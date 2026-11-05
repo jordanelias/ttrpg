@@ -1,0 +1,128 @@
+# Valoria master workplan v11 — the attribute-rulings fold: CR-92 to CR-96 and PC-18 to PC-21 (T12 · lane IN)
+## Status: PROPOSED, ratified on merge (ED-1094, ED-IN-0348).
+## Lane: IN (cross-cutting), with PC, SC and FI.
+## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: ED-IN-0347 (Jordan's attribute rulings of 2026-11-05, recorded as a set: `proposals/2026-11-05-attribute-rulings-by-subject.md`); ED-IN-0348 (the record of this fold). The handles CR-92 to CR-96 and PC-18 to PC-21 allocate no ledger id (P4).
+## Written against: HEAD `859f9dd` plus the verb-attribute map branch (2026-11-05). Reading order: after `-11`. The reasoning for every position is `proposals/2026-11-05-attribute-rulings-adjudication.md` (cited `adj §n`); the rulings are `AR-nn` in the by-subject file.
+
+**The constraint (Jordan, 2026-11-05): every fold lands after B10-10.** No position below sits in B10-10 or gates anything in it, and no amendment this fold made touches B10-10's contents, gates or exits (CR-84, CR-86, REM-30, CR-20, CR-30, CR-19, CR-85's design, CR-33 and CL-CHAR are unchanged). Where a ruling displaces what B10-10 builds, a later position changes it, gated on B10-10's close (CR-96; PC-18). Each position states which side of B10-10 it falls on and what of B10-10 it reads.
+
+**Short forms** as the head (`-00`): `-03` part3, `-04` part4, `-04` part 2 part5, `-07` part12, `-10` part15, `-11` part16; this file is `-12`.
+
+**What the fold also did, outside this file.** Six amendments in place (PC-14, CR-83, CR-87, CR-88, IN-32 in `-04`; PC-06 in `-04` part 2), a new batch B10-11b and rows in B10-13, B10-14, B10-19 and B10-Z (`-03`), nine handle rows (`-07` §1), and the head's rows (`-00`). Deliberately not planned: the provisional health sketch (AR-56 to AR-58), lock-picking (no verb), a second pool attribute per verb, an occasion field on the fight, any edit to B10-10 (adj §3.3; the staging file's §4 is folded into the adjudication's §3).
+
+### CR-92 — The social attributes acting on others: Grace on regard, promotion and the venue's standard; Presence on obedience; Attunement on bonds (SC/IN) · BATCH B10-19 (DESIGN-FIRST; drafted after SC-02's and CR-83's designs are approved; its builds slot by R8) · STATE DESIGN-FIRST · R R-07 (contributor), R-06 (contributor)
+- WHAT: AR-29, AR-31, AR-32 to AR-36a, AR-49, AR-50 (ED-IN-0347). How a person's Grace, Presence and Attunement change what OTHERS do and think: Grace makes others think well of him whatever his office's rank (AR-34) and so raises his chance of an office (AR-35); a formal venue requires Grace and penalizes its want even in a persuasive speaker (AR-36, AR-36a); Presence moves others (AR-29), including whether an order is obeyed; Attunement sets the likelihood that a tie or knot forms (AR-31). Today `regard` (`queries/person_q.py:397`) and `reception` (`queries/world_q.py:678`) read no attribute, `roll.py::obstacle` has no venue standard, `comply`/`defy`/`evade` carry no term from the issuer, and the knot oracle gates on Bonds (`systems/fieldwork/sim/knots.py:53, 200`), which the ten drop (adj §1, §2.2 (iv), (ix)).
+- LANDED ALREADY: `regard` and its gains; `stance_term`'s `declared` regard of a candidate's subject (`decision/choose.py:55`), which carries regard into `confer` with no change to `confer`; `reception`; `arrangements.yaml`'s keys `interposed`, `order`, `floor`, `venue_min_rank`; by B10-10's close, the ten keys (CR-84) and `Person.attributes` (CR-20).
+- REMAINING UNBUILT: (design) ONE design file under `proposals/`, no code, stating with a falsifier each: (1) **how Grace reaches regard** without a person-side reader of another's true attribute: the candidate door is WITNESS (the World may read the true value; the holder reads only what was deposited), the precedent CR-79's credit term; `layer-conformance` Lens B on AX-2 answered first; (2) **promotion**: confirmed through `stance_term`, no `confer` edit, or the design names why not; (3) **the venue standard**: the requirement read from the existing keys (no fourteenth key; `data/arrangements.py` refuses one), and the shortfall demoting the contest result, surplus adding nothing in the venue (adj §3.1 (12)), with its band and the reading rule that chooses any coefficient; (4) **Presence on obedience**: a term on the receiver's `comply` against `defy`/`evade` from the issuer's Presence, as seen by the receiver; (5) **Attunement on bonds**: the formation term IN-32's `tie / knot` effect consumes, and the re-pointing of the knot oracle's Bonds gate (the oracle changes at its owner, re-exported, `CLAUDE.md` §6); (6) the two profiles as its falsifier pair: high Presence, low Grace wins the contest and loses regard; high Grace, low Presence wins regard and loses the contest (AR-49, AR-50).
+- GATE: after B10-10's close (reads CR-20's carrier and CR-84's keys); after SC-02's design (it re-sources `reception`) and CR-83's design (the WITNESS deposit) are approved. Approved by ED-1094's merge default. NEEDS: CR-20, CR-84 (B10-10, read, unchanged); SC-02, CR-83 (designs).
+- EXIT and FALSIFIER: the file exists and states (1) to (6), each with a falsifier and a control (every term at 0 reproduces the base hash); no code.
+- HASH MOVERS: the design none; each build it schedules a declared MOVER, P14.
+- HOLES AND LEDGER IDS: ED-IN-0347; H-215 (`reception`'s valence source); ED-SC-0040.
+- ASKS ATTACHED: none open. The venue shortfall acting on the result is a ladder take, worth a glance `[ASSUMPTION; medium; Jordan to correct; revert: the shortfall lowers `reception` only]`.
+- RE-BASE: `regard`, `reception`, `stance_term`, `obstacle` by symbol; SC-02's and CR-83's approved designs; IN-32's landed effect if built.
+- BUILDER: opus; `valoria-author`; its critic per `CLAUDE.md` §10 (Lens B is the judgment node).
+- SOURCE: AR-29 to AR-36a, AR-49, AR-50; adj §2.2 (iv), (ix), §3.1 (12), (16), (17); map F11, F12, F16 to F19 (reference).
+
+### CR-93 — Attributes in a person's own choice: aptitude on uncontested candidates, Focus on the noise of choosing, Reason on the forecast (IN) · BATCH B10-19 (DESIGN-FIRST; drafted after B10-10's close; its builds slot by R8 into the next batch sharing `decision/`) · STATE DESIGN-FIRST · R R-08 (contributor), R-06 (contributor)
+- WHAT: AR-04, AR-21, AR-23 (ED-IN-0347). Attributes and capabilities weight a character's choice beside his pursuits and convictions. Today an attribute can reach a choice only through `odds_weight` on a contested candidate (`decision/choose.py:171-195`; `seam/wrappers/sigma.py:146`), the believed odds are exact (`sigma.py:368-419`), and τ is one value for everyone (`choose.py:352`). ED-IN-0261's "identically disposed" sentence is narrowed, not reversed (adj §2.1).
+- LANDED ALREADY: `score_terms`, `odds_weight` (CR-17), `_sample_order` (receives the person, `choose.py:243`); by B10-10's close, `Person.attributes` and the `vocation_attribute` rows (CR-20).
+- REMAINING UNBUILT: (design) ONE design file under `proposals/`, no code: (1) an aptitude term on an uncontested candidate from the verb's vocation attribute (CR-20's rows), its scale against the pursuit term, and why it is not a second ladder for `odds_weight` on contested ones; (2) a per-person τ falling with Focus (AR-23); (3) an error on the believed chance that Reason shrinks and low Focus widens (AR-21), and how it composes with CL-PERSON's M40 risk term so the two are not two ladders for one quantity (NERS S); (4) obligations and demands named as CR-88's (no term here). Each coefficient is chosen by a stated reading rule over a measured sweep (`python -m engine.season.harness.decision_spread --persons` or the instrument the design names), never asserted.
+- GATE: after B10-10's close (CR-20). NEEDS: CR-20 (read, unchanged), CR-17 (landed `1ef8d273`); reads CL-PERSON's design if approved.
+- EXIT and FALSIFIER: the file exists and states (1) to (4) with falsifiers: two hand-built persons with equal pursuits and different attributes rank one uncontested candidate differently, and identically with the term at 0; "gates nothing": `opening_set` returns equal sets for the two; CONTROL: every term at neutral reproduces the base hash at seeds 0-2. No code.
+- HASH MOVERS: the design none; each build a declared MOVER of every seeded choice.
+- HOLES AND LEDGER IDS: ED-IN-0347; ED-IN-0261; ED-IN-0304 (M40).
+- ASKS ATTACHED: none open.
+- RE-BASE: `score_terms`, `odds_weight`, `_sample_order`, `odds_of` by symbol; CR-20's landed rows; CL-PERSON's state.
+- BUILDER: opus; `valoria-author`.
+- SOURCE: AR-04, AR-21, AR-23; adj §2.2 (i), §3.1 (14), (15); map F10, F14, F15 (reference).
+
+### CR-94 — Forgery quality reads the forger's Coordination (FI/IN) · BATCH B10-14 (first: … → CR-94 → the batch's order as written) · STATE BUILD · R R-05 (contributor: `forge`)
+- WHAT: AR-16. `Record.forgery_quality` is written by `_eff_forge` (`loop/effects_information.py:777`) from the fixture `default_forgery_quality` (`data/fixtures.py:499`, H-210), the same for every forger. The forger is the examiner's opposition, so his Coordination enters as an opposition score does: `score/2` (Jordan, 2026-08-14; `modules/social_contest/roll.py:93-97`) `[ASSUMPTION; medium; Jordan to correct; revert: the fixture for everyone]`.
+- LANDED ALREADY: `_eff_forge`; `forgery_quality` read as an instance modifier in `obstacle`; by B10-10's close, `Person.attributes` with `attr.body.agility` named Coordination (CR-84, CR-20).
+- REMAINING UNBUILT: `_eff_forge` writes `attributes["attr.body.agility"] / 2` when the forger holds the key, else the fixture. Lock-picking has no verb and nothing is built for it (adj §3.1 (18)).
+- GATE: after B10-10's close. NEEDS: CR-20, CR-84 (read, unchanged).
+- EXIT and FALSIFIER: two hand-built forgers with Coordination 2 and 6 mint sheets of quality 1 and 3, and an examiner's odds against them differ; planted failure: the attribute read dropped makes them equal and reddens. CONTROL: an all-absent realm reproduces the pre-item hash.
+- HASH MOVERS: EQUAL in an all-absent realm; a declared MOVER wherever a forger has authored Coordination.
+- HOLES AND LEDGER IDS: H-210; ED-IN-0347.
+- ASKS ATTACHED: none.
+- RE-BASE: `_eff_forge` and `_mint_sheet` by symbol; H-210's swept range (0, 1, 3) against the halved scale (0.5 to 3.5).
+- BUILDER: sonnet.
+- SOURCE: AR-16; adj §3.1 (18).
+
+### CR-95 — Spirit against circumstance and influence (IN/PC/SC) · BATCH B10-19 (DESIGN-FIRST; its combat half after B10-11b, its social half after SC-02's re-source; builds slot by R8) · STATE DESIGN-FIRST · R —
+- WHAT: AR-44. Spirit resists influence and compulsion, tolerates harm and strain, and gets good results despite poor circumstances, "ignoring obstacle modifiers or adding modifiers to dice pool". Combat already reads Spirit as strain (`combatant.py:20, 34-37, 45-47, 147`); resistance and circumstance are absent (adj §1, AR-44 row).
+- LANDED ALREADY: `register_pool_addend` (`sigma.py:133`); the instance modifiers (`roll.py:122-130`; combat's wound term `combat_systems.py:1044`, ED-1041); after B10-13's first commit, CR-96's `opposed_by` column.
+- REMAINING UNBUILT: (design) ONE design file under `proposals/`, no code: (1) which verbs are opposed by Spirit (influence and compulsion: the persons-targeted rows CR-20 lands), written as `opposed_by` values on CR-96's column; (2) which ADVERSE instance modifiers Spirit discounts, never `base_Ob`, never TN, never below `base_Ob` or `OB_MIN` (adj §2.2 (ii)); (3) whether a pool addend is used anywhere instead; (4) the Grace and Spirit boundary (adj §2.2 (iv)). The design is run through `resolution-diagnostic` and carries its output as evidence (`CLAUDE.md` §9).
+- GATE: after B10-10's close; the combat half after B10-11b closes (PC-19's and PC-20's terms change the same sigma); the social half after SC-02's re-source. NEEDS: CR-20 (read, unchanged), CR-96.
+- EXIT and FALSIFIER: the file states (1) to (4) with falsifiers; the diagnostic's report shows no composed obstacle below `base_Ob` at any Spirit and modifier; CONTROL: Spirit's terms at 0 reproduce the base hash. No code.
+- HASH MOVERS: the design none; (1)'s data edit a MOVER wherever a resisting person has authored Spirit; each build declared.
+- HOLES AND LEDGER IDS: ED-IN-0347; ED-1041; ED-IN-0251.
+- ASKS ATTACHED: none open `[ASSUMPTION; medium; Jordan to correct; revert: Spirit acts only through a pool addend]`.
+- RE-BASE: `_opposition_of`, `obstacle`, the wound term by symbol.
+- BUILDER: opus; `valoria-author`; the diagnostic run sonnet.
+- SOURCE: AR-44; adj §2.2 (ii), (iv); map F5, F21 (reference).
+
+### CR-96 — The opposing attribute, and the vocation rows re-read against the rulings: a follow-on to CR-20's landed carrier (IN/SC) · BATCH B10-13 (first, EQUAL, ahead of SC-02: CR-96 → SC-02 → …) · STATE EDIT (data and one reader) · R R-09 (contributor)
+- WHAT: AR-44, AR-16, AR-24, AR-29 (ED-IN-0347) against what B10-10 lands. `_opposition_of` (`seam/wrappers/sigma.py:163-176`) reads the party's key for the same verb; AR-44 makes Spirit the attribute that resists influence. CR-20 (B10-10, unchanged) lands one base attribute per vocation, chosen by its judgment-tier verify pass before these rulings could be read into it.
+- LANDED ALREADY: by B10-10's close, `rosters.yaml`'s `vocation_attribute` rows and `_opposition_of` reading the authored attribute (CR-20).
+- REMAINING UNBUILT: (1) an optional `opposed_by:` per `vocation_attribute` row, one of the ten keys (the loader refuses any other), read by `_opposition_of`; absent means the row's own attribute, and every row ships absent (CR-95 writes Spirit where it applies). (2) Each landed row re-read against the RULED attributes (forgery and other precise-hand work on Coordination, AR-16; observing on Perception, AR-24; influencing on Presence, AR-29); a row is changed only where it contradicts one, and each change is listed in the commit body; none changed is a valid outcome.
+- GATE: after B10-10's close; B10-13's first commit, so SC-02 and CR-27 read the column. NEEDS: CR-20 (read, unchanged).
+- EXIT and FALSIFIER: (1) a hand-built row with `opposed_by: attr.mind.will` makes a party with Spirit 6 and the verb's attribute 2 oppose at 3, and the row without it at 1; planted failure: the column ignored reddens; an `opposed_by` outside the ten is refused at import. CONTROL: (1) alone reproduces the pre-item hash. (2) each changed row's verb rolls the new attribute for an authored person.
+- HASH MOVERS: (1) EQUAL; (2) a declared MOVER only if a row changes.
+- HOLES AND LEDGER IDS: H-127 (`score/2`); ED-IN-0347.
+- ASKS ATTACHED: none.
+- RE-BASE: CR-20's landed rows and `_opposition_of` by symbol.
+- BUILDER: second tier; (2) to a third-tier (judgment) verify pass.
+- SOURCE: AR-16, AR-24, AR-29, AR-44; adj §2.1, §2.2 (iv).
+
+### PC-18 — The read is Perception and the attack's suddenness is Coordination (PC) · BATCH B10-11b (after PC-06's K-1: PC-06 (K-1) → PC-18 (1) → PC-18 (2) → PC-19 (1) → …) · STATE BUILD in two commits · R —
+- WHAT: AR-37, AR-40 ("reading the attack I want to be a pure perception thing"), AR-18 ("the suddenness and dexterity of the attack, which is a function of coordination"). Today `reading = (2·cog + att)/3 + READ_HISTORY_K·(history − 3)` (`modules/combat/combat_systems.py:171`, 16 calls) and the aggressor's side of the read is his own `reading` (`:1131`).
+- LANDED ALREADY: `reading`, `read_contest`; PC-14's spec (`att` → `attr.mind.perception`, as amended); CR-85's build (B10-11).
+- REMAINING UNBUILT: (1) `reading(c)` returns `c.att`; the history term is removed here if CR-85's build left it; `cog` leaves `Combatant`, PC-14's spec and the typed export (Reason has no combat read, adj §3.1 (1)) `[ASSUMPTION; medium; Jordan to correct; revert: keep `cog` as an input]`; the `:1327` docstring says Perception. (2) In `read_contest`, `read_a`'s `reading(aggressor)` becomes the default fighter's `reading` value plus `AGI_READ_K·(agi − NEUTRAL['agi'])` (a new CFG key, `[SIM-CALIBRATE]`), so a default aggressor is unchanged at any K; K chosen on `systems/combat/combat_engine_v1/workbench/balance.py` by a stated rule (the largest grid value at which the stat mirror stays fair within its Wilson 95% interval and the defender's read-win falls monotonically in the aggressor's Coordination), exported with `--check`.
+- GATE: B10-11b, after PC-06's K-1. NEEDS: PC-14 (B10-10b), CR-85's build (B10-11); CR-84 (B10-10, the key; unchanged).
+- EXIT and FALSIFIER: (1) two defenders differing only in `cog` read alike, and differing only in `att` read differently; planted failure: the `cog` term restored reddens the first. (2) two aggressors differing only in `agi` are read differently at the shipped K and alike at K = 0. CONTROL: a realm with no authored attributes (CR-20's all-absent arm) reproduces the pre-item hash, since `(2·3 + 3)/3 = 3 = att` at the class defaults (adj §1.1 item 1); K = 0 reproduces (1)'s tree.
+- HASH MOVERS: season: EQUAL in an all-absent realm, a declared MOVER where K-1 hands an authored fighter `cog ≠ att` or Coordination ≠ 4. Combat module: a declared MOVER of every pin with `cog ≠ att` or non-default `agi`, re-recorded old to new in the commit body.
+- HOLES AND LEDGER IDS: ED-IN-0347; ED-IN-0330.
+- ASKS ATTACHED: none. Reason's absence from combat is the take worth a glance (adj §3.2).
+- RE-BASE: `reading`, `read_contest`, every `reading(` call by symbol; CR-85's landed tree; PC-14's spec.
+- BUILDER: opus (high) for (2)'s rule; sonnet for (1).
+- SOURCE: AR-18, AR-37, AR-40; adj §2.2 (iii); map F8, F20, F22 (reference).
+
+### PC-19 — Focus between the read and the response (PC) · BATCH B10-11b (after PC-18) · STATE BUILD in two commits · R —
+- WHAT: AR-19 ("you need focus to be in the moment and coordination to physically respond"), AR-22. `mode_sigma` (`combat_systems.py:329`) builds the response from the read, `reflex` and technique, with no Focus term; Focus's error rate in this model is the reserve's `consistency` (`:1423`), today read only on the aggressor's side of the read.
+- LANDED ALREADY: `consistency`, the reserve `conc_max = 3F + 2S`, the per-hit drain `CONC_DRAIN_HIT` (pain).
+- REMAINING UNBUILT: (1) `mode_sigma` adds `LAPSE_K·consistency(defender)` (a new CFG key, shipped 0); (2) the flip: K chosen on the workbench by a stated rule (the midpoint of the range over which a drained defender's chosen-mode sigma falls monotonically and no matchup family's draw rate leaves its interval; "gains ship", adj §2.3). No inattention source (adj §3.1 (4)).
+- GATE: B10-11b, after PC-18. NEEDS: PC-18.
+- EXIT and FALSIFIER: a defender at full reserve and one drained by three hits, same read, choose the same mode and differ in its sigma at the shipped K; planted failure: the term dropped makes them equal. CONTROL: K = 0 reproduces the pre-item tree; at full reserve the term is 0 (`conc/5 − 3 = 0` at `3F + 2S = 15`).
+- HASH MOVERS: (1) EQUAL; (2) a declared MOVER of every season fight (the reserve drains on the first hit) and of the combat pins.
+- HOLES AND LEDGER IDS: ED-IN-0347.
+- ASKS ATTACHED: none `[ASSUMPTION; medium; Jordan to correct; revert: no response term]`.
+- RE-BASE: `mode_sigma`, `consistency` by symbol.
+- BUILDER: sonnet; the rule's reading attacked by an independent critic at the close.
+- SOURCE: AR-19, AR-22; adj §3.1 (3), (4); map F13, F22 (reference).
+
+### PC-20 — Strength's jobs: damage by weapon head, weight, armour, arresting momentum (PC) · BATCH B10-11b (after PC-19; four commits) · STATE BUILD · R —
+- WHAT: AR-10, AR-12, AR-13, AR-14 (adj §1 rows and §3.1 (5) to (8)). Damage takes the same Strength for every head (`core.py:560-571`); `str_demand` has no static weight term (`combat_systems.py:175-177`); armour costs no Strength (grep, adj §1); arresting one's own swing reads Strength only through balance.
+- LANDED ALREADY: `strike_impact`, `str_demand`, `handling_penalty`, `overcommit_exposure`, `recoverability_factor`; per-weapon mass (`weapon_physics.py:9`).
+- REMAINING UNBUILT: one swept coefficient per commit, each with an identity control: (1) `strike_impact = k_str[head]·strength + heft`, additive (ED-1040's reverted multiplicative form is not reintroduced), blunt highest and point lowest, all 1 the control; the sweep must keep ED-1040's observable (the low-Strength heavy-weapon mirror's draw rate) inside its interval. (2) `D_MASS·mass` in `str_demand`, 0 the control. (3) an armour demand per tier (`none` 0) and a Strength shortfall against it costing stamina, by `handling_penalty`'s form; demands chosen by sweep, all 0 the control. (4) a Strength-against-arrested-heft term in the own-swing arrest (`overcommit_exposure`), 0 the control. Each value is chosen on the workbench by a rule stated in its commit, `[SIM-CALIBRATE]`, exported with `--check`. Leverage is not built (adj §3.1 (7)); surplus fluency is not built (§3.1 (6)).
+- GATE: B10-11b, after PC-19. NEEDS: PC-14 (B10-10b); CP-T03-03 (B10-11: kit reaches the fight, so (1) and (3) act on season fighters).
+- EXIT and FALSIFIER: (1) at equal Strength a blunt head gains more damage per Strength point than a point; (2) a heavier weapon of equal inertia handles worse for a weaker fighter; (3) an armoured weak fighter tires faster than an unarmoured one; (4) a strong fighter recovers a deep commit sooner; planted failure per commit: its term dropped reddens its case. CONTROL: each at its control reproduces the previous commit's tree.
+- HASH MOVERS: each flip a declared MOVER of every season fight it reaches and of the combat pins; the season reading is the previous commit's recorded after-reading (V1).
+- HOLES AND LEDGER IDS: ED-1040; ED-IN-0347.
+- ASKS ATTACHED: none open; each value `[ASSUMPTION; medium; Jordan to correct; revert: its control]`.
+- RE-BASE: the four sites by symbol; CP-T03-03's landed kit.
+- BUILDER: opus (high) for (1) and (3); sonnet for (2) and (4).
+- SOURCE: AR-10, AR-12 to AR-14; adj §2.2 (v), §3.1 (5) to (8); map F25 (reference).
+
+### PC-21 — The opponent model: familiarity grown in the season, Attunement's anticipation, the combatant's state (PC/IN) · BATCH B10-19 (DESIGN-FIRST; drafted beside B10-11b; its builds slot by R8 into the next batch editing `modules/combat` and `seam/wrappers/combat.py`) · STATE DESIGN-FIRST · R —
+- WHAT: AR-38, AR-39, AR-41, AR-42, AR-43, AR-45 to AR-48. Familiarity is two module constants keyed by tradition labels (`modules/combat/traditions.py:30-56`), read at `combat_systems.py:1128, 1057, 1059`; a missed read guesses uniformly (`:1136`); no quantity reads the opponent's state or nearness to yielding.
+- LANDED ALREADY: `TR.familiarity`, `read_contest`, `disp_lean`; PC-10a's `yield` terms (`wrapper.py:508`); `world_q.practice` (`:4095`), the derived-from-the-log precedent; PC-06's K-1 (B10-11b).
+- REMAINING UNBUILT: (design) ONE design file under `proposals/`, no code: (1) familiarity as a per-bout input set by the seam (AR-47, AR-48), derived from the holder's own past fights against that weapon class (`wclass`) and his tradition's skills, storing nothing (adj §2.2 (viii)); the label function stays the module default for un-seamed callers; where a person's tradition lives (no `Person` carrier exists; CR-33's keys are the candidate); (2) the anticipation on a missed read, combining familiarity, the defender's Attunement and the opponent's visible state, and its effect on the draw order (the `modes[rng.randrange(3)]` contract, `:1133-1136`); (3) the opponent's state composed from what the module already tracks (fatigue, wounds, poise, initiative, `disp`) before any new quantity is coined (AR-38); (4) nearness to yielding read against PC-10a's threshold, and its consumer, or the statement that it has none yet (AR-42).
+- GATE: after B10-10's close and B10-11's (kit, CR-85's build, PC-10); drafted beside B10-11b. NEEDS: PC-06's K-1, PC-14.
+- EXIT and FALSIFIER: the file states (1) to (4) with falsifiers: at least, a fighter with a record of fights against a weapon class reads it better than one without, and equally at no record; an attuned defender's missed-read guess beats a uniform one against a fixed-disposition opponent and not against a neutral one; CONTROL: every term at its control reproduces the base hash and the combat pins. No code.
+- HASH MOVERS: the design none; each build declared.
+- HOLES AND LEDGER IDS: ED-IN-0347.
+- ASKS ATTACHED: none open; `wclass` and the derived store are takes (adj §2.2 (viii)).
+- RE-BASE: the read sites and `traditions.py` by symbol; K-1's seam.
+- BUILDER: opus; `valoria-author`.
+- SOURCE: AR-38 to AR-48; adj §2.2 (viii), §3.1 (21), (22); map F8, F23 (reference).
