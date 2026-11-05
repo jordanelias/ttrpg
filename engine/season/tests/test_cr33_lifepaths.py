@@ -5,7 +5,7 @@ pool_default}`, rolls the same pool on `research` as a row with no lifepath, and
 it and is refused for the other; a template naming a key outside `verb_capability`'s values is refused at import;
 `repr(Person)` contains no lifepath id. PLANTED FAILURE: the expansion skipped reddens the `train` assertion (run
 in-test below, `test_the_planted_failure_...`). CONTROL: the expansion skipped reproduces the pre-commit hash with
-the registry's authored rows in place (the shipped state's only mover is NPC-088's `inquiry`).
+the registry's authored rows in place (the shipped state's movers are NPC-004's and NPC-088's `inquiry`).
 
 Built on `build_realm` with a PLANTED `lifepath:` on a row that authors none (NPC-087), so the falsifier does not
 read the registry's own authoring; the registry's authored set is pinned separately.
@@ -44,6 +44,7 @@ LIFEPATH_TO_INQUIRY = "3-CH5"                           # Church Investigator: `
 
 #: `{case id: lifepath}` -- the whole authored set, pinned so a key added without its row's own text reddens here.
 AUTHORED = {"NPC-002": "3-VA1",     # notes: "Vaynard's intelligence operative" (Varfell)
+            "NPC-004": "3-CH5",     # role: "Field Inquisitor", goal "Investigate heresy" (added by the verify pass)
             "NPC-005": "3-LO3",     # role: "TS Riskbreaker (Covert)"
             "NPC-080": "3-LO3",     # role: "Riskbreaker (doctrine-following ...)"
             "NPC-088": "3-CF4"}     # role: "Copyist (hand-copies suppressed Einhir cultural texts)"
@@ -149,7 +150,8 @@ def test_a_planted_lifepath_builds_the_key_held_at_pool_default_and_rolls_the_sa
     assert p.capability == {"inquiry": default} and q.capability == {}
     assert sigma.faculty(w, p, "research") == sigma.faculty(w, q, "research") == default
     holders = {pid: x.capability for pid, x in w.persons.items() if x.capability}
-    assert holders == {P_ID: {"inquiry": default}, "p_npc_088": {"inquiry": default}}, holders
+    assert holders == {P_ID: {"inquiry": default}, "p_npc_004": {"inquiry": default},
+                       "p_npc_088": {"inquiry": default}}, holders
 
 
 def test_train_on_inquiry_executes_for_the_holder_and_is_refused_for_the_other(planted_world):
@@ -185,8 +187,8 @@ def test_the_planted_failure_the_expansion_skipped_reddens_the_train_assertion(m
 @pytest.mark.parametrize("seed", sorted(BASE))
 def test_control_the_expansion_skipped_reproduces_the_pre_commit_hash(monkeypatch, seed):
     """With the registry's authored rows in place and the expansion skipped, the 1-season hash is the parent
-    tree's: the lifepath id is read and dropped, so a row that maps to nothing moves nothing, and NPC-088's
-    `inquiry` is the whole mover (`test_rem30_character_sheet.PRE_BUILD` carries the moved hash)."""
+    tree's: the lifepath id is read and dropped, so a row that maps to nothing moves nothing, and NPC-004's and NPC-088's
+    `inquiry` are the whole mover (`test_rem30_character_sheet.PRE_BUILD` carries the moved hash)."""
     monkeypatch.setattr(cast, "capability_of", lambda r, pool_default: {})
     assert _run(PO.build_realm(seed), 1) == BASE[seed]
 

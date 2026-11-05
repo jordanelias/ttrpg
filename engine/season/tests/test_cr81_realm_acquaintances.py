@@ -49,8 +49,9 @@ SEEDS = (0, 1, 2)
 # `build_realm(s, acquaintances=False).content_hash()`, the control arm = the parent tree's build with CR-86's rename and vassals (read 2026-11-05; before CR-86 the PARENT tree 67f5b086 read 70ea49cb... / af5f8b97... / b836647f...): the control arm reproduces them.
 # CR-20+CR-30 re-pin, ONCE (Person.attributes / Person.heritage in the repr; four authored heritage rows): was 87682033... / ca9698d7... / c77d3b27... (CR-86 re-pin: was 70ea49cb... / af5f8b97... / b836647f...)
 # CR-33 re-pin, ONCE (NPC-088's `lifepath: 3-CF4` holds `inquiry`, a Person repr; the event list is the parent's): was 070b68df... / 54809a8a... / 27f94244...
-PARENT_HASHES = {0: "bfee1369051a4dccfc0216da4e0afaa8", 1: "00ca7145fb6665fd6c2b8bacf3215ec0",
-                 2: "030e020f5f7e06d3b00306ae7413f476"}
+# CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr) re-pin, ONCE (a build hash, NPC-004 is seated at build in every seed): was bfee1369... / 00ca7145... / 030e020f...
+PARENT_HASHES = {0: "7a9778bc929bf0105d63349338497e08", 1: "c62eca62c80fa82b30df4806d5210014",
+                 2: "6ea6e6bf03bfb1789580c7e47fe729ea"}
 KNOW_NONE_AT_BUILD = 41          # of 83, every seed (read, see the docstring)
 JORDANS_EXAMPLE = frozenset({"King", "Queen", "Duke", "Duchess"})   # his words, an independent pin on the floor
 

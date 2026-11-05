@@ -188,6 +188,7 @@ characters:
     last_name: Haelgrund
     faction: Church
     role: Field Inquisitor (deployed at AP ≥ 3)
+    lifepath: 3-CH5  # this row's own text: role "Field Inquisitor", goal "Investigate heresy", "investigative instinct" -> 3-CH5 Church Investigator (starred Inquisitorial Method, "+1D Investigation targeting heresy") (holds inquiry)
     status: canonical
     age: null  # [GAP]
     birthplace: null  # [GAP]

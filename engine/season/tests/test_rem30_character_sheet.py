@@ -41,7 +41,7 @@ from engine.season.state.ids import H, draw_factory
 PRE_BUILD = {
     0: "69783660ea3ca2163bd346ee7e29e711",
     1: "d81d7a7377008ddbe4000624e259f4b2",
-    2: "43d2c5249670a51c24c1a102517e9567",
+    2: "9ab1a7492246bf0ae324f4c0cfb65bdf",  # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
 }
 
 

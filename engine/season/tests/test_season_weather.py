@@ -495,7 +495,8 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # move): build d61848d3... -> 6ad7b832..., 1 season f2e5e265... -> 69783660..., 2 seasons 7fbfbe54... -> be2c7f0f.... CONTROL, run in
 # process: `data/cast.py::capability_of` stubbed to `{}` reads the old three exactly; the ordered (kind, id) event list over one season
 # equals the parent tree's (`d5358a9a`) at seeds 0 / 1 / 2 and `BASE_EVENTS` below do not move. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-BASE_HASHES = {0: "6ad7b832e1e60d3e09724b5043640dff",
+# CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): the BUILD hash alone moves (NPC-004 has left the world by season 1 at seed 0): 6ad7b832... -> 837d0f83...
+BASE_HASHES = {0: "837d0f83c62917b88d69da3daa3ea027",
                1: "69783660ea3ca2163bd346ee7e29e711",
                2: "be2c7f0f1d82d8f785a43f14b1273c2c"}
 
@@ -516,7 +517,8 @@ BASE_HASHES = {0: "6ad7b832e1e60d3e09724b5043640dff",
 # RE-PINNED ONCE at v10 CR-30 for CR-20 + CR-30 (the Person repr, the heritage rows): 38b4ff49... -> 4cb09ae3...; the event count and
 # digest do not move.
 # RE-PINNED ONCE at v10 CR-33 (NPC-088 holds `inquiry`, a Person repr): 4cb09ae3... -> 8aa6e2e7...; the event count and digest do not move.
-STEP_OFF_ONE_SEASON = ("8aa6e2e785553c4aa679eec170be1c84",
+# RE-PINNED ONCE at the CR-33 verify pass (NPC-004 holds `inquiry`): 8aa6e2e7... -> d2152860...; the event count and digest do not move.
+STEP_OFF_ONE_SEASON = ("d2152860b88c7bfec387004bb14c78bd",
                        (11807, "8dc5b5fb3768ca1fbd9a790a646e32ca7dcc95037972a1aa7579764170415ff0"))
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
