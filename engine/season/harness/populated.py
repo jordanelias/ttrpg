@@ -985,8 +985,17 @@ def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: boo
 
 def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
                 goals: bool = True, goals_complete: bool = True, foreign: bool = True,
-                guards: bool = False, acquaintances: bool = True) -> World:
+                guards: bool = False, acquaintances: bool = True, cast_attributes: bool = False) -> World:
     """The whole map, its buildings, and one person per season loop.
+
+    `cast_attributes` (v10 CR-20) reads each cast row's `stats:` into `Person.attributes`
+    (`data/cast.py::attributes_of`). `False` SHIPS, and is the CONTROL ARM: no person holds an attribute, so
+    `faculty` falls to `pool_default` and the realm acts as it did before the carrier (only the `Person` repr
+    moved). The registry authors ONE row's `stats:` (NPC-001, the legacy four-stat block), and `True` is a
+    MOVER by that one person (her pool on the `inquiry` vocation is her Reason, 5, not the default 2): measured
+    at CR-20, the event list over two seasons moves at seeds 0, 1 and 2 (her ledger alone at 0 and 1, a
+    cascade through 79 ledgers at 2). [ASSUMPTION; medium; Jordan to correct; revert: none needed -- flipping
+    the default is its own declared mover, with the cast's values Jordan's content.]
 
     `acquaintances` (CR-81, `ED-IN-0318`) writes the realm's starting acquaintances (`acquaintance_pairs`,
     `seed_acquaintances`): faction co-members and the high-status seats know one another. `True` ships;
@@ -1311,6 +1320,11 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # written in play. No fallback and no draw: a row with no authored value leaves `None`, and a
         # `None` cannot pass `thread_read`'s gate (`Person.thread_sensitivity`'s comment).
         w.persons[pid].thread_sensitivity = cast.thread_sensitivity_of(cast.row(cid) or {})
+        # v10 CR-20: the ten attributes, from the same row's `stats:` (legacy spellings resolve through the
+        # registry), set here and NEVER written in play. Absent where unauthored: `{}` is no key, and
+        # `faculty` then falls to `pool_default`.
+        if cast_attributes:
+            w.persons[pid].attributes = cast.attributes_of(cast.row(cid) or {})
 
     # -- WHO BELONGS TO WHAT ----------------------------------------------------
     #

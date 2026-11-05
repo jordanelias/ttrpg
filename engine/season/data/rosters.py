@@ -567,6 +567,28 @@ if RECORD_KINDS & TENURE_KINDS:
 # polarity that function exists to hold. A verb with no row falls through to `pool_default` inside
 # the wrapper, which is the `assumption` grade's own reading (`08 §3`) and not a refusal.
 VERB_CAPABILITY = roster_map("verb_capability", "values")
+
+
+def _load_vocation_attribute(values: dict, vocations) -> dict:
+    """`rosters.yaml: vocation_attribute`'s `values`, CLOSED BOTH WAYS against `vocations` (v10 CR-20): a row
+    for every vocation and for nothing else, each valued by one of the ten registry keys. A vocation with no
+    row would roll its pool from `pool_default` for everyone while the roster read as complete; a row for a
+    name no verb draws on would sit in the table looking live. Refused whole, naming the difference."""
+    from ...substrate.descriptors import ATTRIBUTES
+    out = {str(k): str(v or "") for k, v in values.items()}
+    missing, extra = sorted(set(vocations) - set(out)), sorted(set(out) - set(vocations))
+    bad = sorted(k for k, v in out.items() if v not in ATTRIBUTES)
+    if missing or extra or bad:
+        raise Unspecified(
+            f"`rosters.yaml: vocation_attribute` is not closed over the vocations: no row for {missing}, "
+            f"a row for a non-vocation {extra}, a value that is none of the ten {bad}", "rosters.yaml",
+            needs="exactly one row per `verb_capability` value, each valued by an `attributes` registry key",
+            law="CR-20 -- which attribute a vocation's pool starts from is stated once, for every vocation")
+    return out
+
+
+VOCATION_ATTRIBUTE = _load_vocation_attribute(roster_map("vocation_attribute", "values"),
+                                               set(VERB_CAPABILITY.values()))
 # v9 FI-01 (`ED-FI-0009`, J-22 (A)): inquiry verb -> `{provider, module_entry}`, the roll that grades
 # it with no prize. Validated against the verb table at load (`data/verbs.py`) and against the prize
 # rows at driver construction (`manifest/registry.py::check_graded_inquiries`); read by

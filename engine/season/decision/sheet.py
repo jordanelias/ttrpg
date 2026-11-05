@@ -69,12 +69,15 @@ def _frozen(d: Mapping) -> Mapping:
 class CreationRow:
     """One seated person as the creation sheet shows him: the person-side fields world-gen wrote once
     (`capability` by `build_at`; `pursuits` by `build_at` or the realm builder; `conviction` by the realm
-    builder only, `{}` on shipped data). A copy: the player reads it and picks an `id`."""
+    builder only, `{}` on shipped data; `attributes` by the realm builder from a cast row's `stats:`, `{}`
+    where unauthored -- CR-20, the ten registry keys, absent where nobody authored one). A copy: the player
+    reads it and picks an `id`."""
     id: str
     name: str
     capability: Mapping
     pursuits: Mapping
     conviction: Mapping
+    attributes: Mapping
 
 
 def creation_sheet(persons: Iterable[Person]) -> tuple:
@@ -82,7 +85,7 @@ def creation_sheet(persons: Iterable[Person]) -> tuple:
     `persons` is what the caller already holds (`w.persons.values()` before the first season); this
     function takes no `World` and writes nothing."""
     return tuple(CreationRow(p.id, p.name, _frozen(p.capability), _frozen(p.pursuits),
-                             _frozen(p.conviction))
+                             _frozen(p.conviction), _frozen(p.attributes))
                  for p in sorted(persons, key=lambda q: q.id))
 
 
