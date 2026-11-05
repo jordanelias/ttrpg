@@ -192,9 +192,10 @@ def _require_tn7(tn: int) -> None:
     """The owner refuses any TN but 7.
 
     `tn` is kept as a parameter rather than deleted: it is carried on RollResult and call
-    sites pass tn=7 explicitly. Removing it would be a wide, behaviour-free churn. Validating it costs nothing and turns a silently
-    -ignored argument into a refused one — which is the entire point, because a silently
-    -ignored `tn` is what let four TN-varying mechanisms sit in the tree looking live.
+    sites pass tn=7 explicitly. Removing it would be a wide, behaviour-free churn. Validating it
+    costs nothing and turns a silently-ignored argument into a refused one — which is the entire
+    point, because a silently-ignored `tn` is what let four TN-varying mechanisms sit in the tree
+    looking live.
     """
     # [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
     if tn != 7:

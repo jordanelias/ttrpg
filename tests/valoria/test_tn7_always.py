@@ -11,9 +11,6 @@ This one is load-bearing on three of the four:
   * a Jordan decision — the ruling above is the whole subject;
   * the exported params — `KNOT_FORMATION_TN` and `TN_STANDARD` cross to Godot via
     `tools/export_game_constants.py`, so a re-introduced TN axis would ship to the port.
-  (`WEAPON_TN_BASE` once crossed to Godot via `tools/export_game_constants.py`; it left that
-  table at plan position PC-12 with its v30 owner, and the port's still-varying TN is
-  `DIVERGENCES['weapon_tn_modifiers']` there.)
 
 THE TRAP IT CLOSES, which is the real reason it is here.
 Before the ruling, four independent mechanisms made TN vary. THREE OF THEM WERE INERT,

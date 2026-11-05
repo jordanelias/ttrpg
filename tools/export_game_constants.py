@@ -61,8 +61,8 @@ MAPPING = {
     # CombatLogic.gd:72; oracle History + 6, wounds as the bilateral Ob), the model gap module_contracts.yaml:925 records.
     'COMBAT_POOL_MINIMUM':           'combat.core.POOL_FLOOR',
     # WEAPON_TN_BASE LEFT THIS TABLE at plan position PC-12. Its Python owner was the same retired v30
-    # module (`WEAPON_TN_BASE` = 7; its WEAPON_TN_MOD matrix shifting TN 5-8 was already deleted at ED-IN-0196), and TN is always 7
-    # (ED-IN-0196, Jordan 2026-08-25), so no oracle constant is left to pair; the port's still-varying TN is
+    # module (`WEAPON_TN_BASE` = 7; its WEAPON_TN_MOD matrix shifting TN 5-8 was already deleted), and TN is
+    # always 7 (ED-IN-0196, Jordan 2026-08-25), so no oracle constant is left to pair; the port's still-varying TN is
     # DIVERGENCES['weapon_tn_modifiers']. Same treatment as the COHERENCE_* rows: a retired owner leaves.
     # COHERENCE_START / _MAX / _MIN / _FRACTURED_THRESHOLD LEFT THIS TABLE at position 27 (WR-SCOPE,
     # 2026-09-29). Their Python owners were the retired 10-0 depleting track, and the oracle now
