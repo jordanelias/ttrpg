@@ -8078,9 +8078,13 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # 79, `transfer` 14 -> 30, `fight` 27 -> 31, `oblige` 2 -> 4, `interview` 3 -> 5, `accept` 120 -> 122; `commit` 44 unmoved. CONTROL:
     # `odds_weighting` `none` and tau 0.1 in process read the old 23 verbs and the old counts. THE LOSS OF THREE MARGINAL VERBS IS RECORDED
     # RATHER THAN HIDDEN: it is what the card's rule (the largest grid value above one half strict-top-decided) costs the corpus's variety.
+    # ⚠⚠ v10 REM-31 (IN-46), 20 -> 22: `speak` AND `tend` JOIN, nothing leaves. A RE-RECORD WITH ITS REASON: `the body` defers every fight
+    # to ENCOUNTER (`march`'s pair), so a fight is declared at RESOLVE (`fight.declared`/`accept.declared`, witnessed and deposited) and
+    # fought on the round's settled world, and the act mix moves [the per-verb counts were not re-measured for this pin]. CONTROL: `the
+    # body`'s `step:`/`declares:` popped in process reads the old 20 and passes.
     assert ever == {"accept", "argue", "carry", "challenge", "commit", "conceal", "create_record", "interview",
                     "fight", "give", "move", "oblige", "petition", "reconstruct", "release",
-                    "research", "surveil", "tell", "transfer", "utter"}, (
+                    "research", "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
     # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
@@ -8321,8 +8325,10 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # executed in no world now: the `ever` note above), `covenant` LEAVES (it is no longer attempted in the pass). MEASURED by
     # `_corpus_rows`, refused-world counts parent fixtures -> this tree: `speak` 68 -> 46, `tend` 58 -> 27, `covenant` 2 -> 0. CONTROL:
     # `odds_weighting` `none` and tau 0.1 in process read the 11.
+    # ⚠⚠ v10 REM-31 (IN-46), 12 -> 10: `speak` AND `tend` LEAVE, into `ever` (the `ever` note above): every fight deferred to ENCOUNTER
+    # moves the act mix. CONTROL: `the body`'s `step:`/`declares:` popped in process reads the 12.
     assert refused_only == {"build", "found", "survey",
-                            "forge", "sabotage", "train", "speak", "tend",
+                            "forge", "sabotage", "train",
                             "comply", "evade / defy", "construe", "exchange"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
@@ -9059,7 +9065,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # 2026-09-10 corpus); on this corpus, with flat score fields, the direction at 0.1 -> 0.05 is the opposite, which is recorded and not
     # reconciled here. Not a ranking change. THE SAME-BREATH CHECK is the assertions below, read in the same run. A GOLDEN
     # RE-RECORDED, NOT A BALANCE CLAIM.
-    assert len(by_sig) == 124, (
+    # ⚠⚠ **124 -> 136, v10 REM-31 (IN-46), MEASURED BY THIS TEST'S OWN `by_sig` (the failing assertion's printed figure), PYTHONHASHSEED=0.**
+    # THE UNIT AND THE DIRECTION: variety ROSE by twelve. `the body` defers every fight to ENCOUNTER (`march`'s pair), so each fight is
+    # declared at RESOLVE (an Event witnessed and deposited) and fought on the round's settled world; `speak` and `tend` rejoin `ever`.
+    # Not a ranking change: `H-96` is untouched. CONTROL: `the body`'s `step:`/`declares:` popped in process reads 124 and the whole
+    # test passes. THE SAME-BREATH CHECK is the assertions below, read in the same run. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+    assert len(by_sig) == 136, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -9275,10 +9286,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # is `ever` exactly (23). Control: `propositions_heard` stubbed to `()` reads the 22 without it.
     # ⚠⚠ v11 CR-17 (B10-09 close two): `issue`, `speak` AND `tend` LEAVE (23 -> 20) with `ever` (`choice_temperature` 0.1 -> 0.05); the
     # universal set is unmoved (asserted above). The measurement is at the `ever` note.
+    # ⚠⚠ v10 REM-31 (IN-46): `speak` AND `tend` JOIN (20 -> 22) with `ever` (every fight deferred to ENCOUNTER); the reason and its
+    # control are at the `ever` note.
     assert varying == {"accept", "argue", "carry", "challenge", "commit", "conceal", "create_record", "fight", "give",
                        "interview", "move", "oblige",
                        "petition", "reconstruct", "release", "research",
-                       "surveil", "tell", "transfer", "utter"}, (
+                       "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         sorted(varying))
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
@@ -10818,10 +10831,12 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # 17 -> 11, `petition` 100 -> 95, `research` 339 -> 331; the reason and its control are at the corpus test's `ever` note.
     # ⚠⚠ v11 CR-17 (B10-09 close two): `issue`, `speak` AND `tend` LEAVE (23 -> 20), nothing joins -- `choice_temperature` 0.1 -> 0.05;
     # the measurement and its control are at the corpus test's `ever` note.
+    # ⚠⚠ v10 REM-31 (IN-46): `speak` AND `tend` JOIN (20 -> 22), nothing leaves -- every fight deferred to ENCOUNTER; the reason and
+    # its control are at the corpus test's `ever` note.
     assert set(executed) == {"accept", "argue", "carry", "challenge", "commit", "conceal", "create_record", "interview",
                              "fight", "give",
                              "move", "oblige", "petition", "reconstruct", "release", "research",
-                             "surveil", "tell", "transfer", "utter"}, (
+                             "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
         "ED-FI-0009's, 10 -> 11 is `release`'s, 11 -> 12 is `H-71`'s, 12 -> 13 is the admission "
         "of `kill / wound`, 13 -> 12 is `R8.1`'s (`dispatch`, see above), 12 -> 13 again is "
@@ -10965,9 +10980,11 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # MEASURED by `_wc_corpus_pass`'s own output on this tree (the failing assertion's printed set). `speak` is NOT in this pass's
     # refused set (the corpus test's pass reads it refused in 46 worlds; the two passes differ in which attempts they attribute).
     # CONTROL: the parent tree passes the old set.
+    # ⚠⚠ v10 REM-31 (IN-46), 11 -> 10: `tend` LEAVES -- it executes again (the executed set above): every fight deferred to ENCOUNTER
+    # moves the act mix. CONTROL: `the body`'s `step:`/`declares:` popped in process reads the 11.
     assert set(refused) - set(executed) == {"found",
                                             "build", "survey",
-                                            "forge", "tend",
+                                            "forge",
                                             "sabotage", "train", "comply",
                                             "evade / defy", "construe", "exchange"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
@@ -13606,8 +13623,13 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # old 13 and passes); the per-verb drop counts were not re-measured for this pin, and the in-process sweep of the fixture back to 0.1 was
     # not run [ASSUMPTION; low: the act mix the colder draw moves took the five rows out of the shipped arm's deliberations that this
     # corpus slice reads]. `tell` and `surveil` stay absent.
-    assert {v for v, _ in live} == {"accept", "challenge",
-                                    "fight", "interview",
+    # ⚠ {8 verbs} -> {13 verbs}, v10 REM-31 (IN-46): `build`, `comply`, `construe`, `evade / defy` AND `found` JOIN, nothing leaves. READ OFF
+    # the failing assertion's own printed set on this tree [the per-verb drop counts were not re-measured for this pin]; the cause is the
+    # act mix the deferral of every fight to ENCOUNTER moves (each fight's declaration is witnessed and deposited, and the fight sees the
+    # round's settled world). CONTROL: `the body`'s `step:`/`declares:` popped in process reads the old 8 and passes. `tell` and `surveil`
+    # stay absent.
+    assert {v for v, _ in live} == {"accept", "build", "challenge", "comply", "construe", "evade / defy",
+                                    "fight", "found", "interview",
                                     "sabotage", "speak", "tend", "train"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
@@ -15106,7 +15128,11 @@ def _we_bands(model="scene_fraction", ids=range(24)):
         d = SeasonDriver(w)
         act = Act(id=f"we{i}", actor="p_low", verb="fight",
                     payload={"subject": "p_mid"})
-        evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], w.fixtures.get("contest_max_depth"))
+        # v10 REM-31: `the body` defers to ENCOUNTER (`march`'s pair), so RESOLVE only DECLARES the fight and
+        # the fight's own Events are ENCOUNTER's, fought off that declaration -- the same seam call, seed and fold.
+        md = w.fixtures.get("contest_max_depth")
+        evs = d.encounter(mint_token(d.w, WriteClass.ACTS),
+                          d.resolve(mint_token(d.w, WriteClass.ACTS), [act], md), md)
         for pid in ("p_low", "p_mid"):
             alive = pid in w.persons
             seen.setdefault(party_degree(raw["wound_state"][pid]), dict(
@@ -15664,8 +15690,10 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
 
     w2 = _w(); w2.step = Step.RESOLVE
     d = SeasonDriver(w2)
-    evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we0", actor="p_low", verb="fight",
-                           payload={"subject": "p_mid"})], 2)
+    # v10 REM-31: declared at RESOLVE, fought at ENCOUNTER (`_we_bands`' note); the fight's Events are ENCOUNTER's.
+    evs = d.encounter(mint_token(d.w, WriteClass.ACTS),
+                      d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we0", actor="p_low", verb="fight",
+                                payload={"subject": "p_mid"})], 2), 2)
     assert {e.kind for e in evs} >= {"person.died", "body.changed"}, [(e.kind, e.degree) for e in evs]
     assert "p_mid" in w2.persons, (
         "the subject was deleted by a fight the ACTOR lost -- the band is being read off the "

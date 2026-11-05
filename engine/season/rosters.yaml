@@ -1420,7 +1420,9 @@ rosters:
         module:   "combat"
         provider: "personal_combat"
         module_entry: "combat.fight"   # `31b`, as `a standing`'s: the composition role `seam/wrappers/combat.py` calls through `MODULE_ENTRIES`, for EVERY verb contesting this prize (`fight` and `accept`); the composition row's `verb:` names one of them (`fight`), the registrar's one-verb shape. Line-neutral: the comment block above lost a line for this one.
-        cite:     "H-88; the seam already calls it (seam/wrappers/combat.py)"
+        step:     "ENCOUNTER"   # v10 REM-31 (IN-46): `a field`'s pair. Every fight is declared at RESOLVE and fought at ENCOUNTER, in AUTOMATED and PLAYABLE alike -- the one step the host may suspend at (`seam/wrappers/combat.py::resolve`'s `host`). Declared content-hash mover: every seeded season that fights re-pinned.
+        declares: "Declared"
+        cite:     "H-88; the seam already calls it (seam/wrappers/combat.py); `step:`/`declares:` v10 REM-31, design `proposals/2026-10-07-grid-mode-suspension.md` §1 (PROPOSED, held back)"
       "a field":
         module:   "mass_battle"
         provider: "mass_battle"
@@ -1439,9 +1441,9 @@ rosters:
           `contests: "a field"` and is admitted and DECLARED at RESOLVE, folding at the band
           `declares:` names -- `Declared`, a member of `field_degree_bands` that no subsystem
           reports -- and is actually fought at the new ENCOUNTER step, on the world the whole
-          round's fold left. A prize row with no `step:` (`the body`, `a standing`,
-          `a proposition`) fights at RESOLVE as it always has; `step:`'s absence is the default,
-          not a second code path.
+          round's fold left. A prize row with no `step:` (`a standing`, `a proposition`) fights at
+          RESOLVE as it always has; `step:`'s absence is the default, not a second code path.
+          `the body` carries the same pair since v10 REM-31.
       "a standing":
         module:   "social_contest"
         provider: "social_contest"   # v9 SC-01 steps 13 + 15 (ONE change): repointed from the interim `sigma_leverage`, ED-SC-0033 clause (2) -- a ROW change. `seam/wrappers/sigma.py` registers this string; refusal (c) refuses construction if nothing does

@@ -183,8 +183,12 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             depth: int, max_depth: int, causes: list[str],
             extension: Optional[Callable[[str], bool]] = None,
             *, verb: str = "", subject: Optional[str] = None,
-            rng: Optional[Any] = None, effort: int = 0):
+            rng: Optional[Any] = None, effort: int = 0, host: Optional[Any] = None):
     """S39. EVERY ARGUMENT IS LOAD-BEARING.
+
+    `host` (v10 REM-31, IN-46) is the PLAYABLE host (`queries/inputs.py::PlayHost`), passed by ENCOUNTER alone
+    (`loop/encounter.py`, `loop/resolve.py::_contest`) and handed to the provider with `effort`; the
+    personal-combat provider reads it (its party test), the others accept and ignore it, as `rung`.
 
     `effort` (CP-T01-05) is the act's own, read off its payload by the caller (`state/carriers.py::
     effort_of`) and passed to the provider with `verb` and `subject`; the social roll turns it into named
@@ -275,7 +279,7 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             # row saying `heard_by: bench`; every other provider accepts and ignores it, a deliberate non-change (`combat.py`'s own
             # note on `rng` is the precedent for what that comment looks like).
             out = _run(w, claimants, causes, prize, verb=verb, subject=subject, rng=rng, rung=rung,
-                       effort=effort)
+                       effort=effort, host=host)
             return _returned(out, f"a contest for {prize!r}", f"contest for {prize!r}")
         raise Unspecified(
             f"a contest for {prize!r} belongs to the `{_sub['module']}` subsystem "

@@ -746,7 +746,11 @@ verbs:
     # BAND from the table, but a scar is taken per observer and may be taken by nobody, so a
     # band-level `scar.taken` would report a scar nobody took — the exact `ID-9` defect the flat
     # `person.died` above was, in the same row, one column across.
+    # v10 REM-31 (IN-46): `Declared` is `march`'s deferral band -- `the body` carries `step: ENCOUNTER`, so the
+    # fight is admitted and DECLARED at RESOLVE (writing nothing) and fought at ENCOUNTER, the one step the host's
+    # PLAYABLE mode may suspend at. The same cells on `accept`, which contests the same prize.
     writes:
+      Declared:     []
       Felled:       ["Person.body", "Person.exists", "Tenure.until"]
       Wounded:      ["Person.body"]
       Untouched:    []
@@ -778,6 +782,7 @@ verbs:
     # untouched still emits no `body.changed` (kinds are earned by what moved, `_fold`).
     # `contest.undecided` is therefore emitted only when BOTH parties are untouched.
     emits:
+      Declared:    ["fight.declared"]
       Felled:      ["person.died", "tenure.closed", "body.changed"]
       Wounded:     ["body.changed"]
       Untouched:   ["contest.undecided"]
@@ -843,10 +848,12 @@ verbs:
     # agreed to; what the scene can distinguish about its outcome is exactly what it distinguishes
     # for `fight`, and `Felled` gains `body.changed` for `fight`'s reason.
     writes:
+      Declared:     []
       Felled:       ["Person.body", "Person.exists", "Tenure.until"]
       Wounded:      ["Person.body"]
       Untouched:    []
     emits:
+      Declared:    ["accept.declared"]
       Felled:      ["person.died", "tenure.closed", "body.changed"]
       Wounded:     ["body.changed"]
       Untouched:   ["contest.undecided"]

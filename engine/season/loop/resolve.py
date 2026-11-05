@@ -22,7 +22,7 @@ from ..gaps import InstrumentDefect
 from ..data.rosters import (FOLD_ATTEMPT_REFUSED, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_INQUIRIES,
                             STRATA)
 
-from typing import Optional
+from typing import Any, Optional
 from ..data.matrix import Step, matrix_row
 from ..data.requires import UNKNOWN, Verdict, binding_from_act, evaluate
 from ..data.verbs import (COUNTERPARTY_CLAUSE, ELIGIBILITY_CLAUSE, EVENT_KINDS, VERB_TABLE,
@@ -747,7 +747,7 @@ def _refuse_party_gap(self, w: "World", a: Act) -> list:
 
 
 def _contest(self, w: "World", token: Token, a: Act, contests: list,
-             contest_max_depth: Optional[int]) -> list:
+             contest_max_depth: Optional[int], host: Optional[Any] = None) -> list:
     """S39.2, and M4's deferral fork (`ED-IN-0279` clause (a)). Extracted from `resolve()`'s own
     seam branch so RESOLVE and `loop/encounter.py` share the ONE body (§8) -- both call this for
     the same act, at different steps, and the STEP is what decides which of the two things it
@@ -769,7 +769,11 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
       again with `w.step` at the declared step.
     - OTHERWISE (every prize before M4, and a deferred prize once its step arrives): dispatch to
       the seam and fold at the degree the subsystem's own result decides, exactly as `resolve()`
-      always did."""
+      always did.
+
+    `host` (v10 REM-31, IN-46): the PLAYABLE host, passed by ENCOUNTER only (`loop/encounter.py`); RESOLVE's
+    call passes none, so the driver can suspend nowhere but ENCOUNTER. Handed through `contest()` to the
+    provider untouched; it enters neither the generator's purpose below nor the fold."""
     prize = manifest.resolve("contest", contests[0])
     if prize is not None and prize.get("step") and prize["step"] != w.step.value:
         return self._fold(w, token, a, Resolution(prize["declares"], {}))
@@ -825,7 +829,7 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # them to stay in sync.
     r = contest(w, rung=_rung, prize=contests[0], claimants=_parties, depth=0,
                 max_depth=contest_max_depth, causes=[a.id], verb=a.verb, subject=_subject,
-                rng=_rng, effort=effort_of(a))
+                rng=_rng, effort=effort_of(a), host=host)
     if isinstance(r, ContestRefused):
         # `04 §A.2`'s typed refusal (`seam/contest.py::REFUSAL_STATUSES`): `PARTY-GAP` (a missing
         # party) and `REFUSED` (`sigma.py`'s S27.4, `Ob > 2x Pool`). `speak` is contested, so a
