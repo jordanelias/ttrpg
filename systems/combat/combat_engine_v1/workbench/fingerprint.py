@@ -1,7 +1,7 @@
 """Module fingerprint (PC-11): a MEASUREMENT of the personal-combat module's seeded behaviour, not a guard.
 
 Run it before an edit to `modules/combat/` and again after: if the edit was meant to move no fight, the two
-IDENTITY HASHES are equal. It asserts nothing and fails nothing; it prints.
+IDENTITY HASHES are equal. It asserts nothing about the engine and fails nothing; it prints.
 
   python systems/combat/combat_engine_v1/workbench/fingerprint.py [--fights N] [--json]
 
@@ -17,6 +17,9 @@ WHAT IT HASHES
 
 Families vary kits, armour, skills/traditions/equipped abilities, duel terms and a declared yield. Every fight
 has its own `random.Random(seed)`, so a family's rows do not depend on its neighbours. Stdlib only.
+
+BLIND TO: a draw that moves no outcome (a trailing draw no later roll reads). An inserted mid-fight draw shifts every
+later draw in that fight's own `Random` and is visible.
 
 THE FALSIFIER: two runs on an unchanged tree must print the same identity hash; if they differ the instrument
 cannot see, and nothing measured with it means anything.
@@ -109,7 +112,7 @@ def measure(per_family=FIGHTS_PER_FAMILY):
 if __name__ == '__main__':
     n = FIGHTS_PER_FAMILY
     if '--fights' in sys.argv:
-        n = int(sys.argv[sys.argv.index('--fights') + 1]) // len(FAMILIES)
+        n = max(1, int(sys.argv[sys.argv.index('--fights') + 1]) // len(FAMILIES))
     out = measure(n)
     if '--json' in sys.argv:
         print(json.dumps(out, indent=1, sort_keys=True))
