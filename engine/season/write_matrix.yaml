@@ -234,13 +234,16 @@ rows:
     # at ENCOUNTER (`march`). `class:` is unchanged (ENCOUNTER shares RESOLVE's write class).
   - kind:    "Person"
     field:   "exists"
-    steps:   [MAT, RES, CEN]
+    steps:   [MAT, RES, ENC, CEN]
     class:   "MATTER/ACTS"
     social:  "false"
     by:      "DR-1, D8; bounded by §15.3's causation rule"
     emits:   "`person.died` · `person.individuated` · `tenure.closed`"
     # CP-T02-01: `tenure.closed` -- MATTER's death on this cell (`loop/matter.py::_die`) emits one for
     # the seats it empties beside `person.died` (`World.write`'s per-subject MATTER emission).
+    # ⚠ `ENC` ADDED AT v10 REM-31 (IN-46) ON M4's PRECEDENT for `(Person, body)`: `the body` now defers
+    # to ENCOUNTER like `a field`, so a `fight`/`accept` `Felled` band writes the death there. `class:`
+    # is unchanged (ENCOUNTER shares RESOLVE's write class).
   - kind:    "Person"
     field:   "scar"
     steps:   [RES, ENC]

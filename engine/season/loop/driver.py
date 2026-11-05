@@ -387,7 +387,8 @@ class SeasonDriver:
     # -- one season --------------------------------------------------------
     def season(self, choose, question,
                actorless: Optional[list[Event]] = None,
-               contest_max_depth: Optional[int] = None) -> dict:
+               contest_max_depth: Optional[int] = None,
+               host: Optional[Any] = None) -> dict:
         """`U2` / `R-03`: **a season is R ROUNDS, and MATTER and CALENDAR are not among them.**
 
         R-03 reads *seasons must tick scene-by-scene, so what occurs after one scene can impact
@@ -428,7 +429,18 @@ class SeasonDriver:
         spend it — where the one-pass loop simply lost it. What DOES reproduce the pre-tick season
         is ONE ROUND: at `scene_budget = 1` the act multiset and the Event-kind multiset are
         identical to the pre-`U2` run, and the content hash moves only by `Claim` gaining `round`.
-        That arm is the one-pass loop reproduced THROUGH this code path rather than around it."""
+        That arm is the one-pass loop reproduced THROUGH this code path rather than around it.
+
+        ⚠ `host` (v10 REM-31, IN-46: the grid mode's suspension) IS THE PLAYABLE MODE'S ONE ARGUMENT
+        (`queries/inputs.py::PlayHost`), and it reaches ENCOUNTER ALONE: RESOLVE is called without it, so
+        the season can suspend at one step only, inside one provider call for one deferred act. `None` is
+        AUTOMATED, every fight engine-decided. The suspension is a CALL-OUT: the round's `acts`, `events`
+        and `pending_matter` stay in this frame, and ENCOUNTER's token is minted ONCE, in the argument
+        expression below, never kept, never re-minted on resume -- there is no resume but the decider's
+        return. The draw ordinal resets once per tick (above) and the decider is handed no `World`, so by convention it
+        consumes none (`test_rem31_grid_suspension.py` plants a drawing decider and sees it). `choose` -- a host's own callback included (`harness/play_surface.py`) -- runs inside
+        DELIBERATE's per-person map, which must not depend on the order it visits persons
+        (`loop/deliberate.py::deliberation_order`)."""
         w = self.w
         # ⚠⚠ **THE DEPTH CAP IS THE CALLER'S AND THE DRIVER MUST NOT FILL IT IN. `U2` ADDED A
         # FALLBACK HERE AND IT WAS WRONG; THE REGISTER ROW IS WHAT OVERTURNED IT.**
@@ -490,8 +502,9 @@ class SeasonDriver:
             # `events` list, before the bookkeeping below, so a field battle's own outcome
             # counts toward `_realised` and reaches the log/WITNESS fan-out exactly as any other
             # verb's events do -- ENCOUNTER is not a second, parallel accounting.
+            # v10 REM-31: the host rides THIS call only -- the one step a PLAYABLE fight suspends at.
             events = events + self.encounter(mint_token(w, WriteClass.ACTS), events,
-                                             contest_max_depth)
+                                             contest_max_depth, host)
             # ⚠⚠ **WHAT WAS REALISED, AS OPPOSED TO WHAT WAS ATTEMPTED — AND IT CAN ONLY BE KNOWN
             # HERE, AFTER THE FOLD.** `deliberate` records an attempt at RELEASE, because that is
             # when the scene-action is spent and the budget does not care how it went. Whether the

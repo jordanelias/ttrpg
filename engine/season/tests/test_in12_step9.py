@@ -351,9 +351,9 @@ def test_faculty_varies_by_person_once_train_raises_carins_vocation():
     assert carin.capability == {"copying": 3}, carin.capability
     others = [p for pid, p in sorted(w.persons.items()) if pid != CARIN and not p.capability]
     assert others, "no person without a capability to compare against"
-    cands = _formed(w, CARIN, "train", CARIN)
-    assert cands and all(c.operands.get("kind") == "copying" for c in cands), [c.operands for c in cands]
-    (act,) = _acts(w, CARIN, cands[:1])
+    cands = [c for c in _formed(w, CARIN, "train", CARIN) if c.operands.get("kind") == "copying"]
+    assert len(cands) == 1, [c.operands for c in cands]
+    (act,) = _acts(w, CARIN, cands)
     assert act.payload["kind"] == "copying"
     assert _kinds(_resolve(w, d, act)) == ["capability.raised"]
     assert carin.capability == {"copying": 4}
@@ -407,6 +407,74 @@ def test_mutation_without_the_vocation_line_train_is_not_formed(monkeypatch):
     assert _formed(w, CARIN, "train", CARIN), "precondition: the shipped line forms it"
     monkeypatch.setattr(OPT, "VOCATION_SOURCED", {})
     assert not [c for c in _formed(w, CARIN, "train", CARIN) if c.operands.get("kind") == "copying"]
+
+
+# REM-30 (v10 B10-10) landed CP-T01-01's four deferred `verb_capability` rows: `argue: "argue"`, and `research`,
+# `examine`, `surveil: "inquiry"`. They are VALUES of the table, so they ARE the vocation range
+# (`VOCATIONS = frozenset(VERB_CAPABILITY.values())`); the one roster is the owner, there is no second list.
+
+def test_the_four_verb_capability_rows_resolve_and_are_the_vocation_range():
+    from ..data.rosters import VERB_CAPABILITY
+    assert {v: VERB_CAPABILITY.get(v) for v in ("argue", "research", "examine", "surveil")} == {
+        "argue": "argue", "research": "inquiry", "examine": "inquiry", "surveil": "inquiry"}
+    # CR-20: the range is closed over `vocation_attribute`'s rows (same set, derived: a literal triple here is
+    # flagged by `test_jordan_no_definition_is_hardcoded_in_a_body` now that a second roster is that set).
+    from ..data.rosters import VOCATION_ATTRIBUTE
+    assert VERBS.VOCATIONS == set(VOCATION_ATTRIBUTE) and len(VERBS.VOCATIONS) == 3
+
+
+def _train_kinds(w, pid):
+    return sorted(c.operands.get("kind") for c in _formed(w, pid, "train", pid))
+
+
+def test_train_forms_one_candidate_per_vocation_including_argue_and_inquiry(monkeypatch):
+    """THE FALSIFIER AND ITS CONTROL: Carin forms `train` carrying each vocation in the range, so the two
+    keys the rows add are formed; with the `inquiry` rows removed (the planted failure) or the `argue` row
+    removed, that kind is not formed and the others are."""
+    w, _d = _npc088()
+    assert _train_kinds(w, CARIN) == sorted(VERBS.VOCATIONS) and len(_train_kinds(w, CARIN)) == 3
+    monkeypatch.setattr(OPT, "VOCATIONS", VERBS.VOCATIONS - {"inquiry"})
+    assert _train_kinds(w, CARIN) == ["argue", "copying"]
+    monkeypatch.setattr(OPT, "VOCATIONS", VERBS.VOCATIONS - {"argue"})
+    assert _train_kinds(w, CARIN) == ["copying", "inquiry"]
+
+
+def test_a_pupil_whose_vocation_reads_argue_or_inquiry_is_trained_and_faculty_follows(monkeypatch):
+    """Before the rows `train` on a pupil holding `argue` or `inquiry` was refused at the effect (the key was
+    outside `VOCATIONS`); after, it raises it by one and `faculty` reads the raised key for the verbs that
+    name it (`argue`; `research`, `examine`, `surveil`) while a verb of another key still reads the default."""
+    from ..data.rosters import VERB_CAPABILITY
+    from ..loop import effects_combat as EC
+    w, d = _npc088()
+    pupil = next(pid for pid, p in sorted(w.persons.items()) if pid != CARIN and not p.capability)
+    w.persons[pupil].capability = {"argue": 2, "inquiry": 3}
+    default = w.fixtures.get("pool_default")
+    with monkeypatch.context() as m:                    # the planted failure: the `inquiry` rows removed
+        m.setattr(EC, "VOCATIONS", VERBS.VOCATIONS - {"inquiry"})
+        refused = _resolve(w, d, Act(id="tr_inq0", actor=CARIN, verb="train",
+                                      payload={"subject": pupil, "kind": "inquiry"}))
+    assert _kinds(refused) == ["train.refused"] and w.persons[pupil].capability["inquiry"] == 3
+    assert _kinds(_resolve(w, d, Act(id="tr_inq1", actor=CARIN, verb="train",
+                                      payload={"subject": pupil, "kind": "inquiry"}))) == ["capability.raised"]
+    assert _kinds(_resolve(w, d, Act(id="tr_arg1", actor=CARIN, verb="train",
+                                      payload={"subject": pupil, "kind": "argue"}))) == ["capability.raised"]
+    assert w.persons[pupil].capability == {"argue": 3, "inquiry": 4}
+    p = w.persons[pupil]
+    inquiries = [v for v, k in VERB_CAPABILITY.items() if k == "inquiry"]
+    assert len(inquiries) == 3 and {sigma.faculty(w, p, v) for v in inquiries} == {4}
+    assert sigma.faculty(w, p, "argue") == 3 and sigma.faculty(w, p, "determine") == default
+
+
+def test_the_three_train_candidates_on_one_subject_get_three_act_ids():
+    """The vocation is part of `train`'s act id (`data/verbs.py::act_key`): the three Candidates formed on the same
+    subject mint three ids, and all three fold in one deliberation; without it they share `(actor, verb,
+    subject)` and `state/acts.py` refuses the second (the failure this test was written on, seed 0 season 1)."""
+    w, d = _npc088()
+    acts = _acts(w, CARIN, _formed(w, CARIN, "train", CARIN))
+    assert len(acts) == 3 and len({a.id for a in acts}) == 3, [a.id for a in acts]
+    assert VERBS.act_key("train", CARIN, {"kind": "argue"}) != VERBS.act_key("train", CARIN, {"kind": "inquiry"})
+    assert VERBS.act_key("tend", CARIN, {"kind": "argue"}) == CARIN, "another row's id is untouched"
+    assert len(_resolve(w, d, *acts)) >= 3
 
 
 def test_a_vocation_sourced_line_naming_no_capability_writer_is_refused_at_load():

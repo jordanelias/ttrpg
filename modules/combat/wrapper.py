@@ -530,7 +530,21 @@ def _terms_yielder(A, B, terms, cfg):
     fa, fb = (c.wt.health_remaining / c.wt.health_full for c in (A, B))
     return A if fa < fb else B if fb < fa else None
 
-def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None, terms=LETHAL_TERMS):
+# ── THE PER-TURN CHOICE (v10 REM-31, IN-46: the grid mode's suspension) ──────────────────────────────────────────────
+# A PLAYABLE fight hands each turn's choice to a DECIDER, a parameter (never a module attribute: `_TRACE`'s rebinding is
+# the precedent not to follow). `decide(turn)` is called at the top of each turn, before every draw of that turn and after
+# a declared `Yield` of the same turn (the declaration is the earlier fact), and returns one member of this closed set:
+#   - 'engage'   : the turn is fought. Today's loop engages every turn, so `decide=None` (the default, AUTOMATED) is
+#                  exactly 'engage' every turn, and the call is byte-identical to the one before this parameter.
+#   - 'withdraw' : the loop's existing UNRESOLVED exit, taken early -- no further turn, no UPSET_FLOOR draw (the fight is
+#                  undecided, result 0, the ruled outcome). A `withdraw` trace event names the turn.
+# [ASSUMPTION; the set is {engage, withdraw}, Jordan's "you choose to attack" (#445 `05:8-11`); PC's Plan layer (M-4) may
+# widen it, and whether `yield` joins it is #445 `05` §4.1 (J-15), not decided here.] The decider draws nothing from
+# `rng` and mutates nothing, so equal choices produce the identical draw sequence: AUTOMATED and PLAYABLE replay equal.
+ENGAGE, WITHDRAW = 'engage', 'withdraw'
+TURN_CHOICES = (ENGAGE, WITHDRAW)   # closed set, this module's: the host's decider is checked against this tuple
+
+def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None, terms=LETHAL_TERMS, decide=None):
     import random
     if terms not in DUEL_TERMS:
         raise ValueError(f"terms {terms!r} is not one of {DUEL_TERMS}")
@@ -560,6 +574,13 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None, terms=LETHAL_
                 result, winner = (-1, B) if yield_decl.by is A else (1, A)
                 _emit('fight_result', result=result, winner=winner.label)
                 return result
+        if decide is not None:   # THE PER-TURN CHOICE (REM-31): before every draw of the turn; draws nothing
+            choice = decide(turn+1)
+            if choice not in TURN_CHOICES:
+                raise ValueError(f"the decider returned {choice!r}, which is not one of {TURN_CHOICES}")
+            if choice == WITHDRAW:
+                _emit('withdraw', turn=turn+1)
+                break            # result is 0 here (a felling breaks with a result set): UNRESOLVED, no upset draw
         first = A if rng.random()<0.5 else B
         _emit('turn_start', turn=turn+1, first=first.label)
         loser, prev_closed = engagement(A,B,first,cfg,rng,prev_closed,terms=stop)

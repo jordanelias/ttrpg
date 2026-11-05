@@ -37,8 +37,12 @@ for seed, ends in ((7, (4, 4)), (11, (4, 1)), (3, (2, 4))):
     inp = PersonalCombatInput(claimants=("p_a", "p_b"), ends=ends, wound_quantities=qs)
     got = entry(inp, random.Random(seed))
     again = entry(inp, random.Random(seed))
+    # THE PLAYABLE BRANCH (REM-31): a decider that always engages is the automated fight, and taking that branch
+    # must load nothing of the host either (a host import placed behind `decide` would otherwise never be seen)
+    played = entry(inp, random.Random(seed), decide=lambda view: "engage")
     out.append((seed, ends, got["status"], got["result"], got["ends"], got["wound_state"],
-                len(got["trace"]), again == got))
+                len(got["trace"]), again == got and played["result"] == got["result"]
+                and played["ends"] == got["ends"] and played["wound_state"] == got["wound_state"]))
 loaded = sorted(os.path.relpath(m.__file__, {root!r}) for n, m in list(sys.modules.items())
                 if n not in before and getattr(m, "__file__", None)
                 and os.path.abspath(m.__file__).startswith({root!r} + os.sep))

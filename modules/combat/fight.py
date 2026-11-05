@@ -21,15 +21,16 @@ refusal are `seam/wrappers/combat.py`'s, and the degree is `seam/ladder.py::comb
 from __future__ import annotations
 
 import random
-from typing import Optional
+from typing import Callable, Optional
 
-from engine.season.queries.inputs import PersonalCombatInput
+from engine.season.queries.inputs import CombatTurnView, PersonalCombatInput
 from engine.substrate import pc_engine
 
 _MISSING = object()   # `getattr`'s default for a tracker field the engine does not carry (None is a value)
 
 
-def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None) -> dict:
+def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
+          decide: Optional[Callable[[CombatTurnView], str]] = None) -> dict:
     """Fight one bout scene between the record's two parties. RESOLVED -> dict(status, result, trace,
     ends, wound_state), where `wound_state[id]` is `None` when the Combatant carries no tracker and
     otherwise holds each `inp.wound_quantities` field the tracker carries (a field it lacks is absent,
@@ -38,7 +39,13 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None) -> dict
     The `rng` is a parameter and is never constructed here (`04 §C.12` rejection 4): the host builds it
     from its own seed and passes it down. `pc_engine.load()` RAISES on a missing engine, by its own
     contract; a module whose directory is gone is refused earlier, at driver construction, by the
-    registrar resolving this file."""
+    registrar resolving this file.
+
+    `decide` (v10 REM-31, IN-46) is the host's PLAYABLE per-turn decider, forwarded to the engine's own
+    turn loop (`wrapper.fight`'s `decide`), never re-implemented here. It crosses the module boundary
+    OUTWARD, so it is handed a typed view, never a `Combatant`: `CombatTurnView` -- the turn index, the
+    claimants and a fresh copy of each party's `inp.wound_quantities` (`_lift`, below). `None` (AUTOMATED,
+    the default) is the engine's own engage-every-turn loop exactly."""
     wrapper, combatant = pc_engine.load()
     a_id, b_id = inp.claimants
     a_end, b_end = inp.ends
@@ -50,13 +57,6 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None) -> dict
     # declare `terms` yet: the season passing them (and the field) is PC-10b's, and this module may not edit the
     # host. The engine refuses a term outside `wrapper.DUEL_TERMS` by name.
     terms = getattr(inp, "terms", wrapper.LETHAL_TERMS)
-    try:
-        # The engine's own note: `_TRACE` adds no rng draw and no state mutation, so capturing it
-        # CANNOT change the result. That is why the scene may be recorded without perturbing it.
-        wrapper._TRACE = trace.append
-        result = wrapper.fight(A, B, rng=rng, terms=terms)
-    finally:
-        wrapper._TRACE = prev
 
     def _lift(c) -> Optional[dict]:
         wt = getattr(c, "wt", None)
@@ -68,6 +68,18 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None) -> dict
             if v is not _MISSING:
                 out[q] = v
         return out
+
+    # THE VIEW THE DECIDER READS (REM-31): built per turn from the trackers, a fresh dict each call.
+    turn_choice = None if decide is None else (
+        lambda turn: decide(CombatTurnView(turn=turn, claimants=inp.claimants,
+                                           wound_state={a_id: _lift(A), b_id: _lift(B)})))
+    try:
+        # The engine's own note: `_TRACE` adds no rng draw and no state mutation, so capturing it
+        # CANNOT change the result. That is why the scene may be recorded without perturbing it.
+        wrapper._TRACE = trace.append
+        result = wrapper.fight(A, B, rng=rng, terms=terms, decide=turn_choice)
+    finally:
+        wrapper._TRACE = prev
 
     return dict(status="RESOLVED", result=result, trace=trace,
                 ends={a_id: A.end, b_id: B.end},

@@ -53,6 +53,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import ci_common  # noqa: E402
+import descriptor_registry  # noqa: E402  (the one resolver of a name; the engine reads its cooked map below)
 
 REPO = ci_common.REPO
 SRC = os.path.join(REPO, 'references', 'descriptor_registry.yaml')
@@ -184,6 +185,39 @@ def _affiliation_concerns(block, names):
     return out
 
 
+def _attribute_names(reg):
+    """`{lowercased name | alias | key: key}` over the live roster, refusing a spelling two keys share
+    (a name that resolved to either would be read by whichever came first)."""
+    out = {}
+    for e in descriptor_registry.all_attributes(reg):
+        for spelling in [e['key'], e['name'], *e.get('aliases', [])]:
+            n = str(spelling).strip().lower()
+            if out.setdefault(n, e['key']) != e['key']:
+                raise SystemExit(f'descriptor_registry.yaml: {spelling!r} names both {out[n]} and {e["key"]}.')
+    return dict(sorted(out.items()))
+
+
+def _heritage_roster(reg, concerns):
+    """The descents `Person.heritage` is one of (v10 CR-30, ED-IN-0301). Validated as the rosters above are
+    (`_named_roster`), plus its `engages:` cells: each key a ROSTERED member and each value a `concerns:` key
+    of the affiliation roster (`concerns` is that block's validated mapping), so an engagement can name only a
+    concern the cast is already held to. A member under no key engages none."""
+    block, names = _named_roster(reg, 'heritage_roster',
+                                 'It is the single owner of the descents Person.heritage is one of.')
+    engages = block.get('engages') or {}
+    if not isinstance(engages, dict):
+        raise SystemExit('descriptor_registry.yaml: heritage_roster.engages is not a mapping.')
+    for member, concern in engages.items():
+        if member not in names:
+            raise SystemExit(f'descriptor_registry.yaml: heritage_roster.engages names {member!r}, '
+                             f'which is not on heritage_roster.names.')
+        if concern not in concerns:
+            raise SystemExit(f'descriptor_registry.yaml: heritage_roster.engages.{member} is {concern!r}, '
+                             f'which is not a concerns key of affiliation_roster ({sorted(concerns)}).')
+    return {'source': block.get('source'), 'count': len(names), 'names': names,
+            'engages': {str(m): str(c) for m, c in engages.items()}}
+
+
 def build():
     reg = ci_common.load_yaml(SRC, default=None)
     if not reg:
@@ -214,6 +248,11 @@ def build():
             'default': attrs.get('default'),
             'roster': roster,
             'count': len(roster),
+            # CR-20: every LIVE name, alias and key (lowercased) -> its key, cooked from the resolver
+            # `tools/descriptor_registry.py` owns, so the cast's legacy spellings resolve at runtime
+            # without a second alias list. A retired attribute's names (Bonds) are absent: a value
+            # authored under one is refused as not one of the ten.
+            'names': _attribute_names(reg),
             'pending_tenth': (
                 'Jordan ruled 2026-08-14 that the roster WILL BE 10 attributes. The registry ships '
                 f'{len(roster)} and the tenth is UNNAMED. This sentinel exists so a reader cannot mistake '
@@ -232,6 +271,8 @@ def build():
         'axis_roster': _axis_roster(reg),
         # THE AFFILIATION ROSTER (IN-08 H10): what `Person.conviction` is keyed on, with its scale.
         'affiliation_roster': _affiliation_roster(reg),
+        # THE HERITAGE ROSTER (CR-30): what `Person.heritage` is one of, with the concern each engages.
+        'heritage_roster': _heritage_roster(reg, _affiliation_roster(reg)['concerns']),
         'settlement_stats': _section(reg, 'settlement_stats'),
         'practitioner_stats': _section(reg, 'practitioner_stats'),
         'territory_stats': _section(reg, 'territory_stats'),

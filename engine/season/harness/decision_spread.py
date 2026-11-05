@@ -369,7 +369,7 @@ def common_referents(w) -> list:
         if pid_ not in FACTION_BY_PROP or prop.subject not in w.persons or prop.subject in seen:
             continue
         seen.add(prop.subject)
-        out.append(("King (" + pid_ + ")" if pid_ == faction_prop_id("Crown") else pid_, prop.subject))
+        out.append(("King (" + pid_ + ")" if pid_ == faction_prop_id("Valorsmark") else pid_, prop.subject))
     return out
 
 

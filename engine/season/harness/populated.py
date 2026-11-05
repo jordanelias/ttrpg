@@ -985,8 +985,18 @@ def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: boo
 
 def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
                 goals: bool = True, goals_complete: bool = True, foreign: bool = True,
-                guards: bool = False, acquaintances: bool = True) -> World:
+                guards: bool = False, acquaintances: bool = True, cast_attributes: bool = False) -> World:
     """The whole map, its buildings, and one person per season loop.
+
+    `cast_attributes` (v10 CR-20) reads each cast row's `stats:` into `Person.attributes`
+    (`data/cast.py::attributes_of`). `False` SHIPS, and is the CONTROL ARM: no person holds an attribute, so
+    `faculty` falls to `pool_default` and the realm acts as it did before the carrier (only the `Person` repr
+    moved). The registry authors ONE row's `stats:` (NPC-001: cognition, focus, endurance, and the whole social
+    category as attunement, presence and grace at 3-4), and `True` is a MOVER by that one person (her pool on the
+    `inquiry` vocation is her Reason, 5, not the default 2; on `argue`, her Attunement, 3): measured
+    at CR-20, the event list over two seasons moves at seeds 0, 1 and 2 (her ledger alone at 0 and 1, a
+    cascade through 79 ledgers at 2). [ASSUMPTION; medium; Jordan to correct; revert: none needed -- flipping
+    the default is its own declared mover, with the cast's values Jordan's content.]
 
     `acquaintances` (CR-81, `ED-IN-0318`) writes the realm's starting acquaintances (`acquaintance_pairs`,
     `seed_acquaintances`): faction co-members and the high-status seats know one another. `True` ships;
@@ -1087,7 +1097,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # says *"Duke of Varfell"*. The rung is a place on a containment ladder and asserts nothing about
     # how the Jarls choose him.
     duchy_of: dict = {}
-    for fac_name, duchy_name in (("Crown", "Valorsmark"), ("Hafenmark", "Hafenmark"),
+    for fac_name, duchy_name in (("Valorsmark", "Valorsmark"), ("Hafenmark", "Hafenmark"),
                                  ("Varfell", "Varfell")):
         did = f"duchy_{_slug(duchy_name)}"
         w.rungs[did] = Rung(did, "duchy")
@@ -1099,7 +1109,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         rid = territory_rung_id(tid)                    # one owner: data/rosters.py
         w.rungs[rid] = Rung(rid, "territory")
         _index_anchor(w, anchors, tid, rid)
-        holder = str(terr.get("faction") or "")
+        # CR-86: the geography's `faction: Crown` is Valorsmark's alias; `resolve_faction` is the one owner of
+        # alias -> canonical, so the Crown's territories still hang off its duchy. `Uncontrolled` -> "".
+        holder = cast.resolve_faction(terr.get("faction")) or ""
         # ⚠ A FOREIGN TERRITORY GETS NO PARENT, AND THAT IS THE POINT RATHER THAN A GAP. Schoenland
         # is on the faction roster and is FOREIGN — `rosters.yaml` records it as not
         # player-eligible, holding its territory and granting or refusing Altonian naval passage —
@@ -1309,6 +1321,24 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # written in play. No fallback and no draw: a row with no authored value leaves `None`, and a
         # `None` cannot pass `thread_read`'s gate (`Person.thread_sensitivity`'s comment).
         w.persons[pid].thread_sensitivity = cast.thread_sensitivity_of(cast.row(cid) or {})
+        # v10 CR-20: the ten attributes, from the same row's `stats:` (legacy spellings resolve through the
+        # registry), set here and NEVER written in play. Absent where unauthored: `{}` is no key, and
+        # `faculty` then falls to `pool_default`.
+        if cast_attributes:
+            w.persons[pid].attributes = cast.attributes_of(cast.row(cid) or {})
+        # v10 CR-30: DESCENT, from the same row's `heritage:`, set here and NEVER written in play. No fallback and
+        # no draw: a row that states none leaves `None`, which `epistemic._term_marks` deposits as `()`.
+        w.persons[pid].heritage = cast.heritage_of(cast.row(cid) or {})
+        # v10 CR-33: the row's `lifepath:` EXPANDED into the capability keys its template names, each at
+        # `pool_default` (the grant changes no POOL; it makes the key one `train` can raise, and it LOWERS the
+        # obstacle the holder presents: a held key at 2 is opposed at 2.0 and halved to 1.0, an unheld person at
+        # `obstacle_default` 2 -- unmeasured in magnitude), set here and
+        # written in play only by `train`. The lifepath id is stored on NO Person: `capability_of` reads it and
+        # drops it. No fallback and no draw: a row with no `lifepath:`, or one whose template names no key, leaves
+        # `capability` as it was, `{}`.
+        held = cast.capability_of(cast.row(cid) or {}, w.fixtures.get("pool_default"))
+        if held:
+            w.persons[pid].capability = {**held, **w.persons[pid].capability}
 
     # -- WHO BELONGS TO WHAT ----------------------------------------------------
     #

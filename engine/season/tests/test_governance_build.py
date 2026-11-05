@@ -1182,7 +1182,7 @@ def test_13f_a_planted_establish_founds_the_office_and_grants_a_hold_opened_befo
     assert kinds == ["office.established", "tenure.payload_set"], kinds
     off = w.offices["off_reeve"]
     assert (off.post, off.rung, off.remit_acts, off.faction, off.conferral) == (
-        "Reeve", "S", ["issue", "dispatch"], "Crown", "appointed"), off
+        "Reeve", "S", ["issue", "dispatch"], "Valorsmark", "appointed"), off
     assert not hasattr(off, "establishment") and world_q.establishment_of(w, off.id) == [], (
         "`17a` deleted `Office.establishment`; a founding obliges nobody, so the Query is empty")
     assert t.granted_acts == ("issue", "dispatch"), (
@@ -1430,7 +1430,7 @@ def test_13f_a_planted_establish_founds_an_office_by_body_not_only_by_faction():
     out = _establish(w, d, "e_by_body", _founding(faction=None, body="Imperial Court"))
     assert [e.kind for e in out] == ["office.established"], [e.kind for e in out]
     off = w.offices["off_reeve"]
-    assert (off.body, off.faction) == ("Imperial Court", "Crown"), (off.body, off.faction)
+    assert (off.body, off.faction) == ("Imperial Court", "Valorsmark"), (off.body, off.faction)
 
 
 def test_13f_the_restamp_skips_a_non_hold_tenure_and_a_dead_hold_on_the_same_office():
@@ -1740,7 +1740,7 @@ def test_13d_i_an_empty_parent_refuses_even_a_same_faction_grandparent():
                    for t in w.tenures), "fixture: someone already sits at S"
     _seat_on(w, "p_reeve", "off_reeve_hh", "Reeve", "Hh", "Crown", remit=("issue",))
     w.offices["off_reeve_hh"].revocation = _RUNG_ABOVE
-    assert w.offices["off_duke"].faction == w.offices["off_reeve_hh"].faction == "Crown", (
+    assert w.offices["off_duke"].faction == w.offices["off_reeve_hh"].faction == "Valorsmark", (
         "fixture: the duke and the reeve are not the same faction")
     assert not _may_revoke(w, "p_high", "off_reeve_hh"), (
         "the Crown duke, two rungs above an empty parent, revoked a Crown reeve -- "
@@ -1878,7 +1878,7 @@ def test_13d_i_the_title_in_a_body_refusal_is_rehomed_not_dropped():
     assert checked == len(TITLE_DOMAINS) >= 11, checked
     refuse_a_title_in_a_body("off_t", "King", None)                  # a title held at a rung
     refuse_a_title_in_a_body("off_t", "Chancellor", "Imperial Court")  # an office in an organ
-    assert Office("off_t", "Chancellor", None, [], body="Imperial Court").faction == "Crown"
+    assert Office("off_t", "Chancellor", None, [], body="Imperial Court").faction == "Valorsmark"
 
 
 def test_13d_i_revoke_executes_in_the_fold_for_the_seat_above_and_refuses_the_other_faction():
@@ -2092,6 +2092,7 @@ def test_13d_iii_every_authored_anchor_resolves_to_one_live_rung_of_its_own_kind
     is what filled the index); a territory is `territory_rung_id`, the id relation's one owner. A
     row that resolved to a rung of another kind, or to a neighbour, fails here. The `[NEW]` rows are
     counted separately because the position's falsifier names them."""
+    from ..data import cast
     from ..data.rosters import territory_rung_id
     from ..state.containment import parent_of
 
@@ -2109,7 +2110,7 @@ def test_13d_iii_every_authored_anchor_resolves_to_one_live_rung_of_its_own_kind
             expect = {r for r, x in w.rungs.items() if x.kind == "realm"}
         elif kind == "duchy":
             expect = {parent_of(w, territory_rung_id(tid)) for tid, terr in geo["provinces"].items()
-                      if terr.get("faction") == key}
+                      if cast.resolve_faction(terr.get("faction")) == key}   # CR-86: the geography says `Crown`, the alias
         else:
             expect = {territory_rung_id(key)}
         assert expect == {off.rung}, (
@@ -2463,11 +2464,12 @@ def test_13d_iii_an_authored_obligee_serves_the_seat_with_no_term(_realm13):
     w = _realm13
     withs = [r for r in _seat_rows() if r.get("obligees")]
     assert [r["id"] for r in withs] == ["off_king", "off_restoration_leader"], withs
-    for row_id, sworn in (("off_king", "p_npc_070"), ("off_restoration_leader", "p_npc_041")):
+    # CR-86 (ED-IN-0342): the King's three are the Grand Master and the two vassals (the Duchess, the Duke), in row order
+    for row_id, sworn in (("off_king", ["p_npc_070", "p_npc_050", "p_npc_052"]), ("off_restoration_leader", ["p_npc_041"])):
         seat = w._office_census["authored"][row_id]   # a seat a row overlays keeps the row's id (CP-T02-02), so this is the identity
-        assert world_q.establishment_of(w, seat) == [sworn]
-        t = next(t for t in w.tenures if t.kind == "oblige" and t.object == seat)
-        assert t.term is None and t.live
+        assert sorted(world_q.establishment_of(w, seat)) == sorted(sworn)
+        for t in (t for t in w.tenures if t.kind == "oblige" and t.object == seat):
+            assert t.term is None and t.live
 
 
 def test_13d_iii_the_remit_overlay_replaces_the_default_and_leaves_only_the_unruled_act(_realm13):
@@ -2920,7 +2922,15 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # season: 619 -> 685 in both arms; `test_go07_canonical_digest.py` records the 685). CONTROL: `choice_temperature` swept
     # back to 0.1 reads 619 on the shipped arm (`test_go07_canonical_digest.BASE[0]` before this row, read in process); the
     # second arm was not run under the control.
-    assert (out["acts"], cout["acts"]) == (685, 685), (
+    # ⚠⚠ v10 REM-31 (IN-46): (685, 685) -> (700, 700), A RE-RECORD WITH THE UNIT THAT MOVED IT: `the body` defers every fight to
+    # ENCOUNTER (`march`'s pair), so each fight is declared at RESOLVE and fought on the round's settled world, and the act mix moves
+    # (seed 0, one season: 685 -> 700 in both arms; `test_go07_canonical_digest.py` records the 700). CONTROL: `the body`'s
+    # `step:`/`declares:` popped in process reads (685, 685) under this same test.
+    # ⚠⚠ v10 REM-30 (the `verb_capability` rows): (700, 700) -> (705, 705), A RE-RECORD WITH THE UNIT THAT MOVED IT: `train` forms one
+    # Candidate per vocation (`argue` and `inquiry` join `copying`) and its act id carries the vocation, so the act mix moves (seed 0,
+    # one season: 700 -> 705 in both arms; `test_go07_canonical_digest.py` records the 705). CONTROL: the rows commit's four source
+    # files reverted read (700, 700) under this same test (the parent tree's run of this file's set).
+    assert (out["acts"], cout["acts"]) == (705, 705), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

@@ -21,7 +21,7 @@ from engine.season.queries import world_q
 from engine.season.state import gate as G
 from engine.season.state.carriers import Act
 
-CROWN = "fac_crown"
+CROWN = "fac_valorsmark"
 TOWN = "set_s_016"            # Hafenmark-held; no Crown member stands there at build
 ACTOR, SEAT = "p_npc_033", "off_spymaster"   # a Crown seat granted `dispatch`; his army stands at `set_s_014`
 

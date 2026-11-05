@@ -37,7 +37,9 @@ def test_an_ambiguous_display_string_raises_instead_of_picking_one():
     a settlement stat). `Legitimacy` had once been MISSING from this list -- `descriptor_registry.yaml`
     gained `fac.legitimacy` and `names_index.yaml` did not, so the leaf RESOLVED it to the settlement
     stat -- found by an antagonist pass; the loop below is what proves the refusal still fires."""
-    assert set(N.AMBIGUOUS) == {"Order"}, (
+    #: `Reason` joined at CR-84 (ED-IN-0328): the attribute `attr.mind.acuity` is named Reason and
+    #: `conv.reason` is a conviction. The `Order` precedent: two real quantities, the KEY decides.
+    assert set(N.AMBIGUOUS) == {"Order", "Reason"}, (
         f"the ambiguous set changed: {sorted(N.AMBIGUOUS)}. A new entry means two rows started "
         "claiming one display string; a missing one means a row was removed or merged")
     for name, claimants in N.AMBIGUOUS.items():
@@ -45,6 +47,72 @@ def test_an_ambiguous_display_string_raises_instead_of_picking_one():
             N.canonical_for(name)
         assert all(c in str(e.value) for c in claimants), (
             f"the refusal for {name!r} must name both claimants so the caller can pass a key")
+
+
+#: Every name -> attribute key that resolved through the names leaf before CR-84 (read off
+#: names.json at e71f1749). Perception is absent on purpose: it left Attunement for its own key.
+_PRE_CR84 = {
+    'Strength': 'attr.body.strength', 'Endurance': 'attr.body.endurance',
+    'Vitality': 'attr.body.endurance', 'Agility': 'attr.body.agility',
+    'Dexterity': 'attr.body.agility', 'Focus': 'attr.mind.focus', 'Acuity': 'attr.mind.acuity',
+    'Reasoning': 'attr.mind.acuity', 'Cognition': 'attr.mind.acuity', 'Will': 'attr.mind.will',
+    'Spirit': 'attr.mind.will', 'Attunement': 'attr.social.attunement',
+    'Charisma': 'attr.social.charisma', 'Presence': 'attr.social.charisma',
+    'Bonds': 'attr.social.bonds', 'Sincerity': 'attr.social.bonds', 'Affability': 'attr.social.bonds',
+}
+
+
+def _names_lost():
+    """Names that no longer reach the canonical display of the key they reached before CR-84."""
+    lost = []
+    for name, key in _PRE_CR84.items():
+        try:
+            got = N.canonical_for(name)
+        except ValueError:
+            got = None
+        if got != N.CANONICAL[key]:
+            lost.append(name)
+    return lost
+
+
+def _index_rows():
+    """`names_index.yaml`'s rows by key, wherever they sit in the file."""
+    import yaml
+    found = {}
+
+    def walk(node):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                if isinstance(v, dict) and 'canonical' in v:
+                    found[k] = v
+                else:
+                    walk(v)
+    walk(yaml.safe_load((REPO / 'references' / 'names_index.yaml').read_text()))
+    return found
+
+
+def test_the_reason_group_is_held_by_the_attribute_row_and_not_the_conviction_row():
+    """`Reason` is two rows' display string, so the display-level check above cannot tell which row
+    holds `Acuity` (both display 'Reason'): a name moved onto `conv.reason` would stay green there.
+    This one reads the KEY: every pre-CR-84 name of `attr.mind.acuity` sits on that row."""
+    rows = _index_rows()
+    held = {rows['attr.mind.acuity']['canonical'], *rows['attr.mind.acuity']['aliases']}
+    for name, key in _PRE_CR84.items():
+        if key == 'attr.mind.acuity':
+            assert name in held, name
+            assert name not in {rows['conv.reason']['canonical'], *rows['conv.reason']['aliases']}, name
+
+
+def test_every_attribute_name_that_resolved_before_still_resolves_to_the_same_key():
+    assert _names_lost() == []
+    assert N.canonical_for('Perception') == N.CANONICAL['attr.mind.perception'] == 'Perception'
+    assert 'Perception' not in N.ALIASES            # it is a canonical now, not Attunement's alias
+
+
+def test_names_alias_preservation_reddens_when_an_alias_is_dropped(monkeypatch):
+    """The planted failure: remove 'Dexterity' from the leaf's alias map and `_names_lost` names it."""
+    monkeypatch.setattr(N, 'ALIASES', {k: v for k, v in N.ALIASES.items() if k != 'Dexterity'})
+    assert _names_lost() == ['Dexterity']
 
 
 def test_a_legacy_tag_raises_and_names_its_replacement():
@@ -91,10 +159,12 @@ def test_the_season_loop_derives_the_faction_roster_rather_than_copying_it():
     assert set(N.FACTIONS) == set(FACTIONS), "the derived roster and the leaf disagree"
     # Named members, not a count: each of these is a row whose `token_class: faction` is what
     # carries it down the chain, so losing one is the exact regression Schoenland surfaced.
-    for member in ("Schoenland", "Church of Solmund", "Crown", "Guilds"):
+    for member in ("Schoenland", "Church of Solmund", "Valorsmark", "Guilds"):
         assert member in N.FACTIONS, (
             f"{member!r} left the derived roster: {sorted(N.FACTIONS)}. Its `names_index.yaml` row "
             "has lost `token_class: faction`, or the export was not re-run")
+    # CR-86 (ED-IN-0342): "Crown" is Valorsmark's ALIAS -- it left the roster as a member and resolves to Valorsmark.
+    assert "Crown" not in N.FACTIONS and N.canonical_for("Crown") == "Valorsmark"
 
 
 # ---------------------------------------------------------------------------
@@ -136,8 +206,8 @@ def test_the_exporter_refuses_an_alias_that_shadows_a_canonical(tmp_path):
     now `Prosperity`, a live canonical (`set.prosperity`): the SHAPE is what must red the gate."""
     def doctor(s):
         return s.replace(
-            "  attr.social.charisma:  {canonical: Charisma,   aliases: [Presence]",
-            "  attr.social.charisma:  {canonical: Charisma,   aliases: [Presence, Prosperity]")
+            "  attr.social.charisma:  {canonical: Presence,   aliases: [Charisma]",
+            "  attr.social.charisma:  {canonical: Presence,   aliases: [Charisma, Prosperity]")
     r = _run_exporter_on(tmp_path, doctor)
     assert r.returncode != 0, f"exporter accepted a canonical-shadowing alias: {r.stdout}"
     assert "canonical name of" in (r.stdout + r.stderr)

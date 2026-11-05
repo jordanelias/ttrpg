@@ -74,13 +74,21 @@ entries:
   # ── ATTRIBUTES (mirror: descriptor_registry.yaml attributes; scalar 1-7) ──────
   attr.body.strength:    {canonical: Strength,   aliases: [],                     legacy: [], category: attribute, enforce: warn}
   attr.body.endurance:   {canonical: Endurance,  aliases: [Vitality],             legacy: [], category: attribute, enforce: warn}
-  attr.body.agility:     {canonical: Agility,    aliases: [Dexterity],            legacy: [], category: attribute, enforce: warn}
+  # The ten (ED-IN-0328, CR-84). KEYS ARE STABLE; names and aliases moved. `Composure` is deliberately NOT
+  # an alias of Grace: it is the knot damage track (see descriptor_registry.yaml).
+  attr.body.agility:     {canonical: Coordination, aliases: [Agility, Dexterity], legacy: [], category: attribute, enforce: warn}
   attr.mind.focus:       {canonical: Focus,      aliases: [],                     legacy: [], category: attribute, enforce: warn}
-  attr.mind.acuity:      {canonical: Acuity,     aliases: [Reasoning, Cognition], legacy: [], category: attribute, enforce: warn}
-  attr.mind.will:        {canonical: Will,       aliases: [Spirit],               legacy: [], category: attribute, enforce: warn}
-  attr.social.attunement: {canonical: Attunement, aliases: [Perception],          legacy: [], category: attribute, enforce: warn}
+  # `Reason` is ALSO the conviction `conv.reason`: a recorded display collision (names.json `ambiguous`, like `Order`);
+  # the KEY disambiguates.
+  attr.mind.acuity:      {canonical: Reason,     aliases: [Acuity, Faculty, Forecasting, Predicting, Reasoning, Cognition], legacy: [], category: attribute, enforce: warn}
+  attr.mind.will:        {canonical: Spirit,     aliases: [Will, Willpower],      legacy: [], category: attribute, enforce: warn}
+  attr.mind.perception:  {canonical: Perception, aliases: [],                     legacy: [], category: attribute, enforce: warn}
+  attr.social.attunement: {canonical: Attunement, aliases: [],                    legacy: [], category: attribute, enforce: warn}
   # `Influence` is deliberately NOT an alias here: it is the roll stat's own name, not Charisma's.
-  attr.social.charisma:  {canonical: Charisma,   aliases: [Presence],  legacy: [], category: attribute, enforce: warn}
+  attr.social.charisma:  {canonical: Presence,   aliases: [Charisma],  legacy: [], category: attribute, enforce: warn}
+  attr.social.grace:     {canonical: Grace,      aliases: [],          legacy: [], category: attribute, enforce: warn}
+  # RETIRED by CR-84 (not among the ten): the row stays so the names still resolve; the deprecation flag is the
+  # descriptor_registry's `deprecated:` list (read by tools/descriptor_registry.resolve), not a field here.
   attr.social.bonds:     {canonical: Bonds,      aliases: [Sincerity, Affability], legacy: [], category: attribute, enforce: warn}
 
   # ── AGGREGATES (mirror: descriptor_registry.yaml aggregates; placeholders) ────
@@ -297,7 +305,7 @@ entries:
   world.oastad: {canonical: "Oastad", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.rendstad: {canonical: "Rendstad", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   # Schoenland is filed with the places AND classed `token_class: faction`: it is a (foreign) member of
-  # `engine/season/rosters.yaml: factions`, and `cast.py`'s `_ALIAS_MAP` selects on that class.
+  # `engine/season/rosters.yaml: factions`, and `rosters.FACTION_ALIAS` (read by `cast.py`) selects on that class.
   world.schoenland: {canonical: "Schoenland", aliases: ["Schoenland Factor"], legacy: [], category: proper_noun, enforce: warn, token_class: faction}
   world.sigurdshelm: {canonical: "Sigurdshelm", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.spartfell: {canonical: "Spartfell", aliases: [], legacy: [], category: proper_noun, enforce: warn}
@@ -315,7 +323,13 @@ entries:
   # `legacy:` name (the gate enforces only `legacy`), and `patterns` is unchanged — a bare "Church"
   # still MENTIONS the faction.
   world.church: {canonical: "Church of Solmund", aliases: ["Church"], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bChurch\b(?! Influence)'], context: ['\bArne\b', '\bCardinal\b', '\bPiety\b', '\bHeresy\b', '\bfaction\b', '\bConfessor\b', '\bdoctrine\b']}
-  world.crown: {canonical: "Crown", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bCrown\b(?! Treaty)'], context: ['\bAlmud\b', '\bfaction\b', '\bMandate\b', '\bTreaty\b', '\bTorben\b']}
+  # CR-86 (ED-IN-0342, Jordan 2026-11-05): Valorsmark IS a faction, and "Crown" is its alias -- the name of the
+  # sovereign's faction -- so every `faction: Crown` membership resolves to Valorsmark through `cast.py`'s
+  # `FACTION_ALIAS` and `canonical_for`, and the faction id is `fac_valorsmark`. The Crown's patterns and context
+  # live on this row (a bare "Crown" still MENTIONS the faction); there is no `world.crown` row.
+  # [ASSUMPTION; medium; Jordan to correct; revert: Valorsmark a fifth faction beside the Crown -- restore a
+  # `world.crown` row and drop `token_class: faction` from this one]
+  world.valorsmark: {canonical: "Valorsmark", aliases: ["Crown"], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bCrown\b(?! Treaty)', '\bValorsmark\b'], context: ['\bAlmud\b', '\bfaction\b', '\bMandate\b', '\bTreaty\b', '\bTorben\b']}
   world.hafenmark: {canonical: "Hafenmark", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bHafenmark\b']}
   world.uncontrolled: {canonical: "Uncontrolled", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.varfell: {canonical: "Varfell", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bVarfell\b']}
@@ -326,11 +340,10 @@ entries:
   world.restoration_movement: {canonical: "Restoration Movement", aliases: ["Restoration", "Movement", "RM"], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['Restoration Movement', '\bRM\b(?![a-z])']}
   # -- realms --
   # v9 IN-36: Altonia is a member of `engine/season/rosters.yaml: factions` (the external empire), so
-  # `token_class: faction` -- `cast.py`'s `_ALIAS_MAP` selects on it, which is what resolves NPC-011, NPC-089 and
+  # `token_class: faction` -- `rosters.FACTION_ALIAS` selects on it, which is what resolves NPC-011, NPC-089 and
   # NPC-090's `faction: Altonia` cell into the roster. No `patterns:` -- the vector audit reads none for it.
   world.altonia: {canonical: "Altonia", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction}
   world.valoria: {canonical: "Valoria", aliases: ["Average Valorian", "Stable Valoria", "Unstable Valoria", "Valorian", "Valnese"], legacy: [], category: proper_noun, enforce: warn}
-  world.valorsmark: {canonical: "Valorsmark", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   # -- regions --
   world.ashmarket: {canonical: "Ashmarket", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.southernmost: {canonical: "Southernmost", aliases: ["Southernmost Awareness"], legacy: [], category: proper_noun, enforce: warn}

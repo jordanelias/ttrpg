@@ -27,12 +27,41 @@ where `<actor>` is the Person's `name` when it has one and the id otherwise, `<k
 distinct Event kinds the act emitted in log order, and the first line reads `opens the chain`. `<m>`
 is the line number of the antecedent act, always an earlier line.
 
-`--executed-only` (CR-15) runs the same pick, `deepest_chain`, over `storybar.read`'s EXECUTED rows (the
-acts `corpus_run.attempts` finds no refusal Event for, cross antecedents cut to such acts, depth
-recomputed along them) and renders that chain; the header line keeps its fields and gains the default
-pick's refused-act count. A graded loss is refused. Without the flag nothing here changes.
+THE SELECTION (CR-68, `chronicle.main`, which holds `w`). By default the pick runs over CONSEQUENCE ACTS:
+`arc.consequence_acts(w, act_of)` (over `arc.consequence_kinds`, the one owner of the predicate; `arc.py` imports `storybar`, so the predicate cannot
+live there) names the acts that caused an Event whose Receipt writes a `(kind, field)` of `arc.py`'s
+`ARC_SELF` or `ARC_WORLD`. This module holds no roster of its own. Every other act is cut the way
+`storybar._executed_rows` cuts a refused one (`read`'s `refused` argument is handed the acts that are NOT
+consequence acts): the act, and every cross edge into it, leave the rows and `depth` is recomputed along
+what remains; a cut act is not bridged over. `deepest_chain(rows)` is unchanged and stays pure over the
+rows it is handed. A graded loss that writes (a lost duel, a `field.lost`) is a consequence act; a refusal
+writes nothing and is not. `--all-acts` restores the pick over every act, today's selection before CR-68;
+the retired `--executed-only` cut by the driver's refusal rule, which counts a graded loss as refused.
+The header line keeps its fields and gains `consequence_acts=` at its end (`acts=` stays the count of
+every act read); `depth=` is the rendered chain's. A log with no consequence act says so and renders nothing.
+[ASSUMPTION; medium; Jordan to correct; revert: restore `--executed-only` and the depth-only pick]
 
-Entry point: `python -m engine.season.harness.chronicle --seed S --seasons K [--cap C] [--executed-only]`. `--seed` and
+LIMIT, STATED. An "answers" edge is any cause edge that resolves through `act_of` to another person's
+act (`storybar.read`: an occasion Event is such a cause too), so a chain shows what an act had among its
+causes, not that the later actor decided BECAUSE of the earlier one. The render says "answers" and means
+"had among its causes". And an act counts as a consequence by what its OWN Events wrote; what other
+people's acts or MATTER chained after it does not count for it.
+
+THE STORY READING (CR-69, `consequence_chains`, behind `--chains`). Over the same consequence acts, per seed:
+the number of CHAIN ENDS -- consequence acts that no other consequence act answers (along the `cross`
+edges of the rows cut to consequence acts, as above; a person's later act answering his own is no `cross`
+edge) -- whose cross-person depth, recomputed along those edges only, is at least `--min-depth`; and a
+histogram of the Event kinds carried by the Receipts that made each such end a consequence act
+(`arc.consequence_kinds`, the one owner of the predicate; kinds are READ OFF the log). NO roster of story
+types and NO classification into war / succession / ruin / grudge; no pass bar, no default for `--min-depth`
+(`--chains` without it is refused). It does not call `storybar.chains`, does not touch `_executed_rows`
+(it reads `read`'s `executed` rows, as the pick does) and changes no existing result. A reading, never a
+guard. Kinds are counted here once, raw, over the chain ends only: `harness/strife.py` maps Event kinds to
+its move codes over the whole log and owns that tabulation; this block maps nothing to a code.
+[ASSUMPTION; medium; Jordan to correct; revert: delete the reader]
+
+Entry point: `python -m engine.season.harness.chronicle --seed S --seasons K [--cap C] [--all-acts]
+[--chains --min-depth D]`. `--seed` and
 `--seasons` are required and have no default (this file is inside `tools/ci_sim_fabrication_check.py`'s
 blocking scope, the reason `harness/storybar.py` and `harness/soak.py` give); `--cap` is optional and
 is `build_realm`'s own parameter, defaulting to its own `None`, the full realm. The header line
@@ -44,7 +73,9 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+from collections import Counter
 
+from . import arc as ARC
 from . import storybar as SB
 
 
@@ -132,6 +163,41 @@ def render(log, act_of: dict, rows: dict, persons) -> str:
 
 
 # ---------------------------------------------------------------------------------------------
+# THE STORY READING (CR-69). Over `(w, act_of, bounds, min_depth)`; `log` lets a control hand in
+# `arc.shuffled_causes(...)`.
+# ---------------------------------------------------------------------------------------------
+
+def chain_ends(rows: dict, min_depth: int) -> list:
+    """Act ids in `rows` (consequence rows: `read(...)["executed"]` over the cut) that no other row answers
+    (no row lists them in `cross`) and whose `depth` is at least `min_depth`, in row order."""
+    answered = {b for r in rows.values() for b in r["cross"]}
+    return [aid for aid, r in rows.items() if aid not in answered and r["depth"] >= min_depth]
+
+
+def consequence_chains(w, act_of: dict, bounds: list, min_depth: int, log=None) -> dict:
+    """CR-69 -- `{"consequence_acts": n, "chain_ends": m, "kinds": {Event kind: ends carrying it}}`.
+
+    The ends are `chain_ends` over the rows `storybar.read` gives with every NON-consequence act cut (and
+    the edges into it, depth recomputed, as the pick does); `kinds` counts, per kind, the ends whose
+    consequence-making Events (`arc.consequence_kinds`) include it, sorted by kind. `log` defaults to
+    `w.log`; the control `arc.shuffled_causes(w.log, seed)` breaks only the links. Reads only."""
+    log = list(w.log if log is None else log)
+    made = ARC.consequence_kinds(w, act_of, log)
+    cut = frozenset(a.id for a in act_of.values() if a.id not in made)
+    rows = SB.read(log, act_of, bounds, cut)["executed"]
+    ends = chain_ends(rows, min_depth)
+    hist = Counter(k for aid in ends for k in made[aid])
+    return {"consequence_acts": len(made), "chain_ends": len(ends), "kinds": dict(sorted(hist.items()))}
+
+
+def render_chains(seed, min_depth: int, res: dict) -> str:
+    """The reading as a two-line block."""
+    kinds = ", ".join(f"{k}={n}" for k, n in res["kinds"].items()) or "(none)"
+    return (f"chains seed={seed} min_depth={min_depth} consequence_acts={res['consequence_acts']} "
+            f"chain_ends={res['chain_ends']}\nkinds on the ends' consequence Events: {kinds}")
+
+
+# ---------------------------------------------------------------------------------------------
 # CLI.
 # ---------------------------------------------------------------------------------------------
 
@@ -143,27 +209,40 @@ def main(argv=None) -> int:
                     help=f"forcing arm; built: {', '.join(SB.ARMS)}")
     ap.add_argument("--cap", type=int, default=None,
                     help="build_realm's cast cap; omitted = build_realm's own None, the full realm")
-    ap.add_argument("--executed-only", action="store_true",
-                    help="pick the deepest chain over the EXECUTED rows (refused acts and every edge "
-                         "into one cut; storybar.read's `refused` argument) and render that; the "
-                         "header keeps its fields and adds the default pick's refused-act count and "
-                         "the executed pick's depth. Without it the output is unchanged")
+    ap.add_argument("--all-acts", action="store_true",
+                    help="pick the deepest chain over EVERY act, as before CR-68; without it the pick "
+                         "runs over consequence acts only (arc.consequence_acts: an Event the act "
+                         "caused carries a Receipt writing a (kind, field) of ARC_SELF or ARC_WORLD; "
+                         "the other acts and every edge into one are cut, depth recomputed)")
+    ap.add_argument("--chains", action="store_true",
+                    help="after the render, print the story reading (CR-69): the count of consequence chain "
+                         "ends of cross-person depth at least --min-depth and a histogram of the Event kinds "
+                         "that made them consequence acts; a reading, no bar")
+    ap.add_argument("--min-depth", type=int, default=None,
+                    help="REQUIRED with --chains, no default: the least cross-person depth of a chain end counted")
     args = ap.parse_args(argv)
+    if args.chains and args.min_depth is None:
+        ap.error("--chains requires --min-depth (no default)")
 
     w, d, bounds = SB.drive(args.seed, args.seasons, args.arm, args.cap)
-    refused = SB.refusal_sets(w, len(bounds))[0] if args.executed_only else None
-    res = SB.read(w.log, d.act_of, bounds, refused)
-    chain = deepest_chain(res["acts"])
+    consequence = ARC.consequence_acts(w, d.act_of)
+    cut = None
+    if not args.all_acts:
+        cut = frozenset(a for a in {a.id for a in d.act_of.values()} if a not in consequence)
+    res = SB.read(w.log, d.act_of, bounds, cut)
+    rows = res["acts"] if args.all_acts else res["executed"]
+    chain = deepest_chain(rows)
     head = (f"chronicle seed={args.seed} seasons={args.seasons} arm={args.arm} cap={args.cap} "
-            f"acts={len(res['acts'])} depth={len(chain)} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")
-    rows = res["acts"]
-    if args.executed_only:
-        head += (f" executed-only: default_chain_refused={sum(1 for a in chain if a in refused)} "
-                 f"executed_acts={len(res['executed'])} "
-                 f"executed_depth={len(deepest_chain(res['executed']))}")
-        rows = res["executed"]
+            f"acts={len(res['acts'])} depth={len(chain)} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')} "
+            f"consequence_acts={len(consequence)}")
     print(head)
-    print(render(w.log, d.act_of, rows, w.persons))
+    if not rows and res["acts"]:
+        print("no consequence act in the log; --all-acts renders over every act")
+    else:
+        print(render(w.log, d.act_of, rows, w.persons))
+    if args.chains:
+        print(render_chains(args.seed, args.min_depth,
+                            consequence_chains(w, d.act_of, bounds, args.min_depth)))
     return 0
 
 

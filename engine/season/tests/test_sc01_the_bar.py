@@ -167,7 +167,16 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # bar is an existence claim on SELECTED seeds (above), not a rate, and one passing proceeding still carries it; the file's
 # `len(set(hashes)) == len(PROCEEDINGS)` clause is trivial with one, and the falsifiers below read `PROCEEDINGS[0]`. [ASSUMPTION; medium;
 # Jordan to correct; revert: restore the pair doctrine/115 and community/466 if `choice_temperature` returns to 0.1.]
-PROCEEDINGS = (("stability", 95, 6),)
+# v10 REM-30 (the `verb_capability` rows, B10-10): RE-TRACED AGAIN, stability/95/6 -> stability/35/7, the conviction unchanged and
+# THE SEASON COUNT MOVED -- `train` forms one Candidate per vocation and its act id carries the vocation, so the act mix of this
+# three-person world moved: stability/95/6 now fires TWO dates and determines nobody (`_proceeding`: "no determination's causes reach a
+# date.fired (0 determined, 2 fired)"). ATTRIBUTION: the rows commit's four source files reverted meet every assertion at stability/95/6
+# (the parent tree passes this file). THE SWEEP, this file's `_proceeding` (the producer's scratch, not kept): the 15 convictions x
+# seeds 0..720 at 6 seasons (10800 runs) found NO run meeting every assertion; the 15 convictions x seeds 0..60 at 4 and 5 seasons (900
+# runs each) found none; at 7 and 8 seasons (900 runs each) exactly one each, stability/35 (hashes 7214ae32... and 8dac56b0...). 7 is taken,
+# the first. The bar is an existence claim on SELECTED seeds (above), not a rate. [ASSUMPTION; medium; Jordan to correct; revert:
+# restore stability/95/6 if the rows commit is reverted.]
+PROCEEDINGS = (("stability", 35, 7),)
 BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a judge whose finding opens
 # v9 IN-12 step 9: RE-TRACED, the conviction and season count unchanged -- `argue`/`sabotage`/`tend`/`train`
 # are new members of the Duke's and the clerk's option sets, so doctrine/8's trajectory moved (it now fires

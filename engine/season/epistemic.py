@@ -916,12 +916,19 @@ def _term_stratum(w: "World", e: "Event", act) -> Optional[str]:
 
 
 def _term_marks(w: "World", e: "Event", act) -> Optional[tuple]:
-    """The actor's appearance. ⚠ CORRECTED post-port: `Person.marks` was DELETED 2026-09-24
-    (`ED-IN-0261` item 1) as a zero-reader/zero-writer field — the same fact `R8.4` recorded
-    while the field still existed. There is now no carrier at all, so this reads nothing rather
-    than a deleted attribute; the value is unchanged (`()` for every actor), only the reason."""
+    """The actor's appearance: `(heritage,)` for an actor whose descent is authored (`Person.heritage`, v10 CR-30),
+    `()` for one whose is not -- `()` meaning *seen, and nothing describable* -- and `None` where there is no
+    actor to see. Public at co-location, with no concealment, and deposited TRUE and verbatim like `who`.
+
+    ⚠ HISTORY. `Person.marks` was DELETED 2026-09-24 (`ED-IN-0261` item 1) as a zero-reader/zero-writer field,
+    and this term read `()` for every actor until heritage gave it a carrier. Heritage is the one member of
+    the old `marks[]` no Tenure derives (faction, rank, office and residence are edges). The case of a
+    witness holding `marks` with `who` `None` (`R8` case (2)) stays unreachable: the only channel that shows
+    marks shows `who` too."""
     actor = w.persons.get(act.actor) if act is not None else None
-    return () if actor is not None else None
+    if actor is None:
+        return None
+    return (actor.heritage,) if actor.heritage is not None else ()
 
 
 def _term_who(w: "World", e: "Event", act) -> Optional[str]:

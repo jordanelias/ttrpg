@@ -17,12 +17,47 @@
       "attr.mind.focus",
       "attr.mind.acuity",
       "attr.mind.will",
+      "attr.mind.perception",
       "attr.social.attunement",
       "attr.social.charisma",
-      "attr.social.bonds"
+      "attr.social.grace"
     ],
-    "count": 9,
-    "pending_tenth": "Jordan ruled 2026-08-14 that the roster WILL BE 10 attributes. The registry ships 9 and the tenth is UNNAMED. This sentinel exists so a reader cannot mistake the current roster for a closed one; delete it in the commit that names the tenth."
+    "count": 10,
+    "names": {
+      "acuity": "attr.mind.acuity",
+      "agility": "attr.body.agility",
+      "attr.body.agility": "attr.body.agility",
+      "attr.body.endurance": "attr.body.endurance",
+      "attr.body.strength": "attr.body.strength",
+      "attr.mind.acuity": "attr.mind.acuity",
+      "attr.mind.focus": "attr.mind.focus",
+      "attr.mind.perception": "attr.mind.perception",
+      "attr.mind.will": "attr.mind.will",
+      "attr.social.attunement": "attr.social.attunement",
+      "attr.social.charisma": "attr.social.charisma",
+      "attr.social.grace": "attr.social.grace",
+      "attunement": "attr.social.attunement",
+      "charisma": "attr.social.charisma",
+      "cognition": "attr.mind.acuity",
+      "coordination": "attr.body.agility",
+      "dexterity": "attr.body.agility",
+      "endurance": "attr.body.endurance",
+      "faculty": "attr.mind.acuity",
+      "focus": "attr.mind.focus",
+      "forecasting": "attr.mind.acuity",
+      "grace": "attr.social.grace",
+      "perception": "attr.mind.perception",
+      "predicting": "attr.mind.acuity",
+      "presence": "attr.social.charisma",
+      "reason": "attr.mind.acuity",
+      "reasoning": "attr.mind.acuity",
+      "spirit": "attr.mind.will",
+      "strength": "attr.body.strength",
+      "vitality": "attr.body.endurance",
+      "will": "attr.mind.will",
+      "willpower": "attr.mind.will"
+    },
+    "pending_tenth": null
   },
   "pursuit_roster": {
     "source": "ED-IN-0261 (2026-09-20 ruling; the fifteen as read by its 2026-10-06 row)",
@@ -85,6 +120,21 @@
       "altonia": [
         "altonian_civics"
       ]
+    }
+  },
+  "heritage_roster": {
+    "source": "ED-IN-0301 (the five members and their `engages:` cells, confirmed as written); v10 CR-30",
+    "count": 5,
+    "names": [
+      "northern_einhir",
+      "central_einhir",
+      "southern_einhir",
+      "altonian",
+      "schoenlander"
+    ],
+    "engages": {
+      "southern_einhir": "einhir",
+      "altonian": "altonia"
     }
   },
   "settlement_stats": {

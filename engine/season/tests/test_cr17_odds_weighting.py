@@ -33,7 +33,8 @@ from ..gaps import Unspecified
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
 from ..seam.wrappers import sigma
-from ..state.carriers import Act, Candidate, Person
+from ..data.rosters import VERB_CAPABILITY
+from ..state.carriers import Act, Candidate, Claim, Person
 
 AXIS = "grandiose_humble"        # a pursuit axis the equal pursuits below project onto (asserted in the test)
 RIVAL = "carry"                  # an uncontested verb: no `contests:`, so its pursuit term is never weighted
@@ -186,6 +187,16 @@ def _world():
     return w
 
 
+def _believes_the_hearer(p):
+    """REM-30's `verb_capability` row makes `argue` draw on the `argue` key, so the opposition of a person hearer is
+    a belief the roller must HOLD (`sigma.believed_input`: none held -> unknown -> no figure), and nothing deposits one
+    in a built realm. These readings need a figure, so the believer is handed the claim: the hearer's score 4, an
+    obstacle of 2.0, which is what the module's own default reads for a hearer who holds no key."""
+    p.ledger.append(Claim(id=f"c:{p.id}:{HEARER}", holder=p.id, subject=HEARER,
+                          predicate=sigma.CAPABILITY_CLAIM + VERB_CAPABILITY["argue"], value=4, when=0,
+                          source="told", confidence=5, visibility="own"))
+
+
 def test_two_pools_give_two_believed_chances_and_two_rankings(cells, monkeypatch):
     w = _world()
     sure, unsure = w.persons["p_low"], w.persons["p_mid"]
@@ -193,6 +204,7 @@ def test_two_pools_give_two_believed_chances_and_two_rankings(cells, monkeypatch
     monkeypatch.setattr(sigma, "POOL_ADDENDS", [lambda w_, who, verb: 4 if who.id == sure.id else 0])
     for p in (sure, unsure):
         p.pursuits = {n: 1.0 for n in PURSUITS}
+        _believes_the_hearer(p)
     row = VERB_TABLE["argue"]
     bands = tuple(b for b, written in row.writes_by_degree.items() if written)
     place = {DEGREE_LABEL[d]: n for d, n in DEGREE_ORDINAL.items()}
@@ -235,6 +247,8 @@ def test_a_driver_season_hands_every_view_a_working_query():
     d = SeasonDriver(w)
     inner = CH.make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}", verbs=frozenset())
     views = []
+    for who in w.persons.values():
+        _believes_the_hearer(who)
 
     def watched(p, v, s, ask_budget):
         views.append((p, v))
@@ -300,5 +314,7 @@ def test_none_and_tau_point_one_reproduce_the_parent_world_exactly():
     w = POP.build_realm(0)
     w.fixtures = w.fixtures.sweep("odds_weighting", "none").sweep("choice_temperature", 0.1)
     POP.run(seasons=1, seed=0, w=w)
-    assert w.content_hash().startswith("bdff0832"), w.content_hash()
-    assert len(w.log) == 10316
+    # REM-31 re-pin (every fight deferred to ENCOUNTER; `the body`'s `step:`/`declares:` popped in process reads the old pair): was 60a80834... / 10323
+    # REM-30 `verb_capability` rows re-pin (a DECLARED MOVER; the rows commit reverted in process reads the old pair): was 543e1e43... / 10421
+    assert w.content_hash().startswith("9c665fe8"), w.content_hash()   # CR-33 re-pin (NPC-088 holds `inquiry`; the log length does not move): was bd3d2492...; CR-20+CR-30 re-pin (Person repr, heritage rows; the log length does not move): was 1b7a72f4... (CR-86 re-pin: was bdff0832... / 10316)
+    assert len(w.log) == 10435

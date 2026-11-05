@@ -45,8 +45,8 @@ RELATION FACTS (`relation`), each read through the owner the tree has, at decisi
     `oblige` edge both ways. Where none applies the row says `none the code reads`;
   * the actor holds an office whose `Office.faction` is the target's faction (ED-IN-0335's column);
   * the target is his faction's HEAD: the person a faction Proposition names as `subject` (the reading
-    `decision_spread.common_referents` takes; `faction_q.head` reads `Tenure.degree` and is `None` in every
-    built world, its own docstring);
+    `decision_spread.common_referents` takes; `faction_q.head` reads a graded `commit`, else (CR-86) the live holder of the faction's `head_seat`: the King for
+    Valorsmark, `None` for a faction with no head seat);
   * `person_q.stance_toward`, `person_q.regard` with `person_q.deeds_judged`' two parts, and whether the
     actor's BUILD-TIME stance rows already held a negative row against the target (`person_q.held_against`
     over a snapshot taken before season 1: "authored hostility");

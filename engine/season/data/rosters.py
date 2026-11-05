@@ -406,7 +406,7 @@ def table(name: str) -> dict:
 
 
 def faction_prop_id(name: str) -> str:
-    """`'Crown'` -> `'fac_crown'`. THE ONE OWNER OF THE FACTION-ID RELATION.
+    """`'Valorsmark'` -> `'fac_valorsmark'`. THE ONE OWNER OF THE FACTION-ID RELATION.
 
     ⚠ IT HAD NO OWNER UNTIL 2026-09-16, AND THAT COST A SILENTLY EMPTY QUERY. `populated.py`
     formed the id inline as `f"fac_{_slug(fac_name)}"`; `queries/world_q.py: leaders()` recovered
@@ -567,6 +567,62 @@ if RECORD_KINDS & TENURE_KINDS:
 # polarity that function exists to hold. A verb with no row falls through to `pool_default` inside
 # the wrapper, which is the `assumption` grade's own reading (`08 §3`) and not a refusal.
 VERB_CAPABILITY = roster_map("verb_capability", "values")
+# THE VOCATIONS: the capability keys some verb draws dice from -- `verb_capability`'s VALUES (its keys are verbs),
+# derived here once and never spelt, so a key `train` may raise is exactly a key `faculty` reads (#453 K-20: the
+# range is `verb_capability`'s names; Thread Sensitivity is outside it). `data/verbs.py` re-exports it.
+VOCATIONS = frozenset(VERB_CAPABILITY.values())
+
+
+def _load_vocation_attribute(values: dict, vocations) -> dict:
+    """`rosters.yaml: vocation_attribute`'s `values`, CLOSED BOTH WAYS against `vocations` (v10 CR-20): a row
+    for every vocation and for nothing else, each valued by one of the ten registry keys. A vocation with no
+    row would roll its pool from `pool_default` for everyone while the roster read as complete; a row for a
+    name no verb draws on would sit in the table looking live. Refused whole, naming the difference."""
+    from ...substrate.descriptors import ATTRIBUTES
+    out = {str(k): str(v or "") for k, v in values.items()}
+    missing, extra = sorted(set(vocations) - set(out)), sorted(set(out) - set(vocations))
+    bad = sorted(k for k, v in out.items() if v not in ATTRIBUTES)
+    if missing or extra or bad:
+        raise Unspecified(
+            f"`rosters.yaml: vocation_attribute` is not closed over the vocations: no row for {missing}, "
+            f"a row for a non-vocation {extra}, a value that is none of the ten {bad}", "rosters.yaml",
+            needs="exactly one row per `verb_capability` value, each valued by an `attributes` registry key",
+            law="CR-20 -- which attribute a vocation's pool starts from is stated once, for every vocation")
+    return out
+
+
+VOCATION_ATTRIBUTE = _load_vocation_attribute(roster_map("vocation_attribute", "values"), VOCATIONS)
+
+
+def _load_lifepath_templates(cells: dict, lifepaths, vocations) -> dict:
+    """`rosters.yaml: tables: lifepath_templates`, CLOSED BOTH WAYS against `rosters: lifepaths` (v10 CR-33): a row
+    for every lifepath and for nothing else, each `holds:` entry a `verb_capability` value (a vocation), each row
+    carrying a `ground:`. A template naming a key no verb draws on would grant a capability `train` could raise and
+    `faculty` never read; a row for an id outside the 34 would never be reached and would read as live. Refused
+    whole, naming the difference. Returns `{lifepath id: tuple of capability keys}` -- the lifepath id is the key of
+    this table and is stored on no `Person`."""
+    out: dict = {}
+    for lid, cell in cells.items():
+        holds = cell.get("holds") if isinstance(cell, dict) else None
+        out[str(lid)] = tuple(holds) if isinstance(holds, list) else None
+    missing, extra = sorted(set(lifepaths) - set(out)), sorted(set(out) - set(lifepaths))
+    malformed = sorted(k for k, v in out.items() if v is None)
+    outside = sorted(f"{k}:{h}" for k, v in out.items() for h in (v or ()) if h not in vocations)
+    repeated = sorted(k for k, v in out.items() if v and len(set(v)) != len(v))
+    ungrounded = sorted(k for k, c in cells.items()
+                        if not (isinstance(c, dict) and str(c.get("ground") or "").strip()))
+    if missing or extra or malformed or outside or repeated or ungrounded:
+        raise Unspecified(
+            f"`rosters.yaml: lifepath_templates` is not closed over the lifepaths: no row for {missing}, a row for "
+            f"a non-lifepath {extra}, no `holds:` list {malformed}, a key that is no `verb_capability` value "
+            f"{outside}, a key held twice {repeated}, no `ground:` {ungrounded}", "rosters.yaml",
+            needs="exactly one row per `lifepaths` id, each `holds:` a list of `verb_capability` values, each with a `ground:`",
+            law="CR-33 -- which capability keys a lifepath's starting skills name is stated once, for every lifepath")
+    return out
+
+
+LIFEPATHS = roster("lifepaths")
+LIFEPATH_TEMPLATES = _load_lifepath_templates(table("lifepath_templates"), LIFEPATHS, VOCATIONS)
 # v9 FI-01 (`ED-FI-0009`, J-22 (A)): inquiry verb -> `{provider, module_entry}`, the roll that grades
 # it with no prize. Validated against the verb table at load (`data/verbs.py`) and against the prize
 # rows at driver construction (`manifest/registry.py::check_graded_inquiries`); read by
@@ -695,6 +751,10 @@ REVOCATION_BASES = roster("revocation_bases")
 # and `state/gate.py::FILLED_BY` is the gate's (`check_successions`), since the claim basis lives there
 # and `data/` may not import `state/`.
 SUCCESSIONS = {str(k): str(v) for k, v in roster_map("successions", "values").items()}
+# v10 CP-T02-06 (B10-10): WHO CARRIES ON A SEATED PERSON'S LINE, in the order they are offered
+# (`rosters.yaml: continuation_ties`, ORDERED). The reader per member is `queries/world_q.py::_TIE_READERS`,
+# cross-checked there at import (`data/` may not import `queries/`, `SUCCESSIONS`' reason).
+CONTINUATION_TIES = roster("continuation_ties", ordered=True)
 # Plan position `17a` (r2 `05` RULED (b), `ARCH F.17`): HOW A SEAT TAKES ON THOSE WHO SERVE IT, the
 # third basis beside the two above and bound the same way. `Office.__post_init__` refuses a value
 # off it; `loop/predicates.py::_req_oblige` admits an `oblige` only to a seat whose `binds` is on it.
@@ -1058,8 +1118,18 @@ TITLE_DOMAINS = dict(_OFFICES_DOC["titles"]["domains"])
 FACTIONS = roster("factions")
 
 #: `{proposition id: faction name}`. Derived from the roster, so it cannot disagree with it, and
-#: it is the direction `leaders()` needs: a caller holds `fac_crown` and wants `Crown`.
+#: it is the direction `leaders()` needs: a caller holds `fac_valorsmark` and wants `Valorsmark`.
 FACTION_BY_PROP = {faction_prop_id(f): f for f in FACTIONS}
+#: `{faction name: office id}` -- the seat whose live holder heads the faction (`faction_q.head`; CR-86). A faction
+#: absent here has no head seat authored and `head` answers `None` for it.
+HEAD_SEAT = roster_map("factions", "head_seat")
+for _hf, _hs in HEAD_SEAT.items():
+    require_member(_hf, FACTIONS, f"`factions.head_seat` names {_hf!r}, which is not a faction",
+                   "rosters.yaml -- factions", law="CR-86 -- a head seat belongs to a faction the roster names",
+                   needs="key `head_seat:` by a `token_class: faction` name")
+    require_member(_hs, SEAT_ROW_BY_ID, f"`factions.head_seat` names the seat {_hs!r}, which no row of offices.yaml authors",
+                   "rosters.yaml -- factions", law="CR-86 -- a head seat is an `offices.yaml` seat",
+                   needs="a seat id from `offices.yaml: seats`")
 BODY_FACTION = roster_map("office_bodies", "faction")
 BODY_FUNCTION = roster_map("office_bodies", "function")
 ROLE_TEMPLATE_OF = roster_map("role_templates", "by_faction")
@@ -1225,6 +1295,12 @@ OFFICE_POSTS = frozenset(s.get("post") for s in OFFICES_SEATS)
 ENDINGS = _load_endings(roster_map("endings", "members"), FACTIONS, RUNG_KINDS, OFFICE_POSTS)
 
 
+#: `{alias: canonical}` over the `token_class: faction` rows -- the naming leaf's map, read where an authored
+#: `faction:` string meets the roster (`cast.py` reads this same relation for a cast cell).
+from engine.substrate import names as _faction_names  # noqa: E402
+FACTION_ALIAS = {a: c for a, c in _faction_names.ALIASES.items() if c in _faction_names.FACTIONS}
+
+
 def office_faction(body: str | None, declared: str | None) -> str:
     """The faction an office belongs to: DERIVED from its canonical body where it has one,
     authored where canon gives its faction no organ.
@@ -1238,6 +1314,11 @@ def office_faction(body: str | None, declared: str | None) -> str:
     ⚠ AN ABSENT BODY IS NOT AN ERROR. The Restoration Movement's authority is *"informal"*
     (`worldbuilding_v30.md` §8) and canon gives it no organ, so such a case authors `faction`
     directly. That is a real gap in canon, carried as one rather than filled."""
+    # CR-86 (ED-IN-0342): a faction named by an ALIAS (`Crown`, Valorsmark's) resolves to its canonical member
+    # BEFORE it is compared with a body's derived faction, so `body: "Imperial Court"` with `faction: Crown`, legal
+    # before CR-86, stays legal; the many corpus cases that say `faction: Crown` keep saying it.
+    if isinstance(declared, str):
+        declared = FACTION_ALIAS.get(declared, declared)
     if body is not None:
         require_member(
             body,

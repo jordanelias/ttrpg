@@ -633,9 +633,11 @@ def test_cr14_death_census_names_the_killing_acts_verb_through_the_act_map():
     w.fixtures = w.fixtures.sweep("wound_harm_model", "total")
     d = SeasonDriver(w)
     start = [(len(w.log), A.seats(w))]
-    w.log.extend(d.resolve(mint_token(w, WriteClass.ACTS),
-                           [Act(id=f"h206_{i}", actor="p_near", verb="fight",
-                                payload={"subject": HOLDER})], w.fixtures.get("contest_max_depth")))
+    md = w.fixtures.get("contest_max_depth")
+    declared = d.resolve(mint_token(w, WriteClass.ACTS),
+                         [Act(id=f"h206_{i}", actor="p_near", verb="fight", payload={"subject": HOLDER})], md)
+    # v10 REM-31: declared at RESOLVE, fought at ENCOUNTER; the round logs both, as `SeasonDriver.season` does.
+    w.log.extend(declared + d.encounter(mint_token(w, WriteClass.ACTS), declared, md))
     got = A.death_census(w, d, start)
     assert [x["verb"] for x in got["deaths"]] == ["fight"], got
     assert got["deaths"][0]["victim"] == HOLDER and got["deaths"][0]["seats"], got

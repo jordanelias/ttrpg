@@ -636,6 +636,9 @@ class Scene:
         return extended_cost if self.slots > 1 else self.PLAIN_COST
 
 
+EFFORT = "effort"       # the payload key (`Candidate.operands` -> `Act.payload`) `effort_of` reads and `decision/choose.py` forms
+
+
 def effort_of(act: "Act") -> int:
     """The `effort` an act carries in its payload: a whole number of extra scene slots, `0` when it carries
     none (CP-T01-05). The one reader of the field -- `Scene.slots` counts it and `loop/resolve.py` hands it
@@ -644,7 +647,7 @@ def effort_of(act: "Act") -> int:
     be deciding for the caller. The upper bound is not here: it is the scene's own, `interactions_per_scene`
     (an act at effort `e` needs `1 + e` of them), checked in DELIBERATE."""
     payload = act.payload if isinstance(act.payload, dict) else {}
-    e = payload.get("effort")
+    e = payload.get(EFFORT)
     if e is None:
         return 0
     if isinstance(e, bool) or not isinstance(e, int) or e < 0:
@@ -776,6 +779,25 @@ class Person:
     # ONE READER is `queries/person_q.py::OwnStateReader` (the `thread_sensitivity` stem of
     # `data/requires.py`), which both the fold's `WorldReader` and the person's own decline ask.
     thread_sensitivity: Optional[int] = None
+    # v10 CR-20 (M2): THE ATTRIBUTE CARRIER -- `{registry key: whole number 1-7}` over Jordan's ten
+    # (`references/descriptor_registry.yaml: attributes`, ED-IN-0328; `engine/substrate/descriptors.py::
+    # ATTRIBUTES`). A person's INPUT is `faculty`, derived at read; these are what it reads. ABSENT WHERE
+    # UNAUTHORED: a key nobody authored is missing, never the registry's `default` and never 0 -- the pool
+    # then falls to `pool_default` (`seam/wrappers/sigma.py::faculty`), so an all-absent realm rolls what it
+    # rolled. Filled ONCE at world build, by a cast row's `stats:` (`harness/populated.py::build_realm`'s
+    # `cast_attributes` switch, which SHIPS OFF; `data/cast.py::attributes_of`, `thread_sensitivity_of`'s
+    # precedent) -- `decision/sheet.py`'s creation sheet only READS it and writes nothing, so no shipped writer
+    # exists until that switch flips: the carrier SHIPS EMPTY, and CR-20 and CR-19 are latent in every shipped realm -- and NEVER WRITTEN IN PLAY: no `write_matrix.yaml` row, so the gate refuses any write to it. READERS:
+    # `seam/wrappers/sigma.py::faculty` (the pool's base) and `_opposition_of` (the score the obstacle halves).
+    attributes: dict = field(default_factory=dict)
+    # v10 CR-30: HERITAGE -- DESCENT, one of `references/descriptor_registry.yaml: heritage_roster`'s five
+    # (`engine/substrate/descriptors.py::HERITAGES`), as a read-off field (`architecture/meta/01_AXIOMS.md`
+    # §D.1.1): the one member of the dropped `marks[]` no Tenure derives. `None` IS "UNAUTHORED", never a
+    # default member. Filled ONCE at world build from a cast row's `heritage:` (`data/cast.py::heritage_of`) and
+    # NEVER WRITTEN IN PLAY, `thread_sensitivity`'s precedent: no `write_matrix.yaml` row, so the gate refuses a
+    # write. ONE READER: `epistemic.py::_term_marks`, which deposits it TRUE and verbatim to every co-located
+    # witness beside `who` (AX-7: no competence or prior-belief mediation).
+    heritage: Optional[str] = None
     travel_leg: list[str] = field(default_factory=list)
     # ⚠ W5 MOVED THE TENURE STORE HERE, and `Tenure`'s OWN DOCSTRING already said this: "S15 --
     # THE ONE EDGE. Owned by its SUBJECT (S15.1)." The class asserted the ownership and the

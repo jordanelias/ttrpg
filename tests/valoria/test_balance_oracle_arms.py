@@ -81,7 +81,7 @@ def test_the_total_arm_actually_changes_the_casualty_write():
     for arm_name in ("total", "scaled_by_degree"):
         w = build_realm(0)
         w.fixtures = w.fixtures.sweep("field_casualty_model", oracle.ARMS[arm_name])
-        attackers = world_q.mustered(w, "set_s_014", "fac_crown")
+        attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
         defenders = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
         assert len(attackers) == 2 and len(defenders) == 6, (
             f"the fixture no longer gives a 2-v-6 mismatch here ({attackers}, {defenders}); "

@@ -82,7 +82,7 @@ def sides_of(w: World, a: Act, target: Optional[str],
       `march`'s own `requires: existence of: subject kind: Rung` is what makes that true, not
       this function re-checking it.
 
-      ⚠ `Office.faction` IS A DISPLAY VALUE (`'Crown'`), NOT A PROPOSITION ID (`'fac_crown'`) --
+      ⚠ `Office.faction` IS A DISPLAY VALUE (`'Valorsmark'`), NOT A PROPOSITION ID (`'fac_valorsmark'`) --
       `Proposition.value`, not `.id`. `mustered`/`members` key on the id, via `commit`'s own
       `t.object`. `faction_prop_id`, `data/rosters.py`'s *"ONE OWNER OF THE FACTION-ID
       RELATION"*, converts one to the other -- its own docstring names the exact failure of

@@ -32,7 +32,7 @@ THE FOUR PROPERTIES THE PLAN NAMES, each with the control that stops it passing 
     `destroy_record` EXECUTES THROUGH THE FOLD SINCE v9 IN-26 (`A-13`'s typed, `own`-eligible row),
     and its tripwire below is re-pinned, as it asked, to burn through the fold.
 
-The fixture is `probes.tiny_world` with one rostered faction planted: `fac_crown`, committed to by
+The fixture is `probes.tiny_world` with one rostered faction planted: `fac_valorsmark`, committed to by
 `p_high` (who holds `off_duke`) and `p_mid` (who holds the hearth `Hh`). `p_low`, `p_mid` and
 `p_other` stand in `Hh`; `p_high` in `S`.
 """
@@ -59,7 +59,7 @@ from ..queries import faction_q, world_q
 from ..state.carriers import Act, Claim, Proposition, Question, Record, Tenure, View
 from ..state.ids import H, draw_factory
 
-FAC = faction_prop_id("Crown")
+FAC = faction_prop_id("Valorsmark")
 OTHER_FAC = faction_prop_id("Hafenmark")
 SHEET = faction_q.SHEET_KIND
 _CONTENT = f"{RECORD_CONTENT['predicate']}:{SHEET}"

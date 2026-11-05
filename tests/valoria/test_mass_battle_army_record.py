@@ -85,7 +85,7 @@ def test_every_stat_preset_type_is_trainable_or_a_levy():
 
 # ------------------------------------------------------------------------------------- the army record
 def _army():
-    a = A.new('fac_crown')
+    a = A.new('fac_valorsmark')
     a = A.raised(a, 'c1', 'heavy_infantry', 60)
     a = A.raised(a, 'c2', 'heavy_infantry', 40)
     a = A.raised(a, 'c1', 'archers', 50)
@@ -191,7 +191,7 @@ def test_the_roster_and_the_module_name_the_same_army_keys():
 
 
 def test_apply_runs_each_season_command_and_refuses_each_rule_it_breaks():
-    a = A.new('fac_crown')
+    a = A.new('fac_valorsmark')
     sites = {'barracks': FULL}
     r = A.apply(_cmd(a, 'recruit', cohort='c1', troop_type='heavy_infantry', count=40, weight=12, sites=sites, full=FULL))
     assert A.by_type(r) == {'heavy_infantry': 40}

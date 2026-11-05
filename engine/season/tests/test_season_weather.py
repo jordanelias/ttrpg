@@ -473,9 +473,33 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # tree: `odds_weighting` swept to `none` and `choice_temperature` to 0.1 reads the old triple, the old `BASE_EVENTS`, the old
 # `STEP_OFF_ONE_SEASON` and the old `thread_read`-withheld arm exactly; `believed` at 0.1 reads the old triple and the old
 # `BASE_EVENTS` and only the step-off arm moves. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-BASE_HASHES = {0: "3ae970a172c9c0122adaab552a921eca",
-               1: "4761e5cac3069d78279d3f03657c8007",
-               2: "7d2adfc5d424ce87d34f5a6fa34f07df"}
+# RE-RECORDED at v11 CR-86 (ED-IN-0342; Valorsmark a faction, `fac_crown` -> `fac_valorsmark`, the two vassals' `oblige`
+# tenures, the head seats): 3ae970a1... -> b4bc2df0..., 4761e5ca... -> 87b9d1f1..., 7d2adfc5... -> 48f9f394...; the event
+# count and digest of `BASE_EVENTS` DO move (11775 -> 11793, 30477 -> 30734: the obligees' tenures are logged), as the
+# BASE_EVENTS note below records.
+# RE-RECORDED at v10 REM-31 (IN-46), A DECLARED MOVER: `the body` carries `march`'s `step: ENCOUNTER` / `declares:
+# Declared`, so every `fight`/`accept` is declared at RESOLVE (`fight.declared`/`accept.declared`) and fought at ENCOUNTER on
+# the round's settled world. 87b9d1f1... -> 36378f25..., 48f9f394... -> e39919be...; the build is equal. CONTROL, run in
+# process on this tree: `the body`'s `step:`/`declares:` popped reads the old pins exactly (this file, go07, cr17, cr81,
+# in27 and the corpus pins, 45 passed). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-RECORDED at v10 REM-30's `verb_capability` rows (`argue: argue`; `research`, `examine`, `surveil: inquiry`), A DECLARED
+# MOVER: `train` forms one Candidate per vocation and its act id carries the vocation (`data/verbs.py::act_key`). 36378f25... ->
+# 027c7516..., e39919be... -> 4b0f02bd...; the build is equal. CONTROL: the commit's four source files reverted read the old pins
+# exactly (this file and the six named with it, 409 passed on the parent tree). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v10 CR-30's commit for CR-20 + CR-30 TOGETHER (`Person.attributes`, `Person.heritage` in every Person's repr, and
+# four authored `heritage:` cast rows whose co-located witnesses hold a different `seen` claim `marks`): build b4bc2df0... ->
+# d61848d3..., 1 season 027c7516... -> f2e5e265..., 2 seasons 4b0f02bd... -> 7fbfbe54.... CONTROL, run in process on the parent tree
+# (3ce1f08e) and this one: the ordered (kind, id) event list over two seasons is EQUAL at seeds 0 / 1 / 2 (31452 / 30075 / 31432
+# events), and so is every ledger's claim list with the heritage rows removed; with them present only `seen` claims differ, in
+# their `marks` term alone (158 / 143 / 124 claims). So `BASE_EVENTS` below do not move. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v10 CR-33 (NPC-088's `lifepath: 3-CF4` holds `inquiry` at `pool_default`: a Person repr; the event list does not
+# move): build d61848d3... -> 6ad7b832..., 1 season f2e5e265... -> 69783660..., 2 seasons 7fbfbe54... -> be2c7f0f.... CONTROL, run in
+# process: `data/cast.py::capability_of` stubbed to `{}` reads the old three exactly; the ordered (kind, id) event list over one season
+# equals the parent tree's (`d5358a9a`) at seeds 0 / 1 / 2 and `BASE_EVENTS` below do not move. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): the BUILD hash alone moves (NPC-004 has left the world by season 1 at seed 0): 6ad7b832... -> 837d0f83...
+BASE_HASHES = {0: "837d0f83c62917b88d69da3daa3ea027",
+               1: "69783660ea3ca2163bd346ee7e29e711",
+               2: "be2c7f0f1d82d8f785a43f14b1273c2c"}
 
 # THE ONE-SEASON PIN WITH CR-81'S STEP OFF (`build_realm(0, acquaintances=False)`: the hash and the event count and digest
 # `BASE_HASHES[1]` / `BASE_EVENTS[1]` held before CR-81). The `give`-withheld arm's control, below.
@@ -486,8 +510,17 @@ BASE_HASHES = {0: "3ae970a172c9c0122adaab552a921eca",
 # RE-RECORDED at v11 CR-17: commit 1 (`odds_weighting` `believed`) moves this arm alone of the pins at tau 0.1 (f5987a4b... ->
 # 0aa9d2e1..., events 9952 -> 9952, sequence hash 63160817... -> 33632f41...); commit 2 (tau 0.05) moves it again: f5987a4b... ->
 # b82178e8..., events 9952 -> 11808. The two fixtures swept to `none` and 0.1 read the old value exactly.
-STEP_OFF_ONE_SEASON = ("b82178e877e9831e72df39e113409a06",
-                       (11808, "ffbcfc5049db09ecbda438c70e8edaa035df96f6d889cf43fa1b6d3e0327ed0b"))
+# RE-RECORDED at v11 CR-86: b82178e8... / (11808, ffbcfc50...) -> 782560b3... / (11822, 477d2d19...).
+# RE-RECORDED at v10 REM-31 (every fight deferred to ENCOUNTER): 782560b3... / (11822, 477d2d19...) -> bb5a28b7... / (12257,
+# aa01176b...); `the body`'s `step:`/`declares:` popped in process reads the old value exactly.
+# RE-RECORDED at v10 REM-30's `verb_capability` rows: bb5a28b7... / (12257, aa01176b...) -> 38b4ff49... / (11807, 8dc5b5fb...); the
+# commit's four source files reverted read the old value exactly.
+# RE-PINNED ONCE at v10 CR-30 for CR-20 + CR-30 (the Person repr, the heritage rows): 38b4ff49... -> 4cb09ae3...; the event count and
+# digest do not move.
+# RE-PINNED ONCE at v10 CR-33 (NPC-088 holds `inquiry`, a Person repr): 4cb09ae3... -> 8aa6e2e7...; the event count and digest do not move.
+# RE-PINNED ONCE at the CR-33 verify pass (NPC-004 holds `inquiry`): 8aa6e2e7... -> d2152860...; the event count and digest do not move.
+STEP_OFF_ONE_SEASON = ("d2152860b88c7bfec387004bb14c78bd",
+                       (11807, "8dc5b5fb3768ca1fbd9a790a646e32ca7dcc95037972a1aa7579764170415ff0"))
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -564,8 +597,18 @@ STEP_OFF_ONE_SEASON = ("b82178e877e9831e72df39e113409a06",
 # 10316; `ledger_cap` swept back to 200 reads the old pair).
 # RE-RECORDED at v11 CR-17 with `BASE_HASHES` (10316 -> 11775, 29401 -> 30477; commit 1 `believed` alone moves neither at seed 0;
 # `odds_weighting` `none` and `choice_temperature` 0.1 in process read the old pair).
-BASE_EVENTS = {1: (11775, "87c51e925ddf5d1f6245f12638d09fae865c137e41a588c64a894612f4551661"),
-               2: (30477, "e30bb78fed04cca537b7c0e411b1d7087793e21949aba6107159c6bb0a2e3d16")}
+# RE-RECORDED at v11 CR-86 with `BASE_HASHES` (11775 -> 11793, 30477 -> 30734). CONTROL, run in process on this tree: the
+# two vassals' `oblige` rows (`offices.yaml` `off_king` obligees) dropped read the old season-1 sequence exactly (11775 /
+# 87c51e92...) with the build and season hashes still moved by the `fac_crown` -> `fac_valorsmark` rename alone
+# (build 2a1d39a5..., season 1 e03b429a...).
+# RE-RECORDED at v10 REM-31 with `BASE_HASHES` (11793 / 454fdfe6... -> 11846 / e7a4f9a1..., 30734 / 05951be7... -> 30822 /
+# 03960f4d...: each fight's declaration Event and the trajectory the deferral moves); `the body`'s `step:`/`declares:` popped
+# in process reads the old pair.
+# RE-RECORDED at v10 REM-30's `verb_capability` rows with `BASE_HASHES` (11846 / e7a4f9a1... -> 11581 / 21e9e3eb..., 30822 /
+# 03960f4d... -> 31452 / 5417daa3...: `train` forms `argue` and `inquiry` Candidates and its act id carries the vocation, so the
+# draws walk another trajectory). CONTROL: the rows commit's four source files reverted read the old pair (the file, 409 passed).
+BASE_EVENTS = {1: (11581, "21e9e3eb5b4effd26c1b4541105b502b8f0f9140665ec25c1c10659e773615b7"),
+               2: (31452, "5417daa367ae252a81af3225ac1cfcee510116cba57349982bac38cf00f36b4a")}
 
 
 def _digest(w) -> tuple:
@@ -732,7 +775,11 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: RE-RECORDED at v11 CR-17 with `BASE_HASHES`: 10316 / af2eb292... -> 11781 / 43774342... (commit 1 `believed` alone moves it not
 #: at all; commit 2, tau 0.05, moves it, and the count now differs from `BASE_EVENTS[1]` too); `none` and 0.1 in process read the
 #: old value exactly.
-THREAD_READ_WITHHELD_EVENTS_1 = (11781, "437743422f8d395be785833b656144cc7d7ca11581b9a6a94480beec8b0dddbe")   # CR-17: was 10316 / af2eb292...; CR-25: was 10847 / 83f4c9a2...; CR-81: was 9741 / 1e77a5a4...
+#: RE-RECORDED at v10 REM-31 with `BASE_HASHES`: 11799 / 07b7a36b... -> 11852 / e6f3edeb... (every fight deferred to ENCOUNTER;
+#: `the body`'s `step:`/`declares:` popped in process reads the old value exactly); still differs from `BASE_EVENTS[1]` (11846).
+#: RE-RECORDED at v10 REM-30's `verb_capability` rows with `BASE_HASHES`: 11852 / e6f3edeb... -> 11582 / e23a1f6e... (the rows
+#: commit's four source files reverted in process reads the old value exactly).
+THREAD_READ_WITHHELD_EVENTS_1 = (11582, "e23a1f6e568a536f5d34ba1e39b21fc6dd5400feca4bbbec71effeff8f10996e")   # REM-30 rows: was 11852 / e6f3edeb...   # REM-31: was 11799 / 07b7a36b...   # CR-86: was 11781 / 43774342...   # CR-17: was 10316 / af2eb292...; CR-25: was 10847 / 83f4c9a2...; CR-81: was 9741 / 1e77a5a4...
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

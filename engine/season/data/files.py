@@ -247,7 +247,7 @@ def decision_modules() -> tuple:
 
     ⚠ Recursive and derived, for the reason `package_modules` states above it: three guards in this
     package were first written against a filename tuple and each went blind when a module was added.
-    A caller must also assert a FLOOR on the length -- `04_CODE_ARCHITECTURE.md` §A.2:133 names four
+    A caller must also assert a FLOOR on the length -- `04_CODE_ARCHITECTURE.md` §A.2 (the `decision/` row) names four
     members, so a scan that finds fewer has stopped matching and is passing vacuously (`CLAUDE.md`
     §0.1 pt 2)."""
     return tuple(sorted(DECISION_DIR.rglob("*.py"),

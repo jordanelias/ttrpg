@@ -86,7 +86,7 @@ from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds, settle_record
 from engine.substrate import composition
 
-from ...data.rosters import VERB_CAPABILITY, roster
+from ...data.rosters import VERB_CAPABILITY, VOCATION_ATTRIBUTE, roster
 from ...gaps import Unspecified
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup);
@@ -98,7 +98,7 @@ from ...queries.inputs import Margin, SocialContestInput
 # v9 SC-02 `22a`: the room's two resolver-side reads, the precedent `seam/wrappers/mass_battle.py`'s
 # `world_q.mustered` set. The host READS them; the module composes the obstacle they move.
 from ...queries.world_q import practice, proofs, reception
-from ...state.carriers import effort_of
+from ...state.carriers import EFFORT, effort_of
 from ._entry import entry_for
 
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
@@ -143,6 +143,14 @@ def register_pool_addend(fn: Any) -> None:
 register_pool_addend(practice)
 
 
+def _authored_attribute(entity: Any, verb: str):
+    """The score `entity` HOLDS on the attribute the verb's vocation starts from (`rosters.yaml:
+    vocation_attribute`; `Person.attributes`), or `None` where he holds none, the verb draws on no
+    capability, or the entity is no person. The attribute's twin of `_capability`: a READ, never a default."""
+    attr = VOCATION_ATTRIBUTE.get(VERB_CAPABILITY.get(verb))
+    return (getattr(entity, "attributes", None) or {}).get(attr) if attr else None
+
+
 def faculty(w: Any, p: Any, verb: str) -> int:
     """Dice, from what the actor genuinely has: THE ONE POOL READER. `03 §A.2` -- *"Rank supplies dice and
     gates nothing"*. Reached by `contest_input` (the dealt record) and by `odds_of` (the believer's own
@@ -150,18 +158,31 @@ def faculty(w: Any, p: Any, verb: str) -> int:
 
     `VERB_CAPABILITY` maps a verb to the capability key it draws on; `Person.capability` is the
     person's own dict, written by a `cast:` overlay and (v9 IN-12 step 9) `train`, which raises a key
-    only a person already holds. Where he holds the key the pool is that score; otherwise it is
-    `pool_default`; then the registered addends (`POOL_ADDENDS`) are summed on.
+    only a person already holds. v10 CR-20: WHERE HE HOLDS THE VOCATION'S ATTRIBUTE (`VOCATION_ATTRIBUTE`,
+    `Person.attributes`) that score is the pool's base, and the pool is the LARGER of it and the capability
+    key he holds (practice raises a key; it never takes dice from an attribute). WHERE HE HOLDS NONE the held
+    key stands alone and `pool_default` is the fallback, exactly as before the carrier -- so a held 0 is still
+    a person under one die (`test_odds_of.py`, `test_sc01_speak.py` pin it) and an all-absent realm rolls what
+    it rolled. Then the registered addends (`POOL_ADDENDS`) are summed on.
     ⚠ `08 §3` GIVES THE POLARITY: an `assumption` grade means *inject the default, declare the site,
     sweep three points* -- never refuse the whole corpus for a missing key. `absent` is the grade
     that refuses, and this is not one."""
     have = _capability(p, verb)
-    base = int(have if have is not None else w.fixtures.get("pool_default"))
+    attr = _authored_attribute(p, verb)
+    if attr is not None:
+        base = int(attr) if have is None else max(int(attr), int(have))
+    else:
+        base = int(have if have is not None else w.fixtures.get("pool_default"))
     return base + sum(int(add(w, p, verb)) for add in POOL_ADDENDS)
 
 
 def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]:
-    """The subject's score on the verb's capability key, or `None` -- a READ, not an obstacle.
+    """The subject's score on the verb's vocation, or `None` -- a READ, not an obstacle: the LARGER of the
+    capability key he holds and the attribute he holds on the vocation (v10 CR-20), and nothing else.
+
+    ⚠ NEVER THE FALLBACK AND NEVER PRACTICE. A person who holds neither is `None`, so the module falls to
+    `obstacle_default` as it always did; `pool_default` is the roller's stand-in for a pool, not a score
+    anyone holds, and the practice addend raises a pool, not an opposition (`practice_cap`'s note).
 
     ⚠ v9 SC-01 step 14 DELETED THIS MODULE'S OBSTACLE SITE (`_obstacle_of`; ED-SC-0033 clause (3),
     *the obstacle has a single owner*). What it composed -- `score/2`, the `obstacle_default`
@@ -169,9 +190,10 @@ def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]
     here is the half only the host can do: reading `World` for the score a PERSON subject brings
     (`None` for a record, a rung or a proposition, or a person with no entry)."""
     if subject and subject in w.persons:
-        have = _capability(w.persons[subject], verb)
-        if have is not None:
-            return float(have)
+        person = w.persons[subject]
+        held = [float(v) for v in (_capability(person, verb), _authored_attribute(person, verb)) if v is not None]
+        if held:
+            return max(held)
     return None
 
 
@@ -179,14 +201,14 @@ def _effort_levels(fx: Any, operands: dict) -> list:
     """`effort`'s levels (CP-T01-05): an act at effort `e` brings `e` copies of the `effort_level` fixture
     (a `sigma_leverage.LEVEL_SIGMA` name, shipped `moderate`) -- one named level per slot of effort. None at
     effort 0, so the shipped chooser, which forms no effort, adds nothing."""
-    return [fx.get("effort_level")] * int(operands.get("effort", 0))
+    return [fx.get("effort_level")] * int(operands.get(EFFORT, 0))
 
 
 # THE ADVANTAGE CHANNEL'S BINDING: each member of `rosters.yaml: advantage_sources` -> the function that
 # returns the named levels it brings to an act, `fn(fixtures, operands) -> [level name, ...]`. THE ROSTER IS
 # THE CLOSED SET AND THIS IS ITS BINDING: refused at import if the two disagree, so a member with no function
 # (it would silently add nothing) and a function with no member (it would silently never run) are both loud.
-ADVANTAGE_SOURCES = {"effort": _effort_levels}
+ADVANTAGE_SOURCES = {EFFORT: _effort_levels}
 if set(ADVANTAGE_SOURCES) != set(roster("advantage_sources")):
     raise Unspecified(
         f"`advantage_sources` members {sorted(roster('advantage_sources'))} and "
@@ -258,7 +280,7 @@ def _frame(fx: Any, pool: int, opposition: Optional[float], forgery_quality: flo
         obstacle_ceiling=fx.get("obstacle_ceiling"),
         ceiling_per_pool=fx.get("ceiling_per_pool"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
-        leverage=advantage_sigma(fx, {"effort": effort}),      # the one place the operands are named
+        leverage=advantage_sigma(fx, {EFFORT: effort}),      # the one place the operands are named
         forgery_quality=forgery_quality, **room_terms)
 
 
@@ -451,9 +473,12 @@ def believed_odds_query(w: Any, holder: Any):
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
             rng: Optional[random.Random] = None, rung: Optional[str] = None,
-            module_entry: Optional[str] = None, effort: int = 0) -> dict:
+            module_entry: Optional[str] = None, effort: int = 0, host: Any = None) -> dict:
     """Roll for one contested act: build the record, call the module entry, hold its return to a
     `Margin`, refuse S27.4. Returns a net/ob pair, NEVER a band and never a winner.
+
+    `host` (v10 REM-31) is accepted and NOT USED HERE, as `rung` was: the seam's call is uniform, and only the
+    personal-combat provider has a PLAYABLE mode today (`seam/wrappers/combat.py::resolve`).
 
     `effort` is the act's own (CP-T01-05, `state/carriers.py::effort_of`, passed by `seam/contest.py`): it
     reaches only `contest_input`, where it becomes `leverage`; the act's draw is unchanged (one id, one draw).

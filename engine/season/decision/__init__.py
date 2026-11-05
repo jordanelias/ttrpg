@@ -1,10 +1,10 @@
 """`season.decision` -- AX-2's island: what a PERSON forms, wants and can afford, with no
-`World` in scope. **A PACKAGE, and `04_CODE_ARCHITECTURE.md:1046` is why:** *"`decision/` is a
+`World` in scope. **A PACKAGE, and `04_CODE_ARCHITECTURE.md` §E.1 is why:** *"`decision/` is a
 directory from its first commit. The isolation scan matches by path, so a `choose` drafted inside
 `loop/` and moved later would have been green while violating AX-2."* A single file cannot be
 scanned by path, so the directory is the enforcement mechanism and not a filing preference.
 
-THE FOUR MEMBERS, per §A.2:133 -- *"`decision/` AX-2's island: questions · opening_set · choose ·
+THE FOUR MEMBERS, per §A.2 (the `decision/` row) -- *"`decision/` AX-2's island: questions · opening_set · choose ·
 budget.   NO World in scope."*
 
     questions.py   assemble · aggregate_questions · view_ids
@@ -18,9 +18,16 @@ budget.   NO World in scope."*
 person-first in signature and self-declares as a person Query at its own first statement. `budget`,
 `opening_set` and `assemble` stay: `04:133` names them here, so moving them would break conformance
 rather than restore it.
-    choose.py      make_chooser · pack_scenes
+    choose.py      make_chooser · pack_scenes · make_ranker · release
                    (`align` is `data.verbs.align`, `stance_toward` is `queries.person_q.stance_toward`)
     budget.py      budget · body_band_penalty
+    sheet.py       v10 REM-30 (IN-47): the character sheet's spaces -- creation_sheet · seat ·
+                   development_space · chronicle. NOT a fifth §A.2 member: §A.2's `decision/` row is silent on
+                   a player's sheet (it names questions · opening_set · choose · budget and nothing about a
+                   management space), so this is B4's third disposition, named here and picked: the sheet
+                   lives under `decision/` so the AX-2 by-path scan covers it, `development_space` is
+                   `choose`-shaped (it ranks and selects), and `creation_sheet` / `chronicle` are reads that
+                   return records, not `Scene`s. Imported by module (`decision.sheet`), not re-exported here.
 
 ⚠ **`options.py`, NOT `opening_set.py`.** A module named for the function it exports makes
 `decision.opening_set` ambiguous -- this file's re-export shadows the submodule -- and the rebind

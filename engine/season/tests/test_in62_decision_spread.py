@@ -293,9 +293,9 @@ def test_in62_arm_0_holds_one_vector_one_conviction_and_reads_no_goals_file():
     assert len({tuple(sorted(p.conviction.items())) for p in holders}) == 1
     assert all(not p.pursuits for pid, p in w.persons.items() if not before[pid])
     assert goals_data.goals(), "control: the shipped file carries goals"
-    with_goals = goals_data.expected("faction", "Crown")
+    with_goals = goals_data.expected("faction", "Valorsmark")
     with DS.no_goals():
         assert goals_data.goals() == ()
-        assert goals_data.expected("faction", "Crown") != with_goals, (
+        assert goals_data.expected("faction", "Valorsmark") != with_goals, (
             "the creed's expected vector still sums the file's goal pursuits under the control")
     assert goals_data.goals(), "no_goals() did not restore the cache"

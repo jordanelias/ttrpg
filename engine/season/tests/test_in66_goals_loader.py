@@ -35,7 +35,7 @@ def _base() -> dict:
              stance=1, derives={"from": "g_fac", "kind": "establishes"}),
         _row("g_seat", {"seat": "off_riskbreaker_covert"}, {"kind": "person", "case": "NPC-020"},
              stance=-1, derives={"from": "g_body", "kind": "influences"}),
-        _row("g_fac2", {"faction": "Crown"}, {"kind": "deed_doers", "kinds": ["bond.formed"]},
+        _row("g_fac2", {"faction": "Valorsmark"}, {"kind": "deed_doers", "kinds": ["bond.formed"]},
              derives={"from": "g_fac", "kind": "influences"}),
         _row("g_against", {"faction": "Varfell"}, {"kind": "deed_doers", "against": "g_body"}),
         _row("g_engage", {"faction": "Church of Solmund"},
@@ -158,7 +158,7 @@ _PLANTS = [
      "Ministry of Nothing"),
     ("unknown seat", _mutated("g_seat", _set("org", {"seat": "off_nobody"})), Unspecified, "off_nobody"),
     ("unknown org kind", _mutated("g_fac", _set("org", {"clan": "Löwenritter"})), Unspecified, "clan"),
-    ("two organizations", _mutated("g_fac", _set("org", {"faction": "Crown", "body": "Riskbreakers"})),
+    ("two organizations", _mutated("g_fac", _set("org", {"faction": "Valorsmark", "body": "Riskbreakers"})),
      Unspecified, "exactly one"),
     ("no organization", _mutated("g_fac", _drop("org")), Unspecified, "exactly one"),
     # --- an unknown kind

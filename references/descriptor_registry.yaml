@@ -6,7 +6,7 @@
 #
 # Schema: `name` is the current primary; `aliases` carry alternatives + LEGACY names so existing formula
 # references back-resolve (this is what makes a roster cheap to churn). ONE registry, partitioned by `domain`.
-# The 9-attribute roster is IN FLUX (see ATTRIBUTES below). `resonance_style` is DEPRECATED (see `deprecated:`).
+# The 10-attribute roster is IN FLUX until Jordan confirms it (see ATTRIBUTES below). `resonance_style` is DEPRECATED (see `deprecated:`).
 #
 # KIND: attribute_scalar | attribute_aggregate | faction_stat | settlement_stat |
 #       practitioner_stat | territory_stat | conviction_weight | ethical_axis |
@@ -24,35 +24,45 @@ domains: [actor, settlement, equipment, environment]
 # ATTRIBUTES (actor) -- DEFINED HERE. No prior single source existed; that gap is W1.13's reason.
 # Scalar 1-7. Roster IN FLUX: primary name + aliases (incl. legacy names for back-resolution).
 #
-# ⚠ THE COUNT IS RULED; THE ROSTER IS NOT COMPLETE. Jordan, 2026-08-14: "it will be 10 attributes".
-# NINE are defined below. The TENTH IS UNNAMED — naming it is the open workshop, and it is the ONLY
-# thing still open about the count. Do not infer the tenth from the aliases: Spirit folds to Will and
-# Perception folds to Attunement by the rows below, so neither is a candidate slot.
-# Until the tenth is named, "IN FLUX" stays and Godot fields stay unbound (CLAUDE.md §5). ED-IN-0193.
+# ⚠ THE COUNT IS RULED AND THE TEN ARE NAMED, BUT HEDGED. Jordan, 2026-08-14: "it will be 10 attributes";
+# 2026-11-04 (ED-IN-0328, "I think"): the ten below. CR-84 rewrote the roster to them. KEYS ARE STABLE;
+# only names and aliases moved (Agility -> Coordination, Acuity -> Reason, Will -> Spirit, Charisma ->
+# Presence; Perception and Grace added; Bonds dropped, see `retired` below). Every name that resolved
+# before still resolves to the same key, except Perception, which left Attunement for its own key.
+# "IN FLUX" STAYS and Godot fields stay unbound (CLAUDE.md §5) until Jordan confirms the ten.
+# `Resolve` is NOT an attribute: it is Spirit's derived value (not_descriptors below).
+# `Composure` is NOT an alias of Grace: it is the knot damage track (not_descriptors.derived_values), and an
+# alias would make resolve('Composure') return the attribute where the track is meant.
 # ============================================================================
 attributes:
   scale: "1-7"
   default: 1
   body:
-    - {key: attr.body.strength,  name: Strength,  aliases: []}
-    - {key: attr.body.endurance, name: Endurance, aliases: [Vitality]}
-    - {key: attr.body.agility,   name: Agility,   aliases: [Dexterity]}
+    - {key: attr.body.strength,  name: Strength,     aliases: []}
+    - {key: attr.body.endurance, name: Endurance,    aliases: [Vitality]}
+    - {key: attr.body.agility,   name: Coordination, aliases: [Agility, Dexterity]}
   mind:
-    - {key: attr.mind.focus,  name: Focus,  aliases: []}
-    - {key: attr.mind.acuity, name: Acuity, aliases: [Reasoning, Cognition]}   # [ASSUMPTION] legacy 'Cognition' folds to Acuity -- Jordan veto
-    - {key: attr.mind.will,   name: Will,   aliases: [Spirit]}                  # 'spirit move': formerly standalone Spirit; legacy formulas resolve via alias
+    - {key: attr.mind.focus,      name: Focus,      aliases: []}
+    - {key: attr.mind.acuity,     name: Reason,     aliases: [Acuity, Faculty, Forecasting, Predicting, Reasoning, Cognition]}   # [ASSUMPTION] legacy 'Cognition' folds to Reason -- Jordan veto
+    - {key: attr.mind.will,       name: Spirit,     aliases: [Will, Willpower]}   # 'spirit move': Spirit is the primary again; 'Will' is the legacy name and back-resolves
+    - {key: attr.mind.perception, name: Perception, aliases: []}                   # awareness of surroundings, noticing information; formerly an alias of Attunement
   social:
-    - {key: attr.social.attunement, name: Attunement, aliases: [Perception]}
+    - {key: attr.social.attunement, name: Attunement, aliases: []}                 # reading people
     # `Influence` is not an attribute (it was `fac.influence`'s name); see names_index.yaml.
-    - {key: attr.social.charisma,   name: Charisma,   aliases: [Presence]}
-    - {key: attr.social.bonds,      name: Bonds,      aliases: [Sincerity, Affability]}
+    - {key: attr.social.charisma,   name: Presence,   aliases: [Charisma]}   # NOT 'Social': that is `agg.social`'s name (names_index.yaml), and NPC-001's legacy `social: 3-4` is the whole category, not this attribute (see her row)
+    - {key: attr.social.grace,      name: Grace,      aliases: []}                 # composure, calm, etiquette, manners; NOT the alias 'Composure' (the knot track)
+  # RETIRED attribute: NOT in the roster (the count is ten) and still RESOLVED -- `tools/descriptor_registry.resolve`
+  # returns it with `deprecated: true` (read from the `deprecated:` list below, the one retirement mechanism), so a
+  # legacy reference learns it is retired instead of failing silently.
+  retired:
+    - {key: attr.social.bonds, name: Bonds, aliases: [Sincerity, Affability]}
 
 # AGGREGATES (W2.8 PLACEHOLDERS) -- computed from category members; NOT yet wired into derived values.
 aggregates:
   entries:
     - {key: agg.body,   name: Body,   compute: sum, members: [attr.body.strength, attr.body.endurance, attr.body.agility], status: placeholder}
-    - {key: agg.mind,   name: Mind,   compute: sum, members: [attr.mind.focus, attr.mind.acuity, attr.mind.will],          status: placeholder}
-    - {key: agg.social, name: Social, compute: sum, members: [attr.social.attunement, attr.social.charisma, attr.social.bonds], status: placeholder}
+    - {key: agg.mind,   name: Mind,   compute: sum, members: [attr.mind.focus, attr.mind.acuity, attr.mind.will, attr.mind.perception], status: placeholder}
+    - {key: agg.social, name: Social, compute: sum, members: [attr.social.attunement, attr.social.charisma, attr.social.grace], status: placeholder}
   # Placeholders only: R7 + derived_stats §14 remain authoritative for derived values.
 
 # ============================================================================
@@ -217,6 +227,25 @@ affiliation_roster:
     einhir: [einhir_restoration]
     altonia: [altonian_civics]
 
+# HERITAGE (v10 CR-30, ED-IN-0301): DESCENT, the one member of the dropped `marks[]` no Tenure derives. `Person.heritage`
+# holds one of these names or is None (unauthored: never a default member); a cast row's `heritage:` is refused
+# unless it is a member. `engages:` files a member under the affiliation CONCERN it speaks to (a `concerns:` key
+# of `affiliation_roster` above) and is read by nothing yet (CR-31); every member not named engages none.
+# CONFIRMED AS WRITTEN (ED-IN-0301), so unlike `attributes` this roster is NOT IN FLUX and a Godot resource field
+# may bind to it. Exported by `tools/export_descriptors.py`, read by `engine/substrate/descriptors.py`.
+heritage_roster:
+  source: "ED-IN-0301 (the five members and their `engages:` cells, confirmed as written); v10 CR-30"
+  count: 5
+  names:
+    - northern_einhir
+    - central_einhir
+    - southern_einhir
+    - altonian
+    - schoenlander
+  engages:
+    southern_einhir: einhir
+    altonian: altonia
+
 # ============================================================================
 # REGISTERED BY REFERENCE -- authoritative content stays in the source doc (no re-transcription).
 # ============================================================================
@@ -233,6 +262,7 @@ by_reference:
 # DEPRECATED.
 # ============================================================================
 deprecated:
+  - {key: attr.social.bonds, reason: "Not among Jordan's ten (ED-IN-0328); CR-84 dropped it. It stays in `attributes.retired` so its names still resolve. The oracle systems/fieldwork/sim/knots.py still reads `bonds`."}
   - {key: resonance_style, reason: "Was the 'most-persuasive mode of argument'. Superseded by contest_style (social_contest Step 2-3) + Conviction-driven interpretation. Never canonically enumerated (player_agency §2 references but does not define it). Retired 2026-06-06 (Jordan). ⚠️ CORRECTION (ED-IN-0025, 2026-07-07, C-VERIFY-20): the 'never canonically enumerated' premise is factually FALSE — npc_behavior_v30.md §1.3's Resonant Style Taxonomy is CANONICAL (approved 2026-04-17) and player_agency_v30.md:71 treats it as live, bidirectional, load-bearing. Whether the retirement should stand given this is a Jordan design call (NEEDS-JORDAN), not re-litigated here; retirement status left unchanged."}
 
 # ============================================================================

@@ -1,4 +1,4 @@
-"""`decision/` -- the `questions` member of `04_CODE_ARCHITECTURE.md` §A.2:133.
+"""`decision/` -- the `questions` member of `04_CODE_ARCHITECTURE.md` §A.2 (the `decision/` row).
 
 `assemble` builds the season's `Question[]` for one person, `aggregate_questions` folds several
 into the one the `QUESTION_AGGREGATION` rule selects, and `view_ids` bounds what a `View` may

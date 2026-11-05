@@ -56,7 +56,7 @@
 goals:
   # ---- Crown (faction) -------------------------------------------------------------------------------
   - id: goal_crown_peninsular_sovereignty
-    org: {faction: Crown}
+    org: {faction: Valorsmark}
     text: the Crown holds the peninsula under the dynasty -- the king's seat is the Crown's goal
     object: {kind: seat_holders, seats: [off_king]}
     stance: 1
@@ -193,7 +193,7 @@ goals:
 
   # ---- Crown (further aims) --------------------------------------------------------------------------
   - id: goal_crown_resist_altonia
-    org: {faction: Crown}
+    org: {faction: Valorsmark}
     text: the Crown resists Altonia -- the peninsula is not accommodated away
     object: {kind: orientation}
     pursuits: {honour: 0.4, stability: 0.3, liberty: 0.3}

@@ -35,10 +35,11 @@ import re
 from typing import Optional
 
 from . import files
-from .rosters import FACTIONS, load_yaml
+from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_TEMPLATES, load_yaml
 from ..gaps import Unspecified
-from ...substrate import names as _names
-from ...substrate.descriptors import PRACTITIONER_STATS
+from ...substrate.descriptors import (
+    ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, HERITAGES, PRACTITIONER_STATS, attribute_key,
+)
 
 NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
 
@@ -66,15 +67,10 @@ NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
 # through; `names.canonical_for()` would RAISE. Those are both right, for different callers: the
 # registry carries 6 of 46 rows this loader cannot resolve and COUNTS them (the refusal is the
 # caller's, downstream), so raising here would turn a counted gap into a crash at import.
-#: `{alias: canonical}` over every `token_class: faction` row, from the naming leaf. Built ONCE at
-#: import, not per call: both readers below run per row (46 cast rows, and the geography file's
-#: per-province `faction:` column), and the lazy `_ALIASES` cache this replaced existed for that
-#: reason. Both operands are import-time constants, so there is nothing to defer.
-#:
-#: Schoenland was invisible here until 2026-09-16: its `names_index.yaml` row is filed with the
-#: PLACES and simply never carried `token_class: faction`, so this map saw seven of eight. The
-#: class is set now and the eighth resolves.
-_ALIAS_MAP = {a: c for a, c in _names.ALIASES.items() if c in _names.FACTIONS}
+# `{alias: canonical}` over every `token_class: faction` row is `rosters.FACTION_ALIAS` (imported above), built ONCE
+# at import from the naming leaf: both readers below run per row (46 cast rows, and the geography file's
+# per-province `faction:` column). Schoenland was invisible to it until 2026-09-16: its `names_index.yaml` row is
+# filed with the PLACES and simply never carried `token_class: faction`; the class is set now and the eighth resolves.
 
 
 
@@ -163,7 +159,7 @@ def faction_of(r: dict) -> tuple[Optional[str], Optional[str], str]:
     for candidate in (base, inner):
         if not candidate:
             continue
-        resolved = _ALIAS_MAP.get(candidate, candidate)
+        resolved = FACTION_ALIAS.get(candidate, candidate)
         if resolved in FACTIONS:
             return resolved, (inner if candidate == base else None), raw
     return None, inner, raw
@@ -182,7 +178,7 @@ def resolve_faction(name: Optional[str]) -> Optional[str]:
     mechanism reporting an unheld place rather than a lookup quietly failing."""
     if not name:
         return None
-    resolved = _ALIAS_MAP.get(str(name).strip(), str(name).strip())
+    resolved = FACTION_ALIAS.get(str(name).strip(), str(name).strip())
     return resolved if resolved in FACTIONS else None
 
 
@@ -310,6 +306,95 @@ def thread_sensitivity_of(r: dict) -> Optional[int]:
         needs="a whole number, a range `A–B` (read as A), `~N` (read as N), or null",
         law="v9 PC-06 K-3 -- an authored value this reader cannot parse refuses rather than "
             "being read as a plausible number")
+
+
+_ATTR_RANGE = re.compile(r"^\s*(?P<n>\d+)\s*[-–—]\s*(?P<hi>\d+)\s*$")   # `_TS_RANGE`'s pattern with the upper bound kept, so a backwards or out-of-scale range can refuse
+
+
+def attributes_of(r: dict) -> dict:
+    """`Person.attributes`' authored source (v10 CR-20): the row's `stats:` mapping, as `{registry key:
+    whole number}` over Jordan's ten, or `{}` where nothing is authored -- the key absent, `stats: null #
+    [GAP]`, or no row at all. A key left out of the row is left out of the result: ABSENT, never the
+    registry's default.
+
+    A spelling is read through the registry's own names (`substrate.descriptors.attribute_key`): the
+    cast's legacy `cognition` is Reason's `attr.mind.acuity`; `social` is the category `agg.social`, not an attribute, and resolves to nothing. A name that is NONE
+    OF THE TEN (a retired `bonds` included), two spellings of one key, or a value that is no whole number
+    inside the attribute scale REFUSES, naming the row -- this module reads and validates, it does not
+    guess. A range `A–B` reads as its lower bound (`thread_sensitivity_of`'s rule, the registry's own
+    NPC-001 `attunement: 3–4`); a float, a bool and a numeric string refuse."""
+    raw = (r or {}).get("stats")
+    if raw is None:
+        return {}
+    who = (r or {}).get("id", "?")
+    if not isinstance(raw, dict):
+        raise Unspecified(f"cast row {who}: stats {raw!r} is no mapping", "references/npc_registry.yaml",
+                          needs="a mapping of attribute name to a whole number, or null",
+                          law="CR-20 -- an authored value this reader cannot parse refuses")
+    out: dict = {}
+    for name, v in raw.items():
+        key = attribute_key(name)
+        if key is None:
+            raise Unspecified(
+                f"cast row {who}: stats key {name!r} is none of the ten attributes",
+                "references/descriptor_registry.yaml", needs=f"one of {', '.join(ATTRIBUTES)}, or an alias",
+                law="CR-20 / ED-IN-0328 -- a value under a key that is not one of the ten is refused")
+        if key in out:
+            raise Unspecified(f"cast row {who}: stats names {key} twice (second spelling {name!r})",
+                              "references/npc_registry.yaml", needs="one spelling per attribute",
+                              law="CR-20 -- a duplicate would be read by whichever came last")
+        m = _ATTR_RANGE.match(v) if isinstance(v, str) else None
+        # a range reads as its lower bound; one that runs backwards or past the scale is no range and refuses below
+        n = int(m["n"]) if m and int(m["n"]) <= int(m["hi"]) <= ATTRIBUTE_CEILING else v
+        if not isinstance(n, int) or isinstance(n, bool) or not ATTRIBUTE_FLOOR <= n <= ATTRIBUTE_CEILING:
+            raise Unspecified(
+                f"cast row {who}: stats {name!r}: {v!r} is no whole number from {ATTRIBUTE_FLOOR} to "
+                f"{ATTRIBUTE_CEILING}", "references/npc_registry.yaml",
+                needs=f"a whole number {ATTRIBUTE_FLOOR}-{ATTRIBUTE_CEILING}, or a range `A–B` (read as A)",
+                law="CR-20 -- the attribute scale is the registry's, and an out-of-scale value refuses")
+        out[key] = n
+    return out
+
+
+def heritage_of(r: dict) -> Optional[str]:
+    """`Person.heritage`'s authored source (v10 CR-30): the row's `heritage:` key, one of the registry's
+    five descents (`substrate.descriptors.HERITAGES`), or `None` where nothing is authored -- the key absent,
+    `heritage: null`, or no row at all. `None` is NOT a member: silence is not a descent. A value that is no
+    member REFUSES, naming the row (`thread_sensitivity_of`'s shape; this module reads and validates).
+    Authored ONLY where the row's own text states descent or birthplace, or canon names the person's descent
+    (`canon/03_canonical_timeline.md`); a cultural label or a faction is not descent."""
+    v = (r or {}).get("heritage")
+    if v is None:
+        return None
+    if isinstance(v, str) and v in HERITAGES:
+        return v
+    raise Unspecified(
+        f"cast row {(r or {}).get('id', '?')}: heritage {v!r} is none of {', '.join(HERITAGES)}",
+        "references/descriptor_registry.yaml", needs=f"one of {', '.join(HERITAGES)}, or no key",
+        law="CR-30 -- a heritage outside the registry's roster is refused at build")
+
+
+def capability_of(r: dict, pool_default: int) -> dict:
+    """`Person.capability`'s authored source (v10 CR-33): the row's `lifepath:` key EXPANDED through
+    `rosters.yaml: tables: lifepath_templates` into `{capability key: pool_default}`, or `{}` where nothing is
+    authored -- the key absent, `lifepath: null`, or no row at all -- or where the lifepath's starting skills
+    name no key (most lifepaths map to none, and that is recorded in the table, not invented here).
+
+    THE LIFEPATH ID IS READ AND DROPPED: it is stored on no `Person`, so no reader in play can ask for it (the
+    keys it grants are the hook, `Person.capability`, which `faculty` and `train` already read). Each key is
+    held AT `pool_default` (H-126's fixture), the value `faculty` already falls to, so the grant changes no pool;
+    it makes the key one `train` can raise (`loop/effects_combat.py::_eff_train` raises only a held key). A
+    value that names no template REFUSES, naming the row (`heritage_of`'s shape): a typo'd id would otherwise
+    read as a lifepath that grants nothing."""
+    v = (r or {}).get("lifepath")
+    if v is None:
+        return {}
+    if isinstance(v, str) and v in LIFEPATH_TEMPLATES:
+        return {key: pool_default for key in LIFEPATH_TEMPLATES[v]}
+    raise Unspecified(
+        f"cast row {(r or {}).get('id', '?')}: lifepath {v!r} names no template of `lifepath_templates`",
+        "references/npc_registry.yaml", needs=f"one of the 34 ids of `rosters.yaml: lifepaths` (3-CR1 ... 3-CF6), or no key",
+        law="CR-33 -- a lifepath outside the roster is refused at build; silence is no key")
 
 
 def title_of(r: dict) -> Optional[str]:

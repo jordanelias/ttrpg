@@ -48,8 +48,6 @@ Jordan asked for the NERS lanes' findings to be folded into the plan using the a
 | CP-T02-07 | B10-09 | NARROW | AM-B-13 | held |
 | CP-T03-00 | B10-09 | REPAIR | AM-C-01 | amended |
 | IN-61 | B10-09 | RESEQUENCE | AM-B-08 | held |
-| CP-T02-06 | B10-10 | REPAIR | AM-B-12 | amended |
-| REM-32 | B10-10 | REPAIR | AM-A-20 | held |
 | CP-T03-03 | B10-11 | LIMIT | AM-C-04 | held |
 | CP-T03-04 | B10-11 | LIMIT | AM-C-05 | held |
 | CP-T03-05 | B10-11 | REPAIR | AM-C-02 | amended |
@@ -313,20 +311,9 @@ Each entry: the N-line after the amendment (the form of `ners/SKILL.md`: what th
 - **Override:** No design change. The IN-61 row names its dependencies by the handles that carry them: CP-T02-01 (H-230 limit 1), CP-T02-02 (limit 2) and IN-12 (its gate). The STOPPED state, tripwire and exit are untouched.
 - **Because:** YES — the card row reads `| ? | — | — |` for IN-61; the carried entry (`-04`:147-157) says STATE STOPPED at B-R because design-first check (4) failed (H-230) and its GATE is "H-230's two limits: (1) … a death write that names each seat-hold it closes; (2) a row-id to realm-seat map; IN-12 -> IN-61 (R, 'after IN-12')". The order line already places IN-12's remainder before IN-61.
 
-### CP-T02-06 — REPAIR (B10-10) · AM-B-12
+### REM-32 — REPAIR (B10-10) · AM-A-20 · LANDED in B10-10 (the Item commit is `69fa08a7`)
 
-- **N-line after:** continuations — cut it and a seated player's game ends at the first death with no rule for who is chosen; which persons may be chosen is a game fact (a closed roster) that must not live in a client. Player half only; R-WORLD is IN-61's.
-- **Override:** Add the branch to the re-bind: when `p` dies the client offers the members of its last reading still alive, in `continuation_ties` order, and binds to the one chosen; if none is alive the line is extinct, exactly as for an empty reading. The Query is unchanged (it reads the living only). The falsifier gains a case: a seated person dies in the same season as his one sworn retainer, with a second tie alive: the client offers the second; with none alive, the run ends. Owner: the client's re-bind on the existing seam (`harness/play_surface.py` `overrides`). CP-T02-06 moves from B10-09 to B10-10, after REM-30 (it needs IN-47) and IN-61.
-- **Taken (ladder step 5):** [ASSUMPTION; medium; Jordan to correct; revert: bind to the first living tie in `continuation_ties` order without offering a choice]
-- **Because:** YES — `02:242-243` ends a client's run only on an "empty last reading"; the Query is read "each season while `p` lives" and the re-bind happens "when `p` dies … between seasons".
-- **After the attack:** The draft replaced the player's choice ('which of them to continue as') with an automatic first pick; the client now offers the living ties. The batch placement, which the draft left open, is B10-10.
-
-### REM-32 — REPAIR (B10-10) · AM-A-20
-
-- **N-line after:** one weight-to-troops fixture at `_weighted_unit` — cut it and the gameplay experience is worse, because the scale at which two armies meet is a literal in a function body: Jordan cannot answer JQ-4 by changing a value, a real fold cannot be made to reach `Won` without editing code, and CP-T04-01's per-person subunits have no scale to take. At the shipped value it changes nothing, and the plan says so.
-- **Override:** `modules/mass_battle/massbattle.py::_weighted_unit` takes `troops=max(float(weight) * k, _MIN_TROOPS)` where `k` is one fixture (injected by name from one new `hole_register.yaml` row, kind NUMBER, owner Jordan, unblocks JQ-4), shipped at 1, the identity of today's `troops=weight`. `_SEASON_FORCE_POWER = 4` is a quality stat and is not touched. Hash equal at k = 1; at k = 1 the season force still routs on contact, recorded. Falsifier unchanged: `test_march.py`'s hand-built `Resolution("Won")` is replaced by a real fold reaching `Won` at a k above 1.
-- **Taken (ladder step 4):** [ASSUMPTION; medium; Jordan to correct; revert: ship the multiplier at the value Jordan names at JQ-4]
-- **Because:** YES — on the citation. rem-02:595-596 ships the fixture "at the value that reproduces today's `_SEASON_FORCE_POWER = 4` (`massbattle.py:196`)"; `massbattle.py:189-196` defines `_SEASON_FORCE_POWER = 4` as a Unit-level QUALITY stat (its comment: headcount is a size fact and "conflating it with quality was this function's own first-draft mistake"), used at :228 as `power=`; the weight-to-troops conversion is `troops=max(float(weight), _MIN_TROOPS)` at :226, i.e. ×1.
+Built and closed; the code and its tests are the record. This heading stays only because `hole_register.yaml`'s `source:` for the REM-32 row cites it; delete it when that is repointed.
 
 ### CP-T03-03 — LIMIT (B10-11) · AM-C-04
 

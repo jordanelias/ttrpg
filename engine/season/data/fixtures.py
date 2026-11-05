@@ -772,6 +772,14 @@ DEFAULT_FIXTURES = Fixtures(
     # difference between a walled and an open field removed), `1` the middle arm. Injection site: this
     # line, read by `seam/wrappers/mass_battle.py::field_input` into the record's `walls_dr` (`31c`).
     field_walls_dr=None,     # `H-150`, swept 3 (A.9, = the default) / 0 (control) / 1
+    # REM-32 (`H-250`, JQ-4). THE WEIGHT -> TROOPS SCALE OF A SEASON FIELD: each headcount side's Unit is sized
+    # `troops = max(weight * this, _MIN_TROOPS)` (`massbattle._weighted_unit`). `1` IS SHIPPED AND IS THE
+    # IDENTITY -- `troops = weight`, the field as it was, on which a realm force routs on contact; the value
+    # is Jordan's to name at JQ-4 and is not invented here. Injection site: this line, read by
+    # `seam/wrappers/mass_battle.py::field_input` into the record's `troops_per_weight`. An order-of-battle
+    # side, and a headcount side facing one, are sized by `under_arms_cap`, not by this (`resolve_field`: the scale reaches only
+    # a field where neither side holds an order of battle).
+    field_troops_per_weight=1,  # `H-250`, swept 1 (control, SHIPPED, = troops = weight) / above 1
     # v9 IN-52 (`H-241`). THE LEVY-TO-FIELD FEED'S ARM [ASSUMPTION LF-1..LF-3, delegated-ruled,
     # `_part5` §J.2]: `True` bounds each side's fielded troops by its treasury at the larder's ration
     # (`modules/settlements/provision.py`) and debits what the field eats (`_eff_march`); `False` is the
@@ -940,6 +948,12 @@ DEFAULT_FIXTURES = Fixtures(
     # where it writes in no band. [ASSUMPTION; medium; Jordan to correct; revert: `odds_weighting` `none`, one re-pin]
     # [JUSTIFIED: engine/season/hole_register.yaml H-248 -- `site: Fixtures odds_weighting`, graded `assumption`; whether and how a believed chance weighs a contested choice is no document's (AQ-X1 (b) is taken, M1), so the arm is declared and swept none (the control) / believed]
     odds_weighting="believed",         # `H-248`, swept none (control) / believed (SHIPPED, CR-17)
+    # CP-T01-05, THE NPC HALF (B10-10; `H-249`). WHETHER THE COMPUTED CHOOSER MAY FORM AN `effort` ACT: for a contested
+    # candidate a believed chance can price, `decision/choose.py::settle_efforts` scores the effort variants by the same
+    # score (the pursuit term weighted by his believed chance, `odds_weighting`) and nets off the acts the extra slots
+    # displace; `off` is the CONTROL, the chooser as it stood. [ASSUMPTION; medium; Jordan to correct; revert: `off`, one re-pin]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-249 -- `site: Fixtures npc_effort`, graded `assumption`; whether and how a person spends a scene on one roll is no document's (the plan is silent on the rule), so the arm is declared and swept off (the control) / on]
+    npc_effort="on",                   # `H-249`, swept off (control) / on (SHIPPED, CP-T01-05 NPC half)
     # `H-202` (v9 IN-25, BOUND-STAKES). HOW HARD §F2's STANCE TERM PULLS ON A CHOICE: the term
     # `stance_polarity` signs is read at `1 + this` (`decision/choose.py::stance_term`), so a grudge
     # or a judged deed outweighs a person's pursuits sooner as it rises. §F2 weights the term 1 and
@@ -981,6 +995,15 @@ DEFAULT_FIXTURES = Fixtures(
     # outside it).
     # [JUSTIFIED: engine/season/hole_register.yaml H-199 -- the refraction gain; AX-7 rules THAT channel, competence and prior belief govern divergence and H-36 that it is receiver-side, and no document gives how much, so it is injected and swept 0 / 0.5 / 1.0; shipped live at 0.5 per Jordan's 2026-10-09 ruling]
     refraction_gain=0.5,               # `H-199`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # `H-200` (v10 CR-19, `AX-7`'s competence; `ED-IN-0327`). HOW FAR THE RECEIVER'S ATTUNEMENT SCALES THE
+    # CONFIDENCE A TOLD CLAIM LANDS AT: `decision/options.py::refracted_confidence`'s `competence` factor =
+    # `min(1, 1 + g*(attunement - mid)/(mid - floor))`, `mid`/`floor` the attribute scale's (`descriptors.py`),
+    # a receiver with no authored Attunement reading 1. `0` is the CONTROL AND IT SHIPS (the knowledge-model
+    # fold, `proposals/2026-11-04-knowledge-model-build-plan.md` §11 item 4): the factor is in place and the
+    # flip to a live gain waits on CR-83's design, because a person-side gain cannot tell a lie from a truth
+    # (`H-200`'s cite). Read only where `refraction_gain` refracts a deposit. Must lie in [0, 1].
+    # [JUSTIFIED: engine/season/hole_register.yaml H-200 -- the competence gain; AX-7 rules THAT the reader's competence governs divergence and ED-IN-0327 that Attunement helps judge truthfulness, and no document gives how much, so it is injected and swept 0 / 0.5 / 1.0; shipped at the control 0 until CR-83's design gives a lie/truth separator]
+    competence_gain=0.0,               # `H-200`, swept 0 (control, SHIPPED) / 0.5 / 1.0
     # `H-159` (plan position `17b`, `04 §B.8`'s `term?`; `T-n`, `architecture/meta/01_AXIOMS.md`:
     # *"the opening act declares the terms"*). HOW MANY SEASONS AN `oblige` RUNS BEFORE IT MATURES
     # UNPAID -- the term `_eff_oblige` declares on the edge it opens (`matures_at = tick + this`),

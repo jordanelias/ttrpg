@@ -29,7 +29,16 @@
 
 schema:
   required: [id, first_name, last_name, faction, role, status]
-  optional: [age, birthplace, territory, ts, coherence, stats, convictions, affiliations, goals, arc_trajectory, notes]
+  optional: [age, birthplace, heritage, lifepath, territory, ts, coherence, stats, convictions, affiliations, goals, arc_trajectory, notes]
+  # `heritage:` (v10 CR-30) is one of `references/descriptor_registry.yaml: heritage_roster`, read by
+  # `engine/season/data/cast.py::heritage_of` into `Person.heritage`, which RAISES on any other value. Authored
+  # ONLY where canon names the person's descent or the row's own `birthplace:` states it; silence is no key.
+  # `lifepath:` (v10 CR-33) is one of the 34 ids of `engine/season/rosters.yaml: lifepaths` (`3-CR1` ... `3-CF6`),
+  # expanded by `engine/season/data/cast.py::capability_of` into `Person.capability` entries (the capability keys the
+  # lifepath's template names, each at `pool_default`); the id itself is stored on no Person. Authored ONLY where the
+  # row's own text (role, notes) names or clearly states one of the 34; silence is no key. It is NOT `vocation:` --
+  # in code "vocation" names a capability key.
+  # `stats:` (the ten attributes, v10 CR-20) reads through `cast.py::attributes_of`; legacy spellings resolve.
   # `affiliations:` (IN-08 H10) is `{<affiliation>: <int 0-5>}` over
   # `references/descriptor_registry.yaml: affiliation_roster` -- the person's religious affiliations
   # and, since ED-IN-0293, `altonian_civics` (the political structure they want), read by
@@ -58,7 +67,9 @@ characters:
       cognition: 5
       focus: 5
       endurance: 4
-      social: 3–4
+      attunement: 3–4   # edeyja_npc.md:33 "All social attributes: moderate (3–4)": the whole category, so all three of its keys
+      presence: 3–4
+      grace: 3–4
     convictions:
       primary:
         - {conviction: stewardship, weight: 0.40}
@@ -94,6 +105,7 @@ characters:
     last_name: Uln
     faction: Varfell
     role: Practitioner / Succession Fallback
+    lifepath: 3-VA1  # this row's own text: notes "Vaynard's intelligence operative", Varfell -> 3-VA1 Intelligence Operative (maps to no capability key)
     status: canonical
     age: null  # [GAP]
     birthplace: Western fjords (near southern Einhir communities in Varfell territory)
@@ -176,6 +188,7 @@ characters:
     last_name: Haelgrund
     faction: Church
     role: Field Inquisitor (deployed at AP ≥ 3)
+    lifepath: 3-CH5  # this row's own text: role "Field Inquisitor", goal "Investigate heresy", "investigative instinct" -> 3-CH5 Church Investigator (starred Inquisitorial Method, "+1D Investigation targeting heresy") (holds inquiry)
     status: canonical
     age: null  # [GAP]
     birthplace: null  # [GAP]
@@ -217,6 +230,7 @@ characters:
     last_name: Torsvald
     faction: Löwenritter (Riskbreakers)
     role: TS Riskbreaker (Covert)
+    lifepath: 3-LO3  # this row's own text: role "Riskbreaker" -> 3-LO3 Riskbreaker (maps to no capability key)
     status: canonical
     age: null  # [GAP]
     birthplace: null  # [GAP]
@@ -457,6 +471,7 @@ characters:
     title: Doux
     age: null  # [GAP]
     birthplace: Altonia
+    heritage: altonian  # this row's own text: `birthplace: Altonia`, title "Doux (Altonian Prince)"; birthplace alone is not descent
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
@@ -496,6 +511,7 @@ characters:
     status: canonical
     age: null  # [GAP]
     birthplace: Schoenland
+    heritage: schoenlander  # this row's own text: `birthplace: Schoenland`, "Return home eventually" and homesickness; birthplace alone is not descent
     territory: T16 (Schoenland)
     ts: null  # [GAP]
     coherence: null  # [GAP]
@@ -579,6 +595,7 @@ characters:
     title: King
     age: null  # [GAP]
     birthplace: null  # [GAP]
+    heritage: northern_einhir  # canon/03_canonical_timeline.md:138 -- "King Almud Almqvist ... Northern Einhir"
     territory: T1 (Valorsplatz)
     ts: 28
     coherence: null  # [GAP]
@@ -1191,6 +1208,7 @@ characters:
     status: canonical
     age: null  # [GAP]
     birthplace: null  # [GAP]
+    heritage: southern_einhir  # canon/03_canonical_timeline.md:144 -- "Duke Magnus Vaynard ... Southern Einhir heritage"
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
@@ -1431,6 +1449,7 @@ characters:
     last_name: Haldorsen
     faction: Löwenritter (Riskbreakers)
     role: Riskbreaker (doctrine-following — foil to Torsvald)
+    lifepath: 3-LO3  # this row's own text: role "Riskbreaker" -> 3-LO3 Riskbreaker (maps to no capability key)
     status: proposed
     ts: 0
     certainty: 5
@@ -1690,6 +1709,7 @@ characters:
     last_name: Vedel
     faction: Restoration Movement
     role: Copyist (hand-copies suppressed Einhir cultural texts)
+    lifepath: 3-CF4  # this row's own text: role "Copyist (hand-copies ... texts)" is the trade 3-CF4 Scribe is named for (its Knot: "an author whose work you copied"); maps to inquiry, not copying (the table's 3-CF4 ground)
     status: proposed
     cultural_label: restoration_reformist
     resonant_style: Evidence

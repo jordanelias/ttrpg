@@ -44,13 +44,22 @@ _DATA = _load()
 REGISTRY_VERSION = _DATA.get('registry_version', '')
 REGISTRY_RATIFIED = _DATA.get('registry_ratified', '')
 
-#: Character attribute roster, in registry order. NOTE: Jordan ruled 2026-08-14 that this WILL BE
-#: ten; the registry ships nine and the tenth is unnamed. `ATTRIBUTES_PENDING_TENTH` is non-None
-#: while that is true, so a reader cannot mistake the current roster for a closed one.
+#: Character attribute roster, in registry order. Jordan ruled 2026-08-14 that this is ten and named
+#: them in ED-IN-0328 (CR-84). `ATTRIBUTES_PENDING_TENTH` is None at ten; it is non-None whenever the
+#: registry ships fewer, so a reader cannot mistake a short roster for a closed one.
 ATTRIBUTES = tuple(_DATA['attributes']['roster'])
 ATTRIBUTES_PENDING_TENTH = _DATA['attributes'].get('pending_tenth')
 ATTRIBUTE_FLOOR = _DATA['attributes']['scale']['floor']
 ATTRIBUTE_CEILING = _DATA['attributes']['scale']['ceiling']
+#: `{lowercased name | alias | key: key}` over the ten (CR-20), cooked by the exporter from the registry's
+#: resolver: the cast's legacy spellings (`cognition`) resolves here. A retired attribute's names are absent.
+ATTRIBUTE_NAMES = _DATA['attributes']['names']
+
+
+def attribute_key(name):
+    """The roster key a name, alias or key spells, or `None` if it is none of the ten (a retired attribute's
+    names included). Case-insensitive. A READ: the caller decides whether `None` refuses."""
+    return ATTRIBUTE_NAMES.get(str(name).strip().lower())
 
 #: {registry key -> {name, floor, ceiling}} for each declared domain.
 SETTLEMENT_STATS = _DATA['settlement_stats']
@@ -139,6 +148,16 @@ AFFILIATION_CEILING = _DATA['affiliation_roster']['scale']['ceiling']
 #: `engine/season/data/cast.py::conviction_of` refuses a cast row holding no member of a concern.
 #: Indexed, not `.get`: an export without the key would otherwise read as "no concern to satisfy".
 AFFILIATION_CONCERNS = {c: tuple(ms) for c, ms in _DATA['affiliation_roster']['concerns'].items()}
+
+# ---------------------------------------------------------------------------
+# HERITAGE -- v10 CR-30 (ED-IN-0301). THE ONLY HERITAGE ROSTER IN THE ENGINE.
+# ---------------------------------------------------------------------------
+#: The descents `Person.heritage` is one of (`None` is unauthored, never a member), in registry order, and
+#: `{member: concern}` -- the affiliation concern each engages (a key of `AFFILIATION_CONCERNS`; the exporter
+#: refuses any other). A member absent from the mapping engages none. `engine/season/data/cast.py::heritage_of`
+#: refuses a cast value that is not a member.
+HERITAGES = tuple(_DATA['heritage_roster']['names'])
+HERITAGE_ENGAGES = dict(_DATA['heritage_roster']['engages'])
 
 # ⚠ THERE IS NO ALIAS MAP, AND ITS REMOVAL IS THE POINT (corrected 2026-08-24, same day it was
 # added, by an adversarial pass). This module briefly carried

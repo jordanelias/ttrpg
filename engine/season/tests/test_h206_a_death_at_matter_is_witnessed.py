@@ -141,9 +141,12 @@ def _fight(i):
     w.step = Step.RESOLVE
     w.fixtures = w.fixtures.sweep("wound_harm_model", "total")
     d = SeasonDriver(w)
+    md = w.fixtures.get("contest_max_depth")
     evs = d.resolve(mint_token(w, WriteClass.ACTS),
-                    [Act(id=f"h206_{i}", actor="p_near", verb="fight", payload={"subject": HOLDER})],
-                    w.fixtures.get("contest_max_depth"))
+                    [Act(id=f"h206_{i}", actor="p_near", verb="fight", payload={"subject": HOLDER})], md)
+    # v10 REM-31: `the body` defers to ENCOUNTER, so RESOLVE declares the fight and ENCOUNTER fights it; the
+    # round's Events are both lists, in that order, as `SeasonDriver.season` assembles them.
+    evs = evs + d.encounter(mint_token(w, WriteClass.ACTS), evs, md)
     if HOLDER in w.persons:
         return None
     for ev in evs:                      # `resolve` returns the Events; the caller logs them (as a barrier does)

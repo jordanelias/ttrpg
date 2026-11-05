@@ -76,13 +76,13 @@ def _world(hearers: dict, killer_faction=SCHOENLAND):
     attributes `hearers[h]` gives (`pursuits`, `stance`, `conviction`)."""
     w = P.tiny_world()
     w.tick = 1
-    _commit(w, VICTIM, "fac_crown")
+    _commit(w, VICTIM, "fac_valorsmark")
     for pid in (KILLER, MATE):
         _person(w, pid, at="Hh")
         _commit(w, pid, killer_faction)
     for h, attrs in hearers.items():
         p = _person(w, h)
-        _commit(w, h, "fac_crown")
+        _commit(w, h, "fac_valorsmark")
         for k, v in attrs.items():
             setattr(p, k, v)
         p.ledger += [_deed(h, cid=f"c_died_{h}"), _seen(h, cid=f"c_seen_{h}")]
@@ -210,7 +210,7 @@ def test_a_victim_faction_member_attends_to_the_killers_faction():
     e = _condemning_pursuit()
     w = _world({"h": {"pursuits": {e: 1.0}, "stance": [(VICTIM, 5, 5)]}})
     q = _claim_question(w, "h")
-    assert world_q.faction_holding(w, VICTIM) == world_q.faction_holding(w, "h") == "fac_crown"
+    assert world_q.faction_holding(w, VICTIM) == world_q.faction_holding(w, "h") == "fac_valorsmark"
     hits = set(q.referents) & set(world_q.members(w, SCHOENLAND))
     assert len(hits) >= 1, q.referents
     w.persons["h"].ledger = [c for c in w.persons["h"].ledger if c.predicate != SEEN_PREDICATE]

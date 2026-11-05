@@ -29,6 +29,7 @@ is claimed twice in the index and the collision is a real pair of quantities, no
 three until plan position `29b` retired the `fac.*` rows):
 
     Order      -- `conv.order` (a Conviction) and `set.order` (a settlement stat)
+    Reason     -- `conv.reason` (a Conviction) and `attr.mind.acuity` (an attribute; CR-84)
 
 `canonical_for()` refuses it and names the claimants. The index's `context:` field disambiguates
 these for PROSE matching (the §3.5 gate `vector_audit` reads) but says nothing about which row owns

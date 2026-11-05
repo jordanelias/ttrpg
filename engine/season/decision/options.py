@@ -1,6 +1,6 @@
-"""`decision/` -- the `opening_set` member of `04_CODE_ARCHITECTURE.md` §A.2:133, and its helpers.
+"""`decision/` -- the `opening_set` member of `04_CODE_ARCHITECTURE.md` §A.2 (the `decision/` row), and its helpers.
 
-⚠ **THE FILE IS `options.py` AND THE MEMBER IS `opening_set`, DELIBERATELY.** §A.2:133 names four
+⚠ **THE FILE IS `options.py` AND THE MEMBER IS `opening_set`, DELIBERATELY.** §A.2 (the `decision/` row) names four
 members; a module named `opening_set.py` beside a function named `opening_set` makes
 `decision.opening_set` ambiguous -- `__init__.py`'s re-export shadows the submodule -- and the
 rebind surface needs the MODULE by name. "Option set" is the tree's own existing phrase for what
@@ -12,9 +12,9 @@ eligibility predicate, and the two agreement/standing readers.
 
 ⚠ `entrenchment` SITS HERE PROVISIONALLY AND L3 RE-ADJUDICATES IT. Three functions in the old
 `decision.py` self-declared as person-side Queries via `TRACE.query(..., "person")`: `budget`,
-`opening_set` and `entrenchment`. The first two are named by §A.2:133 as `decision/` MEMBERS and
+`opening_set` and `entrenchment`. The first two are named by §A.2 (the `decision/` row) as `decision/` MEMBERS and
 therefore cannot move to `queries/person_q` -- which is why `ED-IN-0206` item (2) is wrong about
-them. `entrenchment` is the only one of the three that §A.2:133 does not name, so it is the only
+them. `entrenchment` is the only one of the three that §A.2 (the `decision/` row) does not name, so it is the only
 real `queries/person_q` candidate in this file, and L3 owns that call.
 
 AX-2 binds every file under `decision/`: no `World`, as an import, a name, an attribute or a
@@ -49,6 +49,7 @@ from ..queries.person_q import (
 )
 from ..state.carriers import Candidate, Claim, Person, Question, Record, View
 from ..trace_log import TRACE
+from ...substrate.descriptors import ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, attribute_key
 
 # v9 IN-12 step 7: THE CLASS A HELD WRIT RIDES THE QUESTION AS -- the carrier's own type name, which is
 # what `queries/world_q.py::_stamped` stamps for a document (`World.class_of`) and what
@@ -1477,8 +1478,55 @@ def dissents(p: Person, c: Claim, act=None, weigh=None) -> bool:
                               actor=act.actor)
 
 
+# v10 CR-19 / `H-200`: THE ATTRIBUTE `AX-7`'S COMPETENCE READS, named once, here, by its registry name and
+# resolved to its key by the registry's own resolver (`ED-IN-0327`: Attunement helps one judge whether
+# someone is telling the truth). Refused at import if the registry stops carrying it.
+COMPETENCE_ATTRIBUTE = attribute_key("Attunement")
+assert COMPETENCE_ATTRIBUTE is not None, "the attribute registry no longer carries Attunement (H-200)"
+#: The scale's middle, where the competence factor is 1: `(floor + ceiling) / 2`, read off the registry's
+#: `attributes.scale` (1-7, so 4), not written here.
+COMPETENCE_MID = (ATTRIBUTE_FLOOR + ATTRIBUTE_CEILING) / 2
+
+
+def competence(p: Person, competence_gain: float) -> float:
+    """`AX-7`'S THIRD INPUT, THE RECEIVER'S COMPETENCE, in `[0, 1]` (v10 CR-19; `H-200`).
+
+        competence = min(1, 1 + g * (attunement - mid) / (mid - floor))      g = `competence_gain`
+
+    `attunement` is the score `p.attributes` holds at `COMPETENCE_ATTRIBUTE` (`Person.attributes`, CR-20);
+    `mid` is `COMPETENCE_MID`. MONOTONE in Attunement and exactly 1 at `mid`; a receiver with NO authored
+    Attunement reads 1 (a READ, never a default: the cast carries none, so the realm is unmoved). At
+    `g = 0` it is 1 for everyone: THE CONTROL, and the shipped value.
+
+    ⚠ CAPPED AT 1 ABOVE `mid` [ASSUMPTION; medium; Jordan to correct; revert: drop the `min` and clamp the
+    product to a confidence ceiling, which no owner names]: the other two factors only ever LOWER a
+    confidence (`refracted_confidence`'s docstring), and an uncapped factor would let a deposit land ABOVE
+    the confidence it was told at, past any ceiling the tree defines. So a competent reader loses nothing
+    and an incompetent one credits less.
+
+    ⚠⚠ WHAT THIS FACTOR CANNOT DO, AND WHY IT SHIPS AT 0. `ED-IN-0327` (Jordan): *"attunement also helps
+    you determine if someone is telling the truth"*. This factor scales EVERY told claim by the receiver's
+    Attunement alone. A person-side reading cannot see whether a claim is true (`AX-7`: the performer's
+    own understanding and everyone else's are separate objects, and a claim carries no truth value), and
+    what `p` legitimately holds of the claim is only its channel, its teller, its confidence and `p`'s own
+    prior (`dissents`) -- none of which separates a lie from a truth: a lie and a truth reach a receiver
+    with no prior identically, and a receiver whose prior is wrong dissents from a truth exactly as one
+    whose prior is right dissents from a lie. So a LIVE gain here would let a high-Attunement receiver
+    hold a lie MORE firmly than a low one, the opposite of the ruling. Left to CR-27's `lie` (B10-13), which
+    alone knows which told claims are false, and to CR-83's design, which must give the separator before the
+    gain is flipped live (a declared hash mover scheduled by that design, not by this function). CR-27's
+    second falsifier is the guard on that flip."""
+    if not 0.0 <= competence_gain <= 1.0:
+        raise ValueError(f"competence_gain {competence_gain!r} is outside [0, 1] (H-200): a factor below 0 "
+                         "would turn a deposit's confidence negative")
+    held = (getattr(p, "attributes", None) or {}).get(COMPETENCE_ATTRIBUTE)
+    if held is None:
+        return 1.0
+    return min(1.0, 1.0 + competence_gain * (held - COMPETENCE_MID) / (COMPETENCE_MID - ATTRIBUTE_FLOOR))
+
+
 def refracted_confidence(p: Person, c: Claim, channel: str, gain: float,
-                         act=None, weigh=None) -> int:
+                         act=None, weigh=None, competence_gain: float = 0.0) -> int:
     """REFRACTION -- `AX-7`'s divergence formula (v9 IN-15; `H-36`'s shape, `H-199`'s magnitude).
     How much `p` credits a claim landing in their ledger, from the channel it reached them by and
     what they already held:
@@ -1488,7 +1536,8 @@ def refracted_confidence(p: Person, c: Claim, channel: str, gain: float,
 
     `g` is `refraction_gain`, in `[0, 1]`; `remove` is `channel_remove`; `dissent` is `dissents`, 0
     or 1 -- with `act` (the act `c` reports happening) and `weigh` passed through to its act-level
-    term (`H-201`); `competence` is 1, unbuilt (`H-200`). Each factor is in `[0, 1]`, so refraction only
+    term (`H-201`); `competence` is `competence(p, competence_gain)` (CR-19, `H-200`: the receiver's Attunement, swept, 1 at the
+    shipped gain 0). Each factor is in `[0, 1]`, so refraction only
     ever LOWERS a confidence, and at `g = 0` every factor is exactly 1: THE CONTROL, and the deposit
     is today's.
 
@@ -1509,8 +1558,8 @@ def refracted_confidence(p: Person, c: Claim, channel: str, gain: float,
     if not 0.0 <= gain <= 1.0:
         raise ValueError(f"refraction_gain {gain!r} is outside [0, 1] (H-199): a factor below 0 "
                          "would turn a deposit's confidence negative")
-    # ABSENT: H-200 competence  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
-    factor = (1.0 - gain * channel_remove(channel)) * (1.0 - gain * dissents(p, c, act, weigh))
+    factor = ((1.0 - gain * channel_remove(channel)) * (1.0 - gain * dissents(p, c, act, weigh))
+              * competence(p, competence_gain))
     return int(c.confidence * factor + 0.5)
 
 

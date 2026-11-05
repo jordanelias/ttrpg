@@ -286,6 +286,52 @@ class _Records:
         return (None, field), sub
 
 
+def consequence_kinds(w, act_of: dict, log=None) -> dict:
+    """CR-68/CR-69 -- THE ONE OWNER of the consequence predicate: `{act id: (the distinct kinds, in log
+    order, of the Events the act caused that carry a Receipt whose `(kind, field)` is in
+    `ARC_SELF | ARC_WORLD`)}`. An act is a consequence act iff it is a key. Reads only.
+
+    NO SECOND ROSTER: the pairs are the two above, classified by OWNERSHIP as `read_arcs` does (`read_arcs` also skips `DEATH_KIND` Events and this does not, so a
+    `person.died` can appear in CR-69's histogram; the killing act counts through its `body.changed` either way) (a
+    pair in `ARC_SELF` counts only when the record is the ACTOR's own, a pair in `ARC_WORLD` only when it is
+    someone else's, so an actor's write to his own `Person.body` -- a self-tend -- and a pupil's `capability`
+    are NOT consequences; a graded loss that writes -- a `field.lost` -- is one; a refusal writes nothing and
+    is not). `Event.changes`
+    is read by `_Records.of`, exactly as `read_arcs` reads it; the seat Receipts a death mints on a
+    `tenure.closed` Event name an Office and are no write of a record, so they are skipped as `read_arcs`
+    skips them. An Event the act caused is the Event `act_of` maps to it (what the act emitted); the
+    Events other people's acts and MATTER chained after it are not counted. `log` defaults to `w.log`.
+    The kinds are READ OFF the log (CR-69's histogram); no list of kinds is kept here.
+    [ASSUMPTION; medium; Jordan to correct; revert: restore `--executed-only` and the depth-only pick]"""
+    selfs, worlds = validate_roster(ARC_SELF), validate_roster(ARC_WORLD)
+    records = _Records(w)
+    out: dict = {}
+    for ev in (w.log if log is None else log):
+        act = act_of.get(ev.id)
+        if act is None:
+            continue
+        for r in ev.changes:
+            if not isinstance(r, Receipt):
+                continue
+            if ev.kind == TENURE_CLOSED and r.subject in w.offices:
+                continue
+            pair, owner = records.of(r, ev)
+            if pair in (selfs if owner == act.actor else worlds):
+                ks = out.setdefault(act.id, [])
+                if ev.kind not in ks:
+                    ks.append(ev.kind)
+                break
+    return {a: tuple(ks) for a, ks in out.items()}
+
+
+def consequence_acts(w, act_of: dict, log=None) -> frozenset:
+    """CR-68 -- THE ACTS THAT LEFT A MARK: the ids of the acts in `act_of` that caused an Event carrying
+    a Receipt whose `(kind, field)` is in `ARC_SELF | ARC_WORLD`; the keys of `consequence_kinds`, which
+    holds the predicate (`harness/chronicle.py` picks its chain over this; it lives here, beside the
+    roster, because this module imports `storybar` and `storybar` must not import this one)."""
+    return frozenset(consequence_kinds(w, act_of, log))
+
+
 def read_arcs(w, d, on_thrust=None, *, n=None, refused=None, log=None, unrestricted=False,
               self_fields=ARC_SELF, world_fields=ARC_WORLD) -> ArcReading:
     """`ARC(p, A)` over the world `w` and its driver `d`. Reads only.

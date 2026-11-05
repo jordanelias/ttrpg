@@ -1140,11 +1140,12 @@ rosters:
       `movement` has exactly one member (`move`), so that one stratum is bijective with its verb --
       see `epistemic._term_stratum`'s docstring, found by adversarial review. (⚠ TWO since plan
       position `19c` added `migrate` to it; a `movement` witness no longer knows which.) `marks` is the
-      actor's appearance; `Person.marks` itself was DELETED 2026-09-24 (`ED-IN-0261` item 1) as a
-      zero-reader/zero-writer field, so this term now reads nothing rather than a deleted
-      attribute and is `()` for every actor (see `epistemic._term_marks`) -- `()` still means
-      *seen, and nothing describable*, and `None` still means *this channel does not show a body
-      at all*. `who` is the actor's id. `why` is the motive.
+      actor's appearance, and since v10 CR-30 it carries ONE member, the actor's `Person.heritage` (descent,
+      the one member of the dropped `marks[]` no Tenure derives): `(heritage,)` where it is authored and
+      `()` where it is not (`epistemic._term_marks`), public at co-location and deposited true and
+      verbatim, as `who` is. (`Person.marks` itself was DELETED 2026-09-24, `ED-IN-0261` item 1, as a
+      zero-reader/zero-writer field.) `()` still means *seen, and nothing describable*, and `None` still
+      means *this channel does not show a body at all*. `who` is the actor's id. `why` is the motive.
       ⚠ `supplied_by:` IS WHAT EACH CHANNEL SHOWS, and a witness's struct is the UNION over the
       channels that admit them under the live `fan_out_mode` (`epistemic.live_channels`). The
       `total` arm is `H-33`'s control and shows EVERY term to every witness, so this table is read
@@ -1157,10 +1158,11 @@ rosters:
       ⚠ NO CHANNEL SUPPLIES `why`, AND THAT IS `R8.4`'s DEFECT, NOT A CHOICE MADE HERE:
       `Candidate.why` is dropped at `pack_scenes` and `Act` carries no motive, so the engine
       forgets it before the act executes and no witness can learn it. Case 4 (*no discernible
-      reason*) is therefore every deposit today. `Person.marks` has zero writers, so `marks` is
-      `()` wherever it is shown -- case 2 (*someone looking like y*, `who=None`) is supported by
-      the struct and reached by nothing until a recognition producer exists, which `R8.2` defers
-      to its own commit.
+      reason*) is therefore every deposit today. `Person.heritage` has ONE writer, the world build
+      (`data/cast.py::heritage_of`), and `marks` shows it wherever `who` is shown -- so case 2 (*someone
+      looking like y*, `who=None`) is supported by the struct and reached by nothing until a recognition
+      producer exists, which `R8.2` defers to its own commit, and a channel that withholds `who` while
+      showing `marks`.
     values: [stratum, marks, who, why]
     deposit:
       predicate: seen
@@ -1270,12 +1272,12 @@ rosters:
       ⚠ A ROUTE, NOT A PRIZE. Each row names the provider registered under `@provider("contest", …)`
       and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::faculty`
       (`verb_capability`, else the swept `pool_default`) and the obstacle the module's own
-      (`modules/social_contest/roll.py::obstacle`: `obstacle_default`, swept, while no
-      `verb_capability` row names an inquiry -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already
+      (`modules/social_contest/roll.py::obstacle`: `obstacle_default`, swept, unless the subject is a
+      person who HOLDS the `inquiry` key, `sigma.py::_opposition_of` -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already
       binds (`manifest/registry.py::check_graded_inquiries`), so this row adds no roll and no
-      resolver. No `verb_capability` row is added for the inquiries: which capability an inquiry
-      draws on is stated nowhere, so every inquirer rolls `pool_default` -- the declared finding
-      cut, re-read by `corpus_run`, not quoted here.
+      resolver. `verb_capability` now names `inquiry` for the three (REM-30, B10-10; the rows were deferred at
+      CP-T01-01): an inquirer who HOLDS an `inquiry` key rolls it, and one who holds none still rolls
+      `pool_default` (`seam/wrappers/sigma.py::faculty`).
       ⚠ THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the
       questioned person answers by their own `tell`, so there is no degree on the asker);
       `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read`
@@ -1366,15 +1368,90 @@ rosters:
       does not require adding a row before the seam will run it.
       ⚠ AND IT IS NEARLY INERT ON THE CORPUS TODAY, WHICH IS SAID HERE SO NOBODY READS THE ROWS AS
       DOING WORK: the writers of `Person.capability` are a `cast:` overlay's `capability:`
-      (`harness/corpus_run.py`, `build_at`) and, in play, `train` (v9 IN-12 step 9: +1 on a key the subject already holds), and one entry carries one (NPC-088's Carin Vedel,
-      `{copying: 3}`; counted 2026-10-02 with `cast_overlay()`: 1 of 430 built persons), so every
+      (`harness/corpus_run.py`, `build_at`), a cast row's `lifepath:` (v10 CR-33, `data/cast.py::capability_of`,
+      held at `pool_default`) and, in play, `train` (v9 IN-12 step 9: +1 on a key the subject already holds). AS
+      MEASURED 2026-10-02 (a dated count, before CR-33) one entry carried one (NPC-088's Carin Vedel,
+      `{copying: 3}`; with `cast_overlay()`: 1 of 430 built persons), so every
       other derivation lands on `pool_default` and the roll varies by SEED and FIXTURE rather than by
       PERSON. That is why R-09 reads `partial` after `U1` and not `met`.
+      ⚠ FOUR ROWS WERE DEFERRED AT CP-T01-01 (v11 B10-08, AM-B-01) AND LANDED AT v10 B10-10, REM-30, BEFORE
+      THEIR FIRST WRITER (the creation sheet writes nothing; the first writer of an `argue` or `inquiry` key is
+      CR-33's `lifepath:` expansion and, in play, `train`): `argue: "argue"` and the three
+      inquiries `research`, `examine`, `surveil: "inquiry"`. They are VALUES of this table, so they ARE the
+      vocation range (`data/verbs.py::VOCATIONS`, a frozenset of these values; no second roster to extend):
+      `argue` and `inquiry` join `copying`, and every `train` formation (`vocation_sourced`) forms one
+      Candidate per vocation, three where it formed one. A DECLARED MOVER where formation moves, not before.
     sweep: [declared, uniform, absent]
     keys: [verb_table]
     values:
       tell:  "copying"
       speak: "copying"
+      argue: "argue"
+      research: "inquiry"
+      examine:  "inquiry"
+      surveil:  "inquiry"
+
+  vocation_attribute:
+    source: >-
+      v10 CR-20 (M2, taken): a person's input is `faculty`, derived at read; the ten stored attributes
+      (`references/descriptor_registry.yaml: attributes`, ED-IN-0328) are what it derives from. THIS TABLE
+      IS WHICH ATTRIBUTE EACH VOCATION'S POOL STARTS FROM -- the vocation is a `verb_capability` value, the
+      attribute a registry key.
+    note: >-
+      CLOSED, BOTH WAYS: a row for every vocation (`data/verbs.py::VOCATIONS`, the VALUES of
+      `verb_capability`) and for nothing else, each valued by one of the ten registry keys; refused at import
+      otherwise (`data/rosters.py::_load_vocation_attribute`), so a vocation added to `verb_capability` is
+      refused until it is given an attribute, and a row for a name that is no vocation never reads as live.
+      `faculty` takes the HELD value of the person's attribute here as the pool's base and the larger of that
+      and the held capability key; with NO attribute held it is the held key alone, else `pool_default`, exactly
+      as before CR-20 -- so a held key of 0 stays "under one die" without an attribute and is overridden by one
+      (`seam/wrappers/sigma.py::faculty`; the plan's literal "larger of the held key and `pool_default`" would raise
+      a held 0 to 2 against `test_odds_of`'s pin). `_opposition_of` reads the larger of the held key and the
+      authored attribute, never practice, never the fallback.
+      EACH ROW'S GROUND, so a reviewer can check it against the vocation's own text and not against taste:
+      `copying` -> Focus (`attr.mind.focus`): the vocation is `tell`/`speak` (a claim relayed as it was
+      held) and NPC-088's case, a repeated multi-week task of copying a text (`cases/exercises/NPC-088.yaml`),
+      i.e. sustained, exact attention to a thing so that it is reproduced unchanged. `argue` -> Presence (`attr.social.charisma`): RULED by Jordan, 2026-11-05 (ED-IN-0350): *"argue main component is
+      presence, attunement informs how character thinks the other character is receiving it and the best style of
+      argument to deliver"*. Presence is the arguer's pool. Attunement is NOT the pool: it informs the arguer's reading of
+      how the other party is receiving the case and which style of argument to deliver, a choice-side input that no code
+      reads yet (reference, not a mechanism; the carrier for it is a design owed to CR-92/CR-93, `-12`). (Proof is the
+      room's term, `proofs`, composed into the obstacle already.) `inquiry` -> Reason (`attr.mind.acuity`):
+      its three verbs are the fieldwork inquiries whose source rows are headed *Examine · Cognition*,
+      *Research · Recall*, *Surveil · Cognition*
+      (`fieldwork_v30.md:301,303,304`, archived; `verb_table.yaml` `examine` /
+      `research` / `surveil` `requires_typed_note`), and `Cognition` is Reason's registry alias; `Recall`
+      is not among the ten.
+      [ASSUMPTION; medium; Jordan to correct; revert: delete this roster and the loader, and `faculty` /
+      `_opposition_of` read the held capability key alone, as before CR-20.] The competitors, each the
+      cheap swap: `copying` -- Coordination (a copyist's hand) or Presence (`tell` is thrown against the
+      hearer's standing, `verb_table.yaml` `tell`); `argue` -- none: ruled (above);
+      `inquiry` -- Perception for `surveil` ("awareness of surroundings, noticing information",
+      `references/descriptor_registry.yaml`). Focus, Reason and Presence carry no registry description, so
+      no row rests on one. Checked by a read-only pass at CR-20's close; the pass changed `argue` to Attunement and two
+      citations, and Jordan's ruling of 2026-11-05 returned `argue` to Presence.
+    values:
+      copying: "attr.mind.focus"
+      argue:   "attr.social.charisma"
+      inquiry: "attr.mind.acuity"
+
+  lifepaths:
+    source: >-
+      v10 CR-33: the 34 lifepaths (the Stage 3 vocations of `character_histories_v30.md`, archived), by the
+      ids that file prints, `3-CR1` ... `3-CF6`. THE CLOSED SET `tables: lifepath_templates` is keyed by,
+      refused at import both ways (`data/rosters.py::_load_lifepath_templates`), and the set a cast row's
+      `lifepath:` key is checked against (`data/cast.py::capability_of`). Four Niflhel ids (`3-NI1` ...
+      `3-NI4`) are STRUCK in that file (it prints no row for them and sends their backstories to `3-CF6`) and
+      are not members. Jordan's "34 vocations" counts these; in code "vocation" names a capability key
+      (`data/verbs.py::VOCATIONS`), which is why the cast key is `lifepath:` and not `vocation:`.
+    values: ["3-CR1", "3-CR2", "3-CR3", "3-CR4", "3-CR5",
+             "3-CH1", "3-CH2", "3-CH3", "3-CH4", "3-CH5",
+             "3-HA1", "3-HA2", "3-HA3", "3-HA4",
+             "3-VA1", "3-VA2", "3-VA3", "3-VA4",
+             "3-GU1", "3-GU2", "3-GU3",
+             "3-RE1", "3-RE2", "3-RE3",
+             "3-LO1", "3-LO2", "3-LO3", "3-LO4",
+             "3-CF1", "3-CF2", "3-CF3", "3-CF4", "3-CF5", "3-CF6"]
 
   contest_subsystems:
     source: "`references/module_contracts.yaml` names `combat` (was `personal_combat`; one identity per module, A-25), `mass_battle` and `social_contest` as modules with real docs and real resolvers. `ARCHITECTURE_V2.md:394` declares `contests: <prize>` — *if set, routes to the seam at RESOLVE (§39)*."
@@ -1420,7 +1497,9 @@ rosters:
         module:   "combat"
         provider: "personal_combat"
         module_entry: "combat.fight"   # `31b`, as `a standing`'s: the composition role `seam/wrappers/combat.py` calls through `MODULE_ENTRIES`, for EVERY verb contesting this prize (`fight` and `accept`); the composition row's `verb:` names one of them (`fight`), the registrar's one-verb shape. Line-neutral: the comment block above lost a line for this one.
-        cite:     "H-88; the seam already calls it (seam/wrappers/combat.py)"
+        step:     "ENCOUNTER"   # v10 REM-31 (IN-46): `a field`'s pair. Every fight is declared at RESOLVE and fought at ENCOUNTER, in AUTOMATED and PLAYABLE alike -- the one step the host may suspend at (`seam/wrappers/combat.py::resolve`'s `host`). Declared content-hash mover: every seeded season that fights re-pinned.
+        declares: "Declared"
+        cite:     "H-88; the seam already calls it (seam/wrappers/combat.py); `step:`/`declares:` v10 REM-31, design `proposals/2026-10-07-grid-mode-suspension.md` §1 (PROPOSED, held back)"
       "a field":
         module:   "mass_battle"
         provider: "mass_battle"
@@ -1439,9 +1518,9 @@ rosters:
           `contests: "a field"` and is admitted and DECLARED at RESOLVE, folding at the band
           `declares:` names -- `Declared`, a member of `field_degree_bands` that no subsystem
           reports -- and is actually fought at the new ENCOUNTER step, on the world the whole
-          round's fold left. A prize row with no `step:` (`the body`, `a standing`,
-          `a proposition`) fights at RESOLVE as it always has; `step:`'s absence is the default,
-          not a second code path.
+          round's fold left. A prize row with no `step:` (`a standing`, `a proposition`) fights at
+          RESOLVE as it always has; `step:`'s absence is the default, not a second code path.
+          `the body` carries the same pair since v10 REM-31.
       "a standing":
         module:   "social_contest"
         provider: "social_contest"   # v9 SC-01 steps 13 + 15 (ONE change): repointed from the interim `sigma_leverage`, ED-SC-0033 clause (2) -- a ROW change. `seam/wrappers/sigma.py` registers this string; refusal (c) refuses construction if nothing does
@@ -1767,6 +1846,15 @@ rosters:
       an OFFICE BELONGS TO; the actor is always the person holding the office.
     # NO `values:` -- the members ARE `names_index.yaml`'s `token_class: faction` rows, read
     from_names: faction   # via engine/substrate/names.py. Edit the naming index, not here.
+    # CR-86 (ED-IN-0342): the seat whose live holder heads the faction (`queries/faction_q.py::head`). Keyed by the
+    # canonical faction name (Valorsmark is the Crown's: "Crown" is its alias). A faction absent here has no head
+    # seat authored (the Löwenritter, the Guilds, the Restoration Movement, Altonia, Schoenland) and `head` is None.
+    # [ASSUMPTION; medium; Jordan to correct; revert: the Church's head a Holy See seat if one is authored]
+    head_seat:
+      "Valorsmark": off_king
+      "Hafenmark": off_duchess_hafenmark
+      "Varfell": off_duke_varfell
+      "Church of Solmund": off_confessor
 
   role_templates:
     source: "`systems/factions/reference/faction_canon_v30.md` §4 'Role Templates and Expected Convictions', per PP-686 §3.3.1 over the PP-684 13-Conviction taxonomy."
@@ -1803,7 +1891,7 @@ rosters:
       # ⚠ `Varfell` AND `Löwenritter` SHARE `military-order`, WHICH IS CANON AND NOT A COLLISION.
       # §4: *"Both Varfell and Löwenritter use military-order template; their differentiation comes
       # from Mission, leader Convictions, and stat profile, not role template."*
-      "Crown": sovereign
+      "Valorsmark": sovereign
       "Church of Solmund": ecclesiastical
       "Hafenmark": mercantile-procedural
       "Varfell": military-order
@@ -1837,7 +1925,7 @@ rosters:
       vector. That is consistent rather than coincidental: a faction canon gives no head and no
       expectations has no creed to commit to, and this file does not invent one for it.
     by_faction:
-      "Crown": "NPC-020"                    # Almud Almqvist
+      "Valorsmark": "NPC-020"                    # Almud Almqvist
       "Church of Solmund": "NPC-021"        # Arne Himlensendt
       "Hafenmark": "NPC-050"                # Inge Baralta
       "Varfell": "NPC-052"                  # Magnus Vaynard
@@ -1914,11 +2002,11 @@ rosters:
     # which also carries its membership in its mapping. A body with no faction is not a body.
     faction:
       # --- Crown / realm government · worldbuilding_v30.md §6.1 ---
-      "Imperial Court": "Crown"
-      "Court Parliament": "Crown"
-      "Ministries": "Crown"
-      "Rectorates": "Crown"
-      "Praefectures": "Crown"
+      "Imperial Court": "Valorsmark"
+      "Court Parliament": "Valorsmark"
+      "Ministries": "Valorsmark"
+      "Rectorates": "Valorsmark"
+      "Praefectures": "Valorsmark"
       # --- Church of Solmund · worldbuilding_v30.md §3.1 ---
       "Holy See": "Church of Solmund"
       "Cardinal of Fortitude": "Church of Solmund"
@@ -1967,7 +2055,7 @@ rosters:
       # cell below, which nominates Ministers, reads against an organ rather than a list.
       # `harness/populated.py` points here and carries no count. ED-648 is not acted on here
       # (it reads `open` in the editorial ledger; the plan treats it as closed, and this note is the ruling's home).
-      "Inner Circle": "Crown"
+      "Inner Circle": "Valorsmark"
       "Inner Council": "Hafenmark"
       "Jarl Council": "Varfell"
     function:
@@ -2251,7 +2339,7 @@ rosters:
     note: >-
       WHICH VERBS CARRY A VOCATION, AND ON WHICH OPERAND -- `verb: operand`. A VOCATION is a
       capability key `verb_capability` maps some verb to (its VALUES, `data/verbs.py::VOCATIONS`;
-      today `copying` only, #453 K-20's range). A verb named here forms ONE Candidate per vocation in
+      `copying`, `argue` and `inquiry`, #453 K-20's range). A verb named here forms ONE Candidate per vocation in
       that range, the key riding on the named operand (`decision/options.py::opening_set`) -- the
       `kind` operand #453 §9.4's blocker names, which `_derive_operand` would otherwise answer with a
       store kind. ⚠ THE ACTOR'S OWN CAPABILITY IS NOT READ, AND THAT IS THE POINT: capability GATES
@@ -2493,6 +2581,17 @@ rosters:
       attempt, a prize another module rolls) keeps the term as it was.
     values: [none, believed]
 
+  npc_efforts:
+    source: >-
+      v10 CP-T01-05, the NPC half (B10-10; `H-249`, taken at `CLAUDE.md` section 0's ladder step 5: the plan is silent on
+      the rule): whether the computed chooser may form an `effort` act.
+    note: >-
+      THE ARMS OF `Fixtures.npc_effort`, read by `decision/choose.py::settle_efforts`. `off` is the CONTROL: the chooser
+      forms no effort (the pre-NPC-half tree). `on` offers, for a contested candidate a believed chance can price,
+      the variants at effort 1 .. `interactions_per_scene` - 1 beside the base, scored by the same score (so by CR-17's
+      believed chance, `odds_weighting`) and priced by the acts they displace; the best of base and variants is kept.
+    values: ["off", "on"]
+
   said_slants:
     source: >-
       v9 IN-18 `G3` (telling workplan §5, `ED-IN-0282`): *"slant -- the strongly valenced older
@@ -2673,6 +2772,29 @@ rosters:
       here. [ASSUMPTION; medium; Jordan to correct; revert: drop the row, `inheritance` and `succeed`'s row
       back to its decline.]
     values: {off_king: off_heir}
+
+  continuation_ties:
+    source: >-
+      v10 CP-T02-06 (B10-10; M7 taken (b), `workplans/valoria_master_workplan_v11_part6.md` DECISION:
+      *title, then oath*). The seated person's line CONTINUES or ENDS (`-02` §2 CP-T02-06, P30 heir
+      transfer, P42 a dead line).
+    open: false
+    ordered: true
+    note: >-
+      WHO MAY CARRY ON A SEATED PERSON'S LINE WHEN HE DIES, AND IN WHAT ORDER THEY ARE OFFERED -- a closed
+      ORDERED roster (the order is semantic: `ordered: true`). `heir_title`: the holder of the
+      `successions` title of a seat the person holds (the registry above; one title per seat). `sworn`:
+      a person with a live `oblige` to a seat the person holds (`state/gate.py::sworn_to`, the one walk
+      `establishment_of` composes on). A person who is both is offered once, at the earlier tie. WHAT EACH
+      TIE MEANS IS CODE: `queries/world_q.py::_TIE_READERS`, one reader per member; `check_continuation_ties`
+      REFUSES AT IMPORT a member with no reader and a reader with no member, and `continuations` iterates this roster,
+      so a `Continuation` tagged with a kind off this list is never returned. THE CLIENT HOLDS NO COPY: which persons may be
+      chosen is a game fact, so `harness/play_surface.py::carry_on` offers `world_q.continuations`' answer
+      and nothing it composed itself. `follower` (a live `commit` to a Proposition the person made) was in
+      the design's draft and is NOT taken; appending it is one member here and one reader there.
+      [ASSUMPTION; medium; Jordan to correct; revert: bind to the first living tie in this order without
+      offering a choice (`carry_on` takes `offer[0]`), or drop `sworn`, or append `follower`.]
+    values: [heir_title, sworn]
 
   revocation_bases:
     source: "JORDAN, ED-IN-0256 ruling (3), 2026-09-18, VERBATIM: *\"rung above of same faction\"* -- WHO MAY STRIP A SEAT. Plan position `13d-i`; closes the `is_title` branch (`H-109`)."
@@ -3085,6 +3207,79 @@ tables:
       archery_range:  {}
       stable:         {}
       siege_workshop: {}
+
+  # v10 CR-33 -- THE 34 LIFEPATHS AS CREATION TEMPLATES: WHICH CAPABILITY KEYS A LIFEPATH'S STARTING SKILLS NAME.
+  # A cast row's `lifepath:` key is expanded by `data/cast.py::capability_of` into `Person.capability` entries
+  # (each key at `pool_default`) at world build, and the lifepath id is stored NOWHERE on the `Person`.
+  lifepath_templates:
+    source: >-
+      `character_histories_v30.md` (archived), STAGE 3, the
+      `Starting Skills (★)` column, rows `:310-382` of that file. Each `ground:` cites the row's line there.
+    row: H-126
+    keys: [lifepaths, verb_capability]
+    note: >-
+      ⚠ A CUT, NOT A TRANSCRIPTION. Every authored dice magnitude (+1D, +2D, TS +3, Ob and strain changes) is
+      DROPPED: a template names which of `verb_capability`'s VALUES (`copying`, `argue`, `inquiry`) a lifepath's
+      starting skills draw on, and nothing else. A key is held at `pool_default`, so the grant changes no pool;
+      it makes the key one `train` can raise (`loop/effects_combat.py::_eff_train` raises only a key the subject
+      already holds). A lifepath whose starting skills no key covers holds NONE (`holds: []`), RECORDED here
+      and not invented.
+      ⚠ THE RULE EACH ROW WAS READ BY, so a reviewer can re-read the text and not the taste. Only the `★`
+      skills count: the `Third Skill (spark)` column is a skill that may be sparked later, not held at creation
+      (the archived file's own header, `Starting Skills (★)` against `Third Skill (spark)`). `argue` is named
+      when a starting skill's text says the Argue act, or adds dice to, or moves a resistance parameter of,
+      the Argue exchange itself (a Recall bonus in a contest genre, an Obscuring bonus in a private
+      negotiation, Audience Resistance: `social_contest_v30.md:102,115,168,177`); a strain, an Appraise, a
+      Regroup or a payout on a win is not the roll and holds nothing. `inquiry` is named when it says
+      Investigation, institutional records or documents recalled (`research`), assessing or authenticating a
+      thing of the kinds `examine` reads (evidence, architecture, documents, objects: `verb_table.yaml`
+      `examine`), or recon of a place (`surveil`: observe a location, person or operation). `copying` is
+      named when it says relaying or copying a text; no starting skill does, so no row holds it. A text that
+      says only a bonus in a domain, a defence, a strain, an identification of forces, the threat of a being
+      or a navigation holds nothing, and the near misses are said in the row's own `ground:` (3-CH3, 3-CR5,
+      3-HA3, 3-LO2, 3-LO4, and 3-CF4's Knot, which names copying). The rule was widened once, by the read-only
+      pass at CR-33's close, from "the word Argue" to the exchange itself; the wider reading (Appraise, strain
+      and Regroup effects inside the contest also hold `argue`) was left unadopted, and would add argue to
+      3-CR3, 3-VA1, 3-VA4, 3-GU1, 3-LO3, 3-CF3 and 3-CF5.
+      CLOSED, BOTH WAYS (`data/rosters.py::_load_lifepath_templates`): a row for every id of `rosters:
+      lifepaths` and for nothing else, each `holds:` entry a `verb_capability` value, a `ground:` on every row.
+      [ASSUMPTION; medium; Jordan to correct; revert: delete the `lifepath:` keys from the cast rows (one
+      re-pin); the key mapping is content.]
+    cells:
+      3-CR1: {holds: [argue], ground: "★ Courtly Grace '+1D Argue before Expert Judge in Crown territory' names the Argue act -> argue; ★ Read the Room '(Appraise TN 6)' -> none (:310)"}
+      3-CR2: {holds: [], ground: "★ Riposte '(counter-Strike after successful Defence)' and ★ Formation Discipline '(+1 Discipline start)' are combat and formation, no key (:311)"}
+      3-CR3: {holds: [], ground: "★ Schoenland Contacts '(+1D DA involving Schoenland)' is a domain action and ★ Haggler's Nerve '(-1 strain in private negotiation)' a strain; neither names Argue or an inquiry (:312)"}
+      3-CR4: {holds: [inquiry], ground: "★ Paper Trail '(+1D institutional records)' names records -> inquiry (research); ★ Procedural Objection '(force Regroup or +1 Ob once/contest)' names no Argue -> none (:313)"}
+      3-CR5: {holds: [], ground: "★ Harvest Leverage '(+1D on DA involving food supply)' is a domain action; ★ Seasons Reader '(+1D Cognition for weather/terrain/agriculture)' is a domain knowledge bonus naming no assessment -> none (:314)"}
+      3-CH1: {holds: [argue], ground: "★ Doctrinal Authority '(+3D Recall bonus in Memory genre on theology)': Memory is a style picked inside the Argue exchange and the Recall bonus is dice added to that roll (social_contest_v30.md:168,172-177) -> argue; ★ Liturgical Composure '(+2 Composure in Church Tribunal)' -> none (:320)"}
+      3-CH2: {holds: [], ground: "★ Smite the Heretic '(+1D Offence ...)' and ★ Shield of Faith '(+1D Defence in Full Guard)' are combat, no key (:321)"}
+      3-CH3: {holds: [], ground: "★ Sermon Delivery '(+1 Piety Track on Revealing win before Crowd)' names no Argue; ★ Folk Trust '(-1 Ob DA involving common population)' is a domain action -> none (:322)"}
+      3-CH4: {holds: [inquiry], ground: "★ Forbidden Knowledge '(once/arc suppressed document recall)' and ★ Paper Trail '(+1D institutional records)' name documents and records -> inquiry (research) (:323)"}
+      3-CH5: {holds: [inquiry], ground: "★ Inquisitorial Method '(+1D Investigation targeting heresy/Thread practice/Einhir activity)' names Investigation -> inquiry; ★ Suppressed Exposure '(TS +3 ...)' is a Thread Sensitivity gain -> none (:324)"}
+      3-HA1: {holds: [argue], ground: "★ Constitutional Precedent '(-1 Audience Resistance when citing constitutional clause)' moves the Argue contest's Persuasion Track parameter (social_contest_v30.md:102) by a Recall citation (:177) -> argue; ★ Procedural Objection (a Regroup) -> none (:330)"}
+      3-HA2: {holds: [inquiry], ground: "★ Stone Reader '(+1D assess terrain/fortifications)': fortifications are 'architecture', which examine reads (verb_table.yaml `examine`) -> inquiry (examine); 'terrain' alone is none (see 3-CR5); ★ Tunnel Fighter '(+1D Defence in confined spaces)' -> none (:331)"}
+      3-HA3: {holds: [], ground: "★ Fortress Defender '(+1D Defence in Fortified positions)' is defence; ★ Know the Enemy '(+1D identify Altonian forces)' identifies forces, not a thing assessed or a record -> none (:332)"}
+      3-HA4: {holds: [], ground: "★ Mountain Ambush '(-1 Ob one tactic/battle in highland terrain)' and ★ Sure-Footed '(auto-success Establish Distance)' are battle movement, no key (:333)"}
+      3-VA1: {holds: [], ground: "★ Dead Drop '(establish covert channel, -1 Ob Intel ops)' and ★ Smooth Liar '(-1 strain when using Obscuring)' name no key; Shadow Work '(+1D surveillance/counter-intel)' is the THIRD (spark) skill, not held at creation (:339)"}
+      3-VA2: {holds: [inquiry], ground: "★ Sea Legs '(+1D Defence on water)' is defence -> none; ★ Coastal Navigation '(+1D navigation/recon on western coast)': recon of a place is surveil (verb_table.yaml `surveil`: observe a location, person or faction operation) -> inquiry (surveil) (:340)"}
+      3-VA3: {holds: [inquiry], ground: "★ Artefact Authentication '(+2D assess Einhir objects)' names assessing and authenticating a thing -> inquiry (examine); ★ Black Market Contacts '(+1D underground networks)' -> none (:341)"}
+      3-VA4: {holds: [], ground: "★ Vaynard's Confidence '(Spirit roll for +1D Thread-related roll ...)' and ★ Read the Room '(Appraise)' name no key (:342)"}
+      3-GU1: {holds: [], ground: "★ Cross-Border Immunity '(-1 ethical framework Ob in foreign territory)' and ★ Haggler's Nerve '(-1 strain in private negotiation)' name no key (:348)"}
+      3-GU2: {holds: [argue], ground: "★ Back-Alley Fighter '(+1D Stunt in urban)' -> none; ★ Intimidation '(+1D Obscuring in private negotiation)': Obscuring is an Argue orientation and Private Negotiation a proceeding of the exchange (social_contest_v30.md:115,168) -> argue (:349)"}
+      3-GU3: {holds: [], ground: "★ Master Craftwork '(once/season craft +1 item)' and ★ Guild Kinship '(+1D Influence DA with Guilds)' name no key; Precision Hands '(+1D examining crafted objects)' is the THIRD (spark) skill, not held at creation (:350)"}
+      3-RE1: {holds: [argue], ground: "★ Incendiary Rhetoric '(+2D Argue before Crowd, Revealing, social justice)' names the Argue act -> argue; ★ Underground Distribution '(-1 Ob Restoration DA)' -> none (:360)"}
+      3-RE2: {holds: [argue], ground: "★ Community Voice '(+1D Argue before Crowd for common people)' (its text is printed at 3-VA2, :340) names the Argue act -> argue; ★ Solidarity '(+1D Community Weaving)' -> none (:361)"}
+      3-RE3: {holds: [], ground: "★ Intuitive Threadwork '(Attunement + Spirit TN 8 Ob 3 for minor Weaving)' and ★ Folk Healer '(+1D Medicine)' name no key (:362)"}
+      3-LO1: {holds: [], ground: "★ Elite Discipline '(unit Discipline floor 2)' and ★ Riposte are command and combat, no key (:368)"}
+      3-LO2: {holds: [], ground: "★ Eagle Eyes '(Cognition roll to reveal one element of opposing Phase 1)' is a battle-phase reveal, ★ Know the Enemy identifies forces -> none (:369)"}
+      3-LO3: {holds: [], ground: "★ Deniable Action '(Spirit roll to deflect evidence trail)' and ★ Smooth Liar name no key (:370)"}
+      3-LO4: {holds: [], ground: "★ Anomaly Recognition '(+1D Cognition to assess threadcut being threat/movement/constraints)' reads a creature's threat, not examine's evidence, architecture, documents or objects (the same reading as 3-HA3 and 3-LO2) -> none; ★ Classified Knowledge '(once/arc invoke classified info for +2D)' -> none (:371)"}
+      3-CF1: {holds: [], ground: "★ Weapon Versatility '(switch weapon type between exchanges)' and ★ Riposte are combat, no key (:377)"}
+      3-CF2: {holds: [], ground: "★ Field Medicine '(-1 Ob stabilise)' and ★ Folk Healer name medicine, no key (:378)"}
+      3-CF3: {holds: [], ground: "★ Wide Network '(+1D in up to 3 previously-operated territories)' and ★ Haggler's Nerve name no key (:379)"}
+      3-CF4: {holds: [inquiry], ground: "★ Textual Memory '(recall previously-handled documents)' and ★ Paper Trail '(+1D institutional records)' name documents and records -> inquiry (research); the Knot (an author whose work you copied) names copying but no starting skill does, so copying is NOT held (:380)"}
+      3-CF5: {holds: [], ground: "★ Diplomatic Protocol '(ethical framework Ob penalties reduced by 1 ...)' and ★ Read the Room name no key; Treaty Language '(+1D Recall on prior agreements)' is the THIRD (spark) skill, not held at creation (:381)"}
+      3-CF6: {holds: [], ground: "★ Opportunist '(once/scene ... +2D on next roll exploiting outcome)' and ★ Slippery '(Escape -1 Ob; +1D pursuit evasion in urban)' name no key (:382)"}
 
   # IN-08 H10 -- WHICH AFFILIATIONS STRAIN WHEN HELD TOGETHER (ED-IN-0251 R1: confliction is DERIVED
   # from this relation and never stored; `queries/person_q.py::confliction`). A HALF-MATRIX: each

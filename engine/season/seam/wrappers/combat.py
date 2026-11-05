@@ -84,7 +84,7 @@ from ...gaps import Unspecified
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup).
 from ...manifest.providers import provider
-from ...queries.inputs import PersonalCombatInput
+from ...queries.inputs import PersonalCombatInput, PlayHost
 from ...state.ids import H
 from ._entry import entry_for
 
@@ -180,8 +180,25 @@ def _wound_state(lifted: Optional[dict]) -> dict:
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
             rng: Optional[random.Random] = None, rung: Optional[str] = None,
-            effort: int = 0) -> dict:
+            effort: int = 0, host: Optional[PlayHost] = None) -> dict:
     """CALL the personal-combat engine. Returns what it said; decides nothing itself.
+
+    ⚠ `host` (v10 REM-31, IN-46) IS A SECOND INPUT BESIDE §A.2's adapter row's "the projection" (the persons it plays and
+    a decider), named here as that row's departure (B4, third disposition) and picked for the reason A-25 gives.
+    IT IS WHERE THE DRIVER SUSPENDS, AND THE ONLY PLACE. `None` -- every RESOLVE
+    call, and every season run without a host -- is AUTOMATED, today's call exactly. With a host, the mode
+    is a PARTY TEST (A-25): a fight either of whose claimants the host plays (`PlayHost.persons`) hands the
+    host's decider to the module entry, which forwards it to the engine's own turn loop; every other fight
+    stays AUTOMATED. The suspension is a CALL-OUT, not a return: the scene runs inside this frame with the
+    ENCOUNTER token held below it in the driver's argument expression (minted once), the typed record `inp`
+    and the `seed` built by the same lines in both modes, and nothing serialized. The decider is handed
+    no `World` and no token, and is written not to reach `World.write` or `World.new_draw` -- a CONVENTION
+    (a closure over `w` could, and `test_rem31_grid_suspension.py` plants exactly those two shapes to show
+    them seen); it draws only by NOT drawing
+    (its turn's draws are the engine's, in the engine's order). The `RESOLVED` dict below gains no mode
+    field, so the fold cannot tell the modes apart. Design: `proposals/2026-10-07-grid-mode-suspension.md`
+    (PROPOSED, held back) and its `## Re-read at B-L`; reference, never the reason this is correct --
+    `engine/season/tests/test_rem31_grid_suspension.py` is.
 
     `effort` (CP-T01-05) is accepted and NOT USED HERE, as `rung`: the seam's call is uniform, and combat
     sums its own sigma (`modules/combat/core.py`), outside `rosters.yaml: advantage_sources`.
@@ -227,7 +244,12 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     entry, refusal = entry_for(prize, _PROVIDER)
     if entry is None:
         return refusal
-    got = entry.fn(inp, random.Random(seed))
+    # THE PARTY TEST (REM-31). The AUTOMATED call is byte-identical: the keyword is passed only when a played
+    # person is a claimant, so the two other entries' shared `(inp, rng)` shape is untouched.
+    if host is not None and any(c in host.persons for c in (a_id, b_id)):
+        got = entry.fn(inp, random.Random(seed), decide=host.decide)
+    else:
+        got = entry.fn(inp, random.Random(seed))
     result, trace = got["result"], got["trace"]
     winner = a_id if result == 1 else (b_id if result == -1 else None)
 

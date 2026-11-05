@@ -53,7 +53,7 @@ def _base() -> dict:
     return {
         "goals": [
             _goal("g_orient", {"faction": "Löwenritter"}, {"kind": "orientation"}),
-            _goal("g_throne", {"faction": "Crown"}, {"kind": "seat_holders", "seats": ["off_king"]},
+            _goal("g_throne", {"faction": "Valorsmark"}, {"kind": "seat_holders", "seats": ["off_king"]},
                   stance=1, axis="political_authority"),
             _goal("g_rung", {"faction": "Hafenmark"}, {"kind": "rung", "rung": "terr_T9"},
                   axis="uphold_church"),

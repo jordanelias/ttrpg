@@ -33,10 +33,11 @@ import copy
 import functools
 from dataclasses import dataclass, replace
 from fractions import Fraction
-from typing import Callable, Optional
+from typing import Callable, NamedTuple, Optional
 
 from ..data.requires import OWN_STATE_STEMS, UNKNOWN, binding_from_act, binding_of, evaluate
 from ..data.rosters import (
+    CONTINUATION_TIES, SUCCESSIONS,
     BAN_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
@@ -2908,6 +2909,76 @@ def seats_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple
     if named is None:
         named = ledger_names(p.ledger)
     return tuple(sorted(o for o in named if o in w.offices))
+
+
+class Continuation(NamedTuple):
+    """One person who could carry on a seated person's line, and BY WHICH TIE (`rosters.yaml:
+    continuation_ties`). `continuations` iterates the roster itself, and `check_continuation_ties` closes the roster
+    against its readers at import, so a result tagged with an unrostered kind cannot be returned."""
+    tie: str
+    person: str
+
+
+def _heir_title_holders(w: World, p: Person) -> list:
+    """`heir_title`: the live holders of the `successions` title of each seat `p` holds (`SUCCESSIONS`, the
+    registry IN-61's claim reads), seats in `p`'s store order."""
+    out = []
+    for s in w.seat_holds(p.id):
+        title = SUCCESSIONS.get(s.object)
+        if title is None:
+            continue
+        out += [t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == title]
+    return out
+
+
+def _sworn_retainers(w: World, p: Person) -> list:
+    """`sworn`: the persons with a live, SWORN `oblige` to a seat `p` holds, by `state/gate.py::sworn_to` (the walk
+    `establishment_of` composes on). An IMPOSED oblige is a sentence, not an oath (`state/carriers.py` `Tenure.imposed`;
+    `state/gate.py` filters it too): a person sentenced to serve a seat is not offered as its holder's continuation."""
+    return [t.subject for s in w.seat_holds(p.id) for t in sworn_to(w, s.object) if not t.imposed]
+
+
+#: One reader per `rosters.yaml: continuation_ties` member: `(w, p) -> [person id]`. The roster fixes WHICH ties
+#: and their ORDER; this fixes only what each one reads. `check_continuation_ties` refuses a mismatch.
+_TIE_READERS = {"sworn": _sworn_retainers, "heir_title": _heir_title_holders}
+
+
+def check_continuation_ties() -> None:
+    """REFUSED AT IMPORT (04 §B.13), `check_aim_rules`' shape: every `continuation_ties` member has a reader in
+    `_TIE_READERS` (a member that is no known tie kind) and every reader has a member (a tie no roster offers).
+    Callable again so a test can watch it refuse."""
+    unread = [t for t in CONTINUATION_TIES if t not in _TIE_READERS]
+    unrostered = sorted(t for t in _TIE_READERS if t not in CONTINUATION_TIES)
+    if unread or unrostered:
+        raise Unspecified(
+            f"rosters.yaml: continuation_ties and world_q._TIE_READERS disagree (no reader: {unread}; "
+            f"no member: {unrostered})", "rosters.yaml -- continuation_ties",
+            needs="one reader per member and one member per reader",
+            law="CP-T02-06 -- a closed roster: a member that is no known tie kind is refused at load")
+
+
+check_continuation_ties()
+
+
+def continuations(w: World, p: Person) -> tuple:
+    """CP-T02-06 (B10-10; M7 taken (b)): THE LIVING PERSONS WHO WOULD CARRY ON `p`'s LINE, as
+    `Continuation(tie, person)` pairs in the order of `rosters.yaml: continuation_ties` (all `heir_title`
+    before any `sworn`; within a tie, the reader's own order), a person appearing once, at the earlier tie.
+    `()` is the line extinct. `p` himself is never one.
+
+    A QUERY ON THE LIVING, read each season while `p` lives: the seat-holds and the edges `p` owned leave the
+    owner-first `w.tenures` view when he is popped (`World.remove_person`), so a dead `p` reads `()` and the
+    client keeps its LAST reading (`harness/play_surface.py::carry_on`). Persons only: a retainer or heir is
+    listed only while `w.persons` holds him. Reads `hold`, `oblige` and `successions`; writes nothing, and no
+    draw. Whom the client then seats is its own offer and the player's choice, never this Query's."""
+    TRACE.query("continuations", "resolver")
+    out, seen = [], {p.id}
+    for tie in CONTINUATION_TIES:
+        for who in _TIE_READERS[tie](w, p):
+            if who not in seen and who in w.persons:
+                seen.add(who)
+                out.append(Continuation(tie, who))
+    return tuple(out)
 
 
 def writs_held(w: World, p: Person) -> tuple:

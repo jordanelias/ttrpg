@@ -71,7 +71,7 @@ def test_cr25_1_a_king_founds_lord_over_a_held_territory_and_the_office_is_the_d
     out = _act(w, d, "e_found", "p_king", "off_king", {"subject": "T"})
     assert _kinds(out) == ["office.established"], _kinds(out)
     off = w.offices[lord]
-    assert (off.post, off.rung, off.faction, off.body) == ("Lord", "T", "Crown", None), off
+    assert (off.post, off.rung, off.faction, off.body) == ("Lord", "T", "Valorsmark", None), off
     assert off.remit_acts == ["issue", "convene"], f"remit is the seat's less confer and revoke: {off.remit_acts}"
     assert (off.conferral, off.revocation) == ("appointed", "rung_above_in_holdings"), off
     # The post is read from `titles.domains` as data: the first post in authored order whose kind is the rung's.

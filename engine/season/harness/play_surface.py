@@ -24,13 +24,19 @@ whose actor is not the person deciding (L1). Re-checking here would be a second 
 rules. Nor does it build the delegate: the caller constructs `auto` exactly as it would have passed
 it to `season` (`headless.run`, `populated.run`), so with no overrides the run is the shipped run.
 
-The control (`test_play_surface_dispatch.py`): a callback that returns `auto`'s own pick leaves
+**THE LINE CONTINUES, OR ENDS (v10 CP-T02-06)** is `carry_on`, the client's re-bind on this same seam, below.
+
+The control (no file of that name exists; the seam is covered by `test_g2_token.py`, `test_rem30_character_sheet.py` and
+`test_rem31_grid_suspension.py`): a callback that returns `auto`'s own pick leaves
 `World.content_hash()` equal to the plain run on the same seed; a planted deviation for one person
 moves it.
 """
 from __future__ import annotations
 
-from typing import Any, Callable, Mapping
+from typing import Any, Callable, MutableMapping, Mapping, Sequence
+
+from ..gaps import Forbidden
+from ..queries.world_q import continuations
 
 # `(p, v, s, ask_budget) -> list[Act | Scene]` — DELIBERATE's call, the delegate's shape.
 Chooser = Callable[..., list]
@@ -50,3 +56,40 @@ def dispatching_chooser(auto: Chooser, overrides: Mapping[str, Callback]) -> Cho
             return auto(p, v, s, ask_budget)
         return cb(p, v, s, ask_budget, auto)
     return choose
+
+
+def carry_on(w: Any, overrides: MutableMapping[str, Callback], pid: str, last: Sequence,
+             pick: Callable[[Sequence], Any]) -> tuple:
+    """CP-T02-06, THE RE-BIND: called by the client BETWEEN SEASONS for the seated person `pid`, with `last`
+    the reading it took the season before (`()` at the first call). Returns `(pid_now, reading)`: the person
+    the callback is bound to (`None` once the line is extinct) and `world_q.continuations`' reading of him.
+
+      * `pid` lives: the reading is refreshed and nothing is rebound. A season with no death is the shipped
+        run (`overrides` is not touched).
+      * `pid` is dead: the OFFER is `last` filtered to those still in `w.persons`, in the order the Query gave
+        it, which is `rosters.yaml: continuation_ties` order. `pick(offer)` is the PLAYER's choice (a
+        `Continuation` of the offer); `overrides[pid]` is moved to him. An empty offer is the line extinct,
+        exactly as an empty last reading: the callback is dropped and `(None, ())` returned.
+
+    ⚠ THE CLIENT HOLDS NO ROSTER: which persons may be chosen, and in what order, is `world_q.continuations`'
+    answer (a game fact); this only filters it to the living and binds. A choice outside the offer is
+    REFUSED, not coerced. [ASSUMPTION; medium; Jordan to correct; revert: bind to `offer[0]` without calling
+    `pick`.] Writes nothing to the world; `overrides` is read at each call by `dispatching_chooser`, so the
+    rebind is seen by the next season's DELIBERATE."""
+    if pid in w.persons:
+        return pid, continuations(w, w.persons[pid])
+    offer = tuple(c for c in last if c.person in w.persons)
+    if not offer:
+        overrides.pop(pid, None)
+        return None, ()
+    chosen = pick(offer)
+    if chosen not in offer:
+        # REFUSED before anything moves: the callback stays bound to `pid`, so a caller that catches this and asks again
+        # still has the player's binding to move
+        raise Forbidden(f"{chosen!r} is not in the offer {list(offer)!r}", "harness/play_surface.py::carry_on",
+                        needs="a member of the offer, in `continuation_ties` order",
+                        law="CP-T02-06 -- the client binds to one of the living ties the Query offered, no other")
+    callback = overrides.pop(pid, None)
+    if callback is not None:
+        overrides[chosen.person] = callback
+    return chosen.person, continuations(w, w.persons[chosen.person])

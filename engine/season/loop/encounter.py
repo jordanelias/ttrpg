@@ -30,7 +30,7 @@ CENSUS/MATTER); the STEP, not the class, is what the write matrix's `steps:` col
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Any, Optional
 
 from .resolve import _canonical_order, _contests_of
 from ..data.matrix import Step
@@ -41,10 +41,17 @@ from ..trace_log import TRACE
 
 
 def encounter(self, token: Token, events: list,
-              contest_max_depth: Optional[int]) -> list:
+              contest_max_depth: Optional[int], host: Optional[Any] = None) -> list:
     """M4's seventh step. `events` is the SAME round's own -- the driver passes what RESOLVE
     just produced, before it is appended to `w.log` (`loop/driver.py::season`), so this step's
-    own events join the same fan-out WITNESS sees for the round."""
+    own events join the same fan-out WITNESS sees for the round.
+
+    `host` (v10 REM-31, IN-46): THE ONE STEP THE DRIVER MAY SUSPEND AT. Every fight is deferred here
+    (`the body`'s `step: ENCOUNTER`, `rosters.yaml`), in both modes, and the host is handed to each
+    deferred act's `_contest` call, where the provider's party test decides the mode. A PLAYABLE scene
+    runs where its act falls in `_canonical_order`, below -- the host never reorders -- and holds this
+    step's frame (`declared`, `out`, the position in the order) and the token, minted once by the
+    driver, on the stack beneath it until its decider returns."""
     w = self.w
     w.step = Step.ENCOUNTER
     TRACE.step("ENCOUNTER", "enter")
@@ -69,7 +76,7 @@ def encounter(self, token: Token, events: list,
             continue
         row = VERB_TABLE.get(a.verb)
         contests = _contests_of(a, row)
-        produced = self._contest(w, token, a, contests, contest_max_depth)
+        produced = self._contest(w, token, a, contests, contest_max_depth, host)
         for e in produced:
             self.act_of[e.id] = a
         out.extend(produced)
