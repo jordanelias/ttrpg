@@ -291,15 +291,18 @@ def consequence_kinds(w, act_of: dict, log=None) -> dict:
     order, of the Events the act caused that carry a Receipt whose `(kind, field)` is in
     `ARC_SELF | ARC_WORLD`)}`. An act is a consequence act iff it is a key. Reads only.
 
-    NO SECOND ROSTER: the pairs are the two above, whoever the record belongs to (a graded loss that
-    writes -- a `field.lost` -- is a consequence act; a refusal writes nothing and is not). `Event.changes`
+    NO SECOND ROSTER: the pairs are the two above, classified by OWNERSHIP exactly as `read_arcs` does (a
+    pair in `ARC_SELF` counts only when the record is the ACTOR's own, a pair in `ARC_WORLD` only when it is
+    someone else's, so an actor's write to his own `Person.body` -- a self-tend -- and a pupil's `capability`
+    are NOT consequences; a graded loss that writes -- a `field.lost` -- is one; a refusal writes nothing and
+    is not). `Event.changes`
     is read by `_Records.of`, exactly as `read_arcs` reads it; the seat Receipts a death mints on a
     `tenure.closed` Event name an Office and are no write of a record, so they are skipped as `read_arcs`
     skips them. An Event the act caused is the Event `act_of` maps to it (what the act emitted); the
     Events other people's acts and MATTER chained after it are not counted. `log` defaults to `w.log`.
     The kinds are READ OFF the log (CR-69's histogram); no list of kinds is kept here.
     [ASSUMPTION; medium; Jordan to correct; revert: restore `--executed-only` and the depth-only pick]"""
-    roster = validate_roster(ARC_SELF) | validate_roster(ARC_WORLD)
+    selfs, worlds = validate_roster(ARC_SELF), validate_roster(ARC_WORLD)
     records = _Records(w)
     out: dict = {}
     for ev in (w.log if log is None else log):
@@ -311,7 +314,8 @@ def consequence_kinds(w, act_of: dict, log=None) -> dict:
                 continue
             if ev.kind == TENURE_CLOSED and r.subject in w.offices:
                 continue
-            if records.of(r, ev)[0] in roster:
+            pair, owner = records.of(r, ev)
+            if pair in (selfs if owner == act.actor else worlds):
                 ks = out.setdefault(act.id, [])
                 if ev.kind not in ks:
                     ks.append(ev.kind)

@@ -13,7 +13,9 @@ THE CLAIMS, AND WHAT WOULD SHOW EACH WRONG:
   * THE ARM IS A ROSTER: an arm outside `rosters.yaml: npc_efforts` raises.
   * THE ODDS ARE ASKED ABOUT THE ACT WITH ITS EFFORT: on a real world, `sigma.believed_chance` rises with the
     `effort` in the payload (the chooser's variant reaches `odds_of` as `_payload_of` hands it).
-The realm-level control (`off` reproduces the pre-commit hash) is the declared pin in `test_go07_canonical_digest.py`.
+There is NO realm-level pin of the `off` arm in the tree: `test_go07_canonical_digest.py` pins the SHIPPED arm (`on`), and
+`on` and `off` read the same hash at every measured horizon, so that pin cannot tell a working `off` from a no-op `off`
+(the Phase 1 close of B10-10). The `off` control above is the chooser-level one.
 """
 from __future__ import annotations
 

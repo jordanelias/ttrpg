@@ -415,8 +415,8 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
 
     REM-32: `inp.troops_per_weight` multiplies whatever stands in the weight's place -- Σ weight or the fed
     troops (provision bounds in weight units, so the scale applies after the bound) -- on the headcount path
-    only (`_weighted_unit`). A side with an order of battle is sized by that order's own headcounts and
-    `under_arms_cap`, and the scale does not touch it.
+    only (`_weighted_unit`), so only on a field where NEITHER side holds an order of battle. A side with one is sized
+    by that order's own headcounts, and the headcount side facing it by `under_arms_cap`: the scale touches neither.
 
     Returns exactly what `_run_and_grade` returns."""
     weight_a, weight_b = (sum(side) for side in inp.weights)

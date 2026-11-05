@@ -991,8 +991,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     `cast_attributes` (v10 CR-20) reads each cast row's `stats:` into `Person.attributes`
     (`data/cast.py::attributes_of`). `False` SHIPS, and is the CONTROL ARM: no person holds an attribute, so
     `faculty` falls to `pool_default` and the realm acts as it did before the carrier (only the `Person` repr
-    moved). The registry authors ONE row's `stats:` (NPC-001, the legacy four-stat block), and `True` is a
-    MOVER by that one person (her pool on the `inquiry` vocation is her Reason, 5, not the default 2): measured
+    moved). The registry authors ONE row's `stats:` (NPC-001: cognition, focus, endurance, and the whole social
+    category as attunement, presence and grace at 3-4), and `True` is a MOVER by that one person (her pool on the
+    `inquiry` vocation is her Reason, 5, not the default 2; on `argue`, her Attunement, 3): measured
     at CR-20, the event list over two seasons moves at seeds 0, 1 and 2 (her ledger alone at 0 and 1, a
     cascade through 79 ledgers at 2). [ASSUMPTION; medium; Jordan to correct; revert: none needed -- flipping
     the default is its own declared mover, with the cast's values Jordan's content.]
@@ -1329,7 +1330,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # no draw: a row that states none leaves `None`, which `epistemic._term_marks` deposits as `()`.
         w.persons[pid].heritage = cast.heritage_of(cast.row(cid) or {})
         # v10 CR-33: the row's `lifepath:` EXPANDED into the capability keys its template names, each at
-        # `pool_default` (the grant changes no pool; it makes the key one `train` can raise), set here and
+        # `pool_default` (the grant changes no POOL; it makes the key one `train` can raise, and it LOWERS the
+        # obstacle the holder presents: a held key at 2 is opposed at 2.0 and halved to 1.0, an unheld person at
+        # `obstacle_default` 2 -- unmeasured in magnitude), set here and
         # written in play only by `train`. The lifepath id is stored on NO Person: `capability_of` reads it and
         # drops it. No fallback and no draw: a row with no `lifepath:`, or one whose template names no key, leaves
         # `capability` as it was, `{}`.

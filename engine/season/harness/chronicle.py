@@ -28,7 +28,7 @@ distinct Event kinds the act emitted in log order, and the first line reads `ope
 is the line number of the antecedent act, always an earlier line.
 
 THE SELECTION (CR-68, `chronicle.main`, which holds `w`). By default the pick runs over CONSEQUENCE ACTS:
-`arc.consequence_acts(w, act_of)` (its one owner; `arc.py` imports `storybar`, so the predicate cannot
+`arc.consequence_acts(w, act_of)` (over `arc.consequence_kinds`, the one owner of the predicate; `arc.py` imports `storybar`, so the predicate cannot
 live there) names the acts that caused an Event whose Receipt writes a `(kind, field)` of `arc.py`'s
 `ARC_SELF` or `ARC_WORLD`. This module holds no roster of its own. Every other act is cut the way
 `storybar._executed_rows` cuts a refused one (`read`'s `refused` argument is handed the acts that are NOT

@@ -33,8 +33,11 @@ an act's, folded at RESOLVE (and the fold's two post-outcome writes, `_scar_witn
                      whose act a count rose or a creed folded. Giving it that history is a writer's
                      change (the row's `emits:`), never a space's.
 
-THE SHEET HOLDS COPIES. Every field a sheet carries is a read-only copy of the person's own carrier
-(`MappingProxyType`, tuples), so a client's `pick` is never handed a `Person` and cannot reach one.
+THE SHEET HOLDS SHALLOW COPIES. Every field a sheet carries is a read-only copy of the person's own carrier
+(`MappingProxyType`, tuples), so a client's `pick` is never handed a `Person` and cannot reach one. The CONTENTS
+of three fields are live objects, not copies: `candidates` (the `Candidate`s `release` packs), `Chronicle.ledger`
+(the `Claim`s) and `DevelopmentSheet.view` (`View.odds` closes over the World). `release` rebuilds nothing from the
+picked indices but the order, so a `pick` that mutated a `Candidate` would reach what is packed; nothing tests it.
 The space functions themselves do hold `p`; the falsifier for a space that writes it is the G2 spy
 (`tests/test_g2_token.py::test_g2_deliberate_mutates_no_store_by_any_route`, its spaces arm).
 
@@ -69,8 +72,8 @@ def _frozen(d: Mapping) -> Mapping:
 class CreationRow:
     """One seated person as the creation sheet shows him: the person-side fields world-gen wrote once
     (`capability` by `build_at`; `pursuits` by `build_at` or the realm builder; `conviction` by the realm
-    builder only, `{}` on shipped data; `attributes` by the realm builder from a cast row's `stats:`, `{}`
-    where unauthored -- CR-20, the ten registry keys, absent where nobody authored one). A copy: the player
+    builder only, `{}` on shipped data; `attributes` by the realm builder from a cast row's `stats:` when its
+    `cast_attributes` switch is on, `{}` otherwise and where unauthored -- CR-20, the ten registry keys). A copy: the player
     reads it and picks an `id`."""
     id: str
     name: str

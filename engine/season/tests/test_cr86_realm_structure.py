@@ -12,7 +12,10 @@ Each block names the falsifier that would have shown the claim wrong, and its co
      realm, and only then does the Duke's edge decide: reached WITH it, not WITHOUT it.
   4. The Church's territory has its dwelling already (no row added).
 """
+import pytest
+
 from engine.season.data import cast
+from engine.season.gaps import Forbidden
 from engine.season.data.rosters import FACTION_BY_PROP, FACTIONS, HEAD_SEAT, office_faction
 from engine.season.harness.populated import build_realm
 from engine.season.queries import faction_q
@@ -49,6 +52,10 @@ def test_crown_is_valorsmarks_alias_and_every_crown_membership_resolves_to_it():
     assert FACTION_BY_PROP[VALORSMARK] == "Valorsmark"
     assert cast.resolve_faction("Crown") == "Valorsmark"
     assert office_faction(None, "Crown") == "Valorsmark"            # a case overlay's `faction: Crown`
+    # the Phase 1 close: an authored alias also agrees with a `body:`'s derived faction (legal before CR-86)
+    assert office_faction("Imperial Court", "Crown") == "Valorsmark"
+    with pytest.raises(Forbidden):
+        office_faction("Imperial Court", "Church")                    # a real disagreement still refuses
     w = build_realm(0)
     crown_rows = [r for r in cast.load().values() if str(r.get("faction") or "").startswith("Crown")]
     assert len(crown_rows) >= 5, "the registry's Crown rows are what the alias must carry"

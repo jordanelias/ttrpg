@@ -475,7 +475,8 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # `BASE_EVENTS` and only the step-off arm moves. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 # RE-RECORDED at v11 CR-86 (ED-IN-0342; Valorsmark a faction, `fac_crown` -> `fac_valorsmark`, the two vassals' `oblige`
 # tenures, the head seats): 3ae970a1... -> b4bc2df0..., 4761e5ca... -> 87b9d1f1..., 7d2adfc5... -> 48f9f394...; the event
-# count and digest of `BASE_EVENTS` do not move (the state does, the sequence does not).
+# count and digest of `BASE_EVENTS` DO move (11775 -> 11793, 30477 -> 30734: the obligees' tenures are logged), as the
+# BASE_EVENTS note below records.
 # RE-RECORDED at v10 REM-31 (IN-46), A DECLARED MOVER: `the body` carries `march`'s `step: ENCOUNTER` / `declares:
 # Declared`, so every `fight`/`accept` is declared at RESOLVE (`fight.declared`/`accept.declared`) and fought at ENCOUNTER on
 # the round's settled world. 87b9d1f1... -> 36378f25..., 48f9f394... -> e39919be...; the build is equal. CONTROL, run in

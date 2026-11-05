@@ -2939,9 +2939,10 @@ def _heir_title_holders(w: World, p: Person) -> list:
 
 
 def _sworn_retainers(w: World, p: Person) -> list:
-    """`sworn`: the persons with a live `oblige` to a seat `p` holds, by `state/gate.py::sworn_to` (the walk
-    `establishment_of` composes on)."""
-    return [t.subject for s in w.seat_holds(p.id) for t in sworn_to(w, s.object)]
+    """`sworn`: the persons with a live, SWORN `oblige` to a seat `p` holds, by `state/gate.py::sworn_to` (the walk
+    `establishment_of` composes on). An IMPOSED oblige is a sentence, not an oath (`state/carriers.py` `Tenure.imposed`;
+    `state/gate.py` filters it too): a person sentenced to serve a seat is not offered as its holder's continuation."""
+    return [t.subject for s in w.seat_holds(p.id) for t in sworn_to(w, s.object) if not t.imposed]
 
 
 #: One reader per `rosters.yaml: continuation_ties` member: `(w, p) -> [person id]`. The roster fixes WHICH ties

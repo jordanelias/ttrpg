@@ -250,6 +250,23 @@ def test_the_mutation_that_counts_every_act_a_consequence_act_puts_the_deeper_re
     assert not (" acts=8 depth=3 " in out[0] and _actors(out[1:]) == ["p6", "p7", "p8"])
 
 
+def test_consequence_is_classified_by_ownership_as_read_arcs_does():
+    """The Phase 1 close (CR-68's plan: ownership decides self from world). `ARC_SELF` counts only on the actor's OWN
+    record and `ARC_WORLD` only on someone else's: a self-tend (the actor's own `body`) and a pupil's `capability`
+    (another's, and `capability` is no world pair) are not consequences; another's `body` and the actor's own
+    `capability` are. The planted failure is the pair-only reading, which counts all four."""
+    cases = {  # act id -> (actor, receipt)
+        "self_body": ("p1", _rc("p1", "body")),            # (Person, body) is world-only, the record is his own
+        "other_body": ("p2", _rc("p9", "body")),           # world pair, another's record
+        "own_capability": ("p3", _rc("p3")),               # self pair, his own record
+        "pupil_capability": ("p4", _rc("p9")),             # self-only pair on another's record
+    }
+    log = [NS(id=f"e{k}", kind="k", causes=[k], changes=[rc]) for k, (_a, rc) in cases.items()]
+    act_of = {e.id: NS(id=e.causes[0], actor=cases[e.causes[0]][0], verb="tend") for e in log}
+    assert ("Person", "body") not in ARC.ARC_SELF and ("Person", "capability") not in ARC.ARC_WORLD
+    assert ARC.consequence_acts(_world(log), act_of) == frozenset({"other_body", "own_capability"})
+
+
 def test_a_graded_loss_that_writes_counts_and_a_refusal_that_writes_nothing_does_not():
     loss = NS(id="el", kind="field.lost", causes=["loss"], changes=[_rc("p2", "body")])   # ARC_WORLD
     refusal = NS(id="er", kind="act.refused", causes=["refusal"], changes=[])
@@ -270,7 +287,8 @@ def test_the_seat_receipt_a_death_mints_is_no_write_of_a_record():
     world.offices = {"office1": object()}
     act_of = {"et": NS(id="slay", actor="p1", verb="fight")}
     assert ARC.consequence_acts(world, act_of) == frozenset()
-    world.offices = {}                                       # the control: not an Office, the same Receipt counts
+    world.offices = {}                                       # the control: not an Office, the same Receipt is read as a
+    act_of["et"] = NS(id="slay", actor="office1", verb="fight")   # record write, and the owner's own (a self pair) counts
     assert ARC.consequence_acts(world, act_of) == frozenset({"slay"})
 
 

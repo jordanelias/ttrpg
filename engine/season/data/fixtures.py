@@ -777,7 +777,8 @@ DEFAULT_FIXTURES = Fixtures(
     # IDENTITY -- `troops = weight`, the field as it was, on which a realm force routs on contact; the value
     # is Jordan's to name at JQ-4 and is not invented here. Injection site: this line, read by
     # `seam/wrappers/mass_battle.py::field_input` into the record's `troops_per_weight`. An order-of-battle
-    # side is sized by its order (`under_arms_cap`), not by this.
+    # side, and a headcount side facing one, are sized by `under_arms_cap`, not by this (`resolve_field`: the scale reaches only
+    # a field where neither side holds an order of battle).
     field_troops_per_weight=1,  # `H-250`, swept 1 (control, SHIPPED, = troops = weight) / above 1
     # v9 IN-52 (`H-241`). THE LEVY-TO-FIELD FEED'S ARM [ASSUMPTION LF-1..LF-3, delegated-ruled,
     # `_part5` §J.2]: `True` bounds each side's fielded troops by its treasury at the larder's ration

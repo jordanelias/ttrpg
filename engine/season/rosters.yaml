@@ -1368,12 +1368,15 @@ rosters:
       does not require adding a row before the seam will run it.
       ⚠ AND IT IS NEARLY INERT ON THE CORPUS TODAY, WHICH IS SAID HERE SO NOBODY READS THE ROWS AS
       DOING WORK: the writers of `Person.capability` are a `cast:` overlay's `capability:`
-      (`harness/corpus_run.py`, `build_at`) and, in play, `train` (v9 IN-12 step 9: +1 on a key the subject already holds), and one entry carries one (NPC-088's Carin Vedel,
-      `{copying: 3}`; counted 2026-10-02 with `cast_overlay()`: 1 of 430 built persons), so every
+      (`harness/corpus_run.py`, `build_at`), a cast row's `lifepath:` (v10 CR-33, `data/cast.py::capability_of`,
+      held at `pool_default`) and, in play, `train` (v9 IN-12 step 9: +1 on a key the subject already holds). AS
+      MEASURED 2026-10-02 (a dated count, before CR-33) one entry carried one (NPC-088's Carin Vedel,
+      `{copying: 3}`; with `cast_overlay()`: 1 of 430 built persons), so every
       other derivation lands on `pool_default` and the roll varies by SEED and FIXTURE rather than by
       PERSON. That is why R-09 reads `partial` after `U1` and not `met`.
-      ⚠ FOUR ROWS WERE DEFERRED AT CP-T01-01 (v11 B10-08, AM-B-01) AND LAND WITH THE FIRST WRITER OF AN
-      `argue` OR `inquiry` KEY (REM-30's creation sheet; v11 B10-10): `argue: "argue"` and the three
+      ⚠ FOUR ROWS WERE DEFERRED AT CP-T01-01 (v11 B10-08, AM-B-01) AND LANDED AT v10 B10-10, REM-30, BEFORE
+      THEIR FIRST WRITER (the creation sheet writes nothing; the first writer of an `argue` or `inquiry` key is
+      CR-33's `lifepath:` expansion and, in play, `train`): `argue: "argue"` and the three
       inquiries `research`, `examine`, `surveil: "inquiry"`. They are VALUES of this table, so they ARE the
       vocation range (`data/verbs.py::VOCATIONS`, a frozenset of these values; no second roster to extend):
       `argue` and `inquiry` join `copying`, and every `train` formation (`vocation_sourced`) forms one
@@ -1399,9 +1402,12 @@ rosters:
       `verb_capability`) and for nothing else, each valued by one of the ten registry keys; refused at import
       otherwise (`data/rosters.py::_load_vocation_attribute`), so a vocation added to `verb_capability` is
       refused until it is given an attribute, and a row for a name that is no vocation never reads as live.
-      `faculty` takes the HELD value of the person's attribute here as the pool's base (else `pool_default`)
-      and the larger of that and the held capability key; `_opposition_of` reads the larger of the held key
-      and the authored attribute, never practice, never the fallback.
+      `faculty` takes the HELD value of the person's attribute here as the pool's base and the larger of that
+      and the held capability key; with NO attribute held it is the held key alone, else `pool_default`, exactly
+      as before CR-20 -- so a held key of 0 stays "under one die" without an attribute and is overridden by one
+      (`seam/wrappers/sigma.py::faculty`; the plan's literal "larger of the held key and `pool_default`" would raise
+      a held 0 to 2 against `test_odds_of`'s pin). `_opposition_of` reads the larger of the held key and the
+      authored attribute, never practice, never the fallback.
       EACH ROW'S GROUND, so a reviewer can check it against the vocation's own text and not against taste:
       `copying` -> Focus (`attr.mind.focus`): the vocation is `tell`/`speak` (a claim relayed as it was
       held) and NPC-088's case, a repeated multi-week task of copying a text (`cases/exercises/NPC-088.yaml`),
@@ -1411,12 +1417,12 @@ rosters:
       consequence, never by evidence"* (`verb_table.yaml` `argue`, #353 section 9.3 / AX-3); the subsystem's
       own design sets the Argue pool's attribute by adjudicator -- an expert or panel Cognition, a crowd
       Charisma, and NO adjudicator, a private appeal to one counterparty, Attunement
-      (`.designs/systems/social_contest/reference/social_contest_v30.md:40-47`) -- and the engine's `argue`
+      (`social_contest_v30.md:40-47`, archived) -- and the engine's `argue`
       is the last shape: the hearer is the counterparty and his pursuits are what move. (Proof is the
       room's term, `proofs`, composed into the obstacle already.) `inquiry` -> Reason (`attr.mind.acuity`):
       its three verbs are the fieldwork inquiries whose source rows are headed *Examine · Cognition*,
       *Research · Recall*, *Surveil · Cognition*
-      (`.designs/systems/fieldwork/reference/fieldwork_v30.md:301,303,304`; `verb_table.yaml` `examine` /
+      (`fieldwork_v30.md:301,303,304`, archived; `verb_table.yaml` `examine` /
       `research` / `surveil` `requires_typed_note`), and `Cognition` is Reason's registry alias; `Recall`
       is not among the ten.
       [ASSUMPTION; medium; Jordan to correct; revert: delete this roster and the loader, and `faculty` /
@@ -3210,7 +3216,7 @@ tables:
   # (each key at `pool_default`) at world build, and the lifepath id is stored NOWHERE on the `Person`.
   lifepath_templates:
     source: >-
-      `character_histories_v30.md` (archived under `.designs/systems/characters/reference/`), STAGE 3, the
+      `character_histories_v30.md` (archived), STAGE 3, the
       `Starting Skills (★)` column, rows `:310-382` of that file. Each `ground:` cites the row's line there.
     row: H-126
     keys: [lifepaths, verb_capability]

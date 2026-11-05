@@ -30,7 +30,7 @@ from ..harness.populated import build_realm
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.matter import _die
 from ..queries import world_q
-from ..state.carriers import Tenure
+from ..state.carriers import DETERMINED_BY, Tenure
 from ..state.ids import H, draw_factory
 
 # Re-recorded by CR-33 (it lands after this item, in one batch): carin's `capability` now holds {inquiry: 2},
@@ -216,6 +216,25 @@ def test_a_choice_outside_the_offer_is_refused():
     _kill(w, king)
     with pytest.raises(Forbidden):
         carry_on(w, overrides, king, last, lambda offer: world_q.Continuation("sworn", "p_nobody"))
+    # REFUSED, not coerced and not half-applied (the Phase 1 close): the player's binding is still there to move, so
+    # a caller that catches the refusal and asks again binds the callback to the one it then chooses
+    assert overrides == {king: _cb}
+    seen = []
+    now, _ = carry_on(w, overrides, king, last, lambda offer: seen.append(offer) or offer[0])
+    assert now == seen[0][0].person and overrides == {now: _cb}
+
+
+def test_an_imposed_oblige_is_a_sentence_and_is_not_offered_as_a_sworn_continuation():
+    """The Phase 1 close: `sworn_to` lists an `oblige` a determination imposed, and `gate.py` and `world_q` elsewhere
+    exclude it (`Tenure.imposed`). A person sentenced to serve the throne is no retainer who swore."""
+    w, king, heir, sworn = _realm(retainers=1)
+    edge = next(t for t in w.tenures if t.id == "t_cp0206_sworn_0")
+    edge.payload = {DETERMINED_BY: "act_sentence"}                  # the one retainer was sentenced, not sworn
+    assert edge.subject == sworn[0] and edge.imposed
+    reading = world_q.continuations(w, w.persons[king])
+    assert [(c.tie, c.person) for c in reading] == [("heir_title", heir)], reading
+    edge.payload = None                                              # the control: sworn, he is offered again
+    assert [c.tie for c in world_q.continuations(w, w.persons[king])] == ["heir_title", "sworn"]
 
 
 def test_the_rebound_callback_plays_the_successor_through_a_real_season():

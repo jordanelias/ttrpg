@@ -1311,6 +1311,11 @@ def office_faction(body: str | None, declared: str | None) -> str:
     ⚠ AN ABSENT BODY IS NOT AN ERROR. The Restoration Movement's authority is *"informal"*
     (`worldbuilding_v30.md` §8) and canon gives it no organ, so such a case authors `faction`
     directly. That is a real gap in canon, carried as one rather than filled."""
+    # CR-86 (ED-IN-0342): a faction named by an ALIAS (`Crown`, Valorsmark's) resolves to its canonical member
+    # BEFORE it is compared with a body's derived faction, so `body: "Imperial Court"` with `faction: Crown`, legal
+    # before CR-86, stays legal; the many corpus cases that say `faction: Crown` keep saying it.
+    if isinstance(declared, str):
+        declared = _FACTION_ALIAS.get(declared, declared)
     if body is not None:
         require_member(
             body,
@@ -1335,10 +1340,6 @@ def office_faction(body: str | None, declared: str | None) -> str:
             needs="name a canonical body, or the faction directly where canon gives it no organ",
             law="H-99 -- an office belongs to something. §42.2's polarity rule: no evidence of "
                 "belonging is a refusal, never a default faction")
-    # CR-86 (ED-IN-0342): a faction named by an ALIAS (`Crown`, Valorsmark's) resolves to its canonical member
-    # here, the one place a case overlay's authored `faction:` becomes a seat's; the many corpus cases that say
-    # `faction: Crown` keep saying it.
-    declared = _FACTION_ALIAS.get(declared, declared)
     require_member(
         declared,
         FACTIONS,
