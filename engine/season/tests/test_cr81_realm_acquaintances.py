@@ -26,6 +26,10 @@ arm), the base claims displaced at once peak at 93, 142 and 152 on seeds 0-2, ne
 season-1 evictions rise by 90, 139 and 226. The acquaintance claims fade as any build-time claim does: 0, 11 and
 0 of 236 still held at season 4. A durable acquaintance would need a carrier eviction does not reach: not ruled,
 not built. Not asserted here (a play-time reading, not a build property).
+⚠ EVERY PLAY-TIME FIGURE ABOVE IS AT `ledger_cap` 200, NOW THE CONTROL ARM: CR-82 raised the cap to 3200, and
+the fade at 200 is re-read there (`test_cr82_ledger_retention.py`; 6 of 236 at season 4 on seed 1 at CR-82's
+parent, where this commit read 11). The build-time pins below do not read the cap (12 claims at most per
+ledger at build) and do not move.
 """
 
 from __future__ import annotations

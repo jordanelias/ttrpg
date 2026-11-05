@@ -9024,7 +9024,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # signature of their own. The per-verb executed-world counts were not re-measured for this re-pin. Not a ranking change: `H-96` is
     # untouched. THE SAME-BREATH CHECK is the assertions below (the universal set, `ever`, `refused_only`, `varying`), read in the same run.
     # A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-    assert len(by_sig) == 134, (
+    # ⚠⚠ **134 -> 133, v11 CR-82 (B10-09 close two, ED-IN-0319), MEASURED BY `python -m engine.season.harness.corpus_run 0`
+    # (`DISTINCT EXECUTED SETS`), PYTHONHASHSEED=0, AGAINST THE PARENT TREE (`459f767e`, a clean worktree: `ledger_cap` 200)
+    # WHICH READS 134.** THE UNIT AND THE DIRECTION: variety FELL by one. `ledger_cap` 200 -> 3200, so the corpus's small worlds
+    # stop evicting (claims held 31480 -> 38244) and what a person holds re-ranks his candidates: resolved acts 998 -> 1025
+    # (`argue` 64 -> 71, `research` 331 -> 347, `tell` 98 -> 108, `fight` 48 -> 46, `surveil` 188 -> 184). Not a ranking change:
+    # `H-96` is untouched. THE SAME-BREATH CHECK is the assertions below, read in the same run. A GOLDEN RE-RECORDED, NOT A
+    # BALANCE CLAIM.
+    assert len(by_sig) == 133, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -9934,7 +9941,14 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     # headroom below the new measurement, proportioned the same way the `attempt_cases` floor was
     # (roughly half the measured count), rather than raised to the exact new figure.
     # [GROUNDED: measured 2026-09-29 on this tree, 27 NPC rung cases at seed 0, 3 seasons -- 7 cases produce a `news.told`, 24 produce an attempt; 8 `news.told` Events against 47 `news.untold`, a 15% success rate, `pool_default`/`obstacle_default` unchanged]
-    assert told_cases >= 4, (
+    # ⚠⚠ **4 -> 2, v11 CR-82 (`ledger_cap` 200 -> 3200), AND IT IS THE ROLL'S SAMPLE, NOT THE TRANSPORT -- MEASURED IN
+    # PROCESS ON THIS TREE, THE CAP SWEPT AFTER `build_at`, THE SAME LANE AND SEASONS.** At 200 (the parent's reading):
+    # `told_cases` 5, `attempt_cases` 13, 6 `news.told` against 34 `news.untold`, deaths 44, longest ledger 200. At 3200:
+    # 3, 12, 4 against 32, deaths 44, longest ledger 455. Attempts barely move (40 -> 36) and H-126/H-127 are not in the
+    # diff; two fewer successes out of ~40 rolls at ~13% is within the sampling the 2026-09-29 note above describes. The
+    # floor keeps that note's proportion (about half the measurement) and still goes red at zero successes, which is the
+    # vacuity it exists for. [ASSUMPTION; medium; orchestrator to confirm; revert: 4, with the cap back to 200]
+    assert told_cases >= 2, (
         f"only {told_cases} of the 27 NPC rung cases produced a SUCCESSFUL telling — 7 did on "
         "2026-09-29 under position `11a` (down from 15 pre-`11a`), 16 after `T4`. The referent checks above run only "
         "on `news.told`, so this is "

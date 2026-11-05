@@ -633,7 +633,12 @@ def seed_acquaintances(w: World, pairs) -> list:
     comparable (four seasons: 21,131 -> 24,330, 24,437 -> 19,136, 32,833 -> 25,392).
     The acquaintance claims fade like any build-time claim: 0, 11 and 0 of 236 still held at season 4. This is
     the ledger's forgetting rule (`state/ledgers.py`, S20/S34) and is not special-cased: a DURABLE acquaintance
-    would need a carrier eviction does not reach, which is not ruled and is not built here."""
+    would need a carrier eviction does not reach, which is not ruled and is not built here.
+    ⚠ ALL OF THE ABOVE IS READ AT `ledger_cap` 200, WHICH IS NOW THE CONTROL: CR-82 (`ED-IN-0319`) raised the
+    cap to 3200, at which no realm ledger reaches the cap through season 8 (measured, seeds 0-1), so nothing is
+    evicted or displaced that early and 202 and 196 of 236 are still held at season 8 (H-09's `cite:`;
+    `tests/test_cr82_ledger_retention.py`). The comparator is unchanged and still drops these first once the
+    cap binds."""
     kind = KNOWN_PERSON_CLAIM["predicate"]
     conf = w.fixtures.get("confidence_default")
     written = []

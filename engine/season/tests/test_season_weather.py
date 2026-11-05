@@ -456,15 +456,23 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # CONTROL, run in process on this tree: `holdings_to_found` stubbed to `()` AND `establish`'s `referent_class` dropped reads the
 # old pair, the old `BASE_EVENTS`, the old `STEP_OFF_ONE_SEASON` and the old `thread_read`-withheld arm exactly (the term alone
 # stubbed does not: 273b223d... / 10843 events, the column moving formation by itself). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED at v11 CR-82 (B10-09 close two, ED-IN-0319), A FIXTURE MOVE DECLARED: `ledger_cap` 200 -> 3200. A realm ledger
+# reaches 200 in season 1 and no longer evicts there, so what a person holds moves (one season) and then what he does (two).
+# The BUILD is equal (no ledger at build exceeds 12). Was f47dfa8c... / 2f1ba769... (one, two seasons); events 10316 -> 10316
+# (the season-1 sequence is byte-identical), 29399 -> 29401. CONTROL, run in process on this tree: the cap swept back to 200
+# after `build_realm` reads the old pair, the old `BASE_EVENTS` and the old `STEP_OFF_ONE_SEASON` exactly (and
+# `test_go07_canonical_digest.BASE`, seeds 0-2). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE_HASHES = {0: "3ae970a172c9c0122adaab552a921eca",
-               1: "f47dfa8cb1afe0d9497d0f9ae15c1433",
-               2: "2f1ba76938d66a2d4fc685139f0f0da9"}
+               1: "bdff0832849c22a42d21237b867ab6cc",
+               2: "a75b822793b26385ca844b0e743fa148"}
 
 # THE ONE-SEASON PIN WITH CR-81'S STEP OFF (`build_realm(0, acquaintances=False)`: the hash and the event count and digest
 # `BASE_HASHES[1]` / `BASE_EVENTS[1]` held before CR-81). The `give`-withheld arm's control, below.
 # RE-RECORDED at v11 CR-25: a computed `establish` executes on the step-off arm too. Was 1f573c4c... / (9741, 8eefa8b6...);
 # the CR-25 control (the term stubbed and the column dropped) reads the old value exactly.
-STEP_OFF_ONE_SEASON = ("9368bffec7c0093b598998ba00b6845a",
+# RE-RECORDED at v11 CR-82 (`ledger_cap` 200 -> 3200): the hash moves, the event count and digest do not. Was 9368bffe...;
+# the cap swept back to 200 reads it exactly.
+STEP_OFF_ONE_SEASON = ("f5987a4ba2df5a07d10342f48730f2d6",
                        (9952, "631608170ca865b00290f972a413c79d255bf4fdfbd3b64cf2c5a7b30dd4162d"))
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
@@ -538,8 +546,10 @@ STEP_OFF_ONE_SEASON = ("9368bffec7c0093b598998ba00b6845a",
 # RE-RECORDED at v11 CR-28 with `BASE_HASHES` (9739 -> 9741, 26934 -> 27396; `propositions_heard` stubbed reads the old pair).
 # RE-RECORDED at v11 CR-81 with `BASE_HASHES` (9741 -> 10847, 27396 -> 29286; `acquaintances=False` reads the old pair).
 # RE-RECORDED at v11 CR-25 with `BASE_HASHES` (10847 -> 10316, 29286 -> 29399; the CR-25 control reads the old pair).
+# RE-RECORDED at v11 CR-82 with `BASE_HASHES` (season 2 only: 29399 / 356dba1b... -> 29401 / 77ef3d40...; season 1 unmoved,
+# 10316; `ledger_cap` swept back to 200 reads the old pair).
 BASE_EVENTS = {1: (10316, "788369e0dbab0613db382075ba49ac72858d1392c153aa384758c95b769d29c4"),
-               2: (29399, "356dba1b1b29127eaf17cee946c12cc7ddf0d4c9b1022f81656c7585d647aa2f")}
+               2: (29401, "77ef3d40d119cc45568d3b8bb5935d92767dcd35caecd377748036e9566632f0")}
 
 
 def _digest(w) -> tuple:

@@ -145,7 +145,16 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # `_proceeding` found two in 1815 runs, virtue/30 and scholastics/115 (the producer's scratch, not kept; the base rate was not
 # measured); both were re-run here twice, byte-identical, hashes db518c5d and 108f5d6d. The bar is an existence claim on
 # SELECTED seeds (above), not a rate. [GAP: the sweep's lowest-seed claim is the producer's, not re-run by the orchestrator]
-PROCEEDINGS = (("virtue", 30, 6), ("scholastics", 115, 6))
+# v11 CR-82 (B10-09 close two, ED-IN-0319): RE-TRACED AGAIN, virtue/30/6 and scholastics/115/6 -> doctrine/115/6 and
+# community/466/6, the season counts unchanged -- `ledger_cap` 200 -> 3200, and this three-person world's ledgers reached 200
+# inside six seasons (364 at the new cap, virtue/30), so what the Duke holds stops being evicted and the act mix moves: both old
+# proceedings now fire ONE date and determine nobody ("0 determined, 1 fired"). ATTRIBUTION, in process on this tree:
+# `BAR_FIXTURES` with `ledger_cap` swept back to 200 meets every assertion at virtue/30/6 and scholastics/115/6 again, twice
+# byte-identical (2a8c0103... and 108f5d6d...). THE SWEEP, this file's `_proceeding` over the 15 convictions x seeds 0..480 at 6
+# seasons (7215 runs; the producer's scratch, not kept): exactly two runs meet every assertion, doctrine/115 and community/466;
+# both are taken. The rate fell (two in 1815 at the parent over seeds 0..120; one in 1815 here over the same range), which is
+# recorded and not asserted: the bar is an existence claim on SELECTED seeds (above), not a rate.
+PROCEEDINGS = (("doctrine", 115, 6), ("community", 466, 6))
 BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a judge whose finding opens
 # v9 IN-12 step 9: RE-TRACED, the conviction and season count unchanged -- `argue`/`sabotage`/`tend`/`train`
 # are new members of the Duke's and the clerk's option sets, so doctrine/8's trajectory moved (it now fires
