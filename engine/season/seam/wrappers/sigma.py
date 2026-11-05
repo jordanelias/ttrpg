@@ -412,6 +412,10 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
     return None if inp is None else _odds_of_input(inp)
 
 
+# band label -> its place in `band_odds`' tuple, both owned by `dice_engine` (neither spelt here)
+_BAND_PLACE = {DEGREE_LABEL[d]: n for d, n in DEGREE_ORDINAL.items()}
+
+
 def believed_chance(w: Any, believer: Any, act: Any, bands: Any) -> Optional[float]:
     """THE PERSON'S BELIEVED CHANCE THAT THE ROLL OF `act` LANDS IN ANY OF `bands`: the sum of mode (b)'s
     `odds_of` over those bands, or `None` where he cannot say (CR-17). `bands` are the labels the verb
@@ -427,8 +431,7 @@ def believed_chance(w: Any, believer: Any, act: Any, bands: Any) -> Optional[flo
     odds = odds_of(w, act, believer=believer)
     if odds is None:
         return None
-    place = {DEGREE_LABEL[d]: n for d, n in DEGREE_ORDINAL.items()}
-    held = [place.get(b) for b in bands]
+    held = [_BAND_PLACE.get(b) for b in bands]
     if not held or None in held:
         return None
     return sum(odds[n] for n in held)

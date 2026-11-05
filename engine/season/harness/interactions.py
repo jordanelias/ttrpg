@@ -81,6 +81,7 @@ from ..queries import faction_q, person_q, world_q
 from ..state.gate import seated_on_the_rung_above_structure
 from ..state.ids import H, draw_factory
 from . import corpus_run
+from .chronicle import _kinds
 from .decision_spread import attribute_top
 from .populated import build_realm
 
@@ -96,10 +97,8 @@ CLASSES = ("authored hostility", "same faction", "same faction, different office
 
 
 def held_offices(w, pid: str) -> list:
-    p = w.persons.get(pid)
-    if p is None:
-        return []
-    return sorted({t.object for t in p.tenures if t.kind == "hold" and t.live and t.object in w.offices})
+    """The offices `pid` holds live (`World.seat_holds`, the one reader of a person's seats)."""
+    return sorted({t.object for t in w.seat_holds(pid)})
 
 
 def same_faction(w, a: str, t: str) -> bool:
@@ -115,15 +114,16 @@ def faction_heads(w) -> dict:
             if pid_ in FACTION_BY_PROP and prop.subject in w.persons}
 
 
-def office_relation(w, a: str, t: str) -> list:
-    A, T = held_offices(w, a), held_offices(w, t)
+def office_relation(w, a: str, t: str, A: list, T: list) -> list:
+    """`A`, `T`: the offices the actor and the target hold (`held_offices`), which `relation` already has."""
     if not A or not T:
         return ["n/a: " + ("neither" if not A and not T else ("actor" if not A else "target"))
                 + " holds an office"]
     rel = set()
+    subs_of = {o: set(faction_q.subordinates(w, o)) for o in (*A, *T)}
     for x in A:
         ox = w.offices[x]
-        subs = set(faction_q.subordinates(w, x))
+        subs = subs_of[x]
         reach = set(faction_q.purview(w, x))
         for y in T:
             oy = w.offices[y]
@@ -139,7 +139,7 @@ def office_relation(w, a: str, t: str) -> list:
                 rel.add("target's seat in actor's purview")
             if t in subs:
                 rel.add("target obliged to actor's seat")
-            if a in set(faction_q.subordinates(w, y)):
+            if a in subs_of[y]:
                 rel.add("actor obliged to target's seat")
     return sorted(rel) or ["none the code reads (parent_of / purview / oblige)"]
 
@@ -182,7 +182,7 @@ def relation(w, a: str, t: str, authored: dict, heads: dict) -> dict:
         cls = "different faction, rival (stance<0)" if stance < 0 else "different faction, neutral"
     return {"same_faction": sf, "actor_faction": fa, "target_faction": ft,
             "actor_offices": offs_a, "target_offices": offs_t,
-            "office_relation": office_relation(w, a, t),
+            "office_relation": office_relation(w, a, t, offs_a, offs_t),
             "actor_office_in_target_faction": off_in_tf,
             "target_is_faction_head": ft is not None and heads.get(ft) == t,
             "target_heads": sorted(f for f, h in heads.items() if h == t),
@@ -229,11 +229,11 @@ def _question(q, p, acq: set) -> dict | None:
     return out
 
 
-def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = True, world=None):
-    """Build `build_realm(seed, acquaintances=...)` (or use `world`), play `seasons` seasons with the chooser
+def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = True):
+    """Build `build_realm(seed, acquaintances=...)`, play `seasons` seasons with the chooser
     watched when `observe`, and return `(w, d, rows)`. `observe=False` is the hash control's other arm: the
     same chooser, unwrapped."""
-    w = build_realm(seed, acquaintances=acquaintances) if world is None else world
+    w = build_realm(seed, acquaintances=acquaintances)
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     foldable = resolvable_verbs()
@@ -306,7 +306,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
                 "pursuit": t[0], "stance": t[1], "score": t[0] + t[1], "p_first": prob[id(c)],
                 "score_rank": rank[id(c)], "sample_rank": srank[id(c)],
                 "chosen": k in chosen, "act": chosen.get(k)})
-        r = attribute_top(p, cands, fx, draw, odds)
+        r = attribute_top(p, cands, fx, draw, odds, terms=terms)
         row["decider"] = {"decider": r["decider"], "margin": r["margin"], "draw_kind": r["draw_kind"]}
         tol = refusal_tolerance(p, axis)
         row["refusal_gate"] = ("unarmed (refusal_axis unset)" if tol is None else
@@ -328,15 +328,12 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
 
 
 def act_rows(w, d, seasons: int, delibs: list, by_act: dict, names: dict) -> list:
-    kinds: dict = {}
+    kinds = _kinds(w.log, d.act_of)           # chronicle's: the Event -> act attribution, once
     observed: dict = {}
     for e in w.log:
         a = d.act_of.get(e.id)
         if a is None:
             continue
-        kinds.setdefault(a.id, [])
-        if e.kind not in kinds[a.id]:
-            kinds[a.id].append(e.kind)
         row = VERB_TABLE.get(a.verb)
         if row is not None and e.kind in (row.emits_on_refusal or ()) and e.observed:
             observed.setdefault(a.id, []).extend(repr(o) for o in e.observed)
@@ -419,6 +416,7 @@ def print_summary(s: dict, header: str) -> None:
 
 
 def print_audit(rows: list) -> None:
+    by_i = _rows_by_i(rows)
     for r in audit(rows):
         rel, q = r["relation"], r["question"] or {}
         print(f"s{r['season']} t{r['tick']} r{r['round']} {r['actor']} {r['actor_name']} "
@@ -428,7 +426,7 @@ def print_audit(rows: list) -> None:
               f"{(q.get('claim') or {}).get('origin')}; stance {rel['stance']:g} regard {rel['regard']:g} "
               f"office {rel['office_relation']} head-of {rel['target_heads']}; decider {r['decider']}")
         dl = r["deliberation"]
-        for c in sorted(_rows_by_i(rows)[dl]["candidates"], key=lambda c: c["sample_rank"]):
+        for c in sorted(by_i[dl]["candidates"], key=lambda c: c["sample_rank"]):
             print(f"     {'*' if c['chosen'] else ' '} {c['verb']:14} {str(c['subject']):22} "
                   f"pursuit {c['pursuit']:+.3f} stance {c['stance']:+.3f} score {c['score']:+.3f} "
                   f"p_first {c['p_first']:.3f} rank {c['score_rank']} sampled {c['sample_rank']}")

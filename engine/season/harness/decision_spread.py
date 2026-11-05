@@ -183,7 +183,7 @@ def null_alignment():
 # THE ATTRIBUTION
 
 
-def attribute_top(p, cands: list, fx, draw=None, odds=None) -> dict:
+def attribute_top(p, cands: list, fx, draw=None, odds=None, terms=None) -> dict:
     """Rank `cands` for `p` as the chooser does and say WHICH TERM decided the top (the module docstring
     lists the tests in order). Returns `{top, decider, margin, scores, terms, draw_kind, field_zero}`;
     `scores` and `terms` are parallel to `cands`. `cands` empty -> `top` None, `decider` `none`; one
@@ -203,7 +203,8 @@ def attribute_top(p, cands: list, fx, draw=None, odds=None) -> dict:
         return {"top": None, "decider": "none", "margin": None, "scores": [], "terms": [],
                 "draw_kind": None, "field_zero": False}
     memo = CH.deliberation_memo(p, fx)
-    terms = [CH.score_terms(p, c, fx, memo, odds) for c in cands]
+    if terms is None:            # a reader that already scored `cands` (harness/interactions.py) passes its terms
+        terms = [CH.score_terms(p, c, fx, memo, odds) for c in cands]
     scores = [t[0] + t[1] for t in terms]
     field_zero = all(abs(s) <= EPS for s in scores)
     if len(cands) == 1:
