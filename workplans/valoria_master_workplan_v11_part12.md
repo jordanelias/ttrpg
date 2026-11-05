@@ -193,6 +193,11 @@
 | CR-89 | B10-17b | new from the arc fold of 2026-11-05 (`-04`; `ED-IN-0339`, `ED-IN-0341`, `ED-IN-0343` to `ED-IN-0345`): the clocks (Church Influence, Turmoil) as folds of the log, the breaking point, "the nation functions", the band triggers shipped off; each flip a declared mover |
 | CR-90 | B10-17b | new from the arc fold of 2026-11-05 (`-04`; `ED-IN-0341`): the arc instrument, a harness reader of the first season of each band and mark per seed; hash EQUAL |
 | CR-91 | B10-17b | new from the arc fold of 2026-11-05 (`-04`; `ED-IN-0317`): the casus-belli carrier, `march`'s claim gate and civil war; IN-36's casus-belli residue merged here; a declared mover |
+| CR-92 | B10-19 | new from the attribute-rulings fold of 2026-11-05 (`-12`; `ED-IN-0347`): the social attributes acting on others (Grace on regard, promotion and the venue standard; Presence on obedience; Attunement on bonds); DESIGN-FIRST |
+| CR-93 | B10-19 | new from the attribute-rulings fold of 2026-11-05 (`-12`; `ED-IN-0347`): attributes in a person's own choice (aptitude on uncontested candidates, Focus on the noise of choosing, Reason on the forecast); DESIGN-FIRST |
+| CR-94 | B10-14 | new from the attribute-rulings fold of 2026-11-05 (`-12`; `ED-IN-0347`): forgery quality reads the forger's Coordination; a declared mover where a forger has authored Coordination |
+| CR-95 | B10-19 | new from the attribute-rulings fold of 2026-11-05 (`-12`; `ED-IN-0347`): Spirit against circumstance and influence; DESIGN-FIRST, run through the resolution diagnostic |
+| CR-96 | B10-13 | new from the attribute-rulings fold of 2026-11-05 (`-12`; `ED-IN-0347`): the opposing attribute, and the vocation rows re-read against the rulings: a follow-on to CR-20's landed carrier; hash EQUAL |
 | PC-11 | B10-10b | new from the personal-combat fold of 2026-11-01 (`-04`): the control, then the module's dead code |
 | PC-12 | B10-10b | new from the personal-combat fold of 2026-11-01 (`-04`): retire the v30 combat owner; the port's two constants |
 | PC-13 | B10-10b | new from the personal-combat fold of 2026-11-01 (`-04`): the trace is complete |
@@ -200,6 +205,10 @@
 | PC-15 | B10-10b | new from the personal-combat fold of 2026-11-01 (`-04`): thresholds to config |
 | PC-16 | B10-10b | new from the personal-combat fold of 2026-11-01 (`-04`): stale registries and comments |
 | PC-17 | B10-10b | new from the personal-combat fold of 2026-11-01 (`-04`): 21 generic levers; the `tempo` site; calibration |
+| PC-18 | B10-11b | new from the attribute-rulings fold of 2026-11-05 (`-12`; `ED-IN-0347`): the read is Perception and the attack's suddenness is Coordination; `cog` leaves the fighter's inputs |
+| PC-19 | B10-11b | new from the attribute-rulings fold of 2026-11-05 (`-12`; `ED-IN-0347`): Focus between the read and the response: a lapse term on `mode_sigma` from the reserve |
+| PC-20 | B10-11b | new from the attribute-rulings fold of 2026-11-05 (`-12`; `ED-IN-0347`): Strength's jobs: damage by weapon head, weight, armour, arresting momentum (four swept terms) |
+| PC-21 | B10-19 | new from the attribute-rulings fold of 2026-11-05 (`-12`; `ED-IN-0347`): the opponent model: familiarity grown in the season, Attunement's anticipation, the combatant's state; DESIGN-FIRST |
 | DEF-9 | B10-03 (CLOSED) | remediation deletion (home: `…-01-verdict-and-coverage.md` §1.4) |
 | FA-01 | B10-17 | carried v9 position (`-04`) |
 | FA-03 | B10-Z | carried v9 position (`-04`) |
