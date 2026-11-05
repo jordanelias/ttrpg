@@ -8,12 +8,24 @@ the scale reached. The battle itself is replaced by a recorder (`_run_and_grade`
 scale produced, and nothing is resolved."""
 from __future__ import annotations
 
+import importlib
 from types import SimpleNamespace as NS
 
-from modules.mass_battle import massbattle as MB
-from modules.mass_battle.troop_types.recruitment import under_arms_cap
-
 from ..queries.inputs import MassBattleInput
+
+
+def _mb():
+    """`engine/` names no `modules/` import at module level (`tests/valoria/test_engine_does_not_import_systems.py`
+    walks `engine/season/tests/` too and imports every module it finds): the module is loaded on first use."""
+    return importlib.import_module("modules.mass_battle.massbattle")
+
+
+def _recruit():
+    return importlib.import_module("modules.mass_battle.troop_types.recruitment")
+
+
+def under_arms_cap(weight):
+    return _recruit().under_arms_cap(weight)
 
 
 def _field(**kw):
@@ -26,10 +38,10 @@ def _field(**kw):
 def _units(monkeypatch, inp, **kw):
     """The two Units `resolve_field` built, with the battle, the terrain and the crossing stubbed out."""
     seen = {}
-    monkeypatch.setattr(MB, "river_crossed", lambda *a, **k: False)
-    monkeypatch.setattr(MB, "terrain_row_for_territory", lambda *a, **k: None)
-    monkeypatch.setattr(MB, "_run_and_grade", lambda a, b, *r, **k: seen.update(a=a, b=b, k=k) or NS())
-    MB.resolve_field(inp, None, **kw)
+    monkeypatch.setattr(_mb(), "river_crossed", lambda *a, **k: False)
+    monkeypatch.setattr(_mb(), "terrain_row_for_territory", lambda *a, **k: None)
+    monkeypatch.setattr(_mb(), "_run_and_grade", lambda a, b, *r, **k: seen.update(a=a, b=b, k=k) or NS())
+    _mb().resolve_field(inp, None, **kw)
     return seen["a"], seen["b"], seen["k"]
 
 
@@ -53,7 +65,7 @@ def test_a_side_with_an_order_of_battle_and_the_headcount_side_facing_it_are_not
     `under_arms_cap(weight)`; `_weighted_unit` is not reached, so the scale touches neither (D5 of the Phase 1 close:
     the knob reaches only fields where NEITHER side holds an order of battle)."""
     called = []
-    monkeypatch.setattr(MB, "_weighted_unit", lambda *a, **k: called.append((a, k)) or (_ for _ in ()).throw(
+    monkeypatch.setattr(_mb(), "_weighted_unit", lambda *a, **k: called.append((a, k)) or (_ for _ in ()).throw(
         AssertionError("the headcount path ran on an armied field")))
     sized = []
 
@@ -61,7 +73,7 @@ def test_a_side_with_an_order_of_battle_and_the_headcount_side_facing_it_are_not
         sized.append((side, oob, weight))
         return NS(total_troops=lambda: float(under_arms_cap(weight)) if oob is None else 99.0)
 
-    monkeypatch.setattr(MB, "_oob_unit", spy)
+    monkeypatch.setattr(_mb(), "_oob_unit", spy)
     inp = _field(troops_per_weight=3, orders_of_battle=(object(), None))
     a, b, kw = _units(monkeypatch, inp)
     assert not called and kw.get("by_troops") is True
