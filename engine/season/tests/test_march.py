@@ -87,7 +87,7 @@ def test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only():
     ⚠ `field_grudge_weight` AND `field_morale_weight` ARE SWEPT TO DIFFERENT VALUES HERE,
     DELIBERATELY -- both default to `1` (H-148), so an assertion using the DEFAULTS cannot tell
     which weight landed on which faction: `(fac_church_of_solmund, -1.0, 1)` and
-    `(fac_crown, -1.0, 1)` are both present whichever way `winner_faction`/`loser_faction` were
+    `(fac_valorsmark, -1.0, 1)` are both present whichever way `winner_faction`/`loser_faction` were
     assigned. This is the exact gap `/code-review` found: a first writing of `_eff_march` swapped
     the two ternaries (`winner_faction = attacker_faction if attacker_lost else ...`, backwards),
     landing the grudge on the LOSER's own faction and the morale hit on the WINNER -- and this
@@ -95,7 +95,7 @@ def test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only():
     distinguishable by VALUE, not merely by presence."""
     w = build_realm(0)
     w.fixtures = w.fixtures.sweep("field_grudge_weight", 3)
-    attackers = world_q.mustered(w, "set_s_014", "fac_crown")
+    attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
     defenders = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
     assert len(attackers) == 2 and len(defenders) == 6, (
         f"the fixture no longer gives a 2-v-6 mismatch here ({attackers}, {defenders}); "
@@ -121,16 +121,16 @@ def test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only():
         rows = {(ref, val, wt) for ref, val, wt in (w.persons[pid].stance or [])}
         assert ("fac_church_of_solmund", -1.0, grudge_w) in rows, (
             "no grudge row, AT THE GRUDGE WEIGHT, against the winning faction")
-        assert ("fac_crown", -1.0, morale_w) in rows, (
+        assert ("fac_valorsmark", -1.0, morale_w) in rows, (
             "no morale-hit row, AT THE MORALE WEIGHT, against the loser's own faction")
         assert ("fac_church_of_solmund", -1.0, morale_w) not in rows, (
             "the winning faction took the MORALE weight instead of the grudge weight -- "
             "winner_faction/loser_faction are swapped")
-        assert ("fac_crown", -1.0, grudge_w) not in rows, (
+        assert ("fac_valorsmark", -1.0, grudge_w) not in rows, (
             "the loser's own faction took the GRUDGE weight instead of the morale weight -- "
             "winner_faction/loser_faction are swapped")
     for pid in defenders:
-        assert not any(ref in ("fac_crown", "fac_church_of_solmund")
+        assert not any(ref in ("fac_valorsmark", "fac_church_of_solmund")
                        for ref, _v, _w in (w.persons[pid].stance or [])), (
             "the winning side gained a stance row from a battle it won")
 
@@ -142,12 +142,12 @@ def test_an_unopposed_march_arrives_and_writes_no_casualty_or_stance():
 
     v9 IN-13 EXIT (i), the `Unopposed` arm: THE ARMY ARRIVES. Before the arrival this test asserted
     that nothing at all was written, and it would have kept passing while observing nothing about
-    presence (§14.8); it now asserts the presence moved -- `mustered(w, set_s_003, fac_crown)` equals
+    presence (§14.8); it now asserts the presence moved -- `mustered(w, set_s_003, fac_valorsmark)` equals
     the claimants after the fold, and the origin is emptied -- beside the unchanged no-casualty half."""
     w = build_realm(0)
-    assert world_q.holder_faction_of(w, "set_s_003") == "fac_crown"
-    assert world_q.mustered(w, "set_s_003", "fac_crown") == []
-    attackers = world_q.mustered(w, "set_s_014", "fac_crown")
+    assert world_q.holder_faction_of(w, "set_s_003") == "fac_valorsmark"
+    assert world_q.mustered(w, "set_s_003", "fac_valorsmark") == []
+    attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
     assert attackers, "fixture: nobody to march"
     before_a = {pid: w.persons[pid].body for pid in attackers}
     # `build_realm` seeds each person's loyalty as a pre-existing stance row (`data/cast.py`'s
@@ -161,8 +161,8 @@ def test_an_unopposed_march_arrives_and_writes_no_casualty_or_stance():
     assert ("field.unopposed", "Unopposed") in kinds
     assert ("army.arrived", "Unopposed") in kinds
 
-    assert world_q.mustered(w, "set_s_003", "fac_crown") == attackers, "the army did not arrive"
-    assert world_q.mustered(w, "set_s_014", "fac_crown") == [], "the army is still at its origin"
+    assert world_q.mustered(w, "set_s_003", "fac_valorsmark") == attackers, "the army did not arrive"
+    assert world_q.mustered(w, "set_s_014", "fac_valorsmark") == [], "the army is still at its origin"
     for pid in attackers:
         assert w.persons[pid].body == before_a[pid], f"{pid} took casualties in an unopposed march"
         assert list(w.persons[pid].stance or []) == before_stance[pid], (
@@ -240,14 +240,14 @@ def test_a_march_on_an_unheld_settlement_arrives_rather_than_crashing_the_season
         "set_s_037 is no longer a settlement; this test needs one that is")
     assert world_q.holder_faction_of(w, "set_s_037") is None, (
         "set_s_037 is held after all; pick a genuinely unheld settlement")
-    attackers = world_q.mustered(w, "set_s_014", "fac_crown")
+    attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
     act = _march_act("p_npc_033", "set_s_037", "off_spymaster")
     events = _fold_one(w, act, contest_max_depth=2)
     kinds = [(e.kind, e.degree) for e in events]
     assert ("march.declared", "Declared") in kinds
     assert ("field.unopposed", "Unopposed") in kinds and ("army.arrived", "Unopposed") in kinds, (
         f"expected an unopposed arrival, got {kinds}")
-    assert world_q.mustered(w, "set_s_037", "fac_crown") == attackers
+    assert world_q.mustered(w, "set_s_037", "fac_valorsmark") == attackers
     assert world_q.holder_faction_of(w, "set_s_037") is None, "an arrival wrote a title (H-166)"
 
 
@@ -266,7 +266,7 @@ def test_a_won_field_writes_casualties_and_stance_on_the_defender_only():
     and `res.result` say."""
     w = build_realm(0)
     eff = EFFECTS["march"]
-    attackers = world_q.mustered(w, "set_s_014", "fac_crown")
+    attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
     defenders = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
     before_a = {pid: w.persons[pid].body for pid in attackers}
     before_d = {pid: w.persons[pid].body for pid in defenders}
@@ -285,12 +285,12 @@ def test_a_won_field_writes_casualties_and_stance_on_the_defender_only():
 
     for pid in defenders:
         rows = {(ref, val, wt) for ref, val, wt in (w.persons[pid].stance or [])}
-        assert ("fac_crown", -1.0, w.fixtures.get("field_grudge_weight")) in rows, (
+        assert ("fac_valorsmark", -1.0, w.fixtures.get("field_grudge_weight")) in rows, (
             "no grudge row against the winning faction (the attacker)")
         assert ("fac_church_of_solmund", -1.0, w.fixtures.get("field_morale_weight")) in rows, (
             "no morale-hit row against the loser's own faction (the defender)")
     for pid in attackers:
-        assert not any(ref in ("fac_crown", "fac_church_of_solmund")
+        assert not any(ref in ("fac_valorsmark", "fac_church_of_solmund")
                        for ref, _v, _w in (w.persons[pid].stance or [])), (
             "the winning side gained a stance row from a battle it won")
 
@@ -304,7 +304,7 @@ def test_declared_is_no_change_and_unopposed_changes_only_with_claimants_in_the_
     eff = EFFECTS["march"]
     w = build_realm(0)
     act = _march_act("p_npc_033", "set_s_003", "off_spymaster")
-    attackers = world_q.mustered(w, "set_s_014", "fac_crown")
+    attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
     assert eff(w, act, Resolution("Declared", {})) is G.NO_CHANGE
     assert eff(w, act, Resolution("Unopposed", {})) is G.NO_CHANGE
     with_claimants = Resolution("Unopposed", {"parties": {"claimants": attackers, "subject_members": []},
@@ -333,7 +333,7 @@ def test_the_total_casualty_model_zeroes_the_losing_side():
     zeroed."""
     w = build_realm(0)
     w.fixtures = w.fixtures.sweep("field_casualty_model", "total")
-    attackers = world_q.mustered(w, "set_s_014", "fac_crown")
+    attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
     act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
     _fold_one(w, act, contest_max_depth=2)
     for pid in attackers:
@@ -353,7 +353,7 @@ def test_the_none_casualty_model_writes_stance_only():
     (`/code-review` finding on the M4 diff)."""
     w = build_realm(0)
     w.fixtures = w.fixtures.sweep("field_casualty_model", "none")
-    attackers = world_q.mustered(w, "set_s_014", "fac_crown")
+    attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
     before_body = {pid: w.persons[pid].body for pid in attackers}
     before_stance = {pid: list(w.persons[pid].stance or []) for pid in attackers}
     act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
@@ -365,7 +365,7 @@ def test_the_none_casualty_model_writes_stance_only():
         after_new = {(r, v, wt) for r, v, wt in (w.persons[pid].stance or [])} - set(before_stance[pid])
         assert after_new == {
             ("fac_church_of_solmund", -1.0, grudge_w),
-            ("fac_crown", -1.0, morale_w),
+            ("fac_valorsmark", -1.0, morale_w),
         }, f"{pid} gained {after_new}, not exactly the grudge/morale pair, under the `none` model"
 
 
@@ -449,7 +449,7 @@ def test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle
     # `field_grudge_weight` to `3`; this one uses the default), so re-deriving the full body-drop
     # assertions here would repeat, not add, falsifying power. The one thing THIS test proves that
     # the sibling test cannot is that a chooser-formed act reaches a real fight at all.
-    attackers = world_q.mustered(w, "set_s_014", "fac_crown")
+    attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
     defenders = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
     assert len(attackers) == 2 and len(defenders) == 6, (
         f"the fixture no longer gives a 2-v-6 mismatch here ({attackers}, {defenders}); "
@@ -495,7 +495,7 @@ def test_a_real_fold_reads_the_targets_fortification_on_the_battle_path(monkeypa
 # MUTATIONS, run at the build 2026-10-16 (each RED, then restored GREEN): recorded in the commit.
 # =====================================================================================================
 
-CROWN, CHURCH = "fac_crown", "fac_church_of_solmund"
+CROWN, CHURCH = "fac_valorsmark", "fac_church_of_solmund"
 
 
 def _patch_won(monkeypatch, defender_pct=0.5):
@@ -557,7 +557,7 @@ def _no_resident_crown(w):
 def test_in13_exit_i_won_through_the_gate_leaves_the_claimants_mustered_at_the_target():
     """EXIT (i), the `Won` arm: a CONSTRUCTED `Resolution` (Won is unreachable at fixture scale), its
     `Change` written through the real gate at ENCOUNTER -- so the `muster` basis, not a bare `apply()`,
-    admits the claimants' legs. `mustered(w, set_s_036, fac_crown)` equals the claimants after it.
+    admits the claimants' legs. `mustered(w, set_s_036, fac_valorsmark)` equals the claimants after it.
     (The `Unopposed` arm at `set_s_003` is `test_an_unopposed_march_arrives_...`, above.)"""
     w = _no_resident_crown(build_realm(0))
     attackers = world_q.mustered(w, "set_s_014", CROWN)
@@ -656,7 +656,7 @@ def test_in13_exit_i_a_won_never_moves_a_claimant_the_muster_basis_would_refuse(
 def test_in13_exit_i_lost_leaves_the_claimants_at_their_origin_r7():
     """EXIT (i), the `Lost` arm, PINNING #453 R-7 [ASSUMPTION; medium; Jordan to correct; revert:
     Jordan states that a routed army arrives, and this arm is re-pinned]: a real `field.lost` at
-    `set_s_036` leaves `mustered(w, set_s_014, fac_crown)` equal to the claimants, and nobody arrives."""
+    `set_s_036` leaves `mustered(w, set_s_014, fac_valorsmark)` equal to the claimants, and nobody arrives."""
     w = _no_resident_crown(build_realm(0))
     attackers = world_q.mustered(w, "set_s_014", CROWN)
     events = _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_spymaster"))
@@ -866,7 +866,7 @@ def test_in13_exit_vi_control_a_seat_holder_committed_to_another_faction_takes_n
                     t.until = w.tick
             w.add_tenure(Tenure("t_in13_020_commit", "p_npc_020", commit_to, "commit", w.tick))
         assert world_q.faction_holding(w, "p_npc_020") == commit_to
-        assert w.offices["off_king"].faction == "Crown" and G.may_seize(
+        assert w.offices["off_king"].faction == "Valorsmark" and G.may_seize(
             w, "p_npc_020", "off_king", "p_npc_050", "set_s_016")
         return w
     w = occupied("fac_hafenmark")

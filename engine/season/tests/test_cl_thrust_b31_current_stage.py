@@ -65,7 +65,7 @@ def _stage(sid, term, cell):
 
 def _doc(*, with_row=True) -> dict:
     doc = {"goals": [
-        _goal(THRONE, {"faction": "Crown"}, {"kind": "seat_holders", "seats": [SEAT]}, stance=1),
+        _goal(THRONE, {"faction": "Valorsmark"}, {"kind": "seat_holders", "seats": [SEAT]}, stance=1),
         _goal(RUNG, {"faction": "Hafenmark"}, {"kind": "rung", "rung": "terr_T9"}),
     ]}
     if with_row:
@@ -297,7 +297,7 @@ def test_the_control_can_observe_what_it_excludes_a_row_planted_on_a_shipped_goa
     planted here; the loop asserts how many it did plant (4 shipped rows are `rung`/`person` at the base)."""
     planted = 0
     row = _doc()["goal_stages"][0]["stages"]
-    stages = goals.parse({"goals": [_goal("g_x", {"faction": "Crown"}, {"kind": "rung", "rung": "terr_T9"})],
+    stages = goals.parse({"goals": [_goal("g_x", {"faction": "Valorsmark"}, {"kind": "rung", "rung": "terr_T9"})],
                           "goal_stages": [{"id": "gs_x", "for": ["g_x"], "stages": row}]})[0].stages
     for g in goals.goals():
         if g.object["kind"] not in ("rung", "person"):

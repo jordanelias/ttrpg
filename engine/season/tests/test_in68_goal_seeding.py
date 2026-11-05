@@ -32,7 +32,7 @@ from ..gaps import Forbidden, Unspecified
 from ..harness import populated as P
 from ..queries.world_q import members
 
-CROWN = {"faction": "Crown"}
+CROWN = {"faction": "Valorsmark"}
 CIRCLE = {"body": "Inner Circle"}
 SPY = {"seat": "off_spymaster"}
 HEIR = "p_npc_031"
@@ -88,23 +88,23 @@ def _expected(pid, faction, referent, sign):
 
 def test_in68_a_faction_goal_reaches_its_members_and_its_head(monkeypatch, tmp_path):
     w = _realm(monkeypatch, tmp_path, _heir())
-    crown = set(members(w, faction_prop_id("Crown")))
+    crown = set(members(w, faction_prop_id("Valorsmark")))
     prop = w.propositions["g_heir"]
     assert (prop.mood, prop.subject, prop.predicate, prop.value, prop.when) == \
-        ("OUGHT", HEIR, "g_heir, as a predicate", "Crown", 0)
+        ("OUGHT", HEIR, "g_heir, as a predicate", "Valorsmark", 0)
     assert len(crown) > 5 and _committed(w, "g_heir") == crown, "every member, and no one else"
     # the head who is no member: planted by rebinding the owner of "who heads this faction"
     real = cast.faction_leader
-    monkeypatch.setattr(cast, "faction_leader", lambda f: "NPC-040" if f == "Crown" else real(f))
+    monkeypatch.setattr(cast, "faction_leader", lambda f: "NPC-040" if f == "Valorsmark" else real(f))
     w2 = P.build_realm(0, goals_complete=False)
-    assert "p_npc_040" not in members(w2, faction_prop_id("Crown")), "control: the head is no member"
-    assert _committed(w2, "g_heir") == set(members(w2, faction_prop_id("Crown"))) | {"p_npc_040"}
+    assert "p_npc_040" not in members(w2, faction_prop_id("Valorsmark")), "control: the head is no member"
+    assert _committed(w2, "g_heir") == set(members(w2, faction_prop_id("Valorsmark"))) | {"p_npc_040"}
 
 
 def test_in68_a_body_goal_reaches_the_holders_of_the_seats_in_the_body_and_no_one_else(
         monkeypatch, tmp_path):
     w = _realm(monkeypatch, tmp_path, _king())
-    crown = set(members(w, faction_prop_id("Crown")))
+    crown = set(members(w, faction_prop_id("Valorsmark")))
     assert CIRCLE_HOLDERS <= crown and SPYMASTER in crown, "control: the faction holds more than the body"
     assert _committed(w, "g_king") == CIRCLE_HOLDERS
     prop = w.propositions["g_king"]
@@ -131,7 +131,7 @@ def _derived(kind):
 
 def test_in68_establishes_takes_the_parent_goal_off_the_child_orgs_members(monkeypatch, tmp_path):
     w = _realm(monkeypatch, tmp_path, *_derived("establishes"))
-    crown = set(members(w, faction_prop_id("Crown")))
+    crown = set(members(w, faction_prop_id("Valorsmark")))
     assert _committed(w, "g_king") == CIRCLE_HOLDERS, "the child's own commits stand"
     assert not CIRCLE_HOLDERS & _committed(w, "g_heir"), "the child org's members do not commit to the parent"
     assert _committed(w, "g_heir") == crown - CIRCLE_HOLDERS, "and no one else loses it"
@@ -140,7 +140,7 @@ def test_in68_establishes_takes_the_parent_goal_off_the_child_orgs_members(monke
 
 def test_in68_influences_leaves_the_child_orgs_members_committed_to_both(monkeypatch, tmp_path):
     w = _realm(monkeypatch, tmp_path, *_derived("influences"))
-    crown = set(members(w, faction_prop_id("Crown")))
+    crown = set(members(w, faction_prop_id("Valorsmark")))
     assert _committed(w, "g_king") == CIRCLE_HOLDERS
     assert _committed(w, "g_heir") == crown, "the parent keeps every member"
     assert CIRCLE_HOLDERS <= _committed(w, "g_heir") & _committed(w, "g_king")
@@ -160,7 +160,7 @@ def test_in68_influences_across_factions_carries_the_parent_goal_to_the_child_or
     parent. MUTATION (run, both ways): the same rows with `establishes` -- which is what `influences` behaved
     as before the fix -- leaves the child's persons without the parent, and the predicate below sees it."""
     w = _realm(monkeypatch, tmp_path, *_across("influences"))
-    crown = set(members(w, faction_prop_id("Crown")))
+    crown = set(members(w, faction_prop_id("Valorsmark")))
     lowen = _committed(w, "g_king")
     assert lowen and not lowen & crown, "control: the child's persons are no Crown member"
     assert lowen <= _committed(w, "g_heir"), "influences: the child's persons hold the parent as well"
@@ -183,7 +183,7 @@ def test_in68_influences_climbs_while_the_chain_stays_influences_and_stops_at_es
              _king("g_low", org=LOWEN, derives={"from": "g_mid", "kind": "influences"})]
     w = _realm(monkeypatch, tmp_path, *chain)
     low = _committed(w, "g_low")
-    assert low and not low & (set(members(w, faction_prop_id("Crown"))) | set(members(w, faction_prop_id("Church of Solmund"))))
+    assert low and not low & (set(members(w, faction_prop_id("Valorsmark"))) | set(members(w, faction_prop_id("Church of Solmund"))))
     assert low <= _committed(w, "g_mid") and low <= _committed(w, "g_top"), "climbs while influences"
     chain[2]["derives"]["kind"] = "establishes"
     m = _realm(monkeypatch, tmp_path, *chain)
@@ -222,7 +222,7 @@ def test_in68_the_stance_row_is_the_creeds_loyalty_rule_signed_by_the_goals_stan
         for pid in sorted(_committed(w, "g_heir")):
             added = _stance_of(w, pid)[len(_stance_of(base, pid)):]
             assert _stance_of(w, pid)[:len(_stance_of(base, pid))] == _stance_of(base, pid), "the creed's rows stand"
-            want = _expected(pid, "Crown", HEIR, sign)
+            want = _expected(pid, "Valorsmark", HEIR, sign)
             assert added == [want], (pid, added, want)
             checked += 1
             opposed += want[1] != sign
@@ -242,7 +242,7 @@ def test_in68_a_faction_with_no_template_writes_no_stance_row_and_a_row_per_refe
     # `seat_holders`' referent is the holder NOW: one row toward the king per Crown member
     rows = [(p, r) for p in _committed(w, "g_throne") for r in w.persons[p].stance if r[0] == KING]
     assert len({p for p, _ in rows}) == len(_committed(w, "g_throne"))
-    assert {r for p, r in rows if p == "p_npc_036"} >= {_expected("p_npc_036", "Crown", KING, 1)}
+    assert {r for p, r in rows if p == "p_npc_036"} >= {_expected("p_npc_036", "Valorsmark", KING, 1)}
 
 
 def test_in68_a_rung_or_deed_referent_is_no_person_at_seeding_and_writes_no_stance_row(
@@ -251,7 +251,7 @@ def test_in68_a_rung_or_deed_referent_is_no_person_at_seeding_and_writes_no_stan
                _row("g_place", CROWN, {"kind": "rung", "rung": "terr_T9"}, stance=1),
                _row("g_doers", CROWN, {"kind": "deed_doers", "kinds": ["person.died"]}, stance=-1))
     assert _committed(w, "g_place") == _committed(w, "g_doers") and len(_committed(w, "g_place")) > 5
-    assert w.propositions["g_place"].subject == "terr_T9" and w.propositions["g_doers"].subject == "Crown"
+    assert w.propositions["g_place"].subject == "terr_T9" and w.propositions["g_doers"].subject == "Valorsmark"
     c = P.census(w)
     assert (c["goals"], c["goal_stance_rows"]) == (2, 0)
     assert c["goal_commits"] == 2 * len(_committed(w, "g_place"))
@@ -269,8 +269,8 @@ def test_in68_an_unknown_rung_refuses_and_a_known_one_mints(monkeypatch, tmp_pat
 
 
 def test_in68_a_goal_id_that_is_already_a_proposition_refuses(monkeypatch, tmp_path):
-    with pytest.raises(Forbidden, match="fac_crown"):
-        _realm(monkeypatch, tmp_path, _row("fac_crown", CROWN, {"kind": "rung", "rung": "terr_T9"}))
+    with pytest.raises(Forbidden, match="fac_valorsmark"):
+        _realm(monkeypatch, tmp_path, _row("fac_valorsmark", CROWN, {"kind": "rung", "rung": "terr_T9"}))
 
 
 def test_in68_a_cap_that_drops_the_person_or_the_seats_drops_the_goal_and_counts_it(monkeypatch, tmp_path):

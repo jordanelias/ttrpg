@@ -116,7 +116,7 @@ def test_fa06_an_empty_file_refuses_and_names_every_seated_organization(monkeypa
     _plant(monkeypatch, tmp_path, [])
     with pytest.raises(Unspecified) as exc:
         P.build_realm(0)
-    for name in ("faction 'Crown'", "faction 'Restoration Movement'", "body 'Riskbreakers'", "body 'Holy See'"):
+    for name in ("faction 'Valorsmark'", "faction 'Restoration Movement'", "body 'Riskbreakers'", "body 'Holy See'"):
         assert name in exc.value.what, name
 
 

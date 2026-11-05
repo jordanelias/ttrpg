@@ -406,7 +406,7 @@ def table(name: str) -> dict:
 
 
 def faction_prop_id(name: str) -> str:
-    """`'Crown'` -> `'fac_crown'`. THE ONE OWNER OF THE FACTION-ID RELATION.
+    """`'Valorsmark'` -> `'fac_valorsmark'`. THE ONE OWNER OF THE FACTION-ID RELATION.
 
     ⚠ IT HAD NO OWNER UNTIL 2026-09-16, AND THAT COST A SILENTLY EMPTY QUERY. `populated.py`
     formed the id inline as `f"fac_{_slug(fac_name)}"`; `queries/world_q.py: leaders()` recovered
@@ -1058,8 +1058,18 @@ TITLE_DOMAINS = dict(_OFFICES_DOC["titles"]["domains"])
 FACTIONS = roster("factions")
 
 #: `{proposition id: faction name}`. Derived from the roster, so it cannot disagree with it, and
-#: it is the direction `leaders()` needs: a caller holds `fac_crown` and wants `Crown`.
+#: it is the direction `leaders()` needs: a caller holds `fac_valorsmark` and wants `Valorsmark`.
 FACTION_BY_PROP = {faction_prop_id(f): f for f in FACTIONS}
+#: `{faction name: office id}` -- the seat whose live holder heads the faction (`faction_q.head`; CR-86). A faction
+#: absent here has no head seat authored and `head` answers `None` for it.
+HEAD_SEAT = roster_map("factions", "head_seat")
+for _hf, _hs in HEAD_SEAT.items():
+    require_member(_hf, FACTIONS, f"`factions.head_seat` names {_hf!r}, which is not a faction",
+                   "rosters.yaml -- factions", law="CR-86 -- a head seat belongs to a faction the roster names",
+                   needs="key `head_seat:` by a `token_class: faction` name")
+    require_member(_hs, SEAT_ROW_BY_ID, f"`factions.head_seat` names the seat {_hs!r}, which no row of offices.yaml authors",
+                   "rosters.yaml -- factions", law="CR-86 -- a head seat is an `offices.yaml` seat",
+                   needs="a seat id from `offices.yaml: seats`")
 BODY_FACTION = roster_map("office_bodies", "faction")
 BODY_FUNCTION = roster_map("office_bodies", "function")
 ROLE_TEMPLATE_OF = roster_map("role_templates", "by_faction")
@@ -1225,6 +1235,12 @@ OFFICE_POSTS = frozenset(s.get("post") for s in OFFICES_SEATS)
 ENDINGS = _load_endings(roster_map("endings", "members"), FACTIONS, RUNG_KINDS, OFFICE_POSTS)
 
 
+#: `{alias: canonical}` over the `token_class: faction` rows -- the naming leaf's map, read where an authored
+#: `faction:` string meets the roster (`cast.py::_ALIAS_MAP` is the same relation for a cast cell).
+from engine.substrate import names as _faction_names  # noqa: E402
+_FACTION_ALIAS = {a: c for a, c in _faction_names.ALIASES.items() if c in _faction_names.FACTIONS}
+
+
 def office_faction(body: str | None, declared: str | None) -> str:
     """The faction an office belongs to: DERIVED from its canonical body where it has one,
     authored where canon gives its faction no organ.
@@ -1262,6 +1278,10 @@ def office_faction(body: str | None, declared: str | None) -> str:
             needs="name a canonical body, or the faction directly where canon gives it no organ",
             law="H-99 -- an office belongs to something. §42.2's polarity rule: no evidence of "
                 "belonging is a refusal, never a default faction")
+    # CR-86 (ED-IN-0342): a faction named by an ALIAS (`Crown`, Valorsmark's) resolves to its canonical member
+    # here, the one place a case overlay's authored `faction:` becomes a seat's; the many corpus cases that say
+    # `faction: Crown` keep saying it.
+    declared = _FACTION_ALIAS.get(declared, declared)
     require_member(
         declared,
         FACTIONS,

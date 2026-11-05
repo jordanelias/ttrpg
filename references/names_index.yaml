@@ -323,7 +323,13 @@ entries:
   # `legacy:` name (the gate enforces only `legacy`), and `patterns` is unchanged — a bare "Church"
   # still MENTIONS the faction.
   world.church: {canonical: "Church of Solmund", aliases: ["Church"], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bChurch\b(?! Influence)'], context: ['\bArne\b', '\bCardinal\b', '\bPiety\b', '\bHeresy\b', '\bfaction\b', '\bConfessor\b', '\bdoctrine\b']}
-  world.crown: {canonical: "Crown", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bCrown\b(?! Treaty)'], context: ['\bAlmud\b', '\bfaction\b', '\bMandate\b', '\bTreaty\b', '\bTorben\b']}
+  # CR-86 (ED-IN-0342, Jordan 2026-11-05): Valorsmark IS a faction, and "Crown" is its alias -- the name of the
+  # sovereign's faction -- so every `faction: Crown` membership resolves to Valorsmark through `cast.py`'s
+  # `_ALIAS_MAP` and `canonical_for`, and the faction id is `fac_valorsmark`. The Crown's patterns and context
+  # live on this row (a bare "Crown" still MENTIONS the faction); there is no `world.crown` row.
+  # [ASSUMPTION; medium; Jordan to correct; revert: Valorsmark a fifth faction beside the Crown -- restore a
+  # `world.crown` row and drop `token_class: faction` from this one]
+  world.valorsmark: {canonical: "Valorsmark", aliases: ["Crown"], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bCrown\b(?! Treaty)', '\bValorsmark\b'], context: ['\bAlmud\b', '\bfaction\b', '\bMandate\b', '\bTreaty\b', '\bTorben\b']}
   world.hafenmark: {canonical: "Hafenmark", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bHafenmark\b']}
   world.uncontrolled: {canonical: "Uncontrolled", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.varfell: {canonical: "Varfell", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bVarfell\b']}
@@ -338,7 +344,6 @@ entries:
   # NPC-090's `faction: Altonia` cell into the roster. No `patterns:` -- the vector audit reads none for it.
   world.altonia: {canonical: "Altonia", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction}
   world.valoria: {canonical: "Valoria", aliases: ["Average Valorian", "Stable Valoria", "Unstable Valoria", "Valorian", "Valnese"], legacy: [], category: proper_noun, enforce: warn}
-  world.valorsmark: {canonical: "Valorsmark", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   # -- regions --
   world.ashmarket: {canonical: "Ashmarket", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.southernmost: {canonical: "Southernmost", aliases: ["Southernmost Awareness"], legacy: [], category: proper_noun, enforce: warn}

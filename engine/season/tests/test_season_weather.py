@@ -473,9 +473,12 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # tree: `odds_weighting` swept to `none` and `choice_temperature` to 0.1 reads the old triple, the old `BASE_EVENTS`, the old
 # `STEP_OFF_ONE_SEASON` and the old `thread_read`-withheld arm exactly; `believed` at 0.1 reads the old triple and the old
 # `BASE_EVENTS` and only the step-off arm moves. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-BASE_HASHES = {0: "3ae970a172c9c0122adaab552a921eca",
-               1: "4761e5cac3069d78279d3f03657c8007",
-               2: "7d2adfc5d424ce87d34f5a6fa34f07df"}
+# RE-RECORDED at v11 CR-86 (ED-IN-0342; Valorsmark a faction, `fac_crown` -> `fac_valorsmark`, the two vassals' `oblige`
+# tenures, the head seats): 3ae970a1... -> b4bc2df0..., 4761e5ca... -> 87b9d1f1..., 7d2adfc5... -> 48f9f394...; the event
+# count and digest of `BASE_EVENTS` do not move (the state does, the sequence does not).
+BASE_HASHES = {0: "b4bc2df0d507aeb086d79cb8636ca9e0",
+               1: "87b9d1f1dc5547928352429a87011e29",
+               2: "48f9f39450b6e2877b3b3146af6c55d6"}
 
 # THE ONE-SEASON PIN WITH CR-81'S STEP OFF (`build_realm(0, acquaintances=False)`: the hash and the event count and digest
 # `BASE_HASHES[1]` / `BASE_EVENTS[1]` held before CR-81). The `give`-withheld arm's control, below.
@@ -486,8 +489,9 @@ BASE_HASHES = {0: "3ae970a172c9c0122adaab552a921eca",
 # RE-RECORDED at v11 CR-17: commit 1 (`odds_weighting` `believed`) moves this arm alone of the pins at tau 0.1 (f5987a4b... ->
 # 0aa9d2e1..., events 9952 -> 9952, sequence hash 63160817... -> 33632f41...); commit 2 (tau 0.05) moves it again: f5987a4b... ->
 # b82178e8..., events 9952 -> 11808. The two fixtures swept to `none` and 0.1 read the old value exactly.
-STEP_OFF_ONE_SEASON = ("b82178e877e9831e72df39e113409a06",
-                       (11808, "ffbcfc5049db09ecbda438c70e8edaa035df96f6d889cf43fa1b6d3e0327ed0b"))
+# RE-RECORDED at v11 CR-86: b82178e8... / (11808, ffbcfc50...) -> 782560b3... / (11822, 477d2d19...).
+STEP_OFF_ONE_SEASON = ("782560b360a4ad7982e7a73fbe656ebe",
+                       (11822, "477d2d19143b6134382daa797668542ea021dcde1cece59926c87e1004e38e69"))
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -564,8 +568,12 @@ STEP_OFF_ONE_SEASON = ("b82178e877e9831e72df39e113409a06",
 # 10316; `ledger_cap` swept back to 200 reads the old pair).
 # RE-RECORDED at v11 CR-17 with `BASE_HASHES` (10316 -> 11775, 29401 -> 30477; commit 1 `believed` alone moves neither at seed 0;
 # `odds_weighting` `none` and `choice_temperature` 0.1 in process read the old pair).
-BASE_EVENTS = {1: (11775, "87c51e925ddf5d1f6245f12638d09fae865c137e41a588c64a894612f4551661"),
-               2: (30477, "e30bb78fed04cca537b7c0e411b1d7087793e21949aba6107159c6bb0a2e3d16")}
+# RE-RECORDED at v11 CR-86 with `BASE_HASHES` (11775 -> 11793, 30477 -> 30734). CONTROL, run in process on this tree: the
+# two vassals' `oblige` rows (`offices.yaml` `off_king` obligees) dropped read the old season-1 sequence exactly (11775 /
+# 87c51e92...) with the build and season hashes still moved by the `fac_crown` -> `fac_valorsmark` rename alone
+# (build 2a1d39a5..., season 1 e03b429a...).
+BASE_EVENTS = {1: (11793, "454fdfe6537af5297d0a12bdce55b0b86c43803aca0ff4ae1731b80ab7b10dcf"),
+               2: (30734, "05951be7d01165468a341e615ead0664bfbf0bbd054e6dd5e0718a09eeedc75d")}
 
 
 def _digest(w) -> tuple:
@@ -732,7 +740,7 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: RE-RECORDED at v11 CR-17 with `BASE_HASHES`: 10316 / af2eb292... -> 11781 / 43774342... (commit 1 `believed` alone moves it not
 #: at all; commit 2, tau 0.05, moves it, and the count now differs from `BASE_EVENTS[1]` too); `none` and 0.1 in process read the
 #: old value exactly.
-THREAD_READ_WITHHELD_EVENTS_1 = (11781, "437743422f8d395be785833b656144cc7d7ca11581b9a6a94480beec8b0dddbe")   # CR-17: was 10316 / af2eb292...; CR-25: was 10847 / 83f4c9a2...; CR-81: was 9741 / 1e77a5a4...
+THREAD_READ_WITHHELD_EVENTS_1 = (11799, "07b7a36b6e8bdda99803abc463775fadd961b1a76016d8b54d974ecaf0fe4851")   # CR-86: was 11781 / 43774342...   # CR-17: was 10316 / af2eb292...; CR-25: was 10847 / 83f4c9a2...; CR-81: was 9741 / 1e77a5a4...
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

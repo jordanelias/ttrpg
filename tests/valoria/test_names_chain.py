@@ -159,10 +159,12 @@ def test_the_season_loop_derives_the_faction_roster_rather_than_copying_it():
     assert set(N.FACTIONS) == set(FACTIONS), "the derived roster and the leaf disagree"
     # Named members, not a count: each of these is a row whose `token_class: faction` is what
     # carries it down the chain, so losing one is the exact regression Schoenland surfaced.
-    for member in ("Schoenland", "Church of Solmund", "Crown", "Guilds"):
+    for member in ("Schoenland", "Church of Solmund", "Valorsmark", "Guilds"):
         assert member in N.FACTIONS, (
             f"{member!r} left the derived roster: {sorted(N.FACTIONS)}. Its `names_index.yaml` row "
             "has lost `token_class: faction`, or the export was not re-run")
+    # CR-86 (ED-IN-0342): "Crown" is Valorsmark's ALIAS -- it left the roster as a member and resolves to Valorsmark.
+    assert "Crown" not in N.FACTIONS and N.canonical_for("Crown") == "Valorsmark"
 
 
 # ---------------------------------------------------------------------------

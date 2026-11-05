@@ -24,7 +24,7 @@ from modules.mass_battle import armyrecord as A
 from modules.mass_battle.troop_types import recruitment as R
 
 ACTOR, SEAT, ORIGIN = "p_npc_033", "off_spymaster", "set_s_014"
-CROWN, CHURCH, HAFEN = "fac_crown", "fac_church_of_solmund", "fac_hafenmark"
+CROWN, CHURCH, HAFEN = "fac_valorsmark", "fac_church_of_solmund", "fac_hafenmark"
 DEFENDED_TOWN, UNDEFENDED, DEFENDED_TERR = "set_s_036", "terr_T7", "terr_T9"
 
 

@@ -71,7 +71,7 @@ from ._closure_scan import branches_on_ids, game_code
 from ._fresh_process import probe
 from .test_information_cluster import _hear
 
-FAC = faction_prop_id("Crown")
+FAC = faction_prop_id("Valorsmark")
 FORGER, INVESTIGATOR, ABOUT = "p_other", "p_high", "p_mid"
 FORGE_ID = "fi03_forge"
 HAND_BANDS = frozenset(b for b, t in FINDING_TERMS.items() if HAND_TERM in t)
@@ -109,7 +109,7 @@ def trail_world(verb="forge", kind="record.forged", second=None, fixtures=None):
     if fixtures is None:
         fixtures = DEFAULT_FIXTURES.sweep("ceiling_per_pool", False)
     w = P.tiny_world(fixtures)
-    w.propositions[FAC] = Proposition(FAC, "HOLDS", "Crown", "is a faction of this world", True, 0)
+    w.propositions[FAC] = Proposition(FAC, "HOLDS", "Valorsmark", "is a faction of this world", True, 0)
     for pid in (INVESTIGATOR, ABOUT):
         w.add_tenure(Tenure(f"t_commit_{pid}", pid, FAC, "commit", since=0))
     d = SeasonDriver(w)

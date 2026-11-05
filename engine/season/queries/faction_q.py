@@ -74,7 +74,7 @@ from __future__ import annotations
 from dataclasses import dataclass, fields
 
 from .world_q import establishment_of, members
-from ..data.rosters import RECORD_KIND_KEYS
+from ..data.rosters import FACTION_BY_PROP, HEAD_SEAT, RECORD_KIND_KEYS
 from ..gaps import Unspecified
 from ..state.containment import descendants
 from ..state.world import World
@@ -144,7 +144,14 @@ def head(w: World, prop: str) -> "str | None":
     TRACE.query("head", "resolver")
     graded = [t for t in w.tenures
               if t.kind == "commit" and t.object == prop and t.live and t.degree is not None]
-    return graded[-1].subject if graded else None
+    if graded:
+        return graded[-1].subject
+    # CR-86 (ED-IN-0342): a faction whose `rosters.yaml: factions` row names a `head_seat` is headed by that
+    # seat's live holder -- the King for Valorsmark. A graded `commit` (above) stays the more specific
+    # reading and wins where one exists [CHOICE: none is built today, so the order moves nothing].
+    seat = HEAD_SEAT.get(FACTION_BY_PROP.get(prop))
+    held = [t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == seat]
+    return held[-1] if seat and held else None
 
 
 def holdings(w: World, prop: str) -> list:

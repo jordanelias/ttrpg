@@ -8,7 +8,7 @@ recruiting limit are `modules/mass_battle/armyrecord.py`'s (tested without a wor
 module through the composition row, that the gate admits the write, that the holder's standing and the army kind
 are enforced, and that each refusal leaves the record exactly as it was.
 
-Fixture: `probes.tiny_world` plus a faction Proposition `fac_crown`, a cohort `c1` (weight 12, so 120 may be under
+Fixture: `probes.tiny_world` plus a faction Proposition `fac_valorsmark`, a cohort `c1` (weight 12, so 120 may be under
 arms) living at `Hh` and committed to it, and a full barracks at `Hh`. `p_high` mints and so holds the army.
 """
 
@@ -21,7 +21,7 @@ from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.queries import world_q
 from engine.season.state.carriers import Act, Proposition, Site, Tenure
 
-FACTION, COHORT, HOME, COMMANDER = "fac_crown", "c1", "Hh", "p_high"
+FACTION, COHORT, HOME, COMMANDER = "fac_valorsmark", "c1", "Hh", "p_high"
 
 
 def _world():
