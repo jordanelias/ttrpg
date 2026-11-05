@@ -23,7 +23,8 @@ description: >
   `/close`, never per item.
   BATCH-CLOSE: `methodology-close`'s full Phases 1–3, run once against the batch's commit-range
   diff (its recorded starting SHA through HEAD, since every item already committed) — invoked
-  verbatim, not copied here. Use for: "run methodology-execute",
+  verbatim, not copied here — plus one accretion pass between Phases 2 and 3 that deletes the
+  tools and tests the batch added and nothing calls or observes. Use for: "run methodology-execute",
   "/methodology-execute <task>", "build out this phase/area", a workplan position, phase, or
   free-text area of work that has not been built yet and needs both building and verifying before
   `/close`. Not for: a diff that already exists and only needs verifying — use `methodology-close`
@@ -59,8 +60,9 @@ the same way every time, per CLAUDE.md §4.
 
 **Relation to `methodology-close` and to `/close`.** This skill's BATCH-CLOSE *is*
 `methodology-close`'s Phases 1–3, unmodified. A change to that sequence is made once, in that
-file. This skill adds exactly one thing ahead of it: a phase that writes the diff, for when one
-does not exist yet — and it changes *when* the closing phases fire, not what they do.
+file. This skill adds one thing ahead of it: a phase that writes the diff, for when one
+does not exist yet — and one inside it: the accretion pass (BATCH-CLOSE), which deletes what the
+batch added and nothing needs. It changes *when* the closing phases fire, not what they do.
 
 **Per Jordan's directive when this skill was split from `methodology-close`: the expensive
 pass — code-review/simplify/layer-conformance, the agonist/antagonist fan, the terminal critique,
@@ -423,6 +425,32 @@ against a working-tree diff, since nothing is left uncommitted by the time a bat
   batch of prose or ledger edits runs just the files that read what it touched. No item inside the
   batch runs it. CI's two runs per batch — one at its end, one confirming its fixes — are CHECKPOINTS
   AND BASELINES'.
+- **The accretion pass — this skill's one addition inside BATCH-CLOSE, between Phase 2 and Phase 3**
+  (the session's user, 2026-11-05: *"each batch creates its own specific tools and they accrete
+  causing increasingly longer run times for test suites"*; *"as part of methodology execute close"*).
+  Phase 3 then grades the tree as it will be left. The orchestrator runs it in its own tree, over what
+  the batch ADDED (`git diff --diff-filter=A --name-only <batch-start-sha>..HEAD -- tools tests engine`)
+  and over what the batch made redundant (an old tool or test an item replaced; CLAUDE.md §2 retires it
+  in the same change). **A reader's discipline: NO GUARD MAY BE BUILT FOR THIS** (CLAUDE.md §0.1 pt 5),
+  and its output is deletions in the batch's close commit, never a document or a ledger row. For each
+  added file:
+  1. **A tool names its caller:** a CI step, a hook, a `ci_checks_registry.yaml` row, an import from
+     `engine/` or `modules/`, or a named invocation in the plan. None: delete it; it served its item
+     and the commit is its record. A tool whose only consumer is this repository's own process is
+     judged by §0.1 pt 5's predicate (not load-bearing on the game or a Jordan decision): delete it, or
+     accept it and write nothing. It never earns a new registry row because one batch needed it once.
+  2. **A test names the behaviour it observes.** A test whose only subject is a tool step 1 deleted, or
+     a one-off migration that has already landed, goes with it. A test of game behaviour stays.
+  3. **A test's cost is read, not guessed.** Run the batch's added test files alone with `--durations`
+     (the file-scoped run CLAUDE.md §0.4 allows, not the suite). A test that starts a fresh interpreter
+     (`subprocess`, `python -m engine.season…`) or runs seasons states what an in-process check of the
+     same claim would miss; where none is named, rewrite it in-process or delete it.
+  4. **Unearned, by `valoria-simplify`'s own list** (a second owner of a fact; apparatus where an edit
+     to the existing owner would serve; dead or retired code), read at that skill and not restated.
+     Its DISTIL mode is not run per batch.
+
+  The commit body names the paths deleted. It carries no count and no running total (CLAUDE.md §1);
+  the CI job's own wall time is the instrument for whether the suite is growing.
 - Its **Phase 3 tier, escalation trigger, checklist, and the top-down/bottom-up handshake**
   (§3.1–3.7) apply as written there, run against the batch's post-Phase-2 diff. INTERDEPENDENCIES
   and the FORWARD/BACKWARD SWEEPS are more likely to find something real here than at single-item
@@ -608,6 +636,7 @@ seasons, so cost is superlinear in seasons and the unit is not "one realm, one s
 | "the batch resumed from its row" | a resumed batch rebuilt an item whose handle was in `built`, skipped one that was not, or re-ran a BATCH-CLOSE phase at or before `close` — or the row was trusted over the commits where they disagreed |
 | "BATCH-CLOSE ran once per batch" | the full pytest suite, `/code-review`, `/simplify`, `layer-conformance`, the agonist/antagonist fan, or the terminal critique ran between two items of the *same* batch, or the review phases did not run before the batch's items were reported done (the suite runs per CLAUDE.md §0.4 cl.1, not unconditionally) |
 | "CI ran twice per batch" | a CI run started on a commit other than the batch's last `Item:` commit or the commit confirming its fixes (a pushed head commit without `[skip ci]`), or a full CI run was used to find what a covering test file or a one- or two-season probe could show |
+| "the accretion pass ran" | a tool or test file in the batch's added list has no stated caller or observed behaviour and was neither deleted nor given a stated reason; or the pass ran after Phase 3; or it added a file, row or document rather than deleting one |
 | every Phase 1–3 claim, at BATCH-CLOSE | `methodology-close`'s own falsifier table, unchanged, checked against the batch's cumulative post-Phase-0 diff |
 
 **If this skill's guidance conflicts with `CLAUDE.md`, `architecture/`, or `methodology-close`,
