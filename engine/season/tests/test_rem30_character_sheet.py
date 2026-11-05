@@ -35,10 +35,13 @@ from engine.season.state.ids import H, draw_factory
 # commit's four source files reverted read the old three exactly (the first REM-30 commit's own run).
 # RE-PINNED ONCE at v10 CR-30 for CR-20 + CR-30 (Person.attributes / Person.heritage in every repr; four authored heritage rows):
 # was 027c7516... / 5b000930... / 891860d4.... The arm-off event list over two seasons equals the parent tree's at seeds 0 / 1 / 2.
+# RE-PINNED ONCE at v10 CR-33 (NPC-088's `lifepath: 3-CF4` holds `inquiry` at `pool_default`; a Person repr, the event list unmoved): was
+# f2e5e265... / 0d25717b... / 05f065f4.... CONTROL: `data/cast.py::capability_of` stubbed to `{}` reads the old three exactly
+# (`test_cr33_lifepaths.py::BASE`), and the ordered (kind, id) event list equals the parent tree's at seeds 0 / 1 / 2.
 PRE_BUILD = {
-    0: "f2e5e265012d1d96333a43ff514d2b13",
-    1: "0d25717b85d52c4f156136fa724ae46e",
-    2: "05f065f4c917faf3d970f2c50cfd792f",
+    0: "69783660ea3ca2163bd346ee7e29e711",
+    1: "d81d7a7377008ddbe4000624e259f4b2",
+    2: "43d2c5249670a51c24c1a102517e9567",
 }
 
 

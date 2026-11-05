@@ -1432,6 +1432,24 @@ rosters:
       argue:   "attr.social.attunement"
       inquiry: "attr.mind.acuity"
 
+  lifepaths:
+    source: >-
+      v10 CR-33: the 34 lifepaths (the Stage 3 vocations of `character_histories_v30.md`, archived), by the
+      ids that file prints, `3-CR1` ... `3-CF6`. THE CLOSED SET `tables: lifepath_templates` is keyed by,
+      refused at import both ways (`data/rosters.py::_load_lifepath_templates`), and the set a cast row's
+      `lifepath:` key is checked against (`data/cast.py::capability_of`). Four Niflhel ids (`3-NI1` ...
+      `3-NI4`) are STRUCK in that file (it prints no row for them and sends their backstories to `3-CF6`) and
+      are not members. Jordan's "34 vocations" counts these; in code "vocation" names a capability key
+      (`data/verbs.py::VOCATIONS`), which is why the cast key is `lifepath:` and not `vocation:`.
+    values: ["3-CR1", "3-CR2", "3-CR3", "3-CR4", "3-CR5",
+             "3-CH1", "3-CH2", "3-CH3", "3-CH4", "3-CH5",
+             "3-HA1", "3-HA2", "3-HA3", "3-HA4",
+             "3-VA1", "3-VA2", "3-VA3", "3-VA4",
+             "3-GU1", "3-GU2", "3-GU3",
+             "3-RE1", "3-RE2", "3-RE3",
+             "3-LO1", "3-LO2", "3-LO3", "3-LO4",
+             "3-CF1", "3-CF2", "3-CF3", "3-CF4", "3-CF5", "3-CF6"]
+
   contest_subsystems:
     source: "`references/module_contracts.yaml` names `combat` (was `personal_combat`; one identity per module, A-25), `mass_battle` and `social_contest` as modules with real docs and real resolvers. `ARCHITECTURE_V2.md:394` declares `contests: <prize>` — *if set, routes to the seam at RESOLVE (§39)*."
     cite: "H-88"
@@ -3163,6 +3181,71 @@ tables:
       archery_range:  {}
       stable:         {}
       siege_workshop: {}
+
+  # v10 CR-33 -- THE 34 LIFEPATHS AS CREATION TEMPLATES: WHICH CAPABILITY KEYS A LIFEPATH'S STARTING SKILLS NAME.
+  # A cast row's `lifepath:` key is expanded by `data/cast.py::capability_of` into `Person.capability` entries
+  # (each key at `pool_default`) at world build, and the lifepath id is stored NOWHERE on the `Person`.
+  lifepath_templates:
+    source: >-
+      `character_histories_v30.md` (archived under `.designs/systems/characters/reference/`), STAGE 3, the
+      `Starting Skills (★)` column, rows `:310-382` of that file. Each `ground:` cites the row's line there.
+    row: H-126
+    keys: [lifepaths, verb_capability]
+    note: >-
+      ⚠ A CUT, NOT A TRANSCRIPTION. Every authored dice magnitude (+1D, +2D, TS +3, Ob and strain changes) is
+      DROPPED: a template names which of `verb_capability`'s VALUES (`copying`, `argue`, `inquiry`) a lifepath's
+      starting skills draw on, and nothing else. A key is held at `pool_default`, so the grant changes no pool;
+      it makes the key one `train` can raise (`loop/effects_combat.py::_eff_train` raises only a key the subject
+      already holds). A lifepath whose starting skills no key covers holds NONE (`holds: []`), RECORDED here
+      and not invented.
+      ⚠ THE RULE EACH ROW WAS READ BY, so a reviewer can re-read the text and not the taste. Only the `★`
+      skills count: the `Third Skill (spark)` column is a skill that may be sparked later, not held at creation
+      (the archived file's own header, `Starting Skills (★)` against `Third Skill (spark)`). `argue` is named
+      when a starting skill's text says the Argue act. `inquiry` is named when it says Investigation,
+      institutional records or documents recalled (`research`), or assessing or authenticating a thing
+      (`examine`). `copying` is named when it says relaying or copying a text; no starting skill does, so no
+      row holds it. A text that says only a bonus in a domain, a contest genre, a defence, a negotiation
+      strain, an identification of forces or a navigation holds nothing, and the near misses are said in the
+      row's own `ground:` (3-CH1, 3-CH3, 3-CR5, 3-HA1, 3-HA3, 3-VA2, and 3-CF4's Knot, which names copying).
+      CLOSED, BOTH WAYS (`data/rosters.py::_load_lifepath_templates`): a row for every id of `rosters:
+      lifepaths` and for nothing else, each `holds:` entry a `verb_capability` value, a `ground:` on every row.
+      [ASSUMPTION; medium; Jordan to correct; revert: delete the `lifepath:` keys from the cast rows (one
+      re-pin); the key mapping is content.]
+    cells:
+      3-CR1: {holds: [argue], ground: "★ Courtly Grace '+1D Argue before Expert Judge in Crown territory' names the Argue act -> argue; ★ Read the Room '(Appraise TN 6)' -> none (:310)"}
+      3-CR2: {holds: [], ground: "★ Riposte '(counter-Strike after successful Defence)' and ★ Formation Discipline '(+1 Discipline start)' are combat and formation, no key (:311)"}
+      3-CR3: {holds: [], ground: "★ Schoenland Contacts '(+1D DA involving Schoenland)' is a domain action and ★ Haggler's Nerve '(-1 strain in private negotiation)' a strain; neither names Argue or an inquiry (:312)"}
+      3-CR4: {holds: [inquiry], ground: "★ Paper Trail '(+1D institutional records)' names records -> inquiry (research); ★ Procedural Objection '(force Regroup or +1 Ob once/contest)' names no Argue -> none (:313)"}
+      3-CR5: {holds: [], ground: "★ Harvest Leverage '(+1D on DA involving food supply)' is a domain action; ★ Seasons Reader '(+1D Cognition for weather/terrain/agriculture)' is a domain knowledge bonus naming no assessment -> none (:314)"}
+      3-CH1: {holds: [], ground: "★ Doctrinal Authority '(+3D Recall bonus in Memory genre on theology)' is a contest-genre bonus, not a records search; ★ Liturgical Composure '(+2 Composure in Church Tribunal)' -> none (:320)"}
+      3-CH2: {holds: [], ground: "★ Smite the Heretic '(+1D Offence ...)' and ★ Shield of Faith '(+1D Defence in Full Guard)' are combat, no key (:321)"}
+      3-CH3: {holds: [], ground: "★ Sermon Delivery '(+1 Piety Track on Revealing win before Crowd)' names no Argue; ★ Folk Trust '(-1 Ob DA involving common population)' is a domain action -> none (:322)"}
+      3-CH4: {holds: [inquiry], ground: "★ Forbidden Knowledge '(once/arc suppressed document recall)' and ★ Paper Trail '(+1D institutional records)' name documents and records -> inquiry (research) (:323)"}
+      3-CH5: {holds: [inquiry], ground: "★ Inquisitorial Method '(+1D Investigation targeting heresy/Thread practice/Einhir activity)' names Investigation -> inquiry; ★ Suppressed Exposure '(TS +3 ...)' is a Thread Sensitivity gain -> none (:324)"}
+      3-HA1: {holds: [], ground: "★ Constitutional Precedent '(-1 Audience Resistance when citing constitutional clause)' and ★ Procedural Objection name no Argue act -> none (:330)"}
+      3-HA2: {holds: [inquiry], ground: "★ Stone Reader '(+1D assess terrain/fortifications)' names assessing a thing -> inquiry (examine); ★ Tunnel Fighter '(+1D Defence in confined spaces)' -> none (:331)"}
+      3-HA3: {holds: [], ground: "★ Fortress Defender '(+1D Defence in Fortified positions)' is defence; ★ Know the Enemy '(+1D identify Altonian forces)' identifies forces, not a thing assessed or a record -> none (:332)"}
+      3-HA4: {holds: [], ground: "★ Mountain Ambush '(-1 Ob one tactic/battle in highland terrain)' and ★ Sure-Footed '(auto-success Establish Distance)' are battle movement, no key (:333)"}
+      3-VA1: {holds: [], ground: "★ Dead Drop '(establish covert channel, -1 Ob Intel ops)' and ★ Smooth Liar '(-1 strain when using Obscuring)' name no key; Shadow Work '(+1D surveillance/counter-intel)' is the THIRD (spark) skill, not held at creation (:339)"}
+      3-VA2: {holds: [], ground: "★ Sea Legs '(+1D Defence on water)' is defence; ★ Coastal Navigation '(+1D navigation/recon on western coast)' is navigation -> none (:340)"}
+      3-VA3: {holds: [inquiry], ground: "★ Artefact Authentication '(+2D assess Einhir objects)' names assessing and authenticating a thing -> inquiry (examine); ★ Black Market Contacts '(+1D underground networks)' -> none (:341)"}
+      3-VA4: {holds: [], ground: "★ Vaynard's Confidence '(Spirit roll for +1D Thread-related roll ...)' and ★ Read the Room '(Appraise)' name no key (:342)"}
+      3-GU1: {holds: [], ground: "★ Cross-Border Immunity '(-1 ethical framework Ob in foreign territory)' and ★ Haggler's Nerve '(-1 strain in private negotiation)' name no key (:348)"}
+      3-GU2: {holds: [], ground: "★ Back-Alley Fighter '(+1D Stunt in urban)' and ★ Intimidation '(+1D Obscuring in private negotiation)' name no key (:349)"}
+      3-GU3: {holds: [], ground: "★ Master Craftwork '(once/season craft +1 item)' and ★ Guild Kinship '(+1D Influence DA with Guilds)' name no key; Precision Hands '(+1D examining crafted objects)' is the THIRD (spark) skill, not held at creation (:350)"}
+      3-RE1: {holds: [argue], ground: "★ Incendiary Rhetoric '(+2D Argue before Crowd, Revealing, social justice)' names the Argue act -> argue; ★ Underground Distribution '(-1 Ob Restoration DA)' -> none (:360)"}
+      3-RE2: {holds: [argue], ground: "★ Community Voice '(+1D Argue before Crowd for common people)' (its text is printed at 3-VA2, :340) names the Argue act -> argue; ★ Solidarity '(+1D Community Weaving)' -> none (:361)"}
+      3-RE3: {holds: [], ground: "★ Intuitive Threadwork '(Attunement + Spirit TN 8 Ob 3 for minor Weaving)' and ★ Folk Healer '(+1D Medicine)' name no key (:362)"}
+      3-LO1: {holds: [], ground: "★ Elite Discipline '(unit Discipline floor 2)' and ★ Riposte are command and combat, no key (:368)"}
+      3-LO2: {holds: [], ground: "★ Eagle Eyes '(Cognition roll to reveal one element of opposing Phase 1)' is a battle-phase reveal, ★ Know the Enemy identifies forces -> none (:369)"}
+      3-LO3: {holds: [], ground: "★ Deniable Action '(Spirit roll to deflect evidence trail)' and ★ Smooth Liar name no key (:370)"}
+      3-LO4: {holds: [inquiry], ground: "★ Anomaly Recognition '(+1D Cognition to assess threadcut being threat/movement/constraints)' names assessing a thing -> inquiry (examine); ★ Classified Knowledge '(once/arc invoke classified info for +2D)' -> none (:371)"}
+      3-CF1: {holds: [], ground: "★ Weapon Versatility '(switch weapon type between exchanges)' and ★ Riposte are combat, no key (:377)"}
+      3-CF2: {holds: [], ground: "★ Field Medicine '(-1 Ob stabilise)' and ★ Folk Healer name medicine, no key (:378)"}
+      3-CF3: {holds: [], ground: "★ Wide Network '(+1D in up to 3 previously-operated territories)' and ★ Haggler's Nerve name no key (:379)"}
+      3-CF4: {holds: [inquiry], ground: "★ Textual Memory '(recall previously-handled documents)' and ★ Paper Trail '(+1D institutional records)' name documents and records -> inquiry (research); the Knot (an author whose work you copied) names copying but no starting skill does, so copying is NOT held (:380)"}
+      3-CF5: {holds: [], ground: "★ Diplomatic Protocol '(ethical framework Ob penalties reduced by 1 ...)' and ★ Read the Room name no key; Treaty Language '(+1D Recall on prior agreements)' is the THIRD (spark) skill, not held at creation (:381)"}
+      3-CF6: {holds: [], ground: "★ Opportunist '(once/scene ... +2D on next roll exploiting outcome)' and ★ Slippery '(Escape -1 Ob; +1D pursuit evasion in urban)' name no key (:382)"}
 
   # IN-08 H10 -- WHICH AFFILIATIONS STRAIN WHEN HELD TOGETHER (ED-IN-0251 R1: confliction is DERIVED
   # from this relation and never stored; `queries/person_q.py::confliction`). A HALF-MATRIX: each

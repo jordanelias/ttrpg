@@ -589,6 +589,37 @@ def _load_vocation_attribute(values: dict, vocations) -> dict:
 
 VOCATION_ATTRIBUTE = _load_vocation_attribute(roster_map("vocation_attribute", "values"),
                                                set(VERB_CAPABILITY.values()))
+
+
+def _load_lifepath_templates(cells: dict, lifepaths, vocations) -> dict:
+    """`rosters.yaml: tables: lifepath_templates`, CLOSED BOTH WAYS against `rosters: lifepaths` (v10 CR-33): a row
+    for every lifepath and for nothing else, each `holds:` entry a `verb_capability` value (a vocation), each row
+    carrying a `ground:`. A template naming a key no verb draws on would grant a capability `train` could raise and
+    `faculty` never read; a row for an id outside the 34 would never be reached and would read as live. Refused
+    whole, naming the difference. Returns `{lifepath id: tuple of capability keys}` -- the lifepath id is the key of
+    this table and is stored on no `Person`."""
+    out: dict = {}
+    for lid, cell in cells.items():
+        holds = cell.get("holds") if isinstance(cell, dict) else None
+        out[str(lid)] = tuple(holds) if isinstance(holds, list) else None
+    missing, extra = sorted(set(lifepaths) - set(out)), sorted(set(out) - set(lifepaths))
+    malformed = sorted(k for k, v in out.items() if v is None)
+    outside = sorted(f"{k}:{h}" for k, v in out.items() for h in (v or ()) if h not in vocations)
+    repeated = sorted(k for k, v in out.items() if v and len(set(v)) != len(v))
+    ungrounded = sorted(k for k, c in cells.items() if not str((c or {}).get("ground") or "").strip())
+    if missing or extra or malformed or outside or repeated or ungrounded:
+        raise Unspecified(
+            f"`rosters.yaml: lifepath_templates` is not closed over the lifepaths: no row for {missing}, a row for "
+            f"a non-lifepath {extra}, no `holds:` list {malformed}, a key that is no `verb_capability` value "
+            f"{outside}, a key held twice {repeated}, no `ground:` {ungrounded}", "rosters.yaml",
+            needs="exactly one row per `lifepaths` id, each `holds:` a list of `verb_capability` values, each with a `ground:`",
+            law="CR-33 -- which capability keys a lifepath's starting skills name is stated once, for every lifepath")
+    return out
+
+
+LIFEPATHS = roster("lifepaths")
+LIFEPATH_TEMPLATES = _load_lifepath_templates(table("lifepath_templates"), LIFEPATHS,
+                                              set(VERB_CAPABILITY.values()))
 # v9 FI-01 (`ED-FI-0009`, J-22 (A)): inquiry verb -> `{provider, module_entry}`, the roll that grades
 # it with no prize. Validated against the verb table at load (`data/verbs.py`) and against the prize
 # rows at driver construction (`manifest/registry.py::check_graded_inquiries`); read by

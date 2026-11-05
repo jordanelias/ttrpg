@@ -35,7 +35,7 @@ import re
 from typing import Optional
 
 from . import files
-from .rosters import FACTIONS, load_yaml
+from .rosters import FACTIONS, LIFEPATH_TEMPLATES, load_yaml
 from ..gaps import Unspecified
 from ...substrate import names as _names
 from ...substrate.descriptors import (
@@ -377,6 +377,29 @@ def heritage_of(r: dict) -> Optional[str]:
         f"cast row {(r or {}).get('id', '?')}: heritage {v!r} is none of {', '.join(HERITAGES)}",
         "references/descriptor_registry.yaml", needs=f"one of {', '.join(HERITAGES)}, or no key",
         law="CR-30 -- a heritage outside the registry's roster is refused at build")
+
+
+def capability_of(r: dict, pool_default: int) -> dict:
+    """`Person.capability`'s authored source (v10 CR-33): the row's `lifepath:` key EXPANDED through
+    `rosters.yaml: tables: lifepath_templates` into `{capability key: pool_default}`, or `{}` where nothing is
+    authored -- the key absent, `lifepath: null`, or no row at all -- or where the lifepath's starting skills
+    name no key (most lifepaths map to none, and that is recorded in the table, not invented here).
+
+    THE LIFEPATH ID IS READ AND DROPPED: it is stored on no `Person`, so no reader in play can ask for it (the
+    keys it grants are the hook, `Person.capability`, which `faculty` and `train` already read). Each key is
+    held AT `pool_default` (H-126's fixture), the value `faculty` already falls to, so the grant changes no pool;
+    it makes the key one `train` can raise (`loop/effects_combat.py::_eff_train` raises only a held key). A
+    value that names no template REFUSES, naming the row (`heritage_of`'s shape): a typo'd id would otherwise
+    read as a lifepath that grants nothing."""
+    v = (r or {}).get("lifepath")
+    if v is None:
+        return {}
+    if isinstance(v, str) and v in LIFEPATH_TEMPLATES:
+        return {key: pool_default for key in LIFEPATH_TEMPLATES[v]}
+    raise Unspecified(
+        f"cast row {(r or {}).get('id', '?')}: lifepath {v!r} names no template of `lifepath_templates`",
+        "references/npc_registry.yaml", needs=f"one of the 34 ids of `rosters.yaml: lifepaths` (3-CR1 ... 3-CF6), or no key",
+        law="CR-33 -- a lifepath outside the roster is refused at build; silence is no key")
 
 
 def title_of(r: dict) -> Optional[str]:
