@@ -47,7 +47,7 @@ New key names are CR-84's to choose; none is invented here.
 
 | verb | class | primary | secondary | basis | note |
 |---|---|---|---|---|---|
-| `fight` | R | composite |  | CODE | Combat reads seven: Strength, Coordination (`agi`), Endurance, Reason (`cog`), Perception (`att`, open, see §4), Spirit, Focus (`combatant.py:93`). Reads no Presence, Attunement or Grace. |
+| `fight` | R | composite |  | CODE | Combat reads seven: Strength, Coordination (`agi`), Endurance, Reason (`cog`), Perception (`att`, open, see §6), Spirit, Focus (`combatant.py:93`). Reads no Presence, Attunement or Grace. |
 | `assassinate` | D | composite | Coordination | REASONED | `fight` with a held cover and the first move. |
 | `capture` | D | composite |  | REASONED | `fight` with aim alive. |
 | `challenge` | — |  |  |  |  |
@@ -84,7 +84,7 @@ New key names are CR-84's to choose; none is invented here.
 | `speak` | R | Presence | Reason | REASONED | Contested on "a matter" at a sitting. |
 | `determine` | R | Reason | Attunement | RULED | ED-IN-0326: reasoning sharpens judgment of offices, regimes and obligations; attunement, of persons. |
 | `argue` | R | Reason | Presence | REASONED | Coded, not in the roster: the charge's disposition at a sitting (`contests: "a proposition"`). Distinct from `persuade`. |
-| `interrogate` | R | Attunement | Presence | REASONED | Contested against the prisoner's resistance; the resisting side is §4 finding 3. |
+| `interrogate` | R | Attunement | Presence | REASONED | Contested against the prisoner's resistance; the resisting side is §5 finding 2. |
 
 ### FI — fieldwork and inquiry
 
@@ -113,7 +113,7 @@ New key names are CR-84's to choose; none is invented here.
 | `dissolve` | D | Spirit | Focus | REASONED |  |
 | `mend` | D | Spirit | Focus | REASONED |  |
 | `ward` | D | Spirit |  | REASONED | Hostile workings resolve in an opposed roll against the warder. |
-| `knot` | D | Spirit |  | CODE | Rolls on `spirit` (`systems/fieldwork/sim/knots.py`); its gate and cap read `bonds`, which the ten drop (§4 finding 4). |
+| `knot` | D | Spirit |  | CODE | Rolls on `spirit` (`systems/fieldwork/sim/knots.py`); its gate and cap read `bonds`, which the ten drop (§5 finding 4). |
 
 ### GV — settlements and governance
 
@@ -186,7 +186,33 @@ New key names are CR-84's to choose; none is invented here.
 | `defect` | — |  |  |  |  |
 | `give` | — |  |  |  |  |
 
-## 4. Coverage, and what it shows
+## 4. By subsystem
+
+Jordan, 2026-11-05 (in session, not a ledger row): *it is okay for some of these attributes to be niche.* A niche attribute is therefore not a defect below; it is reported so the choice is visible.
+
+Cells read **primary / secondary** verb counts; **c** is a composite read inside personal combat (`fight` and kin; `modules/combat/combatant.py:93`); **·** is none. Subsystems are the roster's lanes. Module reads that are not verbs: mass battle's `derive_command` (Presence 2 : Reason 1) is the `march` row; threadwork's pool and the knot roll (Spirit) are the D rows; the knot gate and cap read `bonds` (§5, finding 4).
+
+| attribute | PC | MB | SC | FI | TW | GV | FA | EC | WT | NP | subsystems with a primary |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Strength | c | · | · | · | · | /1 | · | /1 | · | · | 0 |
+| Coordination | /1+c | · | · | /2 | · | · | 1 | 2 | · | · | 2 |
+| Endurance | c | · | · | · | · | · | · | 1 | 1/1 | · | 2 |
+| Reason | c | /1 | 2/2 | 3 | · | · | · | · | · | 1 | 3 |
+| Focus | c | · | · | 1/3 | /4 | · | /1 | /2 | · | · | 1 |
+| Perception | c | · | · | 2/1 | · | · | · | · | 1/1 | · | 2 |
+| Attunement | · | · | 1/1 | 2/1 | · | · | /1 | · | · | /1 | 2 |
+| Presence | · | 1 | 3/2 | · | · | 1 | 2 | · | · | · | 4 |
+| Grace | · | · | · | 2/1 | · | · | · | · | · | · | 1 |
+| Spirit | c | · | · | · | 7 | · | · | · | · | · | 1 |
+
+Reading it by subsystem:
+
+- **Demand sits in four lanes.** SC (Presence, Reason, Attunement), FI (Reason, Perception, Attunement, Grace, Focus), TW (Spirit, Focus) and PC (seven attributes, composite). MB reads two (Presence, Reason) through one verb.
+- **GV, NP and most of EC read almost nothing.** Offices, writs, stores and bonds resolve by remit, hold or price, not by a person's pool. Of their 36 rows, 4 have a performance (`work`, `craft`, `restore`, `tend`, all P) and one draws (`arrest`, R). That follows the roster's own rule that capability gates nothing; it is not a gap in the map.
+- **Attunement and Presence do not meet personal combat,** and Strength, Endurance and Coordination do not meet the social lanes. The body attributes and the social attributes are served by disjoint subsystems, bridged only by `arrest` (Presence, Strength) and by Reason and Perception, the two attributes that appear in both a body lane (PC) and a social or inquiry lane.
+- **Niche attributes, accepted:** Strength (combat plus two secondaries), Spirit (threadwork primaries; combat's `conc_max`), Grace (FI covert verbs only), Coordination (FI and EC craft). Presence is the least niche (four lanes with a primary), then Reason (three).
+
+## 5. Coverage, and what it shows
 
 Primary counts over single-attribute rows ("of which R / D" counts those that draw); `fight`, `accept`, `capture`, `rescue` and `assassinate` are composite and excluded from primaries.
 
@@ -205,15 +231,15 @@ Primary counts over single-attribute rows ("of which R / D" counts those that dr
 
 Findings, worst first:
 
-1. **Strength has no single-key home.** It is a combat read and the Secondary of `arrest` and `work`; no verb that rolls on one attribute puts Strength first. If Strength is to matter outside a fight, a verb must be given a draw on it (`work`, `build`, `raze` are the candidates); otherwise it is a combat attribute only.
+1. **Strength has no single-key home (niche; accepted, §4).** It is a combat read and the Secondary of `arrest` and `work`; no verb that rolls on one attribute puts Strength first. If Strength is to matter outside a fight, a verb must be given a draw on it (`work`, `build`, `raze` are the candidates); otherwise it is a combat attribute only.
 2. **Grace cannot be the defender's attribute under CR-20.** Its only homes are covert performances (`conceal`, `infiltrate`, both P). Resisting `interrogate` or `arrest` is where "remain calm under pressure" lives, and `_opposition_of` reads the party's key for the *same verb* (`sigma.py`), which for those verbs is Attunement and Presence, not the party's Grace or Spirit. A verb has one key on both sides. A separate resistance key would be a new mechanism, and is not proposed here.
 3. **Presence is the primary of seven rows, four of them R** (`tell`, `speak`, `march`, `arrest`); Reason of three R rows (`determine`, `argue`, `research`). Presence has the most R rows of any single attribute.
 4. **The knot gate has no reader.** `systems/fieldwork/sim/knots.py` gates on `bonds` (`KNOT_BONDS_MIN`) and caps on `bonds//2+1`; Bonds is dropped. A6's proposal was to read Charisma; nothing is decided. The cap and gate are off the season path today.
-5. **Spirit is a single-subsystem attribute.** All seven of its primaries are threadwork (D). Spirit's other reader is combat (`conc_max = 3F+2S`).
-6. **Focus is almost wholly a Secondary** (10 rows, 1 primary), the orphan A6 reported for the nine; Jordan's gloss ("avoiding errors") has made it the natural Secondary of every precision verb rather than the main input of any.
+5. **Spirit is a single-subsystem attribute (niche; accepted, §4).** All seven of its primaries are threadwork (D). Spirit's other reader is combat (`conc_max = 3F+2S`).
+6. **Focus is almost wholly a Secondary (niche; accepted, §4)** (10 rows, 1 primary), the orphan A6 reported for the nine; Jordan's gloss ("avoiding errors") has made it the natural Secondary of every precision verb rather than the main input of any.
 7. **Twelve verbs draw today**, and two have a CODE or RULED attribute outside combat (`march`, `determine`). The rest of the map is inert until CR-20 lands `Person.attributes` and `faculty` reads a `vocation_attribute` row; today only `tell` and `speak` map to a vocation, `copying`, and one authored person holds it (docket `07_social_fieldwork.md`).
 
-## 5. Not covered
+## 6. Not covered
 
 - **Combat's composite.** `fight` and kin are owned by PC-14 (`modules/combat/attributes.py`, unbuilt); whether `att` is Perception or a separate attention is open there. Histories are being eliminated as a roll input (ED-IN-0330, ED-IN-0333 item 4); combat's `history` read is outside this map.
 - **Verbs the roster parks or does not name.** The lexicon files `proposals/2026-10-16-verbs/…-09` to `-18` carry designed verbs (A6 counted 83 moments) that the roster folds in or parks. They were not read for this map.
