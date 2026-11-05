@@ -35,9 +35,8 @@ import re
 from typing import Optional
 
 from . import files
-from .rosters import FACTIONS, LIFEPATH_TEMPLATES, load_yaml
+from .rosters import FACTIONS, LIFEPATH_TEMPLATES, _FACTION_ALIAS, load_yaml
 from ..gaps import Unspecified
-from ...substrate import names as _names
 from ...substrate.descriptors import (
     ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, HERITAGES, PRACTITIONER_STATS, attribute_key,
 )
@@ -76,7 +75,7 @@ NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
 #: Schoenland was invisible here until 2026-09-16: its `names_index.yaml` row is filed with the
 #: PLACES and simply never carried `token_class: faction`, so this map saw seven of eight. The
 #: class is set now and the eighth resolves.
-_ALIAS_MAP = {a: c for a, c in _names.ALIASES.items() if c in _names.FACTIONS}
+_ALIAS_MAP = _FACTION_ALIAS   # one relation, one owner: `rosters.py` derives it from the naming leaf
 
 
 
@@ -314,7 +313,7 @@ def thread_sensitivity_of(r: dict) -> Optional[int]:
             "being read as a plausible number")
 
 
-_ATTR_RANGE = re.compile(r"^\s*(?P<n>\d+)\s*[-–—]\s*\d+\s*$")
+_ATTR_RANGE = re.compile(r"^\s*(?P<n>\d+)\s*[-–—]\s*(?P<hi>\d+)\s*$")
 
 
 def attributes_of(r: dict) -> dict:
@@ -350,7 +349,11 @@ def attributes_of(r: dict) -> dict:
                               "references/npc_registry.yaml", needs="one spelling per attribute",
                               law="CR-20 -- a duplicate would be read by whichever came last")
         m = _ATTR_RANGE.match(v) if isinstance(v, str) else None
-        n = int(m.group("n")) if m else v
+        if m and not int(m.group("n")) <= int(m.group("hi")) <= ATTRIBUTE_CEILING:
+            m = None                        # a range that runs backwards or past the scale is no range: refused below
+            n = v
+        else:
+            n = int(m.group("n")) if m else v
         if not isinstance(n, int) or isinstance(n, bool) or not ATTRIBUTE_FLOOR <= n <= ATTRIBUTE_CEILING:
             raise Unspecified(
                 f"cast row {who}: stats {name!r}: {v!r} is no whole number from {ATTRIBUTE_FLOOR} to "

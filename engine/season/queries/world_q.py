@@ -2934,6 +2934,8 @@ def _heir_title_holders(w: World, p: Person) -> list:
     out = []
     for s in w.seat_holds(p.id):
         title = SUCCESSIONS.get(s.object)
+        if title is None:
+            continue
         out += [t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == title]
     return out
 

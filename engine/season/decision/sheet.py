@@ -195,10 +195,7 @@ def chronicle(p: Person) -> Chronicle:
     """The chronicling space over one person. Reads `p`'s own `ledger`, `scar` and `conviction`; writes
     nothing, emits nothing, and leaves `content_hash` unchanged whether or not it is called."""
     reader = LedgerReader(p.ledger)
-    subjects: list = []
-    for c in p.ledger:
-        if c.subject not in subjects:
-            subjects.append(c.subject)
+    subjects = list(dict.fromkeys(c.subject for c in p.ledger))     # first held first, each once
     aff = {k: n for k, n in (p.scar or {}).items() if k in AFFILIATIONS}
     held = set(p.conviction or {})
     return Chronicle(

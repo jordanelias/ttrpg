@@ -606,7 +606,8 @@ def _load_lifepath_templates(cells: dict, lifepaths, vocations) -> dict:
     malformed = sorted(k for k, v in out.items() if v is None)
     outside = sorted(f"{k}:{h}" for k, v in out.items() for h in (v or ()) if h not in vocations)
     repeated = sorted(k for k, v in out.items() if v and len(set(v)) != len(v))
-    ungrounded = sorted(k for k, c in cells.items() if not str((c or {}).get("ground") or "").strip())
+    ungrounded = sorted(k for k, c in cells.items()
+                        if not (isinstance(c, dict) and str(c.get("ground") or "").strip()))
     if missing or extra or malformed or outside or repeated or ungrounded:
         raise Unspecified(
             f"`rosters.yaml: lifepath_templates` is not closed over the lifepaths: no row for {missing}, a row for "
