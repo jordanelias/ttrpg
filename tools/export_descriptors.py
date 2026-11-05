@@ -53,6 +53,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import ci_common  # noqa: E402
+import descriptor_registry  # noqa: E402  (the one resolver of a name; the engine reads its cooked map below)
 
 REPO = ci_common.REPO
 SRC = os.path.join(REPO, 'references', 'descriptor_registry.yaml')
@@ -184,6 +185,18 @@ def _affiliation_concerns(block, names):
     return out
 
 
+def _attribute_names(reg):
+    """`{lowercased name | alias | key: key}` over the live roster, refusing a spelling two keys share
+    (a name that resolved to either would be read by whichever came first)."""
+    out = {}
+    for e in descriptor_registry.all_attributes(reg):
+        for spelling in [e['key'], e['name'], *e.get('aliases', [])]:
+            n = str(spelling).strip().lower()
+            if out.setdefault(n, e['key']) != e['key']:
+                raise SystemExit(f'descriptor_registry.yaml: {spelling!r} names both {out[n]} and {e["key"]}.')
+    return dict(sorted(out.items()))
+
+
 def build():
     reg = ci_common.load_yaml(SRC, default=None)
     if not reg:
@@ -214,6 +227,11 @@ def build():
             'default': attrs.get('default'),
             'roster': roster,
             'count': len(roster),
+            # CR-20: every LIVE name, alias and key (lowercased) -> its key, cooked from the resolver
+            # `tools/descriptor_registry.py` owns, so the cast's legacy spellings resolve at runtime
+            # without a second alias list. A retired attribute's names (Bonds) are absent: a value
+            # authored under one is refused as not one of the ten.
+            'names': _attribute_names(reg),
             'pending_tenth': (
                 'Jordan ruled 2026-08-14 that the roster WILL BE 10 attributes. The registry ships '
                 f'{len(roster)} and the tenth is UNNAMED. This sentinel exists so a reader cannot mistake '

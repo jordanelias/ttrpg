@@ -779,6 +779,16 @@ class Person:
     # ONE READER is `queries/person_q.py::OwnStateReader` (the `thread_sensitivity` stem of
     # `data/requires.py`), which both the fold's `WorldReader` and the person's own decline ask.
     thread_sensitivity: Optional[int] = None
+    # v10 CR-20 (M2): THE ATTRIBUTE CARRIER -- `{registry key: whole number 1-7}` over Jordan's ten
+    # (`references/descriptor_registry.yaml: attributes`, ED-IN-0328; `engine/substrate/descriptors.py::
+    # ATTRIBUTES`). A person's INPUT is `faculty`, derived at read; these are what it reads. ABSENT WHERE
+    # UNAUTHORED: a key nobody authored is missing, never the registry's `default` and never 0 -- the pool
+    # then falls to `pool_default` (`seam/wrappers/sigma.py::faculty`), so an all-absent realm rolls what it
+    # rolled. Filled ONCE at world build -- by `decision/sheet.py`'s creation arm (a seated person's row) and
+    # by a cast row's `stats:` (`data/cast.py::attributes_of`, `thread_sensitivity_of`'s precedent) -- and
+    # NEVER WRITTEN IN PLAY: no `write_matrix.yaml` row, so the gate refuses any write to it. READERS:
+    # `seam/wrappers/sigma.py::faculty` (the pool's base) and `_opposition_of` (the score the obstacle halves).
+    attributes: dict = field(default_factory=dict)
     travel_leg: list[str] = field(default_factory=list)
     # ⚠ W5 MOVED THE TENURE STORE HERE, and `Tenure`'s OWN DOCSTRING already said this: "S15 --
     # THE ONE EDGE. Owned by its SUBJECT (S15.1)." The class asserted the ownership and the

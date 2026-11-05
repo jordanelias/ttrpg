@@ -51,6 +51,15 @@ ATTRIBUTES = tuple(_DATA['attributes']['roster'])
 ATTRIBUTES_PENDING_TENTH = _DATA['attributes'].get('pending_tenth')
 ATTRIBUTE_FLOOR = _DATA['attributes']['scale']['floor']
 ATTRIBUTE_CEILING = _DATA['attributes']['scale']['ceiling']
+#: `{lowercased name | alias | key: key}` over the ten (CR-20), cooked by the exporter from the registry's
+#: resolver: the cast's legacy spellings (`cognition`, `social`) resolve here. A retired attribute's names are absent.
+ATTRIBUTE_NAMES = _DATA['attributes']['names']
+
+
+def attribute_key(name):
+    """The roster key a name, alias or key spells, or `None` if it is none of the ten (a retired attribute's
+    names included). Case-insensitive. A READ: the caller decides whether `None` refuses."""
+    return ATTRIBUTE_NAMES.get(str(name).strip().lower())
 
 #: {registry key -> {name, floor, ceiling}} for each declared domain.
 SETTLEMENT_STATS = _DATA['settlement_stats']

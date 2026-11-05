@@ -38,7 +38,9 @@ from . import files
 from .rosters import FACTIONS, load_yaml
 from ..gaps import Unspecified
 from ...substrate import names as _names
-from ...substrate.descriptors import PRACTITIONER_STATS
+from ...substrate.descriptors import (
+    ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, PRACTITIONER_STATS, attribute_key,
+)
 
 NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
 
@@ -310,6 +312,53 @@ def thread_sensitivity_of(r: dict) -> Optional[int]:
         needs="a whole number, a range `A–B` (read as A), `~N` (read as N), or null",
         law="v9 PC-06 K-3 -- an authored value this reader cannot parse refuses rather than "
             "being read as a plausible number")
+
+
+_ATTR_RANGE = re.compile(r"^\s*(?P<n>\d+)\s*[-–—]\s*\d+\s*$")
+
+
+def attributes_of(r: dict) -> dict:
+    """`Person.attributes`' authored source (v10 CR-20): the row's `stats:` mapping, as `{registry key:
+    whole number}` over Jordan's ten, or `{}` where nothing is authored -- the key absent, `stats: null #
+    [GAP]`, or no row at all. A key left out of the row is left out of the result: ABSENT, never the
+    registry's default.
+
+    A spelling is read through the registry's own names (`substrate.descriptors.attribute_key`): the
+    cast's legacy `cognition` is Reason's `attr.mind.acuity`, `social` is Presence's. A name that is NONE
+    OF THE TEN (a retired `bonds` included), two spellings of one key, or a value that is no whole number
+    inside the attribute scale REFUSES, naming the row -- this module reads and validates, it does not
+    guess. A range `A–B` reads as its lower bound (`thread_sensitivity_of`'s rule, the registry's own
+    NPC-001 `social: 3–4`); a float, a bool and a numeric string refuse."""
+    raw = (r or {}).get("stats")
+    if raw is None:
+        return {}
+    who = (r or {}).get("id", "?")
+    if not isinstance(raw, dict):
+        raise Unspecified(f"cast row {who}: stats {raw!r} is no mapping", "references/npc_registry.yaml",
+                          needs="a mapping of attribute name to a whole number, or null",
+                          law="CR-20 -- an authored value this reader cannot parse refuses")
+    out: dict = {}
+    for name, v in raw.items():
+        key = attribute_key(name)
+        if key is None:
+            raise Unspecified(
+                f"cast row {who}: stats key {name!r} is none of the ten attributes",
+                "references/descriptor_registry.yaml", needs=f"one of {', '.join(ATTRIBUTES)}, or an alias",
+                law="CR-20 / ED-IN-0328 -- a value under a key that is not one of the ten is refused")
+        if key in out:
+            raise Unspecified(f"cast row {who}: stats names {key} twice (second spelling {name!r})",
+                              "references/npc_registry.yaml", needs="one spelling per attribute",
+                              law="CR-20 -- a duplicate would be read by whichever came last")
+        m = _ATTR_RANGE.match(v) if isinstance(v, str) else None
+        n = int(m.group("n")) if m else v
+        if not isinstance(n, int) or isinstance(n, bool) or not ATTRIBUTE_FLOOR <= n <= ATTRIBUTE_CEILING:
+            raise Unspecified(
+                f"cast row {who}: stats {name!r}: {v!r} is no whole number from {ATTRIBUTE_FLOOR} to "
+                f"{ATTRIBUTE_CEILING}", "references/npc_registry.yaml",
+                needs=f"a whole number {ATTRIBUTE_FLOOR}-{ATTRIBUTE_CEILING}, or a range `A–B` (read as A)",
+                law="CR-20 -- the attribute scale is the registry's, and an out-of-scale value refuses")
+        out[key] = n
+    return out
 
 
 def title_of(r: dict) -> Optional[str]:

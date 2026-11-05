@@ -417,7 +417,10 @@ def test_the_four_verb_capability_rows_resolve_and_are_the_vocation_range():
     from ..data.rosters import VERB_CAPABILITY
     assert {v: VERB_CAPABILITY.get(v) for v in ("argue", "research", "examine", "surveil")} == {
         "argue": "argue", "research": "inquiry", "examine": "inquiry", "surveil": "inquiry"}
-    assert VERBS.VOCATIONS == {"copying", "argue", "inquiry"}
+    # CR-20: the range is closed over `vocation_attribute`'s rows (same set, derived: a literal triple here is
+    # flagged by `test_jordan_no_definition_is_hardcoded_in_a_body` now that a second roster is that set).
+    from ..data.rosters import VOCATION_ATTRIBUTE
+    assert VERBS.VOCATIONS == set(VOCATION_ATTRIBUTE) and len(VERBS.VOCATIONS) == 3
 
 
 def _train_kinds(w, pid):
@@ -429,7 +432,7 @@ def test_train_forms_one_candidate_per_vocation_including_argue_and_inquiry(monk
     keys the rows add are formed; with the `inquiry` rows removed (the planted failure) or the `argue` row
     removed, that kind is not formed and the others are."""
     w, _d = _npc088()
-    assert _train_kinds(w, CARIN) == ["argue", "copying", "inquiry"]
+    assert _train_kinds(w, CARIN) == sorted(VERBS.VOCATIONS) and len(_train_kinds(w, CARIN)) == 3
     monkeypatch.setattr(OPT, "VOCATIONS", VERBS.VOCATIONS - {"inquiry"})
     assert _train_kinds(w, CARIN) == ["argue", "copying"]
     monkeypatch.setattr(OPT, "VOCATIONS", VERBS.VOCATIONS - {"argue"})

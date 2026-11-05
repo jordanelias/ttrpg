@@ -1386,6 +1386,41 @@ rosters:
       examine:  "inquiry"
       surveil:  "inquiry"
 
+  vocation_attribute:
+    source: >-
+      v10 CR-20 (M2, taken): a person's input is `faculty`, derived at read; the ten stored attributes
+      (`references/descriptor_registry.yaml: attributes`, ED-IN-0328) are what it derives from. THIS TABLE
+      IS WHICH ATTRIBUTE EACH VOCATION'S POOL STARTS FROM -- the vocation is a `verb_capability` value, the
+      attribute a registry key.
+    note: >-
+      CLOSED, BOTH WAYS: a row for every vocation (`data/verbs.py::VOCATIONS`, the VALUES of
+      `verb_capability`) and for nothing else, each valued by one of the ten registry keys; refused at import
+      otherwise (`data/rosters.py::_load_vocation_attribute`), so a vocation added to `verb_capability` is
+      refused until it is given an attribute, and a row for a name that is no vocation never reads as live.
+      `faculty` takes the HELD value of the person's attribute here as the pool's base (else `pool_default`)
+      and the larger of that and the held capability key; `_opposition_of` reads the larger of the held key
+      and the authored attribute, never practice, never the fallback.
+      EACH ROW'S GROUND, so a reviewer can check it against the vocation's own text and not against taste:
+      `copying` -> Focus (`attr.mind.focus`): the vocation is `tell`/`speak` (a claim relayed as it was
+      held) and NPC-088's case, a repeated multi-week task of copying a text (`cases/exercises/NPC-088.yaml`),
+      i.e. sustained, exact attention to a thing so that it is reproduced unchanged; no other of the ten
+      names that. `argue` -> Presence (`attr.social.charisma`): `argue` MOVES THE HEARER'S `Person.pursuits`
+      toward the arguer's by the contest's degree, and the verb row holds that a pursuit is *"moved by
+      argument and consequence, never by evidence"* (`verb_table.yaml` `argue` `writes_note`, #353 §9.3 /
+      AX-3), so the faculty that decides it is the arguer's bearing before a hearer, not the proof he holds
+      (proof is the room's term, `proofs`, composed into the obstacle already). `inquiry` -> Reason
+      (`attr.mind.acuity`): its three verbs are the fieldwork inquiries whose source rows are headed
+      *Examine · Cognition*, *Research · Recall*, *Surveil · Cognition* (`verb_table.yaml` `examine` /
+      `research` / `surveil` `requires_typed_note`, `fieldwork_v30.md:293-296`), and `Cognition` is
+      Reason's registry alias.
+      [ASSUMPTION; medium; Jordan to correct; revert: delete this roster and the loader, and `faculty` /
+      `_opposition_of` read the held capability key alone, as before CR-20.] The closest competitor for
+      `copying` is Coordination (a copyist's hand) and for `argue` is Reason; each is the cheap swap.
+    values:
+      copying: "attr.mind.focus"
+      argue:   "attr.social.charisma"
+      inquiry: "attr.mind.acuity"
+
   contest_subsystems:
     source: "`references/module_contracts.yaml` names `combat` (was `personal_combat`; one identity per module, A-25), `mass_battle` and `social_contest` as modules with real docs and real resolvers. `ARCHITECTURE_V2.md:394` declares `contests: <prize>` — *if set, routes to the seam at RESOLVE (§39)*."
     cite: "H-88"
