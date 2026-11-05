@@ -298,7 +298,8 @@ CFG = dict(
   UPSET_FLOOR=0.05,   # [DESIGNER RULE — Jordan; deliberate, NOT an emergent mechanic. Tagged ED-PC-0036.]
   # The '95% cap': with this probability the DECIDED loser steals the win, so no matchup is ever certain. This is the
   # one place the engine deliberately OVERRIDES its own emergent outcome — the trace stream emits `engagement_end
-  # felled=X` and then `fight_result winner=X`, with no in-model event corresponding to the reversal. It is a
+  # felled=X` and then `fight_result winner=X`, with no in-model event corresponding to the reversal (the flip is
+  # marked only by `fight_result.upset`, PC-13). It is a
   # legitimate videogame design choice and is NOT being removed; it is tagged because it was previously
   # indistinguishable from ungrounded fiat, and because it has a MEASUREMENT consequence every reader should know:
   # every win-rate this engine reports (including the ledgered calibration figures) is COMPRESSED toward

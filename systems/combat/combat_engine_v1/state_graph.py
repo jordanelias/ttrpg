@@ -2,8 +2,7 @@
 
 The canonical engine's control flow (wrapper.fight -> wrapper.engagement) expressed as a single declarative
 STATES dict, modelled on tests/sim/v32-combat-balance/m4a_bout_state_graph.py's ENGAGEMENT_STATES idiom.
-This is the source of truth the integrity tests read (tests/valoria/test_combat_state_graph.py) and the
-dynamic coverage harness diffs the live trace against — so "the state graph flows correctly" (requirement 1)
+This is the source of truth the dynamic coverage harness (run this file) diffs the live trace against — so "the state graph flows correctly" (requirement 1)
 becomes a repeatable CHECK, not a hand-traced paragraph that drifts.
 
 Each node carries: `to` (target states), `emits` (trace-event kinds the engine fires at this node),
@@ -160,10 +159,7 @@ def fired_states_from_events(events):
             if e['riposte']: fired.add('Riposte')
         elif k == 'contact': fired.add('Contact')
         elif k == 'withdraw': fired.add('Withdrawal')
-        elif k == 'disengage': fired.add('AwaitTempo')   # a closed-phase beat-head event
-        elif k == 'wound':   # PC-13: the site that dealt it names the node (a felling `outcome` can carry hit=0, e.g. a bind's strike)
-            fired.add({'pursuit': 'AwaitTempo', 'stophit': 'Approach', 'displace_graze': 'Exchange',
-                       'exchange': 'HitLanded', 'bind': 'Bind'}[e['source']])
+        elif k == 'stophit': fired.add('Approach')   # a stop-thrust that fells ends the engagement before the `approach` emit
         elif k == 'separation': fired.add('Separation'); fired.add('InterTurn')
         elif k == 'engagement_end':
             fired.add('Felled' if e['felled'] else 'Separation')
@@ -266,12 +262,8 @@ if __name__ == '__main__':
     checks.append(felled_seen); print(f"(f) Felled terminal reachable (a kill occurs): {'OK' if felled_seen else 'FAIL'}")
 
     # (g) the §11.4 yield path (PC-01): an unrefused Yield visits Yielded and FinalResult and skips the decision nodes
-    _A, _B, _ev = Combatant('A'), Combatant('B'), []
-    _prev, _W._TRACE = _W._TRACE, _ev.append
-    try:
-        _W.fight(_A, _B, None, _random.Random(0), yield_decl=_W.Yield(by=_B, turn=1))
-    finally:
-        _W._TRACE = _prev
+    _B = Combatant('B')
+    _ev = _traced(Combatant('A'), _B, 0, yield_decl=_W.Yield(by=_B, turn=1))
     _fy = fired_states_from_events(_ev)
     g_ok = {'Yielded', 'FinalResult'} <= _fy and not ({'UpsetCheck', 'Decided'} & _fy)
     checks.append(g_ok); print(f"(g) yield path (Yielded -> FinalResult, decision nodes skipped): {'OK' if g_ok else 'FAIL — ' + str(sorted(_fy))}")
