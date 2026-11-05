@@ -16,8 +16,8 @@ A verb belongs to one of four classes, because capability supplies dice and gate
 |---|---|---|
 | **R** | the season engine draws a pool for it now (a `contests:` prize, or `rosters.yaml: graded_inquiries`) | 12 |
 | **D** | a draw is planned, proposed, or lives in a module off the season path | 13 |
-| **P** | a performance with no draw built or ruled; the home is recorded for if one is given | 16 |
-| **—** | no performance: an authority, a record write, a transfer, a choice | 52 |
+| **P** | a performance with no draw built or ruled; the home is recorded for if one is given | 17 |
+| **—** | no performance: an authority, a record write, a transfer, a choice | 51 |
 
 **Primary** is the attribute the pool is built on; **Secondary** is a second contributor. Basis: **CODE** (a module or seam reads that attribute today), **RULED** (Jordan's words, cited), **REASONED** (this document's reading of the roster's effect text). Of the 12 R rows, four are CODE or RULED (`fight`, `accept`, `march`, `determine`); the rest are reasoned.
 
@@ -114,7 +114,7 @@ New key names are CR-84's to choose; none is invented here.
 | `dissolve` | D | Spirit | Focus | REASONED |  |
 | `mend` | D | Spirit | Focus | REASONED |  |
 | `ward` | D | Spirit |  | REASONED | Hostile workings resolve in an opposed roll against the warder. |
-| `knot` | D | Spirit |  | CODE | Rolls on `spirit` (`systems/fieldwork/sim/knots.py`); its gate and cap read `bonds`, which the ten drop (§5 finding 4). |
+| `knot` | D | Spirit | Attunement | CODE | Rolls on `spirit` (`systems/fieldwork/sim/knots.py`). Its gate and cap read `bonds`, which the ten drop; Attunement is the likelihood of forming (Jordan, 2026-11-05; §5 finding 4). |
 
 ### GV — settlements and governance
 
@@ -181,7 +181,7 @@ New key names are CR-84's to choose; none is invented here.
 | `tend` | P | Reason | Attunement | REASONED | [CONFIDENCE: low] |
 | `train` | — |  |  |  | Writes `Person.capability`; the trained key's own base decides the pupil's pool, so `train` inherits and adds no attribute. |
 | `forgive` | — |  |  |  |  |
-| `tie` | — |  |  |  |  |
+| `tie` | P | Attunement |  | REASONED | Whether a genuine connection forms: Attunement is the likelihood (Jordan, 2026-11-05). Declined until its readers exist. |
 | `marry` | — |  |  |  |  |
 | `pledge` | — |  |  |  | Coded as `oblige`. |
 | `defect` | — |  |  |  |  |
@@ -209,7 +209,7 @@ Cells read **primary / secondary** verb counts; **c** is a composite read inside
 | Reason | c | /1 | 2 | 2/1 | · | · | · | · | · | 1 | 3 |
 | Focus | c | · | · | 1/2 | /4 | · | /1 | /2 | · | · | 1 |
 | Perception | c | · | · | 3/1 | · | · | · | · | 1/1 | · | 2 |
-| Attunement | · | · | 1/2 | 2/1 | · | · | /2 | · | · | /1 | 2 |
+| Attunement | · | · | 1/2 | 2/1 | /1 | · | /2 | · | · | 1/1 | 3 |
 | Presence | · | 1 | 3/3 | · | · | 1 | 2/1 | · | · | · | 4 |
 | Grace | · | · | 1/2 | 2/1 | · | · | 1 | · | · | · | 3 |
 | Spirit | c | · | · | · | 7 | · | · | · | · | · | 1 |
@@ -233,7 +233,7 @@ Primary counts over single-attribute rows ("of which R / D" counts those that dr
 | Reason | 5 | 3 | 2 |
 | Focus | 1 | 0 | 9 |
 | Perception | 4 | 2 | 2 |
-| Attunement | 3 | 1 | 6 |
+| Attunement | 4 | 1 | 7 |
 | Presence | 7 | 7 | 4 |
 | Grace | 4 | 0 | 3 |
 | Spirit | 7 | 7 | 0 |
@@ -243,7 +243,7 @@ Findings, worst first:
 1. **Strength has no single-key home (niche; accepted, §4).** It is a combat read and the Secondary of `arrest` and `work`; no verb that rolls on one attribute puts Strength first. If Strength is to matter outside a fight, a verb must be given a draw on it (`work`, `build`, `raze` are the candidates); otherwise it is a combat attribute only.
 2. **Grace has no defender-side key under CR-20, and its royal-conduct half is a reader, not a pool.** Its primaries are performances with no draw (`conceal`, `infiltrate`, `petition`, `covenant`, all P); in the R verbs it is Presence's secondary (`tell`, `speak`). Resisting `interrogate` or `arrest` is where "remain calm under pressure" lives, and `_opposition_of` reads the party's key for the *same verb* (`sigma.py`), which for those verbs is Attunement and Presence, not the party's Grace or Spirit. A separate resistance key would be a new mechanism and is not proposed. The other half of Jordan's description, being *seen as* respectable and its tie to royal conduct, is how others read a person: a reader of standing or stance (`tell` is already contested "against the hearer's standing"), which no verb row can show (§5 finding 11). [ASSUMPTION; medium; Jordan to correct]
 3. **Presence is the primary of seven rows, four of them R** (`tell`, `speak`, `march`, `arrest`); Reason of three R rows (`determine`, `argue`, `research`). Presence has the most R rows of any single attribute.
-4. **The knot gate has no reader.** `systems/fieldwork/sim/knots.py` gates on `bonds` (`KNOT_BONDS_MIN`) and caps on `bonds//2+1`; Bonds is dropped. A6's proposal was to read Charisma; nothing is decided. The cap and gate are off the season path today.
+4. **The knot gate has a candidate reader, Attunement; the formation rule is unbuilt.** `systems/fieldwork/sim/knots.py` gates on `bonds` (`KNOT_BONDS_MIN`, line 53) and caps on `bonds//2+1` (line 201); Bonds is dropped. Jordan (2026-11-05, in session, not a ledger row): *attunement influences the likelihood of forming knots/bonds with others, as knots/bonds concern genuine authentic connections with others.* The map therefore makes Attunement `knot`'s secondary and `tie`'s primary (`tie` is the social bond, `knot` the threadwork one; the roster splits them). Both are formation likelihoods, not rolls: the threadwork roll stays on Spirit. A6's earlier proposal to read Charisma is superseded by this. Open: whether the gate is a threshold or a probability, whether it reads one party's Attunement or both, and whether the cap (`bonds//2+1`) survives on Attunement. The gate and cap are off the season path today; `tie` is declined until its readers exist. [ASSUMPTION; medium; Jordan to correct]
 5. **Spirit is a single-subsystem attribute (niche; accepted, §4).** All seven of its primaries are threadwork (D). Spirit's other reader is combat (`conc_max = 3F+2S`).
 6. **Focus is almost wholly a Secondary (niche; accepted, §4)** (9 rows, 1 primary), the orphan A6 reported for the nine; Jordan's gloss ("avoiding errors") has made it the natural Secondary of every precision verb rather than the main input of any. Combat reads it five ways as a composite (§5 finding 13), so the count understates it there.
 7. **Twelve verbs draw today**, and two have a CODE or RULED attribute outside combat (`march`, `determine`). The rest of the map is inert until CR-20 lands `Person.attributes` and `faculty` reads a `vocation_attribute` row; today only `tell` and `speak` map to a vocation, `copying`, and one authored person holds it (docket `07_social_fieldwork.md`).
