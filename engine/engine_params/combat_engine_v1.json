@@ -77,7 +77,6 @@
    "DISP_COMMIT_K": 0.8,
    "DISP_COUNTER_K": 0.5,
    "DISP_INIT_K": 0.1,
-   "DISRUPT_K": 0.7,
    "DODGE_K": 0.9,
    "D_2H": 0.4,
    "D_HAND": 0.6,

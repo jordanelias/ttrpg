@@ -61,7 +61,6 @@ MAT_CLOTH = 'cloth'
 MAT_MAIL = 'mail'
 MAT_PLATE = 'plate'
 MATERIALS = frozenset({MAT_NONE, MAT_CLOTH, MAT_MAIL, MAT_PLATE})
-RIGID_MATERIALS = frozenset({MAT_MAIL, MAT_PLATE})    # armour that spreads an impact rather than deforming
 
 # ── DEFENCE modes — ORDERED, and the order is load-bearing ─────────────────────────────────────────
 # systems.read_contest picks a missed-read mode with `modes[rng.randrange(3)]`, so this sequence IS part of
@@ -75,7 +74,6 @@ DEFENCE_MODES = (DEF_PARRY, DEF_DODGE, DEF_WIND)
 HILT_COMPOUND = 'compound'
 HILT_SIMPLE = 'simple'
 HILT_NONE = 'none'                   # HOMONYM of TIER_NONE/MAT_NONE — a bare haft, not an armour level
-HILT_TYPES = frozenset({HILT_COMPOUND, HILT_SIMPLE, HILT_NONE})
 
 # ── ARMOUR-DEFEAT DIAGNOSTIC labels (weapon_physics.armour_defeat_mode) ─────────────────────────────
 # A REPORT vocabulary, not a resolution one: these strings are pinned per weapon in the frozen

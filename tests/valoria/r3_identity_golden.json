@@ -220,7 +220,6 @@
      "weapon_tempo": 0.8483135405108699,
      "wield_heft": 0.9907177355932447
     },
-    "can_choke": false,
     "grab_short_reach": false,
     "grip_target_closed": 0.0,
     "leverage": 0.0,
@@ -450,7 +449,6 @@
      "weapon_tempo": 0.8660452536423062,
      "wield_heft": 1.5359209252530237
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.8151960000000001,
     "leverage": 0.05216879999999996,
@@ -680,7 +678,6 @@
      "weapon_tempo": 0.8750681292380513,
      "wield_heft": 1.763085245831334
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 1.0,
     "leverage": -0.06114880000000006,
@@ -910,7 +907,6 @@
      "weapon_tempo": 0.899770067183179,
      "wield_heft": 1.682876613074998
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.5246759999999999,
     "leverage": 0.6913128000000001,
@@ -1140,7 +1136,6 @@
      "weapon_tempo": 0.8443075698727602,
      "wield_heft": 1.4053148633027468
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.5412175865999999,
     "leverage": 0.5203112000000001,
@@ -1370,7 +1365,6 @@
      "weapon_tempo": 1.2118398582881516,
      "wield_heft": 0.619871829967911
     },
-    "can_choke": false,
     "grab_short_reach": true,
     "grip_target_closed": 0.0,
     "leverage": 0.04180000000000002,
@@ -1600,7 +1594,6 @@
      "weapon_tempo": 1.4526299991503562,
      "wield_heft": 0.3159532773024787
     },
-    "can_choke": false,
     "grab_short_reach": true,
     "grip_target_closed": 0.0,
     "leverage": -0.013200000000000012,
@@ -1830,7 +1823,6 @@
      "weapon_tempo": 0.8902320953403782,
      "wield_heft": 1.7697876983051029
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 1.0,
     "leverage": 0.09462879999999996,
@@ -2060,7 +2052,6 @@
      "weapon_tempo": 0.7234876129282899,
      "wield_heft": 1.5116905147826838
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.13685000660000002,
     "leverage": 0.29064880000000004,
@@ -2290,7 +2281,6 @@
      "weapon_tempo": 0.7,
      "wield_heft": 1.854033936560034
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.27820399999999995,
     "leverage": 0.9286312000000001,
@@ -2520,7 +2510,6 @@
      "weapon_tempo": 0.777608696041796,
      "wield_heft": 1.059450480489989
     },
-    "can_choke": false,
     "grab_short_reach": false,
     "grip_target_closed": 0.0,
     "leverage": -0.057648800000000014,
@@ -2750,7 +2739,6 @@
      "weapon_tempo": 0.866460981896338,
      "wield_heft": 1.6400189331241224
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 1.0,
     "leverage": 0.11361919999999998,
@@ -2980,7 +2968,6 @@
      "weapon_tempo": 0.7,
      "wield_heft": 1.6414610098675742
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.1503072666,
     "leverage": 0.27919120000000003,
@@ -3210,7 +3197,6 @@
      "weapon_tempo": 0.8739293074037138,
      "wield_heft": 1.612107958153883
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.7079960000000001,
     "leverage": 0.6840088000000001,
@@ -3440,7 +3426,6 @@
      "weapon_tempo": 0.7,
      "wield_heft": 1.6288720826348866
     },
-    "can_choke": false,
     "grab_short_reach": false,
     "grip_target_closed": 0.0,
     "leverage": 0.1296088,
@@ -3670,7 +3655,6 @@
      "weapon_tempo": 0.7,
      "wield_heft": 1.742104811578976
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.09660000000000002,
     "leverage": 0.2308,
@@ -3900,7 +3884,6 @@
      "weapon_tempo": 0.8329430053995222,
      "wield_heft": 2.186985443228642
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 1.0,
     "leverage": 0.10759999999999999,
@@ -4130,7 +4113,6 @@
      "weapon_tempo": 0.8785813903968451,
      "wield_heft": 1.7135330052296442
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.6746840000000001,
     "leverage": 0.7572952000000002,
@@ -4360,7 +4342,6 @@
      "weapon_tempo": 1.1927246637343127,
      "wield_heft": 0.6217571581240743
     },
-    "can_choke": false,
     "grab_short_reach": false,
     "grip_target_closed": 0.0,
     "leverage": -0.026400000000000014,
@@ -4590,7 +4571,6 @@
      "weapon_tempo": 0.8758429237008833,
      "wield_heft": 1.9187728175803682
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.801796,
     "leverage": 0.8736488,
@@ -4820,7 +4800,6 @@
      "weapon_tempo": 0.9032732746956513,
      "wield_heft": 0.909055188968922
     },
-    "can_choke": false,
     "grab_short_reach": false,
     "grip_target_closed": 0.0,
     "leverage": 0.0022000000000000023,
@@ -5050,7 +5029,6 @@
      "weapon_tempo": 0.8995012402814235,
      "wield_heft": 1.483542313016758
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.9305600000000002,
     "leverage": 0.06249999999999997,
@@ -5280,7 +5258,6 @@
      "weapon_tempo": 0.8187684412464424,
      "wield_heft": 0.9165502944094279
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.009330928600000007,
     "leverage": 0.2741312,
@@ -5510,7 +5487,6 @@
      "weapon_tempo": 0.8022343938662593,
      "wield_heft": 1.1277502587271429
     },
-    "can_choke": false,
     "grab_short_reach": false,
     "grip_target_closed": 0.0,
     "leverage": 0.19340000000000002,
@@ -5740,7 +5716,6 @@
      "weapon_tempo": 0.7015114896979135,
      "wield_heft": 1.254512826547998
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.15039999999999998,
     "leverage": 0.6400000000000001,
@@ -5970,7 +5945,6 @@
      "weapon_tempo": 0.8954739349500271,
      "wield_heft": 1.6953785564312065
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.5246040000000001,
     "leverage": 0.6914712000000001,
@@ -6200,7 +6174,6 @@
      "weapon_tempo": 0.7,
      "wield_heft": 1.1845664550220616
     },
-    "can_choke": false,
     "grab_short_reach": false,
     "grip_target_closed": 0.0,
     "leverage": 0.004399999999999984,
@@ -6430,7 +6403,6 @@
      "weapon_tempo": 1.3559496416159569,
      "wield_heft": 0.43608145925593644
     },
-    "can_choke": false,
     "grab_short_reach": true,
     "grip_target_closed": 0.0,
     "leverage": -0.015399999999999995,
@@ -6660,7 +6632,6 @@
      "weapon_tempo": 1.3846377702557748,
      "wield_heft": 0.3936828568748688
     },
-    "can_choke": false,
     "grab_short_reach": true,
     "grip_target_closed": 0.0,
     "leverage": -0.015399999999999995,
@@ -6890,7 +6861,6 @@
      "weapon_tempo": 0.8814426617262128,
      "wield_heft": 1.5593098734801278
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.6920000000000001,
     "leverage": 0.7192000000000001,
@@ -7120,7 +7090,6 @@
      "weapon_tempo": 0.731396403659927,
      "wield_heft": 1.1365596740432315
     },
-    "can_choke": false,
     "grab_short_reach": false,
     "grip_target_closed": 0.0,
     "leverage": 0.21293600000000001,
@@ -7350,7 +7319,6 @@
      "weapon_tempo": 0.7,
      "wield_heft": 1.5691190345800066
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.134976,
     "leverage": 0.29152,
@@ -7580,7 +7548,6 @@
      "weapon_tempo": 1.211499621555926,
      "wield_heft": 0.6064780926372609
     },
-    "can_choke": false,
     "grab_short_reach": false,
     "grip_target_closed": 0.0,
     "leverage": -0.022000000000000013,
@@ -7810,7 +7777,6 @@
      "weapon_tempo": 0.8764518301878483,
      "wield_heft": 1.5270820102518574
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.824124,
     "leverage": 0.058900799999999975,
@@ -8040,7 +8006,6 @@
      "weapon_tempo": 0.8904989429335108,
      "wield_heft": 1.8631945840386281
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.54,
     "leverage": 0.6576000000000001,
@@ -8270,7 +8235,6 @@
      "weapon_tempo": 0.8823500802805999,
      "wield_heft": 0.9365971031949132
     },
-    "can_choke": false,
     "grab_short_reach": false,
     "grip_target_closed": 0.0,
     "leverage": 0.00624799999999998,
@@ -8500,7 +8464,6 @@
      "weapon_tempo": 0.9022497454436778,
      "wield_heft": 1.7061387571530526
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 1.0,
     "leverage": 0.013448799999999983,
@@ -8730,7 +8693,6 @@
      "weapon_tempo": 0.8461623574836776,
      "wield_heft": 1.0388829641667665
     },
-    "can_choke": false,
     "grab_short_reach": false,
     "grip_target_closed": 0.0,
     "leverage": -0.07920000000000002,
@@ -8960,7 +8922,6 @@
      "weapon_tempo": 1.402828627639288,
      "wield_heft": 0.36992836846159066
     },
-    "can_choke": false,
     "grab_short_reach": true,
     "grip_target_closed": 0.0,
     "leverage": -0.017600000000000008,
@@ -9190,7 +9151,6 @@
      "weapon_tempo": 0.8750477622349924,
      "wield_heft": 0.9506316397699308
     },
-    "can_choke": false,
     "grab_short_reach": false,
     "grip_target_closed": 0.0,
     "leverage": -0.03080000000000003,
@@ -9420,7 +9380,6 @@
      "weapon_tempo": 0.8003763347765709,
      "wield_heft": 1.0265507350869696
     },
-    "can_choke": false,
     "grab_short_reach": false,
     "grip_target_closed": 0.0,
     "leverage": -0.004127200000000017,
@@ -9650,7 +9609,6 @@
      "weapon_tempo": 0.917126493313785,
      "wield_heft": 0.9130419722362826
     },
-    "can_choke": false,
     "grab_short_reach": false,
     "grip_target_closed": 0.0,
     "leverage": 0.017952000000000023,
@@ -9880,7 +9838,6 @@
      "weapon_tempo": 0.8766543084460501,
      "wield_heft": 1.3320540066725102
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.646,
     "leverage": 0.02839999999999998,
@@ -10110,7 +10067,6 @@
      "weapon_tempo": 0.8916485380497627,
      "wield_heft": 1.8107039855208806
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.8959999999999999,
     "leverage": 0.15159999999999998,
@@ -10340,7 +10296,6 @@
      "weapon_tempo": 0.8902947122284655,
      "wield_heft": 1.6815311883551287
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.9904040000000002,
     "leverage": 0.19339119999999999,
@@ -10570,7 +10525,6 @@
      "weapon_tempo": 0.8746171138840444,
      "wield_heft": 1.3165249237817298
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.484,
     "leverage": 0.6224000000000001,
@@ -10800,7 +10754,6 @@
      "weapon_tempo": 1.423748110996276,
      "wield_heft": 0.34639812033889816
     },
-    "can_choke": false,
     "grab_short_reach": true,
     "grip_target_closed": 0.0,
     "leverage": -0.03300000000000001,
@@ -11030,7 +10983,6 @@
      "weapon_tempo": 0.8382176465846232,
      "wield_heft": 0.9896947194723134
     },
-    "can_choke": false,
     "grab_short_reach": false,
     "grip_target_closed": 0.0,
     "leverage": -0.04356000000000003,
@@ -11260,7 +11212,6 @@
      "weapon_tempo": 0.795402639653644,
      "wield_heft": 0.997060207683555
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.0188480446,
     "leverage": 0.2750288,
@@ -11490,7 +11441,6 @@
      "weapon_tempo": 1.0467294097878346,
      "wield_heft": 0.7696984187430312
     },
-    "can_choke": false,
     "grab_short_reach": false,
     "grip_target_closed": 0.0,
     "leverage": 0.010991200000000001,
@@ -11720,7 +11670,6 @@
      "weapon_tempo": 0.8841450476496382,
      "wield_heft": 1.5627802315086603
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.97334,
     "leverage": -0.03173480000000001,
@@ -11950,7 +11899,6 @@
      "weapon_tempo": 0.9029912271815188,
      "wield_heft": 1.5082872900976734
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 1.0,
     "leverage": 0.0677712,
@@ -12180,7 +12128,6 @@
      "weapon_tempo": 0.7,
      "wield_heft": 2.0432306765696677
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.322,
     "leverage": 0.9392,
@@ -12410,7 +12357,6 @@
      "weapon_tempo": 0.7,
      "wield_heft": 2.044706716558872
     },
-    "can_choke": true,
     "grab_short_reach": false,
     "grip_target_closed": 0.38000000000000006,
     "leverage": 0.8116000000000001,

@@ -314,7 +314,6 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
         _ob=core.ob_from_defender(defender)
         deg, net = core.resolve(pool, net_sigma, rng, _ob)   # Ob-from-defender (ED-PC-0058)
         _emit('roll', aggressor=_agg0, pool=pool, net_sigma=round(net_sigma,3), ob=_ob, net=round(net,2), degree=deg, mode=mode)   # `ob`: the workbench bands its distribution at it (PC-03)
-        close = closed   # C-1: per-beat close-coupling follows the engagement measure-state (not raw reach alone)
         # OVERCOMMIT EXPOSURE — systems computes it; the wrapper applies the initiative/poise loss.
         overcommit_exposure = S.overcommit_exposure(aggressor, commit, fat_a, cfg, TR)
         # forced-to-Nach by losing BALANCE/grip — per-tradition: tempo-disciplined (English true-times) lose less grip.
@@ -351,7 +350,6 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                 aggressor.initiative=S.clamp_initiative(aggressor.initiative+steal, cfg)
                 bind=False; riposte=False
                 hit=core.strike(aggressor, defender, 'overwhelming' if deg=='overwhelming' else 'success', cfg, net=net, pool=pool) if deg in ('partial','success','overwhelming') else 0
-        sim=(hit>0 and riposte)
         # CONTACT AXIS (I7b, D8/D9): a unified opening_created flag, set by all three precondition sites below
         # (DISPLACE, deep-commit reopen, bind) — NOT three parallel grab checks. Consumed once, in THIS beat's
         # outcome tail (after riposte resolves, below); never carries across beats (unlike reopen_moment/push_avail).
@@ -424,14 +422,6 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                         break
                 else: riposte=True; break
         if riposte:
-            if sim:
-                # concentration disruption-resistance: focus lets aggressor still complete despite the blow
-                if rng.random() > S.disrupt_resist_p(aggressor, cfg):
-                    d=core.strike(defender, aggressor, 'graze', cfg)
-                    aggressor.apply_wound(d); aggressor.conc=max(0,aggressor.conc-cfg['CONC_DRAIN_HIT'])
-                    _sd,_pb=S.percussion_stagger(defender, aggressor, d, 'graze', cfg)   # ED-PC-0031: riposte wind + stagger
-                    aggressor.stamina-=_sd; aggressor.poise=S.clamp_poise(aggressor.poise-_pb, cfg)
-                    if aggressor.felled: return aggressor, closed
             defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_LOSS'])
             aggressor, defender = defender, aggressor   # role flip — objects, frame-safe
         # CONTACT AXIS (I7b, D8/D9): the ONE insertion point, after hit/bind/riposte all resolve — reads the

@@ -112,7 +112,9 @@ def test_units_refactor_byte_identical():
         _cmp(errs, n, 'systems.leverage', g['systems']['leverage'], S.leverage(c2, CFG))
         _cmp(errs, n, 'systems.lunge_quality', g['systems']['lunge_quality'], S.lunge_quality(c2, CFG))
         _cmp(errs, n, 'systems.grip_target_closed', g['systems']['grip_target_closed'], S.grip_target(c2, True, CFG))
-        _cmp(errs, n, 'systems.can_choke', g['systems']['can_choke'], S.can_choke(c2, CFG))
+        # PC-11: `systems.can_choke` (a bool over this primitive) is deleted with its golden row; the golden's
+        # `grip_choke_max` is the pinned fact and "can gather in" is its sign, so the sign is what is compared.
+        _cmp(errs, n, 'grip_choke_max>0', bool(g['grip_choke_max'] > 0.0), WP.grip_choke_max(c2.w) > 0.0)
         _cmp(errs, n, 'systems.grab_short_reach', g['systems']['grab_short_reach'],
              bool(w['head_len'] <= CFG['GRAB_SHORT_REACH_M']))
     assert not errs, f"{len(errs)} identity violations (first 10): {errs[:10]}"

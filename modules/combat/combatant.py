@@ -120,9 +120,6 @@ class Combatant:
         # readers — removed ED-PC-0023 audit, §8 "every rule lives once". Any consumer needing the pool calls
         # core.resolution_pool.)
         self.wt=WoundTracker(end, spirit=self.spirit, strength=self.strength)
-        self.health_full=self.wt.health_full                 # total Health (End+Spirit+Str buffer)
-        self.wound_interval=self.wt.wi                       # damage per wound-gate (WI)
-        self.max_wounds=self.wt.max_wounds                   # wound-gate cap (felled beyond)
         self.stamina_max=stamina_max(end, self.spirit)       # max stamina from Endurance+Spirit (cfg-free)
         self.conc_max=0.0                                    # max concentration (3*Focus+2*Spirit) — set in derive_stats(cfg)
         # ---- live state (reset/managed by the wrapper each bout) ----
@@ -145,10 +142,6 @@ class Combatant:
         """Compute the cfg-dependent derived figures and store them on self (called once at bout reset). Keeps the
         derivation WITH the combatant so core/systems read c.conc_max etc. rather than calculating them."""
         self.conc_max = cfg['CONC_FOCUS']*self.focus + cfg['CONC_SPIRIT']*self.spirit   # 3F+2S (ED-902)
-    @property
-    def fatigue(self):
-        """Current endurance fatigue in [0,1]: 0 fresh, ->1 spent. Derived from live stamina vs stamina_max."""
-        return max(0.0, 1 - self.stamina/self.stamina_max) if self.stamina_max else 0.0
     @property
     def felled(self): return self.wt.felled
     def apply_wound(self, d):

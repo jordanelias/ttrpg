@@ -125,8 +125,6 @@ AGILITY_EXP = 0.25      # grounded exponent (band 0.20–0.28)
 # strictly from MoI (dagger highest → spear lowest). Chosen so the dodge/parry _band spread (renormalised below to the
 # compressed range) reproduces the previously-calibrated spread — a re-baseline that restores emergence, not a re-tune.
 AGILITY_REF = 0.00215
-# 2H reach comes from the HANDLE/rear-hand setback (HEMA measure-grammar), not hand-count — grip-proportional, not flat
-K_GRIP_REACH = 0.4      # [SIM-CALIBRATE band 0.3–0.5] rear-hand setback fraction of grip_len for a 2H weapon
 # [RESOLVED — Phase B6] weapon_physics.reach() (the head_len-based diagnostic, ~0.7-6.0 span) is DELETED; the LIVE
 # systems.reach_base (grip-aware, ~4.5-7.8 span, CLOSE_REACH_REF-compatible) remains the sole reach source, so the
 # once-live wiring hazard (unscaled reach() zeroing the long-weapon close penalty) no longer applies — there is no

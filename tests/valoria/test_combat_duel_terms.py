@@ -258,3 +258,36 @@ def test_death_terms_leave_felled_reachable():
         assert combat_degree(dict(wound_state={loser.label: st}), loser.label) == COMBAT_BANDS[0]   # 'Felled'
         felled += 1
     assert felled >= 10, felled
+
+
+# ── the exact-tie ending (PC-11) ──────────────────────────────────────────────────────────────────────────────────
+
+def _fight_with_stub_engagement(monkeypatch, damage_A, damage_B, terms):
+    """One `fight` whose first engagement is a stub that wounds both fighters at once and ends without a felling, so
+    BOTH cross the terms on the same beat: the one situation `_terms_yielder`'s tie branch exists for."""
+    A, B = C.Combatant('A', weapon='arming'), C.Combatant('B', weapon='arming')
+
+    def _both_cross(A_, B_, first, cfg, rng, prev_closed=False, terms=None):
+        A_.apply_wound(damage_A); B_.apply_wound(damage_B)
+        return None, False
+    monkeypatch.setattr(wrapper, 'engagement', _both_cross)
+    trace = []
+    monkeypatch.setattr(wrapper, '_TRACE', trace.append)
+    return wrapper.fight(A, B, CFG, random.Random(0), terms=terms), trace, A, B
+
+
+def test_an_exact_tie_on_the_terms_ends_unresolved_with_no_yield(monkeypatch):
+    """Both fighters cross `blood` on the same beat with the same Health left: nobody yields, the fight ends
+    UNRESOLVED (result 0, no winner), and no UPSET_FLOOR draw can flip it. The control (the same stub, unequal
+    damage) yields the one who is worse off, so the assertion can observe the tie branch being absent."""
+    wi = C.Combatant('A', weapon='arming').wt.wi
+    result, trace, A, B = _fight_with_stub_engagement(monkeypatch, wi, wi, 'blood')
+    assert A.wt.wounds >= 1 and B.wt.wounds >= 1 and not (A.felled or B.felled)
+    assert result == 0
+    assert [e for e in trace if e['kind'] == 'fight_result'] == [dict(kind='fight_result', result=0, winner=None)]
+    assert not any(e['kind'] == 'yield' for e in trace)
+    assert wrapper._terms_yielder(A, B, 'blood', CFG) is None
+
+    # control: unequal damage, same stub -> the fighter with the smaller fraction of Health left yields
+    result, trace, A, B = _fight_with_stub_engagement(monkeypatch, 2 * wi, wi, 'blood')
+    assert result == -1 and [e['by'] for e in trace if e['kind'] == 'yield'] == ['A']
