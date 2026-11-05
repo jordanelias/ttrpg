@@ -187,6 +187,10 @@ class MassBattleInput:
                        `loyalty_gain`;
       * `loyalty_gain` -- the `field_morale_loyalty_gain` fixture (`H-148`'s site); `0` is the control,
                        battle history only;
+      * `troops_per_weight` -- REM-32: the `field_troops_per_weight` fixture (`H-250`), the scale from a side's
+                       weight to its Unit's troops on the headcount path (`massbattle._weighted_unit`). `1`, the
+                       default, is `troops = weight`: the field as it was. The host always passes the fixture;
+                       the default is the identity of the multiplication, not a value for the scale;
       * `geography` -- the parsed geography file (`data/geography.py::geography`, read once per process
                        and SHARED by every record: read-only). The module's terrain lookup and river test
                        read it here and open no file. `repr=False`: a record in an assertion message
@@ -206,6 +210,7 @@ class MassBattleInput:
     loyalty_gain: float
     geography: Mapping = field(repr=False)
     orders_of_battle: Optional[tuple] = None
+    troops_per_weight: float = 1
 
 
 # ---------------------------------------------------------------------------
