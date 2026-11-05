@@ -35,18 +35,18 @@ Format as `-04` §1: `### <handle> — <title> (<lane>) · BATCH <…> · STATE 
 - BUILDER: second tier.
 - SOURCE: `strife-00` §7 (the declared-none row), §8 S2.
 
-### CR-72 — Execution: does `fight` form against a held party? (IN/PC) · BATCH B10-11 (after CP-T03-09 and PC-10) · STATE MEASURE (a test) · R —
+### CR-72 — Execution: does `fight` form against a held party? (IN/PC) · BATCH B10-11 (after CP-T03-09, PC-10 and CR-87) · STATE MEASURE (a test) · R —
 - WHAT: `strife-00` §9 defines an execution (XE) as a death caused by a lethal `fight` on a person who holds a live `detain` tenure at that tick, recognised by S1's signature (`victim_held: true`), with no new verb (A7). Its open item (i): whether `fight` forms against a held party at all (its access gate wants co-location, and the seam must say what a restrained party can do in a scene). One hand-built test answers it in a world where the holder of a custody seat and a held party are co-located, run twice: once with the `detain` written by `arrest` (`loop/effects_information.py`, landed at IN-12) and once with it written by CP-T03-09's `capture`, the second route (`strife-00` §9). It records (a) whether `fight` forms for the holder against the held party and is admitted by the fold. Its only other new content is `harness/strife.py`'s real `victim_held` reader read over each of those two real tenures: a planted lethal death reads XE while the tenure is live and KL once it is closed. The classification itself (XE held, KL free, DN with no act) is already `test_strife_instrument.py::test_a_death_is_told_by_its_cause`'s and is not repeated.
 - WHY AFTER CP-T03-09 AND PC-10: not for want of a `detain` (`arrest` already writes one), but because (a) asks the combat seam, and B10-11 changes it: CP-T03-09 adds `capture` as a named fold of `fight` and a `detain` opener in `state/gate.py`, PC-10 changes `accept`'s counterparty and the duel terms, and both edit `modules/combat/` and `seam/wrappers/combat.py`. Read before them, (a) would describe a seam the same batch then rewrites.
 - If (a) does not form or is refused: the commit names the refusing read (formation or admission) and XE stays a named residue whose owner is the combat seam's restrained-party rule; no gate is widened and no `execute` row is added (A7's revert is Jordan's). No assertion that it does not form is written (a guard on an absence, `CLAUDE.md` §0.1 pt 5); if it forms, the assertion that it forms is kept.
 - LANDED ALREADY: S1's XE, KL and DN signatures and their test; `arrest` opens a `detain` to the issuing seat (`verb_table.yaml`, `arrest`; `rosters.yaml`'s restraint openers); IN-12's `interrogate` (B10-09).
 - REMAINING UNBUILT: the test.
-- GATE: CP-T03-09 and PC-10 landed (this batch). NEEDS: CP-T03-09, PC-10.
+- GATE: CP-T03-09, PC-10 and CR-87 landed (this batch). NEEDS: CP-T03-09, PC-10, CR-87.
 - EXIT and FALSIFIER: the test file passes; MUTATION: close the planted tenure one tick before the death and the reading moves from XE to KL (red if it does not). The finding on (a) is quoted in the batch's close commit beside the `interrogate` re-read the card already names.
 - HASH MOVERS: none (a test).
 - HOLES AND LEDGER IDS: the kill ruling (Jordan, 2026-09-02: "you can't just kill or wound", at `hole_register.yaml`, carried at `verb_table.yaml` beside `fight`), which is why the death must come through the combat seam.
 - ASKS ATTACHED: none.
-- RE-BASE: `classify`, `readers_for` and the `victim_held` reader by symbol; `arrest`'s and CP-T03-09's `detain` openers as built.
+- RE-BASE: `classify`, `readers_for` and the `victim_held` reader by symbol; `arrest`'s and CP-T03-09's `detain` openers as built. The arc fold of 2026-11-05 (ED-IN-0346): the `fight` it tests is gated by CR-87's contexts; a held party is context (ii), so the test asks whether `fight` forms under it.
 - FILES: `engine/season/tests/test_strife_execution.py` (new).
 - VERB CLUSTER: no.
 - LAYER 1: `04` §B.8 (`Tenure`, the `detain` edge) and §C.5 (the contest seam: a death reaches only through it); no hunk.
@@ -147,7 +147,7 @@ Format as `-04` §1: `### <handle> — <title> (<lane>) · BATCH <…> · STATE 
 - HASH MOVERS: none.
 - HOLES AND LEDGER IDS: the two named gaps, recorded in the commit; none filed unless measured (P8).
 - ASKS ATTACHED: none beyond CR-75's and CR-76's.
-- RE-BASE: the `Claim` fields and the ledger reader by symbol; which restraint, war and docket claims a ledger can hold.
+- RE-BASE: the `Claim` fields and the ledger reader by symbol; which restraint, war and docket claims a ledger can hold. Consumer named (the arc fold of 2026-11-05, ED-IN-0346): CR-88's duty reading (B10-17b) may read `flows_known` once built (a note, not a gate).
 - FILES: `engine/season/queries/world_q.py`, `engine/season/tests/test_strife_flows.py`.
 - VERB CLUSTER: no.
 - LAYER 1: `04` §A.2 (`world_q`), §B.9 (`Claim`; the act store is resolver-side); `01` AX-7 (a character holds a reading of the world, never the world). No hunk.
@@ -164,7 +164,7 @@ Format as `-04` §1: `### <handle> — <title> (<lane>) · BATCH <…> · STATE 
 - HASH MOVERS: commit (1) EQUAL, `content_hash` at `build_realm(0)` equal to B11-S3's close reading @sha. Commit (2) a declared MOVER: its pre-change `build_realm(0)` reading is commit (1)'s recorded after-reading (P14); seeds 1 and 2 read because it declares a mover (P10); every seeded golden it moves re-recorded, old to new in its body.
 - HOLES AND LEDGER IDS: H-156 (CR-28's falsification on HR-9 control (4) and its revert; CP-T02-05's falsification on the same control is recorded by its trailer `Falsified: CP-T02-05` and in `-03` B10-09, with no hole row); A3.
 - ASKS ATTACHED: the flip, taken, revert stated.
-- RE-BASE: `questions_for`'s `added =` expression and `_stamped` by symbol (B10-18b edits the same expression); CR-28's landed term.
+- RE-BASE: `questions_for`'s `added =` expression and `_stamped` by symbol (B10-18b edits the same expression); CR-28's landed term. The arc fold of 2026-11-05 (ED-IN-0346): the off arm reaches fewer `fight`-routed codes after CR-87 (B10-11) until B10-17b's wars exist; head §6 risk 8 governs.
 - FILES: `engine/season/queries/world_q.py`, `engine/season/data/fixtures.py`, `engine/season/tests/test_strife_flows.py`; at commit (2), the seeded goldens.
 - VERB CLUSTER: no (no `verb_table.yaml`, pin of the verb count or set, or `loop/effects_*.py`); serial by its file and hash edges (head §4).
 - LAYER 1: `04` §A.2 (`decision/` reads `Question[]`: the stamp arrives as Questions, so `decision/` reads nothing new and holds no World; `queries/world_q` owns nothing); `01` AX-2 (kept: the stamp is computed in `questions_for`, which already takes World and the person). No hunk.

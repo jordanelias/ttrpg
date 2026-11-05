@@ -99,7 +99,7 @@ Numbered M1-M21 (v10's numbering; the judges' own Q-numbers are shown; M16 to M2
 - Cheaper to revert: (b) is today; (a) adds one row sharing `tell`'s cell, after the proofs reader.
 
 **M10 · Does a march between two factions require a declared war?** (L2 Q9; D-V9, K-MB-5.)
-- **DECISION — TAKEN (delegated), step 4.** (b): no `at_war` gate on `march`, on Jordan's 2026-10-04 direction 8 ("the stakes for a march are variable"). `[ASSUMPTION; medium; Jordan to correct; revert: add `at_war(...)` as a `requires` conjunct on `march`]` Releases nothing (R-07 conjunct (3) keeps B10-06 as its earliest batch); A2-22 / D-V9 and K-MB-5 closed, the conjunct not adopted.
+- **DECISION — TAKEN (delegated), step 4.** (b): no `at_war` gate on `march`, on Jordan's 2026-10-04 direction 8 ("the stakes for a march are variable"). `[ASSUMPTION; medium; Jordan to correct; revert: add `at_war(...)` as a `requires` conjunct on `march`]` Releases nothing (R-07 conjunct (3) keeps B10-06 as its earliest batch); A2-22 / D-V9 and K-MB-5 closed, the conjunct not adopted. SUPERSEDED by `ED-IN-0317` (2026-11-04): a march needs a casus belli, whose carrier and gate are the position CR-91 (B10-17b), not yet built; option (b) stands as history (the arc fold of 2026-11-05, ED-IN-0346).
 - (a) Yes — declare, then march; war is a gate and a political act before violence.
 - (b) No — march freely; war is a state that values and witnesses read.
 - Blocked: K-MB-5's conjunct; the weight of CP-T09-02's `at_war` edit.
@@ -290,7 +290,7 @@ The NERS fold took further answers under step 5, each with its revert; they are 
 | M7 | AQ-T02-1; A2-02 | Which ties carry a seated player's line? | TAKEN (delegated), step 5, option (b): §1 M7's DECISION | drop `sworn`, or append `follower` |
 | M8 | D-V1; A2-14; H-132, H-144 | Can a living top-seat holder be removed? | TAKEN, step 3 (H-132, H-144: step 4), option (a) (CR-25); CORRECTED by Jordan's 2026-10-26 request (step 1): the revert taken, `off_king.revocation` `joint_concurrence` (CR-37; H-L0-9 applied), `depose` CLOSED, answered by `revoke`; the deposed King keeps `off_duke_valorsmark`: §1 M8's DECISION | off_king null, depose PARKED (with M8's old trigger) |
 | M9 | D-V4 = J-C-6; A2-17; H-198 | May persons lie? | TAKEN (delegated), step 5, option (a) (CR-27): §1 M9's DECISION | `lie_offered = False` or delete the row |
-| M10 | D-V9, K-MB-5; A2-22 | Does a march require a declared war? | TAKEN (delegated), step 4, option (b): §1 M10's DECISION | add `at_war(...)` as a `requires` conjunct on `march` |
+| M10 | D-V9, K-MB-5; A2-22 | Does a march require a declared war? | TAKEN (delegated), step 4, option (b): §1 M10's DECISION; SUPERSEDED by `ED-IN-0317` (2026-11-04): a march needs a casus belli, whose carrier and gate are the position CR-91 (B10-17b), not yet built; option (b) stands as history (the arc fold of 2026-11-05, ED-IN-0346). | add `at_war(...)` as a `requires` conjunct on `march` |
 | M12 | narration Decision 3; A2-39 | A focalized journal? | TAKEN (delegated), step 5, (a) without the §A.2 row: §1 M12's DECISION | delete the function and test; restore the skill line |
 | M14 (taken part) | A1-51; A-36; H-205; H-146 | The cell-value and cosine pass | NARROWED; four value changes, `thread_read`'s cells, one repair (CR-21): §1 M14's DECISION | per cell, the old value |
 | M15 | A1-78; IN-44 row 1 | Retire `CLAUDE.md` §0.2's `mc_v18` bullet? | TAKEN, step 1 (superseded), option (a): §1 M15's DECISION | restore the four lines |
