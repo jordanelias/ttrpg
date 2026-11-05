@@ -940,6 +940,12 @@ DEFAULT_FIXTURES = Fixtures(
     # where it writes in no band. [ASSUMPTION; medium; Jordan to correct; revert: `odds_weighting` `none`, one re-pin]
     # [JUSTIFIED: engine/season/hole_register.yaml H-248 -- `site: Fixtures odds_weighting`, graded `assumption`; whether and how a believed chance weighs a contested choice is no document's (AQ-X1 (b) is taken, M1), so the arm is declared and swept none (the control) / believed]
     odds_weighting="believed",         # `H-248`, swept none (control) / believed (SHIPPED, CR-17)
+    # CP-T01-05, THE NPC HALF (B10-10; `H-249`). WHETHER THE COMPUTED CHOOSER MAY FORM AN `effort` ACT: for a contested
+    # candidate a believed chance can price, `decision/choose.py::settle_efforts` scores the effort variants by the same
+    # score (the pursuit term weighted by his believed chance, `odds_weighting`) and nets off the acts the extra slots
+    # displace; `off` is the CONTROL, the chooser as it stood. [ASSUMPTION; medium; Jordan to correct; revert: `off`, one re-pin]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-249 -- `site: Fixtures npc_effort`, graded `assumption`; whether and how a person spends a scene on one roll is no document's (the plan is silent on the rule), so the arm is declared and swept off (the control) / on]
+    npc_effort="on",                   # `H-249`, swept off (control) / on (SHIPPED, CP-T01-05 NPC half)
     # `H-202` (v9 IN-25, BOUND-STAKES). HOW HARD §F2's STANCE TERM PULLS ON A CHOICE: the term
     # `stance_polarity` signs is read at `1 + this` (`decision/choose.py::stance_term`), so a grudge
     # or a judged deed outweighs a person's pursuits sooner as it rises. §F2 weights the term 1 and

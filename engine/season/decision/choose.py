@@ -42,7 +42,7 @@ from ..gaps import Unspecified
 # imports `person_q` and `data/`); `_stance_arm` calls it, and `confliction` (IN-08 6f,
 # the derived Query's caller, ID-13).
 from ..queries.person_q import confliction, intent_named, intent_said, regard, stance_toward
-from ..state.carriers import Act, Candidate, Person, Question, Scene, Sensation, View
+from ..state.carriers import EFFORT, Act, Candidate, Person, Question, Scene, Sensation, View
 # `project` is DEFINED in `options.py` (see this module's docstring) and imported here because
 # `make_chooser`'s score calls it; `options` never imports this module.
 # `seat_of` is `options.py`'s own G3 helper (`via=seat_of(...)`, below).
@@ -50,6 +50,7 @@ from .options import opening_set, project, seat_of, subject_is_opponent
 
 STANCE_POLARITIES = roster("stance_polarities")
 ODDS_WEIGHTINGS = roster("odds_weightings")
+NPC_EFFORTS = roster("npc_efforts")
 
 
 def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = None) -> float:
@@ -137,6 +138,17 @@ def _odds_arm(fx: "Fixtures") -> str:
     return arm
 
 
+def _writing_bands(c: Candidate) -> Optional[tuple]:
+    """THE BANDS A CONTESTED CANDIDATE'S VERB WRITES IN (`row.writes_by_degree`'s non-empty lists), or `None` for a
+    verb that contests nothing or writes in no band. The ONE test of whether a believed chance can price a
+    candidate: `odds_weight` weights by it and `settle_efforts` offers an `effort` variant only where it holds."""
+    row = VERB_TABLE.get(c.verb)
+    if row is None or not row.contests:
+        return None
+    bands = tuple(b for b, written in row.writes_by_degree.items() if written)
+    return bands or None
+
+
 def odds_weight(p: Person, c: Candidate, fx: "Fixtures", odds: Optional[Callable]) -> float:
     """THE FACTOR `Fixtures.odds_weighting` PUTS ON A CONTESTED CANDIDATE'S PURSUIT TERM (CR-17, `H-248`;
     M1, AQ-X1 (b)): the person's believed chance of the bands that write what the term prices.
@@ -158,11 +170,8 @@ def odds_weight(p: Person, c: Candidate, fx: "Fixtures", odds: Optional[Callable
     arm = _odds_arm(fx)
     if arm == "none" or odds is None:
         return 1.0
-    row = VERB_TABLE.get(c.verb)
-    if row is None or not row.contests:
-        return 1.0
-    bands = tuple(b for b, written in row.writes_by_degree.items() if written)
-    if not bands:
+    bands = _writing_bands(c)
+    if bands is None:
         return 1.0
     chance = odds(Act(f"odds:{c.verb}", p.id, c.verb, payload=_payload_of(c), via=seat_of(p, c)), bands)
     return 1.0 if chance is None else float(chance)
@@ -197,6 +206,63 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
         _odds_arm(fx)           # a zero term is zero whatever the factor: the query is not asked (it scans the log), the arm is still checked.
                                 # Value-equal; the one difference is an error the query would raise on this candidate, which is no longer raised
     return (pursuit, stance_term(p, c, fx, memo))
+
+
+def _npc_effort_arm(fx: "Fixtures") -> str:
+    """`Fixtures.npc_effort`, refused if it is not in the roster (`_odds_arm`'s reason: an unknown arm silently
+    reading `off` would make the sweep report the control twice)."""
+    arm = fx.get("npc_effort")
+    require_member(arm, NPC_EFFORTS, f"npc effort arm {arm!r} is not in the roster", "H-249",
+                   law="CP-T01-05 NPC half -- declare it, default it, sweep it; an unknown arm silently "
+                       "reading `off` would make the sweep report the control twice")
+    return arm
+
+
+def settle_efforts(cands: list, scores: dict, score: Callable, fx: "Fixtures") -> tuple:
+    """THE CHOOSER FORMS `effort` (CP-T01-05, NPC half; `H-249`): for each CONTESTED candidate whose believed
+    chance can price it (`_writing_bands`), the variants at effort `1 .. interactions_per_scene - 1` are
+    ordinary Candidates (`effort` an operand, `carriers.EFFORT`, which `_payload_of` carries to the act and
+    to the odds query), scored by the SAME `score` as their base -- so a variant scores higher exactly where
+    the believed chance of the bands the term prices rises with the effort (CR-17's factor; this function
+    never asks a chance itself). One act per opportunity: of a base and its variants only the best survives,
+    since they would share one act id.
+
+    THE PRICE. Effort `e` fills `1 + e` slots (`Scene.slots`), so it costs the `e` acts the person does not take
+    beside it: a variant scoring `r` is NET of the `e` best-scoring OTHER candidates ranked beneath `r` (the ones
+    its extra slots push out of the scene; a negative score is no loss, so each counts at least 0). It survives only
+    if that net strictly beats the base's own score; a tie keeps the base. With nothing ranked beneath it, effort
+    displaces nothing and a believed gain is free in slots. No flat bonus: the only thing that lifts a variant is
+    the believed chance in the pursuit term. The scene BUDGET (an effort scene costs `extended_scene_cost`) is
+    `pack_scenes`'s `take()`, through `Scene.cost`.
+
+    `off` returns its arguments untouched (the CONTROL); a verb that has no believed chance to ask, a
+    chance of `None`, and `odds_weighting` `none` all leave a variant scoring as its base, so the base stays.
+    Returns `(cands, scores)` for the kept set, `scores` keyed on `id(c)` as `score_order` wants."""
+    if _npc_effort_arm(fx) == "off":
+        return cands, scores
+    per = fx.get("interactions_per_scene")
+    if per is None or per < 2:
+        return cands, scores                # no scene bound, or no room for a second slot: no effort can be formed
+    kept, kept_scores = [], {}
+    for c in cands:
+        base = scores[id(c)]
+        best, best_net, best_score = c, base, base
+        if _writing_bands(c) is not None:
+            others = None
+            for e in range(1, per):
+                v = Candidate(c.verb, c.subject, {**(c.operands or {}), EFFORT: e})
+                raw = score(v)
+                if raw <= base:
+                    continue                # the price is never negative, so a variant that does not out-score its base cannot win
+                if others is None:
+                    others = sorted(scores[id(o)] for o in cands if o is not c)         # ascending
+                beneath = [max(0.0, x) for x in others if x <= raw]
+                net = raw - sum(beneath[-e:])                                   # the `e` best beneath it
+                if net > best_net:
+                    best, best_net, best_score = v, net, raw
+        kept.append(best)
+        kept_scores[id(best)] = best_score
+    return kept, kept_scores
 
 
 def beneficiary_of(p: Person, c: Candidate) -> Optional[str]:
@@ -462,6 +528,8 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         # `c` given the closure), so this is the same ranking computed half as often, not a
         # different one.
         _scores = {id(c): score(c) for c in cands}
+        # CP-T01-05 NPC half: the person may put effort behind a contested act (`npc_effort`); `off` is a no-op.
+        cands, _scores = settle_efforts(cands, _scores, score, fx)
         ranked = score_order(cands, _scores)
         # ⚠ KEYED ON `id(c)` AND THAT IS SAFE HERE, NARROWLY: `cands` holds every Candidate alive
         # for the whole of this call, so no id can be recycled underneath the dict. A Candidate is
@@ -641,28 +709,49 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
     # the same mechanism seen from two sides, and fixing one without the other is what broke it.
     ext = fx.get("extended_scene_cost")
 
+    def fill(cands) -> list:
+        """Consecutive runs of `cands`, each filling at most `width` interaction slots (a Candidate at effort `e`
+        fills `1 + e`, `Scene.slots`'s own count). With every effort 0 this is the slice by `width` it replaced."""
+        runs, cur, used = [], [], 0
+        for c in cands:
+            need = 1 + (c.operands or {}).get(EFFORT, 0)
+            if cur and used + need > width:
+                runs.append(cur)
+                cur, used = [], 0
+            cur.append(c)
+            used += need
+        if cur:
+            runs.append(cur)
+        return runs
+
     def take(chunks) -> list:
         out, left = [], n_scenes
         for chunk in chunks:
             if left <= 0:
                 break
+            # THE PRICE IS `Scene.cost`'s, ASKED OF THE BUILT SCENE: the slots it fills, not the number of acts
+            # (`len(chunk) > 1` was a second owner of it, and a chunk carrying an effort Candidate overspent).
             # An extension the person cannot afford is taken as a PLAIN scene rather than
             # skipped: they still pursue the opportunity, with less in it. Skipping would be the
-            # engine deciding what they leave undone, which is L1.
-            if len(chunk) > 1 and ext > left:
+            # engine deciding what they leave undone, which is L1. The same for a single act at effort that
+            # the budget cannot carry: it is done at effort 0.
+            sc = scene(len(out), chunk)
+            if sc.cost(ext) > left:
                 chunk = chunk[:1]
-            cost = ext if len(chunk) > 1 else 1
-            out.append(scene(len(out), chunk))
-            left -= cost
+                sc = scene(len(out), chunk)
+                if sc.cost(ext) > left:
+                    c0 = chunk[0]
+                    sc = scene(len(out), [Candidate(c0.verb, c0.subject,
+                                                    {k: v for k, v in (c0.operands or {}).items() if k != EFFORT})])
+            out.append(sc)
+            left -= sc.cost(ext)
         return out
 
     if rule == "by_subject":
         seen: dict = {}
         for c in ranked:
             seen.setdefault(c.subject or "", []).append(c)
-        chunks = [seen[subj][start:start + width]
-                  for subj in sorted(seen)
-                  for start in range(0, len(seen[subj]), width)]
+        chunks = [run for subj in sorted(seen) for run in fill(seen[subj])]
     else:
-        chunks = [ranked[i:i + width] for i in range(0, len(ranked), width)]
+        chunks = fill(ranked)
     return take(chunks)
