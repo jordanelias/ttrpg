@@ -127,6 +127,16 @@ def deliberation_memo(p: Person, fx: "Fixtures") -> dict:
             _DAMP: 1.0 if k == 0 else 1.0 / (1.0 + k * confliction(p))}
 
 
+def _odds_arm(fx: "Fixtures") -> str:
+    """`Fixtures.odds_weighting`, refused if it is not in the roster (an unknown arm silently reading `none` would make
+    the sweep report the control twice). Its own function so `score_terms` can validate the arm on a term it does not weigh."""
+    arm = fx.get("odds_weighting")
+    require_member(arm, ODDS_WEIGHTINGS, f"odds weighting {arm!r} is not in the roster", "H-248",
+                   law="CR-17 -- declare it, default it, sweep it; an unknown arm silently reading "
+                       "`none` would make the sweep report the control twice")
+    return arm
+
+
 def odds_weight(p: Person, c: Candidate, fx: "Fixtures", odds: Optional[Callable]) -> float:
     """THE FACTOR `Fixtures.odds_weighting` PUTS ON A CONTESTED CANDIDATE'S PURSUIT TERM (CR-17, `H-248`;
     M1, AQ-X1 (b)): the person's believed chance of the bands that write what the term prices.
@@ -145,10 +155,7 @@ def odds_weight(p: Person, c: Candidate, fx: "Fixtures", odds: Optional[Callable
     `seam/wrappers/sigma.py::believed_chance`): `decision/` holds a callable and the act's shape, never the
     store behind it. A candidate is probed as the act it would become (`pack_scenes`' payload and seat), so
     the figure is the one for the roll the fold would deal that act."""
-    arm = fx.get("odds_weighting")
-    require_member(arm, ODDS_WEIGHTINGS, f"odds weighting {arm!r} is not in the roster", "H-248",
-                   law="CR-17 -- declare it, default it, sweep it; an unknown arm silently reading "
-                       "`none` would make the sweep report the control twice")
+    arm = _odds_arm(fx)
     if arm == "none" or odds is None:
         return 1.0
     row = VERB_TABLE.get(c.verb)
@@ -183,8 +190,12 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
         raise ValueError("score_terms needs a memo from `deliberation_memo(p, fx)` "
                          "(or `make_chooser`'s): the pursuit weights and damp are "
                          "hoisted per deliberation") from None
-    return (damp * sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES) * odds_weight(p, c, fx, odds),
-            stance_term(p, c, fx, memo))
+    pursuit = damp * sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES)
+    if pursuit != 0.0:
+        pursuit *= odds_weight(p, c, fx, odds)
+    else:
+        _odds_arm(fx)           # a zero term is zero whatever the factor: the query is not asked (it scans the log), the arm is still checked
+    return (pursuit, stance_term(p, c, fx, memo))
 
 
 def beneficiary_of(p: Person, c: Candidate) -> Optional[str]:
