@@ -1,6 +1,6 @@
 # CR-85: histories, hooks and combat's input. What replaces the `history` summed into rolls
 
-## Status: RATIFIED on the merge of the PR that lands it (ED-1094), EXCEPT what §10 lists as HELD BACK (§4 step 2, the seeded-damage crossing), which stays PROPOSED until Jordan signs it off separately. Combat's `history` replacement (§1) is a ladder take, `[ASSUMPTION; medium; Jordan to correct; revert: delete this file; history stays]`.
+## Status: RATIFIED by Jordan (2026-11-05, in PR #559: "ratify all proposals and merge", ED-IN-0349), INCLUDING §4 step 2 (the seeded-damage crossing), which §10 had held back. Combat's `history` replacement (§1) stays a ladder take, `[ASSUMPTION; medium; Jordan to correct; revert: delete this file; history stays]`.
 ## Version: v1.0 · Lane: PC (with IN, WR) · Position: `workplans/valoria_master_workplan_v11_part4.md` `### CR-85` (DESIGN-FIRST, B10-10; build B10-11)
 ## Grade under `CLAUDE.md` §0.2: `paper`. This is a design. It changes nothing in `engine/` or `modules/`, and whether its build executes is decided by the tests named in §8, not by this file.
 ## Citation rule: every `file:line` was opened by this author on the tree at `3ce1f08e` unless tagged `[UNVERIFIED]`. A drifted line from the plan is cited at its current line, and §9 lists the drift. Design documents are cited for intent only (`CLAUDE.md` §0.05). No formula below is correct because this file states it; the code that will hold each fact is named beside it.
@@ -270,7 +270,7 @@ The skill-shaped half already runs, and `ED-IN-0330`'s "bundles of skills/aptitu
 
 ## 10. Held back from ED-1094's merge default, and the orchestrator's decisions
 
-**HELD BACK** (needs separate sign-off; the merge does not ratify it):
+**WAS HELD BACK, RATIFIED 2026-11-05 with the rest (ED-IN-0349):**
 
 - §4 step 2, the seeded-damage crossing. It changes what a wounded person's fight means, and it schedules itself on a trigger outside this position.
 - Everything else here is a ladder take, ratified on merge. The one Jordan was told is *"worth his glance"* (`-04` CR-85 ASKS) is §1's recommendation, `[ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays]`.

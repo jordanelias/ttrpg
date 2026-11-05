@@ -1,6 +1,6 @@
 # The character sheet as three spaces — creation, development, chronicling
 
-## Status: PROPOSED (2026-10-07) · design-only · builds nothing · HELD BACK from ratification-on-merge (ED-1094) until its review in B-H against IN-08's carriers · reference under `CLAUDE.md` §0.05
+## Status: RATIFIED by Jordan (2026-11-05, in PR #559: "ratify all proposals and merge", ED-IN-0349) · design-only (its build landed as REM-30, `fca48e4f`) · the hold until its review against IN-08's carriers is released · reference under `CLAUDE.md` §0.05
 ## Lane: IN, with PC and WR · Plan position: IN-47 (`workplans/valoria_master_workplan_v9_part4.md` §4.2, the IN-47 entry) · IDs: none allocated
 ## Written at HEAD `4558f85`; reviewed and every `file:line` re-derived at HEAD `867c1c3f` (B-H, 2026-10-08). A cite that has drifted since is a defect in this document, not in the code.
 ## Builds on: `proposals/2026-09-30-character-and-play-surface/09_the_character_sheet.md` (#445; what a person is in code, one sheet) — not re-derived here.
