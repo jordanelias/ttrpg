@@ -47,7 +47,21 @@ causes, not that the later actor decided BECAUSE of the earlier one. The render 
 "had among its causes". And an act counts as a consequence by what its OWN Events wrote; what other
 people's acts or MATTER chained after it does not count for it.
 
-Entry point: `python -m engine.season.harness.chronicle --seed S --seasons K [--cap C] [--all-acts]`. `--seed` and
+THE STORY READING (CR-69, `consequence_chains`, behind `--chains`). Over the same consequence acts, per seed:
+the number of CHAIN ENDS -- consequence acts that no other consequence act answers (along the `cross`
+edges of the rows cut to consequence acts, as above; a person's later act answering his own is no `cross`
+edge) -- whose cross-person depth, recomputed along those edges only, is at least `--min-depth`; and a
+histogram of the Event kinds carried by the Receipts that made each such end a consequence act
+(`arc.consequence_kinds`, the one owner of the predicate; kinds are READ OFF the log). NO roster of story
+types and NO classification into war / succession / ruin / grudge; no pass bar, no default for `--min-depth`
+(`--chains` without it is refused). It does not call `storybar.chains`, does not touch `_executed_rows`
+(it reads `read`'s `executed` rows, as the pick does) and changes no existing result. A reading, never a
+guard. Kinds are counted here once, raw, over the chain ends only: `harness/strife.py` maps Event kinds to
+its move codes over the whole log and owns that tabulation; this block maps nothing to a code.
+[ASSUMPTION; medium; Jordan to correct; revert: delete the reader]
+
+Entry point: `python -m engine.season.harness.chronicle --seed S --seasons K [--cap C] [--all-acts]
+[--chains --min-depth D]`. `--seed` and
 `--seasons` are required and have no default (this file is inside `tools/ci_sim_fabrication_check.py`'s
 blocking scope, the reason `harness/storybar.py` and `harness/soak.py` give); `--cap` is optional and
 is `build_realm`'s own parameter, defaulting to its own `None`, the full realm. The header line
@@ -59,6 +73,7 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+from collections import Counter
 
 from . import arc as ARC
 from . import storybar as SB
@@ -148,6 +163,41 @@ def render(log, act_of: dict, rows: dict, persons) -> str:
 
 
 # ---------------------------------------------------------------------------------------------
+# THE STORY READING (CR-69). Over `(w, act_of, bounds, min_depth)`; `log` lets a control hand in
+# `arc.shuffled_causes(...)`.
+# ---------------------------------------------------------------------------------------------
+
+def chain_ends(rows: dict, min_depth: int) -> list:
+    """Act ids in `rows` (consequence rows: `read(...)["executed"]` over the cut) that no other row answers
+    (no row lists them in `cross`) and whose `depth` is at least `min_depth`, in row order."""
+    answered = {b for r in rows.values() for b in r["cross"]}
+    return [aid for aid, r in rows.items() if aid not in answered and r["depth"] >= min_depth]
+
+
+def consequence_chains(w, act_of: dict, bounds: list, min_depth: int, log=None) -> dict:
+    """CR-69 -- `{"consequence_acts": n, "chain_ends": m, "kinds": {Event kind: ends carrying it}}`.
+
+    The ends are `chain_ends` over the rows `storybar.read` gives with every NON-consequence act cut (and
+    the edges into it, depth recomputed, as the pick does); `kinds` counts, per kind, the ends whose
+    consequence-making Events (`arc.consequence_kinds`) include it, sorted by kind. `log` defaults to
+    `w.log`; the control `arc.shuffled_causes(w.log, seed)` breaks only the links. Reads only."""
+    log = list(w.log if log is None else log)
+    made = ARC.consequence_kinds(w, act_of, log)
+    cut = frozenset(a.id for a in act_of.values() if a.id not in made)
+    rows = SB.read(log, act_of, bounds, cut)["executed"]
+    ends = chain_ends(rows, min_depth)
+    hist = Counter(k for aid in ends for k in made[aid])
+    return {"consequence_acts": len(made), "chain_ends": len(ends), "kinds": dict(sorted(hist.items()))}
+
+
+def render_chains(seed, min_depth: int, res: dict) -> str:
+    """The reading as a two-line block."""
+    kinds = ", ".join(f"{k}={n}" for k, n in res["kinds"].items()) or "(none)"
+    return (f"chains seed={seed} min_depth={min_depth} consequence_acts={res['consequence_acts']} "
+            f"chain_ends={res['chain_ends']}\nkinds on the ends' consequence Events: {kinds}")
+
+
+# ---------------------------------------------------------------------------------------------
 # CLI.
 # ---------------------------------------------------------------------------------------------
 
@@ -164,7 +214,15 @@ def main(argv=None) -> int:
                          "runs over consequence acts only (arc.consequence_acts: an Event the act "
                          "caused carries a Receipt writing a (kind, field) of ARC_SELF or ARC_WORLD; "
                          "the other acts and every edge into one are cut, depth recomputed)")
+    ap.add_argument("--chains", action="store_true",
+                    help="after the render, print the story reading (CR-69): the count of consequence chain "
+                         "ends of cross-person depth at least --min-depth and a histogram of the Event kinds "
+                         "that made them consequence acts; a reading, no bar")
+    ap.add_argument("--min-depth", type=int, default=None,
+                    help="REQUIRED with --chains, no default: the least cross-person depth of a chain end counted")
     args = ap.parse_args(argv)
+    if args.chains and args.min_depth is None:
+        ap.error("--chains requires --min-depth (no default)")
 
     w, d, bounds = SB.drive(args.seed, args.seasons, args.arm, args.cap)
     consequence = ARC.consequence_acts(w, d.act_of)
@@ -182,6 +240,9 @@ def main(argv=None) -> int:
         print("no consequence act in the log; --all-acts renders over every act")
     else:
         print(render(w.log, d.act_of, rows, w.persons))
+    if args.chains:
+        print(render_chains(args.seed, args.min_depth,
+                            consequence_chains(w, d.act_of, bounds, args.min_depth)))
     return 0
 
 
