@@ -58,7 +58,7 @@ MAPPING = {
     # POOL_FLOOR, by the QUALIFIED key (not the first-section-wins alias). Hand-confirmed: it is the
     # combat-pool minimum, max(POOL_FLOOR, history + BASE_POOL); both agree at 5 (see COLLISIONS['POOL_FLOOR']).
     # As the FLOOR only: the pools floored differ (port Agi*2 + History + 3, less 1 per wound, floored again at
-    # CombatLogic.gd:72; oracle History + 6, wounds as the bilateral Ob), the model gap module_contracts.yaml:925 records.
+    # systems/engine/CombatLogic.gd:72; oracle History + 6, wounds as the bilateral Ob), the model gap module_contracts.yaml:925 records.
     'COMBAT_POOL_MINIMUM':           'combat.core.POOL_FLOOR',
     # WEAPON_TN_BASE LEFT THIS TABLE at plan position PC-12. Its Python owner was the same retired v30
     # module (`WEAPON_TN_BASE` = 7; its WEAPON_TN_MOD matrix shifting TN 5-8 was already deleted), and TN is
@@ -116,7 +116,7 @@ COLLISIONS = {
 
 # Real disagreements between the oracle and the port. These are NOT closed by copying a number —
 # each is a model difference that needs a ruling. The parity checker reports them and does not fail
-# on them; the list can only shrink.
+# on them; an entry leaves only by a ruling or a port alignment, never by a value copy.
 DIVERGENCES = {
     'accord_range': {
         'engine': "NO accord state. The Accord clock has no season analogue (ED-WR-0011 option A); "
@@ -137,11 +137,11 @@ DIVERGENCES = {
         'engine': "TN is always 7 (ED-IN-0196, Jordan 2026-08-25): no weapon axis shifts it. The v30 "
                   "owner that carried WEAPON_TN_BASE (systems/combat/sim/combat.py) was "
                   "deleted at plan position PC-12; the oracle holds no per-weapon TN.",
-        'port':   "TN still VARIES by weapon, 5 to 8 (valoria-game resources/data_types/WeaponData.gd:30-38), "
+        'port':   "TN still VARIES by weapon, 5 to 8 (valoria-game resources/data_types/WeaponData.gd:30-38 and scenes/containers/combat/CombatLogic.gd:65-70), "
                   "with WEAPON_TN_BASE declared by hand in systems/util/Constants.gd.",
         'why_it_matters': "The port implements a per-weapon TN the ruling removed, so a fight resolves at "
-                          "a different target number there than in the oracle; there is no oracle value "
-                          "left to compare WEAPON_TN_BASE against.",
+                          "a different target number there than in the oracle; the port's base plus modifiers has "
+                          "no single oracle constant to compare against.",
         'needs': 'port alignment (CLAUDE.md §6: a port never corrects its oracle) — TN is 7 for every weapon',
     },
     'coherence_bands': {
@@ -230,8 +230,8 @@ def build():
             'MAPPING pairs are hand-confirmed against BOTH call sites and are the only pairs the parity '
             'checker may fail on. COLLISIONS are name look-alikes that are NOT the same quantity — never '
             'promote one into MAPPING without reading both call sites. DIVERGENCES are real model '
-            'disagreements that need a ruling, not a value copy; the checker reports them and the list '
-            'can only shrink.'
+            'disagreements that need a ruling, not a value copy; the checker reports them, and an entry '
+            'leaves only by a ruling or a port alignment.'
         ),
         'constants': {gd: src[key] for gd, key in sorted(MAPPING.items())},
         'owners': dict(sorted(MAPPING.items())),

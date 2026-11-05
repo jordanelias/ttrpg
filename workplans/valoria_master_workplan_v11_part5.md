@@ -213,7 +213,7 @@ The decision round moved four of these entries still here (SE-06 to B10-07b, and
 - RE-BASE: none found.
 - SOURCE: `v9_p7:101-106` (v8 source `v8_part5.md:379`; `registers/editorial_ledger_pc_archive.jsonl:33`); state-index row `v9.md:290`.
 
-### GO-06 — cross-repo: `valoria-game`'s parity reader against the shrunk `MAPPING`; the stale `game_constants.json` sentence (GO) · BATCH B10-20 (listed, HELD · BLK; moved from B10-Z) · STATE BLK:`valoria-game` checkout (another repository; not checkable here) · R —
+### GO-06 — cross-repo: `valoria-game`'s parity reader against the shrunk `MAPPING`; the stale `game_constants.json` sentence (GO) · BATCH B10-20 (listed, HELD · BLK; moved from B10-Z) · STATE BLK:`valoria-game` checkout (another repository: the parity run is done, the hand refresh of the port's copy is not) · R —
 - WHAT: the coherence reshape retired the `COHERENCE_*` pairs from `tools/export_game_constants.py`'s `MAPPING`. Confirm `valoria-game`'s `tools/check_constants_parity.py` (or equivalent) tolerates a smaller `MAPPING` rather than a fixed constant count, and that its generated `game_constants.json` stops carrying the sentence that named a deleted module. GO-01 adds one item: the reader learns the new `engine_series` key and the bumped `schema_version` (1 → 2). "Nothing here edits the other repository."
 - LANDED ALREADY: the reshape on this side (WR); the parity reader's tolerance of a smaller `MAPPING`, run at PC-12 against a scratch copy of `valoria-game@6b0df3d`.
 - REMAINING UNBUILT: the hand refresh of the port's `resources/generated/game_constants.json` (another repository); GO-01's `engine_series` key when it lands.
