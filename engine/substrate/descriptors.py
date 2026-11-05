@@ -44,9 +44,9 @@ _DATA = _load()
 REGISTRY_VERSION = _DATA.get('registry_version', '')
 REGISTRY_RATIFIED = _DATA.get('registry_ratified', '')
 
-#: Character attribute roster, in registry order. NOTE: Jordan ruled 2026-08-14 that this WILL BE
-#: ten; the registry ships nine and the tenth is unnamed. `ATTRIBUTES_PENDING_TENTH` is non-None
-#: while that is true, so a reader cannot mistake the current roster for a closed one.
+#: Character attribute roster, in registry order. Jordan ruled 2026-08-14 that this is ten and named
+#: them in ED-IN-0328 (CR-84). `ATTRIBUTES_PENDING_TENTH` is None at ten; it is non-None whenever the
+#: registry ships fewer, so a reader cannot mistake a short roster for a closed one.
 ATTRIBUTES = tuple(_DATA['attributes']['roster'])
 ATTRIBUTES_PENDING_TENTH = _DATA['attributes'].get('pending_tenth')
 ATTRIBUTE_FLOOR = _DATA['attributes']['scale']['floor']

@@ -39,12 +39,20 @@ def all_attributes(reg):
 
 
 def resolve(reg, name_or_key):
-    """Resolve a primary name, alias, or key -> attribute entry. Case-insensitive; None if absent."""
+    """Resolve a primary name, alias, or key -> attribute entry. Case-insensitive; None if absent.
+
+    A live attribute wins. A name only a RETIRED attribute (`attributes.retired`, e.g. Bonds) carries
+    resolves too, to its entry with `deprecated: True` -- never silently None, never counted in the
+    roster (`all_attributes`/`by_category` read the live lists only)."""
     n = str(name_or_key).strip().lower()
     for e in all_attributes(reg):
         if (e['key'].lower() == n or e['name'].lower() == n
                 or any(a.lower() == n for a in e.get('aliases', []))):
             return e
+    for e in (reg['attributes'].get('retired') or []):
+        if (e['key'].lower() == n or e['name'].lower() == n
+                or any(a.lower() == n for a in e.get('aliases', []))):
+            return {**e, 'domain': 'actor', 'kind': 'attribute_scalar', 'deprecated': True}
     return None
 
 

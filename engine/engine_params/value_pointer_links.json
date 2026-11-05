@@ -33,8 +33,8 @@
       "value": "threadwork.PERCEPTION_BANDS",
       "value_file": "systems/threadwork/sim/threadcut.py",
       "token": "PERCEPTION",
-      "pointer": "Attunement",
-      "pointer_key": "attr.social.attunement",
+      "pointer": "Perception",
+      "pointer_key": "attr.mind.perception",
       "method": "name_token"
     },
     {
@@ -532,8 +532,8 @@
         "social_contest._STRENGTH_LOW"
       ]
     },
-    "attr.social.attunement": {
-      "pointer": "Attunement",
+    "attr.mind.perception": {
+      "pointer": "Perception",
       "values": [
         "threadwork.PERCEPTION_BANDS"
       ]
@@ -710,7 +710,7 @@
       "attr.body.strength"
     ],
     "threadwork.PERCEPTION_BANDS": [
-      "attr.social.attunement"
+      "attr.mind.perception"
     ],
     "fieldwork.KNOT_BONDS_MIN": [
       "attr.social.bonds"
