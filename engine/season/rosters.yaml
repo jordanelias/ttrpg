@@ -1270,12 +1270,12 @@ rosters:
       ⚠ A ROUTE, NOT A PRIZE. Each row names the provider registered under `@provider("contest", …)`
       and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::faculty`
       (`verb_capability`, else the swept `pool_default`) and the obstacle the module's own
-      (`modules/social_contest/roll.py::obstacle`: `obstacle_default`, swept, while no
-      `verb_capability` row names an inquiry -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already
+      (`modules/social_contest/roll.py::obstacle`: `obstacle_default`, swept, unless the subject is a
+      person who HOLDS the `inquiry` key, `sigma.py::_opposition_of` -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already
       binds (`manifest/registry.py::check_graded_inquiries`), so this row adds no roll and no
-      resolver. No `verb_capability` row is added for the inquiries: which capability an inquiry
-      draws on is stated nowhere, so every inquirer rolls `pool_default` -- the declared finding
-      cut, re-read by `corpus_run`, not quoted here.
+      resolver. `verb_capability` now names `inquiry` for the three (REM-30, B10-10; the rows were deferred at
+      CP-T01-01): an inquirer who HOLDS an `inquiry` key rolls it, and one who holds none still rolls
+      `pool_default` (`seam/wrappers/sigma.py::faculty`).
       ⚠ THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the
       questioned person answers by their own `tell`, so there is no degree on the asker);
       `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read`
@@ -1370,11 +1370,21 @@ rosters:
       `{copying: 3}`; counted 2026-10-02 with `cast_overlay()`: 1 of 430 built persons), so every
       other derivation lands on `pool_default` and the roll varies by SEED and FIXTURE rather than by
       PERSON. That is why R-09 reads `partial` after `U1` and not `met`.
+      ⚠ FOUR ROWS WERE DEFERRED AT CP-T01-01 (v11 B10-08, AM-B-01) AND LAND WITH THE FIRST WRITER OF AN
+      `argue` OR `inquiry` KEY (REM-30's creation sheet; v11 B10-10): `argue: "argue"` and the three
+      inquiries `research`, `examine`, `surveil: "inquiry"`. They are VALUES of this table, so they ARE the
+      vocation range (`data/verbs.py::VOCATIONS`, a frozenset of these values; no second roster to extend):
+      `argue` and `inquiry` join `copying`, and every `train` formation (`vocation_sourced`) forms one
+      Candidate per vocation, three where it formed one. A DECLARED MOVER where formation moves, not before.
     sweep: [declared, uniform, absent]
     keys: [verb_table]
     values:
       tell:  "copying"
       speak: "copying"
+      argue: "argue"
+      research: "inquiry"
+      examine:  "inquiry"
+      surveil:  "inquiry"
 
   contest_subsystems:
     source: "`references/module_contracts.yaml` names `combat` (was `personal_combat`; one identity per module, A-25), `mass_battle` and `social_contest` as modules with real docs and real resolvers. `ARCHITECTURE_V2.md:394` declares `contests: <prize>` — *if set, routes to the seam at RESOLVE (§39)*."
@@ -2262,7 +2272,7 @@ rosters:
     note: >-
       WHICH VERBS CARRY A VOCATION, AND ON WHICH OPERAND -- `verb: operand`. A VOCATION is a
       capability key `verb_capability` maps some verb to (its VALUES, `data/verbs.py::VOCATIONS`;
-      today `copying` only, #453 K-20's range). A verb named here forms ONE Candidate per vocation in
+      `copying`, `argue` and `inquiry`, #453 K-20's range). A verb named here forms ONE Candidate per vocation in
       that range, the key riding on the named operand (`decision/options.py::opening_set`) -- the
       `kind` operand #453 §9.4's blocker names, which `_derive_operand` would otherwise answer with a
       store kind. ⚠ THE ACTOR'S OWN CAPABILITY IS NOT READ, AND THAT IS THE POINT: capability GATES

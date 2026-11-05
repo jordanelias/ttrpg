@@ -2926,7 +2926,11 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # ENCOUNTER (`march`'s pair), so each fight is declared at RESOLVE and fought on the round's settled world, and the act mix moves
     # (seed 0, one season: 685 -> 700 in both arms; `test_go07_canonical_digest.py` records the 700). CONTROL: `the body`'s
     # `step:`/`declares:` popped in process reads (685, 685) under this same test.
-    assert (out["acts"], cout["acts"]) == (700, 700), (
+    # ⚠⚠ v10 REM-30 (the `verb_capability` rows): (700, 700) -> (705, 705), A RE-RECORD WITH THE UNIT THAT MOVED IT: `train` forms one
+    # Candidate per vocation (`argue` and `inquiry` join `copying`) and its act id carries the vocation, so the act mix moves (seed 0,
+    # one season: 700 -> 705 in both arms; `test_go07_canonical_digest.py` records the 705). CONTROL: the rows commit's four source
+    # files reverted read (700, 700) under this same test (the parent tree's run of this file's set).
+    assert (out["acts"], cout["acts"]) == (705, 705), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")
