@@ -349,6 +349,12 @@ RETIREMENT_SHIFTED = frozenset({
     'engine/substrate/__init__.py',
     'references/module_contracts.yaml',
     'tools/build_execution_map.py',
+    # PC-11 (B10-10b close one) deleted dead code from these two LIVE files (wrapper.py lost ten lines above
+    # `fight`, combatant.py lost seven), so the archived combat skeleton's and the atlas's `wrapper.py:533 fight`
+    # and `combatant.py:154 apply_wound` line anchors moved. A bare line is now advisory; every symbolled anchor
+    # into them is still checked by symbol. Keyed on the path the archived anchors CITE.
+    'systems/combat/combat_engine_v1/wrapper.py',
+    'systems/combat/combat_engine_v1/combatant.py',
     # ED-IN-0263 (2026-09-22): rewritten as a pointer index, so every row moved. Archived anchors
     # into it are frozen; a bare line is advisory, a symbol (`npc_behavior_v30`) is still checked.
     'CURRENT.md',

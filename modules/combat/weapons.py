@@ -20,7 +20,7 @@ RECORD SCHEMA (per weapon):
              `hand_guard`/`blade_guard`
              are NOT authored in a record: the bake loop at the bottom of this file ADDS both from
              weapon_physics.hand_guard()/blade_guard() (a saturating sum over the record's own located `guards` —
-             morphology-rearch Phase B4). PC-11 deleted the 54 stale pre-Phase-B4 literals the bake overwrote.
+             morphology-rearch Phase B4). PC-11 deleted the 54 pairs of stale pre-Phase-B4 literals the bake overwrote.
   COMPOSITE  wclass{bladed,hafted_tip,hafted_block} · hilt{compound,simple,none}
   PARTS      elements=[{x_m, mass_kg, extent_m, orient_deg, material, [edge_undulation]}] (the located striking
              element(s) — one for a plain blade/point/haft-tip, several for a composite head like the bec de
@@ -907,7 +907,7 @@ import weapon_physics as _wp
 for _w, _rec in WEAPONS.items():
     _rec['_derived'] = _wp.derive(_rec)
 
-# Bake hand_guard/blade_guard ONCE at import (morphology-rearch Phase B4): OVERWRITES the field with the DERIVED
+# Bake hand_guard/blade_guard ONCE at import (morphology-rearch Phase B4): ADDS both fields, the DERIVED
 # value from the record's located `guards` (weapon_physics.hand_guard/blade_guard — a saturating sum over
 # physical catch hardware, not a hand-authored scalar). Every consumer (systems.mode_sigma's parry/wind terms,
 # systems.bind_sigma's catch term, weapon_physics.defense_affinities' parry/wind) already reads w['hand_guard']/

@@ -278,7 +278,7 @@ def _fight_with_stub_engagement(monkeypatch, damage_A, damage_B, terms):
 
 def test_an_exact_tie_on_the_terms_ends_unresolved_with_no_yield(monkeypatch):
     """Both fighters cross `blood` on the same beat with the same Health left: nobody yields, the fight ends
-    UNRESOLVED (result 0, no winner), and no UPSET_FLOOR draw can flip it. The control (the same stub, unequal
+    UNRESOLVED (result 0, no winner) on the first beat. The control (the same stub, unequal
     damage) yields the one who is worse off, so the assertion can observe the tie branch being absent."""
     wi = C.Combatant('A', weapon='arming').wt.wi
     result, trace, A, B = _fight_with_stub_engagement(monkeypatch, wi, wi, 'blood')
@@ -286,6 +286,7 @@ def test_an_exact_tie_on_the_terms_ends_unresolved_with_no_yield(monkeypatch):
     assert result == 0
     assert [e for e in trace if e['kind'] == 'fight_result'] == [dict(kind='fight_result', result=0, winner=None)]
     assert not any(e['kind'] == 'yield' for e in trace)
+    assert sum(e['kind'] == 'turn_start' for e in trace) == 1      # a tie ends the fight; it does not fight on
     assert wrapper._terms_yielder(A, B, 'blood', CFG) is None
 
     # control: unequal damage, same stub -> the fighter with the smaller fraction of Health left yields
