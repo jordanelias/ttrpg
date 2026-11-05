@@ -210,7 +210,7 @@ Each is `[ASSUMPTION; medium; Jordan to correct]` and reverts alone; the revert 
 
 ## 7. Coverage
 
-`python proposals/2026-10-24-master-workplan-v10/ctl/coverage_check.py proposals/2026-10-24-master-workplan-v10 proposals/2026-10-24-master-workplan-v10` reads the id list from `ctl/static_inventory.json` (`ed_open_not_named`, 113 ids) and requires each to be the first cell of a row in this file. It checks that a row exists, not that its disposition is right.
+`python proposals/2026-10-24-master-workplan-v10/ctl/coverage_check.py proposals/2026-10-24-master-workplan-v10 proposals/2026-10-24-master-workplan-v10` (deleted at B10-09's close two with `ctl/`; read at `git show 1ef8d273:proposals/2026-10-24-master-workplan-v10/ctl/coverage_check.py`) reads the id list from `ctl/static_inventory.json` (`ed_open_not_named`, 113 ids) and requires each to be the first cell of a row in this file. It checks that a row exists, not that its disposition is right.
 
 ## 8. Not verified
 

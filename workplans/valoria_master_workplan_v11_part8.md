@@ -9,7 +9,7 @@
 
 - Three tables. The first cell of every data row is exactly the id. Table 1 has 62 rows, Table 2 has 19, Table 3 has 42. The other 171 hole-register rows, and the work v9 names that is not a hole row, are in `workplans/valoria_master_workplan_v11_part9.md`. The 113 other open editorial ids are in `workplans/valoria_master_workplan_v11_part10.md`.
 - `[INFERRED]` marks inference. Where I name a position because its subject matches the row and its own text does not cite the row's id, the cell says so.
-- A handle is a key of REM, CP, V9, CR, NM or CL in `ctl/batch_map.py`. A v9 alias (IN-09, IN-33, IN-46, IN-47, SE-05, FA-02, FI-05) is never a position; it is named only where it explains a target.
+- A handle is a key of REM, CP, V9, CR, NM or CL in `ctl/batch_map.py` (deleted at B10-09's close two; read it at `git show 1ef8d273:proposals/2026-10-24-master-workplan-v10/ctl/batch_map.py`). A v9 alias (IN-09, IN-33, IN-46, IN-47, SE-05, FA-02, FI-05) is never a position; it is named only where it explains a target.
 - The H-nnn column "ladder" names the ask row (A1-nn from L1, A2-nn from L2) and the merged question (M-nn) only where an ask is attached. Where L1 and L2 disagree on one subject, both are shown and nothing is decided here (H-219); the decision round has since decided H-198 (M9) and left H-214 and H-234 on M11, which Jordan has since answered (a), 2026-10-26 (ED-IN-0300); both ride CR-29 and FA-01.
 - The merged question list used here: M1 deliberation (L1 Q1+Q2, L2 Q3); M2 character and capability source (L1 Q3, L2 Q1); M3 troop (L2 Q2); M4 fought field (L2 Q4); M5 works (L1 Q5, L2 Q5); M6 hunger scarcity (L1 Q6, L2 Q12); M7 line past death (L2 Q6); M8 depose (L2 Q7); M9 lies (L2 Q8); M10 march requires declared war (L2 Q9); M11 sixth witness channel and confirm D-1 (L2 Q10, L1 Q9, A1-07); M12 focalized journal (L2 Q11); M13 Godot version (L1 Q4); M14 cell-value pass (L1 Q7); M15 the `CLAUDE.md` §0.2 `mc_v18` bullet (L1 Q8). M16 to M21 and the status of every question after the decision round (taken, narrowed, answered, confirmed at the default, action) are `-05`'s; a disposition below that names a decision cites its new owner.
 - Rule R8 as the B10-19 and B10-Z cards use it: a still-held item slots into the next unopened batch of its cluster (v9 `_part3` §B.0, quoted in `ext/F1_v9_head_part2_part3.md:352`). Where a row has no owner I name the batch whose cluster it belongs to; the choice is [INFERRED].
@@ -88,6 +88,7 @@ Sections: §2 hole rows · §3 editorial-ledger ids · §4 the state index · §
 | H-245 | assumption | OPEN as an assumption (built at CP-T01-02, B10-08, shipped live at CR-18: `practice_window` 4 closed seasons) | NONE (an assumption, not a ruling request); Jordan's to correct (revert: `practice_cap` 0) | CP-T01-02 (landed `4ca86a130`); CR-18 (landed `8bdfb72ce`) | B10-08 (CLOSED) | M2 (NARROWED) |
 | H-246 | assumption | OPEN as an assumption (built at CP-T01-02, B10-08, shipped live at CR-18: `practice_step` 2, two good results buy one die) | NONE (an assumption, not a ruling request); Jordan's to correct (revert: `practice_cap` 0) | CP-T01-02 (landed `4ca86a130`); CR-18 (landed `8bdfb72ce`) | B10-08 (CLOSED) | M2 (NARROWED) |
 | H-247 | assumption | OPEN as an assumption (built at CP-T01-02, B10-08, shipped live at CR-18: `practice_cap` 2 = `pool_default`, and the switch; 0 is the control) | NONE (an assumption, not a ruling request); Jordan's to correct (revert: `practice_cap` 0) | CP-T01-02 (landed `4ca86a130`); CR-18 (landed `8bdfb72ce`) | B10-08 (CLOSED) | M2 (NARROWED) |
+| H-248 | assumption | OPEN as an assumption (built at CR-17, B10-09 close two: `odds_weighting` ships `believed`, `none` the control) | NONE (an assumption, not a ruling request); Jordan's to correct (revert: `odds_weighting` `none`, one re-pin) | CR-17 (landed `3a406d60`) | B10-09 (CLOSED) | M1 (TAKEN) |
 
 ## 3. The editorial-ledger ids open since v9
 
@@ -263,7 +264,7 @@ Counts: 8 hole rows and 3 ledger ids have no v10 handle; 52 hole rows and 8 ledg
 
 ## 9. Coverage
 
-`python proposals/2026-10-24-master-workplan-v10/ctl/coverage_check.py proposals/2026-10-24-master-workplan-v10 proposals/2026-10-24-master-workplan-v10` (the script reads `ctl/batch_map.py` and `ctl/static_inventory.json` beside itself) was run over the finished directory, after the critic pass's edits. Result:
+`python proposals/2026-10-24-master-workplan-v10/ctl/coverage_check.py proposals/2026-10-24-master-workplan-v10 proposals/2026-10-24-master-workplan-v10` (the script reads `ctl/batch_map.py` and `ctl/static_inventory.json` beside itself; deleted at B10-09's close two with `ctl/`, read at `git show 1ef8d273:proposals/2026-10-24-master-workplan-v10/ctl/coverage_check.py`) was run over the finished directory, after the critic pass's edits. Result:
 
 | check | result |
 |---|---|

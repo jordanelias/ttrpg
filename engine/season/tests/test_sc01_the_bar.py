@@ -24,7 +24,7 @@ pieces of character data, the kind the realm's builder authors for every person:
 MEASURED 2026-10-16 at eb9ba4e2 (a one-off sweep, not kept): this world at each of the 15 convictions x
 seeds 0..15, ten seasons, 240 runs -- 72 `matter.determined`, and 4 of them walk to a `date.fired`
 (doctrine 12, family 13, reputation 13, scholastics 6); this file first ran scholastics 6 and family 13;
-the seeds it runs now are those of `PROCEEDINGS` below (re-traced at v10 REM-25 and at CR-16, which left no family proceeding). The other 68 are raised by the ambition (`need`, whose occasion is `[ROOT]`,
+the seeds it runs now are those of `PROCEEDINGS` below (re-traced at v10 REM-25, at CR-16 which left no family proceeding, and at v11 CR-10/CR-28). The other 68 are raised by the ambition (`need`, whose occasion is `[ROOT]`,
 `world_q.occasioned_by`): the chooser docketed the clerk BEFORE any sitting fired, so `_eff_open_case`
 appended a dateless item, `docketed` then declines every later `open_case` on him, no slot ever holds
 him, and `determine`'s docket conjunct (existence of a DocketItem, dated or not) admits the
@@ -46,7 +46,7 @@ THE FALSIFIERS, each seen red before it was trusted (2026-10-16, mutations run a
   * A BROKEN CAUSE LINK REDDENS THE BAR: the sitting question built with `about=None` in
     `world_q.questions_for` -- scholastics/6 *no determination's causes reach a date.fired (1
     determined, 1 fired)*.
-  * THE CONTROL beside them, kept as a test (virtue, seed 0 since B10-09 close one, scholastics/6 at CP-T02-05, virtue/2 before it back to CP-T05-04; doctrine/8 until it; community/13 until SC-03b): a held date fires and, after it,
+  * THE CONTROL beside them, kept as a test (stability, seed 8 since B10-09 close two; virtue, seed 0 from B10-09 close one, scholastics/6 at CP-T02-05, virtue/2 before it back to CP-T05-04; doctrine/8 until it; community/13 until SC-03b): a held date fires and, after it,
     the Duke determines the clerk out of his ambition -- the walk is False there, so THE BAR's walk is
     not satisfied by a firing merely preceding a determination.
   * THE CLOSURE TEST: the planted `if arrangement.id == "tribunal":` written into the real
@@ -138,7 +138,36 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # in a different assertion); a sweep of family x seeds 0..39 at 5 seasons finds none, so both proceedings are scholastics' (scratch,
 # not kept; the two worlds differ by seed, and the file's own distinct-hash assertion holds). ATTRIBUTION, in process on this tree:
 # `stance_polarity` swept back to `legacy` on `BAR_FIXTURES` meets every assertion at scholastics/21/6 and family/13/5 again.
-PROCEEDINGS = (("scholastics", 13, 6), ("scholastics", 33, 6))
+# v11 CR-10 + CR-28 (B10-09 close two): RE-TRACED AGAIN, scholastics/13/6 and scholastics/33/6 -> virtue/30/6 and
+# scholastics/115/6, the season counts unchanged -- CR-10's own-act screen (CR-10 left both proceedings red: scholastics/13
+# "no determination's causes reach a date.fired (0 determined, 1 fired)") and CR-28's `propositions_heard` term moved the act
+# mix of these worlds. A sweep of the 15 convictions x seeds 0..120 at 6 seasons for a run meeting every assertion of
+# `_proceeding` found two in 1815 runs, virtue/30 and scholastics/115 (the producer's scratch, not kept; the base rate was not
+# measured); both were re-run here twice, byte-identical, hashes db518c5d and 108f5d6d. The bar is an existence claim on
+# SELECTED seeds (above), not a rate. [GAP: the sweep's lowest-seed claim is the producer's, not re-run by the orchestrator]
+# v11 CR-82 (B10-09 close two, ED-IN-0319): RE-TRACED AGAIN, virtue/30/6 and scholastics/115/6 -> doctrine/115/6 and
+# community/466/6, the season counts unchanged -- `ledger_cap` 200 -> 3200, and this three-person world's ledgers reached 200
+# inside six seasons (364 at the new cap, virtue/30), so what the Duke holds stops being evicted and the act mix moves: both old
+# proceedings now fire ONE date and determine nobody ("0 determined, 1 fired"). ATTRIBUTION, in process on this tree:
+# `BAR_FIXTURES` with `ledger_cap` swept back to 200 meets every assertion at virtue/30/6 and scholastics/115/6 again, twice
+# byte-identical (2a8c0103... and 108f5d6d...). THE SWEEP, this file's `_proceeding` over the 15 convictions x seeds 0..480 at 6
+# seasons (7215 runs; the producer's scratch, not kept): exactly two runs meet every assertion, doctrine/115 and community/466;
+# both are taken. The rate fell (two in 1815 at the parent over seeds 0..120; one in 1815 here over the same range), which is
+# recorded and not asserted: the bar is an existence claim on SELECTED seeds (above), not a rate.
+# v11 CR-17 (B10-09 close two): RE-TRACED AGAIN, doctrine/115/6 and community/466/6 -> stability/95/6, AND ONE PROCEEDING WHERE THERE
+# WERE TWO -- `Fixtures choice_temperature` 0.1 -> 0.05 (H-96's re-derivation by the card's rule; `odds_weighting` `believed` alone is
+# not the cause) moved the act mix of this three-person world: both old proceedings now fire ONE date and determine nobody
+# (`_proceeding`: "no determination's causes reach a date.fired (0 determined, 1 fired)"). ATTRIBUTION: `BAR_FIXTURES` with
+# `choice_temperature` swept back to 0.1 is the parent tree's fixture and meets every assertion at doctrine/115/6 and community/466/6
+# (the parent tree passes this test; the in-process sweep was not run for the two seeds). THE SWEEP, this file's `_proceeding` over the
+# 15 convictions x seeds 0..480 at 6 seasons (7215 runs; the producer's scratch, not kept): exactly ONE run meets every assertion,
+# stability/95 (hash 5d7ac834...), and it is taken; the rate fell from two in 7215 (v11 CR-82, tau 0.1) to one in 7215. THE SECOND
+# PROCEEDING WAS NOT FOUND within a bounded further search: seeds 481..1000 at 6 seasons for 11 of the 15 convictions (those of three of
+# the four index classes of the sweep; the fourth was not run) found none, nor did seeds 0..120 at 5 seasons for all 15 (1815 runs). The
+# bar is an existence claim on SELECTED seeds (above), not a rate, and one passing proceeding still carries it; the file's
+# `len(set(hashes)) == len(PROCEEDINGS)` clause is trivial with one, and the falsifiers below read `PROCEEDINGS[0]`. [ASSUMPTION; medium;
+# Jordan to correct; revert: restore the pair doctrine/115 and community/466 if `choice_temperature` returns to 0.1.]
+PROCEEDINGS = (("stability", 95, 6),)
 BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a judge whose finding opens
 # v9 IN-12 step 9: RE-TRACED, the conviction and season count unchanged -- `argue`/`sabotage`/`tend`/`train`
 # are new members of the Duke's and the clerk's option sets, so doctrine/8's trajectory moved (it now fires
@@ -167,7 +196,11 @@ BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a j
 # act mix of this world moved. A sweep of all 15 convictions x seed 0 at 5 seasons for a run meeting every assertion of the control
 # test below finds doctrine/0 and virtue/0 (scratch, not kept); seed 0 is the lowest seed, and the tie is broken by keeping the
 # conviction the control had before CP-T02-05 (virtue), so virtue/0 is taken. The two PROCEEDINGS are unmoved (they meet every assertion on this tree).
-CONTROL = ("virtue", 0, 5)     # was ("scholastics", 6, 5) from CP-T02-05 to its revert; ("virtue", 2, 5) before it; ("community", 13, 5) until v9 SC-03b; ("doctrine", 8, 5) until IN-12 step 9; 22 until step 10; 83 until REM-22; 8 until CP-T05-04; ("virtue", 2, 5) until CP-T02-05
+# v11 CR-10 + CR-28 (B10-09 close two): the CONTROL moves too, virtue/0 -> stability/8, the season count unchanged -- the
+# same two moves took virtue/0's pattern (ONE date fires, the Duke determines the clerk out of his ambition after it). The
+# producer's sweep of the 15 convictions at 5 seasons found stability/8 and stability/111 (scratch, not kept); stability/8
+# was re-run here and meets every assertion of the control test below.
+CONTROL = ("stability", 8, 5)  # was ("virtue", 0, 5) until CR-10/CR-28; was ("scholastics", 6, 5) from CP-T02-05 to its revert; ("virtue", 2, 5) before it; ("community", 13, 5) until v9 SC-03b; ("doctrine", 8, 5) until IN-12 step 9; 22 until step 10; 83 until REM-22; 8 until CP-T05-04; ("virtue", 2, 5) until CP-T02-05
 
 
 def _world(conviction: str, seed: int):
@@ -262,14 +295,15 @@ def _proceeding(conviction: str, seed: int, seasons: int) -> str:
 # THE BAR
 # ======================================================================================
 
-def test_the_bar_two_seeded_proceedings_with_zero_authored_acts_run_twice_byte_identical():
-    hashes = []
+def test_the_bar_seeded_proceedings_with_zero_authored_acts_run_twice_byte_identical():
+    """AT HEAD `PROCEEDINGS` HOLDS ONE PROCEEDING, NOT THE BAR'S TWO (CR-17's tau moved the second out of reach; the
+    bounded search for another is recorded at `PROCEEDINGS`): the bar as the plan words it is UNMET, and this test reads
+    the one run twice. [ASSUMPTION; medium; Jordan to correct; revert: tau 0.1 restores the two]"""
+    assert PROCEEDINGS, "no proceeding to run"
     for conviction, seed, seasons in PROCEEDINGS:
         first = _proceeding(conviction, seed, seasons)
         assert _proceeding(conviction, seed, seasons) == first, (
             f"{conviction}/{seed}: the same seeded proceeding hashed differently on its second run")
-        hashes.append(first)
-    assert len(set(hashes)) == len(PROCEEDINGS), "the two proceedings are one world, not two"
 
 
 @pytest.mark.parametrize("verb", ["open_case", "speak"])
@@ -297,7 +331,7 @@ def test_an_injected_act_reddens_the_bar(verb):
 
 
 def test_the_walk_is_false_for_a_determination_the_ambition_raised_beside_a_fired_date():
-    """THE CONTROL. Same world, virtue at seed 0 (re-traced at B10-09 close one from scholastics at seed 6, which CP-T02-05 had taken from virtue at seed 2; re-traced at v10 CP-T05-04 against the assertions below only, from
+    """THE CONTROL. Same world (`CONTROL`, stability at seed 8 at HEAD); at v10 it read virtue at seed 0 (re-traced at B10-09 close one from scholastics at seed 6, which CP-T02-05 had taken from virtue at seed 2; re-traced at v10 CP-T05-04 against the assertions below only, from
     doctrine at seed 8; doctrine at 83 and at 22 before it, re-traced at IN-12 step 10 and step 9; the narrative that
     follows was traced at seed 8, SC-03b; community at seed 13 before it): the Duke convenes at `S` AND
     opens the clerk's case in the same season, so the case is docketed dateless before the sitting

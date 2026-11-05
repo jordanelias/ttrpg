@@ -227,8 +227,24 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-10 -- *the SCENE budget as an integer of the ruled band ~5*; #353 §26.3 gives the band, Jordan's 2026-09-02 ruling the unit, and a band is not an integer]
     scene_budget=5,
     # S20: the ledger cap L. Params-owned; no in-chain value.
-    # [JUSTIFIED: engine/season/hole_register.yaml H-09 -- `site: Fixtures ledger_cap (L) · view_k (K) · confidence_default`; S20 names L, no in-chain value exists, 200 is injected and swept]
-    ledger_cap=200,
+    # CR-82 (ED-IN-0319: people remember one another for years) RAISED THIS FROM 200 TO 3200.
+    # MEASURED (`build_realm`, `populated.run` chooser, PYTHONHASHSEED=0; acq = the 236 claims
+    # `seed_acquaintances` writes): at 200 a realm ledger fills in season 1 and the eviction
+    # comparator (S20/S34, `state/ledgers.py::eviction_key`) drops the acquaintance claims first,
+    # 0 and 0 of 236 held at season 8 on seeds 0 and 1; 3200 is the smallest swept value
+    # (200/400/800/1600/3200) holding them through eight seasons, two years at four seasons to
+    # the year (ED-IN-0332): 202 and 196 of 236 (1600 holds 75 and 116); seed 2, read at 3200
+    # only, holds 185. ⚠ 3200 BUYS TIME, NOT
+    # RETENTION: the ledger grows with the horizon and does not plateau (longest 2506, 2074 and
+    # 2178 at season 8, 3988 at season 12 on seed 0 at cap 6400), so at this value the cap is not reached through
+    # season 8 and eviction does not run; on the measured growth it binds near season ten, and
+    # then the comparator forgets the oldest first again. That figure is extrapolated, not
+    # measured. The next lever is a selective eviction rule (a change to the S20/S34
+    # comparator), not a larger number; it is not built. Cost, seed 0: eight seasons 377 s
+    # against 215 s at 200, peak 1584 MB against 1203 MB.
+    # [ASSUMPTION; medium; Jordan to correct; revert: ledger_cap back to 200]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-09 -- `site: Fixtures ledger_cap (L) · view_k (K) · confidence_default`; S20 names L, no in-chain value exists, 3200 is injected and swept (CR-82)]
+    ledger_cap=3200,
     # S18: "at most K claim ids from the holder's OWN ledger -- BUILT, NOT FILTERED".
     # [JUSTIFIED: engine/season/hole_register.yaml H-09, the same row as `ledger_cap` above; S18 names K and the magnitude is injected and swept]
     view_k=12,
@@ -266,6 +282,9 @@ DEFAULT_FIXTURES = Fixtures(
     # dead at 0.1 exactly as it is at 1.0, BY CONSTRUCTION rather than by degree. Nothing is bought
     # by going hotter.
     #
+    # [THE 2026-09-10 RULE BELOW ("the smallest we sweep above zero") IS SUPERSEDED BY THE v11 CR-17 RULE AT THE END OF THIS
+    # BLOCK: on the extended grid the smallest above zero would be 0.01, and the shipped value is the LARGEST at which the
+    # strict-top share exceeds one half; the measurement that follows still reads.]
     # THE MEASUREMENT — and it says something IS bought by going colder. Sweeping the shipped
     # corpus, 89 live cases at seed 0, distinct executed sets: **tau=0 -> 16 · 0.1 -> 10 ·
     # 0.25 -> 8 · 0.5 -> 7 · 1.0 -> 7**. Between-world variety falls MONOTONICALLY with temperature,
@@ -282,8 +301,24 @@ DEFAULT_FIXTURES = Fixtures(
     # inclinations"* than a hot temperature, which would override the inclinations it is supposed
     # to express. ⚠ RE-DERIVE THIS IF `U3` LANDS: a denser alignment table means fewer ties, which
     # moves what tau is doing.
-    # [JUSTIFIED: engine/season/hole_register.yaml H-96 -- `site: Fixtures choice_temperature`, graded `measured`; the alphabetical tie-break is the measured defect and this is the injected magnitude of its remedy, swept 0 / 0.1 / 0.25 / 0.5 / 1.0, the row's own `sweep:`]
-    choice_temperature=0.1,
+    #
+    # ⚠ RE-DERIVED AT v11 CR-17 (B10-09 close two, its last commit), 0.1 -> 0.05, BY THE RULE THE CARD STATES AND NOT
+    # BY TUNING: H-96's `sweep:` gained 0.01 / 0.02 / 0.03 / 0.05, and tau is the LARGEST grid value at which REM-12's
+    # split (`harness/decision_spread.py --decisions`, the built realm, seeds 0-2) reads the sampler's top as the strict
+    # score leader in MORE THAN ONE HALF of the readings, among persons holding a pursuit vector (every person since
+    # SE-06 gave the cohorts one: `field_zero` reads 0 of 498), AND `test_u4_the_choice_is_sampling_and_the_argmax_is_its_
+    # zero_temperature_control` passes. MEASURED (strict-top-decided share of 498 readings, seeds 0 / 1 / 2): 0.1 ->
+    # 28.5 / 32.5 / 28.3 %; 0.05 -> 54.4 / 59.6 / 54.8 %; 0.03 -> 74.3 / 78.1 / 75.7 %; 0.02 -> 85.5 / 87.6 / 87.2 %; 0.01 ->
+    # 93.4 / 93.8 / 93.2 %; 0 -> 100 %. test_u4 passes at every grid value (15 distinct tops in 20 seeds at each; 1 at 0: the
+    # fixture's candidates score alike, so the draw alone decides). So 0.05 is the largest value above one half at all three
+    # seeds. THE ODDS WEIGHTING (`odds_weighting`, below) MOVES THESE SHARES BY NOTHING AT ANY GRID VALUE (`none` and
+    # `believed` read the same counts at every cell): it reaches only `determine`'s pursuit term, 46 of the 498 readings'
+    # candidates, and not one top. ⚠ THIS IS A PROPERTY OF THIS FLAT FIELD, NOT A TUNED OPTIMUM: most contested rows score
+    # alike at stance 0, so the share is a function of how tau compares to the score gaps (median outvoted lead 0.065 at
+    # 0.1). It goes stale under any later mover of those gaps (B10-18's, CL-PERSON's first non-neutral value).
+    # [ASSUMPTION; medium; Jordan to correct; revert: choice_temperature 0.1, one re-pin]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-96 -- `site: Fixtures choice_temperature`, graded `measured`; the alphabetical tie-break is the measured defect and this is the injected magnitude of its remedy, swept 0 / 0.01 / 0.02 / 0.03 / 0.05 / 0.1 / 0.25 / 0.5 / 1.0, the row's own `sweep:`]
+    choice_temperature=0.05,
     # `W4` / `H-40`, THE THIRD LICENSED CLOCK (#353 `:864`). #353 licenses confidence decay at
     # MATTER and gives NO RATE, so this is an INJECTED DEFAULT with a `site:` and a three-point
     # sweep on the register, exactly as `H-09` treats the confidence default beside it. It is a
@@ -897,6 +932,14 @@ DEFAULT_FIXTURES = Fixtures(
     # pre-G2 term verbatim, and stays selectable.
     # [JUSTIFIED: engine/season/hole_register.yaml H-194 -- the polarity arm; §F2 gives the term and no sign by role, so the readings are declared and swept legacy / regard / declared]
     stance_polarity="declared",        # `H-194`, swept legacy (control) / regard / declared (SHIPPED, CR-16)
+    # `H-248` (v10 CR-17; M1, AQ-X1 (b)). WHETHER A PERSON'S CHANCE OF SUCCEEDING ENTERS THE RANKING: the pursuit term of
+    # a CONTESTED candidate is multiplied by the person's own believed chance of the bands that write what the
+    # term prices (`decision/choose.py::odds_weight`; the chance is `seam/wrappers/sigma.py::believed_chance`, CP-T01-03's
+    # mode (b), handed to the chooser on `View.odds`). `none` is the CONTROL: the term as it stood before CR-17.
+    # `believed` leaves a candidate alone where the person cannot say (`None`), where the verb contests nothing, and
+    # where it writes in no band. [ASSUMPTION; medium; Jordan to correct; revert: `odds_weighting` `none`, one re-pin]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-248 -- `site: Fixtures odds_weighting`, graded `assumption`; whether and how a believed chance weighs a contested choice is no document's (AQ-X1 (b) is taken, M1), so the arm is declared and swept none (the control) / believed]
+    odds_weighting="believed",         # `H-248`, swept none (control) / believed (SHIPPED, CR-17)
     # `H-202` (v9 IN-25, BOUND-STAKES). HOW HARD §F2's STANCE TERM PULLS ON A CHOICE: the term
     # `stance_polarity` signs is read at `1 + this` (`decision/choose.py::stance_term`), so a grudge
     # or a judged deed outweighs a person's pursuits sooner as it rises. §F2 weights the term 1 and

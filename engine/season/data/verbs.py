@@ -1736,8 +1736,14 @@ def _derive_rung_remit_acts() -> frozenset:
 def _remit_acts_of_class(cls: str) -> frozenset:
     """The act of every `remit:` eligibility alternative on a row declaring `referent_class: <cls>` --
     the ONE reading `RUNG_REMIT_ACTS` and `DETAINEE_REMIT_ACTS` are both taken by (v10 IN-12)."""
-    return frozenset(raw.strip() for row in VERB_TABLE.values() if row.referent_class == cls
-                     for kind, _, raw in (alt.partition(":") for alt in row.eligibility)
+    return frozenset(act for row in VERB_TABLE.values() if row.referent_class == cls
+                     for act in _remit_acts_of(row))
+
+
+def _remit_acts_of(row: "VerbRow") -> frozenset:
+    """The act of every `remit:` eligibility alternative on ONE row -- `_remit_acts_of_class`'s per-row read,
+    factored out at v11 CR-25 so `FOUNDING_REMIT_ACTS` (below) takes the same parse, never a second one."""
+    return frozenset(raw.strip() for kind, _, raw in (alt.partition(":") for alt in row.eligibility)
                      if kind.strip() == "remit" and raw.strip())
 
 
@@ -1756,6 +1762,14 @@ if DETAINEE_CLASS not in REFERENT_CLASSES:
 # The remit acts a seat exercises on a `Detainee`: the union over the rows declaring the class
 # (`interrogate`: `determine`), so the stamp offers a prisoner only to a holder of a seat granting one.
 DETAINEE_REMIT_ACTS = _remit_acts_of_class(DETAINEE_CLASS)
+
+# v11 CR-25 ([ASSUMPTION; medium; Jordan to correct; revert: drop `holdings_to_found` and the derivation]): THE
+# REMIT ACTS A SEAT FOUNDS AN OFFICE THROUGH -- `establish`'s own `remit:` alternatives (`confer` today), read off
+# the row, so the founding stamp (`queries/world_q.py::holdings_to_found`) offers a holding only to a holder of a
+# seat the fold's eligibility would admit, and no act literal lives at the stamp site. `RUNG_REMIT_ACTS` (the
+# union over the `Rung` rows) is NOT this set: it carries `issue` and `convene`, through which no `establish` is
+# eligible.
+FOUNDING_REMIT_ACTS = _remit_acts_of(VERB_TABLE["establish"])
 
 # An authored alignment cell for an EVENT KIND rather than a verb is keyed `deed:<kind>` in the same
 # axis row. Admitted only where `<kind>` is in `EMITTED_KINDS` (`_load_alignment`): a deed key for a

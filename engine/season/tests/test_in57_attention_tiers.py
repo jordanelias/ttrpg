@@ -18,6 +18,8 @@ What each test proves, and the failure it can observe:
       foreign-occasioned tier-1 claim and the `need` question; a control asserts it is first with
       `doer` cleared. `test_witness_stamps_doer_exactly_on_the_holders_own_acts` is the stamp's
       own falsifier over a live season (disable the stamp and it reddens).
+  (a4) `test_a_tier_1_own_act_claim_is_spared_the_screen_and_tier_0_and_2_are_not` -- CR-10 (arm D2,
+      A1-05): the screen demotes a tier-0 or tier-2 own-act claim and spares a tier-1 one.
   (b) `test_the_five_tiers_order_against_the_old_key` -- one person holding a question in every
       tier, ids chosen so the old key orders them otherwise; tier 2 by -|valence|.
   (c) `test_the_same_question_keys_differently_for_two_persons_with_different_state` and
@@ -167,6 +169,30 @@ def test_another_persons_doer_is_not_the_screen():
     p, w = _echo_world()
     p.ledger[-2] = dataclasses.replace(p.ledger[-2], doer="p_q")
     assert world_q.questions_for(w, p)[0].about == "c_000"
+
+
+def test_a_tier_1_own_act_claim_is_spared_the_screen_and_tier_0_and_2_are_not():
+    """CR-10, arm D2 (A1-05): the own-act screen spares tier 1 and demotes the rest. The same claim
+    keys one tier lower with `doer` cleared only where the screen applies: tier 0 (about X, the
+    ambition's subject) 4 with `doer` and 0 without; tier 2 (a deed claim with valence) 4 and 2;
+    tier 1 (about Y, his own tenure's object) 1 either way. Reverting to the every-tier screen
+    reddens the tier-1 line (it reads 4)."""
+    p, w = _ambitious()
+    _admits_x(p)
+    p.pursuits = dict(PURSUITS)
+    p.tenures.append(Tenure("t_y", p.id, "Y", "hold", 0))
+    _, big = _deed_kinds(PURSUITS)
+    claims = [_claim("c_x", p.id, "X", "release.refused", True),
+              _claim("c_y", p.id, "Y", "release.refused", True),
+              _claim("c_d", p.id, "elsewhere", big, True)]
+    tiers = {}
+    for doer in (p.id, None):
+        p.ledger[:] = [dataclasses.replace(c, doer=doer) for c in claims]
+        key = world_q.attention_key(w, p)
+        tiers[doer] = {c.id: key(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,), c.id))[0]
+                       for c in claims}
+    assert tiers[p.id] == {"c_x": 4, "c_y": 1, "c_d": 4}, tiers
+    assert tiers[None] == {"c_x": 0, "c_y": 1, "c_d": 2}, tiers
 
 
 def test_the_five_tiers_order_against_the_old_key():
@@ -410,5 +436,9 @@ def test_seed_0_season_1_each_person_answers_a_tier_0_or_1_question_first_where_
     # MEASURED at IN-57 (with the own-act screen): 390 calls, 133 holding a tier-0/1 question, 80 of
     # those first questions moved against the old key; first-question tiers {0: 28, 1: 105, 2: 1,
     # 3 (need): 108, 4: 105}. Without the screen 299 calls held one: most were his own act's echo.
+    # RE-RECORDED at CR-10 (arm D2: tier 1 spared), `build_realm(0)`, one season: 404 calls, 298
+    # holding a tier-0/1 question, 120 of those first questions moved; first-question tiers
+    # {0: 67, 1: 231, 2: 4, 3: 55, 4: 10}. The every-tier screen on the same tree (CR-10's control):
+    # 402 calls, 161, 115, {0: 66, 1: 95, 2: 13, 3: 95, 4: 96}.
     assert checked >= 100, checked
     assert moved >= 1, "control: the tiered key changed no person's first question"

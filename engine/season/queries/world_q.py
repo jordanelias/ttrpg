@@ -51,8 +51,8 @@ from ..data.rosters import (
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
-    DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, HOLDING_RECORD_KINDS, RECORD_REFERENT_KINDS,
-    RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
+    DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, FOUNDING_REMIT_ACTS, HOLDING_RECORD_KINDS,
+    RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
@@ -89,13 +89,15 @@ from ..state.containment import ancestry, home_of  # noqa: F401 -- re-exported
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
 from ..state.gate import BENCH_BASIS, may_determine, may_fill, purview_reaches, sits_over
+# v11 CR-25: conjuncts (i) and (iv) of a founding, asked by `founds_over` below.
+from ..state.gate import in_holdings, seat_on_parent_of
 # ⚠ AND `sworn_to` BY THE SAME ROUTE (v9 IN-40, `H-101`): THE QUERY OF THE LIVE `oblige` EDGES SWORN
 # TO A SEAT. `purview_reaches`' oblige clause asks it, and the gate may not import this module, so
 # its one body lives in `state/gate.py`; `world_q.sworn_to is gate.sworn_to`. `establishment_of`
 # (below) composes on it.
 from ..state.gate import sworn_to
 from ..state.ids import H, ROOT, draw_factory
-from ..state.world import World
+from ..state.world import World, rung_kind_ascends
 from ..trace_log import TRACE
 # v9 IN-07 E1: the `settlements` module's records (the one host leaf a module imports) and the
 # role-string resolver its entries are reached through. Neither pulls in module code at import.
@@ -2655,7 +2657,8 @@ def current_stage(w: World, p: Person, ambition) -> Optional[dict]:
 
     COMPUTED WHEN ASKED AND STORED NOWHERE (`ambitions`' discipline): no stage counter, no progress
     field, no TRACE row (Q4 calls `goal_referents` once per ambition per person, and so would this).
-    NOTHING CALLS IT YET -- the stage's referents joining the person's own `need` question is R2/B3.2.
+    ITS ONE CALLER IS `open_stages` (CL-THRUST B3.2, R2), which `stage_referents` (the question's classed
+    referents) and `attention_key`'s `salience` (the stage's pursuits) both read; B3.2 passes no closure in.
 
     ⚠ PERSON-SIDE, AND THAT IS THE POINT (AX-2): the stage's cell is evaluated through `data/requires.py::
     evaluate` against `LedgerReader(p.ledger)` -- the reader `epistemic.belief_contradicts` asks the same
@@ -3023,6 +3026,34 @@ def places_named(w: World, p: Person, named: Optional[frozenset] = None) -> tupl
     return tuple(sorted(r for r in cands if r not in under))
 
 
+def propositions_heard(w: World, p: Person) -> tuple:
+    """THE PROPOSITIONS `p` HAS HEARD OF FROM ANOTHER (v11 CR-28, G-04 (a); CP-T02-05's re-take folded in;
+    [ASSUMPTION; medium; Jordan to correct; revert: drop the term in `questions_for`]), sorted by id: the
+    Propositions (`World.class_of`) among `person_q.ledger_names` of the claims in `p`'s OWN ledger that
+    do NOT record his own act (`Claim.doer != p.id`) -- an `utter` he witnessed or was told of, another's
+    `commitment.made`, a held document whose `terms` name one, a goal or creed some claim of his names.
+    `seats_named`' shape, one class over: his own ledger, the World asked only which ids are Propositions.
+
+    WHAT DIFFERS FROM THE FAILED TERM (B10-05's `propositions_named`, reverted `Falsified: CR-28`, H-156):
+    (1) THE LEDGER IS THE ONE SOURCE. The failed term also offered every goal and creed he is committed to
+    off his own edges; a Proposition reaches this term only through a claim he holds. (2) THE OWN-ACT
+    SCREEN'S TEST (`attention_key`'s, CR-10): a claim recording his own act is not news, so it does not
+    feed this term -- what he uttered he holds (`_eff_utter`'s maker's hold), and its claim reaches him as
+    a tier-1 question CR-10 spares, whose own Proposition REM-21's own-referent term already stamps.
+    (3) THE 'ALREADY COMMITTED' DECLINE is NOT here and need not be: `rosters.yaml: held_edge_declines`
+    (B10-09 close one, D3) declines `commit` person-side on any object he holds a live `commit` edge on,
+    over every route that carries the referent, which the failed term had no decline for (`commit`
+    executed 612 times at two seasons over seeds 0-4, chiefly repeats). `argue`, the other row declaring
+    the class, forms on a cause he holds too, as D3 intends.
+
+    Resolver-side and read-only: it supplies Proposition IDS, which `questions_for` adds to the question
+    the person answers as CLASSED referents (`_stamped`), so only a row declaring `Proposition` (`commit`,
+    `argue`) forms on them; whether the act then passes is the fold's (`commit`'s `existence` cell).
+    `()` for everyone at build: no ledger names a Proposition before a season is witnessed."""
+    heard = ledger_names([c for c in p.ledger if c.doer != p.id])
+    return tuple(sorted(o for o in heard if w.class_of(o) == "Proposition"))
+
+
 def requisitionable(w: World, rung_id: str, stores: Optional[dict] = None) -> bool:
     """IS THIS LARDER WORTH A REQUISITION (v10 CR-23, M17 taken (a), [ASSUMPTION; medium; Jordan to
     correct]): it holds a positive amount of the matter a computed requisition carries, and at least
@@ -3098,6 +3129,59 @@ def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -
     return tuple(out)
 
 
+def founds_over(w: World, actor: Optional[str], seat, rung: Optional[str]) -> bool:
+    """MAY `actor`, EXERCISING `seat`, FOUND AN OFFICE OVER `rung`? (v11 CR-25, CR-11's design §1; [ASSUMPTION;
+    medium; Jordan to correct; revert: drop `holdings_to_found` and the derivation].) The four conjuncts, each a
+    refusal, ONE owner with two readers: `loop/predicates.py::office_founded_by` (the precondition and the
+    effect) and `holdings_to_found` (the stamp), so what a person is offered and what the fold admits cannot
+    disagree. It lives here and not in `state/gate.py` because (iii) is `state/world.py::rung_kind_ascends` and
+    the gate may not import the World module; every conjunct is still the gate's or the World's own function.
+
+      (i)   `rung` is one of the actor's HOLDINGS (`state/gate.py::in_holdings`);
+      (ii)  it lies inside the seat's PURVIEW (`purview_reaches`, asked of the seat exercised, `04:332`);
+      (iii) its kind is strictly below the seat's rung's kind (`rung_kind_ascends`, the §10 ladder's one owner);
+      (iv)  the seat sits on its PARENT (`seat_on_parent_of`, `seated_on_the_rung_above_structure`'s body), so
+            `rung_above_in_holdings` is satisfiable by the founder through this same seat (H-90 message 2).
+
+    ⚠ (iv) IS ASKED OF THE SEAT EXERCISED, NOT OF ANY SEAT OF THE HOLDER (the design's 'card and tree differ'
+    section): the card's prose accepts any of his seats on the parent, the named function the seat alone. Under
+    it (ii) and (iii) follow from (iv) -- the parent is the seat's own ground, and `contain` ascends strictly --
+    and they stay named refusals, as the card lists them. A rungless seat founds nothing."""
+    if seat is None or seat.rung is None or seat.rung not in w.rungs or rung is None or rung not in w.rungs:
+        return False
+    return (in_holdings(w, actor, rung)                                                  # (i)
+            and purview_reaches(w, seat, rung)                                           # (ii)
+            and rung_kind_ascends(w.rungs[rung].kind, w.rungs[seat.rung].kind)           # (iii)
+            and seat_on_parent_of(w, seat, rung))                                        # (iv)
+
+
+def holdings_to_found(w: World, p: Person) -> tuple:
+    """THE HOLDINGS `p` MAY FOUND AN OFFICE OVER (v11 CR-25, CR-11's design; [ASSUMPTION; medium; Jordan to
+    correct; revert: drop the term in `questions_for` and `establish`'s `referent_class`]), sorted by id: every
+    rung his own live `hold` edges name (his HOLDINGS, `in_holdings`' relation read off his edges) that
+    `founds_over` admits through some seat of his own live `hold`s whose grant carries an act `establish` is
+    eligible by (`data/verbs.py::FOUNDING_REMIT_ACTS`). A `Rung` stamper term, `larders_in_purview`'s shape and
+    `vacancies`' standing-occasion reading: world-read over his own edges and NOT gated on his ledger (a man knows
+    his own lands), resolver-side and read-only. `questions_for` stamps the ids onto the question he answers as
+    `Rung` (`_stamped`), so `establish` (`referent_class: Rung`) forms on them with the holding as `subject`, and
+    `loop/predicates.py::office_founded_by` derives the office from that subject and `Act.via`.
+    ⚠ THE CLASS IS SHARED (the `Rung` note in `rosters.yaml: referent_classes`): `migrate`, `requisition`,
+    `march` and `convene` form on a stamped holding too, and the fold disposes. ⚠ A HOLDING ALREADY FOUNDED IS
+    STILL OFFERED: the derived office's id is the derivation's (`loop/`), not this module's, and a repeat
+    founding writes nothing, so the fold emits `establish.refused` (G4's `NoOpReceipt`). Not filtered here: that
+    would be a second copy of the id rule. `()` for a person whose seats grant none of the acts, which is nearly
+    everyone, so nothing else is read for him."""
+    if not FOUNDING_REMIT_ACTS:
+        return ()
+    live = [t for t in p.tenures if t.kind == "hold" and t.live]
+    seats = [w.offices[o] for o in dict.fromkeys(
+        t.object for t in live if t.object in w.offices and not FOUNDING_REMIT_ACTS.isdisjoint(t.granted_acts))]
+    if not seats:
+        return ()
+    held = sorted({t.object for t in live if t.object in w.rungs})
+    return tuple(r for r in held if any(founds_over(w, p.id, s, r) for s in seats))
+
+
 def detainees_held(w: World, p: Person) -> tuple:
     """THE PRISONERS `p`'s SEATS HOLD (v10 IN-12 step 5, H-226 route (a) with H-232's formation-filter
     shape [ASSUMPTION; medium; Jordan to correct; revert: drop the term in `questions_for`, and
@@ -3150,13 +3234,55 @@ def own_referents_of_class(w: World, q: Question, classes: Optional[frozenset] =
     works kinds are NOT skipped: `carry`, `found` and `build` form on an unheld one and the fold refuses
     it on `held_by`, REM-2C's measured shared-class cost. REVERT: drop the term in `questions_for`
     (or, for the writ alone, the `RECORD_REFERENT_KINDS` test below)."""
+    return _of_stamped_class(w, q.referents, classes)
+
+
+def _of_stamped_class(w: World, referents: tuple, classes: Optional[frozenset] = None) -> tuple:
+    """`own_referents_of_class`'s body over a bare `referents` tuple (CL-THRUST B3.2 reads a stage's referents
+    through it, so a stage referent meets the SAME class test and the SAME writ skip as a question's own, never
+    a second copy of them): those of `referents` whose collection is in `classes` (default: every class a row
+    declares less `occasion_only_classes`) and that are no writ."""
     if classes is None:
         classes = DECLARED_CLASSES - OCCASION_ONLY_CLASSES
     if not classes:
         return ()
-    return tuple(r for r in q.referents
+    return tuple(r for r in referents
                  if w.class_of(r) in classes
                  and not (r in w.records and w.records[r].kind in RECORD_REFERENT_KINDS))
+
+
+def open_stages(w: World, p: Person, ambition) -> dict:
+    """THE STAGES `p` HAS NOT PASSED ON AN AMBITION HE STILL HAS WORK ON (CL-THRUST B3.2, R2): `current_stage`'s
+    `{referent: Stage}`, or `{}` where it reads `None` or the ambition's aim is met (`aim_state` gates first:
+    a met aim asks nothing, so it carries no stage either). The ONE read both consumers below take, so the
+    referents a stage adds and the pursuits it weighs are never of two different stages. Person-side
+    (`current_stage`'s reader): no World fact beyond the aim rule Q4 already asks."""
+    cur = current_stage(w, p, ambition)
+    if not cur or aim_state(w, p, w.propositions[ambition]) == "met":
+        return {}
+    return cur
+
+
+def stage_referents(w: World, p: Person, ambs: Optional[list] = None) -> tuple:
+    """THE REFERENTS OF THE STAGES `p` HAS NOT PASSED, AS CLASSED REFERENTS OF THE QUESTION HE ANSWERS (CL-THRUST
+    B3.2, R2 only; [ASSUMPTION; medium; Jordan to correct; revert: drop the term in `questions_for` and
+    `open_stages`' use in `attention_key`, delete the `goal_stages` and `axis:` keys and the roster]). In
+    `ambs`' order (default `ambitions(w, p)`), each ambition's `open_stages` referents, never twice, kept to those
+    `_of_stamped_class` keeps: a class some verb row declares, no occasion-only class, no writ -- a stage
+    referent reaches `_stamped` on the SAME test a question's own referent does, so an unclassed verb does not form
+    on it and `confer` forms only on an Office-classed one.
+
+    WHAT A STAGE'S REFERENT IS, WITH THE SCHEMA AS BUILT (`data/goals.py::Stage` carries `id`, `term`, `predicate`
+    and `pursuits`, and no referent field): the referent `current_stage` keyed it by, which is a referent of the
+    ambition (`goal_referents`). The plain referents of his `need` question already name it; what this adds is
+    that it is stamped (as the class `World.class_of` gives it) onto the question he answers, `out[0]`, which
+    is the ambition's own `need` question only when that one sorts first (tier 3, `attention_key`). `()` for
+    everyone while `goal_stages` is `[]`, the shipped state. Resolver-side and read-only: it reads `p`'s own
+    ledger through `current_stage` and asks the World only for ids' classes."""
+    out: list = []
+    for pid in (ambitions(w, p) if ambs is None else ambs):
+        out.extend(r for r in open_stages(w, p, pid) if r not in out)
+    return _of_stamped_class(w, tuple(out))
 
 
 def _stamped(q: Question, added: tuple, w: World, classed: tuple = ()) -> Question:
@@ -3204,7 +3330,8 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
          in play this tier scores wound (`body.changed`) and `contest.undecided` claims;
       3. the `need` question -- the standing ambition question, PLAN `W5`'s quiet-season fallback;
       4. the rest -- AND every question whose claim records HIS OWN act (`Claim.doer == p.id`,
-         stamped by WITNESS), whatever its referent: the echo of his own deed is not news.
+         stamped by WITNESS) that would otherwise be tier 0, 2 or 4: the echo of his own deed is not
+         news. A tier-1 own-act claim (CR-10, arm D2, A1-05) is spared the screen and stays tier 1.
 
     SALIENCE ORDERS WITHIN TIERS 0 AND 3, DESCENDING, NEVER ACROSS TIERS (v9 IN-69, ED-IN-0293 (10)): the
     key's second slot is `-salience`, the cosine (`data/pursuits.py::pursuit_cosine`, the owner `cast.loyalty`
@@ -3226,7 +3353,9 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
     ⚠ READS ONLY THE QUESTION AND `p`'S OWN STATE: his edges, ledger (a held claim's `doer` among it)
     and pursuits, the stores those edges name (a proposition's subject, a seat's rung and its
     descendants) and the scar-shift arm (`Fixtures.scar_weight_shift`, the value `choose` projects
-    with). Never the log, never another person, never how important an event is (intent:
+    with). Never the log, never another person EXCEPT through the aim rule of an open stage (B3.2:
+    `salience` -> `open_stages` -> `aim_state` reads who holds the rung; dormant while `goal_stages` is empty), never how
+    important an event is (intent:
     `07_DYNAMICS.md` §7).
     [ASSUMPTION; medium; Jordan to correct -- the five membership tests and the own-act screen.
     The entry's tier 0 put the `need` question first; that arm (measured, `build_realm(0)`, two
@@ -3236,11 +3365,15 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
     on his ambition's subject -- chiefly its refusal (`release.refused`, `migrate.refused`,
     `travel.blocked`) -- and acted on that subject again: 80% of first claim questions were his own
     act's echo (34% before IN-57), and the corpus's R3 propagation fell 46 -> 43 of 46 NPC cases and
-    97 -> 91 of 97 ARC cases; the screen restores 46/46 and 97/97. With the screen the corpus
+    97 -> 91 of 97 ARC cases; the screen restored 46/46 and 97/97 at IN-57; with CR-10's arm D2 the corpus reads 38 / 43 / 39 of 46 at seeds 0-2 (R3 ARC 87 -> 86 at seed 2). With the screen the corpus
     still shows combat high (felled 82, wounded 116 against base 47/66), through `accept` forming
     with no challenge behind it (HANDOFF_IN's accept residue): the screen did not restore that.
     Revert: the screen off (B), the
-    entry's tier 0 literal (`need` in tier 0), or before IN-57 the `(source, id)` key.]"""
+    entry's tier 0 literal (`need` in tier 0), or before IN-57 the `(source, id)` key.]
+    [CR-10, A1-05's arm D2 (answered): the screen's scope is tiers 0, 2 and 4; tier 1 (his own
+    tenure's object or his seat's purview) is spared. [ASSUMPTION; medium; Jordan to correct: tier 2
+    own-act claims stay screened, since A1-05 names tier 0 as demoted and tier 1 as spared and no
+    more. Revert: the screen first again, before the tier-0 test (every tier screened).]]"""
     if ambs is None:
         ambs = ambitions(w, p)
     if refs_of is None:
@@ -3268,6 +3401,12 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
             target = _goals.expected(goal.org_kind, goal.org)
             for name, wt in goal.pursuits.items():
                 target[name] = target.get(name, 0.0) + float(wt)
+            # CL-THRUST B3.2 (R2): the stages he has not passed weigh in as the goal's own pursuits do, each
+            # distinct stage once (two referents at one stage are one stage). [ASSUMPTION; medium; Jordan to
+            # correct; revert: drop this loop.] No ladder, no stage: the target is the goal's alone.
+            for stage in {s.id: s for s in open_stages(w, p, pid).values()}.values():
+                for name, wt in stage.pursuits.items():
+                    target[name] = target.get(name, 0.0) + float(wt)
         elif pid in FACTION_BY_PROP:
             target = _goals.expected("faction", FACTION_BY_PROP[pid])
         else:
@@ -3282,14 +3421,18 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
         if q.source == "need":
             return (3, -salience(q.about) if q.about in refs_of else 0.0) + tie
         held = held_by_id.get(q.about)
-        if held is not None and held.doer == p.id:
-            return (4, 0.0) + tie
+        own = held is not None and held.doer == p.id
+        # CR-10, arm D2 (A1-05): the own-act screen demotes a tier-0 echo and tiers 2 and 4 as ever, and
+        # SPARES a tier-1 one -- a claim recording his own act on his own tenure's object or inside his
+        # seat's purview is answered as tier 1.
         if any(r in aims for r in q.referents):
+            if own:
+                return (4, 0.0) + tie
             return (0, -max(salience(pid) for pid, refs in refs_of.items()
                             if any(r in refs for r in q.referents))) + tie
         if any(r in mine for r in q.referents):
             return (1, 0.0) + tie
-        if held is None:
+        if own or held is None:
             return (4, 0.0) + tie
         # IN-72: a paired claim (death, wound) scores `|lean · bond|` for the doer its `seen.who`
         # pairing names, `person_q.paired_deed_term` -- the scorer `deeds_judged` sums; unpaired: 0.
@@ -3535,6 +3678,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # has room, or a seat reaches it, is then the fold's (`vacancies`/`seats_named`' Office precedent,
     # H-207; H-163 records what the cross-reading costs). No source is added, so no `question_sources`
     # order moves (IN-57: the occasion rides the question he answers). REVERT: drop the term.
+    # v11 CR-25 (CR-11's design; [ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND, DIRECTLY
+    # AFTER THE LARDERS, THE HOLDINGS HE MAY FOUND AN OFFICE OVER (`holdings_to_found`), as `Rung` --
+    # `establish` forms on them; "never twice" is `_stamped`'s REM-21 (iv-b) dedup, so a holding that is also
+    # a larder in purview or a place named keeps its first pair.
     # v10 REM-21 (AM-A-06, [ASSUMPTION; medium; Jordan to correct]): AND, AFTER THOSE, THE QUESTION'S OWN
     # PLAIN REFERENTS OF EVERY CLASS A ROW DECLARES BUT `rosters.yaml: occasion_only_classes`
     # (`own_referents_of_class`) -- no standing occasion, the question he answers read for its own
@@ -3543,11 +3690,18 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # v10 IN-45 (ii) (B10-06; M5 option (B), [ASSUMPTION; medium; Jordan to correct]): AND, APPENDED, THE SITES A
     # WORKS HE HOLDS NAMES (`works_sites`), as `Site` -- the channel from a held works to the fabric `work` raises,
     # which no question a master answers carried. REVERT: drop the term.
+    # v11 CR-28 (G-04 (a); CP-T02-05's re-take; [ASSUMPTION; medium; Jordan to correct]): AND, APPENDED, THE
+    # PROPOSITIONS HE HAS HEARD OF FROM ANOTHER (`propositions_heard`), as `Proposition` -- `commit` and `argue`
+    # form on them; `commit` is declined on a cause he already holds (`rosters.yaml: held_edge_declines`).
+    # REVERT: drop the term.
+    # CL-THRUST B3.2 (R2; [ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND, APPENDED LAST, THE
+    # REFERENTS OF THE STAGES HE HAS NOT PASSED (`stage_referents`), through the same class test as a question's own
+    # referent. `()` while `goal_stages` is `[]`, so with no ladder the output is byte-identical.
     told = ledger_names(p.ledger)
     added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + records_held_for_holding_rows(w, p)
-             + places_named(w, p, told) + larders_in_purview(w, p, told)
+             + places_named(w, p, told) + larders_in_purview(w, p, told) + holdings_to_found(w, p)
              + (own_referents_of_class(w, out[0]) if out else ())
-             + works_sites(w, p))
+             + works_sites(w, p) + propositions_heard(w, p) + stage_referents(w, p, ambs))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
     # (`detainees_held`), as `Detainee` -- the restrained-persons class, named here because it is no
     # collection; only `interrogate` declares it. Empty while no live `detain` names his seat, and then

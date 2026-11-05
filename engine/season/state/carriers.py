@@ -445,10 +445,10 @@ class View:
     # added `question`, which is the guard behaving correctly on a shape it cannot distinguish.
     # CP-T02-07 added `questions` as a FOURTH element of the SAME tuple: the guard counts the
     # tuple once, as one declared site (`EXEMPT_CEILING` in `test_season_shape.py` is unmoved).
-    __slots__ = ("holder", "claim_ids", "question", "questions")
+    __slots__ = ("holder", "claim_ids", "question", "questions", "odds")
 
     def __init__(self, holder: str, claim_ids: list[str], k: int, question: Any = None,
-                 questions: tuple = ()):
+                 questions: tuple = (), odds: Any = None):
         if len(claim_ids) > k:
             raise Forbidden(f"View built with {len(claim_ids)} ids against cap K={k}", "S18",
                             law="S18 -- at most K claim ids from the holder's OWN ledger")
@@ -474,6 +474,14 @@ class View:
         # carries no classed referents and the rows that form on a class (`confer`, `succeed`, `commit`,
         # `interrogate`) form nothing there.
         object.__setattr__(self, "questions", tuple(questions))
+        # CR-17: THE PERSON'S BELIEVED-ODDS QUERY, `(act, bands) -> chance or None`, BOUND TO `holder`
+        # (`seam/wrappers/sigma.py::believed_chance`, closed by `loop/deliberate.py` over the frozen
+        # store). It is a QUERY the person asks, as `choose` asks `ask_budget`, not a store the View
+        # holds: `choose` keeps its four parameters (`test_choose_receives_no_world`), the View keeps
+        # ids and questions and one callable, and `decision/` still names no World. `None` -- a View
+        # built by hand, a test, a seated person's callback -- is "he cannot say", and the chooser then
+        # leaves the pursuit term as it was (`Fixtures.odds_weighting`, H-248).
+        object.__setattr__(self, "odds", odds)
 
     def __getattr__(self, name: str) -> Any:
         raise Forbidden(

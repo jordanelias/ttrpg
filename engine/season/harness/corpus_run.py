@@ -1125,7 +1125,8 @@ def main(seed: int = 0) -> int:
         # conviction dict was keyed by axis; after the swap that lookup misses on every person and
         # this line would report a flat `0 of N` — a measurement silently reading zero, which is
         # the failure mode `H-97` exists to report on. `make_chooser` scores the same way (§8: the
-        # rule lives once), so this instrument and the thing it measures cannot drift apart -- and
+        # rule lives once), so this instrument and the chooser were written to agree (CR-17 added `odds_weight` to the chooser's term, which
+        # this sum lacks; the NONZERO count differs only where a believed chance is exactly 0) -- and
         # it passes the same `scar_weight_shift` arm `make_chooser` does, or a non-zero arm would
         # score here at the unshifted weights while the chooser read the shifted ones.
         axis_w = decision.project(pr, w2.fixtures.get("scar_weight_shift"))

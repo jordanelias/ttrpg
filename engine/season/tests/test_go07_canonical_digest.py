@@ -529,16 +529,58 @@ def _counts(w) -> dict:
 # RE-RECORDED at ED-IN-0310 (`build_realm`'s `foreign` default True; Jordan, 2026-11-04): the Altonian cast adds persons, rungs and two offices, so
 # every seed's hashes, act count, census and counts move. CONTROL, run in process on this tree: `build_realm(seed, foreign=False)` reads the
 # previous literal below exactly at seeds 0-2 (old/new digests, acts, census, counts). Was seed 0 (one season): old 8504cdb7... / new 53469c5c..., 589 acts.
+# RE-RECORDED at CR-10 (B10-09 close two, arm D2), A BEHAVIOUR MOVE DECLARED: `attention_key` spares a tier-1 own-act echo (A1-05), so the
+# first season moves at all three seeds (`acts` 601 / 637 / 647 -> 623 / 672 / 655, `log` 9929 / 11758 / 10703 -> 9739 / 13356 / 10585, `persons`
+# 76 / 81 / 81 -> 78 / 81 / 81). Was, for seeds 0 / 1 / 2: `old` d04a69b6... / 8d64280c... / 1c7ab31a..., `new` 5e4d77d3... / 0cfcf7ec... /
+# 9fef90dd..., `census` 1268c806... / af7e633b... / 2f6133ea.... CONTROL, run in process on this tree: the tier-1 branch returning tier 4
+# for an own-act claim (the every-tier screen) reads the seed-0 values this block held (via `test_season_weather`'s pins); the build is
+# equal. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-RECORDED at v11 CR-28 (B10-09 close two; CP-T02-05's re-take), A BEHAVIOUR MOVE DECLARED: `questions_for` stamps the Propositions a
+# person heard of from another (`world_q.propositions_heard`), so the first season moves at all three seeds (`acts` 623 / 672 / 655 ->
+# 623 / 672 / 661, `log` 9739 / 13356 / 10585 -> 9741 / 12874 / 10699). Was, for seeds 0 / 1 / 2: `old` 3a3c84a9... / 910d2cf9... /
+# f8077b2c..., `new` a2ff6dfe... / f5b9467f... / 762d314d..., `census` cc0a91a7... / af62fcd4... / 5c15e2da.... CONTROL, run in process
+# on this tree: `propositions_heard` stubbed to `()` reads the seed-0 values this block held (via `test_season_weather`'s pins) and
+# CR-10's two-season hashes at seeds 0-2; the build is equal. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED at v11 CR-81 (ED-IN-0318), A DATA MOVE AND A TRAJECTORY MOVE DECLARED: `build_realm` writes the starting
+# acquaintances, so every seed's one-season world moves (`acts` 623 / 672 / 661 -> 630 / 662 / 663, `log` 9741 / 12874 / 10699
+# -> 10847 / 13169 / 12201). Was, for seeds 0 / 1 / 2: `old` 8d5c403e... / e699f507... / 1dadbb92..., `new` 1f573c4c... /
+# ea12c800... / 96763a69..., `census` f9114b10... / be1e3ddb... / 9c425d11.... CONTROL, run in process on this tree: every
+# `build_realm` forced to `acquaintances=False` reads the old block exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-RECORDED at v11 CR-25 (B10-09 close two), A BEHAVIOUR MOVE DECLARED: a computed `establish` founds an office over a
+# holding (`establish` gains `referent_class: Rung`, `questions_for` stamps `holdings_to_found`), so every seed's first
+# season moves (`acts` 630 / 662 / 663 -> 619 / 659 / 658, `log` 10847 / 13169 / 12201 -> 10316 / 13121 / 12898; seed 0
+# founds one office in the first season, `offices` 34 -> 35). Was, for seeds 0 / 1 / 2: `old` b72b5582... /
+# f0572c69... / d5d3073b..., `new` 5fece5d9... / 19f10a6d... / 5a1f42dc..., `census` 97494bcc... / 299fe1f4... / 7234ba8a....
+# CONTROL, run in process on this tree: `holdings_to_found` stubbed to `()` AND `establish`'s `referent_class` dropped reads the
+# old block exactly at seeds 0-2 (the term alone stubbed does NOT: the column moves formation by itself). A GOLDEN
+# RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED at v11 CR-82 (B10-09 close two, ED-IN-0319), A FIXTURE MOVE DECLARED: `ledger_cap` 200 -> 3200, so a realm
+# ledger that reached the cap in season 1 now keeps what it evicted. Was, seeds 0/1/2: old 3ea197ac... / 1c06b375... /
+# b8925f0e..., new f47dfa8c... / 472f71c9... / 06324657..., census f27fea77... / 38076abd... / e4fd0348...; acts 619/659/658
+# -> 619/657/658; log 10316/13121/12898 -> 10316/13085/12898 (seed 1 alone moves its acts and log in season 1). CONTROL,
+# run in process on this tree: the cap swept back to 200 after `build_realm` reads the old three entries exactly, every
+# field. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED at v11 CR-17 (B10-09 close two), TWO BEHAVIOUR MOVES DECLARED: commit 1 ships `Fixtures odds_weighting` `believed` (H-248)
+# and commit 2 re-derives `choice_temperature` 0.1 -> 0.05 (H-96). AT COMMIT 1 ALONE (measured on a scratch harness) seed 0 reads
+# the block below it held exactly, seed 1 moves (`new` 1081dd4f... -> f9ac3028..., `acts` 657 -> 658, `log` 13085 -> 13083) and seed 2
+# reads the old block. AT COMMIT 2 all three seeds move: for seeds 0 / 1 / 2 `acts` 619 / 657 / 658 -> 685 / 673 / 715, `log`
+# 10316 / 13085 / 12898 -> 11775 / 10540 / 10566, `persons` 79 / 80 / 80 -> 77 / 80 / 80, and seed 0's `offices` 35 -> 34: CR-25's season-1 founding no longer
+# occurs on seed 0 at tau 0.05, so no realm run shows a computed `establish` executing at HEAD (CR-25's falsifier is the
+# hand-built world). Was, for seeds 0 / 1 / 2: `old` e700e9ef... /
+# 4f06a8fe... / 8f4851b1..., `new` bdff0832... / 1081dd4f... / 37db6d14..., `census` bdce26ba... / 264d73dd... / b60a0405....
+# CONTROL, run in process on this tree: `odds_weighting` swept to `none` and `choice_temperature` to 0.1 reads the old three
+# entries' `new`, `acts` and `log` at seeds 0 / 1 / 2 (bdff0832... / 1081dd4f... / 37db6d14...; 619 / 657 / 658; 10316 / 13085 /
+# 12898). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
-    0: {"old": "d04a69b607cd52cd16b69706ce331561", "new": "5e4d77d33b2ac40bda208e34327c212d", "acts": 601,
-        "census": "1268c80642c7883e95b72c3883afb16be3b84190678c5eedd043b6a33a935407",
-        "counts": {"persons": 76, "rungs": 407, "offices": 34, "sites": 322, "records": 125, "propositions": 107, "dates": 4, "docket": 3, "tenures": 875, "log": 9929}},
-    1: {"old": "8d64280c14c54c446534dc9bd08ca5a6", "new": "0cfcf7ecba31a031d4e292ef60f9a311", "acts": 637,
-        "census": "af7e633b09a2b11d75cca2bde8b92fa9e482a3602c454d4fc9e99d898ecaea27",
-        "counts": {"persons": 81, "rungs": 412, "offices": 34, "sites": 322, "records": 150, "propositions": 109, "dates": 8, "docket": 2, "tenures": 923, "log": 11758}},
-    2: {"old": "1c7ab31a606d20bcd7cbbf7e3e5c5d4b", "new": "9fef90dd0a9b01df02a494cd35c1d722", "acts": 647,
-        "census": "2f6133ea837e757237336bc4d15bc86c3da74ea19fa04ec5702421b54c762583",
-        "counts": {"persons": 81, "rungs": 412, "offices": 34, "sites": 322, "records": 134, "propositions": 113, "dates": 4, "docket": 2, "tenures": 909, "log": 10703}},
+    0: {"old": "5250cd3f5d66ec83e5e2a21d874ed4b2", "new": "4761e5cac3069d78279d3f03657c8007", "acts": 685,
+        "census": "e3e7b893df883b4391b32134c9d1badcae52eb2a1cf02f4215db120374a61e72",
+        "counts": {"persons": 77, "rungs": 408, "offices": 34, "sites": 322, "records": 172, "propositions": 125, "dates": 3, "docket": 4, "tenures": 989, "log": 11775}},
+    1: {"old": "0458835bc8ef4f4ae0ab5b5d68d9a839", "new": "033474f7402586963ff1aeb73a3889e1", "acts": 673,
+        "census": "26d2bc8898a0b0baf6c3c74a75404e410eb11cd8b3b6dad38b53cc0e32965978",
+        "counts": {"persons": 80, "rungs": 411, "offices": 34, "sites": 322, "records": 192, "propositions": 118, "dates": 3, "docket": 6, "tenures": 1002, "log": 10540}},
+    2: {"old": "0a3e374ec6891fcfe845350df79e18ac", "new": "3217d7437134c019a47e966a879f07bc", "acts": 715,
+        "census": "395fe9535f7b8d734bff84260c2096b4df80573db616c79adc12e0b618aa8334",
+        "counts": {"persons": 80, "rungs": 411, "offices": 34, "sites": 322, "records": 188, "propositions": 142, "dates": 4, "docket": 4, "tenures": 1003, "log": 10566}},
 }
 
 
@@ -546,10 +588,14 @@ def test_go07_control_the_build_world_old_digest_is_unmoved():
     """The base commit's `repr` digest of `build_realm(0)`, before a single act, read this literal
     (`test_season_weather.BASE_HASHES[0]`'s retired value); the same world now reads the new pin."""
     w = POP.build_realm(0)
-    c = POP.build_realm(0, foreign=False)     # ED-IN-0310: the control arm, the realm before the empire was seated
+    c = POP.build_realm(0, foreign=False, acquaintances=False)   # ED-IN-0310 + CR-81: the realm before the empire and the acquaintances
     assert (_old_content_hash(c), c.content_hash()) == ("919faacba3a5b83184266f454f6989d3", "c7ca8d505cc1741f9e54e1fdd0c55292")
-    assert _old_content_hash(w) == "f78bcaf40ff7c29647779ffc3a6cc9e9"        # ED-IN-0310: was 919faacb... (foreign=False reads it); v10 IN-61: was 26c255ac...
-    assert w.content_hash() == "70ea49cbf580a33c82485f84235df525"            # v10 IN-61: was 4ab812ba... (CP-T02-02); before that 3e31638e... (CR-21)
+    a = POP.build_realm(0, acquaintances=False)                  # CR-81's control arm: the parent tree's build
+    assert (_old_content_hash(a), a.content_hash()) == ("f78bcaf40ff7c29647779ffc3a6cc9e9", "70ea49cbf580a33c82485f84235df525")
+    f = POP.build_realm(0, foreign=False)                        # CR-81: was 919faacb... / c7ca8d50... (acquaintances off reads it)
+    assert (_old_content_hash(f), f.content_hash()) == ("42f55a5fc93d6a4612ebbcdaca01c45b", "e12a710be33b5da266444497b3a6e3f7")
+    assert _old_content_hash(w) == "47c172b04028e86b982a454a8e82c15e"        # CR-81: was f78bcaf4... (acquaintances=False reads it); ED-IN-0310: was 919faacb...; v10 IN-61: was 26c255ac...
+    assert w.content_hash() == "3ae970a172c9c0122adaab552a921eca"            # CR-81: was 70ea49cb... (acquaintances=False reads it); v10 IN-61: was 4ab812ba... (CP-T02-02); before that 3e31638e... (CR-21)
 
 
 def test_go07_control_the_world_did_not_move_only_its_digest():

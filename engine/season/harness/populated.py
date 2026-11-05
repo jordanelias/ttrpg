@@ -74,7 +74,7 @@ from ..queries.world_q import (HUNGER_KIND, RESIDE_KIND, WORKS_KIND, ancestry, c
 from ..gaps import Forbidden, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
-                            OFFICES_SEATS, ROLE_TEMPLATE_OF, authored_remit,
+                            OFFICES_SEATS, ROLE_TEMPLATE_OF, RUNG_KINDS, authored_remit,
                             faction_prop_id, load_yaml, refuse_a_titled_post_off_its_rung,
                             remit_or_default, territory_id_of, territory_rung_id, title_domain)
 from ..data.geography import geography
@@ -82,7 +82,8 @@ from ..data.pursuits import temperament_pursuits
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..loop.effects import EFFECTS
-from ..state.carriers import Act, Office, Person, Proposition, Rung, Site, Tenure
+from ..data.requires import KNOWN_PERSON_CLAIM
+from ..state.carriers import Act, Claim, Office, Person, Proposition, Rung, Site, Tenure
 from ..state.gate import NO_CHANGE
 from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
@@ -576,6 +577,78 @@ def _seat_id(row, cid: str) -> str:
     return row["id"] if row is not None else f"off_{_slug(cid)}"
 
 
+# THE LOWEST RUNG KIND WHOSE TITLED SEAT IS "HIGH STATUS" (CR-81, `ED-IN-0318` source (2)). A seat is high
+# status when its `offices.yaml` row's `post` is a TITLE (`title_domain`) and that title governs a rung kind
+# ranking at or above this one in `rung_kinds`: today the King and Queen (`realm`) and the Dukes and Duchess
+# (`duchy`). Province ranks between them and is never a built rung (a query, `world_q.provinces_of`).
+# [ASSUMPTION; medium; Jordan to correct; revert: delete the build step] the duchy seats are the high-status
+# set with the throne and its consort (Jordan's example: "Duke Duchess king queen").
+HIGH_STATUS_FLOOR = "duchy"
+
+
+def acquaintance_pairs(w: World, seat_rows, authored: dict) -> list:
+    """WHO KNOWS WHOM WHEN THE REALM STARTS (CR-81, `ED-IN-0318`): the sorted `(holder, known)` person-id pairs,
+    each directed, never a person with himself, from two sources and no other:
+
+      (1) FACTION BELONGING -- every two members of one faction, membership read by `world_q.members` (the
+          live `commit` to the faction's Proposition, §14.2's one route; `faction_holding` reads the same
+          edge from the person's end);
+      (2) HIGH STATUS -- every two holders of a high-status seat (`HIGH_STATUS_FLOOR`): an `offices.yaml`
+          seat row (`seat_rows`, the rows this realm seated, through `authored`: row id -> Office id) whose
+          post is a title governing the floor's rung kind or a higher one, held at build (`_first_holder`).
+
+    Chosen by data (the membership edge; a row's post and its title's rung kind), never by a name list.
+    [ASSUMPTION; medium; Jordan to correct; revert: delete the build step] "know one another" is MUTUAL and
+    COMPLETE within a faction (Jordan said "many"; every pair is the reading that needs no draw to thin it).
+    A cohort (`is_cohort`) commits to no faction and holds no seat, so neither source reaches one."""
+    floor = RUNG_KINDS.index(HIGH_STATUS_FLOOR)
+    groups = [members(w, faction_prop_id(f)) for f in sorted(FACTIONS) if faction_prop_id(f) in w.propositions]
+    high = sorted({h for row in seat_rows
+                   if (dom := title_domain(row.get("post"))) is not None and RUNG_KINDS.index(dom) >= floor
+                   and (h := _first_holder(w, authored.get(row["id"]))) is not None})
+    pairs = {(a, b) for g in groups + [high] for a in g for b in g if a != b}
+    return sorted(pairs)
+
+
+def seed_acquaintances(w: World, pairs) -> list:
+    """WRITE EACH ACQUAINTANCE AS THE HOLDER'S OWN CLAIM (CR-81). For each `(holder, known)` pair the holder's
+    ledger takes a truthy `exists:Person` reading of the known person -- the first of `person_q.known_persons`'
+    three sources, the carrier CR-03's arm used (`test_cr03_acquaintance_arm.py::seed_acquaintance_from_concerns`):
+    no new carrier, no new Claim field, no roster of acquaintances (AX-2). Season 0, source `firsthand`, at
+    `confidence_default`. Returns the claim ids written, in pair order.
+    ⚠ A CLAIM AT `when` 0 RANKS LOWEST UNDER `state/ledgers.py::eviction_key` (`confidence * (when + 1)`), so
+    when a ledger reaches `ledger_cap` these are the first claims evicted, and `claim_decay_per_season` wears
+    them like any other. Written at build into empty ledgers, they evict nothing then.
+    [ASSUMPTION; medium; Jordan to correct; revert: delete the build step] the added claims evict no claim
+    the base keeps. ⚠ MEASURED FALSE IN PLAY, AND BOUNDED (CR-81, 2026-11-04, `build_realm(s)`, s = 0-2, four
+    seasons, `PYTHONHASHSEED=0`): ledgers reach `ledger_cap` in season 1, and a base claim ranking below an
+    acquaintance claim (a lower `confidence * (when + 1)`) is evicted while the acquaintance claim stays. THE
+    CONTROL is a shadow ledger per person on the same run -- the same claim stream less the acquaintance claims,
+    evicted by the same comparator: a base claim the real ledger evicted and the shadow still holds is one the
+    step displaced. On the step-off arm the instrument reads 0 at every season (its null control); on the
+    shipped arm the displaced count, at the season ends 1-4, is 46 / 93 / 6 / 0, 99 / 142 / 90 / 26 and
+    96 / 152 / 31 / 26 (max 93, 142, 152), never above the 236 claims written, since a displacement needs an
+    acquaintance claim still held in that ledger. Total evictions in season 1, off -> on: 24 -> 114, 474 -> 613,
+    242 -> 468 (+90, +139, +226); from season 2 the two arms' trajectories differ, so their totals stop being
+    comparable (four seasons: 21,131 -> 24,330, 24,437 -> 19,136, 32,833 -> 25,392).
+    The acquaintance claims fade like any build-time claim: 0, 11 and 0 of 236 still held at season 4. This is
+    the ledger's forgetting rule (`state/ledgers.py`, S20/S34) and is not special-cased: a DURABLE acquaintance
+    would need a carrier eviction does not reach, which is not ruled and is not built here.
+    ⚠ ALL OF THE ABOVE IS READ AT `ledger_cap` 200, WHICH IS NOW THE CONTROL: CR-82 (`ED-IN-0319`) raised the
+    cap to 3200, at which no realm ledger reaches the cap through season 8 (measured, seeds 0-1), so nothing is
+    evicted or displaced that early and 202 and 196 of 236 are still held at season 8 (H-09's `cite:`;
+    `tests/test_cr82_ledger_retention.py`). The comparator is unchanged and still drops these first once the
+    cap binds."""
+    kind = KNOWN_PERSON_CLAIM["predicate"]
+    conf = w.fixtures.get("confidence_default")
+    written = []
+    for who, other in pairs:
+        cid = f"c_acq_{who}_{other}"
+        w.persons[who].ledger.append(Claim(cid, who, other, kind, 1, 0, "firsthand", conf, "own"))
+        written.append(cid)
+    return written
+
+
 def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> None:
     """SEAT THE GUARD COHORTS IN A BUILT WORLD. Each row becomes a
     Person at the row's weight, its `person` rung, a `contain` edge (where it IS) at the exact rung its seat's
@@ -912,8 +985,12 @@ def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: boo
 
 def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
                 goals: bool = True, goals_complete: bool = True, foreign: bool = True,
-                guards: bool = False) -> World:
+                guards: bool = False, acquaintances: bool = True) -> World:
     """The whole map, its buildings, and one person per season loop.
+
+    `acquaintances` (CR-81, `ED-IN-0318`) writes the realm's starting acquaintances (`acquaintance_pairs`,
+    `seed_acquaintances`): faction co-members and the high-status seats know one another. `True` ships;
+    `False` is the CONTROL ARM, the realm before the ruling (every world hash as at the parent commit).
 
     `foreign` (v9 IN-36) seats the EXTERNAL EMPIRE: the factions `rosters.yaml: foreign_cast` names get their
     root rung, their settlement (no parent, so outside the realm), a Proposition, their cast rows' persons
@@ -1842,6 +1919,10 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # block, which is the control (an empty `planned_works:` reads the old hash). `venues.yaml: planned_works`.
     mint_planned_works(w, ven.get("planned_works") or [], anchors, w._office_census["authored"],
                        partial=cap is not None)
+    # -- WHO KNOWS WHOM AT THE START (CR-81, `ED-IN-0318`): last, once every person, seat and membership exists.
+    # `acquaintances=False` is the control arm: the realm before the ruling, every hash unmoved.
+    if acquaintances:
+        w._acquaintances = seed_acquaintances(w, acquaintance_pairs(w, seat_rows, w._office_census["authored"]))
     return w
 
 

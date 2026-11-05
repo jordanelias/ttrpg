@@ -28,10 +28,10 @@ from __future__ import annotations
 from typing import Optional
 
 from ..data.requires import binding_from_act
-from ..data.rosters import BINDS_BASES, RELEASABLE_KINDS, RUNG_KINDS
+from ..data.rosters import BINDS_BASES, RELEASABLE_KINDS, RUNG_KINDS, TITLE_DOMAINS
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..queries.person_q import ABOUT_KEYS
-from ..queries.world_q import BAN_KIND, DETAIN_KIND, DOCKET_PETITION, docketed, restrained
+from ..queries.world_q import BAN_KIND, DETAIN_KIND, DOCKET_PETITION, docketed, founds_over, restrained
 from ..state.carriers import Office, subject_of
 from ..trace_log import TRACE
 # G3: THE SEAT-AUTHORITY RULES LIVE WITH THE GATE THAT ENFORCES THEM. `seated_on_the_rung_above`,
@@ -43,7 +43,7 @@ from ..trace_log import TRACE
 # `has_conferral_basis` still reaches both preconditions that call it by that name.
 from ..state.gate import (  # noqa: F401 -- `REVOCATION_RULES`, `in_holdings`, `seated_on_the_rung_above` re-exported
     REVOCATION_RULES, has_conferral_basis, has_filler, has_revocation_disposal, in_holdings, may_claim, may_fill,
-    may_revoke, seated_on_the_rung_above)
+    may_revoke, seat_hold, seated_on_the_rung_above)
 
 
 # A `requires:` predicate. The table states preconditions in PROSE, which the fold cannot read --
@@ -247,6 +247,69 @@ def office_described_by(a: "Act") -> "Optional[Office]":
                   body=body, faction=faction)
 
 
+# v11 CR-25 (CR-11's design §1): WHAT A COMPUTED FOUNDING DECLARES, beside the derivation that reads them. The
+# founder keeps the authority to fill and to strip the seat he founds; the founded seat is filled by appointment
+# (`rosters.yaml: conferral_bases`, which `FILLED_BY` opens to `confer`) and stripped by the rung above that
+# holds the ground (`rosters.yaml: revocation_bases`). The two basis values are roster members, refused by
+# `Office.__post_init__` if a roster edit drops one.
+FOUNDER_KEEPS = ("confer", "revoke")   # [ASSUMPTION; medium; Jordan to correct; revert: the full remit]
+FOUNDED_CONFERRAL = "appointed"
+FOUNDED_REVOCATION = "rung_above_in_holdings"
+
+
+def founded_office_id(rung: str, post: str) -> str:
+    """The id a computed founding gives the office it founds: deterministic from (rung, post), so the same
+    founding forms the same id and a repeat meets `_req_establish`'s clause 4 on its existing-id arm."""
+    return f"off_{post.strip().lower().replace(' ', '_')}_{rung}"
+
+
+def office_founded_by(w: "World", a: "Act") -> "Optional[Office]":
+    """THE OFFICE AN `establish` ACT FOUNDS, WITH THE WORLD (v11 CR-25, CR-11's design §1; [ASSUMPTION; medium;
+    Jordan to correct; revert: drop `holdings_to_found` and the derivation]) -- `office_described_by`'s
+    World-taking sibling, read once for the precondition and the effect (`_req_establish`, `_eff_establish`), so
+    the two cannot disagree on what is founded.
+
+    A HAND-BUILT ACT CARRYING THE OVERLAY KEYS KEEPS ITS READING: where `office_described_by(a)` returns an
+    office, that office is returned unchanged. Otherwise the office is DERIVED from what a computed act already
+    carries -- `subject`, a rung, and `Act.via`, the seat exercised (`state/carriers.py::Act`) -- with no ninth
+    operand and no office coined by name:
+
+      rung        `subject`, admitted by `queries/world_q.py::founds_over`'s four conjuncts (holding, purview,
+                  rank, the seat on its parent);
+      post        `offices.yaml: titles.domains` (`TITLE_DOMAINS`, post -> kind) read in reverse for the rung's
+                  kind, as data and never a branch on a kind; where a kind has two posts (King/Queen,
+                  Duke/Duchess, Count/Countess) the FIRST IN AUTHORED ORDER [ASSUMPTION; medium; Jordan to
+                  correct; revert: the second, or the eventual holder's];
+      faction,    the exercised seat's (a seat with a `body` founding a titled post is refused by the constructor,
+      body        `refuse_a_title_in_a_body`, which clause 1 translates to False);
+      remit       the founder's GRANT on the seat (`seat_hold(...).granted_acts`, the `13e` snapshot of the seat's
+                  `remit_acts` that `_eligible` reads -- the design names `remit_acts`; the two are equal unless the
+                  office was hand-mutated after seating, and `13e` makes the grant the one consumer read
+                  [ASSUMPTION; medium; Jordan to correct; revert: the office's `remit_acts`]) less
+                  `FOUNDER_KEEPS` [ASSUMPTION; medium; Jordan to correct; revert: the full remit];
+      conferral   `FOUNDED_CONFERRAL`; revocation `FOUNDED_REVOCATION`; id `founded_office_id(rung, post)`.
+
+    `None` when the seat or the subject is absent, a conjunct refuses, or no post names the rung's kind.
+    ⚠ THE CONSTRUCTOR'S RAISES PROPAGATE, as `office_described_by`'s do, and for its reason: the caller
+    translates them (clause 1)."""
+    off = office_described_by(a)
+    if off is not None:
+        return off
+    held = seat_hold(w, a.actor, a.via)
+    seat = w.offices[a.via] if held is not None else None
+    rung = subject_of(a)
+    if seat is None or not founds_over(w, a.actor, seat, rung):
+        return None
+    kind = w.rungs[rung].kind
+    post = next((p for p, k in TITLE_DOMAINS.items() if k == kind), None)
+    if post is None:
+        return None
+    return Office(founded_office_id(rung, post), post, rung,
+                  [x for x in held.granted_acts if x not in FOUNDER_KEEPS],
+                  conferral=FOUNDED_CONFERRAL, revocation=FOUNDED_REVOCATION,
+                  body=seat.body, faction=seat.faction)
+
+
 @requires_predicate("establish")
 def _req_establish(w: "World", a: "Act") -> bool:
     """W3's row: *"the establishing office's conferral basis, and a rung to establish it at"*.
@@ -262,7 +325,8 @@ def _req_establish(w: "World", a: "Act") -> bool:
 
     FOUR CLAUSES, EACH A REFUSAL AND NONE A RAISE -- a raise from inside the effect's `apply()`
     escapes the fold, and `establish.refused` would never be emitted:
-      1. the office resolves: `office_described_by` returns one, and the constructor's refusals
+      1. the office resolves: `office_founded_by` returns one (since v11 CR-25: the overlay keys
+         `office_described_by` reads, else the derivation from `subject` and `Act.via`), and the constructor's refusals
          (the three it raises) are translated to False HERE, so each rule still lives once, in the
          constructor. They remain the loud backstop inside the effect;
       2. its rung is one the world holds;
@@ -289,8 +353,9 @@ def _req_establish(w: "World", a: "Act") -> bool:
     authority that may fill a seat may re-grant it -- so this refuses first, with the gate's own
     predicate, whenever ANY live hold exists on the office, self included: 5. the seat the act
     exercises may fill the office (`may_fill`: purview over its rung, `via` not the office itself).
-    An office NOBODY sits in -- a founding -- is unaffected, since there is no hold yet for
-    `may_fill` to be asked about. ⚠ It is STRICTER THAN THE GATE by one case, deliberately: a
+    A founding is unaffected, since there is no hold yet for `may_fill` to be asked about; ⚠ since
+    v11 CR-25 (H-144 (b)) a VACANT EXISTING office is no longer: any existing office asks it, and a
+    reduction of a sitting holder's grant also asks `may_revoke` (H-132 (b)), both at the clause. ⚠ It is STRICTER THAN THE GATE by one case, deliberately: a
     re-stamp that changes no grant writes nothing the gate would see, and this still asks for the
     authority -- mirroring `_grant_remit`'s equal-grant test here would be a second copy of it
     (§8). ⚠ CORRECTED (antagonist pass on the accumulated Phase alpha+beta diff, 2026-09-27): this
@@ -299,7 +364,7 @@ def _req_establish(w: "World", a: "Act") -> bool:
     the actor's own hold from needing `may_fill` at all. See the corrected comment on clause 5's
     body below for the reproduction that found this."""
     try:
-        off = office_described_by(a)
+        off = office_founded_by(w, a)      # v11 CR-25: the overlay keys, else the derivation from subject and via
     except (Unowned, Unspecified, Forbidden):
         return False                       # the constructor refused it: translated, never filled
     if off is None:
@@ -334,8 +399,30 @@ def _req_establish(w: "World", a: "Act") -> bool:
     # -- corrected 2026-09-27, this line previously said `True`), so founding a brand-new office
     # short-circuits `not held` to `True` and is unaffected -- `may_fill` is only asked when a
     # live `hold` already exists to re-stamp.
-    held = any(t.kind == "hold" and t.object == off.id and t.live for t in w.tenures)
-    return not held or may_fill(w, a.actor, a.via, off)
+    #
+    # v11 CR-25, M8 taken, H-144 (b) [ASSUMPTION; medium; Jordan to correct; revert: `return not held or
+    # may_fill(...)` over `held` alone]: A REMIT CHANGE ON AN EXISTING OFFICE, VACANT OR HELD, ASKS `may_fill`
+    # (and so the exercising seat's purview). The test is "the id is an existing Office", which clause 4
+    # computed as `held_as == "Office"`, no longer "a live hold exists": a vacant office was re-remittable from
+    # anywhere in the realm. A founding is no existing office; its purview check is `founds_over`'s (ii).
+    holds = [t for t in w.tenures if t.kind == "hold" and t.object == off.id and t.live]
+    if (held_as == "Office" or holds) and not may_fill(w, a.actor, a.via, off):
+        return False
+    # v11 CR-25, M8 taken, H-132 (b) [ASSUMPTION; medium; Jordan to correct; revert: drop this clause]: A
+    # REDUCTION IS A PARTIAL REVOCATION. A re-stamp that drops from a sitting holder's grant
+    # (`Tenure.granted_acts`, the snapshot the re-stamp overwrites) an act the new remit does not carry must
+    # pass `may_revoke` on the office as it stands -- the one owner that wraps `REVOCATION_RULES` with
+    # `seat_hold` and the basis-roster test, never `REVOCATION_RULES` read here (§8). Asked only where a live
+    # hold exists, because H-132 concerns a sitting holder's grant [ASSUMPTION; medium; Jordan to correct;
+    # revert: ask it on every existing office]. M8 (a) follows: a seat with `revocation: None` is in no basis,
+    # so its grant cannot be reduced.
+    # (A hold opened on the id before the office existed carries no grant to reduce, so the clause needs the
+    # office: `held_as == "Office"`.)
+    keeps = set(off.remit_acts)
+    if (held_as == "Office" and any(set(t.granted_acts) - keeps for t in holds)
+            and not may_revoke(w, a.actor, a.via, w.offices[off.id])):
+        return False
+    return True
 
 
 @requires_predicate("release")

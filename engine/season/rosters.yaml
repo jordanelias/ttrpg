@@ -674,6 +674,15 @@ rosters:
       purview rather than whatever he was asked about. The class is shared, as `Office` is between
       `confer` and `oblige`: each row forms on both sources and the fold disposes. REVERT: `requisition`'s
       column (which removes `issue` from `RUNG_REMIT_ACTS`, the union over the `Rung` rows) and `larders_in_purview`'s splice.
+      v11 CR-25 (CR-11's design, [ASSUMPTION; medium; Jordan to correct; revert: `establish`'s column and
+      `holdings_to_found`'s splice]): AND the holdings a seat may found an office over
+      (`queries/world_q.py::holdings_to_found` -- a rung on one of his own live `hold` edges that
+      `founds_over` admits through a seat of his granting an act `establish` is eligible by,
+      `data/verbs.py::FOUNDING_REMIT_ACTS`: held, in that seat's purview, below its rank, the seat on its
+      parent), stamped directly after the larders and never twice; `establish` declares the class, so its
+      `subject` binds the holding `loop/predicates.py::office_founded_by` derives the office from. Shared, as
+      above: the other `Rung` rows form on a stamped holding too, and `establish` on a place named or a
+      larder; the fold disposes. `RUNG_REMIT_ACTS` gains `confer`.
       v10 REM-21 (B10-05, AM-A-06, [ASSUMPTION; medium; Jordan to correct]): `Site`, `Proposition`
       and `Person` -- THE THINGS A QUESTION IS ITSELF ABOUT, carried as their kind. Not a standing
       occasion: `queries/world_q.py::own_referents_of_class`, one more term of `questions_for`'s
@@ -690,6 +699,15 @@ rosters:
       REM-28 `dispatch`. While no row declares one of the three, the term stamps
       nothing for it and no formation moves; a row's `referent_class:` naming it is what makes the
       term stamp it. REVERT: drop the three values and the term.
+      v11 CR-28 (G-04 (a), B10-09 close two; CP-T02-05's re-take, [ASSUMPTION; medium; Jordan to correct;
+      revert: drop the term in `questions_for`]): `Proposition` GAINS A STANDING OCCASION beside the
+      own-referent term -- `queries/world_q.py::propositions_heard`, the Propositions among
+      `person_q.ledger_names` of the claims in a person's own ledger that do not record his own act
+      (`Claim.doer`, the own-act screen's test): an `utter` he witnessed or was told of, another's
+      commitment, a document whose terms name one. `questions_for` appends it last to its splice;
+      `commit` and `argue` form on what it stamps, and `held_edge_declines` (below) declines `commit` on
+      a cause he already holds. The class stays out of `occasion_only_classes`, so a question's own
+      Propositions are still stamped by the own-referent term.
       `Detainee` (v10 IN-12 step 5, H-226 route (a) with the decline H-232 names [ASSUMPTION; medium;
       Jordan to correct; revert: drop the value, `interrogate` declares `Person`]): THE RESTRAINED-PERSONS
       CLASS -- a person held by a live `detain` whose object is a seat the asker holds, stamped by the
@@ -2458,6 +2476,22 @@ rosters:
       midpoint: G1's regard with `+` on every row, so the sweep separates what regard adds from
       what the sign adds.
     values: [legacy, regard, declared]
+
+  odds_weightings:
+    source: >-
+      v10 CR-17 (M1, AQ-X1 (b), taken at `CLAUDE.md` section 0's ladder step 5): whether the chooser's pursuit
+      term for a CONTESTED candidate is weighted by the person's own believed chance of the band that writes
+      what the term prices.
+    note: >-
+      THE ARMS OF `Fixtures.odds_weighting` (`H-248`), read by `decision/choose.py::odds_weight`, the factor
+      `score_terms` multiplies the pursuit term by. `none` is the CONTROL: the factor is 1 for every
+      candidate, the term as it stood before CR-17. `believed` multiplies a contested candidate's pursuit term
+      by the sum, over the bands the verb's `writes:` map gives a non-empty write, of the person's believed
+      chance of that band (`seam/wrappers/sigma.py::believed_chance`, CP-T01-03's mode (b), passed to the
+      chooser on the View as `View.odds`); a candidate whose verb contests nothing, whose verb writes in
+      no band, or whose believed chance is `None` (a factor he cannot know, no dice dealt, S27.4 refuses the
+      attempt, a prize another module rolls) keeps the term as it was.
+    values: [none, believed]
 
   said_slants:
     source: >-

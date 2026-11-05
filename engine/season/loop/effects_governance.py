@@ -16,7 +16,7 @@ from typing import Optional
 from ..data.rosters import RELEASABLE_KINDS, RESTRAINT_KINDS, SUCCESSIONS
 from ..data.verbs import VERB_TABLE
 from ..gaps import InstrumentDefect
-from ..loop.predicates import office_described_by, office_named_by
+from ..loop.predicates import office_founded_by, office_named_by
 from ..queries.world_q import BAN_KIND, DETAIN_KIND, restrained
 from ..state.carriers import Tenure, Term
 from ..state.gate import (NO_CHANGE, TENURE_CLOSED, Change, Subject, claimable_seats, has_revocation_disposal,
@@ -226,7 +226,9 @@ def _eff_establish(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     HERE AND IS FALSE SINCE G3's OWN ANTAGONIST FIX: `T-m` never admits re-granting a seat-hold,
     not even the actor's own (`state/gate.py::tenure_write_basis`) -- a sole holder re-stamping
     his own seat is exactly the exploit that fix closed. Corrected at G4, which rewrote this body."""
-    off = office_described_by(a)
+    # v11 CR-25: the SAME reader `_req_establish` asks (the overlay keys, else the derivation from `subject` and
+    # `Act.via`), so the precondition never admits an office this effect does not write.
+    off = office_founded_by(w, a)
     if off is None:
         return NO_CHANGE
     cur = w.offices.get(off.id)

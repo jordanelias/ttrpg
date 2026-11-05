@@ -53,7 +53,7 @@
 
 | scale | `in_loop` today | owner under v10 |
 |---|---|---|
-| character creation, development, chronicling | `false` | REM-30 (IN-47's build; B10-10), with CR-20 (the attribute carrier, nine keys) directly after it |
+| character creation, development, chronicling | `false` | REM-30 (IN-47's build; B10-10), with CR-20 (the attribute carrier; ten keys since the knowledge-model fold of 2026-11-04, CR-84, `ED-IN-0328`) directly after it |
 | grand strategy politics | `false` | FA-01's mechanism landed (B-J); executes `via` a seat in `aperture 4 0`; CP-T09 for the rest; CR-29, then FA-01's clause, both released from M11; contributors from the second decision round, none reading the row by itself: CR-32 (Standing ladders as posts on seats; `rank` within one scale), IN-30's `faction_props` and CP-T09-04's unpeopled clause (an emerged faction, and `peninsular_sovereignty` reachable), CR-35 to CR-37 (elected, nominated and revoked seats, hand-built) |
 | social contests and debates | "seam unbuilt" | SC-01 landed; the realm chain stops at `convene`'s referent (REM-28); SC-02 residue; SC-05 held (unslotted) |
 | mass battles and strategy warfare | "seam built; reached via a constructed Question" | IN-13 landed; the realm fights no field yet (REM-27 at B10-06, which prints `field.unopposed` beside `field.won + field.lost`; CP-T04 at B10-12) |
@@ -144,7 +144,7 @@
   - *What still holds it:* `DEGREES RESOLVED` for a non-combat verb besides `tell` at two bands whose writes differ (`speak` and `interrogate` cannot satisfy it).
   - *Who moves it:* CR-18, CR-20, REM-06, REM-13, REM-15, CP-T01.
 - **Text change, stated as an assumption (at CR-18's exit, B10-08; `measure:` re-pointed at CR-18 commit (2), `8bdfb72ce`):** `measure:` moves to `python -m engine.season.harness.aperture 4 0`; the by-person conjunct reads: two persons resolve the same contested verb at different `faculty` pools, beside the practice-off control. This is looser than the `met` text above (pools may differ by seeded history, not capability) and stays within Jordan's row statement, which names no person. **[ASSUMPTION; medium; Jordan to correct]**
-- **Moved by:** REM-06, REM-13, REM-15; CP-T01 (faculty, odds, ceiling); CR-18, CR-20. The tenth attribute (J-T2) stays at its confirmed default (ED-IN-0301: nine keys, the pending slot refusing a value) and holds no conjunct of this row.
+- **Moved by:** REM-06, REM-13, REM-15; CP-T01 (faculty, odds, ceiling); CR-18, CR-20. The tenth attribute (J-T2) stays at its confirmed default (ED-IN-0301: nine keys, the pending slot refusing a value) and holds no conjunct of this row. (Since the knowledge-model fold of 2026-11-04: J-T2 is answered by Jordan's ten, `ED-IN-0328`, built by CR-84 before CR-20; it still holds no conjunct of this row.)
 - **After the second decision round** (no conjunct moves; a contributor as an assumption, §0): the by-person conjunct gains held capability keys from CR-33's lifepath templates (B10-10) for `train` to raise; a held key changes no pool by itself (the grant is at `pool_default`), so the conjunct still reads on pools that differ. *Who moves it* gains CR-33 as a contributor.
 
 ## 11. The R-01/R-02 re-take (carried from v9 `_part2` §11; `requirements.yaml` cites it)

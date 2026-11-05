@@ -82,6 +82,7 @@ import random
 from dataclasses import asdict
 from typing import Any, Optional
 
+from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds, settle_record
 from engine.substrate import composition
 
@@ -382,13 +383,15 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
     ONE STATED EXCEPTION, his own pool: `faculty(w, believer, verb)` sums the registered addends, and the
     practice addend derives from `w.log` the results of HIS OWN acts. His own results are his to know, but
     this departs from 04 (§A.2 table, `loop/deliberate`: frozen `World` for `sense` only; §A.3 row 13: `Act`
-    persists resolver-side, unreachable from a person-side surface), so CR-17's chooser must not call this
-    from `decision/`: a ledger route exists (WITNESS stamps `doer?` on a holder's deposits about his own
-    acts, §B.9) and CR-17 may move the read there (ladder step 5, B10-08 close).
+    persists resolver-side, unreachable from a person-side surface), so the chooser (`decision/`) never calls
+    this: it asks the QUERY `believed_chance` below, which `loop/deliberate.py` hands it on the View (CR-17).
+    A ledger route for the pool exists (WITNESS stamps `doer?` on a holder's deposits about his own acts,
+    §B.9) and would take the one World read out of mode (b); it is not built here [ASSUMPTION; medium;
+    Jordan to correct; revert: none needed, the read is read-only and of himself].
     `None` is also the answer where the social roll deals no dice for the act (see `_rolled_as`) or
     S27.4 refuses it.
 
-    Mode (b) HAS NO CALLER in this change; its first reader is the chooser's alignment term (CR-17)."""
+    Mode (b)'s one caller is `believed_chance` (CR-17): the chooser's pursuit term for a contested candidate."""
     called = _rolled_as(w, act)
     if called is None:
         return None
@@ -407,6 +410,41 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
                          examined_record=examined is not None and examined in w.records,
                          room=believed_room, heard=room is not None, effort=effort)
     return None if inp is None else _odds_of_input(inp)
+
+
+# band label -> its place in `band_odds`' tuple, both owned by `dice_engine` (neither spelt here)
+_BAND_PLACE = {DEGREE_LABEL[d]: n for d, n in DEGREE_ORDINAL.items()}
+
+
+def believed_chance(w: Any, believer: Any, act: Any, bands: Any) -> Optional[float]:
+    """THE PERSON'S BELIEVED CHANCE THAT THE ROLL OF `act` LANDS IN ANY OF `bands`: the sum of mode (b)'s
+    `odds_of` over those bands, or `None` where he cannot say (CR-17). `bands` are the labels the verb
+    table's `writes:` map keys by (`dice_engine.DEGREE_LABEL`'s values); a label the social roll's ladder
+    does not carry (another module's band) is `None` too, since no figure here speaks for it. The band
+    order is the owner's (`DEGREE_ORDINAL`, the tuple `band_odds` returns): neither the labels nor their
+    places are spelt here.
+
+    A QUERY, NOT A STORE (`04` §A.2: the chooser asks, the host answers): `loop/deliberate.py` closes it over
+    the frozen store and hands the chooser `View.odds`, so `decision/` holds a callable and never the store
+    (AX-2). READ-ONLY, like `odds_of`. `believer` is the person choosing; another actor's act is `None`
+    (`odds_of`'s own refusal)."""
+    odds = odds_of(w, act, believer=believer)
+    if odds is None:
+        return None
+    held = [_BAND_PLACE.get(b) for b in bands]
+    if not held or None in held:
+        return None
+    return sum(odds[n] for n in held)
+
+
+def believed_odds_query(w: Any, holder: Any):
+    """THE QUERY THE CHOOSER IS HANDED (`View.odds`): `believed_chance` closed over `w` and BOUND TO `holder`, as
+    `(act, bands) -> chance or None`. The query answers for its holder alone (`04` §20, the own-ledger rule: a
+    person's View carries his own record): it takes no person, so nothing downstream can ask it for another's
+    belief. The ONE place the closure is made -- `loop/deliberate.py` hands it to every person's View and the
+    harness readings that score a person outside `choose` (`harness/decision_spread.py`,
+    `harness/interactions.py`) take it from here, so the figure they read is the figure the chooser reads."""
+    return lambda act, bands: believed_chance(w, holder, act, bands)
 
 
 @provider("contest", _PROVIDER)

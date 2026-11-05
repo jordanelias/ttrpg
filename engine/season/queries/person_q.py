@@ -115,8 +115,12 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     the killer is counted once; an unpaired claim (no `seen`, `who` withheld, ambiguous) scores
     nothing, so a hidden actor stays hidden. A paired deed lands in `judged` or `told` by the deed
     claim's own `firsthand`, as every deed does.
-    ⚠ THE SWORN-TO HALF SHIPS OFF (IN-58): `oblige` is a `World` Tenure read by a `world_q` reader and
-    this module reads a `PersonInterior` only. FACTION-LEVEL grievance is v9 IN-70's: `opinion` here,
+    ⚠ THE SWORN-TO HALF IS NOT BUILT (IN-58, narrowed at B10-09 close two). Its edge IS person-side: a
+    judge's own live, un-`imposed` `oblige` to a seat is in `p.tenures` and outlives the victim. What is
+    missing is the PAIRING, not the edge: a death's seat reaches a ledger as `(seat, tenure.closed, True)`
+    (`state/gate.py::Subject.seat`) beside `(victim, person.died, True)`, two claims that share only
+    `when` and `round`, which this module never reads as a pairing (`deed_doer`: it does not guess), so
+    no claim a judge holds says the victim sat in that seat. FACTION-LEVEL grievance is v9 IN-70's: `opinion` here,
     its World half and its referents in `world_q` (`opinion_of`, `opinion_referents`).
     [ASSUMPTION, H-192: a deed's claim subject is read as its doer for every other kind; the sum is
     unnormalised.] Person-side, no World (AX-2).

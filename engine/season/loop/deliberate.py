@@ -59,6 +59,7 @@ from ..data.verbs import act_key, opportunity_key
 from ..decision import aggregate_questions
 from ..queries.person_q import ledger_names
 from ..gaps import Forbidden, Ungraded
+from ..seam.wrappers.sigma import believed_odds_query
 from ..state.carriers import Act, Person
 from ..state.world import World
 from ..trace_log import TRACE
@@ -133,7 +134,26 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         # what every NPC does first. The rule is data now; `first` is the incumbent kept as
         # the sweep's control.
         q_p = question if question is not None else aggregate_questions(qs, q_rule)
-        v = decision.assemble(p, q_p, k_view, questions=qs)
+        # CR-17: THE BELIEVED-ODDS QUERY on his View (`View.odds`), bound to him (`believed_odds_query(w, p)`):
+        # `believed_chance` is read-only and reads only the asker's own record (mode (b) of `odds_of`) beside the
+        # act's shape, so the chooser holds a callable answering for its holder and never the store (AX-2), and
+        # `choose` keeps its four parameters. Whether it is ASKED is `Fixtures.odds_weighting`'s
+        # (`decision/choose.py::odds_weight`); at `none` nothing calls it and the closure costs a lambda.
+        # B4, NAMED AT THE SITE (`layer-conformance`): `04` §C.11's "split that holds is on what is shown" decides this
+        # symbol in two rows. "what the person holds | `AX-2`, absolutely. The `View` is `ClaimId[]`; nothing is added and
+        # no resolver-side Query becomes visible" -- and "why what they hold says what it says | not information about
+        # the world. It is the derivation of a value the character already has, and displaying it adds no world truth".
+        # §A.2's `loop/deliberate` row adds "frozen `World`, for `sense` only". A believed chance is the arithmetic of
+        # the pool and the capability claims he holds (`believed_input`), the second row's case; its act-shape reads
+        # (`sides_of`, which reaches `world_q.place_of`: its docstring says it may not be called from `decision/`, and it is
+        # called from the host-made query, not from `decision/`'s own code; `person_subject`) and his own-acts `practice`
+        # addend are the departure, declared in `sigma.odds_of`.
+        # PICKED: the second row governs, as a host-made query on the View bound to its holder. Grade: CONVENTION (no
+        # scan sees a callable on a View; `test_season_shape.py`'s AX-2 scans match the token `World` only), columns
+        # read: §A.2's `decision/` and `loop/deliberate` may-read cells, §C.11's two rows. The code-side alternative
+        # (a per-person projection at barrier 2) would enumerate candidates before the chooser forms them.
+        # [ASSUMPTION; medium; revert: `odds_weighting` -> `none`, one re-pin (H-248)]
+        v = decision.assemble(p, q_p, k_view, questions=qs, odds=believed_odds_query(w, p))
         # S26.3: the PERSON asks their own budget. `choose` receives the QUERY, not the
         # answer -- rev 2 computed it in the engine and handed the number down, which is
         # the half of retraction 5 that never landed.

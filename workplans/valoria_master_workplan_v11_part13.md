@@ -76,7 +76,7 @@ Jordan asked for the NERS lanes' findings to be folded into the plan using the a
 | CP-T06-09 | B10-14 | RESEQUENCE | AM-D-17 | held |
 | CP-T07-02 | B10-15 | REPAIR | AM-E-02 | held |
 | CP-T07-02 | B10-15 | REPAIR | HR-6 | editorial-id pass |
-| CP-T07-02 | B10-15 | RESEQUENCE (SUPERSEDED) | HR-7 | editorial-id review round; superseded by M18 (b) at the decision round: CP-T07-02 needs REM-45 again |
+| CP-T07-02 | B10-15 | RESEQUENCE (SUPERSEDED) | HR-7 | editorial-id review round; superseded by M18 (b) at the decision round: CP-T07-02 needs REM-45 again; revived without its M18 clause when the knowledge-model fold of 2026-11-04 dropped REM-45 |
 | CP-T07-03 | B10-15 | NARROW | AM-E-03 | held |
 | CP-T07-04 | B10-15 | NARROW | AM-E-04 | held |
 | CP-T07-05 | B10-15 | NARROW | AM-E-05 | held |

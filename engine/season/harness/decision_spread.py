@@ -107,6 +107,7 @@ from ..decision import assemble, choose as CH, make_chooser, opening_set
 from ..decision.options import project
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
+from ..seam.wrappers.sigma import believed_odds_query
 from ..state.carriers import Question, subject_of
 from ..state.ids import H, draw_factory
 from .populated import build_realm
@@ -182,7 +183,7 @@ def null_alignment():
 # THE ATTRIBUTION
 
 
-def attribute_top(p, cands: list, fx, draw=None) -> dict:
+def attribute_top(p, cands: list, fx, draw=None, odds=None, terms=None) -> dict:
     """Rank `cands` for `p` as the chooser does and say WHICH TERM decided the top (the module docstring
     lists the tests in order). Returns `{top, decider, margin, scores, terms, draw_kind, field_zero}`;
     `scores` and `terms` are parallel to `cands`. `cands` empty -> `top` None, `decider` `none`; one
@@ -193,12 +194,17 @@ def attribute_top(p, cands: list, fx, draw=None) -> dict:
     ordered them, and the sampled top is one of the tied); `outvoted` when the sampler's top is NOT the
     strict score top (the draw overrode a score that had a leader). `field_zero` is true when every
     candidate's score is within `EPS` of 0: nothing the
-    person holds scores any candidate, so no state decided the top (the vectorless)."""
+    person holds scores any candidate, so no state decided the top (the vectorless).
+
+    `odds` (CR-17) is the believed-odds query a View carries (`View.odds`; `seam/wrappers/sigma.py::
+    believed_odds_query`), handed to `score_terms` as the chooser hands it: `None` reads the score without
+    the believed-chance factor, which is also what `odds_weighting` `none` reads whatever is passed."""
     if not cands:
         return {"top": None, "decider": "none", "margin": None, "scores": [], "terms": [],
                 "draw_kind": None, "field_zero": False}
     memo = CH.deliberation_memo(p, fx)
-    terms = [CH.score_terms(p, c, fx, memo) for c in cands]
+    if terms is None:            # a reader that already scored `cands` (harness/interactions.py) passes its terms
+        terms = [CH.score_terms(p, c, fx, memo, odds) for c in cands]
     scores = [t[0] + t[1] for t in terms]
     field_zero = all(abs(s) <= EPS for s in scores)
     if len(cands) == 1:
@@ -402,7 +408,8 @@ def read_decisions(w) -> dict:
         order = sorted(common, key=lambda k: (k[0], k[1] or ""))
         for pid in keyed:
             cands = [keyed[pid][k] for k in order]
-            r = attribute_top(w.persons[pid], cands, fx, draw)
+            r = attribute_top(w.persons[pid], cands, fx, draw,
+                              believed_odds_query(w, w.persons[pid]))   # CR-17: the query his View carries
             deciders[r["decider"]] += 1
             tally_split(split, pid, r)
             tally_split(total, pid, r)
@@ -462,7 +469,7 @@ def play_season(w, seasons: int = 1) -> dict:
             # the chooser's own opening set, narrowed as it narrows, scored again by `attribute_top` (pure in
             # its inputs: the draw is keyed by the candidate, not consumed); nothing is steered
             cands = [c for c in opening_set(p, v, q, w.fixtures) if c.verb in foldable]
-            tally_split(split, p.id, attribute_top(p, cands, w.fixtures, draw))
+            tally_split(split, p.id, attribute_top(p, cands, w.fixtures, draw, getattr(v, "odds", None)))
             key = (q.source, goal_class(q))
             answered[key] += 1
             for sc in scenes:

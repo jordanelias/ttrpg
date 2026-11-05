@@ -1569,7 +1569,12 @@ def _remit_acts_attribute_reads_outside_allowlist() -> list:
         tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
         allowed_spans = []
         for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef) and node.name in ("_grant_remit", "_eff_establish"):
+            # v11 CR-25: `_req_establish` joins `_eff_establish` for `_eff_establish`'s reason -- it reads the
+            # remit of the office THE ACT DESCRIBES (clause 5's H-132 (b) reduction test, against the sitting
+            # holders' `granted_acts`), never a stored office's remit as an eligibility fact. Its derivation
+            # (`office_founded_by`) reads the founder's grant, not `remit_acts`, and stays outside the list.
+            if isinstance(node, ast.FunctionDef) and node.name in ("_grant_remit", "_eff_establish",
+                                                                   "_req_establish"):
                 allowed_spans.append((node.lineno, node.end_lineno))
             elif isinstance(node, ast.ClassDef) and node.name == "Office":
                 allowed_spans += [(sub.lineno, sub.end_lineno) for sub in node.body
@@ -1581,10 +1586,10 @@ def _remit_acts_attribute_reads_outside_allowlist() -> list:
     return violations
 
 
-def test_13e_no_remit_acts_attribute_read_outside_the_three_allow_listed_sites():
+def test_13e_no_remit_acts_attribute_read_outside_the_allow_listed_sites():
     """**THE POSITION'S FALSIFIER, AST CLAUSE.** Before this position, `loop/resolve.py`'s
     `_eligible` and `epistemic.py`'s `_ch_post_remit` were a fourth and fifth reader of
-    `Office.remit_acts`, beyond the three this scan allow-lists; this test observes their absence
+    `Office.remit_acts`, beyond the four this scan allow-lists (the fourth is CR-25's `_req_establish`, which reads the DESCRIBED office); this test observes their absence
     now that both read `t.granted_acts` instead. A fourth reader is PLANNED
     (`budget()` counting `t.granted_acts`, not `Office.remit_acts` -- not this position's job), so
     this pins the CURRENT set to catch a future regression back onto the office-side field rather
@@ -1592,7 +1597,7 @@ def test_13e_no_remit_acts_attribute_read_outside_the_three_allow_listed_sites()
     violations = _remit_acts_attribute_reads_outside_allowlist()
     assert violations == [], (
         f"`Office.remit_acts` read as an attribute outside `_grant_remit`/`Office.__post_init__`/"
-        f"`_eff_establish` at {violations} -- position `13e` consolidated every consumer onto "
+        f"`_eff_establish`/`_req_establish` at {violations} -- position `13e` consolidated every consumer onto "
         f"`Tenure.granted_acts`")
 
 
@@ -2899,7 +2904,23 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # ⚠⚠ ED-IN-0310 (Jordan, 2026-11-04): (589, 589) -> (601, 601), A RE-RECORD WITH THE UNIT THAT MOVED IT: `build_realm`'s `foreign` default is True, the
     # Altonian cast joins the realm and the act mix moves (seed 0, one season: 589 -> 601 in both arms; `test_go07_canonical_digest.py` records the 601).
     # CONTROL: `build_realm(0, foreign=False)` reads the 589 (`test_go07_canonical_digest.BASE` before this row).
-    assert (out["acts"], cout["acts"]) == (601, 601), (
+    # ⚠⚠ CR-10 (B10-09 close two, arm D2): (601, 601) -> (623, 623), A RE-RECORD WITH THE UNIT THAT MOVED IT: `attention_key` spares a
+    # tier-1 own-act echo, so the act mix moves (seed 0, one season: 601 -> 623 in both arms; `test_go07_canonical_digest.py` records
+    # the 623). CONTROL: the tier-1 branch returning tier 4 for an own-act claim reads the 601.
+    # ⚠⚠ v11 CR-81 (ED-IN-0318): (623, 623) -> (630, 630), A RE-RECORD WITH THE UNIT THAT MOVED IT: `build_realm` writes the realm's
+    # starting acquaintances, so the act mix moves (seed 0, one season: 623 -> 630 in both arms; `test_go07_canonical_digest.py`
+    # records the 630). CONTROL: `build_realm` forced to `acquaintances=False` in process reads (623, 623) under this same test.
+    # ⚠⚠ v11 CR-25 (B10-09 close two): (630, 630) -> (619, 619), A RE-RECORD WITH THE UNIT THAT MOVED IT: a computed `establish`
+    # founds an office over a holding, so the act mix moves (seed 0, one season: 630 -> 619 in both arms;
+    # `test_go07_canonical_digest.py` records the 619). CONTROL: `holdings_to_found` stubbed to `()` and `establish`'s
+    # `referent_class` dropped reads 630 acts on the shipped arm (`test_go07_canonical_digest.BASE[0]` before this row, read in
+    # process); the second arm was not run under the control.
+    # ⚠⚠ v11 CR-17 (B10-09 close two): (619, 619) -> (685, 685), A RE-RECORD WITH THE UNIT THAT MOVED IT: `choice_temperature`
+    # 0.1 -> 0.05 (H-96's re-derivation; `odds_weighting` `believed` alone leaves seed 0 at 619), so the act mix moves (seed 0, one
+    # season: 619 -> 685 in both arms; `test_go07_canonical_digest.py` records the 685). CONTROL: `choice_temperature` swept
+    # back to 0.1 reads 619 on the shipped arm (`test_go07_canonical_digest.BASE[0]` before this row, read in process); the
+    # second arm was not run under the control.
+    assert (out["acts"], cout["acts"]) == (685, 685), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")
