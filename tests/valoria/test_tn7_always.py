@@ -9,7 +9,7 @@ This one is load-bearing on three of the four:
 
   * the game — TN is an input to every resolution in six subsystems;
   * a Jordan decision — the ruling above is the whole subject;
-  * the exported params — `WEAPON_TN_BASE` crosses to Godot via
+  * the exported params — `KNOT_FORMATION_TN` and `TN_STANDARD` cross to Godot via
     `tools/export_game_constants.py`, so a re-introduced TN axis would ship to the port.
 
 THE TRAP IT CLOSES, which is the real reason it is here.
@@ -159,9 +159,13 @@ def test_the_tn_constant_sweep_actually_found_constants():
     `BG_VOTE_TN` in `systems/social_contest/sim/parliamentary_vote.py`. The four left are
     `sigma_leverage.TN_STANDARD`, `combat.WEAPON_TN_BASE`, `knots.KNOT_FORMATION_TN` and
     `operations.TN_STANDARD`; `knots.py` leaves at `29f`, which re-pins this again.
+
+    RE-MEASURED at plan position PC-12 (2026-11-05): 4 -> 3. `combat.WEAPON_TN_BASE` lived in
+    `systems/combat/sim/combat.py`, deleted there; the three left are `sigma_leverage.TN_STANDARD`,
+    `knots.KNOT_FORMATION_TN` and `operations.TN_STANDARD`.
     """
     found = _tn_constants()
-    assert len(found) >= 4, (
+    assert len(found) >= 3, (
         f"the TN-constant sweep found only {len(found)} constants — the pattern has probably "
         "stopped matching, and the test above is now vacuous"
     )
