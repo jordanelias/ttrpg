@@ -286,6 +286,37 @@ class _Records:
         return (None, field), sub
 
 
+def consequence_acts(w, act_of: dict, log=None) -> frozenset:
+    """CR-68 -- THE ACTS THAT LEFT A MARK: the ids of the acts in `act_of` that caused (`act_of[event id]`
+    is that act) an Event carrying a Receipt whose `(kind, field)` is in `ARC_SELF | ARC_WORLD`. Reads
+    only; the ONE owner of the predicate (`harness/chronicle.py` picks its chain over it; it lives here,
+    beside the roster, because this module imports `storybar` and `storybar` must not import this one).
+
+    NO SECOND ROSTER: the pairs are the two above, whoever the record belongs to (a graded loss that
+    writes -- a `field.lost` -- is a consequence act; a refusal writes nothing and is not). `Event.changes`
+    is read by `_Records.of`, exactly as `read_arcs` reads it; the seat Receipts a death mints on a
+    `tenure.closed` Event name an Office and are no write of a record, so they are skipped as `read_arcs`
+    skips them. An Event the act caused is the Event `act_of` maps to it (what the act emitted); the
+    Events other people's acts and MATTER chained after it are not counted. `log` defaults to `w.log`.
+    [ASSUMPTION; medium; Jordan to correct; revert: restore `--executed-only` and the depth-only pick]"""
+    roster = validate_roster(ARC_SELF) | validate_roster(ARC_WORLD)
+    records = _Records(w)
+    out = set()
+    for ev in (w.log if log is None else log):
+        act = act_of.get(ev.id)
+        if act is None or act.id in out:
+            continue
+        for r in ev.changes:
+            if not isinstance(r, Receipt):
+                continue
+            if ev.kind == TENURE_CLOSED and r.subject in w.offices:
+                continue
+            if records.of(r, ev)[0] in roster:
+                out.add(act.id)
+                break
+    return frozenset(out)
+
+
 def read_arcs(w, d, on_thrust=None, *, n=None, refused=None, log=None, unrestricted=False,
               self_fields=ARC_SELF, world_fields=ARC_WORLD) -> ArcReading:
     """`ARC(p, A)` over the world `w` and its driver `d`. Reads only.

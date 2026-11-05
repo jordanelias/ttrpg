@@ -27,12 +27,27 @@ where `<actor>` is the Person's `name` when it has one and the id otherwise, `<k
 distinct Event kinds the act emitted in log order, and the first line reads `opens the chain`. `<m>`
 is the line number of the antecedent act, always an earlier line.
 
-`--executed-only` (CR-15) runs the same pick, `deepest_chain`, over `storybar.read`'s EXECUTED rows (the
-acts `corpus_run.attempts` finds no refusal Event for, cross antecedents cut to such acts, depth
-recomputed along them) and renders that chain; the header line keeps its fields and gains the default
-pick's refused-act count. A graded loss is refused. Without the flag nothing here changes.
+THE SELECTION (CR-68, `chronicle.main`, which holds `w`). By default the pick runs over CONSEQUENCE ACTS:
+`arc.consequence_acts(w, act_of)` (its one owner; `arc.py` imports `storybar`, so the predicate cannot
+live there) names the acts that caused an Event whose Receipt writes a `(kind, field)` of `arc.py`'s
+`ARC_SELF` or `ARC_WORLD`. This module holds no roster of its own. Every other act is cut the way
+`storybar._executed_rows` cuts a refused one (`read`'s `refused` argument is handed the acts that are NOT
+consequence acts): the act, and every cross edge into it, leave the rows and `depth` is recomputed along
+what remains; a cut act is not bridged over. `deepest_chain(rows)` is unchanged and stays pure over the
+rows it is handed. A graded loss that writes (a lost duel, a `field.lost`) is a consequence act; a refusal
+writes nothing and is not. `--all-acts` restores the pick over every act, today's selection before CR-68;
+the retired `--executed-only` cut by the driver's refusal rule, which counts a graded loss as refused.
+The header line keeps its fields and gains `consequence_acts=` at its end (`acts=` stays the count of
+every act read); `depth=` is the rendered chain's. A log with no consequence act says so and renders nothing.
+[ASSUMPTION; medium; Jordan to correct; revert: restore `--executed-only` and the depth-only pick]
 
-Entry point: `python -m engine.season.harness.chronicle --seed S --seasons K [--cap C] [--executed-only]`. `--seed` and
+LIMIT, STATED. An "answers" edge is any cause edge that resolves through `act_of` to another person's
+act (`storybar.read`: an occasion Event is such a cause too), so a chain shows what an act had among its
+causes, not that the later actor decided BECAUSE of the earlier one. The render says "answers" and means
+"had among its causes". And an act counts as a consequence by what its OWN Events wrote; what other
+people's acts or MATTER chained after it does not count for it.
+
+Entry point: `python -m engine.season.harness.chronicle --seed S --seasons K [--cap C] [--all-acts]`. `--seed` and
 `--seasons` are required and have no default (this file is inside `tools/ci_sim_fabrication_check.py`'s
 blocking scope, the reason `harness/storybar.py` and `harness/soak.py` give); `--cap` is optional and
 is `build_realm`'s own parameter, defaulting to its own `None`, the full realm. The header line
@@ -45,6 +60,7 @@ import argparse
 import os
 import sys
 
+from . import arc as ARC
 from . import storybar as SB
 
 
@@ -143,27 +159,29 @@ def main(argv=None) -> int:
                     help=f"forcing arm; built: {', '.join(SB.ARMS)}")
     ap.add_argument("--cap", type=int, default=None,
                     help="build_realm's cast cap; omitted = build_realm's own None, the full realm")
-    ap.add_argument("--executed-only", action="store_true",
-                    help="pick the deepest chain over the EXECUTED rows (refused acts and every edge "
-                         "into one cut; storybar.read's `refused` argument) and render that; the "
-                         "header keeps its fields and adds the default pick's refused-act count and "
-                         "the executed pick's depth. Without it the output is unchanged")
+    ap.add_argument("--all-acts", action="store_true",
+                    help="pick the deepest chain over EVERY act, as before CR-68; without it the pick "
+                         "runs over consequence acts only (arc.consequence_acts: an Event the act "
+                         "caused carries a Receipt writing a (kind, field) of ARC_SELF or ARC_WORLD; "
+                         "the other acts and every edge into one are cut, depth recomputed)")
     args = ap.parse_args(argv)
 
     w, d, bounds = SB.drive(args.seed, args.seasons, args.arm, args.cap)
-    refused = SB.refusal_sets(w, len(bounds))[0] if args.executed_only else None
-    res = SB.read(w.log, d.act_of, bounds, refused)
-    chain = deepest_chain(res["acts"])
+    consequence = ARC.consequence_acts(w, d.act_of)
+    cut = None
+    if not args.all_acts:
+        cut = frozenset(a for a in {a.id for a in d.act_of.values()} if a not in consequence)
+    res = SB.read(w.log, d.act_of, bounds, cut)
+    rows = res["acts"] if args.all_acts else res["executed"]
+    chain = deepest_chain(rows)
     head = (f"chronicle seed={args.seed} seasons={args.seasons} arm={args.arm} cap={args.cap} "
-            f"acts={len(res['acts'])} depth={len(chain)} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")
-    rows = res["acts"]
-    if args.executed_only:
-        head += (f" executed-only: default_chain_refused={sum(1 for a in chain if a in refused)} "
-                 f"executed_acts={len(res['executed'])} "
-                 f"executed_depth={len(deepest_chain(res['executed']))}")
-        rows = res["executed"]
+            f"acts={len(res['acts'])} depth={len(chain)} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')} "
+            f"consequence_acts={len(consequence)}")
     print(head)
-    print(render(w.log, d.act_of, rows, w.persons))
+    if not rows and res["acts"]:
+        print("no consequence act in the log; --all-acts renders over every act")
+    else:
+        print(render(w.log, d.act_of, rows, w.persons))
     return 0
 
 
