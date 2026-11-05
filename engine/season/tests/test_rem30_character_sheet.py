@@ -33,10 +33,12 @@ from engine.season.state.ids import H, draw_factory
 # RE-RECORDED at v10 REM-30's second commit (the `verb_capability` rows, a DECLARED MOVER): was, from REM-31's commit
 # `96136014` read before REM-30 touched anything, 36378f25... / 8899cdd5... / 048a326b... for seeds 0 / 1 / 2. CONTROL: this
 # commit's four source files reverted read the old three exactly (the first REM-30 commit's own run).
+# RE-PINNED ONCE at v10 CR-30 for CR-20 + CR-30 (Person.attributes / Person.heritage in every repr; four authored heritage rows):
+# was 027c7516... / 5b000930... / 891860d4.... The arm-off event list over two seasons equals the parent tree's at seeds 0 / 1 / 2.
 PRE_BUILD = {
-    0: "027c7516d23785bebdac6884119fdba8",
-    1: "5b0009306671179780d04981a7325df1",
-    2: "891860d455107e4e674e2f45bf977ae9",
+    0: "f2e5e265012d1d96333a43ff514d2b13",
+    1: "0d25717b85d52c4f156136fa724ae46e",
+    2: "05f065f4c917faf3d970f2c50cfd792f",
 }
 
 

@@ -587,14 +587,21 @@ def _counts(w) -> dict:
 # fced32bd... / a489798b..., `acts` 700 / 688 / 724 -> 705 / 697 / 730, `persons` 77 / 80 / 80 -> 79 / 80 / 81, `log` 11846 /
 # 10680 / 10614 -> 11581 / 10739 / 10985. CONTROL: the rows commit's four files reverted reads the old three entries exactly
 # (the file's tests, run on the parent tree). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v10 CR-30's commit for CR-20 + CR-30 TOGETHER (`Person.attributes`, `Person.heritage`: two new fields in every
+# Person's repr, and four authored `heritage:` cast rows, which change the `marks` term of the `seen` claims their co-located
+# witnesses hold). Was, for seeds 0 / 1 / 2: `old` 4ace8831... / 65f3ee2b... / fcbfc95b..., `new` 027c7516... / 5b000930... /
+# 891860d4...; `acts`, `census` and `counts` do NOT move (705 / 697 / 730, the same census digests and log lengths). CONTROL: the
+# ordered (kind, id) event list over two seasons equals the parent tree's at seeds 0 / 1 / 2 both with the four `heritage:` rows
+# removed (the ledgers' claim values equal too) and with them present (only the `marks` of `seen` claims differ, 158 / 143 / 124
+# of them) -- so only the repr-derived hashes move. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
-    0: {"old": "4ace88313a4e5e0a0306906b0f167759", "new": "027c7516d23785bebdac6884119fdba8", "acts": 705,
+    0: {"old": "bf061eff6f4af2a75d0d2bb48f3694bf", "new": "f2e5e265012d1d96333a43ff514d2b13", "acts": 705,
         "census": "88601d2bf2cb8303647b238b44dfef1f83df0077844bcbb411e04b6c98b7c7ad",
         "counts": {"persons": 79, "rungs": 410, "offices": 34, "sites": 322, "records": 183, "propositions": 126, "dates": 3, "docket": 7, "tenures": 997, "log": 11581}},
-    1: {"old": "65f3ee2bcf7e3e62a2d926a40e268277", "new": "5b0009306671179780d04981a7325df1", "acts": 697,
+    1: {"old": "cad429d9c11eae6e990688be546f4c3f", "new": "0d25717b85d52c4f156136fa724ae46e", "acts": 697,
         "census": "f0508f10a816a9c36b6e4a30c6324359a0b1d89bb6af5afb81845ff47329379e",
         "counts": {"persons": 80, "rungs": 411, "offices": 34, "sites": 322, "records": 194, "propositions": 120, "dates": 3, "docket": 8, "tenures": 1004, "log": 10739}},
-    2: {"old": "fcbfc95b5aa2a78bc66deeec204d96e8", "new": "891860d455107e4e674e2f45bf977ae9", "acts": 730,
+    2: {"old": "10959592ff83921f0fa39c7057c1db4d", "new": "05f065f4c917faf3d970f2c50cfd792f", "acts": 730,
         "census": "c8be79b804c74658adb0153a991eb650da54fc5308c2b41353c4a5cfbeacf93b",
         "counts": {"persons": 81, "rungs": 412, "offices": 34, "sites": 322, "records": 186, "propositions": 142, "dates": 4, "docket": 4, "tenures": 1014, "log": 10985}},
 }
@@ -605,13 +612,13 @@ def test_go07_control_the_build_world_old_digest_is_unmoved():
     (`test_season_weather.BASE_HASHES[0]`'s retired value); the same world now reads the new pin."""
     w = POP.build_realm(0)
     c = POP.build_realm(0, foreign=False, acquaintances=False)   # ED-IN-0310 + CR-81: the realm before the empire and the acquaintances
-    assert (_old_content_hash(c), c.content_hash()) == ("970d0b5ba2380d22ca6947ae918e7667", "060d8901135365dcc10f0e9875a1740b")   # CR-86: was 919faacb... / c7ca8d50...
+    assert (_old_content_hash(c), c.content_hash()) == ("b016e338b750ef9f6edcdecb06819a87", "a4998422114fd89d8640afe4e504365a")   # CR-20+CR-30 (Person.attributes, Person.heritage): was 970d0b5b... / 060d8901... (CR-86: was 919faacb... / c7ca8d50...)
     a = POP.build_realm(0, acquaintances=False)                  # CR-81's control arm: the parent tree's build
-    assert (_old_content_hash(a), a.content_hash()) == ("be420f6771394931732fc2f14724fc8a", "876820336e2259604acb280ab3452a71")   # CR-86: was f78bcaf4... / 70ea49cb...
+    assert (_old_content_hash(a), a.content_hash()) == ("d4be83d2f4dd07f6d6eedc5c9f855ca6", "070b68dfab9dd5d5d1ad1a06c0109c6a")   # CR-20+CR-30: was be420f67... / 87682033... (CR-86: was f78bcaf4... / 70ea49cb...)
     f = POP.build_realm(0, foreign=False)                        # CR-81: was 919faacb... / c7ca8d50... (acquaintances off reads it)
-    assert (_old_content_hash(f), f.content_hash()) == ("a7628b4e4208ab8a98d850a78fa6182f", "7b7992f7ae967e8e36bffb33abc44ba3")   # CR-86: was 42f55a5f... / e12a710b...
-    assert _old_content_hash(w) == "da08203b55c02938215548bce174b9bb"        # CR-86: was 47c172b0... (ED-IN-0342). CR-81: was f78bcaf4... (acquaintances=False reads it); ED-IN-0310: was 919faacb...; v10 IN-61: was 26c255ac...
-    assert w.content_hash() == "b4bc2df0d507aeb086d79cb8636ca9e0"            # CR-86: was 3ae970a1... (ED-IN-0342). CR-81: was 70ea49cb... (acquaintances=False reads it); v10 IN-61: was 4ab812ba... (CP-T02-02); before that 3e31638e... (CR-21)
+    assert (_old_content_hash(f), f.content_hash()) == ("f1c1523081dca7bb3f99f99dcda8310e", "ebd5e067c98f0ddf3bd68e511cf55aa8")   # CR-20+CR-30: was a7628b4e... / 7b7992f7... (CR-86: was 42f55a5f... / e12a710b...)
+    assert _old_content_hash(w) == "ff134c63dd9b380292341b256f13aa19"        # CR-20+CR-30: was da08203b... CR-86: was 47c172b0... (ED-IN-0342). CR-81: was f78bcaf4... (acquaintances=False reads it); ED-IN-0310: was 919faacb...; v10 IN-61: was 26c255ac...
+    assert w.content_hash() == "d61848d3a174464f9c96fe81fe0204f2"            # CR-20+CR-30: was b4bc2df0... CR-86: was 3ae970a1... (ED-IN-0342). CR-81: was 70ea49cb... (acquaintances=False reads it); v10 IN-61: was 4ab812ba... (CP-T02-02); before that 3e31638e... (CR-21)
 
 
 def test_go07_control_the_world_did_not_move_only_its_digest():

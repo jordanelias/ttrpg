@@ -789,6 +789,14 @@ class Person:
     # NEVER WRITTEN IN PLAY: no `write_matrix.yaml` row, so the gate refuses any write to it. READERS:
     # `seam/wrappers/sigma.py::faculty` (the pool's base) and `_opposition_of` (the score the obstacle halves).
     attributes: dict = field(default_factory=dict)
+    # v10 CR-30: HERITAGE -- DESCENT, one of `references/descriptor_registry.yaml: heritage_roster`'s five
+    # (`engine/substrate/descriptors.py::HERITAGES`), as a read-off field (`architecture/meta/01_AXIOMS.md`
+    # §D.1.1): the one member of the dropped `marks[]` no Tenure derives. `None` IS "UNAUTHORED", never a
+    # default member. Filled ONCE at world build from a cast row's `heritage:` (`data/cast.py::heritage_of`) and
+    # NEVER WRITTEN IN PLAY, `thread_sensitivity`'s precedent: no `write_matrix.yaml` row, so the gate refuses a
+    # write. ONE READER: `epistemic.py::_term_marks`, which deposits it TRUE and verbatim to every co-located
+    # witness beside `who` (AX-7: no competence or prior-belief mediation).
+    heritage: Optional[str] = None
     travel_leg: list[str] = field(default_factory=list)
     # ⚠ W5 MOVED THE TENURE STORE HERE, and `Tenure`'s OWN DOCSTRING already said this: "S15 --
     # THE ONE EDGE. Owned by its SUBJECT (S15.1)." The class asserted the ownership and the

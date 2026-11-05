@@ -1325,6 +1325,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # `faculty` then falls to `pool_default`.
         if cast_attributes:
             w.persons[pid].attributes = cast.attributes_of(cast.row(cid) or {})
+        # v10 CR-30: DESCENT, from the same row's `heritage:`, set here and NEVER written in play. No fallback and
+        # no draw: a row that states none leaves `None`, which `epistemic._term_marks` deposits as `()`.
+        w.persons[pid].heritage = cast.heritage_of(cast.row(cid) or {})
 
     # -- WHO BELONGS TO WHAT ----------------------------------------------------
     #

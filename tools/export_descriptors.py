@@ -197,6 +197,27 @@ def _attribute_names(reg):
     return dict(sorted(out.items()))
 
 
+def _heritage_roster(reg, concerns):
+    """The descents `Person.heritage` is one of (v10 CR-30, ED-IN-0301). Validated as the rosters above are
+    (`_named_roster`), plus its `engages:` cells: each key a ROSTERED member and each value a `concerns:` key
+    of the affiliation roster (`concerns` is that block's validated mapping), so an engagement can name only a
+    concern the cast is already held to. A member under no key engages none."""
+    block, names = _named_roster(reg, 'heritage_roster',
+                                 'It is the single owner of the descents Person.heritage is one of.')
+    engages = block.get('engages') or {}
+    if not isinstance(engages, dict):
+        raise SystemExit('descriptor_registry.yaml: heritage_roster.engages is not a mapping.')
+    for member, concern in engages.items():
+        if member not in names:
+            raise SystemExit(f'descriptor_registry.yaml: heritage_roster.engages names {member!r}, '
+                             f'which is not on heritage_roster.names.')
+        if concern not in concerns:
+            raise SystemExit(f'descriptor_registry.yaml: heritage_roster.engages.{member} is {concern!r}, '
+                             f'which is not a concerns key of affiliation_roster ({sorted(concerns)}).')
+    return {'source': block.get('source'), 'count': len(names), 'names': names,
+            'engages': {str(m): str(c) for m, c in engages.items()}}
+
+
 def build():
     reg = ci_common.load_yaml(SRC, default=None)
     if not reg:
@@ -250,6 +271,8 @@ def build():
         'axis_roster': _axis_roster(reg),
         # THE AFFILIATION ROSTER (IN-08 H10): what `Person.conviction` is keyed on, with its scale.
         'affiliation_roster': _affiliation_roster(reg),
+        # THE HERITAGE ROSTER (CR-30): what `Person.heritage` is one of, with the concern each engages.
+        'heritage_roster': _heritage_roster(reg, _affiliation_roster(reg)['concerns']),
         'settlement_stats': _section(reg, 'settlement_stats'),
         'practitioner_stats': _section(reg, 'practitioner_stats'),
         'territory_stats': _section(reg, 'territory_stats'),

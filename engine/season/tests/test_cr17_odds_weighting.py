@@ -316,5 +316,5 @@ def test_none_and_tau_point_one_reproduce_the_parent_world_exactly():
     POP.run(seasons=1, seed=0, w=w)
     # REM-31 re-pin (every fight deferred to ENCOUNTER; `the body`'s `step:`/`declares:` popped in process reads the old pair): was 60a80834... / 10323
     # REM-30 `verb_capability` rows re-pin (a DECLARED MOVER; the rows commit reverted in process reads the old pair): was 543e1e43... / 10421
-    assert w.content_hash().startswith("1b7a72f4"), w.content_hash()   # CR-86 re-pin: was bdff0832... / 10316
+    assert w.content_hash().startswith("bd3d2492"), w.content_hash()   # CR-20+CR-30 re-pin (Person repr, heritage rows; the log length does not move): was 1b7a72f4... (CR-86 re-pin: was bdff0832... / 10316)
     assert len(w.log) == 10435
