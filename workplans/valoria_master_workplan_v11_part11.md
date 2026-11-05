@@ -156,7 +156,7 @@ The register's dependency order (register `:158-169`) maps onto v10's spine with
 
 ## 7. Coverage
 
-`python proposals/2026-10-24-master-workplan-v10/ctl/coverage_check.py proposals/2026-10-24-master-workplan-v10 proposals/2026-10-24-master-workplan-v10`, run from the repository root, reads the 29 ids from `ctl/static_inventory.json` (`thrust_register_ids`) and requires each to be the first cell of a row in this file. It checks that a row exists, not that its disposition is right. The same script requires every handle this file names to be known to `ctl/batch_map.py`, so it fails while that map lacks any of CR-14, CR-15 or CL-THRUST. A negative control (a copy of this directory with the G-17 row deleted) reported `28/29  MISSING ['G-17']`.
+`python proposals/2026-10-24-master-workplan-v10/ctl/coverage_check.py proposals/2026-10-24-master-workplan-v10 proposals/2026-10-24-master-workplan-v10`, run from the repository root (deleted at B10-09's close two with `ctl/`; read at `git show 1ef8d273:proposals/2026-10-24-master-workplan-v10/ctl/coverage_check.py`), reads the 29 ids from `ctl/static_inventory.json` (`thrust_register_ids`) and requires each to be the first cell of a row in this file. It checks that a row exists, not that its disposition is right. The same script requires every handle this file names to be known to `ctl/batch_map.py`, so it fails while that map lacks any of CR-14, CR-15 or CL-THRUST. A negative control (a copy of this directory with the G-17 row deleted) reported `28/29  MISSING ['G-17']`.
 
 ## 8. Not verified
 

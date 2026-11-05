@@ -1672,7 +1672,7 @@ class Subject:
         the TENURE'S OWN ID "after a rejected alternative" (a Receipt must name what was ACTUALLY written;
         `epistemic.py` states the same, `tests/test_season_shape.py` pins it for `confer`). A seat Receipt
         names the OFFICE with the write's own field (`body`/`exists`), which is no write on an Office. The
-        reason is the plan's (`2026-10-24-v10-09-build-B10-09.md` CP-T02-01) and the alternative's cost: a
+        reason is the plan's (`2026-10-24-v10-09-build-B10-09.md` CP-T02-01, deleted at B10-09's close; `git show 1ef8d273:proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-09.md`) and the alternative's cost: a
         dead man's Tenures leave `World.tenures` with him, so a Receipt on a Tenure id cannot be expanded to
         the seat by `_hold_tenure_ends`; that is H-206's option (b), which the plan keeps at LEAVE.
         Its one known misreader is `harness/arc.py::_Records.of`; `read_arcs` skips a seat Receipt on a

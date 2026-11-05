@@ -5,7 +5,7 @@ file and runs on a world this file builds.
 
 HOW THE KNOWN SET FORMS (`queries/person_q.py::known_persons`: a truthy `exists:Person` reading, a `seen`
 claim's `who`, a told claim's `chain[-1]`; nothing else). READ AT THE BASE COMMIT with the reference reader
-(`proposals/2026-10-24-master-workplan-v10/ctl/acquaintance_probe.py`, deleted at B10-09 close two; recover it with `git show 21015bbe^:<that path>`, `PYTHONHASHSEED=0`, four seasons,
+(`git show 1ef8d273:proposals/2026-10-24-master-workplan-v10/ctl/acquaintance_probe.py`, deleted at B10-09 close two; `PYTHONHASHSEED=0`, four seasons,
 the shipped realm, arm `off`; each run's exit and its five rows were read back from its log):
 
     persons who know nobody / persons alive       build    s1      s2      s3      s4
