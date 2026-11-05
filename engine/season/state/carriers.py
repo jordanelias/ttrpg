@@ -787,7 +787,7 @@ class Person:
     # rolled. Filled ONCE at world build, by a cast row's `stats:` (`harness/populated.py::build_realm`'s
     # `cast_attributes` switch, which SHIPS OFF; `data/cast.py::attributes_of`, `thread_sensitivity_of`'s
     # precedent) -- `decision/sheet.py`'s creation sheet only READS it and writes nothing, so no shipped writer
-    # exists until that switch flips (Phase 1 close of B10-10) -- and NEVER WRITTEN IN PLAY: no `write_matrix.yaml` row, so the gate refuses any write to it. READERS:
+    # exists until that switch flips: the carrier SHIPS EMPTY, and CR-20 and CR-19 are latent in every shipped realm -- and NEVER WRITTEN IN PLAY: no `write_matrix.yaml` row, so the gate refuses any write to it. READERS:
     # `seam/wrappers/sigma.py::faculty` (the pool's base) and `_opposition_of` (the score the obstacle halves).
     attributes: dict = field(default_factory=dict)
     # v10 CR-30: HERITAGE -- DESCENT, one of `references/descriptor_registry.yaml: heritage_roster`'s five

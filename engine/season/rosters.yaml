@@ -2790,8 +2790,8 @@ rosters:
       a person with a live `oblige` to a seat the person holds (`state/gate.py::sworn_to`, the one walk
       `establishment_of` composes on). A person who is both is offered once, at the earlier tie. WHAT EACH
       TIE MEANS IS CODE: `queries/world_q.py::_TIE_READERS`, one reader per member; `check_continuation_ties`
-      REFUSES AT IMPORT a member with no reader and a reader with no member, and a `Continuation` tagged
-      with a kind off this list is refused at construction. THE CLIENT HOLDS NO COPY: which persons may be
+      REFUSES AT IMPORT a member with no reader and a reader with no member, and `continuations` iterates this roster,
+      so a `Continuation` tagged with a kind off this list is never returned. THE CLIENT HOLDS NO COPY: which persons may be
       chosen is a game fact, so `harness/play_surface.py::carry_on` offers `world_q.continuations`' answer
       and nothing it composed itself. `follower` (a live `commit` to a Proposition the person made) was in
       the design's draft and is NOT taken; appending it is one member here and one reader there.

@@ -112,10 +112,12 @@ def test_refracted_confidence_reads_the_factor_directly():
 
 def test_the_realm_at_the_shipped_gain_is_the_realm_with_the_factor_inert(monkeypatch):
     """CONTROL on `build_realm(0)`, one season: the shipped world equals the world with `competence` made the
-    constant 1 (the pre-CR-19 formula), by content hash and by the ordered `(kind, id)` event list. Latent in the
-    realm because the cast authors no Attunement; a cast row that gains one moves a LIVE gain, not this."""
+    constant 1 (the pre-CR-19 formula), by content hash and by the ordered `(kind, id)` event list. Built with
+    `cast_attributes=True` so that NPC-001 (the one cast row that authors Attunement, 3-4) HOLDS Attunement 3: with
+    the switch off nobody holds any and `competence` is 1 at every gain, so the equality would be true by
+    construction and could not observe a factor leaking at the shipped gain 0 (the Phase 3 close of B10-10)."""
     def run(seed=0):
-        w = POP.build_realm(seed)
+        w = POP.build_realm(seed, cast_attributes=True)
         POP.run(seasons=1, seed=seed, w=w)
         return w.content_hash(), [(e.kind, e.id) for e in w.log]
 

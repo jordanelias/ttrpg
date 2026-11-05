@@ -67,14 +67,10 @@ NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
 # through; `names.canonical_for()` would RAISE. Those are both right, for different callers: the
 # registry carries 6 of 46 rows this loader cannot resolve and COUNTS them (the refusal is the
 # caller's, downstream), so raising here would turn a counted gap into a crash at import.
-#: `{alias: canonical}` over every `token_class: faction` row, from the naming leaf. Built ONCE at
-#: import, not per call: both readers below run per row (46 cast rows, and the geography file's
-#: per-province `faction:` column), and the lazy `_ALIASES` cache this replaced existed for that
-#: reason. Both operands are import-time constants, so there is nothing to defer.
-#:
-#: Schoenland was invisible here until 2026-09-16: its `names_index.yaml` row is filed with the
-#: PLACES and simply never carried `token_class: faction`, so this map saw seven of eight. The
-#: class is set now and the eighth resolves.
+# `{alias: canonical}` over every `token_class: faction` row is `rosters.FACTION_ALIAS` (imported above), built ONCE
+# at import from the naming leaf: both readers below run per row (46 cast rows, and the geography file's
+# per-province `faction:` column). Schoenland was invisible to it until 2026-09-16: its `names_index.yaml` row is
+# filed with the PLACES and simply never carried `token_class: faction`; the class is set now and the eighth resolves.
 
 
 

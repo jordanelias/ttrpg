@@ -291,7 +291,8 @@ def consequence_kinds(w, act_of: dict, log=None) -> dict:
     order, of the Events the act caused that carry a Receipt whose `(kind, field)` is in
     `ARC_SELF | ARC_WORLD`)}`. An act is a consequence act iff it is a key. Reads only.
 
-    NO SECOND ROSTER: the pairs are the two above, classified by OWNERSHIP exactly as `read_arcs` does (a
+    NO SECOND ROSTER: the pairs are the two above, classified by OWNERSHIP as `read_arcs` does (`read_arcs` also skips `DEATH_KIND` Events and this does not, so a
+    `person.died` can appear in CR-69's histogram; the killing act counts through its `body.changed` either way) (a
     pair in `ARC_SELF` counts only when the record is the ACTOR's own, a pair in `ARC_WORLD` only when it is
     someone else's, so an actor's write to his own `Person.body` -- a self-tend -- and a pupil's `capability`
     are NOT consequences; a graded loss that writes -- a `field.lost` -- is one; a refusal writes nothing and
