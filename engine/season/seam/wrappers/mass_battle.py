@@ -213,6 +213,7 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
     the record's `geography` -- the file `data/geography.py` reads once per process; the module opens none.
     MB-03: `loyalties` and `loyalty_gain` are the build-time loyalty rows and the fixture gain; what
     they do to the morale-start is `massbattle._morale_start`'s.
+    REM-32: `troops_per_weight` is the `field_troops_per_weight` fixture (`H-250`), handed on unread.
     ED-IN-0306 phase 3: `factions` is `(attacker, defender)`, each side's faction Proposition id or `None`;
     each side whose faction holds an army Record fights as that Record's order of battle
     (`_order_of_battle`). Neither side having one leaves `orders_of_battle` `None`, the record exactly as it was."""
@@ -232,7 +233,8 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
         loyalties=(_side_stance(w, claimants, _creed_referent), _side_stance(w, other, _creed_referent)),
         loyalty_gain=w.fixtures.get("field_morale_loyalty_gain"),
         geography=geography(),
-        orders_of_battle=None if oobs == (None, None) else oobs)
+        orders_of_battle=None if oobs == (None, None) else oobs,
+        troops_per_weight=w.fixtures.get("field_troops_per_weight"))
 
 
 def _causing_act(w: Any, causes: list) -> Any:

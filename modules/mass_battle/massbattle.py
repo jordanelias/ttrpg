@@ -207,12 +207,14 @@ _SEASON_FORCE_POWER = 4  # [canonical: sim_mb_06_v9_historical_spec.md — P4 ti
 #: A season-Person-weight -> troop-count conversion is open work this function does not invent one
 #: of; until it lands, `resolve_field`'s outcomes are honest about their INPUT and not yet
 #: calibrated to the engine's own battle scale.
+#: REM-32: the scale is now a fixture (`troops_per_weight`, `hole_register.yaml` H-250, Jordan's value at JQ-4),
+#: shipped at 1 -- the raw weight sum above. At 1 the disclosure stands as written.
 _MIN_TROOPS = 1.0  # floor only -- `Unit.total_troops() == 0` divides by zero deep in
                    # `orchestration.resolve_engagements`; this is the smallest value that avoids
                    # that crash, not a claim about what a minimal army is.
 
 
-def _weighted_unit(name, weight, morale_start=_MORALE_START_BASE):
+def _weighted_unit(name, weight, morale_start=_MORALE_START_BASE, troops_per_weight=1):
     """One `Unit`, one `Subunit`, sized by `troops=` (the Jordan-directed continuous-scale field,
     `hierarchy/units.py`: "when `troops` is set the footprint is generated from (troops,
     concentration) ... `tier` becomes vestigial") rather than by `tier`'s fixed lookup table.
@@ -224,8 +226,13 @@ def _weighted_unit(name, weight, morale_start=_MORALE_START_BASE):
     `morale_start` is `_morale_start`'s value for this side (the base when omitted); `morale` starts
     equal to it, and the Subunit sets neither, so its `eff_morale` falls through to the Unit's.
     Every other Subunit/Unit field is the non-canonical inherited default of the pre-port adapter
-    (`_faction_to_unit`, deleted at `29b`), carried via `_MVP_SUBUNIT_SHAPE`/`_MVP_UNIT_COMMAND`."""
-    sub = Subunit(**_MVP_SUBUNIT_SHAPE, troops=max(float(weight), _MIN_TROOPS),
+    (`_faction_to_unit`, deleted at `29b`), carried via `_MVP_SUBUNIT_SHAPE`/`_MVP_UNIT_COMMAND`.
+
+    REM-32: `troops_per_weight` is the weight -> troops SCALE, handed in on the record (`MassBattleInput.
+    troops_per_weight`; the season's `field_troops_per_weight` fixture, `hole_register.yaml` H-250, owner Jordan
+    at JQ-4). `1` is the identity -- `troops = weight`, the field as it was; this signature's `1` is that identity,
+    not a value for the scale. `_SEASON_FORCE_POWER` is a quality stat and is not scaled."""
+    sub = Subunit(**_MVP_SUBUNIT_SHAPE, troops=max(float(weight) * troops_per_weight, _MIN_TROOPS),
                   concentration=float(CELL_CAP))
     return Unit(name=name, faction=name, power=_SEASON_FORCE_POWER, **_MVP_UNIT_COMMAND,
                 morale=morale_start, morale_start=morale_start,
@@ -406,6 +413,11 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     the side's Σ weight, the field before the feed. They size the Unit in the weight's place and nothing
     else; `_MIN_TROOPS`' floor still applies, so an unprovisioned side (`0`) fields the crash floor.
 
+    REM-32: `inp.troops_per_weight` multiplies whatever stands in the weight's place -- Σ weight or the fed
+    troops (provision bounds in weight units, so the scale applies after the bound) -- on the headcount path
+    only (`_weighted_unit`). A side with an order of battle is sized by that order's own headcounts and
+    `under_arms_cap`, and the scale does not touch it.
+
     Returns exactly what `_run_and_grade` returns."""
     weight_a, weight_b = (sum(side) for side in inp.weights)
     if troops_a is not None:
@@ -419,8 +431,8 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     oob_a, oob_b = inp.orders_of_battle or (None, None)
     armies = oob_a is not None or oob_b is not None
     if not armies:
-        unit_a = _weighted_unit("side_a", weight_a, morale_a)
-        unit_b = _weighted_unit("side_b", weight_b, morale_b)
+        unit_a = _weighted_unit("side_a", weight_a, morale_a, inp.troops_per_weight)
+        unit_b = _weighted_unit("side_b", weight_b, morale_b, inp.troops_per_weight)
     else:
         # ED-IN-0306: a side with an order of battle fights as that order says. Its headcounts are authoritative,
         # so `troops_a`/`troops_b` (the provisioning feed) are not applied to it -- recruiting is what bounds an

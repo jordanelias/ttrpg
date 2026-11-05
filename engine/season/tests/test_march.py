@@ -252,31 +252,39 @@ def test_a_march_on_an_unheld_settlement_arrives_rather_than_crashing_the_season
 
 
 def test_a_won_field_writes_casualties_and_stance_on_the_defender_only():
-    """FALSIFIER for a real, verified gap: `Won` (the ATTACKER wins, defenders lose) had NO
-    execution coverage anywhere in this build. `test_a_lost_field...` above only exercises `Lost`,
-    and `modules/mass_battle/massbattle.py`'s own disclosed limitation -- corpus-scale forces
-    (single/double-digit `weight` sums) rout on contact regardless of size, so `attacker_wins`
-    (hence `Won`) may be UNREACHABLE through a real fold at this fixture's scale -- measured
-    directly: the 6-attacker/2-defender REVERSE of the scenario below still resolved `Lost`.
-    Rather than guess at a fixture combination the engine's own scale limitation may make
-    impossible, this constructs the `Resolution` directly, the same technique
-    `test_declared_is_no_change_and_unopposed_changes_only_with_claimants_in_the_resolution` uses for
-    the other two bands --
-    `_eff_march`'s own logic does not care where a `Resolution` came from, only what `res.degree`
-    and `res.result` say."""
-    w = build_realm(0)
-    eff = EFFECTS["march"]
-    attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
-    defenders = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
-    before_a = {pid: w.persons[pid].body for pid in attackers}
-    before_d = {pid: w.persons[pid].body for pid in defenders}
-    act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
-    res = Resolution("Won", {
-        "parties": {"claimants": attackers, "subject_members": defenders},
-        "result": {"defender_size_pct": 0.4},
-    })
-    change = eff(w, act, res)
-    change.apply()  # bypassing the gate's own receipt-minting, which this test does not need
+    """`Won` (the ATTACKER wins, defenders lose) THROUGH A REAL FOLD (REM-32, `H-250`). This test used to construct
+    the `Resolution` by hand, because `massbattle._weighted_unit` sized a side `troops = weight` and a corpus-scale
+    force (single/double-digit weight sums) routs on contact whoever is stronger, so `Won` was unreachable through
+    the module. `field_troops_per_weight` (the weight -> troops scale, shipped at 1) is the one place that scale now
+    lives; here it is swept to 10 -- a value of THIS TEST, not a shipped one, and not Jordan's answer to JQ-4.
+
+    The world: the Crown's two marchers are cohorts (`Person.weight` 10 each, `state/carriers.py`: a cohort is a
+    person at weight > 1) against the Church's six individuals, so the attacker's side is the larger one (20 v 6).
+    CONTROL, SAME WORLD AND ACT: at the shipped 1 the 20-v-6 attacker still routs on contact and the field is `Lost`
+    (`massbattle.py`'s disclosed scale gap, unchanged at k = 1); only the scale differs between the two folds, so
+    the flip to `Won` is the multiplication's, and a `Lost` at 10 would mean it is not reaching the Unit.
+    The band's effects are asserted as the hand-built test asserted them: the defender takes the casualties and the
+    stance rows, the winning side is never written."""
+    def fold(k):
+        w = build_realm(0)
+        for pid in ("p_npc_033", "p_npc_035"):
+            w.persons[pid].weight = 10
+        w.fixtures = w.fixtures.sweep("field_troops_per_weight", k)
+        attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
+        defenders = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
+        assert attackers == ["p_npc_033", "p_npc_035"] and len(defenders) == 6, (
+            f"fixture moved ({attackers}, {defenders}): re-read it")
+        before_a = {pid: w.persons[pid].body for pid in attackers}
+        before_d = {pid: w.persons[pid].body for pid in defenders}
+        events = _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_spymaster"), contest_max_depth=2)
+        return w, attackers, defenders, before_a, before_d, [(e.kind, e.degree) for e in events]
+
+    kinds_at_1 = fold(1)[-1]
+    assert ("field.lost", "Lost") in kinds_at_1 and not any(k == "field.won" for k, _ in kinds_at_1), (
+        f"at the shipped scale the 20-v-6 attacker no longer routs on contact: {kinds_at_1}")
+
+    w, attackers, defenders, before_a, before_d, kinds = fold(10)
+    assert ("field.won", "Won") in kinds, f"the scale did not carry the fold to Won: {kinds}"
 
     for pid in attackers:
         assert w.persons[pid].body == before_a[pid], f"{pid} (the WINNING side) was written"

@@ -772,6 +772,13 @@ DEFAULT_FIXTURES = Fixtures(
     # difference between a walled and an open field removed), `1` the middle arm. Injection site: this
     # line, read by `seam/wrappers/mass_battle.py::field_input` into the record's `walls_dr` (`31c`).
     field_walls_dr=None,     # `H-150`, swept 3 (A.9, = the default) / 0 (control) / 1
+    # REM-32 (`H-250`, JQ-4). THE WEIGHT -> TROOPS SCALE OF A SEASON FIELD: each headcount side's Unit is sized
+    # `troops = max(weight * this, _MIN_TROOPS)` (`massbattle._weighted_unit`). `1` IS SHIPPED AND IS THE
+    # IDENTITY -- `troops = weight`, the field as it was, on which a realm force routs on contact; the value
+    # is Jordan's to name at JQ-4 and is not invented here. Injection site: this line, read by
+    # `seam/wrappers/mass_battle.py::field_input` into the record's `troops_per_weight`. An order-of-battle
+    # side is sized by its order (`under_arms_cap`), not by this.
+    field_troops_per_weight=1,  # `H-250`, swept 1 (control, SHIPPED, = troops = weight) / above 1
     # v9 IN-52 (`H-241`). THE LEVY-TO-FIELD FEED'S ARM [ASSUMPTION LF-1..LF-3, delegated-ruled,
     # `_part5` §J.2]: `True` bounds each side's fielded troops by its treasury at the larder's ration
     # (`modules/settlements/provision.py`) and debits what the field eats (`_eff_march`); `False` is the
