@@ -57,9 +57,11 @@ MAPPING = {
     # (`systems/combat/sim/combat.py` COMBAT_POOL_MIN, deleted) to the typed owner `modules/combat/core.py`
     # POOL_FLOOR, by the QUALIFIED key (not the first-section-wins alias). Hand-confirmed: it is the
     # combat-pool minimum, max(POOL_FLOOR, history + BASE_POOL); both agree at 5 (see COLLISIONS['POOL_FLOOR']).
+    # As the FLOOR only: the pools floored differ (port Agi*2 + History + 3, less 1 per wound, floored again at
+    # CombatLogic.gd:72; oracle History + 6, wounds as the bilateral Ob), the model gap module_contracts.yaml:925 records.
     'COMBAT_POOL_MINIMUM':           'combat.core.POOL_FLOOR',
     # WEAPON_TN_BASE LEFT THIS TABLE at plan position PC-12. Its Python owner was the same retired v30
-    # module (`WEAPON_TN_BASE` = 7, with `_weapon_tn` shifting TN 5-8 by weapon axes), and TN is always 7
+    # module (`WEAPON_TN_BASE` = 7; its WEAPON_TN_MOD matrix shifting TN 5-8 was already deleted at ED-IN-0196), and TN is always 7
     # (ED-IN-0196, Jordan 2026-08-25), so no oracle constant is left to pair; the port's still-varying TN is
     # DIVERGENCES['weapon_tn_modifiers']. Same treatment as the COHERENCE_* rows: a retired owner leaves.
     # COHERENCE_START / _MAX / _MIN / _FRACTURED_THRESHOLD LEFT THIS TABLE at position 27 (WR-SCOPE,
@@ -133,7 +135,7 @@ DIVERGENCES = {
     },
     'weapon_tn_modifiers': {
         'engine': "TN is always 7 (ED-IN-0196, Jordan 2026-08-25): no weapon axis shifts it. The v30 "
-                  "owner that carried WEAPON_TN_BASE and `_weapon_tn` (systems/combat/sim/combat.py) was "
+                  "owner that carried WEAPON_TN_BASE (systems/combat/sim/combat.py) was "
                   "deleted at plan position PC-12; the oracle holds no per-weapon TN.",
         'port':   "TN still VARIES by weapon, 5 to 8 (valoria-game resources/data_types/WeaponData.gd:30-38), "
                   "with WEAPON_TN_BASE declared by hand in systems/util/Constants.gd.",

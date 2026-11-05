@@ -38,7 +38,7 @@
       "needs": "port alignment (CLAUDE.md \u00a76: a port never corrects its oracle) \u2014 the oracle holds no accord model to port from"
     },
     "weapon_tn_modifiers": {
-      "engine": "TN is always 7 (ED-IN-0196, Jordan 2026-08-25): no weapon axis shifts it. The v30 owner that carried WEAPON_TN_BASE and `_weapon_tn` (systems/combat/sim/combat.py) was deleted at plan position PC-12; the oracle holds no per-weapon TN.",
+      "engine": "TN is always 7 (ED-IN-0196, Jordan 2026-08-25): no weapon axis shifts it. The v30 owner that carried WEAPON_TN_BASE (systems/combat/sim/combat.py) was deleted at plan position PC-12; the oracle holds no per-weapon TN.",
       "port": "TN still VARIES by weapon, 5 to 8 (valoria-game resources/data_types/WeaponData.gd:30-38), with WEAPON_TN_BASE declared by hand in systems/util/Constants.gd.",
       "why_it_matters": "The port implements a per-weapon TN the ruling removed, so a fight resolves at a different target number there than in the oracle; there is no oracle value left to compare WEAPON_TN_BASE against.",
       "needs": "port alignment (CLAUDE.md \u00a76: a port never corrects its oracle) \u2014 TN is 7 for every weapon"

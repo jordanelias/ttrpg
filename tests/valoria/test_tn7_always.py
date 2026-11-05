@@ -5,10 +5,12 @@
 WHY THIS GUARD EXISTS, AND WHY IT IS NOT APPARATUS-GUARDING-APPARATUS.
 CLAUDE.md §0.1 point 5 admits a guard only when the defective artifact class is
 load-bearing on the game, on a Jordan decision, on the exported params, or on the port.
-This one is load-bearing on two of the four:
+This one is load-bearing on three of the four:
 
   * the game — TN is an input to every resolution in six subsystems;
-  * a Jordan decision — the ruling above is the whole subject.
+  * a Jordan decision — the ruling above is the whole subject;
+  * the exported params — `KNOT_FORMATION_TN` and `TN_STANDARD` cross to Godot via
+    `tools/export_game_constants.py`, so a re-introduced TN axis would ship to the port.
   (`WEAPON_TN_BASE` once crossed to Godot via `tools/export_game_constants.py`; it left that
   table at plan position PC-12 with its v30 owner, and the port's still-varying TN is
   `DIVERGENCES['weapon_tn_modifiers']` there.)
