@@ -227,6 +227,25 @@ affiliation_roster:
     einhir: [einhir_restoration]
     altonia: [altonian_civics]
 
+# HERITAGE (v10 CR-30, ED-IN-0301): DESCENT, the one member of the dropped `marks[]` no Tenure derives. `Person.heritage`
+# holds one of these names or is None (unauthored: never a default member); a cast row's `heritage:` is refused
+# unless it is a member. `engages:` files a member under the affiliation CONCERN it speaks to (a `concerns:` key
+# of `affiliation_roster` above) and is read by nothing yet (CR-31); every member not named engages none.
+# CONFIRMED AS WRITTEN (ED-IN-0301), so unlike `attributes` this roster is NOT IN FLUX and a Godot resource field
+# may bind to it. Exported by `tools/export_descriptors.py`, read by `engine/substrate/descriptors.py`.
+heritage_roster:
+  source: "ED-IN-0301 (the five members and their `engages:` cells, confirmed as written); v10 CR-30"
+  count: 5
+  names:
+    - northern_einhir
+    - central_einhir
+    - southern_einhir
+    - altonian
+    - schoenlander
+  engages:
+    southern_einhir: einhir
+    altonian: altonia
+
 # ============================================================================
 # REGISTERED BY REFERENCE -- authoritative content stays in the source doc (no re-transcription).
 # ============================================================================

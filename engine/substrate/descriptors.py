@@ -149,6 +149,16 @@ AFFILIATION_CEILING = _DATA['affiliation_roster']['scale']['ceiling']
 #: Indexed, not `.get`: an export without the key would otherwise read as "no concern to satisfy".
 AFFILIATION_CONCERNS = {c: tuple(ms) for c, ms in _DATA['affiliation_roster']['concerns'].items()}
 
+# ---------------------------------------------------------------------------
+# HERITAGE -- v10 CR-30 (ED-IN-0301). THE ONLY HERITAGE ROSTER IN THE ENGINE.
+# ---------------------------------------------------------------------------
+#: The descents `Person.heritage` is one of (`None` is unauthored, never a member), in registry order, and
+#: `{member: concern}` -- the affiliation concern each engages (a key of `AFFILIATION_CONCERNS`; the exporter
+#: refuses any other). A member absent from the mapping engages none. `engine/season/data/cast.py::heritage_of`
+#: refuses a cast value that is not a member.
+HERITAGES = tuple(_DATA['heritage_roster']['names'])
+HERITAGE_ENGAGES = dict(_DATA['heritage_roster']['engages'])
+
 # ⚠ THERE IS NO ALIAS MAP, AND ITS REMOVAL IS THE POINT (corrected 2026-08-24, same day it was
 # added, by an adversarial pass). This module briefly carried
 # `CONVICTION_ALIASES = {'Reason': 'Scholastic', 'Autonomy': 'Liberty'}`, justified in a comment as

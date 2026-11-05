@@ -123,6 +123,21 @@
       ]
     }
   },
+  "heritage_roster": {
+    "source": "ED-IN-0301 (the five members and their `engages:` cells, confirmed as written); v10 CR-30",
+    "count": 5,
+    "names": [
+      "northern_einhir",
+      "central_einhir",
+      "southern_einhir",
+      "altonian",
+      "schoenlander"
+    ],
+    "engages": {
+      "southern_einhir": "einhir",
+      "altonian": "altonia"
+    }
+  },
   "settlement_stats": {
     "set.legitimacy": {
       "name": "Legitimacy",

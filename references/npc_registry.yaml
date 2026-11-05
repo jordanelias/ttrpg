@@ -29,7 +29,11 @@
 
 schema:
   required: [id, first_name, last_name, faction, role, status]
-  optional: [age, birthplace, territory, ts, coherence, stats, convictions, affiliations, goals, arc_trajectory, notes]
+  optional: [age, birthplace, heritage, territory, ts, coherence, stats, convictions, affiliations, goals, arc_trajectory, notes]
+  # `heritage:` (v10 CR-30) is one of `references/descriptor_registry.yaml: heritage_roster`, read by
+  # `engine/season/data/cast.py::heritage_of` into `Person.heritage`, which RAISES on any other value. Authored
+  # ONLY where canon names the person's descent or the row's own `birthplace:` states it; silence is no key.
+  # `stats:` (the ten attributes, v10 CR-20) reads through `cast.py::attributes_of`; legacy spellings resolve.
   # `affiliations:` (IN-08 H10) is `{<affiliation>: <int 0-5>}` over
   # `references/descriptor_registry.yaml: affiliation_roster` -- the person's religious affiliations
   # and, since ED-IN-0293, `altonian_civics` (the political structure they want), read by
@@ -457,6 +461,7 @@ characters:
     title: Doux
     age: null  # [GAP]
     birthplace: Altonia
+    heritage: altonian  # this row's own `birthplace: Altonia`
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
@@ -496,6 +501,7 @@ characters:
     status: canonical
     age: null  # [GAP]
     birthplace: Schoenland
+    heritage: schoenlander  # this row's own `birthplace: Schoenland`
     territory: T16 (Schoenland)
     ts: null  # [GAP]
     coherence: null  # [GAP]
@@ -579,6 +585,7 @@ characters:
     title: King
     age: null  # [GAP]
     birthplace: null  # [GAP]
+    heritage: northern_einhir  # canon/03_canonical_timeline.md:138 -- "King Almud Almqvist ... Northern Einhir"
     territory: T1 (Valorsplatz)
     ts: 28
     coherence: null  # [GAP]
@@ -1191,6 +1198,7 @@ characters:
     status: canonical
     age: null  # [GAP]
     birthplace: null  # [GAP]
+    heritage: southern_einhir  # canon/03_canonical_timeline.md:144 -- "Duke Magnus Vaynard ... Southern Einhir heritage"
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]

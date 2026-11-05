@@ -1140,11 +1140,12 @@ rosters:
       `movement` has exactly one member (`move`), so that one stratum is bijective with its verb --
       see `epistemic._term_stratum`'s docstring, found by adversarial review. (⚠ TWO since plan
       position `19c` added `migrate` to it; a `movement` witness no longer knows which.) `marks` is the
-      actor's appearance; `Person.marks` itself was DELETED 2026-09-24 (`ED-IN-0261` item 1) as a
-      zero-reader/zero-writer field, so this term now reads nothing rather than a deleted
-      attribute and is `()` for every actor (see `epistemic._term_marks`) -- `()` still means
-      *seen, and nothing describable*, and `None` still means *this channel does not show a body
-      at all*. `who` is the actor's id. `why` is the motive.
+      actor's appearance, and since v10 CR-30 it carries ONE member, the actor's `Person.heritage` (descent,
+      the one member of the dropped `marks[]` no Tenure derives): `(heritage,)` where it is authored and
+      `()` where it is not (`epistemic._term_marks`), public at co-location and deposited true and
+      verbatim, as `who` is. (`Person.marks` itself was DELETED 2026-09-24, `ED-IN-0261` item 1, as a
+      zero-reader/zero-writer field.) `()` still means *seen, and nothing describable*, and `None` still
+      means *this channel does not show a body at all*. `who` is the actor's id. `why` is the motive.
       ⚠ `supplied_by:` IS WHAT EACH CHANNEL SHOWS, and a witness's struct is the UNION over the
       channels that admit them under the live `fan_out_mode` (`epistemic.live_channels`). The
       `total` arm is `H-33`'s control and shows EVERY term to every witness, so this table is read
@@ -1157,10 +1158,11 @@ rosters:
       ⚠ NO CHANNEL SUPPLIES `why`, AND THAT IS `R8.4`'s DEFECT, NOT A CHOICE MADE HERE:
       `Candidate.why` is dropped at `pack_scenes` and `Act` carries no motive, so the engine
       forgets it before the act executes and no witness can learn it. Case 4 (*no discernible
-      reason*) is therefore every deposit today. `Person.marks` has zero writers, so `marks` is
-      `()` wherever it is shown -- case 2 (*someone looking like y*, `who=None`) is supported by
-      the struct and reached by nothing until a recognition producer exists, which `R8.2` defers
-      to its own commit.
+      reason*) is therefore every deposit today. `Person.heritage` has ONE writer, the world build
+      (`data/cast.py::heritage_of`), and `marks` shows it wherever `who` is shown -- so case 2 (*someone
+      looking like y*, `who=None`) is supported by the struct and reached by nothing until a recognition
+      producer exists, which `R8.2` defers to its own commit, and a channel that withholds `who` while
+      showing `marks`.
     values: [stratum, marks, who, why]
     deposit:
       predicate: seen

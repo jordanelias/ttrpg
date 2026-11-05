@@ -39,7 +39,7 @@ from .rosters import FACTIONS, load_yaml
 from ..gaps import Unspecified
 from ...substrate import names as _names
 from ...substrate.descriptors import (
-    ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, PRACTITIONER_STATS, attribute_key,
+    ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, HERITAGES, PRACTITIONER_STATS, attribute_key,
 )
 
 NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
@@ -359,6 +359,24 @@ def attributes_of(r: dict) -> dict:
                 law="CR-20 -- the attribute scale is the registry's, and an out-of-scale value refuses")
         out[key] = n
     return out
+
+
+def heritage_of(r: dict) -> Optional[str]:
+    """`Person.heritage`'s authored source (v10 CR-30): the row's `heritage:` key, one of the registry's
+    five descents (`substrate.descriptors.HERITAGES`), or `None` where nothing is authored -- the key absent,
+    `heritage: null`, or no row at all. `None` is NOT a member: silence is not a descent. A value that is no
+    member REFUSES, naming the row (`thread_sensitivity_of`'s shape; this module reads and validates).
+    Authored ONLY where the row's own text states descent or birthplace, or canon names the person's descent
+    (`canon/03_canonical_timeline.md`); a cultural label or a faction is not descent."""
+    v = (r or {}).get("heritage")
+    if v is None:
+        return None
+    if isinstance(v, str) and v in HERITAGES:
+        return v
+    raise Unspecified(
+        f"cast row {(r or {}).get('id', '?')}: heritage {v!r} is none of {', '.join(HERITAGES)}",
+        "references/descriptor_registry.yaml", needs=f"one of {', '.join(HERITAGES)}, or no key",
+        law="CR-30 -- a heritage outside the registry's roster is refused at build")
 
 
 def title_of(r: dict) -> Optional[str]:
