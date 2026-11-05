@@ -18,6 +18,23 @@ def _emit(kind, **data):
     if _TRACE is not None:
         _TRACE(dict(kind=kind, **data))
 
+def _wound(source, by, victim, damage):
+    """The ONE damage site (PC-13): `victim.apply_wound(damage)` plus the `wound` trace event, nothing else. The event
+    carries the APPLIED amount (`int(damage)`; the tracker adds `max(0, int(d))` and `apply_wound` skips `d <= 0`), so
+    `sum(wound.damage per victim)` is the tracker's `cumulative_damage`. `source` names the site (pursuit, stophit,
+    displace_graze, exchange, bind); `by` is the striker. Draws nothing and keeps no state: concentration drain,
+    stagger and every other per-site effect stay at their sites."""
+    victim.apply_wound(damage)
+    if _TRACE is not None and damage > 0 and int(damage) > 0:
+        _emit('wound', by=by.label, victim=victim.label, damage=int(damage), source=source,
+              wounds=victim.wt.wounds, cumulative=victim.wt.cumulative_damage, felled=bool(victim.felled))
+
+def _emit_outcome(agg0, def0, mode, deg, hit, bind, riposte, A, B):
+    """The exchange's `outcome` event, emitted on the normal tail AND before each felling `return` in the exchange (PC-13)."""
+    _emit('outcome', aggressor=agg0, defender=def0, mode=mode, degree=deg,
+          hit=int(hit), bind=bool(bind), riposte=bool(riposte),
+          A_wounds=A.wt.wounds, B_wounds=B.wt.wounds, A_felled=A.felled, B_felled=B.felled)
+
 def _init_live(c, cfg):
     c.derive_stats(cfg)                  # the combatant computes its cfg-dependent figures (conc_max); stamina_max/health set at build
     c.stamina=float(c.stamina_max)       # reset live state from the combatant's own held maxima
@@ -191,7 +208,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                     _emit('disengage', longer=longer.label, shorter=shorter.label, ok=False, pursued=True, degree=deg)
                     if deg in ('success','overwhelming'):
                         d=core.strike(shorter, longer, deg, cfg, net=net, pool=pool)
-                        longer.apply_wound(d); longer.conc=max(0,longer.conc-cfg['CONC_DRAIN_HIT'])
+                        _wound('pursuit', shorter, longer, d); longer.conc=max(0,longer.conc-cfg['CONC_DRAIN_HIT'])
                         if longer.felled: return longer, closed
                     ready[shorter]=max(ready[shorter], cfg['ACT_THRESHOLD'])   # the pursuer seizes the tempo
         # ----- APPROACH: longer weapon threatens (stop-thrusts) while shorter closes -----
@@ -223,7 +240,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                       pool=pool, net_sigma=round(nsig,3), ob=_ob, net=round(net,2), degree=deg)   # `ob`: the workbench bands its distribution at it (PC-03)
                 if deg in ('success','overwhelming'):
                     d=core.strike(longer, shorter, deg, cfg, net=net, pool=pool)
-                    shorter.apply_wound(d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
+                    _wound('stophit', longer, shorter, d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
                     _sd,_pb=S.percussion_stagger(longer, shorter, d, deg, cfg)   # ED-PC-0031: wind + stagger (armour-gated impulse), distinct from the wound
                     shorter.stamina-=_sd; shorter.poise=S.clamp_poise(shorter.poise-_pb, cfg)
                     if shorter.felled: return shorter, closed
@@ -374,8 +391,9 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                 # pull-back of the committed thrust can still graze the closing defender
                 if rng.random() < cfg['DISPLACE_PULLBACK_GRAZE']:
                     d=core.strike(aggressor, defender, 'graze', cfg)
-                    defender.apply_wound(d)
-                    if defender.felled: return defender, closed
+                    _wound('displace_graze', aggressor, defender, d)
+                    if defender.felled:
+                        _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B); return defender, closed
                 riposte=True   # defender now inside with initiative
         # ---- distance-creating moments for re-opening (corrections 1+3), benefiting the LONGER weapon ----
         # (a) opponent over-committed: a deep commit by the SHORTER weapon (the one who must stay close) leaves it
@@ -390,14 +408,15 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
         if closed and longer.w['hands']==2 and rng.random()<cfg['PUSH_AVAIL_P']:
             push_avail=True; reopen_moment=True; opening_created=True   # a freed hand IS a contact precondition
         if hit>0:
-            defender.apply_wound(hit); defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
+            _wound('exchange', aggressor, defender, hit); defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
             # forced-to-Nach by DAMAGE: the aggressor presses the advantage (gains the Vor); the struck defender loses it.
             aggressor.initiative=S.clamp_initiative(aggressor.initiative+cfg['INIT_GAIN_HIT'], cfg)
             defender.initiative=S.clamp_initiative(defender.initiative-cfg['INIT_LOSS_WOUNDED'], cfg)
             defender.poise=S.clamp_poise(defender.poise - cfg['POISE_BREAK_HIT']*min(1.0, hit/cfg['POISE_SOLID_HIT']), cfg)  # solid blows stagger; chip damage barely
             _sd,_pb=S.percussion_stagger(aggressor, defender, hit, deg, cfg)   # ED-PC-0031: concussive wind + strong stagger (armour-gated; the blunt-through-plate path the wound-only break above cannot see)
             defender.stamina-=_sd; defender.poise=S.clamp_poise(defender.poise-_pb, cfg)
-            if defender.felled: return defender, closed
+            if defender.felled:
+                _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B); return defender, closed
         if bind:
             opening_created=True   # CONTACT AXIS precondition site 3: a bind IS a contact opening (Ringen am Schwert)
             # German Fühlen / Stärke-Schwäche: whoever DOMINATES the bind (bind_sigma sign) steals the Vor through the
@@ -415,10 +434,11 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                 if rng.random() < S.bind_dominance_p(bsig):
                     if rng.random()<cfg['BIND_HIT_P']:
                         d=core.strike(aggressor, defender, 'success', cfg)
-                        defender.apply_wound(d); defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
+                        _wound('bind', aggressor, defender, d); defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
                         _sd,_pb=S.percussion_stagger(aggressor, defender, d, 'success', cfg)   # ED-PC-0031: wind + stagger in the bind
                         defender.stamina-=_sd; defender.poise=S.clamp_poise(defender.poise-_pb, cfg)
-                        if defender.felled: return defender, closed
+                        if defender.felled:
+                            _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B); return defender, closed
                         break
                 else: riposte=True; break
         if riposte:
@@ -446,9 +466,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                 defender.poise=S.clamp_poise(defender.poise - cfg['POISE_BREAK_OVERCOMMIT'], cfg)
             elif contact_outcome=='control':
                 aggressor.initiative=S.clamp_initiative(aggressor.initiative + cfg['INIT_STEAL_INDES']*0.5, cfg)
-        _emit('outcome', aggressor=_agg0, defender=_def0, mode=mode, degree=deg,
-              hit=int(hit), bind=bool(bind), riposte=bool(riposte),
-              A_wounds=A.wt.wounds, B_wounds=B.wt.wounds, A_felled=A.felled, B_felled=B.felled)
+        _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B)
         exchanges+=1
         # TURN = one approach -> burst -> separation (Jordan 2026-06-03). The burst is a SMALL EMERGENT run of
         # exchanges, gated by TEMPO (who re-reaches ACT_THRESHOLD via close_tempo), NOT by ripostes: a faster fighter
@@ -562,7 +580,7 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None, terms=LETHAL_
                 # Combat ends with the yielder standing; the opponent holds the field. NO UPSET_FLOOR draw: that is a
                 # roll, and §11.4 is "no further rolls" -- a lucky blow cannot steal a fight nobody is contesting.
                 result, winner = (-1, B) if yield_decl.by is A else (1, A)
-                _emit('fight_result', result=result, winner=winner.label)
+                _emit('fight_result', result=result, winner=winner.label, upset=False)
                 return result
         if decide is not None:   # THE PER-TURN CHOICE (REM-31): before every draw of the turn; draws nothing
             choice = decide(turn+1)
@@ -585,11 +603,11 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None, terms=LETHAL_
             # where a declared `Yield` is read at the start of its turn. An exact tie yields nobody: UNRESOLVED.
             yielder = _terms_yielder(A, B, stop, cfg)
             if yielder is None:
-                _emit('fight_result', result=0, winner=None)
+                _emit('fight_result', result=0, winner=None, upset=False)
                 return 0
             _emit('yield', turn=turn+1, by=yielder.label, accepted=True, refused=None, terms=stop)
             result, winner = (-1, B) if yielder is A else (1, A)
-            _emit('fight_result', result=result, winner=winner.label)
+            _emit('fight_result', result=result, winner=winner.label, upset=False)
             return result
         for c in (A,B):
             c.stamina=min(c.stamina_max, c.stamina+cfg['RECOVERY_FRAC']*(c.stamina_max-c.stamina)*(c.stamina_max/cfg['STAMINA_REF']))
@@ -599,7 +617,8 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None, terms=LETHAL_
     # 95% cap (videogame rule): no matchup is ever certain. With probability UPSET_FLOOR, the decided LOSER steals
     # the win — a "lucky blow"/critical-opening that the model otherwise suppresses. Applied only to decided fights,
     # symmetric in form, so an X% raw win-rate is clamped toward [UPSET_FLOOR, 1-UPSET_FLOOR].
+    upset = False   # True iff the UPSET_FLOOR flip changed `result` (False on every other path: yield, terms, withdraw, unresolved)
     if result!=0 and rng.random()<cfg['UPSET_FLOOR']:
-        result = -result
-    _emit('fight_result', result=result, winner=(A.label if result==1 else B.label if result==-1 else None))
+        result = -result; upset = True
+    _emit('fight_result', result=result, winner=(A.label if result==1 else B.label if result==-1 else None), upset=upset)
     return result
