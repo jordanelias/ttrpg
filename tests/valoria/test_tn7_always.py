@@ -5,12 +5,13 @@
 WHY THIS GUARD EXISTS, AND WHY IT IS NOT APPARATUS-GUARDING-APPARATUS.
 CLAUDE.md §0.1 point 5 admits a guard only when the defective artifact class is
 load-bearing on the game, on a Jordan decision, on the exported params, or on the port.
-This one is load-bearing on three of the four:
+This one is load-bearing on two of the four:
 
   * the game — TN is an input to every resolution in six subsystems;
-  * a Jordan decision — the ruling above is the whole subject;
-  * the exported params — `WEAPON_TN_BASE` crosses to Godot via
-    `tools/export_game_constants.py`, so a re-introduced TN axis would ship to the port.
+  * a Jordan decision — the ruling above is the whole subject.
+  (`WEAPON_TN_BASE` once crossed to Godot via `tools/export_game_constants.py`; it left that
+  table at plan position PC-12 with its v30 owner, and the port's still-varying TN is
+  `DIVERGENCES['weapon_tn_modifiers']` there.)
 
 THE TRAP IT CLOSES, which is the real reason it is here.
 Before the ruling, four independent mechanisms made TN vary. THREE OF THEM WERE INERT,
@@ -159,9 +160,13 @@ def test_the_tn_constant_sweep_actually_found_constants():
     `BG_VOTE_TN` in `systems/social_contest/sim/parliamentary_vote.py`. The four left are
     `sigma_leverage.TN_STANDARD`, `combat.WEAPON_TN_BASE`, `knots.KNOT_FORMATION_TN` and
     `operations.TN_STANDARD`; `knots.py` leaves at `29f`, which re-pins this again.
+
+    RE-MEASURED at plan position PC-12 (2026-11-05): 4 -> 3. `combat.WEAPON_TN_BASE` lived in
+    `systems/combat/sim/combat.py`, deleted there; the three left are `sigma_leverage.TN_STANDARD`,
+    `knots.KNOT_FORMATION_TN` and `operations.TN_STANDARD`.
     """
     found = _tn_constants()
-    assert len(found) >= 4, (
+    assert len(found) >= 3, (
         f"the TN-constant sweep found only {len(found)} constants — the pattern has probably "
         "stopped matching, and the test above is now vacuous"
     )

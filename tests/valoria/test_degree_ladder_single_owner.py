@@ -392,8 +392,6 @@ DECLARED_ADAPTERS = {
         '`resolve_field`. (`resolve_mass_battle`, its strategic twin, and the `faction_action` ladder '
         'that `LADDERS` once enrolled were deleted at plan position `29b`.) Its one real net/ob ladder, '
         'compute_degree, IS routed through the owner.'),
-    'systems/combat/sim/combat.py': (
-        'Fixed bands on non-roll actions (Full Guard is always Success). Its _degree IS routed.'),
 
     # — FROZEN parity oracles. Migrating them would destroy the thing they exist to be. —
     'tests/sim/v32-combat-balance/combat_resolution.py': _FROZEN_ORACLE,

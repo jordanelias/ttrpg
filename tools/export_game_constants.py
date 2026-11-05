@@ -53,8 +53,15 @@ OUT = os.path.join(REPO, 'engine', 'engine_params', 'game_constants.json')
 # EVERY pair here was confirmed by reading both call sites. Never add one by name similarity.
 MAPPING = {
     'TN_STANDARD':                   'engine.dice_engine.TN_STANDARD',
-    'WEAPON_TN_BASE':                'combat.WEAPON_TN_BASE',
-    'COMBAT_POOL_MINIMUM':           'combat.COMBAT_POOL_MIN',
+    # COMBAT_POOL_MINIMUM re-pointed at plan position PC-12 from the retired v30 owner
+    # (`systems/combat/sim/combat.py` COMBAT_POOL_MIN, deleted) to the typed owner `modules/combat/core.py`
+    # POOL_FLOOR, by the QUALIFIED key (not the first-section-wins alias). Hand-confirmed: it is the
+    # combat-pool minimum, max(POOL_FLOOR, history + BASE_POOL); both agree at 5 (see COLLISIONS['POOL_FLOOR']).
+    'COMBAT_POOL_MINIMUM':           'combat.core.POOL_FLOOR',
+    # WEAPON_TN_BASE LEFT THIS TABLE at plan position PC-12. Its Python owner was the same retired v30
+    # module (`WEAPON_TN_BASE` = 7, with `_weapon_tn` shifting TN 5-8 by weapon axes), and TN is always 7
+    # (ED-IN-0196, Jordan 2026-08-25), so no oracle constant is left to pair; the port's still-varying TN is
+    # DIVERGENCES['weapon_tn_modifiers']. Same treatment as the COHERENCE_* rows: a retired owner leaves.
     # COHERENCE_START / _MAX / _MIN / _FRACTURED_THRESHOLD LEFT THIS TABLE at position 27 (WR-SCOPE,
     # 2026-09-29). Their Python owners were the retired 10-0 depleting track, and the oracle now
     # models Coherence as a distance with two quantities (systems/threadwork/sim/coherence.py), so
@@ -86,9 +93,10 @@ COLLISIONS = {
         'python_name': 'combat.core.POOL_FLOOR',
         'python_value': 5,
         'gd_value': 1,
-        'reason': "Different quantities sharing a word. modules/combat/core.py:51 POOL_FLOOR is the "
-                  "COMBAT POOL minimum, used as max(POOL_FLOOR, history + BASE_POOL) at :56 — the game "
-                  "calls that COMBAT_POOL_MINIMUM and it AGREES at 5. The game's POOL_FLOOR is the "
+        'reason': "Different quantities sharing a word. modules/combat/core.py POOL_FLOOR is the "
+                  "COMBAT POOL minimum, used as max(POOL_FLOOR, history + BASE_POOL) — the game "
+                  "calls that COMBAT_POOL_MINIMUM, and MAPPING pairs the two by this qualified key; they "
+                  "AGREE at 5. The game's POOL_FLOOR (a different constant) is the "
                   "universal dice-pool floor applied by RollContext.effective_pool() (RollContext.gd:26). "
                   "Not a divergence.",
     },
@@ -122,6 +130,17 @@ DIVERGENCES = {
                           "there is no oracle value to match and none to correct it against.",
         'needs': 'port alignment (CLAUDE.md §6: a port never corrects its oracle) — the oracle holds '
                  'no accord model to port from',
+    },
+    'weapon_tn_modifiers': {
+        'engine': "TN is always 7 (ED-IN-0196, Jordan 2026-08-25): no weapon axis shifts it. The v30 "
+                  "owner that carried WEAPON_TN_BASE and `_weapon_tn` (systems/combat/sim/combat.py) was "
+                  "deleted at plan position PC-12; the oracle holds no per-weapon TN.",
+        'port':   "TN still VARIES by weapon, 5 to 8 (valoria-game resources/data_types/WeaponData.gd:30-38), "
+                  "with WEAPON_TN_BASE declared by hand in systems/util/Constants.gd.",
+        'why_it_matters': "The port implements a per-weapon TN the ruling removed, so a fight resolves at "
+                          "a different target number there than in the oracle; there is no oracle value "
+                          "left to compare WEAPON_TN_BASE against.",
+        'needs': 'port alignment (CLAUDE.md §6: a port never corrects its oracle) — TN is 7 for every weapon',
     },
     'coherence_bands': {
         'engine': "Coherence is a DISTANCE from the human equilibrium (0 = on it), held as TWO "

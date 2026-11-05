@@ -7,23 +7,21 @@
     "KNOT_FORMATION_OB": 2,
     "KNOT_FORMATION_TN": 7,
     "SEASONS_PER_YEAR": 4,
-    "TN_STANDARD": 7,
-    "WEAPON_TN_BASE": 7
+    "TN_STANDARD": 7
   },
   "owners": {
-    "COMBAT_POOL_MINIMUM": "combat.COMBAT_POOL_MIN",
+    "COMBAT_POOL_MINIMUM": "combat.core.POOL_FLOOR",
     "KNOT_FORMATION_OB": "fieldwork.KNOT_FORMATION_OB",
     "KNOT_FORMATION_TN": "fieldwork.KNOT_FORMATION_TN",
     "SEASONS_PER_YEAR": "overview.SEASONS_PER_YEAR",
-    "TN_STANDARD": "engine.dice_engine.TN_STANDARD",
-    "WEAPON_TN_BASE": "combat.WEAPON_TN_BASE"
+    "TN_STANDARD": "engine.dice_engine.TN_STANDARD"
   },
   "collisions": {
     "POOL_FLOOR": {
       "python_name": "combat.core.POOL_FLOOR",
       "python_value": 5,
       "gd_value": 1,
-      "reason": "Different quantities sharing a word. modules/combat/core.py:51 POOL_FLOOR is the COMBAT POOL minimum, used as max(POOL_FLOOR, history + BASE_POOL) at :56 \u2014 the game calls that COMBAT_POOL_MINIMUM and it AGREES at 5. The game's POOL_FLOOR is the universal dice-pool floor applied by RollContext.effective_pool() (RollContext.gd:26). Not a divergence."
+      "reason": "Different quantities sharing a word. modules/combat/core.py POOL_FLOOR is the COMBAT POOL minimum, used as max(POOL_FLOOR, history + BASE_POOL) \u2014 the game calls that COMBAT_POOL_MINIMUM, and MAPPING pairs the two by this qualified key; they AGREE at 5. The game's POOL_FLOOR (a different constant) is the universal dice-pool floor applied by RollContext.effective_pool() (RollContext.gd:26). Not a divergence."
     },
     "MOMENTUM_MAX": {
       "python_name": "engine.dice_engine.M_MAX",
@@ -38,6 +36,12 @@
       "port": "accord is an INTEGER clamped to [0, 3] (Constants.gd:144-145, cited to peninsular_strain_v30 \u00a72), registered and clamped as a tracker (SettingState.gd:34,82).",
       "why_it_matters": "The port still carries an accord tracker the oracle no longer models, so there is no oracle value to match and none to correct it against.",
       "needs": "port alignment (CLAUDE.md \u00a76: a port never corrects its oracle) \u2014 the oracle holds no accord model to port from"
+    },
+    "weapon_tn_modifiers": {
+      "engine": "TN is always 7 (ED-IN-0196, Jordan 2026-08-25): no weapon axis shifts it. The v30 owner that carried WEAPON_TN_BASE and `_weapon_tn` (systems/combat/sim/combat.py) was deleted at plan position PC-12; the oracle holds no per-weapon TN.",
+      "port": "TN still VARIES by weapon, 5 to 8 (valoria-game resources/data_types/WeaponData.gd:30-38), with WEAPON_TN_BASE declared by hand in systems/util/Constants.gd.",
+      "why_it_matters": "The port implements a per-weapon TN the ruling removed, so a fight resolves at a different target number there than in the oracle; there is no oracle value left to compare WEAPON_TN_BASE against.",
+      "needs": "port alignment (CLAUDE.md \u00a76: a port never corrects its oracle) \u2014 TN is 7 for every weapon"
     },
     "coherence_bands": {
       "engine": "Coherence is a DISTANCE from the human equilibrium (0 = on it), held as TWO quantities: a resting point that moves out only by permanent set, and elastic displacement that recovers (canon/philosophy/07_drift.md \u00a77.1). Four displacement bands read PRESENT displacement \u2014 Stable, Dissonant >= DISPLACEMENT_DISSONANT_LOW, Fragmented >= DISPLACEMENT_FRAGMENTED_LOW, Fractured >= DISPLACEMENT_FRACTURED_LOW \u2014 and the terminal 'Coherence failure' reads the RESTING point leaving the human band (> HUMAN_BAND_LIMIT). No Severed band; nothing depletes (systems/threadwork/sim/coherence.py, CoherenceState.band).",
