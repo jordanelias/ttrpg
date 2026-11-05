@@ -1,6 +1,6 @@
 # CR-85: histories, hooks and combat's input. What replaces the `history` summed into rolls
 
-## Status: RATIFIED by Jordan (2026-11-05, in PR #559: "ratify all proposals and merge", ED-IN-0349), INCLUDING §4 step 2 (the seeded-damage crossing), which §10 had held back. Combat's `history` replacement (§1) stays a ladder take, `[ASSUMPTION; medium; Jordan to correct; revert: delete this file; history stays]`.
+## Status: PROPOSED. Ratified by Jordan at 2026-11-05 (ED-IN-0349) and WITHDRAWN the same day ("undo ratification of combat", ED-IN-0351). Reopened with it, for combat and the social contest: whether `faculty` (a trained skill's level, with CR-20's attribute base under it) is the right single input to a contest pool, or attribute and trained skill are separate inputs. Nothing in `engine/` or `modules/` was built on this file; its build (B10-11) waits on that answer.
 ## Version: v1.0 · Lane: PC (with IN, WR) · Position: `workplans/valoria_master_workplan_v11_part4.md` `### CR-85` (DESIGN-FIRST, B10-10; build B10-11)
 ## Grade under `CLAUDE.md` §0.2: `paper`. This is a design. It changes nothing in `engine/` or `modules/`, and whether its build executes is decided by the tests named in §8, not by this file.
 ## Citation rule: every `file:line` was opened by this author on the tree at `3ce1f08e` unless tagged `[UNVERIFIED]`. A drifted line from the plan is cited at its current line, and §9 lists the drift. Design documents are cited for intent only (`CLAUDE.md` §0.05). No formula below is correct because this file states it; the code that will hold each fact is named beside it.
@@ -270,7 +270,7 @@ The skill-shaped half already runs, and `ED-IN-0330`'s "bundles of skills/aptitu
 
 ## 10. Held back from ED-1094's merge default, and the orchestrator's decisions
 
-**WAS HELD BACK, RATIFIED 2026-11-05 with the rest (ED-IN-0349):**
+**RATIFIED 2026-11-05 (ED-IN-0349), THEN WITHDRAWN (ED-IN-0351); the merge does not ratify any of it:**
 
 - §4 step 2, the seeded-damage crossing. It changes what a wounded person's fight means, and it schedules itself on a trigger outside this position.
 - Everything else here is a ladder take, ratified on merge. The one Jordan was told is *"worth his glance"* (`-04` CR-85 ASKS) is §1's recommendation, `[ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays]`.

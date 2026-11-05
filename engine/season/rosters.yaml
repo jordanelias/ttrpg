@@ -1411,14 +1411,11 @@ rosters:
       EACH ROW'S GROUND, so a reviewer can check it against the vocation's own text and not against taste:
       `copying` -> Focus (`attr.mind.focus`): the vocation is `tell`/`speak` (a claim relayed as it was
       held) and NPC-088's case, a repeated multi-week task of copying a text (`cases/exercises/NPC-088.yaml`),
-      i.e. sustained, exact attention to a thing so that it is reproduced unchanged. `argue` -> Attunement
-      (`attr.social.attunement`, "reading people"): `argue` MOVES THE HEARER'S `Person.pursuits` toward the
-      arguer's by the contest's degree, and the verb row holds that a pursuit is *"moved by argument and
-      consequence, never by evidence"* (`verb_table.yaml` `argue`, #353 section 9.3 / AX-3); the subsystem's
-      own design sets the Argue pool's attribute by adjudicator -- an expert or panel Cognition, a crowd
-      Charisma, and NO adjudicator, a private appeal to one counterparty, Attunement
-      (`social_contest_v30.md:40-47`, archived) -- and the engine's `argue`
-      is the last shape: the hearer is the counterparty and his pursuits are what move. (Proof is the
+      i.e. sustained, exact attention to a thing so that it is reproduced unchanged. `argue` -> Presence (`attr.social.charisma`): RULED by Jordan, 2026-11-05 (ED-IN-0350): *"argue main component is
+      presence, attunement informs how character thinks the other character is receiving it and the best style of
+      argument to deliver"*. Presence is the arguer's pool. Attunement is NOT the pool: it informs the arguer's reading of
+      how the other party is receiving the case and which style of argument to deliver, a choice-side input that no code
+      reads yet (reference, not a mechanism; the carrier for it is a design owed to CR-92/CR-93, `-12`). (Proof is the
       room's term, `proofs`, composed into the obstacle already.) `inquiry` -> Reason (`attr.mind.acuity`):
       its three verbs are the fieldwork inquiries whose source rows are headed *Examine · Cognition*,
       *Research · Recall*, *Surveil · Cognition*
@@ -1428,14 +1425,14 @@ rosters:
       [ASSUMPTION; medium; Jordan to correct; revert: delete this roster and the loader, and `faculty` /
       `_opposition_of` read the held capability key alone, as before CR-20.] The competitors, each the
       cheap swap: `copying` -- Coordination (a copyist's hand) or Presence (`tell` is thrown against the
-      hearer's standing, `verb_table.yaml` `tell`); `argue` -- Presence (a crowd) or Reason (a judge);
+      hearer's standing, `verb_table.yaml` `tell`); `argue` -- none: ruled (above);
       `inquiry` -- Perception for `surveil` ("awareness of surroundings, noticing information",
       `references/descriptor_registry.yaml`). Focus, Reason and Presence carry no registry description, so
-      no row rests on one. Checked by a read-only pass at CR-20's close; the pass changed `argue` and the
-      two citations.
+      no row rests on one. Checked by a read-only pass at CR-20's close; the pass changed `argue` to Attunement and two
+      citations, and Jordan's ruling of 2026-11-05 returned `argue` to Presence.
     values:
       copying: "attr.mind.focus"
-      argue:   "attr.social.attunement"
+      argue:   "attr.social.charisma"
       inquiry: "attr.mind.acuity"
 
   lifepaths:
