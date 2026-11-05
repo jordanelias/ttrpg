@@ -99,7 +99,7 @@ New key names are CR-84's to choose; none is invented here.
 | `survey` | P | Perception | Reason | REASONED | Fieldwork: what is there, what is out of place, what is absent (Jordan, 2026-11-05). [CONFIDENCE: low] |
 | `conceal` | P | Grace |  | REASONED | Holding a cover under scrutiny: the "remain calm, etiquette and manners" half of Jordan's Grace. [CONFIDENCE: low] |
 | `infiltrate` | P | Grace | Attunement | REASONED | As `conceal`; Attunement for what the seat will look for. [CONFIDENCE: low] |
-| `forge` | P | Focus | Coordination | REASONED | Forgery quality is error-avoidance, Jordan's Focus gloss. |
+| `forge` | P | Coordination | Focus | REASONED | Forgery quality is a precise-hand skill (Jordan, 2026-11-05); Focus for avoiding errors. |
 | `create_record` | — |  |  |  |  |
 | `destroy_record` | — |  |  |  |  |
 | `bribe` | P | Attunement | Grace | REASONED | Knowing what the payee wants; Grace in not being caught. [CONFIDENCE: low] |
@@ -204,10 +204,10 @@ Cells read **primary / secondary** verb counts; **c** is a composite read inside
 | attribute | PC | MB | SC | FI | TW | GV | FA | EC | WT | NP | subsystems with a primary |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | Strength | c | · | · | · | · | /1 | · | /1 | · | · | 0 |
-| Coordination | /1+c | · | · | /2 | · | · | 1 | 2 | · | · | 2 |
+| Coordination | /1+c | · | · | 1/1 | · | · | 1 | 2 | · | · | 3 |
 | Endurance | c | · | · | · | · | · | · | 1 | 1/1 | · | 2 |
 | Reason | c | /1 | 2 | 2/1 | · | · | · | · | · | 1 | 3 |
-| Focus | c | · | · | 1/2 | /4 | · | /1 | /2 | · | · | 1 |
+| Focus | c | · | · | /3 | /4 | · | /1 | /2 | · | · | 0 |
 | Perception | c | · | · | 3/1 | · | · | · | · | 1/1 | · | 2 |
 | Attunement | · | · | 1/2 | 2/1 | /1 | · | /2 | · | · | 1/1 | 3 |
 | Presence | · | 1 | 3/3 | · | · | 1 | 2/1 | · | · | · | 4 |
@@ -228,10 +228,10 @@ Primary counts over single-attribute rows ("of which R / D" counts those that dr
 | attribute | primary | of which R / D | secondary |
 |---|---|---|---|
 | Strength | 0 | 0 | 2 |
-| Coordination | 3 | 0 | 3 |
+| Coordination | 4 | 0 | 2 |
 | Endurance | 2 | 0 | 1 |
 | Reason | 5 | 3 | 2 |
-| Focus | 1 | 0 | 9 |
+| Focus | 0 | 0 | 10 |
 | Perception | 4 | 2 | 2 |
 | Attunement | 4 | 1 | 7 |
 | Presence | 7 | 7 | 4 |
@@ -283,6 +283,8 @@ The kind of contest sorts the same way by verb: `tell` at a hearth is informal, 
 18. **In a formal venue Grace is a standard to meet, not a contribution to the roll.** Jordan (2026-11-05, in session, not a ledger row): *e.g. parliament would penalize someone who lacks sufficient grace, as even if they're persuasive they aren't "doing it right".* That is a threshold with a penalty: a shortfall of Grace against what the room requires costs the speaker whatever their persuasion, so adding Grace into the pool (the map's Secondary column) would let a persuasive speaker buy back a want of decorum, which the sentence denies. The idea is not new to the repository. `OP-031` (Jordan, 2026-08-06, `debate-corpus-by-theme_part2.md:210`) is a PROPOSED decorum operator in which each venue weights rhetorical style, and `CL-048` records the classical rule that a register used on an unwarranted occasion "destroys ethos" with the effect size unevidenced. Neither is built: `modules/social_contest` has no style, register or decorum quantity. Three things a build would have to settle, none decided here. (a) **The required level** is a property of the arrangement; finding 17's reading of `interposed` and `order` is one way to derive it. (b) **The shortfall** is the speaker's Grace against that level, and its effect can land on the contest margin (a speech that would carry is demoted a band), on the bench's `reception` of the speaker (the motion carries and the speaker is thought the worse), or on the record (the speech is noted as out of order). They give different games: only the first can turn a win into a loss. (c) **Whether surplus helps:** under a threshold, Grace above the level adds nothing in the venue and everything in finding 11's regard; under an additive term it adds in both. Finding 16's forceful, ungraceful speaker is the case this separates: a hearth tolerates him, a parliament penalizes him. [ASSUMPTION; medium; Jordan to correct]
 
 19. **Grace reaches promotion through a term that already exists; high Grace with low Presence is the mirror of finding 16.** Jordan (2026-11-05, in session, not a ledger row): *grace can also tie into the likelihood of promotion, receiving an office, etc, as it concerns the appearance of being respectable and apt and capable and correct; someone with high grace and low presence, however, may be seen in a great light but they will struggle commanding people, leading conversations, getting their desired outcomes from social interactions.* (a) **Conferral.** `confer` declares its beneficiary as the `subject` (`verb_table.yaml`), the person who receives the seat, and the chooser's second score term is `stance_term`, which under the shipped `stance_polarity: declared` adds `regard(p, c.subject)` to the candidate's score (`decision/choose.py`, `stance_term`; `fixtures.py:934`). So a conferrer is already more likely to choose a candidate they regard well, and a Grace term in `regard` (finding 11) would raise a graceful candidate's chance of an office with every conferrer who holds them in regard, through no change to `confer`. Two limits: that term is generic regard, not a reading of fitness for the particular office ("apt and capable" is the appearance Grace gives, which is Jordan's point); and `succeed` (inheritance) and the lexicon's `elect` (a count of members' `commit`s, unbuilt) differ, the first by not choosing, the second by inheriting the members' own regard. (b) **High Grace, low Presence.** The roll-based verbs are Presence-led (`tell`, `speak`, `persuade`, `march`), so this person's pools are small and their contests are lost or demoted; the regard-based channel (conferral, reception) runs on Grace and is strong. Together with finding 16 the two profiles are the two off-diagonals of Presence against Grace: forceful and disliked wins contests and loses regard; gracious and weak wins regard and loses contests. The map needs no new row for either: both follow from Presence on the verb rows and Grace on regard. What it cannot show is "leading conversations" and "commanding people" beyond the rolled verbs, because the verbs by which a person leads or commands carry no draw (finding 12). Not decided. [ASSUMPTION; medium; Jordan to correct]
+
+20. **Coordination is the hand, the foot and the balance; forgery moves to it, and combat splits balance between two attributes.** Jordan (2026-11-05, in session, not a ledger row): *coordination concerns accuracy with weapons and stable footing and dodging without losing balance and precise manoeuvres; it'll also concern things like the quality of a forgery or ability to pick a lock.* [CORRECTION: `forge` was Focus-first on the reading that forgery quality is error-avoidance; it is now Coordination-first, Focus second.] Combat's reads of `agi` match the footing half: `reflex` (with `att`), tempo (`AGI_TEMPO_K`), the footwork differential, and `balance_eff = ½·agi + ½·strength − 1 + skill(balance)` (`combat_systems.py:113, 172, 184-188, 839`), so balance is half Strength there where Jordan's description puts it wholly on Coordination; `poise_regen`, the recovery of balance after disruption, is Focus-accelerated (`:1433`) where his description would put it on Coordination too. Whether to move either is PC-14's call and moves the combat goldens. **Accuracy with weapons** has no `agi` read that I found (a search of `combat_systems.py` for accuracy, precision and aim returned only weapon-geometry terms such as `gap_precision` and `CHOKE_ACCURACY_K`), so what the description names first is not yet an attribute's work. **Picking a lock** has no verb: neither the roster nor the verb table has a lock, theft or burglary row (searched 2026-11-05), so that half of the description has nowhere to attach. `sabotage`, `craft`, `restore` and `shadow` already stand on Coordination. Not decided. [ASSUMPTION; medium; Jordan to correct]
 
 ## 6. Not covered
 
