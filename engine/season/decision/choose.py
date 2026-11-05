@@ -497,8 +497,31 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
     DRAW, not per operation" -- so a person-side function cannot produce one. That is a real gap
     between §F1's `-> Candidate[]` and §F2's `-> Act[]` and it is registered (`H-74`), not filled:
     the barrier passes a minter closed over the seed and tick, which are the CLOCK, not anybody's
-    interior. Same shape as `fx`, and the AST proof still sees no `World`."""
+    interior. Same shape as `fx`, and the AST proof still sees no `World`.
+
+    v10 REM-30 (IN-47): the body is two halves with one owner each -- `make_ranker` (what the person
+    would do, in order) and `release` (that order packed into scenes and intents) -- so the player's
+    development space (`decision/sheet.py`) shares both and differs only in who picks the order."""
+    rank = make_ranker(fx, verbs, draw)
+
     def choose(p: Person, v: View, s: Sensation, ask_budget) -> list[Act]:
+        q = getattr(v, "question", None)
+        if q is None:
+            return []
+        return release(p, rank(p, v), ask_budget(), fx, mint, q, draw)
+    return choose
+
+
+def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
+                draw: Optional[Callable[[str, str], Any]] = None) -> Callable[..., list]:
+    """`rank(p, v) -> list[Candidate]`: THE SHIPPED POLICY'S ORDER over the person's own candidate set
+    -- `opening_set`, narrowed to `verbs`, scored, effort-settled and sampled -- and nothing packed.
+
+    v10 REM-30 (IN-47): split out of `make_chooser` unchanged, so the automated chooser and the player's
+    development space (`decision/sheet.py::development_space`) read ONE candidate set in ONE order: the
+    player's sheet offers exactly this list, and a player who takes it whole is the automated chooser
+    (the space's control). `[]` when the View carries no question. Person-side only, as `make_chooser`."""
+    def rank(p: Person, v: View) -> list:
         q = getattr(v, "question", None)
         if q is None:
             return []
@@ -535,24 +558,31 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         # for the whole of this call, so no id can be recycled underneath the dict. A Candidate is
         # not guaranteed hashable and `(verb, subject)` is not guaranteed unique, so neither is a
         # key this can use.
-        ranked = _sample_order(ranked, lambda c: _scores[id(c)], p, fx, draw)
-        # §26.3: the PERSON triages. The slice is the person's own choice of what to leave
-        # undone, taken against a budget they ASKED for -- not an engine truncating a tail.
-        # `W17`: the budgeted unit is the SCENE, so the slice is over scenes and each carries up
-        # to `interactions_per_scene` of the ranked candidates. The default policy fills scenes
-        # greedily in score order -- a person spends a scene on their best option and whatever
-        # else it can carry, which is what "1-3 mechanical interactions" describes.
-        # `U2`: `ask_budget()` is the person's SEASON REMAINDER, not one round's allowance. The
-        # person chooses the whole of what they will do with the season they have left; the driver
-        # releases `scenes_per_round` of it per round (`H-124`). Nothing is discarded, so S26.3's
-        # *the engine never truncates* is untouched -- what the round bounds is WHEN a chosen scene
-        # runs, not WHETHER.
-        # Telling `T7` (G9): what the person has chosen is known HERE, whole, before any of it runs,
-        # so this is where a telling may declare a later chosen act. `intent_disclosure` 0 returns
-        # the scenes untouched.
-        return declare_intents(p, pack_scenes(p, ranked, ask_budget(), fx, mint, occasion=q),
-                               fx, draw)
-    return choose
+        return _sample_order(ranked, lambda c: _scores[id(c)], p, fx, draw)
+    return rank
+
+
+def release(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint, q: "Question",
+            draw=None) -> list:
+    """A person's ORDERED candidates, as the scenes they spend a budget of `n_scenes` on, with any intent
+    a telling declares (`declare_intents`). The one owner of that step for both choosers: the automated
+    (`make_chooser`, over `make_ranker`'s order) and the player's (`decision/sheet.py`, over the player's).
+    `pack_scenes` is read BY BARE NAME here, so a rebind of `decision.choose.pack_scenes` reaches both."""
+    # §26.3: the PERSON triages. The slice is the person's own choice of what to leave
+    # undone, taken against a budget they ASKED for -- not an engine truncating a tail.
+    # `W17`: the budgeted unit is the SCENE, so the slice is over scenes and each carries up
+    # to `interactions_per_scene` of the ranked candidates. The default policy fills scenes
+    # greedily in score order -- a person spends a scene on their best option and whatever
+    # else it can carry, which is what "1-3 mechanical interactions" describes.
+    # `U2`: `n_scenes` (the caller's `ask_budget()`) is the person's SEASON REMAINDER, not one round's
+    # allowance. The person chooses the whole of what they will do with the season they have left; the
+    # driver releases `scenes_per_round` of it per round (`H-124`). Nothing is discarded, so S26.3's
+    # *the engine never truncates* is untouched -- what the round bounds is WHEN a chosen scene
+    # runs, not WHETHER.
+    # Telling `T7` (G9): what the person has chosen is known HERE, whole, before any of it runs,
+    # so this is where a telling may declare a later chosen act. `intent_disclosure` 0 returns
+    # the scenes untouched.
+    return declare_intents(p, pack_scenes(p, ranked, n_scenes, fx, mint, occasion=q), fx, draw)
 
 
 def declare_intents(p: Person, scenes: list, fx: "Fixtures", draw=None) -> list:

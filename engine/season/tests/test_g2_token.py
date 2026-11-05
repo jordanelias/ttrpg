@@ -371,3 +371,44 @@ def test_g2_deliberate_mutates_no_store_by_any_route(monkeypatch):
     assert before != after and "t_g2_orphan" in [t.id for t in p.tenures], (
         "the digest did not change when the tenure store did -- it cannot observe the failure "
         "this test exists to exclude")
+
+    # -- the SPACES arm (v10 REM-30, IN-47) ------------------------------------------------
+    # The character sheet's spaces (`decision/sheet.py`) run INSIDE DELIBERATE, for the player's seated
+    # person, through the play surface's dispatch. IN-47's falsifier: a space that writes a `Person` field
+    # outside an act's fold reddens THIS spy. The real spaces must leave it green; a planted space
+    # (below) must redden it, or the arm cannot observe what it excludes (§0.1 pt 2).
+    from engine.season.decision.sheet import (
+        chronicle, creation_sheet, development_space, seat, take_ranked)
+    from engine.season.harness.play_surface import dispatching_chooser
+
+    def seated(w, wrap=None):
+        mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+        draw = draw_factory(w.world_seed, lambda: w.tick)
+        space = development_space(w.fixtures, mint, take_ranked, verbs=resolvable_verbs(), draw=draw)
+        used = {"n": 0}
+
+        def player(p, v, s, ask_budget, auto):
+            used["n"] += 1
+            chronicle(p)                       # the chronicling space, read where the player reads
+            if wrap is None:
+                return space(p, v, s, ask_budget, auto)
+            return wrap(space, p, v, s, ask_budget, auto)
+        pid = sorted(w.persons)[0]
+        return dispatching_chooser(_chooser(w), seat(creation_sheet(w.persons.values()), pid, player)), used
+
+    spaces_calls = checked["calls"]
+    for w in (P.tiny_world(), HL.build_world(0)):
+        ch, used = seated(w)
+        SeasonDriver(w).season(ch, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+        assert used["n"] >= 1, "the seated player's space was never called; the arm proves nothing"
+    assert checked["calls"] > spaces_calls
+
+    def plant(space, p, v, s, ask_budget, auto):
+        p.scar = {**p.scar, "g2_plant": 1}     # a space assigning a Person field outside any fold
+        return space(p, v, s, ask_budget, auto)
+
+    w = P.tiny_world()
+    ch, used = seated(w, plant)
+    with pytest.raises(AssertionError, match="DELIBERATE mutated"):
+        SeasonDriver(w).season(ch, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert used["n"] >= 1

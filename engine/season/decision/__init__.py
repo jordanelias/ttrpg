@@ -18,9 +18,14 @@ budget.   NO World in scope."*
 person-first in signature and self-declares as a person Query at its own first statement. `budget`,
 `opening_set` and `assemble` stay: `04:133` names them here, so moving them would break conformance
 rather than restore it.
-    choose.py      make_chooser · pack_scenes
+    choose.py      make_chooser · pack_scenes · make_ranker · release
                    (`align` is `data.verbs.align`, `stance_toward` is `queries.person_q.stance_toward`)
     budget.py      budget · body_band_penalty
+    sheet.py       v10 REM-30 (IN-47): the character sheet's three spaces -- creation_sheet · seat ·
+                   development_space · chronicle. A PART of the `choose` member, not a fifth one: §A.2
+                   types a management space as a `choose` for the player's person (A-25), so it lives
+                   beside `choose.py` and composes on its two halves. Imported by module
+                   (`decision.sheet`), not re-exported here.
 
 ⚠ **`options.py`, NOT `opening_set.py`.** A module named for the function it exports makes
 `decision.opening_set` ambiguous -- this file's re-export shadows the submodule -- and the rebind
