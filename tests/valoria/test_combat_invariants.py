@@ -1216,7 +1216,7 @@ def test_contact_insertion_point_after_riposte_before_outcome_emit():
     src = open(os.path.join(ENGINE, 'wrapper.py'), encoding='utf-8').read()
     riposte_flip = src.index("aggressor, defender = defender, aggressor   # role flip")
     contact_check = src.index('CT.grab_available(')
-    outcome_emit = src.index("_emit('outcome',")
+    outcome_emit = src.rindex("_emit_outcome(_agg0")   # PC-13: the emit lives in `_emit_outcome`; the LAST call is the normal tail (earlier ones precede a felling return)
     assert riposte_flip < contact_check < outcome_emit
 
 
