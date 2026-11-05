@@ -13,7 +13,7 @@ THE CLAIMS, AND WHAT WOULD SHOW EACH WRONG:
     the stronger higher, and their rankings part on it; the bands handed to the query are the row's own
     non-empty `writes:` lists, a proper subset of the ladder (else the weighting would be 1 by construction).
   * THE PLUMBING IS REAL: a driver season hands every person's View a callable `odds`, and the callable answers
-    a real act (a float or `None`), reading no argument but the person, the act and the bands.
+    a real act (a float or `None`), taking the act and the bands (the person is bound to it).
   * THE ARM IS A ROSTER: an arm outside `rosters.yaml: odds_weightings` raises.
 """
 from __future__ import annotations
@@ -271,20 +271,34 @@ def _strict_top_share(tau: float, seed: int = 0) -> tuple:
     return sp["read"] - sp["tie"] - sp["outvoted"], sp["read"] - sp["field_zero"]
 
 
-def test_tau_is_the_largest_grid_value_above_one_half_strict_top_decided_and_zero_is_the_argmax():
-    """H-96's re-derivation, executed at seed 0 (the card reads seeds 0-2; `H-96`'s cite carries all three): the shipped tau
-    reads MORE THAN ONE HALF of the vectored readings strict-top-decided, every grid value above it reads LESS, and tau 0 collapses to
-    the argmax (every reading decided, no tie and no overruled leader). MEASURED seed 0: 0.05 -> 271 / 498, 0.1 -> 142 / 498.
+@pytest.mark.parametrize("seed", [0, 1, 2])
+def test_tau_is_the_largest_grid_value_above_one_half_strict_top_decided_and_zero_is_the_argmax(seed):
+    """H-96's re-derivation, executed at seeds 0-2 as the card reads them: the shipped tau reads MORE THAN ONE HALF of the
+    vectored readings strict-top-decided, every grid value above it reads LESS, and tau 0 collapses to the argmax (every
+    reading decided, no tie and no overruled leader). MEASURED, 0.05 -> 271 / 297 / 273 of 498, 0.1 -> 142 / 162 / 141.
     The test_u4 half of the rule is `test_season_shape.py::test_u4_the_choice_is_sampling_and_the_argmax_is_its_zero_temperature_control`."""
     shipped = float(DEFAULT_FIXTURES.get("choice_temperature"))
     grid = [0.0, 0.01, 0.02, 0.03, 0.05, 0.1, 0.25, 0.5, 1.0]
     assert shipped in grid, f"the shipped tau {shipped} is not on H-96's grid"
-    decided, n = _strict_top_share(shipped)
+    decided, n = _strict_top_share(shipped, seed)
     assert n > 0 and decided * 2 > n, f"the shipped tau {shipped} reads {decided} / {n} strict-top-decided: not above one half"
     hotter = [g for g in grid if g > shipped]
     assert hotter, "no grid value above the shipped tau: the 'largest' half of the rule observes nothing"
     for g in hotter:
-        d, m = _strict_top_share(g)
+        d, m = _strict_top_share(g, seed)
         assert d * 2 <= m, f"tau {g}, above the shipped {shipped}, also reads above one half ({d} / {m}): the rule picks the largest"
-    d0, n0 = _strict_top_share(0.0)
+    d0, n0 = _strict_top_share(0.0, seed)
     assert d0 == n0 > 0, f"tau 0 is not the argmax: {d0} of {n0} readings decided"
+
+
+def test_none_and_tau_point_one_reproduce_the_parent_world_exactly():
+    """THE CARD'S CONTROL, executed (it was prose in go07 and weather): `odds_weighting` `none` and `choice_temperature` 0.1
+    on `build_realm(0)`, one season, read the parent's (`f4b74ffa`'s) world: content hash `bdff0832...` and a log of
+    10316 events (the figures `test_go07_canonical_digest.py` and `test_season_weather.py` record as the parent's). The
+    shipped pair does not (685 acts, 11775), so the control can fail."""
+    from ..harness import populated as POP
+    w = POP.build_realm(0)
+    w.fixtures = w.fixtures.sweep("odds_weighting", "none").sweep("choice_temperature", 0.1)
+    POP.run(seasons=1, seed=0, w=w)
+    assert w.content_hash().startswith("bdff0832"), w.content_hash()
+    assert len(w.log) == 10316

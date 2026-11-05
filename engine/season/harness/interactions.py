@@ -38,8 +38,8 @@ ROWS (JSONL, one object per line, `kind` first):
 
 RELATION FACTS (`relation`), each read through the owner the tree has, at decision time:
   * same faction: `world_q.faction_holding` for both (None for none-or-many);
-  * offices held: the person's live `hold` Tenures on an `Office` [ASSUMPTION: no single-owner reader of
-    "the seats a person holds" exists; `options.exercisable_seats` is per verb row];
+  * offices held: the person's live `hold` Tenures on an `Office`, read through `World.seat_holds` (the one
+    reader of the seats a person holds; `options.exercisable_seats` is per verb row);
   * office relation: `state/gate.py::seated_on_the_rung_above_structure` both ways (the rung-above rule the
     revocation basis reads), same rung, `faction_q.purview` containment, and `faction_q.subordinates`'
     `oblige` edge both ways. Where none applies the row says `none the code reads`;

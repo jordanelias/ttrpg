@@ -474,7 +474,7 @@ class View:
         # carries no classed referents and the rows that form on a class (`confer`, `succeed`, `commit`,
         # `interrogate`) form nothing there.
         object.__setattr__(self, "questions", tuple(questions))
-        # CR-17: THE PERSON'S BELIEVED-ODDS QUERY, `(person, act, bands) -> chance or None`
+        # CR-17: THE PERSON'S BELIEVED-ODDS QUERY, `(act, bands) -> chance or None`, BOUND TO `holder`
         # (`seam/wrappers/sigma.py::believed_chance`, closed by `loop/deliberate.py` over the frozen
         # store). It is a QUERY the person asks, as `choose` asks `ask_budget`, not a store the View
         # holds: `choose` keeps its four parameters (`test_choose_receives_no_world`), the View keeps

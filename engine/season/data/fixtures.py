@@ -282,6 +282,9 @@ DEFAULT_FIXTURES = Fixtures(
     # dead at 0.1 exactly as it is at 1.0, BY CONSTRUCTION rather than by degree. Nothing is bought
     # by going hotter.
     #
+    # [THE 2026-09-10 RULE BELOW ("the smallest we sweep above zero") IS SUPERSEDED BY THE v11 CR-17 RULE AT THE END OF THIS
+    # BLOCK: on the extended grid the smallest above zero would be 0.01, and the shipped value is the LARGEST at which the
+    # strict-top share exceeds one half; the measurement that follows still reads.]
     # THE MEASUREMENT — and it says something IS bought by going colder. Sweeping the shipped
     # corpus, 89 live cases at seed 0, distinct executed sets: **tau=0 -> 16 · 0.1 -> 10 ·
     # 0.25 -> 8 · 0.5 -> 7 · 1.0 -> 7**. Between-world variety falls MONOTONICALLY with temperature,
@@ -308,7 +311,7 @@ DEFAULT_FIXTURES = Fixtures(
     # 28.5 / 32.5 / 28.3 %; 0.05 -> 54.4 / 59.6 / 54.8 %; 0.03 -> 74.3 / 78.1 / 75.7 %; 0.02 -> 85.5 / 87.6 / 87.2 %; 0.01 ->
     # 93.4 / 93.8 / 93.2 %; 0 -> 100 %. test_u4 passes at every grid value (15 distinct tops in 20 seeds at each; 1 at 0: the
     # fixture's candidates score alike, so the draw alone decides). So 0.05 is the largest value above one half at all three
-    # seeds. THE ODDS WEIGHTING (`odds_weighting`, above) MOVES THESE SHARES BY NOTHING AT ANY GRID VALUE (`none` and
+    # seeds. THE ODDS WEIGHTING (`odds_weighting`, below) MOVES THESE SHARES BY NOTHING AT ANY GRID VALUE (`none` and
     # `believed` read the same counts at every cell): it reaches only `determine`'s pursuit term, 46 of the 498 readings'
     # candidates, and not one top. ⚠ THIS IS A PROPERTY OF THIS FLAT FIELD, NOT A TUNED OPTIMUM: most contested rows score
     # alike at stance 0, so the share is a function of how tau compares to the score gaps (median outvoted lead 0.065 at

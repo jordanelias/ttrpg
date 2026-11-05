@@ -145,7 +145,9 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         # the world. It is the derivation of a value the character already has, and displaying it adds no world truth".
         # §A.2's `loop/deliberate` row adds "frozen `World`, for `sense` only". A believed chance is the arithmetic of
         # the pool and the capability claims he holds (`believed_input`), the second row's case; its act-shape reads
-        # (`sides_of`, `person_subject`) and his own-acts `practice` addend are the departure, declared in `sigma.odds_of`.
+        # (`sides_of`, which reaches `world_q.place_of`: its docstring says it may not be called from `decision/`, and it is
+        # called from the host-made query, not from `decision/`'s own code; `person_subject`) and his own-acts `practice`
+        # addend are the departure, declared in `sigma.odds_of`.
         # PICKED: the second row governs, as a host-made query on the View bound to its holder. Grade: CONVENTION (no
         # scan sees a callable on a View; `test_season_shape.py`'s AX-2 scans match the token `World` only), columns
         # read: §A.2's `decision/` and `loop/deliberate` may-read cells, §C.11's two rows. The code-side alternative

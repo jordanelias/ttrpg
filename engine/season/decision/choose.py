@@ -194,7 +194,8 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
     if pursuit != 0.0:
         pursuit *= odds_weight(p, c, fx, odds)
     else:
-        _odds_arm(fx)           # a zero term is zero whatever the factor: the query is not asked (it scans the log), the arm is still checked
+        _odds_arm(fx)           # a zero term is zero whatever the factor: the query is not asked (it scans the log), the arm is still checked.
+                                # Value-equal; the one difference is an error the query would raise on this candidate, which is no longer raised
     return (pursuit, stance_term(p, c, fx, memo))
 
 
