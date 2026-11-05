@@ -2752,6 +2752,29 @@ rosters:
       back to its decline.]
     values: {off_king: off_heir}
 
+  continuation_ties:
+    source: >-
+      v10 CP-T02-06 (B10-10; M7 taken (b), `workplans/valoria_master_workplan_v11_part6.md` DECISION:
+      *title, then oath*). The seated person's line CONTINUES or ENDS (`-02` §2 CP-T02-06, P30 heir
+      transfer, P42 a dead line).
+    open: false
+    ordered: true
+    note: >-
+      WHO MAY CARRY ON A SEATED PERSON'S LINE WHEN HE DIES, AND IN WHAT ORDER THEY ARE OFFERED -- a closed
+      ORDERED roster (the order is semantic: `ordered: true`). `heir_title`: the holder of the
+      `successions` title of a seat the person holds (the registry above; one title per seat). `sworn`:
+      a person with a live `oblige` to a seat the person holds (`state/gate.py::sworn_to`, the one walk
+      `establishment_of` composes on). A person who is both is offered once, at the earlier tie. WHAT EACH
+      TIE MEANS IS CODE: `queries/world_q.py::_TIE_READERS`, one reader per member; `check_continuation_ties`
+      REFUSES AT IMPORT a member with no reader and a reader with no member, and a `Continuation` tagged
+      with a kind off this list is refused at construction. THE CLIENT HOLDS NO COPY: which persons may be
+      chosen is a game fact, so `harness/play_surface.py::carry_on` offers `world_q.continuations`' answer
+      and nothing it composed itself. `follower` (a live `commit` to a Proposition the person made) was in
+      the design's draft and is NOT taken; appending it is one member here and one reader there.
+      [ASSUMPTION; medium; Jordan to correct; revert: bind to the first living tie in this order without
+      offering a choice (`carry_on` takes `offer[0]`), or drop `sworn`, or append `follower`.]
+    values: [heir_title, sworn]
+
   revocation_bases:
     source: "JORDAN, ED-IN-0256 ruling (3), 2026-09-18, VERBATIM: *\"rung above of same faction\"* -- WHO MAY STRIP A SEAT. Plan position `13d-i`; closes the `is_title` branch (`H-109`)."
     open: false

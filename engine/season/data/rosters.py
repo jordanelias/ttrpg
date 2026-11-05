@@ -717,6 +717,10 @@ REVOCATION_BASES = roster("revocation_bases")
 # and `state/gate.py::FILLED_BY` is the gate's (`check_successions`), since the claim basis lives there
 # and `data/` may not import `state/`.
 SUCCESSIONS = {str(k): str(v) for k, v in roster_map("successions", "values").items()}
+# v10 CP-T02-06 (B10-10): WHO CARRIES ON A SEATED PERSON'S LINE, in the order they are offered
+# (`rosters.yaml: continuation_ties`, ORDERED). The reader per member is `queries/world_q.py::_TIE_READERS`,
+# cross-checked there at import (`data/` may not import `queries/`, `SUCCESSIONS`' reason).
+CONTINUATION_TIES = roster("continuation_ties", ordered=True)
 # Plan position `17a` (r2 `05` RULED (b), `ARCH F.17`): HOW A SEAT TAKES ON THOSE WHO SERVE IT, the
 # third basis beside the two above and bound the same way. `Office.__post_init__` refuses a value
 # off it; `loop/predicates.py::_req_oblige` admits an `oblige` only to a seat whose `binds` is on it.
