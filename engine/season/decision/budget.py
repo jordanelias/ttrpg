@@ -1,4 +1,4 @@
-"""`decision/` -- the `budget` member of `04_CODE_ARCHITECTURE.md` §A.2:133.
+"""`decision/` -- the `budget` member of `04_CODE_ARCHITECTURE.md` §A.2 (the `decision/` row).
 
 `budget`, and the body-band penalty it applies. §A.2's table lists `budget` in `decision/`'s
 members row (`04:133`) AND in its "may read" column -- both hold at once, not a contradiction: it

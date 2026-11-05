@@ -183,14 +183,18 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             effort: int = 0, host: Optional[PlayHost] = None) -> dict:
     """CALL the personal-combat engine. Returns what it said; decides nothing itself.
 
-    ⚠ `host` (v10 REM-31, IN-46) IS WHERE THE DRIVER SUSPENDS, AND THE ONLY PLACE. `None` -- every RESOLVE
+    ⚠ `host` (v10 REM-31, IN-46) IS A SECOND INPUT BESIDE §A.2's adapter row's "the projection" (the persons it plays and
+    a decider), named here as that row's departure (B4, third disposition) and picked for the reason A-25 gives.
+    IT IS WHERE THE DRIVER SUSPENDS, AND THE ONLY PLACE. `None` -- every RESOLVE
     call, and every season run without a host -- is AUTOMATED, today's call exactly. With a host, the mode
     is a PARTY TEST (A-25): a fight either of whose claimants the host plays (`PlayHost.persons`) hands the
     host's decider to the module entry, which forwards it to the engine's own turn loop; every other fight
     stays AUTOMATED. The suspension is a CALL-OUT, not a return: the scene runs inside this frame with the
     ENCOUNTER token held below it in the driver's argument expression (minted once), the typed record `inp`
-    and the `seed` built by the same lines in both modes, and nothing serialized. The decider holds no
-    `World` and no token, so it cannot reach `World.write` or `World.new_draw`; it draws only by NOT drawing
+    and the `seed` built by the same lines in both modes, and nothing serialized. The decider is handed
+    no `World` and no token, and is written not to reach `World.write` or `World.new_draw` -- a CONVENTION
+    (a closure over `w` could, and `test_rem31_grid_suspension.py` plants exactly those two shapes to show
+    them seen); it draws only by NOT drawing
     (its turn's draws are the engine's, in the engine's order). The `RESOLVED` dict below gains no mode
     field, so the fold cannot tell the modes apart. Design: `proposals/2026-10-07-grid-mode-suspension.md`
     (PROPOSED, held back) and its `## Re-read at B-L`; reference, never the reason this is correct --

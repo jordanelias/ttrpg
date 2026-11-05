@@ -33,11 +33,12 @@ an act's, folded at RESOLVE (and the fold's two post-outcome writes, `_scar_witn
                      whose act a count rose or a creed folded. Giving it that history is a writer's
                      change (the row's `emits:`), never a space's.
 
-THE SHEET HOLDS SHALLOW COPIES. Every field a sheet carries is a read-only copy of the person's own carrier
-(`MappingProxyType`, tuples), so a client's `pick` is never handed a `Person` and cannot reach one. The CONTENTS
-of three fields are live objects, not copies: `candidates` (the `Candidate`s `release` packs), `Chronicle.ledger`
-(the `Claim`s) and `DevelopmentSheet.view` (`View.odds` closes over the World). `release` rebuilds nothing from the
-picked indices but the order, so a `pick` that mutated a `Candidate` would reach what is packed; nothing tests it.
+THE SHEET HOLDS COPIES, SHALLOW EXCEPT WHERE IT MATTERS. Every field a sheet carries is a read-only copy of the
+person's own carrier (`MappingProxyType`, tuples), so a client's `pick` is never handed a `Person` and cannot reach
+one. `DevelopmentSheet.candidates` are DEEP copies and `release` packs the originals by the picked indices, so a
+`pick` that mutated a `Candidate` changes nothing that is packed. Two contents are still live objects:
+`Chronicle.ledger` (the `Claim`s) and `DevelopmentSheet.view` (`View.odds` closes over the World; named at
+`loop/deliberate.py`, a CONVENTION).
 The space functions themselves do hold `p`; the falsifier for a space that writes it is the G2 spy
 (`tests/test_g2_token.py::test_g2_deliberate_mutates_no_store_by_any_route`, its spaces arm).
 
@@ -46,6 +47,7 @@ attribute or a string (`tests/test_season_shape.py`, by path).
 """
 from __future__ import annotations
 
+import copy
 from dataclasses import dataclass
 from types import MappingProxyType
 from typing import Any, Callable, Iterable, Mapping, Optional, Sequence
@@ -150,7 +152,7 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
             return []
         cands = rank(p, v)
         n = ask_budget()
-        sheet = DevelopmentSheet(p.id, v, q, tuple(cands), n, _frozen(p.capability),
+        sheet = DevelopmentSheet(p.id, v, q, tuple(copy.deepcopy(c) for c in cands), n, _frozen(p.capability),
                                  _frozen(p.pursuits), tuple(p.stance), _frozen(p.conviction),
                                  _frozen(p.scar), p.body)
         chosen = [int(i) for i in pick(sheet)]

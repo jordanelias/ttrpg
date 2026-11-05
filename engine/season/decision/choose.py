@@ -1,4 +1,4 @@
-"""`decision/` -- the `choose` member of `04_CODE_ARCHITECTURE.md` §A.2:133.
+"""`decision/` -- the `choose` member of `04_CODE_ARCHITECTURE.md` §A.2 (the `decision/` row).
 
 `make_chooser` and everything it resolves by BARE NAME: `pack_scenes` (with
 `_payload_of`). `align` (from `data/verbs.py`), `stance_toward` (from `queries/person_q.py`) and

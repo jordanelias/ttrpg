@@ -2913,19 +2913,10 @@ def seats_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple
 
 class Continuation(NamedTuple):
     """One person who could carry on a seated person's line, and BY WHICH TIE (`rosters.yaml:
-    continuation_ties`). A tie kind off the roster is REFUSED at construction (`continuations` builds only
-    through `_continuation`), so a result tagged with an unrostered kind cannot be returned."""
+    continuation_ties`). `continuations` iterates the roster itself, and `check_continuation_ties` closes the roster
+    against its readers at import, so a result tagged with an unrostered kind cannot be returned."""
     tie: str
     person: str
-
-
-def _continuation(tie: str, person: str) -> Continuation:
-    if tie not in CONTINUATION_TIES:
-        raise Unspecified(
-            f"continuation tie {tie!r} is not in rosters.yaml: continuation_ties", "rosters.yaml -- continuation_ties",
-            needs=f"one of {list(CONTINUATION_TIES)}",
-            law="CP-T02-06 -- the roster is closed: which persons may be chosen is a game fact, not a client's")
-    return Continuation(tie, person)
 
 
 def _heir_title_holders(w: World, p: Person) -> list:
@@ -2986,7 +2977,7 @@ def continuations(w: World, p: Person) -> tuple:
         for who in _TIE_READERS[tie](w, p):
             if who not in seen and who in w.persons:
                 seen.add(who)
-                out.append(_continuation(tie, who))
+                out.append(Continuation(tie, who))
     return tuple(out)
 
 

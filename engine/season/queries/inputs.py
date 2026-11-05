@@ -154,8 +154,8 @@ class PlayHost:
                      (`seam/wrappers/combat.py::resolve`): a fight either of whose claimants is in this
                      set is PLAYABLE; every other fight, and every fight with no host, is AUTOMATED;
       * `decide`  -- `(CombatTurnView) -> str`, one member of the engine's closed per-turn set
-                     (`modules/combat/wrapper.py::TURN_CHOICES`). It draws nothing, writes nothing and
-                     holds no token: it is called inside the provider's frame, with the driver below it on
+                     (`modules/combat/wrapper.py::TURN_CHOICES`). It is written to draw nothing, write nothing and
+                     hold no token (CONVENTION; `test_rem31_grid_suspension.py` plants the two shapes that break it): it is called inside the provider's frame, with the driver below it on
                      the stack (a call-out, not a return), and its return is the only resume.
     Nothing records the mode: no Event, id purpose, carrier or `RESOLVED` field names it."""
     persons: frozenset

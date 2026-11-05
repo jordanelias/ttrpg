@@ -1,6 +1,6 @@
-"""`decision/` -- the `opening_set` member of `04_CODE_ARCHITECTURE.md` §A.2:133, and its helpers.
+"""`decision/` -- the `opening_set` member of `04_CODE_ARCHITECTURE.md` §A.2 (the `decision/` row), and its helpers.
 
-⚠ **THE FILE IS `options.py` AND THE MEMBER IS `opening_set`, DELIBERATELY.** §A.2:133 names four
+⚠ **THE FILE IS `options.py` AND THE MEMBER IS `opening_set`, DELIBERATELY.** §A.2 (the `decision/` row) names four
 members; a module named `opening_set.py` beside a function named `opening_set` makes
 `decision.opening_set` ambiguous -- `__init__.py`'s re-export shadows the submodule -- and the
 rebind surface needs the MODULE by name. "Option set" is the tree's own existing phrase for what
@@ -12,9 +12,9 @@ eligibility predicate, and the two agreement/standing readers.
 
 ⚠ `entrenchment` SITS HERE PROVISIONALLY AND L3 RE-ADJUDICATES IT. Three functions in the old
 `decision.py` self-declared as person-side Queries via `TRACE.query(..., "person")`: `budget`,
-`opening_set` and `entrenchment`. The first two are named by §A.2:133 as `decision/` MEMBERS and
+`opening_set` and `entrenchment`. The first two are named by §A.2 (the `decision/` row) as `decision/` MEMBERS and
 therefore cannot move to `queries/person_q` -- which is why `ED-IN-0206` item (2) is wrong about
-them. `entrenchment` is the only one of the three that §A.2:133 does not name, so it is the only
+them. `entrenchment` is the only one of the three that §A.2 (the `decision/` row) does not name, so it is the only
 real `queries/person_q` candidate in this file, and L3 owns that call.
 
 AX-2 binds every file under `decision/`: no `World`, as an import, a name, an attribute or a

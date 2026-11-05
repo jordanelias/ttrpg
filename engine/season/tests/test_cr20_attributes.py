@@ -220,3 +220,38 @@ def test_the_realm_reads_the_cast_stats_only_on_the_arm_that_is_switched_on():
     on = PO.build_realm(0, cast_attributes=True)
     assert [p.id for p in on.persons.values() if p.attributes] == ["p_npc_001"]
     assert on.persons["p_npc_001"].attributes == cast.attributes_of(cast.row("NPC-001"))
+
+
+# ======================================================================================
+# THE SETTER SCAN (04 PART D row 3, step 3: "a planted direct assignment is caught by the setter scan"): the gate
+# refuses a gated write that NAMES the field, and nothing refuses a bare `p.attributes = ...`, so the build is the one
+# place that may assign them. `test_k3_thread_sensitivity.py::test_k3_e_...` is the precedent (one field); CR-20 and
+# CR-30 add two read-off fields to it. Added at the B10-10 close (layer-conformance, B3).
+# ======================================================================================
+
+def test_no_engine_source_outside_the_world_build_assigns_attributes_or_heritage():
+    import ast
+    import pathlib
+    root = pathlib.Path(__file__).resolve().parents[1]
+    build = root / "harness" / "populated.py"
+    fields = {"attributes", "heritage"}
+    sites, scanned = [], 0
+    for path in sorted(root.rglob("*.py")):
+        if "tests" in path.relative_to(root).parts:
+            continue
+        scanned += 1
+        for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
+            targets = (node.targets if isinstance(node, ast.Assign)
+                       else [node.target] if isinstance(node, (ast.AugAssign, ast.AnnAssign)) else [])
+            for t in targets:
+                base = t.value if isinstance(t, ast.Subscript) else t          # `p.attributes[k] = v` too
+                if isinstance(base, ast.Attribute) and base.attr in fields:
+                    sites.append((path, node.lineno, base.attr))
+            if (isinstance(node, ast.Call) and getattr(node.func, "id", None) == "setattr"
+                    and len(node.args) >= 2 and isinstance(node.args[1], ast.Constant)
+                    and node.args[1].value in fields):
+                sites.append((path, node.lineno, node.args[1].value))
+    assert scanned > 50, f"scanned {scanned} files -- the walk did not reach the engine"
+    outside = [s for s in sites if s[0] != build]
+    assert not outside, f"assigned outside the world build: {outside}"
+    assert {f for _, _, f in sites} == fields, f"the build no longer assigns both: {sites}"

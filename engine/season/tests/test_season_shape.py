@@ -2920,9 +2920,9 @@ def test_decision_package_never_names_world_anywhere_under_it():
     scan matches BY PATH, so a `choose` drafted inside `loop/` and moved later would have been green
     while violating AX-2."* Step 7 of the decomposition (ED-IN-0203) shipped a FLAT `decision.py`
     and this test walked the AST of that one file. Its own docstring said so, having been corrected
-    once already for overclaiming: *"04:1046's mechanism is a scan BY PATH over a `decision/`
+    once already for overclaiming: *"04 §E.1's mechanism is a scan BY PATH over a `decision/`
     DIRECTORY ... this walks the AST of the one file `decision.py`, so code drafted elsewhere and
-    never moved is never scanned -- it is structurally blind to the exact failure 04:1046 names."*
+    never moved is never scanned -- it is structurally blind to the exact failure 04 §E.1 names."*
     The gap was filed as ED-IN-0206 and `decision/` is a package now, so the scan is what the
     ratified line says: **every `.py` under the directory, discovered and never listed**
     (`files.decision_modules()`), with a FLOOR on the count so a flattening or a glob that stops
@@ -2966,13 +2966,13 @@ def test_decision_package_never_names_world_anywhere_under_it():
     import ast as ast_
 
     mods = files.decision_modules()
-    # ⚠ THE FLOOR, AND IT IS THE POINT OF THE REWRITE. §A.2:133 names four members; with
+    # ⚠ THE FLOOR, AND IT IS THE POINT OF THE REWRITE. §A.2 (the `decision/` row) names four members; with
     # `__init__.py` that is five files. A scan that finds fewer has stopped matching -- a flattened
     # package, a renamed directory, a glob that lost its recursion -- and every assertion below
     # would pass over the shortfall in silence (`CLAUDE.md` §0.1 pt 2).
     assert len(mods) >= 5, (
         f"the AX-2 by-path scan found only {len(mods)} file(s) under {files.DECISION_DIR}: "
-        f"{[p.name for p in mods]}. §A.2:133 names four members plus __init__. Either the package "
+        f"{[p.name for p in mods]}. §A.2 (the `decision/` row) names four members plus __init__. Either the package "
         "was flattened -- which is the ED-IN-0206 violation this scan exists to prevent -- or the "
         "discovery broke, and in both cases the checks below are vacuous.")
 
@@ -2983,7 +2983,7 @@ def test_decision_package_never_names_world_anywhere_under_it():
     # `queries.faction_q` (which imports `World`) and any future `queries/*_q.py`. The person_q
     # side of the edge is `test_person_q_cannot_reach_the_world_side`, which forbids `decision`
     # from `person_q`.
-    FORBIDDEN = ("state.world", "queries", "loop", "seam", "combat_seam", "shape")
+    FORBIDDEN = ("state.world", "queries", "loop", "seam", "combat_seam", "shape", "harness")
     ADMITTED = ("queries.person_q",)
     PKG = "engine.season"
 

@@ -143,12 +143,6 @@ def test_a_person_with_no_ties_reads_nothing():
 
 # --- THE ROSTER IS CLOSED ------------------------------------------------------------------------
 
-def test_an_unrostered_tie_kind_is_refused():
-    with pytest.raises(Unspecified):
-        world_q._continuation("follower", "p_x")
-    assert world_q._continuation("sworn", "p_x").tie == "sworn"
-
-
 def test_a_roster_member_with_no_reader_and_a_reader_with_no_member_are_refused(monkeypatch):
     world_q.check_continuation_ties()
     monkeypatch.setattr(world_q, "CONTINUATION_TIES", ("heir_title", "sworn", "follower"))
