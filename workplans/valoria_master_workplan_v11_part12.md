@@ -9,13 +9,13 @@
 
 | handle | batch | kind of handle |
 |---|---|---|
-| CL-ATTR | B10-19 | held design cluster (`-04`); its carrier is absorbed by CR-20; the tenth attribute's name (J-T2, confirmed at the default, ED-IN-0301) and since the fold of 2026-10-30 the list (`-10` M23) are ANSWERED by Jordan's ten (`ED-IN-0328`; the roster rewrite is CR-84, B10-10); what remains is the training rule, `-10` M24: NARROWED to M24, NOT CLOSED (the knowledge-model fold of 2026-11-04) |
-| CL-CHAR | B10-10 | design cluster (`-04`); M2 answered: absorbed by CR-20 and REM-30, after CR-19; its row is deleted at B10-10's close with CR-20's exit quoted, unless the re-base finds a piece of `characters.yaml` or `template_of` neither builds; its piece check at the close reads CR-33 as well |
+| CL-ATTR | B10-19 | held design cluster (`-04`); its carrier is absorbed by CR-20; the tenth attribute's name (J-T2, confirmed at the default, ED-IN-0301) and since the fold of 2026-10-30 the list (`-10` M23) are ANSWERED by Jordan's ten (`ED-IN-0328`; the roster rewrite is CR-84, B10-10, landed `1abaa612`); what remains is the training rule, `-10` M24: NARROWED to M24, NOT CLOSED (the knowledge-model fold of 2026-11-04) |
+| CL-CHAR | B10-10 (CLOSED, `0533c4da`; the row was deleted at the close) | design cluster (`-04`); M2 answered: absorbed by CR-20, REM-30 and CR-33; the piece check found no reader of `characters.yaml` or `template_of` |
 | CL-EVENTS | B10-18 | design cluster (`-04`; `-05` M16, narrowed), re-scoped to FORCE-WEATHER per territory, and the Tensions receiver as a world-generation draw (the second decision round, item 2): four commits. Commit (1) LANDED in B10-05 after REM-52 (`df4ffc88`, EQUAL at `()`); the row and commit (2), the live arm, in B10-18 after CP-T10-03's flip; commit (3), the Tensions receiver (registry, loader, roster, yield-scale member, build switch, shipped off), and commit (4), the six Tensions cards as `[ASSUMPTION]` data, in B10-18 after CR-22 and before CP-T10-08, both EQUAL and before the freeze. They are commits of this row, not handles. M16's fourth motion stays Jordan's and blocks nothing; it is not needed by commits (3) and (4) |
 | CL-MGMT | B10-19 | design cluster from the fold of 2026-10-30 (`-04`; home `proposals/2026-10-28-content-architecture-suite/01_MAIN_REPORT_part2.md` §13): the management surface, weak reading; DESIGN-FIRST, RATIFIED (Jordan, 2026-10-30, ED-IN-0305); build HELD on `-10` M31; needs CL-SLICE |
 | CL-OPEN | B10-19 | design cluster from the fold of 2026-10-30 (`-04`; home `proposals/2026-10-28-content-architecture-suite/02_P1_templates.md`): story openings drawn from pools at world build, opened only by a person's own act; DESIGN-FIRST, RATIFIED (Jordan, 2026-10-30, ED-IN-0305); build HELD on `-10` M26; its build after CL-EVENTS commit (4) |
 | CL-PERSON | B10-19 | design cluster from the fold of 2026-10-30 (`-04`; home `proposals/2026-10-24-character-layers-v2.md`): the personality layer v2 and ED-IN-0304's risk appetite and horizon; DESIGN-FIRST, RATIFIED (Jordan, 2026-10-30, ED-IN-0305); build HELD on `-10` M34 to M37, M40 and E-4 (stored offsets would contradict ED-IN-0261's ruled sentence, R7's dissolution clause; R7 = `proposals/2026-09-16-conviction-decision-layer/formal_analysis.md:195`); its design approved and its build after CR-17's commit (2) (τ; CR-17 landed `1ef8d273`) |
-| CL-SLICE | B10-19 | design cluster from the fold of 2026-10-30 (`-04`; homes `proposals/2026-10-28-content-architecture-suite/04_P3_player_surface.md` and `01_MAIN_REPORT_part2.md` §14): the first playable slice, a text-first player seat and a fight viewer; DESIGN-FIRST, RATIFIED (Jordan, 2026-10-30, ED-IN-0305); build HELD on `-10` M31, M32, M33; its build a landing at B10-11's head, after B10-10 (REM-31, CR-20) |
+| CL-SLICE | B10-19 | design cluster from the fold of 2026-10-30 (`-04`; homes `proposals/2026-10-28-content-architecture-suite/04_P3_player_surface.md` and `01_MAIN_REPORT_part2.md` §14): the first playable slice, a text-first player seat and a fight viewer; DESIGN-FIRST, RATIFIED (Jordan, 2026-10-30, ED-IN-0305); build HELD on `-10` M31, M32, M33; its build a landing at B10-11's head, after B10-10 (closed, `0533c4da`; REM-31, CR-20 landed) |
 | CL-STRIFE | B11-S2 to B11-S5, and members of B10-11, B10-18, B10-18c and B10-Z | the strife cluster's name (the strife fold, v11; ED-IN-0315; home `proposals/2026-11-04-strife-flows/00_MASTER.md` and `01_STRIFE_KINDS_DRAFT.md`, RATIFIED by Jordan 2026-11-04, ED-IN-0316): a cluster name, a handle and not a position or a batch, defined in the head §7; its positions are CR-71 to CR-80 (`-11`); S1 and S1r are built (`60d13a7`, `79419b7`) and are history, not rows |
 | CL-THRUST | B10-19 | design cluster from the fold of PR #506 (`-04`; home `proposals/2026-10-25-thrust-layer/`; `-05` M20, taken (b) in part): one row; its pieces B0.1 (LANDED in B10-02), B2.1/B2.2 with B3.1 (LANDED in B10-05) and B3.2 (LANDED in B10-09 close two, `67f5b086`, `cf943457`) land in B10-02, B10-05 and B10-09; B4.x (own gates), B5.2 (on IN-36's `guards` flip, scheduled in B10-17 after CP-T09-07 (b), ED-IN-0317) and B6.n (content) stay held; B5.1 is cut (M21). B6.n gains the arc rule (the second decision round, item 2; `-04`): a ladder position draws only from the first two `ENDINGS_CLASSIFIED.yaml` classes |
 | CL-TROOP | B10-19 | held design cluster (`-04`); HELD on M3, whose yes arm is `-10` M22 (the fold of 2026-10-30) |
@@ -23,13 +23,13 @@
 | CP-T01-02 | B10-08 (CLOSED) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T01-03 | B10-08 (CLOSED) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T01-04 | B10-08 (CLOSED) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T01-05 | B10-08 (CLOSED) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T01-05 | B10-08 (CLOSED; its NPC half built in B10-10, `172c58ec`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T01-06 | B10-08 (CLOSED) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T02-01 | B10-09 (close one CLOSED, `f9e4cef`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T02-02 | B10-09 (close one CLOSED, `f9e4cef`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T02-03 | B10-09 (close one CLOSED, `f9e4cef`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T02-05 | B10-09 (close two CLOSED, `1ef8d273`: built in close one, falsified and reverted there, re-taken inside CR-28) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T02-06 | B10-10 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T02-06 | B10-10 (CLOSED, `0533c4da`; landed `a8bdefe9`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T02-07 | B10-09 (close one CLOSED, `f9e4cef`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T03-00 | B10-09 (close one CLOSED, `f9e4cef`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T03-01 | B10-11 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
@@ -121,8 +121,8 @@
 | CR-16 | B10-07b (CLOSED) | new from the decision round (`-04`; M1): the chooser's polarity, the `subject_is_opponent` repair and `stance_polarity: declared` |
 | CR-17 | B10-09 (close two CLOSED, `1ef8d273`) | new from the decision round (`-04`; M1): believed odds weight the alignment term; τ re-derived as its last commit (close two, last); carries the follow-on of ED-IN-0304 (risk appetite and decision horizon) |
 | CR-18 | B10-08 (CLOSED) | new from the decision round (`-04`; M2): practice ships live; the pools reader |
-| CR-19 | B10-10 | new from the decision round (`-04`; M2): AX-7's competence reads Attunement (H-200) |
-| CR-20 | B10-10 | new from the decision round (`-04`; M2): the attribute carrier lands with character creation (nine keys until the knowledge-model fold of 2026-11-04; ten since, on CR-84's roster, no pending slot) |
+| CR-19 | B10-10 (CLOSED, `0533c4da`; landed `d5358a9a`) | new from the decision round (`-04`; M2): AX-7's competence reads Attunement (H-200) |
+| CR-20 | B10-10 (CLOSED, `0533c4da`; landed `c7764a5a`) | new from the decision round (`-04`; M2): the attribute carrier lands with character creation (nine keys until the knowledge-model fold of 2026-11-04; ten since, on CR-84's roster, no pending slot) |
 | CR-21 | B10-07b (CLOSED) | new from the decision round (`-04`; M14): the cell-value and cosine pass |
 | CR-22 | B10-18 | new from the decision round (`-04`; M6): hunger binds, the per-head need chosen by a reading rule; MEASURE then BUILD; its exit also reads the `shortfall:<kind>` observations and the executed `transfer` / `requisition` / `petition` / `migrate` counts (the story-telling fold of 2026-11-02) |
 | CR-23 | B10-06 (CLOSED) | new from the decision round (`-04`; M17): a larder's stock reaches the seats over it, at its crossings |
@@ -132,10 +132,10 @@
 | CR-27 | B10-13 | new from the decision round (`-04`; M9): `lie`, a spoken falsehood on a held cell claim |
 | CR-28 | B10-09 (close two CLOSED, `1ef8d273`; moved from B10-05 at its close: built, falsified and reverted there, H-156; re-taken behind CR-10) | new from the decision round (`-04`; M19): G-04(a), own-ledger Propositions stamp as class `Proposition` |
 | CR-29 | B10-14 | new from the decision round (`-04`; M11): the event-kind reach channel, then `chronicle`'s paired deletion; released from M11 (its other needs stay) |
-| CR-30 | B10-10 | new from the second decision round (`-04`; item 1): `Person.heritage`, descent as a read-off field, the `marks` term's carrier; inside CR-20's commit window, one combined `Person` repr re-pin; `heritage_roster` is not IN FLUX: Jordan confirmed its five members as written (ED-IN-0301, `-05` §1a (a)), and a Godot binding is no longer barred |
+| CR-30 | B10-10 (CLOSED, `0533c4da`; landed `e03c7129`) | new from the second decision round (`-04`; item 1): `Person.heritage`, descent as a read-off field, the `marks` term's carrier; inside CR-20's commit window, one combined `Person` repr re-pin; `heritage_roster` is not IN FLUX: Jordan confirmed its five members as written (ED-IN-0301, `-05` §1a (a)), and a Godot binding is no longer barred |
 | CR-31 | B10-13 | new from the second decision round (`-04`; item 1): the caste estimate, a heritage regard term (`heritage_gain`); last in B10-13, after CR-27 |
 | CR-32 | B10-17 | new from the second decision round (`-04`; item 1): Standing ladders as posts on seats; livery in `marks`; `rank` within one scale (H-181's producer); directly after CP-T09-06 |
-| CR-33 | B10-10 | new from the second decision round (`-04`; item 1): the 34 lifepaths as creation templates (`lifepath:`, `lifepath_templates`); after CR-19, before CL-CHAR's check |
+| CR-33 | B10-10 (CLOSED, `0533c4da`; landed `6b068d8a`) | new from the second decision round (`-04`; item 1): the 34 lifepaths as creation templates (`lifepath:`, `lifepath_templates`); after CR-19, before CL-CHAR's check |
 | CR-34 | B10-13 | new from the second decision round (`-04`; item 5): the declared disposal is read, a vote at a sitting counts live commits (C-7; H-161); after SC-04; hash EQUAL, realm reach 0 |
 | CR-35 | B10-17 | new from the second decision round (`-04`; item 3): an elected seat is filled by its faction's bench; the contested succession; H-217 closes here; its gate arm and H-217 clause: H-L0-8 applied in PR #507, so they build in the ordinary way (the rows' shipped state is whatever the position's own falsifier and control say) |
 | CR-36 | B10-17 | new from the second decision round (`-04`; item 3): nominate-then-confirm, the `nominated` basis and the `resolution` Record kind; after CR-35 |
@@ -170,8 +170,8 @@
 | CR-65 | B10-18c | new from the build-all fold of 2026-11-02 (`-04`): the legitimacy index, design-first, held on P4 Q2 |
 | CR-66 | B10-19 | new from the build-all fold of 2026-11-02 (`-04`): membership contests, design-first |
 | CR-67 | B10-19 | new from the build-all fold of 2026-11-02 (`-04`): trade and levy, design-first |
-| CR-68 | B10-10 | new from the story-telling fold of 2026-11-02 (`-04`; ED-IN-0311): the chronicle ranks by consequence (`harness/chronicle.py` over consequence acts; `--executed-only` retired for `--all-acts`); harness, hash EQUAL |
-| CR-69 | B10-10 | new from the story-telling fold of 2026-11-02 (`-04`; ED-IN-0311): the story reading, per seed the count of consequence chains and a kinds histogram (`harness/chronicle.py --chains`; the one owner of `-10` CL-OPEN's variety reading); harness, hash EQUAL |
+| CR-68 | B10-10 (CLOSED, `0533c4da`; landed `eddcca8b`) | new from the story-telling fold of 2026-11-02 (`-04`; ED-IN-0311): the chronicle ranks by consequence (`harness/chronicle.py` over consequence acts; `--executed-only` retired for `--all-acts`); harness, hash EQUAL |
+| CR-69 | B10-10 (CLOSED, `0533c4da`; landed `e71f1749`) | new from the story-telling fold of 2026-11-02 (`-04`; ED-IN-0311): the story reading, per seed the count of consequence chains and a kinds histogram (`harness/chronicle.py --chains`; the one owner of `-10` CL-OPEN's variety reading); harness, hash EQUAL |
 | CR-71 | B11-S2 | new from the strife fold (v11; `-11`; ED-IN-0315): the strife funnel, each routed and unseen code tied to the read that refuses it and that read's owner; a reading, no code |
 | CR-72 | B10-11 | new from the strife fold (v11; `-11`): execution, whether `fight` forms against a held party; a hand-built test on CP-T03-09's `detain` opener; hash EQUAL |
 | CR-73 | B10-18 | new from the strife fold (v11; `-11`): natural shock (SH), a lowest-member draw that bites (a shortfall logged in that territory that season); harness and one optional `tick` on `season_factor_of`, hash EQUAL |
@@ -185,9 +185,9 @@
 | CR-81 | B10-09 (close two CLOSED, `1ef8d273`) | new from Jordan's answer to CR-03 (`-04`; `ED-IN-0318`): the realm starts with acquaintances (faction co-members, the high-status seats); a mover of every world hash |
 | CR-82 | B10-09 (close two CLOSED, `1ef8d273`) | new from `ED-IN-0319` (`-04`): what a person knows of others is kept for years; three commits since the knowledge-model fold of 2026-11-04 (the measurement, `ledger_cap` raised alone under a run-time ceiling, the readers list); commit 2 a declared mover |
 | CR-83 | B10-13 | new from `ED-IN-0324` (`-04`): familiarity sets inference and adjudication, design-first, drafted beside B10-13; since the knowledge-model fold also CR-82's struck questions (opinion persistence measured first, subject fit, `said_of`'s weighing, CR-19's flip) and the `write_matrix.yaml` Layer-1 question |
-| CR-84 | B10-10 | new from the knowledge-model fold of 2026-11-04 (`-04`; `ED-IN-0328`): the ten attributes, the registry roster rewritten before CR-20, keys kept, Bonds dropped; hash EQUAL for the game |
-| CR-85 | B10-10 | new from the knowledge-model fold of 2026-11-04 (`-04`; `ED-IN-0330`, `ED-IN-0331`): histories, hooks and combat's input, DESIGN-FIRST before CR-33; its build lands in B10-11 after CP-T03-02 and before CP-T03-05, a declared mover of every season fight |
-| CR-86 | B10-10 | new from the arc fold of 2026-11-05 (`-04`; `ED-IN-0342`): the realm's structure, Valorsmark a faction, the vassals' `oblige` tenures, head seats, offices' factions, the Church's settlement; the batch's first mover, after CR-84 |
+| CR-84 | B10-10 (CLOSED, `0533c4da`; landed `1abaa612`) | new from the knowledge-model fold of 2026-11-04 (`-04`; `ED-IN-0328`): the ten attributes, the registry roster rewritten before CR-20, keys kept, Bonds dropped; hash EQUAL for the game |
+| CR-85 | B10-11 (moved from B10-10 at its close: the design landed `12325005`; the build is B10-11's) | new from the knowledge-model fold of 2026-11-04 (`-04`; `ED-IN-0330`, `ED-IN-0331`): histories, hooks and combat's input, DESIGN-FIRST before CR-33; its build lands in B10-11 after CP-T03-02 and before CP-T03-05, a declared mover of every season fight |
+| CR-86 | B10-10 (CLOSED, `0533c4da`; landed `83715fd6`) | new from the arc fold of 2026-11-05 (`-04`; `ED-IN-0342`): the realm's structure, Valorsmark a faction, the vassals' `oblige` tenures, head seats, offices' factions, the Church's settlement; the batch's first mover, after CR-84 |
 | CR-87 | B10-11 | new from the arc fold of 2026-11-05 (`-04`; `ED-IN-0335` to `ED-IN-0337`, `ED-IN-0340`): violence made exceptional (contexts, a cost on every axis, the grudge's bound, `blood` duels, loyalty toward the creed); after PC-10, before CR-72; a mover of every season that fought |
 | CR-88 | B10-17b | new from the arc fold of 2026-11-05 (`-04`; `ED-IN-0335`, `ED-IN-0338`): duty of office and the cost of betrayal; DESIGN-FIRST, drafted beside B10-13 with CR-83; its build in B10-17b after CR-90 |
 | CR-89 | B10-17b | new from the arc fold of 2026-11-05 (`-04`; `ED-IN-0339`, `ED-IN-0341`, `ED-IN-0343` to `ED-IN-0345`): the clocks (Church Influence, Turmoil) as folds of the log, the breaking point, "the nation functions", the band triggers shipped off; each flip a declared mover |
@@ -272,9 +272,9 @@
 | REM-27 | B10-06 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-28 | B10-06 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-29 | B10-06 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-30 | B10-10 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-31 | B10-10 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-32 | B10-10 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-30 | B10-10 (CLOSED, `0533c4da`; landed `fca48e4f`) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-31 | B10-10 (CLOSED, `0533c4da`; landed `96136014`) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-32 | B10-10 (CLOSED, `0533c4da`; landed `69fa08a7`) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-42 | B10-03 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-44 | B10-07 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-45 | DROPPED (was B10-15) | remediation item (home: `proposals/2026-10-21-v9-remediation/`); released by M18 (b): `min(3, history) + 3`, hash EQUAL, between CR-13 and CP-T07-02; DROPPED by the knowledge-model fold of 2026-11-04 (§2) |
