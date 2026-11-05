@@ -25,7 +25,7 @@ import vocabulary as V   # the token ALPHABET (ED-PC-0042) — a zero-import lea
 
 # ---------- logistic (single source, ED-PC-0025) ----------
 # The 1/(1+e^-x) squash was open-coded FIVE ways across the resolver (combat_systems.bind_dominance_p /
-# disrupt_resist_p / the two read-contest sites, contact.grab_outcome) — a §8 "every rule lives once"
+# disrupt_resist_p (since deleted, PC-11) / the two read-contest sites, contact.grab_outcome) — a §8 "every rule lives once"
 # violation AND an overflow hazard: a grossly out-of-contract net-sigma (e.g. an attribute/skill orders of
 # magnitude past the legal ceiling of 5) drives `exp(-x)` past the float range and CRASHES fight resolution
 # with OverflowError (combinatorial-audit finding: strength/skills=50000 -> 99/300 fights crash). Measured

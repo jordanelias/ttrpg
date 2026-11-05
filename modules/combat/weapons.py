@@ -18,10 +18,9 @@ RECORD SCHEMA (per weapon):
              forced 1-10 grappling-affinity scalar with zero readers; contact.py's grab_sigma derives grab
              affinity from free-hand availability + systems.leverage instead — see its docstring.)
              `hand_guard`/`blade_guard`
-             ARE WRITTEN IN EACH RECORD BELOW AS PLAIN LITERALS FOR READABILITY, but the bake loop at the bottom
-             of this file OVERWRITES both from weapon_physics.hand_guard()/blade_guard() (a saturating sum over
-             the record's own located `guards` — morphology-rearch Phase B4) — the literal here is a stale
-             pre-Phase-B4 pre-image, not the live value; do not hand-edit it expecting an effect.
+             are NOT authored in a record: the bake loop at the bottom of this file ADDS both from
+             weapon_physics.hand_guard()/blade_guard() (a saturating sum over the record's own located `guards` —
+             morphology-rearch Phase B4). PC-11 deleted the 54 pairs of stale pre-Phase-B4 literals the bake overwrote.
   COMPOSITE  wclass{bladed,hafted_tip,hafted_block} · hilt{compound,simple,none}
   PARTS      elements=[{x_m, mass_kg, extent_m, orient_deg, material, [edge_undulation]}] (the located striking
              element(s) — one for a plain blade/point/haft-tip, several for a composite head like the bec de
@@ -73,7 +72,7 @@ decision 4/6), not reconstructed here. `gap`/`geo` are DERIVED by the bake below
 
 WEAPONS = {
  'rapier': dict(
-   mass=1.368, head_len=0.96, grip_len=0.18, hands=1, head='point', hand_guard=0.9, blade_guard=0.45, reach_adj=0.15,
+   mass=1.368, head_len=0.96, grip_len=0.18, hands=1, head='point', reach_adj=0.15,
    wclass='bladed', hilt='compound',
    elements=[
      # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): blade 0.62->0.455kg, counterweight pommel 0.348->0.513kg
@@ -88,7 +87,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.18, mass_kg=0.513),
    geometry=dict(curvature=0.0, point_concentration=0.95, cross_section=0.52, edge_keenness=0.3, strike_concentration=0.0)),
  'arming': dict(
-   mass=1.2, head_len=0.72, grip_len=0.24, hands=1, head='cut_thrust', hand_guard=0.4, blade_guard=0.55, reach_adj=-0.1,
+   mass=1.2, head_len=0.72, grip_len=0.24, hands=1, head='cut_thrust', reach_adj=-0.1,
    wclass='bladed', hilt='simple',
    elements=[
      # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): blade 0.78->0.645kg, pommel 0.234->0.369kg (same
@@ -102,7 +101,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.24, mass_kg=0.369),
    geometry=dict(curvature=0.05, point_concentration=0.6, cross_section=0.72, edge_keenness=0.8, strike_concentration=0.0)),
  'longsword': dict(
-   mass=1.408, head_len=0.84, grip_len=0.255, hands=2, head='cut_thrust', hand_guard=0.45, blade_guard=0.85,
+   mass=1.408, head_len=0.84, grip_len=0.255, hands=2, head='cut_thrust',
    wclass='bladed', hilt='simple',
    elements=[
      # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): blade 0.87->0.755kg, pommel 0.3->0.415kg (same
@@ -121,7 +120,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.255, mass_kg=0.415),
    geometry=dict(curvature=0.0, point_concentration=0.8, cross_section=0.9, edge_keenness=0.8, strike_concentration=0.1)),
  'greatsword': dict(
-   mass=2.751, head_len=1.26, grip_len=0.39, hands=2, head='straight_cut', hand_guard=0.55, blade_guard=0.7, reach_adj=-0.05,
+   mass=2.751, head_len=1.26, grip_len=0.39, hands=2, head='straight_cut', reach_adj=-0.05,
    wclass='bladed', hilt='simple',
    elements=[
      # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): blade 1.75->1.414kg, pommel 0.548->0.884kg (same
@@ -137,7 +136,7 @@ WEAPONS = {
  # half-sword: the SHORTENED greatsword (working hand up on the ricasso/forte; the ricasso + parrying lugs are the
  # attested grip). Total length + mass conserved from the base. Auto-switched form (ED-PC-0016).
  'greatsword_halfsword': dict(
-   mass=2.751, head_len=0.6, grip_len=1.05, hands=2, head='point', hand_guard=0.4, blade_guard=0.45, reach_adj=-0.05,
+   mass=2.751, head_len=0.6, grip_len=1.05, hands=2, head='point', reach_adj=-0.05,
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.3, mass_kg=0.673, extent_m=0.6, orient_deg=0, material='steel'),  # free blade tip (forward of the new hand-on-blade grip point)
@@ -150,7 +149,7 @@ WEAPONS = {
    geometry=dict(curvature=0.0, point_concentration=0.72, cross_section=0.92, edge_keenness=0.5, strike_concentration=0.1),
    base='greatsword'),
  'sabre': dict(
-   mass=0.9, head_len=0.78, grip_len=0.21, hands=1, head='curved_cut', hand_guard=0.52, blade_guard=0.45, reach_adj=-0.1,
+   mass=0.9, head_len=0.78, grip_len=0.21, hands=1, head='curved_cut', reach_adj=-0.1,
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.39, mass_kg=0.53, extent_m=0.78, orient_deg=0, material='steel'),  # blade
@@ -162,7 +161,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.21, mass_kg=0.195),
    geometry=dict(curvature=0.42, point_concentration=0.45, cross_section=0.5, edge_keenness=0.9, strike_concentration=0.0)),
  'dagger': dict(
-   mass=0.274, head_len=0.21, grip_len=0.12, hands=1, head='cut_thrust', hand_guard=0.3, blade_guard=0.4,
+   mass=0.274, head_len=0.21, grip_len=0.12, hands=1, head='cut_thrust',
    wclass='bladed', hilt='none',
    elements=[
      dict(x_m=0.105, mass_kg=0.16, extent_m=0.21, orient_deg=0, material='steel'),  # blade
@@ -174,7 +173,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.12, mass_kg=0.021),
    geometry=dict(curvature=0.0, point_concentration=0.95, cross_section=0.84, edge_keenness=0.8, strike_concentration=0.0)),
  'paired_short': dict(
-   mass=0.698, head_len=0.42, grip_len=0.15, hands=1, head='cut_thrust', hand_guard=0.55, blade_guard=0.5, reach_adj=-0.5,
+   mass=0.698, head_len=0.42, grip_len=0.15, hands=1, head='cut_thrust', reach_adj=-0.5,
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.21, mass_kg=0.36, extent_m=0.42, orient_deg=0, material='steel'),  # blade
@@ -186,7 +185,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.15, mass_kg=0.202),
    geometry=dict(curvature=0.05, point_concentration=0.65, cross_section=0.72, edge_keenness=0.8, strike_concentration=0.0)),
  'spear': dict(
-   mass=2.004, head_len=1.65, grip_len=0.36, hands=2, head='point', hand_guard=0.1, blade_guard=0.2,
+   mass=2.004, head_len=1.65, grip_len=0.36, hands=2, head='point',
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=1.51, mass_kg=0.4, extent_m=0.28, orient_deg=0, material='steel/iron'),  # spearhead (leaf-shaped socketed point)
@@ -195,7 +194,7 @@ WEAPONS = {
    butt=dict(x_m=-0.36, mass_kg=0.25),
    geometry=dict(curvature=0.0, point_concentration=0.78, cross_section=0.82, edge_keenness=0.4, strike_concentration=0.0)),
  'staff': dict(
-   mass=1.478, head_len=0.84, grip_len=0.84, hands=2, head='blunt', hand_guard=0.15, blade_guard=0.3,
+   mass=1.478, head_len=0.84, grip_len=0.84, hands=2, head='blunt',
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=0.84, mass_kg=0.0, extent_m=0.0, orient_deg=0, material='wood'),  # working tip (blunt, no metal fitting — bare wood end)
@@ -203,7 +202,7 @@ WEAPONS = {
    haft=dict(x_m=0.0, mass_kg=1.478, extent_m=1.68),
    geometry=dict(curvature=0.0, point_concentration=0.05, cross_section=0.55, edge_keenness=0.0, strike_concentration=0.15)),
  'mace': dict(
-   mass=1.2, head_len=0.54, grip_len=0.21, hands=1, head='blunt', hand_guard=0.18, blade_guard=0.3,
+   mass=1.2, head_len=0.54, grip_len=0.21, hands=1, head='blunt',
    wclass='hafted_block', hilt='none',
    elements=[
      dict(x_m=0.486, mass_kg=0.95, extent_m=0.14, orient_deg=90, material='steel/iron'),  # flanged head (6-8 flanges, solid steel/iron block)
@@ -211,7 +210,7 @@ WEAPONS = {
    haft=dict(x_m=0.165, mass_kg=0.25, extent_m=0.75),
    geometry=dict(curvature=0.0, point_concentration=0.02, cross_section=0.85, edge_keenness=0.0, strike_concentration=0.45)),
  'poleaxe': dict(
-   mass=2.583, head_len=0.9, grip_len=0.9, hands=2, head='blunt', hand_guard=0.3, blade_guard=0.6, reach_adj=-0.05,
+   mass=2.583, head_len=0.9, grip_len=0.9, hands=2, head='blunt', reach_adj=-0.05,
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=0.85, mass_kg=0.55, extent_m=0.06, orient_deg=90, material='steel'),  # hammer face (front, blunt square/pyramidal-studded striking face)
@@ -232,7 +231,7 @@ WEAPONS = {
     ]),
  # half-sword: the SHORTENED longsword (mit dem kurzen Schwert) — one hand grips the blade. Auto-switched form.
  'longsword_halfsword': dict(
-   mass=1.408, head_len=0.42, grip_len=0.78, hands=2, head='point', hand_guard=0.35, blade_guard=0.25,
+   mass=1.408, head_len=0.42, grip_len=0.78, hands=2, head='point',
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.21, mass_kg=0.435, extent_m=0.42, orient_deg=0, material='steel'),  # blade tip segment (forward of the new working-hand point — the working point in half-sword grip)
@@ -245,7 +244,7 @@ WEAPONS = {
    geometry=dict(curvature=0.0, point_concentration=0.85, cross_section=0.95, edge_keenness=0.5, strike_concentration=0.1),
    base='longsword'),
  'yari': dict(
-   mass=1.23, head_len=1.86201, grip_len=0.28809, hands=2, head='point', hand_guard=0.12, blade_guard=0.12,
+   mass=1.23, head_len=1.86201, grip_len=0.28809, hands=2, head='point',
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=1.712, mass_kg=0.28, extent_m=0.3, orient_deg=0, material='steel'),  # main_point
@@ -256,7 +255,7 @@ WEAPONS = {
    haft=dict(x_m=0.787, mass_kg=0.9268, extent_m=2.1501),
    geometry=dict(curvature=0.0, point_concentration=0.88, cross_section=0.8, edge_keenness=0.32, strike_concentration=0.0)),
  'kama_yari': dict(
-   mass=1.4397, head_len=1.743, grip_len=0.2571, hands=2, head='cut_thrust', hand_guard=0.12, blade_guard=0.75, reach_adj=-0.1,
+   mass=1.4397, head_len=1.743, grip_len=0.2571, hands=2, head='cut_thrust', reach_adj=-0.1,
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=1.593, mass_kg=0.28, extent_m=0.3, orient_deg=0, material='steel'),  # main_point
@@ -277,7 +276,7 @@ WEAPONS = {
  # JD-5 (I0, D0): mass-model-only by design — the flank tines are pure bind/catch lugs (already carried as
  # dual_role guards below), not a distinct strike mode; no mode_elements authored.
  'dangpa': dict(
-   mass=1.8392, head_len=1.94799, grip_len=0.34191, hands=2, head='point', hand_guard=0.05, blade_guard=0.55,
+   mass=1.8392, head_len=1.94799, grip_len=0.34191, hands=2, head='point',
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=1.823, mass_kg=0.32, extent_m=0.25, orient_deg=0, material='iron'),  # center_prong
@@ -291,7 +290,7 @@ WEAPONS = {
    haft=dict(x_m=0.803, mass_kg=1.2892, extent_m=2.2899),
    geometry=dict(curvature=0.0, point_concentration=0.75, cross_section=0.78, edge_keenness=0.3, strike_concentration=0.0)),
  'bear_spear': dict(
-   mass=2.3502, head_len=1.92501, grip_len=0.12489, hands=2, head='point', hand_guard=0.12, blade_guard=0.45, reach_adj=-0.1,
+   mass=2.3502, head_len=1.92501, grip_len=0.12489, hands=2, head='point', reach_adj=-0.1,
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=1.75, mass_kg=0.46, extent_m=0.35, orient_deg=0, material='steel'),  # main_point
@@ -302,7 +301,7 @@ WEAPONS = {
    haft=dict(x_m=0.9001, mass_kg=1.8032, extent_m=2.0499),
    geometry=dict(curvature=0.0, point_concentration=0.55, cross_section=0.75, edge_keenness=0.5, strike_concentration=0.0)),
  'ranseur': dict(
-   mass=2.1503, head_len=1.88199, grip_len=0.21801, hands=2, head='cut_thrust', hand_guard=0.12, blade_guard=0.65,
+   mass=2.1503, head_len=1.88199, grip_len=0.21801, hands=2, head='cut_thrust',
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=1.672, mass_kg=0.48, extent_m=0.42, orient_deg=0, material='steel'),  # main_point
@@ -319,7 +318,7 @@ WEAPONS = {
  # JD-5 (I0, D0): mass-model-only by design — the side prongs are pure bind/catch wings (already carried as
  # dual_role guards below), not a distinct strike mode; no mode_elements authored.
  'spetum': dict(
-   mass=1.8, head_len=1.76001, grip_len=0.43899, hands=2, head='cut_thrust', hand_guard=0.2, blade_guard=0.4,
+   mass=1.8, head_len=1.76001, grip_len=0.43899, hands=2, head='cut_thrust',
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=1.55, mass_kg=0.32, extent_m=0.42, orient_deg=0, material='steel'),  # central spear point (langet-socketed triangular blade)
@@ -333,7 +332,7 @@ WEAPONS = {
    haft=dict(x_m=0.6605, mass_kg=1.42, extent_m=2.199),
    geometry=dict(curvature=0.0, point_concentration=0.72, cross_section=0.72, edge_keenness=0.55, strike_concentration=0.0)),
  'naginata': dict(
-   mass=1.35, head_len=1.08, grip_len=1.02, hands=2, head='cut_thrust', hand_guard=0.15, blade_guard=0.15,
+   mass=1.35, head_len=1.08, grip_len=1.02, hands=2, head='cut_thrust',
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=0.87, mass_kg=0.48, extent_m=0.42, orient_deg=0, material='steel'),  # nagasa (forged sword blade, saki-zori curved single edge)
@@ -342,7 +341,7 @@ WEAPONS = {
    butt=dict(x_m=-1.02, mass_kg=0.05),
    geometry=dict(curvature=0.5, point_concentration=0.45, cross_section=0.58, edge_keenness=0.85, strike_concentration=0.0)),
  'glaive': dict(
-   mass=1.84, head_len=1.11999, grip_len=0.98001, hands=2, head='curved_cut', hand_guard=0.2, blade_guard=0.35,
+   mass=1.84, head_len=1.11999, grip_len=0.98001, hands=2, head='curved_cut',
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=0.87, mass_kg=0.82, extent_m=0.5, orient_deg=0, material='steel'),  # leaf-shaped single-edge blade (socketed)
@@ -350,7 +349,7 @@ WEAPONS = {
    haft=dict(x_m=0.07, mass_kg=1.02, extent_m=2.1),
    geometry=dict(curvature=0.22, point_concentration=0.4, cross_section=0.65, edge_keenness=0.8, strike_concentration=0.0)),
  'guandao': dict(
-   mass=3.8, head_len=2.025, grip_len=0.375, hands=2, head='curved_cut', hand_guard=0.15, blade_guard=0.35,
+   mass=3.8, head_len=2.025, grip_len=0.375, hands=2, head='curved_cut',
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=1.53, mass_kg=1.75, extent_m=0.99, orient_deg=0, material='steel'),  # main dao blade (deep reclining-moon crescent, single edge)
@@ -376,7 +375,7 @@ WEAPONS = {
      dict(head='point', element_ref=1, geometry=dict(curvature=0.35, point_concentration=0.55, cross_section=0.72, edge_keenness=0.10, strike_concentration=0.10)),  # rear spike/hook notch
     ]),
  'podao': dict(
-   mass=2.48, head_len=1.59699, grip_len=0.22299, hands=2, head='curved_cut', hand_guard=0.1, blade_guard=0.1,
+   mass=2.48, head_len=1.59699, grip_len=0.22299, hands=2, head='curved_cut',
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=0.85, mass_kg=1.45, extent_m=1.494, orient_deg=15, material='steel'),  # dao_blade
@@ -384,7 +383,7 @@ WEAPONS = {
    haft=dict(x_m=0.687, mass_kg=1.03, extent_m=1.82),
    geometry=dict(curvature=0.3, point_concentration=0.35, cross_section=0.6, edge_keenness=0.85, strike_concentration=0.0)),
  'fauchard': dict(
-   mass=2.03, head_len=1.85151, grip_len=0.34851, hands=2, head='curved_cut', hand_guard=0.05, blade_guard=0.4,
+   mass=2.03, head_len=1.85151, grip_len=0.34851, hands=2, head='curved_cut',
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=0.95, mass_kg=0.65, extent_m=1.803, orient_deg=20, material='steel'),  # fauchard_blade
@@ -404,7 +403,7 @@ WEAPONS = {
      dict(head='point', element_ref=1, geometry=dict(curvature=0.40, point_concentration=0.60, cross_section=0.75, edge_keenness=0.05, strike_concentration=0.05)),  # back_hook_spike
     ]),
  'bardiche': dict(
-   mass=2.61, head_len=1.58799, grip_len=0.21201, hands=2, head='straight_cut', hand_guard=0.1, blade_guard=0.05, reach_adj=-0.1,
+   mass=2.61, head_len=1.58799, grip_len=0.21201, hands=2, head='straight_cut', reach_adj=-0.1,
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=0.85, mass_kg=1.75, extent_m=1.476, orient_deg=25, material='steel'),  # crescent_blade
@@ -415,7 +414,7 @@ WEAPONS = {
    haft=dict(x_m=0.688, mass_kg=0.8, extent_m=1.8),
    geometry=dict(curvature=0.2, point_concentration=0.18, cross_section=0.55, edge_keenness=0.85, strike_concentration=0.0)),
  'sparr_axe': dict(
-   mass=2.25, head_len=1.365, grip_len=0.135, hands=2, head='straight_cut', hand_guard=0.1, blade_guard=0.08, reach_adj=-0.15,
+   mass=2.25, head_len=1.365, grip_len=0.135, hands=2, head='straight_cut', reach_adj=-0.15,
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=0.75, mass_kg=1.15, extent_m=1.23, orient_deg=30, material='steel'),  # broad_axe_bit
@@ -423,7 +422,7 @@ WEAPONS = {
    haft=dict(x_m=0.615, mass_kg=1.1, extent_m=1.5),
    geometry=dict(curvature=0.15, point_concentration=0.1, cross_section=0.6, edge_keenness=0.85, strike_concentration=0.0)),
  'voulge': dict(
-   mass=2.18, head_len=1.85001, grip_len=0.15, hands=2, head='cut_thrust', hand_guard=0.2, blade_guard=0.35,
+   mass=2.18, head_len=1.85001, grip_len=0.15, hands=2, head='cut_thrust',
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=1.1, mass_kg=0.85, extent_m=1.5, orient_deg=30, material='steel'),  # cleaver_blade
@@ -440,7 +439,7 @@ WEAPONS = {
      dict(head='point', element_ref=1, geometry=dict(curvature=0.00, point_concentration=0.68, cross_section=0.78, edge_keenness=0.15, strike_concentration=0.00)),  # thrusting_heel_spike
     ]),
  'guisarme': dict(
-   mass=1.8663, head_len=1.03671, grip_len=1.06329, hands=2, head='cut_thrust', hand_guard=0.15, blade_guard=0.35,
+   mass=1.8663, head_len=1.03671, grip_len=1.06329, hands=2, head='cut_thrust',
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=0.6958, mass_kg=0.19, extent_m=0.32, orient_deg=60, material='steel'),  # hooked cutting blade
@@ -457,7 +456,7 @@ WEAPONS = {
      dict(head='point', element_ref=1, geometry=dict(curvature=0.00, point_concentration=0.80, cross_section=0.85, edge_keenness=0.00, strike_concentration=0.00)),  # reverse thrusting spike
     ]),
  'ji': dict(
-   mass=2.1, head_len=1.15449, grip_len=1.24551, hands=2, head='cut_thrust', hand_guard=0.25, blade_guard=0.75,
+   mass=2.1, head_len=1.15449, grip_len=1.24551, hands=2, head='cut_thrust',
    wclass='hafted_tip', hilt='none',
    elements=[
      dict(x_m=1.0345, mass_kg=0.15, extent_m=0.24, orient_deg=0, material='steel'),  # straight spearhead (thrusting point)
@@ -474,7 +473,7 @@ WEAPONS = {
      dict(head='curved_cut', element_ref=1, geometry=dict(curvature=0.45, point_concentration=0.05, cross_section=0.62, edge_keenness=0.75, strike_concentration=0.05)),  # perpendicular crescent (yueyadao) blade
     ]),
  'bec_de_corbin': dict(
-   mass=2.4534, head_len=0.86169, grip_len=0.93831, hands=2, head='blunt', hand_guard=0.3, blade_guard=0.15, reach_adj=-0.05,
+   mass=2.4534, head_len=0.86169, grip_len=0.93831, hands=2, head='blunt', reach_adj=-0.05,
    wclass='hafted_tip', hilt='none',
    # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): the hammer/beak/spike head was under-massed relative to
    # its own haft (0.58kg head vs poleaxe's comparable 1.18kg for the same head_len/grip_len shape) — a war-hammer
@@ -499,7 +498,7 @@ WEAPONS = {
      dict(head='point', element_ref=2, geometry=dict(curvature=0.00, point_concentration=0.88, cross_section=0.85, edge_keenness=0.00, strike_concentration=0.00)),  # top spike
     ]),
  'lucerne_hammer': dict(
-   mass=2.4834, head_len=0.86151, grip_len=0.93849, hands=2, head='blunt', hand_guard=0.05, blade_guard=0.15, reach_adj=-0.05,
+   mass=2.4834, head_len=0.86151, grip_len=0.93849, hands=2, head='blunt', reach_adj=-0.05,
    wclass='hafted_tip', hilt='none',
    # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): same under-massed-head correction as bec_de_corbin
    # (its own record, above) — the hammer/fluke/spike head scaled ~1.92x (0.70->1.344kg steel), haft correspondingly
@@ -519,7 +518,7 @@ WEAPONS = {
      dict(head='point', element_ref=2, geometry=dict(curvature=0.00, point_concentration=0.80, cross_section=0.88, edge_keenness=0.00, strike_concentration=0.00)),  # top spike
     ]),
  'goedendag': dict(
-   mass=1.796, head_len=0.99999, grip_len=0.20001, hands=2, head='blunt', hand_guard=0.1, blade_guard=0.15,
+   mass=1.796, head_len=0.99999, grip_len=0.20001, hands=2, head='blunt',
    wclass='hafted_block', hilt='none',
    elements=[
      dict(x_m=0.55, mass_kg=0.0, extent_m=0.9, orient_deg=0, material='wood'),  # tapering club body (extended wooden mass element)
@@ -532,7 +531,7 @@ WEAPONS = {
      dict(head='point', element_ref=1, geometry=dict(curvature=0.00, point_concentration=0.75, cross_section=0.88, edge_keenness=0.00, strike_concentration=0.00)),  # iron spike (tanged, thrusting point)
     ]),
  'katana': dict(
-   mass=1.025, head_len=0.64401, grip_len=0.32589, hands=2, head='curved_cut', hand_guard=0.35, blade_guard=0.28,
+   mass=1.025, head_len=0.64401, grip_len=0.32589, hands=2, head='curved_cut',
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.294, mass_kg=0.76, extent_m=0.7, orient_deg=0, material='steel'),  # blade (nagasa)
@@ -544,7 +543,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.3259, mass_kg=0.025),
    geometry=dict(curvature=0.2, point_concentration=0.6, cross_section=0.62, edge_keenness=0.85, strike_concentration=0.0)),
  'tachi': dict(
-   mass=1.105, head_len=0.71799, grip_len=0.34191, hands=2, head='curved_cut', hand_guard=0.3, blade_guard=0.3, reach_adj=0.05,
+   mass=1.105, head_len=0.71799, grip_len=0.34191, hands=2, head='curved_cut', reach_adj=0.05,
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.328, mass_kg=0.82, extent_m=0.78, orient_deg=0, material='steel'),  # blade (nagasa)
@@ -556,7 +555,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.3419, mass_kg=0.025),
    geometry=dict(curvature=0.35, point_concentration=0.5, cross_section=0.55, edge_keenness=0.85, strike_concentration=0.0)),
  'odachi': dict(
-   mass=2.075, head_len=1.116, grip_len=0.444, hands=2, head='cut_thrust', hand_guard=0.3, blade_guard=0.13, reach_adj=-0.05,
+   mass=2.075, head_len=1.116, grip_len=0.444, hands=2, head='cut_thrust', reach_adj=-0.05,
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.516, mass_kg=1.7, extent_m=1.2, orient_deg=0, material='steel'),  # blade (nagasa)
@@ -568,7 +567,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.444, mass_kg=0.03),
    geometry=dict(curvature=0.2, point_concentration=0.55, cross_section=0.62, edge_keenness=0.8, strike_concentration=0.0)),
  'tsurugi': dict(
-   mass=0.605, head_len=0.64101, grip_len=0.23919, hands=1, head='cut_thrust', hand_guard=0.3, blade_guard=0.4,
+   mass=0.605, head_len=0.64101, grip_len=0.23919, hands=1, head='cut_thrust',
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.299, mass_kg=0.43, extent_m=0.684, orient_deg=0, material='steel/iron (chokuto-era ferrous forging, pre-dating classic differential-hardening nihonto technique)'),  # blade
@@ -580,7 +579,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.2392, mass_kg=0.02),
    geometry=dict(curvature=0.0, point_concentration=0.6, cross_section=0.68, edge_keenness=0.8, strike_concentration=0.0)),
  'changdao': dict(
-   mass=1.475, head_len=1.18101, grip_len=0.76899, hands=2, head='cut_thrust', hand_guard=0.28, blade_guard=0.15, reach_adj=-0.05,
+   mass=1.475, head_len=1.18101, grip_len=0.76899, hands=2, head='cut_thrust', reach_adj=-0.05,
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.546, mass_kg=0.95, extent_m=1.27, orient_deg=0, material='steel'),  # blade
@@ -592,7 +591,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.769, mass_kg=0.03),
    geometry=dict(curvature=0.25, point_concentration=0.55, cross_section=0.7, edge_keenness=0.85, strike_concentration=0.0)),
  'nandao': dict(
-   mass=1.24, head_len=0.8178, grip_len=0.2772, hands=2, head='curved_cut', hand_guard=0.25, blade_guard=0.05, reach_adj=-0.1,
+   mass=1.24, head_len=0.8178, grip_len=0.2772, hands=2, head='curved_cut', reach_adj=-0.1,
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.3828, mass_kg=0.95, extent_m=0.87, orient_deg=0, material='steel'),  # blade
@@ -604,7 +603,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.2772, mass_kg=0.15),
    geometry=dict(curvature=0.3, point_concentration=0.35, cross_section=0.6, edge_keenness=0.85, strike_concentration=0.0)),
  'jian': dict(
-   mass=0.835, head_len=0.705, grip_len=0.24, hands=1, head='cut_thrust', hand_guard=0.25, blade_guard=0.25, reach_adj=-0.1,
+   mass=0.835, head_len=0.705, grip_len=0.24, hands=1, head='cut_thrust', reach_adj=-0.1,
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.33, mass_kg=0.6, extent_m=0.75, orient_deg=0, material='steel'),  # blade
@@ -619,7 +618,7 @@ WEAPONS = {
      dict(count=1, extent_m=0.35),  # pommel tassel (jianshui) — civilian/taijijian practice tradition, S2
     ]),
  'scimitar': dict(
-   mass=0.95, head_len=0.81219, grip_len=0.25281, hands=1, head='curved_cut', hand_guard=0.4, blade_guard=0.15, reach_adj=-0.05,
+   mass=0.95, head_len=0.81219, grip_len=0.25281, hands=1, head='curved_cut', reach_adj=-0.05,
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.3847, mass_kg=0.68, extent_m=0.855, orient_deg=0, material='steel'),  # blade
@@ -631,7 +630,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.2528, mass_kg=0.12),
    geometry=dict(curvature=0.55, point_concentration=0.3, cross_section=0.55, edge_keenness=0.9, strike_concentration=0.0)),
  'pulwar': dict(
-   mass=0.86, head_len=0.7254, grip_len=0.2496, hands=1, head='curved_cut', hand_guard=0.25, blade_guard=0.1, reach_adj=-0.1,
+   mass=0.86, head_len=0.7254, grip_len=0.2496, hands=1, head='curved_cut', reach_adj=-0.1,
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.3354, mass_kg=0.64, extent_m=0.78, orient_deg=0, material='steel'),  # blade
@@ -643,7 +642,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.2496, mass_kg=0.09),
    geometry=dict(curvature=0.6, point_concentration=0.25, cross_section=0.5, edge_keenness=0.9, strike_concentration=0.0)),
  'shamshir': dict(
-   mass=0.77, head_len=0.7371, grip_len=0.2679, hands=1, head='curved_cut', hand_guard=0.3, blade_guard=0.1, reach_adj=-0.05,
+   mass=0.77, head_len=0.7371, grip_len=0.2679, hands=1, head='curved_cut', reach_adj=-0.05,
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.3321, mass_kg=0.58, extent_m=0.81, orient_deg=0, material='steel'),  # blade
@@ -655,7 +654,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.2679, mass_kg=0.07),
    geometry=dict(curvature=0.7, point_concentration=0.08, cross_section=0.42, edge_keenness=0.95, strike_concentration=0.0)),
  'szabla': dict(
-   mass=0.95, head_len=0.8445, grip_len=0.2055, hands=1, head='cut_thrust', hand_guard=0.5, blade_guard=0.3,
+   mass=0.95, head_len=0.8445, grip_len=0.2055, hands=1, head='cut_thrust',
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.42, mass_kg=0.52, extent_m=0.849, orient_deg=0, material='steel'),  # blade
@@ -667,7 +666,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.2055, mass_kg=0.21),
    geometry=dict(curvature=0.3, point_concentration=0.6, cross_section=0.62, edge_keenness=0.9, strike_concentration=0.0)),
  'cinquedea': dict(
-   mass=0.8, head_len=0.36, grip_len=0.225, hands=1, head='cut_thrust', hand_guard=0.2, blade_guard=0.1, reach_adj=-0.4,
+   mass=0.8, head_len=0.36, grip_len=0.225, hands=1, head='cut_thrust', reach_adj=-0.4,
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.135, mass_kg=0.4, extent_m=0.45, orient_deg=0, material='steel'),  # blade
@@ -681,7 +680,7 @@ WEAPONS = {
  # JD-5 (I0, D0): mass-model-only by design — forte/tip/ricasso are one continuous edge (see file docstring),
  # not distinct strike modes; no mode_elements authored.
  'flamberge': dict(
-   mass=2.7001, head_len=1.20501, grip_len=0.44499, hands=2, head='cut_thrust', hand_guard=0.55, blade_guard=0.75, reach_adj=-0.05,
+   mass=2.7001, head_len=1.20501, grip_len=0.44499, hands=2, head='cut_thrust', reach_adj=-0.05,
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.3, mass_kg=0.8859, extent_m=0.75, orient_deg=0, material='steel', edge_undulation=dict(amplitude_mm=15.0, period_mm=90.0)),  # blade (flame-ground section, forte-to-mid)
@@ -699,7 +698,7 @@ WEAPONS = {
  # half-sword grip stop), so the plain distal tip projects forward while the flame-ground/waved section stays BEHIND the
  # hand (you grip the plain ricasso/forte, never the waves). Auto-switched form (ED-PC-0016).
  'flamberge_halfsword': dict(
-   mass=2.7001, head_len=0.455, grip_len=1.195, hands=2, head='point', hand_guard=0.4, blade_guard=0.5, reach_adj=-0.05,
+   mass=2.7001, head_len=0.455, grip_len=1.195, hands=2, head='point', reach_adj=-0.05,
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.23, mass_kg=0.4641, extent_m=0.45, orient_deg=0, material='steel'),  # free blade tip (plain distal section, forward of the Parierhaken grip point)
@@ -713,7 +712,7 @@ WEAPONS = {
    geometry=dict(curvature=0.0, point_concentration=0.72, cross_section=0.92, edge_keenness=0.5, strike_concentration=0.1),
    base='flamberge'),
  'estoc': dict(
-   mass=2.0, head_len=1.12449, grip_len=0.44451, hands=2, head='point', hand_guard=0.35, blade_guard=0.75, reach_adj=0.1,
+   mass=2.0, head_len=1.12449, grip_len=0.44451, hands=2, head='point', reach_adj=0.1,
    wclass='bladed', hilt='compound',
    elements=[
      dict(x_m=0.55, mass_kg=1.15, extent_m=1.149, orient_deg=0, material='steel', grippable=True),  # blade — the edgeless armoured-thruster blade is the archetypal half-sword grip zone (mit dem kurzen Schwert); grants the half-sword affordance emergently (P3/JD-3, ED-PC-0014)
@@ -727,7 +726,7 @@ WEAPONS = {
    geometry=dict(curvature=0.0, point_concentration=0.9, cross_section=0.95, edge_keenness=0.05, strike_concentration=0.0)),
  # half-sword: the SHORTENED estoc (mit dem kurzen Schwert on an edgeless armoured thruster). Auto-switched form.
  'estoc_halfsword': dict(
-   mass=2.0, head_len=0.39951, grip_len=1.16949, hands=2, head='point', hand_guard=0.25, blade_guard=0.5, reach_adj=0.1,
+   mass=2.0, head_len=0.39951, grip_len=1.16949, hands=2, head='point', reach_adj=0.1,
    wclass='bladed', hilt='compound',
    elements=[
      dict(x_m=0.2, mass_kg=0.4, extent_m=0.399, orient_deg=0, material='steel'),  # free blade tip (forward of the new hand-on-blade grip point)
@@ -741,7 +740,7 @@ WEAPONS = {
    geometry=dict(curvature=0.0, point_concentration=0.95, cross_section=0.95, edge_keenness=0.05, strike_concentration=0.0),
    base='estoc'),
  'falchion': dict(
-   mass=1.0, head_len=0.84051, grip_len=0.18549, hands=1, head='straight_cut', hand_guard=0.45, blade_guard=0.4, reach_adj=-0.1,
+   mass=1.0, head_len=0.84051, grip_len=0.18549, hands=1, head='straight_cut', reach_adj=-0.1,
    wclass='bladed', hilt='simple',
    elements=[
      dict(x_m=0.44, mass_kg=0.65, extent_m=0.801, orient_deg=0, material='steel'),  # blade
@@ -753,7 +752,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.1855, mass_kg=0.2),
    geometry=dict(curvature=0.15, point_concentration=0.3, cross_section=0.65, edge_keenness=0.85, strike_concentration=0.0)),
  'rondel': dict(
-   mass=0.35, head_len=0.24, grip_len=0.12, hands=1, head='point', hand_guard=0.55, blade_guard=0.12,
+   mass=0.35, head_len=0.24, grip_len=0.12, hands=1, head='point',
    wclass='bladed', hilt='none',
    elements=[
      dict(x_m=0.12, mass_kg=0.235, extent_m=0.24, orient_deg=0, material='steel'),  # blade
@@ -765,7 +764,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.12, mass_kg=0.02),
    geometry=dict(curvature=0.0, point_concentration=0.97, cross_section=0.85, edge_keenness=0.05, strike_concentration=0.0)),
  'main_gauche': dict(
-   mass=0.55, head_len=0.3, grip_len=0.135, hands=1, head='point', hand_guard=0.85, blade_guard=0.65, reach_adj=-0.2,
+   mass=0.55, head_len=0.3, grip_len=0.135, hands=1, head='point', reach_adj=-0.2,
    wclass='bladed', hilt='compound',
    elements=[
      dict(x_m=0.15, mass_kg=0.24, extent_m=0.3, orient_deg=0, material='steel'),  # blade
@@ -778,7 +777,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.135, mass_kg=0.04),
    geometry=dict(curvature=0.0, point_concentration=0.7, cross_section=0.75, edge_keenness=0.3, strike_concentration=0.0)),
  'stiletto': dict(
-   mass=0.22, head_len=0.27, grip_len=0.105, hands=1, head='point', hand_guard=0.2, blade_guard=0.05,
+   mass=0.22, head_len=0.27, grip_len=0.105, hands=1, head='point',
    wclass='bladed', hilt='none',
    elements=[
      dict(x_m=0.135, mass_kg=0.155, extent_m=0.27, orient_deg=0, material='steel'),  # blade
@@ -790,7 +789,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.105, mass_kg=0.012),
    geometry=dict(curvature=0.0, point_concentration=0.99, cross_section=0.9, edge_keenness=0.02, strike_concentration=0.0)),
  'misericorde': dict(
-   mass=0.28, head_len=0.3, grip_len=0.135, hands=1, head='point', hand_guard=0.15, blade_guard=0.03,
+   mass=0.28, head_len=0.3, grip_len=0.135, hands=1, head='point',
    wclass='bladed', hilt='none',
    elements=[
      dict(x_m=0.15, mass_kg=0.185, extent_m=0.3, orient_deg=0, material='steel'),  # blade
@@ -802,7 +801,7 @@ WEAPONS = {
    pommel=dict(x_m=-0.135, mass_kg=0.018),
    geometry=dict(curvature=0.0, point_concentration=0.96, cross_section=0.83, edge_keenness=0.1, strike_concentration=0.0)),
  'hook_sword': dict(
-   mass=0.75, head_len=0.45, grip_len=0.15, hands=1, head='curved_cut', hand_guard=0.55, blade_guard=0.75, reach_adj=-0.3,
+   mass=0.75, head_len=0.45, grip_len=0.15, hands=1, head='curved_cut', reach_adj=-0.3,
    wclass='bladed', hilt='compound',
    elements=[
      dict(x_m=0.225, mass_kg=0.38, extent_m=0.45, orient_deg=0, material='steel'),  # blade_with_hooked_tip
@@ -908,7 +907,7 @@ import weapon_physics as _wp
 for _w, _rec in WEAPONS.items():
     _rec['_derived'] = _wp.derive(_rec)
 
-# Bake hand_guard/blade_guard ONCE at import (morphology-rearch Phase B4): OVERWRITES the field with the DERIVED
+# Bake hand_guard/blade_guard ONCE at import (morphology-rearch Phase B4): ADDS both fields, the DERIVED
 # value from the record's located `guards` (weapon_physics.hand_guard/blade_guard — a saturating sum over
 # physical catch hardware, not a hand-authored scalar). Every consumer (systems.mode_sigma's parry/wind terms,
 # systems.bind_sigma's catch term, weapon_physics.defense_affinities' parry/wind) already reads w['hand_guard']/
