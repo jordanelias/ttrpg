@@ -31,7 +31,8 @@ from ..gaps import Unspecified
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
 from ..seam.wrappers import sigma
-from ..state.carriers import EFFORT, Act, Candidate, Person, Scene, effort_of
+from ..data.rosters import VERB_CAPABILITY
+from ..state.carriers import EFFORT, Act, Candidate, Claim, Person, Scene, effort_of
 
 AXIS = "grandiose_humble"
 RIVAL = "carry"                  # an uncontested verb: its pursuit term is never weighted by a chance
@@ -239,6 +240,12 @@ def test_the_believed_chance_on_a_real_world_rises_with_the_acts_effort():
     w = P.tiny_world(DEFAULT_FIXTURES)
     SeasonDriver(w)                                   # the registrar fills MODULE_ENTRIES
     p = w.persons["p_low"]
+    # REM-30's `verb_capability` row makes `argue` draw on the `argue` key, so a person hearer's opposition is a belief the
+    # roller must hold (none held -> no figure) and nothing deposits one in a built realm: the believer is handed it (score 4,
+    # an obstacle of 2.0, the module's own default for a hearer who holds no key).
+    p.ledger.append(Claim(id=f"c:{p.id}:{HEARER}", holder=p.id, subject=HEARER,
+                          predicate=sigma.CAPABILITY_CLAIM + VERB_CAPABILITY["argue"], value=4, when=0,
+                          source="told", confidence=5, visibility="own"))
     row = VERB_TABLE["argue"]
     bands = tuple(b for b, written in row.writes_by_degree.items() if written)
     got = []

@@ -1246,12 +1246,21 @@ def act_key(verb: str, subject, operands) -> str:
     seat riding in the operands under `VIA`; two of them share `(actor, verb, subject)`, so without it
     they would share an id and `state/acts.py` would refuse the second. Present only for such a
     Candidate -- a person with one seat carries no `VIA`, so every id is byte-identical to before.
+    ⚠ AND THE VOCATION, FOR A ROW THAT CARRIES ONE (`VOCATION_SOURCED`, v10 REM-30's `verb_capability`
+    rows). A `train` Candidate is formed once per vocation in `VOCATIONS` on the same subject, the
+    vocation riding on the `kind` operand (`decision/options.py::opening_set`); with one vocation they
+    shared nothing, with `copying`, `argue` and `inquiry` two chosen in one deliberation share
+    `(actor, verb, subject)` and `state/acts.py` refuses the second. Present only on a row `vocation_sourced`
+    names, so every other row's id is byte-identical to before.
     ONE OWNER for both minting sites: `decision/choose.py::pack_scenes` and
     `loop/deliberate.py::_qualify_by_round` (`04 PART D row 35`: purpose uniqueness is a
     convention, and this is where it is kept)."""
     key = "" if subject is None else str(subject)
     row = VERB_TABLE.get(verb)
     ops = operands if isinstance(operands, dict) else {}
+    voc = VOCATION_SOURCED.get(verb)
+    if voc is not None and ops.get(voc) is not None:
+        key += f"#{ops[voc]}"
     if row is not None:
         for n in row.known_person_operands():
             if ops.get(n) is not None:

@@ -29,12 +29,14 @@ from engine.season.loop.driver import SeasonDriver, resolvable_verbs
 from engine.season.state.carriers import Claim, Person
 from engine.season.state.ids import H, draw_factory
 
-# The parent tree's realm hash after 1 season (REM-31's commit `96136014`, `PYTHONHASHSEED=0`), read
-# before REM-30 touched anything. The OFF arm must reproduce these.
+# The parent tree's realm hash after 1 season (`PYTHONHASHSEED=0`), the arm off. The OFF arm must reproduce these.
+# RE-RECORDED at v10 REM-30's second commit (the `verb_capability` rows, a DECLARED MOVER): was, from REM-31's commit
+# `96136014` read before REM-30 touched anything, 36378f25... / 8899cdd5... / 048a326b... for seeds 0 / 1 / 2. CONTROL: this
+# commit's four source files reverted read the old three exactly (the first REM-30 commit's own run).
 PRE_BUILD = {
-    0: "36378f25df1387e3cf04163ec9c66a3c",
-    1: "8899cdd579525f8dd97644bdef2d0acf",
-    2: "048a326b0d2eeefa0dea30723c14a2a8",
+    0: "027c7516d23785bebdac6884119fdba8",
+    1: "5b0009306671179780d04981a7325df1",
+    2: "891860d455107e4e674e2f45bf977ae9",
 }
 
 

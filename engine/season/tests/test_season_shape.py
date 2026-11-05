@@ -12039,7 +12039,10 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # resolvable. The drop is still `['exchange', 'transfer']`. RE-DERIVED, not adjusted: the CR-26 tree (`59e5cf452`, a
     # detached worktree) lists 21 verbs before, and this tree the same 20 less `succeed`.
     # [GROUNDED: measured at v10 IN-61 -- (20, 18) as built, 21 before on the CR-26 tree; the one missing verb `succeed`]
-    assert (len(before), len(after)) == (20, 18), (
+    # ⚠ 20 -> 22 BEFORE AND 18 -> 20 AFTER, v10 REM-30 (the `verb_capability` rows): `train` forms one Candidate per vocation and
+    # `argue` and `inquiry` join `copying` in the range, so each list gains two `train` Candidates; the missing verbs and the drop
+    # are unchanged. CONTROL: the rows commit's four source files reverted read (20, 18) under this same test.
+    assert (len(before), len(after)) == (22, 20), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")
@@ -14405,7 +14408,9 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default():
     # (no deposits) barely moves and the two live arms fall. 1 >= 2 does NOT hold: see the `>=` block below, where the inversion
     # is recorded. CONTROL: the parent tree (`f4b74ffa`) reads the old 34/5, 34/8, 33/8 and passes; the in-process sweep of
     # `choice_temperature` back to 0.1 was not run for this pin.
-    assert (got["none"]["genuine"], got["none"]["diverged"]) == (33, 5), got
+    # v10 REM-30 (the `verb_capability` rows, a DECLARED MOVER): `none` diverged 5 -> 6, genuine 33 unmoved; the walk is another
+    # (`train`'s act id carries the vocation). CONTROL: the rows commit's four source files reverted read 33/5 here.
+    assert (got["none"]["genuine"], got["none"]["diverged"]) == (33, 6), got
     # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
     # ⚠ 14 of 18 -> 17 of 19 under `U4`: the sampled tie-break moved the act a fork's person takes,
@@ -14530,7 +14535,13 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default():
     # figure is wrong; they answer different questions, and the pinned pair above is the one
     # `19_PLAN.md` specifies.
     # [GROUNDED: measured 2026-09-11 under `U2`, NPC-088, seed 0, 4 seasons at 2 slots -- acts_differ/hash_differ 27/27 of 45 genuine at `none` and 24/24 of 40 at both live arms]
-    assert all(g["hash_differ"] == g["acts_differ"] for g in got.values()), (
+    # ⚠ v10 REM-30 (the `verb_capability` rows): THE ACT TRACE IS `(actor, verb)` PAIRS (`arm9_forking.py::run`, imported UNMODIFIED),
+    # and `train` now forms one Candidate per vocation, so a fork that makes a person take `train` in another vocation moves the log
+    # and not the pairs. One fork per arm does (9 v 8, 6 v 5, 6 v 5). MEASURED with the trace widened to `(actor, verb, subject, kind)`
+    # in a scratch copy of the probe: `acts_differ` == `hash_differ` in every arm (9/9, 6/6, 6/6), so the equality still holds where
+    # the trace can see the act. The gap is pinned, so a fork the log sees and the pairs do not is still one fork per arm and no more.
+    _TRAIN_KIND_GAP = {"none": 1, "actor": 1, "total": 1}
+    assert all(g["hash_differ"] - g["acts_differ"] == _TRAIN_KIND_GAP[m] for m, g in got.items()), (
         f"the event log and the act stream disagree about whether a fork bit: {got}. Every act "
         "that moved must move the log, or the fork is being applied to one and not the other")
     # ⚠⚠ **THE MAJORITY INVERTED UNDER `U3` AND THE CLAIM IS RESTATED, NOT RELAXED.** This
@@ -14684,7 +14695,15 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default():
         # 25%) at `actor` and 9/33 -> 6/22 (27% -> 27%) at `total`; `hash_differ` equals `acts_differ` in every arm. The floor above
         # (`5 * acts_differ > genuine`) holds in all three: 45 > 33, 30 > 24, 30 > 22. CONTROL: the parent tree (`f4b74ffa`) reads the
         # old (9, 34), (9, 34), (9, 33) and passes; the in-process sweep of the fixture back to 0.1 was not run for this pin.
-        "none": (9, 33), "actor": (6, 24), "total": (6, 22)}, (
+        # ⚠⚠ **RE-PINNED AT v10 REM-30 (the `verb_capability` rows, a DECLARED MOVER): `acts_differ` FELL BY ONE IN EVERY ARM AND THE
+        # POPULATIONS HELD.** `acts_differ/genuine` moves 9/33 -> 8/33 (27% -> 24%) at `none`, 6/24 -> 5/24 (25% -> 21%) at `actor` and
+        # 6/22 -> 5/22 (27% -> 23%) at `total`; `hash_differ` stays 9, 6, 6, so it now exceeds `acts_differ` by one fork per arm (the
+        # gap pinned above). The unit is `train`'s vocation, which the `(actor, verb)` act trace cannot see: the one fork per arm
+        # that makes a person train in another vocation moves the log and not the pairs. Measured in a scratch copy of the probe with
+        # the trace widened to `(actor, verb, subject, kind)`: 9/9, 6/6, 6/6 -- the OLD figures, and `acts_differ == hash_differ`.
+        # So the recoverability did not move; the instrument's blind spot did. The floor above holds: 40 > 33, 25 > 24, 25 > 22.
+        # CONTROL: the rows commit's four source files reverted read (9, 33), (6, 24), (6, 22) under this same test.
+        "none": (8, 33), "actor": (5, 24), "total": (5, 22)}, (
         f"the recoverability figures moved: {{k: (v['acts_differ'], v['genuine']) for k, v in got.items()}}. "
         "This is a RE-PIN DECISION, not necessarily a failure — but it is one somebody has to "
         "make deliberately, because `acts_differ / genuine` is how much of a fork the scene tick "
@@ -15041,7 +15060,8 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # v10 CP-T03-00: 34/4 -> 24/2, the sibling test's move (the fight's repair; its `(24, 2)` note).
     # v11 CR-28: 24/2 -> 34/5, the sibling test's move (the heard-of Proposition stamp; its `(34, 5)` note and its control).
     # v11 CR-17: 34/5 -> 33/5, the sibling test's move (`choice_temperature` 0.1 -> 0.05; its `(33, 5)` note and its control).
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (33, 5), got
+    # v10 REM-30: 33/5 -> 33/6, the sibling test's move (the `verb_capability` rows; its `(33, 6)` note).
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (33, 6), got
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
     # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject
