@@ -511,7 +511,7 @@ def test_vocabulary_guard_scope_is_the_whole_resolution_surface():
     """The guard above is only as good as its file list. Pin that every engine module which RESOLVES is
     either an owner or in scope — so a new resolution module cannot be added outside the guard silently.
     `weapons.py`/`combatant.py`/`geometry.py`/`traditions.py`/`tradition.py`/`ability_primitives.py`/
-    `state_graph.py`/`config.py` are DATA or registry modules and are listed here as the explicit,
+    `state_graph.py`/`config.py`/`attributes.py` are DATA or registry modules and are listed here as the explicit,
     reviewable exemption rather than left as an unstated gap."""
     NON_RESOLUTION = {'weapons.py', 'combatant.py', 'geometry.py', 'traditions.py', 'tradition.py',
                       'ability_primitives.py', 'state_graph.py', 'config.py', 'attributes.py'}

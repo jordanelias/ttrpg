@@ -307,17 +307,8 @@ CFG = dict(
   # is partly this clamp rather than pure physics. If the design ever wants upsets to be diegetic instead of a
   # scoreboard edit, the in-fight home for them is a critical-opening mechanic, not a post-hoc flip — Jordan's call.
 
-  # ── contact axis (I7b, D8/D9): grab affinity derives from free-hand availability + LEVERAGE ONLY —
-  # no hook-hardware term (JD-7 retraction: no primitive in the schema separates a pull-hook from a
-  # bind-lug — orient_deg interleaves pulls and binds; see contact.py's docstring). GRAB_SHORT_REACH_M
-  # (U0, ED-PC-0002: was GRAB_SHORT_REACH_LU=1.25 length-units; now 0.375 METRES — same threshold,
-  # honest unit + honest name) is a PRIMITIVE threshold (head_len, metres), not a name check: it clears
-  # the roster's dagger-class (head_len<=0.36) and excludes the next-shortest non-dagger record
-  # (paired_short / half-sworded 2H forms, head_len>=0.399) — the open-contact exemption for a weapon
-  # already functionally at grapple range. GRAB_STR_K >> GRAB_LEV_K*(leverage spread) so the grab reads
-  # strength-dominant (a gross-motor contest), unlike bind_sigma's tactile/technique lead. [SIM-CALIBRATE] all.
   # ── PC-15: thresholds lifted from wrapper.py / combat_systems.py literals (each was inline; values and meanings kept, so the
-  # module fingerprint is byte-identical). CLOSE_GAP_REF (above) is ALSO the one reach-gap threshold at the other three sites
+  # fingerprint's identity hash is unchanged; its CFG hash moves, seven keys being added). CLOSE_GAP_REF (above) is ALSO the one reach-gap threshold at the other three sites
   # (re-presentation gate, reopen, disengage): a reopened gap at or below it re-closes at the approach step, so "a gap worth
   # acting on" and the closed latch are one fact. DEEP_COMMIT: the commit depth at/above which a commit is DEEP (the Indes
   # steal, the displace-and-step-inside route, and the shorter fighter's over-commit reopen moment); it is also the anchor
@@ -328,6 +319,16 @@ CFG = dict(
   # CONTACT_*: the grapple branch effects, as multiples of the existing structure/initiative constants.
   DEEP_COMMIT=4.0, STAMINA_COLLAPSE=-4, BEAT_BUDGET=24, RIPOSTE_CAP=0.95,
   CONTACT_DISARM_POISE_K=2.0, CONTACT_THROW_POISE_K=3.0, CONTACT_CONTROL_VOR_K=0.5,
+
+  # ── contact axis (I7b, D8/D9): grab affinity derives from free-hand availability + LEVERAGE ONLY —
+  # no hook-hardware term (JD-7 retraction: no primitive in the schema separates a pull-hook from a
+  # bind-lug — orient_deg interleaves pulls and binds; see contact.py's docstring). GRAB_SHORT_REACH_M
+  # (U0, ED-PC-0002: was GRAB_SHORT_REACH_LU=1.25 length-units; now 0.375 METRES — same threshold,
+  # honest unit + honest name) is a PRIMITIVE threshold (head_len, metres), not a name check: it clears
+  # the roster's dagger-class (head_len<=0.36) and excludes the next-shortest non-dagger record
+  # (paired_short / half-sworded 2H forms, head_len>=0.399) — the open-contact exemption for a weapon
+  # already functionally at grapple range. GRAB_STR_K >> GRAB_LEV_K*(leverage spread) so the grab reads
+  # strength-dominant (a gross-motor contest), unlike bind_sigma's tactile/technique lead. [SIM-CALIBRATE] all.
   GRAB_SHORT_REACH_M=0.375, GRAB_STR_K=0.06, GRAB_LEV_K=0.5, GRAB_ESCAPE_P=0.25, GRAB_EDGE_K=0.07,   # GRAB_EDGE_K [U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022]: a live edge self-injures an unskilled bare-hand grab (weapon_physics.grab_hazard of the GRABBED weapon), mitigated by grab skill AND ability_factor 'edge_grab' (German Ringen am Schwert seizes a live blade safely — factor<1)
 )
 # HANDLE_RANK RETIRED (morphology-rearch Phase B6, 2026-07-02) — systems.str_demand now reads weapon_physics.

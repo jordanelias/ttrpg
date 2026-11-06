@@ -1,6 +1,6 @@
 """THE COMBAT ATTRIBUTE SPEC (PC-14) -- the one owner of which attributes a `Combatant` carries.
 
-A leaf: imports nothing. Each entry holds COMBAT FACTS ONLY:
+A leaf: imports only the standard library. Each entry holds COMBAT FACTS ONLY:
 
   key          : the engine's own attribute key (`c.history`, `c.attrs['history']`).
   default      : the value a fighter built without that attribute carries.

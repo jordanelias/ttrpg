@@ -55,8 +55,8 @@ class WoundTracker:
     crosses multiple gates at once (the decisive strike). Felled at Health depletion (D-A reshape).
     Wounds add a fractional Ob per wound (combat: ED-1041 bilateral WOUND_ATK_OB/WOUND_DEF_OB in
     config.py/systems.py) — NEVER a -1D pool cut (Jordan ruling 2026-07-08, ED-PC-0005, which
-    reversed PP-716's -1D and deleted the old pool_penalty() here). Persists between
-    encounters (cleared only at session end, per canon)."""
+    reversed PP-716's -1D and deleted the old pool_penalty() here). Damage is held on the tracker
+    and zeroed at the start of each fight (`wrapper.fight`)."""
 
     def __init__(self, end, equipment_health=0, spirit=3, strength=4):
         self.equipment_health = equipment_health
@@ -65,9 +65,9 @@ class WoundTracker:
 
     def rederive(self, end, spirit=3, strength=4):
         """Recompute the maxima (WI, Max Wounds, full Health) from the attributes (PC-14). Touches NO damage:
-        `cumulative_damage` is left as it stands, so a changed attribute never heals a wounded fighter (a fight's own
-        start zeroes it, in `wrapper.fight`)."""
-        self.end = end; self.spirit = spirit; self.strength = strength
+        `cumulative_damage` is left as it stands: damage taken is never erased by an attribute edit. The maxima are
+        recomputed, so `wounds`, `health_remaining` and `felled` are re-read against the kept damage (raising `end`
+        can lift a felled fighter, lowering it can fell one). A fight's own start zeroes the damage, in `wrapper.fight`."""
         self.wi = wound_interval(end, spirit)
         self.max_wounds = max_wounds(end)
         self.health_full = health_full(end, spirit, strength) + self.equipment_health
@@ -164,8 +164,8 @@ class Combatant:
     def rederive(self, cfg=None):
         """THE ONE DERIVATION PATH (PC-14): every figure derived from `attrs`, re-computed from the current values.
         Rebuilds the wound tracker's maxima (WI, Max Wounds, full Health) IN PLACE, PRESERVING `cumulative_damage` --
-        setting an attribute never heals a fighter; `wrapper.fight` zeroes the damage at its own start, because a fight
-        begins unwounded. Sets `stamina_max` (cfg-free) and `conc_max` (3*Focus+2*Spirit, ED-902, from `cfg`), and
+        damage taken is never erased by setting an attribute (the maxima move, so `felled` and `health_remaining` are
+        re-read against it); `wrapper.fight` zeroes the damage at its own start, because a fight begins unwounded. Sets `stamina_max` (cfg-free) and `conc_max` (3*Focus+2*Spirit, ED-902, from `cfg`), and
         clamps live Stamina and Concentration DOWN to the new maxima (never raises them). `cfg=None` re-uses the cfg
         of the last derivation, `config.CFG` until one is given. Writes no Health/WI/Max-Wounds mirror on the
         Combatant (PC-11 deleted those): the tracker owns them."""

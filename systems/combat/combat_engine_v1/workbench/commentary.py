@@ -146,7 +146,7 @@ def _beat(cur, outcome, cfg, wound_str):
     mech = [COMMIT_MECH[band].format(a=a, d=d, c=round(commit, 1))]
     if rw:
         mech.append(f"the read: {d} out-reads the attack ({round(rp*100)}% to read it) — so {d} picks the BEST defence (not a guess)" +
-                    (f", and since {a} committed deep, {d} can steal the initiative (Vor)" if commit >= 4 else ""))
+                    (f", and since {a} committed deep, {d} can steal the initiative (Vor)" if commit >= cfg['DEEP_COMMIT'] else ""))
     else:
         mech.append(f"the read: {a} hid the intent ({d} only had {round(rp*100)}% to read it) — {d} must pick a defence blind (random mode)")
     mech.append({'parry': "parry = deflect with the blade (wants hand-guard)",
