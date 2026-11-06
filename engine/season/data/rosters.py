@@ -1199,13 +1199,16 @@ if _orphan_seats:
         law="v9 IN-36 -- a seat of a faction with no foreign places seats nobody")
 del _orphan_seats
 #: The two foreign nations, by faction name (`rosters.yaml: foreign_factions`; R16). Not `FOREIGN_CAST`: that is the
-#: factions `build_realm(foreign=True)` seats, and Schoenland is not among them. Read by `harness/strife_data.py`.
+#: factions `build_realm(foreign=True)` seats, and Schoenland is not among them. Read as `FOREIGN_FACTION_IDS`, below.
 FOREIGN_FACTIONS = roster("foreign_factions")
 for _f in FOREIGN_FACTIONS:
     require_member(_f, FACTIONS, f"rosters.yaml `foreign_factions` names {_f!r}, which is not a faction",
                    "rosters.yaml -- foreign_factions", law="R16 -- a foreign nation is a faction first",
                    needs="a faction named in `names_index.yaml` (`token_class: faction`)")
 del _f
+#: The faction Proposition ids of `FOREIGN_FACTIONS` (the side read's `O`), derived as `FACTION_BY_PROP` is. Read by
+#: `queries/world_q.py` and `harness/strife_data.py`.
+FOREIGN_FACTION_IDS = frozenset(faction_prop_id(f) for f in FOREIGN_FACTIONS)
 
 # ---------------------------------------------------------------------------
 # THE `modules:` ROSTER (plan position `30`; A-25, `ED-IN-0284` revised by `ED-IN-0285`) -- THE ONE

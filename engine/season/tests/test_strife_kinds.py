@@ -89,23 +89,28 @@ def test_loader_refuses_a_malformed_block():
         R._load_strife_kinds({**base, "opens": base["opens"] + [base["opens"][0]]})             # a kind twice in one list
 
 
+def _homeless(registry, lists) -> dict:
+    """`{kind: [the lists of opens/joins/never holding it]}` for every registry kind NOT in exactly one of them:
+    the one predicate the test and its falsifier both read."""
+    out = {}
+    for k in sorted(registry):
+        homes = [n for n in DECIDED if k in lists[n]]
+        if len(homes) != 1:
+            out[k] = homes
+    return out
+
+
 def test_every_registry_kind_is_in_exactly_one_of_opens_joins_never():
     registry = {k for r in data.MOVES for k in r["kinds"]}
-    assert len(registry) >= 40     # the control: a registry that read empty would pass the loop below
-    checked = 0
-    for k in sorted(registry):
-        homes = [n for n in DECIDED if k in R.STRIFE_KINDS[n]]
-        assert len(homes) == 1, f"{k} is in {homes or 'none of'} opens/joins/never"
-        checked += 1
-    assert checked == len(registry)
+    assert len(registry) >= 40     # the control: a registry that read empty would pass the check below
+    assert _homeless(registry, R.STRIFE_KINDS) == {}
 
 
 def test_a_registry_kind_in_none_of_the_three_lists_is_seen():
-    # FALSIFIER of the test above: strike one registry kind from its list and the same reading finds the hole.
+    # FALSIFIER of the test above: strike one registry kind from its list and the same predicate finds the hole.
     registry = {k for r in data.MOVES for k in r["kinds"]}
     struck = {n: set(R.STRIFE_KINDS[n]) - {"tenure.opened"} for n in LISTS}
-    homes = [k for k in registry if not any(k in struck[n] for n in DECIDED)]
-    assert homes == ["tenure.opened"]
+    assert _homeless(registry, struck) == {"tenure.opened": []}
 
 
 def test_concludes_equals_the_rule_derived_over_the_registry():

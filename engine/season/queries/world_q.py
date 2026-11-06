@@ -52,7 +52,7 @@ from ..data.rosters import (
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
-    DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, FOUNDING_REMIT_ACTS, HOLDING_RECORD_KINDS,
+    DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, EVENT_KINDS, FOUNDING_REMIT_ACTS, HOLDING_RECORD_KINDS,
     RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
@@ -4231,19 +4231,18 @@ def practice(w: World, p: Person, verb: str) -> int:
 # ===========================================================================
 
 from ..data import affiliations as _aff
-from ..data.rosters import FOREIGN_FACTIONS, RECORD_KIND_KEYS, STRIFE_KINDS
-from ..state.attribution import actor_of  # noqa: F401 -- the doer's one owner; `causing_act(...).actor` is its body
+from ..data.requires import RECORD_SOURCED_OPERANDS
+from ..data.rosters import FOREIGN_FACTION_IDS, RECORD_KIND_KEYS, STRIFE_KINDS
+from ..state.attribution import actor_of  # noqa: F401 -- unused here; the no-act-store mutation test patches it (the body reads `causing_act`)
 from ..state.containment import home_map
-
-# The faction Proposition ids of `rosters.yaml: foreign_factions` (R16), the side read's `O`.
-FOREIGN_FACTION_IDS = frozenset(faction_prop_id(n) for n in sorted(FOREIGN_FACTIONS))
+from ..state.gate import PERSON_DIED
 
 # THE WORLD READING'S OPENERS BEYOND THE KIND LIST, one owner (`strife-01` §4, ratified with the kind list,
 # ED-IN-0316). Each kind is a `joins` kind at the person reading; the world reading, which has the act, the verb
 # and the side, opens on it in these cases only:
 #   * a `march.declared` whose marching faction is a challenger (R) or an outside power (O) -- `side_against`;
 #   * a `person.died` caused by one of `OPENING_DEATH_VERBS` (a lethal `fight`, KL or XE; an accepted duel, KL);
-#   * the SECOND of a `CONTENT_OPENING_KINDS` kind on one matter (`content_matter`): two claims on one seat, two
+#   * the SECOND of a `CONTENT_OPENING_KINDS` kind on one matter (`_content_matter`): two claims on one seat, two
 #     petitions on one matter (ruling 4: a lone claim or petition is civic life, the second is the movement).
 # NOT BUILT, AND WHY (CR-76's named gap): ruling 5's burden opener, a `dispensation.issued` whose terms are a
 # burden. `record_kinds: dispensation` keys `[terms, to, at]`; `terms` names a Person, a Record, a Rung or a
@@ -4251,11 +4250,13 @@ FOREIGN_FACTION_IDS = frozenset(faction_prop_id(n) for n in sorted(FOREIGN_FACTI
 # taxes exist is its design and Jordan's content).
 OPENING_MARCH_KIND = "march.declared"
 OPENING_MARCH_SIDES = frozenset({"R", "O"})
-OPENING_DEATH_KIND = "person.died"
+OPENING_DEATH_KIND = PERSON_DIED   # `state/gate.py`'s one spelling of the death kind
 OPENING_DEATH_VERBS = frozenset({"fight", "accept"})
 CONTENT_OPENING_KINDS = ("succession.claimed", "petition.filed")
 PETITION_RECORD_KIND = "petition"
-PETITION_MATTER_KEY = "terms"      # what a petition is about (`_eff_petition`: the act's `subject`)
+# What a petition is about: the content key its `subject` operand is read from (`rosters.yaml:
+# record_sourced_operands.petition.subject`; `_eff_petition` mints it from the act's `subject`).
+PETITION_MATTER_KEY = RECORD_SOURCED_OPERANDS[PETITION_RECORD_KIND]["subject"]
 for _k in (OPENING_MARCH_KIND, OPENING_DEATH_KIND, *CONTENT_OPENING_KINDS):
     if _k not in STRIFE_KINDS["joins"]:
         raise InstrumentDefect(f"world reading opener {_k!r} is not a `strife_kinds.joins` kind (CR-75's list)")
@@ -4296,7 +4297,10 @@ def side_against(attacker: Optional[str], gov: list, foreign=()) -> Optional[str
 
 def march_side(w: World, a, foreign=FOREIGN_FACTION_IDS) -> Optional[str]:
     """The side of a `march` act against the governors of the rung it marches on, or `None` (not a march, or no
-    side can be told). The act's `subject` operand is the rung marched on."""
+    side can be told). The act's `subject` operand is the rung marched on.
+    A STATED LIMIT: the governors are read from the LIVE `hold` tenures at reading time, not at the march's
+    tick, so a seizure after a march changes how the march reads (an `R` march can read `A` once the marcher
+    holds the rung). The real fix is to read the holds as they stood at the Event's tick (the log tick)."""
     if a is None or a.verb != "march":
         return None
     rung = a.payload.get("subject") if isinstance(a.payload, dict) else None
@@ -4382,6 +4386,19 @@ class _StrifeReading:
             return self.w.offices[x].rung
         return place_of(self.w, x, self.homes)
 
+    def place_known(self, x: Optional[str]) -> Optional[str]:
+        """The person reading's place: CONTAINMENT REFERENTS ONLY -- a person by `home_map`, an office by
+        `Office.rung`, a rung as itself. A record, a site or a date has no place here (`None`): `place_of`
+        reads a record's live holder, a site's rung and a date's venue, world state that moves with no claim
+        landing, and writes a TRACE row. The world reading keeps `place`."""
+        if x is None:
+            return None
+        if x in self.w.persons:
+            return self.homes.get(x)
+        if x in self.w.offices:
+            return self.w.offices[x].rung
+        return x if x in self.w.rungs else None
+
     def lowest_covering(self, places) -> Optional[str]:
         first, common = None, None
         for p in places:
@@ -4395,10 +4412,15 @@ class _StrifeReading:
         return next((r for r in first if r in common), None) if first is not None else None
 
 
-def move_referents(rd: _StrifeReading, e, a) -> frozenset:
-    """What a move NAMES: each change's subject (a Tenure's own id read as its two ends, the holder and the held,
-    H-71's reading), a document's `terms`, and the causing act's `subject` operand (a `march.declared` writes
-    nothing, so its target is read off the act). The realm rung is dropped: linking never passes through it."""
+def _move_referents(rd: _StrifeReading, e, a) -> frozenset:
+    """What a move NAMES: each change's subject, a document's `terms`, and the causing act's `subject` operand (a
+    `march.declared` writes nothing, so its target is read off the act). The realm rung is dropped: linking
+    never passes through it. A Tenure's own id is read as its two ends, the holder and the held, FOR EVERY
+    TENURE KIND -- wider than H-71's reading, which `epistemic.py` scopes to `hold` (the deposit rule reads any
+    other edge by its own id), so the world reading links through a `detain` or a `commit` edge's ends where a
+    witness's claims do not. An office is a referent like any other, the crown's included: its `Office.rung` is
+    the realm, which is dropped, but the office id is kept, so two moves naming the crown's seat link where two
+    naming the realm rung do not `[ASSUMPTION; medium; Jordan to correct]`."""
     out: set = set()
     for c in e.changes:
         s = c.subject
@@ -4420,7 +4442,7 @@ def move_referents(rd: _StrifeReading, e, a) -> frozenset:
     return frozenset(out - rd.realm)
 
 
-def content_matter(rd: _StrifeReading, e, a=None) -> Optional[tuple]:
+def _content_matter(rd: _StrifeReading, e, a=None) -> Optional[tuple]:
     """`(kind, matter)` for a content-opening kind (`CONTENT_OPENING_KINDS`), else `None`: the SEAT a
     `succession.claimed` opens a `hold` on, or the `terms` of the `petition` Record a `petition.filed` minted
     (read from `Record.subject_matter`: an Event cannot say "same matter", `strife-01` §4)."""
@@ -4470,7 +4492,10 @@ def _links(rd: _StrifeReading, m: Move, s: _Chain) -> bool:
     reading fills it from the act store (`causing_act(...).actor`, `actor_of`'s body), so there it links any two
     deeds of one doer. The person reading (`flows_known`) fills it from `Claim.doer`, which is only ever the
     holder's own id on his own act's deposits, so there the clause reduces to the one person-side remnant, two
-    of his own deeds, and reaches no act store (`04` §B.9). No parameter is needed to drop it."""
+    of his own deeds, and reaches no act store (`04` §B.9). No parameter is needed to drop it. A witness's
+    claims of two acts by one stranger still link, through the SHARED-REFERENT clause: each act-caused Event's
+    deposit names its actor, so both claims carry the actor's id as a referent -- a lawful same-doer effect
+    from what he saw, not a read of the act store."""
     if m.referents & s.refs:
         return True
     if any(rd.parent(r) in s.refs for r in m.referents) or (m.referents & s.parents):
@@ -4554,13 +4579,23 @@ def flows_in(w: World, terminal: Optional[Callable] = None) -> Flows:
     STRANDS. Moves are read in log order. A move linking to one or more strands joins them (merged, the oldest id
     kept: new events fold into existing flows, R3); a move linking to none starts a strand only if it opens one.
     A content opener's earlier same-matter moves that no strand holds are taken into the strand it opens (the
-    first petition belongs to the movement the second makes). A strand is read at the lowest rung covering its
-    moves (it zooms).
+    first petition belongs to the movement the second makes), whether the opener started a strand or linked to
+    one; and every other strand a taken earlier move links to is merged in, as `_attach` merges for the move
+    itself. A move that content-opens is an OPENING move and is never terminal, though its kind is in
+    `concludes` (a second petition starts the movement; it does not end it). A strand is read at the lowest rung
+    covering its moves (it zooms).
 
-    THE ERA. Every strand move in log order: the first opens the era; a terminal move at the realm rung (its place
-    is the realm) that is not the era's first move and leaves no open referent among the era's realm-rung moves
-    concludes it, freeing the realm's one slot; the next move opens a new era. `[ASSUMPTION; medium; revert: test
-    the era's every move]`: the open-referent test reads the realm-rung moves only, the era being read generally."""
+    A STATED LIMIT: a march's side (`march_side`) and every referent's parent (`_StrifeReading.parent`) are read
+    from the LIVE tenures at reading time, not as they stood at the move's tick, so a seizure after a march
+    changes how the march reads (whether it opens, what it links to). The real fix is a read at the log tick.
+
+    THE ERA. Every strand move whose place lies under the realm, in log order (a move on the foreign root, or with
+    no place, is never within an era, `strife-00` §4): the first opens the era; a terminal move at the realm rung
+    (its place is the realm) that is not the era's first move and leaves no open referent among the era's
+    realm-rung moves concludes it, freeing the realm's one slot; the next move opens a new era. `[ASSUMPTION;
+    medium; revert: in `_eras`, read the open-referent test over `cur` (the era's every move) instead of `top`
+    (its realm-rung moves)]`: the open-referent test reads the realm-rung moves only, the era being read
+    generally."""
     rd = _StrifeReading(w)
     term = terminal or default_terminal
     live: list = []
@@ -4572,24 +4607,29 @@ def flows_in(w: World, terminal: Optional[Callable] = None) -> Flows:
             continue
         a = causing_act(w, e)
         doer = a.actor if a is not None else None
-        refs = move_referents(rd, e, a)
+        refs = _move_referents(rd, e, a)
         place = rd.lowest_covering(rd.place(r) for r in refs) or rd.place(doer)
         opens = (e.kind in opens_kinds
                  or (e.kind == OPENING_MARCH_KIND and march_side(w, a) in OPENING_MARCH_SIDES)
                  or (e.kind == OPENING_DEATH_KIND and a is not None and a.verb in OPENING_DEATH_VERBS))
-        matter = content_matter(rd, e, a)
+        matter = _content_matter(rd, e, a)
         prior = earlier.setdefault(matter, []) if matter is not None else None
         content_opens = bool(prior)
-        m = Move(e.id, i, e.emitted_at, e.kind, doer, refs, place, opens or content_opens, bool(term(e, a)))
-        s0, linked = _attach(rd, live, m)
+        m = Move(e.id, i, e.emitted_at, e.kind, doer, refs, place, opens or content_opens,
+                 bool(term(e, a)) and not content_opens)
+        s0, _ = _attach(rd, live, m)
         if s0 is None:
             if prior is not None:
                 prior.append(m)
             continue
-        joining = [m] + ([p for p in prior if p.event not in held] if content_opens and not linked else [])
-        for mv in joining:
+        pulled = [p for p in prior if p.event not in held] if content_opens else []
+        for mv in [m] + pulled:
             s0.take(rd, mv)
             held.add(mv.event)
+        for p in pulled:
+            for s in [s for s in live if s is not s0 and _links(rd, p, s)]:
+                s0.absorb(s)
+                live.remove(s)
         if prior is not None:
             prior.append(m)
     strands = tuple(sorted((_strand_of(rd, s) for s in live), key=lambda s: s.moves[0].index))
@@ -4606,6 +4646,8 @@ def _eras(w: World, rd: _StrifeReading, strands: tuple) -> tuple:
                        tuple(dict.fromkeys(owner[m.event] for m in cur)), done))
 
     for m in sorted((m for s in strands for m in s.moves), key=lambda m: m.index):
+        if m.place is None or not rd.realm & set(rd.ancestry(m.place)):
+            continue                   # outside the realm (the foreign root) or placeless: never within an era
         cur.append(m)
         if len(cur) > 1 and m.terminal and m.place in rd.realm:
             top = [x for x in cur if x.place in rd.realm]
@@ -4712,9 +4754,11 @@ def incompatible_span(w: World, strand: Strand) -> bool:
 # ===========================================================================
 # STRIFE: THE PERSON READING (CR-77, workplan v11 batch B11-S3; design home `strife-00` §4 last paragraph, §5,
 # reference only). `flows_known(w, p)` and `concluded_known(w, p, strand)` read `p.ledger` and the containment
-# tree ONLY (`_StrifeReading`: `home_map`, `w.rungs`, `Office.rung`, and the `w.tenures` index it builds for
-# the world reading and this one never asks; and the cast
-# roster `w.persons`, to tell a person id from another referent); never the Event
+# tree ONLY (`_StrifeReading.place_known`: `home_map`, `w.rungs`, `Office.rung`; a record, site or date referent
+# has no place here, since `place_of` would read its live holder, rung or venue), the cast roster `w.persons`
+# (to tell a person id from another referent), and the `w.tenures` index for a referent's KIND only
+# (`open_referents_known`: is this id a restraint edge; ids and kinds never change, so no liveness is read);
+# never the Event
 # log and NEVER THE ACT STORE (`04` §B.9, "no person-side Query reaches it"; `01` AX-7: a character holds a
 # reading of the world, never the world). No consumer in the loop yet (CR-78's stamp is the first).
 #
@@ -4733,6 +4777,9 @@ def incompatible_span(w: World, strand: Strand) -> bool:
 #     ends, the act's `subject`), each a move with one referent, and a claim id does not say which Event it
 #     came from. They join one strand only when their subjects link, so he may read as two strands what the
 #     world reads as one (a `field.lost` naming two settlements in two duchies).
+#   * A witness's claims of two acts by one STRANGER still link: each act-caused Event's deposit names its actor
+#     (the anchor), so both claims share the actor's id as a referent and link through `_links`'s shared-referent
+#     clause -- a lawful same-doer effect from what he saw, not the same-doer clause and not the act store.
 #   * NAMED GAP (2), person-side attachment of a joining claim to a world-held strand (`strife-01` §6
 #     ruling 4): SETTLED, NOT ATTACHABLE TO THE WORLD'S STRAND. His reading holds no strand a content opener
 #     opened (no content opener is read here, and the world's strand is built from the act store). What a
@@ -4746,8 +4793,6 @@ def incompatible_span(w: World, strand: Strand) -> bool:
 #     list (`tests/test_strife_flows.py` pins both halves).
 # ===========================================================================
 
-from ..data.verbs import EVENT_KINDS
-
 # NAMED GAP (1), THE PERSON-SIDE OPEN-REFERENT TEST, settled by reading what each arm's emitters deposit
 # (`epistemic.claim_subjects`, shipped `both`: an act-caused Event names its ACTOR and each change's subject,
 # a `hold` edge read as its two ends and every other edge by its own Tenure id; the act's `subject` only when
@@ -4756,22 +4801,27 @@ from ..data.verbs import EVENT_KINDS
 #     the `detain` edge's own id, NEVER THE PRISONER (a `detain` edge is not read as its ends); `detention.ended`
 #     / `ban.ended` (`_eff_pardon`, one kind per closed edge) deposit the pardoner and the closed edge's id. The
 #     one subject the two share is the edge, so "on the same party" is, as a ledger holds it, on the same
-#     restraint: an `arrest.made` claim on a referent that is no person, with no later release claim on it.
+#     restraint: an `arrest.made` claim on a referent that is a restraint edge (a `RESTRAINT_KINDS` Tenure id,
+#     told by its kind and never by whether the arrester still lives), with no later release claim on it.
 #     A person subject of an arrest is its ARRESTER, who is not restrained, and is not read as one. A
 #     restraint a bench imposed earns only `matter.determined`, and a revocation's ban only `tenure.closed`:
 #     neither kind says a restraint opened, so neither is a source.
 #   * DOCKET -- DROPPED PERSON-SIDE, NO LEDGER SOURCE NAMES THE MATTER. `case.opened` (`_eff_open_case`) mints
 #     the case file, so it deposits the opener and the file, not the matter docketed; `petition.carried`
 #     (`_eff_carry`) re-stages the petition, so it deposits the carrier and the petition, not its `terms`;
-#     `matter.determined` deposits the judge and the disposal edge. No claim says WHICH referent is on a
-#     docket, and no opener and closer share a subject.
+#     `matter.determined` deposits the judge and the disposal edge. An OPENER is reachable by composition (a
+#     `petition.carried` claim on the petition plus the holder's `content:petition` claim, which names its
+#     `terms`); the arm is dropped because no CLOSING claim names the matter, so nothing he holds says the
+#     docket on it ended.
 #   * WAR -- DROPPED PERSON-SIDE, NO LEDGER SOURCE. `at_war` reads live `commit`s to a `WAR_MOOD` Proposition;
 #     the deposits of its making (`proposition.uttered`, `commitment.made`) name the Proposition and the
 #     actor and never its mood, and no claim kind says "war".
 # For the two dropped arms the person concludes on the terminal claim (and a live restraint) alone; no world
 # read is substituted.
 KNOWN_RESTRAINT_KINDS = frozenset({"arrest.made"})
-KNOWN_RESTRAINT_ENDED_KINDS = frozenset({"detention.ended", "ban.ended"})
+# The kinds a closed restraint earns: the `pardon` row's `emits:`, read off the table (`loop/effects_governance.py`
+# reads `_DETENTION_ENDED, _BAN_ENDED` the same way), so no kind is spelt twice.
+KNOWN_RESTRAINT_ENDED_KINDS = frozenset(VERB_TABLE["pardon"].emits)
 for _k in sorted(KNOWN_RESTRAINT_KINDS | KNOWN_RESTRAINT_ENDED_KINDS):
     if _k not in EVENT_KINDS:
         raise InstrumentDefect(f"person reading's open-referent kind {_k!r} is not an Event kind")
@@ -4793,7 +4843,7 @@ def _known_moves(rd: _StrifeReading, p: Person) -> list:
             continue
         refs = frozenset({c.subject}) - rd.realm
         doer = p.id if c.doer == p.id else None
-        place = rd.lowest_covering(rd.place(r) for r in refs) or rd.place(doer)
+        place = rd.lowest_covering(rd.place_known(r) for r in refs) or rd.place_known(doer)
         out.append(Move(c.id, i, c.when, c.predicate, doer, refs, place, c.predicate in opens_kinds,
                         c.predicate in CONCLUDING_KINDS))
     return out
@@ -4815,10 +4865,13 @@ def flows_known(w: World, p: Person) -> tuple:
 
 def open_referents_known(w: World, p: Person, referents) -> list:
     """The person-side A10 test, AS HIS LEDGER HOLDS IT (named gap (1), above): each referent he holds under a
-    live restraint, as `("restrained", x)` -- an `arrest.made` claim on `x`, `x` no person (the custody edge),
-    and no release claim on `x` landed after it. The docket and war arms have no ledger source and are
-    dropped. `w` is read for the cast roster only. Empty means no open referent he knows of remains."""
-    refs = frozenset(r for r in referents if r not in w.persons)
+    live restraint, as `("restrained", x)` -- an `arrest.made` claim on `x`, `x` a restraint edge (a Tenure id of
+    a `RESTRAINT_KINDS` kind: the custody edge), and no release claim on `x` landed after it. The docket and war
+    arms have no ledger source and are dropped. `w` is read for the tenure index only, and only for an id's kind
+    (immutable): never whether the edge, or anyone on it, is live. Empty means no open referent he knows of
+    remains."""
+    edges = {t.id: t for t in w.tenures}
+    refs = frozenset(r for r in referents if r in edges and edges[r].kind in RESTRAINT_KINDS)
     live: set = set()
     for c in _ledger_in_order(p):
         if c.subject not in refs or c.value is not True:

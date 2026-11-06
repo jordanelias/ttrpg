@@ -38,10 +38,9 @@ import sys
 from collections import Counter
 from typing import Callable, NamedTuple, Optional
 
-from ..data.rosters import BAN_KIND, DETAIN_KIND
+from ..data.rosters import BAN_KIND, DETAIN_KIND, STRIFE_KINDS
 from ..data.verbs import VERB_TABLE
 from ..loop.driver import resolvable_verbs
-from ..data.rosters import STRIFE_KINDS
 from ..queries import world_q
 # CR-76: the side read (`governors`, `side_against`) MOVED to `queries/world_q.py`, its one owner; re-exported
 # here so `strife.governors is world_q.governors` and the instrument's readers keep their names.
@@ -204,14 +203,30 @@ def terminal_for(w) -> Callable:
     return terminal
 
 
+def _single_code_runs(seq) -> list:
+    """`seq` (one strand's moves, each a list of its codes) split into RUNS of consecutive moves with exactly one code
+    each, as code sequences: a move with no code or several breaks the run, so two codes either side of it are
+    never read as adjacent."""
+    runs, cur = [], []
+    for codes in seq:
+        if len(codes) == 1:
+            cur.append(codes[0])
+        else:
+            runs.append(cur)
+            cur = []
+    runs.append(cur)
+    return [r for r in runs if len(r) > 1]
+
+
 def pair_profile(seqs, shuffles: int = 200, seed: int = 0) -> list:
-    """Adjacent code pairs over each strand's code sequence, against a SHUFFLED-ORDER CONTROL (each sequence's order
+    """Adjacent code pairs over each strand's moves (`seqs`: per strand, each move's list of codes), paired only
+    within a run of single-code moves (`_single_code_runs`), against a SHUFFLED-ORDER CONTROL (each run's order
     permuted `shuffles` times with a seeded `random.Random`): `[(pair, observed, control mean), ...]`, most observed
     first. A pair above its control is one the order produces, not the mix of codes."""
     import random
     rng = random.Random(seed)
     obs, ctl = Counter(), Counter()
-    for s in seqs:
+    for s in (run for seq in seqs for run in _single_code_runs(seq)):
         obs.update(zip(s, s[1:]))
         for _ in range(shuffles):
             t = list(s)
@@ -245,13 +260,12 @@ def strands_block(w, seed: int, resolvable=None) -> list:
                + ", ".join(f"{k} {arms[k]}" for k in (DETAIN_KIND, BAN_KIND, "at_war", "docketed")))
     slots, grouped = world_q.presented(w, fl)
     out.append(f"  presented: {sum(len(v) for v in slots.values())} in {len(slots)} rung(s); grouped {len(grouped)}")
-    seqs = [[c[0] for c in (move_codes(log_ix[m.event], rd) for m in s.moves) if len(c) == 1] for s in fl.strands]
-    prof = pair_profile([q for q in seqs if len(q) > 1])
+    prof = pair_profile([[move_codes(log_ix[m.event], rd) for m in s.moves] for s in fl.strands])
     out.append("  adjacent code pairs in strands, observed against the shuffled-order control (top 10):")
     for p, n, c in prof[:10]:
         out.append(f"    {p[0]}->{p[1]}  observed {n:>3}  control {c:6.2f}")
     if not prof:
-        out.append("    none (no strand holds two moves with one code each)")
+        out.append("    none (no strand holds two adjacent moves with one code each)")
     out.append("  the study's 16 links: NOT TRANSCRIBED (no file in the tree lists them); leave-and-rejoin unread")
     bare = routeless_pairs(MOVES, resolvable)
     out.append(f"  route check: {len(bare)} of {len(opening_routes(MOVES, resolvable))} (opening kind, terminal code) "

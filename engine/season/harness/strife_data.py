@@ -14,8 +14,7 @@ port, so its path is anchored here from `HARNESS_DIR` and `files.py` does not na
 from __future__ import annotations
 
 from ..data.files import HARNESS_DIR
-from ..data.rosters import load_yaml
-from ..queries.world_q import FOREIGN_FACTION_IDS
+from ..data.rosters import FOREIGN_FACTION_IDS, load_yaml
 from ..data.verbs import EVENT_KINDS, VERB_TABLE
 
 STRIFE_MOVES_YAML = HARNESS_DIR / "strife_moves.yaml"
@@ -35,7 +34,8 @@ def declared_kinds() -> frozenset:
 def load_moves(path=STRIFE_MOVES_YAML) -> tuple:
     """`(rows, signatures, foreign)` of `strife_moves.yaml`, validated, in file order. `foreign` is the set of
     faction Proposition ids of `rosters.yaml: foreign_factions` (CR-75 moved the list there from this file, so
-    `queries/world_q.py`, which may not import the harness, can read it; an unknown name is refused at load)."""
+    `queries/world_q.py`, which may not import the harness, can read it; an unknown name is refused at load),
+    read as `data/rosters.py::FOREIGN_FACTION_IDS`, its one derivation."""
     doc = load_yaml(path.read_text(encoding="utf-8"))
     rows, row_keys, needs_vocabulary = doc["moves"], set(doc["row_keys"]), set(doc["needs_vocabulary"])
     kinds, seen = declared_kinds(), set()

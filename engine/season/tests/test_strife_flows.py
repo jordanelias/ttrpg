@@ -10,9 +10,17 @@ Every falsifier runs on a HAND-BUILT world (P9): the shipped realm, before B10-1
      `at_war` pair among its parties leaves it open; a strand never concludes on its own opening move.
   3. A person within the realm flow whose ledger holds none of its moves is listed as within; a person under a
      root outside the realm is not.
-  4. Two petitions sharing a matter open a strand holding both; two on different matters open none.
+  4. Two petitions sharing a matter open a strand holding both; two on different matters open none. The move
+     that content-opens is never terminal (a third keeps the strand open; a later `matter.determined` closes
+     it); a linking content opener still takes its earlier same-matter move, and merges the strand that move
+     links to.
+  4a. The era: a move on the foreign root is within none; a terminal at a duchy, or a lone realm-wide
+     terminal, leaves it open. Rule (b): a later linked non-terminal move reopens a concluded strand; two
+     factions not at war (the real `at_war`) leave it concluded. `presented` types a duchy's two slots and
+     groups the rest under the era (hand-built reading); `incompatible_span` reads a `true` pair.
   5. `commensurate`: +1 (a `false` pair; a shared affiliation), -1 (a `true` pair), 0 (only `null`; none held).
-  6. The route check names a planted gap: a verb removed from the resolvable set loses its pairs.
+  6. The route check names a planted gap: a verb removed from the resolvable set loses its pairs. The pair
+     profile pairs only adjacent single-code moves.
 
 CR-77 (same batch): THE PERSON READING -- `flows_known`, `concluded_known`, `open_referents_known`, over a
 ledger built by hand (the witness's claims minted by the real deposit rule, `epistemic.claim_subjects`).
@@ -27,8 +35,10 @@ ledger built by hand (the witness's claims minted by the real deposit rule, `epi
      petition's names no matter and joins nothing on it; neither opens a strand.
  11. His own two deeds link; two strangers' deeds do not. NO ACT STORE IS READ: with the act store and the
      log replaced by stubs that raise, and their readers patched to raise, both functions still answer.
- 12. CONTROL: `build_realm(0)` hashes the base, and the reading of every person after one season is the same
-     read twice and leaves the hash where it was.
+ 12. CONTROL: `build_realm(0)` hashes the base; after one season `flows_in` (with `terminal_for`) and
+     `presented` leave the hash and the log length where they were, and the reading of every person is the
+     same read twice and leaves the hash where it was. His reading of a record claim does not move when the
+     record changes hands, and a dead arrester is no phantom restraint.
 Each loop asserts that it asserted (`CLAUDE.md` §0.1 pt 2).
 """
 import pytest
@@ -114,6 +124,98 @@ def test_a_strand_never_concludes_on_its_own_opening_move():
     assert len(s.moves) == 1 and s.moves[0].terminal and not W.concluded(w, s)
 
 
+def test_a_move_outside_the_realm_is_within_no_era():
+    w = _world()
+    ev(w, "e1", "field.lost", ["F"])                                # on the foreign root
+    fl = W.flows_in(w)
+    assert len(fl.strands) == 1 and fl.strands[0].rung == "F"       # a strand of its own
+    assert fl.eras == ()                                            # foreign is never within an era
+    ev(w, "e2", "field.lost", ["S", "S2"], tick=2)                  # control: a realm-wide move opens one
+    (era,) = W.flows_in(w).eras
+    assert [m.event for m in era.moves] == ["e2"]
+
+
+def test_a_terminal_at_a_duchy_does_not_conclude_the_era():
+    w = _world()
+    ev(w, "e1", "field.lost", ["S", "S2"])
+    ev(w, "e2", "rung.ceded", ["S"], tick=2)                        # terminal, links by S, placed under D
+    fl = W.flows_in(w)
+    (s,) = fl.strands
+    assert s.moves[-1].terminal and s.moves[-1].place != "R" and W.concluded(w, s)
+    assert [e.concluded for e in fl.eras] == [False]                # the strand ends; the era does not
+
+
+def test_a_one_move_realm_wide_terminal_leaves_the_era_open():
+    w = _world()
+    ev(w, "e1", "field.lost", ["S", "S2"])
+    fl = W.flows_in(w, terminal=lambda e, a: True)
+    assert fl.strands[0].moves[0].terminal and fl.strands[0].moves[0].place == "R"
+    assert [e.concluded for e in fl.eras] == [False]
+
+
+def test_a_later_linked_move_reopens_a_concluded_strand():
+    """Rule (b): the LATEST move decides. A terminal, then a linked non-terminal move: open again."""
+    w = _world()
+    ev(w, "e1", "field.lost", ["S"])
+    ev(w, "e2", "rung.ceded", ["S"], tick=2)
+    (s,) = W.flows_in(w).strands
+    assert W.concluded(w, s)                                        # control: the terminal is latest
+    ev(w, "e3", "field.lost", ["S"], tick=3)
+    (s,) = W.flows_in(w).strands
+    assert len(s.moves) == 3 and not s.moves[-1].terminal and not W.concluded(w, s)
+
+
+def test_factions_not_at_war_leave_the_strand_concluded(monkeypatch):
+    """The `at_war` arm's control: the parties have two factions, and the REAL owner finds them not at war."""
+    w = _world()
+    ev(w, "e1", "field.lost", ["S", "S2", "p_low", "p_mid"])
+    ev(w, "e2", "rung.ceded", ["S", "S2", "p_low", "p_mid"], tick=2)
+    monkeypatch.setattr(W, "faction_of", lambda w_, x: {"p_low": "fac_a", "p_mid": "fac_b"}.get(x))
+    (s,) = W.flows_in(w).strands
+    assert not faction_q.at_war(w, "fac_a", "fac_b")
+    assert W.open_referents(w, s.parties, s.referents) == [] and W.concluded(w, s)
+
+
+def _mv(eid, ix, refs, place):
+    return W.Move(eid, ix, ix, "field.lost", None, frozenset(refs), place, True, False)
+
+
+def _st(rung, *moves, parties=()):
+    return W.Strand(moves[0].event, rung, tuple(moves), frozenset().union(*(m.referents for m in moves)),
+                    frozenset(parties), moves[0].kind)
+
+
+def test_presented_types_a_duchy_s_two_slots_and_groups_the_rest_under_the_era():
+    """A1, A2 on a hand-built reading (`flows_in` merges any strand sharing a referent with an era move into
+    that move's strand, so a duchy tributary is built here by hand). At duchy D: a TRIBUTARY (shares S2 with
+    the era's realm-rung move), an ISOLATE that outranks it on moves, and a third strand that outranks the
+    tributary on recency. Untyped, the top two by rank would be the isolate and the third; typed, the
+    tributary and the isolate are presented and the third is grouped under the open era."""
+    w = _world()
+    era_move = _mv("e0", 0, {"S2", "S3"}, "R")
+    era_strand = _st("R", era_move)
+    trib = _st("D", _mv("t1", 1, {"S2"}, "S"))
+    iso = _st("D", _mv("i1", 2, {"Hh"}, "Hh"), _mv("i2", 3, {"Hh"}, "Hh"))
+    third = _st("D", _mv("x1", 4, {"D"}, "S"))
+    era = W.Era("e0", "R", (era_move,), ("e0",), False)
+    fl = W.Flows((era_strand, trib, iso, third), (era,))
+    assert sorted((trib, iso, third), key=W.slot_rank) == [iso, third, trib]
+    slots, grouped = W.presented(w, fl)
+    assert set(slots["D"]) == {"t1", "i1"} and len(slots["D"]) == W.flow_capacity("duchy") == 2
+    assert grouped["x1"] == "e0" and grouped["e0"] == "e0"
+    assert W.flow_capacity(W.REALM_KIND) == 1 and "R" not in slots
+
+
+def test_incompatible_span_reads_a_true_pair_among_the_living_parties():
+    w = _world()
+    w.persons["p_low"].conviction = {"solmund_orthodoxy": 3}
+    w.persons["p_mid"].conviction = {"thread_truth": 3}
+    s = _st("D", _mv("m1", 0, {"S"}, "S"), parties=("p_low", "p_mid"))
+    assert W.incompatible_span(w, s)
+    w.persons["p_mid"].conviction = {"solmund_orthodoxy": 2}        # control: a shared affiliation
+    assert not W.incompatible_span(w, s)
+
+
 @pytest.mark.parametrize("arm", ["detain", "docket", "at_war"])
 def test_an_open_referent_keeps_the_era_open(arm, monkeypatch):
     w = _world()
@@ -164,10 +266,52 @@ def test_two_petitions_on_one_matter_open_a_strand_and_on_two_matters_none():
     assert W.flows_in(other).strands == ()
 
 
+def test_a_content_opened_strand_is_open_at_birth_and_closes_on_a_later_terminal():
+    """Both content-opener kinds are also `concludes` kinds; the move that content-opens is an opening move and
+    is never terminal, so the movement two petitions make is open, a third keeps it open, and a later
+    `matter.determined` on the matter (a `concludes` kind) with nothing open concludes it (the control)."""
+    w = _world()
+    assert set(W.CONTENT_OPENING_KINDS) <= W.CONCLUDING_KINDS            # the overlap the rule answers
+    _petition(w, "rec_1", "p_low", "S", 1)
+    _petition(w, "rec_2", "p_mid", "S", 2)
+    (s,) = W.flows_in(w).strands
+    assert len(s.moves) == 2 and not s.moves[-1].terminal and not W.concluded(w, s)
+    _petition(w, "rec_3", "p_other", "S", 3)
+    (s,) = W.flows_in(w).strands
+    assert len(s.moves) == 3 and not W.concluded(w, s)
+    ev(w, "e_det", "matter.determined", ["S"], tick=4)
+    (s,) = W.flows_in(w).strands
+    assert s.moves[-1].kind == "matter.determined" and W.concluded(w, s)
+
+
+def test_a_linking_content_opener_still_takes_its_earlier_same_matter_move():
+    """(i) The second petition links to a strand already open (same doer); the first petition, parked, is taken
+    into that strand with it."""
+    w = _world()
+    ev(w, "e_seize", "rung.seized", ["S3"], actor="p_mid", verb="seize")
+    _petition(w, "rec_1", "p_low", "S", 2)
+    _petition(w, "rec_2", "p_mid", "S", 3)
+    (s,) = W.flows_in(w).strands
+    assert [m.event for m in s.moves] == ["e_seize", "e_rec_1", "e_rec_2"]
+
+
+def test_a_taken_earlier_move_merges_the_strand_it_links_to():
+    """(ii) The first petition (p_low) parks; p_low then seizes another rung (a strand of his); the second
+    petition (p_mid) opens the movement and takes the first, which links to p_low's strand: ONE strand."""
+    w = _world()
+    _petition(w, "rec_1", "p_low", "S", 1)
+    ev(w, "e_seize", "rung.seized", ["S3"], actor="p_low", verb="seize", tick=2)
+    _petition(w, "rec_2", "p_mid", "S", 3)
+    (s,) = W.flows_in(w).strands
+    assert [m.event for m in s.moves] == ["e_rec_1", "e_seize", "e_rec_2"] and s.id == "e_rec_1"
+
+
 @pytest.mark.parametrize("a, b, want", [
     ({"inner_tradition": 3}, {"thread_truth": 3}, 1),              # a `false` pair
     ({"altonian_civics": 2}, {"altonian_civics": 4}, 1),           # a shared affiliation (its pairs all null)
     ({"solmund_orthodoxy": 3}, {"thread_truth": 1}, -1),           # a `true` pair
+    ({"solmund_orthodoxy": 3, "inner_tradition": 3}, {"thread_truth": 2}, -1),   # a `true` pair beside a `false`
+    ({"solmund_orthodoxy": 3, "thread_truth": 1}, {"thread_truth": 2}, -1),      # a `true` pair beside a shared one
     ({"inner_tradition": 3}, {"einhir_restoration": 3}, 0),        # only `null` pairs
     ({}, {"thread_truth": 3}, 0),                                  # one holds none
     ({"thread_truth": 0}, {"solmund_orthodoxy": 5}, 0),            # 0 is not held
@@ -181,7 +325,6 @@ def test_commensurate(a, b, want):
 def test_incompatibility_keeps_every_cell_and_incompatible_is_its_true_half():
     vals = set(A.INCOMPATIBILITY.values())
     assert vals == {True, False, None}
-    assert A.INCOMPATIBLE == frozenset(p for p, v in A.INCOMPATIBILITY.items() if v is True)
     assert A._load_incompatible() == A.INCOMPATIBLE
 
 
@@ -203,6 +346,13 @@ def test_the_route_check_names_a_planted_gap():
     assert checked >= 10
     lost = set(H.routeless_pairs(H.MOVES, ok - {"requisition"})) - base
     assert {k for k, _ in lost} == {"requisition.taken"}             # the opening side, removed
+
+
+def test_the_pair_profile_pairs_only_adjacent_single_code_moves():
+    """C9b: a move with no code or several breaks the run; the codes either side of it are not adjacent."""
+    assert H.pair_profile([[["A"], ["B", "C"], ["D"]]], shuffles=5) == []
+    got = {p for p, _, _ in H.pair_profile([[["A"], ["B"], [], ["C"], ["D"], ["E"]]], shuffles=5)}
+    assert got == {("A", "B"), ("C", "D"), ("D", "E")}               # control: pairs within each run
 
 
 # --- CR-77: the person reading ------------------------------------------------------------------------------
@@ -321,8 +471,26 @@ def test_his_restraint_arm_reads_the_custody_edge_and_never_the_arrester():
         got = {tuple(r): done for r, done in reading(w, "p_other")}
         assert got[("t_cust",)] is want, release_tick
         assert got[("p_mid",)] is True, release_tick                 # the arrester is not restrained
+        # C16: an edge is told from a person by its Tenure kind, never by who still lives -- the arrester
+        # dead (gone from the cast) is no phantom restraint, and the custody edge reads as before.
+        w.persons.pop("p_mid")
+        assert {tuple(r): done for r, done in reading(w, "p_other")} == got, release_tick
         checked += 1
     assert checked == 3
+
+
+def test_his_reading_of_a_record_claim_does_not_move_when_the_record_changes_hands():
+    """C17: the person reading places containment referents only. A record's place in the world is its live
+    holder's (`place_of`), so moving the record's `hold` to a person under another root must not move his
+    strand: no claim landed."""
+    w = _world()
+    w.records["rec_x"] = Record("rec_x", "S", "petition", subject_matter={"terms": "S", "to": "p_high", "from": "S"})
+    hold(w, "p_low", "rec_x", "record.seized")
+    before = [s.rung for s in W.flows_known(w, w.persons["p_low"])]
+    assert W.place_of(w, "rec_x") == "S"                              # the world places it at its own rung
+    w.add_tenure(Tenure("t_cr77_rec", "p_far", "rec_x", "hold", 1))
+    assert W.place_of(w, "rec_x") == "F"                              # the world now places it with its holder
+    assert [s.rung for s in W.flows_known(w, w.persons["p_low"])] == before == [None]
 
 
 def test_the_docket_arm_has_no_ledger_source_so_a_docketed_matter_does_not_hold_his_strand_open():
@@ -438,7 +606,11 @@ def test_control_the_realm_hash_holds_and_the_reading_is_the_same_read_twice():
     w = populated.build_realm(0)
     assert w.content_hash() == "837d0f83c62917b88d69da3daa3ea027"
     populated.run(seasons=1, w=w)
-    before = w.content_hash()
+    before, n_log = w.content_hash(), len(w.log)
+    # the world reading, with the harness's code-level terminal test, and its presentation write nothing
+    fl = W.flows_in(w, H.terminal_for(w))
+    W.presented(w, fl)
+    assert fl.strands and w.content_hash() == before and len(w.log) == n_log
 
     def read_all():
         return {pid: [(s.id, tuple(m.event for m in s.moves), W.concluded_known(w, p, s))

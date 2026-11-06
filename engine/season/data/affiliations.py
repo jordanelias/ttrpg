@@ -72,7 +72,12 @@ def conviction_map(raw, where: str = "Person.conviction") -> dict:
 def _load_incompatible(cells: Optional[dict] = None) -> frozenset:
     """`tables.incompatible` as the set of pairs that strain: `frozenset({frozenset({a, b}), ...})`.
     The `true` cells of `_load_incompatibility`'s one pass; the refusals are that function's."""
-    return frozenset(p for p, v in _load_incompatibility(cells).items() if v is True)
+    return _true_pairs(_load_incompatibility(cells))
+
+
+def _true_pairs(incompatibility: dict) -> frozenset:
+    """The pairs whose cell is `true`: the one filter `INCOMPATIBLE` and `_load_incompatible` share."""
+    return frozenset(p for p, v in incompatibility.items() if v is True)
 
 
 def _load_incompatibility(cells: Optional[dict] = None) -> dict:
@@ -124,7 +129,7 @@ def _load_incompatibility(cells: Optional[dict] = None) -> dict:
 
 
 INCOMPATIBILITY = _load_incompatibility()
-INCOMPATIBLE = frozenset(p for p, v in INCOMPATIBILITY.items() if v is True)
+INCOMPATIBLE = _true_pairs(INCOMPATIBILITY)
 
 
 # ---------------------------------------------------------------------------

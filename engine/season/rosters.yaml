@@ -3073,8 +3073,10 @@ rosters:
       `strife_moves.yaml`; it carries that mark until the cross-check (A3, `strife-00` §10), and no step
       of the loop reads it before then.
       [ASSUMPTION; medium; Jordan to correct; revert: each of the five rulings of `strife-01` §6 reverses
-      alone by moving one kind between `opens` and `joins`, or striking one content opener; `concludes`
-      reverts by dropping the list, so a person's flow then concludes only by the open-referent test.]
+      alone by moving one kind between `opens` and `joins`, or striking one content opener; to revert
+      `concludes`, drop `concludes` from `values:`/`lists:` and drop the terminal conjunct in
+      `queries/world_q.py::concluded_known` (a code edit); with no concluding kinds no strand ever
+      concludes.]
     values: [opens, joins, never, concludes]   # the names of the four lists, in reading order
     lists:
       opens: [field.won, field.lost, rung.seized, rung.razed, record.seized, arrest.made, compliance.withheld,

@@ -53,8 +53,10 @@ other, which is the whole content of *"two modules; the second cannot import the
 `season/data/__init__.py` both record at length: an eager package import makes anything that wants
 one name pay for every registry the other module loads, and it silently removes the loaders' last
 external patch point. Within the package, `cache` imports `world_q` and `faction_q` imports
-`world_q` (reusing `members()` rather than re-deriving membership, §8) — both WORLD-FIRST modules
-reading another world-first module, never the direction §A.3 row 2 forbids: `person_q` still
+`world_q` (reusing `members()` rather than re-deriving membership, §8), and `world_q` reaches back
+into `faction_q` LAZILY, inside `open_referents` (`at_war`; a module-level import would be a cycle,
+since `faction_q` imports `world_q` at load) — all WORLD-FIRST modules reading another world-first
+module, never the direction §A.3 row 2 forbids: `person_q` still
 imports neither, and `test_person_q_cannot_reach_the_world_side` is what holds THAT half, which is
 the half that matters for T-f ("in one class, a person-side function calls a resolver-side one
 with no import to scan").
