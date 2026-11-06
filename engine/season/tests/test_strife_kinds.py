@@ -21,9 +21,10 @@ from collections import defaultdict
 import pytest
 
 from engine.season.data import rosters as R
-from engine.season.data.verbs import EVENT_KINDS, _check_strife_kinds
+from engine.season.data.verbs import EVENT_KINDS, VERB_TABLE, _check_strife_kinds
 from engine.season.gaps import Unspecified
 from engine.season.harness import strife_data as data
+from engine.season.queries import world_q as W
 
 LISTS = tuple(sorted(R.STRIFE_KINDS))      # the four lists, read off the loader and not spelled again
 DECIDED = tuple(n for n in LISTS if n != "concludes")   # opens, joins, never: a decision per kind
@@ -116,8 +117,39 @@ def test_mutation_requisition_taken_in_concludes_passes_the_import_check_and_fai
     assert mutated["concludes"] - derived == {"requisition.taken"}     # VI never ends a case
 
 
-def test_foreign_factions_live_in_the_roster_and_not_the_harness_file():
-    assert R.FOREIGN_FACTIONS == frozenset({"Altonia", "Schoenland"})
-    assert R.FOREIGN_FACTION_IDS == {R.faction_prop_id("Altonia"), R.faction_prop_id("Schoenland")}
-    doc = R.load_yaml(data.STRIFE_MOVES_YAML.read_text(encoding="utf-8"))
-    assert doc["moves"] and "foreign_factions" not in doc          # the file parsed, and holds no such key
+def test_foreign_faction_ids_are_the_roster_names_as_propositions():
+    assert R.FOREIGN_FACTION_IDS == {R.faction_prop_id(f) for f in R.FOREIGN_FACTIONS}
+
+
+# The world reading's openers (`world_q.check_strife_openers`, run at import on the shipped tables): each refusal
+# planted on the function, the shipped call as its control.
+def test_the_shipped_openers_pass_their_check():
+    W.check_strife_openers(R.STRIFE_KINDS["joins"], VERB_TABLE, R.RECORD_KIND_KEYS)
+
+
+def test_an_opener_kind_outside_joins_is_refused():
+    joins = R.STRIFE_KINDS["joins"] - {W.OPENING_MARCH_KIND}
+    with pytest.raises(Unspecified, match=W.OPENING_MARCH_KIND):
+        W.check_strife_openers(joins, VERB_TABLE, R.RECORD_KIND_KEYS)
+
+
+@pytest.mark.parametrize("verb", [W.OPENING_MARCH_VERB, *sorted(W.OPENING_DEATH_VERBS)])
+def test_an_opener_verb_outside_the_verb_table_is_refused(verb):
+    table = {k: v for k, v in VERB_TABLE.items() if k != verb}
+    with pytest.raises(Unspecified, match=f"'{verb}'"):
+        W.check_strife_openers(R.STRIFE_KINDS["joins"], table, R.RECORD_KIND_KEYS)
+
+
+def test_a_petition_record_without_its_matter_key_is_refused():
+    keys = {**R.RECORD_KIND_KEYS,
+            W.PETITION_RECORD_KIND: [k for k in R.RECORD_KIND_KEYS[W.PETITION_RECORD_KIND] if k != W.PETITION_MATTER_KEY]}
+    with pytest.raises(Unspecified, match=W.PETITION_MATTER_KEY):
+        W.check_strife_openers(R.STRIFE_KINDS["joins"], VERB_TABLE, keys)
+
+
+def test_an_empty_restraint_derivation_is_refused():
+    W.check_restraint_kinds(W.KNOWN_RESTRAINT_KINDS, W.KNOWN_RESTRAINT_ENDED_KINDS)     # the shipped call
+    with pytest.raises(Unspecified, match="restraint arm"):
+        W.check_restraint_kinds(frozenset(), W.KNOWN_RESTRAINT_ENDED_KINDS)
+    with pytest.raises(Unspecified, match="restraint arm"):
+        W.check_restraint_kinds(W.KNOWN_RESTRAINT_KINDS, frozenset())

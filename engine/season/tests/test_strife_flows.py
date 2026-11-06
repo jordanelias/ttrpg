@@ -585,9 +585,16 @@ def test_the_person_reading_reads_no_act_store(monkeypatch):
     witness(w, "p_low", e1)
     witness(w, "p_low", e2)
     hold(w, "p_low", "S4", "record.seized", when=3, doer="p_low")
+    # a custody edge he holds an arrest of: its referent is a RESTRAINT edge, so `open_referents_known` runs its
+    # ledger scan under the stubs (rung referents return before it)
+    w.add_tenure(Tenure("t_cust", "p_other", "off_duke", DETAIN_KIND, 1))
+    witness(w, "p_low", ev(w, "e_arrest", "arrest.made", ["t_cust"], actor="p_mid", verb="arrest",
+                           payload={"subject": "p_other"}))
+    hold(w, "p_low", "t_cust", "transfer.made", when=3)
     p = w.persons["p_low"]
     want = read_ids(w, p)
-    assert want                                                       # the stubs below meet a real reading
+    assert want and not all(done for _, _, done in want)              # the stubs below meet a real reading, one held open by the scan
+    assert W.open_referents_known(w, p, {"t_cust"}) == [("restrained", "t_cust")]
     monkeypatch.setattr(w, "acts", _NoStore())
     monkeypatch.setattr(w, "log", _NoStore())
     from engine.season.state import attribution

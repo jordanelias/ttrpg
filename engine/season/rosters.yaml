@@ -3065,19 +3065,21 @@ rosters:
                   and `ban.ended` map to AM; `field.won` and `field.lost` to WR; `tenure.closed` to BR;
                   `requisition.taken` to VI). Of those only `field.won` and `field.lost` conclude in the
                   world reading, which knows their code (WA) through the verb and side; the rest end no case
-                  in either reading. Derived over the opens and joins kinds, never
-                  hand-edited: the test re-derives it. Top-down the world sees a war end; bottom-up a
+                  in either reading. A hand-maintained list over the opens and joins kinds, checked
+                  by `tests/test_strife_kinds.py`'s re-derivation (it is red where the list and the rule
+                  disagree). Top-down the world sees a war end; bottom-up a
                   person who holds only a field's outcome may still doubt it.
       The checks at import: a kind in any list absent from `EVENT_KINDS`; a kind in more than one of
       opens, joins and never; a `concludes` kind outside opens and joins.
-      `concludes` derives from `ends` counts hand-read from the study and marked `[UNVERIFIED]` in
+      `concludes` is checked against `ends` counts hand-read from the study and marked `[UNVERIFIED]` in
       `strife_moves.yaml`; it carries that mark until the cross-check (A3, `strife-00` §10), and no step
       of the loop reads it before then.
       [ASSUMPTION; medium; Jordan to correct; revert: each of the five rulings of `strife-01` §6 reverses
       alone by moving one kind between `opens` and `joins`, or striking one content opener; to revert
-      `concludes`, drop `concludes` from `values:`/`lists:` and drop the terminal conjunct in
-      `queries/world_q.py::concluded_known` (a code edit); with no concluding kinds no strand ever
-      concludes.]
+      `concludes`, make it an empty derivation in code: a code edit at `Move.terminal`'s construction in
+      both readings (`queries/world_q.py::flows_in` and `_known_moves`) and in `_check_strife_kinds`. Dropping
+      `concludes` from `values:`/`lists:` raises a KeyError at import (`world_q` and `data/verbs.py` index it
+      directly). With no concluding kinds no strand ever concludes.]
     values: [opens, joins, never, concludes]   # the names of the four lists, in reading order
     lists:
       opens: [field.won, field.lost, rung.seized, rung.razed, record.seized, arrest.made, compliance.withheld,
@@ -3101,8 +3103,9 @@ rosters:
     note: >-
       The two foreign nations, external, functioning as spoilers and limits on the game world (Jordan,
       2026-11-04): the Altonian Empire and Schoenland. NOT `foreign_cast`: that row names the factions
-      `build_realm(foreign=True)` seats, and Schoenland is not among them. `harness/strife_data.py` reads
-      this for the side rule's `O` (a foreign faction, whatever it governs).
+      `build_realm(foreign=True)` seats, and Schoenland is not among them. `queries/world_q.py::side_against`
+      reads this, through `data/rosters.py::FOREIGN_FACTION_IDS`, for the side rule's `O` (a foreign faction,
+      whatever it governs).
     values: [Altonia, Schoenland]
 
   # ── v9 IN-27 (END-VICTORY; H-176, GD-1): THE ENDING VOCABULARY ────────────────────────────────────

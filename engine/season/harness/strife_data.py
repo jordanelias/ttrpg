@@ -16,6 +16,7 @@ from __future__ import annotations
 from ..data.files import HARNESS_DIR
 from ..data.rosters import load_yaml
 from ..data.verbs import EVENT_KINDS, VERB_TABLE
+from ..queries import world_q
 
 STRIFE_MOVES_YAML = HARNESS_DIR / "strife_moves.yaml"
 
@@ -62,7 +63,7 @@ def load_moves(path=STRIFE_MOVES_YAML) -> tuple:
     total = sum(r.get("ends", 0) for r in rows)
     if total != doc["study_cases"]:
         raise ValueError(f"strife_moves.yaml: per-code `ends` total {total}, not the study's {doc['study_cases']} cases")
-    sig_keys, sides = set(doc["signature_keys"]), set(doc["attacker_values"])
+    sig_keys, sides = set(doc["signature_keys"]), set(world_q.SIDES)
     sigs = doc.get("signatures", [])
     for g in sigs:
         unknown = set(g) - sig_keys

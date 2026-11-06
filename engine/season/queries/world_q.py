@@ -4248,7 +4248,7 @@ from ..state.gate import PERSON_DIED
 # Proposition, and none of the three keys tells a burden from a grant, so the opener rides CR-67 (B10-19: which
 # taxes exist is its design and Jordan's content).
 OPENING_MARCH_KIND = "march.declared"
-OPENING_MARCH_SIDES = frozenset({"R", "O"})
+OPENING_MARCH_VERB = "march"   # the verb whose act `march_side` reads
 OPENING_DEATH_KIND = PERSON_DIED   # `state/gate.py`'s one spelling of the death kind
 OPENING_DEATH_VERBS = frozenset({"fight", "accept"})
 PETITION_RECORD_KIND = "petition"
@@ -4286,14 +4286,30 @@ CONCLUDING_KINDS = STRIFE_KINDS["concludes"]
 # Every kind a strand can open on in the world reading, one list: the `opens` kinds, then the openers above (the
 # harness's route check reads it, so an opener added here cannot be left out of the check).
 OPENING_KINDS = (*sorted(OPENS_KINDS), OPENING_MARCH_KIND, OPENING_DEATH_KIND, *CONTENT_OPENING_KINDS)
-for _k in OPENING_KINDS[len(OPENS_KINDS):]:
-    if _k not in STRIFE_KINDS["joins"]:
-        raise InstrumentDefect(f"world reading opener {_k!r} is not a `strife_kinds.joins` kind (CR-75's list)")
-for _v in OPENING_DEATH_VERBS:
-    if _v not in VERB_TABLE:
-        raise InstrumentDefect(f"world reading opener verb {_v!r} is not in verb_table.yaml")
-if PETITION_MATTER_KEY not in (RECORD_KIND_KEYS.get(PETITION_RECORD_KIND) or ()):
-    raise InstrumentDefect(f"`record_kinds: {PETITION_RECORD_KIND}` no longer keys {PETITION_MATTER_KEY!r}")
+
+
+def check_strife_openers(joins, verb_table, record_keys) -> None:
+    """REFUSED AT IMPORT, `Unspecified` (as `check_aim_rules`): every opener beyond `opens` is a `joins` kind, every
+    opener verb (`OPENING_MARCH_VERB`, `OPENING_DEATH_VERBS`) is a row of `verb_table`, and the `petition` record
+    kind still keys `PETITION_MATTER_KEY`. Callable so a test can plant each refusal."""
+    for k in OPENING_KINDS[len(OPENS_KINDS):]:
+        if k not in joins:
+            raise Unspecified(
+                f"world reading opener {k!r} is not a `strife_kinds.joins` kind", "rosters.yaml -- strife_kinds",
+                needs=f"{k!r} in `joins`, or the opener dropped", law="CR-75 -- the world reading opens on joins kinds only")
+    for v in (OPENING_MARCH_VERB, *sorted(OPENING_DEATH_VERBS)):
+        if v not in verb_table:
+            raise Unspecified(
+                f"world reading opener verb {v!r} is not in verb_table.yaml", "verb_table.yaml",
+                needs=f"a `{v}` row", law="CR-75 -- an opener verb is a verb the table declares")
+    if PETITION_MATTER_KEY not in (record_keys.get(PETITION_RECORD_KIND) or ()):
+        raise Unspecified(
+            f"`record_kinds: {PETITION_RECORD_KIND}` no longer keys {PETITION_MATTER_KEY!r}", "rosters.yaml -- record_kinds",
+            needs=f"{PETITION_MATTER_KEY!r} among the `{PETITION_RECORD_KIND}` keys",
+            law="CR-75 -- the petition opener reads the matter off that key")
+
+
+check_strife_openers(STRIFE_KINDS["joins"], VERB_TABLE, RECORD_KIND_KEYS)
 
 
 def governors(w: World, rung: Optional[str]) -> list:
@@ -4310,6 +4326,16 @@ def governors(w: World, rung: Optional[str]) -> list:
     return out
 
 
+# THE SIDE LETTERS, one owner (`side_against` returns these and nothing else; `harness/strife_data.py` validates a
+# signature's `attacker` against `SIDES`): the authority acting, a challenger, an outside (foreign) power.
+SIDE_AUTHORITY = "A"
+SIDE_CHALLENGER = "R"
+SIDE_OUTSIDE = "O"
+SIDES = (SIDE_AUTHORITY, SIDE_CHALLENGER, SIDE_OUTSIDE)
+# The sides whose march opens a strand (the authority marching is not the trouble).
+OPENING_MARCH_SIDES = frozenset({SIDE_CHALLENGER, SIDE_OUTSIDE})
+
+
 def side_against(attacker: Optional[str], gov: list, foreign=FOREIGN_FACTION_IDS) -> Optional[str]:
     """`O` if `attacker` is a foreign faction (`foreign`, by default `rosters.yaml: foreign_factions`; a test may
     plant another set); else `A` if it is the nearest governor or a governor above
@@ -4317,10 +4343,10 @@ def side_against(attacker: Optional[str], gov: list, foreign=FOREIGN_FACTION_IDS
     if attacker is None:
         return None
     if attacker in foreign:
-        return "O"
+        return SIDE_OUTSIDE
     if not gov:
         return None
-    return "A" if attacker in gov else "R"
+    return SIDE_AUTHORITY if attacker in gov else SIDE_CHALLENGER
 
 
 def march_side(w: World, a) -> Optional[str]:
@@ -4329,7 +4355,7 @@ def march_side(w: World, a) -> Optional[str]:
     A STATED LIMIT: the governors are read from the LIVE `hold` tenures at reading time, not at the march's
     tick, so a seizure after a march changes how the march reads (an `R` march can read `A` once the marcher
     holds the rung). The real fix is to read the holds as they stood at the Event's tick (the log tick)."""
-    if a is None or a.verb != "march":
+    if a is None or a.verb != OPENING_MARCH_VERB:
         return None
     rung = a.payload.get("subject") if isinstance(a.payload, dict) else None
     return side_against(faction_of(w, a.actor), governors(w, rung))
@@ -4583,7 +4609,7 @@ WAR_MOOD = "WAR"
 
 
 def at_war(w: World, a: str, b: str) -> bool:
-    """`04:451`, verbatim signature and docstring: *"over live `commit`s to a WAR Proposition.
+    """`04` §B.10–§B.12, `:460`, verbatim signature and docstring: *"over live `commit`s to a WAR Proposition.
     NEVER a stored flag."* `D-48`: *"war is a `WAR` Proposition with an `utterer` (AX-6) plus
     `commit` edges owned by their subjects; `at_war` is a Query over the live ones ... There is no
     boolean between two factions to set, because there is no faction record to hold one."*
@@ -4910,8 +4936,19 @@ _ARREST = VERB_TABLE["arrest"]
 KNOWN_RESTRAINT_KINDS = frozenset(k for d, ks in _ARREST.emits_by_degree.items()
                                   if _ARREST.writes_by_degree.get(d) for k in ks)
 KNOWN_RESTRAINT_ENDED_KINDS = frozenset(VERB_TABLE["pardon"].emits)
-if not KNOWN_RESTRAINT_KINDS or not KNOWN_RESTRAINT_ENDED_KINDS:
-    raise InstrumentDefect("the person reading's restraint arm reads no kind off `arrest` or `pardon`")
+
+
+def check_restraint_kinds(opened, ended) -> None:
+    """REFUSED AT IMPORT, `Unspecified` (as `check_aim_rules`): the restraint arm reads at least one kind off each of
+    `arrest` and `pardon`. Callable so a test can plant an empty derivation."""
+    if not opened or not ended:
+        raise Unspecified(
+            "the person reading's restraint arm reads no kind off `arrest` or `pardon`", "verb_table.yaml -- arrest, pardon",
+            needs="an `arrest` degree that writes and emits, and a `pardon` that emits",
+            law="CR-75 -- an empty derivation would silence the arm, so it refuses")
+
+
+check_restraint_kinds(KNOWN_RESTRAINT_KINDS, KNOWN_RESTRAINT_ENDED_KINDS)
 
 
 def _ledger_in_order(p: Person, keep: Callable) -> list:
