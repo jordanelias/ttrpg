@@ -81,7 +81,7 @@ from traditions import TRADITIONS as _TRADITIONS
 # grounded technique: plain descriptive names, no period terms (ED-PC-0026), grade 'GENERIC', every value
 # [SIM-CALIBRATE]. All op '*': `ability_bonus` ('+') is read at two sites only (counter_success, anti_overcommit), so
 # an additive generic on these levers would never act. Six beneficial levers at x1.10 / x1.25 / x1.50 (edge_read's
-# refined tier REVISED to x1.40, see GENERIC_REVISED); choke_control
+# refined tier REVISED to x1.40, see GENERIC_LEVERS); choke_control
 # as a MITIGATOR at x0.90 / x0.75 / x0.55, because its site (combat_systems.legibility) ADDS the owner's gathered-pole
 # telegraph to the read the OPPONENT takes, so a factor below 1 helps its owner. facing_regime stays bare (geometry,
 # not this position; Jordan 2026-11-01).
@@ -92,47 +92,45 @@ from traditions import TRADITIONS as _TRADITIONS
 # tests/valoria/test_combat_lever_sign_safety.py. CFG['INIT_TEMPO_LEVER_K'] may STAY (with no 'tempo' ability the term
 # is exactly 0); deleting the key alone raises KeyError in combat_systems.init_emphasis_sigma, so delete the key and
 # that term together or not at all.
-GENERIC_LEVERS = (   # (lever, name stem, what the trained fighter does) — the square's lever order
-    ('visual',        'keen_eye',      "watches the opponent's whole body, so the coming action is seen earlier"),
-    ('precommit',     'reading_intent', "reads the attack in its preparation, before it is committed"),
-    ('tactile',       'blade_feel',    "feels the opponent's pressure and intent through blade contact in the bind"),
-    ('tempo',         'timing',        "acts in the opponent's slow moments and keeps the initiative once taken"),
-    ('balance',       'footing',       "keeps a stable, mobile base under footwork and pressure"),
-    ('edge_read',     'hidden_return', "uses a double or false edge to hide the line of the return cut"),
-    ('choke_control', 'quiet_gather',  "gathers up a long pole without telegraphing the shortened grip"),
+GENERIC_TIERS = ('basic', 'practiced', 'refined')   # tier k = 0, 1, 2
+# (lever, name stem, what the trained fighter does, the three tier factors) — the square's lever order. [SIM-CALIBRATE]
+# Beneficial levers x1.10 / x1.25 / x1.50; choke_control is a MITIGATOR (x0.90 / x0.75 / x0.55). edge_read's refined
+# tier is x1.40, REVISED from the plan's x1.50 under its falsifier ("a cliff: the tier is revised, not shipped"): the
+# site SUBTRACTS LEGIB_EDGELINE_K * edge_lines * factor from legibility, which at x1.50 and level 8 reads -0.316 on the
+# jian (the roster's worst case) and then scales the defender's read the wrong way; x1.40 keeps one generic off
+# combat_systems.legibility's floor (0.119 there). Stacking several is closed at that floor, not here.
+GENERIC_LEVERS = (
+    ('visual',        'keen_eye',       "watches the opponent's whole body, so the coming action is seen earlier", (1.10, 1.25, 1.50)),
+    ('precommit',     'reading_intent', "reads the attack in its preparation, before it is committed", (1.10, 1.25, 1.50)),
+    ('tactile',       'blade_feel',     "feels the opponent's pressure and intent through blade contact in the bind", (1.10, 1.25, 1.50)),
+    ('tempo',         'timing',         "acts in the opponent's slow moments and keeps the initiative once taken", (1.10, 1.25, 1.50)),
+    ('balance',       'footing',        "keeps a stable, mobile base under footwork and pressure", (1.10, 1.25, 1.50)),
+    ('edge_read',     'hidden_return',  "uses a double or false edge to hide the line of the return cut", (1.10, 1.25, 1.40)),
+    ('choke_control', 'quiet_gather',   "gathers up a long pole without telegraphing the shortened grip", (0.90, 0.75, 0.55)),
 )
-GENERIC_TIERS = (   # (name suffix, beneficial factor, mitigator factor) — tier k = 0, 1, 2. [SIM-CALIBRATE]
-    ('basic',     1.10, 0.90),
-    ('practiced', 1.25, 0.75),
-    ('refined',   1.50, 0.55),
-)
-GENERIC_MITIGATOR_LEVERS = frozenset({'choke_control'})
-# TIER REVISED, NOT SHIPPED (the plan's falsifier: "a generic with a cliff ... its tier is revised"). The plan set
-# edge_read's refined tier at x1.50, as for the other beneficial levers. edge_read's site SUBTRACTS
-# LEGIB_EDGELINE_K * edge_lines * factor from the aggressor's legibility, which has no lower bound: at level 8 the
-# worst case over the roster (a thrust, LEGIB_THRUST 0.80, by the double-edged jian, whose ornament also subtracts
-# LEGIB_DISTRACT_K * distraction = 0.0907) reads 0.80 - 0.0907 - 0.04 * 1.5**8 = -0.316. A negative legibility makes
-# the defender's read_d negative, and the defender's own visual / precommit factors then WORSEN it (measured against
-# a spear at edge_read L8: keen_eye_refined L0 -> L4 moved p_read 0.0259 -> 0.0021). The level-8 root on the jian is
-# 1.4325; x1.40 leaves 0.119 there (0.21 on a spear or rapier). basic and practiced stay at x1.10 / x1.25 (worst case
-# at level 8: 0.62 and 0.47). STACKING (a fighter knowing japanese, chinese or filipino together equips several
-# edge_read generics; factors multiply, so refined L8 plus practiced L1 is already past the root) is closed at the
-# SITE, not by a tier: combat_systems.legibility is floored at 0, byte-identical at default builds (roster minimum
-# 0.669), after which the defender's read levers go inert instead of harmful.
-GENERIC_REVISED = {('edge_read', 'refined'): 1.40}   # [SIM-CALIBRATE]; plan value x1.50
-_GENERIC_TRADITIONS = tuple(t for t in _TRADITIONS if t != 'none')
-assert len(_GENERIC_TRADITIONS) == len(GENERIC_LEVERS), "the Latin square needs as many traditions as levers"
-for _t, _trad in enumerate(_GENERIC_TRADITIONS):
-    for _k, (_suffix, _up, _down) in enumerate(GENERIC_TIERS):
-        _lever, _stem, _what = GENERIC_LEVERS[(_t + _k) % len(GENERIC_LEVERS)]
-        _name = f'{_stem}_{_suffix}'
-        assert _name not in ABILITIES, f"generic {_name!r} collides with an authored ability"
-        ABILITIES[_name] = dict(
-            tradition=_trad, grade='GENERIC', lever=_lever, op='*',
-            value=GENERIC_REVISED.get((_lever, _suffix),
-                                      _down if _lever in GENERIC_MITIGATOR_LEVERS else _up),   # [SIM-CALIBRATE]
-            desc=f"GENERIC ({_suffix}) {_lever} lever: {_what}. A calibration instrument, not a grounded technique "
-                 f"(PC-17, ED-PC-0059, provisional) [SIM-CALIBRATE]")
+
+
+def _generics():
+    """The 21 generics: tradition t receives (lever (t + k) mod 7, tier k) for k = 0, 1, 2. Raises, not asserts, so the
+    checks survive `python -O`: an eighth tradition or a name collision with an authored ability fails the import."""
+    traditions = [t for t in _TRADITIONS if t != 'none']
+    if len(traditions) != len(GENERIC_LEVERS):
+        raise ValueError("the Latin square needs as many traditions as levers")
+    out = {}
+    for t, trad in enumerate(traditions):
+        for k, suffix in enumerate(GENERIC_TIERS):
+            lever, stem, what, factors = GENERIC_LEVERS[(t + k) % len(GENERIC_LEVERS)]
+            name = f'{stem}_{suffix}'
+            if name in ABILITIES or name in out:
+                raise ValueError(f"generic {name!r} collides with an existing ability")
+            out[name] = dict(
+                tradition=trad, grade='GENERIC', lever=lever, op='*', value=factors[k],
+                desc=f"GENERIC ({suffix}) {lever} lever: {what}. A calibration instrument, not a grounded technique "
+                     f"(PC-17, ED-PC-0059, provisional) [SIM-CALIBRATE]")
+    return out
+
+
+ABILITIES.update(_generics())
 
 for _name, _a in ABILITIES.items():
     assert _a['tradition'] in _TRADITIONS, f"ability {_name!r} tags unknown tradition {_a['tradition']!r}"

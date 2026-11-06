@@ -44,7 +44,7 @@ killed, and only at the site it broke:
     pursuit_sigma: 12 failed each, the Agility 1 / Strength 1 probes among them
   · the tradition gate deleted from ability_primitives._invested: 75 failed (every live probe's untaught half)
   · edge_read's refined tier put back at the plan's x1.50 (it ships REVISED to x1.40, ability_primitives.
-    GENERIC_REVISED), WITH the floor in combat_systems.legibility removed: the single-generic cross-lever probe fails
+    GENERIC_LEVERS' edge_read row), WITH the floor in combat_systems.legibility removed: the single-generic cross-lever probe fails
     on its legibility half (a spear thrust at level 8 reads -0.225) and, with that half disabled, on its read half
     (keen_eye_basic lowers p_read 0.0273 -> 0.0266 -> ... against a spear at level 8); at x1.40 it passes
   · the floor `max(0.0, legib)` in combat_systems.legibility removed, tier at x1.40: the STACKED probe fails on its
@@ -500,12 +500,12 @@ def _stacked(weapon, levels):
 def test_stacked_edge_read_generics_are_floored_and_never_make_the_defender_worse():
     """STACKING (a review finding, PC-17 close six): factors multiply, so two edge_read generics (refined L8 with
     practiced L1 is already past the jian's root at a total factor of 17.7; refined L8 with practiced L8, used here,
-    is past the spear's and rapier's 20 as well) would drive legibility below 0 and invert the defender's read levers. combat_systems.legibility is floored at 0: the stacked build sits ON the floor, and the
-    defender's visual / precommit generics still never lower p_read as their level rises."""
+    is past the spear's and rapier's 20 as well) would drive legibility below 0 and invert the defender's read levers. combat_systems.legibility is floored
+    at 0: the stacked build sits ON the floor, and the defender's visual / precommit generics still never lower p_read
+    as their level rises."""
     checked = 0
     for weapon in THRUSTING_DOUBLE_EDGES:
-        levels = [8.0 if n.endswith('refined') else (8.0 if n.endswith('practiced') else 0.0)
-                  for n, _t in EDGE_READ_GENERICS]
+        levels = [8.0 if n.endswith(('refined', 'practiced')) else 0.0 for n, _t in EDGE_READ_GENERICS]
         agg = _stacked(weapon, levels)
         # the premise this probe licenses: the stack really is past the root (otherwise the floor is never exercised)
         unfloored = (CFG['LEGIB_THRUST'] - CFG['LEGIB_DISTRACT_K'] * WP.distraction(agg.w)
@@ -513,9 +513,7 @@ def test_stacked_edge_read_generics_are_floored_and_never_make_the_defender_wors
         assert unfloored < 0.0, (weapon, unfloored)
         assert S.legibility(agg, 3.0, CFG) == 0.0, (weapon, S.legibility(agg, 3.0, CFG))
         for d_ability, d_tradition in READ_GENERICS:
-            ps = [_p_read(_stacked(weapon, levels),
-                          Combatant('d', weapon='arming', tradition=d_tradition,
-                                    equipped=({} if dl <= 0.0 else {d_ability: dl})))
+            ps = [_p_read(_stacked(weapon, levels), _own(d_ability, d_tradition, dl, weapon='arming'))
                   for dl in LEVELS]
             assert ps == sorted(ps), f"defender's {d_ability!r} lowers p_read against a stacked edge_read {weapon}: {ps!r}"
             checked += 1
