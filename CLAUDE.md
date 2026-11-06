@@ -470,17 +470,17 @@ and its README's "all modules are stubs" line is stale — grep for the stubs.
 
 ## 8. Enforcement (where the gates live)
 
-- **Authoritative tier — CI** (`.github/workflows/valoria-ci.yml`, branch-protected `main`) — **the
-  unbypassable boundary.** Read the workflow for what actually gates; gates are grouped into blocking
-  and report-only jobs, so a job name is not a gate's name. `references/ci_checks_registry.yaml` is the
-  per-tool registry; each `role:` line defines what that tool's verb means.
+- **Authoritative tier — CI** (`.github/workflows/valoria-ci.yml`) — **the full-suite tier, NOT a
+  required check** (`main` has only a deletion rule; #564, #567 merged before green). Read the
+  workflow for what actually gates; gates are grouped into blocking and report-only jobs, so a job
+  name is not a gate's name. `references/ci_checks_registry.yaml` is the per-tool registry.
 - **Local tier — advisory accelerators.** One-time per clone: `git config core.hooksPath .githooks`.
   `.githooks/pre-commit` runs the SAME validators on staged files via
   `python tools/valoria_local.py --staged`. `.claude/settings.json` wires two PreToolUse hooks: the
   naming guard (BLOCKING, `sys.exit(2)`) on writes, and `tools/hook_md_sweep_guard.py` on Grep/Glob —
   which a `Bash` grep bypasses (`Bash(grep *)` is pre-approved), so it steers, not enforces.
   `tools/compliance_check.py`'s size caps are CI-side, so **local-green ≠ compliance-green**.
-  `git commit --no-verify` bypasses local; CI still enforces.
+  `git commit --no-verify` bypasses local; CI still runs.
 
 **Intended invariant: every rule lives once, in `tools/`, called by both CI and local hooks. Never
 re-implement a rule.** Known live violations, treated as bugs rather than propagated:

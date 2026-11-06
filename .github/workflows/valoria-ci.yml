@@ -11,7 +11,7 @@ concurrency:
   group: valoria-${{ github.ref }}
   cancel-in-progress: true
 
-# Enforcement model: this CI is the ONE authoritative tier (on branch-protected main).
+# Enforcement model: this CI is the ONE full-suite tier (a required check on main is NOT set; see CLAUDE.md §8).
 # Every gate is its own job that depends only on syntax-check, so a hiccup in one gate
 # can never silently skip another. The local tier (.githooks/pre-commit +
 # .claude/settings.json) calls the SAME tools/ci_*.py validators for fast feedback.
@@ -70,7 +70,7 @@ jobs:
   #
   # CONSEQUENCE: `valoria_local.py --staged` and this file are now two independently maintained
   # lists, and LOCAL-GREEN NO LONGER IMPLIES CI-GREEN. That asymmetry is acceptable only because CI
-  # is the unbypassable boundary (CLAUDE.md §8) — do not describe local-green as authoritative, and
+  # is the full-suite tier (CLAUDE.md §8) — do not describe local-green as authoritative, and
   # when you add a validator here, add it there in the same commit.
   #
   # NO FAIL-FAST. Each validator runs even if an earlier one failed, and the job

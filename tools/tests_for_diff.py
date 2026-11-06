@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """tests_for_diff.py -- which test suites a session's edits call for, and (with --run) run them.
 
-An INNER-LOOP ACCELERATOR, not a gate: CI runs everything and is the unbypassable boundary (`CLAUDE.md` section 8).
+An INNER-LOOP ACCELERATOR, not a gate: CI runs everything and is the full-suite tier (`CLAUDE.md` section 8).
 It reads the files this session changed (committed since the branch left `origin/main`, staged, unstaged,
 untracked) and prints the narrowest honest command:
 
