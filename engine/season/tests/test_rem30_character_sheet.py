@@ -39,9 +39,9 @@ from engine.season.state.ids import H, draw_factory
 # f2e5e265... / 0d25717b... / 05f065f4.... CONTROL: `data/cast.py::capability_of` stubbed to `{}` reads the old three exactly
 # (`test_cr33_lifepaths.py::BASE`), and the ordered (kind, id) event list equals the parent tree's at seeds 0 / 1 / 2.
 PRE_BUILD = {
-    0: "69783660ea3ca2163bd346ee7e29e711",
-    1: "d81d7a7377008ddbe4000624e259f4b2",
-    2: "9ab1a7492246bf0ae324f4c0cfb65bdf",  # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
+    0: "71ff6e9280dc1c8cdecaf6ff45b1e384",
+    1: "73af0d1e84a9616b6c57940afd2737eb",
+    2: "011a46052caacfd800bcf70598306bcb",  # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
 }
 
 

@@ -86,7 +86,7 @@ from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds, settle_record
 from engine.substrate import composition
 
-from ...data.rosters import VERB_CAPABILITY, VOCATION_ATTRIBUTE, roster
+from ...data.rosters import ESTIMATE_OUTCOMES, VERB_CAPABILITY, VOCATION_ATTRIBUTE, roster
 from ...gaps import Unspecified
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup);
@@ -100,6 +100,7 @@ from ...queries.inputs import Margin, SocialContestInput
 from ...queries.world_q import practice, proofs, reception
 from ...state.carriers import EFFORT, effort_of
 from ._entry import entry_for
+from .combat import PROVIDER as _BODY_PROVIDER, fight_estimate
 
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
 # (A-25), so the row says the social contest module runs its own prizes. Reached by that string only.
@@ -356,11 +357,11 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
     return _frame(fx, pool, opposition, 0.0, room_terms, effort)
 
 
-def _rolled_as(w: Any, act: Any) -> Optional[tuple]:
+def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
     """`(claimants, subject, room, examined)` exactly as the fold hands the act to `resolve`, or `None`
-    when the social roll does not deal it (an uncontested act, another subsystem's prize, a party
-    gap). The derivation is the fold's own: `loop/sides.py::_contests_of` and `::sides_of` and the prize
-    row's `heard_by:` for a contest; the verb's `graded_inquiries` route for an inquiry. `loop.sides` is
+    when `owner`'s roll does not deal it (an uncontested act, another provider's prize, a party
+    gap; `owner` is the social roll's unless `odds_of` asks for combat's). The derivation is the fold's
+    own: `loop/sides.py::_contests_of` and `::sides_of` and the prize row's `heard_by:` for a contest; the verb's `graded_inquiries` route for an inquiry. `loop.sides` is
     imported inside the function: `loop/` imports this package, so a module-level import would loop at
     import time. It imports nothing that imports `seam`, so it closes no cycle the census counts;
     `loop.resolve` would (`tests/valoria/test_import_cycle_game_state_npe.py`), which is why the
@@ -373,7 +374,7 @@ def _rolled_as(w: Any, act: Any) -> Optional[tuple]:
     contests = _contests_of(act, row)
     if contests:
         prize = _prize_row("contest", contests[0])
-        if prize is None or prize.get("provider") != _PROVIDER:
+        if prize is None or prize.get("provider") != owner:
             return None
         target = payload.get(row.opponent_operand() if row is not None else "subject")
         parties, subject, rung = sides_of(w, act, target, contests[0])
@@ -381,7 +382,7 @@ def _rolled_as(w: Any, act: Any) -> Optional[tuple]:
             return None
         return parties, subject, (rung if prize.get("heard_by") == BENCH else None), None
     route = GRADED_INQUIRIES.get(act.verb)
-    if route is not None and route.get("provider") == _PROVIDER:
+    if route is not None and route.get("provider") == owner:
         subject = payload.get("subject")
         return [act.actor], subject, None, subject
     return None
@@ -389,7 +390,8 @@ def _rolled_as(w: Any, act: Any) -> Optional[tuple]:
 
 def odds_of(w: Any, act: Any, *, believer: Any = None,
             believed_room: Optional[dict] = None) -> Optional[tuple]:
-    """`(F, P, S, O)` for the social roll `act` would deal, or `None`. READ-ONLY; nothing is rolled.
+    """`(F, P, S, O)` for the social roll `act` would deal, or, for a row whose prize provider is personal combat
+    (CP-T03-05), `(actor felled, subject felled, yielded, undecided)`; or `None`. READ-ONLY; no season draw and no write (a combat row's shares are SAMPLED, on a private rng).
 
     MODE (a), `believer=None`: the TRUE input -- `contest_input` over the act as the fold would hand it
     to `resolve`, the module's obstacle and `band_odds`. The shown number is the number the roll deals
@@ -413,7 +415,22 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
     `None` is also the answer where the social roll deals no dice for the act (see `_rolled_as`) or
     S27.4 refuses it.
 
-    Mode (b)'s one caller is `believed_chance` (CR-17): the chooser's pursuit term for a contested candidate."""
+    Mode (b)'s one caller is `believed_chance` (CR-17): the chooser's pursuit term for a contested candidate.
+
+    A ROW CONTESTING `the body` (CP-T03-05, MODE (a) ONLY) IS COMBAT'S, NOT THE SOCIAL ROLL'S: the answer is
+    `combat.fight_estimate`'s shares as `(actor felled, subject felled, yielded, undecided)`, sampled live on a
+    private rng (no season draw, nothing written), `None` for a refusal. They are the shares of the scene's
+    four endings, not the social roll's four bands, and the caller knows which it asked by the act's prize.
+    MODE (b) IS NOT BUILT for a fight: a believer's call falls through to the social roll below, which does
+    not deal the act, so `believed_chance` is `None` and the chooser's score is as it was (AQ-X1 (b)'s combat
+    term is not proposed here). No loop caller reaches mode (a): the display is the player's."""
+    if believer is None:
+        fought = _rolled_as(w, act, _BODY_PROVIDER)
+        if fought is not None:
+            if len(fought[0]) < 2:
+                return None
+            got = fight_estimate(w, fought[0][0], act.via, fought[0][1], act.verb)
+            return tuple(got[k] for k in ESTIMATE_OUTCOMES) if got["status"] == "ESTIMATED" else None
     called = _rolled_as(w, act)
     if called is None:
         return None

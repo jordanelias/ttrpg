@@ -78,9 +78,9 @@ from __future__ import annotations
 import random
 from typing import Any, Optional
 
-from ...data.rosters import WOUND_QUANTITIES
+from ...data.rosters import ESTIMATE_OUTCOMES, WOUND_QUANTITIES
 from ...decision import body_band_penalty
-from ...gaps import Unspecified
+from ...gaps import Forbidden, Unspecified
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup).
 from ...manifest.providers import provider
@@ -89,6 +89,8 @@ from ...state.ids import H
 from ._entry import entry_for
 
 _PROVIDER = "personal_combat"
+_PRIZE = "the body"                 # the prize row this provider deals (`rosters.yaml`)
+PROVIDER = _PROVIDER                # the name `odds_of` asks `_rolled_as` for (a prize row's `provider:`)
 
 
 def _probe() -> tuple:
@@ -149,6 +151,67 @@ def combat_input(w: Any, claimants: list) -> PersonalCombatInput:
         claimants=(a_id, b_id),
         ends=(party_end(w.persons[a_id], w.fixtures), party_end(w.persons[b_id], w.fixtures)),
         wound_quantities=tuple(WOUND_QUANTITIES))
+
+
+def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: str = "") -> dict:
+    """THE ODDS A FIGHT WOULD DEAL, SAMPLED LIVE (CP-T03-05; `-08` AM-C-02; MODE (a), THE PLAYER'S DISPLAY ONLY).
+
+    Builds the real `PersonalCombatInput` (`combat_input`, so the fight is the one `resolve` deals when it is AUTOMATED (a fight the player plays turn by turn can end undecided on his withdrawal, which the shares do not assume): the same
+    `end`s, and the module's lethal `terms` -- the record declares none yet, and `fight.py` falls back to
+    `wrapper.LETHAL_TERMS`), runs the module entry `estimate_samples` times, and returns the SHARES of the
+    four ways a scene can end, `actor_felled`, `subject_felled`, `yielded` and `undecided`, which sum to 1
+    (`status` `ESTIMATED`, beside the `samples` count). A refusal is `resolve`'s own dict (`PARTY-GAP`,
+    `ENGINE-UNAVAILABLE`). `via` and `verb` are accepted for the shape of the call and read by nothing today:
+    CP-T03-09 extends it with the `terms` its verb names, and CP-T04-08's `field_estimate` shares the fixture.
+
+    ⚠ THE RNG IS PRIVATE AND IS NOT A SEASON DRAW. It is built here from `H(world_seed, tick, actor,
+    "estimate")` and never from `w.new_draw()` or the driver's generator, so the call reads `World` and writes
+    nothing: `content_hash` is the same with it and without it, and the display is the same on every ask in a
+    tick (a shown figure that moved on re-asking would be noise, not the odds). The fights are NOT the ones the
+    fold will deal -- `resolve` seeds its own scene from the causing act -- so the shares are the distribution
+    the scene is drawn from, not a forecast of the scene dealt."""
+    claimants = [actor, target]
+    pa, pb = w.persons.get(actor), w.persons.get(target)
+    if pa is None or pb is None or actor == target:
+        return dict(status="PARTY-GAP", why=f"personal combat needs two persons; got {actor!r} / {target!r}",
+                    module=_PROVIDER)
+    n = w.fixtures.get("estimate_samples")
+    if isinstance(n, bool) or not isinstance(n, int) or n < 1:
+        raise Forbidden(f"`estimate_samples` must be a whole number of at least 1; got {n!r}",
+                        "H-251", law="a sampler of no fights has no shares, and shares of a fraction of one are not shares")
+    entry, refusal = entry_for(_PRIZE, _PROVIDER)
+    if entry is None:
+        return refusal
+    inp = combat_input(w, claimants)
+    # `H` returns a blake2b hexdigest, so 16 is the radix that parses it back (as in `resolve`'s seed).
+    # [JUSTIFIED: radix for parsing H()'s hex digest, not a mechanical constant]
+    rng = random.Random(int(H(w.world_seed, w.tick, actor, "estimate"), 16))
+    tally = dict.fromkeys(ESTIMATE_OUTCOMES, 0)
+    for _ in range(n):
+        got = entry.fn(inp, rng)
+        # ⚠ THE FELLING IS READ OFF THE TRACKERS, NEVER OFF `result`'s SIGN (`ladder.party_degree`: "the bands read
+        # `felled`, never `result`"). `wrapper.fight` flips `result` after the scene in `UPSET_FLOOR` of the
+        # decided fights and leaves the trackers alone, so the sign names a winner the fold never grades by.
+        # Neither or both down is `undecided` (a draw has no one felled; a mutual felling names no one).
+        down = {}
+        for pid in (actor, target):
+            st = _wound_state(got["wound_state"].get(pid))     # the one owner of a missing tracker's refusal
+            if not st["available"]:
+                raise Unspecified(
+                    f"personal combat sampled and a party's wound state is unavailable ({pid!r})",
+                    "S39.4/H-98", needs="a `wound_state` entry, lifted off the party's own WoundTracker",
+                    law="the shares are read off the scene's trackers; a party with none has no ending to count")
+            down[pid] = bool(st["felled"])
+        a_down, b_down = down[actor], down[target]
+        if surrender_of(got["trace"]) is not None:
+            tally["yielded"] += 1
+        elif a_down and not b_down:
+            tally["actor_felled"] += 1
+        elif b_down and not a_down:
+            tally["subject_felled"] += 1
+        else:
+            tally["undecided"] += 1
+    return dict(status="ESTIMATED", module=_PROVIDER, samples=n, **{k: v / n for k, v in tally.items()})
 
 
 # ⚠ THE OUTCOME'S SEVERITY, READ OFF THE COMBATANTS THE SCENE JUST FOUGHT WITH (Jordan

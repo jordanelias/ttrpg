@@ -373,8 +373,9 @@ def test_h129_a_wounded_then_starved_person_chains_to_the_wound_that_wrote_him_a
     it ANCHORS on the wounder (tier 1) and `last_emission_of("body.changed", pid)` by anchor answered for
     the wrong person: the victim's own later starvation write chained to `[ROOT]` (the wound that wrote his
     body was missed), and the WOUNDER's starvation write chained to the wound he had inflicted on somebody
-    else. Both ends are asserted at the SHIPPED step, the real fold (`fight`, a `Wounded` scene result) then
-    the real MATTER barrier:
+    else. Both ends are asserted at the SHIPPED step: a `fight` folded between two STAGED cohorts (their weights
+    are 1 around the fold, since CP-T03-01 refuses a cohort party; the wound is staged, not one `fight` could
+    deal them), then the real MATTER barrier:
       * `HURT` (wounded by `HIT`, then starved) chains to the wound Event that wrote HIS body;
       * `HIT` (the wounder, starved, never wounded) chains to `[ROOT]`, not to the wound he dealt.
     MUTATION, run at REM-52 (`written=True` taken back off the read in `loop/matter.py`): both assertions
@@ -383,7 +384,14 @@ def test_h129_a_wounded_then_starved_person_chains_to_the_wound_that_wrote_him_a
     assert w.fixtures.get("body_step") > 0, "this test reads the SHIPPED live arm; the control would be vacuous"
     act = Act(id="h129_wound", actor=HIT, verb="fight", payload={"subject": HURT})
     w.step = Step.RESOLVE
+    # v10 CP-T03-01: a cohort is never a party to a `fight` (the `individual` conjunct), and only cohorts starve. The
+    # wound is what this test needs, not the pair's eligibility: they are individuals for the fold and cohorts again
+    # for the barrier. The test is about which Event the barrier's write chains to.
+    for pid in (HIT, HURT):
+        w.persons[pid].weight = 1
     evs = SeasonDriver(w)._fold(w, mint_token(w, WriteClass.ACTS), act, wounded(HURT, full=10, left=5, actor=HIT))
+    for pid in (HIT, HURT):
+        w.persons[pid].weight = 2
     for ev in evs:                      # the fold returns the Events; the barrier logs them
         w.log.append(ev)
     (wound,) = [e for e in evs if e.kind == "body.changed" and any(c.subject == HURT for c in e.changes)]
