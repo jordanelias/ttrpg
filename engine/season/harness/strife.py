@@ -35,14 +35,16 @@ for a strand when some move carrying a is followed by a move carrying b within t
 and is read against the same strands with their coded-move order shuffled (seeded). `move_codes` yields BASE codes only,
 so a side-suffixed link (`CA-R`, `KL-A`) is read at its base (`CA`, `KL`): that link's count is an UPPER BOUND, as is any
 link whose end code needs side, office or context (the KIND-ONLY grade above), and the header line says so. A link with an
-end no strand move can carry (`_REACHABLE`: DR, DA and FA are not) reads 0 whatever the order, so it prints UNREACHABLE and not a
-control comparison; a link no strand shows at all prints that, not `does not beat its control`. ON THE FLOW is an operational rule that SIMPLIFIES the study's flow definition [ASSUMPTION; medium;
+end no strand move can carry (`_REACHABLE`; of the links' codes, DR, DA and FA are not) reads 0 whatever the order, so it prints UNREACHABLE and not a
+control comparison; a link no strand shows at all prints that, not `does not beat its control`. ON THE FLOW is an operational rule that DIFFERS from the study's flow definition [ASSUMPTION; medium;
 Jordan to correct; revert: delete `flow_profile` and its lines]: a coded move is on the flow when it is the second move of
 a drawn-link instance or the first; otherwise off. A strand LEAVES when an on-flow move is followed by an off-flow run and
-REJOINS when an on-flow move follows that run. The study also counts as a rejoin a move linked from the departure move; this
-rule does not, so its figures are printed beside the study's as a reference and not as a bar. The study also starts the flow
-at a first move that has no drawn-link partner (its panel A: A-1 and A-2 each hold one on-flow move of that kind), so this rule
-can only read the flow lower than the study does.
+REJOINS when an on-flow move follows that run. The study works move by move: a move is on the flow when it starts it, follows
+the LAST on-flow move by a drawn link within 3 moves, or, after a departure, is linked from the departure move or starts a
+drawn link within 3 moves. This rule applies the last two clauses everywhere, with no requirement that a move continue from the
+last on-flow move, and it has no start: the study starts the flow at a first move with no drawn-link partner (its panel A: A-1 and
+A-2 each hold one on-flow move of that kind). So the two rules differ in both directions and neither bounds the other; the study's
+figures are printed beside this realm's as a reference and not as a bar.
 
     python -m engine.season.harness.strife <seasons> <seed> [seed ...] [--strands]
 """
@@ -359,7 +361,7 @@ def link_lines(seqs, links=LINKS, study=STUDY_FLOW, shuffles: int = 200, seed: i
         if lost:
             mark = f"  UNREACHABLE: {', '.join(lost)} reach(es) no strand move, so no order can show this link"
         elif o == 0 and c == 0:
-            mark = "  no strand carries both codes"
+            mark = "  no strand shows a then b, in its order or any shuffle"
         else:
             mark = "  does not beat its control" if o <= c else ""
         out.append(f"    {l['a'] + '>' + l['b']:<10} {l['tier']:<6} observed {o:>3}  control {c:6.2f}{ref}{mark}")
