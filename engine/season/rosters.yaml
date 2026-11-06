@@ -965,10 +965,10 @@ rosters:
     source: "CP-T03-09 (`-08` AM-C-03; home `proposals/2026-10-23-subsystem-completion/` T03 §2): the terms a verb's fight is fought under."
     cite: "AM-C-03"
     note: >-
-      WHICH TERMS A VERB'S SCENE IS FOUGHT UNDER -- `verb: term`. ONE ENTRY: `capture: yield`, the fight ends when a
-      party has yielded and the loser is taken into a seat's custody rather than killed (`loop/effects_combat.py`).
-      A verb NOT named here fights under the engine's lethal terms (`PersonalCombatInput.terms`' default, the string
-      `'death'`), so `fight` and `accept` are unchanged. READ BY `seam/wrappers/combat.py::combat_input`, which fills
+      WHICH TERMS A VERB'S SCENE IS FOUGHT UNDER -- `verb: term`. TWO ENTRIES: `capture: yield`, the fight ends when a
+      party has yielded and the loser is taken into a seat's custody rather than killed (`loop/effects_combat.py`),
+      and, since v11 CR-87, `accept: blood` (below). A verb NOT named here fights under the engine's lethal terms
+      (`PersonalCombatInput.terms`' default, the string `'death'`), so `fight` is unchanged. READ BY `seam/wrappers/combat.py::combat_input`, which fills
       `PersonalCombatInput.terms` from it -- the ONE path a term reaches the fight by (PC-10b extends this roster and
       adds no second path). ⚠ THE CLOSED SET OF TERMS IS THE ENGINE'S (`modules/combat/wrapper.py::DUEL_TERMS`), NOT
       THIS FILE'S: `engine/season/data` may not import the module, so the loader (`data/verbs.py::DUEL_TERMS_BY_VERB`)

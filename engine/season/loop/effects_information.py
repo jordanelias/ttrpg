@@ -308,8 +308,8 @@ def _eff_challenge(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     `terms` -- whom it challenges, the act's `subject` (`content.read_from`); `to` -- the same person as its
     ADDRESSEE, so `world_q.writs_held` stamps it on his question once he holds it (a `give`, H-229); `stakes`
     -- the term the duel is fought under, the act's own `stakes` when it carries one, else ABSENT (a computed
-    challenge carries no payload, and `PersonalCombatInput.terms`' own `'death'` is then the duel's term, the
-    one place that default is written); `challenger` -- the actor, written here whatever the payload (`conceal`'s
+    challenge carries no payload, and the duel is then fought under `duel_terms`' `accept` line, `blood`, v11 CR-87;
+    `PersonalCombatInput.terms`' own `'death'` is the term of a verb the roster does not name); `challenger` -- the actor, written here whatever the payload (`conceal`'s
     precedent for a key no operand fills). `accept` binds to it (`names:to`, `names:actor`).
 
     ⚠ A `stakes` OUTSIDE `challenge_terms` IS REFUSED BEFORE ANYTHING IS WRITTEN, naming the roster -- a hand-built
@@ -320,7 +320,7 @@ def _eff_challenge(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         raise Forbidden(
             f"a `challenge` by {a.actor!r} names stakes {stakes!r}, not one of `challenge_terms` "
             f"{tuple(CHALLENGE_TERMS)}", "rosters.yaml -- challenge_terms",
-            needs="a term `rosters.yaml: challenge_terms` names, or no `stakes` (the duel is then lethal)",
+            needs="a term `rosters.yaml: challenge_terms` names, or no `stakes` (the duel is then fought under `duel_terms`' `accept` line)",
             law="PC-10b -- a challenge names a term of the engine's closed set, read from one roster")
     # `terms` through the mint's own `read_from` (the act's `subject`), never spelt; the addressee is the same
     # person; the two keys no operand fills, the effect's.

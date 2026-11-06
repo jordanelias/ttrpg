@@ -1489,6 +1489,10 @@ def _creating_act(w: World, rid: str):
 # H-240 names the creating act's verb, and a `covenant`'s dispensation (`_eff_issue`'s body, another verb) is an
 # instrument, not an invitation [ASSUMPTION; medium; Jordan to correct; revert: any `dispensation`-kind Record].
 WRIT_MINTING_VERB = "issue"
+if WRIT_MINTING_VERB not in VERB_TABLE:           # the sibling constants refuse at import; a renamed verb would close the limb silently
+    raise Forbidden(f"`world_q.WRIT_MINTING_VERB` names {WRIT_MINTING_VERB!r}, which `verb_table.yaml` does not",
+                    "verb_table.yaml", needs="the verb whose mint is an invitation, as a `verb_table.yaml` row",
+                    law="v10 PC-10b -- the writ limb of `admits_audience` reads a verb; a renamed verb must refuse, not close it")
 
 
 def record_names(w: World, rid, operand: str, value):
@@ -1511,7 +1515,8 @@ def stakes_of(w: World, rid) -> Optional[str]:
     """v10 PC-10b -- THE TERM A STANDING CHALLENGE NAMES: the `stakes` of the `challenge` Record `rid`, or `None`
     for anything else (no Record, another kind, or a challenge naming no stakes -- a computed one). Read by
     `seam/wrappers/combat.py::combat_input` into `PersonalCombatInput.terms`, CP-T03-09's one path; `None`
-    leaves the field at its `'death'` default."""
+    falls through to the verb's `duel_terms` line (`accept: blood`, v11 CR-87), and a verb the roster does not name
+    stays at the field's `'death'` default."""
     r = w.records.get(rid) if isinstance(rid, str) else None
     if r is None or r.kind != CHALLENGE_KIND or not isinstance(r.subject_matter, dict):
         return None

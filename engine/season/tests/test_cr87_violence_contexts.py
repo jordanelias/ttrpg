@@ -243,7 +243,7 @@ def test_loyalty_in_band_cuts_a_negative_row_to_the_member_band_and_passes_a_pos
     assert loyalty_in_band((1, 4)) == (1, 4) and loyalty_in_band(None) is None
 
 
-def test_at_build_no_loyalty_row_names_a_faction_head_below_the_band_and_the_revert_does():
+def test_at_build_no_loyalty_row_names_a_faction_head_below_the_band_and_the_revert_does(monkeypatch):
     w = populated.build_realm(0)
     heads = I.faction_heads(w)
     spy, king = "p_npc_033", "p_npc_020"
@@ -251,6 +251,11 @@ def test_at_build_no_loyalty_row_names_a_faction_head_below_the_band_and_the_rev
     assert person_q.stance_toward(w.persons[spy], king) >= 0, w.persons[spy].stance
     creed_rows = [r for p in w.persons.values() for r in p.stance if r[0] in w.propositions]
     assert creed_rows and all(float(r[1]) * float(r[2]) >= MEMBER_BAND for r in creed_rows)
+    # THE REVERT, OBSERVED (batch close B3): the same Spymaster, with the fixture at its revert, holds the grudge toward the
+    # King the audit found -- so the `>= 0` above is the fix and not an absent row.
+    monkeypatch.setattr(populated, "DEFAULT_FIXTURES", DEFAULT_FIXTURES.sweep("loyalty_toward_creed", False))
+    reverted = populated.build_realm(0)
+    assert person_q.stance_toward(reverted.persons[spy], king) < 0, reverted.persons[spy].stance
 
 
 # ------------------------------------------------------------------------------------------------
@@ -282,11 +287,32 @@ def _realm_fights(seed: int, seasons: int = 1) -> list:
     return forms
 
 
-def test_seed_0_season_1_no_same_faction_fight_forms_at_stance_at_or_above_minus_3_and_the_cases_are_gone():
+def _named_cases(forms) -> tuple:
+    """(Cardinal -> Senior Inquisitor formations, Spymaster -> King formations), the audit's two cases."""
+    return ([f for f in forms if f[4] & CARDINALS and "off_senior_inquisitor" in f[5]],
+            [f for f in forms if "off_spymaster" in f[4] and "off_king" in f[5]])
+
+
+def test_seed_0_season_1_no_same_faction_fight_forms_at_stance_at_or_above_minus_3():
     forms = _realm_fights(0)
     assert [f for f in forms if f[2] and f[3] >= -3] == []
-    assert not [f for f in forms if f[4] & CARDINALS and "off_senior_inquisitor" in f[5]]
-    assert not [f for f in forms if "off_spymaster" in f[4] and "off_king" in f[5]]
+
+
+@pytest.mark.parametrize("seed", [0, 1, 2])
+def test_the_cardinal_inquisitor_and_spymaster_king_cases_do_not_form_on_seeds_0_to_2(seed):
+    """The plan's exit reads seeds 0-2 for the two named cases; the same-faction reading above is seed 0, as the plan
+    words it."""
+    cardinal, spymaster = _named_cases(_realm_fights(seed))
+    assert cardinal == [] and spymaster == []
+
+
+@pytest.mark.parametrize("seed", [0, 1, 2])
+def test_mutation_the_decline_deleted_restores_the_two_named_cases_on_each_seed(monkeypatch, seed):
+    """THE POSITIVE CONTROL for the test above: the absence is only a reading if the instrument sees the cases when
+    they are there. With the block emptied, both named cases form on the seed (the audit's 3 and 3 or more)."""
+    monkeypatch.setattr(O, "VIOLENCE_CONTEXTS", {})
+    cardinal, spymaster = _named_cases(_realm_fights(seed))
+    assert cardinal and spymaster, (len(cardinal), len(spymaster))
 
 
 def test_mutation_the_decline_deleted_restores_same_faction_fight_formations(monkeypatch):

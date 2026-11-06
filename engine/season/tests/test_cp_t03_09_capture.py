@@ -257,7 +257,7 @@ def test_a_seat_granting_no_dispatch_is_refused_before_any_fight():
 
 def test_a_seat_whose_purview_does_not_reach_the_captive_opens_nothing():
     """The second settlement's seat: it grants both acts, but its ground is `S2`, not the hearth the captive stands in."""
-    opened = 0
+    opened = fought = 0
     for i in range(TRIES):
         w = P.tiny_world()
         w.rungs["S2"] = Rung("S2", "settlement", stores={"grain": 40})
@@ -268,8 +268,12 @@ def test_a_seat_whose_purview_does_not_reach_the_captive_opens_nothing():
         d.matter(mint_token(w, WriteClass.MATTER), [])
         out = _run(w, d, _capture(i))
         opened += bool(_detains(w))
+        # the act was declared and fought (a refusal at the cell would also open nothing): batch close, B4
+        assert "capture.declared" in _kinds(out), _kinds(out)
+        fought += "body.changed" in _kinds(out)
         assert "person.captured" not in _kinds(out), _kinds(out)
     assert opened == 0
+    assert fought >= 1, "no scene wounded anybody: the control observed nothing"
 
 
 def test_a_capture_across_settlements_is_refused_at_the_cell():
@@ -349,3 +353,24 @@ def test_a_scene_in_which_a_party_was_felled_opens_nothing():
     surrender = dict(by=CAPTIVE, turn=2, accepted=True)
     out = _fold_at(w, d, _capture(0), "Felled", _scene(actor=_state(4, 0, felled=True), surrender=surrender))
     assert not _detains(w) and "person.captured" not in _kinds(out), _kinds(out)
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# 7 -- THE `total` ARM (the batch close's C1): a Wounded party is written 0 there, which removes him
+# ---------------------------------------------------------------------------------------------------------------
+
+def test_capture_under_the_total_arm_opens_no_detain_and_ends_no_season():
+    """Under `wound_harm_model: total` (a swept arm) `_harm` writes body 0 for a WOUNDED party and `_wound` removes
+    him, so a yield by either party leaves a man the edge would be about. The effect must leave the base alone then
+    (the felled guard read FELLED only, and the write was refused at the gate, ending the season). `removed` counts
+    the scenes that exercised it: a scan that found none observes nothing."""
+    removed = 0
+    for i in range(TRIES):
+        w, d = _world()
+        w.fixtures = w.fixtures.sweep("wound_harm_model", "total")
+        before = set(w.persons)
+        out = _run(w, d, _capture(i))
+        removed += bool(before - set(w.persons))
+        assert not _detains(w), f"act {i}: a detain was opened on a man the base removes"
+        assert "person.captured" not in _kinds(out), f"act {i}: a capture was reported"
+    assert removed >= 1, f"no scene in {TRIES} act ids removed a party under `total`: nothing was observed"

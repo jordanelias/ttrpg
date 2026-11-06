@@ -429,7 +429,8 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
         if fought is not None:
             if len(fought[0]) < 2:
                 return None
-            got = fight_estimate(w, fought[0][0], act.via, fought[0][1], act.verb)
+            named = act.payload.get("subject") if isinstance(act.payload, dict) else None
+            got = fight_estimate(w, fought[0][0], act.via, fought[0][1], act.verb, named)
             return tuple(got[k] for k in ESTIMATE_OUTCOMES) if got["status"] == "ESTIMATED" else None
     called = _rolled_as(w, act)
     if called is None:

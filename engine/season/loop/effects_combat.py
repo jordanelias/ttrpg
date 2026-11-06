@@ -27,7 +27,7 @@ from ..queries.world_q import DETAIN_KIND, ancestry, holder_faction_of, home_of,
 from ..seam.ladder import party_degree
 from ..state.carriers import Tenure
 from ..state.gate import (
-    NO_CHANGE, Change, Subject, death_subjects, may_muster, may_warrant, own_kinds, seat_faction,
+    NO_CHANGE, PERSON_DIED, Change, Subject, death_subjects, may_muster, may_warrant, own_kinds, seat_faction,
 )
 from ..state.ids import H
 
@@ -255,9 +255,12 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     if (yielded is None or yielded.get("by") != prisoner or prisoner not in w.persons
             or prisoner == a.actor or restrained(w, prisoner, DETAIN_KIND)):
         return base
-    above = w.fixtures.get("combat_wounded_above")
-    states = result.get("wound_state") or {}
-    if any(party_degree(states.get(pid), above) == FELLED for pid in (a.actor, prisoner)):
+    # A PARTY THE BASE REMOVES CANNOT BE HELD OR HOLD. `person.died` is the base's own record of it: a felled party
+    # (every arm), and a WOUNDED one under `wound_harm_model: total` (`_harm` writes body 0 there, so `_wound`
+    # removes him). Read off the base's subjects, the one owner, never recomputed from the band: an edge on a man
+    # the same write removes -- or opened by a seat whose holder it removes -- is refused at the gate
+    # (`NotYours`), and nothing in the fold catches that, so the season would end.
+    if any(PERSON_DIED in s.kinds for s in base.subjects):
         return base
     if a.via is None or not may_warrant(w, a.actor, a.via, prisoner) or not _may_close_custody(w, a.via, prisoner):
         return base

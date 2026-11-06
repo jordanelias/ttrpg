@@ -23,7 +23,6 @@ the result (`surrender`), earning `duel.yielded` for the yielder alone, never a 
 from __future__ import annotations
 
 import dataclasses
-import pathlib
 import types
 from unittest import mock
 
@@ -127,14 +126,12 @@ def _first_wound_not_decisive(trace) -> bool:
 # 1 -- THE ROSTER, THE STEM, THE ROW
 # ---------------------------------------------------------------------------------------------------------------
 
-def test_challenge_terms_equal_the_engines_duel_terms_by_test_and_no_season_data_module_imports_the_engine():
+def test_challenge_terms_equal_the_engines_duel_terms():
+    """The roster is checked against the engine's closed set by this test alone; that no `engine/season/data` module
+    reaches the engine is `tests/valoria/test_engine_does_not_import_systems.py`'s (a file-path subprocess probe)."""
     engine = combat.engine()
     assert engine is not None, combat.load_error()
     assert set(CHALLENGE_TERMS) == set(engine[0].DUEL_TERMS), (CHALLENGE_TERMS, engine[0].DUEL_TERMS)
-    data_dir = pathlib.Path(REQ.__file__).parent
-    offenders = [p.name for p in data_dir.glob("*.py") if "DUEL_TERMS" in p.read_text()
-                 and ("modules.combat" in p.read_text() or "import wrapper" in p.read_text())]
-    assert offenders == [], offenders
 
 
 def test_names_is_a_world_only_grammar_stem_and_not_a_cell():
@@ -336,13 +333,25 @@ def test_a_blood_duel_whose_first_wound_is_not_decisive_emits_duel_yielded_and_n
     assert checked == len(picked) >= 1
 
 
-def test_control_stakes_death_and_no_stakes_build_todays_duel_exactly():
-    """The record a death-stakes (or a stakes-less) challenge's `accept` builds is the record a lethal `fight` between
-    the pair builds -- the input the scene is drawn from, so the duel is today's."""
-    for stakes in ("death",):     # v11 CR-87: a stakes-less challenge is fought to `blood` (the test above)
-        w, _ = _challenged(stakes)
-        assert (combat.combat_input(w, [ACC, CHAL], "accept", "rec:ch0")
-                == combat.combat_input(w, [ACC, CHAL], "fight")), stakes
+def test_control_stakes_death_builds_todays_duel_exactly():
+    """The record a death-stakes challenge's `accept` builds is the record a lethal `fight` between the pair builds --
+    the input the scene is drawn from, so the duel is today's. (A stakes-less challenge is fought to `blood` since
+    v11 CR-87: the test above.)"""
+    w, _ = _challenged("death")
+    assert (combat.combat_input(w, [ACC, CHAL], "accept", "rec:ch0")
+            == combat.combat_input(w, [ACC, CHAL], "fight"))
+
+
+def test_the_sampler_reads_the_challenges_stakes_the_fold_fights_under():
+    """`fight_estimate` takes the record the act names and builds the SAME input `resolve` does (batch close, A2): a
+    `death` challenge is sampled lethal (no yield exists in its shares), a `yield` challenge is sampled with one."""
+    w_death, _ = _challenged("death")
+    w_yield, _ = _challenged("yield")
+    dead = combat.fight_estimate(w_death, ACC, None, CHAL, "accept", "rec:ch0")
+    yld = combat.fight_estimate(w_yield, ACC, None, CHAL, "accept", "rec:ch0")
+    assert dead["status"] == yld["status"] == "ESTIMATED"
+    assert dead["yielded"] == 0.0, dead
+    assert yld["yielded"] > 0.0, yld
 
 
 def test_control_an_unchallenged_fight_between_the_same_pair_stays_lethal():

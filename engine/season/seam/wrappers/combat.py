@@ -182,8 +182,8 @@ def _cause_record(w: Any, causes: list) -> Optional[str]:
 def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = None) -> PersonalCombatInput:
     """THE HOST INPUT BUILDER (plan position `31b`, A-25): `World` -> the frozen record the fight reads.
 
-    Reads `w.persons` (the two claimants) and `w.fixtures`, and nothing else; the module that consumes
-    the record never sees `World`. Its precondition is the adapter's PARTY-GAP checks (`resolve`,
+    Reads `w.persons` (the two claimants), `w.records` (a challenge's `stakes`, through `stakes_of`) and
+    `w.fixtures`, and nothing else; the module that consumes the record never sees `World`. Its precondition is the adapter's PARTY-GAP checks (`resolve`,
     below): two claimants, both persons.
 
     `verb` (CP-T03-09) is the act's verb and fills `terms` from `rosters.yaml: duel_terms` -- the ONE path a
@@ -192,7 +192,8 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
 
     `record` (v10 PC-10b) is the Record the act is about (`_cause_record`); a `challenge` Record's `stakes`
     (`world_q.stakes_of`) fill the SAME field through the same `duel_terms_of`, so `accept` is fought under the
-    challenge's terms, and under `'death'` where it names none."""
+    challenge's terms; where it names none the verb's `duel_terms` line stands (`accept: blood`, v11 CR-87) and a
+    verb the roster does not name is fought under `'death'`."""
     a_id, b_id = claimants[0], claimants[1]
     terms = duel_terms_of(verb, stakes_of(w, record))
     return PersonalCombatInput(
@@ -202,7 +203,8 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
         **({} if terms is None else dict(terms=terms)))
 
 
-def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: str = "") -> dict:
+def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: str = "",
+                   record: Optional[str] = None) -> dict:
     """THE ODDS A FIGHT WOULD DEAL, SAMPLED LIVE (CP-T03-05; `-08` AM-C-02; MODE (a), THE PLAYER'S DISPLAY ONLY).
 
     Builds the real `PersonalCombatInput` (`combat_input`, so the fight is the one `resolve` deals when it is AUTOMATED (a fight the player plays turn by turn can end undecided on his withdrawal, which the shares do not assume): the same
@@ -210,7 +212,9 @@ def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: st
     four ways a scene can end, `actor_felled`, `subject_felled`, `yielded` and `undecided`, which sum to 1
     (`status` `ESTIMATED`, beside the `samples` count). A refusal is `resolve`'s own dict (`PARTY-GAP`,
     `ENGINE-UNAVAILABLE`). `via` is accepted for the shape of the call and read by nothing today; `verb` names the
-    `terms` (CP-T03-09), so a `capture` is sampled under the terms it is fought under. CP-T04-08's `field_estimate`
+    `terms` (CP-T03-09), so a `capture` is sampled under the terms it is fought under, and `record` (the act's
+    `subject`, as `resolve`'s `_cause_record` reads it) lets a challenge's `stakes` reach the sampler by the same
+    `combat_input` path, so an `accept` is sampled under the terms it is fought under. CP-T04-08's `field_estimate`
     shares the fixture.
 
     ⚠ THE RNG IS PRIVATE AND IS NOT A SEASON DRAW. It is built here from `H(world_seed, tick, actor,
@@ -231,7 +235,7 @@ def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: st
     entry, refusal = entry_for(_PRIZE, _PROVIDER)
     if entry is None:
         return refusal
-    inp = combat_input(w, claimants, verb)
+    inp = combat_input(w, claimants, verb, record)
     # `H` returns a blake2b hexdigest, so 16 is the radix that parses it back (as in `resolve`'s seed).
     # [JUSTIFIED: radix for parsing H()'s hex digest, not a mechanical constant]
     rng = random.Random(int(H(w.world_seed, w.tick, actor, "estimate"), 16))
