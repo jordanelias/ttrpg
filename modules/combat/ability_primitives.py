@@ -19,9 +19,10 @@ LEVER STATUS: the 7 channel levers + counter_success/counter_select/anti_overcom
 'choke_control', 'facing_regime' — consumed at the six U3/U5/U7 lever sites (combat_systems.legibility ×2 /
 bind_sigma / facing_target, contact.grab_sigma). TWO are populated with abilities whose grounding HELD under the
 2026-07-23 adversarial HEMA pass (shinogi->spine_press, ringen_am_schwert->edge_grab; ILLUSTRATIVE — per-event
-effect, ~0 aggregate, see the block below). The other three morphology levers — 'edge_read', 'choke_control',
-'facing_regime' — are BARE (the ability_factor hook is live, factor 1.0 default, byte-identical) awaiting grounded
-content: a deliberate honest gap, NOT invented privilege. ('zwerchhau' was re-homed off edge_read to counter_select
+effect, ~0 aggregate, see the block below). 'edge_read' and 'choke_control' have no GROUNDED ability; since PC-17
+(ED-PC-0059) they and five channel levers carry the 21 GENERIC calibration abilities built below the ABILITIES dict.
+'facing_regime' stays BARE (the ability_factor hook is live, factor 1.0 default, byte-identical): a deliberate
+honest gap, NOT invented privilege. ('zwerchhau' was re-homed off edge_read to counter_select
 and 'guardia' removed off facing_regime — both were winden-class category errors, ED-PC-0026.) There is no 'seize' lever, and no 'vorschlag' or 'sen_no_sen' ability.
 """
 
@@ -64,8 +65,8 @@ ABILITIES = {
     # error (real period term, wrong lever). The Italian profiled-stance TENDENCY facing_regime models is real,
     # but it has no discrete named technique to anchor an ability honestly, so facing_regime stays a BARE
     # morphology lever (fires from WP.facing_pref weapon geometry; honest-gap for a tradition amplifier, exactly
-    # like choke_control) rather than ship a misnamed one. edge_read is likewise now bare (zwerchhau re-homed to
-    # counter_select above): both await grounded content, not invented privilege.
+    # like choke_control was) rather than ship a misnamed one. edge_read likewise has no GROUNDED ability (zwerchhau
+    # re-homed to counter_select above); it and choke_control now carry only the GENERIC calibration abilities below.
 }
 
 
@@ -74,6 +75,61 @@ ABILITIES = {
 # primitives" — TRADITION_KIT['german'] -> ['indes', 'staerke_schwaeche', ...]. One-way import (traditions has no
 # dependency on this module), so no cycle.
 from traditions import TRADITIONS as _TRADITIONS
+
+# ── GENERIC CALIBRATION ABILITIES (PC-17, ED-PC-0059; PROVISIONAL) ────────────────────────────────────────────────
+# Jordan, 2026-11-01: "a spread of generics for now so that we have more calibration data". Instruments, not
+# grounded technique: plain descriptive names, no period terms (ED-PC-0026), grade 'GENERIC', every value
+# [SIM-CALIBRATE]. All op '*': `ability_bonus` ('+') is read at two sites only (counter_success, anti_overcommit), so
+# an additive generic on these levers would never act. Six beneficial levers at x1.10 / x1.25 / x1.50 (edge_read's
+# refined tier REVISED to x1.40, see GENERIC_REVISED); choke_control
+# as a MITIGATOR at x0.90 / x0.75 / x0.55, because its site (combat_systems.legibility) ADDS the owner's gathered-pole
+# telegraph to the read the OPPONENT takes, so a factor below 1 helps its owner. facing_regime stays bare (geometry,
+# not this position; Jordan 2026-11-01).
+# PLACEMENT is a Latin square over the seven traditions in TRADITIONS order ('none' excluded): tradition t receives
+# (lever (t + k) mod 7, tier k) for k = 0, 1, 2, so each (lever, tier) pair exists in exactly one tradition and each
+# tradition gains three generics on three different levers. Kit totals stay unequal; no equality is claimed.
+# REVERT: delete this block (every ability with grade 'GENERIC'), their probes in
+# tests/valoria/test_combat_lever_sign_safety.py, and CFG['INIT_TEMPO_LEVER_K'].
+GENERIC_LEVERS = (   # (lever, name stem, what the trained fighter does) — the square's lever order
+    ('visual',        'keen_eye',      "watches the opponent's whole body, so the coming action is seen earlier"),
+    ('precommit',     'reading_intent', "reads the attack in its preparation, before it is committed"),
+    ('tactile',       'blade_feel',    "feels the opponent's pressure and intent through blade contact in the bind"),
+    ('tempo',         'timing',        "acts in the opponent's slow moments and keeps the initiative once taken"),
+    ('balance',       'footing',       "keeps a stable, mobile base under footwork and pressure"),
+    ('edge_read',     'hidden_return', "uses a double or false edge to hide the line of the return cut"),
+    ('choke_control', 'quiet_gather',  "gathers up a long pole without telegraphing the shortened grip"),
+)
+GENERIC_TIERS = (   # (name suffix, beneficial factor, mitigator factor) — tier k = 0, 1, 2. [SIM-CALIBRATE]
+    ('basic',     1.10, 0.90),
+    ('practiced', 1.25, 0.75),
+    ('refined',   1.50, 0.55),
+)
+GENERIC_MITIGATOR_LEVERS = frozenset({'choke_control'})
+# TIER REVISED, NOT SHIPPED (the plan's falsifier: "a generic with a cliff ... its tier is revised"). The plan set
+# edge_read's refined tier at x1.50, as for the other beneficial levers. edge_read's site SUBTRACTS
+# LEGIB_EDGELINE_K * edge_lines * factor from the aggressor's legibility, which has no lower bound: at level 8 the
+# worst case over the roster (a thrust, LEGIB_THRUST 0.80, by the double-edged jian, whose ornament also subtracts
+# LEGIB_DISTRACT_K * distraction = 0.0907) reads 0.80 - 0.0907 - 0.04 * 1.5**8 = -0.316. A negative legibility makes
+# the defender's read_d negative, and the defender's own visual / precommit factors then WORSEN it (measured against
+# a spear at edge_read L8: keen_eye_refined L0 -> L4 moved p_read 0.0259 -> 0.0021). The level-8 root on the jian is
+# 1.4325; x1.40 leaves 0.119 there (0.21 on a spear or rapier). basic and practiced stay at x1.10 / x1.25 (worst case
+# at level 8: 0.62 and 0.47). STACKING is not covered: one fighter knowing japanese, chinese and filipino can equip all
+# three edge_read generics, and three at level 8 drive legibility negative at any of these values.
+GENERIC_REVISED = {('edge_read', 'refined'): 1.40}   # [SIM-CALIBRATE]; plan value x1.50
+_GENERIC_TRADITIONS = tuple(t for t in _TRADITIONS if t != 'none')
+assert len(_GENERIC_TRADITIONS) == len(GENERIC_LEVERS), "the Latin square needs as many traditions as levers"
+for _t, _trad in enumerate(_GENERIC_TRADITIONS):
+    for _k, (_suffix, _up, _down) in enumerate(GENERIC_TIERS):
+        _lever, _stem, _what = GENERIC_LEVERS[(_t + _k) % len(GENERIC_LEVERS)]
+        _name = f'{_stem}_{_suffix}'
+        assert _name not in ABILITIES, f"generic {_name!r} collides with an authored ability"
+        ABILITIES[_name] = dict(
+            tradition=_trad, grade='GENERIC', lever=_lever, op='*',
+            value=GENERIC_REVISED.get((_lever, _suffix),
+                                      _down if _lever in GENERIC_MITIGATOR_LEVERS else _up),   # [SIM-CALIBRATE]
+            desc=f"GENERIC ({_suffix}) {_lever} lever: {_what}. A calibration instrument, not a grounded technique "
+                 f"(PC-17, ED-PC-0059, provisional) [SIM-CALIBRATE]")
+
 for _name, _a in ABILITIES.items():
     assert _a['tradition'] in _TRADITIONS, f"ability {_name!r} tags unknown tradition {_a['tradition']!r}"
 TRADITION_KIT = {t: [a for a, d in ABILITIES.items() if d['tradition'] == t] for t in _TRADITIONS}

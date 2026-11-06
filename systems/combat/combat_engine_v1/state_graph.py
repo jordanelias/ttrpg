@@ -73,52 +73,64 @@ STATES = {
 TERMINAL_STATES = {s for s, v in STATES.items() if v.get('terminal')}
 ENTRY_STATES = {s for s, v in STATES.items() if v.get('entry')}
 
-# ── INJECTION POINTS (WS-1): where a tradition's methodology plugs into the graph ────────────────
-# "The state graph must be able to accept all these differences across traditions" — this is that, as data.
-# Each decision node where the engine currently makes a GENERIC choice is an injection point: a tradition's
-# preferred-node / access / bias (from tradition_decomposition_v1.md) biases the branch HERE. This is the
-# single-source bridge WS-4 (the access catalogue) and WS-5 (The Approach imposition) wire against. Note the
-# FEINT-NODE ABSORB: there is deliberately no separate Feint state — the feint/micro-read lives inside
-# Exchange.read (feint-as-attack), so the graph already reflects the dissolved structure; WS-5 removes the
-# separate feint_eval CODE, not a graph node.
-# D12b (I8, 2026-07-03): the per-point `site` line-range strings are DROPPED (not tested) — they had already
-# drifted across I2..I7b (every increment that touched wrapper.py shifted the ranges) and re-testing a line
-# range as "still holds the logic" is a losing maintenance game for a plain string. The node name is the
-# stable, checked reference (test_injection_points_reference_defined_states verifies it against STATES).
+# ── INJECTION POINTS: where a fighter's learned abilities reach the graph ─────────────────────────
+# REWRITTEN at PC-17 (ED-PC-0059) to say what the code does. A tradition does NOT bias a branch: the imposition gate
+# is retired (ED-PC-0023) and a tradition only gates ACCESS to its kit (ability_primitives._invested, ED-PC-0028).
+# What reaches the graph is the invested ABILITY, through a named lever: `eff_cw` / `ability_factor` ('*' abilities,
+# exactly 1.0 when none is equipped) or `ability_bonus` ('+' abilities, exactly 0.0), read inside the
+# `combat_systems` function each entry names, which `wrapper.engagement` calls at that node. Familiarity (tradition
+# vs tradition) is the one tradition-level input, and is named where it is read. An entry whose node reads no lever
+# says so. There is no separate Feint state: the feint lives inside the Exchange read (feint-as-attack, WS-5).
+# Each entry was checked against the call sites in `modules/combat/wrapper.py` and the lever reads in
+# `modules/combat/combat_systems.py` / `contact.py` (grep `eff_cw`, `ability_factor`, `ability_bonus`). Line
+# numbers are deliberately absent (D12b: they drift); the node name is checked against STATES by this file's
+# self-test, check (g).
 INJECTION_POINTS = {
-    'approach.measure':    {'node': 'Approach',
-                            'generic': 'shorter closes / longer stop-hits',
-                            'injects': 'measure-control: Spanish circulo / Italian misura bias close_rate + preferred measure'},
+    'beat.head':           {'node': 'AwaitTempo',
+                            'generic': 'every beat, before both Approach and AwaitTempo: initiative decay, grip, facing, readiness = cadence x tempo_pressure',
+                            'injects': "measure lever: init_hold_decay (a factor above 1 slows the decay of the held initiative); tempo lever: tempo_pressure's READ_TEMPO_K term, each side's reading x its own tempo factor; facing_regime lever: facing_target (no ability authored: weapon geometry only)"},
+    'approach.close':      {'node': 'Approach',
+                            'generic': 'shorter closes / longer stop-hits (close_rate, approach_displace, stophit_sigma)',
+                            'injects': 'no ability lever is read by these functions; only the beat-head levers act on an Approach beat'},
     'reopen.measure':      {'node': 'AwaitTempo',
-                            'generic': 'reopen vs stay closed (reopen_prob)',
-                            'injects': 'reach/measure-hold: invested measure abilities (misura/atajo) modulate the measure lever a reach fighter reopens on (the geometric Vor hold) — EMERGENT via the lever, not an imposed reopen-probability (imposition retired ED-PC-0023)'},
+                            'generic': 'on a created moment, the longer weapon reopens distance or stays closed (reopen_prob)',
+                            'injects': "visual lever, both sides: the longer fighter's reading x its visual factor against the shorter's (the denial); no measure lever is read here"},
+    'disengage.withdraw':  {'node': 'AwaitTempo',
+                            'generic': 'the longer weapon attempts a withdrawal (disengage_attempt_p); clean break or pursued',
+                            'injects': 'visual lever, both sides: disengage_clean_p (each reading x its own visual factor); balance lever, both sides: pursuit_sigma\'s footwork term (each balance_eff x its own balance factor) on the pursued branch'},
     'exchange.commit':     {'node': 'Exchange',
-                            'generic': 'commit depth 2-5, disposition-skewed',
-                            'injects': 'Stance posture (The Approach) + wariness vs unread tradition (WS-5)'},
+                            'generic': 'commit depth 2-5, a Beta draw skewed by disposition (commit_depth)',
+                            'injects': 'no ability lever; familiarity (tradition vs tradition) sets the WARINESS that skews the draw shallow'},
     'exchange.read':       {'node': 'Exchange',
-                            'generic': 'read_win logistic',
-                            'injects': 'precommit (Japanese sen-sen-no-sen) + the FEINT/micro-read manipulation (feint-as-attack, WS-5)'},
+                            'generic': 'read_win logistic; the best mode on a won read (read_contest)',
+                            'injects': "visual and precommit levers: the defender's reading x visual x precommit, scaled by familiarity and the aggressor's legibility; the aggressor's reading x visual. Inside legibility, the aggressor's edge_read factor amplifies the double/false-edge return-line term (lowers legibility) and its choke_control factor scales the gathered-pole telegraph term (raises it; a factor below 1 mitigates)"},
     'exchange.mode':       {'node': 'Exchange',
-                            'generic': 'parry/dodge/wind by mode_sigma',
-                            'injects': 'defence-mode preference: German prefers wind, Italian refuses it (stay at the point)'},
+                            'generic': 'parry/dodge/wind by mode_sigma on a won read, else uniform random',
+                            'injects': 'no ability lever is read by mode_sigma'},
+    'exchange.roll':       {'node': 'Exchange',
+                            'generic': 'the net sigma of the main roll, and the over-commitment cost after it',
+                            'injects': "measure lever: reach_sigma's lever_log_edge (defender over aggressor); balance lever: reach_sigma's footwork term, each side's own; tempo lever: init_emphasis_sigma's INIT_TEMPO_LEVER_K x lever_log_edge (aggressor over defender, PC-17); anti_overcommit ('+'): overcommit_exposure; tempo lever: init_overcommit_loss divides the initiative lost"},
+    'exchange.counter':    {'node': 'Exchange',
+                            'generic': 'on a won read against a deep commit: the initiative steal and the single-time counter selection',
+                            'injects': "init_steal_factor: on a wind, the defender's (tactile + leverage)/2, else its tempo factor; counter_select: the defender's tempo factor x its counter_select factor"},
+    'riposte.counter':     {'node': 'Riposte',
+                            'generic': 'whether a selected counter lands (counter_success_prob)',
+                            'injects': "counter_success ('+'): added to the success probability before its [0.05, 0.92] bounds"},
     'exchange.bind_entry': {'node': 'Bind',
-                            'generic': 'bind on wind/partial',
-                            'injects': 'bind-channel modulation: an invested spine ability (shinogi->spine_press) amplifies the bind\'s spine lever for a fighter who INVESTED in the bind (bind skill opens the node, the ability sharpens it); the edge-read/legibility lever fires from weapon geometry (bare — no grounded ability, ED-PC-0026); refusal (cavazione/disengage) is a measure/disposition choice, NOT an imposed refuse-probability — imposition retired ED-PC-0023'},
-    'exchange.counter':    {'node': 'Riposte',
-                            'generic': 'single-time counter select',
-                            'injects': 'Italian mezzo_tempo / Japanese sen-no-sen / English true-times'},
+                            'generic': 'bind on wind/partial; up to three bind iterations',
+                            'injects': "bind_sigma: leverage lever as lever_log_edge, tactile lever on each side's own read (x familiarity), spine_press lever on each side's own spine; at entry the winner's init_steal_factor (tactile + leverage)/2 and a poise break scaled by its leverage factor"},
     'burst.continuation':  {'node': 'AwaitTempo',
-                            'generic': 'continue burst vs separate (clean defence)',
-                            'injects': 'Chinese/Filipino flow: extend the burst on a clean beat'},
+                            'generic': 'continue the burst vs separate (clean defence, burst ceiling, collapse)',
+                            'injects': 'no ability lever is read at this decision'},
     'contact.axis':        {'node': 'Contact',
                             'generic': 'strength+leverage grab affinity; a flat branching menu (disarm/throw/pin/control/foot_pin/escape)',
-                            'injects': 'grab-hazard modulation: invested ringen_am_schwert (edge_grab) mitigates the self-injury of seizing a live blade — an EMERGENT ability effect on the grab lever, NOT a tradition-imposed branch. Menu-weighting of the outcome table is a FUTURE increment, not yet wired (imposition retired ED-PC-0023)'},
+                            'injects': "edge_grab lever: contact.grab_sigma scales the self-hazard of seizing a live edge by the actor's factor (ringen_am_schwert, a mitigator below 1); the outcome menu reads no lever"},
 }
 
 
 def injection_markdown():
-    out = ["### Tradition injection points (where each methodology biases the state graph)",
-           "| point | state | generic choice today | what a tradition injects |",
+    out = ["### Ability injection points (where an invested ability's lever is read in the state graph)",
+           "| point | state | generic choice today | levers read there |",
            "|---|---|---|---|"]
     for k, v in INJECTION_POINTS.items():
         out.append(f"| `{k}` | {v['node']} | {v['generic']} | {v['injects']} |")

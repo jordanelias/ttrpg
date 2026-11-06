@@ -33,9 +33,10 @@ def lever_log_edge(own_factor, opponent_factor):
     owner's win probability monotonically without being literally an odds multiplier there.
 
     Strictly increasing in `own_factor`, strictly decreasing in `opponent_factor`, on every input —
-    that monotonicity IS the sign-safety property, and `tests/valoria/test_combat_lever_sign_safety.py`
-    asserts it for every '*'-op ability in `ability_primitives.ABILITIES`, equipping each on the
-    DISADVANTAGED side. Exactly 0.0 (not approximately) when both factors are 1.0, which is every
+    that monotonicity IS the sign-safety property. `tests/valoria/test_combat_lever_sign_safety.py`
+    (re-created at PC-17) probes it, owner on the DISADVANTAGED side, for the seven levers the GENERIC
+    abilities fill (tempo's `init_emphasis_sigma` among them); the leverage and measure sites have no
+    such probe since ED-IN-0314's cull. Exactly 0.0 (not approximately) when both factors are 1.0, which is every
     default build — that is what makes E1a byte-identical at defaults rather than merely close.
     Both arguments come from `ability_factor`, which clamps to [ABIL_FACTOR_FLOOR, ABIL_FACTOR_CEIL],
     so `log` is always finite and never sees 0. Pure.
@@ -1413,10 +1414,21 @@ def approach_step(measure_gap, base_gap, close_rate, recoil):
 
 def init_emphasis_sigma(aggressor, defender, cfg, TR):
     """Initiative/tempo EMPHASIS sigma fed into attack_sigma: tempo(Agi) + reading(Cog/Att) + experience(History),
-    re-weighted by the aggressor's tempo channel. Pure (the formula the wrapper used to assemble inline)."""
+    plus the two sides' 'tempo' ability lever as an ADDITIVE log-edge. Pure (the formula the wrapper used to assemble
+    inline).
+
+    SEMANTICS CHANGE (PC-17, ED-PC-0059): the base sum used to be MULTIPLIED by `eff_cw(aggressor, 'tempo')`. The sum
+    is signed (an aggressor slower, less read or less experienced than the defender has a negative one), so a tempo
+    factor above 1 AMPLIFIED a deficit: investing in tempo made a disadvantaged aggressor worse, the ED-PC-0045
+    defect. The lever now enters as `INIT_TEMPO_LEVER_K * lever_log_edge(f_aggressor, f_defender)`, the single owner
+    of opposed-lever composition: monotone in each side's own factor whatever the sign of the base sum, and the
+    DEFENDER's tempo factor now counts against the aggressor (it was ignored before). Here it is a monotone additive
+    sigma shift, not an odds multiplier (the channel is not logistic). Exactly 0.0 at default builds (both factors
+    1.0), so `base + 0.0` is bit-identical to the old `base * 1.0`."""
     return (cfg['INIT_K']*(aggressor.agi-defender.agi)
             + cfg['INIT_READING_K']*(reading(aggressor,cfg)-reading(defender,cfg))
-            + cfg['INIT_HISTORY_K']*(aggressor.history-defender.history))*TR.eff_cw(aggressor,'tempo')
+            + cfg['INIT_HISTORY_K']*(aggressor.history-defender.history)
+            + cfg['INIT_TEMPO_LEVER_K']*lever_log_edge(TR.eff_cw(aggressor,'tempo'), TR.eff_cw(defender,'tempo')))
 
 def consistency(c, cfg):
     """Baseline-consistency sigma term from the Concentration tracker (3F+2S, depletes), centred at 3. Pure."""
