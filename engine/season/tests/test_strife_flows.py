@@ -39,6 +39,10 @@ ledger built by hand (the witness's claims minted by the real deposit rule, `epi
      hash and the log length where they were, and the reading of a few planted holders is the same read twice
      and leaves the hash where it was. His reading of a record claim does not move when the
      record changes hands, and a dead arrester is no phantom restraint.
+ 13. The study's 16 links (`strife_moves.yaml: links`): the loader reads 6 robust and 10 stable and refuses each
+     bad document; the windowed count skips an uncoded move and stops at 3 coded moves; strands planted in a link's
+     order read above the seeded shuffled-order control and the same strands scrambled read lower; the
+     leave-and-rejoin profile is exact on hand-built strands; `strands_block` prints the lines on a real run.
 Each loop asserts that it asserted (`CLAUDE.md` §0.1 pt 2).
 """
 import pytest
@@ -387,6 +391,123 @@ def test_the_pair_profile_pairs_only_adjacent_single_code_moves():
     assert H.pair_profile([[["A"], ["B", "C"], ["D"]]], shuffles=5) == []
     got = {p for p, _, _ in H.pair_profile([[["A"], ["B"], [], ["C"], ["D"], ["E"]]], shuffles=5)}
     assert got == {("A", "B"), ("C", "D"), ("D", "E")}               # control: pairs within each run
+
+
+# --- CR-76: the study's 16 links and the leave-and-rejoin profile -------------------------------------------
+
+def _links_doc():
+    from engine.season.data.rosters import load_yaml
+    from engine.season.harness import strife_data as D
+    return load_yaml(D.STRIFE_MOVES_YAML.read_text(encoding="utf-8"))
+
+
+def test_the_link_loader_reads_sixteen_links_and_refuses_each_bad_document():
+    from engine.season.harness import strife_data as D
+    links, flow = D.load_links()
+    assert len(links) == 16 == len(D.load_links(_links_doc())[0])
+    assert [l["tier"] for l in links].count("robust") == 6 and [l["tier"] for l in links].count("stable") == 10
+    assert flow["leave_and_rejoin"] == 74 and flow["cases"] == 102
+
+    def drop_last(d):
+        d["links"].pop()
+
+    def dup(d):
+        d["links"][1] = dict(d["links"][0])
+
+    def put(i, key, val):
+        return lambda d: d["links"][i].__setitem__(key, val)
+
+    bad = [(put(0, "a", "ZZ"), "no row"),                         # a code with no row
+           (put(0, "a", "WA-R"), "side suffix"),                   # WA is not split by side
+           (put(0, "b", "CA-X"), "side suffix"),                   # a suffix outside A/R/O
+           (dup, "twice"),
+           (put(0, "tier", "weak"), "tier"),
+           (put(0, "cases", 99), "not counts"),                    # cases above `of`
+           (drop_last, "not the study's 16"),
+           (lambda d: d["links"].append(dict(d["links"][0], b="XE")), "not the study's 16")]
+    checked = 0
+    for mutate, why in bad:
+        d = _links_doc()
+        mutate(d)
+        with pytest.raises(ValueError, match=why):
+            D.load_links(d)
+        checked += 1
+    assert checked == len(bad) == 8
+
+
+def test_a_window_of_three_coded_moves_skips_an_uncoded_move_and_reads_a_suffixed_link_at_its_base():
+    one = [{"a": "CA-R", "b": "XE-R", "tier": "robust"}]
+    def seen(seq):
+        return H.link_profile([seq], one, shuffles=1)[0][1]
+    assert seen([["CA"], [], ["X"], ["X"], ["XE"]]) == 1             # the empty move is skipped: XE is 3 coded moves on
+    assert seen([["CA"], ["X"], ["X"], ["X"], ["XE"]]) == 0          # 4 on: outside the window
+    assert seen([["XE"], ["CA"]]) == 0                               # a follows b, not the link's order
+    assert seen([["CA", "XE"]]) == 0                                 # one move is not a before b
+    assert seen([["CA"], ["XE"], ["CA"], ["XE"]]) == 1               # a strand is counted once, however many instances it holds
+
+
+def test_a_link_with_an_end_no_strand_move_can_carry_prints_unreachable_and_an_empty_pair_prints_no_strand_carries_both():
+    """DR, DA and FA reach no strand move (`_REACHABLE`), so a link on them reads 0 whatever the order: that is not
+    `does not beat its control`. A link whose ends are reachable but which no strand shows says so; one that is shown and
+    beaten by its control keeps the old words."""
+    assert not ({"DR", "DA", "FA"} & H._REACHABLE) and {"CA", "XE", "IN"} <= H._REACHABLE   # the roster's own reach
+    links = [{"a": "DR", "b": "IN", "tier": "robust"}, {"a": "CA-R", "b": "XE-R", "tier": "robust"},
+             {"a": "WA", "b": "SB", "tier": "stable"}]
+    seqs = [[["CA"], ["XE"]], [["SB"], ["WA"]]]
+    lines = {ln.split()[0]: ln for ln in H.link_lines(seqs, links, shuffles=20) if " observed " in ln}
+    assert len(lines) == 3
+    assert "UNREACHABLE: DR" in lines["DR>IN"] and "does not beat" not in lines["DR>IN"]
+    assert "UNREACHABLE" not in lines["CA-R>XE-R"] and "does not beat" not in lines["CA-R>XE-R"]
+    assert "does not beat its control" in lines["WA>SB"]               # b before a in the one strand: observed 0, control above 0
+    assert "no strand shows a then b" in H.link_lines([[["Z"]]], [links[1]], shuffles=5)[1]
+
+
+def test_a_planted_real_order_reads_a_higher_windowed_count_than_the_same_strands_scrambled():
+    """The card's falsifier: for each of the 16 links, strands planted in the link's order read above the seeded
+    shuffled-order control, and the same strands scrambled (the pair reversed) read lower."""
+    checked = 0
+    for l in H.LINKS:
+        a, b = H.base_code(l["a"]), H.base_code(l["b"])
+        fill = [["Z1"], ["Z2"], ["Z3"], ["Z4"]]
+        real = [[[a], [b]] + fill for _ in range(10)]
+        scrambled = [[[b], [a]] + fill for _ in range(10)]
+        ((_, r_obs, r_ctl),) = H.link_profile(real, [l], shuffles=100)
+        ((_, s_obs, s_ctl),) = H.link_profile(scrambled, [l], shuffles=100)
+        assert r_obs == 10 and r_obs > r_ctl > 0, (l, r_obs, r_ctl)
+        assert s_obs == 0 and s_obs < r_obs, (l, s_obs)
+        checked += 1
+    assert checked == 16
+    # the control is seeded: the same strands read the same control twice
+    assert H.link_profile(real, [l], shuffles=20, seed=3) == H.link_profile(real, [l], shuffles=20, seed=3)
+
+
+def test_the_flow_profile_counts_a_strand_that_leaves_and_rejoins_one_that_never_leaves_and_one_ending_off():
+    ab_bc = [{"a": "A", "b": "B"}, {"a": "B", "b": "C"}]
+    seqs = [[["A"], ["B"], ["X"], [], ["X"], ["X"], ["A"], ["B"]],     # on, on, off x3, on, on: leaves and rejoins
+            [["A"], [], ["B"], ["C"]],                                 # on throughout
+            [["A"], ["B"], ["X"], ["X"]],                              # leaves and ends off
+            [[], []]]                                                   # no coded move: not a strand of the reading
+    f = H.flow_profile(seqs, ab_bc)
+    assert (f["strands"], f["left"], f["rejoined"], f["end_off"]) == (3, 2, 1, 1)
+    assert f["departures"] == {"B": 2} and f["rejoins"] == {"A": 1}
+    assert f["share"] == pytest.approx((4 / 7 + 1.0 + 2 / 4) / 3)
+    assert H.flow_profile([], ab_bc)["strands"] == 0
+
+
+def test_the_strands_block_prints_the_links_and_the_flow_profile_and_no_longer_says_not_transcribed():
+    from engine.season.harness import populated
+    w = populated.build_realm(0)
+    populated.run(seasons=1, w=w)
+    before = w.content_hash()
+    out = H.strands_block(w, 0)
+    text = "\n".join(out)
+    assert "NOT TRANSCRIBED" not in text and w.content_hash() == before
+    link_ln = [ln for ln in out if " robust observed " in ln or " stable observed " in ln]
+    assert len(link_ln) == 16
+    dead = [ln.split()[0] for ln in link_ln if "UNREACHABLE" in ln]
+    assert sorted(dead) == ["DA>WA", "DR>IN", "WN>DA", "WN>FA"]      # exactly the links on DR, DA and FA
+    assert any("strands that leave and rejoin the flow:" in ln for ln in out)
+    assert any("the study's own figures (reference): 74 of 102" in ln for ln in out)
 
 
 # --- CR-77: the person reading ------------------------------------------------------------------------------

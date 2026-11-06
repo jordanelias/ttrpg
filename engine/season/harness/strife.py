@@ -26,9 +26,25 @@ THE STRANDS BLOCK (CR-76, behind `--strands`; off, the report is byte-identical 
 terminal when a matched code is, any other kind when every code it maps to is), and prints strands per rung,
 the eras and the opening kinds open beneath the last, conclusions, per strand whether an incompatible pair
 spans its parties (A5), the opening-to-terminal route check (`opening_routes`), and each strand's code
-sequence's adjacent pairs against a shuffled-order control. A reading, never a bar (V2).
-NOT HERE, AND WHY: the study's 16 links themselves. No file in the tree lists them (only the study artifact
-does), so the block prints the observed pairs against the control and names the 16 as not transcribed.
+sequence's adjacent pairs against a shuffled-order control, then the study's 16 drawn links (`strife_moves.yaml:
+links`, `[UNVERIFIED]`) and the leave-and-rejoin profile. A reading, never a bar (V2).
+
+THE LINKS AND THE FLOW (`link_profile`, `flow_profile`). One strand is the unit, corresponding to the study's case. Its
+move sequence is each move's codes; a move with no code is skipped, as the study skips NOTE and OTH. A link (a, b) counts
+for a strand when some move carrying a is followed by a move carrying b within the next `LINK_WINDOW` (3) coded moves,
+and is read against the same strands with their coded-move order shuffled (seeded). `move_codes` yields BASE codes only,
+so a side-suffixed link (`CA-R`, `KL-A`) is read at its base (`CA`, `KL`): that link's count is an UPPER BOUND, as is any
+link whose end code needs side, office or context (the KIND-ONLY grade above), and the header line says so. A link with an
+end no strand move can carry (`_REACHABLE`; of the links' codes, DR, DA and FA are not) reads 0 whatever the order, so it prints UNREACHABLE and not a
+control comparison; a link no strand shows at all prints that, not `does not beat its control`. ON THE FLOW is an operational rule that DIFFERS from the study's flow definition [ASSUMPTION; medium;
+Jordan to correct; revert: delete `flow_profile` and its lines]: a coded move is on the flow when it is the second move of
+a drawn-link instance or the first; otherwise off. A strand LEAVES when an on-flow move is followed by an off-flow run and
+REJOINS when an on-flow move follows that run. The study works move by move: a move is on the flow when it starts it, follows
+the LAST on-flow move by a drawn link within 3 moves, or, after a departure, is linked from the departure move or starts a
+drawn link within 3 moves. This rule applies the last two clauses everywhere, with no requirement that a move continue from the
+last on-flow move, and it has no start: the study starts the flow at a first move with no drawn-link partner (its panel A: A-1 and
+A-2 each hold one on-flow move of that kind). So the two rules differ in both directions and neither bounds the other; the study's
+figures are printed beside this realm's as a reference and not as a bar.
 
     python -m engine.season.harness.strife <seasons> <seed> [seed ...] [--strands]
 """
@@ -44,7 +60,7 @@ from ..loop.driver import resolvable_verbs
 from ..queries import world_q
 from ..state.attribution import causing_act
 from . import populated
-from .strife_data import MOVES, SIGNATURES
+from .strife_data import LINKS, MOVES, SIGNATURES, STUDY_FLOW, base_code
 
 
 class Readers(NamedTuple):
@@ -179,6 +195,21 @@ del _r, _k
 _SIG_KINDS = frozenset(g["kind"] for g in SIGNATURES)
 
 
+def _reachable_codes() -> frozenset:
+    """The codes a strand's move can carry: a code with a kind `world_q.flows_in` admits (`MOVE_KINDS`) that `move_codes`
+    can return for it, which is any code of a kind with no signatures and, for a kind with signatures, only a code a
+    signature names. DR (its one kind, `person.died`, is graded by DN, XE and KL signatures) and DA and FA (their kinds
+    are in `rosters.yaml: strife_kinds.never`) are not."""
+    sig = {}
+    for g in SIGNATURES:
+        sig.setdefault(g["kind"], set()).add(g["code"])
+    return frozenset(r["code"] for r in MOVES for k in r["kinds"]
+                     if k in world_q.MOVE_KINDS and (k not in _SIG_KINDS or r["code"] in sig.get(k, ())))
+
+
+_REACHABLE = _reachable_codes()
+
+
 def move_codes(e, rd: Readers) -> list:
     """A move's codes as the world reading knows them: its signature matches when its kind has signatures, else every
     code its kind maps to (one code only when the kind is unambiguous)."""
@@ -234,6 +265,121 @@ def pair_profile(seqs, shuffles: int = 200, seed: int = 0) -> list:
     return [(p, n, ctl[p] / shuffles) for p, n in sorted(obs.items(), key=lambda kv: (-kv[1], kv[0]))]
 
 
+# the study's window: `b` within the next 3 coded moves after `a` (its Method, 'Links'; the study is not in the repo)
+LINK_WINDOW = 3  # [JUSTIFIED: the study's own window for a windowed link, inherited and not fitted; magnitude is the study's]
+# `pair_profile`'s shuffle count, shared by the two link readings
+CONTROL_SHUFFLES = 200  # [JUSTIFIED: the shuffle count pair_profile already uses; a mean over seeded permutations, not a rule parameter]
+
+
+def _by_pair(links) -> dict:
+    """`{(base a, base b): [link index, ...]}`: the links at the codes `move_codes` can yield."""
+    out = {}
+    for k, l in enumerate(links):
+        out.setdefault((base_code(l["a"]), base_code(l["b"])), []).append(k)
+    return out
+
+
+def _instances(coded, by_pair) -> list:
+    """`(link index, i, j)` for each place in `coded` (a strand's non-empty moves, each a list of codes) where a move
+    carrying a link's `a` is followed, within `LINK_WINDOW` coded moves, by a move carrying its `b`."""
+    out = []
+    for i, ci in enumerate(coded):
+        for j in range(i + 1, min(i + 1 + LINK_WINDOW, len(coded))):
+            for a in ci:
+                for b in coded[j]:
+                    out.extend((k, i, j) for k in by_pair.get((a, b), ()))
+    return out
+
+
+def link_profile(seqs, links=LINKS, shuffles: int = CONTROL_SHUFFLES, seed: int = 0) -> list:
+    """The WINDOWED link count: `[(link, strands showing it, control mean), ...]` in `links` order. `seqs` is per strand,
+    each move's list of codes; a move with no code is skipped. The control is the same count over each strand's coded
+    moves in SHUFFLED ORDER (`shuffles` permutations with a seeded `random.Random`), as a mean number of strands: a
+    link above its control is one the order produces, not the mix of codes. A side-suffixed link is read at its base
+    code, so its count is an UPPER BOUND (see the module docstring)."""
+    import random
+    rng = random.Random(seed)
+    by_pair = _by_pair(links)
+    obs, ctl = [0] * len(links), [0] * len(links)
+    for seq in seqs:
+        coded = [c for c in seq if c]
+        for k in {k for k, _, _ in _instances(coded, by_pair)}:
+            obs[k] += 1
+        for _ in range(shuffles):
+            t = list(coded)
+            rng.shuffle(t)
+            for k in {k for k, _, _ in _instances(t, by_pair)}:
+                ctl[k] += 1
+    return [(l, obs[k], ctl[k] / shuffles) for k, l in enumerate(links)]
+
+
+def flow_profile(seqs, links=LINKS) -> dict:
+    """The LEAVE-AND-REJOIN profile over strands that hold a coded move (rule in the module docstring; no randomness):
+    `strands`, `left` (an on-flow move followed by an off-flow run), `rejoined` (some off-flow run followed by an
+    on-flow move), `share` (mean over strands of the share of coded moves on the flow), `end_off` (strands whose last
+    coded move is off the flow), `departures` and `rejoins` (Counters: the codes of the on-flow move a detour leaves
+    from, and of the on-flow move it returns to, once per detour; a move that carries two link codes adds each)."""
+    by_pair = _by_pair(links)
+    out = {"strands": 0, "left": 0, "rejoined": 0, "share": 0.0, "end_off": 0,
+           "departures": Counter(), "rejoins": Counter()}
+    shares = []
+    for seq in seqs:
+        coded = [c for c in seq if c]
+        if not coded:
+            continue
+        flow = [set() for _ in coded]
+        for k, i, j in _instances(coded, by_pair):
+            flow[i].add(base_code(links[k]["a"]))
+            flow[j].add(base_code(links[k]["b"]))
+        out["strands"] += 1
+        shares.append(sum(1 for f in flow if f) / len(coded))
+        out["end_off"] += not flow[-1]
+        last_on, off_run, left, back = None, False, False, False
+        for f in flow:
+            if f:
+                if off_run:
+                    back = True
+                    out["rejoins"].update(f)
+                off_run, last_on = False, f
+            elif last_on is not None and not off_run:
+                off_run, left = True, True
+                out["departures"].update(last_on)
+        out["left"] += left
+        out["rejoined"] += back
+    out["share"] = sum(shares) / len(shares) if shares else 0.0
+    return out
+
+
+def link_lines(seqs, links=LINKS, study=STUDY_FLOW, shuffles: int = CONTROL_SHUFFLES, seed: int = 0, reachable=None) -> list:
+    """The block's link lines and leave-and-rejoin lines for `seqs` (per strand, each move's codes). `reachable` is
+    the codes a strand's move can carry (default `_REACHABLE`)."""
+    reachable = _REACHABLE if reachable is None else reachable
+    n = len([s for s in seqs if any(s)])
+    out = [f"  the study's {len(links)} drawn links, windowed ({LINK_WINDOW} coded moves): strands showing each, of {n} with "
+           f"a coded move, against the shuffled-order control; every count is an UPPER BOUND where an end code needs side, "
+           f"office or context (a side-suffixed link is read at its base code):"]
+    for l, o, c in link_profile(seqs, links, shuffles, seed):
+        ref = f"  study {l['cases']} of {l['of']} cases" if "cases" in l else ""
+        lost = sorted({base_code(e) for e in (l["a"], l["b"])} - reachable)
+        if lost:
+            mark = f"  UNREACHABLE: {', '.join(lost)} reach(es) no strand move, so no order can show this link"
+        elif o == 0 and c == 0:
+            mark = "  no strand shows a then b, in its order or any shuffle"
+        else:
+            mark = "  does not beat its control" if o <= c else ""
+        out.append(f"    {l['a'] + '>' + l['b']:<10} {l['tier']:<6} observed {o:>3}  control {c:6.2f}{ref}{mark}")
+    f = flow_profile(seqs, links)
+    top = lambda cnt: ", ".join(f"{c} {v}" for c, v in sorted(cnt.items(), key=lambda kv: (-kv[1], kv[0]))[:5]) or "none"
+    out.append("  leave-and-rejoin (this realm; the rule is simpler than the study's, so the study's figures are a reference):")
+    out.append(f"    strands that leave and rejoin the flow: {f['rejoined']} of {f['strands']} "
+               f"(leave at all {f['left']}); mean share of coded moves on the flow {100 * f['share']:.0f}%; "
+               f"strands ending off the flow {f['end_off']} of {f['strands']}")
+    out.append(f"    departures from, by code: {top(f['departures'])}; rejoins at, by code: {top(f['rejoins'])}")
+    out.append(f"    the study's own figures (reference): {study['leave_and_rejoin']} of {study['cases']} cases leave and rejoin; "
+               f"mean share on the flow {study['mean_share_pct']}%; {study['end_off']} end off the flow")
+    return out
+
+
 def opened_on(s) -> str:
     """The kind a strand opened on: its first `opens` move's (`moves[0]` can be a content opener's pulled prior,
     which did not open it; `world_q.Strand`)."""
@@ -267,13 +413,14 @@ def strands_block(w, seed: int, resolvable=None) -> list:
                + ", ".join(f"{k} {arms[k]}" for k in (DETAIN_KIND, BAN_KIND, "at_war", "docketed")))
     slots, grouped = world_q.presented(w, fl)
     out.append(f"  presented: {sum(len(v) for v in slots.values())} in {len(slots)} rung(s); grouped {len(grouped)}")
-    prof = pair_profile([[codes[m.event] for m in s.moves] for s in fl.strands])
+    seqs = [[codes[m.event] for m in s.moves] for s in fl.strands]
+    prof = pair_profile(seqs)
     out.append("  adjacent code pairs in strands, observed against the shuffled-order control (top 10):")
     for p, n, c in prof[:10]:
         out.append(f"    {p[0]}->{p[1]}  observed {n:>3}  control {c:6.2f}")
     if not prof:
         out.append("    none (no strand holds two adjacent moves with one code each)")
-    out.append("  the study's 16 links: NOT TRANSCRIBED (no file in the tree lists them); leave-and-rejoin unread")
+    out.extend(link_lines(seqs))
     routes = opening_routes(MOVES, resolvable)
     bare = routeless_pairs(routes)
     out.append(f"  route check: {len(bare)} of {len(routes)} (opening kind, terminal code) "

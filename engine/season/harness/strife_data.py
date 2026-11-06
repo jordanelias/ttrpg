@@ -3,8 +3,10 @@
 The file reads the 40 move codes of the strife study against what the season loop can produce.
 This module refuses a row naming a verb that is not in `verb_table.yaml`, an Event kind the loop
 does not declare, a key the row does not define, a code listed twice, or per-code ending counts that
-do not total the study's 102 cases. It resolves nothing and no step of the loop reads it;
-`harness/strife.py` is its reader.
+do not total the study's 102 cases. `load_links` does the same for the study's 16 drawn links (a code with no
+row, a side suffix the code cannot carry, a repeated link, a tier outside robust/stable, a count other than
+`drawn_links`) and carries the study's leave-and-rejoin figures. It resolves nothing and no step of the loop reads
+it; `harness/strife.py` is its reader.
 
 WHY IT LIVES UNDER `harness/` AND NOT `data/`. The port gate (plan position GO-09) exports every
 file `data/files.py` names that a loader reads. A registry only the harness reads must not reach the
@@ -83,4 +85,57 @@ def load_moves(path=STRIFE_MOVES_YAML) -> tuple:
     return tuple(rows), tuple(sigs)
 
 
+LINK_TIERS = ("robust", "stable")
+LINK_SIDED = frozenset({"KL", "CA", "DN", "XE"})        # the codes the study splits by side
+LINK_SIDES = frozenset({"A", "R", "O"})                 # the sides a drawn link uses: authority, rebels, outside power
+_LINK_KEYS = frozenset({"a", "b", "tier", "cases", "of"})
+_FLOW_KEYS = frozenset({"leave_and_rejoin", "mean_share_pct", "end_off"})
+
+
+def base_code(code: str) -> str:
+    """A link code without its side suffix: `CA-R` is `CA`."""
+    return code.split("-", 1)[0]
+
+
+def load_links(doc=None) -> tuple:
+    """`(links, leave_rejoin)` of `strife_moves.yaml`, validated, links in file order. `doc` is the parsed document
+    (default: the file), so a planted bad one needs no file on disk. Refuses a code with no row, a side suffix on a
+    code other than KL/CA/DN/XE or outside A/R/O, a link listed twice, a tier outside robust/stable, a key the row does
+    not define, a `cases`/`of` that is not a count of at most `of`, a count of links other than `drawn_links`, and
+    leave-and-rejoin figures that are not counts within the study's cases."""
+    if doc is None:
+        doc = load_yaml(STRIFE_MOVES_YAML.read_text(encoding="utf-8"))
+    codes, seen, links = {r["code"] for r in doc["moves"]}, set(), []
+    for r in doc["links"]:
+        unknown = set(r) - _LINK_KEYS
+        if unknown:
+            raise ValueError(f"strife_moves.yaml: link {r} carries unknown key(s) {sorted(unknown)}")
+        for end in (r.get("a"), r.get("b")):
+            base, _, side = str(end).partition("-")
+            if base not in codes:
+                raise ValueError(f"strife_moves.yaml: link {r} names code {end!r} that has no row")
+            if side and (base not in LINK_SIDED or side not in LINK_SIDES):
+                raise ValueError(f"strife_moves.yaml: link {r} gives {end!r} a side suffix it cannot carry")
+        if (r["a"], r["b"]) in seen:
+            raise ValueError(f"strife_moves.yaml: link {r['a']}>{r['b']} listed twice")
+        seen.add((r["a"], r["b"]))
+        if r.get("tier") not in LINK_TIERS:
+            raise ValueError(f"strife_moves.yaml: link {r['a']}>{r['b']} has tier {r.get('tier')!r}, not one of {LINK_TIERS}")
+        if ("cases" in r) != ("of" in r):
+            raise ValueError(f"strife_moves.yaml: link {r['a']}>{r['b']} states only one of `cases` and `of`")
+        if "cases" in r and not (isinstance(r["cases"], int) and isinstance(r["of"], int) and 0 <= r["cases"] <= r["of"]):
+            raise ValueError(f"strife_moves.yaml: link {r['a']}>{r['b']} has `cases`/`of` that are not counts, cases at most of")
+        links.append(dict(r))
+    if len(links) != doc["drawn_links"]:
+        raise ValueError(f"strife_moves.yaml: {len(links)} links listed, not the study's {doc['drawn_links']}")
+    flow = dict(doc["leave_rejoin"])
+    if (set(flow) != _FLOW_KEYS or any(not isinstance(v, int) or v < 0 for v in flow.values())
+            or flow["leave_and_rejoin"] > doc["study_cases"] or flow["end_off"] > doc["study_cases"]
+            or flow["mean_share_pct"] > 100):
+        raise ValueError(f"strife_moves.yaml: `leave_rejoin` must hold counts {sorted(_FLOW_KEYS)} within the study's cases")
+    flow["cases"] = doc["study_cases"]
+    return tuple(links), flow
+
+
 MOVES, SIGNATURES = load_moves()
+LINKS, STUDY_FLOW = load_links()
