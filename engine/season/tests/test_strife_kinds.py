@@ -153,3 +153,11 @@ def test_an_empty_restraint_derivation_is_refused():
         W.check_restraint_kinds(frozenset(), W.KNOWN_RESTRAINT_ENDED_KINDS)
     with pytest.raises(Unspecified, match="restraint arm"):
         W.check_restraint_kinds(W.KNOWN_RESTRAINT_KINDS, frozenset())
+
+
+def test_a_restraint_kind_that_is_no_move_is_refused():
+    """`arrest.made` moved to `never` passes every kind check; the restraint arm it feeds would be silent."""
+    W.check_restraint_kinds(W.KNOWN_RESTRAINT_KINDS, W.KNOWN_RESTRAINT_ENDED_KINDS, W.MOVE_KINDS)   # shipped
+    with pytest.raises(Unspecified, match="arrest.made"):
+        W.check_restraint_kinds(W.KNOWN_RESTRAINT_KINDS, W.KNOWN_RESTRAINT_ENDED_KINDS,
+                                W.MOVE_KINDS - {"arrest.made"})

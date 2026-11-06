@@ -4231,7 +4231,7 @@ def practice(w: World, p: Person, verb: str) -> int:
 # ===========================================================================
 
 from ..data import affiliations as _aff
-from ..data.requires import RECORD_SOURCED_OPERANDS
+from .person_q import ABOUT_KEYS
 from ..data.rosters import FOREIGN_FACTION_IDS, RECORD_KIND_KEYS, STRIFE_KINDS
 from ..state.containment import home_map
 from ..state.gate import PERSON_DIED
@@ -4252,9 +4252,9 @@ OPENING_MARCH_VERB = "march"   # the verb whose act `march_side` reads
 OPENING_DEATH_KIND = PERSON_DIED   # `state/gate.py`'s one spelling of the death kind
 OPENING_DEATH_VERBS = frozenset({"fight", "accept"})
 PETITION_RECORD_KIND = "petition"
-# What a petition is about: the content key its `subject` operand is read from (`rosters.yaml:
-# record_sourced_operands.petition.subject`; `_eff_petition` mints it from the act's `subject`).
-PETITION_MATTER_KEY = RECORD_SOURCED_OPERANDS[PETITION_RECORD_KIND]["subject"]
+# What a petition is about: `person_q.ABOUT_KEYS`, the one owner of what a document is about (`_eff_petition`
+# mints it from the act's `subject`). `.get`, so a lost row reaches `check_strife_openers`'s refusal, not a KeyError.
+PETITION_MATTER_KEY = ABOUT_KEYS.get(PETITION_RECORD_KIND)
 
 
 def _claimed_seat(rd, e, a) -> Optional[tuple]:
@@ -4385,9 +4385,11 @@ class Move(NamedTuple):
 
 
 class Strand(NamedTuple):
-    """A connected chain of moves (A9). IDENTITY: the Event id of its first move, so a strand read twice from
-    one log is the same strand, and two strands merged by a later linking move keep the older one's id. The kind
-    it opened on is `moves[0].kind`."""
+    """A connected chain of moves (A9). IDENTITY: the Event id of its EARLIEST move (`moves[0]`, claim order), so
+    a strand read twice from one log is the same strand, and two strands merged by a later linking move keep the
+    older one's id. `moves[0]` need not be the move it opened on (`opens`): a content opener's pulled prior is
+    placed by its index and can be the earliest move, and so a strand read before and after the content opener
+    landed can carry two ids (a stated limit). The kind it opened on is its first `opens` move's kind."""
     id: str
     rung: Optional[str]    # the lowest rung covering its moves' places: its stakes
     moves: tuple
@@ -4442,7 +4444,9 @@ class _StrifeReading:
         """An office by `Office.rung`; else, for the world reading, `place_of`. `known_only` is the person
         reading's place: CONTAINMENT REFERENTS ONLY -- a person by `home_map`, an office, a rung as itself. A
         record, a site or a date has no place there (`None`): `place_of` reads a record's live holder, a site's
-        rung and a date's venue, world state that moves with no claim landing, and writes a TRACE row."""
+        rung and a date's venue, world state that moves with no claim landing, and writes a TRACE row. A PERSON
+        moves with no claim landing too: `home_map` is his live home, so his place follows him when he travels
+        (a stated limit, the CR-77 header's `[ASSUMPTION]`; revert: `None` for a person here)."""
         if x is None:
             return None
         if known_only and x in self.w.persons:
@@ -4467,7 +4471,8 @@ class _StrifeReading:
 
 
 def _move_referents(rd: _StrifeReading, e, a) -> frozenset:
-    """What a move NAMES: each change's subject, a document's `terms`, and the causing act's `subject` operand (a
+    """What a move NAMES: each change's subject, what a document is about (its `person_q.ABOUT_KEYS` key, only
+    for a kind that has one), and the causing act's `subject` operand (a
     `march.declared` writes nothing, so its target is read off the act). The realm rung is dropped: linking
     never passes through it. A Tenure's own id is read as its two ends, the holder and the held, FOR EVERY
     TENURE KIND -- wider than H-71's reading, which `epistemic.py` scopes to `hold` (the deposit rule reads any
@@ -4486,9 +4491,9 @@ def _move_referents(rd: _StrifeReading, e, a) -> frozenset:
             continue
         out.add(s)
         rec = rd.w.records.get(s)
-        sm = rec.subject_matter if rec is not None else None
-        if isinstance(sm, dict) and isinstance(sm.get(PETITION_MATTER_KEY), str):
-            out.add(sm[PETITION_MATTER_KEY])
+        about = ABOUT_KEYS.get(rec.kind) if rec is not None else None
+        if about is not None and isinstance(rec.subject_matter, dict) and isinstance(rec.subject_matter.get(about), str):
+            out.add(rec.subject_matter[about])
     pay = a.payload if a is not None else None
     subj = pay.get("subject") if isinstance(pay, dict) else None
     if isinstance(subj, str):
@@ -4690,8 +4695,8 @@ def flows_in(w: World, terminal: Optional[Callable] = None) -> Flows:
     A content opener's earlier same-matter moves that no strand holds are taken into the strand it opens (the
     first petition belongs to the movement the second makes), whether the opener started a strand or linked to
     one; and every other strand a taken earlier move links to is merged in, as `_attach` merges for the move
-    itself. A move that content-opens is an OPENING move and is never terminal, though its kind is in
-    `concludes` (a second petition starts the movement; it does not end it). A strand is read at the lowest rung
+    itself. A move that content-opens, and each earlier move it takes, is an OPENING move and is never terminal,
+    though its kind is in `concludes` (two petitions start the movement; neither ends it). A strand is read at the lowest rung
     covering its moves (it zooms).
 
     A STATED LIMIT: a march's side (`march_side`) and every referent's parent (`_StrifeReading.parent`) are read
@@ -4728,7 +4733,8 @@ def flows_in(w: World, terminal: Optional[Callable] = None) -> Flows:
             if prior is not None:
                 prior.append(m)
             continue
-        pulled = [p for p in prior if p.event not in held] if content_opens else []
+        # a pulled prior is one of the movement's opening moves, so never terminal (its kind is in `concludes`)
+        pulled = [p._replace(terminal=False) for p in prior if p.event not in held] if content_opens else []
         for mv in [m] + pulled:
             s0.take(rd, mv)
             held.add(mv.event)
@@ -4871,6 +4877,11 @@ def incompatible_span(w: World, strand: Strand) -> bool:
 # never the Event
 # log and NEVER THE ACT STORE (`04` §B.9, "no person-side Query reaches it"; `01` AX-7: a character holds a
 # reading of the world, never the world). No consumer in the loop yet (CR-78's stamp is the first).
+# A STATED LIMIT: the containment tree is read LIVE. A person referent is placed by his live home (`home_map`),
+# linked through his live `contain` parent (`_parents`), and told a party by the live cast (`_parties` reads
+# `w.persons`), so when an arrester travels or dies his holder's `Strand.rung`, links and parties change with no
+# claim landing (`tests/test_strife_flows.py` pins the travel). `[ASSUMPTION; medium; Jordan to correct; revert:
+# place person referents None person-side and rely on the parties]`.
 #
 # WHAT A MOVE IS HERE. A claim in his ledger whose predicate (an event-kind deposit carries `predicate =
 # e.kind, value = True`, `loop/witness.py`) is a `strife_kinds` `opens` or `joins` kind (CR-75), read at the
@@ -4932,20 +4943,27 @@ def incompatible_span(w: World, strand: Strand) -> bool:
 # Failure, `arrest.resisted`, writes nothing); the kinds a closed restraint earns: the `pardon` row's `emits:`
 # (`loop/effects_governance.py` reads `_DETENTION_ENDED, _BAN_ENDED` the same way). Both read off the table, so no
 # kind is spelt twice; an empty derivation would silence the arm, so it refuses.
-_ARREST = VERB_TABLE["arrest"]
-KNOWN_RESTRAINT_KINDS = frozenset(k for d, ks in _ARREST.emits_by_degree.items()
+_ARREST = VERB_TABLE.get("arrest")     # `.get`: a lost row reaches `check_restraint_kinds`, not a KeyError
+KNOWN_RESTRAINT_KINDS = frozenset(k for d, ks in (_ARREST.emits_by_degree.items() if _ARREST else ())
                                   if _ARREST.writes_by_degree.get(d) for k in ks)
-KNOWN_RESTRAINT_ENDED_KINDS = frozenset(VERB_TABLE["pardon"].emits)
+KNOWN_RESTRAINT_ENDED_KINDS = frozenset(VERB_TABLE["pardon"].emits if "pardon" in VERB_TABLE else ())
 
 
-def check_restraint_kinds(opened, ended) -> None:
+def check_restraint_kinds(opened, ended, move_kinds=MOVE_KINDS) -> None:
     """REFUSED AT IMPORT, `Unspecified` (as `check_aim_rules`): the restraint arm reads at least one kind off each of
-    `arrest` and `pardon`. Callable so a test can plant an empty derivation."""
+    `arrest` and `pardon`, and every restraint kind is a move kind (`move_kinds`: a kind in `never` passes every
+    kind check and would silence the arm). Callable so a test can plant each refusal."""
     if not opened or not ended:
         raise Unspecified(
             "the person reading's restraint arm reads no kind off `arrest` or `pardon`", "verb_table.yaml -- arrest, pardon",
             needs="an `arrest` degree that writes and emits, and a `pardon` that emits",
             law="CR-75 -- an empty derivation would silence the arm, so it refuses")
+    stray = sorted(set(opened) - set(move_kinds))
+    if stray:
+        raise Unspecified(
+            f"restraint kind(s) {stray} are not `strife_kinds` `opens` or `joins` kinds", "rosters.yaml -- strife_kinds",
+            needs=f"{stray} in `opens` or `joins`",
+            law="CR-75 -- a restraint the person reading keys on must be a move, or the arm is silent")
 
 
 check_restraint_kinds(KNOWN_RESTRAINT_KINDS, KNOWN_RESTRAINT_ENDED_KINDS)
@@ -4986,7 +5004,8 @@ def open_referents_known(w: World, p: Person, referents, rd: Optional[_StrifeRea
     a `RESTRAINT_KINDS` kind: the custody edge), and no release claim on `x` landed after it. The docket and war
     arms have no ledger source and are dropped. `w` is read for the tenure index only (`rd`'s, when a reading
     passes one), and only for an id's kind (immutable): never whether the edge, or anyone on it, is live. Empty
-    means no open referent he knows of remains."""
+    means no open referent he knows of remains. `rd` is for ONE reading only: its tenure index is built on first
+    use, so an `rd` reused after `w.tenures` grows misses a new custody edge."""
     edges = (rd or _StrifeReading(w)).tenures
     refs = frozenset(r for r in referents if r in edges and edges[r].kind in RESTRAINT_KINDS)
     if not refs:
@@ -5004,7 +5023,7 @@ def concluded_known(w: World, p: Person, strand: Strand, rd: Optional[_StrifeRea
     """`concluded`'s rule (b) (`_concluded`) over HIS strand (one `flows_known(w, p)` returned), against
     `open_referents_known`: a `concludes` kind latest, nothing open he knows of. A strand of the world reading is
     refused, before anything else is read: its moves are Events he may not hold, and judging one by his ledger
-    would read the world through him."""
+    would read the world through him. `rd`, when passed, is for one reading only (`open_referents_known`)."""
     missing = {m.event for m in strand.moves}
     for c in p.ledger:
         if not missing:

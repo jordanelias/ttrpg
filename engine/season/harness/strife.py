@@ -130,8 +130,8 @@ def terminal_codes(rows) -> frozenset:
 
 
 def routeless_terminals(rows, resolvable=None) -> list:
-    """Terminal codes with no static route, in file order. Master section 7 wants a conclusion route per terminal
-    code; until strands exist (S3) the check is per terminal code, not per opening-to-conclusion pair."""
+    """Terminal codes with no static route, in file order: the per-code half of master section 7's check. The
+    per-pair half, opening kind to terminal code, is `opening_routes`/`routeless_pairs`."""
     term = terminal_codes(rows)
     return [r["code"] for r in rows if r["code"] in term and not route(r, resolvable)]
 
@@ -234,6 +234,12 @@ def pair_profile(seqs, shuffles: int = 200, seed: int = 0) -> list:
     return [(p, n, ctl[p] / shuffles) for p, n in sorted(obs.items(), key=lambda kv: (-kv[1], kv[0]))]
 
 
+def opened_on(s) -> str:
+    """The kind a strand opened on: its first `opens` move's (`moves[0]` can be a content opener's pulled prior,
+    which did not open it; `world_q.Strand`)."""
+    return next(m.kind for m in s.moves if m.opens)
+
+
 def strands_block(w, seed: int, resolvable=None) -> list:
     """The shipped-realm reading of CR-76 for one world. Prints; writes nothing; a reading, never a bar (V2)."""
     rd = readers_for(w)
@@ -247,14 +253,14 @@ def strands_block(w, seed: int, resolvable=None) -> list:
     out.append(f"  concluded {sum(done.values())} of {len(fl.strands)}")
     for era in fl.eras:
         inside = set(era.strands)
-        cats = sorted({s.moves[0].kind for s in fl.strands if s.id in inside})
+        cats = sorted({opened_on(s) for s in fl.strands if s.id in inside})
         out.append(f"  era {era.id}: {len(era.moves)} moves, {len(era.strands)} strands, "
                    f"{'concluded' if era.concluded else 'OPEN'}; opening kinds beneath: {', '.join(cats) or 'none'}")
     for s in fl.strands:
         kind = w.rungs[s.rung].kind if s.rung in w.rungs else None
         seq = "-".join("/".join(codes[m.event]) or "?" for m in s.moves)
         out.append(f"    {s.id[:12]:<12} {str(kind):<10} {s.rung or '-':<20} moves {len(s.moves):>3} "
-                   f"opening {s.moves[0].kind:<18} {'concluded' if done[s.id] else 'open':<9} "
+                   f"opening {opened_on(s):<18} {'concluded' if done[s.id] else 'open':<9} "
                    f"incompatible-span {world_q.incompatible_span(w, s)}  {seq[:60]}")
     arms = Counter(r[0] for s in fl.strands for r in world_q.open_referents(w, s.parties, s.referents))
     out.append("  open referents over the strands, by arm (an arm at 0 is vacuous in this world): "

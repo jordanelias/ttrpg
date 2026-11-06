@@ -310,6 +310,32 @@ def test_a_taken_earlier_move_merges_the_strand_it_links_to():
     _petition(w, "rec_2", "p_mid", "S", 3)
     (s,) = W.flows_in(w).strands
     assert [m.event for m in s.moves] == ["e_rec_1", "e_seize", "e_rec_2"] and s.id == "e_rec_1"
+    # The pulled prior is the earliest move but not the one the strand opened on: the harness prints the
+    # first OPENING move's kind, on the strand's line and on its era's, never `moves[0]`'s.
+    assert not s.moves[0].opens and s.moves[1].opens
+    out = H.strands_block(w, 0, resolvable=frozenset())
+    (line,) = [ln for ln in out if ln.startswith("    e_rec_1 ")]
+    assert "opening rung.seized " in line, line
+    (era_line,) = [ln for ln in out if ln.startswith("  era ")]
+    assert era_line.endswith("opening kinds beneath: rung.seized"), era_line
+
+
+def test_a_pulled_earlier_move_is_an_opening_move_and_never_closes_the_era():
+    """A content opener's pulled prior is one of the movement's opening moves, so it is never terminal, though
+    its kind is in `concludes`. p1 is placed at the realm (its terms under D3, the petition at S4) and links to
+    nothing while the era `e1` is open; p2 on the same terms content-opens and pulls p1. The era stays open."""
+    w = _world()
+    ev(w, "e1", "field.lost", ["S", "S2"])
+    w.records["rec_1"] = Record("rec_1", "S4", "petition", subject_matter={"terms": "S3", "to": "p_high", "from": "S4"})
+    ev(w, "e_rec_1", "petition.filed", ["rec_1"], actor="p_low", verb="petition", payload={"subject": "S3"}, tick=2)
+    fl = W.flows_in(w)
+    assert len(fl.strands) == 1 and [(e.id, e.concluded) for e in fl.eras] == [("e1", False)]   # p1 parked
+    _petition(w, "rec_2", "p_mid", "S3", 3)
+    fl = W.flows_in(w)
+    (s,) = [s for s in fl.strands if s.id == "e_rec_1"]
+    assert [m.event for m in s.moves] == ["e_rec_1", "e_rec_2"] and s.moves[0].place == "R"   # at the realm
+    assert [(e.id, e.concluded) for e in fl.eras] == [("e1", False)]
+    assert not s.moves[0].terminal
 
 
 @pytest.mark.parametrize("a, b, want", [
@@ -506,6 +532,41 @@ def test_his_reading_of_a_record_claim_does_not_move_when_the_record_changes_han
     assert [s.rung for s in W.flows_known(w, w.persons["p_low"])] == before == [None]
 
 
+def test_his_reading_places_a_person_referent_by_the_live_containment_tree():
+    """A STATED LIMIT (the CR-77 header, `_StrifeReading.place`), pinned so it is observed: a person referent is
+    placed by his LIVE home (`home_map`), so when the arrester travels the holder's strand moves with him though
+    no claim landed. The revert is named at the limit; this test fails when it is taken."""
+    w = _world()
+    hold(w, "p_other", "p_mid", "arrest.made")
+    assert [s.rung for s in W.flows_known(w, w.persons["p_other"])] == ["Hh"]
+    for t in w.tenures:
+        if t.kind == "contain" and t.subject == "p_mid" and t.live:
+            t.until = 2
+    w.add_tenure(Tenure("t_cr77_travel", "p_mid", "S2", "contain", 2))
+    assert [s.rung for s in W.flows_known(w, w.persons["p_other"])] == ["S2"]
+
+
+def test_a_move_reads_each_record_s_about_key_and_no_other():
+    """What a document is about is `person_q.ABOUT_KEYS[<kind>]` (`terms` for a dispensation or petition,
+    `proposition` for a faction sheet), read by `_move_referents` and never `terms` off every kind: a faction
+    sheet contributes its proposition, a `cover` (keyed `terms`, about nothing) contributes no terms, and a
+    dispensation's terms are still read (the control)."""
+    from engine.season.queries.person_q import ABOUT_KEYS
+    w = _world()
+    w.records["rec_sheet"] = Record("rec_sheet", "S", "faction_sheet", subject_matter={
+        "proposition": "prop_x", "members": [], "holdings": [], "seats": [], "head": None})
+    w.records["rec_cover"] = Record("rec_cover", "S", "cover", subject_matter={"terms": "S3"})
+    w.records["rec_disp"] = Record("rec_disp", "S", "dispensation", subject_matter={"terms": "S2", "to": "p_low",
+                                                                                     "at": "S"})
+    assert ABOUT_KEYS["faction_sheet"] != "terms" and "cover" not in ABOUT_KEYS
+    rd = W._StrifeReading(w)
+    got = {rid: W._move_referents(rd, Event(f"e_{rid}", "record.seized",
+                                            [StateChange(rid, "set", "Event", "exists")], [ROOT], 1), None)
+           for rid in ("rec_sheet", "rec_cover", "rec_disp")}
+    assert got == {"rec_sheet": {"rec_sheet", "prop_x"}, "rec_cover": {"rec_cover"},
+                   "rec_disp": {"rec_disp", "S2"}}, got
+
+
 @pytest.mark.parametrize("arm", ["docket", "at_war"])
 def test_an_arm_with_no_ledger_source_does_not_hold_his_strand_open(arm, monkeypatch):
     """The docket and war arms (named gap (1)): the world reads the strand open, a docketed matter or the parties
@@ -615,8 +676,8 @@ def test_concluded_known_refuses_a_strand_of_the_world_reading():
 def test_control_the_realm_hash_holds_and_the_reading_is_the_same_read_twice():
     """The two readings over a REAL season: a hand-built world would miss the real log, act store and witness
     pipeline (ledgers ordered by landing, evicted, told at second hand), and the harness's code-level terminal
-    test on a real log. MEASURED at seed 0, one season: no ledger holds an `opens` claim (the world opens its
-    strands by side and content only, `strife-01` §3 item 3), so every person reading is `()` as shipped; the
+    test on a real log. At seed 0, one season, no ledger holds an `opens` claim (the world opens its strands by
+    side and content only, `strife-01` §3 item 3), so every person reading is `()` as shipped (asserted); the
     read-twice control plants one `opens` claim under the first move claim of a few holders, so their real
     joining claims attach, and reads those holders twice."""
     from engine.season.harness import populated
@@ -627,6 +688,8 @@ def test_control_the_realm_hash_holds_and_the_reading_is_the_same_read_twice():
     fl = W.flows_in(w, H.terminal_for(w))
     W.presented(w, fl)
     assert fl.strands and w.content_hash() == before and len(w.log) == n_log
+    # the measurement, asserted: no ledger holds an `opens` claim, so every person reading is `()`
+    assert len(w.persons) > 10 and all(W.flows_known(w, p) == () for p in w.persons.values())
     holders = []
     for pid, p in sorted(w.persons.items()):
         first_move = next((c for c in p.ledger if c.predicate in W.MOVE_KINDS and c.value is True), None)
