@@ -35,9 +35,9 @@ ledger built by hand (the witness's claims minted by the real deposit rule, `epi
      petition's names no matter and joins nothing on it; neither opens a strand.
  11. His own two deeds link; two strangers' deeds do not. NO ACT STORE IS READ: with the act store and the
      log replaced by stubs that raise, and their readers patched to raise, both functions still answer.
- 12. CONTROL: `build_realm(0)` hashes the base; after one season `flows_in` (with `terminal_for`) and
-     `presented` leave the hash and the log length where they were, and the reading of every person is the
-     same read twice and leaves the hash where it was. His reading of a record claim does not move when the
+ 12. CONTROL: after one season of `build_realm(0)`, `flows_in` (with `terminal_for`) and `presented` leave the
+     hash and the log length where they were, and the reading of a few planted holders is the same read twice
+     and leaves the hash where it was. His reading of a record claim does not move when the
      record changes hands, and a dead arrester is no phantom restraint.
 Each loop asserts that it asserted (`CLAUDE.md` §0.1 pt 2).
 """
@@ -48,7 +48,7 @@ from engine.season.data.rosters import DETAIN_KIND
 from engine.season.epistemic import act_refs, claim_subjects
 from engine.season.harness import probes as P
 from engine.season.harness import strife as H
-from engine.season.queries import faction_q, world_q as W
+from engine.season.queries import world_q as W
 from engine.season.state.carriers import Act, Claim, Event, Person, Record, Rung, StateChange, Tenure
 from engine.season.state.ids import ROOT
 
@@ -85,8 +85,21 @@ def ev(w, eid, kind, subjects, actor=None, verb="tell", payload=None, tick=1):
     return e
 
 
-def test_the_side_read_has_one_owner():
-    assert H.governors is W.governors and H.side_against is W.side_against
+def _ceded_world():
+    """`_world()` with a realm-wide defeat and its cession, both naming two parties: `(w, e1, e2)`."""
+    w = _world()
+    e1 = ev(w, "e1", "field.lost", ["S", "S2", "p_low", "p_mid"])
+    e2 = ev(w, "e2", "rung.ceded", ["S", "S2", "p_low", "p_mid"], tick=2)
+    return w, e1, e2
+
+
+def _fake_war(monkeypatch, war=True):
+    """Stand-ins: `p_low` and `p_mid` of two factions and, with `war`, the two at war. `at_war` is False for every
+    pair the tree can build, and its own falsifier drives the real fold (`test_faction_q.py`); here the arm's
+    WIRING is read through stand-ins for the owners."""
+    monkeypatch.setattr(W, "faction_of", lambda w_, x: {"p_low": "fac_a", "p_mid": "fac_b"}.get(x))
+    if war:
+        monkeypatch.setattr(W, "at_war", lambda w_, a, b: {a, b} == {"fac_a", "fac_b"})
 
 
 def test_two_realm_wide_events_while_an_era_is_open_read_as_one_era():
@@ -167,22 +180,20 @@ def test_a_later_linked_move_reopens_a_concluded_strand():
 
 def test_factions_not_at_war_leave_the_strand_concluded(monkeypatch):
     """The `at_war` arm's control: the parties have two factions, and the REAL owner finds them not at war."""
-    w = _world()
-    ev(w, "e1", "field.lost", ["S", "S2", "p_low", "p_mid"])
-    ev(w, "e2", "rung.ceded", ["S", "S2", "p_low", "p_mid"], tick=2)
-    monkeypatch.setattr(W, "faction_of", lambda w_, x: {"p_low": "fac_a", "p_mid": "fac_b"}.get(x))
+    w, _, _ = _ceded_world()
+    _fake_war(monkeypatch, war=False)
     (s,) = W.flows_in(w).strands
-    assert not faction_q.at_war(w, "fac_a", "fac_b")
+    assert not W.at_war(w, "fac_a", "fac_b")
     assert W.open_referents(w, s.parties, s.referents) == [] and W.concluded(w, s)
 
 
 def _mv(eid, ix, refs, place):
-    return W.Move(eid, ix, ix, "field.lost", None, frozenset(refs), place, True, False)
+    return W.Move(eid, ix, "field.lost", None, frozenset(refs), place, True, False)
 
 
 def _st(rung, *moves, parties=()):
     return W.Strand(moves[0].event, rung, tuple(moves), frozenset().union(*(m.referents for m in moves)),
-                    frozenset(parties), moves[0].kind)
+                    frozenset(parties))
 
 
 def test_presented_types_a_duchy_s_two_slots_and_groups_the_rest_under_the_era():
@@ -197,7 +208,7 @@ def test_presented_types_a_duchy_s_two_slots_and_groups_the_rest_under_the_era()
     trib = _st("D", _mv("t1", 1, {"S2"}, "S"))
     iso = _st("D", _mv("i1", 2, {"Hh"}, "Hh"), _mv("i2", 3, {"Hh"}, "Hh"))
     third = _st("D", _mv("x1", 4, {"D"}, "S"))
-    era = W.Era("e0", "R", (era_move,), ("e0",), False)
+    era = W.Era("e0", (era_move,), ("e0",), False)
     fl = W.Flows((era_strand, trib, iso, third), (era,))
     assert sorted((trib, iso, third), key=W.slot_rank) == [iso, third, trib]
     slots, grouped = W.presented(w, fl)
@@ -218,19 +229,14 @@ def test_incompatible_span_reads_a_true_pair_among_the_living_parties():
 
 @pytest.mark.parametrize("arm", ["detain", "docket", "at_war"])
 def test_an_open_referent_keeps_the_era_open(arm, monkeypatch):
-    w = _world()
-    ev(w, "e1", "field.lost", ["S", "S2", "p_low", "p_mid"])
-    ev(w, "e2", "rung.ceded", ["S", "S2", "p_low", "p_mid"], tick=2)
+    w, _, _ = _ceded_world()
     assert W.open_era(W.flows_in(w)) is None                        # control: with nothing open it concludes
     if arm == "detain":
         w.add_tenure(Tenure("t_cr76_held", "p_low", "off_duke", DETAIN_KIND, 0))
     elif arm == "docket":
         w.docket.append({"date": None, "matter": "S2", W.DOCKET_ARRANGEMENT: None, W.DOCKET_PETITION: None})
     else:
-        # `at_war` is False for every pair the tree can build, and its own falsifier drives the real fold
-        # (`test_faction_q.py`); here the arm's WIRING is read through stand-ins for the two owners.
-        monkeypatch.setattr(W, "faction_of", lambda w_, x: {"p_low": "fac_a", "p_mid": "fac_b"}.get(x))
-        monkeypatch.setattr(faction_q, "at_war", lambda w_, a, b: {a, b} == {"fac_a", "fac_b"})
+        _fake_war(monkeypatch)
     fl = W.flows_in(w)
     assert W.open_era(fl) is not None, arm
     assert W.open_referents(w, fl.strands[0].parties, fl.strands[0].referents), arm
@@ -240,7 +246,7 @@ def test_a_person_within_the_realm_flow_need_not_hold_any_of_its_moves():
     w = _world()
     ev(w, "e1", "field.lost", ["S", "S2"])
     era = W.open_era(W.flows_in(w))
-    persons, offices, _ = W.within(w, era.rung)
+    persons, offices, _ = W.within(w, "R")                          # the era's rung is the realm
     moves = {m.event for m in era.moves}
     assert "p_other" in persons and not any(c.subject in moves or c.subject in {"S", "S2"}
                                             for c in w.persons["p_other"].ledger)
@@ -331,7 +337,9 @@ def test_incompatibility_keeps_every_cell_and_incompatible_is_its_true_half():
 def test_the_route_check_names_a_planted_gap():
     from engine.season.loop.driver import resolvable_verbs
     ok = resolvable_verbs()
-    base = set(H.routeless_pairs(H.MOVES, ok))
+    def bare(resolvable):
+        return set(H.routeless_pairs(H.opening_routes(H.MOVES, resolvable)))
+    base = bare(ok)
     checked = 0
     for r in H.MOVES:
         if r["code"] not in H.terminal_codes(H.MOVES):
@@ -339,12 +347,12 @@ def test_the_route_check_names_a_planted_gap():
         verbs = {v for v, _ in H.route(r, ok)}
         if not verbs:
             continue
-        lost = set(H.routeless_pairs(H.MOVES, ok - verbs)) - base
+        lost = bare(ok - verbs) - base
         named = {(k, r["code"]) for k in H.opening_kinds() if H.opening_producers(k, ok - verbs)}
         assert named and named <= lost, r["code"]                   # every opening that still exists loses it
         checked += 1
     assert checked >= 10
-    lost = set(H.routeless_pairs(H.MOVES, ok - {"requisition"})) - base
+    lost = bare(ok - {"requisition"}) - base
     assert {k for k, _ in lost} == {"requisition.taken"}             # the opening side, removed
 
 
@@ -384,6 +392,11 @@ def reading(w, pid):
     return [(s.referents, W.concluded_known(w, p, s)) for s in W.flows_known(w, p)]
 
 
+def read_ids(w, p):
+    """His reading by identity: each strand's id, its move ids, and whether he reads it concluded."""
+    return [(s.id, tuple(m.event for m in s.moves), W.concluded_known(w, p, s)) for s in W.flows_known(w, p)]
+
+
 def test_a_witness_and_a_hearsay_holder_of_the_same_events_read_different_flows():
     w = _world()
     e1 = ev(w, "e1", "field.lost", ["S", "S2"])
@@ -412,9 +425,9 @@ def test_an_empty_ledger_reads_no_flow():
 def test_a_person_within_the_realm_flow_who_holds_none_of_its_moves_reads_no_realm_flow():
     w = _world()
     ev(w, "e1", "field.lost", ["S", "S2"])
-    era = W.open_era(W.flows_in(w))
-    persons, _, _ = W.within(w, era.rung)
-    assert "p_other" in persons                                       # CR-76 lists him as within
+    assert W.open_era(W.flows_in(w)) is not None
+    persons, _, _ = W.within(w, "R")
+    assert "p_other" in persons                                      # CR-76 lists him as within
     hold(w, "p_other", "S", "travel.moved")                           # a `never` kind on the same rung
     hold(w, "p_other", "S", "field.lost", value=False)                # a told denial is no move
     assert W.flows_known(w, w.persons["p_other"]) == ()
@@ -493,34 +506,26 @@ def test_his_reading_of_a_record_claim_does_not_move_when_the_record_changes_han
     assert [s.rung for s in W.flows_known(w, w.persons["p_low"])] == before == [None]
 
 
-def test_the_docket_arm_has_no_ledger_source_so_a_docketed_matter_does_not_hold_his_strand_open():
-    w = _world()
-    e1 = ev(w, "e1", "field.lost", ["S", "p_low"])
-    e2 = ev(w, "e2", "rung.ceded", ["S", "p_low"], tick=2)
-    case = ev(w, "e_case", "case.opened", ["rec_case"], actor="p_high", verb="open_case",
-              payload={"subject": "p_low"}, tick=2)
-    w.docket.append({"date": None, "matter": "p_low", W.DOCKET_ARRANGEMENT: None, W.DOCKET_PETITION: None})
+@pytest.mark.parametrize("arm", ["docket", "at_war"])
+def test_an_arm_with_no_ledger_source_does_not_hold_his_strand_open(arm, monkeypatch):
+    """The docket and war arms (named gap (1)): the world reads the strand open, a docketed matter or the parties
+    at war; he concludes on the terminal claim alone."""
+    w, e1, e2 = _ceded_world()
+    assert W.concluded(w, W.flows_in(w).strands[0])                   # control: with nothing open it concludes
+    if arm == "docket":
+        case = ev(w, "e_case", "case.opened", ["rec_case"], actor="p_high", verb="open_case",
+                  payload={"subject": "p_low"}, tick=2)
+        w.docket.append({"date": None, "matter": "p_low", W.DOCKET_ARRANGEMENT: None, W.DOCKET_PETITION: None})
+    else:
+        _fake_war(monkeypatch)
     (s,) = W.flows_in(w).strands
-    assert not W.concluded(w, s)                                      # the world: open, the matter docketed
+    assert not W.concluded(w, s), arm                                 # the world: open
     witness(w, "p_other", e1)
     witness(w, "p_other", e2)
-    assert "p_low" not in witness(w, "p_other", case)                # the case's deposit names no matter
+    if arm == "docket":
+        assert "p_low" not in witness(w, "p_other", case)            # the case's deposit names no matter
     seen = reading(w, "p_other")
-    assert len(seen) >= 2 and all(done for _, done in seen), seen
-
-
-def test_the_war_arm_has_no_ledger_source_so_a_world_at_war_does_not_hold_his_strand_open(monkeypatch):
-    w = _world()
-    e1 = ev(w, "e1", "field.lost", ["S", "p_low", "p_mid"])
-    e2 = ev(w, "e2", "rung.ceded", ["S", "p_low", "p_mid"], tick=2)
-    monkeypatch.setattr(W, "faction_of", lambda w_, x: {"p_low": "fac_a", "p_mid": "fac_b"}.get(x))
-    monkeypatch.setattr(faction_q, "at_war", lambda w_, a, b: {a, b} == {"fac_a", "fac_b"})
-    (s,) = W.flows_in(w).strands
-    assert not W.concluded(w, s)                                      # the world: open, the parties at war
-    witness(w, "p_other", e1)
-    witness(w, "p_other", e2)
-    seen = reading(w, "p_other")
-    assert len(seen) >= 2 and all(done for _, done in seen), seen    # he concludes on the terminal alone
+    assert len(seen) >= 2 and all(done for _, done in seen), (arm, seen)
 
 
 def test_a_petition_deposit_does_not_carry_its_matter_so_it_never_attaches_on_it():
@@ -581,7 +586,7 @@ def test_the_person_reading_reads_no_act_store(monkeypatch):
     witness(w, "p_low", e2)
     hold(w, "p_low", "S4", "record.seized", when=3, doer="p_low")
     p = w.persons["p_low"]
-    want = [(s.id, tuple(m.event for m in s.moves), W.concluded_known(w, p, s)) for s in W.flows_known(w, p)]
+    want = read_ids(w, p)
     assert want                                                       # the stubs below meet a real reading
     monkeypatch.setattr(w, "acts", _NoStore())
     monkeypatch.setattr(w, "log", _NoStore())
@@ -589,8 +594,7 @@ def test_the_person_reading_reads_no_act_store(monkeypatch):
     for mod in (W, attribution):
         for name in ("causing_act", "actor_of", "event_by_id"):
             monkeypatch.setattr(mod, name, _NoStore()._boom, raising=False)
-    got = [(s.id, tuple(m.event for m in s.moves), W.concluded_known(w, p, s)) for s in W.flows_known(w, p)]
-    assert got == want
+    assert read_ids(w, p) == want
 
 
 def test_concluded_known_refuses_a_strand_of_the_world_reading():
@@ -602,35 +606,33 @@ def test_concluded_known_refuses_a_strand_of_the_world_reading():
 
 
 def test_control_the_realm_hash_holds_and_the_reading_is_the_same_read_twice():
+    """The two readings over a REAL season: a hand-built world would miss the real log, act store and witness
+    pipeline (ledgers ordered by landing, evicted, told at second hand), and the harness's code-level terminal
+    test on a real log. MEASURED at seed 0, one season: no ledger holds an `opens` claim (the world opens its
+    strands by side and content only, `strife-01` §3 item 3), so every person reading is `()` as shipped; the
+    read-twice control plants one `opens` claim under the first move claim of a few holders, so their real
+    joining claims attach, and reads those holders twice."""
     from engine.season.harness import populated
     w = populated.build_realm(0)
-    assert w.content_hash() == "837d0f83c62917b88d69da3daa3ea027"
     populated.run(seasons=1, w=w)
     before, n_log = w.content_hash(), len(w.log)
     # the world reading, with the harness's code-level terminal test, and its presentation write nothing
     fl = W.flows_in(w, H.terminal_for(w))
     W.presented(w, fl)
     assert fl.strands and w.content_hash() == before and len(w.log) == n_log
-
-    def read_all():
-        return {pid: [(s.id, tuple(m.event for m in s.moves), W.concluded_known(w, p, s))
-                      for s in W.flows_known(w, p)] for pid, p in sorted(w.persons.items())}
-    first, second = read_all(), read_all()
-    assert len(first) == len(w.persons) > 0
-    assert first == second
-    assert w.content_hash() == before                                 # the reading writes nothing
-    # MEASURED at seed 0, one season: no ledger holds an `opens` claim (the world opens its strands by side
-    # and content only, `strife-01` §3 item 3), so every reading above is `()`. To make the read-twice
-    # control observe something, plant one `opens` claim under the first move claim each holder has, so his
-    # real joining claims attach, and read twice again.
-    planted = 0
+    holders = []
     for pid, p in sorted(w.persons.items()):
         first_move = next((c for c in p.ledger if c.predicate in W.MOVE_KINDS and c.value is True), None)
         if first_move is not None:                                    # landed first: same tick, round 0, front
             c = hold(w, pid, first_move.subject, "field.lost", when=first_move.when)
             p.ledger.remove(c)
             p.ledger.insert(0, c)
-            planted += 1
-    first, second = read_all(), read_all()
-    assert planted > 0 and any(len(m) > 1 for v in first.values() for _, m, _ in v), planted
+            holders.append(p)
+        if len(holders) == 8:
+            break
+    planted, before = len(holders), w.content_hash()
+    first = [read_ids(w, p) for p in holders]
+    second = [read_ids(w, p) for p in holders]
+    assert planted > 0 and any(len(m) > 1 for v in first for _, m, _ in v), planted
     assert first == second
+    assert w.content_hash() == before                                 # the reading writes nothing

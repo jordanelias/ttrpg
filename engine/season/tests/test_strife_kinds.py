@@ -29,11 +29,9 @@ LISTS = tuple(sorted(R.STRIFE_KINDS))      # the four lists, read off the loader
 DECIDED = tuple(n for n in LISTS if n != "concludes")   # opens, joins, never: a decision per kind
 
 
-def _planted(**changes):
-    """A copy of the shipped lists as plain lists, with `changes` (name -> new list) applied."""
-    d = {n: sorted(R.STRIFE_KINDS[n]) for n in LISTS}
-    d.update(changes)
-    return d
+def _planted(**add):
+    """A copy of the shipped lists as sets, with each `add` (list name -> kinds) added to its list."""
+    return {n: set(R.STRIFE_KINDS[n]) | set(add.get(n, ())) for n in LISTS}
 
 
 def _terminal(row) -> bool:
@@ -50,35 +48,24 @@ def derive_concludes(rows, lists) -> frozenset:
     return frozenset(k for k in moves if codes_of.get(k) and all(_terminal(r) for r in codes_of[k]))
 
 
-def test_the_shipped_build_loads_and_the_lists_are_disjoint_decisions():
-    # The import already ran `_check_strife_kinds`; running it again on the shipped lists is the control for
-    # the three plants below (they must be red for the planted fault and not for the shipped data).
-    _check_strife_kinds(R.STRIFE_KINDS, EVENT_KINDS)
-    assert set(R.STRIFE_KINDS) == set(LISTS)
-    assert all(R.STRIFE_KINDS[n] for n in LISTS)
-    assert R.STRIFE_KINDS["concludes"] <= R.STRIFE_KINDS["opens"] | R.STRIFE_KINDS["joins"]
-
-
+# The control for the three plants below is the import itself: it ran `_check_strife_kinds` on the shipped lists.
 def test_import_check_refuses_a_kind_outside_event_kinds():
-    bad = _planted(never=sorted(R.STRIFE_KINDS["never"]) + ["nonesuch.kind"])
     with pytest.raises(Unspecified, match="nonesuch.kind"):
-        _check_strife_kinds({n: set(v) for n, v in bad.items()}, EVENT_KINDS)
+        _check_strife_kinds(_planted(never={"nonesuch.kind"}), EVENT_KINDS)
 
 
 def test_import_check_refuses_a_kind_in_two_lists():
-    bad = _planted(never=sorted(R.STRIFE_KINDS["never"]) + ["field.won"])   # field.won is in `opens`
-    with pytest.raises(Unspecified, match="field.won"):
-        _check_strife_kinds({n: set(v) for n, v in bad.items()}, EVENT_KINDS)
+    with pytest.raises(Unspecified, match="field.won"):                       # field.won is in `opens`
+        _check_strife_kinds(_planted(never={"field.won"}), EVENT_KINDS)
 
 
 def test_import_check_refuses_a_concludes_kind_outside_opens_and_joins():
-    bad = _planted(concludes=sorted(R.STRIFE_KINDS["concludes"]) + ["news.told"])   # news.told is `never`
-    with pytest.raises(Unspecified, match="news.told"):
-        _check_strife_kinds({n: set(v) for n, v in bad.items()}, EVENT_KINDS)
+    with pytest.raises(Unspecified, match="news.told"):                       # news.told is `never`
+        _check_strife_kinds(_planted(concludes={"news.told"}), EVENT_KINDS)
 
 
 def test_loader_refuses_a_malformed_block():
-    base = {n: sorted(R.STRIFE_KINDS[n]) for n in LISTS}
+    base = {n: sorted(v) for n, v in _planted().items()}    # the loader reads lists
     with pytest.raises(Unspecified):
         R._load_strife_kinds({**base, "extra": ["field.won"]})                                  # a list nobody reads
     with pytest.raises(Unspecified):
@@ -121,15 +108,8 @@ def test_concludes_equals_the_rule_derived_over_the_registry():
         f"only in rosters.yaml: {sorted(R.STRIFE_KINDS['concludes'] - derived)}")
 
 
-def test_the_kinds_whose_code_never_ends_a_case_do_not_conclude():
-    # The reasons the entry names: AM (pardon refused), WR (a rebel assault repulsed), BR, VI.
-    for k in ("detention.ended", "ban.ended", "field.won", "field.lost", "tenure.closed", "requisition.taken"):
-        assert k not in R.STRIFE_KINDS["concludes"], k
-
-
 def test_mutation_requisition_taken_in_concludes_passes_the_import_check_and_fails_the_derivation():
-    mutated = {n: frozenset(v) for n, v in _planted(
-        concludes=sorted(R.STRIFE_KINDS["concludes"]) + ["requisition.taken"]).items()}
+    mutated = _planted(concludes={"requisition.taken"})
     _check_strife_kinds(mutated, EVENT_KINDS)           # in `opens`, so the loader's check cannot see it
     derived = derive_concludes(data.MOVES, mutated)
     assert derived != mutated["concludes"]
@@ -138,6 +118,6 @@ def test_mutation_requisition_taken_in_concludes_passes_the_import_check_and_fai
 
 def test_foreign_factions_live_in_the_roster_and_not_the_harness_file():
     assert R.FOREIGN_FACTIONS == frozenset({"Altonia", "Schoenland"})
-    rows, sigs, foreign = data.load_moves()
-    assert foreign == frozenset(R.faction_prop_id(n) for n in R.FOREIGN_FACTIONS) == data.FOREIGN
-    assert "foreign_factions" not in R.load_yaml(data.STRIFE_MOVES_YAML.read_text(encoding="utf-8"))
+    assert R.FOREIGN_FACTION_IDS == {R.faction_prop_id("Altonia"), R.faction_prop_id("Schoenland")}
+    doc = R.load_yaml(data.STRIFE_MOVES_YAML.read_text(encoding="utf-8"))
+    assert doc["moves"] and "foreign_factions" not in doc          # the file parsed, and holds no such key

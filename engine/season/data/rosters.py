@@ -1207,7 +1207,7 @@ for _f in FOREIGN_FACTIONS:
                    needs="a faction named in `names_index.yaml` (`token_class: faction`)")
 del _f
 #: The faction Proposition ids of `FOREIGN_FACTIONS` (the side read's `O`), derived as `FACTION_BY_PROP` is. Read by
-#: `queries/world_q.py` and `harness/strife_data.py`.
+#: `queries/world_q.py` (the side read's default).
 FOREIGN_FACTION_IDS = frozenset(faction_prop_id(f) for f in FOREIGN_FACTIONS)
 
 # ---------------------------------------------------------------------------

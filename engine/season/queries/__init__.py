@@ -15,9 +15,9 @@
     complete rather than partial, and `04 §A.2:132` is edited in the SAME commit, per the
     contradiction's own resolution** ("edit `04 §A.2:132` at `20-ii`, when the fourth module is
     complete -- not before"). It also names `SHEET_KIND`, the `record_kinds` member a `survey`
-    freezes one `Faction` into (plan position `20-iii`), and `WAR_MOOD`, the `Proposition.mood`
-    value `at_war` reads -- and refuses at import if `SHEET_KIND`'s roster row stops being
-    `Faction`'s fields. Still no function here writes.
+    freezes one `Faction` into (plan position `20-iii`), and re-exports `at_war` and `WAR_MOOD`, the
+    `Proposition.mood` value it reads, whose bodies live in `world_q` -- and refuses at import if
+    `SHEET_KIND`'s roster row stops being `Faction`'s fields. Still no function here writes.
   * `inputs`    -- not a query module: the typed INPUT records the host builds for a module entry
     (A-25, plan positions `31a`, `31b`, `31c`) and one OUTPUT record, `Margin`, the social contest
     provider's module -> host return (v9 SC-01 step 15); a stdlib-only leaf a module may import. No
@@ -53,9 +53,9 @@ other, which is the whole content of *"two modules; the second cannot import the
 `season/data/__init__.py` both record at length: an eager package import makes anything that wants
 one name pay for every registry the other module loads, and it silently removes the loaders' last
 external patch point. Within the package, `cache` imports `world_q` and `faction_q` imports
-`world_q` (reusing `members()` rather than re-deriving membership, §8), and `world_q` reaches back
-into `faction_q` LAZILY, inside `open_referents` (`at_war`; a module-level import would be a cycle,
-since `faction_q` imports `world_q` at load) — all WORLD-FIRST modules reading another world-first
+`world_q` (reusing `members()` rather than re-deriving membership, §8, and re-exporting `at_war`,
+whose body moved to `world_q` so `open_referents` reads it with no edge back), and `world_q` imports
+neither — all WORLD-FIRST modules reading another world-first
 module, never the direction §A.3 row 2 forbids: `person_q` still
 imports neither, and `test_person_q_cannot_reach_the_world_side` is what holds THAT half, which is
 the half that matters for T-f ("in one class, a person-side function calls a resolver-side one
