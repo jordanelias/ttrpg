@@ -1182,6 +1182,27 @@ for _v, _k in WARRANT_SOURCED.items():
             needs="a `verb_table.yaml` verb, and a record kind whose `subject` a held Record answers",
             law="IN-12 step 6 -- a warrant-sourced verb forms only on what a held warrant names")
 
+# CP-T03-09: `{verb: term}` -- the terms a verb's personal-combat scene is fought under (`rosters.yaml:
+# duel_terms`), read by `seam/wrappers/combat.py::combat_input`. REFUSED AT IMPORT for a verb the table lacks or
+# a term that is not a non-empty string. THE TERM'S MEMBERSHIP IN THE ENGINE'S CLOSED SET (`modules/combat/
+# wrapper.py::DUEL_TERMS`) IS NOT CHECKED HERE: `engine/season/data` imports no module, so the seam, which may
+# reach the engine, refuses a value outside that tuple (`combat.py::duel_terms_of`) -- checked against it, never
+# re-declared in this tree.
+def _check_duel_terms(values: dict, table: dict) -> dict:
+    """`rosters.yaml: duel_terms` held to the verb table, or import refuses naming the line. A function, so a test
+    can plant a bad line and watch it refuse."""
+    for verb, term in values.items():
+        if verb not in table or not isinstance(term, str) or not term:
+            raise Forbidden(
+                f"`rosters.yaml: duel_terms` names {verb!r}: {term!r}, and either the verb table carries no such "
+                f"verb or the term is not a non-empty string", "rosters.yaml",
+                needs="a `verb_table.yaml` verb and a term the engine names (`modules/combat/wrapper.py::DUEL_TERMS`)",
+                law="CP-T03-09 -- a verb's duel terms are a term of the engine's closed set, read from one roster")
+    return dict(values)
+
+
+DUEL_TERMS_BY_VERB = _check_duel_terms(dict(roster_map("duel_terms", "values")), VERB_TABLE)
+
 
 def derive_event_kinds(table: dict, matrix: dict, fold_kinds: dict, logged_kinds: dict) -> frozenset:
     """LOADER INVARIANT 7 (`04 §B.13 #7`, `F.20b`): THE EVENT-KIND ROSTER IS DERIVED FROM EVERY EMISSION
@@ -1721,6 +1742,46 @@ def _load_held_edge_declines(values: dict) -> dict:
 HELD_EDGE_DECLINES = _load_held_edge_declines(roster_map("held_edge_declines", "values"))
 
 
+# v11 CR-87 (ED-IN-0337): `{verb: (context, ...)}` -- the verbs a person forms only on a subject he holds a context
+# of violence against (`rosters.yaml: violence_contexts`, read in `opening_set`; `fight`). `held_edge_declines`'
+# shape, a list of contexts per verb. REFUSED AT IMPORT for a verb the table lacks or a context list that is not a
+# non-empty list of names; WHICH names are contexts is the readers' (`decision/options.py::VIOLENCE_CONTEXT_READERS`,
+# which refuses a name it cannot read, and a row whose subject is not its opponent, at its own import).
+def _load_violence_contexts(values: dict) -> dict:
+    """`rosters.yaml: violence_contexts`' `values`, checked and frozen -- refused per line (above)."""
+    out = {}
+    for v, ctx in (values or {}).items():
+        if (v not in VERB_TABLE or not isinstance(ctx, list) or not ctx
+                or not all(isinstance(c, str) and c for c in ctx)):
+            raise Forbidden(
+                f"`rosters.yaml: violence_contexts` names {v!r}: {ctx!r}, and either the verb table carries no "
+                "such verb or the contexts are not a non-empty list of names", "rosters.yaml",
+                needs="a `verb_table.yaml` verb and a list of context names",
+                law="CR-87 -- a violence decline reads a context the actor holds against the subject")
+        out[v] = tuple(dict.fromkeys(ctx))
+    return out
+
+
+VIOLENCE_CONTEXTS = _load_violence_contexts(roster_map("violence_contexts", "values"))
+
+
+# v11 CR-87: THE VIOLENT ROWS -- every row whose `contests:` prize `rosters.yaml: violent_prizes` lists (`the body`:
+# `fight`, `capture`, `accept`), derived off the table, no verb named. `decision/choose.py::stance_term` bounds a
+# grudge's pull on them (`Fixtures hostile_stance_gain`). Refused at import for a member that is no prize.
+def _derive_violent_verbs(prizes) -> frozenset:
+    """The rows contesting a listed prize; refused at import if a member is no `contest_subsystems` prize."""
+    prizes = frozenset(prizes or ())
+    if not prizes <= _CONTEST_PRIZES:
+        raise Forbidden(
+            f"`rosters.yaml: violent_prizes` names {sorted(prizes - _CONTEST_PRIZES)}, no `contest_subsystems` "
+            "prize", "rosters.yaml", needs=f"a prize of {sorted(_CONTEST_PRIZES)}",
+            law="CR-87 -- a violent row is one contesting a listed prize")
+    return frozenset(v for v, r in VERB_TABLE.items() if r.contests in prizes)
+
+
+VIOLENT_VERBS = _derive_violent_verbs(roster("violent_prizes"))
+
+
 def _derive_rung_remit_acts() -> frozenset:
     """v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): THE REMIT ACTS A
     SEAT EXERCISES ON A `Rung`-CLASSED REFERENT -- the act of every `remit:` eligibility alternative
@@ -1768,6 +1829,15 @@ if DETAINEE_CLASS not in REFERENT_CLASSES:
 # The remit acts a seat exercises on a `Detainee`: the union over the rows declaring the class
 # (`interrogate`: `determine`), so the stamp offers a prisoner only to a holder of a seat granting one.
 DETAINEE_REMIT_ACTS = _remit_acts_of_class(DETAINEE_CLASS)
+
+# v11 CR-87 (the WAR context of `rosters.yaml: violence_contexts`): A PERSON OF A FACTION AT WAR WITH THE ASKER'S,
+# `Detainee`'s shape -- no collection, stamped by name by the standing occasion `queries/world_q.py::enemies_heard`,
+# and refused at import off `rosters.yaml: referent_classes`. No row declares it; the `fight` decline reads it.
+ENEMY_CLASS = "Enemy"
+if ENEMY_CLASS not in REFERENT_CLASSES:
+    raise Forbidden(f"{ENEMY_CLASS!r} is not a `rosters.yaml: referent_classes` value", "rosters.yaml",
+                    needs="the war-context class in the closed roster",
+                    law="v11 CR-87 -- a class stamped by name must be one the roster declares")
 
 # v11 CR-25 ([ASSUMPTION; medium; Jordan to correct; revert: drop `holdings_to_found` and the derivation]): THE
 # REMIT ACTS A SEAT FOUNDS AN OFFICE THROUGH -- `establish`'s own `remit:` alternatives (`confer` today), read off

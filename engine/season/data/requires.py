@@ -409,21 +409,43 @@ class Relation(Requirement):
     of: str
     relation: str
 
+    # ⚠ v10 PC-10b (H-240 route (1)): A RELATION MAY NAME ITS SECOND SIDE. A bare `relation:` is asked of
+    # `of` and the ACTOR, as every relation before PC-10b was (`held_by:<actor>`). A relation spelt
+    # `<stem>:<operand>` is asked of `of` and THAT OPERAND, and the predicate carries the operand's NAME
+    # beside its value -- `names:to:<id>` -- because the reader answers it per name (the `names` stem
+    # reads the content key `record_sourced_operands` maps for the operand). Only a stem in
+    # `OPERAND_NAMED_STEMS` may be spelt so, and such a stem MUST be: a `with:to` would read `with:to:<id>`,
+    # which no reader answers, and a bare `names` would name no key. The operand is a closed-roster member
+    # inside the form's `needs:`, checked by `_build_clause` like any operand the cell binds.
+    def _parts(self) -> tuple:
+        stem, sep, operand = self.relation.partition(":")
+        return stem, (operand if sep else "")
+
+    def __post_init__(self) -> None:
+        stem, operand = self._parts()
+        if (stem in OPERAND_NAMED_STEMS) != bool(operand):
+            raise SystemExit(
+                f"relation {self.relation!r}: a stem in {sorted(OPERAND_NAMED_STEMS)} is spelt "
+                "`<stem>:<operand>` and every other stem bare -- the operand-named shape reads "
+                "`<stem>:<operand>:<value>`, which only those stems' reader answers")
+
     def operands(self) -> tuple:
-        return (self.of, "actor")
+        return (self.of, self._parts()[1] or "actor")
 
     def entity_operands(self) -> tuple:
         return (self.of,)
 
 
     def stems(self) -> tuple:
-        return (self.relation,)
+        return (self._parts()[0],)
 
     def check(self, reader, binding, observed):
-        subj, actor = _bound(binding, self.of), _bound(binding, "actor")
-        if subj is UNKNOWN or actor is UNKNOWN:
+        stem, operand = self._parts()
+        subj, other = _bound(binding, self.of), _bound(binding, operand or "actor")
+        if subj is UNKNOWN or other is UNKNOWN:
             return UNKNOWN
-        v = _observe(reader, subj, f"{self.relation}:{actor}", observed)
+        pred = f"{stem}:{operand}:{other}" if operand else f"{stem}:{other}"
+        v = _observe(reader, subj, pred, observed)
         return UNKNOWN if v is UNKNOWN else bool(v)
 
 @requirement_form("own_ledger")
@@ -804,12 +826,32 @@ OWN_STATE_STEMS = frozenset({"thread_sensitivity", "thread_sensitivity.gate"})
 # it; WORLD-ONLY (below), because a weight can fall and whether a person is an individual NOW is the world's
 # to decide -- a CELL stem would have WITNESS deposit an `individual:<actor>` reading into every witness's
 # ledger. One stem; no form, no operand, no second meaning of an existing one.
+# ⚠ v10 PC-10b (B10-11; H-240 route (1)) ADDED `names`: `relation` (form 5) asked of a RECORD and ONE
+# NAMED OPERAND -- *does the Record `of` name this operand's value, under the content key its kind maps
+# for that operand* (`rosters.yaml: record_sourced_operands`, the one map of what a document says; no
+# second key list). Spelt `names:<operand>` (`Relation`'s operand-named shape, `OPERAND_NAMED_STEMS`
+# below): `accept` asks `names:to` (its Record's `challenger` is the opponent) and `names:actor` (its
+# `terms` is the acceptor). `WorldReader.read` answers it through `world_q.record_names`. NOT A SECOND
+# COPY OF A RELATION: no other stem reads a Record's content (`held_by` reads a `hold` edge, `exists` a
+# kind, `claim.held` the actor's ledger), and the person-side readers of the same map
+# (`decision/options.py::_content_answer`) DERIVE operands, they ask nothing of the fold. WORLD-ONLY (below).
+# ⚠ v11 CR-87 (B10-11; the DISPUTE, `ED-IN-0337`) ADDED `dispute`: `relation` (form 5) asked of a PERSON and the
+# actor -- *does the actor hold a deed claim of `of` that his own judgement scores against him*
+# (`queries/person_q.py::holds_dispute`, over `deeds_judged`, the one owner). `challenge`'s conjunct: a duel settles a
+# dispute, so a man challenges only one he holds a wrong against. `WorldReader.read` answers it off the ACTOR'S OWN
+# ledger (`claim.held`'s F8 carve-out). WORLD-ONLY (below), for `names`' reason: a witness's ledger must not gain a
+# `dispute:<actor>` reading from a refusal it saw. CR-88 re-points it to `grievance_against`. One stem; no form.
 # roster-exempt: MECHANISM. The grammar's own predicate stems (what a REQUIREMENT MAY ASK), not the game's vocabulary; `rosters.yaml` says what the world contains.
 REQUIRES_STEMS = frozenset({
     "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
     "claim.held", "rank", "purview", "bench", "bench.size", "quorum", "with", "audience", "room",
-    "individual",
+    "individual", "names", "dispute",
 }) | OWN_STATE_STEMS
+
+# THE STEMS A `relation` CELL SPELLS `<stem>:<operand>` (v10 PC-10b): asked of `of` and the named operand,
+# read `<stem>:<operand>:<value>` (`Relation`). Every other relation stem is asked of `of` and the actor.
+# roster-exempt: MECHANISM, as `REQUIRES_STEMS` -- which grammar stems take an operand name, not vocabulary.
+OPERAND_NAMED_STEMS = frozenset({"names"})
 
 # THE STEMS THE PERSON-SIDE READER NEVER ANSWERS: `queries/person_q.py::LedgerReader.read` returns
 # UNKNOWN for them whatever the ledger holds, so §F1 clause 4 never declines on them. `with` asks
@@ -830,8 +872,14 @@ REQUIRES_STEMS = frozenset({
 # what writ and who is sworn to whom NOW is the world's to decide, and a deposited stale reading would
 # let a belief open (or shut) a court.
 # ⚠ v10 CP-T03-01: `individual` is WORLD-ONLY for the same reason (a weight can fall).
+# ⚠ v10 PC-10b: `names` is WORLD-ONLY on `individual`'s and `audience`'s precedent, and for a reason of its
+# own: a CELL stem is deposited at WITNESS, so every refused `accept` would put a `names:to:<id>` reading
+# into every witness's ledger -- a witness-deposit change moving every ledger an `accept` is seen in -- and
+# `record` would then pair those readings as cells. What a document says reaches a person by the content
+# deposit to its HOLDER (`loop/witness.py`), not by watching somebody else's refusal. The person forms the
+# Candidate (UNKNOWN never contradicts) and the fold refuses a Record that does not name the pair.
 # roster-exempt: MECHANISM. The grammar's own predicate stems a ledger never answers, not the game's vocabulary.
-WORLD_ONLY_STEMS = frozenset({"with", "audience", "individual"}) | OWN_STATE_STEMS
+WORLD_ONLY_STEMS = frozenset({"with", "audience", "individual", "names", "dispute"}) | OWN_STATE_STEMS
 
 # THE STEMS A LEDGER CLAIM IS A *CELL* OF -- one `(subject, predicate)` slot that holds one value at a
 # time and can be re-asserted, so two claims on it agree or disagree (`decision/options.py::record`).

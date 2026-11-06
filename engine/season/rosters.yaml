@@ -244,6 +244,17 @@ rosters:
       # four verbs, the one kind whose `subject_matter` is written after the mint (the `(Record, subject_matter)`
       # matrix row). Not a `record_sourced_operands` kind: an army answers no operand.
       army:         [faction, strategy, trained, subformations]
+      # v10 PC-10b (RS-25; H-240 route (1)): A STANDING CHALLENGE TO A DUEL, minted by `challenge`
+      # (`loop/effects_information.py::_eff_challenge`) into the challenger's hand. `terms` is whom it
+      # challenges (`read_from`: the act's `subject`) and `to` the same person as its ADDRESSEE (so
+      # `world_q.writs_held` stamps it on his question once he holds it); `stakes` is the TERM the duel
+      # is fought under (`challenge_terms`, below), absent on a computed challenge, which carries no
+      # payload; `challenger` is the actor, written by the effect. ⚠ THE KEY SPLIT: the duel's term is
+      # `stakes` and the person is `terms` -- a term read from `terms` would read a person id.
+      # `record_sourced_operands` maps it, so the `names:` stem (`data/requires.py`) reads `challenger`
+      # for `to` and `terms` for `actor` and `subject`. [ASSUMPTION; medium; Jordan to correct; revert:
+      # drop the kind, `challenge` writes nothing and `accept` takes a person as its subject.]
+      challenge:    [terms, to, stakes, challenger]
     # HOW A MINTED DOCUMENT'S CONTENT IS READ OFF THE ACT, AND WHAT A HOLDER LEARNS FROM IT. One
     # owner for three facts the mint (`loop/effects.py::_mint_document`) and the deposit rule
     # (`loop/witness.py`) both read, so neither spells them.
@@ -716,7 +727,13 @@ rosters:
       it (`data/verbs.py::DETAINEE_CLASS`); it is occasion-only (below). It exists because `Person` is filled
       with every person a question names, so custody could not be told apart in it. `interrogate`
       declares it. Empty while no live `detain` exists.
-    values: [Office, Record, Rung, Site, Proposition, Person, Detainee]
+      `Enemy` (v11 CR-87, the WAR context of `violence_contexts` [ASSUMPTION; medium; Jordan to correct; revert:
+      drop the value, and `war` has no reader]): A PERSON OF A FACTION AT WAR WITH THE ASKER'S, stamped by the
+      standing occasion `queries/world_q.py::enemies_heard` onto the question he answers, `Detainee`'s shape (no
+      collection; named by `data/verbs.py::ENEMY_CLASS`; occasion-only). No row declares it, so no verb FORMS on
+      it: `decision/options.py::opening_set` reads it as the war context of the `fight` decline. Empty while no
+      war Proposition is live, which is every buildable world before CR-91.
+    values: [Office, Record, Rung, Site, Proposition, Person, Detainee, Enemy]
 
   occasion_only_classes:
     source: "v10 REM-21 (B10-05, AM-A-06's exclusion)"
@@ -749,7 +766,8 @@ rosters:
       `research`'s column).
       v10 IN-12 step 5: `Detainee` joins -- only `detainees_held` stamps it (no collection is named
       `Detainee`, so the own-referent term could never match it; listed so the roster says so).
-    values: [Office, Rung, Detainee]
+      v11 CR-87: `Enemy` joins, for `Detainee`'s reason -- only `enemies_heard` stamps it.
+    values: [Office, Rung, Detainee, Enemy]
 
   person_predicates:
     source: "#353 §14 `:331` — `marks[]` … \"heritage · grade · Church standing · office · residence\""
@@ -942,6 +960,44 @@ rosters:
       a yield (a standing party gave up, the engine's `surrender`), and undecided (the ruled outcome, result 0).
       The ORDER is the tuple's; the shares sum to 1.
     values: [actor_felled, subject_felled, yielded, undecided]
+
+  duel_terms:
+    source: "CP-T03-09 (`-08` AM-C-03; home `proposals/2026-10-23-subsystem-completion/` T03 §2): the terms a verb's fight is fought under."
+    cite: "AM-C-03"
+    note: >-
+      WHICH TERMS A VERB'S SCENE IS FOUGHT UNDER -- `verb: term`. TWO ENTRIES: `capture: yield`, the fight ends when a
+      party has yielded and the loser is taken into a seat's custody rather than killed (`loop/effects_combat.py`),
+      and, since v11 CR-87, `accept: blood` (below). A verb NOT named here fights under the engine's lethal terms
+      (`PersonalCombatInput.terms`' default, the string `'death'`), so `fight` is unchanged. READ BY `seam/wrappers/combat.py::combat_input`, which fills
+      `PersonalCombatInput.terms` from it -- the ONE path a term reaches the fight by (PC-10b extends this roster and
+      adds no second path). ⚠ THE CLOSED SET OF TERMS IS THE ENGINE'S (`modules/combat/wrapper.py::DUEL_TERMS`), NOT
+      THIS FILE'S: `engine/season/data` may not import the module, so the loader (`data/verbs.py::DUEL_TERMS_BY_VERB`)
+      refuses a verb the table lacks or a non-string, and `combat_input` refuses a value outside the engine's tuple,
+      NAMING this roster, before the call -- a term is checked against that tuple and never re-declared here.
+      [ASSUMPTION; medium; Jordan to correct; revert: drop this roster and `capture` fights to the death, which is
+      `fight`.] ⚠ v10 PC-10b FEEDS THE SAME FIELD AND ADDS NO PATH: an act whose `subject` is a `challenge` Record
+      (`accept`) is fought under that Record's `stakes` (`challenge_terms`), read by the same `combat_input` into the
+      same `PersonalCombatInput.terms`; a challenge naming no stakes falls through to this roster's `accept` line.
+      v11 CR-87 (ED-IN-0336, RS-25: *"a duel doesn't have to be lethal"*) ADDS `accept: blood`: a duel whose
+      challenge names no stakes (every computed `challenge`: it carries no payload) is fought to the first wound,
+      not to the death -- through `duel_terms_of`'s fall-through, the same one path; a challenge that names its
+      stakes is still fought under them. [ASSUMPTION; medium; Jordan to correct; revert: drop the `accept` line,
+      and the duel is fought at `PersonalCombatInput.terms`' own `'death'` default.]
+    values:
+      capture: yield
+      accept: blood
+
+  challenge_terms:
+    source: "v10 PC-10b (RS-25, Jordan 2026-10-14: *a duel doesn't have to be lethal*; H-240 route (1)): the terms a challenge may name."
+    cite: "H-240"
+    note: >-
+      THE CLOSED SET OF A `challenge` RECORD'S `stakes` (`record_kinds.challenge`). Its members are the engine's
+      (`modules/combat/wrapper.py::DUEL_TERMS`): `engine/season/data` may not import the module, so the two are held
+      equal by a TEST (`engine/season/tests/test_pc10b_challenge_record.py`), never by an import and never re-declared
+      unchecked. `_eff_challenge` refuses a `stakes` outside it; a computed challenge names none, and its duel is fought
+      under `duel_terms`' `accept` line, `blood` since v11 CR-87. [ASSUMPTION; medium; Jordan to correct -- the three
+      terms; revert: no terms, a duel is lethal, as before.]
+    values: [yield, blood, death]
 
   combat_band_edges:
     source: "`H-98`, plan position `8` (closed; `workplans/valoria_master_workplan_v8_part4.md`, retired, at `FORK:7b619328`) -- the edge between the bands was two literals in `seam/ladder.py::combat_degree` (`if st[\"felled\"]` / `st[\"wounds\"] > 0`). Jordan 2026-09-02: *\"I do not want definitions etc to be hardcoded\"*. The bands themselves are `combat_degree_bands`, ruled 2026-09-03/04 as a READ of the scene."
@@ -2258,6 +2314,14 @@ rosters:
       dispensation: {to: to, subject: terms}
       petition:     {to: to, subject: terms}
       faction_sheet: {to: head, subject: proposition}
+      # v10 PC-10b (H-240 route (1)): A CHALLENGE answers `to` with its CHALLENGER -- the opponent an
+      # `accept` (`counterparty: to`) is fought against -- and `actor` and `subject` with its `terms`,
+      # the person challenged. Read by the `names:<operand>` stem (`data/requires.py`,
+      # `queries/world_q.py::record_names`): `accept`'s cell asks that its Record name the opponent
+      # under `challenger` and the acceptor under `terms`. `actor` is never derived off a document
+      # (`decision/options.py::_derive_operand` answers it with the person before any held Record), so
+      # mapping it moves no formation; the `names:` stem is its one reader.
+      challenge:    {to: challenger, subject: terms, actor: terms}
 
   warrant_sourced:
     source: >-
@@ -2478,6 +2542,49 @@ rosters:
       kind `tenure_kinds` does not carry. [ASSUMPTION; medium; Jordan to correct; revert: drop the line.]
     values:
       commit: commit
+
+  violence_contexts:
+    source: >-
+      v11 CR-87 (commit `c7145842` (1); ED-IN-0337, RULED, Jordan
+      2026-11-05: fighting is exceptional -- it belongs to civil war, criminal contexts and duels, is rare in
+      civil society and is not simply chosen); `held_edge_declines`' shape (above), `verb: [context, ...]`.
+    note: >-
+      WHICH VERBS A PERSON FORMS ONLY ON A SUBJECT HE HOLDS A CONTEXT OF VIOLENCE AGAINST, AND WHICH CONTEXTS
+      COUNT -- `verb: [context, ...]`. Read in `decision/options.py::opening_set`, person-side and World-free
+      (AX-2), after every widening: a referent no listed context names forms no Candidate. A CONTEXT IS A NAME
+      OF ONE READER IN `options.py::VIOLENCE_CONTEXT_READERS`, the closed set (code, not this file): `war` -- the
+      subject is stamped `Enemy` on the question he answers (`queries/world_q.py::enemies_heard`: a person of a
+      faction `faction_q.at_war` with his own, over a war Proposition he has heard of or committed to); `crime`
+      -- the subject is named by a warrant he holds that is ADDRESSED TO HIM (a held Record of a `warrant_sourced`
+      kind, the reading `arrest` forms on, narrowed by `person_q.addressed_to`: the maker of a writ about a person
+      is not charged with it [ASSUMPTION; medium; Jordan to correct; revert: no addressee test]) or stamped
+      `Detainee` (a live `detain` on his seat: `arrest`'s and `capture`'s
+      custody); `duel` -- he holds a `challenge` Record naming himself and the subject as its two parties
+      (PC-10b's Record, read through `record_sourced_operands`); `defence` -- the subject's own act against
+      him, of a kind a VIOLENT opponent-rule row emits (`options.subject_is_opponent` and `violent_prizes`,
+      below: an attack, not a hard word), that he saw done to him in the newest season his ledger holds
+      (`person_q.attackers_of`: `suffered_deeds`' pairing, `recent_claims`' window) [ASSUMPTION; medium; Jordan
+      to correct; revert: drop `defence`]. ED-IN-0336's "duels only" is the line
+      `fight: [duel]`. It NARROWS and widens nothing; the hand-built fold, which never forms, is untouched,
+      and the coercion rows (`arrest`, `detain`, `capture`, `interrogate`, `seize`, `raze`, `march`) keep their
+      own gates. ONE LOADER, `data/verbs.py::VIOLENCE_CONTEXTS`, refused at import when a line names a verb the
+      table lacks or one whose `subject` is not its opponent; `options.py` refuses a context it has no reader
+      for. An empty block is the CONTROL: no decline. [ASSUMPTION; medium; Jordan to correct; revert: `{}`.]
+    values:
+      fight: [war, crime, duel, defence]
+
+  violent_prizes:
+    source: >-
+      v11 CR-87 (commit `c7145842` (3): the grudge's weight on the
+      violent rows only).
+    note: >-
+      THE CONTEST PRIZES WHOSE ROWS ARE VIOLENT -- a list of `contest_subsystems.prizes` keys. A row is violent
+      when its `contests:` is listed (`data/verbs.py::VIOLENT_VERBS`, derived off the table: today `fight`,
+      `capture` and `accept`); `decision/choose.py::stance_term` reads `Fixtures hostile_stance_gain` in place
+      of `1 + stance_gain` on such a row where its subject is its opponent, so a grudge's pull on violence is
+      bounded apart from its pull on every other act. Refused at import when a member is no prize.
+      [ASSUMPTION; medium; Jordan to correct; revert: `hostile_stance_gain` null, which reads `1 + stance_gain`.]
+    values: ["the body"]
 
   shortfall_sourced_operands:
     source: >-
@@ -3717,6 +3824,11 @@ tables:
         row no lean on any axis. It scores 0.0 on every axis until a cell is authored, so no witness
         is scarred by an arrest and `arrest.made` judges as no deed. Revert: the seven cells, IN-08's
         method.
+      capture: >-
+        v10 CP-T03-09: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); a lean on seven axes is authored
+        content (IN-08's method), and `capture` is `fight`'s fold with a different ending, not a new lean. It scores
+        0.0 on every axis until a cell is authored, so no witness is scarred by a capture and `person.captured` judges
+        as no deed (a wound beside it is still `fight`'s `body.changed`). Revert: the seven cells, IN-08's method.
       pardon: >-
         v9 IN-12 step 5: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); #453 §9.1 gives the
         row no lean on any axis. It scores 0.0 on every axis until a cell is authored. Revert: the
@@ -3754,7 +3866,11 @@ tables:
       "for whom" is single-owned by `verb_table.yaml`'s `beneficiary:` column (ED-IN-0261: *"the
       selfish axis score supplies the disposition, the column supplies the per-candidate fact"*); a
       cell here would be a second copy of that column. Its row is all `null`, so the density rule
-      still sees every verb considered on it.
+      still sees every verb considered on it. ⚠ EXCEPT `fight` AND `accept` (v11 CR-87, ED-IN-0340, RULED:
+      *"almost every pursuit-conviction profile finds it unwanted"*): their cell is a COST OF VIOLENCE, -0.3 on
+      every axis, this one included, not a reading of who benefits [ASSUMPTION; medium; Jordan to correct;
+      revert: `fight` null here and on four more axes (+0.3 on `deontological_instrumental`), and `accept`'s
+      own cells].
       ⚠ IT MUST NOT BE A ZERO MATRIX and `--check` enforces it. PLAN §W5's guardrail: "a zero
       matrix makes convictions inert, which is the dead-carrier defect #353 `:739-744` names, and
       it would pass every test while meaning nothing". `default_cell: 0.0` is the SPARSE default
@@ -3812,7 +3928,7 @@ tables:
         create_record:  null
         exchange:       null
         forge:          null
-        fight:          null
+        fight:          -0.3    # v11 CR-87 (ED-IN-0340): violence costs on every axis; was null
         move:           null
         oblige:         null
         construe:       null
@@ -3829,7 +3945,7 @@ tables:
         utter:          null
         work:           null
         challenge:      null
-        accept:         null
+        accept:         -0.3    # v11 CR-87: `fight`'s cell (accepting is fighting); was null
 
       precedent_substantive:
         # negative = returns to previous ideas/actions · positive = forges new ones (draft §3.2)
@@ -3865,7 +3981,7 @@ tables:
         exchange:       null
         forge:          null
         issue:          null
-        fight:          null
+        fight:          -0.3    # v11 CR-87 (ED-IN-0340): violence costs on every axis; was null
         requisition:           null
         move:           null
         petition:       null
@@ -3878,7 +3994,7 @@ tables:
         transfer:       null
         utter:          null
         work:           null
-        accept:         null
+        accept:         -0.3    # v11 CR-87: `fight`'s cell (accepting is fighting); was null
 
       partisan_equitable:
         # negative = for one's own · positive = impartial treatment (draft §3.3)
@@ -3910,7 +4026,7 @@ tables:
         evade / defy:   null
         exchange:       null
         issue:          null
-        fight:          null
+        fight:          -0.3    # v11 CR-87 (ED-IN-0340): violence costs on every axis; was null
         move:           null
         oblige:         null
         petition:       null
@@ -3929,7 +4045,7 @@ tables:
         utter:          null
         work:           null
         challenge:      null
-        accept:         null
+        accept:         -0.3    # v11 CR-87: `fight`'s cell (accepting is fighting); was null
 
       selfish_selfless:
         # negative = for oneself · positive = for others. NO NON-NULL CELL BY DESIGN (draft §3.4):
@@ -3955,7 +4071,7 @@ tables:
         build:          null
         give:           null
         issue:          null
-        fight:          null
+        fight:          -0.3    # v11 CR-87 (ED-IN-0340): violence costs on every axis; was null
         requisition:           null
         march:          null
         migrate:        null
@@ -3980,7 +4096,7 @@ tables:
         utter:          null
         work:           null
         challenge:      null
-        accept:         null
+        accept:         -0.3    # v11 CR-87: `fight`'s cell (accepting is fighting); was null
 
       rigid_flexible:
         # negative = unwilling to deviate in the face of difficulties · positive = will (draft §3.5)
@@ -3995,7 +4111,7 @@ tables:
         commit:         -0.4    # derived: binds regardless of what later calculation would recommend
         release:         0.3    # derived: the un-binding
         oblige:         -0.3    # derived: duty-taken -- the vow's own form
-        accept:         -0.3    # derived: accepting the challenge as offered -- bound by its form
+        accept:         -0.3    # v11 CR-87: `fight`'s cell (accepting is fighting); was -0.3, "accepting the challenge as offered"
         tie / knot:     -0.2    # derived: a bound tie
         migrate:         0.3    # reasoned: abandons the established hearth for another -- a deviation from one's course when circumstances press
         build:          null    # reasoned: the row says nothing about holding or leaving a course
@@ -4016,7 +4132,7 @@ tables:
         exchange:       null
         forge:          null
         issue:          null
-        fight:          null
+        fight:          -0.3    # v11 CR-87 (ED-IN-0340): violence costs on every axis; was null
         requisition:           null
         move:           null
         open_case:      null
@@ -4044,7 +4160,7 @@ tables:
         fight:          -0.3    # derived: as `challenge`, without the declaration
         establish:      -0.3    # derived: founding a new office-seat -- adding a seat to the world
         petition:        0.3    # derived: the channel a subordinate has
-        accept:         -0.2    # derived: as `fight`
+        accept:         -0.3    # v11 CR-87: `fight`'s cell (accepting is fighting); was -0.2
         # v9 IN-58 (RS-29: RATIFIED as authored cells; the numbers are authored here and revised in
         # the CELL-VALUE AND COSINE PASS) [ASSUMPTION; medium; Jordan to correct]. A `deed:<kind>`
         # cell scores the KIND, and `queries/person_q.py` reads these two only for the DOER the
@@ -4114,9 +4230,9 @@ tables:
         research:        0.3    # carried: the lower-cost, calculated route to a finding
         oblige:         -0.3    # derived (re-homed from the old sacred cell): duty-taken has the vow-shape of `commit`
         tie / knot:     -0.4    # derived (re-homed from the old sacred cell): the consecrated bond -- binding oneself, as `commit`
-        fight:           0.3    # derived: the attempt (ED-IN-0261)
+        fight:          -0.3    # v11 CR-87 (ED-IN-0340): violence costs on every axis; was +0.3, "derived: the attempt (ED-IN-0261)"
         challenge:      -0.3    # derived: honour's act -- issued regardless of outcome
-        accept:         -0.4    # derived: accepting regardless of odds -- stronger, because the acceptor did not choose the ground
+        accept:         -0.3    # v11 CR-87: `fight`'s cell (accepting is fighting); was -0.4, "accepting regardless of odds"
         # v9 IN-58 (RS-29) [ASSUMPTION; medium; Jordan to correct]: read for the doer only, as above.
         "deed:person.died":   0.6   # derived: `fight`'s attempt (+0.3) carried to its end -- the disagreeable act done for the outcome, twice the attempt
         "deed:body.changed":  0.3   # derived: `fight`'s attempt landed short of death -- `fight`'s own cell

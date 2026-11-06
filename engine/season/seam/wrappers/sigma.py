@@ -100,7 +100,7 @@ from ...queries.inputs import Margin, SocialContestInput
 from ...queries.world_q import practice, proofs, reception
 from ...state.carriers import EFFORT, effort_of
 from ._entry import entry_for
-from .combat import PROVIDER as _BODY_PROVIDER, fight_estimate
+from .combat import PROVIDER as _BODY_PROVIDER, fight_estimate, record_of
 
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
 # (A-25), so the row says the social contest module runs its own prizes. Reached by that string only.
@@ -429,7 +429,7 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
         if fought is not None:
             if len(fought[0]) < 2:
                 return None
-            got = fight_estimate(w, fought[0][0], act.via, fought[0][1], act.verb)
+            got = fight_estimate(w, fought[0][0], act.via, fought[0][1], act.verb, record_of(act))
             return tuple(got[k] for k in ESTIMATE_OUTCOMES) if got["status"] == "ESTIMATED" else None
     called = _rolled_as(w, act)
     if called is None:

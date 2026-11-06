@@ -305,16 +305,40 @@ def test_tau_is_the_largest_grid_value_above_one_half_strict_top_decided_and_zer
     assert d0 == n0 > 0, f"tau 0 is not the argmax: {d0} of {n0} readings decided"
 
 
-def test_none_and_tau_point_one_reproduce_the_parent_world_exactly():
+def test_none_and_tau_point_one_reproduce_the_parent_world_exactly(monkeypatch):
     """THE CARD'S CONTROL, executed (it was prose in go07 and weather): `odds_weighting` `none` and `choice_temperature` 0.1
     on `build_realm(0)`, one season, read the parent's (`f4b74ffa`'s) world: content hash `bdff0832...` and a log of
     10316 events (the figures `test_go07_canonical_digest.py` and `test_season_weather.py` record as the parent's). The
-    shipped pair does not (685 acts, 11775), so the control can fail."""
+    shipped pair does not (685 acts, 11775), so the control can fail.
+
+    The parent's world is re-pinned at every later DECLARED MOVER, each with the control that reads the old pin (the
+    comments below). B10-11 RE-TAKE (CP-T03-09 and PC-10b left this pin unmoved, so it was red from `95f58adb`; closed at
+    CR-87): the batch's movers are read IN PROCESS, both directions:
+      * CR-87 at its revert (`test_cr87_violence_contexts.py::revert_cr87`, whose own control reproduces the pre-CR-87
+        hashes), so the pin is the PC-10b tree's: `b8ac6025...` / 10869 (read on an export of `d2847e7b`, equal);
+      * CP-T03-09's added row `capture` and PC-10b's re-shaped duel pair (`challenge`, `accept`) WITHHELD from the chooser's
+        verbs: `a38516fb...` / 11505, the value the CP-T03-09 tree (an export of `95f58adb`) reads under the same
+        withholding, so PC-10b moves nothing where no duel verb is chosen; on that tree `capture` alone withheld reads the
+        old pin `edbc7442...` / 10435 exactly (CP-T03-09's own control, the go07 note's)."""
+    from .test_cr87_violence_contexts import revert_cr87
+    revert_cr87(monkeypatch)
     from ..harness import populated as POP
-    w = POP.build_realm(0)
-    w.fixtures = w.fixtures.sweep("odds_weighting", "none").sweep("choice_temperature", 0.1)
-    POP.run(seasons=1, seed=0, w=w)
+
+    def season():
+        w = POP.build_realm(0)
+        w.fixtures = w.fixtures.sweep("odds_weighting", "none").sweep("choice_temperature", 0.1)
+        POP.run(seasons=1, seed=0, w=w)
+        return w
+
+    w = season()
     # REM-31 re-pin (every fight deferred to ENCOUNTER; `the body`'s `step:`/`declares:` popped in process reads the old pair): was 60a80834... / 10323
     # REM-30 `verb_capability` rows re-pin (a DECLARED MOVER; the rows commit reverted in process reads the old pair): was 543e1e43... / 10421
-    assert w.content_hash().startswith("edbc7442"), w.content_hash()   # v10 CP-T03-01 re-pin (the `individual` reads ride `Event.observed`; the log length does not move; the reads left off read 9c665fe8): was 9c665fe8...; CR-33 re-pin (NPC-088 holds `inquiry`; the log length does not move): was bd3d2492...; CR-20+CR-30 re-pin (Person repr, heritage rows; the log length does not move): was 1b7a72f4... (CR-86 re-pin: was bdff0832... / 10316)
-    assert len(w.log) == 10435
+    # v10 CP-T03-01 re-pin (the `individual` reads ride `Event.observed`; the log length does not move; the reads left off read 9c665fe8): was 9c665fe8...; CR-33 re-pin (NPC-088 holds `inquiry`; the log length does not move): was bd3d2492...; CR-20+CR-30 re-pin (Person repr, heritage rows; the log length does not move): was 1b7a72f4... (CR-86 re-pin: was bdff0832... / 10316)
+    # v10 CP-T03-09 + PC-10b re-pin, B10-11 (the docstring's re-take): was edbc7442... / 10435 (CP-T03-09 alone: 2dec120f... / 10421)
+    assert w.content_hash().startswith("b8ac6025"), w.content_hash()
+    assert len(w.log) == 10869
+    real = POP.resolvable_verbs
+    monkeypatch.setattr(POP, "resolvable_verbs", lambda: frozenset(real()) - {"capture", "challenge", "accept"})
+    c = season()
+    assert (c.content_hash()[:8], len(c.log)) == ("a38516fb", 11505), (c.content_hash(), len(c.log))
+    assert c.content_hash() != w.content_hash(), "withholding the batch's verbs moved nothing: the control observes nothing"

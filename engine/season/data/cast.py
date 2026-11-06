@@ -528,3 +528,18 @@ def stance_from_loyalty(value: Optional[int]) -> Optional[tuple]:
     per_step = LOYALTY_INDIFFERENT / STANCE_VALENCE_SCALE
     weight = min(STANCE_VALENCE_SCALE, round(abs(offset) / per_step))
     return (1 if offset >= 0 else -1, weight)
+
+
+# v11 CR-87 (ED-IN-0335: a major betrayal needs a series of events): THE MEMBER BAND -- the lowest `valence * weight`
+# a build-time loyalty row may carry. A member's disaffection at build is a reservation about the creed, never a
+# grudge; anything lower must be earned by deeds (CR-88's reading). One valence step, the row type's own unit.
+# [ASSUMPTION; medium; Jordan to correct; revert: `Fixtures loyalty_toward_creed` False, no band]
+MEMBER_BAND = -1   # [JUSTIFIED: ED-IN-0335 / CR-87 (5) -- "no lower than the member band (-1)": one valence step of the row type, the plan's stated bound, not a tuning]
+
+
+def loyalty_in_band(st: Optional[tuple]) -> Optional[tuple]:
+    """`stance_from_loyalty`'s `(valence, weight)` held at or above `MEMBER_BAND` (`valence * weight`): a negative
+    row's weight is cut to `-MEMBER_BAND`; a positive one, or `None`, passes unchanged."""
+    if st is None or st[0] >= 0:
+        return st
+    return (st[0], min(st[1], -MEMBER_BAND))

@@ -471,7 +471,7 @@ def test_t3_a_firsthand_claim_holds_against_a_newer_told_claim_of_equal_confiden
     assert checked >= 1
 
 
-def test_t3_unplanted_members_with_opposite_loyalty_reach_different_verdicts():
+def test_t3_unplanted_members_with_opposite_loyalty_reach_different_verdicts(monkeypatch):
     """REGARD, READ FROM LOYALTY NOBODY PLANTED. In `build_realm(0)` two members of one faction
     whose stance rows toward its leader carry OPPOSITE signs (`populated`'s loyalty, through
     `cast.stance_from_loyalty`) each hold the same firsthand claim; the leader then tells both the
@@ -500,6 +500,11 @@ def test_t3_unplanted_members_with_opposite_loyalty_reach_different_verdicts():
     from ..epistemic import belief_contradicts
     from ..queries.person_q import stance_toward
 
+    # v11 CR-87 (`Fixtures loyalty_toward_creed`, ED-IN-0335): a member's build-time loyalty now names the CREED, never its
+    # leader, so no unplanted row toward a leader exists on the shipped build; this test's subject is the told channel's
+    # regard, so it reads the build with that one fixture at its revert, where the loyalty rows still name the leader.
+    from ..data.fixtures import DEFAULT_FIXTURES as _DF
+    monkeypatch.setattr(populated, "DEFAULT_FIXTURES", _DF.sweep("loyalty_toward_creed", False))
     w = populated.build_realm(0)
     toward = defaultdict(dict)
     for pid, p in w.persons.items():
@@ -2041,8 +2046,9 @@ def test_g2_a_grudge_raises_fight_on_its_object_under_declared_not_legacy(monkey
     # The term's SIGN at the CONTROL gains, set explicitly: `stance_gain` (H-202) and G1's two gains
     # (H-192/H-193) ship live (Jordan, 2026-10-09), and this test reads polarity, not magnitude --
     # `test_in25_stance_gain.py` owns the gain's scaling.
+    # v11 CR-87: `hostile_stance_gain` at its revert (None, `1 + stance_gain`), or the violent row would read its own bound.
     ctl = (DEFAULT_FIXTURES.sweep("stance_gain", 0.0).sweep("judged_gain", 0.0)
-           .sweep("told_valence_gain", 0.0))
+           .sweep("told_valence_gain", 0.0).sweep("hostile_stance_gain", None))
     for arm in ("legacy", "declared"):
         fx = ctl.sweep("stance_polarity", arm)
         # a row NOT contested against its subject keeps the sign: telling about the disliked

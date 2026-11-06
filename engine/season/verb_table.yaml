@@ -798,6 +798,60 @@ verbs:
     emits_on_refusal: ["kill.refused"]
     grade:       "ruled"
     source:      "ARCHITECTURE_V2.md §E3, transcribed; writes re-keyed by #358 rev.2 §C.4"
+  # v10 CP-T03-09 (`-08` AM-C-03; M5): `capture`, A NAMED FOLD OF `fight` -- the same scene over the same prize, fought
+  # under the terms `rosters.yaml: duel_terms` names (`yield`), whose loser is TAKEN INTO A SEAT'S CUSTODY rather than
+  # killed. One effect with `fight` and `accept` for the wounds (`loop/effects_combat.py::_eff_kill`), plus the
+  # `detain` it opens on a yield (`_eff_capture`), the only effect `data/verbs.py::_derive_openers_from_effects` credits
+  # `capture` with.
+  - verb:        "capture"
+    stratum:     "contested_physical"
+    eligibility: ["remit:dispatch"]
+    eligibility_note: "`arrest`'s, for `arrest`'s reason (v9 IN-12 step 5): `remit:dispatch` -- the act `state/gate.py::WARRANT_ACT` names, so the fold's eligibility and the gate's `warrant` basis (which admits the `detain` this row opens) read one grant. J-8 (whether `dispatch` is a remit act at all, `offices.yaml` `meta: remit_unruled`) is Jordan's; this row moves with `WARRANT_ACT` and the ruling. A person holding no seat that grants it forms no `capture`."
+    beneficiary: "none"
+    beneficiary_note: "`arrest`'s column and reason: custody is taken AGAINST the captive and FOR the seat the act is exercised through, an Office no Candidate carries. (The writes land on the SUBJECT, as `fight`'s do, and a harm is not a benefit to the person harmed.)"
+    requires:    "the subject is a living individual, present where the actor is"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      Person
+        - form:      relation
+          of:        subject
+          relation:  with
+        - form:      relation
+          of:        subject
+          relation:  individual
+        - form:      relation
+          of:        actor
+          relation:  individual
+    requires_typed_note: "`fight`'s cell exactly (the `individual` conjuncts of v10 CP-T03-01 and IN-59 (a)'s `with` included), for `fight`'s reason: a cohort is never a party to a personal fight, and an attack needs the attacker where his target is. Refused with the row's one kind (`capture.refused`). [ASSUMPTION; medium; Jordan to correct; revert: hold `capture` until PC-10b's Record route lands.]"
+    counterparty: subject
+    counterparty_note: "THE CAPTIVE IS THE SECOND SIDE, `arrest`'s shape (`counterparty: subject`): the contest's opponent, and a man does not capture himself (the fold's `counterparty` clause refuses a hand-built self-capture; `opening_set` forms none)."
+    contests: "the body"
+    contests_note: "`fight`'s prize, no new prize and no new provider (`rosters.yaml: contest_subsystems.prizes`). The scene is fought under `rosters.yaml: duel_terms`' `yield` (`seam/wrappers/combat.py::combat_input`), so it ends when a party has crossed the yield threshold rather than at a felling."
+    # `fight`'s bands and cells, plus `Tenure.since` WHERE A YIELDER CAN STAND: a yielder is not felled, so he reads
+    # `Untouched` or `Wounded` off his own tracker (`seam/wrappers/combat.py::surrender_of`: the yield rides the result,
+    # not the band). `Tenure.since` is declared in both so a clean yield (`Untouched`) runs the effect, which is what
+    # opens the `detain`; with no yield `_eff_capture` writes nothing there and a scene that moved nobody is
+    # `capture.refused` (the fold's write clause), NOT `contest.undecided` (LIMIT, stated: `fight` reports the latter).
+    # The effect runs once, on the FIRST pair, so `Tenure.since` leads on `Wounded`.
+    writes:
+      Declared:     []
+      Felled:       ["Person.body", "Person.exists", "Tenure.until"]
+      Wounded:      ["Tenure.since", "Person.body"]
+      Untouched:    ["Tenure.since"]
+    writes_note: "CP-T03-09: `loop/effects_combat.py::_eff_capture` -- `_eff_kill`'s wounds for each party by his own band, and, when the scene's `surrender` names the SUBJECT as the one who yielded, ONE `detain` EDGE, captive -> THE SEAT THE ACT IS EXERCISED THROUGH (`Act.via`), opened where `may_warrant` and `_may_close_custody` both hold (`arrest`'s pair of tests, so an admitted act is never killed at the gate and a custody nothing could close is never opened). The captive stays in `w.persons`; a yield by the ACTOR opens nothing. The gate's `warrant` basis is unchanged."
+    emits:
+      Declared:    ["capture.declared"]
+      Felled:      ["person.died", "tenure.closed", "body.changed"]
+      Wounded:     ["body.changed", "person.captured"]
+      Untouched:   ["person.captured"]
+    emits_note: "`fight`'s kinds, with `contest.undecided` REPLACED by the new `person.captured` on the two bands a yielder stands in (earned only by the opened `detain`, `_fold`'s `earned` intersection, so a Wounded scene with no yield emits `body.changed` alone), and `fight.declared` by `capture.declared` (`march`'s deferral band, `the body` carrying `step: ENCOUNTER`). `person.captured` has one emitter, so `data/verbs.py::KIND_VERB` maps it."
+    emits_on_refusal: ["capture.refused"]
+    refusal_note: "FLAT: one kind for every failable clause, `fight`'s shape. Refusal conditions: the subject is no living individual, or is not where the actor is (the cell), the actor holds no seat granting `dispatch` (the eligibility clause shares the one kind), or the scene moved nobody: no yield and no wound (the write clause)."
+    grade:       "assumption"
+    grade_note:  "[ASSUMPTION; medium; Jordan to correct; revert: hold `capture` until PC-10b's Record route lands] -- `-08` AM-C-03 (ladder step 4): the row, its terms and its custody are the completion item's; the bands and the scene are `fight`'s, ruled."
+    source:      "v10 CP-T03-09 (`workplans/valoria_master_workplan_v11_part13.md`, AM-C-03), on home T03 §2 CP-T03-09 and `fight`'s row"
   # ⚠ THE DUEL PAIR, `challenge` -> `accept` (IN-08's cells commit, B-G; ED-IN-0261's verb split as
   # narrowed by its 2026-10-06 row). `kill` and `wound` are NOT verbs -- they are outputs of a
   # `fight` or a duel having been called (Jordan 2026-09-27, RS-5; ED-IN-0288) -- so the split adds
@@ -820,14 +874,17 @@ verbs:
         - form:      relation
           of:        subject
           relation:  with
-    requires_typed_note: "`fight`'s cell, for `fight`'s reason: you cannot call out someone who is not there. `exists:Person` is answered by the reader today, and since v9 IN-59 (a) (RS-26) so is the second conjunct, `relation` of `subject`, `with` (`give`'s co-location carrier, WORLD-ONLY: the challenger forms the Candidate on whom he knows of and the fold refuses a challenged who is not where he is, `challenge.refused`) [ASSUMPTION; medium; Jordan to correct; revert: the single `existence` cell]. Nothing narrower is invented (`G4`). The SELF-challenge is the `counterparty:` column's, below."
+        - form:      relation
+          of:        subject
+          relation:  dispute
+    requires_typed_note: "⚠ v11 CR-87 (ED-IN-0337, ED-IN-0336: a duel settles a dispute) ADDED THE THIRD CONJUNCT, `relation` of `subject`, `dispute` (`data/requires.py`; `queries/person_q.py::holds_dispute`): the challenger holds a deed claim of the challenged that his own `deeds_judged` scores against him, read off his own ledger in the fold. WORLD-ONLY, so he forms the Candidate on anyone he knows and the fold refuses a challenge with no wrong behind it (`challenge.refused`). CR-88 re-points it to `grievance_against`. [ASSUMPTION; medium; Jordan to correct; revert: drop the conjunct.] `fight`'s cell, for `fight`'s reason: you cannot call out someone who is not there. `exists:Person` is answered by the reader today, and since v9 IN-59 (a) (RS-26) so is the second conjunct, `relation` of `subject`, `with` (`give`'s co-location carrier, WORLD-ONLY: the challenger forms the Candidate on whom he knows of and the fold refuses a challenged who is not where he is, `challenge.refused`) [ASSUMPTION; medium; Jordan to correct; revert: the single `existence` cell]. Nothing narrower is invented (`G4`). The SELF-challenge is the `counterparty:` column's, below."
     counterparty: subject
     counterparty_note: "THE CHALLENGED IS THE SECOND SIDE, AND A MAN DOES NOT CHALLENGE HIMSELF. `determine`'s and `oblige`'s shape (`counterparty: subject`): `decision/options.py::opening_set` forms no Candidate whose counterparty is the person, and the fold's `counterparty` clause (`loop/resolve.py::_admits`) refuses a hand-built one."
-    writes:      []
-    writes_note: "WRITES NOTHING, `speak`'s shape one party narrower: the challenge is an utterance made before witnesses, and what it changes is what they -- the challenged first -- come to know, by the witness channels (`challenge.issued` is deposited like any kind). No state carries a standing challenge: the one that would (a held challenge `accept` reads in its precondition) has no carrier in the tree, and inventing a `Tenure` kind or `Record` kind for it is a design call this commit does not make. So the link from a challenge to its acceptance is the CHOOSER's -- the challenged hears of it and may answer -- and not the fold's [ASSUMPTION; the residue is named in `accept`'s `requires_note`]."
+    writes:      ["Record.exists"]
+    writes_note: "v10 PC-10b (RS-25; H-240 route (1)): A CHALLENGE IS A STANDING `Record` OF KIND `challenge` (`rosters.yaml: record_kinds`), minted into the challenger's hand by `loop/effects_information.py::_eff_challenge` through `_mint_document`, the one mint: `terms` the challenged (the act's `subject`), `to` the same person as its addressee, `stakes` the term the duel is fought under (`challenge_terms`; absent on a computed challenge, which carries no payload, so its duel is fought under `duel_terms`' `accept` line, `blood`, v11 CR-87), `challenger` the actor. It is the carrier `accept` reads (`names:to`, `names:actor`). The `(Record, exists)` matrix row is the tree's. Before PC-10b this row WROTE NOTHING (`speak`'s shape) and the link from a challenge to its acceptance was the chooser's alone. [ASSUMPTION; medium; Jordan to correct; revert: `writes: []` and `accept` reads no Record.] ⚠ THE RECORD REACHES THE CHALLENGED ONLY BY A `give` (ED-IN-0292 (1) RULED NO: no mint into an addressee's hand; H-229: `give` is unreached in the realm), so in computed play a challenge mints and no `accept` forms on it -- `accept`'s named R-05 residue."
     emits:       ["challenge.issued"]
     emits_on_refusal: ["challenge.refused"]
-    refusal_note: "FLAT: one kind for every failable clause. Refusal conditions: the challenged is no living person, or is not where the challenger is (the cell's two conjuncts), or -- for a hand-built act only, a computed one never being formed -- he is the challenger (the fold's `counterparty` clause)."
+    refusal_note: "FLAT: one kind for every failable clause. Refusal conditions: the challenged is no living person, or is not where the challenger is (the cell's two conjuncts), or -- for a hand-built act only, a computed one never being formed -- he is the challenger (the fold's `counterparty` clause), or the mint moved nothing (the write clause, v10 PC-10b)."
     grade:       "assumption"
     grade_note: "the VERB is ruled (ED-IN-0261: *fight, challenge, accept are* verbs); its row -- the cell, writing nothing, the kinds -- is IN-08's reading, graded as `found` and `survey` are."
     source:      "ED-IN-0261 (2026-09-20; as narrowed 2026-10-06); `proposals/2026-09-20-pursuit-basis-worksheet.yaml` §4 (*`challenge` / `accept` -- the duel pair*)"
@@ -835,30 +892,47 @@ verbs:
     stratum:     "contested_physical"
     eligibility: ["own"]
     beneficiary: "actor"
-    beneficiary_note: "`fight`'s column and reason, the retired pursuit-cells draft's §3.4 (*`accept`: `actor`*). As on `fight`, the writes land on the SUBJECT -- here the challenger -- and a harm is not a benefit to the person harmed."
-    requires:    "the challenger is a living person, present where the actor is"
+    beneficiary_note: "`fight`'s column and reason, the retired pursuit-cells draft's §3.4 (*`accept`: `actor`*). As on `fight`, the writes land on the OPPONENT -- here the challenger, the `to` operand since v10 PC-10b -- and a harm is not a benefit to the person harmed."
+    referent_class: Record
+    referent_named: true
+    referent_class_note: "v10 PC-10b (RS-25; H-240 route (1)): FORMED ON A HELD `challenge` ADDRESSED TO THE PERSON, `comply`'s shape on another kind. The cell's `existence` conjunct (`kind: challenge`) puts `challenge` in `data/verbs.py::RECORD_REFERENT_KINDS`, so `queries/world_q.py::writs_held` stamps a challenge on the live `hold` of its addressee onto the question he answers as `Record`, and `referent_named` keeps the Candidate to one his own ledger names (the content claim WITNESS deposits for a new holder). The class is shared: this row also forms on every other Record-classed referent and the fold refuses each on `exists:challenge` (`comply`'s recorded cost). ⚠ A CHALLENGE IS MINTED INTO THE CHALLENGER'S HAND and reaches the challenged only by a `give` (ED-IN-0292 (1) RULED NO; H-229: `give` is unreached in the realm), so in computed play no `accept` binds to one: a NAMED R-05 RESIDUE until H-229's `give` reaches the realm. REVERT: drop both columns and restore the person-subject cell."
+    requires:    "the subject is a challenge Record naming the actor as challenged and the opponent as challenger; the challenger is a living individual, present where the actor is"
     requires_typed:
       all:
         - form:      existence
           of:        subject
-          kind:      Person
+          kind:      challenge
         - form:      relation
           of:        subject
+          relation:  "names:to"
+        - form:      relation
+          of:        subject
+          relation:  "names:actor"
+        - form:      relation
+          of:        to
           relation:  with
         - form:      relation
-          of:        subject
+          of:        to
           relation:  individual
         - form:      relation
           of:        actor
           relation:  individual
     contests: "the body"
-    requires_typed_note: "`fight`'s cell exactly (v10 CP-T03-01's `individual` conjuncts on both parties included: a cohort is never a party, `accept.refused`), and for `fight`'s reason: typing it binds `subject`, the second claimant the seam needs, so a computed `accept` reaches `combat_seam` with two parties rather than returning `PARTY-GAP`. Since v9 IN-59 (a) (RS-26) the cell carries `fight`'s second conjunct too, `relation` of `subject`, `with` (WORLD-ONLY: the Candidate forms and the fold refuses a challenger who is not where the actor is, `accept.refused`) [ASSUMPTION; medium; Jordan to correct; revert: the single `existence` cell]. `contests: \"the body\"` is ED-IN-0261's own words for this row."
-    requires_note: "⚠ WHAT THIS CELL CANNOT YET ASK: *the subject has challenged me*. `challenge` writes nothing (its `writes_note`), so no state holds a standing challenge for the fold to read, and the cell refuses only a dead challenger or one not where the actor is (IN-59 (a)). An `accept` formed with no challenge behind it resolves as a duel all the same -- the fold cannot tell the difference. Recorded as a residue rather than closed by inventing a carrier [ASSUMPTION; Jordan to correct]. MEASURED at IN-08's cells commit (populated realm, seed 0, four seasons, 142 `accept` acts attempted): 12 executed, and in 0 of the 12 did the acceptor's ledger hold a `challenge` claim about the subject at choice time (6 `challenge.issued` events in the log) -- the chooser's link between the two is not there yet."
+    requires_typed_note: "⚠ v10 PC-10b (RS-25; H-240 route (1), a declared Layer 2 grammar change) BINDS `accept` TO A HELD CHALLENGE. `subject` is the `challenge` Record and `to` the opponent (`counterparty: to`, below). THREE NEW CONJUNCTS, ONE NEW STEM: `existence` of `subject`, `kind: challenge` (the act answers a challenge, not a person); `relation` of `subject`, `names:to` -- the Record's `challenger` (the key `rosters.yaml: record_sourced_operands` maps for `to`) is the opponent; and `names:actor` -- its `terms` is the acceptor. `names:<operand>` (`data/requires.py: REQUIRES_STEMS`, `OPERAND_NAMED_STEMS`; answered by `queries/world_q.py::record_names`) is WORLD-ONLY, so the person forms the Candidate and the fold refuses a Record that does not name the pair, at this cell, before any draw. Before PC-10b H-240 measured why the planned route could not do this: with the Record as `subject` the fold's opponent was the Record id and the seam returned PARTY-GAP; `counterparty: to` makes the opponent `to`. THE REST IS `fight`'s CELL, MOVED FROM `subject` TO `to`: `with` (IN-59 (a), RS-26: the challenger is where the actor is; WORLD-ONLY) and v10 CP-T03-01's `individual` on both parties (a cohort is never a party). Refused with the row's one kind (`accept.refused`). [ASSUMPTION; medium; Jordan to correct; revert: the person-subject cell, under which an `accept` forms with no challenge behind it.] `contests: \"the body\"` is ED-IN-0261's own words for this row."
+    requires_note: "v10 PC-10b CLOSES WHAT THIS NOTE NAMED: *the subject has challenged me* is now asked (`names:to`). MEASURED BEFORE IT (the thrust register G-15, seeds 0-4, four seasons): 11 of 20 deaths came through `accept`, and in 0 of the 11 had the accept's subject issued a `challenge` aimed at the acceptor -- the route to death this cell now refuses. At IN-08's cells commit (seed 0, four seasons, 142 `accept` acts attempted): 12 executed, 0 with a challenge claim behind them."
+    counterparty: to
+    counterparty_note: "v10 PC-10b: THE OPPONENT IS THE CHALLENGER, `to` -- the second claimant the seam needs (`loop/resolve.py::_contest` reads `payload[row.opponent_operand()]`), and the party `_eff_kill` writes beside the actor. The cell binds `to` beside `subject`, so `decision/options.py::operand_bags` forms one Candidate per person the acceptor knows and `names:to` refuses all but the challenger; a man does not accept his own challenge (the fold's `counterparty` clause; `opening_set` forms none)."
     # The SAME degree-keyed writes and emits as `fight`, read off the SAME scene (`combat_seam` ->
     # `wound_state[EACH PARTY]`, the act's band the worst over both, CP-T03-00), by the SAME effect
     # (`loop/effects_combat.py::_eff_kill`, registered for both rows). A duel is a fight both sides
     # agreed to; what the scene can distinguish about its outcome is exactly what it distinguishes
     # for `fight`, and `Felled` gains `body.changed` for `fight`'s reason.
+    # v10 PC-10b: the duel is fought under its challenge's `stakes` (`seam/wrappers/combat.py::combat_input`, CP-T03-09's
+    # one `terms` path), and `Wounded` gains `duel.yielded` -- earned by the YIELDER alone, where the scene's `surrender`
+    # names him (`_eff_kill`), so a wounded duel with no yield emits `body.changed` only. THE YIELD RIDES THE RESULT, NOT A
+    # BAND (H-98): a yielder stands, `Wounded` off his own tracker. LIMIT, stated: a yield with no wound (`Untouched`) writes
+    # nothing, so no effect runs to earn the kind and it reports `contest.undecided`, `capture`'s stated limit; under
+    # `blood` the yielder is wounded by construction (the stop is the first wound).
     writes:
       Declared:     []
       Felled:       ["Person.body", "Person.exists", "Tenure.until"]
@@ -867,12 +941,12 @@ verbs:
     emits:
       Declared:    ["accept.declared"]
       Felled:      ["person.died", "tenure.closed", "body.changed"]
-      Wounded:     ["body.changed"]
+      Wounded:     ["body.changed", "duel.yielded"]
       Untouched:   ["contest.undecided"]
     emits_on_refusal: ["accept.refused"]
     grade:       "assumption"
-    grade_note: "the VERB and its `contests:` are ruled (ED-IN-0261); the composition as challenge-then-accept rests on a short reply, [medium]; the rest is `fight`'s row, carried."
-    source:      "ED-IN-0261 (2026-09-20; as narrowed 2026-10-06); `fight`'s row for the writes, emits and cell"
+    grade_note: "the VERB and its `contests:` are ruled (ED-IN-0261); the composition as challenge-then-accept rests on a short reply, [medium]; the Record binding, the stem and the yield are v10 PC-10b's [ASSUMPTION; medium]; the rest is `fight`'s row, carried."
+    source:      "ED-IN-0261 (2026-09-20; as narrowed 2026-10-06); `fight`'s row for the writes, emits and cell; v10 PC-10b (commit `d2847e7b`; `engine/season/hole_register.yaml` H-240)"
   - verb:        "requisition"
     scale:   "settlement"
     scale_note: "a requisition moves a Rung's stores -- the rung IS the subject"

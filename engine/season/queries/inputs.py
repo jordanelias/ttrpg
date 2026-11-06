@@ -122,10 +122,19 @@ class PersonalCombatInput:
       * `wound_quantities` -- the `WoundTracker` fields the host lifts per party after the fight
                        (`rosters.yaml: wound_quantities`, in roster order). The module reads them off the
                        trackers and returns what it found; the refusal for one the tracker does not carry
-                       is the host's (`combat.py::_wound_state`)."""
+                       is the host's (`combat.py::_wound_state`);
+      * `terms`     -- the duel's terms (RS-25, PC-10a, CP-T03-09): one of `modules/combat/wrapper.py::DUEL_TERMS`,
+                       read by the module entry and handed to `wrapper.fight`. The default is the STRING `'death'`
+                       (the engine's `LETHAL_TERMS`, pinned equal by `engine/season/tests/test_cp_t03_09_capture.py`), never `None`:
+                       `wrapper.fight` refuses a term outside `DUEL_TERMS`, so a `None` default would raise, and the
+                       string leaves every record built without the field fighting exactly as before. The ONE path
+                       a non-lethal term reaches the fight by is `combat.py::combat_input`, from `rosters.yaml:
+                       duel_terms` -- and, since v10 PC-10b, from the `stakes` of the `challenge` Record an
+                       `accept` is about (`world_q.stakes_of`), into this same field through the same function."""
     claimants: tuple
     ends: tuple
     wound_quantities: tuple
+    terms: str = "death"
 
 
 @dataclass(frozen=True)
@@ -175,7 +184,9 @@ class MassBattleInput:
                        (`mass_battle.py::_territory_of`);
       * `fort_level` -- its fortification, `world_q.fortification_of`, in `[0.0, 1.0]`;
       * `stances`   -- `(attacker, defender)`: each side's weight-mean stance toward its own faction
-                       (`mass_battle.py::_side_stance`), which the module turns into a morale-start;
+                       (`mass_battle.py::_side_stance`), which the module turns into a morale-start. ⚠ Since
+                       v11 CR-87 (5) that referent also carries every member's build-time loyalty row (H-256);
+                       the morale-start reads it with no gain;
       * `walls_dr`  -- the `field_walls_dr` fixture (`H-150`); `None` is A.9's own number, which the
                        module reads from its terrain table;
       * `origin`    -- the geography territory id the attacking side marched from, or `None` where it
@@ -184,7 +195,8 @@ class MassBattleInput:
       * `loyalties` -- `(attacker, defender)`: each side's weight-mean build-time loyalty row, the
                        stance toward its faction creed's utterer (`mass_battle.py::_side_stance` with
                        `_creed_referent`, MB-03), which the module adds to the morale-start at
-                       `loyalty_gain`;
+                       `loyalty_gain`. ⚠ Since v11 CR-87 (5) no built realm holds such a row (the loyalty row
+                       names the creed Proposition), so this reads 0 whatever `loyalty_gain` is (H-256);
       * `loyalty_gain` -- the `field_morale_loyalty_gain` fixture (`H-148`'s site); `0` is the control,
                        battle history only;
       * `troops_per_weight` -- REM-32: the `field_troops_per_weight` fixture (`H-250`), the scale from a side's
