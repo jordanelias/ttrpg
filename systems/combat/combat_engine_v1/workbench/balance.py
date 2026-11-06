@@ -25,6 +25,7 @@ def _seed(key):
     the re-baseline reference must NOT seed from it (audit finding). crc32 of the repr is stable across processes."""
     return zlib.crc32(repr(key).encode()) % 9999
 from combatant import Combatant
+import attributes   # the combat attribute spec (PC-14)
 import presets
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../../tests/sim/v32-combat-balance'))  # measurement harness reaches into the FROZEN v32 validation station BY DESIGN (dev tooling; doctrine container-hygiene exclusion, ED-1085)
 import r8_parity_harness as r8   # Class-M method constants: FINAL_TRIALS, WILSON_Z, BAND_LO/HI
@@ -41,7 +42,7 @@ WEAPONS = ["rapier", "arming", "longsword", "greatsword", "sabre", "dagger",
            "scimitar", "pulwar", "shamshir", "szabla", "cinquedea", "flamberge", "estoc", "falchion", "rondel",
            "main_gauche", "stiletto", "misericorde", "hook_sword"]
 TRADITIONS = ["none", "german", "italian", "spanish", "japanese", "chinese", "filipino", "english"]
-ATTRS = ["strength", "agi", "end", "cog", "att", "spirit", "focus", "history", "disp"]
+ATTRS = list(attributes.KEYS)   # PC-14: the attribute spec owns the roster (modules/combat/attributes.py)
 
 
 def _wilson(w, n, z=r8.WILSON_Z):
@@ -77,9 +78,9 @@ def winrate(specA, specB, cfg, n, seed=0):
 
 
 def _mk(spec):
-    kw = {k: spec[k] for k in ATTRS if k in spec}
-    return Combatant(spec.get('label', '?'), weapon=spec.get('weapon', 'arming'),
-                     armor=spec.get('armor', 'light'), tradition=spec.get('tradition', 'none'), **kw)
+    attrs = {k: spec[k] for k in ATTRS if k in spec}   # an absent attribute takes the spec's default in Combatant
+    return Combatant(spec.get('label', '?'), attrs=attrs, weapon=spec.get('weapon', 'arming'),
+                     armor=spec.get('armor', 'light'), tradition=spec.get('tradition', 'none'))
 
 
 def weapon_matchup_table(cfg=None, n=600, baseline='arming'):
@@ -95,7 +96,7 @@ def weapon_matchup_table(cfg=None, n=600, baseline='arming'):
 def attribute_parity_table(cfg=None, n=600):
     cfg = cfg or config.CFG
     rows = []
-    base = {a: (4 if a in ('strength', 'agi', 'end') else (4 if a == 'disp' else 3)) for a in ATTRS}
+    base = dict(attributes.DEFAULT)   # the default fighter (PC-14: the spec's defaults, not a re-spelled roster)
     for a in ATTRS:
         up = dict(base); up[a] = base[a] + 1
         p, lo, hi, dec, _ = winrate(up, base, cfg, n, seed=_seed(a))

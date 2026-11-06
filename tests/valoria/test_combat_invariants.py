@@ -514,7 +514,7 @@ def test_vocabulary_guard_scope_is_the_whole_resolution_surface():
     `state_graph.py`/`config.py` are DATA or registry modules and are listed here as the explicit,
     reviewable exemption rather than left as an unstated gap."""
     NON_RESOLUTION = {'weapons.py', 'combatant.py', 'geometry.py', 'traditions.py', 'tradition.py',
-                      'ability_primitives.py', 'state_graph.py', 'config.py'}
+                      'ability_primitives.py', 'state_graph.py', 'config.py', 'attributes.py'}
     on_disk = {f for d in (ENGINE, LEFT) for f in os.listdir(d) if f.endswith('.py')}
     unaccounted = on_disk - set(VOCAB_OWNERS) - set(VOCAB_CONSUMERS) - NON_RESOLUTION
     assert not unaccounted, (

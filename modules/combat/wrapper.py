@@ -21,8 +21,8 @@ def _emit(kind, **data):
 def _wound(source, by, victim, damage):
     """The ONE damage site (PC-13): `victim.apply_wound(damage)` plus the `wound` trace event, nothing else. The event
     carries the APPLIED amount (`int(damage)`; the tracker adds `max(0, int(d))` and `apply_wound` skips `d <= 0`), so
-    `sum(wound.damage per victim)` within one fight() is the tracker's `cumulative_damage` (fight() rebuilds the
-    tracker at its start). `source` names the site (pursuit, stophit,
+    `sum(wound.damage per victim)` within one fight() is the tracker's `cumulative_damage` (fight() zeroes the
+    tracker's damage at its start). `source` names the site (pursuit, stophit,
     displace_graze, exchange, bind); `by` is the striker. Draws nothing and keeps no state: concentration drain,
     stagger and every other per-site effect stay at their sites."""
     victim.apply_wound(damage)
@@ -37,7 +37,7 @@ def _emit_outcome(agg0, def0, mode, deg, hit, bind, riposte, A, B):
           A_wounds=A.wt.wounds, B_wounds=B.wt.wounds, A_felled=A.felled, B_felled=B.felled)
 
 def _init_live(c, cfg):
-    c.derive_stats(cfg)                  # the combatant computes its cfg-dependent figures (conc_max); stamina_max/health set at build
+    c.rederive(cfg)                      # the combatant re-derives its figures from its attributes (PC-14; keeps damage)
     c.stamina=float(c.stamina_max)       # reset live state from the combatant's own held maxima
     c.conc=c.conc_max
     c.initiative=0.0
@@ -564,10 +564,11 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None, terms=LETHAL_
         if not (1 <= yield_decl.turn <= max_bouts):
             raise ValueError(f"Yield.turn {yield_decl.turn} is outside 1..max_bouts ({max_bouts}): it would never fire")
     cfg=cfg or CFG; rng=rng or random.Random()   # stdlib RNG (ED-1085 numpy de-leak; pass random.Random(seed) for determinism)
-    # reset wounds — must mirror Combatant.__init__'s tracker construction (combatant.py:71). WoundTracker.__init__
-    # defaults spirit=3/strength=4, so re-init'ing with end alone silently reverts non-default fighters to those
-    # defaults — corrupting wi, health_full, and every derived health value from bout 2 onward. Pass spirit/strength.
-    A.wt.__init__(A.end, spirit=A.spirit, strength=A.strength); B.wt.__init__(B.end, spirit=B.spirit, strength=B.strength)
+    # A FIGHT BEGINS UNWOUNDED: zero each tracker's damage here, at the fight's own start (PC-13's `wound` events sum to
+    # the tracker within one fight). The maxima are NOT rebuilt by a mirrored constructor call any more: `_init_live`
+    # calls `Combatant.rederive(cfg)`, the one derivation path (PC-14), which reads the fighter's attributes as they
+    # stand now (an attribute edited after construction is followed) and itself never touches damage.
+    A.wt.cumulative_damage = 0; B.wt.cumulative_damage = 0
     _init_live(A,cfg); _init_live(B,cfg)
     _emit('fight_start', A=A.label, B=B.label, weapon_A=A.weapon, weapon_B=B.weapon,
           armor_A=A.armor, armor_B=B.armor, tradition_A=A.tradition, tradition_B=B.tradition)
