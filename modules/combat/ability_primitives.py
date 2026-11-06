@@ -2,7 +2,7 @@
 
 The atoms half of the tradition split (the traditions DICTIONARY that aggregates them is traditions.py). "Abilities
 are basically tradition primitives" (Jordan): just as a weapon is a bundle of physical primitives, a tradition is a
-bundle of ability primitives — the named techniques/concepts it teaches (Indes, Winden, mezzo tempo, atajo,
+bundle of ability primitives — the named techniques/concepts it teaches (Indes, mezzo tempo, atajo,
 true-times…), grounded in the historical-combat-manuals corpus.
 
 CURRENT MODEL (levels-of-investment, ED-PC-0024 — ED-PC-0035 citation fix: 0023 is the fiat audit that RECORDED the principle; 0024 is the entry that filed the model. Jordan directive "we'll probably have levels of investment for

@@ -432,8 +432,8 @@ def strike_point_lever(w, m_strike, x_strike):
         `sqrt(elem_mass) * strike_point_lever(w, delivered_strike(w)[2], elem_x)`.
         ⚠ **NOTE THE FIRST ARGUMENT.** E2a originally prescribed `strike_point_lever(w, elem_mass, elem_x)` here.
         That is WRONG and E2b measured it before consuming it: this function divides its mass argument by the
-        weapon's total, so passing `elem_mass` puts mass in at power 1.5 — dropping percussion 19-37% on every weapon
-        weapons. The element's own mass belongs in `sqrt()`; the lever is geometric, which is exactly what this
+        weapon's total, so passing `elem_mass` puts mass in at power 1.5 — dropping percussion 19-37% on every weapon.
+        The element's own mass belongs in `sqrt()`; the lever is geometric, which is exactly what this
         function returns when handed the delivered mass. `test_combat_element_reachability.py::
         test_element_lever_does_not_double_count_mass` pins it so the prescription cannot be re-followed.
         `tests/valoria/test_combat_strike_point_lever.py::test_strike_point_lever_is_nonzero_at_the_hand` pins
