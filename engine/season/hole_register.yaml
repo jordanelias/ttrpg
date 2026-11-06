@@ -5122,6 +5122,19 @@ rows:
     cite:      "BUILT at B10-11 (CR-87). FALSIFIER: `engine/season/tests/test_cr87_violence_contexts.py` -- at build no loyalty row puts the Spymaster below 0 toward the King, and every row naming a Proposition sits at or above the band. CONTROL: False reproduces the pre-item `build_realm(0)` hash (the same file's control)"
     source:    "v11 CR-87 (`workplans/valoria_master_workplan_v11_part4.md` `### CR-87` (5)), batch B10-11"
 
+  - id:        H-254
+    tier:      1
+    hole:      "A REAL EXECUTION READS KL, NOT XE (v11 CR-72; `strife-00` §9 item (i)). `fight` forms for a seat's holder on a party held by a live `detain` (CR-87's CRIME context reads the `Detainee` stamp) and the fold admits it, by both openers (`arrest`, CP-T03-09's `capture`); nothing on `fight`'s path reads the restraint. But the instrument cannot see the result: `harness/strife.py::readers_for(w).victim_held` collects changes on field `exists`, while a real `person.died` carries its change on `body`, so it names no victim; and `World.remove_person` takes the dead man's `detain` out of `w.tenures`, so a post-run read finds none. Either alone reads a real execution as KL"
+    kind:      "WIRING"
+    owner:     "`engine/season/harness/strife.py::readers_for` (`victim_held`) and `state/world.py::World.remove_person`"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "XE reachable on a real log: the study's ending in five cases (`strife-00` §9)"
+    cite:      "MEASURED at B10-11 (CR-72) by `engine/season/tests/test_strife_execution.py`: a real `fight` by the Duke on the prisoner over 60 act ids reached a death every time. FALSIFIER of the reader reading: the planted death there carries an `exists` change, reads XE on the live tenure and KL once it is closed one tick before; the real death is not asserted XE. Not fixed here: a reader rule belongs to the strife instrument's owner"
+    source:    "v11 CR-72 (`workplans/valoria_master_workplan_v11_part16.md` `### CR-72`), batch B10-11"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
