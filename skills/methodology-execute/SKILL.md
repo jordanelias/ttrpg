@@ -465,7 +465,7 @@ Nothing in this section is restated in full here; a change to any of it is made 
 ## BATCH BOUNDARY — expunge, then clear
 
 Runs after BATCH-CLOSE's reconciliations are committed, after **every** batch including the last
-(for the last, only item 1 applies, and it follows `/close`).
+(for the last, only items 1 and 2 apply, and they follow `/close`).
 
 1. **Expunge on disk — one commit.** **Before deleting anything, grep the tree for what points at
    it:** every remaining batch's rows (the plan and the lane handoff) for each handle and file
@@ -487,7 +487,18 @@ Runs after BATCH-CLOSE's reconciliations are committed, after **every** batch in
    already in the commits; a finding nobody can apply without a decision becomes a ledger row only
    if it is `needs_jordan` after CLAUDE.md §0's five-step ladder, and is otherwise dropped —
    nothing is kept "for the next batch".
-2. **Clear the window.** This skill cannot clear its own context and nothing inside one window
+2. **Merge `main` into the branch — the run's last step before the stop.** GitHub squash-merges each
+   batch's PR, so `main` holds the previous close's squash while this branch still holds that close's
+   commits one by one, and the files the expunge edits (the plan, the lane handoff, the plan head's
+   count lines) conflict with it. Skip when `git rev-list HEAD..origin/main` is empty. Otherwise
+   `git fetch origin main` and `git merge origin/main` into the branch: never a rebase, never a
+   force-push (the branch is already pushed, and a force-push is refused). Read `git diff origin/main
+   HEAD` on each conflicted file: where `main`'s side carries nothing the branch lacks, keep the branch
+   side (`git checkout --ours`); where it carries something (a PR number written into a record, another
+   session's edit), keep both. A conflict in code, or one that cannot be reconciled this way, is
+   `STOPPED`. Commit the merge without `[skip ci]` and push it: it is the head the confirming CI run
+   reads (CHECKPOINTS AND BASELINES).
+3. **Clear the window.** This skill cannot clear its own context and nothing inside one window
    forgets selectively, so the boundary is a **stop**: report in a few lines the batch closed, its
    commit range, and the next batch's handle with whether its gates are met, then end with the
    status line (§THE STATUS LINE). **A fresh process is the clear:** `tools/methodology_drive.py`
@@ -497,11 +508,11 @@ Runs after BATCH-CLOSE's reconciliations are committed, after **every** batch in
    finished positions are gone from the plan, so 0.1 resolves only what remains and BATCH OPEN
    loads `C(k+1)` from disk. The driver is the operator's loop, outside any session; this skill
    never arms its own (CLAUDE.md §11).
-3. **Do not hand a batch to a subagent to obtain the clean window.** A delegate that cannot
+4. **Do not hand a batch to a subagent to obtain the clean window.** A delegate that cannot
    dispatch `valoria-author` and `valoria-critic` cannot run a batch, and a general-purpose
    subagent probed 2026-10-06 held `Skill` but not `Agent`. That is a dated observation — the docs describe nested subagents to a configurable depth, so it
    may vary by agent type and version: re-run the probe before relying on it either way.
-4. **If the invocation told the run to continue through several batches in one window**, do — and
+5. **If the invocation told the run to continue through several batches in one window**, do — and
    say at each boundary that **context was NOT cleared**: only the on-disk expunge happened, and
    every batch after the first carries the earlier ones' residue. Never report a fresh start the
    window did not have.

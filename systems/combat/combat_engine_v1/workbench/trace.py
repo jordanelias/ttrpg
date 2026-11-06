@@ -12,16 +12,17 @@ import wrapper
 import config
 
 
-def run_traced_fight(A, B, cfg=None, seed=0, max_bouts=12):
+def run_traced_fight(A, B, cfg=None, seed=0, max_bouts=12, **fight_kw):
     """Returns (result, events). result is -1/0/+1 (A's perspective). events is the ordered trace.
-    Restores wrapper._TRACE afterward so concurrent callers are unaffected."""
+    Restores wrapper._TRACE afterward so concurrent callers are unaffected. `fight_kw` passes through to
+    `wrapper.fight` (terms=, decide=, yield_decl=)."""
     cfg = cfg or config.CFG
     events = []
     prev = wrapper._TRACE
     wrapper._TRACE = events.append
     try:
         rng = random.Random(seed)   # stdlib RNG (engine contract post ED-1085)
-        result = wrapper.fight(A, B, cfg, rng, max_bouts=max_bouts)
+        result = wrapper.fight(A, B, cfg, rng, max_bouts=max_bouts, **fight_kw)
     finally:
         wrapper._TRACE = prev
     return result, events

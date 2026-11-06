@@ -284,7 +284,7 @@ def test_an_exact_tie_on_the_terms_ends_unresolved_with_no_yield(monkeypatch):
     result, trace, A, B = _fight_with_stub_engagement(monkeypatch, wi, wi, 'blood')
     assert A.wt.wounds >= 1 and B.wt.wounds >= 1 and not (A.felled or B.felled)
     assert result == 0
-    assert [e for e in trace if e['kind'] == 'fight_result'] == [dict(kind='fight_result', result=0, winner=None)]
+    assert [e for e in trace if e['kind'] == 'fight_result'] == [dict(kind='fight_result', result=0, winner=None, upset=False)]
     assert not any(e['kind'] == 'yield' for e in trace)
     assert sum(e['kind'] == 'turn_start' for e in trace) == 1      # a tie ends the fight; it does not fight on
     assert wrapper._terms_yielder(A, B, 'blood', CFG) is None

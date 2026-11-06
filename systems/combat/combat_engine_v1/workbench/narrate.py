@@ -78,7 +78,7 @@ def render(events, seed=None):
                  f"{ev['degree'].upper()}   [{_dist(P.degree_distribution(ev['pool'], ev['net_sigma'], ev['ob']), DEGORD)}]")
         elif k == 'outcome':
             wounds = f"({a_label} {ev['A_wounds']} / {b_label} {ev['B_wounds']} wounds)"
-            if ev['hit'] > 0:
+            if ev['hit'] > 0 or ev['A_felled'] or ev['B_felled']:   # a felling outcome can carry hit=0 (a pull-back graze or a bind strike dealt it: the `wound` event has the amount)
                 line(f"        -> {ev['aggressor']} lands a hit on {ev['defender']}  {wounds}")
             elif ev['bind']:
                 line(f"        -> blades lock in a bind  {wounds}")
