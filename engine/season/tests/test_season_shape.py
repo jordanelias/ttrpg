@@ -4109,8 +4109,9 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
     # [GROUNDED: measured at REM-2C by printing the published chain on this tree and on a detached worktree at the CP-T05-04 tree `ea6f1dba` -- depth 11 here; depth 8 there, the B-W chain above with `kill.refused(bailiff) <- transfer.refused(carin)` as its last two links]
     # ⚠⚠ **11 -> 8, CR-10 (B10-09 close two), A RE-RECORD, SAID SO: THE OWN-ACT SCREEN SPARES TIER 1 AND THE ACT MIX MOVED.**
     # [GROUNDED: measured at CR-10 by running this test on this tree (8) and with the tier-1 branch returning tier 4 for an own-act claim, the every-tier screen (11)]
-    assert d_pub == 8, (
-        f"the published two-season run reaches {d_pub}, not the 8 that `scene_budget` rounds of "
+    # ⚠⚠ **8 -> 10, v11 CR-87 (B10-11)**, A RE-RECORD WITH THE UNIT THAT MOVED IT: `fight` forms only on a subject the person holds a context of violence against (`rosters.yaml: violence_contexts`), and the build's loyalty rows name the creed, so the act mix moves. The old value is the parent tree's pin; `test_cr87_violence_contexts.py::revert_cr87` reproduces the parent's realm hashes (its control) and was NOT run against this corpus pin. The chain's last link was `kill.refused(carin)`, a context-free fight.
+    assert d_pub == 10, (
+        f"the published two-season run reaches {d_pub}, not the 10 that `scene_budget` rounds of "
         "deposit-and-decay produce over two seasons with `11a`'s repeated investigate-and-record "
         "chaining and refusals that cite their occasion (5 before IN-50; 7 before IN-08 "
         "re-scored the chooser; 10 before T4's tellings took two of its "
@@ -4694,9 +4695,12 @@ def test_calendar_a_forced_corpus_date_fires_emits_and_lands_a_claim():
 # W6 — WITNESS CHANNEL PREDICATES, AND LEDGER FLOOD CONTROL. `H-33`.
 # ===========================================================================
 
-def _w6_run(mode: str, seasons: int = 3, seed: int = 0):
+def _w6_run(mode: str, seasons: int = 3, seed: int = 0, cap: int | None = None):
     from ..harness import headless as HL
-    w = HL.build_world(seed, DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
+    fx = DEFAULT_FIXTURES.sweep("fan_out_mode", mode)
+    if cap is not None:                       # v11 CR-87: the cap's exactness arm (`test_w6_h33s...`'s last assertion)
+        fx = fx.sweep("ledger_cap", cap)
+    w = HL.build_world(seed, fx)
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     dep = 0
@@ -4756,10 +4760,27 @@ def test_w6_h33s_declared_sweep_runs_and_the_deposit_count_falls():
     # ⚠ `==`, NOT `>=`. The cap fix (`if` -> `while`: one deposit can mint several claims, so a
     # single pop left the ledger at 203 against `L = 200`) had NO FALSIFIER, because `>=` passes
     # 203 exactly as it passes 200. One character. Found by the `W6` adversarial pass.
-    assert max(got["total"][2]) == DEFAULT_FIXTURES.get("ledger_cap"), (
-        f"the control arm's fullest ledger is {max(got['total'][2])}, not exactly the "
-        f"`L = {DEFAULT_FIXTURES.get('ledger_cap')}` cap. Above it, the cap is not a cap; below "
-        "it, the flood this item exists to bound has gone away and the item should be re-argued")
+    # ⚠⚠ RE-ARGUED AT v11 CR-87 (B10-11), AS THE MESSAGE BELOW ASKED. The one assertion carried TWO claims and CR-87 split
+    # them: (i) THE FLOOD -- `total` floods and the narrowed arms do not; (ii) THE CAP IS EXACT -- the `while` above. Its
+    # equality to the SHIPPED cap was incidental to the act mix, not to either claim: CR-82 raised `L` 200 -> 3200, and on
+    # the base tree (`d2847e7b`, read in a scratch export) `total`'s three ledgers were [3196, 3200, 3200] -- one of the
+    # three already short of the cap. CR-87's contexts remove the context-free `fight` (Carin's `kill.refused` and the
+    # rounds that follow it), so `total` reads 9892 events / 8476 deposits / [2824, 2825, 2827], against 11202 / 9598
+    # on the base. THE FLOOD HAS NOT GONE AWAY: the narrowed arms read 276 deposits / [0, 137, 139] (base 304 / [0, 150,
+    # 154]), so `total`'s fullest ledger is still twenty times theirs (base: 3200 against 154). (i) is asserted as that
+    # ratio, at the order of magnitude §1.4 hole 16 names; (ii) is asserted where the flood exceeds the cap -- `total` at
+    # `L = 200`, the value the defect was found at, reads [200, 200, 200] exactly. MUTATION, observed in process: the
+    # `while` turned back to `if` reads [1236, 1240, 1241] there. At the shipped 3200 the same mutation would be INVISIBLE
+    # now (no ledger reaches it), which is why the exactness arm no longer rides the shipped cap.
+    cap = DEFAULT_FIXTURES.get("ledger_cap")
+    assert max(got["total"][2]) <= cap, f"the control arm's fullest ledger is {max(got['total'][2])}, above `L = {cap}`"
+    assert max(got["total"][2]) >= 10 * max(got["all_five"][2]), (
+        f"the control arm's fullest ledger {max(got['total'][2])} is within 10x of the shipped arm's "
+        f"{max(got['all_five'][2])}: the flood this item exists to bound has gone away and the item should be re-argued")
+    w200, _ = _w6_run("total", cap=200)
+    assert max(len(p.ledger) for p in w200.persons.values()) == 200, (
+        f"`total` at `L = 200` holds {sorted(len(p.ledger) for p in w200.persons.values())}: above it the cap is not a "
+        "cap; below it the flood no longer reaches 200 and this arm needs a lower `L`")
 
 
 def test_w6_an_unrecognised_fan_out_mode_refuses_rather_than_falling_back():
@@ -5069,9 +5090,17 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
     # LINK 1 — the fan. It must actually bite, or nothing below is about the narrowing.
     assert got["all_five"][0] * 5 < got["total"][0], (
         f"the shipped arm deposits within 5x of `total`: {got}. Then the narrowing is cosmetic")
-    assert max(got["total"][1]) == DEFAULT_FIXTURES.get("ledger_cap"), (
-        f"the control's fullest ledger is {max(got['total'][1])}, not the cap — the flood this "
-        "flip relieves has gone away on its own and the item should be re-argued")
+    # ⚠⚠ RE-ARGUED AT v11 CR-87 (B10-11), AS THE MESSAGE BELOW ASKED: `==` the shipped cap -> an order of magnitude over the
+    # shipped arm. The link's own claim (the `11a` note below) is that "the relief this link exists to prove is against
+    # `total`, not against an absolute cap", and the cap-equality was its proxy for "`total` floods". CR-87's contexts
+    # thin `total`'s act mix (no context-free `fight`), so `total` reads [2824, 2825, 2827] against `L = 3200` (the base
+    # tree, `d2847e7b` in a scratch export: [3196, 3200, 3200] -- already one ledger short), while the shipped arm reads
+    # [0, 137, 139] (base [0, 150, 154]). The flood is intact (twenty times, on both trees); the proxy lapsed. The cap's
+    # exactness is `test_w6_h33s...`'s, read at `L = 200` there.
+    assert max(got["total"][1]) <= DEFAULT_FIXTURES.get("ledger_cap"), f"above the cap: {got['total'][1]}"
+    assert max(got["total"][1]) >= 10 * max(got["all_five"][1]), (
+        f"the control's fullest ledger {max(got['total'][1])} is within 10x of the shipped arm's "
+        f"{max(got['all_five'][1])} — the flood this flip relieves has gone away on its own and the item should be re-argued")
     # ⚠⚠ `<` -> `==`, POSITION `11a`, 2026-09-29. Bailiff now forms real candidates too (`reach`/
     # `place_of` widen HIS Q2, not only Carin's), so total activity in this 3-person world rose
     # enough that the NARROWED arm also fills two of its three ledgers to the cap -- not because
@@ -6921,7 +6950,8 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # v10 PC-10b (B10-11; a challenge is a Record, `accept` binds to one): (16, 15) -> (18, 16), a re-record with the unit that moved
     # it: the act mix moves wherever a challenge forms. `depths[6]` still does NOT exceed `depths[3]` (16 against 18), so the walk the
     # message below asks for is not triggered. CONTROL: the base tree (`95f58adb`'s `engine/season`) passes this test at (16, 15).
-    assert (depths[3], depths[6]) == (18, 16), (
+    # v11 CR-87 (B10-11): (18, 16) -> (15, 13), A RE-RECORD WITH THE UNIT THAT MOVED IT: `fight` forms only on a subject the person holds a context of violence against (`rosters.yaml: violence_contexts`), and the build's loyalty rows name the creed, so the act mix moves. The old value is the parent tree's pin; `test_cr87_violence_contexts.py::revert_cr87` reproduces the parent's realm hashes (its control) and was NOT run against this corpus pin. `depths[6]` still does NOT exceed `depths[3]` (13 against 15).
+    assert (depths[3], depths[6]) == (15, 13), (
         f"the maturation depth ceiling moved: {depths}. This is a MEASUREMENT of a mixed chain "
         "whose length the act mix sets, not a discriminator — `H-80`'s discriminator is the COUNT, "
         "asserted below and still live. Re-pin these two numbers with the unit that moved them. "
@@ -6989,7 +7019,8 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # [GROUNDED: re-measured at CR-10 (arm D2) -- the five-season chain reads 11 against the seven-season arm's 13 (`depths[3]`, re-pinned above), 9 and 11 at its base (the every-tier screen), moved by the same unit (a tier-1 own-act echo is answered, the act mix); the RELATION still holds]
     # [GROUNDED: re-measured at v11 CR-17 (`choice_temperature` 0.1 -> 0.05) -- the five-season chain reads 12 against the seven-season arm's 16 (`depths[3]`, re-pinned above), 11 and 17 at its base (the parent tree `f4b74ffa`, tau 0.1); the RELATION (the ceiling rises with the season count) is unchanged]
     # [GROUNDED: re-measured at v10 PC-10b (a challenge is a Record; `accept` binds to one) -- the five-season chain reads 13 against the seven-season arm's 18 (`depths[3]`, re-pinned above), 12 and 16 on the CP-T03-09 tree (`95f58adb`'s `engine/season`, which passes this test); the act mix moves wherever a challenge forms]
-    assert max(depth5(e) for e in mats5) == 13 < depths[3], (
+        # [GROUNDED: re-measured at v11 CR-87 (`fight` only in a held context; the build's loyalty rows name the creed) -- the five-season chain reads 10 against the seven-season arm's 15 (`depths[3]`, re-pinned above), 13 and 18 on the base. The old value is the parent tree's pin (the base tree passes it, read in a scratch export of `d2847e7b`); `revert_cr87` was NOT run against it.]
+    assert max(depth5(e) for e in mats5) == 10 < depths[3], (
         f"the longest maturation chain over FIVE seasons is {max(depth5(e) for e in mats5)}, not "
         "the 11 measured at CR-10, or it is not below the seven-season figure above. The ceiling "
         "MOVING with the season count is what makes the 3-stage and 6-stage arms saturated there "
@@ -8101,9 +8132,11 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # position's declared residue; every `challenge` mints a Record, so the act mix moves, and `capture` (one world before) and `issue`
     # move with it [the worlds were not walked one by one for this pin]. CONTROL: the base tree (`95f58adb`'s `engine/season`) reads
     # the old 23 and passes.
-    assert ever == {"argue", "carry", "challenge", "commit", "conceal", "create_record", "interview",
-                    "fight", "give", "issue", "move", "oblige", "petition", "reconstruct", "release",
-                    "research", "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
+    # ⚠⚠ v11 CR-87 (B10-11), 22 -> 21: `capture` JOINS, `oblige` AND `tend` LEAVE. A RE-RECORD WITH THE UNIT THAT MOVED IT: `fight` forms only on a subject the person holds a context of violence against (`rosters.yaml: violence_contexts`), and the build's loyalty rows name the creed, so the act mix moves. The old value is the parent tree's pin; `test_cr87_violence_contexts.py::revert_cr87` reproduces the parent's realm hashes (its control) and was NOT run against this corpus pin. `fight` still executes in the
+    # corpus (a world whose person holds a context against its subject) [the worlds were not walked one by one for this pin].
+    assert ever == {"argue", "capture", "carry", "challenge", "commit", "conceal", "create_record", "interview",
+                    "fight", "give", "issue", "move", "petition", "reconstruct", "release",
+                    "research", "speak", "surveil", "tell", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
     # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
@@ -8350,9 +8383,11 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # is the position's declared residue: it binds only a held `challenge` Record, which reaches its addressee only by a `give`
     # (H-229), and it forms on the shared `Record` class, refused at `exists:challenge` (`comply`'s recorded cost); `covenant` and
     # `seize` move with the act mix. CONTROL: the base tree (`95f58adb`'s `engine/season`) reads the old 10 and passes.
+    # ⚠⚠ v11 CR-87 (B10-11), 13 -> 15: `tend` AND `determine` JOIN (attempted and refused, executed in no world): the act mix
+    # moves with no context-free `fight` [the worlds were not walked one by one for this pin]. The old value is the parent tree's pin (the base tree passes it, read in a scratch export of `d2847e7b`); `revert_cr87` was NOT run against it.
     assert refused_only == {"accept", "build", "found", "survey",
                             "forge", "sabotage", "train", "covenant", "seize",
-                            "comply", "evade / defy", "construe", "exchange"}, (
+                            "comply", "evade / defy", "construe", "exchange", "tend", "determine"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -9098,7 +9133,18 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # only a held challenge, the declared residue) while `issue` joins, so the executed sets split further. Not a ranking change:
     # `H-96` is untouched. CONTROL: the base tree (`95f58adb`'s `engine/season`) reads 136 and the whole test passes. THE SAME-BREATH
     # CHECK is the assertions below, read in the same run. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-    assert len(by_sig) == 140, (
+    # ⚠⚠ **140 -> 134, v11 CR-87 (B10-11), MEASURED BY THIS TEST'S OWN `by_sig` (`_corpus_rows`, seed 0, the same script on every arm),
+    # AGAINST THIS TREE WITH CR-87 AT ITS REVERT (`revert_cr87`, the corpus's own `DEFAULT_FIXTURES` swept too), WHICH READS 140;
+    # `live` did not move (143 on both).** THE UNIT AND THE DIRECTION: variety FELL by six. Executed-world counts, revert -> here:
+    # `fight` 102 -> 6 (it forms only on a subject its actor holds a context against, and a context-free fight costs on every axis),
+    # `challenge` 81 -> 12 (the `dispute` conjunct refuses a challenge with no deed against the challenged), `oblige` 6 -> 0 and `tend`
+    # 2 -> 0 (both leave `ever`), `capture` 0 -> 1 (joins); the freed scenes go to `argue` 45 -> 80, `tell` 55 -> 67, `commit` 85 -> 101,
+    # `utter` 115 -> 123, `surveil` 55 -> 61, `transfer` 42 -> 49, `research` 79 -> 84; every other count moves by four or fewer. NO
+    # SINGLE PART CARRIES THE COUNT: with only the decline emptied the tree reads 132 (`fight` back in 115 worlds, `challenge` 3), with
+    # only the dispute conjunct stripped it reads 140 by a different partition (`challenge` back in 85 worlds, `fight` in 22). Not a
+    # ranking change: `H-96` is untouched. THE SAME-BREATH CHECK: the universal set is EMPTY on both sides, and the assertions below
+    # (`ever`, `refused_only`, `varying`) are read in the same run. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+    assert len(by_sig) == 134, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -9320,10 +9366,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # set is unmoved. Control: `capture` withheld from `corpus_run.resolvable_verbs` reads the 22 without it.
     # ⚠⚠ v10 PC-10b (B10-11): `accept` AND `capture` LEAVE, `issue` JOINS (23 -> 22) with `ever`; the universal set is unmoved
     # (asserted above). The reason and its control are at the `ever` note.
-    assert varying == {"argue", "carry", "challenge", "commit", "conceal", "create_record", "fight", "give",
-                       "interview", "issue", "move", "oblige",
+    # ⚠⚠ v11 CR-87 (B10-11): `capture` JOINS, `oblige` AND `tend` LEAVE (22 -> 21) with `ever`; the universal set is unmoved (empty, asserted
+    # above). The reason and its control are at the `by_sig` note.
+    assert varying == {"argue", "capture", "carry", "challenge", "commit", "conceal", "create_record", "fight", "give",
+                       "interview", "issue", "move",
                        "petition", "reconstruct", "release", "research",
-                       "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
+                       "speak", "surveil", "tell", "transfer", "utter"}, (
         sorted(varying))
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
@@ -9602,9 +9650,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # RE-RECORD WITH ITS REASON: `issue` executes again (the `ever` note above), `covenant` and `seize` are attempted and refused
     # (`refused_only`), and `capture` (executed in one world before) is attempted in none -- each moved by the act mix a challenge's
     # Record moves [the worlds were not walked one by one]. CONTROL: the base tree (`95f58adb`'s `engine/season`) reads the old set.
-    assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish", "capture",
+    # ⚠⚠ v11 CR-87 (B10-11): `capture` AND `determine` LEAVE, `oblige` JOINS. A RE-RECORD WITH ITS REASON (the `by_sig` note above has the
+    # unit and the per-verb world counts, `revert_cr87` the control): `capture` executes in one world (`ever`), `determine` is attempted
+    # and refused (`refused_only`), and `oblige` (executed in 6 worlds at the revert) is attempted in none.
+    assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish", "oblige",
                                               "destroy_record", "march", "open_case",
-                                              "determine", "migrate", "requisition",
+                                              "migrate", "requisition",
                                               "forgive", "interrogate", "succeed",
                                               "arrest", "pardon", "raze", "thread_read",
                                               "work", "restore", "examine",
@@ -10294,8 +10345,11 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
     # v9 IN-26: a verb held out of formation by the shipped arm (`Fixtures withheld_verbs`), and a row
     # formed only on a referent the person himself holds (`rosters.yaml: own_hold_declines`; `p_low`
     # holds nothing here) -- neither is clause 4. DERIVED FROM THE FIXTURE AND THE ROSTER.
-    from ..data.verbs import OWN_HOLD_DECLINES
+    from ..data.verbs import OWN_HOLD_DECLINES, VIOLENCE_CONTEXTS
     needs_held |= set(OWN_HOLD_DECLINES) | set(w.fixtures.get("withheld_verbs"))
+    # v11 CR-87: a row formed only on a subject the person holds a context of violence against (`rosters.yaml:
+    # violence_contexts`; `p_low` holds none here) -- a person-side decline, not clause 4. DERIVED FROM THE ROSTER.
+    needs_held |= set(VIOLENCE_CONTEXTS)
     # v9 PC-06 K-3: a row whose cell asks the actor's OWN STATE (`OWN_STATE_STEMS`, `thread_read`'s
     # Thread Sensitivity) is declined by that state, not by clause 4 -- `p_low` carries no sensitivity.
     # DERIVED FROM THE CELL'S STEMS; its control, below, is the same person once his own state admits it.
@@ -10879,10 +10933,12 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # REASON. CONTROL, run in process: `capture` withheld from `corpus_run.resolvable_verbs` reads the old 22 exactly and executes in 0.
     # ⚠⚠ v10 PC-10b (B10-11): `accept` AND `capture` LEAVE, `issue` JOINS (23 -> 22) -- the reason and its control are at the corpus
     # test's `ever` note.
-    assert set(executed) == {"argue", "carry", "challenge", "commit", "conceal", "create_record",
+    # ⚠⚠ v11 CR-87 (B10-11): `capture` JOINS, `oblige` AND `tend` LEAVE (22 -> 21) -- the reason and its control are at the
+    # corpus test's `ever` note.
+    assert set(executed) == {"argue", "capture", "carry", "challenge", "commit", "conceal", "create_record",
                              "interview", "fight", "give", "issue",
-                             "move", "oblige", "petition", "reconstruct", "release", "research",
-                             "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
+                             "move", "petition", "reconstruct", "release", "research",
+                             "speak", "surveil", "tell", "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
         "ED-FI-0009's, 10 -> 11 is `release`'s, 11 -> 12 is `H-71`'s, 12 -> 13 is the admission "
         "of `kill / wound`, 13 -> 12 is `R8.1`'s (`dispatch`, see above), 12 -> 13 again is "
@@ -11035,7 +11091,7 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
                                             "build", "survey",
                                             "forge", "covenant", "seize",
                                             "sabotage", "train", "comply",
-                                            "evade / defy", "construe", "exchange"}, (
+                                            "evade / defy", "construe", "exchange", "tend"}, (   # v11 CR-87: `tend` JOINS (it left `executed`, above). The old value is the parent tree's pin (the base tree passes it, read in a scratch export of `d2847e7b`); `revert_cr87` was NOT run against it.
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
         "condition never clears the floor in this corpus; `dispatch` WAS refused only in NPC-033's five-seat "
@@ -11297,7 +11353,7 @@ def test_wc_a_candidate_declines_when_its_hearth_cannot_be_derived():
         "`TRACE.note` is what makes a decline COUNTABLE rather than inferred from an absence")
 
 
-def test_wc_the_fold_binds_what_the_person_bound():
+def test_wc_the_fold_binds_what_the_person_bound(monkeypatch):
     """THE DIVERGENCE `W-C` EXISTS TO CLOSE, ASSERTED AS AN EQUALITY.
 
     There were two binding functions and they were two different decisions. `binding_from_act`
@@ -11401,6 +11457,11 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # arm, once a document is in his hand. DERIVED FROM THE FIXTURE AND THE ROSTER.
     from ..data.verbs import OWN_HOLD_DECLINES
     WALK_HELD: frozenset = frozenset(OWN_HOLD_DECLINES) | frozenset(w.fixtures.get("withheld_verbs"))
+    # v11 CR-87: `fight` forms only on a subject the person holds a context of violence against (`rosters.yaml:
+    # violence_contexts`), and `p_low` holds none on this question. The walk is about BINDING, not formation, so it is read
+    # with the block emptied and `fight` stays in it (an exclusion would drop the one combat row from the binding check).
+    from ..decision import options as _options
+    monkeypatch.setattr(_options, "VIOLENCE_CONTEXTS", {})
     # v9 IN-12 step 11 ADDED `raze` BESIDE `march`, FOR `march`'s OWN LICENSED REASON: its one
     # `eligibility:` alternative is `remit:dispatch` and `p_low` holds no office (#453 §9.2).
     # v10 CP-T03-09 ADDED `capture` BESIDE THEM, FOR THE SAME REASON: `remit:dispatch` and `p_low` holds no office.
@@ -12096,7 +12157,11 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # longer forms on a plain referent like `S`; the drop is unchanged (`['exchange', 'transfer']`). CONTROL: the base tree
     # (`95f58adb`'s `engine/season`) reads (22, 20) under this same test.
     # [GROUNDED: measured at v10 PC-10b -- (21, 19) as built, (22, 20) on the CP-T03-09 tree; the one missing verb `accept`]
-    assert (len(before), len(after)) == (21, 19), (
+    # ⚠ 21 -> 20 BEFORE AND 19 -> 18 AFTER, v11 CR-87: `fight` forms only on a subject the person holds a context of violence
+    # against (`rosters.yaml: violence_contexts`), and `S` is none, so it no longer forms here; the drop is unchanged
+    # (`['exchange', 'transfer']`). RE-DERIVED, not adjusted: the one missing verb is `fight` (`revert_cr87` restores it).
+    # [GROUNDED: measured at v11 CR-87 -- (20, 18) as built, the printed drop `['exchange', 'transfer']`]
+    assert (len(before), len(after)) == (20, 18), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")
@@ -12439,17 +12504,20 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # `("hearth_ostvik", "exists:Rung", 1)`, `("hearth_ostvik", "present_at:p_bailiff", True)`, a second `("rec:2dd19669944564b8", ...)` read
     # and one `exists:Proposition` = 1 read on a new Proposition are in. The property this pin is for holds: 12 grammar claims were ever deposited and all 12 are held at the end, none
     # evicted. The in-process sweep of the fixture back to 0.1 was not run for this pin.
+    # v11 CR-87 (B10-11): 12 -> 11 entries, A RE-RECORD WITH THE UNIT THAT MOVED IT: `fight` forms only on a subject the person holds a context of violence against (`rosters.yaml: violence_contexts`), and the build's loyalty rows name the creed, so the act mix moves. The old value is the parent tree's pin; `test_cr87_violence_contexts.py::revert_cr87` reproduces the parent's realm hashes (its control) and was NOT run against this corpus pin. Against the 12: `("rec:d9d40b704618a215", ...)`,
+    # `("rec:30a013a313fa2ee0", ...)` and `("rec:18e62b2eb9661f52", ...)` (`exists:dispensation`, 0) are out; `("hearth_ostvik",
+    # "exists:Rung", 1)` once more and `("hearth_ostvik", "present_at:p_carin", True)` are in. The property this pin is for holds:
+    # 11 grammar claims were ever deposited and all 11 are held at the end, none evicted.
     assert actor_end == [("hearth_ostvik", "stores:grain", 0),
                          ("hearth_ostvik", "exists:Person", 0),
                          ("rec:2dd19669944564b8", "exists:dispensation", 0),
-                         ("rec:d9d40b704618a215", "exists:dispensation", 0),
+                         ("hearth_ostvik", "exists:Rung", 1),
+                         ("hearth_ostvik", "present_at:p_carin", True),
                          ("hearth_ostvik", "exists:Person", 0),
-                         ("rec:30a013a313fa2ee0", "exists:dispensation", 0),
-                         ("rec:18e62b2eb9661f52", "exists:dispensation", 0),
+                         ("hearth_ostvik", "stores:grain", 0),
                          ("hearth_ostvik", "exists:Rung", 1),
                          ("hearth_ostvik", "present_at:p_bailiff", True),
                          ("prop:d41db7f3b4285af3", "exists:Proposition", 1),
-                         ("hearth_ostvik", "stores:grain", 0),
                          ("rec:2dd19669944564b8", "exists:dispensation", 0)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
@@ -13018,7 +13086,10 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # ⚠⚠ ELEVEN -> TEN, v10 PC-10b (B10-11): `accept` LEAVES, nothing joins. `accept` forms only on a `Record`-classed referent now (a
     # held `challenge`), and its cell's reads are `exists:challenge`, `names:` (WORLD-ONLY) and `fight`'s, so no deposited belief
     # drops it on the headless run. CONTROL: the base tree (`95f58adb`'s `engine/season`) reads the old eleven and passes.
-    assert {v for v, _ in hl_live} == {"challenge", "comply", "construe", "evade / defy", "exchange", "fight",
+    # ⚠⚠ TEN -> NINE, v11 CR-87 (B10-11): `fight` LEAVES, nothing joins. It forms only on a subject the person holds a context
+    # of violence against, and the headless run holds none, so no deposited belief has a `fight` to drop. The old ten are the parent
+    # tree's pin; `revert_cr87` was NOT run against it.
+    assert {v for v, _ in hl_live} == {"challenge", "comply", "construe", "evade / defy", "exchange",
                                        "interview",
                                        "tend", "train", "transfer"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `examine`/`restore`/"
@@ -13295,8 +13366,10 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # v10 PC-10b (B10-11): 26 -> 25, read off this test's own `dropped` on this tree, by the act mix a challenge's Record moves (the
     # sibling `hl_live` note: `accept` no longer drops). CONTROL: the base tree (`95f58adb`'s `engine/season`) reads 26 and passes.
     # The clause still fires.
-    assert len(dropped) == 25, (
-        f"{len(dropped)} executable clause-4 drops, not 25. The drops are the channel itself; if "
+    # v11 CR-87 (B10-11): 25 -> 19, read off this test's own `dropped` on this tree, by the act mix CR-87 moves (no context-free
+    # `fight`; the sibling `hl_live` note: `fight` no longer drops). The old value is the parent tree's pin (the base tree passes it, read in a scratch export of `d2847e7b`); `revert_cr87` was NOT run against it. The clause still fires.
+    assert len(dropped) == 19, (
+        f"{len(dropped)} executable clause-4 drops, not 19. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -13416,7 +13489,25 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # for each pair alone) WAS NOT RUN, CR-17's precedent: whether either is a real recovered denial or a fold-order artifact is
     # UNVERIFIED [ASSUMPTION; medium; Jordan to correct; revert: `set()` with PC-10b reverted]. CONTROL: the base tree (`95f58adb`'s
     # `engine/season`) reads EMPTY and passes.
-    assert bit == {("tend", "hearth_ostvik"), ("transfer", "hearth_ostvik")}, (
+    # ⚠⚠ **v11 CR-87 (B10-11): `('transfer', 'hearth_ostvik')` LEAVES, `('exchange', 'hearth_ostvik')` JOINS; `('tend', 'hearth_ostvik')`
+    # STAYS. NAMED AND GROUNDED AS THE MESSAGE BELOW REQUIRES** (`hl_drops`' replica, scratch, not kept; the same script on every arm).
+    # THE UNIT: the Bailiff's context-free `fight` on `hearth_ostvik` (a Rung; `kill.refused` once in the shipped arm and three times in
+    # the `none` control on the base) is gone from both arms, and its scenes re-rank the rest. EITHER of two CR-87 parts removes it
+    # ALONE: the `violence_contexts` decline (no context names a rung, so `fight` does not form on it) and `fight`'s cost on every
+    # axis (formed with the decline emptied, it is never chosen); the bite reads the shipped pair with either reverted alone, and the
+    # base pair only with BOTH reverted (`revert_cr87`, or the decline and the cells together). The dispute conjunct, the `blood`
+    # duel and the loyalty rows each reverted alone leave the shipped pair.
+    # THE COUNTERFACTUALS (clause 4 disabled for one pair alone, in the shipped arm):
+    #   * `('exchange', 'hearth_ostvik')`: then TAKEN by `p_carin` twice -- a REAL RECOVERED DENIAL. It is dropped 16 times (the
+    #     Bailiff 9, `p_carin` 7) on the hearth's `stores:grain` belief; the `none` control takes it (`p_carin`, `p_bailiff` once each).
+    #     On the base the shipped arm took it (the Bailiff once), so it was no bite there.
+    #   * `('tend', 'hearth_ostvik')`: then NOT taken (0) -- NOT a grounded denial, a fold-order artifact of the act mix (CR-10's
+    #     `transfer` precedent) [ASSUMPTION; medium; Jordan to correct; revert: drop the pair from the pin if the act mix moves it]. It
+    #     answers PC-10b's open question for this pair, which was carried unverified.
+    #   * `('transfer', 'hearth_ostvik')` leaves because the shipped arm now TAKES it (the Bailiff once), though it is still dropped
+    #     (16 times): on the base the shipped arm never took it.
+    # CONTROL: `revert_cr87` reads the base pair `{('tend', 'hearth_ostvik'), ('transfer', 'hearth_ostvik')}` exactly.
+    assert bit == {("exchange", "hearth_ostvik"), ("tend", "hearth_ostvik")}, (
         f"the clause-4 bite is {sorted(bit)}, not the two `rec:6bf4…` pairs measured at CR-10 (EMPTY at REM-2C, the two `transfer` pairs pinned at "
         "REM-22 before it). A "
         "pair beyond those would be a NEW acceptance-chain pair and should be named and grounded "
@@ -13452,8 +13543,18 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # MESSAGE BELOW ASKS FOR WAS NOT RUN for the three new triples (CR-17's precedent): whether each is a real denial is UNVERIFIED
     # [ASSUMPTION; medium; Jordan to correct; revert: `p_carin`'s `exchange` alone, with PC-10b reverted]. CONTROL: the base tree
     # (`95f58adb`'s `engine/season`) reads `p_carin`'s `exchange` alone and passes.
+    # v11 CR-87 (B10-11): `p_bailiff`'s `exchange` on the hearth JOINS, his `train` and `transfer` LEAVE; `p_carin`'s `exchange` and his
+    # `tend` stay. The unit is the pair-grain note's (the Bailiff's context-free `fight` on the hearth gone, by the decline or by the
+    # cost on every axis, either alone). Each move, read off the same replica (`hl_drops`, scratch, not kept): `train` and `transfer`
+    # leave because the shipped arm's Bailiff now TAKES each once (on the base he took neither; both are still dropped, 33 and 9
+    # times); `exchange` joins because he no longer takes it in the shipped arm (once on the base) while the control does. THE
+    # COUNTERFACTUAL for the new triple (clause 4 disabled for `('exchange', 'hearth_ostvik')` alone): the shipped arm then has
+    # `p_carin` take it twice and the Bailiff NOT AT ALL -- so `p_carin`'s triple is a real denial (as REM-2B grounded it) and the
+    # Bailiff's is NOT: a fold-order artifact of the act mix [ASSUMPTION; medium; Jordan to correct; revert: drop the triple if the act
+    # mix moves it]. `p_bailiff`'s `tend`: with clause 4 disabled for its pair nobody takes it, so it is an artifact too, which closes
+    # PC-10b's unverified grounding for it. CONTROL: `revert_cr87` reads PC-10b's four triples.
     assert bite_who == {("p_carin", "exchange", "hearth_ostvik"), ("p_bailiff", "tend", "hearth_ostvik"),
-                        ("p_bailiff", "train", "hearth_ostvik"), ("p_bailiff", "transfer", "hearth_ostvik")}, (
+                        ("p_bailiff", "exchange", "hearth_ostvik")}, (
         f"the person-grain clause-4 bite is {sorted(bite_who)}, not `p_carin`'s `exchange` on her hearth (CR-17; `transfer` and `exchange` on `rec:6bf46a143f347c12` at CR-10). "
         "Ground any change as the note above does -- disable clause 4 for the new triple's pair alone and see whether "
         "the shipped arm's person then takes it -- before re-pinning")
@@ -13707,8 +13808,17 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # (a held `challenge`) and its cell's `names:` reads are WORLD-ONLY, so no deposited belief drops it here (the sibling `hl_live`
     # note). READ OFF the failing assertion's own printed set on this tree. CONTROL: the base tree (`95f58adb`'s `engine/season`) reads
     # the old 13 and passes. `tell` and `surveil` stay absent.
-    assert {v for v, _ in live} == {"build", "challenge", "comply", "construe", "evade / defy",
-                                    "fight", "found", "interview",
+    # ⚠ {12 verbs} -> {12 verbs}, v11 CR-87 (B10-11): `fight` LEAVES, `accept` JOINS. MEASURED BEFORE RE-PINNING, this test's own
+    # `drops(DEFAULT_FIXTURES)` replicated (scratch, not kept) on this tree and with CR-87 at its revert (`revert_cr87`, which reads the
+    # old 12 and 89 drops), the same script on both: here 205 drops. `fight` was formed on `r_realm` and on a Record -- referents that are
+    # no person -- and dropped on the `exists:Person` belief a refused fight deposited (10 drops at the revert); the `violence_contexts`
+    # decline forms it on no such referent (with the decline alone emptied it drops 12 times again). `accept` (20 drops, `p_c`'s) forms
+    # on the PETITION `rec:dc94bbcce1cf5d6a` (the shared `Record` class, `comply`'s cost) and drops on the `exists:challenge` belief his
+    # own refused `accept` there deposited (4 attempts, none at the revert); it joins with EITHER the decline or `fight`'s cost on every
+    # axis in force alone, so the unit is the scenes the context-free fight no longer takes (and `accept` sharing `fight`'s cells).
+    # `tell` and `surveil` stay absent.
+    assert {v for v, _ in live} == {"accept", "build", "challenge", "comply", "construe", "evade / defy",
+                                    "found", "interview",
                                     "sabotage", "speak", "tend", "train"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
@@ -17435,12 +17545,17 @@ def test_t4_nothing_to_say_forms_no_telling_and_survey_is_untouched():
         [(c.subject, sorted(c.operands)) for c in surveys])
 
 
-def test_t4_a_person_may_tell_about_themselves_and_still_not_fight_themselves():
+def test_t4_a_person_may_tell_about_themselves_and_still_not_fight_themselves(monkeypatch):
     """DECISION 3. The contested-verb self-subject skip binds only a row naming NO counterparty: a
     `tell`'s opponent is its `to`, so its `subject` is a topic and a person may tell somebody about
     themselves. `fight` names none -- its opponent IS its subject -- and still declines the person
     as their own subject. CONTROL: `fight` forms on another person, so its absence on `p_low` is the
-    skip and not the verb being unformable."""
+    skip and not the verb being unformable.
+    v11 CR-87: read with `rosters.yaml: violence_contexts` emptied, so the self-subject skip is the only decline at work on
+    `fight` (with the block shipped, no context names `p_mid` either and the control would observe the contexts, not the
+    skip)."""
+    from ..decision import options as _options
+    monkeypatch.setattr(_options, "VIOLENCE_CONTEXTS", {})
     w, p = _t4_person(knows=("p_mid",), holds=("p_low",))
     tells = _t4_offered(w, p, ("p_low",), "tell")
     assert [(c.subject, c.operands["to"]) for c in tells] == [("p_low", "p_mid")], (

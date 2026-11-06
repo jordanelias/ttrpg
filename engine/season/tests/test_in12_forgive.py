@@ -245,7 +245,14 @@ def test_an_own_stance_declines_member_naming_no_verb_or_a_verb_not_writing_stan
 # 6 -- THE REALM COUNTER, KEYED TO FIELD-PLANTED ROWS
 # ======================================================================================
 
-def test_the_field_planted_count_reads_the_fields_grudge_and_not_a_seeded_row():
+def test_the_field_planted_count_reads_the_fields_grudge_and_not_a_seeded_row(monkeypatch):
+    """v11 CR-87 (`Fixtures loyalty_toward_creed`): a disloyal member's build-time row now names the CREED -- for `LOSER`,
+    `fac_valorsmark`, the referent the morale row a lost field writes names too (K-49: a stance row carries no kind) -- so
+    no loyalty-seeded row names a PERSON for this control to forgive. Read with that one fixture at its revert, where
+    `SEEDED` (the King) still carries `LOSER`'s seeded row; the count it guards is IN-12's, not CR-87's."""
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..harness import populated as _populated
+    monkeypatch.setattr(_populated, "DEFAULT_FIXTURES", DEFAULT_FIXTURES.sweep("loyalty_toward_creed", False))
     w = _lost_field()
     assert field_planted_forgivenesses(w) == 0
     assert _kinds(_forgive(w, SEEDED, key="f_seeded")) == ["stance.moved"], "control: a seeded row ends"

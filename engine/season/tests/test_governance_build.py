@@ -2939,7 +2939,12 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # `accept` forms only on a `Record`-classed referent (refused at `exists:challenge` on any other held document), so the act mix
     # moves (seed 0, one season: 703 -> 719 in both arms; `test_go07_canonical_digest.py` records the 719). CONTROL: the base tree
     # (`95f58adb`'s `engine/season`) reads (703, 703) under this same test.
-    assert (out["acts"], cout["acts"]) == (719, 719), (
+    # ⚠⚠ v11 CR-87 (B10-11): (719, 719) -> (744, 743), A RE-RECORD WITH THE UNIT THAT MOVED IT: `fight` forms only in a held context
+    # and the build's loyalty rows name the creed, so the season keeps the persons the fights felled and the act mix moves (seed 0,
+    # one season: 719 -> 744 shipped; `test_go07_canonical_digest.py` records the 744). THE ARMS NOW PART BY ONE ACT, which they had
+    # not since ED-IN-0306 phase 5 -- the wear claims part the act mix again, which the assertion below admits either way.
+    # CONTROL: `test_cr87_violence_contexts.py::revert_cr87` reads the old one-season hash `0fb73bc8...` (and so the 719).
+    assert (out["acts"], cout["acts"]) == (744, 743), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

@@ -5096,6 +5096,32 @@ rows:
     cite:      "FALSIFIER: `engine/season/tests/test_cp_t03_05_fight_estimate.py` -- the shares agree with the shares `resolve` realises over held-out worlds within the standard error of their difference, in every outcome at four matchups, and the tolerance is red against a display of a different matchup and against a display with the actor and subject shares swapped; the call leaves `content_hash` and the draw counter unmoved (red against a variant that draws from the season stream, seen red and reverted). CONTROL: `content_hash` and the draw counter of a world that made the call, equal to a world that did not (`test_cp_t03_05_fight_estimate.py`), and the fixture's addition moves no hash (`test_cp_t03_01_cohorts_never_fight.py`'s stripped-reads control, seeds 0 and 2); the fixture has no loop reader."
     source:    "v10 CP-T03-05 (`workplans/valoria_master_workplan_v11_part13.md`, AM-C-02), batch B10-11"
 
+  - id:        H-252
+    tier:      1
+    hole:      "HOW FAR A GRUDGE MAY CARRY A MAN TO VIOLENCE (v11 CR-87 (3); ED-IN-0337). Under `stance_polarity: declared` (CR-16) §F2's stance term is read at `1 + stance_gain` on every row, so a -4 grudge scored +8 on `fight` against a pursuit term near 0.05 and alone decided a killing. No document gives the weight a grudge carries on a violent act apart from any other"
+    kind:      "NUMBER"
+    owner:     "`decision/choose.py::stance_term`, on the rows `data/verbs.py::VIOLENT_VERBS` derives from `rosters.yaml: violent_prizes` (`fight`, `capture`, `accept`), where the subject is the opponent"
+    grade:     "assumption"
+    default:   "2.0 -- SHIPPED, by CR-87's reading rule: the largest value of the grid 0 / 0.5 / 1.0 / 1.5 / 2.0 at which, on seeds 0-4 over two seasons, no `fight` forms at stance above -3, and a hand-built -4 grudge in a war context still ranks `fight` first [ASSUMPTION; medium; Jordan to correct; revert: None, `1 + stance_gain`]. READ through `harness/interactions.py`'s run: `fight` formed 0 times at 0.5, 1.0 and 2.0 on every seed, so the rule's first arm holds across the grid and 2.0 is taken. 2.0 equals today's `1 + stance_gain`, so the shipped value moves no hash; once the contexts gate formation, the bound does not bind on `fight` and moves `capture` alone (attempts at seeds 0-4, two seasons: 10/12/20/8/13 at 2.0, 8/9/14/7/12 at 1.0, 6/8/7/6/9 at 0.5)"
+    site:      "Fixtures hostile_stance_gain, read by `engine/season/decision/choose.py::stance_term` once per scored candidate on a violent opponent row; a value below 0 raises"
+    sweep:     ["None (the revert: 1 + stance_gain)", "0", "0.5", "1.0", "1.5", "2.0 (SHIPPED)"]
+    unblocks:  "CR-88's duty term, which re-weighs what a grudge may licence once duty exists"
+    cite:      "BUILT at B10-11 (CR-87). FALSIFIER: `engine/season/tests/test_cr87_violence_contexts.py` -- the violent row reads the fixture and every other row `1 + stance_gain` (a non-violent opponent row, `speak`, is untouched); a -4 grudge in a war context ranks `fight` first at the shipped value. CONTROL: None reproduces the pre-item hash (the same test file's control)"
+    source:    "v11 CR-87 (`workplans/valoria_master_workplan_v11_part4.md` `### CR-87` (3)), batch B10-11"
+
+  - id:        H-253
+    tier:      1
+    hole:      "WHERE A MEMBER'S BUILD-TIME LOYALTY IS WRITTEN (v11 CR-87 (5); ED-IN-0335: a major betrayal needs a series of events). `harness/populated.py` wrote `cast.stance_from_loyalty(cast.loyalty(...))` toward the creed's subject (the King, for Valorsmark) and toward a goal's referents, at up to -5, so a disloyal member began the game holding a killing grudge against his own head with no deed behind it (the Spymaster, -4 toward the King, attacking him 5 to 13 times a run)"
+    kind:      "RULING"
+    owner:     "`harness/populated.py`'s two loyalty sites; the band is `data/cast.py::MEMBER_BAND` (`loyalty_in_band`)"
+    grade:     "assumption"
+    default:   "True -- SHIPPED [ASSUMPTION; medium; Jordan to correct; revert: False, the rows as they stood]: the faction creed's row names the creed Proposition (the faction's own id), and a disloyal member's inverted goal row names the goal's Proposition, never the persons it is about; a negative row no lower than -1. A loyal member's goal row is the goal's own call and is unchanged. LIMIT, stated: the creed Proposition is the faction Proposition, so the loyalty row now shares its referent with the morale row a lost field writes (`_eff_march`; K-49, a stance row carries no kind), and `seam/wrappers/mass_battle.py::_creed_referent` (MB-03's `loyalties`, the creed's utterer) reads no build-time row in a built realm"
+    site:      "Fixtures loyalty_toward_creed, read by `engine/season/harness/populated.py` at build (the goal and creed loyalty sites)"
+    sweep:     ["False (the revert)", "True (SHIPPED)"]
+    unblocks:  "CR-88's betrayal reading (disaffection toward a head earned by deeds)"
+    cite:      "BUILT at B10-11 (CR-87). FALSIFIER: `engine/season/tests/test_cr87_violence_contexts.py` -- at build no loyalty row puts the Spymaster below 0 toward the King, and every row naming a Proposition sits at or above the band. CONTROL: False reproduces the pre-item `build_realm(0)` hash (the same file's control)"
+    source:    "v11 CR-87 (`workplans/valoria_master_workplan_v11_part4.md` `### CR-87` (5)), batch B10-11"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

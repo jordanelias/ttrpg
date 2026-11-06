@@ -35,10 +35,13 @@ from .test_rem30_character_sheet import _run
 #: RE-PINNED ONCE at v10 PC-10b (a challenge is a Record; `accept` binds to one; a declared mover wherever a challenge forms):
 #: was `7cde746e...`, `971e3d03...`, `0c28be95...`. CONTROL: the base tree (`95f58adb`'s `engine/season`) reads the old three.
 #: A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-PINNED ONCE at v11 CR-87 (violence made exceptional: the build's loyalty rows and `fight`'s contexts, a declared mover
+#: of the build and of every season that fought): was `f9c01c27...`, `086d1092...`, `6312b4a1...`. CONTROL:
+#: `test_cr87_violence_contexts.py::revert_cr87` reads the pre-item hashes exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
-    0: "f9c01c272bd9af9bea1750283a815646",
-    1: "086d1092fffad3c9c82d04d5ffdb0a70",
-    2: "6312b4a1b6ee8ce3801c6f66a4568844",
+    0: "e9d7c8974bf509ca2b915489cc4f371c",
+    1: "9e1bb7c269b7bc1523a342d11d3fcfb0",
+    2: "fe7b5f497865689edcd0084d1a1effa7",
 }
 
 #: The four Niflhel ids the archived file STRIKES (it prints no row for them): never members.

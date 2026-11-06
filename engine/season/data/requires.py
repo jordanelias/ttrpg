@@ -835,11 +835,17 @@ OWN_STATE_STEMS = frozenset({"thread_sensitivity", "thread_sensitivity.gate"})
 # COPY OF A RELATION: no other stem reads a Record's content (`held_by` reads a `hold` edge, `exists` a
 # kind, `claim.held` the actor's ledger), and the person-side readers of the same map
 # (`decision/options.py::_content_answer`) DERIVE operands, they ask nothing of the fold. WORLD-ONLY (below).
+# ⚠ v11 CR-87 (B10-11; the DISPUTE, `ED-IN-0337`) ADDED `dispute`: `relation` (form 5) asked of a PERSON and the
+# actor -- *does the actor hold a deed claim of `of` that his own judgement scores against him*
+# (`queries/person_q.py::holds_dispute`, over `deeds_judged`, the one owner). `challenge`'s conjunct: a duel settles a
+# dispute, so a man challenges only one he holds a wrong against. `WorldReader.read` answers it off the ACTOR'S OWN
+# ledger (`claim.held`'s F8 carve-out). WORLD-ONLY (below), for `names`' reason: a witness's ledger must not gain a
+# `dispute:<actor>` reading from a refusal it saw. CR-88 re-points it to `grievance_against`. One stem; no form.
 # roster-exempt: MECHANISM. The grammar's own predicate stems (what a REQUIREMENT MAY ASK), not the game's vocabulary; `rosters.yaml` says what the world contains.
 REQUIRES_STEMS = frozenset({
     "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
     "claim.held", "rank", "purview", "bench", "bench.size", "quorum", "with", "audience", "room",
-    "individual", "names",
+    "individual", "names", "dispute",
 }) | OWN_STATE_STEMS
 
 # THE STEMS A `relation` CELL SPELLS `<stem>:<operand>` (v10 PC-10b): asked of `of` and the named operand,
@@ -873,7 +879,7 @@ OPERAND_NAMED_STEMS = frozenset({"names"})
 # deposit to its HOLDER (`loop/witness.py`), not by watching somebody else's refusal. The person forms the
 # Candidate (UNKNOWN never contradicts) and the fold refuses a Record that does not name the pair.
 # roster-exempt: MECHANISM. The grammar's own predicate stems a ledger never answers, not the game's vocabulary.
-WORLD_ONLY_STEMS = frozenset({"with", "audience", "individual", "names"}) | OWN_STATE_STEMS
+WORLD_ONLY_STEMS = frozenset({"with", "audience", "individual", "names", "dispute"}) | OWN_STATE_STEMS
 
 # THE STEMS A LEDGER CLAIM IS A *CELL* OF -- one `(subject, predicate)` slot that holds one value at a
 # time and can be re-asserted, so two claims on it agree or disagree (`decision/options.py::record`).

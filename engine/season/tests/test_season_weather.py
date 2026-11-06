@@ -512,9 +512,16 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # [2] (31510, a65e2185...) -> (32004, 9cd8f64e...); STEP_OFF_ONE_SEASON 81aa6671... / (11401, 2275e41e...) -> 63129abb... / (11496,
 # 24d897bb...); THREAD_READ_WITHHELD_EVENTS_1 (11586, 860b0d23...) -> (11767, c35ef751...). CONTROL: the base tree (`95f58adb`'s
 # `engine/season`) reads all five old values. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-BASE_HASHES = {0: "837d0f83c62917b88d69da3daa3ea027",
-               1: "0fb73bc805ae699a0a13b8d09e130e1c",
-               2: "84002fa849b3ce47e0cc240eed2a61bd"}
+# RE-PINNED ONCE at v11 CR-87 (violence made exceptional), A DECLARED MOVER of the build (the loyalty rows name the creed,
+# never its head, no lower than -1) and of every season that fought (`fight` forms only in a held context). Was:
+# BASE_HASHES 837d0f83... / 0fb73bc8... / 84002fa8... -> 7266f56b... / 20accb03... / 31811193...; BASE_EVENTS[1] (11766,
+# 03e52c6b...) -> (13400, 9d2a2db9...), [2] (32004, 9cd8f64e...) -> (38770, 280b6391...); STEP_OFF_ONE_SEASON 63129abb... /
+# (11496, 24d897bb...) -> 9b62c4cc... / (10954, 44f3aa68...); THREAD_READ_WITHHELD_EVENTS_1 (11767, c35ef751...) -> (13386,
+# 2cea2d08...). CONTROL: `test_cr87_violence_contexts.py::revert_cr87` reads the old build and one-season hashes exactly. A
+# GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+BASE_HASHES = {0: "7266f56bea4e3d75705f5e88eec1b2e1",
+               1: "20accb03c3d32f80a9fab00d80a70b21",
+               2: "31811193f50c22f9947eb75ef5fdcab5"}
 
 # THE ONE-SEASON PIN WITH CR-81'S STEP OFF (`build_realm(0, acquaintances=False)`: the hash and the event count and digest
 # `BASE_HASHES[1]` / `BASE_EVENTS[1]` held before CR-81). The `give`-withheld arm's control, below.
@@ -535,8 +542,8 @@ BASE_HASHES = {0: "837d0f83c62917b88d69da3daa3ea027",
 # RE-PINNED ONCE at v10 CR-33 (NPC-088 holds `inquiry`, a Person repr): 4cb09ae3... -> 8aa6e2e7...; the event count and digest do not move.
 # RE-PINNED ONCE at the CR-33 verify pass (NPC-004 holds `inquiry`): 8aa6e2e7... -> d2152860...; the event count and digest do not move.
 # RE-PINNED ONCE at v10 PC-10b (see `BASE_HASHES`): 81aa6671... / (11401, 2275e41e...) -> 63129abb... / (11496, 24d897bb...).
-STEP_OFF_ONE_SEASON = ("63129abbcb0e81df8f43f64093e0b4d6",
-                       (11496, "24d897bba2505ee36f3494d49a5d4494e72583bf7cb13183784663d88a300f60"))
+STEP_OFF_ONE_SEASON = ("9b62c4ccaf71ba620c0232903de9106c",     # CR-87: was 63129abb... / (11496, 24d897bb...)
+                       (10954, "44f3aa68a0fed79e1c75fab444d66bb9931ed2cef2543828dc3ff3edd2b3059e"))
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -625,8 +632,9 @@ STEP_OFF_ONE_SEASON = ("63129abbcb0e81df8f43f64093e0b4d6",
 # draws walk another trajectory). CONTROL: the rows commit's four source files reverted read the old pair (the file, 409 passed).
 # RE-PINNED ONCE at v10 PC-10b with `BASE_HASHES` (11585 / 06a9dca3... -> 11766 / 03e52c6b..., 31510 / a65e2185... -> 32004 /
 # 9cd8f64e...); the base tree reads the old pair.
-BASE_EVENTS = {1: (11766, "03e52c6baa7a86bf597f31805e08fcaf5a338af2c1d752e77b7428b7fb9dd178"),
-               2: (32004, "9cd8f64e382139fa97f51e46b281de72493abe55bbcd15f04b4b0c458eed163e")}
+# RE-RECORDED at v11 CR-87 with `BASE_HASHES` (11766 -> 13400, 32004 -> 38770; `revert_cr87` reads the old season-1 hash).
+BASE_EVENTS = {1: (13400, "9d2a2db9b18ad5be405cd62bcc50ed4e61a1b74bdae812dcc17cf223a78b6069"),
+               2: (38770, "280b63917c1555943a2ea73558ecda138220816df8b8a8a45e5d8992d69e3e82")}
 
 
 def _digest(w) -> tuple:
@@ -797,7 +805,7 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: `the body`'s `step:`/`declares:` popped in process reads the old value exactly); still differs from `BASE_EVENTS[1]` (11846).
 #: RE-RECORDED at v10 REM-30's `verb_capability` rows with `BASE_HASHES`: 11852 / e6f3edeb... -> 11582 / e23a1f6e... (the rows
 #: commit's four source files reverted in process reads the old value exactly).
-THREAD_READ_WITHHELD_EVENTS_1 = (11767, "c35ef75190e8ed3adcc9481673850be3a88efdb717d543be841b1a135259e751")   # PC-10b: was 11586 / 860b0d23...   # CP-T03-09: was 11582 / e23a1f6e...   # REM-30 rows: was 11852 / e6f3edeb...   # REM-31: was 11799 / 07b7a36b...   # CR-86: was 11781 / 43774342...   # CR-17: was 10316 / af2eb292...; CR-25: was 10847 / 83f4c9a2...; CR-81: was 9741 / 1e77a5a4...
+THREAD_READ_WITHHELD_EVENTS_1 = (13386, "2cea2d08b83c1fd9125f2082daea2bc809e5b8541d1c2206d855200ffcdbc3c4")   # CR-87: was 11767 / c35ef751...   # PC-10b: was 11586 / 860b0d23...   # CP-T03-09: was 11582 / e23a1f6e...   # REM-30 rows: was 11852 / e6f3edeb...   # REM-31: was 11799 / 07b7a36b...   # CR-86: was 11781 / 43774342...   # CR-17: was 10316 / af2eb292...; CR-25: was 10847 / 83f4c9a2...; CR-81: was 9741 / 1e77a5a4...
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

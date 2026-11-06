@@ -15,6 +15,7 @@ from __future__ import annotations
 import pytest
 
 from ..harness import interactions as I
+from .test_cr87_violence_contexts import revert_cr87
 
 CARDINAL, INQUISITOR = "p_npc_013", "p_npc_004"
 
@@ -37,8 +38,12 @@ def _assert_finding(rows) -> None:
     assert r["candidate"]["chosen"] and r["candidate"]["verb"] == "fight"
 
 
-def test_the_log_names_the_cardinals_fight_on_the_inquisitor(season_one):
-    _, _, rows = season_one
+def test_the_log_names_the_cardinals_fight_on_the_inquisitor(monkeypatch):
+    """v11 CR-87 MADE THE FINDING ITS FALSIFIER: with `fight`'s contexts the Cardinal forms no `fight` on the Inquisitor
+    (`test_cr87_violence_contexts.py` asserts it gone on the shipped tree). The instrument's own claim -- that it names the
+    case where the case occurs -- is read on the world it was found in, CR-87 at its revert (`revert_cr87`)."""
+    revert_cr87(monkeypatch)
+    _, _, rows = I.run(0, 1)
     _assert_finding(rows)
 
 
@@ -70,6 +75,7 @@ def test_the_logged_scores_carry_the_believed_odds_factor(monkeypatch):
 
 
 def test_a_planted_wrong_relation_reading_is_seen(monkeypatch):
+    revert_cr87(monkeypatch)            # v11 CR-87: the finding the plant must break exists only at the revert (above)
     real = I.same_faction
     monkeypatch.setattr(I, "same_faction", lambda w, a, t: not real(w, a, t))
     _, _, rows = I.run(0, 1)

@@ -241,7 +241,9 @@ def test_in53v_c_the_classes_survive_the_fold_and_are_closed():
     # own-referent term stamps once a row declares one (`test_referent_class_stamps.py`).
     # RE-RECORDED AT v10 IN-12 step 5: `Detainee` joins (6 -> 7), the restrained-persons class
     # `world_q.detainees_held` stamps (`interrogate`'s, `test_in12_interrogate.py`).
-    assert len(REFERENT_CLASSES) == 7 and {"Office", "Record"} <= REFERENT_CLASSES and "Rung" in REFERENT_CLASSES
+    # RE-RECORDED AT v11 CR-87: `Enemy` joins (7 -> 8), the war-context class `world_q.enemies_heard` stamps (no row declares
+    # it; the `fight` decline reads it, `test_cr87_violence_contexts.py`).
+    assert len(REFERENT_CLASSES) == 8 and {"Office", "Record"} <= REFERENT_CLASSES and "Rung" in REFERENT_CLASSES
     a = Question("q:claim:x", "claim_landed", ("S",), "x")
     b = Question("q:need:off_reeve", "need", (), "off_reeve", (("off_reeve", "Office"),))
     for rule in ("all", "one_per_source"):

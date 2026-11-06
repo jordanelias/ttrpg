@@ -36,7 +36,7 @@ from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member, ro
 # `PURSUIT_PROJECTION` / `PROJECTION_DEFAULT_CELL` were imported here until 2026-09-16 and
 # are not any more: the loop that read the 13x4 moved into `data/pursuits.to_axes`, its
 # single owner. Keeping the imports declared a dependency this module no longer has.
-from ..data.verbs import VERB_TABLE, act_key, align
+from ..data.verbs import VERB_TABLE, VIOLENT_VERBS, act_key, align
 from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
 # imports `person_q` and `data/`); `_stance_arm` calls it, and `confliction` (IN-08 6f,
@@ -85,6 +85,18 @@ def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = 
         raise ValueError(f"stance_gain {g} is not >= 0: it would damp or invert §F2's stance "
                          f"term, and inverting it is G2's polarity, not this gain (H-202)")
     t = _stance_arm(p, c, fx, memo)
+    # v11 CR-87 (THE GRUDGE'S BOUND): on a VIOLENT row (`data/verbs.py::VIOLENT_VERBS`, off `rosters.yaml:
+    # violent_prizes`) whose subject is its opponent, the term is read at `Fixtures hostile_stance_gain` in place of
+    # `1 + g`, so a grudge's pull on violence is bounded apart from its pull on every other act; `declared`'s sign
+    # (CR-16) is the arm's and is kept. `None` is the REVERT: `1 + g`, the same expression, exactly.
+    h = fx.get("hostile_stance_gain")
+    if h is not None and c.verb in VIOLENT_VERBS:
+        row = VERB_TABLE.get(c.verb)
+        if row is not None and subject_is_opponent(row):
+            if not h >= 0:
+                raise ValueError(f"hostile_stance_gain {h} is not >= 0: a negative weight would invert the "
+                                 "grudge's sign on a violent row, which is G2's polarity, not this bound (CR-87)")
+            return h * t
     return (1.0 + g) * t             # at g == 0 this is 1.0 * t: exact for every float
 
 

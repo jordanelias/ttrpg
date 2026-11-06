@@ -5,7 +5,8 @@ addressee, `stakes` the duel's term, `challenger` the actor) through `_eff_chall
 `referent_class: Record`, `counterparty: to`, and a cell asking `exists:challenge` and the new `names:<operand>` stem
 (`data/requires.py`, WORLD-ONLY): `names:to` -- the Record's `challenger` is the opponent -- and `names:actor` -- its
 `terms` is the acceptor. The duel is fought under the Record's `stakes`, through CP-T03-09's ONE path
-(`seam/wrappers/combat.py::combat_input` -> `PersonalCombatInput.terms`), `'death'` where it names none; the yield rides
+(`seam/wrappers/combat.py::combat_input` -> `PersonalCombatInput.terms`), `'blood'` where it names none (v11 CR-87,
+`duel_terms`' `accept` line; PC-10b had `'death'`); the yield rides
 the result (`surrender`), earning `duel.yielded` for the yielder alone, never a band (H-98).
 
   FALSIFIER: a seeded `blood` challenge resolves with `surrender` set; under `death` Felled stays reachable; the
@@ -15,7 +16,7 @@ the result (`surrender`), earning `duel.yielded` for the yielder alone, never a 
   `tests/valoria/test_combat_duel_terms.py::_blood_cases` picks them -- no universal is asserted); a yield read as a
   fourth band fails.
   PLANTED FAILURE: the `names` conjuncts deleted, a no-challenge `accept` executes.
-  CONTROLS: no challenge Record -> `accept` refuses; `stakes: death` (and no stakes) builds today's duel exactly; an
+  CONTROLS: no challenge Record -> `accept` refuses; `stakes: death` builds today's lethal duel exactly; an
   unchallenged `fight` between the same pair stays lethal; `challenge_terms` equals the engine's `DUEL_TERMS` (a test,
   never an import into `engine/season/data`).
 """
@@ -42,6 +43,14 @@ from ..state.carriers import Act, Office, Record, Tenure
 
 ACC, CHAL, THIRD = "p_low", "p_mid", "p_other"     # tiny_world: all three live at the hearth `Hh`
 TRIES = 80                                            # accept act ids scanned for a scene of a given shape
+
+
+@pytest.fixture(autouse=True)
+def _a_dispute_behind_every_challenge(monkeypatch):
+    """v11 CR-87 added `challenge`'s DISPUTE conjunct (`dispute`, `person_q.holds_dispute`); this file's subject is the
+    Record, the terms and the yield, so every challenger here holds his dispute. `test_cr87_violence_contexts.py` owns
+    the conjunct (it reads the real owner, and its control strips the conjunct)."""
+    monkeypatch.setattr(world_q, "holds_dispute", lambda p, referent, scar_shift=0.0: True)
 
 
 def _world():
@@ -177,11 +186,13 @@ def test_a_challenge_mints_a_record_whose_stakes_hold_the_term_and_whose_terms_h
     assert any(t.kind == "hold" and t.subject == CHAL and t.object == rec.id and t.live for t in w.tenures)
 
 
-def test_a_computed_challenge_names_no_stakes_and_its_duel_is_fought_at_death():
+def test_a_computed_challenge_names_no_stakes_and_its_duel_is_fought_to_blood():
+    """v11 CR-87 (ED-IN-0336): a challenge naming no stakes falls through to `rosters.yaml: duel_terms`' `accept` line,
+    `blood` (was `death`, PC-10b's default) -- the one terms path, no second."""
     w, _ = _challenged(None)
     assert w.records["rec:ch0"].subject_matter["stakes"] is None
     assert world_q.stakes_of(w, "rec:ch0") is None
-    assert combat.combat_input(w, [ACC, CHAL], "accept", "rec:ch0").terms == "death"
+    assert combat.combat_input(w, [ACC, CHAL], "accept", "rec:ch0").terms == "blood"
 
 
 def test_a_stakes_outside_the_roster_is_refused_naming_it():
@@ -328,7 +339,7 @@ def test_a_blood_duel_whose_first_wound_is_not_decisive_emits_duel_yielded_and_n
 def test_control_stakes_death_and_no_stakes_build_todays_duel_exactly():
     """The record a death-stakes (or a stakes-less) challenge's `accept` builds is the record a lethal `fight` between
     the pair builds -- the input the scene is drawn from, so the duel is today's."""
-    for stakes in ("death", None):
+    for stakes in ("death",):     # v11 CR-87: a stakes-less challenge is fought to `blood` (the test above)
         w, _ = _challenged(stakes)
         assert (combat.combat_input(w, [ACC, CHAL], "accept", "rec:ch0")
                 == combat.combat_input(w, [ACC, CHAL], "fight")), stakes

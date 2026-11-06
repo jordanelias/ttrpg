@@ -974,6 +974,25 @@ DEFAULT_FIXTURES = Fixtures(
     # by subject and the gain scales it. Must be >= 0.
     # [JUSTIFIED: engine/season/hole_register.yaml H-202 -- the stance term's gain; §F2 gives the term and no gain, and the dukes' and Church's rising stakes have no rate, so it is injected and swept 0 / 1 / 3; shipped live at 1 per Jordan's 2026-10-09 ruling]
     stance_gain=1.0,                   # `H-202`, swept 0 (control) / 1 (SHIPPED) / 3
+    # `H-252` (v11 CR-87, THE GRUDGE'S BOUND). THE WEIGHT §F2's STANCE TERM IS READ AT ON A VIOLENT ROW WHOSE SUBJECT
+    # IS ITS OPPONENT (`data/verbs.py::VIOLENT_VERBS`: `fight`, `capture`; `decision/choose.py::stance_term`), in place
+    # of `1 + stance_gain` -- under `declared` a -4 grudge read at 2 scored +8 against a pursuit term near 0.05, so the
+    # grudge alone decided a killing. `None` is the REVERT: `1 + stance_gain`, exactly. Chosen by CR-87's reading rule
+    # (the largest grid value at which, on seeds 0-4 at two seasons, no `fight` forms at stance above -3 and a
+    # hand-built grudge in a war context still forms one). Must be >= 0 or None.
+    # READ (CR-87's rule, grid 0 / 0.5 / 1.0 / 1.5 / 2.0, `harness/interactions.py`'s run, seeds 0-4, two seasons):
+    # `fight` formed 0 times at every value read (0.5, 1.0, and the revert's 2.0), so the rule's first arm holds across
+    # the grid and its largest value is taken; the second arm (a -4 grudge in a war context ranks `fight` first) holds
+    # there (`tests/test_cr87_violence_contexts.py`). Once the contexts gate formation the bound is not binding on
+    # `fight`; it moves `capture` only (attempts 10/12/20/8/13 at 2.0 against 6/8/7/6/9 at 0.5, seeds 0-4).
+    # [JUSTIFIED: engine/season/hole_register.yaml H-252 -- the grudge's weight on a violent row; §F2 gives the term and no gain, and no document says how far a grudge may carry a man to violence, so it is injected, chosen by a declared reading rule and swept None (the revert) / the grid]
+    hostile_stance_gain=2.0,           # `H-252`, swept None (revert: 1 + stance_gain) / 0 / 0.5 / 1.0 / 1.5 / 2.0 (SHIPPED)
+    # `H-253` (v11 CR-87, ED-IN-0335: a major betrayal needs a series of events). WHERE A MEMBER'S BUILD-TIME LOYALTY
+    # IS WRITTEN (`harness/populated.py`, its two `cast.stance_from_loyalty(cast.loyalty(...))` sites): `True` writes
+    # the row toward the CREED Proposition (the faction's, or the goal's) and never toward its head person, and no
+    # lower than the member band (valence x weight >= -1); `False` is the REVERT, the rows as they stood (a disloyal
+    # member's -4 toward the King). A switch, not a number.
+    loyalty_toward_creed=True,         # `H-253`, swept False (the revert) / True (SHIPPED, CR-87)
     # `H-196` (v9 IN-18 `G3`, slant). WHAT A TELLER PASSES ON ABOUT A SUBJECT: `newest` is the
     # pre-G3 pick; `valence` passes on the deed the teller judges most strongly by their own
     # pursuits, however old (`queries/person_q.py::said_of`; `rosters.yaml: said_slants`). `newest`

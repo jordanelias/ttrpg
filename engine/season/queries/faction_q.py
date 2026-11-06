@@ -216,49 +216,10 @@ def subordinates(w: World, seat: str) -> list:
     return sorted(establishment_of(w, seat))
 
 
-# `20-ii`'s instruction names `at_war` last; the `mood` a war Proposition carries. `Proposition.mood`
-# is a plain string with no roster of allowed values (`OUGHT`/`HOLDS` are the two the tree already
-# mints, `harness/populated.py:658,661`); `WAR` is a third, idiomatic value of the SAME field, never
-# a new one -- `_eff_utter` already writes whatever `payload["mood"]` names, so this needs no new
-# verb and no matrix row. Declared once, beside the one function that reads it, the way `SHEET_KIND`
-# is declared beside `resolve`.
-WAR_MOOD = "WAR"
-
-
-def at_war(w: World, a: str, b: str) -> bool:
-    """`04:451`, verbatim signature and docstring: *"over live `commit`s to a WAR Proposition.
-    NEVER a stored flag."* `D-48`: *"war is a `WAR` Proposition with an `utterer` (AX-6) plus
-    `commit` edges owned by their subjects; `at_war` is a Query over the live ones ... There is no
-    boolean between two factions to set, because there is no faction record to hold one."*
-
-    A `WAR_MOOD` Proposition names its two parties directly, the same shape a creed's `OUGHT`
-    Proposition names its leader (`subject`) and faction (`value`, `harness/populated.py:661`):
-    `subject` and `value` are the two factions, UNORDERED (a war has no "first" side), so this
-    compares `{p.subject, p.value}` as a set against `{a, b}` rather than picking a slot for
-    either. `at_war` asks whether that Proposition still has ANY live `commit` -- `F.32`: *"a
-    `commit` whose subject is the declaring person, so `T-m` gives peace to the declarer"* (peace
-    = writing `until` on that edge, the owner's own discretion, exactly as a faction's own
-    membership commits close).
-
-    ⚠ MEASURABLY `False` FOR EVERY PAIR IN EVERY WORLD THIS TREE'S WORLD-GEN CAN BUILD TODAY --
-    BUT NOT FOR WANT OF A PRODUCER. `_eff_utter` (generic over `mood`) and `_eff_commit` are both
-    shipped, uncontested, `own`-eligible verbs, so a hand-built `Act(verb="utter", payload=
-    {"mood": WAR_MOOD, "subject": a, "value": b})` followed by a `commit` to the Proposition it
-    mints is a REAL fold today, not a hypothetical one -- `10_FACTIONS_AND_DEPLOYMENT.md` §4.1's
-    gap list (`F.33`) is about whether `at_war` may gate a verb's `requires`, which is a narrower,
-    still-open question than whether the Proposition can exist. No world-generation code (`cast`,
-    `build_realm`, the corpus overlays) currently AUTHORS such an act, which is why every corpus
-    and populated-realm world reads `False` for every pair -- a fact about what nothing yet
-    chooses to utter, not about this Query. The falsifier this module's test file carries drives
-    the real fold rather than planting a Tenure by hand, to prove that."""
-    TRACE.query("at_war", "resolver")
-    pair = {a, b}
-    for p in w.propositions.values():
-        if p.mood != WAR_MOOD or {p.subject, p.value} != pair:
-            continue
-        if any(t.kind == "commit" and t.object == p.id and t.live for t in w.tenures):
-            return True
-    return False
+# v11 CR-87: `WAR_MOOD` and `at_war` MOVED, unchanged, to `queries/world_q.py` -- the war context's standing
+# occasion (`world_q.enemies_heard`) reads `at_war`, and this module imports `world_q`, so the reverse import
+# would be a cycle. Re-exported here, so every `faction_q.at_war` caller reads the one owner.
+from .world_q import WAR_MOOD, at_war  # noqa: E402,F401 -- re-exported; the owner is `world_q`
 
 
 # THE `record_kinds` MEMBER A SURVEY MINTS -- `world_q.WORKS_KIND`'s shape: named once, beside the

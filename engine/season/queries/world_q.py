@@ -54,7 +54,7 @@ from ..data.rosters import (
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
-    DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, FOUNDING_REMIT_ACTS, HOLDING_RECORD_KINDS,
+    DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, ENEMY_CLASS, FOUNDING_REMIT_ACTS, HOLDING_RECORD_KINDS,
     RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
@@ -67,6 +67,8 @@ from .person_q import (
 # v9 SC-02 `22a`: `reception` and `proofs` read which claims record a person's deeds, what each is worth
 # to its holder, and which deeds were done TO him, off the same person-side owners `regard` reads.
 from .person_q import attributed_deeds, deed_term, suffered_deeds
+# v11 CR-87: the `dispute` stem's one owner (`challenge`'s conjunct).
+from .person_q import holds_dispute
 # v9 IN-69: the one cosine (`cast.loyalty` calls it too).
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 # v9 IN-67: `goal_referents` reads a goal's `object:` off the ONE loader and a `deed_doers` goal's
@@ -3308,6 +3310,53 @@ def holdings_to_found(w: World, p: Person) -> tuple:
     return tuple(r for r in held if any(founds_over(w, p.id, s, r) for s in seats))
 
 
+# `20-ii`'s instruction names `at_war` last; the `mood` a war Proposition carries. MOVED here from
+# `faction_q.py`, unchanged, by v11 CR-87, so `enemies_heard` below can read it (`faction_q` re-exports both).
+# `Proposition.mood`
+# is a plain string with no roster of allowed values (`OUGHT`/`HOLDS` are the two the tree already
+# mints, `harness/populated.py:658,661`); `WAR` is a third, idiomatic value of the SAME field, never
+# a new one -- `_eff_utter` already writes whatever `payload["mood"]` names, so this needs no new
+# verb and no matrix row. Declared once, beside the one function that reads it, the way `SHEET_KIND`
+# is declared beside `resolve`.
+WAR_MOOD = "WAR"
+
+
+def at_war(w: World, a: str, b: str) -> bool:
+    """`04:451`, verbatim signature and docstring: *"over live `commit`s to a WAR Proposition.
+    NEVER a stored flag."* `D-48`: *"war is a `WAR` Proposition with an `utterer` (AX-6) plus
+    `commit` edges owned by their subjects; `at_war` is a Query over the live ones ... There is no
+    boolean between two factions to set, because there is no faction record to hold one."*
+
+    A `WAR_MOOD` Proposition names its two parties directly, the same shape a creed's `OUGHT`
+    Proposition names its leader (`subject`) and faction (`value`, `harness/populated.py:661`):
+    `subject` and `value` are the two factions, UNORDERED (a war has no "first" side), so this
+    compares `{p.subject, p.value}` as a set against `{a, b}` rather than picking a slot for
+    either. `at_war` asks whether that Proposition still has ANY live `commit` -- `F.32`: *"a
+    `commit` whose subject is the declaring person, so `T-m` gives peace to the declarer"* (peace
+    = writing `until` on that edge, the owner's own discretion, exactly as a faction's own
+    membership commits close).
+
+    ⚠ MEASURABLY `False` FOR EVERY PAIR IN EVERY WORLD THIS TREE'S WORLD-GEN CAN BUILD TODAY --
+    BUT NOT FOR WANT OF A PRODUCER. `_eff_utter` (generic over `mood`) and `_eff_commit` are both
+    shipped, uncontested, `own`-eligible verbs, so a hand-built `Act(verb="utter", payload=
+    {"mood": WAR_MOOD, "subject": a, "value": b})` followed by a `commit` to the Proposition it
+    mints is a REAL fold today, not a hypothetical one -- `10_FACTIONS_AND_DEPLOYMENT.md` §4.1's
+    gap list (`F.33`) is about whether `at_war` may gate a verb's `requires`, which is a narrower,
+    still-open question than whether the Proposition can exist. No world-generation code (`cast`,
+    `build_realm`, the corpus overlays) currently AUTHORS such an act, which is why every corpus
+    and populated-realm world reads `False` for every pair -- a fact about what nothing yet
+    chooses to utter, not about this Query. The falsifier this module's test file carries drives
+    the real fold rather than planting a Tenure by hand, to prove that."""
+    TRACE.query("at_war", "resolver")
+    pair = {a, b}
+    for p in w.propositions.values():
+        if p.mood != WAR_MOOD or {p.subject, p.value} != pair:
+            continue
+        if any(t.kind == "commit" and t.object == p.id and t.live for t in w.tenures):
+            return True
+    return False
+
+
 def detainees_held(w: World, p: Person) -> tuple:
     """THE PRISONERS `p`'s SEATS HOLD (v10 IN-12 step 5, H-226 route (a) with H-232's formation-filter
     shape [ASSUMPTION; medium; Jordan to correct; revert: drop the term in `questions_for`, and
@@ -3337,6 +3386,43 @@ def detainees_held(w: World, p: Person) -> tuple:
     return tuple(sorted({t.subject for t in w.tenures
                          if t.kind == DETAIN_KIND and t.live and t.object in seats
                          and t.subject in w.persons and t.subject != p.id}))
+
+
+def enemies_heard(w: World, p: Person) -> tuple:
+    """THE PERSONS OF A FACTION AT WAR WITH `p`'s, OVER A WAR HE KNOWS OF (v11 CR-87, the WAR context of
+    `rosters.yaml: violence_contexts` [ASSUMPTION; medium; Jordan to correct; revert: `()`, and `war` names
+    nobody]), sorted by id. A war is a `WAR_MOOD` Proposition naming `p`'s faction (`faction_holding`, the one
+    owner of *which faction a person coheres under*) and another, `at_war` (the one owner of *live*) between
+    the two; he KNOWS OF it when its id is among `person_q.ledger_names` of his own ledger (he saw it uttered,
+    was told of it, holds a document naming it) or he holds a live edge on it (he uttered it, or committed):
+    a man who has not heard of the war does not fight in it. The enemy is every OTHER person who coheres under
+    the other party. `detainees_held`' shape and its tension with AX-7, for its reason: no claim carries a
+    person's faction, so membership is world-read, resolver-side and read-only, and stamped by
+    `questions_for` as the `Enemy` class (`ENEMY_CLASS`), which no row forms on: the `fight` decline
+    (`decision/options.py::opening_set`) reads it. `()` for a person in no faction (or two) and in every world
+    with no war Proposition -- every world this tree's world-gen builds before CR-91 -- and then
+    `questions_for`' output is byte-identical."""
+    wars = [x for x in w.propositions.values() if x.mood == WAR_MOOD]
+    if not wars:
+        return ()
+    mine = faction_holding(w, p.id)
+    if mine is None:
+        return ()
+    known = None
+    foes = set()
+    for x in wars:
+        if mine not in (x.subject, x.value):
+            continue
+        other = x.value if x.subject == mine else x.subject
+        if other == mine or not at_war(w, mine, other):
+            continue
+        if known is None:
+            known = ledger_names(p.ledger) | {t.object for t in p.tenures if t.live}
+        if x.id in known:
+            foes.add(other)
+    if not foes:
+        return ()
+    return tuple(sorted(q for q in w.persons if q != p.id and faction_holding(w, q) in foes))
 
 
 def own_referents_of_class(w: World, q: Question, classes: Optional[frozenset] = None) -> tuple:
@@ -3834,6 +3920,12 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # collection; only `interrogate` declares it. Empty while no live `detain` names his seat, and then
     # the output is byte-identical. REVERT: drop the term.
     held = tuple((d, DETAINEE_CLASS) for d in detainees_held(w, p))
+    # v11 CR-87 ([ASSUMPTION; medium; Jordan to correct]): AND, AFTER THEM, THE ENEMIES OF A WAR HE KNOWS OF
+    # (`enemies_heard`), as `Enemy` -- no row forms on it; the `fight` decline reads it as the war context. It
+    # rides a question he already has and never raises one of its own (a war is a context, not a question). Empty
+    # while no war Proposition is live, and then the output is byte-identical. REVERT: drop the term.
+    if out or added or held:
+        held += tuple((e, ENEMY_CLASS) for e in enemies_heard(w, p))
     if added or held:
         first = added[0] if added else held[0][0]
         head = out[0] if out else Question(f"q:need:{first}", "need", (), first)
@@ -4178,6 +4270,15 @@ class WorldReader:
         if stem == "claim.held":
             p = w.persons.get(self._actor)
             return UNKNOWN if p is None else any(c.subject == subject for c in p.ledger)
+        if stem == "dispute":
+            # v11 CR-87: DOES THE ACTOR HOLD A DEED CLAIM OF `subject` HIS OWN JUDGEMENT SCORES AGAINST HIM --
+            # `person_q.holds_dispute`, the one owner, over the ACTOR'S OWN ledger (`claim.held`'s carve-out; `arg` is
+            # the actor, the relation's second side). UNKNOWN for a side that is no person (`ID-5`). The person side
+            # never answers this (`WORLD_ONLY_STEMS`).
+            p = w.persons.get(self._actor)
+            if p is None or arg != self._actor or subject not in w.persons:
+                return UNKNOWN
+            return holds_dispute(p, subject, w.fixtures.get("scar_weight_shift"))
         if stem == "rank":
             # `21_RECONCILIATION.md` PHASE 2 step 9 / `03_PARAMETERS.md` §C.1 -- THE ORDINAL, NOT
             # A KIND CHECK. `rung_kinds` is an ORDERED roster (`person` first), so a rung's rank

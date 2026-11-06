@@ -874,7 +874,10 @@ verbs:
         - form:      relation
           of:        subject
           relation:  with
-    requires_typed_note: "`fight`'s cell, for `fight`'s reason: you cannot call out someone who is not there. `exists:Person` is answered by the reader today, and since v9 IN-59 (a) (RS-26) so is the second conjunct, `relation` of `subject`, `with` (`give`'s co-location carrier, WORLD-ONLY: the challenger forms the Candidate on whom he knows of and the fold refuses a challenged who is not where he is, `challenge.refused`) [ASSUMPTION; medium; Jordan to correct; revert: the single `existence` cell]. Nothing narrower is invented (`G4`). The SELF-challenge is the `counterparty:` column's, below."
+        - form:      relation
+          of:        subject
+          relation:  dispute
+    requires_typed_note: "⚠ v11 CR-87 (ED-IN-0337, ED-IN-0336: a duel settles a dispute) ADDED THE THIRD CONJUNCT, `relation` of `subject`, `dispute` (`data/requires.py`; `queries/person_q.py::holds_dispute`): the challenger holds a deed claim of the challenged that his own `deeds_judged` scores against him, read off his own ledger in the fold. WORLD-ONLY, so he forms the Candidate on anyone he knows and the fold refuses a challenge with no wrong behind it (`challenge.refused`). CR-88 re-points it to `grievance_against`. [ASSUMPTION; medium; Jordan to correct; revert: drop the conjunct.] `fight`'s cell, for `fight`'s reason: you cannot call out someone who is not there. `exists:Person` is answered by the reader today, and since v9 IN-59 (a) (RS-26) so is the second conjunct, `relation` of `subject`, `with` (`give`'s co-location carrier, WORLD-ONLY: the challenger forms the Candidate on whom he knows of and the fold refuses a challenged who is not where he is, `challenge.refused`) [ASSUMPTION; medium; Jordan to correct; revert: the single `existence` cell]. Nothing narrower is invented (`G4`). The SELF-challenge is the `counterparty:` column's, below."
     counterparty: subject
     counterparty_note: "THE CHALLENGED IS THE SECOND SIDE, AND A MAN DOES NOT CHALLENGE HIMSELF. `determine`'s and `oblige`'s shape (`counterparty: subject`): `decision/options.py::opening_set` forms no Candidate whose counterparty is the person, and the fold's `counterparty` clause (`loop/resolve.py::_admits`) refuses a hand-built one."
     writes:      ["Record.exists"]

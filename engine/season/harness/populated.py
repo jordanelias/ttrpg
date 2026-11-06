@@ -977,6 +977,14 @@ def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: boo
             st = cast.stance_from_loyalty(cast.loyalty(r, fac)) if r else None
             if st is None:
                 continue                        # no template to be loyal to: no row (the creed's rule)
+            # v11 CR-87 (ED-IN-0335; `Fixtures loyalty_toward_creed`, H-253): A DISLOYAL MEMBER'S INVERTED ROW NAMES THE
+            # GOAL'S PROPOSITION (the org's creed), never the persons it is about, and no lower than the member band --
+            # the inversion is disaffection with the creed, not a grudge against its head. A loyal member's row is the
+            # goal's own call, toward its referents, as before. `False` is the revert: every row toward the referents.
+            if st[0] < 0 and w.fixtures.get("loyalty_toward_creed"):
+                w.persons[pid].stance.append((g.id, *cast.loyalty_in_band(st)))
+                out["stance_rows"] += 1
+                continue
             for ref in referents:
                 w.persons[pid].stance.append((ref, g.stance * st[0], st[1]))
                 out["stance_rows"] += 1
@@ -1500,7 +1508,13 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         prop = w.propositions[fid]
         st = cast.stance_from_loyalty(cast.loyalty(r, fac_name))
         if st is not None and str(prop.mood).upper() == "OUGHT":
-            w.persons[pid].stance.append((prop.subject, st[0], st[1]))
+            # v11 CR-87 (ED-IN-0335; `Fixtures loyalty_toward_creed`, H-253): THE ROW NAMES THE CREED, NEVER ITS
+            # HEAD PERSON, AND NO LOWER THAN THE MEMBER BAND -- a disloyal member's -4 toward the King was a betrayal
+            # with no series of events behind it. `False` is the revert: the row toward `prop.subject`, unbounded.
+            if w.fixtures.get("loyalty_toward_creed"):
+                w.persons[pid].stance.append((fid, *cast.loyalty_in_band(st)))
+            else:
+                w.persons[pid].stance.append((prop.subject, st[0], st[1]))
     # Reported by `census`, never read by the loop — the same treatment `_tie_census` gets.
     w._unplaced_cast = unplaced
 

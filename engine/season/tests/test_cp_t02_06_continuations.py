@@ -45,9 +45,12 @@ from ..state.ids import H, draw_factory
 # RE-PINNED ONCE at v10 PC-10b (a challenge is a Record; `accept` binds to one; a declared mover wherever a challenge forms): was
 # 009f9f31... / daca4682... / db5bd6f0.... CONTROL: the base tree (`95f58adb`'s `engine/season`) reads the old three. A GOLDEN
 # RE-RECORDED, NOT A BALANCE CLAIM.
-PRE_BUILD = {0: "0fb73bc805ae699a0a13b8d09e130e1c",
-             1: "3b407a74d884c9bdabc1990acb1cfab6",
-             2: "47151656616dc7487a1ec481771d9ce3"}  # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
+# RE-PINNED ONCE at v11 CR-87 (violence made exceptional: a declared mover of the build and of every season that fought): was
+# 0fb73bc8... / 3b407a74... / 47151656.... CONTROL: `test_cr87_violence_contexts.py::revert_cr87` reads the old seed-0 pin
+# exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+PRE_BUILD = {0: "20accb03c3d32f80a9fab00d80a70b21",
+             1: "f4330aacb84c25069dfdb33f2a123215",
+             2: "a030141a9c66a833e84a97a71404ff88"}  # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
 
 
 def _realm(retainers=2):

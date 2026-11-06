@@ -133,8 +133,8 @@ def test_person_captured_has_one_emitter_and_it_is_mapped():
     assert [v for v, r in VERB_TABLE.items() if "person.captured" in r.emits] == ["capture"]
 
 
-def test_duel_terms_is_one_entry_and_is_checked_against_the_engines_tuple_not_redeclared():
-    assert DUEL_TERMS_BY_VERB == {"capture": "yield"}
+def test_duel_terms_names_capture_and_accept_and_is_checked_against_the_engines_tuple_not_redeclared():
+    assert DUEL_TERMS_BY_VERB == {"capture": "yield", "accept": "blood"}     # v11 CR-87 added `accept: blood`
     engine = combat.engine()
     assert engine is not None, "the combat engine did not load"
     wrapper = engine[0]
@@ -173,7 +173,7 @@ def test_the_default_terms_is_the_string_death_and_a_none_default_would_raise():
 def test_combat_input_fills_terms_from_the_roster_by_verb_and_nothing_else_does():
     w, _ = _world()
     got = {v: combat.combat_input(w, [ACTOR, CAPTIVE], v).terms for v in ("fight", "accept", "capture")}
-    assert got == {"fight": "death", "accept": "death", "capture": "yield"}, got
+    assert got == {"fight": "death", "accept": "blood", "capture": "yield"}, got    # `accept`: v11 CR-87
     assert combat.duel_terms_of("fight") is None and combat.duel_terms_of("capture") == "yield"
 
 

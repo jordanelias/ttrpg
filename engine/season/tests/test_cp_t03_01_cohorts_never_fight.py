@@ -36,6 +36,7 @@ from ..decision import make_chooser
 from ..queries import world_q
 from ..state.carriers import Act, Record, Scene
 from ..state.ids import H, draw_factory
+from .test_cr87_violence_contexts import revert_cr87
 
 CROWD, FIGHTER, FOE = "c_crowd", "p_low", "p_mid"       # `tiny_world`: p_low and p_mid live at the hearth `Hh`
 KINDS = {"fight": "kill.refused", "accept": "accept.refused"}
@@ -205,18 +206,24 @@ def _realm_two_seasons(seed):
 
 
 @pytest.mark.parametrize("seed", [0, 1])
-def test_control_the_realm_ends_at_the_base_hash_wherever_no_cohort_was_a_party(seed):
+def test_control_the_realm_ends_at_the_base_hash_wherever_no_cohort_was_a_party(seed, monkeypatch):
     """Seeds 0 and 1 (since PC-10b's re-take; 0 and 2 before it): no `fight`/`accept` was refused by the conjunct, so with its reads left off the realm ends at the
-    base's hash. `reads` is asserted, so the equality cannot hold because the conjunct was never evaluated."""
+    base's hash. `reads` is asserted, so the equality cannot hold because the conjunct was never evaluated.
+    ⚠ v11 CR-87 RE-TOOK IT ON THE WORLD IT WAS MEASURED ON: CR-87's contexts leave no `fight` formed in these realms, so the
+    conjunct would never be read and the control would observe nothing; it is read with CR-87 at its revert
+    (`test_cr87_violence_contexts.py::revert_cr87`, whose own control reproduces the pre-CR-87 hash), and `BASE` stands."""
+    revert_cr87(monkeypatch)
     h, reads, refused_on_it = _realm_two_seasons(seed)
     assert reads > 0, "the conjunct was never read: the equality below observes nothing"
     assert refused_on_it == 0, f"{refused_on_it} Events were refused on `individual` at seed {seed}"
     assert h == BASE[seed], "the conjunct moved a realm in which no cohort was a party"
 
 
-def test_where_a_cohort_was_a_party_the_realm_moves_and_the_refusals_are_the_conjuncts():
+def test_where_a_cohort_was_a_party_the_realm_moves_and_the_refusals_are_the_conjuncts(monkeypatch):
     """Seed 2 (since PC-10b's re-take, under `WITHHELD`; seed 1 before it): a cohort was a party on the pre-conjunct base.
-    The same seed now refuses that act on `individual`, and the realm ends elsewhere -- the mover the position declares."""
+    The same seed now refuses that act on `individual`, and the realm ends elsewhere -- the mover the position declares.
+    Read with CR-87 at its revert, for the control's reason above."""
+    revert_cr87(monkeypatch)
     h, reads, refused_on_it = _realm_two_seasons(2)
     assert refused_on_it > 0, "no act was refused on `individual` at seed 2"
     assert h != BASE[2], "a cohort-party fight was refused and the realm did not move"
