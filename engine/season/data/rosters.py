@@ -977,6 +977,38 @@ FINDING_TERMS = _load_finding_terms(roster_map("finding_terms", "bands"), DEGREE
 # v9 FI-03: the deed kinds whose Events an inquiry can uncover (`epistemic.trail_of`). Checked against
 # the verb table's deed kinds at import, in `data/verbs.py::_check_covert_kinds` (the table loads there).
 COVERT_KINDS = roster("covert_kinds")
+
+
+def _load_strife_kinds(lists: dict) -> dict:
+    """`rosters.yaml: strife_kinds.lists`, SHAPE-CHECKED: exactly the four lists, each a non-empty list of
+    strings with no kind twice in it. Returns `{list name: frozenset}`. The checks that need the verb table
+    (a kind in any list absent from `EVENT_KINDS`; a kind in two of opens, joins, never; a `concludes` kind
+    outside opens and joins) are `data/verbs.py::_check_strife_kinds`, run at import where `EVENT_KINDS` is
+    built: this module cannot import it (`data/verbs.py` imports this one). A function, so a test can plant
+    a bad shape and watch it refuse (`04` §B.13 invariant 10, unknown keys rejected)."""
+    names = roster("strife_kinds", ordered=True)   # the row's `values:`: the names of its lists
+    if set(lists) != set(names):
+        raise Unspecified(
+            f"rosters.yaml `strife_kinds.lists` has keys {sorted(lists)}, not {sorted(names)}", "rosters.yaml -- strife_kinds",
+            needs=f"exactly the lists {list(names)}: a missing one is a decision nobody made, an extra one is read by no one",
+            law="04 §B.13 invariant 10 -- unknown keys are rejected at load, and an absent list is a refusal, never an empty set")
+    out = {}
+    for n in names:
+        kinds = lists[n]
+        if (not isinstance(kinds, list) or not kinds or not all(isinstance(k, str) for k in kinds)
+                or len(set(kinds)) != len(kinds)):
+            raise Unspecified(
+                f"rosters.yaml `strife_kinds.lists.{n}` is not a non-empty list of distinct kind names", "rosters.yaml -- strife_kinds",
+                needs="a non-empty list of Event kind names, each once",
+                law="rosters.yaml's header -- an empty set makes every membership test silently false, so it REFUSES")
+        out[n] = frozenset(kinds)
+    return out
+
+
+#: `{list name: frozenset of Event kinds}` for `opens`, `joins`, `never` and `concludes` (CR-75). Which kinds the
+#: person reading may count as a strife move, and which may conclude a strand at that reading. Nothing in the
+#: loop reads it yet; `data/verbs.py::_check_strife_kinds` holds it to `EVENT_KINDS` at import.
+STRIFE_KINDS = _load_strife_kinds(roster_map("strife_kinds", "lists"))
 # `W-E`. THE THREE BANDS PERSONAL COMBAT CAN DISTINGUISH, and HOW MUCH BODY A WOUND COSTS. Bound
 # here with every other roster rather than beside their reader in the S39 block below, because
 # that is where an absent roster's refusal is guaranteed to fire (`TITLE_DOMAINS`' lesson, above).
@@ -1166,6 +1198,14 @@ if _orphan_seats:
         needs="a `faction:` that is a key of `foreign_cast: by_faction`",
         law="v9 IN-36 -- a seat of a faction with no foreign places seats nobody")
 del _orphan_seats
+#: The two foreign nations, by faction name (`rosters.yaml: foreign_factions`; R16). Not `FOREIGN_CAST`: that is the
+#: factions `build_realm(foreign=True)` seats, and Schoenland is not among them. Read by `harness/strife_data.py`.
+FOREIGN_FACTIONS = roster("foreign_factions")
+for _f in FOREIGN_FACTIONS:
+    require_member(_f, FACTIONS, f"rosters.yaml `foreign_factions` names {_f!r}, which is not a faction",
+                   "rosters.yaml -- foreign_factions", law="R16 -- a foreign nation is a faction first",
+                   needs="a faction named in `names_index.yaml` (`token_class: faction`)")
+del _f
 
 # ---------------------------------------------------------------------------
 # THE `modules:` ROSTER (plan position `30`; A-25, `ED-IN-0284` revised by `ED-IN-0285`) -- THE ONE

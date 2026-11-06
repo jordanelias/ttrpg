@@ -14,7 +14,7 @@ port, so its path is anchored here from `HARNESS_DIR` and `files.py` does not na
 from __future__ import annotations
 
 from ..data.files import HARNESS_DIR
-from ..data.rosters import faction_prop_id, load_yaml
+from ..data.rosters import FOREIGN_FACTIONS, faction_prop_id, load_yaml
 from ..data.verbs import EVENT_KINDS, VERB_TABLE
 
 STRIFE_MOVES_YAML = HARNESS_DIR / "strife_moves.yaml"
@@ -33,7 +33,8 @@ def declared_kinds() -> frozenset:
 
 def load_moves(path=STRIFE_MOVES_YAML) -> tuple:
     """`(rows, signatures, foreign)` of `strife_moves.yaml`, validated, in file order. `foreign` is the set of
-    faction Proposition ids the file names as foreign (an unknown faction name is refused by `faction_prop_id`)."""
+    faction Proposition ids of `rosters.yaml: foreign_factions` (CR-75 moved the list there from this file, so
+    `queries/world_q.py`, which may not import the harness, can read it; an unknown name is refused at load)."""
     doc = load_yaml(path.read_text(encoding="utf-8"))
     rows, row_keys, needs_vocabulary = doc["moves"], set(doc["row_keys"]), set(doc["needs_vocabulary"])
     kinds, seen = declared_kinds(), set()
@@ -78,7 +79,7 @@ def load_moves(path=STRIFE_MOVES_YAML) -> tuple:
             raise ValueError(f"strife_moves.yaml: signature {g} has `victim_held` that is not a boolean")
         if "attacker" in g and g["attacker"] not in sides:
             raise ValueError(f"strife_moves.yaml: signature {g} has attacker outside {sorted(sides)}")
-    foreign = frozenset(faction_prop_id(n) for n in doc["foreign_factions"])
+    foreign = frozenset(faction_prop_id(n) for n in sorted(FOREIGN_FACTIONS))
     return tuple(rows), tuple(sigs), foreign
 
 
