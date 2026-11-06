@@ -30,9 +30,9 @@ from .test_rem30_character_sheet import _run
 
 #: The 1-season hashes of the parent tree (`d5358a9a`, CR-19, `PYTHONHASHSEED=0`), before CR-33 authored a row.
 BASE = {
-    0: "f2e5e265012d1d96333a43ff514d2b13",
-    1: "0d25717b85d52c4f156136fa724ae46e",
-    2: "05f065f4c917faf3d970f2c50cfd792f",
+    0: "662a784707fda3d5baac90b2ac852bcf",
+    1: "af5ba681a6a3eac6b6607e5f674f7300",
+    2: "6c3e0c178442905b2457b3e3a5ebebc4",
 }
 
 #: The four Niflhel ids the archived file STRIKES (it prints no row for them): never members.

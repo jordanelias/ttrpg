@@ -51,6 +51,16 @@ def _state(w, pid):
     return (None if p is None else (p.weight, p.body)), edges
 
 
+def _run_seasons(d, w, choose, n):
+    """`n` seasons. An exception from the engine is turned into a FAILED ASSERTION naming it: a test here fails by
+    assertion, never by a traceback out of the code under test."""
+    try:
+        for _ in range(n):
+            d.season(choose, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+    except Exception as e:                                   # noqa: BLE001
+        raise AssertionError(f"the season raised {type(e).__name__}: {e}") from None
+
+
 def _season(verb=None, actor=FIGHTER, subject=FOE):
     """One season of `_world()` in which `actor` is handed ONE hand-built `verb` act on `subject` through
     `dispatching_chooser` (every other person chooses nothing). `verb=None` is the control: nobody chooses."""
@@ -67,7 +77,7 @@ def _season(verb=None, actor=FIGHTER, subject=FOE):
 
     fired: list = []
     choose = dispatching_chooser(P.NOCHOOSE, {actor: act} if verb else {})
-    d.season(choose, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+    _run_seasons(d, w, choose, 1)
     if verb:
         assert fired, "the hand-built act was never asked for: the falsifier observed nothing"
     return w, d
@@ -90,7 +100,7 @@ def test_a_cohort_subject_is_refused_with_the_rows_kind_and_untouched(verb):
     for k in ("person.died", "body.changed"):       # the season's own MATTER writes the same in the control arm
         assert _kinds(w).count(k) == _kinds(control).count(k), (verb, k)
     assert _state(w, CROWD) == _state(control, CROWD), "a refused fight changed the cohort"
-    assert w.persons[CROWD].weight == 3
+    assert getattr(w.persons.get(CROWD), "weight", None) == 3
 
 
 @pytest.mark.parametrize("verb", sorted(KINDS))
@@ -126,7 +136,8 @@ def test_the_stem_is_answered_from_is_cohort_and_is_world_only():
     assert checked == len(w.persons) and w.persons[CROWD].is_cohort
     assert reader.read("no_such_person", f"individual:{FIGHTER}") is UNKNOWN
     for verb in KINDS:
-        assert "individual" in VERB_TABLE[verb].requires_typed.stems(), verb
+        typed = VERB_TABLE[verb].requires_typed
+        assert typed is not None and "individual" in typed.stems(), verb
 
 
 # --- THE CONTROL ---------------------------------------------------------------------------------
@@ -153,8 +164,7 @@ def _realm_two_seasons(seed):
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     choose = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(), draw=draw_factory(w.world_seed, lambda: w.tick))
-    for _ in range(2):
-        d.season(choose, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+    _run_seasons(d, w, choose, 2)
     reads = refused_on_it = 0
     for e in w.log:
         mine = _individual_reads(e)
