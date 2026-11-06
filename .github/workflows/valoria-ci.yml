@@ -11,7 +11,7 @@ concurrency:
   group: valoria-${{ github.ref }}
   cancel-in-progress: true
 
-# Enforcement model: this CI is the ONE authoritative tier (on branch-protected main).
+# Enforcement model: this CI is the ONE full-suite tier (a required check on main is NOT set; see CLAUDE.md §8).
 # Every gate is its own job that depends only on syntax-check, so a hiccup in one gate
 # can never silently skip another. The local tier (.githooks/pre-commit +
 # .claude/settings.json) calls the SAME tools/ci_*.py validators for fast feedback.
@@ -70,7 +70,7 @@ jobs:
   #
   # CONSEQUENCE: `valoria_local.py --staged` and this file are now two independently maintained
   # lists, and LOCAL-GREEN NO LONGER IMPLIES CI-GREEN. That asymmetry is acceptable only because CI
-  # is the unbypassable boundary (CLAUDE.md §8) — do not describe local-green as authoritative, and
+  # is the full-suite tier (CLAUDE.md §8) — do not describe local-green as authoritative, and
   # when you add a validator here, add it there in the same commit.
   #
   # NO FAIL-FAST. Each validator runs even if an earlier one failed, and the job
@@ -366,7 +366,7 @@ jobs:
       # wired since 2026-07-07 (ED-IN-0017) after being orphaned from CI. Content at fork ref c451bcb.
 
   season-tests:
-    name: Season Loop Tests
+    name: Season Loop Tests (${{ matrix.shard }})
     runs-on: ubuntu-latest
     needs: syntax-check
     # SPLIT OUT OF `unit-tests` 2026-10-02 so each suite gets its own cap. Run 36967763315 (main
@@ -388,6 +388,18 @@ jobs:
     # builds a 4-season realm. 30 is now a stale margin, set on a run that included them: re-derive
     # it from the next hosted run of this job.
     timeout-minutes: 30
+    # TWO SHARDS, 2026-11-06 (B10-10b's card ran 12.5 h; this job was the CI critical path at 724 s of
+    # pytest against 390 s locally, for the same 2148 tests). `heavy` is the five files that weigh
+    # about half the suite (per-file call+setup+teardown from one `--durations=0` run; the five are
+    # `test_season_shape`, `test_interactions_log`, `test_rem31_grid_suspension`, `test_storybar`,
+    # `test_told_by_channel`); `rest` is everything else by `--ignore`, so a NEW test file lands in
+    # `rest` and is always run. `needs.season-tests.result` is success only if both legs are, which is
+    # all `ci-summary` reads. The union is checked by `pytest --collect-only -q` ids equal to the
+    # unsharded list. Same tests, same flags: it changes WHERE they run, never WHICH.
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [heavy, rest]
     permissions:
       contents: read
     steps:
@@ -419,13 +431,20 @@ jobs:
       # tests out in collection order, so the 100-second tests that sit late leave the other workers idle
       # behind them. Measured on 4 cores, same 2,295 tests: 489-505 s -> 398 s (the same flag on
       # `tests/valoria` gained nothing, 189 s against 187-216 s, so that job keeps `-n auto`).
-      - run: python -m pytest engine/season/tests -q -n auto --dist worksteal
+      - run: |
+          HEAVY="engine/season/tests/test_season_shape.py engine/season/tests/test_interactions_log.py engine/season/tests/test_rem31_grid_suspension.py engine/season/tests/test_storybar.py engine/season/tests/test_told_by_channel.py"
+          if [ "${{ matrix.shard }}" = heavy ]; then
+            python -m pytest $HEAVY -q -n auto --dist worksteal
+          else
+            python -m pytest engine/season/tests -q -n auto --dist worksteal $(for f in $HEAVY; do printf -- '--ignore=%s ' "$f"; done)
+          fi
       # The nine acceptance requirements (Jordan, 2026-09-05) — fails a row claiming a status
       # with no measurement behind it, or naming a measure command that resolves to nothing.
       # ⚠ `-m`, AND UNDER `harness/`. The decomposition (ED-IN-0203) made this a package
       # module: run as a loose script it has no package, its relative imports fail, and the
       # step dies before it can check a single row.
-      - run: python -m engine.season.harness.register --requirements
+      - if: ${{ matrix.shard == 'rest' }}
+        run: python -m engine.season.harness.register --requirements
 
   sim-regression:
     name: Sim Reference Regression

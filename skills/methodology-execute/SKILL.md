@@ -308,9 +308,13 @@ the plan's batch and its boundary row stay.
 
 Test every plan batch against the partition. A batch that gates on a later batch, or two of the
 plan's own sources that disagree about a batch (a table against a column), is a conflict — say so
-at the 0.1 stop and leave the plan's grouping standing until it is ruled. Lumping or splitting
-more finely than the partition would is the plan's judgment, not a conflict. This skill does not
-re-split a plan on its own authority. **A one-batch task writes no batch rows:** its commits and its
+at the 0.1 stop and leave the plan's grouping standing until it is ruled. Lumping more coarsely than
+the partition would is the plan's judgment, not a conflict. **A plan card cut into several closes
+along links, with no risk named** (the plan head's P3: a run with no verification checkpoint, or a
+diff too large for Phase 1 or Phase 3 to hold), **is stated at the 0.1 stop, with the merged close
+offered**; the plan's grouping stands unless the person picks the merge, and this skill does not
+re-split a plan on its own authority. Why: each close repeats the fixed Phase 1 and Phase 3 floor,
+the expunge and a merge wait, whatever its diff's size. **A one-batch task writes no batch rows:** its commits and its
 in-flight row are its record.
 
 ### The context set — what each batch declares
@@ -639,7 +643,7 @@ seasons, so cost is superlinear in seasons and the unit is not "one realm, one s
 | "fanned lanes integrated cleanly" | 0.4's merge resolved a same-file collision instead of stopping and rebuilding that file as one producer |
 | "the gate was met before building" | a workplan-position item's `GATE` column named a position or a Jordan decision that had not actually landed (an ad hoc item has no `GATE` and is exempt from this one) |
 | "the batches were partitioned, not sized" | an item's gate is met only by a later batch, or a link was cut with no stated reason |
-| "the batch size was right" | a linked group was carried whole through BATCH-CLOSE with no stated reason not to cut it along a link, or was cut with no stated reason the whole group would have been too large |
+| "the batch size was right" | a linked group was carried whole through BATCH-CLOSE with no stated reason not to cut it along a link, or was cut with no stated reason the whole group would have been too large (a plan's own cut: stated at the 0.1 stop, §BATCHES) |
 | "the plan's batches and boundaries were followed" | a batch, boundary row, batch-named gate or carve-out that a plan defines was re-derived, re-split, merged or crossed (building ran past a `STOP … closes here` row without BATCH-CLOSE) with no conflict stated at the 0.1 stop; or a plan-stated close or suite rule was adopted over `methodology-close` or CLAUDE.md §0.4, or overridden, without that statement |
 | "the context was cleared at the boundary" | the next batch's work cites a receipt, finding, SHA or fact that is neither on disk nor in the permanent surface; or two batches ran in one window and the report did not say context was NOT cleared |
 | "the expunge took only what no remaining batch needs" | after the boundary commit, a remaining batch's gate or reading list names a handle or file that is gone from the tree, with no landing SHA written in its place |
