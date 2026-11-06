@@ -3,14 +3,14 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 125,
-    "total": 281,
-    "uncited": 156,
+    "total": 283,
+    "uncited": 158,
     "of_which_assumption_grade": 8
   },
-  "count": 281,
+  "count": 283,
   "by_module": {
     "engine.dice_engine": 6,
-    "engine.season": 19,
+    "engine.season": 21,
     "mass_battle": 164,
     "characters": 5,
     "fieldwork": 15,
@@ -259,6 +259,28 @@
       "module": "engine.season",
       "file": "engine/season/harness/scarce.py",
       "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.CONTROL_SHUFFLES",
+      "name": "CONTROL_SHUFFLES",
+      "value": 200,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/harness/strife.py",
+      "note": "[JUSTIFIED: the shuffle count pair_profile already uses; a mean over seeded permutations, not a rule parameter]",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.LINK_WINDOW",
+      "name": "LINK_WINDOW",
+      "value": 3,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/harness/strife.py",
+      "note": "[JUSTIFIED: the study's own window for a windowed link, inherited and not fitted; magnitude is the study's]",
       "citation": null,
       "citation_grade": null
     },
