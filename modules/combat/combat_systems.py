@@ -1138,7 +1138,7 @@ def indes_steal_amount(defender, wind, commit, read_d, read_a, cfg, TR):
     """The Indes / sen-no-sen initiative-steal AMOUNT: a defender who out-read a deep commit steals the Vor, scaled
     by commit-depth x read-margin (bounded). Pure — the wrapper applies the clamp/mutation."""
     indes_scale=max(cfg['INDES_SCALE_FLOOR'], min(cfg['INDES_SCALE_CEIL'],
-                    (1+cfg['INDES_COMMIT_K']*(commit-4))*(1+cfg['INDES_READ_K']*(read_d-read_a))))
+                    (1+cfg['INDES_COMMIT_K']*(commit-cfg['DEEP_COMMIT']))*(1+cfg['INDES_READ_K']*(read_d-read_a))))
     return cfg['INIT_STEAL_INDES']*init_steal_factor(defender, wind, cfg, TR)*indes_scale
 
 def counter_select(defender, cfg, rng, TR):
