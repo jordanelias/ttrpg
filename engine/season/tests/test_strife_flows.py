@@ -588,7 +588,7 @@ def test_the_person_reading_reads_no_act_store(monkeypatch):
     from engine.season.state import attribution
     for mod in (W, attribution):
         for name in ("causing_act", "actor_of", "event_by_id"):
-            monkeypatch.setattr(mod, name, _NoStore()._boom)
+            monkeypatch.setattr(mod, name, _NoStore()._boom, raising=False)
     got = [(s.id, tuple(m.event for m in s.moves), W.concluded_known(w, p, s)) for s in W.flows_known(w, p)]
     assert got == want
 

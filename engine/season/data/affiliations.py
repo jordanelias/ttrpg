@@ -16,6 +16,7 @@ checks a HALF-matrix adds over a sparse table live here: no self-pair, and no pa
 """
 from __future__ import annotations
 
+from types import MappingProxyType
 from typing import Optional
 
 from engine.substrate.descriptors import AFFILIATION_CEILING, AFFILIATION_FLOOR
@@ -128,7 +129,7 @@ def _load_incompatibility(cells: Optional[dict] = None) -> dict:
     return seen
 
 
-INCOMPATIBILITY = _load_incompatibility()
+INCOMPATIBILITY = MappingProxyType(_load_incompatibility())   # read-only: INCOMPATIBLE is derived from it once, below
 INCOMPATIBLE = _true_pairs(INCOMPATIBILITY)
 
 

@@ -36,7 +36,7 @@ from __future__ import annotations
 
 import sys
 from collections import Counter
-from typing import Callable, NamedTuple, Optional
+from typing import Callable, NamedTuple
 
 from ..data.rosters import BAN_KIND, DETAIN_KIND, STRIFE_KINDS
 from ..data.verbs import VERB_TABLE
@@ -165,14 +165,17 @@ def opening_routes(rows, resolvable=None) -> dict:
     (`routeless_pairs`), never a state the design accepts. STATIC, AND ONLY THAT: whether a terminal verb can take a
     referent the opening touched (so the two moves would link) is not read; a pair here is the product of the two
     static facts."""
+    ok = resolvable_verbs() if resolvable is None else resolvable      # asked of the fold once, not once per pair
     term = terminal_codes(rows)
-    ends = {r["code"]: [v for v, _ in route(r, resolvable)] for r in rows if r["code"] in term}
-    return {(k, c): (opening_producers(k, resolvable), ends[c]) for k in opening_kinds() for c in sorted(ends)}
+    ends = {r["code"]: [v for v, _ in route(r, ok)] for r in rows if r["code"] in term}
+    return {(k, c): (opening_producers(k, ok), ends[c]) for k in opening_kinds() for c in sorted(ends)}
 
 
-def routeless_pairs(rows, resolvable=None) -> list:
-    """The `(opening kind, terminal code)` pairs with no act route, sorted."""
-    return sorted(p for p, (o, t) in opening_routes(rows, resolvable).items() if not o or not t)
+def routeless_pairs(rows, resolvable=None, routes=None) -> list:
+    """The `(opening kind, terminal code)` pairs with no act route, sorted. `routes` is an `opening_routes` already
+    in hand (the reading block holds one), so it is not computed twice."""
+    routes = opening_routes(rows, resolvable) if routes is None else routes
+    return sorted(p for p, (o, t) in routes.items() if not o or not t)
 
 
 _TERMINAL = terminal_codes(MOVES)
@@ -267,8 +270,9 @@ def strands_block(w, seed: int, resolvable=None) -> list:
     if not prof:
         out.append("    none (no strand holds two adjacent moves with one code each)")
     out.append("  the study's 16 links: NOT TRANSCRIBED (no file in the tree lists them); leave-and-rejoin unread")
-    bare = routeless_pairs(MOVES, resolvable)
-    out.append(f"  route check: {len(bare)} of {len(opening_routes(MOVES, resolvable))} (opening kind, terminal code) "
+    routes = opening_routes(MOVES, resolvable)
+    bare = routeless_pairs(MOVES, resolvable, routes)
+    out.append(f"  route check: {len(bare)} of {len(routes)} (opening kind, terminal code) "
                f"pairs have no act route")
     for k, c in bare:
         out.append(f"    NO ROUTE  {k:<20} -> {c}")

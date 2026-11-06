@@ -4233,7 +4233,6 @@ def practice(w: World, p: Person, verb: str) -> int:
 from ..data import affiliations as _aff
 from ..data.requires import RECORD_SOURCED_OPERANDS
 from ..data.rosters import FOREIGN_FACTION_IDS, RECORD_KIND_KEYS, STRIFE_KINDS
-from ..state.attribution import actor_of  # noqa: F401 -- unused here; the no-act-store mutation test patches it (the body reads `causing_act`)
 from ..state.containment import home_map
 from ..state.gate import PERSON_DIED
 
@@ -4534,8 +4533,8 @@ def _strand_of(rd: _StrifeReading, s: _Chain) -> Strand:
 
 def default_terminal(e, a) -> bool:
     """The kind-level terminal test: a kind every code of which is terminal (`strife_kinds.concludes`, CR-75).
-    The harness passes the code-level test (`harness/strife.py`), which knows a field outcome's and an amnesty's
-    code through the verb and side; this module may not import the registry that holds the codes."""
+    The harness passes the code-level test (`harness/strife.py`), which knows a field outcome's, a march's and a
+    death's code through the verb and side; this module may not import the registry that holds the codes."""
     return e.kind in CONCLUDING_KINDS
 
 

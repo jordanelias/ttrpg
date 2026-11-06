@@ -3063,8 +3063,9 @@ rosters:
                   every code it maps to in `strife_moves.yaml` is terminal (`ends` above 0 and not XP),
                   so a kind that maps to one code which never ends a case does not conclude (`detention.ended`
                   and `ban.ended` map to AM; `field.won` and `field.lost` to WR; `tenure.closed` to BR;
-                  `requisition.taken` to VI). Those conclude a strand only in the world reading, which
-                  knows the code through the verb and side. Derived over the opens and joins kinds, never
+                  `requisition.taken` to VI). Of those only `field.won` and `field.lost` conclude in the
+                  world reading, which knows their code (WA) through the verb and side; the rest end no case
+                  in either reading. Derived over the opens and joins kinds, never
                   hand-edited: the test re-derives it. Top-down the world sees a war end; bottom-up a
                   person who holds only a field's outcome may still doubt it.
       The checks at import: a kind in any list absent from `EVENT_KINDS`; a kind in more than one of
