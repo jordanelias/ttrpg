@@ -94,7 +94,7 @@ The strife positions move no row and change no row's earliest `met` (V4). Contri
 | **B10-18** | WORLD, TRAVEL, SURVIVAL AND NPC LIFE (T10) | WR, IN | 9 CP, 3 CR (CR-73, the strife fold), 1 CL | 13 | yes |
 | **B10-18b** | VERBS: THE R-05 CLOSE | IN (with FA, MB, SE; verb cluster) | 9 CR (CR-46 to CR-54) | 9 | yes |
 | **B10-18c** | SOCIAL CONTEST: THE CHOICE LAYER | SC (with IN; verb cluster) | 10 CR (CR-57 to CR-65; CR-74, the strife fold) | 10 | yes |
-| **B11-S3** | STRIFE: THE TWO READINGS | IN | 3 CR (CR-75 to CR-77) | 3 | yes (a roster block, its loader checks, World-first queries; hash EQUAL) |
+| **B11-S3** | STRIFE: THE TWO READINGS (CR-75, CR-77 CLOSED) | IN | 1 CR (CR-76, narrowed) | 1 | yes (a roster block, its loader checks, World-first queries; hash EQUAL) |
 | **B11-S4** | STRIFE: THE STAMP | IN | 1 CR (CR-78) | 1 | yes (EQUAL off; its flip a declared mover) |
 | **B11-S5** | STRIFE: THE CREDIT TERM AT WITNESS | IN | 1 CR (CR-79) | 1 | yes (commit (1) EQUAL at `regime_gain` 0; commit (2), `regime_gain` 0.5, a declared mover) |
 | **B10-20** | THE PORT GATE | GO, IN | 3 v9, 7 GO | 10 | yes (hash EQUAL) |
