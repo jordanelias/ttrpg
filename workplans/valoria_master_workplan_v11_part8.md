@@ -171,7 +171,6 @@ These are the ids v9 names. The 113 other open ids, which no earlier file named,
 |---|---|---|
 | `test_forked_status.py::test_the_fork_rows_name_a_real_ref` | `.git/shallow` exists; `CLAUDE.md` §0.4 names it | no position: the clone, not `main`. `git fetch --unshallow` clears it (B10-01's gate runs it first). |
 | `test_forked_status.py::test_the_evacuated_content_is_actually_at_the_ref` | the same shallow checkout | the same |
-| `test_combat_lever_sign_safety.py::test_default_builds_are_byte_identical_at_both_lever_sites` | `bear_spear`: `bind_sigma(...).hex()` is `0x1.c57592d86e352p-1` against the pin `…353p-1`, one unit in the last place; reproduced alone | CR-01 (B10-02) |
 
 **Where v9 contradicts itself** (four cases; each entry in `-04` records both readings and applies v9's own rule that the entry wins over the state index):
 

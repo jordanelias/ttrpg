@@ -46,8 +46,9 @@ def test_every_ability_targets_a_live_consumed_lever():
     """No ability targets a typo'd/dead lever. Every ability's lever must be one actually CONSUMED in the engine —
     the five morphology channels OR a live tradition channel/counter lever. (ED-PC-0026: after the adversarial HEMA
     regrounding, the morphology-lever abilities are exactly shinogi->spine_press and ringen_am_schwert->edge_grab;
-    zwerchhau re-homed to counter_select, guardia removed — edge_read/choke_control/facing_regime are BARE levers,
-    fired by weapon geometry, awaiting grounded content.)"""
+    zwerchhau re-homed to counter_select, guardia removed — facing_regime is a BARE lever, fired by weapon geometry,
+    awaiting grounded content; edge_read and choke_control carry only PC-17's GENERIC calibration abilities, no
+    authored one.)"""
     morphology = {'edge_read', 'spine_press', 'edge_grab', 'choke_control', 'facing_regime'}
     channels = {'measure', 'tempo', 'visual', 'precommit', 'leverage', 'tactile', 'balance',
                 'counter_success', 'counter_select', 'anti_overcommit'}

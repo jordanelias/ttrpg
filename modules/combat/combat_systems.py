@@ -34,9 +34,9 @@ def lever_log_edge(own_factor, opponent_factor):
 
     Strictly increasing in `own_factor`, strictly decreasing in `opponent_factor`, on every input —
     that monotonicity IS the sign-safety property. `tests/valoria/test_combat_lever_sign_safety.py`
-    (re-created at PC-17) probes it, owner on the DISADVANTAGED side, for the seven levers the GENERIC
-    abilities fill (tempo's `init_emphasis_sigma` among them); the leverage and measure sites have no
-    such probe since ED-IN-0314's cull. Exactly 0.0 (not approximately) when both factors are 1.0, which is every
+    (re-created at PC-17) probes the seven levers the GENERIC abilities fill, owner on the DISADVANTAGED side
+    where a signed differential exists; only tempo's `init_emphasis_sigma` composes through THIS function, the
+    other six are own-side products. The leverage and measure sites have no such probe since ED-IN-0314's cull. Exactly 0.0 (not approximately) when both factors are 1.0, which is every
     default build — that is what makes E1a byte-identical at defaults rather than merely close.
     Both arguments come from `ability_factor`, which clamps to [ABIL_FACTOR_FLOOR, ABIL_FACTOR_CEIL],
     so `log` is always finite and never sees 0. Pure.
@@ -944,7 +944,13 @@ def legibility(aggressor, commit, cfg, opp_armor=V.TIER_NONE):
     range_avail=getattr(aggressor,'range_avail',1.0)
     pc_sel=getattr(aggressor,'sel_pc',None); pc_sel=pc_sel if pc_sel is not None else aggressor.w['geo']['point_concentration']
     legib += LEGIB_SWING_ROOM_K*(1.0-range_avail)*(1.0-pc_sel)
-    return legib
+    # FLOORED AT 0 (PC-17, ED-PC-0059): the edge_read generics SUBTRACT from legibility and their factors multiply, so
+    # two stacked ones (refined L8 + practiced L1 on a jian thrust) drive it below 0, and a negative legibility makes
+    # read_contest's `read_d` negative, which the DEFENDER's visual / precommit factors then scale: investing worsens
+    # the defender, the ED-PC-0045 defect. At default builds the roster's minimum is 0.669 (measured: every weapon x
+    # armour tier x commit 3..6 x lunge), so this is byte-identical there; past the root the defender's read levers go
+    # inert instead of harmful.
+    return max(0.0, legib)
 
 def approach_displace(shorter, longer, cfg):
     """Lever-arm displacement-on-approach: a higher-leverage closer sets aside a THRUSTING longer weapon's point,

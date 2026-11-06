@@ -88,8 +88,10 @@ from traditions import TRADITIONS as _TRADITIONS
 # PLACEMENT is a Latin square over the seven traditions in TRADITIONS order ('none' excluded): tradition t receives
 # (lever (t + k) mod 7, tier k) for k = 0, 1, 2, so each (lever, tier) pair exists in exactly one tradition and each
 # tradition gains three generics on three different levers. Kit totals stay unequal; no equality is claimed.
-# REVERT: delete this block (every ability with grade 'GENERIC'), their probes in
-# tests/valoria/test_combat_lever_sign_safety.py, and CFG['INIT_TEMPO_LEVER_K'].
+# REVERT: delete this block (every ability with grade 'GENERIC') and their probes in
+# tests/valoria/test_combat_lever_sign_safety.py. CFG['INIT_TEMPO_LEVER_K'] may STAY (with no 'tempo' ability the term
+# is exactly 0); deleting the key alone raises KeyError in combat_systems.init_emphasis_sigma, so delete the key and
+# that term together or not at all.
 GENERIC_LEVERS = (   # (lever, name stem, what the trained fighter does) — the square's lever order
     ('visual',        'keen_eye',      "watches the opponent's whole body, so the coming action is seen earlier"),
     ('precommit',     'reading_intent', "reads the attack in its preparation, before it is committed"),
@@ -113,8 +115,10 @@ GENERIC_MITIGATOR_LEVERS = frozenset({'choke_control'})
 # the defender's read_d negative, and the defender's own visual / precommit factors then WORSEN it (measured against
 # a spear at edge_read L8: keen_eye_refined L0 -> L4 moved p_read 0.0259 -> 0.0021). The level-8 root on the jian is
 # 1.4325; x1.40 leaves 0.119 there (0.21 on a spear or rapier). basic and practiced stay at x1.10 / x1.25 (worst case
-# at level 8: 0.62 and 0.47). STACKING is not covered: one fighter knowing japanese, chinese and filipino can equip all
-# three edge_read generics, and three at level 8 drive legibility negative at any of these values.
+# at level 8: 0.62 and 0.47). STACKING (a fighter knowing japanese, chinese or filipino together equips several
+# edge_read generics; factors multiply, so refined L8 plus practiced L1 is already past the root) is closed at the
+# SITE, not by a tier: combat_systems.legibility is floored at 0, byte-identical at default builds (roster minimum
+# 0.669), after which the defender's read levers go inert instead of harmful.
 GENERIC_REVISED = {('edge_read', 'refined'): 1.40}   # [SIM-CALIBRATE]; plan value x1.50
 _GENERIC_TRADITIONS = tuple(t for t in _TRADITIONS if t != 'none')
 assert len(_GENERIC_TRADITIONS) == len(GENERIC_LEVERS), "the Latin square needs as many traditions as levers"

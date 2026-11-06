@@ -67,10 +67,10 @@ def test_edge_levers_activated_and_grounded():
 def test_edge_read_lever_live_from_geometry():
     """edge_lines -> legibility is live PURELY FROM WEAPON GEOMETRY (isolated by toggling LEGIB_EDGELINE_K, so no
     cross-weapon confound): for a double-edged blade (edge_lines 1.0) the lever makes it read HARDER (lower
-    legibility) than with the lever off; an edgeless weapon (edge_lines 0) is unaffected either way. edge_read is a
-    BARE morphology lever — ED-PC-0026 re-homed the German zwerchhau ability off it to counter_select (its real
+    legibility) than with the lever off; an edgeless weapon (edge_lines 0) is unaffected either way. edge_read has
+    no AUTHORED ability — ED-PC-0026 re-homed the German zwerchhau ability off it to counter_select (its real
     function is tempo-interception, not false-edge unreadability, per the adversarial HEMA critic), leaving no
-    grounded edge_read amplifier: an honest gap. The lever's liveness does not depend on any ability."""
+    grounded edge_read amplifier: an honest gap (PC-17's hidden_return_* GENERIC calibration abilities fill it, ungrounded). The lever's liveness does not depend on any ability."""
     off = dict(CFG); off['LEGIB_EDGELINE_K'] = 0.0
     double = Combatant('A', weapon='arming')                                 # double-edged: edge_lines 1.0
     assert S.legibility(double, 3, CFG) < S.legibility(double, 3, off), \

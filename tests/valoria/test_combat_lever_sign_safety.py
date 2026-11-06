@@ -3,7 +3,9 @@
 One probe per (lever, consuming site, side), run for EVERY ability on that lever, so each (lever, tier) generic is
 checked at every site its factor reaches. The levers: visual, precommit, tactile, tempo, balance, edge_read,
 choke_control. Each probe returns GOODNESS FOR THE INVESTING OWNER on that site's channel, so the property is the
-same everywhere: investing more never makes the owner worse, at levels 0, 0.5, 1, 2, 4, 8.
+same everywhere: investing more never makes the owner worse, at levels 0, 0.5, 1, 2, 4, 8. ONE EXCEPTION: the
+counter_select probe returns the SELECTION probability of a counter (a frequency), not the owner's benefit from it (a
+failed counter leaves the defender undefended); the benefit was measured once, by duel, and is in ED-PC-0059.
 
 WHAT A PROBE CAN SEE. A multiplicative lever is sign-safe when it scales a NON-NEGATIVE own-side quantity (a
 reading, a balance, a probability) or enters as `lever_log_edge`; it is sign-BLIND when it scales a SIGNED
@@ -30,20 +32,24 @@ forgot to set the teaching tradition would pass on broken code. Every probe sets
 MUTATION RECORD (CLAUDE.md §0.1 pt 2: each probe must be able to observe the failure it excludes). Run at PC-17's
 build, 2026-11-06: each sign-broken variant applied to the site, this file run, the site restored. Every variant was
 killed, and only at the site it broke:
-  · the factor INVERTED (`*f` -> `/f`) at each own-side site: read_contest (defender visual, defender precommit,
-    aggressor visual), reopen_prob (both sides), disengage_clean_p (both sides), bind_sigma's tactile read (both
-    sides), init_steal_factor (bind and open), counter_select, tempo_pressure (both sides), reach_sigma's and
-    pursuit_sigma's footwork (each side), legibility's edge_read and choke_control -> 3 failed each (6 for the two
-    legibility variants, seen at legibility and through read_contest); init_overcommit_loss `/f` -> `*f`: 3 failed
+  · the factor INVERTED (`*f` -> `/f`) at each own-side site: read_contest's aggressor visual, reopen_prob (both
+    sides), disengage_clean_p (both sides), bind_sigma's tactile read (both sides), init_steal_factor (bind and
+    open), counter_select, tempo_pressure (both sides), reach_sigma's and pursuit_sigma's footwork (each side) ->
+    3 failed each; read_contest's DEFENDER visual and DEFENDER precommit -> 6 failed each (the own-site probe's 3 and
+    the 3 cross-lever cases below, which call the same function); legibility's edge_read and choke_control -> 6
+    each (seen at legibility and through read_contest); init_overcommit_loss `/f` -> `*f`: 3 failed
   · init_emphasis_sigma restored to its pre-PC-17 form (signed sum x the aggressor's tempo factor): 6 failed (the
     owner-behind aggressor worsens; the defender's factor is not read at all); lever_log_edge's arguments swapped: 6
   · the footwork factor moved onto the SIGNED differential (ratio form, ED-PC-0045's defect) in reach_sigma or
     pursuit_sigma: 12 failed each, the Agility 1 / Strength 1 probes among them
   · the tradition gate deleted from ability_primitives._invested: 75 failed (every live probe's untaught half)
   · edge_read's refined tier put back at the plan's x1.50 (it ships REVISED to x1.40, ability_primitives.
-    GENERIC_REVISED): the cross-lever probe fails on its legibility half (a spear thrust at level 8 reads -0.225),
-    and, with that half disabled, on its read half (keen_eye_basic lowers p_read 0.0273 -> 0.0266 -> ... against a
-    spear at level 8); at x1.40 it passes
+    GENERIC_REVISED), WITH the floor in combat_systems.legibility removed: the single-generic cross-lever probe fails
+    on its legibility half (a spear thrust at level 8 reads -0.225) and, with that half disabled, on its read half
+    (keen_eye_basic lowers p_read 0.0273 -> 0.0266 -> ... against a spear at level 8); at x1.40 it passes
+  · the floor `max(0.0, legib)` in combat_systems.legibility removed, tier at x1.40: the STACKED probe fails on its
+    floor assertion (refined L8 + practiced L8 on a thrust reads below 0); its read half was not isolated from that
+    assertion. The tier back at x1.50 WITH the floor: the single-generic probe fails (`legib > 0.0`: at the floor)
 """
 import os
 import sys
@@ -457,18 +463,21 @@ def _thrusting(c):
 def test_edge_read_keeps_legibility_non_negative_and_the_read_levers_sign_safe(ability, tradition):
     """The CROSS-LEVER case (PC-17's tier revision). edge_read SUBTRACTS from the aggressor's legibility, which
     multiplies the defender's read_d; were it driven below 0, the defender's own visual / precommit factors would
-    scale a NEGATIVE read and make investing worse. At x1.50 for the refined tier this fails (jian, spear and rapier at
-    level 8); the tier was revised to x1.40. Every edge_read generic at every level, on every thrusting double edge:
-    legibility >= 0, and the defender's visual / precommit generics never lower p_read as their level rises."""
+    scale a NEGATIVE read and make investing worse. combat_systems.legibility is floored at 0 (the stacking case, below),
+    but a SINGLE generic must not reach that floor at all: at x1.50 for the refined tier it would (jian, spear and
+    rapier at level 8), so the tier was revised to x1.40. Every edge_read generic at every level, on every thrusting
+    double edge: legibility > 0, and the defender's visual / precommit generics never lower p_read as their level rises."""
     checked = 0
     for weapon in THRUSTING_DOUBLE_EDGES:
         assert WP.edge_lines(Combatant('w', weapon=weapon).w) == 1.0, weapon
         for lv in LEVELS:
             agg = _thrusting(_own(ability, tradition, lv, weapon=weapon))
             legib = S.legibility(agg, 3.0, CFG)
-            assert legib >= 0.0, (
-                f'{ability!r} at level {lv} drives the legibility of a {weapon} thrust to {legib!r} < 0: the '
-                f"defender's read levers would then scale a negative read (revise the tier, PC-17)")
+            # strictly positive: a single generic must stay OFF combat_systems.legibility's floor at every level, so the
+            # tier revision (x1.40) is observed here and not hidden by the floor
+            assert legib > 0.0, (
+                f'{ability!r} at level {lv} drives the legibility of a {weapon} thrust to {legib!r}: at the floor, '
+                f"the defender's read levers go inert (revise the tier, PC-17)")
             for d_ability, d_tradition in READ_GENERICS:
                 ps = [_p_read(_thrusting(_own(ability, tradition, lv, weapon=weapon)),
                               Combatant('d', weapon='arming', tradition=d_tradition,
@@ -478,6 +487,62 @@ def test_edge_read_keeps_legibility_non_negative_and_the_read_levers_sign_safe(a
                     f"defender's {d_ability!r} lowers p_read against {ability!r} L{lv} on a {weapon}: {ps!r}")
                 checked += 1
     assert checked == len(THRUSTING_DOUBLE_EDGES) * len(LEVELS) * len(READ_GENERICS) == 108, checked
+
+
+def _stacked(weapon, levels):
+    """A cross-trained fighter: several edge_read generics from three traditions, factors multiplying."""
+    eq = {n: lv for (n, _t), lv in zip(EDGE_READ_GENERICS, levels)}
+    c = Combatant('stack', weapon=weapon, tradition='none', equipped=eq)
+    c.known_traditions = tuple(t for _n, t in EDGE_READ_GENERICS)   # set after construction, as build_levers does
+    return _thrusting(c)
+
+
+def test_stacked_edge_read_generics_are_floored_and_never_make_the_defender_worse():
+    """STACKING (a review finding, PC-17 close six): factors multiply, so two edge_read generics (refined L8 with
+    practiced L1 is already past the jian's root at a total factor of 17.7; refined L8 with practiced L8, used here,
+    is past the spear's and rapier's 20 as well) would drive legibility below 0 and invert the defender's read levers. combat_systems.legibility is floored at 0: the stacked build sits ON the floor, and the
+    defender's visual / precommit generics still never lower p_read as their level rises."""
+    checked = 0
+    for weapon in THRUSTING_DOUBLE_EDGES:
+        levels = [8.0 if n.endswith('refined') else (8.0 if n.endswith('practiced') else 0.0)
+                  for n, _t in EDGE_READ_GENERICS]
+        agg = _stacked(weapon, levels)
+        # the premise this probe licenses: the stack really is past the root (otherwise the floor is never exercised)
+        unfloored = (CFG['LEGIB_THRUST'] - CFG['LEGIB_DISTRACT_K'] * WP.distraction(agg.w)
+                     - CFG['LEGIB_EDGELINE_K'] * WP.edge_lines(agg.w) * ABIL.ability_factor(agg, 'edge_read'))
+        assert unfloored < 0.0, (weapon, unfloored)
+        assert S.legibility(agg, 3.0, CFG) == 0.0, (weapon, S.legibility(agg, 3.0, CFG))
+        for d_ability, d_tradition in READ_GENERICS:
+            ps = [_p_read(_stacked(weapon, levels),
+                          Combatant('d', weapon='arming', tradition=d_tradition,
+                                    equipped=({} if dl <= 0.0 else {d_ability: dl})))
+                  for dl in LEVELS]
+            assert ps == sorted(ps), f"defender's {d_ability!r} lowers p_read against a stacked edge_read {weapon}: {ps!r}"
+            checked += 1
+    assert checked == len(THRUSTING_DOUBLE_EDGES) * len(READ_GENERICS) == 18, checked
+
+
+def test_latin_square_placement_and_a_wrong_tradition_stays_inert():
+    """Placement is asserted here, not only counted: each (lever, tier) pair exists in exactly one tradition and each
+    tradition holds three generics on three DIFFERENT levers; and a fighter who knows a DIFFERENT real tradition than
+    the generic's gets exactly the unequipped result (the gate admits the named tradition only, not 'any but none')."""
+    pairs = {}
+    per_tradition = {}
+    for n, lever, t in GENERICS:
+        tier = n.rsplit('_', 1)[1]
+        assert (lever, tier) not in pairs, (n, pairs[(lever, tier)])
+        pairs[(lever, tier)] = t
+        per_tradition.setdefault(t, []).append(lever)
+    assert len(pairs) == 21, len(pairs)
+    assert len(per_tradition) == 7 and all(len(set(v)) == 3 == len(v) for v in per_tradition.values()), per_tradition
+    checked = 0
+    for n, lever, t in GENERICS:
+        wrong = next(x for x in per_tradition if x != t)
+        invested = Combatant('w', weapon='arming', tradition=wrong, equipped={n: 8.0})
+        plain = Combatant('w', weapon='arming', tradition=wrong)
+        assert ABIL.ability_factor(invested, lever) == ABIL.ability_factor(plain, lever) == 1.0, (n, wrong)
+        checked += 1
+    assert checked == 21, checked
 
 
 def test_choke_control_generics_are_mitigators_and_the_rest_amplifiers():

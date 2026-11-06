@@ -293,7 +293,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
         # tradition channel-weights (cognitive-mode biases over the shared substrate; neutral=1.0)
         # standing reach advantage (module): defender's reach lowers the attacker's net, falling with armour.
         reach_pen=S.reach_sigma(aggressor, defender, er, fat_a, fat_d, cfg, TR)
-        # tempo emphasis (commitment-window exploitation): re-weights the aggressor's initiative
+        # tempo emphasis (commitment-window exploitation): the aggressor's initiative edge, plus the 'tempo' lever as a log-edge (PC-17)
         init=S.init_emphasis_sigma(aggressor, defender, cfg, TR)   # tempo(Agi)+reading(Cog/Att)+experience(History), plus the 'tempo' lever as an additive log-edge (systems.init_emphasis_sigma, PC-17)
         consistency_a=S.consistency(aggressor, cfg)   # Concentration tracker (3F+2S, depletes), not static Focus (Jordan #12)
         # FEINT DISSOLVED INTO THE ATTACK (WS-5): there is no separate feint maneuver. Deception is intrinsic to
