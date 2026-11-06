@@ -18,9 +18,9 @@ def lever_log_edge(own_factor, opponent_factor):
     THE DEFECT THIS REPLACES (M5/F5): the two contested-channel sites used to multiply a SIGNED
     physical differential by the RATIO `eff_cw(own)/eff_cw(opp)` — and a factor > 1 AMPLIFIES a
     negative difference, so investing in a technique made its owner WORSE exactly when they were
-    behind on the differential it multiplied. `leverage()` is signed (14 of the 53-entry WEAPONS
-    roster are negative, measured 2026-07-29; the plan's "14 of 51" counts balance.py's roster, which
-    excludes the two half-sword forms — same 14 weapons either way) and
+    behind on the differential it multiplied. `leverage()` is signed (14 weapons of the then-roster were
+    negative, measured 2026-07-29; the roster has grown since, and balance.py's excludes the half-sword
+    forms) and
     the measure `gap` is signed by construction, so this was live, not a corner case.
 
     THE FORM: modulate the WIN PROBABILITY, which is positive by construction, rather than the signed
@@ -101,7 +101,7 @@ def weapon_tempo(c, cfg, fatigue=0.0):
     g=getattr(c,'grip_position',0.0)
     _heft=wield_heft(c,cfg)   # DERIVED g-aware MoI heft (Phase-3 Stage 2b): replaces the binary wt class on the COST path
     pen=cfg['WEIGHT_PEN']*_heft+cfg['HANDS_COMMIT']*(w['hands']==2)*_heft
-    # KNOWN BROKEN-LOGIC (ED-PC-0023 audit, FLAGGED not fixed here): this hard min() FLAT-TOPS 38/53 weapons (every
+    # KNOWN BROKEN-LOGIC (ED-PC-0023 audit, FLAGGED not fixed here): this hard min() FLAT-TOPS 38 of the 53 weapons then in the roster (every
     # raw pen>0.8 — a rapier at 0.831 and a spear at 2.878 read the IDENTICAL 0.80) to one value, erasing the tempo
     # ordering. The fix is a surgical saturation of only the over-cap tail (min(pen,MAXP)+K*tanh(max(0,pen-MAXP)),
     # arming/sub-cap byte-identical), but it changes 38 weapons' weapon_tempo/close_tempo and so requires a DELIBERATE

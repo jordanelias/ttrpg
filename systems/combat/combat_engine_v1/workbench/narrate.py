@@ -54,7 +54,6 @@ def render(events, seed=None):
             else:
                 line(f"    they begin at measure (gap {ev['measure_gap']}; {ev['longer']} has the longer reach)")
         elif k == 'approach':
-            d = P.node_distribution(ev)
             tag = "  -> just closed" if ev.get('just_closed') else ""
             line(f"      {ev['shorter']} closes (gap {ev['gap']}, {ev['close_rate']}/beat); "
                  f"{ev['longer']} stop-hit chance {_pct(ev['stophit_p'])}{tag}")
@@ -90,7 +89,7 @@ def render(events, seed=None):
             if ev['felled']:
                 line(f"    — engagement ends: {ev['felled']} is felled")
             else:
-                line(f"    — they separate (no decision this turn)")
+                line("    — they separate (no decision this turn)")
             line()
         elif k == 'fight_result':
             if ev['winner']:
@@ -106,7 +105,6 @@ if __name__ == '__main__':
         sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     except Exception:
         pass
-    import numpy as np
     from combatant import Combatant
     from trace import run_traced_fight
     seed = int(sys.argv[1]) if len(sys.argv) > 1 else 3

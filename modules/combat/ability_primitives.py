@@ -2,8 +2,8 @@
 
 The atoms half of the tradition split (the traditions DICTIONARY that aggregates them is traditions.py). "Abilities
 are basically tradition primitives" (Jordan): just as a weapon is a bundle of physical primitives, a tradition is a
-bundle of ability primitives — the named techniques/concepts it teaches (Indes, Winden, mezzo tempo, atajo,
-sen-no-sen, true-times…), grounded in the historical-combat-manuals corpus.
+bundle of ability primitives — the named techniques/concepts it teaches (Indes, mezzo tempo, atajo,
+true-times…), grounded in the historical-combat-manuals corpus.
 
 CURRENT MODEL (levels-of-investment, ED-PC-0024 — ED-PC-0035 citation fix: 0023 is the fiat audit that RECORDED the principle; 0024 is the entry that filed the model. Jordan directive "we'll probably have levels of investment for
 techniques"): an ability is a tradition-learned MODULATOR a fighter INVESTS IN. `c.equipped` is either a LIST of
@@ -22,8 +22,7 @@ bind_sigma / facing_target, contact.grab_sigma). TWO are populated with abilitie
 effect, ~0 aggregate, see the block below). The other three morphology levers — 'edge_read', 'choke_control',
 'facing_regime' — are BARE (the ability_factor hook is live, factor 1.0 default, byte-identical) awaiting grounded
 content: a deliberate honest gap, NOT invented privilege. ('zwerchhau' was re-homed off edge_read to counter_select
-and 'guardia' removed off facing_regime — both were winden-class category errors, ED-PC-0026.) The 'seize' lever is DEAD (its pre-contact consumer was cut 2026-06-05): vorschlag/sen_no_sen
-do nothing when equipped — slated for retire-or-reroute (Phase 4 / Jordan's call).
+and 'guardia' removed off facing_regime — both were winden-class category errors, ED-PC-0026.) There is no 'seize' lever, and no 'vorschlag' or 'sen_no_sen' ability.
 """
 
 ABILITIES = {

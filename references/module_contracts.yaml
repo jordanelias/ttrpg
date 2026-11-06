@@ -894,7 +894,7 @@ modules:
       - {name: "Health", bucket: derived_value, writable: false}   # WI*(MW+1)+0.25*Str*End - cumulative_damage; route deltas to the wound substrate — F1
       - {name: "cumulative_damage", bucket: track, writable: true}  # the substrate the health delta lands on (WI=round(End+4+0.4*Spi))
       - {name: "Wounds", bucket: track, writable: true}   # min(floor(cum/WI), MW+1); the BILATERAL-Ob source (ED-1041 — impairs offence AND defence)
-      - {name: "Stamina", bucket: pool, writable: true}   # 3*End+2*Spirit (full port; not in the slice)
+      - {name: "Stamina", bucket: pool, writable: true}   # 3*End+2*Spirit (full port)
       - {name: "Initiative", bucket: track, writable: true}  # Vor/Nach (full port)
       - {name: "Poise", bucket: track, writable: true}    # kuzushi/structure (full port)
     derivations:
@@ -908,9 +908,9 @@ modules:
     loops:
       - {open: true}   # bounded self-loop: Strike emits scene.combat_hit, Wound consumes it; terminates at felling / Health depletion
     accounting_phase: [emission_processing]
-    modules:   # the EngineModules the CombatEngine hosts (the canonical 11-action set; the slice ports 2)
-      - {id: "combat.strike",  resolver: d_sigma,      status: PORTED,  in: ["scene.combat_strike"], out: ["scene.combat_hit"]}
-      - {id: "combat.wound",   resolver: state_reader, status: PORTED,  in: ["scene.combat_hit"], out: ["scene.combat_felled"]}
+    modules:   # the EngineModules the CombatEngine hosts (the canonical 11-action set)
+      - {id: "combat.strike",  resolver: d_sigma,      status: PENDING, in: ["scene.combat_strike"], out: ["scene.combat_hit"]}
+      - {id: "combat.wound",   resolver: state_reader, status: PENDING, in: ["scene.combat_hit"], out: ["scene.combat_felled"]}
       - {id: "combat.feint",   resolver: d_sigma,      status: RETIRED}   # RETIRED (ED-PC-0035): the feint was deliberately DISSOLVED into the attack (WS-5); FEINT_*/feint_eval are gone. Do not list it PENDING
       - {id: "combat.bind",    resolver: d_sigma,      status: PENDING}   # winding / Stärke-Schwäche / kuzushi
       - {id: "combat.approach", resolver: d_sigma,     status: PENDING}   # closing / stop-hit / reach re-open
@@ -919,12 +919,12 @@ modules:
       - {id: "combat.halfsword", resolver: state_reader, status: PENDING} # auto-switch to the half-sword form vs plate
       - {id: "combat.initiative", resolver: state_reader, status: PENDING} # Vor/Nach decay/drift/steal/edge
       - {id: "combat.poise",   resolver: state_reader, status: PENDING}   # structure / kuzushi recovery
-      - {id: "combat.armour_defeat", resolver: d_sigma, status: FOLDED}   # a term inside combat.strike for the slice; promote to a module in the full port
+      - {id: "combat.armour_defeat", resolver: d_sigma, status: FOLDED}   # a term inside combat.strike; promote to a module in the full port
     gap_notes:
       - "EXTRACTED 2026-06-23: the v2 deferral ('canonical-candidate, extraction deferred until ratification') is RESOLVED — combat_engine_v1 was ratified CANONICAL by ED-900/904 and docket ED-1029; the only thing keeping the trigger from firing was the stale README 'canonical-candidate' line (audit F6), corrected this pass."
       - "MODEL CORRECTION: resolver is d_sigma (sigma-leverage), NOT the v30 dice_pool model (pool=Agi×2, TN-7, damage=net_hits+STR) that the Godot skeleton placeholder, systems/combat/sim/combat.py, mechanics_index.yaml, and data_serialization_spec.md WeaponData all still carried. Canonical: pool=max(5,History+6); additive-coupled damage (Str+heft)*coupling*1.55; bilateral-Ob wounds (ED-1041, supersedes the -1D aggressor-only pool penalty)."
-      - "F3 RESOLVED: the scene_outcome family now carries personal-combat outcome Key types — scene.combat_hit / scene.combat_resolved / scene.combat_felled registered in godot/skeleton/data/key_types/ (was: registry §7 had contest/battle/investigation only)."
-      - "SLICE: combat.strike + combat.wound are PORTED + validated to the Godot shape; the remaining 9 action/substrate modules are PENDING the full port (implementation_sequence Phase G3)."
+      - "F3 RESOLVED: the scene_outcome family now carries personal-combat outcome Key types — scene.combat_hit / scene.combat_resolved / scene.combat_felled registered in godot/skeleton/data/key_types/ at the time; deleted with godot/skeleton/ at GO-14 (was: registry §7 had contest/battle/investigation only)."
+      - "SLICE: retired at GO-14 (the 2-module GDScript slice, strike/wound). No combat module is GDScript-ported today; PENDING above means not ported, and RETIRED, PARTIAL and FOLDED are as their own comments state."
       - "CONSUMER WIRING (A4, surfaced): scene.combat_resolved / scene.combat_felled are declared with consuming_systems [npc_behavior, faction_layer, articulation] in the registry, but those modules' contract `consumes` lists do not yet name them — the KeyBus delivers to observers/subscribers regardless; the contract declaration follows when npc_behavior/faction_state are next touched (the README's combat→faction/NPC ripple). CLOSED 2026-07-29 (W3 item 5): npc_behavior + faction_state consumes:[] now declare both types (declared intent; runtime gated on those modules being built — npc_behavior has zero .py files). articulation's consumer edge is Wave 3 item 1's territory (L-consumers lane), not this file."
     status: extracted
     sources:

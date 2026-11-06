@@ -14,7 +14,6 @@ import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
-import numpy as np
 import random
 import zlib
 import wrapper, config
@@ -26,15 +25,14 @@ def _seed(key):
     return zlib.crc32(repr(key).encode()) % 9999
 from combatant import Combatant
 import attributes   # the combat attribute spec (PC-14)
-import presets
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../../tests/sim/v32-combat-balance'))  # measurement harness reaches into the FROZEN v32 validation station BY DESIGN (dev tooling; doctrine container-hygiene exclusion, ED-1085)
 import r8_parity_harness as r8   # Class-M method constants: FINAL_TRIALS, WILSON_Z, BAND_LO/HI
 
 WEAPONS = ["rapier", "arming", "longsword", "greatsword", "sabre", "dagger",
            "paired_short", "spear", "staff", "mace", "poleaxe",
-           # morphology-rearch Phase C (2026-07-02): the 40 weapons added by the catalogue expansion, now
+           # morphology-rearch Phase C (2026-07-02): the weapons added by the catalogue expansion, now
            # primitive-composed (elements/guards/mode_elements — see designs/scene/combat_engine_v1/weapons.py).
-           # longsword_halfsword/estoc_halfsword excluded — auto-switch FORMS, never a starting loadout (matches
+           # the `*_halfsword` forms (longsword, estoc, ...) excluded — auto-switch FORMS, never a starting loadout (matches
            # the existing exclusion note above for the original 11).
            "yari", "kama_yari", "dangpa", "bear_spear", "ranseur", "spetum", "naginata", "glaive",
            "guandao", "podao", "fauchard", "bardiche", "sparr_axe", "voulge", "guisarme", "ji", "bec_de_corbin",
@@ -163,7 +161,7 @@ def weapon_armour_matrix(cfg=None, n=600, baseline='arming', armours=('none', 'l
     NOT a flat column — it is each weapon's arc landing where its physical primitives + the armour-mitigation matrix
     (core.coupling / systems.armor_defeat_sigma) put it. Returns {'baseline','n','armours','rows':[(w, [p...],
     [(lo,hi)...]) ...]} sorted by the UNARMOURED (A0) win-rate.
-    NOTE: sweeps the module-level WEAPONS list (the 11 startable weapons); `longsword_halfsword` is excluded — it is a
+    NOTE: sweeps the module-level WEAPONS list (the startable weapons); the `*_halfsword` forms are excluded — it is a
     derived auto-switch FORM (mit dem kurzen Schwert), never a starting loadout. Seeds are deterministic (_seed)."""
     cfg = cfg or config.CFG
     rows = []
@@ -213,12 +211,6 @@ def _md_trad(t):
            "| tradition | uncond. win% |", "|---|---|"]
     out += [f"| {a} | {p} |" for a, p in t['rows']]
     return "\n".join(out)
-
-
-def run_all(cfg=None, n=400):
-    cfg = cfg or config.CFG
-    return {'weapon': weapon_matchup_table(cfg, n), 'attr': attribute_parity_table(cfg, n),
-            'tradition': tradition_field_table(cfg, max(200, n // 2))}
 
 
 if __name__ == '__main__':

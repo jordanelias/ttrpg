@@ -376,7 +376,7 @@ def delivered_strike(w):
     physical picture that a centre-gripped staff strikes with a tip half the haft away from the leading hand.
     Reads the same located-part list as `derive()` (`_all_parts`), so the two cannot disagree about the weapon.
 
-    FALLBACK (no located parts — a synthetic dict; not exercised by the 53-weapon roster, every member of which
+    FALLBACK (no located parts — a synthetic dict; not exercised by the weapon roster, every member of which
     carries a Phase-B part list): the whole mass, at the derived balance point, clamped forward. Pure."""
     m_f = 0.0
     s_f = 0.0
@@ -432,8 +432,8 @@ def strike_point_lever(w, m_strike, x_strike):
         `sqrt(elem_mass) * strike_point_lever(w, delivered_strike(w)[2], elem_x)`.
         ⚠ **NOTE THE FIRST ARGUMENT.** E2a originally prescribed `strike_point_lever(w, elem_mass, elem_x)` here.
         That is WRONG and E2b measured it before consuming it: this function divides its mass argument by the
-        weapon's total, so passing `elem_mass` puts mass in at power 1.5 — dropping percussion 19-37% on all 53
-        weapons. The element's own mass belongs in `sqrt()`; the lever is geometric, which is exactly what this
+        weapon's total, so passing `elem_mass` puts mass in at power 1.5 — dropping percussion 19-37% on every weapon.
+        The element's own mass belongs in `sqrt()`; the lever is geometric, which is exactly what this
         function returns when handed the delivered mass. `test_combat_element_reachability.py::
         test_element_lever_does_not_double_count_mass` pins it so the prescription cannot be re-followed.
         `tests/valoria/test_combat_strike_point_lever.py::test_strike_point_lever_is_nonzero_at_the_hand` pins
@@ -533,7 +533,7 @@ def percussion_element_authority(w, elem_mass, elem_x, grip=0.0, room=1.0):
     prescribed `sqrt(elem_mass) * strike_point_lever(w, elem_mass, elem_x)` for this line. That signature
     DOUBLE-COUNTS the striking mass: `strike_point_lever`'s first argument is a mass it divides by the weapon's
     total, so mass would enter at power 1.5 and be normalised by the whole weapon. Measured across the roster, that
-    drops percussion 19-37% on EVERY one of the 53 weapons (odachi -37.1%, mace -31.6%, poleaxe's hammer element
+    drops percussion 19-37% on EVERY weapon in the roster (odachi -37.1%, mace -31.6%, poleaxe's hammer element
     7.613 -> 4.885) — a roster-wide balance change inside a batch with no balance intent. The element's own mass
     belongs in `sqrt()`, where it has always been; the LEVER is geometric. Passing `delivered_strike(w)[2]` makes
     `strike_point_lever` reduce exactly to `(STRIKE_HAND_LEVER + |x|) / (STRIKE_HAND_LEVER + Lt)` — the same single
@@ -593,7 +593,7 @@ def agility(w):
     at_grip(w,0.0)['I_g'] instead of derive(w)['MoI'] directly — the SAME grip-adjusted MoI wield_heft/
     _recovery_mode_commitment/recoverability_factor already read (at grip=0 today; a future increment may thread
     a real grip here). Proven byte-identical across the full roster (at_grip(w,0)['I_g'] reconstructs derive(w)
-    ['MoI'] to within float round-trip noise, <2e-17 absolute, on 3/53 weapons — see I1 commit note; every other
+    ['MoI'] to within float round-trip noise, <2e-17 absolute, on 3 roster weapons — see I1 commit note; every other
     weapon is EXACT)."""
     return min(1.0, (AGILITY_REF / max(1e-6, at_grip(w, 0.0)['I_g'])) ** AGILITY_EXP)
 
