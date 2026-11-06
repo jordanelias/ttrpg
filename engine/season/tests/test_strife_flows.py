@@ -13,16 +13,33 @@ Every falsifier runs on a HAND-BUILT world (P9): the shipped realm, before B10-1
   4. Two petitions sharing a matter open a strand holding both; two on different matters open none.
   5. `commensurate`: +1 (a `false` pair; a shared affiliation), -1 (a `true` pair), 0 (only `null`; none held).
   6. The route check names a planted gap: a verb removed from the resolvable set loses its pairs.
+
+CR-77 (same batch): THE PERSON READING -- `flows_known`, `concluded_known`, `open_referents_known`, over a
+ledger built by hand (the witness's claims minted by the real deposit rule, `epistemic.claim_subjects`).
+  7. A witness and a hearsay holder of the same events read different flows; an empty ledger reads none; a
+     person within the realm flow whose ledger holds none of its moves reads none.
+  8. Lacking the terminal claim, or holding only a `field.won`, he reads the strand open while the world's
+     `concluded` reads it closed.
+  9. The person-side open-referent test (named gap (1)): an arrest of a custody edge with no later release
+     keeps his strand on that edge open, and the arrester is never read as restrained; the docket and war arms
+     have no ledger source and are dropped, so a world docketed or at war does not hold his strand open.
+ 10. Named gap (2): a succession's deposit names its seat and joins a strand of his own on the seat; a
+     petition's names no matter and joins nothing on it; neither opens a strand.
+ 11. His own two deeds link; two strangers' deeds do not. NO ACT STORE IS READ: with the act store and the
+     log replaced by stubs that raise, and their readers patched to raise, both functions still answer.
+ 12. CONTROL: `build_realm(0)` hashes the base, and the reading of every person after one season is the same
+     read twice and leaves the hash where it was.
 Each loop asserts that it asserted (`CLAUDE.md` §0.1 pt 2).
 """
 import pytest
 
 from engine.season.data import affiliations as A
 from engine.season.data.rosters import DETAIN_KIND
+from engine.season.epistemic import act_refs, claim_subjects
 from engine.season.harness import probes as P
 from engine.season.harness import strife as H
 from engine.season.queries import faction_q, world_q as W
-from engine.season.state.carriers import Act, Event, Person, Record, Rung, StateChange, Tenure
+from engine.season.state.carriers import Act, Claim, Event, Person, Record, Rung, StateChange, Tenure
 from engine.season.state.ids import ROOT
 
 
@@ -186,3 +203,262 @@ def test_the_route_check_names_a_planted_gap():
     assert checked >= 10
     lost = set(H.routeless_pairs(H.MOVES, ok - {"requisition"})) - base
     assert {k for k, _ in lost} == {"requisition.taken"}             # the opening side, removed
+
+
+# --- CR-77: the person reading ------------------------------------------------------------------------------
+
+_N = [0]
+
+
+def hold(w, pid, subject, kind, when=1, chain=(), doer=None, value=True):
+    """Deposit one claim in `pid`'s ledger in the event-kind shape WITNESS writes (`predicate = kind`)."""
+    _N[0] += 1
+    c = Claim(f"c_cr77_{_N[0]}", pid, subject, kind, value, when, "told_by" if chain else "firsthand", 50,
+              "own", chain=chain, doer=doer)
+    w.persons[pid].ledger.append(c)
+    return c
+
+
+def witness(w, pid, e):
+    """What a witness of `e` holds: one claim per subject of the real deposit rule (`claim_subjects`, the
+    shipped `both`), each stamped `doer` only on his own act, as `loop/witness.py` does."""
+    a = W.causing_act(w, e)
+    subs = claim_subjects(w, e, "both", act_refs(a))
+    for s in subs:
+        hold(w, pid, s, e.kind, when=e.emitted_at, doer=pid if a is not None and a.actor == pid else None)
+    return subs
+
+
+def reading(w, pid):
+    p = w.persons[pid]
+    return [(s.referents, W.concluded_known(w, p, s)) for s in W.flows_known(w, p)]
+
+
+def test_a_witness_and_a_hearsay_holder_of_the_same_events_read_different_flows():
+    w = _world()
+    e1 = ev(w, "e1", "field.lost", ["S", "S2"])
+    e2 = ev(w, "e2", "rung.ceded", ["S", "S2"], tick=2)
+    (world_strand,) = W.flows_in(w).strands
+    assert W.concluded(w, world_strand)
+    assert witness(w, "p_mid", e1) and witness(w, "p_mid", e2)
+    hold(w, "p_low", "S", "field.lost", chain=("p_mid",))           # told one claim of the first event
+    seen, heard = reading(w, "p_mid"), reading(w, "p_low")
+    assert seen and all(done for _, done in seen), seen               # he saw the cession
+    assert heard == [(frozenset({"S"}), False)], heard                # he heard only of the defeat
+    assert seen != heard
+    # the stated limit: the witness's claims of one Event are several moves, one per subject
+    assert {r for r, _ in seen} == {frozenset({"S"}), frozenset({"S2"})}
+
+
+def test_an_empty_ledger_reads_no_flow():
+    w = _world()
+    ev(w, "e1", "field.lost", ["S", "S2"])
+    assert W.flows_in(w).strands                                      # the world holds one
+    assert W.flows_known(w, w.persons["p_low"]) == ()
+    hold(w, "p_low", "S", "field.lost")                               # control: one claim, one strand
+    assert len(W.flows_known(w, w.persons["p_low"])) == 1
+
+
+def test_a_person_within_the_realm_flow_who_holds_none_of_its_moves_reads_no_realm_flow():
+    w = _world()
+    ev(w, "e1", "field.lost", ["S", "S2"])
+    era = W.open_era(W.flows_in(w))
+    persons, _, _ = W.within(w, era.rung)
+    assert "p_other" in persons                                       # CR-76 lists him as within
+    hold(w, "p_other", "S", "travel.moved")                           # a `never` kind on the same rung
+    hold(w, "p_other", "S", "field.lost", value=False)                # a told denial is no move
+    assert W.flows_known(w, w.persons["p_other"]) == ()
+    hold(w, "p_mid", "S2", "field.lost")                              # control: holding a move, he reads it
+    assert [s.referents for s in W.flows_known(w, w.persons["p_mid"])] == [frozenset({"S2"})]
+
+
+def test_lacking_the_terminal_claim_he_reads_the_strand_open_while_concluded_reads_it_closed():
+    w = _world()
+    ev(w, "e1", "field.lost", ["S"])
+    e2 = ev(w, "e2", "rung.ceded", ["S"], tick=2)
+    (s,) = W.flows_in(w).strands
+    assert W.concluded(w, s)
+    hold(w, "p_low", "S", "field.lost")
+    assert reading(w, "p_low") == [(frozenset({"S"}), False)]
+    witness(w, "p_low", e2)                                           # control: the terminal lands, it closes
+    assert reading(w, "p_low") == [(frozenset({"S"}), True)]
+
+
+def test_holding_only_a_field_won_he_reads_the_strand_open_while_concluded_reads_it_closed():
+    w = _world()
+    ev(w, "e1", "field.lost", ["S"])
+    ev(w, "e2", "field.won", ["S"], tick=2)
+    # the world's terminal test is code-level (`harness/strife.py::terminal_for`: WA, the authority winning
+    # the field, ends cases); a stand-in reads this `field.won` as that code.
+    (s,) = W.flows_in(w, terminal=lambda e, a: e.kind == "field.won").strands
+    assert W.concluded(w, s)
+    hold(w, "p_low", "S", "field.won", when=2)
+    assert reading(w, "p_low") == [(frozenset({"S"}), False)]
+    hold(w, "p_low", "S", "field.lost", when=1)                       # both outcomes: still no `concludes` kind
+    assert reading(w, "p_low") == [(frozenset({"S"}), False)]
+    assert "field.won" not in W.CONCLUDING_KINDS
+
+
+def test_his_restraint_arm_reads_the_custody_edge_and_never_the_arrester():
+    """Named gap (1), the restraint arm: the arrest's deposit names the arrester and the custody edge, never
+    the prisoner; a release names the edge too. A strand on the edge stays open until a release lands after
+    the arrest; the arrester's strand is not held open by his own arrest. The terminal claims are planted:
+    nothing that concludes names a custody edge in shipped play."""
+    checked = 0
+    for release_tick, want in ((None, False), (2, True), (0, False)):
+        w = _world()
+        w.add_tenure(Tenure("t_cust", "p_low", "off_duke", DETAIN_KIND, 1))
+        arrest = ev(w, "e_arrest", "arrest.made", ["t_cust"], actor="p_mid", verb="arrest",
+                    payload={"subject": "p_low"})
+        subs = witness(w, "p_other", arrest)
+        assert set(subs) == {"p_mid", "t_cust"}, subs                # the prisoner is not named
+        if release_tick is not None:
+            free = ev(w, "e_free", "detention.ended", ["t_cust"], actor="p_high", verb="pardon",
+                      payload={"subject": "p_low"}, tick=release_tick)
+            assert "t_cust" in witness(w, "p_other", free)
+        for x in ("t_cust", "p_mid"):
+            hold(w, "p_other", x, "transfer.made", when=3)
+        got = {tuple(r): done for r, done in reading(w, "p_other")}
+        assert got[("t_cust",)] is want, release_tick
+        assert got[("p_mid",)] is True, release_tick                 # the arrester is not restrained
+        checked += 1
+    assert checked == 3
+
+
+def test_the_docket_arm_has_no_ledger_source_so_a_docketed_matter_does_not_hold_his_strand_open():
+    w = _world()
+    e1 = ev(w, "e1", "field.lost", ["S", "p_low"])
+    e2 = ev(w, "e2", "rung.ceded", ["S", "p_low"], tick=2)
+    case = ev(w, "e_case", "case.opened", ["rec_case"], actor="p_high", verb="open_case",
+              payload={"subject": "p_low"}, tick=2)
+    w.docket.append({"date": None, "matter": "p_low", W.DOCKET_ARRANGEMENT: None, W.DOCKET_PETITION: None})
+    (s,) = W.flows_in(w).strands
+    assert not W.concluded(w, s)                                      # the world: open, the matter docketed
+    witness(w, "p_other", e1)
+    witness(w, "p_other", e2)
+    assert "p_low" not in witness(w, "p_other", case)                # the case's deposit names no matter
+    seen = reading(w, "p_other")
+    assert len(seen) >= 2 and all(done for _, done in seen), seen
+
+
+def test_the_war_arm_has_no_ledger_source_so_a_world_at_war_does_not_hold_his_strand_open(monkeypatch):
+    w = _world()
+    e1 = ev(w, "e1", "field.lost", ["S", "p_low", "p_mid"])
+    e2 = ev(w, "e2", "rung.ceded", ["S", "p_low", "p_mid"], tick=2)
+    monkeypatch.setattr(W, "faction_of", lambda w_, x: {"p_low": "fac_a", "p_mid": "fac_b"}.get(x))
+    monkeypatch.setattr(faction_q, "at_war", lambda w_, a, b: {a, b} == {"fac_a", "fac_b"})
+    (s,) = W.flows_in(w).strands
+    assert not W.concluded(w, s)                                      # the world: open, the parties at war
+    witness(w, "p_other", e1)
+    witness(w, "p_other", e2)
+    seen = reading(w, "p_other")
+    assert len(seen) >= 2 and all(done for _, done in seen), seen    # he concludes on the terminal alone
+
+
+def test_a_petition_deposit_does_not_carry_its_matter_so_it_never_attaches_on_it():
+    """Named gap (2), the petition half: the deposit names the filer and the minted Record, not the `terms`
+    (`claim_subjects` adds the act's `subject` only for an Event that wrote nothing), so even with a strand of
+    his own on the matter the petitions do not join it. He holds no strand the world opened by content."""
+    w = _world()
+    _petition(w, "rec_1", "p_low", "S", 1)
+    _petition(w, "rec_2", "p_mid", "S", 2)
+    assert len(W.flows_in(w).strands) == 1                            # the world opens the movement by content
+    checked = 0
+    for e in list(w.log):
+        subs = witness(w, "p_other", e)
+        assert "S" not in subs and any(r in subs for r in ("rec_1", "rec_2")), (e.id, subs)
+        checked += 1
+    assert checked == 2
+    assert W.flows_known(w, w.persons["p_other"]) == ()               # two petitions open nothing for him
+    hold(w, "p_other", "S", "compliance.withheld", when=0)            # an `opens` claim on the matter
+    (s,) = W.flows_known(w, w.persons["p_other"])
+    assert [m.kind for m in s.moves] == ["compliance.withheld"]      # the petitions stay outside it
+
+
+def test_a_succession_deposit_carries_its_seat_and_attaches_only_to_a_strand_he_opened():
+    """Named gap (2), the succession half: the deposit reads the `hold` it opens as its two ends, so it names
+    the seat; it joins a strand of his own that names the seat, and opens none."""
+    w = _world()
+    w.add_tenure(Tenure("t_cr77_claim", "p_mid", "off_duke", "hold", 2))
+    e = Event("e_succ", "succession.claimed", [StateChange("t_cr77_claim", "set", "Tenure", "since")], [ROOT], 2)
+    w.log.append(e)
+    assert "off_duke" in witness(w, "p_other", e)                     # the deposit names the seat
+    assert W.flows_known(w, w.persons["p_other"]) == ()               # a joining kind alone opens nothing
+    hold(w, "p_other", "off_duke", "record.seized", when=1)           # an `opens` claim naming the seat
+    (s,) = W.flows_known(w, w.persons["p_other"])
+    assert [m.kind for m in s.moves] == ["record.seized", "succession.claimed"]
+
+
+def test_his_own_two_deeds_link_and_no_one_elses_do():
+    for doer, strands in (("p_low", 1), (None, 2), ("p_mid", 2)):
+        w = _world()
+        hold(w, "p_low", "S", "rung.seized", when=1, doer=doer)
+        hold(w, "p_low", "S3", "record.seized", when=2, doer=doer)
+        assert len(W.flows_known(w, w.persons["p_low"])) == strands, doer
+
+
+class _NoStore:
+    """An act store or a log that refuses every read."""
+
+    def _boom(self, *a, **k):
+        raise AssertionError("the person reading read the act store or the log")
+    __getattr__ = __iter__ = __len__ = __getitem__ = __contains__ = __bool__ = _boom
+
+
+def test_the_person_reading_reads_no_act_store(monkeypatch):
+    w = _world()
+    e1 = ev(w, "e1", "rung.seized", ["S"], actor="p_low", verb="seize")
+    e2 = ev(w, "e2", "rung.ceded", ["S", "S3"], tick=2)
+    witness(w, "p_low", e1)
+    witness(w, "p_low", e2)
+    hold(w, "p_low", "S4", "record.seized", when=3, doer="p_low")
+    p = w.persons["p_low"]
+    want = [(s.id, tuple(m.event for m in s.moves), W.concluded_known(w, p, s)) for s in W.flows_known(w, p)]
+    assert want                                                       # the stubs below meet a real reading
+    monkeypatch.setattr(w, "acts", _NoStore())
+    monkeypatch.setattr(w, "log", _NoStore())
+    from engine.season.state import attribution
+    for mod in (W, attribution):
+        for name in ("causing_act", "actor_of", "event_by_id"):
+            monkeypatch.setattr(mod, name, _NoStore()._boom)
+    got = [(s.id, tuple(m.event for m in s.moves), W.concluded_known(w, p, s)) for s in W.flows_known(w, p)]
+    assert got == want
+
+
+def test_concluded_known_refuses_a_strand_of_the_world_reading():
+    w = _world()
+    ev(w, "e1", "field.lost", ["S"])
+    (s,) = W.flows_in(w).strands
+    with pytest.raises(W.InstrumentDefect):
+        W.concluded_known(w, w.persons["p_low"], s)
+
+
+def test_control_the_realm_hash_holds_and_the_reading_is_the_same_read_twice():
+    from engine.season.harness import populated
+    w = populated.build_realm(0)
+    assert w.content_hash() == "837d0f83c62917b88d69da3daa3ea027"
+    populated.run(seasons=1, w=w)
+    before = w.content_hash()
+
+    def read_all():
+        return {pid: [(s.id, tuple(m.event for m in s.moves), W.concluded_known(w, p, s))
+                      for s in W.flows_known(w, p)] for pid, p in sorted(w.persons.items())}
+    first, second = read_all(), read_all()
+    assert len(first) == len(w.persons) > 0
+    assert first == second
+    assert w.content_hash() == before                                 # the reading writes nothing
+    # MEASURED at seed 0, one season: no ledger holds an `opens` claim (the world opens its strands by side
+    # and content only, `strife-01` §3 item 3), so every reading above is `()`. To make the read-twice
+    # control observe something, plant one `opens` claim under the first move claim each holder has, so his
+    # real joining claims attach, and read twice again.
+    planted = 0
+    for pid, p in sorted(w.persons.items()):
+        first_move = next((c for c in p.ledger if c.predicate in W.MOVE_KINDS and c.value is True), None)
+        if first_move is not None:                                    # landed first: same tick, round 0, front
+            c = hold(w, pid, first_move.subject, "field.lost", when=first_move.when)
+            p.ledger.remove(c)
+            p.ledger.insert(0, c)
+            planted += 1
+    first, second = read_all(), read_all()
+    assert planted > 0 and any(len(m) > 1 for v in first.values() for _, m, _ in v), planted
+    assert first == second
