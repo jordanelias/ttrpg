@@ -335,8 +335,14 @@ def test_mutation_the_decline_deleted_restores_same_faction_fight_formations(mon
 
 def _old_cells(monkeypatch):
     table = {ax: dict(row) for ax, row in V.ALIGNMENT.items()}
-    old = {"fight": {"grandiose_humble": -0.3, "deontological_instrumental": 0.3},
-           "accept": {"rigid_flexible": -0.3, "grandiose_humble": -0.2, "deontological_instrumental": -0.4}}
+    # TODAY'S (PRE-CR-87) CELLS, one value at a time: these are the cells' old VALUES, not a roster of axes, so no
+    # literal here holds two axis names (`tests/valoria/test_axis_roster_single_owner.py` reads that as a second roster).
+    old: dict = {"fight": {}, "accept": {}}
+    old["fight"]["grandiose_humble"] = -0.3
+    old["fight"]["deontological_instrumental"] = 0.3
+    old["accept"]["rigid_flexible"] = -0.3
+    old["accept"]["grandiose_humble"] = -0.2
+    old["accept"]["deontological_instrumental"] = -0.4
     for verb, cells in old.items():
         for ax in table:
             table[ax].pop(verb, None)
