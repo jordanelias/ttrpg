@@ -71,6 +71,18 @@ def conviction_map(raw, where: str = "Person.conviction") -> dict:
 
 def _load_incompatible(cells: Optional[dict] = None) -> frozenset:
     """`tables.incompatible` as the set of pairs that strain: `frozenset({frozenset({a, b}), ...})`.
+    The `true` cells of `_load_incompatibility`'s one pass; the refusals are that function's."""
+    return frozenset(p for p, v in _load_incompatibility(cells).items() if v is True)
+
+
+def _load_incompatibility(cells: Optional[dict] = None) -> dict:
+    """`tables.incompatible` as EVERY KEYED PAIR AND ITS CELL: `{frozenset({a, b}): True | False | None}`.
+
+    CR-76 (workplan v11): the loader's second output from the same pass. `INCOMPATIBLE` keeps only the
+    `true` pairs, so `false` (compatible, a recorded source) and `null` (no source) merge there; the
+    world reading's `commensurate` (`queries/world_q.py`) must tell them apart, because a grade that
+    raises credit rests on a recorded compatibility and never on the absence of a source. A pair the
+    table does not key is absent here and reads as `null` to every caller.
 
     `cells` defaults to the shipped table; a caller may pass a planted one to exercise the refusals
     without touching the file. Refused, each because the failure would otherwise be SILENT:
@@ -108,10 +120,11 @@ def _load_incompatible(cells: Optional[dict] = None) -> frozenset:
                     needs="`true` (strains), `false` (compatible) or `null` (no source)",
                     law="ED-IN-0251 R1 -- the relation is boolean")
             seen[pair] = val
-    return frozenset(p for p, v in seen.items() if v is True)
+    return seen
 
 
-INCOMPATIBLE = _load_incompatible()
+INCOMPATIBILITY = _load_incompatibility()
+INCOMPATIBLE = frozenset(p for p, v in INCOMPATIBILITY.items() if v is True)
 
 
 # ---------------------------------------------------------------------------

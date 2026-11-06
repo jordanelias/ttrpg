@@ -14,7 +14,8 @@ port, so its path is anchored here from `HARNESS_DIR` and `files.py` does not na
 from __future__ import annotations
 
 from ..data.files import HARNESS_DIR
-from ..data.rosters import FOREIGN_FACTIONS, faction_prop_id, load_yaml
+from ..data.rosters import load_yaml
+from ..queries.world_q import FOREIGN_FACTION_IDS
 from ..data.verbs import EVENT_KINDS, VERB_TABLE
 
 STRIFE_MOVES_YAML = HARNESS_DIR / "strife_moves.yaml"
@@ -79,8 +80,7 @@ def load_moves(path=STRIFE_MOVES_YAML) -> tuple:
             raise ValueError(f"strife_moves.yaml: signature {g} has `victim_held` that is not a boolean")
         if "attacker" in g and g["attacker"] not in sides:
             raise ValueError(f"strife_moves.yaml: signature {g} has attacker outside {sorted(sides)}")
-    foreign = frozenset(faction_prop_id(n) for n in sorted(FOREIGN_FACTIONS))
-    return tuple(rows), tuple(sigs), foreign
+    return tuple(rows), tuple(sigs), FOREIGN_FACTION_IDS
 
 
 MOVES, SIGNATURES, FOREIGN = load_moves()

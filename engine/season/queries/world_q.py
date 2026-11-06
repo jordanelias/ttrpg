@@ -4213,3 +4213,480 @@ def practice(w: World, p: Person, verb: str) -> int:
         if a is not None and a.actor == p.id and VERB_CAPABILITY.get(a.verb) == key:
             acts.add(a.id)
     return min(cap, len(acts) // step)
+
+
+# ===========================================================================
+# STRIFE: THE WORLD READING (CR-76, workplan v11 batch B11-S3; design home `proposals/2026-11-04-strife-flows/
+# 00_MASTER.md` §4, §5, §7, reference only). World first, OWNING NOTHING AND STORING NOTHING (T-a; ED-IN-0225,
+# R15: a derived reading is not an arc carrier): every function below recomputes from the Event log, the act
+# store, the containment tree and the live tenures, takes no token, and has NO CONSUMER IN THE LOOP -- the
+# harness (`harness/strife.py`'s reading block) and the tests read it. `04` §A.2 names four `queries/` members,
+# so no `situation_q.py` is created; `04` §B.9: an Event has no actor, so the doer is reached only through
+# `causes[]` into the act store (`state/attribution.py::actor_of`, `causing_act`).
+#
+# WHAT A MOVE IS HERE. An Event whose kind is in `rosters.yaml: strife_kinds` `opens` or `joins` (CR-75). It
+# OPENS a strand when its kind is in `opens`, or by the world reading's side-aware and content openers below
+# (`strife-01` §4, §6 rulings 4 and 5); a `joins` move attaches only to a strand it links to, and a `joins` move
+# that links to none is ordinary civic life and is not a move of any flow.
+# ===========================================================================
+
+from ..data import affiliations as _aff
+from ..data.rosters import FOREIGN_FACTIONS, RECORD_KIND_KEYS, STRIFE_KINDS
+from ..state.attribution import actor_of  # noqa: F401 -- the doer's one owner; `causing_act(...).actor` is its body
+from ..state.containment import home_map
+
+# The faction Proposition ids of `rosters.yaml: foreign_factions` (R16), the side read's `O`.
+FOREIGN_FACTION_IDS = frozenset(faction_prop_id(n) for n in sorted(FOREIGN_FACTIONS))
+
+# THE WORLD READING'S OPENERS BEYOND THE KIND LIST, one owner (`strife-01` §4, ratified with the kind list,
+# ED-IN-0316). Each kind is a `joins` kind at the person reading; the world reading, which has the act, the verb
+# and the side, opens on it in these cases only:
+#   * a `march.declared` whose marching faction is a challenger (R) or an outside power (O) -- `side_against`;
+#   * a `person.died` caused by one of `OPENING_DEATH_VERBS` (a lethal `fight`, KL or XE; an accepted duel, KL);
+#   * the SECOND of a `CONTENT_OPENING_KINDS` kind on one matter (`content_matter`): two claims on one seat, two
+#     petitions on one matter (ruling 4: a lone claim or petition is civic life, the second is the movement).
+# NOT BUILT, AND WHY (CR-76's named gap): ruling 5's burden opener, a `dispensation.issued` whose terms are a
+# burden. `record_kinds: dispensation` keys `[terms, to, at]`; `terms` names a Person, a Record, a Rung or a
+# Proposition, and none of the three keys tells a burden from a grant, so the opener rides CR-67 (B10-19: which
+# taxes exist is its design and Jordan's content).
+OPENING_MARCH_KIND = "march.declared"
+OPENING_MARCH_SIDES = frozenset({"R", "O"})
+OPENING_DEATH_KIND = "person.died"
+OPENING_DEATH_VERBS = frozenset({"fight", "accept"})
+CONTENT_OPENING_KINDS = ("succession.claimed", "petition.filed")
+PETITION_RECORD_KIND = "petition"
+PETITION_MATTER_KEY = "terms"      # what a petition is about (`_eff_petition`: the act's `subject`)
+for _k in (OPENING_MARCH_KIND, OPENING_DEATH_KIND, *CONTENT_OPENING_KINDS):
+    if _k not in STRIFE_KINDS["joins"]:
+        raise InstrumentDefect(f"world reading opener {_k!r} is not a `strife_kinds.joins` kind (CR-75's list)")
+for _v in OPENING_DEATH_VERBS:
+    if _v not in VERB_TABLE:
+        raise InstrumentDefect(f"world reading opener verb {_v!r} is not in verb_table.yaml")
+if PETITION_MATTER_KEY not in (RECORD_KIND_KEYS.get(PETITION_RECORD_KIND) or ()):
+    raise InstrumentDefect(f"`record_kinds: {PETITION_RECORD_KIND}` no longer keys {PETITION_MATTER_KEY!r}")
+MOVE_KINDS = frozenset(STRIFE_KINDS["opens"]) | frozenset(STRIFE_KINDS["joins"])
+CONCLUDING_KINDS = frozenset(STRIFE_KINDS["concludes"])
+
+
+def governors(w: World, rung: Optional[str]) -> list:
+    """Factions governing `rung`, nearest first and without repeats: the faction of the live `hold` on each rung
+    from `rung` up to the root (`ancestry` includes `rung` itself). THE SIDE READ'S ONE OWNER (CR-76 moved it here
+    from `harness/strife.py`, which imports it): `world_q` may not import the harness, and two copies of the side
+    rule would be `CLAUDE.md` §8's defect. NOT `governors_of`, which lists the PERSONS whose seat reaches a rung."""
+    out: list = []
+    for cur in ancestry(w, rung) if rung is not None else ():
+        t = hold_force(w, cur)
+        f = faction_holding(w, t.subject) if t is not None else None
+        if f is not None and f not in out:
+            out.append(f)
+    return out
+
+
+def side_against(attacker: Optional[str], gov: list, foreign=()) -> Optional[str]:
+    """`O` if `attacker` is a foreign faction; else `A` if it is the nearest governor or a governor above
+    it, `R` if it governs nothing in `gov`, `None` when there is no governor or no attacker to compare."""
+    if attacker is None:
+        return None
+    if attacker in foreign:
+        return "O"
+    if not gov:
+        return None
+    return "A" if attacker in gov else "R"
+
+
+def march_side(w: World, a, foreign=FOREIGN_FACTION_IDS) -> Optional[str]:
+    """The side of a `march` act against the governors of the rung it marches on, or `None` (not a march, or no
+    side can be told). The act's `subject` operand is the rung marched on."""
+    if a is None or a.verb != "march":
+        return None
+    rung = a.payload.get("subject") if isinstance(a.payload, dict) else None
+    return side_against(faction_of(w, a.actor), governors(w, rung), foreign)
+
+
+REALM_KIND = RUNG_KINDS[-1]        # the top of the ordered `rung_kinds` roster: the era's one scope
+
+
+def flow_capacity(kind: str) -> int:
+    """How many flows a reading presents at a rung of `kind` (A1, R4, R5): position in `rung_kinds` read from the
+    top, so realm 1, duchy 2, then each rung one more than the rung above ("n+1"). No second table."""
+    order = list(RUNG_KINDS)
+    return len(order) - order.index(kind)
+
+
+class Move(NamedTuple):
+    """One strife move as the world reading reads it. `index` is the Event's position in the log (claim order)."""
+    event: str
+    index: int
+    tick: int
+    kind: str
+    doer: Optional[str]
+    referents: frozenset   # what it names, the realm rung never among them (linking never passes through it)
+    place: Optional[str]   # the lowest rung covering its referents, else its doer's place
+    opens: bool
+    terminal: bool
+
+
+class Strand(NamedTuple):
+    """A connected chain of moves (A9). IDENTITY: the Event id of its first move, so a strand read twice from
+    one log is the same strand, and two strands merged by a later linking move keep the older one's id."""
+    id: str
+    rung: Optional[str]    # the lowest rung covering its moves' places: its stakes
+    moves: tuple
+    referents: frozenset
+    parties: frozenset     # the persons among its referents, and its doers
+    opening: str           # the kind of its first move
+
+
+class Era(NamedTuple):
+    """The realm's one flow: a SCOPE over every move from the first strife move until a terminal move at the
+    realm rung meets the open-referent test (A10), not a connected component (R4, R11)."""
+    id: str                # the Event id of its first move
+    rung: Optional[str]
+    moves: tuple
+    strands: tuple         # ids of the strands with a move inside it
+    concluded: bool
+
+
+class Flows(NamedTuple):
+    strands: tuple
+    eras: tuple
+
+
+class _StrifeReading:
+    """One reading's memo of the containment walk and the tenure index. A local of `flows_in`'s call, dropped with
+    it: nothing is stored on the World (T-a)."""
+
+    def __init__(self, w: World):
+        self.w = w
+        self.homes = home_map(w)
+        self.tenures = {t.id: t for t in w.tenures}
+        self.realm = frozenset(r for r, g in w.rungs.items() if g.kind == REALM_KIND)
+        self._anc: dict = {}
+
+    def ancestry(self, r: str) -> tuple:
+        a = self._anc.get(r)
+        if a is None:
+            a = self._anc[r] = tuple(ancestry(self.w, r))
+        return a
+
+    def parent(self, r: str) -> Optional[str]:
+        if r not in self.w.rungs:
+            return None
+        a = self.ancestry(r)
+        return a[1] if len(a) > 1 and a[1] not in self.realm else None
+
+    def place(self, x: Optional[str]) -> Optional[str]:
+        if x is None:
+            return None
+        if x in self.w.offices:
+            return self.w.offices[x].rung
+        return place_of(self.w, x, self.homes)
+
+    def lowest_covering(self, places) -> Optional[str]:
+        first, common = None, None
+        for p in places:
+            if p is None:
+                continue
+            a = self.ancestry(p)
+            if first is None:
+                first, common = a, set(a)
+            else:
+                common &= set(a)
+        return next((r for r in first if r in common), None) if first is not None else None
+
+
+def move_referents(rd: _StrifeReading, e, a) -> frozenset:
+    """What a move NAMES: each change's subject (a Tenure's own id read as its two ends, the holder and the held,
+    H-71's reading), a document's `terms`, and the causing act's `subject` operand (a `march.declared` writes
+    nothing, so its target is read off the act). The realm rung is dropped: linking never passes through it."""
+    out: set = set()
+    for c in e.changes:
+        s = c.subject
+        if not s:
+            continue
+        t = rd.tenures.get(s)
+        if t is not None:
+            out.update((t.subject, t.object))
+            continue
+        out.add(s)
+        rec = rd.w.records.get(s)
+        sm = rec.subject_matter if rec is not None else None
+        if isinstance(sm, dict) and isinstance(sm.get(PETITION_MATTER_KEY), str):
+            out.add(sm[PETITION_MATTER_KEY])
+    pay = a.payload if a is not None else None
+    subj = pay.get("subject") if isinstance(pay, dict) else None
+    if isinstance(subj, str):
+        out.add(subj)
+    return frozenset(out - rd.realm)
+
+
+def content_matter(rd: _StrifeReading, e, a=None) -> Optional[tuple]:
+    """`(kind, matter)` for a content-opening kind (`CONTENT_OPENING_KINDS`), else `None`: the SEAT a
+    `succession.claimed` opens a `hold` on, or the `terms` of the `petition` Record a `petition.filed` minted
+    (read from `Record.subject_matter`: an Event cannot say "same matter", `strife-01` §4)."""
+    if e.kind == CONTENT_OPENING_KINDS[0]:
+        seats = sorted(t.object for c in e.changes for t in [rd.tenures.get(c.subject)]
+                       if t is not None and t.kind == "hold")
+        if not seats and a is not None and isinstance(a.payload, dict):
+            seats = [a.payload.get("subject")] if isinstance(a.payload.get("subject"), str) else []
+        return (e.kind, seats[0]) if seats else None
+    if e.kind == CONTENT_OPENING_KINDS[1]:
+        for c in e.changes:
+            rec = rd.w.records.get(c.subject)
+            if rec is not None and rec.kind == PETITION_RECORD_KIND and isinstance(rec.subject_matter, dict):
+                m = rec.subject_matter.get(PETITION_MATTER_KEY)
+                return (e.kind, m) if m is not None else None
+    return None
+
+
+class _Chain:
+    """A strand while `flows_in` builds it: its moves and the three sets `_links` reads. A local of the call."""
+
+    def __init__(self):
+        self.moves: list = []
+        self.refs: set = set()
+        self.parents: set = set()
+        self.doers: set = set()
+
+    def take(self, rd: "_StrifeReading", mv: Move) -> None:
+        self.moves.append(mv)
+        self.refs |= mv.referents
+        self.parents |= {p for p in (rd.parent(r) for r in mv.referents) if p is not None}
+        if mv.doer is not None:
+            self.doers.add(mv.doer)
+
+    def absorb(self, other: "_Chain") -> None:
+        self.moves += other.moves
+        self.refs |= other.refs
+        self.parents |= other.parents
+        self.doers |= other.doers
+
+
+def _links(rd: _StrifeReading, m: Move, s: _Chain) -> bool:
+    """`strife-00` §4's linking rule (A9): a shared referent; a referent the parent or child of one of the
+    strand's, one rung step apart; or the same doer (through `actor_of`). Never through the realm rung (it is in
+    no referent set and no parent set); never by who holds a rung (no holder is read)."""
+    if m.referents & s.refs:
+        return True
+    if any(rd.parent(r) in s.refs for r in m.referents) or (m.referents & s.parents):
+        return True
+    return m.doer is not None and m.doer in s.doers
+
+
+def _strand_of(rd: _StrifeReading, s: _Chain) -> Strand:
+    moves = tuple(sorted(s.moves, key=lambda m: m.index))
+    refs = frozenset().union(*(m.referents for m in moves))
+    doers = {m.doer for m in moves if m.doer is not None}
+    parties = frozenset({r for r in refs if r in rd.w.persons} | doers)
+    return Strand(moves[0].event, rd.lowest_covering(m.place for m in moves), moves, refs, parties,
+                  moves[0].kind)
+
+
+def default_terminal(e, a) -> bool:
+    """The kind-level terminal test: a kind every code of which is terminal (`strife_kinds.concludes`, CR-75).
+    The harness passes the code-level test (`harness/strife.py`), which knows a field outcome's and an amnesty's
+    code through the verb and side; this module may not import the registry that holds the codes."""
+    return e.kind in CONCLUDING_KINDS
+
+
+def open_referents(w: World, parties, referents) -> list:
+    """What keeps a flow open (`strife-00` §4, A10), each as a tuple: a live `detain` or `ban` on a party
+    (`restrained`), a pair of the parties' factions `at_war` (`faction_q.at_war`), a referent `docketed`. Read
+    from the world AS IT STANDS AT THE READING -- each owner reads live state only (the docket keeps no history),
+    so a past era is judged by today's restraints. Empty means no open referent remains."""
+    from .faction_q import at_war      # `faction_q` imports this module at load
+    out: list = []
+    for p in sorted(parties):
+        for k in (DETAIN_KIND, BAN_KIND):
+            if restrained(w, p, k):
+                out.append((k, p))
+    facs = sorted({f for f in (faction_of(w, x) if x in w.persons else
+                               (x if x in FACTION_BY_PROP and x in w.propositions else None)
+                               for x in set(parties) | set(referents)) if f is not None})
+    for i, fa in enumerate(facs):
+        for fb in facs[i + 1:]:
+            if at_war(w, fa, fb):
+                out.append(("at_war", fa, fb))
+    for r in sorted(referents):
+        if docketed(w, r):
+            out.append(("docketed", r))
+    return out
+
+
+def concluded(w: World, strand: Strand) -> bool:
+    """`strife-00` §4 rule (b) (A10): a strand is concluded while its LATEST move is terminal and no open referent
+    remains; a later conflict move reopens it (it is then the latest). Never on its own opening move: a strand of
+    one move is open whatever that move is."""
+    if len(strand.moves) < 2 or not strand.moves[-1].terminal:
+        return False
+    return not open_referents(w, strand.parties, strand.referents)
+
+
+def flows_in(w: World, terminal: Optional[Callable] = None) -> Flows:
+    """THE WORLD READING (`strife-00` §4, §5): the strands in the log, and the eras over them. `terminal(e, a)`
+    says whether an Event (with its causing act, or `None`) is a terminal move; default `default_terminal`.
+
+    STRANDS. Moves are read in log order. A move linking to one or more strands joins them (merged, the oldest id
+    kept: new events fold into existing flows, R3); a move linking to none starts a strand only if it opens one.
+    A content opener's earlier same-matter moves that no strand holds are taken into the strand it opens (the
+    first petition belongs to the movement the second makes). A strand is read at the lowest rung covering its
+    moves (it zooms).
+
+    THE ERA. Every strand move in log order: the first opens the era; a terminal move at the realm rung (its place
+    is the realm) that is not the era's first move and leaves no open referent among the era's realm-rung moves
+    concludes it, freeing the realm's one slot; the next move opens a new era. `[ASSUMPTION; medium; revert: test
+    the era's every move]`: the open-referent test reads the realm-rung moves only, the era being read generally."""
+    rd = _StrifeReading(w)
+    term = terminal or default_terminal
+    live: list = []
+    held: set = set()
+    earlier: dict = {}
+    opens_kinds = frozenset(STRIFE_KINDS["opens"])
+    for i, e in enumerate(w.log):
+        if e.kind not in MOVE_KINDS:
+            continue
+        a = causing_act(w, e)
+        doer = a.actor if a is not None else None
+        refs = move_referents(rd, e, a)
+        place = rd.lowest_covering(rd.place(r) for r in refs) or rd.place(doer)
+        opens = (e.kind in opens_kinds
+                 or (e.kind == OPENING_MARCH_KIND and march_side(w, a) in OPENING_MARCH_SIDES)
+                 or (e.kind == OPENING_DEATH_KIND and a is not None and a.verb in OPENING_DEATH_VERBS))
+        matter = content_matter(rd, e, a)
+        prior = earlier.setdefault(matter, []) if matter is not None else None
+        content_opens = bool(prior)
+        m = Move(e.id, i, e.emitted_at, e.kind, doer, refs, place, opens or content_opens, bool(term(e, a)))
+        hit = [s for s in live if _links(rd, m, s)]
+        if not hit and not m.opens:
+            if prior is not None:
+                prior.append(m)
+            continue
+        if hit:
+            s0 = hit[0]
+            for s in hit[1:]:
+                s0.absorb(s)
+                live.remove(s)
+        else:
+            s0 = _Chain()
+            live.append(s0)
+        joining = [m] + ([p for p in prior if p.event not in held] if content_opens and not hit else [])
+        for mv in joining:
+            s0.take(rd, mv)
+            held.add(mv.event)
+        if prior is not None:
+            prior.append(m)
+    strands = tuple(sorted((_strand_of(rd, s) for s in live), key=lambda s: s.moves[0].index))
+    return Flows(strands, _eras(w, rd, strands))
+
+
+def _eras(w: World, rd: _StrifeReading, strands: tuple) -> tuple:
+    owner = {m.event: s.id for s in strands for m in s.moves}
+    realm = sorted(rd.realm)[0] if rd.realm else None
+    out, cur = [], []
+
+    def close(done: bool) -> None:
+        out.append(Era(cur[0].event, realm, tuple(cur),
+                       tuple(dict.fromkeys(owner[m.event] for m in cur)), done))
+
+    for m in sorted((m for s in strands for m in s.moves), key=lambda m: m.index):
+        cur.append(m)
+        if len(cur) > 1 and m.terminal and m.place in rd.realm:
+            top = [x for x in cur if x.place in rd.realm]
+            refs = frozenset().union(*(x.referents for x in top))
+            parties = {r for r in refs if r in w.persons} | {x.doer for x in top if x.doer is not None}
+            if not open_referents(w, parties, refs):
+                close(True)
+                cur = []
+    if cur:
+        close(False)
+    return tuple(out)
+
+
+def open_era(flows: Flows) -> Optional[Era]:
+    """The era holding the realm's slot now, or `None` when the slot is free."""
+    return flows.eras[-1] if flows.eras and not flows.eras[-1].concluded else None
+
+
+def slot_rank(s: Strand) -> tuple:
+    """A2's ranking of a strand for a scarce slot, smallest first: the most distinct rungs its moves reach below its
+    own; then the most moves; then the most recent; ties by claim order (its first move's log position)."""
+    below = {m.place for m in s.moves if m.place is not None and m.place != s.rung}
+    return (-len(below), -len(s.moves), -s.moves[-1].index, s.moves[0].index)
+
+
+def presented(w: World, flows: Flows) -> tuple:
+    """`(slots, grouped)`: which OPEN strands a reading presents at each rung, and where each other open strand is
+    grouped (A1, A2; `strife-00` §4 "identity and presentation"). `slots` is `{rung id: (strand id, ...)}`;
+    `grouped` is `{strand id: host}`, the host the nearest ancestor rung presenting a flow, else the open era's id
+    (`None` when no era is open). A strand at the realm rung is of the era and grouped under it. At a duchy the
+    two slots are typed: a TRIBUTARY (shares a referent with the era's realm-rung moves) and an ISOLATE (does not).
+    Ranking decides presentation only; a strand's rung and moves are untouched."""
+    rd = _StrifeReading(w)
+    era = open_era(flows)
+    era_refs = frozenset().union(*(m.referents for m in era.moves if m.place in rd.realm)) if era else frozenset()
+    by_rung: dict = {}
+    for s in flows.strands:
+        if s.rung is not None and not concluded(w, s):
+            by_rung.setdefault(s.rung, []).append(s)
+    slots, grouped = {}, {}
+    for rung, ss in by_rung.items():
+        ss.sort(key=slot_rank)
+        kind = w.rungs[rung].kind if rung in w.rungs else None
+        if kind is None or kind == REALM_KIND:
+            continue
+        if kind == "duchy":
+            trib = [s for s in ss if s.referents & era_refs][:1]
+            iso = [s for s in ss if not (s.referents & era_refs)][:1]
+            slots[rung] = tuple(s.id for s in sorted(trib + iso, key=slot_rank))
+        else:
+            slots[rung] = tuple(s.id for s in ss[:flow_capacity(kind)])
+    for rung, ss in by_rung.items():
+        for s in ss:
+            if s.id in slots.get(rung, ()):
+                continue
+            host = next((r for r in rd.ancestry(rung)[1:] if slots.get(r)), None)
+            grouped[s.id] = host if host is not None else (era.id if era else None)
+    return slots, grouped
+
+
+def within(w: World, rung: str) -> tuple:
+    """`(persons, offices, factions)` WITHIN a flow at `rung` (`strife-00` §5, R9, R12): a person whose own rung
+    has `rung` in its ancestry, an office whose `Office.rung` does, a faction one of whose members holds a rung
+    that does. STRUCTURAL, and awareness is not read: a person whose ledger holds none of the flow's moves is
+    within it all the same. The foreign root has no parent in the realm, so the foreign nations are never within."""
+    rd = _StrifeReading(w)
+    persons = tuple(sorted(p for p in w.persons if rung in rd.ancestry(p)))
+    offices = tuple(sorted(o for o, off in w.offices.items()
+                           if off.rung is not None and rung in rd.ancestry(off.rung)))
+    facs = {faction_holding(w, t.subject) for t in w.tenures
+            if t.kind == "hold" and t.live and t.object in w.rungs and rung in rd.ancestry(t.object)}
+    return persons, offices, tuple(sorted(f for f in facs if f is not None))
+
+
+def commensurate(w: World, a: str, b: str) -> int:
+    """`{-1, 0, +1}` over two persons' HELD affiliations (an intensity above 0, `person_q`'s reading), read from
+    `data/affiliations.py::INCOMPATIBILITY` (every keyed pair to `true`, `false` or `null`; an unkeyed pair is
+    `null`). An affiliation BOTH hold is a compatible pair (the loader refuses a self-pair: an affiliation cannot
+    strain against itself). -1 if any cross pair is `true`; +1 if none is and at least one is `false` or shared;
+    0 if either holds none or every cross pair is `null`. A4 against A12: `null` never makes a pair incompatible,
+    and a grade that raises credit rests on a recorded compatibility, never on the absence of a source
+    `[ASSUMPTION; medium; Jordan to correct; revert: read null as compatible, A4 literally, so all-null reads +1]`.
+    Two persons are COMMENSURATE (A4's boolean) when this is not -1."""
+    def held(pid):
+        conv = w.persons[pid].conviction or {}
+        return {k for k, v in conv.items() if v > 0}
+    ha, hb = held(a), held(b)
+    if not ha or not hb:
+        return 0
+    cells = [_aff.INCOMPATIBILITY.get(frozenset((x, y))) for x in sorted(ha) for y in sorted(hb) if x != y]
+    if any(v is True for v in cells):
+        return -1
+    if ha & hb or any(v is False for v in cells):
+        return 1
+    return 0
+
+
+def incompatible_span(w: World, strand: Strand) -> bool:
+    """A5: whether an incompatible pair (`commensurate` -1) spans the strand's living parties."""
+    ps = sorted(p for p in strand.parties if p in w.persons)
+    return any(commensurate(w, x, y) == -1 for i, x in enumerate(ps) for y in ps[i + 1:])

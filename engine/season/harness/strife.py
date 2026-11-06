@@ -21,10 +21,16 @@ signature is DARK: its kinds are shared with other codes (`march.declared` is al
 so a kind count cannot show the switch has been thrown. A code whose row says it needs side, office
 or context and has no signature is KIND-ONLY: the count is an UPPER BOUND. A code with no kind is GAP.
 
-NOT HERE, AND WHY. The study's 16 links and its leave-and-rejoin profile need STRANDS (master design
-§4 linking), which are batch S3's. Computing them over the raw log would link unrelated strife.
+THE STRANDS BLOCK (CR-76, behind `--strands`; off, the report is byte-identical to the one before it). It reads
+`world_q.flows_in` with this module's code-level terminal test (`terminal_for`: a kind with signatures is
+terminal when a matched code is, any other kind when every code it maps to is), and prints strands per rung,
+the eras and the opening kinds open beneath the last, conclusions, per strand whether an incompatible pair
+spans its parties (A5), the opening-to-terminal route check (`opening_routes`), and each strand's code
+sequence's adjacent pairs against a shuffled-order control. A reading, never a bar (V2).
+NOT HERE, AND WHY: the study's 16 links themselves. No file in the tree lists them (only the study artifact
+does), so the block prints the observed pairs against the control and names the 16 as not transcribed.
 
-    python -m engine.season.harness.strife <seasons> <seed> [seed ...]
+    python -m engine.season.harness.strife <seasons> <seed> [seed ...] [--strands]
 """
 from __future__ import annotations
 
@@ -32,12 +38,15 @@ import sys
 from collections import Counter
 from typing import Callable, NamedTuple, Optional
 
-from ..data.rosters import DETAIN_KIND
+from ..data.rosters import BAN_KIND, DETAIN_KIND
 from ..data.verbs import VERB_TABLE
 from ..loop.driver import resolvable_verbs
-from ..queries.world_q import faction_holding, faction_of, hold_force
+from ..data.rosters import STRIFE_KINDS
+from ..queries import world_q
+# CR-76: the side read (`governors`, `side_against`) MOVED to `queries/world_q.py`, its one owner; re-exported
+# here so `strife.governors is world_q.governors` and the instrument's readers keep their names.
+from ..queries.world_q import governors, march_side, side_against  # noqa: F401 -- re-exported
 from ..state.attribution import causing_act
-from ..state.containment import ancestry
 from . import populated
 from .strife_data import FOREIGN, MOVES, SIGNATURES
 
@@ -52,41 +61,15 @@ class Readers(NamedTuple):
     victim_held: Callable = staticmethod(lambda e: False)
 
 
-def governors(w, rung: Optional[str]) -> list:
-    """Factions governing `rung`, nearest first and without repeats: the faction of the live `hold`
-    on each rung from `rung` up to the root (`ancestry` includes `rung` itself)."""
-    out: list = []
-    for cur in ancestry(w, rung) if rung is not None else ():
-        t = hold_force(w, cur)
-        f = faction_holding(w, t.subject) if t is not None else None
-        if f is not None and f not in out:
-            out.append(f)
-    return out
-
-
-def side_against(attacker: Optional[str], gov: list, foreign=()) -> Optional[str]:
-    """`O` if `attacker` is a foreign faction; else `A` if it is the nearest governor or a governor above
-    it, `R` if it governs nothing in `gov`, `None` when there is no governor or no attacker to compare."""
-    if attacker is None:
-        return None
-    if attacker in foreign:
-        return "O"
-    if not gov:
-        return None
-    return "A" if attacker in gov else "R"
-
-
 def readers_for(w) -> Readers:
     def cause_verb(e):
         a = causing_act(w, e)
         return a.verb if a is not None else None
 
     def attacker_side(e):
-        a = causing_act(w, e)
-        if a is None or a.verb != "march":
-            return None
-        rung = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
-        return side_against(faction_of(w, a.actor), governors(w, rung), FOREIGN)
+        # The side read's one owner is `world_q` (CR-76): `march_side` is `side_against(faction_of(actor),
+        # governors(rung marched on), foreign)`, the body this function carried before the move.
+        return march_side(w, causing_act(w, e), FOREIGN)
 
     def victim_held(e):
         victims = {c.subject for c in e.changes if c.field == "exists"}
@@ -159,6 +142,125 @@ def routeless_terminals(rows, resolvable=None) -> list:
     return [r["code"] for r in rows if r["code"] in term and not route(r, resolvable)]
 
 
+def opening_kinds() -> tuple:
+    """The kinds a strand can open on in the world reading: `strife_kinds.opens`, then `world_q`'s side-aware and
+    content openers (their one owner)."""
+    return (tuple(sorted(STRIFE_KINDS["opens"])) + (world_q.OPENING_MARCH_KIND, world_q.OPENING_DEATH_KIND)
+            + tuple(world_q.CONTENT_OPENING_KINDS))
+
+
+def opening_producers(kind: str, resolvable=None) -> list:
+    """Resolvable verbs whose row emits `kind`; for a death, only `world_q.OPENING_DEATH_VERBS` (the opener is a
+    death by those)."""
+    ok = resolvable_verbs() if resolvable is None else resolvable
+    verbs = sorted(v for v in ok if v in VERB_TABLE and kind in VERB_TABLE[v].emits)
+    if kind == world_q.OPENING_DEATH_KIND:
+        verbs = [v for v in verbs if v in world_q.OPENING_DEATH_VERBS]
+    return verbs
+
+
+def opening_routes(rows, resolvable=None) -> dict:
+    """THE ROUTE CHECK (`strife-00` §7, "a conclusion from every opening"; CR-76): for each opening kind and each
+    terminal code, `(opening verbs, terminal verbs)` -- the resolvable verbs that produce the opening, and `route`'s
+    verbs for the code. A pair with either side empty has NO ACT ROUTE: a defect in the loop, reported by name
+    (`routeless_pairs`), never a state the design accepts. STATIC, AND ONLY THAT: whether a terminal verb can take a
+    referent the opening touched (so the two moves would link) is not read; a pair here is the product of the two
+    static facts."""
+    term = terminal_codes(rows)
+    ends = {r["code"]: [v for v, _ in route(r, resolvable)] for r in rows if r["code"] in term}
+    return {(k, c): (opening_producers(k, resolvable), ends[c]) for k in opening_kinds() for c in sorted(ends)}
+
+
+def routeless_pairs(rows, resolvable=None) -> list:
+    """The `(opening kind, terminal code)` pairs with no act route, sorted."""
+    return sorted(p for p, (o, t) in opening_routes(rows, resolvable).items() if not o or not t)
+
+
+_TERMINAL = terminal_codes(MOVES)
+_KIND_CODES = {}
+for _r in MOVES:
+    for _k in _r["kinds"]:
+        _KIND_CODES.setdefault(_k, set()).add(_r["code"])
+_SIG_KINDS = frozenset(g["kind"] for g in SIGNATURES)
+
+
+def move_codes(e, rd: Readers) -> list:
+    """A move's codes as the world reading knows them: its signature matches when its kind has signatures, else every
+    code its kind maps to (one code only when the kind is unambiguous)."""
+    if e.kind in _SIG_KINDS:
+        return sorted({c for c, _ in classify(e, rd)})
+    return sorted(_KIND_CODES.get(e.kind, ()))
+
+
+def terminal_for(w) -> Callable:
+    """`world_q.flows_in`'s terminal test at CODE level: a kind with signatures is terminal when a matched code is
+    terminal (a field outcome WA, a death KL or XE); any other kind when every code it maps to is (`concludes`)."""
+    rd = readers_for(w)
+
+    def terminal(e, a=None) -> bool:
+        if e.kind in _SIG_KINDS:
+            return any(c in _TERMINAL for c, _ in classify(e, rd))
+        return e.kind in world_q.CONCLUDING_KINDS
+    return terminal
+
+
+def pair_profile(seqs, shuffles: int = 200, seed: int = 0) -> list:
+    """Adjacent code pairs over each strand's code sequence, against a SHUFFLED-ORDER CONTROL (each sequence's order
+    permuted `shuffles` times with a seeded `random.Random`): `[(pair, observed, control mean), ...]`, most observed
+    first. A pair above its control is one the order produces, not the mix of codes."""
+    import random
+    rng = random.Random(seed)
+    obs, ctl = Counter(), Counter()
+    for s in seqs:
+        obs.update(zip(s, s[1:]))
+        for _ in range(shuffles):
+            t = list(s)
+            rng.shuffle(t)
+            ctl.update(zip(t, t[1:]))
+    return [(p, n, ctl[p] / shuffles) for p, n in sorted(obs.items(), key=lambda kv: (-kv[1], kv[0]))]
+
+
+def strands_block(w, seed: int, resolvable=None) -> list:
+    """The shipped-realm reading of CR-76 for one world. Prints; writes nothing; a reading, never a bar (V2)."""
+    rd = readers_for(w)
+    fl = world_q.flows_in(w, terminal_for(w))
+    log_ix = {e.id: e for e in w.log}
+    out = [f"STRANDS (seed {seed}): {len(fl.strands)} strands, {len(fl.eras)} era(s)"]
+    by_kind = Counter((w.rungs[s.rung].kind if s.rung in w.rungs else None) for s in fl.strands)
+    out.append("  per rung kind: " + ", ".join(f"{k} {n}" for k, n in sorted(by_kind.items(), key=str)))
+    done = [s for s in fl.strands if world_q.concluded(w, s)]
+    out.append(f"  concluded {len(done)} of {len(fl.strands)}")
+    for era in fl.eras:
+        cats = sorted({s.opening for s in fl.strands if s.id in era.strands})
+        out.append(f"  era {era.id}: {len(era.moves)} moves, {len(era.strands)} strands, "
+                   f"{'concluded' if era.concluded else 'OPEN'}; opening kinds beneath: {', '.join(cats) or 'none'}")
+    for s in fl.strands:
+        kind = w.rungs[s.rung].kind if s.rung in w.rungs else None
+        seq = "-".join("/".join(move_codes(log_ix[m.event], rd)) or "?" for m in s.moves)
+        out.append(f"    {s.id[:12]:<12} {str(kind):<10} {s.rung or '-':<20} moves {len(s.moves):>3} "
+                   f"opening {s.opening:<18} {'concluded' if world_q.concluded(w, s) else 'open':<9} "
+                   f"incompatible-span {world_q.incompatible_span(w, s)}  {seq[:60]}")
+    arms = Counter(r[0] for s in fl.strands for r in world_q.open_referents(w, s.parties, s.referents))
+    out.append("  open referents over the strands, by arm (an arm at 0 is vacuous in this world): "
+               + ", ".join(f"{k} {arms[k]}" for k in (DETAIN_KIND, BAN_KIND, "at_war", "docketed")))
+    slots, grouped = world_q.presented(w, fl)
+    out.append(f"  presented: {sum(len(v) for v in slots.values())} in {len(slots)} rung(s); grouped {len(grouped)}")
+    seqs = [[c[0] for c in (move_codes(log_ix[m.event], rd) for m in s.moves) if len(c) == 1] for s in fl.strands]
+    prof = pair_profile([q for q in seqs if len(q) > 1])
+    out.append("  adjacent code pairs in strands, observed against the shuffled-order control (top 10):")
+    for p, n, c in prof[:10]:
+        out.append(f"    {p[0]}->{p[1]}  observed {n:>3}  control {c:6.2f}")
+    if not prof:
+        out.append("    none (no strand holds two moves with one code each)")
+    out.append("  the study's 16 links: NOT TRANSCRIBED (no file in the tree lists them); leave-and-rejoin unread")
+    bare = routeless_pairs(MOVES, resolvable)
+    out.append(f"  route check: {len(bare)} of {len(opening_routes(MOVES, resolvable))} (opening kind, terminal code) "
+               f"pairs have no act route")
+    for k, c in bare:
+        out.append(f"    NO ROUTE  {k:<20} -> {c}")
+    return out
+
+
 def count_event(e, rd: Readers, seen: Counter, act: Counter, residue: Counter, signatures=SIGNATURES) -> None:
     """Count one Event once: `seen` by kind; `act` by each signature it matches; and, when its kind is named by
     some signature but it matched none, `residue` by `(kind, cause_verb, side)`. The signatures for one kind are
@@ -171,21 +273,28 @@ def count_event(e, rd: Readers, seen: Counter, act: Counter, residue: Counter, s
         residue[(e.kind, rd.cause_verb(e), rd.attacker_side(e))] += 1
 
 
-def measure(seasons: int, seeds: tuple) -> dict:
-    """Run each seed through the owner (`populated.run`), classify its log, and pool the counts."""
+def measure(seasons: int, seeds: tuple, strands: bool = False) -> dict:
+    """Run each seed through the owner (`populated.run`), classify its log, and pool the counts. `strands` adds the
+    CR-76 reading per seed (`strands_block`); off, nothing about the report changes."""
     seen, act, residue = Counter(), Counter(), Counter()
+    block: list = []
     for s in seeds:
         w = populated.build_realm(s)
         populated.run(seasons, s, w=w)
         rd = readers_for(w)
         for e in w.log:
             count_event(e, rd, seen, act, residue)
+        if strands:
+            block += strands_block(w, s)
     sig_codes = {g["code"] for g in SIGNATURES}
     rows = []
     for r in MOVES:
         st, n = grade(r, seen, act, r["code"] in sig_codes)
         rows.append((r, st, n, route(r)))
-    return {"seasons": seasons, "seeds": tuple(seeds), "seen": seen, "act": act, "residue": residue, "rows": rows}
+    m = {"seasons": seasons, "seeds": tuple(seeds), "seen": seen, "act": act, "residue": residue, "rows": rows}
+    if strands:
+        m["strands"] = block
+    return m
 
 
 def report(m: dict) -> str:
@@ -217,16 +326,21 @@ def report(m: dict) -> str:
         out.append(f"  {n:>5}  {kind:<16} cause={verb}  side={side}")
     if not res:
         out.append("  none")
+    if "strands" in m:
+        out.append("")
+        out.extend(m["strands"])
     return "\n".join(out)
 
 
 def main(argv=None) -> int:
     a = list(sys.argv[1:] if argv is None else argv)
+    strands = "--strands" in a
+    a = [x for x in a if x != "--strands"]
     if len(a) < 2:
-        print("usage: python -m engine.season.harness.strife <seasons> <seed> [seed ...]")
+        print("usage: python -m engine.season.harness.strife <seasons> <seed> [seed ...] [--strands]")
         return 2
     seasons, seeds = int(a[0]), tuple(int(x) for x in a[1:])
-    print(report(measure(seasons, seeds)))
+    print(report(measure(seasons, seeds, strands)))
     return 0
 
 
