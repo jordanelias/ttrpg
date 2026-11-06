@@ -1182,6 +1182,27 @@ for _v, _k in WARRANT_SOURCED.items():
             needs="a `verb_table.yaml` verb, and a record kind whose `subject` a held Record answers",
             law="IN-12 step 6 -- a warrant-sourced verb forms only on what a held warrant names")
 
+# CP-T03-09: `{verb: term}` -- the terms a verb's personal-combat scene is fought under (`rosters.yaml:
+# duel_terms`), read by `seam/wrappers/combat.py::combat_input`. REFUSED AT IMPORT for a verb the table lacks or
+# a term that is not a non-empty string. THE TERM'S MEMBERSHIP IN THE ENGINE'S CLOSED SET (`modules/combat/
+# wrapper.py::DUEL_TERMS`) IS NOT CHECKED HERE: `engine/season/data` imports no module, so the seam, which may
+# reach the engine, refuses a value outside that tuple (`combat.py::duel_terms_of`) -- checked against it, never
+# re-declared in this tree.
+def _check_duel_terms(values: dict, table: dict) -> dict:
+    """`rosters.yaml: duel_terms` held to the verb table, or import refuses naming the line. A function, so a test
+    can plant a bad line and watch it refuse."""
+    for verb, term in values.items():
+        if verb not in table or not isinstance(term, str) or not term:
+            raise Forbidden(
+                f"`rosters.yaml: duel_terms` names {verb!r}: {term!r}, and either the verb table carries no such "
+                f"verb or the term is not a non-empty string", "rosters.yaml",
+                needs="a `verb_table.yaml` verb and a term the engine names (`modules/combat/wrapper.py::DUEL_TERMS`)",
+                law="CP-T03-09 -- a verb's duel terms are a term of the engine's closed set, read from one roster")
+    return dict(values)
+
+
+DUEL_TERMS_BY_VERB = _check_duel_terms(dict(roster_map("duel_terms", "values")), VERB_TABLE)
+
 
 def derive_event_kinds(table: dict, matrix: dict, fold_kinds: dict, logged_kinds: dict) -> frozenset:
     """LOADER INVARIANT 7 (`04 §B.13 #7`, `F.20b`): THE EVENT-KIND ROSTER IS DERIVED FROM EVERY EMISSION

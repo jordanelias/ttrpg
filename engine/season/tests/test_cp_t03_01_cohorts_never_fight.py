@@ -163,7 +163,11 @@ def _realm_two_seasons(seed):
     w = build_realm(seed)
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    choose = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(), draw=draw_factory(w.world_seed, lambda: w.tick))
+    # v10 CP-T03-09: `capture` is WITHHELD FROM THE CHOOSER HERE. It forms for the seats granting `dispatch` and moves every
+    # realm (its own mover, declared in its commit), so with it offered the base below -- taken before `capture` existed --
+    # would be compared against a different trajectory; the control is the `individual` conjunct's, and this keeps it so.
+    choose = make_chooser(w.fixtures, mint, verbs=resolvable_verbs() - {"capture"},
+                          draw=draw_factory(w.world_seed, lambda: w.tick))
     _run_seasons(d, w, choose, 2)
     reads = refused_on_it = 0
     for e in w.log:

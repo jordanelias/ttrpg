@@ -3269,8 +3269,9 @@ def detainees_held(w: World, p: Person) -> tuple:
     the act then passes is the fold's (`loop/predicates.py::_req_interrogate`: custody again, and the
     charge). THE SEAT IS THE CUSTODY'S OWN OBJECT: a man detained to another seat is not offered (the
     predicate's custody clause is `restrained`'s, any seat). `()` for a person granted no such act, or
-    whose seats hold nobody -- every person in the realm while `arrest` executes 0 and `capture` is
-    unbuilt, which is what keeps the realm's formation unchanged."""
+    whose seats hold nobody -- every person in the realm while no `detain` is open: `arrest` executes 0 and
+    `capture` (CP-T03-09) opened none in the seeds-0-2 one-season reading, so the realm's formation is unchanged by
+    this reader."""
     if not DETAINEE_REMIT_ACTS:
         return ()
     seats = {t.object for t in p.tenures

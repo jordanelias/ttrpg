@@ -122,10 +122,18 @@ class PersonalCombatInput:
       * `wound_quantities` -- the `WoundTracker` fields the host lifts per party after the fight
                        (`rosters.yaml: wound_quantities`, in roster order). The module reads them off the
                        trackers and returns what it found; the refusal for one the tracker does not carry
-                       is the host's (`combat.py::_wound_state`)."""
+                       is the host's (`combat.py::_wound_state`);
+      * `terms`     -- the duel's terms (RS-25, PC-10a, CP-T03-09): one of `modules/combat/wrapper.py::DUEL_TERMS`,
+                       read by the module entry and handed to `wrapper.fight`. The default is the STRING `'death'`
+                       (the engine's `LETHAL_TERMS`, pinned equal by `engine/season/tests/test_cp_t03_09_capture.py`), never `None`:
+                       `wrapper.fight` refuses a term outside `DUEL_TERMS`, so a `None` default would raise, and the
+                       string leaves every record built without the field fighting exactly as before. The ONE path
+                       a non-lethal term reaches the fight by is `combat.py::combat_input`, from `rosters.yaml:
+                       duel_terms`."""
     claimants: tuple
     ends: tuple
     wound_quantities: tuple
+    terms: str = "death"
 
 
 @dataclass(frozen=True)

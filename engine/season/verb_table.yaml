@@ -798,6 +798,60 @@ verbs:
     emits_on_refusal: ["kill.refused"]
     grade:       "ruled"
     source:      "ARCHITECTURE_V2.md §E3, transcribed; writes re-keyed by #358 rev.2 §C.4"
+  # v10 CP-T03-09 (`-08` AM-C-03; M5): `capture`, A NAMED FOLD OF `fight` -- the same scene over the same prize, fought
+  # under the terms `rosters.yaml: duel_terms` names (`yield`), whose loser is TAKEN INTO A SEAT'S CUSTODY rather than
+  # killed. One effect with `fight` and `accept` for the wounds (`loop/effects_combat.py::_eff_kill`), plus the
+  # `detain` it opens on a yield (`_eff_capture`), the only effect `data/verbs.py::_derive_openers_from_effects` credits
+  # `capture` with.
+  - verb:        "capture"
+    stratum:     "contested_physical"
+    eligibility: ["remit:dispatch"]
+    eligibility_note: "`arrest`'s, for `arrest`'s reason (v9 IN-12 step 5): `remit:dispatch` -- the act `state/gate.py::WARRANT_ACT` names, so the fold's eligibility and the gate's `warrant` basis (which admits the `detain` this row opens) read one grant. J-8 (whether `dispatch` is a remit act at all, `offices.yaml` `meta: remit_unruled`) is Jordan's; this row moves with `WARRANT_ACT` and the ruling. A person holding no seat that grants it forms no `capture`."
+    beneficiary: "none"
+    beneficiary_note: "`arrest`'s column and reason: custody is taken AGAINST the captive and FOR the seat the act is exercised through, an Office no Candidate carries. (The writes land on the SUBJECT, as `fight`'s do, and a harm is not a benefit to the person harmed.)"
+    requires:    "the subject is a living individual, present where the actor is"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      Person
+        - form:      relation
+          of:        subject
+          relation:  with
+        - form:      relation
+          of:        subject
+          relation:  individual
+        - form:      relation
+          of:        actor
+          relation:  individual
+    requires_typed_note: "`fight`'s cell exactly (the `individual` conjuncts of v10 CP-T03-01 and IN-59 (a)'s `with` included), for `fight`'s reason: a cohort is never a party to a personal fight, and an attack needs the attacker where his target is. Refused with the row's one kind (`capture.refused`). [ASSUMPTION; medium; Jordan to correct; revert: hold `capture` until PC-10b's Record route lands.]"
+    counterparty: subject
+    counterparty_note: "THE CAPTIVE IS THE SECOND SIDE, `arrest`'s shape (`counterparty: subject`): the contest's opponent, and a man does not capture himself (the fold's `counterparty` clause refuses a hand-built self-capture; `opening_set` forms none)."
+    contests: "the body"
+    contests_note: "`fight`'s prize, no new prize and no new provider (`rosters.yaml: contest_subsystems.prizes`). The scene is fought under `rosters.yaml: duel_terms`' `yield` (`seam/wrappers/combat.py::combat_input`), so it ends when a party has crossed the yield threshold rather than at a felling."
+    # `fight`'s bands and cells, plus `Tenure.since` WHERE A YIELDER CAN STAND: a yielder is not felled, so he reads
+    # `Untouched` or `Wounded` off his own tracker (`seam/wrappers/combat.py::surrender_of`: the yield rides the result,
+    # not the band). `Tenure.since` is declared in both so a clean yield (`Untouched`) runs the effect, which is what
+    # opens the `detain`; with no yield `_eff_capture` writes nothing there and a scene that moved nobody is
+    # `capture.refused` (the fold's write clause), NOT `contest.undecided` (LIMIT, stated: `fight` reports the latter).
+    # The effect runs once, on the FIRST pair, so `Tenure.since` leads on `Wounded`.
+    writes:
+      Declared:     []
+      Felled:       ["Person.body", "Person.exists", "Tenure.until"]
+      Wounded:      ["Tenure.since", "Person.body"]
+      Untouched:    ["Tenure.since"]
+    writes_note: "CP-T03-09: `loop/effects_combat.py::_eff_capture` -- `_eff_kill`'s wounds for each party by his own band, and, when the scene's `surrender` names the SUBJECT as the one who yielded, ONE `detain` EDGE, captive -> THE SEAT THE ACT IS EXERCISED THROUGH (`Act.via`), opened where `may_warrant` and `_may_close_custody` both hold (`arrest`'s pair of tests, so an admitted act is never killed at the gate and a custody nothing could close is never opened). The captive stays in `w.persons`; a yield by the ACTOR opens nothing. The gate's `warrant` basis is unchanged."
+    emits:
+      Declared:    ["capture.declared"]
+      Felled:      ["person.died", "tenure.closed", "body.changed"]
+      Wounded:     ["body.changed", "person.captured"]
+      Untouched:   ["person.captured"]
+    emits_note: "`fight`'s kinds, with `contest.undecided` REPLACED by the new `person.captured` on the two bands a yielder stands in (earned only by the opened `detain`, `_fold`'s `earned` intersection, so a Wounded scene with no yield emits `body.changed` alone), and `fight.declared` by `capture.declared` (`march`'s deferral band, `the body` carrying `step: ENCOUNTER`). `person.captured` has one emitter, so `data/verbs.py::KIND_VERB` maps it."
+    emits_on_refusal: ["capture.refused"]
+    refusal_note: "FLAT: one kind for every failable clause, `fight`'s shape. Refusal conditions: the subject is no living individual, or is not where the actor is (the cell), the actor holds no seat granting `dispatch` (the eligibility clause shares the one kind), or the scene moved nobody: no yield and no wound (the write clause)."
+    grade:       "assumption"
+    grade_note:  "[ASSUMPTION; medium; Jordan to correct; revert: hold `capture` until PC-10b's Record route lands] -- `-08` AM-C-03 (ladder step 4): the row, its terms and its custody are the completion item's; the bands and the scene are `fight`'s, ruled."
+    source:      "v10 CP-T03-09 (`workplans/valoria_master_workplan_v11_part13.md`, AM-C-03), on home T03 §2 CP-T03-09 and `fight`'s row"
   # ⚠ THE DUEL PAIR, `challenge` -> `accept` (IN-08's cells commit, B-G; ED-IN-0261's verb split as
   # narrowed by its 2026-10-06 row). `kill` and `wound` are NOT verbs -- they are outputs of a
   # `fight` or a duel having been called (Jordan 2026-09-27, RS-5; ED-IN-0288) -- so the split adds

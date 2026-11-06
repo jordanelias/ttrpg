@@ -38,10 +38,12 @@ from engine.season.state.ids import H, draw_factory
 # RE-PINNED ONCE at v10 CR-33 (NPC-088's `lifepath: 3-CF4` holds `inquiry` at `pool_default`; a Person repr, the event list unmoved): was
 # f2e5e265... / 0d25717b... / 05f065f4.... CONTROL: `data/cast.py::capability_of` stubbed to `{}` reads the old three exactly
 # (`test_cr33_lifepaths.py::BASE`), and the ordered (kind, id) event list equals the parent tree's at seeds 0 / 1 / 2.
+# RE-PINNED ONCE at v10 CP-T03-09 (`capture`, a declared mover of the one-season realm): was 71ff6e92... / 73af0d1e... / 011a4605.... CONTROL: `capture` withheld
+# from `populated.resolvable_verbs` reads the old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 PRE_BUILD = {
-    0: "71ff6e9280dc1c8cdecaf6ff45b1e384",
-    1: "73af0d1e84a9616b6c57940afd2737eb",
-    2: "011a46052caacfd800bcf70598306bcb",  # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
+    0: "009f9f31c60bbc5f1e73d266718e1081",
+    1: "daca46829463c9dac6a211a9777fbcc0",
+    2: "db5bd6f03e115f14d0177cdd7eb3d34e",  # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
 }
 
 

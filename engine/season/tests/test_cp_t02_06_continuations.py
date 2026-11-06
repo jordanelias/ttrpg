@@ -40,9 +40,11 @@ from ..state.ids import H, draw_factory
 #   05f065f4c917faf3d970f2c50cfd792f -> 43d2c5249670a51c24c1a102517e9567
 # the same three pins as `test_rem30_character_sheet.py::PRE_BUILD`. The values pinned below are those after CP-T03-01
 # (the `individual` conjunct's reads ride `Event.observed`), not the ones this list ends on.
-PRE_BUILD = {0: "71ff6e9280dc1c8cdecaf6ff45b1e384",
-             1: "73af0d1e84a9616b6c57940afd2737eb",
-             2: "011a46052caacfd800bcf70598306bcb"}  # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
+# RE-PINNED ONCE at v10 CP-T03-09 (`capture`, a declared mover of the one-season realm): was 71ff6e92... / 73af0d1e... / 011a4605.... CONTROL: `capture` withheld
+# from `populated.resolvable_verbs` reads the old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+PRE_BUILD = {0: "009f9f31c60bbc5f1e73d266718e1081",
+             1: "daca46829463c9dac6a211a9777fbcc0",
+             2: "db5bd6f03e115f14d0177cdd7eb3d34e"}  # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
 
 
 def _realm(retainers=2):

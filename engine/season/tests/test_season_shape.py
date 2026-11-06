@@ -2293,7 +2293,7 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
     # the roster: its job is to fail if the loader started refusing everything, so it moves with
     # the table by construction and the number is read from the file rather than chosen.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
-    assert len(VERBS._load_verb_table()) == 63       # v10 IN-12 step 5: `interrogate` joins, 62 -> 63 (ED-IN-0306 phase 5: 60 -> 62)
+    assert len(VERBS._load_verb_table()) == 64       # v10 CP-T03-09: `capture` joins, 63 -> 64 (IN-12 step 5: `interrogate`, 62 -> 63; ED-IN-0306 phase 5: 60 -> 62)
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -6330,8 +6330,10 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
     #  v9 IN-12 step 11 added one: `raze` (`remit:dispatch`, #453 §9.2, `march`'s act). Re-recorded by
     #  outcome: 15 -> 16, the one row that moved.
     #  v10 IN-12 step 5 added one: `interrogate` (`remit:determine`, #453 §9.1). Re-recorded by outcome:
-    #  16 -> 17, the one row that moved.]
-    assert len(gov) == 17, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
+    #  16 -> 17, the one row that moved.
+    #  v10 CP-T03-09 added one: `capture` (`remit:dispatch`, `arrest`'s eligibility). Re-recorded by outcome:
+    #  17 -> 18, the one row that moved.]
+    assert len(gov) == 18, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
                             "plus march plus transfer plus seize plus covenant plus arrest plus pardon "
                             "plus raze plus interrogate")
     formable = set()
@@ -8082,7 +8084,10 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # to ENCOUNTER (`march`'s pair), so a fight is declared at RESOLVE (`fight.declared`/`accept.declared`, witnessed and deposited) and
     # fought on the round's settled world, and the act mix moves [the per-verb counts were not re-measured for this pin]. CONTROL: `the
     # body`'s `step:`/`declares:` popped in process reads the old 20 and passes.
-    assert ever == {"accept", "argue", "carry", "challenge", "commit", "conceal", "create_record", "interview",
+    # ⚠⚠ v10 CP-T03-09 (B10-11), 22 -> 23: `capture` JOINS, nothing leaves. A RE-RECORD WITH ITS REASON: the new row (`fight`'s
+    # fold under `yield` terms, `remit:dispatch`) executes in ONE of the 143 live worlds (seed 0, `corpus_run`, PYTHONHASHSEED=0).
+    # CONTROL, run in process: `capture` withheld from `corpus_run.resolvable_verbs` reads the old 22 verbs exactly and executes in 0.
+    assert ever == {"accept", "argue", "capture", "carry", "challenge", "commit", "conceal", "create_record", "interview",
                     "fight", "give", "move", "oblige", "petition", "reconstruct", "release",
                     "research", "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
@@ -9288,7 +9293,9 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # universal set is unmoved (asserted above). The measurement is at the `ever` note.
     # ⚠⚠ v10 REM-31 (IN-46): `speak` AND `tend` JOIN (20 -> 22) with `ever` (every fight deferred to ENCOUNTER); the reason and its
     # control are at the `ever` note.
-    assert varying == {"accept", "argue", "carry", "challenge", "commit", "conceal", "create_record", "fight", "give",
+    # ⚠⚠ v10 CP-T03-09 (B10-11): `capture` JOINS (22 -> 23) with `ever` -- it executes in one world, not all 143 (the `ever` note above); the universal
+    # set is unmoved. Control: `capture` withheld from `corpus_run.resolvable_verbs` reads the 22 without it.
+    assert varying == {"accept", "argue", "capture", "carry", "challenge", "commit", "conceal", "create_record", "fight", "give",
                        "interview", "move", "oblige",
                        "petition", "reconstruct", "release", "research",
                        "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
@@ -10833,8 +10840,11 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # the measurement and its control are at the corpus test's `ever` note.
     # ⚠⚠ v10 REM-31 (IN-46): `speak` AND `tend` JOIN (20 -> 22), nothing leaves -- every fight deferred to ENCOUNTER; the reason and
     # its control are at the corpus test's `ever` note.
-    assert set(executed) == {"accept", "argue", "carry", "challenge", "commit", "conceal", "create_record", "interview",
-                             "fight", "give",
+    # ⚠⚠ v10 CP-T03-09 (B10-11): `capture` JOINS (22 -> 23), nothing leaves -- the new row, `fight`'s fold under `yield` terms, is
+    # eligible to the seats granting `dispatch` and executes in ONE of the 143 live worlds (seed 0, `corpus_run`). A RE-RECORD WITH ITS
+    # REASON. CONTROL, run in process: `capture` withheld from `corpus_run.resolvable_verbs` reads the old 22 exactly and executes in 0.
+    assert set(executed) == {"accept", "argue", "capture", "carry", "challenge", "commit", "conceal", "create_record",
+                             "interview", "fight", "give",
                              "move", "oblige", "petition", "reconstruct", "release", "research",
                              "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
@@ -11354,7 +11364,8 @@ def test_wc_the_fold_binds_what_the_person_bound():
     WALK_HELD: frozenset = frozenset(OWN_HOLD_DECLINES) | frozenset(w.fixtures.get("withheld_verbs"))
     # v9 IN-12 step 11 ADDED `raze` BESIDE `march`, FOR `march`'s OWN LICENSED REASON: its one
     # `eligibility:` alternative is `remit:dispatch` and `p_low` holds no office (#453 §9.2).
-    WALK_EXCLUDES: frozenset = (frozenset({"march", "raze"}) | WALK_REMIT | WALK_NAMED | WALK_WARRANT
+    # v10 CP-T03-09 ADDED `capture` BESIDE THEM, FOR THE SAME REASON: `remit:dispatch` and `p_low` holds no office.
+    WALK_EXCLUDES: frozenset = (frozenset({"march", "raze", "capture"}) | WALK_REMIT | WALK_NAMED | WALK_WARRANT
                                 | WALK_HELD)
     cands = [c for c in decision.opening_set(p, v, q, w.fixtures)
              if VERB_TABLE[c.verb].requires_typed is not None]
@@ -15451,10 +15462,13 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # v10 IN-12 step 5: `interrogate` IS contested (`a proposition`, `determine`'s prize), the ninth entry, with
     # its own measurement: `tests/test_in12_interrogate.py` folds it through the real seam on a hand-built
     # custody and charge (one `confession.*` kind at the band reached), its bands writing nothing.
+    # v10 CP-T03-09: `capture` IS contested (`the body`, `fight`'s prize), the tenth entry; it is `fight`'s named fold,
+    # fought under `rosters.yaml: duel_terms`; `engine/season/tests/test_cp_t03_09_capture.py` folds it.
     assert contested == {"fight": "the body", "tell": "a standing", "march": "a field",
                          "accept": "the body", "speak": "a matter",
                          "determine": "a proposition", "argue": "a proposition",
-                         "arrest": "a standing", "interrogate": "a proposition"}, (
+                         "arrest": "a standing", "interrogate": "a proposition",
+                         "capture": "the body"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
         "can be graded today is scoped to this set. A SEVENTH entry is a real widening and wants "
         "its own measurement; losing one of these six means its prize row or its verb row has "
@@ -15480,7 +15494,7 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # uncontested (they contest nothing), a re-record. 62 -> 63, `interrogate` (v10 IN-12 step 5), contested
     # (the contested set above moves with it), a re-record.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
-    assert len(VERB_TABLE) == 63, len(VERB_TABLE)    # v10 IN-12: 62 -> 63 (`interrogate`); ED-IN-0306 phase 5: 60 -> 62
+    assert len(VERB_TABLE) == 64, len(VERB_TABLE)    # v10 CP-T03-09: 63 -> 64 (`capture`); IN-12: 62 -> 63 (`interrogate`); ED-IN-0306 phase 5: 60 -> 62
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.
@@ -17409,5 +17423,8 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
     # prisoner, `determine`'s shape (#453 §9.1). A re-record.
     # v10 IN-12 step 5: `interrogate` joins -- contested (`a proposition`) against its `counterparty: subject`,
     # the prisoner, `arrest`'s shape (#453 §9.1). A re-record.
+    # v10 CP-T03-09: `capture` joins -- contested (`the body`) against its `counterparty: subject`, the captive,
+    # `arrest`'s shape. A re-record.
     assert {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty} == {"tell", "determine", "argue",
-                                                                                   "arrest", "interrogate"}
+                                                                                   "arrest", "interrogate",
+                                                                                   "capture"}

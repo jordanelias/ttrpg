@@ -79,6 +79,7 @@ import random
 from typing import Any, Optional
 
 from ...data.rosters import ESTIMATE_OUTCOMES, WOUND_QUANTITIES
+from ...data.verbs import DUEL_TERMS_BY_VERB
 from ...decision import body_band_penalty
 from ...gaps import Forbidden, Unspecified
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
@@ -140,29 +141,55 @@ def party_end(person: Any, fx: Any) -> int:
     return max(1, default_end - bands)
 
 
-def combat_input(w: Any, claimants: list) -> PersonalCombatInput:
+def duel_terms_of(verb: str) -> Optional[str]:
+    """THE TERMS A VERB'S SCENE IS FOUGHT UNDER (CP-T03-09; `rosters.yaml: duel_terms`), or `None` for a verb the
+    roster does not name (its fight is lethal: `PersonalCombatInput.terms`' own default is the one place that says so).
+
+    ⚠ THE CLOSED SET IS THE ENGINE'S, AND THE CHECK IS AGAINST IT, NEVER A COPY: the term must be a member of
+    `modules/combat/wrapper.py::DUEL_TERMS`, read off the loaded engine, and a value outside it REFUSES here naming
+    the roster (`engine/season/data` cannot import the module, so the seam, which may reach it, is the first place
+    the roster meets the tuple). Engine absent: the unchecked term goes on and the call is refused as
+    `ENGINE-UNAVAILABLE` by `entry_for`, so a bad term cannot reach a fight."""
+    term = DUEL_TERMS_BY_VERB.get(verb)
+    loaded = engine()
+    if term is not None and loaded is not None and term not in loaded[0].DUEL_TERMS:
+        raise Forbidden(
+            f"`rosters.yaml: duel_terms` names {verb!r}: {term!r}, which is not one of the engine's "
+            f"{tuple(loaded[0].DUEL_TERMS)}", "rosters.yaml",
+            needs="a term in `modules/combat/wrapper.py::DUEL_TERMS`",
+            law="CP-T03-09 -- a season roster is checked against the engine's closed set, not re-declared")
+    return term
+
+
+def combat_input(w: Any, claimants: list, verb: str) -> PersonalCombatInput:
     """THE HOST INPUT BUILDER (plan position `31b`, A-25): `World` -> the frozen record the fight reads.
 
     Reads `w.persons` (the two claimants) and `w.fixtures`, and nothing else; the module that consumes
     the record never sees `World`. Its precondition is the adapter's PARTY-GAP checks (`resolve`,
-    below): two claimants, both persons."""
+    below): two claimants, both persons.
+
+    `verb` (CP-T03-09) is the act's verb and fills `terms` from `rosters.yaml: duel_terms` -- the ONE path a
+    non-lethal term reaches the fight by (`duel_terms_of`). A verb the roster does not name leaves `terms` at the
+    record's own default, `'death'`, so `fight` and `accept` build the record they always built."""
     a_id, b_id = claimants[0], claimants[1]
+    terms = duel_terms_of(verb)
     return PersonalCombatInput(
         claimants=(a_id, b_id),
         ends=(party_end(w.persons[a_id], w.fixtures), party_end(w.persons[b_id], w.fixtures)),
-        wound_quantities=tuple(WOUND_QUANTITIES))
+        wound_quantities=tuple(WOUND_QUANTITIES),
+        **({} if terms is None else dict(terms=terms)))
 
 
 def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: str = "") -> dict:
     """THE ODDS A FIGHT WOULD DEAL, SAMPLED LIVE (CP-T03-05; `-08` AM-C-02; MODE (a), THE PLAYER'S DISPLAY ONLY).
 
     Builds the real `PersonalCombatInput` (`combat_input`, so the fight is the one `resolve` deals when it is AUTOMATED (a fight the player plays turn by turn can end undecided on his withdrawal, which the shares do not assume): the same
-    `end`s, and the module's lethal `terms` -- the record declares none yet, and `fight.py` falls back to
-    `wrapper.LETHAL_TERMS`), runs the module entry `estimate_samples` times, and returns the SHARES of the
+    `end`s and the same `terms`: `verb`'s, from `rosters.yaml: duel_terms`, the one path), runs the module entry `estimate_samples` times, and returns the SHARES of the
     four ways a scene can end, `actor_felled`, `subject_felled`, `yielded` and `undecided`, which sum to 1
     (`status` `ESTIMATED`, beside the `samples` count). A refusal is `resolve`'s own dict (`PARTY-GAP`,
-    `ENGINE-UNAVAILABLE`). `via` and `verb` are accepted for the shape of the call and read by nothing today:
-    CP-T03-09 extends it with the `terms` its verb names, and CP-T04-08's `field_estimate` shares the fixture.
+    `ENGINE-UNAVAILABLE`). `via` is accepted for the shape of the call and read by nothing today; `verb` names the
+    `terms` (CP-T03-09), so a `capture` is sampled under the terms it is fought under. CP-T04-08's `field_estimate`
+    shares the fixture.
 
     ⚠ THE RNG IS PRIVATE AND IS NOT A SEASON DRAW. It is built here from `H(world_seed, tick, actor,
     "estimate")` and never from `w.new_draw()` or the driver's generator, so the call reads `World` and writes
@@ -182,7 +209,7 @@ def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: st
     entry, refusal = entry_for(_PRIZE, _PROVIDER)
     if entry is None:
         return refusal
-    inp = combat_input(w, claimants)
+    inp = combat_input(w, claimants, verb)
     # `H` returns a blake2b hexdigest, so 16 is the radix that parses it back (as in `resolve`'s seed).
     # [JUSTIFIED: radix for parsing H()'s hex digest, not a mechanical constant]
     rng = random.Random(int(H(w.world_seed, w.tick, actor, "estimate"), 16))
@@ -298,7 +325,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     if pa is None or pb is None:
         return dict(status="PARTY-GAP", why=f"claimant not a person: {a_id!r} / {b_id!r}",
                     module=_PROVIDER)
-    inp = combat_input(w, claimants)
+    inp = combat_input(w, claimants, verb)
     # `H` returns a blake2b hexdigest (`state/ids.py`), so 16 is the RADIX that parses it back to
     # an int for the RNG -- structural, not a game value. Pre-existing; surfaced because step 8's
     # `S.H(...)` -> `H(...)` lift rewrote the line and the gate scores added lines.

@@ -14,6 +14,8 @@ and `_operand`, the helpers `march` takes from `effects_shared.py`; its arrival 
 
 from __future__ import annotations
 
+from dataclasses import replace
+
 from ..data.rosters import (
     DECLARED, FELLED, FIELD_CASUALTY_MODELS, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
     WOUND_HARM_MODELS, require_member,
@@ -21,12 +23,15 @@ from ..data.rosters import (
 from ..data.verbs import VERB_TABLE, VOCATION_SOURCED, VOCATIONS
 from ..gaps import Unspecified
 from ..queries.person_q import held_against
-from ..queries.world_q import ancestry, holder_faction_of, home_of
+from ..queries.world_q import DETAIN_KIND, ancestry, holder_faction_of, home_of, restrained
 from ..seam.ladder import party_degree
+from ..state.carriers import Tenure
 from ..state.gate import (
-    NO_CHANGE, Change, Subject, death_subjects, may_muster, own_kinds, seat_faction,
+    NO_CHANGE, Change, Subject, death_subjects, may_muster, may_warrant, own_kinds, seat_faction,
 )
+from ..state.ids import H
 
+from .effects_information import _may_close_custody
 from .effects_migration import _relocate
 from .effects_shared import _debit, _operand, effect_for
 
@@ -199,6 +204,60 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         named += (death_subjects(w, pid, own, fields=("body",)) if bodies[pid] == 0
                   else (Subject.entity("persons", pid, earns=own, fields=("body",)),))
     return Change(named, perform)
+
+
+CAPTURED = "person.captured"        # the one kind `capture`'s opened `detain` earns (`verb_table.yaml`'s `capture` row)
+
+
+@effect_for("capture")
+def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """CP-T03-09 (`-08` AM-C-03): `fight`'s WOUNDS, AND THE BEATEN MAN TAKEN INTO A SEAT'S CUSTODY WHERE THE SCENE
+    ENDED IN HIS YIELD. A named fold of `fight`, not a second fight: `_eff_kill` is called and its `Change` is the
+    base (each party written by his own band, `seam/ladder.py::party_degree`), to which ONE `detain` EDGE is added,
+    the captive (the act's `subject`) -> THE SEAT THE ACT IS EXERCISED THROUGH (`Act.via`) -- the seat is `via`
+    itself, not an issuing seat, because no warrant is behind a capture (`_eff_arrest` reads one; PC-10b's Record
+    route is not built).
+
+    WHAT LICENSES THE EDGE, EACH ONE OWNER OF ITS RULE (`_eff_arrest`'s tests, minus the warrant): (1) the scene's
+    `surrender` (`seam/wrappers/combat.py::surrender_of`, lifted off the trace) names the SUBJECT as the one who
+    yielded -- a yield by the actor, or none, opens nothing, and a scene in which either party was felled opens
+    nothing (a felled actor holds no seat to take him into); (2) the subject is a person other than the actor and
+    not already in custody (`restrained`, one live `detain` per prisoner); (3) the exercised seat may take him
+    (`may_warrant`, the gate's own predicate) AND its live holder could close the custody (`_may_close_custody`,
+    `pardon`'s basis), so an act the precondition admitted is never killed at the gate and a custody nothing could
+    release is never opened. The gate is UNCHANGED: its `warrant` clause admits an opened `detain` whose object is
+    a seat under `may_warrant`. Anything else leaves the base: the wounds `fight` would have dealt, or, where
+    nobody was written, `NO_CHANGE` and `capture.refused` (the write clause) -- not `contest.undecided`.
+
+    The kind is a LITERAL and the effect is registered for `capture` ALONE, so `data/verbs.py::
+    _derive_openers_from_effects` reads `capture` (not `fight` or `accept`, which share `_eff_kill`) as a
+    `detain` opener beside `arrest`. G4 -- WHAT IT NAMES: the edge, which always moves (absent -> present), earning
+    `person.captured` alone."""
+    base = _eff_kill(w, a, res)
+    # ⚠ THE WOUNDED PARTY DOES NOT EARN THE CAPTURE. `_eff_kill` names each party with his band's declared kinds
+    # (`own_kinds`), and `Wounded` declares `person.captured` so a wounded yielder's Event can be emitted; left
+    # on the party, a wounded scene with NO yield would report a capture nobody made (ID-9). Only the edge earns it.
+    base = Change(tuple(replace(s, earns=tuple(k for k in s.kinds if k != CAPTURED)) if CAPTURED in s.kinds else s
+                        for s in base.subjects), base.apply)
+    prisoner = _operand(a, "subject")
+    result = res.result if res is not None and isinstance(res.result, dict) else {}
+    yielded = result.get("surrender")
+    if (yielded is None or yielded.get("by") != prisoner or prisoner not in w.persons
+            or prisoner == a.actor or restrained(w, prisoner, DETAIN_KIND)):
+        return base
+    above = w.fixtures.get("combat_wounded_above")
+    states = result.get("wound_state") or {}
+    if any(party_degree(states.get(pid), above) == FELLED for pid in (a.actor, prisoner)):
+        return base
+    if a.via is None or not may_warrant(w, a.actor, a.via, prisoner) or not _may_close_custody(w, a.via, prisoner):
+        return base
+    nt = Tenure(H(w.world_seed, w.tick, prisoner, f"detain:{a.via}:{a.id}"), prisoner, a.via, "detain",
+                since=w.tick)
+
+    def perform() -> None:
+        base.apply()
+        w.add_tenure(nt)
+    return Change(base.subjects + (Subject.edge(nt, earns=CAPTURED),), perform)
 
 
 def _harm(p: "Person", band: str, model: str, st: dict) -> "int | None":

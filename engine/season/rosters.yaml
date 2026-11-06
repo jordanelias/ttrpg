@@ -943,6 +943,24 @@ rosters:
       The ORDER is the tuple's; the shares sum to 1.
     values: [actor_felled, subject_felled, yielded, undecided]
 
+  duel_terms:
+    source: "CP-T03-09 (`-08` AM-C-03; home `proposals/2026-10-23-subsystem-completion/` T03 §2): the terms a verb's fight is fought under."
+    cite: "AM-C-03"
+    note: >-
+      WHICH TERMS A VERB'S SCENE IS FOUGHT UNDER -- `verb: term`. ONE ENTRY: `capture: yield`, the fight ends when a
+      party has yielded and the loser is taken into a seat's custody rather than killed (`loop/effects_combat.py`).
+      A verb NOT named here fights under the engine's lethal terms (`PersonalCombatInput.terms`' default, the string
+      `'death'`), so `fight` and `accept` are unchanged. READ BY `seam/wrappers/combat.py::combat_input`, which fills
+      `PersonalCombatInput.terms` from it -- the ONE path a term reaches the fight by (PC-10b extends this roster and
+      adds no second path). ⚠ THE CLOSED SET OF TERMS IS THE ENGINE'S (`modules/combat/wrapper.py::DUEL_TERMS`), NOT
+      THIS FILE'S: `engine/season/data` may not import the module, so the loader (`data/verbs.py::DUEL_TERMS_BY_VERB`)
+      refuses a verb the table lacks or a non-string, and `combat_input` refuses a value outside the engine's tuple,
+      NAMING this roster, before the call -- a term is checked against that tuple and never re-declared here.
+      [ASSUMPTION; medium; Jordan to correct; revert: drop this roster and `capture` fights to the death, which is
+      `fight`.]
+    values:
+      capture: yield
+
   combat_band_edges:
     source: "`H-98`, plan position `8` (closed; `workplans/valoria_master_workplan_v8_part4.md`, retired, at `FORK:7b619328`) -- the edge between the bands was two literals in `seam/ladder.py::combat_degree` (`if st[\"felled\"]` / `st[\"wounds\"] > 0`). Jordan 2026-09-02: *\"I do not want definitions etc to be hardcoded\"*. The bands themselves are `combat_degree_bands`, ruled 2026-09-03/04 as a READ of the scene."
     cite: "H-98"
@@ -3717,6 +3735,11 @@ tables:
         row no lean on any axis. It scores 0.0 on every axis until a cell is authored, so no witness
         is scarred by an arrest and `arrest.made` judges as no deed. Revert: the seven cells, IN-08's
         method.
+      capture: >-
+        v10 CP-T03-09: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); a lean on seven axes is authored
+        content (IN-08's method), and `capture` is `fight`'s fold with a different ending, not a new lean. It scores
+        0.0 on every axis until a cell is authored, so no witness is scarred by a capture and `person.captured` judges
+        as no deed (a wound beside it is still `fight`'s `body.changed`). Revert: the seven cells, IN-08's method.
       pardon: >-
         v9 IN-12 step 5: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); #453 §9.1 gives the
         row no lean on any axis. It scores 0.0 on every axis until a cell is authored. Revert: the
