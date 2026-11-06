@@ -357,10 +357,10 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
     return _frame(fx, pool, opposition, 0.0, room_terms, effort)
 
 
-def _rolled_as(w: Any, act: Any, provider: str = _PROVIDER) -> Optional[tuple]:
+def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
     """`(claimants, subject, room, examined)` exactly as the fold hands the act to `resolve`, or `None`
-    when `provider`'s roll does not deal it (an uncontested act, another provider's prize, a party
-    gap; `provider` is the social roll's unless `odds_of` asks for combat's). The derivation is the fold's
+    when `owner`'s roll does not deal it (an uncontested act, another provider's prize, a party
+    gap; `owner` is the social roll's unless `odds_of` asks for combat's). The derivation is the fold's
     own: `loop/sides.py::_contests_of` and `::sides_of` and the prize row's `heard_by:` for a contest; the verb's `graded_inquiries` route for an inquiry. `loop.sides` is
     imported inside the function: `loop/` imports this package, so a module-level import would loop at
     import time. It imports nothing that imports `seam`, so it closes no cycle the census counts;
@@ -374,7 +374,7 @@ def _rolled_as(w: Any, act: Any, provider: str = _PROVIDER) -> Optional[tuple]:
     contests = _contests_of(act, row)
     if contests:
         prize = _prize_row("contest", contests[0])
-        if prize is None or prize.get("provider") != provider:
+        if prize is None or prize.get("provider") != owner:
             return None
         target = payload.get(row.opponent_operand() if row is not None else "subject")
         parties, subject, rung = sides_of(w, act, target, contests[0])
@@ -382,7 +382,7 @@ def _rolled_as(w: Any, act: Any, provider: str = _PROVIDER) -> Optional[tuple]:
             return None
         return parties, subject, (rung if prize.get("heard_by") == BENCH else None), None
     route = GRADED_INQUIRIES.get(act.verb)
-    if route is not None and route.get("provider") == provider:
+    if route is not None and route.get("provider") == owner:
         subject = payload.get("subject")
         return [act.actor], subject, None, subject
     return None
