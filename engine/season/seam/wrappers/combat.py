@@ -167,6 +167,13 @@ def duel_terms_of(verb: str, stakes: Optional[str] = None) -> Optional[str]:
     return term
 
 
+def record_of(act: Any) -> Optional[str]:
+    """THE RECORD AN ACT IS ABOUT: its `subject` operand (`None` for an act with no dict payload). The one reader for
+    `_cause_record` (the fold's act, off the store) and `sigma.odds_of` (the act in hand)."""
+    payload = getattr(act, "payload", None)
+    return payload.get("subject") if isinstance(payload, dict) else None
+
+
 def _cause_record(w: Any, causes: list) -> Optional[str]:
     """v10 PC-10b -- THE RECORD THE CAUSING ACT IS ABOUT: the `subject` of `causes[0]`, read off the act store
     (`World.acts`; RESOLVE records the act before it reaches the seam, `loop/resolve.py`), or `None` (no cause,
@@ -174,9 +181,7 @@ def _cause_record(w: Any, causes: list) -> Optional[str]:
     for `fight`, whose `subject` is a person, this changes nothing. The act names the Record; nothing re-derives
     which challenge a pair fights under."""
     store = getattr(w, "acts", None)
-    act = store.get(causes[0]) if store is not None and causes else None
-    payload = getattr(act, "payload", None)
-    return payload.get("subject") if isinstance(payload, dict) else None
+    return record_of(store.get(causes[0]) if store is not None and causes else None)
 
 
 def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = None) -> PersonalCombatInput:

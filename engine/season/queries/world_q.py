@@ -3315,8 +3315,12 @@ def holdings_to_found(w: World, p: Person) -> tuple:
     return tuple(r for r in held if any(founds_over(w, p.id, s, r) for s in seats))
 
 
+# ⚠ `04` §A.2:133 and §B.10-§B.12:460 name `faction_q.at_war(w, a, b) -> bool`. DEFINED HERE (v11 CR-87) because
+# `faction_q` imports `world_q` and `enemies_heard` below reads `at_war`, so a definition in `faction_q` is an import
+# cycle. `layer-conformance` B4, third disposition, picked: the rows decide the NAME and the signature, which
+# `faction_q.py`'s re-export carries exactly; neither decides the defining module. `04` is not edited.
 # `20-ii`'s instruction names `at_war` last; the `mood` a war Proposition carries. MOVED here from
-# `faction_q.py`, unchanged, by v11 CR-87, so `enemies_heard` below can read it (`faction_q` re-exports both).
+# `faction_q.py`, unchanged, by v11 CR-87 (`faction_q` re-exports both).
 # `Proposition.mood`
 # is a plain string with no roster of allowed values (`OUGHT`/`HOLDS` are the two the tree already
 # mints, `harness/populated.py:658,661`); `WAR` is a third, idiomatic value of the SAME field, never
@@ -3327,7 +3331,7 @@ WAR_MOOD = "WAR"
 
 
 def at_war(w: World, a: str, b: str) -> bool:
-    """`04:451`, verbatim signature and docstring: *"over live `commit`s to a WAR Proposition.
+    """`04` §B.10-§B.12 :460's signature and docstring (defined here, named `faction_q.at_war` by re-export): *"over live `commit`s to a WAR Proposition.
     NEVER a stored flag."* `D-48`: *"war is a `WAR` Proposition with an `utterer` (AX-6) plus
     `commit` edges owned by their subjects; `at_war` is a Query over the live ones ... There is no
     boolean between two factions to set, because there is no faction record to hold one."*
