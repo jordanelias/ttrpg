@@ -96,11 +96,7 @@ def _attributes_section(spec):
     -- `registry_key` points at them."""
     out = {}
     for s in spec:
-        entry = {f: getattr(s, f) for f in s._fields if f != 'key'}
-        for f, v in entry.items():
-            if not (v is None or (isinstance(v, (int, float, str)) and not isinstance(v, bool))):
-                raise TypeError(f"attribute spec {s.key!r}.{f} has unexported type {type(v).__name__}: {v!r}")
-        out[s.key] = entry
+        out[s.key] = {f: None if getattr(s, f) is None else _typed(getattr(s, f)) for f in s._fields if f != 'key'}
     return out
 
 
