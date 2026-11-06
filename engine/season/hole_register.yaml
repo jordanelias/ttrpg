@@ -5083,6 +5083,19 @@ rows:
     cite:      "BUILT at REM-32 (B10-10), hash EQUAL at the shipped 1. FALSIFIER: `engine/season/tests/test_march.py::test_a_won_field_writes_casualties_and_stance_on_the_defender_only` -- the hand-built `Resolution(\"Won\")` replaced by a real fold: the Crown's two marchers made cohorts (`Person.weight` 10, 20 v 6 against the Church's six) fold `field.won` at k = 10, and the same world and act fold `field.lost` at k = 1 (the control: only the scale differs); with the multiplication dropped from `_weighted_unit` the test reddens (seen red, reverted). CONTROL: `build_realm(s)`, one season, `PYTHONHASHSEED=0`, seeds 0 / 1 / 2, `content_hash` f2e5e265 / 0d25717b / 05f065f4 and the ordered (kind, id) event list identical to the tree before. MEASURED, that world, k swept at fixed weights: `Lost` at 1 to 4, `Won` at 5 to 15, `Lost` again at 20, 30, 40, 50 -- the engine's own battle outcome is not monotone in the scale (a larger side at the same ratio does not always win the grading), so the swept arm 30 (= `TROOPS_PER_WEIGHT` x `MUSTER_FRACTION`, `troop_types/recruitment.py`) reads `Lost` there. The unmodified 2-v-6 realm pair (Crown at `set_s_014` on the Church at `set_s_036`) reads `Lost` at every k tried (1, 2, 5, 10, 50, 100, 300), the defender being the larger side. With `field_provisioning` on, k scales the fed troops too (the commit's choice; the bound is in weight units)"
     source:    "v10 REM-32 (`workplans/valoria_master_workplan_v11_part13.md`, REM-32; AM-A-20), batch B10-10"
 
+  - id:        H-251
+    tier:      1
+    hole:      "HOW MANY FIGHTS THE PLAYER'S ODDS DISPLAY SAMPLES (CP-T03-05; `-08` AM-C-02). The combat module deals one scene and returns a winner, so the odds the player is shown before choosing `fight` are a distribution that only many scenes give. No document states a sample size for a shown figure."
+    kind:      "NUMBER"
+    owner:     "`seam/wrappers/combat.py::fight_estimate`, the one place the fixture is read; CP-T04-08's `field_estimate` reads the same fixture"
+    grade:     "assumption"
+    default:   "400 -- SHIPPED [ASSUMPTION; medium; Jordan to correct; revert: any whole number >= 1, the display moves and nothing else]. Taken at `CLAUDE.md` section 0's ladder step 5 (architecture): 0.5 / sqrt(400) = 0.025 is the largest standard error of a shown share, a figure a player cannot tell from the dealt one, at about 0.7 s a call (200 fights measured 0.36 s). The reader refuses a value that is not a whole number of at least 1."
+    site:      "Fixtures estimate_samples, read by `engine/season/seam/wrappers/combat.py::fight_estimate`"
+    sweep:     [100, 400, 1600]
+    unblocks:  "the player's display of combat's odds for `fight` (and `capture`, CP-T03-09); CP-T04-08's field estimate"
+    cite:      "FALSIFIER: `engine/season/tests/test_cp_t03_05_fight_estimate.py` -- the shares agree with the shares `resolve` realises over held-out worlds within the standard error of their difference, in every outcome at four matchups, and the tolerance is red against a display of a different matchup and against a display with the actor and subject shares swapped; the call leaves `content_hash` and the draw counter unmoved (red against a variant that draws from the season stream, seen red and reverted). CONTROL: `build_realm(0)`, one season, with and without the call, equal; the fixture has no loop reader."
+    source:    "v10 CP-T03-05 (`workplans/valoria_master_workplan_v11_part13.md`, AM-C-02), batch B10-11"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

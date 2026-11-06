@@ -933,6 +933,16 @@ rosters:
       site; an edge over one would be a second reading of the same quantity.
     values: [felled, wounds, max_wounds, health_remaining, health_full]
 
+  estimate_outcomes:
+    source: "CP-T03-05 (`H-251`, `-08` AM-C-02): the four ways a personal fight can end, as the player's odds display shows them."
+    cite: "H-251"
+    note: >-
+      THE KEYS OF `seam/wrappers/combat.py::fight_estimate`'s shares, in the order `sigma.odds_of` returns them for
+      a row contesting `the body`: the actor felled (the result is the subject's), the subject felled (the actor's),
+      a yield (a standing party gave up, the engine's `surrender`), and undecided (the ruled outcome, result 0).
+      The ORDER is the tuple's; the shares sum to 1.
+    values: [actor_felled, subject_felled, yielded, undecided]
+
   combat_band_edges:
     source: "`H-98`, plan position `8` (closed; `workplans/valoria_master_workplan_v8_part4.md`, retired, at `FORK:7b619328`) -- the edge between the bands was two literals in `seam/ladder.py::combat_degree` (`if st[\"felled\"]` / `st[\"wounds\"] > 0`). Jordan 2026-09-02: *\"I do not want definitions etc to be hardcoded\"*. The bands themselves are `combat_degree_bands`, ruled 2026-09-03/04 as a READ of the scene."
     cite: "H-98"
