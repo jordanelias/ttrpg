@@ -135,7 +135,8 @@ links:
 
 # THE STUDY'S LEAVE-AND-REJOIN FIGURES, printed beside this realm's as the study's reference and never as a bar. Its flow definition
 # is richer than the one `harness/strife.py` applies (a rejoin after a departure counts when linked from the departure move or when
-# it starts a drawn link within 3 moves), so the two are not the same measure. [UNVERIFIED]: hand-read from the study's text.
+# it starts a drawn link within 3 moves, and a first move with no drawn-link partner starts the flow), so the two are not the same
+# measure and this realm's flow reads lower. [UNVERIFIED]: hand-read from the study's text.
 #   leave_and_rejoin  of the study_cases cases, those leaving the flow and rejoining it at least once
 #   mean_share_pct    the mean case's share of its moves on the flow, in percent
 #   end_off           cases whose last move is off the flow

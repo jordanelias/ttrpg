@@ -33,12 +33,16 @@ THE LINKS AND THE FLOW (`link_profile`, `flow_profile`). One strand is the unit,
 move sequence is each move's codes; a move with no code is skipped, as the study skips NOTE and OTH. A link (a, b) counts
 for a strand when some move carrying a is followed by a move carrying b within the next `LINK_WINDOW` (3) coded moves,
 and is read against the same strands with their coded-move order shuffled (seeded). `move_codes` yields BASE codes only,
-so a side-suffixed link (`CA-R`, `KL-A`) is read at its base (`CA`, `KL`): that link's count is an UPPER BOUND, and the
-printed line says so. ON THE FLOW is an operational rule that SIMPLIFIES the study's flow definition [ASSUMPTION; medium;
+so a side-suffixed link (`CA-R`, `KL-A`) is read at its base (`CA`, `KL`): that link's count is an UPPER BOUND, as is any
+link whose end code needs side, office or context (the KIND-ONLY grade above), and the header line says so. A link with an
+end no strand move can carry (`_REACHABLE`: DR, DA and FA are not) reads 0 whatever the order, so it prints UNREACHABLE and not a
+control comparison; a link no strand shows at all prints that, not `does not beat its control`. ON THE FLOW is an operational rule that SIMPLIFIES the study's flow definition [ASSUMPTION; medium;
 Jordan to correct; revert: delete `flow_profile` and its lines]: a coded move is on the flow when it is the second move of
 a drawn-link instance or the first; otherwise off. A strand LEAVES when an on-flow move is followed by an off-flow run and
 REJOINS when an on-flow move follows that run. The study also counts as a rejoin a move linked from the departure move; this
-rule does not, so its figures are printed beside the study's as a reference and not as a bar.
+rule does not, so its figures are printed beside the study's as a reference and not as a bar. The study also starts the flow
+at a first move that has no drawn-link partner (its panel A: A-1 and A-2 each hold one on-flow move of that kind), so this rule
+can only read the flow lower than the study does.
 
     python -m engine.season.harness.strife <seasons> <seed> [seed ...] [--strands]
 """
@@ -189,6 +193,21 @@ del _r, _k
 _SIG_KINDS = frozenset(g["kind"] for g in SIGNATURES)
 
 
+def _reachable_codes() -> frozenset:
+    """The codes a strand's move can carry: a code with a kind `world_q.flows_in` admits (`MOVE_KINDS`) that `move_codes`
+    can return for it, which is any code of a kind with no signatures and, for a kind with signatures, only a code a
+    signature names. DR (its one kind, `person.died`, is graded by DN, XE and KL signatures) and DA and FA (their kinds
+    are in `rosters.yaml: strife_kinds.never`) are not."""
+    sig = {}
+    for g in SIGNATURES:
+        sig.setdefault(g["kind"], set()).add(g["code"])
+    return frozenset(r["code"] for r in MOVES for k in r["kinds"]
+                     if k in world_q.MOVE_KINDS and (k not in _SIG_KINDS or r["code"] in sig.get(k, ())))
+
+
+_REACHABLE = _reachable_codes()
+
+
 def move_codes(e, rd: Readers) -> list:
     """A move's codes as the world reading knows them: its signature matches when its kind has signatures, else every
     code its kind maps to (one code only when the kind is unambiguous)."""
@@ -294,7 +313,7 @@ def flow_profile(seqs, links=LINKS) -> dict:
     `strands`, `left` (an on-flow move followed by an off-flow run), `rejoined` (some off-flow run followed by an
     on-flow move), `share` (mean over strands of the share of coded moves on the flow), `end_off` (strands whose last
     coded move is off the flow), `departures` and `rejoins` (Counters: the codes of the on-flow move a detour leaves
-    from, and of the on-flow move it returns to, each detour once)."""
+    from, and of the on-flow move it returns to, once per detour; a move that carries two link codes adds each)."""
     by_pair = _by_pair(links)
     out = {"strands": 0, "left": 0, "rejoined": 0, "share": 0.0, "end_off": 0,
            "departures": Counter(), "rejoins": Counter()}
@@ -326,16 +345,24 @@ def flow_profile(seqs, links=LINKS) -> dict:
     return out
 
 
-def link_lines(seqs, links=LINKS, study=STUDY_FLOW, shuffles: int = 200, seed: int = 0) -> list:
-    """The block's link lines and leave-and-rejoin lines for `seqs` (per strand, each move's codes)."""
+def link_lines(seqs, links=LINKS, study=STUDY_FLOW, shuffles: int = 200, seed: int = 0, reachable=None) -> list:
+    """The block's link lines and leave-and-rejoin lines for `seqs` (per strand, each move's codes). `reachable` is
+    the codes a strand's move can carry (default `_REACHABLE`)."""
+    reachable = _REACHABLE if reachable is None else reachable
     n = len([s for s in seqs if any(s)])
     out = [f"  the study's {len(links)} drawn links, windowed ({LINK_WINDOW} coded moves): strands showing each, of {n} with "
-           f"a coded move, against the shuffled-order control; a side-suffixed link is read at its base code (UPPER BOUND):"]
+           f"a coded move, against the shuffled-order control; every count is an UPPER BOUND where an end code needs side, "
+           f"office or context (a side-suffixed link is read at its base code):"]
     for l, o, c in link_profile(seqs, links, shuffles, seed):
         ref = f"  study {l['cases']} of {l['of']} cases" if "cases" in l else ""
-        ub = "  [upper bound: read at base code]" if "-" in l["a"] + l["b"] else ""
-        mark = "  does not beat its control" if o <= c else ""
-        out.append(f"    {l['a'] + '>' + l['b']:<10} {l['tier']:<6} observed {o:>3}  control {c:6.2f}{ref}{ub}{mark}")
+        lost = sorted({base_code(e) for e in (l["a"], l["b"])} - reachable)
+        if lost:
+            mark = f"  UNREACHABLE: {', '.join(lost)} reach(es) no strand move, so no order can show this link"
+        elif o == 0 and c == 0:
+            mark = "  no strand carries both codes"
+        else:
+            mark = "  does not beat its control" if o <= c else ""
+        out.append(f"    {l['a'] + '>' + l['b']:<10} {l['tier']:<6} observed {o:>3}  control {c:6.2f}{ref}{mark}")
     f = flow_profile(seqs, links)
     top = lambda cnt: ", ".join(f"{c} {v}" for c, v in sorted(cnt.items(), key=lambda kv: (-kv[1], kv[0]))[:5]) or "none"
     out.append("  leave-and-rejoin (this realm; the rule is simpler than the study's, so the study's figures are a reference):")

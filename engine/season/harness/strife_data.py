@@ -87,7 +87,7 @@ def load_moves(path=STRIFE_MOVES_YAML) -> tuple:
 
 LINK_TIERS = ("robust", "stable")
 LINK_SIDED = frozenset({"KL", "CA", "DN", "XE"})        # the codes the study splits by side
-LINK_SIDES = frozenset({"A", "R", "O"})                 # authority, rebels, outside power (`world_q.SIDES`)
+LINK_SIDES = frozenset({"A", "R", "O"})                 # the study's sides of the person: authority, rebels, outside power
 _LINK_KEYS = frozenset({"a", "b", "tier", "cases", "of"})
 _FLOW_KEYS = frozenset({"leave_and_rejoin", "mean_share_pct", "end_off"})
 

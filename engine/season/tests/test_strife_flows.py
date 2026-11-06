@@ -443,6 +443,23 @@ def test_a_window_of_three_coded_moves_skips_an_uncoded_move_and_reads_a_suffixe
     assert seen([["CA"], ["X"], ["X"], ["X"], ["XE"]]) == 0          # 4 on: outside the window
     assert seen([["XE"], ["CA"]]) == 0                               # a follows b, not the link's order
     assert seen([["CA", "XE"]]) == 0                                 # one move is not a before b
+    assert seen([["CA"], ["XE"], ["CA"], ["XE"]]) == 1               # a strand is counted once, however many instances it holds
+
+
+def test_a_link_with_an_end_no_strand_move_can_carry_prints_unreachable_and_an_empty_pair_prints_no_strand_carries_both():
+    """DR, DA and FA reach no strand move (`_REACHABLE`), so a link on them reads 0 whatever the order: that is not
+    `does not beat its control`. A link whose ends are reachable but which no strand shows says so; one that is shown and
+    beaten by its control keeps the old words."""
+    assert not ({"DR", "DA", "FA"} & H._REACHABLE) and {"CA", "XE", "IN"} <= H._REACHABLE   # the roster's own reach
+    links = [{"a": "DR", "b": "IN", "tier": "robust"}, {"a": "CA-R", "b": "XE-R", "tier": "robust"},
+             {"a": "WA", "b": "SB", "tier": "stable"}]
+    seqs = [[["CA"], ["XE"]], [["SB"], ["WA"]]]
+    lines = {ln.split()[0]: ln for ln in H.link_lines(seqs, links, shuffles=20) if " observed " in ln}
+    assert len(lines) == 3
+    assert "UNREACHABLE: DR" in lines["DR>IN"] and "does not beat" not in lines["DR>IN"]
+    assert "UNREACHABLE" not in lines["CA-R>XE-R"] and "does not beat" not in lines["CA-R>XE-R"]
+    assert "does not beat its control" in lines["WA>SB"] or "no strand carries both codes" in lines["WA>SB"]
+    assert "no strand carries both codes" in H.link_lines([[["Z"]]], [links[1]], shuffles=5)[1]
 
 
 def test_a_planted_real_order_reads_a_higher_windowed_count_than_the_same_strands_scrambled():
@@ -485,7 +502,10 @@ def test_the_strands_block_prints_the_links_and_the_flow_profile_and_no_longer_s
     out = H.strands_block(w, 0)
     text = "\n".join(out)
     assert "NOT TRANSCRIBED" not in text and w.content_hash() == before
-    assert len([ln for ln in out if " robust observed " in ln or " stable observed " in ln]) == 16
+    link_ln = [ln for ln in out if " robust observed " in ln or " stable observed " in ln]
+    assert len(link_ln) == 16
+    dead = [ln.split()[0] for ln in link_ln if "UNREACHABLE" in ln]
+    assert sorted(dead) == ["DA>WA", "DR>IN", "WN>DA", "WN>FA"]      # exactly the links on DR, DA and FA
     assert any("strands that leave and rejoin the flow:" in ln for ln in out)
     assert any("the study's own figures (reference): 74 of 102" in ln for ln in out)
 
