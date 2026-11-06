@@ -307,7 +307,7 @@ def _eff_challenge(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     challenger's `hold` through `_mint_document`, the one mint. Its keys (`rosters.yaml: record_kinds`):
     `terms` -- whom it challenges, the act's `subject` (`content.read_from`); `to` -- the same person as its
     ADDRESSEE, so `world_q.writs_held` stamps it on his question once he holds it (a `give`, H-229); `stakes`
-    -- the term the duel is fought under, the act's own `stakes` when it carries one, else ABSENT (a computed
+    -- the term the duel is fought under, the act's own `stakes` when it carries one, else `None` (a computed
     challenge carries no payload, and the duel is then fought under `duel_terms`' `accept` line, `blood`, v11 CR-87;
     `PersonalCombatInput.terms`' own `'death'` is the term of a verb the roster does not name); `challenger` -- the actor, written here whatever the payload (`conceal`'s
     precedent for a key no operand fills). `accept` binds to it (`names:to`, `names:actor`).

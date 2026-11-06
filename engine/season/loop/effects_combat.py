@@ -47,7 +47,10 @@ DUEL_YIELDED = "duel.yielded"       # v10 PC-10b: the kind a duel's yielder earn
 
 def _yielder(res: "Resolution") -> "str | None":
     """THE PARTY THE SCENE'S `surrender` NAMES (`seam/wrappers/combat.py::surrender_of`, lifted onto the result), or
-    `None`. The one reader both effects ask; `_eff_kill` has already refused a `res` with no dict result."""
+    `None`. The one reader both effects ask. `_eff_kill` refuses a `res` with no dict result only AFTER its
+    opponent-not-a-person early return, so `_eff_capture` reaches this with such a `res` in a hand call: `None`."""
+    if res is None or not isinstance(res.result, dict):
+        return None
     return (res.result.get("surrender") or {}).get("by")
 
 
