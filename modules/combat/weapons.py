@@ -2,7 +2,7 @@
 
 The data half of the weapon split (the derivation half is weapon_physics.py). A weapon is a bundle of primitives;
 behaviour EMERGES upward through weapon_physics, never from a per-weapon behaviour table. Each weapon is a SINGLE
-record here — to add / remove / edit a weapon you touch exactly one entry. 54-weapon roster, morphology-rearch
+record here — to add / remove / edit a weapon you touch exactly one entry. Weapon roster, morphology-rearch
 Phase B (2026-07-02): every weapon's MASS DISTRIBUTION is now a positional sum over LOCATED, MATERIALED PARTS
 (elements/guards/haft/pommel/butt — specimen-grounded, designs/audit/2026-07-02-morphology-rearch-phase0/), not a
 whole-weapon lump at a wclass-centroid. weapon_physics.derive() sums them; see its STAGE-1 docstring.
