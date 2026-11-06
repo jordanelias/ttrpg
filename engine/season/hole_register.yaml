@@ -5107,7 +5107,7 @@ rows:
     sweep:     []
     unblocks:  "an owner for IN, RG and DA in CR-71's lines, in place of this row; a trace of the refusing clause for the 17 acts (REM-14's trace names the clause for `_req_release` only; `_req_confer` and `_req_establish` return a bare `False`)"
     cite:      "READ at CR-71 on `5d6aac5`, `PYTHONHASHSEED=0`, `python -m engine.season.harness.aperture 2 0` (REALM, seed 0, two seasons): `confer.refused` 2 of 2 refusals, `establish.refused` 6 of 6 and `release.refused` 9 of 9, every one `no-read`; the SPINE reads `establish` 9 and `release` 5 the same way (its `confer` is formed 0). `release` executed 2, both as `tenure.closed`; `commitment.ended` and `stance.moved`, DA's kinds, are never emitted. `aperture.py::refusal_reading` says a refusal with no recorded read is never counted post-admission, and a row with no typed cell records no reads. CLAUDE.md section 0.1 pt 3: the cause is not read, so it is not stated"
-    source:    "CR-71 (`workplans/valoria_master_workplan_v11_part16.md`), batch B11-S2"
+    source:    "CR-71, batch B11-S2 (the per-code lines are in the body of commit `ddd05152`; its entry left `workplans/valoria_master_workplan_v11_part16.md` at the close)"
 
   - id:        H-253
     tier:      1
@@ -5120,7 +5120,7 @@ rows:
     sweep:     []
     unblocks:  "IN, CL and XN reading a `succeed` that has formed; CR-35 and CP-T09-06 re-basing on whether `succeed` forms before their falsifiers can be read in the realm"
     cite:      "READ at CR-71 on `5d6aac5`, `PYTHONHASHSEED=0`, `python -m engine.season.harness.aperture 2 0`: PER VERB `succeed` formed 0, offered 0, attempted 0 in the REALM (50 unseated, 33 seated eligible) and in the SPINE. `python -m engine.season.harness.heir_hears --seeds 0 --seasons 2`: checked 10 heir question sets; throne vacated: none; heard by a living heir: none; classed `off_king` while the throne was held: 0 (its control). `rosters.yaml` `successions` opened: one mapping, `off_king` to `off_heir`; `offices.yaml` gives `off_heir` to NPC-031, seated at build. Its control line reads the formation gate's referent link: in 10 heir question sets, all with the throne held, the answered question carried `off_king` as a classed `Office` referent 0 times; the title link holds at build (NPC-031)"
-    source:    "CR-71 (`workplans/valoria_master_workplan_v11_part16.md`), batch B11-S2"
+    source:    "CR-71, batch B11-S2 (the per-code lines are in the body of commit `ddd05152`; its entry left `workplans/valoria_master_workplan_v11_part16.md` at the close)"
 
   - id:        H-254
     tier:      1
@@ -5133,7 +5133,7 @@ rows:
     sweep:     []
     unblocks:  "an owner for PU's `determine` leg in CR-71's lines, in place of this row"
     cite:      "READ at CR-71 on `5d6aac5`, `PYTHONHASHSEED=0`, `python -m engine.season.harness.aperture 2 0` (REALM, seed 0, two seasons): `determine` attempted 2, executed 1 as `matter.undetermined`, refused 1 on `clause:docket`; `matter.determined` is never emitted (the executed act is the zero CR-55's RE-BASE names as its base reading). The SPINE refuses `determine` on `docket` 2 and `party` 1. The owners' entries were opened at `determine` and `docket`: CR-55 (`workplans/valoria_master_workplan_v11_part4.md`) and CR-57 to CR-64"
-    source:    "CR-71 (`workplans/valoria_master_workplan_v11_part16.md`), batch B11-S2"
+    source:    "CR-71, batch B11-S2 (the per-code lines are in the body of commit `ddd05152`; its entry left `workplans/valoria_master_workplan_v11_part16.md` at the close)"
 
 discharges:
   D1:   "row:H-01"
