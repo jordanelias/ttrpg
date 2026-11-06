@@ -156,7 +156,7 @@ def combat_input(w: Any, claimants: list) -> PersonalCombatInput:
 def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: str = "") -> dict:
     """THE ODDS A FIGHT WOULD DEAL, SAMPLED LIVE (CP-T03-05; `-08` AM-C-02; MODE (a), THE PLAYER'S DISPLAY ONLY).
 
-    Builds the real `PersonalCombatInput` (`combat_input`, so the fight is the one `resolve` deals: the same
+    Builds the real `PersonalCombatInput` (`combat_input`, so the fight is the one `resolve` deals when it is AUTOMATED (a fight the player plays turn by turn can end undecided on his withdrawal, which the shares do not assume): the same
     `end`s, and the module's lethal `terms` -- the record declares none yet, and `fight.py` falls back to
     `wrapper.LETHAL_TERMS`), runs the module entry `estimate_samples` times, and returns the SHARES of the
     four ways a scene can end, `actor_felled`, `subject_felled`, `yielded` and `undecided`, which sum to 1
@@ -193,13 +193,16 @@ def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: st
         # `felled`, never `result`"). `wrapper.fight` flips `result` after the scene in `UPSET_FLOOR` of the
         # decided fights and leaves the trackers alone, so the sign names a winner the fold never grades by.
         # Neither or both down is `undecided` (a draw has no one felled; a mutual felling names no one).
-        st = got["wound_state"]
-        if st.get(actor) is None or st.get(target) is None:
-            raise Unspecified(
-                f"personal combat sampled and a party's wound state is unavailable ({actor!r} / {target!r})",
-                "S39.4/H-98", needs="a `wound_state` entry, lifted off the party's own WoundTracker",
-                law="the shares are read off the scene's trackers; a party with none has no ending to count")
-        a_down, b_down = bool(st[actor]["felled"]), bool(st[target]["felled"])
+        down = {}
+        for pid in (actor, target):
+            st = _wound_state(got["wound_state"].get(pid))     # the one owner of a missing tracker's refusal
+            if not st["available"]:
+                raise Unspecified(
+                    f"personal combat sampled and a party's wound state is unavailable ({pid!r})",
+                    "S39.4/H-98", needs="a `wound_state` entry, lifted off the party's own WoundTracker",
+                    law="the shares are read off the scene's trackers; a party with none has no ending to count")
+            down[pid] = bool(st["felled"])
+        a_down, b_down = down[actor], down[target]
         if surrender_of(got["trace"]) is not None:
             tally["yielded"] += 1
         elif a_down and not b_down:

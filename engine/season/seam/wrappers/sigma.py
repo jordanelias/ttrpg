@@ -391,7 +391,7 @@ def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
 def odds_of(w: Any, act: Any, *, believer: Any = None,
             believed_room: Optional[dict] = None) -> Optional[tuple]:
     """`(F, P, S, O)` for the social roll `act` would deal, or, for a row whose prize provider is personal combat
-    (CP-T03-05), `(actor felled, subject felled, yielded, undecided)`; or `None`. READ-ONLY; nothing is rolled.
+    (CP-T03-05), `(actor felled, subject felled, yielded, undecided)`; or `None`. READ-ONLY; no season draw and no write (a combat row's shares are SAMPLED, on a private rng).
 
     MODE (a), `believer=None`: the TRUE input -- `contest_input` over the act as the fold would hand it
     to `resolve`, the module's obstacle and `band_odds`. The shown number is the number the roll deals

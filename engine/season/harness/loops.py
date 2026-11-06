@@ -104,7 +104,7 @@ STEM_READS = {
                      (EVENT, "?")) + _TENURE,
     # v10 REM-29: `has_room` -- residents' `reside` edges and weight, the dwelling Sites (`capacity`)
     "room":         (("Person.weight", "-"), ("Site.exists", "+")) + _TENURE,
-    "individual":   (("Person.weight", "?"),),            # v10 CP-T03-01: `Person.is_cohort`, read off `weight`
+    "individual":   (("Person.weight", "-"),),            # v10 CP-T03-01: `Person.is_cohort`, read off `weight`
     "claim.held":   (("Person.claim_ledger", "+"),),
     "rank":         (("Rung.exists", "?"),),
     "purview":      (("Office.exists", "?"),) + _TENURE,
