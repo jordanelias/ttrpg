@@ -5096,6 +5096,32 @@ rows:
     cite:      "FALSIFIER: `engine/season/tests/test_cp_t03_05_fight_estimate.py` -- the shares agree with the shares `resolve` realises over held-out worlds within the standard error of their difference, in every outcome at four matchups, and the tolerance is red against a display of a different matchup and against a display with the actor and subject shares swapped; the call leaves `content_hash` and the draw counter unmoved (red against a variant that draws from the season stream, seen red and reverted). CONTROL: `content_hash` and the draw counter of a world that made the call, equal to a world that did not (`test_cp_t03_05_fight_estimate.py`), and the fixture's addition moves no hash (`test_cp_t03_01_cohorts_never_fight.py`'s stripped-reads control, seeds 0 and 2); the fixture has no loop reader."
     source:    "v10 CP-T03-05 (`workplans/valoria_master_workplan_v11_part13.md`, AM-C-02), batch B10-11"
 
+  - id:        H-252
+    tier:      1
+    hole:      "WHICH CLAUSE REFUSES A `confer`, AN `establish`, A `release` AND A `march` AT ENCOUNTER (CR-71, B11-S2). Each answers with a refusal Event that records no read, so aperture's DECIDING READ reads `no-read` and POST-ADMISSION never counts it: the funnel cannot say whether the act was refused at admission or in the effect. It keeps four strife codes without a named refusing read: IN (`confer`), RG (`establish`), DA (`release`) and WA, WR, OW (`march`: declared, then refused at ENCOUNTER, so no contested field is ever folded and `field.won` and `field.lost` are never emitted)"
+    kind:      "WIRING"
+    owner:     "none open: `establish`'s owner (CR-25) is closed, and no open position's entry reaches these four refusals. The refusing paths are `loop/predicates.py` (`_req_confer`, `_req_establish`), `loop/effects_governance.py` (`_eff_confer`, `_eff_establish`, `_eff_release`), and for `march` `loop/effects_combat.py::_eff_march` (an army that moves nobody and fells nobody declines) and the empty-`_parties` refusal in `loop/resolve.py`; the reader is `harness/aperture.py` (REM-11)"
+    grade:     "measured"
+    default:   "none injected: the four refusals ship as they are and the funnel names no clause for them. No cause is asserted here; two code branches can answer `march.refused` at ENCOUNTER and the reading cannot tell them apart"
+    site:      "`engine/season/harness/aperture.py` (the DECIDING READ PER REFUSAL block, reason `no-read`); the refusing paths named in `owner:`"
+    sweep:     []
+    unblocks:  "an owner for IN, RG, DA, WA, WR and OW in CR-71's lines, in place of this row; a trace of the refusing branch for the 27 acts (REM-14's trace rows name the clause for a predicate refusal); whether `march` ever folds a contested field at the seed-0 horizon, which R-04 conjunct (3) reads"
+    cite:      "READ at CR-71 on `5d6aac5`, `PYTHONHASHSEED=0`, `python -m engine.season.harness.aperture 2 0` (REALM, seed 0, two seasons): `confer.refused` 2 of 2 refusals, `establish.refused` 6 of 6, `release.refused` 9 of 9 and `march.refused` 10 of 10 (the 10 are also among the 13 `march.declared`), every one `no-read`; the SPINE reads `establish` 9, `march` 12 and `release` 5 the same way (its `confer` is not attempted). `python -m engine.season.harness.strife 2 0`: `march.declared` by side A 2, R 11, O 0, and WA, WR, OW all 0. The `aperture.py` header defines `no-read` as an Event that recorded no read and says a refusal with no recorded read is never counted post-admission. CLAUDE.md section 0.1 pt 3: the cause is not read, so it is not stated"
+    source:    "CR-71 (`workplans/valoria_master_workplan_v11_part16.md`), batch B11-S2"
+
+  - id:        H-253
+    tier:      1
+    hole:      "WHETHER `succeed` CAN FORM WITHIN THE TWO-SEASON HORIZON (CR-71, B11-S2). It forms for a person who holds the title `rosters.yaml: successions` names for a seat and has that seat in his ledger; the roster holds one key, `off_king`. At seed 0 `succeed` is formed 0 for every person in the REALM and the SPINE, so IN, CL and XN read 0 on that verb with no refusal to name: the realm's three seat-holder deaths in two seasons were Church seats, none a `successions` seat"
+    kind:      "PRODUCER"
+    owner:     "none open: IN-61 (`succeed`, the heir's claim, `loop/predicates.py::_req_succeed`) landed at B10-09 and left the plan. CP-T09-06 (B10-17) adds a second `successions` key (`off_duke_valorsmark`) and CR-35 builds the contested succession, but neither reads whether a `successions` seat vacates at the horizon"
+    grade:     "measured"
+    default:   "none injected: nothing vacates the throne at the seed-0 horizon, so `succeed` is not formed. A longer horizon or a seat death on the throne is a different reading and is not taken here (P10: two seasons)"
+    site:      "`engine/season/rosters.yaml` (`successions`, `own_title_declines`); `engine/season/decision/options.py::opening_set` (the formation gate)"
+    sweep:     []
+    unblocks:  "IN, CL and XN reading a `succeed` that has formed; CR-35 and CP-T09-06 re-basing on whether a `successions` seat vacates before their falsifiers can be read in the realm"
+    cite:      "READ at CR-71 on `5d6aac5`, `PYTHONHASHSEED=0`, `python -m engine.season.harness.aperture 2 0`: PER VERB `succeed` formed 0, offered 0, attempted 0 in the REALM (50 unseated, 33 seated eligible) and in the SPINE; the REALM death census lists 4 deaths, 3 of seat-holders (`off_senior_inquisitor`, `off_cardinal_temperance`, `off_cardinal_prudence`). `engine/season/rosters.yaml` `successions` opened: its values are a single mapping, `off_king` to `off_heir`; `own_title_declines` opened: formation is gated on the title and the seat being named in the heir's ledger. Whether the heir holds `off_heir` in the realm is not read here"
+    source:    "CR-71 (`workplans/valoria_master_workplan_v11_part16.md`), batch B11-S2"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

@@ -439,7 +439,7 @@ The fold of 2026-10-30 (Jordan: everything that can properly be folded into v10 
 - HASH MOVERS: declared MOVER (it changes which candidate every deliberating person ranks first); one golden re-record, stated plainly, old to new in the commit body.
 - HOLES AND LEDGER IDS: H-54, H-165, H-166 (limit 4); `-08` G-05, G-09, G-10 (authored rows are Jordan's).
 - ASKS ATTACHED: route (a) over (b) `[ASSUMPTION; medium; Jordan to correct; revert: route (b), through CR-21's cells]`.
-- RE-BASE: the scores above were taken before B10-07b closed (CR-16's `stance_polarity: declared` is now shipped and CR-21's cells landed, both of which change the stance term), so re-run probes that print each master's candidates and scores at tick 0 first: the cause may have moved or narrowed, and `align` for `examine` and `sabotage` reads 0 at the post-B10-07b tree (`restore` -0.2 on one axis); the exact slice boundary of `scene_budget` 5 by `interactions_per_scene` 3 (`data/fixtures.py`, `decision/choose.py::pack_scenes`) is not verified here. The figures in this entry come from probe runs whose output is not in the repository (the R-05 re-take of 2026-10-31); none is quoted until re-taken at the re-base.
+- RE-BASE: the scores above were taken before B10-07b closed (CR-16's `stance_polarity: declared` is now shipped and CR-21's cells landed, both of which change the stance term), so re-run probes that print each master's candidates and scores at tick 0 first: the cause may have moved or narrowed, and `align` for `examine` and `sabotage` reads 0 at the post-B10-07b tree (`restore` -0.2 on one axis); the exact slice boundary of `scene_budget` 5 by `interactions_per_scene` 3 (`data/fixtures.py`, `decision/choose.py::pack_scenes`) is not verified here. The figures in this entry come from probe runs whose output is not in the repository (the R-05 re-take of 2026-10-31); none is quoted until re-taken at the re-base. CR-71 (reading @5d6aac5, `aperture 2 0` and `strife 2 0`, seed 0, REALM): RG and VI stay at 0 on two reads this entry reaches: `found` attempted 4, all refused on `exists:works=0` (a wrong Record sub-kind), and `sabotage` attempted 23, all refused on `exists:Site=0` (a subject that is no Site).
 - BUILDER: third tier (judgment).
 - SOURCE: the R-05 re-take of 2026-10-31; `-02` §6.
 
@@ -452,7 +452,7 @@ The fold of 2026-10-30 (Jordan: everything that can properly be folded into v10 
 - HASH MOVERS: declared MOVER.
 - HOLES AND LEDGER IDS: ED-IN-0292 (1) (RULED NO), H-44 (LEAVE: the nine dispensation terms), H-229 (open or closed not confirmed here: it is not in `-07` §1's index), H-203.
 - ASKS ATTACHED: none new; K-24's evade-versus-defy split stays unbuilt, and `construe` stays emission-only (its row's witness-side revert is a standing `[ASSUMPTION]`). The build-all fold of 2026-11-02 adds CR-57 (a petition is addressable and deliverable), which reuses this position's `give` occasion; serialise on `verb_table.yaml`'s `give` row.
-- RE-BASE: re-run the writ census (issuer, holder) and the `give` formation count at `give` with `with`. The figures in this entry come from probe runs whose output is not in the repository (the R-05 re-take of 2026-10-31); none is quoted until re-taken at the re-base.
+- RE-BASE: re-run the writ census (issuer, holder) and the `give` formation count at `give` with `with`. The figures in this entry come from probe runs whose output is not in the repository (the R-05 re-take of 2026-10-31); none is quoted until re-taken at the re-base. CR-71 (reading @5d6aac5, `aperture 2 0` and `strife 2 0`, seed 0, REALM): RF stays at 0 on the read this entry names: `evade / defy` formed 59, attempted 4, executed 0, all 4 refused `compliance.impossible` with last read `exists:dispensation=0`.
 - BUILDER: third tier.
 - SOURCE: the R-05 re-take of 2026-10-31; `verb_table.yaml` `comply`, `construe`, `evade / defy` and `give` rows.
 
@@ -478,7 +478,7 @@ The fold of 2026-10-30 (Jordan: everything that can properly be folded into v10 
 - HASH MOVERS: declared MOVER (formation changes).
 - HOLES AND LEDGER IDS: H-232 (stays open); H-228 (limit 3).
 - ASKS ATTACHED: none.
-- RE-BASE: re-read the unclassed rows by symbol; `train`'s second refusal (`with=False`, pupil not present) is not this position's. The figures in this entry come from probe runs whose output is not in the repository (the R-05 re-take of 2026-10-31); none is quoted until re-taken at the re-base.
+- RE-BASE: re-read the unclassed rows by symbol; `train`'s second refusal (`with=False`, pupil not present) is not this position's. The figures in this entry come from probe runs whose output is not in the repository (the R-05 re-take of 2026-10-31); none is quoted until re-taken at the re-base. CR-71 (reading @5d6aac5, `aperture 2 0` and `strife 2 0`, seed 0, REALM): VI and PU stay at 0 on `raze` attempted 12, executed 0: 10 refused after admission (last read `exists:Rung=1`, passed, so the decline is in the effect; the person-rung share this entry counts is not read here) and 2 at admission on `exists:Rung=0`.
 - BUILDER: first tier (data).
 - SOURCE: the R-05 re-take of 2026-10-31.
 
@@ -491,7 +491,7 @@ The fold of 2026-10-30 (Jordan: everything that can properly be folded into v10 
 - HASH MOVERS: MOVER if built; EQUAL for the reading.
 - HOLES AND LEDGER IDS: H-232, H-207 (the `revoke` ban producer, CR-54); `-06` part 4 G-07 (IN-12 step 5 owns `arrest`'s warrant, with CR-16's `subject_is_opponent` repair covering it, B10-07b): re-read after both.
 - ASKS ATTACHED: none.
-- RE-BASE: re-run the warrant census; CP-T05-05 (cut by the NERS fold) is not re-opened by this position. The figures in this entry come from probe runs whose output is not in the repository (the R-05 re-take of 2026-10-31); none is quoted until re-taken at the re-base.
+- RE-BASE: re-run the warrant census; CP-T05-05 (cut by the NERS fold) is not re-opened by this position. The figures in this entry come from probe runs whose output is not in the repository (the R-05 re-take of 2026-10-31); none is quoted until re-taken at the re-base. CR-71 (reading @5d6aac5, `aperture 2 0` and `strife 2 0`, seed 0, REALM): CA, AM and PU's `arrest` leg stay at 0 upstream of any refusal: `arrest` formed 1, offered 1, attempted 0 and `pardon` formed 8, offered 8, attempted 0, with `arrest.made`, `tenure.opened`, `detention.ended` and `ban.ended` all never emitted, so no restraint exists to close. The SPINE refuses `pardon` AT admission on `exists:Person=0` (4 of 4), which this entry's "refuses after admission" does not cover.
 - BUILDER: third tier.
 - SOURCE: the R-05 re-take of 2026-10-31; `-08` CP-T05-05's cut.
 
@@ -543,7 +543,7 @@ The fold of 2026-10-30 (Jordan: everything that can properly be folded into v10 
 - HASH MOVERS: declared MOVER (new Events join the log and the claim deposits); one golden re-record, old to new, stated plainly in the commit body.
 - HOLES AND LEDGER IDS: H-80, H-94 (residue), H-222; `engine/season/hole_register.yaml` gains the lapse-rule row.
 - ASKS ATTACHED: the lapse number is an `[ASSUMPTION; medium; Jordan to correct; revert: never]` swept 2 / 4 / 8.
-- RE-BASE: re-run `python proposals/2026-10-29-parliament-and-debate/probe_event_kinds.py 0 4` on the base commit first: the docket counts and the zero `matter.determined` are the base reading.
+- RE-BASE: re-run `python proposals/2026-10-29-parliament-and-debate/probe_event_kinds.py 0 4` on the base commit first: the docket counts and the zero `matter.determined` are the base reading. CR-71 (reading @5d6aac5, `aperture 2 0` and `strife 2 0`, seed 0, REALM): PU's `determine` leg reads that zero: attempted 2, executed 1 as `matter.undetermined`, refused 1 on `clause:docket`; `matter.determined` is never emitted.
 - BUILDER: second tier.
 - SOURCE: the build-all fold of 2026-11-02 (`proposals/2026-10-29-parliament-and-debate/2026-11-02-social-contest-build-all-plan.md`, with `2026-11-01-social-contest-matters-standpoints-and-fold.md`, whose probes are in that folder).
 
