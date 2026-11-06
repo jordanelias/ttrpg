@@ -21,7 +21,8 @@ def _emit(kind, **data):
 def _wound(source, by, victim, damage):
     """The ONE damage site (PC-13): `victim.apply_wound(damage)` plus the `wound` trace event, nothing else. The event
     carries the APPLIED amount (`int(damage)`; the tracker adds `max(0, int(d))` and `apply_wound` skips `d <= 0`), so
-    `sum(wound.damage per victim)` is the tracker's `cumulative_damage`. `source` names the site (pursuit, stophit,
+    `sum(wound.damage per victim)` within one fight() is the tracker's `cumulative_damage` (fight() rebuilds the
+    tracker at its start). `source` names the site (pursuit, stophit,
     displace_graze, exchange, bind); `by` is the striker. Draws nothing and keeps no state: concentration drain,
     stagger and every other per-site effect stay at their sites."""
     victim.apply_wound(damage)

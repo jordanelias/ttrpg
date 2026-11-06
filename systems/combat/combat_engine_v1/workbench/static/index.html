@@ -257,7 +257,7 @@ function renderTrace(events){
     else if(e.kind==='roll'){ if(beat) beat.innerHTML+=nodeRow(`<span class="tag">resolve</span> ${e.aggressor} pool ${e.pool}, edge ${e.net_sigma>=0?'+':''}${e.net_sigma} → ${degSpan(e.degree)}`,e); }
     else if(e.kind==='outcome'){
       let cls='clean',txt='clean defence';
-      if(e.hit>0){cls='hit';txt=`${e.aggressor} HITS ${e.defender}`;}
+      if(e.hit>0||e.A_felled||e.B_felled){cls='hit';txt=`${e.aggressor} HITS ${e.defender}`;}
       else if(e.bind){cls='bind';txt='blades bind';}
       else if(e.riposte){cls='rip';txt=`${e.defender} ripostes (flip)`;}
       if(beat) beat.innerHTML+=`<div class="node"><span class="${cls}">→ ${txt}</span> <span class="meta">(${e.A_wounds}/${e.B_wounds} wounds)</span></div>`;

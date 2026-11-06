@@ -128,7 +128,8 @@ def _beat(cur, outcome, cfg, wound_str):
         call += f", and {d} is caught guessing — " + MODE_LINE[mode].format(d=d) + " on instinct"
 
     hit, bind, rip = outcome['hit'], outcome['bind'], outcome['riposte']
-    if hit > 0:
+    felled = outcome['A_felled'] or outcome['B_felled']   # a felling outcome can carry hit=0 (a pull-back graze or a bind strike dealt it)
+    if hit > 0 or felled:
         call += f". {DEG_LINE[deg]}, and {a} draws blood!"
         cls = 'hit'
     elif bind:
@@ -152,7 +153,7 @@ def _beat(cur, outcome, cfg, wound_str):
                  'dodge': "dodge = void the line with footwork (wants balance)",
                  'wind': "wind = meet and dominate the bind (wants blade-guard + leverage)"}[mode])
     mech.append(f"resolution: pool {cur.get('pool','?')}D, net edge {cur.get('net_sigma',0):+}sig -> {deg.upper()}")
-    if hit > 0:
+    if hit > 0 or felled:
         mech.append(f"{deg} beat {d}'s defence: wound applied ({wound_str(outcome)}); the initiative (Vor) swings to {a}")
     elif bind:
         mech.append("bind entry: whoever dominates the crossing (leverage + tactile feel — the German Fuehlen) steals the Vor through the contact")
