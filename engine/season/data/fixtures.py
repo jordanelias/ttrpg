@@ -954,6 +954,12 @@ DEFAULT_FIXTURES = Fixtures(
     # displace; `off` is the CONTROL, the chooser as it stood. [ASSUMPTION; medium; Jordan to correct; revert: `off`, one re-pin]
     # [JUSTIFIED: engine/season/hole_register.yaml H-249 -- `site: Fixtures npc_effort`, graded `assumption`; whether and how a person spends a scene on one roll is no document's (the plan is silent on the rule), so the arm is declared and swept off (the control) / on]
     npc_effort="on",                   # `H-249`, swept off (control) / on (SHIPPED, CP-T01-05 NPC half)
+    # CP-T03-05 (`H-251`). HOW MANY FIGHTS THE PLAYER'S ODDS DISPLAY SAMPLES: `seam/wrappers/combat.py::fight_estimate`
+    # runs the combat module this many times on a private rng and shows the shares. A DISPLAY SIZE, read by no loop
+    # caller, so it moves no decision and no draw. A whole number >= 1; anything else raises in the reader. 400
+    # keeps a share's standard error at or under 0.025 (0.5 / sqrt(400)). Shared with CP-T04-08's `field_estimate`.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-251 -- `site: Fixtures estimate_samples`, graded `assumption`; no document gives the sample size of a shown figure, so it is injected and swept 100 / 400 / 1600]
+    estimate_samples=400,              # `H-251`, swept 100 / 400 (SHIPPED, CP-T03-05) / 1600
     # `H-202` (v9 IN-25, BOUND-STAKES). HOW HARD §F2's STANCE TERM PULLS ON A CHOICE: the term
     # `stance_polarity` signs is read at `1 + this` (`decision/choose.py::stance_term`), so a grudge
     # or a judged deed outweighs a person's pursuits sooner as it rises. §F2 weights the term 1 and
