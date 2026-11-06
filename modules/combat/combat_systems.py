@@ -9,6 +9,7 @@ import vocabulary as V   # the token ALPHABET, owned once (ED-PC-0042); core's t
 import weapon_physics as WP   # Phase-3b: derived L0 physics (percussion_authority/puncture_pressure/agility/reach) — cycle-free (WP imports only math + the zero-import `vocabulary` leaf at module scope)
 import ability_primitives as ABIL   # U10/ED-PC-0022: the tradition-modulation surface for the morphology levers. ability_factor(c,channel)==1.0 by default (no equipped ability -> byte-identical), so the TR-less lever sites (legibility/facing_target) can reach it without threading TR. Cycle-free (ability_primitives imports only traditions).
 from combatant import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE
+from attributes import NEUTRAL   # PC-14: the centring values of the direct-centred attributes, owned by the spec
 
 # ---------- ability-lever composition (SINGLE OWNER — M5/F5, ED-PC-0045) ----------
 def lever_log_edge(own_factor, opponent_factor):
@@ -110,7 +111,7 @@ def weapon_tempo(c, cfg, fatigue=0.0):
     pen += cfg['CHOKE_TEMPO_PEN']*g   # gathering in trades cadence for close control — CONTINUOUS in grip_position (no choke string)
     pen += cfg['LUNGE_TEMPO_PEN']*getattr(c,'lunge_depth',0.0)     # an extended/lunged body is slower to repeat — CONTINUOUS in lunge_depth
     pen += cfg['TEMPO_RECOVER_K']*tanh(cfg['TEMPO_RECOVER_SHAPE']*(_recovery_mode_commitment(w,g,cfg)-1.0))   # balance-recovery, relative to the 2H cut-thrust anchor's neutral commitment=1.0; tanh-SATURATING (raw commitment spans ~0.2 to ~68 across the roster — a long pole's swing-arrest MoI at grip 0 is enormous — so a linear term would either flatten short weapons or blow the long ones straight to the floor; the tanh keeps the common 0.2-3 range well-differentiated while bounding the extreme-polearm tail)
-    t=cfg['BASE_TEMPO']+cfg['AGI_TEMPO_K']*(c.agi-4)-pen   # athleticism adds a LITTLE cadence (Jordan 2026-06-04); centred at agi 4 so default fighters & the mirror are unchanged
+    t=cfg['BASE_TEMPO']+cfg['AGI_TEMPO_K']*(c.agi-NEUTRAL['agi'])-pen   # athleticism adds a LITTLE cadence (Jordan 2026-06-04); centred at agi 4 so default fighters & the mirror are unchanged
     t*=(1-cfg['TEMPO_FATIGUE_K']*fatigue)               # fatigue slows the rate of action
     t*=poise_factor(c, cfg)                            # DYNAMIC structure/balance: a kuzushi'd fighter acts slower (1.0 at full)
     return max(cfg['TEMPO_FLOOR'],t)
@@ -166,9 +167,9 @@ def act_cost(c, commit, cfg):
     return (cfg['ACT_BASE']+cfg['ACT_WEIGHT']*wield_heft(c,cfg)+cfg['ACT_COMMIT']*commit)*cfg['COST_SCALE']   # DERIVED g-aware heft (Stage 2b)
 
 # ---------- concentration (Focus+Spirit tracker) ----------
-# ED-PC-0035: the `conc_max(c,cfg)` back-compat accessor is REMOVED (zero callers; call c.derive_stats(cfg) and read
+# ED-PC-0035: the `conc_max(c,cfg)` back-compat accessor is REMOVED (zero callers; call c.rederive(cfg) and read
 # c.conc_max — the combatant hosts it, 3F+2S, ED-902).
-def reading(c, cfg): return (2*c.cog + c.att)/3 + cfg['READ_HISTORY_K']*(c.history-3)   # cog primary, Att half, + relevant-History experience (Jordan 2026-06-03)
+def reading(c, cfg): return (2*c.cog + c.att)/3 + cfg['READ_HISTORY_K']*(c.history-NEUTRAL['history'])   # cog primary, Att half, + relevant-History experience (Jordan 2026-06-03)
 def reflex(c, cfg): return (cfg['REFLEX_AGI']*c.agi+cfg['REFLEX_ATT']*c.att)/(cfg['REFLEX_AGI']+cfg['REFLEX_ATT'])
 
 # ---------- strength handling + endurance fatigue ----------
@@ -179,8 +180,9 @@ def handling_penalty(c, fat, cfg):
     deficit=max(0.0, str_demand(c,cfg)-c.strength)
     return cfg['HANDLE_K']*deficit + cfg['FATIGUE_HANDLE_K']*fat
 def disp_lean(c):
-    """Disposition lean on the aggression axis: (disp-4)/3 in [-1,1]; +ve aggressive, -ve cautious, 0 = neutral (default)."""
-    return (c.disp-4)/3.0
+    """Disposition lean on the aggression axis: (disp-NEUTRAL['disp'])/3, in [-1,1] at the default scale; +ve aggressive,
+    -ve cautious, 0 = neutral (the default fighter, while the spec's default and neutral agree)."""
+    return (c.disp-NEUTRAL['disp'])/3.0
 def balance_eff(c, fat, cfg):
     # BALANCE is NOT a stat (Jordan): it is GOVERNED BY AGILITY, modulated by CURRENT poise (kuzushi context); ability
     # modulation (Destreza compás etc.) arrives with the channel-wiring pass. The `agi-1` aligns Agility's neutral (4)
@@ -1429,12 +1431,12 @@ def mental_fatigue(c, fat, cfg):
 def poise_regen(c, cfg):
     """Per-beat structure (kuzushi) regathering toward 1.0, Focus-accelerated. Returns the new poise PRE-clamp (the
     wrapper applies clamp_poise + the mutation). Pure."""
-    return c.poise + cfg['POISE_RECOVER']*(1+cfg['POISE_FOCUS_K']*(c.focus-3))*(1-c.poise)
+    return c.poise + cfg['POISE_RECOVER']*(1+cfg['POISE_FOCUS_K']*(c.focus-NEUTRAL['focus']))*(1-c.poise)
 
 def counter_success_prob(defender, cfg, TR):
     """Single-time-counter SUCCESS probability (bounded): base + training(History) + reflex + the counter ability.
     The untrained counter mostly fails; abilities modulate it upward. Pure — the wrapper rolls rng against it."""
-    succ = (cfg['COUNTER_SUCCESS_BASE'] + cfg['COUNTER_TRAIN_K']*(defender.history-3)
+    succ = (cfg['COUNTER_SUCCESS_BASE'] + cfg['COUNTER_TRAIN_K']*(defender.history-NEUTRAL['history'])
             + cfg['COUNTER_REFLEX_K']*(reflex(defender,cfg)-3) + TR.ability_bonus(defender,'counter_success'))
     return max(0.05, min(0.92, succ))
 

@@ -42,9 +42,10 @@ import weapons as W
 import capabilities as CAP
 from config import CFG
 from combatant import Combatant
+import attributes   # the combat attribute spec (PC-14)
 
 TIERS = ('none', 'light', 'medium', 'heavy')
-NEUTRAL = dict(strength=4, agi=4, end=4, cog=3, att=3, spirit=3, focus=3, history=3, disp=4)
+NEUTRAL = dict(attributes.DEFAULT)   # the neutral FIGHTER is the default fighter: the spec's defaults (PC-14)
 
 
 def roster():
