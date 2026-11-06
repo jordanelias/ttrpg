@@ -280,7 +280,7 @@ jobs:
     # (only test_combat_balance_guard.py and test_combat_audit_pins.py, which have no guard, always ran). main @81948c1 reported 837 passed / 93 skipped in ~3m48s against 972 passed /
     # 21 skipped locally with numpy present. The guard was also unnecessary: the engine import chain has
     # been numpy-free since ED-1085, and only the workbench needed it, through workbench/trace.py (since PC-16 trace.py
-    # imports none; the frozen v32 harness the balance.py and probabilities.py import still does).
+    # imports none; balance.py, presets.py and probabilities.py still reach numpy, directly or through the frozen v32 harness).
     # Every one of those importorskips is now deleted, so an absent numpy fails LOUDLY instead of green-
     # skipping the suite that guards the combat resolver. Expect wall time to grow from ~3m48s toward the
     # ~9-11m the paragraph above already predicted — measured 6m10s locally with numpy present, so a hosted

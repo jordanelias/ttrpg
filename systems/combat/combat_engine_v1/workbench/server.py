@@ -5,7 +5,7 @@ Run:  python systems/combat/combat_engine_v1/workbench/server.py   then open htt
 Endpoints (all JSON except GET /):
   GET  /                -> the single-page app (static/index.html)
   GET  /api/params      -> the class-aware tuning surface (Class A read-only / B / C editable / M method)
-  POST /api/trace       -> {scenario, overrides, seed} -> one traced fight: {result, narration, events}
+  POST /api/trace       -> {scenario, overrides, seed} -> one traced fight: {result, commentary, events, winner}
                            each branch-node event carries `dist` (alternate branches + odds) for the explorer
   POST /api/montecarlo  -> {scenario, overrides, trials, seed} -> win-rate +/- Wilson CI, position-swapped
   POST /api/promote     -> {overrides} -> a reviewable Class-C patch + ledger stub (writes nothing)

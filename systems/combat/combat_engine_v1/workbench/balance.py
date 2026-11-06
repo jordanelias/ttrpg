@@ -30,9 +30,9 @@ import r8_parity_harness as r8   # Class-M method constants: FINAL_TRIALS, WILSO
 
 WEAPONS = ["rapier", "arming", "longsword", "greatsword", "sabre", "dagger",
            "paired_short", "spear", "staff", "mace", "poleaxe",
-           # morphology-rearch Phase C (2026-07-02): the 40 weapons added by the catalogue expansion, now
+           # morphology-rearch Phase C (2026-07-02): the weapons added by the catalogue expansion, now
            # primitive-composed (elements/guards/mode_elements — see designs/scene/combat_engine_v1/weapons.py).
-           # longsword_halfsword/estoc_halfsword excluded — auto-switch FORMS, never a starting loadout (matches
+           # the `*_halfsword` forms (longsword, estoc, ...) excluded — auto-switch FORMS, never a starting loadout (matches
            # the existing exclusion note above for the original 11).
            "yari", "kama_yari", "dangpa", "bear_spear", "ranseur", "spetum", "naginata", "glaive",
            "guandao", "podao", "fauchard", "bardiche", "sparr_axe", "voulge", "guisarme", "ji", "bec_de_corbin",
@@ -161,7 +161,7 @@ def weapon_armour_matrix(cfg=None, n=600, baseline='arming', armours=('none', 'l
     NOT a flat column — it is each weapon's arc landing where its physical primitives + the armour-mitigation matrix
     (core.coupling / systems.armor_defeat_sigma) put it. Returns {'baseline','n','armours','rows':[(w, [p...],
     [(lo,hi)...]) ...]} sorted by the UNARMOURED (A0) win-rate.
-    NOTE: sweeps the module-level WEAPONS list (the 11 startable weapons); `longsword_halfsword` is excluded — it is a
+    NOTE: sweeps the module-level WEAPONS list (the startable weapons); the `*_halfsword` forms are excluded — it is a
     derived auto-switch FORM (mit dem kurzen Schwert), never a starting loadout. Seeds are deterministic (_seed)."""
     cfg = cfg or config.CFG
     rows = []
