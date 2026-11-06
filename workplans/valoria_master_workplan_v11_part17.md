@@ -84,7 +84,7 @@
 - HASH MOVERS: season: EQUAL in an all-absent realm, a declared MOVER where K-1 hands an authored fighter `cog ≠ att` or Coordination ≠ 4. Combat module: a declared MOVER of every pin with `cog ≠ att` or non-default `agi`, re-recorded old to new in the commit body.
 - HOLES AND LEDGER IDS: ED-IN-0347; ED-IN-0330.
 - ASKS ATTACHED: none. Reason's absence from combat is the take worth a glance (adj §3.2).
-- RE-BASE: `reading`, `read_contest`, every `reading(` call by symbol; CR-85's landed tree; PC-14's spec.
+- RE-BASE: `reading`, `read_contest`, every `reading(` call by symbol; CR-85's landed tree; PC-14's spec; `tests/valoria/test_combat_lever_sign_safety.py` (PC-17: its WEAK, STRONG and FLOOR_BAL pass `cog=`, which `Combatant` will refuse, and its read-lever probes assume `reading()` >= 0).
 - BUILDER: opus (high) for (2)'s rule; sonnet for (1).
 - SOURCE: AR-18, AR-37, AR-40; adj §2.2 (iii); map F8, F20, F22 (reference).
 
