@@ -130,6 +130,8 @@ def test_the_displayed_shares_equal_the_realised_shares_within_sampling_over_hel
                 f"{ends} {name}: displayed {s:.4f} vs realised {r:.4f}, beyond {Z} standard errors ({tol:.4f})")
             checked += 1
     assert checked == len(MATCHUPS) * len(combat.ESTIMATE_OUTCOMES), checked
+    # `yielded` is 0 on both sides by construction until CP-T03-09 passes a yield term (lethal terms only), so those
+    # comparisons cannot fail; the felled and undecided shares carry the claim.
 
 
 def test_the_tolerance_can_fail_a_display_of_a_different_fight():
@@ -152,6 +154,44 @@ def test_the_sampler_does_not_swap_the_parties():
     weak = _estimate(_world((1, 4)))
     assert strong["subject_felled"] > strong["actor_felled"], strong
     assert weak["actor_felled"] > weak["subject_felled"], weak
+
+
+def test_the_shares_follow_the_trackers_not_the_sign_of_the_result():
+    """The control the tolerance cannot be: NO SAMPLING NOISE. The sampler's own stream is replayed here (same key,
+    same module entry, same input), each scene is classified the two ways, and (1) the display equals the
+    trackers' tally EXACTLY, (2) the result's sign disagrees with the trackers on at least one scene, so the
+    exclusion this asserts is one the stream can show (`wrapper.fight` flips the sign in `UPSET_FLOOR` of the
+    decided fights and leaves the trackers alone)."""
+    import random
+    from ..seam.wrappers._entry import entry_for
+    from ..state.ids import H
+    w = _world((4, 1))
+    got = _estimate(w)
+    entry, refusal = entry_for(combat._PRIZE, combat._PROVIDER)
+    assert entry is not None, refusal
+    inp = _ran("combat_input", combat.combat_input, w, [ACTOR, SUBJECT])
+    rng = random.Random(int(H(w.world_seed, w.tick, ACTOR, "estimate"), 16))
+    n = w.fixtures.get("estimate_samples")
+    by_trackers = dict.fromkeys(combat.ESTIMATE_OUTCOMES, 0)
+    disagree = scenes = 0
+    for _ in range(n):
+        r = _ran("entry.fn", entry.fn, inp, rng)
+        a, b = bool(r["wound_state"][ACTOR]["felled"]), bool(r["wound_state"][SUBJECT]["felled"])
+        if combat.surrender_of(r["trace"]) is not None:
+            by_trackers["yielded"] += 1
+        elif a and not b:
+            by_trackers["actor_felled"] += 1
+            disagree += r["result"] != -1
+        elif b and not a:
+            by_trackers["subject_felled"] += 1
+            disagree += r["result"] != 1
+        else:
+            by_trackers["undecided"] += 1
+        scenes += 1
+    assert scenes == n and scenes >= 100, scenes
+    for k in combat.ESTIMATE_OUTCOMES:
+        assert got[k] == by_trackers[k] / n, (k, got[k], by_trackers[k] / n)
+    assert disagree >= 1, "the stream never showed the sign and the trackers disagreeing: the control cannot fail"
 
 
 def _fight_act():

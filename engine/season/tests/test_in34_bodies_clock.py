@@ -373,8 +373,9 @@ def test_h129_a_wounded_then_starved_person_chains_to_the_wound_that_wrote_him_a
     it ANCHORS on the wounder (tier 1) and `last_emission_of("body.changed", pid)` by anchor answered for
     the wrong person: the victim's own later starvation write chained to `[ROOT]` (the wound that wrote his
     body was missed), and the WOUNDER's starvation write chained to the wound he had inflicted on somebody
-    else. Both ends are asserted at the SHIPPED step, the real fold (`fight`, a `Wounded` scene result) then
-    the real MATTER barrier:
+    else. Both ends are asserted at the SHIPPED step: a `fight` folded between two STAGED cohorts (their weights
+    are 1 around the fold, since CP-T03-01 refuses a cohort party; the wound is staged, not one `fight` could
+    deal them), then the real MATTER barrier:
       * `HURT` (wounded by `HIT`, then starved) chains to the wound Event that wrote HIS body;
       * `HIT` (the wounder, starved, never wounded) chains to `[ROOT]`, not to the wound he dealt.
     MUTATION, run at REM-52 (`written=True` taken back off the read in `loop/matter.py`): both assertions

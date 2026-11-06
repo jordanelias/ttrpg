@@ -189,12 +189,23 @@ def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: st
     tally = dict.fromkeys(ESTIMATE_OUTCOMES, 0)
     for _ in range(n):
         got = entry.fn(inp, rng)
+        # ⚠ THE FELLING IS READ OFF THE TRACKERS, NEVER OFF `result`'s SIGN (`ladder.party_degree`: "the bands read
+        # `felled`, never `result`"). `wrapper.fight` flips `result` after the scene in `UPSET_FLOOR` of the
+        # decided fights and leaves the trackers alone, so the sign names a winner the fold never grades by.
+        # Neither or both down is `undecided` (a draw has no one felled; a mutual felling names no one).
+        st = got["wound_state"]
+        if st.get(actor) is None or st.get(target) is None:
+            raise Unspecified(
+                f"personal combat sampled and a party's wound state is unavailable ({actor!r} / {target!r})",
+                "S39.4/H-98", needs="a `wound_state` entry, lifted off the party's own WoundTracker",
+                law="the shares are read off the scene's trackers; a party with none has no ending to count")
+        a_down, b_down = bool(st[actor]["felled"]), bool(st[target]["felled"])
         if surrender_of(got["trace"]) is not None:
             tally["yielded"] += 1
-        elif got["result"] == -1:
-            tally["actor_felled"] += 1     # `result` is A's (the actor, `claimants[0]`): `-1` is B winning
-        elif got["result"] == 1:
-            tally["subject_felled"] += 1   # A wins, so B is the one felled
+        elif a_down and not b_down:
+            tally["actor_felled"] += 1
+        elif b_down and not a_down:
+            tally["subject_felled"] += 1
         else:
             tally["undecided"] += 1
     return dict(status="ESTIMATED", module=_PROVIDER, samples=n, **{k: v / n for k, v in tally.items()})

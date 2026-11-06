@@ -28,7 +28,8 @@ from engine.season.state.gate import WriteClass
 from .test_in10_record_operands import _resolve
 from .test_rem30_character_sheet import _run
 
-#: The 1-season hashes of the parent tree (`d5358a9a`, CR-19, `PYTHONHASHSEED=0`), before CR-33 authored a row.
+#: The 1-season hashes with the expansion stubbed out (`PYTHONHASHSEED=0`), as of CP-T03-01's `individual` reads in
+#: `Event.observed` (the parent tree's, `d5358a9a`, were the previous values: `f2e5e265...`, `0d25717b...`, `05f065f4...`).
 BASE = {
     0: "662a784707fda3d5baac90b2ac852bcf",
     1: "af5ba681a6a3eac6b6607e5f674f7300",
