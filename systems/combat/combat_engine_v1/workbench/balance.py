@@ -14,7 +14,6 @@ import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
-import numpy as np
 import random
 import zlib
 import wrapper, config
@@ -25,7 +24,6 @@ def _seed(key):
     the re-baseline reference must NOT seed from it (audit finding). crc32 of the repr is stable across processes."""
     return zlib.crc32(repr(key).encode()) % 9999
 from combatant import Combatant
-import presets
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../../tests/sim/v32-combat-balance'))  # measurement harness reaches into the FROZEN v32 validation station BY DESIGN (dev tooling; doctrine container-hygiene exclusion, ED-1085)
 import r8_parity_harness as r8   # Class-M method constants: FINAL_TRIALS, WILSON_Z, BAND_LO/HI
 
@@ -212,12 +210,6 @@ def _md_trad(t):
            "| tradition | uncond. win% |", "|---|---|"]
     out += [f"| {a} | {p} |" for a, p in t['rows']]
     return "\n".join(out)
-
-
-def run_all(cfg=None, n=400):
-    cfg = cfg or config.CFG
-    return {'weapon': weapon_matchup_table(cfg, n), 'attr': attribute_parity_table(cfg, n),
-            'tradition': tradition_field_table(cfg, max(200, n // 2))}
 
 
 if __name__ == '__main__':

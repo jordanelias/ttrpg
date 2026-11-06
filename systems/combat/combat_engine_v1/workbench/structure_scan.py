@@ -236,17 +236,17 @@ def report():
     for k, v in sorted(zero_callers):
         print(f"    {k:34s} defined in {v}")
 
-    print(f"\n[C] Inline numeric literals inside function bodies (magic-number candidates)")
+    print("\n[C] Inline numeric literals inside function bodies (magic-number candidates)")
     print(f"    TOTAL across engine modules: {sum(magic.values())}")
     for name, c in magic.most_common():
         print(f"    {name:24s} {c}")
 
-    print(f"\n[D] Domain vocabulary strings hard-coded as literals (should be shared defs)")
+    print("\n[D] Domain vocabulary strings hard-coded as literals (should be shared defs)")
     print(f"    TOTAL occurrences: {sum(vocab_count.values())}  across {len(vocab_count)} tokens")
     for k, c in vocab_count.most_common(12):
         print(f"    '{k}'{'':<{max(0,16-len(k))}} {c}")
 
-    print(f"\n[E] Module shape (lines / code / comment / funcs / classes)")
+    print("\n[E] Module shape (lines / code / comment / funcs / classes)")
     for lines, code, comment, nfun, ncls, name in sizes:
         pct = round(100 * comment / max(1, code + comment))
         print(f"    {name:22s} {lines:5d} {code:5d} {comment:5d} ({pct:3d}% cmt) {nfun:3d} fn {ncls} cls")
@@ -255,13 +255,13 @@ def report():
     for mod, cname, nmeth in classes:
         print(f"    {mod:22s} {cname:20s} {nmeth} methods")
 
-    print(f"\n[G] sys.path.insert occurrences (packaging smell)")
+    print("\n[G] sys.path.insert occurrences (packaging smell)")
     print(f"    engine modules: {sum(c for _, c in syspath)} across {len(syspath)} files")
     print(f"    workbench:      {sum(c for _, c in syspath_wb)} across {len(syspath_wb)} files")
 
     dead = dead_exported_keys()
     counts = {s: len(v) for s, v in exported_keys().items()}
-    print(f"\n[H] DEAD EXPORTED PARAMS (in the typed Godot contract, zero live engine reader)")
+    print("\n[H] DEAD EXPORTED PARAMS (in the typed Godot contract, zero live engine reader)")
     print(f"    scope: {counts['cfg']} cfg + {counts['core']} core = {sum(counts.values())} exported params")
     print(f"    dead:  {dead}")
 

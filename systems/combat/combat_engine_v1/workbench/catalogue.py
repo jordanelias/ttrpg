@@ -1,6 +1,6 @@
 """catalogue.py — the complete value + mechanics catalogue for the personal-combat engine.
 
-WHY THIS IS GENERATED, NOT WRITTEN. A hand-authored catalogue of ~50 derived quantities across 51 weapons is
+WHY THIS IS GENERATED, NOT WRITTEN. A hand-authored catalogue of ~50 derived quantities across the weapons is
 ~2,000 numbers that go stale on the first constant change, and this repo has already paid for hand-maintained
 numbers three times (the ED-PC-0040 meta-review: "quantitative claims written faster than they were measured").
 So the catalogue is a QUERY. Two halves, both sourced from the code itself:
@@ -9,7 +9,7 @@ So the catalogue is a QUERY. Two halves, both sourced from the code itself:
       in this engine are maintained and provenance-tagged ([SIM-CALIBRATE] / [FIAT] / [ASSERTED] / ED refs), so
       quoting them beats paraphrasing them: the catalogue cannot drift from the code because it IS the code's
       own account of itself.
-  (2) VALUES — every per-weapon quantity evaluated for all 51 startable weapons against a NEUTRAL fighter, plus
+  (2) VALUES — every per-weapon quantity evaluated for all startable weapons against a NEUTRAL fighter, plus
       the coupling matrix over all four armour tiers and the constant tables.
 
 HONEST SCOPE. A quantity is per-weapon-tabulated only if it is a pure function of (weapon [+ neutral fighter]).

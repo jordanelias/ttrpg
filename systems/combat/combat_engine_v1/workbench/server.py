@@ -1,6 +1,6 @@
 """Combat Workbench backend (WS-6) — a tiny stdlib HTTP server. No external deps, no build step.
 
-Run:  python designs/scene/combat_engine_v1/workbench/server.py   then open http://localhost:8765
+Run:  python systems/combat/combat_engine_v1/workbench/server.py   then open http://localhost:8765
 
 Endpoints (all JSON except GET /):
   GET  /                -> the single-page app (static/index.html)
@@ -17,11 +17,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
-import numpy as np
 import random
 import wrapper
 from combatant import Combatant
-import presets, probabilities as P, narrate
+import presets, probabilities as P
 from commentary import commentate
 from trace import run_traced_fight
 
@@ -85,7 +84,6 @@ def do_montecarlo(req):
         else:
             draws += 1
     p, lo, hi = _wilson(a_wins, decided)
-    mirror = abs(round(50 * (1 - abs(2 * (a_wins / decided - 0.5))) if decided else 0, 1))  # inform/diagnostic
     return {'trials': trials, 'decided': decided, 'draws': draws,
             'A_winrate': p, 'ci_lo': lo, 'ci_hi': hi,
             'A_label': specA.get('label', 'A'), 'B_label': specB.get('label', 'B')}
