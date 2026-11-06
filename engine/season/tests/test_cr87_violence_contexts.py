@@ -262,7 +262,19 @@ def test_at_build_no_loyalty_row_names_a_faction_head_below_the_band_and_the_rev
 # THE REALM READING (the falsifier), THE MUTATION AND THE CONTROL
 
 
+_FIGHTS: dict = {}
+
+
 def _realm_fights(seed: int, seasons: int = 1) -> list:
+    """`_run_realm_fights`, once per (seed, seasons, decline on or off): the exit tests and their mutation controls
+    read the same realm, and a realm run is the cost of this file (batch close, accretion pass)."""
+    key = (seed, seasons, bool(O.VIOLENCE_CONTEXTS))
+    if key not in _FIGHTS:
+        _FIGHTS[key] = _run_realm_fights(seed, seasons)
+    return _FIGHTS[key]
+
+
+def _run_realm_fights(seed: int, seasons: int = 1) -> list:
     """Every `fight` Candidate formed, through the audit's own run: (actor, subject, same faction, stance, seats)."""
     box, forms = {}, []
     rb, ro = I.build_realm, I.opening_set
