@@ -39,9 +39,9 @@ from ..state.ids import H, draw_factory
 #   0d25717b85d52c4f156136fa724ae46e -> d81d7a7377008ddbe4000624e259f4b2
 #   05f065f4c917faf3d970f2c50cfd792f -> 43d2c5249670a51c24c1a102517e9567
 # the same three pins as `test_rem30_character_sheet.py::PRE_BUILD`.
-PRE_BUILD = {0: "69783660ea3ca2163bd346ee7e29e711",
-             1: "d81d7a7377008ddbe4000624e259f4b2",
-             2: "9ab1a7492246bf0ae324f4c0cfb65bdf"}  # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
+PRE_BUILD = {0: "71ff6e9280dc1c8cdecaf6ff45b1e384",
+             1: "73af0d1e84a9616b6c57940afd2737eb",
+             2: "011a46052caacfd800bcf70598306bcb"}  # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
 
 
 def _realm(retainers=2):

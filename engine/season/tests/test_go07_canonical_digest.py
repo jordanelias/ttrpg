@@ -601,14 +601,18 @@ def _counts(w) -> dict:
 # in process on this tree: `data/cast.py::capability_of` stubbed to `{}` reads the old `new` three exactly, and the ordered
 # (kind, id) event list over one season equals the parent tree's (`d5358a9a`) at seeds 0 / 1 / 2 (11581 / 10739 / 10985 events).
 # A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v10 CP-T03-01 (the `individual` conjunct on `fight`/`accept`): the only `old`/`new` movers. `Event.observed` is hashed and every
+# `fight`/`accept` that clears `exists`/`with` now records `individual:<actor>` reads (28 / 24 / 18 at one season). Was, for seeds 0 / 1 / 2: `old`
+# 65f9e76f... / cbbb8e0d... / b7960661..., `new` 69783660... / d81d7a73... / 9ab1a749.... `acts`, `census` and `counts` do NOT move. CONTROL: with those
+# reads left off `observed` (a scratch switch) the old three `new` values read exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
-    0: {"old": "65f9e76f278c59cfaaafecddaf695f9e", "new": "69783660ea3ca2163bd346ee7e29e711", "acts": 705,
+    0: {"old": "31619119f690342a0ff1d40ccd2e086c", "new": "71ff6e9280dc1c8cdecaf6ff45b1e384", "acts": 705,
         "census": "88601d2bf2cb8303647b238b44dfef1f83df0077844bcbb411e04b6c98b7c7ad",
         "counts": {"persons": 79, "rungs": 410, "offices": 34, "sites": 322, "records": 183, "propositions": 126, "dates": 3, "docket": 7, "tenures": 997, "log": 11581}},
-    1: {"old": "cbbb8e0d512c733ea3b7df5795754391", "new": "d81d7a7377008ddbe4000624e259f4b2", "acts": 697,
+    1: {"old": "63a729defcaf61b7f7c9b802e12b5e05", "new": "73af0d1e84a9616b6c57940afd2737eb", "acts": 697,
         "census": "f0508f10a816a9c36b6e4a30c6324359a0b1d89bb6af5afb81845ff47329379e",
         "counts": {"persons": 80, "rungs": 411, "offices": 34, "sites": 322, "records": 194, "propositions": 120, "dates": 3, "docket": 8, "tenures": 1004, "log": 10739}},
-    2: {"old": "b79606611b7a83644d54f2e938dfa756", "new": "9ab1a7492246bf0ae324f4c0cfb65bdf", "acts": 730,   # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr) moves seed 2 alone at one season (NPC-004 has left the world by then at seeds 0 and 1): was d7fbbe5c... / 43d2c524...
+    2: {"old": "1a8a10880432be2fd9efa72ae9e245d9", "new": "011a46052caacfd800bcf70598306bcb", "acts": 730,   # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr) moves seed 2 alone at one season (NPC-004 has left the world by then at seeds 0 and 1): was d7fbbe5c... / 43d2c524...
         "census": "c8be79b804c74658adb0153a991eb650da54fc5308c2b41353c4a5cfbeacf93b",
         "counts": {"persons": 81, "rungs": 412, "offices": 34, "sites": 322, "records": 186, "propositions": 142, "dates": 4, "docket": 4, "tenures": 1014, "log": 10985}},
 }

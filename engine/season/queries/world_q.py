@@ -4096,6 +4096,14 @@ class WorldReader:
             if subject not in w.rungs or arg not in w.persons:
                 return UNKNOWN
             return admits_audience(w, arg, subject)
+        if stem == "individual":
+            # v10 CP-T03-01 (B10-11): IS `subject` ONE PERSON AND NOT A COHORT -- `Person.is_cohort`
+            # (`weight > 1`), the one owner of the test. `arg` (the actor, a `relation` cell's second
+            # side) is not read: the cell asks of `subject` alone, and the same cell with `of: actor`
+            # asks it of the actor. UNKNOWN for a side that is no person (`ID-5`). The person side never
+            # answers this (`WORLD_ONLY_STEMS`).
+            p = w.persons.get(subject)
+            return UNKNOWN if p is None else not p.is_cohort
         if stem == "room":
             # v10 REM-29 (B10-06): IS THERE ROOM UNDER THE RUNG `subject` FOR THE ACTOR (`arg`) --
             # `audience`'s shape, through `has_room`, the one owner `_eff_migrate` calls too. UNKNOWN

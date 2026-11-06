@@ -383,7 +383,14 @@ def test_h129_a_wounded_then_starved_person_chains_to_the_wound_that_wrote_him_a
     assert w.fixtures.get("body_step") > 0, "this test reads the SHIPPED live arm; the control would be vacuous"
     act = Act(id="h129_wound", actor=HIT, verb="fight", payload={"subject": HURT})
     w.step = Step.RESOLVE
+    # v10 CP-T03-01: a cohort is never a party to a `fight` (the `individual` conjunct), and only cohorts starve. The
+    # wound is what this test needs, not the pair's eligibility: they are individuals for the fold and cohorts again
+    # for the barrier. The test is about which Event the barrier's write chains to.
+    for pid in (HIT, HURT):
+        w.persons[pid].weight = 1
     evs = SeasonDriver(w)._fold(w, mint_token(w, WriteClass.ACTS), act, wounded(HURT, full=10, left=5, actor=HIT))
+    for pid in (HIT, HURT):
+        w.persons[pid].weight = 2
     for ev in evs:                      # the fold returns the Events; the barrier logs them
         w.log.append(ev)
     (wound,) = [e for e in evs if e.kind == "body.changed" and any(c.subject == HURT for c in e.changes)]
