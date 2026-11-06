@@ -17,7 +17,7 @@ import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../../tests/sim/v32-combat-balance'))  # measurement harness reaches into the FROZEN v32 validation station BY DESIGN (dev tooling; doctrine container-hygiene exclusion, ED-1085)
-from math import erf, sqrt, exp
+from math import erf, sqrt
 import core                      # engine kernel (numpy-free since ED-1085)
 import m1_dice_sigma_core as m1  # frozen-harness constants (PER_DIE table) — resolved via the insert above
 
@@ -48,11 +48,6 @@ def degree_distribution(pool, net_sigma, ob):
     p_succ = F(t_over) - F(t_succ)
     d = {'fail': p_fail, 'partial': p_part, 'success': p_succ, 'overwhelming': p_over}
     return {k: max(0.0, round(v, 4)) for k, v in d.items()}
-
-
-def read_win_p(read_d, read_a):
-    """P(defender wins the read) = sigmoid(read_d - read_a) — the wrapper read contest (scale 1.0)."""
-    return round(1.0 / (1.0 + exp(-(read_d - read_a) / 1.0)), 4)
 
 
 def outcome_distribution(degree, mode, cfg, exposure=0.0):

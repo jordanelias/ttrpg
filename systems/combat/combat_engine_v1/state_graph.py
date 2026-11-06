@@ -242,8 +242,8 @@ if __name__ == '__main__':
     print(f"    separation reasons observed: {sorted(reasons)}")
     if dead_reasons:
         print(f"    [DEAD-BRANCH FLAG] separation reasons that NEVER fired in the sweep: {sorted(dead_reasons)}")
-        print(f"    -> these `return None` sites may be unreachable (cf. the 2026-06-09 map's stamina<=-4 note); "
-              f"give them a reachable trigger, demote to a documented guard, or delete.")
+        print("    -> these `return None` sites may be unreachable (cf. the 2026-06-09 map's stamina<=-4 note); "
+              "give them a reachable trigger, demote to a documented guard, or delete.")
 
     # (f) Felled reachability over a longer decisive sweep (a kill must occur somewhere)
     felled_seen = False
