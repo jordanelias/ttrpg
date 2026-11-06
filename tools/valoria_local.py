@@ -143,7 +143,7 @@ def main(argv):
         # Report-only, following the freshness_gate/wf_harness precedent above: all four scan
         # the WHOLE tree rather than the changeset, so a blocking local copy would hold an
         # unrelated commit hostage to a file the author is still writing. CI remains the
-        # unbypassable boundary (CLAUDE.md §8) and all four are blocking there, so nothing is
+        # full-suite tier (CLAUDE.md §8) and all four are blocking there, so nothing is
         # weakened — what changes is that local-green now SEES them. Measured cost: 4.9s total.
         # `build_identifier_census.py --check` stood here and is GONE (culling wave 5, ED-IN-0194,
         # 2026-08-22). The census roll-up and its 15 `systems/*/_identifier_census.yaml` sidecars are
