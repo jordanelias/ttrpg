@@ -130,11 +130,16 @@ class PersonalCombatInput:
                        string leaves every record built without the field fighting exactly as before. The ONE path
                        a non-lethal term reaches the fight by is `combat.py::combat_input`, from `rosters.yaml:
                        duel_terms` -- and, since v10 PC-10b, from the `stakes` of the `challenge` Record an
-                       `accept` is about (`world_q.stakes_of`), into this same field through the same function."""
+                       `accept` is about (`world_q.stakes_of`), into this same field through the same function;
+      * `kits`      -- each party's kit, `(weapon, armor)`, in `claimants` order, `ends`' shape (CP-T03-03,
+                       `world_q.kit_of`: what the rungs the person holds store, read not consumed). The module
+                       passes each to `Combatant(..., weapon=, armor=)`. The default is `()`: a record built
+                       without kits is fought by two Combatants at the engine's own default kit, exactly as before."""
     claimants: tuple
     ends: tuple
     wound_quantities: tuple
     terms: str = "death"
+    kits: tuple = ()
 
 
 @dataclass(frozen=True)

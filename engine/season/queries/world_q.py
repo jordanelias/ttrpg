@@ -40,7 +40,7 @@ from ..data.requires import (
 )
 from ..data.rosters import (
     CONTINUATION_TIES, SUCCESSIONS,
-    BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
+    ARMS_KINDS, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
     VERB_CAPABILITY,
@@ -107,7 +107,7 @@ from ..trace_log import TRACE
 from .inputs import (DrawRecord, DrawRow, Eater, FabricInput, FortInput, HousingInput, LarderInput,
                      ProduceInput, SubsistInput, Under)
 from ..data.fixtures import SITE_YIELD
-from engine.substrate import composition
+from engine.substrate import combat_kit as _combat_kit, composition
 
 
 # ===========================================================================
@@ -3286,6 +3286,41 @@ def founds_over(w: World, actor: Optional[str], seat, rung: Optional[str]) -> bo
             and purview_reaches(w, seat, rung)                                           # (ii)
             and rung_kind_ascends(w.rungs[rung].kind, w.rungs[seat.rung].kind)           # (iii)
             and seat_on_parent_of(w, seat, rung))                                        # (iv)
+
+
+def kit_of(w: World, pid: str) -> tuple:
+    """WHAT A PERSON FIGHTS WITH, `(weapon, armor)` (v11 CP-T03-03; `-08` AM-C-04; [ASSUMPTION; medium; Jordan to
+    correct; revert: drop `PersonalCombatInput.kits` and the `kits` fill in `seam/wrappers/combat.py::combat_input`]).
+    Per Combatant field, the HIGHEST-RANKED arms kind (`rosters.yaml: arms_kinds`) with a positive count in the stores
+    of the rungs the person `hold`s (his HOLDINGS, `in_holdings`' relation read off his own live edges: a `hold` whose
+    object is a rung), else of the rung he `reside`s in, else the Combatant's own default
+    (`engine/substrate/combat_kit.py::DEFAULTS`, read off `Combatant.__init__` by the exporter, never copied). A person
+    with holdings is read through his holdings ONLY: his residence is the fallback of a man who holds nothing, not a
+    second store. The field is the kind's, its key the kind's `key`, and the kit is READ, NEVER CONSUMED: nothing here
+    or at the fight writes a store.
+    ⚠ ONE KIT PER PERSON, NOT PER SIDE OF A FIGHT: the caller asks it of each party by his own id, so a party's kit
+    never depends on who he fights or who acts. With `arms_kinds` EMPTY (as shipped: the inventory is Jordan's) it
+    returns the default for everyone and reads nothing else. A person the world does not hold is asked about the same
+    way (his default): a kit is a fact about stores, not a gate on being a person."""
+    kit = dict(_combat_kit.DEFAULTS)
+    p = w.persons.get(pid)
+    if not ARMS_KINDS or p is None:
+        return kit["weapon"], kit["armor"]
+    live = [t for t in p.tenures if t.live]
+    rungs = sorted({t.object for t in live if t.kind == "hold" and t.object in w.rungs})
+    if not rungs:
+        rungs = sorted({t.object for t in live if t.kind == RESIDE_KIND and t.object in w.rungs})
+        if len(rungs) > 1:
+            raise Forbidden(f"{pid!r} has two live `{RESIDE_KIND}` edges ({rungs!r})", "S15",
+                            law="plan position `19c` -- a person lives in ONE place; `residence_of`'s rule")
+    held = {k for r in rungs for k, n in (w.rungs[r].stores or {}).items() if n > 0}
+    best: dict = {}
+    for kind in sorted(held & set(ARMS_KINDS)):
+        field, key, rank = ARMS_KINDS[kind]
+        if field not in best or rank > best[field][0]:
+            best[field] = (rank, key)
+    kit.update({field: key for field, (_rank, key) in best.items()})
+    return kit["weapon"], kit["armor"]
 
 
 def holdings_to_found(w: World, p: Person) -> tuple:

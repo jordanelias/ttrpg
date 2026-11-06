@@ -1718,6 +1718,34 @@ rosters:
       available — but it is still a choice, which is what `H-11` grades.
     values: [grain, salt, timber, ore, coin]
 
+  arms_kinds:
+    source: "v11 CP-T03-03 (`-08` AM-C-04; T03 home §2): arms are `matter_kinds` members, so a person's kit is what the rungs he holds store."
+    note: >-
+      `kinds:` maps an ARMS KIND to the one Combatant field it fills and the key it sets there:
+      `{<kind>: {field: weapon|armor, key: <a weapons.py WEAPONS key | an armour tier>, rank: <int>}}`. Each kind
+      must be a `matter_kinds` member, `field` one of the fields `engine/substrate/combat_kit.py::FIELDS` names, `key`
+      a member of THAT FIELD'S closed set in the same module (the typed `kit` section of
+      `engine/engine_params/combat_engine_v1.json`, `tools/export_engine_params.py --check`) and `rank` a whole
+      number, unique among the kinds of one field; refused whole at import otherwise
+      (`data/rosters.py::_check_arms_kinds`). The key sets are never copied here.
+      `queries/world_q.py::kit_of` is the one reader: per field, the highest-ranked kind with a positive count in the
+      stores of the rungs the person holds, else of his residence, else the Combatant's own default.
+      ⚠ EMPTY ON PURPOSE: which arms exist, which key each sets and how they rank is Jordan's content and is not
+      invented here (`-08` AM-C-04). While `kinds:` is empty `kit_of` returns the Combatant default for everyone and
+      every fight is dealt exactly as before the mechanism existed.
+    kinds: {}
+
+  arms_at_build:
+    source: "v11 CP-T03-03 (`-08` AM-C-04): the arms a rung is built holding, by the rung's kind [ASSUMPTION; medium; Jordan to correct]."
+    note: >-
+      `kinds:` maps a RUNG KIND to the stores that kind of rung is seeded with when a realm is built:
+      `{<rung kind>: {<arms kind>: <positive whole number>}}`. Every key must be a `rung_kinds` member, every inner key
+      an `arms_kinds` member (so a seed can only name an arm that has a kind), every amount a positive whole number;
+      refused whole at import otherwise (`data/rosters.py::_check_arms_at_build`). `harness/populated.py::build_realm`
+      is the one seeder (`seed_arms`). ⚠ EMPTY ON PURPOSE, as `arms_kinds` is: the inventory is Jordan's content, so
+      no rung is built holding arms and `build_realm`'s world is unchanged.
+    kinds: {}
+
   wear_per_season:
     source: "#353 §22 assigns `wear per site kind` to params; no in-chain table exists. `H-07`."
     row: H-07

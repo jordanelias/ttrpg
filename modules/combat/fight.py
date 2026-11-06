@@ -29,6 +29,12 @@ from engine.substrate import pc_engine
 _MISSING = object()   # `getattr`'s default for a tracker field the engine does not carry (None is a value)
 
 
+def _kit_kw(kit) -> dict:
+    """`Combatant`'s keyword arguments for one party's `(weapon, armor)` kit; `None` (no kit given) is none, so the
+    Combatant keeps its own defaults."""
+    return {} if kit is None else dict(weapon=kit[0], armor=kit[1])
+
+
 def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
           decide: Optional[Callable[[CombatTurnView], str]] = None) -> dict:
     """Fight one bout scene between the record's two parties. RESOLVED -> dict(status, result, trace,
@@ -49,7 +55,11 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
     wrapper, combatant = pc_engine.load()
     a_id, b_id = inp.claimants
     a_end, b_end = inp.ends
-    A, B = combatant.Combatant(a_id, end=a_end), combatant.Combatant(b_id, end=b_end)
+    # THE KITS (CP-T03-03): each party's `(weapon, armor)` in `claimants` order, read off the typed input. A record
+    # built without them (`kits == ()`) is two Combatants at the engine's own default kit, as before.
+    a_kit, b_kit = getattr(inp, "kits", ()) or (None, None)
+    A = combatant.Combatant(a_id, end=a_end, **_kit_kw(a_kit))
+    B = combatant.Combatant(b_id, end=b_end, **_kit_kw(b_kit))
     trace: list = []
     prev = getattr(wrapper, "_TRACE", None)
     # THE DUEL TERMS (RS-25, PC-10a): read off the typed input when it carries them, else the engine's lethal

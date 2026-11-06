@@ -86,7 +86,7 @@ from ...gaps import Forbidden, Unspecified
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup).
 from ...manifest.providers import provider
 from ...queries.inputs import PersonalCombatInput, PlayHost
-from ...queries.world_q import stakes_of
+from ...queries.world_q import kit_of, stakes_of
 from ...state.ids import H
 from ._entry import entry_for
 
@@ -187,8 +187,10 @@ def _cause_record(w: Any, causes: list) -> Optional[str]:
 def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = None) -> PersonalCombatInput:
     """THE HOST INPUT BUILDER (plan position `31b`, A-25): `World` -> the frozen record the fight reads.
 
-    Reads `w.persons` (the two claimants), `w.records` (a challenge's `stakes`, through `stakes_of`) and
-    `w.fixtures`, and nothing else; the module that consumes the record never sees `World`. Its precondition is the adapter's PARTY-GAP checks (`resolve`,
+    Reads `w.persons` (the two claimants), `w.records` (a challenge's `stakes`, through `stakes_of`), `w.fixtures`
+    and, for each party's `kits` entry, what his rungs store (`world_q.kit_of`, CP-T03-03: his holdings, else his
+    residence; the Combatant default for a person who holds no arms, which is everyone while `rosters.yaml:
+    arms_kinds` is empty), and nothing else; the module that consumes the record never sees `World`. Its precondition is the adapter's PARTY-GAP checks (`resolve`,
     below): two claimants, both persons.
 
     `verb` (CP-T03-09) is the act's verb and fills `terms` from `rosters.yaml: duel_terms` -- the ONE path a
@@ -205,6 +207,7 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
         claimants=(a_id, b_id),
         ends=(party_end(w.persons[a_id], w.fixtures), party_end(w.persons[b_id], w.fixtures)),
         wound_quantities=tuple(WOUND_QUANTITIES),
+        kits=(kit_of(w, a_id), kit_of(w, b_id)),
         **({} if terms is None else dict(terms=terms)))
 
 
