@@ -946,7 +946,7 @@ verbs:
     emits_on_refusal: ["accept.refused"]
     grade:       "assumption"
     grade_note: "the VERB and its `contests:` are ruled (ED-IN-0261); the composition as challenge-then-accept rests on a short reply, [medium]; the Record binding, the stem and the yield are v10 PC-10b's [ASSUMPTION; medium]; the rest is `fight`'s row, carried."
-    source:      "ED-IN-0261 (2026-09-20; as narrowed 2026-10-06); `fight`'s row for the writes, emits and cell; v10 PC-10b (`workplans/valoria_master_workplan_v11_part4.md` `### PC-10`; `engine/season/hole_register.yaml` H-240)"
+    source:      "ED-IN-0261 (2026-09-20; as narrowed 2026-10-06); `fight`'s row for the writes, emits and cell; v10 PC-10b (commit `d2847e7b`; `engine/season/hole_register.yaml` H-240)"
   - verb:        "requisition"
     scale:   "settlement"
     scale_note: "a requisition moves a Rung's stores -- the rung IS the subject"

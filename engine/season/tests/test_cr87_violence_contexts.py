@@ -1,5 +1,4 @@
-"""v11 CR-87 -- VIOLENCE MADE EXCEPTIONAL (ED-IN-0335 to ED-IN-0337, ED-IN-0340; `workplans/valoria_master_workplan_v11_part4.md`
-`### CR-87`).
+"""v11 CR-87 -- VIOLENCE MADE EXCEPTIONAL (ED-IN-0335 to ED-IN-0337, ED-IN-0340; commit `c7145842`).
 
 Six parts, each read here through the code that carries it:
   (1) `rosters.yaml: violence_contexts` -- a person-side formation decline: `fight` forms on a subject only where the actor

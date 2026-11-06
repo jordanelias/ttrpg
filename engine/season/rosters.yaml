@@ -2545,7 +2545,7 @@ rosters:
 
   violence_contexts:
     source: >-
-      v11 CR-87 (`workplans/valoria_master_workplan_v11_part4.md` `### CR-87` (1); ED-IN-0337, RULED, Jordan
+      v11 CR-87 (commit `c7145842` (1); ED-IN-0337, RULED, Jordan
       2026-11-05: fighting is exceptional -- it belongs to civil war, criminal contexts and duels, is rare in
       civil society and is not simply chosen); `held_edge_declines`' shape (above), `verb: [context, ...]`.
     note: >-
@@ -2575,7 +2575,7 @@ rosters:
 
   violent_prizes:
     source: >-
-      v11 CR-87 (`workplans/valoria_master_workplan_v11_part4.md` `### CR-87` (3): the grudge's weight on the
+      v11 CR-87 (commit `c7145842` (3): the grudge's weight on the
       violent rows only).
     note: >-
       THE CONTEST PRIZES WHOSE ROWS ARE VIOLENT -- a list of `contest_subsystems.prizes` keys. A row is violent

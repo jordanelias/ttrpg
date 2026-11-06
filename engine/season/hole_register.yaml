@@ -4947,7 +4947,7 @@ rows:
     kind:      "PRODUCER"
     owner:     "limit (1): the grammar -- either a Record-content relation stem (`names:<operand>`: the Record `subject` names X under key K) with a challenger content key and `counterparty: to` on `accept`, or a derivation route by which a classed Record referent answers its own non-`subject` operands from the holder's content claim (`decision/options.py`); the first adds a stem (a declared grammar change); the second adds none (no form, no stem) but edits `decision/options.py`, which PC-10b's EDITS list does not name, and shifts derivation for `comply`. A third route was weighed and rejected: the `warrant_sourced` narrowing (`rosters.yaml`, `options.py`) with a challenge kind whose `terms` is written as the actor, as `cover` does -- it narrows computed formation but cannot refuse a hand-built `accept` with no challenge behind it before the scene draws, which is PC-10b's own falsifier. Limit (2), a residue and not a reason to stop (the plan already declares that `accept` may fall to 0 in computed play): `ED-IN-0292` (1) is RULED NO (its last row, 2026-10-14), so a minted challenge reaches its addressee only by a `give`, and `give` is unreached in the realm (H-229's cite). Limit (3): a computed `challenge` carries no payload, so `stakes` needs a declared default for computed play (`death` keeps today's lethal duels)."
     grade:     "measured"
-    default:   "PC-10b NOT BUILT: no `challenge` record kind, no `challenge_terms` roster, no `stakes` key, `accept` keeps the `existence` + `with` cell (IN-59 (a)) and still forms with no challenge behind it, `PersonalCombatInput` has no `terms` field, the seam passes none, no `duel.yielded`. PC-10a's stop rule (`modules/combat/wrapper.py::fight(terms=)`, landed `daae7401`) stays inert, read by nothing in `engine/season/`; every duel is lethal, as today. When PC-10b is built: its `terms` field on `PersonalCombatInput` defaults to `\"death\"` (a `None` default raises in the module); its `challenge_terms` roster is CHECKED against `wrapper.DUEL_TERMS` by a test or at driver construction through `pc_engine`, never imported by `engine/season/data` (`test_importing_every_engine_module_pulls_in_no_subsystem` refuses a code-root import at load), and not declared a second time unchecked; and adding `challenge` to `RECORD_REFERENT_KINDS` widens `admits_audience`'s writ limb (it trusts every kind in that set through `writs_held`), so the limb must then require the creating act's verb to be `issue` or PC-10b must name the widening."
+    default:   "BUILT at B10-11 (PC-10b, commit `d2847e7b`, route (1); a computed duel is fought under `duel_terms`' `accept` line, `blood`, since CR-87, commit `c7145842`); THE TEXT FROM HERE IS WHAT IT REPLACED. PC-10b NOT BUILT: no `challenge` record kind, no `challenge_terms` roster, no `stakes` key, `accept` keeps the `existence` + `with` cell (IN-59 (a)) and still forms with no challenge behind it, `PersonalCombatInput` has no `terms` field, the seam passes none, no `duel.yielded`. PC-10a's stop rule (`modules/combat/wrapper.py::fight(terms=)`, landed `daae7401`) stays inert, read by nothing in `engine/season/`; every duel is lethal, as today. When PC-10b is built: its `terms` field on `PersonalCombatInput` defaults to `\"death\"` (a `None` default raises in the module); its `challenge_terms` roster is CHECKED against `wrapper.DUEL_TERMS` by a test or at driver construction through `pc_engine`, never imported by `engine/season/data` (`test_importing_every_engine_module_pulls_in_no_subsystem` refuses a code-root import at load), and not declared a second time unchecked; and adding `challenge` to `RECORD_REFERENT_KINDS` widens `admits_audience`'s writ limb (it trusts every kind in that set through `writs_held`), so the limb must then require the creating act's verb to be `issue` or PC-10b must name the widening."
     site:      "`engine/season/loop/resolve.py` (the counterparty read, `payload[row.opponent_operand()]`); `engine/season/seam/wrappers/combat.py` (the two-claimant PARTY-GAP); `engine/season/decision/options.py` (`_derive_operand`, `operand_bags`); `engine/season/data/requires.py` (`REQUIRES_STEMS`); `engine/season/rosters.yaml` (`record_sourced_operands`, `record_kinds`)"
     sweep:     ["PC-10b unbuilt (shipped)", "a Record-content relation stem + `counterparty: to` on `accept`", "a classed-Record derivation route in `opening_set`"]
     unblocks:  "PC-10b: the `challenge` Record and `challenge_terms`, `accept` bound to a held challenge, `duel.yielded`; R-05's `accept` residue (`accept`'s `requires_note`) and the `challenge`/`accept` HANDOFF_IN row"
@@ -5107,7 +5107,7 @@ rows:
     sweep:     ["None (the revert: 1 + stance_gain)", "0", "0.5", "1.0", "1.5", "2.0 (SHIPPED)"]
     unblocks:  "CR-88's duty term, which re-weighs what a grudge may licence once duty exists"
     cite:      "BUILT at B10-11 (CR-87). FALSIFIER: `engine/season/tests/test_cr87_violence_contexts.py` -- the violent row reads the fixture and every other row `1 + stance_gain` (a non-violent opponent row, `speak`, is untouched); a -4 grudge in a war context ranks `fight` first at the shipped value. CONTROL: None reproduces the pre-item hash (the same test file's control)"
-    source:    "v11 CR-87 (`workplans/valoria_master_workplan_v11_part4.md` `### CR-87` (3)), batch B10-11"
+    source:    "v11 CR-87 (commit `c7145842` (3)), batch B10-11"
 
   - id:        H-253
     tier:      1
@@ -5120,7 +5120,7 @@ rows:
     sweep:     ["False (the revert)", "True (SHIPPED)"]
     unblocks:  "CR-88's betrayal reading (disaffection toward a head earned by deeds)"
     cite:      "BUILT at B10-11 (CR-87). FALSIFIER: `engine/season/tests/test_cr87_violence_contexts.py` -- at build no loyalty row puts the Spymaster below 0 toward the King, and every row naming a Proposition sits at or above the band. CONTROL: False reproduces the pre-item `build_realm(0)` hash (the same file's control)"
-    source:    "v11 CR-87 (`workplans/valoria_master_workplan_v11_part4.md` `### CR-87` (5)), batch B10-11"
+    source:    "v11 CR-87 (commit `c7145842` (5)), batch B10-11"
 
   - id:        H-254
     tier:      1
@@ -5133,7 +5133,7 @@ rows:
     sweep:     []
     unblocks:  "XE reachable on a real log: the study's ending in five cases (`strife-00` §9)"
     cite:      "MEASURED at B10-11 (CR-72) in a scratch run the producer recorded in `engine/season/tests/test_strife_execution.py`'s docstring and did not assert (a real `fight` by the Duke on the prisoner, over 60 act ids, reached a death every time); the file's tested path is a PLANTED death carrying an `exists` change, which reads XE on the live tenure and KL once it is closed one tick before. A claim about a real death is the record, not the test. Not fixed here: a reader rule belongs to the strife instrument's owner"
-    source:    "v11 CR-72 (`workplans/valoria_master_workplan_v11_part16.md` `### CR-72`), batch B10-11"
+    source:    "v11 CR-72 (commit `3bbe78b6`), batch B10-11"
 
 discharges:
   D1:   "row:H-01"
