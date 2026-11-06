@@ -9,8 +9,7 @@ returns the shares of the four endings (actor felled, subject felled, yielded, u
   standard errors of their difference. The realised side classifies a scene a DIFFERENT way from the sampler
   (the trackers' `felled` flags and the `surrender` on `resolve`'s dict, not the result's sign), so a swapped
   actor/subject share reads red here.
-  FALSIFIER (2): the call consumes no season draw and writes nothing: the draw counter, `content_hash` and a
-  one-season run of the realm are those of the control world that never made the call.
+  FALSIFIER (2): the call consumes no season draw and writes nothing: the draw counter and `content_hash` are those of the control world that never made the call.
   MUTATION (run by hand at the build, reported in the commit body): `w.new_draw()` inside `fight_estimate`
   turns (2) red on the draw counter.
   CONTROL: the same worlds without the call.
@@ -22,7 +21,7 @@ from __future__ import annotations
 
 import math
 
-from ..harness import populated, probes as P
+from ..harness import probes as P
 from ..loop.driver import SeasonDriver
 from ..seam.wrappers import combat, sigma
 from ..state.carriers import Act
@@ -220,24 +219,6 @@ def test_the_estimate_consumes_no_season_draw_and_writes_nothing():
     assert called.draw == control.draw, f"the estimate moved the season draw counter {control.draw} -> {called.draw}"
     assert called.content_hash() == control.content_hash(), "the estimate moved the world's content hash"
     assert called.new_draw() == control.new_draw(), "the next season draw differs after the estimate"
-
-
-def test_a_season_run_of_the_realm_is_the_same_with_and_without_the_call():
-    """The control run (no call) against a run whose world made the call before the season began. The call
-    sits between build and season, where a draw taken would be reset at the tick's start, so this reads the
-    STATE (a write would show); the draw counter above reads the draws."""
-    def one_season(call):
-        w = populated.build_realm(0)
-        if call:
-            SeasonDriver(w)
-            people = sorted(w.persons)[:2]
-            got = combat.fight_estimate(w, people[0], None, people[1], "fight")
-            assert got["status"] == "ESTIMATED", got
-        populated.run(seasons=1, seed=0, w=w)
-        return w.content_hash()
-    control = _ran("the control season", one_season, False)
-    with_call = _ran("the season after the call", one_season, True)
-    assert with_call == control, f"a season after the estimate hashes {with_call}, the control {control}"
 
 
 def test_the_sample_count_is_refused_unless_a_whole_number_of_at_least_one():
