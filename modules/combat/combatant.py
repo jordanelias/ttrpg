@@ -63,7 +63,7 @@ class WoundTracker:
         self.rederive(end, spirit=spirit, strength=strength)
         self.cumulative_damage = 0
 
-    def rederive(self, end, spirit=3, strength=4):
+    def rederive(self, end, spirit, strength):
         """Recompute the maxima (WI, Max Wounds, full Health) from the attributes (PC-14). Touches NO damage:
         `cumulative_damage` is left as it stands, so damage taken is never erased by an attribute edit. The maxima are
         recomputed, so `wounds`, `health_remaining` and `felled` are re-read against the kept damage (raising `end`

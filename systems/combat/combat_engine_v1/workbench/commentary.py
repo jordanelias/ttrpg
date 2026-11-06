@@ -63,7 +63,7 @@ def commentate(events, cfg):
         elif k == 'engagement_start':
             if e['closed']:
                 out.append({'type': 'measure', 'line': "They start already at close quarters, blades almost touching.",
-                            'mech': "measure <= 0.3: the fight opens closed — straight to the tempo-gated exchange."})
+                            'mech': f"measure <= {cfg['CLOSE_GAP_REF']}: the fight opens closed — straight to the tempo-gated exchange."})
             else:
                 out.append({'type': 'measure',
                             'line': f"They square off at distance — {e['longer']} holds the longer reach, {e['shorter']} must close.",
