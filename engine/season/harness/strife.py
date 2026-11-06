@@ -265,7 +265,10 @@ def pair_profile(seqs, shuffles: int = 200, seed: int = 0) -> list:
     return [(p, n, ctl[p] / shuffles) for p, n in sorted(obs.items(), key=lambda kv: (-kv[1], kv[0]))]
 
 
-LINK_WINDOW = 3          # the study's window: `b` within the next 3 coded moves after `a`
+# the study's window: `b` within the next 3 coded moves after `a` (its Method, 'Links'; the study is not in the repo)
+LINK_WINDOW = 3  # [JUSTIFIED: the study's own window for a windowed link, inherited and not fitted; magnitude is the study's]
+# `pair_profile`'s shuffle count, shared by the two link readings
+CONTROL_SHUFFLES = 200  # [JUSTIFIED: the shuffle count pair_profile already uses; a mean over seeded permutations, not a rule parameter]
 
 
 def _by_pair(links) -> dict:
@@ -288,7 +291,7 @@ def _instances(coded, by_pair) -> list:
     return out
 
 
-def link_profile(seqs, links=LINKS, shuffles: int = 200, seed: int = 0) -> list:
+def link_profile(seqs, links=LINKS, shuffles: int = CONTROL_SHUFFLES, seed: int = 0) -> list:
     """The WINDOWED link count: `[(link, strands showing it, control mean), ...]` in `links` order. `seqs` is per strand,
     each move's list of codes; a move with no code is skipped. The control is the same count over each strand's coded
     moves in SHUFFLED ORDER (`shuffles` permutations with a seeded `random.Random`), as a mean number of strands: a
@@ -347,7 +350,7 @@ def flow_profile(seqs, links=LINKS) -> dict:
     return out
 
 
-def link_lines(seqs, links=LINKS, study=STUDY_FLOW, shuffles: int = 200, seed: int = 0, reachable=None) -> list:
+def link_lines(seqs, links=LINKS, study=STUDY_FLOW, shuffles: int = CONTROL_SHUFFLES, seed: int = 0, reachable=None) -> list:
     """The block's link lines and leave-and-rejoin lines for `seqs` (per strand, each move's codes). `reachable` is
     the codes a strand's move can carry (default `_REACHABLE`)."""
     reachable = _REACHABLE if reachable is None else reachable
