@@ -65,7 +65,7 @@ class WoundTracker:
 
     def rederive(self, end, spirit=3, strength=4):
         """Recompute the maxima (WI, Max Wounds, full Health) from the attributes (PC-14). Touches NO damage:
-        `cumulative_damage` is left as it stands: damage taken is never erased by an attribute edit. The maxima are
+        `cumulative_damage` is left as it stands, so damage taken is never erased by an attribute edit. The maxima are
         recomputed, so `wounds`, `health_remaining` and `felled` are re-read against the kept damage (raising `end`
         can lift a felled fighter, lowering it can fell one). A fight's own start zeroes the damage, in `wrapper.fight`."""
         self.wi = wound_interval(end, spirit)
@@ -165,7 +165,8 @@ class Combatant:
         """THE ONE DERIVATION PATH (PC-14): every figure derived from `attrs`, re-computed from the current values.
         Rebuilds the wound tracker's maxima (WI, Max Wounds, full Health) IN PLACE, PRESERVING `cumulative_damage` --
         damage taken is never erased by setting an attribute (the maxima move, so `felled` and `health_remaining` are
-        re-read against it); `wrapper.fight` zeroes the damage at its own start, because a fight begins unwounded. Sets `stamina_max` (cfg-free) and `conc_max` (3*Focus+2*Spirit, ED-902, from `cfg`), and
+        re-read against it); `wrapper.fight` zeroes the damage at its own start, because a fight begins unwounded.
+        Sets `stamina_max` (cfg-free) and `conc_max` (3*Focus+2*Spirit, ED-902, from `cfg`), and
         clamps live Stamina and Concentration DOWN to the new maxima (never raises them). `cfg=None` re-uses the cfg
         of the last derivation, `config.CFG` until one is given. Writes no Health/WI/Max-Wounds mirror on the
         Combatant (PC-11 deleted those): the tracker owns them."""

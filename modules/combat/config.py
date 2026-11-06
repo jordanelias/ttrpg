@@ -307,8 +307,8 @@ CFG = dict(
   # is partly this clamp rather than pure physics. If the design ever wants upsets to be diegetic instead of a
   # scoreboard edit, the in-fight home for them is a critical-opening mechanic, not a post-hoc flip — Jordan's call.
 
-  # ── PC-15: thresholds lifted from wrapper.py / combat_systems.py literals (each was inline; values and meanings kept, so the
-  # fingerprint's identity hash is unchanged; its CFG hash moves, seven keys being added). CLOSE_GAP_REF (above) is ALSO the one reach-gap threshold at the other three sites
+  # ── PC-15: thresholds lifted from wrapper.py / combat_systems.py literals (each was inline; values and meanings kept).
+  # CLOSE_GAP_REF (above) is ALSO the one reach-gap threshold at the other three sites
   # (re-presentation gate, reopen, disengage): a reopened gap at or below it re-closes at the approach step, so "a gap worth
   # acting on" and the closed latch are one fact. DEEP_COMMIT: the commit depth at/above which a commit is DEEP (the Indes
   # steal, the displace-and-step-inside route, and the shorter fighter's over-commit reopen moment); it is also the anchor

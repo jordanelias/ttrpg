@@ -17,7 +17,7 @@ PAIRWISE quantities — anything taking (aggressor, defender) or (longer, shorte
 construction; they are listed in the mechanics half with their inputs and explicitly marked, never silently
 dropped. The header states the partition so a reader knows what is NOT tabulated and why.
 
-NEUTRAL FIGHTER. Attributes at the balance.py baseline (str/agi/end 4, rest 3, disp 4), no skills, no equipped
+NEUTRAL FIGHTER. Attributes at the spec's defaults (`modules/combat/attributes.py`), no skills, no equipped
 techniques, no tradition, light armour, grip 0 (open measure, as-issued), full swing room. Every value below is
 therefore "this weapon in a neutral hand" — the weapon's own contribution, isolated from the build.
 
