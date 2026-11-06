@@ -206,9 +206,14 @@ def attackers_of(ledger, patient: str, kinds: frozenset, window: int = 1) -> fro
     if not kinds:
         return frozenset()
     recent = {id(c) for c in recent_claims(ledger, window)}
-    seen = _seen_index(ledger)
-    return frozenset(d for c in suffered_deeds(ledger, patient) if id(c) in recent and c.predicate in kinds
-                     for d in (deed_doer(c, seen),) if d is not None)
+    seen, out = None, set()
+    for c in suffered_deeds(ledger, patient):
+        if id(c) in recent and c.predicate in kinds:
+            seen = _seen_index(ledger) if seen is None else seen      # built only when a claim qualifies
+            d = deed_doer(c, seen)
+            if d is not None:
+                out.add(d)
+    return frozenset(out)
 
 
 # v9 IN-58: THE DEED KINDS JUDGED ONLY THROUGH THE `seen.who` PAIRING -- every DEED kind no single

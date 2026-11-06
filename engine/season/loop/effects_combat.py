@@ -41,6 +41,16 @@ from .effects_shared import _debit, _operand, effect_for
 # The fold's scar reads `a.verb`, so a duel's moral layer reads `accept`'s own alignment cells. (`challenge`
 # writes nothing and needs no effect: `VerbRow.effect_carried`.) `fight` was RENAMED from
 # "kill / wound" (plan `FIGHT-RENAME`); only the `EFFECTS` key and its row moved.
+CAPTURED = "person.captured"        # the one kind `capture`'s opened `detain` earns (`verb_table.yaml`'s `capture` row)
+DUEL_YIELDED = "duel.yielded"       # v10 PC-10b: the kind a duel's yielder earns (`verb_table.yaml`'s `accept` row)
+
+
+def _yielder(res: "Resolution") -> "str | None":
+    """THE PARTY THE SCENE'S `surrender` NAMES (`seam/wrappers/combat.py::surrender_of`, lifted onto the result), or
+    `None`. The one reader both effects ask; `_eff_kill` has already refused a `res` with no dict result."""
+    return (res.result.get("surrender") or {}).get("by")
+
+
 @effect_for("fight")
 @effect_for("accept")
 def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
@@ -204,8 +214,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # (`seam/wrappers/combat.py::surrender_of`, lifted off the trace) names. A band declaring it (`accept`'s
     # `Wounded`) would otherwise hand it to every wounded party, a yield nobody made (ID-9). Read off the
     # result, never the verb: a row whose band does not declare the kind emits nothing of it (`_fold`).
-    result = res.result if isinstance(res.result, dict) else {}
-    yielder = (result.get("surrender") or {}).get("by")
+    yielder = _yielder(res)
     named: tuple = ()
     for pid, band in bands.items():
         own = () if band == FELLED else own_kinds(row.emits_at(band))
@@ -213,10 +222,6 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         named += (death_subjects(w, pid, own, fields=("body",)) if bodies[pid] == 0
                   else (Subject.entity("persons", pid, earns=own, fields=("body",)),))
     return Change(named, perform)
-
-
-CAPTURED = "person.captured"        # the one kind `capture`'s opened `detain` earns (`verb_table.yaml`'s `capture` row)
-DUEL_YIELDED = "duel.yielded"       # v10 PC-10b: the kind a duel's yielder earns (`verb_table.yaml`'s `accept` row)
 
 
 @effect_for("capture")
@@ -250,17 +255,14 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     base = Change(tuple(replace(s, earns=tuple(k for k in s.kinds if k != CAPTURED)) if CAPTURED in s.kinds else s
                         for s in base.subjects), base.apply)
     prisoner = _operand(a, "subject")
-    result = res.result if res is not None and isinstance(res.result, dict) else {}
-    yielded = result.get("surrender")
-    if (yielded is None or yielded.get("by") != prisoner or prisoner not in w.persons
-            or prisoner == a.actor or restrained(w, prisoner, DETAIN_KIND)):
+    if _yielder(res) != prisoner or prisoner not in w.persons or prisoner == a.actor:
         return base
     # A PARTY THE BASE REMOVES CANNOT BE HELD OR HOLD. `person.died` is the base's own record of it: a felled party
     # (every arm), and a WOUNDED one under `wound_harm_model: total` (`_harm` writes body 0 there, so `_wound`
     # removes him). Read off the base's subjects, the one owner, never recomputed from the band: an edge on a man
     # the same write removes -- or opened by a seat whose holder it removes -- is refused at the gate
     # (`NotYours`), and nothing in the fold catches that, so the season would end.
-    if any(PERSON_DIED in s.kinds for s in base.subjects):
+    if any(PERSON_DIED in s.kinds for s in base.subjects) or restrained(w, prisoner, DETAIN_KIND):
         return base
     if a.via is None or not may_warrant(w, a.actor, a.via, prisoner) or not _may_close_custody(w, a.via, prisoner):
         return base

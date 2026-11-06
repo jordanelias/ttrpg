@@ -73,7 +73,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, fields
 
-from .world_q import establishment_of, members
+from .world_q import WAR_MOOD, at_war, establishment_of, members  # noqa: F401 -- v11 CR-87: the first two MOVED to `world_q` (the war context's `enemies_heard` reads `at_war`, and this module imports `world_q`, so the reverse import would be a cycle); re-exported so every `faction_q.at_war` caller reads the one owner
 from ..data.rosters import FACTION_BY_PROP, HEAD_SEAT, RECORD_KIND_KEYS
 from ..gaps import Unspecified
 from ..state.containment import descendants
@@ -214,12 +214,6 @@ def subordinates(w: World, seat: str) -> list:
     returns sorted ids."""
     TRACE.query("subordinates", "resolver")
     return sorted(establishment_of(w, seat))
-
-
-# v11 CR-87: `WAR_MOOD` and `at_war` MOVED, unchanged, to `queries/world_q.py` -- the war context's standing
-# occasion (`world_q.enemies_heard`) reads `at_war`, and this module imports `world_q`, so the reverse import
-# would be a cycle. Re-exported here, so every `faction_q.at_war` caller reads the one owner.
-from .world_q import WAR_MOOD, at_war  # noqa: E402,F401 -- re-exported; the owner is `world_q`
 
 
 # THE `record_kinds` MEMBER A SURVEY MINTS -- `world_q.WORKS_KIND`'s shape: named once, beside the

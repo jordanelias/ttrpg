@@ -315,7 +315,8 @@ def _eff_challenge(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     ⚠ A `stakes` OUTSIDE `challenge_terms` IS REFUSED BEFORE ANYTHING IS WRITTEN, naming the roster -- a hand-built
     act's caller defect, as `duel_terms_of` refuses a roster term the engine does not name. `challenge_terms` is
     held equal to the engine's `DUEL_TERMS` by a test, never imported here."""
-    stakes = a.payload.get(STAKES_KEY) if isinstance(a.payload, dict) else None
+    d = a.payload if isinstance(a.payload, dict) else {}
+    stakes = d.get(STAKES_KEY)
     if stakes is not None and stakes not in CHALLENGE_TERMS:
         raise Forbidden(
             f"a `challenge` by {a.actor!r} names stakes {stakes!r}, not one of `challenge_terms` "
@@ -329,7 +330,6 @@ def _eff_challenge(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
                if key in RECORD_KIND_KEYS[CHALLENGE_KIND]}
     content.update({RECORD_CONTENT.get("addressee"): _operand(a, "subject"),
                     STAKES_KEY: stakes, CHALLENGER_KEY: a.actor})
-    d = a.payload if isinstance(a.payload, dict) else {}
     return _mint_document(w, a, CHALLENGE_KIND, content, d.get("rung") or a.actor)
 
 

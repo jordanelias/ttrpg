@@ -212,7 +212,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         if contexts and refs:
             if records is None:
                 records = held_record_claims(p)
-            refs = tuple(r for r in refs if violence_context_of(p, q, r, contexts, records) is not None)
+            memo: dict = {}          # what a reader derives from the actor alone, once per call, not once per referent
+            refs = tuple(r for r in refs if violence_context_of(p, q, r, contexts, records, memo) is not None)
         # v9 IN-26 (`rosters.yaml: own_hold_declines`, `A-13`): A VERB A PERSON FORMS ONLY ON A REFERENT HE
         # HIMSELF HOLDS -- `destroy_record`, the person-side reading of its own `held_by` conjunct. The
         # objects of his OWN live `hold` Tenures, no World; computed once per call, only if such a row
@@ -406,7 +407,14 @@ def subject_is_opponent(row: "VerbRow") -> bool:
     return bool(row.contests) and row.opponent_operand() == "subject"
 
 
-# v11 CR-87 (ED-IN-0337): THE CONTEXTS OF VIOLENCE, each a person-side reader `(p, q, subject, records) -> bool`
+# v11 CR-87: THE VIOLENT ROWS WHOSE SUBJECT IS THEIR OPPONENT (`data/verbs.py::VIOLENT_VERBS`, off `rosters.yaml:
+# violent_prizes`, narrowed by `subject_is_opponent`): `fight` and `capture`. `accept` is violent and its opponent is
+# `to` (PC-10b), so it is not in it (H-252). One owner for the conjunct the grudge bound (`choose.stance_term`), the
+# DEFENCE deed kinds and the violence-decline import check each ask.
+VIOLENT_OPPONENT_VERBS = frozenset(v for v in VIOLENT_VERBS if subject_is_opponent(VERB_TABLE[v]))
+
+
+# v11 CR-87 (ED-IN-0337): THE CONTEXTS OF VIOLENCE, each a person-side reader `(p, q, subject, records, memo) -> bool`
 # over the actor's own Tenures, his own ledger (`records`: `held_record_claims(p)`, computed once per
 # `opening_set` call) and the question he answers -- never a World (AX-2). `rosters.yaml: violence_contexts`
 # names which of them admit a verb; this mapping is the closed set of names (a fact of code: the readers).
@@ -424,14 +432,14 @@ def _context(name: str):
 
 
 @_context("war")
-def _war_context(p: Person, q: Question, r: str, records: list) -> bool:
+def _war_context(p: Person, q: Question, r: str, records: list, memo: dict) -> bool:
     """WAR: `r` is stamped `Enemy` on his question (`world_q.enemies_heard`: a war he knows of, `r` of the other
     faction)."""
     return r in q.referents_for(ENEMY_CLASS)
 
 
 @_context("crime")
-def _crime_context(p: Person, q: Question, r: str, records: list) -> bool:
+def _crime_context(p: Person, q: Question, r: str, records: list, memo: dict) -> bool:
     """CRIME: a warrant he holds, ADDRESSED TO HIM, names `r` (a held Record of a `warrant_sourced` kind, answered
     through `record_sourced_operands`' `subject` key -- the reading `arrest` forms on -- whose addressee is he,
     `person_q.addressed_to`, IN-12 step 5a's one owner), or `r` is stamped `Detainee` on his question (a live `detain`
@@ -447,7 +455,7 @@ def _crime_context(p: Person, q: Question, r: str, records: list) -> bool:
 
 
 @_context("duel")
-def _duel_context(p: Person, q: Question, r: str, records: list) -> bool:
+def _duel_context(p: Person, q: Question, r: str, records: list, memo: dict) -> bool:
     """DUEL: he holds a `challenge` Record (PC-10b) whose two parties -- its challenger (`to`'s key) and the
     challenged (`subject`'s), read through `record_sourced_operands` -- are himself and `r`, either way round."""
     pair = {p.id, r}
@@ -456,25 +464,28 @@ def _duel_context(p: Person, q: Question, r: str, records: list) -> bool:
 
 
 @_context("defence")
-def _defence_context(p: Person, q: Question, r: str, records: list) -> bool:
+def _defence_context(p: Person, q: Question, r: str, records: list, memo: dict) -> bool:
     """DEFENCE [ASSUMPTION; medium; Jordan to correct; revert: drop `defence` from the roster]: he saw `r` do to him,
     in the newest season his ledger holds, a deed of a kind a violent opponent-rule row emits (`person_q.attackers_of`,
     `_OPPONENT_DEED_KINDS` below)."""
-    return r in attackers_of(p.ledger, p.id, _OPPONENT_DEED_KINDS)
+    if "attackers" not in memo:        # depends on the actor alone, never on `r`: one ledger pass per call
+        memo["attackers"] = attackers_of(p.ledger, p.id, _OPPONENT_DEED_KINDS)
+    return r in memo["attackers"]
 
 
 # The deed kinds a DEFENCE reads: the paired kinds (a patient on the claim) emitted by a VIOLENT opponent-rule row
 # (`data/verbs.py::VIOLENT_VERBS`: `fight`, `capture`), off the table, no kind listed. NARROWED from "any opponent-rule
 # row" [ASSUMPTION; medium; Jordan to correct; revert: drop the `VIOLENT_VERBS` test]: `speak` is an opponent-rule
 # row too, and its `pursuit.moved` would make a hard word a licence to fight.
-_OPPONENT_DEED_KINDS = frozenset(k for v, row in VERB_TABLE.items() if subject_is_opponent(row) and v in VIOLENT_VERBS
-                                 for k in row.emits if k in PAIRED_KINDS)
+_OPPONENT_DEED_KINDS = frozenset(k for v in VIOLENT_OPPONENT_VERBS for k in VERB_TABLE[v].emits if k in PAIRED_KINDS)
 
 
-def violence_context_of(p: Person, q: Question, r: str, contexts: tuple, records: list) -> Optional[str]:
+def violence_context_of(p: Person, q: Question, r: str, contexts: tuple, records: list,
+                        memo: Optional[dict] = None) -> Optional[str]:
     """THE FIRST OF `contexts` (`rosters.yaml: violence_contexts`' line) IN WHICH `p` HOLDS VIOLENCE AGAINST `r`, or
     `None`. The one reader of the decline, for `opening_set` and any instrument that asks why a fight formed."""
-    return next((name for name in contexts if VIOLENCE_CONTEXT_READERS[name](p, q, r, records)), None)
+    memo = {} if memo is None else memo
+    return next((name for name in contexts if VIOLENCE_CONTEXT_READERS[name](p, q, r, records, memo)), None)
 
 
 for _v, _ctx in VIOLENCE_CONTEXTS.items():

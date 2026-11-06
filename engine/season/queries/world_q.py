@@ -66,9 +66,7 @@ from .person_q import (
     _seen_index, crisis_weights, deed_valence, paired_deed_term, projected_axes)
 # v9 SC-02 `22a`: `reception` and `proofs` read which claims record a person's deeds, what each is worth
 # to its holder, and which deeds were done TO him, off the same person-side owners `regard` reads.
-from .person_q import attributed_deeds, deed_term, suffered_deeds
-# v11 CR-87: the `dispute` stem's one owner (`challenge`'s conjunct).
-from .person_q import holds_dispute
+from .person_q import attributed_deeds, deed_term, holds_dispute, suffered_deeds   # `holds_dispute`: v11 CR-87, the `dispute` stem's one owner
 # v9 IN-69: the one cosine (`cast.loyalty` calls it too).
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 # v9 IN-67: `goal_referents` reads a goal's `object:` off the ONE loader and a `deed_doers` goal's
@@ -1461,7 +1459,7 @@ def guard_weight(w: World, rung_id: str) -> int:
     return sum(w.persons[p].weight for p in sworn)
 
 
-def issuing_seat(w: World, rid: str) -> Optional[str]:
+def issuing_seat(w: World, rid: str, verb: Optional[str] = None) -> Optional[str]:
     """THE SEAT THAT ISSUED THE WRIT `rid` -- the `via` of the Act that caused the Record's CREATING
     Event (#453 §9.1 / K-52: *"read through `state/attribution.py::causing_act` on the warrant Record's
     creating Event -- that Act's `via`"*), or `None` when no Event wrote it (a hand-planted Record), no
@@ -1469,8 +1467,12 @@ def issuing_seat(w: World, rid: str) -> Optional[str]:
     the issuer still holds it). The creating Event is the
     FIRST in the log whose changes name the Record (`loop/matter.py`'s `prior` reads the last, for a
     different question). `arrest` and the `audience` stem's writ limb both ask it, and `queries/` may not
-    import `loop/`, so the one owner sits where both readers reach it."""
-    via = getattr(_creating_act(w, rid), "via", None)
+    import `loop/`, so the one owner sits where both readers reach it. `verb` (v10 PC-10b), when given, asks only
+    for a Record that verb's act minted (the writ limb passes `WRIT_MINTING_VERB`); `None` is every creating act."""
+    act = _creating_act(w, rid)
+    if verb is not None and getattr(act, "verb", None) != verb:
+        return None
+    via = getattr(act, "via", None)
     return via if via in w.offices else None
 
 
@@ -1575,10 +1577,8 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
     # v10 PC-10b: NARROWED TO RECORDS `issue` MINTED (`WRIT_MINTING_VERB`), so `challenge` joining
     # `RECORD_REFERENT_KINDS` does not widen the gate (a challenge is minted by an `own` act, and is no invitation).
     for rid in writs_held(w, p):
-        act = _creating_act(w, rid)
-        seat = getattr(act, "via", None)
-        if (getattr(act, "verb", None) == WRIT_MINTING_VERB and seat in w.offices
-                and purview_reaches(w, w.offices[seat], rung)):
+        seat = issuing_seat(w, rid, WRIT_MINTING_VERB)
+        if seat is not None and purview_reaches(w, w.offices[seat], rung):
             return True
     return False
 
