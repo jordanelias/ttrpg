@@ -185,7 +185,7 @@ class MassBattleInput:
       * `fort_level` -- its fortification, `world_q.fortification_of`, in `[0.0, 1.0]`;
       * `stances`   -- `(attacker, defender)`: each side's weight-mean stance toward its own faction
                        (`mass_battle.py::_side_stance`), which the module turns into a morale-start. ⚠ Since
-                       v11 CR-87 (5) that referent also carries every member's build-time loyalty row (H-253);
+                       v11 CR-87 (5) that referent also carries every member's build-time loyalty row (H-256);
                        the morale-start reads it with no gain;
       * `walls_dr`  -- the `field_walls_dr` fixture (`H-150`); `None` is A.9's own number, which the
                        module reads from its terrain table;
@@ -196,7 +196,7 @@ class MassBattleInput:
                        stance toward its faction creed's utterer (`mass_battle.py::_side_stance` with
                        `_creed_referent`, MB-03), which the module adds to the morale-start at
                        `loyalty_gain`. ⚠ Since v11 CR-87 (5) no built realm holds such a row (the loyalty row
-                       names the creed Proposition), so this reads 0 whatever `loyalty_gain` is (H-253);
+                       names the creed Proposition), so this reads 0 whatever `loyalty_gain` is (H-256);
       * `loyalty_gain` -- the `field_morale_loyalty_gain` fixture (`H-148`'s site); `0` is the control,
                        battle history only;
       * `troops_per_weight` -- REM-32: the `field_troops_per_weight` fixture (`H-250`), the scale from a side's

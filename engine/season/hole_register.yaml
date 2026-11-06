@@ -3220,7 +3220,7 @@ rows:
       (`loop/resolve.py`, before the provider or its `contest()` catch is reached) as
       `march.refused`; `subject = None` now means only 'no
       opposing holder' (own faction, or unheld), which resolves `Unopposed` and arrives. Still
-      enforced: `test_march.py::test_a_march_on_a_non_settlement_rung_refuses_h149_is_enforced`."
+      enforced: `test_march.py::test_a_march_on_a_non_settlement_rung_refuses_h149_is_enforced`. RE-READ at CR-71 (@5d6aac5, `aperture 2 0`, seed 0, `PYTHONHASHSEED=0`, REALM): `march.declared` 13, of which 10 were also `march.refused` with no recorded read and 3 were `field.unopposed`; `field.won` and `field.lost` were never emitted. Which branch refused (an empty `_parties`, a `ContestRefused`, or an effect that moved nobody) is not read; WA and WR stay at 0 here."
     source:    "M4 of the driver-retirement plan (`ED-IN-0279`), Jordan's ruling on the march
       target (M4 planning round 2)"
 
@@ -5098,6 +5098,45 @@ rows:
 
   - id:        H-252
     tier:      1
+    hole:      "WHICH CLAUSE REFUSES A `confer`, AN `establish` OR A `release` (CR-71, B11-S2). All three are predicate rows with no typed cell, so their refusal Event records no read: aperture's DECIDING READ reads `no-read`, and POST-ADMISSION never counts it, so the funnel cannot name the clause. They keep three strife codes without a named refusing read: IN (`confer`), RG (`establish`) and DA (`release`'s nine refusals; DA's other legs are that the two executed releases closed no `commit` edge, and that `forgive` is formed 4 and attempted 0)"
+    kind:      "WIRING"
+    owner:     "none named: the refusing conjunct is not read. CR-35 (`FILLED_BY`) and CR-36 (`_req_confer`) edit conjuncts of `confer`'s path, CR-25 (`establish`) is closed, and CP-T09-01 reaches `release` formation and the realm `commitment.ended` count, not its refusals. The refusing paths are `loop/predicates.py` (`_req_confer`, `_req_establish`, `_req_release`) and `loop/effects_governance.py` (`_eff_confer`, `_eff_establish`, `_eff_release`); the reader is `harness/aperture.py` (REM-11)"
+    grade:     "measured"
+    default:   "none injected: the three refusals ship as they are and the funnel names no clause for them. No cause is asserted here"
+    site:      "`engine/season/harness/aperture.py` (the DECIDING READ PER REFUSAL block, reason `no-read`); the refusing paths named in `owner:`"
+    sweep:     []
+    unblocks:  "an owner for IN, RG and DA in CR-71's lines, in place of this row; a trace of the refusing clause for the 17 acts (REM-14's trace names the clause for `_req_release` only; `_req_confer` and `_req_establish` return a bare `False`)"
+    cite:      "READ at CR-71 on `5d6aac5`, `PYTHONHASHSEED=0`, `python -m engine.season.harness.aperture 2 0` (REALM, seed 0, two seasons): `confer.refused` 2 of 2 refusals, `establish.refused` 6 of 6 and `release.refused` 9 of 9, every one `no-read`; the SPINE reads `establish` 9 and `release` 5 the same way (its `confer` is formed 0). `release` executed 2, both as `tenure.closed`; `commitment.ended` and `stance.moved`, DA's kinds, are never emitted. `aperture.py::refusal_reading` says a refusal with no recorded read is never counted post-admission, and a row with no typed cell records no reads. CLAUDE.md section 0.1 pt 3: the cause is not read, so it is not stated"
+    source:    "CR-71, batch B11-S2 (the per-code lines are in the body of commit `ddd05152`; its entry left `workplans/valoria_master_workplan_v11_part16.md` at the close)"
+
+  - id:        H-253
+    tier:      1
+    hole:      "WHETHER `succeed` FORMS WITHIN THE TWO-SEASON HORIZON (CR-71, B11-S2). It forms for a person who holds the title `rosters.yaml: successions` names for a seat and has that seat in his ledger; the roster holds one key, `off_king`. At seed 0 `succeed` is formed 0 for every person in the REALM and the SPINE, so IN, CL and XN read 0 on that verb with no refusal to name"
+    kind:      "PRODUCER"
+    owner:     "none open: IN-61 (`succeed`, the heir's claim, `loop/predicates.py::_req_succeed`) landed at B10-09 and is closed. R-05 carries `succeed` as a residue; CR-26's reader (`harness/heir_hears.py`) owns whether the throne reaches the heir. A seat-holder's death by age or illness is H-208's"
+    grade:     "measured"
+    default:   "none injected. Formation is gated on the title held and the throne carried as a classed `Office` referent on his question (`decision/options.py::opening_set`, `OWN_TITLE_DECLINES`). At seed 0 over two seasons the throne was never vacated and that referent never arrived (P10: two seasons)"
+    site:      "`engine/season/rosters.yaml` (`successions`, `own_title_declines`); `engine/season/decision/options.py::opening_set` (the formation gate)"
+    sweep:     []
+    unblocks:  "IN, CL and XN reading a `succeed` that has formed; CR-35 and CP-T09-06 re-basing on whether `succeed` forms before their falsifiers can be read in the realm"
+    cite:      "READ at CR-71 on `5d6aac5`, `PYTHONHASHSEED=0`, `python -m engine.season.harness.aperture 2 0`: PER VERB `succeed` formed 0, offered 0, attempted 0 in the REALM (50 unseated, 33 seated eligible) and in the SPINE. `python -m engine.season.harness.heir_hears --seeds 0 --seasons 2`: checked 10 heir question sets; throne vacated: none; heard by a living heir: none; classed `off_king` while the throne was held: 0 (its control). `rosters.yaml` `successions` opened: one mapping, `off_king` to `off_heir`; `offices.yaml` gives `off_heir` to NPC-031, seated at build. Its control line reads the formation gate's referent link: in 10 heir question sets, all with the throne held, the answered question carried `off_king` as a classed `Office` referent 0 times; the title link holds at build (NPC-031)"
+    source:    "CR-71, batch B11-S2 (the per-code lines are in the body of commit `ddd05152`; its entry left `workplans/valoria_master_workplan_v11_part16.md` at the close)"
+
+  - id:        H-254
+    tier:      1
+    hole:      "WHICH POSITION OWNS `determine`'S `docket` CONJUNCT (CR-71, B11-S2). `determine` is refused on `clause:docket` (existence of a `DocketItem` on the subject: nobody put the matter before the room) and PU's `determine` leg reads that refusal. CR-55's facts are a dead party, a bench-less venue and an overdue stage, and CR-57 to CR-64 (B10-18c) edit other conjuncts and the second-case decline; none of their entries reaches this one"
+    kind:      "WIRING"
+    owner:     "none named: `verb_table.yaml` `determine`'s `requires` (conjunct `docket`); the reader is `harness/aperture.py` (REM-11)"
+    grade:     "measured"
+    default:   "none injected; one act in two seasons, so no cause or frequency is asserted"
+    site:      "`engine/season/verb_table.yaml` (`determine`, conjunct `docket`); `engine/season/harness/aperture.py` (the DECIDING READ PER REFUSAL block)"
+    sweep:     []
+    unblocks:  "an owner for PU's `determine` leg in CR-71's lines, in place of this row"
+    cite:      "READ at CR-71 on `5d6aac5`, `PYTHONHASHSEED=0`, `python -m engine.season.harness.aperture 2 0` (REALM, seed 0, two seasons): `determine` attempted 2, executed 1 as `matter.undetermined`, refused 1 on `clause:docket`; `matter.determined` is never emitted (the executed act is the zero CR-55's RE-BASE names as its base reading). The SPINE refuses `determine` on `docket` 2 and `party` 1. The owners' entries were opened at `determine` and `docket`: CR-55 (`workplans/valoria_master_workplan_v11_part4.md`) and CR-57 to CR-64"
+    source:    "CR-71, batch B11-S2 (the per-code lines are in the body of commit `ddd05152`; its entry left `workplans/valoria_master_workplan_v11_part16.md` at the close)"
+
+  - id:        H-255
+    tier:      1
     hole:      "HOW FAR A GRUDGE MAY CARRY A MAN TO VIOLENCE (v11 CR-87 (3); ED-IN-0337). Under `stance_polarity: declared` (CR-16) §F2's stance term is read at `1 + stance_gain` on every row, so a -4 grudge scored +8 on `fight` against a pursuit term near 0.05 and alone decided a killing. No document gives the weight a grudge carries on a violent act apart from any other"
     kind:      "NUMBER"
     owner:     "`decision/choose.py::stance_term`, on the rows `data/verbs.py::VIOLENT_VERBS` derives from `rosters.yaml: violent_prizes` (`fight`, `capture`, `accept`) where the SUBJECT is the opponent: `fight` and `capture`. `accept` is violent but its opponent is `to` (PC-10b), so the branch never reaches it and its stance arm reads the challenge Record (latent: `accept` forms in no computed play, H-229)"
@@ -5109,7 +5148,7 @@ rows:
     cite:      "BUILT at B10-11 (CR-87). FALSIFIER: `engine/season/tests/test_cr87_violence_contexts.py` -- the violent row reads the fixture and every other row `1 + stance_gain` (a non-violent opponent row, `speak`, is untouched); a -4 grudge in a war context ranks `fight` first at the shipped value. CONTROL: None reproduces the pre-item hash (the same test file's control)"
     source:    "v11 CR-87 (commit `c7145842` (3)), batch B10-11"
 
-  - id:        H-253
+  - id:        H-256
     tier:      1
     hole:      "WHERE A MEMBER'S BUILD-TIME LOYALTY IS WRITTEN (v11 CR-87 (5); ED-IN-0335: a major betrayal needs a series of events). `harness/populated.py` wrote `cast.stance_from_loyalty(cast.loyalty(...))` toward the creed's subject (the King, for Valorsmark) and toward a goal's referents, at up to -5, so a disloyal member began the game holding a killing grudge against his own head with no deed behind it (the Spymaster, -4 toward the King, attacking him 5 to 13 times a run)"
     kind:      "RULING"
@@ -5122,7 +5161,7 @@ rows:
     cite:      "BUILT at B10-11 (CR-87). FALSIFIER: `engine/season/tests/test_cr87_violence_contexts.py` -- at build no loyalty row puts the Spymaster below 0 toward the King, and every row naming a Proposition sits at or above the band. CONTROL: False reproduces the pre-item `build_realm(0)` hash (the same file's control)"
     source:    "v11 CR-87 (commit `c7145842` (5)), batch B10-11"
 
-  - id:        H-254
+  - id:        H-257
     tier:      1
     hole:      "A REAL EXECUTION READS KL, NOT XE (v11 CR-72; `strife-00` §9 item (i)). `fight` forms for a seat's holder on a party held by a live `detain` (CR-87's CRIME context reads the `Detainee` stamp) and the fold admits it, by both openers (`arrest`, CP-T03-09's `capture`); nothing on `fight`'s path reads the restraint. But the instrument cannot see the result: `harness/strife.py::readers_for(w).victim_held` collects changes on field `exists`, while a real `person.died` carries its change on `body`, so it names no victim; and `World.remove_person` takes the dead man's `detain` out of `w.tenures`, so a post-run read finds none. Either alone reads a real execution as KL"
     kind:      "WIRING"

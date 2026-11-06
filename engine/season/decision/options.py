@@ -409,7 +409,7 @@ def subject_is_opponent(row: "VerbRow") -> bool:
 
 # v11 CR-87: THE VIOLENT ROWS WHOSE SUBJECT IS THEIR OPPONENT (`data/verbs.py::VIOLENT_VERBS`, off `rosters.yaml:
 # violent_prizes`, narrowed by `subject_is_opponent`): `fight` and `capture`. `accept` is violent and its opponent is
-# `to` (PC-10b), so it is not in it (H-252). One owner for the conjunct the grudge bound (`choose.stance_term`), the
+# `to` (PC-10b), so it is not in it (H-255). One owner for the conjunct the grudge bound (`choose.stance_term`), the
 # DEFENCE deed kinds and the violence-decline import check each ask.
 VIOLENT_OPPONENT_VERBS = frozenset(v for v in VIOLENT_VERBS if subject_is_opponent(VERB_TABLE[v]))
 

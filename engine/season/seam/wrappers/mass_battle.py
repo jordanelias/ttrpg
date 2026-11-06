@@ -122,9 +122,9 @@ def _creed_referent(w: Any, fac: str) -> Optional[str]:
 
     ⚠ v11 CR-87 (5) BROKE THAT SEPARATION AT THE SHIPPED FIXTURE. With `loyalty_toward_creed` True (the default) the
     writer puts the build-time row on the creed PROPOSITION, which is the faction's own id, never on its utterer; so
-    in a built realm this reads NO row (`H-253`), and the same row is read by `_side_stance`'s DEFAULT referent (the
+    in a built realm this reads NO row (`H-256`), and the same row is read by `_side_stance`'s DEFAULT referent (the
     faction id), i.e. by the morale-start's `stance` term at one point per unit and no gain. Nothing here fixes it:
-    it is H-253's recorded collision, to be settled by a decision on where loyalty is read, not by a patch."""
+    it is H-256's recorded collision, to be settled by a decision on where loyalty is read, not by a patch."""
     prop = w.propositions.get(fac)
     return prop.subject if prop is not None and str(prop.mood).upper() == "OUGHT" else None
 
