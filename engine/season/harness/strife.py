@@ -408,13 +408,14 @@ def strands_block(w, seed: int, resolvable=None) -> list:
                + ", ".join(f"{k} {arms[k]}" for k in (DETAIN_KIND, BAN_KIND, "at_war", "docketed")))
     slots, grouped = world_q.presented(w, fl)
     out.append(f"  presented: {sum(len(v) for v in slots.values())} in {len(slots)} rung(s); grouped {len(grouped)}")
-    prof = pair_profile([[codes[m.event] for m in s.moves] for s in fl.strands])
+    seqs = [[codes[m.event] for m in s.moves] for s in fl.strands]
+    prof = pair_profile(seqs)
     out.append("  adjacent code pairs in strands, observed against the shuffled-order control (top 10):")
     for p, n, c in prof[:10]:
         out.append(f"    {p[0]}->{p[1]}  observed {n:>3}  control {c:6.2f}")
     if not prof:
         out.append("    none (no strand holds two adjacent moves with one code each)")
-    out.extend(link_lines([[codes[m.event] for m in s.moves] for s in fl.strands]))
+    out.extend(link_lines(seqs))
     routes = opening_routes(MOVES, resolvable)
     bare = routeless_pairs(routes)
     out.append(f"  route check: {len(bare)} of {len(routes)} (opening kind, terminal code) "

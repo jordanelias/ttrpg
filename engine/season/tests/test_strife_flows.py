@@ -458,7 +458,7 @@ def test_a_link_with_an_end_no_strand_move_can_carry_prints_unreachable_and_an_e
     assert len(lines) == 3
     assert "UNREACHABLE: DR" in lines["DR>IN"] and "does not beat" not in lines["DR>IN"]
     assert "UNREACHABLE" not in lines["CA-R>XE-R"] and "does not beat" not in lines["CA-R>XE-R"]
-    assert "does not beat its control" in lines["WA>SB"] or "no strand carries both codes" in lines["WA>SB"]
+    assert "does not beat its control" in lines["WA>SB"]               # b before a in the one strand: observed 0, control above 0
     assert "no strand carries both codes" in H.link_lines([[["Z"]]], [links[1]], shuffles=5)[1]
 
 
