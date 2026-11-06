@@ -63,7 +63,7 @@ def commentate(events, cfg):
         elif k == 'engagement_start':
             if e['closed']:
                 out.append({'type': 'measure', 'line': "They start already at close quarters, blades almost touching.",
-                            'mech': "measure <= 0.3: the fight opens closed — straight to the tempo-gated exchange."})
+                            'mech': f"measure <= {cfg['CLOSE_GAP_REF']}: the fight opens closed — straight to the tempo-gated exchange."})
             else:
                 out.append({'type': 'measure',
                             'line': f"They square off at distance — {e['longer']} holds the longer reach, {e['shorter']} must close.",
@@ -146,7 +146,7 @@ def _beat(cur, outcome, cfg, wound_str):
     mech = [COMMIT_MECH[band].format(a=a, d=d, c=round(commit, 1))]
     if rw:
         mech.append(f"the read: {d} out-reads the attack ({round(rp*100)}% to read it) — so {d} picks the BEST defence (not a guess)" +
-                    (f", and since {a} committed deep, {d} can steal the initiative (Vor)" if commit >= 4 else ""))
+                    (f", and since {a} committed deep, {d} can steal the initiative (Vor)" if commit >= cfg['DEEP_COMMIT'] else ""))
     else:
         mech.append(f"the read: {a} hid the intent ({d} only had {round(rp*100)}% to read it) — {d} must pick a defence blind (random mode)")
     mech.append({'parry': "parry = deflect with the blade (wants hand-guard)",

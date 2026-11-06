@@ -307,6 +307,19 @@ CFG = dict(
   # is partly this clamp rather than pure physics. If the design ever wants upsets to be diegetic instead of a
   # scoreboard edit, the in-fight home for them is a critical-opening mechanic, not a post-hoc flip — Jordan's call.
 
+  # ── PC-15: thresholds lifted from wrapper.py / combat_systems.py literals (each was inline; values and meanings kept).
+  # CLOSE_GAP_REF (above) is ALSO the one reach-gap threshold at the other three sites
+  # (re-presentation gate, reopen, disengage): a reopened gap at or below it re-closes at the approach step, so "a gap worth
+  # acting on" and the closed latch are one fact. DEEP_COMMIT: the commit depth at/above which a commit is DEEP (the Indes
+  # steal, the displace-and-step-inside route, and the shorter fighter's over-commit reopen moment); it is also the anchor
+  # the Indes scale is centred on (scale 1.0 at DEEP_COMMIT). LUNGE_COMMIT stays its own key (a lunge is a different fact,
+  # though both read 4.0 today), and the ramp in systems.mode_sigma (3 to 4) is a formula coefficient, not moved.
+  # STAMINA_COLLAPSE: a fighter whose stamina is at or below this ends the burst. BEAT_BUDGET: the engagement's beat
+  # ceiling (was soft*3 with soft=8). RIPOSTE_CAP: the ceiling on the riposte chance after the overcommit add-on.
+  # CONTACT_*: the grapple branch effects, as multiples of the existing structure/initiative constants.
+  DEEP_COMMIT=4.0, STAMINA_COLLAPSE=-4, BEAT_BUDGET=24, RIPOSTE_CAP=0.95,
+  CONTACT_DISARM_POISE_K=2.0, CONTACT_THROW_POISE_K=3.0, CONTACT_CONTROL_VOR_K=0.5,
+
   # ── contact axis (I7b, D8/D9): grab affinity derives from free-hand availability + LEVERAGE ONLY —
   # no hook-hardware term (JD-7 retraction: no primitive in the schema separates a pull-hook from a
   # bind-lug — orient_deg interleaves pulls and binds; see contact.py's docstring). GRAB_SHORT_REACH_M

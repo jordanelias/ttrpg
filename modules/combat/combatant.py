@@ -5,6 +5,8 @@ fix for the frame-mapping bug class: roles are objects, not positional/dict keys
 # The weapons DICTIONARY + GEOMETRY live in weapons.py (the data layer); the DERIVATION in weapon_physics.py.
 # Re-exported here so existing `from combatant import WEAPONS` call-sites keep working (the canonical home is weapons.py).
 from weapons import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE  # noqa: F401  (data lives in weapons.py)
+import attributes as _A   # the attribute spec, the one owner of which attributes exist (PC-14)
+from config import CFG    # conc_max's coefficients when rederive() is given no cfg
 
 # ---- COMBAT-STATE KERNEL (relocated verbatim, ED-1085 container de-leak 2026-07-01) ----
 # Previously imported from the FROZEN tests/sim/v32-combat-balance/ harness (r2_consequence_wounds /
@@ -53,15 +55,22 @@ class WoundTracker:
     crosses multiple gates at once (the decisive strike). Felled at Health depletion (D-A reshape).
     Wounds add a fractional Ob per wound (combat: ED-1041 bilateral WOUND_ATK_OB/WOUND_DEF_OB in
     config.py/systems.py) — NEVER a -1D pool cut (Jordan ruling 2026-07-08, ED-PC-0005, which
-    reversed PP-716's -1D and deleted the old pool_penalty() here). Persists between
-    encounters (cleared only at session end, per canon)."""
+    reversed PP-716's -1D and deleted the old pool_penalty() here). Damage is held on the tracker
+    and zeroed at the start of each fight (`wrapper.fight`)."""
 
     def __init__(self, end, equipment_health=0, spirit=3, strength=4):
-        self.end = end; self.spirit = spirit; self.strength = strength
+        self.equipment_health = equipment_health
+        self.rederive(end, spirit=spirit, strength=strength)
+        self.cumulative_damage = 0
+
+    def rederive(self, end, spirit, strength):
+        """Recompute the maxima (WI, Max Wounds, full Health) from the attributes (PC-14). Touches NO damage:
+        `cumulative_damage` is left as it stands, so damage taken is never erased by an attribute edit. The maxima are
+        recomputed, so `wounds`, `health_remaining` and `felled` are re-read against the kept damage (raising `end`
+        can lift a felled fighter, lowering it can fell one). A fight's own start zeroes the damage, in `wrapper.fight`."""
         self.wi = wound_interval(end, spirit)
         self.max_wounds = max_wounds(end)
-        self.health_full = health_full(end, spirit, strength) + equipment_health
-        self.cumulative_damage = 0
+        self.health_full = health_full(end, spirit, strength) + self.equipment_health
 
     @property
     def health_remaining(self):
@@ -90,13 +99,26 @@ class WoundTracker:
 
 
 class Combatant:
-    def __init__(self, label, strength=4, agi=4, end=4, cog=3, att=3, spirit=3, focus=3,
-                 history=3, disp=4, weapon='arming', armor='light', skills=None, equipped=None, tradition='none'):
+    """THE ATTRIBUTES (PC-14): one storage, `self.attrs`, a dict keyed by `attributes.KEYS` (the spec is the one owner of
+    which attributes exist and their defaults). Each key is also a generated property with a getter AND a setter
+    (`c.history`, `c.history = 5`), so every read and assignment site keeps working; a setter is `set_attr`, which
+    re-derives. `Combatant(label, attrs=None, **kw)`: `attrs` is a `{key: value}` dict, `**kw` takes the same keys as
+    keywords (a key given both ways is a TypeError, as Python's own "multiple values" is); an unknown attribute name is
+    a TypeError. `disp` is disposition / temperament, the aggression axis; lean = (disp - NEUTRAL['disp'])/3,
+    orthogonal to tradition."""
+    def __init__(self, label, attrs=None, weapon='arming', armor='light', skills=None, equipped=None, tradition='none',
+                 **kw):
+        given = dict(attrs or {})
+        twice = sorted(set(given) & set(kw))
+        if twice:
+            raise TypeError(f"Combatant() got attribute(s) {twice} both in attrs and as keywords")
+        given.update(kw)
+        unknown = sorted(set(given) - set(_A.KEYS))
+        if unknown:
+            raise TypeError(f"Combatant() got unknown attribute(s) {unknown}; the attributes are {_A.KEYS} "
+                            f"(modules/combat/attributes.py)")
         self.label=label
-        self.strength=strength; self.agi=agi; self.end=end
-        self.cog=cog; self.att=att; self.spirit=spirit; self.focus=focus
-        self.history=history
-        self.disp=disp                       # disposition / temperament, aggression axis (1-7, 4=neutral); lean=(disp-4)/3, orthogonal to tradition
+        self.attrs = {k: given.get(k, _A.DEFAULT[k]) for k in _A.KEYS}
         self.weapon=weapon; self.armor=armor
         self.tradition=tradition             # cognitive-mode profile (selection-weights over the substrate)
         self.grip_position=0.0               # CONTINUOUS grip-position in [0,1]: 0=as-issued (full reach), 1=gathered to the working balance (close control). Retires the choke/normal/lunge strings; derived per-beat by the wrapper from grip_target.
@@ -119,12 +141,13 @@ class Combatant:
         # second hardcoded `self.pool=max(5,history+6)` here was a dead re-implementation of that rule with ZERO
         # readers — removed ED-PC-0023 audit, §8 "every rule lives once". Any consumer needing the pool calls
         # core.resolution_pool.)
-        self.wt=WoundTracker(end, spirit=self.spirit, strength=self.strength)
-        self.stamina_max=stamina_max(end, self.spirit)       # max stamina from Endurance+Spirit (cfg-free)
-        self.conc_max=0.0                                    # max concentration (3*Focus+2*Spirit) — set in derive_stats(cfg)
+        a = self.attrs
+        self.wt=WoundTracker(a['end'], spirit=a['spirit'], strength=a['strength'])
         # ---- live state (reset/managed by the wrapper each bout) ----
         self.stamina=0.0
         self.conc=0.0
+        self._cfg=None                                       # the cfg of the last derivation (None: config.CFG)
+        self.rederive()                                      # stamina_max (End+Spirit) and conc_max (3*Focus+2*Spirit)
         # ED-PC-0035: the dead `self.ready` attribute is GONE — it was written here and in wrapper._init_live but READ
         # nowhere; the live readiness state is the wrapper's LOCAL `ready={A:..,B:..}` dict. Carried state that resets
         # to no effect is worse than absent state: it reads as though the engine tracks it.
@@ -138,12 +161,47 @@ class Combatant:
     # (.reach / .weight categorical accessors removed 2026-06-30 — dead vestigial; reach derives via
     #  systems.reach_base, heft via systems.wield_heft / core.heft_resp; no live consumer read these.)
     # ---- derived-figure host (the combatant computes its own; consumers import these, never recompute) ----
-    def derive_stats(self, cfg):
-        """Compute the cfg-dependent derived figures and store them on self (called once at bout reset). Keeps the
-        derivation WITH the combatant so core/systems read c.conc_max etc. rather than calculating them."""
-        self.conc_max = cfg['CONC_FOCUS']*self.focus + cfg['CONC_SPIRIT']*self.spirit   # 3F+2S (ED-902)
+    def rederive(self, cfg=None):
+        """THE ONE DERIVATION PATH (PC-14): every figure derived from `attrs`, re-computed from the current values.
+        Rebuilds the wound tracker's maxima (WI, Max Wounds, full Health) IN PLACE, PRESERVING `cumulative_damage` --
+        damage taken is never erased by setting an attribute (the maxima move, so `felled` and `health_remaining` are
+        re-read against it); `wrapper.fight` zeroes the damage at its own start, because a fight begins unwounded.
+        Sets `stamina_max` (cfg-free) and `conc_max` (3*Focus+2*Spirit, ED-902, from `cfg`), and
+        clamps live Stamina and Concentration DOWN to the new maxima (never raises them). `cfg=None` re-uses the cfg
+        of the last derivation, `config.CFG` until one is given. Writes no Health/WI/Max-Wounds mirror on the
+        Combatant (PC-11 deleted those): the tracker owns them."""
+        if cfg is not None:
+            self._cfg = cfg
+        cfg = self._cfg if self._cfg is not None else CFG
+        a = self.attrs
+        self.wt.rederive(a['end'], spirit=a['spirit'], strength=a['strength'])
+        self.stamina_max = stamina_max(a['end'], a['spirit'])                       # max stamina from Endurance+Spirit
+        self.conc_max = cfg['CONC_FOCUS']*a['focus'] + cfg['CONC_SPIRIT']*a['spirit']   # 3F+2S (ED-902)
+        self.stamina = min(self.stamina, self.stamina_max)
+        self.conc = min(self.conc, self.conc_max)
+
+    def set_attr(self, key, value):
+        """Re-value one attribute and re-derive (PC-14). An attribute the spec does not name is a TypeError."""
+        if key not in self.attrs:
+            raise TypeError(f"{key!r} is not a combat attribute; the attributes are {_A.KEYS} "
+                            f"(modules/combat/attributes.py)")
+        self.attrs[key] = value
+        self.rederive()
     @property
     def felled(self): return self.wt.felled
     def apply_wound(self, d):
         if d>0: self.wt.apply(d)
     def skill(self, axis): return self.skills.get(axis, 0.0)   # 0 = untrained; positive = trained bonus on that axis
+
+
+def _attribute_property(key):
+    """`c.<key>` reads `c.attrs[key]`; `c.<key> = v` is `c.set_attr(key, v)` (it re-derives)."""
+    return property(lambda self: self.attrs[key], lambda self, value: self.set_attr(key, value),
+                    doc=f"combat attribute {key!r} (modules/combat/attributes.py)")
+
+
+for _key in _A.KEYS:   # GENERATED from the spec: a new spec entry is a new property, with no edit here
+    if hasattr(Combatant, _key):
+        raise TypeError(f"attribute key {_key!r} collides with a Combatant member")
+    setattr(Combatant, _key, _attribute_property(_key))
+del _key

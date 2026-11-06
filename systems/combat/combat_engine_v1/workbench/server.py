@@ -21,20 +21,20 @@ import numpy as np
 import random
 import wrapper
 from combatant import Combatant
+import attributes   # the combat attribute spec (PC-14)
 import presets, probabilities as P, narrate
 from commentary import commentate
 from trace import run_traced_fight
 
 _STATIC = os.path.join(os.path.dirname(__file__), 'static')
-_FIGHTER_FIELDS = ('strength', 'agi', 'end', 'cog', 'att', 'spirit', 'focus', 'history', 'disp')
+_FIGHTER_FIELDS = attributes.KEYS   # PC-14: the attribute spec owns the roster and the defaults
 
 
 def _make_fighter(spec, default_label):
-    kw = {f: int(spec.get(f, 4 if f in ('strength', 'agi', 'end') else 3)) for f in _FIGHTER_FIELDS}
-    kw['disp'] = int(spec.get('disp', 4))
-    return Combatant(spec.get('label', default_label),
+    attrs = {f: int(spec.get(f, attributes.DEFAULT[f])) for f in _FIGHTER_FIELDS}
+    return Combatant(spec.get('label', default_label), attrs=attrs,
                      weapon=spec.get('weapon', 'arming'), armor=spec.get('armor', 'light'),
-                     tradition=spec.get('tradition', 'none'), **kw)
+                     tradition=spec.get('tradition', 'none'))
 
 
 def _wilson(w, n, z=1.96):

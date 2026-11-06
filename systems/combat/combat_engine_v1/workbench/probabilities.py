@@ -62,7 +62,7 @@ def outcome_distribution(degree, mode, cfg, exposure=0.0):
     neut = {'parry': cfg['NEUTRALIZE_PARRY'], 'dodge': cfg['NEUTRALIZE_DODGE'], 'wind': cfg['NEUTRALIZE_WIND']}[mode]
     out = {'hit': 0.0, 'bind': 0.0, 'riposte': 0.0, 'miss': 0.0}
     if degree == 'fail':
-        rip = min(0.95, cfg['RIPOSTE_ON_FAIL'] + exposure)
+        rip = min(cfg['RIPOSTE_CAP'], cfg['RIPOSTE_ON_FAIL'] + exposure)
         out['riposte'], out['miss'] = rip, 1 - rip
     elif degree == 'partial':
         if mode == 'dodge':
@@ -72,7 +72,7 @@ def outcome_distribution(degree, mode, cfg, exposure=0.0):
         else:
             out['bind'] = 1.0
     elif degree == 'success':
-        rip_p = min(0.95, cfg['RIPOSTE_ON_NEUTRALIZE'] + exposure)
+        rip_p = min(cfg['RIPOSTE_CAP'], cfg['RIPOSTE_ON_NEUTRALIZE'] + exposure)
         rem = 1.0
         if mode == 'wind':
             out['bind'] = cfg['WIND_BIND_P']; rem = 1 - cfg['WIND_BIND_P']

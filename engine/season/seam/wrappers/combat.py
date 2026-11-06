@@ -132,7 +132,7 @@ def party_end(person: Any, fx: Any) -> int:
     class's own. Was `derive_party`, which built the `Combatant` too; since `31b` the module entry
     builds it from this number (`modules/combat/fight.py`)."""
     bands = body_band_penalty(person, fx)
-    # `end`'s class default is 4 (combatant.py). One band = one point, floored at 1: a dying
+    # `end`'s class default is 4 (`modules/combat/attributes.py`). One band = one point, floored at 1: a dying
     # person still fights, which is the same floor `decision.budget` applies for the same reason.
     default_end = 4
     return max(1, default_end - bands)
