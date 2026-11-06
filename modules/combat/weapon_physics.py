@@ -44,7 +44,8 @@ def _ltr_sum(xs):
     `**` is the platform's libm and is not controlled here). The builtin `sum()` is NOT: CPython 3.12 changed it
     to Neumaier-compensated summation for floats, so `sum()` of the same parts reads one ULP apart on 3.11 and on
     3.12+ (CR-01: bind_sigma for bear_spear, 16 of 52 roster binds, measured on 3.13). This is the pre-3.12 value
-    the pins in tests/valoria/test_combat_lever_sign_safety.py were recorded under. CI pins 3.11, where `sum()`
+    the pins that tests/valoria/test_combat_lever_sign_safety.py held before ED-IN-0314's cull (FORK:8047c6e0) were
+    recorded under; the file re-created at PC-17 holds sign probes, not pins. CI pins 3.11, where `sum()`
     and this agree, so CI cannot observe the difference. Pure."""
     total = 0
     for x in xs:

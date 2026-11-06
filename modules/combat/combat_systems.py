@@ -33,9 +33,10 @@ def lever_log_edge(own_factor, opponent_factor):
     owner's win probability monotonically without being literally an odds multiplier there.
 
     Strictly increasing in `own_factor`, strictly decreasing in `opponent_factor`, on every input —
-    that monotonicity IS the sign-safety property, and `tests/valoria/test_combat_lever_sign_safety.py`
-    asserts it for every '*'-op ability in `ability_primitives.ABILITIES`, equipping each on the
-    DISADVANTAGED side. Exactly 0.0 (not approximately) when both factors are 1.0, which is every
+    that monotonicity IS the sign-safety property. `tests/valoria/test_combat_lever_sign_safety.py`
+    (re-created at PC-17) probes the seven levers the GENERIC abilities fill, owner on the DISADVANTAGED side
+    where a signed differential exists; only tempo's `init_emphasis_sigma` composes through THIS function, the
+    other six are own-side products. The leverage and measure sites have no such probe since ED-IN-0314's cull. Exactly 0.0 (not approximately) when both factors are 1.0, which is every
     default build — that is what makes E1a byte-identical at defaults rather than merely close.
     Both arguments come from `ability_factor`, which clamps to [ABIL_FACTOR_FLOOR, ABIL_FACTOR_CEIL],
     so `log` is always finite and never sees 0. Pure.
@@ -933,7 +934,7 @@ def legibility(aggressor, commit, cfg, opp_armor=V.TIER_NONE):
     legib += cfg['LEGIB_COMMIT_K']*max(0,commit-3)
     legib += cfg['LEGIB_LUNGE']*getattr(aggressor,'lunge_depth',0.0)   # an extended/lunged body is more readable — CONTINUOUS in lunge_depth (no lunge string)
     legib -= cfg['LEGIB_DISTRACT_K']*WP.distraction(aggressor.w)   # morphology-rearch Phase B5: a feathered/tasselled weapon's ornament motion degrades the read — DERIVED, 0 for the (typical) unadorned weapon
-    legib -= cfg['LEGIB_EDGELINE_K']*WP.edge_lines(aggressor.w)*ABIL.ability_factor(aggressor, 'edge_read')   # U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022: a double/false edge's return-cut ambiguity degrades the read (same sign as distraction), AMPLIFIED by a tradition that weaponizes the false edge (Zwerchhau, 'edge_read'; factor 1.0 default). 0 for a plain-single/edgeless weapon.
+    legib -= cfg['LEGIB_EDGELINE_K']*WP.edge_lines(aggressor.w)*ABIL.ability_factor(aggressor, 'edge_read')   # U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022: a double/false edge's return-cut ambiguity degrades the read (same sign as distraction), AMPLIFIED by an invested 'edge_read' ability (no authored one since ED-PC-0026 re-homed Zwerchhau; PC-17's hidden_return_* GENERIC calibration abilities fill it; factor 1.0 default). 0 for a plain-single/edgeless weapon.
     legib += cfg['CHOKE_ACCURACY_K']*choke_counterbalance(aggressor, cfg)*ABIL.ability_factor(aggressor, 'choke_control')   # U5/ED-PC-0019 -> ACTIVATED U10/ED-PC-0022: a head-heavy pole CHOKED UP to counterbalance telegraphs / loses fine precision AND loses point control (the RE-HOMED choke-thrust cost) -> reads EASIER (more legible). Mitigated by 'choke_control' (a pole tradition gathers without telegraphing; factor 1.0 default). 0 at grip=0 / for a compact weapon / a half-sword form.
     # SWING-ROOM LEGIBILITY (I5, D4/D5): a broad swing that cannot fully develop in cramped quarters is MORE
     # constrained and reads EASIER — weighted by the SELECTED element's own (1-pc_sel) (a thrust, pc_sel~1, is
@@ -943,7 +944,13 @@ def legibility(aggressor, commit, cfg, opp_armor=V.TIER_NONE):
     range_avail=getattr(aggressor,'range_avail',1.0)
     pc_sel=getattr(aggressor,'sel_pc',None); pc_sel=pc_sel if pc_sel is not None else aggressor.w['geo']['point_concentration']
     legib += LEGIB_SWING_ROOM_K*(1.0-range_avail)*(1.0-pc_sel)
-    return legib
+    # FLOORED AT 0 (PC-17, ED-PC-0059): the edge_read generics SUBTRACT from legibility and their factors multiply, so
+    # two stacked ones (refined L8 + practiced L1 on a jian thrust) drive it below 0, and a negative legibility makes
+    # read_contest's `read_d` negative, which the DEFENDER's visual / precommit factors then scale: investing worsens
+    # the defender, the ED-PC-0045 defect. At default builds the roster's minimum is 0.669 (measured: every weapon x
+    # armour tier x commit 3..6 x lunge), so this is byte-identical there; past the root the defender's read levers go
+    # inert instead of harmful.
+    return max(0.0, legib)
 
 def approach_displace(shorter, longer, cfg):
     """Lever-arm displacement-on-approach: a higher-leverage closer sets aside a THRUSTING longer weapon's point,
@@ -1413,10 +1420,21 @@ def approach_step(measure_gap, base_gap, close_rate, recoil):
 
 def init_emphasis_sigma(aggressor, defender, cfg, TR):
     """Initiative/tempo EMPHASIS sigma fed into attack_sigma: tempo(Agi) + reading(Cog/Att) + experience(History),
-    re-weighted by the aggressor's tempo channel. Pure (the formula the wrapper used to assemble inline)."""
+    plus the two sides' 'tempo' ability lever as an ADDITIVE log-edge. Pure (the formula the wrapper used to assemble
+    inline).
+
+    SEMANTICS CHANGE (PC-17, ED-PC-0059): the base sum used to be MULTIPLIED by `eff_cw(aggressor, 'tempo')`. The sum
+    is signed (an aggressor slower, less read or less experienced than the defender has a negative one), so a tempo
+    factor above 1 AMPLIFIED a deficit: investing in tempo made a disadvantaged aggressor worse, the ED-PC-0045
+    defect. The lever now enters as `INIT_TEMPO_LEVER_K * lever_log_edge(f_aggressor, f_defender)`, the single owner
+    of opposed-lever composition: monotone in each side's own factor whatever the sign of the base sum, and the
+    DEFENDER's tempo factor now counts against the aggressor (it was ignored before). Here it is a monotone additive
+    sigma shift, not an odds multiplier (the channel is not logistic). Exactly 0.0 at default builds (both factors
+    1.0), so `base + 0.0` is bit-identical to the old `base * 1.0`."""
     return (cfg['INIT_K']*(aggressor.agi-defender.agi)
             + cfg['INIT_READING_K']*(reading(aggressor,cfg)-reading(defender,cfg))
-            + cfg['INIT_HISTORY_K']*(aggressor.history-defender.history))*TR.eff_cw(aggressor,'tempo')
+            + cfg['INIT_HISTORY_K']*(aggressor.history-defender.history)
+            + cfg['INIT_TEMPO_LEVER_K']*lever_log_edge(TR.eff_cw(aggressor,'tempo'), TR.eff_cw(defender,'tempo')))
 
 def consistency(c, cfg):
     """Baseline-consistency sigma term from the Concentration tracker (3F+2S, depletes), centred at 3. Pure."""

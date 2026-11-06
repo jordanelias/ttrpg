@@ -19,9 +19,10 @@ LEVER STATUS: the 7 channel levers + counter_success/counter_select/anti_overcom
 'choke_control', 'facing_regime' — consumed at the six U3/U5/U7 lever sites (combat_systems.legibility ×2 /
 bind_sigma / facing_target, contact.grab_sigma). TWO are populated with abilities whose grounding HELD under the
 2026-07-23 adversarial HEMA pass (shinogi->spine_press, ringen_am_schwert->edge_grab; ILLUSTRATIVE — per-event
-effect, ~0 aggregate, see the block below). The other three morphology levers — 'edge_read', 'choke_control',
-'facing_regime' — are BARE (the ability_factor hook is live, factor 1.0 default, byte-identical) awaiting grounded
-content: a deliberate honest gap, NOT invented privilege. ('zwerchhau' was re-homed off edge_read to counter_select
+effect, ~0 aggregate, see the block below). 'edge_read' and 'choke_control' have no GROUNDED ability; since PC-17
+(ED-PC-0059) they and five channel levers carry the 21 GENERIC calibration abilities built below the ABILITIES dict.
+'facing_regime' stays BARE (the ability_factor hook is live, factor 1.0 default, byte-identical): a deliberate
+honest gap, NOT invented privilege. ('zwerchhau' was re-homed off edge_read to counter_select
 and 'guardia' removed off facing_regime — both were winden-class category errors, ED-PC-0026.) There is no 'seize' lever, and no 'vorschlag' or 'sen_no_sen' ability.
 """
 
@@ -64,8 +65,8 @@ ABILITIES = {
     # error (real period term, wrong lever). The Italian profiled-stance TENDENCY facing_regime models is real,
     # but it has no discrete named technique to anchor an ability honestly, so facing_regime stays a BARE
     # morphology lever (fires from WP.facing_pref weapon geometry; honest-gap for a tradition amplifier, exactly
-    # like choke_control) rather than ship a misnamed one. edge_read is likewise now bare (zwerchhau re-homed to
-    # counter_select above): both await grounded content, not invented privilege.
+    # like choke_control was) rather than ship a misnamed one. edge_read likewise has no GROUNDED ability (zwerchhau
+    # re-homed to counter_select above); it and choke_control now carry only the GENERIC calibration abilities below.
 }
 
 
@@ -74,6 +75,63 @@ ABILITIES = {
 # primitives" — TRADITION_KIT['german'] -> ['indes', 'staerke_schwaeche', ...]. One-way import (traditions has no
 # dependency on this module), so no cycle.
 from traditions import TRADITIONS as _TRADITIONS
+
+# ── GENERIC CALIBRATION ABILITIES (PC-17, ED-PC-0059; PROVISIONAL) ────────────────────────────────────────────────
+# Jordan, 2026-11-01: "a spread of generics for now so that we have more calibration data". Instruments, not
+# grounded technique: plain descriptive names, no period terms (ED-PC-0026), grade 'GENERIC', every value
+# [SIM-CALIBRATE]. All op '*': `ability_bonus` ('+') is read at two sites only (counter_success, anti_overcommit), so
+# an additive generic on these levers would never act. Six beneficial levers at x1.10 / x1.25 / x1.50 (edge_read's
+# refined tier REVISED to x1.40, see GENERIC_LEVERS); choke_control
+# as a MITIGATOR at x0.90 / x0.75 / x0.55, because its site (combat_systems.legibility) ADDS the owner's gathered-pole
+# telegraph to the read the OPPONENT takes, so a factor below 1 helps its owner. facing_regime stays bare (geometry,
+# not this position; Jordan 2026-11-01).
+# PLACEMENT is a Latin square over the seven traditions in TRADITIONS order ('none' excluded): tradition t receives
+# (lever (t + k) mod 7, tier k) for k = 0, 1, 2, so each (lever, tier) pair exists in exactly one tradition and each
+# tradition gains three generics on three different levers. Kit totals stay unequal; no equality is claimed.
+# REVERT: delete this block (every ability with grade 'GENERIC') and their probes in
+# tests/valoria/test_combat_lever_sign_safety.py. CFG['INIT_TEMPO_LEVER_K'] may STAY (with no 'tempo' ability the term
+# is exactly 0); deleting the key alone raises KeyError in combat_systems.init_emphasis_sigma, so delete the key and
+# that term together or not at all.
+GENERIC_TIERS = ('basic', 'practiced', 'refined')   # tier k = 0, 1, 2
+# (lever, name stem, what the trained fighter does, the three tier factors) — the square's lever order. [SIM-CALIBRATE]
+# Beneficial levers x1.10 / x1.25 / x1.50; choke_control is a MITIGATOR (x0.90 / x0.75 / x0.55). edge_read's refined
+# tier is x1.40, REVISED from the plan's x1.50 under its falsifier ("a cliff: the tier is revised, not shipped"): the
+# site SUBTRACTS LEGIB_EDGELINE_K * edge_lines * factor from legibility, which at x1.50 and level 8 reads -0.316 on the
+# jian (the roster's worst case) and then scales the defender's read the wrong way; x1.40 keeps one generic off
+# combat_systems.legibility's floor (0.119 there). Stacking several is closed at that floor, not here.
+GENERIC_LEVERS = (
+    ('visual',        'keen_eye',       "watches the opponent's whole body, so the coming action is seen earlier", (1.10, 1.25, 1.50)),
+    ('precommit',     'reading_intent', "reads the attack in its preparation, before it is committed", (1.10, 1.25, 1.50)),
+    ('tactile',       'blade_feel',     "feels the opponent's pressure and intent through blade contact in the bind", (1.10, 1.25, 1.50)),
+    ('tempo',         'timing',         "acts in the opponent's slow moments and keeps the initiative once taken", (1.10, 1.25, 1.50)),
+    ('balance',       'footing',        "keeps a stable, mobile base under footwork and pressure", (1.10, 1.25, 1.50)),
+    ('edge_read',     'hidden_return',  "uses a double or false edge to hide the line of the return cut", (1.10, 1.25, 1.40)),
+    ('choke_control', 'quiet_gather',   "gathers up a long pole without telegraphing the shortened grip", (0.90, 0.75, 0.55)),
+)
+
+
+def _generics():
+    """The 21 generics: tradition t receives (lever (t + k) mod 7, tier k) for k = 0, 1, 2. Raises, not asserts, so the
+    checks survive `python -O`: an eighth tradition or a name collision with an authored ability fails the import."""
+    traditions = [t for t in _TRADITIONS if t != 'none']
+    if len(traditions) != len(GENERIC_LEVERS):
+        raise ValueError("the Latin square needs as many traditions as levers")
+    out = {}
+    for t, trad in enumerate(traditions):
+        for k, suffix in enumerate(GENERIC_TIERS):
+            lever, stem, what, factors = GENERIC_LEVERS[(t + k) % len(GENERIC_LEVERS)]
+            name = f'{stem}_{suffix}'
+            if name in ABILITIES or name in out:
+                raise ValueError(f"generic {name!r} collides with an existing ability")
+            out[name] = dict(
+                tradition=trad, grade='GENERIC', lever=lever, op='*', value=factors[k],
+                desc=f"GENERIC ({suffix}) {lever} lever: {what}. A calibration instrument, not a grounded technique "
+                     f"(PC-17, ED-PC-0059, provisional) [SIM-CALIBRATE]")
+    return out
+
+
+ABILITIES.update(_generics())
+
 for _name, _a in ABILITIES.items():
     assert _a['tradition'] in _TRADITIONS, f"ability {_name!r} tags unknown tradition {_a['tradition']!r}"
 TRADITION_KIT = {t: [a for a, d in ABILITIES.items() if d['tradition'] == t] for t in _TRADITIONS}
