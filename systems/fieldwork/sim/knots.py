@@ -54,7 +54,8 @@ KNOT_BONDS_MIN = 5
 KNOT_TS_MIN_PARTY = 30  # Either PC or NPC has TS ≥ 30
 
 # §3.2 formation roll
-# [canonical: §3.2 — "Spirit × 2 + History (Relationships), TN 7, Ob 2"]
+# [canonical: §3.2 — "Spirit × 2 + History (Relationships), TN 7, Ob 2"; the History term is
+#  ELIMINATED by CR-85 (ED-IN-0330: history is no longer added to a roll), so the pool is Spirit × 2]
 KNOT_FORMATION_TN = 7
 KNOT_FORMATION_OB = 2
 
@@ -176,7 +177,7 @@ def form_knot(actor_a: str, actor_b: str, world=None,
     """§3 Formation. Returns Knot on success, None on prerequisite failure.
 
     Caller supplies actor_a_obj / actor_b_obj for stat lookups (.bonds,
-    .spirit, .history_relationships, .ts, .disposition_with_other).
+    .spirit, .ts, .disposition_with_other).
     """
     # §3.1 Prerequisites
     if actor_a_obj is None or actor_b_obj is None:
@@ -212,8 +213,7 @@ def form_knot(actor_a: str, actor_b: str, world=None,
 
     # §3.2 Formation roll
     spirit = getattr(actor_a_obj, 'spirit', 3)
-    history_rel = getattr(actor_a_obj, 'history_relationships', 0)
-    pool = (spirit * 2) + history_rel
+    pool = spirit * 2   # CR-85 (ED-IN-0330): the `history_relationships` addend is DELETED
 
     rng = rng if rng is not None else (world.rng if world is not None and hasattr(world, 'rng') else None)
     if rng is None:

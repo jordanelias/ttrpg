@@ -42,9 +42,14 @@ from .test_rem30_character_sheet import _run
 #: mover wherever a Felled/Wounded fight lands): seeds 1, 2 were `9e1bb7c2...`, `fe7b5f49...`; seed 0 fights nothing and
 #: does not move. CONTROL: `test_cp_t03_02_band_ending_and_body.py::revert_cp_t03_02` reads the pre-item one-season
 #: realm exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-PINNED ONCE at v11 CR-85 (`faculty` replaces `history` in combat's pool and Ob, ED-IN-0330; every season fight
+#: rolls pool 8 against Ob 1.0, was 9 against 1.5): seed 1 was `ce8c74e7...`; seeds 0 and 2 do not move (seed 0
+#: fights nothing, seed 2's fights land where they did). CONTROL:
+#: `test_cr85_faculty_replaces_history.py::revert_cr85` (the seam's faculty at 3 for every party) reads the old value
+#: exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
     0: "e9d7c8974bf509ca2b915489cc4f371c",
-    1: "ce8c74e701b11d66ea5b89ad95ea59b6",
+    1: "ae97a48bb2cd9cf6953bb688a34ab181",   # CR-85: was ce8c74e7...
     2: "831dc04706af9847aab7574061a5c289",
 }
 

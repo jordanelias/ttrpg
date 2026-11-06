@@ -104,7 +104,7 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
                                 environment_in_equilibrium: bool = False) -> OpposingResult:
     """§2.6 Resolve contested operation between two practitioners.
 
-    actor_a / actor_b: practitioner objects (with .spirit, .ts, .history,
+    actor_a / actor_b: practitioner objects (with .spirit, .ts,
                      .actor_id).
     op_type: 'Weaving' / 'Pulling' / 'Locking' / 'Dissolution' / 'POP' / 'Mending'.
     target: dict with 'scale' and optional 'breadth'/'distance'/'recency'.

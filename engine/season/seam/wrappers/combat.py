@@ -36,7 +36,8 @@ entry calls. This module reads it only for `engine()`, the availability probe it
 derive EXACTLY ONE field from something the actor genuinely has, leave every other field at the
 class's own constructor default, and return a typed gap rather than fabricate a party. The
 `Combatant` defaults it names — strength 4, agi 4, end 4, cog 3, att 3, spirit 3, focus 3, disp 4,
-weapon `arming`, armor `light`, tradition `none` — are the class's, not this module's.
+weapon `arming`, armor `light`, tradition `none` — are the class's, not this module's. The record has since grown
+each party's kit (CP-T03-03) and `faculty` (CR-85, `combat_input`), which replaced the class's `history`.
 
 ⚠ THE ONE DERIVED FIELD IS `end`, FROM `body_band_penalty`, AND IT INVENTS NO NUMBER. A tracer
 `Person` carries nothing combat-shaped except `body`, an int on the condition scale. The tree
@@ -200,7 +201,17 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
     `record` (v10 PC-10b) is the Record the act is about (`_cause_record`); a `challenge` Record's `stakes`
     (`world_q.stakes_of`) fill the SAME field through the same `duel_terms_of`, so `accept` is fought under the
     challenge's terms; where it names none the verb's `duel_terms` line stands (`accept: blood`, v11 CR-87) and a
-    verb the roster does not name is fought under `'death'`."""
+    verb the roster does not name is fought under `'death'`.
+
+    `verb` also fills `faculties` (CR-85, ED-IN-0330): each party's `faculty(w, person, verb)`, the season's ONE pool
+    reader, imported from its owner `sigma.py` and never copied. A verb with no `verb_capability` row (every combat
+    verb today) reads `pool_default` plus the registered addends, so the season's fight rolls that against half of it.
+    [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] -- the CR-85 design is
+    UNRATIFIED (ED-IN-0351).
+    ⚠ THE IMPORT IS AT CALL TIME: `sigma.py` imports this module at ITS import (`fight_estimate`, `record_of`), so a
+    module-level import here would close a cycle. Deferring it keeps one owner without moving `faculty`, whose
+    `POOL_ADDENDS` the season tests patch on `sigma` by name."""
+    from .sigma import faculty
     a_id, b_id = claimants[0], claimants[1]
     terms = duel_terms_of(verb, stakes_of(w, record))
     return PersonalCombatInput(
@@ -208,6 +219,7 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
         ends=(party_end(w.persons[a_id], w.fixtures), party_end(w.persons[b_id], w.fixtures)),
         wound_quantities=tuple(WOUND_QUANTITIES),
         kits=(kit_of(w, a_id), kit_of(w, b_id)),
+        faculties=(faculty(w, w.persons[a_id], verb), faculty(w, w.persons[b_id], verb)),
         **({} if terms is None else dict(terms=terms)))
 
 

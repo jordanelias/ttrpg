@@ -134,12 +134,20 @@ class PersonalCombatInput:
       * `kits`      -- each party's kit, `(weapon, armor)`, in `claimants` order, `ends`' shape (CP-T03-03,
                        `world_q.kit_of`: what the rungs the person holds store, read not consumed). The module
                        passes each to `Combatant(..., weapon=, armor=)`. The default is `()`: a record built
-                       without kits is fought by two Combatants at the engine's own default kit, exactly as before."""
+                       without kits is fought by two Combatants at the engine's own default kit, exactly as before;
+      * `faculties` -- each party's dice score for the fight's verb, in `claimants` order, `ends`' shape (CR-85,
+                       ED-IN-0330: it replaces combat's `history`). Filled by `combat.py::combat_input` from
+                       `seam/wrappers/sigma.py::faculty`, THE ONE POOL READER, and passed to `Combatant(..., faculty=)`,
+                       where it feeds the party's pool and the Ob his opponent rolls against, and nothing else. The
+                       default is `()`: a record built without it is fought at the module's own default (3).
+                       [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] --
+                       `proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md` is UNRATIFIED (ED-IN-0351)."""
     claimants: tuple
     ends: tuple
     wound_quantities: tuple
     terms: str = "death"
     kits: tuple = ()
+    faculties: tuple = ()
 
 
 @dataclass(frozen=True)

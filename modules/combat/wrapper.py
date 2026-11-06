@@ -204,7 +204,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                     _emit('disengage', longer=longer.label, shorter=shorter.label, ok=True, gap=round(base_gap,2))
                     continue
                 else:                                            # READ -> the closer pursues into the withdrawal (Nachreisen)
-                    pool=max(1, core.resolution_pool(shorter.history))
+                    pool=max(1, core.resolution_pool(shorter.faculty))
                     deg,net=core.resolve(pool, S.pursuit_sigma(shorter, longer, ffat[shorter], ffat[longer], cfg, TR), rng, core.ob_from_defender(longer))   # ED-PC-0036: was a FLAT cfg['DISENGAGE_PURSUIT_NSIG'], bypassing the whole sigma-assembly (no armour, no wounds, no attribute of the withdrawer — every pair resolved identically). systems.pursuit_sigma owns the formula. Ob-from-defender (ED-PC-0058): `longer` is struck if the pursuit lands, so `longer` is the defender this roll is against.
                     _emit('disengage', longer=longer.label, shorter=shorter.label, ok=False, pursued=True, degree=deg)
                     if deg in ('success','overwhelming'):
@@ -233,7 +233,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             recoil = 0.0
             stophit_p = cfg['STOPHIT_CHANCE'] * min(1.0, measure_gap/cfg['STOPHIT_FULL_GAP']) * (1-displ) * rt  # FIX-1: a stop-hit that can't pierce the armour deters less
             if measure_gap > 0.0 and rng.random() < stophit_p:
-                pool=max(1, core.resolution_pool(longer.history))
+                pool=max(1, core.resolution_pool(longer.faculty))
                 nsig=S.stophit_sigma(longer, shorter, measure_gap, cfg)
                 _ob=core.ob_from_defender(shorter)
                 deg, net = core.resolve(pool, nsig, rng, _ob)   # Ob-from-defender (ED-PC-0058): `shorter` is struck if the stop-thrust lands.
@@ -328,7 +328,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             defender.initiative=S.clamp_initiative(defender.initiative+steal, cfg)
             aggressor.initiative=S.clamp_initiative(aggressor.initiative-steal, cfg)
             counter_attempt=S.counter_select(defender, cfg, rng, TR)
-        pool=max(1, core.resolution_pool(aggressor.history))
+        pool=max(1, core.resolution_pool(aggressor.faculty))
         _ob=core.ob_from_defender(defender)
         deg, net = core.resolve(pool, net_sigma, rng, _ob)   # Ob-from-defender (ED-PC-0058)
         _emit('roll', aggressor=_agg0, pool=pool, net_sigma=round(net_sigma,3), ob=_ob, net=round(net,2), degree=deg, mode=mode)   # `ob`: the workbench bands its distribution at it (PC-03)
@@ -357,7 +357,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             if rng.random()<max(0.0,neutralize-cfg['NEUTRALIZE_OVERWHELM_DROP']): hit=0
             else: hit=core.strike(aggressor, defender, 'overwhelming', cfg, net=net, pool=pool)
         if counter_attempt:
-            # SUCCESS scales with training (history) + reflex; the untrained single-time counter mostly fails — a
+            # SUCCESS scales with reflex (the training term read `history` and went with it, CR-85/ED-IN-0330); the untrained single-time counter mostly fails — a
             # desperate-idiot move. Tradition abilities will modulate this upward (added later). (systems.counter_success_prob)
             if rng.random() < S.counter_success_prob(defender, cfg, TR):
                 hit=0; bind=False; riposte=True            # LANDS: committed attack voided in-tempo, defender ripostes (keeps the seized Vor)

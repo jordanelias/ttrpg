@@ -74,9 +74,11 @@ LEVELS = (0.0, 0.5, 1.0, 2.0, 4.0, 8.0)
 LEVERS = ('visual', 'precommit', 'tactile', 'tempo', 'balance', 'edge_read', 'choke_control')
 
 # a fighter who is BEHIND on reading and footwork, and one who is AHEAD (attributes only; weapons per probe)
-WEAK = dict(cog=1, att=1, history=1, agi=2, strength=2)
-STRONG = dict(cog=5, att=5, history=5, agi=6, strength=6)
-FLOOR_BAL = dict(cog=1, att=1, history=1, agi=1, strength=1)   # balance_eff is exactly 0 here
+# CR-85 (ED-IN-0330) deleted `history` from every sigma term and renamed the input `faculty`, which feeds only the pool
+# and the Ob; no probe here reads a pool or an Ob, so the builds carry none.
+WEAK = dict(cog=1, att=1, agi=2, strength=2)
+STRONG = dict(cog=5, att=5, agi=6, strength=6)
+FLOOR_BAL = dict(cog=1, att=1, agi=1, strength=1)   # balance_eff is exactly 0 here
 
 
 def _own(ability, tradition, level, **kw):
@@ -340,9 +342,9 @@ PROBES = {
         _P('initiative steal in the bind', 'combat_systems.init_steal_factor', _steal_in_bind, None, True),
     ],
     'tempo': [
-        _P('initiative emphasis as AGGRESSOR, behind on agility, reading and history',
+        _P('initiative emphasis as AGGRESSOR, behind on agility and reading',
            'combat_systems.init_emphasis_sigma', _emphasis_as_aggressor, _emphasis_as_aggressor_ref, True),
-        _P('initiative emphasis as DEFENDER, behind on agility, reading and history',
+        _P('initiative emphasis as DEFENDER, behind on agility and reading',
            'combat_systems.init_emphasis_sigma', _emphasis_as_defender, _emphasis_as_defender_ref, True),
         _P('aggressive disposition bleeds the counter selection', 'combat_systems.counter_select',
            _counter, None, True),

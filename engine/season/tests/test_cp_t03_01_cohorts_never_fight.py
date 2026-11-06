@@ -37,6 +37,7 @@ from ..queries import world_q
 from ..state.carriers import Act, Record, Scene
 from ..state.ids import H, draw_factory
 from .test_cp_t03_02_band_ending_and_body import revert_cp_t03_02
+from .test_cr85_faculty_replaces_history import revert_cr85
 from .test_cr87_violence_contexts import revert_cr87
 
 CROWD, FIGHTER, FOE = "c_crowd", "p_low", "p_mid"       # `tiny_world`: p_low and p_mid live at the hearth `Hh`
@@ -214,9 +215,12 @@ def test_control_the_realm_ends_at_the_base_hash_wherever_no_cohort_was_a_party(
     conjunct would never be read and the control would observe nothing; it is read with CR-87 at its revert
     (`test_cr87_violence_contexts.py::revert_cr87`, whose own control reproduces the pre-CR-87 hash), and `BASE` stands.
     ⚠ v10 CP-T03-02 (the band's `ending` and the body Observation, a later mover of every realm that fought) is reverted
-    too (`revert_cp_t03_02`), the same way, so `BASE` stands rather than being re-taken."""
+    too (`revert_cp_t03_02`), the same way, so `BASE` stands rather than being re-taken.
+    ⚠ v11 CR-85 (`faculty` replaces `history` in the pool and the Ob, a later mover of every realm that fought) is
+    reverted too (`revert_cr85`), the same way."""
     revert_cr87(monkeypatch)
     revert_cp_t03_02(monkeypatch)
+    revert_cr85(monkeypatch)
     h, reads, refused_on_it = _realm_two_seasons(seed)
     assert reads > 0, "the conjunct was never read: the equality below observes nothing"
     assert refused_on_it == 0, f"{refused_on_it} Events were refused on `individual` at seed {seed}"

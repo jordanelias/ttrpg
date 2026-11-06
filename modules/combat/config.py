@@ -121,7 +121,7 @@ CFG = dict(
   # reading / tempo channels
   READ_K=0.5, REFLEX_AGI=2.0, REFLEX_ATT=1.0, INIT_K=0.045, COMMIT_SIGMA=0.18,
     WOUND_ATK_OB=0.15, WOUND_DEF_OB=0.25,   # ED-1041 wound obstacle (bilateral, tunable): +0.15 Ob attacking / +0.25 Ob defending per wound; supersedes the -1D aggressor-only pool penalty (ED-1021). Defender has no pool, so defence-impairment must be an Ob channel.
-  READ_HISTORY_K=0.2, INIT_READING_K=0.03, INIT_HISTORY_K=0.02,   # reading=experience(History) term; initiative reading/History terms (Jordan 2026-06-03; Class-C)
+  INIT_READING_K=0.03,   # initiative reading term (Jordan 2026-06-03; Class-C). READ_HISTORY_K and INIT_HISTORY_K are DELETED with their only readers by CR-85 (ED-IN-0330: history is no longer added to a roll)
   INIT_TEMPO_LEVER_K=0.03,   # PC-17 / ED-PC-0059: weight of the 'tempo' ability lever in systems.init_emphasis_sigma, ADDED as K*lever_log_edge(f_aggressor, f_defender) (exactly 0 at default builds). Set equal to INIT_READING_K, so one unit of log-tempo edge weighs what one point of reading difference does: a x1.5 generic at level 1 adds log(1.5)*K = 0.012 sigma, at level 8 about 0.097. [SIM-CALIBRATE]
   # defense modes
   PARRY_K=0.9, DODGE_K=0.9, WIND_K=0.9,   # ED-PC-0035: CHOKE_BIND_K REMOVED — its only reader (systems.mode_sigma's wind branch) multiplied it by a `choke` argument its ONLY caller (read_contest) hardcoded to 0.0, so the term was a structural zero in every regime (ablation at 0 AND 100: 0 outcome changes over 32 cells x 150 seeds). Leftover of the retired choke/normal/lunge stance strings; grip is now the continuous grip_position. If "a gathered grip aids the wind" is wanted it must be DESIGNED against a double-count check vs systems.leverage (bind capacity) and CHOKE_ACCURACY_K (the re-homed choke cost, ED-PC-0026) — not silently revived here.
@@ -262,10 +262,11 @@ CFG = dict(
   # ED-PC-0037: ATTACKER_BIAS REMOVED (see systems.assemble_net_sigma). Untagged fiat duplicating the Vor;
   # retired together with the first-actor monopoly it compounded with, per the batch-3 deferral.
   # single-time counter (a tier of the unified counter): UNIVERSAL but skill-gated. SELECTION is tempo-driven (how
-  # often a fighter reaches for it); SUCCESS scales with training (history)+reflex — the untrained single-time counter
+  # often a fighter reaches for it); SUCCESS scales with reflex (COUNTER_TRAIN_K, the training(history) gain, is DELETED
+  # by CR-85, ED-IN-0330) — the untrained single-time counter
   # is a desperate-idiot move that mostly fails and is punished (eats the attack undefended, cedes the seized Vor).
   # The basic two-time riposte (on miss/neutralize) stays the universal, disadvantaged fallback. Abilities modulate later.
-  COUNTER_SELECT_BASE=0.45, COUNTER_SUCCESS_BASE=0.50, COUNTER_TRAIN_K=0.10, COUNTER_REFLEX_K=0.05,
+  COUNTER_SELECT_BASE=0.45, COUNTER_SUCCESS_BASE=0.50, COUNTER_REFLEX_K=0.05,
   # Indes flip refinement: the steal magnitude scales with commit-DEPTH (a deeper commit leaves more to exploit) and
   # read-MARGIN (how cleanly the defender out-read it). A deep commit read cleanly is a near-complete Vor flip; a
   # shallow/marginally-read one barely shifts it. Bounded [FLOOR,CEIL]x here, and further σ-bounded downstream by

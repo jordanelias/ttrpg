@@ -622,11 +622,16 @@ def _counts(w) -> dict:
 # Was, for seeds 0 / 1 / 2: `old` a0944c1b... / d52e342d... / e6f01019..., `new` 0fb73bc8... / 3b407a74... / 47151656...;
 # `acts` 719 / 721 / 740; `persons` 80 at each. CONTROL: `tests/test_cr87_violence_contexts.py::revert_cr87` reads the old
 # build and one-season hashes exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v11 CR-85 (`faculty` replaces `history` in combat's pool and Ob, ED-IN-0330; every season fight
+# rolls pool 8 against Ob 1.0, was 9 against 1.5): seed 1 was `old` 18de0fa6... / `new` f89ea45d... (`acts`,
+# `census`, `counts` unmoved); seeds 0 and 2 do not move (seed 0 fights nothing, seed 2's fights land where they
+# did). CONTROL: `test_cr85_faculty_replaces_history.py::revert_cr85` (the seam's faculty at 3 for every party) reads
+# the old value exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
     0: {"old": "7e81a2cf124ff105d4bd5af7ac1a5c77", "new": "20accb03c3d32f80a9fab00d80a70b21", "acts": 744,
         "census": "6032506e3dbe624bc7b7bb0cab2ea5029170d5b0681ffb641fb6c586c3abc02e",
         "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 203, "propositions": 143, "dates": 5, "docket": 8, "tenures": 1028, "log": 13400}},
-    1: {"old": "18de0fa6d300264bf535db0ca62c4a7a", "new": "f89ea45dd050cdf2329fde8885a1a110", "acts": 746,   # CP-T03-02 (a fight's `ending` + body Observation): was 327bac57... / f4330aac... / census 321d2548... / log 12271
+    1: {"old": "ec800435096c563dd6598e0ceab74f26", "new": "6e25b047b1fb42e2d50014f100770053", "acts": 746,   # CR-85 (faculty replaces history): was 18de0fa6... / f89ea45d...; `acts`, `census` and `counts` do not move. CP-T03-02 (a fight's `ending` + body Observation): was 327bac57... / f4330aac... / census 321d2548... / log 12271
         "census": "6282d017e89275717b419a4b691cac75dfd9b133d9f761bb80ca330717cea176",
         "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 212, "propositions": 145, "dates": 5, "docket": 9, "tenures": 1022, "log": 12273}},
     2: {"old": "ecc848eae7fcfe9f339d4e47fffa160a", "new": "fe9032eda9b7701241dcbd766c96fd1a", "acts": 746,   # CP-T03-02: was 4fb68bcf... / a030141a... / census 414d3ac0... / log 11338; CR-87: was e6f01019... / 47151656... / 740

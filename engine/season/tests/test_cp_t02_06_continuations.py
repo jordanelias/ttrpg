@@ -51,8 +51,12 @@ from ..state.ids import H, draw_factory
 # RE-PINNED ONCE at v10 CP-T03-02 (a fight band's `Event.ending` and the body Observation): seeds 1, 2 were f4330aac... /
 # a030141a...; seed 0 does not move. CONTROL: `test_cp_t03_02_band_ending_and_body.py::revert_cp_t03_02` reads the old
 # three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v11 CR-85 (`faculty` replaces `history` in combat's pool and Ob, ED-IN-0330; every season fight
+# rolls pool 8 against Ob 1.0, was 9 against 1.5): seed 1 was f89ea45d...; seeds 0 and 2 do not move (seed 0 fights
+# nothing, seed 2's fights land where they did). CONTROL: `test_cr85_faculty_replaces_history.py::revert_cr85` (the
+# seam's faculty at 3 for every party) reads the old value exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 PRE_BUILD = {0: "20accb03c3d32f80a9fab00d80a70b21",
-             1: "f89ea45dd050cdf2329fde8885a1a110",
+             1: "6e25b047b1fb42e2d50014f100770053",   # CR-85: was f89ea45d...
              2: "fe9032eda9b7701241dcbd766c96fd1a"}  # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
 
 

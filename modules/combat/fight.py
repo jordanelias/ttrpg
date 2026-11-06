@@ -35,6 +35,12 @@ def _kit_kw(kit) -> dict:
     return {} if kit is None else dict(weapon=kit[0], armor=kit[1])
 
 
+def _faculty_kw(fac) -> dict:
+    """`Combatant`'s keyword for one party's faculty (CR-85); `None` (none given) is none, so the Combatant keeps its
+    own default."""
+    return {} if fac is None else dict(faculty=fac)
+
+
 def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
           decide: Optional[Callable[[CombatTurnView], str]] = None) -> dict:
     """Fight one bout scene between the record's two parties. RESOLVED -> dict(status, result, trace,
@@ -58,8 +64,12 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
     # THE KITS (CP-T03-03): each party's `(weapon, armor)` in `claimants` order, read off the typed input. A record
     # built without them (`kits == ()`) is two Combatants at the engine's own default kit, as before.
     a_kit, b_kit = getattr(inp, "kits", ()) or (None, None)
-    A = combatant.Combatant(a_id, end=a_end, **_kit_kw(a_kit))
-    B = combatant.Combatant(b_id, end=b_end, **_kit_kw(b_kit))
+    # THE FACULTIES (CR-85, ED-IN-0330): each party's dice score for the fight's verb, read off the typed input; it
+    # replaces `history` in the pool and the Ob. A record built without them (`faculties == ()`) fights at the
+    # Combatant's own default. [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays]
+    a_fac, b_fac = getattr(inp, "faculties", ()) or (None, None)
+    A = combatant.Combatant(a_id, end=a_end, **_kit_kw(a_kit), **_faculty_kw(a_fac))
+    B = combatant.Combatant(b_id, end=b_end, **_kit_kw(b_kit), **_faculty_kw(b_fac))
     trace: list = []
     prev = getattr(wrapper, "_TRACE", None)
     # THE DUEL TERMS (RS-25, PC-10a): read off the typed input when it carries them, else the engine's lethal

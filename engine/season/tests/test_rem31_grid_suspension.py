@@ -35,6 +35,7 @@ from engine.season.loop.driver import SeasonDriver, resolvable_verbs
 from engine.season.queries.inputs import PlayHost
 from engine.season.state.ids import H, draw_factory
 from engine.season.tests.test_cr87_violence_contexts import revert_cr87
+from engine.season.tests.test_cr85_faculty_replaces_history import revert_cr85
 
 import pytest
 
@@ -46,8 +47,13 @@ def _the_world_this_was_measured_on(monkeypatch):
     """v11 CR-87 RE-TOOK THESE READINGS ON THE WORLD THEY WERE MEASURED ON: CR-87's contexts leave no `fight` formed on
     `build_realm(0)` in one season, so no fight reaches ENCOUNTER and every arm here would be vacuous (the census asserts
     it). The suspension is REM-31's and does not read CR-87; it is read with CR-87 at its revert
-    (`test_cr87_violence_contexts.py::revert_cr87`, whose own control reproduces the pre-CR-87 hash)."""
+    (`test_cr87_violence_contexts.py::revert_cr87`, whose own control reproduces the pre-CR-87 hash).
+    v11 CR-85 (`faculty` replaces `history` in the pool and the Ob) moves which fights this world forms: with it, every
+    fight on the seed involves the played person and the AUTOMATED branch of the party test goes unexercised. So it is
+    read at CR-85's revert too (`test_cr85_faculty_replaces_history.py::revert_cr85`, whose own control reproduces the
+    pre-CR-85 hash)."""
     revert_cr87(monkeypatch)
+    revert_cr85(monkeypatch)
 
 
 def _scripted(p, v, s, ask_budget, auto):

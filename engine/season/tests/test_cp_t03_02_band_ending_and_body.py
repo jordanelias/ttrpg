@@ -28,6 +28,7 @@ from ..loop.driver import SeasonDriver, mint_token
 from ..seam import Resolution, degree_of
 from ..state.carriers import Act
 from ._scar_helpers import party_state
+from .test_cr85_faculty_replaces_history import revert_cr85
 
 ACTOR, SUBJECT = "p_low", "p_mid"      # `tiny_world`: co-located, so a `fight` between them is admitted
 
@@ -181,6 +182,8 @@ def test_control_the_item_at_its_revert_reproduces_the_pre_item_one_season_hash(
     run(1, seed, w=w)
     moved = w.content_hash()
     revert_cp_t03_02(monkeypatch)
+    # v11 CR-85 (`faculty` replaces `history`, a later mover of seed 1) is reverted too, so `PRE_ITEM` stands.
+    revert_cr85(monkeypatch)
     w = build_realm(seed)
     run(1, seed, w=w)
     assert w.content_hash() == PRE_ITEM[seed]
