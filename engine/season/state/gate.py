@@ -1639,6 +1639,12 @@ class Subject:
     id: str
     ref: tuple
     earns: Optional[str | tuple] = None
+    # CP-T03-02: WHAT THE WRITE LEAVES THE SUBJECT AS, as `data/requires.py::Observation`s -- the value the
+    # effect WRITES, never a pre-write read. They ride, through `loop/resolve.py::_fold`, the Event of each
+    # kind this subject earns, beside the precondition's reads on `Event.observed`, so WITNESS deposits them
+    # by its shipped `observation_deposit_mode` with no new channel. Only a subject that MOVED contributes:
+    # the fold reads them off the gate's receipts. `()` on every subject but `_eff_kill`'s wounded parties.
+    observed: tuple = ()
 
     @property
     def kinds(self) -> tuple:
@@ -1650,8 +1656,8 @@ class Subject:
 
     @classmethod
     def entity(cls, store: str, eid: str, earns: Optional[str | tuple] = None,
-               fields: Optional[tuple] = None) -> "Subject":
-        return cls(eid, (ENTITY, store, eid, tuple(fields) if fields else None), earns)
+               fields: Optional[tuple] = None, observed: tuple = ()) -> "Subject":
+        return cls(eid, (ENTITY, store, eid, tuple(fields) if fields else None), earns, tuple(observed))
 
     @classmethod
     def edge(cls, t: Tenure, earns: Optional[str | tuple] = None) -> "Subject":
@@ -1711,6 +1717,9 @@ class Change:
 
     subjects: tuple
     apply: Callable[[], None]
+    # CP-T03-02: the per-party ending a fight's band Events carry (`Event.ending`); `()` for every effect
+    # that is not a fight's. The gate does not read it -- the fold copies it onto the act's success Events.
+    ending: tuple = ()
 
 
 def _nothing() -> None:

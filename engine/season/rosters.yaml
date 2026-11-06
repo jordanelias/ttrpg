@@ -961,6 +961,16 @@ rosters:
       The ORDER is the tuple's; the shares sum to 1.
     values: [actor_felled, subject_felled, yielded, undecided]
 
+  fight_endings:
+    source: "CP-T03-02 (home `proposals/2026-10-23-subsystem-completion/` T03 §2): how each party's fight ended, as a Felled/Wounded band's Event carries it (`Event.ending`)."
+    cite: "CP-T03-02"
+    note: >-
+      ONE VALUE PER PARTY, read off the scene by `loop/effects_combat.py::fight_ending`: `felled` (his own band is
+      `Felled`, `seam/ladder.py::party_degree` off the lifted `wound_state`), `yielded` (the scene's `surrender` names
+      him), `undecided` (neither -- standing, and he did not yield). The ORDER is the tuple's: felled, yielded, undecided.
+      [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]
+    values: [felled, yielded, undecided]
+
   duel_terms:
     source: "CP-T03-09 (`-08` AM-C-03; home `proposals/2026-10-23-subsystem-completion/` T03 §2): the terms a verb's fight is fought under."
     cite: "AM-C-03"

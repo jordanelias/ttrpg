@@ -38,10 +38,14 @@ from .test_rem30_character_sheet import _run
 #: RE-PINNED ONCE at v11 CR-87 (violence made exceptional: the build's loyalty rows and `fight`'s contexts, a declared mover
 #: of the build and of every season that fought): was `f9c01c27...`, `086d1092...`, `6312b4a1...`. CONTROL:
 #: `test_cr87_violence_contexts.py::revert_cr87` reads the pre-item hashes exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-PINNED ONCE at v10 CP-T03-02 (a fight band's `Event.ending` and the wounded party's body Observation, a declared
+#: mover wherever a Felled/Wounded fight lands): seeds 1, 2 were `9e1bb7c2...`, `fe7b5f49...`; seed 0 fights nothing and
+#: does not move. CONTROL: `test_cp_t03_02_band_ending_and_body.py::revert_cp_t03_02` reads the pre-item one-season
+#: realm exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
     0: "e9d7c8974bf509ca2b915489cc4f371c",
-    1: "9e1bb7c269b7bc1523a342d11d3fcfb0",
-    2: "fe7b5f497865689edcd0084d1a1effa7",
+    1: "ce8c74e701b11d66ea5b89ad95ea59b6",
+    2: "831dc04706af9847aab7574061a5c289",
 }
 
 #: The four Niflhel ids the archived file STRIKES (it prints no row for them): never members.

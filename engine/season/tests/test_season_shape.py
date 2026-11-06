@@ -999,7 +999,11 @@ def test_event_never_grows_a_target_or_an_actor():
     # exact set and nothing else.
     for banned in ("target", "actor", "subject", "source_actor", "recipient", "to", "stat_deltas"):
         assert banned not in fields
-    assert fields == {"id", "kind", "changes", "causes", "emitted_at", "degree", "observed"}
+    # CP-T03-02 MOVED IT BY ONE MORE: `ending`, a fight band's per-party outcome (`felled`/`yielded`/
+    # `undecided`). Neither attribution nor recipiency -- it names no doer and no addressee; it splits the
+    # scene's outcome (the class `degree` holds for the act) by party. [ASSUMPTION; medium; Jordan to
+    # correct; revert: the field and the Observation]
+    assert fields == {"id", "kind", "changes", "causes", "emitted_at", "degree", "observed", "ending"}
 
 
 def test_causes_is_never_empty():

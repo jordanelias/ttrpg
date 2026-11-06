@@ -626,12 +626,12 @@ BASE = {
     0: {"old": "7e81a2cf124ff105d4bd5af7ac1a5c77", "new": "20accb03c3d32f80a9fab00d80a70b21", "acts": 744,
         "census": "6032506e3dbe624bc7b7bb0cab2ea5029170d5b0681ffb641fb6c586c3abc02e",
         "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 203, "propositions": 143, "dates": 5, "docket": 8, "tenures": 1028, "log": 13400}},
-    1: {"old": "327bac574df3c4e71a2f71df2ebfc323", "new": "f4330aacb84c25069dfdb33f2a123215", "acts": 746,
-        "census": "321d254810a75233b3171635ff5e7802e208057ae614ac7c32cfdba7ddd13055",
-        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 212, "propositions": 145, "dates": 5, "docket": 9, "tenures": 1022, "log": 12271}},
-    2: {"old": "4fb68bcf6c064dc8d9ed77fc2d66a67d", "new": "a030141a9c66a833e84a97a71404ff88", "acts": 746,   # CR-87: was e6f01019... / 47151656... / 740
-        "census": "414d3ac0d9f00aed1a0d7f51c10ef05b84fbb7f6daa2f2a2d646f8daa3609fb6",
-        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 183, "propositions": 141, "dates": 5, "docket": 8, "tenures": 988, "log": 11338}},
+    1: {"old": "18de0fa6d300264bf535db0ca62c4a7a", "new": "f89ea45dd050cdf2329fde8885a1a110", "acts": 746,   # CP-T03-02 (a fight's `ending` + body Observation): was 327bac57... / f4330aac... / census 321d2548... / log 12271
+        "census": "6282d017e89275717b419a4b691cac75dfd9b133d9f761bb80ca330717cea176",
+        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 212, "propositions": 145, "dates": 5, "docket": 9, "tenures": 1022, "log": 12273}},
+    2: {"old": "ecc848eae7fcfe9f339d4e47fffa160a", "new": "fe9032eda9b7701241dcbd766c96fd1a", "acts": 746,   # CP-T03-02: was 4fb68bcf... / a030141a... / census 414d3ac0... / log 11338; CR-87: was e6f01019... / 47151656... / 740
+        "census": "49f45000d4ad2a8970754ca632c00c920a1327feb1432237e3fcb701c9243878",
+        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 183, "propositions": 141, "dates": 5, "docket": 8, "tenures": 988, "log": 11340}},
 }
 
 

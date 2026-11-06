@@ -1100,6 +1100,8 @@ FELLED, WOUNDED, UNTOUCHED = COMBAT_BANDS
 WOUND_QUANTITIES = roster("wound_quantities", ordered=True)
 # CP-T03-05 (`H-251`): the four endings `seam/wrappers/combat.py::fight_estimate` shares out, in `odds_of`'s order.
 ESTIMATE_OUTCOMES = roster("estimate_outcomes", ordered=True)
+# CP-T03-02: how each party's fight ended, as `Event.ending` carries it (`loop/effects_combat.py::fight_ending`).
+ENDING_FELLED, ENDING_YIELDED, ENDING_UNDECIDED = roster("fight_endings", ordered=True)
 
 
 def check_edge_above(above, quantities, what: str, where: str) -> None:

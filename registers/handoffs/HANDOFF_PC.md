@@ -8,7 +8,7 @@
 
 | item | where it lives | next step |
 |---|---|---|
-| Batch A (B10-11: CP-T03-03) — IN FLIGHT | `workplans/valoria_master_workplan_v11_part3.md` B10-11 card, row CP-T03-03; open `83c3d0b8` | built CP-T03-03 · close none · BATCH-CLOSE Phases 1-3, accretion, expunge; then Batch B (CP-T03-07), Batch C (CP-T03-06 measure) |
+| Batch B10-11 (remainder) — IN FLIGHT | `workplans/valoria_master_workplan_v11_part3.md` B10-11 card; open `83c3d0b8` | built CP-T03-03 CP-T03-02 · close none · build next: CR-85's build, CP-T03-04, CP-T03-07, CP-T03-08, CP-T03-06 (measure first); then ONE BATCH-CLOSE over `83c3d0b8..HEAD` |
 | PC-10a — duel terms in the module (commit `daae7401`, batch B-Y) | `modules/combat/wrapper.py` (`DUEL_TERMS`, `fight(terms=)`); `modules/combat/config.py` `CFG['YIELD_HEALTH_FRAC']`; `tests/valoria/test_combat_duel_terms.py` | PC-10b is built (`d2847e7b`, B10-11 close two); the season side reads it through `engine/season/hole_register.yaml` H-240, H-255 |
 | I1 — the season reaches almost none of the personal-combat engine | PC-10b (duel terms and yield) is built, `d2847e7b` (B10-11 close two); `workplans/valoria_master_workplan_v11_part5.md` PC-06 (a combatant from the person: K-1/K-5, K-5 HELD) | No scheduled closer beyond those; B10-10b is closed (`workplans/valoria_master_workplan_v11_part3.md`, its close-six paragraph) |
 | ED-PC-0007 — pessimist-audit PC action-menu consolidation | `registers/editorial_ledger_pc_archive.jsonl` (id `ED-PC-0007`, status deferred) | Reopen only if `combat_engine_v1` grows a discrete player-action menu |

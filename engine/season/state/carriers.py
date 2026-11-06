@@ -292,6 +292,17 @@ class Event:
     # predicate that records nothing, so it too carries `()` -- that is a gap in the OLD channel,
     # not a claim that nothing was read, and it closes when the verb is typed.
     observed: tuple = ()
+    # CP-T03-02. HOW A FIGHT ENDED, PER PARTY -- a tuple of `(person id, "felled" | "yielded" |
+    # "undecided")` pairs in party order (actor first), read off the scene's lifted `wound_state` and
+    # `surrender` by the effect that wrote the band (`loop/effects_combat.py::fight_ending`). Empty on
+    # every Event that is not a fight's Felled/Wounded band, which is nearly all of them.
+    # ⚠ NOT AN `actor`/`target` FIELD UNDER ANOTHER NAME (S19.3): it names no doer and no recipient --
+    # WHO did it stays a per-witness Claim. It records the OUTCOME the scene already decided, the same
+    # class of fact `degree` is (the act's band), split by party because a fight has two.
+    # [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation] -- the carrier is
+    # a new Event field rather than a payload key, since an Event carries no payload; a carrier+hash
+    # schema mover, folded by `World.content_hash` only where non-empty.
+    ending: tuple = ()
 
     def __post_init__(self) -> None:
         if not self.causes:

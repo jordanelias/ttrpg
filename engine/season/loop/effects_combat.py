@@ -17,9 +17,10 @@ from __future__ import annotations
 from dataclasses import replace
 
 from ..data.rosters import (
-    DECLARED, FELLED, FIELD_CASUALTY_MODELS, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
+    DECLARED, ENDING_FELLED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
     WOUND_HARM_MODELS, require_member,
 )
+from ..data.requires import Observation
 from ..data.verbs import VERB_TABLE, VOCATION_SOURCED, VOCATIONS
 from ..gaps import Unspecified
 from ..queries.person_q import held_against
@@ -43,6 +44,7 @@ from .effects_shared import _debit, _operand, effect_for
 # "kill / wound" (plan `FIGHT-RENAME`); only the `EFFECTS` key and its row moved.
 CAPTURED = "person.captured"        # the one kind `capture`'s opened `detain` earns (`verb_table.yaml`'s `capture` row)
 DUEL_YIELDED = "duel.yielded"       # v10 PC-10b: the kind a duel's yielder earns (`verb_table.yaml`'s `accept` row)
+BODY = "body"                     # the predicate of a body Observation: the cell's own field name
 
 
 def _yielder(res: "Resolution") -> "str | None":
@@ -222,9 +224,41 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     for pid, band in bands.items():
         own = () if band == FELLED else own_kinds(row.emits_at(band))
         own = tuple(k for k in own if k != DUEL_YIELDED or pid == yielder)
-        named += (death_subjects(w, pid, own, fields=("body",)) if bodies[pid] == 0
-                  else (Subject.entity("persons", pid, earns=own, fields=("body",)),))
-    return Change(named, perform)
+        if bodies[pid] == 0:
+            named += death_subjects(w, pid, own, fields=("body",))
+            continue
+        # CP-T03-02 (ii): A WOUNDED PARTY'S SUBJECT CARRIES WHAT HIS BODY NOW IS -- `(pid, "body", v)`, `v` the
+        # value `perform` WRITES (`bodies`), never `w.persons[pid].body` read here, which is the pre-fight body
+        # (the item's mutation). It rides each Event this subject earns (`body.changed`; a yielder's
+        # `duel.yielded`), so WITNESS deposits it as it deposits `stores:<kind>` and `condition`: by the shipped
+        # `observation_deposit_mode` (`actor`: the act's actor alone), no new channel. A `none`-model party
+        # (`bodies[pid] is None`) writes nothing and observes nothing.
+        # [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]
+        named += (Subject.entity("persons", pid, earns=own, fields=("body",),
+                                 observed=body_observed(pid, bodies[pid])),)
+    return Change(named, perform, fight_ending(w, (a.actor, who), res, above))
+
+
+def body_observed(pid: str, body: "int | None") -> tuple:
+    """CP-T03-02 (ii): the Observation a wounded party's write carries -- `(pid, "body", v)`, `v` the WRITTEN body
+    -- or `()` where the write writes nothing (`wound_harm_model: none`)."""
+    return (Observation(pid, BODY, body),) if body is not None else ()
+
+
+def fight_ending(w: "World", parties, res: "Resolution", above) -> tuple:
+    """CP-T03-02 (i): `Event.ending` -- `(pid, felled | yielded | undecided)` for each party still a person, in
+    party order, read off the scene's lifted `wound_state` (`party_degree`, the walk `_eff_kill` writes by) and
+    `surrender` (`_yielder`). Read BEFORE the write, which is right: it reports the scene, not the world.
+    [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]"""
+    states = res.result.get("wound_state") or {}
+    yielder = _yielder(res)
+    out = []
+    for pid in dict.fromkeys(parties):
+        if pid not in w.persons:
+            continue
+        out.append((pid, ENDING_FELLED if party_degree(states.get(pid), above) == FELLED
+                    else ENDING_YIELDED if pid == yielder else ENDING_UNDECIDED))
+    return tuple(out)
 
 
 @effect_for("capture")
@@ -256,7 +290,7 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     # (`own_kinds`), and `Wounded` declares `person.captured` so a wounded yielder's Event can be emitted; left
     # on the party, a wounded scene with NO yield would report a capture nobody made (ID-9). Only the edge earns it.
     base = Change(tuple(replace(s, earns=tuple(k for k in s.kinds if k != CAPTURED)) if CAPTURED in s.kinds else s
-                        for s in base.subjects), base.apply)
+                        for s in base.subjects), base.apply, base.ending)
     prisoner = _operand(a, "subject")
     if _yielder(res) != prisoner or prisoner not in w.persons or prisoner == a.actor:
         return base
@@ -275,7 +309,7 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     def perform() -> None:
         base.apply()
         w.add_tenure(nt)
-    return Change(base.subjects + (Subject.edge(nt, earns=CAPTURED),), perform)
+    return Change(base.subjects + (Subject.edge(nt, earns=CAPTURED),), perform, base.ending)
 
 
 def _harm(p: "Person", band: str, model: str, st: dict) -> "int | None":

@@ -1722,6 +1722,10 @@ class World:
             # Event a test has stripped, which `test_wb_the_carrier_moves_the_seeded_hash` does.
             for o in (getattr(e, "observed", None) or []):
                 h.update(_canonical(("^", o)))
+            # CP-T03-02: a fight band's per-party ending. Folded only where non-empty, so a log with
+            # no Felled/Wounded fight hashes as it did before the field existed.
+            if getattr(e, "ending", None):
+                h.update(_canonical(("!", e.ending)))
         return h.hexdigest()
 
     # -- S43: resolution AT BOOT, by string. A missing provider is a STARTUP FAILURE WITH A

@@ -42,6 +42,7 @@ from ..queries import person_q, world_q
 from ..queries.person_q import SEEN_PREDICATE
 from ..seam.wrappers import combat
 from ..state.carriers import Claim, Proposition, Question, Tenure, View
+from .test_cp_t03_02_band_ending_and_body import revert_cp_t03_02
 
 A, B = "p_mid", "p_low"          # `probes.tiny_world`: both at the hearth `Hh`
 BASE_BUILD = "837d0f83c62917b88d69da3daa3ea027"     # build_realm(0).content_hash(), after PC-10b (the pre-item base)
@@ -371,6 +372,9 @@ def revert_cr87(monkeypatch) -> None:
 
 def test_control_the_block_empty_and_every_value_at_its_revert_reproduce_the_pre_item_hash(monkeypatch):
     revert_cr87(monkeypatch)
+    # v10 CP-T03-02 (a later mover of every season that fought: the band's `ending`, the body Observation) is
+    # reverted too, so the base tree's reading stands rather than being re-taken.
+    revert_cp_t03_02(monkeypatch)
     assert populated.build_realm(0).content_hash() == BASE_BUILD
     w, _d, _rows = I.run(0, 1, observe=False)          # the audit's own run, which read the base hash
     assert w.content_hash() == BASE_SEASON
