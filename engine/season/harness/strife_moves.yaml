@@ -27,6 +27,7 @@
 
 row_keys: [code, name, verbs, kinds, needs, dark, gap, ends, terminal]
 study_cases: 102
+drawn_links: 16
 needs_vocabulary: [side, office, context]
 signature_keys: [kind, cause_verb, attacker, victim_held, code]
 # The side letters of `attacker` are `queries/world_q.py: SIDES`, which `strife_data.py` validates against.
@@ -104,3 +105,38 @@ moves:
   - {code: PU,   name: Punishment,              verbs: [arrest, raze, determine],         kinds: [arrest.made, rung.razed, matter.determined],       needs: [side], ends: 3}
   - {code: PC,   name: Penalty on place,        verbs: [requisition, issue, raze],        kinds: [requisition.taken, dispensation.issued, rung.razed], needs: [side], ends: 12}
   - {code: XP,   name: Trouble persists,        verbs: [],                                kinds: [],                                                 needs: [context], gap: "defined by later risings the dossier links; a reading over the log, not a verb", ends: 20, terminal: false}
+
+# THE STUDY'S 16 DRAWN LINKS (CR-76). `a` -> `b`: the study draws an arrow when `b` follows `a` within the next 3 moves (NOTE and
+# OTH skipped) more often than in a within-case shuffle (lift 1.75 and support 6 cases); `tier` is robust (thick arrow: held in at
+# least 75% of 48 rule variants and 70% of 1000 case resamples) or stable (thin: at least 50% of both). A code keeps the study's
+# SIDE suffix as written (-A authority, -R rebels, -O outside power; KL, CA, DN and XE only); `harness/strife.py` reads a link at its
+# BASE code, because `move_codes` carries no side, so a suffixed link's count there is an UPPER BOUND. `cases`/`of`: the study's
+# count of cases showing the link out of the cases containing `a`, where its text gives one; absent where it does not (links 8-16),
+# never guessed.
+# [UNVERIFIED]: hand-read from the study's text and not from its chart, like `ends`; `harness/strife_data.py::load_links` checks the
+# codes, the suffixes, the tiers and that the rows number `drawn_links`, not that the study says so.
+links:
+  - {a: WA,   b: CA-R, tier: robust, cases: 22, of: 66}
+  - {a: CA-R, b: XE-R, tier: robust, cases: 19, of: 35}
+  - {a: NG,   b: RU,   tier: robust, cases: 14, of: 41}
+  - {a: WR,   b: KL-A, tier: robust, cases: 11, of: 37}
+  - {a: OP,   b: MO,   tier: robust, cases: 10, of: 36}
+  - {a: DR,   b: IN,   tier: robust, cases: 10, of: 21}
+  - {a: SP,   b: WA,   tier: stable, cases: 24, of: 50}
+  - {a: SP,   b: FR,   tier: stable}
+  - {a: DA,   b: WA,   tier: stable}
+  - {a: OP,   b: VI,   tier: stable}
+  - {a: WN,   b: FA,   tier: stable}
+  - {a: WA,   b: SB,   tier: stable}
+  - {a: XE-R, b: PU,   tier: stable}
+  - {a: MO,   b: WR,   tier: stable}
+  - {a: WN,   b: DA,   tier: stable}
+  - {a: FR,   b: KL-A, tier: stable}
+
+# THE STUDY'S LEAVE-AND-REJOIN FIGURES, printed beside this realm's as the study's reference and never as a bar. Its flow definition
+# is richer than the one `harness/strife.py` applies (a rejoin after a departure counts when linked from the departure move or when
+# it starts a drawn link within 3 moves), so the two are not the same measure. [UNVERIFIED]: hand-read from the study's text.
+#   leave_and_rejoin  of the study_cases cases, those leaving the flow and rejoining it at least once
+#   mean_share_pct    the mean case's share of its moves on the flow, in percent
+#   end_off           cases whose last move is off the flow
+leave_rejoin: {leave_and_rejoin: 74, mean_share_pct: 23, end_off: 93}
