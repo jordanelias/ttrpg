@@ -35,12 +35,14 @@ from dataclasses import dataclass, replace
 from fractions import Fraction
 from typing import Callable, NamedTuple, Optional
 
-from ..data.requires import OWN_STATE_STEMS, UNKNOWN, binding_from_act, binding_of, evaluate
+from ..data.requires import (
+    OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, UNKNOWN, binding_from_act, binding_of, evaluate,
+)
 from ..data.rosters import (
     CONTINUATION_TIES, SUCCESSIONS,
-    BAN_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
+    BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL,
-    RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
+    RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
     VERB_CAPABILITY,
     faction_prop_id,
     require_member,
@@ -52,7 +54,7 @@ from ..data.rosters import (
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
-    DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, FOUNDING_REMIT_ACTS, HOLDING_RECORD_KINDS,
+    DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, ENEMY_CLASS, FOUNDING_REMIT_ACTS, HOLDING_RECORD_KINDS,
     RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
@@ -64,7 +66,7 @@ from .person_q import (
     _seen_index, crisis_weights, deed_valence, paired_deed_term, projected_axes)
 # v9 SC-02 `22a`: `reception` and `proofs` read which claims record a person's deeds, what each is worth
 # to its holder, and which deeds were done TO him, off the same person-side owners `regard` reads.
-from .person_q import attributed_deeds, deed_term, suffered_deeds
+from .person_q import attributed_deeds, deed_term, holds_dispute, suffered_deeds   # `holds_dispute`: v11 CR-87, the `dispute` stem's one owner
 # v9 IN-69: the one cosine (`cast.loyalty` calls it too).
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 # v9 IN-67: `goal_referents` reads a goal's `object:` off the ONE loader and a `deed_doers` goal's
@@ -1457,7 +1459,7 @@ def guard_weight(w: World, rung_id: str) -> int:
     return sum(w.persons[p].weight for p in sworn)
 
 
-def issuing_seat(w: World, rid: str) -> Optional[str]:
+def issuing_seat(w: World, rid: str, verb: Optional[str] = None) -> Optional[str]:
     """THE SEAT THAT ISSUED THE WRIT `rid` -- the `via` of the Act that caused the Record's CREATING
     Event (#453 §9.1 / K-52: *"read through `state/attribution.py::causing_act` on the warrant Record's
     creating Event -- that Act's `via`"*), or `None` when no Event wrote it (a hand-planted Record), no
@@ -1465,11 +1467,62 @@ def issuing_seat(w: World, rid: str) -> Optional[str]:
     the issuer still holds it). The creating Event is the
     FIRST in the log whose changes name the Record (`loop/matter.py`'s `prior` reads the last, for a
     different question). `arrest` and the `audience` stem's writ limb both ask it, and `queries/` may not
-    import `loop/`, so the one owner sits where both readers reach it."""
-    made = next((e for e in w.log if any(c.subject == rid for c in e.changes)), None)
-    act = causing_act(w, made) if made is not None else None
+    import `loop/`, so the one owner sits where both readers reach it. `verb` (v10 PC-10b), when given, asks only
+    for a Record that verb's act minted (the writ limb passes `WRIT_MINTING_VERB`); `None` is every creating act."""
+    act = _creating_act(w, rid)
+    if verb is not None and getattr(act, "verb", None) != verb:
+        return None
     via = getattr(act, "via", None)
     return via if via in w.offices else None
+
+
+def _creating_act(w: World, rid: str):
+    """THE ACT THAT CAUSED THE EVENT FIRST NAMING `rid` (`issuing_seat`'s read, factored at v10 PC-10b so the
+    `audience` stem's writ limb asks the act's VERB of the same act), or `None` (a hand-planted Record, or an
+    Event no act caused)."""
+    made = next((e for e in w.log if any(c.subject == rid for c in e.changes)), None)
+    return causing_act(w, made) if made is not None else None
+
+
+# THE VERB WHOSE MINT IS AN INVITATION (v10 PC-10b; H-240's carried point): `admits_audience`'s writ limb reads
+# a held, addressed Record as a licence to enter only when `issue` made it. `writs_held` stamps every
+# `RECORD_REFERENT_KINDS` member, and PC-10b's `challenge` joins that set (`accept`'s row), so without this
+# narrowing a challenge addressed to a man would be read as a writ admitting him to a court. A VERB, not a kind:
+# H-240 names the creating act's verb, and a `covenant`'s dispensation (`_eff_issue`'s body, another verb) is an
+# instrument, not an invitation [ASSUMPTION; medium; Jordan to correct; revert: any `dispensation`-kind Record].
+WRIT_MINTING_VERB = "issue"
+if WRIT_MINTING_VERB not in VERB_TABLE:           # the sibling constants refuse at import; a renamed verb would close the limb silently
+    raise Forbidden(f"`world_q.WRIT_MINTING_VERB` names {WRIT_MINTING_VERB!r}, which `verb_table.yaml` does not",
+                    "verb_table.yaml", needs="the verb whose mint is an invitation, as a `verb_table.yaml` row",
+                    law="v10 PC-10b -- the writ limb of `admits_audience` reads a verb; a renamed verb must refuse, not close it")
+
+
+def record_names(w: World, rid, operand: str, value):
+    """v10 PC-10b (H-240 route (1)) -- THE `names:<operand>` STEM'S ANSWER: does the Record `rid` name `value`
+    under the content key its kind maps for `operand` (`rosters.yaml: record_sourced_operands`, the one map of
+    what a document says, read through `data/requires.py::RECORD_SOURCED_OPERANDS`)? `True`/`False`, or
+    UNKNOWN for a subject that is no Record or a kind that maps nothing for `operand` -- a question nobody can
+    answer refuses, never a guessed reading (`ID-5`). An id list (the addressee shape) names each member."""
+    r = w.records.get(rid) if isinstance(rid, str) else None
+    if r is None:
+        return UNKNOWN
+    key = RECORD_SOURCED_OPERANDS.get(r.kind, {}).get(operand)
+    if key is None or not isinstance(r.subject_matter, dict):
+        return UNKNOWN
+    said = r.subject_matter.get(key)
+    return value in said if isinstance(said, (list, tuple)) else said == value
+
+
+def stakes_of(w: World, rid) -> Optional[str]:
+    """v10 PC-10b -- THE TERM A STANDING CHALLENGE NAMES: the `stakes` of the `challenge` Record `rid`, or `None`
+    for anything else (no Record, another kind, or a challenge naming no stakes -- a computed one). Read by
+    `seam/wrappers/combat.py::combat_input` into `PersonalCombatInput.terms`, CP-T03-09's one path; `None`
+    falls through to the verb's `duel_terms` line (`accept: blood`, v11 CR-87), and a verb the roster does not name
+    stays at the field's `'death'` default."""
+    r = w.records.get(rid) if isinstance(rid, str) else None
+    if r is None or r.kind != CHALLENGE_KIND or not isinstance(r.subject_matter, dict):
+        return None
+    return r.subject_matter.get(STAKES_KEY)
 
 
 def admits_audience(w: World, actor: str, rung: str) -> bool:
@@ -1499,6 +1552,8 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
          `dispensation` counts: its content, its `at` and the issuer's continued tenure are not read
          [ASSUMPTION; medium; Jordan to correct; revert: read them]; and a writ reaches its addressee
          only by `give` (`ED-IN-0292` (1), RULED NO), so the limb is built but unreached in computed play.
+         ⚠ v10 PC-10b: ONLY A RECORD `issue` MINTED (`WRIT_MINTING_VERB`, read off the creating act): `writs_held`
+         now stamps a held `challenge` too, and a challenge is not an invitation.
 
     ⚠ LIMIT, STATED: no limb admits a person to the rung where he LIVES (`residence_of`). Where a live sworn
     `oblige` stands with its principal, limb 1 reads `> 0` and an unsworn, seatless, writless household member
@@ -1519,8 +1574,10 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
     p = w.persons.get(actor)
     if p is None:
         return False
+    # v10 PC-10b: NARROWED TO RECORDS `issue` MINTED (`WRIT_MINTING_VERB`), so `challenge` joining
+    # `RECORD_REFERENT_KINDS` does not widen the gate (a challenge is minted by an `own` act, and is no invitation).
     for rid in writs_held(w, p):
-        seat = issuing_seat(w, rid)
+        seat = issuing_seat(w, rid, WRIT_MINTING_VERB)
         if seat is not None and purview_reaches(w, w.offices[seat], rung):
             return True
     return False
@@ -2996,7 +3053,12 @@ def writs_held(w: World, p: Person) -> tuple:
     the act then passes is the fold's (the rows' typed cells: the actor's own ledger holds a claim on
     the writ). It reads `p`'s own edges and the store only for the kinds of the Records they name.
     ⚠ NO 'ALREADY ANSWERED' DECLINE: a holder who complied once is offered the writ again while he
-    holds it -- the scene tax IN-10 (a) recorded for a repeated `oblige` (H-203)."""
+    holds it -- the scene tax IN-10 (a) recorded for a repeated `oblige` (H-203).
+    ⚠ v10 PC-10b: THE KINDS ARE `{dispensation, challenge}` -- `accept` declares `referent_class: Record` on a
+    `challenge` (its `existence` conjunct), so `RECORD_REFERENT_KINDS` derives it and a held challenge ADDRESSED TO
+    `p` (its `to`, the person challenged) is stamped here, `accept`'s occasion. Minted into the challenger's hand,
+    it reaches its addressee only by a `give` (H-229, unreached in the realm): `accept`'s named R-05 residue.
+    `admits_audience` reads only the writs `issue` minted, so the stamp does not widen the access gate."""
     # v10 IN-12 step 5a: the addressee test is `person_q.addressed_to`'s, its one owner (the terms-sourced
     # reader in `decision/options.py` asks the same rule of the holder's content claim).
     return tuple(sorted({t.object for t in p.tenures
@@ -3253,6 +3315,57 @@ def holdings_to_found(w: World, p: Person) -> tuple:
     return tuple(r for r in held if any(founds_over(w, p.id, s, r) for s in seats))
 
 
+# ⚠ `04` §A.2:133 and §B.10-§B.12:460 name `faction_q.at_war(w, a, b) -> bool`. DEFINED HERE (v11 CR-87) because
+# `faction_q` imports `world_q` and `enemies_heard` below reads `at_war`, so a definition in `faction_q` is an import
+# cycle. `layer-conformance` B4, third disposition, picked: the rows decide the NAME and the signature, which
+# `faction_q.py`'s re-export carries exactly; neither decides the defining module. `04` is not edited.
+# `20-ii`'s instruction names `at_war` last; the `mood` a war Proposition carries. MOVED here from
+# `faction_q.py`, unchanged, by v11 CR-87 (`faction_q` re-exports both).
+# `Proposition.mood`
+# is a plain string with no roster of allowed values (`OUGHT`/`HOLDS` are the two the tree already
+# mints, `harness/populated.py:658,661`); `WAR` is a third, idiomatic value of the SAME field, never
+# a new one -- `_eff_utter` already writes whatever `payload["mood"]` names, so this needs no new
+# verb and no matrix row. Declared once, beside the one function that reads it, the way `SHEET_KIND`
+# is declared beside `resolve`.
+WAR_MOOD = "WAR"
+
+
+def at_war(w: World, a: str, b: str) -> bool:
+    """`04` §B.10-§B.12 :460's signature and docstring (defined here, named `faction_q.at_war` by re-export): *"over live `commit`s to a WAR Proposition.
+    NEVER a stored flag."* `D-48`: *"war is a `WAR` Proposition with an `utterer` (AX-6) plus
+    `commit` edges owned by their subjects; `at_war` is a Query over the live ones ... There is no
+    boolean between two factions to set, because there is no faction record to hold one."*
+
+    A `WAR_MOOD` Proposition names its two parties directly, the same shape a creed's `OUGHT`
+    Proposition names its leader (`subject`) and faction (`value`, `harness/populated.py:661`):
+    `subject` and `value` are the two factions, UNORDERED (a war has no "first" side), so this
+    compares `{p.subject, p.value}` as a set against `{a, b}` rather than picking a slot for
+    either. `at_war` asks whether that Proposition still has ANY live `commit` -- `F.32`: *"a
+    `commit` whose subject is the declaring person, so `T-m` gives peace to the declarer"* (peace
+    = writing `until` on that edge, the owner's own discretion, exactly as a faction's own
+    membership commits close).
+
+    ⚠ MEASURABLY `False` FOR EVERY PAIR IN EVERY WORLD THIS TREE'S WORLD-GEN CAN BUILD TODAY --
+    BUT NOT FOR WANT OF A PRODUCER. `_eff_utter` (generic over `mood`) and `_eff_commit` are both
+    shipped, uncontested, `own`-eligible verbs, so a hand-built `Act(verb="utter", payload=
+    {"mood": WAR_MOOD, "subject": a, "value": b})` followed by a `commit` to the Proposition it
+    mints is a REAL fold today, not a hypothetical one -- `10_FACTIONS_AND_DEPLOYMENT.md` §4.1's
+    gap list (`F.33`) is about whether `at_war` may gate a verb's `requires`, which is a narrower,
+    still-open question than whether the Proposition can exist. No world-generation code (`cast`,
+    `build_realm`, the corpus overlays) currently AUTHORS such an act, which is why every corpus
+    and populated-realm world reads `False` for every pair -- a fact about what nothing yet
+    chooses to utter, not about this Query. The falsifier this module's test file carries drives
+    the real fold rather than planting a Tenure by hand, to prove that."""
+    TRACE.query("at_war", "resolver")
+    pair = {a, b}
+    for p in w.propositions.values():
+        if p.mood != WAR_MOOD or {p.subject, p.value} != pair:
+            continue
+        if any(t.kind == "commit" and t.object == p.id and t.live for t in w.tenures):
+            return True
+    return False
+
+
 def detainees_held(w: World, p: Person) -> tuple:
     """THE PRISONERS `p`'s SEATS HOLD (v10 IN-12 step 5, H-226 route (a) with H-232's formation-filter
     shape [ASSUMPTION; medium; Jordan to correct; revert: drop the term in `questions_for`, and
@@ -3269,8 +3382,9 @@ def detainees_held(w: World, p: Person) -> tuple:
     the act then passes is the fold's (`loop/predicates.py::_req_interrogate`: custody again, and the
     charge). THE SEAT IS THE CUSTODY'S OWN OBJECT: a man detained to another seat is not offered (the
     predicate's custody clause is `restrained`'s, any seat). `()` for a person granted no such act, or
-    whose seats hold nobody -- every person in the realm while `arrest` executes 0 and `capture` is
-    unbuilt, which is what keeps the realm's formation unchanged."""
+    whose seats hold nobody -- every person in the realm while no `detain` is open: `arrest` executes 0 and
+    `capture` (CP-T03-09) opened none in the seeds-0-2 one-season reading, so the realm's formation is unchanged by
+    this reader."""
     if not DETAINEE_REMIT_ACTS:
         return ()
     seats = {t.object for t in p.tenures
@@ -3281,6 +3395,43 @@ def detainees_held(w: World, p: Person) -> tuple:
     return tuple(sorted({t.subject for t in w.tenures
                          if t.kind == DETAIN_KIND and t.live and t.object in seats
                          and t.subject in w.persons and t.subject != p.id}))
+
+
+def enemies_heard(w: World, p: Person) -> tuple:
+    """THE PERSONS OF A FACTION AT WAR WITH `p`'s, OVER A WAR HE KNOWS OF (v11 CR-87, the WAR context of
+    `rosters.yaml: violence_contexts` [ASSUMPTION; medium; Jordan to correct; revert: `()`, and `war` names
+    nobody]), sorted by id. A war is a `WAR_MOOD` Proposition naming `p`'s faction (`faction_holding`, the one
+    owner of *which faction a person coheres under*) and another, `at_war` (the one owner of *live*) between
+    the two; he KNOWS OF it when its id is among `person_q.ledger_names` of his own ledger (he saw it uttered,
+    was told of it, holds a document naming it) or he holds a live edge on it (he uttered it, or committed):
+    a man who has not heard of the war does not fight in it. The enemy is every OTHER person who coheres under
+    the other party. `detainees_held`' shape and its tension with AX-7, for its reason: no claim carries a
+    person's faction, so membership is world-read, resolver-side and read-only, and stamped by
+    `questions_for` as the `Enemy` class (`ENEMY_CLASS`), which no row forms on: the `fight` decline
+    (`decision/options.py::opening_set`) reads it. `()` for a person in no faction (or two) and in every world
+    with no war Proposition -- every world this tree's world-gen builds before CR-91 -- and then
+    `questions_for`' output is byte-identical."""
+    wars = [x for x in w.propositions.values() if x.mood == WAR_MOOD]
+    if not wars:
+        return ()
+    mine = faction_holding(w, p.id)
+    if mine is None:
+        return ()
+    known = None
+    foes = set()
+    for x in wars:
+        if mine not in (x.subject, x.value):
+            continue
+        other = x.value if x.subject == mine else x.subject
+        if other == mine or not at_war(w, mine, other):
+            continue
+        if known is None:
+            known = ledger_names(p.ledger) | {t.object for t in p.tenures if t.live}
+        if x.id in known:
+            foes.add(other)
+    if not foes:
+        return ()
+    return tuple(sorted(q for q in w.persons if q != p.id and faction_holding(w, q) in foes))
 
 
 def own_referents_of_class(w: World, q: Question, classes: Optional[frozenset] = None) -> tuple:
@@ -3778,6 +3929,12 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # collection; only `interrogate` declares it. Empty while no live `detain` names his seat, and then
     # the output is byte-identical. REVERT: drop the term.
     held = tuple((d, DETAINEE_CLASS) for d in detainees_held(w, p))
+    # v11 CR-87 ([ASSUMPTION; medium; Jordan to correct]): AND, AFTER THEM, THE ENEMIES OF A WAR HE KNOWS OF
+    # (`enemies_heard`), as `Enemy` -- no row forms on it; the `fight` decline reads it as the war context. It
+    # rides a question he already has and never raises one of its own (a war is a context, not a question). Empty
+    # while no war Proposition is live, and then the output is byte-identical. REVERT: drop the term.
+    if out or added or held:
+        held += tuple((e, ENEMY_CLASS) for e in enemies_heard(w, p))
     if added or held:
         first = added[0] if added else held[0][0]
         head = out[0] if out else Question(f"q:need:{first}", "need", (), first)
@@ -4104,6 +4261,13 @@ class WorldReader:
             # answers this (`WORLD_ONLY_STEMS`).
             p = w.persons.get(subject)
             return UNKNOWN if p is None else not p.is_cohort
+        if stem == "names":
+            # v10 PC-10b (H-240 route (1)): DOES THE RECORD `subject` NAME THE VALUE OF ONE OPERAND, under
+            # the content key its kind maps for that operand -- `arg` is `<operand>:<value>`, the
+            # operand-named relation's predicate (`data/requires.py::Relation`). `record_names` is the one
+            # owner. The person side never answers this (`WORLD_ONLY_STEMS`).
+            operand, _, value = arg.partition(":")
+            return record_names(w, subject, operand, value)
         if stem == "room":
             # v10 REM-29 (B10-06): IS THERE ROOM UNDER THE RUNG `subject` FOR THE ACTOR (`arg`) --
             # `audience`'s shape, through `has_room`, the one owner `_eff_migrate` calls too. UNKNOWN
@@ -4115,6 +4279,15 @@ class WorldReader:
         if stem == "claim.held":
             p = w.persons.get(self._actor)
             return UNKNOWN if p is None else any(c.subject == subject for c in p.ledger)
+        if stem == "dispute":
+            # v11 CR-87: DOES THE ACTOR HOLD A DEED CLAIM OF `subject` HIS OWN JUDGEMENT SCORES AGAINST HIM --
+            # `person_q.holds_dispute`, the one owner, over the ACTOR'S OWN ledger (`claim.held`'s carve-out; `arg` is
+            # the actor, the relation's second side). UNKNOWN for a side that is no person (`ID-5`). The person side
+            # never answers this (`WORLD_ONLY_STEMS`).
+            p = w.persons.get(self._actor)
+            if p is None or arg != self._actor or subject not in w.persons:
+                return UNKNOWN
+            return holds_dispute(p, subject, w.fixtures.get("scar_weight_shift"))
         if stem == "rank":
             # `21_RECONCILIATION.md` PHASE 2 step 9 / `03_PARAMETERS.md` §C.1 -- THE ORDINAL, NOT
             # A KIND CHECK. `rung_kinds` is an ORDERED roster (`person` first), so a rung's rank
@@ -4601,52 +4774,6 @@ def default_terminal(e, a) -> bool:
     The harness passes the code-level test (`harness/strife.py`), which knows a field outcome's, a march's and a
     death's code through the verb and side; this module may not import the registry that holds the codes."""
     return e.kind in CONCLUDING_KINDS
-
-
-# `20-ii`'s instruction names `at_war` last; the `mood` a war Proposition carries. `Proposition.mood`
-# is a plain string with no roster of allowed values (`OUGHT`/`HOLDS` are the two the tree already
-# mints, `harness/populated.py:658,661`); `WAR` is a third, idiomatic value of the SAME field, never
-# a new one -- `_eff_utter` already writes whatever `payload["mood"]` names, so this needs no new
-# verb and no matrix row. Declared once, beside the one function that reads it. `at_war` and `WAR_MOOD` live
-# here, not in `faction_q` (which re-exports both, so `faction_q.at_war` stays the dotted path `04` names):
-# `faction_q` imports this module at load, and `open_referents` below reads `at_war`.
-WAR_MOOD = "WAR"
-
-
-def at_war(w: World, a: str, b: str) -> bool:
-    """`04` §B.10–§B.12, `:460`, verbatim signature and docstring: *"over live `commit`s to a WAR Proposition.
-    NEVER a stored flag."* `D-48`: *"war is a `WAR` Proposition with an `utterer` (AX-6) plus
-    `commit` edges owned by their subjects; `at_war` is a Query over the live ones ... There is no
-    boolean between two factions to set, because there is no faction record to hold one."*
-
-    A `WAR_MOOD` Proposition names its two parties directly, the same shape a creed's `OUGHT`
-    Proposition names its leader (`subject`) and faction (`value`, `harness/populated.py:661`):
-    `subject` and `value` are the two factions, UNORDERED (a war has no "first" side), so this
-    compares `{p.subject, p.value}` as a set against `{a, b}` rather than picking a slot for
-    either. `at_war` asks whether that Proposition still has ANY live `commit` -- `F.32`: *"a
-    `commit` whose subject is the declaring person, so `T-m` gives peace to the declarer"* (peace
-    = writing `until` on that edge, the owner's own discretion, exactly as a faction's own
-    membership commits close).
-
-    ⚠ MEASURABLY `False` FOR EVERY PAIR IN EVERY WORLD THIS TREE'S WORLD-GEN CAN BUILD TODAY --
-    BUT NOT FOR WANT OF A PRODUCER. `_eff_utter` (generic over `mood`) and `_eff_commit` are both
-    shipped, uncontested, `own`-eligible verbs, so a hand-built `Act(verb="utter", payload=
-    {"mood": WAR_MOOD, "subject": a, "value": b})` followed by a `commit` to the Proposition it
-    mints is a REAL fold today, not a hypothetical one -- `10_FACTIONS_AND_DEPLOYMENT.md` §4.1's
-    gap list (`F.33`) is about whether `at_war` may gate a verb's `requires`, which is a narrower,
-    still-open question than whether the Proposition can exist. No world-generation code (`cast`,
-    `build_realm`, the corpus overlays) currently AUTHORS such an act, which is why every corpus
-    and populated-realm world reads `False` for every pair -- a fact about what nothing yet
-    chooses to utter, not about this Query. The falsifier `test_faction_q.py` carries drives
-    the real fold rather than planting a Tenure by hand, to prove that."""
-    TRACE.query("at_war", "resolver")
-    pair = {a, b}
-    for p in w.propositions.values():
-        if p.mood != WAR_MOOD or {p.subject, p.value} != pair:
-            continue
-        if any(t.kind == "commit" and t.object == p.id and t.live for t in w.tenures):
-            return True
-    return False
 
 
 def open_referents(w: World, parties, referents) -> list:

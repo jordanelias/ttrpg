@@ -168,7 +168,7 @@ def test_the_shares_follow_the_trackers_not_the_sign_of_the_result():
     got = _estimate(w)
     entry, refusal = entry_for(combat._PRIZE, combat._PROVIDER)
     assert entry is not None, refusal
-    inp = _ran("combat_input", combat.combat_input, w, [ACTOR, SUBJECT])
+    inp = _ran("combat_input", combat.combat_input, w, [ACTOR, SUBJECT], "fight")
     rng = random.Random(int(H(w.world_seed, w.tick, ACTOR, "estimate"), 16))
     n = w.fixtures.get("estimate_samples")
     by_trackers = dict.fromkeys(combat.ESTIMATE_OUTCOMES, 0)

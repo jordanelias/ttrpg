@@ -30,10 +30,18 @@ from .test_rem30_character_sheet import _run
 
 #: The 1-season hashes with the expansion stubbed out (`PYTHONHASHSEED=0`), as of CP-T03-01's `individual` reads in
 #: `Event.observed` (the parent tree's, `d5358a9a`, were the previous values: `f2e5e265...`, `0d25717b...`, `05f065f4...`).
+#: RE-PINNED ONCE at v10 CP-T03-09 (`capture`, a declared mover of every one-season realm): was `662a7847...`, `af5ba681...`, `6c3e0c17...`.
+#: CONTROL: `capture` withheld from the chooser's verbs (in process) reads the old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-PINNED ONCE at v10 PC-10b (a challenge is a Record; `accept` binds to one; a declared mover wherever a challenge forms):
+#: was `7cde746e...`, `971e3d03...`, `0c28be95...`. CONTROL: the base tree (`95f58adb`'s `engine/season`) reads the old three.
+#: A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-PINNED ONCE at v11 CR-87 (violence made exceptional: the build's loyalty rows and `fight`'s contexts, a declared mover
+#: of the build and of every season that fought): was `f9c01c27...`, `086d1092...`, `6312b4a1...`. CONTROL:
+#: `test_cr87_violence_contexts.py::revert_cr87` reads the pre-item hashes exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
-    0: "662a784707fda3d5baac90b2ac852bcf",
-    1: "af5ba681a6a3eac6b6607e5f674f7300",
-    2: "6c3e0c178442905b2457b3e3a5ebebc4",
+    0: "e9d7c8974bf509ca2b915489cc4f371c",
+    1: "9e1bb7c269b7bc1523a342d11d3fcfb0",
+    2: "fe7b5f497865689edcd0084d1a1effa7",
 }
 
 #: The four Niflhel ids the archived file STRIKES (it prints no row for them): never members.

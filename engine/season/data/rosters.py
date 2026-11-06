@@ -550,6 +550,22 @@ if len(RECORD_KIND_KEYS.get(COVER_KIND, ())) != 1:
         needs=f"a `{COVER_KIND}: [terms]` row, or every cover reader retired with it",
         law="#453 §8.2 -- a cover is a Record whose one key names the actor it conceals")
 (COVER_KEY,) = RECORD_KIND_KEYS[COVER_KIND]
+# v10 PC-10b (RS-25; H-240 route (1)): THE `record_kinds` MEMBER A STANDING CHALLENGE IS, its two keys that
+# no act operand fills -- `stakes`, the duel's term, and `challenger`, the actor the effect writes -- and the
+# closed set of terms `stakes` may name (`challenge_terms`, held equal to `modules/combat/wrapper.py::
+# DUEL_TERMS` by a test, never by an import). Named once here, `COVER_KIND`'s shape, for the mint
+# (`_eff_challenge`) and the seam's read of a duel's stakes (`queries/world_q.py::stakes_of`). Refused at
+# import if the roster stops carrying either key: the mint would write a key the constructor refuses, and
+# the stakes read would match nothing forever.
+CHALLENGE_KIND = "challenge"
+STAKES_KEY, CHALLENGER_KEY = "stakes", "challenger"
+if not {STAKES_KEY, CHALLENGER_KEY} <= set(RECORD_KIND_KEYS.get(CHALLENGE_KIND, ())):
+    raise Unspecified(
+        f"record kind {CHALLENGE_KIND!r} does not carry {STAKES_KEY!r} and {CHALLENGER_KEY!r} "
+        f"({RECORD_KIND_KEYS.get(CHALLENGE_KIND)!r})", "rosters.yaml -- record_kinds",
+        needs=f"a `{CHALLENGE_KIND}` row with both keys, or the challenge mint and its stakes read retired",
+        law="PC-10b -- a challenge's term rides `stakes` and its maker `challenger`; the person is `terms`")
+CHALLENGE_TERMS = roster("challenge_terms", ordered=True)
 # ⚠ ONE STEM READS BOTH VOCABULARIES, SO THEY MAY NOT SHARE A WORD. `exists:<kind>`
 # (`queries/world_q.py::WorldReader.read`) answers a `tenure_kinds` member as a live EDGE and a
 # `record_kinds` member as a Record OF THAT KIND; a word in both rosters would be answered by

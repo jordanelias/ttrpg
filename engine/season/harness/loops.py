@@ -105,7 +105,11 @@ STEM_READS = {
     # v10 REM-29: `has_room` -- residents' `reside` edges and weight, the dwelling Sites (`capacity`)
     "room":         (("Person.weight", "-"), ("Site.exists", "+")) + _TENURE,
     "individual":   (("Person.weight", "-"),),            # v10 CP-T03-01: `Person.is_cohort`, read off `weight`
+    # v10 PC-10b: `record_names` -- a Record's content under the key its kind maps for the operand (minted with it)
+    "names":        (("Record.exists", "+"), ("Record.subject_matter", "?")),
     "claim.held":   (("Person.claim_ledger", "+"),),
+    # v11 CR-87: `person_q.holds_dispute` -- the actor's own deed claims, judged by his own pursuits (`deeds_judged`)
+    "dispute":      (("Person.claim_ledger", "?"),),
     "rank":         (("Rung.exists", "?"),),
     "purview":      (("Office.exists", "?"),) + _TENURE,
     "bench":        (("Office.exists", "?"),) + _TENURE,

@@ -127,8 +127,13 @@ def test_the_split_adds_challenge_and_accept_and_no_kill_or_wound_row():
     assert accept.writes == fight.writes
     # v10 REM-31: the `Declared` band (`the body` deferred to ENCOUNTER) names each verb's own declaration, as each
     # names its own refusal; every band the scene reads is carried by hand, identical.
+    # v10 PC-10b: `accept`'s `Wounded` adds `duel.yielded` (the yielder's own kind, earned off the scene's `surrender` in
+    # `_eff_kill`); every other band the scene reads is `fight`'s, identical, and no band is added (H-98).
     fe, ae = fight.emits_by_degree, accept.emits_by_degree
-    assert {b: k for b, k in ae.items() if b != "Declared"} == {b: k for b, k in fe.items() if b != "Declared"}
+    assert set(ae) == set(fe)
+    assert {b: [x for x in k if x != "duel.yielded"] for b, k in ae.items() if b != "Declared"} == \
+        {b: k for b, k in fe.items() if b != "Declared"}
+    assert ae["Wounded"] == fe["Wounded"] + ["duel.yielded"]
     assert (fe["Declared"], ae["Declared"]) == (["fight.declared"], ["accept.declared"])
     assert not {"kill", "wound", "kill / wound"} & set(V.VERB_TABLE)
 

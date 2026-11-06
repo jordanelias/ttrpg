@@ -73,10 +73,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, fields
 
-from .world_q import establishment_of, members
-# `at_war` (`20-ii`'s last member) and the `WAR_MOOD` it reads live in `world_q`, whose `open_referents` reads
-# `at_war` and which this module imports at load; re-exported here, so `faction_q.at_war` is `04`'s dotted path.
-from .world_q import WAR_MOOD, at_war  # noqa: F401 -- re-exported
+from .world_q import WAR_MOOD, at_war, establishment_of, members  # noqa: F401 -- v11 CR-87: the first two MOVED to `world_q` (the war context's `enemies_heard` reads `at_war`, and this module imports `world_q`, so the reverse import would be a cycle); re-exported so every `faction_q.at_war` caller reads the one owner
 from ..data.rosters import FACTION_BY_PROP, HEAD_SEAT, RECORD_KIND_KEYS
 from ..gaps import Unspecified
 from ..state.containment import descendants

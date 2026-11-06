@@ -79,6 +79,16 @@ def _fold_one(w, act, contest_max_depth=2):
     return events
 
 
+def _new_rows(w, pid, before: dict) -> set:
+    """THE STANCE ROWS THE BATTLE WROTE on `pid`: his rows now, less the ones he held before it (a multiset difference).
+    v11 CR-87 (`Fixtures loyalty_toward_creed`) writes the build-time loyalty row toward the CREED Proposition, which
+    is the faction's own id -- the referent the morale row names too (K-49: a stance row carries no kind) -- so a
+    battle's rows are told from the build's by when they appeared, never by their referent."""
+    from collections import Counter
+    after = Counter(tuple(r) for r in (w.persons[pid].stance or []))
+    return set((after - Counter(tuple(r) for r in before[pid])).elements())
+
+
 def test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only():
     """`p_npc_033`/`p_npc_035` (Crown, 2) march on `set_s_036` (Church of Solmund, 6 defenders)
     and lose. The attacker's own army takes the casualties; the six defenders are untouched --
@@ -102,6 +112,7 @@ def test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only():
         "pick an origin/target pair that still does")
     before_a = {pid: w.persons[pid].body for pid in attackers}
     before_d = {pid: w.persons[pid].body for pid in defenders}
+    before_s = {pid: list(w.persons[pid].stance or []) for pid in attackers + defenders}
 
     act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
     events = _fold_one(w, act, contest_max_depth=2)
@@ -118,7 +129,7 @@ def test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only():
     morale_w = w.fixtures.get("field_morale_weight")
     assert grudge_w != morale_w, "the two weights collided; this test can no longer discriminate"
     for pid in attackers:
-        rows = {(ref, val, wt) for ref, val, wt in (w.persons[pid].stance or [])}
+        rows = _new_rows(w, pid, before_s)
         assert ("fac_church_of_solmund", -1.0, grudge_w) in rows, (
             "no grudge row, AT THE GRUDGE WEIGHT, against the winning faction")
         assert ("fac_valorsmark", -1.0, morale_w) in rows, (
@@ -131,7 +142,7 @@ def test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only():
             "winner_faction/loser_faction are swapped")
     for pid in defenders:
         assert not any(ref in ("fac_valorsmark", "fac_church_of_solmund")
-                       for ref, _v, _w in (w.persons[pid].stance or [])), (
+                       for ref, _v, _w in _new_rows(w, pid, before_s)), (
             "the winning side gained a stance row from a battle it won")
 
 
@@ -276,14 +287,15 @@ def test_a_won_field_writes_casualties_and_stance_on_the_defender_only():
             f"fixture moved ({attackers}, {defenders}): re-read it")
         before_a = {pid: w.persons[pid].body for pid in attackers}
         before_d = {pid: w.persons[pid].body for pid in defenders}
+        before_s = {pid: list(w.persons[pid].stance or []) for pid in attackers + defenders}
         events = _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_spymaster"), contest_max_depth=2)
-        return w, attackers, defenders, before_a, before_d, [(e.kind, e.degree) for e in events]
+        return w, attackers, defenders, before_a, before_d, before_s, [(e.kind, e.degree) for e in events]
 
     kinds_at_1 = fold(1)[-1]
     assert ("field.lost", "Lost") in kinds_at_1 and not any(k == "field.won" for k, _ in kinds_at_1), (
         f"at the shipped scale the 20-v-6 attacker no longer routs on contact: {kinds_at_1}")
 
-    w, attackers, defenders, before_a, before_d, kinds = fold(10)
+    w, attackers, defenders, before_a, before_d, before_s, kinds = fold(10)
     assert ("field.won", "Won") in kinds, f"the scale did not carry the fold to Won: {kinds}"
 
     for pid in attackers:
@@ -292,14 +304,14 @@ def test_a_won_field_writes_casualties_and_stance_on_the_defender_only():
         assert w.persons[pid].body < before_d[pid], f"{pid} (the losing side) took no casualties"
 
     for pid in defenders:
-        rows = {(ref, val, wt) for ref, val, wt in (w.persons[pid].stance or [])}
+        rows = _new_rows(w, pid, before_s)
         assert ("fac_valorsmark", -1.0, w.fixtures.get("field_grudge_weight")) in rows, (
             "no grudge row against the winning faction (the attacker)")
         assert ("fac_church_of_solmund", -1.0, w.fixtures.get("field_morale_weight")) in rows, (
             "no morale-hit row against the loser's own faction (the defender)")
     for pid in attackers:
         assert not any(ref in ("fac_valorsmark", "fac_church_of_solmund")
-                       for ref, _v, _w in (w.persons[pid].stance or [])), (
+                       for ref, _v, _w in _new_rows(w, pid, before_s)), (
             "the winning side gained a stance row from a battle it won")
 
 
@@ -370,7 +382,7 @@ def test_the_none_casualty_model_writes_stance_only():
     morale_w = w.fixtures.get("field_morale_weight")
     for pid in attackers:
         assert w.persons[pid].body == before_body[pid]
-        after_new = {(r, v, wt) for r, v, wt in (w.persons[pid].stance or [])} - set(before_stance[pid])
+        after_new = _new_rows(w, pid, before_stance)
         assert after_new == {
             ("fac_church_of_solmund", -1.0, grudge_w),
             ("fac_valorsmark", -1.0, morale_w),

@@ -142,6 +142,16 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     return judged, told
 
 
+def holds_dispute(p: Person, referent: str, scar_shift: float = 0.0) -> bool:
+    """v11 CR-87 (the DISPUTE, `challenge`'s conjunct; `data/requires.py`'s `dispute` stem): DOES `p` HOLD A DEED CLAIM
+    OF `referent`'s THAT HIS OWN JUDGEMENT SCORES AGAINST HIM -- `deeds_judged`' two parts summed below zero (what he
+    saw and what he was told, each by his own pursuits). Person-side; the fold asks it of the actor's own ledger.
+    CR-88 re-points the conjunct to `grievance_against`. [ASSUMPTION; medium; Jordan to correct; revert: drop the
+    conjunct from `challenge`'s cell.]"""
+    judged, told = deeds_judged(p, referent, scar_shift)
+    return judged + told < 0
+
+
 def attributed_deeds(ledger, referent: str):
     """THE DEED CLAIMS IN `ledger` THAT RECORD AN ACT OF `referent`'s, in ledger order -- the one owner
     of *which of a holder's claims are about what this person did* (v9 SC-02 `22a`, split out of
@@ -185,6 +195,25 @@ def suffered_deeds(ledger, patient: str):
         if (c.subject == patient and not c.chain and is_deed(c) and c.predicate in PAIRED_KINDS
                 and deed_doer(c, seen()) is not None):
             yield c
+
+
+def attackers_of(ledger, patient: str, kinds: frozenset, window: int = 1) -> frozenset:
+    """WHO THE HOLDER SAW DO A DEED OF ONE OF `kinds` TO `patient` IN THE NEWEST `window` SEASONS HIS LEDGER
+    HOLDS (v11 CR-87, the DEFENCE context of `rosters.yaml: violence_contexts`): the doers `deed_doer` pairs to
+    `suffered_deeds`' claims, kept when the claim is among `recent_claims(ledger, window)` (anchored on his newest
+    claim, so `window == 1` is "this season" as he knows it) and its kind is in `kinds` (the caller's: the kinds an
+    opponent-rule row emits). Person-side (AX-2); what he was only told of names nobody, as in `suffered_deeds`."""
+    if not kinds:
+        return frozenset()
+    recent = {id(c) for c in recent_claims(ledger, window)}
+    seen, out = None, set()
+    for c in suffered_deeds(ledger, patient):
+        if id(c) in recent and c.predicate in kinds:
+            seen = _seen_index(ledger) if seen is None else seen      # built only when a claim qualifies
+            d = deed_doer(c, seen)
+            if d is not None:
+                out.add(d)
+    return frozenset(out)
 
 
 # v9 IN-58: THE DEED KINDS JUDGED ONLY THROUGH THE `seen.who` PAIRING -- every DEED kind no single

@@ -310,8 +310,8 @@ def test_the_realm_reading_sees_the_term_stubbed_and_news_told_is_read_against_n
     """THE CONTROLS THE FALSIFIER NAMES, run on the realm. (i) `stage_referents` stubbed to `()` (the ladder kept): the
     stage deliberations and the hits FALL (measured at seed 0, one season: stage 89 -> 51, hit 67 -> 48), so the count
     observes the term and not the ambition's plain `need` question alone. (ii) `news.told` against `goal_stages: []`
-    (measured 4 against 3 at the same world): the card reads it as within the seed spread, so it is asserted to differ
-    by at most one telling, not as a mover."""
+    (measured 4 against 3 at the same world when written; 6 against 4 since CR-87): the card reads it as within the seed
+    spread, so it is asserted to differ by at most the spread measured across seeds 0-4 (the assertion's note), not as a mover."""
     r = ladder_run
     orig = world_q.stage_referents
     world_q.stage_referents = lambda w, p, ambs=None: ()
@@ -326,4 +326,9 @@ def test_the_realm_reading_sees_the_term_stubbed_and_news_told_is_read_against_n
     with goals.rows_replaced(goals.parse(yaml.safe_load(files.GOALS_YAML.read_text(encoding="utf-8")))):
         bare = stage_run(populated.build_realm(0), 1)
     assert bare["stage"] == 0, "no ladder, so no stage referent: the control must read zero"
-    assert abs(r["told"] - bare["told"]) <= 1, (r["told"], bare["told"])
+    # v11 CR-87 (B10-11): 6 against 4 at seed 0 (was 5 against 4 with CR-87 at its revert, `revert_cr87`: the ladder arm alone
+    # moved, by one telling). THE SEED SPREAD, MEASURED by this file's own `stage_run` (ladder against `goal_stages: []`, one season,
+    # seeds 0-4, scratch, not kept): the difference reads +2 / 0 / -1 / 0 / +1 on this tree and +1 / -1 / 0 / 0 / +1 with CR-87 at
+    # its revert -- no consistent sign on either tree, so `news.told` is no mover of the ladder, the card's reading. The bound is
+    # the largest |difference| that spread holds on this tree, 2 (it was 1 at the revert, which is where the old `<= 1` came from).
+    assert abs(r["told"] - bare["told"]) <= 2, (r["told"], bare["told"])

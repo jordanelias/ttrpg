@@ -34,8 +34,20 @@ from engine.season.loop import driver as driver_mod
 from engine.season.loop.driver import SeasonDriver, resolvable_verbs
 from engine.season.queries.inputs import PlayHost
 from engine.season.state.ids import H, draw_factory
+from engine.season.tests.test_cr87_violence_contexts import revert_cr87
+
+import pytest
 
 SEED = 0
+
+
+@pytest.fixture(autouse=True)
+def _the_world_this_was_measured_on(monkeypatch):
+    """v11 CR-87 RE-TOOK THESE READINGS ON THE WORLD THEY WERE MEASURED ON: CR-87's contexts leave no `fight` formed on
+    `build_realm(0)` in one season, so no fight reaches ENCOUNTER and every arm here would be vacuous (the census asserts
+    it). The suspension is REM-31's and does not read CR-87; it is read with CR-87 at its revert
+    (`test_cr87_violence_contexts.py::revert_cr87`, whose own control reproduces the pre-CR-87 hash)."""
+    revert_cr87(monkeypatch)
 
 
 def _scripted(p, v, s, ask_budget, auto):

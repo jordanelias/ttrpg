@@ -38,10 +38,18 @@ from engine.season.state.ids import H, draw_factory
 # RE-PINNED ONCE at v10 CR-33 (NPC-088's `lifepath: 3-CF4` holds `inquiry` at `pool_default`; a Person repr, the event list unmoved): was
 # f2e5e265... / 0d25717b... / 05f065f4.... CONTROL: `data/cast.py::capability_of` stubbed to `{}` reads the old three exactly
 # (`test_cr33_lifepaths.py::BASE`), and the ordered (kind, id) event list equals the parent tree's at seeds 0 / 1 / 2.
+# RE-PINNED ONCE at v10 CP-T03-09 (`capture`, a declared mover of the one-season realm): was 71ff6e92... / 73af0d1e... / 011a4605.... CONTROL: `capture` withheld
+# from `populated.resolvable_verbs` reads the old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v10 PC-10b (a challenge is a Record; `accept` binds to one; a declared mover wherever a challenge forms): was
+# 009f9f31... / daca4682... / db5bd6f0.... CONTROL: the base tree (`95f58adb`'s `engine/season`) reads the old three. A GOLDEN
+# RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v11 CR-87 (violence made exceptional: a declared mover of the build and of every season that fought): was
+# 0fb73bc8... / 3b407a74... / 47151656.... CONTROL: `test_cr87_violence_contexts.py::revert_cr87` reads the old seed-0 pin
+# exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 PRE_BUILD = {
-    0: "71ff6e9280dc1c8cdecaf6ff45b1e384",
-    1: "73af0d1e84a9616b6c57940afd2737eb",
-    2: "011a46052caacfd800bcf70598306bcb",  # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
+    0: "20accb03c3d32f80a9fab00d80a70b21",
+    1: "f4330aacb84c25069dfdb33f2a123215",
+    2: "a030141a9c66a833e84a97a71404ff88",  # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
 }
 
 

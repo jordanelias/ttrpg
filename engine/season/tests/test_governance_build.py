@@ -907,7 +907,8 @@ def test_lb6d_every_verb_declares_a_rostered_beneficiary():
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops this census passing over a loader that returned a subset]
     # 62 -> 63, `interrogate` (v10 IN-12 step 5) -- `beneficiary: actor` (#453 §9.1), so `kinds["actor"]`
     # grows by one (a re-record).
-    assert len(VERB_TABLE) == 63, "the verb count moved; this row's census is stale"       # 62 -> 63, v10 IN-12
+    # 63 -> 64, `capture` (v10 CP-T03-09) -- `beneficiary: none` (`arrest`'s column), so `kinds["none"]` grows by one (a re-record).
+    assert len(VERB_TABLE) == 64, "the verb count moved; this row's census is stale"       # 63 -> 64, v10 CP-T03-09
     undeclared = [v for v, r in VERB_TABLE.items() if not r.beneficiary]
     assert not undeclared, f"verbs with no `beneficiary:`: {undeclared}"
     off_roster = [(v, r.beneficiary) for v, r in VERB_TABLE.items()
@@ -2930,7 +2931,20 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # Candidate per vocation (`argue` and `inquiry` join `copying`) and its act id carries the vocation, so the act mix moves (seed 0,
     # one season: 700 -> 705 in both arms; `test_go07_canonical_digest.py` records the 705). CONTROL: the rows commit's four source
     # files reverted read (700, 700) under this same test (the parent tree's run of this file's set).
-    assert (out["acts"], cout["acts"]) == (705, 705), (
+    # ⚠⚠ v10 CP-T03-09 (B10-11): (705, 705) -> (703, 703), A RE-RECORD WITH THE UNIT THAT MOVED IT: `capture` forms for the seats granting
+    # `dispatch` (26 of 34 live holds on `build_realm(0)`), so a person chooses it and the act mix moves (seed 0, one season: 705 -> 703 in
+    # both arms; `test_go07_canonical_digest.py` records the 703). CONTROL: `capture` withheld from `populated.resolvable_verbs` reads the
+    # old hash `71ff6e92...` and 705 acts.
+    # ⚠⚠ v10 PC-10b (B10-11): (703, 703) -> (719, 719), A RE-RECORD WITH THE UNIT THAT MOVED IT: every `challenge` mints a Record and
+    # `accept` forms only on a `Record`-classed referent (refused at `exists:challenge` on any other held document), so the act mix
+    # moves (seed 0, one season: 703 -> 719 in both arms; `test_go07_canonical_digest.py` records the 719). CONTROL: the base tree
+    # (`95f58adb`'s `engine/season`) reads (703, 703) under this same test.
+    # ⚠⚠ v11 CR-87 (B10-11): (719, 719) -> (744, 743), A RE-RECORD WITH THE UNIT THAT MOVED IT: `fight` forms only in a held context
+    # and the build's loyalty rows name the creed, so the season keeps the persons the fights felled and the act mix moves (seed 0,
+    # one season: 719 -> 744 shipped; `test_go07_canonical_digest.py` records the 744). THE ARMS NOW PART BY ONE ACT, which they had
+    # not since ED-IN-0306 phase 5 -- the wear claims part the act mix again, which the assertion below admits either way.
+    # CONTROL: `test_cr87_violence_contexts.py::revert_cr87` reads the old one-season hash `0fb73bc8...` (and so the 719).
+    assert (out["acts"], cout["acts"]) == (744, 743), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

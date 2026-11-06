@@ -76,10 +76,16 @@ def _stance_of(w, pid) -> list:
     return list(w.persons[pid].stance)
 
 
-def _expected(pid, faction, referent, sign):
-    """The row a member of `faction` takes: the creed's own call on the member's loyalty, signed."""
+def _expected(pid, faction, referent, sign, goal):
+    """The row a member of `faction` takes: the creed's own call on the member's loyalty, signed -- and, since v11 CR-87
+    (`Fixtures loyalty_toward_creed`, ED-IN-0335), a DISLOYAL member's row names the goal's Proposition `goal`, never the
+    persons it is about, held at the member band (`cast.loyalty_in_band`)."""
     st = cast.stance_from_loyalty(cast.loyalty(cast.row("NPC-" + pid.rsplit("_", 1)[1]), faction))
-    return None if st is None else (referent, sign * st[0], st[1])
+    if st is None:
+        return None
+    if st[0] < 0:
+        return (goal, *cast.loyalty_in_band(st))
+    return (referent, sign * st[0], st[1])
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -222,12 +228,14 @@ def test_in68_the_stance_row_is_the_creeds_loyalty_rule_signed_by_the_goals_stan
         for pid in sorted(_committed(w, "g_heir")):
             added = _stance_of(w, pid)[len(_stance_of(base, pid)):]
             assert _stance_of(w, pid)[:len(_stance_of(base, pid))] == _stance_of(base, pid), "the creed's rows stand"
-            want = _expected(pid, "Valorsmark", HEIR, sign)
+            want = _expected(pid, "Valorsmark", HEIR, sign, "g_heir")
             assert added == [want], (pid, added, want)
             checked += 1
             opposed += want[1] != sign
     assert checked == 2 * len(_committed(w, "g_heir")) and checked >= 20
-    assert opposed >= 2, "control: a Crown member below indifference inverts the sign (once per sign)"
+    # v11 CR-87: a member below indifference no longer inverts the sign toward the heir; his row names `g_heir` at -1, so
+    # it departs from the goal's sign under `+1` only (was `>= 2`, once per sign).
+    assert opposed >= 1, "control: a Crown member below indifference writes against the goal's sign"
     assert P.census(w)["goal_stance_rows"] == len(_committed(w, "g_heir"))
 
 
@@ -239,10 +247,12 @@ def test_in68_a_faction_with_no_template_writes_no_stance_row_and_a_row_per_refe
     guild = _committed(w, "g_guild")
     assert guild and all(HEIR not in [r[0] for r in w.persons[p].stance] for p in guild), \
         "Guilds has no role template: nothing to be loyal to"
-    # `seat_holders`' referent is the holder NOW: one row toward the king per Crown member
-    rows = [(p, r) for p in _committed(w, "g_throne") for r in w.persons[p].stance if r[0] == KING]
+    # `seat_holders`' referent is the holder NOW: one row toward the king per loyal Crown member, and (v11 CR-87) one toward
+    # the goal's Proposition per disloyal one -- never toward the king
+    rows = [(p, r) for p in _committed(w, "g_throne") for r in w.persons[p].stance if r[0] in (KING, "g_throne")]
     assert len({p for p, _ in rows}) == len(_committed(w, "g_throne"))
-    assert {r for p, r in rows if p == "p_npc_036"} >= {_expected("p_npc_036", "Valorsmark", KING, 1)}
+    assert any(r[0] == "g_throne" for _p, r in rows), "control: no disloyal member, so the CR-87 branch went unread"
+    assert {r for p, r in rows if p == "p_npc_036"} >= {_expected("p_npc_036", "Valorsmark", KING, 1, "g_throne")}
 
 
 def test_in68_a_rung_or_deed_referent_is_no_person_at_seeding_and_writes_no_stance_row(

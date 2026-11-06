@@ -605,16 +605,33 @@ def _counts(w) -> dict:
 # `fight`/`accept` that clears `exists`/`with` now records `individual:<actor>` reads (28 / 24 / 18 at one season). Was, for seeds 0 / 1 / 2: `old`
 # 65f9e76f... / cbbb8e0d... / b7960661..., `new` 69783660... / d81d7a73... / 9ab1a749.... `acts`, `census` and `counts` do NOT move. CONTROL: with those
 # reads left off `observed` (a scratch switch) the old three `new` values read exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v10 CP-T03-09 (`capture`), A DECLARED MOVER of every realm: the row forms for the seats granting `dispatch` (26 of 34 live
+# holds on `build_realm(0)`), so persons choose it and the act mix, the log and the hash move. Was, for seeds 0 / 1 / 2: `old` 31619119... /
+# 63a729de... / 1a8a1088..., `new` 71ff6e92... / 73af0d1e... / 011a4605...; `acts` 705 / 697 / 730; `tenures` 997 / 1004 / 1014 (seeds 0, 1);
+# `log` 11581 / 10739 / 10985. `build_realm(seed)` itself does not move (the row is chosen in play: 837d0f83... below stands). CONTROL, run in
+# process on this tree: `capture` withheld from `populated.resolvable_verbs` reads the old `new` three exactly (71ff6e92... / 73af0d1e... /
+# 011a4605...). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v10 PC-10b (a challenge is a Record; `accept` binds to one), A DECLARED MOVER wherever a challenge forms: every
+# `challenge` mints a `challenge` Record and its maker's `hold`, and `accept` forms only on a `Record`-classed referent. `build_realm(seed)`
+# does not move (837d0f83... below stands). Was, for seeds 0 / 1 / 2: `old` 020f6611... / a7ed3e98... / 53eb44c0..., `new` 009f9f31... /
+# daca4682... / db5bd6f0...; `acts` 703 / 695 / 731; `records` 183 / 194 / 186; `log` 11585 / 10764 / 10582. CONTROL: the base tree
+# (`95f58adb`'s `engine/season`) reads the old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v11 CR-87 (violence made exceptional), A DECLARED MOVER of every season that fought and of the build: the
+# build-time loyalty row names the creed, never its head, at no lower than -1 (`build_realm(seed)` moves: 837d0f83... ->
+# 7266f56b...), and `fight` forms only in a held context, so the 1-season realm keeps the persons the fights felled (80 -> 83).
+# Was, for seeds 0 / 1 / 2: `old` a0944c1b... / d52e342d... / e6f01019..., `new` 0fb73bc8... / 3b407a74... / 47151656...;
+# `acts` 719 / 721 / 740; `persons` 80 at each. CONTROL: `tests/test_cr87_violence_contexts.py::revert_cr87` reads the old
+# build and one-season hashes exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
-    0: {"old": "31619119f690342a0ff1d40ccd2e086c", "new": "71ff6e9280dc1c8cdecaf6ff45b1e384", "acts": 705,
-        "census": "88601d2bf2cb8303647b238b44dfef1f83df0077844bcbb411e04b6c98b7c7ad",
-        "counts": {"persons": 79, "rungs": 410, "offices": 34, "sites": 322, "records": 183, "propositions": 126, "dates": 3, "docket": 7, "tenures": 997, "log": 11581}},
-    1: {"old": "63a729defcaf61b7f7c9b802e12b5e05", "new": "73af0d1e84a9616b6c57940afd2737eb", "acts": 697,
-        "census": "f0508f10a816a9c36b6e4a30c6324359a0b1d89bb6af5afb81845ff47329379e",
-        "counts": {"persons": 80, "rungs": 411, "offices": 34, "sites": 322, "records": 194, "propositions": 120, "dates": 3, "docket": 8, "tenures": 1004, "log": 10739}},
-    2: {"old": "1a8a10880432be2fd9efa72ae9e245d9", "new": "011a46052caacfd800bcf70598306bcb", "acts": 730,   # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr) moves seed 2 alone at one season (NPC-004 has left the world by then at seeds 0 and 1): was d7fbbe5c... / 43d2c524...
-        "census": "c8be79b804c74658adb0153a991eb650da54fc5308c2b41353c4a5cfbeacf93b",
-        "counts": {"persons": 81, "rungs": 412, "offices": 34, "sites": 322, "records": 186, "propositions": 142, "dates": 4, "docket": 4, "tenures": 1014, "log": 10985}},
+    0: {"old": "7e81a2cf124ff105d4bd5af7ac1a5c77", "new": "20accb03c3d32f80a9fab00d80a70b21", "acts": 744,
+        "census": "6032506e3dbe624bc7b7bb0cab2ea5029170d5b0681ffb641fb6c586c3abc02e",
+        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 203, "propositions": 143, "dates": 5, "docket": 8, "tenures": 1028, "log": 13400}},
+    1: {"old": "327bac574df3c4e71a2f71df2ebfc323", "new": "f4330aacb84c25069dfdb33f2a123215", "acts": 746,
+        "census": "321d254810a75233b3171635ff5e7802e208057ae614ac7c32cfdba7ddd13055",
+        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 212, "propositions": 145, "dates": 5, "docket": 9, "tenures": 1022, "log": 12271}},
+    2: {"old": "4fb68bcf6c064dc8d9ed77fc2d66a67d", "new": "a030141a9c66a833e84a97a71404ff88", "acts": 746,   # CR-87: was e6f01019... / 47151656... / 740
+        "census": "414d3ac0d9f00aed1a0d7f51c10ef05b84fbb7f6daa2f2a2d646f8daa3609fb6",
+        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 183, "propositions": 141, "dates": 5, "docket": 8, "tenures": 988, "log": 11338}},
 }
 
 
@@ -623,13 +640,13 @@ def test_go07_control_the_build_world_old_digest_is_unmoved():
     (`test_season_weather.BASE_HASHES[0]`'s retired value); the same world now reads the new pin."""
     w = POP.build_realm(0)
     c = POP.build_realm(0, foreign=False, acquaintances=False)   # ED-IN-0310 + CR-81: the realm before the empire and the acquaintances
-    assert (_old_content_hash(c), c.content_hash()) == ("1808a6f0f59143cc187b607c1c44f802", "6717d2d12eedf4d97e95ef344861c1f4")   # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 1dd20ec5... / dfdbd5df...; CR-33 (NPC-088 holds `inquiry`): was b016e338... / a4998422... (CR-20+CR-30: was 970d0b5b... / 060d8901... (CR-86: was 919faacb... / c7ca8d50...)
+    assert (_old_content_hash(c), c.content_hash()) == ("d7b1bb377d9bce2edf1c078c45d936c4", "e9611b77932eff80218c48bb98509db2")   # CR-87 (loyalty toward the creed): was 1808a6f0... / 6717d2d1...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 1dd20ec5... / dfdbd5df...; CR-33 (NPC-088 holds `inquiry`): was b016e338... / a4998422... (CR-20+CR-30: was 970d0b5b... / 060d8901... (CR-86: was 919faacb... / c7ca8d50...)
     a = POP.build_realm(0, acquaintances=False)                  # CR-81's control arm: the parent tree's build
-    assert (_old_content_hash(a), a.content_hash()) == ("f37a51c3751433920d42b8d33cd68053", "7a9778bc929bf0105d63349338497e08")   # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 024abccb... / bfee1369...; CR-33: was d4be83d2... / 070b68df... (CR-20+CR-30: was be420f67... / 87682033... (CR-86: was f78bcaf4... / 70ea49cb...)
+    assert (_old_content_hash(a), a.content_hash()) == ("1f53bc119bfdfcb7f4d45fbbe7952bfe", "e6a40e1880bac963506fe39c071133d9")   # CR-87: was f37a51c3... / 7a9778bc...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 024abccb... / bfee1369...; CR-33: was d4be83d2... / 070b68df... (CR-20+CR-30: was be420f67... / 87682033... (CR-86: was f78bcaf4... / 70ea49cb...)
     f = POP.build_realm(0, foreign=False)                        # CR-81: was 919faacb... / c7ca8d50... (acquaintances off reads it)
-    assert (_old_content_hash(f), f.content_hash()) == ("622e0736ad75cebdd21003d5caaa1e90", "ccabd3bef03c01442d3a3558aa12639a")   # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was d1ecf597... / 0b43b49c...; CR-33: was f1c15230... / ebd5e067... (CR-20+CR-30: was a7628b4e... / 7b7992f7... (CR-86: was 42f55a5f... / e12a710b...)
-    assert _old_content_hash(w) == "3a7025a9bc4e58a8b2bd05c9f9db41b8"        # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 42b898c4...; CR-33: was ff134c63... (CR-20+CR-30: was da08203b... CR-86: was 47c172b0... (ED-IN-0342). CR-81: was f78bcaf4... (acquaintances=False reads it); ED-IN-0310: was 919faacb...; v10 IN-61: was 26c255ac...
-    assert w.content_hash() == "837d0f83c62917b88d69da3daa3ea027"            # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 6ad7b832...; CR-33: was d61848d3... (CR-20+CR-30: was b4bc2df0... CR-86: was 3ae970a1... (ED-IN-0342). CR-81: was 70ea49cb... (acquaintances=False reads it); v10 IN-61: was 4ab812ba... (CP-T02-02); before that 3e31638e... (CR-21)
+    assert (_old_content_hash(f), f.content_hash()) == ("e5e7812b7fc1f92a3d4bd66827d18055", "2c9b523d465970715cdf41fced8d3342")   # CR-87: was 622e0736... / ccabd3be...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was d1ecf597... / 0b43b49c...; CR-33: was f1c15230... / ebd5e067... (CR-20+CR-30: was a7628b4e... / 7b7992f7... (CR-86: was 42f55a5f... / e12a710b...)
+    assert _old_content_hash(w) == "8018a699ede4befaa1b0bff79ea3746e"   # CR-87: was 3a7025a9...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 42b898c4...; CR-33: was ff134c63... (CR-20+CR-30: was da08203b... CR-86: was 47c172b0... (ED-IN-0342). CR-81: was f78bcaf4... (acquaintances=False reads it); ED-IN-0310: was 919faacb...; v10 IN-61: was 26c255ac...
+    assert w.content_hash() == "7266f56bea4e3d75705f5e88eec1b2e1"   # CR-87: was 837d0f83...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 6ad7b832...; CR-33: was d61848d3... (CR-20+CR-30: was b4bc2df0... CR-86: was 3ae970a1... (ED-IN-0342). CR-81: was 70ea49cb... (acquaintances=False reads it); v10 IN-61: was 4ab812ba... (CP-T02-02); before that 3e31638e... (CR-21)
 
 
 def test_go07_control_the_world_did_not_move_only_its_digest():

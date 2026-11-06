@@ -46,7 +46,7 @@ from ..state.carriers import EFFORT, Act, Candidate, Person, Question, Scene, Se
 # `project` is DEFINED in `options.py` (see this module's docstring) and imported here because
 # `make_chooser`'s score calls it; `options` never imports this module.
 # `seat_of` is `options.py`'s own G3 helper (`via=seat_of(...)`, below).
-from .options import opening_set, project, seat_of, subject_is_opponent
+from .options import VIOLENT_OPPONENT_VERBS, opening_set, project, seat_of, subject_is_opponent
 
 STANCE_POLARITIES = roster("stance_polarities")
 ODDS_WEIGHTINGS = roster("odds_weightings")
@@ -85,6 +85,16 @@ def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = 
         raise ValueError(f"stance_gain {g} is not >= 0: it would damp or invert §F2's stance "
                          f"term, and inverting it is G2's polarity, not this gain (H-202)")
     t = _stance_arm(p, c, fx, memo)
+    # v11 CR-87 (THE GRUDGE'S BOUND): on a VIOLENT row (`data/verbs.py::VIOLENT_VERBS`, off `rosters.yaml:
+    # violent_prizes`) whose subject is its opponent, the term is read at `Fixtures hostile_stance_gain` in place of
+    # `1 + g`, so a grudge's pull on violence is bounded apart from its pull on every other act; `declared`'s sign
+    # (CR-16) is the arm's and is kept. `None` is the REVERT: `1 + g`, the same expression, exactly.
+    h = fx.get("hostile_stance_gain")
+    if h is not None and c.verb in VIOLENT_OPPONENT_VERBS:
+        if not h >= 0:
+            raise ValueError(f"hostile_stance_gain {h} is not >= 0: a negative weight would invert the "
+                             "grudge's sign on a violent row, which is G2's polarity, not this bound (CR-87)")
+        return h * t
     return (1.0 + g) * t             # at g == 0 this is 1.0 * t: exact for every float
 
 
