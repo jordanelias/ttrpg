@@ -2935,7 +2935,11 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # `dispatch` (26 of 34 live holds on `build_realm(0)`), so a person chooses it and the act mix moves (seed 0, one season: 705 -> 703 in
     # both arms; `test_go07_canonical_digest.py` records the 703). CONTROL: `capture` withheld from `populated.resolvable_verbs` reads the
     # old hash `71ff6e92...` and 705 acts.
-    assert (out["acts"], cout["acts"]) == (703, 703), (
+    # ⚠⚠ v10 PC-10b (B10-11): (703, 703) -> (719, 719), A RE-RECORD WITH THE UNIT THAT MOVED IT: every `challenge` mints a Record and
+    # `accept` forms only on a `Record`-classed referent (refused at `exists:challenge` on any other held document), so the act mix
+    # moves (seed 0, one season: 703 -> 719 in both arms; `test_go07_canonical_digest.py` records the 719). CONTROL: the base tree
+    # (`95f58adb`'s `engine/season`) reads (703, 703) under this same test.
+    assert (out["acts"], cout["acts"]) == (719, 719), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

@@ -244,6 +244,17 @@ rosters:
       # four verbs, the one kind whose `subject_matter` is written after the mint (the `(Record, subject_matter)`
       # matrix row). Not a `record_sourced_operands` kind: an army answers no operand.
       army:         [faction, strategy, trained, subformations]
+      # v10 PC-10b (RS-25; H-240 route (1)): A STANDING CHALLENGE TO A DUEL, minted by `challenge`
+      # (`loop/effects_information.py::_eff_challenge`) into the challenger's hand. `terms` is whom it
+      # challenges (`read_from`: the act's `subject`) and `to` the same person as its ADDRESSEE (so
+      # `world_q.writs_held` stamps it on his question once he holds it); `stakes` is the TERM the duel
+      # is fought under (`challenge_terms`, below), absent on a computed challenge, which carries no
+      # payload; `challenger` is the actor, written by the effect. ⚠ THE KEY SPLIT: the duel's term is
+      # `stakes` and the person is `terms` -- a term read from `terms` would read a person id.
+      # `record_sourced_operands` maps it, so the `names:` stem (`data/requires.py`) reads `challenger`
+      # for `to` and `terms` for `actor` and `subject`. [ASSUMPTION; medium; Jordan to correct; revert:
+      # drop the kind, `challenge` writes nothing and `accept` takes a person as its subject.]
+      challenge:    [terms, to, stakes, challenger]
     # HOW A MINTED DOCUMENT'S CONTENT IS READ OFF THE ACT, AND WHAT A HOLDER LEARNS FROM IT. One
     # owner for three facts the mint (`loop/effects.py::_mint_document`) and the deposit rule
     # (`loop/witness.py`) both read, so neither spells them.
@@ -957,9 +968,23 @@ rosters:
       refuses a verb the table lacks or a non-string, and `combat_input` refuses a value outside the engine's tuple,
       NAMING this roster, before the call -- a term is checked against that tuple and never re-declared here.
       [ASSUMPTION; medium; Jordan to correct; revert: drop this roster and `capture` fights to the death, which is
-      `fight`.]
+      `fight`.] ⚠ v10 PC-10b FEEDS THE SAME FIELD AND ADDS NO PATH: an act whose `subject` is a `challenge` Record
+      (`accept`) is fought under that Record's `stakes` (`challenge_terms`), read by the same `combat_input` into the
+      same `PersonalCombatInput.terms`; a challenge naming no stakes leaves the field at its `'death'` default.
     values:
       capture: yield
+
+  challenge_terms:
+    source: "v10 PC-10b (RS-25, Jordan 2026-10-14: *a duel doesn't have to be lethal*; H-240 route (1)): the terms a challenge may name."
+    cite: "H-240"
+    note: >-
+      THE CLOSED SET OF A `challenge` RECORD'S `stakes` (`record_kinds.challenge`). Its members are the engine's
+      (`modules/combat/wrapper.py::DUEL_TERMS`): `engine/season/data` may not import the module, so the two are held
+      equal by a TEST (`engine/season/tests/test_pc10b_challenge_record.py`), never by an import and never re-declared
+      unchecked. `_eff_challenge` refuses a `stakes` outside it; a computed challenge names none, and its duel is fought
+      at `PersonalCombatInput.terms`' own default, `'death'`. [ASSUMPTION; medium; Jordan to correct -- the three
+      terms; revert: no terms, a duel is lethal, as before.]
+    values: [yield, blood, death]
 
   combat_band_edges:
     source: "`H-98`, plan position `8` (closed; `workplans/valoria_master_workplan_v8_part4.md`, retired, at `FORK:7b619328`) -- the edge between the bands was two literals in `seam/ladder.py::combat_degree` (`if st[\"felled\"]` / `st[\"wounds\"] > 0`). Jordan 2026-09-02: *\"I do not want definitions etc to be hardcoded\"*. The bands themselves are `combat_degree_bands`, ruled 2026-09-03/04 as a READ of the scene."
@@ -2276,6 +2301,14 @@ rosters:
       dispensation: {to: to, subject: terms}
       petition:     {to: to, subject: terms}
       faction_sheet: {to: head, subject: proposition}
+      # v10 PC-10b (H-240 route (1)): A CHALLENGE answers `to` with its CHALLENGER -- the opponent an
+      # `accept` (`counterparty: to`) is fought against -- and `actor` and `subject` with its `terms`,
+      # the person challenged. Read by the `names:<operand>` stem (`data/requires.py`,
+      # `queries/world_q.py::record_names`): `accept`'s cell asks that its Record name the opponent
+      # under `challenger` and the acceptor under `terms`. `actor` is never derived off a document
+      # (`decision/options.py::_derive_operand` answers it with the person before any held Record), so
+      # mapping it moves no formation; the `names:` stem is its one reader.
+      challenge:    {to: challenger, subject: terms, actor: terms}
 
   warrant_sourced:
     source: >-

@@ -32,10 +32,13 @@ from .test_rem30_character_sheet import _run
 #: `Event.observed` (the parent tree's, `d5358a9a`, were the previous values: `f2e5e265...`, `0d25717b...`, `05f065f4...`).
 #: RE-PINNED ONCE at v10 CP-T03-09 (`capture`, a declared mover of every one-season realm): was `662a7847...`, `af5ba681...`, `6c3e0c17...`.
 #: CONTROL: `capture` withheld from the chooser's verbs (in process) reads the old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-PINNED ONCE at v10 PC-10b (a challenge is a Record; `accept` binds to one; a declared mover wherever a challenge forms):
+#: was `7cde746e...`, `971e3d03...`, `0c28be95...`. CONTROL: the base tree (`95f58adb`'s `engine/season`) reads the old three.
+#: A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
-    0: "7cde746ebdd0f855a2bd4ae161d673a5",
-    1: "971e3d030a5a46ea8227bb39be181f4b",
-    2: "0c28be954a86e68f7180c5dfcdc145d6",
+    0: "f9c01c272bd9af9bea1750283a815646",
+    1: "086d1092fffad3c9c82d04d5ffdb0a70",
+    2: "6312b4a1b6ee8ce3801c6f66a4568844",
 }
 
 #: The four Niflhel ids the archived file STRIKES (it prints no row for them): never members.

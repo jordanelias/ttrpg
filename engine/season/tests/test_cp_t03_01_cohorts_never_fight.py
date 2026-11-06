@@ -16,6 +16,11 @@ from `Person.is_cohort`, `weight > 1`), and `verb_table.yaml`'s `fight` and `acc
   the realm ends at the base's `content_hash` once the conjunct's own reads are left off `Event.observed` (they are
   hashed: the raw hash moves wherever a `fight`/`accept` cleared the clauses before it). At seed 1 a cohort was a party
   on the base (`p_npc_007` felled by one), the conjunct refuses it, and the realm moves.
+  ⚠ v10 PC-10b RE-TOOK THE CONTROL (`BASE`, below): `accept` now binds a `challenge` Record and `challenge` mints one, so
+  with `challenge`/`accept` offered the realm walks another trajectory from the pre-conjunct base. They are withheld from
+  the chooser with `capture` (CP-T03-09's precedent), and the base is re-taken on the tree before CP-T03-01 (`778981ed~1`)
+  under the same withholding: seeds 0 and 1 now refuse nothing on `individual` and end at it; seed 2 refuses one act and
+  moves. The hand-built `accept` here binds a planted challenge whose challenger is the act's opponent (`to`).
 """
 from __future__ import annotations
 
@@ -29,7 +34,7 @@ from ..data.requires import CELL_STEMS, REQUIRES_STEMS, WORLD_ONLY_STEMS, UNKNOW
 from ..data.verbs import VERB_TABLE
 from ..decision import make_chooser
 from ..queries import world_q
-from ..state.carriers import Act, Scene
+from ..state.carriers import Act, Record, Scene
 from ..state.ids import H, draw_factory
 
 CROWD, FIGHTER, FOE = "c_crowd", "p_low", "p_mid"       # `tiny_world`: p_low and p_mid live at the hearth `Hh`
@@ -73,7 +78,7 @@ def _season(verb=None, actor=FIGHTER, subject=FOE):
         fired.append(1)
         return [Scene(H(w.world_seed, w.tick, p.id, "scene:cp_t03_01"), p.id,
                       [Act(H(w.world_seed, w.tick, p.id, f"act:{verb}:{subject}"), p.id, verb,
-                           payload={"subject": subject})])]
+                           payload=_payload(w, verb, actor, subject))])]
 
     fired: list = []
     choose = dispatching_chooser(P.NOCHOOSE, {actor: act} if verb else {})
@@ -81,6 +86,18 @@ def _season(verb=None, actor=FIGHTER, subject=FOE):
     if verb:
         assert fired, "the hand-built act was never asked for: the falsifier observed nothing"
     return w, d
+
+
+def _payload(w, verb, actor, opponent):
+    """The hand-built act's payload. `fight`: the opponent is `subject`. `accept` (v10 PC-10b): the act binds a
+    `challenge` Record whose challenger is the opponent and whose `terms` is the actor -- planted here as a held
+    document would stand -- and the opponent rides `to`, the row's counterparty."""
+    if VERB_TABLE[verb].opponent_operand() == "subject":
+        return {"subject": opponent}
+    rid = f"rec:challenge:{opponent}:{actor}"
+    w.records[rid] = Record(rid, "Hh", "challenge",
+                            subject_matter={"terms": actor, "to": [actor], "stakes": None, "challenger": opponent})
+    return {"subject": rid, "to": opponent}
 
 
 def _kinds(w):
@@ -144,9 +161,15 @@ def test_the_stem_is_answered_from_is_cohort_and_is_world_only():
 
 #: `build_realm(seed).content_hash()` after two seasons of the shipped chooser on the base before this position
 #: (B10-10b's close). Re-take, do not edit: the control is that the realm still ends here wherever no cohort was a party.
-BASE = {0: "be2c7f0f1d82d8f785a43f14b1273c2c",
-        1: "3010c440922c4d899f9533446ae38431",
-        2: "6df7a66eedb89b806763cd1ab903d1dd"}
+#: ⚠ RE-TAKEN AT v10 PC-10b, on the tree before CP-T03-01 (`778981ed~1`), with `capture`, `challenge` and `accept` withheld from
+#: the chooser (`WITHHELD`): was be2c7f0f... / 3010c440... / 6df7a66e... (taken with `challenge`/`accept` offered, which PC-10b
+#: moves). The same withholding on the CP-T03-09 tree (`95f58adb`) and on PC-10b's reads the identical stripped hashes at all
+#: three seeds (aa4cc67d... / 8ac99151... / 3cf9a0a6...), so PC-10b moves nothing where no duel verb is chosen.
+BASE = {0: "aa4cc67d97acabc45f5455741c171d87",
+        1: "8ac991519a3cc2decd538597a7cdf497",
+        2: "d1594dae7a962dc9bbe9e6a1de9abb91"}
+#: The verbs this control's chooser never offers: `capture` (CP-T03-09) and the duel pair PC-10b re-shaped.
+WITHHELD = frozenset({"capture", "challenge", "accept"})
 
 
 def _individual_reads(e):
@@ -166,7 +189,8 @@ def _realm_two_seasons(seed):
     # v10 CP-T03-09: `capture` is WITHHELD FROM THE CHOOSER HERE. It forms for the seats granting `dispatch` and moves every
     # realm (its own mover, declared in its commit), so with it offered the base below -- taken before `capture` existed --
     # would be compared against a different trajectory; the control is the `individual` conjunct's, and this keeps it so.
-    choose = make_chooser(w.fixtures, mint, verbs=resolvable_verbs() - {"capture"},
+    # v10 PC-10b: `challenge` and `accept` too -- PC-10b re-shaped the duel pair (a Record, a new cell), a mover of its own.
+    choose = make_chooser(w.fixtures, mint, verbs=resolvable_verbs() - WITHHELD,
                           draw=draw_factory(w.world_seed, lambda: w.tick))
     _run_seasons(d, w, choose, 2)
     reads = refused_on_it = 0
@@ -180,9 +204,9 @@ def _realm_two_seasons(seed):
     return w.content_hash(), reads, refused_on_it
 
 
-@pytest.mark.parametrize("seed", [0, 2])
+@pytest.mark.parametrize("seed", [0, 1])
 def test_control_the_realm_ends_at_the_base_hash_wherever_no_cohort_was_a_party(seed):
-    """Seeds 0 and 2: no `fight`/`accept` was refused by the conjunct, so with its reads left off the realm ends at the
+    """Seeds 0 and 1 (since PC-10b's re-take; 0 and 2 before it): no `fight`/`accept` was refused by the conjunct, so with its reads left off the realm ends at the
     base's hash. `reads` is asserted, so the equality cannot hold because the conjunct was never evaluated."""
     h, reads, refused_on_it = _realm_two_seasons(seed)
     assert reads > 0, "the conjunct was never read: the equality below observes nothing"
@@ -191,8 +215,8 @@ def test_control_the_realm_ends_at_the_base_hash_wherever_no_cohort_was_a_party(
 
 
 def test_where_a_cohort_was_a_party_the_realm_moves_and_the_refusals_are_the_conjuncts():
-    """Seed 1: `p_npc_007` fought (and was felled by) a cohort on the base. The same seed now refuses that act on
-    `individual`, and the realm ends elsewhere -- the mover the position declares."""
-    h, reads, refused_on_it = _realm_two_seasons(1)
-    assert refused_on_it > 0, "no act was refused on `individual` at seed 1"
-    assert h != BASE[1], "a cohort-party fight was refused and the realm did not move"
+    """Seed 2 (since PC-10b's re-take, under `WITHHELD`; seed 1 before it): a cohort was a party on the pre-conjunct base.
+    The same seed now refuses that act on `individual`, and the realm ends elsewhere -- the mover the position declares."""
+    h, reads, refused_on_it = _realm_two_seasons(2)
+    assert refused_on_it > 0, "no act was refused on `individual` at seed 2"
+    assert h != BASE[2], "a cohort-party fight was refused and the realm did not move"

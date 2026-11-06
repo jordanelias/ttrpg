@@ -20,7 +20,11 @@ from engine.substrate import composition
 from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import matrix_row
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
-from ..data.rosters import COVER_KEY, COVER_KIND, FACTION_BY_PROP, RECORD_CONTENT, RECORD_KIND_KEYS
+from ..data.rosters import (
+    CHALLENGE_KIND, CHALLENGE_TERMS, CHALLENGER_KEY, COVER_KEY, COVER_KIND, FACTION_BY_PROP, RECORD_CONTENT,
+    RECORD_KIND_KEYS, STAKES_KEY,
+)
+from ..gaps import Forbidden
 from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
 from ..queries.inputs import ArmyCommand
@@ -295,6 +299,38 @@ def _eff_conceal(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     What the cover DOES is not here: `state/attribution.py::anchor_of` reads it (`live_cover`)."""
     d = a.payload if isinstance(a.payload, dict) else {}
     return _mint_document(w, a, COVER_KIND, {COVER_KEY: a.actor}, d.get("rung") or a.actor)
+
+
+@effect_for("challenge")
+def _eff_challenge(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v10 PC-10b (RS-25; H-240 route (1)): A CHALLENGE IS A `Record` OF KIND `challenge`, minted with the
+    challenger's `hold` through `_mint_document`, the one mint. Its keys (`rosters.yaml: record_kinds`):
+    `terms` -- whom it challenges, the act's `subject` (`content.read_from`); `to` -- the same person as its
+    ADDRESSEE, so `world_q.writs_held` stamps it on his question once he holds it (a `give`, H-229); `stakes`
+    -- the term the duel is fought under, the act's own `stakes` when it carries one, else ABSENT (a computed
+    challenge carries no payload, and `PersonalCombatInput.terms`' own `'death'` is then the duel's term, the
+    one place that default is written); `challenger` -- the actor, written here whatever the payload (`conceal`'s
+    precedent for a key no operand fills). `accept` binds to it (`names:to`, `names:actor`).
+
+    ⚠ A `stakes` OUTSIDE `challenge_terms` IS REFUSED BEFORE ANYTHING IS WRITTEN, naming the roster -- a hand-built
+    act's caller defect, as `duel_terms_of` refuses a roster term the engine does not name. `challenge_terms` is
+    held equal to the engine's `DUEL_TERMS` by a test, never imported here."""
+    stakes = a.payload.get(STAKES_KEY) if isinstance(a.payload, dict) else None
+    if stakes is not None and stakes not in CHALLENGE_TERMS:
+        raise Forbidden(
+            f"a `challenge` by {a.actor!r} names stakes {stakes!r}, not one of `challenge_terms` "
+            f"{tuple(CHALLENGE_TERMS)}", "rosters.yaml -- challenge_terms",
+            needs="a term `rosters.yaml: challenge_terms` names, or no `stakes` (the duel is then lethal)",
+            law="PC-10b -- a challenge names a term of the engine's closed set, read from one roster")
+    # `terms` through the mint's own `read_from` (the act's `subject`), never spelt; the addressee is the same
+    # person; the two keys no operand fills, the effect's.
+    read_from = RECORD_CONTENT.get("read_from") or {}
+    content = {key: _operand(a, src) for key, src in read_from.items()
+               if key in RECORD_KIND_KEYS[CHALLENGE_KIND]}
+    content.update({RECORD_CONTENT.get("addressee"): _operand(a, "subject"),
+                    STAKES_KEY: stakes, CHALLENGER_KEY: a.actor})
+    d = a.payload if isinstance(a.payload, dict) else {}
+    return _mint_document(w, a, CHALLENGE_KIND, content, d.get("rung") or a.actor)
 
 
 @effect_for("open_case")

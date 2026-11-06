@@ -129,7 +129,8 @@ class PersonalCombatInput:
                        `wrapper.fight` refuses a term outside `DUEL_TERMS`, so a `None` default would raise, and the
                        string leaves every record built without the field fighting exactly as before. The ONE path
                        a non-lethal term reaches the fight by is `combat.py::combat_input`, from `rosters.yaml:
-                       duel_terms`."""
+                       duel_terms` -- and, since v10 PC-10b, from the `stakes` of the `challenge` Record an
+                       `accept` is about (`world_q.stakes_of`), into this same field through the same function."""
     claimants: tuple
     ends: tuple
     wound_quantities: tuple

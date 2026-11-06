@@ -35,12 +35,14 @@ from dataclasses import dataclass, replace
 from fractions import Fraction
 from typing import Callable, NamedTuple, Optional
 
-from ..data.requires import OWN_STATE_STEMS, UNKNOWN, binding_from_act, binding_of, evaluate
+from ..data.requires import (
+    OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, UNKNOWN, binding_from_act, binding_of, evaluate,
+)
 from ..data.rosters import (
     CONTINUATION_TIES, SUCCESSIONS,
-    BAN_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
+    BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL,
-    RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
+    RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
     VERB_CAPABILITY,
     faction_prop_id,
     require_member,
@@ -1466,10 +1468,52 @@ def issuing_seat(w: World, rid: str) -> Optional[str]:
     FIRST in the log whose changes name the Record (`loop/matter.py`'s `prior` reads the last, for a
     different question). `arrest` and the `audience` stem's writ limb both ask it, and `queries/` may not
     import `loop/`, so the one owner sits where both readers reach it."""
-    made = next((e for e in w.log if any(c.subject == rid for c in e.changes)), None)
-    act = causing_act(w, made) if made is not None else None
-    via = getattr(act, "via", None)
+    via = getattr(_creating_act(w, rid), "via", None)
     return via if via in w.offices else None
+
+
+def _creating_act(w: World, rid: str):
+    """THE ACT THAT CAUSED THE EVENT FIRST NAMING `rid` (`issuing_seat`'s read, factored at v10 PC-10b so the
+    `audience` stem's writ limb asks the act's VERB of the same act), or `None` (a hand-planted Record, or an
+    Event no act caused)."""
+    made = next((e for e in w.log if any(c.subject == rid for c in e.changes)), None)
+    return causing_act(w, made) if made is not None else None
+
+
+# THE VERB WHOSE MINT IS AN INVITATION (v10 PC-10b; H-240's carried point): `admits_audience`'s writ limb reads
+# a held, addressed Record as a licence to enter only when `issue` made it. `writs_held` stamps every
+# `RECORD_REFERENT_KINDS` member, and PC-10b's `challenge` joins that set (`accept`'s row), so without this
+# narrowing a challenge addressed to a man would be read as a writ admitting him to a court. A VERB, not a kind:
+# H-240 names the creating act's verb, and a `covenant`'s dispensation (`_eff_issue`'s body, another verb) is an
+# instrument, not an invitation [ASSUMPTION; medium; Jordan to correct; revert: any `dispensation`-kind Record].
+WRIT_MINTING_VERB = "issue"
+
+
+def record_names(w: World, rid, operand: str, value):
+    """v10 PC-10b (H-240 route (1)) -- THE `names:<operand>` STEM'S ANSWER: does the Record `rid` name `value`
+    under the content key its kind maps for `operand` (`rosters.yaml: record_sourced_operands`, the one map of
+    what a document says, read through `data/requires.py::RECORD_SOURCED_OPERANDS`)? `True`/`False`, or
+    UNKNOWN for a subject that is no Record or a kind that maps nothing for `operand` -- a question nobody can
+    answer refuses, never a guessed reading (`ID-5`). An id list (the addressee shape) names each member."""
+    r = w.records.get(rid) if isinstance(rid, str) else None
+    if r is None:
+        return UNKNOWN
+    key = RECORD_SOURCED_OPERANDS.get(r.kind, {}).get(operand)
+    if key is None or not isinstance(r.subject_matter, dict):
+        return UNKNOWN
+    said = r.subject_matter.get(key)
+    return value in said if isinstance(said, (list, tuple)) else said == value
+
+
+def stakes_of(w: World, rid) -> Optional[str]:
+    """v10 PC-10b -- THE TERM A STANDING CHALLENGE NAMES: the `stakes` of the `challenge` Record `rid`, or `None`
+    for anything else (no Record, another kind, or a challenge naming no stakes -- a computed one). Read by
+    `seam/wrappers/combat.py::combat_input` into `PersonalCombatInput.terms`, CP-T03-09's one path; `None`
+    leaves the field at its `'death'` default."""
+    r = w.records.get(rid) if isinstance(rid, str) else None
+    if r is None or r.kind != CHALLENGE_KIND or not isinstance(r.subject_matter, dict):
+        return None
+    return r.subject_matter.get(STAKES_KEY)
 
 
 def admits_audience(w: World, actor: str, rung: str) -> bool:
@@ -1499,6 +1543,8 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
          `dispensation` counts: its content, its `at` and the issuer's continued tenure are not read
          [ASSUMPTION; medium; Jordan to correct; revert: read them]; and a writ reaches its addressee
          only by `give` (`ED-IN-0292` (1), RULED NO), so the limb is built but unreached in computed play.
+         ⚠ v10 PC-10b: ONLY A RECORD `issue` MINTED (`WRIT_MINTING_VERB`, read off the creating act): `writs_held`
+         now stamps a held `challenge` too, and a challenge is not an invitation.
 
     ⚠ LIMIT, STATED: no limb admits a person to the rung where he LIVES (`residence_of`). Where a live sworn
     `oblige` stands with its principal, limb 1 reads `> 0` and an unsworn, seatless, writless household member
@@ -1519,9 +1565,13 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
     p = w.persons.get(actor)
     if p is None:
         return False
+    # v10 PC-10b: NARROWED TO RECORDS `issue` MINTED (`WRIT_MINTING_VERB`), so `challenge` joining
+    # `RECORD_REFERENT_KINDS` does not widen the gate (a challenge is minted by an `own` act, and is no invitation).
     for rid in writs_held(w, p):
-        seat = issuing_seat(w, rid)
-        if seat is not None and purview_reaches(w, w.offices[seat], rung):
+        act = _creating_act(w, rid)
+        seat = getattr(act, "via", None)
+        if (getattr(act, "verb", None) == WRIT_MINTING_VERB and seat in w.offices
+                and purview_reaches(w, w.offices[seat], rung)):
             return True
     return False
 
@@ -2996,7 +3046,12 @@ def writs_held(w: World, p: Person) -> tuple:
     the act then passes is the fold's (the rows' typed cells: the actor's own ledger holds a claim on
     the writ). It reads `p`'s own edges and the store only for the kinds of the Records they name.
     ⚠ NO 'ALREADY ANSWERED' DECLINE: a holder who complied once is offered the writ again while he
-    holds it -- the scene tax IN-10 (a) recorded for a repeated `oblige` (H-203)."""
+    holds it -- the scene tax IN-10 (a) recorded for a repeated `oblige` (H-203).
+    ⚠ v10 PC-10b: THE KINDS ARE `{dispensation, challenge}` -- `accept` declares `referent_class: Record` on a
+    `challenge` (its `existence` conjunct), so `RECORD_REFERENT_KINDS` derives it and a held challenge ADDRESSED TO
+    `p` (its `to`, the person challenged) is stamped here, `accept`'s occasion. Minted into the challenger's hand,
+    it reaches its addressee only by a `give` (H-229, unreached in the realm): `accept`'s named R-05 residue.
+    `admits_audience` reads only the writs `issue` minted, so the stamp does not widen the access gate."""
     # v10 IN-12 step 5a: the addressee test is `person_q.addressed_to`'s, its one owner (the terms-sourced
     # reader in `decision/options.py` asks the same rule of the holder's content claim).
     return tuple(sorted({t.object for t in p.tenures
@@ -4105,6 +4160,13 @@ class WorldReader:
             # answers this (`WORLD_ONLY_STEMS`).
             p = w.persons.get(subject)
             return UNKNOWN if p is None else not p.is_cohort
+        if stem == "names":
+            # v10 PC-10b (H-240 route (1)): DOES THE RECORD `subject` NAME THE VALUE OF ONE OPERAND, under
+            # the content key its kind maps for that operand -- `arg` is `<operand>:<value>`, the
+            # operand-named relation's predicate (`data/requires.py::Relation`). `record_names` is the one
+            # owner. The person side never answers this (`WORLD_ONLY_STEMS`).
+            operand, _, value = arg.partition(":")
+            return record_names(w, subject, operand, value)
         if stem == "room":
             # v10 REM-29 (B10-06): IS THERE ROOM UNDER THE RUNG `subject` FOR THE ACTOR (`arg`) --
             # `audience`'s shape, through `has_room`, the one owner `_eff_migrate` calls too. UNKNOWN

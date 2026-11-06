@@ -40,10 +40,13 @@ from engine.season.state.ids import H, draw_factory
 # (`test_cr33_lifepaths.py::BASE`), and the ordered (kind, id) event list equals the parent tree's at seeds 0 / 1 / 2.
 # RE-PINNED ONCE at v10 CP-T03-09 (`capture`, a declared mover of the one-season realm): was 71ff6e92... / 73af0d1e... / 011a4605.... CONTROL: `capture` withheld
 # from `populated.resolvable_verbs` reads the old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v10 PC-10b (a challenge is a Record; `accept` binds to one; a declared mover wherever a challenge forms): was
+# 009f9f31... / daca4682... / db5bd6f0.... CONTROL: the base tree (`95f58adb`'s `engine/season`) reads the old three. A GOLDEN
+# RE-RECORDED, NOT A BALANCE CLAIM.
 PRE_BUILD = {
-    0: "009f9f31c60bbc5f1e73d266718e1081",
-    1: "daca46829463c9dac6a211a9777fbcc0",
-    2: "db5bd6f03e115f14d0177cdd7eb3d34e",  # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
+    0: "0fb73bc805ae699a0a13b8d09e130e1c",
+    1: "3b407a74d884c9bdabc1990acb1cfab6",
+    2: "47151656616dc7487a1ec481771d9ce3",  # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
 }
 
 

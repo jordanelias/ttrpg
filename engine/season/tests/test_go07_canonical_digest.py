@@ -611,16 +611,21 @@ def _counts(w) -> dict:
 # `log` 11581 / 10739 / 10985. `build_realm(seed)` itself does not move (the row is chosen in play: 837d0f83... below stands). CONTROL, run in
 # process on this tree: `capture` withheld from `populated.resolvable_verbs` reads the old `new` three exactly (71ff6e92... / 73af0d1e... /
 # 011a4605...). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v10 PC-10b (a challenge is a Record; `accept` binds to one), A DECLARED MOVER wherever a challenge forms: every
+# `challenge` mints a `challenge` Record and its maker's `hold`, and `accept` forms only on a `Record`-classed referent. `build_realm(seed)`
+# does not move (837d0f83... below stands). Was, for seeds 0 / 1 / 2: `old` 020f6611... / a7ed3e98... / 53eb44c0..., `new` 009f9f31... /
+# daca4682... / db5bd6f0...; `acts` 703 / 695 / 731; `records` 183 / 194 / 186; `log` 11585 / 10764 / 10582. CONTROL: the base tree
+# (`95f58adb`'s `engine/season`) reads the old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
-    0: {"old": "020f6611d09478bf85d1f58eaea8515f", "new": "009f9f31c60bbc5f1e73d266718e1081", "acts": 703,
-        "census": "c7d6df23004698ebf1a484c1ab837761e32a07c87e19eeb4e661501645ab677e",
-        "counts": {"persons": 79, "rungs": 410, "offices": 34, "sites": 322, "records": 183, "propositions": 126, "dates": 3, "docket": 7, "tenures": 996, "log": 11585}},
-    1: {"old": "a7ed3e988216c9c1e462856684bada2a", "new": "daca46829463c9dac6a211a9777fbcc0", "acts": 695,
-        "census": "a22b47291a5440e99c144d77def3ce7bb7f2053356aaa5ae7991ab04e51cbaae",
-        "counts": {"persons": 80, "rungs": 411, "offices": 34, "sites": 322, "records": 194, "propositions": 120, "dates": 3, "docket": 8, "tenures": 1001, "log": 10764}},
-    2: {"old": "53eb44c0ebf9974d14a321924566041a", "new": "db5bd6f03e115f14d0177cdd7eb3d34e", "acts": 731,   # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr) moves seed 2 alone at one season (NPC-004 has left the world by then at seeds 0 and 1): was d7fbbe5c... / 43d2c524...
-        "census": "c749dbe1d36136a6ba8d2541a99547cbfa96e530e0009f0da57c41ae35e33560",
-        "counts": {"persons": 81, "rungs": 412, "offices": 34, "sites": 322, "records": 186, "propositions": 142, "dates": 4, "docket": 4, "tenures": 1014, "log": 10582}},
+    0: {"old": "a0944c1b3736e5fee1a4c37b75c3a6d8", "new": "0fb73bc805ae699a0a13b8d09e130e1c", "acts": 719,
+        "census": "5aa9bb1e63a88f65a08b8c5b2f2eddae1f7f161bf89f51d36db11569427c9085",
+        "counts": {"persons": 80, "rungs": 411, "offices": 34, "sites": 322, "records": 193, "propositions": 128, "dates": 4, "docket": 7, "tenures": 1008, "log": 11766}},
+    1: {"old": "d52e342d084819b02cc5fc4257b10103", "new": "3b407a74d884c9bdabc1990acb1cfab6", "acts": 721,
+        "census": "32cf3a8a4893ff88812b315039a94011604671b4068f38bfbcbfb91c4d122d2e",
+        "counts": {"persons": 80, "rungs": 411, "offices": 34, "sites": 322, "records": 202, "propositions": 131, "dates": 3, "docket": 9, "tenures": 1015, "log": 11520}},
+    2: {"old": "e6f01019f9fe10e6a922cd0cc84752b7", "new": "47151656616dc7487a1ec481771d9ce3", "acts": 740,   # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr) moves seed 2 alone at one season (NPC-004 has left the world by then at seeds 0 and 1): was d7fbbe5c... / 43d2c524...
+        "census": "01a34a3ab9567e1352947c41fd34b3177659b056d399df9494def6d9626728a3",
+        "counts": {"persons": 80, "rungs": 411, "offices": 34, "sites": 322, "records": 188, "propositions": 142, "dates": 4, "docket": 4, "tenures": 995, "log": 11249}},
 }
 
 

@@ -118,7 +118,10 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     the band it is implementing. `max(1, ...)` is `seam/wrappers/combat.py::party_end`'s own floor
     (*"a dying person still fights"*), followed rather than reinvented."""
     d = a.payload if isinstance(a.payload, dict) else {}
-    who = d.get("subject")
+    # THE OPPONENT IS THE ROW'S OWN (`VerbRow.opponent_operand`, the fold's `_target` rule): `subject` for
+    # `fight` and `capture`, `to` for `accept` since v10 PC-10b (its `subject` is the challenge Record).
+    row = VERB_TABLE[a.verb]
+    who = d.get(row.opponent_operand())
     if who not in w.persons:
         return NO_CHANGE
     # ⚠ NO SCENE, NO HARM -- AND THIS IS A REFUSAL TO INVENT, NOT A MISSING FEATURE. `kill / wound`
@@ -197,16 +200,23 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # worst over both, so it must license what a Wounded party earns beside a felled one -- and is not
     # the felled man's own kind. And because `_fold` gives each kind's Event only its earners' changes,
     # the person.died Event of a felled actor names him, never the standing subject.
-    row = VERB_TABLE[a.verb]
+    # v10 PC-10b: `duel.yielded` IS EARNED BY THE YIELDER ALONE -- the party the scene's `surrender`
+    # (`seam/wrappers/combat.py::surrender_of`, lifted off the trace) names. A band declaring it (`accept`'s
+    # `Wounded`) would otherwise hand it to every wounded party, a yield nobody made (ID-9). Read off the
+    # result, never the verb: a row whose band does not declare the kind emits nothing of it (`_fold`).
+    result = res.result if isinstance(res.result, dict) else {}
+    yielder = (result.get("surrender") or {}).get("by")
     named: tuple = ()
     for pid, band in bands.items():
         own = () if band == FELLED else own_kinds(row.emits_at(band))
+        own = tuple(k for k in own if k != DUEL_YIELDED or pid == yielder)
         named += (death_subjects(w, pid, own, fields=("body",)) if bodies[pid] == 0
                   else (Subject.entity("persons", pid, earns=own, fields=("body",)),))
     return Change(named, perform)
 
 
 CAPTURED = "person.captured"        # the one kind `capture`'s opened `detain` earns (`verb_table.yaml`'s `capture` row)
+DUEL_YIELDED = "duel.yielded"       # v10 PC-10b: the kind a duel's yielder earns (`verb_table.yaml`'s `accept` row)
 
 
 @effect_for("capture")
@@ -215,8 +225,8 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     ENDED IN HIS YIELD. A named fold of `fight`, not a second fight: `_eff_kill` is called and its `Change` is the
     base (each party written by his own band, `seam/ladder.py::party_degree`), to which ONE `detain` EDGE is added,
     the captive (the act's `subject`) -> THE SEAT THE ACT IS EXERCISED THROUGH (`Act.via`) -- the seat is `via`
-    itself, not an issuing seat, because no warrant is behind a capture (`_eff_arrest` reads one; PC-10b's Record
-    route is not built).
+    itself, not an issuing seat, because no warrant is behind a capture (`_eff_arrest` reads one; PC-10b's challenge
+    Record is `accept`'s, not `capture`'s).
 
     WHAT LICENSES THE EDGE, EACH ONE OWNER OF ITS RULE (`_eff_arrest`'s tests, minus the warrant): (1) the scene's
     `surrender` (`seam/wrappers/combat.py::surrender_of`, lifted off the trace) names the SUBJECT as the one who

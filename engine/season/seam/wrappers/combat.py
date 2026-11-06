@@ -86,6 +86,7 @@ from ...gaps import Forbidden, Unspecified
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup).
 from ...manifest.providers import provider
 from ...queries.inputs import PersonalCombatInput, PlayHost
+from ...queries.world_q import stakes_of
 from ...state.ids import H
 from ._entry import entry_for
 
@@ -141,27 +142,44 @@ def party_end(person: Any, fx: Any) -> int:
     return max(1, default_end - bands)
 
 
-def duel_terms_of(verb: str) -> Optional[str]:
+def duel_terms_of(verb: str, stakes: Optional[str] = None) -> Optional[str]:
     """THE TERMS A VERB'S SCENE IS FOUGHT UNDER (CP-T03-09; `rosters.yaml: duel_terms`), or `None` for a verb the
     roster does not name (its fight is lethal: `PersonalCombatInput.terms`' own default is the one place that says so).
+
+    v10 PC-10b: `stakes`, a standing challenge's term (`queries/world_q.py::stakes_of`, `rosters.yaml:
+    challenge_terms`), when the act fights under one -- THE SAME FIELD AND THE SAME CHECK, no second path. `None`
+    (no challenge, or a challenge naming no stakes) falls through to the verb's roster line, as before.
 
     ⚠ THE CLOSED SET IS THE ENGINE'S, AND THE CHECK IS AGAINST IT, NEVER A COPY: the term must be a member of
     `modules/combat/wrapper.py::DUEL_TERMS`, read off the loaded engine, and a value outside it REFUSES here naming
     the roster (`engine/season/data` cannot import the module, so the seam, which may reach it, is the first place
     the roster meets the tuple). Engine absent: the unchecked term goes on and the call is refused as
     `ENGINE-UNAVAILABLE` by `entry_for`, so a bad term cannot reach a fight."""
-    term = DUEL_TERMS_BY_VERB.get(verb)
+    term = stakes if stakes is not None else DUEL_TERMS_BY_VERB.get(verb)
+    where = "challenge_terms" if stakes is not None else "duel_terms"
     loaded = engine()
     if term is not None and loaded is not None and term not in loaded[0].DUEL_TERMS:
         raise Forbidden(
-            f"`rosters.yaml: duel_terms` names {verb!r}: {term!r}, which is not one of the engine's "
+            f"`rosters.yaml: {where}` names {verb!r}: {term!r}, which is not one of the engine's "
             f"{tuple(loaded[0].DUEL_TERMS)}", "rosters.yaml",
             needs="a term in `modules/combat/wrapper.py::DUEL_TERMS`",
             law="CP-T03-09 -- a season roster is checked against the engine's closed set, not re-declared")
     return term
 
 
-def combat_input(w: Any, claimants: list, verb: str) -> PersonalCombatInput:
+def _cause_record(w: Any, causes: list) -> Optional[str]:
+    """v10 PC-10b -- THE RECORD THE CAUSING ACT IS ABOUT: the `subject` of `causes[0]`, read off the act store
+    (`World.acts`; RESOLVE records the act before it reaches the seam, `loop/resolve.py`), or `None` (no cause,
+    a cause the store does not hold, or a world with no store). Only a `challenge` Record answers `stakes_of`, so
+    for `fight`, whose `subject` is a person, this changes nothing. The act names the Record; nothing re-derives
+    which challenge a pair fights under."""
+    store = getattr(w, "acts", None)
+    act = store.get(causes[0]) if store is not None and causes else None
+    payload = getattr(act, "payload", None)
+    return payload.get("subject") if isinstance(payload, dict) else None
+
+
+def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = None) -> PersonalCombatInput:
     """THE HOST INPUT BUILDER (plan position `31b`, A-25): `World` -> the frozen record the fight reads.
 
     Reads `w.persons` (the two claimants) and `w.fixtures`, and nothing else; the module that consumes
@@ -170,9 +188,13 @@ def combat_input(w: Any, claimants: list, verb: str) -> PersonalCombatInput:
 
     `verb` (CP-T03-09) is the act's verb and fills `terms` from `rosters.yaml: duel_terms` -- the ONE path a
     non-lethal term reaches the fight by (`duel_terms_of`). A verb the roster does not name leaves `terms` at the
-    record's own default, `'death'`, so `fight` and `accept` build the record they always built."""
+    record's own default, `'death'`, so `fight` builds the record it always built.
+
+    `record` (v10 PC-10b) is the Record the act is about (`_cause_record`); a `challenge` Record's `stakes`
+    (`world_q.stakes_of`) fill the SAME field through the same `duel_terms_of`, so `accept` is fought under the
+    challenge's terms, and under `'death'` where it names none."""
     a_id, b_id = claimants[0], claimants[1]
-    terms = duel_terms_of(verb)
+    terms = duel_terms_of(verb, stakes_of(w, record))
     return PersonalCombatInput(
         claimants=(a_id, b_id),
         ends=(party_end(w.persons[a_id], w.fixtures), party_end(w.persons[b_id], w.fixtures)),
@@ -325,7 +347,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     if pa is None or pb is None:
         return dict(status="PARTY-GAP", why=f"claimant not a person: {a_id!r} / {b_id!r}",
                     module=_PROVIDER)
-    inp = combat_input(w, claimants, verb)
+    inp = combat_input(w, claimants, verb, _cause_record(w, causes))
     # `H` returns a blake2b hexdigest (`state/ids.py`), so 16 is the RADIX that parses it back to
     # an int for the RNG -- structural, not a game value. Pre-existing; surfaced because step 8's
     # `S.H(...)` -> `H(...)` lift rewrote the line and the gate scores added lines.

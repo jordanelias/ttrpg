@@ -138,12 +138,16 @@ def test_in09_the_record_class_is_declared_by_the_three_alone_and_answers_dispen
     # (`RECORD_REFERENT_KINDS` is `dispensation` alone), `HOLDING_RECORD_KINDS` holds no writ kind (a
     # `held_by` conjunct on `construe` would put `dispensation` in it: the checkpoint's third conjunct, not
     # ported -- `test_in09_a_custodian_who_is_not_the_addressee_is_offered_none_of_the_three`).
+    # RE-RECORDED AT v10 PC-10b (B10-11; control: the CP-T03-09 tree `95f58adb`): `accept` declares `Record` on a
+    # `challenge` (no `held_by`), so the rows asking no `held_by` gain it, and `RECORD_REFERENT_KINDS` gains `challenge`,
+    # answered by `accept` ALONE -- the writ occasion (`dispensation`) is still the three's.
     record_rows = {v for v, r in VERB_TABLE.items() if r.referent_class == "Record"}
-    assert record_rows == {*THREE, "carry", "found", "build", "research"}
-    assert {v for v in record_rows if not _asks_subject_held(VERB_TABLE[v])} == {*THREE, "research"}
-    assert {v for v in record_rows if _record_subkinds_answered(VERB_TABLE[v]) & RECORD_REFERENT_KINDS} == set(THREE)
+    assert record_rows == {*THREE, "carry", "found", "build", "research", "accept"}
+    assert {v for v in record_rows if not _asks_subject_held(VERB_TABLE[v])} == {*THREE, "research", "accept"}
+    assert {v for v in record_rows if "dispensation" in _record_subkinds_answered(VERB_TABLE[v])} == set(THREE)
+    assert {v for v in record_rows if "challenge" in _record_subkinds_answered(VERB_TABLE[v])} == {"accept"}
     assert not _record_subkinds_answered(VERB_TABLE["research"])
-    assert RECORD_REFERENT_KINDS == frozenset({"dispensation"})
+    assert RECORD_REFERENT_KINDS == frozenset({"dispensation", "challenge"})
     assert not HOLDING_RECORD_KINDS & RECORD_REFERENT_KINDS, "a writ kind is stamped by a holding row too"
 
 

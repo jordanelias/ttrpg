@@ -505,9 +505,16 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # [2] (31452, 5417daa3...) -> (31510, a65e2185...); STEP_OFF_ONE_SEASON fe7efbe3... / (11807, 8dc5b5fb...) -> 81aa6671... / (11401, 2275e41e...);
 # THREAD_READ_WITHHELD_EVENTS_1 (11582, e23a1f6e...) -> (11586, 860b0d23...). CONTROL, run in process on this tree: `capture` withheld from
 # `populated.resolvable_verbs` reads all five of the old values exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v10 PC-10b (a challenge is a Record; `accept` binds to one), A DECLARED MOVER wherever a challenge forms: every
+# `challenge` now mints a `challenge` Record and the maker's `hold`, and `accept` forms only on a `Record`-classed referent (refused
+# at `exists:challenge` on every held document but a challenge), so the act mix and the log move. The build hash does not. Was:
+# BASE_HASHES[1] 009f9f31... -> 0fb73bc8..., [2] 5b9b4aa4... -> 84002fa8...; BASE_EVENTS[1] (11585, 06a9dca3...) -> (11766, 03e52c6b...),
+# [2] (31510, a65e2185...) -> (32004, 9cd8f64e...); STEP_OFF_ONE_SEASON 81aa6671... / (11401, 2275e41e...) -> 63129abb... / (11496,
+# 24d897bb...); THREAD_READ_WITHHELD_EVENTS_1 (11586, 860b0d23...) -> (11767, c35ef751...). CONTROL: the base tree (`95f58adb`'s
+# `engine/season`) reads all five old values. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE_HASHES = {0: "837d0f83c62917b88d69da3daa3ea027",
-               1: "009f9f31c60bbc5f1e73d266718e1081",
-               2: "5b9b4aa454ecf371ae66e0986a2ea0f1"}
+               1: "0fb73bc805ae699a0a13b8d09e130e1c",
+               2: "84002fa849b3ce47e0cc240eed2a61bd"}
 
 # THE ONE-SEASON PIN WITH CR-81'S STEP OFF (`build_realm(0, acquaintances=False)`: the hash and the event count and digest
 # `BASE_HASHES[1]` / `BASE_EVENTS[1]` held before CR-81). The `give`-withheld arm's control, below.
@@ -527,8 +534,9 @@ BASE_HASHES = {0: "837d0f83c62917b88d69da3daa3ea027",
 # digest do not move.
 # RE-PINNED ONCE at v10 CR-33 (NPC-088 holds `inquiry`, a Person repr): 4cb09ae3... -> 8aa6e2e7...; the event count and digest do not move.
 # RE-PINNED ONCE at the CR-33 verify pass (NPC-004 holds `inquiry`): 8aa6e2e7... -> d2152860...; the event count and digest do not move.
-STEP_OFF_ONE_SEASON = ("81aa6671af9995c88b2e9463cd91c8a6",
-                       (11401, "2275e41ecdb45cf30ec1cc561871699e5828454fba1505c50c03ffa96c784d60"))
+# RE-PINNED ONCE at v10 PC-10b (see `BASE_HASHES`): 81aa6671... / (11401, 2275e41e...) -> 63129abb... / (11496, 24d897bb...).
+STEP_OFF_ONE_SEASON = ("63129abbcb0e81df8f43f64093e0b4d6",
+                       (11496, "24d897bba2505ee36f3494d49a5d4494e72583bf7cb13183784663d88a300f60"))
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -615,8 +623,10 @@ STEP_OFF_ONE_SEASON = ("81aa6671af9995c88b2e9463cd91c8a6",
 # RE-RECORDED at v10 REM-30's `verb_capability` rows with `BASE_HASHES` (11846 / e7a4f9a1... -> 11581 / 21e9e3eb..., 30822 /
 # 03960f4d... -> 31452 / 5417daa3...: `train` forms `argue` and `inquiry` Candidates and its act id carries the vocation, so the
 # draws walk another trajectory). CONTROL: the rows commit's four source files reverted read the old pair (the file, 409 passed).
-BASE_EVENTS = {1: (11585, "06a9dca3eee3e6096ac0c1b10dd10f3809386d894ee27bf3aa53f30f200ad414"),
-               2: (31510, "a65e218559a02946cda623e001e9d879db562a1b871239d0a33845bb577a23f2")}
+# RE-PINNED ONCE at v10 PC-10b with `BASE_HASHES` (11585 / 06a9dca3... -> 11766 / 03e52c6b..., 31510 / a65e2185... -> 32004 /
+# 9cd8f64e...); the base tree reads the old pair.
+BASE_EVENTS = {1: (11766, "03e52c6baa7a86bf597f31805e08fcaf5a338af2c1d752e77b7428b7fb9dd178"),
+               2: (32004, "9cd8f64e382139fa97f51e46b281de72493abe55bbcd15f04b4b0c458eed163e")}
 
 
 def _digest(w) -> tuple:
@@ -787,7 +797,7 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: `the body`'s `step:`/`declares:` popped in process reads the old value exactly); still differs from `BASE_EVENTS[1]` (11846).
 #: RE-RECORDED at v10 REM-30's `verb_capability` rows with `BASE_HASHES`: 11852 / e6f3edeb... -> 11582 / e23a1f6e... (the rows
 #: commit's four source files reverted in process reads the old value exactly).
-THREAD_READ_WITHHELD_EVENTS_1 = (11586, "860b0d23109a7203a4777e98ea342376e9c2156934d9848ad8d0ad6623a60e2f")   # CP-T03-09: was 11582 / e23a1f6e...   # REM-30 rows: was 11852 / e6f3edeb...   # REM-31: was 11799 / 07b7a36b...   # CR-86: was 11781 / 43774342...   # CR-17: was 10316 / af2eb292...; CR-25: was 10847 / 83f4c9a2...; CR-81: was 9741 / 1e77a5a4...
+THREAD_READ_WITHHELD_EVENTS_1 = (11767, "c35ef75190e8ed3adcc9481673850be3a88efdb717d543be841b1a135259e751")   # PC-10b: was 11586 / 860b0d23...   # CP-T03-09: was 11582 / e23a1f6e...   # REM-30 rows: was 11852 / e6f3edeb...   # REM-31: was 11799 / 07b7a36b...   # CR-86: was 11781 / 43774342...   # CR-17: was 10316 / af2eb292...; CR-25: was 10847 / 83f4c9a2...; CR-81: was 9741 / 1e77a5a4...
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

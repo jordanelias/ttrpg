@@ -288,7 +288,9 @@ def test_in53v_c_the_declarations_as_built():
     # (B10-09) `interrogate` declares `Detainee` (twenty-two rows -> twenty-three; control: `114ae5da4`, twenty-two);
     # AT v10 IN-61 (B10-09) `succeed` declares `Office` beside `confer`, `oblige` and `revoke` (twenty-three rows ->
     # twenty-four; control: the CR-26 tree `59e5cf452`, twenty-three); AT v11 CR-25 (B10-09) `establish` declares
-    # `Rung` (twenty-four rows -> twenty-five; control: the CR-81 tree `c35f6599`, twenty-four).
+    # `Rung` (twenty-four rows -> twenty-five; control: the CR-81 tree `c35f6599`, twenty-four); AT v10 PC-10b (B10-11)
+    # `accept` declares `Record` on a held `challenge` (twenty-five rows -> twenty-six; control: the CP-T03-09 tree
+    # `95f58adb`, twenty-five).
     assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer", "oblige", "comply", "march",
                                                                       "establish",
                                                                       "interrogate", "succeed",
@@ -298,7 +300,7 @@ def test_in53v_c_the_declarations_as_built():
                                                                       "commit", "petition",
                                                                       "carry", "found", "build",
                                                                       "argue", "open_case",
-                                                                      "research"}
+                                                                      "research", "accept"}
     assert VERB_TABLE["migrate"].referent_class == "Rung" and not VERB_TABLE["migrate"].referent_named
     assert VERB_TABLE["requisition"].referent_class == "Rung" and not VERB_TABLE["requisition"].referent_named
     assert VERB_TABLE["confer"].referent_class == VERB_TABLE["oblige"].referent_class == "Office"
