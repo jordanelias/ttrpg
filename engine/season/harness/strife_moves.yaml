@@ -29,8 +29,9 @@ row_keys: [code, name, verbs, kinds, needs, dark, gap, ends, terminal]
 study_cases: 102
 needs_vocabulary: [side, office, context]
 signature_keys: [kind, cause_verb, attacker, victim_held, code]
-attacker_values: [A, R, O]
-foreign_factions: [Altonia, Schoenland]
+# The side letters of `attacker` are `queries/world_q.py: SIDES`, which `strife_data.py` validates against.
+# The foreign factions (side `O`) are `rosters.yaml: foreign_factions` (CR-75), read by
+# `queries/world_q.py::side_against` through `data/rosters.py::FOREIGN_FACTION_IDS`.
 
 # ACT-LEVEL SIGNATURES. A kind alone cannot tell a death in battle from a death by no act of anyone,
 # nor a field won by the authority from one won by its challengers. A signature reads the ACT that

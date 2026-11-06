@@ -14,8 +14,9 @@ port, so its path is anchored here from `HARNESS_DIR` and `files.py` does not na
 from __future__ import annotations
 
 from ..data.files import HARNESS_DIR
-from ..data.rosters import faction_prop_id, load_yaml
+from ..data.rosters import load_yaml
 from ..data.verbs import EVENT_KINDS, VERB_TABLE
+from ..queries import world_q
 
 STRIFE_MOVES_YAML = HARNESS_DIR / "strife_moves.yaml"
 
@@ -32,8 +33,9 @@ def declared_kinds() -> frozenset:
 
 
 def load_moves(path=STRIFE_MOVES_YAML) -> tuple:
-    """`(rows, signatures, foreign)` of `strife_moves.yaml`, validated, in file order. `foreign` is the set of
-    faction Proposition ids the file names as foreign (an unknown faction name is refused by `faction_prop_id`)."""
+    """`(rows, signatures)` of `strife_moves.yaml`, validated, in file order. The foreign nations are not here:
+    CR-75 moved them to `rosters.yaml: foreign_factions` (`data/rosters.py::FOREIGN_FACTION_IDS`), so
+    `queries/world_q.py`, which may not import the harness, reads them."""
     doc = load_yaml(path.read_text(encoding="utf-8"))
     rows, row_keys, needs_vocabulary = doc["moves"], set(doc["row_keys"]), set(doc["needs_vocabulary"])
     kinds, seen = declared_kinds(), set()
@@ -61,7 +63,7 @@ def load_moves(path=STRIFE_MOVES_YAML) -> tuple:
     total = sum(r.get("ends", 0) for r in rows)
     if total != doc["study_cases"]:
         raise ValueError(f"strife_moves.yaml: per-code `ends` total {total}, not the study's {doc['study_cases']} cases")
-    sig_keys, sides = set(doc["signature_keys"]), set(doc["attacker_values"])
+    sig_keys, sides = set(doc["signature_keys"]), set(world_q.SIDES)
     sigs = doc.get("signatures", [])
     for g in sigs:
         unknown = set(g) - sig_keys
@@ -78,8 +80,7 @@ def load_moves(path=STRIFE_MOVES_YAML) -> tuple:
             raise ValueError(f"strife_moves.yaml: signature {g} has `victim_held` that is not a boolean")
         if "attacker" in g and g["attacker"] not in sides:
             raise ValueError(f"strife_moves.yaml: signature {g} has attacker outside {sorted(sides)}")
-    foreign = frozenset(faction_prop_id(n) for n in doc["foreign_factions"])
-    return tuple(rows), tuple(sigs), foreign
+    return tuple(rows), tuple(sigs)
 
 
-MOVES, SIGNATURES, FOREIGN = load_moves()
+MOVES, SIGNATURES = load_moves()

@@ -53,7 +53,7 @@ from .requires import (
 )
 from .rosters import (
     COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
-    RESTRAINT_KINDS, VERB_CAPABILITY, VOCATIONS,
+    RESTRAINT_KINDS, STRIFE_KINDS, VERB_CAPABILITY, VOCATIONS,
     is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
@@ -1498,7 +1498,41 @@ def _check_dominance_kinds(kinds, deed_kinds) -> frozenset:
         "kind no act emits partitions nothing, and erodes nothing, forever")
 
 
+def _check_strife_kinds(lists, event_kinds) -> dict:
+    """CR-75 (`rosters.yaml: strife_kinds`): the four strife kind lists are held to the Event-kind roster
+    (`04` §B.13 invariant 7, which derives it from every emission column and lets the log accept no other),
+    or import refuses naming the members. Three refusals: a kind in any list absent from `event_kinds`;
+    a kind in more than one of `opens`, `joins`, `never` (a decision per kind, not two); a `concludes`
+    kind outside `opens` and `joins` (a `never` kind is no move, so it cannot conclude a strand). A function,
+    so a test can plant each and watch it refuse. `lists` is `{name: iterable of kinds}`. Returns it."""
+    unknown = sorted({k for ks in lists.values() for k in ks if k not in event_kinds})
+    if unknown:
+        raise Unspecified(
+            f"`strife_kinds` names {unknown}, which are not Event kinds the loop declares", "rosters.yaml -- strife_kinds",
+            needs="name kinds in `data/verbs.py::EVENT_KINDS`",
+            law="04 §B.13 invariant 7 -- the Event-kind roster is derived from every emission column; a kind "
+                "outside it is one the log accepts from no one, and the list would read as built")
+    placed = {}
+    for n in (n for n in lists if n != "concludes"):    # the three decisions; `concludes` is derived from them
+        for k in lists[n]:
+            placed.setdefault(k, []).append(n)
+    twice = sorted((k, ns) for k, ns in placed.items() if len(ns) > 1)
+    if twice:
+        raise Unspecified(
+            f"`strife_kinds` places {twice} in more than one of opens, joins and never", "rosters.yaml -- strife_kinds",
+            needs="move each kind to the one list it belongs in",
+            law="CR-75 -- the lists are a decision per kind; two lists is two decisions with a read-order tiebreak")
+    stray = sorted(k for k in lists["concludes"] if k not in lists["opens"] and k not in lists["joins"])
+    if stray:
+        raise Unspecified(
+            f"`strife_kinds.concludes` names {stray}, which are in neither opens nor joins", "rosters.yaml -- strife_kinds",
+            needs="a kind in `opens` or `joins`, or drop it from `concludes`",
+            law="CR-75 -- a strand is made of moves; a kind that is no move (`never`, or in no list) concludes nothing")
+    return lists
+
+
 _check_covert_kinds(COVERT_KINDS, DEED_KINDS)
+_check_strife_kinds(STRIFE_KINDS, EVENT_KINDS)
 _check_dominance_kinds(DOMINANCE_KINDS, DEED_KINDS)
 
 

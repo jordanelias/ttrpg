@@ -3149,6 +3149,72 @@ rosters:
       Why a trail is reachable only through a plant: see `epistemic.trail_of`.
     values: ["record.forged"]
 
+  strife_kinds:
+    source: >-
+      CR-75 (workplan v11, batch B11-S3): which Event KINDS the person reading may count as a strife move.
+      Read by `data/rosters.py::STRIFE_KINDS`; checked at import against `EVENT_KINDS` in
+      `data/verbs.py::_check_strife_kinds`. No step of the loop reads it yet (CR-76 and CR-77 do).
+    cite: "ED-IN-0316"
+    note: >-
+      WHY A KIND LIST. The person reading sees an Event's kind and nothing else, and the registry's
+      `kinds` columns (`harness/strife_moves.yaml`) are upper bounds: read as the definition of a move they
+      would make `news.told`, `duty.taken` and `travel.moved` strife, and strands ordinary life.
+      THE FOUR LISTS (under `lists:`, because `roster_map` returns a mapping; `values:` names them, so the
+      loader spells none of them and refuses a missing or an extra list):
+        opens     a kind whose presence alone meets the study's test, so one claim of it starts a strand.
+        joins     a kind that is a move only in company: it attaches to a strand an `opens` kind started
+                  and may conclude it, and never starts one.
+        never     everyday or refusal kinds. Explicit, so every kind the registry names has a decision
+                  (`tests/test_strife_kinds.py` refuses a registry kind in none of the three).
+        concludes the kinds that may conclude a strand AT THE PERSON READING: a kind concludes only if
+                  every code it maps to in `strife_moves.yaml` is terminal (`ends` above 0 and not XP),
+                  so a kind that maps to one code which never ends a case does not conclude (`detention.ended`
+                  and `ban.ended` map to AM; `field.won` and `field.lost` to WR; `tenure.closed` to BR;
+                  `requisition.taken` to VI). Of those only `field.won` and `field.lost` conclude in the
+                  world reading, which knows their code (WA) through the verb and side; the rest end no case
+                  in either reading. A hand-maintained list over the opens and joins kinds, checked
+                  by `tests/test_strife_kinds.py`'s re-derivation (it is red where the list and the rule
+                  disagree). Top-down the world sees a war end; bottom-up a
+                  person who holds only a field's outcome may still doubt it.
+      The checks at import: a kind in any list absent from `EVENT_KINDS`; a kind in more than one of
+      opens, joins and never; a `concludes` kind outside opens and joins.
+      `concludes` is checked against `ends` counts hand-read from the study and marked `[UNVERIFIED]` in
+      `strife_moves.yaml`; it carries that mark until the cross-check (A3, `strife-00` §10), and no step
+      of the loop reads it before then.
+      [ASSUMPTION; medium; Jordan to correct; revert: each of the five rulings of `strife-01` §6 reverses
+      alone by moving one kind between `opens` and `joins`, or striking one content opener; to revert
+      `concludes`, make it an empty derivation in code: a code edit at `Move.terminal`'s construction in
+      both readings (`queries/world_q.py::flows_in` and `_known_moves`) and in `_check_strife_kinds`. Dropping
+      `concludes` from `values:`/`lists:` raises a KeyError at import (`world_q` and `data/verbs.py` index it
+      directly). With no concluding kinds no strand ever concludes.]
+    values: [opens, joins, never, concludes]   # the names of the four lists, in reading order
+    lists:
+      opens: [field.won, field.lost, rung.seized, rung.razed, record.seized, arrest.made, compliance.withheld,
+              requisition.taken, site.damaged]
+      joins: [march.declared, army.arrived, field.unopposed, person.died, succession.claimed, petition.filed,
+              petition.carried, covenant.offered, matter.determined, dispensation.issued, rung.ceded,
+              detention.ended, ban.ended, record.given, transfer.made, record.destroyed, tenure.closed,
+              tenure.opened, office.established, rung.founded, army.recruited, army.formed, army.assigned]
+      never: [argument.lost, argument.won, commitment.ended, commitment.made, date.scheduled, duty.refused,
+              duty.taken, news.told, order.given, residence.changed, stance.moved, travel.moved]
+      concludes: [army.arrived, succession.claimed, petition.filed, petition.carried, covenant.offered,
+                  matter.determined, dispensation.issued, rung.ceded, record.given, transfer.made,
+                  record.destroyed, tenure.opened]
+
+  foreign_factions:
+    source: >-
+      CR-75: moved here from `harness/strife_moves.yaml` (one owner; R16's text unchanged), so
+      `queries/world_q.py`, which may not import the harness, can read it. Read by
+      `data/rosters.py::FOREIGN_FACTIONS`.
+    cite: "ED-IN-0316"
+    note: >-
+      The two foreign nations, external, functioning as spoilers and limits on the game world (Jordan,
+      2026-11-04): the Altonian Empire and Schoenland. NOT `foreign_cast`: that row names the factions
+      `build_realm(foreign=True)` seats, and Schoenland is not among them. `queries/world_q.py::side_against`
+      reads this, through `data/rosters.py::FOREIGN_FACTION_IDS`, for the side rule's `O` (a foreign faction,
+      whatever it governs).
+    values: [Altonia, Schoenland]
+
   # ── v9 IN-27 (END-VICTORY; H-176, GD-1): THE ENDING VOCABULARY ────────────────────────────────────
   # Appended last, `inquiry_modules`' reason: no line-cited row above moves. Here and not a file of its
   # own: a closed set of definitions the loop reads is a roster (this file's header), and `modules:` is

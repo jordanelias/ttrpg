@@ -31,6 +31,7 @@ import pytest
 from engine.season.harness import strife as H
 from engine.season.harness import strife_data as data
 from engine.season.harness.strife_data import STRIFE_MOVES_YAML
+from engine.season.queries import world_q as W
 
 
 def ev(kind):
@@ -46,8 +47,7 @@ def codes(e, rd):
 
 
 def test_registry_loads_forty_codes_and_signatures():
-    rows, sigs, foreign = data.load_moves()
-    assert foreign and len(foreign) == 2
+    rows, sigs = data.load_moves()
     assert len(rows) == 40 and len({r["code"] for r in rows}) == 40
     assert len(sigs) >= 1
 
@@ -92,14 +92,14 @@ def test_an_event_matching_no_signature_is_left_alone():
 
 
 def test_side_against_the_governors():
-    assert H.side_against("f_crown", ["f_crown", "f_realm"]) == "A"   # the nearest governor
-    assert H.side_against("f_realm", ["f_crown", "f_realm"]) == "A"   # a governor above it, sending force down
-    assert H.side_against("f_rebel", ["f_crown", "f_realm"]) == "R"
-    assert H.side_against("f_rebel", []) is None                       # nobody governs: no authority to compare
-    assert H.side_against(None, ["f_crown"]) is None
-    assert H.side_against("f_altonia", ["f_crown"], {"f_altonia"}) == "O"       # a foreign faction is an outside power
-    assert H.side_against("f_altonia", [], {"f_altonia"}) == "O"                 # whether or not anything governs the rung
-    assert H.side_against("f_rebel", ["f_crown"], {"f_altonia"}) == "R"          # control: a non-foreign challenger stays R
+    assert W.side_against("f_crown", ["f_crown", "f_realm"]) == "A"   # the nearest governor
+    assert W.side_against("f_realm", ["f_crown", "f_realm"]) == "A"   # a governor above it, sending force down
+    assert W.side_against("f_rebel", ["f_crown", "f_realm"]) == "R"
+    assert W.side_against("f_rebel", []) is None                       # nobody governs: no authority to compare
+    assert W.side_against(None, ["f_crown"]) is None
+    assert W.side_against("f_altonia", ["f_crown"], {"f_altonia"}) == "O"       # a foreign faction is an outside power
+    assert W.side_against("f_altonia", [], {"f_altonia"}) == "O"                 # whether or not anything governs the rung
+    assert W.side_against("f_rebel", ["f_crown"], {"f_altonia"}) == "R"          # control: a non-foreign challenger stays R
 
 
 def test_the_route_check_finds_a_route_and_a_planted_gap():
@@ -146,9 +146,11 @@ def test_loader_refuses_ends_that_do_not_total_102(tmp_path):
         data.load_moves(p)
 
 
-def test_the_foreign_nations_are_altonia_and_schoenland():
+def test_the_side_read_by_default_reads_altonia_and_schoenland_as_outside_powers():
     from engine.season.data.rosters import faction_prop_id
-    assert data.FOREIGN == {faction_prop_id("Altonia"), faction_prop_id("Schoenland")}
+    for name in ("Altonia", "Schoenland"):
+        assert W.side_against(faction_prop_id(name), ["f_crown"]) == "O", name
+    assert W.side_against(faction_prop_id("Valorsmark"), ["f_crown"]) == "R"     # control: a realm faction is not
 
 
 def _load_with(tmp_path, old, new):
@@ -223,7 +225,7 @@ def test_declared_kinds_is_the_one_roster(tmp_path):
     assert data.declared_kinds() == EVENT_KINDS
     assert "nonesuch.kind" not in EVENT_KINDS
     # every kind the shipped registry names is in the one roster, so the shipped file loads
-    rows, sigs, _ = data.load_moves()
+    rows, sigs = data.load_moves()
     named = {k for r in rows for k in r["kinds"]} | {g["kind"] for g in sigs}
     assert named and named <= EVENT_KINDS
     # the loader refuses a kind absent from it, in a row and in a signature
