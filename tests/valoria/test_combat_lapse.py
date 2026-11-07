@@ -106,3 +106,36 @@ def test_at_full_reserve_the_term_is_zero_at_every_k():
                 S.mode_sigma(mode, agg, fresh, 3.0, True, 0.0, dict(CFG, LAPSE_K=0.0)), (k, mode)
             checked += 1
     assert checked == 12
+
+
+def test_the_shipped_lapse_separates_a_drained_defender():
+    """PC-19 (2): at the shipped K a defender drained by three hits and one at full reserve, the same read, choose the
+    same mode and differ in its sigma by exactly -K*consistency*cap; at K = 0 they are equal."""
+    k = CFG['LAPSE_K']
+    assert k > 0.0, k
+    checked = 0
+    for weapon in ('arming', 'spear', 'rapier', 'longsword', 'mace'):
+        agg = Combatant('a', weapon='arming')
+        fresh, drained = _pair(weapon)
+        rf, rd = _choose(agg, fresh, CFG), _choose(agg, drained, CFG)
+        assert rf['mode'] == rd['mode'], weapon
+        m = rf['mode']
+        assert rd['msig'][m] < rf['msig'][m], (weapon, m)
+        cap = S.WP.defense_affinities(fresh.w)[m]
+        assert rf['msig'][m] - rd['msig'][m] == pytest.approx(-k * S.consistency(drained, CFG) * cap, abs=1e-12)
+        off = dict(CFG, LAPSE_K=0.0)
+        zf, zd = _choose(agg, fresh, off), _choose(agg, drained, off)
+        assert zf['mode'] == zd['mode'] == m and zf['msig'][m] == zd['msig'][m], weapon
+        checked += 1
+    assert checked == 5
+
+
+def test_the_lapse_falls_with_each_further_hit():
+    """The drain is monotone in the response: each further hit lowers the chosen mode's sigma at the shipped K."""
+    agg = Combatant('a', weapon='arming')
+    seen = []
+    for hits in range(0, 8):
+        d = _drained(Combatant('d', weapon='arming'), hits)
+        seen.append(_choose(agg, d, CFG)['msig']['parry'])
+    assert seen[0] > seen[1] > seen[2] > seen[3] > seen[4] > seen[5] > seen[6] > seen[7]   # conc 15, 13, ... 1
+    assert len(seen) == 8
