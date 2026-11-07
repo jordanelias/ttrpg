@@ -4028,10 +4028,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # TEND (`wounded_with`: himself below his ceiling, and those beside him he BELIEVES hurt), as `Person` -- `tend`
     # forms on them, reading no other person's true body.
     # v11 CR-78 (`strife-00` §5, the stamp; [ASSUMPTION; medium; Jordan to correct; revert: ship off]): AND, APPENDED
-    # LAST, WHAT IS AT STAKE IN THE FLOWS HE HOLDS OPEN (`flow_stakes`: each open strand's rung, then its rungs,
-    # persons and offices), as the classes `World.class_of` gives them within `FLOW_STAMP_CLASSES` -- no `Flow`
-    # class, and no chooser reads a flow's opening kind or last move. Read only when `Fixtures stamp_flow_stakes`
-    # is on; it SHIPS OFF, and then the output is byte-identical. "Never twice" is `_stamped`'s dedup.
+    # LAST, WHAT IS AT STAKE IN THE FLOWS HE HOLDS OPEN (`flow_stakes`: the rungs, persons and offices each open
+    # strand names), as the classes `World.class_of` gives them within `FLOW_STAMP_CLASSES` -- no `Flow` class, and
+    # no chooser reads a flow's opening kind or last move. Read only when `Fixtures stamp_flow_stakes` is on (it
+    # SHIPS ON, H-274; off, the output is byte-identical). "Never twice" is `_stamped`'s dedup.
     told = ledger_names(p.ledger)
     added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + larders_in_purview(w, p, told) + holdings_to_found(w, p)
@@ -5120,7 +5120,7 @@ def incompatible_span(w: World, strand: Strand) -> bool:
 # (`open_referents_known`: is this id a restraint edge; ids and kinds never change, so no liveness is read);
 # never the Event
 # log and NEVER THE ACT STORE (`04` §B.9, "no person-side Query reaches it"; `01` AX-7: a character holds a
-# reading of the world, never the world). No consumer in the loop yet (CR-78's stamp is the first).
+# reading of the world, never the world). CR-78's stamp (`flow_stakes`, `questions_for`) is the first consumer in the loop.
 # A STATED LIMIT: the containment tree is read LIVE. A person referent is placed by his live home (`home_map`),
 # linked through his live `contain` parent (`_parents`), and told a party by the live cast (`_parties` reads
 # `w.persons`), so when an arrester travels or dies his holder's `Strand.rung`, links and parties change with no
@@ -5279,39 +5279,44 @@ def concluded_known(w: World, p: Person, strand: Strand, rd: Optional[_StrifeRea
     return _concluded(strand, lambda: open_referents_known(w, p, strand.referents, rd))
 
 
-#: v11 CR-78 (`strife-00` §5, the stamp): THE CLASSES A FLOW'S STAKE MAY BE STAMPED AS -- the closed referent
-#: roster (`rosters.yaml: referent_classes`) less the war-context class (`ENEMY_CLASS`), which no row forms on and
-#: which the `fight` decline reads as licence: a flow a person knows of must never by itself make another man his
-#: enemy. A stake of any other class (or of none: a custody edge's Tenure id, an id the World does not hold) is
-#: REFUSED -- left unstamped by `flow_stakes`, through `_of_stamped_class`, the one class test. No `Flow` class.
-FLOW_STAMP_CLASSES = REFERENT_CLASSES - {ENEMY_CLASS}
+#: v11 CR-78 (`strife-00` §5, the stamp): THE CLASSES A FLOW'S STAKE MAY BE STAMPED AS -- the rungs, persons and
+#: offices a strand names, each a member of the closed referent roster (`rosters.yaml: referent_classes`). Any other
+#: class (the war-context `Enemy`, which the `fight` decline reads as licence, so a flow a person knows of must never
+#: by itself make another man his enemy; a Record, Site or Proposition; none, for a custody edge's Tenure id or an id
+#: the World does not hold) is REFUSED: left unstamped by `_of_stamped_class`, the one class test. No `Flow` class.
+FLOW_STAMP_CLASSES = frozenset({"Rung", "Person", "Office"})
 
 
 def flow_stakes(w: World, p: Person, classes: frozenset = FLOW_STAMP_CLASSES) -> tuple:
     """WHAT IS AT STAKE IN THE FLOWS `p` HOLDS OPEN (v11 CR-78, `strife-00` §5 "the stamp" [ASSUMPTION; medium;
     Jordan to correct; revert: ship off, `Fixtures stamp_flow_stakes`]), as ids `questions_for` stamps onto the
     question he answers (`_stamped`), each as the class `World.class_of` gives it. For each strand of
-    `flows_known(w, p)` that he does not read concluded (`concluded_known`, so from this term a loop step reads
-    the `concludes` set), in his reading's order: the strand's rung (`Strand.rung`, the lowest rung covering its
-    moves' places: its stakes), then, sorted by id, its referents and parties that are a rung, a person or an
-    office (`Strand.referents`, `Strand.parties`). Never twice (the first kept); never `p` himself (a stake he
-    is is no occasion to act on himself: `detainees_held`' and `enemies_heard`' own exclusion [ASSUMPTION;
-    medium; Jordan to correct; revert: keep him]). Each id then meets `_of_stamped_class(w, ..., classes)`: a
-    class outside `classes` (default `FLOW_STAMP_CLASSES`) is refused, and so is the writ skip a question's own
-    referent meets.
+    `flows_known(w, p)` that he does not read concluded (`concluded_known`: it reads the strand's last move's kind,
+    `Strand.moves[-1].terminal`, so from this term a loop step reads the `concludes` set), in his reading's order,
+    its referents and parties sorted by id: the rungs, persons and offices among them. Never twice (the first
+    kept); never `p` himself (a stake he is is no occasion to act on himself: `detainees_held`' and
+    `enemies_heard`' own exclusion [ASSUMPTION; medium; Jordan to correct; revert: keep him]). Each id meets
+    `_of_stamped_class(w, ..., classes)`: a class outside `classes` (default `FLOW_STAMP_CLASSES`) is refused, and
+    so is the writ skip a question's own referent meets. `Strand.rung` is NOT stamped: it is computed from the
+    live home of every person a strand names (CR-77's stated limit, above `flows_known`), so stamping it would
+    hand a person the place where another man lives now, and a realm-wide strand's rung is the realm root.
 
-    WHAT IT DOES NOT READ: a flow's opening kind, its last move, or any World fact beyond the person reading's
-    own (`flows_known`: his ledger and the containment tree) and which collection holds an id. Which verb forms
-    on a stamped referent, and whether it is chosen, is the person's own (R10): two persons in one flow choose
-    differently, and none is told what the flow does next. Resolver-side and read-only (`04` §A.2: the stamp
-    arrives as Questions, so `decision/` reads nothing new and holds no World). `()` for a person whose
-    ledger holds no `opens` claim -- every person after one season of `build_realm(0)` (CR-77's control)."""
+    WHAT IT DOES NOT READ: a flow's opening kind, or any World fact beyond the person reading's own (`flows_known`:
+    his ledger, and the live containment tree under CR-77's stated limit, which also fixes a strand's `parties`
+    by the live cast) and which collection holds an id. Which verb forms on a stamped referent, and whether it is
+    chosen, is the person's own (R10): two persons in one flow choose differently, and none is told what the flow
+    does next. Resolver-side and read-only (`04` §A.2: the stamp arrives as Questions, so `decision/` reads
+    nothing new and holds no World). `()` for a person whose ledger holds no `opens` claim, which is every person
+    after one season of `build_realm(0)` at the default configuration (CR-77's control).
+
+    ⚠ A SHARED-CLASS COST, ACCEPTED ON `holdings_to_found`'s PRECEDENT (the fold disposes): a named settlement the
+    person lives under is a stake, and `migrate` (`own`-eligible) forms on it and is refused at `write`
+    (`places_named` exists to avoid exactly that, but the plan's EXIT requires his own settlement stamped).
+    H-274 records the refused count on against off."""
     rd = _StrifeReading(w)
     out: list = []
     for s in flows_known(w, p):
         if concluded_known(w, p, s, rd):
             continue
-        at_stake = sorted(x for x in s.referents | s.parties
-                          if x in w.rungs or x in w.persons or x in w.offices)
-        out.extend(x for x in ([s.rung] if s.rung is not None else []) + at_stake if x != p.id)
+        out.extend(x for x in sorted(s.referents | s.parties) if x != p.id)
     return _of_stamped_class(w, tuple(dict.fromkeys(out)), classes)

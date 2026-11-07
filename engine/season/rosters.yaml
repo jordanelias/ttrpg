@@ -3227,7 +3227,8 @@ rosters:
     source: >-
       CR-75 (workplan v11, batch B11-S3): which Event KINDS the person reading may count as a strife move.
       Read by `data/rosters.py::STRIFE_KINDS`; checked at import against `EVENT_KINDS` in
-      `data/verbs.py::_check_strife_kinds`. No step of the loop reads it yet (CR-76 and CR-77 do).
+      `data/verbs.py::_check_strife_kinds`. A step of the loop reads it: `queries/world_q.py::questions_for` through
+      `flows_known` and `flow_stakes` (CR-78's stamp, `stamp_flow_stakes`, shipped ON).
     cite: "ED-IN-0316"
     note: >-
       WHY A KIND LIST. The person reading sees an Event's kind and nothing else, and the registry's
@@ -3252,9 +3253,8 @@ rosters:
                   person who holds only a field's outcome may still doubt it.
       The checks at import: a kind in any list absent from `EVENT_KINDS`; a kind in more than one of
       opens, joins and never; a `concludes` kind outside opens and joins.
-      `concludes` is checked against `ends` counts hand-read from the study and marked `[UNVERIFIED]` in
-      `strife_moves.yaml`; it carries that mark until the cross-check (A3, `strife-00` §10), and no step
-      of the loop reads it before then.
+      `concludes` is checked against `ends` counts hand-read from the study and cross-checked against it (A3,
+      `strife-00` §10; `strife_moves.yaml`) before CR-78's stamp first made a step of the loop read it.
       [ASSUMPTION; medium; Jordan to correct; revert: each of the five rulings of `strife-01` §6 reverses
       alone by moving one kind between `opens` and `joins`, or striking one content opener; to revert
       `concludes`, make it an empty derivation in code: a code edit at `Move.terminal`'s construction in

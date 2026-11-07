@@ -44,15 +44,18 @@ ledger built by hand (the witness's claims minted by the real deposit rule, `epi
      order read above the seeded shuffled-order control and the same strands scrambled read lower; the
      leave-and-rejoin profile is exact on hand-built strands; `strands_block` prints the lines on a real run.
 
-CR-78 commit (1) (batch B11-S4): THE STAMP -- `flow_stakes`, appended to `questions_for`'s splice behind `Fixtures
-stamp_flow_stakes`, SHIPPED OFF.
+CR-78 (batch B11-S4): THE STAMP -- `flow_stakes`, appended to `questions_for`'s splice behind `Fixtures
+stamp_flow_stakes`, built off at commit (1) and SHIPPED ON at commit (2).
  14. EXIT (planted): a person aware of a rising at his settlement finds that rung and its holder among his occasions
      (classed on the question he answers, and verbs form on them) with the switch on, and not with it off; a strand
      he reads concluded stamps nothing; the opening kind does not change what is stamped.
  15. MUTATION: a stake of a class outside the closed set (`Enemy`, an unrostered class, or none) is refused; the
      same stake under the whole roster would have been stamped, so the refusal is the closed set's.
  16. CONTROL: the switch set off explicitly reproduces the base `build_realm(0)` hash and the one-season seed-0
-     hash, with the term never computed and the switch read.
+     hash (EQUAL checks only: both are taken where the switch's effect is nil), with the term never computed and
+     the switch read, which are what discriminate.
+ 17. The stamp is never `Strand.rung`: a strand naming only a person stamps that person, not the place where he
+     lives now.
 Each loop asserts that it asserted (`CLAUDE.md` §0.1 pt 2).
 """
 import pytest
@@ -533,8 +536,8 @@ _N = [0]
 
 def hold(w, pid, subject, kind, when=1, chain=(), doer=None, value=True):
     """Deposit one claim in `pid`'s ledger in the event-kind shape WITNESS writes (`predicate = kind`)."""
-    _N[0] += 1
-    c = Claim(f"c_cr77_{_N[0]}", pid, subject, kind, value, when, "told_by" if chain else "firsthand", 50,
+    _N[0] += 1                  # zero-padded: question ids tie-break lexicographically, so deposit order must sort
+    c = Claim(f"c_cr77_{_N[0]:06d}", pid, subject, kind, value, when, "told_by" if chain else "firsthand", 50,
               "own", chain=chain, doer=doer)
     w.persons[pid].ledger.append(c)
     return c
@@ -845,7 +848,7 @@ def test_control_the_realm_hash_holds_and_the_reading_is_the_same_read_twice():
     assert w.content_hash() == before                                 # the reading writes nothing
 
 
-# --- CR-78 commit (1): the stamp, shipped off ---------------------------------------------------------------------
+# --- CR-78: the stamp (commit (1) built it off; commit (2) ships it on) ------------------------------------------
 
 #: Read on the base tree @60c27d08 (before CR-78) and again with the switch off: `build_realm(0).content_hash()`, and
 #: the same realm after one season (`populated.run(seasons=1)`; CP-T03-08's `POST_ITEM[0]`).
@@ -948,8 +951,9 @@ def test_cr78_a_stake_of_a_class_outside_the_closed_set_is_refused(monkeypatch):
 
 
 def test_cr78_control_the_switch_off_reproduces_the_base_hash(monkeypatch):
-    """The switch set off EXPLICITLY: the built realm and one season at seed 0 read the base tree's hashes, the term
-    is never computed (a `flow_stakes` that raises is never reached), and the switch was read, so the gate ran."""
+    """The switch set off EXPLICITLY: the built realm and one season at seed 0 read the base tree's hashes (EQUAL
+    checks; they hold with the switch on too, since the stamp's effect starts later or elsewhere), the term is
+    never computed (a `flow_stakes` that raises is never reached), and the switch was read: those two discriminate."""
     from engine.season.harness import populated
     w = populated.build_realm(0)
     _switch(monkeypatch, w, False)
@@ -962,3 +966,15 @@ def test_cr78_control_the_switch_off_reproduces_the_base_hash(monkeypatch):
     populated.run(seasons=1, w=w)
     assert w.fixtures.reads.get(STAMP, 0) > before
     assert w.content_hash() == BASE_ONE_SEASON
+
+
+def test_cr78_the_stamp_is_never_the_strands_rung(monkeypatch):
+    """`Strand.rung` is computed from the live home of every person a strand names (and is the realm root for a
+    realm-wide strand, which no test here plants); it is no stake of the person's own reading, so it is not stamped."""
+    w = _world()
+    p = w.persons["p_low"]
+    witness(w, "p_low", ev(w, "e_arrest", "rung.seized", ["p_high"]))
+    (s,) = W.flows_known(w, p)
+    assert s.rung is not None and s.referents == frozenset({"p_high"}), (s.rung, s.referents)
+    assert W.flow_stakes(w, p) == ("p_high",), W.flow_stakes(w, p)      # the place he lives is no stake of its own
+    assert s.rung not in W.flow_stakes(w, p)
