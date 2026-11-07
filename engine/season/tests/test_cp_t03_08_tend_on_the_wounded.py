@@ -30,7 +30,6 @@ from ..decision import assemble
 from ..decision.options import opening_set
 from ..harness import probes as P
 from ..harness.populated import build_realm, run
-from ..loop import effects_combat as EC
 from ..queries import world_q
 from ..state.carriers import Claim, Tenure
 from .test_cp_t03_07_body_ceiling import POST_ITEM as PRE_ITEM
@@ -67,9 +66,8 @@ def _tends(w, pid):
 
 # ---- (i) the row, the stem ---------------------------------------------------------------------------------------
 
-def test_tend_declares_person_and_the_stem_is_the_observations_own():
+def test_tend_declares_person():
     assert VERB_TABLE["tend"].referent_class == "Person"
-    assert world_q.BODY_STEM == EC.BODY, "the stamper's predicate must be the one CP-T03-02 writes"
 
 
 # ---- (ii) the falsifier: case 5, through the fold ----------------------------------------------------------------

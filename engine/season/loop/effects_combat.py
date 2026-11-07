@@ -45,7 +45,6 @@ from .effects_shared import _debit, _operand, effect_for
 # "kill / wound" (plan `FIGHT-RENAME`); only the `EFFECTS` key and its row moved.
 CAPTURED = "person.captured"        # the one kind `capture`'s opened `detain` earns (`verb_table.yaml`'s `capture` row)
 DUEL_YIELDED = "duel.yielded"       # v10 PC-10b: the kind a duel's yielder earns (`verb_table.yaml`'s `accept` row)
-BODY = BODY_STEM                  # the predicate of a body Observation: the cell's own field name (`world_q.BODY_STEM` owns it)
 CEILING = "body_ceiling"          # v11 CP-T03-07: the cell the lasting mark writes (`write_matrix.yaml`)
 
 
@@ -246,7 +245,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         # `observation_deposit_mode` (`actor`: the act's actor alone), no new channel. A `none`-model party
         # (`bodies[pid] is None`) writes nothing and observes nothing.
         # [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]
-        named += (Subject.entity("persons", pid, earns=own, fields=(BODY, CEILING),
+        named += (Subject.entity("persons", pid, earns=own, fields=(BODY_STEM, CEILING),
                                  observed=body_observed(pid, bodies[pid])),)
     # CP-T03-04 (iv): EACH GROWN PARTY IS ITS OWN SUBJECT ON `capability`, earning the `(Person, capability)` cell's
     # kind alone -- never a body subject's kind, and never on a party who did not grow (the filter above).
@@ -257,6 +256,15 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 # CP-T03-04 (iv): THE KINDS A GROWN PARTY EARNS -- the `(Person, capability)` matrix row's own `emits:`
 # (`write_matrix.yaml`), `train`'s kind, read off its owner rather than spelt.
 GROWN_KINDS = matrix_row("Person", "capability").emits
+
+
+def raised_capability(p: "Person", key: str) -> "dict | None":
+    """`p.capability` with `key` raised by ONE whole point, the unit of a dice count -- `_eff_train`'s write and
+    `_grown`'s, one body. `None` where `p` does not already hold `key`: a key is NEVER MINTED, because a minted
+    `{arms: 1}` would replace `pool_default` in `faculty` and LOWER the pool of the man it meant to reward."""
+    if key not in (p.capability or {}):
+        return None
+    return {**p.capability, key: int(p.capability[key]) + 1}
 
 
 def _grown(w: "World", a: "Act", parties, bands: dict, bodies: dict) -> dict:
@@ -281,16 +289,16 @@ def _grown(w: "World", a: "Act", parties, bands: dict, bodies: dict) -> dict:
     out = {}
     for pid in dict.fromkeys(parties):
         p = w.persons.get(pid)
-        if p is None or bodies.get(pid) == 0 or key not in (p.capability or {}):
-            continue
-        out[pid] = {**p.capability, key: int(p.capability[key]) + 1}
+        raised = None if p is None or bodies.get(pid) == 0 else raised_capability(p, key)
+        if raised is not None:
+            out[pid] = raised
     return out
 
 
 def body_observed(pid: str, body: "int | None") -> tuple:
     """CP-T03-02 (ii): the Observation a wounded party's write carries -- `(pid, "body", v)`, `v` the WRITTEN body
     -- or `()` where the write writes nothing (`wound_harm_model: none`)."""
-    return (Observation(pid, BODY, body),) if body is not None else ()
+    return (Observation(pid, BODY_STEM, body),) if body is not None else ()
 
 
 def fight_ending(w: "World", parties, res: "Resolution", above) -> tuple:
@@ -337,8 +345,8 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     # ⚠ THE WOUNDED PARTY DOES NOT EARN THE CAPTURE. `_eff_kill` names each party with his band's declared kinds
     # (`own_kinds`), and `Wounded` declares `person.captured` so a wounded yielder's Event can be emitted; left
     # on the party, a wounded scene with NO yield would report a capture nobody made (ID-9). Only the edge earns it.
-    base = Change(tuple(replace(s, earns=tuple(k for k in s.kinds if k != CAPTURED)) if CAPTURED in s.kinds else s
-                        for s in base.subjects), base.apply, base.ending)
+    base = replace(base, subjects=tuple(replace(s, earns=tuple(k for k in s.kinds if k != CAPTURED))
+                                        if CAPTURED in s.kinds else s for s in base.subjects))
     prisoner = _operand(a, "subject")
     if _yielder(res) != prisoner or prisoner not in w.persons or prisoner == a.actor:
         return base
@@ -357,7 +365,7 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     def perform() -> None:
         base.apply()
         w.add_tenure(nt)
-    return Change(base.subjects + (Subject.edge(nt, earns=CAPTURED),), perform, base.ending)
+    return replace(base, subjects=base.subjects + (Subject.edge(nt, earns=CAPTURED),), apply=perform)
 
 
 def marked_ceiling(ceiling: int, floors) -> int:
@@ -707,9 +715,9 @@ def _eff_train(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     who = _operand(a, "subject")
     key = _operand(a, VOCATION_SOURCED[a.verb])
     p = w.persons.get(who)
-    if p is None or key not in VOCATIONS or key not in (p.capability or {}):
+    raised = raised_capability(p, key) if p is not None and key in VOCATIONS else None
+    if raised is None:
         return NO_CHANGE
-    raised = {**p.capability, key: int(p.capability[key]) + 1}
 
     def perform() -> None:
         p.capability = raised

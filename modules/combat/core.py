@@ -110,6 +110,10 @@ def ob_from_defender(defender):
     `PersonalCombatInput.faculties`; one value per party feeds his pool and the Ob he is attacked against.
     [ASSUMPTION; medium; Jordan to correct; revert: the faculty value feeds the pool only and the Ob reads the class
     default 3] -- the CR-85 design is UNRATIFIED (ED-IN-0351).
+    ⚠ THE OB READS MORE THAN THE SOCIAL CONTEST'S DOES (Phase 3, B10-11): `faculty` carries `pool_default` as the
+    pool's fallback and the practice addend, which `seam/wrappers/sigma.py::_opposition_of` ("NEVER THE FALLBACK AND
+    NEVER PRACTICE") leaves out. A person holding no key is attacked at Ob 1.0 here and at `obstacle_default` in a
+    social contest: two ladders for one quantity.
     NO INSTANCE MODIFIER IS ADDED HERE. Wound impairment already has its OWNER
     (combat_systems.wound_impairment, ED-1041) and is folded into net_sigma at every call site (bind_sigma,
     the defence assembly, reach_sigma, pursuit_sigma) — adding a second wound term onto Ob would double-count

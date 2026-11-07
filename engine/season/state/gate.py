@@ -560,14 +560,15 @@ def in_holdings(w: "World", actor: str, rung: Optional[str]) -> bool:
     exercises (`Act.via`) and not of anything the actor holds, this relation included."""
     if rung is None or rung not in w.rungs:
         return False
-    return rung in holdings_of(w, actor)
+    return any(t.kind == "hold" and t.subject == actor and t.object == rung and t.live
+               for t in w.tenures)
 
 
 def holdings_of(w: "World", actor: Optional[str]) -> tuple:
     """THE ACTOR'S HOLDINGS, sorted by id: every rung a live `hold` Tenure of his names (`in_holdings`' relation,
-    read once). Over `w.tenures`, the aggregate, so an edge not yet re-homed onto its subject is still his. The one
-    owner of *the rungs a person holds*: `in_holdings` asks membership of it, and `queries/world_q.py::kit_of` and
-    `holdings_to_found` read it whole."""
+    read whole). Over `w.tenures`, the aggregate, so an edge not yet re-homed onto its subject is still his.
+    `in_holdings` asks one rung of the same relation and stops at the first match; `queries/world_q.py::kit_of` and
+    `holdings_to_found` read the set."""
     return tuple(sorted({t.object for t in w.tenures
                          if t.kind == "hold" and t.subject == actor and t.live and t.object in w.rungs}))
 
