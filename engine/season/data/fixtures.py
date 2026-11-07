@@ -1003,10 +1003,10 @@ DEFAULT_FIXTURES = Fixtures(
     # `H-274` (v11 CR-78, `strife-00` §5, the stamp). WHETHER A FLOW A PERSON HOLDS OPEN IS AMONG HIS OCCASIONS:
     # `True` appends `queries/world_q.py::flow_stakes` (the rungs, persons and offices at stake in each strand of
     # `flows_known` he does not read concluded) to `questions_for`'s stamp, as existing classes, so verbs form on
-    # them; `False` is the CONTROL, the stamp as it stood. A switch, not a number. SHIPPED OFF [ASSUMPTION; medium;
-    # Jordan to correct; revert: ship off]: the flip ON is a separate, declared hash-moving commit, made only on
-    # the strife guard and HR-9 controls (2) and (4) (CR-78 commit (2)), IN-52's precedent.
-    stamp_flow_stakes=False,           # `H-274`, swept False (control, SHIPPED) / True
+    # them; `False` is the CONTROL and the REVERT, the stamp as it stood. A switch, not a number. SHIPPED ON, CR-78
+    # commit (2), a declared hash mover [ASSUMPTION; medium; Jordan to correct; revert: ship off], made on the
+    # strife guard and HR-9 controls (2) and (4) holding, on against off (see the commit body), IN-52's precedent.
+    stamp_flow_stakes=True,            # `H-274`, swept False (the control, the revert) / True (SHIPPED, CR-78)
     # `H-196` (v9 IN-18 `G3`, slant). WHAT A TELLER PASSES ON ABOUT A SUBJECT: `newest` is the
     # pre-G3 pick; `valence` passes on the deed the teller judges most strongly by their own
     # pursuits, however old (`queries/person_q.py::said_of`; `rosters.yaml: said_slants`). `newest`
