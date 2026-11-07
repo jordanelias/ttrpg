@@ -15,7 +15,8 @@ description: >
   behaviour only; presentation layers are out of scope. Use for: "does this work the way it
   should", "does the code do what the design says", "does X behave the way the word suggests",
   "premise check", "sanity check this mechanic", "play it through", "does a decree actually bind",
-  "does the behaviour match the notes". Not for internal formula consistency with no run
+  "does the behaviour match the notes". Files measured gaps in the hole register when asked.
+  Not for internal formula consistency with no run
   (valoria-mechanic-audit), the properties of a draw (resolution-diagnostic), the cut test (ners),
   P-01..P-15 (valoria-canon-guard), or the lines of a diff (/code-review).
 ---
@@ -319,13 +320,38 @@ not hold*, the depth reached (EXECUTES, FORMS, FIRES), and the scale if more tha
    request includes fixing**. A read-only run reports each fix as a proposal. A behaviour fix carries
    a test that **executes** the corrected behaviour; the failing probe from STEP 4 *is* that test,
    with its control shown. Registry renames go through the owner.
-4. A `needs_jordan` row only for what survived the ladder.
-5. A short **skill-friction** line only if a step could not be followed.
+4. **Measured gaps go to the hole register**, `engine/season/hole_register.yaml`, **when the user
+   asks for placement or the run is a `methodology-execute` batch close** (whose rule sends a measured
+   gap there). A read-only run otherwise only reports. See "Filing a measured gap" below.
+5. A `needs_jordan` row only for what survived the ladder.
+6. A short **skill-friction** line only if a step could not be followed.
 
 Output is a reply plus edits and at most one commit paragraph (§0). **No audit directory, no
 document that creates work for a future session, no guard** (§0.1 pt 5): a sweep over every premise
-is the tree-wide guard CLAUDE.md §0.05 does not license. **One round, then stop** (§0): fixes are not
-re-audited.
+is the tree-wide guard CLAUDE.md §0.05 does not license. The hole register is the one store §0's
+rule leaves for a measured gap; it is not a second document. **One round, then stop** (§0): fixes
+are not re-audited.
+
+### Filing a measured gap
+
+One row per distinct gap, appended before the `discharges:` block, **next free `H-` id** (the file's
+last row; no allocation file). Shape and rules are `engine/season/harness/register.py`'s (R0..G13):
+
+- `tier: 1`; `grade: measured`; `default: "none"`; `site: ""`; `sweep: []`.
+- `kind`, from the file's own set: `WIRING` (built, not reaching), `MECHANISM`, `RULING` (a design
+  call between readings), `NAME` (a label that misleads), `ABSENT_RULE` (nothing owns it).
+- `hole`: the premise word that fails, the depth it fails at, and the measured count with its n.
+  `owner`: the function or row that would own the fix. `unblocks`: what becomes possible.
+- `cite`: **in-repo paths with function names**, never a bare `:NNN` (the citation gate reads those
+  as `#353` line references), no long verbatim quotes, no scratch-file paths (the container is
+  reclaimed). Name what the run measured and **what you re-confirmed yourself**; an agent's number
+  you did not re-run is labelled as the agent's. `source`: the run, its date, the PR.
+- **Search first.** If a row already covers the gap (`H-203` writ delivery, `H-163` remit verbs, `H-97`
+  the field a person's condition lands on, `H-198` lying, `H-157` and `H-183` hearsay), add nothing and
+  say which; a related but distinct gap gets a row that names the neighbour in `cite`.
+- **Check:** `python -m engine.season.harness.register --check` (R0, R1, R3, G12 and G13 stay `ok`;
+  any R2 or G6 count must equal the count before your rows) and `--verify-citations`, then the
+  `test_w0`/`test_w1` tests in `engine/season/tests/test_season_shape.py`.
 
 ## GUARDRAILS
 
