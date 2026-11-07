@@ -88,7 +88,7 @@ from ..state.containment import descendants, parent_of  # noqa: F401 -- re-expor
 # `determination` basis asks the bench's containment test of the party's home, so both walks moved
 # down, unchanged. Same function objects; every `world_q.ancestry(...)`/`world_q.home_of(...)` caller
 # is unaffected.
-from ..state.containment import ancestry, home_of  # noqa: F401 -- re-exported
+from ..state.containment import ancestry, home_map, home_of  # noqa: F401 -- re-exported
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
 from ..state.gate import BENCH_BASIS, may_determine, may_fill, purview_reaches, sits_over
@@ -3562,9 +3562,8 @@ def stage_referents(w: World, p: Person, ambs: Optional[list] = None) -> tuple:
     return _of_stamped_class(w, tuple(out))
 
 
-#: v11 CP-T03-08: the predicate of a body Observation -- `Person`'s own field name, the value CP-T03-02 writes as
-#: `loop/effects_combat.py::BODY` (this module may not import `loop`; `test_cp_t03_08_tend_on_the_wounded.py` asserts
-#: the two are equal, so they cannot drift).
+#: v11 CP-T03-08: the predicate of a body Observation -- `Person`'s own field name. The one spelling: CP-T03-02
+#: (`loop/effects_combat.py::body_observed`) writes it and `wounded_with` reads it.
 BODY_STEM = "body"
 
 
@@ -3603,11 +3602,12 @@ def wounded_with(w: World, p: Person) -> tuple:
     if not newest:
         return tuple(out)
     scale = w.fixtures.get("condition_scale")
-    here = place_of(w, p.id)
+    homes = home_map(w)       # once: `place_of(w, x)` alone rebuilds it from `w.tenures` per call; its trace row is unchanged
+    here = place_of(w, p.id, homes)
     if here is None:
         return tuple(out)
     out += [q for q in sorted(newest)
-            if newest[q][1] < scale and q in w.persons and place_of(w, q) == here]
+            if newest[q][1] < scale and q in w.persons and place_of(w, q, homes) == here]
     return tuple(out)
 
 
