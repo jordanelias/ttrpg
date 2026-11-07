@@ -517,7 +517,7 @@ A fresh remote container has pyyaml only; run the provisioner. WHEN each runs is
 | Writing infill prose | `prose-writer` |
 | Dice/EV/pool/Momentum math, d10 success probs | `valoria-dice-model` |
 | Combat-balance simulation | `systems/combat/combat_engine_v1/workbench/balance.py` directly |
-| Finding inert/inconsistent mechanics | `valoria-mechanic-audit` |
+| Finding inert/inconsistent mechanics; **or running a premise sentence** ("an officeholder issues a decree, the others follow") against its plain meaning and design intent | `valoria-mechanic-audit` for the former; `premise-check` for the latter |
 | Philosophy (**P-01..P-15**) compliance | `valoria-canon-guard` |
 | IN → resolver → OUT contract closure | `references/module_contracts.yaml`, read directly — the Key-based adjudicator is retired |
 | **A NERS pass** on any design object | `ners`, which owns the **method**; the four **definitions** are §0.06 |
