@@ -1005,7 +1005,7 @@ DEFAULT_FIXTURES = Fixtures(
     # `flows_known` he does not read concluded) to `questions_for`'s stamp, as existing classes, so verbs form on
     # them; `False` is the CONTROL and the REVERT, the stamp as it stood. A switch, not a number. SHIPPED ON, CR-78
     # commit (2), a declared hash mover [ASSUMPTION; medium; Jordan to correct; revert: ship off]: it leaves
-    # `build_realm(0)` and one-season default runs EQUAL and moves some seeds from two to three seasons on; made on the
+    # `build_realm(0)` and one-season default runs (seeds 0-2) EQUAL and moves some seeds from two to three seasons on; made on the
     # strife guard and HR-9 controls (2) and (4) holding, on against off (H-274's cite), IN-52's precedent.
     stamp_flow_stakes=True,            # `H-274`, swept False (the control, the revert) / True (SHIPPED, CR-78)
     # `H-196` (v9 IN-18 `G3`, slant). WHAT A TELLER PASSES ON ABOUT A SUBJECT: `newest` is the

@@ -54,8 +54,9 @@ stamp_flow_stakes`, built off at commit (1) and SHIPPED ON at commit (2).
  16. CONTROL: the switch set off explicitly reproduces the base `build_realm(0)` hash and the one-season seed-0
      hash (EQUAL checks only: both are taken where the switch's effect is nil), with the term never computed and
      the switch read, which are what discriminate.
- 17. The stamp is never `Strand.rung`: a strand naming only a person stamps that person, not the place where he
-     lives now.
+ 17. `Strand.rung` is not a source of stakes: a strand naming only a person stamps that person, not the place where
+     he lives now (the rung is stamped only when a strand names it as a referent).
+ 18. The closed set stamps an Office a strand names and refuses a Record it names.
 Each loop asserts that it asserted (`CLAUDE.md` §0.1 pt 2).
 """
 import pytest
@@ -968,7 +969,7 @@ def test_cr78_control_the_switch_off_reproduces_the_base_hash(monkeypatch):
     assert w.content_hash() == BASE_ONE_SEASON
 
 
-def test_cr78_the_stamp_is_never_the_strands_rung(monkeypatch):
+def test_cr78_strand_rung_is_not_a_source_of_stakes(monkeypatch):
     """`Strand.rung` is computed from the live home of every person a strand names (and is the realm root for a
     realm-wide strand, which no test here plants); it is no stake of the person's own reading, so it is not stamped."""
     w = _world()
@@ -978,3 +979,18 @@ def test_cr78_the_stamp_is_never_the_strands_rung(monkeypatch):
     assert s.rung is not None and s.referents == frozenset({"p_high"}), (s.rung, s.referents)
     assert W.flow_stakes(w, p) == ("p_high",), W.flow_stakes(w, p)      # the place he lives is no stake of its own
     assert s.rung not in W.flow_stakes(w, p)
+
+
+def test_cr78_the_closed_set_stamps_an_office_and_refuses_a_record_a_strand_names():
+    """The exclusions play can reach (`class_of` answers Person, Rung, Office, Site, Record or Proposition): an Office
+    a strand names is a stake; a Record it names is not, though `class_of` knows it, so a class added to or removed
+    from `FLOW_STAMP_CLASSES` is seen here."""
+    w = _world()
+    p = w.persons["p_low"]
+    w.records["rec_1"] = Record("rec_1", "S", "petition", subject_matter={"terms": "S", "to": "p_high", "from": "S"})
+    witness(w, "p_low", ev(w, "e_o", "rung.seized", ["off_duke", "rec_1"]))
+    named = set().union(*(x.referents for x in W.flows_known(w, p)))
+    assert {"off_duke", "rec_1"} <= named, named                       # the strands name both ...
+    assert w.class_of("off_duke") == "Office" and w.class_of("rec_1") == "Record"
+    assert W.flow_stakes(w, p) == ("off_duke",), W.flow_stakes(w, p)  # ... and only the Office is a stake
+    assert "rec_1" in W.flow_stakes(w, p, classes=W.FLOW_STAMP_CLASSES | {"Record"})
