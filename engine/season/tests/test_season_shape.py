@@ -8398,9 +8398,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `seize` move with the act mix. CONTROL: the base tree (`95f58adb`'s `engine/season`) reads the old 10 and passes.
     # ⚠⚠ v11 CR-87 (B10-11), 13 -> 15: `tend` AND `determine` JOIN (attempted and refused, executed in no world): the act mix
     # moves with no context-free `fight` [the worlds were not walked one by one for this pin]. The old value is the parent tree's pin (the base tree passes it, read in a scratch export of `d2847e7b`); `revert_cr87` was NOT run against it.
+    # ⚠⚠ v11 CP-T03-08 (B10-11), 15 -> 13: `tend` LEAVES, into `ever` (it executes: a man below his ceiling tends himself), and
+    # `seize` LEAVES (no longer attempted in the pass: the act mix the class moves). MEASURED: the failing assertion's printed set.
+    # CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` applied for the session (in process) reads the old set and passes.
     assert refused_only == {"accept", "build", "found", "survey",
-                            "forge", "sabotage", "train", "covenant", "seize",
-                            "comply", "evade / defy", "construe", "exchange", "tend", "determine"}, (
+                            "forge", "sabotage", "train", "covenant",
+                            "comply", "evade / defy", "construe", "exchange", "determine"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -11109,11 +11112,13 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # ⚠⚠ v10 PC-10b (B10-11), 10 -> 12: `covenant` AND `seize` JOIN (attempted and refused in this pass, executed in none), by the act
     # mix a challenge's Record moves. MEASURED by `_wc_corpus_pass`'s own output on this tree (the failing assertion's printed set).
     # CONTROL: the base tree (`95f58adb`'s `engine/season`) passes the old set.
+    # ⚠⚠ v11 CP-T03-08 (B10-11), 13 -> 11: `tend` LEAVES (it executes, the executed set above) and `seize` LEAVES (no longer
+    # attempted in this pass). MEASURED: the failing assertion's printed set. CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` applied for the session (in process) reads the old set and passes.
     assert set(refused) - set(executed) == {"found",
                                             "build", "survey",
-                                            "forge", "covenant", "seize",
+                                            "forge", "covenant",
                                             "sabotage", "train", "comply",
-                                            "evade / defy", "construe", "exchange", "tend"}, (   # v11 CR-87: `tend` JOINS (it left `executed`, above). The old value is the parent tree's pin (the base tree passes it, read in a scratch export of `d2847e7b`); `revert_cr87` was NOT run against it.
+                                            "evade / defy", "construe", "exchange"}, (   # v11 CR-87: `tend` JOINS (it left `executed`, above). The old value is the parent tree's pin (the base tree passes it, read in a scratch export of `d2847e7b`); `revert_cr87` was NOT run against it.
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
         "condition never clears the floor in this corpus; `dispatch` WAS refused only in NPC-033's five-seat "
