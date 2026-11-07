@@ -813,7 +813,8 @@ class Person:
     # `cast_attributes` switch, which SHIPS OFF; `data/cast.py::attributes_of`, `thread_sensitivity_of`'s
     # precedent) -- `decision/sheet.py`'s creation sheet only READS it and writes nothing, so no shipped writer
     # exists until that switch flips: the carrier SHIPS EMPTY, and CR-20 and CR-19 are latent in every shipped realm -- and NEVER WRITTEN IN PLAY: no `write_matrix.yaml` row, so the gate refuses any write to it. READERS:
-    # `seam/wrappers/sigma.py::faculty` (the pool's base) and `_opposition_of` (the score the obstacle halves).
+    # `seam/wrappers/sigma.py::faculty` (the pool's base) and `_opposition_of` (the score the obstacle halves), and
+    # (PC-06 K-1) `seam/wrappers/combat.py::combat_input`/`party_end`, which pass them to the fight on `PersonalCombatInput.attributes`.
     attributes: dict = field(default_factory=dict)
     # v10 CR-30: HERITAGE -- DESCENT, one of `references/descriptor_registry.yaml: heritage_roster`'s five
     # (`engine/substrate/descriptors.py::HERITAGES`), as a read-off field (`architecture/meta/01_AXIOMS.md`

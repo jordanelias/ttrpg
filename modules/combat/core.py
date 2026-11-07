@@ -139,7 +139,7 @@ def resolve(pool, net_sigma, rng, ob):
 # Adopts the ground-up linear damage model [damage_model.py / damage_model_design, Jordan 2026-05-30,
 # ratified 2026-06-17]: damage = Impact x Coupling x Quality, NO cap/tanh, so head/strength/armour drive
 # damage as a live gradient (the old tanh cap saturated everything to ~the cap and flattened the gradient).
-#   Impact   = strength + heft; BLUNT heft is CONTINUOUS from percussion authority P_auth (perc carries it);
+#   Impact   = K_STR_HEAD[head]*strength + heft (PC-20 (1): the Strength coefficient is the head's; blunt 1.0); BLUNT heft is CONTINUOUS from percussion authority P_auth (perc carries it);
 #              cut/thrust heft is weight-class (continuous-mass cut-impact deferred, plan #9).
 #   Coupling = DELIVERY(head) x transmit(material-resistance-per-mode) x gap(COVERAGE_GAP) — material/mode physics.
 #   Quality  = degree factor.   Constants from damage_model (emergent-calibrated so an even Success ~= 1 WI).
@@ -599,7 +599,7 @@ def strike_impact(strength, heft_units, weapon_head, perc=PERC_AUTH_REF):
     return K_STR_HEAD[weapon_head]*strength + heft              # additive force (damage_model design: Str+Heft). M-STR commit 2a2c9f78 reverted per sim v33-mstr-impact (mstr_lin stalled low-Str+heavy).
 
 def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc=PERC_AUTH_REF, q=None, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, weapon_geo=None, cfg_adef=None, grip=0.0, room=1.0, ct_impact=None):
-    """Linear: (strength+heft) x Coupling x Quality x DMG_SCALE — no tanh/cap. perc carries P_auth; blunt heft
+    """Linear: (K_STR_HEAD[head]*strength+heft) x Coupling x Quality x DMG_SCALE — no tanh/cap. perc carries P_auth; blunt heft
     continuous from it. DMG_SCALE (above) is the single damage-scaling knob; the old tanh-cap scale/cap_end
     parameters were dead under the linear model and have been removed (with the config DAMAGE_SCALE/CAP_END
     entries they read). `gap` (the weapon's derived gap_precision, w['gap']) is now LIVE — it threads into coupling's

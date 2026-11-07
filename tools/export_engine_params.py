@@ -55,13 +55,15 @@ REPO_ROOT = ci_common.REPO
 ENGINE_DIR = os.path.join(REPO_ROOT, 'modules', 'combat')
 OUT_PATH = os.path.join(REPO_ROOT, 'engine', 'engine_params', 'combat_engine_v1.json')
 
-SCHEMA_VERSION = 6  # v2 (OPT-AV-17): added the `core` section (core.py canonical constants).
+SCHEMA_VERSION = 7  # v2 (OPT-AV-17): added the `core` section (core.py canonical constants).
                     # v3 (B-D1 PC-07): core.COVERAGE_GAP dict -> scalar (a type change); DECISIVE_OB removed (PC-03).
                     # v4 (PC-14): added the `attributes` section (attributes.py's spec; its entries carry null).
                     # v5 (CP-T03-03): added the `kit` section (the weapon keys, the armour tiers and the Combatant's
                     # default kit; read by `engine/substrate/combat_kit.py`).
                     # v6 (CR-85, ED-IN-0330): READ_HISTORY_K, INIT_HISTORY_K and COUNTER_TRAIN_K removed with their
                     # only readers; the `attributes` entry `history` renamed `faculty` (no `neutral`).
+                    # v7 (B10-11b, PC-18 (1) and PC-20 (4)): the `attributes` entry `cog` removed (Reason has no combat
+                    # read); the `strength` entry's `neutral` null -> 4 (a type change).
 
 
 def _typed(value):

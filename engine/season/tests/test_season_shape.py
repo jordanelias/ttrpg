@@ -9753,9 +9753,10 @@ def test_the_seam_calls_personal_combat_rather_than_naming_it():
 
 
 def test_the_combat_seam_derives_one_field_and_it_decides_something():
-    """`H-97`. A tracer `Person` carries nothing combat-shaped except `body`, so the seam derives
-    EXACTLY ONE `Combatant` field from it and leaves every other at the class's own default —
-    `engine/cross_scale/combat_bridge.py`'s discipline, followed rather than reinvented.
+    """`H-97`. A tracer `Person` carries nothing combat-shaped except `body` (and, since PC-06 K-1, its authored
+    `attributes`, which the module maps), so the seam COMPUTES one `Combatant` field, `end`, and leaves every other at
+    the class's own default unless authored — `engine/cross_scale/combat_bridge.py`'s discipline, followed rather
+    than reinvented.
 
     ⚠ AND IT INVENTS NO NUMBER. `body_band_penalty` already owns the body → bands reading (it is
     `H-38`'s closure spent), so the magnitude comes from `band_floors["body"]`, which is
@@ -9854,8 +9855,15 @@ def test_k1_planted_failure_with_the_mapping_removed_the_exit_reddens(monkeypatc
 
 
 def test_k1_authored_endurance_is_the_base_the_body_band_penalty_comes_off():
-    """`end` composes: authored `attr.body.endurance` (else 4) less the bands, floored at 1; unauthored is today's."""
+    """`end` composes: authored `attr.body.endurance` (else the class default) less the bands, floored at 1; unauthored is
+    today's. The default is read from the module's own spec, so the seam's literal cannot drift from it unseen."""
     from ..seam.wrappers import combat as C
+    from ..seam.wrappers._entry import entry_for
+    if C.engine() is None:
+        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    entry_for(C._PRIZE, C._PROVIDER)                 # loads the engine, which puts the flat `attributes` module on the path
+    import attributes as spec
+    default_end = spec.DEFAULT["end"]
     w = P.tiny_world()
     p, scale = w.persons["p_low"], w.fixtures.get("condition_scale")
     checked = 0
@@ -9863,7 +9871,7 @@ def test_k1_authored_endurance_is_the_base_the_body_band_penalty_comes_off():
         p.body = body
         p.attributes = {}
         bands = decision.body_band_penalty(p, w.fixtures)
-        assert C.party_end(p, w.fixtures) == max(1, 4 - bands)
+        assert C.party_end(p, w.fixtures) == max(1, default_end - bands)
         p.attributes = {"attr.body.endurance": 6}
         assert C.party_end(p, w.fixtures) == max(1, 6 - bands)
         checked += 2
@@ -9873,8 +9881,11 @@ def test_k1_authored_endurance_is_the_base_the_body_band_penalty_comes_off():
 
 
 def test_k1_control_an_all_absent_realm_builds_the_record_it_always_built(monkeypatch):
-    """CONTROL: no authored attribute -> `attributes` stays the default `()`, the fight is the one fought before, and
-    building the input moves no `content_hash`. (`build_realm(0)` ships `cast_attributes` OFF: nobody is authored.)"""
+    """CONTROL: no authored attribute -> `attributes` stays the default `()` and building the input moves no
+    `content_hash` (`build_realm(0)` ships `cast_attributes` OFF: nobody is authored). A record with attributes authored
+    only on keys the module has no field for (a social one) is fought exactly as the no-attribute record is, which
+    exercises the key filter; the fight itself differs from the pre-batch fight (PC-18 to PC-20 moved every default
+    fighter's outcome), so this control compares attributes against attributes, not against the old tree."""
     from ..harness.populated import build_realm
     from ..seam.wrappers import combat as C
     from ..seam.wrappers._entry import entry_for
@@ -9890,9 +9901,15 @@ def test_k1_control_an_all_absent_realm_builds_the_record_it_always_built(monkey
     SeasonDriver(P.tiny_world())
     entry, _ = entry_for(C._PRIZE, C._PROVIDER)
     explicit = dataclasses.replace(inp, attributes=({}, {}))   # authored-nothing, spelled out
+    social = dataclasses.replace(inp, attributes=({"attr.social.charisma": 5}, {"attr.social.grace": 2}))   # no field
+    checked = 0
     for seed in range(5):
-        a, b = entry.fn(inp, random.Random(seed)), entry.fn(explicit, random.Random(seed))
-        assert (a["result"], a["ends"], a["wound_state"]) == (b["result"], b["ends"], b["wound_state"])
+        a = entry.fn(inp, random.Random(seed))
+        for other in (explicit, social):
+            b = entry.fn(other, random.Random(seed))
+            assert (a["result"], a["ends"], a["wound_state"]) == (b["result"], b["ends"], b["wound_state"])
+            checked += 1
+    assert checked == 10
 
 
 def _w18_the_run_instrument_and_its_control(rows):

@@ -175,7 +175,7 @@ def act_cost(c, commit, cfg):
 # ---------- concentration (Focus+Spirit tracker) ----------
 # ED-PC-0035: the `conc_max(c,cfg)` back-compat accessor is REMOVED (zero callers; call c.rederive(cfg) and read
 # c.conc_max — the combatant hosts it, 3F+2S, ED-902).
-def reading(c, cfg): return c.att   # the read is PERCEPTION alone (PC-18 (1), ED-IN-0347: Reason has no combat read; the History experience term is gone, CR-85, ED-IN-0330)
+def reading(c, cfg): return c.att   # the read is PERCEPTION alone (PC-18 (1), ED-IN-0347: Reason has no combat read; the History experience term is gone, CR-85, ED-IN-0330). [ASSUMPTION; medium; Jordan to correct; revert: keep `cog` as an input]
 def reflex(c, cfg): return (cfg['REFLEX_AGI']*c.agi+cfg['REFLEX_ATT']*c.att)/(cfg['REFLEX_AGI']+cfg['REFLEX_ATT'])
 
 # ---------- strength handling + endurance fatigue ----------
@@ -263,11 +263,12 @@ def recoverability_factor(c, cfg):
     # (D) BODY-EXTENSION (lunge) — the lead axis; fires from the wrapper as lunge_depth
     lunge_mult = 1 + cfg['EXPOSE_LUNGE_K'] * ld * (w.get('mass', 1.0) / cfg['LUNGE_REF_MASS']) ** cfg['MOMENT_MASS_EXP']
     # (E) STRENGTH AGAINST THE ARRESTED HEFT (PC-20 (4), AR-13): Strength over the neutral arrests the swing sooner,
-    # under it later, in proportion to the heft being arrested (wield_heft, at this grip) and, like the control credit,
-    # on the SWUNG share only (a thrust retracts along its line: 1 - pc). 0 at Strength 4 (a default fighter is unchanged
-    # at any ARREST_STR_K) and 0 at ARREST_STR_K 0 (the control: the PC-20 (3) tree, bitwise). Floored at 0 so a
-    # strong fighter's factor cannot turn the commitment negative; RECOVER_FLOOR still bounds the product.
-    str_arrest = max(0.0, 1 - cfg['ARREST_STR_K'] * (c.strength - NEUTRAL['strength']) * wield_heft(c, cfg) * (1 - pc))
+    # under it later, in proportion to the heft being arrested (wield_heft, at this grip). The term is scaled by (1 - pc),
+    # the thrust share, and multiplies the whole mode's recovery C_mode (not the swung component alone). 0 at Strength 4
+    # (a default fighter is unchanged at any ARREST_STR_K) and 0 at ARREST_STR_K 0 (the control: the PC-20 (3) tree,
+    # bitwise). No clamp of its own: RECOVER_FLOOR bounds the product, and at the shipped K the factor stays positive
+    # across Strength 1..7 for the heaviest roster heft (K < 1/(3 * 3.116)).
+    str_arrest = 1 - cfg['ARREST_STR_K'] * (c.strength - NEUTRAL['strength']) * wield_heft(c, cfg) * (1 - pc)
     return max(cfg['RECOVER_FLOOR'], C_mode * ctrl_credit * lunge_mult * str_arrest)
 def close_unwieldiness(c, cfg, grip=None):
     """How poorly a weapon serves IN THE CLOSE: the OVERHANG, in metres, of its business end past the distance at
@@ -1152,7 +1153,11 @@ def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d
     legib=legibility(aggressor, commit, cfg, defender.armor)
     read_d=reading(defender,cfg)*TR.eff_cw(defender,'visual')*TR.eff_cw(defender,'precommit')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)
     # PC-18 (2): the attack's suddenness is Coordination — the aggressor's side adds AGI_READ_K*(agi-NEUTRAL['agi']) to
-    # his reading value, inside the visual factor; 0 at agi 4, so a default aggressor reads as before at any K
+    # his reading value, inside the visual factor; 0 at agi 4, so a default aggressor reads as before at any K. The plan
+    # words it 'the default fighter's reading value plus K*(agi - NEUTRAL)'; read as ADDITIVE on the aggressor's own
+    # Perception, the only reading its control (K = 0 reproduces PC-18 (1)) allows [ASSUMPTION; medium; Jordan to correct;
+    # revert: a constant read value]. Agility reaches only this step of the read: mode_sigma's rd, init_emphasis_sigma and
+    # tempo_pressure use the bare Perception difference (a lateral-consistency question for NERS S, not decided here).
     read_a=(reading(aggressor,cfg)+cfg['AGI_READ_K']*(aggressor.agi-NEUTRAL['agi']))*TR.eff_cw(aggressor,'visual')+consistency_a
     p_read=core.logistic((read_d-read_a)/1.0)
     read_win=rng.random() < p_read

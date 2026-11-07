@@ -230,6 +230,7 @@ def test_an_armoured_weak_fighter_tires_faster_than_an_unarmoured_one():
                     checked += 1
                 else:
                     assert gap == 0.0, (tier, s, weapon)
+    assert checked >= 24      # light is short for Strength 1, medium for 1..3, heavy for 1..4, over three weapons: 3 + 9 + 12
     assert checked >= 3 * len(ARMOURED)   # every armoured tier is short for at least the weakest fighter
 
 
@@ -329,10 +330,17 @@ def test_a_thrust_and_a_default_fighter_are_untouched():
 
 
 def test_the_arrest_factor_stays_positive_across_the_scale():
-    """Complete at its extremes: at the shipped coefficient the factor of a Strength-7 fighter stays above 0 for the
-    heaviest wield_heft in the roster with no thrust share, so Strength never stops mattering at the top of the scale."""
-    heft = max(S.wield_heft(Combatant('x', weapon=k), CFG) for k in WEAPONS)
-    assert 1 - CFG['ARREST_STR_K'] * (7 - S.NEUTRAL['strength']) * heft > 0.0, heft
+    """Complete at its extremes: at the shipped coefficient a Strength-7 fighter's recoverability, read THROUGH
+    `recoverability_factor` for the heaviest-heft weapon in the roster with no thrust share, is the Strength-4 fighter's
+    times 1 - K*3*heft, still above RECOVER_FLOOR, so Strength never stops mattering at the top of the scale."""
+    k, floor = CFG['ARREST_STR_K'], CFG['RECOVER_FLOOR']
+    weapon = max(WEAPONS, key=lambda w: S.wield_heft(Combatant('x', weapon=w), CFG))
+    heft = S.wield_heft(Combatant('x', weapon=weapon), CFG)
+    base = S.recoverability_factor(_fighter(4, weapon, sel_pc=0.0), CFG)
+    strong = S.recoverability_factor(_fighter(7, weapon, sel_pc=0.0), CFG)
+    assert 1 - k * 3 * heft > 0.0, heft
+    assert strong > floor and base > floor, (weapon, base, strong, floor)     # neither is the floor's, so the term is read
+    assert strong == pytest.approx(base * (1 - k * 3 * heft), rel=1e-9), (weapon, base, strong)
 
 
 def test_arrest_k_zero_is_the_pre_item_recoverability():

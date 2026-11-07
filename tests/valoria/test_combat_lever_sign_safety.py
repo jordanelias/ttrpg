@@ -594,6 +594,14 @@ def test_the_attacks_suddenness_is_coordination():
     assert _read_a(quick, CFG) - _read_a(slow, CFG) == pytest.approx(k * 4 * TR.eff_cw(quick, 'visual'), abs=1e-12)
     off = dict(CFG, AGI_READ_K=0.0)
     assert _read_a(quick, off) == _read_a(slow, off)
+    # THE PLACEMENT, inside the visual factor: with the lever invested eff_cw is not 1, so a term outside the factor
+    # (added after the multiplication) differs from one inside it by K*4*(eff_cw - 1) and this equality reddens.
+    inv = dict(tradition='german', equipped={'keen_eye_basic': 8.0})
+    slow_i, quick_i = Combatant('a', agi=2, **inv), Combatant('a', agi=6, **inv)
+    ecw = TR.eff_cw(quick_i, 'visual')
+    assert ecw != 1.0 and ecw == TR.eff_cw(slow_i, 'visual'), ecw
+    assert _read_a(quick_i, CFG) - _read_a(slow_i, CFG) == pytest.approx(k * 4 * ecw, abs=1e-12)
+    assert abs(k * 4 * ecw - k * 4) > 1e-6        # inside != outside here, so the placement is observed
     checked = 0
     for kk in (0.0, 0.05, 0.1, 0.2, 0.3, 0.5, k):
         cfg = dict(CFG, AGI_READ_K=kk)
