@@ -320,6 +320,8 @@ def test_none_and_tau_point_one_reproduce_the_parent_world_exactly(monkeypatch):
         verbs: `a38516fb...` / 11505, the value the CP-T03-09 tree (an export of `95f58adb`) reads under the same
         withholding, so PC-10b moves nothing where no duel verb is chosen; on that tree `capture` alone withheld reads the
         old pin `edbc7442...` / 10435 exactly (CP-T03-09's own control, the go07 note's)."""
+    from .test_strife_credit import revert_cr79
+    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
     from .test_cr87_violence_contexts import revert_cr87
     revert_cr87(monkeypatch)
     # v11 CP-T03-04 (`arms` in the vocation range, a formation mover of every season) is read at its revert too

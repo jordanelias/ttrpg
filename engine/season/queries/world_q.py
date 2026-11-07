@@ -5083,7 +5083,10 @@ def commensurate(w: World, a: str, b: str) -> int:
     0 if either holds none or every cross pair is `null`. A4 against A12: `null` never makes a pair incompatible,
     and a grade that raises credit rests on a recorded compatibility, never on the absence of a source
     `[ASSUMPTION; medium; Jordan to correct; revert: read null as compatible, A4 literally, so all-null reads +1]`.
-    Two persons are COMMENSURATE (A4's boolean) when this is not -1."""
+    Two persons are COMMENSURATE (A4's boolean) when this is not -1. A person no longer in `w.persons` (died or
+    removed between RESOLVE and WITNESS, a telling whose teller was felled in the same round) holds none: 0."""
+    if a not in w.persons or b not in w.persons:
+        return 0
     ha, hb = _held(w, a), _held(w, b)
     if not ha or not hb:
         return 0

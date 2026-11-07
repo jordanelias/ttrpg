@@ -375,6 +375,8 @@ def revert_cr87(monkeypatch) -> None:
 
 
 def test_control_the_block_empty_and_every_value_at_its_revert_reproduce_the_pre_item_hash(monkeypatch):
+    from .test_strife_credit import revert_cr79
+    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
     revert_cr87(monkeypatch)
     # v10 CP-T03-02 (a later mover of every season that fought: the band's `ending`, the body Observation) is
     # reverted too, so the base tree's reading stands rather than being re-taken.

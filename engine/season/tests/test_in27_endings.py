@@ -358,6 +358,8 @@ def test_in27_two_seasons_of_the_built_realm_run_the_step_and_report_no_ending(m
     """`season()` on `build_realm(0)`, twice: the Query is CALLED (spied, once per season, on this world)
     and its answer is that season's reported `endings`, `[]`; each season lands on the hash
     `test_season_weather.py` pins for it (`BASE_HASHES[1]`, `BASE_HASHES[2]`)."""
+    from .test_strife_credit import revert_cr79
+    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
     real, calls = Q.endings_reached, []
 
     def spy(w):

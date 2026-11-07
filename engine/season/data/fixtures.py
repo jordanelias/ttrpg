@@ -1044,6 +1044,16 @@ DEFAULT_FIXTURES = Fixtures(
     # (`H-200`'s cite). Read only where `refraction_gain` refracts a deposit. Must lie in [0, 1].
     # [JUSTIFIED: engine/season/hole_register.yaml H-200 -- the competence gain; AX-7 rules THAT the reader's competence governs divergence and ED-IN-0327 that Attunement helps judge truthfulness, and no document gives how much, so it is injected and swept 0 / 0.5 / 1.0; shipped at the control 0 until CR-83's design gives a lie/truth separator]
     competence_gain=0.0,               # `H-200`, swept 0 (control, SHIPPED) / 0.5 / 1.0
+    # `H-275` (v11 CR-79, `strife-00` §5, R14/A12). HOW FAR SHARED OR STRAINED AFFILIATION BETWEEN A HEARER
+    # AND A TELLER MOVES THE CONFIDENCE A TOLD CLAIM LANDS AT: `loop/witness.py::_credit` =
+    # `confidence * (1 + g*c)`, `c` = `queries/world_q.py::commensurate(hearer, teller)` in {-1, 0, +1},
+    # clamped to `[0, max(confidence_default, the uncredited value)]`, applied after `_refract` to the told
+    # deposit only, whether or not `refraction_gain` refracts. `0` is the CONTROL: nothing is credited and
+    # `commensurate` is never read. 0.5 is the value given (`ED-IN-0316`) and SHIPS at CR-79 commit (2), a
+    # declared hash mover, made on its guard [ASSUMPTION; medium; Jordan to correct; revert: set this back
+    # to 0.0 (the control)]. Must lie in [0, 1] (`witness` raises outside it).
+    # [JUSTIFIED: engine/season/hole_register.yaml H-275 -- the credit gain; strife-00 §5 gives the shape 1 + g*c and ED-IN-0316 the value 0.5, no document gives a measured magnitude, so it is injected and swept 0 / 0.5 / 1.0; shipped live at 0.5 at CR-79 commit (2), on its strife guard (ED-IN-0316)]
+    regime_gain=0.5,                   # `H-275`, swept 0 (control) / 0.5 (SHIPPED at CR-79 (2)) / 1.0
     # `H-159` (plan position `17b`, `04 §B.8`'s `term?`; `T-n`, `architecture/meta/01_AXIOMS.md`:
     # *"the opening act declares the terms"*). HOW MANY SEASONS AN `oblige` RUNS BEFORE IT MATURES
     # UNPAID -- the term `_eff_oblige` declares on the edge it opens (`matures_at = tick + this`),

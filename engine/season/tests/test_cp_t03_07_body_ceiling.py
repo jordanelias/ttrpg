@@ -347,6 +347,9 @@ def test_hash_post_item_control_and_revert(seed, monkeypatch):
     # POST_ITEM still reads this item alone (imported here: that module imports this one).
     from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
     revert_cp_t03_08(monkeypatch)
+    # CR-79's credit term (a later mover of the told deposit) is reverted in process too.
+    from .test_strife_credit import revert_cr79
+    revert_cr79(monkeypatch)
     w = build_realm(seed)
     run(1, seed, w=w)
     scale = w.fixtures.get("condition_scale")
