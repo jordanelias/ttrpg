@@ -675,7 +675,9 @@ def test_go07_control_the_build_world_old_digest_is_unmoved():
     assert w.content_hash() == "600d8b27147478e158553552cc1409a5"   # CP-T03-07 (`body_ceiling`; `revert_cp_t03_07` reads the old): was 7266f56b...; CR-87: was 837d0f83...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 6ad7b832...; CR-33: was d61848d3... (CR-20+CR-30: was b4bc2df0... CR-86: was 3ae970a1... (ED-IN-0342). CR-81: was 70ea49cb... (acquaintances=False reads it); v10 IN-61: was 4ab812ba... (CP-T02-02); before that 3e31638e... (CR-21)
 
 
-def test_go07_control_the_world_did_not_move_only_its_digest():
+def test_go07_control_the_world_did_not_move_only_its_digest(monkeypatch):
+    from .test_strife_credit import revert_cr79
+    revert_cr79(monkeypatch)
     checked = 0
     for seed, base in BASE.items():
         w = POP.build_realm(seed)

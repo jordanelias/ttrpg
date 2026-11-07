@@ -159,6 +159,9 @@ def test_a_believed_wound_beside_him_forms_tend_on_the_other_through_questions_f
 
 @pytest.mark.parametrize("seed", [0, 1, 2])
 def test_hash_post_item_and_revert(seed, monkeypatch):
+    # CR-79's credit term (a later mover of the told deposit) is reverted in process: POST_ITEM reads this item alone.
+    from .test_strife_credit import revert_cr79
+    revert_cr79(monkeypatch)
     w = build_realm(seed)
     run(1, seed, w=w)
     assert w.content_hash() == POST_ITEM[seed] != PRE_ITEM[seed]

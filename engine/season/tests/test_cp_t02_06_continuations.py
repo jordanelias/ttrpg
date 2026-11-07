@@ -282,7 +282,9 @@ def test_the_rebound_callback_plays_the_successor_through_a_real_season():
 # --- THE CONTROL ---------------------------------------------------------------------------------
 
 @pytest.mark.parametrize("seed", sorted(PRE_BUILD))
-def test_no_death_means_no_behaviour_change_and_the_realm_hash_is_the_pre_build_hash(seed):
+def test_no_death_means_no_behaviour_change_and_the_realm_hash_is_the_pre_build_hash(seed, monkeypatch):
+    from .test_strife_credit import revert_cr79
+    revert_cr79(monkeypatch)
     w = build_realm(seed)
     king = _holder(w, THRONE)
     calls = []

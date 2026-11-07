@@ -956,6 +956,8 @@ def test_cr78_control_the_switch_off_reproduces_the_base_hash(monkeypatch):
     checks; they hold with the switch on too, since the stamp's effect starts later or elsewhere), the term is
     never computed (a `flow_stakes` that raises is never reached), and the switch was read: those two discriminate."""
     from engine.season.harness import populated
+    from .test_strife_credit import revert_cr79
+    revert_cr79(monkeypatch)
     w = populated.build_realm(0)
     _switch(monkeypatch, w, False)
     assert w.content_hash() == BASE_BUILD

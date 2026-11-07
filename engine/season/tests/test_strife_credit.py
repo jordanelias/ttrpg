@@ -83,8 +83,14 @@ def _c(conviction: dict) -> dict:
     return {pid: W.commensurate(w, pid, TELLER) for pid in (NEAR, OTHER, KNOTTED)}
 
 
-def test_the_gain_ships_at_the_control_zero():
-    assert DEFAULT_FIXTURES.get("regime_gain") == 0.0
+def revert_cr79(monkeypatch):
+    """CR-79 OFF, in process: `regime_gain` at 0, the control. A test that pins a hash from before CR-79's flip to
+    0.5 (a declared mover of the told deposit) calls this, so its pin reads the item it names alone."""
+    monkeypatch.setitem(DEFAULT_FIXTURES._v, "regime_gain", 0.0)
+
+
+def test_the_gain_ships_at_the_value_given_and_zero_is_the_control():
+    assert DEFAULT_FIXTURES.get("regime_gain") == 0.5      # ED-IN-0316, shipped at commit (2) on its guard
 
 
 def test_a_commensurate_teller_is_credited_more_than_an_incommensurate_one_and_an_unrelated_one_not_at_all():

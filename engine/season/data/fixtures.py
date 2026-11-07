@@ -1048,12 +1048,12 @@ DEFAULT_FIXTURES = Fixtures(
     # AND A TELLER MOVES THE CONFIDENCE A TOLD CLAIM LANDS AT: `loop/witness.py::_credit` =
     # `confidence * (1 + g*c)`, `c` = `queries/world_q.py::commensurate(hearer, teller)` in {-1, 0, +1},
     # clamped to `[0, max(confidence_default, the uncredited value)]`, applied after `_refract` to the told
-    # deposit only, whether or not `refraction_gain` refracts. `0` is the CONTROL AND SHIPS AT CR-79 commit
-    # (1): nothing is credited and `commensurate` is never read. 0.5 is the value given (`ED-IN-0316`),
-    # shipped at commit (2) only on its guard [ASSUMPTION; medium; Jordan to correct; revert: set this
-    # back to 0.0 (the control)]. Must lie in [0, 1] (`witness` raises outside it).
-    # [JUSTIFIED: engine/season/hole_register.yaml H-275 -- the credit gain; strife-00 §5 gives the shape 1 + g*c and ED-IN-0316 the value 0.5, no document gives a measured magnitude, so it is injected and swept 0 / 0.5 / 1.0; shipped at the control 0 until commit (2)'s guard]
-    regime_gain=0.0,                   # `H-275`, swept 0 (control, SHIPPED at CR-79 (1)) / 0.5 / 1.0
+    # deposit only, whether or not `refraction_gain` refracts. `0` is the CONTROL: nothing is credited and
+    # `commensurate` is never read. 0.5 is the value given (`ED-IN-0316`) and SHIPS at CR-79 commit (2), a
+    # declared hash mover, made on its guard [ASSUMPTION; medium; Jordan to correct; revert: set this back
+    # to 0.0 (the control)]. Must lie in [0, 1] (`witness` raises outside it).
+    # [JUSTIFIED: engine/season/hole_register.yaml H-275 -- the credit gain; strife-00 §5 gives the shape 1 + g*c and ED-IN-0316 the value 0.5, no document gives a measured magnitude, so it is injected and swept 0 / 0.5 / 1.0; shipped live at 0.5 at CR-79 commit (2), on its strife guard (ED-IN-0316)]
+    regime_gain=0.5,                   # `H-275`, swept 0 (control) / 0.5 (SHIPPED at CR-79 (2)) / 1.0
     # `H-159` (plan position `17b`, `04 §B.8`'s `term?`; `T-n`, `architecture/meta/01_AXIOMS.md`:
     # *"the opening act declares the terms"*). HOW MANY SEASONS AN `oblige` RUNS BEFORE IT MATURES
     # UNPAID -- the term `_eff_oblige` declares on the edge it opens (`matures_at = tick + this`),

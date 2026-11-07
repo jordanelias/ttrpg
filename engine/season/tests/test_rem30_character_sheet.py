@@ -93,7 +93,9 @@ def _run(w, seasons, person_id=None, pick=take_ranked, between=None):
 
 
 @pytest.mark.parametrize("seed", sorted(PRE_BUILD))
-def test_rem30_creation_arm_off_reproduces_the_pre_build_hash(seed):
+def test_rem30_creation_arm_off_reproduces_the_pre_build_hash(seed, monkeypatch):
+    from .test_strife_credit import revert_cr79
+    revert_cr79(monkeypatch)
     assert _run(PO.build_realm(seed), 1) == PRE_BUILD[seed]
 
 

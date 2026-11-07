@@ -716,7 +716,9 @@ def _seasons(w, n: int):
     return stores, shorts
 
 
-def test_in21_control_draw_off_and_draw_at_one_reproduce_the_base_hashes():
+def test_in21_control_draw_off_and_draw_at_one_reproduce_the_base_hashes(monkeypatch):
+    from .test_strife_credit import revert_cr79
+    revert_cr79(monkeypatch)
     h, events = {}, {}
     w = POP.build_realm(0)
     h[0] = w.content_hash()
@@ -731,7 +733,7 @@ def test_in21_control_draw_off_and_draw_at_one_reproduce_the_base_hashes():
     assert events == BASE_EVENTS, f"the bodies clock at its control moved the event sequence: {events}"
 
 
-def test_the_give_withheld_arm_reproduces_the_one_season_pin():
+def test_the_give_withheld_arm_reproduces_the_one_season_pin(monkeypatch):
     """THE `give` + Rung RE-PIN'S CONTROL, ENCODED (it stood as prose above): `give` added to the shipped
     `Fixtures withheld_verbs` reads the CURRENT one-season pin exactly -- hash, event count and digest --
     so at the shipped arm the realm forms no `give` in season one. That `give` formation is the re-pin's
@@ -747,6 +749,8 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 
     ⚠ v11 CR-17 (`choice_temperature` 0.1 -> 0.05): `give` no longer forms in season one at the shipped arm, so the
     shipped-arm half reads the equality again (hash, count and digest of `BASE_HASHES[1]` / `BASE_EVENTS[1]`)."""
+    from .test_strife_credit import revert_cr79
+    revert_cr79(monkeypatch)
     for acq in (False, True):
         w = POP.build_realm(0, acquaintances=acq)
         shipped = tuple(w.fixtures.get("withheld_verbs"))
