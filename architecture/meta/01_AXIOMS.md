@@ -278,7 +278,7 @@ that happen when someone performs an action"*:
 |---|---|---|
 | **(1)** | the objective performance, as a literal, ontical, objective fact | **no** — this is the sanctity |
 | **(2)** | **the performer's own understanding** of their action | **yes**, and by its OWN mechanism — a person does not witness themselves, and self-knowledge is not observation |
-| **(3)** | everyone else's understanding of that action | **yes**, by channel, competence and prior belief |
+| **(3)** | everyone else's understanding of that action | **yes**, by channel, competence and prior belief, and for a told claim the teller's affiliations against the reader's (H-L0-11, 2026-11-07) |
 
 - **(2) is its own object, not privileged access to (1).** A character may intend a kindness that
   lands as an insult and go on believing it was kind.
