@@ -42,6 +42,11 @@ from ..queries import person_q, world_q
 from ..queries.person_q import SEEN_PREDICATE
 from ..seam.wrappers import combat
 from ..state.carriers import Claim, Proposition, Question, Tenure, View
+from .test_cp_t03_02_band_ending_and_body import revert_cp_t03_02
+from .test_cr85_faculty_replaces_history import revert_cr85
+from .test_cp_t03_04_arms import revert_cp_t03_04
+from .test_cp_t03_07_body_ceiling import revert_cp_t03_07
+from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
 
 A, B = "p_mid", "p_low"          # `probes.tiny_world`: both at the hearth `Hh`
 BASE_BUILD = "837d0f83c62917b88d69da3daa3ea027"     # build_realm(0).content_hash(), after PC-10b (the pre-item base)
@@ -371,6 +376,16 @@ def revert_cr87(monkeypatch) -> None:
 
 def test_control_the_block_empty_and_every_value_at_its_revert_reproduce_the_pre_item_hash(monkeypatch):
     revert_cr87(monkeypatch)
+    # v10 CP-T03-02 (a later mover of every season that fought: the band's `ending`, the body Observation) is
+    # reverted too, so the base tree's reading stands rather than being re-taken.
+    revert_cp_t03_02(monkeypatch)
+    # v11 CR-85 (`faculty` replaces `history` in the pool and the Ob, a later mover of every season that fought) is
+    # reverted too (`revert_cr85`, the seam's faculty at 3 for every party), the same way.
+    revert_cr85(monkeypatch)
+    # v11 CP-T03-04 (`arms` in the vocation range, a formation mover of every season) is reverted too, the same way.
+    revert_cp_t03_04(monkeypatch)
+    revert_cp_t03_07(monkeypatch)   # v11 CP-T03-07 (`body_ceiling`, a schema mover of the build), the same way
+    revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
     assert populated.build_realm(0).content_hash() == BASE_BUILD
     w, _d, _rows = I.run(0, 1, observe=False)          # the audit's own run, which read the base hash
     assert w.content_hash() == BASE_SEASON

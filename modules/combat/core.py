@@ -49,11 +49,13 @@ import weapon_physics as WP   # Phase-3 consolidation: percussion authority live
 # bar. test_no_dead_exported_engine_params forbids shipping it into the Godot contract with no reader.
 TN = SL.TN_STANDARD
 POOL_FLOOR = 5     # [canonical: params/core.md §Derived Scores (Combat Pool min 5)]
-BASE_POOL = 6      # [class-C: armature — History-driven pool base; pool = max(5, History+6), ED-901; relocated verbatim from r1, ED-1085]
+BASE_POOL = 6      # [class-C: armature — faculty-driven pool base; pool = max(5, faculty+6), ED-901 (History until CR-85, ED-IN-0330); relocated verbatim from r1, ED-1085]
 
-def resolution_pool(history):
-    """Agility-INDEPENDENT resolution pool (ED-901; re-ratified ED-900/904): max(5, History + 6)."""
-    return max(POOL_FLOOR, int(round(history)) + BASE_POOL)
+def resolution_pool(faculty):
+    """Agility-INDEPENDENT resolution pool (ED-901; re-ratified ED-900/904): max(5, faculty + 6). `faculty` is the
+    party's dice score for the verb that opened the fight (CR-85, ED-IN-0330: it replaces `history`, formula unchanged;
+    `attributes.py` says where the season's value comes from)."""
+    return max(POOL_FLOOR, int(round(faculty)) + BASE_POOL)
 # ED-PC-0035: `effective_ob` REMOVED — zero callers anywhere in the package/workbench/tests, and resolve()'s own
 # docstring records that the Ob-shift path it wrapped is DISPLAY-ONLY and distorts the degree bands. Leaving a
 # mis-resolving helper sitting next to the live resolver is a trap for a future caller, not a convenience.
@@ -82,7 +84,7 @@ def band_floor(band, ob):
     each had kept its own copy of the pre-ruling one; a copy is what went stale, so the edge is DERIVED.
     Exact to the float: `degree(band_floor(b, ob), ob)` is `b` and the next float down is not. The
     +/-64 bracket around `ob` is asserted, not assumed (the owner's edges sit within 3 of `ob`). Pure; cached
-    per (band, ob) — Ob is History/2, so a fight touches a handful of values. `band` is 'partial', 'success' or
+    per (band, ob) — Ob is faculty/2, so a fight touches a handful of values. `band` is 'partial', 'success' or
     'overwhelming': 'fail' is the lowest band and has no edge (it fails the bracket assert)."""
     k = DE.DEGREE_ORDINAL[_DEGREE_OF[band]]
     rank = lambda x: DE.DEGREE_ORDINAL[DE.degree_from_net(x, ob)]
@@ -102,9 +104,12 @@ def ob_from_defender(defender):
     because Ob should be determined by your opponent more than anything" — tests/valoria/test_degree_ladder_
     single_owner.py's RULINGS dict, entry "2026-08-15 — combat, and the sequence"). Score/2 plus that instance's
     modifiers, the SAME reading modules/social_contest/roll.py::obstacle applies (under its H-213 ceiling) for a person subject
-    on the season side. This resolver's own score is `history` — the SAME score resolution_pool() derives dice
-    from (ED-901); combat_engine_v1 has no separate 'capability' surface, so History (a person's combat
-    aptitude) is the natural single reading, not a second one invented for this call site.
+    on the season side. This resolver's own score is `faculty` — the SAME score resolution_pool() derives dice
+    from (ED-901). CR-85 (ED-IN-0330) replaced `history` here with the season's capability surface: `faculty` is
+    the value `engine/season/seam/wrappers/sigma.py::faculty` reads for the party, passed in through
+    `PersonalCombatInput.faculties`; one value per party feeds his pool and the Ob he is attacked against.
+    [ASSUMPTION; medium; Jordan to correct; revert: the faculty value feeds the pool only and the Ob reads the class
+    default 3] -- the CR-85 design is UNRATIFIED (ED-IN-0351).
     NO INSTANCE MODIFIER IS ADDED HERE. Wound impairment already has its OWNER
     (combat_systems.wound_impairment, ED-1041) and is folded into net_sigma at every call site (bind_sigma,
     the defence assembly, reach_sigma, pursuit_sigma) — adding a second wound term onto Ob would double-count
@@ -112,7 +117,7 @@ def ob_from_defender(defender):
     by dsig, which already shaped the roll via net_sigma (audit C-2: avoid double-counting defender skill)").
     If a genuine per-instance Ob modifier is ever needed here, it is a NEW term with its own owner, not folded
     into this function silently. Pure."""
-    return defender.history / 2.0
+    return defender.faculty / 2.0
 
 
 def resolve(pool, net_sigma, rng, ob):

@@ -755,10 +755,18 @@ verbs:
     # v10 REM-31 (IN-46): `Declared` is `march`'s deferral band -- `the body` carries `step: ENCOUNTER`, so the
     # fight is admitted and DECLARED at RESOLVE (writing nothing) and fought at ENCOUNTER, the one step the host's
     # PLAYABLE mode may suspend at. The same cells on `accept`, which contests the same prize.
+    # v11 CP-T03-04 (iv): `Felled` and `Wounded` (and `capture`'s and `accept`'s) gain `Person.capability` and
+    # `capability.raised` -- build-by-doing, `loop/effects_combat.py::_grown`: each surviving party who ALREADY
+    # holds the verb's key (`rosters.yaml: verb_capability`, `arms`) gains one; nothing is minted. LAST in each
+    # band, because the effect runs on the first pair. `Untouched` stays `[]`: a write there would turn every
+    # untouched fight between non-holders into the no-op refusal (`_grown`'s docstring).
+    # v11 CP-T03-07: `Felled` and `Wounded` (and `capture`'s and `accept`'s) gain `Person.body_ceiling` -- the lasting
+    # mark, `loop/effects_combat.py::marked_ceiling`: a party who survives at `wounds >= max_wounds` has his ceiling
+    # fall one below the next body band floor (`body_mark_model`, `H-258`). LAST, for the same reason.
     writes:
       Declared:     []
-      Felled:       ["Person.body", "Person.exists", "Tenure.until"]
-      Wounded:      ["Person.body"]
+      Felled:       ["Person.body", "Person.exists", "Tenure.until", "Person.capability", "Person.body_ceiling"]
+      Wounded:      ["Person.body", "Person.capability", "Person.body_ceiling"]
       Untouched:    []
     writes_grade_note: "ruled -- the SPLIT is read from scene combat (Jordan 2026-09-03); H-98 keeps only the question of whether a decisive win is distinguishable from a narrow one, which the engine currently does not answer. ⚠ EXECUTED 2026-09-04 (`W-E`): all three branches now run end to end through `SeasonDriver.resolve` -> `contest()` -> `combat_seam` -> `wrapper.fight`, and their consequences differ -- Felled deletes the party and emits `person.died`, Wounded leaves them alive with a lower body and emits `body.changed`, Untouched writes nothing and emits `contest.undecided`; since v10 CP-T03-00 each band is read PER PARTY and the act's band is the worst over both. Falsifier: `test_we_a_contested_acts_consequence_differs_by_degree`."
     writes_source_note: "combat_seam.resolve -> wound_state[EACH PARTY]: felled | wounds. ⚠ CP-T03-00 (`-08` AM-C-01): EACH PARTY -- the actor and the subject -- is written by HIS OWN band (`seam/ladder.py::party_degree`, read per party in `_eff_kill`), and the act's band, the token these cells key on, is the WORST over both (`combat_degree`): a felled attacker makes the fight `Felled` though his target stands. Before it the band was read off `wound_state[THE ACT'S SUBJECT]` alone and a felled actor was never written. ⚠ THE 2026-09-04 `W-E` CORRECTION STANDS: the old cell said `wound_state[loser]`, which would kill the wrong person -- reading the loser's band onto the subject deletes a standing TARGET when the ACTOR is felled; each party's band now lands on that party only. `health_remaining`/`health_full` are still read, but for the MAGNITUDE (`wound_harm_model`, `H-123`), not for the band."
@@ -789,8 +797,8 @@ verbs:
     # `contest.undecided` is therefore emitted only when BOTH parties are untouched.
     emits:
       Declared:    ["fight.declared"]
-      Felled:      ["person.died", "tenure.closed", "body.changed"]
-      Wounded:     ["body.changed"]
+      Felled:      ["person.died", "tenure.closed", "body.changed", "capability.raised"]
+      Wounded:     ["body.changed", "capability.raised"]
       Untouched:   ["contest.undecided"]
     # ⚠ WAS `[]`. Under #358 rev.2 loader invariant 4 (widened, F7) every failable clause needs a
     # refusal kind, and a contested verb can be refused by the seam at the depth cap (§C.5 returns
@@ -837,14 +845,14 @@ verbs:
     # The effect runs once, on the FIRST pair, so `Tenure.since` leads on `Wounded`.
     writes:
       Declared:     []
-      Felled:       ["Person.body", "Person.exists", "Tenure.until"]
-      Wounded:      ["Tenure.since", "Person.body"]
+      Felled:       ["Person.body", "Person.exists", "Tenure.until", "Person.capability", "Person.body_ceiling"]
+      Wounded:      ["Tenure.since", "Person.body", "Person.capability", "Person.body_ceiling"]
       Untouched:    ["Tenure.since"]
     writes_note: "CP-T03-09: `loop/effects_combat.py::_eff_capture` -- `_eff_kill`'s wounds for each party by his own band, and, when the scene's `surrender` names the SUBJECT as the one who yielded, ONE `detain` EDGE, captive -> THE SEAT THE ACT IS EXERCISED THROUGH (`Act.via`), opened where `may_warrant` and `_may_close_custody` both hold (`arrest`'s pair of tests, so an admitted act is never killed at the gate and a custody nothing could close is never opened). The captive stays in `w.persons`; a yield by the ACTOR opens nothing. The gate's `warrant` basis is unchanged."
     emits:
       Declared:    ["capture.declared"]
-      Felled:      ["person.died", "tenure.closed", "body.changed"]
-      Wounded:     ["body.changed", "person.captured"]
+      Felled:      ["person.died", "tenure.closed", "body.changed", "capability.raised"]
+      Wounded:     ["body.changed", "person.captured", "capability.raised"]
       Untouched:   ["person.captured"]
     emits_note: "`fight`'s kinds, with `contest.undecided` REPLACED by the new `person.captured` on the two bands a yielder stands in (earned only by the opened `detain`, `_fold`'s `earned` intersection, so a Wounded scene with no yield emits `body.changed` alone), and `fight.declared` by `capture.declared` (`march`'s deferral band, `the body` carrying `step: ENCOUNTER`). `person.captured` has one emitter, so `data/verbs.py::KIND_VERB` maps it."
     emits_on_refusal: ["capture.refused"]
@@ -935,13 +943,13 @@ verbs:
     # `blood` the yielder is wounded by construction (the stop is the first wound).
     writes:
       Declared:     []
-      Felled:       ["Person.body", "Person.exists", "Tenure.until"]
-      Wounded:      ["Person.body"]
+      Felled:       ["Person.body", "Person.exists", "Tenure.until", "Person.capability", "Person.body_ceiling"]
+      Wounded:      ["Person.body", "Person.capability", "Person.body_ceiling"]
       Untouched:    []
     emits:
       Declared:    ["accept.declared"]
-      Felled:      ["person.died", "tenure.closed", "body.changed"]
-      Wounded:     ["body.changed", "duel.yielded"]
+      Felled:      ["person.died", "tenure.closed", "body.changed", "capability.raised"]
+      Wounded:     ["body.changed", "duel.yielded", "capability.raised"]
       Untouched:   ["contest.undecided"]
     emits_on_refusal: ["accept.refused"]
     grade:       "assumption"
@@ -1420,6 +1428,8 @@ verbs:
     eligibility: ["own"]
     beneficiary: "subject"
     beneficiary_note: "THE PERSON TENDED (#453 §9.4: *'beneficiary `subject`'*), whose body the act raises; self or another."
+    referent_class: Person
+    referent_class_note: "v11 CP-T03-08 ([ASSUMPTION; medium; Jordan to correct; revert: delete this column and the `wounded_with` term in `queries/world_q.py::questions_for`]): FORMED ONLY ON A `Person`-CLASSED REFERENT -- the wounded `queries/world_q.py::wounded_with` stamps (the asker himself when his own body is below his own `body_ceiling`, and each person with him whom his own ledger's newest `(person, \"body\", v)` claim -- CP-T03-02's Observation, or a told copy -- puts below `condition_scale`), and a question's own plain `Person` referent (REM-21's own-referent term; `Person` is not in `occasion_only_classes`). No other person's true body is read at formation. The fold is unchanged: a subject already whole is refused at the write (`NoOpReceipt`). Realm readings (seeds 0-2, two seasons) in the CP-T03-08 commit body (0771ede5); the one asserted figure is `engine/season/tests/test_cp_t03_08_tend_on_the_wounded.py::test_rem52s_fall_is_tended_whole_the_same_season`."
     requires:    "the person tended exists and is with the actor"
     requires_typed:
       all:

@@ -961,6 +961,16 @@ rosters:
       The ORDER is the tuple's; the shares sum to 1.
     values: [actor_felled, subject_felled, yielded, undecided]
 
+  fight_endings:
+    source: "CP-T03-02 (home `proposals/2026-10-23-subsystem-completion/` T03 §2): how each party's fight ended, as the band's Event carries it (`Event.ending`): fight/accept at Felled/Wounded, and capture at any band where an edge is opened."
+    cite: "CP-T03-02"
+    note: >-
+      ONE VALUE PER PARTY, read off the scene by `loop/effects_combat.py::fight_ending`: `felled` (his own band is
+      `Felled`, `seam/ladder.py::party_degree` off the lifted `wound_state`), `yielded` (the scene's `surrender` names
+      him), `undecided` (neither -- standing, and he did not yield). The ORDER is the tuple's: felled, yielded, undecided.
+      [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]
+    values: [felled, yielded, undecided]
+
   duel_terms:
     source: "CP-T03-09 (`-08` AM-C-03; home `proposals/2026-10-23-subsystem-completion/` T03 §2): the terms a verb's fight is fought under."
     cite: "AM-C-03"
@@ -1050,6 +1060,18 @@ rosters:
       person, so the body floors at 1 — `seam/wrappers/combat.py::party_end`'s own floor (*a dying person
       still fights*), followed rather than reinvented.
     values: [scene_fraction, total, none]
+
+  body_mark_models:
+    source: "v11 CP-T03-07 (P32, a permanent injury mark). A fight can wound and every recovery heals to the scale, so no fight leaves a lasting mark; `Person.body_ceiling` is the bound a recovery heals toward."
+    cite: "H-258"
+    note: >-
+      WHETHER A FIGHT LEAVES A LASTING MARK. `deepest_gate` is the SHIPPED arm: a party who survives
+      a fight at the engine's deepest gate short of felling (`wounds >= max_wounds` on his lifted
+      tracker, both `wound_quantities` members) has his `body_ceiling` fall to one below the next
+      `band_floors["body"]` floor beneath it, so the marks are as many as the body has floors
+      (`loop/effects_combat.py::marked_ceiling`). `none` is the CONTROL: no ceiling moves and
+      every outcome is the pre-item tree's (the field itself is still a schema mover).
+    values: [deepest_gate, none]
 
   field_degree_bands:
     source: "M4, `ED-IN-0279` clause (a). The token every `march` fold writes -- `seam/ladder.py`'s `field_degree`, analogous to `combat_degree_bands` above."
@@ -1447,6 +1469,17 @@ rosters:
       vocation range (`data/verbs.py::VOCATIONS`, a frozenset of these values; no second roster to extend):
       `argue` and `inquiry` join `copying`, and every `train` formation (`vocation_sourced`) forms one
       Candidate per vocation, three where it formed one. A DECLARED MOVER where formation moves, not before.
+      ⚠ v11 CP-T03-04 (B10-11): `fight`, `accept` and `capture` -- the three rows contesting `the body` -- draw on
+      `arms`, so a held `arms` key reaches combat's pool and Ob through `faculty` (CR-85: `combat_input` fills
+      `PersonalCombatInput.faculties` from it; no second skill input), `train` may raise it (one more Candidate per
+      `train` formation: a formation mover with nobody holding the key), and `_eff_kill` raises it by one on each
+      surviving holder of a fight that drew blood (the key is read off this table by the verb, never spelt there).
+      `capture` is added beside the design's `fight` and `accept` (CR-85 design §5) because it opens the same fight
+      through the same `combat_input`; without its row an `arms` holder would roll `pool_default` in a capture.
+      ⚠ THE NAME: `arms` is the plan's; a reader may take `capability["arms"]` for EQUIPMENT, which is
+      CP-T03-03's `arms_kinds` (matter kinds) -- a different thing. [ASSUMPTION; low; Jordan to correct; revert:
+      rename the roster key] -- the rename is this table's three values and `vocation_attribute`'s key, nothing in a
+      body. NOBODY HOLDS IT at landing: no cast overlay value and no lifepath template names it (Jordan's content).
     sweep: [declared, uniform, absent]
     keys: [verb_table]
     values:
@@ -1456,6 +1489,9 @@ rosters:
       research: "inquiry"
       examine:  "inquiry"
       surveil:  "inquiry"
+      fight:    "arms"
+      accept:   "arms"
+      capture:  "arms"
 
   vocation_attribute:
     source: >-
@@ -1496,10 +1532,19 @@ rosters:
       `references/descriptor_registry.yaml`). Focus, Reason and Presence carry no registry description, so
       no row rests on one. Checked by a read-only pass at CR-20's close; the pass changed `argue` to Attunement and two
       citations, and Jordan's ruling of 2026-11-05 returned `argue` to Presence.
+      `arms` -> Coordination (`attr.body.agility`, v11 CP-T03-04): the row is forced by this table's closure (a
+      vocation with no row refuses the import), and the choice is the cheap swap
+      [ASSUMPTION; medium; Jordan to correct; revert: Strength (`attr.body.strength`) or Endurance]. Ground:
+      `references/descriptor_registry.yaml`'s alias line alone -- `attr.body.agility` is Coordination, aliases
+      Agility, Dexterity; that the dexterity is the fighter's is this row's reading, not the registry's (it says
+      nothing of weapons). ⚠ The combat module ALSO reads `agi` as its own attribute
+      (`modules/combat/attributes.py`), so a person holding Coordination would bring it twice; no built person
+      holds any attribute at landing, so the double read reaches no season.
     values:
       copying: "attr.mind.focus"
       argue:   "attr.social.charisma"
       inquiry: "attr.mind.acuity"
+      arms:    "attr.body.agility"
 
   lifepaths:
     source: >-
@@ -1717,6 +1762,34 @@ rosters:
       a row looks like, so starting the registry with exactly them is the least-invented content
       available — but it is still a choice, which is what `H-11` grades.
     values: [grain, salt, timber, ore, coin]
+
+  arms_kinds:
+    source: "v11 CP-T03-03 (`-08` AM-C-04; T03 home §2): arms are `matter_kinds` members, so a person's kit is what the rungs he holds store."
+    note: >-
+      `kinds:` maps an ARMS KIND to the one Combatant field it fills and the key it sets there:
+      `{<kind>: {field: weapon|armor, key: <a weapons.py WEAPONS key | an armour tier>, rank: <int>}}`. Each kind
+      must be a `matter_kinds` member, `field` one of the fields `engine/substrate/combat_kit.py::FIELDS` names, `key`
+      a member of THAT FIELD'S closed set in the same module (the typed `kit` section of
+      `engine/engine_params/combat_engine_v1.json`, `tools/export_engine_params.py --check`) and `rank` a whole
+      number, unique among the kinds of one field; refused whole at import otherwise
+      (`data/rosters.py::_check_arms_kinds`). The key sets are never copied here.
+      `queries/world_q.py::kit_of` is the one reader: per field, the highest-ranked kind with a positive count in the
+      stores of the rungs the person holds, else of his residence, else the Combatant's own default.
+      ⚠ EMPTY ON PURPOSE: which arms exist, which key each sets and how they rank is Jordan's content and is not
+      invented here (`-08` AM-C-04). While `kinds:` is empty `kit_of` returns the Combatant default for everyone and
+      every fight is dealt exactly as before the mechanism existed.
+    kinds: {}
+
+  arms_at_build:
+    source: "v11 CP-T03-03 (`-08` AM-C-04): the arms a rung is built holding, by the rung's kind [ASSUMPTION; medium; Jordan to correct]."
+    note: >-
+      `kinds:` maps a RUNG KIND to the stores that kind of rung is seeded with when a realm is built:
+      `{<rung kind>: {<arms kind>: <positive whole number>}}`. Every key must be a `rung_kinds` member, every inner key
+      an `arms_kinds` member (so a seed can only name an arm that has a kind), every amount a positive whole number;
+      refused whole at import otherwise (`data/rosters.py::_check_arms_at_build`). `harness/populated.py::build_realm`
+      is the one seeder (`seed_arms`). ⚠ EMPTY ON PURPOSE, as `arms_kinds` is: the inventory is Jordan's content, so
+      no rung is built holding arms and `build_realm`'s world is unchanged.
+    kinds: {}
 
   wear_per_season:
     source: "#353 §22 assigns `wear per site kind` to params; no in-chain table exists. `H-07`."
@@ -3968,6 +4041,7 @@ tables:
         determine:      -1.0    # carried: the licensed judgement made by the holder licensed to make it
         "deed:matter.undetermined": 0.0   # [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its twin] a Failed `determine` writes nothing, so WITNESS's empty-changes rule (`epistemic.py`'s empty-changes rule) lands the claim on the PARTY, and a null cell would fall back to `determine`'s own (`data/verbs.py`: `_load_alignment` drops a null, `align_kind` falls back to the verb): the hearing that changed nothing is judged as no deed at all. Numeric, not null, for that reason. (`speak`'s four `matter.*` kinds share the shape: H-192 (a).)
         "deed:pursuit.moved": 0.0   # [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its twin] `determine`'s consequence write (v9 SC-02 `22b` step 24) and `argue` (v9 IN-12 step 9) both emit `pursuit.moved`, so the kind is SHARED and absent from `KIND_VERB`; before `argue` it mapped to `determine`, and a null cell would judge the judge's interior shift by `determine`'s alignment, a second time beside `matter.determined`; and `_ch_chronicle` publishes it to everyone (`determine` is a `binding_decision`). A pursuit moving is no one's deed; numeric, not null, for the same reason as `deed:matter.undetermined`. Held at 0.0 it survives the second emitter (`argue`); `train` emits `capability.raised`, not this kind.
+        "deed:capability.raised": 0.0   # [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its twin] v11 CP-T03-04 (iv): `train`'s kind is now SHARED with `fight`/`accept`/`capture` (`loop/effects_combat.py::_grown`), so it is absent from `KIND_VERB` and would read 0.0 by default; held explicitly at 0.0 on `deed:pursuit.moved`'s precedent -- a skill raised is no one's deed, and neither emitter's alignment judges it.
         confer:         -0.8    # carried: conferral seats an office; the paradigm top-down act
         evade / defy:    0.9    # carried: refusing a demand outright is the direct negation of command
         establish:      -0.7    # carried: founding an office adds a rung to the ladder that was not there
@@ -4069,6 +4143,7 @@ tables:
         determine:       0.6    # derived: the act's own form is impartial adjudication; who it favours is the `judging_set`'s
         "deed:matter.undetermined": 0.0   # as `hierarchical_equal`'s cell above: same reason, revert together
         "deed:pursuit.moved": 0.0   # as `hierarchical_equal`'s cell above: same reason, revert together
+        "deed:capability.raised": 0.0   # as `hierarchical_equal`'s cell above: same reason, revert together
         construe:       -0.6    # derived: calculated to serve the construer's aim, not to keep the bond
         forge:          -0.5    # derived: counterfeiting a record for advantage
         open_case:       0.3    # derived: the case runs by template regardless of who stands before it

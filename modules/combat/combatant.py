@@ -56,7 +56,11 @@ class WoundTracker:
     Wounds add a fractional Ob per wound (combat: ED-1041 bilateral WOUND_ATK_OB/WOUND_DEF_OB in
     config.py/systems.py) — NEVER a -1D pool cut (Jordan ruling 2026-07-08, ED-PC-0005, which
     reversed PP-716's -1D and deleted the old pool_penalty() here). Damage is held on the tracker
-    and zeroed at the start of each fight (`wrapper.fight`)."""
+    and zeroed at the start of each fight (`wrapper.fight`).
+    PER-SCENE WORKING STATE, NEVER STORED (CR-85 §4 step 1): "non-resetting" means within one fight -- the archived
+    tabletop rule that damage persists between encounters is not this module's. Health between scenes is the HOST's,
+    stored once as `Person.body` (written by `engine/season/loop/effects_combat.py::_harm`); `fight.py` builds fresh
+    Combatants for every scene, and a registered module keeps no game state (`04` §A.2)."""
 
     def __init__(self, end, equipment_health=0, spirit=3, strength=4):
         self.equipment_health = equipment_health
@@ -101,7 +105,7 @@ class WoundTracker:
 class Combatant:
     """THE ATTRIBUTES (PC-14): one storage, `self.attrs`, a dict keyed by `attributes.KEYS` (the spec is the one owner of
     which attributes exist and their defaults). Each key is also a generated property with a getter AND a setter
-    (`c.history`, `c.history = 5`), so every read and assignment site keeps working; a setter is `set_attr`, which
+    (`c.faculty`, `c.faculty = 5`), so every read and assignment site keeps working; a setter is `set_attr`, which
     re-derives. `Combatant(label, attrs=None, **kw)`: `attrs` is a `{key: value}` dict, `**kw` takes the same keys as
     keywords (a key given both ways is a TypeError, as Python's own "multiple values" is); an unknown attribute name is
     a TypeError. `disp` is disposition / temperament, the aggression axis; lean = (disp - NEUTRAL['disp'])/3,
@@ -137,7 +141,7 @@ class Combatant:
         self.skills=skills or {}            # per-axis skill bias {axis: bonus}, read by skill(axis); 0 = untrained
         self.equipped=equipped or []        # LEARNED techniques (ability_primitives): a LIST of names (each level 1.0) OR a DICT {name: level} for graded levels-of-investment (level>=0; 0=untrained/inert). Efficacy emerges from the invested level, not tradition membership (ED-PC-0023). Default none.
         # ---- DERIVED CHARACTER FIGURES — the combatant is the HOST; core/systems CONSUME these, never recompute ----
-        # (resolution pool is NOT hosted here: the live engine calls core.resolution_pool(history) directly, and a
+        # (resolution pool is NOT hosted here: the live engine calls core.resolution_pool(faculty) directly, and a
         # second hardcoded `self.pool=max(5,history+6)` here was a dead re-implementation of that rule with ZERO
         # readers — removed ED-PC-0023 audit, §8 "every rule lives once". Any consumer needing the pool calls
         # core.resolution_pool.)

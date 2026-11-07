@@ -36,7 +36,8 @@ entry calls. This module reads it only for `engine()`, the availability probe it
 derive EXACTLY ONE field from something the actor genuinely has, leave every other field at the
 class's own constructor default, and return a typed gap rather than fabricate a party. The
 `Combatant` defaults it names — strength 4, agi 4, end 4, cog 3, att 3, spirit 3, focus 3, disp 4,
-weapon `arming`, armor `light`, tradition `none` — are the class's, not this module's.
+weapon `arming`, armor `light`, tradition `none` — are the class's, not this module's. The record has since grown
+each party's kit (CP-T03-03) and `faculty` (CR-85, `combat_input`), which replaced the class's `history`.
 
 ⚠ THE ONE DERIVED FIELD IS `end`, FROM `body_band_penalty`, AND IT INVENTS NO NUMBER. A tracer
 `Person` carries nothing combat-shaped except `body`, an int on the condition scale. The tree
@@ -86,9 +87,10 @@ from ...gaps import Forbidden, Unspecified
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup).
 from ...manifest.providers import provider
 from ...queries.inputs import PersonalCombatInput, PlayHost
-from ...queries.world_q import stakes_of
+from ...queries.world_q import kit_of, stakes_of
 from ...state.ids import H
 from ._entry import entry_for
+from .pool import faculty
 
 _PROVIDER = "personal_combat"
 _PRIZE = "the body"                 # the prize row this provider deals (`rosters.yaml`)
@@ -187,8 +189,10 @@ def _cause_record(w: Any, causes: list) -> Optional[str]:
 def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = None) -> PersonalCombatInput:
     """THE HOST INPUT BUILDER (plan position `31b`, A-25): `World` -> the frozen record the fight reads.
 
-    Reads `w.persons` (the two claimants), `w.records` (a challenge's `stakes`, through `stakes_of`) and
-    `w.fixtures`, and nothing else; the module that consumes the record never sees `World`. Its precondition is the adapter's PARTY-GAP checks (`resolve`,
+    Reads `w.persons` (the two claimants), `w.records` (a challenge's `stakes`, through `stakes_of`), `w.fixtures`
+    and, for each party's `kits` entry, what his rungs store (`world_q.kit_of`, CP-T03-03: his holdings, else his
+    residence; the Combatant default for a person who holds no arms, which is everyone while `rosters.yaml:
+    arms_kinds` is empty), and nothing else; the module that consumes the record never sees `World`. Its precondition is the adapter's PARTY-GAP checks (`resolve`,
     below): two claimants, both persons.
 
     `verb` (CP-T03-09) is the act's verb and fills `terms` from `rosters.yaml: duel_terms` -- the ONE path a
@@ -198,13 +202,22 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
     `record` (v10 PC-10b) is the Record the act is about (`_cause_record`); a `challenge` Record's `stakes`
     (`world_q.stakes_of`) fill the SAME field through the same `duel_terms_of`, so `accept` is fought under the
     challenge's terms; where it names none the verb's `duel_terms` line stands (`accept: blood`, v11 CR-87) and a
-    verb the roster does not name is fought under `'death'`."""
+    verb the roster does not name is fought under `'death'`.
+
+    `verb` also fills `faculties` (CR-85, ED-IN-0330): each party's `faculty(w, person, verb)`, the season's ONE pool
+    reader, imported from its owner `pool.py` (a leaf both this adapter and `sigma.py` import) and never copied. `fight`,
+    `accept` and `capture` draw on the `arms` capability key (CP-T03-04, `rosters.yaml: verb_capability`); a person holding no
+    such key (and no attribute for its vocation) reads `pool_default` plus the registered addends, so the season's fight
+    rolls that against half of it. [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] --
+    the CR-85 design is UNRATIFIED (ED-IN-0351)."""
     a_id, b_id = claimants[0], claimants[1]
     terms = duel_terms_of(verb, stakes_of(w, record))
     return PersonalCombatInput(
         claimants=(a_id, b_id),
         ends=(party_end(w.persons[a_id], w.fixtures), party_end(w.persons[b_id], w.fixtures)),
         wound_quantities=tuple(WOUND_QUANTITIES),
+        kits=(kit_of(w, a_id), kit_of(w, b_id)),
+        faculties=(faculty(w, w.persons[a_id], verb), faculty(w, w.persons[b_id], verb)),
         **({} if terms is None else dict(terms=terms)))
 
 

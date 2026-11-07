@@ -18,6 +18,7 @@ write below presents it. This module constructs none and calls no minter --
 from __future__ import annotations
 
 import random
+from dataclasses import replace
 from ..gaps import InstrumentDefect
 from ..data.rosters import (FOLD_ATTEMPT_REFUSED, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_INQUIRIES,
                             STRATA)
@@ -425,6 +426,9 @@ def _fold(self, w: "World", token: Token, a: Act,
     # CP-T03-00: each receipt beside the kinds its subject earned (`()` = every kind, the plain-list
     # contract), so each kind's Event carries only its earners' changes (below).
     earners: dict = {}
+    # CP-T03-02: what the effect hands the act's success Events beside its receipts -- each moved
+    # subject's `observed` (by receipt identity) and the fight's `ending` (`_apply_write`).
+    carried: dict = {}
     # ⚠ `writes_at(degree)`, NOT `row.writes` (#358 rev.2 §C.4 / invariant 12, 2026-09-03).
     # An UNCONTESTED verb has no `writes_by_degree`, so this returns the flat tuple and the
     # behaviour is identical -- the call is here so the new column HAS A READER. A column no
@@ -468,7 +472,8 @@ def _fold(self, w: "World", token: Token, a: Act,
                 # The effect runs ONCE, on the first pair: a verb writing three cells is ONE
                 # operation, and running it per pair minted three Tenures for one `move`.
                 made = self._apply_write(w, token, a, kind, fld, eff if n == 0 else None,
-                                         earned=earned, resolution=resolution, earners=earners)
+                                         earned=earned, resolution=resolution, earners=earners,
+                                         carried=carried)
                 changed.extend(c for c in made if c not in changed)
         # ⚠ AN EFFECT THAT TOUCHED NOTHING DID NOT DO THE THING, AND MUST NOT EMIT THE
         # SUCCESS. `kill / wound`'s effect returns early when its payload names no subject --
@@ -544,10 +549,22 @@ def _fold(self, w: "World", token: Token, a: Act,
     # would have named the actor his killer (the ID-9 class). `world.py`'s MATTER emission already
     # carries per kind (CP-T02-01's `extra` loop); this is the same rule on the act's path. Where no
     # subject names a kind every Event carries every receipt, byte-identical to before.
+    # CP-T03-02: AND EACH KIND'S EVENT CARRIES, AFTER THE PRECONDITION'S READS, THE `observed` OF THE RECEIPTS
+    # RIDING IT (`Subject.observed`: a wounded party's `(pid, "body", v)` on `body.changed`), and every success
+    # Event carries the fight's `ending` -- `()` and `()` on every act that is not `fight`/`accept` at Felled/Wounded
+    # or `capture` at a band where an edge is opened (its Untouched band included), so those Events are
+    # byte-identical to before. [ASSUMPTION; medium; Jordan to correct; revert: the field and
+    # the Observation]
+    _obs_of = carried.get("observed", {})
+    _ending = carried.get("ending", ())
     out = []
     for k in kinds:
-        out.extend(ev((k,), list(a.changes)
-                      + [r for r in changed if not earners.get(id(r)) or k in earners[id(r)]]))
+        riding = [r for r in changed if not earners.get(id(r)) or k in earners[id(r)]]
+        extra = tuple(o for r in riding for o in _obs_of.get(id(r), ()))
+        for e in ev((k,), list(a.changes) + riding):
+            if extra or _ending:
+                e = replace(e, observed=tuple(e.observed) + extra, ending=_ending)
+            out.append(e)
     # IN-08 H3: THE SCAR, AFTER THE ACT'S EVENTS ARE FORMED, BY THE OUTCOME. `changed` is the
     # gate's own receipts for this act's writes, so it is empty on every path that is not a deed:
     # each refusal above returned early, and a band that declares no writes (`tell`'s `Failure`,
@@ -884,7 +901,8 @@ def _grade(self, w: "World", token: Token, a: Act, route: dict) -> list:
 def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, eff=None,
                  earned: Optional[set] = None,
                  resolution: "Resolution | None" = None,
-                 earners: Optional[dict] = None) -> list:
+                 earners: Optional[dict] = None,
+                 carried: Optional[dict] = None) -> list:
     """The fold's write. It carries no per-verb behaviour -- the effect of a write is the
     matrix row's business, and what a verb writes is the verb table's.
 
@@ -964,6 +982,12 @@ def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, ef
         earned.update(s.kinds)
         if earners is not None:
             earners[id(_r)] = s.kinds
+        # CP-T03-02: what a MOVED subject's write leaves it as (`Subject.observed`), keyed like `earners`.
+        if carried is not None and s.observed:
+            carried.setdefault("observed", {})[id(_r)] = s.observed
+    # CP-T03-02: the fight's per-party ending (`Change.ending`), for the fold's success Events.
+    if carried is not None and change.ending:
+        carried["ending"] = change.ending
     # G1a -> G4. THE GATE MINTED THESE, INSIDE THE WRITE, FOR THE SUBJECTS THAT MOVED AND NO OTHER.
     # They were minted here, after `w.write` returned, for every id the effect REPORTED -- which is
     # how a no-op receipt (`before == after`) came to be issued by the gate and admitted by the log.

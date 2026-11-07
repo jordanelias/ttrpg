@@ -32,10 +32,9 @@ import systems.fieldwork.sim.knots as knots  # noqa: E402
 class _FormActor:
     """Duck-typed actor for form_knot prerequisites (§3.1)."""
 
-    def __init__(self, bonds=6, spirit=5, history_relationships=6, ts=40, disposition=6):
+    def __init__(self, bonds=6, spirit=5, ts=40, disposition=6):
         self.bonds = bonds
         self.spirit = spirit
-        self.history_relationships = history_relationships
         self.ts = ts
         self.disposition = disposition
 

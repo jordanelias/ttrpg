@@ -38,10 +38,31 @@ from .test_rem30_character_sheet import _run
 #: RE-PINNED ONCE at v11 CR-87 (violence made exceptional: the build's loyalty rows and `fight`'s contexts, a declared mover
 #: of the build and of every season that fought): was `f9c01c27...`, `086d1092...`, `6312b4a1...`. CONTROL:
 #: `test_cr87_violence_contexts.py::revert_cr87` reads the pre-item hashes exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-PINNED ONCE at v10 CP-T03-02 (a fight band's `Event.ending` and the wounded party's body Observation, a declared
+#: mover wherever a Felled/Wounded fight lands): seeds 1, 2 were `9e1bb7c2...`, `fe7b5f49...`; seed 0 fights nothing and
+#: does not move. CONTROL: `test_cp_t03_02_band_ending_and_body.py::revert_cp_t03_02` reads the pre-item one-season
+#: realm exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-PINNED ONCE at v11 CR-85 (`faculty` replaces `history` in combat's pool and Ob, ED-IN-0330; every season fight
+#: rolls pool 8 against Ob 1.0, was 9 against 1.5): seed 1 was `ce8c74e7...`; seeds 0 and 2 do not move (seed 0
+#: fights nothing, seed 2's fights land where they did). CONTROL:
+#: `test_cr85_faculty_replaces_history.py::revert_cr85` (the seam's faculty at 3 for every party) reads the old value
+#: exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-PINNED ONCE at v11 CP-T03-04 (`arms` in `verb_capability`'s range: a FORMATION mover even at control, one more `train`
+#: Candidate per `train` formation with nobody holding the key): seeds 0 / 1 / 2 were e9d7c897... / ae97a48b... / 831dc047...; no roll moves (nobody
+#: holds `arms`). CONTROL: `test_cp_t03_04_arms.py::revert_cp_t03_04` (the three roster rows and the vocation off) reads the
+#: old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-PINNED ONCE at v11 CP-T03-07 (`Person.body_ceiling`, a SCHEMA mover of every Person, and the lasting mark, an outcome
+#: mover where a survivor reached the deepest gate): seeds 0 / 1 / 2 were 0036bb2e... / 3b30d0ea... / 4856e80a....
+#: CONTROL: `test_cp_t03_07_body_ceiling.py::revert_cp_t03_07` (`body_mark_model: none` and the field out of the canonical
+#: encoding) reads the old three exactly under this control's stub. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-PINNED ONCE at v11 CP-T03-08 (`tend` declares `referent_class: Person` and `wounded_with` stamps the wounded: a
+#: FORMATION mover of every season, and an outcome mover -- a man below his ceiling tends himself whole): seeds 0 / 1 / 2
+#: were 39f53dad... / 82310267... / 3cba88e4.... CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` (the
+#: column emptied, the term returning `()`) is the item's own control. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
-    0: "e9d7c8974bf509ca2b915489cc4f371c",
-    1: "9e1bb7c269b7bc1523a342d11d3fcfb0",
-    2: "fe7b5f497865689edcd0084d1a1effa7",
+    0: "cd42982bd47638dcf31154a24e38857d",   # CP-T03-08: was 39f53dad...; CP-T03-07: was 0036bb2e...; CP-T03-04: was e9d7c897...
+    1: "242dac6563a73cfb7dddde4063ea3168",   # CP-T03-08: was 82310267...; CP-T03-07: was 3b30d0ea...; CP-T03-04: was ae97a48b...; CR-85: was ce8c74e7...
+    2: "174db5fe5b3ccc1aab6ba9cb68e85bd9",   # CP-T03-08: was 3cba88e4...; CP-T03-07: was 4856e80a...; CP-T03-04: was 831dc047...
 }
 
 #: The four Niflhel ids the archived file STRIKES (it prints no row for them): never members.
@@ -80,7 +101,7 @@ def _cells():
 
 
 @pytest.mark.parametrize("mutate", [
-    lambda c: c["3-CR4"].update(holds=["arms"]),                    # a key outside `verb_capability`'s values
+    lambda c: c["3-CR4"].update(holds=["no_such_vocation"]),        # a key outside `verb_capability`'s values (v11 CP-T03-04: was `arms`, now a vocation)
     lambda c: c.update({"3-NI1": {"holds": [], "ground": "x"}}),    # an id outside the 34 (a struck one)
     lambda c: c.pop("3-CF6"),                                       # a lifepath with no row
     lambda c: c["3-CR1"].update(holds=["argue", "argue"]),          # a key held twice

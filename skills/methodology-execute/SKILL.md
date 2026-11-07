@@ -309,12 +309,7 @@ the plan's batch and its boundary row stay.
 Test every plan batch against the partition. A batch that gates on a later batch, or two of the
 plan's own sources that disagree about a batch (a table against a column), is a conflict — say so
 at the 0.1 stop and leave the plan's grouping standing until it is ruled. Lumping more coarsely than
-the partition would is the plan's judgment, not a conflict. **A plan card cut into several closes
-along links, with no risk named** (the plan head's P3: a run with no verification checkpoint, or a
-diff too large for Phase 1 or Phase 3 to hold), **is stated at the 0.1 stop, with the merged close
-offered**; the plan's grouping stands unless the person picks the merge, and this skill does not
-re-split a plan on its own authority. Why: each close repeats the fixed Phase 1 and Phase 3 floor,
-the expunge and a merge wait, whatever its diff's size. **A one-batch task writes no batch rows:** its commits and its
+the partition would is the plan's judgment, not a conflict. **A batch has ONE close (RULED, Jordan 2026-11-06: *"a batch is only supposed to have ONE close. if a batch has multiple closes, then it is not a batch but a series of batches"*; *"methodology-execute should only run the three-phase close once per batch"*).** A plan card that writes several closes ("close one", "close two") is a series of batches under one heading: this skill re-expresses its remaining rows as batches of one close each, by the partition above, states the cut at the 0.1 stop, and runs the first; it never opens a second close inside a window. Why: each close repeats the fixed Phase 1 and Phase 3 floor, the expunge and a merge wait, and a diff built across closes is not the diff one close read. **A one-batch task writes no batch rows:** its commits and its
 in-flight row are its record.
 
 ### The context set — what each batch declares

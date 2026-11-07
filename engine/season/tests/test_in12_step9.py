@@ -55,7 +55,7 @@ from ..harness import probes as P
 from ..loop import effects_economy as ECON
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries import person_q as PQ
-from ..seam.wrappers import sigma
+from ..seam.wrappers import pool, sigma
 from ..state.carriers import Act, Person, Question, StateChange
 from .test_in10_record_operands import _acts, _resolve
 
@@ -76,7 +76,11 @@ def _world(fixtures=None):
 def _formed(w, pid, verb, referent):
     """`pid`'s own option set on one question about `referent` -- the `verb` Candidates it forms."""
     p = w.persons[pid]
-    q = Question(f"q:{verb}:{referent}", "claim_landed", (referent,), None)
+    # v11 CP-T03-08: a row declaring a `referent_class` forms only on a referent carried as that class (`tend`:
+    # `Person`), so the hand-built question carries it as `_stamped` would; a row declaring none is unaffected.
+    cls = VERB_TABLE[verb].referent_class
+    q = Question(f"q:{verb}:{referent}", "claim_landed", (referent,), None,
+                 ((referent, cls),) if cls else ())
     return [c for c in opening_set(p, assemble(p, q, 12), q, w.fixtures) if c.verb == verb]
 
 
@@ -371,7 +375,7 @@ def test_a_planted_addend_registered_through_faculty_is_read_by_the_roll_and_the
     carin = w.persons[CARIN]
     other = next(p for pid, p in sorted(w.persons.items()) if pid != CARIN and not p.capability)
     base = {p.id: sigma.faculty(w, p, "tell") for p in (carin, other)}
-    monkeypatch.setattr(sigma, "POOL_ADDENDS", list(sigma.POOL_ADDENDS))
+    monkeypatch.setattr(pool, "POOL_ADDENDS", list(pool.POOL_ADDENDS))
     sigma.register_pool_addend(lambda w_, p, verb: 2 if (p.id == CARIN and verb == "tell") else 0)
     assert sigma.faculty(w, carin, "tell") == base[CARIN] + 2
     assert sigma.faculty(w, other, "tell") == base[other.id]            # keyed by the person it names
@@ -420,7 +424,8 @@ def test_the_four_verb_capability_rows_resolve_and_are_the_vocation_range():
     # CR-20: the range is closed over `vocation_attribute`'s rows (same set, derived: a literal triple here is
     # flagged by `test_jordan_no_definition_is_hardcoded_in_a_body` now that a second roster is that set).
     from ..data.rosters import VOCATION_ATTRIBUTE
-    assert VERBS.VOCATIONS == set(VOCATION_ATTRIBUTE) and len(VERBS.VOCATIONS) == 3
+    # v11 CP-T03-04: `arms` (`fight`/`accept`/`capture`) joins the range, three -> four.
+    assert VERBS.VOCATIONS == set(VOCATION_ATTRIBUTE) and len(VERBS.VOCATIONS) == 4
 
 
 def _train_kinds(w, pid):
@@ -432,11 +437,11 @@ def test_train_forms_one_candidate_per_vocation_including_argue_and_inquiry(monk
     keys the rows add are formed; with the `inquiry` rows removed (the planted failure) or the `argue` row
     removed, that kind is not formed and the others are."""
     w, _d = _npc088()
-    assert _train_kinds(w, CARIN) == sorted(VERBS.VOCATIONS) and len(_train_kinds(w, CARIN)) == 3
+    assert _train_kinds(w, CARIN) == sorted(VERBS.VOCATIONS) and len(_train_kinds(w, CARIN)) == 4   # v11 CP-T03-04: + `arms`
     monkeypatch.setattr(OPT, "VOCATIONS", VERBS.VOCATIONS - {"inquiry"})
-    assert _train_kinds(w, CARIN) == ["argue", "copying"]
+    assert _train_kinds(w, CARIN) == ["argue", "arms", "copying"]
     monkeypatch.setattr(OPT, "VOCATIONS", VERBS.VOCATIONS - {"argue"})
-    assert _train_kinds(w, CARIN) == ["copying", "inquiry"]
+    assert _train_kinds(w, CARIN) == ["arms", "copying", "inquiry"]
 
 
 def test_a_pupil_whose_vocation_reads_argue_or_inquiry_is_trained_and_faculty_follows(monkeypatch):
@@ -471,7 +476,7 @@ def test_the_three_train_candidates_on_one_subject_get_three_act_ids():
     subject)` and `state/acts.py` refuses the second (the failure this test was written on, seed 0 season 1)."""
     w, d = _npc088()
     acts = _acts(w, CARIN, _formed(w, CARIN, "train", CARIN))
-    assert len(acts) == 3 and len({a.id for a in acts}) == 3, [a.id for a in acts]
+    assert len(acts) == 4 and len({a.id for a in acts}) == 4, [a.id for a in acts]   # v11 CP-T03-04: four with `arms`
     assert VERBS.act_key("train", CARIN, {"kind": "argue"}) != VERBS.act_key("train", CARIN, {"kind": "inquiry"})
     assert VERBS.act_key("tend", CARIN, {"kind": "argue"}) == CARIN, "another row's id is untouched"
     assert len(_resolve(w, d, *acts)) >= 3

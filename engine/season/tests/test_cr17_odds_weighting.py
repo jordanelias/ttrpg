@@ -32,7 +32,7 @@ from ..decision import choose as CH
 from ..gaps import Unspecified
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
-from ..seam.wrappers import sigma
+from ..seam.wrappers import pool, sigma
 from ..data.rosters import VERB_CAPABILITY
 from ..state.carriers import Act, Candidate, Claim, Person
 
@@ -201,7 +201,7 @@ def test_two_pools_give_two_believed_chances_and_two_rankings(cells, monkeypatch
     w = _world()
     sure, unsure = w.persons["p_low"], w.persons["p_mid"]
     # roster-exempt: TEST FIXTURE addend -- one person's pool four dice above the other's (`test_odds_of.py`'s way).
-    monkeypatch.setattr(sigma, "POOL_ADDENDS", [lambda w_, who, verb: 4 if who.id == sure.id else 0])
+    monkeypatch.setattr(pool, "POOL_ADDENDS", [lambda w_, who, verb: 4 if who.id == sure.id else 0])
     for p in (sure, unsure):
         p.pursuits = {n: 1.0 for n in PURSUITS}
         _believes_the_hearer(p)
@@ -322,6 +322,22 @@ def test_none_and_tau_point_one_reproduce_the_parent_world_exactly(monkeypatch):
         old pin `edbc7442...` / 10435 exactly (CP-T03-09's own control, the go07 note's)."""
     from .test_cr87_violence_contexts import revert_cr87
     revert_cr87(monkeypatch)
+    # v11 CP-T03-04 (`arms` in the vocation range, a formation mover of every season) is read at its revert too
+    # (`test_cp_t03_04_arms.py::revert_cp_t03_04`, whose own control reproduces the pre-item hashes), the same way.
+    from .test_cp_t03_04_arms import revert_cp_t03_04
+    revert_cp_t03_04(monkeypatch)
+    # v11 CP-T03-07 (`Person.body_ceiling`, a schema mover of every realm, and the lasting mark), the same way.
+    from .test_cp_t03_07_body_ceiling import revert_cp_t03_07
+    revert_cp_t03_07(monkeypatch)
+    from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
+    revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
+    # CP-T03-02 (`Event.ending` and the body Observation) and CR-85 (`faculty` for `history`) are declared movers of the
+    # batch too, and each is read at its revert in process, as CR-87 and CP-T03-04 are (their own controls reproduce the
+    # pre-item hashes); without them this pin read `be71a51c...` and never the PC-10b tree's.
+    from .test_cp_t03_02_band_ending_and_body import revert_cp_t03_02
+    from .test_cr85_faculty_replaces_history import revert_cr85
+    revert_cp_t03_02(monkeypatch)
+    revert_cr85(monkeypatch)
     from ..harness import populated as POP
 
     def season():

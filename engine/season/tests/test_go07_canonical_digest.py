@@ -622,16 +622,42 @@ def _counts(w) -> dict:
 # Was, for seeds 0 / 1 / 2: `old` a0944c1b... / d52e342d... / e6f01019..., `new` 0fb73bc8... / 3b407a74... / 47151656...;
 # `acts` 719 / 721 / 740; `persons` 80 at each. CONTROL: `tests/test_cr87_violence_contexts.py::revert_cr87` reads the old
 # build and one-season hashes exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v11 CR-85 (`faculty` replaces `history` in combat's pool and Ob, ED-IN-0330; every season fight
+# rolls pool 8 against Ob 1.0, was 9 against 1.5): seed 1 was `old` 18de0fa6... / `new` f89ea45d... (`acts`,
+# `census`, `counts` unmoved); seeds 0 and 2 do not move (seed 0 fights nothing, seed 2's fights land where they
+# did). CONTROL: `test_cr85_faculty_replaces_history.py::revert_cr85` (the seam's faculty at 3 for every party) reads
+# the old value exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v11 CP-T03-04 (`arms` in `verb_capability`'s range: a FORMATION mover even at control, one more `train`
+# Candidate per `train` formation with nobody holding the key; no roll moves). Was, for seeds 0 / 1 / 2: `old` 7e81a2cf... /
+# ec800435... / ecc848ea..., `new` 20accb03... / 6e25b047... / fe9032ed...; `acts` 744 / 746 / 746; the census and counts in
+# each row's trailing comment. `build_realm(seed)` does not move (7266f56b... stands). CONTROL:
+# `test_cp_t03_04_arms.py::revert_cp_t03_04` (the three roster rows and the vocation off) reads the old three `new` values
+# exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v11 CP-T03-07 (`Person.body_ceiling`: a SCHEMA mover of every Person, so both the `repr` digest and the
+# canonical one move at build and at every season; and the lasting mark, an outcome mover where a survivor reached the deepest
+# gate -- one person at seed 2, whose body and ceiling moved and nothing else: `acts`, `census` and `counts` do NOT move at any
+# seed). Was, for seeds 0 / 1 / 2: `old` 42847586... / 7e8ccabe... / 6c3fdfa0..., `new` b2dde1fc... / 07634b99... / 1cc4370d...;
+# and the build pins in the test below, each with its `was`. CONTROL: `test_cp_t03_07_body_ceiling.py::revert_cp_t03_07`
+# (`body_mark_model: none` and the field out of the canonical encoding) reads the old three `new` values and the old build
+# `7266f56b...` exactly; the `repr` digest has no in-process revert (a dataclass `repr` carries every field). A GOLDEN
+# RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v11 CP-T03-08 (`tend` declares `referent_class: Person` and `wounded_with` stamps the wounded: a
+# FORMATION mover of every season and an outcome mover -- a man below his ceiling tends himself whole; `acts`, `census`
+# and `counts` move at every seed). Was, for seeds 0 / 1 / 2: `old` 92e19ffc... / 6cffb790... / aa306a67..., `new`
+# eb2919ae... / fc3201f3... / 6da144ff..., `acts` 744 / 747 / 747, census f970d2ed... / 3b1d0142... / 015989bc..., `log`
+# 13401 / 11767 / 11344. The build pins do not move (the item writes no field). CONTROL:
+# `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` reads the old three `new` values exactly. A GOLDEN RE-RECORDED,
+# NOT A BALANCE CLAIM.
 BASE = {
-    0: {"old": "7e81a2cf124ff105d4bd5af7ac1a5c77", "new": "20accb03c3d32f80a9fab00d80a70b21", "acts": 744,
-        "census": "6032506e3dbe624bc7b7bb0cab2ea5029170d5b0681ffb641fb6c586c3abc02e",
-        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 203, "propositions": 143, "dates": 5, "docket": 8, "tenures": 1028, "log": 13400}},
-    1: {"old": "327bac574df3c4e71a2f71df2ebfc323", "new": "f4330aacb84c25069dfdb33f2a123215", "acts": 746,
-        "census": "321d254810a75233b3171635ff5e7802e208057ae614ac7c32cfdba7ddd13055",
-        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 212, "propositions": 145, "dates": 5, "docket": 9, "tenures": 1022, "log": 12271}},
-    2: {"old": "4fb68bcf6c064dc8d9ed77fc2d66a67d", "new": "a030141a9c66a833e84a97a71404ff88", "acts": 746,   # CR-87: was e6f01019... / 47151656... / 740
-        "census": "414d3ac0d9f00aed1a0d7f51c10ef05b84fbb7f6daa2f2a2d646f8daa3609fb6",
-        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 183, "propositions": 141, "dates": 5, "docket": 8, "tenures": 988, "log": 11338}},
+    0: {"old": "942102ac04efcbc0ee8fb7f612ea7afb", "new": "d4c83c8ca9d5082f5237a3889e1a995b", "acts": 755,   # CP-T03-08: was 92e19ffc... / eb2919ae... / 744 / census f970d2ed... / records 202 / propositions 144 / tenures 1029 / log 13401. CP-T03-07: was 42847586... / b2dde1fc.... CP-T03-04: was 7e81a2cf... / 20accb03... / census 6032506e... / records 203 / propositions 143 / tenures 1028 / log 13400
+        "census": "4cfb3efe1ad9455df9822760145226d1272e9da33efcf5a4f5925fe1598bcc3a",
+        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 198, "propositions": 143, "dates": 5, "docket": 8, "tenures": 1024, "log": 13454}},
+    1: {"old": "3caed4ccdb11887aedfd38cd4b93ca33", "new": "d9f3be70a492753d16584d068ba98108", "acts": 754,   # CP-T03-08: was 6cffb790... / fc3201f3... / 747 / census 3b1d0142... / records 210 / propositions 146 / docket 9 / tenures 1022 / log 11767. CP-T03-07: was 7e8ccabe... / 07634b99.... CP-T03-04: was ec800435... / 6e25b047... / 746 / census 6282d017... / records 212 / propositions 145 / log 12273. CR-85 (faculty replaces history): was 18de0fa6... / f89ea45d...; `acts`, `census` and `counts` do not move. CP-T03-02 (a fight's `ending` + body Observation): was 327bac57... / f4330aac... / census 321d2548... / log 12271
+        "census": "09f11a01493b441979ab66c19532debbfca8739690f40e710fb3c70889e77ec8",
+        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 205, "propositions": 141, "dates": 5, "docket": 10, "tenures": 1011, "log": 11937}},
+    2: {"old": "bb2336b4ea5e13c217ecc03c2964e3ee", "new": "285fb92a927eaa642e8478c799995315", "acts": 757,   # CP-T03-08: was aa306a67... / 6da144ff... / 747 / census 015989bc... / records 183 / propositions 139 / tenures 984 / log 11344. CP-T03-07: was 6c3fdfa0... / 1cc4370d.... CP-T03-04: was ecc848ea... / fe9032ed... / 746 / census 49f45000... / propositions 141 / docket 8 / tenures 988 / log 11340. CP-T03-02: was 4fb68bcf... / a030141a... / census 414d3ac0... / log 11338; CR-87: was e6f01019... / 47151656... / 740
+        "census": "ab2d3aa73d60479bb651435ea3bbe7b03298b9d17f8a94776ce5d6521d4bf902",
+        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 179, "propositions": 138, "dates": 5, "docket": 7, "tenures": 981, "log": 11398}},
 }
 
 
@@ -640,13 +666,13 @@ def test_go07_control_the_build_world_old_digest_is_unmoved():
     (`test_season_weather.BASE_HASHES[0]`'s retired value); the same world now reads the new pin."""
     w = POP.build_realm(0)
     c = POP.build_realm(0, foreign=False, acquaintances=False)   # ED-IN-0310 + CR-81: the realm before the empire and the acquaintances
-    assert (_old_content_hash(c), c.content_hash()) == ("d7b1bb377d9bce2edf1c078c45d936c4", "e9611b77932eff80218c48bb98509db2")   # CR-87 (loyalty toward the creed): was 1808a6f0... / 6717d2d1...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 1dd20ec5... / dfdbd5df...; CR-33 (NPC-088 holds `inquiry`): was b016e338... / a4998422... (CR-20+CR-30: was 970d0b5b... / 060d8901... (CR-86: was 919faacb... / c7ca8d50...)
+    assert (_old_content_hash(c), c.content_hash()) == ("a2b12c0d640dd015504b2e622c2ae07b", "e9ec044a5bf7248449fef9e8a28c0896")   # CP-T03-07 (`body_ceiling`, a Person field): was d7b1bb37... / e9611b77...; CR-87 (loyalty toward the creed): was 1808a6f0... / 6717d2d1...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 1dd20ec5... / dfdbd5df...; CR-33 (NPC-088 holds `inquiry`): was b016e338... / a4998422... (CR-20+CR-30: was 970d0b5b... / 060d8901... (CR-86: was 919faacb... / c7ca8d50...)
     a = POP.build_realm(0, acquaintances=False)                  # CR-81's control arm: the parent tree's build
-    assert (_old_content_hash(a), a.content_hash()) == ("1f53bc119bfdfcb7f4d45fbbe7952bfe", "e6a40e1880bac963506fe39c071133d9")   # CR-87: was f37a51c3... / 7a9778bc...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 024abccb... / bfee1369...; CR-33: was d4be83d2... / 070b68df... (CR-20+CR-30: was be420f67... / 87682033... (CR-86: was f78bcaf4... / 70ea49cb...)
+    assert (_old_content_hash(a), a.content_hash()) == ("0bfaf18815fedddcfc55b754329a9255", "b9928b271a022bb49e4a743859bcb386")   # CP-T03-07: was 1f53bc11... / e6a40e18...; CR-87: was f37a51c3... / 7a9778bc...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 024abccb... / bfee1369...; CR-33: was d4be83d2... / 070b68df... (CR-20+CR-30: was be420f67... / 87682033... (CR-86: was f78bcaf4... / 70ea49cb...)
     f = POP.build_realm(0, foreign=False)                        # CR-81: was 919faacb... / c7ca8d50... (acquaintances off reads it)
-    assert (_old_content_hash(f), f.content_hash()) == ("e5e7812b7fc1f92a3d4bd66827d18055", "2c9b523d465970715cdf41fced8d3342")   # CR-87: was 622e0736... / ccabd3be...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was d1ecf597... / 0b43b49c...; CR-33: was f1c15230... / ebd5e067... (CR-20+CR-30: was a7628b4e... / 7b7992f7... (CR-86: was 42f55a5f... / e12a710b...)
-    assert _old_content_hash(w) == "8018a699ede4befaa1b0bff79ea3746e"   # CR-87: was 3a7025a9...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 42b898c4...; CR-33: was ff134c63... (CR-20+CR-30: was da08203b... CR-86: was 47c172b0... (ED-IN-0342). CR-81: was f78bcaf4... (acquaintances=False reads it); ED-IN-0310: was 919faacb...; v10 IN-61: was 26c255ac...
-    assert w.content_hash() == "7266f56bea4e3d75705f5e88eec1b2e1"   # CR-87: was 837d0f83...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 6ad7b832...; CR-33: was d61848d3... (CR-20+CR-30: was b4bc2df0... CR-86: was 3ae970a1... (ED-IN-0342). CR-81: was 70ea49cb... (acquaintances=False reads it); v10 IN-61: was 4ab812ba... (CP-T02-02); before that 3e31638e... (CR-21)
+    assert (_old_content_hash(f), f.content_hash()) == ("eac2356d678fa882b0e919fc37e67f98", "69dbd3be3b7b0067baffbb2eff10b8fd")   # CP-T03-07: was e5e7812b... / 2c9b523d...; CR-87: was 622e0736... / ccabd3be...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was d1ecf597... / 0b43b49c...; CR-33: was f1c15230... / ebd5e067... (CR-20+CR-30: was a7628b4e... / 7b7992f7... (CR-86: was 42f55a5f... / e12a710b...)
+    assert _old_content_hash(w) == "02997e750e3652605a9872e910d978b3"   # CP-T03-07: was 8018a699...; CR-87: was 3a7025a9...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 42b898c4...; CR-33: was ff134c63... (CR-20+CR-30: was da08203b... CR-86: was 47c172b0... (ED-IN-0342). CR-81: was f78bcaf4... (acquaintances=False reads it); ED-IN-0310: was 919faacb...; v10 IN-61: was 26c255ac...
+    assert w.content_hash() == "600d8b27147478e158553552cc1409a5"   # CP-T03-07 (`body_ceiling`; `revert_cp_t03_07` reads the old): was 7266f56b...; CR-87: was 837d0f83...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 6ad7b832...; CR-33: was d61848d3... (CR-20+CR-30: was b4bc2df0... CR-86: was 3ae970a1... (ED-IN-0342). CR-81: was 70ea49cb... (acquaintances=False reads it); v10 IN-61: was 4ab812ba... (CP-T02-02); before that 3e31638e... (CR-21)
 
 
 def test_go07_control_the_world_did_not_move_only_its_digest():
