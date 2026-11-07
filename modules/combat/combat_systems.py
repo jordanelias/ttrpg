@@ -262,7 +262,13 @@ def recoverability_factor(c, cfg):
     ctrl_credit = 1 - cfg['REC_CTRL_K'] * max(0.0, arrest - 1) * (1 - pc)       # a SWUNG weapon gains from 2H control; a thrust barely
     # (D) BODY-EXTENSION (lunge) — the lead axis; fires from the wrapper as lunge_depth
     lunge_mult = 1 + cfg['EXPOSE_LUNGE_K'] * ld * (w.get('mass', 1.0) / cfg['LUNGE_REF_MASS']) ** cfg['MOMENT_MASS_EXP']
-    return max(cfg['RECOVER_FLOOR'], C_mode * ctrl_credit * lunge_mult)
+    # (E) STRENGTH AGAINST THE ARRESTED HEFT (PC-20 (4), AR-13): Strength over the neutral arrests the swing sooner,
+    # under it later, in proportion to the heft being arrested (wield_heft, at this grip) and, like the control credit,
+    # on the SWUNG share only (a thrust retracts along its line: 1 - pc). 0 at Strength 4 (a default fighter is unchanged
+    # at any ARREST_STR_K) and 0 at ARREST_STR_K 0 (the control: the PC-20 (3) tree, bitwise). Floored at 0 so a
+    # strong fighter's factor cannot turn the commitment negative; RECOVER_FLOOR still bounds the product.
+    str_arrest = max(0.0, 1 - cfg['ARREST_STR_K'] * (c.strength - NEUTRAL['strength']) * wield_heft(c, cfg) * (1 - pc))
+    return max(cfg['RECOVER_FLOOR'], C_mode * ctrl_credit * lunge_mult * str_arrest)
 def close_unwieldiness(c, cfg, grip=None):
     """How poorly a weapon serves IN THE CLOSE: the OVERHANG, in metres, of its business end past the distance at
     which a fight is closed. 0 for a weapon shorter than that measure (a dagger is at home in the close).

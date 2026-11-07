@@ -48,7 +48,7 @@
    },
    "strength": {
     "default": 4,
-    "neutral": null,
+    "neutral": 4,
     "registry_key": "attr.body.strength",
     "status": "IN_FLUX"
    }
@@ -86,6 +86,7 @@
    },
    "ARREST_K": 0.12,
    "ARREST_REACH_FLOOR": 5.0,
+   "ARREST_STR_K": 0.05,
    "BASE_TEMPO": 2.0,
    "BEAT_BUDGET": 24,
    "BIND_GUARD_K": 0.55,
