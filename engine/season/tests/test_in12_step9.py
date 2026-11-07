@@ -55,7 +55,7 @@ from ..harness import probes as P
 from ..loop import effects_economy as ECON
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries import person_q as PQ
-from ..seam.wrappers import sigma
+from ..seam.wrappers import pool, sigma
 from ..state.carriers import Act, Person, Question, StateChange
 from .test_in10_record_operands import _acts, _resolve
 
@@ -375,7 +375,7 @@ def test_a_planted_addend_registered_through_faculty_is_read_by_the_roll_and_the
     carin = w.persons[CARIN]
     other = next(p for pid, p in sorted(w.persons.items()) if pid != CARIN and not p.capability)
     base = {p.id: sigma.faculty(w, p, "tell") for p in (carin, other)}
-    monkeypatch.setattr(sigma, "POOL_ADDENDS", list(sigma.POOL_ADDENDS))
+    monkeypatch.setattr(pool, "POOL_ADDENDS", list(pool.POOL_ADDENDS))
     sigma.register_pool_addend(lambda w_, p, verb: 2 if (p.id == CARIN and verb == "tell") else 0)
     assert sigma.faculty(w, carin, "tell") == base[CARIN] + 2
     assert sigma.faculty(w, other, "tell") == base[other.id]            # keyed by the person it names

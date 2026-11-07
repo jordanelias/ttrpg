@@ -28,7 +28,7 @@ from ..data.fixtures import DEFAULT_FIXTURES
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
 from ..seam import ladder
-from ..seam.wrappers import sigma
+from ..seam.wrappers import pool, sigma
 from ..state.carriers import Act, Claim
 from .test_sc01_obstacle_ceiling import _module
 
@@ -277,7 +277,7 @@ def test_mode_b_pool_is_faculty_and_an_addend_moves_it(monkeypatch):
     act = _tell("p_other")
     before = sigma.odds_of(w, act, believer=p)
     assert before == sigma.odds_of(w, act)
-    monkeypatch.setattr(sigma, "POOL_ADDENDS", list(sigma.POOL_ADDENDS))
+    monkeypatch.setattr(pool, "POOL_ADDENDS", list(pool.POOL_ADDENDS))
     sigma.register_pool_addend(lambda w_, who, verb: 2 if who.id == "p_low" else 0)
     after = sigma.odds_of(w, act, believer=p)
     assert after == band_odds(6, 1.5, 0.0) == sigma.odds_of(w, act) and after != before

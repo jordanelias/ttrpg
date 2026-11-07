@@ -90,6 +90,7 @@ from ...queries.inputs import PersonalCombatInput, PlayHost
 from ...queries.world_q import kit_of, stakes_of
 from ...state.ids import H
 from ._entry import entry_for
+from .pool import faculty
 
 _PROVIDER = "personal_combat"
 _PRIZE = "the body"                 # the prize row this provider deals (`rosters.yaml`)
@@ -204,14 +205,11 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
     verb the roster does not name is fought under `'death'`.
 
     `verb` also fills `faculties` (CR-85, ED-IN-0330): each party's `faculty(w, person, verb)`, the season's ONE pool
-    reader, imported from its owner `sigma.py` and never copied. A verb with no `verb_capability` row (every combat
-    verb today) reads `pool_default` plus the registered addends, so the season's fight rolls that against half of it.
-    [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] -- the CR-85 design is
-    UNRATIFIED (ED-IN-0351).
-    ⚠ THE IMPORT IS AT CALL TIME: `sigma.py` imports this module at ITS import (`fight_estimate`, `record_of`), so a
-    module-level import here would close a cycle. Deferring it keeps one owner without moving `faculty`, whose
-    `POOL_ADDENDS` the season tests patch on `sigma` by name."""
-    from .sigma import faculty
+    reader, imported from its owner `pool.py` (a leaf both this adapter and `sigma.py` import) and never copied. `fight`,
+    `accept` and `capture` draw on the `arms` capability key (CP-T03-04, `rosters.yaml: verb_capability`); a person holding no
+    such key (and no attribute for its vocation) reads `pool_default` plus the registered addends, so the season's fight
+    rolls that against half of it. [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] --
+    the CR-85 design is UNRATIFIED (ED-IN-0351)."""
     a_id, b_id = claimants[0], claimants[1]
     terms = duel_terms_of(verb, stakes_of(w, record))
     return PersonalCombatInput(

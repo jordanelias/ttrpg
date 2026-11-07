@@ -32,7 +32,7 @@ from ..decision import choose as CH
 from ..gaps import Unspecified
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
-from ..seam.wrappers import sigma
+from ..seam.wrappers import pool, sigma
 from ..data.rosters import VERB_CAPABILITY
 from ..state.carriers import Act, Candidate, Claim, Person
 
@@ -201,7 +201,7 @@ def test_two_pools_give_two_believed_chances_and_two_rankings(cells, monkeypatch
     w = _world()
     sure, unsure = w.persons["p_low"], w.persons["p_mid"]
     # roster-exempt: TEST FIXTURE addend -- one person's pool four dice above the other's (`test_odds_of.py`'s way).
-    monkeypatch.setattr(sigma, "POOL_ADDENDS", [lambda w_, who, verb: 4 if who.id == sure.id else 0])
+    monkeypatch.setattr(pool, "POOL_ADDENDS", [lambda w_, who, verb: 4 if who.id == sure.id else 0])
     for p in (sure, unsure):
         p.pursuits = {n: 1.0 for n in PURSUITS}
         _believes_the_hearer(p)

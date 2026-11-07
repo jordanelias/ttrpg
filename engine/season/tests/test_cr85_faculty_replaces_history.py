@@ -33,7 +33,7 @@ from engine.substrate import pc_engine
 
 from ..harness.populated import build_realm, run
 from ..seam.wrappers import combat as C
-from ..seam.wrappers import sigma
+from ..seam.wrappers import pool, sigma
 from ._fresh_process import entry_target
 from .test_cp_t03_04_arms import revert_cp_t03_04
 from .test_cp_t03_07_body_ceiling import revert_cp_t03_07
@@ -136,7 +136,7 @@ def test_control_faculty_3_for_every_party_reproduces_the_pre_item_hash(seed, mo
 def test_planted_a_party_holding_the_combat_key_at_5_rolls_11_and_is_attacked_at_ob_2_5(monkeypatch):
     """A test-local `VERB_CAPABILITY` row names `fight`'s key; one party holds it at 5, the other none (the fallback,
     `pool_default` 2). His rolls are pool 11 against his opponent's Ob 1.0; his opponent's are pool 8 against 2.5."""
-    monkeypatch.setattr(sigma, "VERB_CAPABILITY", {**sigma.VERB_CAPABILITY, "fight": _KEY})
+    monkeypatch.setattr(pool, "VERB_CAPABILITY", {**pool.VERB_CAPABILITY, "fight": _KEY})
     w = build_realm(1)
     a, b = sorted(w.persons)[:2]
     w.persons[a].capability = {**(w.persons[a].capability or {}), _KEY: 5}
