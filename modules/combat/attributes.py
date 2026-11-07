@@ -22,7 +22,8 @@ scale (`balance_eff - 3`, `reflex - 3`, `conc/5 - 3`, `Ob = faculty/2`, `pool = 
 
 INTERIM HOMES. `faculty`, `disp` carry `registry_key: None`: this spec is their only home until the registry or the
 season's carrier (`Person.attributes`, CR-20) names a key for one; that commit sets the entry's `registry_key` in
-the same change. `cog` keeps `attr.mind.acuity` until PC-18 removes it. `att` is Perception (ED-IN-0347).
+the same change. `att` is Perception (ED-IN-0347) and is the whole of the read (PC-18 (1)); Reason (`attr.mind.acuity`) has no combat
+role, so an authored acuity does not reach a `Combatant`.
 
 `faculty` (CR-85's build, ED-IN-0330/0331) REPLACES `history`, which stopped being an integer added to a roll. It is
 the party's dice score for the verb that opened the fight -- the season's ONE pool reader
@@ -44,7 +45,6 @@ SPEC = (
     AttributeSpec('strength', 4, None, 'attr.body.strength', IN_FLUX),
     AttributeSpec('agi', 4, 4, 'attr.body.agility', IN_FLUX),
     AttributeSpec('end', 4, None, 'attr.body.endurance', IN_FLUX),
-    AttributeSpec('cog', 3, None, 'attr.mind.acuity', IN_FLUX),
     AttributeSpec('att', 3, None, 'attr.mind.perception', IN_FLUX),
     AttributeSpec('spirit', 3, None, 'attr.mind.will', IN_FLUX),
     AttributeSpec('focus', 3, 3, 'attr.mind.focus', IN_FLUX),

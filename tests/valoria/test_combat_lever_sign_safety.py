@@ -76,9 +76,9 @@ LEVERS = ('visual', 'precommit', 'tactile', 'tempo', 'balance', 'edge_read', 'ch
 # a fighter who is BEHIND on reading and footwork, and one who is AHEAD (attributes only; weapons per probe)
 # CR-85 (ED-IN-0330) deleted `history` from every sigma term and renamed the input `faculty`, which feeds only the pool
 # and the Ob; no probe here reads a pool or an Ob, so the builds carry none.
-WEAK = dict(cog=1, att=1, agi=2, strength=2)
-STRONG = dict(cog=5, att=5, agi=6, strength=6)
-FLOOR_BAL = dict(cog=1, att=1, agi=1, strength=1)   # balance_eff is exactly 0 here
+WEAK = dict(att=1, agi=2, strength=2)
+STRONG = dict(att=5, agi=6, strength=6)
+FLOOR_BAL = dict(att=1, agi=1, strength=1)   # balance_eff is exactly 0 here
 
 
 def _own(ability, tradition, level, **kw):
@@ -554,3 +554,23 @@ def test_choke_control_generics_are_mitigators_and_the_rest_amplifiers():
         assert (v < 1.0) if lever == 'choke_control' else (v > 1.0), (n, v)
         checked += 1
     assert checked == 21
+
+
+def test_the_read_is_perception_alone():
+    """PC-18 (1), ED-IN-0347: `reading(c)` is `c.att` and nothing else. `cog` is gone from `Combatant`, so two defenders
+    cannot differ in it (the constructor refuses the keyword, as does the attribute setter), and two defenders differing
+    only in `att` read differently. Planted failure: the `cog` term back in `reading` reddens this (no `c.cog`)."""
+    with pytest.raises(TypeError):
+        Combatant('d', cog=5)
+    with pytest.raises(TypeError):
+        Combatant('d').set_attr('cog', 5)
+    assert not hasattr(Combatant('d'), 'cog')
+    checked = 0
+    seen = []
+    for att in (1, 2, 3, 4, 5):
+        d = Combatant('d', att=att)
+        assert S.reading(d, CFG) == att, att
+        seen.append(S.reading(d, CFG))
+        checked += 1
+    assert len(set(seen)) == 5 and checked == 5     # differing only in att, they read differently
+    assert S.reading(Combatant('d'), CFG) == 3      # the class default: the old (2*3+3)/3, so an unauthored realm is unmoved
