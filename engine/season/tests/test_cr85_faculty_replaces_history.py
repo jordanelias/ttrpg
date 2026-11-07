@@ -18,7 +18,8 @@ withdrawn by ED-IN-0351).
   CONTROL: the seam's value replaced by 3 for every party reproduces the pre-item one-season hash exactly -- the five
   deleted sigma terms were exactly 0.0 in every season fight (both parties at history 3, empty `skills`).
   ⚠ `build_realm(0)` forms no fight in one season since CR-87, so the falsifier reads seeds 1 and 2; seed 0's hash
-  does not move, and neither does seed 2's: its fights roll at (8, 1.0) and land where they landed at (9, 1.5).
+  does not move. Seed 2's fights roll at (8, 1.0) and landed where they landed at (9, 1.5) until PC-20 (1) (the
+  head-weighted strike impact, B10-11b) weighted the blows; seed 2 now moves with seed 1.
 """
 from __future__ import annotations
 
@@ -49,13 +50,18 @@ def _engine_available():
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
 
 #: The one-season realm hashes BEFORE this item (93662b9a). `build_realm(seed)` itself does not move (7266f56b...).
+#: Seeds 1 and 2 of both are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit: PC-20 (1)
+#: (the head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`; seed 0 calls none.
+#: Was, before that pin commit: PRE_ITEM 20accb03... / f89ea45d... / fe9032ed...; POST_ITEM 20accb03... / 6e25b047... /
+#: fe9032ed... -- ONE string played both roles at seed 2 (the item did not move it); the head weighting makes the (8, 1.0)
+#: and (9, 1.5) fights land differently there, so each role now has its own value.
 PRE_ITEM = {0: "20accb03c3d32f80a9fab00d80a70b21",
-            1: "f89ea45dd050cdf2329fde8885a1a110",
-            2: "fe9032eda9b7701241dcbd766c96fd1a"}
-#: The same, AFTER: only seed 1 moves (seed 0 fights nothing; seed 2's fights land where they did).
+            1: "a0bb01cbfec7094c0dafa4e704d734e8",
+            2: "cc186ede6c7613a659a2a46d3d6e96ab"}
+#: The same, AFTER: seed 0 fights nothing; seeds 1 and 2 move (seed 2 moved only once PC-20 (1) landed).
 POST_ITEM = {0: "20accb03c3d32f80a9fab00d80a70b21",
-             1: "6e25b047b1fb42e2d50014f100770053",
-             2: "fe9032eda9b7701241dcbd766c96fd1a"}
+             1: "597fac345c8791ea17d6228f3121d81c",
+             2: "a157d34aab053ffd84161f7f28e22e8f"}
 
 _KEY = "cr85_test_arms"   # a test-local capability key: no roster row is added
 
@@ -134,7 +140,7 @@ def test_control_faculty_3_for_every_party_reproduces_the_pre_item_hash(seed, mo
     seen, got = _season_rolls(monkeypatch, seed)
     assert got == PRE_ITEM[seed]
     assert set(seen) <= {(9, 1.5)}, dict(seen)
-    assert (POST_ITEM[seed] != PRE_ITEM[seed]) == (seed == 1)
+    assert (POST_ITEM[seed] != PRE_ITEM[seed]) == (seed in (1, 2))
 
 
 def test_planted_a_party_holding_the_combat_key_at_5_rolls_11_and_is_attacked_at_ob_2_5(monkeypatch):

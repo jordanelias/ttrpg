@@ -171,8 +171,11 @@ def test_the_stem_is_answered_from_is_cohort_and_is_world_only():
 #: the chooser (`WITHHELD`): was be2c7f0f... / 3010c440... / 6df7a66e... (taken with `challenge`/`accept` offered, which PC-10b
 #: moves). The same withholding on the CP-T03-09 tree (`95f58adb`) and on PC-10b's reads the identical stripped hashes at all
 #: three seeds (aa4cc67d... / 8ac99151... / 3cf9a0a6...), so PC-10b moves nothing where no duel verb is chosen.
-BASE = {0: "aa4cc67d97acabc45f5455741c171d87",
-        1: "8ac991519a3cc2decd538597a7cdf497",
+#: ⚠ RE-TAKEN ONCE MORE by the B10-11b batch pin commit (`reading @4b334f2a`), seeds 0 and 1 (was aa4cc67d... / 8ac99151...):
+#: PC-20 (1) (the head-weighted strike impact, `K_STR_HEAD`) moves a run that reaches `strike_impact`, and these two-season
+#: realms reach it. `reads > 0` and `refused_on_it == 0` still hold, so the conjunct moved no realm; the hash is the trajectory's.
+BASE = {0: "4704d8a6ba7fc84ff6801a2481823501",
+        1: "b6f1c2939725849b51dad3af3791df25",
         2: "d1594dae7a962dc9bbe9e6a1de9abb91"}
 #: The verbs this control's chooser never offers: `capture` (CP-T03-09) and the duel pair PC-10b re-shaped.
 WITHHELD = frozenset({"capture", "challenge", "accept"})
