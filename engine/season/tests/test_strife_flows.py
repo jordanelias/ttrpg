@@ -99,6 +99,12 @@ def ev(w, eid, kind, subjects, actor=None, verb="tell", payload=None, tick=1):
     return e
 
 
+def revert_cr78(monkeypatch):
+    """CR-78 OFF, in process: the stamp's term stamps nobody (`flow_stakes` reads `()`), which is what the switch
+    `stamp_flow_stakes` off does. A test that pins a hash from before CR-78 flipped it ON (a declared mover) calls this."""
+    monkeypatch.setattr(W, "flow_stakes", lambda w_, p_, classes=None: ())
+
+
 def _ceded_world():
     """`_world()` with a realm-wide defeat and its cession, both naming two parties: `(w, e1, e2)`."""
     w = _world()
