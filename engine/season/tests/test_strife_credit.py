@@ -36,6 +36,9 @@ LIVE = 0.5                  # the value given (ED-IN-0316), set in the tests exp
 # Conviction maps, one affiliation each (pairs from `test_strife_flows::test_commensurate`):
 # `NONE` holds no affiliation, so it reads 0 against anyone (an unrelated pair).
 THREAD, INNER, ORTHO, NONE = {"thread_truth": 3}, {"inner_tradition": 3}, {"solmund_orthodoxy": 3}, {}
+# `build_realm(0)` after one season at `regime_gain` 0.5, the shipped value (CR-79 commit (2); the pins that read the
+# control call `revert_cr79`, so this is the one place the shipped season is pinned; it moves with every later mover).
+AT_THE_VALUE_GIVEN_ONE_SEASON = "180c6863d6346ed2a069c33533985422"
 
 
 def _tell(regime: float, refraction: float = 0.0, held: int = HELD_CONF, conviction=None,
@@ -236,4 +239,4 @@ def test_the_realm_reaches_commensurate_at_the_value_given_and_never_at_the_cont
         m.setattr(W, "commensurate", lambda *a, **k: calls.append(a) or real(*a, **k))
         POP.run(seasons=1, seed=0, w=w2)
     assert len(calls) >= 1, "the realm never reached the told site at the value given"
-    assert w2.content_hash() != BASE_ONE_SEASON
+    assert w2.content_hash() == AT_THE_VALUE_GIVEN_ONE_SEASON

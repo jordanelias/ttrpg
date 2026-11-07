@@ -750,7 +750,7 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin(monkeypatch):
     ⚠ v11 CR-17 (`choice_temperature` 0.1 -> 0.05): `give` no longer forms in season one at the shipped arm, so the
     shipped-arm half reads the equality again (hash, count and digest of `BASE_HASHES[1]` / `BASE_EVENTS[1]`)."""
     from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)
+    revert_cr79(monkeypatch)    # v11 CR-79 moved the shipped season; this reads the control, the shipped one is `test_strife_credit.py`'s
     for acq in (False, True):
         w = POP.build_realm(0, acquaintances=acq)
         shipped = tuple(w.fixtures.get("withheld_verbs"))
