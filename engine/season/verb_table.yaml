@@ -1428,6 +1428,8 @@ verbs:
     eligibility: ["own"]
     beneficiary: "subject"
     beneficiary_note: "THE PERSON TENDED (#453 §9.4: *'beneficiary `subject`'*), whose body the act raises; self or another."
+    referent_class: Person
+    referent_class_note: "v11 CP-T03-08 ([ASSUMPTION; medium; Jordan to correct; revert: delete this column and the `wounded_with` term in `queries/world_q.py::questions_for`]): FORMED ONLY ON A `Person`-CLASSED REFERENT -- the wounded `queries/world_q.py::wounded_with` stamps (the asker himself when his own body is below his own `body_ceiling`, and each person with him whom his own ledger's newest `(person, \"body\", v)` claim -- CP-T03-02's Observation, or a told copy -- puts below `condition_scale`), and a question's own plain `Person` referent (REM-21's own-referent term; `Person` is not in `occasion_only_classes`). No other person's true body is read at formation. The fold is unchanged: a subject already whole is refused at the write (`NoOpReceipt`). Readings (seeds 0-2, two seasons) in the CP-T03-08 commit and `tests/test_cp_t03_08_tend_on_the_wounded.py`."
     requires:    "the person tended exists and is with the actor"
     requires_typed:
       all:

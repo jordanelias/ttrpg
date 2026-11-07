@@ -323,7 +323,7 @@ def test_24f_control_at_the_control_body_step_no_body_moves_in_the_same_dearth()
     assert not crossed, f"the control arm published {len(crossed)} body crossing(s)"
 
 
-def test_rem52_the_shipped_arm_falls_every_short_cohort_by_step_times_its_shortfall_in_season_zero():
+def test_rem52_the_shipped_arm_falls_every_short_cohort_by_step_times_its_shortfall_in_season_zero(monkeypatch):
     """v10 REM-52 (B10-05), THE SHIPPED ARM'S OWN FALSIFIER (H-125's live arm shipped as the default).
     The realm as `build_realm` returns it, NO sweep, one season through `populated.run` (the real
     driver; MATTER runs FIRST in a season, `SeasonDriver.season`, and its first draw finds every larder
@@ -336,7 +336,13 @@ def test_rem52_the_shipped_arm_falls_every_short_cohort_by_step_times_its_shortf
     person (`person = copy.copy(w.persons.get(pid))`) leaves every body at 1000 and this test reds -- the
     read/write asymmetry `CLAUDE.md` §0.1 pt 1 names, observed from the reader's side.
     CONTROL, below: the same realm with `body_step` swept back to the control arm moves no body, so
-    the fall is the shipped arm's."""
+    the fall is the shipped arm's.
+    v11 CP-T03-08 (`tend` forms on the wounded) is read at its revert: with it live, every short cohort is stamped for
+    itself below its ceiling and tends itself whole in the same season (MEASURED, seed 0: 37 of 37 tended, `fell` 0), so the
+    fall this test observes would be erased before the season's end. Its own effect is pinned in
+    `test_cp_t03_08_tend_on_the_wounded.py::test_rem52s_fall_is_tended_whole_the_same_season`."""
+    from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
+    revert_cp_t03_08(monkeypatch)
     w = POP.build_realm(0)
     assert w.fixtures.get("body_step") == SHIPPED_ARM and SHIPPED_ARM in LIVE_ARMS, (
         "this test reads the SHIPPED default, unswept")

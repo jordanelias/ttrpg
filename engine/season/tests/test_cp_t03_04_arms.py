@@ -280,6 +280,8 @@ def test_control_formation_moves_every_hash_and_the_item_off_reproduces_the_pre_
     # (`test_cp_t03_07_body_ceiling.py::revert_cp_t03_07`, whose own control reproduces POST_ITEM), so both pins stand.
     from .test_cp_t03_07_body_ceiling import revert_cp_t03_07
     revert_cp_t03_07(monkeypatch)
+    from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
+    revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
     w = build_realm(seed)
     run(1, seed, w=w)
     assert w.content_hash() == POST_ITEM[seed] != PRE_ITEM[seed]
