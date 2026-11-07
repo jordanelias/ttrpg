@@ -43,7 +43,7 @@ presentation layer are out of scope.
 
 | scope | when | the premises come from | the chain covers |
 |---|---|---|---|
-| **PR** (default) | a PR, or a diff, is the subject | what the PR claims the element now does: its description, commit message, and the notes it adds or changes. **A PR typically involves an entire element**, so it usually yields several premises (a combat PR: fighting, wounds, yielding) | the element **end to end**, links the diff did not touch included: a changed link can break its neighbours. Another element's broken link gets one line, "outside this PR", and no fix (CLAUDE.md §0: the request is the scope) |
+| **PR** (default) | a PR, or a diff, is the subject | what the PR claims the element now does, put in plain words from its description and commit message. The notes it adds or changes are read in STEP 2b, not here. **A PR typically involves an entire element**, so it usually yields several premises (a combat PR: fighting, wounds, yielding) | the element **end to end**, links the diff did not touch included: a changed link can break its neighbours. Another element's broken link gets one line, "outside this PR", and no fix (CLAUDE.md §0: the request is the scope) |
 | **SLICE** (explicit only) | the user names a slice: an element with no PR behind it, or a cut that crosses elements | the user's sentence, or the notes aggregate (STEP 2b) alone, and STEP 0 says so | the named **boundary**: an entry link and an exit link, or the verbs and files it covers. A slice with no boundary is the whole element; ask for one |
 
 **Never widen a PR run to a slice on your own.** If a slice run looks worthwhile, say so and ask.
@@ -75,13 +75,14 @@ oracle **outside** the repo's own definitions, applied by execution.
 Write down: the **PREMISE(S)**, verbatim, and the source of each (the user; or the PR claim and its
 path; or `[ASSUMPTION]` where you rendered a bare word like "combat" into a sentence) · the **scope**
 (PR or SLICE, and the slice's boundary) · the **element's head** (resolve through `CURRENT.md`, then
-its `## Status:`) · **standing orders and rulings that already decide part of it**: the lane's
-`HANDOFF_<LANE>.md`, `engine/season/hole_register.yaml` (it names a missing mechanism in one read),
-and a grep of the owner's docstrings for `ED-`, `RULED`, `HELD`, `ASSUMPTION` — a successor ruling
-often lives only in a docstring. Carry a ruling into STEP 5 rather than re-litigating it.
+its `## Status:`).
 
-Scoping reads **names only**: `CURRENT.md`, the verb names in `verb_table.yaml`, file lists, the
-hole register's ids. It does not read the notes that describe behaviour (STEP 2b) or the code.
+Scoping reads **names only**: `CURRENT.md`, the verb names in `verb_table.yaml`, file lists. It does
+not read the notes that describe behaviour, the standing orders, the hole register or the code:
+those wait for STEP 2b, after O is written. **Write each premise sentence from the user's words or
+the PR's description, not from the diff's docstrings.** A reviewer who has already read those notes
+will write O as a paraphrase of N, and the "O = N" row below then fires by construction. In PR scope,
+therefore, **the blind predictor (STEP 2) is the default**, fed only the premise sentences.
 
 No GM exists (CLAUDE.md, opening): the engine resolves everything, so "a person does X" is a claim
 about what the **decision layer forms and the resolver executes**, not what a human would narrate.
@@ -97,14 +98,17 @@ reaches addressees → addressees respond → response changes the world → the
 **Do not merge links.** "Others follow" is at least three: who counts as an other, what following is,
 and what following changes. A chain of five to ten links is normal; more means the premise is two.
 
-**Mark dependencies.** Note which links need which. Links that share no dependency are
-**independent branches** (a persuasion premise's trust, skill and conviction do not depend on one
-another); STEP 5 treats a break on one branch and the others separately.
+**Mark dependencies, provisionally.** Note which links appear to need which; links that share no
+dependency are **independent branches** (a persuasion premise's trust, skill and conviction do not
+depend on one another). This is a guess from the words. **Re-mark in STEP 3**, once the owners are
+known, because a wrongly assumed dependency leaves a link UNREACHED and hides a second bug.
 
 ## STEP 2 — PREDICT BEFORE YOU READ (the ordinary account, O)
 
 For every link write, **before opening any note or implementing file**, what a player would expect.
-Use these classes as columns; skip one only by saying why it does not apply.
+Use these classes as a checklist. **Fill a cell only where the class applies**, and skip a class with
+one word ("n/a: no addressee"). Tag a cell **[GENRE]** when the premise's own words do not imply
+that class: a genre expectation the premise never promised ranks lower in STEP 5.
 
 | # | class | the expectation, in plain words |
 |---|---|---|
@@ -125,8 +129,10 @@ Each cell holds a prediction **a run could contradict**. "It should work" is not
 
 **Blind predictions (recommended once the code or notes have been read, or for six or more links).**
 Hand a fresh-context agent only the premise and the word list, and have it fill this table; compare.
-Where the two disagree, the words are ambiguous (AMBIGUOUS in STEP 5). Reading is shared, the oracle
-is forked (CLAUDE.md §10). One agent, `sonnet`.
+Where the two disagree, decide which is the error: mark the link AMBIGUOUS (STEP 5) **only if both
+readings can be stated from the words alone**; otherwise one predictor erred, and the link keeps the
+prediction that the words support. Reading is shared, the oracle is forked (CLAUDE.md §10). One
+agent; the tier is the §10 calculation, `sonnet` when the table is long.
 
 ## STEP 2b — THE NOTES IN AGGREGATE (the designer's account, N)
 
@@ -134,8 +140,13 @@ This codebase documents itself densely: docstrings, `*_note` columns in `verb_ta
 register rows, ruling quotations. Read together, they are a statement of what the element is meant to
 do. Use them as one, **after O is written and before the run**:
 
-1. **Extract once, cheaply.** One `valoria-measure` (Haiku) pass collects every note on the element's
-   links, with `file:line`. **One reader** then builds N: a short coherent account in plain words of
+0. **Collect the standing rulings first** (they are N's spine): the lane's `HANDOFF_<LANE>.md`,
+   `engine/season/hole_register.yaml` (it names a missing mechanism in one read), and a grep of the
+   owner's docstrings for `ED-`, `RULED`, `HELD`, `ASSUMPTION` — a successor ruling often lives only
+   in a docstring.
+1. **Extract once, cheaply, if the notes are many.** A `valoria-measure` (Haiku) pass collects every
+   note on the element's links, with `file:line`; for a handful of notes, read them yourself (§10's
+   overhead calculation). **One reader** then builds N: a short coherent account in plain words of
    what the notes say the element does and does not do. That reader never sees the run's results.
 2. **Resolve disagreement inside N.** Notes carry rulings from different dates. The latest ruling
    wins (CLAUDE.md §0's ladder). A disagreement it does not settle is a finding on the notes.
@@ -147,7 +158,7 @@ do. Use them as one, **after O is written and before the run**:
 
 | pattern | reading |
 |---|---|
-| O = C, N differs | the notes are stale; the code is fine |
+| O = C, N differs | the notes are stale; the code is fine. **Unless N's latest item is a ruling**: then the code merely agrees with ordinary meaning while lagging the ruling, which is a BEHAVIOUR finding or goes up §0's ladder, not STALE-PROSE |
 | O = N, C differs | **the code is wrong**: fix it |
 | N = C, O differs | the code does what its notes say, but the design does not make plain sense |
 | all three differ | layered rulings that disagree with each other as well as with the code |
@@ -167,8 +178,10 @@ Open the code now. For each link name the **owner at `file:line`**, or write **N
 | scope, who it reaches | `loop/predicates.py`, `queries/`, the verb's `scale`, `counterparty`, `referent_class`; ⚠ a document or writ may reach its addressee by a *separate* act (`give`), not by the issuing act |
 | a response, another's act | the answering verb's row, and the decision code that FORMS it: `engine/season/decision/` — an act nobody is ever offered does not happen |
 | a number, a level, a bound | `engine/engine_params/*.json`, the single Python owner, or the constant in `systems/` / `modules/` |
-| a module's resolution | `references/module_contracts.yaml` `composition_roles` → `composition.json`. ⚠ **A module and the season loop may differ**: the module can implement a premise the season-scale wrapper never feeds (a wrapper that derives one field and defaults the rest). Treat them as two scales (STEP 4) |
-| a word | `references/names_index.yaml` (the owner), `references/descriptor_registry.yaml` |
+| a module's resolution | `references/module_contracts.yaml` `composition_roles` → `composition.json` names the entry (e.g. role `combat.fight` → `modules/combat/fight.py`). ⚠ **A module and the season loop may differ**: the module can implement a premise the season-scale wrapper never feeds (a wrapper that derives one field and defaults the rest). Treat them as two scales (STEP 4) |
+| a word | a state, stat or term: `references/names_index.yaml` (the owner), `references/descriptor_registry.yaml`. **A verb or an event kind: its key in `engine/season/verb_table.yaml`**, not the names index |
+
+**Re-mark STEP 1's dependencies here**, now that the owners are known.
 
 A `writes: []` column plus a note saying "emission only" is a finding in waiting: the act announces
 and changes nothing. Carry it to STEP 4 to see whether anything else does.
@@ -198,21 +211,28 @@ mistaken for the second.
 | **FORMS** | the decision layer offers the act to someone who would take it | read the opening set for that person; count the offers |
 | **FIRES** | it appears in a seeded season with no hand in it | run N seasons; count occurrences, state N and the seeds |
 
-With no GM, a premise that EXECUTES but never FORMS is **half-true**.
+With no GM, a premise that EXECUTES but never FORMS is **half-true**: record it as INERT at FORMS
+(STEP 5). **Zero occurrences at FIRES in few seeds is NOT OBSERVED, not INERT** (an absence claim,
+§0.1 pt 3): write "0 in n seasons" with the FORMS count beside it, and call it INERT only when FORMS
+shows nobody is offered the act or the effect is nil when it does fire.
 
 **Report one chain per scale** when an element has a module and a season-loop wrapper: the same
 premise can hold at module scale and break at season scale, and one "first broken link" hides it.
+At **module scale** there is no Event log: call the module's composition-row entry directly, and
+read the returned typed outcome and trace where the season scale reads `causes[]` (control C
+compares outcomes; E10 reads the trace).
 
 **Controls — a result without them is not a measurement (§0.1 pt 4):**
 
 - **P — positive.** Every condition holds; the act must succeed. A refusal here is the first break.
 - **N — negative, one condition at a time.** Not the holder; another body's holder; the wrong rung;
   the seat vacated. Each must be refused with a keyed, visible reason.
-- **Z — null.** Same seed, same world, no act. The baseline the effect is read against.
-- **C — counterfactual pair.** Same seed, act against none; the difference must trace through
-  `causes[]` to the act. A difference that does not trace is noise; none at all is INERT.
-- **M — mirror, for any draw-resolved contest.** Identical sides must come out near even (~50%);
-  swap the sides and the result must flip. A bias here is a defect in the harness or the rule.
+- **C — counterfactual pair, whose no-act arm is the null baseline.** Same seed, act against none
+  (the no-act arm is the null control: the effect is read against it). The difference must trace
+  through `causes[]` to the act. A difference that does not trace is noise; none at all is INERT.
+- **M — mirror, for any draw-resolved contest.** Identical sides must come out near even; swap the
+  sides and the result must flip. State n and the band you accept (for n trials at p = 0.5, about
+  ±2·√(0.25/n)); a bias outside it is a defect in the harness or the rule.
 
 Also: run twice on one seed and compare `World.content_hash()` (E12). **Check the run happened**
 (§0.1 pt 3): diff the world before and after, assert the event was emitted, assert the loop asserted.
@@ -231,20 +251,24 @@ feeds stay UNREACHED for the premise as worded.
 
 ## STEP 5 — COMPARE, CLASSIFY, RANK
 
-**Verdict per link:**
+**Verdict per link, with the depth it holds at** (EXECUTES, FORMS or FIRES): one link can FOLLOW on a
+hand-built act and be INERT at FORMS, and the table records both rows, not whichever was reached
+first.
 
 | verdict | meaning |
 |---|---|
 | **FOLLOWS** | observed, and as predicted |
 | **DEPARTS** | observed, and differs |
-| **INVERTED** | does the opposite of what its word says |
+| **INVERTED** | a DEPARTS that does the opposite of what its word says; ranked first |
 | **INERT** | code exists; a run that should reach it never does, or the effect is nil |
 | **ASSERTED** | the premise names it; **no code owns it** |
 | **UNREACHED** | a link it *depends on* broke, so it was not tested. Not a pass, not a fail. Independent branches (STEP 1) are tested and reported on their own |
 | **AMBIGUOUS** | the words support two readings and the code picks one; name both |
 
 **Cause, for DEPARTS, INVERTED and INERT:** **WORD** (the behaviour is sensible, the name misleads →
-rename at its owner, `references/names_index.yaml`) · **BEHAVIOUR** (the word is right, the code is
+rename at its owner: `references/names_index.yaml` for a term, `engine/season/verb_table.yaml` for
+a verb or event kind, where a rename moves `World.content_hash()` for any world whose log uses it,
+so declare that move) · **BEHAVIOUR** (the word is right, the code is
 wrong → change the code) · **EDGE** (fine mid-range, absurd at a reachable extreme) · **COMPOSITION**
 (each link fine, the chain absurd) · **STALE-PROSE** (the notes were superseded; cite the successor,
 and the prose changes) · **DELIBERATE** (a documented departure, with its reason and a safeguard).
@@ -265,9 +289,10 @@ player):
 1. **INVERTED**, then **DEPARTS on the ordinary path** — code that runs and does not make sense.
 2. **EDGE** and **COMPOSITION** failures at a reachable extreme.
 3. **INERT**.
-4. **WORD** defects (a label that means something else).
-5. **ASSERTED** — a mechanism no code owns. Listed in a short note; **a defect only if the PR (or
-   the user) claims the mechanism exists**. An unbuilt mechanism a premise merely mentions is not a bug.
+4. **WORD** defects (a label that means something else) and **AMBIGUOUS** links.
+5. **ASSERTED** links, and any finding on a cell tagged **[GENRE]** (STEP 2): listed in a short note.
+   **A defect only if the PR (or the user) claims the mechanism or behaviour exists.** An unbuilt
+   mechanism a premise merely mentions, or a genre expectation it never promised, is not a bug.
 
 **Tuned values are Jordan's:** "major is 1.0 or 1.2" is not a finding; "major is not larger than
 minor" is.
@@ -325,8 +350,8 @@ An illustration of the verdict types, not a record: **re-run before citing it.**
 ("a person holds an office within a faction and issues a decree for others to follow") came out as:
 *holds, and issues, then breaks at reaching the others.* Standing and the act FOLLOWED, with eight
 negative controls refused. "Reaches the others" DEPARTED as BEHAVIOUR and COMPOSITION: one addressee
-per act, and the writ stayed with its issuer until a separate `give`. "They follow" was INERT where
-refusal cost nothing. Revocation and expiry were ASSERTED, and listed last. The play-back read: *the
+per act, and the writ stayed with its issuer until a separate `give`. "They follow" was INERT at FORMS
+(no compliance on a decree in any seeded season), and refusing cost nothing, a [GENRE] note. Revocation and expiry were ASSERTED, and listed last. The play-back read: *the
 Duke writes an order and keeps it in his drawer.* A combat premise showed why one chain per scale is
 needed: it held at module scale and broke at season scale, where a person's skill, weapon and armour
 never reached the fight.
