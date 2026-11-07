@@ -5382,6 +5382,19 @@ rows:
     cite:      "MEASURED with n=15 hand-set judges on the forge fixture, not a rate; only the sign is reported, because the values are tuned and are Jordan's. Related: H-198 (a teller never lies), H-183 (the hearer's record of a teller)."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: one person lies to another [ASSUMPTION: rendered from the word lying]. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
+  - id:        H-274
+    tier:      1
+    hole:      "WHETHER A FLOW A PERSON HOLDS OPEN IS AMONG HIS OCCASIONS (v11 CR-78, `strife-00` §5, the stamp). Without it a person who knows of a rising at his own settlement chooses exactly as if he did not: `flows_known` has no consumer in the loop, so flows condition nothing (R2). With it, `questions_for` stamps the rung, persons and offices at stake in each strand he does not read concluded onto the question he answers, as existing classes, so verbs form on them and each is chosen by his own convictions. Whether the stamp ships, and whether it concentrates the strife codes (`strife-00` §6), are open"
+    kind:      "RULING"
+    owner:     "`engine/season/queries/world_q.py::flow_stakes` (the term) and `questions_for` (the stamp site); the closed set is `FLOW_STAMP_CLASSES`"
+    grade:     "assumption"
+    default:   "False -- SHIPPED, the control [ASSUMPTION; medium; Jordan to correct; revert: ship off]: the stamp as it stood before CR-78, byte-identical. True is CR-78 commit (2), a declared mover made only if the strife guard (three seasons over seeds 0-4 and 5-9, the off arm reaching at least two distinct terminal codes) and HR-9 controls (2) and (4) hold, with A3 cross-checked"
+    site:      "Fixtures stamp_flow_stakes, read by `engine/season/queries/world_q.py::questions_for` (the `added =` splice)"
+    sweep:     ["False (control, SHIPPED)", "True"]
+    unblocks:  "CR-78 commit (2), the flip; B11-S5 (CR-79) waits on the stamp measured"
+    cite:      "BUILT at B11-S4 commit (1) (CR-78), switch off. FALSIFIER: `engine/season/tests/test_strife_flows.py` -- a person aware of a rising at his settlement finds that rung and its holder among his occasions with the switch on and not with it off; a stake of a class outside the closed set (or of none) is refused. CONTROL: off reproduces the base `build_realm(0)` hash (the same file)"
+    source:    "v11 CR-78 commit (1), batch B11-S4"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

@@ -43,6 +43,16 @@ ledger built by hand (the witness's claims minted by the real deposit rule, `epi
      bad document; the windowed count skips an uncoded move and stops at 3 coded moves; strands planted in a link's
      order read above the seeded shuffled-order control and the same strands scrambled read lower; the
      leave-and-rejoin profile is exact on hand-built strands; `strands_block` prints the lines on a real run.
+
+CR-78 commit (1) (batch B11-S4): THE STAMP -- `flow_stakes`, appended to `questions_for`'s splice behind `Fixtures
+stamp_flow_stakes`, SHIPPED OFF.
+ 14. EXIT (planted): a person aware of a rising at his settlement finds that rung and its holder among his occasions
+     (classed on the question he answers, and verbs form on them) with the switch on, and not with it off; a strand
+     he reads concluded stamps nothing; the opening kind does not change what is stamped.
+ 15. MUTATION: a stake of a class outside the closed set (`Enemy`, an unrostered class, or none) is refused; the
+     same stake under the whole roster would have been stamped, so the refusal is the closed set's.
+ 16. CONTROL: the switch set off explicitly reproduces the base `build_realm(0)` hash and the one-season seed-0
+     hash, with the term never computed and the switch read.
 Each loop asserts that it asserted (`CLAUDE.md` §0.1 pt 2).
 """
 import pytest
@@ -827,3 +837,122 @@ def test_control_the_realm_hash_holds_and_the_reading_is_the_same_read_twice():
     assert planted > 0 and any(len(m) > 1 for v in first for _, m, _ in v), planted
     assert first == second
     assert w.content_hash() == before                                 # the reading writes nothing
+
+
+# --- CR-78 commit (1): the stamp, shipped off ---------------------------------------------------------------------
+
+#: Read on the base tree @60c27d08 (before CR-78) and again with the switch off: `build_realm(0).content_hash()`, and
+#: the same realm after one season (`populated.run(seasons=1)`; CP-T03-08's `POST_ITEM[0]`).
+BASE_BUILD = "600d8b27147478e158553552cc1409a5"
+BASE_ONE_SEASON = "d4c83c8ca9d5082f5237a3889e1a995b"
+STAMP = "stamp_flow_stakes"
+
+
+def _switch(monkeypatch, w, on):
+    monkeypatch.setitem(w.fixtures._v, STAMP, on)
+
+
+def _rising(opening="rung.seized"):
+    """`_world()` with a rising at `S`, the settlement over `p_low`'s hearth: `p_high`, who lives at `S`, holds it
+    (a `hold` edge the stamp never reads), and `p_low` witnessed an opening move naming the rung and its holder
+    (the real deposit rule, one claim per subject, linked into one strand by `p_high`'s place)."""
+    w = _world()
+    w.add_tenure(Tenure("t_hold_S", "p_high", "S", "hold", 0))
+    assert witness(w, "p_low", ev(w, "e_rise", opening, ["S", "p_high"])) == ["S", "p_high"]
+    return w
+
+
+def _occasions(w, pid):
+    """The classed referents of the question he answers, and the `(verb, subject)` pairs formed on it."""
+    from engine.season.decision import assemble
+    from engine.season.decision.options import opening_set
+    p = w.persons[pid]
+    q = W.questions_for(w, p)[0]
+    return set(q.classes), {(c.verb, c.subject) for c in opening_set(p, assemble(p, q, 12), q, w.fixtures)}
+
+
+def test_cr78_a_person_aware_of_a_rising_at_his_settlement_finds_that_rung_and_its_holder_only_with_the_switch_on(
+        monkeypatch):
+    w = _rising()
+    p = w.persons["p_low"]
+    (s,) = W.flows_known(w, p)
+    assert s.rung == "S" and not W.concluded_known(w, p, s)          # he holds it open, at his settlement
+    assert W.flow_stakes(w, p) == ("S", "p_high")
+    stake = {("S", "Rung"), ("p_high", "Person")}
+    _switch(monkeypatch, w, False)
+    off_classes, off_formed = _occasions(w, "p_low")
+    _switch(monkeypatch, w, True)
+    on_classes, on_formed = _occasions(w, "p_low")
+    assert not off_classes & stake, off_classes
+    assert stake <= on_classes, on_classes
+    # the stamp changes which verbs form for him: something forms on the holder, which nothing did before
+    assert not any(subj == "p_high" for _, subj in off_formed), off_formed
+    assert any(subj == "p_high" for _, subj in on_formed), on_formed
+    assert off_formed < on_formed
+    # nobody else: a person whose ledger holds no move is stamped nothing, the switch on
+    assert W.flow_stakes(w, w.persons["p_other"]) == ()
+    # the opening kind is never read: another `opens` kind stamps the same stakes
+    checked = 0
+    for kind in sorted(W.OPENS_KINDS - {"rung.seized"}):
+        if kind in W.CONCLUDING_KINDS:
+            continue
+        wk = _rising(kind)
+        assert W.flow_stakes(wk, wk.persons["p_low"]) == ("S", "p_high"), kind
+        checked += 1
+    assert checked >= 3, checked
+    # a strand he reads concluded is not held open, so it stamps nothing
+    witness(w, "p_low", ev(w, "e_cede", "rung.ceded", ["S"], tick=2))
+    (s,) = W.flows_known(w, p)
+    assert W.concluded_known(w, p, s)
+    assert W.flow_stakes(w, p) == ()
+    on_classes, _ = _occasions(w, "p_low")
+    assert not on_classes & stake, on_classes
+
+
+def test_cr78_a_stake_of_a_class_outside_the_closed_set_is_refused(monkeypatch):
+    from engine.season.data.rosters import REFERENT_CLASSES
+    from engine.season.data.verbs import ENEMY_CLASS
+    assert W.FLOW_STAMP_CLASSES < REFERENT_CLASSES and ENEMY_CLASS not in W.FLOW_STAMP_CLASSES
+    assert "Flow" not in REFERENT_CLASSES                             # no `Flow` class exists to be stamped
+    w = _rising()
+    p = w.persons["p_low"]
+    _switch(monkeypatch, w, True)
+    real = w.class_of
+    checked = 0
+    for planted in (ENEMY_CLASS, "Flow", None):
+        monkeypatch.setattr(w, "class_of", lambda x, c=planted: c if x == "p_high" else real(x))
+        # the same stake under the whole roster is stamped (the mutation the closed set excludes) ...
+        if planted in REFERENT_CLASSES:
+            assert "p_high" in W.flow_stakes(w, p, classes=REFERENT_CLASSES), planted
+        # ... and under the closed set it is refused, and the rung beside it still stamped
+        assert W.flow_stakes(w, p) == ("S",), planted
+        classes, _ = _occasions(w, "p_low")
+        assert ("S", "Rung") in classes and not any(o == "p_high" for o, _ in classes), (planted, classes)
+        checked += 1
+    assert checked == 3
+    monkeypatch.setattr(w, "class_of", real)
+    assert W.flow_stakes(w, p) == ("S", "p_high")                    # control: unplanted, the holder is stamped
+    # a stake of no class at all: a custody edge's Tenure id, the only referent of an `arrest.made` strand
+    w.add_tenure(Tenure("t_cust", "p_other", "off_duke", DETAIN_KIND, 1))
+    hold(w, "p_mid", "t_cust", "arrest.made")
+    pm = w.persons["p_mid"]
+    assert [x.referents for x in W.flows_known(w, pm)] == [frozenset({"t_cust"})]
+    assert w.class_of("t_cust") is None and W.flow_stakes(w, pm) == ()
+    W.questions_for(w, pm)                                            # and the stamp site does not raise on it
+
+
+def test_cr78_control_the_switch_off_reproduces_the_base_hash(monkeypatch):
+    """The switch set off EXPLICITLY: the built realm and one season at seed 0 read the base tree's hashes, the term
+    is never computed (a `flow_stakes` that raises is never reached), and the switch was read, so the gate ran."""
+    from engine.season.harness import populated
+    w = populated.build_realm(0)
+    _switch(monkeypatch, w, False)
+    assert w.content_hash() == BASE_BUILD
+
+    def _never(*a, **k):
+        raise AssertionError("flow_stakes computed with the switch off")
+    monkeypatch.setattr(W, "flow_stakes", _never)
+    before = w.fixtures.reads.get(STAMP, 0)
+    populated.run(seasons=1, w=w)
+    assert w.fixtures.reads.get(STAMP, 0) > before
+    assert w.content_hash() == BASE_ONE_SEASON
