@@ -223,6 +223,8 @@ def test_control_the_realm_ends_at_the_base_hash_wherever_no_cohort_was_a_party(
     reverted too (`revert_cr85`), the same way.
     ⚠ v11 CP-T03-04 (`arms` in the vocation range, a formation mover of every realm) is reverted too
     (`revert_cp_t03_04`), the same way, and v11 CP-T03-07 (`body_ceiling`, a schema mover) by `revert_cp_t03_07`."""
+    from .test_strife_credit import revert_cr79
+    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
     revert_cr87(monkeypatch)
     revert_cp_t03_02(monkeypatch)
     revert_cr85(monkeypatch)

@@ -197,6 +197,8 @@ def test_control_the_item_at_its_revert_reproduces_the_pre_item_one_season_hash(
     """HASH MOVER, CONTROLLED: every pin this item re-records moved by the ending and the body Observation alone --
     with both reverted in process the one-season realm reads the pre-item hash exactly; with them, seeds 1 and 2
     move (seed 0 formed no Felled/Wounded fight)."""
+    from .test_strife_credit import revert_cr79
+    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
     # v11 CP-T03-04 (`arms` in the vocation range, a formation mover of EVERY seed, seed 0 included) is reverted on BOTH arms,
     # so `moved` still reads this item alone and `PRE_ITEM` stands.
     revert_cp_t03_04(monkeypatch)

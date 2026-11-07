@@ -219,6 +219,8 @@ def test_control_the_expansion_skipped_reproduces_the_pre_commit_hash(monkeypatc
     """With the registry's authored rows in place and the expansion skipped, the 1-season hash is the parent
     tree's: the lifepath id is read and dropped, so a row that maps to nothing moves nothing, and NPC-004's and NPC-088's
     `inquiry` are the whole mover (`test_rem30_character_sheet.PRE_BUILD` carries the moved hash)."""
+    from .test_strife_credit import revert_cr79
+    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
     monkeypatch.setattr(cast, "capability_of", lambda r, pool_default: {})
     assert _run(PO.build_realm(seed), 1) == BASE[seed]
 
