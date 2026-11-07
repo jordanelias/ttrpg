@@ -68,7 +68,7 @@ see STEP 2b); a design doc's `## Status:` line (§0.05); the author's reasoning.
 
 Siblings own other questions: `valoria-mechanic-audit` (internal consistency, no run),
 `resolution-diagnostic` (properties of a draw), `ners` (the cut test), `valoria-canon-guard`
-(P-01..P-15), `efficient-coding-review` (a whole subject's claims). This skill's difference is an
+(P-01..P-15), `claim-review` (a whole subject's claims). This skill's difference is an
 oracle **outside** the repo's own definitions, applied by execution.
 
 ## STEP 0 — FRAME
