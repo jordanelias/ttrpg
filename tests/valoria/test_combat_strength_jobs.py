@@ -7,7 +7,16 @@ between. Every head at 1.0 is the control and reproduces the pre-PC-20 `strength
 Falsifier (CLAUDE.md §0.1 pt 3), run at the build: `K_STR_HEAD[weapon_head]*` deleted from `strike_impact` reddens
 `test_a_blunt_head_gains_more_damage_per_strength_point_than_a_point` and
 `test_the_point_damage_gain_from_strength_falls_through_strike` (the slopes come out equal); with it present and every
-head at 1.0 the control tests stay green (`test_all_ones_is_the_pre_item_impact`)."""
+head at 1.0 the control tests stay green (`test_all_ones_is_the_pre_item_impact`).
+
+(2) The weapon's weight. `combat_systems.str_demand` adds `D_MASS*mass` (kg) beside the swing inertia `wield_heft`
+already carries, so a heavier weapon of equal inertia handles worse for a fighter short of its demand. D_MASS = 0 is
+the control.
+
+Falsifier, run at the build: `+cfg['D_MASS']*w['mass']` deleted from `str_demand` reddens
+`test_a_heavier_weapon_of_equal_inertia_handles_worse_for_a_weaker_fighter` (the twin and the greatsword handle
+alike) and the shipped-minus-control half of `test_d_mass_zero_is_the_pre_item_demand` (the demand no longer moves
+by D_MASS*mass); with it present and D_MASS = 0 the twin and the greatsword read one demand bitwise."""
 import os
 import sys
 
@@ -16,8 +25,9 @@ import pytest
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
 sys.path.insert(0, ENGINE)
 
+import combat_systems as S  # noqa: E402
 import core  # noqa: E402
-from combatant import Combatant  # noqa: E402
+from combatant import WEAPONS, Combatant  # noqa: E402
 from config import CFG  # noqa: E402
 import vocabulary as V  # noqa: E402
 
@@ -98,3 +108,62 @@ def test_the_point_damage_gain_from_strength_falls_through_strike(monkeypatch):
     assert control[V.HEAD_POINT] > 0 and control[V.HEAD_BLUNT] > 0, control
     assert shipped[V.HEAD_BLUNT] == control[V.HEAD_BLUNT], (shipped, control)
     assert shipped[V.HEAD_POINT] < control[V.HEAD_POINT], (shipped, control)
+
+
+# ── (2) the weapon's weight in the Strength demand ──────────────────────────────────────────────────────────────────
+TWIN = 'pc20_heavy_twin'
+
+
+@pytest.fixture
+def heavy_twin(monkeypatch):
+    """A greatsword record half again as HEAVY with the same parts: the greatsword's derived inertia (wield_heft),
+    balance (WP.handling), reach and rear clearance read its parts, not its `mass` field, so the twin is a heavier
+    weapon of EQUAL inertia. The fixture asserts that premise rather than assuming it."""
+    base = WEAPONS['greatsword']
+    monkeypatch.setitem(WEAPONS, TWIN, dict(base, mass=base['mass'] * 1.5))
+    a, b = Combatant('light', weapon='greatsword'), Combatant('heavy', weapon=TWIN)
+    assert S.wield_heft(a, CFG) == S.wield_heft(b, CFG)
+    assert S.WP.handling(a.w) == S.WP.handling(b.w)
+    assert S.reach_base(a, CFG) == S.reach_base(b, CFG)
+    assert S.rear_clearance(a, CFG) == S.rear_clearance(b, CFG)
+    assert b.w['mass'] > a.w['mass']
+    return base['mass'], base['mass'] * 1.5
+
+
+def _penalty(weapon, strength, cfg, fat=0.0):
+    return S.handling_penalty(Combatant('x', attrs={'strength': strength}, weapon=weapon), fat, cfg)
+
+
+def test_a_heavier_weapon_of_equal_inertia_handles_worse_for_a_weaker_fighter(heavy_twin):
+    """The EXIT: a weak fighter (in deficit on both) handles the heavier twin worse, by HANDLE_K*D_MASS per kg; a
+    strong fighter (in deficit on neither) handles the two alike — weight is a Strength job, not a flat tax."""
+    assert CFG['D_MASS'] > 0.0, CFG['D_MASS']
+    light, heavy = heavy_twin
+    checked = 0
+    for s in (1, 2, 3):
+        assert S.str_demand(Combatant('x', attrs={'strength': s}, weapon=TWIN), CFG) - s > 0.0   # in deficit on both
+        lp, hp = _penalty('greatsword', s, CFG), _penalty(TWIN, s, CFG)
+        assert hp > lp, s
+        assert hp - lp == pytest.approx(CFG['HANDLE_K'] * CFG['D_MASS'] * (heavy - light), abs=1e-12), s
+        checked += 1
+    assert checked == 3
+    strong = 12
+    assert S.str_demand(Combatant('x', attrs={'strength': strong}, weapon=TWIN), CFG) < strong
+    assert _penalty('greatsword', strong, CFG) == _penalty(TWIN, strong, CFG)
+
+
+def test_d_mass_zero_is_the_pre_item_demand(heavy_twin):
+    """CONTROL: at D_MASS = 0 mass has no channel into the demand — the heavier twin reads the greatsword's demand
+    bitwise (the planted failure: the exit reads false) — and every roster weapon's demand moves by exactly
+    D_MASS*mass between the control and the shipped value."""
+    off = dict(CFG, D_MASS=0.0)
+    for s in (1, 2, 3, 4):
+        assert _penalty('greatsword', s, off) == _penalty(TWIN, s, off), s
+    checked = 0
+    for k in sorted(WEAPONS):
+        if k == TWIN:
+            continue
+        c = Combatant('x', weapon=k)
+        assert S.str_demand(c, CFG) - S.str_demand(c, off) == pytest.approx(CFG['D_MASS'] * c.w['mass'], abs=1e-12), k
+        checked += 1
+    assert checked >= 50

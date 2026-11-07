@@ -136,6 +136,7 @@
    "D_2H": 0.4,
    "D_HAND": 0.6,
    "D_LEN": 0.35,
+   "D_MASS": 0.45,
    "D_WT": 1.0,
    "EXPOSE_CLOSE_K": 0.6,
    "EXPOSE_LUNGE_K": 0.4,

@@ -176,7 +176,8 @@ def reflex(c, cfg): return (cfg['REFLEX_AGI']*c.agi+cfg['REFLEX_ATT']*c.att)/(cf
 # ---------- strength handling + endurance fatigue ----------
 def str_demand(c, cfg):
     w=c.w; return (cfg['D0']+cfg['D_LEN']*reach_base(c,cfg)+cfg['D_WT']*wield_heft(c,cfg)+cfg['D_HAND']*WP.handling(w)
-                    +cfg['D_2H']*(w['hands']==2)+REAR_CLEARANCE_STR_K*rear_clearance(c,cfg))   # DERIVED g-aware heft (Stage 2b); D_HAND now reads morphology-rearch Phase B6's PoB_frac/hand_guard handling() gap, not the retired Forgiving/Standard/Demanding category. I7a/D7: general handling difficulty from what trails behind the hand.
+                    +cfg['D_2H']*(w['hands']==2)+REAR_CLEARANCE_STR_K*rear_clearance(c,cfg)
+                    +cfg['D_MASS']*w['mass'])   # PC-20 (2), AR-12: the weapon's static WEIGHT (kg), beside the swing inertia wield_heft carries (D_MASS in config). DERIVED g-aware heft (Stage 2b); D_HAND now reads morphology-rearch Phase B6's PoB_frac/hand_guard handling() gap, not the retired Forgiving/Standard/Demanding category. I7a/D7: general handling difficulty from what trails behind the hand.
 def handling_penalty(c, fat, cfg):
     deficit=max(0.0, str_demand(c,cfg)-c.strength)
     return cfg['HANDLE_K']*deficit + cfg['FATIGUE_HANDLE_K']*fat
