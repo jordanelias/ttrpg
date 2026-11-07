@@ -16,8 +16,9 @@
 #   gap         no verb or kind in the tree produces the move
 #
 # `ends` is the number of the study's 102 cases whose last substantive move (NOTE and OTH set aside) is this code,
-# by base code (KL-R and KL-O are KL), hand-read from the nine case-mapping tables [UNVERIFIED]; the loader
-# checks only that they total 102. `terminal: false` marks XP: the study's mark of later linked trouble, not an
+# by base code (KL-R and KL-O are KL), hand-read from the nine case-mapping tables and recounted from them (A3, CR-78, 2026-11-07: the same method re-run,
+# not an independent check, over a study that is an external artifact; by position, not a case-by-case audit; the 25
+# codes with `ends` above 0 all equal, 102 in all); the loader checks only that they total 102. `terminal: false` marks XP: the study's mark of later linked trouble, not an
 # ending the loop produces (master §4).
 #
 # [ASSUMPTION; medium; Jordan to correct; revert: delete this file, `harness/strife_data.py` and

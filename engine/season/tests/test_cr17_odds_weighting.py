@@ -331,6 +331,8 @@ def test_none_and_tau_point_one_reproduce_the_parent_world_exactly(monkeypatch):
     revert_cp_t03_07(monkeypatch)
     from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
     revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
+    from .test_strife_flows import revert_cr78
+    revert_cr78(monkeypatch)   # v11 CR-78 (the stamp of a held flow's stakes, flipped ON: a declared mover; unreverted this pin reads 3ef8bab1...), the same way
     # CP-T03-02 (`Event.ending` and the body Observation) and CR-85 (`faculty` for `history`) are declared movers of the
     # batch too, and each is read at its revert in process, as CR-87 and CP-T03-04 are (their own controls reproduce the
     # pre-item hashes); without them this pin read `be71a51c...` and never the PC-10b tree's.

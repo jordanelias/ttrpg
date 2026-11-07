@@ -974,6 +974,14 @@ for _c in sorted(OCCASION_ONLY_CLASSES):
                    law="v10 REM-21 -- the own-referent term holds back a declared class; a misspelt one "
                        "holds back nothing")
 del _c
+#: v11 CR-78 (B11-S4): THE CLASSES A FLOW'S STAKE MAY BE STAMPED AS (`rosters.yaml: flow_stake_classes`' note).
+FLOW_STAKE_CLASSES = roster("flow_stake_classes")
+for _c in sorted(FLOW_STAKE_CLASSES):
+    require_member(_c, REFERENT_CLASSES,
+                   f"`flow_stake_classes` names {_c!r}, which is no referent class",
+                   "rosters.yaml -- flow_stake_classes",
+                   law="v11 CR-78 -- the stamp's class test; a misspelt member would refuse its namesake")
+del _c
 PERSON_PREDICATES = roster("person_predicates")
 VIEW_BUILDER_RULES = roster("view_builder_rules")
 QUESTION_AGGREGATION = roster("question_aggregation", ordered=True)
