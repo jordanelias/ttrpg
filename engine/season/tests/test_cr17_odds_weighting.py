@@ -322,6 +322,10 @@ def test_none_and_tau_point_one_reproduce_the_parent_world_exactly(monkeypatch):
         old pin `edbc7442...` / 10435 exactly (CP-T03-09's own control, the go07 note's)."""
     from .test_cr87_violence_contexts import revert_cr87
     revert_cr87(monkeypatch)
+    # v11 CP-T03-04 (`arms` in the vocation range, a formation mover of every season) is read at its revert too
+    # (`test_cp_t03_04_arms.py::revert_cp_t03_04`, whose own control reproduces the pre-item hashes), the same way.
+    from .test_cp_t03_04_arms import revert_cp_t03_04
+    revert_cp_t03_04(monkeypatch)
     from ..harness import populated as POP
 
     def season():

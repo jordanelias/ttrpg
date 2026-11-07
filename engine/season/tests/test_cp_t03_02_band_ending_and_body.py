@@ -29,6 +29,7 @@ from ..seam import Resolution, degree_of
 from ..state.carriers import Act
 from ._scar_helpers import party_state
 from .test_cr85_faculty_replaces_history import revert_cr85
+from .test_cp_t03_04_arms import revert_cp_t03_04
 
 ACTOR, SUBJECT = "p_low", "p_mid"      # `tiny_world`: co-located, so a `fight` between them is admitted
 
@@ -178,6 +179,9 @@ def test_control_the_item_at_its_revert_reproduces_the_pre_item_one_season_hash(
     """HASH MOVER, CONTROLLED: every pin this item re-records moved by the ending and the body Observation alone --
     with both reverted in process the one-season realm reads the pre-item hash exactly; with them, seeds 1 and 2
     move (seed 0 formed no Felled/Wounded fight)."""
+    # v11 CP-T03-04 (`arms` in the vocation range, a formation mover of EVERY seed, seed 0 included) is reverted on BOTH arms,
+    # so `moved` still reads this item alone and `PRE_ITEM` stands.
+    revert_cp_t03_04(monkeypatch)
     w = build_realm(seed)
     run(1, seed, w=w)
     moved = w.content_hash()

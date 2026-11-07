@@ -44,6 +44,7 @@ from ..seam.wrappers import combat
 from ..state.carriers import Claim, Proposition, Question, Tenure, View
 from .test_cp_t03_02_band_ending_and_body import revert_cp_t03_02
 from .test_cr85_faculty_replaces_history import revert_cr85
+from .test_cp_t03_04_arms import revert_cp_t03_04
 
 A, B = "p_mid", "p_low"          # `probes.tiny_world`: both at the hearth `Hh`
 BASE_BUILD = "837d0f83c62917b88d69da3daa3ea027"     # build_realm(0).content_hash(), after PC-10b (the pre-item base)
@@ -379,6 +380,8 @@ def test_control_the_block_empty_and_every_value_at_its_revert_reproduce_the_pre
     # v11 CR-85 (`faculty` replaces `history` in the pool and the Ob, a later mover of every season that fought) is
     # reverted too (`revert_cr85`, the seam's faculty at 3 for every party), the same way.
     revert_cr85(monkeypatch)
+    # v11 CP-T03-04 (`arms` in the vocation range, a formation mover of every season) is reverted too, the same way.
+    revert_cp_t03_04(monkeypatch)
     assert populated.build_realm(0).content_hash() == BASE_BUILD
     w, _d, _rows = I.run(0, 1, observe=False)          # the audit's own run, which read the base hash
     assert w.content_hash() == BASE_SEASON

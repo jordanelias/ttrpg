@@ -18,8 +18,9 @@ from dataclasses import replace
 
 from ..data.rosters import (
     DECLARED, ENDING_FELLED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
-    WOUND_HARM_MODELS, require_member,
+    VERB_CAPABILITY, WOUND_HARM_MODELS, require_member,
 )
+from ..data.matrix import matrix_row
 from ..data.requires import Observation
 from ..data.verbs import VERB_TABLE, VOCATION_SOURCED, VOCATIONS
 from ..gaps import Unspecified
@@ -176,11 +177,14 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
                 bands[pid] = band
     bodies = {pid: _harm(w.persons[pid], band, model, states[pid])
               for pid, band in bands.items()}
+    grown = _grown(w, a, (a.actor, who), bands, bodies)
 
     def perform() -> None:
         for pid, body in bodies.items():
             if body is not None:
                 _wound(pid, body)
+        for pid, raised in grown.items():
+            w.persons[pid].capability = raised
 
     def _wound(pid: str, body: int) -> None:
         w.persons[pid].body = body
@@ -223,7 +227,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     named: tuple = ()
     for pid, band in bands.items():
         own = () if band == FELLED else own_kinds(row.emits_at(band))
-        own = tuple(k for k in own if k != DUEL_YIELDED or pid == yielder)
+        own = tuple(k for k in own if (k != DUEL_YIELDED or pid == yielder) and k not in GROWN_KINDS)
         if bodies[pid] == 0:
             named += death_subjects(w, pid, own, fields=("body",))
             continue
@@ -236,7 +240,43 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         # [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]
         named += (Subject.entity("persons", pid, earns=own, fields=("body",),
                                  observed=body_observed(pid, bodies[pid])),)
+    # CP-T03-04 (iv): EACH GROWN PARTY IS ITS OWN SUBJECT ON `capability`, earning the `(Person, capability)` cell's
+    # kind alone -- never a body subject's kind, and never on a party who did not grow (the filter above).
+    named += tuple(Subject.entity("persons", pid, earns=GROWN_KINDS, fields=("capability",)) for pid in grown)
     return Change(named, perform, fight_ending(w, (a.actor, who), res, above))
+
+
+# CP-T03-04 (iv): THE KINDS A GROWN PARTY EARNS -- the `(Person, capability)` matrix row's own `emits:`
+# (`write_matrix.yaml`), `train`'s kind, read off its owner rather than spelt.
+GROWN_KINDS = matrix_row("Person", "capability").emits
+
+
+def _grown(w: "World", a: "Act", parties, bands: dict, bodies: dict) -> dict:
+    """v11 CP-T03-04 (iv), BUILD-BY-DOING: `{pid: raised capability}` for each party of a fight THAT DREW BLOOD (some
+    party `Wounded` or `Felled`, i.e. `bands` is not empty) who SURVIVES it (his written body is not 0) and ALREADY
+    HOLDS the key the verb draws on (`VERB_CAPABILITY[a.verb]`, `rosters.yaml: verb_capability` -- `arms` for the
+    three verbs contesting `the body`; the name is read there, never spelt here). Raised by ONE whole point,
+    `_eff_train`'s unit.
+
+    ⚠ NEVER MINTED (`_eff_train`'s rule and its reason): a minted `{arms: 1}` would replace `pool_default` 2 in
+    `faculty` and LOWER the pool of the man it meant to reward. A party holding no key gains nothing.
+    ⚠ ONLY WHERE BLOOD WAS DRAWN, AND THE REASON IS THE FOLD, NOT TASTE: `fight`'s and `accept`'s `Untouched` band
+    writes nothing, so the fold never runs this effect there (`loop/resolve.py`, `_pairs`); declaring a
+    `Person.capability` write on it would turn every untouched fight between non-holders into `kill.refused`
+    (the gate's no-op refusal) where it emits `contest.undecided`. `capture` runs this effect at `Untouched` (its
+    `Tenure.since`), and the same rule (`bands` empty) holds it to the same answer.
+    [ASSUMPTION; medium; Jordan to correct; revert: return `{}` here, and the three bands' `Person.capability`
+    write and `capability.raised` kind in `verb_table.yaml`]."""
+    key = VERB_CAPABILITY.get(a.verb)
+    if not key or not bands:
+        return {}
+    out = {}
+    for pid in dict.fromkeys(parties):
+        p = w.persons.get(pid)
+        if p is None or bodies.get(pid) == 0 or key not in (p.capability or {}):
+            continue
+        out[pid] = {**p.capability, key: int(p.capability[key]) + 1}
+    return out
 
 
 def body_observed(pid: str, body: "int | None") -> tuple:
