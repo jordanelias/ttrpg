@@ -9793,6 +9793,108 @@ def test_the_combat_seam_derives_one_field_and_it_decides_something():
         "The derived field is decoration, and the seam is handing the subsystem a constant")
 
 
+def _k1_combatants(w, monkeypatch):
+    """The two `Combatant`s the module entry builds for `p_low` / `p_mid`, observed at `wrapper.fight`'s door."""
+    from ..seam.wrappers import combat as C
+    from ..seam.wrappers._entry import entry_for
+    from engine.substrate import pc_engine
+    if C.engine() is None:
+        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    SeasonDriver(P.tiny_world())   # registers the module entries a direct `entry_for` reads
+    entry, _ = entry_for(C._PRIZE, C._PROVIDER)
+    wrapper = pc_engine.load().wrapper
+    seen, real = {}, wrapper.fight
+
+    def spy(A, B, **kw):
+        seen[A.label], seen[B.label] = A, B
+        return real(A, B, **kw)
+    monkeypatch.setattr(wrapper, "fight", spy)
+    inp = C.combat_input(w, ["p_low", "p_mid"], "fight")
+    entry.fn(inp, __import__("random").Random(0))
+    return inp, seen
+
+
+def _k1_holds(w, monkeypatch) -> int:
+    """PC-06 K-1's EXIT, as a predicate shared by the shipped seam and its mutant: authored Strength 6 fights as 6, the
+    other authored keys land on their PC-14 fields, the unauthored ones stay at the class default. Returns how many
+    assertions it made (a predicate that asserts nothing observes nothing)."""
+    w.persons["p_low"].attributes = {"attr.body.strength": 6, "attr.body.agility": 5, "attr.mind.perception": 2}
+    inp, seen = _k1_combatants(w, monkeypatch)
+    import attributes as spec   # on the path once `_k1_combatants` has loaded the engine
+    low, mid = seen["p_low"], seen["p_mid"]
+    checked = 0
+    for c, want in ((low, dict(strength=6, agi=5, att=2)), (mid, {})):
+        for key, v in want.items():
+            assert getattr(c, key) == v, f"{c.label}: {key} is {getattr(c, key)}, authored {v}"
+            checked += 1
+    for key in ("cog", "spirit", "focus", "disp", "faculty"):   # unauthored (or keyless): the class default / the input's
+        want = inp.faculties[0] if key == "faculty" else spec.DEFAULT[key]
+        assert getattr(low, key) == want, f"{key} moved without an authored value"
+        checked += 1
+    assert mid.strength == spec.DEFAULT["strength"] and mid.end == inp.ends[1]
+    assert low.end == inp.ends[0]
+    return checked + 2
+
+
+def test_k1_a_person_with_authored_strength_6_fights_as_strength_6(monkeypatch):
+    """PC-06 K-1 EXIT. `Person.attributes` -> `PersonalCombatInput.attributes` -> the `Combatant` the entry builds,
+    by PC-14's `registry_key`."""
+    w = P.tiny_world()
+    assert _k1_holds(w, monkeypatch) >= 10
+
+
+def test_k1_planted_failure_with_the_mapping_removed_the_exit_reddens(monkeypatch):
+    """The falsifier: the same predicate, with every spec entry's `registry_key` blanked, must fail."""
+    w = P.tiny_world()
+    _k1_combatants(w, monkeypatch)   # loads the engine, which puts the flat `attributes` module on the path
+    import attributes as spec
+    monkeypatch.setattr(spec, "SPEC", tuple(s._replace(registry_key=None) for s in spec.SPEC))
+    with pytest.raises(AssertionError):
+        _k1_holds(w, monkeypatch)
+
+
+def test_k1_authored_endurance_is_the_base_the_body_band_penalty_comes_off():
+    """`end` composes: authored `attr.body.endurance` (else 4) less the bands, floored at 1; unauthored is today's."""
+    from ..seam.wrappers import combat as C
+    w = P.tiny_world()
+    p, scale = w.persons["p_low"], w.fixtures.get("condition_scale")
+    checked = 0
+    for body in (scale, 700, 400, 50):
+        p.body = body
+        p.attributes = {}
+        bands = decision.body_band_penalty(p, w.fixtures)
+        assert C.party_end(p, w.fixtures) == max(1, 4 - bands)
+        p.attributes = {"attr.body.endurance": 6}
+        assert C.party_end(p, w.fixtures) == max(1, 6 - bands)
+        checked += 2
+    assert checked == 8
+    p.body = scale; p.attributes = {"attr.body.endurance": 6}
+    assert C.party_end(p, w.fixtures) == 6
+
+
+def test_k1_control_an_all_absent_realm_builds_the_record_it_always_built(monkeypatch):
+    """CONTROL: no authored attribute -> `attributes` stays the default `()`, the fight is the one fought before, and
+    building the input moves no `content_hash`. (`build_realm(0)` ships `cast_attributes` OFF: nobody is authored.)"""
+    from ..harness.populated import build_realm
+    from ..seam.wrappers import combat as C
+    from ..seam.wrappers._entry import entry_for
+    import random
+    realm = build_realm(0)
+    assert not any(p.attributes for p in realm.persons.values()), "the shipped realm authors an attribute"
+    w = P.tiny_world()
+    before = w.content_hash()
+    inp = C.combat_input(w, ["p_low", "p_mid"], "fight")
+    assert inp.attributes == () and w.content_hash() == before
+    if C.engine() is None:
+        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    SeasonDriver(P.tiny_world())
+    entry, _ = entry_for(C._PRIZE, C._PROVIDER)
+    explicit = dataclasses.replace(inp, attributes=({}, {}))   # authored-nothing, spelled out
+    for seed in range(5):
+        a, b = entry.fn(inp, random.Random(seed)), entry.fn(explicit, random.Random(seed))
+        assert (a["result"], a["ends"], a["wound_state"]) == (b["result"], b["ends"], b["wound_state"])
+
+
 def _w18_the_run_instrument_and_its_control(rows):
     """`W18`. `PLAN.md` Part 6's bar, as an instrument. Three clauses, and **the control is first
     because it is the only one that demonstrates sensitivity.**
