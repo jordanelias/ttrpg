@@ -3,7 +3,7 @@
 `loop/witness.py::_credit` grades a told claim's confidence, after `_refract`, by
 `1 + regime_gain * c`, `c` = `world_q.commensurate(hearer, teller)` in {-1, 0, +1}, clamped to
 `[0, max(confidence_default, the uncredited value)]` and applied only when `regime_gain * c` is not 0.
-`regime_gain` ships at the control 0 at commit (1).
+`regime_gain` is the control 0 at commit (1) and ships 0.5 at commit (2) (`revert_cr79` sets it back).
 
 Every world here is hand-built (`probes.tiny_world`, the told deposit driven as `test_ax7_refraction`
 drives it). Each test that means the control sets `regime_gain` to 0 explicitly, and each test runs an
@@ -32,7 +32,7 @@ from ..state.ids import H
 from .test_ax7_refraction import HELD_CONF, KNOTTED, NEAR, TELLER, _told
 
 OTHER = "p_other"           # a second hearer standing in `Hh` with `NEAR`, so `co_located` reaches both
-LIVE = 0.5                  # the value given (ED-IN-0316), set in the tests and not shipped at commit (1)
+LIVE = 0.5                  # the value given (ED-IN-0316), set in the tests explicitly
 # Conviction maps, one affiliation each (pairs from `test_strife_flows::test_commensurate`):
 # `NONE` holds no affiliation, so it reads 0 against anyone (an unrelated pair).
 THREAD, INNER, ORTHO, NONE = {"thread_truth": 3}, {"inner_tradition": 3}, {"solmund_orthodoxy": 3}, {}
@@ -197,23 +197,44 @@ def test_the_control_reads_nothing_and_deposits_what_a_bypass_deposits(monkeypat
     assert control == bypass == {NEAR: HELD_CONF, OTHER: HELD_CONF, KNOTTED: HELD_CONF}
 
 
-def test_the_realm_at_the_control_never_reaches_commensurate_and_its_build_hash_is_the_base(monkeypatch):
-    """THE CONTROL, on the realm. `build_realm(0)` hashes to the base reading; one season at
-    `regime_gain` 0 (set explicitly) runs with `commensurate` replaced by a raise, so no told deposit read
-    a person's affiliations, and its after-hash equals a run with the told site's `_credit` bypassed. The
-    seeded before/after hashes over seeds 0-2 against the unmodified base are the commit's scratch reading."""
+def test_a_person_absent_from_the_world_reads_zero():
+    """`commensurate` is a reader over `w.persons`: a person who is no longer there (felled between RESOLVE and
+    WITNESS, `World.remove_person`) holds none, so the pair reads 0 and nothing raises. MEASURED, NOT ASSUMED: a
+    `tell` whose teller is removed before WITNESS deposits nothing on this fixture (the fan-out does not reach a
+    hearer, `commensurate` is never called), so the told site's path to a missing teller was not reproduced; the
+    guard is the reader honouring its own contract ('0 if either holds none')."""
+    w = P.tiny_world()
+    w.persons[NEAR].conviction = dict(THREAD)
+    assert W.commensurate(w, NEAR, "p_not_in_the_world") == 0
+    assert W.commensurate(w, "p_not_in_the_world", NEAR) == 0
+    w.persons[TELLER].conviction = dict(THREAD)
+    assert W.commensurate(w, NEAR, TELLER) == 1, "fixture: the pair is live when both are present"
+
+
+def test_the_realm_reaches_commensurate_at_the_value_given_and_never_at_the_control(monkeypatch):
+    """THE CONTROL AND ITS LIVE ARM, on the realm, seed 0, one season. `build_realm(0)` hashes to the base reading.
+    At `regime_gain` 0 (set explicitly) `commensurate` is replaced by a raise and the run completes at the
+    one-season base hash `d4c83c8c...` (`test_strife_flows.BASE_ONE_SEASON`): no told deposit read an affiliation.
+    At 0.5 the same run calls `commensurate` (counted, through the real function) and ends elsewhere, so the realm
+    does reach the told site and the control above was not vacuous. Seeds 1 and 2, and three seasons, are the
+    commit's scratch readings (H-275)."""
+    from .test_strife_flows import BASE_ONE_SEASON
     w = POP.build_realm(0)
     assert w.content_hash() == REALM_BASE_HASH
-    w.fixtures = w.fixtures.sweep("regime_gain", 0.0)
 
     def _boom(*a, **k):
         raise AssertionError("commensurate read at the control")
     with monkeypatch.context() as m:
         m.setattr(W, "commensurate", _boom)
+        w.fixtures = w.fixtures.sweep("regime_gain", 0.0)
         POP.run(seasons=1, seed=0, w=w)
+    assert w.content_hash() == BASE_ONE_SEASON
+    calls = []
+    real = W.commensurate
     w2 = POP.build_realm(0)
-    w2.fixtures = w2.fixtures.sweep("regime_gain", 0.0)
+    w2.fixtures = w2.fixtures.sweep("regime_gain", LIVE)
     with monkeypatch.context() as m:
-        m.setattr(WIT, "_credit", lambda w, c, *a: c)
+        m.setattr(W, "commensurate", lambda *a, **k: calls.append(a) or real(*a, **k))
         POP.run(seasons=1, seed=0, w=w2)
-    assert w.content_hash() == w2.content_hash() != REALM_BASE_HASH
+    assert len(calls) >= 1, "the realm never reached the told site at the value given"
+    assert w2.content_hash() != BASE_ONE_SEASON

@@ -887,8 +887,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
         #
         # ⚠ CONFIDENCE IS THE TELLER'S OWN, THEN REFRACTED (v9 IN-15): the hearer's copy starts at
         # what the teller held and `_refract` lowers it by the channel the hearer heard the speech
-        # through and by what they already held firsthand -- at `refraction_gain` 0 it is the
-        # teller's own exactly. The hop itself is still graded at READ
+        # through and by what they already held firsthand -- at `refraction_gain` 0, and
+        # `regime_gain` 0 or `c` 0, it is the teller's own exactly. The hop itself is still graded at READ
         # (`teller_weight`), never here. The text below is why the start point is the teller's own:
         # Nothing in the chain states how much a hearing costs a belief, and
         # `probes.py` builds every hand-written `told_by` claim at full confidence (`:380`,
