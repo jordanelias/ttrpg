@@ -165,7 +165,12 @@ def close_tempo(c, cfg, fatigue=0.0):
 # ED-PC-0035: the `stamina_max(c)` back-compat accessor is REMOVED (zero callers; read c.stamina_max directly —
 # the combatant hosts its own derived figures).
 def act_cost(c, commit, cfg):
-    return (cfg['ACT_BASE']+cfg['ACT_WEIGHT']*wield_heft(c,cfg)+cfg['ACT_COMMIT']*commit)*cfg['COST_SCALE']   # DERIVED g-aware heft (Stage 2b)
+    # PC-20 (3), AR-10: the harness is a Strength job. Strength short of the tier's demand (ARMOR_DEMAND, 'none' 0)
+    # costs stamina by handling_penalty's form, max(0, demand - strength), priced at the stamina a unit of weapon heft
+    # costs (ACT_WEIGHT per D_WT, one Strength demand point): one ladder for a Strength demand, whether weapon or harness.
+    # A fighter at or over the demand pays nothing; every tier at 0 is the control (the PC-20 (2) tree, bitwise).
+    return (cfg['ACT_BASE']+cfg['ACT_WEIGHT']*wield_heft(c,cfg)+cfg['ACT_COMMIT']*commit
+            +cfg['ACT_WEIGHT']/cfg['D_WT']*max(0.0, cfg['ARMOR_DEMAND'][c.armor]-c.strength))*cfg['COST_SCALE']   # DERIVED g-aware heft (Stage 2b)
 
 # ---------- concentration (Focus+Spirit tracker) ----------
 # ED-PC-0035: the `conc_max(c,cfg)` back-compat accessor is REMOVED (zero callers; call c.rederive(cfg) and read

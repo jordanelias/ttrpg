@@ -78,6 +78,12 @@
    "AGI_TEMPO_K": 0.03,
    "APPROACH_DISPLACE_K": 0.7,
    "APPROACH_DISPLACE_MAX": 0.6,
+   "ARMOR_DEMAND": {
+    "heavy": 5.0,
+    "light": 1.6666666666666667,
+    "medium": 3.3333333333333335,
+    "none": 0.0
+   },
    "ARREST_K": 0.12,
    "ARREST_REACH_FLOOR": 5.0,
    "BASE_TEMPO": 2.0,
