@@ -4027,17 +4027,18 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # v11 CP-T03-08 ([ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND, APPENDED, THE WOUNDED HE MAY
     # TEND (`wounded_with`: himself below his ceiling, and those beside him he BELIEVES hurt), as `Person` -- `tend`
     # forms on them, reading no other person's true body.
-    # v11 CR-78 (`strife-00` §5, the stamp): AND, APPENDED, WHAT IS AT STAKE IN EACH OPEN FLOW HE KNOWS OF
-    # (`flows_at_stake`: its rung, the seats at it and their holders, its parties and referents), as their existing
-    # classes -- only while `stamp_known_flows` holds (H-274), SHIPPED OFF, and then the output is byte-identical.
-    # The flip on is a separate, declared hash-moving commit. REVERT: drop the term.
+    # v11 CR-78 (`strife-00` §5, the stamp; [ASSUMPTION; medium; Jordan to correct; revert: ship off]): AND, APPENDED
+    # LAST, WHAT IS AT STAKE IN THE FLOWS HE HOLDS OPEN (`flow_stakes`: each open strand's rung, then its rungs,
+    # persons and offices), as the classes `World.class_of` gives them within `FLOW_STAMP_CLASSES` -- no `Flow`
+    # class, and no chooser reads a flow's opening kind or last move. Read only when `Fixtures stamp_flow_stakes`
+    # is on; it SHIPS OFF, and then the output is byte-identical. "Never twice" is `_stamped`'s dedup.
     told = ledger_names(p.ledger)
     added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + larders_in_purview(w, p, told) + holdings_to_found(w, p)
              + (own_referents_of_class(w, out[0]) if out else ())
              + works_sites(w, p) + propositions_heard(w, p) + stage_referents(w, p, ambs)
              + wounded_with(w, p)
-             + (flows_at_stake(w, p) if w.fixtures.get("stamp_known_flows") else ()))
+             + (flow_stakes(w, p) if w.fixtures.get("stamp_flow_stakes") else ()))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
     # (`detainees_held`), as `Detainee` -- the restrained-persons class, named here because it is no
     # collection; only `interrogate` declares it. Empty while no live `detain` names his seat, and then
@@ -4521,7 +4522,7 @@ def practice(w: World, p: Person, verb: str) -> int:
 
 from ..data import affiliations as _aff
 from .person_q import ABOUT_KEYS
-from ..data.rosters import FOREIGN_FACTION_IDS, RECORD_KIND_KEYS, STRIFE_KINDS
+from ..data.rosters import FOREIGN_FACTION_IDS, RECORD_KIND_KEYS, REFERENT_CLASSES, STRIFE_KINDS
 from ..state.containment import home_map
 from ..state.gate import PERSON_DIED
 
@@ -5278,27 +5279,39 @@ def concluded_known(w: World, p: Person, strand: Strand, rd: Optional[_StrifeRea
     return _concluded(strand, lambda: open_referents_known(w, p, strand.referents, rd))
 
 
-def flows_at_stake(w: World, p: Person) -> tuple:
-    """THE STAMP'S TERM (v11 CR-78, `strife-00` §5 "The stamp"): for each strand `flows_known(w, p)` reads and
-    `concluded_known` reads OPEN, what is at stake in it -- its rung, the seats whose `rung` it is, the persons
-    on a live `hold` of those seats, its parties and its referents -- kept by `_of_stamped_class` over every class a
-    verb row declares (`DECLARED_CLASSES`: a standing occasion, so `Office` and `Rung` stay, unlike a question's own
-    referents; no writ), so each is stamped as an EXISTING class through `World.class_of` and no `Flow` class
-    exists -- in strand order, each once, `p` himself never among them (he is no occasion of his own). `questions_for` appends it to the stamp (`_stamped`) only while the fixture
-    `stamp_known_flows` holds (H-274). READS NO MOVE'S KIND: neither the kind a strand opened on nor its last
-    move reaches the output, only which ids it names; which verb forms on a stamped referent, and whether it is
-    chosen, is the person's own. `()` for a person whose ledger holds no open strand."""
-    strands = flows_known(w, p)
-    if not strands:
-        return ()
+#: v11 CR-78 (`strife-00` §5, the stamp): THE CLASSES A FLOW'S STAKE MAY BE STAMPED AS -- the closed referent
+#: roster (`rosters.yaml: referent_classes`) less the war-context class (`ENEMY_CLASS`), which no row forms on and
+#: which the `fight` decline reads as licence: a flow a person knows of must never by itself make another man his
+#: enemy. A stake of any other class (or of none: a custody edge's Tenure id, an id the World does not hold) is
+#: REFUSED -- left unstamped by `flow_stakes`, through `_of_stamped_class`, the one class test. No `Flow` class.
+FLOW_STAMP_CLASSES = REFERENT_CLASSES - {ENEMY_CLASS}
+
+
+def flow_stakes(w: World, p: Person, classes: frozenset = FLOW_STAMP_CLASSES) -> tuple:
+    """WHAT IS AT STAKE IN THE FLOWS `p` HOLDS OPEN (v11 CR-78, `strife-00` §5 "the stamp" [ASSUMPTION; medium;
+    Jordan to correct; revert: ship off, `Fixtures stamp_flow_stakes`]), as ids `questions_for` stamps onto the
+    question he answers (`_stamped`), each as the class `World.class_of` gives it. For each strand of
+    `flows_known(w, p)` that he does not read concluded (`concluded_known`, so from this term a loop step reads
+    the `concludes` set), in his reading's order: the strand's rung (`Strand.rung`, the lowest rung covering its
+    moves' places: its stakes), then, sorted by id, its referents and parties that are a rung, a person or an
+    office (`Strand.referents`, `Strand.parties`). Never twice (the first kept); never `p` himself (a stake he
+    is is no occasion to act on himself: `detainees_held`' and `enemies_heard`' own exclusion [ASSUMPTION;
+    medium; Jordan to correct; revert: keep him]). Each id then meets `_of_stamped_class(w, ..., classes)`: a
+    class outside `classes` (default `FLOW_STAMP_CLASSES`) is refused, and so is the writ skip a question's own
+    referent meets.
+
+    WHAT IT DOES NOT READ: a flow's opening kind, its last move, or any World fact beyond the person reading's
+    own (`flows_known`: his ledger and the containment tree) and which collection holds an id. Which verb forms
+    on a stamped referent, and whether it is chosen, is the person's own (R10): two persons in one flow choose
+    differently, and none is told what the flow does next. Resolver-side and read-only (`04` §A.2: the stamp
+    arrives as Questions, so `decision/` reads nothing new and holds no World). `()` for a person whose
+    ledger holds no `opens` claim -- every person after one season of `build_realm(0)` (CR-77's control)."""
     rd = _StrifeReading(w)
     out: list = []
-    for s in strands:
+    for s in flows_known(w, p):
         if concluded_known(w, p, s, rd):
             continue
-        seats = sorted(o.id for o in w.offices.values() if s.rung is not None and o.rung == s.rung)
-        holders = sorted({t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object in seats})
-        out += _of_stamped_class(w, tuple(x for x in ([s.rung] if s.rung is not None else []) + seats + holders
-                                          + sorted(s.parties) + sorted(s.referents) if x != p.id),
-                                 DECLARED_CLASSES)
-    return tuple(dict.fromkeys(out))
+        at_stake = sorted(x for x in s.referents | s.parties
+                          if x in w.rungs or x in w.persons or x in w.offices)
+        out.extend(x for x in ([s.rung] if s.rung is not None else []) + at_stake if x != p.id)
+    return _of_stamped_class(w, tuple(dict.fromkeys(out)), classes)
