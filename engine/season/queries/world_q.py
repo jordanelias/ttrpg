@@ -4522,7 +4522,7 @@ def practice(w: World, p: Person, verb: str) -> int:
 
 from ..data import affiliations as _aff
 from .person_q import ABOUT_KEYS
-from ..data.rosters import FOREIGN_FACTION_IDS, RECORD_KIND_KEYS, REFERENT_CLASSES, STRIFE_KINDS
+from ..data.rosters import FOREIGN_FACTION_IDS, RECORD_KIND_KEYS, STRIFE_KINDS
 from ..state.containment import home_map
 from ..state.gate import PERSON_DIED
 
