@@ -25,7 +25,7 @@ from ..data.requires import Observation
 from ..data.verbs import VERB_TABLE, VOCATION_SOURCED, VOCATIONS
 from ..gaps import Unspecified
 from ..queries.person_q import held_against
-from ..queries.world_q import DETAIN_KIND, ancestry, holder_faction_of, home_of, restrained
+from ..queries.world_q import BODY_STEM, DETAIN_KIND, ancestry, holder_faction_of, home_of, restrained
 from ..seam.ladder import party_degree
 from ..state.carriers import Tenure
 from ..state.gate import (
@@ -45,7 +45,7 @@ from .effects_shared import _debit, _operand, effect_for
 # "kill / wound" (plan `FIGHT-RENAME`); only the `EFFECTS` key and its row moved.
 CAPTURED = "person.captured"        # the one kind `capture`'s opened `detain` earns (`verb_table.yaml`'s `capture` row)
 DUEL_YIELDED = "duel.yielded"       # v10 PC-10b: the kind a duel's yielder earns (`verb_table.yaml`'s `accept` row)
-BODY = "body"                     # the predicate of a body Observation: the cell's own field name
+BODY = BODY_STEM                  # the predicate of a body Observation: the cell's own field name (`world_q.BODY_STEM` owns it)
 CEILING = "body_ceiling"          # v11 CP-T03-07: the cell the lasting mark writes (`write_matrix.yaml`)
 
 
@@ -365,7 +365,8 @@ def marked_ceiling(ceiling: int, floors) -> int:
     (`band_floors["body"]`, the floors `decision/budget.py::body_band_penalty` counts): 1000 -> 799 -> 499 -> 99 on the
     shipped floors. With no floor at or beneath it, `ceiling` unchanged: the marks are as many as the body has floors,
     and no count is spelt here."""
-    below = [int(f) for f in floors if int(f) <= ceiling]
+    # a floor of 1 or less would leave a ceiling of 0 or below, which `_wound` reads as a death: only floors above 1 mark
+    below = [int(f) for f in floors if 1 < int(f) <= ceiling]
     return max(below) - 1 if below else ceiling
 
 

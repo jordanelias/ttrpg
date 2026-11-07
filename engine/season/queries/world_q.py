@@ -4200,10 +4200,12 @@ class PersonProjection:
 
 def projection(w: World, pid: str) -> PersonProjection:
     """S-2: `pid`'s own claims and the Events `pid` witnessed, as copies, each Event's `observed`
-    emptied (`PersonProjection` says why). Read-only."""
+    emptied (`PersonProjection` says why) and its `ending` too (v11 CP-T03-02: a fight's per-party ending is the
+    resolver's payload, not something WITNESS deposited, so a witness reads it from his ledger or not at all).
+    Read-only."""
     p = _person_or_refuse(w, pid)
     return PersonProjection(pid, tuple(copy.deepcopy(c) for c in p.ledger),
-                            tuple(copy.deepcopy(replace(e, observed=())) for e in witnessed(w, pid)))
+                            tuple(copy.deepcopy(replace(e, observed=(), ending=())) for e in witnessed(w, pid)))
 
 
 # ---------------------------------------------------------------------------

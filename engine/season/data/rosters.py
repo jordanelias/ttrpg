@@ -759,8 +759,9 @@ def _check_arms_kinds(mapping: dict, matter_kinds, fields: dict) -> dict:
         row = row if isinstance(row, dict) else {}
         field, key, rank = row.get("field"), row.get("key"), row.get("rank")
         # three entries, each read below and none of them absent, are exactly `field`, `key` and `rank`
-        if (kind not in matter_kinds or len(row) != 3 or field not in fields
-                or key not in fields[field] or isinstance(rank, bool) or not isinstance(rank, int)):
+        if (kind not in matter_kinds or len(row) != 3 or not isinstance(field, str) or field not in fields
+                or not isinstance(key, str) or key not in fields[field] or isinstance(rank, bool)
+                or not isinstance(rank, int)):
             bad.append(kind)
         else:
             out[kind] = (field, key, rank)
