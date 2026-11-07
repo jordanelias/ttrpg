@@ -165,7 +165,12 @@ def close_tempo(c, cfg, fatigue=0.0):
 # ED-PC-0035: the `stamina_max(c)` back-compat accessor is REMOVED (zero callers; read c.stamina_max directly —
 # the combatant hosts its own derived figures).
 def act_cost(c, commit, cfg):
-    return (cfg['ACT_BASE']+cfg['ACT_WEIGHT']*wield_heft(c,cfg)+cfg['ACT_COMMIT']*commit)*cfg['COST_SCALE']   # DERIVED g-aware heft (Stage 2b)
+    # PC-20 (3), AR-10: the harness is a Strength job. Strength short of the tier's demand (ARMOR_DEMAND, 'none' 0)
+    # costs stamina by handling_penalty's form, max(0, demand - strength), priced at the stamina a unit of weapon heft
+    # costs (ACT_WEIGHT per D_WT, one Strength demand point): one ladder for a Strength demand, whether weapon or harness.
+    # A fighter at or over the demand pays nothing; every tier at 0 is the control (the PC-20 (2) tree, bitwise).
+    return (cfg['ACT_BASE']+cfg['ACT_WEIGHT']*wield_heft(c,cfg)+cfg['ACT_COMMIT']*commit
+            +cfg['ACT_WEIGHT']/cfg['D_WT']*max(0.0, cfg['ARMOR_DEMAND'][c.armor]-c.strength))*cfg['COST_SCALE']   # DERIVED g-aware heft (Stage 2b)
 
 # ---------- concentration (Focus+Spirit tracker) ----------
 # ED-PC-0035: the `conc_max(c,cfg)` back-compat accessor is REMOVED (zero callers; call c.rederive(cfg) and read
@@ -257,7 +262,13 @@ def recoverability_factor(c, cfg):
     ctrl_credit = 1 - cfg['REC_CTRL_K'] * max(0.0, arrest - 1) * (1 - pc)       # a SWUNG weapon gains from 2H control; a thrust barely
     # (D) BODY-EXTENSION (lunge) — the lead axis; fires from the wrapper as lunge_depth
     lunge_mult = 1 + cfg['EXPOSE_LUNGE_K'] * ld * (w.get('mass', 1.0) / cfg['LUNGE_REF_MASS']) ** cfg['MOMENT_MASS_EXP']
-    return max(cfg['RECOVER_FLOOR'], C_mode * ctrl_credit * lunge_mult)
+    # (E) STRENGTH AGAINST THE ARRESTED HEFT (PC-20 (4), AR-13): Strength over the neutral arrests the swing sooner,
+    # under it later, in proportion to the heft being arrested (wield_heft, at this grip) and, like the control credit,
+    # on the SWUNG share only (a thrust retracts along its line: 1 - pc). 0 at Strength 4 (a default fighter is unchanged
+    # at any ARREST_STR_K) and 0 at ARREST_STR_K 0 (the control: the PC-20 (3) tree, bitwise). Floored at 0 so a
+    # strong fighter's factor cannot turn the commitment negative; RECOVER_FLOOR still bounds the product.
+    str_arrest = max(0.0, 1 - cfg['ARREST_STR_K'] * (c.strength - NEUTRAL['strength']) * wield_heft(c, cfg) * (1 - pc))
+    return max(cfg['RECOVER_FLOOR'], C_mode * ctrl_credit * lunge_mult * str_arrest)
 def close_unwieldiness(c, cfg, grip=None):
     """How poorly a weapon serves IN THE CLOSE: the OVERHANG, in metres, of its business end past the distance at
     which a fight is closed. 0 for a weapon shorter than that measure (a dagger is at home in the close).

@@ -16,7 +16,26 @@ the control.
 Falsifier, run at the build: `+cfg['D_MASS']*w['mass']` deleted from `str_demand` reddens
 `test_a_heavier_weapon_of_equal_inertia_handles_worse_for_a_weaker_fighter` (the twin and the greatsword handle
 alike) and the shipped-minus-control half of `test_d_mass_zero_is_the_pre_item_demand` (the demand no longer moves
-by D_MASS*mass); with it present and D_MASS = 0 the twin and the greatsword read one demand bitwise."""
+by D_MASS*mass); with it present and D_MASS = 0 the twin and the greatsword read one demand bitwise.
+
+(3) The harness. `combat_systems.act_cost` adds `ACT_WEIGHT/D_WT * max(0, ARMOR_DEMAND[armor] - strength)` (AR-10,
+adj §3.1 (8): handling_penalty's form, a Strength shortfall against a demand, paid in stamina at the price of a unit
+of weapon heft), so an armoured weak fighter tires faster than an unarmoured one. Every tier at 0 is the control.
+
+Falsifier, run at the build: the shortfall term deleted from `act_cost` reddens
+`test_an_armoured_weak_fighter_tires_faster_than_an_unarmoured_one` and
+`test_a_weak_fighter_in_heavy_armour_runs_dry_in_fewer_acts`; with it present and every tier at 0 those two and
+`test_every_armour_tier_has_a_demand_rising_with_the_tier` are red and the control test green.
+
+(4) Strength against the arrested heft. `combat_systems.recoverability_factor` multiplies the irrecoverability by
+`max(0, 1 - ARREST_STR_K*(strength - NEUTRAL['strength'])*wield_heft*(1 - pc))` (AR-13): a strong fighter arrests
+his own swing sooner, so both readers of the factor (`overcommit_exposure`, and the wrapper's tempo cost of a deep
+commit) see it. 0 at Strength 4 and on a pure thrust; ARREST_STR_K = 0 is the control.
+
+Falsifier, run at the build: `* str_arrest` deleted from the return reddens
+`test_a_strong_fighter_arrests_his_own_swing_sooner` and
+`test_a_strong_fighter_recovers_a_deep_commit_sooner_through_the_exposure`; with it present and ARREST_STR_K = 0
+the same two are red and the rest green."""
 import os
 import sys
 
@@ -167,3 +186,163 @@ def test_d_mass_zero_is_the_pre_item_demand(heavy_twin):
         assert S.str_demand(c, CFG) - S.str_demand(c, off) == pytest.approx(CFG['D_MASS'] * c.w['mass'], abs=1e-12), k
         checked += 1
     assert checked >= 50
+
+
+# ── (3) the harness's Strength demand, paid in stamina ──────────────────────────────────────────────────────────────
+TIERS = (V.TIER_NONE, V.TIER_LIGHT, V.TIER_MEDIUM, V.TIER_HEAVY)
+ARMOURED = TIERS[1:]
+
+
+def _act(strength, armor, cfg, weapon='arming', commit=3.0):
+    return S.act_cost(Combatant('x', attrs={'strength': strength}, weapon=weapon, armor=armor), commit, cfg)
+
+
+def _pre_item_act(c, commit, cfg):
+    """The PC-20 (2) per-act stamina cost, written out: no armour channel."""
+    return (cfg['ACT_BASE'] + cfg['ACT_WEIGHT'] * S.wield_heft(c, cfg) + cfg['ACT_COMMIT'] * commit) * cfg['COST_SCALE']
+
+
+def test_every_armour_tier_has_a_demand_rising_with_the_tier():
+    """A tier missing from the table would KeyError in act_cost; 'none' demands nothing; the demand rises with the
+    tier, and the strongest fighter on the scale (7) bears every tier free (else the harness is a flat tax)."""
+    d = CFG['ARMOR_DEMAND']
+    assert set(d) == set(V.ARMOUR_TIERS)
+    assert d[V.TIER_NONE] == 0.0
+    ladder = [d[t] for t in TIERS]
+    assert all(lo < hi for lo, hi in zip(ladder, ladder[1:])), ladder
+    assert d[V.TIER_HEAVY] <= 7, d
+
+
+def test_an_armoured_weak_fighter_tires_faster_than_an_unarmoured_one():
+    """The EXIT: a fighter short of a tier's demand pays more stamina per act in it than out of armour, by the
+    shortfall priced at a unit of heft (COST_SCALE*ACT_WEIGHT/D_WT per Strength point); a fighter at or over the
+    demand pays the same in it as out of it — the harness is a Strength job, not a flat tax."""
+    k = CFG['COST_SCALE'] * CFG['ACT_WEIGHT'] / CFG['D_WT']
+    checked = 0
+    for tier in ARMOURED:
+        demand = CFG['ARMOR_DEMAND'][tier]
+        for s in range(1, 8):
+            for weapon in ('dagger', 'arming', 'greatsword'):
+                gap = _act(s, tier, CFG, weapon) - _act(s, V.TIER_NONE, CFG, weapon)
+                if s < demand:
+                    assert gap > 0.0, (tier, s, weapon)
+                    assert gap == pytest.approx(k * (demand - s), abs=1e-12), (tier, s, weapon)
+                    checked += 1
+                else:
+                    assert gap == 0.0, (tier, s, weapon)
+    assert checked >= 3 * len(ARMOURED)   # every armoured tier is short for at least the weakest fighter
+
+
+def test_a_weak_fighter_in_heavy_armour_runs_dry_in_fewer_acts():
+    """The exit read as the wrapper spends it (`aggressor.stamina -= S.act_cost(...)`, wrapper.engagement): from a
+    full reserve, a Strength-1 fighter in plate reaches zero stamina in fewer acts than the same fighter unarmoured,
+    and a Strength-7 fighter does so in the same number either way."""
+    def acts_to_empty(strength, armor):
+        c = Combatant('x', attrs={'strength': strength}, weapon='arming', armor=armor)
+        stamina, acts = float(c.stamina_max), 0
+        while stamina > 0:
+            stamina -= S.act_cost(c, 4.0, CFG)
+            acts += 1
+        return acts
+    assert acts_to_empty(1, V.TIER_HEAVY) < acts_to_empty(1, V.TIER_NONE)
+    assert acts_to_empty(7, V.TIER_HEAVY) == acts_to_empty(7, V.TIER_NONE)
+
+
+def test_armour_demand_zero_is_the_pre_item_cost():
+    """CONTROL: every tier at 0 reproduces the PC-20 (2) per-act cost bitwise, in every tier at every Strength (the
+    planted failure: armour then costs a weak fighter nothing, so the exit reads false)."""
+    off = dict(CFG, ARMOR_DEMAND={t: 0.0 for t in TIERS})
+    checked = 0
+    for tier in TIERS:
+        for s in (1, 2, 4, 7):
+            for weapon in ('dagger', 'arming', 'greatsword', 'guandao'):
+                for commit in (2.0, 3.5, 5.0):
+                    c = Combatant('x', attrs={'strength': s}, weapon=weapon, armor=tier)
+                    assert S.act_cost(c, commit, off) == _pre_item_act(c, commit, off), (tier, s, weapon, commit)
+                    checked += 1
+    assert checked == 4 * 4 * 4 * 3
+    assert _act(1, V.TIER_HEAVY, off) == _act(1, V.TIER_NONE, off)
+
+
+# ── (4) Strength against the arrested heft, in the own-swing arrest ─────────────────────────────────────────────────
+SWUNG = ('greatsword', 'mace', 'guandao', 'longsword', 'bardiche')
+
+
+def _fighter(strength, weapon, sel_pc=None):
+    c = Combatant('x', attrs={'strength': strength}, weapon=weapon)
+    c.sel_pc = sel_pc
+    return c
+
+
+class _NeutralTR:
+    """No trained anti-overcommit bonus: the exposure read is the physics alone."""
+    @staticmethod
+    def ability_bonus(c, key):
+        return 0.0
+
+
+def _exposure(strength, weapon, commit, cfg):
+    return S.overcommit_exposure(_fighter(strength, weapon), commit, 0.0, cfg, _NeutralTR)
+
+
+def test_a_strong_fighter_arrests_his_own_swing_sooner():
+    """The EXIT at the owner: above the neutral Strength the irrecoverability of a swung weapon falls, below it rises,
+    so a strong fighter's tempo cost of a deep commit (wrapper: RECOVERY_TEMPO_K*(commit-2)*recoverability_factor)
+    is smaller; the gap grows with the heft arrested (a guandao's more than a longsword's)."""
+    assert CFG['ARREST_STR_K'] > 0.0, CFG['ARREST_STR_K']
+    checked = 0
+    for weapon in SWUNG:
+        r = [S.recoverability_factor(_fighter(s, weapon), CFG) for s in range(1, 8)]
+        assert all(hi > lo for hi, lo in zip(r, r[1:])), (weapon, r)   # strictly falling in Strength 1..7
+        checked += 1
+    assert checked == len(SWUNG)
+    def relative_gain(weapon):
+        return 1 - S.recoverability_factor(_fighter(7, weapon), CFG) / S.recoverability_factor(_fighter(4, weapon), CFG)
+    assert relative_gain('guandao') > relative_gain('longsword') > 0.0
+
+
+def test_a_strong_fighter_recovers_a_deep_commit_sooner_through_the_exposure():
+    """The EXIT at the call site the riposte reads (`overcommit_exposure`): the exposure a weak fighter carries over a
+    strong one on a deep commit is WIDER than the control's, where only balance's half-Strength separates them; on
+    a commit of 3 the commit term is 0 and the term adds nothing."""
+    off = dict(CFG, ARREST_STR_K=0.0)
+    checked = 0
+    for weapon in SWUNG:
+        for commit in (4.5, 5.0, 6.0):
+            shipped = _exposure(2, weapon, commit, CFG) - _exposure(6, weapon, commit, CFG)
+            control = _exposure(2, weapon, commit, off) - _exposure(6, weapon, commit, off)
+            assert shipped > control, (weapon, commit, shipped, control)
+            checked += 1
+        assert _exposure(6, weapon, 3.0, CFG) == _exposure(6, weapon, 3.0, off), weapon
+    assert checked == 3 * len(SWUNG)
+
+
+def test_a_thrust_and_a_default_fighter_are_untouched():
+    """The term acts on the SWUNG share: a selected mode of point concentration 1 retracts along its line and reads
+    the control at every Strength; a Strength-4 fighter reads the control at every weapon (0 at the neutral)."""
+    off = dict(CFG, ARREST_STR_K=0.0)
+    for weapon in sorted(WEAPONS):
+        assert S.recoverability_factor(_fighter(4, weapon), CFG) == S.recoverability_factor(_fighter(4, weapon), off)
+        for s in (1, 7):
+            thrust = _fighter(s, weapon, sel_pc=1.0)
+            assert S.recoverability_factor(thrust, CFG) == S.recoverability_factor(thrust, off), (weapon, s)
+
+
+def test_the_arrest_factor_stays_positive_across_the_scale():
+    """Complete at its extremes: at the shipped coefficient the factor of a Strength-7 fighter stays above 0 for the
+    heaviest wield_heft in the roster with no thrust share, so Strength never stops mattering at the top of the scale."""
+    heft = max(S.wield_heft(Combatant('x', weapon=k), CFG) for k in WEAPONS)
+    assert 1 - CFG['ARREST_STR_K'] * (7 - S.NEUTRAL['strength']) * heft > 0.0, heft
+
+
+def test_arrest_k_zero_is_the_pre_item_recoverability():
+    """CONTROL: ARREST_STR_K = 0 reproduces the PC-20 (3) recoverability bitwise at every Strength (the planted
+    failure: a strong and a weak fighter then read one irrecoverability, so the owner-level exit reads false)."""
+    off = dict(CFG, ARREST_STR_K=0.0)
+    checked = 0
+    for weapon in sorted(WEAPONS):
+        base = S.recoverability_factor(_fighter(4, weapon), off)
+        for s in (1, 2, 6, 7):
+            assert S.recoverability_factor(_fighter(s, weapon), off) == base, (weapon, s)
+            checked += 1
+    assert checked >= 4 * 50

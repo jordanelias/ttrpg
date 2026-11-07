@@ -42,7 +42,7 @@ IN_FLUX = 'IN_FLUX'
 AttributeSpec = namedtuple('AttributeSpec', 'key default neutral registry_key status')
 
 SPEC = (
-    AttributeSpec('strength', 4, None, 'attr.body.strength', IN_FLUX),
+    AttributeSpec('strength', 4, 4, 'attr.body.strength', IN_FLUX),   # neutral 4: PC-20 (4)'s arrest term centres on it
     AttributeSpec('agi', 4, 4, 'attr.body.agility', IN_FLUX),
     AttributeSpec('end', 4, None, 'attr.body.endurance', IN_FLUX),
     AttributeSpec('att', 3, None, 'attr.mind.perception', IN_FLUX),
