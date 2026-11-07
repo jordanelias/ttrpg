@@ -136,6 +136,7 @@
    "D_2H": 0.4,
    "D_HAND": 0.6,
    "D_LEN": 0.35,
+   "D_MASS": 0.45,
    "D_WT": 1.0,
    "EXPOSE_CLOSE_K": 0.6,
    "EXPOSE_LUNGE_K": 0.4,
@@ -319,6 +320,14 @@
     "straight_cut": "shear"
    },
    "HEFT_HEAVY": 3.0,
+   "K_STR_HEAD": {
+    "blunt": 1.0,
+    "curved_cut": 0.925,
+    "cut": 0.925,
+    "cut_thrust": 0.925,
+    "point": 0.85,
+    "straight_cut": 0.925
+   },
    "OW_MAX": 2.5,
    "OW_Z": 1.5,
    "PEN_DEFICIT_K": 6.0,
