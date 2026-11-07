@@ -1134,7 +1134,9 @@ def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d
     fam=TR.familiarity(defender.tradition, aggressor.tradition)
     legib=legibility(aggressor, commit, cfg, defender.armor)
     read_d=reading(defender,cfg)*TR.eff_cw(defender,'visual')*TR.eff_cw(defender,'precommit')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)
-    read_a=reading(aggressor,cfg)*TR.eff_cw(aggressor,'visual')+consistency_a
+    # PC-18 (2): the attack's suddenness is Coordination — the aggressor's side adds AGI_READ_K*(agi-NEUTRAL['agi']) to
+    # his reading value, inside the visual factor; 0 at agi 4, so a default aggressor reads as before at any K
+    read_a=(reading(aggressor,cfg)+cfg['AGI_READ_K']*(aggressor.agi-NEUTRAL['agi']))*TR.eff_cw(aggressor,'visual')+consistency_a
     p_read=core.logistic((read_d-read_a)/1.0)
     read_win=rng.random() < p_read
     modes=list(V.DEFENCE_MODES)   # ORDERED: modes[rng.randrange(3)] below makes the sequence part of the RNG contract
