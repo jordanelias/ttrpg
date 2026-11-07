@@ -168,17 +168,45 @@ def test_kit_of_a_holder_of_a_stocked_rung_is_the_top_ranked_kind_per_field_and_
     assert world_q.kit_of(w, SUBJECT) == default
 
 
-def test_kit_of_reads_his_holdings_and_only_then_his_residence(armed):
+def test_kit_of_reads_his_holdings_and_then_his_residence_per_field(armed):
     w = P.tiny_world()
     default = (combat_kit.DEFAULTS["weapon"], combat_kit.DEFAULTS["armor"])
     w.rungs["Hh"].stores = {"t_plate": 1}
     assert world_q.kit_of(w, ACTOR) == (default[0], "heavy"), "no holdings: the rung he resides in"
     w.rungs["Arsenal"] = Rung("Arsenal", "hearth", stores={})
     w.add_tenure(Tenure("t_hold_empty", ACTOR, "Arsenal", "hold", since=0))
-    assert world_q.kit_of(w, ACTOR) == default, "he holds a rung, so the residence is no second store"
+    assert world_q.kit_of(w, ACTOR) == (default[0], "heavy"), "an empty holding fills no field: the residence's armour"
     w.rungs["Arsenal"].stores = {"t_gambeson": 1}
-    assert world_q.kit_of(w, ACTOR) == (default[0], "medium")
+    assert world_q.kit_of(w, ACTOR) == (default[0], "medium"), "the holdings' armour wins its field over the residence's"
     assert world_q.kit_of(w, "no_such_person") == default
+
+
+def _armour_holder_at_an_armoury():
+    """The ACTOR holds `Arsenal`, stocking armour only, and lives at `Hh`, stocking a weapon only."""
+    w = P.tiny_world()
+    w.rungs["Hh"].stores = {"t_blade": 1}
+    w.rungs["Arsenal"] = Rung("Arsenal", "hearth", stores={"t_plate": 1})
+    w.add_tenure(Tenure("t_hold_arsenal_a", ACTOR, "Arsenal", "hold", since=0))
+    return w
+
+
+def test_kit_of_falls_back_per_field_the_holdings_armour_and_the_residences_weapon(armed):
+    w = _armour_holder_at_an_armoury()
+    blade = world_q.ARMS_KINDS["t_blade"][1]
+    assert world_q.kit_of(w, ACTOR) == (blade, "heavy")
+
+
+def test_mutation_a_per_person_fallback_loses_the_residences_weapon(armed, monkeypatch):
+    """The rule this item replaced, executed: the residence read ONLY by a man who holds nothing. The holder then
+    fights with the default weapon, and the per-field predicate above goes red."""
+    def per_person(w, pid):
+        p = w.persons[pid]
+        rungs = world_q.holdings_of(w, pid) or tuple(r for r in (world_q.lives_in(p),) if r in w.rungs)
+        kit = {**combat_kit.DEFAULTS, **world_q._top_arms(w, rungs)}
+        return kit["weapon"], kit["armor"]
+    w = _armour_holder_at_an_armoury()
+    blade = world_q.ARMS_KINDS["t_blade"][1]
+    assert per_person(w, ACTOR) == (combat_kit.DEFAULTS["weapon"], "heavy") != (blade, "heavy")
 
 
 def test_kit_of_writes_no_store(armed):

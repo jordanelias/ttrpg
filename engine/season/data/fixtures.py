@@ -719,7 +719,7 @@ DEFAULT_FIXTURES = Fixtures(
     # harm (`body_step` above: the live arm ships, the control is one named value away)
     # [ASSUMPTION; medium; Jordan to correct; revert: none]. `none` is the control: no ceiling moves.
     # Injection site: this line, read by `loop/effects_combat.py::_eff_kill`.
-    # [JUSTIFIED: engine/season/hole_register.yaml H-258 -- whether a survivor at the deepest wound gate is marked; no document gives it, so it is injected and swept none / deepest_gate]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-258 -- the gate and the ceiling walk are the CP-T03-07 home's; only whether the live arm ships is undocumented, so it is injected and swept none / deepest_gate]
     body_mark_model="deepest_gate",    # `H-258`, swept none (control) / deepest_gate (SHIPPED)
     # `H-184` (plan position `8`; split out of `H-98`). WHERE THE `Wounded` BAND STARTS: the threshold `wounds` must be
     # strictly above for a standing subject to read `Wounded` rather than `Untouched`. The edge is

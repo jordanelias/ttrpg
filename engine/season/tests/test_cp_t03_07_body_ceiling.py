@@ -128,11 +128,30 @@ def test_a_survivor_at_the_deepest_gate_holds_799_and_a_shallower_one_is_unmarke
     assert (w2.persons[SUBJECT].body_ceiling, w2.persons[SUBJECT].body) == (1000, 400)
 
 
-def test_the_written_body_is_held_under_the_ceiling_and_the_observation_reports_it():
+def _held_under_ceiling():
+    """The 900-body fight held under 799: `(ceiling, body, [v of every (SUBJECT, "body", v) on body.changed])`."""
     w = P.tiny_world()
-    _fight(w, party_state(wounds=3, max_wounds=3, full=10, left=9))     # 1000 * 9 // 10 = 900, above 799
+    _, out = _fight(w, party_state(wounds=3, max_wounds=3, full=10, left=9))     # 1000 * 9 // 10 = 900, above 799
     p = w.persons[SUBJECT]
-    assert (p.body_ceiling, p.body) == (799, 799)
+    seen = [o.value for e in out if e.kind == "body.changed"
+            for o in e.observed if (o.subject, o.predicate) == (SUBJECT, "body")]
+    return p.body_ceiling, p.body, seen
+
+
+def test_the_written_body_is_held_under_the_ceiling_and_the_observation_reports_it():
+    assert _held_under_ceiling() == (799, 799, [799])
+
+
+def test_mutation_an_observation_built_off_the_pre_clamp_body_reports_900_and_goes_red(monkeypatch):
+    """The mutation, executed: the Observation is built from the body BEFORE the ceiling's `min` (the `_harm` value,
+    900), the write still clamped. The assertion above then observes 900 where 799 was written."""
+    real = EC.body_observed
+
+    def pre_clamp(pid, body):
+        return real(pid, 900 if (pid, body) == (SUBJECT, 799) else body)
+    monkeypatch.setattr(EC, "body_observed", pre_clamp)
+    got = _held_under_ceiling()
+    assert got == (799, 799, [900]) != (799, 799, [799]), got
 
 
 def test_a_felled_party_is_not_marked_and_the_marks_stop_at_the_last_floor():
@@ -253,28 +272,34 @@ def _season_sources():
         yield f
 
 
+def _check_source(text: str, rel: str, found: list, offenders: list) -> int:
+    """One source through the guard: appends every scanned write to `found` and every unregistered write or unbounded
+    raiser to `offenders`; returns how many registered raisers it checked."""
+    tree, raisers = None, 0
+    for n, line in _scan(text):
+        found.append(line)
+        role = _BODY_WRITES.get(line)
+        if role is None:
+            offenders.append(f"{rel}:{n}: {line}")
+            continue
+        if role == "raises":
+            raisers += 1
+            tree = tree or ast.parse(text)
+            # the MODULE-LEVEL function holding the write (the effect, not its `perform` closure)
+            fn = next(node for node in tree.body
+                      if isinstance(node, ast.FunctionDef) and node.lineno <= n <= node.end_lineno)
+            nodes = list(ast.walk(fn))
+            if not any(isinstance(x, ast.Attribute) and x.attr == CEILING for x in nodes):
+                offenders.append(f"{rel}:{n}: raiser `{fn.name}` does not read {CEILING}")
+            if any(isinstance(x, ast.Constant) and x.value == "condition_scale" for x in nodes):
+                offenders.append(f"{rel}:{n}: raiser `{fn.name}` reads condition_scale")
+    return raisers
+
+
 def test_every_bare_body_write_is_registered_and_every_raiser_heals_to_the_ceiling():
     found, offenders, raisers = [], [], 0
     for f in _season_sources():
-        text = f.read_text(encoding="utf-8")
-        tree = None
-        for n, line in _scan(text):
-            found.append(line)
-            role = _BODY_WRITES.get(line)
-            if role is None:
-                offenders.append(f"{f.relative_to(_SEASON)}:{n}: {line}")
-                continue
-            if role == "raises":
-                raisers += 1
-                tree = tree or ast.parse(text)
-                # the MODULE-LEVEL function holding the write (the effect, not its `perform` closure)
-                fn = next(node for node in tree.body
-                          if isinstance(node, ast.FunctionDef) and node.lineno <= n <= node.end_lineno)
-                nodes = list(ast.walk(fn))
-                if not any(isinstance(x, ast.Attribute) and x.attr == CEILING for x in nodes):
-                    offenders.append(f"{f.relative_to(_SEASON)}:{n}: raiser `{fn.name}` does not read {CEILING}")
-                if any(isinstance(x, ast.Constant) and x.value == "condition_scale" for x in nodes):
-                    offenders.append(f"{f.relative_to(_SEASON)}:{n}: raiser `{fn.name}` reads condition_scale")
+        raisers += _check_source(f.read_text(encoding="utf-8"), str(f.relative_to(_SEASON)), found, offenders)
     assert raisers >= 1 and len(found) >= len(_BODY_WRITES), (found, "the guard observed nothing")
     assert sorted(set(found)) == sorted(_BODY_WRITES), ("a registered write is gone; delete its entry", found)
     assert not offenders, ("an unregistered or unbounded `body` write -- register it in _BODY_WRITES with its role, "
@@ -286,6 +311,32 @@ def test_the_guard_itself_can_fail():
                "    w.write('b', t, lambda q=q: setattr(q, 'body', 9))\n")
     got = [line for _, line in _scan(planted)]
     assert len(got) == 2 and all(line not in _BODY_WRITES for line in got)
+
+
+_PLANTED_RAISERS = {
+    # a registered raiser that reads `condition_scale` (and the ceiling): the second AST branch
+    "reads condition_scale": ("def _eff_tend(w, a, res=None):\n"
+                              "    p = w.persons[a.payload['subject']]\n"
+                              "    whole = max(p.body, p.body_ceiling, w.fixtures.get('condition_scale'))\n"
+                              "    def perform():\n"
+                              "        p.body = whole\n"
+                              "    return perform\n"),
+    # a registered raiser that never reads `body_ceiling`: the first AST branch
+    "does not read body_ceiling": ("def _eff_tend(w, a, res=None):\n"
+                                   "    p = w.persons[a.payload['subject']]\n"
+                                   "    whole = max(p.body, 1000)\n"
+                                   "    def perform():\n"
+                                   "        p.body = whole\n"
+                                   "    return perform\n"),
+}
+
+
+@pytest.mark.parametrize("why", sorted(_PLANTED_RAISERS))
+def test_the_raiser_branch_of_the_guard_can_fail(why):
+    found, offenders = [], []
+    raisers = _check_source(_PLANTED_RAISERS[why], "planted.py", found, offenders)
+    assert raisers == 1 and found == ["p.body = whole"], (raisers, found)
+    assert len(offenders) == 1 and offenders[0].endswith(why) and "`_eff_tend`" in offenders[0], offenders
 
 
 # ---- hashes: the declared mover and its control ------------------------------------------------------------------

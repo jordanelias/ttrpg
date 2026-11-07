@@ -133,7 +133,10 @@ def test_the_split_adds_challenge_and_accept_and_no_kill_or_wound_row():
     assert set(ae) == set(fe)
     assert {b: [x for x in k if x != "duel.yielded"] for b, k in ae.items() if b != "Declared"} == \
         {b: k for b, k in fe.items() if b != "Declared"}
-    assert ae["Wounded"] == fe["Wounded"] + ["duel.yielded"]
+    # v11 CP-T03-04 (B10-11): `capability.raised` joins `fight`'s, `accept`'s and `capture`'s `Felled`/`Wounded` bands (a surviving holder
+    # of the `arms` key grows), so `duel.yielded` is no longer the LAST kind of `accept`'s `Wounded`: the contract is that it is `fight`'s
+    # list plus `duel.yielded`, in `fight`'s order (a pin re-recorded in the batch's pin commit, P15).
+    assert [x for x in ae["Wounded"] if x != "duel.yielded"] == fe["Wounded"] and "duel.yielded" in ae["Wounded"]
     assert (fe["Declared"], ae["Declared"]) == (["fight.declared"], ["accept.declared"])
     assert not {"kill", "wound", "kill / wound"} & set(V.VERB_TABLE)
 

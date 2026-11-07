@@ -93,7 +93,7 @@ from ..state.containment import ancestry, home_of  # noqa: F401 -- re-exported
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
 from ..state.gate import BENCH_BASIS, may_determine, may_fill, purview_reaches, sits_over
 # v11 CR-25: conjuncts (i) and (iv) of a founding, asked by `founds_over` below.
-from ..state.gate import in_holdings, seat_on_parent_of
+from ..state.gate import holdings_of, in_holdings, seat_on_parent_of
 # ⚠ AND `sworn_to` BY THE SAME ROUTE (v9 IN-40, `H-101`): THE QUERY OF THE LIVE `oblige` EDGES SWORN
 # TO A SEAT. `purview_reaches`' oblige clause asks it, and the gate may not import this module, so
 # its one body lives in `state/gate.py`; `world_q.sworn_to is gate.sworn_to`. `establishment_of`
@@ -1627,13 +1627,29 @@ def residence_of(w: World) -> dict:
         if t.kind != RESIDE_KIND or not t.live or t.subject not in w.persons:
             continue
         if t.subject in out:
-            raise Forbidden(
-                f"{t.subject!r} has two live `{RESIDE_KIND}` edges ({out[t.subject]!r}, "
-                f"{t.object!r})", "S15",
-                law="plan position `19c` -- a person lives in ONE place; `migrate` closes the old "
-                    "residence as it opens the new, so this world was built by hand")
+            _refuse_two_residences(t.subject, out[t.subject], t.object)
         out[t.subject] = t.object
     return out
+
+
+def _refuse_two_residences(pid: str, first: str, second: str) -> None:
+    """THE ONE OWNER OF *A PERSON LIVES IN ONE PLACE* (plan position `19c`): raised by `residence_of` (over the
+    aggregate) and `lives_in` (over one person's own edges) alike, so the rule, its kind and its text live once."""
+    raise Forbidden(
+        f"{pid!r} has two live `{RESIDE_KIND}` edges ({first!r}, {second!r})", "S15",
+        law="plan position `19c` -- a person lives in ONE place; `migrate` closes the old "
+            "residence as it opens the new, so this world was built by hand")
+
+
+def lives_in(p: Person) -> Optional[str]:
+    """THE RUNG ONE PERSON LIVES IN -- the object of his one live `reside` edge, read off his OWN edges
+    (`p.tenures`), or `None` for a man of no fixed abode; two raise (`_refuse_two_residences`, `residence_of`'s
+    rule). The per-person read `kit_of` takes; `residence_of` keeps its scan of the aggregate (it maps everyone,
+    and an edge not yet re-homed onto its subject is in `w.tenures` and not in `p.tenures`)."""
+    found = [t.object for t in p.tenures if t.kind == RESIDE_KIND and t.live]
+    if len(found) > 1:
+        _refuse_two_residences(p.id, found[0], found[1])
+    return found[0] if found else None
 
 
 def restrained(w: World, person: Optional[str], kind: str) -> bool:
@@ -3291,13 +3307,14 @@ def founds_over(w: World, actor: Optional[str], seat, rung: Optional[str]) -> bo
 def kit_of(w: World, pid: str) -> tuple:
     """WHAT A PERSON FIGHTS WITH, `(weapon, armor)` (v11 CP-T03-03; `-08` AM-C-04; [ASSUMPTION; medium; Jordan to
     correct; revert: drop `PersonalCombatInput.kits` and the `kits` fill in `seam/wrappers/combat.py::combat_input`]).
-    Per Combatant field, the HIGHEST-RANKED arms kind (`rosters.yaml: arms_kinds`) with a positive count in the stores
-    of the rungs the person `hold`s (his HOLDINGS, `in_holdings`' relation read off his own live edges: a `hold` whose
-    object is a rung), else of the rung he `reside`s in, else the Combatant's own default
-    (`engine/substrate/combat_kit.py::DEFAULTS`, read off `Combatant.__init__` by the exporter, never copied). A person
-    with holdings is read through his holdings ONLY: his residence is the fallback of a man who holds nothing, not a
-    second store. The field is the kind's, its key the kind's `key`, and the kit is READ, NEVER CONSUMED: nothing here
-    or at the fight writes a store.
+    PER COMBATANT FIELD, the HIGHEST-RANKED arms kind (`rosters.yaml: arms_kinds`) with a positive count in the stores
+    of the rungs the person `hold`s (his HOLDINGS, `state/gate.py::holdings_of`: a live `hold` whose object is a rung),
+    ELSE of the rung he `reside`s in (`lives_in`), else the Combatant's own default
+    (`engine/substrate/combat_kit.py::DEFAULTS`, read off `Combatant.__init__` by the exporter, never copied). The
+    fallback is per field, as the home states it: a holder whose holdings stock armour and no weapon takes the
+    holdings' armour and his residence's weapon; the residence is read only for a field his holdings leave unfilled.
+    The field is the kind's, its key the kind's `key`, and the kit is READ, NEVER CONSUMED: nothing here or at the
+    fight writes a store.
     ⚠ ONE KIT PER PERSON, NOT PER SIDE OF A FIGHT: the caller asks it of each party by his own id, so a party's kit
     never depends on who he fights or who acts. With `arms_kinds` EMPTY (as shipped: the inventory is Jordan's) it
     returns the default for everyone and reads nothing else. A person the world does not hold is asked about the same
@@ -3306,27 +3323,31 @@ def kit_of(w: World, pid: str) -> tuple:
     p = w.persons.get(pid)
     if not ARMS_KINDS or p is None:
         return kit["weapon"], kit["armor"]
-    live = [t for t in p.tenures if t.live]
-    rungs = sorted({t.object for t in live if t.kind == "hold" and t.object in w.rungs})
-    if not rungs:
-        rungs = sorted({t.object for t in live if t.kind == RESIDE_KIND and t.object in w.rungs})
-        if len(rungs) > 1:
-            raise Forbidden(f"{pid!r} has two live `{RESIDE_KIND}` edges ({rungs!r})", "S15",
-                            law="plan position `19c` -- a person lives in ONE place; `residence_of`'s rule")
+    best = _top_arms(w, holdings_of(w, pid))
+    if set(kit) - set(best):
+        home = lives_in(p)
+        if home in w.rungs:
+            best = {**_top_arms(w, (home,)), **best}
+    kit.update(best)
+    return kit["weapon"], kit["armor"]
+
+
+def _top_arms(w: World, rungs) -> dict:
+    """`{Combatant field: key}` -- per field, the key of the highest-ranked `arms_kinds` member with a positive count
+    in the stores of `rungs` (`kit_of`'s one ranking, asked of the holdings and then of the residence)."""
     held = {k for r in rungs for k, n in (w.rungs[r].stores or {}).items() if n > 0}
     best: dict = {}
     for kind in sorted(held & set(ARMS_KINDS)):
         field, key, rank = ARMS_KINDS[kind]
         if field not in best or rank > best[field][0]:
             best[field] = (rank, key)
-    kit.update({field: key for field, (_rank, key) in best.items()})
-    return kit["weapon"], kit["armor"]
+    return {field: key for field, (_rank, key) in best.items()}
 
 
 def holdings_to_found(w: World, p: Person) -> tuple:
     """THE HOLDINGS `p` MAY FOUND AN OFFICE OVER (v11 CR-25, CR-11's design; [ASSUMPTION; medium; Jordan to
     correct; revert: drop the term in `questions_for` and `establish`'s `referent_class`]), sorted by id: every
-    rung his own live `hold` edges name (his HOLDINGS, `in_holdings`' relation read off his edges) that
+    rung his own live `hold` edges name (his HOLDINGS, `state/gate.py::holdings_of`) that
     `founds_over` admits through some seat of his own live `hold`s whose grant carries an act `establish` is
     eligible by (`data/verbs.py::FOUNDING_REMIT_ACTS`). A `Rung` stamper term, `larders_in_purview`'s shape and
     `vacancies`' standing-occasion reading: world-read over his own edges and NOT gated on his ledger (a man knows
@@ -3346,8 +3367,7 @@ def holdings_to_found(w: World, p: Person) -> tuple:
         t.object for t in live if t.object in w.offices and not FOUNDING_REMIT_ACTS.isdisjoint(t.granted_acts))]
     if not seats:
         return ()
-    held = sorted({t.object for t in live if t.object in w.rungs})
-    return tuple(r for r in held if any(founds_over(w, p.id, s, r) for s in seats))
+    return tuple(r for r in holdings_of(w, p.id) if any(founds_over(w, p.id, s, r) for s in seats))
 
 
 # ⚠ `04` §A.2:133 and §B.10-§B.12:460 name `faction_q.at_war(w, a, b) -> bool`. DEFINED HERE (v11 CR-87) because
@@ -3554,13 +3574,21 @@ def wounded_with(w: World, p: Person) -> tuple:
     is below his OWN ceiling (`Person.body_ceiling`, CP-T03-07), then, sorted by id, each OTHER living person `with`
     him (`place_of`, `with`'s one owner, as the `with` stem reads it) whom HE BELIEVES below whole: the newest
     `(person, "body", v)` claim his own ledger holds about that person (CP-T03-02's Observation, or a told copy of it;
-    newest by `(when, round)`, a later ledger position breaking a tie) under `v < condition_scale`.
+    newest by `(when, round)`, a later ledger position breaking a tie) under `v < condition_scale`. ⚠ The tie-break
+    is by LEDGER POSITION, and position is NOT arrival order: `state/ledgers.py::evict_over_cap` sorts the ledger in
+    place by eviction key, so a tie between two same-`(when, round)` claims goes to whichever the last sort left later.
 
     THE LAWFUL-INPUT RULE: IT READS NO OTHER PERSON'S TRUE BODY -- only `p.body`, `p.body_ceiling`, `p.ledger`, and
     where the others stand. So it does not repeat the AX-7 tension `vacancies` carries (H-207): a wounded man whom
     nobody saw hurt is stamped only for himself. Ceiling, not scale, for himself (he knows his own mark); scale for
-    another (a believed value names no ceiling). A stale belief is the believer's: a man healed since the claim is
-    still stamped, and `tend` is then refused at its write (`_eff_tend`'s `NoOpReceipt`). Stamped by `questions_for`
+    another (a believed value names no ceiling).
+    ⚠ STATED LIMIT -- NOTHING CLEARS A BELIEVED WOUND. Only `_eff_kill` writes a `(pid, "body", v)` Observation;
+    `_eff_tend` and MATTER write none. So a healed man stays stamped for every believer, and so does a MARKED
+    survivor sitting at his ceiling (his written body is clamped at or under the mark while this comparison is
+    against `condition_scale`): `tend` forms on him and is refused at its write as a no-op (`_eff_tend`'s
+    `NoOpReceipt`) each season. The believed-body arm forms near zero today (the CP-T03-08 commit, 0771ede5,
+    measured 0/3/9 pairs at seeds 0/1/2 over two seasons, none attempted). Carrying the ceiling with the body
+    Observation is the repair, deferred. [GAP: a believed ceiling is not carried] Stamped by `questions_for`
     as `Person` (`World.class_of`), so `tend` (`referent_class: Person`) forms on it -- and so do the other rows
     declaring `Person` (the shared class; the fold disposes). Resolver-side and read-only. `()` for a whole man who
     holds no belief of a wounded body beside him."""

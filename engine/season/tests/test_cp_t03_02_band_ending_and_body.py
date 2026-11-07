@@ -157,11 +157,27 @@ def test_an_untouched_fight_carries_no_ending_and_no_body():
 
 
 def test_a_felled_party_carries_no_body_observation():
-    """A felled man is removed; only the wounded party's body is observed, on `body.changed` alone."""
+    """A felled man is removed and carries no body Observation; only the wounded party's body is observed, riding
+    every kind the wounded body subject earns (here `body.changed`; a yielder's `duel.yielded` too --
+    `loop/effects_combat.py`, the CP-T03-02 (ii) comment at the body subject)."""
     _w, out, _b = _fight(WOUNDED, FELLED)
     by_kind = {e.kind: [o for o in e.observed if o.predicate == "body"] for e in out}
     assert [o.subject for o in by_kind.get("body.changed", [])] == [ACTOR], by_kind
-    assert by_kind.get("person.died", []) == [], by_kind
+    assert "person.died" in by_kind, by_kind
+    assert by_kind["person.died"] == [], by_kind
+
+
+def test_a_capture_yielded_at_the_untouched_band_stamps_the_ending_on_person_captured():
+    """`Event.ending` is NOT a Felled/Wounded-only field: `capture`'s Untouched band runs the effect (it declares
+    `Tenure.since`), `_eff_capture` returns `_eff_kill`'s `ending` with the opened edge, and the fold stamps it on every
+    success Event -- here `person.captured`, the captive `yielded`, the actor `undecided`, actor first."""
+    from .test_cp_t03_09_capture import ACTOR as C_ACTOR, CAPTIVE, _capture, _fold_at, _scene, _world as _cworld
+    w, d = _cworld()
+    out = _fold_at(w, d, _capture(0), UNTOUCHED, _scene(surrender=dict(by=CAPTIVE, turn=1, accepted=True)))
+    assert [e.kind for e in out] == ["person.captured"], [e.kind for e in out]
+    (e,) = out
+    assert e.ending, "the Untouched capture's Event carries no ending"
+    assert e.ending == ((C_ACTOR, "undecided"), (CAPTIVE, "yielded")), e.ending
 
 
 #: The one-season realm hashes BEFORE this item (dee492f7); seed 0 forms no Felled/Wounded fight and does not move.
@@ -186,12 +202,13 @@ def test_control_the_item_at_its_revert_reproduces_the_pre_item_one_season_hash(
     revert_cp_t03_04(monkeypatch)
     revert_cp_t03_07(monkeypatch)   # v11 CP-T03-07 (`body_ceiling`, a schema mover of every realm), the same way
     revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
+    # v11 CR-85 (`faculty` replaces `history`, a later mover of seed 1) is reverted on BOTH arms too, BEFORE `moved`
+    # is taken, so `moved` differs from `PRE_ITEM` by this item alone and a CR-85 move cannot pass for one of its own.
+    revert_cr85(monkeypatch)
     w = build_realm(seed)
     run(1, seed, w=w)
     moved = w.content_hash()
     revert_cp_t03_02(monkeypatch)
-    # v11 CR-85 (`faculty` replaces `history`, a later mover of seed 1) is reverted too, so `PRE_ITEM` stands.
-    revert_cr85(monkeypatch)
     w = build_realm(seed)
     run(1, seed, w=w)
     assert w.content_hash() == PRE_ITEM[seed]

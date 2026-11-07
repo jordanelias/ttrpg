@@ -43,8 +43,8 @@ PARAMS = REPO / 'engine' / 'engine_params'
 #: {artifact -> modules under engine/ that BIND its path at runtime}. Measured, not assumed: an
 #: earlier draft of this file listed `key_types.json` with three readers and `params_tables.yaml`
 #: with two, on the strength of a grep that could not tell a path construction from a docstring
-#: mentioning the filename. Four bindings exist in the whole of `engine/`, and three of them are
-#: already the target shape.
+#: mentioning the filename. Three bindings exist in the whole of `engine/` (the three entries below),
+#: and each is already the target shape: one substrate leaf per artifact.
 #:
 #: `params_tables.yaml` had NO runtime binding — `dice_engine.py` and `sigma_leverage.py` only cited
 #: it in prose — so it was a tracked file with no runtime reader, which is why it was absent here

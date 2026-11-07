@@ -551,8 +551,9 @@ def _fold(self, w: "World", token: Token, a: Act,
     # subject names a kind every Event carries every receipt, byte-identical to before.
     # CP-T03-02: AND EACH KIND'S EVENT CARRIES, AFTER THE PRECONDITION'S READS, THE `observed` OF THE RECEIPTS
     # RIDING IT (`Subject.observed`: a wounded party's `(pid, "body", v)` on `body.changed`), and every success
-    # Event carries the fight's `ending` -- `()` and `()` on every act that is not a fight's Felled/Wounded band,
-    # so those Events are byte-identical to before. [ASSUMPTION; medium; Jordan to correct; revert: the field and
+    # Event carries the fight's `ending` -- `()` and `()` on every act that is not `fight`/`accept` at Felled/Wounded
+    # or `capture` at a band where an edge is opened (its Untouched band included), so those Events are
+    # byte-identical to before. [ASSUMPTION; medium; Jordan to correct; revert: the field and
     # the Observation]
     _obs_of = carried.get("observed", {})
     _ending = carried.get("ending", ())

@@ -962,7 +962,7 @@ rosters:
     values: [actor_felled, subject_felled, yielded, undecided]
 
   fight_endings:
-    source: "CP-T03-02 (home `proposals/2026-10-23-subsystem-completion/` T03 §2): how each party's fight ended, as a Felled/Wounded band's Event carries it (`Event.ending`)."
+    source: "CP-T03-02 (home `proposals/2026-10-23-subsystem-completion/` T03 §2): how each party's fight ended, as the band's Event carries it (`Event.ending`): fight/accept at Felled/Wounded, and capture at any band where an edge is opened."
     cite: "CP-T03-02"
     note: >-
       ONE VALUE PER PARTY, read off the scene by `loop/effects_combat.py::fight_ending`: `felled` (his own band is
@@ -1534,9 +1534,10 @@ rosters:
       citations, and Jordan's ruling of 2026-11-05 returned `argue` to Presence.
       `arms` -> Coordination (`attr.body.agility`, v11 CP-T03-04): the row is forced by this table's closure (a
       vocation with no row refuses the import), and the choice is the cheap swap
-      [ASSUMPTION; medium; Jordan to correct; revert: Strength (`attr.body.strength`) or Endurance]. Ground: a
-      fighter's trained skill is handling a weapon, which `references/descriptor_registry.yaml` names
-      Coordination (aliases Agility, Dexterity). ⚠ The combat module ALSO reads `agi` as its own attribute
+      [ASSUMPTION; medium; Jordan to correct; revert: Strength (`attr.body.strength`) or Endurance]. Ground:
+      `references/descriptor_registry.yaml`'s alias line alone -- `attr.body.agility` is Coordination, aliases
+      Agility, Dexterity; that the dexterity is the fighter's is this row's reading, not the registry's (it says
+      nothing of weapons). ⚠ The combat module ALSO reads `agi` as its own attribute
       (`modules/combat/attributes.py`), so a person holding Coordination would bring it twice; no built person
       holds any attribute at landing, so the double read reaches no season.
     values:
@@ -4040,6 +4041,7 @@ tables:
         determine:      -1.0    # carried: the licensed judgement made by the holder licensed to make it
         "deed:matter.undetermined": 0.0   # [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its twin] a Failed `determine` writes nothing, so WITNESS's empty-changes rule (`epistemic.py`'s empty-changes rule) lands the claim on the PARTY, and a null cell would fall back to `determine`'s own (`data/verbs.py`: `_load_alignment` drops a null, `align_kind` falls back to the verb): the hearing that changed nothing is judged as no deed at all. Numeric, not null, for that reason. (`speak`'s four `matter.*` kinds share the shape: H-192 (a).)
         "deed:pursuit.moved": 0.0   # [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its twin] `determine`'s consequence write (v9 SC-02 `22b` step 24) and `argue` (v9 IN-12 step 9) both emit `pursuit.moved`, so the kind is SHARED and absent from `KIND_VERB`; before `argue` it mapped to `determine`, and a null cell would judge the judge's interior shift by `determine`'s alignment, a second time beside `matter.determined`; and `_ch_chronicle` publishes it to everyone (`determine` is a `binding_decision`). A pursuit moving is no one's deed; numeric, not null, for the same reason as `deed:matter.undetermined`. Held at 0.0 it survives the second emitter (`argue`); `train` emits `capability.raised`, not this kind.
+        "deed:capability.raised": 0.0   # [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its twin] v11 CP-T03-04 (iv): `train`'s kind is now SHARED with `fight`/`accept`/`capture` (`loop/effects_combat.py::_grown`), so it is absent from `KIND_VERB` and would read 0.0 by default; held explicitly at 0.0 on `deed:pursuit.moved`'s precedent -- a skill raised is no one's deed, and neither emitter's alignment judges it.
         confer:         -0.8    # carried: conferral seats an office; the paradigm top-down act
         evade / defy:    0.9    # carried: refusing a demand outright is the direct negation of command
         establish:      -0.7    # carried: founding an office adds a rung to the ladder that was not there
@@ -4141,6 +4143,7 @@ tables:
         determine:       0.6    # derived: the act's own form is impartial adjudication; who it favours is the `judging_set`'s
         "deed:matter.undetermined": 0.0   # as `hierarchical_equal`'s cell above: same reason, revert together
         "deed:pursuit.moved": 0.0   # as `hierarchical_equal`'s cell above: same reason, revert together
+        "deed:capability.raised": 0.0   # as `hierarchical_equal`'s cell above: same reason, revert together
         construe:       -0.6    # derived: calculated to serve the construer's aim, not to keep the bond
         forge:          -0.5    # derived: counterfeiting a record for advantage
         open_case:       0.3    # derived: the case runs by template regardless of who stands before it

@@ -247,4 +247,5 @@ def test_where_a_cohort_was_a_party_the_realm_moves_and_the_refusals_are_the_con
     revert_cp_t03_08(monkeypatch)
     h, reads, refused_on_it = _realm_two_seasons(2)
     assert refused_on_it > 0, "no act was refused on `individual` at seed 2"
-    assert h != BASE[2], "a cohort-party fight was refused and the realm did not move"
+    assert h != BASE[2], ("the realm did not move off the pre-conjunct base at seed 2 (the refusal itself is observed "
+                          "by `refused_on_it` above, not by this hash)")

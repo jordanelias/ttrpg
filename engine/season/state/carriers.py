@@ -293,9 +293,16 @@ class Event:
     # not a claim that nothing was read, and it closes when the verb is typed.
     observed: tuple = ()
     # CP-T03-02. HOW A FIGHT ENDED, PER PARTY -- a tuple of `(person id, "felled" | "yielded" |
-    # "undecided")` pairs in party order (actor first), read off the scene's lifted `wound_state` and
-    # `surrender` by the effect that wrote the band (`loop/effects_combat.py::fight_ending`). Empty on
-    # every Event that is not a fight's Felled/Wounded band, which is nearly all of them.
+    # "undecided")` pairs, read off the scene's lifted `wound_state` and `surrender` by the effect that
+    # wrote the band (`loop/effects_combat.py::fight_ending`). Stamped on every success Event of
+    # `fight`/`accept` at Felled/Wounded, and of `capture` at any band where an edge is opened (its
+    # Untouched band runs the effect: a clean yield's `person.captured` carries it). Empty on every other
+    # Event, which is nearly all of them.
+    # THE ORDER is the `claimants` order, actor first -- the convention `PersonalCombatInput`'s `ends`,
+    # `kits` and `faculties` follow -- a convention, NOT a role field.
+    # ⚠ NO PRODUCTION READER EXISTS AT THIS COMMIT. The plan gives it as the band Event's payload (the
+    # CP-T03-02 home: with the body Observation, it is what CP-T03-05 (mode b) and CP-T03-08 "get their
+    # lawful input" from); until one of them reads it, only the tests and `World.content_hash` do.
     # ⚠ NOT AN `actor`/`target` FIELD UNDER ANOTHER NAME (S19.3): it names no doer and no recipient --
     # WHO did it stays a per-witness Claim. It records the OUTCOME the scene already decided, the same
     # class of fact `degree` is (the act's band), split by party because a fight has two.

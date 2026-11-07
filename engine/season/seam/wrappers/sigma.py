@@ -86,7 +86,7 @@ from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds, settle_record
 from engine.substrate import composition
 
-from ...data.rosters import ESTIMATE_OUTCOMES, VERB_CAPABILITY, VOCATION_ATTRIBUTE, roster
+from ...data.rosters import ESTIMATE_OUTCOMES, VERB_CAPABILITY, roster
 from ...gaps import Unspecified
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup);
@@ -97,7 +97,7 @@ from ...manifest.registry import BENCH, resolve as _prize_row
 from ...queries.inputs import Margin, SocialContestInput
 # v9 SC-02 `22a`: the room's two resolver-side reads, the precedent `seam/wrappers/mass_battle.py`'s
 # `world_q.mustered` set. The host READS them; the module composes the obstacle they move.
-from ...queries.world_q import practice, proofs, reception
+from ...queries.world_q import proofs, reception
 from ...state.carriers import EFFORT, effort_of
 from ._entry import entry_for
 from .combat import PROVIDER as _BODY_PROVIDER, fight_estimate, record_of
