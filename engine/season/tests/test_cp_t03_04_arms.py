@@ -50,12 +50,15 @@ BODY_VERBS = ("fight", "accept", "capture")
 
 #: 1-season hashes BEFORE this item (22ea6e13), and AFTER it with nobody holding the key (formation only).
 #: `build_realm(0).content_hash()` is 7266f56bea4e3d75705f5e88eec1b2e1 before and after.
+#: Seeds 1 and 2 of both are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit: PC-20 (1)
+#: (the head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`; seed 0 calls none.
+#: Was, before that pin commit: PRE_ITEM 6e25b047... / fe9032ed...; POST_ITEM 07634b99... / 1cc4370d....
 PRE_ITEM = {0: "20accb03c3d32f80a9fab00d80a70b21",
-            1: "6e25b047b1fb42e2d50014f100770053",
-            2: "fe9032eda9b7701241dcbd766c96fd1a"}
+            1: "597fac345c8791ea17d6228f3121d81c",
+            2: "a157d34aab053ffd84161f7f28e22e8f"}
 POST_ITEM = {0: "b2dde1fcf889605d76a30eeba48d2aa0",
-             1: "07634b99c7c757e451855d7554a1709c",
-             2: "1cc4370de8e8552d1fdf914109aadd37"}
+             1: "c58b1a7e05de416b88db213f855b9eba",
+             2: "5518f31c87d481988a9829d737d8211f"}
 
 
 def revert_cp_t03_04(monkeypatch):
