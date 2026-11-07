@@ -404,7 +404,7 @@ B11-S5 (STRIFE: THE CREDIT TERM AT WITNESS) is CLOSED: CR-79's row left this tab
 | CR-93 | Attributes in a person's own choice: aptitude on uncontested candidates, Focus on the noise of choosing, Reason on the forecast (ED-IN-0347) | DESIGN-FIRST | E (design) | CR-20 (landed `c7764a5a`) (B10-10, read); CL-PERSON's design if approved | — | written out in full: `-12` |
 | CR-95 | Spirit against circumstance and influence (ED-IN-0347) | DESIGN-FIRST | E (design) | CR-20 (landed `c7764a5a`) (B10-10, read), CR-96; B10-11b closed for its combat half | — | written out in full: `-12` |
 | PC-21 | The opponent model: familiarity grown in the season, Attunement's anticipation, the combatant's state (ED-IN-0347) | DESIGN-FIRST | E (design) | PC-06 (K-1), PC-14 (landed `6732111a`); B10-11 | — | written out in full: `-12` |
-| PC-22 | Sparring: a non-lethal venue that pays composure and pairwise familiarity, once a season (Jordan, 2026-11-07) | DESIGN-FIRST | E (design) | PC-21, PC-20 | — | written out in full: `-12` |
+| PC-22 | Sparring: a non-lethal venue that pays Concentration and pairwise familiarity, once a season (Jordan, 2026-11-07) | DESIGN-FIRST | E (design) | PC-21, PC-20 | — | written out in full: `-12` |
 
 ### B10-Z · HELD AND LEAVE
 

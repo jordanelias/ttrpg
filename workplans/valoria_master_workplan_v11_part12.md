@@ -209,7 +209,7 @@
 | PC-19 | B10-11b | new from the attribute-rulings fold of 2026-11-05 (`-12`; `ED-IN-0347`): Focus between the read and the response: a lapse term on `mode_sigma` from the reserve |
 | PC-20 | B10-11b | new from the attribute-rulings fold of 2026-11-05 (`-12`; `ED-IN-0347`): Strength's jobs: damage by weapon head, weight, armour, arresting momentum (four swept terms) |
 | PC-21 | B10-19 | new from the attribute-rulings fold of 2026-11-05 (`-12`; `ED-IN-0347`): the opponent model: familiarity grown in the season, Attunement's anticipation, the combatant's state; DESIGN-FIRST |
-| PC-22 | B10-19 | new from Jordan, 2026-11-07 (`-12`): sparring, a non-lethal venue that pays composure and pairwise familiarity, once a season; DESIGN-FIRST |
+| PC-22 | B10-19 | new from Jordan, 2026-11-07 (`-12`): sparring, a non-lethal venue that pays Concentration and pairwise familiarity, once a season; DESIGN-FIRST |
 | DEF-9 | B10-03 (CLOSED) | remediation deletion (home: `…-01-verdict-and-coverage.md` §1.4) |
 | FA-01 | B10-17 | carried v9 position (`-04`) |
 | FA-03 | B10-Z | carried v9 position (`-04`) |
