@@ -268,9 +268,9 @@ def _credit(w, c: Claim, hearer: str, teller: str, regime_gain: float, ceiling: 
     k = regime_gain * world_q.commensurate(w, hearer, teller)
     if k == 0:
         return c
-    hi = max(ceiling, c.confidence)
-    x = c.confidence * (1.0 + k)
-    return replace(c, confidence=int((0.0 if x < 0 else hi if x > hi else x) + 0.5))
+    # `k` is in [-1, 1] (the range check and `commensurate`), so `x` is never below 0 and only the ceiling clamps
+    x = min(c.confidence * (1.0 + k), max(ceiling, c.confidence))
+    return replace(c, confidence=int(x + 0.5))
 
 
 def _happened(act, e: Event):

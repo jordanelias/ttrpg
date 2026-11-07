@@ -36,7 +36,6 @@ LIVE = 0.5                  # the value given (ED-IN-0316), set in the tests exp
 # Conviction maps, one affiliation each (pairs from `test_strife_flows::test_commensurate`):
 # `NONE` holds no affiliation, so it reads 0 against anyone (an unrelated pair).
 THREAD, INNER, ORTHO, NONE = {"thread_truth": 3}, {"inner_tradition": 3}, {"solmund_orthodoxy": 3}, {}
-REALM_BASE_HASH = "600d8b27147478e158553552cc1409a5"   # `build_realm(0)`, after B11-S4 (PR #580)
 
 
 def _tell(regime: float, refraction: float = 0.0, held: int = HELD_CONF, conviction=None,
@@ -218,9 +217,9 @@ def test_the_realm_reaches_commensurate_at_the_value_given_and_never_at_the_cont
     At 0.5 the same run calls `commensurate` (counted, through the real function) and ends elsewhere, so the realm
     does reach the told site and the control above was not vacuous. Seeds 1 and 2, and three seasons, are the
     commit's scratch readings (H-275)."""
-    from .test_strife_flows import BASE_ONE_SEASON
+    from .test_strife_flows import BASE_BUILD, BASE_ONE_SEASON    # `build_realm(0)` and its season, after B11-S4 (#580)
     w = POP.build_realm(0)
-    assert w.content_hash() == REALM_BASE_HASH
+    assert w.content_hash() == BASE_BUILD
 
     def _boom(*a, **k):
         raise AssertionError("commensurate read at the control")
