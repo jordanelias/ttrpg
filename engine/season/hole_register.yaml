@@ -5576,6 +5576,279 @@ rows:
     cite:      "RE-CONFIRMED BY THE AUTHOR: `roll` and `obstacle` READ in full (only `inp.pool` is rolled; the obstacle is the opposition score halved, less the room, capped) and the agent's exact-odds probe RE-RUN with output identical to the agent's (a reproduction, not an independent derivation). The pair mapping (a person of score s acts with pool s and opposes at score s) is a labelled proxy the agent confirmed with `contest_input` on three `tiny_world` persons. Tuned values are Jordan's and are not a finding; the structure is. A bigger pool against a strong opposition keeps the same 10 percent chance of Partial-or-better by design (H-213), and its mean margin worsens as a by-product. Neighbours: H-127 (no score to halve), H-213, H-126."
     source:    "premise-check run over the Proceedings (social contest) subsystem, 2026-11-07, branch ccr-9207f975-dylpas (jordanelias/ttrpg), slice S1 of a seven-premise run [ASSUMPTION: the premise sentences were rendered from plain words by the author, and the user confirmed the subject is Proceedings and not the legacy kernel]. MEASURED by read-only agents; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
+  - id:        H-289
+    tier:      1
+    hole:      "A VACANT THRONE IS NOT REFILLED IN COMPUTED PLAY, AND THE ACT THE ENGINE KEEPS OFFERING FOR IT CANNOT SUCCEED (premise-check, seats). With the king's seat vacated and the heir alive, `succeed` is formed every season (3, 5 and 5 offers over seeds 0-2) and was executed 0 times in 9 heir-seasons: it ranks about 33rd to 59th of 36 to 235 candidates at a score near 0.022 against a top candidate (`forge`) near 4.05. In the same worlds 17 to 25 `confer` acts per run name the throne and every one is refused, because the seat's conferral basis is inheritance. In unplanted whole runs (ladder fixture seeds 0-2 at 8 seasons, realm seeds 0-1 at 4) seats were vacated 8, 6, 2, 6 and 9 times and refilled 0 times. So the realm does not keep itself running through a succession, though the act that would do it is offered."
+    kind:      "WIRING"
+    owner:     "`engine/season/decision/choose.py` (`make_ranker`: the heir's pull toward a vacant seat on his title); `engine/season/queries/world_q.py` (`vacancies`; which seats form `confer`); `engine/season/loop/predicates.py` (`_req_succeed`, `_req_confer`)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a succession that happens in play without a hand, and `confer` offered only where a conferral basis can answer it"
+    cite:      "MEASURED at fires depth: planted vacancy of the king's seat, 3 seeds x 3 seasons, by the S1 agent; the author re-ran one seat (`off_lord_treasurer`, realm seed 0, 3 seasons: vacant throughout, 3 to 4 `confer.refused` a season) and the unplanted whole runs above. Zero at this n is NOT OBSERVED for the claim; the FORMS count is what makes it INERT. Related: H-253 (`succeed` forms 0 while the throne is held), H-252 (the refusing clause is unread), H-206 (no natural deaths, so vacancies are rare), H-230 (the heir hears the vacancy)."
+    source:    "premise-check run, 2026-11-07, slice S1 seats of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a body has offices, a person is given one, holds it for a term, leaves it, and a successor takes it [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-290
+    tier:      1
+    hole:      "NO COMPUTED ACT DECLARES A TERM FOR A SEAT, AND A MALFORMED TERM ENDS THE SEASON INSTEAD OF REFUSING (premise-check, seats). A term given to `confer` bounds the tenure correctly when hand-built (terms 1, 2 and 3 end on the date with a citing `tenure.closed`; the untermed control stays live), but nothing outside the effect reads the term key, so no seat filled by a computed act is ever term-limited. A hand-built term of 0, -1, the string '2', True or 1.5 raises `InstrumentDefect` out of the fold rather than emitting `confer.refused`."
+    kind:      "ABSENT_RULE"
+    owner:     "`engine/season/loop/effects_governance.py` (`_declared_term`, `_eff_confer`); `engine/season/loop/predicates.py` (`_req_confer`); `engine/season/offices.yaml` (a term source on the office row)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "term-limited seats in play, and a refusal where a defect now stops the run"
+    cite:      "MEASURED by the S1 agent on the shared test world with hand-built acts only (EXECUTES depth); the malformed-term raise is not reachable from a computed act. Not re-run by the author. Related: H-159 (the `oblige` term, a different term)."
+    source:    "premise-check run, 2026-11-07, slice S1 seats of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a body has offices, a person is given one, holds it for a term, leaves it, and a successor takes it [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-291
+    tier:      1
+    hole:      "A HAND-BUILT `establish` ON AN OVERLAY KEY SKIPS THE PURVIEW CHECK (premise-check, seats). An `establish` by a duke of another body, at a seat under a different duke, was admitted when it carried an overlay key; the computed shape refuses the same act. Only a hand-built act reaches the overlay arm, so this is an edge, not a path a person takes."
+    kind:      "RULING"
+    owner:     "`engine/season/loop/predicates.py` (`_req_establish`, the overlay-key arm); `engine/season/queries/world_q.py` (`founds_over`)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "one purview rule for every arm of `establish`"
+    cite:      "MEASURED by the S1 agent (EXECUTES, hand-built); not re-run by the author. Related: H-144 (clause 5 asks purview only when the office is occupied; the founding half is ruled intended)."
+    source:    "premise-check run, 2026-11-07, slice S1 seats of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a body has offices, a person is given one, holds it for a term, leaves it, and a successor takes it [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-292
+    tier:      1
+    hole:      "AN ELECTED OR ANNEXED SEAT IS FILLED BY A PLAIN `confer` DECREE, EXACTLY AS AN APPOINTED ONE (premise-check, seats). The three conferral bases are not told apart in play: for all three a decree by the seat's authority fills it identically. 8 of the 34 seats in realm seed 0 say `elected`. An election that a ruler can settle by decree is an appointment under another name."
+    kind:      "ABSENT_RULE"
+    owner:     "`engine/season/offices.yaml` (`conferral`); `engine/season/loop/predicates.py` (`_req_confer`); `engine/season/state/gate.py` (`may_fill`)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "an `elected` seat that is filled by something other than the ruler's say-so, or a ruling that it is not"
+    cite:      "MEASURED by the S1 agent (all three bases filled by the same plain `confer`); the count of 8 of 34 is the agent's reading of the realm's offices. Not re-run by the author."
+    source:    "premise-check run, 2026-11-07, slice S1 seats of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a body has offices, a person is given one, holds it for a term, leaves it, and a successor takes it [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-293
+    tier:      1
+    hole:      "AN ARRESTED PERSON IS STOPPED FROM TRAVELLING AND NOTHING ELSE (premise-check, removal). After a successful `arrest`, the held Duke's `move` gives `travel.blocked`, but `issue`, `convene`, `dispatch` and `speak` all execute exactly as for a free man, and `move` is still offered to him. The custody edge is read only by `move`, `migrate` and the army-side selection. A prisoner who still rules from his cell is not held in the ordinary sense of the word."
+    kind:      "MECHANISM"
+    owner:     "`engine/season/loop/effects_migration.py` (`_eff_move`, `_eff_migrate`); `engine/season/queries/world_q.py` (`restrained`); `engine/season/loop/sides.py`; `engine/season/decision/options.py` (what a held person is offered)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "custody that costs a ruler his rule, or a ruling that custody is travel-only"
+    cite:      "RE-RAN by the author on the shared test world (hand-built acts, EXECUTES): free Duke and arrested Duke both execute `issue`, `convene`, `dispatch` and `speak`; only `move` differs. The arrested Duke's offered verbs still include `move` and `issue`. Pardon by the king through the issuing seat then restores travel. Related: H-231 (arrest receipts name no one; custody is not re-checked), H-257 (`fight` on a detained party), H-232 (`pardon` and `arrest` form and never execute)."
+    source:    "premise-check run, 2026-11-07, slice S2 removal of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a ruler can strip a post, seize a holding, lock a person up and forgive [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-294
+    tier:      1
+    hole:      "A REVOKE-BAN DOES NOT REACH THE SEATS THE BANNED MAN ALREADY HOLDS (premise-check, removal). When the king revokes an appointed seat, a ban opens on the holder, but it refuses only new `confer`, `oblige` and claims. The banned Duke still held `off_reeve` and `issue` through it executed (`dispensation.issued`), identically to the unbanned control. The ban is also called permanent yet is pardonable only by the revoker's own bench seat, and of 7 realm seats that grant `revoke`, 4 also grant `determine`."
+    kind:      "RULING"
+    owner:     "`engine/season/loop/effects_governance.py` (`_eff_revoke`); `engine/season/state/gate.py`; `engine/season/loop/predicates.py` (the ban arm)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a ban that costs a man his other offices, or a ruling that it costs only new ones"
+    cite:      "MEASURED by the S2 agent (hand-built, EXECUTES; control: same act unbanned); the 4-of-7 count is the agent's reading of the realm's offices. Not re-run by the author. Related: H-217 (the `succession` arrangement is unseeded), H-259 (`revoke` acts on tenures only)."
+    source:    "premise-check run, 2026-11-07, slice S2 removal of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a ruler can strip a post, seize a holding, lock a person up and forgive [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-295
+    tier:      1
+    hole:      "`seize` TAKES A RECORD, OR A TOWN AFTER A WAR, BUT NOT A VASSAL'S HOLDING IN PEACE, AND THE DISPOSSESSED IS NOT TOLD (premise-check, removal). A Record is moved in one write (one live holder before and after, `record.seized`). A settlement is seized only by an occupying army: a hearth with no army gives `seize.refused`, an occupied town gives `rung.seized`. A ruler's confiscation of land from a same-faction vassal therefore does not exist; the nearest act is `revoke` of the office, which leaves the holding. The dispossessed man holds no grudge afterwards (no stance rows) and hears nothing. A refusal on any of revoke, arrest or seize records no reason (`observed` is empty)."
+    kind:      "RULING"
+    owner:     "`engine/season/loop/effects_information.py` (`_eff_seize`, `_seize_rung`); `engine/season/state/gate.py` (the seize clause); `engine/season/loop/witness.py`"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a ruler who can take land by authority, or a ruling that only war does"
+    cite:      "MEASURED by the S2 agent (hand-built, EXECUTES; plus the existing occupied-town tests, 4 passed); the author did not re-run it. Seized attempts in the realm: 1 to 10 a run, all refused. Related: H-186 (insurgency), H-252 and H-254 (refusal clause unread)."
+    source:    "premise-check run, 2026-11-07, slice S2 removal of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a ruler can strip a post, seize a holding, lock a person up and forgive [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-296
+    tier:      1
+    hole:      "WHEN TWO EQUALLY MATCHED SIDES CONTEST AN ARREST, THE ARRESTER WINS 20% AS WATCHMAN AND 29% WITH THE ROLES SWAPPED (premise-check, removal). With equal default sides, n=120 each way, the result is outside 50% +/- 9 and differs by which side holds which role. A tie going to the resister may explain part. Left as a measurement; no cause is claimed. [INTENT UNDETERMINED]"
+    kind:      "MECHANISM"
+    owner:     "`engine/season/verb_table.yaml` (`arrest` row, its contest); `engine/season/loop/resolve.py`; `engine/season/seam/ladder.py` (`degree_of`)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "an arrest whose odds follow the two sides' strength and not their seat"
+    cite:      "MEASURED by the S2 agent, n=120 per arm, band 50% +/- 9; the author did not re-run it. Not a balance verdict; tuned values are Jordan's. Related: H-98 and H-164 (the contest's sides). The cause is probably the one H-288 (main) measures for the social roll (one party rolls against a halved score), which this row does not test."
+    source:    "premise-check run, 2026-11-07, slice S2 removal of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a ruler can strip a post, seize a holding, lock a person up and forgive [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-297
+    tier:      1
+    hole:      "`convene` SUMMONS NOBODY AND ACCEPTS A PAST DATE (premise-check, orders; reconciles with H-278 and H-279). Those rows record that `convene` asks no purview over the venue and that a ruling needs no sitting. This slice saw the same purview gap on the ladder fixture (a hearth head convened the realm and the date fired), and adds what they do not say: no attendee is summoned or expected, so a fired sitting has no one at it by construction; a hand-built date earlier than now is accepted and never fires; and over 2 seeds x 8 seasons of the ladder fixture there were 46 and 50 convenings, about 40 empty docket slots and 0 determinations, which agrees with H-279's one filled slot of 41 in the realm."
+    kind:      "MECHANISM"
+    owner:     "`engine/season/loop/effects_governance.py` (`_eff_convene`); `engine/season/loop/calendar.py` (the date and the docket slot it forms); `engine/season/loop/predicates.py` (a purview check on the venue)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a sitting whose summoned persons are named, and a convener who has standing over the venue"
+    cite:      "MEASURED by the S3 agent at fires depth (ladder fixture, 2 seeds x 8 seasons) and EXECUTES depth for the hearth-head and past-date cases; the author re-ran the ladder fixture for 3 seeds x 8 seasons and saw `date.scheduled` and `date.fired` but did not count the empty slots. Related: H-278 (purview over the venue), H-279 (a ruling does not need a sitting), H-32 (what a sitting decides), H-163 (the docket to determination chain)."
+    source:    "premise-check run, 2026-11-07, slice S3 orders of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: an officer issues an order and those beneath it receive it, comply or defy, and what follows shows [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-298
+    tier:      1
+    hole:      "`oblige` BINDS ONLY THE ACTOR, WHICH IS NOT WHAT THE WORD MEANS (premise-check, orders). An officer who `oblige`s a subordinate obliges himself: any `to` operand is ignored and the edge is the actor's own, lapsing after 4 seasons (`tenure.closed`). Realm fires: 48 and 44 executions in seeds 1 and 2, 0 formed in seed 0. In ordinary English to oblige is to bind another; the act is closer to taking up a duty."
+    kind:      "NAME"
+    owner:     "`engine/season/verb_table.yaml` (`oblige` row); `engine/season/loop/effects_governance.py` (`_eff_oblige`); `engine/season/loop/predicates.py` (`_req_oblige`)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a verb whose name matches who it binds"
+    cite:      "MEASURED by the S3 agent at EXECUTES depth and over 3 realm seeds at 4 seasons; not re-run by the author. A rename moves `World.content_hash()` for any world whose log uses the kind, which a fix must declare. Related: H-173 (a sentence and a job are the same `oblige` edge), H-159 (its term)."
+    source:    "premise-check run, 2026-11-07, slice S3 orders of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: an officer issues an order and those beneath it receive it, comply or defy, and what follows shows [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-299
+    tier:      1
+    hole:      "A PETITION'S ADDRESSEE LEARNS NOTHING, NOTHING RETURNS, AND A PETITION CAN GO DOWNWARD (premise-check, orders; reconciles with H-280). H-280 measures that every computed petition is addressed to the person it concerns and reaches a docket only by its petitioner's `carry`. This slice adds the other half of the premise: the person addressed is told nothing and no answer comes back to the petitioner, and a realm head can petition a person below him, so the direction of the word is not enforced."
+    kind:      "ABSENT_RULE"
+    owner:     "`engine/season/loop/effects_information.py` (`_eff_petition`, `_eff_carry`); `engine/season/verb_table.yaml` (`petition`, `carry`)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a petition that has an addressee above the petitioner and an answer that comes back"
+    cite:      "MEASURED by the S3 agent at EXECUTES depth on the ladder fixture; not re-run by the author. Related: H-280 (who a computed petition is addressed to), H-203 (no writ reaches the person who would act on it), H-168."
+    source:    "premise-check run, 2026-11-07, slice S3 orders of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: an officer issues an order and those beneath it receive it, comply or defy, and what follows shows [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-300
+    tier:      1
+    hole:      "`give` OF A WRIT IS OFFERED TO ADDRESSEES WHO ARE NOT WHERE THE ISSUER IS (premise-check, orders). In realm seed 0, 41 of 42 attempted `give`s of a writ were refused because the receiver was not co-located. The only way a writ reaches its addressee is `give`, so formation spends scenes on a delivery that cannot happen. Whole-run delivery: 0 `record.given` in three ladder fixture seeds at 8 seasons, 1 and 5 in two realm seeds at 4 seasons, so the writs minted (18, 18, 2; 52, 20) mostly stay with the issuer."
+    kind:      "WIRING"
+    owner:     "`engine/season/decision/options.py` (formation of `give`); `engine/season/queries/world_q.py` (`writs_held`); `engine/season/loop/effects_information.py` (`_eff_give`)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a delivery plan, or `give` offered only where the receiver is present"
+    cite:      "MEASURED by the S3 agent (41 of 42) and RE-RAN by the author for the whole-run counts above (shipped chooser, no hand in it; each of the 20 writs in ladder seed 0 had one live holder). Related: H-203 (the writ-to-addressee mint refused, ED-IN-0292), H-229 (rung `give`), H-44 (comply on a petition refused)."
+    source:    "premise-check run, 2026-11-07, slice S3 orders of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: an officer issues an order and those beneath it receive it, comply or defy, and what follows shows [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-301
+    tier:      1
+    hole:      "`determine` ROLLS A DEFAULT JUDGE POOL AGAINST A FIXED OBSTACLE, AND A MATTER LEFT UNDETERMINED CAN ONLY END IN CONVICTION (premise-check, cases; reconciles with H-287, H-288 and H-162). H-287 and H-288 measure the social roll in general: standing does not reach it and identical parties are not even. This slice measures it for `determine`: the verb has no capability row, so every judge rolls the default pool 2 against obstacle 2, and with a judge of nine and a party of zero, and the sides swapped, the Failure share was identical to the last draw (n=400 per arm, band 0.05), while a positive control (pool default 4) moved Failure from 0.735 to 0.440. Partial, Success and Overwhelming open the same `oblige` edge, term 4, for the party; only the judge's own pursuits move (0, 1x, 2x). A failed draw leaves the matter docketed, and re-hearing until a non-Failure draw bound the party in 400 of 400 trials (mean 4.0 hearings, max 21), a measurement of H-162's missing acquittal path."
+    kind:      "MECHANISM"
+    owner:     "`engine/season/loop/effects_information.py` (`_eff_determine`); `engine/season/rosters.yaml` (`verb_capability`, which has no `determine` row) and `engine/season/data/rosters.py` (`VERB_CAPABILITY`); `engine/season/seam/wrappers/sigma.py` (`_opposition_of`); `engine/season/queries/person_q.py` (`consequence_pursuits`)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a hearing whose result depends on who is judging and who is judged, and one that can go the other way"
+    cite:      "MEASURED by the S4 agent (n=400 per arm, controls named); the degree table RE-RAN by the author (Failure leaves the matter docketed with no edge; Partial, Success and Overwhelming give the same edge). The 400-of-400 count and the swap result were not re-run by the author. Related, and already registered: H-162 (no acquittal path; `Tenure.degree` has no reader), H-126 (the judge's pool is a fixture), H-287 and H-288 (the roll in general), H-163 (the docket to determination chain: 10 `determine` attempts, 1 executed, over 3 realm seeds x 2 seasons)."
+    source:    "premise-check run, 2026-11-07, slice S4 cases of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a matter is brought to the seat that can judge it, the holder determines it and the ruling changes the world [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-302
+    tier:      1
+    hole:      "A DOCKET ITEM NAMES NO SEAT, A SELF-CASE BLOCKS ITS OWN MATTER, AND A CASE WHOSE SEAT IS VACATED OR WHOSE PARTY IS REMOVED PASSES WITHOUT AN EVENT (premise-check, cases; reconciles with H-277). The docket is one list; an item carries a date, a matter, an arrangement and a petition, and the hearing seat is found only at `determine`. H-277 records that a seat-holder can open a case on himself and a later ruling by another judge can bind him. This slice adds that the Duke's own self-case makes `determine` refuse on the bench conjunct for him, and the item then blocks a second `open_case` on that matter. A case whose seat is vacated, or whose party is removed, sits for at least 6 seasons (observed) with no event, until a new holder hears it."
+    kind:      "ABSENT_RULE"
+    owner:     "`engine/season/loop/effects_information.py` (`_docket_item`, `_eff_open_case`); `engine/season/queries/world_q.py` (`docketed`, `docketed_under`); `engine/season/loop/calendar.py`"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a docket that records where a matter is to be heard, and a case that does not pass silently"
+    cite:      "MEASURED by the S4 agent (hand-built, EXECUTES; 6 empty seasons for the vacated seat, 3 seasons for a dead party); not re-run by the author. CR-55 (the lapse) is planned work and not a hole. Related: H-277 (a seat-holder opens a case on himself), H-52, H-161."
+    source:    "premise-check run, 2026-11-07, slice S4 cases of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a matter is brought to the seat that can judge it, the holder determines it and the ruling changes the world [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-303
+    tier:      1
+    hole:      "A LARDER WITH A LITTLE GRAIN IN IT FEEDS WORSE THAN AN EMPTY ONE (premise-check, larder). The draw walks up the ladder only when the home store holds none of the kind, and a remainder is not walked on. With 1 grain at the home and 1000 above, a cohort asking 6 takes 1 and is 5 short; with none at home it takes all 6 from above. The module's own docstring states the rule (ED-IN-0246 item 3a, ED-IN-0255); no safeguard against this is stated."
+    kind:      "RULING"
+    owner:     "`modules/settlements/larder.py` (`larder_draw`, the walk and `take = min(want, held)`); `engine/season/queries/world_q.py` (`larder_input`)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a hungry cohort that is fed from above when its own store runs short, or a ruling that it is not"
+    cite:      "RE-RAN by the author with a direct call to `larder_draw` on a one-cohort input (home 0 gives take 6 from the town; home 1 gives take 1 from the hearth, home 5 gives 5, home 6 gives 6). Reachable in play only once a rung above holds stock while a home is partly drained, which is not shown to coincide in the realm. Related: H-211, H-160."
+    source:    "premise-check run, 2026-11-07, slice S5 larder of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a settlement feeds its people from what it produces and stores, and hunger hurts until food arrives [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-304
+    tier:      1
+    hole:      "A STARVING COHORT RESTORES ITS BODY WHOLE BY RESTING, WITH NO FOOD EATEN (premise-check, larder). After a season in which every home larder is empty, `tend` on the cohort raises its body back to 1000. In build_realm seasons 37 of 37 cohorts were short at season 0 and 37 and 38 `body.tended` events followed in two seeds at 4 seasons; the empty-larder cohort in the scarce fixture tends itself in 6 of 8 seasons and is alive at 8, where the no-act control dies at tick 4. Hunger therefore costs nothing durable. The reading is pinned by a named test (`test_rem52s_fall_is_tended_whole_the_same_season`)."
+    kind:      "MECHANISM"
+    owner:     "`engine/season/loop/effects_combat.py` (`_eff_tend`); `modules/settlements/subsist.py` (`subsist`); `engine/season/harness/scarce.py`"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "hunger that stays until food arrives, or a ruling that tending cures it (CP-T10-04 `tend_share` is the planned shape)"
+    cite:      "RE-RAN by the author: the scarce-fixture tend probe (body 1000 at ticks 1, 2, 4, 5 and 6 with the stock at zero, 700 at tick 3 with no tend) and the whole-run `body.tended` counts above (37 and 38). The fixture is not canon. Related: H-211 (a body only falls, so recovery is silent), H-160 (a shortfall reaches somebody only in a built world), H-242."
+    source:    "premise-check run, 2026-11-07, slice S5 larder of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a settlement feeds its people from what it produces and stores, and hunger hurts until food arrives [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-305
+    tier:      1
+    hole:      "BODY LOSS FROM HUNGER SCALES WITH THE COHORT'S HEADCOUNT (premise-check, larder). The loss is `body_step` times the units short, and a cohort's want is its weight times the kind's weight, so at the same half-ration weight 2 loses 30, weight 10 loses 150, weight 20 loses 300 and weight 100 dies in one season. Latent: every shipped cohort has weight 2 (37 of 37). A half-fed crowd should not be hurt more per person than a half-fed family."
+    kind:      "MECHANISM"
+    owner:     "`modules/settlements/subsist.py` (`subsist`, the `lost` line); `engine/season/cohorts.yaml`"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "per-head hunger loss, so a larger cohort is not harmed more at the same ration"
+    cite:      "READ BY THE AUTHOR in `subsist` (loss is `body_step x sum(short units)` and short units come from `want = weight x Person.weight`) and MEASURED by the S5 agent at weights 2, 10, 20 and 100; the sweep was not re-run by the author. Related: H-170 (what a cohort stands for), H-171."
+    source:    "premise-check run, 2026-11-07, slice S5 larder of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a settlement feeds its people from what it produces and stores, and hunger hurts until food arrives [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-306
+    tier:      1
+    hole:      "A NEGATIVE AMOUNT ON `transfer`, `exchange` OR `requisition` REVERSES THE DIRECTION OF THE MOVE (premise-check, larder). A `transfer` of -5 gave `transfer.made` with the giver's granary rising 60 to 65 and the receiver's falling, and passed the stores precondition; `exchange` give -4 and `requisition` -5 do the same. Stores stay conserved and none goes negative, so the harness does not notice. Not reachable from a computed act, whose operands come from fixtures and claims; amount 0 and amounts above the store are refused."
+    kind:      "ABSENT_RULE"
+    owner:     "`engine/season/loop/effects_economy.py` (`_shift`, `_eff_transfer`, `_eff_exchange`); `engine/season/loop/effects_governance.py` (`_eff_requisition`); the rows' `scalar_threshold` conjuncts"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "an amount that cannot be negative, so a giver cannot take"
+    cite:      "RE-RAN by the author (hand-built acts on the scarce fixture, EXECUTES only; amounts -5, 0, 1, 5, 60, 61 and 1000000; `requisition` -5 gives `requisition.taken`). Related: H-94 (the open operand values of `transfer`)."
+    source:    "premise-check run, 2026-11-07, slice S5 larder of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a settlement feeds its people from what it produces and stores, and hunger hurts until food arrives [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-307
+    tier:      1
+    hole:      "HOUSING CAPACITY IGNORES THE CONDITION OF THE DWELLINGS, AND NOTHING HAPPENS TO THOSE WHO EXCEED IT (premise-check, larder and standing). Three dwellings at condition 0 and at condition 1000 both give capacity 3; a dwelling at condition 0 adds a place (cap 9 to 10 on a hand-set proxy). The authored realm starts over capacity (`b_s_001_court` pop 8 against capacity 1, `set_s_001` 12 against 9) with no eviction, and a population of 50 against capacity 1 persists with no consequence. Capacity gates `migrate` in and nowhere else."
+    kind:      "ABSENT_RULE"
+    owner:     "`engine/season/queries/world_q.py` (`capacity`, `has_room`); `modules/settlements/housing.py`; `engine/season/loop/effects_migration.py` (`_eff_migrate`)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a roofless town that is crowded out, and a ruin that houses no one"
+    cite:      "MEASURED by the S5 and S6 agents (season-scale probes; the condition-0 case on a hand-set proxy); not re-run by the author. Related: H-167 (the capacity floor), H-168 (`migrate` and capacity), H-170."
+    source:    "premise-check run, 2026-11-07, slice S5 larder and S6 standing of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a settlement feeds its people from what it produces and stores, and hunger hurts until food arrives [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-308
+    tier:      1
+    hole:      "FORTIFICATION IS A STEP, NOT A LEVEL, AND SABOTAGE AND RAZING IGNORE IT (premise-check, standing). `fortification` returns an ordered 0 to 1 value, but the territory's terrain row is WALLS for any value above 0: a garrison at 0.001 gives the defender the whole +3 that one at 1.0 does. Module scale, 400 trials, 500 troops a side: attacker wins 198 at level 0 and 129 at every level from 0.01 to 1.0. `sabotage` takes a sole present hand from garrison 1000, 500, 100 or 1 to 0 in one act, and `raze` also ignores it. A walled town with no defenders is walked into (`field.unopposed`). At season scale the side weights are hand-planted and the same step appears."
+    kind:      "MECHANISM"
+    owner:     "`modules/mass_battle/terrain.py` (`terrain_row_for_territory`); `engine/season/seam/wrappers/mass_battle.py`; `modules/settlements/fortification.py` (`fortification`); `engine/season/loop/effects_economy.py` (`_eff_sabotage`); `engine/season/loop/effects_founding.py` (`_eff_raze`)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a fortification whose strength changes the cost of taking or ruining it, or a ruling that walls are binary"
+    cite:      "RE-RAN by the author: `terrain_row_for_territory` on a known territory gives open_flat at 0 and walls at 0.001, 0.5 and 1.0, and the terrain tests pass (51). The 198 and 129 counts, the sabotage sweep and the unopposed march are the S6 agent's and were not re-run. H-150's text predates the wiring (it says nothing calls the value); this row names what the wiring now does. Related: H-150, H-228."
+    source:    "premise-check run, 2026-11-07, slice S6 standing of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a settlement is founded, built up, fortified, razed, and people move between settlements [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
+  - id:        H-309
+    tier:      1
+    hole:      "A SETTLEMENT-SEAT HOLDER WHO MIGRATES AWAY KEEPS THE SEAT (premise-check, standing). `migrate` closes only the migrant's `contain` and `reside` edges, so an office over the settlement he has left stays his; on the ladder fixture the steward moved from one settlement to another and kept both seats. [INTENT UNDETERMINED] Whether absence should vacate an office is a design question, not a gate bug."
+    kind:      "RULING"
+    owner:     "`engine/season/loop/effects_migration.py` (`_eff_migrate`, `_relocate`); `engine/season/state/gate.py` (`sits_over`)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "an office whose holder lives elsewhere either losing it or being counted as absent, or a ruling that it stays"
+    cite:      "MEASURED by the S6 agent on the ladder fixture (`set_s_001` to `set_s_002`: population 12 to 11 and 5 to 6, total residents 120 before and after); not re-run by the author. Related: H-140 (a move to the mover's own location), H-168 (`migrate` executes only from hand-built acts)."
+    source:    "premise-check run, 2026-11-07, slice S6 standing of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a settlement is founded, built up, fortified, razed, and people move between settlements [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
