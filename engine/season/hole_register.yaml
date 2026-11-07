@@ -5386,7 +5386,7 @@ rows:
     tier:      1
     hole:      "WHETHER A FLOW A PERSON HOLDS OPEN IS AMONG HIS OCCASIONS (v11 CR-78, `strife-00` §5, the stamp). Without it a person who knows of a rising at his own settlement chooses exactly as if he did not: `flows_known` had no consumer in the loop, so flows conditioned nothing (R2). With it, `questions_for` stamps the rungs, persons and offices each open strand he does not read concluded names onto the question he answers, as existing classes, so verbs form on them and each is chosen by his own convictions. Not stamped: `Strand.rung` (computed from the live home of every person a strand names, CR-77's stated limit, and the realm root for a realm-wide strand)"
     kind:      "RULING"
-    owner:     "`engine/season/queries/world_q.py::flow_stakes` (the term) and `questions_for` (the stamp site); the closed set is `FLOW_STAMP_CLASSES` (Rung, Person, Office)"
+    owner:     "`engine/season/queries/world_q.py::flow_stakes` (the term) and `questions_for` (the stamp site); the closed set is `FLOW_STAKE_CLASSES` (Rung, Person, Office)"
     grade:     "assumption"
     default:   "True -- SHIPPED at CR-78 commit (2), a declared hash mover [ASSUMPTION; medium; Jordan to correct; revert: ship off]: made because the strife guard (three seasons over seeds 0-4 and 5-9, the off arm reaching at least two distinct terminal codes) and HR-9 controls (2) and (4) held on against off, with A3 cross-checked. False is the control and the revert, the stamp as it stood before CR-78, byte-identical"
     site:      "Fixtures stamp_flow_stakes, read by `engine/season/queries/world_q.py::questions_for` (the `added =` splice)"

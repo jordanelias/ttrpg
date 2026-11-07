@@ -4029,7 +4029,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # forms on them, reading no other person's true body.
     # v11 CR-78 (`strife-00` §5, the stamp; [ASSUMPTION; medium; Jordan to correct; revert: ship off]): AND, APPENDED
     # LAST, WHAT IS AT STAKE IN THE FLOWS HE HOLDS OPEN (`flow_stakes`: the rungs, persons and offices each open
-    # strand names), as the classes `World.class_of` gives them within `FLOW_STAMP_CLASSES` -- no `Flow` class, and
+    # strand names), as the classes `World.class_of` gives them within `FLOW_STAKE_CLASSES` -- no `Flow` class, and
     # no chooser reads a flow's opening kind or last move. Read only when `Fixtures stamp_flow_stakes` is on (it
     # SHIPS ON, H-274; off, the output is byte-identical). "Never twice" is `_stamped`'s dedup.
     told = ledger_names(p.ledger)
@@ -4522,7 +4522,7 @@ def practice(w: World, p: Person, verb: str) -> int:
 
 from ..data import affiliations as _aff
 from .person_q import ABOUT_KEYS
-from ..data.rosters import FOREIGN_FACTION_IDS, RECORD_KIND_KEYS, STRIFE_KINDS
+from ..data.rosters import FLOW_STAKE_CLASSES, FOREIGN_FACTION_IDS, RECORD_KIND_KEYS, STRIFE_KINDS
 from ..state.containment import home_map
 from ..state.gate import PERSON_DIED
 
@@ -5279,15 +5279,7 @@ def concluded_known(w: World, p: Person, strand: Strand, rd: Optional[_StrifeRea
     return _concluded(strand, lambda: open_referents_known(w, p, strand.referents, rd))
 
 
-#: v11 CR-78 (`strife-00` §5, the stamp): THE CLASSES A FLOW'S STAKE MAY BE STAMPED AS -- the rungs, persons and
-#: offices a strand names, each a member of the closed referent roster (`rosters.yaml: referent_classes`). Any other
-#: class (the war-context `Enemy`, which the `fight` decline reads as licence, so a flow a person knows of must never
-#: by itself make another man his enemy; a Record, Site or Proposition; none, for a custody edge's Tenure id or an id
-#: the World does not hold) is REFUSED: left unstamped by `_of_stamped_class`, the one class test. No `Flow` class.
-FLOW_STAMP_CLASSES = frozenset({"Rung", "Person", "Office"})
-
-
-def flow_stakes(w: World, p: Person, classes: frozenset = FLOW_STAMP_CLASSES) -> tuple:
+def flow_stakes(w: World, p: Person, classes: frozenset = FLOW_STAKE_CLASSES) -> tuple:
     """WHAT IS AT STAKE IN THE FLOWS `p` HOLDS OPEN (v11 CR-78, `strife-00` §5 "the stamp" [ASSUMPTION; medium;
     Jordan to correct; revert: ship off, `Fixtures stamp_flow_stakes`]), as ids `questions_for` stamps onto the
     question he answers (`_stamped`), each as the class `World.class_of` gives it. For each strand of
@@ -5296,7 +5288,7 @@ def flow_stakes(w: World, p: Person, classes: frozenset = FLOW_STAMP_CLASSES) ->
     its referents and parties sorted by id: the rungs, persons and offices among them. Never twice (the first
     kept); never `p` himself (a stake he is is no occasion to act on himself: `detainees_held`' and
     `enemies_heard`' own exclusion [ASSUMPTION; medium; Jordan to correct; revert: keep him]). Each id meets
-    `_of_stamped_class(w, ..., classes)`: a class outside `classes` (default `FLOW_STAMP_CLASSES`) is refused, and
+    `_of_stamped_class(w, ..., classes)`: a class outside `classes` (default `FLOW_STAKE_CLASSES`, `rosters.yaml: flow_stake_classes`) is refused, and
     so is the writ skip a question's own referent meets. `Strand.rung` is NOT stamped: it is computed from the
     live home of every person a strand names (CR-77's stated limit, above `flows_known`), so stamping it would
     hand a person the place where another man lives now, and a realm-wide strand's rung is the realm root.

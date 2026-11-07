@@ -922,7 +922,7 @@ def test_cr78_a_person_aware_of_a_rising_at_his_settlement_finds_that_rung_and_i
 def test_cr78_a_stake_of_a_class_outside_the_closed_set_is_refused(monkeypatch):
     from engine.season.data.rosters import REFERENT_CLASSES
     from engine.season.data.verbs import ENEMY_CLASS
-    assert W.FLOW_STAMP_CLASSES < REFERENT_CLASSES and ENEMY_CLASS not in W.FLOW_STAMP_CLASSES
+    assert W.FLOW_STAKE_CLASSES < REFERENT_CLASSES and ENEMY_CLASS not in W.FLOW_STAKE_CLASSES
     assert "Flow" not in REFERENT_CLASSES                             # no `Flow` class exists to be stamped
     w = _rising()
     p = w.persons["p_low"]
@@ -984,7 +984,7 @@ def test_cr78_strand_rung_is_not_a_source_of_stakes(monkeypatch):
 def test_cr78_the_closed_set_stamps_an_office_and_refuses_a_record_a_strand_names():
     """The exclusions play can reach (`class_of` answers Person, Rung, Office, Site, Record or Proposition): an Office
     a strand names is a stake; a Record it names is not, though `class_of` knows it, so a class added to or removed
-    from `FLOW_STAMP_CLASSES` is seen here."""
+    from `FLOW_STAKE_CLASSES` is seen here."""
     w = _world()
     p = w.persons["p_low"]
     w.records["rec_1"] = Record("rec_1", "S", "petition", subject_matter={"terms": "S", "to": "p_high", "from": "S"})
@@ -993,4 +993,4 @@ def test_cr78_the_closed_set_stamps_an_office_and_refuses_a_record_a_strand_name
     assert {"off_duke", "rec_1"} <= named, named                       # the strands name both ...
     assert w.class_of("off_duke") == "Office" and w.class_of("rec_1") == "Record"
     assert W.flow_stakes(w, p) == ("off_duke",), W.flow_stakes(w, p)  # ... and only the Office is a stake
-    assert "rec_1" in W.flow_stakes(w, p, classes=W.FLOW_STAMP_CLASSES | {"Record"})
+    assert "rec_1" in W.flow_stakes(w, p, classes=W.FLOW_STAKE_CLASSES | {"Record"})
