@@ -1,16 +1,16 @@
 # Efficient-coding-review — a standard to stop at, and an end point the skill cannot run past
 
-## Status: PROPOSED — decision requested from Jordan. Terminal by design: executing it deletes it (`FORK:` row, CLAUDE.md §1).
+## Status: PROPOSED — ratified on merge of its landing PR (CLAUDE.md §2, ED-1094), except §7, which is held back. Terminal by design: executing it deletes it (`FORK:` row, CLAUDE.md §1).
 
-## Date: 2026-11-07 · Lane: IN (cross-cutting) · ED: none allocated (allocated at execution, with the Layer-1 amendment, §6)
+## Date: 2026-11-07 · Lane: IN (cross-cutting) · ED: none allocated (allocated at execution, with the Layer-1 text, §6)
 
 **What this changes in `engine/season/`** (CLAUDE.md §3, `proposals/`): nothing at runtime. It proposes
-a code-economy standard *over* `engine/season/` and `modules/`, the checks that measure it, and a
-rewrite of `skills/efficient-coding-review` around that standard.
+a code-economy standard *over* `engine/season/` and `modules/`, one behaviour test (M3), and a rewrite
+of `skills/efficient-coding-review` around that standard.
 
-**Source.** One session's six questions and answers (2026-11-07), re-read in full, with every repo claim
+**Source.** One session's questions and answers (2026-11-07), re-read in full, with every repo claim
 re-opened at its locus. Four of those answers were wrong or have been overtaken since; they are marked
-**CORRECTION** below rather than silently restated.
+**CORRECTION**.
 
 ---
 
@@ -18,226 +18,243 @@ re-opened at its locus. Four of those answers were wrong or have been overtaken 
 
 The skill repeats because it has nothing to stop at. Its six lenses test whether *claims* are true;
 none measures efficiency, and a search for defects in claims has no terminal state. A review finishes
-only against a **fixed, finite, ratified standard**, measured by checks that **compute** the end state from
-the tree rather than remembering it. Three properties then make it impossible to run indefinitely:
+only against a **fixed, finite, ratified standard**. The design below adds no tool, gate, scorer or
+baseline, and four properties make it impossible to run indefinitely:
 
-- **Variant.** Every accepted fix strictly lowers a vector of violation counts, which cannot fall below
-  zero (a ranking function: Floyd, 1967).
-- **Idempotence.** An unchanged tree under an unchanged standard returns NOTHING TO DO at the first step.
-- **No growth from inside.** The skill may not add a rule; a rule changes only by Layer-1 ratification.
+- **Scope.** A run's work is only the code that changed since the last run, so it creates no queue.
+- **Order.** Every finding is collected before any repair, so no fix is ever re-reviewed.
+- **Bound.** Each violation gets one attempt per run, so a run is finite.
+- **No growth from inside.** The skill may not add a rule.
 
 The standard is Jordan's definition of efficiency: as little code as possible, extremely clear,
-organised, centralised and modular, sharpened by two questions (P8):
+organised, centralised and modular, sharpened by two questions:
 - can the exact same behaviour and outcomes be produced with less code?
 - can it be done without hard-coding values?
-
-It is written below as thirteen rules over four properties, each with a check and a threshold.
 
 **The honest limit.** Whether a shorter program with the same behaviour *exists* cannot be computed. The
 length of the shortest such program is Kolmogorov complexity, which is uncomputable, and program
 equivalence is undecidable in general (Rice). So the end point is never "the code is minimal". It is
-**"no further behaviour-preserving reduction was found, and that fact is recorded against this exact
-tree"**. Re-opening it takes a change to the tree or to the standard.
+"each violation in scope was attempted once, every accepted change preserved behaviour, and the run is
+recorded against the commit it produced". Re-opening that takes a change to the code or to the standard.
 
 ---
 
 ## 1. Findings, by premise
 
-Each premise is a question asked this session. Every finding gives its evidence and an action; an action
-marked **§n** is resolved by the proposal section of that number.
+Each premise is a question asked this session. An action marked **§n** is resolved by the proposal
+section of that number.
 
 ### P1 — "The skill can review the code base, identify issues and propose solutions"
 
 | id | finding | evidence | action |
 |---|---|---|---|
-| **F1** | **The skill does not measure efficiency, centralisation or modularity.** Its lenses are SURVEY, ACCURACY, APPLICATION, LOGIC, ALL DIRECTIONS and ACROSS MODULES. The last is a *coverage* matrix (does each idea reach each module), not a test of modularity. "Efficient" occurs only in the name and the headings. | `skills/efficient-coding-review/SKILL.md:2,20,190`; STEP 6 at `:170–186` | Rewrite it around Jordan's definition (§3, §4); move the claim-review method to a name that says what it does (§5) |
-| **F2** | It hands the structural questions elsewhere: unearned complexity and second owners to `valoria-simplify`, Layer-1 conformance to `layer-conformance`. | `SKILL.md:14–17, 64–67` | The rewrite owns Jordan's four properties; the siblings keep their own jobs, which never duplicate a check (§3) |
+| **F1** | **The skill does not measure efficiency, centralisation or modularity.** Its lenses are SURVEY, ACCURACY, APPLICATION, LOGIC, ALL DIRECTIONS and ACROSS MODULES. The last is a *coverage* matrix (does each idea reach each module), not a test of modularity. "Efficient" occurs only in the name and the headings. | `skills/efficient-coding-review/SKILL.md:2,20,190`; STEP 6 at `:170–186` | Rewrite it around Jordan's definition (§3, §4); keep the claim-review method under its own name (§5) |
+| **F2** | It hands the structural questions elsewhere: unearned complexity and second owners to `valoria-simplify`, Layer-1 conformance to `layer-conformance`. | `SKILL.md:14–17, 64–67` | The rewrite owns Jordan's four properties and reuses the siblings' instruments rather than duplicating them (§3) |
 
 ### P2 — "If it always finds something new, we loop"
 
 | id | finding | evidence | action |
 |---|---|---|---|
-| **F3** | **Root cause: no reference standard, so no terminal state.** A review can say "this is false", never "this is enough". | the lens list (F1); the verdict template at `SKILL.md:189–211` has no condition for being finished | §2 E1–E2 |
-| **F4** | **No memory between sessions, by design.** The skill writes no file. STEP 0 learns of prior review only from the commit message, the PR body and a critic pass. | `SKILL.md:61–62, 187, 223` | Compute the end point from the tree; key the judgment lens to a commit trailer (§2 E3, E5) |
-| **F5** | **Re-running it after its own fixes is the forbidden audit→fix→audit shape.** Only the request prevents it. | CLAUDE.md §0, "THE REQUEST IS THE SCOPE" | Idempotence: an unchanged tree returns NOTHING TO DO (§2 E3) |
-| **F6** | **Sampling:** non-HIGH claims are sampled, so two runs examine different claims. | `SKILL.md:84–86` | The new checks run over the whole subject, with no sampling (§3) |
-| **F7** | **No consequence floor:** any observation can become a finding. | the verdict template has no admission test | Apply CLAUDE.md §0.1 pt 5's predicate; route a candidate rule out, never adopt it (§2 E6) |
+| **F3** | **Root cause: no reference standard, so no terminal state.** A review can say "this is false", never "this is enough". | the verdict template at `SKILL.md:189–211` has no condition for being finished | §2 |
+| **F4** | **No memory between sessions, by design.** The skill writes no file. STEP 0 learns of prior review only from the commit message, the PR body and a critic pass. | `SKILL.md:61–62, 187, 224` | Record each run as a commit trailer and scope the next run from that commit (§2 E2) |
+| **F5** | **Re-running it after its own fixes is the forbidden audit→fix→audit shape.** Only the request prevents it. | CLAUDE.md §0, "THE REQUEST IS THE SCOPE" | Findings are collected before repairs; the next run starts *after* the repairs (§2 E2, E3) |
+| **F6** | **Sampling:** non-HIGH claims are sampled, so two runs examine different claims. | `SKILL.md:84–86` | Mechanical checks cover all of the run's scope, with no sampling (§3) |
+| **F7** | **No consequence floor:** any observation can become a finding. | the verdict template has no admission test | A candidate rule is routed out, never adopted (§2 E5) |
 
 ### P3 — "The skill adjudicates whether the code is efficient, centralised, modular"
 
 | id | finding | evidence | action |
 |---|---|---|---|
-| **F8** | **A standard is decided, not discovered,** so no review can supply it. Theory proves properties against a stated predicate. By Rice's theorem, no general procedure decides an arbitrary non-trivial property of programs. | — | Write each property as predicate + observable + threshold + falsifier + grade (§3) |
-| **F9** | **The repo already has a finite structural standard:** `04` PART D, graded STRUCTURAL / MECHANICAL / CONVENTION. | `architecture/meta/04_CODE_ARCHITECTURE.md:66–99, 1019–1048` | The modular and centralised rules reuse it rather than restating it (§3) |
+| **F8** | **A standard is decided, not discovered,** so no review can supply it. Theory proves properties against a stated predicate. By Rice's theorem, no general procedure decides an arbitrary non-trivial property of programs. | — | Write each property as predicate + observable + threshold + falsifier (§3) |
+| **F9** | **The repo already has a finite structural standard:** `04` PART D, graded STRUCTURAL / MECHANICAL / CONVENTION. | `architecture/meta/04_CODE_ARCHITECTURE.md:66–99` (grades), `:1019–1107` (PART D) | Reuse it rather than restating it (§3) |
 
 ### P4 — "The tests should come from software engineering practice and computer science theory"
 
 | id | finding | evidence | action |
 |---|---|---|---|
-| **F10** | Theory supplies the properties and the ways to prove them, never the threshold for one code base. PART D already restates established principles: Parnas's information hiding (1972); coupling and cohesion (Stevens, Myers and Constantine, 1974); acyclic dependencies; single source of truth (Hunt and Thomas, 1999); types that make the defect impossible to write; non-interference (Goguen and Meseguer, 1982); mutation adequacy (DeMillo, Lipton and Sayward, 1978). | PART D rows 2, 9–12, 22 | Cite the source per rule, and label every threshold that has none (§3) |
+| **F10** | Theory supplies the properties and the ways to prove them, never the threshold for one code base. PART D already restates established principles: Parnas's information hiding (1972); coupling and cohesion (Stevens, Myers and Constantine, 1974); acyclic dependencies; single source of truth (Hunt and Thomas, 1999); types that make the defect impossible to write; non-interference (Goguen and Meseguer, 1982); mutation adequacy (DeMillo, Lipton and Sayward, 1978). | PART D rows 2, 9–12, 22, 28, 38 | Cite the source per rule; adopt only thresholds a source gives (§3) |
 | **F11** | **CORRECTION** to an earlier answer: PART D row 11 ("a seat that knows its holder") was mapped to information hiding. It is a one-home-per-relation rule, a sibling of rows 10 and 12. | `04_CODE_ARCHITECTURE.md:1034–1038` | none |
 
 ### P5 — Efficiency as run time
 
 | id | finding | evidence | action |
 |---|---|---|---|
-| **F12** | **No performance instrument exists:** no timing, benchmark or memory-profile code, and no stated growth order. | `[NULL: tests/, engine/tests, engine/season/tests, tools/ searched for perf_counter, timeit, benchmark, tracemalloc, time budget; requirements.yaml and 04 for growth-order statements]` | **Out of scope:** P7 defines efficiency as code economy. Kept as a separate decision (§7) |
+| **F12** | **No performance instrument exists.** | `[NULL: no perf_counter, timeit or tracemalloc in any .py under tools/, tests/ or engine/; no growth-order statement in requirements.yaml or 04]` | **Out of scope:** P7 defines efficiency as code economy. Held back (§7) |
 
 ### P6 — Practice for minimal code, plug-in modules, GDScript, conformance, testing
 
 | id | finding | evidence | action |
 |---|---|---|---|
-| **F13** | **No type checker or import linter runs, and CI installs four packages only.** By `04` §0's own rule, every row graded "STRUCTURAL under a checker" is therefore MECHANICAL at runtime. | `git grep` for mypy, pyright, import-linter, vulture, mutmut: none in config or code; `engine/season/harness/invariants.py:19–21` (the CI package list) | **Held back** (§7): a new dependency is a decision. The rules in §3 are written to need none |
-| **F14** | **CORRECTION:** property-based testing *is* in use, as a method without the library. The invariant sweep, the dice-engine property tests and their mutation-verified predicates all run on the standard library. The earlier "not in use" was wrong in substance. | `engine/season/harness/invariants.py:1–25`; `tests/valoria/test_season_invariant_sweep.py`; `tests/valoria/test_dice_engine_properties.py` | Precedent for building every check in §3 on the standard library alone |
-| **F15** | **No test shows a module can be added without editing the loop.** | `[NULL: no such test found]` | It becomes rule M3, the falsifier for "modular" (§3) |
-| **F16** | `tools/ci_module_shape_check.py` runs report-only. It checks reach-ins into `tests/`, not the `04` §A.2 module contract. | `.github/workflows/valoria-ci.yml:246` (the `w` prefix); its docstring at `:1–30` | The module-shape rules extend this tool, so one owner holds module shape (§3, §6) |
-| **F17** | **No GDScript-subset check exists, and the GDScript claims made this session were not checked** against the docs for the ruled series (ED-GO-0002). | `[NULL: tools/]`; `skills/valoria-simplify/SKILL.md` port note | **Out of scope:** portability is not in P7's definition. Kept as a separate decision (§7) |
-| **F18** | **Precedent risk.** The repo's recursion was generated by doctrine that turned each observation into a permanent artifact, including guards on guards. Any checks proposed here must not reproduce it. | `proposals/2026-08-18-breaking-the-recursion.md` §2.1 (`:181–213`), §5.1 (`:411–437`); CLAUDE.md §0.1 pt 5 | Scope the checks to game code; show each falsifier by planting a violation and reverting it, never as a committed test of the check (§2 E7, §3) |
+| **F13** | **No type checker or import linter runs.** The jobs that run tests install `pyyaml pytest numpy pytest-xdist`; others install fewer packages. By `04` §0's own rule, every row graded "STRUCTURAL under a checker" is therefore MECHANICAL at runtime. | `.github/workflows/valoria-ci.yml:339, 421` (the four packages); `:98, 211, 476, 584` (fewer); `04:88–92` | **Held back** (§7): a new dependency is a decision |
+| **F14** | **CORRECTION:** property-based testing *is* in use, as a method without the library. The invariant sweep, the dice-engine property tests and their mutation-verified predicates all run on the standard library. The earlier "not in use" was wrong in substance. | `engine/season/harness/invariants.py:1–25`; `tests/valoria/test_season_invariant_sweep.py`; `tests/valoria/test_dice_engine_properties.py` | Precedent for standard-library probes (§3) |
+| **F15** | **No test shows a module can be added without editing the loop.** | `[NULL: no such test found]` | It becomes M3, the one committed test (§3) |
+| **F16** | `tools/ci_module_shape_check.py` runs report-only. It checks reach-ins into `tests/`, not the `04` §A.2 module contract, and has its own unit test. | `.github/workflows/valoria-ci.yml:246` (`w`); its docstring at `:1–30`; `tests/valoria/test_module_shape_check.py` (5 tests) | Not extended; module shape is checked by a probe (§3 L2) |
+| **F17** | **No GDScript-subset check exists, and the GDScript claims made this session were not checked** against the docs for the ruled series (ED-GO-0002). | `[NULL: tools/]`; `skills/valoria-simplify/SKILL.md`, the port note | Held back (§7) |
+| **F18** | **Precedent risk.** The repo's recursion was generated by doctrine that turned each observation into a permanent artifact: guards on guards, and baseline ratchets that the repo later retired. | `proposals/2026-08-18-breaking-the-recursion.md` §2.1 (`:181–213`); `.github/workflows/valoria-ci.yml:171–173, 253` (retired ratchet and baseline) | No tool, gate, baseline or test of a check (§2, §3) |
 
 ### P7 — Jordan's definition: efficiency is as little code as possible, extremely clear and organised, centralised and modular
 
 | id | finding | evidence | action |
 |---|---|---|---|
 | **F19** | Read literally, "as few lines as possible" conflicts with "extremely clear": golfed code is short and opaque. **[ASSUMPTION: clarity is the constraint and minimality the goal — minimise code without losing clarity; basis: "in an extremely clear organized manner" qualifies the minimising]** | — | Priority order in §3: clarity outranks minimality |
-| **F20** | **CORRECTION:** the line-count ratchet proposed this session ("lines grow only with behaviour") is **withdrawn**. As a CI gate it would block a split that improves clarity, contradicting F19's priority order. Size returns in §3 as N0, measured in syntax-tree nodes and ranked **last** in *V*. A clarity fix lowers a higher-ranked count, so it is accepted even when size rises; size decides only between changes that tie on everything above it. | — | §3 N0 |
-| **F21** | Two thresholds are owed: the clone size and the complexity ceiling. | — | Defaults in §3, one with a source and one labelled as a reviewer's default |
+| **F20** | **CORRECTION:** both the line-count ratchet proposed this session and the standing size score of this proposal's first draft are **withdrawn**. The ratchet would block a split that improves clarity; the score is the "composite score" `valoria-simplify` rule 5 forbids. Size enters only per change: a reduction must delete more than it adds. | `skills/valoria-simplify/SKILL.md:204` | §3, the reduction test |
+| **F21** | Thresholds: McCabe's complexity ceiling of 10 has a source. No source gives a minimum clone size, so the duplicate rule counts whole functions and needs no size threshold. | McCabe (1976); `valoria-simplify` rule 5 | §3 L1, N2 |
 
 ### P8 — "Can the exact same behaviour and outcomes be produced with less code? Without hard-coding values?"
 
 | id | finding | evidence | action |
 |---|---|---|---|
-| **F22** | **This is the right definition of minimal:** a behaviour-preserving reduction, as in refactoring, which changes structure without changing behaviour (Opdyke, 1992; Fowler, 1999). Whether a shorter equivalent exists cannot be decided (§0, the honest limit). Whether a *given* reduction preserves behaviour can be checked against an observable definition of behaviour. | — | Make behavioural equivalence a hard constraint on every fix (§2 E2); add size as N0 (§3) |
-| **F23** | **"The exact same behaviour" needs an observable definition.** A single `content_hash` on one seed can miss a change. `valoria-simplify` C4 says so, and asks for a differential run of old against new code that compares intermediate state for any change that rewrites an algorithm or deletes executing code. | `skills/valoria-simplify/SKILL.md:129` | §2 E2 defines equivalence as: the seeds the goldens already pin, the touched files' tests, and the C4 differential run for deletions and algorithm rewrites |
-| **F24** | **Hard-coding is partly guarded today, and more weakly than P8 asks.** `tools/ci_sim_fabrication_check.py` is blocking and covers `engine/season/`. It accepts a literal that carries a `# [canonical: …]` comment, so a value can still be cited *in code*. It has a recorded known gap at `modules/combat/`. CLAUDE.md §0.05 asks for more: a fact the engine uses lives in a typed artifact under `engine/engine_params/` or a single Python owner. | `tools/ci_sim_fabrication_check.py:1–25, 164–167`; `.github/workflows/valoria-ci.yml:102, 183` (`v` = blocking); CLAUDE.md §0.05 | Rule C3 (§3), added as a stricter mode of that same tool so one owner holds "literal in game code". Introducing a hard-coded value is a hard constraint, never a trade (§2 E2) |
-| **F25** | **A reduction that moves logic into data is not a reduction.** Encoding branches as YAML shrinks the Python and grows a second language: `valoria-simplify`'s "a knot moved, not loosened". Moving a *value* to its owner is right; moving *logic* to data is not. | `skills/valoria-simplify/SKILL.md` (the DISTIL list in its description) | N0 counts code; any data a change adds must be values or rows, never conditions or control flow (§3 N0) |
+| **F22** | **This is the right definition of minimal:** a behaviour-preserving reduction, as in refactoring, which changes structure without changing behaviour (Opdyke, 1992; Fowler, 1999). Whether a shorter equivalent exists cannot be decided (§0). Whether a *given* reduction preserves behaviour can be checked against an observable definition of behaviour. | — | Hard constraint H1 (§3) |
+| **F23** | **"The exact same behaviour" needs an observable definition.** A single `content_hash` on one seed can miss a change. A deletion or algorithm rewrite needs a differential run of old against new code that compares intermediate state. A run never proves code dead: dead means no reference. | `skills/valoria-simplify/SKILL.md:129` (C4), `:131` (C5) | H1 and N1 (§3) |
+| **F24** | **Hard-coding is already guarded, and the rule is already in Layer 1.** PART D row 38: "a constant invented at the keyboard … MECHANICAL + a numeric-literal scan". `tools/ci_sim_fabrication_check.py` is blocking. It accepts honest provenance tags, including `[DECLARED-DIVERGENCE]`, per Jordan's 2026-07-24 ruling. It scans numbers only, on the changeset. It has a recorded gap at `modules/combat/`, which is a PC-lane decision. A scope-wide "no hard-coded value" gate is the tree-wide guard CLAUDE.md §0.05 refuses. | `04:1067` (row 38); `tools/ci_sim_fabrication_check.py:64–76, 164–170, 515–520`; `.github/workflows/valoria-ci.yml:183` (`v`, blocking); CLAUDE.md §0.05 | H2 reuses the existing gate on each change; no new rule; the `modules/combat/` gap is held back (§3, §7) |
+| **F25** | **A reduction that moves logic or knots elsewhere is not a reduction.** Encoding branches as YAML, or moving a knot into a helper or config, leaves the reader holding the same concepts. | `skills/valoria-simplify/SKILL.md:147` ("Relocation is not reduction") | The reduction test adopts that pass condition (§3) |
+
+### Conformance with the repository's own rules (found by the adversarial pass)
+
+| id | finding | evidence | action |
+|---|---|---|---|
+| **F26** | **The first draft of this proposal conflicted with the ratified `valoria-simplify`:** a new scorer and tool, an invented threshold, a composite score, and blocking guards that code stays simple. | `skills/valoria-simplify/SKILL.md:165, 201–204` | The design adds none of these: existing checks plus throwaway probes in scratch, as `valoria-simplify` rule 4 requires (§3) |
+| **F27** | **One active plan per lane.** A multi-position build order ratified on merge would be a second IN plan beside `valoria_master_workplan_v11`. | CLAUDE.md §2; `CURRENT.md:19` | §6 lands as one change, so it is not a plan |
 
 ---
 
 ## 2. The end point — what makes a review finish
 
 **E1 · A fixed, finite, ratified standard.**
-- The rules (§3) live in Layer 1, as an amendment to `04` (§6).
-- The checks live in `tools/` (Layer-1 scripts).
-- The skill owns the method only, and copies no rule.
+- The rules (§3) live in their own Layer-1 file, `architecture/meta/04_CODE_ARCHITECTURE_part2.md`
+  (CLAUDE.md §4's sequential parts), so the file's git blob hash identifies the standard exactly.
+- The skill owns the method only and copies no rule.
 - The standard is frozen for the length of a run.
 
-**E2 · A variant that must fall.**
-- *V* is the vector of violation counts per rule, taken in the priority order of §3.
-- A fix is accepted only if *V* falls lexicographically: it reduces some rule's count without raising
-  the count of any rule ranked above it.
-- It must also meet two **hard constraints**, which are never traded against *V*:
-  1. **Same behaviour and outcomes (F22, F23).** `World.content_hash()` is unchanged on every seed the
-     goldens under `engine/tests/` and the season harness already pin; the tests covering the touched
-     files stay green (CLAUDE.md §0.4); and, for a deletion or an algorithm rewrite, a differential run
-     of old against new code compares intermediate state on those seeds (`valoria-simplify` C4).
-  2. **No value hard-coded (F24).** The fix introduces no game value as a literal in the §3 scope. A
-     value it needs is read from its owner (`engine/engine_params/` or the single Python owner).
-- A fix that moves the hash is a change to a mechanic. It is reverted and handed to `ners`.
-- *V* is a vector of natural numbers under lexicographic order, which has no infinite descending chain.
-  The repair loop therefore terminates, at *V* = 0 or at a set of **residuals** no accepted fix can
-  reduce (Floyd, 1967, termination by a well-founded ranking function).
+**E2 · Scope comes from the last run's commit.**
+- Every run ends with one line in the body of the commit that carries its repairs:
+  `Efficiency-Reviewed: <subject paths> std=<blob hash of the part2 file> attempted=<n> residual=<n>`.
+- The next run finds the newest commit `T` carrying that trailer. In a shallow clone it deepens
+  (`git fetch --unshallow`, precedent CLAUDE.md §2) until it finds `T` or history ends.
+- **NOTHING TO DO** when, for every subject path, `T:<path>` equals `HEAD:<path>` and `std` matches
+  the current file. The run stops before reading any code.
+- **Otherwise the scope** is the files changed between `T` and the run's starting `HEAD`. If the
+  standard itself changed, the whole subject is in scope once. With no `T` at all, the whole subject is
+  in scope once.
+- `T` is the commit *with* the repairs, so a run's own edits never fall inside the next run's scope.
+- **Violations outside the scope are not the run's work.** That keeps the skill from becoming a standing
+  queue (CLAUDE.md §0's test: "does this document create work for a future session?"). Jordan can still
+  ask for a whole-subject run; the request is the scope.
 
-**E3 · Idempotence: the end state is computed, not remembered.**
-- Every run ends with one commit-message trailer:
-  `Efficiency-Reviewed: <subject> tree=<git rev-parse HEAD:<path> per path> standard=<blob hash of the rule section> V=<vector> residual=<n>`.
-- The next run compares the current tree and standard hashes with the trailer. If both match, the
-  verdict is **NOTHING TO DO** and the run stops before reading any code.
-- A trailer is one line of the commit body, which the pass is already allowed (CLAUDE.md §0, "at most
-  one paragraph in the commit message"). It creates no file and no queue.
+**E3 · Findings first, then repairs, never re-read.**
+- All findings, mechanical and judgment (L4), are collected from the **starting** tree over the scope.
+- Repairs follow. No repair is reviewed again in the same run (CLAUDE.md §0) or in the next one (E2).
 
-**E4 · The baseline only shrinks.**
-- At adoption, each check records the existing violations as a baseline. CI fails only on a violation
-  above the baseline (the precedent is `PATH_SEAM_ALLOWED`, which only shrinks).
-- The skill's work is to lower the baseline.
-- A genuine exception is written into the **rule** (for example, "Godot export entry points are
-  exempt"), which is a Layer-1 edit. It is never added to a list. The baseline has no path to grow.
+**E4 · Each violation gets one attempt; each accepted change must lower the count.**
+- A repair is accepted only if it meets the hard constraints (§3) and lowers the run's vector of
+  violation counts per rule lexicographically. It must reduce some rule's count without raising the
+  count of any rule ranked above it. **This applies to judgment (L4) repairs too.**
+- Each violation gets **one** attempt per run. A failed attempt makes it a residual, reported with its
+  reason: a change to a mechanic (hand it to `ners`) or a candidate exemption (E5).
+- **Termination:** a run is bounded by the number of violations in its scope, so it is finite. The
+  lexicographic order on violation counts has no infinite descending chain (Floyd, 1967), so accepted
+  repairs also cannot cycle.
+- The vector is used only to accept or reject repairs inside one run. It has no weights and no sum, and
+  it is never reported as a grade of the code. That keeps it outside `valoria-simplify` rule 5's
+  "composite score". The conflict is named here so a reader can judge the distinction.
 
-**E5 · The judgment lens is bounded by scope.**
-- The one non-mechanical check, the newcomer clarity read (§3 L4), covers only files whose content
-  differs from the tree named in the last trailer.
-- No trailer reachable in a shallow clone: deepen it (`git fetch --unshallow`, precedent CLAUDE.md §2).
-  Never any trailer: run the read over the whole subject once, and write the first trailer.
-
-**E6 · No rule growth from inside.**
+**E5 · No rule growth from inside.**
 - An observation that violates no rule is a **candidate rule**, not a finding.
 - It goes through CLAUDE.md §0's five answer-it-first tests. A survivor becomes at most one
-  `needs_jordan: true` row.
-- The skill never adopts a rule. That keeps the standard finite, and keeps E2 and E3 meaningful.
+  `needs_jordan: true` row, and a candidate that already has a row is never raised again.
+- The skill never adopts a rule.
 
-**E7 · Falsifiers are planted and reverted, never committed.**
-- Each run plants one violation per check, confirms the check goes red, and reverts: *k* checks give *k*
-  plants, a bounded cost.
-- No test of a check is written. That is the guard-on-guard shape F18 rules out.
+**E6 · Falsifiers are planted in a worktree and never committed.**
+- For each probe, plant one violation in a worktree or scratch copy (`valoria-simplify` C2: "never the
+  working tree"), confirm the probe sees it, and discard the copy.
+- No test of a check is written.
 
-**E8 · One round** (CLAUDE.md §0), unchanged.
+**E7 · One round** (CLAUDE.md §0), unchanged.
 
 **Why this cannot run indefinitely.**
-- Within one run, the work is bounded by E2.
-- Across runs, new work can come only from a change to the tree or a ratified change to the standard.
-  Both originate outside the skill.
-- On an unchanged tree, E3 makes the second run cost one hash comparison.
+- Within one run, work is bounded by E4.
+- Across runs, work exists only where code or the standard changed since `T` (E2). Both changes
+  originate outside the skill.
+- On an unchanged tree, the second run costs one trailer lookup and one hash comparison.
 
 ---
 
-## 3. The standard (proposed Layer-1 amendment)
+## 3. The standard (proposed Layer-1 text, `04_CODE_ARCHITECTURE_part2.md`)
 
 **Scope:** `engine/season/` and `modules/`, the game code (Layer 2). Not `tools/`, `tests/` or
-`systems/`: F18 rules out pointing a standard at the repository's own apparatus.
+`systems/` (F18).
 
-**Hard constraints, outside *V*:** same behaviour and outcomes, and no value hard-coded, both as defined
-in §2 E2. A fix that moves the hash is a mechanic; it goes to `ners`.
+**Instruments.** Existing checks, plus throwaway standard-library probes run in scratch and never
+committed (`valoria-simplify` rule 4). Nothing here becomes a CI gate. CI keeps running what it already
+runs.
 
-**Rules, in priority order** (lexicographic; earlier rules dominate). Every check is standard-library
-only (F13, F14).
+**Hard constraints** (never traded against the violation counts):
 
-| # | property · rule | predicate (violation) | check | threshold | source |
+- **H1 · Same behaviour and outcomes.** All of these must hold:
+  - `World.content_hash()` is unchanged on every seed the goldens under `engine/tests/` and the season
+    harness already pin;
+  - the tests covering the touched files stay green (CLAUDE.md §0.4);
+  - every exporter's `--check` passes;
+  - for a deletion or an algorithm rewrite, a differential run of old against new code compares
+    intermediate state on those seeds (`valoria-simplify` C4).
+- **H2 · No hard-coding.** Two halves:
+  - the existing blocking `tools/ci_sim_fabrication_check.py` passes on the change's added lines
+    (PART D row 38);
+  - no value that the code read from its owner (`engine/engine_params/` or the single Python owner)
+    becomes a literal. This is checked by reading the diff.
+
+**The reduction test** (Jordan's "the same behaviour with less code"). A change offered as a reduction
+is accepted only if:
+- H1 and H2 hold;
+- it deletes more lines than it adds (`git diff --numstat`);
+- the number of places a reader must open to predict the behaviour does not rise (`valoria-simplify`
+  `:147`).
+
+**Rules, in priority order** (earlier rules dominate, per E4):
+
+| # | property · rule | violation | instrument | threshold | source |
 |---|---|---|---|---|---|
 | **1** | **MODULAR** | | | | |
-| M1 | dependencies point one way | `engine/season/` imports a module by name; a module imports another module or `engine/season` internals outside a declared seam | the existing subprocess import test, plus an `ast` import scan of `modules/` added to `ci_module_shape_check.py` | 0 above baseline | acyclic dependencies; `04` PART D row 22 |
-| M2 | modules keep no state | module-level mutable binding (list, dict or set literal, `global`) in `modules/` | `ast` scan in `ci_module_shape_check.py` | 0 above baseline | `04` §A.2; Parnas (1972) |
-| M3 | a module can be added without editing the core | a dummy module registered through `composition_roles` cannot run one seeded season unless `engine/season/` is edited | one test in `engine/season/tests/` | must pass | dependency inversion; F15 |
+| M1 | dependencies point one way | `engine/season/` imports a module by name; a module imports another module or `engine/season` internals outside a declared seam | existing: `test_importing_every_engine_module_pulls_in_no_subsystem` and the shrink-only `PATH_SEAM_ALLOWED`; a probe (`ast` import scan) for module-to-module imports | 0 in scope | acyclic dependencies; CLAUDE.md §3 (`engine/`); `04` PART D row 2 (`:1027`) |
+| M2 | modules keep no state | a module-level mutable binding (list, dict or set literal, `global`) in `modules/` | probe (`ast` scan) | 0 in scope | `04` §A.2; Parnas (1972) |
+| M3 | a module can be added without editing the core | a dummy module registered through `composition_roles` cannot run one seeded season unless `engine/season/` is edited | **the one committed test**, in `engine/season/tests/`. It asserts that the dummy's entry point **ran**, because `composition.require` resolves on demand (`engine/substrate/composition.py:43–69`) and an un-entered dummy would pass vacuously | must pass | dependency inversion; the permutation falsifier of PART D row 28 is its analogue |
 | **2** | **CENTRALISED** | | | | |
-| C1 | one owner per fact | a module-scope constant duplicated across modules; a stale export | existing: `python tools/export_sim_params.py --search`, exporters' `--check` | 0 above baseline | single source of truth (Hunt and Thomas, 1999); CLAUDE.md §0.05 |
-| C2 | one write path | a write that bypasses the write gate | existing: `04` PART D row 3 and its tests | 0 | `04` §C.2 |
-| C3 | no hard-coded game value | a numeric or string literal standing for a game fact in the §3 scope, **cited or not**. Exempt: the structural numbers `ci_sim_fabrication_check.py` already exempts, and literals inside the owner modules themselves | a stricter mode of `ci_sim_fabrication_check.py` over `engine/season/` + `modules/`, `modules/combat/` included (F24) | 0 above baseline | CLAUDE.md §0.05, §5 |
-| **3** | **CLEAR** (mechanical part) | | | | |
-| L1 | bounded complexity | a function with cyclomatic complexity > 10 | `ast` count of decision points + 1, in the new `tools/code_economy.py` | ≤ 10 | McCabe (1976) |
-| L2 | one module shape | a module departing from the `04` §A.2 layout or entry signature | `ci_module_shape_check.py` | 0 above baseline | `04` §A.2 |
+| C1 | one owner per fact | a module-scope constant duplicated across modules; a stale export | existing: `python tools/export_sim_params.py --search`; exporters' `--check` | 0 in scope | single source of truth (Hunt and Thomas, 1999); CLAUDE.md §0.05 |
+| C2 | one write path | a write that bypasses the write gate | existing: PART D row 3 and its tests | 0 | `04` §C.2 |
+| **3** | **CLEAR** | | | | |
+| L1 | bounded complexity | a function with cyclomatic complexity > 10 | probe (`ast` count of decision points + 1) | ≤ 10 | McCabe (1976) |
+| L2 | one module shape | a module departing from the `04` §A.2 layout or entry signature | probe, read against `04` §A.2 | 0 in scope | `04` §A.2 |
 | L3 | names from one source | a name that does not resolve through `references/names_index.yaml` | existing naming gate | 0 | CLAUDE.md §4 |
-| L4 | a newcomer can find things (**CONVENTION**, outside *V*) | a reader opening a changed file cold cannot find what it does and where its inputs come from | judgment, scoped by E5 | — | the current skill's SURVEY row |
+| L4 | a newcomer can find things (**CONVENTION**) | a reader opening a scoped file cold cannot find what it does and where its inputs come from | judgment, on the starting tree only (E3) | — | the current skill's SURVEY row |
 | **4** | **MINIMAL** | | | | |
-| N1 | no code that never runs | a function never entered by the tests covering the subject plus one seeded season | `python -m trace --listfuncs`, run in a single process (xdist workers would split the count), in `tools/code_economy.py` | 0 above baseline; each removal confirmed by `valoria-simplify` C4 (edit, rerun, no change) | dead-code removal; `valoria-simplify` I1 |
-| N2 | nothing written twice | identical normalised `ast` subtrees of ≥ 6 statements | `tools/code_economy.py` | 0 above baseline | **reviewer's default — no source gives a size** (`valoria-simplify` rule 5) |
-| N0 | **less code for the same behaviour** (last in *V*) | — (a quantity, not a violation): the count of syntax-tree nodes in the §3 scope. Nodes, not lines, so formatting and comments do not count. Data a change adds must be values or rows, never conditions or control flow (F25) | `tools/code_economy.py` | lower is better; never a gate; ranked last, so it never overrides clarity or structure (F20) | Opdyke (1992); Fowler (1999) |
+| N1 | no dead code | a function with no static non-test caller, no string or registry reference to its name, and no consumer the repository declares outside itself (the port, an exporter) | `valoria-simplify` C5 (`rg` over Python and data files). A coverage run is evidence only, never proof | 0 in scope | `valoria-simplify` C5 |
+| N2 | nothing written twice | two functions whose normalised `ast` bodies are identical | probe | 0 in scope | single source of truth; no size threshold is needed (F21) |
 
 **What the standard cannot see** (stated so that no one reads it as complete):
 - semantic duplication written differently (`valoria-simplify` I3, on request);
 - clarity beyond L1–L3 (L4, judgment);
 - whether a mechanic should exist at all (`ners`).
 
-**New apparatus:** one new tool (`tools/code_economy.py`), two extended tools
-(`ci_module_shape_check.py`, `ci_sim_fabrication_check.py`) and one test (M3). Every other rule reuses
-a check that exists today.
+**New apparatus:** one behaviour test (M3). No tool, gate, scorer or baseline.
 
 ---
 
 ## 4. The skill, rewritten (outline of the new `SKILL.md`)
 
-- **STEP 0 · FRAME.** Name the subject (default: `engine/season/` + `modules/`), the hash of the
-  standard, and the last `Efficiency-Reviewed:` trailer (E3).
-- **STEP 1 · MEASURE.** If the tree and standard hashes match the trailer: **NOTHING TO DO**; stop.
-  Otherwise run the checks and compute *V*.
-- **STEP 2 · FALSIFIERS.** Plant one violation per check, confirm red, revert (E7).
-- **STEP 3 · REPAIR.** Work from the highest-ranked rule down. Accept a fix only under E2; revert
-  anything else. A violation no fix can reduce is a residual, with its reason: a mechanic (hand it to
-  `ners`) or a candidate exemption (E6).
-- **STEP 4 · CLARITY.** The L4 read over changed files only (E5). Each finding is fixed now or dropped.
-  If it reveals a gap in the rules, it is a candidate rule (E6).
-- **STEP 5 · VERDICT.** The reply: *V* before and after, the residuals with reasons, the falsifiers
-  shown, and the trailer line. No file.
+- **STEP 0 · FRAME.** Name the subject (default: `engine/season/` + `modules/`), find the trailer
+  commit `T`, and compute the scope (E2). If the result is **NOTHING TO DO**, stop.
+- **STEP 1 · FALSIFIERS.** Plant one violation per probe in a worktree, confirm the probe sees it,
+  discard the copy (E6).
+- **STEP 2 · FIND.** Run every instrument in §3 over the scope on the starting tree, and do the L4 read.
+  This produces all findings (E3).
+- **STEP 3 · REPAIR.** Work from the highest-ranked rule down: one attempt per violation, each accepted
+  only under E4 and the hard constraints. Reductions also pass the reduction test. A failed attempt
+  becomes a residual with its reason.
+- **STEP 4 · VERDICT.** The reply: violation counts before and after, residuals with reasons, falsifiers
+  shown, candidate rules routed (E5), and the trailer line for the commit. No file.
 
 **Guardrails kept from the current skill:** one round; edits, not documents; re-open any citation before
-relaying it; independence is structural, with a `valoria-critic` used only for STEP 4.
+relaying it; independence is structural, with a `valoria-critic` used only for the L4 read.
 
 ---
 
@@ -245,31 +262,31 @@ relaying it; independence is structural, with a `valoria-critic` used only for S
 
 Its method is a sound **claim review**, so it is kept under a name that says so: `claim-review`.
 
-- **Its end point:** the same trailer mechanism, keyed on the reviewed work's file hashes. A work whose
-  hashes match its trailer returns NOTHING TO DO. A high-load claim closes once it rests on an execution
+- **Its end point:** the same trailer mechanism, keyed on the reviewed work's paths. A work unchanged
+  since its trailer commit returns NOTHING TO DO. A high-load claim closes once it rests on an execution
   artifact (CLAUDE.md §0.2); a finding that cannot become one is dropped.
 - **References to update in the same commit:**
   - CLAUDE.md:54 (ALL DIRECTIONS, STEP 5);
   - CLAUDE.md:537 (task routing);
   - `skills/premise-check/SKILL.md:71`;
-  - the `.claude/skills/` symlink.
+  - the `.claude/skills/efficient-coding-review` symlink, plus a new one for `claim-review`.
 - **Not rewritten:** the historical mention in `proposals/2026-10-29-parliament-and-debate/…:711`.
 
 ---
 
-## 6. Build order
+## 6. Execution — one change, not a plan
 
-1. **Ratify** (the merge of this proposal, ED-1094). At execution: allocate an `ED-IN` id and write §3
-   as a new subsection of `04` Part A, Jordan-directed, as `04`'s earlier amendments were.
-2. **Extend `ci_module_shape_check.py`** with M1 (the `modules/` half), M2 and L2. Keep it report-only
-   and record the baseline.
-3. **Add `tools/code_economy.py`** with L1, N0, N1 and N2, standard library only. **Add C3** as a
-   stricter mode of `ci_sim_fabrication_check.py`, report-only, with the baseline recorded. Report-only, baseline
-   recorded, and registered in `references/ci_checks_registry.yaml`.
-4. **Add the M3 plug-in test.**
-5. **Rewrite `skills/efficient-coding-review`** per §4; move the current method to `claim-review` per §5.
-6. **Move the §3 checks to blocking**, so that CI fails on a violation above the baseline.
-7. **Delete this proposal**, with an exact-file `FORK:` row.
+Ratification is the merge of this proposal (ED-1094). Execution is **one** change, so it adds no
+position to any plan (F27):
+
+1. allocate an `ED-IN` id and write §3 as `architecture/meta/04_CODE_ARCHITECTURE_part2.md`, indexed
+   from `CURRENT.md`'s Layer-1 row;
+2. add the M3 test;
+3. rewrite `skills/efficient-coding-review` per §4, and move the current method to `claim-review` per §5;
+4. delete this proposal, with an exact-file `FORK:` row.
+
+If that cannot land as one change, its remaining items go to `valoria_master_workplan_v11` as IN-lane
+positions in the same commit that stops.
 
 ---
 
@@ -279,21 +296,24 @@ Its method is a sound **claim review**, so it is kept under a name that says so:
   "STRUCTURAL under a checker" grades true. It is a new CI dependency.
 - **A GDScript-subset check (F17):** a portability rule, outside P7's definition. It is owed a check of
   the ruled series' docs first.
-- **A performance budget (F12):** outside P7's definition. If wanted, it needs a stated growth order
-  (derivable, an engineering answer) and a time budget per season (a design choice).
+- **A performance budget (F12):** outside P7's definition. It would need a stated growth order and a
+  time budget per season.
+- **`modules/combat/` in the fabrication gate's scope (F24):** a PC-lane decision, already filed under
+  ED-IN-0119 (`tools/ci_sim_fabrication_check.py:164–170`). Not taken here.
 
 ---
 
 ## 8. Falsifiers for this proposal
 
 - **Idempotence:** run the rewritten skill twice on an unchanged tree. The second run must stop at
-  STEP 1 with NOTHING TO DO and open no source file. If it reports anything else, E3 is broken.
-- **Variant:** plant a duplicate block of ≥ 6 statements in `modules/`. *V*'s N2 count must rise by
-  one, the run must remove it, and *V* must return to its prior value.
-- **Same behaviour:** plant a false reduction, deleting one executing branch whose effect reaches world
-  state, and confirm the hard-constraint run goes red. If it stays green, the equivalence definition
-  cannot see the change and E2's first constraint is paper.
-- **No hard-coding:** replace one value read from `engine/engine_params/` with its literal. C3 must go
-  red, and the run must refuse the change even if *V* fell.
-- **No growth:** across the build, no test whose subject is a §3 check may appear. If one does, F18's
-  failure has recurred and this proposal has failed by its own measure.
+  STEP 0 with NOTHING TO DO and open no source file. If it reports anything else, E2 is broken.
+- **Scope:** add a duplicate function to one file in `modules/` and commit it. The next run's scope must
+  be exactly that file. N2 must find the duplicate, the repair must pass H1 and the reduction test, and
+  the run after that must return NOTHING TO DO.
+- **Same behaviour:** in a worktree, plant a false reduction that deletes one executing branch whose
+  effect reaches world state. H1 must go red. If it stays green, H1 cannot see the change and is paper.
+- **No hard-coding:** in a worktree, replace one value read from `engine/engine_params/` with an
+  uncited literal. The fabrication gate must go red. Then add a `[JUSTIFIED: …]` tag: the gate passes,
+  and H2's second half (reading the diff) must still refuse it.
+- **No growth:** executing this proposal must add exactly one test (M3), and no tool, gate, baseline or
+  test of a check. Anything more and F18's failure has recurred.
