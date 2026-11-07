@@ -53,8 +53,11 @@ SEEDS = (0, 1, 2)
 # v11 CR-87 re-pin, ONCE (a build hash: the loyalty rows name the creed, never its head, no lower than -1; CR-87's full revert
 # reproduces the shipped seed-0 build, `test_cr87_violence_contexts.py`'s control -- not read on this arm): was 7a9778bc... /
 # c62eca62... / 6ea6e6bf...
-PARENT_HASHES = {0: "e6a40e1880bac963506fe39c071133d9", 1: "c846864a17340076c9f43b759a209dc5",
-                 2: "f1894dbf11097039421999d13b9a9387"}
+# v11 CP-T03-07 re-pin, ONCE (a build hash: `Person.body_ceiling` joins every Person's canonical encoding; seed 0's
+# move, e6a40e18... -> b9928b27..., is the one `test_go07_canonical_digest.py` records and reproduces with the old
+# encoding; seeds 1 and 2 read the same way, not separately reverted): was e6a40e18... / c846864a... / f1894dbf...
+PARENT_HASHES = {0: "b9928b271a022bb49e4a743859bcb386", 1: "d58a1395e28fea7a13783bbcb16cc4fd",
+                 2: "cb800549cffe280834caa31a08bb78ee"}
 KNOW_NONE_AT_BUILD = 41          # of 83, every seed (read, see the docstring)
 JORDANS_EXAMPLE = frozenset({"King", "Queen", "Duke", "Duchess"})   # his words, an independent pin on the floor
 

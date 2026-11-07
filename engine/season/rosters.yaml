@@ -1538,8 +1538,9 @@ rosters:
       `references/descriptor_registry.yaml`'s alias line alone -- `attr.body.agility` is Coordination, aliases
       Agility, Dexterity; that the dexterity is the fighter's is this row's reading, not the registry's (it says
       nothing of weapons). ⚠ The combat module ALSO reads `agi` as its own attribute
-      (`modules/combat/attributes.py`), so a person holding Coordination would bring it twice; no built person
-      holds any attribute at landing, so the double read reaches no season.
+      (`modules/combat/attributes.py`), but a season fighter's `agi` is the module's class default
+      (`modules/combat/fight.py` builds each Combatant from `end`, kit and `faculty` only), so a person holding
+      Coordination brings it once, through `faculty`; no built person holds any attribute at landing.
     values:
       copying: "attr.mind.focus"
       argue:   "attr.social.charisma"

@@ -3347,7 +3347,8 @@ def _top_arms(w: World, rungs) -> dict:
 def holdings_to_found(w: World, p: Person) -> tuple:
     """THE HOLDINGS `p` MAY FOUND AN OFFICE OVER (v11 CR-25, CR-11's design; [ASSUMPTION; medium; Jordan to
     correct; revert: drop the term in `questions_for` and `establish`'s `referent_class`]), sorted by id: every
-    rung his own live `hold` edges name (his HOLDINGS, `state/gate.py::holdings_of`) that
+    rung a live `hold` edge of his names (his HOLDINGS, `state/gate.py::holdings_of`, read over `w.tenures`, so an
+    edge not yet re-homed onto him counts; the SEATS below are his own edges) that
     `founds_over` admits through some seat of his own live `hold`s whose grant carries an act `establish` is
     eligible by (`data/verbs.py::FOUNDING_REMIT_ACTS`). A `Rung` stamper term, `larders_in_purview`'s shape and
     `vacancies`' standing-occasion reading: world-read over his own edges and NOT gated on his ledger (a man knows
