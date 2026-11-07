@@ -365,8 +365,8 @@ def mode_sigma(mode, aggressor, defender, commit, read_win, fat_d, cfg):
     _shallow=max(0.0,min(1.0,3.0-commit))  # 0 at >=3, ramps to 1 at <=2
     if mode==V.DEF_PARRY: sig-=0.25*_deep      # a deep commit is easier to parry (committed line); a shallow probe harder to catch
     if mode==V.DEF_DODGE: sig+=0.10*_deep-0.10*_shallow   # deep commit easier to void; a shallow feint harder to read for the dodge
-    # PC-19 (1): Focus between the read and the response. consistency() = FOCUS_CONSISTENCY_K*(conc/5-3) is 0 at full
-    # reserve (3F+2S = 15) and NEGATIVE when drained; mode_sigma is a quality (higher = a better response, the chosen
+    # PC-19 (1): Focus between the read and the response. consistency() = FOCUS_CONSISTENCY_K*(conc/5-3) is 0 at the DEFAULT
+    # full reserve (3F+2S = 15; a build above it is POSITIVE even when fresh, below it negative) and NEGATIVE when drained; mode_sigma is a quality (higher = a better response, the chosen
     # mode is the max), so the SIGN IS PLUS: LAPSE_K > 0 lowers a drained defender's response and leaves a fresh one's
     # alone. It sits inside the cap, so a mode the weapon cannot make (cap ~ 0) is not revived by it.
     sig+=cfg['LAPSE_K']*consistency(defender,cfg)

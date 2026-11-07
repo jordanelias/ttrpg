@@ -195,7 +195,7 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
     Reads `w.persons` (the two claimants), `w.records` (a challenge's `stakes`, through `stakes_of`), `w.fixtures`
     and, for each party's `kits` entry, what his rungs store (`world_q.kit_of`, CP-T03-03: his holdings, else his
     residence; the Combatant default for a person who holds no arms, which is everyone while `rosters.yaml:
-    arms_kinds` is empty), and nothing else; the module that consumes the record never sees `World`. Its precondition is the adapter's PARTY-GAP checks (`resolve`,
+    arms_kinds` is empty), and each party's authored `Person.attributes` (PC-06 K-1), and nothing else; the module that consumes the record never sees `World`. Its precondition is the adapter's PARTY-GAP checks (`resolve`,
     below): two claimants, both persons.
 
     `verb` (CP-T03-09) is the act's verb and fills `terms` from `rosters.yaml: duel_terms` -- the ONE path a

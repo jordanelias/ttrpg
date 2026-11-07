@@ -28,7 +28,7 @@ Falsifier, run at the build: the shortfall term deleted from `act_cost` reddens
 `test_every_armour_tier_has_a_demand_rising_with_the_tier` are red and the control test green.
 
 (4) Strength against the arrested heft. `combat_systems.recoverability_factor` multiplies the irrecoverability by
-`max(0, 1 - ARREST_STR_K*(strength - NEUTRAL['strength'])*wield_heft*(1 - pc))` (AR-13): a strong fighter arrests
+`1 - ARREST_STR_K*(strength - NEUTRAL['strength'])*wield_heft*(1 - pc)` (AR-13; no clamp of its own, RECOVER_FLOOR bounds the product): a strong fighter arrests
 his own swing sooner, so both readers of the factor (`overcommit_exposure`, and the wrapper's tempo cost of a deep
 commit) see it. 0 at Strength 4 and on a pure thrust; ARREST_STR_K = 0 is the control.
 
@@ -319,7 +319,7 @@ def test_a_strong_fighter_recovers_a_deep_commit_sooner_through_the_exposure():
 
 
 def test_a_thrust_and_a_default_fighter_are_untouched():
-    """The term acts on the SWUNG share: a selected mode of point concentration 1 retracts along its line and reads
+    """The term is scaled by (1 - pc), the thrust share: a selected mode of point concentration 1 retracts along its line and reads
     the control at every Strength; a Strength-4 fighter reads the control at every weapon (0 at the neutral)."""
     off = dict(CFG, ARREST_STR_K=0.0)
     for weapon in sorted(WEAPONS):
