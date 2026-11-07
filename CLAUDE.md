@@ -51,7 +51,7 @@ is reported in. Name the conflict; never silently rank them.
   entity or outcome is **scripting drift** — stop.
 - **"All directions" is a method, not a NERS criterion (Jordan, 2026-10-28).** Work any pipeline, code,
   system or workflow by several routes and from several perspectives, never only the one it was built
-  along; `skills/efficient-coding-review` STEP 5 operationalises it, and §0.06 is the NERS case.
+  along; `skills/claim-review` STEP 5 operationalises it, and §0.06 is the NERS case.
 - **Adversarial pass at every stage that gates a result.** After you draft canon, a number or a fix,
   *try to break it*: verify provenance by hand against the cited `PP-NNN`/`ED-NNN` (PP provenance is
   unvalidated — `tools/validate_ed_citations.py` covers ED only), run the relevant `tools/` validator,
@@ -524,7 +524,7 @@ A fresh remote container has pyyaml only; run the provisioner. WHEN each runs is
 | Stressing anything that resolves by a **draw** — σ-leverage, μ-shift vs Ob-shift, fractional pool/Ob, sub-1D floor | `resolution-diagnostic`. Its output is **evidence**, not a verdict: carry findings into a `ners` pass |
 | **Layer placement** — which layer does this bind, is prose being made a mechanism, does a proposed guard earn its existence | `layer-conformance` (Lens A); the **definitions** are the layer table, §0.05 and §0.1 pt 5 |
 | **Code-architecture / Layer-1 conformance** | `layer-conformance` (Lens B), which reads `architecture/meta/04_CODE_ARCHITECTURE.md` (and, for `modules/`, `holonic_ARCHITECTURE.md` §43, §45–§47) at the row and copies no table or count out of it |
-| **Distilling code and data without losing function** — unearned complexity, a second owner, new apparatus where an edit would serve, scripting drift, dead code; a high-level survey of a system in six directions; the cost of porting it | `valoria-simplify`, run between `layer-conformance`'s Lens A and Lens B |
+| **Distilling code and data without losing function** — unearned complexity, a second owner, new apparatus where an edit would serve, scripting drift, dead code; a high-level survey of a system in six directions; the cost of porting it | `valoria-simplify`, run between `layer-conformance`'s Lens A and Lens B; the whole-subject efficiency pass, which sequences them, is `efficient-coding-review` |
 | Editorial-debt workflow over the JSONL ledger | `valoria-editorial-register` |
 | Structural-debt corpus scan | `valoria-vector-audit` |
 | Splitting an oversized doc | `valoria-chunker`; **nothing enforces a general length cap** (§4) |
@@ -534,7 +534,7 @@ A fresh remote container has pyyaml only; run the provisioner. WHEN each runs is
 | Verifying a nontrivial code change that already exists, against its own stated plan, before close | `methodology-close` — a Sonnet agonist/antagonist pass, then `/code-review`+`/simplify`+`layer-conformance` fixed in sequence, then one terminal Opus critique |
 | Building a workplan phase/task (many positions) AND verifying it, before close | `methodology-execute` — `valoria-author` builds each item and commits it, cheap; `methodology-close`'s full pipeline + the pytest suite run once per BATCH (items linked by a shared file or gate), not per item; a closed batch is deleted from the plan and the run stops for a cleared window before the next opens |
 | Closing a commit | `/close` |
-| Reviewing a diff / a PR / your own just-finished work; **or attacking a whole subject that is not a diff** — the code base (engine, modules, subsystems), a research corpus, survey, proposal, plan or instrument — for whether its claims are true, its ideas transfer, its logic holds, it works by every route and across modules, and a stranger can survey it | for a diff, the native `/code-review`, a fresh-context reviewer that never saw your reasoning, the single-pass review for one (`methodology-close` when a stated plan exists); for a whole subject, `efficient-coding-review`. Nothing grades repo-wide signals any more, and nothing is supposed to |
+| Reviewing a diff / a PR / your own just-finished work; **or attacking a whole subject that is not a diff** — the claims a code base (engine, modules, subsystems) makes about itself, a research corpus, survey, proposal, plan or instrument — for whether its claims are true, its ideas transfer, its logic holds, it works by every route and across modules, and a stranger can survey it | for a diff, the native `/code-review`, a fresh-context reviewer that never saw your reasoning, the single-pass review for one (`methodology-close` when a stated plan exists); for a whole subject's claims, `claim-review`. Nothing grades repo-wide signals any more, and nothing is supposed to |
 | Many mechanical numbers before any judgment | `valoria-measure` on Haiku — batched only; one delegated grep loses the tier arithmetic |
 | Orchestrating a multi-agent audit | the **Agent** tool directly, with `valoria-critic` for read-only critic stages |
 
