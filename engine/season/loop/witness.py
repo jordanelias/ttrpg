@@ -39,6 +39,11 @@ from ..data.verbs import VERB_TABLE
 # writes no ledger, and is a CONVENTION exceedance justified by IN-55's measured saving.
 # v9 FI-03 exceeds `04:178` twice more, in `_found_claims`: it reads a driver-held store of finds
 # (`self.findings`), and it reads OLDER ticks' Events by id (`event_by_id`), beyond "this tick's log".
+# v11 CR-79 (`H-275`) exceeds `04:178` once more, in `_credit`: `world_q.commensurate` reads the HEARER'S
+# and the TELLER'S held affiliations (`Person.conviction`), which the `may read` cell does not list. Read
+# only when `regime_gain` is not 0, so the control reads nothing new. Kept on the WITNESS side, not in
+# `decision/` (`refracted_confidence` takes no world-derived number: `decision/` stays an island, AX-2).
+# CONVENTION, no scan reads this step's person reads; AX-7's governors are widened by hunk H-L0-11.
 from ..decision.options import ledger_weigh, refracted_confidence
 from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, changes_only_held_claims,
                          claim_subjects, held_claim_ids, holds_trail, live_channels,
@@ -244,6 +249,30 @@ def _refract(c: Claim, p, channel: str, gain: float, act=None, weigh=None,
     return replace(c, confidence=refracted_confidence(p, c, channel, gain, act, weigh, competence_gain))
 
 
+def _credit(w, c: Claim, hearer: str, teller: str, regime_gain: float, ceiling: int) -> Claim:
+    """`c` AS `hearer` CREDITS IT FROM `teller` (v11 CR-79, `H-275`; `strife-00` §5, R14/A12): the told
+    claim's confidence, AFTER `_refract` (or as told, where nothing refracts), times
+    `1 + regime_gain * commensurate(hearer, teller)`, clamped to `[0, max(ceiling, the uncredited value)]`
+    and rounded as `refracted_confidence` rounds. `ceiling` is `confidence_default`, so a commensurate
+    teller's credit may raise a claim up to it and never lowers one already above it [ASSUMPTION; medium;
+    Jordan to correct; revert: the told claim's own pre-refraction confidence as the ceiling].
+
+    ⚠ THE ONE FACTOR THAT MAY RAISE A CONFIDENCE, AND IT IS NOT IN `refracted_confidence`: the sign comes
+    from two persons' own held affiliations (`world_q.commensurate`: the hearer's own conviction, never
+    his settlement's), a world read `decision/` may not make, so it is applied here, beside `_refract`.
+    ⚠ WHEN `regime_gain * c` IS 0 THE CLAIM IS RETURNED UNTOUCHED, rounding included: at the control, and
+    for an unrelated pair. The caller calls this only when `regime_gain` is not 0, so the control does
+    not read `commensurate` at all; the caller also range-checks the gain, once per barrier.
+    ⚠ TOLD CLAIMS ONLY, FROZEN AT DEPOSIT: it departs from CAT-3's "graded when read" for this one factor
+    (R14); `teller_weight` still grades the hop when read."""
+    k = regime_gain * world_q.commensurate(w, hearer, teller)
+    if k == 0:
+        return c
+    hi = max(ceiling, c.confidence)
+    x = c.confidence * (1.0 + k)
+    return replace(c, confidence=int((0.0 if x < 0 else hi if x > hi else x) + 0.5))
+
+
 def _happened(act, e: Event):
     """THE ACT `e` REPORTS HAPPENING, or `None` -- what `dissents`' act-level prior (`H-201`) is asked
     of. `e` must be one of the act's verb row's `emits:` and none of its `emits_on_refusal:` (this ROW's
@@ -389,6 +418,14 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # v10 CR-19 / `H-200`: THE COMPETENCE GAIN, read once per barrier beside `gain` and passed to every
     # `_refract` alike. `0` is the control and SHIPS: the receiver's Attunement scales nothing.
     cgain = float(w.fixtures.get("competence_gain"))
+    # v11 CR-79 / `H-275`: THE CREDIT GAIN, read and range-checked once per barrier beside `gain`, for
+    # the same reason; `_credit` (its docstring) owns what it does. `0` is the control: no told deposit
+    # is credited and `commensurate` is never read. Independent of `gain`: it applies where nothing
+    # refracts, so reverting either gain leaves the other's term in place.
+    regime = float(w.fixtures.get("regime_gain"))
+    if not 0 <= regime <= 1:         # `not ... <=`, so a NaN is refused too
+        raise ValueError(f"regime_gain {regime} is outside [0, 1] (H-275): above 1 a factor at c = -1 "
+                         "would turn a told deposit's confidence negative")
     # v9 IN-18 `G6` / `H-197`: THE CONFIDENCE CHANCE, read and range-checked once per barrier,
     # beside `gain`, for the same reason; `_circle_of` (its docstring) owns what it does.
     privacy = float(w.fixtures.get("telling_privacy"))
@@ -971,6 +1008,12 @@ def witness(self, token: Token, events: list[Event]) -> int:
                                chain=_held.chain + (_act.actor,))
                     if refracting:
                         tc = _refract(tc, p, channel, gain, competence_gain=cgain)
+                    # v11 CR-79 (`H-275`): the credit term, after refraction and whether or not it
+                    # refracted (the two gains revert independently). `_act.actor` is the teller,
+                    # `tc.chain[-1]`; never `pid`, which the guard above excludes. ⚠ `04:178`'s
+                    # `may read` cell does not list a person's `conviction`: CONVENTION (top of file).
+                    if regime:
+                        tc = _credit(w, tc, pid, _act.actor, regime, conf)
                     w.write("claim_ledger", token,
                             lambda p=p, c=tc: p.ledger.append(c),
                             record_kind="Person", fieldname="claim_ledger", driver="Event",
