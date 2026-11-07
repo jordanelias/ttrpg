@@ -286,7 +286,7 @@ that happen when someone performs an action"*:
   their own understanding of it."* Testimony reaches self-knowledge; a man can be talked out of what
   he thought he did.
 - **What governs divergence, ruled as all three together:** the **channel** it arrived on, the
-  reader's **competence**, and their **prior beliefs**. Not a draw alone.
+  reader's **competence**, and their **prior beliefs**. Not a draw alone. **Widened once (Jordan, 2026-11-07, hunk H-L0-11, CR-79):** a fourth factor, whether the teller's held affiliations are commensurate with the reader's, read at deposit (`strife-00` §5).
 
 ⚠ **THE SCOPE CLAUSE IS LOAD-BEARING, AND IT IS WHY THIS IS AN AXIOM RATHER THAN A MOOD.**
 **`AX-7` quantifies over WHAT HAPPENED. It does not reach WHAT IS PERMITTED.** An event and an act
