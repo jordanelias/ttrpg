@@ -16,12 +16,6 @@
     "registry_key": "attr.mind.perception",
     "status": "IN_FLUX"
    },
-   "cog": {
-    "default": 3,
-    "neutral": null,
-    "registry_key": "attr.mind.acuity",
-    "status": "IN_FLUX"
-   },
    "disp": {
     "default": 4,
     "neutral": 4,

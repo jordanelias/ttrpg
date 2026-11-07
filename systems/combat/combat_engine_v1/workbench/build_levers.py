@@ -192,8 +192,8 @@ def archetypes(n=600):
          dict(weapon='rapier', armor='light', tradition='italian', agi=5, att=4,
               skills={'dodge': 1.0, 'parry': 1.0},
               equipped={'mezzo_tempo': 2.0, 'misura': 2.0}), dict(BASE), n)
-    _row('binder: longsword, str5 cog4, bind2 tech1, german kit L2',
-         dict(weapon='longsword', armor='light', tradition='german', strength=5, cog=4,
+    _row('binder: longsword, str5 att4, bind2 tech1, german kit L2',
+         dict(weapon='longsword', armor='light', tradition='german', strength=5, att=4,
               skills={'bind': 2.0, 'technique': 1.0},
               equipped={'indes': 2.0, 'staerke_schwaeche': 2.0}), dict(BASE), n)
     _row('armour-breaker: poleaxe, str5 end5, tech1, heavy armour',

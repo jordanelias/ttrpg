@@ -35,7 +35,7 @@ entry calls. This module reads it only for `engine()`, the availability probe it
 *answered by precedent — the tree has already decided this shape somewhere else*). Its discipline is the part worth copying:
 set a field only from something the actor genuinely has (his authored attributes, PC-06 K-1), leave every
 other field at the class's own constructor default, and return a typed gap rather than fabricate a party. The
-`Combatant` defaults it names — strength 4, agi 4, end 4, cog 3, att 3, spirit 3, focus 3, disp 4,
+`Combatant` defaults it names — strength 4, agi 4, end 4, att 3, spirit 3, focus 3, disp 4,
 weapon `arming`, armor `light`, tradition `none` — are the class's, not this module's. The record has since grown
 each party's kit (CP-T03-03) and `faculty` (CR-85, `combat_input`), which replaced the class's `history`.
 

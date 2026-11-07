@@ -170,7 +170,7 @@ def act_cost(c, commit, cfg):
 # ---------- concentration (Focus+Spirit tracker) ----------
 # ED-PC-0035: the `conc_max(c,cfg)` back-compat accessor is REMOVED (zero callers; call c.rederive(cfg) and read
 # c.conc_max — the combatant hosts it, 3F+2S, ED-902).
-def reading(c, cfg): return (2*c.cog + c.att)/3   # cog primary, Att half. The relevant-History experience term (Jordan 2026-06-03) is DELETED by CR-85 (ED-IN-0330: history is no longer added to a roll; a person's latitude enters through the pool only)
+def reading(c, cfg): return c.att   # the read is PERCEPTION alone (PC-18 (1), ED-IN-0347: Reason has no combat read; the History experience term is gone, CR-85, ED-IN-0330)
 def reflex(c, cfg): return (cfg['REFLEX_AGI']*c.agi+cfg['REFLEX_ATT']*c.att)/(cfg['REFLEX_AGI']+cfg['REFLEX_ATT'])
 
 # ---------- strength handling + endurance fatigue ----------
@@ -1330,7 +1330,7 @@ def tempo_pressure(c, opp, cfg, TR):
       • `initiative` — the Vor. It is not static: it decays per beat (init_hold_decay, tradition-held), drifts with
         disposition, and is STOLEN on hits and in the bind (init_steal_factor). A fighter who has been dictating the
         exchange gets to keep dictating it — earned, not owned.
-      • `reading` — cog/attention/experience. Anticipating the opponent's commitment is precisely what lets you act
+      • `reading` — Perception (Att). Anticipating the opponent's commitment is precisely what lets you act
         into it rather than after it. (The feint is not a separate action here — WS-5 dissolved it into the attack's
         commit-depth and legibility — so its influence arrives through the read, which is where it belongs.)
     Floored at 0 so a badly out-read fighter stalls rather than accumulating backwards. Both K's [SIM-CALIBRATE].
@@ -1420,7 +1420,7 @@ def approach_step(measure_gap, base_gap, close_rate, recoil):
     return min(base_gap, max(0.0, measure_gap - close_rate + recoil))
 
 def init_emphasis_sigma(aggressor, defender, cfg, TR):
-    """Initiative/tempo EMPHASIS sigma fed into attack_sigma: tempo(Agi) + reading(Cog/Att) (the experience(History)
+    """Initiative/tempo EMPHASIS sigma fed into attack_sigma: tempo(Agi) + reading(Att) (the experience(History)
     addend is DELETED by CR-85, ED-IN-0330),
     plus the two sides' 'tempo' ability lever as an ADDITIVE log-edge. Pure (the formula the wrapper used to assemble
     inline).

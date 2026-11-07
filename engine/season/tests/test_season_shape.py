@@ -9827,7 +9827,7 @@ def _k1_holds(w, monkeypatch) -> int:
         for key, v in want.items():
             assert getattr(c, key) == v, f"{c.label}: {key} is {getattr(c, key)}, authored {v}"
             checked += 1
-    for key in ("cog", "spirit", "focus", "disp", "faculty"):   # unauthored (or keyless): the class default / the input's
+    for key in ("spirit", "focus", "disp", "faculty"):   # unauthored (or keyless): the class default / the input's
         want = inp.faculties[0] if key == "faculty" else spec.DEFAULT[key]
         assert getattr(low, key) == want, f"{key} moved without an authored value"
         checked += 1
@@ -9840,7 +9840,7 @@ def test_k1_a_person_with_authored_strength_6_fights_as_strength_6(monkeypatch):
     """PC-06 K-1 EXIT. `Person.attributes` -> `PersonalCombatInput.attributes` -> the `Combatant` the entry builds,
     by PC-14's `registry_key`."""
     w = P.tiny_world()
-    assert _k1_holds(w, monkeypatch) >= 10
+    assert _k1_holds(w, monkeypatch) >= 9
 
 
 def test_k1_planted_failure_with_the_mapping_removed_the_exit_reddens(monkeypatch):
