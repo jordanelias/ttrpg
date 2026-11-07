@@ -526,9 +526,14 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # f5947315...); THREAD_READ_WITHHELD_EVENTS_1 (13386, 2cea2d08...) -> (13387, 1cdf25c4...). CONTROL, run in process on this tree:
 # `test_cp_t03_04_arms.py::revert_cp_t03_04` (the three roster rows and the vocation off) reads all five old values exactly. A
 # GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-BASE_HASHES = {0: "7266f56bea4e3d75705f5e88eec1b2e1",
-               1: "b2dde1fcf889605d76a30eeba48d2aa0",   # CP-T03-04: was 20accb03...
-               2: "ae8e79a8690cd00bd400b41a7f379fb3"}   # CP-T03-04: was 31811193...
+# RE-PINNED ONCE at v11 CP-T03-07 (`Person.body_ceiling`, a SCHEMA mover of every Person, build included; and the lasting
+# mark, an outcome mover where a survivor reaches the deepest gate). Was: BASE_HASHES 7266f56b... / b2dde1fc... / ae8e79a8...
+# -> 600d8b27... / eb2919ae... / 4ec8a812...; STEP_OFF_ONE_SEASON 1660aedc... -> 2e942f16... (its event count and digest do
+# not move). CONTROL: `test_cp_t03_07_body_ceiling.py::revert_cp_t03_07` (`body_mark_model: none` and the field out of the
+# canonical encoding) reads the old values exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+BASE_HASHES = {0: "600d8b27147478e158553552cc1409a5",   # CP-T03-07: was 7266f56b...
+               1: "eb2919ae5fc955c27529f12b5a93bd62",   # CP-T03-07: was b2dde1fc...; CP-T03-04: was 20accb03...
+               2: "4ec8a8123ee453a2c34a6f60ae5bd407"}   # CP-T03-07: was ae8e79a8...; CP-T03-04: was 31811193...
 
 # THE ONE-SEASON PIN WITH CR-81'S STEP OFF (`build_realm(0, acquaintances=False)`: the hash and the event count and digest
 # `BASE_HASHES[1]` / `BASE_EVENTS[1]` held before CR-81). The `give`-withheld arm's control, below.
@@ -549,7 +554,7 @@ BASE_HASHES = {0: "7266f56bea4e3d75705f5e88eec1b2e1",
 # RE-PINNED ONCE at v10 CR-33 (NPC-088 holds `inquiry`, a Person repr): 4cb09ae3... -> 8aa6e2e7...; the event count and digest do not move.
 # RE-PINNED ONCE at the CR-33 verify pass (NPC-004 holds `inquiry`): 8aa6e2e7... -> d2152860...; the event count and digest do not move.
 # RE-PINNED ONCE at v10 PC-10b (see `BASE_HASHES`): 81aa6671... / (11401, 2275e41e...) -> 63129abb... / (11496, 24d897bb...).
-STEP_OFF_ONE_SEASON = ("1660aedc030fba4ab5ca692fad70791c",     # CP-T03-04: was 9b62c4cc... / (10954, 44f3aa68...); CR-87: was 63129abb... / (11496, 24d897bb...)
+STEP_OFF_ONE_SEASON = ("2e942f1661d0cd0f495e20052bf92bb0",     # CP-T03-07: was 1660aedc...; CP-T03-04: was 9b62c4cc... / (10954, 44f3aa68...); CR-87: was 63129abb... / (11496, 24d897bb...)
                        (11206, "f59473154a8f94b7aff98be59b2d191856aca71459af9d927e1fcf02ce56bf77"))
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its

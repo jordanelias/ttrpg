@@ -178,6 +178,18 @@ rows:
     # loss at the ENCOUNTER step, not RESOLVE -- `march`'s prize row defers there. `ENCOUNTER`
     # shares RESOLVE's write class (`data/matrix.py`), so `class:` above is unchanged.
   - kind:    "Person"
+    field:   "body_ceiling"
+    # v11 CP-T03-07 (P32): the fight's LASTING MARK. Written only by `fight` / `accept` / `capture`
+    # (`Felled` and `Wounded`; `loop/effects_combat.py::_eff_kill`, through `marked_ceiling`) on a party
+    # who survives at `wounds >= max_wounds`, at the ENCOUNTER step (`the body` carries `step:
+    # ENCOUNTER`), on `(Person, capability)`'s precedent. It rides the party's body subject, which
+    # earns `body.changed`: a mark never falls without the body write it is part of.
+    steps:   [RES, ENC]
+    class:   "ACTS"
+    social:  "false"
+    by:      "v11 CP-T03-07 (P32): `Person.body_ceiling`, built at `condition_scale`; it falls to one below the next `band_floors[\"body\"]` floor beneath it when a party survives a fight at the deepest wound gate (`body_mark_model: deepest_gate`, `H-258`). Read by `_eff_tend`, which heals toward it. `social: false` on `(Person, body)`'s precedent: the mark is the scene's verdict, not a person's choice"
+    emits:   "`body.changed`"
+  - kind:    "Person"
     field:   "claim_ledger"
     steps:   [WIT]
     class:   "INTERIOR"

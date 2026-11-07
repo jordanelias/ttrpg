@@ -326,6 +326,9 @@ def test_none_and_tau_point_one_reproduce_the_parent_world_exactly(monkeypatch):
     # (`test_cp_t03_04_arms.py::revert_cp_t03_04`, whose own control reproduces the pre-item hashes), the same way.
     from .test_cp_t03_04_arms import revert_cp_t03_04
     revert_cp_t03_04(monkeypatch)
+    # v11 CP-T03-07 (`Person.body_ceiling`, a schema mover of every realm, and the lasting mark), the same way.
+    from .test_cp_t03_07_body_ceiling import revert_cp_t03_07
+    revert_cp_t03_07(monkeypatch)
     # CP-T03-02 (`Event.ending` and the body Observation) and CR-85 (`faculty` for `history`) are declared movers of the
     # batch too, and each is read at its revert in process, as CR-87 and CP-T03-04 are (their own controls reproduce the
     # pre-item hashes); without them this pin read `be71a51c...` and never the PC-10b tree's.

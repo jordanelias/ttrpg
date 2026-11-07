@@ -752,6 +752,13 @@ class Person:
     # is the model" MEANS. A bare 1000 here would be a second, silent copy of that scale — the
     # defect `G1` names — and it would drift the moment the fixture moved.
     body: int = field(default_factory=lambda: DEFAULT_FIXTURES.get("condition_scale"))
+    # v11 CP-T03-07 (P32): THE BODY'S CEILING -- what a recovery heals toward, as `Site.condition` has
+    # one. Built at `condition_scale`, so an unmarked person heals whole. WRITTEN only by the fight
+    # (`loop/effects_combat.py::_eff_kill`, through `marked_ceiling`; `write_matrix.yaml` row
+    # `(Person, body_ceiling)`); READ by every raiser of `body` (`_eff_tend` today), which heals to it
+    # and never to `condition_scale` -- `engine/season/tests/test_cp_t03_07_body_ceiling.py` fails on a
+    # new bare `body` write that does not say how it stands to this field (CLAUDE.md §0.1 pt 1).
+    body_ceiling: int = field(default_factory=lambda: DEFAULT_FIXTURES.get("condition_scale"))
     # v9 IN-34 FORCE-BODIES: THE BIRTH TICK, the one field the bodies clock adds, and its ONLY READER
     # is `queries/world_q.py::age_of` -> `body_hazard` (ID-13: no field without a reader). Age is NOT
     # stored; it is `w.tick - born`, a Query over the clock (IN-21's `season_of_year` precedent), so

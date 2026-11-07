@@ -1186,6 +1186,7 @@ def load_combat_band_edges(row, bands, quantities) -> tuple:
 COMBAT_EDGES = load_combat_band_edges(
     _ROSTERS.get("combat_band_edges"), COMBAT_BANDS, WOUND_QUANTITIES)
 WOUND_HARM_MODELS = roster("wound_harm_models")
+BODY_MARK_MODELS = roster("body_mark_models")     # v11 CP-T03-07 (`H-258`): `_eff_kill`'s mark
 # M4 (`ED-IN-0279` clause (a)). `field_degree_bands`' own note: ordered and unpacked the same way,
 # `Declared` first because ENCOUNTER's declaration fold writes it at RESOLVE, before anything has
 # fought. `FIELD_CASUALTY_MODELS`/`MARCH_TARGET_KINDS` bound here for `TITLE_DOMAINS`' reason: an

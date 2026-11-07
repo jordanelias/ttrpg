@@ -30,6 +30,7 @@ from ..state.carriers import Act
 from ._scar_helpers import party_state
 from .test_cr85_faculty_replaces_history import revert_cr85
 from .test_cp_t03_04_arms import revert_cp_t03_04
+from .test_cp_t03_07_body_ceiling import revert_cp_t03_07
 
 ACTOR, SUBJECT = "p_low", "p_mid"      # `tiny_world`: co-located, so a `fight` between them is admitted
 
@@ -182,6 +183,7 @@ def test_control_the_item_at_its_revert_reproduces_the_pre_item_one_season_hash(
     # v11 CP-T03-04 (`arms` in the vocation range, a formation mover of EVERY seed, seed 0 included) is reverted on BOTH arms,
     # so `moved` still reads this item alone and `PRE_ITEM` stands.
     revert_cp_t03_04(monkeypatch)
+    revert_cp_t03_07(monkeypatch)   # v11 CP-T03-07 (`body_ceiling`, a schema mover of every realm), the same way
     w = build_realm(seed)
     run(1, seed, w=w)
     moved = w.content_hash()

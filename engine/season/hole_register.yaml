@@ -5174,6 +5174,19 @@ rows:
     cite:      "MEASURED at B10-11 (CR-72) in a scratch run the producer recorded in `engine/season/tests/test_strife_execution.py`'s docstring and did not assert (a real `fight` by the Duke on the prisoner, over 60 act ids, reached a death every time); the file's tested path is a PLANTED death carrying an `exists` change, which reads XE on the live tenure and KL once it is closed one tick before. A claim about a real death is the record, not the test. Not fixed here: a reader rule belongs to the strife instrument's owner"
     source:    "v11 CR-72 (commit `3bbe78b6`), batch B10-11"
 
+  - id:        H-258
+    tier:      1
+    hole:      "WHETHER A FIGHT LEAVES A LASTING MARK (v11 CP-T03-07, P32). A fight can wound and every recovery healed to `condition_scale`, so no fight left a permanent mark. No document states the gate a mark is taken at, nor where the ceiling falls."
+    kind:      "NUMBER"
+    owner:     "`engine/season/loop/effects_combat.py::_marks` and `marked_ceiling` (the writer, from `_eff_kill`); `_eff_tend` reads `Person.body_ceiling`"
+    grade:     "assumption"
+    default:   "deepest_gate -- SHIPPED [ASSUMPTION; medium; Jordan to correct; revert: none], on REM-52's precedent for a harm (`body_step`): the live arm ships with the control one named value away. A party who survives at `wounds >= max_wounds` (the engine's deepest gate short of felling) has his ceiling fall to one below the next `band_floors[\"body\"]` floor beneath it (1000 -> 799 -> 499 -> 99), as many times as there are floors; the written body is held at or under the new ceiling"
+    site:      "Fixtures body_mark_model, read by `engine/season/loop/effects_combat.py::_eff_kill` (`_marks`)"
+    sweep:     [none, deepest_gate]
+    unblocks:  "CP-T03-08 (`tend` forms on a person below his ceiling) and CP-T10-04 (its rising arm and `tend_share` read the field as their cap)"
+    cite:      "FALSIFIER: `engine/season/tests/test_cp_t03_07_body_ceiling.py` -- a survivor at `wounds == max_wounds` holds 799 and his written body is under it; `tend` restores him to 799 where an unmarked man goes to 1000, and his `budget` sits one below whole; mutation red: a raiser reading `condition_scale` lifts him past 799; an asymmetry guard fails on a new bare `body` write not registered with its relation to the ceiling. CONTROL: `none` marks nobody and, with the field dropped from the canonical encoding (`revert_cp_t03_07`), reproduces the pre-item hashes"
+    source:    "v11 CP-T03-07, batch B10-11"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
