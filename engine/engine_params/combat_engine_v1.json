@@ -74,6 +74,7 @@
     "medium": 1.0,
     "none": 0.0
    },
+   "AGI_READ_K": 0.2,
    "AGI_TEMPO_K": 0.03,
    "APPROACH_DISPLACE_K": 0.7,
    "APPROACH_DISPLACE_MAX": 0.6,

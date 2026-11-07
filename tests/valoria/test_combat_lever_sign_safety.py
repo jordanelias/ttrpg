@@ -574,3 +574,37 @@ def test_the_read_is_perception_alone():
         checked += 1
     assert len(set(seen)) == 5 and checked == 5     # differing only in att, they read differently
     assert S.reading(Combatant('d'), CFG) == 3      # the class default: the old (2*3+3)/3, so an unauthored realm is unmoved
+
+
+def _read_a(aggressor, cfg, consistency_a=0.7):
+    return S.read_contest(aggressor, Combatant('d', weapon='arming'), 3.0, consistency_a, 0.0, 0.0, cfg,
+                          _FixedRng(0.5), TR)['read_a']
+
+
+def test_the_attacks_suddenness_is_coordination():
+    """PC-18 (2), ED-IN-0347: the aggressor's side of the read adds AGI_READ_K*(agi - NEUTRAL['agi']) to his reading
+    value, inside the visual factor. Two aggressors differing only in agi are read differently at the shipped K and
+    alike at K = 0; an aggressor at agi 4 reads exactly as the pre-item formula at every K, his visual lever invested
+    or not; at the shipped K a Perception-1 / Coordination-1 aggressor's read value stays above 0, so the visual
+    probes above stay live and sign-safe. Planted failure: the term dropped from read_contest makes the first equal."""
+    k = CFG['AGI_READ_K']
+    assert k > 0.0, k
+    slow, quick = Combatant('a', agi=2), Combatant('a', agi=6)
+    assert _read_a(quick, CFG) > _read_a(slow, CFG)
+    assert _read_a(quick, CFG) - _read_a(slow, CFG) == pytest.approx(k * 4 * TR.eff_cw(quick, 'visual'), abs=1e-12)
+    off = dict(CFG, AGI_READ_K=0.0)
+    assert _read_a(quick, off) == _read_a(slow, off)
+    checked = 0
+    for kk in (0.0, 0.05, 0.1, 0.2, 0.3, 0.5, k):
+        cfg = dict(CFG, AGI_READ_K=kk)
+        for att in (1, 3, 5, 7):
+            for lv in (0.0, 8.0):
+                agg = Combatant('a', att=att, tradition='german',
+                                equipped=({} if lv <= 0.0 else {'keen_eye_basic': lv}))
+                assert agg.agi == S.NEUTRAL['agi']
+                pre = S.reading(agg, cfg) * TR.eff_cw(agg, 'visual') + 0.7      # the formula before PC-18 (2)
+                assert _read_a(agg, cfg) == pre, (kk, att, lv)
+                checked += 1
+    assert checked == 7 * 4 * 2
+    floor = Combatant('a', att=1, agi=1)
+    assert S.reading(floor, CFG) + k * (floor.agi - S.NEUTRAL['agi']) > 0.0
