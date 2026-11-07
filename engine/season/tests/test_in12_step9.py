@@ -76,7 +76,11 @@ def _world(fixtures=None):
 def _formed(w, pid, verb, referent):
     """`pid`'s own option set on one question about `referent` -- the `verb` Candidates it forms."""
     p = w.persons[pid]
-    q = Question(f"q:{verb}:{referent}", "claim_landed", (referent,), None)
+    # v11 CP-T03-08: a row declaring a `referent_class` forms only on a referent carried as that class (`tend`:
+    # `Person`), so the hand-built question carries it as `_stamped` would; a row declaring none is unaffected.
+    cls = VERB_TABLE[verb].referent_class
+    q = Question(f"q:{verb}:{referent}", "claim_landed", (referent,), None,
+                 ((referent, cls),) if cls else ())
     return [c for c in opening_set(p, assemble(p, q, 12), q, w.fixtures) if c.verb == verb]
 
 

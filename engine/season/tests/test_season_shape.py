@@ -6955,7 +6955,10 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # it: the act mix moves wherever a challenge forms. `depths[6]` still does NOT exceed `depths[3]` (16 against 18), so the walk the
     # message below asks for is not triggered. CONTROL: the base tree (`95f58adb`'s `engine/season`) passes this test at (16, 15).
     # v11 CR-87 (B10-11): (18, 16) -> (15, 13), A RE-RECORD WITH THE UNIT THAT MOVED IT: `fight` forms only on a subject the person holds a context of violence against (`rosters.yaml: violence_contexts`), and the build's loyalty rows name the creed, so the act mix moves. The old value is the parent tree's pin; `test_cr87_violence_contexts.py::revert_cr87` reproduces the parent's realm hashes (its control) and was NOT run against this corpus pin. `depths[6]` still does NOT exceed `depths[3]` (13 against 15).
-    assert (depths[3], depths[6]) == (15, 13), (
+    # v11 CP-T03-08 (B10-11): (15, 13) -> (16, 14), A RE-RECORD WITH THE UNIT THAT MOVED IT: `tend` forms only on a `Person`-classed
+    # referent and `wounded_with` stamps a man below his ceiling for himself, so the act mix moves. `depths[6]` still does NOT exceed
+    # `depths[3]` (14 against 16). CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` applied for the session (in process) reads the old value and passes.
+    assert (depths[3], depths[6]) == (16, 14), (
         f"the maturation depth ceiling moved: {depths}. This is a MEASUREMENT of a mixed chain "
         "whose length the act mix sets, not a discriminator — `H-80`'s discriminator is the COUNT, "
         "asserted below and still live. Re-pin these two numbers with the unit that moved them. "
@@ -7117,8 +7120,11 @@ def test_w9_the_sweeps_the_register_declares_are_executed():
         # scale per season at 100 and 0.1% at 10000, and the sweep reported an event-count move
         # that was the confound, not a band edge read as an absolute. §0.1 point 1: the hazard is
         # changing a getter's source while a co-varying quantity still writes the old one.
+        # v11 CP-T03-08: `body_ceiling` (CP-T03-07, built at the DEFAULT scale) co-varies with `body` and is scaled with
+        # it -- once `wounded_with` reads it, a body of 100 under a ceiling of 1000 is a wound (MEASURED: {100: 366, 1000:
+        # 268, 10000: 268} with the ceiling left at 1000), which is this block's confound, not a band edge read absolutely.
         for p in w.persons.values():
-            p.body = scale
+            p.body = p.body_ceiling = scale
         d = SeasonDriver(w)
         mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         for _ in range(2):
@@ -8138,9 +8144,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # the old 23 and passes.
     # ⚠⚠ v11 CR-87 (B10-11), 22 -> 21: `capture` JOINS, `oblige` AND `tend` LEAVE. A RE-RECORD WITH THE UNIT THAT MOVED IT: `fight` forms only on a subject the person holds a context of violence against (`rosters.yaml: violence_contexts`), and the build's loyalty rows name the creed, so the act mix moves. The old value is the parent tree's pin; `test_cr87_violence_contexts.py::revert_cr87` reproduces the parent's realm hashes (its control) and was NOT run against this corpus pin. `fight` still executes in the
     # corpus (a world whose person holds a context against its subject) [the worlds were not walked one by one for this pin].
+    # ⚠⚠ v11 CP-T03-08 (B10-11), 21 -> 22: `tend` JOINS, nothing leaves. A RE-RECORD WITH THE UNIT THAT MOVED IT: `tend` forms only
+    # on a `Person`-classed referent and `wounded_with` stamps a man below his ceiling for himself, so a hungry or wounded person
+    # tends himself and the fold executes it -- the item's own falsifier (`tend` executes > 0). CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` applied for the session (in process) reads the old value and passes.
     assert ever == {"argue", "capture", "carry", "challenge", "commit", "conceal", "create_record", "interview",
                     "fight", "give", "issue", "move", "petition", "reconstruct", "release",
-                    "research", "speak", "surveil", "tell", "transfer", "utter"}, (
+                    "research", "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
     # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
@@ -10946,10 +10955,12 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # test's `ever` note.
     # ⚠⚠ v11 CR-87 (B10-11): `capture` JOINS, `oblige` AND `tend` LEAVE (22 -> 21) -- the reason and its control are at the
     # corpus test's `ever` note.
+    # ⚠⚠ v11 CP-T03-08 (B10-11): `tend` JOINS (21 -> 22), nothing leaves -- the reason and its control are at the corpus test's
+    # `ever` note.
     assert set(executed) == {"argue", "capture", "carry", "challenge", "commit", "conceal", "create_record",
                              "interview", "fight", "give", "issue",
                              "move", "petition", "reconstruct", "release", "research",
-                             "speak", "surveil", "tell", "transfer", "utter"}, (
+                             "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
         "ED-FI-0009's, 10 -> 11 is `release`'s, 11 -> 12 is `H-71`'s, 12 -> 13 is the admission "
         "of `kill / wound`, 13 -> 12 is `R8.1`'s (`dispatch`, see above), 12 -> 13 again is "
@@ -12175,7 +12186,10 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # ⚠ 20 -> 21 BEFORE AND 18 -> 19 AFTER, v11 CP-T03-04 (`arms` joins `verb_capability`'s range): `train` forms one Candidate
     # per vocation, so each list gains one `train` Candidate (REM-30's mechanism); the missing verbs and the drop are unchanged.
     # CONTROL: `test_cp_t03_04_arms.py::revert_cp_t03_04` in process reads (20, 18) under this same test.
-    assert (len(before), len(after)) == (21, 19), (
+    # ⚠ 21 -> 20 BEFORE AND 19 -> 18 AFTER, v11 CP-T03-08: `tend` declares `referent_class: Person`, so it no longer forms on a
+    # plain referent like `S` (REM-21's own-referent term stamps only a person); the drop is unchanged. RE-DERIVED, not adjusted:
+    # the one missing verb is `tend`. CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` applied for the session (in process) reads the old value and passes.
+    assert (len(before), len(after)) == (20, 18), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")
@@ -13103,9 +13117,12 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # ⚠⚠ TEN -> NINE, v11 CR-87 (B10-11): `fight` LEAVES, nothing joins. It forms only on a subject the person holds a context
     # of violence against, and the headless run holds none, so no deposited belief has a `fight` to drop. The old ten are the parent
     # tree's pin; `revert_cr87` was NOT run against it.
+    # ⚠⚠ NINE -> EIGHT, v11 CP-T03-08 (B10-11): `tend` LEAVES, nothing joins. It forms only on a `Person`-classed referent now (a
+    # wounded man `wounded_with` stamps, or a person the question itself names), and the headless run's drops were on the plain
+    # `hearth_ostvik`, no person. CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` applied for the session (in process) reads the old value and passes.
     assert {v for v, _ in hl_live} == {"challenge", "comply", "construe", "evade / defy", "exchange",
                                        "interview",
-                                       "tend", "train", "transfer"}, (
+                                       "train", "transfer"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `examine`/`restore`/"
         "`interview`/`fight`/`research` are the `exists:` and `existence:`-cell drops the "
         "investigation and combat acts open, and `restore` is the one worth naming on its own: it "
@@ -14615,7 +14632,11 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default():
     # v11 CP-T03-04 (`arms` joins `verb_capability`'s range, a FORMATION mover: one more `train` Candidate per formation): `none`
     # diverged 5 -> 4, genuine 33 unmoved; a fork's alternative can be the new `train` Candidate. CONTROL:
     # `test_cp_t03_04_arms.py::revert_cp_t03_04` in process reads 33/5 and the whole test passes.
-    assert (got["none"]["genuine"], got["none"]["diverged"]) == (33, 4), got
+    # v11 CP-T03-08 (B10-11; `tend` forms only on a `Person`-classed referent, `wounded_with` stamps the wounded, a FORMATION mover):
+    # `none` 33/4 -> 31/3, a re-record read off `got` (this loop on this tree); `actor` and `total` unmoved at 28/2. UNIT AND
+    # DIRECTION: `tend` no longer forms on every plain referent, so the off-budget alternatives a fork can take thin and the
+    # control arm's fork population falls. CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` applied for the session (in process) reads the old value and passes.
+    assert (got["none"]["genuine"], got["none"]["diverged"]) == (31, 3), got
     # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
     # ⚠ 14 of 18 -> 17 of 19 under `U4`: the sampled tie-break moved the act a fork's person takes,
@@ -15285,7 +15306,8 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # v10 REM-30: 33/5 -> 33/6, the sibling test's move (the `verb_capability` rows; its `(33, 6)` note).
     # v10 PC-10b: 33/6 -> 33/5, the sibling test's move (a challenge is a Record; its `(33, 5)` note and its control).
     # v11 CP-T03-04: 33/5 -> 33/4, the sibling test's move (`arms` in the vocation range; its `(33, 4)` note and its control).
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (33, 4), got
+    # v11 CP-T03-08: 33/4 -> 31/3, the sibling test's move (`tend`'s class; its `(31, 3)` note and its control).
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (31, 3), got
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
     # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject

@@ -3542,6 +3542,47 @@ def stage_referents(w: World, p: Person, ambs: Optional[list] = None) -> tuple:
     return _of_stamped_class(w, tuple(out))
 
 
+#: v11 CP-T03-08: the predicate of a body Observation -- `Person`'s own field name, the value CP-T03-02 writes as
+#: `loop/effects_combat.py::BODY` (this module may not import `loop`; `test_cp_t03_08_tend_on_the_wounded.py` asserts
+#: the two are equal, so they cannot drift).
+BODY_STEM = "body"
+
+
+def wounded_with(w: World, p: Person) -> tuple:
+    """THE WOUNDED `p` MAY TEND (v11 CP-T03-08, the home's `wounded_with(..., cls="Person")` [ASSUMPTION; medium; Jordan
+    to correct; revert: drop the term in `questions_for` and `tend`'s `referent_class`]): `p` himself when his OWN body
+    is below his OWN ceiling (`Person.body_ceiling`, CP-T03-07), then, sorted by id, each OTHER living person `with`
+    him (`place_of`, `with`'s one owner, as the `with` stem reads it) whom HE BELIEVES below whole: the newest
+    `(person, "body", v)` claim his own ledger holds about that person (CP-T03-02's Observation, or a told copy of it;
+    newest by `(when, round)`, a later ledger position breaking a tie) under `v < condition_scale`.
+
+    THE LAWFUL-INPUT RULE: IT READS NO OTHER PERSON'S TRUE BODY -- only `p.body`, `p.body_ceiling`, `p.ledger`, and
+    where the others stand. So it does not repeat the AX-7 tension `vacancies` carries (H-207): a wounded man whom
+    nobody saw hurt is stamped only for himself. Ceiling, not scale, for himself (he knows his own mark); scale for
+    another (a believed value names no ceiling). A stale belief is the believer's: a man healed since the claim is
+    still stamped, and `tend` is then refused at its write (`_eff_tend`'s `NoOpReceipt`). Stamped by `questions_for`
+    as `Person` (`World.class_of`), so `tend` (`referent_class: Person`) forms on it -- and so do the other rows
+    declaring `Person` (the shared class; the fold disposes). Resolver-side and read-only. `()` for a whole man who
+    holds no belief of a wounded body beside him."""
+    out = [p.id] if p.body < p.body_ceiling else []
+    newest: dict = {}
+    for i, c in enumerate(p.ledger):
+        if c.predicate != BODY_STEM or c.subject == p.id or not isinstance(c.value, (int, float)):
+            continue
+        key = (c.when, c.round, i)
+        if c.subject not in newest or key > newest[c.subject][0]:
+            newest[c.subject] = (key, c.value)
+    if not newest:
+        return tuple(out)
+    scale = w.fixtures.get("condition_scale")
+    here = place_of(w, p.id)
+    if here is None:
+        return tuple(out)
+    out += [q for q in sorted(newest)
+            if newest[q][1] < scale and q in w.persons and place_of(w, q) == here]
+    return tuple(out)
+
+
 def _stamped(q: Question, added: tuple, w: World, classed: tuple = ()) -> Question:
     """`q` carrying the ids in `added` as CLASSED referents (IN-53, DECISION 2026-10-13 D1) -- the
     one stamp site. Each id's class is the collection the World holds it in (`World.class_of`:
@@ -3954,11 +3995,15 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # CL-THRUST B3.2 (R2; [ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND, APPENDED LAST, THE
     # REFERENTS OF THE STAGES HE HAS NOT PASSED (`stage_referents`), through the same class test as a question's own
     # referent. `()` while `goal_stages` is `[]`, so with no ladder the output is byte-identical.
+    # v11 CP-T03-08 ([ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND, APPENDED, THE WOUNDED HE MAY
+    # TEND (`wounded_with`: himself below his ceiling, and those beside him he BELIEVES hurt), as `Person` -- `tend`
+    # forms on them, reading no other person's true body.
     told = ledger_names(p.ledger)
     added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + larders_in_purview(w, p, told) + holdings_to_found(w, p)
              + (own_referents_of_class(w, out[0]) if out else ())
-             + works_sites(w, p) + propositions_heard(w, p) + stage_referents(w, p, ambs))
+             + works_sites(w, p) + propositions_heard(w, p) + stage_referents(w, p, ambs)
+             + wounded_with(w, p))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
     # (`detainees_held`), as `Detainee` -- the restrained-persons class, named here because it is no
     # collection; only `interrogate` declares it. Empty while no live `detain` names his seat, and then

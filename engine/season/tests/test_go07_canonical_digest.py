@@ -641,16 +641,23 @@ def _counts(w) -> dict:
 # (`body_mark_model: none` and the field out of the canonical encoding) reads the old three `new` values and the old build
 # `7266f56b...` exactly; the `repr` digest has no in-process revert (a dataclass `repr` carries every field). A GOLDEN
 # RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v11 CP-T03-08 (`tend` declares `referent_class: Person` and `wounded_with` stamps the wounded: a
+# FORMATION mover of every season and an outcome mover -- a man below his ceiling tends himself whole; `acts`, `census`
+# and `counts` move at every seed). Was, for seeds 0 / 1 / 2: `old` 92e19ffc... / 6cffb790... / aa306a67..., `new`
+# eb2919ae... / fc3201f3... / 6da144ff..., `acts` 744 / 747 / 747, census f970d2ed... / 3b1d0142... / 015989bc..., `log`
+# 13401 / 11767 / 11344. The build pins do not move (the item writes no field). CONTROL:
+# `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` reads the old three `new` values exactly. A GOLDEN RE-RECORDED,
+# NOT A BALANCE CLAIM.
 BASE = {
-    0: {"old": "92e19ffc01674b4609a899d48a72513d", "new": "eb2919ae5fc955c27529f12b5a93bd62", "acts": 744,   # CP-T03-07: was 42847586... / b2dde1fc.... CP-T03-04: was 7e81a2cf... / 20accb03... / census 6032506e... / records 203 / propositions 143 / tenures 1028 / log 13400
-        "census": "f970d2ed017bc0d98bafc9f339def775abb308873089c90a9a4a8c942a24e221",
-        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 202, "propositions": 144, "dates": 5, "docket": 8, "tenures": 1029, "log": 13401}},
-    1: {"old": "6cffb790f3d44014506da45908ddfb52", "new": "fc3201f39df518f5d2189685a5935107", "acts": 747,   # CP-T03-07: was 7e8ccabe... / 07634b99.... CP-T03-04: was ec800435... / 6e25b047... / 746 / census 6282d017... / records 212 / propositions 145 / log 12273. CR-85 (faculty replaces history): was 18de0fa6... / f89ea45d...; `acts`, `census` and `counts` do not move. CP-T03-02 (a fight's `ending` + body Observation): was 327bac57... / f4330aac... / census 321d2548... / log 12271
-        "census": "3b1d01429c4c1205cc79090192cb5387f6419406e83822c1dfeac0f27577f0ec",
-        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 210, "propositions": 146, "dates": 5, "docket": 9, "tenures": 1022, "log": 11767}},
-    2: {"old": "aa306a675cc037964bef56b3b70b8b07", "new": "6da144ff2d1dbf8d142f8ceb38f55f5a", "acts": 747,   # CP-T03-07: was 6c3fdfa0... / 1cc4370d.... CP-T03-04: was ecc848ea... / fe9032ed... / 746 / census 49f45000... / propositions 141 / docket 8 / tenures 988 / log 11340. CP-T03-02: was 4fb68bcf... / a030141a... / census 414d3ac0... / log 11338; CR-87: was e6f01019... / 47151656... / 740
-        "census": "015989bc810e812031d906d7760ed92304911a53905f46a9375988ea591b8730",
-        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 183, "propositions": 139, "dates": 5, "docket": 7, "tenures": 984, "log": 11344}},
+    0: {"old": "942102ac04efcbc0ee8fb7f612ea7afb", "new": "d4c83c8ca9d5082f5237a3889e1a995b", "acts": 755,   # CP-T03-08: was 92e19ffc... / eb2919ae... / 744 / census f970d2ed... / records 202 / propositions 144 / tenures 1029 / log 13401. CP-T03-07: was 42847586... / b2dde1fc.... CP-T03-04: was 7e81a2cf... / 20accb03... / census 6032506e... / records 203 / propositions 143 / tenures 1028 / log 13400
+        "census": "4cfb3efe1ad9455df9822760145226d1272e9da33efcf5a4f5925fe1598bcc3a",
+        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 198, "propositions": 143, "dates": 5, "docket": 8, "tenures": 1024, "log": 13454}},
+    1: {"old": "3caed4ccdb11887aedfd38cd4b93ca33", "new": "d9f3be70a492753d16584d068ba98108", "acts": 754,   # CP-T03-08: was 6cffb790... / fc3201f3... / 747 / census 3b1d0142... / records 210 / propositions 146 / docket 9 / tenures 1022 / log 11767. CP-T03-07: was 7e8ccabe... / 07634b99.... CP-T03-04: was ec800435... / 6e25b047... / 746 / census 6282d017... / records 212 / propositions 145 / log 12273. CR-85 (faculty replaces history): was 18de0fa6... / f89ea45d...; `acts`, `census` and `counts` do not move. CP-T03-02 (a fight's `ending` + body Observation): was 327bac57... / f4330aac... / census 321d2548... / log 12271
+        "census": "09f11a01493b441979ab66c19532debbfca8739690f40e710fb3c70889e77ec8",
+        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 205, "propositions": 141, "dates": 5, "docket": 10, "tenures": 1011, "log": 11937}},
+    2: {"old": "bb2336b4ea5e13c217ecc03c2964e3ee", "new": "285fb92a927eaa642e8478c799995315", "acts": 757,   # CP-T03-08: was aa306a67... / 6da144ff... / 747 / census 015989bc... / records 183 / propositions 139 / tenures 984 / log 11344. CP-T03-07: was 6c3fdfa0... / 1cc4370d.... CP-T03-04: was ecc848ea... / fe9032ed... / 746 / census 49f45000... / propositions 141 / docket 8 / tenures 988 / log 11340. CP-T03-02: was 4fb68bcf... / a030141a... / census 414d3ac0... / log 11338; CR-87: was e6f01019... / 47151656... / 740
+        "census": "ab2d3aa73d60479bb651435ea3bbe7b03298b9d17f8a94776ce5d6521d4bf902",
+        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 179, "propositions": 138, "dates": 5, "docket": 7, "tenures": 981, "log": 11398}},
 }
 
 
