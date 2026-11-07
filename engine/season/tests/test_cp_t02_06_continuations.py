@@ -59,9 +59,13 @@ from ..state.ids import H, draw_factory
 # Candidate per `train` formation with nobody holding the key): seeds 0 / 1 / 2 were 20accb03... / 6e25b047... / fe9032ed...; no roll moves (nobody
 # holds `arms`). CONTROL: `test_cp_t03_04_arms.py::revert_cp_t03_04` (the three roster rows and the vocation off) reads the
 # old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-PRE_BUILD = {0: "b2dde1fcf889605d76a30eeba48d2aa0",   # CP-T03-04: was 20accb03...
-             1: "07634b99c7c757e451855d7554a1709c",   # CP-T03-04: was 6e25b047...; CR-85: was f89ea45d...
-             2: "1cc4370de8e8552d1fdf914109aadd37"}  # CP-T03-04: was fe9032ed...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
+# RE-PINNED ONCE at v11 CP-T03-07 (`Person.body_ceiling`, a SCHEMA mover of every realm, and the lasting mark, an outcome
+# mover where a survivor reached the deepest gate -- one person at seed 2): seeds 0 / 1 / 2 were b2dde1fc... / 07634b99... /
+# 1cc4370d.... CONTROL: `test_cp_t03_07_body_ceiling.py::revert_cp_t03_07` (`body_mark_model: none` and the field out of
+# the canonical encoding) reads the old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+PRE_BUILD = {0: "eb2919ae5fc955c27529f12b5a93bd62",   # CP-T03-07: was b2dde1fc...; CP-T03-04: was 20accb03...
+             1: "fc3201f39df518f5d2189685a5935107",   # CP-T03-07: was 07634b99...; CP-T03-04: was 6e25b047...; CR-85: was f89ea45d...
+             2: "6da144ff2d1dbf8d142f8ceb38f55f5a"}  # CP-T03-07: was 1cc4370d...; CP-T03-04: was fe9032ed...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
 
 
 def _realm(retainers=2):

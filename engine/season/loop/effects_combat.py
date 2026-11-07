@@ -18,7 +18,7 @@ from dataclasses import replace
 
 from ..data.rosters import (
     DECLARED, ENDING_FELLED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
-    VERB_CAPABILITY, WOUND_HARM_MODELS, require_member,
+    VERB_CAPABILITY, WOUND_HARM_MODELS, BODY_MARK_MODELS, require_member,
 )
 from ..data.matrix import matrix_row
 from ..data.requires import Observation
@@ -46,6 +46,7 @@ from .effects_shared import _debit, _operand, effect_for
 CAPTURED = "person.captured"        # the one kind `capture`'s opened `detain` earns (`verb_table.yaml`'s `capture` row)
 DUEL_YIELDED = "duel.yielded"       # v10 PC-10b: the kind a duel's yielder earns (`verb_table.yaml`'s `accept` row)
 BODY = "body"                     # the predicate of a body Observation: the cell's own field name
+CEILING = "body_ceiling"          # v11 CP-T03-07: the cell the lasting mark writes (`write_matrix.yaml`)
 
 
 def _yielder(res: "Resolution") -> "str | None":
@@ -177,9 +178,16 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
                 bands[pid] = band
     bodies = {pid: _harm(w.persons[pid], band, model, states[pid])
               for pid, band in bands.items()}
+    # v11 CP-T03-07: THE LASTING MARK, and the written body held under the ceiling it leaves (a body is never above
+    # its ceiling; the Observation below reports the body as written).
+    marks = _marks(w, bodies, states)
+    for pid, ceiling in marks.items():
+        bodies[pid] = min(bodies[pid], ceiling)
     grown = _grown(w, a, (a.actor, who), bands, bodies)
 
     def perform() -> None:
+        for pid, ceiling in marks.items():
+            w.persons[pid].body_ceiling = ceiling
         for pid, body in bodies.items():
             if body is not None:
                 _wound(pid, body)
@@ -238,7 +246,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         # `observation_deposit_mode` (`actor`: the act's actor alone), no new channel. A `none`-model party
         # (`bodies[pid] is None`) writes nothing and observes nothing.
         # [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]
-        named += (Subject.entity("persons", pid, earns=own, fields=("body",),
+        named += (Subject.entity("persons", pid, earns=own, fields=(BODY, CEILING),
                                  observed=body_observed(pid, bodies[pid])),)
     # CP-T03-04 (iv): EACH GROWN PARTY IS ITS OWN SUBJECT ON `capability`, earning the `(Person, capability)` cell's
     # kind alone -- never a body subject's kind, and never on a party who did not grow (the filter above).
@@ -350,6 +358,48 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
         base.apply()
         w.add_tenure(nt)
     return Change(base.subjects + (Subject.edge(nt, earns=CAPTURED),), perform, base.ending)
+
+
+def marked_ceiling(ceiling: int, floors) -> int:
+    """v11 CP-T03-07 (P32): THE CEILING A MARK LEAVES -- one below the highest body band floor at or beneath `ceiling`
+    (`band_floors["body"]`, the floors `decision/budget.py::body_band_penalty` counts): 1000 -> 799 -> 499 -> 99 on the
+    shipped floors. With no floor at or beneath it, `ceiling` unchanged: the marks are as many as the body has floors,
+    and no count is spelt here."""
+    below = [int(f) for f in floors if int(f) <= ceiling]
+    return max(below) - 1 if below else ceiling
+
+
+def _marks(w: "World", bodies: dict, states: dict) -> dict:
+    """v11 CP-T03-07: `{pid: new body_ceiling}` for each party of a fight who SURVIVES it (his written body is above 0;
+    a `none`-arm party, written nothing, is not marked) at the engine's DEEPEST GATE SHORT OF FELLING -- `wounds >=
+    max_wounds` on his lifted tracker (`rosters.yaml: wound_quantities`) -- and whose ceiling the mark lowers
+    (`marked_ceiling`). `body_mark_model: none` (`H-258`, the control) marks nobody.
+    [ASSUMPTION; medium; Jordan to correct; revert: `body_mark_model: none`]"""
+    mode = w.fixtures.get("body_mark_model")
+    require_member(
+        mode, BODY_MARK_MODELS, f"body-mark model {mode!r} is not in the roster", "H-258",
+        law="`wound_harm_model`'s precedent -- an unrecognised mode silently falling back would make every "
+            "measurement of the sweep read the control")
+    if mode == "none":
+        return {}
+    floors = w.fixtures.get("band_floors")["body"].values()
+    out = {}
+    for pid, body in bodies.items():
+        if not body:
+            continue
+        st = states[pid]
+        if st.get("wounds") is None or st.get("max_wounds") is None:
+            raise Unspecified(
+                f"the scene reports no wound gate for {pid!r} ({st!r})", "S39.4/H-258",
+                needs="`wounds` and `max_wounds` on the party's wound state",
+                law="the mark is READ off the scene's tracker; a scene that carries no gate cannot be read")
+        if int(st["wounds"]) < int(st["max_wounds"]):
+            continue
+        p = w.persons[pid]
+        after = marked_ceiling(p.body_ceiling, floors)
+        if after != p.body_ceiling:
+            out[pid] = after
+    return out
 
 
 def _harm(p: "Person", band: str, model: str, st: dict) -> "int | None":
@@ -615,8 +665,8 @@ def _eff_tend(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """v9 IN-12 step 9 (#453 §9.4) -- `tend` RAISES THE SUBJECT'S `Person.body` TO THE BODY'S SCALE.
 
     THE MAGNITUDE IS `restore`'s FORMULA READ ON A BODY (`loop/effects_economy.py::_rise`): the headroom
-    to the ceiling -- here `condition_scale`, the scale a person is built at (`Person.body`'s default) --
-    taken whole, because the `share` term is the commons of a fabric and a body has none, and `f(degree)`
+    to the ceiling -- the person's own `Person.body_ceiling` (v11 CP-T03-07), built at `condition_scale` and lowered
+    only by a fight's lasting mark (`_marks`) -- taken whole, because the `share` term is the commons of a fabric and a body has none, and `f(degree)`
     is the identity on an uncontested row (`H-164`). So one tender restores a person whole in one act, as
     one hand raises a fabric to its ceiling [ASSUMPTION; medium; Jordan to correct; revert: a swept
     fixture fraction of the headroom -- #453's *'fast partial and slow full form'*, C-48].
@@ -629,7 +679,8 @@ def _eff_tend(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     p = w.persons.get(who)
     if p is None:
         return NO_CHANGE
-    whole = max(p.body, int(w.fixtures.get("condition_scale")))
+    # v11 CP-T03-07: HEALS TOWARD THE PERSON'S OWN CEILING, never `condition_scale`: a marked man is restored to his mark.
+    whole = max(p.body, p.body_ceiling)
 
     def perform() -> None:
         p.body = whole

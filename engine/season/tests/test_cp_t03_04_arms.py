@@ -276,6 +276,10 @@ def test_capture_and_accept_grow_by_the_same_rule():
 @pytest.mark.parametrize("seed", [0, 1, 2])
 def test_control_formation_moves_every_hash_and_the_item_off_reproduces_the_pre_item_hash(seed, monkeypatch,
                                                                                          _engine):
+    # v11 CP-T03-07 (`Person.body_ceiling`, a schema mover of every realm) is reverted in process on BOTH arms
+    # (`test_cp_t03_07_body_ceiling.py::revert_cp_t03_07`, whose own control reproduces POST_ITEM), so both pins stand.
+    from .test_cp_t03_07_body_ceiling import revert_cp_t03_07
+    revert_cp_t03_07(monkeypatch)
     w = build_realm(seed)
     run(1, seed, w=w)
     assert w.content_hash() == POST_ITEM[seed] != PRE_ITEM[seed]

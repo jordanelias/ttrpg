@@ -36,6 +36,7 @@ from ..seam.wrappers import combat as C
 from ..seam.wrappers import sigma
 from ._fresh_process import entry_target
 from .test_cp_t03_04_arms import revert_cp_t03_04
+from .test_cp_t03_07_body_ceiling import revert_cp_t03_07
 
 
 # ⚠ A FIXTURE, NOT A MODULE-LEVEL `skipif(C.engine() is None)` (`test_combat_band_edges.py`'s precedent):
@@ -105,6 +106,7 @@ def test_falsifier_every_season_roll_reads_pool_8_against_ob_1(seed, monkeypatch
     # v11 CP-T03-04 (`arms` in the vocation range, a formation mover of every season) is reverted so `POST_ITEM` stands;
     # its own file reads the live tree's rolls (`test_cp_t03_04_arms.py`, every season roll still at (8, 1.0)).
     revert_cp_t03_04(monkeypatch)
+    revert_cp_t03_07(monkeypatch)        # v11 CP-T03-07 (`body_ceiling`, a schema mover of every realm), the same way
     seen, got = _season_rolls(monkeypatch, seed)
     assert _off_the_reading(seen) == [], dict(seen)
     assert got == POST_ITEM[seed]
@@ -121,6 +123,7 @@ def test_mutation_the_seam_read_dropped_reproduces_9_against_1_5_and_reddens(mon
 def test_control_faculty_3_for_every_party_reproduces_the_pre_item_hash(seed, monkeypatch):
     revert_cr85(monkeypatch)
     revert_cp_t03_04(monkeypatch)        # v11 CP-T03-04, a later formation mover of every season: so `PRE_ITEM` stands
+    revert_cp_t03_07(monkeypatch)        # v11 CP-T03-07 (`body_ceiling`, a schema mover of every realm), the same way
     seen, got = _season_rolls(monkeypatch, seed)
     assert got == PRE_ITEM[seed]
     assert set(seen) <= {(9, 1.5)}, dict(seen)

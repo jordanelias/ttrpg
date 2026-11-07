@@ -1061,6 +1061,18 @@ rosters:
       still fights*), followed rather than reinvented.
     values: [scene_fraction, total, none]
 
+  body_mark_models:
+    source: "v11 CP-T03-07 (P32, a permanent injury mark). A fight can wound and every recovery heals to the scale, so no fight leaves a lasting mark; `Person.body_ceiling` is the bound a recovery heals toward."
+    cite: "H-258"
+    note: >-
+      WHETHER A FIGHT LEAVES A LASTING MARK. `deepest_gate` is the SHIPPED arm: a party who survives
+      a fight at the engine's deepest gate short of felling (`wounds >= max_wounds` on his lifted
+      tracker, both `wound_quantities` members) has his `body_ceiling` fall to one below the next
+      `band_floors["body"]` floor beneath it, so the marks are as many as the body has floors
+      (`loop/effects_combat.py::marked_ceiling`). `none` is the CONTROL: no ceiling moves and
+      every outcome is the pre-item tree's (the field itself is still a schema mover).
+    values: [deepest_gate, none]
+
   field_degree_bands:
     source: "M4, `ED-IN-0279` clause (a). The token every `march` fold writes -- `seam/ladder.py`'s `field_degree`, analogous to `combat_degree_bands` above."
     row: H-147
