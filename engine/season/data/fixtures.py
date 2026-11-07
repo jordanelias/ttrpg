@@ -1000,6 +1000,14 @@ DEFAULT_FIXTURES = Fixtures(
     # lower than the member band (valence x weight >= -1); `False` is the REVERT, the rows as they stood (a disloyal
     # member's -4 toward the King). A switch, not a number.
     loyalty_toward_creed=True,         # `H-256`, swept False (the revert) / True (SHIPPED, CR-87)
+    # `H-274` (v11 CR-78, `strife-00` §5, the stamp). WHETHER WHAT IS AT STAKE IN A FLOW A PERSON KNOWS OF IS STAMPED
+    # AMONG HIS OCCASIONS: `True` appends `queries/world_q.py::flows_at_stake` (each open strand his ledger holds:
+    # its rung, the seats at it and their holders, its parties and referents, as their existing classes) to the
+    # standing-occasion stamp `questions_for` puts on his first question; `False` appends nothing and every output
+    # is byte-identical. SHIPPED OFF; the flip on is a separate, declared hash-moving commit, measured by the strife
+    # guard (`strife-00` §6). A switch, not a number.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-274 -- whether a held flow conditions a person's occasions; strife-00 §5 gives the stamp and no measurement yet licenses it on, so it ships off and is swept False / True]
+    stamp_known_flows=False,           # `H-274`, swept False (control, SHIPPED) / True
     # `H-196` (v9 IN-18 `G3`, slant). WHAT A TELLER PASSES ON ABOUT A SUBJECT: `newest` is the
     # pre-G3 pick; `valence` passes on the deed the teller judges most strongly by their own
     # pursuits, however old (`queries/person_q.py::said_of`; `rosters.yaml: said_slants`). `newest`

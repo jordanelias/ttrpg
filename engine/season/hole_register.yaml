@@ -5382,6 +5382,19 @@ rows:
     cite:      "MEASURED with n=15 hand-set judges on the forge fixture, not a rate; only the sign is reported, because the values are tuned and are Jordan's. Related: H-198 (a teller never lies), H-183 (the hearer's record of a teller)."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: one person lies to another [ASSUMPTION: rendered from the word lying]. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
+  - id:        H-274
+    tier:      1
+    hole:      "WHETHER A FLOW A PERSON KNOWS OF CONDITIONS HIS OCCASIONS (v11 CR-78, `strife-00` §5, the stamp). Without the stamp a person who knows of a rising at his own settlement chooses exactly as if he did not: no question he answers carries the rung, its seats or their holders, so no verb forms on them because of the flow"
+    kind:      "RULING"
+    owner:     "`engine/season/queries/world_q.py::flows_at_stake` (the term), appended in `questions_for` to the `_stamped` stamp"
+    grade:     "assumption"
+    default:   "False -- SHIPPED OFF: the term appends nothing and every output is byte-identical. The flip on is a separate, declared hash-moving commit, made only if the strife guard (`strife-00` §6) and HR-9 controls (2) and (4) hold on against off, [ASSUMPTION; medium; Jordan to correct; revert: ship off]"
+    site:      "Fixtures stamp_known_flows, read by `engine/season/queries/world_q.py::questions_for`"
+    sweep:     ["False (control, SHIPPED)", "True"]
+    unblocks:  "B11-S4 commit (2), the flip; B11-S5 (the credit term) waits on the stamp measured"
+    cite:      "BUILT at B11-S4 commit (1) (CR-78). FALSIFIER: `engine/season/tests/test_strife_flows.py` -- a person aware of a rising at his settlement finds that rung, its seat and its holder among his occasions with the switch on and not off; a referent of a class outside the closed set is refused. CONTROL: off reproduces the base `build_realm(0)` hash (the same file)"
+    source:    "v11 CR-78 commit (1), batch B11-S4"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
