@@ -36,6 +36,7 @@ from engine.season.queries.inputs import PlayHost
 from engine.season.state.ids import H, draw_factory
 from engine.season.tests.test_cr87_violence_contexts import revert_cr87
 from engine.season.tests.test_cr85_faculty_replaces_history import revert_cr85
+from engine.season.tests.test_cp_t03_04_arms import revert_cp_t03_04
 
 import pytest
 
@@ -51,9 +52,12 @@ def _the_world_this_was_measured_on(monkeypatch):
     v11 CR-85 (`faculty` replaces `history` in the pool and the Ob) moves which fights this world forms: with it, every
     fight on the seed involves the played person and the AUTOMATED branch of the party test goes unexercised. So it is
     read at CR-85's revert too (`test_cr85_faculty_replaces_history.py::revert_cr85`, whose own control reproduces the
-    pre-CR-85 hash)."""
+    pre-CR-85 hash).
+    v11 CP-T03-04 (`arms` in the vocation range, a formation mover of every season) is reverted too
+    (`test_cp_t03_04_arms.py::revert_cp_t03_04`), so these readings stand on the world they were measured on."""
     revert_cr87(monkeypatch)
     revert_cr85(monkeypatch)
+    revert_cp_t03_04(monkeypatch)
 
 
 def _scripted(p, v, s, ask_budget, auto):

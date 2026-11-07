@@ -38,6 +38,7 @@ from ..state.carriers import Act, Record, Scene
 from ..state.ids import H, draw_factory
 from .test_cp_t03_02_band_ending_and_body import revert_cp_t03_02
 from .test_cr85_faculty_replaces_history import revert_cr85
+from .test_cp_t03_04_arms import revert_cp_t03_04
 from .test_cr87_violence_contexts import revert_cr87
 
 CROWD, FIGHTER, FOE = "c_crowd", "p_low", "p_mid"       # `tiny_world`: p_low and p_mid live at the hearth `Hh`
@@ -217,10 +218,13 @@ def test_control_the_realm_ends_at_the_base_hash_wherever_no_cohort_was_a_party(
     ⚠ v10 CP-T03-02 (the band's `ending` and the body Observation, a later mover of every realm that fought) is reverted
     too (`revert_cp_t03_02`), the same way, so `BASE` stands rather than being re-taken.
     ⚠ v11 CR-85 (`faculty` replaces `history` in the pool and the Ob, a later mover of every realm that fought) is
-    reverted too (`revert_cr85`), the same way."""
+    reverted too (`revert_cr85`), the same way.
+    ⚠ v11 CP-T03-04 (`arms` in the vocation range, a formation mover of every realm) is reverted too
+    (`revert_cp_t03_04`), the same way."""
     revert_cr87(monkeypatch)
     revert_cp_t03_02(monkeypatch)
     revert_cr85(monkeypatch)
+    revert_cp_t03_04(monkeypatch)
     h, reads, refused_on_it = _realm_two_seasons(seed)
     assert reads > 0, "the conjunct was never read: the equality below observes nothing"
     assert refused_on_it == 0, f"{refused_on_it} Events were refused on `individual` at seed {seed}"
@@ -230,8 +234,10 @@ def test_control_the_realm_ends_at_the_base_hash_wherever_no_cohort_was_a_party(
 def test_where_a_cohort_was_a_party_the_realm_moves_and_the_refusals_are_the_conjuncts(monkeypatch):
     """Seed 2 (since PC-10b's re-take, under `WITHHELD`; seed 1 before it): a cohort was a party on the pre-conjunct base.
     The same seed now refuses that act on `individual`, and the realm ends elsewhere -- the mover the position declares.
-    Read with CR-87 at its revert, for the control's reason above."""
+    Read with CR-87 at its revert, for the control's reason above, and (v11) CP-T03-04's formation mover at its revert,
+    so the seed forms the cohort-party act it was measured on."""
     revert_cr87(monkeypatch)
+    revert_cp_t03_04(monkeypatch)
     h, reads, refused_on_it = _realm_two_seasons(2)
     assert refused_on_it > 0, "no act was refused on `individual` at seed 2"
     assert h != BASE[2], "a cohort-party fight was refused and the realm did not move"

@@ -1457,6 +1457,17 @@ rosters:
       vocation range (`data/verbs.py::VOCATIONS`, a frozenset of these values; no second roster to extend):
       `argue` and `inquiry` join `copying`, and every `train` formation (`vocation_sourced`) forms one
       Candidate per vocation, three where it formed one. A DECLARED MOVER where formation moves, not before.
+      ⚠ v11 CP-T03-04 (B10-11): `fight`, `accept` and `capture` -- the three rows contesting `the body` -- draw on
+      `arms`, so a held `arms` key reaches combat's pool and Ob through `faculty` (CR-85: `combat_input` fills
+      `PersonalCombatInput.faculties` from it; no second skill input), `train` may raise it (one more Candidate per
+      `train` formation: a formation mover with nobody holding the key), and `_eff_kill` raises it by one on each
+      surviving holder of a fight that drew blood (the key is read off this table by the verb, never spelt there).
+      `capture` is added beside the design's `fight` and `accept` (CR-85 design §5) because it opens the same fight
+      through the same `combat_input`; without its row an `arms` holder would roll `pool_default` in a capture.
+      ⚠ THE NAME: `arms` is the plan's; a reader may take `capability["arms"]` for EQUIPMENT, which is
+      CP-T03-03's `arms_kinds` (matter kinds) -- a different thing. [ASSUMPTION; low; Jordan to correct; revert:
+      rename the roster key] -- the rename is this table's three values and `vocation_attribute`'s key, nothing in a
+      body. NOBODY HOLDS IT at landing: no cast overlay value and no lifepath template names it (Jordan's content).
     sweep: [declared, uniform, absent]
     keys: [verb_table]
     values:
@@ -1466,6 +1477,9 @@ rosters:
       research: "inquiry"
       examine:  "inquiry"
       surveil:  "inquiry"
+      fight:    "arms"
+      accept:   "arms"
+      capture:  "arms"
 
   vocation_attribute:
     source: >-
@@ -1506,10 +1520,18 @@ rosters:
       `references/descriptor_registry.yaml`). Focus, Reason and Presence carry no registry description, so
       no row rests on one. Checked by a read-only pass at CR-20's close; the pass changed `argue` to Attunement and two
       citations, and Jordan's ruling of 2026-11-05 returned `argue` to Presence.
+      `arms` -> Coordination (`attr.body.agility`, v11 CP-T03-04): the row is forced by this table's closure (a
+      vocation with no row refuses the import), and the choice is the cheap swap
+      [ASSUMPTION; medium; Jordan to correct; revert: Strength (`attr.body.strength`) or Endurance]. Ground: a
+      fighter's trained skill is handling a weapon, which `references/descriptor_registry.yaml` names
+      Coordination (aliases Agility, Dexterity). ⚠ The combat module ALSO reads `agi` as its own attribute
+      (`modules/combat/attributes.py`), so a person holding Coordination would bring it twice; no built person
+      holds any attribute at landing, so the double read reaches no season.
     values:
       copying: "attr.mind.focus"
       argue:   "attr.social.charisma"
       inquiry: "attr.mind.acuity"
+      arms:    "attr.body.agility"
 
   lifepaths:
     source: >-

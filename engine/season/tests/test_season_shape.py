@@ -9148,7 +9148,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # only the dispute conjunct stripped it reads 140 by a different partition (`challenge` back in 85 worlds, `fight` in 22). Not a
     # ranking change: `H-96` is untouched. THE SAME-BREATH CHECK: the universal set is EMPTY on both sides, and the assertions below
     # (`ever`, `refused_only`, `varying`) are read in the same run. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-    assert len(by_sig) == 134, (
+    # ⚠⚠ **134 -> 133, v11 CP-T03-04 (B10-11), MEASURED BY THIS TEST'S OWN `by_sig` (`_corpus_rows`, seed 0, PYTHONHASHSEED=0, the same
+    # script on both arms), AGAINST THIS TREE WITH CP-T03-04 AT ITS REVERT (`revert_cp_t03_04`, the three `verb_capability` rows and
+    # the vocation off), WHICH READS 134 AND PASSES THE WHOLE TEST; `live` did not move (143 on both).** THE UNIT AND THE DIRECTION:
+    # variety FELL by one. `arms` in the vocation range gives every `train` formation one more Candidate (nobody holds the key, so
+    # none lands and `train` executes in no world on either arm); the draws walk another trajectory. Executed-world counts, revert ->
+    # here: `argue` 80 -> 79, `commit` 101 -> 100, `research` 83 -> 84, `conceal` 65 -> 66, `release` 11 -> 12; every other verb
+    # unmoved, none joins or leaves `ever`. Not a ranking change: `H-96` is untouched. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+    assert len(by_sig) == 133, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -12165,7 +12172,10 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # against (`rosters.yaml: violence_contexts`), and `S` is none, so it no longer forms here; the drop is unchanged
     # (`['exchange', 'transfer']`). RE-DERIVED, not adjusted: the one missing verb is `fight` (`revert_cr87` restores it).
     # [GROUNDED: measured at v11 CR-87 -- (20, 18) as built, the printed drop `['exchange', 'transfer']`]
-    assert (len(before), len(after)) == (20, 18), (
+    # ⚠ 20 -> 21 BEFORE AND 18 -> 19 AFTER, v11 CP-T03-04 (`arms` joins `verb_capability`'s range): `train` forms one Candidate
+    # per vocation, so each list gains one `train` Candidate (REM-30's mechanism); the missing verbs and the drop are unchanged.
+    # CONTROL: `test_cp_t03_04_arms.py::revert_cp_t03_04` in process reads (20, 18) under this same test.
+    assert (len(before), len(after)) == (21, 19), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")
@@ -14602,7 +14612,10 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default():
     # (`train`'s act id carries the vocation). CONTROL: the rows commit's four source files reverted read 33/5 here.
     # v10 PC-10b (a challenge is a Record, `accept` binds to one; a DECLARED MOVER wherever a challenge forms): `none` diverged 6 -> 5,
     # genuine 33 unmoved. CONTROL: the base tree (`95f58adb`'s `engine/season`) reads 33/6 here.
-    assert (got["none"]["genuine"], got["none"]["diverged"]) == (33, 5), got
+    # v11 CP-T03-04 (`arms` joins `verb_capability`'s range, a FORMATION mover: one more `train` Candidate per formation): `none`
+    # diverged 5 -> 4, genuine 33 unmoved; a fork's alternative can be the new `train` Candidate. CONTROL:
+    # `test_cp_t03_04_arms.py::revert_cp_t03_04` in process reads 33/5 and the whole test passes.
+    assert (got["none"]["genuine"], got["none"]["diverged"]) == (33, 4), got
     # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
     # ⚠ 14 of 18 -> 17 of 19 under `U4`: the sampled tie-break moved the act a fork's person takes,
@@ -14733,7 +14746,10 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default():
     # and not the pairs. One fork per arm does (9 v 8, 6 v 5, 6 v 5). MEASURED with the trace widened to `(actor, verb, subject, kind)`
     # in a scratch copy of the probe: `acts_differ` == `hash_differ` in every arm (9/9, 6/6, 6/6), so the equality still holds where
     # the trace can see the act. The gap is pinned, so a fork the log sees and the pairs do not is still one fork per arm and no more.
-    _TRAIN_KIND_GAP = {"none": 1, "actor": 1, "total": 1}
+    # ⚠ v11 CP-T03-04 (`arms` joins the vocation range, one more `train` Candidate per formation): the gap is TWO per arm (7 v 9 in
+    # each), the same mechanism one vocation over. CONTROL: `test_cp_t03_04_arms.py::revert_cp_t03_04` in process reads gap 1 and the
+    # whole test passes; with the trace widened to `(actor, verb, subject, kind)` in a scratch copy the equality holds (gap 0).
+    _TRAIN_KIND_GAP = {"none": 2, "actor": 2, "total": 2}
     assert all(g["hash_differ"] - g["acts_differ"] == _TRAIN_KIND_GAP[m] for m, g in got.items()), (
         f"the event log and the act stream disagree about whether a fork bit: {got}. Every act "
         "that moved must move the log, or the fork is being applied to one and not the other")
@@ -14901,7 +14917,12 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default():
         # at `actor` and 5/22 -> 8/28 (23% -> 29%) at `total`. The unit is the act mix a challenge's Record moves (the sibling tests'
         # `(33, 5)` / `(28, 2)` notes). The floor above holds: 40 > 33, 40 > 28, 40 > 28. CONTROL: the base tree (`95f58adb`'s
         # `engine/season`) reads (8, 33), (5, 24), (5, 22) and passes.
-        "none": (8, 33), "actor": (8, 28), "total": (8, 28)}, (
+        # ⚠⚠ **RE-PINNED AT v11 CP-T03-04 (`arms` joins the vocation range): `acts_differ` 8 -> 7 IN EVERY ARM, POPULATIONS UNMOVED --
+        # THE INSTRUMENT'S BLIND SPOT AGAIN, NOT RECOVERABILITY.** REM-30's unit one vocation over: one more fork per arm makes a person
+        # train in another vocation, which moves the log (`hash_differ` 9 in each) and not the `(actor, verb)` pairs. Measured in a
+        # scratch copy of the probe with the trace widened to `(actor, verb, subject, kind)`: 9/9 in every arm. The floor above holds.
+        # CONTROL: `test_cp_t03_04_arms.py::revert_cp_t03_04` in process reads (8, 33), (8, 28), (8, 28) and the test passes.
+        "none": (7, 33), "actor": (7, 28), "total": (7, 28)}, (
         f"the recoverability figures moved: {{k: (v['acts_differ'], v['genuine']) for k, v in got.items()}}. "
         "This is a RE-PIN DECISION, not necessarily a failure — but it is one somebody has to "
         "make deliberately, because `acts_differ / genuine` is how much of a fork the scene tick "
@@ -15263,7 +15284,8 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # v11 CR-17: 34/5 -> 33/5, the sibling test's move (`choice_temperature` 0.1 -> 0.05; its `(33, 5)` note and its control).
     # v10 REM-30: 33/5 -> 33/6, the sibling test's move (the `verb_capability` rows; its `(33, 6)` note).
     # v10 PC-10b: 33/6 -> 33/5, the sibling test's move (a challenge is a Record; its `(33, 5)` note and its control).
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (33, 5), got
+    # v11 CP-T03-04: 33/5 -> 33/4, the sibling test's move (`arms` in the vocation range; its `(33, 4)` note and its control).
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (33, 4), got
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
     # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject

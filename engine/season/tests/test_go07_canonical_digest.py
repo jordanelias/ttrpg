@@ -627,16 +627,22 @@ def _counts(w) -> dict:
 # `census`, `counts` unmoved); seeds 0 and 2 do not move (seed 0 fights nothing, seed 2's fights land where they
 # did). CONTROL: `test_cr85_faculty_replaces_history.py::revert_cr85` (the seam's faculty at 3 for every party) reads
 # the old value exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED ONCE at v11 CP-T03-04 (`arms` in `verb_capability`'s range: a FORMATION mover even at control, one more `train`
+# Candidate per `train` formation with nobody holding the key; no roll moves). Was, for seeds 0 / 1 / 2: `old` 7e81a2cf... /
+# ec800435... / ecc848ea..., `new` 20accb03... / 6e25b047... / fe9032ed...; `acts` 744 / 746 / 746; the census and counts in
+# each row's trailing comment. `build_realm(seed)` does not move (7266f56b... stands). CONTROL:
+# `test_cp_t03_04_arms.py::revert_cp_t03_04` (the three roster rows and the vocation off) reads the old three `new` values
+# exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
-    0: {"old": "7e81a2cf124ff105d4bd5af7ac1a5c77", "new": "20accb03c3d32f80a9fab00d80a70b21", "acts": 744,
-        "census": "6032506e3dbe624bc7b7bb0cab2ea5029170d5b0681ffb641fb6c586c3abc02e",
-        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 203, "propositions": 143, "dates": 5, "docket": 8, "tenures": 1028, "log": 13400}},
-    1: {"old": "ec800435096c563dd6598e0ceab74f26", "new": "6e25b047b1fb42e2d50014f100770053", "acts": 746,   # CR-85 (faculty replaces history): was 18de0fa6... / f89ea45d...; `acts`, `census` and `counts` do not move. CP-T03-02 (a fight's `ending` + body Observation): was 327bac57... / f4330aac... / census 321d2548... / log 12271
-        "census": "6282d017e89275717b419a4b691cac75dfd9b133d9f761bb80ca330717cea176",
-        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 212, "propositions": 145, "dates": 5, "docket": 9, "tenures": 1022, "log": 12273}},
-    2: {"old": "ecc848eae7fcfe9f339d4e47fffa160a", "new": "fe9032eda9b7701241dcbd766c96fd1a", "acts": 746,   # CP-T03-02: was 4fb68bcf... / a030141a... / census 414d3ac0... / log 11338; CR-87: was e6f01019... / 47151656... / 740
-        "census": "49f45000d4ad2a8970754ca632c00c920a1327feb1432237e3fcb701c9243878",
-        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 183, "propositions": 141, "dates": 5, "docket": 8, "tenures": 988, "log": 11340}},
+    0: {"old": "42847586de16dc778e369058b817ab92", "new": "b2dde1fcf889605d76a30eeba48d2aa0", "acts": 744,   # CP-T03-04: was 7e81a2cf... / 20accb03... / census 6032506e... / records 203 / propositions 143 / tenures 1028 / log 13400
+        "census": "f970d2ed017bc0d98bafc9f339def775abb308873089c90a9a4a8c942a24e221",
+        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 202, "propositions": 144, "dates": 5, "docket": 8, "tenures": 1029, "log": 13401}},
+    1: {"old": "7e8ccabe93c374537e3a7a92e515f836", "new": "07634b99c7c757e451855d7554a1709c", "acts": 747,   # CP-T03-04: was ec800435... / 6e25b047... / 746 / census 6282d017... / records 212 / propositions 145 / log 12273. CR-85 (faculty replaces history): was 18de0fa6... / f89ea45d...; `acts`, `census` and `counts` do not move. CP-T03-02 (a fight's `ending` + body Observation): was 327bac57... / f4330aac... / census 321d2548... / log 12271
+        "census": "3b1d01429c4c1205cc79090192cb5387f6419406e83822c1dfeac0f27577f0ec",
+        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 210, "propositions": 146, "dates": 5, "docket": 9, "tenures": 1022, "log": 11767}},
+    2: {"old": "6c3fdfa022c21fde04118fca4028e0a3", "new": "1cc4370de8e8552d1fdf914109aadd37", "acts": 747,   # CP-T03-04: was ecc848ea... / fe9032ed... / 746 / census 49f45000... / propositions 141 / docket 8 / tenures 988 / log 11340. CP-T03-02: was 4fb68bcf... / a030141a... / census 414d3ac0... / log 11338; CR-87: was e6f01019... / 47151656... / 740
+        "census": "015989bc810e812031d906d7760ed92304911a53905f46a9375988ea591b8730",
+        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 183, "propositions": 139, "dates": 5, "docket": 7, "tenures": 984, "log": 11344}},
 }
 
 

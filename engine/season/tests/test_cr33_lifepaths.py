@@ -47,10 +47,14 @@ from .test_rem30_character_sheet import _run
 #: fights nothing, seed 2's fights land where they did). CONTROL:
 #: `test_cr85_faculty_replaces_history.py::revert_cr85` (the seam's faculty at 3 for every party) reads the old value
 #: exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-PINNED ONCE at v11 CP-T03-04 (`arms` in `verb_capability`'s range: a FORMATION mover even at control, one more `train`
+#: Candidate per `train` formation with nobody holding the key): seeds 0 / 1 / 2 were e9d7c897... / ae97a48b... / 831dc047...; no roll moves (nobody
+#: holds `arms`). CONTROL: `test_cp_t03_04_arms.py::revert_cp_t03_04` (the three roster rows and the vocation off) reads the
+#: old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
-    0: "e9d7c8974bf509ca2b915489cc4f371c",
-    1: "ae97a48bb2cd9cf6953bb688a34ab181",   # CR-85: was ce8c74e7...
-    2: "831dc04706af9847aab7574061a5c289",
+    0: "0036bb2eaa9059087df7dfd245b68a77",   # CP-T03-04: was e9d7c897...
+    1: "3b30d0ea9a6a7fbb363e70a080e57975",   # CP-T03-04: was ae97a48b...; CR-85: was ce8c74e7...
+    2: "4856e80a99fa1006c3cffc9166fe3e30",   # CP-T03-04: was 831dc047...
 }
 
 #: The four Niflhel ids the archived file STRIKES (it prints no row for them): never members.
@@ -89,7 +93,7 @@ def _cells():
 
 
 @pytest.mark.parametrize("mutate", [
-    lambda c: c["3-CR4"].update(holds=["arms"]),                    # a key outside `verb_capability`'s values
+    lambda c: c["3-CR4"].update(holds=["no_such_vocation"]),        # a key outside `verb_capability`'s values (v11 CP-T03-04: was `arms`, now a vocation)
     lambda c: c.update({"3-NI1": {"holds": [], "ground": "x"}}),    # an id outside the 34 (a struck one)
     lambda c: c.pop("3-CF6"),                                       # a lifepath with no row
     lambda c: c["3-CR1"].update(holds=["argue", "argue"]),          # a key held twice

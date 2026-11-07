@@ -216,7 +216,11 @@ rows:
     # name (grep-confirmed), so this is a pure rename, not a behaviour change.
   - kind:    "Person"
     field:   "capability"
-    steps:   [RES]
+    # `ENC` ADDED AT v11 CP-T03-04 (iv), on `(Person, body)`'s M4 precedent: the SECOND producer is the fight
+    # (`fight` / `accept` / `capture`, `Felled` and `Wounded`; `loop/effects_combat.py::_grown`), fought at the
+    # ENCOUNTER step (`the body` carries `step: ENCOUNTER`), where it raises by one the key a surviving party
+    # already holds (`train`'s never-mint rule). ENCOUNTER shares RESOLVE's write class, so `class:` is unchanged.
+    steps:   [RES, ENC]
     class:   "ACTS"
     social:  "true"
     by:      "v9 IN-12 step 9 (#453 §9.4, K-21): RETURNED FROM `retired:` WITH ITS PRODUCER, `train` (`loop/effects_combat.py::_eff_train`), in the same commit -- this file's own rule, *a row exists because a producer produces it*. `{capability key: whole number}` (`state/carriers.py::Person.capability`), the dice a contested act draws (`seam/wrappers/sigma.py::faculty`, through `rosters.yaml: verb_capability`); capability GATES NOTHING (#353 §9.2). Written at world build by a `cast:` overlay (`harness/corpus_run.py::build_at`, never through this gate) and in play only by `train`, under J-13 (iii)'s interim [medium; Jordan to correct]: only where a case names a vocation. `social: true` -- only a person's act raises it; the world does not train anybody"

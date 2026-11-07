@@ -55,9 +55,13 @@ from ..state.ids import H, draw_factory
 # rolls pool 8 against Ob 1.0, was 9 against 1.5): seed 1 was f89ea45d...; seeds 0 and 2 do not move (seed 0 fights
 # nothing, seed 2's fights land where they did). CONTROL: `test_cr85_faculty_replaces_history.py::revert_cr85` (the
 # seam's faculty at 3 for every party) reads the old value exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-PRE_BUILD = {0: "20accb03c3d32f80a9fab00d80a70b21",
-             1: "6e25b047b1fb42e2d50014f100770053",   # CR-85: was f89ea45d...
-             2: "fe9032eda9b7701241dcbd766c96fd1a"}  # CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
+# RE-PINNED ONCE at v11 CP-T03-04 (`arms` in `verb_capability`'s range: a FORMATION mover even at control, one more `train`
+# Candidate per `train` formation with nobody holding the key): seeds 0 / 1 / 2 were 20accb03... / 6e25b047... / fe9032ed...; no roll moves (nobody
+# holds `arms`). CONTROL: `test_cp_t03_04_arms.py::revert_cp_t03_04` (the three roster rows and the vocation off) reads the
+# old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+PRE_BUILD = {0: "b2dde1fcf889605d76a30eeba48d2aa0",   # CP-T03-04: was 20accb03...
+             1: "07634b99c7c757e451855d7554a1709c",   # CP-T03-04: was 6e25b047...; CR-85: was f89ea45d...
+             2: "1cc4370de8e8552d1fdf914109aadd37"}  # CP-T03-04: was fe9032ed...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
 
 
 def _realm(retainers=2):
