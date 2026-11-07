@@ -9394,8 +9394,10 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     assert varying == {"argue", "capture", "carry", "challenge", "commit", "conceal", "create_record", "fight", "give",
                        "interview", "issue", "move",
                        "petition", "reconstruct", "release", "research",
-                       "speak", "surveil", "tell", "transfer", "utter"}, (
+                       "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         sorted(varying))
+    # ⚠⚠ v11 CP-T03-08 (B10-11, pin commit P15): `tend` JOINS `varying` (21 -> 22) with `ever`: it now executes on a wounded self in
+    # worlds the fork reaches, and not in all 143. The universal set is unmoved. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
     # that is the mechanism the retraction above restored and it is asserted below. What no longer
@@ -9676,6 +9678,8 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ v11 CR-87 (B10-11): `capture` AND `determine` LEAVE, `oblige` JOINS. A RE-RECORD WITH ITS REASON (the `by_sig` note above has the
     # unit and the per-verb world counts, `revert_cr87` the control): `capture` executes in one world (`ever`), `determine` is attempted
     # and refused (`refused_only`), and `oblige` (executed in 6 worlds at the revert) is attempted in none.
+    # ⚠⚠ v11 B10-11 pin commit (P15): `seize` JOINS the never-attempted set (it left `refused_only` under CP-T03-08 and is attempted in none of
+    # the 143 worlds). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM [UNVERIFIED: the worlds were not walked one by one].
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish", "oblige",
                                               "destroy_record", "march", "open_case",
                                               "migrate", "requisition",
@@ -9684,7 +9688,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
                                               "work", "restore", "examine",
                                               "dispatch",
                                               "recruit", "form_unit", "assign_troops", "order_unit",
-                                              "disband_unit", "discharge_troops"}, (    # ED-IN-0306: the SIX army verbs JOIN (the four of phase 2 and the two of phase 5) -- withheld from formation (`rosters.yaml: army_verbs`), their command is a payload no Candidate carries, so nobody forms them, by design; a re-record.       # IN-57: `dispatch` out, to `refused_only`; FI-01: back; IN-38: out again; K-3: `thread_read` in; REM-10: `speak`, `examine`, `argue` out; REM-22: `work`, `restore`, `examine` in; REM-23: `commit` in; REM-25: `comply` out; CP-T05-04: `argue` in
+                                              "disband_unit", "discharge_troops", "seize"}, (    # ED-IN-0306: the SIX army verbs JOIN (the four of phase 2 and the two of phase 5) -- withheld from formation (`rosters.yaml: army_verbs`), their command is a payload no Candidate carries, so nobody forms them, by design; a re-record.       # IN-57: `dispatch` out, to `refused_only`; FI-01: back; IN-38: out again; K-3: `thread_read` in; REM-10: `speak`, `examine`, `argue` out; REM-22: `work`, `restore`, `examine` in; REM-23: `commit` in; REM-25: `comply` out; CP-T05-04: `argue` in
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -13404,8 +13408,12 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # The clause still fires.
     # v11 CR-87 (B10-11): 25 -> 19, read off this test's own `dropped` on this tree, by the act mix CR-87 moves (no context-free
     # `fight`; the sibling `hl_live` note: `fight` no longer drops). The old value is the parent tree's pin (the base tree passes it, read in a scratch export of `d2847e7b`); `revert_cr87` was NOT run against it. The clause still fires.
-    assert len(dropped) == 19, (
-        f"{len(dropped)} executable clause-4 drops, not 19. The drops are the channel itself; if "
+    # v11 B10-11 (the batch's pin commit, P15): 19 -> 18, read off this test's own `dropped` on this tree, by the act mix the batch's
+    # movers change together (CP-T03-02's ending and Observation, CR-85, CP-T03-04's `train` Candidate, CP-T03-07's ceiling and
+    # CP-T03-08's `tend` formation). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM: no single item was read for it. The clause still fires.
+    # The batch-open tree (`83c3d0b8`) reads 19 and passes.
+    assert len(dropped) == 18, (
+        f"{len(dropped)} executable clause-4 drops, not 18. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -13543,7 +13551,11 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     #   * `('transfer', 'hearth_ostvik')` leaves because the shipped arm now TAKES it (the Bailiff once), though it is still dropped
     #     (16 times): on the base the shipped arm never took it.
     # CONTROL: `revert_cr87` reads the base pair `{('tend', 'hearth_ostvik'), ('transfer', 'hearth_ostvik')}` exactly.
-    assert bit == {("exchange", "hearth_ostvik"), ("tend", "hearth_ostvik")}, (
+    # v11 B10-11 pin commit (P15): `('tend', 'hearth_ostvik')` LEAVES the bite -- CP-T03-08 changes who forms `tend` (the stamp, `Person`
+    # referents), so the pair is no longer dropped by clause 4 on this tree. The counterfactual above already read it as a fold-order
+    # artifact of the act mix, not a grounded denial, so its leaving is the same artifact moving. A GOLDEN RE-RECORDED, NOT A BALANCE
+    # CLAIM [UNVERIFIED: the pair was not walked on the batch-open tree or by counterfactual at this reading].
+    assert bit == {("exchange", "hearth_ostvik")}, (
         f"the clause-4 bite is {sorted(bit)}, not the two `rec:6bf4…` pairs measured at CR-10 (EMPTY at REM-2C, the two `transfer` pairs pinned at "
         "REM-22 before it). A "
         "pair beyond those would be a NEW acceptance-chain pair and should be named and grounded "
@@ -13589,7 +13601,9 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # Bailiff's is NOT: a fold-order artifact of the act mix [ASSUMPTION; medium; Jordan to correct; revert: drop the triple if the act
     # mix moves it]. `p_bailiff`'s `tend`: with clause 4 disabled for its pair nobody takes it, so it is an artifact too, which closes
     # PC-10b's unverified grounding for it. CONTROL: `revert_cr87` reads PC-10b's four triples.
-    assert bite_who == {("p_carin", "exchange", "hearth_ostvik"), ("p_bailiff", "tend", "hearth_ostvik"),
+    # v11 B10-11 pin commit (P15): `('p_bailiff', 'tend', 'hearth_ostvik')` LEAVES with the pair-grain `('tend', 'hearth_ostvik')` above
+    # (CP-T03-08 changes who forms `tend`). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM [UNVERIFIED: not walked by counterfactual].
+    assert bite_who == {("p_carin", "exchange", "hearth_ostvik"),
                         ("p_bailiff", "exchange", "hearth_ostvik")}, (
         f"the person-grain clause-4 bite is {sorted(bite_who)}, not `p_carin`'s `exchange` on her hearth (CR-17; `transfer` and `exchange` on `rec:6bf46a143f347c12` at CR-10). "
         "Ground any change as the note above does -- disable clause 4 for the new triple's pair alone and see whether "
@@ -13853,9 +13867,11 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # own refused `accept` there deposited (4 attempts, none at the revert); it joins with EITHER the decline or `fight`'s cost on every
     # axis in force alone, so the unit is the scenes the context-free fight no longer takes (and `accept` sharing `fight`'s cells).
     # `tell` and `surveil` stay absent.
+    # ⚠ v11 B10-11 pin commit (P15): `tend` LEAVES (12 -> 11 verbs) with the two `tend` bite pairs above: CP-T03-08 changes who forms `tend`.
+    # A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM [UNVERIFIED: not walked by counterfactual].
     assert {v for v, _ in live} == {"accept", "build", "challenge", "comply", "construe", "evade / defy",
                                     "found", "interview",
-                                    "sabotage", "speak", "tend", "train"}, (
+                                    "sabotage", "speak", "train"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
         "`LEDGER_DERIVED_STEMS` excludes. `surveil` RETURNING means `tell`'s degree has stopped "
@@ -14775,7 +14791,10 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default():
     # ⚠ v11 CP-T03-04 (`arms` joins the vocation range, one more `train` Candidate per formation): the gap is TWO per arm (7 v 9 in
     # each), the same mechanism one vocation over. CONTROL: `test_cp_t03_04_arms.py::revert_cp_t03_04` in process reads gap 1 and the
     # whole test passes; with the trace widened to `(actor, verb, subject, kind)` in a scratch copy the equality holds (gap 0).
-    _TRAIN_KIND_GAP = {"none": 2, "actor": 2, "total": 2}
+    # ⚠ v11 B10-11 pin commit (P15): the gap is read per arm on this tree as 1 / 3 / 3 (hash_differ 11 v acts_differ 10 at `none`; 9 v 6 at `actor`
+    # and at `total`), moved by the batch's movers together (CP-T03-08's `tend` formation on `Person` referents joins CP-T03-04's `train`
+    # Candidate). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM. [UNVERIFIED: the widened-trace control (gap 0) was not re-run at this reading.]
+    _TRAIN_KIND_GAP = {"none": 1, "actor": 3, "total": 3}
     assert all(g["hash_differ"] - g["acts_differ"] == _TRAIN_KIND_GAP[m] for m, g in got.items()), (
         f"the event log and the act stream disagree about whether a fork bit: {got}. Every act "
         "that moved must move the log, or the fork is being applied to one and not the other")
@@ -14948,7 +14967,11 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default():
         # train in another vocation, which moves the log (`hash_differ` 9 in each) and not the `(actor, verb)` pairs. Measured in a
         # scratch copy of the probe with the trace widened to `(actor, verb, subject, kind)`: 9/9 in every arm. The floor above holds.
         # CONTROL: `test_cp_t03_04_arms.py::revert_cp_t03_04` in process reads (8, 33), (8, 28), (8, 28) and the test passes.
-        "none": (7, 33), "actor": (7, 28), "total": (7, 28)}, (
+        # ⚠ v11 B10-11 pin commit (P15): recoverability FELL at `none` and ROSE at the live arms -- `none` 7/33 -> 10/31 (21% -> 32% of forks
+        # move the act stream, the genuine population 33 -> 31), `actor` and `total` 7/28 -> 6/28 (25% -> 21%). The batch's movers act together
+        # (CP-T03-04's `train` Candidate, CP-T03-08's `tend` formation, CR-85's pool), so no one item is the cause; the `_TRAIN_KIND_GAP` note
+        # above reads the same population. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM [UNVERIFIED: no counterfactual per item was run].
+        "none": (10, 31), "actor": (6, 28), "total": (6, 28)}, (
         f"the recoverability figures moved: {{k: (v['acts_differ'], v['genuine']) for k, v in got.items()}}. "
         "This is a RE-PIN DECISION, not necessarily a failure — but it is one somebody has to "
         "make deliberately, because `acts_differ / genuine` is how much of a fork the scene tick "
