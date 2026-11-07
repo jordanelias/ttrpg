@@ -745,6 +745,67 @@ _check_scale_of_rung(SCALE_OF_RUNG, RUNG_KINDS)
 # than read by a bare `roster(...)` at the one call site. `data/fixtures.py` reads the same row for
 # its both-direction table checks, so a kind here always has a wear and a band-floor row.
 SITE_KINDS = roster("site_kinds")
+
+
+def _check_arms_kinds(mapping: dict, matter_kinds, fields: dict) -> dict:
+    """`rosters.yaml: arms_kinds.kinds`, VALIDATED AT LOAD (v11 CP-T03-03): each arms kind a `matter_kinds` member,
+    its `field` one of `fields`' names, its `key` a member of THAT FIELD'S closed set, its `rank` a whole number and
+    unique among the kinds of one field (a tie would make the top-ranked kind a read-order accident). `fields` is
+    `engine/substrate/combat_kit.py::FIELDS`, the typed export of the engine's own weapon keys and armour tiers, so
+    no key list is copied into the roster. A function, so a test can plant a drifted mapping and watch it refuse.
+    Returns `{kind: (field, key, rank)}`."""
+    out, bad = {}, []
+    for kind, row in mapping.items():
+        row = row if isinstance(row, dict) else {}
+        field, key, rank = row.get("field"), row.get("key"), row.get("rank")
+        # three entries, each read below and none of them absent, are exactly `field`, `key` and `rank`
+        if (kind not in matter_kinds or len(row) != 3 or not isinstance(field, str) or field not in fields
+                or not isinstance(key, str) or key not in fields[field] or isinstance(rank, bool)
+                or not isinstance(rank, int)):
+            bad.append(kind)
+        else:
+            out[kind] = (field, key, rank)
+    seen, tied = set(), []
+    for field, _key, rank in out.values():
+        if (field, rank) in seen:
+            tied.append((field, rank))
+        seen.add((field, rank))
+    if bad or tied:
+        raise Unspecified(
+            f"`rosters.yaml: arms_kinds` is malformed: {sorted(bad)} (each must be a `matter_kinds` member, a row of "
+            f"exactly `field`/`key`/`rank` with `field` in {sorted(fields)}, `key` in that field's engine set and an "
+            f"integer `rank`); ties in rank among one field's kinds: {tied}", "rosters.yaml -- arms_kinds",
+            needs="register the kind in `matter_kinds`, spell `key` as `weapons.py` / the armour tiers do "
+                  "(`engine_params/combat_engine_v1.json: sections.kit`), and give each kind of a field its own rank",
+            law="CP-T03-03 -- a kit is validated against the engine that fights; an arms kind naming a weapon the "
+                "engine lacks would reach `Combatant(weapon=...)` and fail at the first fight, not at load")
+    return out
+
+
+def _check_arms_at_build(mapping: dict, rung_kinds, arms_kinds) -> dict:
+    """`rosters.yaml: arms_at_build.kinds`, VALIDATED AT LOAD (v11 CP-T03-03): each key a `rung_kinds` member, each
+    inner key an `arms_kinds` member, each amount a positive whole number. Returns `{rung kind: {arms kind: amount}}`."""
+    out, bad = {}, []
+    for rung_kind, stock in mapping.items():
+        stock = stock if isinstance(stock, dict) and stock else None
+        if rung_kind not in rung_kinds or stock is None or any(
+                a not in arms_kinds or isinstance(n, bool) or not isinstance(n, int) or n < 1
+                for a, n in stock.items()):
+            bad.append(rung_kind)
+        else:
+            out[rung_kind] = dict(stock)
+    if bad:
+        raise Unspecified(
+            f"`rosters.yaml: arms_at_build` is malformed at {sorted(bad)} (each a `rung_kinds` member holding a "
+            f"non-empty mapping of `arms_kinds` members to positive whole numbers)", "rosters.yaml -- arms_at_build",
+            needs="a rostered rung kind, an arms kind that `arms_kinds` declares, and an amount of at least 1",
+            law="CP-T03-03 -- a seed names only arms that have a kind, on rungs that exist")
+    return out
+
+
+from engine.substrate import combat_kit as _combat_kit  # noqa: E402
+ARMS_KINDS = _check_arms_kinds(roster_map("arms_kinds", "kinds"), roster("matter_kinds"), _combat_kit.FIELDS)
+ARMS_AT_BUILD = _check_arms_at_build(roster_map("arms_at_build", "kinds"), RUNG_KINDS, ARMS_KINDS)
 REMIT_ACTS = roster("remit_acts")
 # `data/arrangements.py`'s four content rosters -- plan position `18` (PROC-A). Bound here beside
 # their nearest kin (`RUNG_KINDS`/`REMIT_ACTS`, both read by the same loader) rather than left to a
@@ -1040,6 +1101,8 @@ FELLED, WOUNDED, UNTOUCHED = COMBAT_BANDS
 WOUND_QUANTITIES = roster("wound_quantities", ordered=True)
 # CP-T03-05 (`H-251`): the four endings `seam/wrappers/combat.py::fight_estimate` shares out, in `odds_of`'s order.
 ESTIMATE_OUTCOMES = roster("estimate_outcomes", ordered=True)
+# CP-T03-02: how each party's fight ended, as `Event.ending` carries it (`loop/effects_combat.py::fight_ending`).
+ENDING_FELLED, ENDING_YIELDED, ENDING_UNDECIDED = roster("fight_endings", ordered=True)
 
 
 def check_edge_above(above, quantities, what: str, where: str) -> None:
@@ -1124,6 +1187,7 @@ def load_combat_band_edges(row, bands, quantities) -> tuple:
 COMBAT_EDGES = load_combat_band_edges(
     _ROSTERS.get("combat_band_edges"), COMBAT_BANDS, WOUND_QUANTITIES)
 WOUND_HARM_MODELS = roster("wound_harm_models")
+BODY_MARK_MODELS = roster("body_mark_models")     # v11 CP-T03-07 (`H-258`): `_eff_kill`'s mark
 # M4 (`ED-IN-0279` clause (a)). `field_degree_bands`' own note: ordered and unpacked the same way,
 # `Declared` first because ENCOUNTER's declaration fold writes it at RESOLVE, before anything has
 # fought. `FIELD_CASUALTY_MODELS`/`MARCH_TARGET_KINDS` bound here for `TITLE_DOMAINS`' reason: an

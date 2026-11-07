@@ -170,7 +170,7 @@ def act_cost(c, commit, cfg):
 # ---------- concentration (Focus+Spirit tracker) ----------
 # ED-PC-0035: the `conc_max(c,cfg)` back-compat accessor is REMOVED (zero callers; call c.rederive(cfg) and read
 # c.conc_max — the combatant hosts it, 3F+2S, ED-902).
-def reading(c, cfg): return (2*c.cog + c.att)/3 + cfg['READ_HISTORY_K']*(c.history-NEUTRAL['history'])   # cog primary, Att half, + relevant-History experience (Jordan 2026-06-03)
+def reading(c, cfg): return (2*c.cog + c.att)/3   # cog primary, Att half. The relevant-History experience term (Jordan 2026-06-03) is DELETED by CR-85 (ED-IN-0330: history is no longer added to a roll; a person's latitude enters through the pool only)
 def reflex(c, cfg): return (cfg['REFLEX_AGI']*c.agi+cfg['REFLEX_ATT']*c.att)/(cfg['REFLEX_AGI']+cfg['REFLEX_ATT'])
 
 # ---------- strength handling + endurance fatigue ----------
@@ -328,12 +328,12 @@ assert set(GEOMETRY)>=set(WEAPONS), f"GEOMETRY missing weapons: {set(WEAPONS)-se
 def mode_sigma(mode, aggressor, defender, commit, read_win, fat_d, cfg):
     """defender's δσ for a chosen defensive mode. Reading universal; +2 axis-specific. Skills bias per-axis."""
     rd=reading(defender,cfg)-reading(aggressor,cfg)
-    rfx=reflex(defender,cfg); tech=defender.history+defender.skill('technique')
+    rfx=reflex(defender,cfg); tech=defender.skill('technique')   # CR-85 (ED-IN-0330): the `history +` term is DELETED, and with it the `-3` centre it carried below (a bare skill is centred at 0)
     ftw=balance_eff(defender,fat_d,cfg); strn=defender.strength
     base=cfg['READ_K']*rd*(1.3 if read_win else 0.7)
     cap=WP.defense_affinities(defender.w)[mode]   # DERIVED from geometry+dynamics (retired the hand GATE table)
     if mode==V.DEF_PARRY:
-        sig=cfg['PARRY_K']*(0.45*(rfx-3)+0.45*(tech-3))/3 + defender.skill(V.DEF_PARRY)
+        sig=cfg['PARRY_K']*(0.45*(rfx-3)+0.45*tech)/3 + defender.skill(V.DEF_PARRY)
         # "don't parry with your hands!": an unguarded weapon's parry exposes the hand -> penalised; a guarded one
         # parries confidently. Scales the parry around a neutral simple-cross guard.
         sig += cfg['PARRY_GUARD_K']*(defender.w['hand_guard']-cfg['GUARD_NEUTRAL'])
@@ -345,7 +345,7 @@ def mode_sigma(mode, aggressor, defender, commit, read_win, fat_d, cfg):
     elif mode==V.DEF_DODGE:
         sig=cfg['DODGE_K']*(0.30*(rfx-3)+0.70*(ftw-3))/3 + defender.skill(V.DEF_DODGE)
     else:               # wind (in the bind): fore/thumb-rings "enhance winding"
-        sig=cfg['WIND_K']*(0.45*(tech-3)+0.45*(strn-aggressor.strength))/3 + defender.skill('bind')   # ED-PC-0035: the `+ CHOKE_BIND_K*choke` term is GONE — `choke` was hardcoded 0.0 by the only caller, so it was a structural zero (see config.py)
+        sig=cfg['WIND_K']*(0.45*tech+0.45*(strn-aggressor.strength))/3 + defender.skill('bind')   # ED-PC-0035: the `+ CHOKE_BIND_K*choke` term is GONE — `choke` was hardcoded 0.0 by the only caller, so it was a structural zero (see config.py)
         sig += cfg['WIND_GUARD_K']*(defender.w['blade_guard']-cfg['GUARD_NEUTRAL'])
         sig += cfg['WIND_MOMENT_K']*contact_moment_edge(defender, aggressor)   # [channel 5] winding is in the bind — weapon on weapon, so the same moment fact applies (own gain)
     _deep=max(0.0,min(1.0,commit-3.0))     # CONTINUOUS commit response: 0 at <=3, ramps to 1 at >=4 (no integer cliff)
@@ -1050,12 +1050,13 @@ def wound_impairment(defender, aggressor, cfg):
 
 
 def bind_sigma(aggressor, defender, cfg, TR):
-    """One bind iteration's net sigma: LEVERAGE (technique+skill + physical lever-arm) + BLADE-GUARD catch (the
+    """One bind iteration's net sigma: LEVERAGE (bind skill + physical lever-arm; the `history` term is DELETED by
+    CR-85, ED-IN-0330) + BLADE-GUARD catch (the
     cross/quillons/rings that catch & control the opposing blade — a guardless pole binds poorly, a long cross
     excels) + TACTILE read (Fuhlen, degraded by the OPPONENT's edge vibration — morphology-rearch Phase B5: a
     wavy/flame-ground edge is felt as unfamiliar noise by whoever is bound against it, not its own wielder);
     Strength minor. +ve favours the aggressor winning the bind. Pure."""
-    lev = ((aggressor.history+aggressor.skill('bind')) - (defender.history+defender.skill('bind')))*cfg['BIND_TECH_K'] \
+    lev = (aggressor.skill('bind') - defender.skill('bind'))*cfg['BIND_TECH_K'] \
           + (leverage(aggressor,cfg) - leverage(defender,cfg)) \
           + lever_log_edge(TR.eff_cw(aggressor, 'leverage'), TR.eff_cw(defender, 'leverage'))   # M5/F5 ED-PC-0045: was `* eff_cw(agg)/eff_cw(def)`, which AMPLIFIED a negative lever-arm differential — a dagger specialist in Stärke-Schwäche bound a poleaxe WORSE than an untrained twin (-1.05624 -> -1.19040). Now an ADDITIVE log-odds shift: since bind_dominance_p is logistic(bind_sigma), this multiplies the owner's ODDS of dominating the bind by exactly its ability factor, whatever the sign of the physical differential — and unlike the old ratio it is not inert when the two lever-arms are EQUAL (every mirror matchup), where a trained binder should still win.
     catch = cfg['BIND_GUARD_K']*(aggressor.w['blade_guard'] - defender.w['blade_guard'])   # quillons/rings catch the blade
@@ -1353,7 +1354,7 @@ def pursuit_sigma(pursuer, withdrawer, fat_p, fat_w, cfg, TR):
     [ED-PC-0036] This REPLACES a flat cfg['DISENGAGE_PURSUIT_NSIG'] passed straight to core.resolve: that shortcut let
     the single most violent branch in the closed phase bypass the ENTIRE sigma-assembly — no armour, no wounds, no
     attribute of the withdrawer at all, so every fighter pair in this branch resolved identically and the pursuer
-    contributed only History (the pool). The mechanism ED-PC-0030 grounded is the attempt/clean/pursued STRUCTURE; the
+    contributed only its pool score (History then; `faculty` since CR-85). The mechanism ED-PC-0030 grounded is the attempt/clean/pursued STRUCTURE; the
     flat resolution was grounded nowhere. Terms, each already canonical elsewhere:
       • the base anchor — catching a withdrawing opponent is HARD (negative), the one part the old constant had right;
       • bilateral wound-Ob, on the same sign convention as every other sigma (a wounded target is easier, a wounded
@@ -1419,7 +1420,8 @@ def approach_step(measure_gap, base_gap, close_rate, recoil):
     return min(base_gap, max(0.0, measure_gap - close_rate + recoil))
 
 def init_emphasis_sigma(aggressor, defender, cfg, TR):
-    """Initiative/tempo EMPHASIS sigma fed into attack_sigma: tempo(Agi) + reading(Cog/Att) + experience(History),
+    """Initiative/tempo EMPHASIS sigma fed into attack_sigma: tempo(Agi) + reading(Cog/Att) (the experience(History)
+    addend is DELETED by CR-85, ED-IN-0330),
     plus the two sides' 'tempo' ability lever as an ADDITIVE log-edge. Pure (the formula the wrapper used to assemble
     inline).
 
@@ -1433,7 +1435,6 @@ def init_emphasis_sigma(aggressor, defender, cfg, TR):
     1.0), so `base + 0.0` is bit-identical to the old `base * 1.0`."""
     return (cfg['INIT_K']*(aggressor.agi-defender.agi)
             + cfg['INIT_READING_K']*(reading(aggressor,cfg)-reading(defender,cfg))
-            + cfg['INIT_HISTORY_K']*(aggressor.history-defender.history)
             + cfg['INIT_TEMPO_LEVER_K']*lever_log_edge(TR.eff_cw(aggressor,'tempo'), TR.eff_cw(defender,'tempo')))
 
 def consistency(c, cfg):
@@ -1452,9 +1453,10 @@ def poise_regen(c, cfg):
     return c.poise + cfg['POISE_RECOVER']*(1+cfg['POISE_FOCUS_K']*(c.focus-NEUTRAL['focus']))*(1-c.poise)
 
 def counter_success_prob(defender, cfg, TR):
-    """Single-time-counter SUCCESS probability (bounded): base + training(History) + reflex + the counter ability.
+    """Single-time-counter SUCCESS probability (bounded): base + reflex + the counter ability (the training(History)
+    term is DELETED by CR-85, ED-IN-0330).
     The untrained counter mostly fails; abilities modulate it upward. Pure — the wrapper rolls rng against it."""
-    succ = (cfg['COUNTER_SUCCESS_BASE'] + cfg['COUNTER_TRAIN_K']*(defender.history-NEUTRAL['history'])
+    succ = (cfg['COUNTER_SUCCESS_BASE']
             + cfg['COUNTER_REFLEX_K']*(reflex(defender,cfg)-3) + TR.ability_bonus(defender,'counter_success'))
     return max(0.05, min(0.92, succ))
 

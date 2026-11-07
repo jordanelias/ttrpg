@@ -714,6 +714,13 @@ DEFAULT_FIXTURES = Fixtures(
     # gate saw it; `corpus_run`'s R5 passed throughout because it matches on the fixture
     # KEY in a `site:`, never on the id a comment cites.
     wound_harm_model="scene_fraction",  # `H-123`, swept scene_fraction / total / none
+    # v11 CP-T03-07 (P32): WHETHER A FIGHT LEAVES A LASTING MARK on `Person.body_ceiling`
+    # (`rosters.yaml: body_mark_models`). SHIPPED LIVE at `deepest_gate`, on REM-52's precedent for a
+    # harm (`body_step` above: the live arm ships, the control is one named value away)
+    # [ASSUMPTION; medium; Jordan to correct; revert: none]. `none` is the control: no ceiling moves.
+    # Injection site: this line, read by `loop/effects_combat.py::_eff_kill`.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-258 -- the gate and the ceiling walk are the CP-T03-07 home's; only whether the live arm ships is undocumented, so it is injected and swept none / deepest_gate]
+    body_mark_model="deepest_gate",    # `H-258`, swept none (control) / deepest_gate (SHIPPED)
     # `H-184` (plan position `8`; split out of `H-98`). WHERE THE `Wounded` BAND STARTS: the threshold `wounds` must be
     # strictly above for a standing subject to read `Wounded` rather than `Untouched`. The edge is
     # `rosters.yaml: combat_band_edges` and `None` MEANS ITS VALUE (`0`, any wound), so the number is

@@ -5176,6 +5176,19 @@ rows:
 
   - id:        H-258
     tier:      1
+    hole:      "WHETHER A FIGHT LEAVES A LASTING MARK (v11 CP-T03-07, P32). A fight can wound and every recovery healed to `condition_scale`, so no fight left a permanent mark. The gate (`wounds >= max_wounds`) and the ceiling's walk down the body floors ARE given by the CP-T03-07 home (`proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-03-personal-combat.md`, the item's `adds` (ii)); what no document states is WHETHER the live arm ships or the control does."
+    kind:      "NUMBER"
+    owner:     "`engine/season/loop/effects_combat.py::_marks` and `marked_ceiling` (the writer, from `_eff_kill`); `_eff_tend` reads `Person.body_ceiling`"
+    grade:     "assumption"
+    default:   "deepest_gate -- SHIPPED [ASSUMPTION; medium; Jordan to correct; revert: none], on REM-52's precedent for a harm (`body_step`): the live arm ships with the control one named value away. A party who survives at `wounds >= max_wounds` (the engine's deepest gate short of felling) has his ceiling fall to one below the next `band_floors[\"body\"]` floor beneath it (1000 -> 799 -> 499 -> 99), as many times as there are floors; the written body is held at or under the new ceiling"
+    site:      "Fixtures body_mark_model, read by `engine/season/loop/effects_combat.py::_eff_kill` (`_marks`)"
+    sweep:     [none, deepest_gate]
+    unblocks:  "CP-T03-08 (`tend` forms on a person below his ceiling). Reference, not a dependency: CP-T10-04 (unbuilt) is planned to read the field as its rising arm's cap; no gap there is measured"
+    cite:      "FALSIFIER: `engine/season/tests/test_cp_t03_07_body_ceiling.py` -- a survivor at `wounds == max_wounds` holds 799 and his written body is under it; `tend` restores him to 799 where an unmarked man goes to 1000, and his `budget` sits one below whole; mutation red: a raiser reading `condition_scale` lifts him past 799; an asymmetry guard fails on a new bare `body` write not registered with its relation to the ceiling. CONTROL: `none` marks nobody and, with the field dropped from the canonical encoding (`revert_cp_t03_07`), reproduces the pre-item hashes"
+    source:    "v11 CP-T03-07, batch B10-11"
+
+  - id:        H-259
+    tier:      1
     hole:      "A DECREE NEVER LAPSES AND ITS ISSUER CANNOT WITHDRAW IT (premise-check, decree). `issue` mints a writ Record with ttl None. After eight seasons it was still held. With the issuer unseated, `comply` on it still emitted `compliance.given`. `revoke` acts on tenures only, and `destroy_record` was refused to the issuer once the writ had been handed on: only the holder may destroy it. Nothing ends a decree: no expiry, no withdrawal act, no consequence of the issuer leaving office."
     kind:      "WIRING"
     owner:     "`loop/effects_information.py::_eff_issue` (mints the writ, sets no ttl); `engine/season/verb_table.yaml` rows `issue`, `revoke`, `destroy_record`; `rosters.yaml: record_kinds` (the `ttl` column H-22 rules exists)"
@@ -5187,7 +5200,7 @@ rows:
     cite:      "MEASURED on the governance spine fixture (a test fixture, not canon) by hand-built acts, 8 seasons. Anchor re-confirmed by the author: the writ reaches its addressee only by a separate `give` (queries/world_q.py `writs_held` docstring, ED-IN-0292). Related, not duplicated: H-203 (no writ reaches the person who would act on it) and H-163 (remit verbs rarely execute)."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: a person holds an office within a faction and issues a decree for others to follow. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
-  - id:        H-259
+  - id:        H-260
     tier:      1
     hole:      "OBEYING OR DEFYING A DECREE CHANGES NOTHING IN THE WORLD (premise-check, decree). `comply` and `evade / defy` write nothing and emit one event each (`compliance.given`, `compliance.withheld`). In a counterfactual pair over 20 seeds, hand-placing the writ on the addressee, the decree arm showed 4 given, 6 withheld and 4 `terms.distorted` against none in the no-decree arm, yet the world state after comply and after defy was identical. The one coupling found is that an OUGHT-Proposition decree forms `commit` for its addressee. A free refusal reads, to a player, as an authority with no force. The verb table already records the intent behind defiance having a cost: ED-FA-0021 D6, conditioned on a suspicion carrier engine/season does not have."
     kind:      "MECHANISM"
@@ -5200,7 +5213,7 @@ rows:
     cite:      "MEASURED on the governance spine, 20 seeds x 2 seasons, writ hand-placed on the addressee, the traces through `causes[]` not followed. Anchor re-confirmed by the author: the `evade / defy` writes_note in `engine/season/verb_table.yaml` names ED-FA-0021 D6 and the missing suspicion carrier. A design call (what refusing costs) is Jordan's."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: a person holds an office within a faction and issues a decree for others to follow. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
-  - id:        H-260
+  - id:        H-261
     tier:      1
     hole:      "A DECREE REACHES BY RUNG AND TERRITORY, NOT BY FACTION (premise-check, decree). On the spine fixture an `issue` from a duke of one faction could address a reeve of another faction and an officeless commoner. Reach by rung was strictly ordered, shrinking at each rung down. `Office.binds` was found read only by the `oblige` predicate, so the premise word within a faction has no owner in `issue`. The words support two readings (the territory the seat governs, or the faction that seat belongs to) and the code picks the first."
     kind:      "RULING"
@@ -5213,7 +5226,7 @@ rows:
     cite:      "MEASURED on the governance spine fixture by hand-built acts. AMBIGUOUS in the premise-check sense: both readings are statable from the words alone, so the choice is a design ruling and not a bug."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: a person holds an office within a faction and issues a decree for others to follow. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
-  - id:        H-261
+  - id:        H-262
     tier:      1
     hole:      "A DECREE IS CALLED A `dispensation`, WHICH ORDINARILY MEANS AN EXEMPTION FROM A RULE (premise-check, decree). The Record kind and the event `dispensation.issued` name an order by the word for its opposite. A reader with no memory of this repo lands on the wrong meaning (CLAUDE.md section 4, idempotent in meaning). The code, `comply`, `evade / defy` and `construe` all behave as an order, not an exemption."
     kind:      "NAME"
@@ -5226,7 +5239,7 @@ rows:
     cite:      "WORD-class finding by reading, with behaviour confirmed by the decree run. A rename of an event kind or a verb moves `World.content_hash()` for any world whose log uses it, and that move must be declared (see the renamed-verb comment in `engine/season/verb_table.yaml`)."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: a person holds an office within a faction and issues a decree for others to follow. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
-  - id:        H-262
+  - id:        H-263
     tier:      1
     hole:      "A BEATEN FIGHTER IN A PLAIN `fight` HAS NO EXIT BUT DEATH (premise-check, combat). At season scale `fight` is lethal: the loser got `person.died` in 200 of 200 resolved fights. Yield exists only under the `capture` and `accept` terms. The verb table has no flee or yield verb, nothing outside tests calls `Yield()`, and the module's one early exit, `withdraw`, is a player-host option that ends the fight undecided. So the premise words yields or flees have no season-scale owner."
     kind:      "RULING"
@@ -5239,7 +5252,7 @@ rows:
     cite:      "MEASURED at season scale by hand-built acts through SeasonDriver.resolve (n=200) and at module scale (n=400 per cell): under yield or blood terms the yielder is always the result's loser. A design call (add an exit, or narrow the premise) is Jordan's; related to H-229 and CR-87 violence contexts."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: two armed people fight: skill, weapon and armour decide, wounds impair, the beaten yield, flee or die [ASSUMPTION: rendered from the word combat]. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
-  - id:        H-263
+  - id:        H-264
     tier:      1
     hole:      "`fight` FIRES IN NO COMPUTED SEASON (premise-check, combat). Over 3 realm seeds x 4 seasons (about 3,290 resolved acts per seed) the resolved counts were `fight` 0, `capture` 7, `challenge` 489, `accept` 0, `march` 96. FORMS was not isolated: it is not known whether `fight` is never offered or is offered and never chosen."
     kind:      "WIRING"
@@ -5252,7 +5265,7 @@ rows:
     cite:      "MEASURED on build_realm seeds 0-2, 4 seasons each. n is small and FORMS was not run. Related: H-255 (the stance gain on violent rows) and H-229 (give + rung executes 0 times)."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: two armed people fight: skill, weapon and armour decide, wounds impair, the beaten yield, flee or die [ASSUMPTION: rendered from the word combat]. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
-  - id:        H-264
+  - id:        H-265
     tier:      1
     hole:      "A FIGHTER WITH NO WEAPON CANNOT BE CONSTRUCTED (premise-check, combat). `Combatant(weapon=...)` with unarmed or none, and armour plate, raise KeyError at module scale, while `modules/combat/contact.py` speaks of an unarmed class. Premise: two armed people fight, so unarmed is outside it, but an unarmed person is an ordinary state in a game where anyone can be drawn into a fight."
     kind:      "ABSENT_RULE"
@@ -5265,7 +5278,7 @@ rows:
     cite:      "MEASURED at module scale by constructing Combatants (n=1 per weapon name; a construction error, not a rate). Whether to add the state is a design call."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: two armed people fight: skill, weapon and armour decide, wounds impair, the beaten yield, flee or die [ASSUMPTION: rendered from the word combat]. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
-  - id:        H-265
+  - id:        H-266
     tier:      1
     hole:      "A FIGHT'S LOG NAMES NEITHER WHO WON NOR WHY (premise-check, combat). At season scale the log carries `person.died` on the loser and `body.changed` on a survivor (95 of 200), and not the weapon, the armour or the number of turns. A player cannot tell from the record why one fighter lost."
     kind:      "WIRING"
@@ -5278,7 +5291,7 @@ rows:
     cite:      "MEASURED at season scale, n=200 resolved fights. Minor (E10 in the premise-check classes)."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: two armed people fight: skill, weapon and armour decide, wounds impair, the beaten yield, flee or die [ASSUMPTION: rendered from the word combat]. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
-  - id:        H-266
+  - id:        H-267
     tier:      1
     hole:      "A HEARER'S REGARD FOR THE ARGUER DOES NOT ENTER `argue` (premise-check, persuasion). Sweeping the hearer's stance toward the arguer from -5 to +5 gave identical bands and an identical shift in every arm, while changing the hearer's own Presence did change the record. `SocialContestInput` carries a bench `reception` and `reception_gain` only, and `argue` is not heard by a bench. The premise word trusted speaker has no owner on `argue`; `speak` has one."
     kind:      "RULING"
@@ -5291,7 +5304,7 @@ rows:
     cite:      "MEASURED at EXECUTES depth, n=80 per cell. Related, not duplicated: H-215 grades the gain on `reception` for the bench. A design call: route `argue` through a regard term, or narrow the premise."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: one person argues to persuade another [ASSUMPTION: rendered from the word persuasion]. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
-  - id:        H-267
+  - id:        H-268
     tier:      1
     hole:      "A HEARER'S COMMITMENT DOES NOT RESIST AN ARGUMENT, AND A HEARER WITH NONE IS IMMOVABLE (premise-check, persuasion). `Person.conviction` at 0, 1, 3 and 5 changed nothing (identical bands): the record does not read it. The fraction of a hearer's own weight lost was a constant 0.0225 across weights 0.01 to 1.0, so a firmer holder moved more in absolute terms. A hearer at weight 0 on the contested pursuit was never moved: the Success and Overwhelming bands were rolled, then the argument refused (15 of 80)."
     kind:      "WIRING"
@@ -5304,7 +5317,7 @@ rows:
     cite:      "MEASURED at EXECUTES depth, n=80 per cell, hand-built `argue` acts on the tiny-world fixture. The direction of both departures is the inverse of the premise words."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: one person argues to persuade another [ASSUMPTION: rendered from the word persuasion]. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
-  - id:        H-268
+  - id:        H-269
     tier:      1
     hole:      "A PARTIAL `argue` IS LOGGED AS `argument.won` WITH NOTHING CHANGED (premise-check, persuasion). A Partial result emits `argument.won` with an empty changes list and the hearer is unchanged, and the `pursuit.moved` receipt carries no before or after value. The verb row documents that Partial's step is zero, so the label is the defect, not the arithmetic."
     kind:      "NAME"
@@ -5317,7 +5330,7 @@ rows:
     cite:      "MEASURED at EXECUTES depth by a control-C pair. DELIBERATE in the arithmetic, WORD in the label."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: one person argues to persuade another [ASSUMPTION: rendered from the word persuasion]. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
-  - id:        H-269
+  - id:        H-270
     tier:      1
     hole:      "THE DECISION LAYER FORMS `argue` FOR HEARERS WHO ARE ELSEWHERE (premise-check, persuasion). Over 10 realm seeds x 2 seasons there were 64 executed `argue` acts and 171 `argument.refused`. For seed 0, one season, all 7 refusals were that the hearer is not with the arguer. The refusals are noise in the log and a sign that formation does not read the co-location the fold requires."
     kind:      "WIRING"
@@ -5330,7 +5343,7 @@ rows:
     cite:      "MEASURED on build_realm, n=20 seed-seasons. The cause of the formation was not chased: the agent could not reproduce a hand-built Proposition-classed referent forming `argue`, which is a separate gap in the recipe."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: one person argues to persuade another [ASSUMPTION: rendered from the word persuasion]. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
-  - id:        H-270
+  - id:        H-271
     tier:      1
     hole:      "NOTHING LETS A HEARER CHECK A TOLD CLAIM (premise-check, lying). The premise unless they check it has no owner: a search of `engine/season/decision/` and `engine/season/verb_table.yaml` for verification or corroboration terms finds only comments, and no act has the job of checking a told claim against its source. Only an incidental firsthand sight displaces a rumour."
     kind:      "ABSENT_RULE"
@@ -5343,7 +5356,7 @@ rows:
     cite:      "MEASURED by an absence search the author re-ran for the two paths named. The investigative verbs (`examine`, `interrogate`, `research`) act on sites and persons and were not found to take a told claim as their subject. Related: H-198 (a teller never lies), H-183 (the record of a teller)."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: one person lies to another [ASSUMPTION: rendered from the word lying]. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
-  - id:        H-271
+  - id:        H-272
     tier:      1
     hole:      "A TOLD CLAIM IS NEVER RETOLD AS HEARSAY IN COMPUTED PLAY (premise-check, lying). Over 800 `tell` acts in 13 realm worlds, 114 one-hop claims and none at two hops. The chooser's own pick passes on the `news.told` event claim and not the hearsay. A hand-built retell does reach a third party, with chain (A, B) at weight 0.25. So others may repeat it is true at EXECUTES and false at FIRES."
     kind:      "WIRING"
@@ -5356,7 +5369,7 @@ rows:
     cite:      "MEASURED on build_realm seed 0 at 4 seasons and seeds 1-12 at 2 seasons (n=13 worlds). Related: H-157 (the Claim.chain reader is built)."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: one person lies to another [ASSUMPTION: rendered from the word lying]. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
-  - id:        H-272
+  - id:        H-273
     tier:      1
     hole:      "BEING FOUND OUT AS A FORGER RAISES THE FINDER'S REGARD FOR 8 OF 15 PURSUIT PROFILES (premise-check, lying). After a successful `research` the finder's regard for the forger moved with the finder's pursuits: swept over all 15 pursuits at weight 1.0 as hand-set judges, regard rose for 8 and fell for 7. The sign comes from the forge deed's alignment values, which are tuned. A discovery therefore costs the forger trust only for some judges, and no event marks a lie or forgery as found out."
     kind:      "RULING"

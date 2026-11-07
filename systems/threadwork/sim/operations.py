@@ -13,8 +13,8 @@ Implements 7 operation entry points + the Three-Axis Ob lookup (Depth + Breadth
   - Returns OperationResult with degree + side-effects
 
 [ASSUMPTION: practitioner stats sourced from caller — basis: actor parameter
- is a duck-typed object with .spirit, .focus, .ts (Thread Sensitivity), and
- optionally .history dict. World has no practitioner stat schema yet.
+ is a duck-typed object with .spirit, .focus, .ts (Thread Sensitivity).
+ No .history is read (CR-85, ED-IN-0330). World has no practitioner stat schema yet.
  When practitioner state is added to World, signature accepts actor_id +
  looks up. Until then, caller supplies a Practitioner-like object.]
 
@@ -233,18 +233,18 @@ def _compute_degree(net_successes: int | float, ob: int | float) -> str:
 
 
 def _actor_pool(actor) -> int:
-    """Compute (Spirit × 2) + relevant History bonus + TPS per PP-616.
+    """Compute (Spirit × 2) + PP-624's constant 3 + TPS per PP-616.
 
-    actor must expose: .spirit (1-7), .ts (Thread Sensitivity 0-100),
-    and optionally .history (relevant points; +3 constant per PP-624).
+    actor must expose: .spirit (1-7), .ts (Thread Sensitivity 0-100).
+    CR-85 (ED-IN-0330: history is no longer added to a roll) replaced the term
+    `min(3, history + 3)` with the constant it yielded for every history >= 0,
+    which every caller in the tree passed; `.history` is no longer read.
     """
     spirit = getattr(actor, 'spirit', 4)
     ts = getattr(actor, 'ts', 30)
-    history = getattr(actor, 'history', 0)  # Points; constant +3 already in pool baseline
     tps = ts // 10
-    # PP-624: (Spirit × 2) + (History + 3 constant, capped +3D from level) + TPS
-    history_contrib = min(3, history + 3)
-    return (spirit * 2) + history_contrib + tps
+    # PP-624: (Spirit × 2) + the constant +3 + TPS
+    return (spirit * 2) + 3 + tps
 
 
 def resist_coherence_cost(cost: int, actor) -> int:

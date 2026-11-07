@@ -1696,7 +1696,8 @@ class World:
         `(name, n, item)` per `_STATE_SEQUENCES` entry, `n` its position; `("T", t.id, t)` per Tenure,
         sorted by id; and per Event in log order `("E", id, kind, emitted_at, degree, causes)`
         (`causes` as a tuple), then `("~", subject, mode, driver, field, delta)` per change, then
-        `("^", o)` per observed record. Keys and ids sort as Python sorts `str`, by code point. Tenures
+        `("^", o)` per observed record, then `("!", ending)` -- ONE frame, the whole `Event.ending` tuple,
+        folded only when `ending` is non-empty (CP-T03-02). Keys and ids sort as Python sorts `str`, by code point. Tenures
         sharing an id keep `World.tenures`' order (owners in `persons` order, then the unowned)."""
         # [JUSTIFIED: a HASH WIDTH, not a game value -- 16 bytes is the 32 hex characters the content hash is compared as; nothing in the model reads it as a quantity]
         h = hashlib.blake2b(digest_size=16)
@@ -1722,6 +1723,10 @@ class World:
             # Event a test has stripped, which `test_wb_the_carrier_moves_the_seeded_hash` does.
             for o in (getattr(e, "observed", None) or []):
                 h.update(_canonical(("^", o)))
+            # CP-T03-02: a fight band's per-party ending. Folded only where non-empty, so a log with
+            # no Felled/Wounded fight hashes as it did before the field existed.
+            if getattr(e, "ending", None):
+                h.update(_canonical(("!", e.ending)))
         return h.hexdigest()
 
     # -- S43: resolution AT BOOT, by string. A missing provider is a STARTUP FAILURE WITH A

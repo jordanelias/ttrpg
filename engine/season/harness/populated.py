@@ -991,6 +991,26 @@ def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: boo
     return out
 
 
+def seed_arms(w: World, seeds: dict | None = None) -> int:
+    """SEED ARMS INTO STORES (v11 CP-T03-03): every rung of a kind `seeds` names (`rosters.yaml: arms_at_build`, by
+    default) gains that kind's arms, `Rung.stores[arms kind] += amount`, which `world_q.kit_of` reads. Returns how many
+    rungs were seeded (0 for the shipped empty roster, which leaves `Rung.stores` and the hash untouched). Rungs are
+    visited in id order so the insertion order of a store never depends on dict history."""
+    from ..data.rosters import ARMS_AT_BUILD
+    seeds = ARMS_AT_BUILD if seeds is None else seeds
+    n = 0
+    for rid in sorted(w.rungs):
+        stock = seeds.get(w.rungs[rid].kind)
+        if not stock:
+            continue
+        r = w.rungs[rid]
+        r.stores = dict(r.stores or {})
+        for arms, amount in stock.items():
+            r.stores[arms] = r.stores.get(arms, 0) + amount
+        n += 1
+    return n
+
+
 def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
                 goals: bool = True, goals_complete: bool = True, foreign: bool = True,
                 guards: bool = False, acquaintances: bool = True, cast_attributes: bool = False) -> World:
@@ -1967,6 +1987,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # `acquaintances=False` is the control arm: the realm before the ruling, every hash unmoved.
     if acquaintances:
         w._acquaintances = seed_acquaintances(w, acquaintance_pairs(w, seat_rows, w._office_census["authored"]))
+    # v11 CP-T03-03: THE ARMS A RUNG IS BUILT HOLDING (`rosters.yaml: arms_at_build`), the very last write so the build
+    # up to here is byte-identical to the realm without it. The shipped roster is empty (the inventory is Jordan's).
+    seed_arms(w)
     return w
 
 

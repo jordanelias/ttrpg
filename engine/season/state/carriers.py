@@ -292,6 +292,24 @@ class Event:
     # predicate that records nothing, so it too carries `()` -- that is a gap in the OLD channel,
     # not a claim that nothing was read, and it closes when the verb is typed.
     observed: tuple = ()
+    # CP-T03-02. HOW A FIGHT ENDED, PER PARTY -- a tuple of `(person id, "felled" | "yielded" |
+    # "undecided")` pairs, read off the scene's lifted `wound_state` and `surrender` by the effect that
+    # wrote the band (`loop/effects_combat.py::fight_ending`). Stamped on every success Event of
+    # `fight`/`accept` at Felled/Wounded, and of `capture` at any band where an edge is opened (its
+    # Untouched band runs the effect: a clean yield's `person.captured` carries it). Empty on every other
+    # Event, which is nearly all of them.
+    # THE ORDER is the `claimants` order, actor first -- the convention `PersonalCombatInput`'s `ends`,
+    # `kits` and `faculties` follow -- a convention, NOT a role field.
+    # ⚠ NO PRODUCTION READER EXISTS AT THIS COMMIT. The plan gives it as the band Event's payload (the
+    # CP-T03-02 home: with the body Observation, it is what CP-T03-05 (mode b) and CP-T03-08 "get their
+    # lawful input" from); until one of them reads it, only the tests and `World.content_hash` do.
+    # ⚠ NOT AN `actor`/`target` FIELD UNDER ANOTHER NAME (S19.3): it names no doer and no recipient --
+    # WHO did it stays a per-witness Claim. It records the OUTCOME the scene already decided, the same
+    # class of fact `degree` is (the act's band), split by party because a fight has two.
+    # [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation] -- the carrier is
+    # a new Event field rather than a payload key, since an Event carries no payload; a carrier+hash
+    # schema mover, folded by `World.content_hash` only where non-empty.
+    ending: tuple = ()
 
     def __post_init__(self) -> None:
         if not self.causes:
@@ -741,6 +759,13 @@ class Person:
     # is the model" MEANS. A bare 1000 here would be a second, silent copy of that scale — the
     # defect `G1` names — and it would drift the moment the fixture moved.
     body: int = field(default_factory=lambda: DEFAULT_FIXTURES.get("condition_scale"))
+    # v11 CP-T03-07 (P32): THE BODY'S CEILING -- what a recovery heals toward, as `Site.condition` has
+    # one. Built at `condition_scale`, so an unmarked person heals whole. WRITTEN only by the fight
+    # (`loop/effects_combat.py::_eff_kill`, through `marked_ceiling`; `write_matrix.yaml` row
+    # `(Person, body_ceiling)`); READ by every raiser of `body` (`_eff_tend` today), which heals to it
+    # and never to `condition_scale` -- `engine/season/tests/test_cp_t03_07_body_ceiling.py` fails on a
+    # new bare `body` write that does not say how it stands to this field (CLAUDE.md §0.1 pt 1).
+    body_ceiling: int = field(default_factory=lambda: DEFAULT_FIXTURES.get("condition_scale"))
     # v9 IN-34 FORCE-BODIES: THE BIRTH TICK, the one field the bodies clock adds, and its ONLY READER
     # is `queries/world_q.py::age_of` -> `body_hazard` (ID-13: no field without a reader). Age is NOT
     # stored; it is `w.tick - born`, a Query over the clock (IN-21's `season_of_year` precedent), so

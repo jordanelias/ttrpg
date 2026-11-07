@@ -17,13 +17,15 @@ from __future__ import annotations
 from dataclasses import replace
 
 from ..data.rosters import (
-    DECLARED, FELLED, FIELD_CASUALTY_MODELS, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
-    WOUND_HARM_MODELS, require_member,
+    DECLARED, ENDING_FELLED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
+    VERB_CAPABILITY, WOUND_HARM_MODELS, BODY_MARK_MODELS, require_member,
 )
+from ..data.matrix import matrix_row
+from ..data.requires import Observation
 from ..data.verbs import VERB_TABLE, VOCATION_SOURCED, VOCATIONS
 from ..gaps import Unspecified
 from ..queries.person_q import held_against
-from ..queries.world_q import DETAIN_KIND, ancestry, holder_faction_of, home_of, restrained
+from ..queries.world_q import BODY_STEM, DETAIN_KIND, ancestry, holder_faction_of, home_of, restrained
 from ..seam.ladder import party_degree
 from ..state.carriers import Tenure
 from ..state.gate import (
@@ -43,6 +45,7 @@ from .effects_shared import _debit, _operand, effect_for
 # "kill / wound" (plan `FIGHT-RENAME`); only the `EFFECTS` key and its row moved.
 CAPTURED = "person.captured"        # the one kind `capture`'s opened `detain` earns (`verb_table.yaml`'s `capture` row)
 DUEL_YIELDED = "duel.yielded"       # v10 PC-10b: the kind a duel's yielder earns (`verb_table.yaml`'s `accept` row)
+CEILING = "body_ceiling"          # v11 CP-T03-07: the cell the lasting mark writes (`write_matrix.yaml`)
 
 
 def _yielder(res: "Resolution") -> "str | None":
@@ -174,11 +177,21 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
                 bands[pid] = band
     bodies = {pid: _harm(w.persons[pid], band, model, states[pid])
               for pid, band in bands.items()}
+    # v11 CP-T03-07: THE LASTING MARK, and the written body held under the ceiling it leaves (a body is never above
+    # its ceiling; the Observation below reports the body as written).
+    marks = _marks(w, bodies, states)
+    for pid, ceiling in marks.items():
+        bodies[pid] = min(bodies[pid], ceiling)
+    grown = _grown(w, a, (a.actor, who), bands, bodies)
 
     def perform() -> None:
+        for pid, ceiling in marks.items():
+            w.persons[pid].body_ceiling = ceiling
         for pid, body in bodies.items():
             if body is not None:
                 _wound(pid, body)
+        for pid, raised in grown.items():
+            w.persons[pid].capability = raised
 
     def _wound(pid: str, body: int) -> None:
         w.persons[pid].body = body
@@ -221,10 +234,87 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     named: tuple = ()
     for pid, band in bands.items():
         own = () if band == FELLED else own_kinds(row.emits_at(band))
-        own = tuple(k for k in own if k != DUEL_YIELDED or pid == yielder)
-        named += (death_subjects(w, pid, own, fields=("body",)) if bodies[pid] == 0
-                  else (Subject.entity("persons", pid, earns=own, fields=("body",)),))
-    return Change(named, perform)
+        own = tuple(k for k in own if (k != DUEL_YIELDED or pid == yielder) and k not in GROWN_KINDS)
+        if bodies[pid] == 0:
+            named += death_subjects(w, pid, own, fields=("body",))
+            continue
+        # CP-T03-02 (ii): A WOUNDED PARTY'S SUBJECT CARRIES WHAT HIS BODY NOW IS -- `(pid, "body", v)`, `v` the
+        # value `perform` WRITES (`bodies`), never `w.persons[pid].body` read here, which is the pre-fight body
+        # (the item's mutation). It rides each Event this subject earns (`body.changed`; a yielder's
+        # `duel.yielded`), so WITNESS deposits it as it deposits `stores:<kind>` and `condition`: by the shipped
+        # `observation_deposit_mode` (`actor`: the act's actor alone), no new channel. A `none`-model party
+        # (`bodies[pid] is None`) writes nothing and observes nothing.
+        # [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]
+        named += (Subject.entity("persons", pid, earns=own, fields=(BODY_STEM, CEILING),
+                                 observed=body_observed(pid, bodies[pid])),)
+    # CP-T03-04 (iv): EACH GROWN PARTY IS ITS OWN SUBJECT ON `capability`, earning the `(Person, capability)` cell's
+    # kind alone -- never a body subject's kind, and never on a party who did not grow (the filter above).
+    named += tuple(Subject.entity("persons", pid, earns=GROWN_KINDS, fields=("capability",)) for pid in grown)
+    return Change(named, perform, fight_ending(w, (a.actor, who), res, above))
+
+
+# CP-T03-04 (iv): THE KINDS A GROWN PARTY EARNS -- the `(Person, capability)` matrix row's own `emits:`
+# (`write_matrix.yaml`), `train`'s kind, read off its owner rather than spelt.
+GROWN_KINDS = matrix_row("Person", "capability").emits
+
+
+def raised_capability(p: "Person", key: str) -> "dict | None":
+    """`p.capability` with `key` raised by ONE whole point, the unit of a dice count -- `_eff_train`'s write and
+    `_grown`'s, one body. `None` where `p` does not already hold `key`: a key is NEVER MINTED, because a minted
+    `{arms: 1}` would replace `pool_default` in `faculty` and LOWER the pool of the man it meant to reward."""
+    if key not in (p.capability or {}):
+        return None
+    return {**p.capability, key: int(p.capability[key]) + 1}
+
+
+def _grown(w: "World", a: "Act", parties, bands: dict, bodies: dict) -> dict:
+    """v11 CP-T03-04 (iv), BUILD-BY-DOING: `{pid: raised capability}` for each party of a fight THAT DREW BLOOD (some
+    party `Wounded` or `Felled`, i.e. `bands` is not empty) who SURVIVES it (his written body is not 0) and ALREADY
+    HOLDS the key the verb draws on (`VERB_CAPABILITY[a.verb]`, `rosters.yaml: verb_capability` -- `arms` for the
+    three verbs contesting `the body`; the name is read there, never spelt here). Raised by ONE whole point,
+    `_eff_train`'s unit.
+
+    ⚠ NEVER MINTED (`_eff_train`'s rule and its reason): a minted `{arms: 1}` would replace `pool_default` 2 in
+    `faculty` and LOWER the pool of the man it meant to reward. A party holding no key gains nothing.
+    ⚠ ONLY WHERE BLOOD WAS DRAWN, AND THE REASON IS THE FOLD, NOT TASTE: `fight`'s and `accept`'s `Untouched` band
+    writes nothing, so the fold never runs this effect there (`loop/resolve.py`, `_pairs`); declaring a
+    `Person.capability` write on it would turn every untouched fight between non-holders into `kill.refused`
+    (the gate's no-op refusal) where it emits `contest.undecided`. `capture` runs this effect at `Untouched` (its
+    `Tenure.since`), and the same rule (`bands` empty) holds it to the same answer.
+    [ASSUMPTION; medium; Jordan to correct; revert: return `{}` here, and the three bands' `Person.capability`
+    write and `capability.raised` kind in `verb_table.yaml`]."""
+    key = VERB_CAPABILITY.get(a.verb)
+    if not key or not bands:
+        return {}
+    out = {}
+    for pid in dict.fromkeys(parties):
+        p = w.persons.get(pid)
+        raised = None if p is None or bodies.get(pid) == 0 else raised_capability(p, key)
+        if raised is not None:
+            out[pid] = raised
+    return out
+
+
+def body_observed(pid: str, body: "int | None") -> tuple:
+    """CP-T03-02 (ii): the Observation a wounded party's write carries -- `(pid, "body", v)`, `v` the WRITTEN body
+    -- or `()` where the write writes nothing (`wound_harm_model: none`)."""
+    return (Observation(pid, BODY_STEM, body),) if body is not None else ()
+
+
+def fight_ending(w: "World", parties, res: "Resolution", above) -> tuple:
+    """CP-T03-02 (i): `Event.ending` -- `(pid, felled | yielded | undecided)` for each party still a person, in
+    party order, read off the scene's lifted `wound_state` (`party_degree`, the walk `_eff_kill` writes by) and
+    `surrender` (`_yielder`). Read BEFORE the write, which is right: it reports the scene, not the world.
+    [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]"""
+    states = res.result.get("wound_state") or {}
+    yielder = _yielder(res)
+    out = []
+    for pid in dict.fromkeys(parties):
+        if pid not in w.persons:
+            continue
+        out.append((pid, ENDING_FELLED if party_degree(states.get(pid), above) == FELLED
+                    else ENDING_YIELDED if pid == yielder else ENDING_UNDECIDED))
+    return tuple(out)
 
 
 @effect_for("capture")
@@ -255,8 +345,8 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     # ⚠ THE WOUNDED PARTY DOES NOT EARN THE CAPTURE. `_eff_kill` names each party with his band's declared kinds
     # (`own_kinds`), and `Wounded` declares `person.captured` so a wounded yielder's Event can be emitted; left
     # on the party, a wounded scene with NO yield would report a capture nobody made (ID-9). Only the edge earns it.
-    base = Change(tuple(replace(s, earns=tuple(k for k in s.kinds if k != CAPTURED)) if CAPTURED in s.kinds else s
-                        for s in base.subjects), base.apply)
+    base = replace(base, subjects=tuple(replace(s, earns=tuple(k for k in s.kinds if k != CAPTURED))
+                                        if CAPTURED in s.kinds else s for s in base.subjects))
     prisoner = _operand(a, "subject")
     if _yielder(res) != prisoner or prisoner not in w.persons or prisoner == a.actor:
         return base
@@ -275,7 +365,50 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     def perform() -> None:
         base.apply()
         w.add_tenure(nt)
-    return Change(base.subjects + (Subject.edge(nt, earns=CAPTURED),), perform)
+    return replace(base, subjects=base.subjects + (Subject.edge(nt, earns=CAPTURED),), apply=perform)
+
+
+def marked_ceiling(ceiling: int, floors) -> int:
+    """v11 CP-T03-07 (P32): THE CEILING A MARK LEAVES -- one below the highest body band floor at or beneath `ceiling`
+    (`band_floors["body"]`, the floors `decision/budget.py::body_band_penalty` counts): 1000 -> 799 -> 499 -> 99 on the
+    shipped floors. With no floor at or beneath it, `ceiling` unchanged: the marks are as many as the body has floors,
+    and no count is spelt here."""
+    # a floor of 1 or less would leave a ceiling of 0 or below, which `_wound` reads as a death: only floors above 1 mark
+    below = [int(f) for f in floors if 1 < int(f) <= ceiling]
+    return max(below) - 1 if below else ceiling
+
+
+def _marks(w: "World", bodies: dict, states: dict) -> dict:
+    """v11 CP-T03-07: `{pid: new body_ceiling}` for each party of a fight who SURVIVES it (his written body is above 0;
+    a `none`-arm party, written nothing, is not marked) at the engine's DEEPEST GATE SHORT OF FELLING -- `wounds >=
+    max_wounds` on his lifted tracker (`rosters.yaml: wound_quantities`) -- and whose ceiling the mark lowers
+    (`marked_ceiling`). `body_mark_model: none` (`H-258`, the control) marks nobody.
+    [ASSUMPTION; medium; Jordan to correct; revert: `body_mark_model: none`]"""
+    mode = w.fixtures.get("body_mark_model")
+    require_member(
+        mode, BODY_MARK_MODELS, f"body-mark model {mode!r} is not in the roster", "H-258",
+        law="`wound_harm_model`'s precedent -- an unrecognised mode silently falling back would make every "
+            "measurement of the sweep read the control")
+    if mode == "none":
+        return {}
+    floors = w.fixtures.get("band_floors")["body"].values()
+    out = {}
+    for pid, body in bodies.items():
+        if not body:
+            continue
+        st = states[pid]
+        if st.get("wounds") is None or st.get("max_wounds") is None:
+            raise Unspecified(
+                f"the scene reports no wound gate for {pid!r} ({st!r})", "S39.4/H-258",
+                needs="`wounds` and `max_wounds` on the party's wound state",
+                law="the mark is READ off the scene's tracker; a scene that carries no gate cannot be read")
+        if int(st["wounds"]) < int(st["max_wounds"]):
+            continue
+        p = w.persons[pid]
+        after = marked_ceiling(p.body_ceiling, floors)
+        if after != p.body_ceiling:
+            out[pid] = after
+    return out
 
 
 def _harm(p: "Person", band: str, model: str, st: dict) -> "int | None":
@@ -541,8 +674,8 @@ def _eff_tend(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """v9 IN-12 step 9 (#453 §9.4) -- `tend` RAISES THE SUBJECT'S `Person.body` TO THE BODY'S SCALE.
 
     THE MAGNITUDE IS `restore`'s FORMULA READ ON A BODY (`loop/effects_economy.py::_rise`): the headroom
-    to the ceiling -- here `condition_scale`, the scale a person is built at (`Person.body`'s default) --
-    taken whole, because the `share` term is the commons of a fabric and a body has none, and `f(degree)`
+    to the ceiling -- the person's own `Person.body_ceiling` (v11 CP-T03-07), built at `condition_scale` and lowered
+    only by a fight's lasting mark (`_marks`) -- taken whole, because the `share` term is the commons of a fabric and a body has none, and `f(degree)`
     is the identity on an uncontested row (`H-164`). So one tender restores a person whole in one act, as
     one hand raises a fabric to its ceiling [ASSUMPTION; medium; Jordan to correct; revert: a swept
     fixture fraction of the headroom -- #453's *'fast partial and slow full form'*, C-48].
@@ -555,7 +688,8 @@ def _eff_tend(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     p = w.persons.get(who)
     if p is None:
         return NO_CHANGE
-    whole = max(p.body, int(w.fixtures.get("condition_scale")))
+    # v11 CP-T03-07: HEALS TOWARD THE PERSON'S OWN CEILING, never `condition_scale`: a marked man is restored to his mark.
+    whole = max(p.body, p.body_ceiling)
 
     def perform() -> None:
         p.body = whole
@@ -581,9 +715,9 @@ def _eff_train(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     who = _operand(a, "subject")
     key = _operand(a, VOCATION_SOURCED[a.verb])
     p = w.persons.get(who)
-    if p is None or key not in VOCATIONS or key not in (p.capability or {}):
+    raised = raised_capability(p, key) if p is not None and key in VOCATIONS else None
+    if raised is None:
         return NO_CHANGE
-    raised = {**p.capability, key: int(p.capability[key]) + 1}
 
     def perform() -> None:
         p.capability = raised

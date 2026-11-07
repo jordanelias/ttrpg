@@ -29,7 +29,7 @@ from engine.season.data.verbs import VOCATIONS
 from engine.season.gaps import Unspecified
 from engine.season.harness import probes as P
 from engine.season.loop.driver import mint_token
-from engine.season.seam.wrappers import sigma
+from engine.season.seam.wrappers import pool, sigma
 from engine.season.state.gate import WriteClass
 from engine.season.state.world import Step
 from engine.substrate import composition, descriptors
@@ -82,7 +82,7 @@ def test_the_planted_failure_faculty_ignoring_the_base_reads_two_and_not_six(mon
     """The assertion above can observe the failure it excludes: with the attribute read removed the 6 rolls 2."""
     w = _w(**{HIGH: {ATTR: 6}})
     assert sigma.faculty(w, w.persons[HIGH], TELL) == 6
-    monkeypatch.setattr(sigma, "_authored_attribute", lambda entity, verb: None)
+    monkeypatch.setattr(pool, "_authored_attribute", lambda entity, verb: None)
     assert sigma.faculty(w, w.persons[HIGH], TELL) == w.fixtures.get("pool_default") != 6
 
 

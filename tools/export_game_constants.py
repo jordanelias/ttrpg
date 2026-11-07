@@ -56,9 +56,9 @@ MAPPING = {
     # COMBAT_POOL_MINIMUM re-pointed at plan position PC-12 from the retired v30 owner
     # (`systems/combat/sim/combat.py` COMBAT_POOL_MIN, deleted) to the typed owner `modules/combat/core.py`
     # POOL_FLOOR, by the QUALIFIED key (not the first-section-wins alias). Hand-confirmed: it is the
-    # combat-pool minimum, max(POOL_FLOOR, history + BASE_POOL); both agree at 5 (see COLLISIONS['POOL_FLOOR']).
+    # combat-pool minimum, max(POOL_FLOOR, faculty + BASE_POOL) (`history` until CR-85); both agree at 5 (see COLLISIONS['POOL_FLOOR']).
     # As the FLOOR only: the pools floored differ (port Agi*2 + History + 3, less 1 per wound, floored again at
-    # systems/engine/CombatLogic.gd:72; oracle History + 6, wounds as the bilateral Ob), the model gap module_contracts.yaml:925 records.
+    # systems/engine/CombatLogic.gd:72; oracle faculty + 6 (History + 6 until CR-85), wounds as the bilateral Ob), the model gap module_contracts.yaml:925 records.
     'COMBAT_POOL_MINIMUM':           'combat.core.POOL_FLOOR',
     # WEAPON_TN_BASE LEFT THIS TABLE at plan position PC-12. Its Python owner was the same retired v30
     # module (`WEAPON_TN_BASE` = 7; its WEAPON_TN_MOD matrix shifting TN 5-8 was already deleted), and TN is
@@ -96,7 +96,7 @@ COLLISIONS = {
         'python_value': 5,
         'gd_value': 1,
         'reason': "Different quantities sharing a word. modules/combat/core.py POOL_FLOOR is the "
-                  "COMBAT POOL minimum, used as max(POOL_FLOOR, history + BASE_POOL) — the game "
+                  "COMBAT POOL minimum, used as max(POOL_FLOOR, faculty + BASE_POOL) — the game "
                   "calls that COMBAT_POOL_MINIMUM, and MAPPING pairs the two by this qualified key; they "
                   "AGREE at 5. The game's POOL_FLOOR (a different constant) is the "
                   "universal dice-pool floor applied by RollContext.effective_pool() (RollContext.gd:26). "
