@@ -84,7 +84,10 @@ def wield_heft(c, cfg):
     half-sword form's tiny MoI now reads LIGHT (was binary wt='heavy' -> fixes the longsword-vs-plate collapse at
     root); a GATHERED pole (lower I_g) is lighter to wield. Replaces core.heft_resp on the COST path only (the
     damage-impact path keeps heft_resp pending the wt de-leak). Pure."""
-    I_g = WP.at_grip(c.w, getattr(c, 'grip_position', 0.0))['I_g']
+    return _heft_of(WP.at_grip(c.w, getattr(c, 'grip_position', 0.0))['I_g'], cfg)
+
+def _heft_of(I_g, cfg):
+    """`wield_heft`'s power law on an inertia the caller already holds (one owner of the formula). Pure."""
     return (max(1e-6, I_g) / cfg['REC_I_REF']) ** cfg['WIELD_HEFT_EXP']
 
 # ---------- tempo ----------
@@ -268,7 +271,8 @@ def recoverability_factor(c, cfg):
     # (a default fighter is unchanged at any ARREST_STR_K) and 0 at ARREST_STR_K 0 (the control: the PC-20 (3) tree,
     # bitwise). No clamp of its own: RECOVER_FLOOR bounds the product, and at the shipped K the factor stays positive
     # across Strength 1..7 for the heaviest roster heft (K < 1/(3 * 3.116)).
-    str_arrest = 1 - cfg['ARREST_STR_K'] * (c.strength - NEUTRAL['strength']) * wield_heft(c, cfg) * (1 - pc)
+    d_str = c.strength - NEUTRAL['strength']
+    str_arrest = 1.0 if d_str == 0 else 1 - cfg['ARREST_STR_K'] * d_str * _heft_of(I_g, cfg) * (1 - pc)   # d_str 0: exactly 1.0, skipped
     return max(cfg['RECOVER_FLOOR'], C_mode * ctrl_credit * lunge_mult * str_arrest)
 def close_unwieldiness(c, cfg, grip=None):
     """How poorly a weapon serves IN THE CLOSE: the OVERHANG, in metres, of its business end past the distance at

@@ -182,6 +182,24 @@ DELIVERY={'blunt':1.6,'point':1.45,'straight_cut':1.5,'curved_cut':1.5,'cut':1.5
 # one mode; once cut_thrust_arm resolved the two arms on their own tokens nothing read it, yet export_engine_params
 # kept shipping the dead 1.35 into the Godot-facing contract — the exact 'dead keys leaking into the typed contract'
 # class ED-PC-0035 existed to clean, recreated one batch later. Caught by the batch-3 adversarial review.
+K_STR_HEAD = {V.HEAD_BLUNT: 1.0, V.HEAD_STRAIGHT_CUT: 0.925, V.HEAD_CURVED_CUT: 0.925, V.HEAD_CUT: 0.925,
+              V.HEAD_CUT_THRUST: 0.925, V.HEAD_POINT: 0.85}
+# PC-20 (1), AR-10, adj §2.2 (v) [SIM-CALIBRATE; ASSUMPTION; medium; Jordan to correct; revert: every head 1.0, the
+# control, which reproduces the pre-PC-20 tree byte for byte]. Strength's weight in `strike_impact`, PER SELECTED HEAD:
+# a big blunt head turns the arm's force into damage most fully, a skinny point "slides in with little effort" and
+# turns it least, an edge lies between. ADDITIVE (k·strength + heft): ED-1040's reverted multiplicative form
+# ((STR_REF+heft)·(strength/STR_REF)^STR_EXP) is NOT reintroduced. Every head token is a key (a missing head is a
+# KeyError, never a silent 1.0); `cut_thrust` takes the edge weight — its family claims an edge
+# (V.CUT_FAMILY_HEADS), and it is one head token whichever arm `cut_thrust_arm` resolves.
+# THE SWEEP RULE. AR-10 says Strength's damage is "mitigated by the type of weapon", the blunt head "most positively
+# affected": blunt stays 1.0 (unmitigated, today's), edge = 1-d, point = 1-2d (equal steps; nothing measured separates
+# the two gaps), d > 0 so the order is strict and d < 0.5 so a point keeps some Strength. Shipped: the middle grid
+# member of the d-range over which ED-1040's observable (the str-2 greatsword mirror's draw rate, n=3000) AND every
+# matchup family's pooled draw rate (PC-19 (2)'s instrument: weapon sweep n=1000/weapon vs arming, attribute n=3000,
+# tradition n=500/pair) stay inside their d=0 Wilson 95% intervals — the roster-wide form of the stall ED-1040 was
+# about, since less damage per blow is a longer fight. Workbench balance.winrate, PYTHONHASHSEED=0. Grid d .05, .075,
+# .1, .175, .25, .325, .4: .05-.1 in; .175 out (weapon, tradition), .25 and up out (all three families); the
+# greatsword reading stays in everywhere. Middle of .05-.1: d = .075.
 # Material resistance per mode in [0,1] (resist; transmit = 1-resist). GROUNDED 2026-06-30 (Alan Williams, The Knight
 # and the Blast Furnace, 2003) — designs/audit/2026-06-30-combat-grounding/. CHANGED 4 cells: cloth.shear .35->.45
 # (a 16-30 layer jack sheds a ~60-130 J cut); cloth.puncture .15->.12 (a point stops at only ~50 J vs ~80 J cut — the
@@ -566,24 +584,6 @@ def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
 # coupling/adef/legibility machinery is unchanged) and one DAMAGE mode. The wielder greedily SELECTS the afforded
 # head whose resulting damage-coupling vs THIS armour is highest — generalizing the existing cut_thrust max() and the
 # blunt max(concussion,puncture) from 2 modes to N. Pure.
-K_STR_HEAD = {V.HEAD_BLUNT: 1.0, V.HEAD_STRAIGHT_CUT: 0.925, V.HEAD_CURVED_CUT: 0.925, V.HEAD_CUT: 0.925,
-              V.HEAD_CUT_THRUST: 0.925, V.HEAD_POINT: 0.85}
-# PC-20 (1), AR-10, adj §2.2 (v) [SIM-CALIBRATE; ASSUMPTION; medium; Jordan to correct; revert: every head 1.0, the
-# control, which reproduces the pre-PC-20 tree byte for byte]. Strength's weight in `strike_impact`, PER SELECTED HEAD:
-# a big blunt head turns the arm's force into damage most fully, a skinny point "slides in with little effort" and
-# turns it least, an edge lies between. ADDITIVE (k·strength + heft): ED-1040's reverted multiplicative form
-# ((STR_REF+heft)·(strength/STR_REF)^STR_EXP) is NOT reintroduced. Every head token is a key (a missing head is a
-# KeyError, never a silent 1.0); `cut_thrust` takes the edge weight — its family claims an edge
-# (V.CUT_FAMILY_HEADS), and it is one head token whichever arm `cut_thrust_arm` resolves.
-# THE SWEEP RULE. AR-10 says Strength's damage is "mitigated by the type of weapon", the blunt head "most positively
-# affected": blunt stays 1.0 (unmitigated, today's), edge = 1-d, point = 1-2d (equal steps; nothing measured separates
-# the two gaps), d > 0 so the order is strict and d < 0.5 so a point keeps some Strength. Shipped: the middle grid
-# member of the d-range over which ED-1040's observable (the str-2 greatsword mirror's draw rate, n=3000) AND every
-# matchup family's pooled draw rate (PC-19 (2)'s instrument: weapon sweep n=1000/weapon vs arming, attribute n=3000,
-# tradition n=500/pair) stay inside their d=0 Wilson 95% intervals — the roster-wide form of the stall ED-1040 was
-# about, since less damage per blow is a longer fight. Workbench balance.winrate, PYTHONHASHSEED=0. Grid d .05, .075,
-# .1, .175, .25, .325, .4: .05-.1 in; .175 out (weapon, tradition), .25 and up out (all three families); the
-# greatsword reading stays in everywhere. Middle of .05-.1: d = .075.
 def strike_impact(strength, heft_units, weapon_head, perc=PERC_AUTH_REF):
     """The Str+Heft IMPACT term of `damage` — its single owner, so `cut_thrust_impacts` prices the cut_thrust arm
     contest on exactly what `damage` pays (ED-PC-0050). Strength is weighted by the head (`K_STR_HEAD`, PC-20 (1)).
