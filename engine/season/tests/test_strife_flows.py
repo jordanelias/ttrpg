@@ -827,3 +827,87 @@ def test_control_the_realm_hash_holds_and_the_reading_is_the_same_read_twice():
     assert planted > 0 and any(len(m) > 1 for v in first for _, m, _ in v), planted
     assert first == second
     assert w.content_hash() == before                                 # the reading writes nothing
+
+
+# --- CR-78 commit (1): the stamp, switch shipped off ----------------------------------------------------------
+# 14. PLANTED: a person aware of a rising at his settlement finds that rung, its seat and the seat's holder among
+#     his occasions (the classed referents of his first question) with `stamp_known_flows` on, and not with it off.
+# 15. MUTATION: a referent the term carries, classed outside the closed set, is refused at the Question.
+# 16. CONTROL: with the switch off, `build_realm(0)` and one season at seed 0 reproduce the base hashes (read at
+#     the worktree base, 60c27d08, before the term existed), and the term is never computed (patched to raise).
+
+from engine.season.data.fixtures import DEFAULT_FIXTURES  # noqa: E402
+from engine.season.gaps import Forbidden  # noqa: E402
+from engine.season.state.carriers import Office  # noqa: E402
+
+STAMP = "stamp_known_flows"
+BASE_BUILD_CR78 = "600d8b27147478e158553552cc1409a5"    # build_realm(0).content_hash() @60c27d08, before CR-78
+BASE_SEASON_CR78 = "d4c83c8ca9d5082f5237a3889e1a995b"   # one season, seed 0, @60c27d08, before CR-78
+
+
+def _rising(on):
+    """`_world()` with a seat at the settlement `S` held by `p_high`, and `p_low` (at the hearth inside `S`) holding
+    one claim of a withheld compliance at `S` -- an `opens` kind, so his reading holds one open strand there."""
+    w = _world()
+    w.fixtures = w.fixtures.sweep(STAMP, on)
+    w.offices["off_reeve"] = Office("off_reeve", "Reeve", "S", ["issue"], faction="Valorsmark")
+    w.add_tenure(Tenure("t_cr78_reeve", "p_high", "off_reeve", "hold", 0))
+    hold(w, "p_low", "S", "compliance.withheld")
+    return w
+
+
+def _stamp_of(w, pid):
+    qs = W.questions_for(w, w.persons[pid])
+    assert qs, "no question carries the stamp"
+    return set(qs[0].classes)
+
+
+def test_a_person_aware_of_a_rising_at_his_settlement_finds_its_rung_seat_and_holder_only_with_the_stamp_on():
+    w_off, w_on = _rising(False), _rising(True)
+    p = w_on.persons["p_low"]
+    (s,) = W.flows_known(w_on, p)
+    assert s.rung == "S" and not W.concluded_known(w_on, p, s)       # the planted flow is his, open, at S
+    stakes = {("S", "Rung"), ("off_reeve", "Office"), ("p_high", "Person")}
+    on, off = _stamp_of(w_on, "p_low"), _stamp_of(w_off, "p_low")
+    assert stakes <= on, on
+    assert {("off_reeve", "Office"), ("p_high", "Person")}.isdisjoint(off), off
+    assert not any(x == "p_low" for x, _ in on - off)                 # he is no occasion of his own
+    # a person who holds no claim of it is not conditioned by it, with the switch on
+    assert W.flows_at_stake(w_on, w_on.persons["p_other"]) == ()
+    # the term names ids, never a move's kind
+    assert W.flows_at_stake(w_on, p) and not any(x in W.MOVE_KINDS for x in W.flows_at_stake(w_on, p))
+
+
+def test_a_stamped_flow_referent_of_a_class_outside_the_closed_set_is_refused(monkeypatch):
+    """The seat is re-classed `Flow`. The term's own class test (`_of_stamped_class` over `DECLARED_CLASSES`)
+    drops it; with that test widened to admit `Flow`, the Question refuses it at construction (the closed
+    `referent_classes` set). With the switch off nothing of the flow is stamped, so even widened nothing raises."""
+    def flowed(on):
+        w = _rising(on)
+        orig = w.class_of
+        monkeypatch.setattr(w, "class_of", lambda x: "Flow" if x == "off_reeve" else orig(x))
+        return w
+    w = flowed(True)
+    assert "off_reeve" not in W.flows_at_stake(w, w.persons["p_low"])               # the term's filter drops it
+    assert ("p_high", "Person") in _stamp_of(w, "p_low")                            # ... and keeps the rest
+    monkeypatch.setattr(W, "DECLARED_CLASSES", W.DECLARED_CLASSES | {"Flow"})       # the mutation: filter widened
+    assert "off_reeve" in W.flows_at_stake(w, w.persons["p_low"])
+    with pytest.raises(Forbidden, match="no declared class"):
+        W.questions_for(w, w.persons["p_low"])
+    w_off = flowed(False)                                                            # control: off stamps nothing of it
+    assert not any(x == "off_reeve" for x, _ in _stamp_of(w_off, "p_low"))
+
+
+def test_control_with_the_stamp_off_the_base_hashes_hold_and_the_term_is_never_computed(monkeypatch):
+    from engine.season.harness import populated
+
+    def boom(*_a, **_k):
+        raise AssertionError("flows_at_stake computed with the stamp off")
+    monkeypatch.setitem(DEFAULT_FIXTURES._v, STAMP, False)
+    monkeypatch.setattr(W, "flows_at_stake", boom)
+    assert populated.build_realm(0).content_hash() == BASE_BUILD_CR78
+    w = populated.build_realm(0)
+    reads = w.fixtures.reads.get(STAMP, 0)
+    populated.run(seasons=1, w=w)
+    assert w.fixtures.reads.get(STAMP, 0) > reads                    # the switch was read, so `boom` could fire
+    assert w.content_hash() == BASE_SEASON_CR78
