@@ -908,7 +908,9 @@ def test_lb6d_every_verb_declares_a_rostered_beneficiary():
     # 62 -> 63, `interrogate` (v10 IN-12 step 5) -- `beneficiary: actor` (#453 §9.1), so `kinds["actor"]`
     # grows by one (a re-record).
     # 63 -> 64, `capture` (v10 CP-T03-09) -- `beneficiary: none` (`arrest`'s column), so `kinds["none"]` grows by one (a re-record).
-    assert len(VERB_TABLE) == 64, "the verb count moved; this row's census is stale"       # 63 -> 64, v10 CP-T03-09
+    # 64 -> 65, `lie` (B10-13 CR-27; re-recorded in the batch's pin commit, P15) -- `beneficiary: subject` (`tell`'s column), so
+    # `kinds["subject"]` grows by one (a re-record).
+    assert len(VERB_TABLE) == 65, "the verb count moved; this row's census is stale"       # 64 -> 65, B10-13 CR-27 `lie` (was 63 -> 64, v10 CP-T03-09)
     undeclared = [v for v, r in VERB_TABLE.items() if not r.beneficiary]
     assert not undeclared, f"verbs with no `beneficiary:`: {undeclared}"
     off_roster = [(v, r.beneficiary) for v, r in VERB_TABLE.items()
@@ -2948,7 +2950,11 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # `Person`-classed referent and `wounded_with` stamps a man below his ceiling for himself, so the hungry tend themselves
     # whole and the act mix moves (seed 0, one season: 744 -> 755 shipped; `test_go07_canonical_digest.py` records the 755).
     # CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` reads the old one-season hash `eb2919ae...` (744).
-    assert (out["acts"], cout["acts"]) == (755, 753), (
+    # ⚠⚠ v11 B10-13 (the batch's pin commit, P15): (755, 753) -> (749, 747), A RE-RECORD WITH THE BATCH THAT MOVED IT: the batch's
+    # items together (CR-27 `lie`, CP-T05-02, CP-T05-03, CR-55, CR-56, CR-34, CR-31; the batch's commits name each item's own
+    # reading) move the act mix (seed 0, one season: 755 -> 749 shipped, 753 -> 747
+    # in the control arm; `test_go07_canonical_digest.py` records the 749). The arms still part by two acts.
+    assert (out["acts"], cout["acts"]) == (749, 747), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

@@ -224,10 +224,10 @@ def test_st14_a_verdict_is_a_tenure_its_determiner_opened_and_disposes_has_a_wri
     """RE-HOSTS ST-14 (`00_DERIVATION.md` §A.6). The tracer's finding (F-14, blocking): `determine` can
     GRADE a Tenure and cannot OPEN one, so *`disposes:` NAMES A WRITE AND HAS NO WRITER*. REVERSED by v9
     SC-03: `_eff_determine` opens the kind the docketed row `disposes:`. Asked of every seeded row that
-    disposes a Tenure kind -- the six, `excommunication_deliberation` (SC-04's row) among them -- through the
+    disposes a Tenure kind -- the seven, `excommunication_deliberation` (SC-04's row) and `negotiation` (B10-13 SC-04's) among them -- through the
     real fold: the matter is docketed under the row, a strong judge determines it, and ONE live edge of
     exactly the row's kind appears, owned by the party, on the seat exercised, graded at the band the
-    contest decided, and no edge of any other disposal kind. The loop asserts it asserted (six rows).
+    contest decided, and no edge of any other disposal kind. The loop asserts it asserted (seven rows; six before the B10-13 pin commit's `negotiation`).
     THE HALF THAT IS STILL OPEN: the two `Record`-disposing rows (`parliamentary_debate`, `council_of_state`)
     have no writer -- `open_case` REFUSES to dock under them (`case.refused`), asserted below, so the gap is
     observed and not skipped."""
@@ -256,7 +256,7 @@ def test_st14_a_verdict_is_a_tenure_its_determiner_opened_and_disposes_has_a_wri
         assert all(not _edges(w, other) for other in disposal_kinds if other != row["disposes"]), (
             name, [(t.kind, t.subject) for t in w.tenures if t.object == SEAT])
         checked += 1
-    assert checked == 6, checked
+    assert checked == 7, checked      # B10-13 pin commit (SC-04's `negotiation` row): was 6
     assert record_rows == ["council_of_state", "parliamentary_debate"], record_rows
 
 
