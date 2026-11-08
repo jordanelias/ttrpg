@@ -203,7 +203,11 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
                           proofs=proofs(w, claimants[0], subject, room),
                           proof_step=fx.get("proof_step"))
     doc = w.records.get(examined) if examined is not None else None
-    return _frame(fx, faculty(w, w.persons[claimants[0]], verb), _opposition_of(w, subject, verb),
+    # NOBODY OPPOSES HIMSELF (v10 CP-T05-02 (ii), AM-D-02): a subject who IS the actor (the self-plea,
+    # `speak {subject: himself}`) brings no opposition -- his own score is not an obstacle to himself --
+    # so the obstacle starts at `obstacle_default`, the same at any capability he holds.
+    opposition = None if subject == claimants[0] else _opposition_of(w, subject, verb)
+    return _frame(fx, faculty(w, w.persons[claimants[0]], verb), opposition,
                   doc.forgery_quality if doc is not None else 0.0, room_terms, effort)
 
 

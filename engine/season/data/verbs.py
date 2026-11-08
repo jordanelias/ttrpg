@@ -259,6 +259,13 @@ class VerbRow:
     # `decision/options.py::opening_set` with no World (L2). The loader admits it only beside a
     # `referent_class:`; one class, two sources, and this column is which one a row may answer.
     referent_named: bool = False
+    # v10 CP-T05-02 (iii) (AM-D-02): MAY THE SUBJECT BE THE PERSON THEMSELF? `False` (every row but one)
+    # keeps `opening_set`'s self-subject decline: a person is not their own adversary on a row contested
+    # against its subject (`decision/options.py::subject_is_opponent`). `True` (`speak`: a docketed party
+    # answers to his own matter) waives that decline for the row declaring it, and for that row alone. NOT
+    # `counterparty_may_be_self`, which waives the COUNTERPARTY operand's self-exclusion (`confer`). The
+    # loader admits it only on a row `subject_is_opponent` reads as contested against its subject.
+    subject_may_be_self: bool = False
 
     def referents_of(self, q) -> tuple:
         """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
@@ -655,7 +662,8 @@ def _load_verb_table() -> dict:
                       requires_decline_note=str(r.get("requires_decline_note") or "").strip(),
                       referent_class=str(r.get("referent_class") or "").strip(),
                       counterparty_may_be_self=r.get("counterparty_may_be_self", False),
-                      referent_named=r.get("referent_named", False))
+                      referent_named=r.get("referent_named", False),
+                      subject_may_be_self=r.get("subject_may_be_self", False))
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.
@@ -702,9 +710,9 @@ def _load_verb_table() -> dict:
                 "`writs_held` and `records_held_for_holding_rows` stamp a held Record only of a kind "
                 "such a clause names, and the own-referent term a Record of any kind only for a clause "
                 "naming the class, so this row would never form.")
-        # IN-10 (a) / IN-53 D2: `referent_named` and `counterparty_may_be_self` ARE BOOLEANS -- a
-        # string `"false"` would read truthy.
-        for col in ("referent_named", "counterparty_may_be_self"):
+        # IN-10 (a) / IN-53 D2 / CP-T05-02 (iii): `referent_named`, `counterparty_may_be_self` and
+        # `subject_may_be_self` ARE BOOLEANS -- a string `"false"` would read truthy.
+        for col in (f.name for f in fields(VerbRow) if f.type in (bool, "bool")):
             if not isinstance(getattr(row, col), bool):
                 raise SystemExit(
                     f"verb_table.yaml: {name!r} declares {col} {getattr(row, col)!r}; it is "
@@ -729,6 +737,15 @@ def _load_verb_table() -> dict:
                 f"({list(row.known_person_operands())}). The column adds the person to that fan "
                 "(`decision/options.py::operand_bags`); on any other row it would only waive the "
                 "fold's self-exclusion.")
+        # CP-T05-02 (iii): `subject_may_be_self` ONLY ON A ROW CONTESTED AGAINST ITS SUBJECT. On any other
+        # row `opening_set` makes no self-subject decline (`decision/options.py::subject_is_opponent`:
+        # `tell`'s subject is a topic), so the column would waive nothing -- a column read by nothing.
+        if row.subject_may_be_self and not (row.contests and row.opponent_operand() == "subject"):
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares subject_may_be_self, but its act is not contested "
+                f"against its subject (contests {row.contests!r}, opponent operand "
+                f"{row.opponent_operand()!r}). The column waives `opening_set`'s decline of a person as "
+                "his own adversary, which only such a row makes.")
         # A row that declares `requires_typed: none` must SAY WHY. The three admissible reasons
         # are a well-formedness constraint on the Act (§F.24a: `issue`, `open_case` -- *"they
         # belong in the `Act` schema and are refused at construction"*), a `per act` cell, and an

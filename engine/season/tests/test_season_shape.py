@@ -935,14 +935,18 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     ⚠ 83 -> 84, v10 PC-10b, ONE NEW LOAD-TIME REFUSAL in `data/requires.py::Relation.__post_init__`: a relation spelt
     `<stem>:<operand>` whose stem is not an `OPERAND_NAMED_STEMS` member, or an operand-named stem spelt bare (the
     `names:<operand>` stem's shape; a `with:to` would read a predicate no reader answers). Raised while `verb_table.yaml`
-    loads. Falsifier: `test_pc10b_challenge_record.py::test_the_operand_named_shape_is_closed_to_its_stems` plants both."""
+    loads. Falsifier: `test_pc10b_challenge_record.py::test_the_operand_named_shape_is_closed_to_its_stems` plants both.
+
+    ⚠ 84 -> 85, v10 CP-T05-02 (iii), ONE NEW LOAD-TIME REFUSAL in `data/verbs.py`: `subject_may_be_self` on a row not
+    contested against its subject (`VerbRow.opponent_operand() == "subject"`), where the column would waive nothing.
+    Falsifier: `test_cp_t05_02_self_plea.py::test_the_loader_refuses_the_column_off_a_row_contested_against_its_subject`."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 84, (
-        f"{total} load-time exits across the model set, expected 84. Per file: "
+    assert total == 85, (
+        f"{total} load-time exits across the model set, expected 85. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
