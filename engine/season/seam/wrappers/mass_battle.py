@@ -220,11 +220,16 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
     MB-03: `loyalties` and `loyalty_gain` are the build-time loyalty rows and the fixture gain; what
     they do to the morale-start is `massbattle._morale_start`'s.
     REM-32: `troops_per_weight` is the `field_troops_per_weight` fixture (`H-250`), handed on unread.
+    CP-T04-01: `members` are the person ids beside `weights` (the same test, so they align) and `subunits` is the
+    `field_subunits` fixture (`H-359`), handed on unread; the module reads them only on its `person` arm.
     ED-IN-0306 phase 3: `factions` is `(attacker, defender)`, each side's faction Proposition id or `None`;
     each side whose faction holds an army Record fights as that Record's order of battle
     (`_order_of_battle`). Neither side having one leaves `orders_of_battle` `None`, the record exactly as it was."""
     def weights(side: list) -> tuple:
         return tuple(w.persons[pid].weight for pid in side if pid in w.persons)
+
+    def members(side: list) -> tuple:
+        return tuple(pid for pid in side if pid in w.persons)    # `weights`' own test, so the two align
     oobs = (_order_of_battle(w, factions[0], claimants), _order_of_battle(w, factions[1], other))
     return MassBattleInput(
         weights=(weights(claimants), weights(other)),
@@ -240,7 +245,9 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
         loyalty_gain=w.fixtures.get("field_morale_loyalty_gain"),
         geography=geography(),
         orders_of_battle=None if oobs == (None, None) else oobs,
-        troops_per_weight=w.fixtures.get("field_troops_per_weight"))
+        troops_per_weight=w.fixtures.get("field_troops_per_weight"),
+        members=(members(claimants), members(other)),
+        subunits=w.fixtures.get("field_subunits"))
 
 
 def _causing_act(w: Any, causes: list) -> Any:

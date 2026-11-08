@@ -787,6 +787,14 @@ DEFAULT_FIXTURES = Fixtures(
     # side, and a headcount side facing one, are sized by `under_arms_cap`, not by this (`resolve_field`: the scale reaches only
     # a field where neither side holds an order of battle).
     field_troops_per_weight=1,  # `H-250`, swept 1 (control, SHIPPED, = troops = weight) / above 1
+    # CP-T04-01 (`H-359`). WHAT A HEADCOUNT SIDE IS MADE OF: `side` IS SHIPPED AND IS THE FIELD AS IT WAS -- one
+    # subunit sized by the side's Σ weight, and `_eff_march` scales every loser's body by the SIDE's survivor ratio.
+    # `person` builds one subunit per commanding person, sized by his own weight (`field_troops_per_weight` applies),
+    # and `_eff_march` scales each loser by HIS subunit's ratio and names, on the band Event, the loser whose subunit
+    # broke first. A side that holds an order of battle, or faces one, is unchanged by either value. The flip to
+    # `person` is its own declared-mover commit. Injection site: this line, read by
+    # `seam/wrappers/mass_battle.py::field_input` into the record's `subunits`; the module refuses any other string.
+    field_subunits="side",  # `H-359`, swept side (control, SHIPPED) / person
     # v9 IN-52 (`H-241`). THE LEVY-TO-FIELD FEED'S ARM [ASSUMPTION LF-1..LF-3, delegated-ruled,
     # `_part5` §J.2]: `True` bounds each side's fielded troops by its treasury at the larder's ration
     # (`modules/settlements/provision.py`) and debits what the field eats (`_eff_march`); `False` is the
