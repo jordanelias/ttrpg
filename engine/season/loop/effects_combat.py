@@ -301,6 +301,18 @@ def body_observed(pid: str, body: "int | None") -> tuple:
     return (Observation(pid, BODY_STEM, body),) if body is not None else ()
 
 
+BROKE_STEM = "broke"
+
+
+def broke_observed(pid: str, broke: "str | None") -> tuple:
+    """CP-T04-01: the Observation the loser whose subunit BROKE FIRST carries on the field's band Event --
+    `(pid, "broke", True)` -- or `()` for every other loser and for a field that names nobody (the `side` arm, or a
+    side whose subunits did not break on their own account). An Event carries no payload (`Event.ending`'s note), so the
+    cause rides `Event.observed`, deposited by WITNESS as `body_observed` is. [ASSUMPTION; medium; Jordan to correct;
+    revert: the Observation, and the field's cause is unnamed]"""
+    return (Observation(pid, BROKE_STEM, True),) if broke is not None and pid == broke else ()
+
+
 def fight_ending(w: "World", parties, res: "Resolution", above) -> tuple:
     """CP-T03-02 (i): `Event.ending` -- `(pid, felled | yielded | undecided)` for each party still a person, in
     party order, read off the scene's lifted `wound_state` (`party_degree`, the walk `_eff_kill` writes by) and
@@ -524,6 +536,11 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     if drawn is not None and res.degree != UNOPPOSED:
         losers = list(drawn)             # cohorts do not stand beside their army: they are the people at home
     pct = engine_result.get("attacker_size_pct" if attacker_lost else "defender_size_pct")
+    # CP-T04-01 (`field_subunits: person`): the module's record then carries each person's own subunit ratio, and a
+    # loser is scaled by HIS, not the side's. A person it does not name (a side fought as an order of battle, or the
+    # `side` arm, which carries no `subunits` at all) keeps the side's `pct`, so the `side` arm is today's write.
+    per_person = engine_result.get("subunits") or {}
+    broke = (engine_result.get("broke_first") or (None, None))[0 if attacker_lost else 1]
     touched = [pid for pid in losers if pid in w.persons]
     debits = _ration_debits(w, res)
     if not touched and not movers and not debits:
@@ -576,7 +593,8 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
             if model == "total":
                 p.body = 0
             elif model == "scaled_by_degree":
-                p.body = max(1, int(p.body * max(0.0, pct or 0.0)))
+                mine = per_person[pid][0] if pid in per_person else pct
+                p.body = max(1, int(p.body * max(0.0, mine or 0.0)))
             # `none`: the control arm -- body is not written at all.
             rows = list(p.stance or [])
             if winner_faction:
@@ -604,7 +622,8 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     losers_named = tuple(
         s for pid in touched
         for s in (death_subjects(w, pid, loser_earns, fields=fields) if dies
-                  else (Subject.entity("persons", pid, earns=loser_earns, fields=fields),)))
+                  else (Subject.entity("persons", pid, earns=loser_earns, fields=fields,
+                                       observed=broke_observed(pid, broke)),)))
     return Change(losers_named
                   + tuple(Subject.entity("persons", pid, earns=own) for pid in movers)
                   + tuple(Subject.entity("rungs", rid, earns=loser_earns, fields=("stores",))
