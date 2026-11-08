@@ -138,16 +138,14 @@ SUPPORT_STACK_ENABLED = True
 # [CALIBRATED-DEBT: cell-support-stacking taper (F-i) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 SUPPORT_WEIGHTS = {1: 1.0, 2: 0.7, 3: 0.5}
 SUPPORT_WEIGHT_FLOOR = 0.3  # [CALIBRATED-DEBT: cell-support-stacking floor (F-i) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
-# [MB-07, J-18 (A), ED-MB-0041] SUPPORT RANK CAP: support counts only from the ranks a troop type's weapon
-# reaches past the contact rank; a rank deeper than the cap adds 0 to the pool. SHIPPED OFF = today's uncapped
-# stack exactly. ON stalls the bat.py battery: `python3 tools/ci_golden_modes_check.py --perturb MB_SUPPORT_RANK_CAP=1`
-# (FIELD_PINS pins the flag to '0', so an ambient env var does nothing; --perturb overrides the pin) against the same
-# command without --perturb, whose digests are the control. The mirror/cav_shaken/ranged rows hit MAX_TURNS=20 on
-# every probed seed with it ON (4 of the battery's seeds; 3-10 turns OFF) and cell_field_mor0 exceeds the golden
-# tool's 300s/mode (`ci_golden_modes_check.py`, the per-mode timeout). To flip it: recalibrate casualty/pool magnitudes so
-# the capped modes finish under MAX_TURNS and the timeout, set this default and FIELD_PINS to '1', and declare the
-# re-pinned digests. Not done: J-18 (A) does not execute in play while this is OFF (workplan MB-07).
-MB_SUPPORT_RANK_CAP = (_sigma_os.environ.get('MB_SUPPORT_RANK_CAP', '0') == '1')
+# [MB-07 / MB-07r, J-18 (A), ED-MB-0041] SUPPORT RANK CAP: support counts only from the ranks a troop type's weapon
+# reaches past the contact rank; a rank deeper than the cap adds 0 to the pool. SHIPPED ON since MB-07r. It shipped
+# OFF at MB-07 because the capped bat.py battery stalled: the cap shrinks the engaged share of every body (the battery's
+# tier-3 infantry Line engages 0.40 of its troops capped against 0.70 uncapped), the pool falls with it, margins fall to
+# Failure/Partial, and mirror/cav_shaken/ranged ran to MAX_TURNS=20 (~3.5x the OFF time; cell_field_mor0 exceeded the golden
+# tool's 300s/mode). MB-07r recalibrated the pool magnitude to the cap (POOL_QUALITY_SCALE below) and flipped this default
+# and FIELD_PINS to '1'. '0' is the control arm: the uncapped stack, exactly (tests/valoria/test_mass_battle_support_rank_cap.py).
+MB_SUPPORT_RANK_CAP = (_sigma_os.environ.get('MB_SUPPORT_RANK_CAP', '1') == '1')
 PUNCTURE_ENABLED = True
 PUNCTURE_CAP = 3
 CASCADING_ENABLED = True
@@ -573,7 +571,15 @@ POOL_QUALITY_MODEL = _sigma_os.environ.get('POOL_QUALITY_MODEL', '1') == '1'  # 
 # magnitude), so this is flagged as a genuine, not-yet-closed follow-up (likely needs the
 # degree/damage-tier discretization or Lanchester's own interaction reconsidered), not
 # silently patched by picking a smaller scale that merely LOOKS closer.
-POOL_QUALITY_SCALE = float(_sigma_os.environ.get('POOL_QUALITY_SCALE', '0.5'))
+# [MB-07r, J-18 (A)] 0.5 -> 0.8, the MB-07 cap's own recalibration. This constant is the pool's per-reference-body
+# magnitude, and the support rank cap cuts the battery's reference body (tier-3 infantry Line, one rank of support) to
+# 0.40 of its troops engaged where the uncapped stack engaged 0.70, so the scale that holds that body's pool at the
+# 0.5 anchor above is 0.5 x 0.70 / 0.40 = 0.875. 0.8 is taken instead of 0.875: at 0.875 the 16-seed braced-charge
+# fixture of test_mass_battle_support_rank_cap.py reverses the pike/heavy retention order the cap exists to produce
+# (capped pike 0.9503 < heavy 0.9568, a gap inside that fixture's seed noise), and at 0.8 it holds (0.9604 > 0.9508).
+# Measured on the golden battery (3.11.18): at 0.5 the capped cell_field_mor0 battery ran to MAX_TURNS=20 in most
+# rows and exceeded the 300s per-mode timeout; the timings at 0.8 are in the MB-07r commit.
+POOL_QUALITY_SCALE = float(_sigma_os.environ.get('POOL_QUALITY_SCALE', '0.8'))
 
 # ─── P-C COMPOSITIONAL-FORMATION ROLES (data; the instruction→primitive wiring is
 # hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES, MB-04; see pc_formation_design.md §3.5/§9.1).
