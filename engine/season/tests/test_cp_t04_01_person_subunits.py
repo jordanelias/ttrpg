@@ -3,11 +3,14 @@
 
 THE FIELD IS HAND-BUILT, NOT NATURAL. One season of the shipped realm fights almost no field (seed 0: `field.unopposed`
 3, `march.declared` 6; seed 1: unopposed 2, declared 3; seed 2: `field.lost` 1), so the falsifier runs on a real fold of
-`set_s_014` marching on `set_s_036` with the Crown's two marchers made cohorts (`Person.weight` 2) and the weight ->
-troops scale at 100 (REM-32's `field_troops_per_weight`; a value of THIS TEST, not Jordan's answer to JQ-4). At that
-scale a weight-1 subunit is 100 troops, at or above `SUBUNIT_ROUT_FLOOR = 80`, and a side is above the 100-troop line,
-so a subunit does not rout on tick 1. Realm seed 0 loses the field with ONE marcher's subunit routed and the other's
-not (the preconditions are asserted below, so a moved fixture reads as a precondition, not a pass).
+`set_s_014` marching on `set_s_036` with the Crown's two marchers at `Person.weight` 1 and the weight -> troops scale at 200 (REM-32's
+`field_troops_per_weight`; a value of THIS TEST, not Jordan's answer to JQ-4). At that scale a weight-1 subunit is
+200 troops, above `SUBUNIT_ROUT_FLOOR = 80`, and a side is above the 100-troop line, so a subunit does not rout on
+tick 1. Realm seed 8 loses the field with ONE marcher's subunit routed and the other's untouched (the preconditions
+are asserted below, so a moved fixture reads as a precondition, not a pass). RE-PICKED by MB-07r (the depth support
+cap ON, `POOL_QUALITY_SCALE` 0.5 -> 0.8): at the old pick (seed 0, weight 2, scale 100) the new magnitudes cut BOTH
+marchers ({p_npc_033: 820, p_npc_035: 460}), so the unrouted one was no longer untouched. Seed, weight and scale are
+the helper's own three knobs; the claims below are unchanged.
 
 The cases: the falsifier (different bodies under `person`, identical under `side`), its planted failure (the side's ratio
 fed to every person: the same check reddens), the control (`side` writes today's bodies and carries no per-person
@@ -25,7 +28,8 @@ from engine.season.queries import world_q
 from engine.season.queries.inputs import MassBattleInput
 from engine.season.tests.test_march import _fold_one, _march_act
 
-SEED, WEIGHT, SCALE = 0, 2, 100
+SEED, WEIGHT, FIELD_SCALE = 8, 1, 200      # the hand-built fold's three knobs
+SCALE = 100                                  # the weight -> troops scale of the unit-shape cases (a subunit of weight 1 is 100)
 MARCHERS = ("p_npc_033", "p_npc_035")
 
 
@@ -35,12 +39,12 @@ def _mb():
 
 
 def _fold(arm=None, *, seed=SEED):
-    """The hand-built field: the Crown's two marchers (cohorts of `WEIGHT`) on the Church's six at `set_s_036`.
+    """The hand-built field: the Crown's two marchers (each of weight `WEIGHT`) on the Church's six at `set_s_036`.
     `arm=None` leaves the shipped fixture untouched. Returns `(world, events, bodies after, bodies before)`."""
     w = build_realm(seed)
     for pid in MARCHERS:
         w.persons[pid].weight = WEIGHT
-    w.fixtures = w.fixtures.sweep("field_troops_per_weight", SCALE)
+    w.fixtures = w.fixtures.sweep("field_troops_per_weight", FIELD_SCALE)
     if arm is not None:
         w.fixtures = w.fixtures.sweep("field_subunits", arm)
     assert world_q.mustered(w, "set_s_014", "fac_valorsmark") == list(MARCHERS), "fixture moved: re-read it"

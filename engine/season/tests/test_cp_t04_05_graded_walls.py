@@ -28,7 +28,11 @@ from engine.season.queries import world_q
 from engine.season.seam.wrappers import mass_battle as wrapper
 from engine.season.tests.test_march import _fold_one, _march_act
 
-WEIGHT, SCALE, SEEDS = 8, 100, range(200)
+#: RE-PICKED by MB-07r (the depth support cap ON, `POOL_QUALITY_SCALE` 0.5 -> 0.8): at the old fold (weight 8, scale 100)
+#: the defender's shares read {1.0: 0.54, 0.67: 0.465, 0.33: 0.42, 0.0: 0.42}, a 4.5-point second step under the +-7
+#: band the entry names. At (10, 60) they read {1.0: 0.49, 0.67: 0.385, 0.33: 0.285, 0.0: 0.285}: base inside the 45-56 %
+#: shape, both steps ~10 points, the 0.33 -> 0 plateau exact (`int(3 * 0.33)` is 0). The predicate and n are unchanged.
+WEIGHT, SCALE, SEEDS = 10, 60, range(200)
 MARCHERS = ("p_npc_033", "p_npc_035")
 LEVELS = (1.0, 0.67, 0.33, 0.0)
 TARGET, HOME = "set_s_036", "set_s_014"
