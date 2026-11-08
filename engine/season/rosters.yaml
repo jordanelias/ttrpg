@@ -255,6 +255,15 @@ rosters:
       # for `to` and `terms` for `actor` and `subject`. [ASSUMPTION; medium; Jordan to correct; revert:
       # drop the kind, `challenge` writes nothing and `accept` takes a person as its subject.]
       challenge:    [terms, to, stakes, challenger]
+      # v11 CP-T04-02 (B10-12, `marshal`; AM-C-09 REPAIR): A STANDING ORDER OF BATTLE, minted by `marshal`
+      # (`loop/effects_information.py::_eff_marshal`) into the marshal's hand through `_mint_document`, the one mint. `at`
+      # is the settlement the order is read about (the side's place: the attacker's origin, the defender's target),
+      # `role` a `order_roles` member and `retreat_at` an `order_retreat_at` member. THREE KEYS, NOT THE HOME'S FIVE:
+      # `reserve` and `general` are dropped (`RESERVE_COMMIT_TURN` stays the module's). READ by
+      # `seam/wrappers/mass_battle.py::field_input`, which picks per side the order whose holder edge is newest.
+      # Not a `record_sourced_operands` kind: an order answers no operand. [ASSUMPTION; medium; Jordan to correct; revert:
+      # add the omitted keys back with their home wiring.]
+      order_of_battle: [at, role, retreat_at]
     # HOW A MINTED DOCUMENT'S CONTENT IS READ OFF THE ACT, AND WHAT A HOLDER LEARNS FROM IT. One
     # owner for three facts the mint (`loop/effects.py::_mint_document`) and the deposit rule
     # (`loop/witness.py`) both read, so neither spells them.
@@ -2512,6 +2521,42 @@ rosters:
       # loader admits the kind by derivation (`data/verbs.py::_load_terms_sourced`).
       commit: [dispensation, petition]
 
+  # v11 CP-T04-02: THE TWO CLOSED SETS OF A STANDING ORDER OF BATTLE. NO `values:` -- the members ARE the mass-battle
+  # module's (`modules/mass_battle/massbattle.py::ORDER_ROLES`, `config.ROLE_SPEC`'s names, and `ORDER_RETREAT_AT`), cooked
+  # by `tools/export_battle_orders.py` into `engine/engine_params/battle_orders.json` and read through
+  # `engine/substrate/battle_orders.py`. A role is added to `ROLE_SPEC`, never here. `role` ranges over the WHOLE set, not
+  # a troop type's menu: a standing order of battle is the commander's, so it is not gated by `registry.role_allowed`
+  # (`H-361`). [ASSUMPTION; medium; Jordan to correct; revert: gate `role` on `registry.role_allowed` for the line's
+  # stand-in troop type.]
+  order_roles:
+    source: "CP-T04-02 (B10-12), `modules/mass_battle/config.py::ROLE_SPEC`"
+    open: false
+    ordered: true
+    from_battle_orders: roles
+  order_retreat_at:
+    source: "CP-T04-02 (B10-12), `modules/mass_battle/massbattle.py::ORDER_RETREAT_AT`; consumed by CP-T04-03"
+    open: false
+    ordered: true
+    from_battle_orders: retreat_at
+
+  choice_sourced:
+    source: >-
+      v11 CP-T04-02 (B10-12): `decision/options.py::operand_bags` *"ranges `role` and `retreat_at` over their closed
+      sets, or no NPC marshals"*, after `confer`'s `to` (a known person) and `train`'s vocation (`vocation_sourced`).
+    note: >-
+      WHICH VERBS CARRY A CHOICE, AND OVER WHICH PAYLOAD KEYS -- `verb: [key, ...]`. A verb named here forms ONE bag
+      per COMBINATION of its keys' closed sets (`data/verbs.py::CHOICE_RANGES`: `role` is `order_roles`, `retreat_at`
+      is `order_retreat_at`), each value riding on the act's payload under its own name. ⚠ THE KEYS ARE NOT
+      `requires_operands` MEMBERS and a cell never binds them: the closed operand vocabulary stays closed (`challenge`'s
+      `stakes` is the precedent for a payload key the effect reads). ⚠ THE CHOOSER IS CONTENT-BLIND: Candidates score
+      on `(verb, subject)` (`decision/choose.py`), so the fan is a draw among equally scored orders, not a judgement of
+      which role suits the field. ⚠ THE FAN IS A COST, MEASURED AT ITS LANDING (`hole_register.yaml` `H-361`): 15 roles x 3
+      `retreat_at` values = 45 bags per settlement a marshal forms on. ONE LOADER, `data/verbs.py::CHOICE_SOURCED`,
+      refused at import for a verb the table lacks, a verb that writes no `Record.exists`, or a key without a range.
+      [ASSUMPTION; medium; Jordan to correct; revert: delete the row, and `marshal` forms one Candidate with no order.]
+    values:
+      marshal: [role, retreat_at]
+
   vocation_sourced:
     source: >-
       #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.4, the `train` row: *"The
@@ -4028,6 +4073,11 @@ tables:
         row no lean on any axis. It scores 0.0 on every axis until a cell is authored, so no witness
         is scarred by a razing and `rung.razed` judges as no deed. Revert: the seven cells, IN-08's
         method.
+      marshal: >-
+        v11 CP-T04-02: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); a lean on seven axes is authored content
+        (IN-08's method), and a standing order of battle is a document written before the field, whose moral weight
+        is the field's. It scores 0.0 on every axis until a cell is authored, so no witness is scarred by an order
+        marshalled and `order.marshaled` judges as no deed. Revert: the seven cells, IN-08's method.
       tell: >-
         No cell on any axis BY DESIGN: testimony's moral weight is in WHAT is told (a claim), which
         no verb x axis cell can carry, and telling is driven by regard (the telling workplan's G1),

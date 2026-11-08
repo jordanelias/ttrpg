@@ -1077,6 +1077,38 @@ verbs:
     grade:       "ruled"
     source:      "M4 of the driver-retirement plan (`ED-IN-0279`), Jordan's ruling on both open clauses of that row (verb name: `march`; loss effects: casualties/morale/grudge). No `ARCHITECTURE_V2.md` cell -- this verb does not exist in the chain."
   # ===========================================================================================
+  # v11 CP-T04-02 (B10-12; AM-C-09 REPAIR) -- MARSHAL: THE STANDING ORDER OF BATTLE. A seat granting `dispatch` (`march`'s
+  # eligibility) writes the order its faction's line takes the field under, BEFORE the field, for attack and for defence.
+  # ===========================================================================================
+  - verb:        "marshal"
+    scale:       "settlement"
+    scale_note:  "an order of battle is read about a settlement, the place the side stands at when it fights (the attacker's origin, the defender's target): the settlement IS the subject, as `march`'s and `requisition`'s are, and the exercised seat's purview must reach it."
+    stratum:     "binding_decision"
+    eligibility: ["remit:dispatch"]
+    beneficiary: "actor"
+    beneficiary_note: "`march`'s column: the marshal's own line is the one he orders, so the order is for his gain; the Record is minted into his hand and is no operand's beneficiary."
+    referent_class: Rung
+    referent_class_note: "v11 CP-T04-02: FORMED ONLY ON A `Rung`-CLASSED REFERENT, `march`'s class and so `march`'s stamps (`queries/world_q.py::places_named`, `larders_in_purview`, `matters_awaiting`): `subject` binds the place through the unchanged referent rule. The class is shared, so a seat granting `dispatch` is offered the same Rungs for both verbs and the fold disposes (`marshal.unauthorized`: the exercised seat's purview must reach the place). [ASSUMPTION; medium; Jordan to correct; revert: drop this row, `order_of_battle`, `choice_sourced` and the field read, and the field is fought as it was.]"
+    requires:    "the exercised seat's purview reaches the subject, a settlement"
+    requires_typed:
+      form:      basis
+      of:        subject
+      basis:     purview
+      conjunct:  authority
+    requires_typed_note: "v11 CP-T04-02: `seize`'s and `requisition`'s ONE CONJUNCT, `authority` -- the exercised seat's purview reaches the subject's place (`state/gate.py::purview_reaches`): a seat orders only the line that stands inside the tier it holds. No form, operand or stem is added. THE ORDER'S `role` AND `retreat_at` ARE NOT OPERANDS and no cell binds them: they ride the payload as `challenge`'s `stakes` does, ranged over their closed sets by `rosters.yaml: choice_sourced`. [ASSUMPTION; medium; Jordan to correct; revert: `requires_typed: none`, under which any dispatcher marshals any place.]"
+    writes:      ["Record.exists"]
+    writes_note: "`challenge`'s, `issue`'s and `petition`'s column: ONE `(Record, exists)` write through `_mint_document`, the one mint, with the marshal's `hold` riding on the Record's receipt (admitted as `T-m`, `create_record`'s). The Record is kind `order_of_battle` (`rosters.yaml: record_kinds`: `at` the subject, `role`, `retreat_at`). It is WRITTEN ONCE AND NEVER CHANGED: a newer order is a second Record, and `field_input` reads, per side, the one whose holder edge is newest (`since`; ties, later in `w.tenures`); older orders are ignored, not deleted. The `(Record, exists)` matrix row is the tree's. Each order adds one `hold` to its holder's budget (`decision/budget.py`), H-92's known drift, named and not new."
+    emits:       ["order.marshaled"]
+    emits_note:  "A KIND OF ITS OWN, NOT `record.created`: a standing order is read by the field and by whoever comes to hold it (the content deposit), and is no public record of the settlement."
+    emits_on_refusal:
+      eligibility: ["marshal.unauthorized"]
+      authority:   ["marshal.unauthorized"]
+      write:       ["marshal.refused"]
+    refusal_note: "KEYED PER CLAUSE, `seize`'s shape. `marshal.unauthorized` -- the SEAT, at `authority`: none exercised grants `dispatch`, or its purview does not reach the subject's place. `marshal.refused` -- the WORLD, at `write`: the effect declined (a hand-built act naming a `role` outside `order_roles` or a `retreat_at` outside `order_retreat_at` is refused before anything is written, a caller defect) or the mint moved nothing."
+    grade:       "assumption"
+    grade_note:  "an argued addition (v11 CP-T04-02, AM-C-09): the matrix row `(Record, exists)` is the tree's; the verb, its `remit:dispatch` eligibility, the three-key kind and the `role_allowed` bypass (the `role` ranges over the module's whole `ROLE_SPEC`, `H-361`) are this item's, on the user's ruling to build it as the entry writes it."
+    source:      "v11 CP-T04-02 (`proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-12.md`), AM-C-09 (`workplans/valoria_master_workplan_v11_part13.md`); home `proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-04-mass-battle.md` §2 CP-T04-02"
+  # ===========================================================================================
   # PLAN POSITION `19c` -- MIGRATE (`RULINGS.yaml` RR-2: *"must be able to build hearths and accept
   # people who move settlements"*; *"migration is a verb persons take"*). `move` is travel: it
   # re-homes `contain`, where a person IS. `migrate` is travel AND settling: it re-homes `contain`

@@ -89,7 +89,8 @@ from typing import Any, Optional
 from ...manifest.providers import provider
 from ...data.geography import geography
 from ...data.rosters import SUBTREE_OCCUPATION_KINDS, territory_id_of
-from ...queries.inputs import ArmyMuster, MassBattleInput, ProvisionInput
+from ...data.rosters import ORDER_RETREAT_KEY, ORDER_ROLE_KEY
+from ...queries.inputs import ArmyMuster, FieldOrder, MassBattleInput, ProvisionInput
 from ...queries.person_q import stance_toward
 from ...queries import world_q
 from engine.substrate import composition
@@ -203,8 +204,16 @@ def _order_of_battle(w: Any, faction: Optional[str], side: list) -> Any:
     return composition.require(world_q.ARMY_ORDER)(ArmyMuster(w.records[rid].subject_matter, fit))
 
 
+def _standing_order(w: Any, faction: Optional[str], place: Optional[str]) -> Optional[FieldOrder]:
+    """CP-T04-02: the standing order of battle `faction`'s line fights `place` under, as the module reads it, or `None`.
+    Which Record is `world_q.standing_order`'s (the newest holder edge among the faction's seats' orders about the place);
+    this lifts its content into the typed `FieldOrder` and decides nothing."""
+    rec = world_q.standing_order(w, faction, place)
+    return None if rec is None else FieldOrder(rec.subject_matter[ORDER_ROLE_KEY], rec.subject_matter[ORDER_RETREAT_KEY])
+
+
 def field_input(w: Any, claimants: list, other: list, rung: str,
-                factions: tuple = (None, None)) -> MassBattleInput:
+                factions: tuple = (None, None), origin_place: Optional[str] = None) -> MassBattleInput:
     """THE HOST INPUT BUILDER (plan position `31c`, A-25): `World` -> the frozen record the field reads.
 
     Reads `w.persons` (each side member's `weight`, and the stances `_side_stance` reads), the rung
@@ -225,13 +234,18 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
     `field_subunits` fixture (`H-359`), handed on unread; the module reads them only on its `person` arm.
     ED-IN-0306 phase 3: `factions` is `(attacker, defender)`, each side's faction Proposition id or `None`;
     each side whose faction holds an army Record fights as that Record's order of battle
-    (`_order_of_battle`). Neither side having one leaves `orders_of_battle` `None`, the record exactly as it was."""
+    (`_order_of_battle`). Neither side having one leaves `orders_of_battle` `None`, the record exactly as it was.
+    CP-T04-02 (`H-361`): `orders` is each side's STANDING ORDER OF BATTLE (`_standing_order`): the attacker's about
+    `origin_place` (the settlement it marched from, `world_q.march_origin`), the defender's about `rung` (the target). A
+    side whose faction's seats hold no order about its place reads `None`; neither side having one leaves `orders` `None`,
+    the record exactly as it was."""
     def weights(side: list) -> tuple:
         return tuple(w.persons[pid].weight for pid in side if pid in w.persons)
 
     def members(side: list) -> tuple:
         return tuple(pid for pid in side if pid in w.persons)    # `weights`' own test, so the two align
     oobs = (_order_of_battle(w, factions[0], claimants), _order_of_battle(w, factions[1], other))
+    orders = (_standing_order(w, factions[0], origin_place), _standing_order(w, factions[1], rung))
     fort = world_q.fortification_of(w, rung) if w.rungs[rung].kind in SUBTREE_OCCUPATION_KINDS else 0.0
     return MassBattleInput(
         weights=(weights(claimants), weights(other)),
@@ -251,7 +265,8 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
         orders_of_battle=None if oobs == (None, None) else oobs,
         troops_per_weight=w.fixtures.get("field_troops_per_weight"),
         members=(members(claimants), members(other)),
-        subunits=w.fixtures.get("field_subunits"))
+        subunits=w.fixtures.get("field_subunits"),
+        orders=None if orders == (None, None) else orders)
 
 
 def _causing_act(w: Any, causes: list) -> Any:
@@ -363,7 +378,8 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     # `loop/sides.py::sides_of` mustered `claimants` under), the defender's is `subject`.
     act = _causing_act(w, causes)
     inp = field_input(w, claimants, other, rung,
-                      factions=(seat_faction(w, act.via) if act is not None else None, subject))
+                      factions=(seat_faction(w, act.via) if act is not None else None, subject),
+                      origin_place=world_q.march_origin(w, act.actor) if act is not None else None)
     if inp.orders_of_battle is not None:
         # WHO FOUGHT, for `_eff_march` to write casualties to (ED-IN-0306): a side fought as an order of battle drew
         # its troops from the cohorts it names, and the fight is theirs alone; a side with none (None) fought as

@@ -1,6 +1,6 @@
 """`season.loop.effects_information` -- records, propositions, matters: create_record, issue,
 covenant, conceal, open_case, carry, determine, argue, petition, survey, forge, give, seize, arrest,
-destroy_record, utter, commit.
+destroy_record, utter, commit, challenge, marshal.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the document/proposition/
 matter cluster: the one mint (`_mint_document`) that `create_record`, `issue`, `petition` and
@@ -21,8 +21,8 @@ from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import matrix_row
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
 from ..data.rosters import (
-    CHALLENGE_KIND, CHALLENGE_TERMS, CHALLENGER_KEY, COVER_KEY, COVER_KIND, FACTION_BY_PROP, RECORD_CONTENT,
-    RECORD_KIND_KEYS, STAKES_KEY,
+    CHALLENGE_KIND, CHALLENGE_TERMS, CHALLENGER_KEY, COVER_KEY, COVER_KIND, FACTION_BY_PROP, ORDER_AT_KEY, ORDER_KIND,
+    ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, RECORD_CONTENT, RECORD_KIND_KEYS, STAKES_KEY,
 )
 from ..gaps import Forbidden
 from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
@@ -331,6 +331,33 @@ def _eff_challenge(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     content.update({RECORD_CONTENT.get("addressee"): _operand(a, "subject"),
                     STAKES_KEY: stakes, CHALLENGER_KEY: a.actor})
     return _mint_document(w, a, CHALLENGE_KIND, content, d.get("rung") or a.actor)
+
+
+@effect_for("marshal")
+def _eff_marshal(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v11 CP-T04-02 (B10-12): A STANDING ORDER OF BATTLE IS A `Record` OF KIND `order_of_battle`, minted with the
+    marshal's `hold` through `_mint_document`, the one mint. Its keys (`rosters.yaml: record_kinds`): `at` -- the
+    settlement it is read about, the act's `subject` (the side's place when the field is fought: the attacker's origin,
+    the defender's target); `role` -- a `order_roles` member, the shape and instruction package the module maps onto
+    each subunit of the line (`massbattle.resolve_field`); `retreat_at` -- an `order_retreat_at` member, carried for
+    CP-T04-03. ⚠ `role` AND `retreat_at` COME FROM THE PAYLOAD, NOT FROM AN OPERAND (`challenge`'s `stakes` shape): a
+    computed `marshal` carries them because `decision/options.py::operand_bags` ranges them over their closed sets
+    (`rosters.yaml: choice_sourced`).
+
+    ⚠ A VALUE OUTSIDE ITS CLOSED SET, OR ABSENT, IS REFUSED BEFORE ANYTHING IS WRITTEN, naming the roster -- a hand-built
+    act's caller defect, as `_eff_challenge` refuses `stakes`. The Record is written once and never changed: a newer
+    order is a second Record, and `field_input` reads the newest per side; this effect deletes and closes nothing."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    for key, roster in ((ORDER_ROLE_KEY, ORDER_ROLES), (ORDER_RETREAT_KEY, ORDER_RETREAT_AT)):
+        if d.get(key) not in roster:
+            raise Forbidden(
+                f"a `marshal` by {a.actor!r} names {key} {d.get(key)!r}, not one of {tuple(roster)}",
+                "rosters.yaml -- order_roles / order_retreat_at",
+                needs=f"a {key} the mass-battle module names (`engine/engine_params/battle_orders.json`)",
+                law="CP-T04-02 -- a standing order names a role and a retreat point from the module's closed sets")
+    content = {ORDER_AT_KEY: _operand(a, "subject"), ORDER_ROLE_KEY: d[ORDER_ROLE_KEY],
+               ORDER_RETREAT_KEY: d[ORDER_RETREAT_KEY]}
+    return _mint_document(w, a, ORDER_KIND, content, _seat_rung(w, a))
 
 
 @effect_for("open_case")
