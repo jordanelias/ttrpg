@@ -5249,20 +5249,20 @@ rows:
     site:      ""
     sweep:     []
     unblocks:  "a defeated fighter who can give up or run, so that violence need not end in a death every time"
-    cite:      "MEASURED at season scale by hand-built acts through SeasonDriver.resolve (n=200) and at module scale (n=400 per cell): under yield or blood terms the yielder is always the result's loser. A design call (add an exit, or narrow the premise) is Jordan's; related to H-229 and CR-87 violence contexts."
+    cite:      "MEASURED at season scale by hand-built acts through SeasonDriver.resolve (n=200) and at module scale (n=400 per cell): under yield or blood terms the yielder is always the result's loser. A design call (add an exit, or narrow the premise) is Jordan's; related to H-229 and CR-87 violence contexts. SUPPLEMENTED 2026-11-08 (premise-check re-run, combat, branch ccr-e0f1a5da-xgnvta; the author ran every figure below). Re-confirmed on tiny_world through SeasonDriver.resolve and encounter: a decided plain fight left the loser dead in every one (a mirror of n=400, then n=300 per cell over 39 input-sweep cells); the only undecided scenes came from both parties in heavy armour (116 of 300, proxy kit). The exit exists under accept: with the dispute conjunct stubbed true (world_q.holds_dispute, as test_pc10b_challenge_record.py does, so a proxy) a challenge then accept gave duel.yielded with both fighters alive in 150 of 150 under blood or unnamed stakes, and one dead in 150 of 150 under death stakes. Under capture the beaten ACTOR yielded and was wounded in 36 of 80 (the test_cp_t03_09_capture helpers), so the exit is real under the named terms and its door is H-264 and H-346."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: two armed people fight: skill, weapon and armour decide, wounds impair, the beaten yield, flee or die [ASSUMPTION: rendered from the word combat]. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
   - id:        H-264
     tier:      1
-    hole:      "`fight` FIRES IN NO COMPUTED SEASON (premise-check, combat). Over 3 realm seeds x 4 seasons (about 3,290 resolved acts per seed) the resolved counts were `fight` 0, `capture` 7, `challenge` 489, `accept` 0, `march` 96. FORMS was not isolated: it is not known whether `fight` is never offered or is offered and never chosen."
+    hole:      "`fight` FIRES IN NO COMPUTED SEASON (premise-check, combat). Over 3 realm seeds x 4 seasons (about 3,290 resolved acts per seed) the resolved counts were `fight` 0, `capture` 7, `challenge` 489, `accept` 0, `march` 96. FORMS ISOLATED 2026-11-08 (the author, branch ccr-e0f1a5da-xgnvta): `fight` is never offered. With opening_set wrapped over build_realm seeds 0, 1 and 2, three seasons each, `fight` was formed 0 times in 1,174, 1,181 and 1,163 opening sets. The cause is the violence-context decline (rosters.yaml violence_contexts, `fight: [war, crime, duel, defence]`, applied in opening_set; ED-IN-0336 and ED-IN-0337, deliberate, with a positive control in test_cr87_violence_contexts.py), and the decline is total in a built realm: violence_context_of was wrapped and every reading (1,137, 1,141 and 1,126) was None, war included, so no context arises. Control: with VIOLENCE_CONTEXTS emptied, fight is offered. Why none arises: the duel needs a challenge Record and none is ever issued (H-346); arrest resolved 0 times in seeds 0 and 1 and no crime context was read; defence needs a violent deed on a ledger and 0 fights occur."
     kind:      "WIRING"
-    owner:     "`engine/season/decision/options.py` (opening_set); `engine/season/verb_table.yaml` row `fight`; `engine/season/harness/populated.py` (build_realm)"
+    owner:     "`engine/season/decision/options.py` (opening_set); `engine/season/verb_table.yaml` row `fight`; `engine/season/harness/populated.py` (build_realm); `engine/season/rosters.yaml` (violence_contexts); `engine/season/decision/options.py` (violence_context_of)"
     grade:     "measured"
     default:   "none"
     site:      ""
     sweep:     []
     unblocks:  "the question of whether combat ever starts in a played realm, which every season-scale combat claim depends on"
-    cite:      "MEASURED on build_realm seeds 0-2, 4 seasons each. n is small and FORMS was not run. Related: H-255 (the stance gain on violent rows) and H-229 (give + rung executes 0 times)."
+    cite:      "MEASURED on build_realm seeds 0-2, 4 seasons each. n is small and FORMS was not run. Related: H-255 (the stance gain on violent rows) and H-229 (give + rung executes 0 times). SUPPLEMENTED 2026-11-08 (premise-check re-run, combat, branch ccr-e0f1a5da-xgnvta; the author ran every figure below). One process per seed, 3 seasons; resolved counts are SeasonDriver.resolved, which holds the 129 refused challenges but not every cell refusal (seed 0: 18 `capture.refused` and 47 `accept.refused` events against 0 resolved capture and accept), and person.captured and duel.yielded were 0 in seeds 0 and 1."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: two armed people fight: skill, weapon and armour decide, wounds impair, the beaten yield, flee or die [ASSUMPTION: rendered from the word combat]. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
   - id:        H-265
@@ -5275,7 +5275,7 @@ rows:
     site:      ""
     sweep:     []
     unblocks:  "a fight that an unarmed person can be in"
-    cite:      "MEASURED at module scale by constructing Combatants (n=1 per weapon name; a construction error, not a rate). Whether to add the state is a design call."
+    cite:      "MEASURED at module scale by constructing Combatants (n=1 per weapon name; a construction error, not a rate). Whether to add the state is a design call. SUPPLEMENTED 2026-11-08 (premise-check re-run, combat, branch ccr-e0f1a5da-xgnvta; the author ran every figure below). Re-confirmed through the season seam with world_q.kit_of patched to return the weapon: weapon `none`, `unarmed` and None each raised KeyError. Correction to the hole text: armour `none` is a valid tier (the kit set in engine_params names none, light, medium and heavy) and fights ran with it (n=300 to 6,000 per cell); `plate` is not a tier name. The hole is the weapon only."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: two armed people fight: skill, weapon and armour decide, wounds impair, the beaten yield, flee or die [ASSUMPTION: rendered from the word combat]. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
   - id:        H-266
@@ -5288,7 +5288,7 @@ rows:
     site:      ""
     sweep:     []
     unblocks:  "an Event log from which a loser's defeat can be explained"
-    cite:      "MEASURED at season scale, n=200 resolved fights. Minor (E10 in the premise-check classes)."
+    cite:      "MEASURED at season scale, n=200 resolved fights. Minor (E10 in the premise-check classes). SUPPLEMENTED 2026-11-08 (premise-check re-run, combat, branch ccr-e0f1a5da-xgnvta; the author ran every figure below). The hole text is STALE IN PART: Event.ending (CP-T03-02 (i), loop/effects_combat.py fight_ending) names each party as felled, yielded or undecided on person.died and body.changed, so who was left standing is in the log (300 of 300 hand-built fights read felled and undecided); the weapon, armour and turns are still absent. Residual gaps, hand-built on tiny_world: (1) the standing victor reads undecided (H-347); (2) a failed capture, where the beaten actor yields and is wounded (36 of 80), emits capture.declared and body.changed only, and no event says the capture failed; (3) the body.changed about a wounded survivor carries degree Felled in 150 of 150 (the act is Felled on the opponent, the event is about the survivor)."
     source:    "premise-check run, 2026-11-07, PR 578 (jordanelias/ttrpg), premise: two armed people fight: skill, weapon and armour decide, wounds impair, the beaten yield, flee or die [ASSUMPTION: rendered from the word combat]. MEASURED by a read-only agent run; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
   - id:        H-267
@@ -6281,6 +6281,58 @@ rows:
     unblocks:  "a hearer who can tell a garbled report from a clean one"
     cite:      "MEASURED by the agent (slice S5), not re-run by the author. Neighbours: H-199, H-36, H-198."
     source:    "premise-check run over the fieldwork / investigation / exploration subsystem, 2026-11-07, branch ccr-6c82ac30-bmifse (no PR number yet), slice S5; the premise sentences are the author's rendering of the subject name [ASSUMPTION]. MEASURED by read-only agent runs; the author re-ran only: nothing (the agent's figures). Reproduce by the call described, not by any scratch script."
+
+  - id:        H-346
+    tier:      1
+    hole:      "THE DUEL'S ENTRY IS OFFERED AND ALWAYS REFUSED (premise-check, combat). In build_realm seed 0, three seasons, `challenge` was offered 813 times and chosen 129 times, and all 129 were refused: 0 `challenge.issued` events and 0 challenge Records. The failing conjunct of each refusal was exists:Person in 87 (the subject is a rung, a Record or another non-person: 30, 37 and 20 of the 129), with in 18 (not present where the challenger is) and dispute in 24 (the challenger holds no wrong against him). `accept` was offered 2,337 times in seed 0 and 2,569 in seed 1 with no challenge Record in the world, followed by 47 `accept.refused` events in seed 0 and no `accept.declared`. Seed 1 issued 0 challenges as well. Since the duel is the only door ED-IN-0336 leaves `fight` that a built realm could open, a duel cannot start in a played season."
+    kind:      "WIRING"
+    owner:     "`engine/season/decision/options.py` (opening_set: the referents `challenge` and `accept` are formed on, and held_record_claims); `engine/season/verb_table.yaml` rows `challenge` and `accept`; `engine/season/data/requires.py` (the `dispute` stem) and `engine/season/queries/person_q.py` (holds_dispute)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a duel any seeded season can open, which is what makes `fight` formable (H-264)"
+    cite:      "MEASURED by the author on build_realm seeds 0 and 1 (seed 0 for the refusal predicates), three seasons each, one process per seed, with opening_set wrapped and the refused events' observations read. Control: with holds_dispute stubbed true (a proxy, as test_pc10b_challenge_record.py does) a hand-built challenge then accept executes, 150 of 150 (see H-263). Not measured: whether holds_dispute ever holds in a built realm beyond these seeds (24 refusals on it, none passed). Neighbours: H-264, H-156 (candidates that form and are always refused, the same shape), H-240, H-255."
+    source:    "premise-check run, 2026-11-08, branch ccr-e0f1a5da-xgnvta (no PR number yet), premise: one person fights another who is there with them; each fights with their own skill, weapon and armour; the loser is unhurt, wounded, dead or yielding; wounds last and weaken; the engine records who did it and why [ASSUMPTION: rendered from the words personal combat]. Re-run of the 2026-11-07 combat run (H-263 to H-266); a stress pass followed."
+
+  - id:        H-347
+    tier:      1
+    hole:      "THE FIGHTER LEFT STANDING IS RECORDED AS `undecided` (premise-check, combat). `Event.ending` is `(pid, felled | yielded | undecided)` for each party (CP-T03-02 (i), loop/effects_combat.py fight_ending); a party neither felled nor yielded reads `undecided`, so in a lethal fight the winner carries the word `undecided` beside the loser's `felled`: 300 of 300 hand-built fights on tiny_world read felled and undecided. A reader with no memory of this repo takes undecided to mean no result, which is what `contest.undecided` means for a fight nobody lost."
+    kind:      "NAME"
+    owner:     "`engine/season/loop/effects_combat.py` (fight_ending and the ENDING_ constants)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a log in which the value for the one left standing says so"
+    cite:      "MEASURED by the author on tiny_world through SeasonDriver.resolve and encounter, n=300, plain `fight`. Whether the value is renamed or split (standing against undecided) is a name call at the owner; a rename of an Event field value moves World.content_hash for any log that carries it, so declare that move. Neighbours: H-266 (the log's other gaps)."
+    source:    "premise-check run, 2026-11-08, branch ccr-e0f1a5da-xgnvta (no PR number yet), premise: one person fights another who is there with them; each fights with their own skill, weapon and armour; the loser is unhurt, wounded, dead or yielding; wounds last and weaken; the engine records who did it and why [ASSUMPTION: rendered from the words personal combat]. Re-run of the 2026-11-07 combat run (H-263 to H-266); a stress pass followed."
+
+  - id:        H-348
+    tier:      1
+    hole:      "ARMOUR `none` AND `light` DO NOT DIFFER IN A FIGHT, AND LIGHT SURVIVORS ARE HURT MORE OFTEN (premise-check, combat). Against an arming sword, with the opponent at default attributes and kit, the share of fights the armoured fighter dies in, `none` against `light`: 0.868 against 0.858 at strength 2, 0.511 against 0.489 at strength 4, 0.218 against 0.196 at strength 7 (n=2,000 per cell; a band of about 0.02), and 0.519 against 0.503 at n=6,000. The step is flat to within the band at every strength, while `medium` (0.261 at strength 4) and `heavy` (0.0) are far below. Among fighters who survived, the share left unhurt was 0.512 in `none` and 0.444 in `light` (n=2,871 and 2,973, about 5 sigma), the wrong direction for a fighter who put armour on."
+    kind:      "RULING"
+    owner:     "`modules/combat/combat_systems.py` (the armour-defeat and harness-heft terms, ARMOR_DEMAND); `engine/engine_params/combat_engine_v1.json` (armour tiers)"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "an armour ladder whose lowest step is a step, or a stated reason it is not"
+    cite:      "MEASURED by the author on tiny_world, a proxy kit (world_q.kit_of patched in the seam wrapper, since no season source gives a kit: H-349), opponent weapon arming and armour light. The Strength demand for a harness (ARMOR_DEMAND, 'none' 0) was tried as the explanation: it does not open the gap at strength 7. Not claimed: that medium or heavy is too strong (CLAUDE.md section 7; no campaign-level instrument), nor that the flatness is a defect; it may be the intended cost of a light harness. [INTENT UNDETERMINED] Tuned values are Jordan's. Neighbour: HANDOFF_PC.md's R2 capstone finding."
+    source:    "premise-check run, 2026-11-08, branch ccr-e0f1a5da-xgnvta (no PR number yet), premise: one person fights another who is there with them; each fights with their own skill, weapon and armour; the loser is unhurt, wounded, dead or yielding; wounds last and weaken; the engine records who did it and why [ASSUMPTION: rendered from the words personal combat]. Re-run of the 2026-11-07 combat run (H-263 to H-266); a stress pass followed."
+
+  - id:        H-349
+    tier:      1
+    hole:      "EVERY PERSON IN A BUILT REALM FIGHTS WITH THE SAME WEAPON AND ARMOUR (premise-check, combat). `kit_of` returns the Combatant default for everyone while `rosters.yaml: arms_kinds` is empty, and `arms_at_build` is empty too, so no rung is built holding arms: all 83 persons in each of build_realm seeds 0, 1 and 2 resolve to `('arming', 'light')`. The premise each fights with their own weapon and armour therefore holds in the module and not in the season. The module honours a kit: with a proxy kit for one fighter, P(that fighter dies) was 0.94 with a dagger, 0.53 with the default arming sword, 0.24 with a longsword and 0.01 with a greatsword (n=300 each), and 0.53, 0.28 and 0.00 for light, medium and heavy armour."
+    kind:      "WIRING"
+    owner:     "`engine/season/queries/world_q.py` (kit_of); `engine/season/rosters.yaml` (arms_kinds, arms_at_build); `engine/season/harness/populated.py` (seed_arms)"
+    grade:     "measured"
+    default:   "the Combatant default for everyone"
+    site:      "queries/world_q.py kit_of, read by seam/wrappers/combat.py combat_input"
+    sweep:     []
+    unblocks:  "a fight in which a person's weapon and armour decide anything at season scale"
+    cite:      "MEASURED by the author: kit_of over every person after build_realm on seeds 0 to 2 (the distinct kits counted); the module sweep on tiny_world with kit_of patched in the seam wrapper (a proxy). EMPTY ON PURPOSE: the roster notes say the inventory is Jordan's content, so this row records the consequence and no defect in the mechanism. Neighbours: H-97 (what a person contributes to a Combatant), H-348 (the armour ladder), H-265 (no unarmed state)."
+    source:    "premise-check run, 2026-11-08, branch ccr-e0f1a5da-xgnvta (no PR number yet), premise: one person fights another who is there with them; each fights with their own skill, weapon and armour; the loser is unhurt, wounded, dead or yielding; wounds last and weaken; the engine records who did it and why [ASSUMPTION: rendered from the words personal combat]. Re-run of the 2026-11-07 combat run (H-263 to H-266); a stress pass followed."
 
 discharges:
   D1:   "row:H-01"
