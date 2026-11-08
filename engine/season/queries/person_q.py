@@ -43,7 +43,9 @@ import functools
 import math
 from typing import Optional
 
-from engine.substrate.descriptors import AFFILIATION_CONCERNS, PURSUITS
+from engine.substrate.descriptors import (
+    AFFILIATION_CONCERNS, AFFILIATION_FLOOR, HERITAGE_ENGAGES, HERITAGES, PURSUITS,
+)
 
 from ..data import requires as _requires
 from ..data import verbs as _verbs
@@ -429,9 +431,11 @@ def regard(p: Person, referent: str, fx=None) -> float:
     spine):
 
         regard = stance_toward(p, x) + judged_gain · judged + told_valence_gain · told
+                 + heritage_regard(p, x)
 
     the stored half (`stance_toward`, the person's own stance rows) plus `deeds_judged`'s two
-    halves (v9 IN-18 `G1`). With no `fx`, or with both gains 0 -- the CONTROL (both ship live at 0.5,
+    halves (v9 IN-18 `G1`) plus the caste estimate (v11 CR-31, `heritage_regard`, at `heritage_gain`).
+    With no `fx`, or with all three gains 0 -- the CONTROL (the first two ship live at 0.5,
     `H-192`/`H-193`) -- it is the stored half exactly and reads no ledger. ⚠ `judged_gain` IS NOT
     `regard_gain`: the shape row spells `regard_gain · judged`, but `regard_gain` is `teller_weight`'s
     relation gain (`H-179`, shipped 0.5), and zeroing it for G1's control would move every told
@@ -445,10 +449,62 @@ def regard(p: Person, referent: str, fx=None) -> float:
     tg = float(fx.get("told_valence_gain"))
     if not (jg >= 0 and tg >= 0):
         raise ValueError(f"judged_gain {jg} / told_valence_gain {tg} must be >= 0 (H-192/H-193)")
-    if not jg and not tg:
-        return stored
-    judged, told = deeds_judged(p, referent, fx.get("scar_weight_shift"))
-    return stored + jg * judged + tg * told
+    if jg or tg:
+        judged, told = deeds_judged(p, referent, fx.get("scar_weight_shift"))
+        stored = stored + jg * judged + tg * told
+    # v11 CR-31: the caste estimate, `heritage_regard`, a third term at its own gain (0 reads nothing, so the
+    # sum above is returned untouched: the control). It reads `p`'s own ledger and own convictions only.
+    h = heritage_regard(p, referent, fx)
+    return stored + h if h else stored
+
+
+def conviction_stand(p: Person, affiliation: str) -> float:
+    """HOW FAR `p` STANDS FOR (+1) OR AGAINST (-1) ONE AFFILIATION, on `[-1, +1]`: `p.conviction[affiliation]`
+    centred on the affiliation scale's midpoint and scaled by its half-range, `(v - mid) / half`. An ABSENT key
+    is 0 -- never considered, which is not held, and stands neither way -- while a STORED 0 is a considered
+    rejection and reads `-1`, the farthest the scale goes (v9 IN-63; `conviction_map`). Person-side (AX-2)."""
+    v = (p.conviction or {}).get(affiliation)
+    if v is None:
+        return 0.0
+    half = (AFFILIATION_CEILING - AFFILIATION_FLOOR) / 2
+    return (v - (AFFILIATION_FLOOR + half)) / half
+
+
+def heritage_regard(p: Person, q: str, fx) -> float:
+    """THE CASTE ESTIMATE (v11 CR-31; ED-IN-0301): how `p`'s OWN creed colours his regard for `q`, through
+    what `p` BELIEVES of `q`'s descent -- never through what `q` is (`Person.heritage` is world truth and is
+    not read here).
+
+        heritage_regard = heritage_gain · STANCE_MAX · mean over the affiliations a in the concern
+                          `HERITAGE_ENGAGES[h]` of `conviction_stand(p, a)`
+
+    `h` is the heritage named in `p`'s NEWEST own untold `seen` claim whose `who` is `q` and whose `marks`
+    names a heritage (newest by `(when, round)`, a later deposit winning a tie). Each affiliation of the
+    engaged concern contributes `conviction_stand`, an absent key 0 and still counted in the mean. In
+    `regard`'s own units, so `teller_weight` reads it through `regard / STANCE_MAX` as it reads any stance.
+    `0.0` where `p` holds no such `seen` claim, where the heritage engages no concern, or at `heritage_gain` 0
+    -- the CONTROL, which reads no ledger. Reads `p`'s ledger and conviction only: no other person's, and no
+    World (AX-2). [ASSUMPTION; medium; Jordan to correct; revert: `heritage_gain` 0]"""
+    gain = float(fx.get("heritage_gain"))
+    if not gain >= 0:                # `not >=`, so a NaN is refused too
+        raise ValueError(f"heritage_gain {gain} must be >= 0 (H-348)")
+    if not gain:
+        return 0.0
+    best, best_key = None, None
+    for c in p.ledger:
+        if c.predicate != SEEN_PREDICATE or c.chain or getattr(c.value, "who", None) != q:
+            continue
+        named = next((m for m in (getattr(c.value, "marks", None) or ()) if m in HERITAGES), None)
+        if named is None:
+            continue
+        key = (c.when, c.round)
+        if best_key is None or key >= best_key:
+            best, best_key = named, key
+    concern = HERITAGE_ENGAGES.get(best)
+    if concern is None:
+        return 0.0
+    members = AFFILIATION_CONCERNS[concern]
+    return gain * STANCE_MAX * (sum(conviction_stand(p, a) for a in members) / len(members))
 
 
 # ---------------------------------------------------------------------------

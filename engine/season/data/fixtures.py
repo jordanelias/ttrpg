@@ -1052,6 +1052,14 @@ DEFAULT_FIXTURES = Fixtures(
     # row's formation, and the false-value rule's own magnitude is `told_drift_band`'s.
     # [JUSTIFIED: engine/season/hole_register.yaml H-347 -- whether a person may offer a lie; M9 was taken (a) by delegation and no document says how often a person lies, so the offer is a switch and the chance is the scorer's, swept False / True; shipped True]
     lie_offered=True,                  # `H-347`, swept False (control) / True (SHIPPED)
+    # `H-348` (v11 CR-31). HOW FAR WHAT A PERSON BELIEVES OF ANOTHER'S DESCENT, AGAINST HIS OWN CREED, MOVES HIS
+    # REGARD FOR THEM: `queries/person_q.py::heritage_regard` = this x `STANCE_MAX` x the mean standing of the
+    # hearer's own convictions on the concern the believed heritage engages (his newest own `seen` claim naming
+    # the other, marks naming a heritage). `0` is the CONTROL: the term reads no ledger and `regard` is the tree
+    # before it. 0.5 SHIPS, the shipped value of `judged_gain` and `told_valence_gain` [ASSUMPTION; medium;
+    # Jordan to correct; revert: set this to 0.0 (one value)]. Must be >= 0.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-348 -- the caste estimate's gain; no document gives how far a believed descent moves regard, so it is injected and swept 0 / 0.5 / 1.0; shipped live at 0.5, the shipped value of the other two regard gains]
+    heritage_gain=0.5,                 # `H-348`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
     # `H-275` (v11 CR-79, `strife-00` §5, R14/A12). HOW FAR SHARED OR STRAINED AFFILIATION BETWEEN A HEARER
     # AND A TELLER MOVES THE CONFIDENCE A TOLD CLAIM LANDS AT: `loop/witness.py::_credit` =
     # `confidence * (1 + g*c)`, `c` = `queries/world_q.py::commensurate(hearer, teller)` in {-1, 0, +1},

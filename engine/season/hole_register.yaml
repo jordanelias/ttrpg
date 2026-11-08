@@ -6305,6 +6305,18 @@ rows:
     unblocks:  "a liar whose caught lies cost him credit: `record` (`H-183`) now meets a told claim that contradicts what the hearer holds firsthand; CP-T06-05's false replies (`lie`, `lie_said_of`); R-05's `lie` execution"
     cite:      "BUILT at CR-27 (B10-13). The DEED lie (H-198 rule (ii)) stays unbuilt: no deposit can hold a deed `False` and no reader pairs one, so `lie_said_of` draws from cell claims only. `lie` emits `tell`'s kinds and no `lie.*` kind, so `news.told`, `news.untold`, `tell.refused` and `confidence.broken` have two emitters and the three deed kinds among them join `PAIRED_KINDS` (`data/verbs.py::_derive_kind_verb`); none carries an authored `deed:<kind>` cell. Falsifier and control: `engine/season/tests/test_cr27_lie.py`"
     source:    "v11 CR-27 (B10-13), `workplans/valoria_master_workplan_v11_part4.md` CR-27; M9 taken (a), `workplans/valoria_master_workplan_v11_part6.md`"
+  - id:        H-348
+    tier:      1
+    hole:      "HOW FAR WHAT A PERSON BELIEVES OF ANOTHER'S DESCENT, AGAINST HIS OWN CREED, MOVES HIS REGARD FOR THEM (the caste estimate; ED-IN-0301). `heritage_regard` = `heritage_gain` x `STANCE_MAX` x the mean, over the affiliations of the concern the believed heritage engages (`heritage_roster`'s `engages:`), of the hearer's own conviction centred on the scale's midpoint and scaled to [-1, 1]. Nothing gives a magnitude for how far a believed descent moves regard, so the gain is injected. Also assumed with the shape: (a) an absent conviction key reads 0 (never considered, counted in the mean) and a stored 0 is a held rejection and reads -1; (b) the heritage is the one in the hearer's NEWEST own untold `seen` claim naming the other with a heritage in `marks`, never the other's `Person.heritage`; (c) a heritage engaging no concern (northern, central, schoenlander) reads 0"
+    kind:      "RULING"
+    owner:     "`queries/person_q.py::heritage_regard` (the term) and `regard` (which adds it); the engaged concern is `references/descriptor_registry.yaml: heritage_roster.engages`"
+    grade:     "assumption"
+    default:   "0.5 -- SHIPPED, the shipped value of `judged_gain` and `told_valence_gain` [ASSUMPTION; medium; Jordan to correct; revert: `heritage_gain` 0 (one value)], v11 CR-31. `0` is the CONTROL: `regard` is the tree before the term and reads no ledger for it. A negative or NaN gain raises"
+    site:      "Fixtures heritage_gain, read by `engine/season/queries/person_q.py::heritage_regard`, added by `regard`; the shipped consumers are the `regard` and `declared` arms of `decision/choose.py::stance_term` (the shipped `stance_polarity` is `declared`; `legacy` reads `stance_toward` and not the term) and `decision/options.py::teller_weight`'s relation term"
+    sweep:     [0, 0.5, 1.0]
+    unblocks:  "a hearer's discount or credit for a teller he believes southern Einhir or Altonian, by his own Einhir-restoration or Altonian-civics conviction; R-07's second route to the `regard` clause, content-gated (only where a heritage is authored and seen)"
+    cite:      "BUILT at CR-31 (B10-13). Refused, not built: caste Ob variants, a Renown halving, any Disposition-floor transcription, appointment gates, the caste-transgressive-person Query. Falsifier and control: `engine/season/tests/test_cr31_heritage_regard.py`"
+    source:    "v11 CR-31 (B10-13), `workplans/valoria_master_workplan_v11_part4.md` CR-31; ED-IN-0301 (the `engages:` cells)"
 
 
 discharges:

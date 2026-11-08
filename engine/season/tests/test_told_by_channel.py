@@ -1815,8 +1815,11 @@ def _g1_split():
 
 
 def _g1_fx(judged, told):
+    """G1's two gains; `heritage_gain` (v11 CR-31, `regard`'s third term) is held at its control 0, so a G1
+    control reads the stored half exactly. CR-31 has its own falsifier, `test_cr31_heritage_regard.py`."""
     from ..data.fixtures import DEFAULT_FIXTURES
-    return DEFAULT_FIXTURES.sweep("judged_gain", judged).sweep("told_valence_gain", told)
+    return (DEFAULT_FIXTURES.sweep("judged_gain", judged).sweep("told_valence_gain", told)
+            .sweep("heritage_gain", 0.0))
 
 
 def _g1_hearers(kind, pro, con, chain=()):
