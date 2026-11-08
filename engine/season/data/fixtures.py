@@ -1154,7 +1154,7 @@ DEFAULT_FIXTURES = Fixtures(
     # four army verbs (`loop/effects_army.py`): their command is the act's payload, which no Candidate carries. [ASSUMPTION; medium;
     # Jordan to correct; the flip ON is a separate, declared hash-moving commit, IN-52's precedent.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-156 -- the formation-policy row; (a) and (b) are both defensible and lead to different corpora, so the arm ships at (a), today's state, and (b) is the declared second point]
-    withheld_verbs=("destroy_record", *ARMY_VERBS, "marshal"),   # `H-156`, swept ("destroy_record", *ARMY_VERBS, "marshal") (control, SHIPPED) / ARMY_VERBS alone (the sink arm); `marshal` (CP-T04-02, `H-361`) ships withheld so the season is EQUAL at shipped, its flip a separate declared mover
+    withheld_verbs=("destroy_record", *ARMY_VERBS, "marshal", "surrender"),   # `H-156`, swept ("destroy_record", *ARMY_VERBS, "marshal", "surrender") (control, SHIPPED) / ARMY_VERBS alone (the sink arm); `marshal` (CP-T04-02, `H-361`) and `surrender` (CP-T04-07) ship withheld so the season is EQUAL at shipped, each flip a separate declared mover
     # `H-356` (v11 CR-55). HOW MANY SEASONS AFTER ITS OWN A DOCKET ITEM MAY BE HELD BEFORE MATTER LAPSES IT
     # (`matter.lapsed`, `loop/matter.py`; age read off the item's docketing Event or Date by
     # `queries/world_q.py::lapsing_items`, nothing stored). An item whose party has died, whose venue
