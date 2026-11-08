@@ -3537,7 +3537,7 @@ def detainees_held(w: World, p: Person) -> tuple:
     one of `data/verbs.py::DETAINEE_REMIT_ACTS` (the remit acts of the rows declaring the class:
     `interrogate`'s `determine`). A STANDING OCCASION, `vacancies`' shape: world-read, gated on the seat's
     grant and NOT on what the asker was told (`larders_in_purview` is ledger-gated; this is not), resolver-side
-    and read-only. That shape is the tree's own `in tension with AX-7` list (`loop/matter.py`, `vacancies`):
+    and read-only. That shape is the tree's own `in tension with AX-7` shape (`loop/matter.py`, `vacancies`, `detainees_held`; `04` has no AX-7 row, so it grades CONVENTION). `sittings_before`'s reason (an item on a room's docket is the room's business) does not carry to an UNDATED item, which is before no room: the precedent covers the shape, not the reason:
     no ledger deposit occurs, so AX-7's falsifier (a deposit) is not tripped; the reason it is a world stamp and
     not a claim is H-231 limit 3 (a custody Receipt names no one, so no claim can carry the prisoner). It supplies Person ids, which
     `questions_for` stamps onto the question he answers as the `Detainee` class (`DETAINEE_CLASS`, named

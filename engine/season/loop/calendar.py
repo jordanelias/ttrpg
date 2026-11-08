@@ -80,6 +80,13 @@ def calendar(self, token: Token) -> list[Event]:
     # the case's opening. So each undated person-matter (`world_q.undated_matters`, oldest first) takes the
     # open slot `world_q.slot_for` finds for it -- the same nearest-sitting walk an opening case takes --
     # the waiting item taking the slot's place and its `date`, the dateless item gone.
+    # ⚠ LAYER 1, GRADED CONVENTION (B10-13 Lens B; `04` §A.2:173 gives `loop/calendar` its own state, an R-1 subtree
+    # aggregate and the calendar to read): `slot_for` reads a matter person's containment (`place_of`) and
+    # `undated_matters` reads items RESOLVE formed. No scan sees the exceedance; it is recorded here, as
+    # `loop/witness.py` records each of its own. The write below moves a whole item into the slot, so it
+    # changes the item's `date` under the `(DocketItem, matter)` cell and gives the slot the RES-only
+    # `arrangement` and `petition` keys; a `(DocketItem, date)` CAL row would be the conformant shape (not
+    # taken: unmeasured against the hash).
     # Slots open here (the ones just formed) and wherever a determination emptied one (RESOLVE). One gate
     # write per matter, `docket.formed` at the venue, chained on that venue's firing as the slot's own is.
     for item in world_q.undated_matters(w):

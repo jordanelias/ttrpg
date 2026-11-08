@@ -440,7 +440,11 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # `docket_question` keeps naming it. One rule covers all three and asks why none: an item held
     # beyond `Fixtures docket_lapse` seasons is taken off the docket, slot and all, by one gate write,
     # `matter.lapsed`, `causes` the Event that put it there (`world_q.lapsing_items`, which reads the age
-    # off the item's own beginning and stores none). THIS BARRIER IS FIRST IN THE SEASON, BEFORE
+    # off the item's own beginning and stores none). ⚠ LAYER 1, GRADED CONVENTION (B10-13 Lens B): `04` §A.2:173
+    # gives `DocketItem` to CALENDAR and §A.2:174 gives MATTER 'ttl/term'; the lapse is read as a ttl, and
+    # MATTER is chosen over CALENDAR because it runs before DELIBERATE (`loop/driver.py`); moving it into
+    # CALENDAR changes log order (not hash-neutral) and `matter.lapsed` is not in §A.2:173's emits. The log
+    # and act-store read in `lapsing_items` is outside §A.2:174's may-read list. THIS BARRIER IS FIRST IN THE SEASON, BEFORE
     # DELIBERATE: a bench is never deliberating a matter in the round that lapses it. SUBJECT: the
     # venue where there is a sitting (the room that hears of it), else the matter, else the petition.
     for item, docketed_by_ev in world_q.lapsing_items(w, w.fixtures.get("docket_lapse")):
