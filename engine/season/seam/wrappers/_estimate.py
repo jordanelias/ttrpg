@@ -16,7 +16,7 @@ import random
 from typing import Any
 
 from ...gaps import Forbidden
-from ...state.ids import H
+from ...state.ids import draw_factory
 
 
 def samples_of(w: Any) -> int:
@@ -30,7 +30,6 @@ def samples_of(w: Any) -> int:
 
 
 def rng_of(w: Any, actor: str) -> random.Random:
-    """The estimate's private stream, keyed `(world_seed, tick, actor, "estimate")`. `H` returns a blake2b hexdigest, so
-    16 is the radix that parses it back (as in `resolve`'s seed). [JUSTIFIED: radix for parsing H()'s hex digest, not a
-    mechanical constant]"""
-    return random.Random(int(H(w.world_seed, w.tick, actor, "estimate"), 16))
+    """The estimate's private stream, keyed `(world_seed, tick, actor, "estimate")`: `state.ids.draw_factory`'s one
+    seeding rule, read at the call's tick."""
+    return draw_factory(w.world_seed, lambda: w.tick)(actor, "estimate")

@@ -2308,20 +2308,24 @@ def standing_order(w: World, faction: Optional[str], place: Optional[str]):
     TRACE.query("standing_order", "resolver")
     if faction is None or place is None:
         return None
+    # The Records first: `w.tenures` is a rebuilt view (O(persons + tenures)), and a world that holds no order about
+    # `place` (every shipped one, `marshal` being withheld) has nothing to find in it.
+    about = {rid for rid, r in w.records.items()
+             if r.kind == ORDER_KIND and isinstance(r.subject_matter, dict) and r.subject_matter.get(ORDER_AT_KEY) == place}
+    if not about:
+        return None
     best = None
     for i, t in enumerate(w.tenures):
-        if t.kind != "hold" or not t.live:
+        if t.kind != "hold" or not t.live or t.object not in about:
             continue
-        rec = w.records.get(t.object)
-        if rec is None or rec.kind != ORDER_KIND or not isinstance(rec.subject_matter, dict) \
-                or rec.subject_matter.get(ORDER_AT_KEY) != place:
-            continue
+        key = (t.since, i)
+        if best is not None and key < best[0]:
+            continue                            # cannot win, so the holder walk below is skipped
         holder = w.persons.get(t.subject)
         if holder is None or not any(h.kind == "hold" and h.live and seat_faction(w, h.object) == faction
                                      for h in holder.tenures):
             continue
-        if best is None or (t.since, i) >= best[0]:
-            best = ((t.since, i), rec)
+        best = (key, w.records[t.object])
     return None if best is None else best[1]
 
 

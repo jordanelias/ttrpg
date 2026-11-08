@@ -23,6 +23,7 @@ string. Enforced BY PATH over this directory (`04 §E.1`).
 
 from __future__ import annotations
 
+import itertools
 from typing import Any, Callable, Optional
 from ..data.cast import STANCE_MAX
 from ..data.requires import (
@@ -1350,12 +1351,13 @@ def _fanned_choices(row: "VerbRow", bags: list) -> list:
     value on every bag would rename every act (`data/verbs.py::act_key` suffixes the choice) and move the draws under
     those ids. `march`'s `posture` ships over `[storm]`, so no `march` Candidate carries one; `besiege` joining the
     roster is what makes the posture a choice."""
-    keys = tuple(k for k in CHOICE_SOURCED.get(row.verb, ()) if len(CHOICE_RANGES[k]) > 1)
+    sourced = CHOICE_SOURCED.get(row.verb)
+    if not sourced:
+        return bags
+    keys = tuple(k for k in sourced if len(CHOICE_RANGES[k]) > 1)
     if not keys:
         return bags
-    combos = [()]
-    for k in keys:
-        combos = [c + (v,) for c in combos for v in CHOICE_RANGES[k]]
+    combos = tuple(itertools.product(*(CHOICE_RANGES[k] for k in keys)))
     return [{**b, **dict(zip(keys, c))} for b in bags for c in combos]
 
 

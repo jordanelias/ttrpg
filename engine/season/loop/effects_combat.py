@@ -311,7 +311,7 @@ def broke_observed(pid: str, broke: "str | None") -> tuple:
     side whose subunits did not break on their own account). An Event carries no payload (`Event.ending`'s note), so the
     cause rides `Event.observed`, deposited by WITNESS as `body_observed` is. [ASSUMPTION; medium; Jordan to correct;
     revert: the Observation, and the field's cause is unnamed]"""
-    return (Observation(pid, BROKE_STEM, True),) if broke is not None and pid == broke else ()
+    return (Observation(pid, BROKE_STEM, True),) if pid == broke else ()
 
 
 def fight_ending(w: "World", parties, res: "Resolution", above) -> tuple:
@@ -572,24 +572,23 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # an order of battle bleeds only its drawn cohorts (`fielded`), as the loser does. Each carries his own ratio: his
     # subunit's under `person`, else his side's, capped at 1 (the casualty can only lower a body). A winner with no ratio
     # to read (a hand-built result that carries none) is left unwritten; under `total` only a winner below 1 dies.
-    winners: list = []
-    win_ratio: dict = {}
+    win_ratio: dict = {}                     # winner pid -> his ratio; its keys ARE the winners, in win_side order
     if winner_arm == "engine" and model != "none" and res.degree != UNOPPOSED:
         win_drawn = (parties.get("fielded") or (None, None))[1 if attacker_lost else 0]
         win_side = win_drawn if win_drawn is not None else (defenders if attacker_lost else attackers)
         win_pct = engine_result.get("defender_size_pct" if attacker_lost else "attacker_size_pct")
+        loser_set = set(losers)
         for pid in win_side:
-            if pid not in w.persons or pid in losers or pid in win_ratio:
+            if pid not in w.persons or pid in loser_set or pid in win_ratio:
                 continue
             mine = per_person[pid][0] if pid in per_person else win_pct
             if mine is None or (model == "total" and mine >= 1.0):
                 continue            # no ratio, no write; under `total` only a winner who took a casualty dies
             win_ratio[pid] = min(1.0, max(0.0, mine))
-            winners.append(pid)
         if model == "total":
             movers = [pid for pid in movers if pid not in win_ratio]     # a winner the arm kills does not arrive
     debits = _ration_debits(w, res)
-    if not touched and not movers and not debits and not winners:
+    if not touched and not movers and not debits and not win_ratio:
         return NO_CHANGE
     attacker_faction = seat_faction(w, a.via)
     defender_faction = holder_faction_of(w, target)
@@ -654,7 +653,7 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
             if p.body <= 0:
                 w.remove_person(pid)
         # CR-24: the winners' casualty is `body` ONLY -- no stance row (the loop above is the only place one is written).
-        for pid in winners:
+        for pid in win_ratio:
             p = w.persons[pid]
             p.body = 0 if model == "total" else max(1, int(p.body * win_ratio[pid]))
             if p.body <= 0:
@@ -675,7 +674,7 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # here, by `body` alone (the field he is written by); under `total` a dying winner is named by his death.
     movers_set = set(movers)
     winners_named = tuple(
-        s for pid in winners if pid not in movers_set
+        s for pid in win_ratio if pid not in movers_set
         for s in (death_subjects(w, pid, loser_earns, fields=("body",)) if dies
                   else (Subject.entity("persons", pid, earns=loser_earns, fields=("body",)),)))
     return Change(losers_named + winners_named
@@ -695,8 +694,7 @@ def _siege(w: "World", target: str) -> Change:
     A SITE THAT WOULD NOT FALL IS NOT NAMED (no condition to lose, or a share that rounds the fall to 0); a subtree with none
     that would declines `NO_CHANGE`, so the band's act is `march.refused`, as a band that moves nobody always has been.
     [ASSUMPTION; medium; Jordan to correct; revert: name every garrison and let the gate's no-op refusal decline it.]"""
-    falls = [(s, _fall(w, s)) for s in garrison_sites(w, target)]
-    falls = [(s, n) for s, n in falls if n > 0]
+    falls = [(s, n) for s in garrison_sites(w, target) if (n := _fall(w, s)) > 0]
     if not falls:
         return NO_CHANGE
     kind = _band_kind(INVESTED)

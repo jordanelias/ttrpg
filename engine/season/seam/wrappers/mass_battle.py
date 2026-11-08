@@ -247,11 +247,11 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
     `origin_place` (the settlement it marched from, `world_q.march_origin`), the defender's about `rung` (the target). A
     side whose faction's seats hold no order about its place reads `None`; neither side having one leaves `orders` `None`,
     the record exactly as it was."""
-    def weights(side: list) -> tuple:
-        return tuple(w.persons[pid].weight for pid in side if pid in w.persons)
-
     def members(side: list) -> tuple:
-        return tuple(pid for pid in side if pid in w.persons)    # `weights`' own test, so the two align
+        return tuple(pid for pid in side if pid in w.persons)
+
+    def weights(side: list) -> tuple:
+        return tuple(w.persons[pid].weight for pid in members(side))    # the two align by construction
     oobs = (_order_of_battle(w, factions[0], claimants), _order_of_battle(w, factions[1], other))
     orders = (_standing_order(w, factions[0], origin_place), _standing_order(w, factions[1], rung))
     fort = world_q.fortification_of(w, rung) if w.rungs[rung].kind in SUBTREE_OCCUPATION_KINDS else 0.0

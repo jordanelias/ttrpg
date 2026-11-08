@@ -301,7 +301,7 @@ class _PersonSubunit(Subunit):
 
     @routed.setter
     def routed(self, value):
-        unit = getattr(self, '_unit', None)
+        unit = self._u()
         if (value and not self.__dict__.get('_routed_flag', False) and self.broke_log is not None
                 and not (unit is not None and unit.routed)):
             self.broke_log.append(self.person)
@@ -593,5 +593,4 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
                           terrain_row_for_territory(inp.territory, inp.fort_level, crossing,
                                                     geography=inp.geography),
                           rng, walls_dr=inp.walls_dr,
-                          **({'by_troops': True} if armies else {}),
-                          **({'persons': persons} if persons is not None else {}))
+                          persons=persons, **({'by_troops': True} if armies else {}))
