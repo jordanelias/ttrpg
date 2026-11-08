@@ -113,7 +113,19 @@ def unit_lures(unit):
                                         for k in getattr(a, 'instructions', ()))
 
 
-__all__ = ['Subunit', 'Unit', 'Order', 'Officer', 'clamp_command', 'MB_ENVELOP_PATH', 'MB_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'COL_WIDTH',
+def unit_conceded(unit):
+    """CP-T04-03 (retreat in good order): True once EVERY subunit of the unit has either retreated (its stance, as an
+    Order's `{'stance': 'retreat'}` writes it, is 'retreat') or routed, and at least one has retreated. The SINGLE OWNER
+    of what it is for a side to give up the field without being broken: `orchestration.run_battle`'s stop test (the
+    battle ends for it as a rout ends it) and `massbattle._grade` (it cannot be graded the winner) both read this one
+    predicate. It sets nothing, so a conceding side does not take rout's facing flip. A side that holds no retreating
+    subunit (no `own_strength` Order has fired) is never conceded, so an unordered battle is exactly what it was."""
+    subs = getattr(unit, 'subunits', ())
+    return bool(subs) and all(a.routed or a.eff_stance == 'retreat' for a in subs) \
+        and any(a.eff_stance == 'retreat' for a in subs)
+
+
+__all__ = ['Subunit', 'Unit', 'Order', 'Officer', 'clamp_command', 'unit_conceded', 'MB_ENVELOP_PATH', 'MB_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'COL_WIDTH',
            'MB_FACING_MODEL', 'MB_FACING_ATTENTION', 'MB_FACING_SLEW_BASE', 'MB_FACING_FOV_GATE', 'MB_FACING_ROUT',
            'MB_ROLE_INSTRUCTIONS', 'ROLE_INSTRUCTION_PRIMITIVES', 'unit_lures',
            'CELL_RADIUS', 'standoff_from_reach', 'standoff', 'MB_REACH_FACING_GATE', 'resolve_toi_and_commit', 'separate_all_bodies', 'turn_to_face_aggressors']

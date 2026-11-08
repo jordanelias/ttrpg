@@ -63,7 +63,7 @@ import math
 
 from modules.mass_battle import rngsource
 from modules.mass_battle.config import CELL_CAP, ROLE_SPEC
-from modules.mass_battle.hierarchy.units import Subunit, Unit
+from modules.mass_battle.hierarchy.units import Order, Subunit, Unit, unit_conceded
 from modules.mass_battle.orchestration import run_battle
 from modules.mass_battle.orderofbattle import OrderOfBattle, Subformation, build_unit as _build_oob_unit
 from modules.mass_battle.troop_types.recruitment import under_arms_cap
@@ -221,7 +221,7 @@ _MIN_TROOPS = 1.0  # floor only -- `Unit.total_troops() == 0` divides by zero de
 #: menu is Hold/Push/ShieldWall and moves a field by under 3 points, `H-361`). [ASSUMPTION; medium; Jordan to correct;
 #: revert: gate `role` on `registry.role_allowed` for the stand-in troop type in `_role_fields`.]
 #: `ORDER_RETREAT_AT` is the closed set of the order's second key, `none` or the share of its starting strength at
-#: which the side falls back; it is carried on the record and read by nobody until CP-T04-03.
+#: which a subunit of the side falls back (`_retreat_orders`; CP-T04-03).
 ORDER_ROLES = tuple(ROLE_SPEC)
 ORDER_RETREAT_AT = ('none', '0.5', '0.25')
 
@@ -239,7 +239,21 @@ def _role_fields(role):
     return dict(shape=spec['shape'], role=role, instructions=spec['instructions'])
 
 
-def _weighted_unit(name, weight, morale_start=_MORALE_START_BASE, troops_per_weight=1, role=None):
+def _retreat_orders(retreat_at):
+    """CP-T04-03: a standing order's `retreat_at` as the Orders each of the side's subunits carries -- one
+    `own_strength:FRAC` Order whose action is the `retreat` stance (the primitive `orderofbattle`'s `fall_back_at` writes,
+    `hierarchy/units.py::Order`): once THIS subunit is down to FRAC of its starting troops it turns and gives ground. A
+    subunit retreats on its OWN strength, not the side's, and `unit_conceded` is what makes a side whose every subunit has
+    retreated or routed give up the field. `None` and `'none'` are no order (`()`, the subunit exactly as it was); a
+    value outside `ORDER_RETREAT_AT` is refused here, naming the set."""
+    if retreat_at is None or retreat_at == 'none':
+        return ()
+    if retreat_at not in ORDER_RETREAT_AT:
+        raise ValueError(f"order retreat_at {retreat_at!r} is not one of {ORDER_RETREAT_AT}")
+    return (Order(f'own_strength:{float(retreat_at)}', {'stance': 'retreat'}),)
+
+
+def _weighted_unit(name, weight, morale_start=_MORALE_START_BASE, troops_per_weight=1, role=None, retreat_at=None):
     """One `Unit`, one `Subunit`, sized by `troops=` (the Jordan-directed continuous-scale field,
     `hierarchy/units.py`: "when `troops` is set the footprint is generated from (troops,
     concentration) ... `tier` becomes vestigial") rather than by `tier`'s fixed lookup table.
@@ -258,8 +272,9 @@ def _weighted_unit(name, weight, morale_start=_MORALE_START_BASE, troops_per_wei
     at JQ-4). `1` is the identity -- `troops = weight`, the field as it was; this signature's `1` is that identity,
     not a value for the scale. `_SEASON_FORCE_POWER` is a quality stat and is not scaled.
 
-    CP-T04-02: `role`, the side's standing order (`_role_fields`); `None` is the side as it was."""
-    sub = Subunit(**{**_MVP_SUBUNIT_SHAPE, **_role_fields(role)},
+    CP-T04-02: `role`, the side's standing order (`_role_fields`); `None` is the side as it was. CP-T04-03: `retreat_at`,
+    the order's second key (`_retreat_orders`); `None` or `'none'` is the side as it was."""
+    sub = Subunit(**{**_MVP_SUBUNIT_SHAPE, **_role_fields(role)}, orders=_retreat_orders(retreat_at),
                   troops=max(float(weight) * troops_per_weight, _MIN_TROOPS), concentration=float(CELL_CAP))
     return Unit(name=name, faction=name, power=_SEASON_FORCE_POWER, **_MVP_UNIT_COMMAND,
                 morale=morale_start, morale_start=morale_start,
@@ -293,20 +308,22 @@ class _PersonSubunit(Subunit):
         self.__dict__['_routed_flag'] = bool(value)
 
 
-def _person_unit(name, weights, members, morale_start=_MORALE_START_BASE, troops_per_weight=1, fed=None, role=None):
+def _person_unit(name, weights, members, morale_start=_MORALE_START_BASE, troops_per_weight=1, fed=None, role=None,
+                 retreat_at=None):
     """CP-T04-01: the `person` arm of a headcount side -- ONE `Unit`, ONE `Subunit` PER COMMANDING PERSON, each sized by
     that person's own `weight * troops_per_weight` (REM-32's scale, floored at `_MIN_TROOPS` as `_weighted_unit` floors
     the side). `fed`, when the host provisioned the field (v9 IN-52), is the side's fielded troops standing in for
     Σ weight: it is spread over the persons in proportion to their weights, so the side's total is what it was. Every
     subunit has `_weighted_unit`'s shape and the Unit its command and morale; the engine's `separate_all_bodies`
     deploys them clear of each other. Returns `(unit, broke_log)`; `broke_log` is the persons whose subunits broke,
-    in the order they broke. CP-T04-02: `role`, the side's standing order, is every subunit's (`_role_fields`)."""
+    in the order they broke. CP-T04-02: `role`, the side's standing order, is every subunit's (`_role_fields`).
+    CP-T04-03: so is `retreat_at` (`_retreat_orders`): each subunit retreats on its OWN strength."""
     total = float(sum(weights))
     share = (float(fed) / total) if (fed is not None and total > 0) else 1.0
     log = []
     subs = []
     for pid, wt in zip(members, weights):
-        sub = _PersonSubunit(**{**_MVP_SUBUNIT_SHAPE, **_role_fields(role)},
+        sub = _PersonSubunit(**{**_MVP_SUBUNIT_SHAPE, **_role_fields(role)}, orders=_retreat_orders(retreat_at),
                              troops=max(float(wt) * share * troops_per_weight, _MIN_TROOPS),
                              concentration=float(CELL_CAP))
         sub.person, sub.broke_log = pid, log
@@ -428,7 +445,12 @@ def _grade(unit_a, unit_b, by_troops=False):
     else:
         a_size_pct = unit_a.effective_size / max(1, unit_a.size_max)
         b_size_pct = unit_b.effective_size / max(1, unit_b.size_max)
-    attacker_wins = (not unit_a.routed) and (unit_b.routed or a_size_pct > b_size_pct)
+    # CP-T04-03: a side that has CONCEDED (every subunit retreated or routed, `unit_conceded`) is never the winner and
+    # its opponent holds the field: the attacker whose retreat fired cannot be graded a win, and a defender who conceded
+    # leaves the attacker the field. `Won`/`Lost` stay the two fought bands; no band is added.
+    a_conceded, b_conceded = unit_conceded(unit_a), unit_conceded(unit_b)
+    attacker_wins = ((not unit_a.routed) and (not a_conceded)
+                     and (unit_b.routed or b_conceded or a_size_pct > b_size_pct))
 
     if attacker_wins and a_size_pct >= OVERWHELMING_ATTACKER_MIN and b_size_pct <= OVERWHELMING_DEFENDER_MAX:
         degree = 'Overwhelming'
@@ -523,7 +545,8 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     `retreat_at`, or `None`. A side's `role` is the shape and instruction package of every subunit of its headcount line,
     on either `subunits` arm (`_role_fields`); a side with `None` is the line it always was, so no order held is today's
     field. A side that holds an army's order of battle, or faces one, fights as that order says and an order of battle
-    here is not read. `retreat_at` is carried and read by nobody yet (CP-T04-03).
+    here is not read. CP-T04-03: a side's `retreat_at` is each of its headcount line's subunits' `own_strength` retreat Order
+    (`_retreat_orders`), on either `subunits` arm; `'none'`, or no order, is no Order. `_grade` reads the side's concession.
 
     Returns exactly what `_run_and_grade` returns."""
     weight_a, weight_b = (sum(side) for side in inp.weights)
@@ -541,6 +564,8 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     order_a, order_b = inp.orders or (None, None)
     role_a = None if order_a is None else order_a.role
     role_b = None if order_b is None else order_b.role
+    retreat_a = None if order_a is None else order_a.retreat_at
+    retreat_b = None if order_b is None else order_b.retreat_at
     if inp.subunits not in SUBUNIT_ARMS:
         raise ValueError(f"field_subunits {inp.subunits!r} is not one of {SUBUNIT_ARMS}")
     persons = None
@@ -548,13 +573,13 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
         # CP-T04-01: one subunit per commanding person. `members` is `weights`' own order, so zip pairs a person with
         # his weight. A provisioned side (`troops_a`/`troops_b`) is spread over its persons by weight.
         unit_a, log_a = _person_unit("side_a", inp.weights[0], inp.members[0], morale_a, inp.troops_per_weight,
-                                     troops_a, role_a)
+                                     troops_a, role_a, retreat_a)
         unit_b, log_b = _person_unit("side_b", inp.weights[1], inp.members[1], morale_b, inp.troops_per_weight,
-                                     troops_b, role_b)
+                                     troops_b, role_b, retreat_b)
         persons = (inp.members, (log_a, log_b))
     elif not armies:
-        unit_a = _weighted_unit("side_a", weight_a, morale_a, inp.troops_per_weight, role_a)
-        unit_b = _weighted_unit("side_b", weight_b, morale_b, inp.troops_per_weight, role_b)
+        unit_a = _weighted_unit("side_a", weight_a, morale_a, inp.troops_per_weight, role_a, retreat_a)
+        unit_b = _weighted_unit("side_b", weight_b, morale_b, inp.troops_per_weight, role_b, retreat_b)
     else:
         # ED-IN-0306: a side with an order of battle fights as that order says. Its headcounts are authoritative,
         # so `troops_a`/`troops_b` (the provisioning feed) are not applied to it -- recruiting is what bounds an
