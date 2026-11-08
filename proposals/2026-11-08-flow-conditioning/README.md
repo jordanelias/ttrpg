@@ -1,5 +1,5 @@
 # Flow conditioning: the settlement content CR-106 and CR-107 build from
-## Status: PROPOSED. HELD BACK from ratification on merge (ED-1094): a first reading Jordan corrects; every row `[ASSUMPTION; medium; Jordan to correct]`.
+## Status: RATIFIED as the accepted first reading (Jordan, 2026-11-08, "ratify all and merge"; ED-1094): a first reading Jordan corrects; every row `[ASSUMPTION; medium; Jordan to correct]`.
 
 **What it changes in `engine/season/`: nothing at runtime.** No loader, test or gate reads these files.
 They are the builder's input for two positions of workplan v11 (`workplans/valoria_master_workplan_v11_part16.md`):
