@@ -1044,6 +1044,22 @@ DEFAULT_FIXTURES = Fixtures(
     # (`H-200`'s cite). Read only where `refraction_gain` refracts a deposit. Must lie in [0, 1].
     # [JUSTIFIED: engine/season/hole_register.yaml H-200 -- the competence gain; AX-7 rules THAT the reader's competence governs divergence and ED-IN-0327 that Attunement helps judge truthfulness, and no document gives how much, so it is injected and swept 0 / 0.5 / 1.0; shipped at the control 0 until CR-83's design gives a lie/truth separator]
     competence_gain=0.0,               # `H-200`, swept 0 (control, SHIPPED) / 0.5 / 1.0
+    # `H-357` (v11 CR-27, M9 taken (a)). WHETHER A PERSON OFFERS A LIE: a row named in `rosters.yaml: lie_verbs`
+    # (`lie`) forms a Candidate only while this is True (`decision/options.py::opening_set`; NOT
+    # `loop/driver.py::resolvable_verbs()`). `False` is the CONTROL, swept, and is the tree before the row: no
+    # lie is offered and `build_realm` reads as it did. `True` SHIPS [ASSUMPTION; medium; Jordan to correct;
+    # revert: `lie_offered = False`, or delete the row, its cells and this key]. A bool, not a gain: it gates a
+    # row's formation, and the false-value rule's own magnitude is `told_drift_band`'s.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-357 -- whether a person may offer a lie; M9 was taken (a) by delegation and no document says how often a person lies, so the offer is a switch and the chance is the scorer's, swept False / True; shipped True]
+    lie_offered=True,                  # `H-357`, swept False (control) / True (SHIPPED)
+    # `H-358` (v11 CR-31). HOW FAR WHAT A PERSON BELIEVES OF ANOTHER'S DESCENT, AGAINST HIS OWN CREED, MOVES HIS
+    # REGARD FOR THEM: `queries/person_q.py::heritage_regard` = this x `STANCE_MAX` x the mean standing of the
+    # hearer's own convictions on the concern the believed heritage engages (his newest own `seen` claim naming
+    # the other, marks naming a heritage). `0` is the CONTROL: the term reads no ledger and `regard` is the tree
+    # before it. 0.5 SHIPS, the shipped value of `judged_gain` and `told_valence_gain` [ASSUMPTION; medium;
+    # Jordan to correct; revert: set this to 0.0 (one value)]. Must be >= 0.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-358 -- the caste estimate's gain; no document gives how far a believed descent moves regard, so it is injected and swept 0 / 0.5 / 1.0; shipped live at 0.5, the shipped value of the other two regard gains]
+    heritage_gain=0.5,                 # `H-358`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
     # `H-275` (v11 CR-79, `strife-00` §5, R14/A12). HOW FAR SHARED OR STRAINED AFFILIATION BETWEEN A HEARER
     # AND A TELLER MOVES THE CONFIDENCE A TOLD CLAIM LANDS AT: `loop/witness.py::_credit` =
     # `confidence * (1 + g*c)`, `c` = `queries/world_q.py::commensurate(hearer, teller)` in {-1, 0, +1},
@@ -1125,4 +1141,15 @@ DEFAULT_FIXTURES = Fixtures(
     # Jordan to correct; the flip ON is a separate, declared hash-moving commit, IN-52's precedent.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-156 -- the formation-policy row; (a) and (b) are both defensible and lead to different corpora, so the arm ships at (a), today's state, and (b) is the declared second point]
     withheld_verbs=("destroy_record", *ARMY_VERBS),   # `H-156`, swept ("destroy_record", *ARMY_VERBS) (control, SHIPPED) / ARMY_VERBS alone (the sink arm)
+    # `H-356` (v11 CR-55). HOW MANY SEASONS AFTER ITS OWN A DOCKET ITEM MAY BE HELD BEFORE MATTER LAPSES IT
+    # (`matter.lapsed`, `loop/matter.py`; age read off the item's docketing Event or Date by
+    # `queries/world_q.py::lapsing_items`, nothing stored). An item whose party has died, whose venue
+    # seats no bench, or whose matter is no person (`determine` binds a person) is held for ever
+    # otherwise, and `docket_question` keeps naming it. `None` is the CONTROL: no item lapses, the
+    # pre-item docket. `4` is SHIPPED, `oblige_term`'s own length (`H-159`): a matter docketed in season
+    # `t` is heard through season `t + 4` and lapses as `t + 5` opens. `2` is the harsh point, `8` the
+    # patient one; `0` is the instrument's (a two-season probe), not a sweep point.
+    # [ASSUMPTION; medium; Jordan to correct; revert: never]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-356 -- the docket lapse rule; the observable rules THAT a held matter lapses visibly, and no document gives the number of seasons, so it is injected and swept 2 / 4 / 8]
+    docket_lapse=4,                    # `H-356`, swept None (control) / 2 / 4 (SHIPPED) / 8
 )

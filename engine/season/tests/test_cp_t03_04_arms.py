@@ -53,12 +53,14 @@ BODY_VERBS = ("fight", "accept", "capture")
 #: Seeds 1 and 2 of both are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit: PC-20 (1)
 #: (the head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`; seed 0 calls none.
 #: Was, before that pin commit: PRE_ITEM 6e25b047... / fe9032ed...; POST_ITEM 07634b99... / 1cc4370d....
-PRE_ITEM = {0: "20accb03c3d32f80a9fab00d80a70b21",
-            1: "597fac345c8791ea17d6228f3121d81c",
-            2: "a157d34aab053ffd84161f7f28e22e8f"}
-POST_ITEM = {0: "b2dde1fcf889605d76a30eeba48d2aa0",
-             1: "c58b1a7e05de416b88db213f855b9eba",
-             2: "5518f31c87d481988a9829d737d8211f"}
+#: B10-13 batch pin commit: PRE_ITEM was 20accb03... / 597fac34... / a157d34a... (= CR-85's POST_ITEM, re-recorded with it);
+#: POST_ITEM was b2dde1fc... / c58b1a7e... / 5518f31c....
+PRE_ITEM = {0: "a63b960024babdcd2a1a37839e2d6cb0",
+            1: "0cd4f72e0cb1eba8ce55b78bfbc8201f",
+            2: "355872c5f7c9786c196a81a5142bc306"}
+POST_ITEM = {0: "8b5e882b0a4d771d56e8472ef557f84f",
+             1: "e9aad997765ecb589711613cfb194444",
+             2: "6078a9502bb5d0e40ccfb807567ad905"}
 
 
 def revert_cp_t03_04(monkeypatch):

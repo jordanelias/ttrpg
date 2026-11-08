@@ -102,6 +102,19 @@ def test_in18_a_lost_telling_is_attempted_and_is_not_a_report():
     assert sum(r.attempted_by.values()) == 1 and all(k[0] == "news.untold" for k in r.attempted_by)
 
 
+def test_in18_a_refused_telling_is_attempted_too():
+    """CP-T05-03 split the refusal off the lost telling (`tell.refused` beside `news.untold`); the reader's
+    `attempted` still counts both, since either is the obligee forming a `tell` to his holder. The refusal is the
+    lost telling's Event re-kinded with no degree (the shape of the T4 refusal), beside it, so it names the same act."""
+    import dataclasses
+    w = _world(obliged=True)
+    (lost,) = _tell(w, HOLDER, label="refused", lost=True)
+    w.log.append(dataclasses.replace(lost, id=lost.id + "_refused", kind="tell.refused", degree=None))
+    r = OR.read_obligee_reports(w)
+    assert (r.attempted, r.m0e) == (2, 0), r.line()
+    assert {k[0] for k in r.attempted_by} == {"news.untold", "tell.refused"}, r.attempted_by
+
+
 def test_in18_an_edge_not_yet_live_at_the_telling_is_not_a_duty():
     """The tick window: an `oblige` opened at tick 5 does not make a tick-0 telling a report."""
     w = _world(obliged=True, oblige_since=5)

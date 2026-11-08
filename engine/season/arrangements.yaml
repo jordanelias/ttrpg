@@ -28,7 +28,7 @@
 # <tenure kind> | Record | none` enum at all -- both are real, corpus-level inconsistencies, named
 # rather than guessed past. `disposal: declared` (the ONE new value `19_PLAN.md` step 11 adds) has NO
 # worked example anywhere in the source; the loader accepts it (with `quorum:` required) but no row
-# here uses it. The remaining seven bench-disposal games are unseeded for the same placeholder/
+# here used it until v11 CR-34 (`excommunication_deliberation`, below). The remaining seven bench-disposal games are unseeded for the same placeholder/
 # ambiguity reasons, plainly, not because the loader could not carry them -- "the loader accepts a
 # thirteenth arrangement with no code change" is the artifact, and it is true of any well-formed row,
 # seeded or not.
@@ -46,9 +46,10 @@
 # higher authority` carry placeholders and `public debate`'s `disposes: standing` is outside the enum
 # (the reasons stated above); `negotiation` (+ its envoys variant) was held for its old pair's
 # disagreement (false+given), which the `excommunication_deliberation` reading below ANSWERS for that
-# row -- keep the key the source writes -- and so stays unseeded only because SC-04 did not take the
-# decision, not for a blocker: it is a data row (`disposal: mutual`, `disposes: oblige`, whose opener
-# `_eff_oblige` exists since plan position `17a`), the residue of this position. NO `succession` ROW (`disposes: hold`) YET: `loop/effects_information.py::_disposal`
+# row -- keep the key the source writes. ⚠ v10 SC-04 SEEDED IT (`negotiation`, `disposal: mutual`,
+# `disposes: oblige`, whose opener `_eff_oblige` exists since plan position `17a`; the last block of
+# `arrangements:`) -- NINE rows. Its envoys variant (`interposed: [person, pair]`, §E.2: "the ONLY
+# change") is not a row of its own here. NO `succession` ROW (`disposes: hold`) YET -- CR-35's: `loop/effects_information.py::_disposal`
 # has no `hold` site, so `determine` opens nothing under it and C-1's report would name the row --
 # `test_arrangements.py::test_a_hold_disposing_row_is_reported_by_c1_until_determine_can_open_a_hold`
 # goes red the day a `determine` site opens a `hold`, which is the signal the row can be seeded.
@@ -260,10 +261,17 @@ arrangements:
   # SC-04's; revert: `records_dissent: true` -- a data edit, no code reads a row by name]: the surviving
   # key is the one the source WRITES, `false` (the deliberation is sealed, as the council's is), and the
   # dropped `verdict_reasons: given` is not carried. Reading it the other way would contradict a value the
-  # source states outright; the same reading would seed `negotiation` (false + given), which this row does
-  # not decide (header: a data row left, no other blocker).
+  # source states outright; the same reading seeds `negotiation` (false + given), the last block below.
+  # ⚠ v11 CR-34 (C-7, `ED-SC-0034`) FLIPPED IT TO `disposal: declared`, THE FIRST DECLARED ROW: the deliberation is
+  # a VOTE, and `determine` under it needs at least `quorum` distinct bench members each holding a LIVE `commit`
+  # to an OUGHT whose subject is the accused and whose predicate names `ban` (`determine`'s `vote` conjunct,
+  # `world_q.declared_votes`; computed when read, stored nowhere). `quorum: 2`, swept {1, 2, 3} [ASSUMPTION;
+  # medium; Jordan to correct; revert: `disposal: bench` and no `quorum:` on this row -- the loader refuses the
+  # one without the other]. `parliamentary_debate` is NOT flipped: it disposes a `Record`, which `_eff_determine`
+  # declines, so a declared flip there has no opener until a Record disposal site exists.
   - id:               excommunication_deliberation
-    disposal:          bench
+    disposal:          declared
+    quorum:             2
     bench_basis:        determine
     floor:              closed
     records_dissent:    false
@@ -275,3 +283,25 @@ arrangements:
     proofs:             [record, testimony]
     disposes:           ban
     disposal_reach:      realm
+
+  # ── negotiation — the deciders are the parties ────────────────────────────────────────────────
+  # §E.2 (`03_PARAMETERS.md:553-565`), transcribed in full under the thirteen-key collapse (header):
+  # `registers: [all seven]`, `verdict_reasons: given` and `stakes_grade: costly` dropped. `disposal:
+  # mutual` -- nothing settles until both parties commit to the same Proposition, so no bench and
+  # `bench_basis: none`; it disposes an `oblige`, which `_eff_oblige` opens. ⚠ THE OLD PAIR DISAGREES
+  # (`records_dissent: false` + `verdict_reasons: given`): the surviving key is the one the source
+  # WRITES, `false`, the reading `excommunication_deliberation` above already makes and this row cites
+  # rather than re-decides.
+  - id:               negotiation
+    disposal:          mutual
+    bench_basis:        none
+    floor:              closed
+    records_dissent:    false
+    venue_min_rank:     hearth
+    term_required:      false
+    appeal_basis:       none
+    interposed:         []
+    order:              alternating
+    proofs:             [record, testimony]
+    disposes:           oblige
+    disposal_reach:      room

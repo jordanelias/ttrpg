@@ -40,18 +40,21 @@ does: `choose` and `options` read `stance_toward` and `said_of` from here. The A
 from __future__ import annotations
 
 import functools
+import math
 from typing import Optional
 
-from engine.substrate.descriptors import AFFILIATION_CONCERNS, PURSUITS
+from engine.substrate.descriptors import (
+    AFFILIATION_CONCERNS, HERITAGE_ENGAGES, HERITAGES, PURSUITS,
+)
 
 from ..data import requires as _requires
 from ..data import verbs as _verbs
 from ..data import affiliations as _aff
-from ..data.affiliations import AFFILIATION_CEILING, conviction_map, engagement
+from ..data.affiliations import AFFILIATION_CEILING, AFFILIATION_FLOOR, conviction_map, engagement
 from ..data.cast import STANCE_MAX
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 from ..data.requires import (
-    KNOWN_PERSON_CLAIM, OWN_STATE_STEMS, REQUIRES_OPERANDS, REQUIRES_STEMS, SHORTFALL_PREDICATE,
+    CELL_STEMS, KNOWN_PERSON_CLAIM, OWN_STATE_STEMS, REQUIRES_OPERANDS, REQUIRES_STEMS, SHORTFALL_PREDICATE,
     UNKNOWN, WORLD_ONLY_STEMS,
 )
 from ..data.rosters import (
@@ -428,9 +431,11 @@ def regard(p: Person, referent: str, fx=None) -> float:
     spine):
 
         regard = stance_toward(p, x) + judged_gain · judged + told_valence_gain · told
+                 + heritage_regard(p, x)
 
     the stored half (`stance_toward`, the person's own stance rows) plus `deeds_judged`'s two
-    halves (v9 IN-18 `G1`). With no `fx`, or with both gains 0 -- the CONTROL (both ship live at 0.5,
+    halves (v9 IN-18 `G1`) plus the caste estimate (v11 CR-31, `heritage_regard`, at `heritage_gain`).
+    With no `fx`, or with all three gains 0 -- the CONTROL (the first two ship live at 0.5,
     `H-192`/`H-193`) -- it is the stored half exactly and reads no ledger. ⚠ `judged_gain` IS NOT
     `regard_gain`: the shape row spells `regard_gain · judged`, but `regard_gain` is `teller_weight`'s
     relation gain (`H-179`, shipped 0.5), and zeroing it for G1's control would move every told
@@ -444,10 +449,62 @@ def regard(p: Person, referent: str, fx=None) -> float:
     tg = float(fx.get("told_valence_gain"))
     if not (jg >= 0 and tg >= 0):
         raise ValueError(f"judged_gain {jg} / told_valence_gain {tg} must be >= 0 (H-192/H-193)")
-    if not jg and not tg:
-        return stored
-    judged, told = deeds_judged(p, referent, fx.get("scar_weight_shift"))
-    return stored + jg * judged + tg * told
+    if jg or tg:
+        judged, told = deeds_judged(p, referent, fx.get("scar_weight_shift"))
+        stored = stored + jg * judged + tg * told
+    # v11 CR-31: the caste estimate, `heritage_regard`, a third term at its own gain (0 reads nothing, so the
+    # sum above is returned untouched: the control). It reads `p`'s own ledger and own convictions only.
+    h = heritage_regard(p, referent, fx)
+    return stored + h if h else stored
+
+
+def conviction_stand(p: Person, affiliation: str) -> float:
+    """HOW FAR `p` STANDS FOR (+1) OR AGAINST (-1) ONE AFFILIATION, on `[-1, +1]`: `p.conviction[affiliation]`
+    centred on the affiliation scale's midpoint and scaled by its half-range, `(v - mid) / half`. An ABSENT key
+    is 0 -- never considered, which is not held, and stands neither way -- while a STORED 0 is a considered
+    rejection and reads `-1`, the farthest the scale goes (v9 IN-63; `conviction_map`). Person-side (AX-2)."""
+    v = (p.conviction or {}).get(affiliation)
+    if v is None:
+        return 0.0
+    half = (AFFILIATION_CEILING - AFFILIATION_FLOOR) / 2
+    return (v - (AFFILIATION_FLOOR + half)) / half
+
+
+def heritage_regard(p: Person, q: str, fx) -> float:
+    """THE CASTE ESTIMATE (v11 CR-31; ED-IN-0301): how `p`'s OWN creed colours his regard for `q`, through
+    what `p` BELIEVES of `q`'s descent -- never through what `q` is (`Person.heritage` is world truth and is
+    not read here).
+
+        heritage_regard = heritage_gain · STANCE_MAX · mean over the affiliations a in the concern
+                          `HERITAGE_ENGAGES[h]` of `conviction_stand(p, a)`
+
+    `h` is the heritage named in `p`'s NEWEST own untold `seen` claim whose `who` is `q` and whose `marks`
+    names a heritage (newest by `(when, round)`, a later deposit winning a tie). Each affiliation of the
+    engaged concern contributes `conviction_stand`, an absent key 0 and still counted in the mean. In
+    `regard`'s own units, so `teller_weight` reads it through `regard / STANCE_MAX` as it reads any stance.
+    `0.0` where `p` holds no such `seen` claim, where the heritage engages no concern, or at `heritage_gain` 0
+    -- the CONTROL, which reads no ledger. Reads `p`'s ledger and conviction only: no other person's, and no
+    World (AX-2). [ASSUMPTION; medium; Jordan to correct; revert: `heritage_gain` 0]"""
+    gain = float(fx.get("heritage_gain"))
+    if not gain >= 0:                # `not >=`, so a NaN is refused too
+        raise ValueError(f"heritage_gain {gain} must be >= 0 (H-358)")
+    if not gain:
+        return 0.0
+    best, best_key = None, None
+    for c in p.ledger:
+        if c.predicate != SEEN_PREDICATE or c.chain or getattr(c.value, "who", None) != q:
+            continue
+        named = next((m for m in (getattr(c.value, "marks", None) or ()) if m in HERITAGES), None)
+        if named is None:
+            continue
+        key = (c.when, c.round)
+        if best_key is None or key >= best_key:
+            best, best_key = named, key
+    concern = HERITAGE_ENGAGES.get(best)
+    if concern is None:
+        return 0.0
+    members = AFFILIATION_CONCERNS[concern]
+    return gain * STANCE_MAX * (sum(conviction_stand(p, a) for a in members) / len(members))
 
 
 # ---------------------------------------------------------------------------
@@ -1149,6 +1206,78 @@ def said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None
     return Said(c.subject, c.predicate, c.value, c.confidence, c.chain)
 
 
+def drifted(before, band: float, sel: int, whole_band: bool = False):
+    """A HELD NUMBER MOVED WITHIN `band`, SIGN-PRESERVING AND NEVER CROSSING ZERO -- `loop/witness.py::
+    _told_value`'s numeric branch (v10 `15b`, r2 `02` §A.10.2's three clauses), moved here unchanged so the
+    liar's false number (`lie_said_of`) and the channel's lossy copy are ONE rule and not two. The three
+    clauses: (1) `before` of 0, or a band that moves nothing (`ceil(band * |before|) < 1`, the control),
+    comes back as it was; (2) otherwise a magnitude of `1 + sel % max_delta` and a direction from the next
+    bit of `sel`; (3) a result that would reach or cross zero is clamped back to `before`'s own side.
+
+    `whole_band` is the liar's reading of (2): the magnitude is the band's whole unit, `max_delta`, one step
+    of `told_drift_band`'s size, not a draw within it. `sel` then only picks the direction (0: upward,
+    clamped to the far side where upward would cross zero). No draw is spent by the caller either way."""
+    max_delta = math.ceil(band * abs(before))
+    if before == 0 or max_delta < 1:
+        return before   # no sign to preserve at 0, or the band drifts nothing (control)
+    magnitude = max_delta if whole_band else 1 + sel % max_delta
+    after = before + magnitude if (sel // max_delta) % 2 == 0 else before - magnitude
+    # §A.10.2: bounded AND signed -- `after` never crosses zero and never flips sign. A draw
+    # that would do either is clamped back to the same side rather than discarded, so the
+    # selection still spends exactly one hash and never re-draws.
+    if before > 0 and after <= 0:
+        after = before + magnitude
+    elif before < 0 and after >= 0:
+        after = before - magnitude
+    return after
+
+
+def is_cell(c) -> bool:
+    """Is `c` a claim on a CELL -- a slot that holds one value (`data/requires.py: CELL_STEMS`)? The one owner,
+    read by `lie_said_of` and `decision/options.py::record`'s pairing."""
+    return str(c.predicate).partition(":")[0] in CELL_STEMS
+
+
+def lie_said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None":
+    """WHAT THIS PERSON WOULD SAY FALSELY ABOUT `subject`: `said_of`'s pick, over the teller's CELL claims
+    only, with its value made false -- or `None` where there is no false value to say (v11 CR-27, M9 taken
+    (a), the cell lie; H-198 rule (i)). Asked of the LIAR'S OWN claims at CHOOSE
+    (`decision/options.py::opening_set`, for a row named in `rosters.yaml: lie_verbs`) and carried on the
+    Act's `payload["said"]`, so WITNESS deposits it through the one told channel and reads no ledger.
+
+    THE FALSE-VALUE RULE [ASSUMPTION; medium; Jordan to correct; revert: a different false-value rule]:
+      * a NUMBER is moved one whole step of `told_drift_band`'s unit by `drifted` -- sign-preserving and
+        never crossing zero, `_told_value`'s own clauses and not a copy of them. A held 0, or a band of 0,
+        has no false number to say: `None`.
+      * a TRUTH VALUE becomes the other member of its closed roster, `(False, True)`. No draw is spent: the
+        roster of every non-numeric cell value a ledger holds today has two members, so the other member is
+        the only one (a roster with several would be drawn on `draw(actor, 'lie:<act id>')`, and the act has
+        no id at CHOOSE, so none is built; it would be a WITNESS-side change).
+      * anything else -- a value that is neither -- has no roster: `None`.
+    A claim that is no CELL (`data/requires.py: CELL_STEMS`: a deed kind, a `seen` sighting, a `content:` or
+    `shortfall:` claim) is never lied about: the pool is cells only, so the DEED lie (H-198 rule (ii)) stays
+    unbuilt. The chain is EMPTY: the liar is the origin of what he says, so the hearer's claim reads
+    `(liar,)` and a falsehood is never fathered on whoever told the liar the truth.
+
+    ⚠ A FALSE VALUE IS NEVER THE HELD ONE, so the hearer's exact-triple guard (`loop/witness.py`) does not
+    drop the deposit for a hearer who holds the cell firsthand: his claim and the lie then DISAGREE, which
+    is the pair `decision/options.py::record` counts against the liar (`H-183`)."""
+    cells = [c for c in claims if c.subject == subject and is_cell(c)]
+    said = said_of(cells, subject, fx, teller)
+    if said is None:
+        return None
+    held = said.value
+    if isinstance(held, bool):
+        false = not held
+    elif isinstance(held, (int, float)):
+        false = drifted(held, fx.get("told_drift_band"), 0, whole_band=True)
+    else:
+        return None
+    if false == held:
+        return None
+    return Said(said.subject, said.predicate, false, said.confidence, ())
+
+
 def confided_outside(claims, said: "Said", hearer: str) -> bool:
     """v9 IN-18 `G6`: DOES A COPY OF `said` IN `claims` HOLD A CONFIDENCE CIRCLE `hearer` IS OUTSIDE?
     The copy is the claim with the said `(subject, predicate, value, chain)` -- the four fields
@@ -1291,7 +1420,7 @@ def known_persons(claims, actor) -> tuple:
     A person is never known from the world: no presence read, no roster of acquaintances (`AX-2`).
     WHETHER the person is present to hear is the fold's question (`tell`'s `hearer` conjunct, the
     `with` stem), so a known person who has walked away is still named and the telling is refused
-    -- and the person does NOT learn it from the refusal (`news.untold` is one kind for both
+    -- and the person does NOT learn it from the refusal (`tell.refused` is one kind for both
     conjuncts and the `with` read is never deposited, `witness.py`). The actor is excluded because a
     person does not tell themselves (`opening_set`'s counterparty rule declines it too).
     ⚠ THE TOPIC IS NOT EXCLUDED (v9 IN-18 step 2a, #453): a telling names its topic on `subject`

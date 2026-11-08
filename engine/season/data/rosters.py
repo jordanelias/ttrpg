@@ -610,6 +610,27 @@ def _load_vocation_attribute(values: dict, vocations) -> dict:
 VOCATION_ATTRIBUTE = _load_vocation_attribute(roster_map("vocation_attribute", "values"), VOCATIONS)
 
 
+def _load_vocation_opposed_by(opposed: dict, vocations) -> dict:
+    """`rosters.yaml: vocation_attribute`'s `opposed_by` (v10 CR-96, AR-44): the OPTIONAL attribute a person subject
+    opposes a vocation's verbs with, in place of the row's own. A subset of the vocations (an absent vocation is
+    opposed by its own attribute), each valued by one of the ten registry keys -- the same set `_load_vocation_attribute`
+    holds its values to, so there is no second list. Refused whole, naming the difference."""
+    from ...substrate.descriptors import ATTRIBUTES
+    out = {str(k): str(v or "") for k, v in opposed.items()}
+    extra = sorted(set(out) - set(vocations))
+    bad = sorted(k for k, v in out.items() if v not in ATTRIBUTES)
+    if extra or bad:
+        raise Unspecified(
+            f"`rosters.yaml: vocation_attribute: opposed_by` names a non-vocation {extra} and/or a value that is "
+            f"none of the ten {bad}", "rosters.yaml",
+            needs="only `verb_capability` values as keys, each valued by an `attributes` registry key",
+            law="CR-96 / AR-44 -- the opposing attribute is one of the ten, stated once per vocation or absent")
+    return out
+
+
+VOCATION_OPPOSED_BY = _load_vocation_opposed_by(roster_map("vocation_attribute", "opposed_by"), VOCATIONS)
+
+
 def _load_lifepath_templates(cells: dict, lifepaths, vocations) -> dict:
     """`rosters.yaml: tables: lifepath_templates`, CLOSED BOTH WAYS against `rosters: lifepaths` (v10 CR-33): a row
     for every lifepath and for nothing else, each `holds:` entry a `verb_capability` value (a vocation), each row

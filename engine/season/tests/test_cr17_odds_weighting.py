@@ -355,10 +355,13 @@ def test_none_and_tau_point_one_reproduce_the_parent_world_exactly(monkeypatch):
     # REM-30 `verb_capability` rows re-pin (a DECLARED MOVER; the rows commit reverted in process reads the old pair): was 543e1e43... / 10421
     # v10 CP-T03-01 re-pin (the `individual` reads ride `Event.observed`; the log length does not move; the reads left off read 9c665fe8): was 9c665fe8...; CR-33 re-pin (NPC-088 holds `inquiry`; the log length does not move): was bd3d2492...; CR-20+CR-30 re-pin (Person repr, heritage rows; the log length does not move): was 1b7a72f4... (CR-86 re-pin: was bdff0832... / 10316)
     # v10 CP-T03-09 + PC-10b re-pin, B10-11 (the docstring's re-take): was edbc7442... / 10435 (CP-T03-09 alone: 2dec120f... / 10421)
-    assert w.content_hash().startswith("b8ac6025"), w.content_hash()
-    assert len(w.log) == 10869
+    # B10-13 batch pin commit (the batch's declared movers): was b8ac6025... / 10869
+    # B10-13 Phase 1 A1, the self-plea's stance sign (`_stance_arm`: `subject != p.id`; a declared mover in non-shipped arms): was ecfe1180... / 10633
+    assert w.content_hash().startswith("eea8eaf8"), w.content_hash()
+    assert len(w.log) == 10397
     real = POP.resolvable_verbs
     monkeypatch.setattr(POP, "resolvable_verbs", lambda: frozenset(real()) - {"capture", "challenge", "accept"})
     c = season()
-    assert (c.content_hash()[:8], len(c.log)) == ("a38516fb", 11505), (c.content_hash(), len(c.log))
+    # B10-13 batch pin commit: was a38516fb... / 11505; B10-13 Phase 1 A1, the self-plea's stance sign: was bf0202d2... / 11253
+    assert (c.content_hash()[:8], len(c.log)) == ("c1bf72d0", 11016),(c.content_hash(), len(c.log))
     assert c.content_hash() != w.content_hash(), "withholding the batch's verbs moved nothing: the control observes nothing"

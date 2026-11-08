@@ -1111,7 +1111,7 @@ rows:
       text's `0 · 0 · 0`; `DISTINCT EXECUTED SETS 124`. The denominator 56 is the line's own `len(VERB_TABLE)`. ⚠ THE REM-10 NOTE:
       `run_case`'s `refused` list reads the act store (`corpus_run.attempts`), which is what moved `argue`, `speak` and `examine` from
       never-attempted to refused; its `executed` list stays on the fold set (`corpus_run.attribute`, `driver.resolved`), because
-      `_attribute_acts`' made rule reads a refusal whose kind is also an emitted kind (`finding.none`, `news.untold`) as made, so over
+      `_attribute_acts`' made rule reads a refusal whose kind is also an emitted kind (`finding.none`, `news.untold` (until CP-T05-03; its refusal is now `tell.refused`)) as made, so over
       the act store `examine` read executed in 85 worlds (0 on the fold set), every one of them refused at admission. THE 19 STILL
       OVERSTATES ITS OWN VERBS, AS IT ALWAYS HAS: a GRADED LOSS (a lost `tell`, a failed `research`) carries that kind at degree
       `Failure` and reads as made on the fold set too. `aperture` separates them (its `both` column is an act matching both the made

@@ -337,11 +337,24 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # check is on the winder still existing, not on a clock.
     for rid in sorted(w.records):
         rec = w.records[rid]
+        # v11 CR-55: `<=`, NOT `==`, AND ONCE. A stage that missed its due tick (its winder was gone at
+        # it) matured never under `==`; it matures at the first barrier its winder is back, and not
+        # again. WHICH STAGES HAVE MATURED is read off the record's last `term.matured` Event, taken
+        # BEFORE this pass emits any: every stage due by that Event's tick matured at it, since one pass
+        # matures every stage due by its own tick. `Record.matured` is one bool for all stages and says
+        # nothing of which; no per-stage count is stored.
+        matured_by = None
         for n, st in enumerate(list(rec.stages)):
             if not (isinstance(st, tuple) and len(st) >= 3):
                 continue
             due, label, wound_by = st[0], st[1], st[2]
-            if due != w.tick:
+            if due > w.tick:
+                continue
+            if matured_by is None:
+                last_id = w.last_emission_of("term.matured", rid, written=True)
+                last_ev = next((e for e in reversed(w.log) if e.id == last_id), None) if last_id else None
+                matured_by = last_ev.emitted_at if last_ev is not None else -1
+            if due <= matured_by:
                 continue
             holder = next((t.subject for t in w.tenures
                            if t.object == rid and t.kind == "hold" and t.live), None)
@@ -420,6 +433,28 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                 record_kind="Tenure", fieldname="until", driver="Event",
                 emits="tenure.closed", subject=t.id, causes=[t.term.declared_by],
                 matured_term=t.id)
+
+    # -- A DOCKET ITEM HELD TOO LONG LAPSES (v11 CR-55; `H-356`) ------------------------------------
+    # A dead party (`remove_person` closes his edges and never touches `w.docket`), a venue that seats
+    # no bench and a matter that is no person each hold an item no `determine` will clear, and
+    # `docket_question` keeps naming it. One rule covers all three and asks why none: an item held
+    # beyond `Fixtures docket_lapse` seasons is taken off the docket, slot and all, by one gate write,
+    # `matter.lapsed`, `causes` the Event that put it there (`world_q.lapsing_items`, which reads the age
+    # off the item's own beginning and stores none). ⚠ LAYER 1, GRADED CONVENTION (B10-13 Lens B): `04` §A.2:173
+    # gives `DocketItem` to CALENDAR and §A.2:174 gives MATTER 'ttl/term'; the lapse is read as a ttl, and
+    # MATTER is chosen over CALENDAR because it runs before DELIBERATE (`loop/driver.py`); moving it into
+    # CALENDAR changes log order (not hash-neutral) and `matter.lapsed` is not in §A.2:173's emits. The log
+    # and act-store read in `lapsing_items` is outside §A.2:174's may-read list. THIS BARRIER IS FIRST IN THE SEASON, BEFORE
+    # DELIBERATE: a bench is never deliberating a matter in the round that lapses it. SUBJECT: the
+    # venue where there is a sitting (the room that hears of it), else the matter, else the petition.
+    for item, docketed_by_ev in world_q.lapsing_items(w, w.fixtures.get("docket_lapse")):
+        venue = world_q.slot_venue(w, item)
+        subject = venue or item.get("matter") or item.get(world_q.DOCKET_PETITION) or item.get("date")
+        w.write("DocketItem", token,
+                lambda item=item: w.docket.__setitem__(slice(None), [d for d in w.docket if d is not item]),
+                record_kind="DocketItem", fieldname="matter", driver="Event",
+                emits="matter.lapsed", subject=subject,
+                causes=[docketed_by_ev] if docketed_by_ev else [ROOT])
 
     # -- CLAIM CONFIDENCE DECAY (`W4` / `H-40`) --------------------------
     # THE THIRD LICENSED CLOCK (#353 `:864`), and until now the only one of the three with no

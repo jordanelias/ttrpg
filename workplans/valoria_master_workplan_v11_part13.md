@@ -59,10 +59,10 @@ Jordan asked for the NERS lanes' findings to be folded into the plan using the a
 | CP-T04-05 | B10-12 | REPAIR | AM-C-10 | amended |
 | CP-T04-06 | B10-12 | REPAIR | AM-C-11 | amended |
 | CP-T04-07 | B10-12 | REPAIR | AM-C-12 | amended |
-| CP-T05-01 | B10-13 | LIMIT | AM-D-03 | held |
-| CP-T05-02 | B10-13 | REPAIR | AM-D-01 | amended |
-| CP-T05-02 | B10-13 | REPAIR | AM-D-02 | held |
-| CP-T05-03 | B10-13 | LIMIT | AM-D-04 | held |
+| CP-T05-01 | B10-Z (HELD) | LIMIT | AM-D-03 | held |
+| CP-T05-02 | B10-Z (HELD; part (i)) | REPAIR | AM-D-01 | amended |
+| CP-T05-02 | B10-13 (CLOSED, `c627426a`) | REPAIR | AM-D-02 | held |
+| CP-T05-03 | B10-13 (CLOSED, `01ffc567`) | LIMIT | AM-D-04 | held |
 | CP-T06-01 | B10-14 | LIMIT | AM-D-07 | replaced |
 | CP-T06-02 | B10-14 | LIMIT | AM-D-08 | held |
 | CP-T06-03 | B10-14 | LIMIT | AM-D-09 | held |
@@ -393,13 +393,13 @@ Built and closed; the code and its tests are the record. This heading stays only
 - **Because:** YES — on all. T04 file:261 "actor a member of `holder_faction_of(subject)` present"; file:271-273 "the closer holds a seat of `holder_faction_of(subject)`". The row is `remit:dispatch` (file:261), which requires the actor to hold SOME seat granting `dispatch` (`WARRANT_ACT`, `gate.py:272`), not a seat of the holder faction.
 - **After the attack:** A 'typed conjunct' would be a new grammar stem, which adds a system; the tree's precedent (`_eff_arrest`) asks the gate predicate in the effect.
 
-### CP-T05-01 — LIMIT (B10-13) · AM-D-03
+### CP-T05-01 — LIMIT (B10-Z, HELD) · AM-D-03
 
 - **N-line after:** `opposed` and the prize move on `determine` — cut them and the verdict cannot depend on what the bench knows of the man before it: every party faces the same .74/.19/.07 at Ob 2. Holds in the hostile direction only at the shipped ceiling, and for the whole deed record of the party, not the charged deed.
 - **Override:** No design change. Three limits become part of the item's exit. (1) Character as evidence: `opposed` reads every deed of the party the bench holds, not the charged one (no charge carrier, H-227); a man of ill repute is bound more easily for anything. (2) Under `obstacle_ceiling` 2 only the hostile half is observable; the favourable half shows on the derived-ceiling arm (CP-T01-06) alone. (3) The realm forms about three `determine` in twelve seed-seasons, so the hand-built falsifier worlds, not realm arms, are the exit evidence; arm B isolates little because `proofs` is mirror-zeroed (H-216, 49/49). Say each in the commit. Limit (1) is re-read once SC-02's design is approved: option B (A1-08) admits a judge's ledger only where the judge is the act's actor (a `determine`), so for `speak`, whose actor is the speaker, the read may not stand; CP-T05-01 waits on that design (`-03` B10-13).
 - **Because:** YES — `data/fixtures.py:416,419`: `obstacle_default=2`, `obstacle_ceiling=2`. `modules/social_contest/roll.py::obstacle`: `ob = max(ob - room, min(ob, OB_MIN)) if room > 0 else ob - room`, then `min(ob, ceiling)` (a room that raises the obstacle is clipped to 2 on a defaulted base; only a room that lowers it bites).
 
-### CP-T05-02 — REPAIR (B10-13) · AM-D-01
+### CP-T05-02 — REPAIR (B10-Z, HELD; part (i)) · AM-D-01
 
 - **N-line after:** `WQ::hearing` — cut it and the game cannot let a won speech before the bench change a later verdict: a plea or a prosecution that carried is forgotten by the next sitting's `determine`, and the only thing that can reweight a docketed party's odds is what the bench already knew of him.
 - **Override:** In `queries/world_q.py::hearing`, each band counts `remove_weight(c.source) · c.confidence / full · max(DEGREE_STEP[band], 0)`, so Failure and Partial count 0 and only a carried (+2) or advanced (+1) hearing is remembered, signed −1 where the act was the party's own and +1 otherwise. Delete F05's `matter.undetermined counts −1` clause and §4 step 5's "his own plea … counts +1 against him" and step 6's "remembers as −1". Result: speaking weakly dominates silence for either side (a scene for P(S) .07 at Ob 2, .27 at Ob 1) and silence no longer dominates; "a lost hearing costs its side" is dropped from the N-line. Note on the double count (F05:187-195): take the revert, accept it, do not exclude kinds from `opposed`, because that forks `reception` from `deeds_judged` (`person_q.py` docstring "the two readers cannot disagree"); the weight is swept by `opposed_gain`. Re-pin F05:171-173's falsifier from `hearing` = 6 to 4, and strike F05:168-169 ('a weak speaker who presses can hurt his own case'). Residual cost to R, stated: after the fix silence no longer dominates, speech weakly dominates, and it costs only the scene.
@@ -407,14 +407,14 @@ Built and closed; the code and its tests are the record. This heading stays only
 - **Because:** YES — `data/rosters.py:851` `DEGREE_STEP` = {O 2, S 1, P 0, F -1} (printed). Siblings: `argue` Failure `writes: []` (`verb_table.yaml:154`, and `writes_note` :155 "`Failure` writes nothing"); `determine` Failure `writes: []` (`verb_table.yaml:389`) with `pursuits_note` :390 "`Failure` … is NOT BUILT (H-221)"; `EI::_eff_determine` docstring says the same.
 - **After the attack:** The arithmetic holds. The basis cited three precedents; one is real. The home's falsifier and one sentence of its N-line are re-pinned.
 
-### CP-T05-02 — REPAIR (B10-13) · AM-D-02
+### CP-T05-02 — REPAIR (B10-13, CLOSED `c627426a`) · AM-D-02
 
 - **N-line after:** `subject_may_be_self` on `speak` — cut it and the docketed party has no act at all on his own case (the accused cannot answer), where the bench otherwise hears only his accusers.
 - **Override:** In `seam/wrappers/sigma.py::contest_input`, `opposition` is `None` when `subject == claimants[0]` (nobody opposes himself); the obstacle then starts at `obstacle_default`, as F05:154 already states for the empty-capability case. One conditional at the one site that reads the score; no new field. Add to CP-T05-02 (iii)'s falsifier: a hand-built world with the pleader's `speak` capability seeded at 3 rolls the self-plea at the same obstacle as with capability 0. Hash-neutral at HEAD (capability is empty); the guard only matters once J-13's remainder seeds a score.
 - **Taken (ladder step 4):** [ASSUMPTION; medium; Jordan to correct; revert: drop the guard and a skilled pleader opposes himself.]
 - **Because:** YES — `seam/wrappers/sigma.py:134-146` `_opposition_of(w, subject, verb)` returns `float(_capability(w.persons[subject], verb))` whenever the subject is a person with an entry; `contest_input` passes it unconditionally at :187 (`opposition=_opposition_of(w, subject, verb)`) and never compares `subject` to `claimants[0]`; `_capability` maps the verb through `VERB_CAPABILITY` (`{tell: copying, speak: copying}` per the orchestrator's content note).
 
-### CP-T05-03 — LIMIT (B10-13) · AM-D-04
+### CP-T05-03 — LIMIT (B10-13, CLOSED `01ffc567`) · AM-D-04
 
 - **N-line after:** the `tell.refused` kind — cut it and a failed telling stays a free retry within the season while every sibling contested row's failure costs the opportunity, so one contested row keeps a different method from its siblings (S). Gain is consistency and the end of repeat-until-success gossip; its cost is fewer chain-carrying claims.
 - **Override:** No design change. State the world cost as an exit clause: `Claim.chain` is built only by a won spoken `tell` (code report: 0, 0, 4, 0 chained claims at four season ends over three seeds; 54 of 236 `tell` won), and this item removes same-season retries of failed ones, so it thins the information loop's only chain source. The exit reports `tell` attempts, `news.told` and chained-claim count per season before and after at seeds 0-2; a fall is the price, not a failure. The revert is the one kind. The ten named readers of `news.untold` (nine code files and the hole register) are re-read before the split lands.

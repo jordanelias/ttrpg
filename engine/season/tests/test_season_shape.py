@@ -935,14 +935,19 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     ⚠ 83 -> 84, v10 PC-10b, ONE NEW LOAD-TIME REFUSAL in `data/requires.py::Relation.__post_init__`: a relation spelt
     `<stem>:<operand>` whose stem is not an `OPERAND_NAMED_STEMS` member, or an operand-named stem spelt bare (the
     `names:<operand>` stem's shape; a `with:to` would read a predicate no reader answers). Raised while `verb_table.yaml`
-    loads. Falsifier: `test_pc10b_challenge_record.py::test_the_operand_named_shape_is_closed_to_its_stems` plants both."""
+    loads. Falsifier: `test_pc10b_challenge_record.py::test_the_operand_named_shape_is_closed_to_its_stems` plants both.
+
+    ⚠ 84 -> 85, v11 CP-T05-02 (iii), re-recorded at the B10-13 pin commit (P15), ONE NEW LOAD-TIME REFUSAL in `data/verbs.py`
+    (`verbs.py` 40 -> 41): `subject_may_be_self` on a row not contested against its subject, a column read by nothing. Raised
+    while `verb_table.yaml` loads. No other file's count moves across the batch (measured per file at the batch-open and
+    batch-final trees: `verbs.py` 40 -> 41, every other file equal)."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 84, (
-        f"{total} load-time exits across the model set, expected 84. Per file: "
+    assert total == 85, (
+        f"{total} load-time exits across the model set, expected 85. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
@@ -2302,7 +2307,7 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
     # the roster: its job is to fail if the loader started refusing everything, so it moves with
     # the table by construction and the number is read from the file rather than chosen.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
-    assert len(VERBS._load_verb_table()) == 64       # v10 CP-T03-09: `capture` joins, 63 -> 64 (IN-12 step 5: `interrogate`, 62 -> 63; ED-IN-0306 phase 5: 60 -> 62)
+    assert len(VERBS._load_verb_table()) == 65       # B10-13 pin commit (CR-27): `lie` joins, 64 -> 65 (v10 CP-T03-09: `capture` joins, 63 -> 64;IN-12 step 5: `interrogate`, 62 -> 63; ED-IN-0306 phase 5: 60 -> 62)
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -8147,8 +8152,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ v11 CP-T03-08 (B10-11), 21 -> 22: `tend` JOINS, nothing leaves. A RE-RECORD WITH THE UNIT THAT MOVED IT: `tend` forms only
     # on a `Person`-classed referent and `wounded_with` stamps a man below his ceiling for himself, so a hungry or wounded person
     # tends himself and the fold executes it -- the item's own falsifier (`tend` executes > 0). CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` applied for the session (in process) reads the old value and passes.
+    # ⚠⚠ v11 B10-13 pin commit (P15, CR-27), 22 -> 23: `lie` JOINS, nothing leaves. A RE-RECORD WITH ITS REASON: the new row (`tell`'s
+    # cell, a false value on a held cell claim) forms wherever `tell` does and executes in the corpus. READ OFF the failing assertion's
+    # printed set on the batch-final tree (the batch-open tree reads the 22 and passes) [the worlds were not walked one by one; the
+    # control, `lie_offered` False, was not run here].
     assert ever == {"argue", "capture", "carry", "challenge", "commit", "conceal", "create_record", "interview",
-                    "fight", "give", "issue", "move", "petition", "reconstruct", "release",
+                    "fight", "give", "issue", "lie", "move", "petition", "reconstruct", "release",
                     "research", "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
@@ -9167,7 +9176,22 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # none lands and `train` executes in no world on either arm); the draws walk another trajectory. Executed-world counts, revert ->
     # here: `argue` 80 -> 79, `commit` 101 -> 100, `research` 83 -> 84, `conceal` 65 -> 66, `release` 11 -> 12; every other verb
     # unmoved, none joins or leaves `ever`. Not a ranking change: `H-96` is untouched. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-    assert len(by_sig) == 133, (
+    # ⚠⚠ **133 -> 137, B10-13 pin commit (P15), READ OFF THIS TEST'S OWN `by_sig` (the failing assertion's printed figure),
+    # PYTHONHASHSEED=0; the batch-open tree reads 133 and passes.** THE UNIT AND THE DIRECTION: variety ROSE by four, with `lie` joining
+    # `ever` (CR-27) and the rest of the batch moving the act mix. The batch's items were not isolated one by one [ASSUMPTION; low: `lie`
+    # splits the executed sets in the worlds where it executes, as each verb joining `ever` has before]. Not a ranking change: `H-96` is
+    # untouched. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+    # ⚠⚠ **137 -> 136, B10-13 Phase 1 A1 (the self-plea's stance sign), MEASURED BY `_corpus_rows`, seed 0, PYTHONHASHSEED=0, AGAINST THIS
+    # TREE WITH `_stance_arm`'s `and subject != p.id` REMOVED IN PROCESS (the control), WHICH READS 137; `live` did not move (143 on both).**
+    # THE UNIT AND THE DIRECTION: variety FELL by one. A self-plea (`subject_may_be_self`, a subject that is the actor) read `-regard` as
+    # if the actor were his own adversary; it now reads `+regard`, so five worlds re-rank a candidate and each loses one verb from its
+    # executed set: `NPC-006` `reconstruct`, `ARC-10` `give`, `ARC-17` `tell`, `NSC-08` `tell`, `SCN-02` `conceal`. `ARC-10`'s set, minus
+    # `give`, equals `NPC-020`'s, which it did not before: the two worlds take one signature, and that merge is the net one fewer. The
+    # other four stay distinct, each on a signature of its own. Executed-world counts, control -> here: `give` 14 -> 13, `conceal` 65 -> 64,
+    # `tell` 62 -> 60, `reconstruct` 111 -> 110; every other verb's count is unmoved. THE SAME-BREATH CHECK: the universal set is EMPTY on
+    # both sides (the largest executed-world count is `create_record`'s 129 of 143), `ever` is the same 23 verbs on both and `varying` is
+    # that 23. Not a ranking change: `H-96` is untouched. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+    assert len(by_sig) == 136, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -9391,8 +9415,10 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # (asserted above). The reason and its control are at the `ever` note.
     # ⚠⚠ v11 CR-87 (B10-11): `capture` JOINS, `oblige` AND `tend` LEAVE (22 -> 21) with `ever`; the universal set is unmoved (empty, asserted
     # above). The reason and its control are at the `by_sig` note.
+    # ⚠⚠ v11 B10-13 pin commit (P15, CR-27): `lie` JOINS `varying` (22 -> 23) with `ever`: it executes in some live worlds and not in all
+    # 143, so the universal set is unmoved. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
     assert varying == {"argue", "capture", "carry", "challenge", "commit", "conceal", "create_record", "fight", "give",
-                       "interview", "issue", "move",
+                       "interview", "issue", "lie", "move",
                        "petition", "reconstruct", "release", "research",
                        "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         sorted(varying))
@@ -11083,8 +11109,12 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # corpus test's `ever` note.
     # ⚠⚠ v11 CP-T03-08 (B10-11): `tend` JOINS (21 -> 22), nothing leaves -- the reason and its control are at the corpus test's
     # `ever` note.
+    # ⚠⚠ v11 B10-13 pin commit (P15, CR-27): `lie` JOINS (22 -> 23), nothing leaves -- the new row, `tell`'s cell with a false value, is
+    # eligible wherever `tell` is and executes in the corpus. A RE-RECORD WITH ITS REASON (READ OFF the failing assertion's printed
+    # set on the batch-final tree; the batch-open tree reads the 22 and passes). CONTROL: `lie_offered` False (the swept control,
+    # H-357) withholds the row from `opening_set` [UNVERIFIED: that this set reads the old 22 at the control was not run here].
     assert set(executed) == {"argue", "capture", "carry", "challenge", "commit", "conceal", "create_record",
-                             "interview", "fight", "give", "issue",
+                             "interview", "fight", "give", "issue", "lie",
                              "move", "petition", "reconstruct", "release", "research",
                              "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
@@ -11532,6 +11562,11 @@ def test_wc_the_fold_binds_what_the_person_bound(monkeypatch):
     from ..epistemic import Seen
     p.ledger.append(Claim("c_wc_seen", p.id, "Hh", SEEN_PREDICATE, Seen(who="p_mid"), 0,
                           "firsthand", 100, "own"))
+    # B10-13 CR-27: `lie` is typed and shares `tell`'s cell, and it forms only for a teller who holds a CELL claim to
+    # say falsely (`person_q.lie_said_of`; a `seen` sighting is a deed kind and gives it nothing to say). One held
+    # cell claim on `Hh` (a number: `lie` shifts it one whole step) puts `lie` in the walk, so its binding is
+    # covered by the equality below instead of sitting in `WALK_EXCLUDES`.
+    p.ledger.append(Claim("c_wc_held", p.id, "Hh", "stores:grain", 8, 0, "firsthand", 80, "own"))
     # v9 IN-45 `migrate`: `D` rides the question as a `Rung`-classed referent (what
     # `world_q.places_named` stamps), so `migrate` -- typed, formed only on that class -- stays in the
     # walk, its `to` bound to the classed place; no plain-referent row forms on a class.
@@ -13988,7 +14023,11 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # `tell` and `surveil` stay absent.
     # ⚠ v11 B10-11 pin commit (P15): `tend` LEAVES (12 -> 11 verbs) with the two `tend` bite pairs above: CP-T03-08 changes who forms `tend`.
     # A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM [UNVERIFIED: not walked by counterfactual].
-    assert {v for v, _ in live} == {"accept", "build", "challenge", "comply", "construe", "evade / defy",
+    # ⚠ v11 B10-13 pin commit (P15): `accept` LEAVES (11 -> 10 verbs), nothing joins. READ OFF the failing assertion's own printed set
+    # on the batch-final tree (the batch-open tree reads the 11 and passes); the per-verb drop counts were not re-measured and the
+    # batch's items were not walked one by one [ASSUMPTION; low: the act mix the batch moves (`lie` joins the table; the self-plea)
+    # took `accept` out of the shipped arm's deliberations that this corpus slice reads]. `tell` and `surveil` stay absent.
+    assert {v for v, _ in live} == {"build", "challenge", "comply", "construe", "evade / defy",
                                     "found", "interview",
                                     "sabotage", "speak", "train"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
@@ -15846,11 +15885,13 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # custody and charge (one `confession.*` kind at the band reached), its bands writing nothing.
     # v10 CP-T03-09: `capture` IS contested (`the body`, `fight`'s prize), the tenth entry; it is `fight`'s named fold,
     # fought under `rosters.yaml: duel_terms`; `engine/season/tests/test_cp_t03_09_capture.py` folds it.
+    # v11 CR-27 (re-recorded at the B10-13 pin commit, P15): `lie` IS contested (`a standing`, `tell`'s prize and contest), the
+    # eleventh entry; it shares `tell`'s cell and contest and emits `tell`'s kinds.
     assert contested == {"fight": "the body", "tell": "a standing", "march": "a field",
                          "accept": "the body", "speak": "a matter",
                          "determine": "a proposition", "argue": "a proposition",
                          "arrest": "a standing", "interrogate": "a proposition",
-                         "capture": "the body"}, (
+                         "capture": "the body", "lie": "a standing"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
         "can be graded today is scoped to this set. A SEVENTH entry is a real widening and wants "
         "its own measurement; losing one of these six means its prize row or its verb row has "
@@ -15876,7 +15917,9 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # uncontested (they contest nothing), a re-record. 62 -> 63, `interrogate` (v10 IN-12 step 5), contested
     # (the contested set above moves with it), a re-record.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
-    assert len(VERB_TABLE) == 64, len(VERB_TABLE)    # v10 CP-T03-09: 63 -> 64 (`capture`); IN-12: 62 -> 63 (`interrogate`); ED-IN-0306 phase 5: 60 -> 62
+    # 64 -> 65, `lie` (v11 CR-27, re-recorded at the B10-13 pin commit, P15), contested (`a standing`, `tell`'s prize; the contested
+    # set above moves with it), a re-record.
+    assert len(VERB_TABLE) == 65, len(VERB_TABLE)    # B10-13 pin commit: 64 -> 65 (`lie`); v10 CP-T03-09: 63 -> 64 (`capture`); IN-12: 62 -> 63 (`interrogate`); ED-IN-0306 phase 5: 60 -> 62
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.
@@ -17786,7 +17829,9 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
     # ⚠ RE-RECORDED AT v10 PC-10b: `accept` JOINS -- its cell binds `to` (the challenger, `counterparty: to`) beside `subject`
     # (the challenge Record), so the opponent is a known person and `names:to` refuses all but the challenger; the rows this
     # control covers are unchanged.
-    assert fanned == {"accept", "argue", "covenant", "give", "issue", "tell"}, sorted(fanned)
+    # ⚠ RE-RECORDED AT THE B10-13 PIN COMMIT (P15, CR-27): `lie` JOINS -- it shares `tell`'s cell (`subject` beside `to`, the hearer),
+    # so the known-person fan reaches it the same way; the rows this control covers are unchanged.
+    assert fanned == {"accept", "argue", "covenant", "give", "issue", "lie", "tell"}, sorted(fanned)
     w, p = _t4_person(knows=("p_mid", "p_high", "p_king"))
     q = Question("q:t4c", "need", ("p_mid",))
     checked = 0
@@ -17817,6 +17862,8 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
     # `arrest`'s shape. A re-record.
     # v10 PC-10b: `accept` joins -- contested (`the body`) against its `counterparty: to`, the challenger (its `subject` is
     # the challenge Record). A re-record.
+    # v11 CR-27 (re-recorded at the B10-13 pin commit, P15): `lie` joins -- contested (`a standing`) against its `counterparty: to`,
+    # the hearer, `tell`'s shape. A re-record.
     assert {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty} == {"tell", "determine", "argue",
                                                                                    "arrest", "interrogate",
-                                                                                   "capture", "accept"}
+                                                                                   "capture", "accept", "lie"}
