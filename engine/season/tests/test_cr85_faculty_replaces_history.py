@@ -55,13 +55,15 @@ def _engine_available():
 #: Was, before that pin commit: PRE_ITEM 20accb03... / f89ea45d... / fe9032ed...; POST_ITEM 20accb03... / 6e25b047... /
 #: fe9032ed... -- ONE string played both roles at seed 2 (the item did not move it); the head weighting makes the (8, 1.0)
 #: and (9, 1.5) fights land differently there, so each role now has its own value.
-PRE_ITEM = {0: "20accb03c3d32f80a9fab00d80a70b21",
-            1: "a0bb01cbfec7094c0dafa4e704d734e8",
-            2: "cc186ede6c7613a659a2a46d3d6e96ab"}
+#: B10-13 batch pin commit (the batch's declared movers move a one-season realm of every seed): PRE_ITEM was 20accb03... /
+#: a0bb01cb... / cc186ede...; POST_ITEM was 20accb03... / 597fac34... / a157d34a....
+PRE_ITEM = {0: "a63b960024babdcd2a1a37839e2d6cb0",
+            1: "cbe7de7ff0d61bbdbe396aa3da40cd97",
+            2: "5350d34d19bd442d187981f510aa1d61"}
 #: The same, AFTER: seed 0 fights nothing; seeds 1 and 2 move (seed 2 moved only once PC-20 (1) landed).
-POST_ITEM = {0: "20accb03c3d32f80a9fab00d80a70b21",
-             1: "597fac345c8791ea17d6228f3121d81c",
-             2: "a157d34aab053ffd84161f7f28e22e8f"}
+POST_ITEM = {0: "a63b960024babdcd2a1a37839e2d6cb0",
+             1: "0cd4f72e0cb1eba8ce55b78bfbc8201f",
+             2: "355872c5f7c9786c196a81a5142bc306"}
 
 _KEY = "cr85_test_arms"   # a test-local capability key: no roster row is added
 

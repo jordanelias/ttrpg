@@ -174,8 +174,10 @@ def test_the_stem_is_answered_from_is_cohort_and_is_world_only():
 #: ⚠ RE-TAKEN ONCE MORE by the B10-11b batch pin commit (`reading @4b334f2a`), seeds 0 and 1 (was aa4cc67d... / 8ac99151...):
 #: PC-20 (1) (the head-weighted strike impact, `K_STR_HEAD`) moves a run that reaches `strike_impact`, and these two-season
 #: realms reach it. `reads > 0` and `refused_on_it == 0` still hold, so the conjunct moved no realm; the hash is the trajectory's.
-BASE = {0: "4704d8a6ba7fc84ff6801a2481823501",
-        1: "b6f1c2939725849b51dad3af3791df25",
+#: ⚠ RE-TAKEN BY THE B10-13 batch pin commit, seeds 0 and 1 (was 4704d8a6... / b6f1c293...); `reads > 0` and `refused_on_it == 0`
+#: still hold. Seed 2 is read only as `h != BASE[2]` below, and is left at its stale value (not re-taken: no test reads it as equal).
+BASE = {0: "6438faa5c3679ca11594d8428e201c94",
+        1: "a3bd409c6f4cb5870c2ea7362d54ee63",
         2: "d1594dae7a962dc9bbe9e6a1de9abb91"}
 #: The verbs this control's chooser never offers: `capture` (CP-T03-09) and the duel pair PC-10b re-shaped.
 WITHHELD = frozenset({"capture", "challenge", "accept"})
