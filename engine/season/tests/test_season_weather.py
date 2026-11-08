@@ -538,7 +538,7 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # 8d00c148...); THREAD_READ_WITHHELD_EVENTS_1 (13387, 1cdf25c4...) -> (13441, 9f23e5f1...). CONTROL:
 # `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` reads the old 1-season hash exactly (its own test). A GOLDEN
 # RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at the B10-13 pin commit (P15; the batch's recorded movers at these readings: CR-27 `lie`, CR-56, CP-T05-02, CP-T05-03; CR-34, CR-55 and CR-31 are recorded EQUAL here (H-161, H-346, H-348), none isolated per item:
+# RE-PINNED ONCE at the B10-13 pin commit (P15; the batch's recorded movers at these readings: CR-27 `lie`, CR-56, CP-T05-02, CP-T05-03; CR-34, CR-55 and CR-31 are recorded EQUAL here (H-161, H-356, H-358), none isolated per item:
 # a FORMATION mover of every season and an outcome mover). The build hash does not move. Was: BASE_HASHES[1] d4c83c8c... ->
 # 25660615..., [2] a350161b... -> 27d8e869...; BASE_EVENTS[1] (13454, 238a4375...) -> (13379, 0572125c...), [2] (38561, bbd6239f...)
 # -> (37646, 4f192564...); STEP_OFF_ONE_SEASON bb148d0e... / (11035, 8d00c148...) -> 9ec591a2... / (10770, 93c4830d...);

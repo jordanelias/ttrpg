@@ -112,7 +112,7 @@ Built and closed; the code and its tests are the record. This heading stays only
 - SOURCE: `-05` M4; `proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-04-mass-battle.md:500-503`.
 
 ### CR-27 — `lie`: a spoken falsehood on a held cell claim (SC/IN) · BATCH B10-13 (CLOSED, landed `db1dc1f2`) · STATE LANDED, entry narrowed to what code and the hole register cite · R R-05, R-07 (contributor)
-- LANDED: M9 taken (a), the cell lie (`-05` step 5): a `lie` row sharing `tell`'s cell shape and emitting only `tell`'s kinds; `queries/person_q.py::lie_said_of` with the false-value rule `[ASSUMPTION; medium; Jordan to correct; revert: a different false-value rule]`; `lie_offered` shipped True, False the swept control, gated in `decision/options.py::opening_set`; a declared hash MOVER. Its record is `-03` §1's B10-13 paragraph; its hole row is H-347 (H-198 is the row it closes for rule (i)).
+- LANDED: M9 taken (a), the cell lie (`-05` step 5): a `lie` row sharing `tell`'s cell shape and emitting only `tell`'s kinds; `queries/person_q.py::lie_said_of` with the false-value rule `[ASSUMPTION; medium; Jordan to correct; revert: a different false-value rule]`; `lie_offered` shipped True, False the swept control, gated in `decision/options.py::opening_set`; a declared hash MOVER. Its record is `-03` §1's B10-13 paragraph; its hole row is H-357 (H-198 is the row it closes for rule (i)).
 - STILL OPEN: the deed lie (H-198 rule (ii)) stays unbuilt; trigger: a deposit that can hold a deed `False` and a reader that pairs it. The second falsifier (T's lie told to two receivers at Attunement 2 and 6 with CR-19's gain set live: the receiver at 6 does not hold the lie higher than the receiver at 2) guards the flip CR-83's design schedules, not the shipped value (CR-19 ships at gain 0).
 - SOURCE: `-05` M9; `proposals/2026-10-16-verbs/2026-10-16-verbs-11-lexicon-social-contest.md:328-338`, `:587-589`.
 
@@ -142,7 +142,7 @@ Built and closed; the code and its tests are the record. This heading stays only
 - SOURCE: `-05` M11; `proposals/2026-09-05-proceedings-subsystem/19_PLAN.md:499-509`; FA-01's entry (part 2).
 
 ### CR-31 — The caste estimate: a regard term over the decider's own creed and his own belief about the other's descent (IN) · BATCH B10-13 (CLOSED, landed `f1319502`) · STATE LANDED, entry narrowed to what the hole register cites · R R-07 (contributor)
-- LANDED: item 1, caste order taken at step 4 (a person's estimate, never a stored order): `queries/person_q.py::heritage_regard(p, q)` added by `regard`, times `heritage_gain` (`data/fixtures.py`, shipped 0.5, swept [0, 0.5, 1.0], hole row H-348) `[ASSUMPTION; medium; Jordan to correct; revert: heritage_gain = 0]`; its shipped consumer is `teller_weight`'s relation term. Its record is `-03` §1's B10-13 paragraph.
+- LANDED: item 1, caste order taken at step 4 (a person's estimate, never a stored order): `queries/person_q.py::heritage_regard(p, q)` added by `regard`, times `heritage_gain` (`data/fixtures.py`, shipped 0.5, swept [0, 0.5, 1.0], hole row H-358) `[ASSUMPTION; medium; Jordan to correct; revert: heritage_gain = 0]`; its shipped consumer is `teller_weight`'s relation term. Its record is `-03` §1's B10-13 paragraph.
 - REFUSED, NOT DEFERRED: caste Ob variants (`faction_politics_v30.md` §3.4) and the Renown halving (§3.3); §3.2's appointment gates do not compute by this position (no conferee-regard term exists); the caste-transgressive person stays a Query a later reader may ask, not built.
 - SOURCE: item 1 (`-05` §1b); ED-IN-0301 (the `engages:` cells).
 
@@ -506,7 +506,7 @@ The fold of 2026-10-30 (Jordan: everything that can properly be folded into v10 
 - SOURCE: the R-05 re-take of 2026-10-31; H-207.
 
 ### CR-55 — A matter lapses visibly: a dead party, a venue with no bench, an overdue stage (SC/IN) · BATCH B10-13 (CLOSED, landed `eb76f57f`) · STATE LANDED, entry narrowed to what the hole register cites · R R-04 (contributor), R-01
-- LANDED: `matter.lapsed`, written through the gate by MATTER (`loop/matter.py`) for a docket item held beyond `docket_lapse` (`Fixtures`, shipped 4, swept [null, 2, 4, 8], hole row H-346) `[ASSUMPTION; medium; Jordan to correct; revert: never]`; `world_q.lapsing_items` owns an item's age and stores nothing; the overdue-stage line is `due > w.tick` with a once-guard. Its record is `-03` §1's B10-13 paragraph.
+- LANDED: `matter.lapsed`, written through the gate by MATTER (`loop/matter.py`) for a docket item held beyond `docket_lapse` (`Fixtures`, shipped 4, swept [null, 2, 4, 8], hole row H-356) `[ASSUMPTION; medium; Jordan to correct; revert: never]`; `world_q.lapsing_items` owns an item's age and stores nothing; the overdue-stage line is `due > w.tick` with a once-guard. Its record is `-03` §1's B10-13 paragraph.
 - SOURCE: the build-all fold of 2026-11-02 (`proposals/2026-10-29-parliament-and-debate/2026-11-02-social-contest-build-all-plan.md`).
 
 ### CR-56 — The matter is stamped where it waits: a convener is offered the tier that can hear it (SC/IN) · BATCH B10-13 (CLOSED, landed `6e9550c4`) · STATE LANDED (RL1 and the re-slot step), entry narrowed to what the test file cites · R R-04 (contributor)

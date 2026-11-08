@@ -434,7 +434,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                 emits="tenure.closed", subject=t.id, causes=[t.term.declared_by],
                 matured_term=t.id)
 
-    # -- A DOCKET ITEM HELD TOO LONG LAPSES (v11 CR-55; `H-346`) ------------------------------------
+    # -- A DOCKET ITEM HELD TOO LONG LAPSES (v11 CR-55; `H-356`) ------------------------------------
     # A dead party (`remove_person` closes his edges and never touches `w.docket`), a venue that seats
     # no bench and a matter that is no person each hold an item no `determine` will clear, and
     # `docket_question` keeps naming it. One rule covers all three and asks why none: an item held

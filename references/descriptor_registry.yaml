@@ -230,7 +230,7 @@ affiliation_roster:
 # HERITAGE (v10 CR-30, ED-IN-0301): DESCENT, the one member of the dropped `marks[]` no Tenure derives. `Person.heritage`
 # holds one of these names or is None (unauthored: never a default member); a cast row's `heritage:` is refused
 # unless it is a member. `engages:` files a member under the affiliation CONCERN it speaks to (a `concerns:` key
-# of `affiliation_roster` above) and is read by `queries/person_q.py::heritage_regard` (v11 CR-31, H-348); every member not named engages none.
+# of `affiliation_roster` above) and is read by `queries/person_q.py::heritage_regard` (v11 CR-31, H-358); every member not named engages none.
 # CONFIRMED AS WRITTEN (ED-IN-0301), so unlike `attributes` this roster is NOT IN FLUX and a Godot resource field
 # may bind to it. Exported by `tools/export_descriptors.py`, read by `engine/substrate/descriptors.py`.
 heritage_roster:

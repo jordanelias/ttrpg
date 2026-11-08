@@ -1,4 +1,4 @@
-"""v11 CR-27 (M9 taken (a)): `lie`, a spoken falsehood on a held cell claim (`H-347`; H-198 rule (i)).
+"""v11 CR-27 (M9 taken (a)): `lie`, a spoken falsehood on a held cell claim (`H-357`; H-198 rule (i)).
 
 `lie` is `tell`'s row with a false value: the same cell, the same contest, the same kinds, and a `said` that
 `queries/person_q.py::lie_said_of` has made false at CHOOSE. It is offered while `Fixtures lie_offered` is True

@@ -487,7 +487,7 @@ def heritage_regard(p: Person, q: str, fx) -> float:
     World (AX-2). [ASSUMPTION; medium; Jordan to correct; revert: `heritage_gain` 0]"""
     gain = float(fx.get("heritage_gain"))
     if not gain >= 0:                # `not >=`, so a NaN is refused too
-        raise ValueError(f"heritage_gain {gain} must be >= 0 (H-348)")
+        raise ValueError(f"heritage_gain {gain} must be >= 0 (H-358)")
     if not gain:
         return 0.0
     best, best_key = None, None

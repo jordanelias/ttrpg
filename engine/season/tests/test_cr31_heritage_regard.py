@@ -1,5 +1,5 @@
 """v11 CR-31: the caste estimate, a heritage regard term (`queries/person_q.py::heritage_regard`, `regard`'s
-third term, at `Fixtures heritage_gain`, `H-348`).
+third term, at `Fixtures heritage_gain`, `H-358`).
 
 FALSIFIER (the plan's): two hearers with equal stance toward one teller and the same `seen` claim marking him
 `southern_einhir`, one holding `einhir_restoration: 0` and one `5`, weight the same told claim differently at

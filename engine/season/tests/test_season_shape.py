@@ -11112,7 +11112,7 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # ⚠⚠ v11 B10-13 pin commit (P15, CR-27): `lie` JOINS (22 -> 23), nothing leaves -- the new row, `tell`'s cell with a false value, is
     # eligible wherever `tell` is and executes in the corpus. A RE-RECORD WITH ITS REASON (READ OFF the failing assertion's printed
     # set on the batch-final tree; the batch-open tree reads the 22 and passes). CONTROL: `lie_offered` False (the swept control,
-    # H-347) withholds the row from `opening_set` [UNVERIFIED: that this set reads the old 22 at the control was not run here].
+    # H-357) withholds the row from `opening_set` [UNVERIFIED: that this set reads the old 22 at the control was not run here].
     assert set(executed) == {"argue", "capture", "carry", "challenge", "commit", "conceal", "create_record",
                              "interview", "fight", "give", "issue", "lie",
                              "move", "petition", "reconstruct", "release", "research",
