@@ -57,13 +57,15 @@ def _engine_available():
 #: and (9, 1.5) fights land differently there, so each role now has its own value.
 #: B10-13 batch pin commit (the batch's declared movers move a one-season realm of every seed): PRE_ITEM was 20accb03... /
 #: a0bb01cb... / cc186ede...; POST_ITEM was 20accb03... / 597fac34... / a157d34a....
+#: B10-12 pin commit (CR-24 `field_winner_casualties: engine` and MB-07r's support cap, both shipped, move a one-season
+#: realm that fights; control: both reverted reads the old pins): seed 2 PRE_ITEM was 5350d34d..., POST_ITEM was 355872c5....
 PRE_ITEM = {0: "a63b960024babdcd2a1a37839e2d6cb0",
             1: "cbe7de7ff0d61bbdbe396aa3da40cd97",
-            2: "5350d34d19bd442d187981f510aa1d61"}
+            2: "3d89f9a22907a0b4d69f88e16341c43a"}
 #: The same, AFTER: seed 0 fights nothing; seeds 1 and 2 move (seed 2 moved only once PC-20 (1) landed).
 POST_ITEM = {0: "a63b960024babdcd2a1a37839e2d6cb0",
              1: "0cd4f72e0cb1eba8ce55b78bfbc8201f",
-             2: "355872c5f7c9786c196a81a5142bc306"}
+             2: "b8c1873362190843ad00860275961a7e"}
 
 _KEY = "cr85_test_arms"   # a test-local capability key: no roster row is added
 
