@@ -52,7 +52,7 @@ from .requires import (
     TypedRequires, build_typed_requires,
 )
 from .rosters import (
-    COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, ORDER_RETREAT_AT, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STRIFE_KINDS, VERB_CAPABILITY, VOCATIONS,
     is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
@@ -1309,6 +1309,12 @@ def act_key(verb: str, subject, operands) -> str:
         for n in row.known_person_operands():
             if ops.get(n) is not None:
                 key += f">{ops[n]}"
+    # CP-T04-02: AND THE CHOICE, FOR A ROW THAT CARRIES ONE (`CHOICE_SOURCED`, `marshal`'s `role` and `retreat_at`). A
+    # Candidate is formed once per combination on the same subject, so two chosen in one deliberation would share
+    # `(actor, verb, subject)` and `state/acts.py` would refuse the second. Present only on a row the roster names.
+    for n in CHOICE_SOURCED.get(verb, ()):
+        if ops.get(n) is not None:
+            key += f"#{ops[n]}"
     if ops.get(VIA) is not None:
         key += f"@{ops[VIA]}"
     return key
@@ -1681,6 +1687,34 @@ def _load_vocation_sourced(values: dict) -> dict:
 
 VOCATION_SOURCED = _load_vocation_sourced(roster_map("vocation_sourced", "values"))
 # THE VOCATIONS (`rosters.VOCATIONS`, imported above): `verb_capability`'s VALUES, derived once in `rosters.py`.
+
+
+# v11 CP-T04-02: `{verb: (key, ...)}` -- the verbs whose Candidate is formed once per COMBINATION of the closed sets the
+# named payload keys range over (`rosters.yaml: choice_sourced`, read in `decision/options.py::operand_bags`; `marshal`'s
+# `role` and `retreat_at`), and `CHOICE_RANGES`, each key's closed set. The ranges are pointers at the mass-battle module's
+# vocabulary (`rosters.yaml: order_roles`, `order_retreat_at`), never lists spelt here. REFUSED AT IMPORT,
+# `VOCATION_SOURCED`'s reason: a verb the table lacks, a verb whose row writes no `Record.exists` (the order is a
+# minted document), or a key with no range would each carry a choice nothing reads.
+CHOICE_RANGES = {"role": tuple(ORDER_ROLES), "retreat_at": tuple(ORDER_RETREAT_AT)}
+_RECORD_EXISTS_PAIR = "Record.exists"
+
+
+def _load_choice_sourced(values: dict) -> dict:
+    """`rosters.yaml: choice_sourced`'s `values`, checked and frozen -- refused per line (above)."""
+    out = {v: tuple(ks or ()) for v, ks in values.items()}
+    for v, ks in out.items():
+        row = VERB_TABLE.get(v)
+        if row is None or _RECORD_EXISTS_PAIR not in row.writes or not ks or any(k not in CHOICE_RANGES for k in ks):
+            raise Forbidden(
+                f"`rosters.yaml: choice_sourced` names {v!r}: {list(ks)}, and the verb table carries no such verb, "
+                f"its row writes no `{_RECORD_EXISTS_PAIR}`, or the line names a key outside {sorted(CHOICE_RANGES)}",
+                "rosters.yaml",
+                needs="a `verb_table.yaml` verb that mints a Record, and keys `CHOICE_RANGES` carries",
+                law="CP-T04-02 -- a choice rides an act that mints the document it is written on, over a closed set")
+    return out
+
+
+CHOICE_SOURCED = _load_choice_sourced(roster_map("choice_sourced", "values"))
 
 
 # v9 IN-12 step 10: `{verb: record kind}` -- the verbs a person does not form while he holds a document

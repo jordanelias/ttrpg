@@ -1,0 +1,27 @@
+{
+  "_generated": "tools/export_battle_orders.py -- do not hand-edit; edit modules/mass_battle/massbattle.py (ORDER_ROLES from config.ROLE_SPEC, ORDER_RETREAT_AT)",
+  "schema_version": 1,
+  "source": "modules/mass_battle/massbattle.py",
+  "roles": [
+    "ShieldWall",
+    "Hold",
+    "Anvil",
+    "Push",
+    "Skirmish",
+    "Screen",
+    "Pursue",
+    "Shock",
+    "Flanker",
+    "Feint",
+    "VolleyLine",
+    "Harass",
+    "Kite",
+    "Support",
+    "Reserve"
+  ],
+  "retreat_at": [
+    "none",
+    "0.5",
+    "0.25"
+  ]
+}

@@ -36,7 +36,7 @@ from ..data.rosters import (
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, LIE_VERBS,
+    CHOICE_RANGES, CHOICE_SOURCED, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, LIE_VERBS,
     OWN_HOLD_DECLINES,
     OWN_STANCE_DECLINES, OWN_TITLE_DECLINES,
     TERMS_SOURCED, VERB_TABLE, VIOLENCE_CONTEXTS, VIOLENT_VERBS, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED,
@@ -1336,6 +1336,27 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     and a Record about anything else forms nothing here. A Record whose kind maps none of the fan's
     operands, or whose addressee is a known person's bag already, adds nothing (same act id,
     `data/verbs.py::act_key`). A row with no fan is untouched: its operands are what it is about."""
+    return _fanned_choices(row, _person_bags(p, row, q, subject, fx, seat, people, records))
+
+
+def _fanned_choices(row: "VerbRow", bags: list) -> list:
+    """CP-T04-02 (`rosters.yaml: choice_sourced`): FOR A ROW THAT CARRIES A CHOICE, EACH BAG BECOMES ONE PER COMBINATION
+    of the closed sets its keys range over (`data/verbs.py::CHOICE_RANGES`), each value riding on the bag under its own
+    name -- `marshal`'s `role` x `retreat_at`, or no NPC ever marshals. The ranges are the module's vocabulary read
+    through the roster pointers, in their own order; no value is chosen here (the chooser's draw is content-blind,
+    `decision/choose.py`). A row the roster does not name returns its bags untouched."""
+    keys = CHOICE_SOURCED.get(row.verb)
+    if not keys:
+        return bags
+    combos = [()]
+    for k in keys:
+        combos = [c + (v,) for c in combos for v in CHOICE_RANGES[k]]
+    return [{**b, **dict(zip(keys, c))} for b in bags for c in combos]
+
+
+def _person_bags(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures", seat: Optional[str] = None,
+                 people: Optional[tuple] = None, records: Optional[list] = None) -> list[dict]:
+    """`operand_bags`' body before the choice fan: one bag, or one per known person / held Record (its docstring)."""
     fan = row.known_person_operands()
     if not fan:
         ops = _operands(p, row, q, subject, fx, {}, seat)

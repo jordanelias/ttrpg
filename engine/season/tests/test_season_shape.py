@@ -41,7 +41,7 @@ from ..data.rosters import (
 )
 from ..data import verbs as data_verbs
 from ..data.verbs import (
-    ALIGNMENT_SWEEP, PURSUIT_PROJECTION, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, align, alignment_at, rows_without_a_producer, tenure_kinds_without_an_opener,
+    ALIGNMENT_SWEEP, CHOICE_RANGES, PURSUIT_PROJECTION, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, align, alignment_at, rows_without_a_producer, tenure_kinds_without_an_opener,
 )
 from .. import decision
 from ..decision import (
@@ -5842,10 +5842,13 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # `said` (T1, ED-IN-0282) is the told triple a telling CARRIES, chosen at CHOOSE; it is not a
     # `requires` operand -- `binding_of` drops it (`test_t1_said_is_not_a_binding_operand`) -- so
     # naming it here does not coin an operand, which is what this closure refuses.
+    # CP-T04-02: AND THE CHOICE KEYS (`CHOICE_RANGES`, `marshal`'s `role` and `retreat_at`), `said`'s case: a payload key a
+    # `choice_sourced` row carries, read by its effect alone, bound by no cell (the row's `requires_typed` binds `subject`)
+    # and dropped by `binding_of`, so naming them here coins no operand either.
     carried = {k for a in minted for k in (a.payload or {})}
-    assert carried <= set(REQUIRES_OPERANDS) | {"subject", "said"}, (
+    assert carried <= set(REQUIRES_OPERANDS) | {"subject", "said"} | set(CHOICE_RANGES), (
         f"a minted act carries "
-        f"{sorted(carried - set(REQUIRES_OPERANDS) - {'subject', 'said'})}, which "
+        f"{sorted(carried - set(REQUIRES_OPERANDS) - {'subject', 'said'} - set(CHOICE_RANGES))}, which "
         "is outside the closed operand vocabulary — coining an operand is filling `H-94` by "
         "keyword argument, which is what the roster exists to refuse")
     # AND `changes` IS STILL EMPTY, which is the OTHER half and is `H-63`, not this item: Part E's
