@@ -2228,9 +2228,16 @@ def fort_input(w: World, rung_id: str) -> FortInput:
     """THE PROJECTION `settlements.fortification` reads (v9 IN-07 E6): every `garrison` Site's condition
     in the subtree, in `World.sites` order, and `condition_scale` -- read only when there is a garrison,
     as the old body read it (a no-garrison world reads no fixture)."""
-    here = _subtree(w, rung_id)
-    conditions = tuple(s.condition for s in w.sites.values() if s.kind == "garrison" and s.rung in here)
+    conditions = tuple(s.condition for s in garrison_sites(w, rung_id))
     return FortInput(conditions, w.fixtures.get("condition_scale") if conditions else None)
+
+
+def garrison_sites(w: World, rung_id: str) -> list:
+    """EVERY `garrison` Site in `rung_id`'s subtree, in `World.sites` order -- the walls `fortification_of` averages
+    (`fort_input`) and the walls a `besiege` march wears (CP-T04-06, `loop/effects_combat.py::_eff_march`). One owner for
+    which Sites are a settlement's garrison, so what a siege lowers is exactly what a storm then reads."""
+    here = _subtree(w, rung_id)
+    return [s for s in w.sites.values() if s.kind == "garrison" and s.rung in here]
 
 
 def training_sites(w: World, person_id: str) -> dict:

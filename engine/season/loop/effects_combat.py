@@ -17,7 +17,7 @@ from __future__ import annotations
 from dataclasses import replace
 
 from ..data.rosters import (
-    DECLARED, ENDING_FELLED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, FIELD_WINNER_CASUALTY_ARMS, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
+    DECLARED, ENDING_FELLED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, FIELD_WINNER_CASUALTY_ARMS, INVESTED, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
     VERB_CAPABILITY, WOUND_HARM_MODELS, BODY_MARK_MODELS, require_member,
 )
 from ..data.matrix import matrix_row
@@ -25,7 +25,7 @@ from ..data.requires import Observation
 from ..data.verbs import VERB_TABLE, VOCATION_SOURCED, VOCATIONS
 from ..gaps import Unspecified
 from ..queries.person_q import held_against
-from ..queries.world_q import BODY_STEM, DETAIN_KIND, ancestry, holder_faction_of, home_of, restrained
+from ..queries.world_q import BODY_STEM, DETAIN_KIND, ancestry, garrison_sites, holder_faction_of, home_of, restrained
 from ..seam.ladder import party_degree
 from ..state.carriers import Tenure
 from ..state.gate import (
@@ -33,6 +33,7 @@ from ..state.gate import (
 )
 from ..state.ids import H
 
+from .effects_economy import _fall
 from .effects_information import _may_close_custody
 from .effects_migration import _relocate
 from .effects_shared import _debit, _operand, effect_for
@@ -515,6 +516,8 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
                 "survivor ratio, never invented here")
     if res.degree == DECLARED:
         return NO_CHANGE
+    if res.degree == INVESTED:
+        return _siege(w, _operand(a, "subject"))
     parties = res.result.get("parties") or {}
     attackers = list(parties.get("claimants") or [])
     defenders = list(parties.get("subject_members") or [])
@@ -679,6 +682,29 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
                   + tuple(Subject.entity("persons", pid, earns=own) for pid in movers)
                   + tuple(Subject.entity("rungs", rid, earns=loser_earns, fields=("stores",))
                           for rid in dict.fromkeys(rid for rid, _ in debits)), perform)
+
+
+def _siege(w: "World", target: str) -> Change:
+    """CP-T04-06 (`besiege`, AM-C-11): THE `Invested` BAND. Each `garrison` Site in `target`'s subtree loses `_fall(w, site)`
+    of its condition -- `sabotage`'s one formula (`loop/effects_economy.py::_fall`: the footroom, taken at the commons'
+    share), so a siege and a saboteur are one quantity with one owner. WRITTEN DIRECTLY through the gate, in `perform`: wear
+    staged through `World.stage` at ENCOUNTER is never applied (`loop/encounter.py` has no `take_staged`; the accumulator is
+    RESOLVE-scoped, `World.stage`). No accumulator, no fixture and no ratio, and nobody is hurt or relocated: no `Person` and
+    no `travel_leg` is written. Every fall is read before any is applied, and each Site is its own Subject.
+
+    A SITE THAT WOULD NOT FALL IS NOT NAMED (no condition to lose, or a share that rounds the fall to 0); a subtree with none
+    that would declines `NO_CHANGE`, so the band's act is `march.refused`, as a band that moves nobody always has been.
+    [ASSUMPTION; medium; Jordan to correct; revert: name every garrison and let the gate's no-op refusal decline it.]"""
+    falls = [(s, _fall(w, s)) for s in garrison_sites(w, target)]
+    falls = [(s, n) for s, n in falls if n > 0]
+    if not falls:
+        return NO_CHANGE
+    kind = _band_kind(INVESTED)
+
+    def perform() -> None:
+        for s, n in falls:
+            s.condition = max(0, s.condition - n)
+    return Change(tuple(Subject.entity("sites", s.id, earns=kind, fields=("condition",)) for s, _ in falls), perform)
 
 
 def _ration_debits(w: "World", res: "Resolution") -> list:
