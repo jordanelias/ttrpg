@@ -50,8 +50,12 @@ def test_the_nine_seeded_arrangements_load():
     # deliberation with a ceremony interposed, appealable, reaching the realm.
     exc = A.ARRANGEMENTS["excommunication_deliberation"]
     assert exc["disposes"] == A.ARRANGEMENTS["inquisition_hearing"]["disposes"] == "ban"
-    assert (exc["disposal"], exc["floor"], exc["records_dissent"], exc["order"], exc["appeal_basis"],
-            exc["disposal_reach"]) == ("bench", "closed", False, "rank", "determine", "realm")
+    # v11 CR-34: the first `declared` row (C-7), `quorum: 2` -- `test_cr34_declared_disposal.py` reads the vote.
+    assert (exc["disposal"], exc["quorum"], exc["floor"], exc["records_dissent"], exc["order"],
+            exc["appeal_basis"], exc["disposal_reach"]) == (
+        "declared", 2, "closed", False, "rank", "determine", "realm")
+    assert [r for r, row in A.ARRANGEMENTS.items() if row["disposal"] == "declared"] == [
+        "excommunication_deliberation"]
     assert exc["interposed"] == ("procedure", "ceremony") and exc["term_required"] is True
     # v10 SC-04: `negotiation`, the one `mutual` disposal -- the deciders are the parties, so no bench
     # (`bench_basis: none`); §E.2's block (03_PARAMETERS.md:553-565) read key by key. `records_dissent: false`

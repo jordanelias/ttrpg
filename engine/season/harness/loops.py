@@ -114,6 +114,9 @@ STEM_READS = {
     "purview":      (("Office.exists", "?"),) + _TENURE,
     "bench":        (("Office.exists", "?"),) + _TENURE,
     "bench.size":   _TENURE,
+    # v11 CR-34: the live commits of the bench's members to an OUGHT about the party (`declared_votes`), and the row's `quorum:`
+    "declared.votes": _TENURE + (("Proposition.exists", "?"),),
+    "declared.quorum": (),                                # an arrangement row's own key: written by none
     "exists":       None,
 }
 

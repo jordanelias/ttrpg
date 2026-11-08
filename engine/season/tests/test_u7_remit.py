@@ -625,7 +625,10 @@ PETITION = "rec_petition"
 
 
 def _row_disposing(kind):
-    return next(name for name, row in sorted(ARRANGEMENTS.items()) if row["disposes"] == kind)
+    # v11 CR-34: a `declared` row needs its bench's votes (`test_cr34_declared_disposal.py`); these tests are about
+    # the kind a determination opens, so they take the first row disposing it that is NOT declared.
+    return next(name for name, row in sorted(ARRANGEMENTS.items())
+                if row["disposes"] == kind and row["disposal"] != "declared")
 
 
 def _petition(w, rid=PETITION, kind="petition"):

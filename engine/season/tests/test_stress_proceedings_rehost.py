@@ -164,6 +164,7 @@ import dataclasses                                                       # noqa:
 
 from ..data.rosters import DEGREE_BANDS                                 # noqa: E402
 from ..state.carriers import Act as _Act                                 # noqa: E402
+from ..state.carriers import Proposition, Tenure                         # noqa: E402
 from .test_sc01_speak import _docket, _speak                             # noqa: E402
 from .test_u7_remit import (                                             # noqa: E402
     JUDGE, OPENS, PARTY, SEAT, _determine, _edges, _fold, _kinds, _open, _petition, _world,
@@ -219,7 +220,7 @@ def test_st10_a_contested_speak_reaches_a_provider_and_comes_back_graded():
     assert folded == 40 and len(seen) >= 2, (folded, sorted(seen))
 
 
-def test_st14_a_verdict_is_a_tenure_its_determiner_opened_and_disposes_has_a_writer():
+def test_st14_a_verdict_is_a_tenure_its_determiner_opened_and_disposes_has_a_writer(monkeypatch):
     """RE-HOSTS ST-14 (`00_DERIVATION.md` §A.6). The tracer's finding (F-14, blocking): `determine` can
     GRADE a Tenure and cannot OPEN one, so *`disposes:` NAMES A WRITE AND HAS NO WRITER*. REVERSED by v9
     SC-03: `_eff_determine` opens the kind the docketed row `disposes:`. Asked of every seeded row that
@@ -241,6 +242,13 @@ def test_st14_a_verdict_is_a_tenure_its_determiner_opened_and_disposes_has_a_wri
             continue
         assert _kinds(_fold(w, d, _open("oc", arrangement=name, petition=_petition(w)))) \
             == ["case.opened"], name
+        if row["disposal"] == "declared":
+            # v11 CR-34: a declared row needs its `quorum` of the bench's live commits to an OUGHT about the party
+            # naming the kind it disposes; `tiny_world`'s bench is the Duke alone, so the row is read at quorum 1
+            # and he is the one vote (the clause itself is `test_cr34_declared_disposal.py`'s).
+            monkeypatch.setitem(row, "quorum", 1)
+            w.propositions["prop_vote"] = Proposition("prop_vote", "OUGHT", PARTY, row["disposes"], True, 0)
+            w.add_tenure(Tenure("cm_vote", "p_high", "prop_vote", "commit", since=0))
         out = _fold(w, d, _determine("dt"))
         assert _kinds(out) == ["matter.determined"] and out[0].degree in OPENS, (name, _kinds(out))
         edge, = _edges(w, row["disposes"])
