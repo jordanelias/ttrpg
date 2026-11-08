@@ -4405,7 +4405,7 @@ tables:
         "deed:commitment.ended": 0.8
         seize:          null    # reasoned (IN-12 step 6): the warrant is what licenses it, so it is neither a disagreeable act taken for an end nor one refused -- considered, no lean
         forge:           0.8    # carried: the purest means-to-ends act on the table
-        lie:             0.5    # CR-27 [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its six `null` twins, and `lie` joins `uncelled:`]: reasoned -- a falsehood told for an end is `forge`'s means-to-ends reading in the mouth, smaller (0.5 against 0.8) because it leaves no document behind
+        lie:             0.5    # CR-27 [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its six `null` twins, and `lie` joins `uncelled:`]: reasoned -- a falsehood told for an end is `forge`'s means-to-ends reading in the mouth, smaller (0.5 against 0.8) because it leaves no document behind. The plan's premise that CR-21 celled `tell` was false (`tell` is `uncelled:`); `lie` alone is celled, so where this axis weighs positive `lie` outscores an otherwise identical `tell`
         commit:         -0.8    # carried: binds regardless of what later calculation would recommend
         utter:          -0.7    # carried: the uttered word binds the utterer whatever advantage later counsels
         evade / defy:    0.7    # carried: putting your own calculus over a demand

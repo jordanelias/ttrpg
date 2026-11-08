@@ -281,7 +281,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
     His `effort` is his own act's, held with certainty like his pool (CP-T01-05)."""
     key = VERB_CAPABILITY.get(verb)
     opposition = None
-    if person_subject and key:
+    if person_subject and key and subject != p.id:
         held = [c for c in p.ledger
                 if c.subject == subject and c.predicate == CAPABILITY_CLAIM + key]
         if not held:

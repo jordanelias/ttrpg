@@ -319,8 +319,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # side on another operand contests against THAT (`tell`'s `to`),
             # so its `subject` is a topic and a person may tell somebody about themselves; the
             # counterparty rule below still declines the person as their own second side.
-            # CP-T05-02 (iii): ...EXCEPT A ROW DECLARING `subject_may_be_self` (`speak`: the docketed party
-            # answers to his own matter). The column is the row's own, never a verb name.
+            # CP-T05-02 (iii): ...EXCEPT A ROW DECLARING `subject_may_be_self` (`speak`: a person may answer for himself; the
+            # fold admits it only for a docketed party). The column is the row's own, never a verb name.
             if opposes_subject and subject == p.id and not row.subject_may_be_self:
                 continue
             # ⚠ OPERANDS BEFORE THE BELIEF TEST, AND THE ORDER IS THE POINT. Clause 4 asks

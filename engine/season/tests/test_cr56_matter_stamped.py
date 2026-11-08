@@ -105,6 +105,7 @@ def test_the_stamp_displaces_no_question(monkeypatch):
     with_stamp = world_q.questions_for(w, duke)
     monkeypatch.setattr(world_q, "matters_awaiting", lambda w_, p_: ())
     without = world_q.questions_for(w, duke)
+    assert len(without) >= 2, "one question cannot be displaced: the order is unobserved"
     assert [q.id for q in with_stamp] == [q.id for q in without]
     assert set(with_stamp[0].classes) - set(without[0].classes) == {("D", "Rung")}
 

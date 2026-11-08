@@ -28,6 +28,7 @@ from __future__ import annotations
 import pytest
 
 from ..data import arrangements as A
+from ..data.requires import UNKNOWN
 from ..data.verbs import VERB_TABLE
 from ..queries import world_q
 from ..queries.world_q import WorldReader
@@ -203,6 +204,24 @@ def test_control_3_at_quorum_one_with_the_determiner_committed_the_result_equals
     assert _kinds(declared) == _kinds(bench) == ["matter.determined"], (_kinds(declared), _kinds(bench))
     assert declared_bans == len(_bans(w2)) == 1
     assert declared[0].degree == bench[0].degree
+
+
+def test_an_ambiguous_docket_is_refused_and_reads_unknown_not_a_guessed_row():
+    """TWO docket items for one matter, one under the declared row (a hand-planted docket: `open_case` declines a
+    matter already docketed). `declared_sitting` answers `UNKNOWN` rather than choosing the declared row, and
+    `_eff_determine` declines it, so even with the quorum of votes in hand nothing opens. PLANTED FAILURE:
+    `declared_sitting` returning the declared row whatever else the matter is docketed under -- the first
+    assertion, red."""
+    w, d = _church_world()
+    _vote_against(w, "p_low")
+    _vote_against(w, "p_other")                     # two live votes: the declared row alone would admit
+    w.docket.append({"date": None, "matter": PARTY, world_q.DOCKET_ARRANGEMENT: None,
+                     world_q.DOCKET_PETITION: None})
+    assert world_q.docketed_under(w, PARTY) == {ROW, None}
+    assert world_q.declared_sitting(w, PARTY) is UNKNOWN
+    out = _determine_now(w, d)
+    assert _kinds(out) == ["determine.refused"], _kinds(out)
+    assert _bans(w) == [] and len(world_q.docketed(w, PARTY)) == 2, "a refused determination opened a ban or moved the docket"
 
 
 def test_the_tally_is_stored_nowhere():

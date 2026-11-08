@@ -13,8 +13,9 @@ true.
   * PLANTED FAILURE (run 2026-11-08, reverted): the row's refusal kind put back to `news.untold` (`revert_cp_t05_03`)
     -- the lost telling re-forms every round and the first test reds on its own count. That arm is also run in the
     suite, as the control that the count can see a re-formation.
-  * THE CONSEQUENCE STATED: `news.untold` is no longer a refusal kind, so a claim of it is a deed (`is_deed`), valued
-    by `tell`'s alignment as `argument.lost` is by `argue`'s; `tell.refused` is no deed.
+  * THE CONSEQUENCE STATED: `news.untold` is no longer a refusal kind, so a claim of it is a deed (`is_deed`); since
+    CR-27 a paired kind (two emitters), judged only for a `seen`-paired doer through its `deed:` cell (none
+    authored); `tell.refused` is no deed.
 """
 from __future__ import annotations
 

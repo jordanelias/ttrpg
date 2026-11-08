@@ -28,7 +28,7 @@
 # <tenure kind> | Record | none` enum at all -- both are real, corpus-level inconsistencies, named
 # rather than guessed past. `disposal: declared` (the ONE new value `19_PLAN.md` step 11 adds) has NO
 # worked example anywhere in the source; the loader accepts it (with `quorum:` required) but no row
-# here uses it. The remaining seven bench-disposal games are unseeded for the same placeholder/
+# here used it until v11 CR-34 (`excommunication_deliberation`, below). The remaining seven bench-disposal games are unseeded for the same placeholder/
 # ambiguity reasons, plainly, not because the loader could not carry them -- "the loader accepts a
 # thirteenth arrangement with no code change" is the artifact, and it is true of any well-formed row,
 # seeded or not.

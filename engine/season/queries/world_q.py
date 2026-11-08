@@ -441,7 +441,8 @@ def lapsing_items(w: World, lapse: Optional[int]) -> list[tuple]:
         is the matter or the petition it rose from, as `docketed_by` matches them; failing that, the
         Date its slot was formed for (`due_at`);
       * an empty slot: its Date's `due_at`, the `docket.formed` CALENDAR wrote for it is the cause.
-    An item neither reaches (a hand-planted dateless one with no Event) has no beginning to count
+    An item neither reaches (a hand-planted dateless one with no Event, or a dateless item a
+    determination emptied (`_eff_determine` sets `matter` None; it never lapses)) has no beginning to count
     from, so it does not lapse: an unknown age is not an old one. A dead party, a venue that seats no
     bench and a matter that is no person all hold their item the same way and lapse by the same
     count; the rule does not ask why `determine` has not cleared it."""
@@ -456,7 +457,7 @@ def lapsing_items(w: World, lapse: Optional[int]) -> list[tuple]:
             if ref is not None:
                 by_ref[ref] = e
         elif e.kind == "docket.formed":
-            formed[(anchor_of(w, e), e.emitted_at)] = e
+            formed.setdefault((anchor_of(w, e), e.emitted_at), e)
     out = []
     for item in w.docket:
         date = w.dates.get(item.get("date")) or {}

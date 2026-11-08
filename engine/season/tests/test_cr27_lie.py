@@ -19,8 +19,6 @@ from __future__ import annotations
 
 import dataclasses
 
-import pytest
-
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import WriteClass
 from ..data.verbs import LIE_VERBS, VERB_TABLE
@@ -250,11 +248,12 @@ def test_a_lie_told_to_attunement_2_and_6_at_the_shipped_gain_is_held_equal():
     assert got[HOLDER] == got[KNOWNOT], got
 
 
-@pytest.mark.xfail(strict=True, reason=(
-    "CR-19's `competence` cannot tell a lie from a truth (`H-200`, ED-IN-0327): at a live gain the receiver at "
-    "Attunement 6 holds a lie HIGHER than the one at 2. This is the falsifier the flip must pass, not a shipped "
-    "behaviour (CR-19 ships at gain 0); it goes green only when CR-83's design gives the separator, and a strict "
-    "xfail then fails loudly so the flip is declared."))
-def test_a_lie_told_to_attunement_2_and_6_at_a_live_gain_is_not_held_higher_by_the_one_at_6():
+def test_a_lie_told_to_attunement_2_and_6_at_a_live_gain_is_held_higher_by_the_one_at_6_until_cr83():
+    """THE MEASURED GAP, PINNED (`H-200`, ED-IN-0327): CR-19's `competence` cannot tell a lie from a truth, so at a
+    live gain the receiver at Attunement 6 holds a lie HIGHER than the one at 2. The falsifier guards the flip
+    CR-83's design schedules (`workplans/valoria_master_workplan_v11_part4.md:119`), not the shipped value
+    (CR-19 ships at gain 0). THIS ASSERT TURNS RED WHEN CR-83 SUPPLIES THE LIE/TRUTH SEPARATOR; invert it then to
+    the plan's form, `got[KNOWNOT] <= got[HOLDER]` (plan rule P8 forbids a standing xfail, so the gap is asserted
+    as it is)."""
     got = _two_hear_a_lie(0.5)
-    assert got[KNOWNOT] <= got[HOLDER], got
+    assert got[KNOWNOT] > got[HOLDER], got

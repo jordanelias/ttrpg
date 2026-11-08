@@ -29,8 +29,9 @@ from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.matter import _die
 from ..decision import make_chooser
 from ..queries import world_q
-from ..state.carriers import Record, Tenure
+from ..state.carriers import Act, Record, Tenure
 from ..state.ids import H, ROOT, draw_factory
+from .test_cr56_matter_stamped import _convene_at, _next_calendar
 from .test_sc01_fired_slot import VENUE, _convene, _next_season_calendar
 from .test_u7_remit import DUKE, PARTY, SEAT, _fold, _kinds, _open, _world
 
@@ -127,6 +128,27 @@ def test_an_empty_slot_lapses_too_chained_on_the_docket_formed_that_made_it():
         _season(w, d)
     ev, = _lapsed(w)
     assert w.docket == [] and ev.causes == [formed.id] and world_q.anchor_of(w, ev) == VENUE
+
+
+def test_a_slot_a_determination_emptied_lapses_on_the_event_that_formed_it_not_the_re_slot_at_its_tick():
+    """Two `docket.formed` at one (venue, tick): the slot's own, and CALENDAR's re-slot of a waiting matter
+    (CR-56). The re-slotted item is then emptied (a determination's effect, by hand here), and its lapse
+    `causes` the slot-forming Event. PLANTED FAILURE: `formed[...] = e` -- the later Event wins, red."""
+    w, d = _world(docket_lapse=2)
+    assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]       # no slot open: a waiting, dateless item
+    did = _convene_at(w, d, VENUE)
+    cal = _next_calendar(w, d)
+    assert _kinds(cal) == ["date.fired", "docket.formed", "docket.formed"], _kinds(cal)
+    _, slot_formed, reslotted = cal
+    item, = w.docket
+    assert item["date"] == did and item["matter"] == PARTY, "the waiting matter did not take the slot"
+    item["matter"] = None                                            # the determination emptied the slot
+    since = w.dates[did]["due_at"]
+    while w.tick < since + 3:
+        assert w.docket == [item] and not _lapsed(w)
+        _season(w, d)
+    ev, = _lapsed(w)
+    assert w.docket == [] and ev.causes == [slot_formed.id] and ev.causes != [reslotted.id], ev.causes
 
 
 def test_the_lapse_leaves_the_neighbouring_item_alone():
@@ -230,6 +252,24 @@ def test_a_stage_whose_winder_was_gone_at_its_tick_matures_once_when_he_is_back(
     assert len(_matured(w, key)) == 1
     _season(w, d)
     assert len(_matured(w, key)) == 1
+
+
+def test_a_stage_wound_by_an_act_matures_once_though_no_logged_event_touches_the_record():
+    """The winder is an ACT id, and no logged Event names the Record: `term.matured` then `causes` the act, so
+    `anchor_of` answers the MAKER and not the Record (`matured_terms`' docstring, H-129's shape). The once-guard
+    must read the Event that WROTE the Record (`last_emission_of(..., written=True)`). PLANTED FAILURE: the
+    unkeyed `last_emission_of("term.matured", rid)` -- it finds no maturation, and the stage matures at every
+    barrier, red."""
+    w, d = _world()
+    w.acts.append(Act("act_wind", DUKE, "create_record"))
+    key = _staged(w, d, [(1, "stage1", "act_wind")])
+    assert not [e for e in w.log if any(c.subject == key for c in e.changes)], "an Event already names the Record"
+    _season(w, d)
+    ev, = _matured(w, key)
+    assert ev.causes == ["act_wind"] and world_q.anchor_of(w, ev) == DUKE, "the act is not the cause"
+    for _ in range(3):
+        _season(w, d)
+    assert len(_matured(w, key)) == 1, "a stage wound by an act matured again at a later barrier"
 
 
 # ======================================================================================

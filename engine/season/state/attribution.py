@@ -221,8 +221,8 @@ def _a_stage_unmatured(w, rec) -> bool:
     """IS SOME DECLARED STAGE OF `rec` NOT YET RIPENED? -- `matured_terms`' count against the stage list,
     the log being the ruled carrier of *how many have ripened* (`matured_terms`' docstring). A Record
     with no stage has none unmatured. Two shortcuts, each EXACT rather than approximate, so the log is
-    scanned only once every stage's tick has come: MATTER ripens a stage only AT its own due tick
-    (`loop/matter.py`, `due != w.tick: continue`), so a stage due after now cannot have ripened; and
+    scanned only once every stage's tick has come: MATTER ripens a stage only once its due tick has come
+    (`loop/matter.py`, `due > w.tick: continue`, v11 CR-55), so a stage due after now cannot have ripened; and
     `Record.matured` is set at every ripening (the same write), so a Record still `False` has ripened
     none."""
     stages = list(rec.stages or ())

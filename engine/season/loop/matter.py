@@ -351,7 +351,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
             if due > w.tick:
                 continue
             if matured_by is None:
-                last_id = w.last_emission_of("term.matured", rid)
+                last_id = w.last_emission_of("term.matured", rid, written=True)
                 last_ev = world_q.event_by_id(w, last_id) if last_id else None
                 matured_by = last_ev.emitted_at if last_ev is not None else -1
             if due <= matured_by:

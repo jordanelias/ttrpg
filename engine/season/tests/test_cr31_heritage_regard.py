@@ -166,3 +166,14 @@ def test_the_regard_and_declared_arms_read_the_term_and_legacy_does_not():
         assert _stance_arm(p, cand, fx, None) == (0.5 * STANCE_MAX if reads else 0.0), arm
         assert _stance_arm(p, cand, _fx(0.0, stance_polarity=arm), None) == 0.0, arm
     assert DEFAULT_FIXTURES.get("stance_polarity") == "declared" and DEFAULT_FIXTURES.get("heritage_gain") == 0.5
+
+
+def test_an_opponent_row_reads_the_term_negated_at_declared_and_not_at_regard():
+    """`fight` is a row whose subject is the act's opponent (`options.subject_is_opponent`): `declared` NEGATES the
+    term there and `regard` keeps `+`. PLANTED FAILURE: the negation removed from `_stance_arm` -- the `declared`
+    arm reads `+0.5 * STANCE_MAX`, red."""
+    p = _hearer("h", {"einhir_restoration": 5})
+    cand = SimpleNamespace(verb="fight", subject=TELLER)
+    assert _stance_arm(p, cand, _fx(0.5, stance_polarity="declared"), None) == -0.5 * STANCE_MAX
+    assert _stance_arm(p, cand, _fx(0.5, stance_polarity="regard"), None) == 0.5 * STANCE_MAX
+    assert _stance_arm(p, cand, _fx(0.0, stance_polarity="declared"), None) == 0.0

@@ -68,6 +68,15 @@ def test_a_row_with_opposed_by_spirit_opposes_at_the_spirit_and_the_row_without_
     assert ob == 3.0, f"Spirit 6 halves to 3; read {ob}"                                   # not capped: the roller's pool is 7
 
 
+def test_the_column_replaces_the_own_attribute_and_is_not_the_larger_of_the_two(monkeypatch):
+    """The own attribute 9 above Spirit 6: `opposed_by` REPLACES it, so the opposition reads 6.0, not the larger 9.0."""
+    w = _w()
+    w.persons[HOLDER].attributes = {OWN: 9, SPIRIT: 6}
+    assert sigma._opposition_of(w, HOLDER, TELL) == 9.0                                    # the row without it: the own
+    monkeypatch.setattr(pool, "VOCATION_OPPOSED_BY", {VOC: SPIRIT})
+    assert sigma._opposition_of(w, HOLDER, TELL) == 6.0
+
+
 def test_the_column_moves_the_opposition_and_not_the_pool(monkeypatch):
     w = _w()
     before = sigma.faculty(w, w.persons[HOLDER], TELL)

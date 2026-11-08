@@ -37,7 +37,7 @@ So for a **`speak`** the bench reads only the commit term: what each seated memb
 | P3 | the mirror: `{(c.subject, c.predicate) for c in opp.ledger}` | **the opponent's ledger: F8's sharpest breach (H-216 (7))** | **the opponent's commits:** `{(P.subject, P.predicate)}` over every live `commit` Tenure whose subject is the opponent (`P = w.propositions[t.object]`). The key is the same `(subject, predicate)` the base uses, and any value counts, as at the base (H-216 limit (2)). The opponent mirrors a proof by answering it on the record: a commit to a Proposition on that subject and predicate, for example a denial (`value` False). A non-person opponent has no edges and mirrors nothing, as at the base. |
 | P4 | `remove_weight(c.source)` per unmirrored proof | the actor's own claims | unchanged |
 
-**Consequence, stated: the mirror is no longer total.** At the base it zeroes every proof, because WITNESS deposits a doer's own act to him (H-216 (4); 49 of 49 at the B-P measurement). After the re-source it zeroes a proof only where the opponent has committed on that pair. §3's realm reading shows that no Proposition at seed 0 has a deed-kind predicate. So in computed play `proofs` becomes non-zero for the first time, wherever a `speak`'s actor holds an attributed deed of the subject before a seated bench. This is the build's largest realm mover, and the build declares it.
+**Consequence, stated: the mirror is no longer total.** At the base it zeroes every proof, because WITNESS deposits a doer's own act to him (H-216 (4); 49 of 49 at the B-P measurement). After the re-source it zeroes a proof only where the opponent has committed on that pair. §3's realm reading shows that no Proposition at seed 0 has a deed-kind predicate. So in computed play `proofs` becomes non-zero for the first time, wherever a `speak`'s actor holds an attributed deed of the subject before a seated bench. This is expected to be the build's largest realm mover (unmeasured; `proofs` last read at H-216), and the build declares it.
 
 ## 2. The route a bench member's commit gives
 
@@ -56,7 +56,7 @@ The source text (the obstacle reading live commits to a charge) assumes a charge
 
 **What it excludes, and why:**
 
-- **`OUGHT` commits count 0 in the room.** They are what a member wants done, and CR-34 counts them as votes, in `determine`'s `quorum` conjunct at a `declared` sitting. Counting them here as well would put one commit in two operands of one verdict. It would also need a valence for a wish whose sign depends on whether the predicate harms its subject, a second ladder with no owner. This also closes the loyal-creed hazard: the realm's creed commits (`carries the creed of`, subject the leader, `OUGHT`) do not read as regard. `[ASSUMPTION; medium; Jordan to correct; revert: an OUGHT commit whose predicate names a verb contested against its subject (`VerbRow.opponent_operand() == "subject"`) counts −1 per commit, on a NUMBER row]`.
+- **`OUGHT` commits count 0 in the room.** They are what a member wants done, and CR-34 counts them as votes, in `determine`'s `vote` conjunct at a `declared` sitting. Counting them here as well would put one commit in two operands of one verdict. It would also need a valence for a wish whose sign depends on whether the predicate harms its subject, a second ladder with no owner. This also closes the loyal-creed hazard: the realm's creed commits (`carries the creed of`, subject the leader, `OUGHT`) do not read as regard. `[ASSUMPTION; medium; Jordan to correct; revert: an OUGHT commit whose predicate names a verb contested against its subject (`VerbRow.opponent_operand() == "subject"`) counts −1 per commit, on a NUMBER row]`.
 - **No reconstruction from the log.** Rebuilding what a judge saw from `w.log` and `epistemic.observers_for` would be a second store of the judge's knowledge, and F8 by another door. The route does not do it.
 
 **For `speak`, then:** the bench reads its members' HOLDS commits about the speaker and nothing else. That is the answer to the instruction's `speak` question.
@@ -78,6 +78,7 @@ File: `engine/season/tests/test_sc02_reception.py` (new tests beside the `22a` o
   - J1's own claim counts through the own term, at `deed_term`'s value.
   - `J2` gets the same claim in his ledger, and the total does not change.
 - **Ended commit.** World B with `J1`'s commit closed (`until` set) reads as World A.
+- **One judge, two Propositions.** One judge's commits to two Propositions of the same (subject, predicate, value) count once: the route dedupes per judge by that key.
 
 ### 3b. Control
 
