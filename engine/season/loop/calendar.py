@@ -89,7 +89,12 @@ def calendar(self, token: Token) -> list[Event]:
     # taken: unmeasured against the hash).
     # Slots open here (the ones just formed) and wherever a determination emptied one (RESOLVE). One gate
     # write per matter, `docket.formed` at the venue, chained on that venue's firing as the slot's own is.
+    # An item the lapse is about to take (MATTER runs next, this tick) is not re-slotted: it would fill a sitting's
+    # slot only to leave with it, and the sitting forms no other (B10-13 Phase 3).
+    lapsing = {id(i) for i, _ in world_q.lapsing_items(w, w.fixtures.get("docket_lapse"))}
     for item in world_q.undated_matters(w):
+        if id(item) in lapsing:
+            continue
         slot = world_q.slot_for(w, item["matter"])
         if slot is None:
             continue

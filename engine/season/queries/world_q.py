@@ -471,7 +471,10 @@ def lapsing_items(w: World, lapse: Optional[int]) -> list[tuple]:
         date = w.dates.get(item.get("date")) or {}
         ev = None
         if item.get("matter") is not None:
-            ev = by_ref.get(item["matter"]) or by_ref.get(item.get(DOCKET_PETITION))
+            # THE LATER of the two: a `carry`'s act subject is the petition, an `open_case`'s the matter, and a matter
+            # carried after an older `open_case` of it must age from the carry, not from the stale case (B10-13 Phase 3).
+            cands = [by_ref[r] for r in (item["matter"], item.get(DOCKET_PETITION)) if r is not None and r in by_ref]
+            ev = max(cands, key=lambda c: c.emitted_at) if cands else None
         since = ev.emitted_at if ev is not None else date.get("due_at")
         if ev is None and since is not None:
             ev = formed.get((slot_venue(w, item), since))
