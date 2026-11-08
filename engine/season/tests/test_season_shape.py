@@ -9884,8 +9884,8 @@ def test_k1_control_an_all_absent_realm_builds_the_record_it_always_built(monkey
     """CONTROL: no authored attribute -> `attributes` stays the default `()` and building the input moves no
     `content_hash` (`build_realm(0)` ships `cast_attributes` OFF: nobody is authored). A record with attributes authored
     only on keys the module has no field for (a social one) is fought exactly as the no-attribute record is, which
-    exercises the key filter; the fight itself differs from the pre-batch fight (PC-18 to PC-20 moved every default
-    fighter's outcome), so this control compares attributes against attributes, not against the old tree."""
+    exercises the key filter; the fight itself differs from the pre-batch fight (PC-20 (1)'s head weighting moves a default
+    fighter's blows; PC-18 (1) is equal at the defaults), so this control compares attributes against attributes, not against the old tree."""
     from ..harness.populated import build_realm
     from ..seam.wrappers import combat as C
     from ..seam.wrappers._entry import entry_for

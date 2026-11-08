@@ -96,6 +96,7 @@ from ._entry import entry_for
 from .pool import faculty
 
 _END_KEY = attribute_key("Endurance")      # the registry key of `end` (`descriptors`, the one owner), not a typed literal
+assert _END_KEY, "descriptors names no Endurance attribute: party_end would read the default for every person"
 _PROVIDER = "personal_combat"
 _PRIZE = "the body"                 # the prize row this provider deals (`rosters.yaml`)
 PROVIDER = _PROVIDER                # the name `odds_of` asks `_rolled_as` for (a prize row's `provider:`)
