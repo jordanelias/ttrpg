@@ -1,4 +1,4 @@
-# Valoria master workplan v11 — the attribute-rulings fold: CR-92 to CR-96, PC-21 and PC-22 (T12 · lane IN; PC-18 to PC-20 built at B10-11b and left this file at its close)
+# Valoria master workplan v11 — the attribute-rulings fold: CR-92 to CR-95, PC-21 and PC-22 (T12 · lane IN; PC-18 to PC-20 built at B10-11b and CR-96 at B10-13, and left this file at those closes)
 ## Status: PROPOSED, ratified on merge (ED-1094, ED-IN-0348).
 ## Lane: IN (cross-cutting), with PC, SC and FI.
 ## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: ED-IN-0347 (Jordan's attribute rulings of 2026-11-05, recorded as a set: `proposals/2026-11-05-attribute-rulings-by-subject.md`); ED-IN-0348 (the record of this fold). The handles CR-92 to CR-96 and PC-18 to PC-21 allocate no ledger id (P4).
@@ -51,9 +51,9 @@
 
 ### CR-95 — Spirit against circumstance and influence (IN/PC/SC) · BATCH B10-19 (DESIGN-FIRST; its combat half after B10-11b, its social half after SC-02's re-source; builds slot by R8) · STATE DESIGN-FIRST · R —
 - WHAT: AR-44. Spirit resists influence and compulsion, tolerates harm and strain, and gets good results despite poor circumstances, "ignoring obstacle modifiers or adding modifiers to dice pool". Combat already reads Spirit as strain (`combatant.py:20, 34-37, 45-47, 147`); resistance and circumstance are absent (adj §1, AR-44 row).
-- LANDED ALREADY: `register_pool_addend` (`sigma.py:133`); the instance modifiers (`roll.py:122-130`; combat's wound term `combat_systems.py:1044`, ED-1041); after B10-13's first commit, CR-96's `opposed_by` column.
-- REMAINING UNBUILT: (design) ONE design file under `proposals/`, no code: (1) which verbs are opposed by Spirit (influence and compulsion: the persons-targeted rows CR-20 lands), written as `opposed_by` values on CR-96's column; (2) which ADVERSE instance modifiers Spirit discounts, never `base_Ob`, never TN, never below `base_Ob` or `OB_MIN` (adj §2.2 (ii)); (3) whether a pool addend is used anywhere instead; (4) the Grace and Spirit boundary (adj §2.2 (iv)). The design is run through `resolution-diagnostic` and carries its output as evidence (`CLAUDE.md` §9).
-- GATE: after B10-10's close; the combat half after B10-11b closes (PC-19's and PC-20's terms change the same sigma); the social half after SC-02's re-source. NEEDS: CR-20 (landed `c7764a5a`) (read, unchanged), CR-96.
+- LANDED ALREADY: `register_pool_addend` (`sigma.py:133`); the instance modifiers (`roll.py:122-130`; combat's wound term `combat_systems.py:1044`, ED-1041); CR-96's `opposed_by` column (landed `c0baed2c`).
+- REMAINING UNBUILT: (design) ONE design file under `proposals/`, no code: (1) which verbs are opposed by Spirit (influence and compulsion: the persons-targeted rows CR-20 lands), written as `opposed_by` values on CR-96's column (landed `c0baed2c`); (2) which ADVERSE instance modifiers Spirit discounts, never `base_Ob`, never TN, never below `base_Ob` or `OB_MIN` (adj §2.2 (ii)); (3) whether a pool addend is used anywhere instead; (4) the Grace and Spirit boundary (adj §2.2 (iv)). The design is run through `resolution-diagnostic` and carries its output as evidence (`CLAUDE.md` §9).
+- GATE: after B10-10's close; the combat half after B10-11b closes (PC-19's and PC-20's terms change the same sigma); the social half after SC-02's re-source. NEEDS: CR-20 (landed `c7764a5a`) (read, unchanged); CR-96 (landed `c0baed2c`).
 - EXIT and FALSIFIER: the file states (1) to (4) with falsifiers; the diagnostic's report shows no composed obstacle below `base_Ob` at any Spirit and modifier; CONTROL: Spirit's terms at 0 reproduce the base hash. No code.
 - HASH MOVERS: the design none; (1)'s data edit a MOVER wherever a resisting person has authored Spirit; each build declared.
 - HOLES AND LEDGER IDS: ED-IN-0347; ED-1041; ED-IN-0251.
@@ -61,19 +61,6 @@
 - RE-BASE: `_opposition_of`, `obstacle`, the wound term by symbol.
 - BUILDER: opus; `valoria-author`; the diagnostic run sonnet.
 - SOURCE: AR-44; adj §2.2 (ii), (iv); map F5, F21 (reference).
-
-### CR-96 — The opposing attribute, and the vocation rows re-read against the rulings: a follow-on to CR-20's landed carrier (IN/SC) · BATCH B10-13 (first, EQUAL, ahead of SC-02: CR-96 → SC-02 → …) · STATE EDIT (data and one reader) · R R-09 (contributor)
-- WHAT: AR-44, AR-16, AR-24, AR-29 (ED-IN-0347) against what B10-10 lands. `_opposition_of` (`seam/wrappers/sigma.py:163-176`) reads the party's key for the same verb; AR-44 makes Spirit the attribute that resists influence. CR-20 (B10-10, unchanged) lands one base attribute per vocation, chosen by its judgment-tier verify pass before these rulings could be read into it.
-- LANDED ALREADY: by B10-10's close, `rosters.yaml`'s `vocation_attribute` rows and `_opposition_of` reading the authored attribute (CR-20).
-- REMAINING UNBUILT: (1) an optional `opposed_by:` per `vocation_attribute` row, one of the ten keys (the loader refuses any other), read by `_opposition_of`; absent means the row's own attribute, and every row ships absent (CR-95 writes Spirit where it applies). (2) Each landed row re-read against the RULED attributes (forgery and other precise-hand work on Coordination, AR-16; observing on Perception, AR-24; influencing on Presence, AR-29); a row is changed only where it contradicts one, and each change is listed in the commit body; none changed is a valid outcome.
-- GATE: after B10-10's close; B10-13's first commit, so SC-02 and CR-27 read the column. NEEDS: CR-20 (landed `c7764a5a`) (read, unchanged).
-- EXIT and FALSIFIER: (1) a hand-built row with `opposed_by: attr.mind.will` makes a party with Spirit 6 and the verb's attribute 2 oppose at 3, and the row without it at 1; planted failure: the column ignored reddens; an `opposed_by` outside the ten is refused at import. CONTROL: (1) alone reproduces the pre-item hash. (2) each changed row's verb rolls the new attribute for an authored person.
-- HASH MOVERS: (1) EQUAL; (2) a declared MOVER only if a row changes.
-- HOLES AND LEDGER IDS: H-127 (`score/2`); ED-IN-0347.
-- ASKS ATTACHED: none.
-- RE-BASE: CR-20's landed rows and `_opposition_of` by symbol.
-- BUILDER: second tier; (2) to a third-tier (judgment) verify pass.
-- SOURCE: AR-16, AR-24, AR-29, AR-44; adj §2.1, §2.2 (iv).
 
 ### PC-21 — The opponent model: familiarity grown in the season, Attunement's anticipation, the combatant's state (PC/IN) · BATCH B10-19 (DESIGN-FIRST; drafted beside B10-11b; its builds slot by R8 into the next batch editing `modules/combat` and `seam/wrappers/combat.py`) · STATE DESIGN-FIRST · R —
 - WHAT: AR-38, AR-39, AR-41, AR-42, AR-43, AR-45 to AR-48. Familiarity is two module constants keyed by tradition labels (`modules/combat/traditions.py:30-56`), read at `combat_systems.py:1128, 1057, 1059`; a missed read guesses uniformly (`:1136`); no quantity reads the opponent's state or nearness to yielding.

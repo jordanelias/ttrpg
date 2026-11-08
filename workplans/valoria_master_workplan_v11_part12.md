@@ -53,9 +53,9 @@
 | CP-T04-08 | B10-12 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T04-09 | B10-12 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T04-10 | B10-12 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T05-01 | B10-13 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T05-02 | B10-13 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T05-03 | B10-13 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T05-01 | B10-Z (HELD, waiting on SC-02's approved design; left B10-13 at its close) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T05-02 | B10-13 (parts (ii) and (iii) CLOSED, `c627426a`); part (i) B10-Z (HELD) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T05-03 | B10-13 (CLOSED, `01ffc567`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T05-04 | B10-05 (CLOSED) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T06-01 | B10-14 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T06-02 | B10-14 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
@@ -129,14 +129,14 @@
 | CR-24 | B10-12 | new from the decision round (`-04`; M4 Ask B (b)): winners take their engine casualties |
 | CR-25 | B10-09 (close two CLOSED, `1ef8d273`) | new from the decision round (`-04`; CR-11's build, M8): a computed `establish` founds an office over a holding (close two, after CR-11) |
 | CR-26 | B10-09 (close one CLOSED, `f9e4cef`) | new from the decision round (`-04`; IN-61 check (4)): the heir hears the vacancy; MEASURE (a test), directly before IN-61 |
-| CR-27 | B10-13 | new from the decision round (`-04`; M9): `lie`, a spoken falsehood on a held cell claim |
+| CR-27 | B10-13 (CLOSED, `db1dc1f2`) | new from the decision round (`-04`; M9): `lie`, a spoken falsehood on a held cell claim |
 | CR-28 | B10-09 (close two CLOSED, `1ef8d273`; moved from B10-05 at its close: built, falsified and reverted there, H-156; re-taken behind CR-10) | new from the decision round (`-04`; M19): G-04(a), own-ledger Propositions stamp as class `Proposition` |
 | CR-29 | B10-14 | new from the decision round (`-04`; M11): the event-kind reach channel, then `chronicle`'s paired deletion; released from M11 (its other needs stay) |
 | CR-30 | B10-10 (CLOSED, `0533c4da`; landed `e03c7129`) | new from the second decision round (`-04`; item 1): `Person.heritage`, descent as a read-off field, the `marks` term's carrier; inside CR-20's commit window, one combined `Person` repr re-pin; `heritage_roster` is not IN FLUX: Jordan confirmed its five members as written (ED-IN-0301, `-05` §1a (a)), and a Godot binding is no longer barred |
-| CR-31 | B10-13 | new from the second decision round (`-04`; item 1): the caste estimate, a heritage regard term (`heritage_gain`); last in B10-13, after CR-27 |
+| CR-31 | B10-13 (CLOSED, `f1319502`) | new from the second decision round (`-04`; item 1): the caste estimate, a heritage regard term (`heritage_gain`); last in B10-13, after CR-27 |
 | CR-32 | B10-17 | new from the second decision round (`-04`; item 1): Standing ladders as posts on seats; livery in `marks`; `rank` within one scale (H-181's producer); directly after CP-T09-06 |
 | CR-33 | B10-10 (CLOSED, `0533c4da`; landed `6b068d8a`) | new from the second decision round (`-04`; item 1): the 34 lifepaths as creation templates (`lifepath:`, `lifepath_templates`); after CR-19, before CL-CHAR's check |
-| CR-34 | B10-13 | new from the second decision round (`-04`; item 5): the declared disposal is read, a vote at a sitting counts live commits (C-7; H-161); after SC-04; hash EQUAL, realm reach 0 |
+| CR-34 | B10-13 (CLOSED, `67f118dd`) | new from the second decision round (`-04`; item 5): the declared disposal is read, a vote at a sitting counts live commits (C-7; H-161); after SC-04; hash EQUAL, realm reach 0 |
 | CR-35 | B10-17 | new from the second decision round (`-04`; item 3): an elected seat is filled by its faction's bench; the contested succession; H-217 closes here; its gate arm and H-217 clause: H-L0-8 applied in PR #507, so they build in the ordinary way (the rows' shipped state is whatever the position's own falsifier and control say) |
 | CR-36 | B10-17 | new from the second decision round (`-04`; item 3): nominate-then-confirm, the `nominated` basis and the `resolution` Record kind; after CR-35 |
 | CR-37 | B10-17 | new from the second decision round (`-04`; item 3): the throne revoked by joint concurrence (`joint_concurrence`); `depose` CLOSED (§2); H-L0-9 applied in PR #507 |
@@ -157,8 +157,8 @@
 | CR-52 | B10-18b | new from the R-05 fold (`-04`): the menu door, the preset order of battle through `dispatching_chooser` |
 | CR-53 | B10-18b | new from the R-05 fold (`-04`): `destroy_record`'s sink arm switched on |
 | CR-54 | B10-18b | new from the R-05 fold (`-04`): the `revoke` vacancy motive, design-first |
-| CR-55 | B10-13 | new from the build-all fold of 2026-11-02 (`-04`): a matter lapses visibly: a dead party, a venue with no bench, an overdue stage (`matter.lapsed`); MATTER matures on `<=`, once; after SC-04; declared mover |
-| CR-56 | B10-13 | new from the build-all fold of 2026-11-02 (`-04`): the matter is stamped where it waits (reasons-to-convene RL1, RL2; RL5 only if measured); after CR-55; declared mover |
+| CR-55 | B10-13 (CLOSED, `eb76f57f`) | new from the build-all fold of 2026-11-02 (`-04`): a matter lapses visibly: a dead party, a venue with no bench, an overdue stage (`matter.lapsed`); MATTER matures on `<=`, once; after SC-04; declared mover |
+| CR-56 | B10-13 (CLOSED, `6e9550c4`) | new from the build-all fold of 2026-11-02 (`-04`): the matter is stamped where it waits (reasons-to-convene RL1, RL2; RL5 only if measured); after CR-55; declared mover |
 | CR-57 | B10-18c | new from the build-all fold of 2026-11-02 (`-04`): a petition is addressable and deliverable; reuses CR-48's `give` occasion; declared mover |
 | CR-58 | B10-18c | new from the build-all fold of 2026-11-02 (`-04`): consent: acts admitted only on a council's count; `<verb>.unlicensed`; needs CR-36, CR-37; declared mover |
 | CR-59 | B10-18c | new from the build-all fold of 2026-11-02 (`-04`): an appeal goes to another authority: the appellate closure basis; hash EQUAL |
@@ -197,7 +197,7 @@
 | CR-93 | B10-19 | new from the attribute-rulings fold of 2026-11-05 (`-12`; `ED-IN-0347`): attributes in a person's own choice (aptitude on uncontested candidates, Focus on the noise of choosing, Reason on the forecast); DESIGN-FIRST |
 | CR-94 | B10-14 | new from the attribute-rulings fold of 2026-11-05 (`-12`; `ED-IN-0347`): forgery quality reads the forger's Coordination; a declared mover where a forger has authored Coordination |
 | CR-95 | B10-19 | new from the attribute-rulings fold of 2026-11-05 (`-12`; `ED-IN-0347`): Spirit against circumstance and influence; DESIGN-FIRST, run through the resolution diagnostic |
-| CR-96 | B10-13 | new from the attribute-rulings fold of 2026-11-05 (`-12`; `ED-IN-0347`): the opposing attribute, and the vocation rows re-read against the rulings: a follow-on to CR-20's landed carrier; hash EQUAL |
+| CR-96 | B10-13 (CLOSED, `c0baed2c`) | new from the attribute-rulings fold of 2026-11-05 (`-12`; `ED-IN-0347`): the opposing attribute, and the vocation rows re-read against the rulings: a follow-on to CR-20's landed carrier; hash EQUAL |
 | PC-11 | B10-10b | new from the personal-combat fold of 2026-11-01 (`-04`): the control, then the module's dead code |
 | PC-12 | B10-10b | new from the personal-combat fold of 2026-11-01 (`-04`): retire the v30 combat owner; the port's two constants |
 | PC-13 | B10-10b | new from the personal-combat fold of 2026-11-01 (`-04`): the trace is complete |
@@ -292,8 +292,8 @@
 | REM-47 | B10-03 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-50 | B10-04 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-52 | B10-05 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`); released by M6 at `body_step = 10`: its own declared-mover commit after CR-07 and the CL-THRUST landings, followed by CL-EVENTS (1) |
-| SC-02 | B10-13 | carried v9 position (`-04`) |
-| SC-04 | B10-13 | carried v9 position (`-04`) |
+| SC-02 | B10-Z (HELD: the design is written, the re-source build awaits its approval; left B10-13 at its close) | carried v9 position (`-04`) |
+| SC-04 | B10-13 (CLOSED, `bc5d987a`) | carried v9 position (`-04`) |
 | SC-05 | B10-Z | carried v9 position (`-04`) |
 | SC-06 | B10-01 (CLOSED) | carried v9 position (`-04`); answered, an EDIT: the row is deleted in the adoption commit |
 | SC-07 | B10-Z | carried v9 position (`-04`) |
