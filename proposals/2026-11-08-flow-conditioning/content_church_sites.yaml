@@ -5,28 +5,28 @@
 # Engine reality is authoritative for places (Jordan, 2026-11-08): ids/types are build_realm(0)'s.
 #
 # PART 1 -- rosters.yaml rows. Shape mirrors the existing tables exactly:
-#   site_kinds.values (rosters.yaml:1765), wear_per_season.rates (:1851-1860),
-#   capacity_floor.floors (:1884-1893), works_cost.costs (:1926-1936), band_floors.cells (:3463-3479),
+#   site_kinds.values (rosters.yaml:1778), wear_per_season.rates (:1864-1873),
+#   capacity_floor.floors (:1897-1906), works_cost.costs (:1939-1949), band_floors.cells (:3490-3506),
 #   and the new site_owner table (CR-106 (b)).
 
 site_kinds_append: [worship, templar_quarters, school]
 
-wear_per_season_rates:          # control arm, as dwelling: 0 (rosters.yaml:1855) and garrison/training (:1856-1860)
+wear_per_season_rates:          # control arm, as dwelling: 0 (rosters.yaml:1868) and garrison/training (:1869-1873)
   worship:          0
   templar_quarters: 0
   school:           0
 
-capacity_floor_floors:          # 0, as every non-dwelling kind (rosters.yaml:1884-1893); capacity counts dwellings only
+capacity_floor_floors:          # 0, as every non-dwelling kind (rosters.yaml:1897-1906); capacity counts dwellings only
   worship:          0
   templar_quarters: 0
   school:           0
 
-works_cost_costs:               # optional per CR-106 (a); priced like every fabric kind (rosters.yaml:1926-1936, H-166's one magnitude)
+works_cost_costs:               # optional per CR-106 (a); priced like every fabric kind (rosters.yaml:1939-1949, H-166's one magnitude)
   worship:          {timber: 10}
   templar_quarters: {timber: 10}
   school:           {timber: 10}
 
-band_floors_cells:              # one three-floor ladder, the only three-floor precedent: body 800/500/100 (rosters.yaml:3470-3473)
+band_floors_cells:              # one three-floor ladder, the only three-floor precedent: body 800/500/100 (rosters.yaml:3497-3500)
   worship:                      # chapel / church / cathedral are bands of ONE Site's condition (CR-106 (a); ED-IN-0279, H-38)
     chapel:     100
     church:     500

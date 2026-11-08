@@ -4,7 +4,7 @@
 # (table B), and the values carry no marks.
 #
 # NO ROW CARRIES `faction:` (B1). A `commit` makes the faction occupy the settlement at build
-# (world_q.py:2021-2062), so allegiance is carried by `heritage` and `conviction` alone, and faction
+# (world_q.py:2131-2172), so allegiance is carried by `heritage` and `conviction` alone, and faction
 # commitment is HELD behind a reader audit.
 #
 # THE RULES (applied in this order):

@@ -11,12 +11,12 @@ handle (CR-106, CR-107) mean `workplans/valoria_master_workplan_v11_part16.md`'s
 | row id | value | source file:line | rule applied | alternative rejected |
 |---|---|---|---|---|
 | A1 kinds | `worship`, `templar_quarters`, `school` | CR-106 (a); Jordan ruling 3 | the names CR-106 proposes. "schools/monasteries" is treated as one function | three kinds per function (chapel/church/cathedral). Rejected by CR-106 (a): it would duplicate the condition ladder (ED-IN-0279, H-38) |
-| A2 wear_per_season | 0 ×3 | `engine/season/rosters.yaml:1855` (dwelling 0, control arm), `:1856-1860` (garrison, training kinds) | the control arm, as for every non-producing fabric | non-zero wear. Rejected: H-165, a pacing decision nobody has made (`rosters.yaml:1838-1850`, the wear note) |
-| A3 capacity_floor | 0 ×3 | `rosters.yaml:1884-1893`; `queries/world_q.py:1745-1770` (capacity counts dwellings only) | every non-dwelling kind is 0 | — |
-| A4 works_cost | `{timber: 10}` ×3 | `rosters.yaml:1926-1936`; H-166's one magnitude, `:1920-1925` | every fabric kind is priced alike. Optional per CR-106 (a) | unpriced, so `build` refuses (`loop/effects_founding.py:218-221`). That leaves the orchestrator a choice: with no price, a Church Site can never be newly built |
-| A5 worship band_floors | chapel 100 / church 500 / cathedral 800 | `rosters.yaml:3470-3473` (`body`: 100/500/800, the only three-floor row) | Jordan's three scales map onto the one three-floor precedent ladder | the two-floor ladders (harbour 800/100 `:3464-3466`, seam 700/50 `:3467-3469`). Rejected: they carry two bands, and Jordan named three |
-| A6 templar band_floors | station 100 / house 500 / chapter 800 | same ladder. `station` from `settlement_layer_v30.md:121` ("Templar Station", ref.); `chapter` from `venues.yaml:86` (`chapter_house`) | same ladder, so the methodology stays consistent (S) | `house` is UNDERIVED (see below) |
-| A7 school band_floors | school 100 / monastery 500 / university 800 | Jordan ruling 3 (schools/monasteries); `canon/03_canonical_timeline.md:62` ("the university system"); `faction_politics_v30.md:973` (ref., "university curricula in all territories") | same ladder | — |
+| A2 wear_per_season | 0 ×3 | `engine/season/rosters.yaml:1868` (dwelling 0, control arm), `:1869-1873` (garrison, training kinds) | the control arm, as for every non-producing fabric | non-zero wear. Rejected: H-165, a pacing decision nobody has made (`rosters.yaml:1851-1863`, the wear note) |
+| A3 capacity_floor | 0 ×3 | `rosters.yaml:1897-1906`; `queries/world_q.py:1855-1880` (capacity counts dwellings only) | every non-dwelling kind is 0 | — |
+| A4 works_cost | `{timber: 10}` ×3 | `rosters.yaml:1939-1949`; H-166's one magnitude, `:1933-1938` | every fabric kind is priced alike. Optional per CR-106 (a) | unpriced, so `build` refuses (`loop/effects_founding.py:218-221`). That leaves the orchestrator a choice: with no price, a Church Site can never be newly built |
+| A5 worship band_floors | chapel 100 / church 500 / cathedral 800 | `rosters.yaml:3497-3500` (`body`: 100/500/800, the only three-floor row) | Jordan's three scales map onto the one three-floor precedent ladder | the two-floor ladders (harbour 800/100 `:3491-3493`, seam 700/50 `:3494-3496`). Rejected: they carry two bands, and Jordan named three |
+| A6 templar band_floors | station 100 / house 500 / chapter 800 | same ladder. `station` from `settlement_layer_v30.md:119` ("Templar Station", ref.); `chapter` from `venues.yaml:86` (`chapter_house`) | same ladder, so the methodology stays consistent (S) | `house` is UNDERIVED (see below) |
+| A7 school band_floors | school 100 / monastery 500 / university 800 | Jordan ruling 3 (schools/monasteries); `canon/03_canonical_timeline.md:62` ("the university system"); `faction_politics_v30.md:850` (ref., "university curricula in all territories") | same ladder | — |
 | A8 site_owner | `Church of Solmund` ×3, default null | CR-106 (b); Jordan ruling 3; the factions roster (`FACTIONS` holds `Church of Solmund`) | ownership is a data cell on the kind, with no branch on a name | a `Site.owner` field. Rejected by CR-106 (c) |
 | A9 worship rows | Seat `cathedral`, City/Town/Village/Fortress/Fortress-City `chapel`, Cathedral-City `cathedral` | `venues.yaml:68,79,85,97,103,108,116`; `settlement_layer_v30.md:117` (ref., Axis 1: one religious building per settlement) | each type's single Church worship row | — |
 | A10 school rows | Seat `scriptorium`, Cathedral-City `scriptorium` | `venues.yaml:73,87`; canon :50 ("educational monopoly"), :58 ("educational rights, archival authority") | a scriptorium is the archival/educational house | `chapter_house` and `almonry` as `school` (the plan's first reading). Rejected: an almonry is a charity house (canon :58 "charitable operations"), not on Jordan's list. `chapter_house` goes to A11 |
@@ -32,7 +32,7 @@ The file header states rules H, C and V. `content_validate.py` re-derives all 51
 result against the draft (an empty diff on the final run).
 
 **Faction commitment is HELD (B1).** No row carries `faction:`. A `commit` Tenure makes the faction OCCUPY the
-settlement at build (`world_q.py:2021-2062`: occupies, then mustered; the cohort's `contain` is at the
+settlement at build (`world_q.py:2131-2172`: occupies, then mustered; the cohort's `contain` is at the
 settlement, `populated.py:517`). That would license seize, raze and levies from tick 0 (Altonia in Lowenskyst
 Fortress; the Church in six Varfell settlements) and turn `test_in36_foreign.py:120` red. Allegiance is carried
 by `heritage` and `conviction` only. Re-admitting `faction:` waits on an audit of the readers of a cohort's
@@ -68,7 +68,7 @@ sits beside an einhir-leading row.
 
 | place | prose says | prose file:line | engine holds | engine file:line |
 |---|---|---|---|---|
-| Himmelenger (cathedral city) | T14 | `canon/03_canonical_timeline.md:58` | T9 (T14 is Ehrenfeld) | `systems/settlements/valoria_geography_v30.yaml:123-134` (T9), `:201`ff S-036 `territory: T9`; `venues.yaml:147` |
+| Himmelenger (cathedral city) | T14 | `canon/03_canonical_timeline.md:58` | T9 (T14 is Ehrenfeld) | `systems/settlements/valoria_geography_v30.yaml:123-134` (T9), `:528`ff S-036 `territory: T9`; `venues.yaml:147` |
 | Varfell territories | T1-T4 | `canon/03_canonical_timeline.md:100` | T4, T11, T12, T13 (T1-T3 are Valorsmark) | geography `:57-200` `faction:` fields; `build_realm(0)` `holder_faction_of` |
 | Valorsplatz Cathedral | S-003 | `settlement_layer_v30.md:1093` | S-001 (S-003 is Königsbrück) | geography S-001 description; `cohorts.yaml:65,67` |
 | Church holdouts if Himmelenger falls | S-023 through S-025 | `settlement_layer_v30.md:1093` | S-023..S-025 are Halvarshelm Town / Erzbach / Schmiedhof in T17 (Hafenmark). The intended referent is unknown | `cohorts.yaml:87-89` |
@@ -96,9 +96,9 @@ row I used. No translation was needed.
 ## Consequences the orchestrator should see
 
 - **Room for migration.** Every village and fortress holding two cohorts reaches summed weight 4 =
-  capacity 4 (validator: min room 0). `has_room` counts named residents too (`world_q.py:1675-1688`, :1773), so
+  capacity 4 (validator: min room 0). `has_room` counts named residents too (`world_q.py:1785-1798`, :1883), so
   `migrate` into them is refused from tick 0.
-- **Creed contest.** `incompatible[solmund_orthodoxy][einhir_restoration]` is `true` (`rosters.yaml:3577`),
+- **Creed contest.** `incompatible[solmund_orthodoxy][einhir_restoration]` is `true` (`rosters.yaml:3604`),
   so every northern/southern pair and every T5/T6 caste pair holds positions on both ends of that incompatible
   pair (whether `commensurate` reads them as opposed depends on its "held above 0" reading, which I did not run).
 - **No new Tenures** beyond today's `contain` and `reside` per cohort (B1).
