@@ -1,0 +1,85 @@
+== A. Church-owned Sites
+PASS new kinds ['worship', 'templar_quarters', 'school'] collide with no existing site_kinds member
+PASS wear_per_season_rates keyed on exactly the three new kinds
+PASS capacity_floor_floors keyed on exactly the three new kinds
+PASS works_cost_costs keyed on exactly the three new kinds
+PASS band_floors_cells keyed on exactly the three new kinds
+PASS site_owner[worship] = 'Church of Solmund' is a factions member
+PASS site_owner[templar_quarters] = 'Church of Solmund' is a factions member
+PASS site_owner[school] = 'Church of Solmund' is a factions member
+PASS capacity is uniform per settlement type: {'Seat': {9}, 'Town': {7}, 'Village': {4}, 'Fortress': {4}, 'Fortress-City': {6}, 'City': {6}, 'Cathedral-City': {6}}
+PASS the Church's seat type Cathedral-City has exactly one settlement (per-type row = per-settlement)
+PASS Seat:cathedral uses the adopted nested shape site: {kind, condition}
+PASS Seat:cathedral is an existing venues.yaml row
+PASS Seat:cathedral condition 900 == rule 900
+PASS Seat:scriptorium uses the adopted nested shape site: {kind, condition}
+PASS Seat:scriptorium is an existing venues.yaml row
+PASS Seat:scriptorium condition 900 == rule 900
+PASS City:chapel uses the adopted nested shape site: {kind, condition}
+PASS City:chapel is an existing venues.yaml row
+PASS City:chapel condition 650 == rule 650
+PASS Cathedral-City:cathedral uses the adopted nested shape site: {kind, condition}
+PASS Cathedral-City:cathedral is an existing venues.yaml row
+PASS Cathedral-City:cathedral condition 1000 == rule 1000
+PASS Cathedral-City:chapter_house uses the adopted nested shape site: {kind, condition}
+PASS Cathedral-City:chapter_house is an existing venues.yaml row
+PASS Cathedral-City:chapter_house condition 1000 == rule 1000
+PASS Cathedral-City:scriptorium uses the adopted nested shape site: {kind, condition}
+PASS Cathedral-City:scriptorium is an existing venues.yaml row
+PASS Cathedral-City:scriptorium condition 1000 == rule 1000
+PASS Fortress-City:chapel uses the adopted nested shape site: {kind, condition}
+PASS Fortress-City:chapel is an existing venues.yaml row
+PASS Fortress-City:chapel condition 650 == rule 650
+PASS Fortress:chapel uses the adopted nested shape site: {kind, condition}
+PASS Fortress:chapel is an existing venues.yaml row
+PASS Fortress:chapel condition 300 == rule 300
+PASS Town:chapel uses the adopted nested shape site: {kind, condition}
+PASS Town:chapel is an existing venues.yaml row
+PASS Town:chapel condition 650 == rule 650
+PASS Village:chapel uses the adopted nested shape site: {kind, condition}
+PASS Village:chapel is an existing venues.yaml row
+PASS Village:chapel condition 300 == rule 300
+Church Sites by kind: {'school': 3, 'templar_quarters': 1, 'worship': 37} total 41
+Church Sites by territory: {'terr_ALT': 0, 'terr_T1': 4, 'terr_T10': 2, 'terr_T11': 3, 'terr_T12': 4, 'terr_T13': 2, 'terr_T14': 2, 'terr_T15': 0, 'terr_T16': 1, 'terr_T17': 3, 'terr_T2': 3, 'terr_T3': 2, 'terr_T4': 2, 'terr_T5': 3, 'terr_T6': 2, 'terr_T7': 2, 'terr_T8': 3, 'terr_T9': 3}
+PASS terr_T1 (under r_valoria, holds a settlement) holds >= 1 Church-owned Site (4)
+PASS terr_T10 (under r_valoria, holds a settlement) holds >= 1 Church-owned Site (2)
+PASS terr_T11 (under r_valoria, holds a settlement) holds >= 1 Church-owned Site (3)
+PASS terr_T12 (under r_valoria, holds a settlement) holds >= 1 Church-owned Site (4)
+PASS terr_T13 (under r_valoria, holds a settlement) holds >= 1 Church-owned Site (2)
+PASS terr_T14 (under r_valoria, holds a settlement) holds >= 1 Church-owned Site (2)
+PASS terr_T17 (under r_valoria, holds a settlement) holds >= 1 Church-owned Site (3)
+PASS terr_T2 (under r_valoria, holds a settlement) holds >= 1 Church-owned Site (3)
+PASS terr_T3 (under r_valoria, holds a settlement) holds >= 1 Church-owned Site (2)
+PASS terr_T4 (under r_valoria, holds a settlement) holds >= 1 Church-owned Site (2)
+PASS terr_T5 (under r_valoria, holds a settlement) holds >= 1 Church-owned Site (3)
+PASS terr_T6 (under r_valoria, holds a settlement) holds >= 1 Church-owned Site (2)
+PASS terr_T7 (under r_valoria, holds a settlement) holds >= 1 Church-owned Site (2)
+PASS terr_T8 (under r_valoria, holds a settlement) holds >= 1 Church-owned Site (3)
+PASS terr_T9 (under r_valoria, holds a settlement) holds >= 1 Church-owned Site (3)
+coverage: 15 of 15 territories under r_valoria that hold a settlement
+EXCEPTION terr_ALT: foreign root (not under r_valoria); 1 settlement(s), no venue rows; Church Sites 0
+EXCEPTION terr_T15: holds no settlement; Church Sites 0
+EXCEPTION terr_T16: foreign root (not under r_valoria); 1 settlement(s); Church Sites 1
+PASS the single highest worship Site is at the Church's seat S-036 (1000)
+worship band by type: {'Cathedral-City': ['cathedral'], 'City': ['church'], 'Fortress': ['chapel'], 'Fortress-City': ['church'], 'Seat': ['cathedral'], 'Town': ['church'], 'Village': ['chapel']}
+PASS village chapel < town church < cathedral
+PASS no duplicate minted Site (settlement, slug, kind)
+== B. cohorts
+PASS every row uses only rung/weight/label/heritage/conviction
+PASS NO row carries `faction:` (B1: commitment HELD behind a reader audit)
+PASS every one of the 37 geography settlements has a cohort
+PASS every rung exists and is a settlement
+PASS every weight is an int >= 2
+PASS summed weight <= capacity at every rung (over: {})
+PASS every heritage is a heritage_roster member
+PASS every conviction passes conviction_map ([])
+PASS no two cohorts share (rung, label)
+PASS no row names a person or keys on a faction/office id
+PASS drafted rows == rows re-derived from rules H/C/V (missing [], extra [])
+cohort rows: 51 | settlements: 37 | settlements with >1 cohort: 14 ['set_s_007', 'set_s_009', 'set_s_010', 'set_s_011', 'set_s_012', 'set_s_013', 'set_s_026', 'set_s_028', 'set_s_029', 'set_s_030', 'set_s_031', 'set_s_032', 'set_s_033', 'set_s_034']
+settlements with a northern AND a southern cohort: 8 ['set_s_026', 'set_s_028', 'set_s_029', 'set_s_030', 'set_s_031', 'set_s_032', 'set_s_033', 'set_s_034']
+rows by label: {'(majority)': 37, 'altonian': 1, 'southern': 6, 'central': 2, 'northern': 5}
+band-data heritages: ['central_einhir', 'northern_einhir', 'southern_einhir']
+rows by heritage: {'central_einhir': 10, 'northern_einhir': 24, 'altonian': 1, 'southern_einhir': 15, 'schoenlander': 1}
+room left for migrate (capacity - cohorts), min: 0
+== 0 FAIL line(s)
