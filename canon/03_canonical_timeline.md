@@ -1,6 +1,6 @@
 # VALORIA — Canonical Setting Timeline
 ## Status: Canonical reference document
-## Last updated: 2026-04-11 (Secession legitimation, Altonian containment, deed-monarchy, caste reconciliation)
+## Last updated: 2026-04-11 (Secession legitimation, Altonian containment, deed-monarchy, caste reconciliation; Schoenland neutral, ED-IN-0356, 2026-11-08)
 ## Authority: This document is canonical for setting chronology. Supersedes all prior timeline references in checkpoint documents.
 
 ---
@@ -117,7 +117,7 @@ The post-war settlement establishes: the Valorian Crown (deed-monarchy, Church-c
 | ~218 AG | **Almud Almqvist ascends to the throne.** The founder's son. Young. Has not personally earned the deed-claim — inherits the presumption his father created. Early reign defined by proving the presumption warranted. |
 | 220-235 AG | **Almud opens trade via Schoenland.** Politically toxic. Economy stabilises. The Church objects publicly; its Altonian missionaries quietly benefit. Schoenland profits enormously. |
 | ~220 AG | **Almud marries Lenneth.** Two children follow: Princess Elske and Prince Torben. |
-| 238 AG | **Direct trade routes with Altonia.** Ratified by Elske's marriage to Doux Alexios Laskaris. Schoenland partially cut out — pivots to arms sales and tension-stoking. |
+| 238 AG | **Direct trade routes with Altonia.** Ratified by Elske's marriage to Doux Alexios Laskaris. Schoenland partially cut out — pivots to arms sales to both sides. |
 | 238-245 AG | **Uneasy direct relationship.** Militarised trade routes. Altonia's Church minority growing. Schoenland selling arms to all sides. Torben at Royal Court; Altonia eyeing him as leverage. |
 | **245 AG** | **GAME START.** |
 
@@ -164,7 +164,7 @@ The post-war settlement establishes: the Valorian Crown (deed-monarchy, Church-c
 | Löwenritter | — | 3 | — | 5 | 3 | 5 |
 
 ### Schoenland
-Not a faction — a spoiler actor. Profits from tension, including caste tensions as a destabilisation vector. Territory 15 on the board. GM-driven.
+Not a faction — a neutral offshore trade nation outside the realm (ED-IN-0356). It trades with both Altonia and Valoria without regard to whether they are at war, and profits from that trade, arms included. Its persons act from their own seats and goals; there is no GM. T16 in the geography (the board-game "Territory 15" numbering is superseded).
 
 ---
 
