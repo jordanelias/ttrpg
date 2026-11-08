@@ -39,7 +39,6 @@ from ..harness import decision_spread as DS
 from ..harness.populated import build_realm
 from ..state.carriers import Candidate, Person
 from ..state.ids import draw_factory
-from .test_cp_t05_02_self_plea import revert_cp_t05_02
 
 _FX0 = DEFAULT_FIXTURES.sweep("choice_temperature", 0)        # no sampler: the score alone orders
 _SUBJECT = "p_in62_x"
@@ -262,13 +261,7 @@ def test_in62_score_is_the_sum_of_score_terms_for_every_candidate_a_season_forms
     assert any(t[0] != 0 for _, t in season_pairs), "no pursuit term was nonzero: the sum proved nothing"
 
 
-def test_in62_under_the_null_every_realm_top_is_draw_or_tiebreak_and_the_shipped_reading_is_not(monkeypatch):
-    # v10 CP-T05-02 (iii): the self-plea is read at its revert. The harness hands every person a question about one
-    # referent, so the referent's own `speak` on himself now forms; `_stance_arm` scores a contested row at `-regard(self)`
-    # where every sibling candidate on himself scores `+regard(self)`, so 3 and 7 of the 83 tops at the two referents that
-    # differ from their rivals' under the null are attributed to `stance` (MEASURED, seed 0). The null's claim -- no alignment
-    # reading separates the tops -- is about the pre-item candidate set; the self-plea's polarity is the orchestrator's.
-    revert_cp_t05_02(monkeypatch)
+def test_in62_under_the_null_every_realm_top_is_draw_or_tiebreak_and_the_shipped_reading_is_not():
     shipped = DS.read_decisions(build_realm(0))
     with DS.null_alignment():
         null = DS.read_decisions(build_realm(0))

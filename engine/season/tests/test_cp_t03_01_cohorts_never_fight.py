@@ -41,7 +41,6 @@ from .test_cr85_faculty_replaces_history import revert_cr85
 from .test_cp_t03_04_arms import revert_cp_t03_04
 from .test_cp_t03_07_body_ceiling import revert_cp_t03_07
 from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
-from .test_cp_t05_02_self_plea import revert_cp_t05_02
 from .test_cr87_violence_contexts import revert_cr87
 
 CROWD, FIGHTER, FOE = "c_crowd", "p_low", "p_mid"       # `tiny_world`: p_low and p_mid live at the hearth `Hh`
@@ -251,10 +250,6 @@ def test_where_a_cohort_was_a_party_the_realm_moves_and_the_refusals_are_the_con
     # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season) moves seed 2's second season off the
     # cohort-party act (MEASURED: 0 refusals on `individual` with it live), so it is read at its revert too, the same way.
     revert_cp_t03_08(monkeypatch)
-    # v10 CP-T05-02 (iii) (the self-plea, a formation mover wherever a docketed party is offered his own matter) moves this
-    # reverted arm's seed-2 trajectory off the cohort-party act (MEASURED: 0 refusals on `individual` with it live), so it
-    # is read at its revert too, the same way. The shipped realm's pins do not move (`test_season_weather.BASE_HASHES`).
-    revert_cp_t05_02(monkeypatch)
     h, reads, refused_on_it = _realm_two_seasons(2)
     assert refused_on_it > 0, "no act was refused on `individual` at seed 2"
     assert h != BASE[2], ("the realm did not move off the pre-conjunct base at seed 2 (the refusal itself is observed "
