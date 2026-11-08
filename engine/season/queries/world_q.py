@@ -358,6 +358,16 @@ if not DOCKETING_KINDS:
             "dead reader wearing a query's clothes")
 
 
+def _docketing_ref(w: World, e) -> Optional[str]:
+    """THE `subject` OF THE ACT BEHIND DOCKETING EVENT `e` -- the matter, or the petition it rose from -- or `None`
+    for no Event, an Event that is no docketing one (`DOCKETING_KINDS`), or an act whose payload names none.
+    Read by `docketed_by` and `lapsing_items`, which match an item to its Event by it."""
+    if e is None or e.kind not in DOCKETING_KINDS:
+        return None
+    act = causing_act(w, e)
+    return act.payload.get("subject") if act is not None and isinstance(act.payload, dict) else None
+
+
 def docketed_by(w: World, claim) -> tuple:
     """THE DOCKETED MATTERS THE DOCKETING EVENT `claim` IS A CLAIM OF PUT BEFORE A ROOM, or `()` (v10
     CP-T05-04). A claim is OF an Event when its predicate is that Event's kind (`Claim.predicate` is
@@ -379,8 +389,7 @@ def docketed_by(w: World, claim) -> tuple:
     out: dict = {}
     for eid in occasioned_by(w, probe):
         e = event_by_id(w, eid)
-        act = causing_act(w, e) if e is not None and e.kind in DOCKETING_KINDS else None
-        ref = act.payload.get("subject") if act is not None and isinstance(act.payload, dict) else None
+        ref = _docketing_ref(w, e)
         if ref is None:
             continue
         out.update((d["matter"], None) for d in w.docket
@@ -429,7 +438,7 @@ def docket_question(w: World, p: Person) -> Optional[Question]:
 
 def lapsing_items(w: World, lapse: Optional[int]) -> list[tuple]:
     """THE DOCKET ITEMS HELD BEYOND `lapse` SEASONS, with the Event that put each there --
-    `[(item, since tick, docketing Event id or None), ...]` in docket order; `[]` when `lapse` is
+    `[(item, docketing Event id or None), ...]` in docket order; `[]` when `lapse` is
     `None` (v11 CR-55, `Fixtures docket_lapse`; the control: nothing lapses). The one owner of *how
     long has this item been before a room*, read by MATTER's lapse pass. AN ITEM DOCKETED IN SEASON `t` IS
     HEARD IN SEASONS `t` TO `t + lapse` AND LAPSES AT THE BARRIER OPENING `t + lapse + 1`: MATTER precedes
@@ -452,8 +461,7 @@ def lapsing_items(w: World, lapse: Optional[int]) -> list[tuple]:
     formed: dict = {}
     for e in w.log:
         if e.kind in DOCKETING_KINDS:
-            act = causing_act(w, e)
-            ref = act.payload.get("subject") if act is not None and isinstance(act.payload, dict) else None
+            ref = _docketing_ref(w, e)
             if ref is not None:
                 by_ref[ref] = e
         elif e.kind == "docket.formed":
@@ -466,9 +474,9 @@ def lapsing_items(w: World, lapse: Optional[int]) -> list[tuple]:
             ev = by_ref.get(item["matter"]) or by_ref.get(item.get(DOCKET_PETITION))
         since = ev.emitted_at if ev is not None else date.get("due_at")
         if ev is None and since is not None:
-            ev = formed.get((date.get("venue"), since))
+            ev = formed.get((slot_venue(w, item), since))
         if since is not None and w.tick - since > lapse:
-            out.append((item, since, ev.id if ev is not None else None))
+            out.append((item, ev.id if ev is not None else None))
     return out
 
 
@@ -3577,13 +3585,16 @@ def matters_awaiting(w: World, p: Person) -> tuple:
     REM-28's stamp convened at. A MATTER OUTSIDE EVERY SEAT OF HIS IS NOT STAMPED: nothing contains it. A seat
     with no rung (`Office.rung` None, the cluster seat) contains nothing. `()` for a person granted no such
     act, or while no person-matter waits undated."""
+    items = undated_matters(w)
+    if not items:
+        return ()
     rungs = {w.offices[t.object].rung for t in p.tenures
              if t.kind == "hold" and t.live and t.object in w.offices
              and not CONVENING_REMIT_ACTS.isdisjoint(t.granted_acts)} - {None}
     if not rungs:
         return ()
     out: dict = {}
-    for item in undated_matters(w):
+    for item in items:
         place = place_of(w, item["matter"])
         if place is None:
             continue

@@ -51,12 +51,18 @@ def register_pool_addend(fn: Any) -> None:
 register_pool_addend(practice)
 
 
+def _held_attribute(entity: Any, attr):
+    """The score `entity` holds on attribute `attr` (`Person.attributes`), or `None` where `attr` is none, he holds
+    none, or the entity is no person. The one read `_authored_attribute` and `_opposing_attribute` end in."""
+    return (getattr(entity, "attributes", None) or {}).get(attr) if attr else None
+
+
 def _authored_attribute(entity: Any, verb: str):
     """The score `entity` HOLDS on the attribute the verb's vocation starts from (`rosters.yaml:
     vocation_attribute`; `Person.attributes`), or `None` where he holds none, the verb draws on no
     capability, or the entity is no person. The attribute's twin of `_capability`: a READ, never a default."""
     attr = VOCATION_ATTRIBUTE.get(VERB_CAPABILITY.get(verb))
-    return (getattr(entity, "attributes", None) or {}).get(attr) if attr else None
+    return _held_attribute(entity, attr)
 
 
 def _opposing_attribute(entity: Any, verb: str):
@@ -66,7 +72,7 @@ def _opposing_attribute(entity: Any, verb: str):
     keeps the row's own attribute for the pool."""
     voc = VERB_CAPABILITY.get(verb)
     attr = VOCATION_OPPOSED_BY.get(voc) or VOCATION_ATTRIBUTE.get(voc)
-    return (getattr(entity, "attributes", None) or {}).get(attr) if attr else None
+    return _held_attribute(entity, attr)
 
 
 def faculty(w: Any, p: Any, verb: str) -> int:

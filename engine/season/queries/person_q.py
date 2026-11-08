@@ -44,13 +44,13 @@ import math
 from typing import Optional
 
 from engine.substrate.descriptors import (
-    AFFILIATION_CONCERNS, AFFILIATION_FLOOR, HERITAGE_ENGAGES, HERITAGES, PURSUITS,
+    AFFILIATION_CONCERNS, HERITAGE_ENGAGES, HERITAGES, PURSUITS,
 )
 
 from ..data import requires as _requires
 from ..data import verbs as _verbs
 from ..data import affiliations as _aff
-from ..data.affiliations import AFFILIATION_CEILING, conviction_map, engagement
+from ..data.affiliations import AFFILIATION_CEILING, AFFILIATION_FLOOR, conviction_map, engagement
 from ..data.cast import STANCE_MAX
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 from ..data.requires import (
@@ -1232,6 +1232,12 @@ def drifted(before, band: float, sel: int, whole_band: bool = False):
     return after
 
 
+def is_cell(c) -> bool:
+    """Is `c` a claim on a CELL -- a slot that holds one value (`data/requires.py: CELL_STEMS`)? The one owner,
+    read by `lie_said_of` and `decision/options.py::record`'s pairing."""
+    return str(c.predicate).partition(":")[0] in CELL_STEMS
+
+
 def lie_said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None":
     """WHAT THIS PERSON WOULD SAY FALSELY ABOUT `subject`: `said_of`'s pick, over the teller's CELL claims
     only, with its value made false -- or `None` where there is no false value to say (v11 CR-27, M9 taken
@@ -1256,7 +1262,7 @@ def lie_said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | 
     ⚠ A FALSE VALUE IS NEVER THE HELD ONE, so the hearer's exact-triple guard (`loop/witness.py`) does not
     drop the deposit for a hearer who holds the cell firsthand: his claim and the lie then DISAGREE, which
     is the pair `decision/options.py::record` counts against the liar (`H-183`)."""
-    cells = [c for c in claims if c.subject == subject and str(c.predicate).partition(":")[0] in CELL_STEMS]
+    cells = [c for c in claims if c.subject == subject and is_cell(c)]
     said = said_of(cells, subject, fx, teller)
     if said is None:
         return None

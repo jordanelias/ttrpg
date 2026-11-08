@@ -26,7 +26,7 @@ from __future__ import annotations
 from typing import Any, Callable, Optional
 from ..data.cast import STANCE_MAX
 from ..data.requires import (
-    CELL_STEMS, OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, SHORTFALL_PREDICATE,
+    OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, SHORTFALL_PREDICATE,
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
 )
 from ..data.rosters import (
@@ -47,7 +47,7 @@ from ..gaps import Forbidden
 from ..queries.person_q import (
     PAIRED_KINDS, LedgerReader, OwnStateReader, addressed_to, attackers_of, content_kind, content_said,
     held_against, known_persons, ledger_names,
-    lie_said_of, projected_axes, regard, said_of,
+    is_cell as _is_cell, lie_said_of, projected_axes, regard, said_of,
 )
 from ..state.carriers import Candidate, Claim, Person, Question, Record, View
 from ..trace_log import TRACE
@@ -409,14 +409,16 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
 def subject_is_opponent(row: "VerbRow") -> bool:
     """WHETHER AN ACT OF `row` IS CONTESTED AGAINST ITS `subject` -- the row declares a prize
     (`contests:`) and its second side IS its subject: it names no `counterparty:`, or names
-    `counterparty: subject` (`determine`'s party, `arrest`'s prisoner). The fold's own opponent rule,
-    `payload[row.opponent_operand()]` (`data/verbs.py::VerbRow`, asked by `loop/resolve.py::_contest` too). Read off the row's own columns, never a verb name. One owner for two readers:
+    `counterparty: subject` (`determine`'s party, `arrest`'s prisoner). The test itself is
+    `VerbRow.contested_against_subject` (`data/verbs.py`, the fold's own opponent rule,
+    `payload[row.opponent_operand()]`, asked by `loop/resolve.py::_contest` too); this name is kept for its
+    readers. Read off the row's own columns, never a verb name. One owner for two readers:
     `opening_set`'s self-subject decline (a person is not their own adversary) and
     `decision/choose.py`'s score term 2 under `stance_polarity: declared` (v9 IN-18 `G2`: an act
     against a disliked opponent scores higher, not lower). CR-16: it read `not row.counterparty`,
     which is False for a row that names `counterparty: subject`, so those rows were scored on the
     wrong side under `declared`."""
-    return bool(row.contests) and row.opponent_operand() == "subject"
+    return row.contested_against_subject()
 
 
 # v11 CR-87: THE VIOLENT ROWS WHOSE SUBJECT IS THEIR OPPONENT (`data/verbs.py::VIOLENT_VERBS`, off `rosters.yaml:
@@ -1692,11 +1694,6 @@ def rank(p: Person, teller: str) -> int:
     Comparing values nobody writes, in a shape nobody declared, would be inventing the ruling."""
     # ABSENT: H-181 rank ordering  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
     return 0
-
-
-def _is_cell(c: Claim) -> bool:
-    """Is `c` a claim on a CELL -- a slot that holds one value (`data/requires.py: CELL_STEMS`)?"""
-    return str(c.predicate).partition(":")[0] in CELL_STEMS
 
 
 def record(p: Person, teller: str, fx: "Fixtures") -> float:

@@ -352,7 +352,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                 continue
             if matured_by is None:
                 last_id = w.last_emission_of("term.matured", rid, written=True)
-                last_ev = world_q.event_by_id(w, last_id) if last_id else None
+                last_ev = next((e for e in reversed(w.log) if e.id == last_id), None) if last_id else None
                 matured_by = last_ev.emitted_at if last_ev is not None else -1
             if due <= matured_by:
                 continue
@@ -443,7 +443,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # off the item's own beginning and stores none). THIS BARRIER IS FIRST IN THE SEASON, BEFORE
     # DELIBERATE: a bench is never deliberating a matter in the round that lapses it. SUBJECT: the
     # venue where there is a sitting (the room that hears of it), else the matter, else the petition.
-    for item, since, docketed_by_ev in world_q.lapsing_items(w, w.fixtures.get("docket_lapse")):
+    for item, docketed_by_ev in world_q.lapsing_items(w, w.fixtures.get("docket_lapse")):
         venue = world_q.slot_venue(w, item)
         subject = venue or item.get("matter") or item.get(world_q.DOCKET_PETITION) or item.get("date")
         w.write("DocketItem", token,

@@ -286,6 +286,12 @@ class VerbRow:
         and `decision/options.py::subject_is_opponent`, which had each written it inline (CR-16)."""
         return self.counterparty or "subject"
 
+    def contested_against_subject(self) -> bool:
+        """WHETHER AN ACT OF THIS ROW IS CONTESTED AGAINST ITS `subject`: it declares a prize (`contests:`) and its
+        opponent operand is `subject`. The one owner of the test `decision/options.py::subject_is_opponent` and the
+        loader's `subject_may_be_self` refusal both ask."""
+        return bool(self.contests) and self.opponent_operand() == "subject"
+
     def known_person_operands(self) -> tuple:
         """THE OPERANDS A CANDIDATE OF THIS ROW TAKES FROM SOMEBODY THE PERSON KNOWS, one bag per
         person known (`decision/options.py::operand_bags`) -- the ONE owner, read by `operand_bags`
@@ -712,7 +718,7 @@ def _load_verb_table() -> dict:
                 "naming the class, so this row would never form.")
         # IN-10 (a) / IN-53 D2 / CP-T05-02 (iii): `referent_named`, `counterparty_may_be_self` and
         # `subject_may_be_self` ARE BOOLEANS -- a string `"false"` would read truthy.
-        for col in (f.name for f in fields(VerbRow) if f.type in (bool, "bool")):
+        for col in (f.name for f in fields(VerbRow) if f.type == "bool"):
             if not isinstance(getattr(row, col), bool):
                 raise SystemExit(
                     f"verb_table.yaml: {name!r} declares {col} {getattr(row, col)!r}; it is "
@@ -740,7 +746,7 @@ def _load_verb_table() -> dict:
         # CP-T05-02 (iii): `subject_may_be_self` ONLY ON A ROW CONTESTED AGAINST ITS SUBJECT. On any other
         # row `opening_set` makes no self-subject decline (`decision/options.py::subject_is_opponent`:
         # `tell`'s subject is a topic), so the column would waive nothing -- a column read by nothing.
-        if row.subject_may_be_self and not (row.contests and row.opponent_operand() == "subject"):
+        if row.subject_may_be_self and not row.contested_against_subject():
             raise SystemExit(
                 f"verb_table.yaml: {name!r} declares subject_may_be_self, but its act is not contested "
                 f"against its subject (contests {row.contests!r}, opponent operand "
