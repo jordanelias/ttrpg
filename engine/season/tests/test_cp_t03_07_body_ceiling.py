@@ -55,14 +55,17 @@ CEILING = "body_ceiling"
 #: Was, before that pin commit: PRE_ITEM 07634b99... / 1cc4370d...; POST_ITEM fc3201f3... / 6da144ff...; CONTROL seed 2 702d9074....
 #: B10-13 batch pin commit: PRE_ITEM was b2dde1fc... / c58b1a7e... / 5518f31c... (= CP-T03-04's POST_ITEM, re-recorded with it);
 #: POST_ITEM was eb2919ae... / c4ba7a75... / c72aa6fe...; CONTROL seed 2 was 7ee0f657....
+#: B10-12 pin commit (CR-24 `field_winner_casualties: engine` and MB-07r's support cap, both shipped, move a one-season
+#: realm that fights; control: both reverted reads the old pins): seed 2 PRE_ITEM was 6078a950... (= CP-T03-04's POST_ITEM),
+#: POST_ITEM was bc4f92ac....
 PRE_ITEM = {0: "8b5e882b0a4d771d56e8472ef557f84f",
             1: "e9aad997765ecb589711613cfb194444",
-            2: "6078a9502bb5d0e40ccfb807567ad905"}
+            2: "1139c7dcac2b0dd2b2ff6cbacc27e55c"}
 POST_ITEM = {0: "1c9939fc22035400981bcf6b99b9d6f9",
              1: "8fbb92ad369b065bb83f8680d779ae5b",
-             2: "bc4f92ac926ac3930147ae9befa43e2a"}
+             2: "ec354d2a2a8c8f9ad5d23317921b5f08"}
 #: At `none`, the schema alone: seeds 0 and 1 mark nobody, so they equal POST_ITEM; seed 2 marks one survivor.
-CONTROL = {0: POST_ITEM[0], 1: POST_ITEM[1], 2: "64304e5886b36fa9edfaccaec7f5ffca"}
+CONTROL = {0: POST_ITEM[0], 1: POST_ITEM[1], 2: "73702f7cbebebf053109e7fff536cedc"}   # B10-12 pin commit (CR-24 + MB-07r): seed 2 was 64304e58...
 BUILD_PRE, BUILD_POST = "7266f56bea4e3d75705f5e88eec1b2e1", "600d8b27147478e158553552cc1409a5"
 
 
@@ -245,7 +248,11 @@ _BODY_WRITES = {
     "w.persons[pid].body = body": "lowers",
     # `_eff_march`: the losing side's casualties, `total` and `scaled_by_degree` arms.
     "p.body = 0": "lowers",
-    "p.body = max(1, int(p.body * max(0.0, pct or 0.0)))": "lowers",
+    # (B10-12 pin commit: CP-T04-01 changed `pct` to `mine`, the loser's own subunit ratio under `field_subunits: person`.)
+    "p.body = max(1, int(p.body * max(0.0, mine or 0.0)))": "lowers",
+    # `_eff_march` (CR-24, `field_winner_casualties: engine`): the winners' own casualties, `body` only; `win_ratio` is clamped
+    # to [0, 1] at its one write (`min(1.0, max(0.0, mine))`), so the write can only hold or lower a body.
+    'p.body = 0 if model == "total" else max(1, int(p.body * win_ratio[pid]))': "lowers",
     # `_eff_tend`: the one raiser at HEAD; `whole` is `max(p.body, p.body_ceiling)`.
     "p.body = whole": "raises",
     # `loop/matter.py`'s subsistence fall (`fall.body_after`, a loss), in the `setattr` form a `.body =` grep misses.

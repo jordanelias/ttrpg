@@ -70,7 +70,7 @@ from engine.season.state.ids import H, draw_factory
 PRE_BUILD = {
     0: "256606154c30542f9456b2fe15c76f09",   # B10-13 batch pin commit: was d4c83c8c...; CP-T03-08: was eb2919ae...; CP-T03-07: was b2dde1fc...; CP-T03-04: was 20accb03...
     1: "aa58ef0b71c947ce5ff9f0a75ffd8ca6",   # B10-13 batch pin commit: was 7cacc763...; CP-T03-08: was fc3201f3...; CP-T03-07: was 07634b99...; CP-T03-04: was 6e25b047...; CR-85: was f89ea45d...
-    2: "77a0969743190aea9e65db99f57c77b0",  # B10-13 batch pin commit: was 447ed0d8...; CP-T03-08: was 6da144ff...; CP-T03-07: was 1cc4370d...; CP-T03-04: was fe9032ed...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
+    2: "a21ab6e12e356ccc4261bec1c93ca3b4",  # B10-12 pin commit (CR-24 + MB-07r): was 77a09697...; B10-13 batch pin commit: was 447ed0d8...; CP-T03-08: was 6da144ff...; CP-T03-07: was 1cc4370d...; CP-T03-04: was fe9032ed...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
 }
 
 

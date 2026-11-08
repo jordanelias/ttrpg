@@ -910,7 +910,7 @@ def test_lb6d_every_verb_declares_a_rostered_beneficiary():
     # 63 -> 64, `capture` (v10 CP-T03-09) -- `beneficiary: none` (`arrest`'s column), so `kinds["none"]` grows by one (a re-record).
     # 64 -> 65, `lie` (B10-13 CR-27; re-recorded in the batch's pin commit, P15) -- `beneficiary: subject` (`tell`'s column), so
     # `kinds["subject"]` grows by one (a re-record).
-    assert len(VERB_TABLE) == 65, "the verb count moved; this row's census is stale"       # 64 -> 65, B10-13 CR-27 `lie` (was 63 -> 64, v10 CP-T03-09)
+    assert len(VERB_TABLE) == 67, "the verb count moved; this row's census is stale"       # B10-12 pin commit: 65 -> 67 (CP-T04-02 `marshal`, CP-T04-07 `surrender`, both WITHHELD); 64 -> 65, B10-13 CR-27 `lie` (was 63 -> 64, v10 CP-T03-09)
     undeclared = [v for v, r in VERB_TABLE.items() if not r.beneficiary]
     assert not undeclared, f"verbs with no `beneficiary:`: {undeclared}"
     off_roster = [(v, r.beneficiary) for v, r in VERB_TABLE.items()

@@ -185,9 +185,11 @@ def test_a_capture_yielded_at_the_untouched_band_stamps_the_ending_on_person_cap
 #: a030141a...): PC-20 (1) (the head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`.
 #: B10-13 batch pin commit (the batch's declared movers move a one-season realm of every seed, seed 0 included): was
 #: 20accb03... / 35dadf8a... / 72d62e19....
+#: B10-12 pin commit (CR-24 `field_winner_casualties: engine` and MB-07r's support cap, both shipped, move a one-season
+#: realm that fights; control: both reverted reads the old pin): seed 2 was 5e5bf76c....
 PRE_ITEM = {0: "a63b960024babdcd2a1a37839e2d6cb0",
             1: "938a3affd22183adfc34d7777df7f3a0",
-            2: "5e5bf76c475d1284151e573426db9d9b"}
+            2: "d5d356c7537ba36127ee288867726c2d"}
 
 
 def revert_cp_t03_02(monkeypatch):

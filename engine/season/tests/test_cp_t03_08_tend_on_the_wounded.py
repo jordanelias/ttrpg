@@ -45,7 +45,9 @@ FAR = "p_high"                     # elsewhere
 #: 285fb92a...): PC-20 (1) (the head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`.
 #: B10-13 batch pin commit (the batch's declared movers, CR-27 `lie` among them, move a one-season realm of every seed):
 #: was d4c83c8c... / 7cacc763... / 447ed0d8....
-POST_ITEM = {0: "256606154c30542f9456b2fe15c76f09", 1: "aa58ef0b71c947ce5ff9f0a75ffd8ca6", 2: "77a0969743190aea9e65db99f57c77b0"}
+#: B10-12 pin commit (CR-24 `field_winner_casualties: engine` and MB-07r's support cap move a one-season realm that fights;
+#: control: both reverted reads the old pin): seed 2 was 77a09697....
+POST_ITEM = {0: "256606154c30542f9456b2fe15c76f09", 1: "aa58ef0b71c947ce5ff9f0a75ffd8ca6", 2: "a21ab6e12e356ccc4261bec1c93ca3b4"}
 BUILD = "600d8b27147478e158553552cc1409a5"
 
 
