@@ -1344,8 +1344,13 @@ def _fanned_choices(row: "VerbRow", bags: list) -> list:
     of the closed sets its keys range over (`data/verbs.py::CHOICE_RANGES`), each value riding on the bag under its own
     name -- `marshal`'s `role` x `retreat_at`, or no NPC ever marshals. The ranges are the module's vocabulary read
     through the roster pointers, in their own order; no value is chosen here (the chooser's draw is content-blind,
-    `decision/choose.py`). A row the roster does not name returns its bags untouched."""
-    keys = CHOICE_SOURCED.get(row.verb)
+    `decision/choose.py`). A row the roster does not name returns its bags untouched.
+
+    CP-T04-06: A KEY WHOSE RANGE HAS ONE MEMBER IS NOT FANNED -- there is nothing to choose among, and riding the lone
+    value on every bag would rename every act (`data/verbs.py::act_key` suffixes the choice) and move the draws under
+    those ids. `march`'s `posture` ships over `[storm]`, so no `march` Candidate carries one; `besiege` joining the
+    roster is what makes the posture a choice."""
+    keys = tuple(k for k in CHOICE_SOURCED.get(row.verb, ()) if len(CHOICE_RANGES[k]) > 1)
     if not keys:
         return bags
     combos = [()]

@@ -33,7 +33,7 @@ import sys
 from typing import Any, Optional
 from ..data import files
 from ..data.rosters import (
-    COMBAT_BANDS, COMBAT_EDGES, LOST, UNOPPOSED, WON, WOUND_QUANTITIES, WOUNDED,
+    COMBAT_BANDS, COMBAT_EDGES, INVESTED, LOST, UNOPPOSED, WON, WOUND_QUANTITIES, WOUNDED,
     check_edge_above)
 from ..gaps import Unspecified
 
@@ -237,6 +237,9 @@ def field_degree(result: dict) -> str:
     `result['result']['degree']` for introspection and stays there."""
     if result.get("unopposed"):
         return UNOPPOSED
+    # CP-T04-06: an opposed `besiege` fought no field -- the provider lifts `invested` and nobody won or lost.
+    if result.get("invested"):
+        return INVESTED
     return WON if result.get("attacker_wins") else LOST
 
 

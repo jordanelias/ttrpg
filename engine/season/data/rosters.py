@@ -1253,10 +1253,25 @@ BODY_MARK_MODELS = roster("body_mark_models")     # v11 CP-T03-07 (`H-258`): `_e
 # fought. `FIELD_CASUALTY_MODELS`/`MARCH_TARGET_KINDS` bound here for `TITLE_DOMAINS`' reason: an
 # unbound roster is the one whose absence goes unnoticed.
 FIELD_BANDS = roster("field_degree_bands", ordered=True)
-DECLARED, WON, LOST, UNOPPOSED = FIELD_BANDS
+DECLARED, WON, LOST, UNOPPOSED, INVESTED = FIELD_BANDS     # CP-T04-06: `Invested` is appended, the four above do not move
 FIELD_CASUALTY_MODELS = roster("field_casualty_models")
 FIELD_WINNER_CASUALTY_ARMS = roster("field_winner_casualty_arms")     # CR-24 (`H-360`)
 MARCH_TARGET_KINDS = roster("march_target_kinds")
+# CP-T04-06 (`besiege`): HOW A `march` MEETS AN OPPOSING SIDE, a payload key (`MARCH_POSTURE_KEY`) the act declares and the
+# mass-battle provider reads. Ordered, because `choice_sourced` fans the Candidates in this order; shipped `[storm]`. The two
+# NAMES are the posture's semantics (a storm fights, a besiege wears the walls and fights nothing) and are what the roster
+# may carry: refused at import for a member that is neither, or for a roster without `storm`, the default an act with no
+# posture is read under.
+MARCH_POSTURES = roster("march_postures", ordered=True)
+MARCH_POSTURE_KEY = "posture"
+STORM = "storm"
+BESIEGE = "besiege"
+if STORM not in MARCH_POSTURES or not set(MARCH_POSTURES) <= {STORM, BESIEGE}:
+    raise Unspecified(
+        f"`march_postures` is {list(MARCH_POSTURES)!r}", "rosters.yaml -- march_postures",
+        needs=f"a roster holding {STORM!r} (the default) and at most {BESIEGE!r} beside it",
+        law="CP-T04-06 -- a posture is a way of meeting the opposing side that code reads; a name no code reads would "
+            "be a posture nothing performs")
 SUBTREE_OCCUPATION_KINDS = roster("subtree_occupation_kinds")
 RAZE_TARGET_KINDS = roster("raze_target_kinds")
 ARRIVAL_ONLY_KINDS = roster("arrival_only_kinds")

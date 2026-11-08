@@ -406,7 +406,11 @@ rows:
     emits:   "`yield.taken`"
   - kind:    "Site"
     field:   "condition"
-    steps:   [MAT, RES]
+    # `ENC` ADDED AT v11 CP-T04-06 (`besiege`), on `(Person, body)`'s M4 precedent: `march` folds at ENCOUNTER (`a field`
+    # carries `step: ENCOUNTER`), and its `Invested` band lowers the garrison Sites in the target's subtree there, DIRECTLY
+    # (`loop/effects_combat.py::_eff_march`) -- wear staged through `World.stage` at ENCOUNTER is never applied, so the
+    # staged writers (`restore`, `work`, `sabotage`) stay RESOLVE-scoped. `class:` is unchanged (ENCOUNTER shares RESOLVE's).
+    steps:   [MAT, RES, ENC]
     class:   "MATTER/ACTS"
     social:  "false"
     by:      "DR-1"

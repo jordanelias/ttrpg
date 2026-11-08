@@ -90,7 +90,8 @@ from typing import Any, Optional
 from ...manifest.providers import provider
 from ...data.geography import geography
 from ...data.rosters import SUBTREE_OCCUPATION_KINDS, territory_id_of
-from ...data.rosters import LOST, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, UNOPPOSED, WON
+from ...data import rosters
+from ...data.rosters import BESIEGE, LOST, MARCH_POSTURE_KEY, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, STORM, UNOPPOSED, WON, require_member
 from ...queries.inputs import ArmyMuster, FieldOrder, MassBattleInput, ProvisionInput
 from ...queries.person_q import stance_toward
 from ...queries import world_q
@@ -393,6 +394,14 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     # nobody to muster, which is this function's existing empty-defence shape, read as such.
     other = world_q.mustered(w, rung, subject) if subject is not None else []
     parties = {"claimants": claimants, "subject_members": other}
+    # CP-T04-06: THE POSTURE THE MARCH DECLARED (`rosters.yaml: march_postures`), a payload key read off the marching act, `storm`
+    # for an act that declares none. Checked against the roster BEFORE anything is answered, so an unrostered posture (a
+    # `besiege` while the roster ships `[storm]`) is a refusal to run and not a storm in disguise.
+    act = _causing_act(w, causes)
+    declared = act.payload.get(MARCH_POSTURE_KEY, STORM) if act is not None and isinstance(act.payload, dict) else STORM
+    require_member(declared, rosters.MARCH_POSTURES, f"march posture {declared!r} is not in the roster", "CP-T04-06",
+                   law="`field_casualty_model`'s own precedent -- an unrecognised posture silently falling back to a storm "
+                       "would make every measurement of `besiege` read the control")
     if not other:
         # ⚠ AN EMPTY DEFENDING SIDE IS `Unopposed`, NOT A CALL TO `resolve_field` (M4,
         # `ED-IN-0279` clause (a)). `resolve_field`'s own docstring: *"AN EMPTY `side_b` gets
@@ -407,6 +416,14 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                     result=dict(attacker_wins=True, degree="Unopposed",
                                 attacker_size_pct=1.0, defender_size_pct=0.0),
                     winner=claimants, parties=parties)
+    if declared == BESIEGE:
+        # CP-T04-06, AN OPPOSED SIEGE: THE ARMY SITS BEFORE THE WALLS AND NO BATTLE IS RUN -- no engine call, so no draw is
+        # consumed and nobody is hurt or moved. Graded `Invested` (`seam/ladder.py::field_degree`, off the lifted `invested`
+        # marker); `_eff_march` wears the garrison. An empty defence never reaches here: it answered `Unopposed` above, as a storm.
+        return dict(status="RESOLVED", module=_PROVIDER, resolver="dice_pool",
+                    attacker_wins=False, unopposed=False, invested=True,
+                    result=dict(attacker_wins=False, degree="Invested"),
+                    winner=[], parties=parties)
     # ⚠ THE ENTRY IS LOOKED UP BY THE ROLE THE PRIZE ROW NAMES (`module_entry:`), IN `MODULE_ENTRIES`,
     # as `sigma.py` and `combat.py` look theirs up (`31a`, `31b`): a call reaching here with the role
     # unregistered (no driver constructed in the process) is the typed `ENGINE-UNAVAILABLE`.
@@ -419,7 +436,6 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     # own number, which the module reads from its terrain table -- this adapter decides none of it.
     # ED-IN-0306 phase 3: the attacker's faction is the seat the marching act was exercised through (the one
     # `loop/sides.py::sides_of` mustered `claimants` under), the defender's is `subject`.
-    act = _causing_act(w, causes)
     inp = field_input(w, claimants, other, rung,
                       factions=(seat_faction(w, act.via) if act is not None else None, subject),
                       origin_place=world_q.march_origin(w, act.actor) if act is not None else None)

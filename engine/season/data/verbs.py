@@ -52,7 +52,7 @@ from .requires import (
     TypedRequires, build_typed_requires,
 )
 from .rosters import (
-    COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, ORDER_RETREAT_AT, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STRIFE_KINDS, VERB_CAPABILITY, VOCATIONS,
     is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
@@ -1691,12 +1691,14 @@ VOCATION_SOURCED = _load_vocation_sourced(roster_map("vocation_sourced", "values
 
 # v11 CP-T04-02: `{verb: (key, ...)}` -- the verbs whose Candidate is formed once per COMBINATION of the closed sets the
 # named payload keys range over (`rosters.yaml: choice_sourced`, read in `decision/options.py::operand_bags`; `marshal`'s
-# `role` and `retreat_at`), and `CHOICE_RANGES`, each key's closed set. The ranges are pointers at the mass-battle module's
-# vocabulary (`rosters.yaml: order_roles`, `order_retreat_at`), never lists spelt here. REFUSED AT IMPORT,
-# `VOCATION_SOURCED`'s reason: a verb the table lacks, a verb whose row writes no `Record.exists` (the order is a
-# minted document), or a key with no range would each carry a choice nothing reads.
-CHOICE_RANGES = {"role": tuple(ORDER_ROLES), "retreat_at": tuple(ORDER_RETREAT_AT)}
-_RECORD_EXISTS_PAIR = "Record.exists"
+# `role` and `retreat_at`; CP-T04-06's `march` `posture`), and `CHOICE_RANGES`, each key's closed set. The ranges are pointers
+# at the rosters (`order_roles`, `order_retreat_at` -- the mass-battle module's vocabulary -- and `march_postures`), never
+# lists spelt here. REFUSED AT IMPORT, `VOCATION_SOURCED`'s reason: a verb the table lacks, a key with no range, or a verb whose
+# row writes no `CHOICE_CARRIER` of the key (the order is a minted document, `Record.exists`; a besieged posture's wear is
+# written on `Site.condition`) would each carry a choice nothing reads.
+CHOICE_RANGES = {ORDER_ROLE_KEY: tuple(ORDER_ROLES), ORDER_RETREAT_KEY: tuple(ORDER_RETREAT_AT),
+                 MARCH_POSTURE_KEY: tuple(MARCH_POSTURES)}
+CHOICE_CARRIER = {ORDER_ROLE_KEY: "Record.exists", ORDER_RETREAT_KEY: "Record.exists", MARCH_POSTURE_KEY: "Site.condition"}
 
 
 def _load_choice_sourced(values: dict) -> dict:
@@ -1704,13 +1706,13 @@ def _load_choice_sourced(values: dict) -> dict:
     out = {v: tuple(ks or ()) for v, ks in values.items()}
     for v, ks in out.items():
         row = VERB_TABLE.get(v)
-        if row is None or _RECORD_EXISTS_PAIR not in row.writes or not ks or any(k not in CHOICE_RANGES for k in ks):
+        if row is None or not ks or any(k not in CHOICE_RANGES or CHOICE_CARRIER[k] not in row.writes for k in ks):
             raise Forbidden(
                 f"`rosters.yaml: choice_sourced` names {v!r}: {list(ks)}, and the verb table carries no such verb, "
-                f"its row writes no `{_RECORD_EXISTS_PAIR}`, or the line names a key outside {sorted(CHOICE_RANGES)}",
+                f"its row writes no carrier of a key (`CHOICE_CARRIER`), or the line names a key outside {sorted(CHOICE_RANGES)}",
                 "rosters.yaml",
-                needs="a `verb_table.yaml` verb that mints a Record, and keys `CHOICE_RANGES` carries",
-                law="CP-T04-02 -- a choice rides an act that mints the document it is written on, over a closed set")
+                needs="a `verb_table.yaml` verb that writes each key's carrier, and keys `CHOICE_RANGES` carries",
+                law="CP-T04-02 -- a choice rides an act that writes what the choice is read from, over a closed set")
     return out
 
 
