@@ -54,11 +54,11 @@ Jordan asked for the NERS lanes' findings to be folded into the plan using the a
 | CP-T03-07 | B10-11 | RESEQUENCE | AM-C-06 | amended |
 | CP-T03-08 | B10-11 | RESEQUENCE | AM-C-08 | held |
 | CP-T03-09 | B10-11 | REPAIR | AM-C-03 | amended |
-| B10-12 entry gate (CP-T04-01 … -08) | B10-12 | LIMIT | AM-C-13 | held |
-| CP-T04-02 | B10-12 | REPAIR | AM-C-09 | amended |
-| CP-T04-05 | B10-12 | REPAIR | AM-C-10 | amended |
-| CP-T04-06 | B10-12 | REPAIR | AM-C-11 | amended |
-| CP-T04-07 | B10-12 | REPAIR | AM-C-12 | amended |
+| B10-12 entry gate (CP-T04-01 … -08) | B10-12 (CLOSED, `6b6ec196`) | LIMIT | AM-C-13 | held |
+| CP-T04-02 | B10-12 (CLOSED, `a86be397`) | REPAIR | AM-C-09 | amended |
+| CP-T04-05 | B10-12 (CLOSED, `db99c1c4`) | REPAIR | AM-C-10 | amended |
+| CP-T04-06 | B10-12 (CLOSED, `6efea3db`) | REPAIR | AM-C-11 | amended |
+| CP-T04-07 | B10-12 (CLOSED, `1cdfcaf6`) | REPAIR | AM-C-12 | amended |
 | CP-T05-01 | B10-Z (HELD) | LIMIT | AM-D-03 | held |
 | CP-T05-02 | B10-Z (HELD; part (i)) | REPAIR | AM-D-01 | amended |
 | CP-T05-02 | B10-13 (CLOSED, `c627426a`) | REPAIR | AM-D-02 | held |
@@ -356,12 +356,12 @@ Built and closed; the code and its tests are the record. This heading stays only
 - **Because:** YES — on every part. (1) Gate: `state/gate.py:1205-1206` admits an OPENED `detain` whose object is in `w.offices` when `may_warrant(w, actor, via, prisoner)` holds (`:809-831`: `via` is a seat the actor sits in, its grant carries `WARRANT_ACT = "dispatch"` (`:272`), its purview reaches the prisoner).
 - **After the attack:** Hash-neutral only with a `'death'` default; a host-side literal would have been a second copy of `LETHAL_TERMS`; the override dropped the home's closability conjunct; and PC-10b would have fed a second `terms` path.
 
-### B10-12 entry gate (CP-T04-01 … -08) — LIMIT (B10-12) · AM-C-13
+### B10-12 entry gate (CP-T04-01 … -08) — LIMIT (B10-12, CLOSED `6b6ec196`) · AM-C-13
 
 - **Override:** State the prerequisites in the card: REM-27 (a march reaches a field) and REM-22 (`restore` forms) have landed (B10-06, B10-05) before B10-12 opens. Each T04 item's exit reports the fought-field count it was measured on. If a natural run still fights no field after REM-27, the T04 falsifiers that need a fought field (01, 02, 03, 05) are measured on hand-built folds, as the homes already allow, and say so.
 - **Because:** YES — `content_and_surface.md` probe: `march` declared/refused/arrived is 21/24/0 and 30/30/0 at baseline, and the only fought field in any arm is one `field.lost` (seed 1, all content on). `-03` row REM-27 "`march` reaches a field" is in B10-06; B10-12's gate is "B10-10 merged" only, which by the serial order (`-00:97`) already follows B10-06.
 
-### CP-T04-02 — REPAIR (B10-12) · AM-C-09
+### CP-T04-02 — REPAIR (B10-12, CLOSED `a86be397`) · AM-C-09
 
 - **N-line after:** `marshal` — cut it and the defender has no act that changes the field it will fight (and no built role reaches a season field); narrowed to `role` and `retreat_at`.
 - **Override:** `order_of_battle` keys are `[at, role, retreat_at]`; `reserve` and `general` are dropped (and `RESERVE_COMMIT_TURN` stays the module's). `field_input` reads, per side, the order Record whose holder edge has the greatest `since` among live orders held by a seat of that side's faction about the side's settlement (ties: later in `w.tenures`); older orders are ignored, not deleted. The role roster export under `engine_params/` shrinks to the roles the module names. Falsifier unchanged (paired seeds, two roles, ±7 points), plus: two orders in two seasons, the newer one governs. `faction_q.home_of`'s last-write rule picks the last in `w.tenures`, which is ordered by owner and not by time; so `since` decides and `w.tenures` order only breaks ties.
@@ -369,7 +369,7 @@ Built and closed; the code and its tests are the record. This heading stays only
 - **Because:** YES — `modules/mass_battle/massbattle.py:176-186` `_MVP_UNIT_COMMAND = dict(command=4, …)` is a constant; `Record` (`state/carriers.py:761-791`) has `ttl: Optional[int] = None` and no creation-tick field (ttl has no reader per the code report; not re-opened by me). The order's holder edge is a `hold` `Tenure` with `since` (`effects_information.py` `_disposal` shape: `since=w.tick`).
 - **After the attack:** The precedent was misquoted; the rule stands, its basis is restated.
 
-### CP-T04-05 — REPAIR (B10-12) · AM-C-10
+### CP-T04-05 — REPAIR (B10-12, CLOSED `db99c1c4`) · AM-C-10
 
 - **N-line after:** walls that grade with the garrison's condition — cut it and `restore` and `sabotage` change nothing in a battle until a garrison reaches 0, so walls remain a switch; one line in the wrapper.
 - **Override:** No new fixture and no `massbattle.py` edit. In `seam/wrappers/mass_battle.py::field_input`, `walls_dr` becomes `None` when `field_walls_dr` is `None` (shipped; A.9's number stands) and otherwise `int(field_walls_dr × fort_level)` (floor; Python's `round` is banker's rounding: 3 × 0.5 gives 2 and 1 × 0.5 gives 0). `fort_level` is `world_q.fortification_of`, already read there. The `field_walls_graded` fixture and its `hole_register.yaml` row are not created. Falsifier unchanged (defender win share falls as `fort_level` steps 1.0 → 0 under paired seeds, with `field_walls_dr = 3`), plus: shipped `None` is hash-equal. The on-arm commit declares its `field_walls_dr` value a copy of `terrain.WALLS_DEFENDER_DR` (`massbattle.py:238`: 'read here and never copied').
@@ -377,7 +377,7 @@ Built and closed; the code and its tests are the record. This heading stays only
 - **Because:** YES — `fixtures.py:690` `field_walls_dr=None`; `seam/wrappers/mass_battle.py:196` `walls_dr=w.fixtures.get("field_walls_dr")`; `massbattle.py:233-239` documents `walls_dr` (None = A.9's number) and `:273` is `unit_b.dr += WALLS_DEFENDER_DR if walls_dr is None else walls_dr`; `terrain.py:177` selects WALLS when `fort_level > 0`.
 - **After the attack:** Rounding rule fixed; turning grading on writes a number that copies A.9's, which the on-arm commit must declare.
 
-### CP-T04-06 — REPAIR (B10-12) · AM-C-11
+### CP-T04-06 — REPAIR (B10-12, CLOSED `6efea3db`) · AM-C-11
 
 - **N-line after:** `besiege` — cut it and an army outside the walls can only storm them, so time and a scene action cannot be traded for blood; narrowed to the from-outside writer of `Site.condition`, using the same decrement as `sabotage`.
 - **Override:** `besiege` writes `condition -= _fall(w, site)` directly, through the gate, in `_eff_march`'s `Invested` branch on the home's ENC cell, for each garrison Site in the target's subtree: the same formula as `_eff_sabotage`, with no accumulator (wear staged through `World.stage` at ENCOUNTER is never applied: `encounter.py:43-77` has no `take_staged`, and the accumulator is RESOLVE-scoped, `world.py:265-272`). With n fixed, repeated falls commute. No `siege_wear` fixture, no `hole_register` NUMBER row, no ratio. LIMIT: `march_postures` ships as `[storm]`; `besiege` joins the roster in its own declared-mover commit, whose body must state that `restore` executed at least once on a garrison Site in a natural run (seeds 0-2) after REM-22. Until then besiege-then-storm dominates storm: the wear is permanent. `share` floors n at 1, so at a rung with one person present a single besiege act zeroes the walls. Falsifier: after k besieging acts the garrison condition reads the `_fall` iterate; a storm afterwards wins more often than at full walls.
@@ -385,7 +385,7 @@ Built and closed; the code and its tests are the record. This heading stays only
 - **Because:** YES — `effects_economy.py:109-138` `_rise` = headroom × share; `:141-157` `_fall` = condition × share ("one formula, two signs", `:152-153`); both stage through `World.stage` and `resolve()` sums and clamps once (`:105-106`, `:175-177`). The home's wear (file:233-235) is a fixture times a ratio, a third formula.
 - **After the attack:** Rejected as drafted: staging through `World.stage` at ENCOUNTER never applies. The repair is the direct write the home's ENC cell already allows; the limit and the dominance statement stand.
 
-### CP-T04-07 — REPAIR (B10-12) · AM-C-12
+### CP-T04-07 — REPAIR (B10-12, CLOSED `1cdfcaf6`) · AM-C-12
 
 - **N-line after:** `surrender` — cut it and a town changes hands only by blood or by `give`; narrowed to a seat of the holder faction ceding to a live threat.
 - **Override:** `_eff_surrender` asks the `cession` basis's predicate (`may_warrant`'s shape) that the seat the actor exercises (`a.via`) belongs to `holder_faction_of(subject)`, and declines `NO_CHANGE` as `surrender.refused`, as `_eff_arrest` asks `may_warrant`: no new `requires` stem (`data/requires.py` has none for a seat's faction). Cost, stated: Candidates form and are refused for seats of the wrong faction. E count adds the `cession` gate basis (one clause in `state/gate.py`). The threat it answers is a `siege.pressed` this season (CP-T04-06); the declared unfought `march` (CP-T04-04) is added only when CP-T04-04 lands (Ask C).

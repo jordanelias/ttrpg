@@ -43,16 +43,16 @@
 | CP-T03-09 | B10-11 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T03-10 | B10-11 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T03-11 | B10-11 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T04-01 | B10-12 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T04-02 | B10-12 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T04-03 | B10-12 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T04-04 | B10-12 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T04-05 | B10-12 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T04-06 | B10-12 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T04-07 | B10-12 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T04-08 | B10-12 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T04-09 | B10-12 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T04-10 | B10-12 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T04-01 | B10-12 (CLOSED, `5de92100`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T04-02 | B10-12 (CLOSED, `a86be397`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T04-03 | B10-12 (CLOSED, `e5432ea0`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T04-04 | B10-Z (HELD on M4 Ask C (b); left B10-12 at its close) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T04-05 | B10-12 (CLOSED, `db99c1c4`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T04-06 | B10-12 (CLOSED, `6efea3db`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T04-07 | B10-12 (CLOSED, `1cdfcaf6`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T04-08 | B10-12 (CLOSED, `e445c3e4`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T04-09 | B10-12 (CLOSED; CUT, never built) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T04-10 | B10-Z (HELD on M3, Ask A; left B10-12 at its close) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T05-01 | B10-Z (HELD, waiting on SC-02's approved design; left B10-13 at its close) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T05-02 | B10-13 (parts (ii) and (iii) CLOSED, `c627426a`); part (i) B10-Z (HELD) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T05-03 | B10-13 (CLOSED, `01ffc567`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
@@ -114,7 +114,7 @@
 | CR-09 | B10-17 | new from the hole-row pass (`-04`; H-101) |
 | CR-10 | B10-09 (close two CLOSED, `1ef8d273`) | new from the v9 residue (`-04`; IN-57 arm D2) |
 | CR-11 | B10-09 (close two CLOSED, `1ef8d273`) | new from the editorial-id pass (`-04`; H-94 residue, H-132, H-144, H-156), design-first |
-| CR-12 | B10-12 | new from the editorial-id pass (`-04`; ED-MB-0045), measure then design-first |
+| CR-12 | B10-Z (HELD: measured `da2b82c9`, design written and PROPOSED, awaits Jordan; left B10-12 at its close) | new from the editorial-id pass (`-04`; ED-MB-0045), measure then design-first |
 | CR-13 | B10-15 | new from the editorial-id pass (`-04`; ED-WR-0005 C-TW-3) |
 | CR-14 | B10-02 (CLOSED) | new from the fold of PR #506 (`-04`; the register's G-08, G-11, G-12, G-20, G-29), harness, hash EQUAL |
 | CR-15 | B10-02 (CLOSED) | new from the fold of PR #506 (`-04`; the register's G-27), harness, hash EQUAL |
@@ -126,7 +126,7 @@
 | CR-21 | B10-07b (CLOSED) | new from the decision round (`-04`; M14): the cell-value and cosine pass |
 | CR-22 | B10-18 | new from the decision round (`-04`; M6): hunger binds, the per-head need chosen by a reading rule; MEASURE then BUILD; its exit also reads the `shortfall:<kind>` observations and the executed `transfer` / `requisition` / `petition` / `migrate` counts (the story-telling fold of 2026-11-02) |
 | CR-23 | B10-06 (CLOSED) | new from the decision round (`-04`; M17): a larder's stock reaches the seats over it, at its crossings |
-| CR-24 | B10-12 | new from the decision round (`-04`; M4 Ask B (b)): winners take their engine casualties |
+| CR-24 | B10-12 (CLOSED, `e9db80f6`) | new from the decision round (`-04`; M4 Ask B (b)): winners take their engine casualties |
 | CR-25 | B10-09 (close two CLOSED, `1ef8d273`) | new from the decision round (`-04`; CR-11's build, M8): a computed `establish` founds an office over a holding (close two, after CR-11) |
 | CR-26 | B10-09 (close one CLOSED, `f9e4cef`) | new from the decision round (`-04`; IN-61 check (4)): the heir hears the vacancy; MEASURE (a test), directly before IN-61 |
 | CR-27 | B10-13 (CLOSED, `db1dc1f2`) | new from the decision round (`-04`; M9): `lie`, a spoken falsehood on a held cell claim |
@@ -239,7 +239,7 @@
 | IN-52 | B10-16 | carried v9 position (`-04`) |
 | IN-58 | B10-Z (HELD; narrowed at B10-09's close two, `1ef8d273`) | carried v9 position (`-04`) |
 | IN-61 | B10-09 (close one CLOSED, `f9e4cef`) | carried v9 position (`-04`) |
-| MB-07r | B10-12 | carried v9 position (`-04`) |
+| MB-07r | B10-12 (CLOSED, `aa6871b8`) | carried v9 position (`-04`) |
 | MB-08 | B10-Z | carried v9 position (`-04`) |
 | NM-W0 | B10-02 (CLOSED) | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4); subsumed, an EDIT: the row left `-03` at B10-02's close |
 | NM-W1 | B10-19 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4); its ranking-tier piece moved to CR-68 (B10-10, the story-telling fold of 2026-11-02), the remainder stays HELD · PARTLY LANDED |
