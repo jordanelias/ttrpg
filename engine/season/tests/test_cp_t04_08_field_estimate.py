@@ -105,6 +105,9 @@ def _realised_won(w, seed0):
     return won / REALISED
 
 
+_REALISED_CACHE: dict = {}      # (pair, seed0) -> the realised share: the real arm and the swapped-sides arm deal the same scenes
+
+
 def _coverage(estimate=None):
     """`(pairs covered, pairs tested, [(pair, shown, realised, interval)])`: the realised `Won` share inside the estimate's
     interval. `estimate` is the call under test (the real `field_estimate` by default), so a planted failure is judged by
@@ -114,7 +117,10 @@ def _coverage(estimate=None):
     for k, (aw, worn, role) in enumerate(_pairs()):
         w = _build(aw, worn, role)
         shown = _shares(estimate(w, ACTOR, KING_SEAT, TARGET))["Won"]
-        real = _realised_won(w, 10_000 + 1_000 * k)
+        key = ((aw, worn, role), 10_000 + 1_000 * k)
+        if key not in _REALISED_CACHE:
+            _REALISED_CACHE[key] = _realised_won(w, key[1])
+        real = _REALISED_CACHE[key]
         lo, hi = _interval(shown)
         assert hi - lo <= 2 * MAX_HALF_WIDTH + 1e-9, (shown, lo, hi)
         covered += lo - 1e-12 <= real <= hi + 1e-12
@@ -322,12 +328,13 @@ def test_falsifier_a_season_whose_callback_asks_before_every_act_ends_at_the_sam
     assert draw1 == draw0, f"the call moved the season's draw counter {draw0} -> {draw1}"
 
 
-def test_planted_failure_an_estimate_that_draws_from_the_season_reddens_the_hash_falsifier(monkeypatch):
+def test_planted_failure_an_estimate_that_draws_from_the_season_reddens_the_hash_falsifier(monkeypatch, season_pair):
     real = wrapper.field_estimate
 
     def drawing(w, *a, **k):
         w.new_draw()
         return real(w, *a, **k)
     monkeypatch.setattr(wrapper, "field_estimate", drawing)
-    (h0, draw0, _, _), (h1, draw1, calls, _) = _season(False), _season(True)
+    (h0, draw0, _, _), _ = season_pair                 # the baseline season the fixture already ran, before the monkeypatch
+    (h1, draw1, calls, _) = _season(True)
     assert calls > 0 and draw1 != draw0, (draw0, draw1)
