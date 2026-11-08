@@ -42,6 +42,7 @@ from ..data.requires import (
 from ..data.rosters import (
     CONTINUATION_TIES, SUCCESSIONS,
     ARMS_KINDS, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
+    INVESTED,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
     VERB_CAPABILITY,
@@ -2238,6 +2239,23 @@ def garrison_sites(w: World, rung_id: str) -> list:
     which Sites are a settlement's garrison, so what a siege lowers is exactly what a storm then reads."""
     here = _subtree(w, rung_id)
     return [s for s in w.sites.values() if s.kind == "garrison" and s.rung in here]
+
+
+def siege_pressed_by(w: World, place: str):
+    """THE THREAT A `surrender` ANSWERS (CP-T04-07, AM-C-12): the `march` Act whose `Invested` band pressed a siege on `place`
+    THIS SEASON -- the latest `siege.pressed` Event (`march`'s `Invested` kind, read off the row, never spelt here) with
+    `emitted_at == w.tick` whose causing act is a `march` naming `place` as its subject -- or `None`. The Act, not its actor:
+    the actor is who receives the place, and `via` names the seat he pressed it through. Read-only over `w.log`; the
+    declared unfought `march` (CP-T04-04, held) joins it here when it lands."""
+    TRACE.query("siege_pressed_by", "resolver")
+    kind = VERB_TABLE["march"].emits_at(INVESTED)[0]
+    for e in reversed(w.log):
+        if e.kind != kind or e.emitted_at != w.tick:
+            continue
+        a = causing_act(w, e)
+        if a is not None and a.verb == "march" and isinstance(a.payload, dict) and a.payload.get("subject") == place:
+            return a
+    return None
 
 
 def training_sites(w: World, person_id: str) -> dict:

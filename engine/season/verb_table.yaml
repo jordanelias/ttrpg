@@ -1111,6 +1111,39 @@ verbs:
     grade_note:  "an argued addition (v11 CP-T04-02, AM-C-09): the matrix row `(Record, exists)` is the tree's; the verb, its `remit:dispatch` eligibility, the three-key kind and the `role_allowed` bypass (the `role` ranges over the module's whole `ROLE_SPEC`, `H-361`) are this item's, on the user's ruling to build it as the entry writes it."
     source:      "v11 CP-T04-02 (`proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-12.md`), AM-C-09 (`workplans/valoria_master_workplan_v11_part13.md`); home `proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-04-mass-battle.md` §2 CP-T04-02"
   # ===========================================================================================
+  # v11 CP-T04-07 (B10-12; AM-C-12 REPAIR) -- SURRENDER: THE HOLDER YIELDS A THREATENED PLACE ON TERMS. A seat granting `dispatch`
+  # whose faction holds a settlement a `siege.pressed` names this season gives the place to the person who pressed it, and no
+  # field is fought. Ships WITHHELD (`Fixtures withheld_verbs`, `marshal`'s precedent): formable, it moves every seeded season.
+  # ===========================================================================================
+  - verb:        "surrender"
+    scale:       "settlement"
+    scale_note:  "a place is yielded where it stands: the settlement IS the subject, as `march`'s and `marshal`'s are, and the exercised seat's purview must reach it."
+    stratum:     "binding_decision"
+    eligibility: ["remit:dispatch"]
+    beneficiary: "none"
+    beneficiary_note: "`seize`'s column, for the same reason mirrored: the place passes to the person who pressed the siege, who is no operand of this act (nothing in the row binds him; he is read off the threat), and the yielder gains no more than the end of the war's cost, which no operand carries."
+    referent_class: Rung
+    referent_class_note: "v11 CP-T04-07: FORMED ONLY ON A `Rung`-CLASSED REFERENT, `march`'s and `marshal`'s class, so a seat granting `dispatch` is offered the same Rungs for all three and the fold disposes (`surrender.unauthorized`: the exercised seat's purview must reach the place; `surrender.refused`: the effect declines a place that is no settlement, is not held, is under no siege this season, or is held by a faction other than the seat's). [ASSUMPTION; medium; Jordan to correct; revert: drop this row, `cession` and `siege_pressed_by`, and a town changes hands only by blood or by `give`.]"
+    requires:    "the exercised seat's purview reaches the subject, a settlement"
+    requires_typed:
+      form:      basis
+      of:        subject
+      basis:     purview
+      conjunct:  authority
+    requires_typed_note: "v11 CP-T04-07: `marshal`'s, `seize`'s and `requisition`'s ONE CONJUNCT, `authority` -- the exercised seat's purview reaches the subject's place (`state/gate.py::purview_reaches`). NO NEW STEM (AM-C-12): that the seat BELONGS TO `holder_faction_of(subject)` is asked by the EFFECT, through the cession basis's predicate (`state/gate.py::may_cede`, `may_warrant`'s shape), as `_eff_arrest` asks `may_warrant`; `data/requires.py` has no stem for a seat's faction and a typed conjunct for one would add a grammar. THE COST, STATED: Candidates form and are refused for seats of the wrong faction. [ASSUMPTION; medium; Jordan to correct; revert: the home's text, actor any member present.]"
+    writes:      ["Tenure.until", "Tenure.since"]
+    writes_note: "ONE PER SIDE, `seize`'s pair: the yielding seat's live `hold` on the place, if the place is held directly, closes (`Tenure.until`) and the receiver's opens (`Tenure.since`), in ONE effect (`loop/effects_information.py::_eff_surrender` through `_take_hold`). Seeded settlements are held through their territory, so usually nothing closes and the territory's holder keeps the territory, while the settlement's own `hold` now shadows it in `holder_faction_of`'s walk. The gate admits both under `cession` (`state/gate.py`). No `write_matrix.yaml` row is added: both pairs exist. NO BODY, STANCE OR LEG IS WRITTEN: that is the whole difference from a `march` that wins the field."
+    emits:       ["place.surrendered"]
+    emits_note:  "A KIND OF ITS OWN: a cession under arms, distinct from `rung.seized` (a taking by a warrant and an occupation) and `rung.ceded` (`give`, consensual and unthreatened). It is an act exercised through a seat, so `_ch_post_remit` hands it to the obligees standing at that seat; `chronicle` keys on `binding_decision` rows, so a town yielded is a chronicled event."
+    emits_on_refusal:
+      eligibility: ["surrender.unauthorized"]
+      authority:   ["surrender.unauthorized"]
+      write:       ["surrender.refused"]
+    refusal_note: "KEYED PER CLAUSE, `seize`'s shape. `surrender.unauthorized` -- the SEAT, at `authority`: none exercised grants `dispatch`, or its purview does not reach the place. `surrender.refused` -- the WORLD, at `write`: the subject is no settlement or nobody holds it, no `siege.pressed` names it this season, the person who pressed it is not a living person of another faction, the seat's faction is not the place's holder faction, or the yielding hold is one the seat may not close."
+    grade:       "assumption"
+    grade_note:  "an argued addition (v11 CP-T04-07, AM-C-12): the matrix rows `(Tenure, until)` and `(Tenure, since)` are the tree's; the verb, its `remit:dispatch` eligibility, the `cession` basis and the threat reading are this item's."
+    source:      "v11 CP-T04-07 (`proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-12.md`), AM-C-12 (`workplans/valoria_master_workplan_v11_part13.md`); home `proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-04-mass-battle.md` §2 CP-T04-07"
+  # ===========================================================================================
   # PLAN POSITION `19c` -- MIGRATE (`RULINGS.yaml` RR-2: *"must be able to build hearths and accept
   # people who move settlements"*; *"migration is a verb persons take"*). `move` is travel: it
   # re-homes `contain`, where a person IS. `migrate` is travel AND settling: it re-homes `contain`

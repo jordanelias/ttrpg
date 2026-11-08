@@ -4106,6 +4106,11 @@ tables:
         (IN-08's method), and a standing order of battle is a document written before the field, whose moral weight
         is the field's. It scores 0.0 on every axis until a cell is authored, so no witness is scarred by an order
         marshalled and `order.marshaled` judges as no deed. Revert: the seven cells, IN-08's method.
+      surrender: >-
+        v11 CP-T04-07: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); a lean on seven axes is authored content
+        (IN-08's method), and a place yielded on terms is a moral weight the field would have carried (the
+        stormed town's `fight`/`march` cells). It scores 0.0 on every axis until a cell is authored, so no witness is
+        scarred by a surrender and `place.surrendered` judges as no deed. Revert: the seven cells, IN-08's method.
       tell: >-
         No cell on any axis BY DESIGN: testimony's moral weight is in WHAT is told (a claim), which
         no verb x axis cell can carry, and telling is driven by regard (the telling workplan's G1),
