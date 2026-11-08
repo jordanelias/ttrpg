@@ -5151,10 +5151,10 @@ rows:
     tier:      1
     hole:      "HOW MANY FIGHTS THE PLAYER'S ODDS DISPLAY SAMPLES (CP-T03-05; `-08` AM-C-02). The combat module deals one scene and returns a winner, so the odds the player is shown before choosing `fight` are a distribution that only many scenes give. No document states a sample size for a shown figure."
     kind:      "NUMBER"
-    owner:     "`seam/wrappers/combat.py::fight_estimate`, the one place the fixture is read; CP-T04-08's `field_estimate` reads the same fixture"
+    owner:     "`seam/wrappers/_estimate.py::samples_of`, the one place the fixture is read; `combat.fight_estimate` and CP-T04-08's `mass_battle.field_estimate` both call it"
     grade:     "assumption"
     default:   "400 -- SHIPPED [ASSUMPTION; medium; Jordan to correct; revert: any whole number >= 1, the display moves and nothing else]. Taken at `CLAUDE.md` section 0's ladder step 5 (architecture): 0.5 / sqrt(400) = 0.025 is the largest standard error of a shown share, a figure a player cannot tell from the dealt one, at about 0.7 s a call (200 fights measured 0.36 s). The reader refuses a value that is not a whole number of at least 1."
-    site:      "Fixtures estimate_samples, read by `engine/season/seam/wrappers/combat.py::fight_estimate`"
+    site:      "Fixtures estimate_samples, read by `engine/season/seam/wrappers/_estimate.py::samples_of`"
     sweep:     [100, 400, 1600]
     unblocks:  "the player's display of combat's odds for `fight` (and `capture`, CP-T03-09); CP-T04-08's field estimate"
     cite:      "FALSIFIER: `engine/season/tests/test_cp_t03_05_fight_estimate.py` -- the shares agree with the shares `resolve` realises over held-out worlds within the standard error of their difference, in every outcome at four matchups, and the tolerance is red against a display of a different matchup and against a display with the actor and subject shares swapped; the call leaves `content_hash` and the draw counter unmoved (red against a variant that draws from the season stream, seen red and reverted). CONTROL: `content_hash` and the draw counter of a world that made the call, equal to a world that did not (`test_cp_t03_05_fight_estimate.py`), and the fixture's addition moves no hash (`test_cp_t03_01_cohorts_never_fight.py`'s stripped-reads control, seeds 0 and 2); the fixture has no loop reader."
