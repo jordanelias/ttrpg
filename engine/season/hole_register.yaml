@@ -3135,10 +3135,19 @@ rows:
       names the CELL Jordan's ruling on clause (b) fixes -- casualties, a morale hit, a grudge
       token, nothing else, nothing on the winner -- and never a magnitude; no ruling states one.
       `wound_harm_models` (`H-123`) asked the identical question of a scene's `WoundTracker` and
-      this row asks it of mass_battle's own survivor-ratio result instead."
+      this row asks it of mass_battle's own survivor-ratio result instead.
+      ⚠ CORRECTED 2026-11-08 (premise-check on mass battle; Jordan's ruling in session, verbatim:
+      *Casualties would be written on both sides. If I ruled otherwise then I was given
+      misleading/poorly written context*). The words 'nothing on the winner' above, and the same words
+      in the `march` row's `writes_grade_note`, are this chain's gloss on the quoted ruling
+      (casualties, a morale hit, a grudge token), which never excluded the winner. Casualties are
+      written on BOTH sides, so the winner-side body write is an open BEHAVIOUR defect and no longer a
+      ruling to keep; measured in `cite:`."
     kind:      "FORMULA"
     owner:     "`_eff_march` (loop/effects.py) -- the value the `Lost`/`Won` branches write to
-      `(Person, body)` on the LOSING side"
+      `(Person, body)` on the LOSING side
+      ⚠ BOTH sides since the 2026-11-08 ruling (see `hole:`): the fix site is `_eff_march`'s `losers`
+      selection and its `_casualties` writer."
     grade:     "assumption"
     default:   "`scaled_by_degree` -- each loser's body scales by the survivor fraction the mass-
       battle engine already computed for their own side (`attacker_size_pct`/`defender_size_pct`,
@@ -3176,9 +3185,42 @@ rows:
       question, so no such run was made. FALSIFIER: `test_march.py`'s
       `test_the_total_casualty_model_zeroes_the_losing_side` and
       `test_the_none_casualty_model_writes_stance_only`, the two controls run deliberately through
-      the real driver fold."
+      the real driver fold.
+      PREMISE-CHECK ON MASS BATTLE, 2026-11-08 (author-run; every figure below was run by the author
+      in this session). WINNER'S CASUALTIES: through the real driver fold (`test_march.py`'s
+      `_fold_one` and `_march_act`, `build_realm(s)`, seeds 0..11, the Crown pair at `set_s_014` on
+      the Church's six at `set_s_036`), the `Won` band (`field_troops_per_weight` 10, marchers at
+      weight 10, 200 v 60 troops) left every attacker's body and stance unwritten in 12 of 12 folds (0
+      attacker persons changed, 72 defender persons changed, defender survivor fractions 0.48 and 0.60
+      only). The `Lost` band (k 1, 20 weight each, 40 v 6) wrote the attacker alone (24 attacker
+      persons changed, 0 defender; attacker survivor fractions 0.385 and 0.40). The three
+      `field_casualty_model` arms leave the winner untouched alike (seed 0, `Won`: scaled_by_degree
+      defenders 0.6, total defenders 0, none defenders 1.0, attackers 1.0 in all three). THE ENGINE
+      COMPUTES THE WINNER'S LOSS AND `_eff_march` DISCARDS IT: `resolve_field` returns both
+      `attacker_size_pct` and `defender_size_pct`, and `_eff_march` reads only the loser's. On the
+      `Lost` band the unwritten winner can be the heavier loser: at 40 v 6 the module leaves the
+      defender 4.3% of its troops and the attacker 39.7% (300 seeds, both sides routed in 300 of 300),
+      and the season writes the attacker's 60% and nothing for the defender's 96%. FIX SITE (a
+      read-only run proposes it; not made): `loop/effects_combat.py::_eff_march`'s `losers` selection
+      and `_casualties`, scaling BOTH sides by their own survivor fraction. The `march` row's `writes`
+      cells in `verb_table.yaml` already name `Person.body` on both bands, but whether `state/gate.py`
+      admits a winner's body write was NOT tested. `test_march.py` claim 2 (the winning side is never
+      written) asserts the old gloss and is re-pinned with the fix; the seeded goldens move and are
+      declared when re-recorded. MORALE WEIGHT'S READER, MEASURED (this row's stance-weight half):
+      `massbattle._morale_start` moves a result little at the troop counts a season reaches and more
+      as the force grows. Paired seeds, n 400 per cell, attacker morale-start 1 against 7: 200 v 200
+      attacker wins 44.5% then 45.3%; 100 v 60 70.8% then 70.8%; 300 v 200 54.0% then 56.5%; 200 v 300
+      33.8% then 34.7%; 1000 v 1000 39.5% then 48.7%. Defender morale 1 against 7 at 200 v 200:
+      attacker wins 46.3% then 45.3%. CONTROL (the harness sees an effect): a 5% troop change at 200 v
+      200 moves the attacker's wins from 45.3% to 53.5%. A first reading of the morale effect as nil
+      was retracted by this larger-n pass. RELATED NEW ROWS: H-354 (both sides rout, attacker graded
+      the loser) and H-355 (no retreat written)."
     source:    "M4 of the driver-retirement plan (`ED-IN-0279`), invented on `wound_harm_model`'s
-      own precedent -- no ruling states a magnitude, exactly as `H-123` records for that row"
+      own precedent -- no ruling states a magnitude, exactly as `H-123` records for that row
+      Premise-check run on mass battle, 2026-11-08, branch ccr-e2df41cb-hk3892 (no PR number yet),
+      whole element, module and season scale; the premise sentence is the author's rendering of two
+      words [ASSUMPTION]. The winner's-casualties correction is Jordan's, stated in session the same
+      day."
 
   - id:        H-149
     tier:      1
@@ -3954,7 +3996,13 @@ rows:
       (`engine/season/tests/test_build_realm_determinism.py`) now asserts
       `march.declared`/`march.refused`-family events appear in `build_realm(0)`'s log over the
       real season it already runs for the hash pin -- added this same pass, 2 passed; see the
-      2026-09-30 plan doc's `c . 28-ii` subsection for the full statement."
+      2026-09-30 plan doc's `c . 28-ii` subsection for the full statement.
+      FIRES, MEASURED BY THE PREMISE-CHECK ON MASS BATTLE, 2026-11-08 (author-run): `PYTHONHASHSEED=0
+      python -m engine.season.harness.aperture 2 <seed>`, seeds 0, 1 and 2, REALM section, two seasons
+      each. `march` acts attempted 15, 5 and 12 (32 in all), of which `field.unopposed` 3, 3 and 5
+      (11), `march.refused` 12, 2 and 6 (20) and ONE fought field (`field.lost`, seed 2); `field.won`
+      in none. So `march` executes in natural play here, but a fought field is rare (1 of 32) and no
+      seed reached `Won` at the shipped scale (H-250). Why 20 of 32 are refused is not measured here."
     source:    "BATCH-CLOSE Phase 2, position 28-ii's Phase-1 antagonist reconciliation, 2026-09-30
       -- `/simplify`'s ALTITUDE lens recommended minting this row rather than leaving the gap as a
       footnote on H-151 (a RULING-kind row scoped to a different question, same-faction combat).
@@ -3962,7 +4010,9 @@ rows:
       THIRD TIME, the Phase 3 terminal critique's reconciliation, 2026-09-30: three successive
       rounds of fixes to this row each replaced the stated CAUSE while never running the one
       instrument that measures the ABSENCE itself -- this pass ran it, and the result narrows the
-      row's scope rather than replacing its cause again."
+      row's scope rather than replacing its cause again.
+      Premise-check run on mass battle, 2026-11-08, branch ccr-e2df41cb-hk3892 (no PR number yet): the
+      FIRES count above."
 
   - id:        H-176
     tier:      1
@@ -5080,8 +5130,22 @@ rows:
     site:      "Fixtures field_troops_per_weight (`data/fixtures.py`, REM-32), read by `engine/season/seam/wrappers/mass_battle.py::field_input` into the record's `troops_per_weight`, which `modules/mass_battle/massbattle.py::resolve_field` hands `_weighted_unit`"
     sweep:     [1, 10, 30]
     unblocks:  "JQ-4 (the weight-to-troops conversion, answerable now by a value); a real fold reaching `Won` (`engine/season/tests/test_march.py`); CP-T04-01's per-person subunits, which take this scale"
-    cite:      "BUILT at REM-32 (B10-10), hash EQUAL at the shipped 1. FALSIFIER: `engine/season/tests/test_march.py::test_a_won_field_writes_casualties_and_stance_on_the_defender_only` -- the hand-built `Resolution(\"Won\")` replaced by a real fold: the Crown's two marchers made cohorts (`Person.weight` 10, 20 v 6 against the Church's six) fold `field.won` at k = 10, and the same world and act fold `field.lost` at k = 1 (the control: only the scale differs); with the multiplication dropped from `_weighted_unit` the test reddens (seen red, reverted). CONTROL: `build_realm(s)`, one season, `PYTHONHASHSEED=0`, seeds 0 / 1 / 2, `content_hash` f2e5e265 / 0d25717b / 05f065f4 and the ordered (kind, id) event list identical to the tree before. MEASURED, that world, k swept at fixed weights: `Lost` at 1 to 4, `Won` at 5 to 15, `Lost` again at 20, 30, 40, 50 -- the engine's own battle outcome is not monotone in the scale (a larger side at the same ratio does not always win the grading), so the swept arm 30 (= `TROOPS_PER_WEIGHT` x `MUSTER_FRACTION`, `troop_types/recruitment.py`) reads `Lost` there. The unmodified 2-v-6 realm pair (Crown at `set_s_014` on the Church at `set_s_036`) reads `Lost` at every k tried (1, 2, 5, 10, 50, 100, 300), the defender being the larger side. With `field_provisioning` on, k scales the fed troops too (the commit's choice; the bound is in weight units)"
-    source:    "v10 REM-32 (`workplans/valoria_master_workplan_v11_part13.md`, REM-32; AM-A-20), batch B10-10"
+    cite:      "BUILT at REM-32 (B10-10), hash EQUAL at the shipped 1. FALSIFIER: `engine/season/tests/test_march.py::test_a_won_field_writes_casualties_and_stance_on_the_defender_only` -- the hand-built `Resolution(\"Won\")` replaced by a real fold: the Crown's two marchers made cohorts (`Person.weight` 10, 20 v 6 against the Church's six) fold `field.won` at k = 10, and the same world and act fold `field.lost` at k = 1 (the control: only the scale differs); with the multiplication dropped from `_weighted_unit` the test reddens (seen red, reverted). CONTROL: `build_realm(s)`, one season, `PYTHONHASHSEED=0`, seeds 0 / 1 / 2, `content_hash` f2e5e265 / 0d25717b / 05f065f4 and the ordered (kind, id) event list identical to the tree before. MEASURED, that world, k swept at fixed weights: `Lost` at 1 to 4, `Won` at 5 to 15, `Lost` again at 20, 30, 40, 50 -- the engine's own battle outcome is not monotone in the scale (a larger side at the same ratio does not always win the grading), so the swept arm 30 (= `TROOPS_PER_WEIGHT` x `MUSTER_FRACTION`, `troop_types/recruitment.py`) reads `Lost` there. The unmodified 2-v-6 realm pair (Crown at `set_s_014` on the Church at `set_s_036`) reads `Lost` at every k tried (1, 2, 5, 10, 50, 100, 300), the defender being the larger side. With `field_provisioning` on, k scales the fed troops too (the commit's choice; the bound is in weight units)
+      PREMISE-CHECK ON MASS BATTLE, 2026-11-08 (author-run, confirming this row by execution; it is
+      not a new gap). SEASON, shipped k 1: marchers at weights 1, 2, 3, 5, 10 and 20 each (2, 4, 6,
+      10, 20 and 40 troops) against the Church's six end `Lost` in 12 of 12 seeds each
+      (`build_realm(0..11)` through `_fold_one`), so at the shipped scale the larger side never wins.
+      k 10 (20, 40, 60, 100, 200, 400 troops against 60): `Lost` 12 of 12 for the first three, `Won`
+      10 of 12 at 100, `Won` 12 of 12 at 200 and 400. MODULE (`resolve_field`, headcount path, no
+      geography): attacker wins 0 of 400 at 60 v 60, 20 v 60 and 60 v 100; 305 of 400 at 100 v 60;
+      above that floor the response is monotone (n 300, attacker 200 against 800, 400, 200, 100, 50:
+      12, 27, 44, 59, 100%). Below about a hundred troops a side the field is decided by a mutual rout
+      (60 v 60 and 40 v 6: both sides routed in 300 of 300 runs), not by strength, and that is the
+      regime the shipped scale puts every realm force in; the grading of that case is H-354. Same
+      seed, same result (equal)."
+    source:    "v10 REM-32 (`workplans/valoria_master_workplan_v11_part13.md`, REM-32; AM-A-20), batch B10-10
+      Premise-check run on mass battle, 2026-11-08, branch ccr-e2df41cb-hk3892 (no PR number yet): the
+      scale measurements above."
 
   - id:        H-251
     tier:      1
@@ -6384,6 +6448,32 @@ rows:
     unblocks:  "a faction whose seat-holders are always its members, or a ruling that they may differ"
     cite:      "MEASURED by the author on `probes.tiny_world`, with and without a `commit` for the Duke (the control). `build_realm` mints a `commit` for every sitter: 34 of 34 office-holders were members at build, and after three seasons at seeds 0 and 1 the count of sitters who are not members stayed 0 (the Church lost one sitter and one member to a death at seed 1). `world_q.leaders` documents that an office-holder who has not committed is staff and not a leader, so the fixture half is documented; the open question is the heir, which was not run. Neighbour: H-253 (`succeed` forms for the throne only)."
     source:    "premise-check run on factions, 2026-11-08, branch ccr-a68e30b5-6vwvdw (no PR number yet); the premise sentence is the user's choice among the author's renderings of one word [ASSUMPTION: 'factions' read as a body of people under its office-holders who act for it, whose holdings move with those acts, and whose members and rivals can tell]. Every figure was run by the author; the controls are named in `cite`."
+
+  - id:        H-354
+    tier:      1
+    hole:      "WHEN BOTH SIDES ROUT, THE ATTACKER IS GRADED THE LOSER AND ONLY THE ATTACKER BLEEDS (premise-check, mass battle). `massbattle._grade` makes `attacker_wins` false unless the attacker is unrouted, so a field in which both lines break reads as an attacker loss; `seam/ladder.py::field_degree` maps that to `Lost`; `_eff_march` then writes the attacker's casualties and morale row and leaves the defender, which also broke, unwritten and holding the place. The premise 'the loser breaks and retreats and the winner holds the field' has no case for a field neither side wins, and the code has no band for one (Won, Lost and Unopposed only). At the troop counts a realm force has it is the usual result, not an edge: both sides rout in 300 of 300 seeded runs at 60 v 60, 20 v 60 and 40 v 6."
+    kind:      "MECHANISM"
+    owner:     "`modules/mass_battle/massbattle.py::_grade` (the grade), `engine/season/seam/ladder.py::field_degree` (the band), `loop/effects_combat.py::_eff_march` (the writes). What a field neither side wins should be (a third band, a draw, or a winner by survivor share) is a design call between readings, not derived here."
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a field two broken armies fight reading as a stalemate, with casualties written on both sides (with the winner's-casualties correction on H-148); H-250's scale gap no longer producing a rout of both sides by default"
+    cite:      "MEASURED and re-run by the author, 2026-11-08. MODULE: `massbattle._weighted_unit` units through `orchestration.run_battle` (18 ticks) under `rngsource.using`, seeds 0..299, rout flags (attacker, defender): 60 v 60 both routed 300 of 300; 20 v 60 both 300; 40 v 6 both 300 (`resolve_field` mean survivors over 300 seeds: attacker 39.7%, defender 4.3%); 100 v 60 both routed in 64 and the defender alone in 236; 200 v 200 attacker alone 109, defender alone 112, neither 79. `resolve_field` over 400 seeds at 60 v 60: Failure 400, attacker wins 0. SEASON: through the real driver fold (`test_march.py`'s `_fold_one` and `_march_act`, `build_realm(0..11)`) at k 10, 60 v 60 troops: `Lost` 12 of 12, attacker body fractions 0.456 and 0.6, defender 1.0 in all twelve. CONTROL: 200 v 200 grades symmetrically (attacker alone routed 109, defender alone 112), so the grade is not biased by seat when only one side breaks; a field with exactly one routed side is graded for that side (100 v 60: attacker wins 305 of 400)."
+    source:    "premise-check run on mass battle, 2026-11-08, branch ccr-e2df41cb-hk3892 (no PR number yet), whole element at module and season scale; the premise sentence is the author's rendering of two words [ASSUMPTION]."
+
+  - id:        H-355
+    tier:      1
+    hole:      "THE SIDE THAT LOSES A FIELD DOES NOT RETREAT, AND THE WINNING ARMY STANDS BESIDE IT (premise-check, mass battle). On `Won` the attacker's claimants are re-homed under the target (`army.arrived`) while the defenders, cut to the survivor fraction of their bodies, stay mustered at the same settlement, and the settlement's holder is unchanged (title moves by `seize`, `give`, `release` or death: the code's R-6). On `Lost` the attacker stays at its origin (R-7). No flight, pursuit or withdrawal is written for the side that lost, so after a won field two armies of different factions stand in one settlement, which the premise 'the loser breaks and retreats from the field and the winner holds it' does not describe. Both choices are labelled [ASSUMPTION; medium; Jordan to correct] in `_eff_march`."
+    kind:      "RULING"
+    owner:     "`loop/effects_combat.py::_eff_march` (R-6 and R-7 as written there) and `queries/world_q.py::occupies` (what holding reads). Whether a beaten defender withdraws, or stays and the field is held by presence, is Jordan's."
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "a won field with a visible aftermath: a beaten army that leaves, or an occupier and a garrison that can be told apart; neighbour H-212 (what an occupying army does to the larder) which assumes occupation"
+    cite:      "MEASURED by the author, 2026-11-08, one realm world (`build_realm(0)`), a hand-built act through the driver (EXECUTES only; FIRES shows one fought field in 32 march acts, see H-175). k 10, marchers at weight 10 (200 v 60), `march` on `set_s_036` from `set_s_014`: events `march.declared`, `field.won`, `army.arrived`; afterwards `holder_faction_of(set_s_036)` is still `fac_church_of_solmund`, `mustered(set_s_036, fac_valorsmark)` is the two marchers plus one already there, `mustered(set_s_036, fac_church_of_solmund)` is all six defenders (bodies 600 of 1000) and `mustered(set_s_014, fac_valorsmark)` is empty. `Lost`, k 1 (40 v 6), 12 of 12 seeds: the marchers are still mustered at `set_s_014`. CONTROL: an unopposed march on an own-held settlement arrives (`field.unopposed`, `army.arrived`), so the arrival write works when nothing contests it."
+    source:    "premise-check run on mass battle, 2026-11-08, branch ccr-e2df41cb-hk3892 (no PR number yet), whole element at module and season scale; the premise sentence is the author's rendering of two words [ASSUMPTION]."
 
 discharges:
   D1:   "row:H-01"
