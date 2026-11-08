@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from ...data.rosters import VERB_CAPABILITY, VOCATION_ATTRIBUTE
+from ...data.rosters import VERB_CAPABILITY, VOCATION_ATTRIBUTE, VOCATION_OPPOSED_BY
 from ...queries.world_q import practice
 
 
@@ -56,6 +56,16 @@ def _authored_attribute(entity: Any, verb: str):
     vocation_attribute`; `Person.attributes`), or `None` where he holds none, the verb draws on no
     capability, or the entity is no person. The attribute's twin of `_capability`: a READ, never a default."""
     attr = VOCATION_ATTRIBUTE.get(VERB_CAPABILITY.get(verb))
+    return (getattr(entity, "attributes", None) or {}).get(attr) if attr else None
+
+
+def _opposing_attribute(entity: Any, verb: str):
+    """The score `entity` HOLDS on the attribute that OPPOSES the verb's vocation (v10 CR-96, AR-44): the row's
+    `opposed_by` where it has one, else the row's own attribute (so every row shipped absent reads as CR-20 landed
+    it, and `_authored_attribute` is its twin). `None` where he holds none. The opposition's read only: `faculty`
+    keeps the row's own attribute for the pool."""
+    voc = VERB_CAPABILITY.get(verb)
+    attr = VOCATION_OPPOSED_BY.get(voc) or VOCATION_ATTRIBUTE.get(voc)
     return (getattr(entity, "attributes", None) or {}).get(attr) if attr else None
 
 

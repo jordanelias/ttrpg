@@ -101,7 +101,7 @@ from ...queries.world_q import proofs, reception
 from ...state.carriers import EFFORT, effort_of
 from ._entry import entry_for
 from .combat import PROVIDER as _BODY_PROVIDER, fight_estimate, record_of
-from .pool import POOL_ADDENDS, _authored_attribute, _capability, faculty, register_pool_addend  # noqa: F401  (moved: see pool.py)
+from .pool import POOL_ADDENDS, _authored_attribute, _capability, _opposing_attribute, faculty, register_pool_addend  # noqa: F401  (moved: see pool.py)
 
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
 # (A-25), so the row says the social contest module runs its own prizes. Reached by that string only.
@@ -115,7 +115,9 @@ _RESOLVER = "d10_sigma"
 
 def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]:
     """The subject's score on the verb's vocation, or `None` -- a READ, not an obstacle: the LARGER of the
-    capability key he holds and the attribute he holds on the vocation (v10 CR-20), and nothing else.
+    capability key he holds and the attribute he holds on the vocation (v10 CR-20), and nothing else. The
+    attribute is the one that OPPOSES the vocation (`pool._opposing_attribute`, v10 CR-96, AR-44): the row's
+    `opposed_by` where it has one, else the row's own.
 
     ⚠ NEVER THE FALLBACK AND NEVER PRACTICE. A person who holds neither is `None`, so the module falls to
     `obstacle_default` as it always did; `pool_default` is the roller's stand-in for a pool, not a score
@@ -128,7 +130,7 @@ def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]
     (`None` for a record, a rung or a proposition, or a person with no entry)."""
     if subject and subject in w.persons:
         person = w.persons[subject]
-        held = [float(v) for v in (_capability(person, verb), _authored_attribute(person, verb)) if v is not None]
+        held = [float(v) for v in (_capability(person, verb), _opposing_attribute(person, verb)) if v is not None]
         if held:
             return max(held)
     return None

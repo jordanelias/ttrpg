@@ -1522,7 +1522,7 @@ rosters:
       as before CR-20 -- so a held key of 0 stays "under one die" without an attribute and is overridden by one
       (`seam/wrappers/sigma.py::faculty`; the plan's literal "larger of the held key and `pool_default`" would raise
       a held 0 to 2 against `test_odds_of`'s pin). `_opposition_of` reads the larger of the held key and the
-      authored attribute, never practice, never the fallback.
+      authored attribute (the row's `opposed_by` where it has one, CR-96), never practice, never the fallback.
       EACH ROW'S GROUND, so a reviewer can check it against the vocation's own text and not against taste:
       `copying` -> Focus (`attr.mind.focus`): the vocation is `tell`/`speak` (a claim relayed as it was
       held) and NPC-088's case, a repeated multi-week task of copying a text (`cases/exercises/NPC-088.yaml`),
@@ -1545,6 +1545,11 @@ rosters:
       `references/descriptor_registry.yaml`). Focus, Reason and Presence carry no registry description, so
       no row rests on one. Checked by a read-only pass at CR-20's close; the pass changed `argue` to Attunement and two
       citations, and Jordan's ruling of 2026-11-05 returned `argue` to Presence.
+      CR-96 RE-READ every row against the rulings of 2026-11-05 and CHANGED NONE: `argue` -> Presence stands (AR-29, influence);
+      no vocation here is forgery or other precise-hand work (AR-16: `forge` draws on no capability key, and its quality is
+      CR-94's); `inquiry` -> Reason is the one row AR-24 (Perception, "surveillance and fieldwork") presses on, through
+      `surveil` and `examine`, while `research` stays Reason's. One row cannot serve both, and a split is a new vocation
+      (`verb_capability`'s values), which is a decision and not a re-read [ASSUMPTION; medium; Jordan to correct].
       `arms` -> Coordination (`attr.body.agility`, v11 CP-T03-04): the row is forced by this table's closure (a
       vocation with no row refuses the import), and the choice is the cheap swap
       [ASSUMPTION; medium; Jordan to correct; revert: Strength (`attr.body.strength`) or Endurance]. Ground:
@@ -1559,6 +1564,14 @@ rosters:
       argue:   "attr.social.charisma"
       inquiry: "attr.mind.acuity"
       arms:    "attr.body.agility"
+    # v10 CR-96 (AR-44): OPTIONAL, per vocation, which attribute a PERSON SUBJECT opposes the vocation's verbs
+    # WITH when it is not the row's own (Spirit, `attr.mind.will`, is the attribute that resists influence). A
+    # vocation with no entry here is opposed by its row's own attribute (`values:`), as CR-20 landed it. Closed
+    # against the vocations and valued by one of the ten registry keys, refused at import otherwise
+    # (`data/rosters.py::_load_vocation_opposed_by`); read by `seam/wrappers/pool.py::_opposing_attribute`. It moves
+    # the OPPOSITION only, never the pool (`faculty` reads `values:`). EVERY ROW SHIPS ABSENT: CR-95 writes Spirit
+    # where it applies, so this is data-equal until then.
+    opposed_by: {}
 
   lifepaths:
     source: >-
