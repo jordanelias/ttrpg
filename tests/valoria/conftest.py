@@ -32,8 +32,9 @@ import pytest
 # nodeid (relative to tests/valoria/) -> why it is red.
 # SOURCE OF TRUTH for the known-red set. Cited: ED-MB-0061.
 KNOWN_RED = {
-    'test_conditional_orders.py::test_conditional_withdraw_fires_when_enemy_closes':
-        'conditional withdraw does not fire — flags-ON residual (ED-MB-0061 Track F)',
+    # `test_conditional_orders.py::test_conditional_withdraw_fires_when_enemy_closes` LEFT THIS SET at B10-12 (MB-07r):
+    # at the recalibrated magnitudes (support cap ON, POOL_QUALITY_SCALE 0.8) the withdraw fires and the test passes; at
+    # the old ones (`MB_SUPPORT_RANK_CAP=0 POOL_QUALITY_SCALE=0.5`) it still fails, so the recalibration is what moved it.
     'test_conditional_orders.py::test_own_strength_fires_when_attrited':
         'own_strength order never advances _order_idx — flags-ON residual (ED-MB-0061 Track F)',
     'test_dg2_yield_residuals.py::test_rally_keeps_pressured_yielding_subunit':

@@ -47,7 +47,7 @@ REALISED = 200                   # scenes `resolve` deals per pair: its standard
 Z = 1.96                         # the interval is a 95% one, so one pair of twenty may miss (the entry's 19 of 20)
 PAIRS_NEEDED = 19
 TICK = 9                         # the sampler's stream is keyed on the tick: see the note under `_pairs`
-MAX_HALF_WIDTH = 0.16            # the widest the interval can be (a share of 0.5 shown at 50, 400 realised); a looser one passes a wrong display
+MAX_HALF_WIDTH = 0.16            # a Wilson interval at 50 shown scenes is at most about 0.134 wide at a share of 0.5, so this ceiling cannot fail at SHOWN = 50; it guards a later change to SHOWN
 ACTOR = MARCHERS[0]
 
 

@@ -68,7 +68,7 @@ MANUFACTURING A MARGIN (M4, `ED-IN-0279` clause (a)).** It does NOT grade `massb
 survivor-ratio classification, which is still disclosed as *"NOT the canonical degree ladder ... a
 bespoke post-hoc classification"* by that module's own header -- reconciling the two stays open
 MB-lane work. What it grades is the top-level `attacker_wins`/`unopposed` this function lifts,
-onto the three bands `march` writes on (`seam/ladder.py::field_degree`). Manufacturing a `net`/`ob`
+onto the bands `march` writes on (Won, Lost, Unopposed, and Invested under a besiege) (`seam/ladder.py::field_degree`). Manufacturing a `net`/`ob`
 from the survivor-ratio classification would have been the second resolver S27.2 refuses; reading
 a marker this function already derives is not that.
 

@@ -220,8 +220,8 @@ def _engaged_by_resolve_field(monkeypatch, weight):
 
 
 def test_resolve_field_at_weight_3000_engages_the_capped_troops(monkeypatch):
-    """Measured (Python 3.11.18): a 3000-troop infantry line of 3 ranks engages 2700 troops uncapped (contact rank
-    plus 0.7 and 0.5 of the ranks behind) and 2000 with the cap ON (infantry reaches one rank past contact, so the
+    """Measured (Python 3.11.18): a 3000-troop infantry line of 3 ranks engages 2700 troops uncapped (the contact rank
+    plus depth 1 at weight 1.0 and depth 2 at 0.7: `SUPPORT_WEIGHTS`) and 2000 with the cap ON (infantry reaches one rank past contact, so the
     third rank weighs 0). The OFF arm is the control: it reads the uncapped stack and the weight is unchanged."""
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', False)
     troops_off, engaged_off = _engaged_by_resolve_field(monkeypatch, 3000)

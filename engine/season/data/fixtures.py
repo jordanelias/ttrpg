@@ -775,7 +775,7 @@ DEFAULT_FIXTURES = Fixtures(
     # `systems/`, so the 3 stays authored once, at `terrain.WALLS_DEFENDER_DR`, and the engine reads it
     # when this is `None` -- a literal 3 here would be a second copy that drifts the day A.9 is
     # re-ruled. An int overrides it for the season: `3` spells A.9's number out (it reproduces `None`
-    # exactly, which `test_mass_battle_provider.py` asserts), `0` is the CONTROL (the only live
+    # at fort_level 1.0; CP-T04-05 grades it `int(3 * fort_level)` below that, `None` stays binary), `0` is the CONTROL (the only live
     # difference between a walled and an open field removed), `1` the middle arm. Injection site: this
     # line, read by `seam/wrappers/mass_battle.py::field_input` into the record's `walls_dr` (`31c`).
     field_walls_dr=None,     # `H-150`, swept 3 (A.9, = the default) / 0 (control) / 1
@@ -1154,7 +1154,7 @@ DEFAULT_FIXTURES = Fixtures(
     # four army verbs (`loop/effects_army.py`): their command is the act's payload, which no Candidate carries. [ASSUMPTION; medium;
     # Jordan to correct; the flip ON is a separate, declared hash-moving commit, IN-52's precedent.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-156 -- the formation-policy row; (a) and (b) are both defensible and lead to different corpora, so the arm ships at (a), today's state, and (b) is the declared second point]
-    withheld_verbs=("destroy_record", *ARMY_VERBS, "marshal", "surrender"),   # `H-156`, swept ("destroy_record", *ARMY_VERBS, "marshal", "surrender") (control, SHIPPED) / ARMY_VERBS alone (the sink arm); `marshal` (CP-T04-02, `H-361`) and `surrender` (CP-T04-07) ship withheld so the season is EQUAL at shipped, each flip a separate declared mover
+    withheld_verbs=("destroy_record", *ARMY_VERBS, "marshal", "surrender"),   # `H-156`, swept ("destroy_record", *ARMY_VERBS, "marshal", "surrender") (control, SHIPPED) / (*ARMY_VERBS, "marshal", "surrender") (the sink arm: it also un-withholds both new verbs, so a destroy_record sink measurement on it carries the marshal fan); `marshal` (CP-T04-02, `H-361`) and `surrender` (CP-T04-07) ship withheld so the season is EQUAL at shipped, each flip a separate declared mover
     # `H-356` (v11 CR-55). HOW MANY SEASONS AFTER ITS OWN A DOCKET ITEM MAY BE HELD BEFORE MATTER LAPSES IT
     # (`matter.lapsed`, `loop/matter.py`; age read off the item's docketing Event or Date by
     # `queries/world_q.py::lapsing_items`, nothing stored). An item whose party has died, whose venue

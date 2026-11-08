@@ -389,9 +389,6 @@ RETIREMENT_SHIFTED = frozenset({
 # is genuinely gone. A symbol whose last occurrences are prose about its own deletion is retired.
 # Every entry below was grepped across `engine/`, `systems/` and `tools/` and occurs nowhere.
 RETIRED_SYMBOLS = frozenset({
-    # CP-T04-03 (B10-12), ED-1043's trigger: `sync_col_grid` was a call inside `run_battle`, which moved verbatim to
-    # `modules/mass_battle/battle_loop.py`; the archived anchor cites it in `orchestration.py`, where it no longer occurs.
-    'sync_col_grid',
     'key_log_hash', 'keys_emitted', 'subscribe_all', 'run_parliamentary_scene',
     'echo_scheduler', '_emit_battle_concluded', '_emit_public_governance_transfer',
     'KeyLog', 'TickScheduler', 'TypeRegistry', 'EmittedAt', 'emit_scene_echo',
@@ -421,6 +418,10 @@ RETIRED_SYMBOLS = frozenset({
 # is keyed on the (file, symbol) pair: an archived anchor naming the symbol at the old call site is
 # correct about a tree that no longer exists, and the same symbol anywhere else is still checked.
 RETIRED_CALL_SITES = frozenset({
+    # CP-T04-03 (B10-12), ED-1043's trigger: `sync_col_grid` (still defined in `percell.py`) was a call inside
+    # `run_battle`, which moved verbatim to `modules/mass_battle/battle_loop.py`; the archived anchor cites it in
+    # `orchestration.py`, where it no longer occurs. Keyed on the (file, symbol) pair so the symbol stays checked elsewhere.
+    ('systems/mass_battle/sim/orchestration.py', 'sync_col_grid'),
     ('systems/threadwork/sim/opposing.py', 'apply_ms_delta'),
     ('systems/threadwork/sim/opposing.py', 'sustain_knot'),
     ('systems/threadwork/sim/co_movement.py', 'apply_ms_delta'),

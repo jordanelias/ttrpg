@@ -3069,12 +3069,17 @@ class Unit:
 
 
 def unit_conceded(unit):
-    """CP-T04-03 (retreat in good order): True once EVERY subunit of the unit has either retreated (its stance, as an
-    Order's `{'stance': 'retreat'}` writes it, is 'retreat') or routed, and at least one has retreated. The SINGLE OWNER
-    of what it is for a side to give up the field without being broken: `orchestration.run_battle`'s stop test (the
-    battle ends for it as a rout ends it) and `massbattle._grade` (it cannot be graded the winner) both read this one
-    predicate. It sets nothing, so a conceding side does not take rout's facing flip. A side that holds no retreating
-    subunit (no `own_strength` Order has fired) is never conceded, so an unordered battle is exactly what it was."""
+    """CP-T04-03 (retreat in good order): True once EVERY subunit of the unit has either retreated (its stance, however
+    an Order wrote it, is 'retreat') or routed, and at least one has retreated. A FIGHTING WITHDRAWAL (`yielding`, DG-2)
+    is not a concession: a yielding subunit "gives ground under pressure but keeps FIGHTING" and the entry leaves the
+    `MB_YIELD_*` yield untouched, so a yielding subunit never counts as having retreated. It is read by
+    `battle_loop.run_battle`'s stop test (the battle ends for it as a rout ends it) and by `massbattle._grade` (it
+    cannot be graded the winner); `orchestration.run_multi_turn_battle` does not read it (it ends a conceded turn a
+    'draw', and breaks only on `.routed`), a sim-path grading `_grade` does not share. It sets nothing, so a conceding
+    side does not take rout's facing flip. A side no subunit of which stands at stance 'retreat' (from any Order) is
+    never conceded, so a battle in which none has retreated is exactly what it was."""
     subs = getattr(unit, 'subunits', ())
-    return bool(subs) and all(a.routed or a.eff_stance == 'retreat' for a in subs) \
-        and any(a.eff_stance == 'retreat' for a in subs)
+
+    def _retreated(a):
+        return a.eff_stance == 'retreat' and not getattr(a, 'yielding', False)
+    return bool(subs) and all(a.routed or _retreated(a) for a in subs) and any(_retreated(a) for a in subs)
