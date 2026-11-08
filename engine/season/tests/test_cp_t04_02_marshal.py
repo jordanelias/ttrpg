@@ -290,3 +290,17 @@ def test_the_role_is_not_gated_by_role_allowed():
     assert [(s.role, s.shape) for s in persons.subunits] == [("ShieldWall", "Line")] * 2   # on the `person` arm too
     with pytest.raises(ValueError):
         mb._weighted_unit("a", 20, 5, SCALE, "Berserker")
+
+
+def test_create_record_does_not_mint_an_order_of_battle_marshal_alone_does():
+    """A hand-built `create_record` naming kind `order_of_battle` (the menu's path, as the army verbs have) would skip
+    `_eff_marshal`'s closed sets, its purview conjunct and the withheld arm; it declines instead. Control: the same act
+    with kind `text` mints."""
+    def minted(kind, content):
+        w = _world()
+        before = Counter(r.kind for r in w.records.values())
+        _fold_one(w, Act(id="cr_x", actor=KING, verb="create_record", via=KING_SEAT,
+                         payload={"kind": kind, "subject_matter": content}))
+        return Counter(r.kind for r in w.records.values()) - before
+    assert minted("text", None)["text"] == 1, "the control did not mint: the act never reached the effect"
+    assert not minted("order_of_battle", {"at": TARGET, "role": "Banana", "retreat_at": "none"})

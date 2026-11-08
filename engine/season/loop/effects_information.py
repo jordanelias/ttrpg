@@ -97,6 +97,8 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
         return NO_CHANGE
     if kind == "army" and not _army_mintable(w, a.actor, d.get("subject_matter")):
         return NO_CHANGE
+    if kind == ORDER_KIND:      # an order of battle is minted by `marshal` alone: its closed role / retreat_at sets, its purview conjunct, its withheld arm
+        return NO_CHANGE
     return _mint_document(w, a, kind, d.get("subject_matter"), d.get("rung") or a.actor)
 
 

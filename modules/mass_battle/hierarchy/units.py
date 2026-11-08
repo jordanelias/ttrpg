@@ -276,6 +276,9 @@ _ORDER_SAFE_FIELDS = frozenset({
     # `stance`), read fresh every tick via `yield_active` -- no cached derived state keyed off it,
     # same reasoning as every other field in this set.
     'yielding',
+    # [CP-T04-03, B10-12] `conceded`: set by a `retreat_at` order alone (`massbattle._retreat_orders`), read by
+    # `unit_conceded` -- a pure flag, nothing else reads it, no cached derived state keyed off it.
+    'conceded',
     # [A1, ED-MB-0067 Part A] `route` (an ordered tuple of absolute waypoints) and `_route_idx` (its
     # cursor) are read fresh every tick by _resolve_route_goal -- no cached geometry keyed off
     # either, same reasoning as every other field in this set. `_route_idx` is included alongside
@@ -503,6 +506,11 @@ class Subunit:
     # `eff_discipline >= D_YIELD` at every CONSUMPTION site (movement/facing/combat pool), not at
     # entry -- ordering a too-disordered subunit to yield is simply a no-op, not a special case.
     yielding: bool = False
+    # [CP-T04-03, B10-12] This subunit has given up the field on a `retreat_at` order (retreat in good order). Set ONLY by
+    # that order's behaviour dict, beside `stance: 'retreat'`; default False -> inert for every existing Subunit. It is the
+    # order's own mark and not the stance's or `yielding`'s, so a DG-2 fighting withdrawal (`yielding` + `stance: retreat`)
+    # or an army's `fall_back_at` is never read as a concession, and an EMERGENT `yielding` cannot hide one.
+    conceded: bool = False
     # [ED-MB-0024, DG-2 §2.4 pocket exit] Set live during the yield movement pass when rearward motion is
     # structurally blocked (map edge in the flee direction, or an enemy has gotten behind into the retreat
     # path). While pocketed, yielding converts to a HOLD with the combat malus REMOVED (Cannae's pinned-
@@ -3069,17 +3077,14 @@ class Unit:
 
 
 def unit_conceded(unit):
-    """CP-T04-03 (retreat in good order): True once EVERY subunit of the unit has either retreated (its stance, however
-    an Order wrote it, is 'retreat') or routed, and at least one has retreated. A FIGHTING WITHDRAWAL (`yielding`, DG-2)
-    is not a concession: a yielding subunit "gives ground under pressure but keeps FIGHTING" and the entry leaves the
-    `MB_YIELD_*` yield untouched, so a yielding subunit never counts as having retreated. It is read by
-    `battle_loop.run_battle`'s stop test (the battle ends for it as a rout ends it) and by `massbattle._grade` (it
-    cannot be graded the winner); `orchestration.run_multi_turn_battle` does not read it (it ends a conceded turn a
-    'draw', and breaks only on `.routed`), a sim-path grading `_grade` does not share. It sets nothing, so a conceding
-    side does not take rout's facing flip. A side no subunit of which stands at stance 'retreat' (from any Order) is
-    never conceded, so a battle in which none has retreated is exactly what it was."""
+    """CP-T04-03 (retreat in good order): True once EVERY subunit of the unit has either conceded (its `retreat_at` order
+    fired: `Subunit.conceded`, set by that order's behaviour dict alone) or routed, and at least one has conceded. Keyed on
+    the order's own mark, not on the stance: a DG-2 fighting withdrawal (`yielding` + `stance: 'retreat'`, which "keeps
+    FIGHTING", the entry leaving the `MB_YIELD_*` yield untouched) and an army's `fall_back_at` are never a concession, and
+    an emergent `yielding` cannot hide one. It is read by `battle_loop.run_battle`'s stop test (the battle ends for it as a
+    rout ends it) and by `massbattle._grade` (it cannot be graded the winner); `orchestration.run_multi_turn_battle` does
+    not read it (it ends a conceded turn a 'draw', and breaks only on `.routed`), a sim-path grading `_grade` does not
+    share. It sets nothing, so a conceding side does not take rout's facing flip. A side no subunit of which has conceded
+    is never conceded, so a battle in which no `retreat_at` order fired is exactly what it was."""
     subs = getattr(unit, 'subunits', ())
-
-    def _retreated(a):
-        return a.eff_stance == 'retreat' and not getattr(a, 'yielding', False)
-    return bool(subs) and all(a.routed or _retreated(a) for a in subs) and any(_retreated(a) for a in subs)
+    return bool(subs) and all(a.routed or a.conceded for a in subs) and any(a.conceded for a in subs)

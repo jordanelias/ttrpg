@@ -574,11 +574,14 @@ POOL_QUALITY_MODEL = _sigma_os.environ.get('POOL_QUALITY_MODEL', '1') == '1'  # 
 # [MB-07r, J-18 (A)] 0.5 -> 0.8, the MB-07 cap's own recalibration. This constant is the pool's per-reference-body
 # magnitude, and the support rank cap cuts the battery's reference body (tier-3 infantry Line, one rank of support) to
 # 0.40 of its troops engaged where the uncapped stack engaged 0.70, so the scale that holds that body's pool at the
-# 0.5 anchor above is 0.5 x 0.70 / 0.40 = 0.875. 0.8 is taken instead of 0.875: at 0.875 the 16-seed braced-charge
-# fixture of test_mass_battle_support_rank_cap.py reverses the pike/heavy retention order the cap exists to produce
-# (capped pike 0.9503 < heavy 0.9568, a gap inside that fixture's seed noise), and at 0.8 it holds (0.9604 > 0.9508).
-# Measured on the golden battery (3.11.18): at 0.5 the capped cell_field_mor0 battery ran to MAX_TURNS=20 in most
-# rows and exceeded the 300s per-mode timeout; the timings at 0.8 are in the MB-07r commit.
+# 0.5 anchor above is 0.5 x 0.70 / 0.40 = 0.875. 0.8 is a CHOICE FITTED TO A TEST, not a derived value: at 0.875 the
+# 16-seed braced-charge fixture of test_mass_battle_support_rank_cap.py reads pike 0.9503 < heavy 0.9568, and at 0.8 it
+# reads 0.9604 > 0.9508; the two gaps (0.0065 and 0.0096) are the same size, nothing separates them from that fixture's
+# seed noise, so the ordering assertion is not independent evidence for 0.8 over 0.875 (both fit the golden time budget).
+# Measured on the golden battery (3.11.18): at 0.5 the capped cell_field_mor0 battery ran to MAX_TURNS=20 in the mirror
+# and ranged rows on all 3 probed seeds (8, 8, 5 turns uncapped) and exceeded the 300s per-mode timeout; the timings at
+# 0.8 are in the MB-07r commit. It is the default of every non-golden fight; it bites a season field once
+# `field_troops_per_weight` rises above 1 (at 1 every subunit routs on tick 1, H-361).
 POOL_QUALITY_SCALE = float(_sigma_os.environ.get('POOL_QUALITY_SCALE', '0.8'))
 
 # ─── P-C COMPOSITIONAL-FORMATION ROLES (data; the instruction→primitive wiring is

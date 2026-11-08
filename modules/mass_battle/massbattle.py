@@ -242,7 +242,8 @@ def _role_fields(role):
 def _retreat_orders(retreat_at):
     """CP-T04-03: a standing order's `retreat_at` as the Orders each of the side's subunits carries -- one
     `own_strength:FRAC` Order whose action is the `retreat` stance (the primitive `orderofbattle`'s `fall_back_at` writes,
-    `hierarchy/units.py::Order`): once THIS subunit is down to FRAC of its starting troops it turns and gives ground. A
+    `hierarchy/units.py::Order`) AND the order's own mark `conceded` (which `fall_back_at` and a DG-2 withdrawal do not set):
+    once THIS subunit is down to FRAC of its starting troops it turns and gives ground. A
     subunit retreats on its OWN strength, not the side's, and `unit_conceded` is what makes a side whose every subunit has
     retreated or routed give up the field. `None` and `'none'` are no order (`()`, the subunit exactly as it was); a
     value outside `ORDER_RETREAT_AT` is refused here, naming the set."""
@@ -250,7 +251,7 @@ def _retreat_orders(retreat_at):
         return ()
     if retreat_at not in ORDER_RETREAT_AT:
         raise ValueError(f"order retreat_at {retreat_at!r} is not one of {ORDER_RETREAT_AT}")
-    return (Order(f'own_strength:{float(retreat_at)}', {'stance': 'retreat'}),)
+    return (Order(f'own_strength:{float(retreat_at)}', {'stance': 'retreat', 'conceded': True}),)
 
 
 def _weighted_unit(name, weight, morale_start=_MORALE_START_BASE, troops_per_weight=1, role=None, retreat_at=None):
