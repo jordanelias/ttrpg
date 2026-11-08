@@ -334,6 +334,10 @@ RETIREMENT_SHIFTED = frozenset({
     # Keyed on the path the archived anchors CITE; since plan position `31c` the ledger resolves it to
     # `modules/mass_battle/massbattle.py`, where the symbols are checked.
     'systems/mass_battle/sim/massbattle.py',
+    # CP-T04-03 (B10-12), ED-1043's trigger: `run_battle` (481 lines) moved verbatim to `battle_loop.py`, so every
+    # archived line anchor below it in `orchestration.py` moved or went out of range. Same stated loss: a bare line
+    # into this file is advisory; a symbolled anchor is still checked by symbol.
+    'systems/mass_battle/sim/orchestration.py',
     # Plan position `31c` replaced this workbench's `start_trace`/`get_trace` calls with one
     # `with tracing()` block (the two accessors join RETIRED_SYMBOLS), so its archived anchors moved.
     'systems/mass_battle/sim/workbench/trace.py',
@@ -385,6 +389,9 @@ RETIREMENT_SHIFTED = frozenset({
 # is genuinely gone. A symbol whose last occurrences are prose about its own deletion is retired.
 # Every entry below was grepped across `engine/`, `systems/` and `tools/` and occurs nowhere.
 RETIRED_SYMBOLS = frozenset({
+    # CP-T04-03 (B10-12), ED-1043's trigger: `sync_col_grid` was a call inside `run_battle`, which moved verbatim to
+    # `modules/mass_battle/battle_loop.py`; the archived anchor cites it in `orchestration.py`, where it no longer occurs.
+    'sync_col_grid',
     'key_log_hash', 'keys_emitted', 'subscribe_all', 'run_parliamentary_scene',
     'echo_scheduler', '_emit_battle_concluded', '_emit_public_governance_transfer',
     'KeyLog', 'TickScheduler', 'TypeRegistry', 'EmittedAt', 'emit_scene_echo',

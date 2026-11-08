@@ -195,8 +195,8 @@ class PlayHost:
 class FieldOrder:
     """CP-T04-02: ONE SIDE'S STANDING ORDER OF BATTLE as the field reads it -- the content of the `order_of_battle`
     Record `seam/wrappers/mass_battle.py::field_input` chose (`rosters.yaml: record_kinds`): `role`, a `config.ROLE_SPEC`
-    name the module maps onto each subunit of the side's line, and `retreat_at`, one of `ORDER_RETREAT_AT`, carried for
-    CP-T04-03. Plain strings: the closed sets are the module's (`engine/substrate/battle_orders.py`)."""
+    name the module maps onto each subunit of the side's line, and `retreat_at`, one of `ORDER_RETREAT_AT`, which the
+    module reads (CP-T04-03) as each subunit's `own_strength` retreat Order. Plain strings: the closed sets are the module's (`engine/substrate/battle_orders.py`)."""
     role: str
     retreat_at: str
 
