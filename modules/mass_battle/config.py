@@ -105,7 +105,7 @@ CELL_CAP = 200              # max troops/cell that fight; beyond this, troops ov
 # pinned OFF (the test pins it explicitly ON, as it does MB_OCTAGON_DMG) so the change-detector keeps
 # tracking the SHIPPED configuration -- pinning it off would have kept the goldens meaningful while
 # quietly ending their coverage of what the engine actually does.
-MB_CELL_MORALE = _sigma_os.environ.get('MB_CELL_MORALE', '1') == '1'   # RETRACTED to OFF 2026-07-25 -- see above
+MB_CELL_MORALE = _sigma_os.environ.get('MB_CELL_MORALE', '1') == '1'   # default ON: retracted to OFF 2026-07-25 (above), back ON once ED-MB-0058 resolved the scalar-write no-op (ED-MB-0046 closed)
 # [ED-MB-0041 phase 2] Share of a subunit's LIVE troops standing in broken cells at which the body is
 # no longer a formation. The men are still present -- they have stopped being a fighting line, which is
 # what a local break is. Same shape as ROUT_CASCADE_FRAC one scale down (army:sections :: subunit:cells),
