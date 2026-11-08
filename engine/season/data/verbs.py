@@ -972,7 +972,7 @@ def _load_verb_table() -> dict:
             # ⚠ NARROWED AT TELLING WORKPLAN `T4`: the party-gap refusal emits the UNION, which is
             # `ID-9` only if the union holds more than one kind -- a kind published for a conjunct
             # that did not fail. A contested row whose every key emits ONE kind (`tell`:
-            # `news.untold` for `holds` and `hearer`) emits exactly that kind at the party gap too.
+            # `tell.refused` for `holds` and `hearer`) emits exactly that kind at the party gap too.
             # ⚠ NARROWED AGAIN AT v9 IN-12 step 5 (#453 K-02, the party-gap fold edit): THE SEAM'S
             # PARTY GAP IS THE COUNTERPARTY CLAUSE FAILING, so a row that KEYS `COUNTERPARTY_CLAUSE`
             # emits that key's kinds there (`loop/resolve.py::_refuse_party_gap`) and not the union,

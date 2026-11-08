@@ -270,7 +270,7 @@ def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = Non
         # both, not through `tell` by itself.
         #
         # ⚠ **REFUSALS PROPAGATE TOO, AND THAT IS A DESIGN QUESTION NOBODY HAS RULED** — a
-        # `news.untold` deposits a claim about the subject that was not told about. Registered as
+        # `news.untold` (since CP-T05-03 the lost telling; the refused one is `tell.refused`, which deposits alike) deposits a claim about the subject that was not told about. Registered as
         # `H-111`; the inquiries' `finding.none` is skipped at WITNESS since v9 FI-01, `news.untold` is not.
         # ⚠ `actor` STAYS THE DECLARED INCUMBENT and is untouched — it is the roster's control
         # arm, and this adds nothing to it.

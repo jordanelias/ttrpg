@@ -1306,9 +1306,10 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     ⚠ PERSON-SIDE AND WORLD-FREE, like `operands_for` -- `p` first for the AST guard's reason
     recorded there. WHETHER the person told is present is the fold's `hearer` conjunct; a known
     person who is elsewhere still gets a Candidate. THE TELLER DOES NOT LEARN IT FROM THE REFUSAL: the
-    `with` read is observed, never deposited (batch-2 close `F1`), and `news.untold` is one kind for
+    `with` read is observed, never deposited (batch-2 close `F1`), and `tell.refused` is one kind for
     both conjuncts, so a refused telling to an absent hearer is retried whenever the teller
-    re-deliberates -- a scene tax with nothing behind it. Recorded, with the measurement owed, at
+    re-deliberates -- a scene tax with nothing behind it. (CP-T05-03: a LOST telling, `news.untold`,
+    is a realised act and is not retried within the season; only the refusal is.) Recorded, with the measurement owed, at
     the telling workplan's T4b *As built* line. `give` (plan position `14`) shares the shape: its
     receiver is a known person and its `with` conjunct the fold's. `people` is `known_persons`'
     answer when the caller already holds it (`opening_set`, once per call); `None` computes it.

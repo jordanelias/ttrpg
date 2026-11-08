@@ -15,7 +15,7 @@ different owner and a single count hides which one closed it:
                that never reaches the fold (`SeasonDriver.resolved`)
     executed   `corpus_run.attempts`'s `made`: the act's row's `emits:` Event is in the log. An act refused
                AT ADMISSION whose refusal kind is also an `emits:` kind (`finding.none` on `examine` and
-               `research`, `news.untold` on `tell`) reads executed too and is also `both`: `ex` counts
+               `research`) reads executed too and is also `both`: `ex` counts
                acts that emitted a declared kind, not completions, and `ex - both` is an execution that
                is no refusal
     refused    `corpus_run.attempts`'s `refused`: its `emits_on_refusal:` Event is in the log

@@ -1291,7 +1291,7 @@ def known_persons(claims, actor) -> tuple:
     A person is never known from the world: no presence read, no roster of acquaintances (`AX-2`).
     WHETHER the person is present to hear is the fold's question (`tell`'s `hearer` conjunct, the
     `with` stem), so a known person who has walked away is still named and the telling is refused
-    -- and the person does NOT learn it from the refusal (`news.untold` is one kind for both
+    -- and the person does NOT learn it from the refusal (`tell.refused` is one kind for both
     conjuncts and the `with` read is never deposited, `witness.py`). The actor is excluded because a
     person does not tell themselves (`opening_set`'s counterparty rule declines it too).
     ⚠ THE TOPIC IS NOT EXCLUDED (v9 IN-18 step 2a, #453): a telling names its topic on `subject`

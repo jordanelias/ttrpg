@@ -279,7 +279,9 @@ def _happened(act, e: Event):
     column, the test `loop/driver.py` applies to *this Event is a refusal*; `verbs.REFUSAL_KINDS` is the
     cross-row union `is_deed` uses, and the two agree today): a witness
     who believed the act could not happen and saw it refused has nothing to doubt. A kind on both
-    columns (`tell`'s `news.untold`) cannot say which, and takes no prior. An Event no act caused
+    columns cannot say which, and takes no prior (`tell` had one, `news.untold`, until CP-T05-03
+    split the refusal off as `tell.refused`: a lost telling now takes the prior, as a lost `argue`
+    does). An Event no act caused
     (MATTER, CALENDAR) and an act whose verb has no row report no act."""
     row = VERB_TABLE.get(getattr(act, "verb", None)) if act is not None else None
     if row is None or e.kind not in (row.emits or ()) or e.kind in (row.emits_on_refusal or ()):
@@ -390,7 +392,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # v9 FI-01, THE SKIP ARM (RS-21 item 1, H-111 [medium; Jordan to correct]): an Event whose KIND is in
     # `rosters.yaml: undeposited_kinds` (`finding.none`) fans to nobody -- no event-kind claim, no read,
     # no `seen`, no content -- and stays in the log and its act's causes. Keyed on the kind, not on a band
-    # or an empty `changes[]`: `news.untold` and `matter.undetermined` keep depositing. Rebinding `events`
+    # or an empty `changes[]`: `news.untold`, `tell.refused` and `matter.undetermined` keep depositing. Rebinding `events`
     # covers every pass below that reads it; the trace still counts every Event handed in.
     n_handed = len(events)
     events = [e for e in events if e.kind not in UNDEPOSITED_KINDS]

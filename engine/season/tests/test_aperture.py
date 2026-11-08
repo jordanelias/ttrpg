@@ -244,8 +244,10 @@ def _graded_research(failure: bool):
 
 
 def test_rem10_graded_loss_counts_a_lost_tell_and_a_failed_inquiry_and_nothing_else():
-    """HR-8. A lost `tell` (`news.untold`, `Failure`) and a `Failure` `research` (`finding.none`) are
-    graded losses, counted by `graded_loss` and `graded_losses`, and are `both` acts. A `research`
+    """HR-8. A `Failure` `research` (`finding.none`) is a graded loss, counted by `graded_loss` and
+    `graded_losses`, and a `both` act. A LOST `tell` (`news.untold`, `Failure`) WAS one until CP-T05-03
+    split its refusal off as `tell.refused`: `news.untold` is now on `emits:` alone, so the lost telling is
+    a realised act and no graded loss (the control that the reader sees the split). A `research`
     on a Record that is not there is refused at admission with the SAME kind and no degree: it is
     `both` (the kind is in both columns) and NOT a graded loss. A Success `tell` is neither. A
     refused `transfer` has no kind in both columns.
@@ -254,8 +256,8 @@ def test_rem10_graded_loss_counts_a_lost_tell_and_a_failed_inquiry_and_nothing_e
     the admission-refused `research` reads as a graded loss and this test reds."""
     # -- the lost tell, and the Success tell beside it as the control
     w, _ = _lost_or_won_tell("Failure")
-    (lost,) = graded_losses(w, w.tick + 1)
-    assert lost.verb == "tell" and _rows(w)[lost.id] == (("news.untold",), ("news.untold",))
+    assert graded_losses(w, w.tick + 1) == []
+    assert list(_rows(w).values()) == [(("news.untold",), ())], _rows(w)
     ws, _ = _lost_or_won_tell("Success")
     assert graded_losses(ws, ws.tick + 1) == []
     assert list(_rows(ws).values()) == [(("news.told",), ())], _rows(ws)
@@ -282,22 +284,23 @@ def test_rem10_graded_loss_counts_a_lost_tell_and_a_failed_inquiry_and_nothing_e
     assert graded_losses(wt, wt.tick + 1) == []
     # -- the reader itself, on a synthetic Failure: every refusal-kind Event must carry it
     ev = lambda kind, degree: SimpleNamespace(kind=kind, degree=degree)
-    a = Act(id="x", actor="p", verb="tell")
-    assert graded_loss(a, [ev("news.untold", "Failure")])
-    assert not graded_loss(a, [ev("news.untold", "Failure"), ev("news.untold", None)])
-    assert not graded_loss(a, [ev("news.told", "Success")]) and not graded_loss(a, [])
+    a = Act(id="x", actor="p", verb="research")
+    assert graded_loss(a, [ev("finding.none", "Failure")])
+    assert not graded_loss(a, [ev("finding.none", "Failure"), ev("finding.none", None)])
+    assert not graded_loss(a, [ev("finding.made", "Success")]) and not graded_loss(a, [])
+    assert not graded_loss(Act(id="y", actor="p", verb="tell"), [ev("news.untold", "Failure")])
 
 
 def test_rem10_every_graded_loss_is_also_a_both_act(realm):
     """THE CONTROL on the new reader: a graded loss has a kind in both columns, so `graded` can never
     exceed `both`. Checked on the hand-built losses and, per verb, on a populated season's own dict."""
     checked = 0
-    for w in (_lost_or_won_tell("Failure")[0], _graded_research(failure=True)[0]):
+    for w in (_graded_research(failure=True)[0],):
         both = {a.id for a, made, no in attempts(w, w.tick + 1) if made and no}
         losses = {a.id for a in graded_losses(w, w.tick + 1)}
         assert losses and losses <= both, (losses, both)
         checked += len(losses)
-    assert checked == 2
+    assert checked == 1
     assert all(n <= realm["both"].get(v, 0) for v, n in realm["graded"].items()), (
         realm["graded"], realm["both"])
 
@@ -404,7 +407,7 @@ def test_rem11_a_graded_loss_is_no_refusal_reason_and_is_never_post_admission():
     assert list(ra["reasons"]["research"]) != ["graded-loss"], ra
     assert "no-event" not in ra["reasons"]["research"], ra
     wl, dl = _lost_or_won_tell("Failure")
-    assert _reading(wl, dl)["reasons"]["tell"] == {"no-event": 1}
+    assert "tell" not in _reading(wl, dl)["reasons"]       # CP-T05-03: a lost telling is no refusal at all
 
 
 def test_rem11_kind_census_counts_by_act_and_names_the_declared_kinds_the_log_lacks():

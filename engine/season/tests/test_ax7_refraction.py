@@ -312,17 +312,17 @@ def test_h201_a_refusal_is_not_doubted_by_a_belief_that_it_could_not_happen():
     who believed the act could not happen and sees it refused holds the refusal whole; the same
     witness seeing it succeed is lowered (the control that the world can lower at all). Two arms,
     one per clause of `loop/witness.py::_happened`: `build.refused` is on no `emits:`; `tell`'s
-    `news.untold` is on BOTH columns, so only the refusal clause excludes it. ⚠ The `tell` prior is
+    `tell.refused` is on `emits_on_refusal` only (CP-T05-03 split it off `news.untold`, which now takes the prior as a lost `argue` does), so only the refusal clause excludes it. ⚠ The `tell` prior is
     PLANTED: `(Hh, claim.held, False)` is a `LEDGER_DERIVED_STEMS` read WITNESS never deposits, so in
     a run no ledger makes `tell`'s `requires` known-false and that clause is a guard for the row's
     shape, observed here and nowhere else.
 
-    MUTATION (run 2026-10-09): the refusal clause dropped from `_happened` -- RED (`news.untold`
+    MUTATION (run 2026-10-09): the refusal clause dropped from `_happened` -- RED (`news.untold`, then `tell.refused`
     lowered to 50). Restored, GREEN."""
     arms = (
         ("build", "W", "site.built", "build.refused",
          Claim("c_not_his", NEAR, "W", f"held_by:{TELLER}", False, 0, "firsthand", 100, "own")),
-        ("tell", "Hh", "news.told", "news.untold",
+        ("tell", "Hh", "news.told", "tell.refused",
          Claim("c_nobody_holds", NEAR, "Hh", "claim.held", False, 0, "firsthand", 100, "own")),
     )
     checked = 0

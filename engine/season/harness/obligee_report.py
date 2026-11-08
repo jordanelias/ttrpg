@@ -31,7 +31,7 @@ counts both, headline first, so neither reading is lost):
     (`state/attribution.causing_act`) is a `tell` -- by an obligee, whose HEARER (the act's operand
     under the `tell` row's `counterparty:` column, read through `binding_from_act`, exactly as
     `loop/witness.py` reads it) is the holder of that obligee's seat. One count per (Event, seat).
-  * REPORTING, ATTEMPTED (`attempted`): the same, over `news.told` AND `news.untold` Events (a refused
+  * REPORTING, ATTEMPTED (`attempted`): the same, over `news.told`, `news.untold` AND `tell.refused` Events (a refused
     or lost telling is still the obligee forming a `tell` to his holder).
   * REPORTING, HEARD (`told_by`): a `told_by` claim in the seat holder's ledger whose last chain hop
     (`Claim.teller`) is the obligee, deposited while both edges were live. It also counts a telling
@@ -62,6 +62,7 @@ from ..state.attribution import causing_act
 
 TOLD = "news.told"
 UNTOLD = "news.untold"
+REFUSED = "tell.refused"      # CP-T05-03: the refusal, split off the lost telling `news.untold`
 TOLD_BY = "told_by"
 INFERRED = "inferred"
 
@@ -69,7 +70,7 @@ INFERRED = "inferred"
 @dataclass
 class ObligeeReading:
     m0e: int = 0                      # executed tells by an obligee to his seat's holder
-    attempted: int = 0                # news.told + news.untold of the same
+    attempted: int = 0                # news.told + news.untold + tell.refused of the same
     told_by: int = 0                  # told_by claims in a holder's ledger, last hop an obligee
     inferred_about_person: int = 0    # inferred claims an obligee holds whose subject is a person
     obligee_edges: int = 0            # oblige Tenures on a seat in w.offices, of persons still in the world
@@ -122,7 +123,7 @@ def read_obligee_reports(w) -> ObligeeReading:
     ticks = set()
     for e in w.log:
         ticks.add(e.emitted_at)
-        if e.kind not in (TOLD, UNTOLD):
+        if e.kind not in (TOLD, UNTOLD, REFUSED):
             continue
         a = causing_act(w, e)
         if a is None or a.verb != "tell":

@@ -762,10 +762,10 @@ def attribute(w: World, d, n: int) -> list:
     `emits_on_refusal:` kinds — so each is truthy when an Event of that column's kinds is in the
     log, and `refused` says WHICH refusal when there are several. The two are not exclusive, for two
     DIFFERENT reasons (measured in the populated realm, 2026-09-30): a `march` can publish TWO
-    Events, `march.declared` at RESOLVE and `march.refused` at ENCOUNTER; a LOST `tell` publishes
-    ONE, `news.untold` at degree `Failure`, whose kind is in both the row's degree-keyed `emits:` and
-    its `emits_on_refusal:` (deliberately — `verb_table.yaml`'s `tell` note), so both columns match
-    the same Event. A graded loss is not a refusal (`04 §C.4`); `Event.degree` is what tells them
+    Events, `march.declared` at RESOLVE and `march.refused` at ENCOUNTER; a LOST inquiry (`examine`, `research`) publishes
+    ONE, `finding.none` at degree `Failure`, whose kind is in both the row's degree-keyed `emits:` and
+    its `emits_on_refusal:`, so both columns match the same Event. (`tell` had the same shape until
+    CP-T05-03: its lost telling, `news.untold`, is now on `emits:` alone and its refusal is `tell.refused`.) A graded loss is not a refusal (`04 §C.4`); `Event.degree` is what tells them
     apart, and this function does not read it — a caller that needs the difference reads it there.
 
     ⚠ THE KIND ALONE IS NOT AN ATTRIBUTION, AND READING IT AS ONE PUT A FALSE POSITIVE IN THE
@@ -791,7 +791,7 @@ def attribute(w: World, d, n: int) -> list:
     ATTEMPTED; `attempts(w, n)` below reads the act store and counts them. This function keeps its
     signature and its reading for the callers that want the fold set (`soak.py`, the two tests, and
     `run_case`'s `executed` list, which stays here because over the act store an admission refusal whose
-    kind is also an `emits:` kind -- `finding.none`, `news.untold` -- reads as made)."""
+    kind is also an `emits:` kind -- `finding.none` -- reads as made)."""
     return _attribute_acts(w, getattr(d, "resolved", []), n)
 
 
@@ -851,7 +851,7 @@ def graded_loss(act, events) -> bool:
     records but is not a refusal (`04 §C.4`). True when the act's row has a kind in BOTH `emits` and
     `emits_on_refusal`, `events` (the Events the act emitted) hold at least one refusal-kind Event,
     EVERY refusal-kind Event carries `degree == "Failure"`, and at least one of those kinds is in
-    `emits` -- `tell`'s `news.untold`, `finding.none` on `examine` and `research`. A refusal at
+    `emits` -- `finding.none` on `examine` and `research` (`tell`'s `news.untold` until CP-T05-03). A refusal at
     admission carries no degree (`None`), so it is not a graded loss: the `degree` test is what
     separates the two, and the kind alone cannot."""
     row = VERB_TABLE.get(act.verb)
@@ -974,7 +974,7 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     # REM-10: `refused` reads the ACT STORE, not the fold set -- a contested act refused at admission is
     # an attempt that `d.resolved` never held, so R-05's `refused` class read it as never attempted.
     # `executed` STAYS ON THE FOLD SET: `_attribute_acts`'s made rule reads a refusal whose kind is also
-    # an `emits:` kind (`finding.none` on `examine` and `research`, `news.untold` on `tell`) as made, so
+    # an `emits:` kind (`finding.none` on `examine` and `research`) as made, so
     # over the act store an admission refusal would read as an execution (measured on the 143 worlds:
     # `examine` 0 -> 85 worlds executing, every one of them refused at admission).
     ok = sorted({a.verb for a, made, _ in attribute(w, d, n) if made})

@@ -100,8 +100,8 @@ def test_a_failed_inquiry_deposits_no_claim_and_news_untold_still_does():
     band; each is resolved through the real driver and witnessed. The `Failure` act emits `finding.none`
     with the degree on it and NOTHING lands in any ledger -- no `claim.deposited` names it; the finding
     act's `finding.made` does deposit (the arm reads the kind, not the act). A REFUSED research (no such
-    Record) likewise deposits nothing. THE CONTROL: a refused `tell` (`news.untold`, a keyed kind `tell`
-    declares) deposits as before.
+    Record) likewise deposits nothing. THE CONTROL: a refused `tell` (`tell.refused`, a keyed kind `tell`
+    declares; `news.untold` before CP-T05-03) deposits as before.
 
     MUTATION (run 2026-10-17, reverted): `undeposited_kinds` emptied in `loop/witness.py`'s filter (the
     `events = [...]` line made a no-op) -- the failed research deposits, and the first ledger assertion
@@ -141,7 +141,7 @@ def test_a_failed_inquiry_deposits_no_claim_and_news_untold_still_does():
     before, after = _witness(w, d, out)
     assert before == after and not _deposits_caused_by(w, out[0].id), "a refused inquiry deposited"
 
-    # THE CONTROL: a telling to an absent hearer is refused `news.untold` (T4) and still deposits.
+    # THE CONTROL: a telling to an absent hearer is refused `tell.refused` (T4) and still deposits.
     w = P.tiny_world()
     d = SeasonDriver(w)
     w.persons[ACTOR].ledger.append(
@@ -150,10 +150,10 @@ def test_a_failed_inquiry_deposits_no_claim_and_news_untold_still_does():
                payload={"subject": "Hh", "to": "p_king",
                         "said": said_of(w.persons[ACTOR].ledger, "Hh", w.fixtures)})
     out = _resolve(w, d, told)
-    assert [e.kind for e in out] == ["news.untold"], [e.kind for e in out]
+    assert [e.kind for e in out] == ["tell.refused"], [e.kind for e in out]
     _witness(w, d, out)
-    assert _deposits_caused_by(w, out[0].id), "`news.untold` stopped depositing -- the skip widened"
-    assert any(c.predicate == "news.untold" for p in w.persons.values() for c in p.ledger)
+    assert _deposits_caused_by(w, out[0].id), "`tell.refused` stopped depositing -- the skip widened"
+    assert any(c.predicate == "tell.refused" for p in w.persons.values() for c in p.ledger)
 
 
 def test_the_route_is_not_readable_as_a_prize():

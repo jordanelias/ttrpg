@@ -1394,14 +1394,14 @@ rosters:
   undeposited_kinds:
     source: >-
       RS-21 item 1 (H-111 ANSWERED [medium; Jordan to correct]): SKIP at WITNESS, except keyed kinds a
-      verb declares (`news.untold` stays, T4) -- a refused inquiry deposits nothing, and no
+      verb declares (`news.untold` and `tell.refused` stay, T4; CP-T05-03 split the one kind in two) -- a refused inquiry deposits nothing, and no
       `finding.none` is deposited. Built by v9 FI-01 as the deposit half of `ED-FI-0009`.
     row: H-111
     note: >-
       ⚠ THE EVENT KINDS WITNESS FANS TO NOBODY (`loop/witness.py::witness`): an Event of one of these
       kinds stays in the log and in its act's causes, and no ledger receives any claim from it.
       Keyed on the KIND, never on a band or on an empty `changes[]`: those would also swallow
-      `matter.undetermined` and `news.untold`, which keep depositing. [ASSUMPTION; medium; Jordan to
+      `matter.undetermined`, `news.untold` and `tell.refused`, which keep depositing. [ASSUMPTION; medium; Jordan to
       correct] the six inquiry rows' `finding.none` only, not every refusal kind -- a widening would
       move every refusal-bearing row's deposits, which nothing here measured. Revert: Jordan rules
       deposit at WITNESS, and this roster is deleted. Each member must be a kind some verb row
