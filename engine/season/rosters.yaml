@@ -1132,6 +1132,16 @@ rosters:
       sweep through `engine/season`'s own corpus (`corpus_run.run_case`), never this tool.
     values: [scaled_by_degree, total, none]
 
+  field_winner_casualty_arms:
+    source: "CR-24 (M4 Ask B (b)). Whether the WINNING side of a fought field takes casualties too -- `field_casualty_models`' question asked of the winner."
+    row: H-360
+    note: >-
+      `off` is the field as ED-IN-0279 left it (a lost field writes the loser only; nothing is specified for the
+      winner). `engine` writes each winner's `body` by his own side's or subunit's survivor ratio, `body` only: no
+      stance row, no morale hit, and a winner is never appended to `touched`. Under `field_casualty_model: total` a
+      winner takes the same body-to-0 and the same death write a loser does; `none` writes no body on either side.
+    values: ["off", engine]     # quoted: bare `off` is YAML 1.1 False
+
   march_target_kinds:
     source: "M4, `ED-IN-0279` clause (a). What a `march` may target."
     row: H-149

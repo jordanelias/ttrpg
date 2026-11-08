@@ -795,6 +795,12 @@ DEFAULT_FIXTURES = Fixtures(
     # `person` is its own declared-mover commit. Injection site: this line, read by
     # `seam/wrappers/mass_battle.py::field_input` into the record's `subunits`; the module refuses any other string.
     field_subunits="side",  # `H-359`, swept side (control, SHIPPED) / person
+    # CR-24 (`H-360`). WHAT A FOUGHT FIELD COSTS THE WINNER: `engine` IS SHIPPED -- each winner's `body` is scaled by his own
+    # side's (or, under `field_subunits: person`, his own subunit's) survivor ratio from the engine's result, `body` ONLY: a
+    # winner earns no stance row (no grudge, no morale hit) and is never in `touched`. `off` is the field as it was (the
+    # winner is not written), and is the control. Read by `loop/effects_combat.py::_eff_march`, which refuses any other
+    # string (`rosters.yaml` `field_winner_casualty_arms`).
+    field_winner_casualties="engine",  # `H-360`, swept off (control) / engine (SHIPPED)
     # v9 IN-52 (`H-241`). THE LEVY-TO-FIELD FEED'S ARM [ASSUMPTION LF-1..LF-3, delegated-ruled,
     # `_part5` §J.2]: `True` bounds each side's fielded troops by its treasury at the larder's ration
     # (`modules/settlements/provision.py`) and debits what the field eats (`_eff_march`); `False` is the
