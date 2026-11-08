@@ -1316,6 +1316,11 @@ rows:
       60-degree bar; the `doctrine` row is PROVISIONAL. Distinct executed sets 118 -> 135. Stays
       `partial` for the reasons above that this did not touch (the corpus cast is still one shared
       OUGHT per world).
+      ⚠ CORRECTED 2026-11-08 (premise-check on decision making; read off `rosters.yaml: tables.alignment`): the paragraph above
+      names the `uncelled:` set as `tell`, `thread_read` and `restore`. The declared set is nineteen verbs, of which `tell` is one;
+      `thread_read` is not in it but is celled `null` on all seven axes (as are `carry`, `examine` and `interview`); `restore` is not
+      uncelled at all -- it carries a `precedent_substantive` cell of -0.2. Read off the live binding, 23 of the 63 resolvable verbs
+      have no non-zero cell (`celled_verbs`).
       **B-X EXIT READING (v9 IN-62 instrument, B-X1..B-X3), 2026-10-15, PYTHONHASHSEED=0, @ the B-X close commit; arm B is IN-62's
       commit-message base reading @462c68a4 (B-W's close tree); recorded, never pinned. THE HEADLINE EXIT DOES NOT HOLD ON LEG (3).**
       ARM 0 WAS REPAIRED BEFORE THIS READING (the close review found it leaked): `--control` now also gives every holder of a
