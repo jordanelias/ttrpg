@@ -1,0 +1,93 @@
+# CONTENT DRAFT for CR-106 (workplans/valoria_master_workplan_v11_part16.md, entry CR-106). The builder's
+# input, read by nothing at runtime; the build transcribes it into engine/season/rosters.yaml and venues.yaml.
+# First reading for Jordan to correct. Every cell is [ASSUMPTION; medium; Jordan to correct];
+# provenance per cell is in content_provenance.md (table A), not in these values.
+# Engine reality is authoritative for places (Jordan, 2026-11-08): ids/types are build_realm(0)'s.
+#
+# PART 1 -- rosters.yaml rows. Shape mirrors the existing tables exactly:
+#   site_kinds.values (rosters.yaml:1778), wear_per_season.rates (:1864-1873),
+#   capacity_floor.floors (:1897-1906), works_cost.costs (:1939-1949), band_floors.cells (:3490-3506),
+#   and the new site_owner table (CR-106 (b)).
+
+site_kinds_append: [worship, templar_quarters, school]
+
+wear_per_season_rates:          # control arm, as dwelling: 0 (rosters.yaml:1868) and garrison/training (:1869-1873)
+  worship:          0
+  templar_quarters: 0
+  school:           0
+
+capacity_floor_floors:          # 0, as every non-dwelling kind (rosters.yaml:1897-1906); capacity counts dwellings only
+  worship:          0
+  templar_quarters: 0
+  school:           0
+
+works_cost_costs:               # optional per CR-106 (a); priced like every fabric kind (rosters.yaml:1939-1949, H-166's one magnitude)
+  worship:          {timber: 10}
+  templar_quarters: {timber: 10}
+  school:           {timber: 10}
+
+band_floors_cells:              # one three-floor ladder, the only three-floor precedent: body 800/500/100 (rosters.yaml:3497-3500)
+  worship:                      # chapel / church / cathedral are bands of ONE Site's condition (CR-106 (a); ED-IN-0279, H-38)
+    chapel:     100
+    church:     500
+    cathedral:  800
+  templar_quarters:             # "of varying size" (Jordan ruling 3)
+    station:    100
+    house:      500
+    chapter:    800
+  school:                       # "schools/monasteries" (Jordan ruling 3); university (canon/03_canonical_timeline.md:62)
+    school:     100
+    monastery:  500
+    university: 800
+
+site_owner:                     # NEW table, keys: [site_kinds], default_cell: null; non-null = a `factions` member
+  default_cell: null
+  cells:
+    worship:          Church of Solmund
+    templar_quarters: Church of Solmund
+    school:           Church of Solmund
+    # every other site_kinds member: null (owned through the rung's holder, as today)
+
+# PART 2 -- `site:` on venues.yaml building rows (per settlement TYPE, as venues.yaml is keyed).
+# ADOPTED SHAPE (coordinator ruling B7): `site:` is a nested mapping `{kind, condition}` on the venue row.
+# The condition is needed because, without it, every minted Site would take
+# condition_scale (1000, every Site's start: harness/populated.py:1219-1260) and every chapel would
+# sit in the cathedral band.
+#
+# CONDITION RULE (one rule, all three kinds): band by the settlement type's capacity tier on
+# build_realm(0) (capacity = dwelling count = venue rows: Village/Fortress 4; City/Fortress-City/
+# Cathedral-City 6; Town 7; Seat 9), start at the MIDPOINT of the band (between its floor and the next
+# floor, or condition_scale for the top band), except the Church's own seat (venues.yaml:147
+# `Church: S-036`), which starts at condition_scale (1000):
+#   tier 4  -> bottom band midpoint (100+500)/2 = 300
+#   tier 6-7 -> middle band midpoint (500+800)/2 = 650
+#   tier 9  -> top band midpoint   (800+1000)/2 = 900
+#   the Church's venues seat -> 1000
+
+venue_site_rows:
+  Seat:            # S-001 Valorsplatz (T1), S-031 Sigurdshelm (T12)
+    - {slug: cathedral,   site: {kind: worship, condition: 900}}   # cathedral band
+    - {slug: scriptorium, site: {kind: school, condition: 900}}   # university band
+  City:            # S-018 Gransol (T8), S-037 Schoenland (T16)
+    - {slug: chapel,      site: {kind: worship, condition: 650}}   # church band
+  Cathedral-City:  # S-036 Himmelenger (T9) -- the Church's venues seat
+    - {slug: cathedral,     site: {kind: worship, condition: 1000}}  # cathedral band, highest worship Site in the realm
+    - {slug: chapter_house, site: {kind: templar_quarters, condition: 1000}}  # chapter band
+    - {slug: scriptorium,   site: {kind: school, condition: 1000}}  # university band
+    # almonry: NO site (a charity house is not on Jordan's list: worship, Templar quarters, schools/monasteries)
+  Fortress-City:   # S-014 Ehrenfeld (T14)
+    - {slug: chapel,      site: {kind: worship, condition: 650}}   # church band (tier 6)
+  Fortress:        # S-007 Lowenskyst Fortress (T3), S-021 Spartfell Fortress (T10)
+    - {slug: chapel,      site: {kind: worship, condition: 300}}   # chapel band
+  Town:            # 17 towns
+    - {slug: chapel,      site: {kind: worship, condition: 650}}   # church band (slug stays `chapel`; the band names its scale)
+  Village:         # 13 villages
+    - {slug: chapel,      site: {kind: worship, condition: 300}}   # chapel band
+
+# RESULTING CHURCH-OWNED SITES on build_realm(0) (computed by content_validate.py, not by hand):
+#   worship 37 (one per settlement), school 3 (S-001, S-031, S-036), templar_quarters 1 (S-036); total 41.
+#   Per territory: T1 4, T2 3, T3 2, T4 2, T5 3, T6 2, T7 2, T8 3, T9 3, T10 2, T11 3, T12 4, T13 2,
+#   T14 2, T16 1, T17 3. Every territory under r_valoria that holds a settlement holds >= 1 Church Site
+#   (15 of 15, measured); T16 Schoenland, a foreign root outside r_valoria, also holds 1 (16 settled territories). Documented exceptions: terr_T15 holds no settlement
+#   (geography `settlements: []`); terr_ALT is a foreign root whose one settlement (set_alt_1,
+#   harness/populated.py:1173-1178) has no venue rows.

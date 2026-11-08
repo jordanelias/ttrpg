@@ -1,0 +1,107 @@
+# CONTENT DRAFT for CR-107 (workplans/valoria_master_workplan_v11_part16.md, entry CR-107), REVISION 2
+# (coordinator rulings B1-B5). The builder's input, read by nothing at runtime. Replaces the `cohorts:` block of engine/season/cohorts.yaml only; `temperaments:` and
+# `guards:` stay. Every row is [ASSUMPTION; medium; Jordan to correct]; provenance is in content_provenance.md
+# (table B), and the values carry no marks.
+#
+# NO ROW CARRIES `faction:` (B1). A `commit` makes the faction occupy the settlement at build
+# (world_q.py:2131-2172), so allegiance is carried by `heritage` and `conviction` alone, and faction
+# commitment is HELD behind a reader audit.
+#
+# THE RULES (applied in this order):
+#  H  majority cohort, one per settlement, NO label (keeps today's id `cohort_<rung>`), weight 2.
+#       H1 T4, T12, T13 (Varfell; faction_politics_v30.md:657 names T4, T13 and the western fjords) -> southern_einhir
+#       H2 T11 (Varfell; north-of-lake central fjords, geography:152,161; :655 "Varfell highlands")  -> northern_einhir
+#       H3 other territory at radiation band <= 1 (T6; :657)                                          -> southern_einhir
+#       H4 band 2-3 (T1, T5, T14; :656 "Valorsmark core")                                             -> central_einhir
+#       H5 band >= 4 (T2 T3 T7 T8 T9 T10 T17; :655 "Hafenmark, Crown heartland")                     -> northern_einhir
+#       H6 T16 Schoenland (foreign root) -> its people's heritage                                     -> schoenlander
+#  C  caste cohort (label = the first word of the heritage), weight 2, only where sum <= capacity:
+#       C1 non-Varfell territory at band <= 2 (T5, T6): the other side of the caste line -- southern_einhir where the
+#          majority is not southern (T5), and the holder's seat-territory heritage (T1 -> central_einhir) where it is (T6)
+#       C2 T11 (northern majority): a southern_einhir cohort in every settlement (capacities 7/4/4)
+#       C3 southern-majority Varfell settlement of capacity >= 6: a northern_einhir cohort (S-026 S-031 S-032 S-033 S-034)
+#       C4 a venues.yaml `seats:` tag that is a heritage_roster member's people (`Altonian` -> altonian;
+#          names_index.yaml:352, a people): an altonian cohort at that seat (S-007)
+#  V  conviction, ONE rule on the geography's radiation bands b (valoria_geography_v30.yaml:842-872):
+#       southern_einhir: einhir_restoration (its engaged affiliation, descriptor_registry.yaml:245-247) = 6 - b
+#       northern/central_einhir: solmund_orthodoxy = min(5, 1 + b); the Church's seat territory (T9) = 5
+#       every other affiliation = 1
+#     [ASSUMPTION; one rule on the geography's band data, swept with the bands; Jordan to correct]
+#     V branches on whether the HERITAGE HAS BAND DATA, i.e. holds a majority cohort in a territory under
+#     r_valoria (rule H) -- a data test, not a name test:
+#       V1 band data (northern/central/southern_einhir): as above.
+#       V2 no band data (altonian, schoenlander): the heritage's ENGAGED affiliation (descriptor_registry.yaml:245-247)
+#          = median_low of the engaged affiliation over the cast rows of that people's faction (the faction whose cast
+#          rows carry the heritage: altonian -> Altonia, NPC-011; median of 3/4/5 = 4); every other member 1.
+#          schoenlander has NO `engages:` cell, so V2 gives it 1 throughout.
+#       [ASSUMPTION; medium; Jordan to correct; revert: 1 everywhere]
+#     (s = solmund_orthodoxy, e = einhir_restoration, c = altonian_civics)
+
+cohorts:
+# T1 Valorsplatz (band 3)
+- {rung: set_s_001, weight: 2, heritage: central_einhir, conviction: {solmund_orthodoxy: 4, einhir_restoration: 1, altonian_civics: 1}}   # H4 V
+- {rung: set_s_002, weight: 2, heritage: central_einhir, conviction: {solmund_orthodoxy: 4, einhir_restoration: 1, altonian_civics: 1}}   # H4
+- {rung: set_s_003, weight: 2, heritage: central_einhir, conviction: {solmund_orthodoxy: 4, einhir_restoration: 1, altonian_civics: 1}}   # H4
+# T2 Kronmark (band 4)
+- {rung: set_s_004, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 5, einhir_restoration: 1, altonian_civics: 1}}  # H5
+- {rung: set_s_005, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 5, einhir_restoration: 1, altonian_civics: 1}}  # H5
+- {rung: set_s_006, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 5, einhir_restoration: 1, altonian_civics: 1}}  # H5
+# T3 Lowenskyst (band 5)
+- {rung: set_s_007, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 5, einhir_restoration: 1, altonian_civics: 1}}  # H5
+- {rung: set_s_007, weight: 2, label: altonian, heritage: altonian, conviction: {solmund_orthodoxy: 1, einhir_restoration: 1, altonian_civics: 4}}  # C4, V2
+- {rung: set_s_008, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 5, einhir_restoration: 1, altonian_civics: 1}}  # H5
+# T5 Feldmark (band 2)
+- {rung: set_s_009, weight: 2, heritage: central_einhir, conviction: {solmund_orthodoxy: 3, einhir_restoration: 1, altonian_civics: 1}}   # H4
+- {rung: set_s_009, weight: 2, label: southern, heritage: southern_einhir, conviction: {solmund_orthodoxy: 1, einhir_restoration: 4, altonian_civics: 1}}  # C1
+- {rung: set_s_010, weight: 2, heritage: central_einhir, conviction: {solmund_orthodoxy: 3, einhir_restoration: 1, altonian_civics: 1}}   # H4
+- {rung: set_s_010, weight: 2, label: southern, heritage: southern_einhir, conviction: {solmund_orthodoxy: 1, einhir_restoration: 4, altonian_civics: 1}}  # C1
+- {rung: set_s_011, weight: 2, heritage: central_einhir, conviction: {solmund_orthodoxy: 3, einhir_restoration: 1, altonian_civics: 1}}   # H4
+- {rung: set_s_011, weight: 2, label: southern, heritage: southern_einhir, conviction: {solmund_orthodoxy: 1, einhir_restoration: 4, altonian_civics: 1}}  # C1
+# T6 Stillhelm (band 1)
+- {rung: set_s_012, weight: 2, heritage: southern_einhir, conviction: {solmund_orthodoxy: 1, einhir_restoration: 5, altonian_civics: 1}}  # H3
+- {rung: set_s_012, weight: 2, label: central, heritage: central_einhir, conviction: {solmund_orthodoxy: 2, einhir_restoration: 1, altonian_civics: 1}}  # C1
+- {rung: set_s_013, weight: 2, heritage: southern_einhir, conviction: {solmund_orthodoxy: 1, einhir_restoration: 5, altonian_civics: 1}}  # H3
+- {rung: set_s_013, weight: 2, label: central, heritage: central_einhir, conviction: {solmund_orthodoxy: 2, einhir_restoration: 1, altonian_civics: 1}}  # C1
+# T14 Ehrenfeld (band 3)
+- {rung: set_s_014, weight: 2, heritage: central_einhir, conviction: {solmund_orthodoxy: 4, einhir_restoration: 1, altonian_civics: 1}}   # H4
+- {rung: set_s_015, weight: 2, heritage: central_einhir, conviction: {solmund_orthodoxy: 4, einhir_restoration: 1, altonian_civics: 1}}   # H4
+# T7 Rendstad (band 4)
+- {rung: set_s_016, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 5, einhir_restoration: 1, altonian_civics: 1}}  # H5
+- {rung: set_s_017, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 5, einhir_restoration: 1, altonian_civics: 1}}  # H5
+# T8 Gransol (band 5)
+- {rung: set_s_018, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 5, einhir_restoration: 1, altonian_civics: 1}}  # H5
+- {rung: set_s_019, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 5, einhir_restoration: 1, altonian_civics: 1}}  # H5
+- {rung: set_s_020, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 5, einhir_restoration: 1, altonian_civics: 1}}  # H5
+# T10 Spartfell (band 4)
+- {rung: set_s_021, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 5, einhir_restoration: 1, altonian_civics: 1}}  # H5
+- {rung: set_s_022, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 5, einhir_restoration: 1, altonian_civics: 1}}  # H5
+# T17 Halvarshelm (band 5)
+- {rung: set_s_023, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 5, einhir_restoration: 1, altonian_civics: 1}}  # H5
+- {rung: set_s_024, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 5, einhir_restoration: 1, altonian_civics: 1}}  # H5
+- {rung: set_s_025, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 5, einhir_restoration: 1, altonian_civics: 1}}  # H5
+# T4 Grauwald (Varfell; band 3)
+- {rung: set_s_026, weight: 2, heritage: southern_einhir, conviction: {solmund_orthodoxy: 1, einhir_restoration: 3, altonian_civics: 1}}  # H1
+- {rung: set_s_026, weight: 2, label: northern, heritage: northern_einhir, conviction: {solmund_orthodoxy: 4, einhir_restoration: 1, altonian_civics: 1}}  # C3
+- {rung: set_s_027, weight: 2, heritage: southern_einhir, conviction: {solmund_orthodoxy: 1, einhir_restoration: 3, altonian_civics: 1}}  # H1
+# T11 Halvardshelm (Varfell; band 3)
+- {rung: set_s_028, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 4, einhir_restoration: 1, altonian_civics: 1}}  # H2
+- {rung: set_s_028, weight: 2, label: southern, heritage: southern_einhir, conviction: {solmund_orthodoxy: 1, einhir_restoration: 3, altonian_civics: 1}}  # C2
+- {rung: set_s_029, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 4, einhir_restoration: 1, altonian_civics: 1}}  # H2
+- {rung: set_s_029, weight: 2, label: southern, heritage: southern_einhir, conviction: {solmund_orthodoxy: 1, einhir_restoration: 3, altonian_civics: 1}}  # C2
+- {rung: set_s_030, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 4, einhir_restoration: 1, altonian_civics: 1}}  # H2
+- {rung: set_s_030, weight: 2, label: southern, heritage: southern_einhir, conviction: {solmund_orthodoxy: 1, einhir_restoration: 3, altonian_civics: 1}}  # C2
+# T12 Sigurdshelm (Varfell; band 2)
+- {rung: set_s_031, weight: 2, heritage: southern_einhir, conviction: {solmund_orthodoxy: 1, einhir_restoration: 4, altonian_civics: 1}}  # H1
+- {rung: set_s_031, weight: 2, label: northern, heritage: northern_einhir, conviction: {solmund_orthodoxy: 3, einhir_restoration: 1, altonian_civics: 1}}  # C3
+- {rung: set_s_032, weight: 2, heritage: southern_einhir, conviction: {solmund_orthodoxy: 1, einhir_restoration: 4, altonian_civics: 1}}  # H1
+- {rung: set_s_032, weight: 2, label: northern, heritage: northern_einhir, conviction: {solmund_orthodoxy: 3, einhir_restoration: 1, altonian_civics: 1}}  # C3
+- {rung: set_s_033, weight: 2, heritage: southern_einhir, conviction: {solmund_orthodoxy: 1, einhir_restoration: 4, altonian_civics: 1}}  # H1
+- {rung: set_s_033, weight: 2, label: northern, heritage: northern_einhir, conviction: {solmund_orthodoxy: 3, einhir_restoration: 1, altonian_civics: 1}}  # C3
+# T13 Oastad (Varfell; band 1)
+- {rung: set_s_034, weight: 2, heritage: southern_einhir, conviction: {solmund_orthodoxy: 1, einhir_restoration: 5, altonian_civics: 1}}  # H1
+- {rung: set_s_034, weight: 2, label: northern, heritage: northern_einhir, conviction: {solmund_orthodoxy: 2, einhir_restoration: 1, altonian_civics: 1}}  # C3
+- {rung: set_s_035, weight: 2, heritage: southern_einhir, conviction: {solmund_orthodoxy: 1, einhir_restoration: 5, altonian_civics: 1}}  # H1
+# T9 Himmelenger (the Church's seat territory; band 4)
+- {rung: set_s_036, weight: 2, heritage: northern_einhir, conviction: {solmund_orthodoxy: 5, einhir_restoration: 1, altonian_civics: 1}}  # H5, V seat
+# T16 Schoenland (foreign root)
+- {rung: set_s_037, weight: 2, heritage: schoenlander, conviction: {solmund_orthodoxy: 1, einhir_restoration: 1, altonian_civics: 1}}     # H6
