@@ -50,7 +50,7 @@ from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
 
 A, B = "p_mid", "p_low"          # `probes.tiny_world`: both at the hearth `Hh`
 BASE_BUILD = "837d0f83c62917b88d69da3daa3ea027"     # build_realm(0).content_hash(), after PC-10b (the pre-item base)
-BASE_SEASON = "8bca0263a16935a94acf716ece635c11"    # one season, seed 0, after PC-10b; B10-13 batch pin commit: was 0fb73bc8...
+BASE_SEASON = "bcc4ee3fa3d93ede38fb937f204511ea"    # one season, seed 0, after PC-10b; B10-13 batch pin commit: was 0fb73bc8...; B10-13 Phase 1 A1, the self-plea's stance sign: was 8bca0263...
 CARDINALS = {"off_cardinal_fortitude", "off_cardinal_justice", "off_cardinal_prudence", "off_cardinal_temperance"}
 
 

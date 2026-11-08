@@ -17,6 +17,8 @@ THE FALSIFIERS, each seen red with its mechanism removed (2026-11-08, the plante
 docstring), then restored:
   * an item held the lapse emits `matter.lapsed` and leaves the docket; no item outlives the rule;
   * the control (`docket_lapse = None`) emits none, however many seasons pass;
+  * a carried matter ages from the carry, not an older `open_case` of it (B10-13 Phase 3: the old precedence is red);
+  * an undated matter the lapse is about to take is not re-slotted (the `lapsing` skip deleted is red);
   * an overdue stage matures once: `due != w.tick` never matured it; dropping the once-guard matures it
     at every barrier after.
 """
@@ -29,7 +31,7 @@ from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.matter import _die
 from ..decision import make_chooser
 from ..queries import world_q
-from ..state.carriers import Act, Record, Tenure
+from ..state.carriers import Act, Event, Record, Tenure
 from ..state.ids import H, ROOT, draw_factory
 from .test_cr56_matter_stamped import _convene_at, _next_calendar
 from .test_sc01_fired_slot import VENUE, _convene, _next_season_calendar
@@ -149,6 +151,51 @@ def test_a_slot_a_determination_emptied_lapses_on_the_event_that_formed_it_not_t
         _season(w, d)
     ev, = _lapsed(w)
     assert w.docket == [] and ev.causes == [slot_formed.id] and ev.causes != [reslotted.id], ev.causes
+
+
+def test_a_carried_matter_ages_from_the_carry_not_from_an_older_case_of_the_same_matter():
+    """A matter opened at tick 0, determined and cleared, then CARRIED at tick 6: the carry's act subject is the
+    PETITION, the older `open_case`'s the matter, and the item holds both. Its age is the carry's. PLANTED
+    FAILURE: `by_ref.get(matter) or by_ref.get(petition)` in `lapsing_items` (the matter's older Event wins) --
+    the item is returned at tick 7 as 7 seasons old, red."""
+    w, d = _world(docket_lapse=4)
+    assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
+    opened = _docketing(w)
+    assert opened.emitted_at == 0
+    w.docket.clear()                                     # determined and cleared, by hand
+    w.tick = 6
+    w.acts.append(Act("act_carry", DUKE, "carry", payload={"subject": "pet_x"}))
+    carried = Event("ev_carry", "petition.carried", [], ["act_carry"], 6)
+    assert carried.kind in world_q.DOCKETING_KINDS, "the carry Event is not a docketing kind"
+    w.log.append(carried)
+    w.docket.append({"date": None, "matter": PARTY, world_q.DOCKET_ARRANGEMENT: None,
+                     world_q.DOCKET_PETITION: "pet_x"})
+    w.tick = 7
+    assert world_q.lapsing_items(w, 4) == [], "the carried matter aged from the older open_case"
+    w.tick = 11                                          # carried at 6, heard through 10, beyond 4 seasons at 11
+    (item, eid), = world_q.lapsing_items(w, 4)
+    assert item is w.docket[0] and eid == carried.id, "the lapse does not name the carry"
+
+
+def test_an_undated_matter_the_lapse_is_about_to_take_is_not_re_slotted_into_a_fresh_slot():
+    """A person-matter docketed at tick 0 and still dateless at tick 5 (`docket_lapse` 2) is beyond the rule when a
+    sitting fires. CALENDAR's re-slot would move it into the fresh slot only for MATTER, next, to take it off with
+    the item; it stays dateless, the slot stays empty, and MATTER lapses it. PLANTED FAILURE: the `lapsing` skip in
+    `loop/calendar.py` deleted -- the matter takes the slot, red."""
+    w, d = _world(docket_lapse=2)
+    assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
+    w.tick = 4
+    did = _convene_at(w, d, VENUE)
+    cal = _next_calendar(w, d)                           # tick 5: the sitting fires
+    assert _kinds(cal) == ["date.fired", "docket.formed"], _kinds(cal)
+    assert world_q.lapsing_items(w, 2) and w.tick - _docketing(w).emitted_at > 2, "the item is not past the rule"
+    assert world_q.open_slots(w, VENUE) == [{"date": did, "matter": None}], "the lapsing matter took the slot"
+    item, = world_q.undated_matters(w)
+    assert item["date"] is None and item["matter"] == PARTY
+    _season(w, d)                                        # MATTER lapses it
+    ev, = _lapsed(w)
+    assert world_q.anchor_of(w, ev) == PARTY and world_q.undated_matters(w) == []
+    assert w.docket == [{"date": did, "matter": None}], w.docket
 
 
 def test_the_lapse_leaves_the_neighbouring_item_alone():

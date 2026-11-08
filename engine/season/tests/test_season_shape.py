@@ -9181,7 +9181,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `ever` (CR-27) and the rest of the batch moving the act mix. The batch's items were not isolated one by one [ASSUMPTION; low: `lie`
     # splits the executed sets in the worlds where it executes, as each verb joining `ever` has before]. Not a ranking change: `H-96` is
     # untouched. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-    assert len(by_sig) == 137, (
+    # ⚠⚠ **137 -> 136, B10-13 Phase 1 A1 (the self-plea's stance sign), MEASURED BY `_corpus_rows`, seed 0, PYTHONHASHSEED=0, AGAINST THIS
+    # TREE WITH `_stance_arm`'s `and subject != p.id` REMOVED IN PROCESS (the control), WHICH READS 137; `live` did not move (143 on both).**
+    # THE UNIT AND THE DIRECTION: variety FELL by one. A self-plea (`subject_may_be_self`, a subject that is the actor) read `-regard` as
+    # if the actor were his own adversary; it now reads `+regard`, so five worlds re-rank a candidate and each loses one verb from its
+    # executed set: `NPC-006` `reconstruct`, `ARC-10` `give`, `ARC-17` `tell`, `NSC-08` `tell`, `SCN-02` `conceal`. `ARC-10`'s set, minus
+    # `give`, equals `NPC-020`'s, which it did not before: the two worlds take one signature, and that merge is the net one fewer. The
+    # other four stay distinct, each on a signature of its own. Executed-world counts, control -> here: `give` 14 -> 13, `conceal` 65 -> 64,
+    # `tell` 62 -> 60, `reconstruct` 111 -> 110; every other verb's count is unmoved. THE SAME-BREATH CHECK: the universal set is EMPTY on
+    # both sides (the largest executed-world count is `create_record`'s 129 of 143), `ever` is the same 23 verbs on both and `varying` is
+    # that 23. Not a ranking change: `H-96` is untouched. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+    assert len(by_sig) == 136, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
