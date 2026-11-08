@@ -43,7 +43,9 @@ FAR = "p_high"                     # elsewhere
 #: (600d8b27147478e158553552cc1409a5): the item writes no field and no world-gen.
 #: Seeds 1 and 2 are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit (was d9f3be70... /
 #: 285fb92a...): PC-20 (1) (the head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`.
-POST_ITEM = {0: "d4c83c8ca9d5082f5237a3889e1a995b", 1: "7cacc76327c222c2595c57f24d147d36", 2: "447ed0d819b895fd828e4b1c26a34e69"}
+#: B10-13 batch pin commit (the batch's declared movers, CR-27 `lie` among them, move a one-season realm of every seed):
+#: was d4c83c8c... / 7cacc763... / 447ed0d8....
+POST_ITEM = {0: "256606154c30542f9456b2fe15c76f09", 1: "aa58ef0b71c947ce5ff9f0a75ffd8ca6", 2: "77a0969743190aea9e65db99f57c77b0"}
 BUILD = "600d8b27147478e158553552cc1409a5"
 
 

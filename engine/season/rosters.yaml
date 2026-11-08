@@ -1394,14 +1394,14 @@ rosters:
   undeposited_kinds:
     source: >-
       RS-21 item 1 (H-111 ANSWERED [medium; Jordan to correct]): SKIP at WITNESS, except keyed kinds a
-      verb declares (`news.untold` stays, T4) -- a refused inquiry deposits nothing, and no
+      verb declares (`news.untold` and `tell.refused` stay, T4; CP-T05-03 split the one kind in two) -- a refused inquiry deposits nothing, and no
       `finding.none` is deposited. Built by v9 FI-01 as the deposit half of `ED-FI-0009`.
     row: H-111
     note: >-
       ⚠ THE EVENT KINDS WITNESS FANS TO NOBODY (`loop/witness.py::witness`): an Event of one of these
       kinds stays in the log and in its act's causes, and no ledger receives any claim from it.
       Keyed on the KIND, never on a band or on an empty `changes[]`: those would also swallow
-      `matter.undetermined` and `news.untold`, which keep depositing. [ASSUMPTION; medium; Jordan to
+      `matter.undetermined`, `news.untold` and `tell.refused`, which keep depositing. [ASSUMPTION; medium; Jordan to
       correct] the six inquiry rows' `finding.none` only, not every refusal kind -- a widening would
       move every refusal-bearing row's deposits, which nothing here measured. Revert: Jordan rules
       deposit at WITNESS, and this roster is deleted. Each member must be a kind some verb row
@@ -1522,7 +1522,7 @@ rosters:
       as before CR-20 -- so a held key of 0 stays "under one die" without an attribute and is overridden by one
       (`seam/wrappers/sigma.py::faculty`; the plan's literal "larger of the held key and `pool_default`" would raise
       a held 0 to 2 against `test_odds_of`'s pin). `_opposition_of` reads the larger of the held key and the
-      authored attribute, never practice, never the fallback.
+      authored attribute (the row's `opposed_by` where it has one, CR-96), never practice, never the fallback.
       EACH ROW'S GROUND, so a reviewer can check it against the vocation's own text and not against taste:
       `copying` -> Focus (`attr.mind.focus`): the vocation is `tell`/`speak` (a claim relayed as it was
       held) and NPC-088's case, a repeated multi-week task of copying a text (`cases/exercises/NPC-088.yaml`),
@@ -1545,6 +1545,11 @@ rosters:
       `references/descriptor_registry.yaml`). Focus, Reason and Presence carry no registry description, so
       no row rests on one. Checked by a read-only pass at CR-20's close; the pass changed `argue` to Attunement and two
       citations, and Jordan's ruling of 2026-11-05 returned `argue` to Presence.
+      CR-96 RE-READ every row against the rulings of 2026-11-05 and CHANGED NONE: `argue` -> Presence stands (AR-29, influence);
+      no vocation here is forgery or other precise-hand work (AR-16: `forge` draws on no capability key, and its quality is
+      CR-94's); `inquiry` -> Reason is the one row AR-24 (Perception, "surveillance and fieldwork") presses on, through
+      `surveil` and `examine`, while `research` stays Reason's. One row cannot serve both, and a split is a new vocation
+      (`verb_capability`'s values), which is a decision and not a re-read [ASSUMPTION; medium; Jordan to correct].
       `arms` -> Coordination (`attr.body.agility`, v11 CP-T03-04): the row is forced by this table's closure (a
       vocation with no row refuses the import), and the choice is the cheap swap
       [ASSUMPTION; medium; Jordan to correct; revert: Strength (`attr.body.strength`) or Endurance]. Ground:
@@ -1559,6 +1564,14 @@ rosters:
       argue:   "attr.social.charisma"
       inquiry: "attr.mind.acuity"
       arms:    "attr.body.agility"
+    # v10 CR-96 (AR-44): OPTIONAL, per vocation, which attribute a PERSON SUBJECT opposes the vocation's verbs
+    # WITH when it is not the row's own (Spirit, `attr.mind.will`, is the attribute that resists influence). A
+    # vocation with no entry here is opposed by its row's own attribute (`values:`), as CR-20 landed it. Closed
+    # against the vocations and valued by one of the ten registry keys, refused at import otherwise
+    # (`data/rosters.py::_load_vocation_opposed_by`); read by `seam/wrappers/pool.py::_opposing_attribute`. It moves
+    # the OPPOSITION only, never the pool (`faculty` reads `values:`). EVERY ROW SHIPS ABSENT: CR-95 writes Spirit
+    # where it applies, so this is data-equal until then.
+    opposed_by: {}
 
   lifepaths:
     source: >-
@@ -2557,6 +2570,20 @@ rosters:
       `forgive`'s decline beside it, not the hook itself. [ASSUMPTION; medium; Jordan to correct;
       revert: build `release`'s hook in the same position.]
     values: [forgive]
+
+  lie_verbs:
+    source: >-
+      v11 CR-27 (B10-13), M9 taken (a) (`workplans/valoria_master_workplan_v11_part6.md` M9): the cell lie.
+    note: >-
+      WHICH VERBS SAY A FALSE VALUE OF A CLAIM THE SPEAKER HOLDS -- a list of verbs. Read in
+      `decision/options.py::opening_set`, person-side and World-free (AX-2): a listed row copies
+      `queries/person_q.py::lie_said_of` onto the Act where an unlisted row copies `said_of`, and is formed only
+      while `Fixtures lie_offered` is True. The roster names the verb and the loader VALIDATES it against the row's
+      typed cell: no verb name is spelt in code. ONE LOADER, `data/verbs.py::LIE_VERBS`, refused at import when a
+      member names a verb the table lacks or one whose cell names no `own_ledger` conjunct (a row that carries no
+      `said` has nothing to make false). [ASSUMPTION; medium; Jordan to correct; revert: delete this roster and
+      the `lie` row, its alignment cells and `lie_offered`.]
+    values: [lie]
 
   army_verbs:
     source: >-
@@ -4082,6 +4109,7 @@ tables:
         create_record:  null
         exchange:       null
         forge:          null
+        lie:            null    # CR-27 [ASSUMPTION]: considered, no source and no lean on this axis
         fight:          -0.3    # v11 CR-87 (ED-IN-0340): violence costs on every axis; was null
         move:           null
         oblige:         null
@@ -4134,6 +4162,7 @@ tables:
         establish:      null
         exchange:       null
         forge:          null
+        lie:            null    # CR-27 [ASSUMPTION]: considered, no source and no lean on this axis
         issue:          null
         fight:          -0.3    # v11 CR-87 (ED-IN-0340): violence costs on every axis; was null
         requisition:           null
@@ -4160,6 +4189,7 @@ tables:
         "deed:capability.raised": 0.0   # as `hierarchical_equal`'s cell above: same reason, revert together
         construe:       -0.6    # derived: calculated to serve the construer's aim, not to keep the bond
         forge:          -0.5    # derived: counterfeiting a record for advantage
+        lie:            null    # CR-27 [ASSUMPTION]: considered, no source and no lean on this axis
         open_case:       0.3    # derived: the case runs by template regardless of who stands before it
         requisition:           -0.3    # derived: rank drawing on subjects -- one's own office's take
         march:          -0.4    # reasoned: `sides_of` divides the claimants into sides and the loss lands on the other one -- war for one's own against another; `requisition`'s reason, stronger
@@ -4222,6 +4252,7 @@ tables:
         evade / defy:   null
         exchange:       null
         forge:          null
+        lie:            null    # CR-27 [ASSUMPTION]: considered, no source and no lean on this axis
         found:          null
         build:          null
         give:           null
@@ -4286,6 +4317,7 @@ tables:
         evade / defy:   null
         exchange:       null
         forge:          null
+        lie:            null    # CR-27 [ASSUMPTION]: considered, no source and no lean on this axis
         issue:          null
         fight:          -0.3    # v11 CR-87 (ED-IN-0340): violence costs on every axis; was null
         requisition:           null
@@ -4341,6 +4373,7 @@ tables:
         evade / defy:   null
         exchange:       null
         forge:          null
+        lie:            null    # CR-27 [ASSUMPTION]: considered, no source and no lean on this axis
         issue:          null
         requisition:           null
         move:           null
@@ -4372,6 +4405,7 @@ tables:
         "deed:commitment.ended": 0.8
         seize:          null    # reasoned (IN-12 step 6): the warrant is what licenses it, so it is neither a disagreeable act taken for an end nor one refused -- considered, no lean
         forge:           0.8    # carried: the purest means-to-ends act on the table
+        lie:             0.5    # CR-27 [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its six `null` twins, and `lie` joins `uncelled:`]: reasoned -- a falsehood told for an end is `forge`'s means-to-ends reading in the mouth, smaller (0.5 against 0.8) because it leaves no document behind. The plan's premise that CR-21 celled `tell` was false (`tell` is `uncelled:`); `lie` alone is celled, so where this axis weighs positive `lie` outscores an otherwise identical `tell`
         commit:         -0.8    # carried: binds regardless of what later calculation would recommend
         utter:          -0.7    # carried: the uttered word binds the utterer whatever advantage later counsels
         evade / defy:    0.7    # carried: putting your own calculus over a demand

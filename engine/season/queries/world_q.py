@@ -35,6 +35,7 @@ from dataclasses import dataclass, replace
 from fractions import Fraction
 from typing import Callable, NamedTuple, Optional
 
+from ..data.arrangements import ARRANGEMENTS      # v11 CR-34: `declared_sitting` reads a row's `disposal`/`quorum`
 from ..data.requires import (
     OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, UNKNOWN, binding_from_act, binding_of, evaluate,
 )
@@ -55,7 +56,7 @@ from ..data.rosters import (
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
     DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, ENEMY_CLASS, FOUNDING_REMIT_ACTS, HOLDING_RECORD_KINDS,
-    RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
+    CONVENING_REMIT_ACTS, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
@@ -293,6 +294,16 @@ def slot_for(w: World, matter: Optional[str]) -> Optional[dict]:
     return None
 
 
+def undated_matters(w: World) -> list[dict]:
+    """THE DOCKET ITEMS A MATTER WAITS IN WITH NO SITTING, in docket order (oldest first): a dateless item
+    (`open_case` and `carry` append one where no slot is open) whose matter is a person -- the one kind
+    `slot_for` places and `determine` clears. v11 CR-56: the one owner of *which matters await a
+    sitting*, read by `matters_awaiting` (the tier a convener is offered) and by CALENDAR's re-slot step
+    (`loop/calendar.py`), so the matter a lord is offered a venue for and the matter the slot then takes
+    are one set. A non-person matter waits too, but no slot will take it and MATTER's lapse clears it."""
+    return [d for d in w.docket if d.get("date") is None and _is_person_id(w, d.get("matter"))]
+
+
 def sittings_before(w: World, p: Person) -> list[tuple]:
     """THE FIRED SITTINGS WITH A MATTER BEFORE `p`'s BENCH, AND THE CLAIM BY WHICH HE KNOWS EACH FIRED --
     `[(date id, claim, (matter, ...)), ...]` in docket order. v9 SC-01 fired-slot step (H-163 limit 2,
@@ -347,6 +358,16 @@ if not DOCKETING_KINDS:
             "dead reader wearing a query's clothes")
 
 
+def _docketing_ref(w: World, e) -> Optional[str]:
+    """THE `subject` OF THE ACT BEHIND DOCKETING EVENT `e` -- the matter, or the petition it rose from -- or `None`
+    for no Event, an Event that is no docketing one (`DOCKETING_KINDS`), or an act whose payload names none.
+    Read by `docketed_by` and `lapsing_items`, which match an item to its Event by it."""
+    if e is None or e.kind not in DOCKETING_KINDS:
+        return None
+    act = causing_act(w, e)
+    return act.payload.get("subject") if act is not None and isinstance(act.payload, dict) else None
+
+
 def docketed_by(w: World, claim) -> tuple:
     """THE DOCKETED MATTERS THE DOCKETING EVENT `claim` IS A CLAIM OF PUT BEFORE A ROOM, or `()` (v10
     CP-T05-04). A claim is OF an Event when its predicate is that Event's kind (`Claim.predicate` is
@@ -368,8 +389,7 @@ def docketed_by(w: World, claim) -> tuple:
     out: dict = {}
     for eid in occasioned_by(w, probe):
         e = event_by_id(w, eid)
-        act = causing_act(w, e) if e is not None and e.kind in DOCKETING_KINDS else None
-        ref = act.payload.get("subject") if act is not None and isinstance(act.payload, dict) else None
+        ref = _docketing_ref(w, e)
         if ref is None:
             continue
         out.update((d["matter"], None) for d in w.docket
@@ -414,6 +434,53 @@ def docket_question(w: World, p: Person) -> Optional[Question]:
                     if m in found)
     about = LedgerReader([c for c, _ in reached]).belief_among()
     return Question(f"q:docket:{'|'.join(matters)}", "claim_landed", matters, about.id)
+
+
+def lapsing_items(w: World, lapse: Optional[int]) -> list[tuple]:
+    """THE DOCKET ITEMS HELD BEYOND `lapse` SEASONS, with the Event that put each there --
+    `[(item, docketing Event id or None), ...]` in docket order; `[]` when `lapse` is
+    `None` (v11 CR-55, `Fixtures docket_lapse`; the control: nothing lapses). The one owner of *how
+    long has this item been before a room*, read by MATTER's lapse pass. AN ITEM DOCKETED IN SEASON `t` IS
+    HEARD IN SEASONS `t` TO `t + lapse` AND LAPSES AT THE BARRIER OPENING `t + lapse + 1`: MATTER precedes
+    DELIBERATE, so `>=` would take a matter from a bench in the very season its count ran out (found at
+    CR-55: `test_sc01_the_bar`'s control determines at the fourth season a matter docketed at the first).
+    NOTHING IS STORED: an item
+    carries no age, so the age is read where the item's beginning is already written --
+      * an item naming a matter: the latest docketing Event (`DOCKETING_KINDS`) whose act's `subject`
+        is the matter or the petition it rose from, as `docketed_by` matches them; failing that, the
+        Date its slot was formed for (`due_at`);
+      * an empty slot: its Date's `due_at`, the `docket.formed` CALENDAR wrote for it is the cause.
+    An item neither reaches (a hand-planted dateless one with no Event, or a dateless item a
+    determination emptied (`_eff_determine` sets `matter` None; it never lapses)) has no beginning to count
+    from, so it does not lapse: an unknown age is not an old one. A dead party, a venue that seats no
+    bench and a matter that is no person all hold their item the same way and lapse by the same
+    count; the rule does not ask why `determine` has not cleared it."""
+    if lapse is None or not w.docket:
+        return []
+    by_ref: dict = {}
+    formed: dict = {}
+    for e in w.log:
+        if e.kind in DOCKETING_KINDS:
+            ref = _docketing_ref(w, e)
+            if ref is not None:
+                by_ref[ref] = e
+        elif e.kind == "docket.formed":
+            formed.setdefault((anchor_of(w, e), e.emitted_at), e)
+    out = []
+    for item in w.docket:
+        date = w.dates.get(item.get("date")) or {}
+        ev = None
+        if item.get("matter") is not None:
+            # THE LATER of the two: a `carry`'s act subject is the petition, an `open_case`'s the matter, and a matter
+            # carried after an older `open_case` of it must age from the carry, not from the stale case (B10-13 Phase 3).
+            cands = [by_ref[r] for r in (item["matter"], item.get(DOCKET_PETITION)) if r is not None and r in by_ref]
+            ev = max(cands, key=lambda c: c.emitted_at) if cands else None
+        since = ev.emitted_at if ev is not None else date.get("due_at")
+        if ev is None and since is not None:
+            ev = formed.get((slot_venue(w, item), since))
+        if since is not None and w.tick - since > lapse:
+            out.append((item, ev.id if ev is not None else None))
+    return out
 
 
 def docketed_under(w: World, matter: Optional[str]) -> set:
@@ -649,6 +716,49 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
             continue
         seats.append(t.subject)
     return seats
+
+
+def declared_sitting(w: World, matter: Optional[str]):
+    """v11 CR-34 (C-7, `ED-SC-0034`): THE ARRANGEMENT ROW `matter` IS HEARD UNDER WHEN THAT ROW DECLARES ITS
+    DISPOSAL (`disposal: declared`), else `None` -- the one owner of *is this a vote at a sitting*, read by the
+    `declared.votes` and `declared.quorum` stems of `determine`'s `vote` conjunct. The row comes from the
+    docket item (`docketed_under`); a computed `open_case` names none (H-80), so every computed matter is
+    `None` here. More than one row on one matter (a hand-planted docket, which `_eff_determine` declines
+    rather than choosing between) is `UNKNOWN` when any of them declares: absence refuses, never a guessed row."""
+    rows = docketed_under(w, matter)
+    declared = [ARRANGEMENTS[r] for r in rows
+                if isinstance(r, str) and r in ARRANGEMENTS and ARRANGEMENTS[r]["disposal"] == "declared"]
+    if not declared:
+        return None
+    return declared[0] if len(rows) == 1 else UNKNOWN
+
+
+def declared_votes(w: World, matter: str, row: dict) -> int:
+    """v11 CR-34: HOW MANY DISTINCT MEMBERS OF THE BENCH AT `matter`'S PLACE VOTE AGAINST HIM under the declared
+    `row` -- those holding a LIVE `commit` to an OUGHT Proposition whose subject is the matter (the party) and
+    whose predicate names the kind the row `disposes:` (`ban` for `excommunication_deliberation`).
+    COMPUTED WHEN READ AND STORED NOWHERE (`commit_count_guard`'s shape): `ambitions` is the one owner of
+    *a live `commit` to an OUGHT* and returns live edges only, so an ended commit is no vote, and the bench is
+    `judging_set`'s, counted as distinct persons (`bench.size`'s rule).
+
+    THE SUBJECT TEST IS THE RULE, NOT AN ADDENDUM: a commit to a faction creed has the faction's LEADER as its
+    subject (`harness/populated.py`'s creed Propositions), so a member's loyal creed is a vote against nobody
+    unless the leader is the one on trial -- and then only if the creed's predicate names the disposal, which
+    it does not. `names` is equality with the kind: a predicate that merely mentions it is not a vote
+    [ASSUMPTION; medium; Jordan to correct; revert: any Proposition about the party]. A matter with no place has
+    no bench: 0."""
+    venue = place_of(w, matter)
+    if venue is None:
+        return 0
+    kind = row["disposes"]
+    votes = 0
+    for member in set(judging_set(w, venue, matter)):
+        p = w.persons.get(member)
+        if p is not None and any(
+                w.propositions[i].subject == matter and w.propositions[i].predicate == kind
+                for i in ambitions(w, p)):
+            votes += 1
+    return votes
 
 
 # ===========================================================================
@@ -3430,7 +3540,7 @@ def detainees_held(w: World, p: Person) -> tuple:
     one of `data/verbs.py::DETAINEE_REMIT_ACTS` (the remit acts of the rows declaring the class:
     `interrogate`'s `determine`). A STANDING OCCASION, `vacancies`' shape: world-read, gated on the seat's
     grant and NOT on what the asker was told (`larders_in_purview` is ledger-gated; this is not), resolver-side
-    and read-only. That shape is the tree's own `in tension with AX-7` list (`loop/matter.py`, `vacancies`):
+    and read-only. That shape is the tree's own `in tension with AX-7` shape (`loop/matter.py`, `vacancies`, `detainees_held`; `04` has no AX-7 row, so it grades CONVENTION). `sittings_before`'s reason (an item on a room's docket is the room's business) does not carry to an UNDATED item, which is before no room: the precedent covers the shape, not the reason:
     no ledger deposit occurs, so AX-7's falsifier (a deposit) is not tripped; the reason it is a world stamp and
     not a claim is H-231 limit 3 (a custody Receipt names no one, so no claim can carry the prisoner). It supplies Person ids, which
     `questions_for` stamps onto the question he answers as the `Detainee` class (`DETAINEE_CLASS`, named
@@ -3451,6 +3561,50 @@ def detainees_held(w: World, p: Person) -> tuple:
     return tuple(sorted({t.subject for t in w.tenures
                          if t.kind == DETAIN_KIND and t.live and t.object in seats
                          and t.subject in w.persons and t.subject != p.id}))
+
+
+def matters_awaiting(w: World, p: Person) -> tuple:
+    """THE TIERS WHERE A MATTER WAITS THAT `p` MAY CONVENE (v11 CR-56, reasons-to-convene RL1 [ASSUMPTION;
+    medium; Jordan to correct; revert: drop the term in `questions_for`]): for each undated person-matter on
+    the docket (`undated_matters`, oldest first), the LOWEST rung that contains the matter's place (`place_of`,
+    walking `ancestry` up, the start included) among the rungs of `p`'s own seats -- live `hold`s on an Office
+    granting one of `data/verbs.py::CONVENING_REMIT_ACTS`, the remit acts of the rows that write a Date's
+    `due_at` -- each rung once, in the order its first matter waits. A STANDING OCCASION, `detainees_held`'
+    shape: world-read, gated on the seat's grant, resolver-side and read-only, in the tree's `in tension with
+    AX-7` list beside `vacancies` and `sittings_before` (what waits on a room's docket is the room's business).
+    It supplies rung ids, which `questions_for` stamps onto the question he answers as `Rung` (`World.class_of`,
+    `_stamped`), beside `places_named`, so `convene` (`referent_class: Rung`) forms on them and `subject` binds
+    the venue through the unchanged referent rule. THE CLASS IS SHARED (`migrate`, `march`, `requisition` form
+    on a stamped tier too and the fold disposes, H-163's measured cost). WHAT IT ADDS TO `places_named`: his own
+    seat's rung where he lives under it (a duke at home in his duchy), which the places-to-settle stamp never
+    offers. ⚠ RL2 (convene stops forming on `places_named`) WAS MEASURED AND NOT TAKEN: `convene`'s score is
+    content-blind, so with only the tier stamp a lord almost never convenes (`verb_table.yaml`'s `convene`
+    note has the reading).
+    WHY THE SEAT'S RUNG AND THE LOWEST ONE: a sitting's tier is its jurisdiction (reasons-to-convene §1), and a
+    seat's rung is the tier it holds; `slot_for` walks up from the matter, so a sitting at any rung containing
+    the matter takes it, and of his own seats' the lowest is the narrowest room that can hear it (a man who
+    sits for a territory and for the realm convenes the territory). "Lowest rung of the seat's tier" is
+    read as the seat's own rung, never a rung below it inside its purview, which would stamp the hearth tier
+    REM-28's stamp convened at. A MATTER OUTSIDE EVERY SEAT OF HIS IS NOT STAMPED: nothing contains it. A seat
+    with no rung (`Office.rung` None, the cluster seat) contains nothing. `()` for a person granted no such
+    act, or while no person-matter waits undated."""
+    items = undated_matters(w)
+    if not items:
+        return ()
+    rungs = {w.offices[t.object].rung for t in p.tenures
+             if t.kind == "hold" and t.live and t.object in w.offices
+             and not CONVENING_REMIT_ACTS.isdisjoint(t.granted_acts)} - {None}
+    if not rungs:
+        return ()
+    out: dict = {}
+    for item in items:
+        place = place_of(w, item["matter"])
+        if place is None:
+            continue
+        lowest = next((r for r in ancestry(w, place) if r in rungs), None)
+        if lowest is not None:
+            out.setdefault(lowest, None)
+    return tuple(out)
 
 
 def enemies_heard(w: World, p: Person) -> tuple:
@@ -3999,6 +4153,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # so a held petition (or works) is a Record those rows form on. REVERT: drop the term.
     # v9 IN-45 `migrate` (H-168 limit 1, [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE
     # PLACES HE HAS BEEN TOLD OF AND COULD SETTLE IN (`places_named`), as `Rung`. REVERT: drop the term.
+    # v11 CR-56 (reasons-to-convene RL1, [ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND,
+    # DIRECTLY AFTER THE PLACES, THE TIERS WHERE A MATTER WAITS THAT HE MAY CONVENE (`matters_awaiting`), as `Rung`
+    # -- `convene` forms on them. A tier that is also a place named keeps the place's pair (`_stamped`'s dedup), so
+    # where the two coincide the output is byte-identical. After the sort, so it displaces no question.
     # v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE
     # LARDERS HIS SEAT MAY REQUISITION (`larders_in_purview`), last, as `Rung`, never twice. The class is
     # `Rung` either way, so every row declaring it forms on both: whether a place
@@ -4034,7 +4192,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # SHIPS ON, H-274; off, the output is byte-identical). "Never twice" is `_stamped`'s dedup.
     told = ledger_names(p.ledger)
     added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + records_held_for_holding_rows(w, p)
-             + places_named(w, p, told) + larders_in_purview(w, p, told) + holdings_to_found(w, p)
+             + places_named(w, p, told) + matters_awaiting(w, p) + larders_in_purview(w, p, told)
+             + holdings_to_found(w, p)
              + (own_referents_of_class(w, out[0]) if out else ())
              + works_sites(w, p) + propositions_heard(w, p) + stage_referents(w, p, ambs)
              + wounded_with(w, p)
@@ -4444,6 +4603,19 @@ class WorldReader:
             # `bench_quorum` (`H-161`), the stand-in for an arrangement's own `quorum:` until a
             # docketed matter maps to its arrangement row. The same for every subject today.
             return w.fixtures.get("bench_quorum")
+        if stem in ("declared.votes", "declared.quorum"):
+            # v11 CR-34 (C-7): `determine`'s `vote` conjunct, `quorum`'s shape -- a computed scalar against a
+            # SECOND READ on the same subject (the matter). Both sides are 0 for a matter heard under no
+            # declared row (every computed matter: no docket item names an arrangement, H-80), so `0 >= 0`
+            # holds and the conjunct is vacuous there. Under a declared row the left is `declared_votes`
+            # (live commits of distinct bench members, computed now, stored nowhere) and the right is the
+            # row's OWN `quorum:` key. UNKNOWN for an ambiguous docket (`declared_sitting`), which refuses.
+            row = declared_sitting(w, subject)
+            if row is None:
+                return 0
+            if row is UNKNOWN:
+                return UNKNOWN
+            return declared_votes(w, subject, row) if stem == "declared.votes" else row["quorum"]
         if stem in OWN_STATE_STEMS:
             # v9 PC-06 K-3 (`H-85`): `thread_sensitivity` and its gate, through
             # `person_q.OwnStateReader` -- the one answerer, which the person's own formation asks

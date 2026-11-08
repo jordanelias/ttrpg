@@ -16,12 +16,20 @@ it. This module constructs none and calls no minter -- `tests/test_g2_token.py` 
 from __future__ import annotations
 
 from ..data.matrix import Step
+from ..queries import world_q
 from ..queries.world_q import FIRED_KIND
 from ..state.carriers import Event
 from ..state.gate import Token
 from ..state.ids import ROOT
 from ..trace_log import TRACE
 
+
+
+def _reslot(w, item: dict, slot: dict) -> None:
+    """v11 CR-56: the waiting `item` TAKES the open `slot`'s place, dated with the slot's `date`, and leaves
+    its own -- one docket item per matter, as `open_case`'s fill leaves it. The item moves whole, so no key is
+    written into an item another step formed (CR-55's lapse removes an item whole under the same cell)."""
+    w.docket[:] = [{**item, "date": slot["date"]} if d is slot else d for d in w.docket if d is not item]
 
 
 # -- CALENDAR -- barrier 1 -- DECIDES NOTHING (S24) ----------------------
@@ -66,5 +74,36 @@ def calendar(self, token: Token) -> list[Event]:
                     record_kind="DocketItem", fieldname="matter", driver="Event",
                     emits="docket.formed", subject=d.get("venue"),
                     causes=[fired] if fired else [ROOT])
+    # -- v11 CR-56: A WAITING MATTER IS RE-SLOTTED (reasons-to-convene §0 line 1, RL1's re-slot step;
+    # [ASSUMPTION; medium; Jordan to correct; revert: drop this loop]). No act back-fills a matter already
+    # waiting: `open_case` and `carry` both decline a docketed matter, and only `open_case` fills a slot, at
+    # the case's opening. So each undated person-matter (`world_q.undated_matters`, oldest first) takes the
+    # open slot `world_q.slot_for` finds for it -- the same nearest-sitting walk an opening case takes --
+    # the waiting item taking the slot's place and its `date`, the dateless item gone.
+    # ⚠ LAYER 1, GRADED CONVENTION (B10-13 Lens B; `04` §A.2:173 gives `loop/calendar` its own state, an R-1 subtree
+    # aggregate and the calendar to read): `slot_for` reads a matter person's containment (`place_of`) and
+    # `undated_matters` reads items RESOLVE formed. No scan sees the exceedance; it is recorded here, as
+    # `loop/witness.py` records each of its own. The write below moves a whole item into the slot, so it
+    # changes the item's `date` under the `(DocketItem, matter)` cell and gives the slot the RES-only
+    # `arrangement` and `petition` keys; a `(DocketItem, date)` CAL row would be the conformant shape (not
+    # taken: unmeasured against the hash).
+    # Slots open here (the ones just formed) and wherever a determination emptied one (RESOLVE). One gate
+    # write per matter, `docket.formed` at the venue, chained on that venue's firing as the slot's own is.
+    # An item the lapse is about to take (MATTER runs next, this tick) is not re-slotted: it would fill a sitting's
+    # slot only to leave with it, and the sitting forms no other (B10-13 Phase 3).
+    lapsing = {id(i) for i, _ in world_q.lapsing_items(w, w.fixtures.get("docket_lapse"))}
+    for item in world_q.undated_matters(w):
+        if id(item) in lapsing:
+            continue
+        slot = world_q.slot_for(w, item["matter"])
+        if slot is None:
+            continue
+        venue = world_q.slot_venue(w, slot)
+        fired = w.last_emission_of(FIRED_KIND, venue)
+        w.write("DocketItem", token,
+                lambda item=item, slot=slot: _reslot(w, item, slot),
+                record_kind="DocketItem", fieldname="matter", driver="Event",
+                emits="docket.formed", subject=venue,
+                causes=[fired] if fired else [ROOT])
     TRACE.step("CALENDAR", "leave")
     return w.log[_mark:]

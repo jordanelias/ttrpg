@@ -838,7 +838,7 @@ def test_t4_a_telling_to_an_absent_hearer_is_refused_and_a_present_one_hears():
     """`p_low` (in `Hh`) holds a claim on `Hh` and tells it twice.
 
     ABSENT -- to `p_king`, who stands in `R`: the fold refuses BEFORE any contest, on the `hearer`
-    conjunct, with `news.untold`; the Event carries no degree (a refusal, not a lost contest, so a
+    conjunct, with `tell.refused` (CP-T05-03; `news.untold` before it); the Event carries no degree (a refusal, not a lost contest, so a
     Failure roll cannot impersonate it), and nobody is told anything.
     PRESENT -- to `p_mid`, who stands in `Hh`: admitted, and folded at `Success` (the band the seam
     would hand back on a win -- the roll is not this test's subject); at WITNESS the addressee AND
@@ -873,10 +873,10 @@ def test_t4_a_telling_to_an_absent_hearer_is_refused_and_a_present_one_hears():
         f"a telling to someone in another rung read {verdict.value!r} on {verdict.failed!r}, "
         "not False on `hearer`")
     ok, kinds, _ = d._admits(w, gone, row)
-    assert not ok and list(kinds) == ["news.untold"], (ok, kinds)
+    assert not ok and list(kinds) == ["tell.refused"], (ok, kinds)
     out = d.resolve(mint_token(w, WriteClass.ACTS), [gone],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
-    assert [e.kind for e in out] == ["news.untold"] and all(e.degree is None for e in out), (
+    assert [e.kind for e in out] == ["tell.refused"] and all(e.degree is None for e in out), (
         f"the absent telling emitted {[(e.kind, e.degree) for e in out]} -- it reached the contest")
 
     # PRESENT.
@@ -950,7 +950,7 @@ def test_t4_a_with_read_is_observed_and_never_deposited_into_the_tellers_ledger(
             else:
                 out = d.resolve(mint_token(w, WriteClass.ACTS), [a],
                                 contest_max_depth=w.fixtures.get("contest_max_depth"))
-                assert [e.kind for e in out] == ["news.untold"], (where, [e.kind for e in out])
+                assert [e.kind for e in out] == ["tell.refused"], (where, [e.kind for e in out])
                 assert all(e.degree is None for e in out), (
                     where, "the T4 refusal reached the contest: it is the WorldReader's, not the ledger's")
             w.log.extend(out)
@@ -1815,8 +1815,11 @@ def _g1_split():
 
 
 def _g1_fx(judged, told):
+    """G1's two gains; `heritage_gain` (v11 CR-31, `regard`'s third term) is held at its control 0, so a G1
+    control reads the stored half exactly. CR-31 has its own falsifier, `test_cr31_heritage_regard.py`."""
     from ..data.fixtures import DEFAULT_FIXTURES
-    return DEFAULT_FIXTURES.sweep("judged_gain", judged).sweep("told_valence_gain", told)
+    return (DEFAULT_FIXTURES.sweep("judged_gain", judged).sweep("told_valence_gain", told)
+            .sweep("heritage_gain", 0.0))
 
 
 def _g1_hearers(kind, pro, con, chain=()):
@@ -1915,8 +1918,8 @@ def test_g1_a_told_by_deed_with_an_empty_chain_is_told_not_judged():
 def test_g1_a_refusal_is_no_deed():
     """A REFUSAL REPORTS AN ACT THAT DID NOT HAPPEN (`data/verbs.py::REFUSAL_KINDS`): a firsthand
     `kill.refused` about V judges nothing. `kill.refused` has a `KIND_VERB` (one row emits it), so
-    without the exclusion it would be scored as that verb's deed. `news.untold`, which `tell` emits
-    on success AND refusal, is no deed either."""
+    without the exclusion it would be scored as that verb's deed. `tell.refused`, the refusal CP-T05-03
+    split off `tell`'s lost telling (`news.untold`, now a deed like `argument.lost`), is no deed either."""
     from ..data import verbs as V
     from ..data.pursuits import to_axes
     from ..data.rosters import PURSUIT_AXES, PURSUITS
@@ -1932,7 +1935,7 @@ def test_g1_a_refusal_is_no_deed():
     a.ledger = [x for x in a.ledger if x.subject != "p_other"] + [
         Claim("c_g1_ref", a.id, "p_other", kind, True, 0, "firsthand", 100, "own")]
     assert PQ.deeds_judged(a, "p_other") == (0.0, 0.0)
-    assert not PQ.is_deed(Claim("c_untold", a.id, "p_other", "news.untold", True, 0, "firsthand",
+    assert not PQ.is_deed(Claim("c_untold", a.id, "p_other", "tell.refused", True, 0, "firsthand",
                                 100, "own"))
 
 

@@ -39,6 +39,7 @@ from ..harness import decision_spread as DS
 from ..harness.populated import build_realm
 from ..state.carriers import Candidate, Person
 from ..state.ids import draw_factory
+from .test_cp_t05_02_self_plea import revert_cp_t05_02
 
 _FX0 = DEFAULT_FIXTURES.sweep("choice_temperature", 0)        # no sampler: the score alone orders
 _SUBJECT = "p_in62_x"
@@ -261,7 +262,16 @@ def test_in62_score_is_the_sum_of_score_terms_for_every_candidate_a_season_forms
     assert any(t[0] != 0 for _, t in season_pairs), "no pursuit term was nonzero: the sum proved nothing"
 
 
-def test_in62_under_the_null_every_realm_top_is_draw_or_tiebreak_and_the_shipped_reading_is_not():
+def test_in62_under_the_null_every_realm_top_is_draw_or_tiebreak_and_the_shipped_reading_is_not(monkeypatch):
+    # B10-13 CP-T05-02: the null is read with the self-plea at its revert. `read_decisions` scores the intersection of
+    # every person's opening set at a referent, and the referent is one of those people: with `subject_may_be_self`
+    # his set holds `speak` on himself, so `speak` (the one common row contested against its subject) enters the
+    # common set at every referent, and the `declared` polarity (CR-16) scores it `+regard` for a person who dislikes
+    # the referent against `-regard` on every other row. The null zeroes alignment only, so `stance` then decides
+    # their tops (MEASURED at dcac6650: p_npc_050 on p_npc_021, regard -3: `speak` +6.0, the other 14 rows -6.0).
+    # The claim here is about alignment; the instrument's `(verb, subject)` key does not tell a self-plea from an
+    # accusation. A harness change that keys them apart would lift this revert.
+    revert_cp_t05_02(monkeypatch)
     shipped = DS.read_decisions(build_realm(0))
     with DS.null_alignment():
         null = DS.read_decisions(build_realm(0))

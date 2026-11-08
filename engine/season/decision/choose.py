@@ -115,7 +115,10 @@ def _stance_arm(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict]) -
     if arm == "regard":
         return r
     row = VERB_TABLE.get(c.verb)
-    return -r if row is not None and subject_is_opponent(row) else r
+    # CP-T05-02 (B10-13): self-regard is read here as `regard(p, p.id)` (stored stance plus his own deeds), while `_bond`
+    # treats a judge as his own full ally; the two are not routed together. `subject_is_opponent` encodes 'a person is not his own adversary'; a self-plea
+    # (`subject_may_be_self`) is an act FOR himself, so the polarity flips only where the subject is somebody else.
+    return -r if row is not None and subject_is_opponent(row) and subject != p.id else r
 
 
 # IN-62: the keys under which `make_chooser` hoists a deliberation's candidate-independent factors

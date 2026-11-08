@@ -259,6 +259,13 @@ class VerbRow:
     # `decision/options.py::opening_set` with no World (L2). The loader admits it only beside a
     # `referent_class:`; one class, two sources, and this column is which one a row may answer.
     referent_named: bool = False
+    # v10 CP-T05-02 (iii) (AM-D-02): MAY THE SUBJECT BE THE PERSON THEMSELF? `False` (every row but one)
+    # keeps `opening_set`'s self-subject decline: a person is not their own adversary on a row contested
+    # against its subject (`decision/options.py::subject_is_opponent`). `True` (`speak`: a docketed party
+    # answers to his own matter) waives that decline for the row declaring it, and for that row alone. NOT
+    # `counterparty_may_be_self`, which waives the COUNTERPARTY operand's self-exclusion (`confer`). The
+    # loader admits it only on a row `subject_is_opponent` reads as contested against its subject.
+    subject_may_be_self: bool = False
 
     def referents_of(self, q) -> tuple:
         """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
@@ -278,6 +285,12 @@ class VerbRow:
         name none and read `subject`). The one owner of that rule, asked by `loop/resolve.py` (the fold's `_target`)
         and `decision/options.py::subject_is_opponent`, which had each written it inline (CR-16)."""
         return self.counterparty or "subject"
+
+    def contested_against_subject(self) -> bool:
+        """WHETHER AN ACT OF THIS ROW IS CONTESTED AGAINST ITS `subject`: it declares a prize (`contests:`) and its
+        opponent operand is `subject`. The one owner of the test `decision/options.py::subject_is_opponent` and the
+        loader's `subject_may_be_self` refusal both ask."""
+        return bool(self.contests) and self.opponent_operand() == "subject"
 
     def known_person_operands(self) -> tuple:
         """THE OPERANDS A CANDIDATE OF THIS ROW TAKES FROM SOMEBODY THE PERSON KNOWS, one bag per
@@ -655,7 +668,8 @@ def _load_verb_table() -> dict:
                       requires_decline_note=str(r.get("requires_decline_note") or "").strip(),
                       referent_class=str(r.get("referent_class") or "").strip(),
                       counterparty_may_be_self=r.get("counterparty_may_be_self", False),
-                      referent_named=r.get("referent_named", False))
+                      referent_named=r.get("referent_named", False),
+                      subject_may_be_self=r.get("subject_may_be_self", False))
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.
@@ -702,9 +716,9 @@ def _load_verb_table() -> dict:
                 "`writs_held` and `records_held_for_holding_rows` stamp a held Record only of a kind "
                 "such a clause names, and the own-referent term a Record of any kind only for a clause "
                 "naming the class, so this row would never form.")
-        # IN-10 (a) / IN-53 D2: `referent_named` and `counterparty_may_be_self` ARE BOOLEANS -- a
-        # string `"false"` would read truthy.
-        for col in ("referent_named", "counterparty_may_be_self"):
+        # IN-10 (a) / IN-53 D2 / CP-T05-02 (iii): `referent_named`, `counterparty_may_be_self` and
+        # `subject_may_be_self` ARE BOOLEANS -- a string `"false"` would read truthy.
+        for col in (f.name for f in fields(VerbRow) if f.type == "bool"):
             if not isinstance(getattr(row, col), bool):
                 raise SystemExit(
                     f"verb_table.yaml: {name!r} declares {col} {getattr(row, col)!r}; it is "
@@ -729,6 +743,15 @@ def _load_verb_table() -> dict:
                 f"({list(row.known_person_operands())}). The column adds the person to that fan "
                 "(`decision/options.py::operand_bags`); on any other row it would only waive the "
                 "fold's self-exclusion.")
+        # CP-T05-02 (iii): `subject_may_be_self` ONLY ON A ROW CONTESTED AGAINST ITS SUBJECT. On any other
+        # row `opening_set` makes no self-subject decline (`decision/options.py::subject_is_opponent`:
+        # `tell`'s subject is a topic), so the column would waive nothing -- a column read by nothing.
+        if row.subject_may_be_self and not row.contested_against_subject():
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares subject_may_be_self, but its act is not contested "
+                f"against its subject (contests {row.contests!r}, opponent operand "
+                f"{row.opponent_operand()!r}). The column waives `opening_set`'s decline of a person as "
+                "his own adversary, which only such a row makes.")
         # A row that declares `requires_typed: none` must SAY WHY. The three admissible reasons
         # are a well-formedness constraint on the Act (§F.24a: `issue`, `open_case` -- *"they
         # belong in the `Act` schema and are refused at construction"*), a `per act` cell, and an
@@ -955,7 +978,7 @@ def _load_verb_table() -> dict:
             # ⚠ NARROWED AT TELLING WORKPLAN `T4`: the party-gap refusal emits the UNION, which is
             # `ID-9` only if the union holds more than one kind -- a kind published for a conjunct
             # that did not fail. A contested row whose every key emits ONE kind (`tell`:
-            # `news.untold` for `holds` and `hearer`) emits exactly that kind at the party gap too.
+            # `tell.refused` for `holds` and `hearer`) emits exactly that kind at the party gap too.
             # ⚠ NARROWED AGAIN AT v9 IN-12 step 5 (#453 K-02, the party-gap fold edit): THE SEAM'S
             # PARTY GAP IS THE COUNTERPARTY CLAUSE FAILING, so a row that KEYS `COUNTERPARTY_CLAUSE`
             # emits that key's kinds there (`loop/resolve.py::_refuse_party_gap`) and not the union,
@@ -1706,6 +1729,27 @@ def _load_own_stance_declines(values) -> frozenset:
 OWN_STANCE_DECLINES = _load_own_stance_declines(roster("own_stance_declines"))
 
 
+# v11 CR-27 (M9 taken (a)): the verbs that say a FALSE value of a claim the speaker holds
+# (`rosters.yaml: lie_verbs`, read in `opening_set`; `lie`). Refused at import when a member names a verb the
+# table lacks or one whose typed cell names no `own_ledger` conjunct -- `opening_set` carries `said` only off
+# that conjunct, so a listed row without one would be a roster line nothing reads.
+def _load_lie_verbs(values) -> frozenset:
+    """`rosters.yaml: lie_verbs`' `values`, checked and frozen -- refused per member (above)."""
+    out = frozenset(str(v or "") for v in (values or ()))
+    for v in sorted(out):
+        row = VERB_TABLE.get(v)
+        if row is None or row.requires_typed is None or not row.requires_typed.named_own_ledger_operands():
+            raise Forbidden(
+                f"`rosters.yaml: lie_verbs` names {v!r}, and the verb table carries no such verb or its typed "
+                "cell names no `own_ledger` conjunct", "rosters.yaml",
+                needs="a `verb_table.yaml` verb whose cell names an `own_ledger` conjunct (`tell`'s `holds`)",
+                law="CR-27 -- a lie is a said claim made false; a row that says nothing has none")
+    return out
+
+
+LIE_VERBS = _load_lie_verbs(roster("lie_verbs"))
+
+
 # v9 IN-26 (BOUND-PAPER, `A-13`): the verbs a person forms only on a referent he himself holds -- the
 # object of one of his OWN live `hold` Tenures (`rosters.yaml: own_hold_declines`, read in `opening_set`;
 # `destroy_record`). `own_stance_declines`' shape one field over: the decline is the person-side reading of
@@ -1872,6 +1916,19 @@ if ENEMY_CLASS not in REFERENT_CLASSES:
     raise Forbidden(f"{ENEMY_CLASS!r} is not a `rosters.yaml: referent_classes` value", "rosters.yaml",
                     needs="the war-context class in the closed roster",
                     law="v11 CR-87 -- a class stamped by name must be one the roster declares")
+
+# v11 CR-56 (reasons-to-convene RL1 [ASSUMPTION; medium; Jordan to correct; revert: drop with
+# `queries/world_q.py::matters_awaiting`]): THE REMIT ACTS A SEAT CONVENES A SITTING THROUGH -- the `remit:`
+# alternatives of every row that writes a Date's `due_at` (`convene`'s, today `convene`), read off the rows'
+# `writes:` as `DOCKETING_KINDS` is, so `matters_awaiting` offers a tier only to a holder of a seat the fold's
+# eligibility would admit, and no act literal lives at the stamp site. Refused at import if empty: the stamp would
+# otherwise offer nothing for ever and read as an honest absence.
+CONVENING_REMIT_ACTS = frozenset(act for row in VERB_TABLE.values() if "Date.due_at" in row.writes
+                                 for act in _remit_acts_of(row))
+if not CONVENING_REMIT_ACTS:
+    raise Forbidden("no verb-table row granted by a remit act writes `Date.due_at`", "verb_table.yaml",
+                    needs="the convening row's `writes:` and `remit:` eligibility, or `matters_awaiting` retired",
+                    law="v11 CR-56 -- a stamp keyed on an act no row grants offers nothing in every world")
 
 # v11 CR-25 ([ASSUMPTION; medium; Jordan to correct; revert: drop `holdings_to_found` and the derivation]): THE
 # REMIT ACTS A SEAT FOUNDS AN OFFICE THROUGH -- `establish`'s own `remit:` alternatives (`confer` today), read off

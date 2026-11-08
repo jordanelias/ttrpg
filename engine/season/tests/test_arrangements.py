@@ -4,7 +4,7 @@ Falsifiers named by the source docs this position builds from (`21_RECONCILIATIO
 6, `19_PLAN.md` step 11, `03_PARAMETERS.md` PART D): a fourteenth key fails naming the row; a
 declared-disposal row with no quorum fails the load; a thirteenth (here: another, beyond the
 seeded rows) arrangement loads with no code change; a speech-kind whose reachable bands name a band outside the ladder fails
-to load. Scoped to the EIGHT seeded games (three until v9 SC-03a, seven until v9 SC-04; `arrangements.yaml`'s own header states why not all
+to load. Scoped to the NINE seeded games (three until v9 SC-03a, seven until v9 SC-04, eight until v10 SC-04; `arrangements.yaml`'s own header states why not all
 twelve) and the SIX seeded speech kinds (same file, why not all ten).
 """
 
@@ -22,16 +22,17 @@ from ..data import files
 from ..data.rosters import LADDER_RUNGS, load_yaml
 
 
-def test_the_eight_seeded_arrangements_load():
+def test_the_nine_seeded_arrangements_load():
     """THREE until v9 SC-03a, which seeded four `<tenure>` rows (`arrangements.yaml`'s header)
     once `detain` and `ban` became `tenure_kinds` members; EIGHT since v9 SC-04 seeded the fifth,
-    `excommunication_deliberation`. The four dispose those two kinds and
+    `excommunication_deliberation`; NINE since v10 SC-04 seeded `negotiation` (a `mutual` disposal). The four dispose those two kinds and
     nothing else, each a `bench` disposal -- the loader stays green on them (the position's own
     falsifier clause)."""
     assert set(A.ARRANGEMENTS) == {"arbitration", "parliamentary_debate", "council_of_state",
                                    "legal_trial", "tribunal", "interrogation",
-                                   "inquisition_hearing", "excommunication_deliberation"}
-    assert len(A.ARRANGEMENTS) == 8
+                                   "inquisition_hearing", "excommunication_deliberation",
+                                   "negotiation"}
+    assert len(A.ARRANGEMENTS) == 9
     sc03a = ("legal_trial", "tribunal", "interrogation", "inquisition_hearing")
     assert {A.ARRANGEMENTS[r]["disposes"] for r in sc03a} == {"detain", "ban"}
     assert all(A.ARRANGEMENTS[r]["disposal"] == "bench" for r in sc03a)
@@ -49,9 +50,25 @@ def test_the_eight_seeded_arrangements_load():
     # deliberation with a ceremony interposed, appealable, reaching the realm.
     exc = A.ARRANGEMENTS["excommunication_deliberation"]
     assert exc["disposes"] == A.ARRANGEMENTS["inquisition_hearing"]["disposes"] == "ban"
-    assert (exc["disposal"], exc["floor"], exc["records_dissent"], exc["order"], exc["appeal_basis"],
-            exc["disposal_reach"]) == ("bench", "closed", False, "rank", "determine", "realm")
+    # v11 CR-34: the first `declared` row (C-7), `quorum: 2` -- `test_cr34_declared_disposal.py` reads the vote.
+    assert (exc["disposal"], exc["quorum"], exc["floor"], exc["records_dissent"], exc["order"],
+            exc["appeal_basis"], exc["disposal_reach"]) == (
+        "declared", 2, "closed", False, "rank", "determine", "realm")
+    assert [r for r, row in A.ARRANGEMENTS.items() if row["disposal"] == "declared"] == [
+        "excommunication_deliberation"]
     assert exc["interposed"] == ("procedure", "ceremony") and exc["term_required"] is True
+    # v10 SC-04: `negotiation`, the one `mutual` disposal -- the deciders are the parties, so no bench
+    # (`bench_basis: none`); §E.2's block (03_PARAMETERS.md:553-565) read key by key. `records_dissent: false`
+    # is the reading `excommunication_deliberation` makes for an old false+given pair (kept: the key the
+    # source writes), cited rather than re-decided; `succession` is CR-35's and is absent.
+    neg = A.ARRANGEMENTS["negotiation"]
+    assert (neg["disposal"], neg["bench_basis"], neg["floor"], neg["records_dissent"], neg["venue_min_rank"],
+            neg["term_required"], neg["appeal_basis"], neg["order"], neg["disposes"],
+            neg["disposal_reach"]) == ("mutual", "none", "closed", False, "hearth", False, "none",
+                                       "alternating", "oblige", "room")
+    assert neg["interposed"] == () and neg["proofs"] == ("record", "testimony") and neg["quorum"] is None
+    assert neg["records_dissent"] == A.ARRANGEMENTS["excommunication_deliberation"]["records_dissent"]
+    assert "succession" not in A.ARRANGEMENTS
     arb = A.ARRANGEMENTS["arbitration"]
     assert arb["disposal"] == "bench" and arb["appeal_basis"] == "none"
     parl = A.ARRANGEMENTS["parliamentary_debate"]
@@ -243,6 +260,27 @@ def test_c1_is_a_report_not_a_refusal_and_is_honest_about_todays_state():
     assert reported == [], reported
     assert "parliamentary_debate" not in reported and "council_of_state" not in reported, (
         "a `Record`-disposing row is not asked of the tenure-kind opener map")
+
+
+def test_a_negotiation_reaches_eff_oblige_the_opener_of_the_kind_it_disposes(monkeypatch):
+    """v10 SC-04: the seeded `negotiation` row (`disposal: mutual`, `disposes: oblige`) is only as good as
+    its opener. Hand-built, end to end: the kind it disposes is opened by the real `oblige` act through
+    the fold (`loop/effects_governance.py::_eff_oblige` -> `duty.taken`, one live `oblige` edge), and
+    C-1 reads that opener. CONTROL: with `oblige`'s opener map emptied C-1 names the row (a `mutual` row
+    asks for `oblige`'s opener alone; `arbitration`, which `determine` opens `oblige` for, is named too),
+    so its absence from the report is the opener's."""
+    from ..data.verbs import _OPENERS_FROM_EFFECTS
+    from ..harness import probes as P
+    row = A.ARRANGEMENTS["negotiation"]
+    assert row["disposal"] == "mutual" and row["disposes"] == "oblige"
+    assert "negotiation" not in A.arrangements_without_a_disposal_opener()
+    w = P.tiny_world()
+    P._run_d(w, lambda p, v, s, b: ([P.Act_(w, p, "oblige", payload={"subject": "off_dicastery"})]
+                                    if p.id == "p_low" else []))
+    edges = [t for t in w.tenures if t.kind == row["disposes"] and t.subject == "p_low" and t.live]
+    assert [t.object for t in edges] == ["off_dicastery"] and "duty.taken" in {e.kind for e in w.log}
+    monkeypatch.setitem(_OPENERS_FROM_EFFECTS, "oblige", ())
+    assert A.arrangements_without_a_disposal_opener() == ["arbitration", "negotiation"]
 
 
 def test_a_hold_disposing_row_is_reported_by_c1_until_determine_can_open_a_hold(monkeypatch):
