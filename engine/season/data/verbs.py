@@ -1890,6 +1890,19 @@ if ENEMY_CLASS not in REFERENT_CLASSES:
                     needs="the war-context class in the closed roster",
                     law="v11 CR-87 -- a class stamped by name must be one the roster declares")
 
+# v11 CR-56 (reasons-to-convene RL1 [ASSUMPTION; medium; Jordan to correct; revert: drop with
+# `queries/world_q.py::matters_awaiting`]): THE REMIT ACTS A SEAT CONVENES A SITTING THROUGH -- the `remit:`
+# alternatives of every row that writes a Date's `due_at` (`convene`'s, today `convene`), read off the rows'
+# `writes:` as `DOCKETING_KINDS` is, so `matters_awaiting` offers a tier only to a holder of a seat the fold's
+# eligibility would admit, and no act literal lives at the stamp site. Refused at import if empty: the stamp would
+# otherwise offer nothing for ever and read as an honest absence.
+CONVENING_REMIT_ACTS = frozenset(act for row in VERB_TABLE.values() if "Date.due_at" in row.writes
+                                 for act in _remit_acts_of(row))
+if not CONVENING_REMIT_ACTS:
+    raise Forbidden("no verb-table row granted by a remit act writes `Date.due_at`", "verb_table.yaml",
+                    needs="the convening row's `writes:` and `remit:` eligibility, or `matters_awaiting` retired",
+                    law="v11 CR-56 -- a stamp keyed on an act no row grants offers nothing in every world")
+
 # v11 CR-25 ([ASSUMPTION; medium; Jordan to correct; revert: drop `holdings_to_found` and the derivation]): THE
 # REMIT ACTS A SEAT FOUNDS AN OFFICE THROUGH -- `establish`'s own `remit:` alternatives (`confer` today), read off
 # the row, so the founding stamp (`queries/world_q.py::holdings_to_found`) offers a holding only to a holder of a

@@ -55,7 +55,7 @@ from ..data.rosters import (
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
     DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, ENEMY_CLASS, FOUNDING_REMIT_ACTS, HOLDING_RECORD_KINDS,
-    RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
+    CONVENING_REMIT_ACTS, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
@@ -291,6 +291,16 @@ def slot_for(w: World, matter: Optional[str]) -> Optional[dict]:
         if slots:
             return slots[0]
     return None
+
+
+def undated_matters(w: World) -> list[dict]:
+    """THE DOCKET ITEMS A MATTER WAITS IN WITH NO SITTING, in docket order (oldest first): a dateless item
+    (`open_case` and `carry` append one where no slot is open) whose matter is a person -- the one kind
+    `slot_for` places and `determine` clears. v11 CR-56: the one owner of *which matters await a
+    sitting*, read by `matters_awaiting` (the tier a convener is offered) and by CALENDAR's re-slot step
+    (`loop/calendar.py`), so the matter a lord is offered a venue for and the matter the slot then takes
+    are one set. A non-person matter waits too, but no slot will take it and MATTER's lapse clears it."""
+    return [d for d in w.docket if d.get("date") is None and _is_person_id(w, d.get("matter"))]
 
 
 def sittings_before(w: World, p: Person) -> list[tuple]:
@@ -3497,6 +3507,47 @@ def detainees_held(w: World, p: Person) -> tuple:
                          and t.subject in w.persons and t.subject != p.id}))
 
 
+def matters_awaiting(w: World, p: Person) -> tuple:
+    """THE TIERS WHERE A MATTER WAITS THAT `p` MAY CONVENE (v11 CR-56, reasons-to-convene RL1 [ASSUMPTION;
+    medium; Jordan to correct; revert: drop the term in `questions_for`]): for each undated person-matter on
+    the docket (`undated_matters`, oldest first), the LOWEST rung that contains the matter's place (`place_of`,
+    walking `ancestry` up, the start included) among the rungs of `p`'s own seats -- live `hold`s on an Office
+    granting one of `data/verbs.py::CONVENING_REMIT_ACTS`, the remit acts of the rows that write a Date's
+    `due_at` -- each rung once, in the order its first matter waits. A STANDING OCCASION, `detainees_held`'
+    shape: world-read, gated on the seat's grant, resolver-side and read-only, in the tree's `in tension with
+    AX-7` list beside `vacancies` and `sittings_before` (what waits on a room's docket is the room's business).
+    It supplies rung ids, which `questions_for` stamps onto the question he answers as `Rung` (`World.class_of`,
+    `_stamped`), beside `places_named`, so `convene` (`referent_class: Rung`) forms on them and `subject` binds
+    the venue through the unchanged referent rule. THE CLASS IS SHARED (`migrate`, `march`, `requisition` form
+    on a stamped tier too and the fold disposes, H-163's measured cost). WHAT IT ADDS TO `places_named`: his own
+    seat's rung where he lives under it (a duke at home in his duchy), which the places-to-settle stamp never
+    offers. ⚠ RL2 (convene stops forming on `places_named`) WAS MEASURED AND NOT TAKEN: `convene`'s score is
+    content-blind, so with only the tier stamp a lord almost never convenes (`verb_table.yaml`'s `convene`
+    note has the reading).
+    WHY THE SEAT'S RUNG AND THE LOWEST ONE: a sitting's tier is its jurisdiction (reasons-to-convene §1), and a
+    seat's rung is the tier it holds; `slot_for` walks up from the matter, so a sitting at any rung containing
+    the matter takes it, and of his own seats' the lowest is the narrowest room that can hear it (a man who
+    sits for a territory and for the realm convenes the territory). "Lowest rung of the seat's tier" is
+    read as the seat's own rung, never a rung below it inside its purview, which would stamp the hearth tier
+    REM-28's stamp convened at. A MATTER OUTSIDE EVERY SEAT OF HIS IS NOT STAMPED: nothing contains it. A seat
+    with no rung (`Office.rung` None, the cluster seat) contains nothing. `()` for a person granted no such
+    act, or while no person-matter waits undated."""
+    rungs = {w.offices[t.object].rung for t in p.tenures
+             if t.kind == "hold" and t.live and t.object in w.offices
+             and not CONVENING_REMIT_ACTS.isdisjoint(t.granted_acts)} - {None}
+    if not rungs:
+        return ()
+    out: dict = {}
+    for item in undated_matters(w):
+        place = place_of(w, item["matter"])
+        if place is None:
+            continue
+        lowest = next((r for r in ancestry(w, place) if r in rungs), None)
+        if lowest is not None:
+            out.setdefault(lowest, None)
+    return tuple(out)
+
+
 def enemies_heard(w: World, p: Person) -> tuple:
     """THE PERSONS OF A FACTION AT WAR WITH `p`'s, OVER A WAR HE KNOWS OF (v11 CR-87, the WAR context of
     `rosters.yaml: violence_contexts` [ASSUMPTION; medium; Jordan to correct; revert: `()`, and `war` names
@@ -4043,6 +4094,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # so a held petition (or works) is a Record those rows form on. REVERT: drop the term.
     # v9 IN-45 `migrate` (H-168 limit 1, [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE
     # PLACES HE HAS BEEN TOLD OF AND COULD SETTLE IN (`places_named`), as `Rung`. REVERT: drop the term.
+    # v11 CR-56 (reasons-to-convene RL1, [ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND,
+    # DIRECTLY AFTER THE PLACES, THE TIERS WHERE A MATTER WAITS THAT HE MAY CONVENE (`matters_awaiting`), as `Rung`
+    # -- `convene` forms on them. A tier that is also a place named keeps the place's pair (`_stamped`'s dedup), so
+    # where the two coincide the output is byte-identical. After the sort, so it displaces no question.
     # v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE
     # LARDERS HIS SEAT MAY REQUISITION (`larders_in_purview`), last, as `Rung`, never twice. The class is
     # `Rung` either way, so every row declaring it forms on both: whether a place
@@ -4078,7 +4133,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # SHIPS ON, H-274; off, the output is byte-identical). "Never twice" is `_stamped`'s dedup.
     told = ledger_names(p.ledger)
     added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + records_held_for_holding_rows(w, p)
-             + places_named(w, p, told) + larders_in_purview(w, p, told) + holdings_to_found(w, p)
+             + places_named(w, p, told) + matters_awaiting(w, p) + larders_in_purview(w, p, told)
+             + holdings_to_found(w, p)
              + (own_referents_of_class(w, out[0]) if out else ())
              + works_sites(w, p) + propositions_heard(w, p) + stage_referents(w, p, ambs)
              + wounded_with(w, p)
