@@ -12,7 +12,9 @@ mechanism; later byte-identical increments reuse the same fixture). The fixture 
 lengths in METRES (unit-invariant), so it compares directly on both sides of the conversion.
 NEVER hand-edit the fixture; a deliberate re-baseline increment (U1/U2/U9) regenerates it with
 recorded reasons. PC-11 removed the `can_choke` key (54 rows, no value changed): a key REMOVAL for a deleted
-primitive is the one hand-edit this fixture has had.
+primitive was the first hand-edit this fixture had. B10-11b's PC-20 (2) is the second: `tests/valoria/r3_identity_golden.json`'s
+`systems[*].str_demand` cells were recomputed with the live `S.str_demand` (no generator exists), after a control run at
+D_MASS 0 matched the old file exactly.
 """
 import json
 import math

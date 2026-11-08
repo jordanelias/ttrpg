@@ -41,7 +41,9 @@ FAR = "p_high"                     # elsewhere
 
 #: 1-season hashes after this item; PRE_ITEM is eb34324f's (CP-T03-07's POST_ITEM). `build_realm(0)` is unmoved
 #: (600d8b27147478e158553552cc1409a5): the item writes no field and no world-gen.
-POST_ITEM = {0: "d4c83c8ca9d5082f5237a3889e1a995b", 1: "d9f3be70a492753d16584d068ba98108", 2: "285fb92a927eaa642e8478c799995315"}
+#: Seeds 1 and 2 are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit (was d9f3be70... /
+#: 285fb92a...): PC-20 (1) (the head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`.
+POST_ITEM = {0: "d4c83c8ca9d5082f5237a3889e1a995b", 1: "7cacc76327c222c2595c57f24d147d36", 2: "447ed0d819b895fd828e4b1c26a34e69"}
 BUILD = "600d8b27147478e158553552cc1409a5"
 
 

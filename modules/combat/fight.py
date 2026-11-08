@@ -41,6 +41,17 @@ def _faculty_kw(fac) -> dict:
     return {} if fac is None else dict(faculty=fac)
 
 
+def _attr_kw(authored) -> dict:
+    """`Combatant`'s keywords for one party's authored attributes (PC-06 K-1): each `attributes.SPEC` entry whose
+    `registry_key` the party authored, by that key; every other field stays at the class default. `end` is the input's
+    `ends` (the seam composes it with the body bands), and `faculty`/`disp` have no registry key. `None` is none."""
+    if not authored:
+        return {}
+    import attributes as spec   # the flat module `pc_engine.load()` put on the path (`combatant` imports it the same way)
+    return {s.key: authored[s.registry_key] for s in spec.SPEC
+            if s.key != "end" and s.registry_key is not None and s.registry_key in authored}
+
+
 def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
           decide: Optional[Callable[[CombatTurnView], str]] = None) -> dict:
     """Fight one bout scene between the record's two parties. RESOLVED -> dict(status, result, trace,
@@ -68,8 +79,10 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
     # replaces `history` in the pool and the Ob. A record built without them (`faculties == ()`) fights at the
     # Combatant's own default. [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays]
     a_fac, b_fac = getattr(inp, "faculties", ()) or (None, None)
-    A = combatant.Combatant(a_id, end=a_end, **_kit_kw(a_kit), **_faculty_kw(a_fac))
-    B = combatant.Combatant(b_id, end=b_end, **_kit_kw(b_kit), **_faculty_kw(b_fac))
+    # THE AUTHORED ATTRIBUTES (PC-06 K-1): each party's `Person.attributes`, mapped by PC-14's `registry_key`.
+    a_attr, b_attr = getattr(inp, "attributes", ()) or (None, None)
+    A = combatant.Combatant(a_id, end=a_end, **_attr_kw(a_attr), **_kit_kw(a_kit), **_faculty_kw(a_fac))
+    B = combatant.Combatant(b_id, end=b_end, **_attr_kw(b_attr), **_kit_kw(b_kit), **_faculty_kw(b_fac))
     trace: list = []
     prev = getattr(wrapper, "_TRACE", None)
     # THE DUEL TERMS (RS-25, PC-10a): read off the typed input when it carries them, else the engine's lethal

@@ -117,8 +117,8 @@ class PersonalCombatInput:
     Built by `seam/wrappers/combat.py::combat_input` (the host input builder) from `World`:
       * `claimants` -- the two parties' ids, `(A, B)`: each is a `Combatant` label, and the engine's
                        result is `+1` when A wins, `-1` when B does, `0` UNRESOLVED (a ruled outcome);
-      * `ends`      -- each party's one derived field, `end`, in `claimants` order
-                       (`combat.py::party_end`, `H-97`); every other field is the class's own default;
+      * `ends`      -- each party's `end`, in `claimants` order (`combat.py::party_end`, `H-97`): the authored
+                       `attr.body.endurance` (else the class default) less the body-band penalty, floored at 1;
       * `wound_quantities` -- the `WoundTracker` fields the host lifts per party after the fight
                        (`rosters.yaml: wound_quantities`, in roster order). The module reads them off the
                        trackers and returns what it found; the refusal for one the tracker does not carry
@@ -141,13 +141,20 @@ class PersonalCombatInput:
                        where it feeds the party's pool and the Ob his opponent rolls against, and nothing else. The
                        default is `()`: a record built without it is fought at the module's own default (3).
                        [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] --
-                       `proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md` is UNRATIFIED (ED-IN-0351)."""
+                       `proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md` is UNRATIFIED (ED-IN-0351);
+      * `attributes` -- each party's authored `Person.attributes`, `{registry key: whole number}`, in `claimants`
+                       order (PC-06 K-1, ED-IN-0347). The module maps each key to its `Combatant` field by PC-14's
+                       `registry_key` (`modules/combat/attributes.py`); a key absent from the dict leaves its field at
+                       the class default, and `end` is carried by `ends`, not read from here. The default is `()`:
+                       `combat_input` fills it only when a claimant has an authored attribute, so an all-absent
+                       record is the record it always was."""
     claimants: tuple
     ends: tuple
     wound_quantities: tuple
     terms: str = "death"
     kits: tuple = ()
     faculties: tuple = ()
+    attributes: tuple = ()
 
 
 @dataclass(frozen=True)

@@ -76,9 +76,9 @@ LEVERS = ('visual', 'precommit', 'tactile', 'tempo', 'balance', 'edge_read', 'ch
 # a fighter who is BEHIND on reading and footwork, and one who is AHEAD (attributes only; weapons per probe)
 # CR-85 (ED-IN-0330) deleted `history` from every sigma term and renamed the input `faculty`, which feeds only the pool
 # and the Ob; no probe here reads a pool or an Ob, so the builds carry none.
-WEAK = dict(cog=1, att=1, agi=2, strength=2)
-STRONG = dict(cog=5, att=5, agi=6, strength=6)
-FLOOR_BAL = dict(cog=1, att=1, agi=1, strength=1)   # balance_eff is exactly 0 here
+WEAK = dict(att=1, agi=2, strength=2)
+STRONG = dict(att=5, agi=6, strength=6)
+FLOOR_BAL = dict(att=1, agi=1, strength=1)   # balance_eff is exactly 0 here
 
 
 def _own(ability, tradition, level, **kw):
@@ -554,3 +554,65 @@ def test_choke_control_generics_are_mitigators_and_the_rest_amplifiers():
         assert (v < 1.0) if lever == 'choke_control' else (v > 1.0), (n, v)
         checked += 1
     assert checked == 21
+
+
+def test_the_read_is_perception_alone():
+    """PC-18 (1), ED-IN-0347: `reading(c)` is `c.att` and nothing else. `cog` is gone from `Combatant`, so two defenders
+    cannot differ in it (the constructor refuses the keyword, as does the attribute setter), and two defenders differing
+    only in `att` read differently. Planted failure: the `cog` term back in `reading` reddens this (no `c.cog`)."""
+    with pytest.raises(TypeError):
+        Combatant('d', cog=5)
+    with pytest.raises(TypeError):
+        Combatant('d').set_attr('cog', 5)
+    assert not hasattr(Combatant('d'), 'cog')
+    checked = 0
+    seen = []
+    for att in (1, 2, 3, 4, 5):
+        d = Combatant('d', att=att)
+        assert S.reading(d, CFG) == att, att
+        seen.append(S.reading(d, CFG))
+        checked += 1
+    assert len(set(seen)) == 5 and checked == 5     # differing only in att, they read differently
+    assert S.reading(Combatant('d'), CFG) == 3      # the class default: the old (2*3+3)/3, so an unauthored realm is unmoved
+
+
+def _read_a(aggressor, cfg, consistency_a=0.7):
+    return S.read_contest(aggressor, Combatant('d', weapon='arming'), 3.0, consistency_a, 0.0, 0.0, cfg,
+                          _FixedRng(0.5), TR)['read_a']
+
+
+def test_the_attacks_suddenness_is_coordination():
+    """PC-18 (2), ED-IN-0347: the aggressor's side of the read adds AGI_READ_K*(agi - NEUTRAL['agi']) to his reading
+    value, inside the visual factor. Two aggressors differing only in agi are read differently at the shipped K and
+    alike at K = 0; an aggressor at agi 4 reads exactly as the pre-item formula at every K, his visual lever invested
+    or not; at the shipped K a Perception-1 / Coordination-1 aggressor's read value stays above 0, so the visual
+    probes above stay live and sign-safe. Planted failure: the term dropped from read_contest makes the first equal."""
+    k = CFG['AGI_READ_K']
+    assert k > 0.0, k
+    slow, quick = Combatant('a', agi=2), Combatant('a', agi=6)
+    assert _read_a(quick, CFG) > _read_a(slow, CFG)
+    assert _read_a(quick, CFG) - _read_a(slow, CFG) == pytest.approx(k * 4 * TR.eff_cw(quick, 'visual'), abs=1e-12)
+    off = dict(CFG, AGI_READ_K=0.0)
+    assert _read_a(quick, off) == _read_a(slow, off)
+    # THE PLACEMENT, inside the visual factor: with the lever invested eff_cw is not 1, so a term outside the factor
+    # (added after the multiplication) differs from one inside it by K*4*(eff_cw - 1) and this equality reddens.
+    inv = dict(tradition='german', equipped={'keen_eye_basic': 8.0})
+    slow_i, quick_i = Combatant('a', agi=2, **inv), Combatant('a', agi=6, **inv)
+    ecw = TR.eff_cw(quick_i, 'visual')
+    assert ecw != 1.0 and ecw == TR.eff_cw(slow_i, 'visual'), ecw
+    assert _read_a(quick_i, CFG) - _read_a(slow_i, CFG) == pytest.approx(k * 4 * ecw, abs=1e-12)
+    assert abs(k * 4 * ecw - k * 4) > 1e-6        # inside != outside here, so the placement is observed
+    checked = 0
+    for kk in (0.0, 0.05, 0.1, 0.2, 0.3, 0.5, k):
+        cfg = dict(CFG, AGI_READ_K=kk)
+        for att in (1, 3, 5, 7):
+            for lv in (0.0, 8.0):
+                agg = Combatant('a', att=att, tradition='german',
+                                equipped=({} if lv <= 0.0 else {'keen_eye_basic': lv}))
+                assert agg.agi == S.NEUTRAL['agi']
+                pre = S.reading(agg, cfg) * TR.eff_cw(agg, 'visual') + 0.7      # the formula before PC-18 (2)
+                assert _read_a(agg, cfg) == pre, (kk, att, lv)
+                checked += 1
+    assert checked == 7 * 4 * 2
+    floor = Combatant('a', att=1, agi=1)
+    assert S.reading(floor, CFG) + k * (floor.agi - S.NEUTRAL['agi']) > 0.0

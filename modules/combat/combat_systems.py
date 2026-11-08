@@ -84,7 +84,10 @@ def wield_heft(c, cfg):
     half-sword form's tiny MoI now reads LIGHT (was binary wt='heavy' -> fixes the longsword-vs-plate collapse at
     root); a GATHERED pole (lower I_g) is lighter to wield. Replaces core.heft_resp on the COST path only (the
     damage-impact path keeps heft_resp pending the wt de-leak). Pure."""
-    I_g = WP.at_grip(c.w, getattr(c, 'grip_position', 0.0))['I_g']
+    return _heft_of(WP.at_grip(c.w, getattr(c, 'grip_position', 0.0))['I_g'], cfg)
+
+def _heft_of(I_g, cfg):
+    """`wield_heft`'s power law on an inertia the caller already holds (one owner of the formula). Pure."""
     return (max(1e-6, I_g) / cfg['REC_I_REF']) ** cfg['WIELD_HEFT_EXP']
 
 # ---------- tempo ----------
@@ -165,18 +168,24 @@ def close_tempo(c, cfg, fatigue=0.0):
 # ED-PC-0035: the `stamina_max(c)` back-compat accessor is REMOVED (zero callers; read c.stamina_max directly —
 # the combatant hosts its own derived figures).
 def act_cost(c, commit, cfg):
-    return (cfg['ACT_BASE']+cfg['ACT_WEIGHT']*wield_heft(c,cfg)+cfg['ACT_COMMIT']*commit)*cfg['COST_SCALE']   # DERIVED g-aware heft (Stage 2b)
+    # PC-20 (3), AR-10: the harness is a Strength job. Strength short of the tier's demand (ARMOR_DEMAND, 'none' 0)
+    # costs stamina by handling_penalty's form, max(0, demand - strength), priced at the stamina a unit of weapon heft
+    # costs (ACT_WEIGHT per D_WT, one Strength demand point): one ladder for a Strength demand, whether weapon or harness.
+    # A fighter at or over the demand pays nothing; every tier at 0 is the control (the PC-20 (2) tree, bitwise).
+    return (cfg['ACT_BASE']+cfg['ACT_WEIGHT']*wield_heft(c,cfg)+cfg['ACT_COMMIT']*commit
+            +cfg['ACT_WEIGHT']/cfg['D_WT']*max(0.0, cfg['ARMOR_DEMAND'][c.armor]-c.strength))*cfg['COST_SCALE']   # DERIVED g-aware heft (Stage 2b)
 
 # ---------- concentration (Focus+Spirit tracker) ----------
 # ED-PC-0035: the `conc_max(c,cfg)` back-compat accessor is REMOVED (zero callers; call c.rederive(cfg) and read
 # c.conc_max — the combatant hosts it, 3F+2S, ED-902).
-def reading(c, cfg): return (2*c.cog + c.att)/3   # cog primary, Att half. The relevant-History experience term (Jordan 2026-06-03) is DELETED by CR-85 (ED-IN-0330: history is no longer added to a roll; a person's latitude enters through the pool only)
+def reading(c, cfg): return c.att   # the read is PERCEPTION alone (PC-18 (1), ED-IN-0347: Reason has no combat read; the History experience term is gone, CR-85, ED-IN-0330). [ASSUMPTION; medium; Jordan to correct; revert: keep `cog` as an input]
 def reflex(c, cfg): return (cfg['REFLEX_AGI']*c.agi+cfg['REFLEX_ATT']*c.att)/(cfg['REFLEX_AGI']+cfg['REFLEX_ATT'])
 
 # ---------- strength handling + endurance fatigue ----------
 def str_demand(c, cfg):
     w=c.w; return (cfg['D0']+cfg['D_LEN']*reach_base(c,cfg)+cfg['D_WT']*wield_heft(c,cfg)+cfg['D_HAND']*WP.handling(w)
-                    +cfg['D_2H']*(w['hands']==2)+REAR_CLEARANCE_STR_K*rear_clearance(c,cfg))   # DERIVED g-aware heft (Stage 2b); D_HAND now reads morphology-rearch Phase B6's PoB_frac/hand_guard handling() gap, not the retired Forgiving/Standard/Demanding category. I7a/D7: general handling difficulty from what trails behind the hand.
+                    +cfg['D_2H']*(w['hands']==2)+REAR_CLEARANCE_STR_K*rear_clearance(c,cfg)
+                    +cfg['D_MASS']*w['mass'])   # PC-20 (2), AR-12: the weapon's static WEIGHT (kg), beside the swing inertia wield_heft carries (D_MASS in config). DERIVED g-aware heft (Stage 2b); D_HAND now reads morphology-rearch Phase B6's PoB_frac/hand_guard handling() gap, not the retired Forgiving/Standard/Demanding category. I7a/D7: general handling difficulty from what trails behind the hand.
 def handling_penalty(c, fat, cfg):
     deficit=max(0.0, str_demand(c,cfg)-c.strength)
     return cfg['HANDLE_K']*deficit + cfg['FATIGUE_HANDLE_K']*fat
@@ -256,7 +265,15 @@ def recoverability_factor(c, cfg):
     ctrl_credit = 1 - cfg['REC_CTRL_K'] * max(0.0, arrest - 1) * (1 - pc)       # a SWUNG weapon gains from 2H control; a thrust barely
     # (D) BODY-EXTENSION (lunge) — the lead axis; fires from the wrapper as lunge_depth
     lunge_mult = 1 + cfg['EXPOSE_LUNGE_K'] * ld * (w.get('mass', 1.0) / cfg['LUNGE_REF_MASS']) ** cfg['MOMENT_MASS_EXP']
-    return max(cfg['RECOVER_FLOOR'], C_mode * ctrl_credit * lunge_mult)
+    # (E) STRENGTH AGAINST THE ARRESTED HEFT (PC-20 (4), AR-13): Strength over the neutral arrests the swing sooner,
+    # under it later, in proportion to the heft being arrested (wield_heft, at this grip). The term is scaled by (1 - pc),
+    # the thrust share, and multiplies the whole mode's recovery C_mode (not the swung component alone). 0 at Strength 4
+    # (a default fighter is unchanged at any ARREST_STR_K) and 0 at ARREST_STR_K 0 (the control: the PC-20 (3) tree,
+    # bitwise). No clamp of its own: RECOVER_FLOOR bounds the product, and at the shipped K the factor stays positive
+    # across Strength 1..7 for the heaviest roster heft (K < 1/(3 * 3.116)).
+    d_str = c.strength - NEUTRAL['strength']
+    str_arrest = 1.0 if d_str == 0 else 1 - cfg['ARREST_STR_K'] * d_str * _heft_of(I_g, cfg) * (1 - pc)   # d_str 0: exactly 1.0, skipped
+    return max(cfg['RECOVER_FLOOR'], C_mode * ctrl_credit * lunge_mult * str_arrest)
 def close_unwieldiness(c, cfg, grip=None):
     """How poorly a weapon serves IN THE CLOSE: the OVERHANG, in metres, of its business end past the distance at
     which a fight is closed. 0 for a weapon shorter than that measure (a dagger is at home in the close).
@@ -352,6 +369,11 @@ def mode_sigma(mode, aggressor, defender, commit, read_win, fat_d, cfg):
     _shallow=max(0.0,min(1.0,3.0-commit))  # 0 at >=3, ramps to 1 at <=2
     if mode==V.DEF_PARRY: sig-=0.25*_deep      # a deep commit is easier to parry (committed line); a shallow probe harder to catch
     if mode==V.DEF_DODGE: sig+=0.10*_deep-0.10*_shallow   # deep commit easier to void; a shallow feint harder to read for the dodge
+    # PC-19 (1): Focus between the read and the response. consistency() = FOCUS_CONSISTENCY_K*(conc/5-3) is 0 at the DEFAULT
+    # full reserve (3F+2S = 15; a build above it is POSITIVE even when fresh, below it negative) and NEGATIVE when drained; mode_sigma is a quality (higher = a better response, the chosen
+    # mode is the max), so the SIGN IS PLUS: LAPSE_K > 0 lowers a drained defender's response and leaves a fresh one's
+    # alone. It sits inside the cap, so a mode the weapon cannot make (cap ~ 0) is not revived by it.
+    sig+=cfg['LAPSE_K']*consistency(defender,cfg)
     return (base+sig)*cap
 
 def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
@@ -1134,7 +1156,13 @@ def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d
     fam=TR.familiarity(defender.tradition, aggressor.tradition)
     legib=legibility(aggressor, commit, cfg, defender.armor)
     read_d=reading(defender,cfg)*TR.eff_cw(defender,'visual')*TR.eff_cw(defender,'precommit')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)
-    read_a=reading(aggressor,cfg)*TR.eff_cw(aggressor,'visual')+consistency_a
+    # PC-18 (2): the attack's suddenness is Coordination — the aggressor's side adds AGI_READ_K*(agi-NEUTRAL['agi']) to
+    # his reading value, inside the visual factor; 0 at agi 4, so a default aggressor reads as before at any K. The plan
+    # words it 'the default fighter's reading value plus K*(agi - NEUTRAL)'; read as ADDITIVE on the aggressor's own
+    # Perception, the only reading its control (K = 0 reproduces PC-18 (1)) allows [ASSUMPTION; medium; Jordan to correct;
+    # revert: a constant read value]. Agility reaches only this step of the read: mode_sigma's rd, init_emphasis_sigma and
+    # tempo_pressure use the bare Perception difference (a lateral-consistency question for NERS S, not decided here).
+    read_a=(reading(aggressor,cfg)+cfg['AGI_READ_K']*(aggressor.agi-NEUTRAL['agi']))*TR.eff_cw(aggressor,'visual')+consistency_a
     p_read=core.logistic((read_d-read_a)/1.0)
     read_win=rng.random() < p_read
     modes=list(V.DEFENCE_MODES)   # ORDERED: modes[rng.randrange(3)] below makes the sequence part of the RNG contract
@@ -1330,7 +1358,7 @@ def tempo_pressure(c, opp, cfg, TR):
       • `initiative` — the Vor. It is not static: it decays per beat (init_hold_decay, tradition-held), drifts with
         disposition, and is STOLEN on hits and in the bind (init_steal_factor). A fighter who has been dictating the
         exchange gets to keep dictating it — earned, not owned.
-      • `reading` — cog/attention/experience. Anticipating the opponent's commitment is precisely what lets you act
+      • `reading` — Perception (Att). Anticipating the opponent's commitment is precisely what lets you act
         into it rather than after it. (The feint is not a separate action here — WS-5 dissolved it into the attack's
         commit-depth and legibility — so its influence arrives through the read, which is where it belongs.)
     Floored at 0 so a badly out-read fighter stalls rather than accumulating backwards. Both K's [SIM-CALIBRATE].
@@ -1420,7 +1448,7 @@ def approach_step(measure_gap, base_gap, close_rate, recoil):
     return min(base_gap, max(0.0, measure_gap - close_rate + recoil))
 
 def init_emphasis_sigma(aggressor, defender, cfg, TR):
-    """Initiative/tempo EMPHASIS sigma fed into attack_sigma: tempo(Agi) + reading(Cog/Att) (the experience(History)
+    """Initiative/tempo EMPHASIS sigma fed into attack_sigma: tempo(Agi) + reading(Att) (the experience(History)
     addend is DELETED by CR-85, ED-IN-0330),
     plus the two sides' 'tempo' ability lever as an ADDITIVE log-edge. Pure (the formula the wrapper used to assemble
     inline).

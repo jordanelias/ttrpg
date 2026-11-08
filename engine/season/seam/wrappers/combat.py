@@ -33,19 +33,21 @@ entry calls. This module reads it only for `engine()`, the availability probe it
 `ENGINE-UNAVAILABLE` is the unregistered entry's (no driver constructed in the process), as in `sigma.py`.
 ⚠ THE PARTY DISCIPLINE FOLLOWS `combat_bridge.py` AS PRECEDENT RATHER THAN REINVENTING IT (§0:
 *answered by precedent — the tree has already decided this shape somewhere else*). Its discipline is the part worth copying:
-derive EXACTLY ONE field from something the actor genuinely has, leave every other field at the
-class's own constructor default, and return a typed gap rather than fabricate a party. The
-`Combatant` defaults it names — strength 4, agi 4, end 4, cog 3, att 3, spirit 3, focus 3, disp 4,
+set a field only from something the actor genuinely has (his authored attributes, PC-06 K-1), leave every
+other field at the class's own constructor default, and return a typed gap rather than fabricate a party. The
+`Combatant` defaults it names — strength 4, agi 4, end 4, att 3, spirit 3, focus 3, disp 4,
 weapon `arming`, armor `light`, tradition `none` — are the class's, not this module's. The record has since grown
 each party's kit (CP-T03-03) and `faculty` (CR-85, `combat_input`), which replaced the class's `history`.
 
-⚠ THE ONE DERIVED FIELD IS `end`, FROM `body_band_penalty`, AND IT INVENTS NO NUMBER. A tracer
-`Person` carries nothing combat-shaped except `body`, an int on the condition scale. The tree
-already owns the body → bands reading: `body_band_penalty` counts how many `band_floors["body"]`
-floors a person has fallen below (0 at full operations, +1 per band), and `H-38` closed with
-*"`Site.condition` is the model"* so that table is the registered one. `end` is the Combatant
-field that reading belongs to — it drives `wound_interval`, `max_wounds` and `health_full`, i.e.
-how much punishment the body takes. A healthy person gets the class default; each band costs one.
+⚠ THE ONE FIELD THE SEAM COMPUTES IS `end`, FROM `body_band_penalty`, AND IT INVENTS NO NUMBER. A
+`Person` carries `body`, an int on the condition scale, and `attributes` (PC-06 K-1: those ride
+whole on `PersonalCombatInput.attributes` and the module maps them by PC-14's `registry_key`, an
+absent key at the class default). The tree already owns the body → bands reading: `body_band_penalty`
+counts how many `band_floors["body"]` floors a person has fallen below (0 at full operations, +1 per
+band), and `H-38` closed with *"`Site.condition` is the model"* so that table is the registered one.
+`end` is the Combatant field that reading belongs to — it drives `wound_interval`, `max_wounds` and
+`health_full`, i.e. how much punishment the body takes. A healthy person gets his authored
+`attr.body.endurance`, else the class default; each band costs one.
 Which field the penalty lands on is the injected part and is registered (`H-97`); the magnitude is
 not invented, because the bands already exist.
 
@@ -88,10 +90,13 @@ from ...gaps import Forbidden, Unspecified
 from ...manifest.providers import provider
 from ...queries.inputs import PersonalCombatInput, PlayHost
 from ...queries.world_q import kit_of, stakes_of
+from ....substrate.descriptors import attribute_key
 from ...state.ids import H
 from ._entry import entry_for
 from .pool import faculty
 
+_END_KEY = attribute_key("Endurance")      # the registry key of `end` (`descriptors`, the one owner), not a typed literal
+assert _END_KEY, "descriptors names no Endurance attribute: party_end would read the default for every person"
 _PROVIDER = "personal_combat"
 _PRIZE = "the body"                 # the prize row this provider deals (`rosters.yaml`)
 PROVIDER = _PROVIDER                # the name `odds_of` asks `_rolled_as` for (a prize row's `provider:`)
@@ -134,14 +139,15 @@ def surrender_of(trace: list) -> Optional[dict]:
 
 
 def party_end(person: Any, fx: Any) -> int:
-    """A tracer `Person`'s ONE derived `Combatant` field, `end` (`H-97`); every other field is the
-    class's own. Was `derive_party`, which built the `Combatant` too; since `31b` the module entry
+    """A `Person`'s `Combatant.end` (`H-97`): his authored `attr.body.endurance` (else the class default) less
+    one point per body band. The other attributes ride on `PersonalCombatInput.attributes` and the module maps
+    them (PC-06 K-1). Was `derive_party`, which built the `Combatant` too; since `31b` the module entry
     builds it from this number (`modules/combat/fight.py`)."""
     bands = body_band_penalty(person, fx)
     # `end`'s class default is 4 (`modules/combat/attributes.py`). One band = one point, floored at 1: a dying
     # person still fights, which is the same floor `decision.budget` applies for the same reason.
-    default_end = 4
-    return max(1, default_end - bands)
+    base_end = person.attributes.get(_END_KEY, 4)
+    return max(1, base_end - bands)
 
 
 def duel_terms_of(verb: str, stakes: Optional[str] = None) -> Optional[str]:
@@ -192,7 +198,7 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
     Reads `w.persons` (the two claimants), `w.records` (a challenge's `stakes`, through `stakes_of`), `w.fixtures`
     and, for each party's `kits` entry, what his rungs store (`world_q.kit_of`, CP-T03-03: his holdings, else his
     residence; the Combatant default for a person who holds no arms, which is everyone while `rosters.yaml:
-    arms_kinds` is empty), and nothing else; the module that consumes the record never sees `World`. Its precondition is the adapter's PARTY-GAP checks (`resolve`,
+    arms_kinds` is empty), and each party's authored `Person.attributes` (PC-06 K-1), and nothing else; the module that consumes the record never sees `World`. Its precondition is the adapter's PARTY-GAP checks (`resolve`,
     below): two claimants, both persons.
 
     `verb` (CP-T03-09) is the act's verb and fills `terms` from `rosters.yaml: duel_terms` -- the ONE path a
@@ -212,13 +218,16 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
     the CR-85 design is UNRATIFIED (ED-IN-0351)."""
     a_id, b_id = claimants[0], claimants[1]
     terms = duel_terms_of(verb, stakes_of(w, record))
+    pa, pb = w.persons[a_id], w.persons[b_id]
     return PersonalCombatInput(
         claimants=(a_id, b_id),
-        ends=(party_end(w.persons[a_id], w.fixtures), party_end(w.persons[b_id], w.fixtures)),
+        ends=(party_end(pa, w.fixtures), party_end(pb, w.fixtures)),
         wound_quantities=tuple(WOUND_QUANTITIES),
         kits=(kit_of(w, a_id), kit_of(w, b_id)),
-        faculties=(faculty(w, w.persons[a_id], verb), faculty(w, w.persons[b_id], verb)),
-        **({} if terms is None else dict(terms=terms)))
+        faculties=(faculty(w, pa, verb), faculty(w, pb, verb)),
+        **({} if terms is None else dict(terms=terms)),
+        # PC-06 K-1: the authored attributes, only when someone authored one (the field's default is the record as it was).
+        **({} if not (pa.attributes or pb.attributes) else dict(attributes=(dict(pa.attributes), dict(pb.attributes)))))
 
 
 def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: str = "",

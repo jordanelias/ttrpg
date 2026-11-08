@@ -1,5 +1,5 @@
 {
- "_comment": "REGENERATED identity-sweep fixture (ED-PC-0054, 2026-07-29): channel 2 — CURVATURE -> cheaper swing arrest. systems._recovery_mode_commitment's C_swing branch is now discounted by (1 - CURVE_RECOVERY_K*curvature), so a curved blade recovers faster because it slices out instead of wedging (Jordan: \"faster recovery because the weapon isn't getting stuck\" / \"greater manoeuvreability compared to a contemporary that is a purely straight edge\" -- ONE fact here, since recovery IS how soon you can act or redirect again). SWING-ONLY: C_thrust is untouched, a thrust retracts along its own line and has nothing to unstick. Before this, `curvature` had exactly ONE runtime consumer in the engine (arrest_impulse, where it is a COST) plus cut_factor's damage term. MOVED IN THIS FIXTURE: recoverability_factor and weapon_tempo for every weapon with curvature > 0; every straight-edged weapon (curvature 0 -- rapier/estoc/longsword/spear/dagger and the rest) is BYTE-IDENTICAL, which is the zero-anchor guard. Bounded by construction: curvature is dimensionless in [0,1] so the factor cannot leave [1-K, 1] -- unlike this session's two earlier scaling terms, whose inputs were unbounded. Regenerated with the control-arm generator (control reproduces the prior fixture byte-for-byte). Lengths in METRES. Compared at 1e-9 by test_combat_units_refactor.py.",
+ "_comment": "REGENERATED identity-sweep fixture (ED-PC-0054, 2026-07-29): channel 2 — CURVATURE -> cheaper swing arrest. systems._recovery_mode_commitment's C_swing branch is now discounted by (1 - CURVE_RECOVERY_K*curvature), so a curved blade recovers faster because it slices out instead of wedging (Jordan: \"faster recovery because the weapon isn't getting stuck\" / \"greater manoeuvreability compared to a contemporary that is a purely straight edge\" -- ONE fact here, since recovery IS how soon you can act or redirect again). SWING-ONLY: C_thrust is untouched, a thrust retracts along its own line and has nothing to unstick. Before this, `curvature` had exactly ONE runtime consumer in the engine (arrest_impulse, where it is a COST) plus cut_factor's damage term. MOVED IN THIS FIXTURE: recoverability_factor and weapon_tempo for every weapon with curvature > 0; every straight-edged weapon (curvature 0 -- rapier/estoc/longsword/spear/dagger and the rest) is BYTE-IDENTICAL, which is the zero-anchor guard. Bounded by construction: curvature is dimensionless in [0,1] so the factor cannot leave [1-K, 1] -- unlike this session's two earlier scaling terms, whose inputs were unbounded. Regenerated with the control-arm generator (control reproduces the prior fixture byte-for-byte). Lengths in METRES. Compared at 1e-9 by test_combat_units_refactor.py. RE-BASELINED (PC-20 (2), ED-IN-0347, AR-12): systems[*].str_demand ONLY, for every weapon at every grip -- systems.str_demand now adds D_MASS*mass (D_MASS 0.45); every other field byte-identical. Hand-reproduced (no generator exists) with a control arm: at D_MASS=0 the recomputed field equals the prior fixture exactly.",
  "weapons": {
   "arming": {
    "agility": 0.35541108323217724,
@@ -196,7 +196,7 @@
      "reach_base": 5.424,
      "rear_clearance": 0.24,
      "recoverability_factor": 0.7069211599898424,
-     "str_demand": 3.9251177355932447,
+     "str_demand": 4.465117735593244,
      "weapon_tempo": 1.24831354051087,
      "wield_heft": 0.9907177355932447
     },
@@ -206,7 +206,7 @@
      "reach_base": 5.424,
      "rear_clearance": 0.24,
      "recoverability_factor": 0.7069211599898424,
-     "str_demand": 3.9251177355932447,
+     "str_demand": 4.465117735593244,
      "weapon_tempo": 1.0483135405108701,
      "wield_heft": 0.9907177355932447
     },
@@ -216,7 +216,7 @@
      "reach_base": 5.424,
      "rear_clearance": 0.24,
      "recoverability_factor": 0.7069211599898424,
-     "str_demand": 3.9251177355932447,
+     "str_demand": 4.465117735593244,
      "weapon_tempo": 0.8483135405108699,
      "wield_heft": 0.9907177355932447
     },
@@ -425,7 +425,7 @@
      "reach_base": 7.440747300000001,
      "rear_clearance": 0.21200000000000008,
      "recoverability_factor": 23.578989774458293,
-     "str_demand": 6.49347931969448,
+     "str_demand": 7.66797931969448,
      "weapon_tempo": 0.8000001093801365,
      "wield_heft": 2.2827164236983104
     },
@@ -435,7 +435,7 @@
      "reach_base": 6.07762455,
      "rear_clearance": 0.8559950000000001,
      "recoverability_factor": 8.479134538299125,
-     "str_demand": 5.626953821572937,
+     "str_demand": 6.801453821572937,
      "weapon_tempo": 0.7,
      "wield_heft": 1.7966846380767678
     },
@@ -445,7 +445,7 @@
      "reach_base": 4.714501800000001,
      "rear_clearance": 1.49999,
      "recoverability_factor": 0.5238896480271256,
-     "str_demand": 4.9856963962491925,
+     "str_demand": 6.160196396249193,
      "weapon_tempo": 0.8660452536423062,
      "wield_heft": 1.5359209252530237
     },
@@ -654,7 +654,7 @@
      "reach_base": 8.080344700000001,
      "rear_clearance": 0.12485000000000002,
      "recoverability_factor": 25.814646279221325,
-     "str_demand": 7.245363940138491,
+     "str_demand": 8.30295394013849,
      "weapon_tempo": 0.8000000228710029,
      "wield_heft": 2.6797173487647163
     },
@@ -664,7 +664,7 @@
      "reach_base": 6.3605424500000005,
      "rear_clearance": 0.937355,
      "recoverability_factor": 9.7285958597408,
-     "str_demand": 6.174264596099705,
+     "str_demand": 7.231854596099705,
      "weapon_tempo": 0.7,
      "wield_heft": 2.0886730422259308
     },
@@ -674,7 +674,7 @@
      "reach_base": 4.640740200000001,
      "rear_clearance": 1.74986,
      "recoverability_factor": 0.45736758315066206,
-     "str_demand": 5.368621762205108,
+     "str_demand": 6.426211762205108,
      "weapon_tempo": 0.8750681292380513,
      "wield_heft": 1.763085245831334
     },
@@ -883,7 +883,7 @@
      "reach_base": 6.5683463,
      "rear_clearance": 0.9383,
      "recoverability_factor": 2.6714791427084754,
-     "str_demand": 5.595104536269434,
+     "str_demand": 6.699134536269434,
      "weapon_tempo": 0.989478868508125,
      "wield_heft": 1.7554383312694348
     },
@@ -893,7 +893,7 @@
      "reach_base": 5.97389105,
      "rear_clearance": 1.2191450000000001,
      "recoverability_factor": 1.4538521269897113,
-     "str_demand": 5.375433881052912,
+     "str_demand": 6.4794638810529115,
      "weapon_tempo": 0.9369897868069788,
      "wield_heft": 1.7017002635529108
     },
@@ -903,7 +903,7 @@
      "reach_base": 5.3794358,
      "rear_clearance": 1.49999,
      "recoverability_factor": 0.3,
-     "str_demand": 5.190677643074999,
+     "str_demand": 6.294707643074998,
      "weapon_tempo": 0.899770067183179,
      "wield_heft": 1.682876613074998
     },
@@ -1112,7 +1112,7 @@
      "reach_base": 7.1008827000000005,
      "rear_clearance": 0.769,
      "recoverability_factor": 2.0019062235927287,
-     "str_demand": 5.475480644476538,
+     "str_demand": 6.139230644476538,
      "weapon_tempo": 1.0652131601903472,
      "wield_heft": 1.474821699476537
     },
@@ -1122,7 +1122,7 @@
      "reach_base": 6.604534950000001,
      "rear_clearance": 1.003495,
      "recoverability_factor": 1.3183898635628777,
-     "str_demand": 5.291921654528798,
+     "str_demand": 5.955671654528798,
      "weapon_tempo": 0.9556090174593643,
      "wield_heft": 1.4298101720287977
     },
@@ -1132,7 +1132,7 @@
      "reach_base": 6.1081872,
      "rear_clearance": 1.23799,
      "recoverability_factor": 0.6822133565125297,
-     "str_demand": 5.128878883302747,
+     "str_demand": 5.792628883302747,
      "weapon_tempo": 0.8443075698727602,
      "wield_heft": 1.4053148633027468
     },
@@ -1341,7 +1341,7 @@
      "reach_base": 4.362,
      "rear_clearance": 0.225,
      "recoverability_factor": 0.3,
-     "str_demand": 3.180321829967911,
+     "str_demand": 3.540321829967911,
      "weapon_tempo": 1.6118398582881515,
      "wield_heft": 0.619871829967911
     },
@@ -1351,7 +1351,7 @@
      "reach_base": 4.362,
      "rear_clearance": 0.225,
      "recoverability_factor": 0.3,
-     "str_demand": 3.180321829967911,
+     "str_demand": 3.540321829967911,
      "weapon_tempo": 1.4118398582881515,
      "wield_heft": 0.619871829967911
     },
@@ -1361,7 +1361,7 @@
      "reach_base": 4.362,
      "rear_clearance": 0.225,
      "recoverability_factor": 0.3,
-     "str_demand": 3.180321829967911,
+     "str_demand": 3.540321829967911,
      "weapon_tempo": 1.2118398582881516,
      "wield_heft": 0.619871829967911
     },
@@ -1570,7 +1570,7 @@
      "reach_base": 4.4445,
      "rear_clearance": 0.12,
      "recoverability_factor": 0.3,
-     "str_demand": 2.91254241797932,
+     "str_demand": 3.0358424179793198,
      "weapon_tempo": 1.852629999150356,
      "wield_heft": 0.3159532773024787
     },
@@ -1580,7 +1580,7 @@
      "reach_base": 4.4445,
      "rear_clearance": 0.12,
      "recoverability_factor": 0.3,
-     "str_demand": 2.91254241797932,
+     "str_demand": 3.0358424179793198,
      "weapon_tempo": 1.6526299991503561,
      "wield_heft": 0.3159532773024787
     },
@@ -1590,7 +1590,7 @@
      "reach_base": 4.4445,
      "rear_clearance": 0.12,
      "recoverability_factor": 0.3,
-     "str_demand": 2.91254241797932,
+     "str_demand": 3.0358424179793198,
      "weapon_tempo": 1.4526299991503562,
      "wield_heft": 0.3159532773024787
     },
@@ -1799,7 +1799,7 @@
      "reach_base": 8.4127293,
      "rear_clearance": 0.34194999999999987,
      "recoverability_factor": 14.084403682080477,
-     "str_demand": 7.228168028658767,
+     "str_demand": 8.055808028658767,
      "weapon_tempo": 0.8000841986742024,
      "wield_heft": 2.5460982955454865
     },
@@ -1809,7 +1809,7 @@
      "reach_base": 6.66860655,
      "rear_clearance": 1.1659449999999998,
      "recoverability_factor": 5.95350130102098,
-     "str_demand": 6.229305390231171,
+     "str_demand": 7.056945390231171,
      "weapon_tempo": 0.7,
      "wield_heft": 2.034079369617891
     },
@@ -1819,7 +1819,7 @@
      "reach_base": 4.9244838,
      "rear_clearance": 1.9899399999999998,
      "recoverability_factor": 0.34420625642819624,
-     "str_demand": 5.478170006418384,
+     "str_demand": 6.305810006418383,
      "weapon_tempo": 0.8902320953403782,
      "wield_heft": 1.7697876983051029
     },
@@ -2028,7 +2028,7 @@
      "reach_base": 6.8565223,
      "rear_clearance": 0.44455,
      "recoverability_factor": 1.842651121676364,
-     "str_demand": 5.398394555254494,
+     "str_demand": 6.298394555254494,
      "weapon_tempo": 1.0853343556540156,
      "wield_heft": 1.5319292502544937
     },
@@ -2038,7 +2038,7 @@
      "reach_base": 6.70358255,
      "rear_clearance": 0.516805,
      "recoverability_factor": 1.6975931218470424,
-     "str_demand": 5.345172151693026,
+     "str_demand": 6.245172151693026,
      "weapon_tempo": 0.9042324377472142,
      "wield_heft": 1.5213975091930263
     },
@@ -2048,7 +2048,7 @@
      "reach_base": 6.550642799999999,
      "rear_clearance": 0.58906,
      "recoverability_factor": 1.5533327089932627,
-     "str_demand": 5.292774494782683,
+     "str_demand": 6.192774494782683,
      "weapon_tempo": 0.7234876129282899,
      "wield_heft": 1.5116905147826838
     },
@@ -2257,7 +2257,7 @@
      "reach_base": 5.935797699999999,
      "rear_clearance": 1.1695,
      "recoverability_factor": 4.149833605489995,
-     "str_demand": 5.506988131560034,
+     "str_demand": 6.406988131560034,
      "weapon_tempo": 0.8794502427633881,
      "wield_heft": 1.854033936560034
     },
@@ -2267,7 +2267,7 @@
      "reach_base": 5.8304829499999995,
      "rear_clearance": 1.219255,
      "recoverability_factor": 4.149833605489995,
-     "str_demand": 5.477591219060034,
+     "str_demand": 6.377591219060035,
      "weapon_tempo": 0.7,
      "wield_heft": 1.854033936560034
     },
@@ -2277,7 +2277,7 @@
      "reach_base": 5.7251682,
      "rear_clearance": 1.26901,
      "recoverability_factor": 4.149833605489995,
-     "str_demand": 5.448194306560034,
+     "str_demand": 6.348194306560035,
      "weapon_tempo": 0.7,
      "wield_heft": 1.854033936560034
     },
@@ -2486,7 +2486,7 @@
      "reach_base": 5.6790795,
      "rear_clearance": 0.1855,
      "recoverability_factor": 1.1601052588315717,
-     "str_demand": 4.097102018940281,
+     "str_demand": 4.547102018940281,
      "weapon_tempo": 1.177608696041796,
      "wield_heft": 1.059450480489989
     },
@@ -2496,7 +2496,7 @@
      "reach_base": 5.6790795,
      "rear_clearance": 0.1855,
      "recoverability_factor": 1.1601052588315717,
-     "str_demand": 4.097102018940281,
+     "str_demand": 4.547102018940281,
      "weapon_tempo": 0.9776086960417962,
      "wield_heft": 1.059450480489989
     },
@@ -2506,7 +2506,7 @@
      "reach_base": 5.6790795,
      "rear_clearance": 0.1855,
      "recoverability_factor": 1.1601052588315717,
-     "str_demand": 4.097102018940281,
+     "str_demand": 4.547102018940281,
      "weapon_tempo": 0.777608696041796,
      "wield_heft": 1.059450480489989
     },
@@ -2715,7 +2715,7 @@
      "reach_base": 8.2141013,
      "rear_clearance": 0.34850000000000014,
      "recoverability_factor": 16.668466796259775,
-     "str_demand": 6.777818566894645,
+     "str_demand": 7.691318566894645,
      "weapon_tempo": 0.8000137966112906,
      "wield_heft": 2.2404469602866635
     },
@@ -2725,7 +2725,7 @@
      "reach_base": 6.57208655,
      "rear_clearance": 1.1242550000000002,
      "recoverability_factor": 6.516038521602037,
-     "str_demand": 5.915175230820563,
+     "str_demand": 6.828675230820563,
      "weapon_tempo": 0.7,
      "wield_heft": 1.8361455367125816
     },
@@ -2735,7 +2735,7 @@
      "reach_base": 4.9300718,
      "rear_clearance": 1.90001,
      "recoverability_factor": 0.520836396613577,
-     "str_demand": 5.2607067147321045,
+     "str_demand": 6.1742067147321045,
      "weapon_tempo": 0.866460981896338,
      "wield_heft": 1.6400189331241224
     },
@@ -2944,7 +2944,7 @@
      "reach_base": 6.8773627,
      "rear_clearance": 0.445,
      "recoverability_factor": 3.25767756564069,
-     "str_demand": 5.538521670166302,
+     "str_demand": 6.753566670166302,
      "weapon_tempo": 0.9365939832962928,
      "wield_heft": 1.6646947251663022
     },
@@ -2954,7 +2954,7 @@
      "reach_base": 6.72391495,
      "rear_clearance": 0.517495,
      "recoverability_factor": 2.987456406471151,
-     "str_demand": 5.483613935068581,
+     "str_demand": 6.698658935068581,
      "weapon_tempo": 0.7593705155625341,
      "wield_heft": 1.6526194525685798
     },
@@ -2964,7 +2964,7 @@
      "reach_base": 6.5704672,
      "rear_clearance": 0.58999,
      "recoverability_factor": 2.722115673145458,
-     "str_demand": 5.4296230298675745,
+     "str_demand": 6.644668029867574,
      "weapon_tempo": 0.7,
      "wield_heft": 1.6414610098675742
     },
@@ -3173,7 +3173,7 @@
      "reach_base": 7.2003873,
      "rear_clearance": 0.98,
      "recoverability_factor": 5.8035273561739995,
-     "str_demand": 6.006050773774757,
+     "str_demand": 6.834050773774758,
      "weapon_tempo": 0.8267913684107138,
      "wield_heft": 1.8170518647374896
     },
@@ -3183,7 +3183,7 @@
      "reach_base": 6.332564550000001,
      "rear_clearance": 1.3899949999999999,
      "recoverability_factor": 2.846393349266731,
-     "str_demand": 5.615758038310744,
+     "str_demand": 6.443758038310745,
      "weapon_tempo": 0.7723473022290614,
      "wield_heft": 1.6689978417734763
     },
@@ -3193,7 +3193,7 @@
      "reach_base": 5.4647418000000005,
      "rear_clearance": 1.79999,
      "recoverability_factor": 0.46579433748473176,
-     "str_demand": 5.316629442191151,
+     "str_demand": 6.144629442191151,
      "weapon_tempo": 0.8739293074037138,
      "wield_heft": 1.612107958153883
     },
@@ -3402,7 +3402,7 @@
      "reach_base": 6.2859873,
      "rear_clearance": 0.19999999999999996,
      "recoverability_factor": 6.598099287784955,
-     "str_demand": 5.5165956999956896,
+     "str_demand": 6.32479569999569,
      "weapon_tempo": 0.8155843857363712,
      "wield_heft": 1.6288720826348866
     },
@@ -3412,7 +3412,7 @@
      "reach_base": 6.2859873,
      "rear_clearance": 0.19999999999999996,
      "recoverability_factor": 6.598099287784955,
-     "str_demand": 5.5165956999956896,
+     "str_demand": 6.32479569999569,
      "weapon_tempo": 0.7,
      "wield_heft": 1.6288720826348866
     },
@@ -3422,7 +3422,7 @@
      "reach_base": 6.2859873,
      "rear_clearance": 0.19999999999999996,
      "recoverability_factor": 6.598099287784955,
-     "str_demand": 5.5165956999956896,
+     "str_demand": 6.32479569999569,
      "weapon_tempo": 0.7,
      "wield_heft": 1.6288720826348866
     },
@@ -3631,7 +3631,7 @@
      "reach_base": 6.9472,
      "rear_clearance": 0.39,
      "recoverability_factor": 3.1483778973525656,
-     "str_demand": 5.639685486509599,
+     "str_demand": 6.8776354865095986,
      "weapon_tempo": 0.9454798802965549,
      "wield_heft": 1.7496654865095989
     },
@@ -3641,7 +3641,7 @@
      "reach_base": 6.85195,
      "rear_clearance": 0.43500000000000005,
      "recoverability_factor": 3.0391257611743008,
-     "str_demand": 5.609253490302822,
+     "str_demand": 6.847203490302822,
      "weapon_tempo": 0.754804788191882,
      "wield_heft": 1.745820990302822
     },
@@ -3651,7 +3651,7 @@
      "reach_base": 6.7567,
      "rear_clearance": 0.48000000000000004,
      "recoverability_factor": 2.930529319951341,
-     "str_demand": 5.578949811578976,
+     "str_demand": 6.816899811578976,
      "weapon_tempo": 0.7,
      "wield_heft": 1.742104811578976
     },
@@ -3860,7 +3860,7 @@
      "reach_base": 8.60375,
      "rear_clearance": 0.375,
      "recoverability_factor": 62.10822863537538,
-     "str_demand": 7.814223733118378,
+     "str_demand": 9.524223733118378,
      "weapon_tempo": 0.7999999999999998,
      "wield_heft": 3.116035312065746
     },
@@ -3870,7 +3870,7 @@
      "reach_base": 6.778125,
      "rear_clearance": 1.2374999999999998,
      "recoverability_factor": 22.702526676312086,
-     "str_demand": 6.689466875348719,
+     "str_demand": 8.399466875348718,
      "weapon_tempo": 0.7,
      "wield_heft": 2.5008722042960874
     },
@@ -3880,7 +3880,7 @@
      "reach_base": 4.952500000000001,
      "rear_clearance": 2.0999999999999996,
      "recoverability_factor": 0.7641586322140874,
-     "str_demand": 5.865986364281273,
+     "str_demand": 7.575986364281273,
      "weapon_tempo": 0.8329430053995222,
      "wield_heft": 2.186985443228642
     },
@@ -4089,7 +4089,7 @@
      "reach_base": 7.0946217,
      "rear_clearance": 1.0633000000000001,
      "recoverability_factor": 0.6780092764798367,
-     "str_demand": 5.7567798495975735,
+     "str_demand": 6.596614849597573,
      "weapon_tempo": 1.2448888242957712,
      "wield_heft": 1.7141672545975737
     },
@@ -4099,7 +4099,7 @@
      "reach_base": 6.31493695,
      "rear_clearance": 1.4316550000000001,
      "recoverability_factor": 0.5545749248822969,
-     "str_demand": 5.538667801425262,
+     "str_demand": 6.378502801425262,
      "weapon_tempo": 1.0618591700624762,
      "wield_heft": 1.7136916189252618
     },
@@ -4109,7 +4109,7 @@
      "reach_base": 5.5352522,
      "rear_clearance": 1.80001,
      "recoverability_factor": 0.4313115171648326,
-     "str_demand": 5.3208727752296445,
+     "str_demand": 6.160707775229644,
      "weapon_tempo": 0.8785813903968451,
      "wield_heft": 1.7135330052296442
     },
@@ -4318,7 +4318,7 @@
      "reach_base": 4.6525,
      "rear_clearance": 0.15,
      "recoverability_factor": 0.3392750239101091,
-     "str_demand": 3.2726321581240745,
+     "str_demand": 3.6101321581240744,
      "weapon_tempo": 1.5927246637343129,
      "wield_heft": 0.6217571581240743
     },
@@ -4328,7 +4328,7 @@
      "reach_base": 4.6525,
      "rear_clearance": 0.15,
      "recoverability_factor": 0.3392750239101091,
-     "str_demand": 3.2726321581240745,
+     "str_demand": 3.6101321581240744,
      "weapon_tempo": 1.3927246637343127,
      "wield_heft": 0.6217571581240743
     },
@@ -4338,7 +4338,7 @@
      "reach_base": 4.6525,
      "rear_clearance": 0.15,
      "recoverability_factor": 0.3392750239101091,
-     "str_demand": 3.2726321581240745,
+     "str_demand": 3.6101321581240744,
      "weapon_tempo": 1.1927246637343127,
      "wield_heft": 0.6217571581240743
     },
@@ -4547,7 +4547,7 @@
      "reach_base": 7.4982023,
      "rear_clearance": 1.2455,
      "recoverability_factor": 0.80292973209283,
-     "str_demand": 6.130750879802566,
+     "str_demand": 7.075750879802566,
      "weapon_tempo": 1.2275461677743444,
      "wield_heft": 1.9195550748025658
     },
@@ -4557,7 +4557,7 @@
      "reach_base": 6.59386705,
      "rear_clearance": 1.672745,
      "recoverability_factor": 0.6271695507302144,
-     "str_demand": 5.8777336691478865,
+     "str_demand": 6.822733669147887,
      "weapon_tempo": 1.0519020042568918,
      "wield_heft": 1.9189684516478864
     },
@@ -4567,7 +4567,7 @@
      "reach_base": 5.6895318,
      "rear_clearance": 2.09999,
      "recoverability_factor": 0.4516291345121386,
-     "str_demand": 5.625107447580368,
+     "str_demand": 6.5701074475803685,
      "weapon_tempo": 0.8758429237008833,
      "wield_heft": 1.9187728175803682
     },
@@ -4776,7 +4776,7 @@
      "reach_base": 5.392250000000001,
      "rear_clearance": 0.24,
      "recoverability_factor": 0.7815939676223596,
-     "str_demand": 3.9064748959834645,
+     "str_demand": 4.282224895983465,
      "weapon_tempo": 1.3032732746956515,
      "wield_heft": 0.909055188968922
     },
@@ -4786,7 +4786,7 @@
      "reach_base": 5.392250000000001,
      "rear_clearance": 0.24,
      "recoverability_factor": 0.7815939676223596,
-     "str_demand": 3.9064748959834645,
+     "str_demand": 4.282224895983465,
      "weapon_tempo": 1.1032732746956513,
      "wield_heft": 0.909055188968922
     },
@@ -4796,7 +4796,7 @@
      "reach_base": 5.392250000000001,
      "rear_clearance": 0.24,
      "recoverability_factor": 0.7815939676223596,
-     "str_demand": 3.9064748959834645,
+     "str_demand": 4.282224895983465,
      "weapon_tempo": 0.9032732746956513,
      "wield_heft": 0.909055188968922
     },
@@ -5005,7 +5005,7 @@
      "reach_base": 7.807028000000001,
      "rear_clearance": 0.2570500000000001,
      "recoverability_factor": 8.043485765870143,
-     "str_demand": 6.656980729583626,
+     "str_demand": 7.304845729583627,
      "weapon_tempo": 0.8057372174658719,
      "wield_heft": 2.192647844216614
     },
@@ -5015,7 +5015,7 @@
      "reach_base": 6.279853000000001,
      "rear_clearance": 0.9785500000000001,
      "recoverability_factor": 3.5850582180521986,
-     "str_demand": 5.768133229249049,
+     "str_demand": 6.415998229249049,
      "weapon_tempo": 0.7125549112734861,
      "wield_heft": 1.7300865938820367
     },
@@ -5025,7 +5025,7 @@
      "reach_base": 4.752678,
      "rear_clearance": 1.70005,
      "recoverability_factor": 0.3,
-     "str_demand": 5.095302698383771,
+     "str_demand": 5.743167698383771,
      "weapon_tempo": 0.8995012402814235,
      "wield_heft": 1.483542313016758
     },
@@ -5234,7 +5234,7 @@
      "reach_base": 5.6390747,
      "rear_clearance": 0.32595,
      "recoverability_factor": 0.84801863452361,
-     "str_demand": 4.387474686412983,
+     "str_demand": 4.848724686412983,
      "weapon_tempo": 1.2181386634002243,
      "wield_heft": 0.9176826954306221
     },
@@ -5244,7 +5244,7 @@
      "reach_base": 5.61167445,
      "rear_clearance": 0.33889500000000006,
      "recoverability_factor": 0.8456912854387535,
-     "str_demand": 4.379259711575725,
+     "str_demand": 4.8405097115757245,
      "weapon_tempo": 1.018453699118941,
      "wield_heft": 0.9171160580933632
     },
@@ -5254,7 +5254,7 @@
      "reach_base": 5.5842742,
      "rear_clearance": 0.35184000000000004,
      "recoverability_factor": 0.8433664867101907,
-     "str_demand": 4.371045610391789,
+     "str_demand": 4.832295610391789,
      "weapon_tempo": 0.8187684412464424,
      "wield_heft": 0.9165502944094279
     },
@@ -5463,7 +5463,7 @@
      "reach_base": 5.9939,
      "rear_clearance": 0.255,
      "recoverability_factor": 0.9840398778086243,
-     "str_demand": 4.663865258727143,
+     "str_demand": 5.297465258727144,
      "weapon_tempo": 1.2022343938662594,
      "wield_heft": 1.1277502587271429
     },
@@ -5473,7 +5473,7 @@
      "reach_base": 5.9939,
      "rear_clearance": 0.255,
      "recoverability_factor": 0.9840398778086243,
-     "str_demand": 4.663865258727143,
+     "str_demand": 5.297465258727144,
      "weapon_tempo": 1.0022343938662597,
      "wield_heft": 1.1277502587271429
     },
@@ -5483,7 +5483,7 @@
      "reach_base": 5.9939,
      "rear_clearance": 0.255,
      "recoverability_factor": 0.9840398778086243,
-     "str_demand": 4.663865258727143,
+     "str_demand": 5.297465258727144,
      "weapon_tempo": 0.8022343938662593,
      "wield_heft": 1.1277502587271429
     },
@@ -5692,7 +5692,7 @@
      "reach_base": 5.5494,
      "rear_clearance": 0.78,
      "recoverability_factor": 1.7182463095755662,
-     "str_demand": 4.713802826547998,
+     "str_demand": 5.347402826547999,
      "weapon_tempo": 1.1015114896979137,
      "wield_heft": 1.254512826547998
     },
@@ -5702,7 +5702,7 @@
      "reach_base": 5.4224,
      "rear_clearance": 0.8400000000000001,
      "recoverability_factor": 1.7182463095755662,
-     "str_demand": 4.678352826547998,
+     "str_demand": 5.311952826547998,
      "weapon_tempo": 0.9015114896979137,
      "wield_heft": 1.254512826547998
     },
@@ -5712,7 +5712,7 @@
      "reach_base": 5.295400000000001,
      "rear_clearance": 0.9,
      "recoverability_factor": 1.7182463095755662,
-     "str_demand": 4.642902826547998,
+     "str_demand": 5.276502826547999,
      "weapon_tempo": 0.7015114896979135,
      "wield_heft": 1.254512826547998
     },
@@ -5921,7 +5921,7 @@
      "reach_base": 6.5681177,
      "rear_clearance": 0.9385,
      "recoverability_factor": 3.1434691813708135,
-     "str_demand": 5.699821930883637,
+     "str_demand": 6.817351930883637,
      "weapon_tempo": 0.9458893073112069,
      "wield_heft": 1.7802617478027798
     },
@@ -5931,7 +5931,7 @@
      "reach_base": 5.97385295,
      "rear_clearance": 1.219255,
      "recoverability_factor": 1.691230869451968,
-     "str_demand": 5.471207834103985,
+     "str_demand": 6.588737834103985,
      "weapon_tempo": 0.9050725425223545,
      "wield_heft": 1.7175270635231266
     },
@@ -5941,7 +5941,7 @@
      "reach_base": 5.379588200000001,
      "rear_clearance": 1.50001,
      "recoverability_factor": 0.3046313344844648,
-     "str_demand": 5.283179914512065,
+     "str_demand": 6.400709914512065,
      "weapon_tempo": 0.8954739349500271,
      "wield_heft": 1.6953785564312065
     },
@@ -6150,7 +6150,7 @@
      "reach_base": 5.143,
      "rear_clearance": 0.21,
      "recoverability_factor": 2.590153859635157,
-     "str_demand": 4.351416455022061,
+     "str_demand": 4.891416455022061,
      "weapon_tempo": 0.9978335767718189,
      "wield_heft": 1.1845664550220616
     },
@@ -6160,7 +6160,7 @@
      "reach_base": 5.143,
      "rear_clearance": 0.21,
      "recoverability_factor": 2.590153859635157,
-     "str_demand": 4.351416455022061,
+     "str_demand": 4.891416455022061,
      "weapon_tempo": 0.797833576771819,
      "wield_heft": 1.1845664550220616
     },
@@ -6170,7 +6170,7 @@
      "reach_base": 5.143,
      "rear_clearance": 0.21,
      "recoverability_factor": 2.590153859635157,
-     "str_demand": 4.351416455022061,
+     "str_demand": 4.891416455022061,
      "weapon_tempo": 0.7,
      "wield_heft": 1.1845664550220616
     },
@@ -6379,7 +6379,7 @@
      "reach_base": 4.435,
      "rear_clearance": 0.135,
      "recoverability_factor": 0.3,
-     "str_demand": 3.0085814592559363,
+     "str_demand": 3.2560814592559364,
      "weapon_tempo": 1.755949641615957,
      "wield_heft": 0.43608145925593644
     },
@@ -6389,7 +6389,7 @@
      "reach_base": 4.435,
      "rear_clearance": 0.135,
      "recoverability_factor": 0.3,
-     "str_demand": 3.0085814592559363,
+     "str_demand": 3.2560814592559364,
      "weapon_tempo": 1.5559496416159568,
      "wield_heft": 0.43608145925593644
     },
@@ -6399,7 +6399,7 @@
      "reach_base": 4.435,
      "rear_clearance": 0.135,
      "recoverability_factor": 0.3,
-     "str_demand": 3.0085814592559363,
+     "str_demand": 3.2560814592559364,
      "weapon_tempo": 1.3559496416159569,
      "wield_heft": 0.43608145925593644
     },
@@ -6608,7 +6608,7 @@
      "reach_base": 4.635,
      "rear_clearance": 0.135,
      "recoverability_factor": 0.3,
-     "str_demand": 3.102363743574376,
+     "str_demand": 3.2283637435743757,
      "weapon_tempo": 1.784637770255775,
      "wield_heft": 0.3936828568748688
     },
@@ -6618,7 +6618,7 @@
      "reach_base": 4.635,
      "rear_clearance": 0.135,
      "recoverability_factor": 0.3,
-     "str_demand": 3.102363743574376,
+     "str_demand": 3.2283637435743757,
      "weapon_tempo": 1.584637770255775,
      "wield_heft": 0.3936828568748688
     },
@@ -6628,7 +6628,7 @@
      "reach_base": 4.635,
      "rear_clearance": 0.135,
      "recoverability_factor": 0.3,
-     "str_demand": 3.102363743574376,
+     "str_demand": 3.2283637435743757,
      "weapon_tempo": 1.3846377702557748,
      "wield_heft": 0.3936828568748688
     },
@@ -6837,7 +6837,7 @@
      "reach_base": 7.1495999999999995,
      "rear_clearance": 1.02,
      "recoverability_factor": 2.603015865514041,
-     "str_demand": 5.779131658961779,
+     "str_demand": 6.386631658961779,
      "weapon_tempo": 0.9964959240739228,
      "wield_heft": 1.6409780081681287
     },
@@ -6847,7 +6847,7 @@
      "reach_base": 6.3241,
      "rear_clearance": 1.4100000000000001,
      "recoverability_factor": 1.4542560308982255,
-     "str_demand": 5.488389137438921,
+     "str_demand": 6.095889137438921,
      "weapon_tempo": 0.9369346446507252,
      "wield_heft": 1.5806604866452703
     },
@@ -6857,7 +6857,7 @@
      "reach_base": 5.4986,
      "rear_clearance": 1.8,
      "recoverability_factor": 0.4100219189192499,
-     "str_demand": 5.236613524273778,
+     "str_demand": 5.844113524273778,
      "weapon_tempo": 0.8814426617262128,
      "wield_heft": 1.5593098734801278
     },
@@ -7066,7 +7066,7 @@
      "reach_base": 5.865706,
      "rear_clearance": 0.2772,
      "recoverability_factor": 1.4949170681718642,
-     "str_demand": 4.723278970242966,
+     "str_demand": 5.281278970242965,
      "weapon_tempo": 1.1313964036599269,
      "wield_heft": 1.1365596740432315
     },
@@ -7076,7 +7076,7 @@
      "reach_base": 5.865706,
      "rear_clearance": 0.2772,
      "recoverability_factor": 1.4949170681718642,
-     "str_demand": 4.723278970242966,
+     "str_demand": 5.281278970242965,
      "weapon_tempo": 0.9313964036599272,
      "wield_heft": 1.1365596740432315
     },
@@ -7086,7 +7086,7 @@
      "reach_base": 5.865706,
      "rear_clearance": 0.2772,
      "recoverability_factor": 1.4949170681718642,
-     "str_demand": 4.723278970242966,
+     "str_demand": 5.281278970242965,
      "weapon_tempo": 0.731396403659927,
      "wield_heft": 1.1365596740432315
     },
@@ -7295,7 +7295,7 @@
      "reach_base": 6.6881200000000005,
      "rear_clearance": 0.444,
      "recoverability_factor": 4.672925240481539,
-     "str_demand": 5.494210475979146,
+     "str_demand": 6.4279604759791455,
      "weapon_tempo": 0.8568201177999069,
      "wield_heft": 1.608466752160794
     },
@@ -7305,7 +7305,7 @@
      "reach_base": 6.53572,
      "rear_clearance": 0.516,
      "recoverability_factor": 4.427841931189933,
-     "str_demand": 5.431826821093853,
+     "str_demand": 6.365576821093853,
      "weapon_tempo": 0.7,
      "wield_heft": 1.5886230972755022
     },
@@ -7315,7 +7315,7 @@
      "reach_base": 6.38332,
      "rear_clearance": 0.5880000000000001,
      "recoverability_factor": 4.188797909990697,
-     "str_demand": 5.369782758398357,
+     "str_demand": 6.303532758398357,
      "weapon_tempo": 0.7,
      "wield_heft": 1.5691190345800066
     },
@@ -7524,7 +7524,7 @@
      "reach_base": 4.389,
      "rear_clearance": 0.15,
      "recoverability_factor": 0.3,
-     "str_demand": 3.165128092637261,
+     "str_demand": 3.479228092637261,
      "weapon_tempo": 1.6114996215559259,
      "wield_heft": 0.6064780926372609
     },
@@ -7534,7 +7534,7 @@
      "reach_base": 4.389,
      "rear_clearance": 0.15,
      "recoverability_factor": 0.3,
-     "str_demand": 3.165128092637261,
+     "str_demand": 3.479228092637261,
      "weapon_tempo": 1.411499621555926,
      "wield_heft": 0.6064780926372609
     },
@@ -7544,7 +7544,7 @@
      "reach_base": 4.389,
      "rear_clearance": 0.15,
      "recoverability_factor": 0.3,
-     "str_demand": 3.165128092637261,
+     "str_demand": 3.479228092637261,
      "weapon_tempo": 1.211499621555926,
      "wield_heft": 0.6064780926372609
     },
@@ -7753,7 +7753,7 @@
      "reach_base": 7.5690937,
      "rear_clearance": 0.22299999999999998,
      "recoverability_factor": 18.765438391515197,
-     "str_demand": 6.594779152234592,
+     "str_demand": 7.710779152234592,
      "weapon_tempo": 0.8000031789665474,
      "wield_heft": 2.2542416266260665
     },
@@ -7763,7 +7763,7 @@
      "reach_base": 6.196445949999999,
      "rear_clearance": 0.8714949999999999,
      "recoverability_factor": 7.034348214504587,
-     "str_demand": 5.737049723973582,
+     "str_demand": 6.853049723973582,
      "weapon_tempo": 0.7,
      "wield_heft": 1.7796646608650581
     },
@@ -7773,7 +7773,7 @@
      "reach_base": 4.823798200000001,
      "rear_clearance": 1.51999,
      "recoverability_factor": 0.44711625402169897,
-     "str_demand": 5.101314610860382,
+     "str_demand": 6.217314610860383,
      "weapon_tempo": 0.8764518301878483,
      "wield_heft": 1.5270820102518574
     },
@@ -7982,7 +7982,7 @@
      "reach_base": 6.617,
      "rear_clearance": 0.9,
      "recoverability_factor": 5.441086481083671,
-     "str_demand": 5.956637248092624,
+     "str_demand": 7.118987248092624,
      "weapon_tempo": 0.8341978674550554,
      "wield_heft": 2.0252845367750347
     },
@@ -7992,7 +7992,7 @@
      "reach_base": 5.982,
      "rear_clearance": 1.2000000000000002,
      "recoverability_factor": 2.777331998763901,
-     "str_demand": 5.66089043765123,
+     "str_demand": 6.82324043765123,
      "weapon_tempo": 0.7789740008312611,
      "wield_heft": 1.9067877263336408
     },
@@ -8002,7 +8002,7 @@
      "reach_base": 5.347,
      "rear_clearance": 1.5,
      "recoverability_factor": 0.34219769085117424,
-     "str_demand": 5.440047295356218,
+     "str_demand": 6.6023972953562176,
      "weapon_tempo": 0.8904989429335108,
      "wield_heft": 1.8631945840386281
     },
@@ -8211,7 +8211,7 @@
      "reach_base": 5.43543,
      "rear_clearance": 0.2496,
      "recoverability_factor": 0.7736148346620927,
-     "str_demand": 3.94042899854375,
+     "str_demand": 4.32742899854375,
      "weapon_tempo": 1.2823500802805996,
      "wield_heft": 0.9365971031949132
     },
@@ -8221,7 +8221,7 @@
      "reach_base": 5.43543,
      "rear_clearance": 0.2496,
      "recoverability_factor": 0.7736148346620927,
-     "str_demand": 3.94042899854375,
+     "str_demand": 4.32742899854375,
      "weapon_tempo": 1.0823500802805999,
      "wield_heft": 0.9365971031949132
     },
@@ -8231,7 +8231,7 @@
      "reach_base": 5.43543,
      "rear_clearance": 0.2496,
      "recoverability_factor": 0.7736148346620927,
-     "str_demand": 3.94042899854375,
+     "str_demand": 4.32742899854375,
      "weapon_tempo": 0.8823500802805999,
      "wield_heft": 0.9365971031949132
     },
@@ -8440,7 +8440,7 @@
      "reach_base": 8.1681273,
      "rear_clearance": 0.21800000000000008,
      "recoverability_factor": 11.664965286652997,
-     "str_demand": 7.161377389071097,
+     "str_demand": 8.129012389071097,
      "weapon_tempo": 0.8004577480653676,
      "wield_heft": 2.5693146099694766
     },
@@ -8450,7 +8450,7 @@
      "reach_base": 6.49385455,
      "rear_clearance": 1.008995,
      "recoverability_factor": 5.33932756399329,
-     "str_demand": 6.1353116352600825,
+     "str_demand": 7.102946635260082,
      "weapon_tempo": 0.7,
      "wield_heft": 2.0105950686584624
     },
@@ -8460,7 +8460,7 @@
      "reach_base": 4.8195818,
      "rear_clearance": 1.7999900000000002,
      "recoverability_factor": 0.3,
-     "str_demand": 5.363509111254673,
+     "str_demand": 6.331144111254673,
      "weapon_tempo": 0.9022497454436778,
      "wield_heft": 1.7061387571530526
     },
@@ -8669,7 +8669,7 @@
      "reach_base": 6.182,
      "rear_clearance": 0.18,
      "recoverability_factor": 0.6687932213693382,
-     "str_demand": 4.229582964166767,
+     "str_demand": 4.845182964166766,
      "weapon_tempo": 1.2461623574836778,
      "wield_heft": 1.0388829641667665
     },
@@ -8679,7 +8679,7 @@
      "reach_base": 6.182,
      "rear_clearance": 0.18,
      "recoverability_factor": 0.6687932213693382,
-     "str_demand": 4.229582964166767,
+     "str_demand": 4.845182964166766,
      "weapon_tempo": 1.046162357483678,
      "wield_heft": 1.0388829641667665
     },
@@ -8689,7 +8689,7 @@
      "reach_base": 6.182,
      "rear_clearance": 0.18,
      "recoverability_factor": 0.6687932213693382,
-     "str_demand": 4.229582964166767,
+     "str_demand": 4.845182964166766,
      "weapon_tempo": 0.8461623574836776,
      "wield_heft": 1.0388829641667665
     },
@@ -8898,7 +8898,7 @@
      "reach_base": 4.508,
      "rear_clearance": 0.12,
      "recoverability_factor": 0.3,
-     "str_demand": 3.025249797033019,
+     "str_demand": 3.1827497970330194,
      "weapon_tempo": 1.8028286276392882,
      "wield_heft": 0.36992836846159066
     },
@@ -8908,7 +8908,7 @@
      "reach_base": 4.508,
      "rear_clearance": 0.12,
      "recoverability_factor": 0.3,
-     "str_demand": 3.025249797033019,
+     "str_demand": 3.1827497970330194,
      "weapon_tempo": 1.6028286276392882,
      "wield_heft": 0.36992836846159066
     },
@@ -8918,7 +8918,7 @@
      "reach_base": 4.508,
      "rear_clearance": 0.12,
      "recoverability_factor": 0.3,
-     "str_demand": 3.025249797033019,
+     "str_demand": 3.1827497970330194,
      "weapon_tempo": 1.402828627639288,
      "wield_heft": 0.36992836846159066
     },
@@ -9127,7 +9127,7 @@
      "reach_base": 5.551,
      "rear_clearance": 0.21,
      "recoverability_factor": 0.745377535607624,
-     "str_demand": 3.9249816397699306,
+     "str_demand": 4.3299816397699304,
      "weapon_tempo": 1.2750477622349923,
      "wield_heft": 0.9506316397699308
     },
@@ -9137,7 +9137,7 @@
      "reach_base": 5.551,
      "rear_clearance": 0.21,
      "recoverability_factor": 0.745377535607624,
-     "str_demand": 3.9249816397699306,
+     "str_demand": 4.3299816397699304,
      "weapon_tempo": 1.0750477622349923,
      "wield_heft": 0.9506316397699308
     },
@@ -9147,7 +9147,7 @@
      "reach_base": 5.551,
      "rear_clearance": 0.21,
      "recoverability_factor": 0.745377535607624,
-     "str_demand": 3.9249816397699306,
+     "str_demand": 4.3299816397699304,
      "weapon_tempo": 0.8750477622349924,
      "wield_heft": 0.9506316397699308
     },
@@ -9356,7 +9356,7 @@
      "reach_base": 5.6691355,
      "rear_clearance": 0.2528,
      "recoverability_factor": 0.9973118936599168,
-     "str_demand": 4.099986380991343,
+     "str_demand": 4.527486380991343,
      "weapon_tempo": 1.2003763347765708,
      "wield_heft": 1.0265507350869696
     },
@@ -9366,7 +9366,7 @@
      "reach_base": 5.6691355,
      "rear_clearance": 0.2528,
      "recoverability_factor": 0.9973118936599168,
-     "str_demand": 4.099986380991343,
+     "str_demand": 4.527486380991343,
      "weapon_tempo": 1.000376334776571,
      "wield_heft": 1.0265507350869696
     },
@@ -9376,7 +9376,7 @@
      "reach_base": 5.6691355,
      "rear_clearance": 0.2528,
      "recoverability_factor": 0.9973118936599168,
-     "str_demand": 4.099986380991343,
+     "str_demand": 4.527486380991343,
      "weapon_tempo": 0.8003763347765709,
      "wield_heft": 1.0265507350869696
     },
@@ -9585,7 +9585,7 @@
      "reach_base": 5.510195,
      "rear_clearance": 0.26795,
      "recoverability_factor": 0.6586706106384242,
-     "str_demand": 3.9376462287297893,
+     "str_demand": 4.28414622872979,
      "weapon_tempo": 1.317126493313785,
      "wield_heft": 0.9130419722362826
     },
@@ -9595,7 +9595,7 @@
      "reach_base": 5.510195,
      "rear_clearance": 0.26795,
      "recoverability_factor": 0.6586706106384242,
-     "str_demand": 3.9376462287297893,
+     "str_demand": 4.28414622872979,
      "weapon_tempo": 1.117126493313785,
      "wield_heft": 0.9130419722362826
     },
@@ -9605,7 +9605,7 @@
      "reach_base": 5.510195,
      "rear_clearance": 0.26795,
      "recoverability_factor": 0.6586706106384242,
-     "str_demand": 3.9376462287297893,
+     "str_demand": 4.28414622872979,
      "weapon_tempo": 0.917126493313785,
      "wield_heft": 0.9130419722362826
     },
@@ -9814,7 +9814,7 @@
      "reach_base": 6.85355,
      "rear_clearance": 0.135,
      "recoverability_factor": 15.701997058958403,
-     "str_demand": 6.098195679464017,
+     "str_demand": 7.110695679464017,
      "weapon_tempo": 0.8000271380049546,
      "wield_heft": 2.0056031794640163
     },
@@ -9824,7 +9824,7 @@
      "reach_base": 5.726425,
      "rear_clearance": 0.6675,
      "recoverability_factor": 5.608375524581286,
-     "str_demand": 5.347566370644451,
+     "str_demand": 6.360066370644451,
      "weapon_tempo": 0.7,
      "wield_heft": 1.5695926206444506
     },
@@ -9834,7 +9834,7 @@
      "reach_base": 4.5992999999999995,
      "rear_clearance": 1.2,
      "recoverability_factor": 0.44561499355283735,
-     "str_demand": 4.79540900667251,
+     "str_demand": 5.80790900667251,
      "weapon_tempo": 0.8766543084460501,
      "wield_heft": 1.3320540066725102
     },
@@ -10043,7 +10043,7 @@
      "reach_base": 7.7973,
      "rear_clearance": 0.36,
      "recoverability_factor": 8.277977208146543,
-     "str_demand": 6.603740829605232,
+     "str_demand": 7.5055408296052315,
      "weapon_tempo": 0.8048740077109602,
      "wield_heft": 2.214034952255453
     },
@@ -10053,7 +10053,7 @@
      "reach_base": 6.36855,
      "rear_clearance": 1.035,
      "recoverability_factor": 3.903903885472702,
-     "str_demand": 5.921704494307728,
+     "str_demand": 6.823504494307728,
      "weapon_tempo": 0.7,
      "wield_heft": 1.9308111169579498
     },
@@ -10063,7 +10063,7 @@
      "reach_base": 4.9398,
      "rear_clearance": 1.71,
      "recoverability_factor": 0.33353733566767646,
-     "str_demand": 5.40278486287066,
+     "str_demand": 6.30458486287066,
      "weapon_tempo": 0.8916485380497627,
      "wield_heft": 1.8107039855208806
     },
@@ -10272,7 +10272,7 @@
      "reach_base": 8.0970327,
      "rear_clearance": 0.43899999999999995,
      "recoverability_factor": 9.806534686771998,
-     "str_demand": 6.756189491684777,
+     "str_demand": 7.566189491684778,
      "weapon_tempo": 0.8016785612723945,
      "wield_heft": 2.234603212669315
     },
@@ -10282,7 +10282,7 @@
      "reach_base": 6.55185545,
      "rear_clearance": 1.1690049999999998,
      "recoverability_factor": 4.352036215302791,
-     "str_demand": 5.948428624294174,
+     "str_demand": 6.758428624294174,
      "weapon_tempo": 0.7,
      "wield_heft": 1.8581536327787125
     },
@@ -10292,7 +10292,7 @@
      "reach_base": 5.0066782,
      "rear_clearance": 1.89901,
      "recoverability_factor": 0.34373499550362857,
-     "str_demand": 5.340494892370591,
+     "str_demand": 6.150494892370592,
      "weapon_tempo": 0.8902947122284655,
      "wield_heft": 1.6815311883551287
     },
@@ -10501,7 +10501,7 @@
      "reach_base": 6.4892,
      "rear_clearance": 0.84,
      "recoverability_factor": 0.4607059958290537,
-     "str_demand": 5.113744923781731,
+     "str_demand": 5.7788449237817305,
      "weapon_tempo": 1.2746171138840445,
      "wield_heft": 1.3165249237817298
     },
@@ -10511,7 +10511,7 @@
      "reach_base": 5.9177,
      "rear_clearance": 1.1099999999999999,
      "recoverability_factor": 0.4607059958290537,
-     "str_demand": 4.95421992378173,
+     "str_demand": 5.61931992378173,
      "weapon_tempo": 1.0746171138840446,
      "wield_heft": 1.3165249237817298
     },
@@ -10521,7 +10521,7 @@
      "reach_base": 5.3462,
      "rear_clearance": 1.38,
      "recoverability_factor": 0.4607059958290537,
-     "str_demand": 4.79469492378173,
+     "str_demand": 5.45979492378173,
      "weapon_tempo": 0.8746171138840444,
      "wield_heft": 1.3165249237817298
     },
@@ -10730,7 +10730,7 @@
      "reach_base": 4.5715,
      "rear_clearance": 0.105,
      "recoverability_factor": 0.3,
-     "str_demand": 3.0618331203388984,
+     "str_demand": 3.1608331203388986,
      "weapon_tempo": 1.823748110996276,
      "wield_heft": 0.34639812033889816
     },
@@ -10740,7 +10740,7 @@
      "reach_base": 4.5715,
      "rear_clearance": 0.105,
      "recoverability_factor": 0.3,
-     "str_demand": 3.0618331203388984,
+     "str_demand": 3.1608331203388986,
      "weapon_tempo": 1.6237481109962761,
      "wield_heft": 0.34639812033889816
     },
@@ -10750,7 +10750,7 @@
      "reach_base": 4.5715,
      "rear_clearance": 0.105,
      "recoverability_factor": 0.3,
-     "str_demand": 3.0618331203388984,
+     "str_demand": 3.1608331203388986,
      "weapon_tempo": 1.423748110996276,
      "wield_heft": 0.34639812033889816
     },
@@ -10959,7 +10959,7 @@
      "reach_base": 5.7875250000000005,
      "rear_clearance": 0.2055,
      "recoverability_factor": 0.7855020531413021,
-     "str_demand": 4.046153469472314,
+     "str_demand": 4.473653469472314,
      "weapon_tempo": 1.2382176465846233,
      "wield_heft": 0.9896947194723134
     },
@@ -10969,7 +10969,7 @@
      "reach_base": 5.7875250000000005,
      "rear_clearance": 0.2055,
      "recoverability_factor": 0.7855020531413021,
-     "str_demand": 4.046153469472314,
+     "str_demand": 4.473653469472314,
      "weapon_tempo": 1.0382176465846231,
      "wield_heft": 0.9896947194723134
     },
@@ -10979,7 +10979,7 @@
      "reach_base": 5.7875250000000005,
      "rear_clearance": 0.2055,
      "recoverability_factor": 0.7855020531413021,
-     "str_demand": 4.046153469472314,
+     "str_demand": 4.473653469472314,
      "weapon_tempo": 0.8382176465846232,
      "wield_heft": 0.9896947194723134
     },
@@ -11188,7 +11188,7 @@
      "reach_base": 5.8592293,
      "rear_clearance": 0.3419,
      "recoverability_factor": 1.0364669482161832,
-     "str_demand": 4.552471138601217,
+     "str_demand": 5.0497211386012175,
      "weapon_tempo": 1.193496952147791,
      "wield_heft": 0.9999949668409488
     },
@@ -11198,7 +11198,7 @@
      "reach_base": 5.81487455,
      "rear_clearance": 0.362855,
      "recoverability_factor": 1.029308502335161,
-     "str_demand": 4.5386202352093985,
+     "str_demand": 5.035870235209399,
      "weapon_tempo": 0.9944510209380073,
      "wield_heft": 0.998524975949131
     },
@@ -11208,7 +11208,7 @@
      "reach_base": 5.7705198,
      "rear_clearance": 0.38381,
      "recoverability_factor": 1.0221730187632643,
-     "str_demand": 4.524774554443823,
+     "str_demand": 5.022024554443823,
      "weapon_tempo": 0.795402639653644,
      "wield_heft": 0.997060207683555
     },
@@ -11417,7 +11417,7 @@
      "reach_base": 5.3568045,
      "rear_clearance": 0.2392,
      "recoverability_factor": 0.5499710179228783,
-     "str_demand": 3.7543737041319174,
+     "str_demand": 4.026623704131917,
      "weapon_tempo": 1.4467294097878347,
      "wield_heft": 0.7696984187430312
     },
@@ -11427,7 +11427,7 @@
      "reach_base": 5.3568045,
      "rear_clearance": 0.2392,
      "recoverability_factor": 0.5499710179228783,
-     "str_demand": 3.7543737041319174,
+     "str_demand": 4.026623704131917,
      "weapon_tempo": 1.2467294097878345,
      "wield_heft": 0.7696984187430312
     },
@@ -11437,7 +11437,7 @@
      "reach_base": 5.3568045,
      "rear_clearance": 0.2392,
      "recoverability_factor": 0.5499710179228783,
-     "str_demand": 3.7543737041319174,
+     "str_demand": 4.026623704131917,
      "weapon_tempo": 1.0467294097878346,
      "wield_heft": 0.7696984187430312
     },
@@ -11646,7 +11646,7 @@
      "reach_base": 8.0428545,
      "rear_clearance": 0.15000000000000002,
      "recoverability_factor": 18.704000379523013,
-     "str_demand": 6.952442678151117,
+     "str_demand": 7.933442678151117,
      "weapon_tempo": 0.8000033186649966,
      "wield_heft": 2.428610749588778
     },
@@ -11656,7 +11656,7 @@
      "reach_base": 6.402427250000001,
      "rear_clearance": 0.925005,
      "recoverability_factor": 7.112665572863035,
-     "str_demand": 5.941423192495033,
+     "str_demand": 6.922423192495033,
      "weapon_tempo": 0.7,
      "wield_heft": 1.8754900514326944
     },
@@ -11666,7 +11666,7 @@
      "reach_base": 4.7620000000000005,
      "rear_clearance": 1.7000099999999998,
      "recoverability_factor": 0.38985507087552096,
-     "str_demand": 5.170814585070998,
+     "str_demand": 6.151814585070998,
      "weapon_tempo": 0.8841450476496382,
      "wield_heft": 1.5627802315086603
     },
@@ -11875,7 +11875,7 @@
      "reach_base": 8.1851707,
      "rear_clearance": 0.28805000000000003,
      "recoverability_factor": 6.198549407439408,
-     "str_demand": 6.745801426979693,
+     "str_demand": 7.299301426979692,
      "weapon_tempo": 0.8204848889245637,
      "wield_heft": 2.1561760576383393
     },
@@ -11885,7 +11885,7 @@
      "reach_base": 6.53204345,
      "rear_clearance": 1.069055,
      "recoverability_factor": 2.9388168729424535,
-     "str_demand": 5.855939581232225,
+     "str_demand": 6.409439581232225,
      "weapon_tempo": 0.7637602732709343,
      "wield_heft": 1.7277579993908727
     },
@@ -11895,7 +11895,7 @@
      "reach_base": 4.8789162,
      "rear_clearance": 1.85006,
      "recoverability_factor": 0.3,
-     "str_demand": 5.175025084439026,
+     "str_demand": 5.728525084439026,
      "weapon_tempo": 0.9029912271815188,
      "wield_heft": 1.5082872900976734
     },
@@ -12104,7 +12104,7 @@
      "reach_base": 5.92485,
      "rear_clearance": 1.195,
      "recoverability_factor": 8.914068155267532,
-     "str_demand": 5.696178176569667,
+     "str_demand": 6.911223176569667,
      "weapon_tempo": 0.8031294103028177,
      "wield_heft": 2.0432306765696677
     },
@@ -12114,7 +12114,7 @@
      "reach_base": 5.760808333333333,
      "rear_clearance": 1.2725,
      "recoverability_factor": 8.914068155267532,
-     "str_demand": 5.650388593236334,
+     "str_demand": 6.865433593236334,
      "weapon_tempo": 0.7,
      "wield_heft": 2.0432306765696677
     },
@@ -12124,7 +12124,7 @@
      "reach_base": 5.5967666666666664,
      "rear_clearance": 1.35,
      "recoverability_factor": 8.914068155267532,
-     "str_demand": 5.6045990099030005,
+     "str_demand": 6.8196440099030005,
      "weapon_tempo": 0.7,
      "wield_heft": 2.0432306765696677
     },
@@ -12333,7 +12333,7 @@
      "reach_base": 6.109000000000001,
      "rear_clearance": 1.05,
      "recoverability_factor": 8.365808084079575,
-     "str_demand": 5.740356716558872,
+     "str_demand": 6.978306716558872,
      "weapon_tempo": 0.8045850375023333,
      "wield_heft": 2.044706716558872
     },
@@ -12343,7 +12343,7 @@
      "reach_base": 5.7915,
      "rear_clearance": 1.2,
      "recoverability_factor": 8.365808084079575,
-     "str_demand": 5.6517317165588725,
+     "str_demand": 6.889681716558872,
      "weapon_tempo": 0.7,
      "wield_heft": 2.044706716558872
     },
@@ -12353,7 +12353,7 @@
      "reach_base": 5.474,
      "rear_clearance": 1.35,
      "recoverability_factor": 8.365808084079575,
-     "str_demand": 5.563106716558871,
+     "str_demand": 6.801056716558871,
      "weapon_tempo": 0.7,
      "wield_heft": 2.044706716558872
     },

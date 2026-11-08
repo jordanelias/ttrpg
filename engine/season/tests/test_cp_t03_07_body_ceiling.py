@@ -50,14 +50,17 @@ CEILING = "body_ceiling"
 
 #: 1-season hashes before this item (ed983b6a, = CP-T03-04's POST_ITEM) and after it. `build_realm(0)`:
 #: 7266f56bea4e3d75705f5e88eec1b2e1 -> 600d8b27147478e158553552cc1409a5 (the schema).
+#: Seeds 1 and 2 of both are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit: PC-20 (1)
+#: (the head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`; seed 0 calls none.
+#: Was, before that pin commit: PRE_ITEM 07634b99... / 1cc4370d...; POST_ITEM fc3201f3... / 6da144ff...; CONTROL seed 2 702d9074....
 PRE_ITEM = {0: "b2dde1fcf889605d76a30eeba48d2aa0",
-            1: "07634b99c7c757e451855d7554a1709c",
-            2: "1cc4370de8e8552d1fdf914109aadd37"}
+            1: "c58b1a7e05de416b88db213f855b9eba",
+            2: "5518f31c87d481988a9829d737d8211f"}
 POST_ITEM = {0: "eb2919ae5fc955c27529f12b5a93bd62",
-             1: "fc3201f39df518f5d2189685a5935107",
-             2: "6da144ff2d1dbf8d142f8ceb38f55f5a"}
+             1: "c4ba7a756b9517eedca7960a0c324393",
+             2: "c72aa6feb038a8b9b9947e54e4f6fe17"}
 #: At `none`, the schema alone: seeds 0 and 1 mark nobody, so they equal POST_ITEM; seed 2 marks one survivor.
-CONTROL = {0: POST_ITEM[0], 1: POST_ITEM[1], 2: "702d9074d183386abdd0658c6d9527e5"}
+CONTROL = {0: POST_ITEM[0], 1: POST_ITEM[1], 2: "7ee0f6575e91016325f74080b8b5518d"}
 BUILD_PRE, BUILD_POST = "7266f56bea4e3d75705f5e88eec1b2e1", "600d8b27147478e158553552cc1409a5"
 
 

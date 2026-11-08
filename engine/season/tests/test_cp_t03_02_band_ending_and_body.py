@@ -181,9 +181,11 @@ def test_a_capture_yielded_at_the_untouched_band_stamps_the_ending_on_person_cap
 
 
 #: The one-season realm hashes BEFORE this item (dee492f7); seed 0 forms no Felled/Wounded fight and does not move.
+#: Seeds 1 and 2 are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit (was f4330aac... /
+#: a030141a...): PC-20 (1) (the head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`.
 PRE_ITEM = {0: "20accb03c3d32f80a9fab00d80a70b21",
-            1: "f4330aacb84c25069dfdb33f2a123215",
-            2: "a030141a9c66a833e84a97a71404ff88"}
+            1: "35dadf8a667a03e68378f492f83acd7a",
+            2: "72d62e193af5a0fc494a4cbc63ba0de3"}
 
 
 def revert_cp_t03_02(monkeypatch):

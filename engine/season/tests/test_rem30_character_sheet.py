@@ -65,10 +65,12 @@ from engine.season.state.ids import H, draw_factory
 # FORMATION mover of every season, and an outcome mover -- a man below his ceiling tends himself whole): seeds 0 / 1 / 2
 # were eb2919ae... / fc3201f3... / 6da144ff.... CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` (the
 # column emptied, the term returning `()`) reads the old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# Seeds 1 and 2 are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit (was d9f3be70... /
+# 285fb92a...): PC-20 (1) (the head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`.
 PRE_BUILD = {
     0: "d4c83c8ca9d5082f5237a3889e1a995b",   # CP-T03-08: was eb2919ae...; CP-T03-07: was b2dde1fc...; CP-T03-04: was 20accb03...
-    1: "d9f3be70a492753d16584d068ba98108",   # CP-T03-08: was fc3201f3...; CP-T03-07: was 07634b99...; CP-T03-04: was 6e25b047...; CR-85: was f89ea45d...
-    2: "285fb92a927eaa642e8478c799995315",  # CP-T03-08: was 6da144ff...; CP-T03-07: was 1cc4370d...; CP-T03-04: was fe9032ed...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
+    1: "7cacc76327c222c2595c57f24d147d36",   # CP-T03-08: was fc3201f3...; CP-T03-07: was 07634b99...; CP-T03-04: was 6e25b047...; CR-85: was f89ea45d...
+    2: "447ed0d819b895fd828e4b1c26a34e69",  # CP-T03-08: was 6da144ff...; CP-T03-07: was 1cc4370d...; CP-T03-04: was fe9032ed...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
 }
 
 
