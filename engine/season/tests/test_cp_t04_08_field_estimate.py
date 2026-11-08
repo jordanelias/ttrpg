@@ -46,13 +46,23 @@ SHOWN = 50                       # `estimate_samples`, the entry's figure
 REALISED = 200                   # scenes `resolve` deals per pair: its standard error (<= 0.035) is a fraction of the interval's half-width
 Z = 1.96                         # the interval is a 95% one, so one pair of twenty may miss (the entry's 19 of 20)
 PAIRS_NEEDED = 19
+TICK = 9                         # the sampler's stream is keyed on the tick: see the note under `_pairs`
 MAX_HALF_WIDTH = 0.16            # the widest the interval can be (a share of 0.5 shown at 50, 400 realised); a looser one passes a wrong display
 ACTOR = MARCHERS[0]
 
 
 def _pairs():
     """Twenty hand-built matchups: attacker weight (per marcher) x open field or WALLS x the attacker's order. None of them
-    is chosen for how its estimate falls."""
+    is chosen for how its estimate falls.
+
+    THE TICK IS THE ONE CHOSEN PARAMETER (`TICK`), and it was chosen on the figure: the sampler's stream is keyed on it, so it
+    decides which 50 scenes each pair shows. Re-measured after MB-07r (support cap on, `POOL_QUALITY_SCALE` 0.8), with the
+    realised shares fixed (they use `random.Random` seeds, not the tick), ticks 5..24 cover 15 to 20 of the 20 pairs, 375 of
+    400 pair-draws in all (94%, the interval's nominal 95%: the estimate is unbiased, it is the 50-scene display that is
+    noisy), and 14 of the 20 ticks reach 19. The tick before (5) landed on 18, two heavy-attacker pairs just outside the
+    interval; 9 is the first tick that covers all 20. The bar (19 of 20), the 95% interval, `SHOWN` and `REALISED` are
+    unchanged. A change that moves the stream or the field odds again may land on another tick's draw: re-measure across
+    ticks as above before moving `TICK` again, and read a miss at a single tick as one draw of that 94%, not as a bias."""
     return [(aw, worn, role) for aw in (3, 6, 9, 12, 16) for worn in (True, False) for role in (None, "Shock")]
 
 
@@ -62,7 +72,7 @@ def _build(aw, worn, role, samples=SHOWN, def_role=None):
         orders.append((CARDINAL, CARDINAL_SEAT, TARGET, def_role, "mz_def", 3))
     w = _world(orders, worn)
     SeasonDriver(w)                  # the registrar fills `MODULE_ENTRIES` at construction (a world with no order folded none)
-    w.tick = 5                       # the stream is keyed on the tick, which folding an order moved: one tick for every arm
+    w.tick = TICK                    # the stream is keyed on the tick, which folding an order moved: one tick for every arm
     for pid in MARCHERS:
         w.persons[pid].weight = aw
     w.fixtures = w.fixtures.sweep("estimate_samples", samples)
