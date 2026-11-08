@@ -17,7 +17,7 @@ from __future__ import annotations
 from dataclasses import replace
 
 from ..data.rosters import (
-    DECLARED, ENDING_FELLED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
+    DECLARED, ENDING_FELLED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, FIELD_WINNER_CASUALTY_ARMS, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
     VERB_CAPABILITY, WOUND_HARM_MODELS, BODY_MARK_MODELS, require_member,
 )
 from ..data.matrix import matrix_row
@@ -449,16 +449,25 @@ def _harm(p: "Person", band: str, model: str, st: dict) -> "int | None":
 @effect_for("march")
 def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """§E3 (M4, `ED-IN-0279` clause (a)): writes `(Person, body)` and `(Person, stance)` -- ON
-    THE LOSING SIDE ONLY, on either band. Jordan's ruling on clause (b): a loss writes *"casualties
-    only, decrease in morale, and a grudge token"* and nothing else -- the ruling is silent on the
-    winner because it was never asked, and this does not invent an answer for it.
+    THE LOSING SIDE, on either band. Jordan's ruling on clause (b): a loss writes *"casualties
+    only, decrease in morale, and a grudge token"* and nothing else -- the ruling specifies nothing
+    for the winner.
+
+    ⚠ CR-24 (`field_winner_casualties`, `H-360`, M4 Ask B (b)): UNDER `engine` (SHIPPED) THE WINNERS TAKE THEIR OWN
+    ENGINE CASUALTIES, ON `body` ONLY -- each winner at his own side's survivor ratio (`attacker_size_pct` /
+    `defender_size_pct`) or, under `field_subunits: person`, his own subunit's (CP-T04-01's `subunits` record), never
+    the loser's, and never above 1 (a winner is not raised). A winner is NOT a loser: he is not appended to `touched`,
+    so he earns no grudge against his own faction and no morale hit, and he gets no stance row. A winner who also
+    marches is one Subject (the mover's). Under `field_casualty_model: total` a winner takes the loser's body-to-0 and
+    the same death write (`death_subjects`, `remove_person`) -- no death edge the losers do not have -- and, being dead,
+    does not arrive. `off` is the field as it was.
 
     ⚠ v9 IN-13 (#453 §10.4 step 8, THE ARRIVAL): ONE WRITE IS ADDED, AND IT IS PRESENCE, NOT TITLE. On
     `Won` and `Unopposed` every claimant is relocated to the destination (`_relocate`'s pair, keyed on
     the mover: his live `contain` closes, one opens to the target, the target is appended to his
     `travel_leg`), emitting `army.arrived` beside the band's kind; the gate admits another person's
-    legs under its `muster` basis (`state/gate.py::may_muster`). The winner's BODY and STANCE are
-    still never written, and no `hold` moves (R-6, β: title moves by `seize`, `give`, `release` or
+    legs under its `muster` basis (`state/gate.py::may_muster`). The winner's STANCE is
+    never written (his BODY is, under CR-24's `engine` arm, above), and no `hold` moves (R-6, β: title moves by `seize`, `give`, `release` or
     death). `Lost` is unchanged: a routed army stays at its origin (R-7).
 
     ⚠ `Won`/`Lost` NAME THE ATTACKER'S OWN OUTCOME (`seam/ladder.py::field_degree`), NOT WHICH
@@ -542,14 +551,40 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     per_person = engine_result.get("subunits") or {}
     broke = (engine_result.get("broke_first") or (None, None))[0 if attacker_lost else 1]
     touched = [pid for pid in losers if pid in w.persons]
-    debits = _ration_debits(w, res)
-    if not touched and not movers and not debits:
-        return NO_CHANGE
     model = w.fixtures.get("field_casualty_model")
     require_member(
         model, FIELD_CASUALTY_MODELS, f"field-casualty model {model!r} is not in the roster",
         "H-148", law="`wound_harm_model`'s own precedent -- an unrecognised mode silently "
         "falling back would make every measurement of this sweep read the control")
+    winner_arm = w.fixtures.get("field_winner_casualties")
+    require_member(
+        winner_arm, FIELD_WINNER_CASUALTY_ARMS, f"field-winner-casualties arm {winner_arm!r} is not in the roster",
+        "H-360", law="`field_casualty_model`'s own precedent -- an unrecognised arm silently falling back would "
+        "make every measurement of this switch read the control")
+    # CR-24: THE WINNERS, A SEPARATE LIST -- NEVER `touched` (which feeds the stance rows below), so a winner earns no
+    # grudge against his own faction and no morale hit. The winning side is the one `losers` is not; a side that fought as
+    # an order of battle bleeds only its drawn cohorts (`fielded`), as the loser does. Each carries his own ratio: his
+    # subunit's under `person`, else his side's, capped at 1 (the casualty can only lower a body). A winner with no ratio
+    # to read (a hand-built result that carries none) is left unwritten; under `total` no ratio is read.
+    winners: list = []
+    win_ratio: dict = {}
+    if winner_arm == "engine" and model != "none" and res.degree != UNOPPOSED:
+        win_drawn = (parties.get("fielded") or (None, None))[1 if attacker_lost else 0]
+        win_side = win_drawn if win_drawn is not None else (defenders if attacker_lost else attackers)
+        win_pct = engine_result.get("defender_size_pct" if attacker_lost else "attacker_size_pct")
+        for pid in win_side:
+            if pid not in w.persons or pid in losers or pid in win_ratio:
+                continue
+            mine = per_person[pid][0] if pid in per_person else win_pct
+            if mine is None and model != "total":
+                continue
+            win_ratio[pid] = min(1.0, max(0.0, mine or 0.0))
+            winners.append(pid)
+        if model == "total":
+            movers = [pid for pid in movers if pid not in win_ratio]     # a winner the arm kills does not arrive
+    debits = _ration_debits(w, res)
+    if not touched and not movers and not debits and not winners:
+        return NO_CHANGE
     attacker_faction = seat_faction(w, a.via)
     defender_faction = holder_faction_of(w, target)
     winner_faction = defender_faction if attacker_lost else attacker_faction
@@ -612,6 +647,12 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
             # precedent that a wound (never total) cannot kill.
             if p.body <= 0:
                 w.remove_person(pid)
+        # CR-24: the winners' casualty is `body` ONLY -- no stance row (the loop above is the only place one is written).
+        for pid in winners:
+            p = w.persons[pid]
+            p.body = 0 if model == "total" else max(1, int(p.body * win_ratio[pid]))
+            if p.body <= 0:
+                w.remove_person(pid)       # the `total` arm's own death rule, as the loser's above
     fields = ("stance",) if model == "none" else ("body", "stance")
     # G4 -- WHAT IT NAMES: the losers by the fields the casualty writes (earning as above); the movers
     # WHOLE, `move`'s reason (a `contain` leg is stored on its Person, so his digest carries the legs
@@ -624,7 +665,14 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         for s in (death_subjects(w, pid, loser_earns, fields=fields) if dies
                   else (Subject.entity("persons", pid, earns=loser_earns, fields=fields,
                                        observed=broke_observed(pid, broke)),)))
-    return Change(losers_named
+    # CR-24: a winner who also moves is ONE Subject -- the mover's, whole-entity -- so only a winner who stays is named
+    # here, by `body` alone (the field he is written by); under `total` a dying winner is named by his death.
+    movers_set = set(movers)
+    winners_named = tuple(
+        s for pid in winners if pid not in movers_set
+        for s in (death_subjects(w, pid, loser_earns, fields=("body",)) if dies
+                  else (Subject.entity("persons", pid, earns=loser_earns, fields=("body",)),)))
+    return Change(losers_named + winners_named
                   + tuple(Subject.entity("persons", pid, earns=own) for pid in movers)
                   + tuple(Subject.entity("rungs", rid, earns=loser_earns, fields=("stores",))
                           for rid in dict.fromkeys(rid for rid, _ in debits)), perform)

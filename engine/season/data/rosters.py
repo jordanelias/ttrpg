@@ -1224,6 +1224,7 @@ BODY_MARK_MODELS = roster("body_mark_models")     # v11 CP-T03-07 (`H-258`): `_e
 FIELD_BANDS = roster("field_degree_bands", ordered=True)
 DECLARED, WON, LOST, UNOPPOSED = FIELD_BANDS
 FIELD_CASUALTY_MODELS = roster("field_casualty_models")
+FIELD_WINNER_CASUALTY_ARMS = roster("field_winner_casualty_arms")     # CR-24 (`H-360`)
 MARCH_TARGET_KINDS = roster("march_target_kinds")
 SUBTREE_OCCUPATION_KINDS = roster("subtree_occupation_kinds")
 RAZE_TARGET_KINDS = roster("raze_target_kinds")
