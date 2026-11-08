@@ -1125,4 +1125,15 @@ DEFAULT_FIXTURES = Fixtures(
     # Jordan to correct; the flip ON is a separate, declared hash-moving commit, IN-52's precedent.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-156 -- the formation-policy row; (a) and (b) are both defensible and lead to different corpora, so the arm ships at (a), today's state, and (b) is the declared second point]
     withheld_verbs=("destroy_record", *ARMY_VERBS),   # `H-156`, swept ("destroy_record", *ARMY_VERBS) (control, SHIPPED) / ARMY_VERBS alone (the sink arm)
+    # `H-346` (v11 CR-55). HOW MANY SEASONS AFTER ITS OWN A DOCKET ITEM MAY BE HELD BEFORE MATTER LAPSES IT
+    # (`matter.lapsed`, `loop/matter.py`; age read off the item's docketing Event or Date by
+    # `queries/world_q.py::lapsing_items`, nothing stored). An item whose party has died, whose venue
+    # seats no bench, or whose matter is no person (`determine` binds a person) is held for ever
+    # otherwise, and `docket_question` keeps naming it. `None` is the CONTROL: no item lapses, the
+    # pre-item docket. `4` is SHIPPED, `oblige_term`'s own length (`H-159`): a matter docketed in season
+    # `t` is heard through season `t + 4` and lapses as `t + 5` opens. `2` is the harsh point, `8` the
+    # patient one; `0` is the instrument's (a two-season probe), not a sweep point.
+    # [ASSUMPTION; medium; Jordan to correct; revert: never]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-346 -- the docket lapse rule; the observable rules THAT a held matter lapses visibly, and no document gives the number of seasons, so it is injected and swept 2 / 4 / 8]
+    docket_lapse=4,                    # `H-346`, swept None (control) / 2 / 4 (SHIPPED) / 8
 )

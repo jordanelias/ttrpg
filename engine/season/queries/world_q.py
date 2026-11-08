@@ -416,6 +416,50 @@ def docket_question(w: World, p: Person) -> Optional[Question]:
     return Question(f"q:docket:{'|'.join(matters)}", "claim_landed", matters, about.id)
 
 
+def lapsing_items(w: World, lapse: Optional[int]) -> list[tuple]:
+    """THE DOCKET ITEMS HELD BEYOND `lapse` SEASONS, with the Event that put each there --
+    `[(item, since tick, docketing Event id or None), ...]` in docket order; `[]` when `lapse` is
+    `None` (v11 CR-55, `Fixtures docket_lapse`; the control: nothing lapses). The one owner of *how
+    long has this item been before a room*, read by MATTER's lapse pass. AN ITEM DOCKETED IN SEASON `t` IS
+    HEARD IN SEASONS `t` TO `t + lapse` AND LAPSES AT THE BARRIER OPENING `t + lapse + 1`: MATTER precedes
+    DELIBERATE, so `>=` would take a matter from a bench in the very season its count ran out (found at
+    CR-55: `test_sc01_the_bar`'s control determines at the fourth season a matter docketed at the first).
+    NOTHING IS STORED: an item
+    carries no age, so the age is read where the item's beginning is already written --
+      * an item naming a matter: the latest docketing Event (`DOCKETING_KINDS`) whose act's `subject`
+        is the matter or the petition it rose from, as `docketed_by` matches them; failing that, the
+        Date its slot was formed for (`due_at`);
+      * an empty slot: its Date's `due_at`, the `docket.formed` CALENDAR wrote for it is the cause.
+    An item neither reaches (a hand-planted dateless one with no Event) has no beginning to count
+    from, so it does not lapse: an unknown age is not an old one. A dead party, a venue that seats no
+    bench and a matter that is no person all hold their item the same way and lapse by the same
+    count; the rule does not ask why `determine` has not cleared it."""
+    if lapse is None or not w.docket:
+        return []
+    by_ref: dict = {}
+    formed: dict = {}
+    for e in w.log:
+        if e.kind in DOCKETING_KINDS:
+            act = causing_act(w, e)
+            ref = act.payload.get("subject") if act is not None and isinstance(act.payload, dict) else None
+            if ref is not None:
+                by_ref[ref] = e
+        elif e.kind == "docket.formed":
+            formed[(anchor_of(w, e), e.emitted_at)] = e
+    out = []
+    for item in w.docket:
+        date = w.dates.get(item.get("date")) or {}
+        ev = None
+        if item.get("matter") is not None:
+            ev = by_ref.get(item["matter"]) or by_ref.get(item.get(DOCKET_PETITION))
+        since = ev.emitted_at if ev is not None else date.get("due_at")
+        if ev is None and since is not None:
+            ev = formed.get((date.get("venue"), since))
+        if since is not None and w.tick - since > lapse:
+            out.append((item, since, ev.id if ev is not None else None))
+    return out
+
+
 def docketed_under(w: World, matter: Optional[str]) -> set:
     """THE ARRANGEMENT ROWS THE DOCKET HEARS `matter` UNDER -- every `DOCKET_ARRANGEMENT` named by an
     item `docketed` lists for it, `None` included for an item that names none. One element in every

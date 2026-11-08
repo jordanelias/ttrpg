@@ -125,11 +125,11 @@ rows:
     emits:   "`date.fired`"
   - kind:    "DocketItem"
     field:   "matter"
-    steps:   [CAL, RES]
-    class:   "CALENDAR/ACTS"
+    steps:   [CAL, MAT, RES]
+    class:   "CALENDAR/MATTER/ACTS"
     social:  "false"
-    by:      "DR-3 · §24 *\"dockets form\"*, no actor. ⚠ PLAN POSITION `19`: the RES cell has its first two producers -- `open_case` puts a matter ON the docket and `determine` takes it OFF (the item's `matter` written back to `None`), both through their own effects (`loop/effects_information.py`). CALENDAR still forms the actorless empty slot (`{date, matter: None}`); since v9 SC-01's fired-slot step `open_case` FILLS such a slot where one holds the matter (`world_q.slot_for`, the slot keeps its `date`) and appends a dateless item only where none is open."
-    emits:   "`docket.formed`"
+    by:      "DR-3 · §24 *\"dockets form\"*, no actor. ⚠ V11 CR-55: MAT is the lapse -- MATTER takes an item off the docket (slot and all) once it has been held beyond `Fixtures docket_lapse` seasons, one gate write per item (`loop/matter.py`), `matter.lapsed` its Event; a dead party, a venue that seats no bench and a matter that is no person otherwise hold their item for ever. ⚠ PLAN POSITION `19`: the RES cell has its first two producers -- `open_case` puts a matter ON the docket and `determine` takes it OFF (the item's `matter` written back to `None`), both through their own effects (`loop/effects_information.py`). CALENDAR still forms the actorless empty slot (`{date, matter: None}`); since v9 SC-01's fired-slot step `open_case` FILLS such a slot where one holds the matter (`world_q.slot_for`, the slot keeps its `date`) and appends a dateless item only where none is open."
+    emits:   "`docket.formed` · `matter.lapsed`"
   - kind:    "DocketItem"
     field:   "arrangement"
     steps:   [RES]
