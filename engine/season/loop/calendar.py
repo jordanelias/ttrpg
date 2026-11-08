@@ -83,7 +83,7 @@ def calendar(self, token: Token) -> list[Event]:
     # Slots open here (the ones just formed) and wherever a determination emptied one (RESOLVE). One gate
     # write per matter, `docket.formed` at the venue, chained on that venue's firing as the slot's own is.
     for item in world_q.undated_matters(w):
-        slot =world_q.slot_for(w, item["matter"])
+        slot = world_q.slot_for(w, item["matter"])
         if slot is None:
             continue
         venue = world_q.slot_venue(w, slot)
