@@ -275,10 +275,7 @@ _ORDER_SAFE_FIELDS = frozenset({
     # [DG-2, Jordan-ruled "build it now" 2026-07-08] `yielding` is a pure behavioural switch (like
     # `stance`), read fresh every tick via `yield_active` -- no cached derived state keyed off it,
     # same reasoning as every other field in this set.
-    'yielding',
-    # [CP-T04-03, B10-12] `conceded`: set by a `retreat_at` order alone (`massbattle._retreat_orders`), read by
-    # `unit_conceded` -- a pure flag, nothing else reads it, no cached derived state keyed off it.
-    'conceded',
+    'yielding', 'conceded',    # `conceded` (CP-T04-03): a pure flag a `retreat_at` order sets, read by `unit_conceded` alone
     # [A1, ED-MB-0067 Part A] `route` (an ordered tuple of absolute waypoints) and `_route_idx` (its
     # cursor) are read fresh every tick by _resolve_route_goal -- no cached geometry keyed off
     # either, same reasoning as every other field in this set. `_route_idx` is included alongside
@@ -506,11 +503,7 @@ class Subunit:
     # `eff_discipline >= D_YIELD` at every CONSUMPTION site (movement/facing/combat pool), not at
     # entry -- ordering a too-disordered subunit to yield is simply a no-op, not a special case.
     yielding: bool = False
-    # [CP-T04-03, B10-12] This subunit has given up the field on a `retreat_at` order (retreat in good order). Set ONLY by
-    # that order's behaviour dict, beside `stance: 'retreat'`; default False -> inert for every existing Subunit. It is the
-    # order's own mark and not the stance's or `yielding`'s, so a DG-2 fighting withdrawal (`yielding` + `stance: retreat`)
-    # or an army's `fall_back_at` is never read as a concession, and an EMERGENT `yielding` cannot hide one.
-    conceded: bool = False
+    conceded: bool = False    # CP-T04-03: set ONLY by a `retreat_at` order's behaviour dict (see `unit_conceded`, end of file)
     # [ED-MB-0024, DG-2 §2.4 pocket exit] Set live during the yield movement pass when rearward motion is
     # structurally blocked (map edge in the flee direction, or an enemy has gotten behind into the retreat
     # path). While pocketed, yielding converts to a HOLD with the combat malus REMOVED (Cannae's pinned-
