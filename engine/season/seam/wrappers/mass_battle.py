@@ -220,6 +220,7 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
     MB-03: `loyalties` and `loyalty_gain` are the build-time loyalty rows and the fixture gain; what
     they do to the morale-start is `massbattle._morale_start`'s.
     REM-32: `troops_per_weight` is the `field_troops_per_weight` fixture (`H-250`), handed on unread.
+    CP-T04-05: `walls_dr` is the `field_walls_dr` fixture times `fort_level`, floored; `None` stays `None`.
     CP-T04-01: `members` are the person ids beside `weights` (the same test, so they align) and `subunits` is the
     `field_subunits` fixture (`H-359`), handed on unread; the module reads them only on its `person` arm.
     ED-IN-0306 phase 3: `factions` is `(attacker, defender)`, each side's faction Proposition id or `None`;
@@ -231,15 +232,18 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
     def members(side: list) -> tuple:
         return tuple(pid for pid in side if pid in w.persons)    # `weights`' own test, so the two align
     oobs = (_order_of_battle(w, factions[0], claimants), _order_of_battle(w, factions[1], other))
+    fort = world_q.fortification_of(w, rung) if w.rungs[rung].kind in SUBTREE_OCCUPATION_KINDS else 0.0
     return MassBattleInput(
         weights=(weights(claimants), weights(other)),
         territory=_territory_of(w, rung),
         # Walls are a settlement's: a field fought AT a territory is a field battle in the territory's own terrain
         # (`fortification_of` averages every garrison in a subtree and any value above 0 is WALLS, which overrides
         # terrain), ED-IN-0306 phase 5.
-        fort_level=world_q.fortification_of(w, rung) if w.rungs[rung].kind in SUBTREE_OCCUPATION_KINDS else 0.0,
+        fort_level=fort,
         stances=(_side_stance(w, claimants), _side_stance(w, other)),
-        walls_dr=w.fixtures.get("field_walls_dr"),
+        # CP-T04-05: graded walls. `None` (shipped) is today's flat row; else the fixture's value scaled by the garrison's
+        # condition, FLOORED (`int`, never `round`: banker's rounding gives 3 x 0.5 -> 2 and 1 x 0.5 -> 0).
+        walls_dr=None if (dr := w.fixtures.get("field_walls_dr")) is None else int(dr * fort),
         origin=_origin_of(w, claimants),
         loyalties=(_side_stance(w, claimants, _creed_referent), _side_stance(w, other, _creed_referent)),
         loyalty_gain=w.fixtures.get("field_morale_loyalty_gain"),
