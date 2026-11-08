@@ -16,7 +16,6 @@ fails if it does.
 
 from __future__ import annotations
 
-import math
 from dataclasses import replace
 
 from ..data.matrix import Step
@@ -49,6 +48,7 @@ from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, changes_on
                          claim_subjects, held_claim_ids, holds_trail, live_channels,
                          non_anchor_subjects, observers_for, seen_of, seen_showing, seen_subject)
 from ..queries import cache, world_q
+from ..queries.person_q import drifted
 from ..queries.world_q import hold_force
 from ..state.attribution import event_by_id, actor_of, anchor_of, causing_act
 from ..state.carriers import Claim, Event
@@ -218,21 +218,9 @@ def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = 
                 return tuple((k, new_to if k == addressee else v) for k, v in held.value)
         return held.value  # one addressee, or none at all -- §A.10.1's floor; nothing droppable
     if isinstance(held.value, (int, float)) and not isinstance(held.value, bool):
-        before = held.value
-        band = w.fixtures.get("told_drift_band")
-        max_delta = math.ceil(band * abs(before))
-        if before == 0 or max_delta < 1:
-            return held.value   # no sign to preserve at 0, or the band drifts nothing (control)
-        magnitude = 1 + sel % max_delta
-        after = before + magnitude if (sel // max_delta) % 2 == 0 else before - magnitude
-        # §A.10.2: bounded AND signed -- `after` never crosses zero and never flips sign. A draw
-        # that would do either is clamped back to the same side rather than discarded, so the
-        # selection still spends exactly one hash and never re-draws.
-        if before > 0 and after <= 0:
-            after = before + magnitude
-        elif before < 0 and after >= 0:
-            after = before - magnitude
-        return after
+        # §A.10.2's three clauses live once, in `queries/person_q.py::drifted` (v11 CR-27: the liar's false
+        # number is the same rule), and this branch is its caller.
+        return drifted(held.value, w.fixtures.get("told_drift_band"), sel)
     return held.value  # nothing either mechanism can act on -- deposited verbatim, honestly
 
 

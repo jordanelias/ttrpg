@@ -1723,6 +1723,27 @@ def _load_own_stance_declines(values) -> frozenset:
 OWN_STANCE_DECLINES = _load_own_stance_declines(roster("own_stance_declines"))
 
 
+# v11 CR-27 (M9 taken (a)): the verbs that say a FALSE value of a claim the speaker holds
+# (`rosters.yaml: lie_verbs`, read in `opening_set`; `lie`). Refused at import when a member names a verb the
+# table lacks or one whose typed cell names no `own_ledger` conjunct -- `opening_set` carries `said` only off
+# that conjunct, so a listed row without one would be a roster line nothing reads.
+def _load_lie_verbs(values) -> frozenset:
+    """`rosters.yaml: lie_verbs`' `values`, checked and frozen -- refused per member (above)."""
+    out = frozenset(str(v or "") for v in (values or ()))
+    for v in sorted(out):
+        row = VERB_TABLE.get(v)
+        if row is None or row.requires_typed is None or not row.requires_typed.named_own_ledger_operands():
+            raise Forbidden(
+                f"`rosters.yaml: lie_verbs` names {v!r}, and the verb table carries no such verb or its typed "
+                "cell names no `own_ledger` conjunct", "rosters.yaml",
+                needs="a `verb_table.yaml` verb whose cell names an `own_ledger` conjunct (`tell`'s `holds`)",
+                law="CR-27 -- a lie is a said claim made false; a row that says nothing has none")
+    return out
+
+
+LIE_VERBS = _load_lie_verbs(roster("lie_verbs"))
+
+
 # v9 IN-26 (BOUND-PAPER, `A-13`): the verbs a person forms only on a referent he himself holds -- the
 # object of one of his OWN live `hold` Tenures (`rosters.yaml: own_hold_declines`, read in `opening_set`;
 # `destroy_record`). `own_stance_declines`' shape one field over: the decline is the person-side reading of

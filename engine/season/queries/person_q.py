@@ -40,6 +40,7 @@ does: `choose` and `options` read `stance_toward` and `said_of` from here. The A
 from __future__ import annotations
 
 import functools
+import math
 from typing import Optional
 
 from engine.substrate.descriptors import AFFILIATION_CONCERNS, PURSUITS
@@ -51,7 +52,7 @@ from ..data.affiliations import AFFILIATION_CEILING, conviction_map, engagement
 from ..data.cast import STANCE_MAX
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 from ..data.requires import (
-    KNOWN_PERSON_CLAIM, OWN_STATE_STEMS, REQUIRES_OPERANDS, REQUIRES_STEMS, SHORTFALL_PREDICATE,
+    CELL_STEMS, KNOWN_PERSON_CLAIM, OWN_STATE_STEMS, REQUIRES_OPERANDS, REQUIRES_STEMS, SHORTFALL_PREDICATE,
     UNKNOWN, WORLD_ONLY_STEMS,
 )
 from ..data.rosters import (
@@ -1147,6 +1148,72 @@ def said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None
     if c is None:
         return None
     return Said(c.subject, c.predicate, c.value, c.confidence, c.chain)
+
+
+def drifted(before, band: float, sel: int, whole_band: bool = False):
+    """A HELD NUMBER MOVED WITHIN `band`, SIGN-PRESERVING AND NEVER CROSSING ZERO -- `loop/witness.py::
+    _told_value`'s numeric branch (v10 `15b`, r2 `02` §A.10.2's three clauses), moved here unchanged so the
+    liar's false number (`lie_said_of`) and the channel's lossy copy are ONE rule and not two. The three
+    clauses: (1) `before` of 0, or a band that moves nothing (`ceil(band * |before|) < 1`, the control),
+    comes back as it was; (2) otherwise a magnitude of `1 + sel % max_delta` and a direction from the next
+    bit of `sel`; (3) a result that would reach or cross zero is clamped back to `before`'s own side.
+
+    `whole_band` is the liar's reading of (2): the magnitude is the band's whole unit, `max_delta`, one step
+    of `told_drift_band`'s size, not a draw within it. `sel` then only picks the direction (0: upward,
+    clamped to the far side where upward would cross zero). No draw is spent by the caller either way."""
+    max_delta = math.ceil(band * abs(before))
+    if before == 0 or max_delta < 1:
+        return before   # no sign to preserve at 0, or the band drifts nothing (control)
+    magnitude = max_delta if whole_band else 1 + sel % max_delta
+    after = before + magnitude if (sel // max_delta) % 2 == 0 else before - magnitude
+    # §A.10.2: bounded AND signed -- `after` never crosses zero and never flips sign. A draw
+    # that would do either is clamped back to the same side rather than discarded, so the
+    # selection still spends exactly one hash and never re-draws.
+    if before > 0 and after <= 0:
+        after = before + magnitude
+    elif before < 0 and after >= 0:
+        after = before - magnitude
+    return after
+
+
+def lie_said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None":
+    """WHAT THIS PERSON WOULD SAY FALSELY ABOUT `subject`: `said_of`'s pick, over the teller's CELL claims
+    only, with its value made false -- or `None` where there is no false value to say (v11 CR-27, M9 taken
+    (a), the cell lie; H-198 rule (i)). Asked of the LIAR'S OWN claims at CHOOSE
+    (`decision/options.py::opening_set`, for a row named in `rosters.yaml: lie_verbs`) and carried on the
+    Act's `payload["said"]`, so WITNESS deposits it through the one told channel and reads no ledger.
+
+    THE FALSE-VALUE RULE [ASSUMPTION; medium; Jordan to correct; revert: a different false-value rule]:
+      * a NUMBER is moved one whole step of `told_drift_band`'s unit by `drifted` -- sign-preserving and
+        never crossing zero, `_told_value`'s own clauses and not a copy of them. A held 0, or a band of 0,
+        has no false number to say: `None`.
+      * a TRUTH VALUE becomes the other member of its closed roster, `(False, True)`. No draw is spent: the
+        roster of every non-numeric cell value a ledger holds today has two members, so the other member is
+        the only one (a roster with several would be drawn on `draw(actor, 'lie:<act id>')`, and the act has
+        no id at CHOOSE, so none is built; it would be a WITNESS-side change).
+      * anything else -- a value that is neither -- has no roster: `None`.
+    A claim that is no CELL (`data/requires.py: CELL_STEMS`: a deed kind, a `seen` sighting, a `content:` or
+    `shortfall:` claim) is never lied about: the pool is cells only, so the DEED lie (H-198 rule (ii)) stays
+    unbuilt. The chain is EMPTY: the liar is the origin of what he says, so the hearer's claim reads
+    `(liar,)` and a falsehood is never fathered on whoever told the liar the truth.
+
+    ⚠ A FALSE VALUE IS NEVER THE HELD ONE, so the hearer's exact-triple guard (`loop/witness.py`) does not
+    drop the deposit for a hearer who holds the cell firsthand: his claim and the lie then DISAGREE, which
+    is the pair `decision/options.py::record` counts against the liar (`H-183`)."""
+    cells = [c for c in claims if c.subject == subject and str(c.predicate).partition(":")[0] in CELL_STEMS]
+    said = said_of(cells, subject, fx, teller)
+    if said is None:
+        return None
+    held = said.value
+    if isinstance(held, bool):
+        false = not held
+    elif isinstance(held, (int, float)):
+        false = drifted(held, fx.get("told_drift_band"), 0, whole_band=True)
+    else:
+        return None
+    if false == held:
+        return None
+    return Said(said.subject, said.predicate, false, said.confidence, ())
 
 
 def confided_outside(claims, said: "Said", hearer: str) -> bool:

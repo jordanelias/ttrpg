@@ -524,6 +524,52 @@ verbs:
     grade:       "assumption"
     grade_note:  "an argued addition: the matrix rows `(Record, exists)` and `(Record, forgery_quality)` are the tree's; the cell, the kind and the false key (`head`) are v9 IN-45's, on #453 `:515`. The forged sheet's CONTENT is read -- the sheet consumer, `rosters.yaml: record_sourced_operands.faction_sheet` -- and since v9 SC-02 `22b` step 25 its `forgery_quality` too, by the examination's obstacle (`H-210`)."
     source:      "ARCHITECTURE_V2.md §E3, transcribed; typed and effected at v9 IN-45 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) `:515` and `:557`"
+  # v11 CR-27 (M9, taken (a)): THE CELL LIE, `tell`'s ROW WITH A FALSE VALUE, placed beside `forge` (ED-IN-0329: a
+  # forged sheet and a spoken falsehood are the two ways a person misleads). Every column is `tell`'s and the
+  # row EMITS ONLY `tell`'s KINDS -- there is no `lie.*` kind, so a hearer learns nothing a `tell` would not
+  # have taught him, and the two detection routes stay asymmetric by design (`forge` has its own kind, a lie
+  # has none; a lie is caught only by `record`'s pairing against what the hearer holds firsthand, `H-183`).
+  # The false value is `queries/person_q.py::lie_said_of`'s, copied onto the Act at CHOOSE exactly as `said_of`'s
+  # is; `rosters.yaml: lie_verbs` names this row so `decision/options.py::opening_set` reads that one instead.
+  - verb:        "lie"
+    stratum:     "social"
+    eligibility: ["own"]
+    beneficiary: "subject"
+    requires:    "the liar holds a claim on the subject, and the person told is with the liar"
+    requires_typed:
+      all:
+        - form:      own_ledger
+          of:        subject
+          conjunct:  holds
+        - form:      relation
+          of:        to
+          relation:  with
+          conjunct:  hearer
+    requires_typed_note: "`tell`'s cell, unchanged (see `tell`). WHAT IS NOT IN IT: the exclusion of a claim there is no false value for. A deed kind (`(x, <kind>, True)`), a `seen` sighting and a document's `content:` claim are not cells (`data/requires.py: CELL_STEMS`), and a cell whose value has no other member of its closed roster (a number that cannot drift, a value that is neither a number nor a truth value) has nothing to say falsely; `lie_said_of` returns `None` for each and `opening_set` declines the Candidate as it declines a `tell` with nothing to say. The DEED lie (H-198 rule (ii)) is unbuilt: no deposit can hold a deed `False` and no reader pairs one. [ASSUMPTION; medium; Jordan to correct; revert: a different false-value rule.]"
+    counterparty: to
+    counterparty_note: "`tell`'s: the hearer `to` is the contest's opponent, the topic `subject` is what is falsely said."
+    contests:    "a standing"
+    contests_note: "`tell`'s prize, `a standing`, thrown against the hearer. No new prize, no new provider."
+    writes:
+      Overwhelming: []
+      Success:      []
+      Partial:      []
+      Failure:      []
+    emits:
+      Overwhelming: ["news.told", "confidence.broken"]
+      Success:      ["news.told", "confidence.broken"]
+      Partial:      ["news.told", "confidence.broken"]
+      Failure:      ["news.untold"]
+    emits_note: "`tell`'s kinds and no other (CR-27): a hearer's deposit is `loop/witness.py`'s `news.told` branch reading the `said` the act carries, so a false value rides the one channel a true one does. ⚠ A KIND TWO ROWS EMIT HAS NO `KIND_VERB` (`data/verbs.py::_derive_kind_verb`) AND SO JOINS `PAIRED_KINDS`: `news.told`, `news.untold` and `confidence.broken` are now paired kinds (`tell.refused` is a refusal kind, so no deed). None carries an authored `deed:<kind>` cell, so `_lean` reads 0 for each and no judgement moves; the pairing's other readers are what the realm hash records."
+    emits_on_refusal:
+      holds:  ["tell.refused"]
+      hearer: ["tell.refused"]
+      counterparty: ["tell.refused"]
+    grade:       "assumption"
+    grade_note:  "an argued addition (CR-27, M9 taken (a)): the row is `tell`'s with the false-value rule in `lie_said_of`. [ASSUMPTION; medium; Jordan to correct; revert: `lie_offered` False, or delete this row, its alignment cells and its `lie_verbs` line.]"
+    writes_note: "— (deposits at WITNESS, not here)"
+    refusal_note: "`tell`'s: `holds` -- nothing held about the subject; `hearer` -- the person told is not with the liar; `counterparty` -- a lie to nobody, or to oneself. One kind for all three, `tell.refused`."
+    source:      "v11 CR-27 (B10-13), `workplans/valoria_master_workplan_v11_part4.md` CR-27; M9 taken (a) (`-05`, step 5)"
   - verb:        "forgive"
     stratum:     "social"
     eligibility: ["own"]

@@ -105,7 +105,10 @@ def test_the_kinds_the_split_declares():
     row = VERB_TABLE["tell"]
     assert set(row.emits_on_refusal) == {"tell.refused"}, row.emits_on_refusal
     assert tuple(row.emits_by_degree["Failure"]) == ("news.untold",), row.emits_by_degree
-    assert KIND_VERB["tell.refused"] == "tell" and KIND_VERB["news.untold"] == "tell"
+    # v11 CR-27: `lie` emits `tell`'s kinds and no kind of its own, so each is emitted by two rows and names no one verb
+    assert "tell.refused" not in KIND_VERB and "news.untold" not in KIND_VERB
+    lie = VERB_TABLE["lie"]
+    assert set(lie.emits_on_refusal) == {"tell.refused"} and tuple(lie.emits_by_degree["Failure"]) == ("news.untold",)
     assert "tell.refused" in REFUSAL_KINDS and "news.untold" not in REFUSAL_KINDS
     assert "news.untold" in DEED_KINDS and "tell.refused" not in DEED_KINDS
     refused = Claim("c_ref", "p_other", TELLER, "tell.refused", True, 0, "firsthand", 100, "own")

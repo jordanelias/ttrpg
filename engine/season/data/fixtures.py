@@ -1044,6 +1044,14 @@ DEFAULT_FIXTURES = Fixtures(
     # (`H-200`'s cite). Read only where `refraction_gain` refracts a deposit. Must lie in [0, 1].
     # [JUSTIFIED: engine/season/hole_register.yaml H-200 -- the competence gain; AX-7 rules THAT the reader's competence governs divergence and ED-IN-0327 that Attunement helps judge truthfulness, and no document gives how much, so it is injected and swept 0 / 0.5 / 1.0; shipped at the control 0 until CR-83's design gives a lie/truth separator]
     competence_gain=0.0,               # `H-200`, swept 0 (control, SHIPPED) / 0.5 / 1.0
+    # `H-347` (v11 CR-27, M9 taken (a)). WHETHER A PERSON OFFERS A LIE: a row named in `rosters.yaml: lie_verbs`
+    # (`lie`) forms a Candidate only while this is True (`decision/options.py::opening_set`; NOT
+    # `loop/driver.py::resolvable_verbs()`). `False` is the CONTROL, swept, and is the tree before the row: no
+    # lie is offered and `build_realm` reads as it did. `True` SHIPS [ASSUMPTION; medium; Jordan to correct;
+    # revert: `lie_offered = False`, or delete the row, its cells and this key]. A bool, not a gain: it gates a
+    # row's formation, and the false-value rule's own magnitude is `told_drift_band`'s.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-347 -- whether a person may offer a lie; M9 was taken (a) by delegation and no document says how often a person lies, so the offer is a switch and the chance is the scorer's, swept False / True; shipped True]
+    lie_offered=True,                  # `H-347`, swept False (control) / True (SHIPPED)
     # `H-275` (v11 CR-79, `strife-00` §5, R14/A12). HOW FAR SHARED OR STRAINED AFFILIATION BETWEEN A HEARER
     # AND A TELLER MOVES THE CONFIDENCE A TOLD CLAIM LANDS AT: `loop/witness.py::_credit` =
     # `confidence * (1 + g*c)`, `c` = `queries/world_q.py::commensurate(hearer, teller)` in {-1, 0, +1},

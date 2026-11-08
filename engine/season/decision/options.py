@@ -36,7 +36,8 @@ from ..data.rosters import (
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, OWN_HOLD_DECLINES,
+    DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, LIE_VERBS,
+    OWN_HOLD_DECLINES,
     OWN_STANCE_DECLINES, OWN_TITLE_DECLINES,
     TERMS_SOURCED, VERB_TABLE, VIOLENCE_CONTEXTS, VIOLENT_VERBS, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED,
     align,
@@ -46,7 +47,7 @@ from ..gaps import Forbidden
 from ..queries.person_q import (
     PAIRED_KINDS, LedgerReader, OwnStateReader, addressed_to, attackers_of, content_kind, content_said,
     held_against, known_persons, ledger_names,
-    projected_axes, regard, said_of,
+    lie_said_of, projected_axes, regard, said_of,
 )
 from ..state.carriers import Candidate, Claim, Person, Question, Record, View
 from ..trace_log import TRACE
@@ -139,6 +140,12 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             law="IN-26 -- a withheld verb is one the table forms; a name it lacks withholds nothing")
     for verb, row in sorted(VERB_TABLE.items()):
         if verb in withheld:
+            continue
+        # v11 CR-27 (M9 taken (a), `rosters.yaml: lie_verbs`): A ROW THAT SAYS A FALSE VALUE IS FORMED ONLY WHILE
+        # `Fixtures lie_offered` is True, and the gate is HERE, in formation, not in `loop/driver.py::
+        # resolvable_verbs()`: a hand-built `lie` still folds, and the person simply does not offer it. At False
+        # the row forms no Candidate for anybody, and the realm is the pre-item one.
+        if verb in LIE_VERBS and not fx.get("lie_offered"):
             continue
         if not person_side_eligible(p, row):
             continue
@@ -381,7 +388,10 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                     # one telling is read once however many hearers it fans to.
                     entity = ops.get(ledger_of[0])
                     if entity not in said_of_entity:
-                        said_of_entity[entity] = said_of(p.ledger, entity, fx, teller=p)
+                        # CR-27: a row in `lie_verbs` says the claim FALSELY (`lie_said_of`), every other row
+                        # says it as held (`said_of`); both are the actor's own ledger and nothing else.
+                        said_of_entity[entity] = (lie_said_of if verb in LIE_VERBS else said_of)(
+                            p.ledger, entity, fx, teller=p)
                     said = said_of_entity[entity]
                     if said is None:
                         continue

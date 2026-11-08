@@ -2571,6 +2571,20 @@ rosters:
       revert: build `release`'s hook in the same position.]
     values: [forgive]
 
+  lie_verbs:
+    source: >-
+      v11 CR-27 (B10-13), M9 taken (a) (`workplans/valoria_master_workplan_v11_part6.md` M9): the cell lie.
+    note: >-
+      WHICH VERBS SAY A FALSE VALUE OF A CLAIM THE SPEAKER HOLDS -- a list of verbs. Read in
+      `decision/options.py::opening_set`, person-side and World-free (AX-2): a listed row copies
+      `queries/person_q.py::lie_said_of` onto the Act where an unlisted row copies `said_of`, and is formed only
+      while `Fixtures lie_offered` is True. The roster names the verb and the loader VALIDATES it against the row's
+      typed cell: no verb name is spelt in code. ONE LOADER, `data/verbs.py::LIE_VERBS`, refused at import when a
+      member names a verb the table lacks or one whose cell names no `own_ledger` conjunct (a row that carries no
+      `said` has nothing to make false). [ASSUMPTION; medium; Jordan to correct; revert: delete this roster and
+      the `lie` row, its alignment cells and `lie_offered`.]
+    values: [lie]
+
   army_verbs:
     source: >-
       ED-IN-0306 phase 2 (Jordan, 2026-10-28: a faction's army is an order-of-battle record the season changes
@@ -4095,6 +4109,7 @@ tables:
         create_record:  null
         exchange:       null
         forge:          null
+        lie:            null    # CR-27 [ASSUMPTION]: considered, no source and no lean on this axis
         fight:          -0.3    # v11 CR-87 (ED-IN-0340): violence costs on every axis; was null
         move:           null
         oblige:         null
@@ -4147,6 +4162,7 @@ tables:
         establish:      null
         exchange:       null
         forge:          null
+        lie:            null    # CR-27 [ASSUMPTION]: considered, no source and no lean on this axis
         issue:          null
         fight:          -0.3    # v11 CR-87 (ED-IN-0340): violence costs on every axis; was null
         requisition:           null
@@ -4173,6 +4189,7 @@ tables:
         "deed:capability.raised": 0.0   # as `hierarchical_equal`'s cell above: same reason, revert together
         construe:       -0.6    # derived: calculated to serve the construer's aim, not to keep the bond
         forge:          -0.5    # derived: counterfeiting a record for advantage
+        lie:            null    # CR-27 [ASSUMPTION]: considered, no source and no lean on this axis
         open_case:       0.3    # derived: the case runs by template regardless of who stands before it
         requisition:           -0.3    # derived: rank drawing on subjects -- one's own office's take
         march:          -0.4    # reasoned: `sides_of` divides the claimants into sides and the loss lands on the other one -- war for one's own against another; `requisition`'s reason, stronger
@@ -4235,6 +4252,7 @@ tables:
         evade / defy:   null
         exchange:       null
         forge:          null
+        lie:            null    # CR-27 [ASSUMPTION]: considered, no source and no lean on this axis
         found:          null
         build:          null
         give:           null
@@ -4299,6 +4317,7 @@ tables:
         evade / defy:   null
         exchange:       null
         forge:          null
+        lie:            null    # CR-27 [ASSUMPTION]: considered, no source and no lean on this axis
         issue:          null
         fight:          -0.3    # v11 CR-87 (ED-IN-0340): violence costs on every axis; was null
         requisition:           null
@@ -4354,6 +4373,7 @@ tables:
         evade / defy:   null
         exchange:       null
         forge:          null
+        lie:            null    # CR-27 [ASSUMPTION]: considered, no source and no lean on this axis
         issue:          null
         requisition:           null
         move:           null
@@ -4385,6 +4405,7 @@ tables:
         "deed:commitment.ended": 0.8
         seize:          null    # reasoned (IN-12 step 6): the warrant is what licenses it, so it is neither a disagreeable act taken for an end nor one refused -- considered, no lean
         forge:           0.8    # carried: the purest means-to-ends act on the table
+        lie:             0.5    # CR-27 [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its six `null` twins, and `lie` joins `uncelled:`]: reasoned -- a falsehood told for an end is `forge`'s means-to-ends reading in the mouth, smaller (0.5 against 0.8) because it leaves no document behind
         commit:         -0.8    # carried: binds regardless of what later calculation would recommend
         utter:          -0.7    # carried: the uttered word binds the utterer whatever advantage later counsels
         evade / defy:    0.7    # carried: putting your own calculus over a demand
