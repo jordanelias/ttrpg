@@ -135,3 +135,29 @@ def test_the_loader_admits_the_column_on_a_row_contested_against_its_subject(mon
     assert subject_is_opponent(row) and row.opponent_operand() == "subject"
     _plant(monkeypatch, "determine", lambda r: r.__setitem__("subject_may_be_self", True))
     assert _verbs._load_verb_table()["determine"].subject_may_be_self is True
+
+
+# ---------------------------------------------------------------------------------------------
+# THE STANCE SIGN (Phase 1 of the B10-13 close: A1)
+# ---------------------------------------------------------------------------------------------
+
+def test_a_self_plea_is_scored_for_himself_and_an_accusation_against_another(monkeypatch):
+    """`_stance_arm` negates `regard` on a row contested against its subject (the `declared` polarity, CR-16: an act
+    AGAINST somebody you like scores down). `subject_is_opponent` encodes 'a person is not his own adversary', so a
+    self-plea (`speak` on himself) is not that act and reads `+regard`. FALSIFIER: with a held regard of -3 the
+    self-plea reads -3.0 and `speak` on another reads +3.0; PLANTED FAILURE (run 2026-11-08, reverted): the guard
+    `subject != p.id` dropped -> the self-plea reads +3.0 and this test reds. CONTROL: the `regard` arm reads the
+    same -3.0 for both."""
+    from ..decision import choose as CH
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..state.carriers import Candidate
+    w = _world()[0]
+    p = next(iter(w.persons.values()))
+    monkeypatch.setattr(CH, "regard", lambda person, subject, fx: -3.0)
+    declared = DEFAULT_FIXTURES.sweep("stance_polarity", "declared")
+    regard_arm = DEFAULT_FIXTURES.sweep("stance_polarity", "regard")
+    assert subject_is_opponent(VERB_TABLE["speak"])
+    own, other = Candidate("speak", p.id), Candidate("speak", "p_someone_else")
+    assert CH._stance_arm(p, own, declared, {}) == -3.0
+    assert CH._stance_arm(p, other, declared, {}) == 3.0
+    assert CH._stance_arm(p, own, regard_arm, {}) == CH._stance_arm(p, other, regard_arm, {}) == -3.0

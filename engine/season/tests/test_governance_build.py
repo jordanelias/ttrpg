@@ -2951,7 +2951,7 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # whole and the act mix moves (seed 0, one season: 744 -> 755 shipped; `test_go07_canonical_digest.py` records the 755).
     # CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` reads the old one-season hash `eb2919ae...` (744).
     # ⚠⚠ v11 B10-13 (the batch's pin commit, P15): (755, 753) -> (749, 747), A RE-RECORD WITH THE BATCH THAT MOVED IT: the batch's
-    # items together (CR-27 `lie`, CP-T05-02, CP-T05-03, CR-55, CR-56, CR-34, CR-31; the batch's commits name each item's own
+    # items together (CR-27 `lie`, CP-T05-02, CP-T05-03 and CR-56; CR-55, CR-34 and CR-31 are recorded EQUAL inside one season; the batch's commits name each item's own
     # reading) move the act mix (seed 0, one season: 755 -> 749 shipped, 753 -> 747
     # in the control arm; `test_go07_canonical_digest.py` records the 749). The arms still part by two acts.
     assert (out["acts"], cout["acts"]) == (749, 747), (

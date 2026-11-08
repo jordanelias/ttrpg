@@ -648,8 +648,9 @@ def _counts(w) -> dict:
 # 13401 / 11767 / 11344. The build pins do not move (the item writes no field). CONTROL:
 # `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` reads the old three `new` values exactly. A GOLDEN RE-RECORDED,
 # NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at the B10-13 pin commit (P15; the batch's movers are CR-27 `lie`, CR-34 the declared vote, CR-55 and CR-56 the
-# lapsed and re-slotted matter, CP-T05-02 the self-plea, CP-T05-03 `tell.refused` and CR-31 `heritage_gain`: a FORMATION mover and an
+# RE-PINNED ONCE at the B10-13 pin commit (P15; the batch's recorded movers at these one-season readings are CR-27 `lie`, CR-56 the re-slotted
+# matter, CP-T05-02 the self-plea and CP-T05-03 `tell.refused`; CR-34, CR-55 and CR-31 are recorded EQUAL inside two seasons here (H-161,
+# H-346, H-348) and are not isolated per item: a FORMATION mover and an
 # outcome mover of every season; `acts`, `census` and `counts` move at every seed, `dates` at seed 1). Was, for seeds 0 / 1 / 2: `old`
 # 942102ac... / 9538a881... / a1bc1235..., `new` d4c83c8c... / 7cacc763... / 447ed0d8..., `acts` 755 / 754 / 757, census 4cfb3efe... /
 # 8256042d... / ab2d3aa7..., `log` 13454 / 11955 / 11398. The build pins do not move. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
