@@ -349,17 +349,27 @@ def test_multi_side_shock_is_face_based_not_pair_count(mb):
     IDENTICAL geometry+dice, cleanly isolating (a) that a genuine front+rear pincer IS shocked, and (b)
     the A1 fix: two co-FRONT bodies are ONE face, so the shock must NOT apply to them."""
     orch, contact, C = mb
+    # RE-PICKED by MB-07r (support cap ON, POOL_QUALITY_SCALE 0.5 -> 0.8): at the old seed 13 the one-tick pincer
+    # dealt 0.0 with the shock on AND off (0.0 > 0.0) and the co-front arm 0.0 == 0.0, so neither arm observed
+    # anything. Seed 3 reads PINCER 33.0 on / 22.0 off (the 1.5x of (1 + 0.5)) and TWO_FRONT 14.8 on / 14.8 off,
+    # a NON-ZERO equality: the face-based claim is observed on a body that took damage, not on a miss. Mutation
+    # (measured, then reverted): `_nb = eng_counts.get(id(atom_b), 0)` in place of the face count reads TWO_FRONT
+    # 22.2 on / 14.8 off, so arm (b) reddens; with the shock never applied, on == off and arm (a)'s `>` fails (this was the 0.0 > 0.0 red).
+    SHOCK_SEED = 3
 
     def with_shock(shock, attackers):
         old = orch.MULTI_SIDE_SHOCK
         orch.MULTI_SIDE_SHOCK = shock
         try:
-            return _pincer_dmgb(orch, contact, attackers, seed=13)
+            return _pincer_dmgb(orch, contact, attackers, seed=SHOCK_SEED)
         finally:
             orch.MULTI_SIDE_SHOCK = old
 
     PINCER = [(-3, +1), (+3, -1)]          # front pinner + rear body -> faces {F, B} -> 2 sides -> SHOCK
-    TWO_FRONT = [(-3, +1), (-4, +1)]       # two bodies BOTH to the front -> face {F} -> 1 side -> NO shock
+    TWO_FRONT = [(-3, +1), (-2, +1)]       # two bodies BOTH to the front -> face {F} -> 1 side -> NO shock
+    # (-2, not the old -4: the body at -4 is out of contact, so the fixture made ONE pair and the old pair-count
+    # trigger (eng_counts >= 2) could not have fired on it either -- arm (b) could not observe the failure it
+    # excludes. At -2 both bodies touch: 2 pairs, 1 face, which is the case the A1 fix is about.)
     # (a) the effect is real and points the right way: turning the shock ON strictly raises the enveloped
     # defender's casualties (same dice, only the shock constant differs).
     assert with_shock(0.5, PINCER) > with_shock(0.0, PINCER), (
