@@ -86,21 +86,20 @@ from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds, settle_record
 from engine.substrate import composition
 
-from ...data.rosters import ESTIMATE_OUTCOMES, VERB_CAPABILITY, roster
+from ...data.rosters import VERB_CAPABILITY, roster
 from ...gaps import Unspecified
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup);
 # `manifest/registry.py` imports only `data/` and `gaps` and `queries/` is below `seam/`, so the
 # two imports below close none either (measured, v9 SC-02 `22a`).
 from ...manifest.providers import provider
-from ...manifest.registry import BENCH, resolve as _prize_row
+from ...manifest.registry import BENCH, call as _provider_for, resolve as _prize_row
 from ...queries.inputs import Margin, SocialContestInput
 # v9 SC-02 `22a`: the room's two resolver-side reads, the precedent `seam/wrappers/mass_battle.py`'s
 # `world_q.mustered` set. The host READS them; the module composes the obstacle they move.
 from ...queries.world_q import proofs, reception
 from ...state.carriers import EFFORT, effort_of
 from ._entry import entry_for
-from .combat import PROVIDER as _BODY_PROVIDER, fight_estimate, record_of
 from .pool import POOL_ADDENDS, _authored_attribute, _capability, _opposing_attribute, faculty, register_pool_addend  # noqa: F401  (moved: see pool.py)
 
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
@@ -330,6 +329,27 @@ def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
     return None
 
 
+def _estimated(w: Any, act: Any) -> tuple:
+    """`(True, odds)` when the provider of `act`'s prize registered an ESTIMATE (`@provider("estimate", <provider>)`:
+    personal combat's `fight_estimate`, mass battle's `field_estimate`), `odds` being that provider's tuple or `None`;
+    `(False, None)` when it did not (the social roll's case, `odds_of` below). The seam names the ROLE; which module
+    answers is the prize row's `provider:` (CP-T04-08 replaced a direct import of one provider's wrapper with this
+    lookup, so neither fight is named here). The act's parties are the fold's own derivation (`loop.sides`, imported
+    inside the function for `_rolled_as`'s reason); none -> `None`, as the social roll's `_rolled_as` answers a party gap."""
+    from ...data.verbs import VERB_TABLE
+    from ...loop.sides import _contests_of, sides_of
+    row = VERB_TABLE.get(act.verb)
+    contests = _contests_of(act, row)
+    prize = _prize_row("contest", contests[0]) if contests else None
+    estimator = _provider_for("estimate", prize.get("provider")) if prize else None
+    if estimator is None:
+        return False, None
+    payload = act.payload if isinstance(act.payload, dict) else {}
+    target = payload.get(row.opponent_operand() if row is not None else "subject")
+    claimants = sides_of(w, act, target, contests[0])[0]
+    return True, (estimator(w, act, claimants, target) if claimants else None)
+
+
 def odds_of(w: Any, act: Any, *, believer: Any = None,
             believed_room: Optional[dict] = None) -> Optional[tuple]:
     """`(F, P, S, O)` for the social roll `act` would deal, or, for a row whose prize provider is personal combat
@@ -365,14 +385,17 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
     four endings, not the social roll's four bands, and the caller knows which it asked by the act's prize.
     MODE (b) IS NOT BUILT for a fight: a believer's call falls through to the social roll below, which does
     not deal the act, so `believed_chance` is `None` and the chooser's score is as it was (AQ-X1 (b)'s combat
-    term is not proposed here). No loop caller reaches mode (a): the display is the player's."""
+    term is not proposed here). No loop caller reaches mode (a): the display is the player's.
+
+    A ROW CONTESTING `a field` (CP-T04-08, MODE (a) ONLY, AQ-X1: no NPC reads it) IS MASS BATTLE'S: the answer is
+    `mass_battle.field_estimate`'s shares as `(Won, Lost, Unopposed)` (`mass_battle.ESTIMATE_BANDS`), the field's three
+    graded bands. BOTH FIGHTS ARE REACHED THE SAME WAY, through the provider each prize row names, registered under the
+    ESTIMATE role (`@provider("estimate", <provider>)`, `_estimated`): this function imports neither wrapper and holds
+    no second odds function."""
     if believer is None:
-        fought = _rolled_as(w, act, _BODY_PROVIDER)
-        if fought is not None:
-            if len(fought[0]) < 2:
-                return None
-            got = fight_estimate(w, fought[0][0], act.via, fought[0][1], act.verb, record_of(act))
-            return tuple(got[k] for k in ESTIMATE_OUTCOMES) if got["status"] == "ESTIMATED" else None
+        answered, odds = _estimated(w, act)
+        if answered:
+            return odds
     called = _rolled_as(w, act)
     if called is None:
         return None
