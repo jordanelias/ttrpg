@@ -1,255 +1,214 @@
 ---
 name: efficient-coding-review
 description: >
-  ADVERSARIAL REVIEW OF A WHOLE SUBJECT, NOT A DIFF — attacks the code base (the engine, its modules and
-  subsystems, a data family, a pipeline) or a work product (an analysis, research corpus, survey, proposal,
-  plan or instrument) on six lenses run in a fixed order: a HIGH-LEVEL SURVEY first (a
-  one-screen map), then ACCURACY (is each claim true, at its source), APPLICATION (does each idea
-  transfer to the target, step by step), LOGIC (do the conclusions follow), ALL DIRECTIONS (the work
-  and its subject walked by several routes and from several perspectives, not only the one it was
-  built along) and ACROSS MODULES (a coverage matrix read from the registry). Output is a reply plus
-  edits to the subject; no file, and no ledger row unless a ruling is owed. Use for: "adversarial
-  review", "attack this", "review the engine / this module / this subsystem", "review my research / survey / proposal / plan", "did we apply the
-  ideas", "does it work across modules", "work it from all directions", "survey it from a high
-  level". Not for code diffs (/code-review), distilling unearned complexity (valoria-simplify), the cut
-  test on a design object (ners), placement or
-  Layer-1 compliance (layer-conformance), inert mechanics (valoria-mechanic-audit), or P-01..P-15
+  EFFICIENCY PASS — Jordan's standard applied to a whole subject (default `engine/season/` and
+  `modules/`): as little code as possible for the exact same behaviour and outcomes, extremely clear and
+  organised, centralised, modular, nothing hard-coded. It owns no test of its own except a clarity read.
+  It SEQUENCES the skills that already own each test (`layer-conformance` Lens A, `valoria-simplify`,
+  `layer-conformance` Lens B), then reads for clarity, closes once, and records the post-repair git tree
+  hashes in a commit trailer, so an unchanged subject returns NOTHING TO DO and a changed one is reviewed
+  only where it changed. A repair is accepted only if no property gets worse and one gets better; each
+  finding gets one attempt. Use for: "efficiency review", "efficiency pass", "is the code efficient",
+  "can we get the same behaviour with less code", "is it centralised and modular", "is the code base
+  minimal and clear", "why does this keep finding something new". Not for: whether a work's or a code
+  area's claims about itself are true (claim-review), a diff (/code-review, methodology-close), the cut
+  test on a design object (ners), run time or a performance budget (not covered), P-01..P-15
   (valoria-canon-guard).
 ---
 
-# EFFICIENT-CODING-REVIEW — adversarial attack on the code base or a work product
+# EFFICIENT-CODING-REVIEW — the efficiency pass
 
-## Status: RATIFIED on merge of its landing PR (CLAUDE.md §2, ED-1094; #518). Lane IN; no ED allocated. Invocable as a project skill through `.claude/skills/efficient-coding-review`.
+## Status: RATIFIED on merge of #583 (CLAUDE.md §2, ED-1094). Lane IN; no ED allocated. Invocable as a project skill through `.claude/skills/efficient-coding-review`. Replaces the skill of this name, whose method is now `claim-review`. Requested by Jordan in session, 2026-11-07. The design record is the proposal that #583 landed, retired by its execution (`FORK:` row in `references/restructure_ledger.md`).
 
-## What this skill owns, and what it copies
+## What it owns, and what it copies
 
-**It owns the METHOD**: the six lenses and their order, the claim ledger, the route-and-perspective
-sweep, the module matrix and the reply shape. It copies no rule; each is read at its owner, every time.
+**It owns the SEQUENCE, the REPAIR RULE, the END POINT and one rule: the clarity read (L4).** Everything
+else is read at its owner, at the row, every time. **Never copy a rule, a table, a count or a threshold
+into this file**: a copy rots silently and the next session reads the copy.
 
 | the content | its single owner |
 |---|---|
-| how to ground a claim: absence, citation, "I ran it", claim versus support | **CLAUDE.md §0.1 pt 3** |
-| one bar for favourable and unfavourable claims | **CLAUDE.md §0.1 pt 4** |
-| one round then stop; the pass is a stage, not a deliverable; `needs_jordan` | **CLAUDE.md §0** |
-| code is the mechanism, prose is reference | **CLAUDE.md §0.05** |
-| what makes a critic independent; sizing a fan-out; reading is the cost | **CLAUDE.md §10** |
-| the pass discipline (a named failed attack licenses a PASS; a null result needs its trail) | **`skills/ners` THROUGHLINE** |
-| what the modules are | **`references/module_contracts.yaml`** (`composition_roles`) and **`CURRENT.md`** |
+| placement: which layer an artifact binds, prose offered as mechanism, whether a guard earns its existence | `layer-conformance` Lens A |
+| unearned artifacts, second owners, dead code, the removal ladder, relocation, the control and its plants | `valoria-simplify` (EARN, OBSERVE C1–C6, DISPOSE, the nine instruments) |
+| module shape and Layer-1 conformance; the control's command set and cadence | `layer-conformance` Lens B, THE CONTROL |
+| what `engine/season/` and `modules/` must be | `architecture/meta/04_CODE_ARCHITECTURE.md` (§A.2, §C.12, PART D) and `architecture/holonic_ARCHITECTURE.md` §43, §45–§47 |
+| a constant invented at the keyboard | `04` PART D row 38; `tools/ci_sim_fabrication_check.py` |
+| one round then stop; the pass is a stage, not a deliverable; `needs_jordan`; the request is the scope | `CLAUDE.md` §0 |
+| the full suite runs at most once per commit | `CLAUDE.md` §0.4 |
+| tiering, fan-out sizing, what makes a critic independent | `CLAUDE.md` §10 |
+| code is the mechanism, prose is reference | `CLAUDE.md` §0.05 |
 
-## ALL DIRECTIONS — what Jordan means
+## JORDAN'S DEFINITION
 
-*"all directions refers to working through the pipeline/code/logic/systems/mechanics/workflows from
-different perspectives and routes, not a specific NERS thing."* (Jordan, in session, 2026-10-28.)
-It is a **method for any subject**: never review, or build, along only the one route the thing was
-made along. **CLAUDE.md §0 owns the rule**; STEP 5 operationalises it for a review. It is not delegated to `ners`.
+*"Efficiency, for me, is as little code as possible in an extremely clear organized manner that is
+centralized and modularity."* Sharpened: *"can we produce the exact same behavior and outcomes with less
+code than currently exists? … and can we do so without hard-coding values?"* (Jordan, in session,
+2026-11-07.)
 
-## THE THROUGHLINE
+**[ASSUMPTION: clarity outranks minimality. Basis: "in an extremely clear organized manner" qualifies the
+minimising. Where the two conflict, clarity wins.]**
 
-1. **Survey first, attack second, verdict last.** The map is an output, not a warm-up: it decides what
-   is attacked in full and what is sampled.
-2. **Accuracy and application are different objects.** A faithful summary of a finding that does not
-   transfer passes STEP 2 and fails STEP 3. Run both; never let one stand in for the other.
-3. **The work is reviewed as filed.** A claim the work does not make is not attacked; a limit the work
-   dropped *is* (STEP 3, A4).
-4. **A PASS is licensed by a named failed attack**, not by the absence of a finding — *"I attacked X as
-   Y and it holds, because Z"*. A clean lens stands only on its trail. Never manufacture a finding.
+**The honest limit.** Whether a shorter program with the same behaviour *exists* cannot be computed
+(Kolmogorov complexity is uncomputable; program equivalence is undecidable, by Rice's theorem). The end
+point is never "the code is minimal". It is *every frozen finding in scope got one attempt, every
+accepted change preserved behaviour, and the post-repair tree is recorded.*
 
-## STEP 0 — FRAME (five lines)
+## THE OWNERS — each property, and who decides it
 
-Name: the **WORK** (paths, commit, PR) · its **PURPOSE** (the decision it informs) · its **TARGET**
-(the system its ideas are applied to) and the **modules it says it reaches** · its **DECLARED STATUS**
-(what it says it read, ran or checked) · **WHAT REVIEW IT ALREADY HAD** (commit message, PR body, any
-critic pass). Attack what that review did not reach; **never re-audit its fixes** (CLAUDE.md §0).
+| property | the question | owner of the test | counts as a violation |
+|---|---|---|---|
+| **MODULAR** (hierarchical, isolated, pluggable) | does each scoped module conform to its Layer-1 row, and do levels respect their order? | `layer-conformance` Lens B (both halves of an §A.2 row; B2's grade); `valoria-simplify` I4 | a Lens-B nonconformance (B4's first disposition); an I4 FAILS |
+| **CENTRALISED** | does each fact have one owner and one writer? | `valoria-simplify` I3 (`export_sim_params.py --search`, the exporters' `--check`); `layer-conformance` A2 | an I3 FAILS; an A2 finding |
+| **MINIMAL** | can the same behaviour be had with less code? | `valoria-simplify`: EARN, C1–C5, the ladder, lookalike-versus-copy | an unearned artifact, or a C5-dead one, that the ladder can remove |
+| **NO HARD-CODING** | is a value typed where it belongs in its owner? | `04` PART D row 38; `tools/ci_sim_fabrication_check.py` | a repair that adds one (a hard constraint, H2) |
+| **CLEAR** | can a newcomer find what a module does and where its inputs come from? | **this skill** (L4) | one named failed lookup |
 
-When the subject is the **code base**, the WORK is the named engine area, module, subsystem or pipeline; its
-claims are its docstrings, contracts, registries and tests, and ACCURACY is settled by running it (CLAUDE.md
-§0.2), not by reading the prose about it. A diff of it stays with `/code-review`; removing unearned
-complexity stays with `valoria-simplify`; placement and Layer-1 conformance stay with `layer-conformance`.
+**Verdicts are the owners'**: HOLDS, FAILS, INCONCLUSIVE. INCONCLUSIVE is reported with its reason and
+never counted as clear.
 
-Resolve the target's canonical head first (`CURRENT.md`, then its `## Status:` line), then **the plan row
-that names the work** (`CURRENT.md`'s plan row). The work is in one of **three states**: **CURRENT**;
-**PARTLY RULED** — a ratified plan row already decided parts of it (carry each ruling into STEPS 3 and
-6, part by part; a status line that does not point at the ruling is a SURVEY finding); or
-**SUPERSEDED**, which voids STEP 3. If the work is yours or this session's, prepend
-`[SELF-AUTHORED — bias risk]` and run STEPS 2–4 in a critic (Guardrails).
+**Subject.** `engine/season/` and `modules/`, the game code (Layer 2; `CLAUDE.md` §3). Not `tools/`,
+`tests/` or `systems/`: a standard pointed at the repository's own apparatus is the recursion
+`CLAUDE.md` §0.1 pt 5 exists to stop.
 
-## STEP 1 — SURVEY (the first screen of the reply)
+**When to run it.** Routine per-commit conformance is `/close` step 4 and `methodology-close`. This pass is
+for the subject-wide questions a diff cannot ask: second owners across modules, subject-wide minimality,
+pluggability, the clarity of code nobody has changed. The request is the scope (`CLAUDE.md` §0).
 
-- **THESIS** — the headline in one plain sentence.
-- **SPINE** — the hops from raw material to headline (e.g. *source → entry → instrument →
-  application*). Every hop is a handoff STEP 5 walks.
-- **CLAIM LEDGER** (≤ 25 rows): `id | claim | kind | status | load`.
-  **Kind**: FACT · ATTRIBUTION · ABSENCE · COUNT · TRANSFER · INFERENCE · SCOPE. **Status**: what the
-  work says it did to know it (read in full / secondary / ran / assumed). **Load**: HIGH when a false
-  claim collapses a conclusion.
-- **LOAD-BEARING SET** — every HIGH row, with the three thinnest named. The rest are sampled; **state
-  the rate**.
-- **SIZE** — counts from an instrument (`wc`, `grep -c`, a parse), never by hand.
+## THE SEQUENCE
 
-A map that needs more than one screen is not yet a map: cut rows.
+Each stage is a *find, then repair* pair. **Findings are frozen at the start of their own stage**, so a
+stage never re-reads its own repairs, and a later stage reads the tree as earlier stages left it. That is
+the order the owners already rule: Lens A gates B, and `valoria-simplify` runs between them so that B grades
+what remains.
 
-## STEP 2 — ACCURACY *(is it true?)*
+| step | does |
+|---|---|
+| **0 · FRAME** | name the subject; compute the scope and the standard fingerprint (THE END POINT); if the scope is empty, **NOTHING TO DO**, stop |
+| **1 · PLACE** | `layer-conformance` Lens A over the scope; repair |
+| **2 · DISTIL** | `valoria-simplify` over the units the scope falls in (areas as its M1 defines them): SURVEY to triage, then EARN and the instruments; the owner shows its control before it edits (C2, plants in a worktree, never the working tree); repair by its ladder |
+| **3 · CONFORM** | `layer-conformance` Lens B on the scoped modules; repair |
+| **4 · CLEAR** | the L4 read, on scoped files this run did not edit; repair. Last, so it never judges code a structural stage is about to delete, and never reads this run's own edits |
+| **5 · CLOSE** | the suites once (`layer-conformance` THE CONTROL; `CLAUDE.md` §0.4); a red re-runs the failing file only; a repair the red traces to is reverted and becomes a residual |
+| **6 · RECORD** | the reply: violation counts per property before and after, residuals with reasons, controls shown, candidate rules routed; and the trailer line for the commit |
 
-For each load-bearing FACT, ATTRIBUTION, ABSENCE and COUNT, **observe before you rule** (CLAUDE.md §0.1
-pt 3): open the locus; for an **absence**, RUN the search with its variants (spacing stripped, plural,
-synonym, the neighbouring document where it might actually live); recount with a tool; check a
-quotation verbatim. Then:
+The owners' own stages apply inside steps 1–3 (PRE-FLIGHT, WORK, ATTACK by `valoria-critic`, read-only,
+RECONCILE). One producer per package; tiers set per `CLAUDE.md` §10; no lane count is mandated here.
 
-- **Strength ≤ status.** A conclusion drawn from a summary is stated as the summary's.
-- **Claims about itself are claims.** "Verified", "checked", "N of M": was the check run, over what,
-  with what control? A guard with no control (a check that cannot fail) is no check.
-- **"Frozen", "pre-registered", "pinned", "reproduced" each name an artifact.** Recompute its hash or
-  re-run it, and confirm the artifact frozen is the artifact that ran (a freeze of the predictions
-  does not freeze the code they ran against).
+## THE END POINT — what makes a run finish
 
-Rule per claim: **UPHOLD · OVERTURN · SOFTEN · SHARPEN · UNVERIFIABLE** (the first four are `valoria-critic`'s vocabulary; UNVERIFIABLE is this skill's).
+**E1 · The standard is fixed for a run.** It is this skill's text and the owners' text read at the row.
+The trailer's `std=` is the blob hash of this `SKILL.md` alone: a change to a sibling skill does not
+reopen the subject. Ask for a whole-subject run if wanted.
 
-## STEP 3 — APPLICATION *(does the idea transfer?)* — six tests per TRANSFER row
+**E2 · Scope comes from recorded tree hashes, never from a remembered verdict.**
 
-| # | test | finds |
-|---|---|---|
-| A1 | **CONDITIONS** — what the idea's source needed to be true (domain, scale, user role, size of its evidence) | the unstated premise |
-| A2 | **TARGET MATCH** — which of those hold in the target; name each that does not | a transfer across a gap |
-| A3 | **PATH** — a shipped object (`file:line`) at every step where the idea binds in the target. An object at every step *constructs*; a step with none is *asserted*. Downgrade the verb to match (implementable → expressible) | an idea that has no place to land |
-| A4 | **LOSS IN TRANSIT** — the source's own limits against the limits the work carries forward | a limit dropped between source and application |
-| A5 | **ADDITION** — does applying it add an object, gauge, table or guard? | an object for `ners` to cut-test; flag it, do not rule here |
-| A6 | **FALSIFIER** — one observation *in the target* that would show the idea wrong as applied | an idea unfalsifiable as applied |
+- A run that commits repairs puts one line in the body of its last commit:
+  `Efficiency-Reviewed: engine/season=<tree> modules=<tree> std=<blob> attempted=<n> residual=<n>`.
+  Read each `<tree>` from the **index** just before committing: `T=$(git write-tree); git rev-parse
+  $T:engine/season $T:modules` (the plain `git rev-parse :engine/season` fails: a directory is not an
+  index entry). `std=` is `git rev-parse :skills/efficient-coding-review/SKILL.md`.
+- The next run finds the newest such line in the available history:
+  `git log -n1 --grep='^Efficiency-Reviewed:' --format=%B`. A squash merge keeps each commit message's
+  lines at line start, and the line records tree hashes, not a commit, so it survives a squash or a
+  rebase. **It does not deepen a shallow clone** (`valoria-simplify` M5; `CLAUDE.md` §2): no line found
+  means the whole subject, once.
+- **NOTHING TO DO** when, for every subject path, `git rev-parse HEAD:<path>` equals the recorded tree
+  and `std` matches. Stop before reading any code.
+- **Otherwise the scope** is `git diff --name-only <recorded-tree> HEAD:<path>` per path, prefixed with
+  the path. If `git cat-file -e <recorded-tree>` fails (a tree this clone no longer has), that path's
+  scope is the whole path, once. If `std` differs, the whole subject, once.
+- **A finding is in scope** if it is located in a scoped file, **or** has an endpoint in one (an import
+  edge, a duplicate pair, a second owner), **or** concerns a name on a line the same diff removed
+  (deleting a last caller makes its callee dead wherever the callee lives).
+- **A violation outside scope is not this run's work**, and nothing records it as owed, so the pass never
+  becomes a standing queue (`CLAUDE.md` §0: "does this document create work for a future session?").
+- **What this cannot see:** a violation that arises because something *outside* the subject changed (a
+  registry row naming a function being deleted; an owner's instrument being revised). Neither reopens the
+  subject. Ask for a whole-subject run.
 
-An idea with **no external source** is `NO SOURCE (own)`: skip A1 and run A2–A6 against the target's
-**ratified architecture** (axioms, plan rulings, `architecture/`). A ratified ruling that excludes the
-idea ends the test: DOES NOT TRANSFER, citing the ruling.
+**E3 · Findings are frozen per stage; re-measuring is not re-reviewing.** After each repair the owner's
+*cheap* instruments are re-run on what the repair touched (`layer-conformance` THE CONTROL). That is
+measurement. The judgment findings (an earned or unearned verdict, an L4 finding) are not re-read. A repair
+is never audited in the run that made it (`CLAUDE.md` §0), and the next run starts after it (E2).
 
-Verdict per idea: **TRANSFERS · NARROWED** (say how) **· ASSERTED · DOES NOT TRANSFER.**
+**E4 · Each finding gets one attempt; a repair is accepted only if no property gets worse and one gets
+better.**
 
-## STEP 4 — LOGIC *(do the conclusions follow?)*
+- The measure is **a count per property** (THE OWNERS), componentwise, **never summed, weighted or reported
+  as a grade of the code**. That keeps it outside `valoria-simplify`'s "no composite score".
+- Accepted: no property's count rises **and** at least one falls (for an L4 repair: the named lookup
+  becomes answerable). The conditions of ACCEPTANCE also hold.
+- A repair that fixes one property and raises another is **not accepted**; the finding becomes a residual
+  with its reason. Otherwise a repair could create violations in files the next run never examines.
+- **Termination.** Within a run: each frozen finding gets at most one attempt, and L4 reads a finite set of
+  files. Every accepted repair strictly lowers a total drawn from the natural numbers and raises no
+  component, so accepted repairs cannot cycle (Floyd, 1967).
 
-For each HIGH inference write the chain (premises → conclusion, ≤ 5 links) and attack **each link**:
+**E5 · No rule growth from inside.** An observation that violates no rule is a **candidate rule**, not a
+finding. It goes through `CLAUDE.md` §0's five answer-it-first tests. A survivor becomes at most one
+`needs_jordan: true` row, and a candidate that already has a row is never raised again. The skill never
+adopts a rule.
 
-- **equivocation** (one word, two senses — state both) · **scope shift** (some → all, one → the class)
-- **missing denominator** (a count without what it is out of)
-- **independence overstated** — sources sharing authors, lineage or data counted as separate
-  corroboration. *Count the overlap by instrument.*
-- **circular validation** (an instrument confirmed on the cases that built it) · **survivorship**
-- **cause from correlation** · **authority for evidence** (cited for prominence)
-- **asymmetric skepticism** (CLAUDE.md §0.1 pt 4): was one bar applied to both directions?
-- **the instrument shares its template with the treatment** (a metric scoring the same shape the
-  treatment was built to produce) · **post hoc arms reported beside pre-registered ones** (see which
-  results come from which)
-- **a guard, filter or null that claims to exclude X: construct an X that passes it.** The first
-  draft usually excludes the leak just found and admits the next one (WORKED EXAMPLE).
+**E6 · One round** (`CLAUDE.md` §0). The named subject plus its one pass is the stop condition.
 
-Then the **contradiction sweep**: two parts ruling one fact pattern opposite ways — match the pattern,
-not the wording, and **include contradictions this work introduced**. Last, the **falsifier**: every
-conclusion names what would overturn it; one that cannot is paper.
+**Why it cannot run indefinitely.** Within one run, work is bounded by E4. A run that commits repairs
+records the post-repair trees, so the next run's scope is empty unless code changed, and changes originate
+outside the skill. A run that commits nothing changes nothing: a repeat costs reading and cannot make the
+tree worse or cycle. It can differ only in L4, where a repeat may find a lookup the first run did not; that
+finding is repaired, a trailer is written, and the files leave scope. Over an unchanged subject the
+sequence of runs is any number of no-op runs, then at most one repairing run, then NOTHING TO DO.
 
-## STEP 5 — ALL DIRECTIONS *(routes and perspectives)*
+## ACCEPTANCE
 
-Walk the **SUBJECT** (the pipeline, code path, logic, system, mechanic or workflow the work is about)
-**and the work itself** by each route, and name a **carrier** — a table, a mapping, an index, a
-function — or record the gap.
+**H1 · Same behaviour and outcomes** (hard constraint, never traded against a count).
+`layer-conformance` THE CONTROL is the definition, read there: the cheap instruments after every unit, the
+suites once at the close, only those the change can reach (`CLAUDE.md` §0.4). A repair that moves the
+content hash or a probe verdict has broken something and is reverted. For a deletion or an algorithm
+rewrite, add `valoria-simplify` C4's differential run of old against new code. Every exporter's `--check`
+passes for a repair that touches an exported chain.
 
-| route | the walk | what it finds |
-|---|---|---|
-| **FORWARD** | an input through every stage to the output, as one item would travel | a stage never mentioned; a stage whose output the next does not consume |
-| **BACKWARD** | an output (a claim, a player-visible line) to its origin | an output with no producer; a claim with no source |
-| **TOP-DOWN** | the purpose or headline requirement to the parts that must exist | a required part that is absent |
-| **BOTTOM-UP** | one smallest unit to what it feeds; then recount the whole | totals that do not add up; an aggregate that gains or loses |
-| **VERTICAL** | one item through every level of the spine | the hop where meaning is lost or inflated |
-| **DIAGONAL** | an item from one level applied in a different family at another level | silence about the translation |
-| **LATERAL / HORIZONTAL** | peers at one level: same method, same evidence bar? contradictions? double-counting? | an inconsistency; a convention used once; **a correction that reached one sibling and not the other** (stale figures) |
-| **OFF THE HAPPY PATH** | empty, extreme, failed, partial, restarted, regenerated | breakage at an extreme; an unwritten branch |
+**H2 · No hard-coding** (hard constraint). (a) `tools/ci_sim_fabrication_check.py` passes on the repair's
+added lines (the invocation is in THE CONTROL). (b) The repair does not turn a value its code read from its
+owner (`engine/engine_params/` or the single Python owner) into a literal. Part (b) is read from the diff,
+because the gate accepts a tagged literal (`[JUSTIFIED: …]`, `[DECLARED-DIVERGENCE: …]`) by design.
 
-Walk each route **as** a **CONSUMER** (player, reader, downstream module), a **MAINTAINER** (who must
-change it), a **SKEPTIC** (who wants it false) and a **NEWCOMER** (ten minutes). Not every cell is
-owed; **every empty cell the subject needs is a finding.** A carrier that names things that do not
-exist *delivers blind* — the same defect one step later.
+**The reduction test.** A change offered as a reduction is accepted only if H1 and H2 hold, **and** it
+deletes more lines than it adds (`git diff --numstat`), **and** the number of places a reader must open to
+predict the behaviour does not rise (`valoria-simplify`: relocation is not reduction). A repair that is not
+offered as a reduction (a placement or conformance fix) is not held to the line count.
 
-⚠ **BUILT-DIRECTION BIAS.** A work runs well in the direction it was built (usually bottom-up from its
-inputs) and often only that one. The finding is the directions it cannot run.
+**L4 · The clarity read** (CONVENTION; the one rule this skill owns). Open a scoped file cold and try to
+answer: *what does this module do, and where do its inputs come from?* `claim-review`'s SURVEY row asks
+the same of a work (a stranger, ten minutes, judged by doing it); this reads it per module.
 
-## STEP 6 — ACROSS MODULES
+- **Scope:** scoped files this run did not edit (an edited file was already held to the reduction test or
+  to Lens B).
+- **Order:** by cyclomatic complexity, descending (McCabe, 1976), from a throwaway `ast` probe, **to rank
+  where to look and nothing more** (`valoria-simplify` I7: rank only, no FAILS). There is no cutoff.
+- **Admission:** a finding quotes the lookup, says where the reader looked (file and line) and why it
+  failed. "This feels unclear" without a failed lookup is dropped.
+- **Repair:** accepted when that same lookup is answerable in the repaired file, no other property's count
+  rises, and H1 and H2 hold. The lookup is re-asked once, as the acceptance check; the repaired file is
+  not re-read for new findings (E3).
 
-1. **Derive the module list from the registry** (`references/module_contracts.yaml`
-   `composition_roles`, `CURRENT.md`'s subsystem rows) — never from memory. **Add the host owners the
-   work's own citations bind to** (the loop, queries, goal and roster loaders): a registry lists modules,
-   but an idea often lives in host code no composition row registers, and a matrix of registered
-   modules alone comes out all N-A.
-2. **The matrix.** Rows: the modules, the host owners, plus the **seams** between them. Columns: the
-   work's ideas, tests or gates. Each cell: **APPLIES** (carrier named, `file:line`) · **N-A** (why) ·
-   **UNTESTED** (no evidence either way) · **CONTRADICTS** (the module's code or contract, or a ratified
-   ruling that governs it — name which). Open the code or contract for every cell that is not N-A; a
-   design doc is reference (CLAUDE.md §0.05).
-3. **Survivorship.** Which module was the work built from? Report **UNTESTED out of the total**;
-   invent no threshold.
-4. **Seams.** An idea that crosses modules names the contract row (producer → consumer) that carries
-   it; a crossing named nowhere is a gap.
+## WHAT THIS PASS MAY NOT PRODUCE
 
-## STEP 7 — THE VERDICT (the reply; nothing is written to a file)
+`layer-conformance` WHAT THIS PASS MAY NOT PRODUCE and `valoria-simplify`'s list bind here unchanged:
+**no new document** (the reply and the trailer are the output), **no guard, test, tool, scorer or
+baseline**, **no composite score**, **no invented threshold**, **no edit to `04` or `architecture/`** to
+make a repair fit, **no skipped or weakened test**, **no self-scheduling** (`CLAUDE.md` §11).
 
-```
-EFFICIENT-CODING-REVIEW: <work>      [SELF-AUTHORED — bias risk]      ROUNDS: 1
+## THE FALSIFIERS — how a reader tells whether the pass ran
 
-IN PLAIN WORDS   <≤ 5 sentences: what it is · whether to rely on it · the three things that limit it most>
+| the claim | what would show it false |
+|---|---|
+| *"NOTHING TO DO"* | a source file was opened, or a recorded tree was compared to something other than `HEAD:<path>` |
+| *"the scope is the delta"* | the scope was taken from a commit range, or from a remembered verdict, not `git diff` between the recorded tree and `HEAD:<path>` |
+| *"a repair was accepted"* | a property's count rose, or no count fell, or H1 or H2 does not hold |
+| *"same behaviour"* | the control was not shown to see the artifact (`valoria-simplify` C2), or a deletion has no differential run |
+| *"no hard-coding"* | only the gate was run, and the diff was not read for a value turned into a literal |
+| *"clear"* | no lookup is quoted, or the repaired file was re-read for new findings |
+| *"nothing found"* | no named failed attack, only an absent finding |
 
-MAP              <STEP 1, corrected by what the attacks found>
-
-| lens         | verdict          | what would overturn it |
-| SURVEY       | PASS / FINDINGS  | a stranger given ten minutes cannot find the thesis, the limits and the next step — JUDGED BY DOING IT |
-| ACCURACY     | PASS / FINDINGS  | <a claim, and the search or recount that would falsify it> |
-| APPLICATION  | n TRANSFERS · n NARROWED · n ASSERTED · n DOES NOT | <the idea, and the target step with no object> |
-| LOGIC        | PASS / FINDINGS  | <the link in the chain> |
-| DIRECTIONS   | route × perspective grid: carrier or GAP | <the route the work cannot run> |
-| MODULES      | APPLIES a · N-A b · UNTESTED c · CONTRADICTS d of N | <the module and the cell> |
-
-MUST BE STATED AS A LIMIT      - <claim> — <why it is not carried>
-MAY BE CLAIMED, HAVING SURVIVED - <claim> — <the attack run, and why it failed>
-
-REPAIRS (worst first; each an EDIT: a corrected claim, a limit carried forward, a deletion, or one object)
-  <finding> → <fix>
-
-GRADE: paper | runs — <the execution artifact, or its absence>
-```
-
-- **The SURVEY row is a property of the work**, judged by doing it: open the work cold, time yourself,
-  and report what you could and could not find.
-- **GRADE is the row you cannot fill by writing** (CLAUDE.md §0.2): run something and paste what it
-  said. A work with nothing running stays **paper**.
-- **Apply the repairs in the same change.** A finding that needs no ruling is fixed or dropped; at most
-  one `needs_jordan: true` row, after CLAUDE.md §0's five answer-it-first tests.
-
-## GUARDRAILS
-
-- **One round, then stop** (CLAUDE.md §0). Your own fixes are not re-reviewed; before any second wave
-  of agents, stop and report what the first found.
-- **Edits, not documents.** No `audit/` directory, no verdict file, no registry entry, no guard.
-- **Independence is structural** (CLAUDE.md §10). Spawn `valoria-critic` per **disjoint read set**, not
-  per lens: lenses reading the same text share a critic; a lens reading another tree takes its own.
-  Hand it the OUTPUT and the step text, never your reasoning. When you authored the work, STEPS 2–4
-  run in a critic; you run STEPS 0–1, the instrument counts and the verdict.
-- **Reading is the cost** (CLAUDE.md §10). Extract once and hand the extract down; make no critic
-  re-read what another already opened.
-- **Re-open before you relay.** A critic's citation you have not opened is not a citation.
-- **A critic limited to Read, Grep and Glob** may be steered off Grep over `.md` by
-  `tools/hook_md_sweep_guard.py` (CLAUDE.md §8): hand it the file list to Read whole, or the extract.
-- **Observe, do not rule, outside the lens.** Another lane's defect is an observation.
-- **Parameters and rulings are Jordan's.** Report a tuned value as `[OPEN — Jordan tuning]`.
-- **Never defend prior output** (`[SELF-AUTHORED — bias risk]`), and say what an independent reviewer
-  would add.
-
-## WORKED EXAMPLE — the move this skill exists to make
-
-*A design defines an arc as an act linked by `causes[]` to a write on its actor and a write on the
-world. Its first draft counted any Receipt; a review round found that witness bookkeeping met the
-test, so the second draft restricted the effect fields to cells whose steps include `RES`.*
-
-1. **STEP 4, the guard rule: build the leak that passes the fix.** The cells the roster names
-   (`Person.body`, `Rung.stores`, `Site.condition`) have steps `[MAT, RES, …]` and class
-   `MATTER/ACTS` in `write_matrix.yaml`. MATTER rewrites them every season, with `causes` chained to
-   the subject's previous emission (`loop/matter.py`). The filter excluded the leak just found and
-   admitted the next one.
-2. **STEP 5, backward:** from an ARC that reads TRUE, trace the write that met clause (3). It can be
-   MATTER's, not an act's.
-3. **The repair is an edit, not a system:** key on the write's class, not on the field name, and plant a
-   MATTER-chained case in the instrument's falsifier list.
-4. **The grade, honestly:** the mechanism is shown at the cited lines; no run has produced an ARC that
-   reads TRUE through MATTER. **GRADE: paper.**
+**If this skill conflicts with `CLAUDE.md`, `architecture/`, `layer-conformance` or `valoria-simplify`,
+they win**; correct the skill.
