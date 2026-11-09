@@ -334,6 +334,10 @@ RETIREMENT_SHIFTED = frozenset({
     # Keyed on the path the archived anchors CITE; since plan position `31c` the ledger resolves it to
     # `modules/mass_battle/massbattle.py`, where the symbols are checked.
     'systems/mass_battle/sim/massbattle.py',
+    # CP-T04-03 (B10-12), ED-1043's trigger: `run_battle` (481 lines) moved verbatim to `battle_loop.py`, so every
+    # archived line anchor below it in `orchestration.py` moved or went out of range. Same stated loss: a bare line
+    # into this file is advisory; a symbolled anchor is still checked by symbol.
+    'systems/mass_battle/sim/orchestration.py',
     # Plan position `31c` replaced this workbench's `start_trace`/`get_trace` calls with one
     # `with tracing()` block (the two accessors join RETIRED_SYMBOLS), so its archived anchors moved.
     'systems/mass_battle/sim/workbench/trace.py',
@@ -414,6 +418,10 @@ RETIRED_SYMBOLS = frozenset({
 # is keyed on the (file, symbol) pair: an archived anchor naming the symbol at the old call site is
 # correct about a tree that no longer exists, and the same symbol anywhere else is still checked.
 RETIRED_CALL_SITES = frozenset({
+    # CP-T04-03 (B10-12), ED-1043's trigger: `sync_col_grid` (still defined in `percell.py`) was a call inside
+    # `run_battle`, which moved verbatim to `modules/mass_battle/battle_loop.py`; the archived anchor cites it in
+    # `orchestration.py`, where it no longer occurs. Keyed on the (file, symbol) pair so the symbol stays checked elsewhere.
+    ('systems/mass_battle/sim/orchestration.py', 'sync_col_grid'),
     ('systems/threadwork/sim/opposing.py', 'apply_ms_delta'),
     ('systems/threadwork/sim/opposing.py', 'sustain_knot'),
     ('systems/threadwork/sim/co_movement.py', 'apply_ms_delta'),

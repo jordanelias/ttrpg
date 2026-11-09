@@ -123,7 +123,9 @@ def test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only():
     for pid in attackers:
         assert w.persons[pid].body < before_a[pid], f"{pid} (the losing side) took no casualties"
     for pid in defenders:
-        assert w.persons[pid].body == before_d[pid], f"{pid} (the WINNING side) was written"
+        # CR-24 (`field_winner_casualties`, shipped `engine`): the winners take their own engine casualties on `body`
+        # ONLY (never raised); the stance rows asserted absent below are still the loser's alone
+        assert w.persons[pid].body <= before_d[pid], f"{pid} (the WINNING side) was raised"
 
     grudge_w = w.fixtures.get("field_grudge_weight")
     morale_w = w.fixtures.get("field_morale_weight")

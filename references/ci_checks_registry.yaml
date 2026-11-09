@@ -309,6 +309,14 @@ ci_checks:
     ci_job: validators
     notes: "BLOCKING (deterministic, no external pins). engine/substrate/descriptors.py is the reader that loads the cooked artifact this export writes. The export records RATIFIED-BUT-UNIMPLEMENTED items in its `unimplemented` block rather than silently closing them, and an empty register is not evidence the register is complete. Falsifier: tests/valoria/test_descriptors_runtime.py pins the empty set, that the reader reads the cooked artifact, and that the export is current."
 
+  - path: tools/export_battle_orders.py
+    level: 5
+    subject: game
+    posture: harden
+    role: "Module -> typed-JSON: engine/engine_params/battle_orders.json must match modules/mass_battle/massbattle.py's ORDER_ROLES (config.ROLE_SPEC's names) and ORDER_RETREAT_AT (--check mode). It is the writer for engine/substrate/battle_orders.py, the sole runtime reader, which engine/season/rosters.yaml's order_roles and order_retreat_at point at (from_battle_orders) so the season spells no role."
+    ci_job: ""
+    notes: "WIRED locally (valoria_local.py --staged, blocking) and by engine/season/tests/test_cp_t04_02_marshal.py in the season job, NOT by a workflow line; the CI workflow line is Jordan's file (.github/CODEOWNERS owns /.github/workflows/) and is NOT edited by CP-T04-02 -- add `v python3 tools/export_battle_orders.py --check` beside export_game_constants there. Falsifier: engine/season/tests/test_cp_t04_02_marshal.py pins the artifact current and equal to ROLE_SPEC's names."
+
   - path: tools/export_npc_roster.py
     level: 5
     subject: game

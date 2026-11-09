@@ -28,6 +28,7 @@ import sys
 
 import pytest  # noqa: E402
 
+import modules.mass_battle.config as _cfg  # noqa: E402
 import modules.mass_battle.hierarchy.units as _hu  # noqa: E402
 import modules.mass_battle.orchestration as _orch  # noqa: E402
 import modules.mass_battle.troop_types.registry as _reg  # noqa: E402
@@ -115,12 +116,25 @@ def _charge_vs_brace(def_type, n=16):
     return tot / n
 
 
+@pytest.fixture
+def uncapped(monkeypatch):
+    """The uncapped depth stack (`MB_SUPPORT_RANK_CAP` False), as `test_mass_battle_support_rank_cap.py`'s
+    `uncapped` does. Read at call time by `registry.support_weight`, so no module reload. Since MB-07r the cap ships
+    ON (J-18 (A)); the two reach tests below were written, and their exact equalities hold, in the uncapped world."""
+    monkeypatch.setattr(_cfg, 'MB_SUPPORT_RANK_CAP', False)
+
+
 @pytest.mark.slow
-def test_pike_reach_advantage_vs_cavalry(field_path):
+def test_pike_reach_advantage_vs_cavalry(field_path, uncapped):
     """The reach advantage EMERGES: a pike wall (reach 0.3 >= cavalry lance 0.2) repels the charge and
     retains materially more troops than a levy line (reach 0.1 < 0.2, charge lands). Spear/heavy_infantry
     (0.2 == 0.2) also stops it. This is the recoil gate made CONDITIONAL by the differentiated reach —
-    the anti-cavalry pike role, emergent from the reach data."""
+    the anti-cavalry pike role, emergent from the reach data.
+
+    PINNED TO THE UNCAPPED STACK (`uncapped`, MB-07r): pike == heavy retention is the cap-OFF fact (pike mirrors
+    heavy_infantry's stats, so the uncapped stack cannot tell them apart); with the cap ON the pike's longer
+    supported depth makes it out-retain heavy, which `test_mass_battle_support_rank_cap.py` observes
+    (`test_capped_pike_out_retains_heavy_after_repelling_a_charge`)."""
     pike_hp = _charge_vs_brace('pike')
     levy_hp = _charge_vs_brace('levy')
     heavy_hp = _charge_vs_brace('heavy_infantry')
@@ -130,10 +144,14 @@ def test_pike_reach_advantage_vs_cavalry(field_path):
     assert math.isclose(pike_hp, heavy_hp, abs_tol=1e-6)
 
 
-def test_standing_melee_reach_independent(field_path):
+def test_standing_melee_reach_independent(field_path, uncapped):
     """Disclosed finding: reach differentiation does NOT change symmetric standing melee (the exchange
     is mutual once contact fires; reach only shifts contact TIMING). pike-vs-levy standing == levy-vs-levy
-    standing. Documents that reach is a charge/brace lever here, not a standing-melee one."""
+    standing. Documents that reach is a charge/brace lever here, not a standing-melee one.
+
+    PINNED TO THE UNCAPPED STACK (`uncapped`, MB-07r): the equality is the cap-OFF fact. With the cap ON a pike's
+    supported depth differs from a levy's, so pike-vs-levy is no longer levy-vs-levy; that world is observed by
+    `test_mass_battle_support_rank_cap.py` (`test_capped_pike_outfights_levy_in_standing_melee`)."""
     assert _standing('pike', 'levy') == _standing('levy', 'levy')
 
 

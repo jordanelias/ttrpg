@@ -5,10 +5,10 @@ with no cutoff — so of two forces of EQUAL troops the deeper one keeps adding 
 could never bring to bear. `registry.support_weight` is the single owner of a rank's weight; with
 `MB_SUPPORT_RANK_CAP` ON, a rank past `support_ranks_for(troop_type)` weighs 0.
 
-SHIPPED OFF (config.py at the flag): ON stalls the bat.py battery (mirror/cav_shaken/ranged at
-MAX_TURNS=20 in every probed seed, ~2.8x slower, cell_field_mor0 688.7s) until casualty/pool magnitudes
-are recalibrated. So every cap-ON assertion here sets the flag explicitly, and one test pins that the
-shipped default reproduces the uncapped stack to the last float digit.
+SHIPPED ON (MB-07r, J-18 (A)): the flag's default flipped when `POOL_QUALITY_SCALE` was recalibrated so the
+capped bat.py battery finishes inside the golden gate's timeout (config.py at the flag). Every assertion
+here still sets the flag explicitly, and the OFF control reproduces the uncapped stack to the last float
+digit, so the flip moved no number that the OFF arm reads.
 
 The forces: a tier-4 Line (7 files x 5 ranks) and a tier-4 Column (5 files x 7 ranks) — 35 cells and the
 same 800 troops each, so the only difference is depth. Contact is each force's front rank (orig row 0).
@@ -77,11 +77,13 @@ def uncapped(monkeypatch):
 
 # ── the shipped default ───────────────────────────────────────────────────────────────────────────
 
-def test_shipped_default_is_off_and_is_todays_stack_exactly():
-    if 'MB_SUPPORT_RANK_CAP' not in os.environ:
-        assert C.MB_SUPPORT_RANK_CAP is False, "the cap ships OFF until magnitudes are recalibrated"
-    if C.MB_SUPPORT_RANK_CAP:
-        pytest.skip("ambient MB_SUPPORT_RANK_CAP=1 — the shipped-default arm cannot be observed here")
+def test_shipped_default_is_on():
+    if 'MB_SUPPORT_RANK_CAP' in os.environ:
+        pytest.skip("ambient MB_SUPPORT_RANK_CAP — the shipped-default arm cannot be observed here")
+    assert C.MB_SUPPORT_RANK_CAP is True, "the cap ships ON since MB-07r"
+
+
+def test_off_control_is_the_uncapped_stack_exactly(uncapped):
     for tt in _TYPES + (None, 'no_such_type'):
         for d in range(1, 12):
             assert support_weight(d, tt) == C.SUPPORT_WEIGHTS.get(d, C.SUPPORT_WEIGHT_FLOOR), (tt, d)
@@ -152,14 +154,17 @@ def test_table_follows_the_weapon_classes():
     assert {t: _cap(t) for t in TROOP_TYPE_REACH} == {t: expect[r] for t, r in TROOP_TYPE_REACH.items()}
 
 
-# ── what the cap does to play (measured, Python 3.11.17) ─────────────────────────────────────────
+# ── what the cap does to play (measured, Python 3.11.18, POOL_QUALITY_SCALE 0.8) ─────────────────────────────────────────
 
 @pytest.mark.slow
 def test_capped_pike_out_retains_heavy_after_repelling_a_charge(field_path, monkeypatch):
     """Both pike (0.3) and heavy (0.2) clear the lance (0.2), so the recoil gate treats them alike; with
     the cap ON the melee after the repel separates them by the pike's third supported rank. Measured over
-    test_reach_weapon_class's 16-seed braced-vs-charge fixture: capped pike 0.9774 > heavy 0.9665 > levy
-    0.9225; uncapped pike == heavy == 0.958 (levy 0.9188).
+    test_reach_weapon_class's 16-seed braced-vs-charge fixture: capped pike 0.9604 > heavy 0.9508 > levy
+    0.8895; uncapped pike == heavy == 0.9514 (levy 0.9192).
+    RE-RECORDED at MB-07r, when POOL_QUALITY_SCALE went 0.5 -> 0.8 to recalibrate the pool to the cap (before: capped
+    0.9774/0.9665/0.9225, uncapped 0.958, levy 0.9188). At 0.875, the pool-neutral value, this fixture reads capped pike
+    0.9503 < heavy 0.9568: the ordering reverses inside the fixture's seed noise, which is why the scale is 0.8.
     Re-measured at MB-04: the fixture's charger carries the 'charge' keyword, which now drives the
     aggressive stance (hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES). With MB_ROLE_INSTRUCTIONS=0 the
     MB-07 readings return exactly (capped 0.9805/0.9714/0.9275, uncapped 0.9663, levy 0.9244); the
@@ -167,18 +172,20 @@ def test_capped_pike_out_retains_heavy_after_repelling_a_charge(field_path, monk
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', False)
     pike0, heavy0 = _charge_vs_brace('pike'), _charge_vs_brace('heavy_infantry')
     assert math.isclose(pike0, heavy0, abs_tol=1e-6)
-    assert pike0 == pytest.approx(0.958, abs=1e-4)
+    assert pike0 == pytest.approx(0.9514, abs=1e-4)
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', True)
     pike, heavy, levy = (_charge_vs_brace(t) for t in ('pike', 'heavy_infantry', 'levy'))
     assert pike > heavy > levy, (pike, heavy, levy)
-    assert (pike, heavy, levy) == pytest.approx((0.9774, 0.9665, 0.9225), abs=1e-4)
+    assert (pike, heavy, levy) == pytest.approx((0.9604, 0.9508, 0.8895), abs=1e-4)
 
 
 @pytest.mark.slow
 def test_capped_pike_outfights_levy_in_standing_melee(field_path, monkeypatch):
     """With the cap ON the pike side (3 ranks) out-retains the levy side (1 rank) on either side of the
-    field: pike-vs-levy (0.9639, 0.9461), levy-vs-pike (0.934, 0.9762), levy-vs-levy (0.9653, 0.9662).
-    Uncapped all three read (0.9219, 0.9619): the reach VALUE alone does not change standing melee.
+    field: pike-vs-levy (0.9588, 0.9151), levy-vs-pike (0.8851, 0.9697), levy-vs-levy (0.9415, 0.9527).
+    Uncapped all three read (0.9024, 0.9369): the reach VALUE alone does not change standing melee.
+    RE-RECORDED at MB-07r (POOL_QUALITY_SCALE 0.5 -> 0.8): the ordering held; before: capped (0.9639, 0.9461),
+    (0.934, 0.9762), (0.9653, 0.9662), uncapped (0.9219, 0.9619).
     RE-RECORDED 2026-11-01 (ED-MB-0079) when the cell body became a circle one pitch across: the ordering held and
     the retentions moved by up to 0.014 (before: 0.9646/0.9421, 0.9296/0.9746, 0.963/0.9634; uncapped 0.9273/0.9457)."""
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', False)
@@ -186,4 +193,41 @@ def test_capped_pike_outfights_levy_in_standing_melee(field_path, monkeypatch):
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', True)
     pl, lp, ll = _standing('pike', 'levy'), _standing('levy', 'pike'), _standing('levy', 'levy')
     assert pl[0] > pl[1] and lp[1] > lp[0], (pl, lp)
-    assert (pl, lp, ll) == ((0.9639, 0.9461), (0.934, 0.9762), (0.9653, 0.9662))
+    assert (pl, lp, ll) == ((0.9588, 0.9151), (0.8851, 0.9697), (0.9415, 0.9527))
+
+
+# ── MB-07r: the cap reaches the season's own entry ───────────────────────────────────────────────
+
+def _engaged_by_resolve_field(monkeypatch, weight):
+    """The troops `resolve_field` would bring to bear on contact for a headcount side of `weight`: the Unit it builds
+    is captured at `_run_and_grade` (no battle is fought), and its one subunit is read through the same
+    `_pair_engaged_troops` the battle's pools use, with the front rank (orig row 0) as the contact."""
+    import random
+
+    from engine.season.queries.inputs import MassBattleInput
+    from modules.mass_battle import massbattle
+
+    seen = []
+    monkeypatch.setattr(massbattle, '_run_and_grade', lambda unit_a, unit_b, *a, **k: seen.append(unit_a) or {})
+    massbattle.resolve_field(MassBattleInput(
+        weights=((weight,), (10,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None, origin=None,
+        loyalties=(0.0, 0.0), loyalty_gain=0, geography={}), random.Random(1))
+    assert len(seen) == 1
+    atom = seen[0].subunits[0]
+    front = {ab for ab, orig in _oriented_abs_map(atom).items() if orig[0] == 0}
+    assert front
+    return atom.cur_troops, _pair_engaged_troops(atom, front)
+
+
+def test_resolve_field_at_weight_3000_engages_the_capped_troops(monkeypatch):
+    """Measured (Python 3.11.18): a 3000-troop infantry line of 3 ranks engages 2700 troops uncapped (the contact rank
+    plus depth 1 at weight 1.0 and depth 2 at 0.7: `SUPPORT_WEIGHTS`) and 2000 with the cap ON (infantry reaches one rank past contact, so the
+    third rank weighs 0). The OFF arm is the control: it reads the uncapped stack and the weight is unchanged."""
+    monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', False)
+    troops_off, engaged_off = _engaged_by_resolve_field(monkeypatch, 3000)
+    monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', True)
+    troops_on, engaged_on = _engaged_by_resolve_field(monkeypatch, 3000)
+    assert troops_off == troops_on == 3000.0
+    assert engaged_off == 2700.0, repr(engaged_off)
+    assert engaged_on == 2000.0, repr(engaged_on)
+    assert engaged_on < engaged_off

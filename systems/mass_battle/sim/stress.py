@@ -17,8 +17,8 @@ facing and troops, plus the post-movement contact set):
   fit       the deployed extent of each side, and any build error (a cell off the field raises at construction).
   fight     winner, ticks, survivor share, first contact, share of subunits engaged.
 
-FLAGS. `--arm shipped` is every flag at its shipped default (all on but one); `--arm all_on` also turns on the one
-flag that ships off (`MB_SUPPORT_RANK_CAP`). The arms are in the JSON. Flags are read at import, so run one arm per
+FLAGS. `--arm shipped` is every flag at its shipped default (all on since MB-07r flipped `MB_SUPPORT_RANK_CAP`);
+`--arm all_on` sets that flag explicitly and is the shipped arm now. The arms are in the JSON. Flags are read at import, so run one arm per
 process. `--grid N` sets BATTLEFIELD_SIZE to N before the module loads, and moves the season path's deployment
 constants with it, to test whether the 51x51 field is the limit.
 

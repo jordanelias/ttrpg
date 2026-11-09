@@ -68,7 +68,7 @@ MANUFACTURING A MARGIN (M4, `ED-IN-0279` clause (a)).** It does NOT grade `massb
 survivor-ratio classification, which is still disclosed as *"NOT the canonical degree ladder ... a
 bespoke post-hoc classification"* by that module's own header -- reconciling the two stays open
 MB-lane work. What it grades is the top-level `attacker_wins`/`unopposed` this function lifts,
-onto the three bands `march` writes on (`seam/ladder.py::field_degree`). Manufacturing a `net`/`ob`
+onto the bands `march` writes on (Won, Lost, Unopposed, and Invested under a besiege) (`seam/ladder.py::field_degree`). Manufacturing a `net`/`ob`
 from the survivor-ratio classification would have been the second resolver S27.2 refuses; reading
 a marker this function already derives is not that.
 
@@ -82,6 +82,7 @@ imports are dotted `modules.mass_battle.*`, a package, so it needs no path seam.
 from __future__ import annotations
 
 import random
+from dataclasses import replace
 from typing import Any, Optional
 
 # `providers` is imported by module, as combat.py and sigma.py do (see their notes on the manifest
@@ -89,14 +90,22 @@ from typing import Any, Optional
 from ...manifest.providers import provider
 from ...data.geography import geography
 from ...data.rosters import SUBTREE_OCCUPATION_KINDS, territory_id_of
-from ...queries.inputs import ArmyMuster, MassBattleInput, ProvisionInput
+from ...data import rosters
+from ...data.rosters import BESIEGE, LOST, MARCH_POSTURE_KEY, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, STORM, UNOPPOSED, WON, require_member
+from ...queries.inputs import ArmyMuster, FieldOrder, MassBattleInput, ProvisionInput
 from ...queries.person_q import stance_toward
 from ...queries import world_q
 from engine.substrate import composition
 from ...state.gate import seat_faction
 from ._entry import entry_for
+from ._estimate import rng_of, samples_of
+from ..ladder import field_degree
 
 _PROVIDER = "mass_battle"
+_PRIZE = "a field"      # the prize row this provider deals (`rosters.yaml`), `march`'s
+# CP-T04-08: the bands `field_estimate` shares out, in `sigma.odds_of`'s order -- the three `field_degree` grades a
+# fought or unopposed field into (`Declared` is the band RESOLVE writes before anything is fought, not an ending).
+ESTIMATE_BANDS = (WON, LOST, UNOPPOSED)
 
 
 def _territory_of(w: Any, rung: str) -> Optional[str]:
@@ -203,8 +212,16 @@ def _order_of_battle(w: Any, faction: Optional[str], side: list) -> Any:
     return composition.require(world_q.ARMY_ORDER)(ArmyMuster(w.records[rid].subject_matter, fit))
 
 
+def _standing_order(w: Any, faction: Optional[str], place: Optional[str]) -> Optional[FieldOrder]:
+    """CP-T04-02: the standing order of battle `faction`'s line fights `place` under, as the module reads it, or `None`.
+    Which Record is `world_q.standing_order`'s (the newest holder edge among the faction's seats' orders about the place);
+    this lifts its content into the typed `FieldOrder` and decides nothing."""
+    rec = world_q.standing_order(w, faction, place)
+    return None if rec is None else FieldOrder(rec.subject_matter[ORDER_ROLE_KEY], rec.subject_matter[ORDER_RETREAT_KEY])
+
+
 def field_input(w: Any, claimants: list, other: list, rung: str,
-                factions: tuple = (None, None)) -> MassBattleInput:
+                factions: tuple = (None, None), origin_place: Optional[str] = None) -> MassBattleInput:
     """THE HOST INPUT BUILDER (plan position `31c`, A-25): `World` -> the frozen record the field reads.
 
     Reads `w.persons` (each side member's `weight`, and the stances `_side_stance` reads), the rung
@@ -220,27 +237,44 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
     MB-03: `loyalties` and `loyalty_gain` are the build-time loyalty rows and the fixture gain; what
     they do to the morale-start is `massbattle._morale_start`'s.
     REM-32: `troops_per_weight` is the `field_troops_per_weight` fixture (`H-250`), handed on unread.
+    CP-T04-05: `walls_dr` is the `field_walls_dr` fixture times `fort_level`, floored; `None` stays `None`.
+    CP-T04-01: `members` are the person ids beside `weights` (the same test, so they align) and `subunits` is the
+    `field_subunits` fixture (`H-359`), handed on unread; the module reads them only on its `person` arm.
     ED-IN-0306 phase 3: `factions` is `(attacker, defender)`, each side's faction Proposition id or `None`;
     each side whose faction holds an army Record fights as that Record's order of battle
-    (`_order_of_battle`). Neither side having one leaves `orders_of_battle` `None`, the record exactly as it was."""
+    (`_order_of_battle`). Neither side having one leaves `orders_of_battle` `None`, the record exactly as it was.
+    CP-T04-02 (`H-361`): `orders` is each side's STANDING ORDER OF BATTLE (`_standing_order`): the attacker's about
+    `origin_place` (the settlement it marched from, `world_q.march_origin`), the defender's about `rung` (the target). A
+    side whose faction's seats hold no order about its place reads `None`; neither side having one leaves `orders` `None`,
+    the record exactly as it was."""
+    def members(side: list) -> tuple:
+        return tuple(pid for pid in side if pid in w.persons)
+
     def weights(side: list) -> tuple:
-        return tuple(w.persons[pid].weight for pid in side if pid in w.persons)
+        return tuple(w.persons[pid].weight for pid in members(side))    # the two align by construction
     oobs = (_order_of_battle(w, factions[0], claimants), _order_of_battle(w, factions[1], other))
+    orders = (_standing_order(w, factions[0], origin_place), _standing_order(w, factions[1], rung))
+    fort = world_q.fortification_of(w, rung) if w.rungs[rung].kind in SUBTREE_OCCUPATION_KINDS else 0.0
     return MassBattleInput(
         weights=(weights(claimants), weights(other)),
         territory=_territory_of(w, rung),
         # Walls are a settlement's: a field fought AT a territory is a field battle in the territory's own terrain
         # (`fortification_of` averages every garrison in a subtree and any value above 0 is WALLS, which overrides
         # terrain), ED-IN-0306 phase 5.
-        fort_level=world_q.fortification_of(w, rung) if w.rungs[rung].kind in SUBTREE_OCCUPATION_KINDS else 0.0,
+        fort_level=fort,
         stances=(_side_stance(w, claimants), _side_stance(w, other)),
-        walls_dr=w.fixtures.get("field_walls_dr"),
+        # CP-T04-05: graded walls. `None` (shipped) is today's flat row; else the fixture's value scaled by the garrison's
+        # condition, FLOORED (`int`, never `round`: banker's rounding gives 3 x 0.5 -> 2 and 1 x 0.5 -> 0).
+        walls_dr=None if (dr := w.fixtures.get("field_walls_dr")) is None else int(dr * fort),
         origin=_origin_of(w, claimants),
         loyalties=(_side_stance(w, claimants, _creed_referent), _side_stance(w, other, _creed_referent)),
         loyalty_gain=w.fixtures.get("field_morale_loyalty_gain"),
         geography=geography(),
         orders_of_battle=None if oobs == (None, None) else oobs,
-        troops_per_weight=w.fixtures.get("field_troops_per_weight"))
+        troops_per_weight=w.fixtures.get("field_troops_per_weight"),
+        members=(members(claimants), members(other)),
+        subunits=w.fixtures.get("field_subunits"),
+        orders=None if orders == (None, None) else orders)
 
 
 def _causing_act(w: Any, causes: list) -> Any:
@@ -250,14 +284,19 @@ def _causing_act(w: Any, causes: list) -> Any:
     return next((w.acts.get(c) for c in causes if w.acts.get(c) is not None), None)
 
 
-def _attacker_treasury(w: Any, causes: list) -> Optional[str]:
-    """v9 IN-52: THE ATTACKER'S TREASURY -- the rung of the office the marching act exercised (`Act.via`),
+def _seat_treasury(w: Any, via: Optional[str]) -> Optional[str]:
+    """v9 IN-52: THE ATTACKER'S TREASURY -- the rung of the office a marching act is exercised through (`Act.via`),
     the treasury `requisition` fills (`loop/effects_governance.py::_eff_requisition`'s `seat.rung`), or
-    `None` for an act exercising no seat, a rungless seat, or no act among `causes`."""
-    act = _causing_act(w, causes)
-    office = w.offices.get(act.via) if act is not None and act.via else None
+    `None` for an act exercising no seat or a rungless seat."""
+    office = w.offices.get(via) if via else None
     rid = office.rung if office is not None else None
     return rid if rid in w.rungs else None
+
+
+def _attacker_treasury(w: Any, causes: list) -> Optional[str]:
+    """`_seat_treasury` of the marching act among `causes` (`None` for no act among them)."""
+    act = _causing_act(w, causes)
+    return _seat_treasury(w, act.via if act is not None else None)
 
 
 def _defender_treasury(w: Any, rung: str) -> Optional[str]:
@@ -283,6 +322,37 @@ def provision_input(w: Any, weight: int, treasury: Optional[str], eaten: tuple =
         stores = tuple((kind, units - less.get(kind, 0)) for kind, units in stores)
     ration = tuple(sorted((w.fixtures.get("subsistence_weight") or {}).items()))
     return ProvisionInput(weight, stores, ration, bool(w.fixtures.get("field_provisioning")))
+
+
+def _fielded_by(inp: MassBattleInput) -> tuple:
+    """WHO FOUGHT, per side: the cohorts a side fought as an order of battle drew its troops from, else `None`
+    (everybody mustered, as it always did). `(None, None)` when neither side has an order of battle."""
+    if inp.orders_of_battle is None:
+        return (None, None)
+    return tuple(None if o is None else o.drawn_from for o in inp.orders_of_battle)
+
+
+def _fed(w: Any, inp: MassBattleInput, treasuries: tuple) -> list:
+    """v9 IN-52, THE LEVY-TO-FIELD FEED [LF-1..LF-3]: each side's fielded troops are `settlements.provision`'s
+    answer on its treasury, reached by role string; `resolve_field` sizes each Unit by them, and
+    `_eff_march` debits each side's `consumed` from the treasury named beside it. With `field_provisioning`
+    off (shipped) the entry returns `troops = Σ weight` and `consumed = ()`: the field and the world as
+    they were. An unprovisioned side fields 0, which `resolve_field`'s crash floor lifts (A16).
+    ONE TREASURY FOR BOTH SIDES (the defender's held rung is the attacker's seat rung): the attacker eats
+    first, attacker-then-defender being the order `_ration_debits` writes, and each side is provisioned
+    NET of what its treasury has already had eaten this field, so the debit never exceeds the store. A
+    side with no treasury (`None`) projects no stores and consumes `()`, so it nets nothing.
+    `treasuries` is `(attacker's, defender's)`. Moved out of `resolve` at CP-T04-08 so `field_estimate` sizes the
+    sides the way the fold does; read-only."""
+    prov = composition.require(world_q.PROVISION)
+    fed, eaten = [], {}
+    for t, side, drawn in zip(treasuries, inp.weights, _fielded_by(inp)):
+        # An army eats what it drew its troops from (the cohorts' weight), not everyone mustered beside it.
+        weight = sum(w.persons[pid].weight for pid in drawn if pid in w.persons) if drawn is not None else sum(side)
+        p = prov(provision_input(w, weight, t, eaten.get(t, ())))
+        eaten[t] = p.consumed
+        fed.append(p)
+    return fed
 
 
 @provider("contest", _PROVIDER)
@@ -324,6 +394,14 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     # nobody to muster, which is this function's existing empty-defence shape, read as such.
     other = world_q.mustered(w, rung, subject) if subject is not None else []
     parties = {"claimants": claimants, "subject_members": other}
+    # CP-T04-06: THE POSTURE THE MARCH DECLARED (`rosters.yaml: march_postures`), a payload key read off the marching act, `storm`
+    # for an act that declares none. Checked against the roster BEFORE anything is answered, so an unrostered posture (a
+    # `besiege` while the roster ships `[storm]`) is a refusal to run and not a storm in disguise.
+    act = _causing_act(w, causes)
+    declared = act.payload.get(MARCH_POSTURE_KEY, STORM) if act is not None and isinstance(act.payload, dict) else STORM
+    require_member(declared, rosters.MARCH_POSTURES, f"march posture {declared!r} is not in the roster", "CP-T04-06",
+                   law="`field_casualty_model`'s own precedent -- an unrecognised posture silently falling back to a storm "
+                       "would make every measurement of `besiege` read the control")
     if not other:
         # ⚠ AN EMPTY DEFENDING SIDE IS `Unopposed`, NOT A CALL TO `resolve_field` (M4,
         # `ED-IN-0279` clause (a)). `resolve_field`'s own docstring: *"AN EMPTY `side_b` gets
@@ -338,6 +416,14 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                     result=dict(attacker_wins=True, degree="Unopposed",
                                 attacker_size_pct=1.0, defender_size_pct=0.0),
                     winner=claimants, parties=parties)
+    if declared == BESIEGE:
+        # CP-T04-06, AN OPPOSED SIEGE: THE ARMY SITS BEFORE THE WALLS AND NO BATTLE IS RUN -- no engine call, so no draw is
+        # consumed and nobody is hurt or moved. Graded `Invested` (`seam/ladder.py::field_degree`, off the lifted `invested`
+        # marker); `_eff_march` wears the garrison. An empty defence never reaches here: it answered `Unopposed` above, as a storm.
+        return dict(status="RESOLVED", module=_PROVIDER, resolver="dice_pool",
+                    attacker_wins=False, unopposed=False, invested=True,
+                    result=dict(attacker_wins=False, degree="Invested"),
+                    winner=[], parties=parties)
     # ⚠ THE ENTRY IS LOOKED UP BY THE ROLE THE PRIZE ROW NAMES (`module_entry:`), IN `MODULE_ENTRIES`,
     # as `sigma.py` and `combat.py` look theirs up (`31a`, `31b`): a call reaching here with the role
     # unregistered (no driver constructed in the process) is the typed `ENGINE-UNAVAILABLE`.
@@ -350,33 +436,17 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     # own number, which the module reads from its terrain table -- this adapter decides none of it.
     # ED-IN-0306 phase 3: the attacker's faction is the seat the marching act was exercised through (the one
     # `loop/sides.py::sides_of` mustered `claimants` under), the defender's is `subject`.
-    act = _causing_act(w, causes)
     inp = field_input(w, claimants, other, rung,
-                      factions=(seat_faction(w, act.via) if act is not None else None, subject))
+                      factions=(seat_faction(w, act.via) if act is not None else None, subject),
+                      origin_place=world_q.march_origin(w, act.actor) if act is not None else None)
     if inp.orders_of_battle is not None:
         # WHO FOUGHT, for `_eff_march` to write casualties to (ED-IN-0306): a side fought as an order of battle drew
         # its troops from the cohorts it names, and the fight is theirs alone; a side with none (None) fought as
         # everybody mustered, as it always did.
-        parties = {**parties, "fielded": tuple(None if o is None else o.drawn_from for o in inp.orders_of_battle)}
-    # v9 IN-52, THE LEVY-TO-FIELD FEED [LF-1..LF-3]: each side's fielded troops are `settlements.provision`'s
-    # answer on its treasury, reached by role string; `resolve_field` sizes each Unit by them, and
-    # `_eff_march` debits each side's `consumed` from the treasury named beside it. With `field_provisioning`
-    # off (shipped) the entry returns `troops = Σ weight` and `consumed = ()`: the field and the world as
-    # they were. An unprovisioned side fields 0, which `resolve_field`'s crash floor lifts (A16).
-    # ONE TREASURY FOR BOTH SIDES (the defender's held rung is the attacker's seat rung): the attacker eats
-    # first, attacker-then-defender being the order `_ration_debits` writes, and each side is provisioned
-    # NET of what its treasury has already had eaten this field, so the debit never exceeds the store. A
-    # side with no treasury (`None`) projects no stores and consumes `()`, so it nets nothing.
-    prov = composition.require(world_q.PROVISION)
+        parties = {**parties, "fielded": _fielded_by(inp)}
+    # v9 IN-52, THE LEVY-TO-FIELD FEED: `_fed` (above), the one place a side's fielded troops are read.
     treasuries = (_attacker_treasury(w, causes), _defender_treasury(w, rung))
-    fed, eaten = [], {}
-    fielded = parties.get("fielded") or (None, None)
-    for t, side, drawn in zip(treasuries, inp.weights, fielded):
-        # An army eats what it drew its troops from (the cohorts' weight), not everyone mustered beside it.
-        weight = sum(w.persons[pid].weight for pid in drawn if pid in w.persons) if drawn is not None else sum(side)
-        p = prov(provision_input(w, weight, t, eaten.get(t, ())))
-        eaten[t] = p.consumed
-        fed.append(p)
+    fed = _fed(w, inp, treasuries)
     result = entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)
     return dict(status="RESOLVED", module=_PROVIDER, resolver="dice_pool",
                 # v9 IN-52: `((treasury rung, consumed), ...)`, attacker then defender -- what `_eff_march`
@@ -392,3 +462,61 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                 result=result,
                 winner=(claimants if result.get("attacker_wins") else other),
                 parties=parties)
+
+
+def field_estimate(w: Any, actor: str, via: Optional[str], target: Optional[str],
+                   order: Optional[FieldOrder] = None) -> dict:
+    """THE ODDS A FIELD WOULD DEAL, SAMPLED LIVE (CP-T04-08; `-08` AM-C-02's shape, `fight_estimate`'s sibling; MODE (a),
+    THE PLAYER'S DISPLAY ONLY -- no NPC reads it, AQ-X1, and DELIBERATE never calls it).
+
+    Builds the `MassBattleInput` `resolve` would build for `actor` marching on `target` through the seat `via` (the sides are
+    `loop/sides.py::sides_of`'s, the same function the fold uses; the input is `field_input`'s; the troops are `_fed`'s),
+    runs the module entry `resolve_field` `estimate_samples` times on the private stream `_estimate.rng_of` keys
+    `(world_seed, tick, actor, "estimate")`, grades each result with `ladder.field_degree` (the one grader, so no second
+    odds function and no band mapped here), and returns the SHARES `Won`, `Lost` and `Unopposed` (`ESTIMATE_BANDS`; they
+    sum to 1) beside `status` `ESTIMATED` and the `samples` run. An empty defending side is `Unopposed` with share 1 and
+    `samples` 0: `resolve` deals it with no battle, so nothing is sampled. A refusal is `resolve`'s own dict
+    (`PARTY-GAP`, `ENGINE-UNAVAILABLE`).
+
+    THE ORDER. `order` None reads the standing order of battle as `field_input` reads it (`world_q.standing_order`, both
+    sides'); a `FieldOrder` given is the ATTACKER's order for this estimate in the standing one's place (the defender's
+    standing order stays), so the player can ask what a role or a retreat line would change before he issues it.
+
+    ⚠ THE RNG IS PRIVATE AND IS NOT A SEASON DRAW (`_estimate.py`): `content_hash` and the draw counter are those of a
+    world that never asked, and the shares are the distribution the field is drawn from, not a forecast of the battle the
+    fold deals (it seeds its own from the causing act). Reads `World`; writes nothing."""
+    if w.persons.get(actor) is None:
+        return dict(status="PARTY-GAP", why=f"a march needs an actor who is a person; got {actor!r}", module=_PROVIDER)
+    n = samples_of(w)
+    # `loop.sides` is imported inside the function: `loop/` imports this package (`sigma._rolled_as` says the same).
+    from ...loop.sides import sides_of
+    from ...state.carriers import Act
+    claimants, subject, rung = sides_of(w, Act(id="estimate", actor=actor, verb="march", via=via), target, _PRIZE)
+    if not claimants:
+        return dict(status="PARTY-GAP", why="a field battle needs at least one claimant", module=_PROVIDER)
+    other = world_q.mustered(w, rung, subject) if subject is not None else []
+    if not other:
+        return dict(status="ESTIMATED", module=_PROVIDER, samples=0, **{b: float(b == UNOPPOSED) for b in ESTIMATE_BANDS})
+    entry, refusal = entry_for(_PRIZE, _PROVIDER)
+    if entry is None:
+        return refusal
+    inp = field_input(w, claimants, other, rung, factions=(seat_faction(w, via), subject),
+                      origin_place=world_q.march_origin(w, actor))
+    if order is not None:
+        inp = replace(inp, orders=(order, inp.orders[1] if inp.orders is not None else None))
+    fed = _fed(w, inp, (_seat_treasury(w, via), _defender_treasury(w, rung)))
+    rng = rng_of(w, actor)
+    tally = dict.fromkeys(ESTIMATE_BANDS, 0)
+    for _ in range(n):
+        got = entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)
+        tally[field_degree(dict(attacker_wins=got.get("attacker_wins"), unopposed=False))] += 1
+    return dict(status="ESTIMATED", module=_PROVIDER, samples=n, **{b: c / n for b, c in tally.items()})
+
+
+@provider("estimate", _PROVIDER)
+def estimate(w: Any, act: Any, claimants: list, target: Optional[str]) -> Optional[tuple]:
+    """THIS PROVIDER'S CASE FOR `sigma.odds_of`, MODE (a): `field_estimate`'s shares as `(Won, Lost, Unopposed)`
+    (`ESTIMATE_BANDS`' order), or `None` for a refusal. `claimants` is `odds_of`'s own derivation of the act's parties,
+    unused here beyond being non-empty (`field_estimate` derives the sides itself, from the act's actor, seat and target)."""
+    got = field_estimate(w, act.actor, act.via, target)
+    return tuple(got[b] for b in ESTIMATE_BANDS) if got["status"] == "ESTIMATED" else None

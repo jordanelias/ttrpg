@@ -50,7 +50,7 @@ def _real_cycles():
     return sa._cycles(scc, g_code)
 
 
-def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
+def test_exactly_four_cycles_remain_and_they_are_the_expected_families():
     """THREE since step 8 of the decomposition (ED-IN-0203; renamed from `..._four_...`), and the
     drop is a DISSOLUTION, not a fix reached for here. `engine.season.combat_seam` <->
     `engine.season.shape` is GONE: step 8 moved `body_band_penalty` (already in `decision.py`
@@ -105,9 +105,9 @@ def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
     result this repository usually only claims in prose.
     """
     cycles = _real_cycles()
-    assert len(cycles) == 3, (
-        f"expected exactly 3 remaining cycles (contest + the canon MB family + the one declared "
-        f"engine.season one), got {len(cycles)}: {cycles}"
+    assert len(cycles) == 4, (
+        f"expected exactly 4 remaining cycles (contest + the canon MB family + the declared "
+        f"battle_loop one + the one declared engine.season one), got {len(cycles)}: {cycles}"
     )
 
     def _matches(cyc, prefix):
@@ -116,7 +116,16 @@ def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
     contest = [c for c in cycles if _matches(c, 'systems.social_contest.sim.contest')]
     # The canon MB family moved whole with `massbattle.py`'s import closure to `modules/mass_battle/` at
     # plan position `31c`; its prefix is the package's.
-    mb_canon = [c for c in cycles if _matches(c, 'modules.mass_battle')]
+    # B10-12 / CP-T04-03 (ED-1043's trigger) added a second, declared MB cycle, matched by its EXACT member set:
+    # `run_battle` moved verbatim out of `orchestration.py` into `battle_loop.py`, and it reads orchestration's ~40
+    # module globals by a function-local import at call time (so tests that `monkeypatch.setattr(orchestration, ...)`
+    # still reach it); `orchestration` re-exports `run_battle` from `battle_loop`. SHRINK-ONLY, on the same discipline
+    # as the harness entry below: it goes when those globals move to a leaf `run_battle` imports one way, and its
+    # entry is deleted in that commit. ⚠ A function-local import hides nothing from `build_g_code`, which walks the
+    # whole AST: the instrument sees it, as it should.
+    battle_loop = [c for c in cycles
+                   if set(c) == {'modules.mass_battle.battle_loop', 'modules.mass_battle.orchestration'}]
+    mb_canon = [c for c in cycles if _matches(c, 'modules.mass_battle') and c not in battle_loop]
     # The one remaining declared season cycle, matched by its EXACT member set rather than by a
     # prefix. A prefix match would silently absorb a SECOND season cycle a later carving step
     # introduces, which is the one thing this count exists to catch.
@@ -136,15 +145,16 @@ def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
     for family_name, family in (
         ('social_contest.contest', contest),
         ('modules.mass_battle', mb_canon),
+        ('modules.mass_battle battle_loop <-> orchestration', battle_loop),
         ('engine.season harness __main__ edge', harness_main),
     ):
         checked += 1
         assert len(family) == 1, f"{family_name}: expected exactly one cycle, found {family}"
     # assert-that-asserted (CLAUDE.md §0.1 point 2): confirm every named family was actually
     # looked up, not skipped by an early return.
-    assert checked == 3
+    assert checked == 4
 
     # No family is a partial/renamed match of another — the union covers every cycle found, so a
     # fourth cycle cannot hide behind a family that matched two.
-    accounted = contest + mb_canon + harness_main
-    assert len(accounted) == len(cycles) == 3
+    accounted = contest + mb_canon + battle_loop + harness_main
+    assert len(accounted) == len(cycles) == 4

@@ -113,7 +113,7 @@ def unit_lures(unit):
                                         for k in getattr(a, 'instructions', ()))
 
 
-__all__ = ['Subunit', 'Unit', 'Order', 'Officer', 'clamp_command', 'MB_ENVELOP_PATH', 'MB_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'COL_WIDTH',
+__all__ = ['Subunit', 'Unit', 'Order', 'Officer', 'clamp_command', 'unit_conceded', 'MB_ENVELOP_PATH', 'MB_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'COL_WIDTH',
            'MB_FACING_MODEL', 'MB_FACING_ATTENTION', 'MB_FACING_SLEW_BASE', 'MB_FACING_FOV_GATE', 'MB_FACING_ROUT',
            'MB_ROLE_INSTRUCTIONS', 'ROLE_INSTRUCTION_PRIMITIVES', 'unit_lures',
            'CELL_RADIUS', 'standoff_from_reach', 'standoff', 'MB_REACH_FACING_GATE', 'resolve_toi_and_commit', 'separate_all_bodies', 'turn_to_face_aggressors']
@@ -275,7 +275,7 @@ _ORDER_SAFE_FIELDS = frozenset({
     # [DG-2, Jordan-ruled "build it now" 2026-07-08] `yielding` is a pure behavioural switch (like
     # `stance`), read fresh every tick via `yield_active` -- no cached derived state keyed off it,
     # same reasoning as every other field in this set.
-    'yielding',
+    'yielding', 'conceded',    # `conceded` (CP-T04-03): a pure flag a `retreat_at` order sets, read by `unit_conceded` alone
     # [A1, ED-MB-0067 Part A] `route` (an ordered tuple of absolute waypoints) and `_route_idx` (its
     # cursor) are read fresh every tick by _resolve_route_goal -- no cached geometry keyed off
     # either, same reasoning as every other field in this set. `_route_idx` is included alongside
@@ -503,6 +503,7 @@ class Subunit:
     # `eff_discipline >= D_YIELD` at every CONSUMPTION site (movement/facing/combat pool), not at
     # entry -- ordering a too-disordered subunit to yield is simply a no-op, not a special case.
     yielding: bool = False
+    conceded: bool = False    # CP-T04-03: set ONLY by a `retreat_at` order's behaviour dict (see `unit_conceded`, end of file)
     # [ED-MB-0024, DG-2 §2.4 pocket exit] Set live during the yield movement pass when rearward motion is
     # structurally blocked (map edge in the flee direction, or an enemy has gotten behind into the retreat
     # path). While pocketed, yielding converts to a HOLD with the combat malus REMOVED (Cannae's pinned-
@@ -3066,3 +3067,17 @@ class Unit:
 
 
 # ─── TARGETING ───────────────────────────────────────────────────────────────
+
+
+def unit_conceded(unit):
+    """CP-T04-03 (retreat in good order): True once EVERY subunit of the unit has either conceded (its `retreat_at` order
+    fired: `Subunit.conceded`, set by that order's behaviour dict alone) or routed, and at least one has conceded. Keyed on
+    the order's own mark, not on the stance: a DG-2 fighting withdrawal (`yielding` + `stance: 'retreat'`, which "keeps
+    FIGHTING", the entry leaving the `MB_YIELD_*` yield untouched) and an army's `fall_back_at` are never a concession, and
+    an emergent `yielding` cannot hide one. It is read by `battle_loop.run_battle`'s stop test (the battle ends for it as a
+    rout ends it) and by `massbattle._grade` (it cannot be graded the winner); `orchestration.run_multi_turn_battle` does
+    not read it (it ends a conceded turn a 'draw', and breaks only on `.routed`), a sim-path grading `_grade` does not
+    share. It sets nothing, so a conceding side does not take rout's facing flip. A side no subunit of which has conceded
+    is never conceded, so a battle in which no `retreat_at` order fired is exactly what it was."""
+    subs = getattr(unit, 'subunits', ())
+    return bool(subs) and all(a.routed or a.conceded for a in subs) and any(a.conceded for a in subs)

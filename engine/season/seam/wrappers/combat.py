@@ -93,6 +93,7 @@ from ...queries.world_q import kit_of, stakes_of
 from ....substrate.descriptors import attribute_key
 from ...state.ids import H
 from ._entry import entry_for
+from ._estimate import rng_of, samples_of
 from .pool import faculty
 
 _END_KEY = attribute_key("Endurance")      # the registry key of `end` (`descriptors`, the one owner), not a typed literal
@@ -242,7 +243,7 @@ def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: st
     `terms` (CP-T03-09), so a `capture` is sampled under the terms it is fought under, and `record` (the act's
     `subject`, as `resolve`'s `_cause_record` reads it) lets a challenge's `stakes` reach the sampler by the same
     `combat_input` path, so an `accept` is sampled under the terms it is fought under. CP-T04-08's `field_estimate`
-    shares the fixture.
+    shares the fixture and the stream's key (`_estimate.py`).
 
     ⚠ THE RNG IS PRIVATE AND IS NOT A SEASON DRAW. It is built here from `H(world_seed, tick, actor,
     "estimate")` and never from `w.new_draw()` or the driver's generator, so the call reads `World` and writes
@@ -255,17 +256,12 @@ def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: st
     if pa is None or pb is None or actor == target:
         return dict(status="PARTY-GAP", why=f"personal combat needs two persons; got {actor!r} / {target!r}",
                     module=_PROVIDER)
-    n = w.fixtures.get("estimate_samples")
-    if isinstance(n, bool) or not isinstance(n, int) or n < 1:
-        raise Forbidden(f"`estimate_samples` must be a whole number of at least 1; got {n!r}",
-                        "H-251", law="a sampler of no fights has no shares, and shares of a fraction of one are not shares")
+    n = samples_of(w)
     entry, refusal = entry_for(_PRIZE, _PROVIDER)
     if entry is None:
         return refusal
     inp = combat_input(w, claimants, verb, record)
-    # `H` returns a blake2b hexdigest, so 16 is the radix that parses it back (as in `resolve`'s seed).
-    # [JUSTIFIED: radix for parsing H()'s hex digest, not a mechanical constant]
-    rng = random.Random(int(H(w.world_seed, w.tick, actor, "estimate"), 16))
+    rng = rng_of(w, actor)
     tally = dict.fromkeys(ESTIMATE_OUTCOMES, 0)
     for _ in range(n):
         got = entry.fn(inp, rng)
@@ -292,6 +288,19 @@ def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: st
         else:
             tally["undecided"] += 1
     return dict(status="ESTIMATED", module=_PROVIDER, samples=n, **{k: v / n for k, v in tally.items()})
+
+
+@provider("estimate", _PROVIDER)
+def estimate(w: Any, act: Any, claimants: list, target: Optional[str]) -> Optional[tuple]:
+    """THIS PROVIDER'S CASE FOR `sigma.odds_of`, MODE (a) (CP-T04-08 moved the dispatch off a direct import): the
+    shares `fight_estimate` samples for the act, as `(actor felled, subject felled, yielded, undecided)`
+    (`ESTIMATE_OUTCOMES`' order), or `None` for a party gap or a refusal. `claimants` is the fold's own derivation
+    of the act's parties (`loop/sides.py::sides_of`, which `odds_of` calls once for every provider); `target` is
+    unused here (the fight's second party is `claimants[1]`). Reads, draws and writes what `fight_estimate` does."""
+    if len(claimants) < 2:
+        return None
+    got = fight_estimate(w, claimants[0], act.via, claimants[1], act.verb, record_of(act))
+    return tuple(got[k] for k in ESTIMATE_OUTCOMES) if got["status"] == "ESTIMATED" else None
 
 
 # ⚠ THE OUTCOME'S SEVERITY, READ OFF THE COMBATANTS THE SCENE JUST FOUGHT WITH (Jordan

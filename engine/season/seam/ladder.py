@@ -33,7 +33,7 @@ import sys
 from typing import Any, Optional
 from ..data import files
 from ..data.rosters import (
-    COMBAT_BANDS, COMBAT_EDGES, LOST, UNOPPOSED, WON, WOUND_QUANTITIES, WOUNDED,
+    COMBAT_BANDS, COMBAT_EDGES, INVESTED, LOST, UNOPPOSED, WON, WOUND_QUANTITIES, WOUNDED,
     check_edge_above)
 from ..gaps import Unspecified
 
@@ -232,11 +232,14 @@ def field_degree(result: dict) -> str:
     ⚠ DOES NOT GRADE `massbattle.py`'s OWN NON-CANONICAL `result['degree']`
     (Overwhelming/Success/Partial/Failure) -- that classification is disclosed as *"NOT the
     canonical degree ladder... a bespoke post-hoc classification"* by its own module header, and
-    reconciling the two remains open MB-lane work, not M4's. `march` writes on THREE bands
+    reconciling the two remains open MB-lane work, not M4's. `march` writes on its graded bands (Won, Lost, Unopposed and, since CP-T04-06, Invested)
     (Won/Lost/Unopposed); the engine's finer four-way split is available under
     `result['result']['degree']` for introspection and stays there."""
     if result.get("unopposed"):
         return UNOPPOSED
+    # CP-T04-06: an opposed `besiege` fought no field -- the provider lifts `invested` and nobody won or lost.
+    if result.get("invested"):
+        return INVESTED
     return WON if result.get("attacker_wins") else LOST
 
 
@@ -254,8 +257,8 @@ def degree_of(result: Any, subject: Optional[str] = None, fixtures: Any = None) 
     any more. Its provider's result is still a survivor-ratio classification, not a margin -- see
     `seam/wrappers/mass_battle.py`'s own docstring -- and `field_degree` does not grade THAT
     classification either; it reads the top-level `attacker_wins`/`unopposed` markers the provider
-    lifts for exactly this purpose, onto the three bands `march` actually writes on
-    (Won/Lost/Unopposed). Reconciling the engine's own finer four-way split with the canonical
+    lifts for exactly this purpose, onto the bands `march` writes on
+    (Won/Lost/Unopposed, and Invested under a besiege). Reconciling the engine's own finer four-way split with the canonical
     ladder stays open MB-lane work, unrelated to this."""
     if not isinstance(result, dict):
         raise Unspecified(

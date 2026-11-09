@@ -109,7 +109,7 @@ def _load_rosters() -> tuple:
         # `rosters.yaml` is circular by construction: `roster()` would have to read the file to
         # learn how to read the file. It fails the data-file test in the direction that exempts:
         # changing this list changes how the LOADER works, never what the game is.
-        _ptrs = [k for k in ("from_descriptor", "from_names", "from_roster") if k in _r]
+        _ptrs = [k for k in ("from_descriptor", "from_names", "from_roster", "from_battle_orders") if k in _r]
         if len(_ptrs) > 1:
             raise Unspecified(
                 f"roster {_n!r} carries {len(_ptrs)} owner pointers ({', '.join(_ptrs)})",
@@ -254,6 +254,20 @@ def roster(name: str, ordered: bool = False):
                       "`python tools/export_names.py`",
                 law="ED-IN-0230 -- a pointed-at roster REFUSES when its owner is empty. Returning "
                     "an empty set would be the silent-false `rosters.yaml`'s own header forbids")
+    elif "from_battle_orders" in r:
+        # `from_battle_orders:` (CP-T04-02) -- the same pointer aimed at the mass-battle module's standing-order
+        # vocabulary, cooked by `tools/export_battle_orders.py` and read through `engine/substrate/battle_orders.py`.
+        # The roles and `retreat_at` values are the MODULE's (`massbattle.ORDER_ROLES`, `ORDER_RETREAT_AT`); a roster of
+        # them here is a pointer, never a second list.
+        from engine.substrate import battle_orders as _orders
+        vals = list(getattr(_orders, str(r["from_battle_orders"]).upper(), ()))
+        if not vals:
+            raise Unspecified(
+                f"roster {name!r} points at battle-order set {r['from_battle_orders']!r}, which "
+                f"`engine/substrate/battle_orders.py` does not carry or carries empty", "engine/engine_params/battle_orders.json",
+                needs="`roles` or `retreat_at`, then `python tools/export_battle_orders.py`",
+                law="ED-IN-0230 -- a pointed-at roster REFUSES when its owner is empty. Returning an empty set "
+                    "would be the silent-false `rosters.yaml`'s own header forbids")
     elif "from_roster" in r:
         # `from_roster:` — the same pointer aimed at a SIBLING ROW IN THIS FILE, for the case where
         # one roster's members ARE another's. ⚠ IT EXISTS BECAUSE `remit_default` SPELLED
@@ -566,6 +580,23 @@ if not {STAKES_KEY, CHALLENGER_KEY} <= set(RECORD_KIND_KEYS.get(CHALLENGE_KIND, 
         needs=f"a `{CHALLENGE_KIND}` row with both keys, or the challenge mint and its stakes read retired",
         law="PC-10b -- a challenge's term rides `stakes` and its maker `challenger`; the person is `terms`")
 CHALLENGE_TERMS = roster("challenge_terms", ordered=True)
+# v11 CP-T04-02 (B10-12): THE `record_kinds` MEMBER A STANDING ORDER OF BATTLE IS, its three keys, and the two closed sets
+# its `role` and `retreat_at` range over (`order_roles`, `order_retreat_at`: pointers at the mass-battle module's own
+# vocabulary, `from_battle_orders`). Named once here, `CHALLENGE_KIND`'s shape, for the mint (`_eff_marshal`), the read
+# (`seam/wrappers/mass_battle.py::field_input`) and the chooser's fan (`data/verbs.py::CHOICE_RANGES`). Refused at import if
+# the roster stops carrying the three keys: the mint would write a key set the constructor refuses.
+ORDER_KIND = "order_of_battle"
+ORDER_AT_KEY = "at"
+ORDER_ROLE_KEY, ORDER_RETREAT_KEY = "role", "retreat_at"
+if set(RECORD_KIND_KEYS.get(ORDER_KIND, ())) != {ORDER_AT_KEY} | {ORDER_ROLE_KEY, ORDER_RETREAT_KEY}:
+    raise Unspecified(
+        f"record kind {ORDER_KIND!r} does not carry exactly {ORDER_AT_KEY!r}, {ORDER_ROLE_KEY!r} and "
+        f"{ORDER_RETREAT_KEY!r} ({RECORD_KIND_KEYS.get(ORDER_KIND)!r})", "rosters.yaml -- record_kinds",
+        needs=f"an `{ORDER_KIND}` row with those three keys, or `marshal` and its field read retired",
+        law="CP-T04-02 -- a standing order names where it is read, a role and a retreat point; the omitted "
+            "`reserve` and `general` are not keys")
+ORDER_ROLES = roster("order_roles", ordered=True)
+ORDER_RETREAT_AT = roster("order_retreat_at", ordered=True)
 # ⚠ ONE STEM READS BOTH VOCABULARIES, SO THEY MAY NOT SHARE A WORD. `exists:<kind>`
 # (`queries/world_q.py::WorldReader.read`) answers a `tenure_kinds` member as a live EDGE and a
 # `record_kinds` member as a Record OF THAT KIND; a word in both rosters would be answered by
@@ -1222,9 +1253,25 @@ BODY_MARK_MODELS = roster("body_mark_models")     # v11 CP-T03-07 (`H-258`): `_e
 # fought. `FIELD_CASUALTY_MODELS`/`MARCH_TARGET_KINDS` bound here for `TITLE_DOMAINS`' reason: an
 # unbound roster is the one whose absence goes unnoticed.
 FIELD_BANDS = roster("field_degree_bands", ordered=True)
-DECLARED, WON, LOST, UNOPPOSED = FIELD_BANDS
+DECLARED, WON, LOST, UNOPPOSED, INVESTED = FIELD_BANDS     # CP-T04-06: `Invested` is appended, the four above do not move
 FIELD_CASUALTY_MODELS = roster("field_casualty_models")
+FIELD_WINNER_CASUALTY_ARMS = roster("field_winner_casualty_arms")     # CR-24 (`H-360`)
 MARCH_TARGET_KINDS = roster("march_target_kinds")
+# CP-T04-06 (`besiege`): HOW A `march` MEETS AN OPPOSING SIDE, a payload key (`MARCH_POSTURE_KEY`) the act declares and the
+# mass-battle provider reads. Ordered, because `choice_sourced` fans the Candidates in this order; shipped `[storm]`. The two
+# NAMES are the posture's semantics (a storm fights, a besiege wears the walls and fights nothing) and are what the roster
+# may carry: refused at import for a member that is neither, or for a roster without `storm`, the default an act with no
+# posture is read under.
+MARCH_POSTURES = roster("march_postures", ordered=True)
+MARCH_POSTURE_KEY = "posture"
+STORM = "storm"
+BESIEGE = "besiege"
+if STORM not in MARCH_POSTURES or not set(MARCH_POSTURES) <= {STORM, BESIEGE}:
+    raise Unspecified(
+        f"`march_postures` is {list(MARCH_POSTURES)!r}", "rosters.yaml -- march_postures",
+        needs=f"a roster holding {STORM!r} (the default) and at most {BESIEGE!r} beside it",
+        law="CP-T04-06 -- a posture is a way of meeting the opposing side that code reads; a name no code reads would "
+            "be a posture nothing performs")
 SUBTREE_OCCUPATION_KINDS = roster("subtree_occupation_kinds")
 RAZE_TARGET_KINDS = roster("raze_target_kinds")
 ARRIVAL_ONLY_KINDS = roster("arrival_only_kinds")

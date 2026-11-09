@@ -31,7 +31,7 @@ from .. import manifest
 from ..data.rosters import MARCH_TARGET_KINDS, SUBTREE_OCCUPATION_KINDS
 from ..data.verbs import VerbRow
 from ..queries.world_q import (
-    DETAIN_KIND, ancestry, holder_faction_of, home_of, mustered, place_of, restrained, standing_at,
+    DETAIN_KIND, holder_faction_of, march_origin, mustered, place_of, restrained, standing_at,
 )
 from ..state.carriers import Act
 from ..state.gate import seat_faction
@@ -129,14 +129,12 @@ def sides_of(w: World, a: Act, target: Optional[str],
                                          "nothing)"])
             return ([], None, target or "R")
         faction = seat_faction(w, a.via)
-        home = home_of(w).get(a.actor)
-        chain = ancestry(w, home) if home is not None else []
         # ED-IN-0306 phase 5: the origin is the nearest place a march can reach in the actor's home chain -- a
         # settlement for anyone housed in one, the territory itself for an army that has arrived at it and so lives
-        # there. A settlement is mustered by subtree (its people stand in buildings beneath it), a territory by who is
+        # there (`world_q.march_origin`, the one owner since CP-T04-02, which reads the standing order about it). A
+        # settlement is mustered by subtree (its people stand in buildings beneath it), a territory by who is
         # standing AT it, so a parked army can march on and a territory does not muster its whole realm.
-        origin = next((r for r in chain if w.rungs.get(r) is not None
-                       and w.rungs[r].kind in MARCH_TARGET_KINDS), None)
+        origin = march_origin(w, a.actor)
         if not (origin and faction):
             claimants = []
         elif w.rungs[origin].kind in SUBTREE_OCCUPATION_KINDS:

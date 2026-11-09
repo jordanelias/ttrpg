@@ -192,6 +192,16 @@ class PlayHost:
 
 
 @dataclass(frozen=True)
+class FieldOrder:
+    """CP-T04-02: ONE SIDE'S STANDING ORDER OF BATTLE as the field reads it -- the content of the `order_of_battle`
+    Record `seam/wrappers/mass_battle.py::field_input` chose (`rosters.yaml: record_kinds`): `role`, a `config.ROLE_SPEC`
+    name the module maps onto each subunit of the side's line, and `retreat_at`, one of `ORDER_RETREAT_AT`, which the
+    module reads (CP-T04-03) as each subunit's `own_strength` retreat Order. Plain strings: the closed sets are the module's (`engine/substrate/battle_orders.py`)."""
+    role: str
+    retreat_at: str
+
+
+@dataclass(frozen=True)
 class MassBattleInput:
     """What the `mass_battle` module's field reads, and nothing else (plan position `31c`).
 
@@ -223,6 +233,15 @@ class MassBattleInput:
                        weight to its Unit's troops on the headcount path (`massbattle._weighted_unit`). `1`, the
                        default, is `troops = weight`: the field as it was. The host always passes the fixture;
                        the default is the identity of the multiplication, not a value for the scale;
+      * `members`   -- CP-T04-01: `(attacker, defender)`, each a tuple of person ids, ONE PER ENTRY OF `weights`, in the
+                       same order (`field_input` filters both by the same test). Read only on the `person` arm;
+                       `((), ())`, the default, names nobody;
+      * `subunits`  -- CP-T04-01: the `field_subunits` fixture (`H-359`), `side` or `person`. `side`, the default, is
+                       the side as it was: one subunit sized by Σ weight. `person` is one subunit per member;
+      * `orders`    -- CP-T04-02 (`H-361`): `(attacker, defender)`, each a `FieldOrder` or `None`, the standing order of
+                       battle `field_input` read for that side (the `order_of_battle` Record its faction's seat holds
+                       about the side's settlement whose holder edge is newest). `None`, the default, is both sides
+                       without one: the field as it was;
       * `geography` -- the parsed geography file (`data/geography.py::geography`, read once per process
                        and SHARED by every record: read-only). The module's terrain lookup and river test
                        read it here and open no file. `repr=False`: a record in an assertion message
@@ -243,6 +262,9 @@ class MassBattleInput:
     geography: Mapping = field(repr=False)
     orders_of_battle: Optional[tuple] = None
     troops_per_weight: float = 1
+    members: tuple = ((), ())
+    subunits: str = "side"
+    orders: Optional[tuple] = None
 
 
 # ---------------------------------------------------------------------------

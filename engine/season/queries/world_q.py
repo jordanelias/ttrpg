@@ -42,7 +42,8 @@ from ..data.requires import (
 from ..data.rosters import (
     CONTINUATION_TIES, SUCCESSIONS,
     ARMS_KINDS, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
-    MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL,
+    INVESTED,
+    MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
     VERB_CAPABILITY,
     faction_prop_id,
@@ -94,7 +95,7 @@ from ..state.containment import ancestry, home_map, home_of  # noqa: F401 -- re-
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
 from ..state.gate import BENCH_BASIS, may_determine, may_fill, purview_reaches, sits_over
 # v11 CR-25: conjuncts (i) and (iv) of a founding, asked by `founds_over` below.
-from ..state.gate import holdings_of, in_holdings, seat_on_parent_of
+from ..state.gate import holdings_of, in_holdings, seat_faction, seat_on_parent_of
 # ⚠ AND `sworn_to` BY THE SAME ROUTE (v9 IN-40, `H-101`): THE QUERY OF THE LIVE `oblige` EDGES SWORN
 # TO A SEAT. `purview_reaches`' oblige clause asks it, and the gate may not import this module, so
 # its one body lives in `state/gate.py`; `world_q.sworn_to is gate.sworn_to`. `establishment_of`
@@ -2228,9 +2229,33 @@ def fort_input(w: World, rung_id: str) -> FortInput:
     """THE PROJECTION `settlements.fortification` reads (v9 IN-07 E6): every `garrison` Site's condition
     in the subtree, in `World.sites` order, and `condition_scale` -- read only when there is a garrison,
     as the old body read it (a no-garrison world reads no fixture)."""
-    here = _subtree(w, rung_id)
-    conditions = tuple(s.condition for s in w.sites.values() if s.kind == "garrison" and s.rung in here)
+    conditions = tuple(s.condition for s in garrison_sites(w, rung_id))
     return FortInput(conditions, w.fixtures.get("condition_scale") if conditions else None)
+
+
+def garrison_sites(w: World, rung_id: str) -> list:
+    """EVERY `garrison` Site in `rung_id`'s subtree, in `World.sites` order -- the walls `fortification_of` averages
+    (`fort_input`) and the walls a `besiege` march wears (CP-T04-06, `loop/effects_combat.py::_eff_march`). One owner for
+    which Sites are a settlement's garrison, so what a siege lowers is exactly what a storm then reads."""
+    here = _subtree(w, rung_id)
+    return [s for s in w.sites.values() if s.kind == "garrison" and s.rung in here]
+
+
+def siege_pressed_by(w: World, place: str):
+    """THE THREAT A `surrender` ANSWERS (CP-T04-07, AM-C-12): the `march` Act whose `Invested` band pressed a siege on `place`
+    THIS SEASON -- the latest `siege.pressed` Event (`march`'s `Invested` kind, read off the row, never spelt here) with
+    `emitted_at == w.tick` whose causing act is a `march` naming `place` as its subject -- or `None`. The Act, not its actor:
+    the actor is who receives the place, and `via` names the seat he pressed it through. Read-only over `w.log`; the
+    declared unfought `march` (CP-T04-04, held) joins it here when it lands."""
+    TRACE.query("siege_pressed_by", "resolver")
+    kind = VERB_TABLE["march"].emits_at(INVESTED)[0]
+    for e in reversed(w.log):
+        if e.kind != kind or e.emitted_at != w.tick:
+            continue
+        a = causing_act(w, e)
+        if a is not None and a.verb == "march" and isinstance(a.payload, dict) and a.payload.get("subject") == place:
+            return a
+    return None
 
 
 def training_sites(w: World, person_id: str) -> dict:
@@ -2260,6 +2285,48 @@ def army_of(w: World, faction: str) -> Optional[str]:
                  if r.kind == "army" and isinstance(r.subject_matter, dict) and r.subject_matter.get("faction") == faction
                  and hold_force(w, r.id) is not None)
     return ids[0] if ids else None
+
+
+def march_origin(w: World, person: str) -> Optional[str]:
+    """CP-T04-02 (lifted out of `loop/sides.py::sides_of`, which now calls it): THE PLACE A PERSON MARCHES FROM -- the
+    nearest rung of a `march_target_kinds` kind in his home's ancestry (`ancestry`, the one walk): a settlement for anyone
+    housed in one, the territory itself for an army that has arrived at it and so lives there. `None` for a person with
+    no home or none such above it. The one owner of *the attacker's place*; `field_input` reads the standing order about it."""
+    home = home_of(w).get(person)
+    chain = ancestry(w, home) if home is not None else []
+    return next((r for r in chain if w.rungs.get(r) is not None and w.rungs[r].kind in MARCH_TARGET_KINDS), None)
+
+
+def standing_order(w: World, faction: Optional[str], place: Optional[str]):
+    """CP-T04-02 (AM-C-09): THE STANDING ORDER OF BATTLE `faction`'s line fights `place` under, or `None` -- the live
+    `order_of_battle` Record about `place` (its `at` key) held by a seat of `faction`, the one whose HOLDER EDGE has the
+    greatest `since`; a tie goes to the later in `w.tenures` (the read-only owner-first view: the last-write rule of
+    `containment.home_of`). `Record` has no creation tick (`ttl` has no reader), so the edge's `since` -- opened at
+    `w.tick` by `_makers_hold` -- is the order's age. OLDER ORDERS ARE IGNORED, NOT DELETED. A holder is `a seat of
+    that faction` when he holds a live `hold` on an Office `seat_faction` reads as `faction`; a Record held by anyone else, or about
+    another place, or already closed, is not the faction's order here. `None` for no faction or no place: the field as it was."""
+    TRACE.query("standing_order", "resolver")
+    if faction is None or place is None:
+        return None
+    # The Records first: `w.tenures` is a rebuilt view (O(persons + tenures)), and a world that holds no order about
+    # `place` (every shipped one, `marshal` being withheld) has nothing to find in it.
+    about = {rid for rid, r in w.records.items()
+             if r.kind == ORDER_KIND and isinstance(r.subject_matter, dict) and r.subject_matter.get(ORDER_AT_KEY) == place}
+    if not about:
+        return None
+    best = None
+    for i, t in enumerate(w.tenures):
+        if t.kind != "hold" or not t.live or t.object not in about:
+            continue
+        key = (t.since, i)
+        if best is not None and key < best[0]:
+            continue                            # cannot win, so the holder walk below is skipped
+        holder = w.persons.get(t.subject)
+        if holder is None or not any(h.kind == "hold" and h.live and seat_faction(w, h.object) == faction
+                                     for h in holder.tenures):
+            continue
+        best = (key, w.records[t.object])
+    return None if best is None else best[1]
 
 
 def enclosing_territory(w: World, rung_id: Optional[str]) -> Optional[str]:

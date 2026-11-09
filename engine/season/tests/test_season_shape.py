@@ -41,7 +41,7 @@ from ..data.rosters import (
 )
 from ..data import verbs as data_verbs
 from ..data.verbs import (
-    ALIGNMENT_SWEEP, PURSUIT_PROJECTION, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, align, alignment_at, rows_without_a_producer, tenure_kinds_without_an_opener,
+    ALIGNMENT_SWEEP, CHOICE_RANGES, PURSUIT_PROJECTION, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, align, alignment_at, rows_without_a_producer, tenure_kinds_without_an_opener,
 )
 from .. import decision
 from ..decision import (
@@ -2307,7 +2307,7 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
     # the roster: its job is to fail if the loader started refusing everything, so it moves with
     # the table by construction and the number is read from the file rather than chosen.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
-    assert len(VERBS._load_verb_table()) == 65       # B10-13 pin commit (CR-27): `lie` joins, 64 -> 65 (v10 CP-T03-09: `capture` joins, 63 -> 64;IN-12 step 5: `interrogate`, 62 -> 63; ED-IN-0306 phase 5: 60 -> 62)
+    assert len(VERBS._load_verb_table()) == 67       # B10-12 pin commit (CP-T04-02 `marshal`, CP-T04-07 `surrender`, both WITHHELD): 65 -> 67; B10-13 pin commit (CR-27): `lie` joins, 64 -> 65 (v10 CP-T03-09: `capture` joins, 63 -> 64;IN-12 step 5: `interrogate`, 62 -> 63; ED-IN-0306 phase 5: 60 -> 62)
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -5842,10 +5842,13 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # `said` (T1, ED-IN-0282) is the told triple a telling CARRIES, chosen at CHOOSE; it is not a
     # `requires` operand -- `binding_of` drops it (`test_t1_said_is_not_a_binding_operand`) -- so
     # naming it here does not coin an operand, which is what this closure refuses.
+    # CP-T04-02: AND THE CHOICE KEYS (`CHOICE_RANGES`, `marshal`'s `role` and `retreat_at`), `said`'s case: a payload key a
+    # `choice_sourced` row carries, read by its effect alone, bound by no cell (the row's `requires_typed` binds `subject`)
+    # and dropped by `binding_of`, so naming them here coins no operand either.
     carried = {k for a in minted for k in (a.payload or {})}
-    assert carried <= set(REQUIRES_OPERANDS) | {"subject", "said"}, (
+    assert carried <= set(REQUIRES_OPERANDS) | {"subject", "said"} | set(CHOICE_RANGES), (
         f"a minted act carries "
-        f"{sorted(carried - set(REQUIRES_OPERANDS) - {'subject', 'said'})}, which "
+        f"{sorted(carried - set(REQUIRES_OPERANDS) - {'subject', 'said'} - set(CHOICE_RANGES))}, which "
         "is outside the closed operand vocabulary — coining an operand is filling `H-94` by "
         "keyword argument, which is what the roster exists to refuse")
     # AND `changes` IS STILL EMPTY, which is the OTHER half and is `H-63`, not this item: Part E's
@@ -6375,8 +6378,10 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
     #  v10 IN-12 step 5 added one: `interrogate` (`remit:determine`, #453 §9.1). Re-recorded by outcome:
     #  16 -> 17, the one row that moved.
     #  v10 CP-T03-09 added one: `capture` (`remit:dispatch`, `arrest`'s eligibility). Re-recorded by outcome:
-    #  17 -> 18, the one row that moved.]
-    assert len(gov) == 18, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
+    #  17 -> 18, the one row that moved.
+    #  B10-12 pin commit (P15): CP-T04-02 added `marshal` and CP-T04-07 added `surrender`, each `remit:dispatch`-eligible
+    #  (the ranked-command act, as `march`'s), both WITHHELD from the chooser. Re-recorded by outcome: 18 -> 20, the two rows that moved.]
+    assert len(gov) == 20, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
                             "plus march plus transfer plus seize plus covenant plus arrest plus pardon "
                             "plus raze plus interrogate")
     formable = set()
@@ -9714,7 +9719,8 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
                                               "work", "restore", "examine",
                                               "dispatch",
                                               "recruit", "form_unit", "assign_troops", "order_unit",
-                                              "disband_unit", "discharge_troops", "seize"}, (    # ED-IN-0306: the SIX army verbs JOIN (the four of phase 2 and the two of phase 5) -- withheld from formation (`rosters.yaml: army_verbs`), their command is a payload no Candidate carries, so nobody forms them, by design; a re-record.       # IN-57: `dispatch` out, to `refused_only`; FI-01: back; IN-38: out again; K-3: `thread_read` in; REM-10: `speak`, `examine`, `argue` out; REM-22: `work`, `restore`, `examine` in; REM-23: `commit` in; REM-25: `comply` out; CP-T05-04: `argue` in
+                                              "disband_unit", "discharge_troops", "seize",
+                                              "marshal", "surrender"}, (    # B10-12 pin commit (P15): `marshal` (CP-T04-02) and `surrender` (CP-T04-07) JOIN, a re-record by construction -- both ship WITHHELD (`withheld_verbs`) and are `remit:dispatch`-only, so nobody forms them. ED-IN-0306: the SIX army verbs JOIN (the four of phase 2 and the two of phase 5) -- withheld from formation (`rosters.yaml: army_verbs`), their command is a payload no Candidate carries, so nobody forms them, by design; a re-record.       # IN-57: `dispatch` out, to `refused_only`; FI-01: back; IN-38: out again; K-3: `thread_read` in; REM-10: `speak`, `examine`, `argue` out; REM-22: `work`, `restore`, `examine` in; REM-23: `commit` in; REM-25: `comply` out; CP-T05-04: `argue` in
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -11716,7 +11722,12 @@ def test_wc_the_fold_binds_what_the_person_bound(monkeypatch):
     qh = Question("q:wc_held", "need", ("rec_wc_held",))
     held_walk = [c for c in decision.opening_set(p, View(p.id, [], sink.get("view_k"), qh), qh, sink)
                  if c.verb in WALK_HELD]
-    assert {c.verb for c in held_walk} == WALK_HELD, sorted({c.verb for c in held_walk})
+    # B10-12 pin commit (P15): CP-T04-02 `marshal` and CP-T04-07 `surrender` ship WITHHELD and are `remit:dispatch`-only, as
+    # `march`, `raze` and `capture` are (excluded from the first walk above for the same reason): `p_low` holds no office, so
+    # neither forms for him even at the sink arm. DERIVED FROM THE ROW'S OWN COLUMN, never from a verb name.
+    WALK_HELD_OFFICE: frozenset = frozenset(vb for vb in WALK_HELD if VERB_TABLE[vb].eligibility == ("remit:dispatch",))
+    assert WALK_HELD_OFFICE == {"marshal", "surrender"}, sorted(WALK_HELD_OFFICE)
+    assert {c.verb for c in held_walk} == WALK_HELD - WALK_HELD_OFFICE, sorted({c.verb for c in held_walk})
     for c in held_walk:
         act = [a for sc in pack_scenes(p, [c], 5, sink, mint, occasion=qh) for a in sc.acts][0]
         fold = binding_from_act(act)
@@ -15919,7 +15930,7 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
     # 64 -> 65, `lie` (v11 CR-27, re-recorded at the B10-13 pin commit, P15), contested (`a standing`, `tell`'s prize; the contested
     # set above moves with it), a re-record.
-    assert len(VERB_TABLE) == 65, len(VERB_TABLE)    # B10-13 pin commit: 64 -> 65 (`lie`); v10 CP-T03-09: 63 -> 64 (`capture`); IN-12: 62 -> 63 (`interrogate`); ED-IN-0306 phase 5: 60 -> 62
+    assert len(VERB_TABLE) == 67, len(VERB_TABLE)    # B10-12 pin commit: 65 -> 67 (`marshal`, `surrender`, both WITHHELD); B10-13 pin commit: 64 -> 65 (`lie`); v10 CP-T03-09: 63 -> 64 (`capture`); IN-12: 62 -> 63 (`interrogate`); ED-IN-0306 phase 5: 60 -> 62
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.

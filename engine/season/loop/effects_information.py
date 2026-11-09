@@ -1,6 +1,6 @@
 """`season.loop.effects_information` -- records, propositions, matters: create_record, issue,
 covenant, conceal, open_case, carry, determine, argue, petition, survey, forge, give, seize, arrest,
-destroy_record, utter, commit.
+destroy_record, utter, commit, challenge, marshal, surrender.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the document/proposition/
 matter cluster: the one mint (`_mint_document`) that `create_record`, `issue`, `petition` and
@@ -21,8 +21,9 @@ from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import matrix_row
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
 from ..data.rosters import (
-    CHALLENGE_KIND, CHALLENGE_TERMS, CHALLENGER_KEY, COVER_KEY, COVER_KIND, FACTION_BY_PROP, RECORD_CONTENT,
-    RECORD_KIND_KEYS, STAKES_KEY,
+    CHALLENGE_KIND, CHALLENGE_TERMS, CHALLENGER_KEY, COVER_KEY, COVER_KIND, FACTION_BY_PROP, ORDER_AT_KEY, ORDER_KIND,
+    ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, RECORD_CONTENT, RECORD_KIND_KEYS, STAKES_KEY,
+    SUBTREE_OCCUPATION_KINDS,
 )
 from ..gaps import Forbidden
 from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
@@ -31,13 +32,13 @@ from ..queries.inputs import ArmyCommand
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
     ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, army_of, docketed, docketed_under,
-    faction_holding, faction_of, hold_force, issuing_seat, place_of, restrained,
-    slot_for, works_for, works_target,
+    faction_holding, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
+    siege_pressed_by, slot_for, works_for, works_target,
 )
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
-    DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_determine, may_seize,
+    DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_cede, may_determine, may_seize,
     may_warrant,
 )
 from ..state.ids import H
@@ -95,6 +96,8 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
     if works_for(w, at, plan):
         return NO_CHANGE
     if kind == "army" and not _army_mintable(w, a.actor, d.get("subject_matter")):
+        return NO_CHANGE
+    if kind == ORDER_KIND:      # an order of battle is minted by `marshal` alone: its closed role / retreat_at sets, its purview conjunct, its withheld arm
         return NO_CHANGE
     return _mint_document(w, a, kind, d.get("subject_matter"), d.get("rung") or a.actor)
 
@@ -331,6 +334,33 @@ def _eff_challenge(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     content.update({RECORD_CONTENT.get("addressee"): _operand(a, "subject"),
                     STAKES_KEY: stakes, CHALLENGER_KEY: a.actor})
     return _mint_document(w, a, CHALLENGE_KIND, content, d.get("rung") or a.actor)
+
+
+@effect_for("marshal")
+def _eff_marshal(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v11 CP-T04-02 (B10-12): A STANDING ORDER OF BATTLE IS A `Record` OF KIND `order_of_battle`, minted with the
+    marshal's `hold` through `_mint_document`, the one mint. Its keys (`rosters.yaml: record_kinds`): `at` -- the
+    settlement it is read about, the act's `subject` (the side's place when the field is fought: the attacker's origin,
+    the defender's target); `role` -- a `order_roles` member, the shape and instruction package the module maps onto
+    each subunit of the line (`massbattle.resolve_field`); `retreat_at` -- an `order_retreat_at` member, carried for
+    CP-T04-03. ⚠ `role` AND `retreat_at` COME FROM THE PAYLOAD, NOT FROM AN OPERAND (`challenge`'s `stakes` shape): a
+    computed `marshal` carries them because `decision/options.py::operand_bags` ranges them over their closed sets
+    (`rosters.yaml: choice_sourced`).
+
+    ⚠ A VALUE OUTSIDE ITS CLOSED SET, OR ABSENT, IS REFUSED BEFORE ANYTHING IS WRITTEN, naming the roster -- a hand-built
+    act's caller defect, as `_eff_challenge` refuses `stakes`. The Record is written once and never changed: a newer
+    order is a second Record, and `field_input` reads the newest per side; this effect deletes and closes nothing."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    for key, roster in ((ORDER_ROLE_KEY, ORDER_ROLES), (ORDER_RETREAT_KEY, ORDER_RETREAT_AT)):
+        if d.get(key) not in roster:
+            raise Forbidden(
+                f"a `marshal` by {a.actor!r} names {key} {d.get(key)!r}, not one of {tuple(roster)}",
+                "rosters.yaml -- order_roles / order_retreat_at",
+                needs=f"a {key} the mass-battle module names (`engine/engine_params/battle_orders.json`)",
+                law="CP-T04-02 -- a standing order names a role and a retreat point from the module's closed sets")
+    content = {ORDER_AT_KEY: _operand(a, "subject"), ORDER_ROLE_KEY: d[ORDER_ROLE_KEY],
+               ORDER_RETREAT_KEY: d[ORDER_RETREAT_KEY]}
+    return _mint_document(w, a, ORDER_KIND, content, _seat_rung(w, a))
 
 
 @effect_for("open_case")
@@ -945,8 +975,10 @@ def _held_warrant_names(w: "World", actor: str, rid: str) -> bool:
 _SEIZED_RECORD, _SEIZED_RUNG = VERB_TABLE["seize"].emits
 
 
-def _take_hold(w: "World", a: "Act", obj: str, held: Optional[Tenure], earns: str) -> Change:
-    """THE TAIL BOTH HALVES OF `seize` SHARE: the actor OPENS a `hold` on `obj`, and the `hold` it
+def _take_hold(w: "World", a: "Act", obj: str, held: Optional[Tenure], earns: str,
+               to: Optional[str] = None) -> Change:
+    """THE TAIL BOTH HALVES OF `seize` SHARE, AND `surrender`'S (CP-T04-07): the actor -- or `to`, when a cession names the
+    one who receives it -- OPENS a `hold` on `obj`, and the `hold` it
     displaces (`held`, or `None` when nobody held it) CLOSES, in ONE write. THE NEW EDGE'S ID carries the
     act (`hold:<obj>:<act>`), `_eff_give`'s salting. G4 -- WHAT IT NAMES: the two edges, the opened one
     first, both earning `earns`. The close is written FIRST, then the open.
@@ -954,7 +986,8 @@ def _take_hold(w: "World", a: "Act", obj: str, held: Optional[Tenure], earns: st
     _derive_openers_from_effects` reads which verb opens which kind off that literal, walking same-file
     helpers from the registered effect, so `seize` stays a `hold` opener through this helper (the
     `_eff_commit` note below records what a parameterised kind did to the walk)."""
-    nt = Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{obj}:{a.id}"), a.actor, obj, "hold", since=w.tick)
+    taker = a.actor if to is None else to
+    nt = Tenure(H(w.world_seed, w.tick, taker, f"hold:{obj}:{a.id}"), taker, obj, "hold", since=w.tick)
 
     def perform() -> None:
         if held is not None:
@@ -1050,6 +1083,51 @@ def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
                              or not may_seize(w, a.actor, a.via, held.subject, rid)):
         return NO_CHANGE
     return _take_hold(w, a, rid, held, _SEIZED_RUNG)
+
+
+_SURRENDERED = VERB_TABLE["surrender"].emits[0]
+
+
+@effect_for("surrender")
+def _eff_surrender(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v11 CP-T04-07 (B10-12; AM-C-12 REPAIR): THE HOLDER YIELDS A THREATENED SETTLEMENT ON TERMS. A `hold` on the place OPENS
+    to the person who pressed the siege, and the yielding seat's live `hold` on it, if any, CLOSES, in ONE write
+    (`_take_hold`, `seize`'s pair, `to` naming the receiver). Nobody is fought: no body, no stance and no leg is written, and
+    `holder_faction_of(subject)` is afterwards the receiver's faction, so a pending march resolves `Unopposed` by
+    `sides_of`'s own rule. Emits `place.surrendered`, a cession under arms, distinct from `rung.seized`.
+
+    WHAT LICENSES IT, IN THE ORDER IT IS ASKED, each one owner of its rule: (1) the subject is a settlement (a
+    `subtree_occupation_kinds` Rung) that somebody holds (`holder_faction_of`; H-166: an unheld place is unruled); (2) a
+    `siege.pressed` names it THIS SEASON (`world_q.siege_pressed_by`), and the act that pressed it is the RECEIVER's -- a
+    living person committed to a faction other than the holder's; (3) THE CESSION BASIS'S PREDICATE (`may_cede`, `may_warrant`'s
+    shape, asked in the effect as `_eff_arrest` asks it -- no new `requires` stem, `data/requires.py` has none for a seat's faction): the seat the actor exercises
+    (`a.via`) BELONGS TO `holder_faction_of(subject)`, with the purview and the grant; (4) the yielding hold, if the place
+    is held directly, is one the same seat may close (`may_cede` with `yielder`; a hold the actor owns himself is his
+    to release). Anything else declines (`NO_CHANGE` -> `surrender.refused`, the `write` clause): THE COST, STATED,
+    is that Candidates form and are refused for seats of the wrong faction.
+
+    THE GATE: `cession` (`state/gate.py`) -- the receiver's opening and the yielder's closure each. `data/verbs.py::
+    _derive_openers_from_effects` reads this effect a `hold` opener through `_take_hold`'s literal.
+    G4 -- WHAT IT NAMES: the two edges, `_take_hold`'s, both earning `place.surrendered`."""
+    rid = _operand(a, "subject")
+    rung = w.rungs.get(rid)
+    if rung is None or rung.kind not in SUBTREE_OCCUPATION_KINDS:
+        return NO_CHANGE
+    holder = holder_faction_of(w, rid)
+    threat = siege_pressed_by(w, rid)
+    if holder is None or threat is None:
+        return NO_CHANGE
+    receiver = threat.actor
+    rfac = faction_holding(w, receiver)
+    if receiver not in w.persons or rfac is None or rfac == holder or receiver == a.actor:
+        return NO_CHANGE
+    if not may_cede(w, a.actor, a.via, rid, to=receiver, holder_faction=holder):
+        return NO_CHANGE
+    held = hold_force(w, rid)
+    if held is not None and held.subject != a.actor and not may_cede(
+            w, a.actor, a.via, rid, yielder=held.subject, holder_faction=holder):
+        return NO_CHANGE
+    return _take_hold(w, a, rid, held, _SURRENDERED, to=receiver)
 
 
 def _may_close_custody(w: "World", seat: str, prisoner: str) -> bool:

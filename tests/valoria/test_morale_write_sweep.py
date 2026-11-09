@@ -136,7 +136,10 @@ def test_subunit_absolute_write_reaches_the_cells(unit_and_atom):
 
 # ── the guard that makes the sweep durable ──────────────────────────────────────────────────────
 
-_ENGINE_FILES = ['modules/mass_battle/orchestration.py', 'modules/mass_battle/core/state.py',
+_ENGINE_FILES = ['modules/mass_battle/orchestration.py',
+                 # CP-T04-03 (B10-12, ED-1043) moved `run_battle` -- the tick loop, with the Command=0 morale write and
+                 # the per-subunit rout loop -- out of `orchestration.py` into this file; the sweep follows it.
+                 'modules/mass_battle/battle_loop.py', 'modules/mass_battle/core/state.py',
                  'modules/mass_battle/core/exchange.py', 'modules/mass_battle/hierarchy/units.py',
                  'modules/mass_battle/percell.py', 'modules/mass_battle/resolution.py',
                  # [ED-MB-0049 / plan-v2 A5a, 2026-07-29] `lanchester_signature.py` joins the scanned
