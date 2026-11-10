@@ -1,10 +1,13 @@
 """modules.mass_battle.core.contact — targeting + contact detection (the contact-event layer).
 Stage-1 behaviour-frozen extract from orchestration.py (assign_targets, resolve_cross_side_contention,
 find_contacts, count_engagements_per_atom). Depends on geometry (_oriented/octagon/facing) + config +
-math + duck-typed unit/atom methods; no up-DAG import (no cycle). Re-imported by orchestration via
+math + duck-typed unit/atom methods, and on hierarchy.units for its flags and body helpers, read as
+attributes of the module at call time (`_u.FIELD_MOVEMENT`), not copied; units imports nothing from
+here, so there is no cycle. Re-imported by orchestration via
 star-import so resolve_engagements/run_battle and every caller are unchanged.
 [canonical: mass_battle_v30.md §A.7 manoeuvre/contact]"""
 import math
+import modules.mass_battle.hierarchy.units as _u
 from modules.mass_battle.config import *
 from modules.mass_battle.geometry import *
 
@@ -47,8 +50,7 @@ def _visible_enemy_cells(sub, enemy_cells):
         return enemy_cells
     # [movement-substrate review 06 — contact cluster precedent] Read at CALL TIME, not import-bound
     # -- same reasoning as find_contacts' own _u.FIELD_MOVEMENT reads in this file: a runtime flag
-    # flip (e.g. validators.py) stays consistent, and this avoids a units->contact import cycle.
-    import modules.mass_battle.hierarchy.units as _u
+    # flip (e.g. validators.py) stays consistent.
     if not (_u.MB_FACING_MODEL and _u.MB_FACING_FOV_GATE):
         return enemy_cells
     facing = getattr(sub, '_node_facing', None) or (sub.advance_dir, 0)
@@ -285,7 +287,6 @@ def resolve_cross_side_contention(unit_a, unit_b):
 
     Citation: see preceding canonical comment.
     """
-    import modules.mass_battle.hierarchy.units as _u
     if _u.FIELD_MOVEMENT:
         # ⚠ [ED-MB-0061, 2026-07-30] THIS CLAIM IS FALSE AND IS RETAINED ONLY AS A WARNING.
         # It used to read: "Co-location is now geometrically impossible on the field path:
@@ -321,7 +322,6 @@ def resolve_cross_side_contention(unit_a, unit_b):
                     # co-location on the SAME file-cell grid as cells()/find_contacts (the ratified
                     # 'contested grid cell = unit of contested ground' model), not raw-float equality
                     # (which almost never coincides). OFF = verbatim int(round). Toggles at call time.
-                    import modules.mass_battle.hierarchy.units as _u
                     ar, ac = (int(round(_pr)), int(round(_pc / _u.COL_WIDTH))) if _u.FIELD_MOVEMENT else (int(round(_pr)), int(round(_pc)))
                 # Contention speed: only counts if cell moved this turn
                 speed = (su.cell_last_speed.get((orig_r, orig_c), 0)
@@ -371,9 +371,8 @@ def resolve_cross_side_contention(unit_a, unit_b):
 
 
 def find_contacts(unit_a, unit_b):
-    # Toggles read at CALL TIME (not import-bound) so a runtime flag flip stays consistent across modules
-    # and to avoid a units->contact import cycle. [movement-substrate review 06 — contact cluster]
-    import modules.mass_battle.hierarchy.units as _u
+    # Toggles read at CALL TIME (not import-bound) so a runtime flag flip stays consistent across modules.
+    # [movement-substrate review 06 — contact cluster]
     if _u.FIELD_MOVEMENT:
         # [Stage A] The continuous-field halt (_node_advance) now stops cells at standoff() -- not at
         # Chebyshev<=1 -- so contact must fire at the SAME radius, or cells halt at 2-3 lattice units
@@ -421,7 +420,6 @@ def _find_contacts_standoff(unit_a, unit_b):
     a_cells/b_cells are snapped to the same (rank, file) convention _node_advance/orchestration.py
     already use for halted_cells matching (int(round(r)), int(round(c/COL_WIDTH))) -- only the contact
     PREDICATE is continuous; the reported cell identities stay on the existing snap convention."""
-    import modules.mass_battle.hierarchy.units as _u
     pairs = []
     # Each cell is a circular body (CellBody) whose weapon reach extends its FRONT along its own heading; contact
     # fires on reach_reaches (a's reach body meets b's body, or b's meets a's). The bodies are built by
@@ -485,7 +483,6 @@ def _find_contacts_field(unit_a, unit_b):
     are SETS (matching OFF's set(a.cells()) dedup) so round-colliding float cells do not multiply-count.
     At CONTACT_REACH=0.0 this reduces exactly to OFF adjacency. [movement-substrate review 06 — contact cluster]
     NOTE: reach>0 widening of the SET predicate is UNSPECIFIED and pending Jordan; ships reach=0.0 only."""
-    import modules.mass_battle.hierarchy.units as _u
     _reach = _u.CONTACT_REACH  # exercised only when a ratified non-zero reach lands; 0.0 => OFF adjacency
     pairs = []
     af = {id(a): a.cells_float() for a in unit_a.subunits}

@@ -1342,22 +1342,18 @@ class World:
         # ambiguity in Part D's column that makes the roster necessary is registered rather than
         # decided. The exemption is narrow: an UNDECLARED kind is still refused below.
         conditional = roster("conditional_emission_rows")
-        if (wclass is WriteClass.MATTER and declared
+        if (wclass is WriteClass.MATTER and declared and emits is None
                 and f"{record_kind}.{fieldname}" not in conditional):
-            if emits is None:
-                TRACE.write(thing, wclass.value, sname, False)
-                raise Forbidden(
-                    f"({record_kind}, {fieldname}) written at MATTER and emitted nothing, while "
-                    f"Part D declares {list(declared)}", "D22",
-                    needs="emits=<one of the row's declared kinds>",
-                    law="`H-12`, RULED: MATTER emits an Event PER WRITE so crossings have an "
-                        "antecedent, and the kind is Part D's `emits:` column. A MATTER write "
-                        "that emits nothing is the silent write `D22` names")
-            self._refuse_undeclared_kind(thing, wclass, sname, record_kind, fieldname,
-                                         emits, declared)
-        else:
-            self._refuse_undeclared_kind(thing, wclass, sname, record_kind, fieldname,
-                                         emits, declared)
+            TRACE.write(thing, wclass.value, sname, False)
+            raise Forbidden(
+                f"({record_kind}, {fieldname}) written at MATTER and emitted nothing, while "
+                f"Part D declares {list(declared)}", "D22",
+                needs="emits=<one of the row's declared kinds>",
+                law="`H-12`, RULED: MATTER emits an Event PER WRITE so crossings have an "
+                    "antecedent, and the kind is Part D's `emits:` column. A MATTER write "
+                    "that emits nothing is the silent write `D22` names")
+        self._refuse_undeclared_kind(thing, wclass, sname, record_kind, fieldname,
+                                     emits, declared)
         # CP-T02-01: AN EMITTING WRITE HANDED A `Change` EMITS, BESIDE ITS OWN KIND, EACH FURTHER KIND
         # ITS SUBJECTS NAME (`Subject.kinds`) -- the fold's per-subject earning (`loop/resolve.py::
         # _apply_write`) at the gate's own emission. MATTER's death (`loop/matter.py::_die`) is the one

@@ -53,7 +53,7 @@ from .requires import (
 )
 from .rosters import (
     COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
-    RESTRAINT_KINDS, STRIFE_KINDS, VERB_CAPABILITY, VOCATIONS,
+    RESTRAINT_KINDS, STRIFE_KINDS, VOCATIONS,
     is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
@@ -602,7 +602,6 @@ def _record_subkinds_answered(row: "VerbRow") -> frozenset:
 
 
 def _load_verb_table() -> dict:
-    import yaml as _y
     if not VERB_TABLE_YAML.exists():
         raise SystemExit(f"verb_table.yaml not found at {VERB_TABLE_YAML}")
     doc = load_yaml(VERB_TABLE_YAML.read_text())

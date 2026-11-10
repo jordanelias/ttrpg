@@ -32,14 +32,13 @@ import argparse
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.pursuits import pursuit as _pursuit
 from ..data.verbs import VERB_TABLE
-from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries.world_q import RESIDE_KIND
 from ..state.attribution import anchor_of
 from ..state.carriers import Person, Proposition, Rung, Site, Tenure
-from ..state.ids import H, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
+from . import probes as P
 
 CASE = "NPC-088"
 
@@ -135,7 +134,6 @@ def run(seasons: int = 2, seed: int = 0) -> dict:
     """Run Carin's season(s) and return the artifact. NOTHING HERE CHOOSES AN ACT."""
     w = build_world(seed)
     d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     out = []
     for _ in range(seasons):
         # ⚠ NARROWED TO WHAT THE FOLD CAN EXECUTE, AND THE NARROWING IS COMPUTED, NOT AUTHORED.
@@ -156,8 +154,7 @@ def run(seasons: int = 2, seed: int = 0) -> dict:
         # `H-87`: the contest depth cap is the CALLER's to supply (S39.3 refuses a default), and
         # artifact 2 never had to decide until Part E's `contests:` column became real and the
         # seam started firing on `kill / wound`.
-        out.append(d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                                         draw=draw_factory(w.world_seed, lambda: w.tick)),
+        out.append(d.season(P.chooser(w, verbs=resolvable_verbs()),
                             None,
                             contest_max_depth=w.fixtures.get("contest_max_depth")))
     return dict(seasons=out, hash=w.content_hash(), world=w,

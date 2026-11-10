@@ -81,35 +81,21 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
             # [migration H] recompute abs from _node_pos (file-binned) on ON so it matches find_contacts'
             # (file-binned) cells; OFF = verbatim cell_offsets build. Otherwise the == misses on the node
             # path and halted_cells stays empty -> pre-contact halt silently disabled on the field path.
-            _atom_a = p["atom_a"]; _atom_b = p["atom_b"]
-            _fld_a = FIELD_MOVEMENT and MB_NODE_COHESION and hasattr(_atom_a, '_node_pos')
-            _fld_b = FIELD_MOVEMENT and MB_NODE_COHESION and hasattr(_atom_b, '_node_pos')
-            op_a = _oriented(_atom_a)
-            for cell in p["a_cells"]:
-                for orig_r, orig_c, or_r, or_c in op_a:
-                    if _fld_a:
-                        _pr, _pc = _atom_a._node_pos.get((orig_r, orig_c), (0.0, 0.0))
-                        abs_r = int(round(_pr)); abs_c = int(round(_pc / COL_WIDTH))
-                    else:
-                        abs_r = (_atom_a.starting_position[0] + or_r
-                                 + _atom_a.cell_offsets.get((orig_r,orig_c), 0) * _atom_a.advance_dir)
-                        abs_c = (_atom_a.starting_position[1] + or_c
-                                 + _atom_a.cell_offsets_c.get((orig_r,orig_c), 0))
-                    if (abs_r, abs_c) == cell:
-                        _atom_a.halted_cells.add((orig_r, orig_c)); break
-            op_b = _oriented(_atom_b)
-            for cell in p["b_cells"]:
-                for orig_r, orig_c, or_r, or_c in op_b:
-                    if _fld_b:
-                        _pr, _pc = _atom_b._node_pos.get((orig_r, orig_c), (0.0, 0.0))
-                        abs_r = int(round(_pr)); abs_c = int(round(_pc / COL_WIDTH))
-                    else:
-                        abs_r = (_atom_b.starting_position[0] + or_r
-                                 + _atom_b.cell_offsets.get((orig_r,orig_c), 0) * _atom_b.advance_dir)
-                        abs_c = (_atom_b.starting_position[1] + or_c
-                                 + _atom_b.cell_offsets_c.get((orig_r,orig_c), 0))
-                    if (abs_r, abs_c) == cell:
-                        _atom_b.halted_cells.add((orig_r, orig_c)); break
+            for _atom, _cells in ((p["atom_a"], p["a_cells"]), (p["atom_b"], p["b_cells"])):
+                _fld = FIELD_MOVEMENT and MB_NODE_COHESION and hasattr(_atom, '_node_pos')
+                op = _oriented(_atom)
+                for cell in _cells:
+                    for orig_r, orig_c, or_r, or_c in op:
+                        if _fld:
+                            _pr, _pc = _atom._node_pos.get((orig_r, orig_c), (0.0, 0.0))
+                            abs_r = int(round(_pr)); abs_c = int(round(_pc / COL_WIDTH))
+                        else:
+                            abs_r = (_atom.starting_position[0] + or_r
+                                     + _atom.cell_offsets.get((orig_r,orig_c), 0) * _atom.advance_dir)
+                            abs_c = (_atom.starting_position[1] + or_c
+                                     + _atom.cell_offsets_c.get((orig_r,orig_c), 0))
+                        if (abs_r, abs_c) == cell:
+                            _atom.halted_cells.add((orig_r, orig_c)); break
         # [Stage C] check_orders BEFORE assign_targets -- a fired order's behavior dict may itself set
         # target_condition/target_delay_ticks/stance/instructions, so orders must land first. Hoisting
         # a_cells_set/b_cells_set up here (they were computed just after assign_targets) is a pure,
@@ -277,11 +263,8 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         trunc_pairs += result.get("truncated_pairs", 0)
         trunc_troops += result.get("truncated_troops", 0.0)
         max_groups = max(max_groups, result.get("n_groups", 0))
-        sz_a, sz_b = unit_a.size, unit_b.size
         # Apply Phase 2 Volley + Phase 5 Engagement damage simultaneously at Phase 6 Step 1
         # [canonical: mass_battle_v30.md §A.7 — Volley/Thread/Engagement damage applied together]
-        total_dmg_a_turn = result["dmg_a"] + volley_dmg_a
-        total_dmg_b_turn = result["dmg_b"] + volley_dmg_b
         # v12: Volley size-loss → hp uses ceil(h_per_size / 2), not full h_per_size.
         # Bottom-up rationale: a ranged "size loss" represents arrows finding targets in
         # the formation; many hits glance off shields/armor. Melee size loss represents
@@ -301,7 +284,6 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         # belongs, in the DR subtraction above.
         # [JUSTIFIED: magnitude preserved from the prior baseline to isolate the inversion fix; the
         #  underlying scale is admitted band-fitting (file header v12 note #4) and is Tier-3 debt.]
-        volley_hp_scale = lambda u: VOLLEY_LETHALITY_SCALE
         # v20: scale engagement damage by contact fraction.
         # More cells in contact = more soldiers fighting = more damage dealt.
         # Bottom-up: the envelopment advantage EMERGES from having more cells engaged.
@@ -311,15 +293,6 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         # makes LANCHESTER_ENABLED=0 byte-exact to the pre-P-L engine.
         if pairs and not LANCHESTER_ENABLED:
             for u, dmg_key in [(unit_a, "dmg_a"), (unit_b, "dmg_b")]:
-                cells_in_contact = set()
-                total_cells = 0
-                for sub in u.subunits:
-                    total_cells += len(list(sub.cells()))
-                    for p in pairs:
-                        if p.get('atom_a') is sub:
-                            cells_in_contact.update(p.get('a_cells', []))
-                        elif p.get('atom_b') is sub:
-                            cells_in_contact.update(p.get('b_cells', []))
                 # The OPPONENT's contact fraction scales their damage against us
                 # More of the opponent's troops fighting = more damage TO us
                 opp = unit_b if u is unit_a else unit_a
@@ -357,10 +330,10 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         # byte-identical to what it replaced. Melee and volley are separated by computing each
         # side's split from the same terms the assignment uses — no second derivation of either.
         _a_before, _b_before = unit_a.hp, unit_b.hp
-        _vol_a = volley_dmg_a * volley_hp_scale(unit_a)
-        _vol_b = volley_dmg_b * volley_hp_scale(unit_b)
-        unit_a.hp = max(0, unit_a.hp - result["dmg_a"] - volley_dmg_a * volley_hp_scale(unit_a))
-        unit_b.hp = max(0, unit_b.hp - result["dmg_b"] - volley_dmg_b * volley_hp_scale(unit_b))
+        _vol_a = volley_dmg_a * VOLLEY_LETHALITY_SCALE
+        _vol_b = volley_dmg_b * VOLLEY_LETHALITY_SCALE
+        unit_a.hp = max(0, unit_a.hp - result["dmg_a"] - volley_dmg_a * VOLLEY_LETHALITY_SCALE)
+        unit_b.hp = max(0, unit_b.hp - result["dmg_b"] - volley_dmg_b * VOLLEY_LETHALITY_SCALE)
         if tracing_on():
             # Split the clamped total across its two sources in proportion to their nominal share,
             # so the parts always sum to the whole even on a killing blow (where the clamp bites).
@@ -379,8 +352,6 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
             # E: ORDERED volley fire concentrates its portion on the target subunit (apply_to_subunit); the
             # unordered remainder spreads as before. Same totals -> sum==hp preserved; with no ordered fire
             # (the default) this is byte-exact-identical to the prior two distribute_casualties calls.
-            _sa = volley_hp_scale(unit_a)
-            _sb = volley_hp_scale(unit_b)
             _ord_a = vol.get("ordered_a", [])
             _ord_b = vol.get("ordered_b", [])
             _ord_a_tot = sum(_d for _su, _d in _ord_a)
@@ -393,18 +364,18 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
             _cdb = result.get("cell_dmg_b") if MB_CELL_DAMAGE else None
             if _cda:
                 distribute_casualties_cellwise(unit_a, result["dmg_a"], _cda)
-                distribute_casualties(unit_a, (volley_dmg_a - _ord_a_tot) * _sa, pairs)
+                distribute_casualties(unit_a, (volley_dmg_a - _ord_a_tot) * VOLLEY_LETHALITY_SCALE, pairs)
             else:
-                distribute_casualties(unit_a, result["dmg_a"] + (volley_dmg_a - _ord_a_tot) * _sa, pairs)
+                distribute_casualties(unit_a, result["dmg_a"] + (volley_dmg_a - _ord_a_tot) * VOLLEY_LETHALITY_SCALE, pairs)
             if _cdb:
                 distribute_casualties_cellwise(unit_b, result["dmg_b"], _cdb)
-                distribute_casualties(unit_b, (volley_dmg_b - _ord_b_tot) * _sb, pairs)
+                distribute_casualties(unit_b, (volley_dmg_b - _ord_b_tot) * VOLLEY_LETHALITY_SCALE, pairs)
             else:
-                distribute_casualties(unit_b, result["dmg_b"] + (volley_dmg_b - _ord_b_tot) * _sb, pairs)
+                distribute_casualties(unit_b, result["dmg_b"] + (volley_dmg_b - _ord_b_tot) * VOLLEY_LETHALITY_SCALE, pairs)
             for _su, _d in _ord_a:
-                apply_to_subunit(unit_a, _su, _d * _sa)
+                apply_to_subunit(unit_a, _su, _d * VOLLEY_LETHALITY_SCALE)
             for _su, _d in _ord_b:
-                apply_to_subunit(unit_b, _su, _d * _sb)
+                apply_to_subunit(unit_b, _su, _d * VOLLEY_LETHALITY_SCALE)
             if MB_CLOSE_RANKS:
                 # [ED-MB-0028] Cell-level closing-ranks: AFTER both units' casualties are applied (so it
                 # stays simultaneous — neither side's reflow sees the other mid-tick), rear cells step up

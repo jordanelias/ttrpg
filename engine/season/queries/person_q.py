@@ -52,7 +52,7 @@ from ..data import verbs as _verbs
 from ..data import affiliations as _aff
 from ..data.affiliations import AFFILIATION_CEILING, AFFILIATION_FLOOR, conviction_map, engagement
 from ..data.cast import STANCE_MAX
-from ..data.pursuits import pursuit_cosine_axes, to_axes
+from ..data.pursuits import _AXES, pursuit_cosine_axes, to_axes   # `_AXES`: the sorted axis order, owned once
 from ..data.requires import (
     CELL_STEMS, KNOWN_PERSON_CLAIM, OWN_STATE_STEMS, REQUIRES_OPERANDS, REQUIRES_STEMS, SHORTFALL_PREDICATE,
     UNKNOWN, WORLD_ONLY_STEMS,
@@ -419,11 +419,6 @@ def _lean(axis_w: dict, kind: str) -> float:
     """`Σ_axis axis_w[axis] · align_kind(kind, axis)`: how pursuits projected to `axis_w` lean on a
     deed of `kind`. One owner for the unpaired (`deed_valence`) and the paired (IN-58) scoring."""
     return sum(axis_w[ax] * _verbs.align_kind(kind, ax) for ax in _AXES)
-
-
-# sorted: PURSUIT_AXES is a frozenset, and a float sum's order would move with PYTHONHASHSEED
-# while callers test the result for exact zero.
-_AXES = tuple(sorted(PURSUIT_AXES))
 
 
 def regard(p: Person, referent: str, fx=None) -> float:

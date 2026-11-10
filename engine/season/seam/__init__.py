@@ -9,13 +9,13 @@ own *"nothing, ever"* and return a `Margin`.
     wrappers/combat.py    the IN-side of the personal-combat call
     wrappers/fieldwork.py the `inquiry` role's provider (v9 FI-02 + FI-03), called by find_trail()
 
-⚠ **`_LADDER` AND `_LADDER_ERROR` ARE NOT RE-EXPORTED HERE.** `degree_ladder()` rebinds both through
-`global`, so a name bound in this namespace would be a snapshot that is permanently stale the moment
-the first call fires. A caller that reads or writes the raw attribute -- a test swapping the ladder
--- must name **`seam.ladder._LADDER`**. Step 8 established this for the flat module and it holds one
-directory down. The two non-rebinding readers, `ladder_error()` and `degree_of()`, ARE re-exported
-and work from here: a function is one object regardless of which module holds a name pointing at it,
-so `seam.ladder_error()` runs the same code and reads `ladder`'s own globals.
+⚠ **`_LADDER` IS NOT RE-EXPORTED HERE.** `degree_ladder()` reads it as `ladder`'s own global, so a name
+bound in this namespace would be a snapshot that goes stale the moment a test swaps the ladder. A caller
+that reads or writes the raw attribute -- a test swapping the ladder -- must name **`seam.ladder._LADDER`**.
+Step 8 established this for the flat module and it holds one directory down. The readers `degree_ladder()`,
+`ladder_error()` and `degree_of()`, ARE re-exported and work from here: a function is one object regardless
+of which module holds a name pointing at it, so `seam.degree_ladder()` runs the same code and reads
+`ladder`'s own globals.
 
 ⚠ **`combat_seam.py` MOVED, AND THE CLAIM THAT IT WOULD NOT IS THE DEFECT THIS UNIT REPAIRS.** The
 flat `seam.py`'s docstring said it *"does NOT move here and is not renamed ... per
@@ -41,7 +41,7 @@ Filed as **ED-IN-0206**; this is unit **L2** of
 
 # ---------------------------------------------------------------------------
 # THE PACKAGE SURFACE. Everything the fold, the harness and the suite import from `..seam`,
-# re-exported from its owning member -- EXCEPT `_LADDER` and `_LADDER_ERROR`, per the docstring.
+# re-exported from its owning member -- EXCEPT `_LADDER`, per the docstring.
 # `dir(seam)` must keep containing `contest`: `harness/probes.py`'s A17 probe asks this surface
 # whether the loop has one resolver, and a package that hid it would make that probe read PASS over
 # an empty list.
@@ -64,8 +64,8 @@ from .ladder import combat_degree, degree_ladder, degree_of, ladder_error, party
 
 # ⚠ DERIVED, NOT LISTED -- Jordan 2026-09-02, definitions are not hardcoded, and
 # `test_jordan_no_definition_is_hardcoded_in_a_body` reads a written-out name list in a model module
-# as a literal roster. The predicate keeps only what a member DEFINED, which is what makes the two
-# exclusions structural rather than remembered: `_LADDER` is a tuple with no `__module__` and would
+# as a literal roster. The predicate keeps only what a member DEFINED, which is what makes the
+# exclusion structural rather than remembered: `_LADDER` is a tuple with no `__module__` and would
 # be excluded even if the underscore rule were dropped.
 __all__ = sorted(
     _n for _n, _v in list(globals().items())

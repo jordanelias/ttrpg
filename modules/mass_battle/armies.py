@@ -9,17 +9,11 @@ and a module may not import from `systems/` (the harness and workbench tree). Mo
 The moved text was edited in ONE place: `build_army`'s spec tuple gained `'target_condition'` (a spec's targeting
 preference was silently dropped before; no caller passed one). A diff against the old engine.py lines is otherwise
 empty but for this docstring and the imports."""
-from modules.mass_battle.config import *
-from modules.mass_battle.core.exchange import *
-from modules.mass_battle.core.state import *
-from modules.mass_battle.core.attrition import *
-from modules.mass_battle.core.contact import *
-from modules.mass_battle.troop_types.registry import *
-from modules.mass_battle.hierarchy.units import *
-from modules.mass_battle.geometry import *
-from modules.mass_battle.percell import *
-from modules.mass_battle.resolution import *
-from modules.mass_battle.orchestration import *
+from modules.mass_battle.config import BATTLEFIELD_SIZE, MB_VOLLEYS_START, ROLE_SPEC, SIDE_A_START_ROW, SIDE_B_START_ROW
+from modules.mass_battle.core.exchange import clamp_command
+from modules.mass_battle.troop_types.registry import role_allowed, roles_for, unit_type_for
+from modules.mass_battle.hierarchy.units import Officer, Subunit, Unit
+from modules.mass_battle.geometry import CELL_PATTERN_FN, footprint_for
 
 __all__ = ['SUBUNIT_CAP', 'DEPLOY_GAP', 'ENVELOP_WING_GAP', 'REFUSE_ECHELON', '_spec_span',
            '_centered_line_cols', 'build_army']

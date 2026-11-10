@@ -276,7 +276,10 @@ _Q = Question("q:view-probe", "need", ())
 
 
 def chooser(w, only=None, verbs=None):
-    """§F2's default policy, built the way the barrier builds it. `only` narrows to one person so
+    """§F2's default policy, built the way the barrier builds it -- the composition of
+    `make_chooser` over a world (act-id mint, `verbs`, the per-candidate draw) that the instruments
+    which play a season on the shipped policy call. `soak`, `interactions` and `storybar` still
+    compose it by hand (`storybar` with its own `draw_seed`). `only` narrows to one person so
     a probe can watch a single decision; `verbs` narrows the option set to the ones under test.
 
     ⚠ IT DOES NOT TAKE A ROSTER, and it cannot: `opening_set` computes from the verb table now.

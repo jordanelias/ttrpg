@@ -950,9 +950,7 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     n = seasons_for(case)
     w = build_at(case, seed)
     d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                      draw=draw_factory(w.world_seed, lambda: w.tick))
+    ch = P.chooser(w, verbs=resolvable_verbs())
     try:
         for _ in range(n):
             # `H-87` -- S39.3 gives the contest depth cap NO DEFAULT, so an uncapped call raised
@@ -983,9 +981,7 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     before = dict(DEFAULT_FIXTURES.reads)
     w2 = build_at(case, seed)
     d2 = SeasonDriver(w2)
-    mint2 = lambda pid, verb, subj: H(w2.world_seed, w2.tick, pid, f"act:{verb}:{subj}")
-    ch2 = make_chooser(w2.fixtures, mint2, verbs=resolvable_verbs(),
-                       draw=draw_factory(w2.world_seed, lambda: w2.tick))
+    ch2 = P.chooser(w2, verbs=resolvable_verbs())
     try:
         for _ in range(n):
             # ⚠ THE SAME FIXTURE, ON BOTH CALL SITES. A cap on the measured run and not the R4

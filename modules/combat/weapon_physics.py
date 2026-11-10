@@ -34,7 +34,7 @@ fit in the re-baseline (REARCHITECTURE_v1 Phase 3), not asserted.
 import math
 
 import vocabulary as V   # the engine's token ALPHABET, owned once (ED-PC-0042). A zero-import leaf, so this
-                         # module -- which CANNOT import core (core imports IT, core.py:37) -- still reaches the
+                         # module -- which CANNOT import core (core imports IT: `import weapon_physics as WP`) -- still reaches the
                          # same head/mode/hilt tokens core's tables are keyed by, with no cycle.
 
 

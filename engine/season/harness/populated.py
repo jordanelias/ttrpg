@@ -2059,9 +2059,7 @@ def run(seasons: int = 1, seed: int = 0, cap: int | None = None, w: World | None
     quantity; it does not replace this one."""
     w = build_realm(seed, cap) if w is None else w
     d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                      draw=draw_factory(w.world_seed, lambda: w.tick))
+    ch = P.chooser(w, verbs=resolvable_verbs())
     for _ in range(seasons):
         d.season(ch, question=None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))

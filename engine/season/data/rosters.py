@@ -1375,14 +1375,13 @@ FOREIGN_FACTION_IDS = frozenset(faction_prop_id(f) for f in FOREIGN_FACTIONS)
 #     loop-resident, data register, host or stub (`rosters.yaml` defines each in one line).
 #   * an entry's `home:` is the repo-relative path it lives at: a directory, written with a trailing
 #     `/`, or -- for `npcs` -- the one file that holds it. The loader checks it is a non-empty,
-#     relative string and nothing more; the consumers (`R04_PENDING_SUBSYSTEMS`, `tools/evacuation_plan.py`)
-#     each compare a directory home with the slash stripped. It may
+#     relative string and nothing more; the consumer (`R04_PENDING_SUBSYSTEMS`)
+#     compares a directory home with the slash stripped. It may
 #     name a path that does not exist yet (`game/`); nothing here checks the disk, because a home is
 #     a declaration about where an entry BELONGS, and moving code is `31a`-`31c`'s, not a loader's.
 # Validated AT LOAD, `_load_rosters`' reason: a check that only runs when something reads the roster
-# misses the rows nothing reads. The readers are `R04_PENDING_SUBSYSTEMS`
-# (`tests/valoria/test_engine_does_not_import_systems.py`, computed from `home:`) and
-# `tools/evacuation_plan.py`'s two `systems/` rules.
+# misses the rows nothing reads. The one reader is `R04_PENDING_SUBSYSTEMS`
+# (`tests/valoria/test_engine_does_not_import_systems.py`, computed from `home:`).
 # ---------------------------------------------------------------------------
 MODULE_KINDS = roster("module_kinds")
 #: This loader's own row grammar -- the two keys an entry carries -- not a definition the game

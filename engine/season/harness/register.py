@@ -83,10 +83,6 @@ REGISTER = files.HOLE_REGISTER_YAML
 ARCHITECTURE_V2 = files.ARCHITECTURE_V2_MD
 
 GRADES = ("ruled", "measured", "assumption", "absent")
-# Strictest first. A row V2 grades in parts (H-02, H-20) takes the strictest grade present,
-# because §42.2's polarity rule sends zero evidence to the verdict AGAINST the thing measured:
-# a hole that is absent in part must refuse in part, and refusing is what a grade decides.
-GRADE_STRICTNESS = ("absent", "assumption", "measured", "ruled")
 FIELDS = ("id", "tier", "hole", "kind", "owner", "grade",
           "default", "site", "sweep", "unblocks", "cite", "source")
 # ⚠ `sign` IS DECLARED OPTIONAL AND IS REQUIRED ON EXACTLY ONE KIND. `ID-16` — *a design
@@ -164,16 +160,6 @@ def load(path: Path = REGISTER) -> dict:
     if not path.exists():
         raise SystemExit(f"register not found: {path}")
     return load_yaml(path.read_text())
-
-
-def grade_of(cell: str) -> str:
-    """The strictest grade NAMED in a cell. Word-bounded, because a substring scan is a router
-    and this module's own G8 docstring indicts one: `unmeasured` contains `measured`, `not ruled`
-    contains `ruled`. No V2 cell trips it today, which makes it latent rather than safe."""
-    for g in GRADE_STRICTNESS:
-        if re.search(r"\b" + g + r"\b", cell, re.I):
-            return g
-    return ""
 
 
 def part_b_defects() -> set:
