@@ -312,7 +312,9 @@ RELATIONS = [
                 "roll and the punishment of a miss are untouched",
          term='V', mech='U', src='CAPO',
          note="Capoferro's counter-time happens when both 'come at the same time to narrow measure'; he does not say the "
-              "attacker must have committed deeply. The engine's DEEP_COMMIT gate is the repo's, not the treatise's."),
+              "attacker must have committed deeply. The engine's DEEP_COMMIT gate is the repo's, not the treatise's. "
+              "BUILD NOTE: in wrapper.engagement the Indes steal and counter_select share ONE `if` on that gate, so the "
+              "block must be split or the widening also grants the steal."),
     dict(id='DE-1', kind='requires', tradition='german', ability='indes', needs={'fuehlen': 1.0},
          term='C', mech='C', src='RINGECK',
          note="The repo's decomposition pairs 'Fuhlen / Indes' (feel, then the decision in the same tempo). Not re-read."),
