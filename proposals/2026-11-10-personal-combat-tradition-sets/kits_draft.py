@@ -59,6 +59,12 @@ LEVERS_NEW = {
         site='combat_systems.read_contest (lost-read branch)', point='exchange.mode', form='as guard_prior_parry', K=None),
     'guard_prior_wind': dict(
         site='combat_systems.read_contest (lost-read branch)', point='exchange.mode', form='as guard_prior_parry', K=None),
+    'handling': dict(
+        site='combat_systems.handling_penalty', point='exchange.roll',
+        form='own-side mitigator on a non-negative deficit: HANDLE_K * deficit * ability_factor(c, "handling") (<1 helps its '
+             'owner); read by defence_sigma and attack_sigma, so it acts on both halves of the exchange. NO ABILITY '
+             'AUTHORED: a weapon-competence ability has no treatise technique to cite (see 00_tradition_sets.md 3c).',
+        K=None),
     'grapple_control': dict(
         site='contact.grab_sigma', point='contact.axis',
         form='signed sigma: + GRAB_CONTROL_K * log(ability_factor(actor, "grapple_control"))', K='GRAB_CONTROL_K'),
