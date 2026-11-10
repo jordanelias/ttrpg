@@ -149,7 +149,7 @@ scales:
       (`combat_systems.py::RANGE_COMMIT_PEAK`, `RANGE_AVAIL_FLOOR`) between two combatants.
       ⚠ CORRECTED 2026-10-26 (v10 REM-03, B10-01): this note used to say grid-based map combat with
       units exists nowhere in the tree. `modules/mass_battle` holds a cell battlefield
-      (`config.py:16` `BATTLEFIELD_SIZE`, `:25` `UNIT_GRID_SIZE`); what does not exist is the
+      (`config.py:14` `BATTLEFIELD_SIZE`, `:23` `UNIT_GRID_SIZE`); what does not exist is the
       decision at its scale (commander-chosen orders). THE READING OF THIS ROW
       [ASSUMPTION; medium; Jordan to correct; revert: commander-chosen orders restored as a third
       gate]: it reads `in_loop` when, in computed play, (i) a duel resolves (`fight` or `accept` ->
