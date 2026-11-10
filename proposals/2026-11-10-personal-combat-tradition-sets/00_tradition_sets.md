@@ -46,6 +46,16 @@ A **lever** is a read site: an `eff_cw`, `ability_factor` or `ability_bonus` cal
 
 Neutrality: every form is exactly neutral at factor 1.0. `guard_prior_*` must keep `modes[rng.randrange(3)]` when all weights are 1.0, or the RNG stream changes for default builds. Signed sigma sites take `K * log(factor)` (the `lever_log_edge` precedent, ED-PC-0045).
 
+## 3b. Relations: abilities that set up other abilities
+
+The live ability record is flat. `_invested` checks tradition membership only, and abilities on a lever multiply, so a kit is a bag of independent multipliers. Jordan's objection, in his words: an ability "shouldn't just be values over a lever, but should be changing behaviour around that lever too". `phase4_5_plan_v1` §4b names the same fields (`prereq`, `trigger`) and calls an ability "learned ACCESS to attempt a graph transition, never a +X dial". The draft adds three relations (`RELATIONS` in `kits_draft.py`; none is built):
+
+- `requires`: an ability can be invested only while its prerequisites are invested to a level. The access gate gains a second clause.
+- `widens`: with the named abilities invested, a gate admits a case it refuses today. This is the agency proposal's Class B ("availability, never magnitude"); it only adds cases, so an empty kit stays byte-identical.
+- `branch`: the follow-up depends on a state the lever already computes, instead of one fixed weight.
+
+Five are authored, each where a source read this session states the dependency: Capoferro ties the time available to the measure (wide measure a tempo and a half, narrow a whole tempo, narrowest half), so `mezzo_tempo` and `contratempo` require `misura`, and `misura` widens `mezzo_tempo` to a won read at narrow measure without a deep commit (the engine's `DEEP_COMMIT` gate at `wrapper.engagement` is the repo's, not the treatise's); Zornhau (verses 27–31) takes the blow off if the opponent reacts and winds and thrusts if the opponent is strong, so `fuehlen` branches between `absetzen` and `staerke_schwaeche`, and `indes` requires `fuehlen` (carried from the repo). Chain depth is capped at three, after Fiore's "few plays go past the third master" (V). Spanish, English and Japanese have no authored relation because no source read states one; inventing a chain is the error ED-PC-0026 removed twice. Engine work implied: a `requires` clause in `_invested`, and one availability test at the `DEEP_COMMIT` gate. Neither is a lever.
+
 ## 4. The kits
 
 Names, lever, point and slot are in `kits_draft.py` and printed by `check_kits.py`. Grounding, with what was and was not read this session:
@@ -91,7 +101,7 @@ The shipped values are the lowered ones. Three findings on existing abilities: `
 
 1. **Chinese and Filipino (agency proposal Q5).** Leave empty (the armature's rule), commission the research in §6, or accept explicitly flagged provisional content. The kits above assume the first.
 2. **Build the eight levers?** `pursuit` and `guard_prior_parry` carry three abilities between them; `close`, `stophit`, `disengage`, `grapple_control` one or two each. Each is one call site plus one `config.py` constant and needs the agency proposal's sign-safety test and byte-identity gate.
-3. **Interim modulator or Phase 4b access form** for the kits. The draft is shaped for the first and carries the fields for the second.
+3. **Interim modulator or Phase 4b access form** for the kits, and whether the relations in §3b are the shape wanted. The draft is shaped for the first and carries the fields for the second.
 4. **New traditions** (the roster has Indo-Persian, Polish and Korean weapons with no tradition): adding an eighth tradition raises `ValueError` at import, because `ability_primitives._generics` needs exactly as many traditions as levers (7). It needs the 21 generics retired first (their stated revert).
 5. **`misura` at 1.15** overshoots; lower it or accept it.
 6. **`cavazione` → `disengage`:** hold or accept.

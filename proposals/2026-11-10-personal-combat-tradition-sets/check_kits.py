@@ -121,6 +121,31 @@ for trad, kit in K.KITS.items():
         print(f'  {trad:9s} {len(sl)} slots: ' + '; '.join(f'{k}: {", ".join(v)}' for k, v in sl.items()))
 check(all(p in K.SLOT_OF_POINT for p in SG.INJECTION_POINTS), 'SLOT_OF_POINT misses an injection point')
 
+print('3c. relations')
+ids = set()
+for r in K.RELATIONS:
+    check(r['id'] not in ids, f"duplicate relation id {r['id']}"); ids.add(r['id'])
+    kit = K.KITS[r['tradition']]['abilities']
+    check(r['ability'] in kit, f"{r['id']}: {r['ability']!r} not in the {r['tradition']} kit")
+    deps = r.get('needs') or r.get('with_') or {}
+    for d, lv in deps.items():
+        check(d in kit, f"{r['id']}: dependency {d!r} not in the {r['tradition']} kit")
+        check(0 < lv <= ABIL.MAX_INVESTMENT_LEVEL, f"{r['id']}: level {lv} outside (0, MAX_INVESTMENT_LEVEL]")
+    for st, ab in (r.get('selects') or {}).items():
+        check(ab in kit, f"{r['id']}: branch target {ab!r} not in the kit")
+    check(r['src'] in K.SOURCES, f"{r['id']}: unknown source")
+    if r['kind'] == 'widens':
+        check(r['gate_class'] == 'B', f"{r['id']}: a widening must be a Class B availability gate")
+        check("commit>=cfg['DEEP_COMMIT']" in ENGINE_SRC['wrapper.py'], f"{r['id']}: the gate it cites is not in wrapper.py")
+    print(f"  {r['id']} {r['kind']:8s} {r['ability']:12s} <- {', '.join(deps) or ', '.join((r.get('selects') or {}).values())}   term={r['term']} mech={r['mech']}")
+# acyclic, depth <= 3
+req = {r['ability']: set(r['needs']) for r in K.RELATIONS if r['kind'] == 'requires'}
+def depth(a, seen=()):
+    check(a not in seen, f'requires cycle through {a}')
+    return 1 + max((depth(d, seen + (a,)) for d in req.get(a, ())), default=0) if a not in seen else 0
+check(all(depth(a) <= 3 for a in req), 'a requires chain is deeper than 3')
+print('  kits with no relation authored:', {t: K.RELATION_GAPS.get(t, '(none stated)') for t in K.KITS if K.KITS[t]['abilities'] and not any(r['tradition'] == t for r in K.RELATIONS)})
+
 print('4. weapon coverage (live roster, half-sword forms excluded)')
 roster = [w for w in S.WEAPONS if not w.endswith('halfsword')]
 taught = {}

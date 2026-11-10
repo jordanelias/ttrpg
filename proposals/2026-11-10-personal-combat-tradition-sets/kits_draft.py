@@ -283,3 +283,50 @@ NOT_HOOKED = {
                           "contest. A tradition that extends it is the retired imposition gate (ED-PC-0023); "
                           "tradition reaches it only through the tempo lever upstream.",
 }
+
+
+# ── Relations: how one ability sets up another, or changes behaviour around its lever ─────────────────
+# The live record is flat: `_invested` checks tradition membership only and abilities on a lever multiply. These are
+# the three relations the draft adds, each with the engine site that would have to honour it. NONE IS BUILT.
+#   requires : ability can be invested only while every `needs` ability is invested to at least that level
+#              (the access gate gains a second clause; phase4_5_plan section 4b's `prereq`).
+#   widens   : with every `with_` ability invested, a named GATE admits a case it refuses today (agency proposal
+#              Class B: an ability may change AVAILABILITY, never magnitude). It only ever ADDS cases, so an
+#              empty kit stays byte-identical to today.
+#   branch   : the follow-up the fighter takes depends on a state the lever already computes, instead of one
+#              fixed weight. `selects` maps that state to the ability that then applies.
+# RULES. Relations stay inside one tradition. Chain depth <= 3 (Fiore: 'few plays go past the third master', V,
+# Wiktenauer Fiore page). A relation is authored only where a source states the dependency; the rest of each kit
+# is left flat and is listed in RELATION_GAPS rather than invented.
+RELATIONS = [
+    dict(id='IT-1', kind='requires', tradition='italian', ability='mezzo_tempo', needs={'misura': 1.0},
+         term='V', mech='V', src='CAPO',
+         note="Capoferro ties the time available to the measure: wide measure takes a tempo and a half, fixed-foot narrow "
+              "a whole tempo, the narrowest half a tempo. A half-time counter presupposes holding the measure it is "
+              "taken in."),
+    dict(id='IT-2', kind='requires', tradition='italian', ability='contratempo', needs={'misura': 1.0},
+         term='V', mech='V', src='CAPO', note="As IT-1: the blow in counter-time is delivered 'at narrow measure'."),
+    dict(id='IT-3', kind='widens', tradition='italian', ability='mezzo_tempo', with_={'misura': 1.0}, gate_class='B',
+         gate="wrapper.engagement: `if read_win and commit>=cfg['DEEP_COMMIT']` before counter_select",
+         effect="a won read at narrow measure admits a counter attempt without a deep commit; the existing success "
+                "roll and the punishment of a miss are untouched",
+         term='V', mech='U', src='CAPO',
+         note="Capoferro's counter-time happens when both 'come at the same time to narrow measure'; he does not say the "
+              "attacker must have committed deeply. The engine's DEEP_COMMIT gate is the repo's, not the treatise's."),
+    dict(id='DE-1', kind='requires', tradition='german', ability='indes', needs={'fuehlen': 1.0},
+         term='C', mech='C', src='RINGECK',
+         note="The repo's decomposition pairs 'Fuhlen / Indes' (feel, then the decision in the same tempo). Not re-read."),
+    dict(id='DE-2', kind='branch', tradition='german', ability='fuehlen',
+         selects={'soft': 'absetzen', 'hard': 'staerke_schwaeche'},
+         site="bind state already computed in bind_sigma (the sign of the tactile read against the opponent's pressure)",
+         term='V', mech='U', src='LIECH',
+         note="Zornhau, Wiktenauer v.27-31: it threatens the point; if the opponent reacts, take the blow off above; if "
+              "the opponent is strong, wind and thrust. The follow-up depends on what the fighter feels. The mapping of "
+              "soft/hard onto the engine's bind state is mine."),
+]
+
+RELATION_GAPS = {
+    'spanish': "no relation stated in any source read (the Destreza terms were not found in the text read)",
+    'english': "Silver's governors are named but not listed in the text read, so no dependency can be cited",
+    'japanese': "the sen terms were not found in the texts searched; a sen -> zanshin dependency is plausible and unsourced",
+}
