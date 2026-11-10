@@ -14,7 +14,7 @@ import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))   # modules/combat/ (plan position `31b`)
 if _REPO_ROOT not in sys.path:
-    sys.path.insert(0, _REPO_ROOT)          # resolve the sim.* shared-service layer (autoload)
+    sys.path.insert(0, _REPO_ROOT)          # resolve `engine.dice_engine` (below) when core is imported flat, outside the repo root
 import functools
 from math import tanh, exp
 from engine.dice_engine import sigma_leverage as SL
@@ -576,6 +576,14 @@ def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
     if head=='cut_thrust': return max(cfg['ADEF_CUT'], cfg['ADEF_POINT']*gap*tauth)   # cut OR half-sword gap-thrust (the thrust term pressed home by the short lever)
     return cfg['ADEF_CUT']                                                            # straight/curved pure cut collapses
 
+def adef_deficit(cap, cfg, armor):
+    """How far an armour-defeat CAPABILITY falls short of `armor`'s ADEF_THRESHOLD, floored at 0 on BOTH sides [ED-PC-0039, ED-PC-0046]. `adef_cap`
+    returns a NEGATIVE number for a pure cutter (ADEF_CUT = -0.9): a sigma-domain CONTROL PENALTY for armor_defeat_sigma's +/- scale (which keeps the
+    raw signed cap), not a capability magnitude. Every DEFICIT clamps it at zero capability first, since 'cannot defeat the harness' is a floor, not
+    an unbounded negative: raw, it tripled the bardiche's medium deficit (0.45 -> 1.35), inflated damage()'s knee ~x10.7 (bardiche 17 -> 1 per hit at
+    plate) and crowded it off measure 99.1% of engagements in represent_measure_p (0.0089 raw against 0.207 clamped). Pure."""
+    return max(0.0, cfg['ADEF_THRESHOLD'][armor] - max(0.0, cap))
+
 # ── primitive-emergent USE-MODE selection (the per-exchange technique choice) ───────────────────────────────────
 # grounded_weapon_armour_usemode_model.md §3-4 (tasks wht7pkx1c / w4bekmb5e). There is NO per-weapon mode table:
 # the AFFORDED modes + their effectiveness DERIVE from each weapon's existing geometry primitives, so poleaxe/mace/
@@ -631,17 +639,7 @@ def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc
         _cap = (adef_cap(weapon_geo, cfg_adef, head=weapon_head, gap=gap, grip=grip, room=room)
                 if (weapon_geo is not None and cfg_adef is not None) else None)
         if _cap is not None:
-            # CLAMP THE CAPABILITY AT 0 BEFORE TAKING THE DEFICIT [ED-PC-0039, adversarial-review fix]. adef_cap can
-            # return a NEGATIVE number — ADEF_CUT is -0.9, a sigma-domain CONTROL PENALTY calibrated for
-            # armor_defeat_sigma's +/- scale, not a capability magnitude. Feeding it raw gave a pure cutter a deficit of
-            # 1.62 at plate (more than twice the entire threshold scale) and inflated its knee ~x10.7, which silently
-            # annihilated the whole cutter class: bardiche 17->1, podao 13->1, sparr_axe 11->1 per hit, and at MEDIUM —
-            # a tier the fix was never meant to touch — sparr_axe 0.32->0.05, staff 0.22->0.04. "Cannot defeat the
-            # harness" is a floor at zero capability, not an unbounded negative one; a weapon with no armour-defeat is
-            # simply at deficit = threshold, and the grading of HOW badly a given cut fails is ADEF_CUT's job in the
-            # sigma path (and the batch-6 mass/keenness work), not this knee's.
-            _deficit = max(0.0, cfg_adef['ADEF_THRESHOLD'][armor] - max(0.0, _cap))
-            t *= (1.0 + PEN_DEFICIT_K * _deficit)
+            t *= (1.0 + PEN_DEFICIT_K * adef_deficit(_cap, cfg_adef, armor))   # the clamp, and why, live in adef_deficit
     if t > 0.0 and raw > 0.0:
         raw *= (raw*raw) / (raw*raw + t*t)                       # soft knee: a sub-defeat blow inflicts little LASTING wound (deflected); a defeating blow (large raw) keeps ~all
     return max(0, int(round(raw)))
@@ -650,9 +648,8 @@ def strike(attacker, defender, deg, cfg, net=None, pool=None):
     """Role-object damage convenience: reads weight/head/strength/gap/percussion off the ATTACKER and armour off the
     DEFENDER, returning the int damage. Single call-site for every blow so the 9-arg positional surface (the
     transposition-bug class) exists in exactly one place. Takes role objects (never raw A/B), consistent with the
-    subsystem contract. `cfg` is retained as the engine-config handle at this single damage chokepoint — no longer
-    read here now that DMG_SCALE is the lone scaling constant, but it is the wiring point should a damage knob ever
-    move into config.
+    subsystem contract. `cfg` rides to `damage` as `cfg_adef`, where the penetration knee reads `ADEF_THRESHOLD` and
+    `adef_cap` the `ADEF_*` weights (ED-PC-0039); `strike` itself reads none.
     CIRCUMSTANCE-DEGRADED (I2, D2/D2b/D5 — BLOCKER-2 + M-02 fixes): `gap`/`perc` now read the SELECTED element's
     OWN sel_gap/sel_perc (systems.select_mode's widened 5-tuple, threaded onto the attacker by the wrapper),
     native whole-weapon fallback only when unset — the canonical single source of truth (fixes the sel-vs-native

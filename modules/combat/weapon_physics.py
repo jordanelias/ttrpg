@@ -436,10 +436,9 @@ def strike_point_lever(w, m_strike, x_strike):
         That is WRONG and E2b measured it before consuming it: this function divides its mass argument by the
         weapon's total, so passing `elem_mass` puts mass in at power 1.5 — dropping percussion 19-37% on every weapon.
         The element's own mass belongs in `sqrt()`; the lever is geometric, which is exactly what this
-        function returns when handed the delivered mass. `test_combat_element_reachability.py::
-        test_element_lever_does_not_double_count_mass` pins it so the prescription cannot be re-followed.
-        `tests/valoria/test_combat_strike_point_lever.py::test_strike_point_lever_is_nonzero_at_the_hand` pins
-        the hand-floor property E2b consumes, so the two scales cannot ship two different lever forms (R-11.4).
+        function returns when handed the delivered mass. Both properties E2b consumes (the element's lever does not
+        double-count mass; the lever is nonzero at the hand) were pinned by tests dropped at ED-IN-0313 and
+        ED-IN-0314, so only this docstring now keeps the two scales from shipping two different lever forms (R-11.4).
       · NOT `|x| / Lt` and NOT `PoB_frac`. If a third lever form ever appears in this module, one of them is wrong.
 
     Symmetric in the sign of x (a rear-facing fluke swings on |x| like any other located element). Monotone

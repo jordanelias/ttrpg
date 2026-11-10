@@ -1,5 +1,4 @@
-"""contact.py — L2 module for the post-opening grapple/contact resolution (D8/D9, I7b,
-designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md).
+"""contact.py — L2 module for the post-opening grapple/contact resolution (D8/D9, I7b; `grab_available`, `grab_sigma`, `grab_outcome`).
 
 Grab affinity derives from real primitives the schema actually supports — free-hand availability
 (a dagger/unarmed-class weapon is already functionally at grapple range) and LEVERAGE

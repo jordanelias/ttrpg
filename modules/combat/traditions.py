@@ -1,21 +1,30 @@
-"""traditions.py — the TRADITIONS ROSTER and the FAMILIARITY table.
+"""traditions.py — the TRADITIONS DICTIONARY: each tradition as an AGGREGATE of ability primitives + a reading bias.
 
-The data half of the tradition split (the atoms, and each tradition's kit TRADITION_KIT, are in ability_primitives.py). Symmetric to the weapon split: a
+The data half of the tradition split (the atoms are in ability_primitives.py). Symmetric to the weapon split: a
 weapon is a bundle of physical primitives (weapons.py); a tradition is a bundle of ABILITY primitives (the kit it
 teaches) plus its preferred-node bias and familiarity profile. A tradition is a COGNITIVE MODE — a way of reading
 the same shared physics — NOT a separate rule-set; it biases HOW its fighter reads/selects, never new physics.
 
 Differentiation is BOTTOM-UP only: the learned ABILITIES it grants (ability_primitives.py), the IMPOSITION gate
 (the preferred node it fights to impose), and FAMILIARITY (how well it reads an unfamiliar style). The scalar
-7-channel weight vector was REMOVED 2026-06-29 (Jordan) — proven a degenerate "who-bought-balance" contest; nothing
-of it survives.
+7-channel weight vector was REMOVED 2026-06-29 (Jordan) — proven a degenerate "who-bought-balance" contest; the
+raw numbers below survive only as `set`/`mode`/provenance metadata, read by nothing as weights.
 """
 
-# The traditions, a closed set. ORDER IS LOAD-BEARING: ability_primitives places the generic abilities by position
-# ('none' excluded). A tradition carries no data of its own: the old 7-dim channel-weight vector was REMOVED 2026-06-29
-# (degenerate top-down tuning), and the `set`/`mode` labels that outlived it were read by nothing. Differentiation is
-# bottom-up: the abilities it grants (ability_primitives) + familiarity (below).
-TRADITIONS = ('german', 'italian', 'spanish', 'japanese', 'chinese', 'filipino', 'english', 'none')
+# Each tradition: the named-set it expresses (bridge mapping) + the cognitive-mode label. The old 7-dim channel-weight
+# vector was REMOVED 2026-06-29 (degenerate top-down tuning) and its vestigial numbers deleted 2026-06-29 (read by
+# nothing). Differentiation is bottom-up: the abilities it grants (ability_primitives) + the imposition gate
+# familiarity. `mode` is flavour metadata (the governing-analogue label); not read at resolution.
+TRADITIONS = {
+    'german':   dict(set='Bind Fighter',    mode='tactile'),
+    'italian':  dict(set='Thrust Duelist',  mode='temporal-spatial'),
+    'spanish':  dict(set='Thrust Duelist',  mode='geometric'),
+    'japanese': dict(set='Counter-time',    mode='intentional'),
+    'chinese':  dict(set='Burst',           mode='kinetic-rhythmic'),
+    'filipino': dict(set='Continuous-flow', mode='kinetic-rhythmic'),
+    'english':  dict(set='Counter-time',    mode='biomechanical'),
+    'none':     dict(set=None,              mode=None),
+}
 
 # Knowledge-of-others: how well a tradition READS an unfamiliar one (the imposition/read edge against a novel style).
 FAMILIARITY_DEFAULT = 0.85          # baseline read of any unfamiliar tradition

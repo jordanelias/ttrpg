@@ -54,8 +54,7 @@ def reach_base(c, cfg, grip=None):
     CENTRE-gripped pole (staff, head_len≈grip_len) reaches LESS than a BUTT-gripped one (spear, head_len≫grip_len),
     and a long blade (greatsword) more than a short one — the grip-position insight, emergent. reach_adj is now a
     SMALL per-weapon residual, not the dominant term.
-    GRIP-AWARE (I3, D3, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/
-    plan_r1_RATIFIED.md): the forward extent is reduced by the FLOORED geometric slide (WP.at_circumstance's
+    GRIP-AWARE (I3, D3, 2026-07-03; `forward_extent`): the forward extent is reduced by the FLOORED geometric slide (WP.at_circumstance's
     `geom_slide`, D1) at the given grip — a gathered-up pole reaches less. `grip=None` (the default) reads the
     combatant's LIVE `c.grip_position`; an explicit override is used ONLY by grip_target's own drive input
     (JD-9 — see close_unwieldiness/grip_target) to break the grip<->reach feedback loop D3 would otherwise close.
@@ -126,9 +125,8 @@ REAR_CLEARANCE_STR_K = 0.15    # [SIM-CALIBRATE] str_demand penalty per metre of
                                #   general handling difficulty, not close-scoped (unlike the tempo term above).
 
 def rear_clearance(c, cfg):
-    """The length trailing behind the working hand AT THE COMBATANT'S CURRENT GRIP (I7a, D7 — designs/audit/
-    2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md; consumes D1/I2's at_circumstance,
-    unread until now). Pure."""
+    """The length trailing behind the working hand AT THE COMBATANT'S CURRENT GRIP (I7a, D7; consumes D1/I2's
+    `WP.at_circumstance`, unread until now). Pure."""
     return WP.at_circumstance(c.w, getattr(c,'grip_position',0.0))['rear_clearance']
 
 def choke_counterbalance(c, cfg):
@@ -310,8 +308,7 @@ def grip_target(c, closed, cfg):
     CLOSED, a fighter GATHERS IN (g>0) in proportion to how unwieldy the weapon is in the close (close_unwieldiness),
     bounded by how far it can regrip (WP.grip_choke_max): a pole gathers up the haft; a rapier (short hilt) cannot
     and just suffers. At open measure g=0 (full reach). Pure (returns g; the wrapper writes grip_position).
-    JD-9 FIXED-GRIP DRIVE INPUT (I3, D3, capstone finding M1, 2026-07-03 — designs/audit/2026-07-02-scene-combat-
-    closing-distance-redesign/plan_r1_RATIFIED.md): once D3 makes reach_base grip-aware, this function's OWN drive
+    JD-9 FIXED-GRIP DRIVE INPUT (I3, D3, capstone finding M1, 2026-07-03): once D3 makes reach_base grip-aware, this function's OWN drive
     term would otherwise read close_unwieldiness at the CURRENT grip_position — but grip_position THIS beat is
     exactly what this function is computing, closing a per-beat feedback loop (grip_position(n) depends on
     reach_base(grip_position(n-1)), the prior beat's own output) that iterates to a HARD, PERMANENT 2-cycle for
@@ -407,8 +404,7 @@ def close_efficacy(pc, measure_gap, range_avail=1.0, closed=False, head=None):
     f = CLOSE_EFF_FLOOR * max(gap_term, room_term)
     return 1.0 - (1.0 - pc) * f
 
-# ── swing-room (I5, D4, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/
-# plan_r1_RATIFIED.md): the AVAILABLE room to develop a swing this beat, derived from how close the exchange is.
+# ── swing-room (I5, D4, 2026-07-03; `range_utilization`): the AVAILABLE room to develop a swing this beat, derived from how close the exchange is.
 # Two non-monotone-safe consumers, both reaching a channel int(round) cannot erase (C4 — never a heft multiply):
 # commit_depth's Beta upper-support contraction and a swing-room legibility term (weighted by (1-sel_pc), a
 # thrust unaffected). Never adds/reorders an rng draw.
@@ -423,8 +419,7 @@ STOPHIT_RANGE_K = 0.3      # [SIM-CALIBRATE] the approach stop-hit's commitment-
                            #   stop-hit thrown with full extension threatens more than one snapped into a
                            #   cramped, rapidly-closing gap.
 
-# ── facing (I6, D6, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/
-# plan_r1_RATIFIED.md): per-beat Combatant state, near-neutral (register-SOUND — no repair needed, a scaffolding
+# ── facing (I6, D6, 2026-07-03; `facing_target`): per-beat Combatant state, near-neutral (register-SOUND — no repair needed, a scaffolding
 # increment). Keyed ONLY on stance/measure/grip (C2 — NEVER weapon class); ships small because C1 (polearm
 # facing direction) is UNRESOLVED, so this must not become load-bearing. Two consumers: a lateral-void
 # contribution into closing (Fiore fol. 39r) and a small profile term in reach_sigma (`[FIAT — C1]`).
@@ -508,8 +503,7 @@ MODE_PERC_MIN = 0.5       # [DESIGN, U2/ED-PC-0009, 2026-07-08] per-primitive pe
                           #   two-handed sword reads (see reversed_grip_percussion) and well above 0 (one-handed
                           #   swords and daggers, which the function gates to exactly 0 — no comparable technique
                           #   is attested for them in the sourced material).
-# ── close-efficacy (I4, D5, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/
-# plan_r1_RATIFIED.md): a broad arc-requiring swing (low per-element point_concentration) collapses in tight
+# ── close-efficacy (I4, D5, 2026-07-03; `close_efficacy`): a broad arc-requiring swing (low per-element point_concentration) collapses in tight
 # quarters; a point-selected thrust barely degrades (half-swording is the norm in the close). [SIM-CALIBRATE
 # throughout — the brief flags the absence of a treatise passage for cut-arc truncation; ships small and
 # ablation-gated, not load-bearing, per D4].
@@ -770,7 +764,7 @@ def armor_defeat_sigma(aggressor, defender, cfg):
     cap=adef_cap(aggressor.w, cfg, getattr(aggressor,'sel_head',None), gap=getattr(aggressor,'sel_gap',None),
                  grip=getattr(aggressor,'grip_position',0.0), room=getattr(aggressor,'range_avail',1.0))
     # [ED-PC-0046] THIS SITE DELIBERATELY KEEPS THE RAW, SIGNED cap — do not "consistency-fix" it to match the
-    # max(0, cap) clamp in reach_threat/represent_measure_p (or core.damage's knee, ED-PC-0039). Those three take a
+    # clamp in core.adef_deficit (reach_threat, represent_measure_p and core.damage's knee ask it). Those three take a
     # capability DEFICIT, where a negative cap is a category error: ADEF_CUT = -0.9 is a sigma-domain CONTROL
     # PENALTY, not a capability magnitude. THIS function IS the sigma domain — it is the term ADEF_CUT was
     # calibrated for, and it is signed on both sides by design (capability above threshold = control, below =
@@ -789,16 +783,7 @@ def reach_threat(longer, defender, cfg):
     if aw==0.0: return 1.0
     cap=adef_cap(longer.w, cfg, head=getattr(longer,'sel_head',None), gap=getattr(longer,'sel_gap',None),
                  grip=getattr(longer,'grip_position',0.0), room=getattr(longer,'range_avail',1.0))
-    # CLAMP THE CAPABILITY AT 0 BEFORE TAKING THE DEFICIT [ED-PC-0046] — the same fix core.damage's penetration knee
-    # already carries (ED-PC-0039), which was applied there ONLY and left the two sigma-path deficits unclamped.
-    # adef_cap returns a NEGATIVE number for a pure cutter (ADEF_CUT = -0.9), and that -0.9 is a sigma-domain CONTROL
-    # PENALTY calibrated for armor_defeat_sigma's +/- scale, NOT a capability magnitude. Read raw it tripled the
-    # bardiche's medium deficit (0.45 -> 1.35) and decayed its reach threat 0.843 -> 0.5275 — the reach-ladder was
-    # punishing a cutter twice for the same fact, once as ADEF_CUT in armor_defeat_sigma and again here. "Cannot
-    # defeat the harness" is a floor at ZERO capability, not an unbounded negative one; the grading of HOW badly a
-    # cut fails against a harness is ADEF_CUT's job in the sigma path, not this decay's.
-    deficit=max(0.0, cfg['ADEF_THRESHOLD'][defender.armor] - max(0.0, cap))
-    return max(cfg['REACH_THREAT_FLOOR'], 1.0 - cfg['REACH_DECAY_K']*aw*deficit)
+    return max(cfg['REACH_THREAT_FLOOR'], 1.0 - cfg['REACH_DECAY_K']*aw*core.adef_deficit(cap, cfg, defender.armor))
 
 def represent_measure_p(longer, shorter, cfg, TR, measure_gap=None):
     """P(a reach weapon RE-PRESENTS its point at open measure entering a fresh engagement, rather than being crowded to
@@ -850,13 +835,7 @@ def represent_measure_p(longer, shorter, cfg, TR, measure_gap=None):
     room = range_utilization(longer, measure_gap, cfg)
     sel = select_mode(longer, shorter.armor, False, cfg, measure_gap=measure_gap, grip=0.0, room=room)
     cap = adef_cap(longer.w, cfg, head=sel.head, gap=sel.gap, grip=0.0, room=room)
-    # CLAMP THE CAPABILITY AT 0 BEFORE TAKING THE DEFICIT [ED-PC-0046] — same rule, same reason as reach_threat above
-    # and core.damage's knee (ED-PC-0039): a raw negative adef_cap is ADEF_CUT's sigma-domain control penalty, not a
-    # capability magnitude. Unclamped, the STEEPER exp() response here amplified the error far harder than the linear
-    # reach decay does: bardiche vs arming at medium read 0.0089 — a pure cutter crowded off measure 99.1% of
-    # engagements — against 0.207 clamped, a 23x move on the gate.
-    deficit = max(0.0, cfg['ADEF_THRESHOLD'][shorter.armor] - max(0.0, cap))
-    base = exp(-cfg['REPRESENT_DECAY_K'] * aw * deficit)
+    base = exp(-cfg['REPRESENT_DECAY_K'] * aw * core.adef_deficit(cap, cfg, shorter.armor))
     foot = 1.0 + cfg['REPRESENT_FOOT_K']*(longer.agi - shorter.agi)   # footwork differential; 0 for a stat mirror
     return max(0.0, min(1.0, base*foot))
 
@@ -1090,7 +1069,7 @@ def bind_sigma(aggressor, defender, cfg, TR):
     strq = (aggressor.strength-defender.strength)*cfg['BIND_STR_K']
     spine = cfg['BIND_SPINE_K']*(WP.spine(aggressor.w)*TR.eff_cw(aggressor,'spine_press') - WP.spine(defender.w)*TR.eff_cw(defender,'spine_press'))   # U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022: a single-edge rigid SPINE presses/binds the opposing blade (hand-high spine-press) — a separate physical fact from the lever-arm in `lev`, kept its own ablatable primitive (not multiplied into leverage — §2.3). Each side is AMPLIFIED by its own 'spine_press' ability (Japanese SHINOGI — the ability wired here; factor 1.0 default), so a bind specialist makes the spine decisive. [comment corrected 2026-07-23 ED-PC-0026: was "German Winden", a stale ref to the retired winden ability — winden is a DOUBLE-edged longsword technique, physically inert on this single-edge-only lever, which is why it was retagged to shinogi.] 0 for a double-edged/edgeless weapon.
     wound = wound_impairment(defender, aggressor, cfg)   # ED-1041: wounds impair the bind too (defence ~1.6x), bind-aggressor/defender roles fixed through the loop
-    moment = cfg['BIND_MOMENT_K']*contact_moment_edge(aggressor, defender)   # channel 5 / ED-PC-0052: DISPLACEMENT RESISTANCE — the mass-moment half of the bind, absent until 2026-07-29 (see bind_moment_edge). A separate physical fact from `lev`'s lever ARM, so it is its own ablatable term and is NOT multiplied into leverage() (consolidation_v1 §2.3).
+    moment = cfg['BIND_MOMENT_K']*contact_moment_edge(aggressor, defender)   # channel 5 / ED-PC-0052: DISPLACEMENT RESISTANCE — the mass-moment half of the bind, absent until 2026-07-29 (see contact_moment_edge). A separate physical fact from `lev`'s lever ARM, so it is its own ablatable term and is NOT multiplied into leverage() (consolidation_v1 §2.3).
     return lev + catch + tac + strq + spine + wound + moment
 
 # ---------- initiative substrate (three-phase Vor / Nach / Indes ~ sen; culture-neutral) ----------
@@ -1252,9 +1231,8 @@ def percussion_stagger(striker, victim, wound, deg, cfg):
     balance offset as its lever, so a centre-gripped haft derived EXACTLY 0.0 authority and this function returned
     (0.0, 0.0) for the staff — the worked example of ED-PC-0031's headline mechanic delivered no wind and no stagger
     at all. Fixed at the lever (`weapon_physics.strike_point_lever`); the staff now derives 5.6290 and staggers at
-    ~70% of a mace's. The claim above is now measured, not asserted:
-    tests/valoria/test_combat_strike_point_lever.py::test_staff_stagger_is_a_real_fraction_of_the_maces pins it
-    THROUGH this function with a constructed wound, so it cannot silently revert to a docstring again."""
+    ~70% of a mace's (measured at the fix, ED-PC-0047; the test that pinned it, `test_combat_strike_point_lever.py`, was
+    dropped by ED-IN-0313, and no test names this function now)."""
     if deg not in ('graze', 'success', 'overwhelming'):
         return 0.0, 0.0
     head = getattr(striker, 'sel_head', None) or striker.head

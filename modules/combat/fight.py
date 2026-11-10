@@ -74,22 +74,20 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
     a_end, b_end = inp.ends
     # THE KITS (CP-T03-03): each party's `(weapon, armor)` in `claimants` order, read off the typed input. A record
     # built without them (`kits == ()`) is two Combatants at the engine's own default kit, as before.
-    a_kit, b_kit = getattr(inp, "kits", ()) or (None, None)
+    a_kit, b_kit = inp.kits or (None, None)
     # THE FACULTIES (CR-85, ED-IN-0330): each party's dice score for the fight's verb, read off the typed input; it
     # replaces `history` in the pool and the Ob. A record built without them (`faculties == ()`) fights at the
     # Combatant's own default. [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays]
-    a_fac, b_fac = getattr(inp, "faculties", ()) or (None, None)
+    a_fac, b_fac = inp.faculties or (None, None)
     # THE AUTHORED ATTRIBUTES (PC-06 K-1): each party's `Person.attributes`, mapped by PC-14's `registry_key`.
-    a_attr, b_attr = getattr(inp, "attributes", ()) or (None, None)
+    a_attr, b_attr = inp.attributes or (None, None)
     A = combatant.Combatant(a_id, end=a_end, **_attr_kw(a_attr), **_kit_kw(a_kit), **_faculty_kw(a_fac))
     B = combatant.Combatant(b_id, end=b_end, **_attr_kw(b_attr), **_kit_kw(b_kit), **_faculty_kw(b_fac))
     trace: list = []
     prev = getattr(wrapper, "_TRACE", None)
-    # THE DUEL TERMS (RS-25, PC-10a): read off the typed input when it carries them, else the engine's lethal
-    # default -- so a record built without the field fights exactly as before. `PersonalCombatInput` does not
-    # declare `terms` yet: the season passing them (and the field) is PC-10b's, and this module may not edit the
-    # host. The engine refuses a term outside `wrapper.DUEL_TERMS` by name.
-    terms = getattr(inp, "terms", wrapper.LETHAL_TERMS)
+    # THE DUEL TERMS (RS-25, PC-10a): the record's own field, default `'death'` (`wrapper.LETHAL_TERMS`); the engine
+    # refuses a term outside `wrapper.DUEL_TERMS` by name.
+    terms = inp.terms
 
     def _lift(c) -> Optional[dict]:
         wt = getattr(c, "wt", None)
