@@ -1,6 +1,6 @@
 """modules.mass_battle.resolution — sigma-leverage head: pool roll, degree, morale/charge-shock
 sigma, softcap, net-boost. Behaviour-frozen P-A extract. Depends on config + percell."""
-import contextlib, contextvars, math, random
+import contextlib, contextvars, math
 from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
 from modules.mass_battle.config import *
 from modules.mass_battle.percell import *

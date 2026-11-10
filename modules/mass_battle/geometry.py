@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from modules.mass_battle.config import *
 from modules.mass_battle.troop_types.registry import support_weight
 
-__all__ = ['arrowhead_cells', 'line_cells', 'gapped_line_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', '_oriented_abs_map', 'support_engage_frac', 'cell_speed', '_oriented', 'CELL_RADIUS', 'CellBody', 'cellbody_from', 'body_depth', 'body_overlap', 'reach_reaches', '_normalize_heading', '_rotate90', 'engaged_frontage', '_project_interval', '_merge_intervals', '_interval_union_length']
+__all__ = ['arrowhead_cells', 'line_cells', 'gapped_line_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', '_oriented_abs_map', 'support_engage_frac', 'cell_speed', '_oriented', 'CELL_RADIUS', 'CellBody', 'cellbody_from', 'body_depth', 'body_overlap', 'reach_reaches', '_normalize_heading', '_rotate90', 'engaged_frontage', '_project_interval', '_merge_intervals', '_interval_union_length']
 
 def arrowhead_cells(tier):
     cells = []
@@ -126,10 +126,6 @@ def oriented_pattern(shape, tier, advance_dir):
         return [(r, c, r, c) for r, c in pattern]
     max_r = max(r for r, c in pattern)
     return [(r, c, max_r - r, c) for r, c in pattern]
-
-def cell_facing(advance_dir):
-    # [canonical: v11 — legacy centroid facing, kept for fallback only]
-    return (advance_dir, 0)
 
 # v11: Per-cell octagon angle model
 # [canonical: Jordan design — octagon, 2 GREEN faces = 90°, 2 YELLOW = 45°+45°, 4 RED = 180°]

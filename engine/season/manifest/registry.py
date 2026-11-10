@@ -172,8 +172,9 @@ def resolve(role: str, key: Any) -> Optional[dict]:
     # (`31a`, A-25) is the composition role the provider calls, held to its row by `check_contest_prizes()`;
     # `heard_by` (v9 SC-02 `22a`) names the room that hears the contest (`bench`) or is absent, and
     # `_check_heard_by` refuses any other value at boot.
-    cells = {k: row.get(k) if isinstance(row, dict) else None
-             for k in ("provider", "step", "declares", "module_entry", "heard_by")}
+    cell = row.get if isinstance(row, dict) else (lambda k: None)
+    cells = dict(provider=cell("provider"), step=cell("step"), declares=cell("declares"),
+                 module_entry=cell("module_entry"), heard_by=cell("heard_by"))
     contracts = files.MODULE_CONTRACTS_YAML
     if not contracts.exists():
         return dict(module=name, resolver="unknown", doc="module_contracts.yaml not found", **cells)

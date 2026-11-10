@@ -1,7 +1,6 @@
 """modules.mass_battle.percell — per-column density/depth grid, casualty distribution, fatigue,
 envelopment-sigma, defender depth, stamina. Behaviour-frozen P-A extract.
 Depends on config + geometry."""
-import math
 from modules.mass_battle.config import *
 from modules.mass_battle.geometry import *
 

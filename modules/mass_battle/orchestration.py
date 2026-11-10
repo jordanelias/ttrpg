@@ -151,10 +151,8 @@
 #   - If a shape's historical advantage doesn't emerge from geometry alone,
 #     that's a REAL missing mechanism to add (not a band-aid to re-introduce).
 
-import random, math, statistics, time
+import math
 from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
-from dataclasses import dataclass, field
-from typing import List, Tuple, Optional, Dict, Set
 
 # [canonical: designs/provincial/mass_battle_v30.md §map — 25×25 grid, 5-cell buffer per side]
 from modules.mass_battle.config import *  # P-A: constants extracted to mass_battle/config.py
@@ -198,7 +196,6 @@ from modules.mass_battle.resolution import *  # [Stage-1] sigma head (roll/degre
 # No LETHALITY_SCALE — casualty rates emerge from pool/TN/DR mechanics directly.
 # At Company scale: Size 4 unit = 400 soldiers = 400 HP. Pool=8, ~3 successes/tick
 # = ~3 soldiers killed/tick = 0.75%/tick = ~13% per 3-phase turn. Emergent.
-import os as _os
 
 # ─── MORALE EROSION (v20 — fully emergent) ───────────────────────────────────
 # [canonical: designs/provincial/mass_battle_v30.md §A.4 morale triggers]
@@ -250,23 +247,9 @@ import os as _os
 # rally_check, reform_check, threadwork_check remain empty (future cycles).
 
 
-def _formation_depth(unit):
-    """Max row count across all subunits = number of distinct ranks.
-    Deeper formations have more reserve ranks for stamina rotation.
-    [canonical: audit_sim_mb_06_v14.md §G-1 — depth permits rotation]"""
-    max_depth = 1
-    for sub in unit.subunits:
-        pattern = CELL_PATTERN_FN[sub.shape](sub.tier)
-        if pattern:
-            rows = max(r for r, c in pattern) + 1
-            if rows > max_depth:
-                max_depth = rows
-    return max_depth
-
-
 def _subunit_depth(atom):
     # Rank count (rows) of ONE subunit's pattern = its internal reserve depth for stamina rotation.
-    # For a single-subunit unit this equals _formation_depth(unit) -> byte-exact phase recovery.
+    # [canonical: audit_sim_mb_06_v14.md §G-1 — depth permits rotation]
     pattern = CELL_PATTERN_FN[atom.shape](atom.tier)
     return (max(r for r, c in pattern) + 1) if pattern else 1
 
@@ -2511,4 +2494,4 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                          for i, u in enumerate(side_b)},
     }
 
-__all__ = ['_formation_depth', '_subunit_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Subunit', 'Unit', 'derive_command', 'command_base_pool', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'MB_ROLLUP_PER_RANK', 'MB_ROLLUP_MARGIN', 'MB_ROLLUP_REACH', 'MB_ROLLUP_CAP', 'MB_ROLLUP_FLANK_REACH', 'MB_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_morale_between_battles', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle', 'roles_for', 'role_allowed', 'stats_for', 'TROOP_TYPE_STATS']
+__all__ = ['_subunit_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Subunit', 'Unit', 'derive_command', 'command_base_pool', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'MB_ROLLUP_PER_RANK', 'MB_ROLLUP_MARGIN', 'MB_ROLLUP_REACH', 'MB_ROLLUP_CAP', 'MB_ROLLUP_FLANK_REACH', 'MB_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_morale_between_battles', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle', 'roles_for', 'role_allowed', 'stats_for', 'TROOP_TYPE_STATS']
