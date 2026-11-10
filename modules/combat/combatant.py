@@ -62,8 +62,7 @@ class WoundTracker:
     stored once as `Person.body` (written by `engine/season/loop/effects_combat.py::_harm`); `fight.py` builds fresh
     Combatants for every scene, and a registered module keeps no game state (`04` §A.2)."""
 
-    def __init__(self, end, equipment_health=0, spirit=3, strength=4):
-        self.equipment_health = equipment_health
+    def __init__(self, end, spirit=3, strength=4):
         self.rederive(end, spirit=spirit, strength=strength)
         self.cumulative_damage = 0
 
@@ -74,7 +73,7 @@ class WoundTracker:
         can lift a felled fighter, lowering it can fell one). A fight's own start zeroes the damage, in `wrapper.fight`."""
         self.wi = wound_interval(end, spirit)
         self.max_wounds = max_wounds(end)
-        self.health_full = health_full(end, spirit, strength) + self.equipment_health
+        self.health_full = health_full(end, spirit, strength)
 
     @property
     def health_remaining(self):
