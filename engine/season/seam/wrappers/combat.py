@@ -18,7 +18,7 @@ WHAT THIS IS, AND WHAT IT DELIBERATELY IS NOT
 ---------------------------------------------
 `references/module_contracts.yaml` declares `combat` (plan position `30`; the PROVIDER this module
 registers keeps the name `personal_combat`) with `sim_module: modules/combat/` and `resolver: d_sigma`. Its public entry point is
-`wrapper.fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None) -> int` — `+1` A wins, `-1` B wins, and
+`wrapper.fight(A, B, ...) -> int` (`modules/combat/wrapper.py`) — `+1` A wins, `-1` B wins, and
 **`0` UNRESOLVED, which is a RULING and not a failure**: *"NO automatic tiebreak (Jordan
 2026-06-02): if neither fighter is felled, the round ends UNRESOLVED... an undecided fight is a
 legitimate outcome."*
@@ -81,7 +81,7 @@ from __future__ import annotations
 import random
 from typing import Any, Optional
 
-from ...data.rosters import ESTIMATE_OUTCOMES, WOUND_QUANTITIES
+from ...data.rosters import ESTIMATE_OUTCOMES, FELLED, WOUND_QUANTITIES
 from ...data.verbs import DUEL_TERMS_BY_VERB
 from ...decision import body_band_penalty
 from ...gaps import Forbidden, Unspecified
@@ -92,6 +92,7 @@ from ...queries.inputs import PersonalCombatInput, PlayHost
 from ...queries.world_q import kit_of, stakes_of
 from ....substrate.descriptors import attribute_key
 from ...state.ids import H
+from ..ladder import party_degree
 from ._entry import entry_for
 from ._estimate import rng_of, samples_of
 from .pool import faculty
@@ -265,20 +266,12 @@ def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: st
     tally = dict.fromkeys(ESTIMATE_OUTCOMES, 0)
     for _ in range(n):
         got = entry.fn(inp, rng)
-        # ⚠ THE FELLING IS READ OFF THE TRACKERS, NEVER OFF `result`'s SIGN (`ladder.party_degree`: "the bands read
-        # `felled`, never `result`"). `wrapper.fight` flips `result` after the scene in `UPSET_FLOOR` of the
-        # decided fights and leaves the trackers alone, so the sign names a winner the fold never grades by.
-        # Neither or both down is `undecided` (a draw has no one felled; a mutual felling names no one).
-        down = {}
-        for pid in (actor, target):
-            st = _wound_state(got["wound_state"].get(pid))     # the one owner of a missing tracker's refusal
-            if not st["available"]:
-                raise Unspecified(
-                    f"personal combat sampled and a party's wound state is unavailable ({pid!r})",
-                    "S39.4/H-98", needs="a `wound_state` entry, lifted off the party's own WoundTracker",
-                    law="the shares are read off the scene's trackers; a party with none has no ending to count")
-            down[pid] = bool(st["felled"])
-        a_down, b_down = down[actor], down[target]
+        # ⚠ THE FELLING IS `ladder.party_degree`'S VERDICT ON THE PARTY'S TRACKER (the walk `_eff_kill` writes by and
+        # `combat_degree` grades by; it refuses a missing tracker), NEVER `result`'s SIGN. `wrapper.fight` flips
+        # `result` after the scene in `UPSET_FLOOR` of the decided fights and leaves the trackers alone, so the sign
+        # names a winner the fold never grades by. Neither or both down is `undecided` (a draw has no one felled; a
+        # mutual felling names no one).
+        a_down, b_down = (party_degree(_wound_state(got["wound_state"].get(pid))) == FELLED for pid in (actor, target))
         if surrender_of(got["trace"]) is not None:
             tally["yielded"] += 1
         elif a_down and not b_down:
@@ -424,8 +417,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                 # CAPTURED IT, returned rather than reduced to `bouts` alone -- the read a grid display
                 # or B-3's per-event measure plays the bout from. `bouts` above is its `turn_start`
                 # count. Nothing here or downstream folds it into `World`: `contest()` hands this dict
-                # to `_fold` as `Resolution.result`, whose effects read `result`/`wound_state`/
-                # `parties` only, so `content_hash()` is unchanged
-                # (`engine/season/tests/test_combat_trace_returned.py`).
+                # to `_fold` as `Resolution.result`, whose effects read `wound_state` and `surrender`
+                # only (`loop/effects_combat.py`), so `content_hash()` is unchanged.
                 trace=trace,
                 parties=got["ends"], seed=seed)

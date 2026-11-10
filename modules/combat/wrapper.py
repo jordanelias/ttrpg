@@ -46,6 +46,14 @@ def _init_live(c, cfg):
     c.initiative=0.0
     c.poise=1.0
 
+def _select(c, opp, closed, cfg, measure_gap):
+    """The ONE write of `S.select_mode`'s record onto `c` (the wrapper owns the mutation): the six `sel_*` fields by NAME (ED-PC-0042/I3),
+    then the selected element's per-arm magnitudes (ED-PC-0037.1). Called at every beat's head AND after the half-sword swap: a partial
+    thread leaves a post-swap `c.w` resolved against a pre-swap-selected element (R-7's object confusion)."""
+    _sel = S.select_mode(c, opp.armor, closed, cfg, measure_gap=measure_gap)
+    c.sel_dmg, c.sel_head, c.sel_gap, c.sel_perc, c.sel_pc, c.sel_eff = _sel.dm, _sel.head, _sel.gap, _sel.perc, _sel.pc, _sel.eff
+    c.sel_eff_cut, c.sel_eff_thrust = S.selected_arm_magnitudes(c, c.sel_head)
+
 def _carry(ready, cfg):
     """Phase-transition readiness: keep each fighter's RESIDUAL cadence phase, drop any banked whole action.
 
@@ -148,25 +156,19 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
         # CONDITIONAL TEMPO (correction 2): recompute each beat with current fatigue — grip/stance/fatigue change
         # cadence; it is not a static weapon property. Approach uses general cadence; closed uses close-cadence.
         ffat={A:max(0.0,1-A.stamina/max(1,A.stamina_max)), B:max(0.0,1-B.stamina/max(1,B.stamina_max))}
-        # INITIATIVE DECAY (damper) — per-tradition HOLD: high measure (destreza) decays slower, holding the Vor longer.
-        A.initiative=S.clamp_initiative(A.initiative*S.init_hold_decay(A,cfg,TR), cfg)
-        B.initiative=S.clamp_initiative(B.initiative*S.init_hold_decay(B,cfg,TR), cfg)
-        # DISPOSITION (initiative lever): aggressive temperament drifts the Vor UP (pressing builds Vor), cautious DOWN
-        # (cedes it) — the standing pressure that makes both poles cost. Neutral (lean 0) = no drift; bounded by clamp.
-        A.initiative=S.clamp_initiative(A.initiative + cfg['DISP_INIT_K']*S.disp_lean(A), cfg)
-        B.initiative=S.clamp_initiative(B.initiative + cfg['DISP_INIT_K']*S.disp_lean(B), cfg)
-        # STRUCTURE recovery (the kuzushi damper): balance regathers toward 1.0 each beat.
-        A.poise=S.clamp_poise(S.poise_regen(A,cfg), cfg)   # Focus speeds structure recovery (Jordan 2026-06-03); regen formula -> systems.poise_regen
-        B.poise=S.clamp_poise(S.poise_regen(B,cfg), cfg)
         for c in (A,B):
+            # INITIATIVE DECAY (damper) — per-tradition HOLD: high measure (destreza) decays slower, holding the Vor longer.
+            c.initiative=S.clamp_initiative(c.initiative*S.init_hold_decay(c,cfg,TR), cfg)
+            # DISPOSITION (initiative lever): aggressive temperament drifts the Vor UP (pressing builds Vor), cautious DOWN
+            # (cedes it) — the standing pressure that makes both poles cost. Neutral (lean 0) = no drift; bounded by clamp.
+            c.initiative=S.clamp_initiative(c.initiative + cfg['DISP_INIT_K']*S.disp_lean(c), cfg)
+            # STRUCTURE recovery (the kuzushi damper): balance regathers toward 1.0 each beat.
+            c.poise=S.clamp_poise(S.poise_regen(c,cfg), cfg)   # Focus speeds structure recovery (Jordan 2026-06-03); regen formula -> systems.poise_regen
             c.grip_position=S.grip_target(c, closed, cfg)   # GRIP/STANCE (The Approach): a closing pole GATHERS IN (grip_position 0->1) to fight the close; else 0 (full reach). CONTINUOUS, derived. The lunge is set at the attack below.
             c.range_avail=S.range_utilization(c, measure_gap, cfg)   # SWING-ROOM (I5, D4): measure-derived, not form-derived — a single per-beat write suffices (no post-swap refresh needed, unlike er/sel_*). Shapes commit_depth's Beta window + the swing-room legibility term + the approach stop-hit; also threaded into THIS beat's select_mode/afforded_heads below (percussion's Phi_room).
             c.facing=S.facing_target(c, closed, cfg)   # FACING (I6, D6): near-neutral per-beat state, keyed ONLY on stance/measure/grip (C2 — never weapon class). Feeds the lateral-void close_rate term + reach_sigma's small profile term.
             c.lunge_depth=0.0                                # reset the body-extension each beat; a deep thrust re-sets it below
-            opp = B if c is A else A
-            _sel = S.select_mode(c, opp.armor, closed, cfg, measure_gap=measure_gap)
-            c.sel_dmg, c.sel_head, c.sel_gap, c.sel_perc, c.sel_pc, c.sel_eff = _sel.dm, _sel.head, _sel.gap, _sel.perc, _sel.pc, _sel.eff   # ED-PC-0042 (I3): the pairing is SPELLED, not positional — a reordered ModeSelection now fails on a field name instead of silently transposing gap into perc
-            c.sel_eff_cut, c.sel_eff_thrust = S.selected_arm_magnitudes(c, c.sel_head)   # [ED-PC-0037.1] element-local per-arm magnitudes for core.strike's cut_thrust contest (wrapper owns the mutation, as with every other sel_*)   # USE-MODE: greedily pick the afforded head with the best damage-coupling vs the opponent's armour (a weapon that affords >1 mode, e.g. the poleaxe's blunt+spike, shifts with armour). Per-beat, DERIVED, pure; the wrapper owns the mutation (mirrors grip_position). Widened I2/D2b to the 5-tuple (sel_gap/sel_perc/sel_pc — R-7/capstone M2), then to 6 (sel_eff — U2/ED-PC-0011): the SELECTED element's own gap/percussion/point_concentration/cut-thrust-magnitude, the canonical source for core.strike/adef_cap/D5's arc-vs-thrust (M-02). I4/D5: measure_gap threads the close-efficacy factor into the greedy comparator. Refreshed after the half-sword form-switch below.
+            _select(c, B if c is A else A, closed, cfg, measure_gap)   # USE-MODE: the afforded head with the best damage-coupling vs the opponent's armour (S.select_mode); refreshed after the half-sword form-switch below.
             er[c]=S.reach_base(c,cfg)   # er REFRESH #1 (I3, D3, two-recompute contract — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/): re-derives ONLY er[c] on the grip-aware CURRENT (pre-swap) form; NEVER measure_gap (the running approach decrement, below) or `closed` (latched); longer/shorter LABELS stay frozen at engagement start (JD-2 plan default). Feeds reopen (below) and close_tempo/tempo (next line) via reach-derived close_unwieldiness.
         if not closed: rate={c:S.weapon_tempo(c,cfg,ffat[c]) for c in (A,B)}
         else:          rate={c:S.close_tempo(c,cfg,ffat[c]) for c in (A,B)}
@@ -270,15 +272,9 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
         # half-sword auto-switch (mit dem kurzen Schwert): adopt the form fitting the current range/armour
         aggressor.weapon = S.halfsword_target(aggressor, closed, defender.armor)   # wrapper owns the mutation
         defender.weapon  = S.halfsword_target(defender, closed, aggressor.armor)
-        # re-select the use-mode on the (possibly just-switched) form, so sel_* match the current weapon (I2/D2b:
-        # BOTH call sites must write all six sel_* fields — c.w flips at :120 above, so a partial thread would
-        # leave a post-swap c.w resolved against a pre-swap-selected element, the same object-confusion bug R-7
-        # closed for select_mode's own return).
-        for _c, _opp in ((aggressor, defender), (defender, aggressor)):   # ED-PC-0042 (I3): ONE spelled pairing for both roles — the two lines used to be a copy-pair, and a copy-pair over a positional 6-tuple is the transposition-bug class twice over (aggressor is still resolved FIRST, exactly as before)
-            _sel = S.select_mode(_c, _opp.armor, closed, cfg, measure_gap=measure_gap)
-            _c.sel_dmg, _c.sel_head, _c.sel_gap, _c.sel_perc, _c.sel_pc, _c.sel_eff = _sel.dm, _sel.head, _sel.gap, _sel.perc, _sel.pc, _sel.eff
-        aggressor.sel_eff_cut, aggressor.sel_eff_thrust = S.selected_arm_magnitudes(aggressor, aggressor.sel_head)   # [ED-PC-0037.1] refreshed with the post-swap form, like sel_*
-        defender.sel_eff_cut,  defender.sel_eff_thrust  = S.selected_arm_magnitudes(defender, defender.sel_head)
+        # re-select the use-mode on the (possibly just-switched) form, so sel_* match the current weapon (aggressor resolved FIRST, as before)
+        for _c, _opp in ((aggressor, defender), (defender, aggressor)):
+            _select(_c, _opp, closed, cfg, measure_gap)
         er[aggressor]=S.reach_base(aggressor,cfg); er[defender]=S.reach_base(defender,cfg)   # er REFRESH #2 (I3, D3): re-derives er for aggressor/defender on the grip+FORM-aware POST-SWAP weapon — so a half-sworded longsword reads its shorter reach everywhere in the closed exchange (reach_sigma below), not the frozen pre-swap #1 value. Consistency-proven: at open measure (grip=0, no swap) this equals #1 exactly.
         ready[aggressor]-=cfg['ACT_THRESHOLD']
         # COMMIT DEPTH — disposition lean + wariness skew a Beta over [2,5] (the commitment-recovery spectrum). The

@@ -1,6 +1,7 @@
 """ability_primitives.py — the ABILITY PRIMITIVES: the atomic, learnable units a tradition is built from.
 
-The atoms half of the tradition split (the traditions DICTIONARY that aggregates them is traditions.py). "Abilities
+The atoms half of the tradition split (the traditions ROSTER and familiarity are traditions.py; the bundle each
+tradition teaches is TRADITION_KIT, built below). "Abilities
 are basically tradition primitives" (Jordan): just as a weapon is a bundle of physical primitives, a tradition is a
 bundle of ability primitives — the named techniques/concepts it teaches (Indes, mezzo tempo, atajo,
 true-times…), grounded in the historical-combat-manuals corpus.
@@ -70,10 +71,8 @@ ABILITIES = {
 }
 
 
-# THE BUNDLE, made explicit: validate every ability's tradition tag (catch typos at import) and build the forward
-# index "what does tradition T grant?". This is the data-level realisation of "a tradition is a bundle of ability
-# primitives" — TRADITION_KIT['german'] -> ['indes', 'staerke_schwaeche', ...]. One-way import (traditions has no
-# dependency on this module), so no cycle.
+# The tradition roster (read by `_generics` and by THE BUNDLE below). One-way import (traditions has no dependency on
+# this module), so no cycle.
 from traditions import TRADITIONS as _TRADITIONS
 
 # ── GENERIC CALIBRATION ABILITIES (PC-17, ED-PC-0059; PROVISIONAL) ────────────────────────────────────────────────
@@ -132,6 +131,9 @@ def _generics():
 
 ABILITIES.update(_generics())
 
+# THE BUNDLE, made explicit: validate every ability's tradition tag (catch typos at import) and build the forward
+# index "what does tradition T grant?". This is the data-level realisation of "a tradition is a bundle of ability
+# primitives" — TRADITION_KIT['german'] -> ['indes', 'staerke_schwaeche', ...].
 for _name, _a in ABILITIES.items():
     assert _a['tradition'] in _TRADITIONS, f"ability {_name!r} tags unknown tradition {_a['tradition']!r}"
 TRADITION_KIT = {t: [a for a, d in ABILITIES.items() if d['tradition'] == t] for t in _TRADITIONS}

@@ -7,7 +7,7 @@ coefficients from physical geometric parameters so curved-vs-straight edges, poi
 blade rigidity are modelled from first principles rather than assigned by hand.
 
 ENGINEERING CONTRACT (no runtime cost): these are pure functions. `bake(params)` precomputes a weapon's combat
-coefficients ONCE at build time (the "precalculated surface"); the engine/sim reads the baked values. Adding
+coefficients ONCE at build time (the "precalculated surface"); the engine reads the baked values. Adding
 geometric granularity therefore adds build-time work only — zero added runtime calculation.
 
 CALIBRATION DISCIPLINE: the derived coefficients are calibrated to REPRODUCE the already-validated §4-grounded

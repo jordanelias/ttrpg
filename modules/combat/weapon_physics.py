@@ -5,10 +5,11 @@ NOT a bundle of hand-authored aggregates (spd, wt, closes_poorly, HEFT class, GA
 PRIMITIVES and EVERY combat quantity DERIVES here, once, as documented physics. Aggregate-based emergence: behaviour
 rises from the primitives, never from a per-weapon table.
 
-PRIMITIVES consumed (per weapon, from combatant.WEAPONS):
-  mass(kg), head_len, grip_len (METRES — U0 units honesty, ED-PC-0002), pommel_kg, wclass{bladed,hafted_tip,hafted_block},
-  hilt{compound,simple,none}, hands, hand_guard, blade_guard, reach_adj, head, + geometry geo{cut,thrust,perc_conc}
-  and the raw geometry {cross_section, strike_concentration, ...} on combatant.GEOMETRY.
+PRIMITIVES consumed (per weapon: a weapons.WEAPONS record, whose schema is weapons.py's header):
+  mass(kg), head_len, grip_len (METRES — U0 units honesty, ED-PC-0002), wclass{bladed,hafted_tip,hafted_block},
+  hilt{compound,simple,none}, hands, head, the located parts elements/guards/haft/pommel/butt, adornments, and the fields
+  weapons.py bakes onto the record: geo{cut,thrust,perc_conc,cross_section,strike_concentration,...}, hand_guard,
+  blade_guard, _derived.
 
 DERIVED (the intended single basis; wiring is PARTIAL — see WIRING STATUS):
   STAGE 1 composite mass -> PoB, m_head, MoI, static_moment   (recovered weapon_physics 2026-06-22, self-tested 0.05cm)
@@ -19,7 +20,7 @@ WIRING STATUS (2026-06-30, Gate-1 audit — SUPERSEDES the prior "BUILD-ONLY; no
 which is now FALSE):
   · LIVE consumers (read by systems.py / core via Phase-3 wiring): derive(), agility(), defense_affinities(),
     percussion_authority(), puncture_pressure(), at_grip(), grip_choke_max().
-  · DIAGNOSTIC-ONLY (still defined, called only from __main__): armour_defeat_mode(). (STALE-DOC FIX, ED-PC-0023
+  · DIAGNOSTIC-ONLY (still defined, called by no resolution code): armour_defeat_mode(). (STALE-DOC FIX, ED-PC-0023
     audit: the prior text here listed authority()/reach() as "NOT YET WIRED / diagnostic-only" and cited an OPEN
     "core.p_auth vs WP.percussion_authority" single-source debt — but authority()/reach() were DELETED outright the
     SAME day, 2026-06-30, see the deletion note below the STAGE-3 block, and core.p_auth was retired, see core.py's
@@ -435,10 +436,9 @@ def strike_point_lever(w, m_strike, x_strike):
         That is WRONG and E2b measured it before consuming it: this function divides its mass argument by the
         weapon's total, so passing `elem_mass` puts mass in at power 1.5 — dropping percussion 19-37% on every weapon.
         The element's own mass belongs in `sqrt()`; the lever is geometric, which is exactly what this
-        function returns when handed the delivered mass. `test_combat_element_reachability.py::
-        test_element_lever_does_not_double_count_mass` pins it so the prescription cannot be re-followed.
-        `tests/valoria/test_combat_strike_point_lever.py::test_strike_point_lever_is_nonzero_at_the_hand` pins
-        the hand-floor property E2b consumes, so the two scales cannot ship two different lever forms (R-11.4).
+        function returns when handed the delivered mass. Both properties E2b consumes (the element's lever does not
+        double-count mass; the lever is nonzero at the hand) were pinned by tests dropped at ED-IN-0313 and
+        ED-IN-0314, so only this docstring now keeps the two scales from shipping two different lever forms (R-11.4).
       · NOT `|x| / Lt` and NOT `PoB_frac`. If a third lever form ever appears in this module, one of them is wrong.
 
     Symmetric in the sign of x (a rear-facing fluke swings on |x| like any other located element). Monotone
@@ -970,28 +970,3 @@ def at_grip(w, g):
     byte-identical (D1, I2). New code should call at_circumstance directly."""
     a = at_circumstance(w, g, 1.0)
     return dict(I_g=a['I_g'], S_g=a['S_g'], d_g=a['d_g'], u=a['u'])
-
-
-if __name__ == '__main__':
-    import sys
-    try:
-        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
-    except Exception:
-        pass
-    from combatant import WEAPONS
-
-    print("STAGE 1 — composite PoB (mass-model derivation):")
-    print(f"{'weapon':12} {'PoB_cm':>7} {'PoB_frac':>9} {'MoI':>7} {'m_head':>7}")
-    for n, w in WEAPONS.items():
-        d = derive(w)
-        print(f"  {n:10} {d['PoB_cm']:7.1f} {d['PoB_frac']:9.3f} {d['MoI']:7.3f} {d['m_head']:7.3f}")
-    print()
-
-    print("STAGE 2/3 — derived agility/percussion/defence affinities + Phase-B6 heft/handling (tempo's balance-")
-    print("recovery term now lives in systems._recovery_mode_commitment — Combatant/cfg-aware, not shown here):")
-    print(f"{'weapon':12} {'agil':>5} {'perc':>5} {'mode':>10} {'parry/dodge/wind':>18} {'heft':>6} {'handl':>6}")
-    for n, w in WEAPONS.items():
-        a = defense_affinities(w)
-        print(f"  {n:10} {agility(w):5.2f} {percussion_authority(w):5.2f} "
-              f"{armour_defeat_mode(w):>10}   {a[V.DEF_PARRY]:.2f}/{a[V.DEF_DODGE]:.2f}/{a[V.DEF_WIND]:.2f} "
-              f"{heft(w):6.2f} {handling(w):6.2f}")
