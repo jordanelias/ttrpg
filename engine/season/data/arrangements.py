@@ -40,11 +40,11 @@ and nothing seeded fails it. A row disposing a Tenure kind `determine` does not 
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 from . import files
 from .rosters import (
-    DEGREE_BANDS, GENRES, INTERPOSITION_KINDS, LADDER_RUNGS, PROOFS, REMIT_ACTS, RUNG_KINDS,
+    DEGREE_BANDS, GENRES, INTERPOSITION_KINDS, PROOFS, REMIT_ACTS, RUNG_KINDS,
     TENURE_KINDS, load_yaml,
 )
 

@@ -49,7 +49,7 @@ def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # reporting, unfired because the precondition refuses first. One owner is also one place for
     # that mistake to be made.
     if restrained(w, a.actor, DETAIN_KIND):
-        return _decline_custody(w, a, dest)
+        return _decline_custody(a, dest)
     # ⚠ A DESTINATION THE LADDER WILL NOT SEAT THE MOVER IN IS A BLOCKED TRAVEL, NOT A CRASH, and
     # this branch is `W-C`'s doing: once `move` carries a real `to`, a person can name any rung
     # their containment path reaches, and `contain.path` asks for a SHARED ANCESTOR -- which a
@@ -77,7 +77,7 @@ def _arrival_only(w: "World", dest) -> bool:
     return rung is not None and rung.kind in ARRIVAL_ONLY_KINDS
 
 
-def _decline_custody(w: "World", a: "Act", dest: str) -> Change:
+def _decline_custody(a: "Act", dest: str) -> Change:
     """v9 SC-03a (#453 §10.4 step 3, K-53): A PERSON HOLDING A LIVE `detain` DOES NOT TRAVEL OR
     SETTLE -- the custody edge's first reader, shared by `move` and `migrate` because the journey is
     one (`_relocate`). Asked FIRST, before the ladder: a prisoner's road is closed whether or not it
@@ -193,7 +193,7 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     S defect (*calculations consistent in methodology*)."""
     dest = _operand(a, "to")
     if restrained(w, a.actor, DETAIN_KIND):
-        return _decline_custody(w, a, dest)
+        return _decline_custody(a, dest)
     if _arrival_only(w, dest):
         return _decline_ascent(f"a {a.verb}'s destination is reached only by a march's arrival -> {a.actor} into {dest!r}")
     if not w.contain_ascends(a.actor, dest):

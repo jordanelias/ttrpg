@@ -112,17 +112,16 @@ from ..data.requires import UNKNOWN, binding_from_act, evaluate
 from ..data.rosters import (CLAIM_SOURCES, QUESTION_AGGREGATION, QUESTION_SOURCES, RECORD_KINDS,
                             TENURE_KINDS)
 from ..data.verbs import COUNTERPARTY_CLAUSE, EMITTED_KINDS, VERB_TABLE, WRITE_CLAUSE
-from ..decision import (aggregate_questions, assemble, make_chooser, opening_set,
-                        person_side_eligible)
+from ..decision import aggregate_questions, assemble, opening_set, person_side_eligible
 from ..gaps import Unspecified
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..queries.world_q import DOCKET_KIND
 from ..state.carriers import subject_of
 from ..state.gate import PERSON_DIED
-from ..state.ids import H, draw_factory
 from ..state.world import World
 from . import governance_spine, populated
+from . import probes as P
 from .corpus_run import attempts, graded_loss, graded_losses, unrowed_acts
 from .decision_spread import goal_class
 
@@ -490,8 +489,7 @@ def instrumented_season(w, seasons: int) -> dict:
     fx = w.fixtures
     cast = frozenset(w.persons)          # the persons BEFORE the season, for the wrong-kind columns
     foldable = resolvable_verbs()
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    real = make_chooser(fx, mint, verbs=foldable, draw=draw_factory(w.world_seed, lambda: w.tick))
+    real = P.chooser(w, verbs=foldable)
 
     delivered: dict = {}                 # person id -> the Question[] this barrier handed them
     q_count: dict = defaultdict(Counter)  # source -> Counter(person id -> questions)

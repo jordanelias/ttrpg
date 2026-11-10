@@ -67,7 +67,6 @@ CASES_DIR = PACKAGE_DIR / "cases"
 EXERCISES_DIR = CASES_DIR / "exercises"
 CHAIN_CASES_DIR = CASES_DIR / "chain"
 RESULTS_JSON = RUNS_DIR / "results.json"
-TRACE_TXT = RUNS_DIR / "TRACE.txt"
 
 # The same artifact as a REPO-RELATIVE string, because `harness/delta.py` reads it out of git
 # (`git show <rev>:<path>`) rather than off the disk, and git speaks repo-relative paths only.
@@ -179,14 +178,6 @@ LOOP_DIR = PACKAGE_DIR / "loop"
 # used to read `SHAPE_PY` for `SeasonDriver` code read this instead -- `shape.py` was deleted at
 # step 10, so a scan pointed there fails to open a file rather than passing by finding nothing.
 DRIVER_PY = LOOP_DIR / "driver.py"
-# THE AGGREGATOR, NOT THE WHOLE WALK -- since the Phase-4 per-subsystem split (2026-09-30),
-# `effects.py` itself holds no `@effect_for`-decorated function and no `Tenure(...)` call; those
-# moved into its `effects_*.py` siblings. `data/verbs.py::_derive_openers_from_effects` reads
-# `effects_modules()` below, not this constant alone -- kept because it still names the one file a
-# caller means by "the effects module" (`test_governance_build.py`'s `inspect.getsource` case and
-# similar). Never imported by either reader, so there is no `data` -> `loop` import edge, only a
-# file-level read of `loop`'s own text (`OPENERS-DERIVE`, 2026-09-29).
-EFFECTS_PY = LOOP_DIR / "effects.py"
 
 
 def loop_modules() -> tuple:
@@ -215,14 +206,14 @@ def loop_source() -> str:
 
 def effects_modules() -> tuple:
     """EVERY `.py` under `loop/` NAMED `effects*`, DISCOVERED -- the Phase-4 per-subsystem split of
-    `effects.py` (2026-09-30) into the aggregator (`EFFECTS_PY`) plus seven flat siblings
+    `effects.py` (2026-09-30) into the aggregator (`effects.py`) plus seven flat siblings
     (`effects_shared.py`, `effects_governance.py`, `effects_economy.py`, `effects_migration.py`,
     `effects_founding.py`, `effects_information.py`, `effects_combat.py`), no package and no
     `__init__.py` barrel -- EIGHT files today, matched by name rather than hand-listed.
     `data/verbs.py::_derive_openers_from_effects` is the one reader: every `@effect_for(...)`-
     decorated function and every `Tenure(...)` construction site it walks now lives in one of the
     seven siblings, none in the aggregator itself (which only imports them), so a walk confined to
-    `EFFECTS_PY` alone finds nothing -- `loop_modules`'s own lesson (`compute the corpus, never
+    `effects.py` alone finds nothing -- `loop_modules`'s own lesson (`compute the corpus, never
     list it`) applies a second time, one split down, rather than hand-listing eight names that go
     stale the day a ninth lands.
 
@@ -258,16 +249,9 @@ SEAM_DIR = PACKAGE_DIR / "seam"
 # because the step-8 plan read D5's COST as a reason not to perform the rename. The declared
 # `sys.path` seam in `tests/valoria/test_engine_does_not_import_systems.py` is renamed with it.
 COMBAT_SEAM_PY = SEAM_DIR / "wrappers" / "combat.py"
-TRACE_LOG_PY = PACKAGE_DIR / "trace_log.py"
 TEST_PY = TESTS_DIR / "test_season_shape.py"
 
 PROBES_PY = HARNESS_DIR / "probes.py"
-RUN_CASES_PY = HARNESS_DIR / "run_cases.py"
-CORPUS_RUN_PY = HARNESS_DIR / "corpus_run.py"
-EXERCISES_PY = HARNESS_DIR / "exercises.py"
-REGISTER_PY = HARNESS_DIR / "register.py"
-REPORT_PY = HARNESS_DIR / "report.py"
-DELTA_PY = HARNESS_DIR / "delta.py"
 HEADLESS_PY = HARNESS_DIR / "headless.py"
 
 

@@ -87,7 +87,9 @@ from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds, 
 from engine.substrate import composition
 
 from ...data.rosters import VERB_CAPABILITY, roster
+from ...data.verbs import VERB_TABLE
 from ...gaps import Unspecified
+from ...loop.sides import _contests_of, sides_of
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup);
 # `manifest/registry.py` imports only `data/` and `gaps` and `queries/` is below `seam/`, so the
@@ -302,14 +304,11 @@ def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
     """`(claimants, subject, room, examined)` exactly as the fold hands the act to `resolve`, or `None`
     when `owner`'s roll does not deal it (an uncontested act, another provider's prize, a party
     gap; `owner` is the social roll's unless `odds_of` asks for combat's). The derivation is the fold's
-    own: `loop/sides.py::_contests_of` and `::sides_of` and the prize row's `heard_by:` for a contest; the verb's `graded_inquiries` route for an inquiry. `loop.sides` is
-    imported inside the function: `loop/` imports this package, so a module-level import would loop at
-    import time. It imports nothing that imports `seam`, so it closes no cycle the census counts;
-    `loop.resolve` would (`tests/valoria/test_import_cycle_game_state_npe.py`), which is why the
-    contest-of-an-act helper lives in `sides.py`."""
+    own: `loop/sides.py::_contests_of` and `::sides_of` and the prize row's `heard_by:` for a contest; the verb's `graded_inquiries` route for an inquiry. `loop.sides`
+    imports nothing that imports `seam` (`loop/__init__.py` imports nothing), so this module imports it at module
+    level; `loop.resolve` would close a cycle the census counts (`tests/valoria/test_import_cycle_game_state_npe.py`),
+    which is why the contest-of-an-act helper lives in `sides.py`."""
     from ...data.rosters import GRADED_INQUIRIES
-    from ...data.verbs import VERB_TABLE
-    from ...loop.sides import _contests_of, sides_of
     row = VERB_TABLE.get(act.verb)
     payload = act.payload if isinstance(act.payload, dict) else {}
     contests = _contests_of(act, row)
@@ -334,10 +333,8 @@ def _estimated(w: Any, act: Any) -> tuple:
     personal combat's `fight_estimate`, mass battle's `field_estimate`), `odds` being that provider's tuple or `None`;
     `(False, None)` when it did not (the social roll's case, `odds_of` below). The seam names the ROLE; which module
     answers is the prize row's `provider:` (CP-T04-08 replaced a direct import of one provider's wrapper with this
-    lookup, so neither fight is named here). The act's parties are the fold's own derivation (`loop.sides`, imported
-    inside the function for `_rolled_as`'s reason); none -> `None`, as the social roll's `_rolled_as` answers a party gap."""
-    from ...data.verbs import VERB_TABLE
-    from ...loop.sides import _contests_of, sides_of
+    lookup, so neither fight is named here). The act's parties are the fold's own derivation (`loop.sides`);
+    none -> `None`, as the social roll's `_rolled_as` answers a party gap."""
     row = VERB_TABLE.get(act.verb)
     contests = _contests_of(act, row)
     prize = _prize_row("contest", contests[0]) if contests else None

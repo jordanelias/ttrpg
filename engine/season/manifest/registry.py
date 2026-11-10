@@ -165,29 +165,18 @@ def resolve(role: str, key: Any) -> Optional[dict]:
             needs="a `module:` naming the subsystem that owns the prize",
             law="a prize row names WHOSE contest it is before it names what runs it; a row with a "
                 "provider and no module says a thing can be rolled without saying what it is")
-    provider_name = row.get("provider") if isinstance(row, dict) else None
-    # M4 (`ED-IN-0279` clause (a)). `step:` names WHEN this prize is fought -- absent means
-    # RESOLVE, the default every prize before M4 already had; `ENCOUNTER` defers to the seventh
-    # phase. `declares:` is the band RESOLVE's own admission-and-fold writes while deferred.
-    # Read here, once, because `04 §C.4`'s seam asks `manifest.resolve()` for both rather than
-    # reaching into the roster row a second way -- one reader, not two.
-    step = row.get("step") if isinstance(row, dict) else None
-    declares = row.get("declares") if isinstance(row, dict) else None
-    # Plan position `31a` (A-25). `module_entry:` names the composition role the provider calls
-    # through `MODULE_ENTRIES` -- the prize row's half of *"two owners say which module is called"*.
-    # Absent means the provider calls no module entry (yet). Read here for `step:`'s reason: one
-    # reader of the row, not two; `check_contest_prizes()` holds it to its composition row.
-    module_entry = row.get("module_entry") if isinstance(row, dict) else None
-    # v9 SC-02 `22a`. `heard_by:` names the ROOM that hears this prize's contest -- `bench`, the
-    # `judging_set` at the act's rung, whose ledgers `world_q.reception` reads -- or is absent: no room,
-    # and the provider carries no room operand. Read here for `step:`'s reason (one reader of the row);
+    # The row's optional cells, read here ONCE: `04 §C.4`'s seam asks `manifest.resolve()` for them rather than
+    # reaching into the roster row a second way (one reader, not two). A bare-string row carries none. `provider`
+    # is what runs the prize; `step`/`declares` (M4, `ED-IN-0279` (a)) are WHEN it is fought (absent = RESOLVE,
+    # `ENCOUNTER` defers to the seventh phase) and the band RESOLVE's fold writes while deferred; `module_entry`
+    # (`31a`, A-25) is the composition role the provider calls, held to its row by `check_contest_prizes()`;
+    # `heard_by` (v9 SC-02 `22a`) names the room that hears the contest (`bench`) or is absent, and
     # `_check_heard_by` refuses any other value at boot.
-    heard_by = row.get("heard_by") if isinstance(row, dict) else None
+    cells = {k: row.get(k) if isinstance(row, dict) else None
+             for k in ("provider", "step", "declares", "module_entry", "heard_by")}
     contracts = files.MODULE_CONTRACTS_YAML
     if not contracts.exists():
-        return dict(module=name, provider=provider_name, resolver="unknown",
-                    doc="module_contracts.yaml not found", step=step, declares=declares,
-                    module_entry=module_entry, heard_by=heard_by)
+        return dict(module=name, resolver="unknown", doc="module_contracts.yaml not found", **cells)
     for m in _contracts():
         if m.get("module") == name:
             # ⚠ THE PYTHON, NOT THE MARKDOWN. Jordan, 2026-09-02: *"we aren't using the .md or
@@ -201,10 +190,7 @@ def resolve(role: str, key: Any) -> Optional[dict]:
                 where = (f"systems/{name}/sim/" if guess.is_dir()
                          else f"(no `sim_module:` in module_contracts.yaml; "
                               f"`doc:` is {m.get('doc')!r} and is out of date)")
-            return dict(module=name, provider=provider_name,
-                        resolver=m.get("resolver") or "undeclared", doc=where,
-                        step=step, declares=declares, module_entry=module_entry,
-                        heard_by=heard_by)
+            return dict(module=name, resolver=m.get("resolver") or "undeclared", doc=where, **cells)
     raise Unspecified(
         f"`{roster}` maps {key!r} to {name!r}, which is in no module contract", "S39",
         needs="a module named in references/module_contracts.yaml",

@@ -9,13 +9,13 @@ own *"nothing, ever"* and return a `Margin`.
     wrappers/combat.py    the IN-side of the personal-combat call
     wrappers/fieldwork.py the `inquiry` role's provider (v9 FI-02 + FI-03), called by find_trail()
 
-⚠ **`_LADDER` AND `_LADDER_ERROR` ARE NOT RE-EXPORTED HERE.** `degree_ladder()` rebinds both through
-`global`, so a name bound in this namespace would be a snapshot that is permanently stale the moment
-the first call fires. A caller that reads or writes the raw attribute -- a test swapping the ladder
--- must name **`seam.ladder._LADDER`**. Step 8 established this for the flat module and it holds one
-directory down. The two non-rebinding readers, `ladder_error()` and `degree_of()`, ARE re-exported
-and work from here: a function is one object regardless of which module holds a name pointing at it,
-so `seam.ladder_error()` runs the same code and reads `ladder`'s own globals.
+⚠ **`_LADDER` IS NOT RE-EXPORTED HERE.** `degree_ladder()` reads it as `ladder`'s own global, so a name
+bound in this namespace would be a snapshot that goes stale the moment a test swaps the ladder. A caller
+that reads or writes the raw attribute -- a test swapping the ladder -- must name **`seam.ladder._LADDER`**.
+Step 8 established this for the flat module and it holds one directory down. The readers `degree_ladder()`,
+`ladder_error()` and `degree_of()`, ARE re-exported and work from here: a function is one object regardless
+of which module holds a name pointing at it, so `seam.degree_ladder()` runs the same code and reads
+`ladder`'s own globals.
 
 ⚠ **`combat_seam.py` MOVED, AND THE CLAIM THAT IT WOULD NOT IS THE DEFECT THIS UNIT REPAIRS.** The
 flat `seam.py`'s docstring said it *"does NOT move here and is not renamed ... per

@@ -92,10 +92,12 @@ from ...data.geography import geography
 from ...data.rosters import SUBTREE_OCCUPATION_KINDS, territory_id_of
 from ...data import rosters
 from ...data.rosters import BESIEGE, LOST, MARCH_POSTURE_KEY, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, STORM, UNOPPOSED, WON, require_member
+from ...loop.sides import sides_of
 from ...queries.inputs import ArmyMuster, FieldOrder, MassBattleInput, ProvisionInput
 from ...queries.person_q import stance_toward
 from ...queries import world_q
 from engine.substrate import composition
+from ...state.carriers import Act
 from ...state.gate import seat_faction
 from ._entry import entry_for
 from ._estimate import rng_of, samples_of
@@ -293,12 +295,6 @@ def _seat_treasury(w: Any, via: Optional[str]) -> Optional[str]:
     return rid if rid in w.rungs else None
 
 
-def _attacker_treasury(w: Any, causes: list) -> Optional[str]:
-    """`_seat_treasury` of the marching act among `causes` (`None` for no act among them)."""
-    act = _causing_act(w, causes)
-    return _seat_treasury(w, act.via if act is not None else None)
-
-
 def _defender_treasury(w: Any, rung: str) -> Optional[str]:
     """v9 IN-52 [ASSUMPTION LF-2, delegated-ruled]: THE DEFENDER'S TREASURY -- the nearest held rung at or
     above the target, the walk `world_q.holder_faction_of` makes (`world_q.governing_hold`, its one owner;
@@ -445,7 +441,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         # everybody mustered, as it always did.
         parties = {**parties, "fielded": _fielded_by(inp)}
     # v9 IN-52, THE LEVY-TO-FIELD FEED: `_fed` (above), the one place a side's fielded troops are read.
-    treasuries = (_attacker_treasury(w, causes), _defender_treasury(w, rung))
+    treasuries = (_seat_treasury(w, act.via if act is not None else None), _defender_treasury(w, rung))
     fed = _fed(w, inp, treasuries)
     result = entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)
     return dict(status="RESOLVED", module=_PROVIDER, resolver="dice_pool",
@@ -488,9 +484,6 @@ def field_estimate(w: Any, actor: str, via: Optional[str], target: Optional[str]
     if w.persons.get(actor) is None:
         return dict(status="PARTY-GAP", why=f"a march needs an actor who is a person; got {actor!r}", module=_PROVIDER)
     n = samples_of(w)
-    # `loop.sides` is imported inside the function: `loop/` imports this package (`sigma._rolled_as` says the same).
-    from ...loop.sides import sides_of
-    from ...state.carriers import Act
     claimants, subject, rung = sides_of(w, Act(id="estimate", actor=actor, verb="march", via=via), target, _PRIZE)
     if not claimants:
         return dict(status="PARTY-GAP", why="a field battle needs at least one claimant", module=_PROVIDER)

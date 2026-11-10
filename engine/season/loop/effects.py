@@ -52,15 +52,15 @@ no package, no `__init__.py` barrel:
 
   * `effects_shared.py`      -- `effect_for`, `_operand`, and the handful of helpers three or
                                  more domain files' effects share.
-  * `effects_governance.py`  -- office/seat lifecycle: confer, establish, release, revoke,
-                                 convene, oblige, requisition.
-  * `effects_economy.py`     -- labour, repair, material transfer: work, restore, transfer, exchange.
-  * `effects_migration.py`   -- travel and settlement: move, migrate.
-  * `effects_founding.py`    -- minting works: found, build.
-  * `effects_information.py` -- records, propositions, matters: create_record, issue, open_case,
-                                 determine, petition, survey, give, destroy_record, utter, commit.
-  * `effects_combat.py`      -- casualties and morale: fight (renamed from "kill / wound"), march.
-  * `effects_army.py`        -- a faction's army record: recruit, form_unit, assign_troops, order_unit (ED-IN-0306).
+  * `effects_governance.py`  -- office/seat lifecycle.
+  * `effects_economy.py`     -- labour, repair, material transfer.
+  * `effects_migration.py`   -- travel and settlement.
+  * `effects_founding.py`    -- minting and razing works.
+  * `effects_information.py` -- records, propositions, matters.
+  * `effects_combat.py`      -- casualties and morale; the person raised.
+  * `effects_army.py`        -- a faction's army record (ED-IN-0306).
+  Which verbs a file registers is its `@effect_for(...)` decorators (each file's header names them):
+  this list names the split, not the verbs, so it cannot fall behind a verb added to a file.
 
 ⚠ THIS FILE IS THE REASONED EXCEPTION TO `queries/__init__.py`'s "THIS FILE IMPORTS NONE OF ITS
 SUBMODULES" CONVENTION, NOT A SILENT COPY OF A PATTERN THAT DOES NOT FIT HERE. `queries/`'s reason

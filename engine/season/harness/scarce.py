@@ -59,12 +59,11 @@ from collections import Counter
 
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.requires import SHORTFALL_PREDICATE
-from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..state.carriers import Office, Person, Rung, Site, Tenure
-from ..state.ids import H, draw_factory
 from ..state.world import World
+from . import probes as P
 
 # THE TWO SETTLEMENTS AND THE TWO PEOPLE. Test-fixture ids, not definitions the game resolves from.
 GRANARY, HUNGRY = "set_granary", "set_hungry"
@@ -213,9 +212,7 @@ def run(seasons: int = 3, seed: int = 0, w: World | None = None,
     skip `d.resolved`; the outcomes read here are per fold, which is what the set holds."""
     w = build(seed) if w is None else w
     d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                      draw=draw_factory(w.world_seed, lambda: w.tick))
+    ch = P.chooser(w, verbs=resolvable_verbs())
     out = []
     for _ in range(seasons):
         need, got = world_q.demanded(w, HUNGRY), world_q.delivered(w, HUNGRY)

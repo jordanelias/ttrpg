@@ -1,5 +1,5 @@
 """`season.loop.effects_combat` -- casualties and morale: fight (renamed from "kill / wound") and
-the duel's `accept`, march; and the person raised (v9 IN-12 step 9, G15): tend, train; and the
+the duel's `accept`, capture, march; and the person raised (v9 IN-12 step 9, G15): tend, train; and the
 grudge's closer (v9 IN-12 step 13, G15): forgive.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the two effects that read a

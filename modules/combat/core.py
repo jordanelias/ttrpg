@@ -117,7 +117,7 @@ def ob_from_defender(defender):
     NO INSTANCE MODIFIER IS ADDED HERE. Wound impairment already has its OWNER
     (combat_systems.wound_impairment, ED-1041) and is folded into net_sigma at every call site (bind_sigma,
     the defence assembly, reach_sigma, pursuit_sigma) — adding a second wound term onto Ob would double-count
-    it, exactly the class of defect wrapper.py:316-317 already guards against for defence_sigma ("NOT re-scaled
+    it, exactly the class of defect `wrapper.engagement`'s `neutralize` note already guards against for defence_sigma ("NOT re-scaled
     by dsig, which already shaped the roll via net_sigma (audit C-2: avoid double-counting defender skill)").
     If a genuine per-instance Ob modifier is ever needed here, it is a NEW term with its own owner, not folded
     into this function silently. Pure."""

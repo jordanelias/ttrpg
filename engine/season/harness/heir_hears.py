@@ -22,13 +22,12 @@ from __future__ import annotations
 import argparse
 import sys
 
-from ..decision import make_chooser
 from ..decision.questions import aggregate_questions
 from ..loop import driver as DRV
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..queries.person_q import ledger_names
-from ..state.ids import H, draw_factory
+from . import probes as P
 from .populated import build_realm
 
 THRONE, HEIR_SEAT = "off_king", "off_heir"
@@ -94,9 +93,7 @@ class Patch:
 
 def one_season(w, d):
     """One real season: MATTER, CALENDAR, the rounds of DELIBERATE, RESOLVE and WITNESS."""
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                      draw=draw_factory(w.world_seed, lambda: w.tick))
+    ch = P.chooser(w, verbs=resolvable_verbs())
     return d.season(ch, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
 
 

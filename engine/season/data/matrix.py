@@ -142,7 +142,6 @@ _MATRIX_ROW_KEYS = frozenset(f.name for f in fields(MatrixRow)) | {"class"}
 
 
 def _load_write_matrix() -> dict:
-    import yaml as _yaml
     if not WRITE_MATRIX_YAML.exists():
         raise SystemExit(f"write_matrix.yaml not found at {WRITE_MATRIX_YAML}")
     doc = load_yaml(WRITE_MATRIX_YAML.read_text())
@@ -163,10 +162,6 @@ def _load_write_matrix() -> dict:
         social = {"true": True, "false": False, "n/a": None}[r["social"].strip()]
         # THE CROSS-CHECK. `class:` is V2's prose; the derivation is this file's. If they
         # disagree, one of them is wrong and neither may be trusted silently.
-        derived = "/".join(sorted({STEP_CLASS[st].value for st in steps},
-                                  key=lambda v: [s.value for s in Step].index(v)
-                                  # [JUSTIFIED: a SORT SENTINEL, not a game value -- it orders a class outside `Step` last, and any value above len(Step) is equivalent]
-                                  if v in [s.value for s in Step] else 99))
         stated = r["class"].strip()
         if steps and stated != "—":
             want = set(stated.split("/"))

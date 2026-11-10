@@ -3227,8 +3227,7 @@ rosters:
       yet (`game/` is unbuilt) and nothing here moves a file (`31a`-`31c` move module code into
       `modules/<name>/`, which A-25 derives from the composition rows, not from this roster). A
       `systems/<name>/` directory that no entry names as its `home:` is not retained as a system:
-      `R04_PENDING_SUBSYSTEMS` is computed from exactly that, and `tools/evacuation_plan.py` reads
-      its two `systems/` rules from here instead of spelling directories. ⚠ [ASSUMPTION, position
+      `R04_PENDING_SUBSYSTEMS` is computed from exactly that. ⚠ [ASSUMPTION, position
       `30`] the four stubs' homes follow `ED-IN-0284`'s own reasons -- `articulation` and `ui` are
       presentation (holonic §45's `game/`), `victory` is a set of conditions the host would
       evaluate (`H-176`; built since as `world_q.endings_reached`, v9 IN-27), `_architecture` is not a system and its subject is Layer 1's --

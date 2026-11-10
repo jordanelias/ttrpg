@@ -597,6 +597,17 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 ledgers.evict_over_cap(p.ledger, len(p.ledger) - 1)
             w.write("claim_ledger", token, _evict,
                     record_kind="Person", fieldname="claim_ledger", driver="Event")
+
+    def _deposit(p, c, e, also=()) -> None:
+        """THE ONE GATED DEPOSIT: `c` into `p`'s own ledger, emitting `claim.deposited` caused by the
+        witnessed Event `e` (and by `also`, a found deposit's trail Event), traced and counted. Every
+        deposit below -- event-kind, observation, `seen`, content, told, found -- ends here."""
+        nonlocal deposits
+        w.write("claim_ledger", token, lambda: p.ledger.append(c),
+                record_kind="Person", fieldname="claim_ledger", driver="Event",
+                emits="claim.deposited", subject=c.id, causes=[e.id, *also])
+        TRACE.claim(p.id, e.id, c.source)
+        deposits += 1
     w._in_parallel_map = True
     for pid, e, channel in fan:
         p = w.persons.get(pid)
@@ -683,12 +694,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
             # `W4`'s own ROOT-count proof unsatisfiable. Chained to the witnessed Event, the
             # walk is `decayed -> ... -> deposited -> the act that was witnessed`, which is
             # what #353 §19.4 means by the substrate of the emergent-narrative claim.
-            w.write("claim_ledger", token,
-                    lambda p=p, c=c: p.ledger.append(c),
-                    record_kind="Person", fieldname="claim_ledger", driver="Event",
-                    emits="claim.deposited", subject=c.id, causes=[e.id])
-            TRACE.claim(pid, e.id, src)
-            deposits += 1
+            _deposit(p, c, e)
         # `W-B`. THE SECOND DEPOSIT: ONE CLAIM PER READ THE FOLD MADE, IN THE `requires`
         # VOCABULARY. `Observation` is `(subject, predicate, value)` and so is `Claim`; its
         # own docstring says an Observation *"is what a Claim would be if the reader wrote
@@ -795,12 +801,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                            self.round, doer=doer)   # `U2`: see the deposit above
                 if refracting:
                     oc = _refract(oc, p, channel, gain, competence_gain=cgain)
-                w.write("claim_ledger", token,
-                        lambda p=p, c=oc: p.ledger.append(c),
-                        record_kind="Person", fieldname="claim_ledger", driver="Event",
-                        emits="claim.deposited", subject=oc.id, causes=[e.id])
-                TRACE.claim(pid, e.id, src)
-                deposits += 1
+                _deposit(p, oc, e)
         # `R8.1`. THE THIRD DEPOSIT: ONE `seen` CLAIM PER (WITNESS, EVENT), BESIDE THE TWO ABOVE.
         # Its value is `epistemic.Seen` -- `{stratum, marks, who, why}`, each `None` where the
         # admitting channels withhold it -- and its subject is the changed thing, else the RUNG,
@@ -818,12 +819,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                        self.round, doer=doer)   # `U2`: see the first deposit
             if refracting:
                 sc = _refract(sc, p, channel, gain, prior_act, prior_weigh, cgain)
-            w.write("claim_ledger", token,
-                    lambda p=p, c=sc: p.ledger.append(c),
-                    record_kind="Person", fieldname="claim_ledger", driver="Event",
-                    emits="claim.deposited", subject=sc.id, causes=[e.id])
-            TRACE.claim(pid, e.id, src)
-            deposits += 1
+            _deposit(p, sc, e)
         # THE FOURTH DEPOSIT: THE CONTENT OF A DOCUMENT THIS WITNESS HAS COME TO HOLD (plan position
         # `15`). `(record, "content:<kind>", <subject_matter, frozen>)` -- `content_value` above:
         # the belief is what the document said when it reached this hand, and nothing done to the
@@ -847,12 +843,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                        "own", self.round, doer=doer)   # `U2`: see the first deposit
             if refracting:
                 dc = _refract(dc, p, channel, gain, competence_gain=cgain)
-            w.write("claim_ledger", token,
-                    lambda p=p, c=dc: p.ledger.append(c),
-                    record_kind="Person", fieldname="claim_ledger", driver="Event",
-                    emits="claim.deposited", subject=dc.id, causes=[e.id])
-            TRACE.claim(pid, e.id, src)
-            deposits += 1
+            _deposit(p, dc, e)
         # THE TOLD CHANNEL -- `claim_sources`' `told_by`, WHICH NOTHING WROTE.
         #
         # ⚠ WHAT WAS TOLD, NOT MERELY THAT A TELLING HAPPENED. The event-kind deposit above
@@ -1004,12 +995,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     # `may read` cell does not list a person's `conviction`: CONVENTION (top of file).
                     if regime:
                         tc = _credit(w, tc, pid, _act.actor, regime, conf)
-                    w.write("claim_ledger", token,
-                            lambda p=p, c=tc: p.ledger.append(c),
-                            record_kind="Person", fieldname="claim_ledger", driver="Event",
-                            emits="claim.deposited", subject=tc.id, causes=[e.id])
-                    TRACE.claim(pid, e.id, "told_by")
-                    deposits += 1
+                    _deposit(p, tc, e)
         if len(p.ledger) > cap:
             _cap(p)
     # v9 FI-03 (`ED-FI-0002`): THE SIXTH DEPOSIT -- WHAT A FINDING UNCOVERED, INTO THE FINDER'S OWN LEDGER.
@@ -1024,12 +1010,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
     if self.findings:
         for e in events:
             for p, f, c in _found_claims(self, w, e, claim_rule, conf, mode, gain, cgain):
-                w.write("claim_ledger", token,
-                        lambda p=p, c=c: p.ledger.append(c),
-                        record_kind="Person", fieldname="claim_ledger", driver="Event",
-                        emits="claim.deposited", subject=c.id, causes=[e.id, f.id])
-                TRACE.claim(p.id, e.id, c.source)
-                deposits += 1
+                _deposit(p, c, e, also=(f.id,))
                 _cap(p)
     w._in_parallel_map = False
     # S9.3/S28: WITNESS NEVER TOUCHES A BELIEF. Nothing above writes `pursuits` -- its row

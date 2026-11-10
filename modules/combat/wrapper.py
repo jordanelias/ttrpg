@@ -1,6 +1,9 @@
-"""CombatWrapper — owns the state graph and the A/B identity. The driver assigns aggressor/defender ONCE per
-beat and passes Combatant objects to every subsystem. Initialization is the only toggle. This is the structural
-cure for the role-inversion bug class: no subsystem and no resolution step ever indexes raw 'A'/'B'."""
+"""wrapper.py — the personal-combat engine's orchestrator: `fight(A, B, ...)` runs a scene of up to `max_bouts`
+engagements and returns +1 / -1 / 0 (A won / B won / unresolved); `engagement(...)` is one burst of beats inside it.
+Inputs: two `combatant.Combatant` objects, `config.CFG` (or a `cfg` passed in) and the caller's `rng`; the host
+reaches it through `fight.py` (`engine/substrate/pc_engine.py` puts this directory on the path). Here `engagement`
+assigns aggressor/defender ONCE per beat and passes Combatant objects to every subsystem (`combat_systems`, `core`,
+`contact`, `tradition`), the structural cure for the role-inversion bug class: nothing ever indexes raw 'A'/'B'."""
 import sys, os; sys.path.insert(0, os.path.dirname(__file__))
 import core, combat_systems as S, tradition as TR, contact as CT
 import vocabulary as V   # the token ALPHABET, owned once (ED-PC-0042)

@@ -103,13 +103,14 @@ from ..data import goals as goals_data
 from ..data import verbs as V
 from ..data.rosters import FACTION_BY_PROP, PURSUIT_AXES, faction_prop_id
 from ..data.verbs import alignment_at
-from ..decision import assemble, choose as CH, make_chooser, opening_set
+from ..decision import assemble, choose as CH, opening_set
 from ..decision.options import project
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..seam.wrappers.sigma import believed_odds_query
 from ..state.carriers import Question, subject_of
-from ..state.ids import H, draw_factory
+from ..state.ids import draw_factory
+from . import probes as P
 from .populated import build_realm
 
 # [JUSTIFIED: a float-tie tolerance for the attribution (two scores within it are a tie), an instrument constant and not a game number]
@@ -454,10 +455,9 @@ def play_season(w, seasons: int = 1) -> dict:
     entered the fold and was refused there is in them, and a contested act refused at admission, which
     never enters `d.resolved`, is not."""
     d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     foldable = resolvable_verbs()
     draw = draw_factory(w.world_seed, lambda: w.tick)
-    real = make_chooser(w.fixtures, mint, verbs=foldable, draw=draw)
+    real = P.chooser(w, verbs=foldable)
     split = new_split()                    # every deliberation's `draw_kind` / `field_zero`, read beside the chooser
     answered: Counter = Counter()          # (source, goal class) -> deliberations
     by_act: dict = {}                      # (actor, verb, subject) -> (source, goal class)

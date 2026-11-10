@@ -65,7 +65,7 @@ from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .person_q import LedgerReader, OwnStateReader, addressed_to, content_said, intent_named, ledger_names
 # v9 IN-57: `attention_key`'s tier 2 scores a deed claim by `deed_valence`, one owner per factor.
 from .person_q import (
-    _seen_index, crisis_weights, deed_valence, paired_deed_term, projected_axes)
+    _seen_index, deed_valence, paired_deed_term, projected_axes)
 # v9 SC-02 `22a`: `reception` and `proofs` read which claims record a person's deeds, what each is worth
 # to its holder, and which deeds were done TO him, off the same person-side owners `regard` reads.
 from .person_q import attributed_deeds, deed_term, holds_dispute, suffered_deeds   # `holds_dispute`: v11 CR-87, the `dispute` stem's one owner
