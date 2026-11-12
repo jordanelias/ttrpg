@@ -54,3 +54,13 @@ Collected by the orchestrator from lane receipts, 2026-11-12. Each item names it
 ## D. Standing requirements every document must meet (checked by unification test 9 and the gates)
 
 A-80 entrenchment moves the world; A-81 no scene is still; every recommendation carries instructions to code it (AUDIT_BRIEF last sections); on any conflict this session's content wins over workplan v11 (`STAGES.md`).
+
+## E. Implementation lane A has finished (2026-11-12): code facts the suite is read against
+
+Local branch `worktree-agent-a737f996de1fa4752` (worktree `.claude/worktrees/agent-a737f996de1fa4752`), base `main` at `1424aa7`, two commits, **not pushed and not merged** (the designated session branch is the design suite's; the code branch needs Jordan's word to push and its own PR). `e5d6ab9` the duel chain reaches play (steps 1 and 2); `c5bf18a` persons hold scores and the obstacle is task difficulty plus named terms (steps 3 and 4). 49 files, +1178/-158; realm and corpus pins re-recorded, `results.json` regenerated. The tree the suite cites (`main`) does not contain this work; documents that quote the tree's state stay true of `main`, and any batch of v12 that touches the same files takes this branch as its base or re-does the work.
+
+Measured by the lane (`aperture 2 s`, seeds 0/1/2): challenge executed 0/0/0 → 26/19/24; accept refused 28/30/21 → 0 (executed 1/3/1); comply's dead ends no longer form; same seed twice gives the same hash. **Charge 3 is NOT met in the shipped realm**: the obstacle is still 2.0 in 998 of 1106 rolls (every person holds the default score 2; task difficulties are calibrated to the old mean); authored scores and per-task difficulties are owed.
+
+Residues the suite must carry: an accepted challenge is never used up (can be fought again until someone dies); `ob_terms` ride the roll's in-memory result, not the event log (a Layer 1 `04` receipt question); a plain `fight` still kills every time (F-PC-04); `tests/valoria` not run whole (12 covering files green; four xdist worker crashes that pass alone: a known-red to re-check on `main` per CLAUDE.md §0.4).
+
+Ladder-closed here (no Jordan call): two commits instead of five is accepted (each commit's revert function separates the links). Owed to unification: (1) **H-275 may collide with another lane** — U3 checks the row against `references/id_reservations.yaml` and the hole register; (2) **who owns scores and per-task difficulties** — U1's capability architecture decides one owner (A-6 base floor five, A-7 two inputs, A-71/A-79 the one rule) and the task-difficulty table's home; (3) **new witness roster `read_to_addressee`** — U2 grades it against the closed-set and loader-refusal rule (CLAUDE.md §0.05) and `04`.
