@@ -80,6 +80,9 @@ Answered by prior ruling, precedent or architecture; recorded so the numbering i
 | D-46 | B: his refusal teaches him, privately | Jordan's 'we never want dead ends'; step 5 |
 | D-48 | A: forgetting computed when read | precedent (a crossing is recorded, a level is not); step 4 |
 | D-74 | B: fix the witness code, not Layer 1 | CLAUDE.md §0.05 (a spec edited to match its code checks nothing); step 3 |
+| D-20 | A: a won battle gives presence only; title passes by a separate act of seizure | as built and per #453; one owner of title (seizure); step 4. Contradiction with Layer 1's faction contract ('holdings and seats') is named for the unification stage, not edited into Layer 1 |
+| D-25 | A: an arrest needs no officer beside the prisoner (the court's reach suffices) | as built; the physical-verbs lane and this register agree; step 4 |
+| D-27, D-28, D-31 | B / B / A (a drawn and seen crisis of faith; a drawn scruple; swearing to a seat a draw against the seat) | by Jordan's A-24 (D-26) |
 | D-68 | B: farm work an act, sequenced after the cohorts' heavy moves land | its stated condition (D-73 B) is met; step 3 |
 | D-69 | A: famine reports once, never-stocked edge repaired | consistent with the 2026-10-12 ruling; step 3 |
 | D-72 | A: leave a lord over an empty land | recommended until yield, levy and stability bind; step 5 |
