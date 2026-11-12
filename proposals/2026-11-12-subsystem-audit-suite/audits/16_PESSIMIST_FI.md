@@ -868,7 +868,7 @@ the shipped chooser and fixtures, through the GAME lane's `pes.py`.
 | 12 | `fi_arms.py 0 1 ship` (smoke) | realm · 0 · 1 | hash `5ab73af2…`, 13,379 Events: the first FI audit's run 4 |
 | 13 | `fi_arms.py 0 3 <arm>` | realm · 0 · 3 | `ship` `52ff67bc…` (equal to the GAME lane's `x1` shipped arm, so this instrument perturbs nothing); `draw1` `a162bf8b`; `notell` `a9b3283d`; `noc4` `d45d46f2`; `presence` `a0742623`; `nofi` `56741b4b`; `nochron` `7a08179a`. §1.1, §1.3, §3 |
 | 14 | `fi_arms.py 1 2 ship`, `presence` | realm · 1 · 2 | `ship` `8aae8412`: `march` 5, `migrate` 41 attempted / 4, forgeries 34 (0 travel), chained 5 (one hop), 13 non-information answers. `presence` `a992acee`: `march` 0, `migrate` 0, two deaths (6 firsthand holders each) |
-| 15 | `fi_arms.py 0 3 nod3`, `noinq` | realm · 0 · 3 | proposal D's "today" arms; see that file |
+| 15 | `fi_arms.py 0 3 nod3`, `noinq` | realm · 0 · 3 | §1.2 "N-2 decomposed"; proposal D's measured arm is `nod3` |
 
 Not run: `pytest` (by instruction); `aperture`, `strife`, `storybar`, `chronicle`, `arc`,
 `corpus_run`, `register --requirements`, `m1_acceptance` (cited from the lanes that ran them). A

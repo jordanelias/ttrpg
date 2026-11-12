@@ -79,7 +79,7 @@ retelling; fill, do not amputate.
 | reading (`build_realm(0)`, two seasons) | today | passes when |
 |---|---|---|
 | receipts minted by the gate and carried by no Event (`p34.py`'s count) | 3,914 | 0 |
-| `scar.taken` Events / `Person.scar` write calls | 0 / 315 per season | equal |
+| `scar.taken` Events / `Person.scar` write calls | 0 / 315 in season 0 (`ordp.py`) | equal |
 | claims deposited per season | 12,115; 10,607 | unchanged (the new Events fan out to nobody) |
 | receipts on a fields-naming `Change` with `delta is None` | all | none |
 | acts, per-act outcomes, every state component of `pes.proj` | — | identical to today's (only the log and the hash move) |

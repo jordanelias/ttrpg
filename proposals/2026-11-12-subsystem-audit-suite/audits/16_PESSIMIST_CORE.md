@@ -295,7 +295,7 @@ documented (`loop/resolve.py:637-640`: *"Nothing is emitted: `scar.taken` is dec
 reader consumes it, and putting the receipts on the act's Event would deposit claims about every scarred
 observer at WITNESS"*; `_conviction_crisis` follows *"the scar's precedent"*, `:706-708`), and
 `write_matrix.yaml` still declares `emits: scar.taken` and `emits: conviction.moved` on the two rows. The
-rate itself (a scar on 38% of acts, a dozen observers each) is the CHAR lane's finding; the core's is that
+rate itself (a scar write on 315 of season 0's 821 acts, several observers each) is the CHAR lane's finding; the core's is that
 the one kind of change that reaches every person in the realm, and the only writer of a conviction
 crisis (*"fold, restabilise or destroyed"*), leaves nothing a retelling can find. F-PES-CORE-03.
 
@@ -417,8 +417,8 @@ roster rows (`peninsular_sovereignty`, `theocracy`), *"a read … the run does n
 | beginnings | 1,487 individual acts, every one with an occasion: 1,408 `claim_landed`, 79 `need`. Nobody begins anything unprompted |
 | escalation | deepest cross-person chain of consequence acts: 4 (`conceal`, then three `create_record`s); over all acts 10, eight of them refusals (§1.5) |
 | reversal | none observed: no `tenure.opened`, `stance.moved`, `conviction.moved`, `commitment.ended`, `record.destroyed` in three seasons |
-| cost | 828 refused scenes; the price leaves no receipt (F-CORE-17, cited) |
-| ending | `endings: []` at every season of every arm run here (11 two- or three-season runs); the WR lane reports none in six seasons |
+| cost | 828 refused acts, each spending its slot; the price leaves no receipt (F-CORE-17, cited) |
+| ending | `endings: []` at all 26 realm seasons logged by the arms run here (seed 0, perturbed and not); the WR lane reports none in six seasons |
 | retelling | one chain, as `season | actor verb | kinds | answers n`; no value, no place at the time, no reason (§1.4) |
 
 **4.3 Dead ends.** Every Event kind that finishes something is among the 100 never emitted (§2, R).
@@ -536,7 +536,7 @@ training, a confession, a determination, either roster ending.
 | R-01/R-02 lack a controlled reading | `storybar.knockout_arm` beside `draw_seed_arm`; statuses untouched | 4 (precedent: `draw_seed_arm`) | same |
 | the stored plan tail | delete | 5 | `…_no_stored_plan.md` |
 | an old Event's place | a retelling reads the actor's `contain` edge live at `e.emitted_at` (`move` writes `Tenure.until` and `Tenure.since`, so the closed edge is kept); `event_place` stays as WITNESS's read; no proposal file: one function beside it when a retelling is built | 5 | this row |
-| `scene_budget = 0` | `Fixtures` refuses `scene_budget < 1` at load, as it refuses other unusable values: a season with no round is not a season | 4 (precedent: the loader's refusals) | this row |
+| `scene_budget = 0` | `Fixtures` refuses `scene_budget < 1` where it is read (`driver.py:479`): a season with no round is not a season. The licensed form is a loader's refusal per data family (CLAUDE.md §0.05) | 5 | this row |
 
 **Survivor for Jordan (1).** *Is a scene a budget unit or a short sequence?* Option A: keep the global
 fold order; define *scene* as a budget unit; re-point R-09 at chains across rounds. Option B: fold a
@@ -557,7 +557,7 @@ The machine was heavily loaded (load average 25 to 42); wall times are not measu
 | E-01 | `run_dump.py 0 3 s0_k3.json` | 0 × 3 | 2,630 acts, 74,510 Events, hashes `5ab73af2…`, `bacd687f…`, `52ff67bc…` (equal to the GAME lane's: the wrappers are inert); `endings []` each season |
 | E-02 | `an1.py s0_k3.json` | — | scene, round, refusal and log readings of §1.1, §1.3, §1.4 |
 | E-03 | `an2.py s0_k3.json` | — | retry by verb and by observation; refusal share per person |
-| E-04 | `knock.py 0 2` | 0 × 2, five arms | baseline `bacd687f…`; receipts 36,586 all `delta=None`; place drift 39 of 831; scene order 120 of 525; plan change 516 of 527; knockouts 634 / 309 / 236 / 625. **OOM-killed** in its sixth arm (the process-global `TRACE.rows` grows without bound across arms) |
+| E-04 | `knock.py 0 2` | 0 × 2, five arms | baseline `bacd687f…`; receipts 36,586 all `delta=None`; place drift 39 of 831; scene order 120 of 525; plan change 516 of 527; knockouts 634 / 309 / 236 / 625. **OOM-killed** in its sixth arm (the process held the baseline world and the process-global `TRACE.rows`, which F-CORE-09 notes is cleared by nothing but `soak`; the cause was not isolated) |
 | E-05 | `knock2.py replay`, `cohort`, `noise` | 0 × 2, one arm a process | 0 (hash `bacd687f…`); 0; 2,760 |
 | E-06 | `p34.py 0 2` | 0 × 2 | refusals by failing stem; 3,914 orphan receipts, all `scar`; chronicle 4 acts against a shuffled 5 |
 | E-07 | `ordp.py 0 1` | 0 × 1, four arms | strata cut 0 flips; reversed 1 of 175; replay identical; write-matrix cells 26 of 65 written |

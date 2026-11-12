@@ -243,3 +243,143 @@ Lane tests5: 56 test files (engine/season/tests, engine/tests, tests/valoria hel
   - G6: `telling_privacy` ships 0; at 1.0 a private telling deposits `visibility == (teller, addressee)` for both addressee and bystander; retelling outside the circle emits `confidence.broken` (at Success, Partial and Overwhelming); inside the circle or by the confider breaks nothing `:2220-2335`. DOCUMENTED LIMIT (C1(i)): the production `said` pick (newest-first) shadows the confided copy with the hearer's own `news.told` claim, so the break path is NOT reached in shipped play; the repair "moves the shipped told channel and the hashes, and is not built here" `:2261-2284`.
 - **Conflicts / stale:** (1) F-TEST row R-07 lists "Feeling, attitude, relationship: no test"; `test_r07_realm_regard_differs_between_hearers_by_claim_not_stance_alone` `:1964` and G1 tests exist (existence claim, realm, two seasons, control arm). (2) `test_t3_unplanted_members_with_opposite_loyalty_reach_different_verdicts` `:474` must sweep `loyalty_toward_creed` to False because CR-87 made build-time loyalty name the creed, so "no unplanted row toward a leader exists on the shipped build" `:503-507` (the premise is reverted in process). (3) The realm falsifier's seed pin is chosen to make it pass `:301`. (4) `intent_disclosure` 0, `telling_privacy` 0, `said_slant newest`: three telling mechanisms (intent disclosure, confidences, slant) ship OFF or neutral; tested live only on `tiny_world`.
 - **Open items:** `said_of` excluding the hearer's own `news.told` claim (R8.1 `seen` precedent) so a confided copy can be broken in play, not built `:2269-2271`. Mechanism by which 13d-iii lowered chained claims "not isolated" `:249-261`.
+
+### engine/season/tests/test_u7_own.py
+- **What it is:** pytest file, plan position `14` (U7-own): the fold's counterparty clause over every counterparty row; self-loop `give`; bare-string `oblige`; the always-refused verb set not growing; `destroy_record`'s hold as an arm; `give` formable; `Candidate` has no `why`.
+- **Status:** no Status line. Reading: live. Named in F-TEST as read at flagged tests (`:1-?`).
+- **Bears on:** CORE (verb table, fold admission), FA (obligations), FI (records).
+- **Content that matters:**
+  - For EVERY `VERB_TABLE` row with a `counterparty`, an act naming the actor or nobody is refused with the row's own counterparty refusal, with eligibility and precondition stubbed open (`dataclasses.replace(row, eligibility=("own",), requires="—")`); control names another person; `checked == len(rows) >= 1`; exactly one row (`confer`) has `counterparty_may_be_self` `:77-106`.
+  - A `give` to oneself opens nothing and leaves custody unchanged (control: to another moves the hold) `:122-136`. Bare-string `oblige` (`einhir_texts`) is `duty.refused` and opens no edge; a real seat (`off_dicastery`) opens one `:143-153`.
+  - `DECLINED = ("tie / knot",)` is the one remaining declined row, and `resolvable_verbs()` must not contain it; untyped counterparty rows that no person can bind are exactly `["interrogate","oblige"]` `:61,160-181`. The comment history shows `repudiate`, `forge`, `carry`, `thread_read`, `exchange`, `succeed` each LEFT the declined set at named positions `:41-60`.
+  - `destroy_record` is held out of formation by `Fixtures withheld_verbs` at the shipped arm (A-13, H-156): `"destroy_record" in w.fixtures.get("withheld_verbs")`; at the sink arm it forms only on the held Record `:187-205`. Control: the holder forms other verbs on the same referents.
+- **Conflicts / stale:** `tie / knot` appears as a verb name with a slash (a row that is a decline placeholder). `engine/season/tests/test_in26_record_sink.py` is the named owner of the rest.
+- **Open items:** none.
+
+### engine/season/tests/test_u7_remit.py
+- **What it is:** pytest file (1,244 lines), plan position `19` U7-remit plus SC-03a/SC-03b plus IN-49: the four remit verbs `requisition`, `open_case`, `determine`, `issue` through the seat (`Act.via`), the keyed `emits_on_refusal` schema, the docket, the gate's `determination`/`warrant`/`seizure` bases, `detain`/`ban` restraints, the contested `determine`.
+- **Status:** no Status line. Reading: live. F-TEST read it at flagged tests; read here in full.
+- **Bears on:** FA (offices, seats, remit, docket, restraint), SC (determine, arrangements, `contests: a proposition`), SE (requisition of larders), CORE (gate bases, fold, R-04).
+- **Content that matters:**
+  - Plan's falsifier: none of the four executes with `via=None`, run twice (eligibility refuses; and with eligibility forced open the `basis` conjunct refuses, verdict `UNKNOWN`, not False) `:175-221`. `requisition` moves matter from the rung into the seat's treasury, conserved, both rungs on the Event; two requisitions of one larder in one fold: second `requisition.refused` carrying `("stores:grain", 0)` `:228-255`; a requisition of `R` above the Duke's purview is `requisition.unauthorized` naming `purview:off_duke` `:258-266`.
+  - `determine` is CONTESTED (SC-03b, `contests: "a proposition"`, provider `social_contest.roll`): a determination executes at the band the judge's roll decides. At the shipped `pool_default` 2 vs obstacle 2 "most rolls are `Failure`" so tests take a STRONG JUDGE `pool_default: 30` and assert the band (`OPENS = Overwhelming, Success`) `:58-65`. Runtime test: two judges (pool 2 and 12) x 40 act ids each; all four bands occur (`set(seen) == BANDS`, `sum(seen.values()) == 80`); Failure -> `matter.undetermined`, no edge, matter still docketed; other bands -> `matter.determined` with `edge.degree == band` `:1180-1207`; an undetermined matter can be re-heard (200 act ids) `:1210-1230`; a judge pool under one die is refused (S27.4) with no degree `:1233-1244`. Also `Failure` writes nothing, `Partial` writes the three disposal pairs, `Success/Overwhelming` add `Person.pursuits` and `pursuit.moved` `:1138-1145`.
+  - Bench quorum (`bench_quorum` swept 1,2,3; `tiny_world` bench for `Hh` is ONE person) below quorum is `determine.refused` carrying `bench.size`/`quorum` reads `:354-368`. `judging_set` and `may_determine` read one bench over every person (`sits_over`) `:480-494`.
+  - Gate: the `determination` basis refuses each missing clause (no seat, outside the ground, no bench grant, another seat, not seated) with the store put back `:424-447`; a determination OPENS a disposed kind and CLOSES a `detain`/`ban` and re-grades nothing; closure of a `hold` on a Record is admitted as `seizure`, not determination `:754-801`; `warrant` basis opens a `detain` only for a seat granted `dispatch` over a prisoner in purview `:820-846`; an owner cannot open or close his own restraint (T-m excludes `detain`/`ban`) `:849-875`.
+  - Consequences: a `ban` blocks `oblige` (`duty.refused`) and `confer` seating; `detain` blocks `move` (`travel.blocked`) and `migrate`; a ban does not stop travel; a mustered army excludes persons in custody; the party's `release` of a `ban` is refused, of an `oblige` closes it `:700-751,878-915`.
+  - IN-49: a computed `requisition` forms only on a `Rung`-classed larder inside the seat's purview with stock `larders_in_purview`; refused arms for the realm `R`, the seat's own treasury `D` and an empty larder; the requisition's kind/amount come from fixtures (`default_store_kind`, `default_transfer_amount`) not from claims about the rung, with a `transfer` control that reads the claim `:981-1109`.
+  - Loader: 7 planted defects on `requisition`'s keyed `emits_on_refusal` each fail the load naming it `:564-599`.
+- **Conflicts / stale:** `issue` (a writ) and `open_case` and `requisition` execute DETERMINISTICALLY once admitted (no roll): `issue` mints a `dispensation` Record, `requisition` moves exactly `default_transfer_amount`, `open_case` dockets; under the brief's DO-NOT-DO-DETERMINISTIC rule ("a decree binds") these are eligibility-gated but their consequence is a fixed function of state [UNVERIFIED whether the later compliance/obedience step draws]. `determine`, by contrast, is already a draw. Cites `21_RECONCILIATION.md:575`, `04:120`, `04:330`, `04 §B.13` (design docs; `.designs/` archive).
+- **Open items:** none.
+
+### engine/season/tests/test_u8_ambitions.py
+- **What it is:** pytest file, plan position `17` (U8): `world_q.ambitions(w, p)` and `corpus_run.build_at`'s cast (the NPC corpus runner).
+- **Status:** no Status line. Reading: live.
+- **Bears on:** CHAR (ambitions, cast), ARCS (cast seating, `WAITS-ON-PLAYER`), CORE (corpus harness).
+- **Content that matters:**
+  - `ambitions` = LIVE `commit` edges to OUGHT Propositions off the person's OWN tenures; each of 4 distractors (ended, `hold` not `commit`, `commit` to HOLDS, `commit` to unknown id) tried alone returns `[]`; faction creed (OUGHT commit) IS an ambition; HOLDS only for `Guilds`, `Schoenland`, `faction x` `:61-118`.
+  - `cast:` seating: `p_b`/`p_c` named from the cast; an 11-entry cast seats 11 and RUNS (`r["checks"]["R1"] is True`, `executed` non-empty, `len(actors) > 3`); a `WAITS-ON-PLAYER` entry is not seated and is reported; capability lands on its own seat only `:151-203`. Control: NPC-020 has no overlay and builds three anonymous people `p_a,p_b,p_c`; a one-entry cast changes only the name (hash differs, then tally equal after renaming) `:229-254`.
+  - Q4 (`questions_for` `need` source) fires once per ambition per person: 3 propositions before, 11 after a cast of 11 `:266-290`.
+- **Conflicts / stale:** the comment on `person_q` vs `world_q` placement (a deleted AX-2 guard test) `:24-28`. Knowledge -> initial Claims is REFUSED by name at load (tested in `test_u8_cast_fields.py`).
+- **Open items:** none.
+
+### engine/season/tests/test_u8_cast_fields.py
+- **What it is:** pytest file, plan position `17-cast`: a `cast:` entry's `office:`, `ought:`, `capability:` and the refusal of `knows:` in `harness/corpus_run.py`, plus overlay-loading integrity (`cast_overlay`, `rescales`).
+- **Status:** no Status line. Reading: live.
+- **Bears on:** ARCS (the provided characters' overlays: NPC-038, NPC-088 Carin Vedel), CHAR (capability, ambitions), CORE (corpus harness).
+- **Content that matters:**
+  - `office:` is seated by `_seat_office` (mutation: a no-op seater makes `_held` empty) `:58-75`; a first cast entry may not carry an office beside a case-level one (`Forbidden`) `:85-102`; a titled post (Duke, etc.) must stand at the rung kind its title governs (`TITLE_DOMAINS`), refused on both caller paths, `len(wrong) >= 5` `:109-147`.
+  - `ought:` replaces the rotation default (next seat) for that entry only; mutation `C._referent` pointed at the wrong seat is seen `:160-199`.
+  - 21 load refusals: unknown key, `knows:`, malformed `ought`/`office`/`capability` (capability key no verb draws on, non-integer magnitude), waiting entries carrying office/ought/capability, non-list cast, missing/blank/misspelled `case:`, two files for one case, two scale files for one case; each with a positive control `:219-419`.
+  - The checked-in overlays: `len(real) >= 13` cast files; NPC-088's `Carin Vedel` `capability == {"copying": 3}` `:283-285,418`; every authored `office:` is held and every authored `ought:` is a live ambition with `offices >= 1 and oughts >= 1` asserted `:426-443`.
+- **Conflicts / stale:** `knows:` (initial beliefs) cannot be authored in a cast ("no builder here constructs a Claim, AX-7") -- relevant to ARCS: provided characters' starting beliefs have no authoring route in the corpus runner `:15-16`.
+- **Open items:** none.
+
+### engine/season/tests/test_works_founding.py
+- **What it is:** pytest file (886 lines), plan position `24e` WORKS & FOUNDING (+ IN-45 formation, IN-28 cost): a `works` Record, `ceiling` of matured terms, `share`, `restore`/`work` through one clamped rise, `found` (new Rung under the `founding` gate basis), `build` (new Site at condition 0), cost and hold.
+- **Status:** no Status line. Reading: live. F-TEST read it at flagged tests.
+- **Bears on:** SE (works, settlements, founding, dwellings, capacity), FA (holdings), CORE (gate bases).
+- **Content that matters:**
+  - A works is a `Record` of kind `works` `{plan, at}` minted by `create_record` with its maker's `hold`; one live works per target (a second is `act.refused`, a released one frees the target) `:111-139`.
+  - `ceiling = scale x matured // declared` read off `term.matured` Events: 0, 333, 666, 1000 over three barriers; the seam (no works) reads the full scale; a works whose master died bounds nothing and stops ripening `:146-195`. `share = (1, n)` persons present floored at one `:166-176`.
+  - `work` advances a works (500 -> exactly 666 with 2 of 3 terms ripe, one person present) and a `text` Record is NOT advanced (`work.unavailable`) from one body, two arms `:202-222`; declared delta still wins but is bounded and never cut (`max(condition, ceiling)`) `:237-253`; `restore` raises to the ceiling then stalls (`restore.refused`, "you cannot hurry mortar") `:305-318`; two present each stage half and fold order does not matter (S27.3 sum-then-clamp-once) `:281-302`.
+  - `found` mints one Rung of the plan under `at` ("census shows exactly one more rung"), admitted under the NINTH gate basis `founding`; seven refusals each make nothing; paid from the works' rung (stake moves; grain conserved two-sided) and held by the founder `:342-402,775-809`. `build` makes a Site at condition 0, once; priced via `works_cost`; unpriced plans (`body`, `settlement`) refused; the price is the only difference between executes and refuses `:434-450,839-886`. A full rung still grows: `found`/`build` never consult `capacity`/`population` (both patched to raise) and every ancestor's capacity rises by exactly one `:453-497`.
+  - Lifecycle end to end: declare, ripen, `found`, `build`, move in, `restore` exactly as far as terms allow (666 then full) `:500-524`.
+  - COMPUTED PLAY GAP: "what is missing in computed play is the PRODUCER, a computed `create_record` that declares one (limit 2)" `:551-554` -- no chooser forms a works; `found`/`build` form on a works the maker holds only after a hand-built `create_record`. "Where a works comes from in computed play is ED-IN-0297's open question" `:765`.
+  - A founder's `hold` makes `holder_faction_of(hearth)` read `None` unless the founder is committed to the faction (pinned "as it reads", not blessed) `:812-836`.
+- **Conflicts / stale:** All deterministic (no draw anywhere in works/found/build/restore; the amount raised is arithmetic); under the brief's rule these are bookkeeping and eligibility, but the outcome of whether a work "goes well" has no band. `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` cited as the source (a retired workplan [UNVERIFIED]); r2 `proposals/2026-09-17-governance-and-holdings-r2/04_MATTER_AND_WORKS.md` cited as content owner. `:553-554` states no test asserts anything about the seed-0 realm (v9 §0.5).
+- **Open items:** the producer of a works in computed play (ED-IN-0297); `raze` as the closer (H-166 design order (3), IN-12 step 11).
+
+### engine/tests/test_band_odds.py
+- **What it is:** pytest file, CP-T01-03: `sigma_leverage.band_odds`, the exact four-band odds of one d10 pool roll, enumerated over `dice_engine`'s own face table and graded by its own ladder.
+- **Status:** no Status line. Reading: live; F-TEST section 4 names it among the strongest (closed form vs brute-force walk, with a count).
+- **Bears on:** DICE (R-09, probabilistic chains), SC (sigma-leverage), CORE.
+- **Content that matters:**
+  - Worked case `band_odds(2, 2) == (0.74, 0.19, 0.07, 0.0)` asserted with `==` (exact because integer counts over `10**pool`) `:39-40` -- an exactness claim asserted exactly, not by `approx` (a model for CLAUDE.md §0.1 pt 2). Face table: -1/0/+1/+2 at 10/50/30/10 per cent (`:6-7`).
+  - Sweep: 5 pools x 6 obs x 4 boosts = 120, sums to 1 within `1e-12`, `checked == 5*6*4` `:43-52`.
+  - Brute-force walk of all `10**3` faces for pool 3 at three (ob, boost) cases with the fraction rule written independently; `math.isclose(..., abs_tol=1e-12)` against enumeration (a float tolerance on a derived sum, defensible) `:55-76`.
+  - MUTATION in test: swap Partial/Success edges of `degree_from_net` and the tuple moves to `(0.74, 0.25, 0.01, 0.0)`, proving `band_odds` reads the owner and holds no ladder copy `:79-94`.
+  - Boost is a mu-shift never an Ob change; larger boost never lowers clearing; pool is rounded and floored (`max(1, round(pool))`) as `roll_net` does `:97-119`.
+- **Conflicts / stale:** the sampling arm that "agrees with the dealt distribution" was moved to `test_settle_margin.py` (single sampling arm for the whole rule) `:9-18`.
+- **Open items:** none.
+
+### engine/tests/test_contest_kernel.py
+- **What it is:** pytest wrapper that runs the promoted groundup contest kernel suite `systems/social_contest/sim/contest/_kernel_tests.py` as a subprocess and asserts its `RESULT: N passed, 0 failed` line.
+- **Status:** no Status line. Reading: live but a retiring subject; F-TEST section 4 and T-12 say it follows `05_SC_sc05_kernel_retirement.md` (SC-P2). The kernel suite file exists (checked).
+- **Bears on:** SC (the off-loop contest kernel), DICE, PROCESS.
+- **Content that matters:**
+  - Asserts exit code 0, `failed == 0`, `passed >= 151` (the "behavior-preserving floor") and `passed == 389` (`_KERNEL_EXPECTED`) `:110-124` -- it pins a COUNT of an inner script's own checks, not a behaviour; any added or removed check anywhere in the kernel suite reddens it, and any bad check inside still reds it with the count unchanged.
+  - Retraction in the comment: "All 151 stay green" is RETRACTED; ED-SC-0031 re-pinned four of the original 151 (the degree bands and three sigma-leverage band checks moved one step per Jordan's 2026-08-14 ladder ruling) `:83-88`.
+  - The giant comment `:93-107` is a re-pin history of 389 (385 -> 389 by ED-SC-0031; breakdown of 319 through Gate B), citing `social_contest_v30`, ED-1056 (Face_max = Charisma x 3), ED-1057 (Panel aggregation weighted-by-standing), ED-1059, ED-1061, CR3 three-tracker model (Concentration, Face, Persuasion Track; Composure RETIRED), CR4/CR5 stasis x genre and self-gating.
+  - Docstring at `:1-58` still says "Total 303" and "151-check"; the pinned figure is 389 -- the docstring is stale against the constant.
+- **Conflicts / stale:** archived-doc references: `designs/audit/2026-06-30-contest-stage0-reconciliation`, `params/contest.md`, `RATIFIED_2026-06-01.md`, `social_contest_v30` (all dissolved/archived paths). `systems/fieldwork/sim/knots.py:85` still carries `BREAK_COMPOSURE_DAMAGE = 4` ("Both partners take 4 Composure") while this kernel retires Composure (see `test_knots_ed912.py`) -- a retired-term residue [verified by grep].
+- **Open items:** retires with SC-P2.
+
+### engine/tests/test_knots_ed912.py
+- **What it is:** pytest regression for ED-912: `systems/fieldwork/sim/knots.py` runs a bidirectional -5..+5 bond-strain gauge (C-TW-12), plus a conviction-scar falsifier.
+- **Status:** no Status line. Reading: live as the oracle of a RETAINED off-loop subsystem (F-TEST section 4: `knots`, `thread_mending` kept by ED-IN-0283); "knots/ is an island (no campaign callers)" `:17`.
+- **Bears on:** FI (fieldwork knots), WR (threadwork), CHAR (conviction scar), CORE (off-loop).
+- **Content that matters:**
+  - Gauge: Distant range -2..+5 (start 0), Close -5..+5 (start -2); break/rupture at +5 for both tiers; -5 is Tempered (Close only) absorbing one rupture trigger (reset to 0) then rupturing; break/betrayal-rupture Disposition -3 (revised from -4) floor -5; a Close knot that broke from POSITIVE strain gets Conviction Scar +1 `:11-17,51-124`.
+  - `test_ed912_formation_starts_at_tier_gauge_start` loops 80 seeds and asserts `formed` > 0 (asserts it asserted) `:51-63`.
+  - FALSIFIER (the best part): the first scar test only asserted the consequences dict knots.py wrote for itself; the Scar never landed because knots.py passed `conviction='Loyalty'`, an unknown name that returned a magnitude-0 record. The new test reads the SCAR STORE before and after (`scar_counts.get("honour")`) and `apply_conviction_scar` raises `ValueError` on unknown or legacy names (`Reason`, `Autonomy`, `Continuity`, `Honor`) `:127-175`. Pursuit `honour` replaced `Honor` (IN-08 cells) `:145,168`.
+  - `coherence_delta == -1` is tagged `[UNVERIFIED post-ED-912]` in its own test `:124`.
+- **Conflicts / stale:** `BREAK_COMPOSURE_DAMAGE` residue (see test_contest_kernel entry); Disposition/Composure/Coherence vocabulary is pre-v40 sim vocabulary [UNVERIFIED current].
+- **Open items:** `[UNVERIFIED post-ED-912]` coherence delta.
+
+### engine/tests/test_settle_margin.py
+- **What it is:** pytest file, CP-T01-04: `sigma_leverage.settle_margin` -- the fraction of a margin settled by the act's own uniform -- and `band_odds` enumerating that same rule.
+- **Status:** no Status line. Reading: live; F-TEST: strongest tier.
+- **Bears on:** DICE (R-09), SC, CORE (seam: its host twin is `test_settle_margin_seam.py`).
+- **Content that matters:**
+  - Rule: `m = raw_net + floor(q) + [u < frac(q)]`, `q = boost - ob`; the extra uniform is drawn ONLY when `frac(q) > 0`, so whole-Ob rolls keep their stream `:5-11`. Expected margin preserved exactly: mean settled margin `= 0.4*pool + boost - ob` to `1e-12` over pools 1-8 x 13 obs x 13 boosts `checked == 8*13*13` `:69-78` (a mean over exactly enumerated nets, so a tolerance, not an approx on an exactness claim).
+  - P(Partial or better) strictly increasing in boost and strictly decreasing in Ob wherever interior, `steps > 500` asserted `:81-96`.
+  - Whole margin draws nothing (a `_no_draw` that raises) `:99-106`; fractional margin draws exactly one uniform: `u=0.49 -> +1`, `u=0.50` and `0.99` -> not (strict `<`) `:108-122`.
+  - `band_odds` hand-enumerated cases `(0.58, 0.255, 0.16, 0.005)` at Ob 1.5 and `(0.42, 0.32, 0.25, 0.01)` at Ob 1; brute force through `settle_margin` itself `:125-150`; six parametrized sampling arms at n = 100,000 seed `20261101` within 3 SE (`seen == 4`) `:156-173`.
+  - mu-shift not Ob-change: `settle_margin(net, 0.5, 2.0, u)` equals `settle_margin(net, 0.0, 1.5, u)` `:176-180`; `record_odds`/`settle_record` are the two owners over a record's fields `:183-194`.
+- **Conflicts / stale:** none; numbers like "100,000 draws resolve a band to 0.47 points" are test-design reasoning `:153-155`.
+- **Open items:** none.
+
+### engine/tests/test_sigma_leverage_parity.py
+- **What it is:** pytest file, 619 lines: parity of `engine.dice_engine.sigma_leverage` against a committed golden table `engine/tests/goldens/sigma_leverage_parity.json` (1,758 rows) plus oracle-free property/identity tests.
+- **Status:** no Status line. Reading: live; F-TEST-08 judged this file (58 % rows refused or contradicted) -- confirmed below.
+- **Bears on:** DICE (resolution core, sigma-leverage, TN7), SC (degree extension), CORE.
+- **Content that matters:**
+  - TN7-ONLY PARTITION (ED-IN-0196, Jordan: "TN7 always. Never change TN anywhere ever."): 768 of 1,758 rows are TN 6/8 and are re-purposed as `KeyError` assertions (one row per TN exercised) `:62-77,195-205`; the table is NOT regenerated (`:29-30`, 'never to make a red test green'). Confirms F-TEST-08 (768 rows) `:187`.
+  - PRE-RULING-LADDER PARTITION (ED-SC-0031): the 255 `degree` rows leave the parity arm; 47 moved cells, 208 kept; asserted as a SET (`by_ob == {1.0: 9, 2.0: 15, 3.0: 23}`) plus `len(moved)==47 and len(kept)==208` and that no cell bands UP `:208-252` -- so the file pins counts of a retired oracle (confirms F-TEST-08 "255 pre-ruling ladder rows checked as two counts"). `test_golden_table_is_not_vacuous` pins `by_oracle["m1"] >= 731`, `["groundup"] >= 4`, `len(_PRE_RULING_DEGREE_ROWS) == 255`, and the function set `:157-177`.
+  - Parity at `TOL = 1e-9` on floats with `==` for others `:115,148-154`; 735 live rows.
+  - Properties: `sigma_n = 0.8*sqrt(max(1,pool))`, `soft_cap = M_MAX*tanh(ns/M_MAX)` with spec checkpoints `(0.5,0.48),(1.0,0.87),(2.0,1.31),(3.0,1.45)` to 2 dp, `sigma_space_ob_shift == ns*sigma_n` exact, F1 uniformity (+0.7 sigma gives +25.8 pp at every pool; spread rounds to 0.0) `:259-398`.
+  - `TestPoolAwareDegree`: `CD.degree` equals the owner's `degree_from_net` over a 61 x 81 grid (`checked >= 4000`), the contest extension may only demote Overwhelming to Success, and de-saturates (pool 30: owner's Overwhelming > 0.9, with extension < 0.25; crossover pools `[6, 8, 10]` for obs 1,2,3); `demoted >= 100`, `checked >= 9_000` `:453-589`. An earlier algebraic-identity assertion that "could not fail" was replaced and said so `:509-523`.
+  - The `degree_extension` module under test is `systems.social_contest.sim.contest.degree_extension`, imported by no loop/module code (matches F-TEST evidence row 16).
+- **Conflicts / stale:** `modifier_system_spec.md` §3.1/§2.1 cited for spec checkpoints (prose referent); the TN-6/8 and 255-degree rows are 1,023 dead golden rows (F-TEST-08 / T-11: regenerate at the generator). The header says the file used to import oracles `tests/sim/v32-combat-balance/m1_dice_sigma_core.py` and `audit/2026-06-03-contest-groundup/engine.py` (retired paths; only referenced in the generator).
+- **Open items:** none.
+
+### engine/tests/test_thread_mending_ed871.py
+- **What it is:** pytest regression for ED-871: Mending (a RESTORATIVE threadwork operation) costs 0 Coherence at every degree; `systems/threadwork/sim/operations.py`.
+- **Status:** no Status line. Reading: live as an off-loop oracle regression (F-TEST section 4: retained subsystem, ED-IN-0283).
+- **Bears on:** WR (threadwork), PROCESS.
+- **Content that matters:**
+  - 300 seeds of `attempt_mending` each assert `coherence_delta == 0`; asserts Partial/Failure degrees occurred (`degrees & {"Partial","Failure"}`) so the exemption is observed `:39-49`.
+  - Control: `attempt_weaving` at Relational scale costs -1 on Success/Overwhelming and -2 on Partial/Failure, guarded by `saw_penalized` `:52-70` -- the exemption is Mending-only.
+  - The Leap defect C-TW-3 (same blanket penalty hits Leap against its own docstring) is "intentionally NOT fixed" (ED-WR-0005 Stratum-B tail) `:17-19`.
+- **Conflicts / stale:** Coherence is the pre-v40 sim currency; "sim/thread was a total island" `:9`.
+- **Open items:** C-TW-3 Leap Coherence defect.

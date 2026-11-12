@@ -178,7 +178,13 @@ Yield, stores, bodies and crossings equal (a) to the unit. No front, because the
 | 13 | 15 | 14 | 62 | 212 | 432 | 719 |
 
 *(d) The same world, played by the shipped chooser, three seasons* (`p2_s0_k3_calamity.txt`):
-CALAMITY_PLAY_PENDING
+the ring means after seasons 0, 1 and 2 are 725, 542, 405 (ring 0) and 748, 559, 417 (ring 1), **equal
+to arm (c) to the unit**. Twenty-four `condition.band_crossed` Events were emitted and witnessed;
+`restore` was attempted 0 times, `work` 0 times; nobody died; the story bar reads 23.0% against the
+shipped realm's 23.4%; the executed-verb distance from the realm with no Calamity is **24**, against a
+noise of 316 (§1.1). The realm does not notice that it is collapsing. The cause is stated in the verb
+table's own `restore` row ("no question the realm delivers carries a Site among its referents"); this
+arm is the first run in which crossings actually occurred and the absence could be seen.
 
 | # | link | O | C observed | verdict |
 |---|---|---|---|---|

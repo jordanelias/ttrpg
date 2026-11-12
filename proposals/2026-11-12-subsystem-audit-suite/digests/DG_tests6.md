@@ -330,3 +330,100 @@ Lane `tests6`: 77 files under `tests/valoria/` (alphabetical `test_combat_invari
 - **Conflicts / stale:** `_set_movement_path` is in `systems.mass_battle.sim.validators`, i.e. the test selects the engine's path through the `systems/` sim package while the code under test is `modules.mass_battle`. Two movement paths ('node' and 'grid') coexist; facing exists on one only.
 - **Open items:** the test depends on a 9-troop-per-cell `build_unit('Line', 3, 'A', 'A', 9)` fixture.
 
+### tests/valoria/test_feigned_retreat.py
+- **What it is:** pytest file, PP-256 / mass_battle_v30 §A.12, §B.4 / ED-MB-0022 and ED-MB-0067 Part C / ED-MB-0071: Feigned Retreat resolution (recognise roll, Discipline check, overextend penalty) and the order-writable `feign_retreat` trigger.
+- **Status:** none stated; reading: live. Docstring corrects an earlier "default OFF" to "default ON since the flags-ON ruling" (:9-11).
+- **Bears on:** MB (orders, deception, discipline, command), SC/FI (a ruse a commander declares, resolved by a recognition roll against a general's Command: fog stands, no automatic reveal).
+- **Content that matters:**
+  - The mechanic: a Fast victor pursuing a feigning enemy makes Command d10s vs Ob 2 to recognise; if deceived, a Discipline check at Ob 1; failing it sets `overextended`, cutting the pursuer's next engagement pool by `OVEREXTEND_PENALTY` (:1-8, :141-155). Realised Discipline-1 hold about 40% (matches PP-256), Discipline-4 about 74.5% (the doc's 87% was a no-botch idealisation; the file refuses a bespoke botch-free counter as a "scale-local dialect", :20-25).
+  - Rate tests are sampled with a global `random.seed(...)`: 20,000 trials, bands `0.36..0.44` and `0.70..0.79`, monotone in Discipline (:58-69); recognition rises with Command (one-sided `low < high`, :72-78).
+  - `test_resolve_marks_overextended_only_when_deceived_and_failing` carries its own anti-vacuity counter (`n_recognized >= 1000`, measured 1560 of 2000, floor at half, :96-107), a conditional-assert-with-counter example added at ED-MB-0045 S12; `n_over > 0` for low-Discipline low-Command pursuers.
+  - The trigger: before ED-MB-0067 C4 nothing assigned `.feigned` (dead by construction); now an `Order` with `behavior={'feign_retreat': True}` sets the issuing Unit's `.feigned` through `core.contact.check_orders`, never as an attribute on the Subunit (:164-222); a later-trigger order (`tick:5`) does not pre-declare (:189-200).
+  - Gate-off (`MB_FEIGNED_RETREAT=0`) is inert/byte-exact; flag toggling reloads four modules and `teardown_module` resets to OFF (:35-45, :225-227).
+- **Conflicts / stale:** `teardown_module` reloads with `on=False` while the shipped default is ON (as the module docstring says): after this file runs, the in-process `config` module sits at OFF until another reload, a cross-test order effect [UNVERIFIED]. Cites PP-256's "~87%" as a doc figure the code deliberately does not match.
+- **Open items:** no NPC chooser that DECIDES to feign exists in this file's scope; the trigger is an order a scenario author writes.
+
+### tests/valoria/test_field_golden_pins.py
+- **What it is:** pytest file, plan-v2 A1b / ED-MB-0053 / ED-MB-0061: drift guard for `tools/ci_golden_modes_check.py`'s `FIELD_PINS` and `MODES` (the pin vector for the mass-battle field goldens) against the `environ.get` defaults in `modules/mass_battle` and `systems/mass_battle/sim`.
+- **Status:** none stated; reading: live. Its own comments mark ten pins as "transition debt" ("THIS SET MUST BE EMPTY AFTER THE RE-BASE", :136-137).
+- **Bears on:** MB (shipped configuration vs golden configuration), CORE (golden discipline), GO.
+- **Content that matters:**
+  - Jordan's flags-ON ruling (2026-07-29) flipped 15 `MB_*` defaults ON at once; the goldens still record the pre-flip configuration (re-basing first "would bake nine defects into the definition of correct"). `_PENDING_REBASE` (:141-145) names the ten pinned flags whose pin differs from the source default: `MB_CELL_DAMAGE, MB_CELL_MORALE, MB_CLOSE_RANKS, MB_FRACTIONAL_POOL, MB_FRICTION, MB_INTENT_RESOLUTION, MB_TROOP_DENSITY_CAP, FIELD_CONTACT, MB_FACING_MODEL, REFORM_CHECK_ENABLED`. So the golden battery certifies a configuration that is not the shipped one for ten flags (`test_pending_rebase_set_is_exactly_the_transition`, which pins the set both ways and `len == 10`, :148-168).
+  - `_KNOWN_INERT` lists env-read flags that cannot move a battery digest: including `MB_YIELD_EMERGENT/RALLY/POCKET`, `MB_FEIGNED_RETREAT`, `MB_RESERVE_COMMIT`, `MB_ROLE_INSTRUCTIONS`, `MB_FACING_*` (no-ops while `MB_FACING_MODEL` is pinned '0'), `COMMAND_SIGMA_ENABLED` (dead while `POOL_QUALITY_MODEL=1`). Five of those were justified circularly ("inert because off") and were re-established by measurement (cell_field, 6 seeds, digest `71fdb844...` identical ON vs OFF, :64-77). So facing, yield, feigned retreat, reserve commit and role instructions are NOT exercised by the golden battery at all.
+  - `test_pins_match_source_defaults` has `checked == expected` arithmetic (:189-191), `test_no_unclassified_env_reads` makes every engine `environ.get` classified, `test_every_pin_is_read` detects rot, `test_mode_selectors_cover_every_out_of_budget_golden_mode` pins the exact mode set `{unit_field_mor0, cell_field_mor0, cell_legacy_mor1}` and reads geometry (cell/unit), movement (field/grid) and morale axes out of the key (:220-248).
+  - `test_known_inert_reasons_are_not_self_referential` reads THIS FILE'S OWN SOURCE text (`open(__file__)`) and looks for the string `MEASURED-INERT` within 1,400 characters before each flag name (:258-302): a self-referential text-position guard whose subject is a comment.
+  - The comment at :269-270 says `test_dg2_yield_residuals` "fails at the new defaults"; that test sets its env vars explicitly in `_reload`, so it should be default-independent [UNVERIFIED].
+- **Conflicts / stale:** a header line says tests moved to `tests/sim/mass_battle/` then `systems/mass_battle/sim/` then `modules/mass_battle/` (three relocations recorded in comments, :24-36). The shipped MB configuration (flags ON) is not the configuration any hash in this lane certifies.
+- **Open items:** the re-base itself ("the defects the flip exposed" nine of them) is the exit condition; nothing in this file schedules it.
+
+### tests/valoria/test_flow_skeletons.py
+- **What it is:** pytest file, 726 lines: checks every `` `path:line symbol` `` anchor in the ARCHIVED `<sub>_flow_skeleton_v1.md` documents (roster parsed from the archived format spec) plus `engine_atlas_v1.md`: file exists, line in range, symbol within +-3 lines or enclosing the cited span; required section order; `**Contracts:**` header names real modules.
+- **Status:** none stated; reading: live as a test, subject archived and frozen (addendum F-TEST-04 recommends deletion; confirmed below).
+- **Bears on:** PROCESS (guard of archived prose), CORE, MB, PC, SC, FA, SE, FI, WR (every subsystem skeleton is anchored here).
+- **Content that matters:**
+  - Roster comes from `.designs/systems/_architecture/reference/subsystem_flow_skeletons_v1.md` §3 at import time (`_roster`, :130-146); `len(ROSTER) >= 15`; each row's path must equal `systems/<name>/reference/<name>_flow_skeleton_v1.md` (:158-163). The test reads `.designs/` (and, through `QUARANTINE_MIRRORS`, `.audit/`) for its inputs (:56-90): the brief says nothing outside `.audit/` may load anything inside it (RULED) [UNVERIFIED whether any anchor currently resolves into `.audit/`].
+  - Mutation record M1a-M8 (10/10) is in the docstring and not re-run; the docstring states what it does not catch: line drift within the named definition (:39-45).
+  - Exemption machinery makes the guard soft where code moved: `RETIREMENT_SHIFTED` (14 live paths plus census sidecars) turns bare-line anchors into advisory ("281 of the 587 anchors are bare line numbers", :315-327), `LINE_UNSTABLE_TARGETS` (1), `RETIRED_SYMBOLS` (about 30 names, many Key-substrate), `RETIRED_CALL_SITES` (4), `RETIRED_GENERATED` (6), `RETIRED_CONTRACTS` (3: `articulation_layer`, `personal_combat`, `fieldwork_knots`). Roughly 60 exemption strings; the comments admit "what is lost is real" (:322-327).
+  - Anti-vacuity floors: `MIN_ANCHORS_PER_SKELETON = 3`, `MIN_TOTAL_ANCHORS = 150`, symbol checks `>= 75` (:589-609), `len(known) >= 20` module rows (:693-696). Several tests `pytest.skip` when a skeleton is missing (:177, :199, :583, :631, :690), delegating to the roster test.
+  - `_is_retired` uses `pathres.resolve(...).status == FORKED`, and its docstring records the directory-prefix hazard as wanted here (:457-469).
+- **Conflicts / stale:** `_CENSUS_SIDECARS` is computed at import from `os.listdir(ROOT/'systems')`, a directory that on a fresh clone lacks five subsystem dirs (`_architecture`, `articulation`, `npcs`, `ui`, `victory`), fixed by unioning with `.designs/systems`; a failure documented as red in CI and green locally. `modules/mass_battle/terrain.py:269-270` (per the addendum) keeps a constant below a lookup so a skeleton's line anchor stays put: code placement is decided by an archived document's citation.
+- **Open items:** the file documents that 12 anchors point into untracked generated files and calls the durable fix (cite by symbol) "a design-surface call, flagged for Jordan" (:574-581), later taken by the symbol-binding rule.
+
+### tests/valoria/test_fractional_pool.py
+- **What it is:** pytest file, ED-MB-0032 (Jordan 2026-07-23 "pool must be fractional"): `roll_pool_fractional` in mass battle keeps the pool at full precision (integer dice plus one extra die rolled with probability `frac`).
+- **Status:** none stated; reading: live; test name `test_default_gated_off` is stale (it asserts the default is ON).
+- **Bears on:** MB, DICE (fractional pool / sub-1D floor), PC (contrast), CHAR.
+- **Content that matters:**
+  - `C.MB_FRACTIONAL_POOL is True` (default ON since Jordan 2026-07-29, ED-MB-0061; "it does move goldens", :23-26); `PER_DIE_NET_EV == 0.4` ((-1 + 3 + 2)/10 for faces 1, 2-6, 7-9, 10; `approx` on an arithmetic constant, :29-31).
+  - Sampled with global `random.seed`: a 0.5 pool has mean 0.2 within `abs=0.05` over 8,000 draws (a 25% relative tolerance, :34-40; the addendum flags this as a `[not adjudicated: DICE]` row), pool 0.6 can net below 0 and exactly 0 (the Failure boundary survives, :43-49), 3.7 vs 3.0 differ by 0.28 within `abs=0.08` (:52-57), integer pool equals `roll_pool` for the same seed (:60-66), means rise across 2.0..3.0 (:69-76).
+  - Contrast with PC: personal combat rounds faculty to an integer die count (`core.resolution_pool`, `int(round(faculty))+6`, `test_combat_invariants.py:225-242`), so two pool conventions (fractional for MB, rounded for PC) coexist.
+- **Conflicts / stale:** the function name `test_default_gated_off` contradicts its assertion; comment cites "Fable-audit A3". `_SIM` sets `tests/sim` on the path (unused here).
+- **Open items:** none.
+
+### tests/valoria/test_friction.py
+- **What it is:** pytest file, ED-MB-0016 / DG-6 (renamed from CEV at ED-MB-0045): per-battle per-side LogNormal combat-effectiveness "friction" drawn once to keep outcome variance scale-invariant.
+- **Status:** none stated; reading: live; the file records an open defect.
+- **Bears on:** MB (variance, decisiveness, Clausewitzian friction), DICE.
+- **Content that matters:**
+  - Assertion text at :91-95 records that the shipped default (`MB_FRICTION` ON, ED-MB-0061) "confers a large SYSTEMATIC one-sided advantage (mean end-state hp A 0.9910 / B 0.8634 over the 20 historical rows, 13 of 20 at exactly 1.0000; with it alone off, A 0.8625 / B 0.9390)... an open engine defect, not a reason to re-gate the mechanic" (F1). The test asserts the flag is ON; it does not assert the defect is absent.
+  - Each module that star-imports config holds its OWN copy of the flag (`_cfg`, `_exch`, `_orch`), so the file's fixtures patch all three and the OFF test patches `_orch` only (caught by a failure at 5.717 != 1.0, :96-100): the "multiple owners at the flag layer" hazard in miniature.
+  - Properties: OFF makes `_friction == 1.0` exactly (:85-108); drawn once per battle (a second `_draw_friction` call does not redraw, :113-124); mean of log over 400 draws within 0.15 of 0 (~3 SE, :127-140); at 1,600 base troops a 2:1 matchup is at least 95% decisive without friction and under 90% with it, difference at least 10 points over 40 seeds each (`@pytest.mark.slow`, :145-163); the 400-troop A/B has off > on and off >= 90 (:166-179); conservation via the shared `_conservation.assert_troop_conservation` with `checked >= 2`, and same-seed determinism of the outcome tuple including `_friction` (:184-211).
+  - Win-rate bands are sampled, n=40, seeds `9000+`.
+- **Conflicts / stale:** cites `audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md` (archived). The F1 defect text conflicts with leaving the default ON; no test pins F1 as fixed.
+- **Open items:** F1 (one-sided end-state advantage with friction ON) is stated open here.
+
+### tests/valoria/test_front_fixer_scope.py
+- **What it is:** pytest file, ED-MB-0041 Tier-2: the fixing-force relation (`_compute_front_fixers`) must be computed over the whole tick, not per cascade sub-phase group.
+- **Status:** none stated; reading: live; small.
+- **Bears on:** MB (envelopment, flanking, Cannae shape).
+- **Content that matters:**
+  - Relation: only an enemy in the defender's GREEN (front) arc registers as a fixer; a flank enemy does not (:50-58).
+  - Partition-dependence: evaluating the flank pair alone gives an empty fixed-by-other set, the whole tick retains the frontal fixer (:61-78): the defect that motivated hoisting the computation.
+  - `resolve_engagements` must accept a `front_fixers` parameter (a signature pin, :81-84).
+  - Scenario builder `_scenario()` places D at `SIDE_A_START_ROW` col 20, front enemy +6 rows, flank enemy +12 cols (:38-47).
+- **Conflicts / stale:** none. Documents "CASCADING_ENABLED" sub-phase groups.
+- **Open items:** none.
+
+### tests/valoria/test_frontage_conservation.py
+- **What it is:** pytest file, spatial-model v2 Stage D (ED-MB-0013): the continuous front-overlap width (`geometry.engaged_frontage`) replaces the last integer on the contact path; the Lanchester term stays linear.
+- **Status:** none stated; reading: live; one dead variable.
+- **Bears on:** MB (cell geometry, Lanchester attrition, contact, conservation of troops).
+- **Content that matters:**
+  - Geometry properties: aligned head-on rows give frontage equal to the file count (n=1,3,5 at `abs_tol=1e-9`), a half-file offset gives exactly 2.5, depth-2 does not inflate frontage, frontage is capped at the enemy's covered span (an 11-file side against 3 files gives 3.0: numerical superiority is a linear edge, never square), empty sides give 0 (:66-114).
+  - `_lanchester_strength(cells, unit=None, front_width=w)` scales linearly in `front_width` (1, 2, 2.5); `front_width=None` reproduces the legacy distinct-column count; `front_width=0` gives 0 (:119-143).
+  - `test_field_pairs_carry_continuous_frontage` computes `seen_fractional` but never asserts it ("not asserting seen_fractional strictly ... keep it informative", :180-182): a dead variable; only `seen_front` is asserted.
+  - Conservation: sum of `cell_troops` equals `hp` for both units at battle end over seeds 1, 7, 42, 101, 2026 through `_conservation.assert_troop_conservation` with `checked >= 2` (:185-202); same-seed determinism (:205-217). The addendum notes `_conservation.py:99` uses `approx` on a conservation claim `[not adjudicated: MB]`.
+  - The "grid oracle" path (`front_width=None`) and node path coexist (see `test_face_aggressors.py`).
+- **Conflicts / stale:** none found. Two movement paths ('grid' oracle and 'node' field) both live.
+- **Open items:** none.
+
+### tests/valoria/test_generated_layer.py
+- **What it is:** pytest file (culling wave 5, ED-IN-0194): the session-scoped `generated_layer` conftest fixture builds the untracked generated artifacts; this file asserts each exists non-empty.
+- **Status:** none stated; reading: live; process only.
+- **Bears on:** PROCESS, CORE.
+- **Content that matters:**
+  - Every declared artifact path is a file and non-empty (:38-48); floor `len(generated_layer_paths) >= 4`, with the floor-lowering history (10 to 7 at ED-IN-0232, 7 to 4 at plan position 28-i, :51-65).
+  - States that determinism of each builder is left to per-artifact tests (`test_engine_atlas.py`, `test_execution_map.py`), two of which retired with their builders.
+- **Conflicts / stale:** the docstring says `test_execution_map.py::test_the_render_is_deterministic` exists while the execution-map cluster retired at 28-i [UNVERIFIED].
+- **Open items:** none.
+
