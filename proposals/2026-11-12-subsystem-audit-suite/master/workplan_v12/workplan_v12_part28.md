@@ -45,7 +45,7 @@ C(B12c-material-verbs-and-valley): this batch's entries; the plan's head parts; 
 UNDECIDED: (1) **CP-T08-05's `offer` consent** (its card item 4: `exchange` requires a live `offer`) would refuse every computed `exchange` while nothing produces an `offer` (H-165; AM-E-16 "executes on hand-built worlds only"), against `14_VERBS_MATERIAL_B` §6's gate (`exchange.made` > 0 in computed play). Session content wins (`STAGES.md` stage 6): the price lands (B12c.16), the consent clause is HELD (B12c.17, trigger: a computed producer of `offer`). Other reading: land the clause and accept MAT_B's exchange gate red. (2) **`U5d_SE_owed_edits` §2** gives `transfer` and `migrate` `referent_class: Rung` restricted to a settlement rung; `14_VERBS_MATERIAL_B` (rewritten later, W3-4a) gives `transfer` the class `Needy` and `exchange` the class `Market`, with the self-trade decline as the `distinct` column. Taken: MAT_B's classes for `transfer` and `exchange`; U5d §2's settlement-rung restriction and decline for `migrate` only, in CR-49's commit (B12c.14), "so the three rows land as one". `14_VERBS_MILITARY_A` (B22) re-classes `migrate` later; its author must keep the settlement-rung restriction or say why not. (3) **CP-T08-08** — E5's target reads "after B21 (`oblige` computed)"; B12c does not follow B21 in §2.1 (B21 closes at S12, before S15, with no edge). Its falsifier runs on `harness/scarce.governed`, hand-built, so no edge is added; the realm reading is B98's. (4) **The valley's gate at two seasons** (B12c.28): the source's ending readings are at twelve seasons; at two, `held` cannot be reached by the shipped run, so the test plants the season count of the `held` ending (a module constant `HELD_SEASONS = 12`, overridden in the test) `[ASSUMPTION: the constant — basis: D-17 and `V12_STRUCTURE_part2.md` §5.8; the twelve-season reading is not run before B99]`. (5) **MAT_A §7 step 2** (`07_SE_kernel_repairs` §3, "if not already landed") lands in B12a with the kernel file; it is a POINTER here (B12c.05). (6) **CP-T08-04** is a task row under 18-A (`07_SE_capability_rate_B` §4 (b): "`restore`, `work`, `build` and `craft` (CP-T08-04) become task rows") while its card says "Uncontested, no draw"; taken: the card's row joins `graded_tasks` in shape (a) (session content wins). (7) **E-13 grouping**: MAT_A §2 rows 2–7 are one commit (the source's §7 step 1); MAT_C (a)(i), (b) and the class are one commit (its §4 step 2); MAT_C (c), (d), (e) one commit (step 4); CR-49 with U5d §2 one commit.
 C-IN-B12c (the intake entries this batch takes, and the rule that placed each, `V12_STRUCTURE_part2.md` §5.6 with `_part4` E-8 and the orchestrator's routing): CR-40 (E4 "CR-40 first, then CP-T08-01 onward") → B12c.01; CP-T08-01 (E5 C13 "before `07_SE_capability_rate_B`") → B12c.02; CP-T08-03 (card: after CP-T08-01) → B12c.03; CR-49 (§5.6: with `14_VERBS_MATERIAL_B`) → B12c.14; CP-T08-05 (E5 C15 "after `14_VERBS_MATERIAL_B`"; A20's routing) → B12c.16, B12c.17; CP-T08-08 (routed; forms a `transfer`, after MAT_B) → B12c.18; G-05 (E4 "with CR-47 … and U3 B12"; C3-R7 "G-05's fallback is the plan", read on MAT_C's gate) → B12c.23; CP-T08-04 (E5 C14 "after `14_VERBS_MATERIAL_C`") → B12c.25; the P14 MISSING-DEP entry ("whoever lands SE B12") → B12c.30. Not here: CR-47 (B12a.03), CP-T08-02 (B12a), CR-22/H-11/H-125, IN-52, DEF-7, H-171, CP-T08-06 (B12b), CR-67 (B24a, the orchestrator's routing: its NEEDS is CR-58).
 SERIAL EDGES (written after the position table, E-11): within the batch: B12c.01 → B12c.02 → B12c.03 (CR-40 first; CP-T08-03 after CP-T08-01, its card); B12c.04 (the family's draw) → every MATERIAL item; B12c.04 → B12c.06 (tend, the smallest, re-records first: MAT_A §7) → B12c.07 (restore) → B12c.08 (sabotage, after `holders_named`, B11) → B12c.09 (`IS-B3-SE-05`, beside sabotage) → B12c.10 (`IS-B3-SE-06`, "after SE-05: it composes on the same notice draw"); B12c.11 (`distinct`) → B12c.12 (transfer) → B12c.13 (requisition) → B12c.14 (exchange with CR-49 and U5d §2; MAT_B §5 order) → B12c.15 (U5d §7, "depends on §2") → B12c.16 (CP-T08-05, after MAT_B) → B12c.17; B12c.12 → B12c.18 (CP-T08-08 forms a `transfer`); B12c.19 → B12c.20 → B12c.21 (MAT_C §4 steps 2, 3, 4) → B12c.22 (`work`, "with batch M-C … it has nothing to raise before a `build`") → B12c.23 (G-05), B12c.24 (W2's gate); B12c.21 → B12c.25 (`craft`'s workshop is raised by `build`); B12c.02 and B12c.22 → B12c.26 (`capability_rate_B` lands "after `14_VERBS_MATERIAL_A`–`_C`"; §4 (e) composes on `labour`) → B12c.27 (chooser §5–§6 after rate_B) → B12c.28 (valley, last of U3's list) → B12c.29 (`IS-B3-SE-01` last) → B12c.31; B12c.99 last.
-  With other batches, by file (U3 §5.1, `→` landing order): `rosters.yaml`, `verb_table.yaml`, `data/fixtures.py`, `queries/world_q.py`, `decision/options.py`: B12b → B12c → B14… (§7.3: B12c, B18 and B24a are open together at S15; different keys and functions; merged by hand in §2.1's order B12c, B18, B24a); `effects_economy.py` B12 → B33; `effects_shared.py` B12c → B21 → B28 → B38; `effects_founding.py` B12c → B22 → B39; `seam/wrappers/pool.py` B04 → B05 → B12c; `harness/valley.py`, `valley.yaml` B12c → B39; `data/files.py` B03 → B12c → B32; `harness/scenarios.py` B11 → B21 → B12c → B34 (IS-B3 §7.3); `loop/witness.py` B11 → B12c (SE-05, CP-T08-08); `modules/settlements/produce.py` B12c only in this plan's census as read.
+  With other batches, by file (U3 §5.1, `→` landing order): `rosters.yaml`, `verb_table.yaml`, `data/fixtures.py`, `queries/world_q.py`, `decision/options.py`: B12b → B12c → B14… (§7.3: B12c, B18 and B24a are open together at S15; different keys and functions; merged by hand in §2.1's order B12c, B18, B24a); `effects_economy.py` B12 → B33; `effects_shared.py` B12c → B21 → B28 → B38; `effects_founding.py` B12c → B22 → B39; `seam/wrappers/pool.py` B04 → B05 → B12c; `harness/valley.py`, `valley.yaml` B12c → B39; `data/files.py` B03 → B12c → B32; `harness/scenarios.py` B11 → B21 → B12c → B34 (IS-B3 §7.3); `epistemic.py` B11 → B12c (SE-05's term in `notice`, CP-T08-08's `_ch_post_remit` clause, SE-06's found deposit); `modules/settlements/produce.py` B12c only in this plan's census as read.
 PARALLEL: S15 with B18 (PC), B19 (MB), B21d (FA), B24a (SC), B41 (GO). Shared hot files: `rosters.yaml` with B18 (`arms_kinds`, `matter_kinds`, `lifepath_templates`) and B24a (`record_kinds`, `authority`); `verb_table.yaml` with B24a (`give`, `requisition`'s licence conjunct, `determine`, the five CR-63 rows) — `requisition` is edited by both: B12c.13 rewrites the row's draw columns, B24a's CR-58 item adds a licence conjunct and an `emits_on_refusal` clause, merged by hand in §2.1's order (B12c first); `queries/world_q.py` with B18 (`kit_of`). Movers in this step merge in §2.1's order: B12c, B18, B19, B24a, B21d, B41 (§7.4); B12c merges first.
 COST: builds and small builds; producer `valoria-author` on `sonnet`, `high`; `opus` reads each MATERIAL gate's band table and spread (the sources' tier), `opus` critic on `IS-B3-SE-05`'s term, `opus` on MAT_C's two contested rows and `works_outlay`; the close's terminal critique `opus`.
 EST: 15 h [estimate: `V12_STRUCTURE.md` §2.4's formula over this block's 32 positions, 0.4 h × 32 + 2.5 h; §2.2's 6 h counted the six members]
@@ -168,5 +168,305 @@ Not in this batch, and where each is: `14_VERBS_MATERIAL_C`'s `_stamped` pair fo
 
 ### B12c.05 — a wear of zero emits nothing · `14_VERBS_MATERIAL_A` §7 step 2 · POINTER
 - WHAT IT POINTS AT: MAT_A's landing order names `07_SE_kernel_repairs.md` §3 ("a wear of zero emits nothing"), "if not already landed", before `tend`. That file is a member of B12a (U3 §1.2's B12 step 5), which lands it in full; B12c.06 onward compose on it. Files: `engine/season/loop/matter.py` (the wear step). Gate: B12a's item for `07_SE_kernel_repairs` §3, read at B12a's close (`reading @<sha>`); this batch adds nothing. If B12a's close records it not landed, this position is `STOPPED` at the batch's open (the skill, BATCH OPEN item 3), never built here.
+
+### B12c.06 — `tend` is offered to a believer and drawn · `14_VERBS_MATERIAL_A` §6 · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/14_VERBS_MATERIAL_A_mending.md` §6, §7 step 3 ("`tend` (smallest; re-records the realm goldens once)"), §8 "`tend`" and "A-81"; U5c C-32 ("§6 owns the `tend` row"); rulings A-6, A-7, A-8, A-30, A-81; closes F-SE-18's body half.
+- ADVANCES: R-05 (`tend` built out, read at the close); R-09 (a mending is drawn).
+- INSTRUCTION (copied):
+  1. "`questions_for`: `wounded_with(w, p)` moves from the `added` splice (class `Person`) to the classed tuple as `Wounded`."
+  2. The row (columns not listed are unchanged; B12b.42's `requires_typed` conjunct on `tend` is kept as it landed: "MAT_A §6 rewrites around it without touching it"):
+     ```yaml
+       - verb:        "tend"
+         referent_class: Wounded
+         capability:  healing       # the definition row landed in B15.07 (the source: "`healing` once its definition row lands")
+         difficulty:  routine       # + `wound` (OBS member 28): one step per `band_floors.body` floor above the patient's body
+         writes:  ["Person.body"]               # shape (a)
+         emits:   ["body.tended"]
+         emits_on_refusal: {draw: ["tend.failed"], <each derived clause>: ["tend.refused"]}   # MAT_A §2 row 5 note
+     ```
+     "`graded_tasks` gains `tend`." `sigma.py::contest_input`: `wound` = the count of `band_floors.body` floors above the patient's `body` `[ASSUMPTION: the reading of the row's comment as the operand — basis: `ruin`'s operand sentence in §3 has the same form]`.
+  3. "`_eff_tend`: `whole = p.body + graded_amount(w, res, max(p.body, p.body_ceiling) - p.body)`, and the `Change` carries `body_observed(who, whole)` as `_eff_kill` carries it, so a believer's newest body claim is the mended one. `03_PC_exits_withdrawal_recovery.md` Part C's `tend_fraction` is not added."
+  4. A-81 ("Standing"): "a failed `restore`, `work` or `tend` emits its `draw` refusal kind, witnessed by those present (a claim of it to each) and, for an actor alone, deposited as his own firsthand claim `(self, <verb>.failed, True)`."
+- WHERE: `engine/season/queries/world_q.py` (`questions_for`; `wounded_with` read); `engine/season/verb_table.yaml` (`tend`); `engine/season/rosters.yaml` (`graded_tasks`); `engine/season/loop/effects_combat.py` (`_eff_tend`); `engine/season/seam/wrappers/sigma.py` (`contest_input`: `wound`); `engine/season/loop/witness.py` (the actor-alone deposit, only if the refusal Event's deposit does not already reach the actor; SITE: open the deposit path first and record what is found in the commit body); `engine/season/tests/test_vm_mat_a_mending.py`.
+- TESTS: in `test_vm_mat_a_mending.py`, written before step 3 and red: §8 "`tend`. A fixture with one wounded man and one tender, seeds 0 to 19: three or more distinct bodies after one act; after a whole mending nobody forms `tend` on him", as `test_tend_spreads_over_seeds` (`assert checked >= 20`) and `test_no_tend_after_a_whole_mending`; the A-81 arm, `test_a_failed_tend_leaves_a_claim` ("a planted `Failure` leaves at least one new claim in some ledger … count of Failure acts with zero durable writes, expected 0") `[ASSUMPTION: test names]`. The existing `test_cp_t03_08_tend_on_the_wounded.py` and `test_cp_t03_07_body_ceiling.py` are run and re-recorded only where they pin `_eff_tend`'s magnitude (the change is the band's share).
+- FALSIFIER and CONTROL: "Planted failure for the batch. Pin `_grade` to `Success`: every spread above collapses to one value and each gate must go red" (read here for `tend`). Control: `task_fraction` at `1 / 1 / 1 / 0` with a planted `Success` reproduces today's mended body.
+- GATE: `python -m pytest engine/season/tests/test_vm_mat_a_mending.py -k tend engine/season/tests/test_cp_t03_08_tend_on_the_wounded.py engine/season/tests/test_cp_t03_07_body_ceiling.py -q` → pass; realm, `aperture 2 0`: `tend` refusals `with=False` → 0 (§8 "Realm"); the realm content hash at seed 0, one season → moved, value in the commit body (`reading @<sha>` of B12c.05's tree).
+- HASH MOVERS: every realm world with a wounded person a believer stands with: the act forms and is drawn. Declared; B12c.99's re-pin (§7's "re-records the realm goldens once" is moved there, E-1).
+- DEPENDS ON: V12 B12c.04; V12 Batch B15 (B15.07: the `healing` definition row); V12 Batch B12b (B12b.42's conjunct); V12 Batch B06 (the keyed draw, A-30: `H(w.world_seed, w.tick, <actor id>, "tend.task")`); EXISTS-IN-TREE `queries/world_q.py::wounded_with`, `::questions_for`, `loop/effects_combat.py::_eff_tend`, `::_eff_kill` (`body_observed`), `loop/resolve.py::_grade`.
+- GLOSSARY: none (*tend* is the ordinary word).
+- COST and TIER: small build; `sonnet`, `high`; `opus` reads the band table once.
+- LANDS IT: B12c's producer; `Item: B12c.06`, `[skip ci]`.
+
+### B12c.07 — `restore` is offered at a fabric known worn, and drawn · `14_VERBS_MATERIAL_A` §3 · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/14_VERBS_MATERIAL_A_mending.md` §3, §7 step 4, §8 "`restore`", "A-81"; FI-01 R-03 (the own-ledger rule); closes F-SE-18's fabric half; narrows H-105 ("`restore`: 0 attempts").
+- ADVANCES: R-05 (`restore` built out); R-04.c6 (a repaired harbour is next season's yield); R-09.
+- INSTRUCTION (copied):
+  1. "Stamp. `rosters.yaml`, new roster (checked at import against `EVENT_KINDS`, `strife_kinds`' loader shape):"
+     ```yaml
+       fabric_news:
+         source: "14_VERBS_MATERIAL_A: which Event kinds tell a person that a fabric fell, rose or was begun."
+         lists:
+           lowers: [condition.worn, condition.band_crossed, site.damaged]
+           raises: [site.restored, site.worked]
+           begun:  [site.built]
+     ```
+  2. "`queries/world_q.py`, new, beside `wounded_with`:"
+     ```python
+     def fabric_known(w: World, p: Person) -> tuple:
+         """((site, class), ...) for the Sites standing at the rung `p` stands in (his own `contain`) about which
+         the NEWEST claim of a `fabric_news` kind in his OWN ledger is a `lowers` kind (class Worn) or a `begun`
+         kind (class Unfinished). Reads no Site's condition: a fabric that fell with nobody to see it is stamped
+         for nobody (FI-01 R-03). Newest by (when, lap, ledger position), `wounded_with`'s rule."""
+     ```
+     "`questions_for` appends its pairs to the classed tuple beside the detainees. Control: `lowers: []`."
+  3. The row ("columns not listed are unchanged; `effect_formula_note` gains the ladder"):
+     ```yaml
+       - verb:        "restore"
+         referent_class: Worn
+         capability:  none          # `craft` when Jordan authors it (CORE Edit 3)
+         capability_note: "undeclared at authoring; every person rolls the untrained default"
+         difficulty:  routine       # + `ruin`: one step per `band_floors` floor of the site's kind above its condition
+         writes:  ["Site.condition"]            # shape (a): one cell; the band scales it (task_fraction)
+         emits:   ["site.restored"]
+         emits_on_refusal: {draw: ["restore.failed"], <each derived clause>: ["restore.refused"]}
+     ```
+     (The `capability_note:` line is added by this plan: B04.03's loader refuses `none` without one; its text is CORE Edit 3's.)
+  4. "`rosters.yaml: graded_tasks.values` gains `restore: {provider: "social_contest", module_entry: "social_contest.roll"}`. `_eff_restore`: `delta = _rise(w, site, res)`. `sigma.py::contest_input`: `ruin` = the count of `w.fixtures.band_floors(site.kind)` values above `site.condition` (0 for an empty cell)."
+- WHERE: `engine/season/rosters.yaml` (`fabric_news`; `graded_tasks`); `engine/season/data/rosters.py` (the `fabric_news` loader check); `engine/season/queries/world_q.py` (`fabric_known`; `questions_for`); `engine/season/verb_table.yaml` (`restore`); `engine/season/loop/effects_economy.py` (`_eff_restore`); `engine/season/seam/wrappers/sigma.py` (`contest_input`: `ruin`); `engine/season/tests/test_vm_mat_a_mending.py`.
+- TESTS: `test_restore_formed_only_on_a_fall_he_heard_of` (the falsifier: "a `restore` formed on a Site whose fall no claim in the actor's ledger reports (plant: lower a Site with no Event)"), `test_fabric_news_lowers_empty_forms_nothing` (control), `test_a_failed_restore_leaves_a_claim` (A-81) `[ASSUMPTION: test names]`, written before step 2 and red.
+- FALSIFIER and CONTROL: the planted fall above forms a `restore`. Control: "`fabric_news.lowers: []` gives formed 0."
+- GATE: `python -m pytest engine/season/tests/test_vm_mat_a_mending.py -k restore -q` → pass; §8 "`restore`. `aperture 2 s`, seeds 0 to 2: `site.restored` > 0 at every seed; at least two degrees among them; mean harbour condition and the two-season `yield.taken` total above SE's no-acts arm at the same seed", each reading quoted; the seed-0 one-season hash → moved, recorded.
+- HASH MOVERS: every realm world in which a person hears a fabric fall at his rung. Declared; B12c.99.
+- DEPENDS ON: V12 B12c.06 (§7's order); V12 B12c.04; EXISTS-IN-TREE `loop/effects_economy.py::_eff_restore`, `queries/world_q.py::wounded_with` (the newest-claim rule), `data/rosters.py` (`strife_kinds`' loader shape), `EVENT_KINDS`.
+- GLOSSARY: none.
+- NAMES: the docstring's "round" → "lap" (B04, PCR-4).
+- COST and TIER: small build; `sonnet`, `high`; `opus` reads the band table.
+- LANDS IT: B12c's producer; `Item: B12c.07`, `[skip ci]`.
+
+### B12c.08 — `sabotage` at the works of a man resented, contested · `14_VERBS_MATERIAL_A` §5 · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/14_VERBS_MATERIAL_A_mending.md` §5, §7 step 5 ("after `08_FI_01` edit 1 (`holders_named`)"), §8 "`sabotage`"; the W3-4a settlement of covert masking (`04` §C.6: "covertness is presence"); closes F-SE-18's lowering-by-hand half.
+- ADVANCES: R-05 (`sabotage` built out); R-09.
+- INSTRUCTION (copied):
+  1. "`queries/world_q.py`, new:"
+     ```python
+     def fabric_resented(w: World, p: Person) -> tuple:
+         """The Sites standing where `p` stands whose rung (or the nearest rung above it) his OWN ledger names a
+         holder of (`person_q.holders_named`, FI-01 edit 1), where he holds a stance row against that holder
+         (`person_q.held_against`) or the holder is among `enemies_heard(w, p)`. Class Resented."""
+     ```
+  2. The row:
+     ```yaml
+       - verb:        "sabotage"
+         referent_class: Resented
+         contests:    "a task"      # shape (b): Partial and Failure emit a second kind (VRES §1)
+         capability:  none          # `craft` when authored
+         capability_note: "undeclared at authoring; every person rolls the untrained default"
+         difficulty:  demanding     # + `watch`: world_q.guard_weight(site.rung) x Fixtures watch_step
+         requires_typed:            # `restore`'s cell, plus CHAR item 5's conjunct
+           all:
+             - {form: existence, of: site, kind: Site}
+             - {form: relation, of: site, relation: present_at}
+             - {form: relation, of: actor, relation: individual}
+         writes:  {Overwhelming: ["Site.condition"], Success: ["Site.condition"], Partial: ["Site.condition"], Failure: []}
+         emits:
+           Overwhelming: ["site.damaged"]
+           Success:      ["site.damaged"]
+           Partial:      ["site.damaged", "sabotage.seen"]
+           Failure:      ["sabotage.seen"]
+         emits_on_refusal: ["sabotage.refused"]
+     ```
+     (`capability_note:` added by this plan, as in B12c.07.)
+  3. "`rosters.yaml: covert_kinds.values` gains `site.damaged` (so `epistemic.trail_of` holds the hand for an `examine` of the Site). `sabotage.seen` is an ordinary deed kind naming the actor. `sabotage` is not a `graded_tasks` member (it is a contest row). `_eff_sabotage`: `delta = -_fall(w, site, res)`." `sigma.py::contest_input`: `watch` = `world_q.guard_weight(site.rung)` (the row's comment).
+  4. "no masking clause is added: covertness is a property of presence … Consequence for the gate: a person co-located with the Site at the act holds the attribution at every band." Whether a sabotage is seen is B12c.09's (`IS-B3-SE-05`, the source's INCOMPLETE point).
+- WHERE: `engine/season/queries/world_q.py` (`fabric_resented`; `questions_for`'s classed tuple); `engine/season/verb_table.yaml` (`sabotage`); `engine/season/rosters.yaml` (`covert_kinds`); `engine/season/loop/effects_economy.py` (`_eff_sabotage`); `engine/season/seam/wrappers/sigma.py` (`contest_input`: `watch`); `engine/season/tests/test_vm_mat_a_mending.py`.
+- TESTS: §8 "`sabotage`. A fixture (a town, a garrison, a holder, a man with a row against him), seeds 0 to 19: three or more distinct garrison conditions; at `Overwhelming` and `Success` no co-located ledger names him and a planted-`Success` `examine` does; a `march` on the town reads lower `fortification_of` than the control" — "Until then [B12c.09] the gate reads the hidden hand on a fixture where nobody else stands at the Site" — as `test_sabotage_spreads_over_seeds` (`assert checked >= 20`), `test_an_examine_finds_the_hand`, `test_a_sabotaged_town_is_weaker_to_a_march`, `test_a_failed_sabotage_is_a_deed_seen` (A-81: "`sabotage`'s Failure `sabotage.seen` is a deed naming him, deposited to those present") `[ASSUMPTION: test names]`; written before step 2, red.
+- FALSIFIER and CONTROL: a `sabotage` formed on a Site whose holder the actor's ledger does not name. Control: the fixture's "nobody else stands at the Site" arm; `watch_step` 0 reproduces the base difficulty.
+- GATE: `python -m pytest engine/season/tests/test_vm_mat_a_mending.py -k sabotage -q` → pass; realm, `aperture 2 0`: `exists:Site=0` refusals → 0 (§8 "Realm"); the seed-0 one-season hash recorded.
+- HASH MOVERS: every realm world with a resented holder's works at a man's rung. Declared; B12c.99.
+- DEPENDS ON: V12 B12c.07; V12 Batch B11 (`08_FI_01` edit 1: `person_q.holders_named`, absent at `fe09cdd`); EXISTS-IN-TREE `person_q.py::held_against`, `world_q.py::enemies_heard`, `::guard_weight`, `epistemic.py::trail_of`, `loop/effects_economy.py::_eff_sabotage`, `::_fall`, `rosters.yaml: covert_kinds`.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`; `opus` reads the band table.
+- LANDS IT: B12c's producer; `Item: B12c.08`, `[skip ci]`.
+
+### B12c.09 — whether a sabotage is seen is the notice draw's, with the saboteur's band as a term · `IS-B3-SE-05` · BUILD · HASH EQUAL
+- SOURCE: `master/instructions/IS_B3_FA_SE_WR_GO.md` "Item: IS-B3-SE-05" (`:257-266`); part 2 §7.1 ("SE-05 with `14_VERBS_MATERIAL_A`"), §7.2, §8 row 7 (ladder step 4: "B11's notice draw; C3-C14's 'perception is a drawn deposit, not a gate'"); closes `14_VERBS_MATERIAL_A`'s INCOMPLETE point (U4 §3.4).
+- ADVANCES: R-09, R-07 (the works are at risk from a hidden hand).
+- INSTRUCTION (copied): "(1) The notice draw's obstacle composer gains one term for a deed whose own band is known to the fold: the deed's degree, as a member of the closed modifier roster of `U5c_SC_one_obstacle_form.md` §2 `[ASSUMPTION: the member's name, `deed_band` — basis: OBS §2 is the one roster of obstacle terms; the U1 owners ledger admits the member, as it does for the military terms]`. Overwhelming raises the obstacle most, Failure not at all. (2) `14_VERBS_MATERIAL_A`'s gate reads the hidden hand on a world where others stand at the Site: across 200 keyed draws at equal state a bystander holds the attribution on some and not others, less often at a higher band. Its fixture 'where nobody else stands at the Site' is kept as the control." The composer is the obstacle B11.66 composes in `epistemic.py::notice` ("Obstacle, composed by the one obstacle composer: the task difficulty `notice_ob` … plus one level if the channel is not the precedence head"); `deed_band` is appended at the end of `rosters.yaml: obstacle_terms` (CIP part 2 §5 note 1) with its step per band written `[ASSUMPTION]` and listed in the PR body.
+- WHERE: `engine/season/epistemic.py` (`notice`: the term; B11.66's function); `engine/season/rosters.yaml` (`obstacle_terms`: `deed_band`); `engine/season/tests/test_notice_draw.py` (B11.66's file).
+- TESTS: `test_a_better_sabotage_is_noticed_less_often` ("200 draws per band, `assert checked >= 200`; shares strictly ordered between Failure and Overwhelming and strictly between 0 and 1"), run at `notice_arm: on` inside the test, written first and red; B12c.08's hidden-hand test gains the co-located arm (step 2).
+- FALSIFIER and CONTROL: shares not strictly ordered, or at 0 or 1. Control: "`notice_arm: off` reproduces B11's base hash" (here: B12c.08's tree's hash).
+- GATE: `python -m pytest engine/season/tests/test_notice_draw.py -q` → pass; the seed-0 one-season realm hash at the shipped `notice_arm` → equal to B12c.08's reading if the arm is off; if B11.67 turned it on, moved and declared below.
+- HASH MOVERS: "Every world with a non-public deed that has a co-located bystander, once `notice_arm` is on; declared with B11's own flip, not a second re-pin." In this plan: if `notice_arm` is on at this batch's open, the move is declared here and taken by B12c.99's re-pin; if off, none until B11.67 or B98 sets it.
+- DEPENDS ON: V12 Batch B11 (B11.66 `epistemic.notice`, `queries/cache.py::notice_pools`, absent at `fe09cdd`; B11.65 `VerbRow.public`); V12 Batch B05 (`obstacle_terms`); V12 B12c.08.
+- GLOSSARY: *notice* row (B11's) gains the term's one sentence: "a deed done well is noticed less often".
+- COST and TIER: edit; `sonnet`, `high`; `opus` critic on the term (the source's tier).
+- LANDS IT: B12c's producer; `Item: B12c.09`, `[skip ci]`.
+
+### B12c.10 — finding what is hidden: the place half's build · `IS-B3-SE-06` (A-109) · BUILD · HASH EQUAL
+- SOURCE: `master/instructions/IS_B3_FA_SE_WR_GO.md` "Item: IS-B3-SE-06" (`:268-279`), "INSTRUCTION — decidable now" (1)–(5); its design pass is B11.01 (`IS-B2-FI-07` with `IS-B3-SE-06`, DESIGN-FIRST, "at B11's open"); the intake §1 row (H-325, H-326 (r), A-109); D-18; closes H-325, H-326 (r) (the place half).
+- ADVANCES: R-07 (imperfect knowledge); SE and FI standalone (a search is a choice that can fail).
+- STOPS IF: B11.01's design file is not merged at this batch's open, or it decides any of the item's "not decidable here" points (a)–(c) otherwise than the instruction below reads them: then this item is HELD (D-18: "a build whose design is unmerged at its batch's open is HELD") and leaves for the held list at the expunge, its handle named in the expunge commit.
+- INSTRUCTION ("decidable now", copied; the design file supplies (a)–(c) and is read whole first): "(1) A hidden place is a withheld claim, not a Rung field … the person who does not hold such a claim never forms an act naming it, which `08_FI_01` already makes true. (2) Finding yields a claim: a `finding.made` on a search deposits, through WITNESS, a claim naming the hidden rung in the finder's own ledger (his known-places entry is that claim; no second store), so `places_named` names it from the next deliberation. (3) Where a person conceals, the one opposed rule decides (`29_DICE_one_opposed_rule_form_and_tuning.md`): a keeper who holds a `cover` on the place (the `conceal` verb's Record, its `terms` widened from himself to a rung he holds) stands against the search as the opposed side, his skill score against the searcher's; a place nobody conceals is found by the searcher's draw against the place's own difficulty. (4) The search act is `surveil` on the containing rung … its Success band deposits claims naming the hidden child rungs of the subject rung, its Overwhelming band also the keeper, its Partial a claim of low confidence, its Failure nothing. (5) Exposure gets its carrier as the searcher's own risk of being seen … through the notice draw (B11), with the act's depth (its `effort`, CP-T01-05) as a term that makes it likelier to be noticed `[ASSUMPTION: Exposure read as per-act notice …; revert: a per-person `exposure` carrier with its write-matrix row, which needs a ruling]`." Which places are hidden is content, `BLOCKED (CONTENT — Jordan or a content pass he reviews)`: none is authored here, so the build ships at its control.
+- WHERE (the source's candidates, narrowed by the design file at the item's open): `engine/season/verb_table.yaml` (`surveil`: the deposit's subject; `conceal`: `terms`); `engine/season/epistemic.py` (the found-place deposit); `engine/season/queries/world_q.py` (one reader: the hidden child rungs of a rung, those no claim in the asker's ledger names); `engine/season/venues.yaml` and `data/rosters.py` (only if the design takes (a)'s rating); `engine/season/tests/test_finding_what_is_hidden.py` (NEW in B11 by B11's FI half, or here if absent: `ls` at the open).
+- TESTS (copied): "`test_a_hidden_place_is_named_by_no_option_until_found` (a planted hidden hearth under a settlement: no act names it; after a planted Success `surveil` on the settlement the finder holds a claim naming it and forms an act on it next round [lap]); `test_a_kept_place_is_found_less_often` (200 dice seeds, keeper with and without a cover, shares strictly ordered, `assert checked >= 200`); `test_a_deep_search_is_noticed_more_often` (the notice share rises with `effort`)", written before the edits, red.
+- FALSIFIER and CONTROL: "control: with no hidden place authored, the realm hash at seeds 0 to 2 equals the base."
+- GATE: `python -m pytest engine/season/tests/test_finding_what_is_hidden.py -q` → pass; the realm hash at seed 0, one season, with no hidden place authored → equal to B12c.09's (seeds 1 and 2 at B12c.99, E-2).
+- HASH MOVERS: "None at the control (no hidden place authored). Authoring the first hidden place is a declared mover; step 5's notice of a search moves every world with a co-located searcher once `notice_arm` is on (B11's flip, no second re-pin)."
+- DEPENDS ON: V12 B11.01 (the design); V12 Batch B11 (`08_FI_01` `places_named` as stamped, `18_DETERMINISM_notice_is_a_draw` B11.66, `16_PESSIMIST_FI_C`); V12 Batch B05 and B04 (`29_DICE` the one opposed rule); V12 B12c.09 ("after SE-05: it composes on the same notice draw"); EXISTS-IN-TREE `verb_table.yaml` rows `surveil`, `conceal`, `queries/world_q.py::places_named`.
+- GLOSSARY: a row *hidden place* (new): "a place nobody has been told of except its keepers; found by searching the place around it" (owner: the design file's reader in `world_q`).
+- NAMES: "next round" in the copied test → "next lap" (B04).
+- COST and TIER: small build; `sonnet`, `high`; the design `opus` (B11.01, done before).
+- LANDS IT: B12c's producer; `Item: B12c.10`, `[skip ci]`.
+
+### B12c.11 — the `distinct` column and its loader check · `14_VERBS_MATERIAL_B` §5 step 1 · BUILD · HASH EQUAL
+- SOURCE: `proposals/14_VERBS_MATERIAL_B_stores.md` §2 "Formation", §5 step 1 ("`distinct:` column and its loader check (hash EQUAL until a row declares it)"); CR-49's "read from a row column, never from the verb's name"; R4 §1.2 N5 (`distinct` in the loader's closed key set).
+- ADVANCES: none by itself.
+- INSTRUCTION (copied): "`decision/options.py::opening_set`: a row may declare `distinct: [from, to]` (a column, CR-49's *read from a row column, never from the verb's name*); a bag whose two named operands are equal forms no Candidate. `data/verbs.py` adds `distinct` to the loader's closed set of row keys (unknown keys are refused at load, `04` §B.13) and refuses a `distinct` member that is not an operand the row binds."
+- WHERE: `engine/season/decision/options.py` (`opening_set`); `engine/season/data/verbs.py` (`VerbRow.distinct`, the closed key set, the refusal); `engine/season/tests/test_vm_mat_b_stores.py` (NEW; the source's file: "one function per §6 gate").
+- TESTS: `test_distinct_member_not_an_operand_is_refused_at_load` (planted row), `test_equal_operands_form_no_candidate` (a test-rebound row with `distinct: [from, to]`, a bag with `from == to`) `[ASSUMPTION: test names]`, red first.
+- FALSIFIER and CONTROL: a bag with equal named operands formed. Control: no shipped row declares the column; the realm hash at seed 0, one season, equal to B12c.10's.
+- GATE: `python -m pytest engine/season/tests/test_vm_mat_b_stores.py -k distinct -q` → pass; the realm hash → equal.
+- HASH MOVERS: none (`VerbRow` is not a `World` carrier: no encoding move, D-04).
+- DEPENDS ON: EXISTS-IN-TREE `decision/options.py::opening_set`, `data/verbs.py` (the closed key set; `counterparty:`'s precedent); V12 B12c.04.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B12c's producer; `Item: B12c.11`, `[skip ci]`.
+
+### B12c.12 — `transfer` toward a place in need, drawn · `14_VERBS_MATERIAL_B` §2 · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/14_VERBS_MATERIAL_B_stores.md` §2, §5 step 2, §6 "`transfer`", "Conservation", "Planted failures"; "Standing" (A-6, A-7, A-8, A-30, A-81); U5c C-21 (`distance` is OBS member 20); closes F-SE-04, F-SE-07 (the `transfer` half; U5d §2's `transfer` half is carried here by `distinct`).
+- ADVANCES: R-05 (`transfer`); R-04.c6.
+- INSTRUCTION (copied):
+  1. "Stamp. `rosters.yaml: referent_classes` gains `Needy` (occasion-only, non-collection). `queries/world_q.py`, new:"
+     ```python
+     def places_in_need(w: World, p: Person) -> tuple:
+         """The rungs `p` has a reason to send stores to, from his OWN ledger and OWN edges, sorted, each once,
+         never the rung he would give from (`containing_rung_of`, or a held seat's `seat_rung`):
+           (a) a rung his newest claim of a `shortfall:<kind>` predicate is about, or his newest `stores:<kind>`
+               claim puts at 0;
+           (b) `Record.rung` of an unmade works on his own live `hold` (the rung `_cost` pays from);
+           (c) where a person he knows to be obliged to a seat he holds stands (`ledger_names`, `home_of`)."""
+     ```
+  2. "`_derive_operand`: for a classed row that declares `shortfall_sourced`, `kind` and `amount` are read from the newest shortfall claim about the bound `to` (today the reader keys on `q.about` only, so a stamped rung gets the fixtures). `amount` then rides SE's `amount_shares`."
+  3. The row ("unlisted columns unchanged"):
+     ```yaml
+       - verb:        "transfer"
+         referent_class: Needy
+         distinct:    [from, to]
+         capability:  none
+         capability_note: "moving one's own stores draws on no skill; the draw is whether it arrives"
+         difficulty:  plain          # + `distance` (OBS member 20): Fixtures distance_step per `contain` edge on the ladder path from `from` to `to`
+         writes:  ["Rung.stores", "Rung.stores", "Tenure.term"]   # shape (a): one magnitude
+         emits:   ["transfer.made", "term.renewed"]
+         emits_on_refusal: {draw: ["transfer.failed"], <each derived clause>: ["transfer.refused"]}
+     ```
+  4. "`_eff_transfer`: `moved = graded_amount(w, res, amount)` … `_shift(src, dst, kind, moved)`; `_renewals(w, a, src.id, dst.id, moved)`. `delivery_share` 1000 / 1000 / 700 / 0 is a sweep arm of `task_fraction` … not a fixture of its own. `distance` is OBS §2's member 20 with its one fixture `distance_step` (`0.5`, swept 0 / 0.5 / 1; control 0; NUMBER row in `hole_register.yaml`): a member lands with its first reader … so the member and its fixture land in this commit and no later proposal adds them again. `graded_tasks` gains `transfer`." `sigma.py::contest_input` carries `distance` raw (the count of `contain` edges on the ladder path, × `distance_step` in the composer).
+- WHERE: `engine/season/rosters.yaml` (`referent_classes`: `Needy`; `obstacle_terms`: `distance`; `graded_tasks`); `engine/season/queries/world_q.py` (`places_in_need`; `questions_for`); `engine/season/decision/options.py` (`_derive_operand`); `engine/season/verb_table.yaml` (`transfer`); `engine/season/loop/effects_economy.py` (`_eff_transfer`); `engine/season/data/fixtures.py` (`distance_step`); `engine/season/seam/wrappers/sigma.py` (`contest_input`: `distance`); `engine/season/hole_register.yaml` (block slot 5); `engine/season/tests/test_vm_mat_b_stores.py`.
+- TESTS: §6 "`transfer`. `python -m engine.season.harness.scarce`, named arm, extended to seeds 0 to 19: grain delivered > 0 and a second claim-sourced `transfer.made` … and the delivered amount takes more than one value across seeds", as `test_transfer_delivers_and_varies_over_seeds` (`assert checked >= 20`); "Conservation, at every band. Total stores of each kind over all rungs are equal before and after every act" as `test_transfer_conserves_at_every_band`; the planted failure "Stamp the giver's own rung as `Needy`: the realm line must show self-transfers again" as `test_planted_self_stamp_reproduces_self_transfers` `[ASSUMPTION: test names]`; written first, red.
+- FALSIFIER and CONTROL: "Realm, `aperture 2 s`: no attempted `transfer` whose `to` equals its `from` or is no rung. Control: `distance_step` 0 and `task_fraction` at its control arm `1 / 1 / 1 / 0` reproduce a whole delivery wherever the base difficulty is passed."
+- GATE: `python -m pytest engine/season/tests/test_vm_mat_b_stores.py -k transfer -q` → pass; `aperture 2 0`: self-`transfer` attempts → 0, quoted; CR-49's exit clause (MAT_B §5: "applies to all three"): `confer` and `oblige` executed at `aperture 2 0` against B12c.11's reading — a fall to 0 reverts this item alone.
+- HASH MOVERS: every seeded world with a `transfer` candidate. Declared; B12c.99.
+- DEPENDS ON: V12 B12c.11, B12c.04; V12 Batch B12b (`07_SE_arc_needs` §3 b: `amount_shares`; `07_SE_treasury_granary_B`; `07_SE_kernel_repairs` §2); EXISTS-IN-TREE `loop/effects_economy.py::_eff_transfer`, `::_renewals`, `effects_shared.py::_shift`, `decision/options.py::_derive_operand`, `harness/scarce.py`.
+- GLOSSARY: none.
+- IDS: H block slot 5 (`distance_step`).
+- COST and TIER: small build; `sonnet`, `high`; `opus` reads the spread.
+- LANDS IT: B12c's producer; `Item: B12c.12`, `[skip ci]`.
+
+### B12c.13 — `requisition` on a larder the seat may take from, drawn · `14_VERBS_MATERIAL_B` §4 · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/14_VERBS_MATERIAL_B_stores.md` §4, §5 step 3, §6 "`requisition`"; `audits/25_GROUNDING_ENGINE.md` G-13 (the roster is `standing_routes: kinds: dominance`); C3-Y7 (`requisition.rendered` left to B33); W3 mop-up (Partial's remainder read by `bills_due`, not deposited).
+- ADVANCES: R-05 (`requisition`); R-04.a (`requisition` with `Act.via`, read at the close).
+- INSTRUCTION (copied):
+  1. "Stamp. `rosters.yaml: referent_classes` gains `Larder`. `queries/world_q.py::larders_in_purview` is stamped twice: as `Rung` exactly as today (so `migrate`, `march` and `convene` do not move), and as `Larder` for the subset reached by a seat of his that grants **this row's own act** (`issue`), read off the row (`VERB_TABLE["requisition"].eligibility`), never spelt."
+  2. The row, as the source writes it (`capability: none` with its `capability_note: "the office is the instrument: the exercised seat helps as the `office` level read off its row's `modifier:` (U1 D-U1-01), never as dice"`; `difficulty: routine # + `stakes` (stakes_ob.requisition per third of the known stock asked) + `regard` of the cohort residing at the rung`; `writes: ["Rung.stores", "Rung.stores"]`; `emits: ["requisition.taken"]`; `emits_on_refusal` keyed `eligibility`/`authority: ["requisition.unauthorized"]`, `stores`/`write: ["requisition.refused"]`, `draw: ["requisition.resisted"]`; `referent_class: Larder`).
+  3. "`_eff_requisition`: `_shift(src, dst, kind, graded_amount(w, res, amount))` … `Fixtures stakes_ob` (SC-B's table) gains `requisition: 0.5`. The `regard` operand is the stance toward the actor of the one cohort whose `reside` edge is the requisitioned rung (`stance_toward`, its one owner); absent where no cohort or several reside there. `rosters.yaml: standing_routes: kinds: dominance` … gains `requisition.resisted`, so a place that refused its lord is a deed `stability` counts as a taking is." "Adding a kind there adds it to every reader of dominance, not to `stability` alone" (G-13): grep the readers of `DOMINANCE_KINDS` at the item's open and list them in the commit body. "`graded_tasks` gains `requisition`." "At Partial the requisition moves half … The remainder still owed is not deposited by `_eff_requisition`: BYZ_B's `world_q.bills_due(w, p)` reads it when read."
+  4. "This file ships `requisition` in shape (a), without the stake; the move to shape (b) is made once, in the batch that adopts either the stake or `requisition.rendered` (whichever is first, B33 or the STORY_A batch B38), and is not made twice."
+- WHERE: `engine/season/rosters.yaml` (`referent_classes`: `Larder`; `standing_routes.kinds.dominance`; `graded_tasks`); `engine/season/queries/world_q.py` (`larders_in_purview`'s two stamps; `questions_for`); `engine/season/verb_table.yaml` (`requisition`); `engine/season/loop/effects_governance.py` (`_eff_requisition`); `engine/season/data/fixtures.py` (`stakes_ob`: `requisition`); `engine/season/seam/wrappers/sigma.py` (`contest_input`: `stakes`, `regard`); `engine/season/tests/test_vm_mat_b_stores.py`.
+- TESTS: §6 "`requisition`. `scarce.governed` with `amount_shares: [250, 1000]`: for one candidate the amount taken varies across seeds 0 to 19; the cohort's stance toward the steward differs after `requisition.resisted` and after `requisition.taken`", as `test_requisition_amount_varies_over_seeds`, `test_resisted_and_taken_leave_different_stances`; conservation at every band `[ASSUMPTION: test names]`; red first.
+- FALSIFIER and CONTROL: "Realm: no computed `requisition.unauthorized`." Control: `task_fraction` at its control arm with a planted `Success` takes the whole amount.
+- GATE: `python -m pytest engine/season/tests/test_vm_mat_b_stores.py -k requisition -q` → pass; `aperture 2 s`, s = 0–2: computed `requisition.unauthorized` → 0, quoted; `requisition.taken` executed count quoted (it may read 0: no channel gives an issue-granting holder a larder claim, B12c.30); CR-49's exit clause as in B12c.12.
+- HASH MOVERS: every world with a `requisition` candidate. Declared; B12c.99.
+- DEPENDS ON: V12 B12c.12; V12 Batch B05 (SC-B `stakes_ob`, `regard`); EXISTS-IN-TREE `world_q.py::larders_in_purview`, `effects_governance.py::_eff_requisition`, `person_q.py::stance_toward`, `data/rosters.py` (`standing_routes`), `person_q.py:517 UNREST_KINDS = DOMINANCE_KINDS`.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B12c's producer; `Item: B12c.13`, `[skip ci]`.
+
+### B12c.14 — `exchange` names another place; `migrate` a settlement · `14_VERBS_MATERIAL_B` §3 with CR-49 and `U5d_SE_owed_edits` §2 · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/14_VERBS_MATERIAL_B_stores.md` §3, §5 step 4, §6 "`exchange`"; the intake `:322` (CR-49; carry-forward E1 "### CR-49" (`:2584-2606`), copying `workplans/valoria_master_workplan_v11_part4.md:417-429`); `proposals/U5d_SE_owed_edits.md` §2 ("A plan edit to CR-49's entry, so the three rows land as one"; B12b.29's POINTER names this item); D-02 (CR-48 is not a data edge); UNDECIDED (2); closes CR-49, R-SE-19, F-SE-07, F-SE-09; F-PES-SE-13's third item.
+- ADVANCES: R-05 (`exchange`), R-04.a/(1) re-read (CR-49's R line).
+- INSTRUCTION (copied):
+  1. MAT_B §3: "CR-49 lands as written with two changes: the class is `Market`, not the shared `Rung` (so `migrate`, `march` and `convene` gain no formations), and the self-trade decline is the `distinct: [from, to]` column above." `queries/world_q.py`, new: `markets_known(w, p)` — "The rungs, other than the one he would give from, about which `p`'s newest `stores:<kind>` claim for some kind is positive. Class Market. His own ledger only." `rosters.yaml: referent_classes` gains `Market`.
+  2. "`_derive_operand`, for a row declaring `stock_sourced: [kind, return_kind]` (a roster line beside `shortfall_sourced_operands`): `kind` is the matter his newest `stores:` claims about `from` put highest; `return_kind` is the matter his claims about `to` put positive that his claims about `from` put lowest, and never `kind`; either falls back to its fixture (`default_store_kind`, `default_return_kind`) when he holds no such claim."
+  3. The row: `verb: "exchange"`, `referent_class: Market`, `distinct: [from, to]`, `capability: none # `trade` when authored` (with `capability_note:` as B12c.07), `difficulty: routine # + `opposition` and `regard` (SC-B) of the holder his ledger names for `to`, when it names one`, `writes: ["Rung.stores", "Rung.stores"]`, `emits: ["exchange.made"]`, `emits_on_refusal: {draw: ["exchange.failed"], <each derived clause>: ["exchange.refused"]}`.
+  4. "`data/fixtures.py`: `exchange_terms={"Overwhelming": 1500, "Success": 1000, "Partial": 500}` (per-mille of `return_amount` the actor receives for his `amount`; swept, with `1000/1000/1000` the control: par at every winning band), with a NUMBER row in `hole_register.yaml`. It is the row's own content table … `_eff_exchange`: `back = min(held by dst of return_kind, ceil(return_amount × terms[band] / 1000))`, at least 1; two `_shift`s as today … `graded_tasks` gains `exchange`."
+  5. U5d §2, the `migrate` half: "`referent_class: Rung` restricted to a settlement rung (a cohort may not `migrate` into a territory, a duchy or the realm: 485, 76 and 1 such open pairs read by the pessimist) and a `to != from` decline": `migrate`'s class reads only settlement rungs (the restriction at the stamper that forms it, never a test of the verb's name) and the row declares `distinct: [from, to]` `[ASSUMPTION: the decline is B12c.11's column — basis: MAT_B's self-trade decline is the same rule; one decline column]`.
+  6. RE-BASE (copied as a step): "re-run the operand census for `exchange` (`from`, `to` kinds) at the base commit … none is quoted until re-taken at the re-base"; the census goes in the commit body.
+- WHERE: `engine/season/rosters.yaml` (`referent_classes`: `Market`; `stock_sourced` beside `shortfall_sourced_operands`; `graded_tasks`); `engine/season/queries/world_q.py` (`markets_known`; `questions_for`; the settlement-rung reading `migrate`'s stamp uses); `engine/season/decision/options.py` (`_derive_operand`); `engine/season/verb_table.yaml` (`exchange`, `migrate`); `engine/season/loop/effects_economy.py` (`_eff_exchange`); `engine/season/loop/effects_migration.py` (`_eff_migrate`'s decline, SITE: open it first — the class may make the effect's decline unreachable, record which); `engine/season/data/fixtures.py` (`exchange_terms`); `engine/season/hole_register.yaml` (block slot 6); `engine/season/tests/test_vm_mat_b_stores.py`; `engine/season/tests/test_in33_exchange.py` (existing; re-read).
+- TESTS: §6 "`exchange`. Under SE's `ground` arm, seeds 0 to 2, three seasons [two, A-114]: `exchange.made` > 0 between two settlements of unlike endowment; the importer's hunger band differs from the arm with `exchange` withheld (`Fixtures withheld_verbs`)", as `test_exchange_between_unlike_settlements`; "Bind `return_kind` to `kind`: no `exchange` may form" as `test_return_kind_equal_to_kind_forms_nothing`; conservation at every band; `test_no_migrate_candidate_names_a_non_settlement_rung` (U5d §2) `[ASSUMPTION: test names]`; red first.
+- FALSIFIER and CONTROL: CR-49: "`aperture 3 s` [2, A-114]: `exchange.made` at least once from a computed act; `confer` and `oblige` re-read at the realm line against their pre-item counts …; a fall to 0 reverts this position alone." U5d §2: "A `transfer` whose `to` is the giver's own rung executes." Control: `exchange_terms` at `1000/1000/1000`.
+- GATE: `python -m pytest engine/season/tests/test_vm_mat_b_stores.py engine/season/tests/test_in33_exchange.py -q` → pass; `python -m engine.season.harness.aperture 2 0` before (B12c.13's tree) and after: `exchange.made` ≥ 1 from a computed act at one of seeds 0–2, `transfer.made` to self → 0 (U5d §2's gate, "goes to 0"), no `migrate` candidate names a non-settlement rung, `confer` and `oblige` not fallen to 0; each quoted.
+- HASH MOVERS: CR-49 "declared MOVER"; U5d §2: "Every seeded run with a `transfer` or `migrate` candidate". Declared; B12c.99.
+- DEPENDS ON: V12 B12c.13 (MAT_B §5's order); V12 B12c.11 (`distinct`); EXISTS-IN-TREE `effects_economy.py::_eff_exchange` (both sides move, matter conserved: REM-2B's cell, CR-49's LANDED ALREADY), `data/fixtures.py::default_store_kind`, `::default_return_kind`, `rosters.yaml: shortfall_sourced_operands`; V12 Batch B12a (`ground`'s unlike endowment; B12a.54's flip).
+- GLOSSARY: none.
+- IDS: H block slot 6 (`exchange_terms`).
+- COST and TIER: small build; `sonnet`, `high` (CR-49's BUILDER: second tier); `opus` reads the spread.
+- LANDS IT: B12c's producer; `Item: B12c.14`, `[skip ci]`.
+
+### B12c.15 — the kinds a trade is formed on · `U5d_SE_owed_edits` §7 · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/U5d_SE_owed_edits.md` §7 (R-PES-SE-09; F-PES-SE-10; "owed to CHAR's formation"); its land order ("§2, §7"); B12b.30's POINTER names this item.
+- ADVANCES: R-04.c6 (a trade answers want).
+- INSTRUCTION (copied): "Owner. `engine/season/decision/options.py` (operand bags) for `exchange` and `transfer`. Edit. `kind` is the kind the actor's rung holds most of beyond its own draw; `return_kind` is a kind its ladder was short of at the last MATTER (`World._subsistence_shortfall`), else the fixture default. Both are read from the actor's own ledger and rung (AX-2)." Composed on B12c.14's `stock_sourced` reading: where the actor holds a shortfall claim about his own rung's ladder from the last MATTER, it names `return_kind` before the `stores:` comparison does `[ASSUMPTION: the order of the two readings — basis: §7's "a kind its ladder was short of" is the more specific; the reading that changes less of B12c.14]`.
+- WHERE: `engine/season/decision/options.py` (`_derive_operand`, the `exchange` and `transfer` bags); `engine/season/tests/test_vm_mat_b_stores.py`.
+- TESTS: "In `harness/scarce.py`'s short town, the formed `exchange` asks for the kind it lacks", as `test_a_short_town_asks_for_what_it_lacks` `[ASSUMPTION: test name]`; red first.
+- FALSIFIER and CONTROL: "A hungry town offering grain for the default return kind." Control: an actor holding no shortfall claim reads the fixture default.
+- GATE: `python -m pytest engine/season/tests/test_vm_mat_b_stores.py -k lacks -q` → pass; the seed-0 one-season hash recorded.
+- HASH MOVERS: "Runs with an `exchange` or `transfer` candidate. Declared." B12c.99.
+- DEPENDS ON: V12 B12c.14 ("Depends on §2"); EXISTS-IN-TREE `World._subsistence_shortfall` as a census-only attribute (read by `harness/populated.py`; `decision/options.py`'s note at `_from_shortfall_claim`: "`World._subsistence_shortfall` is census-only and is no claim at all"). Since §7 reads "from the actor's own ledger and rung (AX-2)", the ladder's shortfall is read through the actor's own `shortfall:<kind>` claim about his rung (`_from_shortfall_claim`'s source), never the census attribute `[ASSUMPTION — basis: AX-2 as §7 states it and the tree's note; revert: none that keeps AX-2]`.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B12c's producer; `Item: B12c.15`, `[skip ci]`.
+
+### B12c.16 — a price read off the place · CP-T08-05 items 1–3 (AM-E-16) · BUILD · HASH MOVER(behaviour)
+- SOURCE: the intake `:316` (CP-T08-05; carry-forward E1 "### CP-T08-05" (`:1258-1285`); E4 `:1520-1526` "REPAIR · AM-E-16", which governs; E5 Block C15 "B12 after `14_VERBS_MATERIAL_B` · gate: hand-built world price rises as stock falls; zero-stock no divide-by-zero"); `14_VERBS_MATERIAL_B` §3 ("When CP-T08-05 gives a price, par is that price and this table scales it"); A20's routing; UNDECIDED (1); closes CP-T08-05 (with B12c.17 held).
+- ADVANCES: R-04.c6 (a town in dearth can buy).
+- INSTRUCTION (the card as AM-E-16 overrides it, copied):
+  1. "`price_of(w, rung, kind) = price_base[kind] × (need + 1) // (stock + 1)`, where `need = demanded(kind) × price_horizon` and `stock` come from the same draw record and `Rung.stores` reads REM-50 uses: one owner of the reads, no second ratio. The recipe-input term is dropped (CP-T08-04 is held). Lands in `queries/world_q.py` beside `hunger`." Stored nowhere.
+  2. "A roster `rosters.yaml: price_base` (one value per matter kind) and the fixture `price_horizon`, each with its H-row." Shipped at the card's control: every `price_base` equal and `price_horizon` 0 (par barter), the DIALS line.
+  3. "`exchange`'s effect computes the return from the counterparty's prices: for an offer of `a1` of `k1` for `k2`, the counterparty's rung gives `a2 = a1 × price_of(r2, k1) // price_of(r2, k2)`; if `a2 = 0` or `r2` cannot cover it, `exchange.refused`." With MAT_B: `a2` is par, scaled by `exchange_terms[band]` (`back = min(held, ceil(a2 × terms[band] / 1000))`, at least 1), so `exchange_terms` scales a price, never a second rate `[ASSUMPTION: the composition — basis: MAT_B §3's sentence; revert: the card's bare `a2`]`.
+- WHERE: `engine/season/queries/world_q.py` (`price_of`, beside `hunger`); `engine/season/rosters.yaml` (`price_base`); `engine/season/data/fixtures.py` (`price_horizon`); `engine/season/loop/effects_economy.py` (`_eff_exchange`: the return); `engine/season/hole_register.yaml` (block slots 7, 8); NEW `engine/season/tests/test_price.py`.
+- TESTS: in the new file, red first, on a hand-built two-town world: "the town short of grain prices grain above the town in surplus; an `exchange` of salt for grain at the short town returns less grain than the same offer at the full town; after the swap, the short town's grain price falls. Mutation: read `stock` from the actor's rung instead of the counterparty's; the second assertion reds", as `test_a_short_town_prices_grain_higher`, `test_the_same_offer_returns_less_where_grain_is_dear`, `test_a_swap_lowers_the_short_towns_price`; E5's `test_zero_stock_does_not_divide_by_zero` `[ASSUMPTION: test names]`. The `offer` arm of the card's falsifier is B12c.17's.
+- FALSIFIER and CONTROL: "this item's control is REM-2B's merged hash with `price_horizon` at 0 and every `price_base` equal (every price equal, so `a2 = a1`: barter at par), against the priced arm, seeds 0-2."
+- GATE: `python -m pytest engine/season/tests/test_price.py engine/season/tests/test_vm_mat_b_stores.py -q` → pass; the seed-0 one-season hash recorded (moved where an `exchange` executes: the return is now `a1`-based at par).
+- HASH MOVERS: "Every world where `exchange` executes. Revert: equal bases and horizon 0 (par barter), then the Query." Declared; B12c.99.
+- DEPENDS ON: V12 B12c.15, B12c.14; EXISTS-IN-TREE `queries/world_q.py::hunger`, `::demanded` (REM-50's owner of demand); V12 Batch B12a (CP-T08-02's unlike stores, B12a.51/.54).
+- GLOSSARY: *price* (new row): "what a place asks of one kind in another, higher where it has little and needs much" (owner `world_q.price_of`).
+- IDS: H block slots 7, 8 (`price_base`, `price_horizon`).
+- COST and TIER: build (size M); `sonnet`, `high`.
+- LANDS IT: B12c's producer; `Item: B12c.16`, `[skip ci]`.
+
+### B12c.17 — consent to trade: the `offer` Record · CP-T08-05 item 4 · HELD (trigger: a computed producer of an `offer` Record; H-165's shape)
+- SOURCE: E1 "### CP-T08-05" item 4 ("Consent is an act the counterparty already made … `exchange` requires a live `offer` naming `r2`"); AM-E-16 ("The item ships and executes on hand-built worlds only (an `offer` Record needs a producer; H-165's shape)").
+- Why held: landing the conjunct refuses every computed `exchange` while no act mints an `offer`, against B12c.14's gate (UNDECIDED (1); session content wins). Its text (item 4, with the `offer` Record kind `{at, until}` in `rosters.yaml: record_kinds`, minted by `create_record` by a holder of `at` or a seat-holder whose purview reaches it) is carried whole at E1 `:1275` and fires as an item of the batch that gives `create_record` an `offer` source; until then B98's `price_base`/`price_horizon` dial is read with par barter. Its falsifier arm ("With the counterparty's `offer` destroyed, the same `exchange` is refused") goes with it.
+
+### B12c.18 — the upkeep payment gets a question · CP-T08-08 (AM-E-19) · BUILD · HASH EQUAL
+- SOURCE: the intake `:318` (CP-T08-08; carry-forward E1 "### CP-T08-08" (`:1350-1375`); E4 `:1579-1584` "REPAIR · AM-E-19", which governs; E5 Block C18); the orchestrator's routing; UNDECIDED (3); closes CP-T08-08.
+- ADVANCES: R-04 (a stocked treasury pays its establishment by a chooser's act).
+- INSTRUCTION (the card as AM-E-19 overrides it, copied):
+  1. "A question source `upkeep_due` for a seat-holder, built from **his own held claims** (AX-2): each `duty.taken` claim naming a seat he holds whose claimed season plus `oblige_term` falls within `upkeep_lead` seasons of his newest claim, and for which he holds no later `term.renewed` claim, grouped by the obligee's last-known place. It forms one `transfer` Candidate per group: `via` the seat, `from` the seat's rung, `to` that place, `kind` grain, `amount` = obligees in the group × upkeep." AM-E-19: "`upkeep_due` skips any group whose place is the seat's own rung (clause 3 renews nothing there) and forms a Candidate only while the seat's rung holds at least the group's amount of the kind, so a bare treasury forms nothing … Delete the Join sentence about IN-49 forming a refill."
+  2. "One WITNESS route: `duty.taken` is deposited to the holder of the seat the `oblige` names (the `post_remit` channel — in the tree `epistemic.py::_ch_post_remit`, not `loop/witness.py` as the card cites — widened from 'obligees of the seat that acted' to 'the holder of the seat an act names')."
+  3. "The seat's per-seat upkeep reaches the holder through the hold's payload snapshot, as `granted_acts` does, or else the fixture `default_upkeep` is used person-side [UNVERIFIED: whether `Office.upkeep` is in any snapshot today]" — SITE: open `Office` and the hold snapshot first and record which branch is taken.
+  4. `data/fixtures.py: upkeep_lead` with its H-row; shipped `none` (DIALS line).
+- WHERE: `engine/season/decision/options.py` (the question-source registry, beside `_from_shortfall_claim`); `engine/season/epistemic.py` (`_ch_post_remit`: the channel clause); `engine/season/data/fixtures.py` (`upkeep_lead`); `engine/season/hole_register.yaml` (block slot 9); NEW `engine/season/tests/test_upkeep_question.py`.
+- TESTS: red first, on `scarce.governed` with `upkeep_lead` set in the test: "an obligee sworn three seasons ago puts a `transfer` Candidate through the seat into the holder's questions, to the obligee's last-known place, for `upkeep`; executing it emits `term.renewed`. Mutation: take `to` from the obligee's residence instead of his last-known place (H-174's other reading); the renewal reds when he stands elsewhere", as `test_upkeep_question_forms_a_transfer_to_the_obligees_place`, `test_no_candidate_from_a_bare_treasury`, `test_no_group_at_the_seats_own_rung` `[ASSUMPTION: test names]`. The channel clause's widening is planted in the same file.
+- FALSIFIER and CONTROL: "Control. `upkeep_lead: none` (the source off) reproduces today's hashes at seeds 0-2." "Sharpened risk: no computed `oblige` exists to renew."
+- GATE: `python -m pytest engine/season/tests/test_upkeep_question.py -q` → pass; the seed-0 one-season hash → equal to B12c.17's tree (B12c.16's reading). The realm reading ("seed 1, six seasons, `term.renewed` > 0") is B98's, at two seasons (A-114).
+- HASH MOVERS: none with the source off. The witness clause (step 2) is not behind `upkeep_lead`: "every seed through the widened deposit" moves. Taken: the clause ships behind the same fixture (read only when `upkeep_lead` is not `none`) so the item is EQUAL `[ASSUMPTION — basis: the card's control "`upkeep_lead: none` … reproduces today's hashes" holds only so; revert: the clause unconditional, a declared mover in B12c.99]`.
+- DEPENDS ON: V12 B12c.12 (the `transfer` row it forms); EXISTS-IN-TREE `decision/options.py::_from_shortfall_claim`, `epistemic.py::_ch_post_remit`, `data/fixtures.py::oblige_term`, `loop/effects_economy.py::_renewals`, `harness/scarce.py::governed`.
+- GLOSSARY: none.
+- IDS: H block slot 9 (`upkeep_lead`).
+- COST and TIER: build (size M); `sonnet`, `high`.
+- LANDS IT: B12c's producer; `Item: B12c.18`, `[skip ci]`.
+
+*(B12c continues in this part's continuation file from B12c.19.)*
+
+Last item written in this file: B12c.18.
 
 

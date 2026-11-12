@@ -147,3 +147,358 @@ UNDECIDED: [written last]
 - COST and TIER: edit; `sonnet`, `high`; the reading of gate 3 (does the credit term concentrate endings) `opus`.
 - LANDS IT: B38's producer; `Item: B38.03`, `[skip ci]`.
 
+### B38.04 — at build, everyone under a held seat knows who holds it; the reader of that belief · `20_NARRATIVE_C` edits 1 and 3 (commit 1) · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/20_NARRATIVE_C_who_holds_what.md` "What it changes" 1, "The resolution, decided", "Exact edits" 1 and 3, "The gate" 1, 2, 5; its Reconciled lines (A-32: who holds a seat is learned by the seat's reach; C3-K3; this file lands before `20_NARRATIVE_B` inside B38); rulings A-32, A-33; closes H-195's knowledge half (the `held_by` claim no ledger held).
+- ADVANCES: none of the nine; A-32 (the holder of a seat is public knowledge within its reach, as an ordinary claim, and it can be stale).
+- INSTRUCTION:
+  1. The realm builder (`engine/season/boot/realm.py::build_realm`, "the one owner of the built realm's ledgers"): "After seats are filled and homes set: for every person `p` and every Office `o` with a live holder `h` such that `p`'s home is within `o`'s purview (`state/gate.py::purview_reaches`, the one owner of that walk) or `o` is a seat `p` is sworn to, mint one claim `(o.id, "held_by", h)`, source and confidence as the builder's other seeded claims, `when = -1`. The same for the governing hold of each rung on his home's ancestry (`world_q.governing_hold`). A switch `seed_holders: bool` on `build_realm` (default on; off is the control and reproduces today's build hash)." The switch is threaded through `boot/realm.py`'s callers as the builder's other switches are (by keyword, default on).
+  2. `engine/season/queries/person_q.py`, new, beside `known_persons`:
+     ```python
+     def believed_holder(p: Person, x: str, at: Optional[int] = None) -> Optional[str]:
+         """WHO `p` BELIEVES HOLDS the seat or rung `x`: the value of his newest `held_by` claim on `x`
+         (by `(when, round)`, with `when <= at` when `at` is given), or `None` -- he has no belief, or
+         believes it vacant. His ledger only (AX-2, AX-7): it may be wrong, and stays wrong until a
+         claim lands."""
+     ```
+     After B04 the ordering key is `(when, lap)` (`NAMES:`).
+  3. `held_by` is a claim predicate: if the claim-predicate roster (`rosters.yaml`) or `write_matrix.yaml`'s deposit cell refuses an unrostered predicate, add `held_by` at the end of its family's block in this commit (CIP part 2 §5 note 1) and say so in the commit body; if neither refuses, add nothing.
+- WHERE: `engine/season/boot/realm.py` (`build_realm`, `seed_holders`); `engine/season/queries/person_q.py` (`believed_holder`); `engine/season/rosters.yaml` (the predicate, only if step 3 finds a refusal); NEW `engine/season/tests/test_held_by.py`; `unified/U1_GLOSSARY.md` (*believed holder*).
+- TESTS: NEW `engine/season/tests/test_held_by.py`, written before step 1: `test_build_seeds_one_claim_per_seat_under_purview` (gate 2; red: no `held_by` claim at build); `test_seed_holders_false_reproduces_base_hash` (gate 1; written green against today's build and kept green). `test_far_person_keeps_the_old_holder_until_told` is written in B38.05 (it needs the deposit).
+- FALSIFIER and CONTROL: "The build hash moving with `seed_holders=False`: the switch is not a control." Control: `build_realm(0, seed_holders=False).content_hash()` equal to B38.03's build reading (`reading @<sha>`).
+- GATE: `python -m pytest engine/season/tests/test_held_by.py -q` → pass; on `build_realm(s)`, s = 0, 1, 2: "the share of persons holding a `held_by` claim at build, by seed, is above 5 % (expected: every person under a held seat)" — H-195's own trigger, printed per seed; the build hash at seed 0 → moved (declared).
+- HASH MOVERS: "A build-hash mover (a ledger is state)": every build and season hash. Declared; B38's one re-pin at B38.99.
+- DEPENDS ON: EXISTS-IN-TREE `state/gate.py::purview_reaches`, `queries/world_q.py::governing_hold`, `queries/person_q.py::known_persons`; V12 Batch B03c-boot (`boot/realm.py`); V12 Batch B21-fa-governance and B23-land (the seats and holds the seeding reads; `06_FA_seat_terms_and_turnover`, `06_FA_seat_terms_by_body_B`, `06_FA_war_lives_in_seats_B`).
+- GLOSSARY: *believed holder* — row added if absent: "the person someone believes holds a seat or a rung, from his own newest `held_by` claim; it can be stale"; owner `person_q.believed_holder`.
+- NAMES: `harness/populated.py::build_realm` → `boot/realm.py::build_realm` (B03c); `(when, round)` → `(when, lap)` (B04, PCR-4).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B38's producer; `Item: B38.04`, `[skip ci]`.
+
+### B38.05 — a change of holder reaches everyone the Event reaches, as a `held_by` claim · `20_NARRATIVE_C` edit 2 (commit 2) · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/20_NARRATIVE_C_who_holds_what.md` "What it changes" 2, "Exact edits" 2 (the call site resolved at the tree in its Reconciled line (1)), "The gate" 1, 5, "The falsifier"; rulings A-32, A-33 (a holder's death is learned apart, by presence, trail and telling; no edit corrects the belief on the death).
+- ADVANCES: none of the nine; AX-7 (a man who has not heard of the succession still serves the old holder).
+- INSTRUCTION: "`engine/season/loop/witness.py`, the deposit, and `engine/season/epistemic.py::claim_subjects`'s `hold` branch (the one place a `hold` is read as its ends, H-71). Where an Event's changes open or close a `hold` whose object is an Office or a Rung, each recipient of the Event's deposit also receives `Claim(subject = the object, predicate = "held_by", value = the subject of the live hold after the Event, or None)`, with the Event's own source, chain and confidence (so a told succession is hearsay and can be disbelieved, and the notice draw of `18_DETERMINISM_notice_is_a_draw.md` governs it like any other deed). Behind `Fixtures deposit_holder` (`off` control / `on`). Call site (read at the tree): `claim_subjects` (`epistemic.py`) produces a `hold`'s ends through `_hold_tenure_ends` (called in `claim_subjects` and in the sighting walk); the `held_by` claim is minted beside those ends for each recipient, so the deposit and the sighting read one rule." This commit ships `deposit_holder="on"` with a `[JUSTIFIED: …]` line and a hole-register row (block slot 2: kind `RULING`, grade `assumption`, swept `off` (control) / `on` (SHIPPED), `[ASSUMPTION; medium; Jordan to correct; revert: off]`), and `rosters.yaml` gains `deposit_holders: [off, on]` beside `held_readings`, checked by `require_member` `[ASSUMPTION: the source states the two values and no roster; "a declared mover with its control" is read as shipped `on` — basis: "What it changes" 2 counts this commit a mover "in any season where such a hold changes", which it cannot be at `off`]`.
+- WHERE: `engine/season/epistemic.py` (`claim_subjects`, the `hold` branch beside `_hold_tenure_ends`); `engine/season/loop/witness.py` (the deposit); `engine/season/data/fixtures.py` (`deposit_holder`); `engine/season/rosters.yaml` (`deposit_holders`); `engine/season/hole_register.yaml` (block slot 2); `engine/season/tests/test_held_by.py`.
+- TESTS: in `test_held_by.py`, written before the edit and read red: `test_conferral_deposits_held_by_to_the_reach` (commit 2); `test_far_person_keeps_the_old_holder_until_told` (gate 5, AX-7: "a planted conferral that a far person does not witness leaves his `believed_holder` at the old holder; a `tell` of it updates him at the told confidence").
+- FALSIFIER and CONTROL: "Gate 5 failing (he knows at once): the deposit is fanning past its channel." Control: `deposit_holder off` reproduces B38.04's season hashes at seed 0, one and two seasons.
+- GATE: `python -m pytest engine/season/tests/test_held_by.py -q` → pass; the season hash at seed 0, two seasons, at `deposit_holder on` → moved only where a hold on a seat or rung opened or closed in the run (the count of such Events printed; "in the shipped realm: none in four seasons at three seeds, audit O3; it moves when FA's turnover proposals land, and in every forced arm": B21 and B23 have landed, so a zero count is reported, not read as a pass of the deposit, whose observation is the planted test).
+- HASH MOVERS: "A mover in any season where such a hold changes". Declared; B38's one re-pin.
+- DEPENDS ON: EXISTS-IN-TREE `epistemic.py::claim_subjects`, `::_hold_tenure_ends`, `loop/witness.py` (the deposit); V12 B38.04 (`believed_holder`, the predicate); V12 Batch B11-fi-readers (`18_DETERMINISM_notice_is_a_draw`, the notice draw the deposit rides).
+- GLOSSARY: none.
+- IDS: H block slot 2.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B38's producer; `Item: B38.05`, `[skip ci]`.
+
+### B38.06 — a seat's believed holder enters the stance term, at a gain shipped 0 · `20_NARRATIVE_C` edits 4 and 5 (commit 3) · BUILD · HASH EQUAL
+- SOURCE: `proposals/20_NARRATIVE_C_who_holds_what.md` "What it changes" 3, "Exact edits" 4 and 5, "The gate" 3, 4, 6, "The falsifier"; its Reconciled line (2) (the memo, not `_regard_of`; C3-K3) and (3) (the `release` sign decided at its owner); rulings A-22, A-37, A-103 (CR-91's ground is the occasion of a march, never its admission); closes H-195 (`absent` → `assumption`).
+- ADVANCES: none of the nine; who an act on a seat is against.
+- INSTRUCTION:
+  1. "`engine/season/decision/choose.py::_stance_arm`, at the `ABSENT: H-195 holder` marker. Landing order on this one function (C3-K3): the scar-cap Addendum's term (`regard_sign(row) × regard(p, subject)` plus `regard(p, b)` for a beneficiary, B10, which also carries `17_CENSUS_C1A_02` W4) first; this term after it, added to the same `r` before the sign rule, under one clamp and one `stance_scale`. After `r` is formed:
+     ```python
+         hg = fx.get("holder_gain")
+         if hg:
+             h = believed_holder(p, subject)
+             if h is not None and h != p.id:
+                 if h not in memo:
+                     memo[h] = regard(p, h, fx)                 # the same `regard`, memoised per subject
+                 r = r + hg * memo[h]
+     ```
+     The sign rule that follows is untouched: on a contested row whose subject is its opponent the sum is negated, so a man who hates the holder of a town scores `march` on that town higher, and one who honours him lower." The `ABSENT: H-195 holder` marker comment is removed.
+  2. `engine/season/data/fixtures.py`: "`holder_gain` ships 0 (control), swept 0 / 0.5 / 1, a `hole_register.yaml` row replacing H-195's `absent` with `assumption`; `[ASSUMPTION; medium; Jordan to correct; revert: 0]`." H-195's own row is re-graded `absent` → `assumption` and its `site:` re-pointed to `Fixtures holder_gain` (no new id; UNDECIDED 2).
+  3. Edit 5, "nothing is built for "the oath meets a new holder": it falls out." The `release` sign: "`release` and any row that ends a tie to its subject carry `regard_sign: -1`" in `02_CHAR_scar_cap_and_regard_unit.md`'s Addendum column, written in B10. This item opens `verb_table.yaml`'s `release` row and records in the commit body the `regard_sign` it carries; a value other than `-1` is reported (STOPS IF below), not edited here (the row values are the CHAR lane's).
+- WHERE: `engine/season/decision/choose.py` (`_stance_arm`); `engine/season/data/fixtures.py` (`holder_gain`); `engine/season/hole_register.yaml` (H-195); `engine/season/tests/test_held_by.py`.
+- TESTS: `test_holder_gain_ranks_march_on_a_hated_holders_rung_higher` (gate 3: "a planted person holding a grudge row on `p_x`, who believes `p_x` holds rung A and `p_y` rung B, ranks `march` on A above `march` on B at `holder_gain 1` and equal at 0, through `make_chooser`'s real ranking"), written before step 1 and read red; the `holder_gain 1` arm read through `Fixtures.sweep`.
+- FALSIFIER and CONTROL: "Gate 4 with no verb moved at `holder_gain 1`: regard for holders is flat (nobody holds anything against anybody who holds anything), which is a finding about `regard`'s inputs (CHAR F-CHAR-03, the interior does not move) and `20_NARRATIVE_B`'s reason to exist." Control: `holder_gain 0` reproduces B38.05's hashes (gate 1).
+- GATE: `python -m pytest engine/season/tests/test_held_by.py engine/season/tests/test_told_by_channel.py -q` → pass (`-k g2`'s `march` half, "not observable while H-195 holds", is now observable: it is read and its result quoted); realm, seeds 0 to 2, two seasons, `holder_gain 1` against 0 (`Fixtures.sweep`): "among `march`, `petition`, `challenge`, `speak` and `release` acts whose subject is a seat or rung, the mean regard of the actor for its believed holder differs between arms by more than the control's seed spread for at least one verb; and the targets of marches spread over at least three believed holders at two seeds (not one name)" (four seasons in the source; A-114), printed in the commit body with the `release` sign found; `python -m engine.season.harness.storybar --base-seed 0 --n 3 --seasons 2 --arms basis_off on --overlaps --executed-only` → G3 and G4 printed (gate 6: G4 above zero at two seeds and above the control arm at `holder_gain 1`); `python -m engine.season.harness.register --check` → exit 0 (H-195 re-graded); the realm hash at seed 0, one season → equal to B38.05's.
+- HASH MOVERS: none (`holder_gain` ships 0).
+- STOPS IF: `release`'s `regard_sign` is not `-1` at the item's open (B10's Addendum did not write it): the item lands steps 1–2, records the value, and the batch's PR body lists it for the CHAR lane (`20_NARRATIVE_C` edit 5: "listed for it").
+- DEPENDS ON: EXISTS-IN-TREE `decision/choose.py::_stance_arm`, `::make_chooser`, `queries/person_q.py::regard`, `hole_register.yaml` H-195; V12 the B10 item that lands `02_CHAR_scar_cap_and_regard_unit`'s Addendum (`regard_sign`, the merged term, `17_CENSUS_C1A_02` W4) (Batch B10-character); V12 B38.04 (`believed_holder`).
+- GLOSSARY: none.
+- IDS: none (H-195 re-graded).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B38's producer; `Item: B38.06`, `[skip ci]`.
+
+### B38.07 — a due that lapses unmet, inside the window and net of a renewed tie, lowers regard for the believed holder, at a valence shipped 0 · `20_NARRATIVE_B` edits 1–3 with `30_WR_D` commit 1 · BUILD · HASH EQUAL
+- SOURCE: `proposals/20_NARRATIVE_B_what_he_was_owed.md` "What it changes", "The resolution, decided", "Exact edits" 1, 2, 3, "The gate" 1 to 5, "The falsifier"; `proposals/30_WR_D_momentum_and_its_brakes.md` "Instructions to code", commit 1 (1–3) ("Land commit 1 inside `20_NARRATIVE_B`'s first commit"); C3-D8 (before `28_CORE_scene_access_C`); rulings A-80, A-81, A-12, A-23; closes F-NARR-02, F-NARR-03, F-30-11 (the brake).
+- ADVANCES: none of the nine; A-80 (L8's brake: a grievance is as old as memory).
+- INSTRUCTION:
+  1. `engine/season/queries/person_q.py`, new, beside `held_against` (the amended form; `30_WR_D` commit 1 step 1):
+     ```python
+     def dues_unmet(p: Person, x: str, window: int) -> int:
+         """HOW MANY OF `p`'S OWN DUES LAPSED UNMET AT `x`'S DOOR, INSIDE THE ESTIMATE WINDOW: his own
+         `oblige` edges (`p.tenures`) that carry a `term` and ended at or after it (`until >=
+         term.matures_at`: MATTER's closure; a `release` ends an edge before its term and is his own act,
+         not a due unmet) with `until` inside the last `window` seasons, whose seat he BELIEVED `x` held
+         when it lapsed -- his newest `held_by` claim on that seat with `when <= until` (`believed_holder`,
+         proposal C's reader) -- LESS one for each such lapse followed by a newer `oblige` edge of his to
+         the same seat that is live or was ended by his own `release` (the tie renewed). Never below 0.
+         0 for a seat he holds no such belief of: a man who does not know who failed him blames no one.
+         Person-side, own state and own ledger only (AX-2); nothing is stored (T-a). The window and the
+         netting are `30_WR_D_momentum_and_its_brakes.md` commit 1's brake (A-80): without them the count
+         only rises. [ASSUMPTION; medium; Jordan to correct; revert: count every lapse.]"""
+     ```
+  2. `person_q.regard`, after the `judged`/`told` block:
+     ```python
+         dv = float(fx.get("dues_valence"))
+         if dv:
+             stored -= dv * dues_unmet(p, referent, int(fx.get("estimate_window_seasons")))
+     ```
+     "with the `>= 0` refusal the other gains carry; the window is the argument `legitimacy` and `stability` take and the fixture `harness/storybar.py` already reads. The docstring's formula gains the term." (`30_WR_D` commit 1 step 2: "the call site passes `fx.get("estimate_window_seasons")` … as the block that reads `scar_weight_shift` passes its own".)
+  3. `engine/season/data/fixtures.py`: "`dues_valence=0.0`, swept `0` (control) / `2` / `4` (a stance row's valence is −5 to +5 at weight 1; 2 is a moderate grievance per lapsed oath, 4 a heavy one), with a `hole_register.yaml` NUMBER row, `[ASSUMPTION; medium; Jordan to correct; revert: 0.0]`" (block slot 3).
+  4. Not carried: edit 4 (CR-88's design file's `grievance_against` adds `dues_unmet`) targets a design written in Batch B21d (UNDECIDED 3); edit 5 (the petition clause) is `28_CORE_scene_access_C` §1, B38.11.
+- WHERE: `engine/season/queries/person_q.py` (`dues_unmet`, `regard`); `engine/season/data/fixtures.py` (`dues_valence`); `engine/season/hole_register.yaml` (block slot 3); NEW `engine/season/tests/test_narrative_dues.py`; `unified/U1_GLOSSARY.md` (*due unmet*).
+- TESTS: NEW `engine/season/tests/test_narrative_dues.py`, "written as the first commit" of this item's work, before steps 1–2, each read red (no `dues_unmet`): `test_a_lapse_older_than_the_window_is_not_counted`, `test_a_renewed_tie_nets_the_lapse_before_it`, `test_two_lapses_and_one_renewal_count_one`, `test_the_count_is_never_negative` (`30_WR_D`'s four); `test_no_belief_about_the_holder_reads_zero`; `test_paid_arm_blames_only_the_unpaid_half` ("gate 3, on world (i), built inside the test: three held seats, four sworn persons each, one-season terms, half paid"). "Run that file and `engine/season/tests/test_strife_credit.py` (the other `regard` terms)."
+- FALSIFIER and CONTROL: "Gate 2 at zero: nobody sworn believes anything about who held his seat (C did not land, or its seeding reached nobody), which is a finding about C. Gate 4 with no verb moved: the grievance has nothing to ride … and this term then ships at 0 until one executes. Gate 2 with every grievance on one holder at every seed: the oaths of the built realm all point at one seat, and the content (who is sworn to whom) is what is degenerate. This is the expected first reading" (on today's content the term is silent, correctly: the seat sworn to has no holder; listed for FA and CHAR). `30_WR_D`'s runaway falsifier: "`dues_unmet` above the number of his termed edges inside the window: a brake is not braking." Control: `dues_valence 0` reproduces B38.06's hashes.
+- GATE: `python -m pytest engine/season/tests/test_narrative_dues.py engine/season/tests/test_strife_credit.py -q` → pass. On world (i) (planted inside the test module, `PYTHONHASHSEED=0`, at `dues_valence 2` through `Fixtures.sweep`, two seasons): gate 2 — persons with `dues_unmet(p, x) > 0` for some `x` more than zero; the holders blamed number at least three; no holder draws a larger share of the grievances than his share of the seats sworn to (`assert checked >= 3` holders); gate 3 — grievances only among the unpaid half; gate 4 — executed acts by an aggrieved person whose subject is the holder he blames, in the two seasons after the lapse, by verb, against `dues_valence 0`: at least one of `petition`, `speak`, `tell`, `challenge`, `release` differs, printed (on world (i) the control spread is over seeds 0 to 2). World (ii) (`build_realm`, seeds 0 to 2, six seasons) is beyond the two-season cap: B99's conjunct `argv` (A-114). Gate 5 (`20_NARRATIVE_F` G1 above zero at two seeds, zero in the control) → `python -m engine.season.harness.storybar --base-seed 0 --n 3 --seasons 2 --overlaps --executed-only` at `dues_valence 2`: G1 printed (it may read 0 at two seasons on the shipped realm's four-season terms; reported, not asserted). The realm hash at seed 0, one season → equal to B38.06's.
+- HASH MOVERS: none (`dues_valence` ships 0; "Commit 1 (`dues_valence` 0) hash-equal; the live value a declared mover", set by B98).
+- DEPENDS ON: EXISTS-IN-TREE `queries/person_q.py::regard`, `::held_against`, `::legitimacy`, `::stability`, `data/fixtures.py` `estimate_window_seasons`; V12 B38.04 (`believed_holder`); EXISTS-IN-TREE `loop/matter.py` (MATTER's lapse closure of a termed `oblige`).
+- GLOSSARY: *due unmet* — row added if absent: "a sworn man's term of service that ran out unpaid, laid at the door of the person he believed held the seat"; owner `person_q.dues_unmet`.
+- IDS: H block slot 3.
+- COST and TIER: edit; `sonnet`, `high` (`30_WR_D`: "second (sonnet) for both commits; no judgment node").
+- LANDS IT: B38's producer; `Item: B38.07`, `[skip ci]`.
+
+### B38.08 — what a petition has been through, and what it complains of now · `28_CORE_scene_access_C` commit 1 · BUILD · HASH EQUAL
+- SOURCE: `proposals/28_CORE_scene_access_C_the_petition_that_waits.md` "The resolution, decided" §2 (`rebuffs`, `rebuff_kinds`), §3 (`petition_state`, `petition_state_held`), "Exact edits" 1–2, "Instructions to code it" row 1, Gate row 2; its Reconciled line (`now` is the chronicle's and the harness's only; the person-facing form reads the reader's own claim, `04` §C.11, AX-2); rulings A-64 (3), ED-IN-0345.
+- ADVANCES: none of the nine; A-64 (3) (a petition that cannot get through intensifies).
+- INSTRUCTION (row 1, then §2 and §3's bodies, copied):
+  1. `data/rosters.py`: `REBUFF_KINDS` "(validated against `data/verbs.py::EVENT_KINDS`)"; `rosters.yaml`: `rebuff_kinds: [visitor.kept_waiting, carry.refused, matter.lapsed]` — "ships with the kinds the verb table and the write matrix derive at build … `document.held` and `document.returned` are added in the commit that lands their rows. The loader refuses a kind the derived roster does not hold."
+  2. `queries/world_q.py`, beside `issuing_seat`, "sharing `_creating_act`":
+     ```python
+     def rebuffs(w, rid: str) -> int:
+         """THE EVENTS IN WHICH THE PETITION `rid`, OR ITS HOLDER AT ITS ADDRESSEE'S DOOR, WAS PUT OFF since
+         the Record's creating Event (`_creating_act`'s scan): kinds in `rosters.yaml: rebuff_kinds`, whose
+         subject is `rid`, its docket item, or (for `visitor.kept_waiting`) its addressee with the petition's
+         holder as the causing act's actor. Read off the log; stored nowhere."""
+
+     # queries/world_q.py  (resolver-side: the chronicle and the harness only)
+     def petition_state(w, rid: str) -> dict:
+         """{filed: the creating Event's tick, stage: the newest stage label, rebuffs: `rebuffs(w, rid)`,
+         then: the terms Proposition's value, now: `WorldReader.read(terms.subject, terms.predicate)` where the
+         predicate is a stem the world answers (else None)}. A read; nothing is written. Never handed to a
+         person-side reader: `now` is world truth."""
+     ```
+  3. `queries/person_q.py`:
+     ```python
+     # queries/person_q.py  (person-side; no World)
+     def petition_state_held(p: PersonInterior, rid: str) -> dict:
+         """The same keys as `petition_state`, with `now` read from `p`'s own ledger claim about the terms'
+         subject and predicate (newest, then most confident; else None), and `rebuffs` the rebuffs `p` himself
+         holds claims of. What the player's surface shows and what a bench member weighs."""
+     ```
+- WHERE: `engine/season/data/rosters.py` (`REBUFF_KINDS`); `engine/season/rosters.yaml` (`rebuff_kinds`); `engine/season/queries/world_q.py` (`rebuffs`, `petition_state`, beside `issuing_seat`); `engine/season/queries/person_q.py` (`petition_state_held`); NEW `engine/season/tests/test_scene_access_waiting.py`; `unified/U1_GLOSSARY.md` (*rebuff*).
+- TESTS: NEW `engine/season/tests/test_scene_access_waiting.py` ("absent on `main`", U3 §6.1; written before step 1, each read red: no symbol): `test_rebuffs_counts_what_the_log_holds_and_nothing_else`; `test_petition_state_reads_now_without_writing_the_record` (gate row 2: "planted: a petition on a rung's stores; the stores are lowered by an act between filing and reading" → "`petition_state` returns `now != then`; the Record's encoding is byte-identical before and after"); `test_petition_state_held_reads_now_from_the_readers_own_ledger` ("a reader holding no claim of the lowered stores reads the old `now` or `None`").
+- FALSIFIER and CONTROL: "`now` equal to `then` after the world moved (the content was stored, not read). A person-facing `now` that equals the world's value where the reader holds no claim of it (world truth shown). … A person-side reader that names `World`." Control: the realm hash at seed 0, one season, equal to B38.07's (reads only).
+- GATE: `python -m pytest engine/season/tests/test_scene_access_waiting.py -q` → pass; `python -m engine.season.harness.register --check` → exit 0; the `decision/` World-scan test (the AX-2 guard `decision/`'s tests already run) → green.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `queries/world_q.py::issuing_seat`, `::_creating_act`, `data/verbs.py::EVENT_KINDS`, `loop/matter.py` (`matter.lapsed`); V12 Batch B28-social-verbs (`28_CORE_scene_access_A`'s `visitor.kept_waiting` Event kind; `14_VERBS_SOCIAL1_D`'s `carry`); V12 Batch B27-sc-proceedings (`U5c_SC_proceedings_residue.md` §4 item 6, `world_q.lapsed_at`).
+- STOPS IF: `visitor.kept_waiting` is not in `EVENT_KINDS` at the item's open (B28 did not land proposal A's Event): the roster ships the two kinds that exist, the commit says which is missing, and B38.09's `kept_waiting` reads 0 for everyone until it lands.
+- GLOSSARY: *rebuff* — row added if absent: "an occasion on which a man or his petition was put off: kept waiting at a door, a carry refused, a docket item lapsed"; owner `rosters.yaml: rebuff_kinds`.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B38's producer; `Item: B38.08`, `[skip ci]`.
+
+### B38.09 — being kept waiting at a man's door lowers regard for him, at a valence shipped 0 · `28_CORE_scene_access_C` commit 2 · BUILD · HASH EQUAL
+- SOURCE: the same file, "The resolution, decided" §1 (`kept_waiting`, the `regard` term), "Exact edits" 3 and 6 (`waiting_valence`), "Instructions to code it" row 2, Gate row 5; its Reconciled line (the term is in the stance row's unit, U1 §3; one unit for regard); rulings A-64, ED-IN-0345, D-48.
+- ADVANCES: none of the nine; L13 (the door), `30_WR_D` §2.
+- INSTRUCTION:
+  1. `queries/person_q.py`, beside `held_against`:
+     ```python
+     def kept_waiting(p: Person, x: str) -> float:
+         """HOW MUCH `p` REMEMBERS BEING KEPT WAITING AT `x`'S DOOR: the summed present confidence, over
+         `confidence_default`, of his own firsthand claims of kind `visitor.kept_waiting` whose subject is
+         `x` and whose doer is himself. It fades as those memories fade (the present-confidence read
+         `01_CORE_claim_fade_as_read.md` proposes; until it lands, the stored confidence MATTER decays) and is
+         0 when he holds none."""
+     ```
+  2. `person_q.regard`, "after the dues term NARRATIVE_B adds" (B38.07): "`stored -= float(fx.get("waiting_valence")) * kept_waiting(p, referent)`, in the stance row's unit (`Σ valence × weight`, U1 §3): `kept_waiting` counts fully remembered rebuffs, so one is worth `waiting_valence` stance steps, and the sum is bounded by `stance_term`'s ±`STANCE_MAX` clamp (`02_CHAR_scar_cap_and_regard_unit.md` item 3)."
+  3. `data/fixtures.py`: `waiting_valence = 0.0` ("control `0.0`; swept `0 / 0.5 / 1`; first value `0.5` … `[ASSUMPTION; medium; Jordan to correct; revert: 0.0]`"), with its hole-register row (block slot 4; "register rows at build").
+- WHERE: `engine/season/queries/person_q.py` (`kept_waiting`, `regard`); `engine/season/data/fixtures.py` (`waiting_valence`); `engine/season/hole_register.yaml` (block slot 4); `engine/season/tests/test_scene_access_waiting.py`.
+- TESTS: in `test_scene_access_waiting.py`, before the edit, red: `test_kept_waiting_reads_own_ledger_only` ("the `decision/` World scan stays green"); `test_regard_is_unchanged_at_valence_zero` (hash EQUAL); `test_kept_waiting_fades_to_zero_with_no_write` (gate row 5: "with no new rebuff, a person's `kept_waiting` falls season on season and reaches 0 with no write to him").
+- FALSIFIER and CONTROL: "A regard that fell where the log holds no rebuff (moved by time alone, against ED-IN-0345)." Control: `waiting_valence 0` → the realm hash at seed 0, one season, equal to B38.08's.
+- GATE: `python -m pytest engine/season/tests/test_scene_access_waiting.py engine/season/tests/test_narrative_dues.py -q` → pass; `python tools/ci_sim_fabrication_check.py` → exit 0; `python -m engine.season.harness.register --check` → exit 0.
+- HASH MOVERS: none (flipped at B38.13).
+- DEPENDS ON: V12 B38.07 (`regard`'s dues term, the landing order on `regard`); V12 Batch B28-social-verbs (the `visitor.kept_waiting` claims); V12 Batch B10-character (`02_CHAR_scar_cap_and_regard_unit`, `STANCE_MAX`, `regard_unit: stance`); V12 the item of `01_CORE_claim_fade_as_read` (Batch B09-memory) for the present-confidence read, else the stored confidence.
+- GLOSSARY: *kept waiting* — row added if absent: "how much a person remembers being put off at someone's door, fading as the memory fades"; owner `person_q.kept_waiting`.
+- IDS: H block slot 4.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B38's producer; `Item: B38.09`, `[skip ci]`.
+
+### B38.10 — a lapsed paper and a broken promise to receive him are dues unmet too · `28_CORE_scene_access_C` commit 3 (`20_NARRATIVE_B` edit 5's owed clause) · BUILD · HASH EQUAL
+- SOURCE: the same file, "The resolution, decided" §1 (the second clause), "Exact edits" 3, "Instructions to code it" row 3, "INCOMPLETE, with what is missing" (commit 3: both missing parts are now B38.04 and B38.07, `unified/U4_DOCUMENT_STATUS.md` §3.4's recoding: "ordering, not a dependency without a carrier"); `20_NARRATIVE_B` Folded (A-64) and edit 5; ED-IN-0322 (each origin once).
+- ADVANCES: none of the nine; L8 and L13 meet in one count.
+- INSTRUCTION: `queries/person_q.py::dues_unmet(p, x, window)` "gains the owed second clause, each origin once (ED-IN-0322): a petition of his own addressed to `x` of which he holds a claim that it lapsed or was returned; and a promise of `x`'s to receive him of which he holds a claim that it ended at its term while he also holds a `visitor.kept_waiting` claim from inside its span (proposal B's `turned_away`, read person-side from his own claims)." The second clause obeys the first clause's window and floor (B38.07: "inside the estimate window … never below 0"); its docstring gains the clause. "CR-88's `grievance_against`, when its design file is drafted, counts the same origins" (not edited here: B21d's design; UNDECIDED 3).
+- WHERE: `engine/season/queries/person_q.py` (`dues_unmet`); `engine/season/tests/test_scene_access_waiting.py`.
+- TESTS: `test_a_lapsed_paper_and_a_promise_broken_by_a_crowded_day_are_each_one_origin`, written before the edit and read red (the clause counts nothing). `test_narrative_dues.py`'s six stay green.
+- FALSIFIER and CONTROL: the second clause counting a petition he holds no lapse or return claim of, or a promise with no kept-waiting claim inside its span (a world read). Control: `dues_valence 0` → the realm hash at seed 0, one season, equal to B38.09's.
+- GATE: `python -m pytest engine/season/tests/test_scene_access_waiting.py engine/season/tests/test_narrative_dues.py -q` → pass; "the first census reading of commit 3" (U4 §3.4's open item): over seeds 0 to 2, two seasons, at `dues_valence 2` (`Fixtures.sweep`), the count of persons whose `dues_unmet` is raised by the second clause, printed in the commit body (a zero is reported, not read as a pass: the planted test is the observation).
+- HASH MOVERS: none (`dues_valence` ships 0).
+- DEPENDS ON: V12 B38.07 (`dues_unmet`), B38.04 (`believed_holder`), B38.08 (`rebuffs`' kinds); V12 Batch B28-social-verbs (`28_CORE_scene_access_B`'s promise to receive and `turned_away`); V12 Batch B27-sc-proceedings (the petition's `lapsed` reading, `world_q.lapsed_at`).
+- GLOSSARY: *due unmet* (B38.07's row) gains "a petition lapsed or returned, a promise to receive him broken".
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B38's producer; `Item: B38.10`, `[skip ci]`.
+
+### B38.11 — a paper turned away is likelier to be let in and heard hard, by a draw; a declined paper carries its stage · `28_CORE_scene_access_C` commit 4 · BUILD · HASH MOVER(behaviour)
+- SOURCE: the same file, "The resolution, decided" §2 (the `waiting` leverage source), "No scene is still (A-81)" (the `declined` stage), "Exact edits" 1 and 4, "Instructions to code it" row 4, Gate row 3, "Declared hash movers", "INCOMPLETE" (commit 4: the composer is `U5c_SC_one_obstacle_form.md` §3, B05; the declining band is `14_VERBS_SOCIAL1_D` §1, B28); rulings A-64, A-81, A-79.
+- ADVANCES: none of the nine; A-64 (3), A-81 (a declined paper leaves a durable write).
+- INSTRUCTION:
+  1. `rosters.yaml: advantage_sources` (`U5c_SC_one_obstacle_form.md` §3) "gains `waiting`, placed after `custody`, whose shape it copies":
+     | source | aggressor levels | defender levels | fixture |
+     |---|---|---|---|
+     | `waiting` | one `waiting_level` per rebuff the log records of the petition the act carries or speaks to (`world_q.rebuffs`), netted and capped by the one soft cap | — | `waiting_level` (first value `minor`; control `None`) |
+     "It applies where the act's subject is a petition Record or a docket item that names one: `carry` (`14_VERBS_SOCIAL1_D_grievance_and_settlement.md` §1), a clerk's entering `carry` (`15_INSTITUTIONS_BYZANTINE_C_the_hands_of_the_chain.md`), `speak` on the item, and the petitioner's side of the hearing's closing draw (`05_SC_playable_hearing_B.md`). … No band is ever certain and no rebuff adds a fixed amount to any state."
+  2. The leverage composer of `U5c_SC_one_obstacle_form.md` §3 (the one function, B05): the source `waiting`; call sites: "the composer's callers for `carry`, `speak` and the hearing's closing draw".
+  3. `loop/effects_information.py::_eff_carry`: "at the declining band, append `(tick, "declined", a.id)` to the Record's stages … under its own act (an ACTS write at RESOLVE, `(Record, stages)` being `RES`/`ACTS`)"; `verb_table.yaml` `carry`: "the declining band's `writes:` gains `Record.stages`". The lapse is not a stage: it "is read from its `matter.lapsed` Event (`world_q.lapsed_at` …: MATTER appends no stage)".
+  4. `data/fixtures.py`: `waiting_level` (shipped `None`), its hole-register row (block slot 5).
+- WHERE: `engine/season/rosters.yaml` (`advantage_sources`); the leverage composer (`U5c_SC_one_obstacle_form.md` §3's function, at the path B05 gave it); `engine/season/loop/effects_information.py` (`_eff_carry`); `engine/season/verb_table.yaml` (`carry`, the declining band's `writes:`); `engine/season/data/fixtures.py` (`waiting_level`); `engine/season/hole_register.yaml` (block slot 5); `engine/season/tests/test_scene_access_waiting.py`.
+- TESTS: before the edit, red: `test_three_rebuffs_shift_the_bands_and_fix_none` (gate row 3: "planted: one petition heard after 0 rebuffs and after 3, 400 seeds each" → "the band distribution shifts toward the petitioner; no band has probability 0 or 1 in either arm", at `waiting_level minor` through `Fixtures.sweep`; `assert checked >= 400` per arm); `test_a_declined_paper_carries_a_stage` ("the no-null reading; mutation arm: the write removed, the count is 1").
+- FALSIFIER and CONTROL: "A band at certainty in gate 3." Control: `waiting_level None` with the stage write reverted → the realm hash equal to B38.10's; with the stage write alone the hash moves only where a paper is declined.
+- GATE: `python -m pytest engine/season/tests/test_scene_access_waiting.py -q` → pass; the realm hash at seed 0, one season → moved only if a `carry` reached its declining band in the run (the count of declined papers printed; zero declines and an unmoved hash is the declared reading of that seed, not a defect).
+- HASH MOVERS: "commit 4's stage write wherever a paper is declined (it lands with S1-D's drawn `carry`, which is itself a declared mover)"; `waiting_level` off its control is B38.13's. Declared; B38's one re-pin.
+- STOPS IF: `carry` has no declining band at the item's open (`14_VERBS_SOCIAL1_D` §1 not landed by B28: "today `carry.refused` is a precondition refusal and no effect runs"): steps 1, 2 and 4 land, step 3 is BLOCKED (SC: the declining band), said in the commit and the receipt.
+- DEPENDS ON: V12 Batch B05-one-roll (`U5c_SC_one_obstacle_form.md` §3's composer, `advantage_sources`, `custody`'s row); V12 Batch B28-social-verbs (`14_VERBS_SOCIAL1_D` §1's drawn `carry` with a declining band); V12 Batch B24-sc-hearing (`05_SC_playable_hearing_B`'s closing draw); V12 B38.08 (`rebuffs`); EXISTS-IN-TREE `loop/effects_information.py::_eff_carry`, `write_matrix.yaml` `(Record, stages)`.
+- GLOSSARY: *leverage source* `waiting` — the row of *advantage source* gains it: "the levels a petitioner's side gains for each time his paper was put off".
+- IDS: H block slot 5.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B38's producer; `Item: B38.11`, `[skip ci]`.
+
+### B38.12 — the chronicle and the census read the closed door · `28_CORE_scene_access_C` commit 5 · BUILD · HASH EQUAL
+- SOURCE: the same file, "The resolution, decided" §5 (the chronicle row), "Entrenchment moves the world (A-80)" (the four census shapes), "Exact edits" 5, "Instructions to code it" row 5, Gate row 8; its Reconciled line (`harness/storybar.py` edited after `23_STORY_D` and before `30_WR_B`, C3-K7); rulings A-80, A-81.
+- ADVANCES: none of the nine; A-80, A-81 (readings).
+- INSTRUCTION:
+  1. `harness/storybar.py::SHAPES` (`23_STORY_D_story_census_and_gate.md` edit 1, B36), four rows; "The opening of each is a rebuff: `visitor.kept_waiting`, `carry.refused` or `matter.lapsed`":
+     | id | name | turn | close | window |
+     |---|---|---|---|---|
+     | `S-28a` | kept out, got in by another hand | `record.given` or `news.told`, role `same` | `petition.carried`, `matter.advanced`, `matter.carried` or `matter.determined`, role `other` | 4 |
+     | `S-28b` | kept out, went over his head | `petition.filed`, role `same` | `petition.carried`, `matter.determined` or `dispensation.issued`, role `other` | 4 |
+     | `S-28c` | kept out, turned to other means | `challenge.issued`, `record.forged`, `capture.declared`, `compliance.withheld`, `commitment.ended` or `residence.changed`, role `same` | `person.captured`, `body.changed`, `person.died`, `tenure.closed` or `residence.changed`, role `any` | 4 |
+     | `S-28d` | kept out, then given leave | `commitment.made`, role `other` | `news.told`, `argument.won`, `argument.lost` or `record.given`, role `same` | 3 |
+     "A shape whose kinds no row emits yet prints `n/a (no emitter)` by the census's own rule." (The window is in seasons, the census's unit; a run of two seasons reads the shapes that close inside it.)
+  2. `harness/chronicle.py`: "one line per petition from `petition_state` (the true `now`); and a story class, *kept waiting, then …*": "a `visitor.kept_waiting` or lapse Event in the cause chain of a later act by the same person toward the same holder or a seat above".
+  3. `harness/access.py` (`28_CORE_scene_access_A` commit 7, B28): "`kept_waiting` and rebuff counts, `--null-scenes`" — "The no-null-scene reading for this file: of the scenes in a run that hold a `carry` or an engaging act, the count with no gate write and no `claim.deposited` citing them. Expected 0."
+- WHERE: `engine/season/harness/storybar.py` (`SHAPES`); `engine/season/harness/chronicle.py` (the petition line, the story class); `engine/season/harness/access.py` (the counts, `--null-scenes`); `engine/season/tests/test_scene_access_waiting.py`.
+- TESTS: `test_each_closed_door_shape_matches_a_planted_chain_and_not_its_shuffle` ("the census's own null arm"), written before step 1 and read red.
+- FALSIFIER and CONTROL: "a still scene in gate row 8"; a shape that matches its shuffle as often as its planted chain. Control: the realm hash at seed 0, one season, equal to B38.11's (harness only).
+- GATE: `python -m pytest engine/season/tests/test_scene_access_waiting.py engine/season/tests/test_storybar.py -q` → pass; `python -m engine.season.harness.access 0 2 --null-scenes`, seeds 0 to 4 → "0 scenes holding a `carry` or an engaging act with no durable change" (gate row 8; four seasons in the source; A-114).
+- HASH MOVERS: none (harness only).
+- DEPENDS ON: V12 Batch B36-wr-story-instruments (`harness/storybar.py::SHAPES`, `23_STORY_D`); V12 Batch B28-social-verbs (`harness/access.py`, `28_CORE_scene_access_A` commit 7; `--null-scenes` with `_B`'s row 7); V12 B38.08 (`petition_state`); EXISTS-IN-TREE `harness/chronicle.py`. Serial file: `harness/storybar.py` (C3-K7): B38.02 → B38.12 → the `30_WR_B` item.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B38's producer; `Item: B38.12`, `[skip ci]`.
+
+### B38.13 — the door made live: the measurement, then the two flips · `28_CORE_scene_access_C` commit 6 · BUILD · HASH MOVER(behaviour)
+- SOURCE: the same file, "Instructions to code it" row 6 ("the measurement (gate rows 4, 6, 7) and the flips of `waiting_valence` to `0.5` and `waiting_level` to `minor`; one declared re-pin"), Gate rows 4, 6, 7 ("Gate row 7 (added; the entrenched-world arm, A-80)"), "Control and falsifier", "Declared hash movers"; rulings A-64, A-80.
+- ADVANCES: none of the nine; A-64 (3), A-80 (the door is a source of motion).
+- INSTRUCTION: `data/fixtures.py`: `waiting_valence` `0.0` → `0.5`; `waiting_level` `None` → `minor`; their `[JUSTIFIED: …]` lines and block-slot rows 4 and 5 read "SHIPPED; control `0.0` / `None`" (revert: the controls). The measurement is read first on the arms through `Fixtures.sweep`, then the flip is committed; the source's "one declared re-pin" is B38.99's (E-1).
+- WHERE: `engine/season/data/fixtures.py` (`waiting_valence`, `waiting_level`); `engine/season/hole_register.yaml` (block slots 4, 5).
+- TESTS: none new.
+- FALSIFIER and CONTROL: "Gate 4 with no verb moved: the grievance has nothing to ride, which is a finding about the closing verbs, as NARRATIVE_B's own falsifier says"; "the entrenched arm reading no more *kept out* stories than the `engagement: off` arm reads (the door made nothing move)". Control: both fixtures at their controls → B38.12's hashes.
+- GATE (`PYTHONHASHSEED=0`; six seasons in the source for rows 4 and 7, written at two, A-114):
+  1. Row 4: realm, seeds 0 to 4, two seasons, proposals A and B on → "persons with `kept_waiting > 0` above zero at three seeds; executed acts by them toward that holder or a seat above, in the two seasons after, differ by verb from the control arm by more than the control's seed-to-seed spread" (`assert checked >= 3` seeds with a kept-waiting person; a count below is reported).
+  2. Row 6: `harness/chronicle.py` at seeds 0 to 4, two seasons → "at least one *kept waiting, then …* chain at two seeds; none in the control".
+  3. Row 7: "proposal A's arm of row 12 (`engagement: seat_and_debit`, the strongest `precedence_level`, `appointments: off`): the census reads `S-28a` + `S-28b` + `S-28c` at a summed rate of at least one instance per two seasons at four seeds of five; `S-28d` reads 0 (no leave can be given in this arm), which is the control that the arm is in fact entrenched. `[ASSUMPTION; medium; Jordan to correct: the rate is a seed]`" — `python -m engine.season.harness.storybar --base-seed 0 --n 5 --seasons 2 --stories` on that arm (`23_STORY_D`'s census flag, B36).
+  4. The realm hash at seed 0, one season → moved where the log holds a rebuff (declared).
+- HASH MOVERS: "`waiting_valence` and `waiting_level` off their controls where the log holds a rebuff". Declared; B38's one re-pin.
+- DEPENDS ON: V12 B38.09, B38.11, B38.12; V12 Batch B28-social-verbs (`28_CORE_scene_access_A`'s row-12 arm fixtures `engagement`, `precedence_level`; `28_CORE_scene_access_B`'s `appointments`).
+- GLOSSARY: none.
+- COST and TIER: calibration reading and an edit; `sonnet`, `high`; the reading of rows 4 and 7 (does the door move the world, or nothing ride it) `opus`.
+- LANDS IT: B38's producer; `Item: B38.13`, `[skip ci]`.
+
+### B38.14 — a faction's row may declare the poles its creed stands on; the conviction term reads them · `20_NARRATIVE_D` edits 1–2 (commit 1) · BUILD · HASH EQUAL
+- SOURCE: `proposals/20_NARRATIVE_D_his_own_side.md` "What it changes" 1, "The resolution, decided", "Exact edits" 1 and 2, "The gate" 1, 2, 4; its Reconciled line (edit 1's content block struck: the `creed:` values are `31_WR_A` commit 4's rows, one owner; this file keeps the key, its loader and the readers); U3 §1 item 38 (`20_NARRATIVE_D` commit 1 here, its later commits after `31_WR_A` commit 4, NARR_D `:9`); rulings A-87 to A-90 (content, via `31_WR_A`), A-46 (edit 4, the second half); closes F-NARR-05's data half.
+- ADVANCES: none of the nine; A-82 (a faction's creed is data).
+- INSTRUCTION:
+  1. "`engine/season/rosters.yaml: factions` — an optional key `creed:` on a faction row, `{<affiliation>: -1 | 1}` (sign only, the `affiliation_engagement` cells' own rule), loaded and refused by `data/rosters.py` beside `head_seat` (an affiliation outside `AFFILIATIONS`, a value outside the two signs). **This file writes no content.**" The loader is a `roster_map("factions", "creed")` beside `HEAD_SEAT`, each entry checked with `require_member(…, AFFILIATIONS, …)` and the sign set `{-1, 1}`.
+  2. "`engine/season/queries/world_q.py::engaged_poles`: the returned tuple is the goal pairs as today, then the faction row's `creed` pairs not already present, in roster order. The docstring's `[ASSUMPTION] … revert` sentence is replaced by the rule and its new revert." (New revert: drop the `creed` pairs; the goal pairs alone.)
+- WHERE: `engine/season/rosters.yaml` (`factions`: the key's documentation line in the block's header comment; no row carries it yet); `engine/season/data/rosters.py` (the `creed` loader beside `HEAD_SEAT`); `engine/season/queries/world_q.py` (`engaged_poles`); NEW `engine/season/tests/test_own_side.py`; `unified/U1_GLOSSARY.md` (*creed*).
+- TESTS: NEW `engine/season/tests/test_own_side.py`, written before step 1, each read red: `test_no_creed_key_reproduces_base` (gate 1; green from the start against today's hash and kept green); `test_creed_gives_the_conviction_term_a_nonzero_value` ("gate 2, on planted rows": `opinion_of`'s affiliation term, `person_q.opinion_terms`' second value, non-zero for a member standing on a planted creed pole); `test_rename_every_faction_and_no_reading_moves` (gate 4: "rename every faction id and name consistently and no reading moves; move one member's convictions and his row follows"); `test_creed_value_outside_two_signs_is_refused_at_load`. `test_stamp_own_side_forms_argue_on_the_creed_proposition` and `test_routine_release_does_not_join_a_strand_and_a_creed_release_does` are the later commits' (second half).
+- FALSIFIER and CONTROL: a creed pole that `opinion_of` does not read; a hash moving with no `creed:` row. Control: no faction row declares `creed:` → the realm hash at seed 0, one and two seasons, equal to B38.13's.
+- GATE: `python -m pytest engine/season/tests/test_own_side.py -q` → pass; `python -m engine.season.harness.register --check` → exit 0; the realm hash at seed 0, one season → equal to B38.13's.
+- HASH MOVERS: none ("With no row declaring one (this file's first commit) every hash is EQUAL"; the content, `31_WR_A` commit 4, is the declared mover, B38.25).
+- DEPENDS ON: EXISTS-IN-TREE `queries/world_q.py::engaged_poles`, `::opinion_of`, `::opinion_referents`, `data/rosters.py::HEAD_SEAT`, `::AFFILIATIONS`, `::require_member`; V12 B38.03 (`stands_for` at `stands`: "reads better after `20_NARRATIVE_A` (the same poles decide credit)").
+- GLOSSARY: *creed* — its owner column `rosters.yaml: factions` (T) gains the key `factions.creed` and the loader; the rejected-synonym column kept.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B38's producer; `Item: B38.14`, `[skip ci]`.
+
+### B38.15 — a stamped question remembers its ground, and the chronicle prints it · `20_NARRATIVE_E` edit 2 · BUILD · HASH EQUAL
+- SOURCE: `proposals/20_NARRATIVE_E_the_year_and_the_reason.md` "What it changes" (edit 2), "The problems" 2, "Exact edits" 2, "The gates" 2, "The falsifiers"; its Reconciled line ((3) "edit 2's field lands in one commit with its first reader (`04` ID-13)"); U3 §4.1 row 43 (edit 1, the year, landed at the head of B12; this batch takes "not edit 1"); closes F-NARR-06's occasion half.
+- ADVANCES: none of the nine; the reason trail's lost occasion (a sixth of executed acts take their subject from a stamped referent).
+- INSTRUCTION ("The ground", copied):
+  1. "`engine/season/rosters.yaml`: a closed roster `occasion_grounds`, one member per stamp term, in splice order: `vacancy, seat_named, writ_held, record_held, place_named, matter_awaiting, larder_in_purview, holding_to_found, own_referent, works_site, proposition_heard, stage, wounded, flow_stake, detainee, enemy` (and `own_side`, `flow_within` when D and CR-100 land)." CR-100 landed in Batch B11F2: `flow_within` is a member now, at its splice position, if `questions_for` at the item's open splices it (read the term list there and keep splice order); `own_side` is added by the item that lands `20_NARRATIVE_D` edit 3 (the second half). A stamp term present in `questions_for` at the item's open and absent from the list is added under its own name, and the commit body names it.
+  2. "`engine/season/state/carriers.py::Question`: `grounds: tuple = ()`, pairs `(id, ground)`, refused unless each ground is rostered. Not read by `referents_for`."
+  3. "`engine/season/queries/world_q.py::questions_for` / `_stamped`: each term's ids are passed with the term's roster name, and `_stamped` fills `grounds` for the pairs it keeps (the first, as today)."
+  4. "Nothing under `decision/` reads it (a test asserts the candidate sets are equal with the field filled and emptied). Its readers are the Scene store (`01_CORE_reason_trail_in_the_act_store.md`, which keeps the Question, B09) and the chronicle's `why` (`09_WR_story_instruments_that_can_fail.md` edit 5; `09_WR_B_chronicle_that_tells.md`, B36). **`04` ID-13 (a field with no reader at landing is not carried):** the field lands in B38 in one commit with the chronicle line that prints the ground" — `harness/chronicle.py`'s `why` line for an executed act whose subject came from a stamped referent prints its ground.
+- WHERE: `engine/season/rosters.yaml` (`occasion_grounds`); `engine/season/data/rosters.py` (its loader, `OCCASION_GROUNDS`); `engine/season/state/carriers.py` (`Question.grounds`); `engine/season/queries/world_q.py` (`questions_for`, `_stamped`); `engine/season/harness/chronicle.py` (the `why` line's ground); NEW `engine/season/tests/test_question_grounds.py`; `unified/U1_GLOSSARY.md` (*ground* of a question).
+- TESTS: NEW `engine/season/tests/test_question_grounds.py`, before the edit, red: `test_candidate_sets_equal_with_grounds_filled_and_emptied`; `test_every_stamped_executed_act_prints_a_ground`.
+- FALSIFIER and CONTROL: "Edit 2: a candidate set that differs with `grounds` filled." Control: "pins EQUAL" — the realm hash at seed 0, one and two seasons, equal to B38.14's (a `Question` is "not world state, never hashed": `carriers.py`'s docstring; the Scene store is left out of `content_hash`, `01_CORE_reason_trail_in_the_act_store` edit 4).
+- GATE: `python -m pytest engine/season/tests/test_question_grounds.py engine/season/tests/test_season_shape.py -q` → pass; seeds 0 to 2, two seasons (three in the source; A-114): every executed act whose subject came from a stamped referent prints a ground in the chronicle, and the distribution over grounds is reported per seed in the commit body (`assert checked >= 1` act per seed).
+- HASH MOVERS: none. A new field on `Question`, which `World.content_hash()` does not reach (above): not an encoding mover (D-04's rule checked: `Question` is not a hashed carrier; B38.15's gate observes it).
+- DEPENDS ON: EXISTS-IN-TREE `state/carriers.py::Question`, `queries/world_q.py::questions_for`, `::_stamped`, `harness/chronicle.py`; V12 Batch B09-memory (`01_CORE_reason_trail_in_the_act_store`: the Scene store keeps the Question); V12 Batch B36-wr-story-instruments (the chronicle's `why`); V12 Batch B11F2-flow-in (CR-100, `flow_within`).
+- GLOSSARY: *ground* (of a question) — row added if absent: "the reason a person's question named its subject: a vacancy, a writ held, a place named, and the rest of `occasion_grounds`"; owner `rosters.yaml: occasion_grounds`.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B38's producer; `Item: B38.15`, `[skip ci]`.
+
+### B38.16 — the chronicle says why a conviction moved · `20_NARRATIVE_E` edit 3 (the reason line) · BUILD · HASH EQUAL
+- SOURCE: `proposals/20_NARRATIVE_E_the_year_and_the_reason.md` "What it changes" (edit 3), "Exact edits" 3, "The gates" 3, "The falsifiers"; its Reconciled line ((1) the crisis draw, bands and `crisis_arm` are `16_PESSIMIST_CHAR_A`'s, B10; this file keeps only the reason line); rulings A-24.
+- ADVANCES: none of the nine; A-24 (a crisis of faith is drawn and seen).
+- INSTRUCTION: "No draw, fixture or switch is written here. … What stays: the narrator's one-line `why`, read off CHAR_A's `conviction.moved` Event (which affiliation broke, into what, after which scars), printed by the chronicle beside the season of the year (edit 1) and the ground (edit 2)." In `harness/chronicle.py`: one line per `conviction.moved` Event, reading the Event's own fields (the affiliation, its heir, the scar counts it carries), the season of the year from `world_q.season_of_year` (edit 1, B12) and the ground of the act whose scene drew it (B38.15) where there is one.
+- WHERE: `engine/season/harness/chronicle.py` (the `conviction.moved` line); `engine/season/tests/test_question_grounds.py` (one test).
+- TESTS: `test_every_conviction_moved_event_prints_one_why_line` `[ASSUMPTION: test name; the item creates it]` (planted log with one `conviction.moved` Event: one line; with the Event removed: none), written before the edit and read red.
+- FALSIFIER and CONTROL: "The reason line: a `conviction.moved` Event with no `why` line, or a `why` line with no Event." Control: the realm hash at seed 0, one season, equal to B38.15's (harness only).
+- GATE: `python -m pytest engine/season/tests/test_question_grounds.py -q` → pass; "every `conviction.moved` Event in a four-season run at seed 0 prints one `why` line in the chronicle", read at two seasons (A-114) with `crisis_arm` as B10 shipped it: the count of Events and of lines printed, equal (a zero count is reported with the arm it ran at).
+- HASH MOVERS: none.
+- DEPENDS ON: V12 the B10 item that lands `16_PESSIMIST_CHAR_A` (the `conviction.moved` Event, its one emitter); V12 B38.15; V12 Batch B12a-world-motion-and-ground's `20_NARRATIVE_E` edit 1 item (`season_of_year`, `SEASONS_OF_YEAR`); EXISTS-IN-TREE `harness/chronicle.py`.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B38's producer; `Item: B38.16`, `[skip ci]`.
+
+### B38.17 — creed bodies: who stands for exactly what, as a reading with no consumer in the loop · `30_WR_B` commit 1 · BUILD · HASH EQUAL
+- SOURCE: `proposals/30_WR_B_regimes_who_believes_whom.md` "The resolution, decided" (the life table, the three partitions), "Instructions to code" commit 1, "The falsifier, and its control"; its Reconciled line (A-86; the creed-exact grouping is a **creed body**, and "their rename (`CreedBody`, `creed_bodies`, `creed_relation`) is owed as one commit across those files at landing"); rulings A-82, A-86; closes F-30-04 (part).
+- ADVANCES: none of the nine; A-82 (regimes can be seen to form, grow, split and end).
+- INSTRUCTION: `engine/season/queries/world_q.py`, after `incompatible_span`. The identifiers land under the glossary's names (UNDECIDED 5: the source keeps `Regime`, `regimes`, `regime_relation` only so other proposals' citations resolve, and the glossary row *regime* refuses "a creed-exact set"); the body is the source's:
+  ```python
+  class CreedBody(NamedTuple):     # 30_WR_B's `Regime`
+      creed: frozenset      # the affiliations its members stand for (`_held`'s reading)
+      persons: tuple        # ids, sorted
+      seats: tuple          # office ids its members hold (live `hold`), sorted
+      factions: tuple       # `faction_of` over its members, sorted, None dropped
+
+  def creed_bodies(w: World) -> tuple:     # 30_WR_B's `regimes`
+      """Every non-empty creed set among living persons, as a `CreedBody`, most persons first, then by sorted
+      creed. A body with no seat is a persuasion (`seats == ()`). Recomputed; stores nothing; no consumer
+      in the loop (T-a). Reads `_held`, so it follows `Fixtures held_reading`."""
+
+  def creed_relation(a: frozenset, b: frozenset) -> int:     # 30_WR_B's `regime_relation`
+      """-1 / 0 / +1 between two creed sets: `commensurate`'s rule over sets (`_strains`; a shared member
+      or a recorded `false` pair). `commensurate` is rewritten to call it, so the rule has one body."""
+  ```
+  "`commensurate` keeps its signature and its two early returns and calls `regime_relation(ha, hb)`" (here `creed_relation`). The class docstring defines the word (CLAUDE.md §4): "a creed body: the living persons who stand for exactly one creed set; seated while one of them holds a seat, a persuasion while none does".
+- WHERE: `engine/season/queries/world_q.py` (`CreedBody`, `creed_bodies`, `creed_relation`, `commensurate`); `engine/season/tests/test_strife_credit.py`; `unified/U1_GLOSSARY.md` (*creed body*).
+- TESTS: in `test_strife_credit.py`, before the edit, red: `test_commensurate_and_regime_relation_agree_on_every_pair_of_the_built_realm` ("all pairs, `assert checked >= 1000`"; under the landed names `creed_relation`), `test_regimes_partition_the_convinced` ("every person with a non-empty creed set is in exactly one"), `test_a_body_with_no_seat_reads_as_a_persuasion`.
+- FALSIFIER and CONTROL: "A person in two bodies, or a convinced person in none: the partition is wrong." "Control arm `held_reading: any`: the block must reproduce the one-body reading." Control: the realm hash at seed 0, one season, equal to B38.16's (`commensurate`'s rule moved into `creed_relation`, values unchanged: the agreement test is the observation).
+- GATE: `python -m pytest engine/season/tests/test_strife_credit.py -q` → pass; the realm hash at seed 0, one season → equal to B38.16's.
+- HASH MOVERS: none ("All commits hash EQUAL").
+- DEPENDS ON: EXISTS-IN-TREE `queries/world_q.py::commensurate`, `::incompatible_span`, `::_held`, `::faction_of`; V12 B38.01, B38.03 (`_held` through `stands_for`).
+- GLOSSARY: *creed body* — row added: "the living persons who stand for exactly one creed set; a persuasion when none of them holds a seat"; owner `world_q.creed_bodies`; rejected synonym "regime" (a regime is A-82's cluster with a core and a fringe, `rosters.yaml: regime_cores`, B38.24). Row *regime*'s rejected-sense cell ("a creed-exact set (`30_WR_B`)") gains "→ *creed body*".
+- NAMES: `Regime` → `CreedBody`; `regimes` → `creed_bodies`; `regime_relation` → `creed_relation` (this batch; every later item that copies `30_WR_B`'s identifiers carries this line).
+- COST and TIER: small build; `sonnet`, `high` (the source: "second (sonnet); no judgment node").
+- LANDS IT: B38's producer; `Item: B38.17`, `[skip ci]`.
+
+### B38.18 — the story bar prints the creed bodies, their moves and who believes whom · `30_WR_B` commit 2 · BUILD · HASH EQUAL
+- SOURCE: `proposals/30_WR_B_regimes_who_believes_whom.md` "Instructions to code" commit 2, "The gate", "The falsifier, and its control"; its "Lands in batch" line (commit 2 edits `harness/storybar.py` after `28_CORE_scene_access_C`, before `30_WR_C`, C3-K7).
+- ADVANCES: none of the nine; A-82, A-86 (a ruler's conversion is visible as a move).
+- INSTRUCTION: "`engine/season/harness/storybar.py`: `--regimes`, on the existing `on_season` hook (`drive`), printing per season:
+  - `regime <creed> persons=<n> seats=<n> reach=<rung kind or -> factions=<…>` per body (`reach` prints `n/a (no influence_rung)` until CR-104 lands);
+  - `relations: strained=<n pairs> allied=<n> apart=<n>`;
+  - `moved: <pid> <from creed> -> <to creed> by <Event kind or 'no Event'>` for each person whose creed set differs from the last snapshot, and the derived words `formed`, `unseated`, `split`, `ended` for bodies (set comparison between two snapshots; bookkeeping);
+  - `credit: hearer regime x teller regime -> n told claims, mean credited confidence` over the season's `claim.deposited` Events with a teller (the "who believes whom" table);
+  - per faction, its members' creed sets; per strand (when `--strands` data is present), `between` or `inside`."
+  The flag keeps its name `--regimes` (the block grows the regime cores in B38.24, which are regimes in the glossary's sense); the per-body line's leading word is `body`, not `regime`, and the credit line reads `hearer body x teller body` (the glossary correction of B38.17, said in the commit). CR-104 landed in Batch B11F2: `reach` prints the highest `influence_rung` among the body's seats.
+- WHERE: `engine/season/harness/storybar.py` (`--regimes`, the block); `engine/season/tests/test_storybar.py`.
+- TESTS: in `test_storybar.py`, before the edit, red: `test_regimes_block_reads_a_planted_conversion_as_a_move` ("a planted `conviction.moved`; with the Event removed the line reads `by no Event`"), `test_regimes_block_moves_no_hash`.
+- FALSIFIER and CONTROL: "`moved` lines identical at every seed with the crisis drawn: membership is written into the build (S-64 stands). Control arm `held_reading: any`: the block must reproduce the one-body reading. If it prints six bodies there, the block is not reading `_held`. Control arm `regime_gain 0`: the credit table's mean confidence must be equal across signs (within the seed spread)". Control: the realm hash at seed 0, one season, equal to B38.17's.
+- GATE: `PYTHONHASHSEED=0 python -m engine.season.harness.storybar --base-seed 0 --n 3 --seasons 2 --arms off off --regimes` (four seasons in the source; A-114) → at season 0 of seed 0, with `held_reading: stands`: "**six** bodies, 20 persons in none, relations among convinced pairs 130 / 779 / 126, and the credit table populated in all three signs at two seeds or more of three"; at `held_reading: any` (a `Fixtures.sweep` arm): "**seven** bodies at season 0 of seed 0, one of them holding 32 persons". These are the readings before `31_WR_A` commit 2 (B38.20), which moves them ("with `31_WR_A`'s values … 25 among 46 persons, the largest of five"; `commensurate` "357 / 247 / 431"): this gate is read at this item, on this item's tree. The `moved` line over five seeds and six seasons is beyond the cap: at two seasons, seeds 0 to 4, the `moved` lines are printed and the set of persons who move is reported per seed (not asserted). `python -m pytest engine/season/tests/test_strife_credit.py engine/season/tests/test_storybar.py -q` → pass.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B38.17; V12 B38.12 (the last earlier edit of `harness/storybar.py`; C3-K7); V12 Batch B11F2-flow-in (CR-104's `influence_rung`, CR-97's `--strands`); EXISTS-IN-TREE `harness/storybar.py::drive` (`on_season`).
+- GLOSSARY: none (B38.17 wrote *creed body*).
+- NAMES: as B38.17.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B38's producer; `Item: B38.18`, `[skip ci]`.
+
