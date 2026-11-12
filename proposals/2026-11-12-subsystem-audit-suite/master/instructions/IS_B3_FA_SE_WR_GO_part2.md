@@ -4,6 +4,8 @@
 
 Checked: 2026-11-12, Sonnet check (`master/instructions/IS_CHECK.md`): `IS-B3-WR-02` (3a) reads the `realm` row `IS-B3-FA-01` registers; §6.1 decides the one `test_play_surface.py` (`engine/season/tests/`).
 
+Reconciled: 2026-11-12, A-102, A-104, A-105, A-109 (lane `unified/work/A102_112_APPLIED.md`): `IS-B3-GO-07` added (A-104, a management order costs no scene budget); §7.1 and §7.2 list `IS-B3-FA-07`, `IS-B3-SE-06` (part 1) and GO-07; §8 rows on H-02 and row 10 note `J-H-01` answered (A-102).
+
 Read at `b07fc1c`. The item form, the marks and the seven-part test are part 1's §0 and §1. Item handles continue: `IS-B3-WR-nn`, `IS-B3-GO-nn`.
 
 ## 5. WR — the world
@@ -213,6 +215,18 @@ B00 → B01 → B02 → **B03** (`11_GO_pointer_and_stale_text_resolutions`, `11
 - **Depends on.** The four plan positions (step 5); `11_GO_port_gate_order_and_coverage.md` (B41).
 - **Lane · batch · cost · tier · lands it.** GO · B03 (the landings) and v12's text for B41 · edit · `sonnet` · the B03 session; v12's author.
 
+**Item: IS-B3-GO-07** — a management order costs no scene budget, and may open scenes after (A-104; M31 (b), E-3).
+
+- **Advances.** GO and FA standalone (S3: a seated player's orders are not rationed like his scenes); R-04. Added 2026-11-12 by the A-102..A-112 lane on Jordan's A-104: *"menu orders, which are management orders like 'assign this' or 'fire this person' or 'raise army' or whatever do not cost scene budget because they are not scenes. however, these CAN prompt scenes after being performed."*
+- **What the tree has (read 2026-11-12).** The budget is scene actions (`decision/budget.py::budget`, `:18-61`, Jordan's 2026-09-02 ruling, kept: an order is not a scene). A scene's price has one owner, `state/carriers.py::Scene.cost(extended_cost)` (`:650-654`: `extended_cost` when it fills more than one slot, else `PLAIN_COST`), read by `decision/choose.py::pack_scenes`'s `take()` (`:770-782`) and by DELIBERATE's overspend check and debit (`loop/deliberate.py:175-177`, `:230-235`, `:294`). Every act today rides in a priced scene, so every order costs (the "everything costs" status quo A-104 replaces). Which verbs are orders is CL-MGMT's list and is not authored.
+- **INSTRUCTION.** (1) **The list, as data.** `engine/season/rosters.yaml: management_orders`, a closed set of verb names, loaded by `data/rosters.py` and refused at import when a member is not a row of `verb_table.yaml`; it **ships empty** (the control: today's prices, hash EQUAL). Its members are CL-MGMT's `[BLOCKED: CONTENT — CL-MGMT's list, A-104 (the examples "assign", "fire", "raise army" read as `confer`, `revoke`, `muster` are this lane's reading, not a list)]`. (2) **One price owner.** `Scene.cost(extended_cost, orders=frozenset())`: a scene whose every act's verb is in `orders` costs 0; any other scene as today. The callers pass `rosters.MANAGEMENT_ORDERS` (DELIBERATE and `pack_scenes`; `decision/` may read `data/`). No caller computes a price of its own. (3) **No mixed scene.** `pack_scenes` puts an order candidate in a scene of its own, so an order never makes a priced scene free and never rides in one at a price. (4) **Orders open scenes after.** Nothing new: an order's Events are witnessed like any act's, and the questions and candidates they occasion next round (the dispatched man's `comply`, the stripped officer's grievance) are ordinary scenes at ordinary prices. (5) **Scope.** Every person's orders, the player's and every NPC's `[ASSUMPTION: A-104's own — the reason given is that orders are not scenes, which holds for everyone]`. (6) **Layer 1.** `04` §B.9 (`:449`) reads *"`choose` returns `Scene[]` of length ≤ `budget`"*; a free order scene makes the length exceed the budget while the priced cost does not. The node is drafted, not applied, in `unified/U3_LAYER1_AMENDMENTS.md` (`L1-A104`); the control (an empty list) contradicts nothing, and a non-empty list waits on the node. Not decided here: whether a person's free orders per round need a cap (the release count `scenes_per_round`, `data/fixtures.py:577`, counts scenes, so an order scene would take a round's slot); the first reading below decides whether a setting is owed.
+- **WHERE.** `engine/season/rosters.yaml`, `data/rosters.py`, `state/carriers.py::Scene.cost`, `decision/choose.py::pack_scenes`, `loop/deliberate.py` (the two `cost` call sites), `engine/season/tests/test_management_orders.py` (new).
+- **FALSIFIER and control.** `test_an_order_scene_costs_nothing_and_a_priced_scene_is_unchanged` (with a planted one-member list: the order scene's cost is 0, a plain scene's 1, an extended one's `extended_scene_cost`); `test_an_order_never_shares_a_scene_with_a_priced_act`; `test_a_person_with_a_full_budget_may_still_order` (budget spent to 0, an order is still released); `test_an_order_opens_a_scene_next_round` (a planted `dispatch` forms the recipient's `comply` next round, priced 1). Control: the list empty, the realm content hash at seeds 0, 1, 2 equals the base.
+- **GATE.** `python -m pytest engine/season/tests/test_management_orders.py -q`; the realm hash equal at seeds 0, 1, 2 with the list empty; with CL-MGMT's list loaded, `aperture 2 0` and `2 2` print orders per person per season (the reading for the cap question).
+- **Hash movers.** None at the control. Loading CL-MGMT's list is a declared mover (A-104: every person's orders become free; the realm moves), re-pinned once at that commit, after `L1-A104` is applied.
+- **Depends on.** CL-MGMT's list (MISSING, content); `L1-A104` (DRAFTED, Jordan's under A-97); `IS-B3-FA-02` (the spine's `Offer`, B34), `IS-B3-FA-05` (`dispatch`, B21).
+- **Lane · batch · cost · tier · lands it.** GO with FA · B34, after `IS-B3-FA-02` · small build · `sonnet` · the B34 session; the list's load in a later commit.
+
 ### 6.4 The INCOMPLETE GO proposal
 
 | file (batch) | missing part | disposition | needed for the test |
@@ -229,15 +243,15 @@ B00 → B01 → B02 → **B03** (`11_GO_pointer_and_stale_text_resolutions`, `11
 |---|---|---|
 | B03-hygiene (IN, W3) | `IS-B3-SE-04`; `IS-B3-GO-06` (the four early landings) | SE-04 after CI-03; the landings last |
 | B11-fi-readers (FI, W9) | `IS-B3-GO-01` | with lane IS-B2's `IS-B2-CORE-01`, the batch's first item |
-| B12-world-motion-and-ground (SE+WR, W10) | `IS-B3-SE-03`; `IS-B3-SE-05`; `IS-B3-SE-01` | SE-03 first commit; SE-05 with `14_VERBS_MATERIAL_A`; SE-01 last |
-| B21-fa-governance (FA, W9) | `IS-B3-FA-05`; `IS-B3-FA-06`; `IS-B3-FA-01` | FA-05 after `14_VERBS_BINDING_D`; FA-06 with the rest of `U5d_FA_owed_edits`; FA-01 after `06_FA_shortest_loop_B` |
+| B12-world-motion-and-ground (SE+WR, W10) | `IS-B3-SE-03`; `IS-B3-SE-05`; `IS-B3-SE-06` (A-109; its design pass at B11's open, with `IS-B2-FI-07`); `IS-B3-SE-01` | SE-03 first commit; SE-05 with `14_VERBS_MATERIAL_A`; SE-06 after SE-05 (it composes on the same notice draw); SE-01 last |
+| B21-fa-governance (FA, W9) | `IS-B3-FA-05`; `IS-B3-FA-06`; `IS-B3-FA-07` (A-105); `IS-B3-FA-01` | FA-05 after `14_VERBS_BINDING_D`; FA-06 with the rest of `U5d_FA_owed_edits`; FA-07 after `14_VERBS_BINDING_C` and `U5d_FA_owed_edits` §3–§4; FA-01 after `06_FA_shortest_loop_B` |
 | B23-land (FA, W13) | `IS-B3-FA-04`; the added gate arm of part 1, §3.4 row 3 | after `U5d_FA_land_and_seats_pass_on_a_won_march` |
-| B34-go-surface (GO, W11) | `IS-B3-GO-02`; `IS-B3-GO-03`; `IS-B3-FA-02` | after `11_GO_fidelity_and_campaign_modes` |
+| B34-go-surface (GO, W11) | `IS-B3-GO-02`; `IS-B3-GO-03`; `IS-B3-FA-02`; `IS-B3-GO-07` (A-104, at its control) | after `11_GO_fidelity_and_campaign_modes`; GO-07 after FA-02 |
 | B35-wr-thread (WR, W13) | `IS-B3-WR-01`; `IS-B3-WR-03`; `IS-B3-WR-02`; `IS-B3-WR-04`; `IS-B3-WR-05` | WR-01 after `09_WR_B_threadwork…` edits 1 and 2; the rest in this order |
 | B38-narrative-regimes (WR, W15) | `IS-B3-GO-04`; `IS-B3-FA-03`; `IS-B3-SE-02` | GO-04 with `30_GO_F`; the two readings after `30_WR_E` and `U5d_SE_cohort_heavy_moves_and_caste` |
 | B41-go-port-gate (GO, W12) | `IS-B3-GO-05`; v12's text per `IS-B3-GO-06` | after the `module_scenes` block |
 
-Count: FA 6, SE 5, WR 5, GO 6.
+Count: FA 6, SE 5, WR 5, GO 6. *(Reconciled 2026-11-12, A-104, A-105, A-109: FA 7, SE 6, WR 5, GO 7; 25 items; no new batch.)*
 
 ### 7.2 Declared hash movers
 
@@ -246,6 +260,9 @@ Count: FA 6, SE 5, WR 5, GO 6.
 | `IS-B3-FA-04` | only when `march_grievance_regard` leaves `None` | co-pinned at B23's last item |
 | `IS-B3-FA-05` | every world in which a `dispatch` is complied with | B21's one re-pin |
 | `IS-B3-FA-06` | every world with a succession after an `issue` | B21's one re-pin |
+| `IS-B3-FA-07` (A-105) | every world in which an `establish` narrowed a sitting grant (refused; the `revoke` forms); `faction_power_step` above 0 | B21's one re-pin; the step's flip declared on its own |
+| `IS-B3-GO-07` (A-104) | none while `management_orders` is empty; loading CL-MGMT's list moves every world | at the list's load, after `L1-A104` |
+| `IS-B3-SE-06` (A-109) | none until a hidden place is authored; the search's notice with B11's `notice_arm` flip | at the content's load |
 | `IS-B3-SE-05` | worlds with a non-public deed and a co-located bystander, once `notice_arm` is on | with B11's flip of `notice_arm`; no second re-pin |
 | `IS-B3-WR-01` | every executed thread row | B35's one re-pin |
 | `IS-B3-WR-04` | none while `legibility_curve` is `()` | — |
@@ -309,7 +326,7 @@ Readings, not decisions: the row's state is what `register --requirements` print
 | | `09_WR_world_motion` | `IS-B3-WR-05` |
 | | the other FA, SE, WR, GO rows | blocked, each with its reason and owner (part 1 §3.4, §4.4; §5.6, §6.4) |
 | `master/HOLISTIC_AUDIT_part2.md` | H-01 (engines reached unevenly) | each S7 above quotes CI-11's block; `IS-B3-SE-03` adds the settlement block |
-| | H-02 (no entry point; six builders; hand-composed run loops) | lane IS-B2's `IS-B2-CORE-01` (one loop for scenarios), which this lane's rows use; `IS-B3-GO-05` (scenario worlds as pins, so the port ports no builder). `J-H-01` and CI-07 are untouched |
+| | H-02 (no entry point; six builders; hand-composed run loops) | lane IS-B2's `IS-B2-CORE-01` (one loop for scenarios), which this lane's rows use; `IS-B3-GO-05` (scenario worlds as pins, so the port ports no builder). `J-H-01` and CI-07 are untouched *(A-102, 2026-11-12: `J-H-01` answered, option A; CI-07 lands as `B03c-boot`)* |
 | `master/CODEBASE_IMPROVEMENT_PROPOSAL*.md` | CI-06, CI-11 | depended on (B03, B02); CI-01 to CI-05, CI-07 to CI-10 are not this lane's subjects |
 
 ## 8. Decided by the ladder, and reversible on a word
@@ -327,7 +344,7 @@ Nothing in this file overwrites ratified canon, a `(RULED)` item or a ratified L
 | 7 | **Whether a sabotage is seen is the notice draw's** (`IS-B3-SE-05`) | a masking rule or a new formation stem | 4: B11's notice draw; C3-C14's "perception is a drawn deposit, not a gate" | — |
 | 8 | **One writer of `Person.coherence`: the host** (`IS-B3-WR-01`, change 4) | a task row's bands write it too (ARCS-03 item 3) | 5: the write gate refuses any driver but the seam | — |
 | 9 | **The wound is T15's own Thread ground** (`IS-B3-WR-05`) | a Site of another kind beside the ground | 1: A-40, one site per territory | keep the B12 kind |
-| 10 | **The port plays a scenario from a pinned world, not from a ported builder** (`IS-B3-GO-05`) | port each scenario's builder | 4 and 5: the port re-implements no instrument, and the builders are instruments until `J-H-01` is answered | build the pins anyway; port a builder when CI-07 has moved it into game code |
+| 10 | **The port plays a scenario from a pinned world, not from a ported builder** (`IS-B3-GO-05`) | port each scenario's builder | 4 and 5: the port re-implements no instrument, and the builders are instruments until `J-H-01` is answered *(A-102, 2026-11-12: answered. The realm builder becomes game code at `B03c-boot` (`engine/season/boot/`), so "new game" ports `boot/realm.py`; the scenario builders (`probes.tiny_world`, `scarce`, `governance_spine`, `headless.build_world`, `corpus_run.build_at`) stay instruments, and this decision stands for them)* | build the pins anyway; port a builder when CI-07 has moved it into game code |
 
 ## 9. Limits, stated once
 

@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (a decision register in the form of `unified/DECISIONS_FOR_JORDAN.md`; resolves nothing at runtime, CLAUDE.md §0.05; not canon)
 
+Reconciled: 2026-11-12, A-106 (lane `unified/work/A102_112_APPLIED.md`): J-IS-B2-01 answered (option A); no entry here waits on Jordan.
+
 **What this is.** `master/INSTRUCTION_SUITE_ORDER.md` asks each instruction lane to list here what survives
 the five-step ladder (CLAUDE.md §0): what the game does today, one question, the options with how each
 plays, a recommendation, and what the suite assumes meanwhile. One section per lane; a lane with nothing
@@ -16,7 +18,11 @@ Read at `b07fc1c`. One entry. Everything else this lane met was answered by the 
 is picking a seated person), the negotiation's opening verb (`covenant`), the default rite's burden map
 (a data row, marked as an assumption).
 
-### J-IS-B2-01 · Can a skill be lost? · CHAR (item `IS-B2-CHAR-04`; `unified/U4_TRACEABILITY.md` G-10)
+### J-IS-B2-01 · Can a skill be lost? · CHAR (item `IS-B2-CHAR-04`; `unified/U4_TRACEABILITY.md` G-10) — **ANSWERED (A-106, Jordan 2026-11-12: option A)**
+
+**Answer.** No: a learned skill stays. No lapse rule and no reserved column (`lapses_by`) is built; Option B's
+`lapses_by: [none, disuse]` below is **not built** and stays only as the record of what was offered (one data
+column and one draw, if ever wanted). The question as put stays below.
 
 **What the game does today.** A person's rank in a skill (the tree's `Person.capability`) only rises or
 stays. The skill authoring architecture written this session keeps that: *"A capability is never lost (no

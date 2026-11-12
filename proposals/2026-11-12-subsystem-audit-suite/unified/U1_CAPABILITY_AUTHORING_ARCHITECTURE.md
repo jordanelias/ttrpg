@@ -8,6 +8,8 @@ Reconciled: 2026-11-12, unification lane U1 (wave 2; `unified/U1_OWNERS_AND_VOCA
 
 Reconciled: 2026-11-12, A-98 vocabulary lane (A-98; ledger `unified/work/A98_SWEEP.md`): the `kinds:` roster collapses to `skill` (§2); `insight` is a skill whose use rows give no dice; the four `moved_by_*` rows leave the skill table for a trait roster of their own, with its home and loader as ordered coding instructions (§2a, batch U1-A step 1a) `[ASSUMPTION, A-98 (4)]`; the exporter's and the uses loader's refusal of "a dice use of a trait" is restated for the two rosters; `grows_by: fixed` leaves with the traits; "talent" → governing attribute, "training" (the rank) and "trained score/rank" → skill score, "capability" in prose → skill (identifiers and this file's name keep `capability`, glossary *capability*).
 
+Reconciled: 2026-11-12, A-106 and A-107 (lane `unified/work/A102_112_APPLIED.md`): §2's "a skill is never lost" is now Jordan's ruling (A-106: no lapse rule, no reserved column); §2a's trait roster is confirmed as written (A-107: a separate roster, `Person.traits` with its own loader, a trait cannot give dice, a declared hash mover re-pinned once in its batch); the two `[ASSUMPTION]` marks on §2a are resolved by A-107, their text kept.
+
 **What this settles.** Ten proposals describe pieces of one surface
 (`01_CORE_capability_authoring_surface.md`, `10_DICE_capability_axiom_map.md`,
 `02_CHAR_capability_uses_table.md`, `02_CHAR_capability_definitions.md`, `05_SC_capability_surface.md`,
@@ -114,7 +116,7 @@ skill. An aptitude is an attribute (A-98 (1)), defined in `attributes:` and neve
 dispositions (formerly kind *trait*) are not skills and are defined in their own roster (§2a). An **ability**
 is not a kind: it is a skill whose use row names its scene's site (`02_CHAR_audit_addendum_B.md` §B4 (c), as
 A-98 restates it). A skill is never lost (no loss rule exists; adding one is a new growth rule, which is code and
-a decision). A new skill is a row.
+a decision); **ruled, A-106 (2026-11-12): no lapse rule and no reserved column (`lapses_by`) is built.** A new skill is a row.
 
 **The rows, all lanes (each lands in its own lane's commit, definition row before any verb cell or use row names it).**
 
@@ -140,7 +142,9 @@ skills used in fighting).
 ## §2a · The trait roster: home, loader, refusals (A-98 (4); ordered coding instructions)
 
 `[ASSUMPTION, A-98 (4): the four held-or-not dispositions are not skills in any ordinary sense; they leave the
-skill table and are a separate roster, a person's traits; reversible, listed for Jordan.]` What a trait is is
+skill table and are a separate roster, a person's traits; reversible, listed for Jordan.]` **Confirmed by Jordan,
+A-107 (2026-11-12): "yes, a separate roster"; the mark above is resolved, and step 4's hash mover is declared
+(re-pinned once in its batch).** What a trait is is
 vocabulary, so it lives where the skill roster lives and for the same reasons (§1's ladder: step 4, the
 registry holds every *what a thing is* roster of a person; step 5, a module and the port read the substrate
 leaf). How the season uses a trait stays a `capability_uses` row (§3), as for a skill. Order (each step lands in
@@ -162,7 +166,7 @@ batch U1-A, after step 1, in one commit with its revert separable; the CHAR lane
    value through `descriptors.TRAITS[*].seated_by` (no second roster: `rosters.yaml: susceptibilities` is not
    created), refuses a value no trait row names, and never writes into `Person.capability` (the skill map holds
    skills only). Where the person holds his traits is a carrier field `Person.traits: frozenset` with its
-   `write_matrix.yaml` row (written at build only) `[ASSUMPTION: a new `Person` field is a declared hash mover if
+   `write_matrix.yaml` row (written at build only); A-107 rules it a declared hash mover, re-pinned once in batch U1-A `[ASSUMPTION, as first written: a new `Person` field is a declared hash mover if
    `World.content_hash()` encodes it; the batch reads the pins before and after and declares the result; the
    alternative that moves nothing, reading `resonant_style` through a build-time map keyed by person id, is a
    second store and is not taken]`.

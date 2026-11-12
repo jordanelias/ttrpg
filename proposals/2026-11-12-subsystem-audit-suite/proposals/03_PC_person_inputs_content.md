@@ -4,6 +4,8 @@ Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.1,
 
 Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §2 row A-71/A-79 (Part A: "at the fight's own rate (A-31)" deleted; one rate `opposition_rate`, one operand, `29_DICE_one_opposed_rule_form_and_tuning.md`), `U1_OWNERS_AND_VOCABULARY.md` D-U1-08 (the `pool` slot carries `scores` and `addends` raw; the pool is `sigma_leverage.pool_of`), `U1_GLOSSARY.md` *skill* (the slot family `skill` is renamed `axis`: the six combat axes are not U1 skills; the U5b line above keeps the old word as history), `R1_READ.md` §1.1 Part B (the `[UNVERIFIED]` on `rung_kinds` settled by `audits/25_GROUNDING_ENGINE.md` V-18 and re-read at the tree), Part D's pointer moved to PB; test 9 (tests, call sites, lands-it; `Depends on:` / `Lands in batch:` from `U3_DEPENDENCY_ORDER.md`). Content values stay `[ASSUMPTION; low; Jordan to correct]`. R1's flag on the tradition access table (a capability-shaped gate on which lever rows compose, not on an act) needs no rewrite here and is carried by `U1_CAPABILITY_AUTHORING_ARCHITECTURE.md`. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "faculty" → "score" (glossary *faculty*, retired). A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "capability" in prose → skill (2); "trained score/rank" → skill score (1); "training" for the rank → skill score (1); proposed names `talent_level` → `attribute_level`, `pool.py::talent` → `pool.py::governing_attribute` and test names (1); rewordings by sense (1: retired kinds `aptitude`/`trait`, traits apart, Thread Sensitivity not a skill, line-wrapped "trained").
 
+Reconciled: 2026-11-12, A-112 (lane `unified/work/A102_112_APPLIED.md`): Part A notes that `attributes.py`'s `faculty` row is dropped before this file lands (`IS-PC-05`, B15); no edit of this file changes.
+
 **Depends on:** `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` batches U1-A / U1-B (the `fight` site rows and the two-input roll); `U5b_PC_residue.md` §3 (B14: the roster census that admits a kind); `U5b_PC_rulings_in_the_fight.md` §2 (B15: the record's raw roll numbers); CHAR attribute authoring for Part D (design-first there).
 **Lands in batch:** B18 (`B18-pc-content`, PC): Parts B–D after the census; Part A's slot tuples with the export in the same batch.
 
@@ -39,7 +41,11 @@ disposition 56%.
 
 The module owns one list of input slots and nothing about who fills them. Extend
 `modules/combat/attributes.py` (already the one owner of the attribute spec, PC-14) with two more
-tuples in the same form, exported in the typed export's `attributes` section:
+tuples in the same form, exported in the typed export's `attributes` section. *(A-112, Jordan 2026-11-12: the
+attribute spec drops `faculty` (`attributes.py:51`); a combatant's skill score is the `pool` slot's `scores`, read
+through the skill table like everyone's, never an attribute key. The drop lands before this file, in B15, as
+`master/instructions/IS_B1_PC_MB_DICE.md` `IS-PC-05`, hash EQUAL if the values carry over; the `attr` family below
+already omits it.)*
 
 | slot family | members (as the engine reads them today) | read at | scale |
 |---|---|---|---|

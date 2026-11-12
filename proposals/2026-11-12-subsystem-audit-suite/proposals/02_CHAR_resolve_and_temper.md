@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §4) — the gate gains the test-retest reading of `U5a_CHAR_owed_amendments.md` §1 (F-PES-CHAR-04 a).
 
+Reconciled: 2026-11-12, A-108 (lane `unified/work/A102_112_APPLIED.md`): CL-PERSON is no longer held; manner = projection plus a stored offset on three axes (`ED-IN-0261` superseding row); the three places that called it held or ruled-against are marked; item 2 is unchanged.
+
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.2 row (AMBIGUOUS, internal), §4 row *resolve*, §7, §7b-4, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-11m, ledger C-23; `unified/U1_GLOSSARY.md` *resolve*; `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §8 ("nothing under `decision/` names an attribute"); `unified/U3_DEPENDENCY_ORDER.md` node B10, §6.2). Changed: the proposed reader is renamed **`person_q.decisiveness`** (D-U1-11m: `faction_q.resolve` is ratified, `04` §B.6.1, and the RESOLVE step owns the word) and takes `PersonInterior` (`04` §B.10-12), not `Person`; Edit 2's `temper` no longer resolves Focus by name in `decision/` — it is `capability_factor(p, "choice_temper", fx)`, the `choice_temper` use row in `02_CHAR_capability_uses_table.md` (U1 §8; PART D row 27); scratch `probe1.py` marked; named tests; lands-it and tier. The rest stands.
 
 **Lands in batch:** B10. **Depends on:** `02_CHAR_capability_uses_table.md` (B04; the `choice_temper` row and `capability_factor`), `U5a_CHAR_owed_amendments.md` §1 (B10; the test-retest reading).
@@ -10,7 +12,10 @@ Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.
 
 Written by the CHAR audit lane (`audits/02_CHAR_audit.md`, findings F-CHAR-02, F-CHAR-06, F-CHAR-10).
 Ratifies nothing. Reference under `CLAUDE.md` §0.05. It is evidence for the open asks M35 and M40 and
-for CR-93's design item (2); it does not pre-empt CL-PERSON, which is HELD on a ruled sentence.
+for CR-93's design item (2); it does not pre-empt CL-PERSON, which is HELD on a ruled sentence. *(A-108,
+2026-11-12: no longer held. Jordan allows a stored offset on each of three manner axes; manner = what the
+pursuits project plus the person's own offset; CL-PERSON is built behind a neutral-control gate that reproduces
+today's hashes at zero offset, `master/instructions/IS_B2_SC_FI_CORE_CHAR_part2.md` `IS-B2-CHAR-07`.)*
 
 ## What this changes in `engine/season/` at runtime
 
@@ -75,7 +80,10 @@ the variation comes from the candidates"*): two such people stay identically dis
 and differ in how reliably they follow them. Whether that is within the sentence is already answered
 by a later ruling: CR-93's entry records that `ED-IN-0347` narrows the sentence and does not reverse it
 (*"ED-IN-0261's 'identically disposed' sentence is narrowed, not reversed"*), and names this term. So
-it is not escalated.
+it is not escalated. *(A-108, 2026-11-12, narrows the sentence again, by Jordan's word and a superseding
+ledger row (`ED-IN-0261`, 2026-11-12): a person may carry a stored offset on `rigid_flexible`,
+`grandiose_humble` and `deontological_instrumental`. Item 2 is unaffected: `temper` stores no offset and stays
+the reliability term beside it.)*
 
 ## The exact edits, by owner
 
@@ -149,7 +157,8 @@ the finding is wrong.
   `capability_factor` over a use row, so the two attribute uses in `decision/` share one method and name no
   attribute.
 - **E (last, as a ratio).** One function, one hook, one column, one loop variable. The alternative
-  (stored manner axes) is CL-PERSON's and costs a ruling.
+  (stored manner axes) is CL-PERSON's and costs a ruling *(given: A-108; it is now a sibling, not an
+  alternative, `IS-B2-CHAR-07`)*.
 
 ## Cost class
 

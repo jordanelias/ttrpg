@@ -1,0 +1,1053 @@
+# Evaluation of workplan v11, part 15: lane E5, tables and carry-forward blocks (verbatim)
+
+## Status: EVALUATION RECORD, assembled (stage 5 of `STAGES.md`; reference, resolves nothing at runtime, CLAUDE.md §0.05; deleted when workplan v12 is adopted)
+
+**What this part is.** The tables and carry-forward blocks of lane E5, copied by script from `master/eval/E5.md` lines 24 to 1068, byte for byte; nothing below the rule was retyped or edited. Line numbers cited in the settlement ledger (`V11_EVALUATION_part2.md`) are those of the lane file, so a row of this part is found there as `E5:<line>`. Where the ledger re-dispositions a row, the ledger governs and the copy below keeps the lane's original call as the record.
+
+---
+
+## Table
+## Table A: part 14 (NERS amendments, part 2; positions as filed, source order)
+
+| id | gist | disposition | evidence / cite | v12 target |
+|---|---|---|---|---|
+| P14 CP-T06-07 REPAIR (AM-D-14) | cover record gains `as` key (`record_kinds` cover `[terms, as]`; `rosters.py:505-511` arity guard; `effects_information.py:270`) | STILL-NEEDED | unbuilt: `master/instructions/IS_B2_SC_FI_CORE_CHAR.md:253-254` lists CP-T06-07 among nine B10-14 positions "nothing from this session supersedes"; `audits/08_FI_audit.md:568` "unbuilt, keep" | FI · B11 (row 6 of `unified/U5c_FI_residue.md` §2 order, after CP-T06-09) · gate: `test_fi03_trail.py` re-recorded; found deposits > 0 in seeded realm (today 0/0/0) · hash: mover where a cover is found · tier sonnet. Block C1 |
+| P14 CP-T06-09 LIMIT (AM-D-16) | restate F06 consequence claims: a covered deed reaches a bench through `reception` and the witness's judgement, not `proofs` | STILL-NEEDED | prose restatement riding the unbuilt CP-T06-09 EDIT (`audits/08_FI_audit.md:562` "unbuilt, keep") | FI · B11 with CP-T06-09 · gate as CP-T06-07 · no code. Block C2 |
+| P14 CP-T06-09 RESEQUENCE (AM-D-17) | order 09 before 07 ("without 09, 07 makes eyewitnesses accuse the framed man") | SUPERSEDED | the order is re-derived by `unified/U5c_FI_residue.md` §2 (named by IS-B2-FI-02, `master/instructions/IS_B2_SC_FI_CORE_CHAR.md:254`); UNVERIFIED: §2 itself not opened by me. The fact (09 before 07) is carried in Blocks C1/C2 | none (order edge only) |
+| P14 CP-T07-02 REPAIR (AM-E-02) | thread host `seam/wrappers/threadwork.py`: `thread_scales` by target class, `Person.coherence` carrier, actor adapter, `working.failed` | STILL-NEEDED | not in tree: `grep` of `engine/season` for `thread_scales`, `working.failed` = 0 files. Suite depends on it and names it "no carrier in the suite": `unified/U3_DEPENDENCY_ORDER.md:1197`, `proposals/09_WR_B_threadwork_session_and_practitioner.md:12,23`, `proposals/U5d_WR_zero_coherence_unknowable.md:10`, `IS_B3_FA_SE_WR_GO_part2.md:43,60` | WR · new batch B35a, immediately before B35, after B03/B05/B06 · gate: seeded test that a Leap + operation + cost pay through the seam in one place; `register --requirements` reading · hash: SCHEMA mover on every person repr (declared, H-208), one re-pin at batch end · tier sonnet, opus critic. Block C3 |
+| P14 CP-T07-02 REPAIR (HR-6) | CR-13 first: failed Leap writes no Coherence change (oracle `attempt_leap` passes `coherence_delta=0`; blanket penalty is C-TW-3) | STILL-NEEDED | rider on the host; `IS_B3_FA_SE_WR_GO_part2.md:60` "CR-13 ... not opened" by the instruction lane. CR-13 itself is another eval lane's position | WR · B35a, after CR-13's disposition (other lane) · gate: Leap-Failure test reds when step 2 skipped. Block C4 |
+| P14 CP-T07-02 RESEQUENCE (HR-7) | REM-45 dropped; adapter reads `_actor_pool`'s `min(3, history+3)` through its one owner | STILL-NEEDED | rider on the host; REM-45 dropped by ED-IN-0330 (`registers/editorial_ledger_in.jsonl:113`, "histories are eliminated as a roll input"); A-98 changes skill words only | WR · B35a, same item · no separate gate. Block C5 |
+| P14 CP-T07-03 NARROW (AM-E-03) | `weave`, `lock` thread acts; locked-Site yield 0 at the `ProduceInput.sites` projection; `held_load` Query | STILL-NEEDED | unbuilt (no `lock`/`weave` rows); `IS_B3_FA_SE_WR_GO_part2.md:60` reads it "needed for the test" | WR · B35a · gate: locked Site yields 0; staged-delta refusal on a locked Site · mover: thread rows ship off · tier opus critic (design-first per its home). Block C6 |
+| P14 CP-T07-04 NARROW (AM-E-04) | `mend` routes (locked Site, other person, self) | STILL-NEEDED | unbuilt; same IS reading; `proposals/09_WR_B_threadwork_session_and_practitioner.md:182` cites CP-T07-04 | WR · B35a · gate: `mend` clears `Site.locked`; refused on another's live weave/ward. Block C7 |
+| P14 CP-T07-05 NARROW (AM-E-05) | `in_equilibrium` true unless Site locked | STILL-NEEDED | unbuilt (`def in_equilibrium` = 0 files); `09_WR_B_threadwork_session...:94` cites it | WR · B35a · gate: locked/unlocked pair. Block C8 |
+| P14 CP-T07-07 REPAIR (AM-E-07) | `coherence_band_floors` Fixtures tuple read in `budget()` beside `body_band_penalty` | STILL-NEEDED | unbuilt (0 files); `09_WR_B_threadwork_session...:45,155` names CP-T07-07 as IN-06's consumer | WR · B35a · gate: shipped `()` leaves every arm equal; floor passed lowers budget. Block C9 |
+| P14 CP-T07-08 NARROW (AM-E-08), threshold form | breach Event fires the first time the resting point passes `HUMAN_BAND_LIMIT` (a crossing that decides) | SUPERSEDED | A-24 standing rule (crossing decides nothing; a draw does) and `proposals/09_WR_B_threadwork_session_and_practitioner.md:170-176` (opened): "under the standing rule it becomes a draw made whenever a working leaves the displacement past the band" | none for the threshold form |
+| P14 CP-T07-08 NARROW (AM-E-08), the Event | `coherence.crossed` Event fanned at WITNESS so a witness can hold, tell or act on it | STILL-NEEDED | the suite lists the crossing "for its owner, not built here" (`09_WR_B_threadwork_session...:170`); no `coherence.crossed` in tree (0 files) | WR · B35a, after the drawn-crossing rule of 09_WR_B · gate: a drawn breach emits the Event once and a co-located witness holds the Claim. Block C10 |
+| P14 CP-T07-09 LIMIT (AM-E-09) | state the limit: NPC practitioner's choice among thread rows is by order until JQ-3 pursuit cells | STILL-NEEDED | text-only limit; `IS_B3_FA_SE_WR_GO_part2.md:60` names -09 for legibility | WR · B35a, recorded in the batch card; no code. Block C11 |
+| P14 B10-16 gates, IN-52, `requisition` (AM-E-21) | no position makes `requisition` execute in computed play; H-163 limit 3(a) unowned | MISSING-DEP | H-163 appears only in `proposals/14_VERBS_PHYSICAL_C_looking.md` and `unified/U5_FINDINGS_CLOSURE_U5d.md`; `proposals/14_VERBS_MATERIAL_B_stores.md` §4 redesigns `requisition` as a draw but does not own 3(a) (opened line 115-120 only) | dep: a seat-channel stock report or residence-ladder reach (H-163 3(a)); owner none · whoever lands SE B12; design choice, not mine. Block C12 |
+| P14 CP-T08-01 REPAIR (AM-E-12) | `labour(w, rung)` per rung, one ratio on `ProduceInput`; `labour_mode` | STILL-NEEDED | unbuilt (`def labour` 0 files); suite files wait on it: `07_SE_capability_rate_B.md:25,109`, `07_SE_campaign_supply_and_muster.md:25,124`, `IS_B3_FA_SE_WR_GO.md:259-260` "[BLOCKED: step 5's disposition of CP-T08-01]" | SE · B12, before `07_SE_capability_rate_B` · gate: fewer hands lowers yield; `labour_mode: off` = today's hash · mover: off=EQUAL. Block C13 |
+| P14 CP-T08-02 LIMIT (AM-E-13) | `endowment_mode: ground` ships `uniform`; flip waits for a relief path | SUPERSEDED | `proposals/07_SE_ground_and_granaries.md:78-86` (opened): "R3 ... AM-E-13's limit is replaced by this one" (flip gated on a granary rung named as `source` in a seeded `ground` run) | none (the base CP-T08-02 is amended there) |
+| P14 CP-T08-04 RESEQUENCE (AM-E-15) | `smithy`/`mint` sites built by `build` on `planned_works`; held on IN-45 | STILL-NEEDED | `smithy`/`mint` absent from `rosters.yaml`; `venues.yaml:188` has `planned_works:` and `populated.py::mint_planned_works` exists, so IN-45's gate looks met (verify at build); `07_SE_capability_rate_B.md:78` makes `craft` task rows under 18-A (UNVERIFIED overlap) | SE · B12 after `14_VERBS_MATERIAL_C_works` · gate: a `build` on a planned works row mints the Site. Block C14 |
+| P14 CP-T08-05 REPAIR (AM-E-16) | `price_of` from need/stock on the REM-50 draw record | STILL-NEEDED | unbuilt (`def price_of` 0 files); `14_VERBS_MATERIAL_B_stores.md:112` ("when CP-T08-05 gives a price, par is that price"), `07_SE_capability_rate_B.md:140` | SE · B12 after `14_VERBS_MATERIAL_B` · gate: hand-built world price rises as stock falls; zero-stock no divide-by-zero. Block C15 |
+| P14 CP-T08-06 NARROW (AM-E-17) | `unrest(w,S)` Query + `unrest_band_floors` tuple; stop rule: HELD with CP-T08-07 if its gate unmet | STILL-NEEDED | unbuilt (0 files); `proposals/U5d_SE_owed_edits.md:77,102` and `16_PESSIMIST_SE_B...` still read `unrest` as the flip's consequence path | SE · B12, HELD with CP-T08-07 · gate: census line only until `requisition` executes. Block C16 |
+| P14 CP-T08-07 RESEQUENCE (AM-E-18) | `tax` edict; gated on H-163 limit 3(a); slot is on edicts only | MISSING-DEP | gate H-163 3(a) has no owner (see AM-E-21 row); kit files wait on it: `15_INSTITUTIONS_PAPACY_E...:17,96`, `15_INSTITUTIONS_SYNTHESIS_E_implementation_plan.md:249` | dep as AM-E-21 · lane FA/SE · then B33 (kit). Block C17 |
+| P14 CP-T08-08 REPAIR (AM-E-19) | `upkeep_due` skips same-rung groups; forms a Candidate only while the treasury holds the amount | STILL-NEEDED | unbuilt (`upkeep_due` 0 files); kit files cite upkeep (`14_VERBS_MILITARY_C_the_muster.md`, `15_INSTITUTIONS_SYNTHESIS_A`) | FA/SE · after B21 (`oblige` computed) · gate on `harness/scarce.governed` · forms 0 acts until a treasury holds stock. Block C18 |
+| P14 CP-T08-10 RESEQUENCE (AM-E-20) | domain limit: cap and overhead on the count `budget()` multiplies by `budget_office_bonus` | SUPERSEDED | `unified/U3_CONFLICT_LEDGER.md:73` C3-L8 removes `budget_office_bonus`; `proposals/U5a_CORE_owed_edits.md:176-186` (opened) "IN-14 and CP-T08-10 are retired by C3-L8" | none: B03 `U5a_CORE_owed_edits` §H |
+| P14 CP-T09-01 LIMIT (AM-F-16) | first commit is a hash-equal reading of leavers/joiners; build only if both halves non-null | STILL-NEEDED | no suite file does this reading; A-46 narrows leaving-as-strife only (creed/head seat), not faction exit by opinion | FA · B21 first item (a reading, haiku/sonnet) · gate: counts at seeds 0-2, ticks 0-2; close MEASURED if null. Block C19 |
+| P14 CP-T09-02 RESEQUENCE (AM-F-10) | B10-17 order and cycle repair (02 <-> 03; 04 needs 07) | SUPERSEDED | U3 re-batches FA as B21/B23 (`unified/U3_DEPENDENCY_ORDER.md:177-193`); edges carried in Blocks C20-C26 | none (order only) |
+| P14 CP-T09-02 LIMIT (AM-F-11) | `declare` done on a computed declaration; teeth only on observed `army.arrived`/`rung.seized` | STILL-NEEDED | `war.declared` in no suite proposal (grep 0); `IS_B3_FA_SE_WR_GO.md:166` "[BLOCKED: realm reading waits on CP-T09-02]" | FA · B21 · gate: seeded run shows `war.declared` ≥ 1; teeth reported separately (seeds 0-2). Block C20 |
+| P14 CP-T09-03 LIMIT (AM-F-12) | `covenant` on a war Proposition: `referent_class: Proposition` added | STILL-NEEDED | 41 realm refusals recorded; kit files need a covenant something reads (`IS_B3...:170`) | FA · B21 · gate: seeded `covenant` ≥ 1 with a W subject. Block C21 |
+| P14 CP-T09-04 REPAIR (AM-F-13) | occupation plurality on `mustered`; one-count claim true after CP-T09-07 | STILL-NEEDED | `06_FA_war_lives_in_seats_B` edit 6 is "a clause on it" (`IS_B3...:170`) | FA · B23 · gate: obligee-only seat counts toward plurality (after 07). Block C22 |
+| P14 CP-T09-04 LIMIT (HR-4) | third faction invisible on an unheld settlement; two armies on one empty target both arrive | STILL-NEEDED | UNVERIFIED overlap with `09_WR_world_motion` edit 2 (unheld seizure) and `14_VERBS_PHYSICAL_B`: not opened | FA · B23 · gate: two planted armies, one arrives. Block C23 |
+| P14 CP-T09-05 LIMIT (AM-F-14) | fief occasion; stop rule: grantee defection reverts the term | STILL-NEEDED | `rosters.yaml` `give` cells null; `15_INSTITUTIONS_COLONIAL_D` mentions fief (UNVERIFIED overlap) | FA · B21/B23 · gate: seeds 0-2 reading of grantee `opinion_of`. Block C24 |
+| P14 CP-T09-07 REPAIR (AM-F-15) | (b) `seat_people_at` union + `oblige` muster clause; (a) `retain` verb (name collision with ED-IN-0306 `recruit`) | STILL-NEEDED | `seat_people_at`, `retain` absent (0 files); `14_VERBS_BINDING_D_orders.md:16,113` and `IS_B3...:143` need (b) | FA · B21, before IS-B3-FA-05 (`dispatch`) · gate: obligee-only plurality; (a) won `retain` on uncapped arm. Block C25 |
+| P14 CP-T09-09 LIMIT (AM-F-17) | plot with backers; measure `legitimacy(p,H) < 0` first, cut if null | STILL-NEEDED | A-16 (murder gated by grievance+hatred) may re-aim it; UNVERIFIED: no suite file opened for plots | FA · B21 first-commit reading · gate: reading at seeds 0-2 else CUT row. Block C26 |
+| P14 CP-T10-01 REPAIR (AM-F-07) | `route`/`terrain_type_at`; mountain returns `travel.blocked`; `route_pricing` off | STILL-NEEDED | `terrain_type_at` absent; `09_WR_B_weather_with_memory_and_the_year.md:26,50,135` and `16_PESSIMIST_WR_A_the_road_is_drawn.md:22,23` depend on `route`/`leg_price` | WR · B12, before `09_WR_B_weather` edit 3 · gate: nested `mountain_pass` costs 2.0 not 999. Block C27 |
+| P14 CP-T10-02 REPAIR (AM-F-08), exposure effect | Calamity costs the traveller (`exposure_body` keyed by band) | SUPERSEDED | `proposals/16_PESSIMIST_WR_A_the_road_is_drawn.md:23,105-113` (opened): "decides the shape of plan position CP-T10-02 ... for the v12 card": a drawn `exposure(RoadInput)` in `modules/settlements/exposure.py` | none for the exposure effect |
+| P14 CP-T10-02 REPAIR (AM-F-08), band function | `band(territory)` = BFS over `adjacent_territories()` in `data/geography.py` | STILL-NEEDED | UNVERIFIED whether WR_A's `RoadInput` reads a band (lines 105-113 show no band field); `data/geography.py` has no `band` | WR · B12 with `16_PESSIMIST_WR_A`, only if its draw keys on it. Block C28 |
+| P14 CP-T10-03 REPAIR (AM-F-04) | `season_terms.want` applied in `_larder_parts` | STILL-NEEDED | `season_terms` absent (0 files); `09_WR_B_weather...:17` "CP-T10-03's per-season terms stay the plan's (B10-18) and are not restated here"; `22_HAPPENINGS_A` uses `season_term x want_term` | WR · B12 with `09_WR_B_weather_with_memory_and_the_year` · gate: `demanded` and MATTER delivered+short agree at a winter tick. Block C29 |
+| P14 CP-T10-05 NARROW (AM-F-05) | hazard hit wounds; illness term reads where a person stands (age term unchanged) | SUPERSEDED | `proposals/22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md:28-46,94-98` (opened): a struck person rolls body against a spell, four bands, "a man in full health cannot die of one spell"; `16_PESSIMIST_WR_C...` reduced to exposure terms; A-15 | none; the needs edge to CP-T10-04 survives in Block C34 |
+| P14 CP-T10-06 REPAIR (AM-F-01) | `kin` releasable (add to `release` `domain:`); one-sided divorce | STILL-NEEDED | `verb_table.yaml:1341` release domain `[hold, commit, oblige, succeed, tie, knot]`, no `kin`; no suite file names `heir_of`/`estates_named`/`marry` for kin (grep) | WR/FA · B37 or B39 (A-75 births, `23_STORY_B_a_house_continues`) [ASSUMPTION: after `22_HAPPENINGS_A` — basis: A-75 needs marry/birth reachable] · gate: spouse edge closes, other stays live. Block C30 |
+| P14 CP-T10-07 REPAIR (AM-F-02) | `World.estates`, `estates_named` | STILL-NEEDED | `def estates_named` absent; `state/world.py _STATE_COLLECTIONS` | same batch · mover: new hashed collection (declared). Block C31 |
+| P14 CP-T10-07 LIMIT (AM-F-20) | report done for record + hand-built chain; live world only once an estate `succeed` executes | STILL-NEEDED | reporting limit | same batch gate wording. Block C32 |
+| P14 CP-T10-08 RESEQUENCE (AM-C-07) | `individual` stem built in B10-11 first; CP-T10-08 drops the T03 entry | DONE-IN-CODE | `engine/season/data/requires.py:823-827` ("v10 CP-T03-01 (B10-11) ADDED `individual`") | none |
+| P14 CP-T10-08 LIMIT (AM-F-09) | falsifier: A's `marry` to C refused keyed `spouse` while B's edge naming A is live | STILL-NEEDED | `marry` row absent from the tree; rides CP-T10-06 | same batch. Block C33 |
+| P14 CP-T10-09 NARROW (AM-F-03) | `_bond` kin clause (`a = 1.0` for own kin edge) | STILL-NEEDED | not built; no suite file covers it | same batch · tier sonnet. Block C35 |
+| P14 CP-T02-04 CUT (AM-B-10) | vacancy motive for a superior's `revoke`; cut, reopens when a computed `revoke` executes | SUPERSEDED | A-35 (head strips an officer by a resistible draw) and `14_VERBS_BINDING_C` (`revoke`/`succeed` draws, B21, `unified/U3_DEPENDENCY_ORDER.md:178-179`); the cut stands | none |
+| P14 CP-T02-08 CUT (AM-B-14) | Act interface shows true odds from `odds_of` | DONE-IN-CODE | `engine/season/seam/wrappers/sigma.py:350 def odds_of`; display rule is M32/`11_GO_player_surface_contract_B` | none |
+| P14 CP-T05-05 CUT (AM-D-06) | `interrogate` band kinds one per band (carried to IN-12's builder) | SUPERSEDED | `proposals/14_VERBS_SOCIAL2_C_case_question_confession.md` (B25) builds the question route; UNVERIFIED: file not opened for the one-kind-per-band requirement; check at B25 | none; B25 gate adds "one kind per band" check |
+| P14 CP-T06-06 CUT (AM-D-12) | capability keys for `research`/`examine`/`surveil` | SUPERSEDED | A-98 (one capability kind, skill) and `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md`; `02_CHAR_capability_uses_table` (B04) names use rows | none |
+| P14 CP-T07-01 CUT (AM-E-01) | thread seeding half; adapter moves to CP-T07-02 | DONE-IN-CODE | `engine/season/data/cast.py:279 thread_sensitivity_of`; adapter carried in Block C3 | none |
+| P14 REM-40 CUT (AM-A-02) | withdrawn: design shipped as SC-02 `23` | DONE-IN-CODE | `rosters.yaml` carries `fold_kinds` (3 hits); `data/verbs.py:1269 EVENT_KINDS = derive_event_kinds(...)` | none |
+| P14 REM-41 CUT (AM-A-01) | withdrawn: loader invariant 7 shipped | DONE-IN-CODE | `data/verbs.py:1269`; Layer 1 `04:496` edit owed under IN-44 (other lane's position) | none |
+| P14 REM-51 CUT (AM-A-03) | `hunger_reach` withdrawn; reopen on REM-52 `body_step` > 0 | SUPERSEDED | A-56 (common people: a few heavy moves) and `proposals/U5d_SE_cohort_heavy_moves_and_caste.md`; UNVERIFIED: that file not opened beyond title/A-56 | none |
+
+## Table A (continued): part 14 section 4, "lane findings that changed nothing"
+
+| id | gist | disposition | evidence / cite | v12 target |
+|---|---|---|---|---|
+| P14 REM-42 (AM-A-21) | `_MU_PER_DIE` / `_SIGMA_PER_DIE` equal in two files | DONE-IN-CODE | `sigma_leverage.py:83-84` now reads `dice_engine.MU_PER_DIE`/`SIGMA_PER_DIE` ("read from the owner, never copied") | none |
+| P14 REM-45 (AM-A-23) | corrected history term | SUPERSEDED | ED-IN-0330 (`editorial_ledger_in.jsonl:113`) eliminates rolled history; A-98 | none |
+| P14 REM-46 (AM-A-24) | delete `TRACE.txt` and eight `.md` run logs | DONE-IN-CODE | `git ls-files engine/season/runs` = `results.json` only | none |
+| P14 REM-47 (AM-A-25) | remove `tools/evacuation_plan.py` and its `AUTHORED_PARSERS` entry | DONE-IN-CODE | file absent; `tests/valoria/test_engine_params_bridge.py` has no `evacuation` hit | none |
+| P14 REM-26 (AM-A-12) | measure non-Rung referent share; build `referent_source:` only if larger than 7 UNKNOWN reads | STILL-NEEDED | no `referent_source` in `engine/season` (0 files); rem-02 text not opened by me (UNVERIFIED) | IN · B03-adjacent reading (haiku) · gate: the REM-11 reading at `aperture 1 s`. Block C36 |
+| P14 REM-28 (AM-A-14) | venue/person referent classes | DONE-IN-CODE | `verb_table.yaml` rows carry "v10 REM-28 (B10-06, AM-A-14)" `referent_class` notes (`convene`, `dispatch`) | none |
+| P14 REM-2A (AM-A-16) | reading names one cause per refusal class | DONE-IN-CODE | cited as a built tree `f23194871` in `tests/test_in53_vacancy_need.py:289`, `test_season_shape.py:6944` (weak: comments only) | none |
+| P14 REM-2B (AM-A-17) | restore v9 IN-09 `comply` row | DONE-IN-CODE | `verb_table.yaml:462-464` "v10 REM-2B (restores v9 IN-09's row ...)" | none |
+| P14 REM-44 (AM-A-22) | delete inert `urgency`/`benefits_me` | DONE-IN-CODE | `hole_register.yaml:831` "DELETED BY REM-44"; `benefits_me` only in comments | none |
+| P14 REM-30 (AM-A-18) | character-sheet spaces; creation arm off, design held | STILL-NEEDED | design file `proposals/2026-10-07-character-sheet-spaces.md` not opened (lane or me); UNVERIFIED overlap with B04/B10 CHAR | IN/CHAR · HELD, decide at v12 against B04 · gate: arm off reproduces pre-build hash. Block C37 |
+| P14 REM-31 (AM-A-19) | grid-mode suspension | DONE-IN-CODE | `engine/season/tests/test_rem31_grid_suspension.py`; `proposals/05_SC_playable_hearing_B.md:36` "built for combat (ED-IN-0349, REM-31)" | none |
+| P14 CP-T06-08 (AM-D-15) | burn a cover Record (`destroy_record` has effect, formation withheld) | STILL-NEEDED | HELD on JA-1; `proposals/08_FI_05_evidence-interface.md:61` cites burned Records | FI · after B11 · HELD. Block C38 |
+| P14 CP-T07-06 (AM-E-06) | held-load projection; staleness limit | STILL-NEEDED | `write_matrix.yaml` admits `(Person, coherence)` only via Seam; needs CP-T07-02 | WR · B35a. Block C39 |
+| P14 CP-T07-10 (AM-E-10) | `thread_read` formation | STILL-NEEDED | `09_WR_B_threadwork_session...:44,150` names CP-T07-10 `threadwork.read` | WR · B35a. Block C40 |
+| P14 CP-T07-11 (AM-E-11) | thin thread content, last | STILL-NEEDED | `IS_B3...part2:60` needs -11 for the test | WR · B35a last. Block C41 |
+| P14 CP-T08-03 (AM-E-14) | spoilage lowers `stores`; ships all-zero rates | STILL-NEEDED | not built; UNVERIFIED overlap with `14_VERBS_MATERIAL_B_stores` | SE · B12, off. Block C42 |
+| P14 CP-T09-06 (AM-F-18) | post Duke `conferral` data edit | SUPERSEDED | `IS_B3_FA_SE_WR_GO.md:170`: "CP-T09-06 (a data edit, `U5d_FA_owed_edits` §7)"; `proposals/U5d_FA_owed_edits.md:124` | none |
+| P14 CP-T09-08 (AM-F-19) | rebuild `dispatch` to relocate an obligee | SUPERSEDED | `master/instructions/IS_B3_FA_SE_WR_GO.md` IS-B3-FA-05 (opened): carries `_eff_dispatch` in full (WHERE, FALSIFIER, GATE: `dispatch` executed with a `comply` emitting `travel.*`), B21 | none; CP-T09-07 (b) stays (Block C25) |
+| P14 CP-T10-04 (AM-F-06) | body recovery; needs-cycle with CP-T03-07 | STILL-NEEDED | `unified/U5_FINDINGS_CLOSURE_U5d.md:347` "H-211 a body only falls: RESOLVED-BY ARCS-WR edit 2; plan CP-T10-04"; `U5d_WR_owed_edits.md:47` | WR · B12 after `09_WR_provided_arcs`. Block C34 |
+
+## Table B: part 15 (the resolution plan: M22-M40, design lanes, escalations, housekeeping)
+
+| id | gist | disposition | evidence / cite | v12 target |
+|---|---|---|---|---|
+| P15 M22 | may an army be a counted troop stock by type (amends Layer 1 `04:801,810`) | SUPERSEDED | A-2 (a unit is a row of data; ED-IN-0306 stands); `unified/U5_FINDINGS_CLOSURE_U5b.md:389,496` ("no unit class" rows SUPERSEDED, answered by A-2); `proposals/04_MB_headcount_grade_and_scale.md`, `04_MB_unit_loadout_and_weapon_in_hand_B.md` (B17) | none |
+| P15 M23 | which ten attributes | DONE-IN-CODE | ED-IN-0328 / CR-84 landed: `references/descriptor_registry.yaml:28` ("the ten below. CR-84 rewrote the roster"); `engine/season/tests/test_cr20_attributes.py` exists; A-98 sets the words | none |
+| P15 M24 | does training add to talent or replace it (`max` vs capped sum) | SUPERSEDED | A-7 (two numbers: attribute sets dice, skill sets obstacle) and A-98; `proposals/U5a_capability_home_and_two_inputs.md` (B04) | none |
+| P15 M25 | who owns a sword | SUPERSEDED | `proposals/03_PC_loadout_and_carry.md` (B18), `04_MB_unit_loadout_and_weapon_in_hand_B.md`; UNVERIFIED: the files' kit carrier choice not opened by me | none |
+| P15 M26 | storyline form: reduced P1-B pools drawn at build | SUPERSEDED | A-50 (world cards draw bounded starting state); `proposals/21_PROCEDURAL_C_prologue_and_case_seeds.md`, `21_PROCEDURAL_D_world_cards_and_churn.md` (hits for pools/`opens_with`); UNVERIFIED: not opened | none |
+| P15 M27 | mass-battle command | SUPERSEDED | A-59 (command is a draw from learned skill + attributes) ; `04_MB_manager_battle_one_resolver.md`, `26_MASS_BATTLE_maneuver_orders.md` (B20) | none |
+| P15 M28 | founding a faction in play | SUPERSEDED | A-55 (fixed map; lapse allowed); v11 itself closed it at step 1 | none |
+| P15 M29 | 37 mayor seats | SUPERSEDED | A-44 (cast and seats proposal proceeds); v11 verdict "no rows until a reader" leaves nothing to build | none |
+| P15 M30 | no world Thread substrate (mechanical half) | SUPERSEDED | A-40 (D-57): the world wears down as "ground, a real condition of places" (one site per territory); A-54; `09_WR_world_motion.md` (B12). Note: contradicts v11's step-1 "no world Thread substrate" (a confirmed default, ED-IN-0301, not (RULED)); the later Jordan ruling wins | none |
+| P15 M31 | management surface: (a) weak, (b) does an order cost scene budget | STILL-NEEDED | (a) is closed; (b): no `DECISIONS_ANSWERED` row decides it (grep `menu`, `free order` = 0 hits in suite); C3-L8 removed `budget_office_bonus`, which removes the "two ladders" objection but not the arms | decision for Jordan, default (iii) status quo · lane IN/GO · B34 · gate: scripted orders = chooser's `content_hash` seeds 0-2. Block D6 |
+| P15 M32 | non-combat odds display | SUPERSEDED | `seam/wrappers/sigma.py:350 odds_of`; `proposals/10_DICE_believed_odds_have_a_prior.md` (B05), `11_GO_player_surface_contract_B.md` (B34); UNVERIFIED: display rule not opened | none |
+| P15 M33 | what the console may show | SUPERSEDED | `11_GO_player_surface_contract_B.md` (`account`, `explain`; C3-L4); not opened (UNVERIFIED) | none |
+| P15 M34 | `selfish_selfless` spread 0 or stored | STILL-NEEDED | design-first, after M36; UNVERIFIED overlap with `02_CHAR_resolve_and_temper`, `02_CHAR_choice_alignment` (appetite hits), `16_PESSIMIST_CHAR_B` | IN/CHAR · B10 residue · gate: neutral value reproduces base hash. Block D1 |
+| P15 M35 | tau against trait spreads | DONE-IN-CODE | tau re-derived by CR-17's rule: `engine/season/tests/test_cr17_odds_weighting.py` exists; the re-apply-after-first-non-neutral-value clause rides D4 | none |
+| P15 M36 | per-verb payoff/force/beneficiary cells | STILL-NEEDED | design-first; REM-44 deleted `benefits_me`, the beneficiary column has no owner | IN/CHAR · B10 residue. Block D2 |
+| P15 M37 | refusal gate vs one-signed axes | SUPERSEDED | answered "no manner axis feeds the refusal gate" at v11 step 4; no build; restated as a sentence in D4's design | none |
+| P15 M38 | #527 RJ-calls, RH-1/RH-3, marquis | STILL-NEEDED | no suite file names CR-38 (grep 0); A-76 supplies only the stand-in bench; RH-1/RH-3 Layer 1 hunks "land in the commits of RJ-8 and RJ-2" | FA · after B23 · gate: CR-38 exit (motion against the King carried by a bench of ≥ 2 landed seats). Block D5 |
+| P15 M39 | motion source (RJ-11): every computed `utter` is empty | STILL-NEEDED | design-first, post-freeze mover; A-76 stand-in only | FA · after D5. Block D5 |
+| P15 M40, risk term | risk appetite per person | SUPERSEDED | `proposals/02_CHAR_what_an_act_risks.md` (opened lines 1-12): the cost term for danger to the actor (B10); it says it is "an input to CL-PERSON's open ask M40" and "does not pre-empt" it, so the build is the suite's | none for the risk term |
+| P15 M40, horizon term | how a horizon weights a later outcome | STILL-NEEDED | no suite file authors the horizon term (hits for "horizon" are unrelated: `20_NARRATIVE_C`, `15_INSTITUTIONS_COLONIAL_A`) | IN/CHAR · B10 residue. Block D3 |
+| P15 CL-ATTR | training composition + attribute brief | SUPERSEDED | M23 done, M24 superseded (rows above) | none |
+| P15 CL-TROOP | troop stock yes-arm and kit | SUPERSEDED | M22, M25 (rows above) | none |
+| P15 CL-OPEN | story openings drawn at build; dossier option | SUPERSEDED | M26 row; CL-CHAR dossier row already deleted (B10-10 closed `0533c4da`, part15:212) | none |
+| P15 CL-PERSON | personality layer v2 design | STILL-NEEDED | residue of M34/M36/M40-horizon; E-4 hold on stored offsets | IN/CHAR · B10 residue (design lane, opus; critic opus or fable) · gate: neutral control reproduces hash seeds 0-2. Block D4 |
+| P15 CL-MGMT | management surface, legibility, scene list | SUPERSEDED | scene list: `28_CORE_scene_access_A/B/C`, `01_CORE_one_scene_contract.md` (B34), A-48 (slate); legibility: M32/M33 rows; budget (b) stays as M31 row | none |
+| P15 CL-SLICE | first playable slice | SUPERSEDED | `01_CORE_one_scene_contract.md`, `11_GO_player_surface_contract_B.md` (B34), `04_MB_playable_field_scenario`, `05_SC_playable_hearing_B`, `06_FA_playable_scenario`; UNVERIFIED: none opened beyond headers | none |
+| P15 CR-38 after #527 | bench reconciliation and motion source | STILL-NEEDED | see M38/M39 | FA · after B23. Block D5 |
+| P15 E-1 | ten attributes | DONE-IN-CODE | same as M23 | none |
+| P15 E-2 | troop counts | SUPERSEDED | same as M22 (A-2) | none |
+| P15 E-3 | management budget arms (i)/(ii)/(iii) | STILL-NEEDED | same as M31(b); a live design choice between materially different games | for `master/eval/EVAL_FOR_JORDAN.md`. Block D6 |
+| P15 E-4 | stored manner offsets vs ED-IN-0261 | STILL-NEEDED | a hold on CL-PERSON; no ruling in `DECISIONS_ANSWERED` | for Jordan; default: read from pursuits alone. Block D7 |
+| P15 E-5 | is the Thread dying (lore half) | SUPERSEDED | A-40 (D-57): the world wears down, ground as a real condition of places | none |
+| P15 A-1 (#527 discharged) | #527 merged | DONE-IN-CODE | `proposals/2026-10-29-parliament-and-debate/` is in tree (debate-corpus files listed); merge SHA `022fef02` not reachable in this shallow clone (`git log --all` grep empty): UNVERIFIED | none |
+| P15 H-1 | owed ledger rows: Jordan's words from the 2026-10-28 session | STILL-NEEDED | content not in hand; M31/M32 words unrecorded | IN · B00 (ids) · needs Jordan's confirmation. Block D8 |
+| P15 H-2 | R-03 stale text in `requirements.yaml` | STILL-NEEDED | `requirements.yaml:40` still reads "implements one tick granularity and no zoom" (grep) | IN · B02 (`01_CORE_requirements_reading_record`) · gate: `register --requirements`. Block D9 |
+| P15 H-3 | `CLAUDE.md` §3 `systems/` line | SUPERSEDED | current `CLAUDE.md` §3 already states `systems/` holds no `.md` (ED-IN-0231) | none |
+| P15 H-4 | suite repo-fix list (`orient.self_other`, NPC-004 role, "thirteen convictions") | STILL-NEEDED | not re-checked line by line (UNVERIFIED); comment/data notes, hash EQUAL | IN · B03 · gate: `rg` finds no live reader before RETIRED mark. Block D10 |
+| P15 H-5 | `valoria-game` cross-repo items (GO-01, GO-05, GO-06) | MISSING-DEP | `valoria-game` is a separate clone not checked out here; ED-GO-0002 rules the engine series; `IS_B3_FA_SE_WR_GO_part2.md:230` says v12 adoption deletes v11's GO-12/GO-15 entries | dep: the valoria-game checkout; owner GO lane/Jordan. Block D11 |
+| P15 H-6 | overbuild findings | DONE-IN-CODE | CR-45 landed: `names_a_verb`/`SOURCE_353_TEXT` survive only as a docstring (`loop/driver.py:12`); (b) answered by A1-28/DEF-10 | none |
+| P15 H-7 | draft `overbuild` skill note | SUPERSEDED | self-declared "not plan content"; nothing to carry | none |
+| P15 V0 and section 3 order/gates | one batched measurement call; the gate table for the lanes | SUPERSEDED | all lanes it served are dispositioned above; the table's batches are replaced by `unified/U3_DEPENDENCY_ORDER.md` | none |
+
+## Table C: part 16 (strife positions and the flow-conditioning fold, ED-IN-0352)
+
+| id | gist | disposition | evidence / cite | v12 target |
+|---|---|---|---|---|
+| P16 CR-73 | natural shock (SH): low draw that bites; `season_factor_of` gains optional `tick` | STILL-NEEDED | `def season_factor_of(w, territory=None)` has no `tick` (`world_q.py:1178`); `strife_moves.yaml` SH row `gap:`; no suite file builds it | IN/WR · new strife-supply batch after B12 · gate: three hand-built worlds (hash EQUAL). Block F1 |
+| P16 CR-74 | religious sanction (CH) signature | STILL-NEEDED | NEEDS CR-51, CR-63, IN-30 (other eval lanes' positions); `IS_B3_FA_SE_WR_GO.md:168` lists CR-74 among positions the kit waits on | IN/FA · strife-supply batch after B21 · gate: CH > 0 at a seed or GAP with carrier named. Block F2 |
+| P16 CR-80 | the deck: world-build seeds per strife category | STILL-NEEDED | HELD on CL-OPEN's build; UNVERIFIED overlap with `21_PROCEDURAL_D_world_cards_and_churn` (A-50) | IN/WR · after B39 · gate: each category's opening kind in the reachability report at seed 0. Block F0 |
+| P16 `ED-IN-0352` | record of Jordan's 2026-11-08 rulings | DONE-IN-CODE | `registers/editorial_ledger_in.jsonl` carries the id (2 hits); A-83/A-85 amend its FORBIDDEN list (3) by the named exception | none; A-85 text owed |
+| P16 canon alignment | Himmelenger T9, Varfell T4/T11/T12/T13 | DONE-IN-CODE | `canon/03_canonical_timeline.md` reads "Himmelenger, T9" and "Varfell territories (T4, T11, T12, T13)" | none |
+| P16 CR-106 | Church-owned building kinds, `site_owner` table, `owner_of`, `site:` minting | STILL-NEEDED | unbuilt (`site_owner`, `def owner_of`, `worship` = 0 files); content in `proposals/2026-11-08-flow-conditioning/content_church_sites.yaml` (dir present) | SE · new batch F1 after B12 · gate: `owner_of` reads Church for a planted `worship` Site; rename falsifier · mover: `build_realm(0)` hash (new Sites), one re-pin · tier sonnet, opus critic. Block F3 |
+| P16 CR-107 | several cohorts per settlement (`label`, `heritage`, `conviction`); summed ceiling | STILL-NEEDED | unbuilt (`cohorts.yaml` one row per rung); `proposals/U5d_SE_cohort_heavy_moves_and_caste.md` needs cohorts; content `content_cohorts.yaml` present | SE · F1 with CR-106 · gate: summed weight over capacity refused; no new key reproduces today's hash · content commit = declared mover. Block F4 |
+| P16 CR-107b | cohort `faction:` commit Tenure, behind a reader audit | STILL-NEEDED | HELD by design (part16 item 3); contained in Block F4 | SE · HELD behind the reader audit. Block F4 |
+| P16 CR-104 | `faction_q.influence_rung` and `owned_site_rungs` | STILL-NEEDED | unbuilt (0 files); suite builds on it: `30_WR_A:67,114`, `30_WR_B:38,82` | IN · F2 after F1 · gate: Church-analogue with one seat and owned Sites reads the realm · hash EQUAL. Block F5 |
+| P16 CR-97 | measure plot points and office influence (strands block columns a-h) | STILL-NEEDED | `harness/strife.py` columns absent; `30_WR_C:52,78,114` and `30_WR_A:138` cite CR-97; `09_WR_story_instruments_that_can_fail` (B36) shares `harness/storybar.py` serially (C3-K7) | IN · F2 after B36 · gate: planted-log falsifiers, spread printed at seeds 0-2 · hash EQUAL. Block F6 |
+| P16 CR-98 | LOOP rows L1-L5 in `hole_register.yaml` | STILL-NEEDED | no L1-L5 rows (`kind: "LOOP"` rows are the five H-102.. ones); `30_WR_D:29,61,110`, `U5a_CORE_owed_edits.md:116` wait on it; `IS_B3...part2:117` "[BLOCKED: step 5's disposition of CR-98]" | IN · F2 · gate: `register --check` G13 passes; planted row without `sign:` fails. Block F7 |
+| P16 CR-99 | strife guard as a function with a positive control | STILL-NEEDED | not built; `20_NARRATIVE_A:188`, `30_WR_C:92` use it "if landed" | IN · F2 · gate: concentrator FAIL, one-code arm BLIND, identical arms PASS. Block F8 |
+| P16 CR-100 | the unaware's field: `stamp_flow_within` in `questions_for` | STILL-NEEDED | absent (0 files); `30_WR_A:85`, `30_WR_C:50` build on it; consistent with A-83 only via the World-side stamp (not a person-side read) | IN · F2 · gate: empty-ledger person gets the same within-stamp; shipped OFF, hash EQUAL. Block F9 |
+| P16 CR-101 | `flow_salience_gain` in `attention_key` | STILL-NEEDED | absent; `30_WR_A:85` | IN · F2 · gate: bump only inside its tier; gain 0 EQUAL. Block F10 |
+| P16 CR-102 | office influence on the within-stake (CONDITIONAL on CR-97's gate) | STILL-NEEDED | conditional by its own gate; `30_WR_B`, `30_WR_A` read `influence_rung` | IN · F2 last, conditional · gate: CR-97 three-seed reading. Block F11 |
+| P16 CR-103 | evaluate the field route (decision rule fixed in advance) | STILL-NEEDED | needs the supply gates (war producer CP-T09-02, CR-73, CR-74/docket closure) | IN · new batch F3 after B21 and the strife-supply batch · gate: per-seed readings in the commit body. Block F12 |
+| P16 CR-105 | choice-score bias toward what is at stake | STILL-NEEDED | HELD on CR-103 verdict and Jordan's AX-2 hunk (Layer 1 file is Jordan's); A-97 does not cover this hunk | IN · F3 conditional, HELD. Block F13 |
+| P16 section 3.1 rules, 3.5 decisions, formerly-held items | binding rules, D4-D14, ratified items 1-6 | STILL-NEEDED | rules bind CR-97..CR-107 and are carried with them; D8/D14 (cohort conviction authored; no `faction:`) are content rulings; item 4 (Schoenland `engages:` cell) is a registry row edit at CR-107's build | IN/SE · F1/F2 as above. Block F14 |
+| P16 section 3.4 territory caps | caps on developments and sizes | STILL-NEEDED | out of scope in v11, "its own design-first position, after ED-IN-0297's authored works" (`venues.yaml:157-198` exist) | SE · design-first, post-F1; UNVERIFIED whether any suite file covers it (`07_SE_*` not searched for caps) |
+| P16 section 3.6 owed corrections | H-102 `default:` names `ask_budget`; `attention_key` docstring; `cohorts.yaml:21-23`; `serves:` tag | STILL-NEEDED | each rides the position that edits the file (CR-98, CR-101, CR-107, CR-106) | with F2/F1. Block F14 |
+
+
+## Carry-forward blocks
+
+Each block copies the v11 entry verbatim (file and lines named) so the v12 author need not reopen v11. A block's row above says what part of it is superseded; where a row is split, only the STILL-NEEDED part is to be carried.
+
+### Block C1 (`workplans/valoria_master_workplan_v11_part14.md` lines 8-14)
+
+> ### CP-T06-07 — REPAIR (B10-14) · AM-D-14
+> 
+> - **Override:** The item's size is M plus three named edits it did not count. (1) `rosters.yaml: record_kinds.values` `cover: [terms, as]`, with `content.read_from` for `as` (a non-operand source, read as declared, absent allowed). (2) `data/rosters.py:505-511`: `(COVER_KEY, COVER_AS) = RECORD_KIND_KEYS[COVER_KIND]` behind a `len != 2` guard, keeping the refusal for a missing kind. (3) `loop/effects_information.py:270` passes `{COVER_KEY: a.actor, COVER_AS: d.get("as")}` (no `"as"` literal: `rosters.py:499` says it is 'never spelt'). `live_cover`'s `terms == actor` read and `held_document_declines` are unchanged; `_cover_for` answers `sm.get("as")` when set, else the cover's id.
+> - **Taken (ladder step 5):** [ASSUMPTION; medium; Jordan to correct; revert: a second `record_kinds` member in place of the second key, which adds a kind and every reader of the cover kind's name.]
+> - **Because:** YES — `data/rosters.py:505-511`: `if len(RECORD_KIND_KEYS.get(COVER_KIND, ())) != 1: raise Unspecified(…)` and `(COVER_KEY,) = RECORD_KIND_KEYS[COVER_KIND]` (a two-key cover fails both lines at import).
+> - **After the attack:** 'Its first key is `COVER_KEY`' was circular (the unpack defines `COVER_KEY`) and would have loosened the exact-arity guard.
+> 
+>
+
+### Block C2 (`workplans/valoria_master_workplan_v11_part14.md` lines 15-20)
+
+> ### CP-T06-09 — LIMIT (B10-14) · AM-D-16
+> 
+> - **N-line after:** `epistemic` helper that files a covered deed under the hand — cut it and an eyewitness's judgement of a covered deed lands on an alias nobody is, so the deed can never count in the regard a witness (or a judge he tells) holds of the doer. Narrowed to the judging side: `proofs` against a doer stays zero by the mirror.
+> - **Override:** No code change. Restate F06's consequence claims at three places: §0 fact 2 and §1 row I ("a found claim is already evidence"), §3 rows 07 and 09, §4 step 9 ("his proofs count against the clerk unless the clerk mirrors them"). A found or seen deed reaches a bench through the bench's own regard (`reception`, hence CP-T05-01's `opposed`) and through the witness's own judgement of the doer, not through `proofs`, because the doer always holds his own claim. The helper's falsifier (F06:160) is unchanged.
+> - **Because:** YES — for the code, relied-on for the measurement — `queries/world_q.py::proofs` (read): `mirror = {(c.subject, c.predicate) for c in opp.ledger}` and it sums `remove_weight` only over held deeds whose `(subject, predicate)` is not in the mirror; the opponent in a charge is the doer, and under the shipped `claim_subject_rule: both` every admitted witness, the doer included (he stands at his own act, channel `co_located`), holds `(anchor, kind, True)` (F06:31, `epistemic.py:185-215`, not opened by me).
+> 
+>
+
+### Block C3 (`workplans/valoria_master_workplan_v11_part14.md` lines 26-32)
+
+> ### CP-T07-02 — REPAIR (B10-15) · AM-E-02
+> 
+> - **N-line after:** the one working host — cut it and a practitioner has no thread act that rolls the Leap, rolls the operation and pays its cost through the seam in one place, so no thread row can be built without a second writer of `(Person, coherence)`.
+> - **Override:** `thread_scales` maps by target CLASS only: Person -> Personal, Tenure -> Relational, Site -> Field (a Site is a Site: IN-35 couples every kind). No "lattice Site" row. CP-T07-02 itself adds the carrier `Person.coherence` (resting point, elastic displacement; written only by the seam, `state/world.py:1014`) and deletes `unproduced:` from the matrix row in the same commit: a SCHEMA mover on every person's `repr`, declared (H-208). It also owns the actor adapter (AM-E-01) and the `working.failed` Event kind. Counted objects: module, prize row, `thread_scales`, `working.failed`, `Person.coherence`, adapter. Lands in `engine/season/seam/wrappers/threadwork.py`, `state/carriers.py`, `write_matrix.yaml`, `rosters.yaml`.
+> - **Taken (ladder step 3/4):** [ASSUMPTION; medium; Jordan to correct; revert: Structural for every Site, which prices every Site working at Ob 8 and cost -2]
+> - **Because:** YES — `loop/matter.py:142` "EVERY SITE, WHATEVER ITS KIND -- the lattice is the territories' fabric, not a kind", so "lattice Site -> Structural" is every Site; the home's own worked example maps a mill (a Site) to Field (T07:396-397), contradicting it.
+> 
+>
+
+### Block C4 (`workplans/valoria_master_workplan_v11_part14.md` lines 33-39)
+
+> ### CP-T07-02 — REPAIR (B10-15) · HR-6
+> 
+> - **Override:** CR-13 lands first in B10-15, so the oracle CP-T07-02's host rolls no longer charges a Leap that rolls Partial or Failure. The home's step (2) ("on Failure the act ends, `working.failed`, and the Leap's charge stands (the oracle's own −1, C-TW-3, is carried, not fixed here)", lines 120-121), its falsifier ("a Leap Failure writes the Leap's charge and no target change", lines 138-139) and its closing line 463 are replaced: a Leap Failure ends the act with `working.failed`, writes no Coherence change and no target change; a Leap Partial proceeds and writes no Coherence change of its own. The other half of the falsifier (the seam Event's deltas equal the oracle's `OperationResult.coherence_delta` plus the Leap's for the same dice) stands, and the Leap's is 0. Mutation: skip step 2 and the Leap-Failure test still reds. Control: `ts_seed: none`.
+> - **Taken (ladder step 1):** [ASSUMPTION; medium; Jordan to correct; revert: CR-13 (a) is not built and the home's text stands]
+> - **Because:** YES — `systems/threadwork/sim/operations.py::attempt_leap` passes `coherence_delta=0` and its docstring says a failed Leap costs no Coherence (§3.2); the −1 comes only from the blanket penalty in `_resolve_operation`, which `operations.py:319-320` records as a known defect (C-TW-3).
+> - **After the attack:** Found by the editorial-id critic round (CR-13 vs the home text).
+> 
+>
+
+### Block C5 (`workplans/valoria_master_workplan_v11_part14.md` lines 40-47)
+
+> ### CP-T07-02 — RESEQUENCE (B10-15) · HR-7
+> 
+> - **SUPERSEDED by M18 (b)** at the decision round (`-05` §1 M18): REM-45 builds `min(3, history) + 3` in B10-15 between CR-13 and CP-T07-02, hash EQUAL (both lines agree at every history ≤ 0), and CP-T07-02 needs REM-45 again, as T07 §5 has it. The override below is kept as history and no longer applies; its last sentence ("a declared mover on every thread-pool roll") was wrong: the change moves a pool only for a History of 1 or more.
+> - **REVIVED, narrowed (the knowledge-model fold of 2026-11-04; `proposals/2026-11-04-knowledge-model-build-plan.md` §6 and §11 item 7, reference):** REM-45 is DROPPED (`-07` §2: `ED-IN-0330` eliminates the rolled `history` integers, and REM-45 would switch the dead term back on), so the override below applies again WITHOUT its "waits on M18" clause and without its last sentence: CP-T07-02 does not need REM-45; its actor adapter reads `_actor_pool`'s `min(3, history + 3)` as the code has it, through that one owner; the term's fate (kept, replaced or removed) is CR-85's design (`-04`), not a flip scheduled here `[ASSUMPTION; medium; Jordan to correct; revert: REM-45 restored and this line struck]`.
+> - **Override (superseded):** CP-T07-02 no longer needs REM-45. T07 §5's "REM-45 before CP-T07-02" ("the corrected history term, before B-S") is overridden: REM-45's gate is not met, and it is HELD on M18 in B10-Z (`-05` M18). CP-T07-02 builds on the code's reading (`operations.py::_actor_pool`, `min(3, history + 3)`: History inert at history 0 or more); its actor adapter reads the pool through that one owner, so the corrected history term waits on M18 and needs no change here. Flipping later is one expression in `_actor_pool` and a declared mover on every thread-pool roll.
+> - **Because:** YES — K-WR-7 (`research/by_lane/WR_world.md:548`) asks for a ruling and is not one: the PP-624 text (`threadwork_v30.md:163`) admits both readings, the question survives all five ladder steps, and `proposals/2026-08-15-character-and-faction-stats-and-progression.md` calls the change a behaviour change to be gated. No earlier `-05` question carried it.
+> - **After the attack:** Found by the editorial-id review round (REM-45's gate in the B10-03 build instructions).
+> 
+>
+
+### Block C6 (`workplans/valoria_master_workplan_v11_part14.md` lines 48-53)
+
+> ### CP-T07-03 — NARROW (B10-15) · AM-E-03
+> 
+> - **N-line after:** `weave` — cut it and a practitioner cannot hold a place against wear by carrying the load herself, so wear suspension remains a repeated unpaid `restore` act each season. `lock` — cut it and a practitioner cannot deny a rival a place (yield 0, no one else can repair it), the only act that destroys a place's use without ending it.
+> - **Override:** Delete the "strain for IN-35" row and the `strain(w, territory)` Query: `held_load(w, person)` stays (CP-T07-06 floors on it). Locked-Site yield 0 lands where `loop/matter.py` projects `ProduceInput.sites` into `settlements.produce` (skip a locked Site there), not at `matter.py:591`. The staged-delta refusal on a locked Site (`restore`, `work`, `sabotage`) stays; it becomes exercisable once REM-22 lands. `lock` on one's own Site is dominated by not working the Site (yield 0) and is not a designed use. A strain source for IN-35 is not built here (H-236 stays open).
+> - **Because:** PARTLY — `loop/matter.py:117-121,141-150`: the coupling reads Site conditions only; it takes no strain scalar and its docstring says it "does not build the SOURCE" (`H-236`). `hole_register.yaml` `lattice_coupling` ships 0 and IN-35's rule has no input a `strain(territory)` Query could feed; feeding it would be an edit to IN-35's coupling the home names as a "need" and nothing builds.
+> 
+>
+
+### Block C7 (`workplans/valoria_master_workplan_v11_part14.md` lines 54-59)
+
+> ### CP-T07-04 — NARROW (B10-15) · AM-E-04
+> 
+> - **N-line after:** `mend` on a locked Site — cut it and nothing can undo a `lock`. `mend` on oneself — cut it and permanent set (which narrows the season, CP-T07-07) has no remedy. `mend` on another person — cut it and a stretched ally cannot be kept under the range inside a season (in-season value only).
+> - **Override:** Delete the lattice-Site route; IN-35's Mending arm stays `restore`, so the home's "edit to IN-35's text" (`_part5.md:91`) is not made. Routes kept: locked Site (clears `Site.locked`), another person (target's elastic falls; stated as in-season only), oneself (resting point -1, `self_mend_ob_step` swept at 0). The sentence "the Mender holds back the Calamity" in the home's chooser text is struck (no Calamity source exists, H-236). `mend` still cannot form on another's live `weave` or `ward`.
+> - **Because:** YES — `loop/effects_economy.py:109-138` `_rise` = headroom x share, "`f(degree)` IS NOT BUILT ... the term is therefore the IDENTITY"; `restore` and `work` are uncontested. `systems/threadwork/sim/coherence.py:115,133` `ELASTIC_RETURN_PER_SEASON = 6`, `ELASTIC_RANGE = 6`: one rested season in equilibrium returns the whole elastic range.
+> 
+>
+
+### Block C8 (`workplans/valoria_master_workplan_v11_part14.md` lines 60-66)
+
+> ### CP-T07-05 — NARROW (B10-15) · AM-E-05
+> 
+> - **N-line after:** `in_equilibrium` — cut it and recovery is free everywhere, so a stretched practitioner has no reason to leave a locked place.
+> - **Override:** `queries/world_q.py::in_equilibrium(w, person)` is True unless the Site the person is contained at is `locked`. Delete `calamity_band` and the fixture `equilibrium_band_floor`; the control `equilibrium: everywhere` stays. The Calamity half re-opens, as a read of `closed_uses`, when H-236's source lands. The falsifier's locked/unlocked pair stands unchanged.
+> - **Taken:** [ASSUMPTION; medium; Jordan to correct; revert: gate on `closed_uses(w, territory)` being empty]
+> - **Because:** YES — `grep -rn calamity_band engine modules systems --include=*.py --include=*.yaml` returns nothing.
+> 
+>
+
+### Block C9 (`workplans/valoria_master_workplan_v11_part14.md` lines 67-73)
+
+> ### CP-T07-07 — REPAIR (B10-15) · AM-E-07
+> 
+> - **N-line after:** permanent set narrows the season — cut it and set is felt only at the crossing, so a practitioner who overworked pays nothing between stretch and crossing, against the genre's central expectation.
+> - **Override:** No `coherence_band_penalty` table. Add a `coherence_band_floors` Fixtures tuple (shipped `()`), read as `standing_band_floors` is (H-223); a `band_floors["coherence"]` row would not load (its outer key is `site_kinds`, `rosters.yaml:2645-2655`, and `body` sits there by the H-38 exception). `budget()` subtracts `bands_below(<resting headroom>, fx.get("coherence_band_floors"))` beside `body_band_penalty`, one count per floor passed (higher resting is worse; the sign is handled once, in the caller). Shipped `()`: every arm equals today. The band edges are authored in the tuple, not retyped from `coherence._displacement_band`: the oracle's edges stay its own, and a drift between the two is the tuple's H-row, named [OPEN — Jordan tuning]. Reads `Person.coherence` (CP-T07-02); no World read.
+> - **Because:** YES — `decision/budget.py:64-83`: `bands_below(value, floors)` counts floors `value` is below; `body_band_penalty` = `bands_below(p.body, fx.get("band_floors")["body"].values())`. The home's `coherence_band_penalty` (T07:272) is a four-entry table indexed by band name, a second ladder method in one function.
+> - **After the attack:** A `band_floors["coherence"]` row does not load; the tree's method for a band over a derived quantity is a Fixtures tuple, which is also REM-50's.
+> 
+>
+
+### Block C10 (`workplans/valoria_master_workplan_v11_part14.md` lines 74-79)
+
+> ### CP-T07-08 — NARROW (B10-15) · AM-E-08
+> 
+> - **N-line after:** `coherence.crossed` — cut it and a practitioner can pass the human band without anyone present learning it, so no witness can hold, tell or act on the fact.
+> - **Override:** The host emits one Event `coherence.crossed` (subject the person; fanned at WITNESS) the first time a seam write carries the resting point past `HUMAN_BAND_LIMIT`. Delete `crossing_outcomes` and `crossing_knot_stress` and the knot arm. The crossed person keeps acting. Falsifier: three Field workings that carry a hand-set resting point past 5 emit it once and a co-located witness holds the Claim; a fourth emits none (the home's "Structural lock Failures" are repriced by AM-E-02: Sites map to Field). The outcome content (queue A1 / A2-08) is reopened when something reads a consequence.
+> - **Because:** YES — `ctl/census2_s0.json` (and s1, s2) `event_kinds` hold no `arrest.made`; code report line 87 lists `arrest` and `tie / knot` among verbs never attempted over 12 seed-seasons; the slot is a roster whose every entry is `none` (T07:291), which no code reads; `-05` queue A2-08 records the content as ANSWERED-DOC on a PROPOSED canon section (`07_drift.md` §7.6), which is reference, not a mechanism.
+> 
+>
+
+### Block C11 (`workplans/valoria_master_workplan_v11_part14.md` lines 80-84)
+
+> ### CP-T07-09 — LIMIT (B10-15) · AM-E-09
+> 
+> - **Override:** Add the stated limit: until the JQ-3 cell-value pass authors pursuit cells for `weave`, `lock`, `mend`, `ward`, an NPC practitioner's choice among them is decided by order, not by preference; the "unwatched" claims of T07 §2-§4 hold for witness scars and for execution by a planted or played practitioner, not for an NPC preferring one working. No design change.
+> - **Because:** YES — `decision/choose.py:129-151` `score_terms` = (pursuit sum over `align(c.verb, ax)`, stance, urgency); the stance and urgency terms do not depend on the thread verb's identity beyond its target; the content report (orchestrator, 16 verbs uncelled) lists no thread row celled; T07:305-312 authors affiliation cells (witness scars) and defers the pursuit axes to JQ-3's pass.
+> 
+>
+
+### Block C12 (`workplans/valoria_master_workplan_v11_part14.md` lines 85-91)
+
+> ### B10-16 gates, IN-52 and `requisition` — RESEQUENCE (B10-16) · AM-E-21
+> 
+> - **Override:** Record the gap in the batch card and in `-02` and `-06`: no position makes `requisition` execute in computed play; the owner is none. The seat channel carries only MATTER-recorded reads, and the realm records no shortfall after season 1 (`scarce.py:21-24`); no channel gave any issue-granting holder a settlement-larder claim (H-163 limit 3(a): `larders_in_purview` returned `()` in 766 of 766 calls). Until a position takes H-163 limit 3(a) (**[GAP: unowned]**), CP-T08-06's compliance reader, CP-T08-07's collection, CP-T08-08's refill and IN-52's flip are credited on hand-built worlds only, and none counts toward R-04 conjunct (1) (`-02` §5). CP-T08-04 is held at ED-IN-0297; CP-T08-02's `ground` flip waits on a relief path. Nothing is added to fix it: which lift to build (a seat-channel level report, or residence-ladder reach) is a design choice with different information games, and H-163 says it is not this row's to choose. The choice of lift is asked as M17 (`-05`) by the later hole-row pass; until it is answered no position builds either lift.
+> - **Taken (ladder step 1):** [ASSUMPTION about the gap only: record it, build nothing]
+> - **Because:** YES — and the cause is not authority. (1) Census: `ctl/census2_s0.json` `event_kinds`: `requisition.unauthorized` 12, `requisition.refused` 4; s1 10/5; s2 9/2; `requisition.taken` never emitted.
+> - **After the attack:** The causal claim stands. 'Unowned' was not new (IN-52 was already gated on H-163 3(a)); the draft's account of the channel was wrong, and `-02` and `-06` now record the gap in the plan's own shape. The B10-16 card edits the draft listed had not been applied and now are.
+> 
+>
+
+### Block C13 (`workplans/valoria_master_workplan_v11_part14.md` lines 92-97)
+
+> ### CP-T08-01 — REPAIR (B10-16) · AM-E-12
+> 
+> - **N-line after:** `labour` — cut it and a death, a flight or a cohort's starvation costs a town no output, so there is no famine spiral (fewer hands, less food, more hunger); the battle->output direction is not observable until a march arrives.
+> - **Override:** `labour(w, rung)` is per RUNG: sum of `weight x body / body_scale` over `presence(w, rung)`; the yield factor is one per rung, `min(1, labour / sum(site_crew[kind] for the rung's producing Sites))`, so a person's hands are spent once however many Sites the rung holds and `site_crew` keeps its meaning (the hands at which the rung's whole fabric reaches its condition-scaled base). It lands as one per-rung ratio on `ProduceInput` (`modules/settlements/produce.py`), built in `loop/matter.py` from `world_q.labour`; `labour_mode: off` is 1. The falsifier (c) person-moves-onto-the-rung stays; a battle falsifier is dropped until a march arrives (stated limit).
+> - **Because:** YES — `modules/settlements/produce.py:30-52` `produce(inp)` loops each rung's `(site_kind, condition)` pairs and computes `int(base * (condition/scale) * inp.factor)`: the arithmetic is behind `ProduceInput`, not `loop/matter.py:589-591`.
+> 
+>
+
+### Block C14 (`workplans/valoria_master_workplan_v11_part14.md` lines 103-107)
+
+> ### CP-T08-04 — RESEQUENCE (B10-16) · AM-E-15
+> 
+> - **Override:** CP-T08-04 is HELD on IN-45 (B10-06). ED-IN-0297 is closed (M5 (B), `editorial_ledger_in.jsonl:81`): works are authored as `venues.yaml` `planned_works:` rows. It builds nothing in B10-16 until IN-45 releases it. When it is released: `smithy`/`mint` Sites are built by `build` on that row; recipes stay [ASSUMPTION; medium; Jordan to correct]. CP-T08-05 no longer needs it (AM-E-16).
+> - **Because:** YES — home CP-T08-04 item 3 raises `smithy`/`mint` "by the shipped `build`"; `hole_register.yaml` H-165 (limits 2-3) and H-166: `build` needs a works Record, "nothing computed declares a works"; `ctl/census2_s0..s2.json` `resolved_by_verb.build` 40/48/47, none executed. The plan already holds IN-45 on the same question (ED-IN-0297, `-04` IN-45 entry).
+> 
+>
+
+### Block C15 (`workplans/valoria_master_workplan_v11_part14.md` lines 108-115)
+
+> ### CP-T08-05 — REPAIR (B10-16) · AM-E-16
+> 
+> - **N-line after:** `price_of` — cut it and goods move only by authority or gift, so a town in dearth cannot buy; it is paper until an `offer` has a computed producer.
+> - **Override:** `price_of(w, rung, kind) = price_base[kind] × (need + 1) // (stock + 1)`, where `need = demanded(kind) × price_horizon` and `stock` come from the same draw record and `Rung.stores` reads REM-50 uses: one owner of the reads, no second ratio. The recipe-input term is dropped (CP-T08-04 is held). Lands in `queries/world_q.py` beside `hunger`. The item ships and executes on hand-built worlds only (an `offer` Record needs a producer; H-165's shape); nothing in the shipped realm exercises it.
+> - **Taken (ladder step 4/5):** [ASSUMPTION; medium; Jordan to correct; revert: the home's `need/stock` formula]
+> - **Because:** YES — home item 4: "A computed `create_record` mints only `text` today (H-165), so offers form only from a hand-built or played act"; `ctl/census2_s0.json` has no `exchange` in `resolved_by_verb`.
+> - **After the attack:** 'Per-kind cover' does not exist (REM-50 gives an aggregate integer) and 'inverse of cover' divides by zero at stock 0. The formula now reads the same draw record, and the cross-request to REM-50 is dropped.
+> 
+>
+
+### Block C16 (`workplans/valoria_master_workplan_v11_part14.md` lines 116-124)
+
+> ### CP-T08-06 — NARROW (B10-16) · AM-E-17
+> 
+> - **N-line after:** `unrest(w, S)` — cut it and an overtaxed but fed town yields to every taker forever; neglect never degrades a place. Reader: the census report now; `requisition`'s compliance when it executes.
+> - **Override:** Delete home item 2: no `unrest_signs` roster and no clause added to `stability`. `unrest(w, S)` is the sum over cohorts residing at S of `-stability(c, S, unrest_window)` as it already counts (dominance deeds including `requisition.taken`, and shortfall claims); the band is an `unrest_band_floors` Fixtures tuple (shipped `()`), as `hunger_band_floors` is. The falsifier uses `shortfall:grain` claims, not hunger-band claims. Its reader before CP-T08-07 is the census line only (`uncontrolled`'s precedent), so it is a report until `requisition` executes. REM-51 is cut: nothing here reads a hunger-band claim.
+> - **Taken:** [ASSUMPTION; medium; Jordan to correct; revert: add `rosters.yaml: unrest_signs` with the hunger predicate at `hungry`/`starving`]
+> - **Because:** YES — `queries/person_q.py:481-505` `stability` = minus the count of claims at the rung that are deed claims of an `UNREST_KINDS` kind (`person.died`, `body.changed`, `field.won`, `rung.seized`, `record.seized`, `requisition.taken`) OR a `shortfall:<kind>` claim.
+> - **After the attack:** Same banding method as REM-50 and CP-T07-07 (a tuple fixture); the REM-51 premise is struck.
+> - **Story-telling fold of 2026-11-02 (ED-IN-0311):** STOP RULE: if CP-T08-07's gate (H-163 limit 3(a), owned by CR-23) is not met at B10-16's entry (re-based by symbol; CR-23 closed in B10-06, so the condition is known before the batch opens), CP-T08-06 moves to B10-Z as HELD with it, because alone it is a gauge whose only reader is a census line. It does not merge into CP-T08-07's commit (P5: one position, one commit). `[ASSUMPTION; medium; Jordan to correct; revert: delete the stop rule]`
+> 
+>
+
+### Block C17 (`workplans/valoria_master_workplan_v11_part14.md` lines 125-130)
+
+> ### CP-T08-07 — RESEQUENCE (B10-16) · AM-E-18
+> 
+> - **N-line after:** the `tax` edict — cut it and governing leaves no rule behind (no rate, no slot, no lag), provided a governor can know the stock he rates; until then it is dominated by a bare requisition.
+> - **Override:** CP-T08-07 is gated on H-163 limit 3(a) (a governor holds a stock claim of the rung he taxes) and does not build before it. Its "one slot per place" is a slot on EDICTS only: a rival seat's bare `requisition` (IN-49) takes regardless; this is stated, not designed away (the home's text implies a slot on takers). It no longer needs CP-T08-08 (the treasury is a join, not a need). Compliance by `unrest` band (item 5) stays as written and ships at 1000.
+> - **Because:** YES — and stronger than the lane states: home item 4 sizes the collection as `edict.amount x ramp / 1000 x the stock his newest claim gives` and marks the carrier `[UNVERIFIED: which claim carries a rung's stock to its governor]`.
+> 
+>
+
+### Block C18 (`workplans/valoria_master_workplan_v11_part14.md` lines 131-137)
+
+> ### CP-T08-08 — REPAIR (B10-16) · AM-E-19
+> 
+> - **N-line after:** the upkeep question — cut it and a stocked treasury can never pay its establishment by a chooser's act, so every establishment lapses at its first term.
+> - **Override:** `upkeep_due` skips any group whose place is the seat's own rung (clause 3 renews nothing there) and forms a Candidate only while the seat's rung holds at least the group's amount of the kind, so a bare treasury forms nothing (no scene crowding, H-156's shape). Delete the Join sentence about IN-49 forming a refill. It forms 0 acts in computed play until a treasury holds stock; its only filler is `requisition` (AM-E-21), so its falsifier runs on `harness/scarce.governed`. CP-T09-05 and CP-T09-07 need this item (CROSS: F): their lapse-and-pay paths are hand-built until the gap closes. Sharpened risk: no computed `oblige` exists to renew (`effects_economy.py:335`; the row is untyped, so there is no term to renew).
+> - **Because:** YES — `loop/effects_economy.py:301-303` clause 3 (`src == dst` "A transfer from a rung to itself cancels to nothing") and `:342` (`if ... src == dst ... return []`): a same-rung group renews nothing. The home's `upkeep_due` groups obligees by last-known place and forms one `transfer` per group with `from` the seat's rung.
+> - **After the attack:** The dependence on an `oblige` that never forms is stated.
+> 
+>
+
+### Block C19 (`workplans/valoria_master_workplan_v11_part14.md` lines 145-150)
+
+> ### CP-T09-01 — LIMIT (B10-17) · AM-F-16
+> 
+> - **N-line after:** leaving and joining decided by opinion — cut it and the gameplay experience is worse, because a member cannot leave a faction he has come to read below indifference, nor a stranger join one he favours, since no candidate reflects opinion; this is built only if the pre-build reading (members reading own faction below 0; (person, rival creed) pairs passing the join gate, ticks 0-2, hash-equal) finds both a leaver and a gate that is not near-universal.
+> - **Override:** CP-T09-01's first commit is the reading, not the code: seeds 0-2, ticks 0-2, hash-equal, counts of members with `opinion_of(own) < 0` and of (person, rival creed) pairs with `opinion_of > max(0, own)`. Zero leavers: the leave body is not built. Join gate passing for most of the cast at tick 0: the filter is not built as written. Either residue is recorded and the item closes as MEASURED. The home's own "R-CHOICE … keep my followers" claim is amended as AM-F-14 says.
+> - **Because:** YES — T09 file `:149-154` (measure first, "both halves": if no member reads own faction below 0 the leave body is not built; if the join gate passes for most of the cast at tick 0 the filter is too loose to build as written). `queries/world_q.py:2294-2327` (`opinion_of` as above) and `:2330-2354` (`opinion_referents`' own gate `< 0`).
+> 
+>
+
+### Block C20 (`workplans/valoria_master_workplan_v11_part14.md` lines 151-166)
+
+> ### CP-T09-02 — RESEQUENCE (B10-17) · AM-F-10
+> 
+> - **Override:** B10-17 order: CP-T09-04; -01; -05; -02; -03; -07; -08; -09 (the home's §5), with -04 carrying IN-30's exit; CP-T09-06 waits on IN-61 (STOPPED) and IN-53 (no v10 position), so it does not open the batch. Needs: CP-T09-02 swaps `CP-T09-03, CP-T09-07, ED-IN-0298` for `CP-T09-04`; CP-T09-04 drops `CP-T09-07` (AM-F-13 moves the shared count to 07's commit); CP-T09-08 drops `ED-IN-0298`. M11's builder carries a constraint: the replacement for `chronicle` must publish `war.declared` (the one kind CP-T09-02 relies on it for). IN-30 builds with CP-T09-04 (d), as before.
+> - **Taken (ladder step 3):** [ASSUMPTION; medium; Jordan to correct; revert: restore the plan's order and needs; the cycle then has to be broken some other way.]
+> - **Because:** YES — for the needs graph as the plan states it; the plan's B10-17 contradicts itself and the home's §5. Plan rows: CP-T09-02 needs `CP-T09-03, CP-T09-07`; CP-T09-03 needs `CP-T09-02` (a two-row cycle); CP-T09-04 needs `CP-T09-07`; the batch's order line puts 02 before 03, 04 before 07 (backward edges).
+> - **After the attack:** CP-T09-06 was placed first as having no dependency; it needs IN-61 and IN-53.
+> 
+> ### CP-T09-02 — LIMIT (B10-17) · AM-F-11
+> 
+> - **N-line after:** `declare` and the war it opens — cut them and the gameplay experience is worse, because no act makes a war a state anyone can read, so a wound across factions cannot become a declared war that members rally to; whether the war's targets are taken is a separate, later claim (`march` and `seize` arriving), made only when an arrival is observed.
+> - **Override:** CP-T09-02 is reported done for the declaration (a computed `declare` forms, executes and its `war.declared` reaches a ledger) and NOT done for term (c)'s teeth. The teeth are done only when a seeded run shows `army.arrived` ≥ 1 after a computed `march` on a term-(c) target, or `rung.seized` ≥ 1 after a computed `seize` on one. The realm reading records `war.declared`, term-(c) offers, `march` formed / refused / arrived, `seize` formed / executed, at seeds 0-2, and names the first link that failed (formed, offered, attempted, arrived), as REM-27 does. The same clause binds CP-T09-03, -04 and -08 for their own chain links. The B10-17 Exit says so, because the clause otherwise sits only in CP-T09-02's title: CP-T09-02, -03, -04 and -08 count their chain's teeth only on an observed `army.arrived` or `rung.seized` after a computed act on a term-(c) target, seeds 0-2.
+> - **Taken:** [ASSUMPTION; medium; Jordan to correct; revert: the home's formation-only falsifier.]
+> - **Because:** YES — the home's falsifier (2) (T09 file `:212-215`) reads: *"With W live, a Crown `dispatch` seat forms `march` on a Hafenmark-held settlement its ledger never named"*: a formation test; its realm reading is `war.declared`, `field.won + field.lost` "base 0, 0, 0" with no pass condition.
+> - **After the attack:** The clause was written for four items and printed in one; the batch Exit now carries it.
+> - **Story-telling fold of 2026-11-02 (ED-IN-0311):** at re-base confirm that `declare`'s `referent_class: Proposition` has a stamper beside `seats_named` in `queries/world_q.py::questions_for`'s stamped occasions (`Proposition` is already stamped by `own_referents_of_class` in `queries/world_q.py`, for `argue`; `opening_set` iterates only referents carried AS the row's class, so confirm that the war Proposition `declare` mints reaches that stamp when a seat-holder chooses). If it does not, the stamp is part of CP-T09-02's commit, not a new position. `[ASSUMPTION; medium; Jordan to correct; revert: delete the re-base check]`
+> 
+>
+
+### Block C21 (`workplans/valoria_master_workplan_v11_part14.md` lines 167-175)
+
+> ### CP-T09-03 — LIMIT (B10-17) · AM-F-12
+> 
+> - **N-line after:** alliance and peace as acts on the war Proposition — cut them and the gameplay experience is worse, because a third faction cannot be invited in and a war cannot be ended on an offer, only by each committer's unprompted `release`; the item is done as formation until the covenant link executes.
+> - **Override:** CP-T09-03 is reported done on a hand-built chain plus a realm reading of each link: `covenant` formed / refused / executed with a W subject, `give` of the instrument, the counterparty's `commit` or `release`. It is not reported done for computed alliance or peace until a seeded run executes `covenant` ≥ 1 with a W subject. If the reading shows `covenant` still refused for wrong-kind subjects, the residue names `referent_class` on `covenant` (REM-23's shape) as the next link and the item stays `paper` for the computed chain.
+> - **Taken:** [ASSUMPTION; medium; Jordan to correct; revert: none needed, the clause only restricts what is reported done.]
+> - **Because:** YES — `verb_table.yaml:292-312`: the `covenant` row declares `requires_typed` (`existence` of `subject` kind Proposition) and no `referent_class:` (the only classed rows are at `:226, :266, :820, :892, :943`; none is `covenant`), and its note says *"A computed covenant forms on a Proposition referent … on any other referent the `subject` conjunct refuses it in the fold"*: an unclassed row forms on every plain referent, so the 41 refusals are the wrong-kind class REM-23 removed from `commit`.
+> - **After the attack:** Wording only.
+> - **Story-telling fold of 2026-11-02 (ED-IN-0311):** CP-T09-03's commit also adds `referent_class: Proposition` to `covenant` in `verb_table.yaml`, instead of waiting for the realm reading to name it (the residue clause above, "names `referent_class` on `covenant`", becomes this position's own edit; REM-23 and CR-50 are the shape). Reason: `covenant` forms on every plain referent today and 3 of its 4 realm refusals read `exists:Proposition = 0`; the war Proposition `declare` mints is its only computed producer of a lawful subject besides `utter`. "Done" for computed alliance or peace still requires a seeded run that executes `covenant` >= 1 with a W subject. `[ASSUMPTION; medium; Jordan to correct; revert: leave `covenant` unclassed and wait for the realm reading]`
+> 
+>
+
+### Block C22 (`workplans/valoria_master_workplan_v11_part14.md` lines 176-181)
+
+> ### CP-T09-04 — REPAIR (B10-17) · AM-F-13
+> 
+> - **Override:** CP-T09-04 lands on `mustered` as filed and stops needing CP-T09-07. CP-T09-07's commit adds one reader, `world_q.seat_people_at(w, via, rid)` = `mustered(rid, seat_faction(via))` ∪ the seat's obligees present in `rid`'s subtree, and in the same commit points `sides_of` (`sides.py:115`), `occupying_faction` (`effects_shared.py:149`) and the plurality comparison of CP-T09-04 (b) at it. The one-count claim at T09:515-516 is true after that commit and false between the two. 04's falsifier (2) is re-run in 07's commit with an obligee-only seat: the obligee counts toward the plurality.
+> - **Taken (ladder step 5):** [ASSUMPTION; medium; Jordan to correct; revert: obligees fight but do not occupy, and the home's S-line is amended to say two counts.]
+> - **Because:** YES — `loop/effects_shared.py:149-168` `occupying_faction`: the licence tests `mustered(w, rid, mine)`; `loop/sides.py:~115` `claimants = mustered(w, origin, faction)`; `state/gate.py:865-888` `may_muster`: a moved man must hold a live `commit` to the seat's faction.
+> 
+>
+
+### Block C23 (`workplans/valoria_master_workplan_v11_part14.md` lines 182-187)
+
+> ### CP-T09-04 — LIMIT (B10-17) · HR-4
+> 
+> - **Override:** Two residues of H-151 are CP-T09-04 limits, not LEAVE: a third faction is invisible on an unheld settlement, and two armies on one empty target both arrive. Both fall inside the item's subject (plurality occupation of land with no holder).
+> - **Because:** H-151's residues 2 and 3 are the same subject as CP-T09-04.
+> - **After the attack:** Found by the hole-row critic round (H-151 EDIT).
+> 
+>
+
+### Block C24 (`workplans/valoria_master_workplan_v11_part14.md` lines 188-193)
+
+> ### CP-T09-05 — LIMIT (B10-17) · AM-F-14
+> 
+> - **N-line after:** the fief occasion — cut it and the gameplay experience is worse, because no follower is ever given land in computed play (0 formed at HEAD); it is NOT claimed to keep a follower, which waits on a `deed:rung.ceded` cell.
+> - **Override:** Add to CP-T09-05's stopping rule: a grantee whose `opinion_of(own faction)` reads below 0 within two seasons of a cession to him and who then `release`s his `commit` counts as a defection the grant drove; if such a defection appears in the seeds 0-2 reading, revert the term. Strike "grant land" as an answer to "keep my followers" in T09's R-CHOICE paragraph (T09:500-501): the intent has no act at HEAD that reaches it (pay upkeep waits on CP-T08-08; do nothing emits the follower's `commitment.ended`). The "no strict dominance" line stays an upper bound and says what it is an upper bound over: rows that do not yet reach the intent.
+> - **Because:** YES — `rosters.yaml:3199, 3245, 3285, 3342, 3383, 3436` are `give: null` and `:3494` is `give: -0.2` (one axis, "mild"). `data/verbs.py::KIND_VERB` maps `rung.ceded` and `record.given` to `give` (checked by import), so a witnessed cession is judged at `give`'s cells until a `deed:rung.ceded` cell is authored.
+> 
+>
+
+### Block C25 (`workplans/valoria_master_workplan_v11_part14.md` lines 194-201)
+
+> ### CP-T09-07 — REPAIR (B10-17) · AM-F-15
+> 
+> - **N-line after:** (b) the seat's obligees in its army and its count of people at a place — cut it and the gameplay experience is worse, because a sworn man yields purview and no men, so oaths bind nobody to a field; (a) `retain` (planned as `recruit`; the name collision below) — cut it and no seat can bring a man into service by a contested act, which is claimed only on the uncapped arm.
+> - **Override:** CP-T09-07 has two exits. (b) the union (`world_q.seat_people_at`, AM-F-13) and `may_muster`'s `oblige` clause: done on an executed hand-built march plus the obligee-only plurality arm; independent of H-213 and of CP-T01-06. (a) `retain`: reported done only on the uncapped arm with a won `retain` in a seeded run, and "not shown at the shipped ceiling" otherwise; its obstacle terms are demands on `roll.py::obstacle` and are clipped there at the shipped ceiling. The realm reading counts won `retain`s of seat-holders separately, as the home's stopping rules ask. **Name collision (R-05 fold of 2026-10-31):** ED-IN-0306 landed a `recruit` row (army troop raising, `recruit` in `rosters.yaml: army_verbs`) after this entry was written, and `VERB_TABLE` is keyed by verb, so (a)'s planned row, the contested offer of service, takes the plain word `retain` (to retain a man is to bring him into one's service; the MB verb lexicon's §3.8 proposed `retain` or `enlist` for this collision, `proposals/2026-10-16-verbs/2026-10-16-verbs-10-lexicon-mass-battle.md`, and `enlist` reads as troop raising; absent from `VERB_TABLE` at this edit), its Lost event `retain.declined` `[ASSUMPTION; medium; Jordan to correct; revert: rename the army row and give (a) `recruit`]`; (b) also edits `loop/sides.py::sides_of`, which ED-IN-0306 changed, so the re-base re-reads it.
+> - **Taken (ladder step 4):** [ASSUMPTION as AM-F-13.]
+> - **Because:** YES — the home (T09 file `:379-383`): at the shipped ceiling (default 2, `data/fixtures.py:416-419`) an added obstacle term is clipped, so falsifier (1) runs on H-213's uncapped arm, owner CP-T01-06; the plan's `-03` row names `CP-T01-06`, `H-213` as needs. `loop/sides.py` is edited by this item (b), by CP-T04-01 (landed `5de92100`) and by CP-T04-04 (the same file). The count split is AM-F-13.
+> - **Story-telling fold of 2026-11-02 (ED-IN-0311):** `guards` ON does not muster the guards until (b)'s union lands (it is NOT otherwise inert: the guards' `oblige` already closes audience at any rung where `guard_weight > 0`, `queries/world_q.py` `admits_audience` limb 1, and `guards=True` has its own hash), because the guard cohorts (`harness/populated.py` `seat_guards`) hold a live `oblige` and no `commit` and so are not `mustered`; (b)'s landing is therefore the moment to put the flip to Jordan; it is his (M1's residue, `guards` half, ED-IN-0301, kept off by ED-IN-0310) and is NOT part of (b).
+> 
+>
+
+### Block C26 (`workplans/valoria_master_workplan_v11_part14.md` lines 202-207)
+
+> ### CP-T09-09 — LIMIT (B10-17) · AM-F-17
+> 
+> - **N-line after:** a plot with backers — cut it and the gameplay experience is worse, because backers and the refused invitation cannot exist (a lone killing survives as `fight`); built only if a reading over the realm's persons toward seat-holders at ticks 0-2 finds `legitimacy < 0` for anyone.
+> - **Override:** CP-T09-09's first commit is a hash-equal reading of `legitimacy(p, H)` for every person toward every seat-holder at ticks 0-2, seeds 0-2. Null (nobody below 0): the item is cut and a CUT row is added to `-07` §2 with the reading as its reason. The obstacle terms on `roll.py::obstacle` are clipped at the shipped ceiling (as CP-T09-07 (a)); the falsifier runs on the uncapped arm only.
+> - **Because:** YES — T09 file `:449-450` ("Measure first. As CP-T09-01: B-V's foreign prefect read no negative `legitimacy` at three placements") and `:486` ("the first to drop if its measure-first reading is null"); `queries/person_q.py:~452` `legitimacy`. The plan's row has no measure-first mark.
+> 
+>
+
+### Block C27 (`workplans/valoria_master_workplan_v11_part14.md` lines 208-215)
+
+> ### CP-T10-01 — REPAIR (B10-18) · AM-F-07
+> 
+> - **N-line after:** the journey priced by its route — cut it and the gameplay experience is worse, because where things happen carries no cost for a seated player (IN-47) and distance buys nothing; for an NPC it is an unseen cost, and no position gives a chooser a person-side reading of the leg's price (T10 D-1): **[GAP: unowned]**.
+> - **Override:** Terrain at a point has one owner: extract the loop at `modules/mass_battle/terrain.py:~189-195` into a public `terrain_type_at(point, *, geography)` that `terrain_row_for_territory` also calls; `route` reaches it as a `query` role (a row in `references/module_contracts.yaml`, an entry in `world_q.QUERY_ENTRIES`), never by import. `route` returns `None` when any entered settlement costs the matrix's `mountain` entry; the journey is `travel.blocked`, as the border is. `route_pricing` ships OFF; the same-place rule ships on both arms. The on-arm default does not flip: no position gives a chooser a person-side reading of leg price (T10 D-1), **[GAP: unowned]**. Falsifier gains: a settlement planted in a `mountain_pass` polygon nested in a `mountain` costs 2.0, not 999.
+> - **Taken (ladder step 4):** [ASSUMPTION; medium; Jordan to correct; revert: restore a first-match lookup in `data/geography.py` and accept the second copy.]
+> - **Because:** PARTLY — all cites open: `systems/settlements/valoria_geography_v30.yaml:760-771` (`mountain: 999.0`, `mountain_pass: 2.0`, comment *"Mountain interior is impassable except via embedded mountain_pass polygons"*); `modules/mass_battle/terrain.py:150-195` (the smallest-area match is inline in `terrain_row_for_territory`, keyed on a *territory anchor* and returning a six-row class through `_TYPE_TO_ROW`, not a terrain type; `_point_in_polygon` and `_polygon_area` are private).
+> - **After the attack:** The 'has a position' gate carried nothing; there is no such position.
+> 
+>
+
+### Block C28 (`workplans/valoria_master_workplan_v11_part14.md` lines 216-222)
+
+> ### CP-T10-02 — REPAIR (B10-18) · AM-F-08
+> 
+> - **N-line after:** the Calamity costs the traveller — cut it and the gameplay experience is worse, because the Calamity's edge is only scenery to anyone who walks there, since nothing makes a place dangerous to visit.
+> - **Override:** `band(territory)` is breadth-first distance over `data/geography.py::adjacent_territories()` from the epicentre territory (`terr_T15`), written as one function in `data/geography.py` beside it. `exposure_body` is keyed by that number. The file's `radiation_bands` table stays unread by game code and remains the tests' independent oracle: the falsifier asserts the BFS band equals the file's band for all 17 territories (it does today, measured). Strike "read through `data/geography.py` until then" (T10:166). `radiation_bands` band-0's territory is the only read of that table, for the root, and `geography.py`'s docstring is amended to say so.
+> - **Taken (ladder step 4):** [ASSUMPTION; medium; Jordan to correct; revert: root named in a `rosters.yaml` row `calamity_epicentre` instead.]
+> - **Because:** YES — `data/geography.py:43-65`: `adjacent_territories()` is the undirected territory adjacency, and its docstring says *"THE FILE'S `radiation_bands:` IS NOT READ HERE, AND THAT IS THE POINT: a band there is 'node distance' from Askeheim, i.e. a breadth-first reading of these same edges, so reading both would be two owners of one distance.
+> 
+>
+
+### Block C29 (`workplans/valoria_master_workplan_v11_part14.md` lines 223-229)
+
+> ### CP-T10-03 — REPAIR (B10-18) · AM-F-04
+> 
+> - **N-line after:** the year — cut it and the gameplay experience is worse, because yield and need are the same every season, so stocking before winter and relief before the lean season are never choices.
+> - **Override:** The `want` multiplier is applied in `world_q._larder_parts` (`world_q.py:~1100`), scaling each `subsistence_weight` entry by `season_terms[season_of_year].want` and rounding to a whole number (half up); it is not applied in `subsistence_draw` or MATTER. `larder_draw` and `subsist` are unedited, so the Query and the draw read one projection. `season_factor_of` returns the bare `season_factor` when `season_factor_draw` is empty, whatever `season_of_year` says. CP-T10-03 no longer needs CP-T10-05. Falsifier gains: `demanded(w, S)` and MATTER's delivered+short agree at a winter tick; a salt weight of 1 under 1.5 is 2, never 1.5; `year_length` 4 with the draw `()` raises nothing.
+> - **Taken (ladder step 5):** [ASSUMPTION; medium; Jordan to correct; revert: `season_terms.want` entries 1.0.]
+> - **Because:** YES — `queries/world_q.py:1002-1054` (`subsistence_draw` is `_draw_dict(_entry(LARDER_DRAW)(larder_input(w)))`; its docstring: *"the arithmetic is the `settlements` module's … `larder_draw` owns the cohort exemption, the walk … and `take = min(want, held)`"*); `modules/settlements/larder.py:52` (`want = wt * e.weight`, `wt` from `inp.weights`); `queries/world_q.py:1080-1127` (`larder_input` / `_larder_parts` build `LarderInput(tuple(sorted(weights.items())), …)` from the `subsistence_weight` fixture, `{'grain': 2, 'salt': 1}` at HEAD; `subsist_input` calls the same `_larder_parts`).
+> 
+>
+
+### Block C30 (`workplans/valoria_master_workplan_v11_part14.md` lines 236-243)
+
+> ### CP-T10-06 — REPAIR (B10-18) · AM-F-01
+> 
+> - **N-line after:** the `kin` edge — cut it and the gameplay experience is worse, because the game can no longer say who is whose spouse or child, so an estate (CP-T10-07) passes to nobody and `marry` (CP-T10-08) has nothing to open.
+> - **Override:** Item 1: `kin` is a releasable kind. Add `kin` to `release`'s `domain:` (`verb_table.yaml:1054`); `RELEASABLE_KINDS` derives it from `tenure_kinds` with no edit. Divorce or disowning is the owner's `release` of his own directed edge. It is one-sided: the releaser forfeits his claim on the other's estate, and hers stays live (`_eff_release` closes only edges whose subject is the actor); `marry`'s spouse negation reads live `spouse` edges owned by or naming either party, so a remarriage is refused while she holds the edge. Item 3 (the `kin` witness channel, `kin_news_kinds`) is cut from this item: a sixth channel is a §C.6 Layer-1 row, ED-IN-0298/M11's to authorise (M11 is answered (a), 2026-10-26; the cut stands until a position builds the channel). Whoever lands that channel renames `fan_out_mode: all_five` and the roster value. T10:104-105 is corrected: the item touches Layer 1 only through the channel, now removed. Falsifier gains: a `release` of a spouse edge closes it and leaves the other spouse's edge live.
+> - **Taken (ladder step 3):** [ASSUMPTION; medium; Jordan to correct; revert: restore item 3 and gate CP-T10-06 on M11.] [ASSUMPTION; medium; Jordan to correct; revert: `marry`'s negation reads edges owned only]
+> - **Because:** YES — opened `data/rosters.py:483` (the one derivation line), `data/verbs.py:1028-1046` (`_release_domain != RELEASABLE_KINDS` is a `SystemExit`; the closer clause adds *"no third excluded set can exist"* and refuses a declared `domain:` member that needs no closer), `verb_table.yaml:1054-1057` (`release` domain `[hold, commit, oblige, succeed, tie, knot]`).
+> - **After the attack:** 'A released edge forfeits the claim' was true of one spouse only; divorce is one-sided, and the abandoned spouse remains an heir.
+> 
+>
+
+### Block C31 (`workplans/valoria_master_workplan_v11_part14.md` lines 244-250)
+
+> ### CP-T10-07 — REPAIR (B10-18) · AM-F-02
+> 
+> - **N-line after:** the estate record — cut it and the gameplay experience is worse, because a dead holder's papers and land become nobody's the instant he dies, since his own edges leave with him (`hole_register.yaml:4502`), so no heir can ever be offered them.
+> - **Override:** `_estates` is renamed `World.estates`, declared in `World._STATE_COLLECTIONS` (`state/world.py:1348`), written once inside `remove_person` beside the `_departed` line (`:758`), value `(tick, sorted object ids)`, keyed by the dead man's id, never cleared and never rewritten. It is a new owner and says so. "Unclaimed" is read, not stored: an object is claimable while `hold_force(obj)` is `None`. `estates_named(w, p)` offers an object only to `p == heir_of(w, dead, obj)` AND who holds a `person.died` claim naming `dead`, from any source (the `told` shape of `places_named`). The kin channel is cut (AM-F-01), so a far heir waits for a `tell`. Falsifier gains: a hash difference between a world with a recorded estate and one without; the entry survives three ticks. `estates_named` is one more term in `questions_for`'s `added` splice beside `larders_in_purview` (REM-21 as amended has no registry, so the home's item 3 has no `STAMPERS` to ride).
+> - **Because:** YES — `state/world.py:264` and `:758` (`_departed[who] = (t.object, self.tick)`, written in `remove_person`); `loop/driver.py:444` (`w._departed.clear()` at the top of each tick, which is a season); `state/world.py:1358` (the `content_hash` docstring names `_departed` "the one per-tick exception"); `state/world.py:1348-1353` (`_STATE_COLLECTIONS` is a closed tuple).
+> - **After the attack:** The hash design is sound; the registry it rode is deleted by AM-A-06.
+> 
+>
+
+### Block C32 (`workplans/valoria_master_workplan_v11_part14.md` lines 251-255)
+
+> ### CP-T10-07 — LIMIT (B10-18) · AM-F-20
+> 
+> - **Override:** CP-T10-07 is reported done for the record and the hand-built claim chain (the falsifier as filed). The realm reading, seeds 0-2, four seasons, records: kin edges at build; `estates` entries written; `heir_of` non-empty; estate `succeed` formed / executed. All zero is the expected base and is recorded as such. The item is not reported done for the live world until an estate `succeed` executes in a seeded run, which on canon alone needs `marry` (CP-T10-08) to have produced a spouse edge first.
+> - **Because:** PARTLY — the dependency is real and AM-F-01 makes 06 load.
+> 
+>
+
+### Block C33 (`workplans/valoria_master_workplan_v11_part14.md` lines 262-267)
+
+> ### CP-T10-08 — LIMIT (B10-18) · AM-F-09
+> 
+> - **Override:** No design change. Falsifier: after A releases his spouse edge, A's `marry` to C is refused keyed `spouse` while B's edge naming A is live (divorce is one-sided, AM-F-01). `CROSS: C` — the `individual` stem (`data/requires.py::REQUIRES_STEMS`) is built by CP-T10-08's entry in B10-11 first (the `-03` B10-11 order line).
+> - **Because:** YES — the `-03` row needs `CP-T03-10, CP-T10-06, ED-IN-0210, IN-08`. AM-F-01 changes one fact it reads: `kin` is releasable, so a spouse edge can be closed by its owner's `release`. The home's "Deliberately not done: divorce … (parked)" (T10:563) stays true of a divorce *verb* and is now untrue of divorce as an act: `release` on the spouse edge.
+> - **After the attack:** The drafted falsifier ('remarry after release is not refused') is false under the one-sided release the repair of CP-T10-06 adopts.
+> 
+>
+
+### Block C34 (`workplans/valoria_master_workplan_v11_part14.md` lines 230-235, lines 353-353)
+
+> ### CP-T10-05 — NARROW (B10-18) · AM-F-05
+> 
+> - **N-line after:** a hazard hit wounds and sickness reads where a person stands — cut it and the gameplay experience is worse, because the 46 named persons feel no pressure from the world they stand in and a hit is still a one-shot kill.
+> - **Override:** CP-T10-05's N-line is items 1 and 2 only: the wounding hit and the world-reading illness term. The age term is `body_hazard`'s existing `age_step × age`, unchanged by this item and unchanged in meaning: a calendar ramp until H-208 gives persons different `born` values. Strike from the home: the sentence "The age half becomes GK2's (DA:#19)" (T10:245) and gap H's "age reaches the body" closure (T10:73): the item does not close DA:#19. Add the needs edge CP-T10-05 → CP-T10-04: the home orders recovery first ("sickness must heal, or it is slow death", T10:497) and the plan omitted it.
+> - **Because:** YES — `queries/world_q.py:970-999` (`age_of = w.tick - w.persons[pid].born`; `body_hazard = min(1.0, illness + age_step * max(0, age_of))`); `data/fixtures.py:604-609` and the printed defaults (`age_at_build=0`, `age_step=0.0`, `illness_rate=0.0`); `state/carriers.py:687` and `loop/census.py:106` (`born = w.tick - age_at_build` at build, the only writers); `references/npc_registry.yaml:52` etc.
+> 
+>
+> | CP-T10-04 | AM-F-06 | YES — the `-03` rows read: CP-T03-07 needs `CP-T10-04, REM-52`; CP-T10-04 needs `CP-T03-07, H-211, REM-29, REM-44`. A two-row cycle. |
+>
+
+### Block C35 (`workplans/valoria_master_workplan_v11_part14.md` lines 268-275)
+
+> ### CP-T10-09 — NARROW (B10-18) · AM-F-03
+> 
+> - **N-line after:** `_bond`'s kin clause — cut it and the death or wounding of a judge's own kin weighs on him no more than a stranger's, since `_bond` counts only himself and his stance rows.
+> - **Override:** In `queries/person_q.py::_bond`, `a = 1.0` when `patient == p.id` or the patient is the object of a live `kin` edge in `p.tenures` (a Person carries every Tenure whose subject he is: `state/carriers.py:76-80`, read person-side at `decision/budget.py:57`); otherwise the stance ratio as today. One clause. `patient_valence` and `patient_gain` are not created, and the unpaired kinds (`body.tended`, `record.given`) are dropped from the item: no pairing of a claim to its patient exists for them. CP-T10-06's `heir_of` and `marry` readers are unchanged.
+> - **Taken:** [ASSUMPTION; medium; Jordan to correct; revert: restore the home's `patient_valence`/`patient_gain` design, or cut the item]
+> - **Because:** The lane's diagnosis was right: death and wound are already judged through `_bond` (`person_q.py:350-361`), so the home's 'patient-blind' is false for the kinds that carry the kin hook.
+> - **After the attack:** Rejected as drafted (a cut): the draft held that a kin edge, being a World Tenure, cannot be read person-side. A kin edge the judge owns is in his own `tenures`; only an edge he does not own (the `oblige` precedent, `person_q.py:118-120`) is out of reach. The lane's own narrowing stands.
+> 
+>
+
+### Block C36 (`workplans/valoria_master_workplan_v11_part14.md` lines 339-339)
+
+> | REM-26 | AM-A-12 | YES — rem-02:439-448: "measure first with REM-11 at `aperture 1 s`", build only if the non-Rung share is larger than the 7 UNKNOWN reads and a step-5 critic passes the per-row `referent_source:` column; hash none unless built. |
+>
+
+### Block C37 (`workplans/valoria_master_workplan_v11_part14.md` lines 344-344)
+
+> | REM-30 | AM-A-18 | PARTLY — the plan card (B10-10) states the exit (a creation arm switched off reproduces the pre-build hash) and D-2 (the design stays held; the build PR lists IN-46 and IN-47 as held back). The design file `proposals/2026-10-07-character-sheet-spaces.md` was not opened by the lane or by me. |
+>
+
+### Block C38 (`workplans/valoria_master_workplan_v11_part14.md` lines 346-346)
+
+> | CP-T06-08 | AM-D-15 | YES — F06:150, :176: the item's N-line is "the counter-move to CP-T06-01" (burning the cover Record ends the cover, `attribution.py` "he holds it", and refuses a later `research` of it). AM-D-07 keeps the cover half, which is the half the burn counters, so the contingency survives the narrowing. |
+>
+
+### Block C39 (`workplans/valoria_master_workplan_v11_part14.md` lines 347-347)
+
+> | CP-T07-06 | AM-E-06 | YES — `write_matrix.yaml:190` states the fourth-clock bar; `state/world.py:1014-1017` admits `(Person, coherence)` only with `driver="Seam"`; the projection writes nothing on its own. Its staleness limit is stated at T07:486. |
+>
+
+### Block C40 (`workplans/valoria_master_workplan_v11_part14.md` lines 348-348)
+
+> | CP-T07-10 | AM-E-10 | PARTLY — `verb_table.yaml:1519-1535` `thread_read` forms on a `Rung` referent with `presence:<site>`; the plan already needs CP-T07-02 and CP-T07-03. The reader gap is the same as AM-E-14's for `requisition`: nothing in computed play reads `finding.made` for a decision. Not a design fault of the item. |
+>
+
+### Block C41 (`workplans/valoria_master_workplan_v11_part14.md` lines 349-349)
+
+> | CP-T07-11 | AM-E-11 | YES — T07:374-376 and §7 state the thinness; the plan orders it last and needs CP-T07-03. 4 TS>=30 persons: `cast.py` parse over `npc_registry.yaml` (lane count upheld). |
+>
+
+### Block C42 (`workplans/valoria_master_workplan_v11_part14.md` lines 350-350)
+
+> | CP-T08-03 | AM-E-14 | YES — remediation `-03`:325-345 defines `A(S)` = sum of `Rung.stores` over the subtree and `cover = A / D`; spoilage lowers `stores` through the existing `stores` write at MATTER (`loop/matter.py` wear step), so REM-50's `hunger` sees it with no new reader. Ships all-zero rates. |
+>
+
+### Block D1 (`workplans/valoria_master_workplan_v11_part15.md` lines 111-113)
+
+> **M34 · Does `selfish_selfless` stay at spread 0, or become a stored seventh manner axis?** (Layers v2, owner call 1.)
+> - 1: the 2026-09-17 Borgia example (two persons sharing Utility 0.9 who "differ on `selfish`", a directly held axis; `proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:241-247`, its `why_it_dissolves_R7` at `:242-246`; R7 itself binds only projected axes, `:224`, `:327`) is followed by ED-IN-0261, ruled 2026-09-20 (`registers/editorial_ledger_in.jsonl:36`). That ruling makes selfish/selfless one of seven projected bipolar axes and records "DROPPED … `Person.orient` -- never built, and now redundant: self/other lives in the pursuit space"; its row also says "two people with identical pursuits ARE identically disposed and the variation comes from the candidates", a sentence that is the recorder's, not Jordan's verbatim. ED-IN-0304 (2026-10-29) carves out risk appetite and decision horizon only, by its words (`jsonl:91`). So the direct-holding reading is dropped by a ruled row, but where the per-candidate difference then lives is not settled: it needs the beneficiary column, whose owner is M36's (REM-44 deletes `benefits_me` in B10-07, `part3.md:55`).
+> - **VERDICT: DESIGN-FIRST** (CL-PERSON), after M36. Default in force: spread 0 (`-05` §1c M34: no stored offset). The same reading holds for CL-PERSON's three ±0.15 offset axes, which are ED-IN-0261's projected axes; stored offsets there are §4 E-4, a hold on CL-PERSON.
+>
+
+### Block D2 (`workplans/valoria_master_workplan_v11_part15.md` lines 119-121)
+
+> **M36 · Who sets the per-verb payoff, force and beneficiary cells?** (Layers v2, owner call 3.)
+> - 4: CR-21's rule-bound cell pass (built at B10-07b, `f59d0ca63`; its entry left `-04` at the close): cells set by a stated rule, each `[ASSUMPTION]`, revertible per cell. One owner per fact (`CLAUDE.md` §0.05 cl. 3): a column is derived from a verb-row field that already says it (beneficiary from what the row writes and to whom; exposure from the row's existing fields), and declared only where no field does. REM-44 (B10-07) deletes `benefits_me` (`part3.md:55`), so the beneficiary column must name its new owner and must not revive the deleted term.
+> - **VERDICT: DESIGN-FIRST** (CL-PERSON). Not Jordan's: cells under a rule are data, as in CR-21.
+>
+
+### Block D3 (`workplans/valoria_master_workplan_v11_part15.md` lines 135-137)
+
+> **M40 · ED-IN-0304's undecided residue**: where appetite and horizon come from, what the risk term multiplies, how a horizon weights a later outcome, and whether each is per person or per verb.
+> - 3: ED-IN-0304 itself says "NOT DECIDED (open design, to be written where the build is scheduled)" (`registers/editorial_ledger_in.jsonl:91`). It is delegated design, not a question. Layers v2's `cautious_bold` (derived from verb exposure, with a per-person offset) and `hasty_patient` (declared per verb from delay cases) are candidate forms for the two terms.
+> - **VERDICT: DESIGN-FIRST** (CL-PERSON). It replaces CR-17's FOLLOW-ON line, which points to CL-PERSON in the fold (`part4.md` CL-PERSON gate).
+>
+
+### Block D4 (`workplans/valoria_master_workplan_v11_part15.md` lines 175-180)
+
+> ### CL-PERSON · the personality layer v2, and ED-IN-0304's two terms
+> - **Home:** `proposals/2026-10-24-character-layers-v2.md` (on disk at `c1a6a816`, reconstructed from a digest; the lane amends it, it does not fork it). **Inputs:** ED-IN-0261 (`jsonl:36`), ED-IN-0304 (`jsonl:91`); `adjudication_register.yaml:241-247`; CR-17 (its card in `part4.md`); CR-21 and H-146; REM-44's deletions (`part3.md:55`); `modules/combat/combatant.py`'s `disp`; `fixtures.py`'s `choice_temperature` (τ), `:757` (`refusal_axis`); V0-5.
+> - **Carries:** M34 (DESIGN-FIRST after M36; spread 0 in force), M35 (ANSWERED: spreads against CR-17's τ, the rule re-applied after the first non-neutral value), M36 (DESIGN-FIRST), M37 (ANSWERED: stated as a rule), M40 (DESIGN-FIRST); held on §4 E-4 (stored offsets).
+> - **Must contain:** (1) the risk term and the horizon term for M40: where each value comes from (a creation-time per-person value, or a derivation from pursuits, convictions or scars), what the risk term multiplies (the believed-odds-weighted alignment of CR-17 commit 1 is the candidate input), how a horizon weights an outcome landing SHORT, MEDIUM or LONG seasons ahead (ED-IN-0304's bands, no gap or overlap), and per person or per verb. Each choice is argued at step 5 or marked a remaining question. (2) M36's columns: each derived from an existing verb-row field where one says it, declared under a stated rule where none does, each declared cell `[ASSUMPTION]`, and the beneficiary column on a new owner (REM-44 deletes `benefits_me`). (3) Spreads chosen against CR-17's landed τ (M35), with the measured decision shift (V0-5 re-run) at the proposed spread, and either the statement that CR-17's τ rule is re-applied after the first non-neutral value or the measurement showing the new terms leave the margins τ divides alone. (4) For each stored manner offset: the ED-IN-0304 term it implements, or the statement that it would contradict ED-IN-0261's ruled sentence (R7's dissolution clause; R7 = `proposals/2026-09-16-conviction-decision-layer/formal_analysis.md:195`) and so waits on §4 E-4. (4a) M34: where the self/other difference lives once `benefits_me` is gone (M36's beneficiary column), and whether `selfish_selfless` then needs any spread. (5) M37 as a sentence: no manner axis feeds the refusal gate. (6) Falsifier: two hand-built persons with identical pursuits and opposite risk appetite rank one exposed verb differently, and rank it identically when the term is zeroed; planted failure: the term dropped. Control: every new term at neutral reproduces the base hash at seeds 0-2.
+> - **N-line:** per-person manner — cut it and the gameplay experience is worse, because two persons who want the same things are the same character in what they choose, against ED-IN-0304's ruling that persons differ in risk appetite and horizon (the objects: the chooser's score terms and τ in `decision/`, and `Combatant.disp`, combat's per-person template, unmapped, at HEAD; CR-17's believed-odds weighting, after B10-09). ED-IN-0304 makes the risk and horizon half necessary. **Any trait beyond those two that the design cannot tie to a reader is cut** (layers v2's nine "gain" traits each name the global setting they copy; one with no reader at HEAD is cut).
+> - **Tiers:** producer `opus`; critic `opus`, or `fable` if the orchestrator prices it. **Exit:** approved AFTER CR-17's commit (2) lands (τ; B10-09 close two, landed `1ef8d273`), since its spreads are chosen against the landed τ (M35); the design may be drafted earlier. Its build then slots by R8 into the next batch sharing `decision/`, and the stored-offset axes stay out of it until E-4 is answered.
+>
+
+### Block D5 (`workplans/valoria_master_workplan_v11_part15.md` lines 127-129, lines 131-133, lines 196-201)
+
+> **M38 · #527's RJ-calls, the Layer-1 hunks RH-1 and RH-3, and the marquis question.**
+> - 1: not settled here. The delegation ("resolve for me for now", 2026-10-30) and the RJ-calls #527 takes provisionally with their reverts exist only on #527's unmerged branch (`git show origin/parliament-resolution-design:proposals/2026-10-29-parliament-and-debate/2026-10-29-resolution-design.md`, lines 4 and 195 `[UNVERIFIED: unmerged branch]`; RJ-bench, RJ-consent, RJ-parliaments, RJ-cardinality, the hunks, titles, location), so no verdict here can rest on them. Merging #527 would ratify them by ED-1094 unless its body holds them back: an ACTION of Jordan's, M13's shape. After a merge, RH-1 and RH-3 land in the commits of RJ-8 and RJ-2 (`:195` item 5, `:244-247` `[UNVERIFIED: unmerged branch]`) under D-1 (ED-IN-0300), a (RULED) mark at the anchor stopping that row, and CR-38's row is edited when RJ-2 is scheduled (`:4` `[UNVERIFIED: unmerged branch]`). 3: the marquis question is answered by canon: Jordan's verbatim 2026-09-02 ladder, "province = count/countess, territory = lord" (`engine/season/offices.yaml:153-156`); #527 keeps it (`:182` `[UNVERIFIED: unmerged branch]`).
+> - **VERDICT: #527 MERGED** (§4 A-1, discharged by the merge on main, `022fef02`; the merge was Jordan's act). #527's PR body held back, and the merge does not ratify: the three drafted Layer-1 hunks (RH-1, RH-3 and the `appetite`/`horizon` Person fields) and the marquis question. Its other calls (RJ-bench, RJ-consent, RJ-parliaments, RJ-cardinality) took effect under ED-1094's merge default, each with its stated revert. RH-1 and RH-3 land in the commits of RJ-8 and RJ-2 under D-1 (ED-IN-0300), a (RULED) mark at the anchor stopping that row. The marquis half is ANSWERED (step 3): canon stands. CR-38's row is not edited here: #527 says it is edited when RJ-2 is scheduled, and that is `-10`'s CR-38 lane.
+>
+> **M39 · Where do motions come from?** (#527's motion source, RJ-11 / RM2; the digest calls it J-11, a label not found in the branch's files.)
+> - 1: delegated with the RJ-calls (M38), on #527's unmerged branch only. The design names its gap itself: every computed `utter` is empty (44 of 44, `:26`), so "Played debate waits on RJ-11" (`:202`). RJ-11 is a motion-kind roster, one kind per strain query (vacancy, ungoverned rung, shortage, war), binding `utter`'s `subject`/`value` from two classed referents; its falsifier is "a strain with no trigger forms nothing; a trigger with no strain forms nothing; both form one" (`:155`). Each citation in this block is `[UNVERIFIED: unmerged branch]`.
+> - **VERDICT: DESIGN-FIRST** (CR-38 after #527). A MOVER (`:155` `[UNVERIFIED: unmerged branch]`); it builds after RJ-3 and RJ-8, so it is a post-freeze mover unless CR-38's sub-batch carries it.
+>
+> ### CR-38 after #527 · the bench and the motion source
+> - **Home:** `proposals/2026-10-29-parliament-and-debate/2026-10-29-resolution-design.md` (merged, #527). The lane may open now. This lane does not edit CR-38's `-04` row until RJ-2 is scheduled (`:4`).
+> - **Carries:** M38 (the ACTION), M39 (DESIGN-FIRST).
+> - **Must contain:** (1) a reconciliation of CR-38's exit ("a motion against the King is carried by a bench of at least two landed seats and refused by one", `part4.md:357`) with #527's share count, which "does not claim" that exit because a council of one could carry a motion (I7 `[UNVERIFIED: unmerged branch]`). Either the exit is restated as #527's property or a minimum-membership conjunct is designed; state which, as one edit for whoever schedules RJ-2. (2) RJ-11's motion-kind roster and its falsifier (`:155` `[UNVERIFIED: unmerged branch]`), with its hash declaration and its slot (CR-38's R8 sub-batch between B10-18 and B10-20, or post-freeze). (3) Whether RJ-10 (appetite and horizon fields, deferred to CR-17 by #527) is CL-PERSON's (M40) and not built twice.
+> - **N-line:** the motion source — cut it and the gameplay experience is worse, because no sitting ever has a motion, so every debate mechanism #527 builds runs on hand-built worlds only (the objects: `utter`, at HEAD, empty in 44 of 44 computed cases by #527's count, `:26` `[UNVERIFIED: unmerged branch]`; the RJ-3 docket items, after #527's build). The bench — cut it and the gameplay experience is worse, because a motion against the King is judged by the King and the Widow Regent alone (`queries/world_q.py::judging_set`, `:566`).
+> - **Tiers:** producer `opus`; critic `opus`. **Exit:** #527 merged (or held, loudly) before B10-13 opens; CR-38's design approved before B10-18 closes (`part4.md:356`); RJ-11's design approved before CR-38's sub-batch opens, else it is a post-freeze mover.
+>
+
+### Block D6 (`workplans/valoria_master_workplan_v11_part15.md` lines 98-101, lines 233-233)
+
+> **M31 · The management surface: weak or strong, and does it cost the scene budget?** (Suite 10.)
+> - (a) Weak (a batched front end over the seat verbs the seated person already holds) or strong (the player outside the world, his orders executed by the engine). 3: AX-1, "No institution, no faction, no threshold, no clock, no rung, and no engine is ever the subject of a decision" (`01_AXIOMS.md:75-78`); §C.11, "for a player character the player IS the decision procedure" (`04_CODE_ARCHITECTURE.md:853`). Strong amends both and no lane recommends it. **ANSWERED (step 3): weak.**
+> - (b) The budget. 1: Jordan's 2026-09-02 ruling sets the budget's unit (`engine/season/decision/budget.py:19-20`, the function docstring: "Returns SCENE ACTIONS, per Jordan's 2026-09-02 ruling"). His 2026-10-28 words (relayed, in no ledger) "menu based management wouldn't take up any budget. the budget is for playable scenes where the character actually interacts within the world" speak of the player's menu; they reach the player's person only. Extending them to every person (every NPC's orders free) would overwrite the verbatim 2026-09-02 ruling for persons his words do not name, so step 1 settles nothing beyond the player's menu, and even that waits on H-1. 5: not reached: the arms lead to materially different games and one overwrites a verbatim ruling. Three arms: (i) the player's person only (it special-cases one entity, scripting drift, `CLAUDE.md` §0, and a seated run then cannot reproduce the chooser's `content_hash`, REM-31's control, `part3.md:139`); (ii) every person (one rule, a hash mover across the realm; it overwrites the 2026-09-02 ruling for NPCs); (iii) the status quo (orders cost scene actions as every act does). The design must name what already prices a seat: `budget_office_bonus` (`data/fixtures.py:532`, read at `decision/budget.py:58`) buys a scene per live `hold`, and that scene is already unspendable against the release count (`loop/deliberate.py:85-113`; H-92 widens the count to Records and Propositions); a free order beside that bonus is two ladders for one quantity, seat capacity (`CLAUDE.md` §0.06 S).
+> - **VERDICT: ESCALATE** for (b) (§4 E-3; default (iii), the status quo), with CL-MGMT writing the brief: which verbs are orders, one owner of an order's cost under each arm, and each arm's falsifier. (a) is ANSWERED weak at step 3. A declared mover if arm (ii) is chosen.
+>
+> - **E-3 · M31 (b), the management budget (CL-MGMT's build).** "Your 2026-09-02 ruling makes the budget scene actions; on 2026-10-28 you said menu management would not take up any budget. Which persons' orders are free: (i) only the player's person (one entity treated differently from every other, and the seated run no longer reproduces the chooser's hash); (ii) every person, NPCs included (one rule, but it overwrites the 2026-09-02 ruling for persons your words did not name, and moves the whole realm); or (iii) none, as today? Default: (iii), the status quo." Consequence: (i) and (ii) each need CL-MGMT's one owner of an order's cost beside `budget_office_bonus` (H-92), so seat capacity is not priced twice. Brief: CL-MGMT.
+>
+
+### Block D7 (`workplans/valoria_master_workplan_v11_part15.md` lines 234-234)
+
+> - **E-4 · CL-PERSON's stored offsets (a hold on CL-PERSON's build).** "May a person's manner (rigid/flexible, grandiose/humble, deontological/instrumental) differ from what his pursuits project? A stored offset would contradict ED-IN-0261's ruled sentence that two persons with identical pursuits are identically disposed (R7's dissolution clause; R7 = `formal_analysis.md:195`). ED-IN-0304 left the source of risk appetite and horizon undecided ('derived from temperament or conviction'), so it does not decide this either. Default: those axes are read from pursuits alone (ED-IN-0261)." CL-PERSON builds no stored offset on these axes until it is answered.
+>
+
+### Block D8 (`workplans/valoria_master_workplan_v11_part15.md` lines 240-240)
+
+> - **H-1 · Owed ledger rows** (owner: the IN lane, at the commit that writes them, ids allocated from `references/id_reservations.yaml`, never here). Jordan's three "yes" decisions of the 2026-10-28 session: **contents not in hand** (the digest names them but not their words); needed from Jordan: the three items and his words, or confirmation that the session transcript is the source. His no-forecast combat directive ("we wouldn't really forecast though"; M32's combat half waits on it), the troop and equipment directions ("troops can be modeled somewhat after games like rotk and total war … equipment can be from tactical RPGs"), the story-variety concern ("relying 100% on primitive emergence … could produce too many similar stories", CL-OPEN's N-line), the budget words M31 (b) quotes, and the 2026-10-30 instruction licensing this file: each is held only as relayed in a digest; needed from Jordan: confirm the words (a row records his words, not a digest's). #527's "resolve for me for now" is in #527's own file `[UNVERIFIED: unmerged branch]`. **ED-IN-0304's PLAN line is narrowed by the fold:** the row says the follow-on "builds after CR-17's believed-odds weighting" (B10-09), and the fold builds no follow-on commit in B10-09 until M40 is answered (`part4.md:138`); a superseding ED-IN row is owed, its contents Jordan's.
+>
+
+### Block D9 (`workplans/valoria_master_workplan_v11_part15.md` lines 241-241)
+
+> - **H-2 · R-03's status and opening text** (`engine/season/requirements.yaml:699-747`). `status: met` (`:703`) is current: the U2 acceptance executed (`:723-747`). Stale: the opening of `measured:` (`:705-716`, "What is missing is a scene-granular TICK … flattened into one `acts` list"), which describes the pre-U2 loop, and the file header (`:40`, "The loop implements one tick granularity and no zoom"). Owner: A1-26 / DEF-8 (`part6.md:273`, the narrative moved out after the R-01/R-02 re-take at B10-06's close), extended to R-03; checked by `python -m engine.season.harness.register --requirements`.
+>
+
+### Block D10 (`workplans/valoria_master_workplan_v11_part15.md` lines 243-243)
+
+> - **H-4 · The suite's repo-fix list** (owner: the B10-08 IN editorial pass, CR-41 to CR-44, CLOSED, landed `acb954dde` to `ecac06370`; comments and data notes only, hash EQUAL). Verified: `references/descriptor_registry.yaml:227` (`orient.self_other`, sourced to the retired 13-conviction basis; mark it RETIRED only after `rg orient.self_other` finds no live reader); `references/npc_registry.yaml:981` names NPC-004 Haelgrund "Cardinal Justice" while NPC-038 Olafsson's `role:` is Cardinal Justice (`:983-987`, `offices.yaml:390-401`); `engine/season/decision/choose.py:440-441`, `decision/options.py:386-398` and `engine/season/rosters.yaml:523-527` still say thirteen convictions and four axes against ED-IN-0261's fifteen and seven (REM-44 in B10-07 edits `choose.py` first; re-derive after it). Not verified, for the same pass: Edeyja's legacy stats block (re-author before CR-20, B10-10's re-base); the Resonant Style item (run the ladder; NEEDS-JORDAN since 2026-07-07 per the suite); the `fac.legitimacy` supersession row (`registers/supersession_register.yaml:22-28`, closable on `references/restructure_ledger.md:2687` if `fac.*` is retired there).
+>
+
+### Block D11 (`workplans/valoria_master_workplan_v11_part15.md` lines 244-244)
+
+> - **H-5 · `valoria-game`** (owner: B10-20; GO-01 records `engine_series` "4.7" from ED-GO-0002, GO-05 the manifest, GO-06 the cross-repo items, HELD on Jordan's side). The suite's list (dropping seven retired constants, deleting `KeyStore.gd` and fifteen trigger resources, ED-1050) joins GO-06's item list `[UNVERIFIED: valoria-game not checked out]`; the Key substrate is retired (ED-IN-0232).
+>
+
+### Block F0 (`workplans/valoria_master_workplan_v11_part16.md` lines 56-71)
+
+> ### CR-80 — The deck: world-build seeds per strife category (IN/WR) · BATCH B10-Z (HELD on CL-OPEN's build; slots by the plan's R8, head §7) · STATE BUILD (rows; shipped off; hash EQUAL) when released · R —
+> - WHAT: `strife-00` §8 S6: world-build seeds per category (A to I) through the schema of CL-EVENTS commit (3) (goal rows or yield scales, drawn once at build), so that every category can open in a seeded world without anything firing in a season (R1, R2; T-c). Rows only: the schema, and any widening of it, are CL-EVENTS (3)'s and CL-OPEN's (the one owner of the widening, `-10` §3). Each row is read from the study's occasion column (`strife-00` §2) and carries `[ASSUMPTION; medium; Jordan to correct; revert: delete the row]`; the switch is the Tensions switch, shipped off.
+> - LANDED ALREADY: none (CL-EVENTS (3) and (4) are B10-18's).
+> - REMAINING UNBUILT: the rows; their test.
+> - GATE: CL-EVENTS commits (3) and (4) landed (B10-18); CL-OPEN's build landed (B10-19, HELD on M26). Released, it slots by the plan's R8 (head §7; not `strife-00`'s R8, "People exist within flows") into the next unopened batch that edits `tensions.yaml`, else runs as its own sub-batch; released after B10-20 opens, it is a declared post-freeze change. NEEDS: CL-EVENTS, CL-OPEN.
+> - EXIT and FALSIFIER: on the test arm (switch on), each category's opening kind appears in the strife reachability report at seed 0; the loader refuses a row outside CL-EVENTS (3)'s schema. CONTROL: switch off reproduces the base hash. "It has no on-arm today": the on-arm flip is the Tensions flip already on B10-20's freeze row.
+> - HASH MOVERS: none (switch off). Released after B10-20 opens, a registry change re-exported through GO-09 with an `ED-GO-` row.
+> - HOLES AND LEDGER IDS: none.
+> - ASKS ATTACHED: the rows' content beyond `[ASSUMPTION]` rows is Jordan's (P11).
+> - RE-BASE: CL-EVENTS (3)'s schema and CL-OPEN's widening as built.
+> - FILES: `engine/season/tensions.yaml`, `engine/season/tests/test_tensions.py`.
+> - VERB CLUSTER: no.
+> - LAYER 1: none beyond CL-EVENTS (3)'s.
+> - N-LINE: the deck — cut it and the gameplay experience is worse, because categories whose occasion no default world holds (a subject people under a burden, a servile population, an unpaid army) can never open, so R1 holds only for the categories the cast happens to seed.
+> - BUILDER: second tier for rows.
+> - SOURCE: `strife-00` §8 S6.
+>
+
+### Block F1 (`workplans/valoria_master_workplan_v11_part16.md` lines 21-36)
+
+> ### CR-73 — Natural shock (SH): a low draw that bites (IN/WR) · BATCH B10-18 (directly after CL-EVENTS commit (2)) · STATE BUILD (harness, one optional argument on a query; hash EQUAL) · R —
+> - WHAT: SH has no producer (`strife_moves.yaml` SH `gap:`). The study's SH is an exogenous shock to matter or bodies (plague, eruption, flood, drought) that opens a subsistence strand; in the loop the only exogenous draw is CL-EVENTS commit (2)'s weather factor per territory, `((0.5, 1.0, 2.0),)*4`, and its lowest member comes up about a third of the time, so a low draw alone is a bad season, not a shock. **SH here is a low draw that bites:** a territory and season whose drawn factor is the arm's lowest member AND in which the larder pass (`loop/matter.py`) logs a `shortfall:<kind>` at a settlement of that territory (the reading CR-22's exit already names) `[ASSUMPTION; medium; Jordan to correct; revert: SH stays GAP]`. Read after the run from the log and the draw: `queries/world_q.py::season_factor_of` reads only `w.tick`, so it gains an optional `tick` argument defaulting to `w.tick` (the draw's key is already (world seed, tick, territory), CL-EVENTS (1)), and the harness recomputes the past draw with it; nothing is recorded during the run and no Event kind is added. Whether a low draw binds hunger at all is CR-22's reading, not this one's.
+> - LANDED ALREADY: CL-EVENTS commit (1) (`df4ffc88`, the key); S1's instrument.
+> - REMAINING UNBUILT: the `tick` argument; the SH reading in `strife.py`; the SH row's `gap:` replaced by the reading's description; its test.
+> - GATE: CL-EVENTS commit (2) landed (this batch). NEEDS: CL-EVENTS. Not a dependency: CP-T10-02 (a calamity band is a second producer only if it lands as an Event; read at the close if it does).
+> - EXIT and FALSIFIER: three hand-built one-territory worlds: a lowest-member draw with a settlement's larder at its floor logs a shortfall and reads one SH; the same draw with a full larder reads none; a shortfall caused at a 1.0 or 2.0 draw reads none (a shortfall without a shock is not SH). MUTATION: drop the draw condition and the third world reads SH (red). The live-arm count at the batch close is a reading, not a pass condition (it would be above 0 by construction). CONTROL: `season_factor_of(w)` with no `tick` returns today's value (hash EQUAL); `content_hash` and log length unchanged by the reading.
+> - HASH MOVERS: none.
+> - HOLES AND LEDGER IDS: none.
+> - ASKS ATTACHED: none.
+> - RE-BASE: `season_factor_of`'s signature and key as commit (2) leaves them; where the larder pass logs `shortfall:<kind>`; the SH row.
+> - FILES: `engine/season/queries/world_q.py` (`season_factor_of`'s optional `tick`), `engine/season/harness/strife.py`, `strife_moves.yaml` (the SH row), `strife_data.py` (only if the row needs a new key), `engine/season/tests/test_strife_instrument.py`.
+> - VERB CLUSTER: no.
+> - LAYER 1: none (an argument on an ownerless `world_q` function; a harness reader).
+> - N-LINE: the SH reading — cut it and the gameplay experience is worse, because the subsistence category (the study's A: drought, flood, plague) cannot be seen to open in play, so the reachability report cannot say whether a famine strand can begin even once the weather is live.
+> - BUILDER: second tier.
+> - SOURCE: `strife-00` §7 (natural shock row), §8 S2.
+>
+
+### Block F2 (`workplans/valoria_master_workplan_v11_part16.md` lines 38-54)
+
+> ### CR-74 — Religious sanction (CH): a signature on a restraint opened through a church seat (IN/FA) · BATCH B10-18c (directly after CR-63) · STATE BUILD (harness; hash EQUAL), or the missing carrier named · R —
+> - WHAT: CH has no kind (`strife_moves.yaml` CH `gap:`); `strife-00` §7: "a church seat issuing ban or detain tenures: data, and the seat". A CH signature reads an Event that opens a `detain` or `ban` (`arrest.made`, or the church-custody branch: CR-51's gap, which CR-51 builds "with CR-63's warrant duty", so the branch exists only after CR-63) whose causing act's `via` seat belongs to a church, read from a property the seat's institution already carries in code. The re-base looks for that property in this order: IN-30's `faction_props` (B10-17), an `offices.yaml` field naming the institution's kind, a faction's creed. A signature keyed on a named faction is refused (scripting drift, `CLAUDE.md` §0; the foreign-faction list is Jordan's ruling R16 and is no precedent for a church list). If no such property exists, the commit names the missing carrier and CH stays GAP; no roster is authored (P11).
+> - SIDE EFFECT, STATED: the residue counts an Event whose kind some signature names and that matches none (`strife.py::count_event`). Once CH has a signature on `arrest.made`, every arrest not through a church seat lands in the residue, because CA and PU are kind-only rows with no signature. That is intended and is labelled: the report prints those residue lines as "arrest, not through a church seat (CA, PU kind-only)", so they are not read as an unexplained mover, and S1r's "act plus residue equals one per Event" stays true. No CA or PU signature is added here (each needs side and office, which this position does not read).
+> - LANDED ALREADY: S1's instrument; the church seats in `offices.yaml` (the Cardinal seats, the Senior Inquisitor, faction "Church of Solmund").
+> - REMAINING UNBUILT: the signature or the named finding; the residue label; its test.
+> - GATE: CR-63 landed (this batch; CR-51 in B10-18b). NEEDS: CR-51, CR-63, IN-30.
+> - EXIT and FALSIFIER: at the batch close CH above 0 at some seed (`strife 3 0 1 2`; the batch declares movers, P10) or GAP with the carrier named; planted: a restraint opened through a church seat reads CH, the same restraint through a secular seat does not and appears in the labelled residue line. CONTROL: `content_hash` unchanged by the reading.
+> - HASH MOVERS: none (harness).
+> - HOLES AND LEDGER IDS: none.
+> - ASKS ATTACHED: none (a church seat's authority to sanction is content, P11).
+> - RE-BASE: CR-51's and CR-63's outcomes (which restraint producer was built); the property search above.
+> - FILES: `engine/season/harness/strife.py`, `strife_moves.yaml` (the CH row and a signature), `engine/season/tests/test_strife_instrument.py`.
+> - VERB CLUSTER: no.
+> - LAYER 1: none.
+> - N-LINE: the CH signature — cut it and the gameplay experience is worse, because strife begun by the Church's own hand (the study's F and I categories, 15 cases) cannot be told from a secular arrest, so the report cannot say whether a religious strand can open in the realm at all.
+> - BUILDER: second tier.
+> - SOURCE: `strife-00` §7 (church sanction row), §8 S2; `-04` CR-51 (the church-custody branch, built with CR-63's warrant duty).
+>
+
+### Block F3 (`workplans/valoria_master_workplan_v11_part16.md` lines 131-152)
+
+> ### CR-106 — Church-owned building kinds, the owner table and the minting (IN/SE) · BATCH B11-F1 (settlement fabric) · STATE BUILD (roster rows, a loader table, a builder step; a declared hash mover; content authored here) · R —
+> - STATUS: PROPOSED; the merge ratifies the position (its rule, gate, falsifier and place in B11-F1). RATIFIED (Jordan, 2026-11-08): its CONTENT (`proposals/2026-11-08-flow-conditioning/content_church_sites.yaml`) as the accepted first reading; every cell keeps `[ASSUMPTION; medium; Jordan to correct]` and its revert.
+> - WHAT: Jordan's rule: buildings belong to the settlement and so to the governing faction, EXCEPT the Church of Solmund's (places of worship of differing scale, Templar quarters of varying size, schools and monasteries), which the Church always owns, never the faction owning the territory. The survey found that `engine/season/venues.yaml` (a runtime mechanism, its header `:15-19`) already puts a Church-tagged building (`serves: [Church]`) in every settlement type (`:68,73,79,85-88,97,103,108,116`) and `build_realm` mints a `hearth` rung for each (`harness/populated.py:1201-1210`), but the `serves:` tag never enters the World (its only reader seats persons, `populated.py:1284-1303`; ED-SE-0052, `registers/editorial_ledger_se.jsonl:1`, its first row; its last row `:6` supersedes it in part and carries the fabric-and-address ontology and "`hold` not reaching a `Site`" to ED-SE-0053 (`:7`), without restating the `serves:` sentence) and no Site kind names an owner. Four parts, each reusing an existing owner:
+>   - (a) KINDS. Three rows appended to `site_kinds` (`rosters.yaml:1741`, appended after `:1778`): `worship`, `templar_quarters`, `school` (names Jordan's; "schools/monasteries" is one function) `[ASSUMPTION; medium; Jordan to correct; revert: rename the rows]`. SCALE is `Site.condition` with `band_floors` rows (chapel, church, cathedral as bands of `worship`; sizes of `templar_quarters` likewise): ED-IN-0279 chose a Site's condition over a per-size alternative for fortification (`rosters.yaml:1759-1771`), H-38 rules `Site.condition` the model, and `restore`/`work` raising a building past a band floor already emits `condition.band_crossed` (`write_matrix.yaml:407-413`), so an upgrade needs no new verb; three separate kinds per function would duplicate that ladder. Each kind carries the required cells (`wear_per_season`, `band_floors`, `capacity_floor`; both-direction loader checks, `data/fixtures.py:106-111`; `rosters.yaml:1890-1896`); `wear_per_season` 0 ships as the control arm, as `dwelling` did (`rosters.yaml:1831`); `works_cost` optional (unpriced means `build` refuses, `loop/effects_founding.py:218-221`); no `site_yield` row.
+>   - (b) THE OWNER TABLE. A new table `site_owner` in `rosters.yaml`, `keys: [site_kinds]`, `default_cell: null`; a non-null cell names an owning institution, validated at load as a `factions` member (precedent: `HEAD_SEAT`, `data/rosters.py:1268-1274`, `require_member`). The three new kinds' cells name the Church of Solmund; null means owned through the rung, as today. The exception is DATA on the kind row; there is no branch on "Church" anywhere in code, and any institution with exclusive buildings uses the same cell.
+>   - (c) ONE OWNER OF OWNERSHIP. `queries/faction_q.py::owner_of(w, site) = SITE_OWNER[site.kind] or holder_faction_of(w, site.rung)`. No `hold` Tenure on a Site (refused by the roster `rosters.yaml:148-160`, by `World._refuse_bad_hold` `state/world.py:911-917` and by Layer 1 §15 `architecture/holonic_ARCHITECTURE.md:538`; ED-SE-0053 (its last row `editorial_ledger_se.jsonl:7`, RATIFIED AS INTENT ONLY) ratifies document 04, whose commons argument is the `:2` row's); no `Site.owner` field (a hash mover and a second home for what the kind row decides, §0.05 clause 3).
+>   - (d) MINTING. `venues.yaml` building rows gain an optional `site:` mapping `{kind, condition}` (a `site_kinds` member and its starting `condition`; ONE key, because the starting condition differs by row; the content draft spells it as two flat keys, `site:` and `site_condition:`, which the builder nests) `[ASSUMPTION; medium; Jordan to correct; revert: the flat pair]`; the builder mints `Site(f"s_{sid}_{slug}_{kind}", bid, kind, condition)` for any row carrying it, in the dwelling loop (`populated.py:1236-1240`); it reads no `serves` tag and no name. Uniform: any row may carry `site:`.
+> - CONTENT (authored here from Jordan's rulings, a first reading he corrects; he said "I already gave you P11 information to build from"): `proposals/2026-11-08-flow-conditioning/content_church_sites.yaml`, provenance per cell in `proposals/2026-11-08-flow-conditioning/content_provenance.md` (table A), checked by `proposals/2026-11-08-flow-conditioning/content_validate.py` (output `content_validate.out`). It gives: the three kinds with every per-kind cell (`wear_per_season` 0, `capacity_floor` 0, `works_cost` `{timber: 10}` like every fabric kind, H-166's one magnitude) and the `site_owner` cells naming the Church of Solmund; one three-floor `band_floors` ladder (100/500/800) borrowed from the body ladder (`rosters.yaml:3497-3500`, the only three-floor precedent) for chapel/church/cathedral and the Templar and school scales; each building starting at the midpoint of its band; 41 Church Sites in `build_realm(0)` (37 places of worship, 3 schools, 1 Templar quarters), Himmelenger's cathedral highest (1000) and the scale order village chapel < town church < cathedral holding; the `chapter_house` row carries the Templar quarters (Jordan says they exist; the plan's earlier "none at start" is withdrawn), the `almonry` row carries no `site:` (a charity house is not on his list). Coverage: every territory under `r_valoria` that holds a settlement holds at least one Church Site (the count is the validator's). `terr_T15` (no settlement in the geography) and `terr_ALT` (a foreign root whose one settlement has no venue rows) hold none; Jordan's "all territories" is read as every realm territory with a settlement (ladder step 5: buildings stand in settlements, and venue rows are per settlement) `[ASSUMPTION; medium; Jordan to correct; revert: carry a Church Site at those two by a row that is not a venue]`. Settlements of one type get identical buildings (Sigurdshelm's cathedral equals Valorsmark's seat cathedral, 900), since venue rows are per settlement type `[ASSUMPTION; medium; Jordan to correct; revert: per-settlement overrides]`. Pricing: `{timber: 10}`; unpriced kinds can never be newly built, so priced `[ASSUMPTION; medium; Jordan to correct; revert: unpriced]`.
+> - LANDED ALREADY: `site_kinds` and its per-kind tables; `Site.condition` and `band_floors`; `build` and `restore`/`work`; `venues.yaml`'s Church-tagged building rows and the hearth rungs they mint; `holder_faction_of` (`queries/world_q.py:2447,2472`); the default ownership of a Site by its rung's holder (`hold_force`, `governing_hold`, `loop/effects_founding.py:115-121, 209-213`).
+> - REMAINING UNBUILT: the three rows and their cells; the `site_owner` table and its loader; `owner_of`; the `site:` key and the minting step; the hole row; the tests.
+> - GATE: `ED-IN-0352` landed. NEEDS: `ED-IN-0352`.
+> - EXIT and FALSIFIER (hand-built worlds, P9): (1) a planted `worship` Site on a rung held by another faction: `owner_of` reads the Church's proposition; set that table cell null and it reads the rung's holder; (2) the rename falsifier (every id and faction name renamed consistently, `site_owner` cells included) changes no reading; (3) in `build_realm(0)` the number of `worship` Sites equals the number of settlements whose venue rows carry `worship`, asserted by counting `venues.yaml` rows in the test and not by a literal, and every territory under `r_valoria` that holds a settlement holds at least one Church-owned Site (the validator's check; `terr_T15` holds no settlement, and `terr_ALT` is a foreign root whose one settlement, `set_alt_1`, `populated.py:1173-1178`, has no venue rows); (4) with no row carrying `site:`, the World and its hash are unchanged. MUTATION: key `owner_of` on the kind's name and (1)'s null-cell variant reads red. CONTROLS: `wear_per_season` 0 (the control arm); `content_hash` EQUAL when no row carries `site:`; the control-arm identity `test_24d_i_...moves_no_question_in_one_season` is re-read with the Church Sites present and its result stated (the dwelling control relied on an EMPTY band cell so the `floor` stem raised, `rosters.yaml:3470-3481`, and the Church kinds' `{100,500,800}` rows remove that guard; MATTER also writes every Site every season at rate 0 and emits `condition.worn`, `rosters.yaml:1846-1848`, and `work` forms on a Site-classed referent, `world_q.py:3228`, so the Church Sites enter `work`/`restore`'s referent space: a reading, stated, not hidden).
+> - HASH MOVERS: `build_realm(0).content_hash()` MOVES where rows carry `site:` (new Sites fold into the encoding, `state/world.py:1664,1704-1707`); pre-change reading per P14; re-pinned once in the batch's pin commit (P15).
+> - HOLES AND LEDGER IDS: one `hole_register.yaml` row (kind `RULING`, grade `assumption`: the three names, the null-cell rule and the first-reading rows, with the revert above); `ED-IN-0352` records the ownership rule (item 7).
+> - ASKS ATTACHED: none (the content is Jordan's under P11 and is named above, not asked).
+> - RE-BASE: `venues.yaml` and `populated.py`'s dwelling loop as the settlement-lane batches that edit them leave them (not checked here).
+> - FILES: `engine/season/rosters.yaml`, `engine/season/data/rosters.py`, `engine/season/data/fixtures.py`, `engine/season/venues.yaml`, `engine/season/harness/populated.py`, `engine/season/queries/faction_q.py`, `engine/season/hole_register.yaml`, `engine/season/tests/test_cr106_church_sites.py` (new).
+> - VERB CLUSTER: no.
+> - LAYER 1: none (no `hold` on a Site, no Site field, no Tenure kind; ED-SE-0053 and Layer 1 §15 untouched).
+> - N-LINE: the Church-owned building kinds — cut them and the gameplay experience is worse, because the Church's reach into every territory, which canon makes the source of its political weight, would exist only in prose, and a territory's lord could seize or tax what is the Church's by right.
+> - BUILDER: second tier for the rows and loader; a third-tier (judgment) critic on the null-cell rule.
+> - SOURCE: Jordan's description of 2026-11-08 (settlement infrastructure and the Church exception); the Fable survey of that date.
+>
+
+### Block F4 (`workplans/valoria_master_workplan_v11_part16.md` lines 154-180)
+
+> ### CR-107 — Several cohorts per settlement, identified by caste, creed and allegiance (IN/SE) · BATCH B11-F1 (settlement fabric) · STATE BUILD (a loader change and a ceiling fix; hash EQUAL until rows are added) · R —
+> - STATUS: PROPOSED; the merge ratifies the position (the loader keys, the summed ceiling, its place in B11-F1). RATIFIED (Jordan, 2026-11-08): its CONTENT (`proposals/2026-11-08-flow-conditioning/content_cohorts.yaml`) as the accepted first reading, every row keeping `[ASSUMPTION; medium; Jordan to correct]`; CR-107b (`faction:`) as a held position behind the reader audit below (not built, not a member, no row); the Schoenland `engages:` cell, made at this position's build.
+> - WHAT: Jordan: settlements require several cohorts to represent the caste system, the contest between Einhir Revivalism and the Church of Solmund and/or the Altonian political system, and faction allegiances; cohorts may conflict in feelings and demands, and converge or diverge on everyday needs. Today a cohort's identity is its rung alone (`cohorts.yaml` rows `{rung, weight}`; the loader refuses a second row on a rung, `harness/populated.py:384-390`, and the id is `COHORT_PREFIX + rung`, `:499-504`). Three additions to the row and one held, all optional so that an old row reproduces today's id and hash:
+>   - `label:` (one word): the id becomes `cohort_<rung>_<label>`, and the duplicate test runs over `(rung, label)`. The `guards:` block (`populated.py:523-541`) is the precedent for a second cohort family with its own fields.
+>   - `heritage:` a `Person.heritage` member (`state/carriers.py:819-826`; five members, `descriptor_registry.yaml:240-244`): the caste carrier. The thrust layer rules there is no caste store (`proposals/2026-10-25-thrust-layer/00_THRUST_LAYER_DESIGN.md:501`) and CR-31 (B10-13) reads caste as an estimate off a `seen` heritage claim, so the cohort's heritage is the data the estimate reads. The thrust layer's D3 makes caste a Query over persons' convictions, and the cohort's `conviction` map feeds that Query, so both tree readings are carried `[ASSUMPTION; medium; Jordan to correct; revert: heritage only]`.
+>   - `conviction:` a map validated by `data/affiliations.py::conviction_map` (`:39`) over the affiliations (`solmund_orthodoxy`, `einhir_restoration`, `altonian_civics`, the others). This is SE-06's held conviction half (`workplans/valoria_master_workplan_v11_part5.md:101-111`): its GATE asks for a source or a ruling, and Jordan's statement above is the ruling that settlements hold opposed creeds in separate cohorts; the territory-derivation alternative (SE-06's residues (iii) and (iv): two Piety tables disagree, and no rule splits one bipolar track into unipolar intensities) would make every cohort of a territory identical, which defeats the contest he describes. CR-107 builds the loader path; SE-06 stays the owner of the conviction content and re-bases on this entry (§8: one owner).
+>   - `faction:` HELD (CR-107b, not built here): a faction member whose `commit` Tenure the builder would mint (cohorts hold none today, `populated.py:448`). A `commit` makes the faction OCCUPY the settlement at build (`occupies` → `mustered`, `queries/world_q.py:2131-2172`; the cohort's `contain` sits at the settlement, `populated.py:517`), licensing `seize`/`raze` (`loop/effects_information.py:1017-1031`, `loop/effects_founding.py:253-290`) and levies (`raisable_by`, `world_q.py:2185-2194`) from tick 0, adding acquaintance pairs (`acquaintance_pairs` runs after `seat_cohorts`, `populated.py:1976` vs `:1988-1989`, and its docstring at `:603`, "A cohort commits to no faction", would be false) and opinion referents (`world_q.py:3049-3051`), and turning `engine/season/tests/test_in36_foreign.py:120` (`members(foreign, FID) == CAST`) red. It is built only after a reader audit enumerates `occupies`, `mustered`, `standing_at`, `raisable_by`, `acquaintance_pairs`, `opinion_referents`, `footprint` and `density` and re-pins that test. Until then allegiance is carried by `heritage` and `conviction`; the shipped content carries no `faction:`.
+>   - THE CEILING FIX: `seat_cohorts` checks each row's weight against `capacity(w, rung)` (`populated.py:492-498`) while `population` sums residents' weights (`queries/world_q.py:1785-1798`) and `has_room` throttles `migrate` on that sum (`:1883-1899`); two cohorts of weight 2 at a capacity-4 settlement would each pass and fill it. The check becomes the SUM of the rung's cohort weights against `capacity`.
+> - CONTENT (authored here, a first reading he corrects; revised once after the independent attack): `proposals/2026-11-08-flow-conditioning/content_cohorts.yaml` (51 rows over the 37 settlements, replacing the `cohorts:` block; `temperaments:` and `guards:` stay), provenance, rejected alternatives and the ladder's choices in `proposals/2026-11-08-flow-conditioning/content_provenance.md` (table B), validated by `proposals/2026-11-08-flow-conditioning/content_validate.py` (69 PASS, 0 FAIL, exit 0, which also re-derives every row from the stated rules and diffs it). 14 settlements hold more than one cohort; 8 hold BOTH a northern and a southern Einhir cohort (S-026, S-028, S-029, S-030, S-031, S-032, S-033, S-034), which is Jordan's own example; no row carries `faction:`. Rules: (H) heritage from the canon timeline's territory gradient as the geography's calamity radiation bands (`valoria_geography_v30.yaml`) carry it, and the faction holdings, and `faction_politics_v30.md:655-657`, translated to the ENGINE's territory for each place (Jordan's ruling that engine locations govern): `:657`'s explicit territory ids win over `:655`'s "Varfell highlands", which lands on T11, so T11's majority is northern and a southern cohort sits beside it where capacity admits; (V) one conviction rule keyed on whether a heritage holds a majority cohort in a territory under `r_valoria`: for the Einhir heritages (data: central, northern, southern) the engaged affiliation reads `6 − band` for southern heritage (band 1 → 5, 2 → 4, 3 → 3) and `solmund_orthodoxy` reads `1 + band` capped at 5 for northern and central cohorts (minority rows included, or they would read all 1s and carry no creed contest), the Church's seat territory reads 5, every other member 1, with the radiation bands from `systems/settlements/valoria_geography_v30.yaml:842-872`; for the other heritages (altonian, schoenlander) the engaged affiliation reads the cast median of the faction whose rows carry that heritage, which gives the S-007 Altonian cohort `altonian_civics: 4` `[ASSUMPTION; medium; Jordan to correct; revert: 1 everywhere]`. The two quarantined Piety tables are rejected (they disagree on T1, T2, T3, T6, T13, T14; each is one two-ended track with no split rule), and the cast median over a whole populace is the rejected alternative for Einhir cohorts (it gave every populace its leaders' ceiling and flattened the canon gradient). Majority cohorts carry no `label:`; their ids stay as today.
+> - A GAP, NOT FILLED: the `schoenlander` heritage has no `engages:` cell in the registry (`descriptor_registry.yaml`, ED-IN-0301's confirmed cells), so the Schoenland cohort (S-037) holds 1 throughout and that populace has a heritage but no intensity. Adding `schoenlander: altonia` to `engages:` would fix it, but it edits a confirmed registry row, which is canon-adjacent data; it is recorded here and left for the owner of that registry, not made.
+> - FACTION ALIASES: none added. `FACTION_ALIAS` is derived from `engine/substrate/names.py::ALIASES`, the export of `references/names_index.yaml` (`data/rosters.py:1455`), and `Altonian` and `Einhir` are canonical names of peoples there (`names_index.yaml:352-353`; `canonical_for` checks ALIASES before CANONICAL, `names.py:89-96`), so an alias would silently re-point a canonical. The shipped content carries no `faction:` and reads allegiance from `heritage` and `conviction`; venue `seats:` rows are the NPC seating table and not an allegiance source.
+> - CONSEQUENCES THE CONTENT CREATES (stated, not hidden): every two-cohort village and fortress is at `capacity`, so `migrate` into it is refused from the first tick (the existing throttle, `has_room`, `queries/world_q.py:1883-1899`); orthodox and Revivalist cohorts in one settlement are `incompatible` under `commensurate`, so their tellings discount each other at once; no `commit` Tenure is minted, so no faction reader moves (CR-107b holds that); and NOT CARRIED: "convergence and divergence for everyday needs" — both cohorts of a settlement take the territory's one pursuit vector (`populated.py:481-482, 514`; `cohorts.yaml:105-106`) and the row has no pursuit field, so divergence on needs cannot occur yet; a `pursuits:` field on the row is the carrier and is not designed here.
+> - BEHAVIOUR WITH SEVERAL COHORTS (read, not changed): `subsistence_draw` draws per eater by weight (`world_q.py:1272-1297`), so demand doubles with no edit; `commensurate` over `Person.conviction` and `_credit` at WITNESS (`world_q.py:5250-5269`, `loop/witness.py:240-261`) discount two opposed-creed cohorts' tellings as soon as they hold convictions, with no edit; CR-100's within-stamp keys on home ancestry, so both cohorts of a settlement receive identical stamps and divergence enters only through convictions and faction. SE-04 (c)'s closure (one cohort splitting) is not reopened by authored cohorts.
+> - LANDED ALREADY: the cohort loader, `seat_cohorts`, `capacity`, `commensurate`, `_credit`; `Person.heritage` (cast-only today, never written in play).
+> - REMAINING UNBUILT: the four keys and their validation, the id change, the summed ceiling, the hole row, the tests.
+> - GATE: `ED-IN-0352` landed. NEEDS: `ED-IN-0352`.
+> - EXIT and FALSIFIER (hand-built worlds): (1) two planted cohorts of opposed creeds (an `incompatible` pair) in one settlement: `commensurate` reads -1 and a telling between them lands at a discounted confidence (`_credit`), the same teller to a cohort of the same creed does not; (2) a summed weight over `capacity` is refused at seating; (3) two rows on one `(rung, label)` are refused, and a row with no new key reproduces today's id and hash (EQUAL); (4) a `faction:` row mints exactly one `commit` Tenure; (5) the rename falsifier. MUTATION: check each row's weight alone and (2) reads red. CONTROLS: the shipped `cohorts.yaml` unchanged gives `content_hash` EQUAL; the authored rows are a separate content commit and a declared hash mover (P14, P15).
+> - HASH MOVERS: none from the loader change alone; the authored rows move every hash from `build_realm(0)` on (a golden re-record, stated plainly).
+> - HOLES AND LEDGER IDS: one `hole_register.yaml` row (kind `RULING`, grade `assumption`) for the summed-ceiling reading; SE-06's rows H-170 and H-171 are cited, not edited.
+> - ASKS ATTACHED: none (the content is Jordan's).
+> - RE-BASE: SE-06's entry and the `temperament_rows`/`seat_cohorts` code as the held batch leaves them; the readers CR-107b's audit lists (`faction_q.members`/`resolve`, `world_q.py:2026-2037`, and their callers).
+> - FILES: `engine/season/harness/populated.py`, `engine/season/cohorts.yaml` (the authored `cohorts:` block; comment lines `:21-23`, stale, corrected), `engine/season/data/affiliations.py` (read only), `engine/season/hole_register.yaml`, `engine/season/tests/test_cr107_cohort_identity.py` (new).
+> - VERB CLUSTER: no.
+> - LAYER 1: none.
+> - N-LINE: several cohorts per settlement — cut them and the gameplay experience is worse, because a town could hold only one mood, so the caste, creed and allegiance contests Jordan describes could not occur inside a settlement, and strife flows would have no populace to divide.
+> - BUILDER: second tier for the loader; the content pass is a separate judgment lane.
+> - SOURCE: Jordan's description of 2026-11-08 (cohorts and the three axes); SE-06 (`part5.md:101-111`); the Fable survey.
+>
+
+### Block F5 (`workplans/valoria_master_workplan_v11_part16.md` lines 182-200)
+
+> ### CR-104 — Institutional reach: the influence rung of an office (IN/FA) · BATCH B11-F2 (first item) · STATE BUILD (a query and its test; hash EQUAL: no loop consumer until CR-102) · R —
+> - STATUS: PROPOSED; the merge ratifies the position. HELD BACK: nothing beyond its `[ASSUMPTION]` (the head-only reading), which carries its revert.
+> - WHAT: one function, `queries/faction_q.py::influence_rung(w, office_id) -> rung id`: the lowest rung covering (a) the office's own `Office.rung` and, ONLY IF the office is the head seat of a faction (`HEAD_SEAT`, `engine/season/data/rosters.py:1268`, the roster `rosters.yaml: factions.head_seat` at `engine/season/rosters.yaml:2019-2023`, CR-86/ED-IN-0342), (b) every rung in that faction's `holdings`, (c) the `Office.rung` of every seat in its `seats` (`faction_q.resolve`) and (d) the rungs of the Sites the faction OWNS: a sibling query `faction_q.owned_site_rungs(w, prop)`, the sorted rungs of the Sites whose `owner_of` (CR-106) resolves to the faction. `faction_q.Faction` is a five-field view key-locked to `record_kinds.faction_sheet` (`queries/faction_q.py:60-70`), so `holdings` is NOT widened; (d) is a sibling. The covering rule is the one that gives `Strand.rung` (`queries/world_q.py:4922-4932`, `_StrifeReading.lowest_covering`, used at `:5057`), extracted to a module-level `world_q.lowest_covering(ancestry_of, places)` that the method then calls: one owner of "lowest covering rung". The influence ORDINAL, where a number is needed (CR-102), is `RUNG_KINDS.index(kind) + 1` (`data/rosters.py:740`; realm highest) through a one-line helper that `flow_capacity` (`queries/world_q.py:4829-4833`, which counts from the top as `len − index`) then calls (D6). An office heading nothing reads its own seat's rung; a non-head office of a wide institution reads its own seat's rung (the head exercises the institution's reach) `[ASSUMPTION; medium; Jordan to correct; revert: every office of a faction reads the faction's covering rung]`.
+> - WHY THIS ROUTE (the ladder, `CLAUDE.md` §0). Jordan's reason for the Church (churches and infrastructure of varying size in all territories) is now carried: CR-106 stands Church-owned `worship` (and school, Templar) Sites in the settlements whose venue rows carry them, owned by the Church whatever faction holds the rung, so the Church's covering rung is the realm because its OWNED BUILDINGS span the territories, not because of its seats. Canon names the apparatus (`canon/03_canonical_timeline.md:50,58,62,64`: Cardinals, diocesan structure, Knights Templar, educational monopoly, a cathedral city with tax-exempt lands) and the quarantined design the mechanism (`franchise_v30.md:80`, quarantined: "Church settlements ... count as infrastructure in ANY territory where they exist, regardless of controller"), reference not authority. Measured on `build_realm(0)` (2026-11-08) before CR-106, `[UNREPRODUCED; re-read at CR-104's build]`: the lowest covering rung of each faction's holdings ∪ seat rungs is Church of Solmund `r_valoria` (holdings `terr_T9` only; seats at `terr_T9` ×6 and `terr_T1` ×1; `terr_T9` hangs off `r_valoria` directly, `harness/populated.py:1154-1156`, so the second seat lifts it to the realm); Valorsmark `r_valoria`; Hafenmark `duchy_hafenmark`; Varfell `duchy_varfell`; Guilds `duchy_hafenmark`; Löwenritter `terr_T1`; Restoration Movement `terr_T15`; Altonia `terr_ALT`. Head seats: Valorsmark → `off_king` (realm) held by `p_npc_020`; Hafenmark → `off_duchess_hafenmark` (duchy) `p_npc_050`; Varfell → `off_duke_varfell` (duchy) `p_npc_052`; Church → `off_confessor` (territory T9) `p_npc_021`. Routes rejected: affiliation presence (a believer is not an institution's infrastructure and the same reading gives `altonian_civics` a realm reach); Church seats in every territory (needs holders the registry lacks); a `hold` on a Site and a `Site.owner` field (CR-106 (c)).
+> - STATED LIMITS: (1) before CR-106 lands, the Church reads the realm only because `terr_T9` is in no duchy and a second seat (T1) lies outside it; with CR-106 it reads the realm from its owned Sites even with `off_archbishops_rep` deleted. (2) `seats` and `holdings` are what the faction's committed members hold (`faction_q.resolve`), so a member holding an unrelated seat elsewhere widens the reading. (3) A Site's owner is read from its kind's row; a Church building the Church does not own (a seized one) is not representable, since ownership follows the kind.
+> - LANDED ALREADY: `faction_q.resolve` (`holdings`, `seats`, `head`), `faction_q.head` with the CR-86 head-seat branch (`queries/faction_q.py:116-155`), `rosters.yaml: factions.head_seat` (four rows), `_StrifeReading.lowest_covering`, `flow_capacity`, `RUNG_KINDS`.
+> - REMAINING UNBUILT: `influence_rung`; `owned_site_rungs`; the two one-line extractions (`lowest_covering`, the rung-position helper) with their original callers routed through them; the test.
+> - GATE: `ED-IN-0352` and CR-106 landed. NEEDS: `ED-IN-0352`, CR-106.
+> - EXIT and FALSIFIER (hand-built worlds, v11 P9; and one `build_realm(0)` reading): (1) a planted realm whose head seat sits in a territory contained by the realm root and whose institution owns `worship`-analogue Sites in two territories of one duchy reads the head seat at that duchy; add a Site in a third territory under another duchy and it reads the realm; (2) the Church-analogue with ONE seat at T9 and owned Sites in several territories reads the realm (red before CR-106, green after: the carrier's falsifier for Jordan's reason, run as a test once CR-106 exists); remove every Church seat but the Confessor and it still reads the realm; (3) a single-seat office with no owned Sites reads its seat's rung; (4) the rename falsifier changes no reading; (5) `build_realm(0)` reads `off_king` and `off_confessor` at a realm-kind rung and `off_duchess_hafenmark`, `off_duke_varfell` at duchy-kind rungs, asserted by rung KIND over all offices (the test enumerates offices and checks kinds; it names no office or person); (6) null every `site_owner` cell and the reading falls back to holdings ∪ seats (the control). MUTATION: drop the owned-site term and (2) reads the territory (red). CONTROL: `flow_capacity` and `Strand.rung` return what they returned before the extractions on `engine/season/tests/test_strife_flows.py`; `content_hash` unchanged by this position. EXPECTED: all pass; mutation red.
+> - HASH MOVERS: none (no loop consumer; hash EQUAL by construction).
+> - HOLES AND LEDGER IDS: one `hole_register.yaml` row (kind `RULING`, grade `assumption`, H-274's shape at `engine/season/hole_register.yaml:5449-5460`: the head-only reading, the owned-site term and the three limits, with the revert above).
+> - ASKS ATTACHED: none.
+> - RE-BASE: `faction_q.head`'s branches and `HEAD_SEAT` as B10-17 (IN-30's `faction_props`) and B10-17b (CR-88's head seats) leave them; CR-106's table and `owner_of`.
+> - FILES: `engine/season/queries/faction_q.py`, `engine/season/queries/world_q.py` (the two extractions), `engine/season/hole_register.yaml`, `engine/season/tests/test_cr104_influence_rung.py` (new).
+> - VERB CLUSTER: no.
+> - LAYER 1: `04_CODE_ARCHITECTURE.md:168` (`queries/world_q`: reads any store via World, no token) and the `faction_q` row of §A.2; a new query, no hunk.
+> - N-LINE: the influence rung — cut it and the gameplay experience is worse, because without one structural reading of how far an office's institution reaches, the Church's head weighs as a territory notable two rungs below the dukes although canon gives the Church the greatest standing influence, and the realm's greatest actors could only be made great by naming them.
+> - BUILDER: second tier; a third-tier (judgment) critic on the head-only `[ASSUMPTION]`.
+> - SOURCE: Jordan's D7 ruling and his settlement description (this session); CR-86 (ED-IN-0342) for the head seats; the Fable survey.
+>
+
+### Block F6 (`workplans/valoria_master_workplan_v11_part16.md` lines 202-238)
+
+> ### CR-97 — Measure plot points and office influence (IN) · BATCH B11-F2 · STATE MEASURE (a harness reading and its test; hash EQUAL) · R —
+> - STATUS: PROPOSED; the merge ratifies the position. HELD BACK: nothing (a harness reading).
+> - WHAT: extend the strands block (`engine/season/harness/strife.py:389-430`, `strands_block`; a reading, grades nothing, V2) with the columns below, every one computed from the finished log and the act store, reusing `harness/arc.py` (`consequence_acts` `:327`, `shuffled_causes` `:213`), `harness/chronicle.py` (`chain_ends` `:170`), `harness/storybar.py` (`chains` `:373`) and `world_q.flows_in` with the harness's code-level `terminal_for` (`harness/strife.py:221-233`). Nothing is built beside them.
+>   - (a) PLOT POINTS, per strand. TURN (computed from the log, never from live state: `open_referents` reads the world as it stands, `queries/world_q.py:5068-5088`, so it cannot say what was open at a past tick): a strand move whose own Event writes a change, on a strand referent or party, to a store `open_referents` reads (the strand-move kinds, `MOVE_KINDS` (`world_q.py:4745-4746`), whose `write_matrix.yaml` row writes a store `open_referents` reads (restraint Tenures, war Propositions, DocketItems), derived in code from the matrix at import and never listed here; a war Proposition has no strand-move writer until `declare`, B10-17, so the war clause reads 0 until then) or opens or closes a `hold` Tenure on a strand referent (`tenure.opened`/`tenure.closed`: its holder changes). A PLOT POINT is an opening move, a TURN reachable from it by `causes*`, and a consequence act (`arc.consequence_acts`) in that chain. Reported: the share of strands with at least one plot point; the share of moves that are consequence acts; the share of turns reachable by `causes*` from an opening move.
+>   - (a') CLOSURE CLASS, per strand, derived in code from the strand's latest terminal move: `decider` if its causing act (`state/attribution.py:91-102`) exists and its verb row declares no `contests:` prize and is not named by the `graded_inquiries` route (a roster route in `rosters.yaml`, named in `verb_table.yaml:1686`'s `emits_note`; not a verb-row field) (a person's choice ended it); `roll` if the causing act's verb declares `contests:` or is so named (a contest resolved it); `threshold` if the Event has no causing act (a MATTER or CALENDAR Event); `open` if the strand is not concluded at the horizon (`world_q.concluded`). The labels borrow the vocabulary of `engine/season/ENDINGS_CLASSIFIED.yaml` (DECIDER/ROLL/THRESHOLD/NEVER); that file is an agent classification of arc prose (its own header) and is read by nothing here (§0.05 clause 2).
+>   - (b) CHAINS IN STRANDS: for every consequence chain of depth ≥ D (D = 3, the deepest depth the folding session measured (its collation is not kept in the tree) `[ASSUMPTION; medium; Jordan to correct; revert: D = 2]`), whether its Events are strand moves.
+>   - (c) OFFICE INFLUENCE, per move: (i) the rung kind of the seat exercised (`causing_act(w, e).via` → `w.offices[via].rung` → kind), with the `via=None` and `act=None` shares; (ii) the highest rung kind among the doer's live `hold` tenures (the walk `own_purview` makes, `queries/world_q.py:1079-1098`); (iii) the rung kind of `faction_q.influence_rung(w, via)` (CR-104).
+>   - (d) REFERENT BREADTH: whether a seat-exercised move's subject lifts the strand's `rung` (the strand's lowest covering rung before and after the move).
+>   - (e) DISSEMINATION: per act-caused Event, the number of `claim.deposited` Events whose `causes` names it (`loop/witness.py:689`, `:801`), grouped by (c)(iii)'s rung kind. (The obligee channel `epistemic._ch_post_remit`, `epistemic.py:563-583`, is the seat route; the IN-22 purview limb, `loop/witness.py:545-555`, admits ACTORLESS Events only, so it carries no seat act.)
+>   - (f) PRESENCE: per person, whether he appears as doer in a `causes*` chain of depth ≥ D.
+>   - (g) THE FIELD THE STAMP WOULD REACH (CR-100's dose, read before it is built): per round-end world, for every person, the number of open strands he is within (`s.rung` in his home's ancestry; `within`'s person limb, `queries/world_q.py:5236-5247`) and the number of referents those strands would stamp (after `FLOW_STAKE_CLASSES`); and the number of strands the kind-level terminal (`default_terminal`, `:5061-5065`) reads open while `terminal_for` reads concluded (the disagreement CR-100 inherits). Reported as readings, no bar (V2): the fraction of persons with a non-empty within-stamp; the fraction of that stamp that comes from realm-rung strands alone (a stamp every person receives equally conditions no one in particular, so CR-103 reads the lift against the SHUFFLED arm); and the dose asserted ≤ Σ `flow_capacity(kind)` over the kinds in the person's ancestry, a bound by construction (the test plants K > capacity open strands at one duchy).
+>   - (h) EMERGENCE ROW: the set of persons holding a head seat whose `influence_rung` is of realm or duchy kind, printed as ids and names in the report (a result row; no test keys on a name). On `build_realm(0)` it is expected to read `p_npc_020`, `p_npc_050`, `p_npc_052`, `p_npc_021` (CR-104's measurement).
+>   - SPREAD: every number above is printed per seed and, where several seeds are read, as min, max and spread (max − min). At this position's own commit the OFF reading is taken at seeds 0, 1, 2 (P10/P14: B11-F2 declares CR-100 a mover), with N strands per seed printed beside P and Q, so CR-102's gate and CR-103's WIDE-SPREAD and QUANTISATION clauses are readable before CR-100 is built.
+>   - CONTROLS: `arc.shuffled_causes` (causal links shuffled); shuffled strand membership (moves re-dealt to strands of the same sizes, seeded); a matched-holder control for (c) to (f), matched on act count AND verb mix (otherwise `own`-verb petitioners are compared with `remit` issuers).
+>   - HORIZON: three seasons, seeds 0, 1, 2 (strife reading, P10's exception, with P10/P14's three seeds because the batch declares a mover; the arc columns ride P16 (1)'s arc exception). Four only if the three-season reading has fewer than two strands with any move (risk 8's logic applied to this instrument).
+> - LANDED ALREADY:
+>   - Strands link by `_links` (`queries/world_q.py:5001-5016`): a shared referent, a parent/child one rung step apart, or the same doer; never by `causes`.
+>   - A strand stays open while any referent is docketed (`open_referents`, `:5068-5088`); the blocker to conclusion is docket closure (H-254, `engine/season/hole_register.yaml:5189`). Terminal codes are reached at all (H-274's and H-275's readings, `:5459`, `:5471`).
+>   - `causing_act(w, e)` returns the Act (`state/attribution.py:91-102`), so the seat is recoverable per Event in a harness.
+>   - Most strand moves carry no seat: `petition` (`verb_table.yaml:1219`), `commit` (`:211`), `fight` (`:735`) and `accept` (`:953`) are `own`; `march` (`:1051`, `remit:dispatch`), `issue` (`:686`), `determine` (`:364`), and the other `remit:` rows carry `via`; MATTER Events have no causing act.
+>   - `Act.via` (`state/carriers.py:714-730`) is set at mint (`decision/choose.py:744`).
+>   - Seats and rungs (`engine/season/offices.yaml`): `off_king` realm (`:187-189`), `off_duke_valorsmark` duchy (`:200-202`), `off_duchess_hafenmark` duchy (`:213-215`), `off_duke_varfell` duchy (`:226-228`), `off_confessor` territory T9 (`:369-371`; `faction: null` in the file at `:373`, filled to "Church of Solmund" in `build_realm(0)`, measured; its note `:380`: "`governs: "ecclesiastical institution"` is not a rung kind"). Rung ladder `engine/season/rosters.yaml:281`. The authored realm is `harness/populated.py::build_realm` (`:1014`).
+>   - The 16 links in `strife_moves.yaml` are `[UNVERIFIED]` (`engine/season/harness/strife_moves.yaml:117`), 4 unreachable, and not a weight source.
+>   - One-season reading (seed 0, `build_realm(0)` + one season, 2026-11-08; reproduce the strands: `python -m engine.season.harness.strife 1 0 --strands`, re-read at HEAD `e4d0bb5` on 2026-11-08 it prints 3 strands, `r_valoria` 14 moves (open), `duchy_hafenmark` 6 (concluded) and `b_s_014_barracks` 3 (concluded), "concluded 2 of 3", "docketed 2"; at the plan's base `d87946a` the same command printed 4 strands (15/6/3/2, "concluded 2 of 4" under the harness's code-level terminal (`terminal_for`), against the "3 open" below, read under the plan's own count (the two-test disagreement CR-97 (g) measures), "docketed 3", the cathedral strand `b_s_036_cathedral` open), so B10-13 (#594) moved the reading: the cathedral strand is gone and the realm strand reads 14 moves; the earlier log size (13,454 Events), the `flows_in` timing (0.011 s) and the 79 of 83 persons within an open strand were taken at the base and are `[UNREPRODUCED; re-read at CR-97's build]`; the figures below are the BASE reading and are kept as the record of what was measured: 13,454 Events; `flows_in` 0.011 s; 4 strands (rungs `r_valoria` 15 moves/22 referents, `duchy_hafenmark` 6/4, a barracks 3/2, the cathedral 2/5); 3 open; 79 of 83 persons within at least one open strand.
+> - REMAINING UNBUILT: columns (a) to (h), the spread print, the three controls, the test.
+> - GATE: `ED-IN-0352` and CR-104 landed. NEEDS: `ED-IN-0352`, CR-104.
+> - EXIT and FALSIFIER (planted logs and hand-built worlds, P9): (1) a planted log whose every strand has opening → turn → consequence act reads plot-point share 1.0, and the `shuffled_causes` arm on it reads lower; (2) a strand of petitions only reads 0 turns; (3) a planted strand ended by an actorless Event reads `threshold`, by an uncontested act `decider`, by a contested act `roll`; (4) in a planted world, swapping two seats' rungs swaps their (c)(i) rows; (5) the rename falsifier changes no row; (6) the emergence row on a planted realm reads exactly the holders of the head seats whose `influence_rung` is realm or duchy. MUTATION: read TURN from `open_referents` at the end instead of from the log and (2)'s variant with a restraint opened then closed reads 0 turns (red). CONTROL: `content_hash` and log length unchanged by the reading. EXPECTED: all pass; mutation red.
+> - HASH MOVERS: none.
+> - HOLES AND LEDGER IDS: none new (D's `[ASSUMPTION]` lives in the code at the constant, with its revert).
+> - ASKS ATTACHED: none.
+> - RE-BASE: `strands_block` and `terminal_for` as B10-18 (CR-73) and B10-18c (CR-74) leave `harness/strife.py`; `arc.py` as B10-17b (CR-88 to CR-91's arc instrument) leaves it.
+> - FILES: `engine/season/harness/strife.py`, `engine/season/tests/test_strife_instrument.py` (the existing instrument test, extended).
+> - VERB CLUSTER: no.
+> - LAYER 1: none (a harness reader).
+> - N-LINE: the measurement — cut it and the gameplay experience is worse, because the strife guard sees narrowing and concentration of terminal codes and cannot see coherence (H-275 passed "for want of movement", `engine/season/hole_register.yaml:5471`), so neither plot-point legibility nor influence by office could be observed, and no later term could be shown to help.
+> - BUILDER: second tier; a third-tier (judgment) critic on the TURN and closure-class definitions.
+> - SOURCE: the folding session's collation (not kept in the tree: the handshake and its two coverage conditions); Jordan's T2 (ED-IN-0352).
+>
+
+### Block F7 (`workplans/valoria_master_workplan_v11_part16.md` lines 240-264)
+
+> ### CR-98 — Declare the loops as rows (IN) · BATCH B11-F2 · STATE EDIT (register rows; hash EQUAL) · R —
+> - STATUS: PROPOSED; the merge ratifies the position. HELD BACK: nothing (register rows; L6 and L7 land only with CR-102 and CR-105).
+> - WHAT: `kind: "LOOP"` rows in `engine/season/hole_register.yaml`, each with `sign:` and a bound in `default:` so G13's three clauses hold (the header at `:1425-1440`: a LOOP row carries `sign:` `+`/`-`; a non-loop row none; an amplifying loop names its bound). Transcribed from `proposals/2026-11-04-strife-flows/00_MASTER.md:177-182` (§6), reference only (§0.05: the rows describe code; the prose is their vocabulary):
+>   - L1 — path "stamp, attention, acts, moves, strand, stamp"; sign `+` ("persons who know of a strand act on it", `:179`); bound: `scene_budget` 5 (`engine/season/data/fixtures.py:228`), `ledger_cap` 3200 (`:247`; the stamp reads `flows_known`, the ledger), `question_aggregation_rule: first` (`:547`; H-102's note that it flattens rather than bounds, `hole_register.yaml:1447-1459`). CR-101's `flow_salience_gain` is recorded on this row as a gain, no new row.
+>   - L2 — path "grouping under the flow above, fewer distinct strands held, fewer stamps"; sign `-` (`:180`).
+>   - L3 — path "conclusion frees a slot, a new strand is held, a new stamp"; sign `-` (`:181`).
+>   - L4 — path "in-regime tellers credited more, their claims acted on, more moves, more told"; sign `+`, "the strongest" (`:182`); its condition "present only once S5 exists" is met (B11-S5 CLOSED, `workplans/valoria_master_workplan_v11_part3.md:66`); bound: `_credit`'s clamp to `[0, max(confidence_default, the uncredited value)]` (`loop/witness.py:240`, H-275), `ledger_cap`, `scene_budget`.
+>   - L5 (lands with CR-100, not before; replaces the draft's Ob loop) — the WITHIN-STAMP loop, CR-100: "within-stamp, choices on stake referents, moves, strand, within-stamp"; sign `+`; bound: `flow_capacity` through `presented` (a grouped strand stamps nothing), `scene_budget` 5 (a person acts at most five scenes a season, `fixtures.py:228`), `question_aggregation_rule: first` with `_stamped`'s one-stamp-per-question (`queries/world_q.py:3769`; the stamp rides `out[0]` only), `FLOW_STAKE_CLASSES` (only rows declaring Rung, Person or Office form on a stamped id), and conclusion (`_concluded`, `:5090-5097`: a concluded strand stamps nothing). ⚠ STATED: `ledger_cap` and claim decay do NOT bound L5, which reads the log, not a ledger; a strand's referent set only grows until it concludes; the number of strands stamped is bounded by `flow_capacity` through `presented`, the size of each strand's referent set by conclusion, and conclusion waits on docket closure (H-254). CR-97 (g) measures the size.
+>   - L6 — only if CR-102 is built: "office act, wider within-reach or salience, choices on stakes, moves, strand"; sign `+`; bound: L5's.
+>   - L7 — only if CR-105 is built: "within-stake, choice score, acts on stakes, moves, strand, within-stake"; sign `+`; bound: `scene_budget`, `_sample_order`'s draw over the ranked candidates (`decision/choose.py:322`, called at `:574`; the score orders, it does not force a pick), conclusion.
+>   - Reason: ID-16 (`architecture/meta/01_AXIOMS.md:616-619`) asks every feedback path declared with a direction before a further amplifier lands; L1 to L4 are table rows in prose today, and the register's five LOOP rows are H-102, H-103, H-104, H-112, H-235 (`hole_register.yaml:1508`).
+> - LANDED ALREADY: the five LOOP rows; G13 (`harness/register.py:100-140`); the derived reading `python -m engine.season.harness.loops` (`hole_register.yaml:1508`: "amplifiers derived equal declared").
+> - REMAINING UNBUILT: rows L1 to L5 (L6, L7 with their positions).
+> - GATE: CR-97 landed (each row's `cite:` quotes CR-97's first reading as the unmeasured-sign baseline). NEEDS: CR-97.
+> - EXIT and FALSIFIER: `python -m engine.season.harness.register --check` passes G13 on the new rows; the falsifier: a planted copy of one row with `sign:` removed (or an amplifying row with `default: "none"`) fails G13 (red, the gate can see it); and `python -m engine.season.harness.loops` still exits 0 and prints its declared-against-derived comparison with the new rows: EXPECTED either "amplifiers derived equal declared" or a named disagreement, which the commit records (L1 to L5 pass through steps whose read tables the derivation hand-writes, so a disagreement is a finding about the derivation, not a reason to drop a row).
+> - HASH MOVERS: none.
+> - HOLES AND LEDGER IDS: the LOOP rows themselves (next free H ids).
+> - ASKS ATTACHED: none.
+> - RE-BASE: the register as the batch finds it (other batches add rows).
+> - FILES: `engine/season/hole_register.yaml`, `engine/season/harness/loops.py` (`DECLARED_CYCLES`, `:172-181`, gains one key per row, or the row is recorded unmapped with the reason: a row absent there reads `unmapped` and `equal` is false, `engine/season/tests/test_loops_instrument.py:48-51`).
+> - VERB CLUSTER: no.
+> - LAYER 1: `01_AXIOMS.md:616-619` (ID-16) is satisfied, not edited; no hunk.
+> - N-LINE: the loop rows — cut them and the gameplay experience is worse, because ID-16 requires every feedback path declared with a sign before a further amplifier, and L1 to L4 exist only as a prose table, so CR-100 and CR-101 would add amplifiers to undeclared loops.
+> - BUILDER: second tier.
+> - SOURCE: `00_MASTER.md` §6 (`:175-184`).
+>
+
+### Block F8 (`workplans/valoria_master_workplan_v11_part16.md` lines 266-282)
+
+> ### CR-99 — Give the strife guard a positive control (IN) · BATCH B11-F2 · STATE BUILD (harness and test; hash EQUAL) · R —
+> - STATUS: PROPOSED; the merge ratifies the position. HELD BACK: nothing (a harness function and its planted tests).
+> - WHAT: make the strife guard (`00_MASTER.md:184`; head §7's definition, `workplans/valoria_master_workplan_v11.md:162`) a function over arms: given per-seed terminal-code histograms for an off arm and an on arm, it returns pass/fail with the two clauses (every code reached off is reached on; no code's share rises by more than the off arm's seed-to-seed spread) and the off-arm count of distinct codes (so a blind guard, fewer than two codes, reports BLIND rather than pass: head §6 risk 8, `:143`). A test plants a forced concentrator (an on arm whose histogram puts every terminal move on one code) and asserts FAIL; a second plants an off arm with one code and asserts BLIND.
+> - LANDED ALREADY: the guard as a reading quoted in commits (V2), run by hand in CR-78 and CR-79; it has no positive control (H-275 passed "for want of movement", `hole_register.yaml:5471`).
+> - REMAINING UNBUILT: the function; its two planted tests.
+> - GATE: CR-98 landed. NEEDS: CR-98.
+> - EXIT and FALSIFIER: the planted concentrator reads FAIL; the one-code off arm reads BLIND; two identical arms read PASS. MUTATION: drop the share clause and the concentrator reads PASS (red). EXPECTED: as stated. The guard is still a reading at batch closes (head §7: "never a test that asserts a count" on the realm); only the planted arms are asserted.
+> - HASH MOVERS: none.
+> - HOLES AND LEDGER IDS: none.
+> - ASKS ATTACHED: none.
+> - RE-BASE: `harness/strife.py` as CR-97 leaves it.
+> - FILES: `engine/season/harness/strife.py`, `engine/season/tests/test_strife_instrument.py`.
+> - VERB CLUSTER: no.
+> - LAYER 1: none (a harness reader).
+> - N-LINE: the guard control — cut it and the gameplay experience is worse, because a guard that has never been seen to fail passed CR-79 for want of movement, so a concentrator added by CR-100 could pass unseen and harden L1 or L5 into a determinant.
+> - BUILDER: second tier.
+> - SOURCE: `00_MASTER.md:184`; head §6 risk 8.
+>
+
+### Block F9 (`workplans/valoria_master_workplan_v11_part16.md` lines 284-311)
+
+> ### CR-100 — The unaware's field: the within-stamp in `questions_for` (IN) · BATCH B11-F2 · STATE BUILD (a query term, one driver line, a fixture shipped off; hash EQUAL off, a declared mover on) · R —
+> - STATUS: PROPOSED; the merge ratifies the position, shipped OFF. Whether it ships ON is CR-103's decision rule, not the merge's.
+> - WHAT: a world-side splice in `questions_for` (`queries/world_q.py:3964`; World-first, resolver-side, so lawful with no AX-2 hunk) that appends, for a person WITHIN an open strand, the strand's referents at stake, whether or not his ledger holds any move of it (R9, `00_MASTER.md:55`: "Awareness is not required to be within a flow"). Precisely:
+>   - `world_q.flow_stakes_within(w, p, flows, classes=FLOW_STAKE_CLASSES) -> tuple`: for each strand PRESENTED (`presented(w, flows)`, the slots A1/A2 bound to `flow_capacity`, `:5200-5233`) at a rung in the ancestry of `p`'s home (the person limb of `within`, `:5236-5247`, extracted to a one-line predicate that `within` then calls), plus the open era's realm-rung strands, and not `concluded(w, s)` (`:5100-5102`); a strand grouped under the flow above stamps nothing (L2's damping reaches L5 by construction); the stamped strands' referents and parties sorted by id, never `p` himself, through `_of_stamped_class(w, ..., classes)` (`:3672`). Its loop body is SHARED with `flow_stakes` (`:5457-5489`) through one private helper both call (strands, a concluded test, `p`, classes); no second copy.
+>   - The splice: `questions_for` gains an optional parameter `flows: Optional[Flows] = None`; the `added =` expression (`:4194-4200`) gains, after `flow_stakes`, `+ (flow_stakes_within(w, p, flows) if flows is not None else ())`. `_stamped`'s dedup keeps an id carried by both stamps once.
+>   - HOW THE WORLD READING IS READ AT A BARRIER: `loop/driver.py::_questions_at_barrier` (`:377-385`), the barrier-2 projection the driver builds once per round for every person (04 PART D row 41), computes `flows = world_q.flows_in(w) if w.fixtures.get("stamp_flow_within") else None` once and passes it to every `questions_for` call. The driver owns barrier lifetimes (`04_CODE_ARCHITECTURE.md:172`), the World is frozen at that point (`loop/driver.py:494-495`), and the reading is a local dropped with the call (T-a). `queries/cache.py` is NOT used: it holds presence, tenure and home indexes only (`queries/cache.py:72-130`), the projection has one caller, and `world_q` cannot import `cache` (which imports `world_q`, `:68`) without a cycle.
+>   - TERMINAL TEST: `flows_in(w)` with its default, the kind-level `default_terminal` (`:5061-5065`), exactly as CR-78's stamp reads the kind-level `concludes` set (`:5462`). The code-level test (`harness/strife.py::terminal_for`, `:221-233`) reads `strife_moves.yaml` signatures through the harness and may not be imported by the loop; moving it to a roster-side home is CR-78's named precondition (`workplans/valoria_master_workplan_v11_part3.md:62`) and is not required here (ladder step 4, CR-78's precedent). Status: PARTIAL, accepted; CR-97 (g) measures the strands the two tests disagree on.
+>   - COST: `flows_in` read 0.011 s on a one-season `build_realm(0)` log of 13,454 Events (CR-97's BASE reading at `d87946a`, `[UNREPRODUCED]`; HEAD prints 3 strands; CR-97's LANDED ALREADY); once per round, five rounds a season (`scene_budget` 5, `scenes_per_round` 1).
+>   - Fixture `stamp_flow_within`, shipped `False` (pattern: `stamp_flow_stakes`, `engine/season/data/fixtures.py:1003-1010`). Sign: none to decide (the stamp widens a field; it weights nothing).
+>   - It applies identically to every person (ID-17, `architecture/meta/01_AXIOMS.md:703-717`): the only inputs are containment, the log and the closed class set.
+> - LANDED ALREADY:
+>   - The stamp `flow_stakes` iterates `flows_known` (`:5485`), the person's own ledger, so a person who holds no `opens` claim gets `()` (`:5476-5477`): no channel reaches the unaware today.
+>   - `flows_in` has no loop caller (callers outside tests: `harness/strife.py:392` only; grep 2026-11-08).
+>   - Dose of the existing stamp: 6 to 13 persons ever stamped (H-274, `hole_register.yaml:5449-5460`). CR-97's BASE reading (`d87946a`, `[UNREPRODUCED]`): 79 of 83 persons are within an open strand after one season (a realm-rung strand covers everyone).
+>   - Precedent for a fixture-gated splice term with a revert helper: CR-78 (`revert_cr78`, `engine/season/tests/test_strife_flows.py:106`).
+> - REMAINING UNBUILT: `flow_stakes_within`, the shared helper, the `within` extraction, the `questions_for` parameter and term, the driver line, the fixture, the hole row, the test and its `revert_cr100` helper.
+> - GATE: CR-97, CR-98 (L5's row), CR-99 landed. NEEDS: CR-97, CR-98, CR-99.
+> - EXIT and FALSIFIER (hand-built worlds, P9): (1) two persons at one settlement under an open strand's rung, one with an empty ledger and one who witnessed every move, receive the same within-stamped referents; (2) a person outside the strand's rung receives none; (3) a concluded strand stamps nothing; (4) `questions_for(w, p)` with `flows=None` is byte-identical to today's output; (5) the rename falsifier. MUTATION: read `flows_known` instead of `flows.strands` and (1)'s empty-ledger person receives none (red). CONTROLS: fixture off reproduces the pre-change one-season hashes at seeds 0, 1, 2 (EQUAL); a shuffled-flow arm (the same number of referents drawn at random from the strands' rung subtree, seeded) for CR-103. EXPECTED: all pass; mutation red. Execution artifact: the test file, and the commit body's one-season after-readings.
+> - HASH MOVERS: on, a mover of every season in which a strand is open: one-season `build_realm(0)` seeds 0, 1, 2 (P14; pre-change readings the previous item's recorded after-readings). It SHIPS OFF in this position; whether it ships on, and at what reach, is CR-103's decision. `build_realm(0).content_hash()` EQUAL (Fixtures is not hashed).
+> - HOLES AND LEDGER IDS: one `hole_register.yaml` row, kind `RULING`, grade `assumption`, `sweep: ["False (control, the revert)", "True"]` (H-274's shape); `revert_cr100` in `engine/season/tests/test_strife_flows.py` (idiom: `revert_cr78` `:106`, `revert_cr79` in `test_strife_credit.py:88`).
+> - ASKS ATTACHED: none.
+> - RE-BASE: `questions_for`'s `added =` expression as B10-18b and B10-18c leave it (head §4's re-base note, `workplans/valoria_master_workplan_v11.md:112`); `_questions_at_barrier` as it stands at build.
+> - FILES: `engine/season/queries/world_q.py`, `engine/season/loop/driver.py`, `engine/season/data/fixtures.py`, `engine/season/hole_register.yaml`, `engine/season/tests/test_strife_flows.py`.
+> - VERB CLUSTER: no (no `verb_table.yaml`, count or set pin, or `loop/effects_*.py`).
+> - LAYER 1: `04_CODE_ARCHITECTURE.md:168` (`queries/world_q` reads any store via World), `:171` (`decision/` receives `Question[]` and nothing new), `:172` (`loop/driver` owns the caches' lifetimes and builds the barrier-2 projection); no hunk.
+> - N-LINE: the within-stamp — cut it and the gameplay experience is worse, because a character who has not heard of the rising in his own duchy chooses exactly as if it did not exist, so era, regime and strife condition only the handful who already know (6 to 13 persons, H-274) and the world's drama never reaches the people living inside it.
+> - BUILDER: second tier; a third-tier (judgment) critic on the dose against L5's bound.
+> - SOURCE: `00_MASTER.md` §5 (R9, `within`); Jordan's K2 and the correction of 2026-11-08.
+>
+
+### Block F10 (`workplans/valoria_master_workplan_v11_part16.md` lines 313-330)
+
+> ### CR-101 — The field's order: flow salience in `attention_key` (IN) · BATCH B11-F2 · STATE BUILD (a sort-key term and a fixture shipped 0; hash EQUAL at 0) · R —
+> - STATUS: PROPOSED; the merge ratifies the position, shipped at gain 0. The value it ships at is CR-103's decision rule, not the merge's.
+> - WHAT: in `attention_key` (`queries/world_q.py:3790`), a salience bump for a question whose referent is at stake for `p`, in either stamp: `flow_stakes(w, p)` (his own ledger) or `flow_stakes_within(w, p, flows)` (CR-100). `questions_for` computes both once and passes the union to `attention_key` (it already passes `ambs` and `refs_of`, `:4133`), so nothing is computed twice. Fixture `flow_salience_gain`, shipped 0. The bump enters the key's salience slot of tiers 0, 2 and 3, inside the tier (the existing "never across tiers" rule, `:3817-3826`, stays), so a stake orders questions inside a tier and cannot lift a stranger's matter over a person's own ambition; this widens IN-69's rule that tiers 1 and 4 carry 0 (`:3825`) to tier 2 only, named at the site, and a stake on a tier-4 own-act echo stays tier 4 `[ASSUMPTION; medium; Jordan to correct; revert: tiers 0 and 3 only, which leaves the term inert for a stake that is neither an ambition referent nor the need question]`. Recorded as a gain on L1 (own-ledger stakes) and on L5 (within stakes).
+> - ⚠ STATED: `attention_key`'s docstring says it reads "ONLY THE QUESTION AND `p`'S OWN STATE … Never the log" (`:3834-3838`). The within half reads the log through the driver's `flows`. That is lawful (`world_q` reads any store, `04:168`; `decision/` still receives only the sorted `Question[]`) but it falsifies the docstring, which this position corrects at the site in the same commit.
+> - LANDED ALREADY: `attention_key`'s five tiers and salience slot (IN-57, IN-69); the own-act screen (tier 4, `:3813-3815`) damps echo only.
+> - REMAINING UNBUILT: the term, the fixture, the docstring correction, the hole row, the test, `revert_cr101`.
+> - GATE: CR-100 landed. NEEDS: CR-98, CR-99, CR-100.
+> - EXIT and FALSIFIER: (1) in a hand-built world, a tier-2 claim question whose referent is a within-stake sorts earlier at gain > 0 than at 0, and only inside its tier, while a second planted world whose only stake question is a tier-4 echo is byte-identical at any gain; (2) a person with no stake in either stamp is byte-identical at any gain; (3) a tier-1 question is never displaced by a tier-0 stake bump. MUTATION: apply the bump across tiers and (3) reads red. CONTROLS: gain 0 EQUAL at seeds 0, 1, 2; the shuffled-flow arm (CR-100's) for CR-103. EXPECTED: all pass; mutation red.
+> - HASH MOVERS: at a nonzero gain, a mover wherever a stamped referent is a question's referent: one-season seeds 0, 1, 2 (P14). Ships 0 here; CR-103 selects the value.
+> - HOLES AND LEDGER IDS: one `hole_register.yaml` row (kind `NUMBER`, grade `assumption`, `sweep` 0 / the CR-103 grid); `revert_cr101` in `engine/season/tests/test_in57_attention_tiers.py`.
+> - ASKS ATTACHED: none.
+> - RE-BASE: `attention_key`'s tiers as B10-13 (CR-34) and B10-14 (CR-29) leave `world_q.py`.
+> - FILES: `engine/season/queries/world_q.py`, `engine/season/data/fixtures.py`, `engine/season/hole_register.yaml`, `engine/season/tests/test_in57_attention_tiers.py`.
+> - VERB CLUSTER: no.
+> - LAYER 1: `04_CODE_ARCHITECTURE.md:168`, `:171`; no hunk (AX-2 untouched: the order of a person's questions is produced resolver-side; T-f, `01_AXIOMS.md:417`, holds).
+> - N-LINE: the salience bump — cut it and the gameplay experience is worse, because a stake handed to a person sorts behind every unrelated question in its tier, so with `question_aggregation_rule: first` he is told what is at stake and answers something else.
+> - BUILDER: second tier.
+> - SOURCE: `00_MASTER.md` §6 L1 ("stamp, attention, acts"); Jordan's K1.
+>
+
+### Block F11 (`workplans/valoria_master_workplan_v11_part16.md` lines 332-349)
+
+> ### CR-102 — Office influence on the within-stake (IN) · CONDITIONAL · BATCH B11-F2 (last item) · STATE BUILD if its gate holds, else recorded NOT BUILT (hash EQUAL at 0, a declared mover above 0) · R —
+> - STATUS: PROPOSED, CONDITIONAL; the merge ratifies the position and its gate. It is built only if its gate holds on CR-97's reading, else recorded NOT BUILT.
+> - WHAT: a salience term added to CR-101's: a within- or own-stake referent belonging to a strand that holds a move exercised through an office (`causing_act(w, e).via`, read per move by `flow_stakes_within`'s caller from `flows`, since `Move` carries no seat, `queries/world_q.py:4836-4847`) gains `flow_office_gain × r`, where `r = RUNG_KINDS.index(kind) + 1` for `faction_q.influence_rung(w, via)`'s kind (realm highest; `flow_capacity` is `len − index` and is NOT reused for `r`; CR-104's one-line helper, D6), the highest such over the strand's moves. Fixture `flow_office_gain`, shipped 0, `[ASSUMPTION; medium; Jordan to correct; revert: gain 0]`. Not a weight in `flows_in`, `slot_rank` (`:5193-5197`, a presentation ranking read by `presented`, `:5216`, `:5224`) or the era (`_eras`, `:5166-5185`, a scope). Not a change to who is deposited what (the witness channels are unmodified): the draft's dissemination route is dropped by Jordan's correction (choices, not channels), and CR-97 (e) measures dissemination as it stands.
+> - FORBIDDEN: as §3.1's rule, and specifically: no literal or lookup on an office, faction, post, body or person id; the faction enters only through `influence_rung`'s structural derivation (§3.1's rename falsifier).
+> - LANDED ALREADY: `rank` returns 0 and is dormant (`decision/options.py:1685-1696`, H-181 `hole_register.yaml:4154`, `rank_gain` 0.5 `fixtures.py:903`, H-178 `:4076`): a hearer-relative quantity inside AX-2's island, not office influence; untouched.
+> - REMAINING UNBUILT: the term, the fixture, the hole row, the test, `revert_cr102`.
+> - GATE (computable from CR-97's three-seed OFF reading, taken in this batch): let `T_k` be the share of strand moves exercised through an office of influence kind k that are TURNS, `C_k` the share that start a consequence chain of depth ≥ D, and `T_m`, `C_m` the same for the matched-holder control; BUILT only if, for k ∈ {realm, duchy}, both `T_k − T_m` and `C_k − C_m` are at most the larger of their two arms' seed spreads (no influence gradient exists without it). Otherwise recorded as NOT BUILT, with the four numbers. NEEDS: CR-97, CR-100, CR-101, CR-104.
+> - EXIT and FALSIFIER: (1) in a planted world, swap two offices' rungs and the term follows the offices; (1b) a realm-kind office's term exceeds a territory-kind office's; (2) the rename falsifier; (3) a strand whose moves carry no `via` gains nothing; (4) gain 0 EQUAL. MUTATION: read the doer's own home rung instead of `influence_rung` and (1) reads red. EXPECTED: all pass.
+> - HASH MOVERS: at a nonzero gain, one-season seeds 0, 1, 2 (P14).
+> - HOLES AND LEDGER IDS: one `hole_register.yaml` row (kind `NUMBER`, grade `assumption`); L6 in CR-98's block; `revert_cr102` in `engine/season/tests/test_in57_attention_tiers.py`.
+> - ASKS ATTACHED: D6 (answered by precedent; carries `[ASSUMPTION; medium; Jordan to correct; revert: gain 0]`).
+> - RE-BASE: CR-101's term and CR-104's function as built.
+> - FILES: `engine/season/queries/world_q.py`, `engine/season/data/fixtures.py`, `engine/season/hole_register.yaml`, `engine/season/tests/test_in57_attention_tiers.py`.
+> - VERB CLUSTER: no.
+> - LAYER 1: `04_CODE_ARCHITECTURE.md:168`, `:171`; no hunk.
+> - N-LINE: the office term — cut it and the gameplay experience is worse, because a strand moved by the Confessor or the King would press on people's choices no harder than a quarrel between two smallholders, so the big four's deeds would not shape what the realm attends to; built only if CR-97 shows their deeds do not already shape strands more than matched commoners'.
+> - BUILDER: second tier; a third-tier (judgment) critic on the gate's verdict.
+> - SOURCE: Jordan's D7 ruling; D6.
+>
+
+### Block F12 (`workplans/valoria_master_workplan_v11_part16.md` lines 351-368)
+
+> ### CR-103 — Evaluate the field route (IN) · BATCH B11-F3 (after B10-18c; first item) · STATE MEASURE (readings; the selected values shipped in its pin commit) · R —
+> - STATUS: PROPOSED; the merge ratifies the position and its decision rule, fixed before the run. HELD BACK: nothing; which arm ships is the rule's output, not the merge's.
+> - WHAT: run CR-97's reading and CR-99's guard over arms, three seasons (strife: P10's exception; four only where the off arm is BLIND, risk 8), seeds 0, 1, 2 (P10: the arms declare movers), one process per seed and arm, `PYTHONHASHSEED=0`. Arms: OFF (all of `stamp_flow_within` False, `flow_salience_gain` 0, `flow_office_gain` 0); FIELD (`stamp_flow_within` True, salience 0); FIELD+S at each salience on the grid {0.25, 0.5, 1.0} `[ASSUMPTION; medium; Jordan to correct; revert: grid {0.5}]`; SHUFFLED (CR-100's shuffled-flow arm, salience at the best FIELD+S value); and, if CR-102 is built, FIELD+S+O at `flow_office_gain` on the same grid. It tests T1 (without a bias, events will not cohere at both depth and breadth) on the decisions-only route.
+> - DECISION RULE (fixed before the run). For arm A and number X, `X̄_A` is its mean over seeds 0, 1, 2 and `s_A(X)` its spread (max − min). The two coverage numbers are `P` = CR-97 (a)'s plot-point share (depth: strand → chain) and `Q` = CR-97 (b)'s share of depth-≥D chains inside strands (breadth: chain → strand). An arm A LIFTS when `P̄_A − P̄_OFF > s_OFF(P)` AND `Q̄_A − Q̄_OFF > s_OFF(Q)` AND `P̄_A − P̄_SHUFFLED > s_SHUFFLED(P)` (the lift is the flow's, not any extra stamp's). An arm A is SAFE when CR-99's guard PASSES A against OFF over the three seeds. Selection: among arms that LIFT and are SAFE, ship the one with the smallest largest-code share of terminal codes; ties to the smaller gains. If none lifts: ship everything OFF and 0, and CR-105's gate opens. QUANTISATION CLAUSE: P and Q move in steps of 1/N for N strands; if `s_OFF(P) ≥ 1 − P̄_OFF` or `s_OFF(Q) ≥ 1 − Q̄_OFF` the LIFT clause cannot be met and the reading is INCONCLUSIVE for that number, stated as such; CR-100 to CR-102 are then not shipped on, and CR-105's gate stays CLOSED, until a longer or wider reading that Jordan calls. WIDE-SPREAD CLAUSE: if `s_OFF(P)` or `s_OFF(Q)` exceeds half of `P̄_OFF` or `Q̄_OFF` respectively, or the guard is BLIND at four seasons, the reading is INCONCLUSIVE at the permitted seed set: ship OFF and 0, CR-105's gate stays CLOSED (an inconclusive field reading is not evidence the field failed), and the commit names the spread; more seeds are a P10 reading only Jordan calls, so the route is stated, not parked.
+> - LANDED ALREADY: none of the arms; the instruments (CR-97, CR-99) are this plan's.
+> - REMAINING UNBUILT: the readings; the pin commit if an arm ships.
+> - GATE: the supply gates that make strands able to conclude and every category able to open, so a coherence reading is not vacuous: B10-17 closed (`at_war` false in every buildable world until it, head §4 `workplans/valoria_master_workplan_v11.md:112`, the casus-belli carrier ED-IN-0317 (a)); B10-18 closed (CR-73's SH reading after CL-EVENTS (2)); B10-18c closed (docket closure, H-254; CR-74's CH signature). CR-100 to CR-102 may be built before these; they cannot be evaluated until they land. NEEDS: CR-97, CR-99, CR-100, CR-101, CR-102 (if built), B10-17, B10-18, B10-18c.
+> - EXIT and FALSIFIER: the falsifier of T1 on this route: OFF already meets both lift thresholds against SHUFFLED, or FIELD+S meets none against OFF. The commit body carries every arm's per-seed numbers, means and spreads, the guard's verdicts, and which clause selected the shipped arm. Execution artifact: the readings in the commit body (V2) and the pin commit. EXPECTED: not predicted (that is the point of fixing the rule first).
+> - HASH MOVERS: the shipped arm, if any: one-season seeds 0, 1, 2 and the three-season strife reading (P14; pre-change = CR-102's or CR-101's recorded after-reading); shared pins re-recorded in the batch's pin commit (P15), stated plainly as a golden re-record.
+> - HOLES AND LEDGER IDS: the `cite:` of CR-100's, CR-101's (and CR-102's) hole rows gains the readings; their `default:` the shipped value.
+> - ASKS ATTACHED: none (every branch of the rule is decided in advance).
+> - RE-BASE: the arms re-read on the tree after B10-18c (V1); CR-97's columns re-checked against any Event kind those batches add.
+> - FILES: `engine/season/hole_register.yaml`, `engine/season/data/fixtures.py` (only if an arm ships), and the pin files the shipped arm moves.
+> - VERB CLUSTER: no.
+> - LAYER 1: none.
+> - N-LINE: the evaluation — cut it and the gameplay experience is worse, because without a rule fixed in advance the field terms would ship on judgment, and Jordan's thesis that coherence needs a bias would be neither confirmed nor refuted.
+> - BUILDER: second tier; an independent third-tier (judgment) critic judges the selected arm (the builder line for a selected arm at `workplans/valoria_master_workplan_v11_part4.md:98`).
+> - SOURCE: Jordan's T1; `00_MASTER.md:184` (the guard).
+>
+
+### Block F13 (`workplans/valoria_master_workplan_v11_part16.md` lines 370-387)
+
+> ### CR-105 — A choice-score bias toward what is at stake (IN) · CONDITIONAL · BATCH B11-F3 (after CR-103) · STATE HELD until CR-103's verdict and Jordan's hunk, then BUILD (a score term and a fixture shipped 0) · R —
+> - STATUS: RATIFIED, CONDITIONAL: built only if CR-103 ships OFF under "none lifts" and the AX-2 hunk (item 1 above, ratified as wording, applied at the gate) is in Jordan's file. Ratification adds no build.
+> - WHAT: in `decision/choose.py::score_terms` (`:193`, the one owner of the score's terms; `score` sums them, `:556-559`), one term: a candidate whose subject is a referent at stake in a flow the person is within (CR-100's within-stamp, or his own `flow_stakes`) gains `flow_choice_gain`, shipped 0. `choose` still receives no World (T-f, `01_AXIOMS.md:417`): the stake set reaches it on the `Question` it already receives, as a new field (`Question.stakes`, a frozenset filled by `_stamped` from the two stamp terms; `state/carriers.py:513`), not as a class (a referent class would make rows form on it). Uniform: the predicate is "subject ∈ stakes", never a verb, move code, side, faction, seat id or person. Direction: toward engaging what is at stake, so there is no sign decision.
+> - WHY A HUNK: AX-2 (`architecture/meta/01_AXIOMS.md:106`): "A person decides from what they hold … There is no view of world truth" inside a decision. A within-stake is world truth (the log's strands, read for a person who may know none of them), so a score term on it breaches AX-2 as worded. Jordan waived AX-2 under the split (W1); the hunk is Jordan-directed, one sentence at AX-2 naming the waiver and its bound (a structural stake predicate, one fixture, a gain), in the style of H-L0-11 (2026-11-07, the governors line of `01_AXIOMS.md`, B11-S5's record `workplans/valoria_master_workplan_v11_part3.md:66`).
+> - LANDED ALREADY: `score_terms` (IN-62); `Question.classes` (the stamp's carrier).
+> - REMAINING UNBUILT: the hunk (Jordan's), `Question.stakes`, the term, the fixture, the hole row, the test, `revert_cr105`, L7's row.
+> - GATE: CR-103 shipped OFF under "none lifts" (NOT under the wide-spread clause), and Jordan has applied the hunk. Otherwise recorded NOT BUILT. NEEDS: CR-103, the hunk.
+> - EXIT and FALSIFIER: (1) two hand-built persons with equal pursuits, one whose question carries a stake on a candidate's subject, rank that candidate higher at gain > 0 and alike at 0; (2) a candidate keyed by verb with the same subject not at stake gains nothing; (3) `choose` takes no World (the existing AX-2 path scan over `decision/` stays green); (4) gain 0 EQUAL. MUTATION: key the term on the verb and (2) reads red. Then the CR-103 rule re-run with this arm added (same seeds, horizon and clauses). EXPECTED: (1) to (4) pass; the re-run not predicted.
+> - HASH MOVERS: at a nonzero gain, one-season seeds 0, 1, 2 (P14).
+> - HOLES AND LEDGER IDS: one `hole_register.yaml` row (kind `NUMBER`, grade `assumption`); L7.
+> - ASKS ATTACHED: the hunk's text, Jordan's (a hunk to a Layer 1 file is his; the plan supplies a sentence for him to apply or correct, `[ASSUMPTION; medium; Jordan to correct]`: *"A world-side mechanism may add to the field and the score of a decision a bias derived from flows the person is within but does not hold; the bias is a weight on candidates whose subject is at stake and never a belief, a claim or an outcome, and the person still chooses from what he holds."*).
+> - RE-BASE: `score_terms` and `Question` as B10-13 and B10-18c leave them.
+> - FILES: `decision/choose.py`, `state/carriers.py` (`Question.stakes`), `queries/world_q.py` (`_stamped` fills it), `data/fixtures.py`, `hole_register.yaml` (all under `engine/season/`), `engine/season/tests/test_cr17_odds_weighting.py` (the existing score-term test's idiom) or a new `engine/season/tests/test_cr105_choice_stakes.py`; and `architecture/meta/01_AXIOMS.md` (Jordan's hunk).
+> - VERB CLUSTER: no.
+> - LAYER 1: `01_AXIOMS.md:106` (AX-2), HUNK REQUIRED, Jordan-directed.
+> - N-LINE: the choice bias — cut it and, if the field route has been measured not to lift coherence, the gameplay experience is worse, because people handed what is at stake still choose as if it were not, and Jordan's split (the world conditions the choices, the person chooses from what he knows) has no second lever.
+> - BUILDER: third tier (judgment) for the term and its gate reading.
+> - SOURCE: Jordan's W1 waiver and the correction of 2026-11-08 (*"bias decisions and choices"*).
+>
+
+### Block F14 (`workplans/valoria_master_workplan_v11_part16.md` lines 86-91, lines 393-412)
+
+> ### 3.1 Rules binding every position in this section
+> 
+> - **FORBIDDEN (all positions):** a change to any obstacle, target number, pool, odds, leverage or draw, or to any resolver's or module's composition of them (`modules/*/roll.py`, `modules/combat/`, `seam/wrappers/*`, `engine/dice_engine/`); a weight inside `decision/` other than CR-105's single term (and CR-105 only under its gate and its hunk); a term keyed on the IDENTITY of a faction, seat, post, body, person, NPC case id, verb, move code, side or link (see the next rule); a dict or table from rung to weight; a second position-in-roster computation; a stored flow (T-a); a flow that writes or fires anything (T-b); `rank`/H-181.
+> - **Keys versus structure.** Forbidden is a term that tests WHICH entity something is: a literal or a lookup on an id, name, post string, body string, verb name, move code or side. Permitted is a quantity DERIVED by a uniform rule from structural relations every entity of the kind carries: a rung's place in the containment tree, an office's `rung`, a faction's `holdings` and `seats` (`queries/faction_q.py::resolve`), the head seat an authored data roster names for ANY faction (`rosters.yaml: factions.head_seat`, read through `faction_q.head`, `queries/faction_q.py:116-155`). The test that tells them apart is the **rename falsifier**: rename every faction, office, person and rung id in a planted world consistently (data only) and every reading is unchanged; then move one seat to another rung (structure) and the reading follows the seat. A key fails the first half; a structural derivation passes both.
+> - **Readings and seeds (v11 head P10 `workplans/valoria_master_workplan_v11.md:41`, P14 `:45`, P15 `:46`, P16 `:47`).** These positions are not B10-13 and enter an unbuilt batch, so P16 governs. Horizon: no reading beyond `aperture 2 0` except (a) a reading that concerns strife explicitly (P10's strife exception: the strife instrument and the strife guard read three seasons, four only where the three-season guard is blind, head §6 risk 8 `:143`) and (b) a reading that tests an arc or chronicle (P16 (1)'s second exception: `arc`, `chronicle`, `storybar` story readings take the horizon their entry names). Seeds: seed 0 for every reading and control, seeds 1 and 2 only where the batch declares a hash mover (P10, P14); the CR-78 exception (seed sets 0-4 and 5-9, part16 `:8`) is bound to HR-9's controls and applies to none of these positions. The seed-to-seed spread every decision rule below uses is therefore the spread over **seeds 0, 1, 2**, read in CR-97 (this batch declares CR-100 a mover, so P10/P14 permit the three seeds at CR-97's own commit) and again in CR-103. Every hash mover takes as its pre-change reading the after-reading recorded in the preceding item's commit body (P14, P16 (2)); the batch takes one fresh base reading at entry (V1); shared pins are re-recorded once, in the batch's pin commit (P15). `Fixtures` is not hashed, so a fixture shipped off/0 leaves `build_realm(0).content_hash()` and every season hash EQUAL by construction.
+> - **Scope as built.** The conditioning acts on DECISIONS only; no position changes an obstacle, target number, pool, odds or draw. A flow is a recomputed reading and is never stored (T-a); a flow never produces an outcome (T-b). STRIFE (and the era, as its realm-rung strands) conditions the decision field; REGIME conditions belief at WITNESS (CR-79, landed) and is not read into the field here; an office-holder's act reaches others' choices only through CR-102's conditional attention term; no position lifts a strand's rung by the office's reach (CR-97 (d) measures the lift; nothing builds it). Influence is a uniform function of the rung an office's institution covers, never of a named person: the "big four" Jordan names (King Almud, Duke Magnus Vaynard, Duchess Baralta, the church head Himlensendt) must EMERGE as the holders of the head seats whose institutions cover the realm and duchy rungs; no code names them and no test is keyed on their names.
+>
+> ### 3.5 Decisions
+> 
+> - D4 (the Ob sign): WITHDRAWN with CR-100's obstacle term by Jordan's correction of 2026-11-08. Nothing in this plan has a sign to decide.
+> - D5 (a weight inside `choose`): ANSWERED BY JORDAN'S WAIVER (W1), gated by measurement: CR-105 is built only if CR-103's rule finds the field route does not lift coherence, and only under the AX-2 hunk he directs. Not "not built".
+> - D6 (ANSWERED, by precedent: `flow_capacity`, `queries/world_q.py:4829-4833`, and A1, `proposals/2026-11-04-strife-flows/00_MASTER.md:246`, "capacity is read from the order of `rung_kinds`"): influence takes its ordinal from the rung kind's position in `RUNG_KINDS`; a swept gain, `[ASSUMPTION; medium; Jordan to correct; revert: gain 0]`.
+> - D7 (ANSWERED BY JORDAN): influence follows the rung an office's institution covers; designed in CR-104 (head-seat reach) with its reason now carried by CR-106's Church-owned Sites.
+> - D8 (ANSWERED BY JORDAN'S STATEMENT, ladder step 1): cohort convictions are AUTHORED per cohort row (the survey's Option A), because settlements must hold opposed creeds in separate cohorts; the territory-derivation alternative is not taken. The content is his to correct (P11).
+> - D10 (ANSWERED, ladder step 5): "all territories" is read as every realm territory with a settlement (CR-106 content).
+> - D11 (ANSWERED, ladder step 5, §8): the starting condition of a Church Site is nested in the one `site:` mapping, not a second key.
+> - D12 (ANSWERED, ladder step 4): the three kinds are priced like every fabric kind (`{timber: 10}`).
+> - D13 (WITHDRAWN; ladder step 3, `names_index.yaml:352-353`): no faction alias is added; `Altonian` and `Einhir` are canonical peoples' names, not factions.
+> - D14 (ANSWERED, ladder step 5): majority cohorts carry no `label:` (their ids stay as today); no cohort carries `faction:` (CR-107b holds it behind the reader audit: B1 of the critic's attack).
+> - D9 (ANSWERED, ladder step 3 and 4): scale of a building is `Site.condition` bands (ED-IN-0279, H-38), ownership is a kind-row table (a `hold` on a Site is refused by Layer 1 §15 and ED-SE-0053), the cohort ceiling is checked on the SUM of weights (step 5).
+> - `rank` / H-181 (ANSWERED): out of scope; a hearer-relative telling quantity, not office influence.
+> - Nothing survives the five-step ladder as a question to Jordan. His owed acts are one hunk and corrections, not questions: the AX-2 hunk text if CR-105's gate opens (his file); and any correction he makes to the first-reading content (CR-106, CR-107), each of which carries its revert.
+> 
+> ### 3.6 Owed corrections
+> 
+> - MADE IN THIS FOLD: this file's §1 positions-by-batch line no longer lists CR-72 (LANDED `3bbe78b6`, B10-11 close two; `-03` §1); `registers/handoffs/HANDOFF_IN.md`'s plan row reads CR-73, CR-74 and CR-80; the canon alignment's two lines.
+> - OWED, each to the position that edits the file: `engine/season/hole_register.yaml` H-102's `default:` names the bound "`ask_budget`" where the fixture is `scene_budget` (`engine/season/data/fixtures.py:228`): CR-98 re-cites it with L1's row; `queries/world_q.py::attention_key`'s "Never the log" sentence: CR-101 corrects it; `engine/season/cohorts.yaml:21-23` (rows carry no `institution` or `tie`, the retired one-order plan's item 10): CR-107 corrects it; `engine/season/venues.yaml`'s `serves:` tag never enters the World (ED-SE-0052): CR-106 mints Sites from a `site:` key and leaves `serves:` as it is.
+>
+
