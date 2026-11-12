@@ -576,3 +576,31 @@ Scope: 73 files under `.audit/2026-07-22-mass-battle-stress-test/`, `.audit/2026
   - CLAUDE.md §5 "combat pool defined three ways" overstated: `max(5, History+6)` everywhere except stale `values_master.yaml` (since dissolved) :73-76.
 - **Conflicts / stale:** `values_master.yaml` is in the dissolved list (CLAUDE.md §3); `adef_cap` blunt-branch latent bug [UNVERIFIED fixed].
 - **Open items:** tempo-penalty saturation; PERC calibrations; graded investment levels for abilities ("levels of investment for techniques", scoped as next increment).
+
+### .audit/2026-07-23-combat-engine-wiring-audit/wiring_audit_v1.md
+- **What it is:** READ-ONLY PC engine wiring inventory, state-graph map and cross-module compliance audit (2026-07-23), runtime `sys.setprofile` coverage plus agent reads; no code changed.
+- **Status:** none; reading: historical, with several findings since fixed (pool duplication removed, `GAP_EXPOSURE` reordered).
+- **Bears on:** PC, DICE, CHAR
+- **Content that matters:**
+  - Coverage: 120 of 142 engine functions fire; only 6 genuinely dead (`core.effective_ob`, `combat_systems.can_choke`, `stamina_max`, `conc_max`, `ability_primitives.kit`, `traditions.profile`) plus dead field `Combatant.ready` :23-67.
+  - Wired-but-inert frontier: six K=0 morphology levers, abilities layer (`eff_cw` ~82k calls returning 1.0), Contact axis built but tradition weighting unwired :69-77.
+  - State graph node/edge map; dead separation reasons `beat_exhaustion`, `collapse` :84-113; 9 tradition injection points hooks built, per-tradition biasing largely unwired :157-162.
+  - Design-promised-but-absent (§3.1): ranged combat entirely absent (`combat_engine_v1` is a melee-only 1v1 resolver); abilities-as-access schema NOT STARTED; Phase-4a game-theoretic layer NOT STARTED; disengage/cavazione, Nachreisen, body-void; balance channel wired at 1 of 5 sites; staged incapacitation absent (binary `felled`) :166-187.
+  - Dead ability lever: `seize`/`vorschlag`/`sen_no_sen` labelled "live" but consumer cut 2026-06-05 :189-193.
+  - Doc conflict: stamina formula `combat_v30.md:302` (End x5) vs `combat_design_v1.md:286` vs engine's third form :204-206.
+  - Compliance: no `if weapon == name` branch in 8 resolution modules; sole name-membership predicate in `capabilities.py:36` (diagnostic layer); ~60 knobs leak outside CFG; ≈8.0 percussion anchor triplicated (`core.PERC_AUTH_REF`, `weapon_physics.PERC_CAP`, `config.ADEF_PERC_REF`); module scorecard A to C :211-306.
+- **Conflicts / stale:** path `systems/combat/combat_engine_v1/` is the old home; live is `modules/combat/` (verified listing). `modules/combat/` has no `capabilities.py` or `state_graph.py`, so those were removed or moved [UNVERIFIED]. Ranged/abilities/incapacitation gaps may be addressed elsewhere (e.g. `tests/valoria` combat tests) [UNVERIFIED].
+- **Open items:** ranged combat in-scope decision; abilities-as-access schema; Phase-4a game theory; tradition biasing at injection points.
+
+### .audit/2026-07-24-combat-four-dimension-audit/combat_four_dimension_audit_index.md
+- **What it is:** Index/skeleton of the four-dimension (fiat, orphans, conflicts, tuning) PC engine audit and remediation by batches (ED-PC-0034..0040), 2026-07-24.
+- **Status:** "IN PROGRESS - Batches 1-5.2 landed (ED-PC-0034..0040); Batch 6 pending."; reading: historical snapshot; Batch 6 and later state unknown.
+- **Bears on:** PC, PROCESS
+- **Content that matters:**
+  - Finding roster F1-F24 with severity and batch; open structural findings: F16 deterministic first-actor race (1.5% tempo edge -> 2:1 action monopoly), F17 `closed = gap <= 0.3` cliff, F18 off-plate reach still ~0.94 vs Jordan's ~0.75 target, F19 plate damage vs `adef_cap` (covert plate-killers partisan/ranseur/guandao), F21 flat `ADEF_CUT=-0.90` cutter cliff, F22 roster gaps, F23 ability/`eff_cw` surface hollow (5 of 8 channels identity), F24 selection contradicts damage (falchion 46/47 plate strikes pick `point` for 0 damage) :32-57.
+  - Review record: batches 4, 5, 5.1 each "half-stood" because the fix introduced a new defect or overstated its reach; a ceiling raise justified as noise over a real +27pp regression; a fabricated ledger `files` entry :9-20.
+  - Enforcement added (ED-PC-0040): `workbench/armour_participation.py`, `test_plate_participation_guard_is_not_blind`, `tests/valoria/data/combat_armour_reference.json` + `test_combat_armour_reference.py` (drift gate 0.15), `tools/ci_claim_provenance_check.py` requiring `MEASURED-BY: <path>` :95-112.
+  - Core unresolved: "three separate models of what a weapon does to armour (damage, capability, selection) reconciled pairwise by patch" -- a design call for Jordan :116-119.
+  - Known-open: ranseur covert plate-killer, 34/51 weapons decide zero plate fights, `PEN_DEFICIT_K` exported to a Godot contract whose port lacks a penetration knee, four-channel double-count of the armour-defeat deficit, medium-tier round trip (odachi 0.67 -> 0.26) :121-151.
+- **Conflicts / stale:** the claim-provenance checker (`tools/ci_claim_provenance_check.py`) is cited by CLAUDE.md §3 (QUARANTINE_MIRRORS) so it exists [UNVERIFIED current form]. `armour_participation.py` workbench location [UNVERIFIED].
+- **Open items:** Batch 6; the three-model reconciliation; F18 tune; F21-F24.

@@ -601,6 +601,7 @@ not timings.
 | E-7 | `grep -rni secession --include=*.py --include=*.yaml engine/ modules/ references/` | — | no hit | §2 P6.1; canon at `canon/03_canonical_timeline.md:72-84`, `:194` |
 | E-8 | inline: residence of every individual against the rung of every seat he holds | 0 and 1 · none | printed | 16 of 34 seat-holds held by a resident of the seat's ground at both seeds; 32 of 46 individuals live in the Duchy of Valorsmark |
 | E-9 | inline greps: non-test readers of `.head`, `HEAD_SEAT`, `faction_q.resolve(`, `at_war(` | — | printed | §1.2 |
+| E-10 | `pf6_fixcheck.py` (PES-FA-A's three edits applied to a forked world in memory; no file written) | 0 · one idle season | `pf6.txt` | one claim opens throne and duchy, the strippable set survives the death; three of four re-anchored council seats pass `may_revoke`, the Guild Comptroller does not (faction `Guilds`); dismiss, pardon (`ban.ended`), reappoint; control `pardon.refused` through `off_king` |
 | cited | the game lane's `x2_death_s0.txt`, `x2b_*`, `x4_s0.txt`, `x5_s0.txt` (its §2.1, §2.5, §3.7); the FA lane's E-3 to E-6 | | | not re-run |
 
 **Not done, and why.** No second seed for the cut arms or the hand-built premise probes (the load; the
