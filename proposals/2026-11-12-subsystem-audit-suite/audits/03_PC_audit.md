@@ -102,8 +102,8 @@ Ranked by the weight each bears.
    *Attack:* E3, E5. **Holds for the survivor; fails for the loser of a plain `fight`** (F-PC-04).
 4. **A death is consequential.** `remove_person` closes every edge naming the dead, each emptied seat
    earns `tenure.closed`, and witnesses hold `person.died` with the doer paired (IN-58). *Attack:* E4:
-   10 of the 15 deaths were of a seat-holder and each emitted `tenure.closed`; E3's ledger counts show
-   bystanders holding the death in all 200. **Holds.**
+   10 of the 15 deaths were of a seat-holder and each emitted `tenure.closed`; E3's ledgers hold 296
+   bystander `person.died` claims over the 200 fights. **Holds.**
 5. **Violence is exceptional by ruling (ED-IN-0337), so zero fights at seed 0 is the ruling working.**
    *Attack:* the ruling says rare and belonging to war, crime and duels; E7 shows 123 attempts on combat
    verbs, every one refused, 92 of them on a kind or carrier error rather than on rarity. **Fails as a
@@ -267,8 +267,8 @@ weapon will still arm a person. H-265 stands. Fix: in the person-inputs proposal
   named anti-pattern. `references/module_contracts.yaml:912-922` still lists eleven sub-rows as
   `PENDING` port slices under a retired vocabulary; reference only.
 - **Determinism.** Sound. The seed string is unique per act; the estimate uses a private stream and
-  moves no hash (`combat.py:249-254`). The order of `DEFENCE_MODES` is part of the draw contract
-  (`vocabulary.py:71-76`), stated at its owner.
+  moves no hash (`combat.py:249-254`). The order of `DEFENCE_MODES` is part of the draw contract,
+  stated at its owner (`modules/combat/vocabulary.py`).
 - **Test strength.** The module test can observe the failure it excludes (subprocess, oracle, counted).
   The fold tests (`test_cp_t03_00…`, read in full) drive pinned bands through the real fold and gate and
   record a hand-run mutation; they do not drive the real draw, which the capture tests do by scanning
@@ -464,7 +464,7 @@ them (their own revert note says how).
 | choice surface, before | which verb (`fight`, `capture`, `challenge`, `accept`), offered through `opening_set`; a four-share odds reading | `combat.py:235-296` |
 | choice surface, during | `engage` or `withdraw`, once per turn, for a played person | `wrapper.py:552-553`; E6 |
 | choice surface, build | none: no kit, tradition, technique or disposition can be chosen | F-PC-02 |
-| outcome legibility | thirteen trace event kinds with the inputs of each decision; a commentary and a narration renderer in the workbench; `Event.ending`; the body Observation to the actor | `wrapper.py:20-40`; `workbench/commentary.py`, `narrate.py` (heads read) |
+| outcome legibility | eighteen trace event kinds with the inputs of each decision; a commentary and a narration renderer in the workbench; `Event.ending`; the body Observation to the actor | `wrapper.py:20-40`; `workbench/commentary.py`, `narrate.py` (heads read) |
 | stakes | death with its cascade, body, ceiling, custody; nothing for the winner | §3 F-PC-03 |
 | end condition | of a fight: felling, terms met, yield, withdrawal, twelve turns; of a scenario: none | `wrapper.py:576-625` |
 | instrument | `workbench/balance.py` (win-rate tables with Wilson intervals); this audit's probes | — |
@@ -566,7 +566,7 @@ All runs `PYTHONHASHSEED=0`. No pytest was run. No tracked file was written by a
 | E5 | `probe_module_fights.py 1000` → `module_fights_1000.txt` | `wrapper.fight` with the trace seam, seeds 0 to 999 per cell; one control cell at seeds 100000 to 100999 | as §1.3 rows 3 and 4 |
 | E6 | `probe_playable.py 300` → `playable_300.txt` | provider-level, world_seed 5000 to 5299, four policies; then 60 lethal fights through the fold for bystander regard (world_seed 7000 to 7059) | as §1.3 row 5; regard unmoved 87 of 87 (the fixture's persons hold no pursuits) |
 | E7 | `python -m engine.season.harness.aperture 2 0` → `aperture_2_0.txt` | seed 0, two seasons, realm and spine | as §1.3 row 6 |
-| E7b | `python -m engine.season.harness.aperture 2 1` → `aperture_2_1.txt` | seed 1, two seasons | see §13's closing note for whether it returned |
+| E7b | `python -m engine.season.harness.aperture 2 1` → `aperture_2_1.txt` | seed 1, two seasons, realm and spine | realm: `capture` attempted 18, executed 2; `challenge` 105 refused of 105; `accept` 27 of 27; `fight` formed 0; deaths 0. Spine: all refused, deaths 0 |
 | E8 | a `python -c` reading of `build_realm(0)` | seed 0 | as §1.3 row 7; 37 of the 83 are cohorts |
 | E9 | `python tools/export_engine_params.py --check` | — | round-trip verified |
 | E10 | `python -c`: `soft_cap·sigma_n` against `net_boost` at four points; `p_success`; the export's sections; a regex over `combat_systems.py`; `grep -c designs/audit/` | — | equal to one unit in the last place; `p_success(1.0, 8, 0)` = 0.835; sections attributes 8, cfg 214, core 26, kit 3; 0 of 18 module constants exported; 16 dead citations |

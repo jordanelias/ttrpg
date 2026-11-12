@@ -440,3 +440,124 @@ Response Matrix, Case Board, Cover/Exposure, points of interest and discovery (`
 `investigation_systems_v30.md`; archived, not canon). The research lane file records the archived corpus
 as GM-dependent in four places and internally contradictory in seventeen; nothing here should be built
 from it without a new design. 59 of the 143 corpus cases name one of these terms in a need (§13).
+
+## 6. Hole-register and workplan disposition, and resolutions
+
+### 6a. Hole-register rows (primary to this dossier)
+
+Read at the register line through a compact dump (each row's `hole`, `default`, `unblocks` and the head of
+`cite`; the long `cite` tails of H-33, H-55, H-122, H-169, H-182, H-197 and H-222 were read in part:
+`[PARTIAL READ]`). "Verified" is against code or a run in §12, not against the row's own text.
+
+| id | listed | verified | evidence | action |
+|---|---|---|---|---|
+| H-22 | ruled, open? | closed but for `ttl` | `Record.ttl` has no reader (`_eff_destroy_record` docstring; H-259) | R-24 |
+| H-33 | assumption | open as an assumption; `all_five` is the ruled default | `fan_out_mode="all_five"`, `fixtures.py:421` | none; CR-29 changes the fifth channel |
+| H-42 | closed? | closed | `_eff_utter`; `utter` folded 73 / 69 / 68 | none |
+| H-43 | closed? | closed | `_mint_document` is the one mint | none |
+| H-45 | closed? | closed as rows; three rows have no product | `verb_table.yaml` rows; F-FI-03 | R-07, R-08 |
+| H-55 | closed? | closed (measured) | `observers_for` read at every WITNESS | none |
+| H-62 | absent | open; wrongly filed (CHAR: interior writes) | — | CHAR lane |
+| H-72 | closed? | closed | clause 4 declined 461 / 445 / 485 | none |
+| H-79 | assumption | open as an assumption (`both` ships) | `claim_subjects` | none |
+| H-84 | closed? | closed; `give` rare in play | `record.given` 0 / 1 / 0 | see H-316 |
+| H-92 | absent | open; wrongly filed (CHAR: `decision/budget.py`) | a held Record or Proposition is a `hold`; `budget` counts every live `hold` | R-22 |
+| H-104 | measured | closed as a bound; not exercised at the shipped cap in two seasons | largest ledger 271 (535 at two seasons) against 3,200 | none |
+| H-106 | absent | open; wrongly filed (IN: loop enumeration) | — | IN lane |
+| H-111 | assumption | open; answered by the plan | B10-14 CP-T06-04 | R-09 |
+| H-112 | measured | closed as a bound | `World.write` MATTER-only buffer [not re-run] | none |
+| H-138 | measured | open, latent; wrongly filed (economy) and its cite names a moved function | `_eff_transfer` is not in `effects_information.py` | WR/SE lane; fix the cite |
+| H-116 | measured, open? | closed; the head describes the tree before W-A/W-B | clause 4 fires (above) | R-16 |
+| H-122 | assumption | open as an assumption (`actor` ships) | `fixtures.py:584` | none |
+| H-155 | assumption | open; unsweepable at this volume | `news.told` 2 / 1 / 0 a season | after R-05 |
+| H-157 | measured | closed | `teller_weight` reads `Claim.chain` | none |
+| H-162 | measured | SC's; writer built, no reader | — | SC lane |
+| H-169 | measured | partly closed (`forge`, `destroy_record` built since); open: a sheet's content is unbounded | `_eff_forge`; `_eff_survey` docstring | design-first, unchanged |
+| H-173 | assumption | closed by delegated ruling (no distinct reading) | row's own `default:` | none |
+| H-182 | absent | open; CHAR's (`_eff_tie`, position `14`) | `tie / knot` has no effect | CHAR lane |
+| H-197 | closed? | open as an assumption; ships at the control | `telling_privacy=0.0` | after R-05 |
+| H-210 | closed? | open as an assumption; CR-94 scheduled | B10-14 | none |
+| H-214 | measured | superseded by the plan | B10-14 CR-29 | R-06 |
+| H-217 | measured | open; wrongly filed (SC/FA: succession) | — | SC lane |
+| H-218 | closed? | superseded in both halves (its own cite); residue open | K-36, K-37; CP-T06-05 | R-07, R-08 |
+| H-219 | absent | SC's; stopped | — | SC lane |
+| H-222 | closed? | built, never fires; irrelevant until a `person_predicates` producer exists | `standing_of` returns the maximum for everyone | none (R-21) |
+| H-231 | measured | open | `event_place` None for a razing; `_hold_tenure_ends` expands `hold` only | R-23 |
+| H-234 | measured, ruling | answered by the plan's reach channel | CR-29's roster row keyed on event kind | R-18 |
+| H-259 | measured | open | `issue` mints with no end | R-24 |
+| H-267 | measured, ruling | SC's; answered by precedent (`speak`'s `reception`) | `SocialContestInput.reception` | SC lane, R-25 |
+| H-269 | measured | open (name) | `argue` `Partial` emits `argument.won` | R-11 |
+| H-275 | assumption | open as an assumption; unsweepable at this volume | 7 / 0 / 0 told claims | after R-05 |
+| H-279, H-285, H-295, H-299, H-301, H-302 | measured | SC/FA's; filed here by path (`effects_information.py`) | — | SC, FA lanes |
+| H-314 | measured, ruling | superseded by the plan | B10-14 CP-T06-03 | R-09 |
+| H-315 | measured | open | one covert kind; three ungraded inquiries | R-07 |
+| H-318 | measured | open (name) | `finding.none` for three causes | R-10 |
+| H-319 | measured | open | `research`'s cell has no place conjunct | R-12 |
+| H-320 | measured | open | repeats mint the same event-kind claim | R-13 |
+| H-323 | measured, ruling | closed by ruling (hearing by presence; whispers not built) | `_circle_of` docstring | none |
+| H-324 | measured | superseded by the plan | B10-14 CP-T06-09, -07 | none |
+| H-325 | measured | open; SE/WR's (exploration) | — | SE lane |
+| H-331 | measured | open; T07's | `thread_read` has no bands | B10-15 |
+| H-332 | measured | open | F-FI-07 | R-14 |
+| H-333 | measured | superseded by the plan | CR-29 deletes the channel that leaks it | R-06 |
+| H-335, H-336 | measured | SC's (conversation state); design-only | — | SC lane |
+| H-341 | measured | half defect, half ruled | `holds_trail` ignores confidence (defect); `deeds_judged` ignoring it is ED-IN-0320 | R-15 |
+| H-345 | measured | closed by ruling (r2 `02` §A.10's lossy copy) | all `news.told` here are `Partial` | none |
+| H-351 | measured | closed by precedent: no faction channel | r2's retirement of the place-blind broadcast; `post_remit` is place-bound | R-19 |
+
+Secondary rows that bear on a finding: H-204 and H-272 (R-05), H-271 (R-08), H-316 (R-07), H-230 and H-207
+(R-01, R-02), H-198 (the deed lie: stays absent, no deposit can hold a deed false), H-327 (SE's).
+
+### 6b. Workplan positions (B10-14, `workplans/valoria_master_workplan_v11_part3.md:104-125`)
+
+| item | listed | verified | action |
+|---|---|---|---|
+| CR-94 forgery quality reads Coordination | BUILD | unbuilt (`default_forgery_quality` is a fixture) | keep |
+| CP-T06-09 room files a covered deed under the hand | EDIT | unbuilt | keep |
+| CR-29 reach channel, then `chronicle`'s deletion | BUILD | unbuilt; `_ch_chronicle` live | **move first** (R-06) |
+| CP-T06-01 a deed that writes a place or alias leaves a trail | BUILD | unbuilt; `covert_kinds` has one member | keep |
+| CP-T06-03 a `Partial` closes the deed, not the hand | BUILD | unbuilt; the test pins the old behaviour | keep (closes H-314) |
+| CP-T06-04 a refused or failed inquiry teaches its actor his reads | EDIT | unbuilt | keep; widen by R-08 |
+| CP-T06-02 `surveil` finds covert deeds at the place watched | BUILD | unbuilt | keep |
+| CP-T06-07 a cover can borrow another's name | BUILD | unbuilt | keep |
+| CP-T06-05 the person questioned answers by his own act | EDIT | unbuilt | keep; R-05 is its precondition (an answer is a telling) |
+| CP-T06-08 paper can be burned | HELD on JA-1 | `destroy_record` has its effect; formation withheld | unchanged |
+| CR-83 (B10-13 tail; familiarity sets inference) | DESIGN-FIRST | no design file found by this audit [UNVERIFIED] | owns F-FI-04's price |
+
+### 6c. Resolutions (every inconsistency, gap and unclear passage found; decided)
+
+Ladder step: 1 superseded · 2 irrelevant · 3 a design document or plan answers · 4 precedent · 5 what the
+architecture needs. Proposal files are under `proposals/2026-11-12-subsystem-audit-suite/proposals/`.
+
+| # | what | kind | resolution (decided) | step | carried by |
+|---|---|---|---|---|---|
+| R-01 | R-07/R-08 say non-omniscience holds; `questions_for` hands world-read referents | doc against code | the code is the defect; referents about OTHERS' state come from the person's ledger; R-07/R-08 `measured:` text corrected to "holds for claims, not for referents" until built | 1 (ED-IN-0292 last row) | `08_FI_01` |
+| R-02 | `goal_referents`' docstring reads ED-IN-0292's closing row as licensing the world read | unclear passage | rewrite to the row's actual answer; take the docstring's own stated revert | 1 | `08_FI_01` |
+| R-03 | which stampers may stay world-read | gap (no rule) | a stamp over the person's OWN live edges stays (`writs_held`, `records_held_for_holding_rows`, `works_sites`, `detainees_held`, `holdings_to_found`: "a man knows his own lands"); a stamp over anyone else's state is ledger-gated (`vacancies`, `seat_holders`, `aim_state`, `matters_awaiting`) | 4 (`docket_question` and `sittings_before` already require a held claim) | `08_FI_01` |
+| R-04 | Q2 clause 2 reads where a claim's subject is now | unclear | stays: it filters the person's own landed claims and adds no referent (r2 `01` §A.4.4) | 3 | none |
+| R-05 | a telling passes on what the room already holds; a retelling passes on "a telling happened" | gap | a third `said_slants` arm, `unshared`, at `said_of` | 5 | `08_FI_02` |
+| R-06 | CR-29 is third in B10-14; two defects cannot be measured while `chronicle` broadcasts | sequencing | CR-29 first | 5 | `08_FI_02` |
+| R-07 | investigation has no scenario, conclusion, stake or end | gap | a standalone fixture and a conclusion carried by existing verbs | 5 | `08_FI_03` |
+| R-08 | nothing checks a told claim (H-271); a lie has no consequence | gap | a graded inquiry's success deposits what it examined firsthand; a teller's record first falling below neutral lands as a claim | 5, then 3 (CR-83 prices it) | `08_FI_03` |
+| R-09 | H-111 (does a refusal propagate) and H-314 (a `Partial` closes the trail) flagged as rulings | flagged for Jordan | both answered by B10-14 as written (CP-T06-04, CP-T06-03); not escalated | 3 | none |
+| R-10 | `finding.none` names three outcomes | name | a refused inquiry emits `<verb>.refused`'s shape, `inquiry.refused`; a rolled Failure keeps `finding.none` | 4 (CP-T05-03 split `tell.refused` from `news.untold`) | `08_FI_04` |
+| R-11 | `argument.won` at `Partial` | name | `Partial` emits `argument.held` | 4 (`speak`'s `matter.held`) | `08_FI_04` |
+| R-12 | `research` needs no presence | wiring | add the `present_at` conjunct on the Record's place | 4 (`examine`, `surveil`) | `08_FI_04` |
+| R-13 | a repeated ungraded finding mints the same claim again | wiring | the told channel's exact-triple guard applied to an event-kind claim the holder already holds firsthand at the same tick-or-later subject | 4 | `08_FI_04` |
+| R-14 | `knots.py`: global registry, unseeded draw, dead "Canon source" path, self-knot | hygiene | refuse a missing `rng`; refuse `actor_a == actor_b`; correct the path line; registry stays (an oracle, unplugged) | 5 | `08_FI_04` |
+| R-15 | a claim at confidence 0 still closes a trail | wiring | `holds_trail` requires `confidence > 0`; `deeds_judged` unchanged (ED-IN-0320: the opinion stays) | 5, 1 | `08_FI_04` |
+| R-16 | H-116's head states a severed edge that is closed | stale row | head rewritten to "closed by W-A/W-B", with this audit's count | 1 | `08_FI_04` |
+| R-17 | `module_contracts.yaml`'s `fieldwork` module row describes the knots oracle; `HANDOFF_FI.md` names two ledger rows as unwritten | pointer | split the contract row's description (entry `find`; oracle `knots.py` unplugged); write the two ED-FI rows | 5 | `08_FI_04` |
+| R-18 | H-234: how news of unrest travels (needs_jordan on ED-IN-0298 [last row UNVERIFIED]) | flagged for Jordan | a row in CR-29's `reach` roster for the unrest kinds, by rung kind; not a sixth channel | 3 | `08_FI_02` |
+| R-19 | H-351: should a faction's members learn of its acts at a distance | unclear | no: every channel is place-bound or edge-bound by precedent; members learn by being told (R-05) | 4 | none |
+| R-20 | H-323 / H-345: bystanders hear; a garbled copy carries no flag | flagged as rulings | both ruled already; closed | 1 | none |
+| R-21 | H-222: `standing` is the same constant for everyone | gap | irrelevant while no deposit mints a `person_predicates` claim and no chooser term reads `standing` (REM-44) | 2 | none |
+| R-22 | H-92: a held document buys a scene | wiring | `budget` counts live `hold`s whose object is an Office | 5 (S26.3: the budget varies *by office*) | `08_FI_04` (CHAR's owner) |
+| R-23 | H-231: a razing is witnessed by the razer alone; custody receipts name nobody | wiring | `event_place` falls back to the place the actor departed in the same write (H-206's limb); `_hold_tenure_ends` also expands `detain` and `ban` to (prisoner, seat) | 4 (H-206, H-71) | `08_FI_04` |
+| R-24 | `Record.ttl` has no reader; a decree never lapses (H-259) | dead carrier | a writ lapses when its last declared stage matures (`stages`/`matured` already run at MATTER); `ttl` leaves the matrix | 5 (ID-13) | `08_FI_04` |
+| R-25 | H-267: a hearer's regard never enters `argue` | unclear | the hearer's `regard` for the arguer rides the existing `reception` operand | 4 | SC lane (named, not authored here) |
+| R-26 | `loop/witness` exceeds `04:178` five times by declared convention | spec against code | amend the row's may-read cell (listed in §11: it overwrites ratified Layer 1) | 5 | `08_FI_04` §6, and §11 |
+| R-27 | `reconstruct` has no product (K-37: "no value space") | gap | its value space is the persons the actor's own ledger names as doers; its product is an uttered HOLDS Proposition | 5 | `08_FI_03` |
+| R-28 | H-204: the confidence break path is unreachable | wiring | closed by R-05's arm (a confided copy outranks the hearer's own "a telling happened" claim) | 5 | `08_FI_02` |
+
+**28 resolutions decided.** Two are also listed in §11 (R-01's scope for common knowledge; R-26).
