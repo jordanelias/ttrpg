@@ -2,7 +2,67 @@
 
 ## Status: PROPOSAL (continues `PC_ROUND_SPEC.md`; reference, resolves nothing at runtime, CLAUDE.md §0.05)
 
-<!-- §4 is written after the sweep's edits; §5 and §6 were written first. -->
+## 4. The consistency sweep (2026-11-12)
+
+### 4.1 What was searched, and the decisions it applied
+
+Searched (grep over `proposals/`, `master/`, `unified/` of the suite, `.md`): "round(s)", "turn(s)", "bout(s)",
+"beat(s)", "engagement(s)", "exchange", durations ("ten seconds", "~10s", "N seconds"), `turn_start`, `max_bouts`,
+"twelve turns". Three conflicts were found and decided:
+
+1. **The duel's "turn" is a round.** A-9 owns "turn" (a scene's short sequence); the PC files used "turn" for the
+   fight's iterations because the code does (`turn_start`, `decide(turn)`). Decided by A-101 (ladder 1): every duel
+   "turn" reads **round**; proposed identifiers that carried `turn`/`turns` are renamed in the proposals
+   (`CombatOutcome.rounds`, `Surrender.round`, `DecisiveBeat.round`, `SceneShape.rounds`, the Observation term
+   `fight_rounds`, the riposte's key `"upset:<round>"` and event `finalblow_riposte(round, by)`); tree identifiers
+   are the rename candidate PCR-3.
+2. **"About ten seconds" for a round.** Corrected to A-101's indicator (4 to 10 seconds, of the exchange cap, never
+   a clock) where stated: PA §1, `unified/work/R1_READ.md:326`; the code's own `wrapper.py:576` is PCR-1's edit.
+3. **The season's "round" collides with A-101's.** The word test (STAGES.md): both senses pass ordinary English
+   (a boxing round; a round of turns in a board game), so a fresh reader cannot tell which is meant where both
+   appear, and test (a) fails. Jordan's word (A-101) keeps "round"; the season's within-season pass of
+   DELIBERATE, RESOLVE and WITNESS (`Claim.round`, `SeasonDriver.round`, `scene_budget`) is called a **lap** in
+   prose (ordinary: one circuit of a course; unused in the suite and the tree, checked by grep; "cycle" refused,
+   it names dependency cycles throughout the suite; "pass" refused, it names review passes and a fencing step).
+   The tree identifiers are the rename candidate PCR-4. Files with a dense season sense got a `Reconciled:` note;
+   the rest change at their next edit (STAGES.md rule 3), listed in the glossary's *lap* row.
+
+"Beat", "exchange" and "engagement" were found used consistently with §2.1 in the PC files (a beat is a loop step;
+an exchange one attack with its defence; "engagement" the code's name for the round); `03_PC_typed_outcome_one_door.md`'s
+`DecisiveBeat` (the beat in which the felling wound landed) keeps its name. MB uses of "bout", "field tick" and
+"window" agree with the clock table. "Engagement" in MB prose is already refused by the MB lexicon.
+
+### 4.2 Files edited (29), each with a `Reconciled:` line or a marked in-row correction, 2026-11-12, A-101
+
+| file | change |
+|---|---|
+| `unified/U1_GLOSSARY.md` | §D *round* row → *lap*; §E *exchange*, *bout* rows and the riposte's ids; new §K (fight, round, duel round, closing, attack attempt, separation, beat, turn) and the clock table |
+| `unified/U1_OWNERS_AND_VOCABULARY.md` | the *round / turn / tick* row marked superseded, old text kept |
+| `unified/MB_LEXICON_part2.md` | *bout* row's refused senses; *duel round* row (same round; no tick advance) |
+| `unified/MB_LEXICON_part3.md` | D-7's reason column |
+| `unified/U3_DEPENDENCY_ORDER.md` | §1 items 15 (PCR-1 first in B15) and 16 (PCR-2, PCR-3 in B16); a `Reconciled:` line |
+| `unified/work/R1_READ.md` | the *round* row's "about ten seconds" corrected in place |
+| `master/instructions/IS_B1_PC_MB_DICE.md` | a `Reconciled:` line (turn → round, `fight_round`, the three items) |
+| `proposals/03_PC_duel_round_and_approach.md` | §1's "about ten seconds"; `Reconciled:` note |
+| `proposals/03_PC_duel_round_and_approach_B.md` | `Reconciled:` note: PCR-1/2/3 amendments to step 1 and the key |
+| `proposals/03_PC_typed_outcome_one_door.md` | Part A fields `round`/`rounds`; seam keys; note |
+| `proposals/16_PESSIMIST_PC_C_what_the_world_keeps_of_a_fight.md` | `SceneShape.rounds`, `fight_rounds` (six sites); note |
+| `proposals/18_DETERMINISM_no_certain_matchup.md` | key `"upset:<round>"`, event `finalblow_riposte(round, by)`; note |
+| `proposals/03_PC_exits_withdrawal_recovery.md`, `03_PC_weapon_form_at_round_start.md`, `03_PC_loadout_and_carry.md`, `16_PESSIMIST_PC_A_…`, `16_PESSIMIST_PC_B_…`, `16_PESSIMIST_PC_D_…`, `29_DICE_one_opposed_rule_form_and_tuning.md`, `U5b_PC_rulings_in_the_fight.md`, `U5a_capability_home_and_two_inputs.md` | `Reconciled:` note: the duel's "turn" reads round (and file-specific: the withdrawal at a round's top; the form reset also at a re-opening; figures pre-PCR-1) |
+| `proposals/27_MB_E_…`, `28_CORE_scene_access_A_…`, `_B_…`, `_C_…`, `16_PESSIMIST_CORE_no_stored_plan.md`, `_a_scene_runs_in_its_own_order.md`, `_the_nine_gate_and_a_knockout_reading.md`, `18_DETERMINISM_rival_acts_in_one_fold.md` | `Reconciled:` note: "round" here is the season's **lap** |
+
+### 4.3 Not edited, and why
+
+- **`unified/DECISIONS_ANSWERED.md`** (Jordan's record): A-101's consequence column lists *initiative* among the
+  carried state and says the exchange's attack attempts "are what the engine's beats are"; §2.4 and §1 of the spec
+  decide otherwise (initiative resets; a beat is a loop step that holds at most one attack). A-63/A-64's
+  consequence text uses "round" for the season's lap. The record is the orchestrator's to amend; listed in the
+  receipt and in `PCR_FOR_JORDAN.md` item 1.
+- **`unified/DECISIONS_FOR_JORDAN.md`**, `master/eval/*`, `master/HOLISTIC_*`, closure and conflict ledgers: question
+  and audit records, edited only by their owners; their season "round"s read as laps by the glossary.
+- **About 60 files with one or two season-sense "round"s** (the count in §4.1's grep): changed at their next edit
+  (STAGES.md rule 3); the glossary's *lap* row is the instruction.
+- **`master/mb_abstraction/`**: not present when read; not edited by rule. §5 is its input.
 
 ## 5. What the mass-battle abstraction lane should assume (A-100; `master/mb_abstraction/`, not edited here)
 

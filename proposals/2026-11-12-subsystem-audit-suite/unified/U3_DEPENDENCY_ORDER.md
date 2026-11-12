@@ -8,6 +8,8 @@ Reconciled: 2026-11-12, A-97 (`unified/work/L1_APPLIED.md`, `unified/work/L1_PRO
 
 Reconciled: 2026-11-12, U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fought scene" → "fight" (glossary *scene*); "the riposte" (`18_DETERMINISM_no_certain_matchup.md`) → "the riposte" (glossary *riposte*); "knockout" → "removal test" (glossary *removal test*; file names keep their words).
 
+Reconciled: 2026-11-12, A-101 round lane (`master/pc_round/PC_ROUND_SPEC.md`, part 2 §6): §1 items 15 and 16 gain PCR-1 (B15's first item, before UPR §4: the scale and every B15 reading are taken on A-101's rounds) and PCR-2, PCR-3 (B16, with PB step 1). PCR-4 (the season's `Claim.round` → `lap`, IN) is a rename candidate for v12's rename batch, not scheduled here. No new batch handle.
+
 ## 0. How this order was built, and what it is not
 
 **Source of the edges.** The five read lanes' §5 tables (`unified/work/R1_READ.md` to `R5_READ.md`): one row per
@@ -149,12 +151,15 @@ CLAUDE.md §7).
 14. **B14 PC outcome (PC).** `03_PC_typed_outcome_one_door` (C3-L5) → `03_PC_weapon_records_in_the_export` →
     `03_PC_weapon_form_at_round_start` → `16_PESSIMIST_PC_C` → `U5b_PC_residue` §7–§8 → `14_VERBS_PHYSICAL_A` A4.
     Gate: `tools/export_engine_params.py --check`; two declared movers (`standing`, `fell_to`).
-15. **B15 PC calibration (PC; one re-record of combat goldens, the armour reference and the export).** UPR §4 (the
+15. **B15 PC calibration (PC; one re-record of combat goldens, the armour reference and the export).** PCR-1
+    (`master/pc_round/PC_ROUND_SPEC_part2.md` §6: a round ends at every separation, A-101; its movers co-batched
+    with this one re-record) → UPR §4 (the
     scale) → `16_PESSIMIST_PC_B` → `16_PESSIMIST_PC_D` → `14_VERBS_PHYSICAL_A` A3 (in `modules/combat/`, C3-C8;
     `22_HAPPENINGS_A` edit 3's `mortal_terms` lands here; moved ahead of the two files that depend on it, U6 R-A,
     UPR §5 row 5 edited to match) → `18_DETERMINISM_no_certain_matchup` → `16_PESSIMIST_PC_A` → UPR §3's flip;
     `29_DICE` rows 5–7, 9. Gate: `29_DICE` gates (a)–(c); each step's own gate read before the next.
-16. **B16 PC round (PC).** `03_PC_duel_round_and_approach_B` steps 1–2 (round keys, A-30) → 3a, 3b, 3e, 3c at 0 →
+16. **B16 PC round (PC).** `03_PC_duel_round_and_approach_B` step 1 with PCR-2 (the round's outcome names how it
+    ended; the entry `fight_round`) → PCR-3 (one word in code for the round, hash EQUAL) → step 2 (round keys, A-30) → 3a, 3b, 3e, 3c at 0 →
     step 4 with `03_PC_exits_withdrawal_recovery` Part A; `03_PC_duel_round_and_approach` marked superseded.
     Gate: PB's per-step gates and the added R-6 gate.
 17. **B17 MB scale (MB).** `04_MB_headcount_grade_and_scale` (the `Drawn` re-homing, A-67 to A-70) →

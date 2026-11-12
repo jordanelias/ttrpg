@@ -7,6 +7,9 @@ Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `unified/work/R
 command, pre-deletion grep, tier); `unified/U3_DEPENDENCY_ORDER.md` B03 and §6.2 (the probes `knock.py`,
 `qreuse_small.py` are not in the repository). Changed: the gate is restated as commands that exist; the
 probe readings stay as the producing lane's evidence and no gate rests on them; implementation block added.
+A-101 round lane (2026-11-12, `master/pc_round/PC_ROUND_SPEC.md`, glossary §D *lap*, §K): "round" in this file
+(`self.round`, "the same round") is the season's within-season pass (`SeasonDriver.round`, `Claim.round`), now called
+a **lap** in prose; "round" alone is personal combat's (A-101); the identifiers keep their names until PCR-4.
 
 Lands in batch: **B03** (IN, hash-equal text and deletions). Depends on: nothing (no proposal, no
 unlanded symbol).

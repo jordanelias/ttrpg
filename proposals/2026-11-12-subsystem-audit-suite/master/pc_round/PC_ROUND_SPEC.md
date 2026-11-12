@@ -66,7 +66,8 @@ cap** `BURST_MAX=4` (`config.py:112`); rarely a stamina collapse; never, in the 
    (`:206-210`) — the loop `continue`s into a new approach phase **in the same engagement**: the fighters separate
    and close again without a round boundary, so no between-round recovery, no fresh initiative and no decider
    consult happens. A-101 ends the round at the disengagement. Measured: 4.3% to 5.0% of rounds in
-   reach-mismatched pairs, 0% in matched-reach mirrors.
+   three reach-mismatched pairs (0% in spear against arming sword, where the spear fells on the closing), 0% in
+   the arming mirror.
 2. **No one-round entry.** `modules/combat/fight.py` exposes `fight` only (`:55-117`); the round is reached only
    inside `wrapper.fight`'s loop, so a battle (A-4, A-72) cannot call one round, and the tracker's damage is
    zeroed at each call (`wrapper.py:570`). PB step 1 is the cure; this lane adds the round's typed ending.

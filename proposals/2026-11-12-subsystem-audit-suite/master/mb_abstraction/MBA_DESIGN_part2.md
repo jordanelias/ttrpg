@@ -46,7 +46,7 @@ matchups:
 - **Situations** (read from engine state that exists: the octagon zone, `_unit_braced`/`_subunit_braced`, the brace delay, momentum, the in-hand arm, formation state): `charge_front_braced`, `charge_front_unbraced`, `charge_flank_or_rear`, `marching` (a body in column or moving: no brace possible, `MB_BRACE_SETUP_DELAY`), `in_cover`, `pursuit` (the rout's), `skirmish` (a light body's evade).
 - **How a row acts on the contact draw:** it **multiplies** exposure for the first tick of a contact (the impact: the charger's momentum puts more men into rounds at once; a braced wall's points meet the horse) and adds named **levels**, in skill steps on the one ladder (§1.3); it sets whether the contact forms at all (`closes`: always; `draw`: a will check of the charger, H1's "horses refusing to gallop into the dense mass"; `evades`: the light body opens distance on a draw, the kite rule; `refused`: no contact); and it scales the charge's **moral shock** passed to the stand draw (`26_MASS_BATTLE_rout_pursuit_and_giving_ground.md`; A-61), which is where du Picq's "moral impulse" belongs, not in the casualty count. After the first tick the contact is an ordinary contact draw. **No row replaces the contact draw**; a missing row means the plain contact draw.
 
-**Which rows the troop table needs (the roster).** Of 8 x 8 class pairs, rows are needed only where geometry or momentum makes the plain contact draw wrong. The full roster is 30 rows; **first needed (B19)** marked ★, the rest join in B31 with the troop economy:
+**Which rows the troop table needs (the roster).** Of 8 x 8 class pairs, rows are needed only where geometry or momentum makes the plain contact draw wrong. The full roster is 35 rows (counting each situation of each pair, the `pursuit` row once); the 10 **first needed (B19)** are marked ★, the other 25 join in B31 with the troop economy:
 
 | attacker | defender | situations needing a row | why (source) |
 |---|---|---|---|
@@ -60,7 +60,7 @@ matchups:
 | horse_missile | any foot | skirmish | evades: the kite (`MB_KITE_*`, `config.py:388-389`) |
 | foot_missile (skirmishers) | foot_pole, foot_pike | skirmish | evades: javelins harass, do not close (`registry.py:68`) |
 | foot_pike | foot_short, foot_pole | charge_front_unbraced (the push of pike) | depth and reach in the press (MV F3, X5) |
-| any | any | pursuit | the rout's pursuit row (`26_…rout…` §3): the pursuer's exposure only, the fleeing side's none |
+| any | any | ★ pursuit | the rout's pursuit row (`26_…rout…` §3): the pursuer's exposure only, the fleeing side's none |
 
 **How each row is derived.** In order of preference, stated per row in its `status`:
 
@@ -162,7 +162,7 @@ A cell whose magnitude is uncalibrated carries `status: seed` in the artifact; t
 
 - **New batch B19a-mb-contact-instrument** (MB lane, with PC review): the instrument, the measured table, the exporter and its `--check`, the module's loader. **After** B14, B15, B16, B17. **Hash EQUAL** (nothing in the field reads the table yet). Wave: W11 (B16 is W10).
 - **B19-mb-field-calibration** gains the contact draw, the range-band model and the ★ matchup rows as its central step, in place of `04_MB_cr12_linear_law.md` steps 2-3 and `16_PESSIMIST_MB_partition_and_the_pair_rule.md` edits 1-3; it gains dependencies **B16 and B19a**, so it moves from W10 to **W12**. Its one re-record stays one.
-- **Cascade** (dependency levels only; no other edge changes): B20 W11 to W13; B22 W12 to W14; B23 W13 to W15; B30 and B31 W12 to W14. The suite's critical path (18 batches through FI, SC, FA and WR, U3 §2.2) is unchanged: B38 still waits on B23 at W15 and runs at W16, one wave later than U3's W15 — **this lengthens the critical path by one wave**, and the cost is recorded here for v12's serial-edge table. [ASSUMPTION: B38's edge to B23 is the only critical-path edge the MB chain feeds — basis: U3 §2.1 rows 37-38 read; B39's dependencies include B22 (W14 under the cascade), which stays below B38's level.]
+- **Cascade** (dependency levels only; no other edge changes): B20 W11 to W13; B22 W12 to W14; B23 W13 to W15; B30 W12 to W14 (it follows B20); B31 W12 to W13 (it follows B19 and B18). The suite's critical path (18 batches through FI, SC, FA and WR, U3 §2.2) is unchanged: B38 still waits on B23 at W15 and runs at W16, one wave later than U3's W15 — **this lengthens the critical path by one wave**, and the cost is recorded here for v12's serial-edge table. [ASSUMPTION: B38's edge to B23 is the only critical-path edge the MB chain feeds — basis: U3 §2.1 rows 37-38 read; B39's dependencies include B22 (W14 under the cascade), which stays below B38's level.]
 - The **missile mode** of the instrument (per-hit felling from the duel's armour model) and the derived matchup rows wait on personal combat carrying the kit (J-MBA-01); they are items MBA-02 stage 2 and MBA-07, in **B31** and **B30** respectively, each behind its kit.
 
 ---
@@ -194,7 +194,7 @@ Removing the contact draw returns the field to a pool of troop quality against t
 
 **N (necessary).** Holds from top-down, bottom-up, vertical and lateral; narrowed horizontally by §6.3 and by the kit gap (J-MBA-01): for pike and horse the layer is stated, not derived, so for those troops A-100's "derived from personal combat" is not yet true.
 
-**E (elegant), last, as a ratio against N and R.** Removed: the pool, the opposed degree, `DAMAGE_BY_DEGREE`, `K_LINEAR`, `LANCHESTER_STRENGTH_REF`, `POOL_QUALITY_SCALE`, `CASUALTY_SCALE` in melee, `MB_STAM_SIGMA`, `RANGED_MELEE_SIGMA`, `MB_FRICTION` with `MB_FRICTION_SIGMA`, `K_SQUARE`, and the `dr` subtraction in both melee and volley; with them `subunit_combat_pool`, `pair_pool_contribution` and `_draw_friction`. Added: one measured table and its exporter, one exposure product of four reused factors, one base number, a matchup table of 30 rows. The player intuits a field from a duel: "spears beat swords, plate turns blades, fresh men beat tired ones" is true at both scales because it is one fact. The ratio is favourable; the cost is the 7.7 core-hour run [estimate], paid once per duel-engine change.
+**E (elegant), last, as a ratio against N and R.** Removed: the pool, the opposed degree, `DAMAGE_BY_DEGREE`, `K_LINEAR`, `LANCHESTER_STRENGTH_REF`, `POOL_QUALITY_SCALE`, `CASUALTY_SCALE` in melee, `MB_STAM_SIGMA`, `RANGED_MELEE_SIGMA`, `MB_FRICTION` with `MB_FRICTION_SIGMA`, `K_SQUARE`, and the `dr` subtraction in both melee and volley; with them `subunit_combat_pool`, `pair_pool_contribution` and `_draw_friction`. Added: one measured table and its exporter, one exposure product of four reused factors, one base number, a matchup table of 35 rows (10 at first). The player intuits a field from a duel: "spears beat swords, plate turns blades, fresh men beat tired ones" is true at both scales because it is one fact. The ratio is favourable; the cost is the 7.7 core-hour run [estimate], paid once per duel-engine change.
 
 ### §6.3 The dominant-strategy check
 
