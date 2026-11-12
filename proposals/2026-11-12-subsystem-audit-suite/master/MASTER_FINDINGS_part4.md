@@ -2,7 +2,7 @@
 
 ## Status: REFERENCE (part 4 of `master/MASTER_FINDINGS.md`; the row tables are generated from the closure tables `unified/U5_FINDINGS_CLOSURE_U5a.md`..`_U5d.md` by the lane's scratch extract, the syntheses written by lane MF; resolves nothing at runtime; dies with the suite)
 
-Columns and order are the head part's §0. **evidence**: the closure row (`U5a:66` = `unified/U5_FINDINGS_CLOSURE_U5a.md` line 66), then the audit line that defines the finding where the extract found it (`audits/` implied), then the closure row's own evidence, cut to one line. **sev**: B blocks a requirement · D degrades narrative · C code matter · M design matter · H hygiene · — ungraded. **carrier**: the closure row's carrier cell, cut to one line (its short names are the closure table's, defined at the head of that table's section). **batch**: v12's handle; `→` before it on a SUPERSEDED row (the successor's batch); `— (stale)`, `— (disputed)`, `— (answered …)` where no fix is owed. Claims are the closure tables' one-liners, cut at about a hundred characters.
+Columns and order are the head part's §0. **evidence**: the closure row (`U5a:66` = `unified/U5_FINDINGS_CLOSURE_U5a.md` line 66), then the audit line that defines the finding where the extract found it (`audits/` implied), then the closure row's own evidence, cut to one line. **sev**: B blocks a requirement · D degrades narrative · C code matter · M design matter · H hygiene · — ungraded. **carrier**: the closure row's carrier cell, cut to one line (its short names are the closure table's, defined at the head of that table's section). **batch**: v12's handle; `→` before it on a SUPERSEDED row (the successor's batch); `— (stale)`, `— (disputed)`, `— (answered …)` where no fix is owed. Claims are the closure tables' one-liners, cut at about a hundred characters; outside code font the word *capability* is printed *skill* (A-98, as the suite's own vocabulary sweep did, `unified/work/A98_SWEEP.md`), and nothing else in a quoted cell is changed.
 
 
 ---
@@ -45,7 +45,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 28 | U5c `challenge` | forms but is refused | — |  | `U5b:260` | RESOLVED-BY | P1 | B01 | IN |
 | 29 | §11 item 2 | the one input to a combat pool and its obstacle | — |  | `U5b:143` · `DECISIONS_ANSWERED.md` A-6, A-7, A-8 | SUPERSEDED | answered: A-7 (two numbers), A-6 (score plus a base, floor five), A-8 (the wound); carried by… | → B04, B15 | IN |
 | 30 | §13 ARC-53 (the wound degrades faction-… | in part | — |  | `U5b:152` · `es/seam/wrappers/pool.py:38-50` | RESOLVED-BY | CAP Part B row B6 and `10_DICE_advantage_sources_for_the_arcs.md` Edits B–D (A-8: a level agai… | B05, B04 | IN |
-| 31 | §14 (a)–(e) the capability surface for… | slots; rule in code; doubled Ob; no carriers | — |  | `U5b:167` · audit §14 table | RESOLVED-BY | U1 §2–§4 and §8 (the home, the roles, the reader); P4 Part A; CAP Part B row B7 specified by R… | B18, B04, B15 | PC |
+| 31 | §14 (a)–(e) the skill surface for combat | slots; rule in code; doubled Ob; no carriers | — |  | `U5b:167` · audit §14 table | RESOLVED-BY | U1 §2–§4 and §8 (the home, the roles, the reader); P4 Part A; CAP Part B row B7 specified by R… | B18, B04, B15 | PC |
 | 32 | §1.6 S (i) | one ladder centred at two places | — |  | `U5b:230` · pessimist `pJ_roll.py` | RESOLVED-BY | CAP Part B (one pool rule, one opposed divisor across combat and everything else, A-5/A-6/A-26… | B04, B15 | IN |
 | 33 | PC-21, PC-22, CR-95 | design-first positions | — |  | `U5b:113` | SUPERSEDED | plan positions stand; CR-95's adverse body modifier is answered by A-8 (`10_DICE_advantage_sou… | → B05, B10 | IN |
 | 34 | C-9 | a fight is never priced by believed odds in the chooser | — |  | `U5b:183` · `es/seam/wrappers/sigma.py` | RESOLVED-BY | RES-PC §8 (the `believed_chance` answer for the `personal_combat` band: the resolver sampled o… | B05, B14 | IN |
@@ -174,7 +174,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 157 | §13 NPC-040, ARC-16, NPC-081/020/031/00… | not PC's mechanism | — |  | `U5b:163` | SUPERSEDED | CHAR (U5a), FA (U5d), SC (U5c) closures | — | PC |
 | 158 | §13 ARC-31 (a covert lethal attempt in… | no | — |  | `U5b:164` | SUPERSEDED | A-16 supplies the attempt (`22_HAPPENINGS_C_*`); the interruption of a proceeding is SC's (U5c) | — | PC |
 | 159 | §13 ARC-07 | not PC | — |  | `U5b:166` | SUPERSEDED | Part 2 (MB) of this file; A-2 | — | PC |
-| 160 | §14 (d) item 10 | "a capability may gate an attempt" is refused by Layer 1 | — |  | `U5b:168` | SUPERSEDED | A-11 confirms the refusal | — | PC |
+| 160 | §14 (d) item 10 | "a skill may gate an attempt" is refused by Layer 1 | — |  | `U5b:168` | SUPERSEDED | A-11 confirms the refusal | — | PC |
 | 161 | C-5 | `videogame_mode_spec.md` is superseded on both points | — |  | `U5b:179` | SUPERSEDED | Layer 1; A-1; no edit (R-PC-41) | — | PC |
 | 162 | C-10 | the FFT precedent is in the held proposal's Appendix A, unsurveyed | — |  | `U5b:184` | SUPERSEDED | recorded as a null; nothing is built from it (addendum §B3 "Against the research") | — | PC |
 | 163 | §B4 row 3 | the upset flip after the engagement | — |  | `U5b:196` | RESOLVED-BY | 18-D | — | PC |
@@ -260,7 +260,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 63 | R-27 | one weapon roster, personal combat's | — |  | `U5b:336` · addendum §B7 (no missile weapon, pike or lance in the personal roster) | SUPERSEDED | by addendum C-3 and R-36 (one owner a fact, not one file); LOAD-B §2 | → B17 | MB |
 | 64 | §13 ARC-07 (five needs) | a rare sub-outcome persists; a condition on a unit; the reason for staying; a distinct resolving act; a… | — |  | `U5b:340` | RESOLVED-BY | TO §1 (parts, `broke_first`); A-2 (the condition is claims in the men's ledgers); PLAY §G and… | B17, B20, B31, B23, B22 | MB |
 | 65 | §13 ARC-43, ARC-20, ARC-45, ARC-11, NPC… | fields that arise from persons' acts; commanders whose command is material | — |  | `U5b:342` | RESOLVED-BY | PLAY §E; MIL-C, MIL-D; TO (per-cohort shares) | B17, B20, B22 | MB |
-| 66 | §14 (a)–(e) capability surface | Command a literal; troop tables in Python; two stat systems; the roller re-implemented | — |  | `U5b:346` | RESOLVED-BY | 27-MB (command; a unit's prowess from its own row); LOAD-B stage 1 (the troop file); RUL-MB §1… | B19, B17 | MB |
+| 66 | §14 (a)–(e) skill surface | Command a literal; troop tables in Python; two stat systems; the roller re-implemented | — |  | `U5b:346` | RESOLVED-BY | 27-MB (command; a unit's prowess from its own row); LOAD-B stage 1 (the troop file); RUL-MB §1… | B19, B17 | MB |
 | 67 | §16 (a)–(e) the NPC surface | who decides; the estimate is the player's; doctrine a script | — |  | `U5b:350` | RESOLVED-BY | MIL-C, MIL-D; RES-MB §5; CHAR's cells on fanned payload values (U5a) | B17, B22 | MB |
 | 68 | §16 named: AQ-X1 | "no NPC reads" the estimate | — |  | `U5b:351` · `es/seam/wrappers/mass_battle.py:465-466` | RESOLVED-BY | RES-MB §5 (an NPC reckons on what he believes, never on the world) | B17 | MB |
 | 69 | §18.2 "no character death from mass bat… | the `total` casualty arm kills | — |  | `U5b:353` | RESOLVED-BY | RES-MB §2 is extended at landing by one roster note (the `total` arm labelled a control that c… | B17 | MB |
@@ -387,11 +387,11 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 33 | G-21 | which faculty a judge, arrester, liar and interrogator roll | — |  | `U5c:90` · CAPS table | SUPERSEDED | by G-53/G-67 (CAPS): `lie` → `deception`, `determine` → `law`, `interrogate` → `inquiry`; `arr… | → B04, B24 | IN |
 | 34 | G-23 | a trait cannot reach the roll without code | — |  | `U5c:92` · `sigma.py:151-157` | RESOLVED-BY | `05_SC_capability_surface.md` edits 3–4, as one member of the leverage channel (OBS §3; the ta… | B04, B05 | IN |
 | 35 | §13 arcs table | ARC-04, -05, -06, -10, -21, -31, -42, R18; EMG-C4, -X6; NPC-001, -071, -085; SCN-04, -12 | — |  | `U5c:109` · audit §13; addendum §B6 | RESOLVED-BY | as the addendum's amended table reads, with: ARC-04 `05_SC_acquittal.md` + VERD; ARC-10/-21 `0… | B27, B04, B05, B24, B21c | SC |
-| 36 | G-52 | the social capabilities as rows | — |  | `U5c:145` · CAPS edits | RESOLVED-BY | CAPS (rows on the surface U1 decides) | B04 | IN |
+| 36 | G-52 | the social skills as rows | — |  | `U5c:145` · CAPS edits | RESOLVED-BY | CAPS (rows on the surface U1 decides) | B04 | IN |
 | 37 | G-53 | `lie` → `deception` | — |  | `U5c:146` · CAPS | RESOLVED-BY | CAPS edit 2; `05_SC_capability_surface.md` Reconciled | B04 | IN |
 | 38 | G-59 | `score/2` kept, the divisor in `opposed_ob` | — |  | `U5c:152` · 2026-08-14 ruling; A-26 | SUPERSEDED | in its first half by Jordan's answer A-26 (the rate is 0.4 per point; C-33). Its second half s… | → B04, B05 | IN |
 | 39 | G-67 | CORE's edit 8 against `deception` and `law` | — |  | `U5c:160` · CAPS | RESOLVED-BY | CAPS "Sequencing" | B04 | IN |
-| 40 | §B5 items 1–6 | capability consequences | — |  | `U5c:163` | RESOLVED-BY | CAPS; office weight is FA's `06_FA_office_capabilities.md` | B04 | IN |
+| 40 | §B5 items 1–6 | skill consequences | — |  | `U5c:163` | RESOLVED-BY | CAPS; office weight is FA's `06_FA_office_capabilities.md` | B04 | IN |
 | 41 | cell 1 | `lie`, `arrest`, `determine`, `interrogate` cannot be opposed | — |  | `U5c:170` · 13 §3.3 control | RESOLVED-BY | CAPS edit 2 and `05_SC_capability_surface.md` edit 2 (rows); OBS §2 | B04, B05 | IN |
 | 42 | cell 10 | a verdict with no spread | — |  | `U5c:179` · 13 §3.3 | RESOLVED-BY | OBS; T13; CAPS | B05, B04 | IN |
 | 43 | G-10 | the roll's operands are dropped: `Event.ending` | — |  | `U5c:79` · H-266 precedent | RESOLVED-BY | `05_SC_contest_record_on_event.md` (C-06) | B05 | IN |
@@ -428,7 +428,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 74 | R-10 | office standing is dice | — |  | `U5c:190` · `verb_capability` source line | RESOLVED-BY | T13 T4 (`standing_dice` through `register_pool_addend`); a `standing` obstacle member is refus… | B05 | IN |
 | 75 | R-11 | two cited SC files do not exist | — |  | `U5c:191` · `ls proposals/` at `6cbc712` | STALE/FP | none: `05_SC_negotiation_scene.md` and `05_SC_evidence_and_rebuttal_B.md` exist at HEAD; T13's… | — (stale) | SC |
 | 76 | res. 1 | favour and proofs as levels | — |  | `U5c:211` · ladder 1 | RESOLVED-BY | PES-A; OBS §3 | B05 | IN |
-| 77 | res. 3 | `tell` is opposed by the hearer's skill | — |  | `U5c:213` · PES-SC §2.2 table | RESOLVED-BY | OBS §2: the opposing score is the capability row's `opposed_by`; `copying.opposed_by: none` gi… | B05 | IN |
+| 77 | res. 3 | `tell` is opposed by the hearer's skill | — |  | `U5c:213` · PES-SC §2.2 table | RESOLVED-BY | OBS §2: the opposing score is the skill row's `opposed_by`; `copying.opposed_by: none` gives t… | B05 | IN |
 | 78 | Jordan 1 | is a favourable modifier part of the obstacle? | — |  | `U5c:221` · ledger rows read at HEAD | RESOLVED-BY | PES-A; OBS §3. Answered by Jordan (A-25, D-29: they raise the speaker; hostile ones raise the… | B05 | IN |
 | 79 | G-51 | negotiation under `disposal: mutual`; acceptance is the accepter's own act | — |  | `U5c:144` · `04` PART D row 10a | RESOLVED-BY | NEG (as reconciled, D-06: the choice is sampled); C-07 keeps it against DRAW13's row | B24, B07 | SC |
 | 80 | cell 8 | `interview` has no roll | — |  | `U5c:177` · sweep C-03 | RESOLVED-BY | DRAW13 (questioning row) with QUES and plan CP-T06-05 (C-12 orders them) | B26, B07, B25 | FI |

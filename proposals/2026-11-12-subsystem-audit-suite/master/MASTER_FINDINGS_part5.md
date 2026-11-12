@@ -2,7 +2,7 @@
 
 ## Status: REFERENCE (part 5 of `master/MASTER_FINDINGS.md`; the row tables are generated from the closure tables `unified/U5_FINDINGS_CLOSURE_U5a.md`..`_U5d.md` by the lane's scratch extract, the syntheses written by lane MF; resolves nothing at runtime; dies with the suite)
 
-Columns and order are the head part's §0. **evidence**: the closure row (`U5a:66` = `unified/U5_FINDINGS_CLOSURE_U5a.md` line 66), then the audit line that defines the finding where the extract found it (`audits/` implied), then the closure row's own evidence, cut to one line. **sev**: B blocks a requirement · D degrades narrative · C code matter · M design matter · H hygiene · — ungraded. **carrier**: the closure row's carrier cell, cut to one line (its short names are the closure table's, defined at the head of that table's section). **batch**: v12's handle; `→` before it on a SUPERSEDED row (the successor's batch); `— (stale)`, `— (disputed)`, `— (answered …)` where no fix is owed. Claims are the closure tables' one-liners, cut at about a hundred characters.
+Columns and order are the head part's §0. **evidence**: the closure row (`U5a:66` = `unified/U5_FINDINGS_CLOSURE_U5a.md` line 66), then the audit line that defines the finding where the extract found it (`audits/` implied), then the closure row's own evidence, cut to one line. **sev**: B blocks a requirement · D degrades narrative · C code matter · M design matter · H hygiene · — ungraded. **carrier**: the closure row's carrier cell, cut to one line (its short names are the closure table's, defined at the head of that table's section). **batch**: v12's handle; `→` before it on a SUPERSEDED row (the successor's batch); `— (stale)`, `— (disputed)`, `— (answered …)` where no fix is owed. Claims are the closure tables' one-liners, cut at about a hundred characters; outside code font the word *capability* is printed *skill* (A-98, as the suite's own vocabulary sweep did, `unified/work/A98_SWEEP.md`), and nothing else in a quoted cell is changed.
 
 
 ---
@@ -69,7 +69,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 52 | §6b workplan | B10-14 cards kept; CR-29 first; CP-T06-05 preconditioned | — |  | `U5c:291` · audit §6b | RESOLVED-BY | FI-02 edit 1; FRES §2 (the order across both lanes and the pessimist) | B11 | FI |
 | 53 | §13 classes A–J | arc needs by information class | — |  | `U5c:292` · audit §13 | RESOLVED-BY | A: CR-29, FI-02 §4 · B: CONC, FI-02, PFI-A · C: B10-14, FI-03 §4, CR-83 · D: FI-07, FI-05B, PF… | B11, B26, B24, B25, B11 (design item, D-18) | FI |
 | 54 | §13 wrongly stated | Evidence Track; a hidden truth flag; self-ignorance of sensitivity; stored exposure; a faction AI | — |  | `U5c:293` | RESOLVED-BY | the audit's restatements stand; the first two by CONC; no stored track (`04` §B.3) | B11 | FI |
-| 55 | §14, §15 | capability reads; hard-coded NPC rules | — |  | `U5c:294` · `options.py:1627` | RESOLVED-BY | the `credit` role and `opposes` rows on U1's surface (cross-family); FI-02 §4; FI-01 | B11 | FI |
+| 55 | §14, §15 | skill reads; hard-coded NPC rules | — |  | `U5c:294` · `options.py:1627` | RESOLVED-BY | the `credit` role and `opposes` rows on U1's surface (cross-family); FI-02 §4; FI-01 | B11 | FI |
 | 56 | C-2 | R-22 was measured and declined | — |  | `U5c:301` · H-92 `cite:` | RESOLVED-BY | R-39; FI-04 §4 as amended | B11 | FI |
 | 57 | C-4 | `observes:` must not be band-gated | — |  | `U5c:303` · H-218 | RESOLVED-BY | FI-07 §2 (b); FI-03 carries a Reconciled line | B11 | FI |
 | 58 | C-5 | the narrow slant ships as its own arm | — |  | `U5c:304` · H-197 | RESOLVED-BY | FI-06 §5 | B11 | FI |
@@ -113,7 +113,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 96 | R-48 | a person witnesses through a knot he owns | — |  | `U5c:335` · `04:388` | RESOLVED-BY | FI-08 §1 | B25 | FI |
 | 97 | R-50 | delete the `try/except` wrappers | — |  | `U5c:337` · `knots.py:347-378` | RESOLVED-BY | FI-08 §2 | B25 | FI |
 | 98 | R-21 | `standing` is one constant for everyone | — |  | `U5c:275` · `04` §B.10 note on `Sensation` | STALE/FP | irrelevant at HEAD: no deposit mints a `person_predicates` claim and no chooser term reads `st… | — (stale) | FI |
-| 99 | R-31 | one vocation for three inquiries | — |  | `U5c:285` · `verb_capability` | RESOLVED-BY | no engine edit owed: authoring (two data rows on the capability surface U1 decides) | — | FI |
+| 99 | R-31 | one vocation for three inquiries | — |  | `U5c:285` · `verb_capability` | RESOLVED-BY | no engine edit owed: authoring (two data rows on the skill surface U1 decides) | — | FI |
 | 100 | C-3 | forgery quality is inert at the shipped fixtures, refused at quality 3 | — |  | `U5c:302` · `p4_detective.py 300` (PES-FI §2.2) | STALE/FP | false at HEAD: quality 0 → 1 moves Failure 68.3% → 91.0% at pool 2; nothing is refused (the pe… | — (stale) | FI |
 | 101 | C-7 | Heavy Rain is named nowhere in the tree | — |  | `U5c:306` · addendum §B7 run 4 | RESOLVED-BY | R-49 (dropped as a referent; no file cites it for a design) | — | FI |
 | 102 | C-10 | the three-season runs | — |  | `U5c:309` · addendum §B7 run 3 | RESOLVED-BY | no edit owed (readings) | — | FI |
@@ -165,7 +165,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 32 | R-09, R-10, R-11, R-12, R-13, R-14, R-15 | hygiene rows | — |  | `U5d:111` | RESOLVED-BY | HYG items 5, 3, 4, 4, 1, 2, 6 | B03 | IN |
 | 33 | H-207 | `confer` formed, never attempted | — |  | `U5d:83` · E-3 | RESOLVED-BY | TERMS (vacancies on a clock) and CAPS-FA edit 4 (the conferee is ranked) | B21, B04 | FA |
 | 34 | NPC-008 (an office makes reform harder… | "wrongly stated against the architecture" | — |  | `U5d:128` · `04` §B.7 (to be amended on A-12; text owed, not applied) | SUPERSEDED | A-12: a seat may carry a modifier; the need stands as stated and is carried by CAPS-FA as reco… | → B04, B21c | IN |
-| 35 | §14 (capability surface), §15 (chooser… | whom to seat reads nothing about the candidate | — |  | `U5d:143` · audit §14 table | RESOLVED-BY | CAPS-FA; `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` owns the home | B04 | IN |
+| 35 | §14 (skill surface), §15 (chooser surfa… | whom to seat reads nothing about the candidate | — |  | `U5d:143` · audit §14 table | RESOLVED-BY | CAPS-FA; `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` owns the home | B04 | IN |
 | 36 | H-91 | `remit:revoke` beside purview | — |  | `U5d:76` · `gate.py:370-375` `[not re-opened]` | STALE/FP | closed by precedent (R-05); OWED-FA §7 re-grades the row | — (stale) | FA |
 | 37 | H-144 | measured; verified closed | — |  | `U5d:79` · `predicates.py:403-410` | STALE/FP | OWED-FA §7 re-grades the row | — (stale) | FA |
 | 38 | H-260 | obeying and defying change nothing | — |  | `U5d:85` · measured on hand-placed writs | RESOLVED-BY | DECREE edit 4 | B21 | FA |
@@ -290,7 +290,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 28 | F-PES-SE-06 | a founding cannot fail, cannot found a town, and leaves a lot nobody uses | D |  | `U5d:296` · `16_PESSIMIST_SE.md:604` | RESOLVED-BY | LAPSE as reconciled (A-55: fixed map; an empty founded household may lapse) | B39 | WR |
 | 29 | F-SE-08 | 248 of 322 `condition.worn` Events report a wear that did not happen | H |  | `U5d:219` · `07_SE_audit.md:337` · the audit's count | RESOLVED-BY | KERN-SE §3 (R-SE-08) | B12a-c | SE+WR |
 | 30 | F-SE-11 | a move to where the mover stands publishes as travel | H |  | `U5d:222` · `07_SE_audit.md:354` · 14 of 15 executed moves same-place | RESOLVED-BY | KERN-SE §4 (R-SE-09) | B12a-c | SE+WR |
-| 31 | F-SE-21 | two lanes' capability edits collide | H |  | `U5d:273` · `07_SE_audit_addendum_B.md:415` | RESOLVED-BY | RATE-B as reconciled; the home is `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md`'s | B12a-c | SE+WR |
+| 31 | F-SE-21 | two lanes' skill edits collide | H |  | `U5d:273` · `07_SE_audit_addendum_B.md:415` | RESOLVED-BY | RATE-B as reconciled; the home is `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md`'s | B12a-c | SE+WR |
 | 32 | F-SE-24 | `amount_shares` at 1000 strips below subsistence with no consequence path | H |  | `U5d:276` · `07_SE_audit_addendum_B.md:449` | RESOLVED-BY | OWED-SE §6 (R-SE-38: the flip is sequenced after CP-T08-06) | B12a-c | SE+WR |
 | 33 | F-PES-SE-12 | stocking the larders at world-gen coincides with every migration stopping | H |  | `U5d:302` · `16_PESSIMIST_SE.md:640` · the pessimist's two-arm run | RESOLVED-BY | OWED-SE §10 (a gate arm on GROUND's stocking edit); the drawn start (A-50) leaves some larders… | B12a-c | SE+WR |
 | 34 | F-PES-SE-13 | smaller kernel defects | H |  | `U5d:303` · `16_PESSIMIST_SE.md:647` | RESOLVED-BY | OWED-SE §9 (R-PES-SE-13) and KERN-SE | B12a-c | SE+WR |
@@ -317,18 +317,18 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 55 | R-SE-19 | `transfer`'s `to` binds the question's referent | — |  | `U5d:251` | RESOLVED-BY | OWED-SE §2 | B12a-c | SE+WR |
 | 56 | R-SE-22 | the ration is a `min` over every eaten kind | — |  | `U5d:253` | RESOLVED-BY | OWED-SE §4 | B12a-c | SE+WR |
 | 57 | R-SE-23, -24 | case worlds hold no eater; every store move is 1 unit | — |  | `U5d:254` | RESOLVED-BY | ARCN §3 a, b | B12a-c | SE+WR |
-| 58 | R-SE-25 | no settlement verb reads a capability | — |  | `U5d:255` · H-164 | SUPERSEDED | by R-SE-32 (RATE-B) | → B12a-c | SE+WR |
+| 58 | R-SE-25 | no settlement verb reads a skill | — |  | `U5d:255` · H-164 | SUPERSEDED | by R-SE-32 (RATE-B) | → B12a-c | SE+WR |
 | 59 | S-SE-1 | may a population recover | — |  | `U5d:256` · ED-SE-0051 `[ledger row not re-opened]` | SUPERSEDED | the register's ladder table ("Yes, bounded by food and room", the 2026-09-17 ruling) and the a… | → B12a-c | SE+WR |
 | 60 | §13 NPC-083, NPC-037, NPC-013 | shortfall against orders; treasury post; the tithe | — |  | `U5d:257` · `corpus_run.build_at` seats no eater | RESOLVED-BY | ARCN §3 a, b; plan CP-T08-06, -07 | B12a-c | SE+WR |
 | 61 | §13 NPC-090, ARC-20 | treaty trade; a trade dependency | — |  | `U5d:259` · `exchange` 0 of 79 | RESOLVED-BY | ARCN §3 c; GROUND; TREAS-B (R-SE-30: the gate is a person's store move across two duchies) | B12a-c | SE+WR |
-| 62 | §14 (capability surface) | (c) and (e) superseded | — |  | `U5d:262` | SUPERSEDED | the addendum §6; RATE-B | → B12a-c | SE+WR |
+| 62 | §14 (skill surface) | (c) and (e) superseded | — |  | `U5d:262` | SUPERSEDED | the addendum §6; RATE-B | → B12a-c | SE+WR |
 | 63 | C-1 to C-8 | corrections to the first audit | — |  | `U5d:268` | RESOLVED-BY | made in the addendum; carried by TREAS-B (C-2, C-3), REGROW-B (C-1, C-8), RATE-B (C-5) | B12a-c | SE+WR |
 | 64 | §2.4 ARC-37/39, NPC-007, EMG-11, NPC-08… | cases the first audit did not list | — |  | `U5d:278` | RESOLVED-BY | GROUND and OWED-SE §2 for SE's half; FA, FI, WR, CHAR own the rest (CR-107b; COHORT for ARC-14… | B12a-c, B38 | SE+WR |
 | 65 | P-1 to P-16 | decisions on the first lane's placeholders | — |  | `U5d:279` | RESOLVED-BY | as the addendum's table: P-7 superseded by TREAS-B, P-10 by REGROW-B, P-14 by RATE-B; the rest… | B12a-c | SE+WR |
 | 66 | R-SE-26, -27 | recovery; flight is an act | — |  | `U5d:280` | RESOLVED-BY | REGROW-B | B12a-c | SE+WR |
 | 67 | R-SE-28, -29, -30 | where relief sits; relief is the rule; the trade channel | — |  | `U5d:281` · ED-IN-0255 `[not re-opened]` | RESOLVED-BY | TREAS-B | B12a-c | SE+WR |
 | 68 | R-SE-31, -37, -38 | endowment annotations; `ration` is no verb; when `amount_shares` flips | — |  | `U5d:282` | RESOLVED-BY | OWED-SE §6 (notes for the builder of GROUND and ARCN) | B12a-c | SE+WR |
-| 69 | R-SE-32 | the capability rate against the other surfaces | — |  | `U5d:283` | RESOLVED-BY | RATE-B | B12a-c | SE+WR |
+| 69 | R-SE-32 | the skill rate against the other surfaces | — |  | `U5d:283` | RESOLVED-BY | RATE-B | B12a-c | SE+WR |
 | 70 | §6 "stewardship: no passive bonus from… | declined by the addendum | — |  | `U5d:285` | SUPERSEDED | A-54 (a steward's skill bears on the harvest draw) and A-12 (a seat may carry a modifier); RAT… | → B12a-c | SE+WR |
 | 71 | R-PES-SE-01 to -04 | sharing; the crossing; causes; `tend` and hunger | — |  | `U5d:304` | RESOLVED-BY | PES-SE-A edits 1–4 | B12a-c | SE+WR |
 | 72 | R-PES-SE-05, -07, -08, -09, -13 | ore's reader; hunger bands; `coin`; trade kinds; Site-kind names | — |  | `U5d:305` | RESOLVED-BY | OWED-SE §7, §9 | B12a-c | SE+WR |
@@ -434,8 +434,8 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 76 | §13 ARC-02 | a state-change check with no actor | — |  | `U5d:368` | SUPERSEDED | A-15 | — | WR |
 | 77 | §13 ARC-53, SCN-07, ARC-23 | represented today | — |  | `U5d:369` · `tend` 37/69 (E-07) | STALE/FP | none owed | — (stale) | WR |
 | 78 | §13 ARC-07, NPC-052, ARC-01, ARC-44 | other lanes' | — |  | `U5d:371` | SUPERSEDED | U5b; Parts 1 and 2 | — | WR |
-| 79 | §14 (capability surface; "banded scalar… | asked CHAR for a row kind | — |  | `U5d:373` | SUPERSEDED | the addendum's R-24 (none needed) | — | WR |
-| 80 | R-24, R-33, R-35 | no "banded scalar"; no navigation capability; no Approach Training gate | — |  | `U5d:394` | RESOLVED-BY | none owed (A-11 confirms: training gates nothing; Thread Sensitivity is the one gate) | — | WR |
+| 79 | §14 (skill surface; "banded scalar") | asked CHAR for a row kind | — |  | `U5d:373` | SUPERSEDED | the addendum's R-24 (none needed) | — | WR |
+| 80 | R-24, R-33, R-35 | no "banded scalar"; no navigation skill; no Approach Training gate | — |  | `U5d:394` | RESOLVED-BY | none owed (A-11 confirms: training gates nothing; Thread Sensitivity is the one gate) | — | WR |
 | 81 | R-36 | the Rendering Crisis's four beats | — |  | `U5d:398` | RESOLVED-BY | none owed (the Event alone; the journal tells) | — | WR |
 | 82 | §6: 20 rows another lane's | read and left | — |  | `U5d:403` | SUPERSEDED | the owning closures | — | WR |
 | 83 | §5, §6, §7 lists | false N-lines; premises; stories | — |  | `U5d:421` | RESOLVED-BY | none owed beyond the rows above | — | WR |
@@ -467,7 +467,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 15 | F-PES-DICE-03 | the ceiling is a wall; every shipped forgery stands on it | D |  | `U5a:635` · `16_PESSIMIST_DICE.md:466` · pools 1–12 read 10.00 % at their cap | RESOLVED-BY | SOFT (the cap's closed form follows the one sampler: DOE §1) | B05 | IN |
 | 16 | F-PES-DICE-05 | a failed search is forgotten and retried; remembering alone changes nothing | D |  | `U5a:637` · `16_PESSIMIST_DICE.md:510` · 157 of 157 `finding.none` Events have no descendant; deposit alone: 19 of 42 ag… | RESOLVED-BY | DOE §4 (the actor-only deposit of `finding.none`, read by `refused_before` of `16_PESSIMIST_CO… | B09, B05 | IN |
 | 17 | F-PES-DICE-06 | one die cannot succeed, and a zero cannot try | D |  | `U5a:638` · `16_PESSIMIST_DICE.md:532` · `band_odds(1, 2.0)` | SUPERSEDED | A-6 (no person rolls under five dice); TASK for the unopposed rows | → B05 | IN |
-| 18 | F-DICE-04 | four rolled verbs name no capability | D |  | `U5a:552` · `10_DICE_audit.md:197` · E-09 | RESOLVED-BY | U1 architecture §5 (one value per verb row, decided across CORE, DICE, SC and FA: C-U5a-11) | — | IN |
+| 18 | F-DICE-04 | four rolled verbs name no skill | D |  | `U5a:552` · `10_DICE_audit.md:197` · E-09 | RESOLVED-BY | U1 architecture §5 (one value per verb row, decided across CORE, DICE, SC and FA: C-U5a-11) | — | IN |
 | 19 | F-PES-DICE-04 | a field is decided by a draw the dice engine never sees | D |  | `U5a:636` · `16_PESSIMIST_DICE.md:491` · friction's 5th–95th percentile 0.164–6.107 | JORDAN | D-34 (luck in battle: a hidden multiplier, or a named level) | — (answered A-59, A-77) | IN |
 | 20 | F-DICE-22 | two unread tests are prose guards | H |  | `U5a:578` · `10_DICE_audit_addendum_B.md:300` | RESOLVED-BY | `01_CORE_tests_delete_what_cannot_fail.md` row 1 (`test_knot_pool_formula.py`); `tests/valoria… | B02, B05 | IN |
 | 21 | F-PES-DICE-08 | the obstacle's floor reaches one term and not the sum | H |  | `U5a:640` · `16_PESSIMIST_DICE.md:554` · E-P1 | SUPERSEDED | `13_SC_tuning_tables.md` T1 (U5c) | → B05, B02 | IN |
@@ -573,7 +573,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 33 | GO-09, GO-11, GO-01, GO-05 | open; early landings | — |  | `U5d:454` | RESOLVED-BY | GATE §2 (R13, R14); TEXT 8, 9 | B41, B03 | GO |
 | 34 | ED-1054 | stale navigation open since 2026-06-30 | — |  | `U5d:458` | RESOLVED-BY | TEXT (R35: closed; the banners are its resolution) | B03 | IN |
 | 35 | R22–R32, R34, R35 | pointer and stale text | — |  | `U5d:467` | RESOLVED-BY | TEXT 1–13 | B03 | IN |
-| 36 | §14 (capability surface; R31) | may a field bind to an attribute | — |  | `U5d:475` · `descriptors.json` | RESOLVED-BY | TEXT 10 | B03 | IN |
+| 36 | §14 (skill surface; R31) | may a field bind to an attribute | — |  | `U5d:475` · `descriptors.json` | RESOLVED-BY | TEXT 10 | B03 | IN |
 | 37 | R48–R78 | thirty-one resolutions | — |  | `U5d:490` | RESOLVED-BY | SURF-B (R50–R55, R57, R72–R74, R76–R78), MODES (R56, R60–R65), REF (R48, R49, R58, R59, R66–R7… | B34, B03 | GO |
 | 38 | resolutions 1–11 | decided | — |  | `U5d:511` | RESOLVED-BY | PINS (1), KEYED (2), HELD (3, 6), WHY (9); 4 → F-PES-GO-05's row; 5 none; 7 → `03_PC_typed_out… | B14, B06, B41, B34, B09, B03g | PC |
 | 39 | GO-10, GO-12, GO-08, GO-15 | open; under-scoped or mis-shaped | — |  | `U5d:455` | RESOLVED-BY | GATE §4, §5, §3, §1; DRAW (R8: every unseeded fallback refuses) | B06, B41 | IN |

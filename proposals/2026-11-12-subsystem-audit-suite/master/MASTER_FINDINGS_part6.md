@@ -2,7 +2,7 @@
 
 ## Status: REFERENCE (part 6 of `master/MASTER_FINDINGS.md`; the row tables are generated from the closure tables `unified/U5_FINDINGS_CLOSURE_U5a.md`..`_U5d.md` by the lane's scratch extract, the syntheses written by lane MF; resolves nothing at runtime; dies with the suite)
 
-Columns and order are the head part's §0. **evidence**: the closure row (`U5a:66` = `unified/U5_FINDINGS_CLOSURE_U5a.md` line 66), then the audit line that defines the finding where the extract found it (`audits/` implied), then the closure row's own evidence, cut to one line. **sev**: B blocks a requirement · D degrades narrative · C code matter · M design matter · H hygiene · — ungraded. **carrier**: the closure row's carrier cell, cut to one line (its short names are the closure table's, defined at the head of that table's section). **batch**: v12's handle; `→` before it on a SUPERSEDED row (the successor's batch); `— (stale)`, `— (disputed)`, `— (answered …)` where no fix is owed. Claims are the closure tables' one-liners, cut at about a hundred characters.
+Columns and order are the head part's §0. **evidence**: the closure row (`U5a:66` = `unified/U5_FINDINGS_CLOSURE_U5a.md` line 66), then the audit line that defines the finding where the extract found it (`audits/` implied), then the closure row's own evidence, cut to one line. **sev**: B blocks a requirement · D degrades narrative · C code matter · M design matter · H hygiene · — ungraded. **carrier**: the closure row's carrier cell, cut to one line (its short names are the closure table's, defined at the head of that table's section). **batch**: v12's handle; `→` before it on a SUPERSEDED row (the successor's batch); `— (stale)`, `— (disputed)`, `— (answered …)` where no fix is owed. Claims are the closure tables' one-liners, cut at about a hundred characters; outside code font the word *capability* is printed *skill* (A-98, as the suite's own vocabulary sweep did, `unified/work/A98_SWEEP.md`), and nothing else in a quoted cell is changed.
 
 
 ---
@@ -60,7 +60,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 6 | D-2, D-3, D-5, D-6, D-7 | pool; obstacle; a failure is not a refusal; formation on what is known; populations | — |  | `U5c:495` | RESOLVED-BY | M-A §2; OBS; `02_CHAR_offer_what_can_be_done.md` (cross-family) | B10, B05, B12a-c | IN |
 | 7 | `move` | executes and goes nowhere | — |  | `U5b:464` · `aperture 2 0`: 55 / 15 / 40; H-329 (16 of 17 to the mover's own rung) | RESOLVED-BY | MIL-A Edits 1–4 as reconciled (a contest row, RES-V §1) | B07, B22 | IN |
 | 8 | S1 | every row joins the graded route | — |  | `U5b:478` · 25 G-01 | DISPUTED | in its form only: the draw stands; a band-keyed `writes:` on a route row does not load (`es/da… | — (disputed) | IN |
-| 9 | S2 | two capability keys, `command` and `wayfaring` | — |  | `U5b:479` | RESOLVED-BY | definition rows on U1's surface (RES-V §1 rule 2); `command` is defined once by 27-MB | B07 | IN |
+| 9 | S2 | two skill keys, `command` and `wayfaring` | — |  | `U5b:479` | RESOLVED-BY | definition rows on U1's surface (RES-V §1 rule 2); `command` is defined once by 27-MB | B07 | IN |
 | 10 | res. 1 | one draw each on the graded route | — |  | `U5b:486` | RESOLVED-BY | MIL-A to MIL-D as reconciled (RES-V §1) | B07, B22 | IN |
 | 11 | §5.2 cross-lane dependencies | thirteen named edges | — |  | `U5b:495` | SUPERSEDED | each is a dependency, not a finding; ordered in RUL-MB §6 and RES-V "Who lands it" | → B19, B07 | MB |
 | 12 | `capture` | forms but is refused | — |  | `U5b:512` · 12 / 0 / 12 | RESOLVED-BY | PHY-A A2; RES-V §4 (`mustered` reads custody) | B07, B15 | IN |
@@ -74,7 +74,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 20 | 25 G-32 | `mustered` does not read `restrained` | — |  | `U5b:554` · `es/queries/world_q.py:2132-2149` | RESOLVED-BY | RES-V §4 | B07 | IN |
 | 21 | 25 G-34 | `_fall` is a fixed fraction | — |  | `U5b:556` · `es/loop/effects_economy.py:141-158` | SUPERSEDED | SE's closure (U5d); cross-listed in RES-MB §8 | → B17 | MB |
 | 22 | U5a sweep | each verb's own band row supersedes the task default | — |  | `U5b:558` | RESOLVED-BY | RES-V §1 | B07 | IN |
-| 23 | `carry` | executes; the docket item names no room; admission is certain | — |  | `U5c:420` · `[2s]` 17 / 4 / 13 | RESOLVED-BY | S1-D §1 (venue, appeal, the draw: capability `law`, C-25); DRAW13's docketing row yields to it… | B07, B28 | IN |
+| 23 | `carry` | executes; the docket item names no room; admission is certain | — |  | `U5c:420` · `[2s]` 17 / 4 / 13 | RESOLVED-BY | S1-D §1 (venue, appeal, the draw: skill `law`, C-25); DRAW13's docketing row yields to it (C-0… | B07, B28 | IN |
 | 24 | D1 | should a writ be minted into its addressee's hand? | — |  | `U5c:434` · `world_q.writs_held`; A-21 | SUPERSEDED | answered for decrees by Jordan, A-21 (D-22: proclaimed): whoever learns a decree was issued kn… | → B21, B07, B28 | FA |
 | 25 | D2 | should a person learn from his own refused act that the other was not there? | — |  | `U5c:435` · `p1b_belief.py` (7 → 0 candidates after one refusal) | RESOLVED-BY | VRES §3. Closed on the decision register as D-46, taken B (his refusal teaches him, privately)… | B07, B11 | IN |
 | 26 | `open_case` | works in part; the case file is empty | — |  | `U5c:444` · opened 6 / 8 / 5 | RESOLVED-BY | S2-A §1, §3; S2-C §1 (the `case` kind and the charge). Not drawn: opening on one's own bench i… | B27, B07, B25 | SC |
@@ -95,7 +95,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 41 | U5c `interrogate` | unreachable: no custody | — |  | `U5b:557` | RESOLVED-BY | PHY-A A1, A2 | B15 | PC |
 | 42 | `argue` | three in four refused on an absent hearer; Partial claims a win | — |  | `U5c:421` · `[2s]` 41 / 10 / 31; `p5_argue.py` | RESOLVED-BY | S1-A §1–2 (through `present_persons`, C-19); S1-C §1 (`commitment`); the Partial band is PES-D… | B11, B28, B27 | FI |
 | 43 | `covenant` | forms but is refused; in-force reading unbuilt | — |  | `U5c:425` · `[2s]` 10 / 0 / 10 | RESOLVED-BY | S1-A §3 (class); S1-B §3 (drafting draw, `covenant_in_force`, breach; key `force`); acceptance… | B11, B28 | FI |
-| 44 | `lie` | three in four refused; the bands are three alike; Failure has none | — |  | `U5c:427` · corpus 138 graded, 110 Failure | RESOLVED-BY | S1-A; S1-C §2 as reconciled (C-26: capability `deception`; no `contradiction` term; `deceit.ex… | B11, B28 | FI |
+| 44 | `lie` | three in four refused; the bands are three alike; Failure has none | — |  | `U5c:427` · corpus 138 graded, 110 Failure | RESOLVED-BY | S1-A; S1-C §2 as reconciled (C-26: skill `deception`; no `contradiction` term; `deceit.exposed… | B11, B28 | FI |
 | 45 | `give` | almost unreachable; three chains die behind it | — |  | `U5c:429` · `[2s]` 19 / 1 / 18 | RESOLVED-BY | S1-A; S1-B §1 (the addressed-document occasion; a draw against the receiver; `unwelcome` reads… | B11, B28 | FI |
 | 46 | R-WITH | believed co-location, read by conjunct | — |  | `U5c:431` | RESOLVED-BY | S1-A as reconciled (C-19: the reader is `present_persons`; the fixture is `telling_hearers`) | B11 | FI |
 | 47 | `tell` | forms on absent hearers; fails two times in three | — |  | `U5c:447` · `tell.refused` 20 / 43 / 4 | RESOLVED-BY | S2-A §4 (FI-02 edit 5); S2-C §4 folded into the one obstacle form (C-21: no `tell_obstacle` ta… | B25, B11 | FI |
@@ -190,7 +190,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 136 | §0.6 | every verb resolves by a draw | — |  | `U5c:433` | RESOLVED-BY | the rows above, each with a registered prize (C-22, C-25) | — | — |
 | 137 | D-1 | every material act is drawn through `graded_acts` | — |  | `U5c:494` · `data/verbs.py:848-851` | DISPUTED | the draw stands; a band-keyed `writes:` on a route row does not (C-22). A material row whose e… | — (disputed) | — |
 | 138 | J-M2 | what a failed reconstruction leaves | — |  | `U5c:499` · CONC R-19-04 | SUPERSEDED | closed at step 3 (K-37, ratified as intent, ED-IN-0288): a lost draw states nothing; a wrong c… | — | — |
-| 139 | named (2) | who may declare a works; the four capability ids | — |  | `U5c:500` | RESOLVED-BY | no edit owed (ED-IN-0297 closed at (B); ids are content) | — | — |
+| 139 | named (2) | who may declare a works; the four skill ids | — |  | `U5c:500` | RESOLVED-BY | no edit owed (ED-IN-0297 closed at (B); ids are content) | — | — |
 
 ---
 
@@ -282,7 +282,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 26 | §6 rows 2, 3, 4, 5, 10, 11, 13, 14, 15,… | a faction "chooses"; fixed lookup; "GM-judged"; a skill gates; registry values; collisions; lost head; o… | — |  | `U5d:545` | RESOLVED-BY | none owed (decided by ladder steps 1–3 in the audit; A-11 confirms row 5) | — | WR |
 | 27 | §6 row 12 | off-map superiors decide things | — |  | `U5d:548` | RESOLVED-BY | as M-ABROAD | — | WR |
 | 28 | S-1 | does the world itself decay | — |  | `U5d:550` | SUPERSEDED | A-40 (ground) | — | WR |
-| 29 | §8, §9 (capability; the chooser) | what the corpus implies | — |  | `U5d:552` | SUPERSEDED | U5a | — | WR |
+| 29 | §8, §9 (skill; the chooser) | what the corpus implies | — |  | `U5d:552` | SUPERSEDED | U5a | — | WR |
 
 ---
 
@@ -416,7 +416,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 12 | D-3 | re-arming in play | — |  | `U5d:650` | SUPERSEDED | A-52 (a docket read inside convening, after a test shows cards-at-build runs dry); PROC-D §5 a… | → B39 | WR |
 | 13 | D-4 | Thread-bearing generation | — |  | `U5d:651` | SUPERSEDED | A-40: the substrate ruling its Option A waited for is made (ground); PROC-C may generate Threa… | → B39 | WR |
 | 14 | §5 (validation V1–V3) | a world that can be rejected; a bar that can fail | — |  | `U5d:653` | RESOLVED-BY | PROC-A, PROC-C (the detective gate), under A-53 | B39 | WR |
-| 15 | §9, §13, §14, §15 | the generated inquiry; arcs; capability; the standing rule | — |  | `U5d:654` | RESOLVED-BY | PROC-C; `12_ARCS_case_on_the_realm.md`; U1's capability home; no fixed outcome found in the ki… | B39 | WR |
+| 15 | §9, §13, §14, §15 | the generated inquiry; arcs; skill; the standing rule | — |  | `U5d:654` | RESOLVED-BY | PROC-C; `12_ARCS_case_on_the_realm.md`; U1's skill home; no fixed outcome found in the kit's t… | B39 | WR |
 | 16 | D-1 | the cast: 46, or 46 plus a generated supporting cast | — |  | `U5d:648` | SUPERSEDED | A-44 (about 94 generated persons plus kin, capped) | — | WR |
 | 17 | D-2 | depth of the past | — |  | `U5d:649` | SUPERSEDED | A-51 (five years; no generational pass; no births or ageing pass ordered) | — | WR |
 | 18 | D-5 | a wrong world | — |  | `U5d:652` | SUPERSEDED | A-53 (next seed by default; play-it behind a setting) | — | WR |
@@ -475,7 +475,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 7 | M18 | a scene runs in its own order | — |  | `U5d:713` | SUPERSEDED | A-9 (a short sequence); `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` (U5a); S-67 no lo… | → B08 | IN |
 | 8 | R-05 | the deposition of a crowned or anointed head | — |  | `U5d:723` | RESOLVED-BY | none new: conquest (`U5d_FA_land_and_seats_pass_on_a_won_march.md`, for a head whose seat is a… | B23, B21c | FA |
 | 9 | R-07 | a besieged town's larder | — |  | `U5d:725` | RESOLVED-BY | `U5d_STORY_owed_edits.md` §1 (a constraint on `07_SE_campaign_supply_and_muster.md`) | B22, B39 | MB |
-| 10 | M10, M13, M15 | violence with a cause and a mercy; a field that can be won; capability differs and grows | — |  | `U5d:709` · 0 `field.won` in any run | SUPERSEDED | U5b and U5a; the land and seats a field wins are `U5d_FA_land_and_seats_pass_on_a_won_march.md` | → B23 | FA |
+| 10 | M10, M13, M15 | violence with a cause and a mercy; a field that can be won; skill differs and grows | — |  | `U5d:709` · 0 `field.won` in any run | SUPERSEDED | U5b and U5a; the land and seats a field wins are `U5d_FA_land_and_seats_pass_on_a_won_march.md` | → B23 | FA |
 | 11 | S-01 to S-73 (the inventory) | each story completes when its mechanisms land | — |  | `U5d:718` · `runs/STORY/p2_count.py` `[not re-run]` | RESOLVED-BY | by batch, the audit's §6.2: E-2 (S-60, 68, 69, 71, 72, and S-67 now that A-9 is ruled), E-3 (S… | B36 | WR |
 | 12 | E-0 to E-11 | the batches and their gates | — |  | `U5d:720` | RESOLVED-BY | STORY-D (the gate every batch uses) and the batch table as reconciled in STORY-D's head line | B36 | WR |
 | 13 | §8.3 (twelve items "already Jordan's") | defaults under which no batch waited | — |  | `U5d:734` | SUPERSEDED | eleven are answered: A-15, A-16, A-19, A-24 (D-27, D-28), A-9, A-46, A-55, A-38, A-33 and the… | → B36 | WR |

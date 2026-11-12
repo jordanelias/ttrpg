@@ -219,3 +219,82 @@ The batch block's head, its position table and items B39.01 to B39.17 are in the
 - GLOSSARY: *lean year* (the scenario's name; row: "a year of short harvest, as the ordinary phrase says"), owner pointer to `SCENARIOS["lean_year"]`.
 - COST and TIER: edit (rows) and small build (the preset and `endings`); `sonnet`, `high`.
 - LANDS IT: B39's producer; `Item: B39.31`, `[skip ci]`.
+
+### B39.32 — three founders and their deeds, before tick 0 · `SYN_B` §2 · BUILD · HASH MOVER(behaviour)
+- SOURCE: `SYN_B` "Exact edits" §2, "Gate" 1, 2 and 4, "Falsifier", "What it does not do"; its implementation block ("**B39** — edit 2 (the prehistory), with `12_ARCS_case_on_the_realm.md`"); U3 §4.1 row 84; rulings A-17, A-18 (Varfell's founding deed held realm-wide at the third confidence), A-19, A-43, A-51 ("everything older stays tradition and hearsay").
+- ADVANCES: none of the nine; Jordan's order of accomplishment ("the first king had the greatest accomplishment in the secession war, followed by the first Duke of Hafenmark and the first Duke of Varfell").
+- INSTRUCTION:
+  1. `engine/season/rosters.yaml: prehistory` (new; "the owner of what happened in the realm before tick 0; `12_ARCS_case_on_the_realm.md`'s row shape, for the realm base"), copied:
+     ```yaml
+     prehistory:
+       source: "Jordan 2026-11-12 (the order of accomplishment); canon/03_canonical_timeline.md:78-90"
+       note: >-
+         ONLY THE ORDER IS JORDAN'S. The counts (3, 2, 1) carry the order and nothing else; the deed kind
+         (`field.won`) is [ASSUMPTION; medium; Jordan to correct]: canon says "wartime deeds" and no more.
+       founders:
+         off_king:              {case: "<new registry id>"}     # the first Almqvist
+         off_duchess_hafenmark: {case: "<new registry id>"}     # the first Duke of Hafenmark
+         off_duke_varfell:      {case: "<new registry id>"}     # the first Duke of Varfell
+       deeds:
+         - {id: deed_secession_k1, seat: off_king,              kind: field.won}
+         - {id: deed_secession_k2, seat: off_king,              kind: field.won}
+         - {id: deed_secession_k3, seat: off_king,              kind: field.won}
+         - {id: deed_secession_h1, seat: off_duchess_hafenmark, kind: field.won}
+         - {id: deed_secession_h2, seat: off_duchess_hafenmark, kind: field.won}
+         - {id: deed_secession_v1, seat: off_duke_varfell,      kind: field.won}
+     ```
+  2. `references/npc_registry.yaml`: "three rows, `status: proposed`, ids from `references/id_reservations.yaml` at landing, each dead before tick 0. No name is proposed for the two first Dukes; canon names none." (IDS of the block.)
+  3. `build_realm`, "a prehistory block before tick 0: for each founder, a `hold` on his seat opened and closed; for each `deeds` row, an Event of its kind with the founder as doer, placed at the realm rung; the first Almqvist's death a `person.died` with no doer (canon `:116`). **These Events are `ROOT`-caused build-time Events** (`04` §B.9 …): no act is invented for them, and **their only product is the cast's told claims, tradition and hearsay** … No season is simulated for them, no `hold` is opened for a living person by this block, no age or birth pass runs, and no store, stance or tenure of a living person is written beyond the founders' closed holds the chain reads. The present holders' holds open after their founders' close, so `prior_holders` reads one step for each seat `[ASSUMPTION; intermediate holders, if Jordan names any, are further rows and lengthen the chain]`. A-51's five-year prologue … runs after this block and over it."
+  4. "How the cast comes to hold them. By the fold's own deposits and no constructed Claim (ARCS §6 row 16): the Events are witnessed at their place by the persons the kind's reach admits. `[UNVERIFIED]` what reach `field.won` carries today and under CR-29's map; the requirement … is that **at build every cast person under the realm root holds a told claim of each seeded deed and of each founder's closed hold** …; from tick 1 those claims fade like any other. If the kind's reach is narrower than the realm, the block adds one `tell` per keeper per deed-set, folded under the pinned roll …, and the reading in gate 2 reports who was reached instead of asserting everyone was." At the item's open read `field.won`'s reach on the B11 tree (CR-29's map, B11.01 to B11.04) and record it in the commit body. The fold is B39.12's function; no second fold.
+- WHERE: `engine/season/rosters.yaml` (`prehistory`); `engine/season/data/rosters.py` (its loader); `references/npc_registry.yaml` (three rows); `engine/season/boot/realm.py` (`build_realm`'s prehistory block); NEW or extended `engine/season/tests/test_inst_syn_b_deed_ledger.py` (B32 creates the file with gates 1, 3, 5).
+- TESTS: in `test_inst_syn_b_deed_ledger.py`, written first: gate 1 as a function (`test_empty_prehistory_reproduces_the_pre_item_hash` `[ASSUMPTION: test name]`), and the reading functions of gates 2 and 4 ("gates 2 and 4 are its reading functions, printed"); red before (no `prehistory` key).
+- FALSIFIER and CONTROL: "The order encoded twice: any reader that takes the order from somewhere other than the seeded deeds … A build in which a house's head holds the paper that recites his house's deeds. A `legitimacy` that differs from today's at `presumption_gain` 0." Planted: "swap the Hafenmark and Varfell counts; the majority ordering swaps." Control: "`presumption_gain` 0, `prehistory` and `seeded` empty: `build_realm(0)` hash equals the pre-item hash; `legitimacy` returns today's value for every (person, holder) pair of the cast."
+- GATE: `python -m pytest engine/season/tests/test_inst_syn_b_deed_ledger.py -q` → pass; gate 2 at `presumption_gain` 0.5 on `build_realm(0)`: per cast person the ordering of the three holders by `legitimacy(p, holder, seat)` printed; "among persons holding claims of all six seeded deeds, a majority order them king, Hafenmark, Varfell, **and at least one does not**", "reported per regime" (`rosters.yaml: regime_cores`), not asserted per regime; gate 4, "Realm, seeds 0 to 4", two seasons (eight in the source; A-114), the keepers' `tell` of certificate content withheld (`Fixtures withheld_verbs` scoped by a planted question) and not withheld: "the mean chain term for the three holders" per season, "it falls in both arms and falls further in the withheld arm at some season", "a reading over five trajectories; no rate is claimed". Gates 2 and 4 read by `opus` ("who orders the founders how is a judgment about pursuits").
+- HASH MOVERS: every seeded world (the founders' closed holds, the six deed Events and the cast's told claims at build). Declared ("The seeding is a declared mover with re-pins"); B39.99.
+- DEPENDS ON: V12 B39.12 (the prehistory fold); V12 Batch B32 (`SYN_B` edits 1, 3, 4: the chain in `legitimacy`, `presumption_gain`, `recites`; `15_INSTITUTIONS_SYNTHESIS_A`); V12 Batch B21 (`14_VERBS_BINDING_C` edit 9, the believed holder); V12 Batch B25 (`14_VERBS_SOCIAL2_B`); V12 Batch B24 (`05_SC_evidence_and_rebuttal_B`); V12 Batch B11 (CR-29's reach map); V12 Batch B38 (`regime_cores`, A-82, A-87 to A-91).
+- GLOSSARY: *prehistory* (B39.12's row; owner pointer gains `rosters.yaml: prehistory` for the realm base); *founder* (new: "the first holder of a seat, as a dynasty's founder is").
+- NAMES: `build_realm` as B39.01.
+- COST and TIER: small build; `sonnet`, `high`; one `opus` read of gates 2 and 4 (`SYN_B`'s implementation block).
+- LANDS IT: B39's producer; `Item: B39.32`, `[skip ci]`.
+
+### B39.33 — `foreign_kinds` beside `unrowed_acts` · `17_CENSUS_C1B_02` W-2 · POINTER (non-carry)
+U3 §4.1 row 87 and §1 item 39 send "`17_CENSUS_C1B_02_wires` W-2" to this batch as "the `arc.py` build-on-case item". The file's own `Reconciled:` line corrects that row at the tree: "W-2 edits `aperture.py` only and depends on nothing in `12_ARCS_case_on_the_realm.md` …, while the `arc.py` item is W-1, which builds on no case. The order constraint the cut expresses is that `12_ARCS_case_on_the_realm.md`'s `match_beats` (B39) lands after W-1's entry. So both W-1 and W-2 land in B36." Nothing of the file lands here. The order constraint is kept as a dependency of B39.11 (`match_beats` after W-1, Batch B36). Gate of W-2, for H2's check that B36 carries it: `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 0` prints the `FOREIGN` line (three seasons in the source; A-114); `engine/season/tests/test_aperture.py` green.
+
+### B39.35 — CR-85's hooks: the build · CR-85 (ED-IN-0331) · HELD (B39.07's design merged and naming a build)
+The intake entry orders a design and states no build (its gate: "a design file naming the carrier … and its falsifier"; "hash none for the design"). B39.07 writes that design; its point (5) states the build as items, or "no build". The build is not written here: D-18 ("a build whose design is unmerged at its batch's open is HELD and leaves for the held list at the expunge"). Trigger: B39's PR merged with the design not held back, and the design's (5) naming a build. When it fires, the items are the design's, in this plan's item form, landed in the WR lane's next open batch (or `STOPPED` if none remains before B98); the CR-85 design §2's FALSIFIER (2) is its gate, read at two seasons. Files it may touch (from the CR-85 design §2): `engine/season/data/cast.py` (`capability_of`, the template expansion), `engine/season/rosters.yaml: tables: lifepath_templates` (the goal-commit column), `engine/season/harness/populated.py::seed_goals`, and B39.03's `worldgen.yaml: lifepaths` if the design makes the two tables one.
+
+## Readings
+
+Each READING position's text, copied from its source; read once on the closing tree and quoted in the close's commit body with `reading @<sha>`.
+
+**Reading for B39.34 — R-06.e, R-09.b and `COL_D`'s orderings read on this tree.**
+- IS-A §12.2, row B39: "| B39 | WR | re-read R-06.e, R-09.b on the generated cast | every acting person vectored; pools differ |".
+- R-06.e (`IS_A_NINE.md` §7): "every acting person carries a pursuit vector | `decision_spread --persons`: n of n at the built realm | yes, 83 of 83 | re-read at B39, where A-44's generated cast (about 94 persons and kin) arrives". Read: `python -m engine.season.harness.decision_spread --persons` (shipped arm) and B39.03's `test_every_generated_person_carries_a_pursuit_vector` (generated arm).
+- R-09.b (`IS_A_NINE.md` §10): "two persons resolve the same verb at different pools because they differ | `python -m engine.season.harness.aperture 4 0`: `POOLS ROLLED` prints *two actors at different pools: yes* on a non-combat verb, beside the control in which every person holds the default". Read at two seasons (four in the source; A-114): `python -m engine.season.harness.aperture 2 0` (shipped arm) and B39.03's `test_two_generated_persons_roll_one_verb_at_different_pools` (generated arm).
+- `COL_D` "Gate", its B39 part: "Realm (B39, after SYNTHESIS-B §2): SYNTHESIS-B's gate 2 (per cast person, the ordering of the three seat-holders; a majority king, Hafenmark, Varfell and at least one person not; reported per regime, A-87 to A-91). Not repeated here." and "After two seasons at seeds 0–2: the orderings are printed again; the count of persons whose ordering changed is reported (not asserted: it is zero today if no deed is done, and that is a finding about the realm, not this edit)." Read after B39.32, through `test_inst_syn_b_deed_ledger.py`'s gate-2 reading function, at seeds 0, 1, 2, two seasons; one `opus` read of the per-regime ordering (`COL_D` implementation block).
+
+**Reading for B39.36 — the lean year's cuts read.**
+- `STORY_E` "The gate", with `--seasons 8` read as `--seasons 2` (A-114):
+  ```sh
+  PYTHONHASHSEED=0 python -m engine.season.harness.storybar --base-seed 0 --n 20 --seasons 2 --arms control on --stories --world valley
+  PYTHONHASHSEED=0 python -m engine.season.harness.valley --lean-year --seed 0 --seasons 2 --play p_steward
+  ```
+  "With the shipped chooser in every seat (first command), at the third cut: 1. at least 12 distinct stories occur across the 20 seeds, and each that occurs meets clauses C1 to C6 of the audit's §6.1; 2. at least four distinct endings occur; no more than three seeds share one story set and one ending; 3. in the control arm (every batch fixture at control) the story count reads only the control shapes; 4. planted failure: with `--pin-rolls Success` the seeds agree on the ending, or the variety was not the draws'; 5. a played seat changes the ending: for each of four seats (the steward, the nephew, the mother, the reeve) one played run at seed 0 whose ending differs from the unplayed seed 0; control: the same seed with the callback returning the chooser's own pick has the unplayed hash."
+  The counts 12 and four were set by the source for eight seasons `[ASSUMPTION: a shortfall at two seasons is reported with its reading and read by `opus`, not passed silently and not counted a failed close; the eight-season form is B99's — basis: D-17]`. "The stories outside it print `n/a` in the story count"; the cut reached is named (the third, unless a story's batch did not land).
+- `STORY_B` "Census" (gate 5) and `STORY_C` "Census" (gate 5), read in the same `storybar` run: "S-07 and S-05 pass audit §6.1's clauses C1 to C6"; "S-38 passes audit §6.1's clauses C1 to C6. Under C6's pinned rolls no rung is abandoned." (Read with `birth_rate` and `abandonment_draw` on in the `on` arm only; at control they print `n/a`.)
+
+### B39.99 — re-pin and close readings · E-1 · BUILD · HASH MOVER (the re-pin)
+- SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12; `IS-A-12`.
+- ADVANCES: the batch's requirement readings (R-06.e, R-09.b re-read).
+- INSTRUCTION: (1) re-record, once, the pins the batch's movers moved (B39.04, B39.19 to B39.23, B39.25, B39.28, B39.32): the realm pins in `engine/season/tests/_realm_goldens.py`; the combat goldens and golden modes moved by B39.23 (`python tools/ci_golden_modes_check.py`, the combat suite's pins; `python tools/export_engine_params.py --check` exit 0); old to new in the commit body, which says "re-pin" and lists the movers by handle; a pin only one item's own test file reads stayed in that item. (2) Write the conjuncts' `reading:` records in `engine/season/requirements.yaml` for R-06.e and R-09.b (both arms, with their tree); no `status:` edited (A-114). (3) Read the two `## Readings` positions and quote them. (4) Re-read B15's calibration readings (`reading @<sha>` of B15's close) on this tree and report any move B39.23 caused (`UNDECIDED` (4)). (5) The BATCH GATE, all of it, including the one full-suite run (CLAUDE.md §0.4) and seeds 0 to 2.
+- WHERE: `engine/season/tests/_realm_goldens.py`; the combat golden files `tools/ci_golden_modes_check.py` names; `engine/season/requirements.yaml` (`reading:` records of R-06.e, R-09.b).
+- TESTS: every test the batch named; the suites `python tools/tests_for_diff.py --base <batch-start-sha>` names.
+- FALSIFIER and CONTROL: a hash that moves at a setting every item declared EQUAL (B39.01 to B39.03, B39.05 to B39.18, B39.24, B39.26, B39.27, B39.29 to B39.31 at control): the re-pin stops and the item that moved it is found before anything is re-recorded. Control: the shipped realm at `variable=False`, `prologue=0`, `cards=False`, `birth_rate` 0.0, `majority_age` as B39.28 left it, `abandonment_draw` `off`.
+- GATE: the BATCH GATE of the block's head.
+- HASH MOVERS: the re-pin (above).
+- DEPENDS ON: V12 B39.01 to B39.36.
+- GLOSSARY: the close reads every glossary row the batch's items named against the code (STAGES rule 2).
+- COST and TIER: edit and the close's readings; `sonnet`; the terminal critique `opus`.
+- LANDS IT: B39's producer; `Item: B39.99`; the batch's last `Item:` commit, without `[skip ci]` (CI's run at the end of the batch).
+
+| STOP. Batch B39-procgen-and-cases closes here |
