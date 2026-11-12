@@ -1,5 +1,11 @@
 # CENSUS C1B · wires: two readings that are tested and that nobody can run, and one gap in a carried wire
 
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row C1B_02 CONFORMS, §7 COMPLETE but for the tier; `unified/U3_DEPENDENCY_ORDER.md` §1 item 36, §3.1, §4.1 row 87, §5.1 rows `arc.py` and `aperture.py`; `unified/U5_CONFLICTS_U5a.md` C-U5a-17). Changed: W-3 is marked decided (reading 1, now in `09_WR_threadwork_module.md`'s own `Reconciled:` line); the dependency, batch and tier lines. One U3 row corrected at the tree: §4.1 row 87 and §1 item 36 move "W-2" to B39 as "the `arc.py` build-on-case item"; W-2 edits `aperture.py` only and depends on nothing in `12_ARCS_case_on_the_realm.md` (U3's own file census orders `aperture.py` B36 → B37), while the `arc.py` item is W-1, which builds on no case. The order constraint the cut expresses is that `12_ARCS_case_on_the_realm.md`'s `match_beats` (B39) lands after W-1's entry. So both W-1 and W-2 land in B36.
+
+Depends on: `09_WR_threadwork_module.md` (B03; W-3's reading carried there); `09_WR_B_threadwork_session_and_practitioner.md` (B35); `09_WR_B_readings_of_closure_and_tension.md` (B36, which also edits `arc.py`: W-1 lands after it in B36). `12_ARCS_case_on_the_realm.md` (B39) depends on W-1, not the reverse.
+Lands in batch: B36 (lane IN), W-1 and W-2 one commit each.
+Tier: sonnet / high.
+
 ## Status: PROPOSED
 
 Carries `audits/17_CENSUS_C1B.md` §3.2. Of the 23 rows read as broken, 20 are already carried and are
@@ -121,6 +127,11 @@ which of two things is true, and this lane's reading is the first:
 
 Either removes the state "moved into `modules/` and still test-only". This is an edit to another lane's
 proposal, so it is listed for the unification stage (U3), not made here.
+
+**Decided (`unified/U5_CONFLICTS_U5a.md` C-U5a-17): reading 1.** `09_WR_threadwork_module.md`'s head now
+reads edit 2 as moving `collective.py` and `opposing.py` as inputs to `work` through
+`WorkingInput.helpers` and `WorkingInput.opposed_by`, with no composition row of their own. Nothing in this
+file is built for W-3.
 
 ## NERS reading
 

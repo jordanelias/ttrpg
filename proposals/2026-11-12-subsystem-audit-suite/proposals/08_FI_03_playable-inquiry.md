@@ -2,6 +2,10 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-22, C-24) — §2's band gate and §3's graded `reconstruct` that mints a Proposition are read with `U5c_FI_residue.md` §7 and §8. `observes:` is a flat list and `finding_terms` owns which reads a band deposits. `reconstruct` is a graded inquiry that writes nothing and deposits its conclusion to its maker; the committed assertion is his `utter` (the loader refuses a band-keyed `writes:` on a route row, `04` §B.13 invariant 12).
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.5 row FI-03 (CONFORMS, stale §3), §4 row *conclude*, §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-11i, ledger S-21, S-22; `unified/U1_GLOSSARY.md` *task*, *party*; `unified/U3_DEPENDENCY_ORDER.md` node B11). The body follows its head: §2's "evaluated … when the act's band is `Partial` or better" is replaced by `U5c_FI_residue.md` §8 (`observes:` a flat list; `rosters.yaml: finding_terms` owns which reads a band deposits; the gating reads at every band); §3's "`reconstruct` … utters a Proposition … through the `graded_inquiries` route" is replaced by FRES §7 (`reconstruct` writes nothing and deposits a `concluded:` claim to its maker; the committed assertion is his `utter`, carrying `cites` as `Proposition.support`); the accusation's mood is named (`HOLDS`, FRES §7); `graded_inquiries` → `graded_tasks` (D-U1-11i); "patient" → counterparty; the gates are named tests; lands-it and tier. §3's acting-on and §4 stay design-first (INCOMPLETE, reason stated).
+
+**Lands in batch:** B11. **Depends on:** `U5c_FI_residue.md` (B11), `19_LACUNA_conclusion_is_a_committed_assertion.md` (B11), `14_VERBS_SOCIAL2_B_a_word_with_content.md` §1 (B25; typed `utter`) for §3's commit step, B07 (18-A's loader edit, `graded_tasks`).
+
 ## Status: PROPOSED (design-first: §3 and §4 need a design pass before code; §1, §2 and §6 are edits)
 
 Carries audit `audits/08_FI_audit.md` F-FI-03, F-FI-04 and resolutions R-07, R-08, R-27. Sits on top of
@@ -41,9 +45,12 @@ needs a confident wrong one.
 
 ## 2. Products for the empty inquiries, and checking (build)
 
-One new **column** on `verb_table.yaml`, `observes:` — a list of typed reads in the existing `requires`
-grammar that do **not** gate, evaluated by the fold's `WorldReader` when the act's band is `Partial` or
-better, and attached to the act's Event as `Observation`s. Nothing else is new: `loop/witness.py`'s second
+One new **column** on `verb_table.yaml`, `observes:` — a **flat list** of typed reads in the existing
+`requires` grammar that do **not** gate, naming what the look takes and never a band, evaluated by the
+fold's `WorldReader` and attached to the act's Event as `Observation`s; **which reads a band deposits is
+`rosters.yaml: finding_terms`'** (the one band-keyed table): at Overwhelming and Success every listed read,
+at Partial every listed read but `held_by` (numeric values through the lossy-copy rule), at Failure none;
+the gating reads are deposited at every band and on a refusal (CP-T06-04) (`U5c_FI_residue.md` §8). Nothing else is new: `loop/witness.py`'s second
 deposit already turns an Event's observations into firsthand cell claims for the actor
 (`observation_deposit_mode: actor`), in the vocabulary clause 4 and `record` read.
 
@@ -63,12 +70,20 @@ reads; this column is its non-gating half.
 
 ## 3. A conclusion (design-first)
 
-`reconstruct` becomes the act that states what the investigator believes happened (R-27):
+What the investigator believes happened is stated in **two acts** (R-27; `U5c_FI_residue.md` §7): the
+graded route refuses a band-keyed `writes:` (`data/verbs.py:848-851`, `:870-874`; `04` §B.13 invariant 12),
+and giving an inquiry a prize would be scripting drift (SM-3).
 - **Value space** (K-37's missing piece): the persons his own ledger names as the doer of a deed he holds a
   claim of — `queries/person_q.py::deed_doer`, which already pairs a deed claim with its sighting.
-- **Product:** an uttered Proposition, mood `HOLDS`, about the deed's patient or the Record, naming that
-  doer, with the maker's `hold` (`_eff_utter`'s body and `_makers_hold`, the one owner). Graded through the
-  existing `graded_inquiries` route: `Failure` utters nothing; `Partial` utters it without the hand.
+- **Product, act 1 (`reconstruct` reasons):** on the graded route (`rosters.yaml: graded_tasks`, renamed from
+  `graded_inquiries`, D-U1-11i), `writes: []`; at WITNESS one claim is deposited to the maker,
+  `(the deed's counterparty or the Record, concluded:<deed kind>, doer)`, source `inferred`, what it shows
+  read off `finding_terms` by band (Partial withholds the hand; Success names it; Overwhelming at full
+  confidence; Failure `finding.none`).
+- **Product, act 2 (`utter` commits it):** the maker's `utter` of the held `concluded:` claim is a Proposition,
+  mood `HOLDS` (the mood FRES §7 decides; `04` §B.6 uses `HOLDS` for a faction's claim on territory, the same
+  sense: an assertion that something is so), naming the deed and the doer, with the maker's `hold`
+  (`_eff_utter`'s body and `_makers_hold`, the one owner), carrying `cites` stored as `Proposition.support`.
 - **If his ledger is wrong, the conclusion is wrong, and nothing tells him.** A borrowed name (CP-T06-07), a
   lie or a drifted report is enough. This is NPC-004's need with no truth flag anywhere.
 - **Acting on it:** `petition` whose `terms` names the accused, `carry`, `determine` — the route
@@ -109,8 +124,13 @@ a `surveil` against a covered deed is harder against a better cover. No second q
 - §2: at seeds 0–2, a hearer's `record` of a liar reads 1.0 before his `examine`/`surveil` and below 1.0
   after; control: the same season with `observes:` empty reads 1.0 throughout.
 - §3: over the 20 seeds at least one run ends with a conclusion naming someone who is not the Event's actor,
-  and at least one with the actor named; `reconstruct` deposits a Proposition in more than zero of its
-  folded acts (today zero of 47 / 45 / 54).
+  and at least one with the actor named; a Proposition is uttered after a winning `reconstruct` in more than
+  zero runs (today `reconstruct` deposits nothing in 47 / 45 / 54 folds).
+- Named tests (new, `engine/season/tests/test_playable_inquiry.py`): `test_every_inquiry_world_run_ends_by_a_predicate`
+  (§1, seeds 0–19); `test_a_look_re_grades_a_liar_and_the_empty_observes_control_does_not` (§2);
+  `test_a_failed_look_deposits_the_gating_reads_only` (§2, FRES §8); `test_some_conclusion_names_a_non_actor`
+  (§3); `test_reconstruct_writes_nothing` (§3, the loader refuses the banded-`writes:` form when planted);
+  `test_a_contradicted_teller_becomes_a_question` (§4, after its design pass).
 - §4: a question whose referent is the liar exists in the round after the contradiction; control: no
   contradiction, no question.
 
@@ -136,3 +156,9 @@ scale that today does nothing.
 
 §1, §5, §6: edit. §2: small build. §3, §4: design-first, then small builds. Lanes: FI; SC (the bench);
 CHAR (CR-83); T07 (`thread_read`).
+
+**Lands it and tier.** The B11 batch: §1, §2, §5, §6 and §3's two acts on `sonnet` (`high`,
+`valoria-author`); a design pass on `opus` (with `ners`) for §3's acting-on row (`terms_sourced`) and §4;
+one `methodology-close`. **INCOMPLETE, not decidable here:** which row forms a petition from a held conclusion
+(`terms_sourced`'s row) and whether `record` scores the concluder (CR-83). **Hash movers.** §2 onward
+(declared).

@@ -2,7 +2,9 @@
 
 Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-01 — superseded by `05_SC_evidence_and_rebuttal_B.md`, which now keeps this file's draw-at-the-answer rule (edits 2–3) and replaces edit 5's automatic strike on a forgery finding with a rolled, graded answer. No other change.
 
-## Status: PROPOSED
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4/§1.5 SUPERSEDED row, §7; `unified/U3_DEPENDENCY_ORDER.md` node B24). Document status only: the Status line is set to SUPERSEDED by `05_SC_evidence_and_rebuttal_B.md` (the earlier `Reconciled:` line already said so); no edit of this file is landed; its body is kept as the evidence its successor cites. **Lands in batch:** none (node B24 kept for the order).
+
+## Status: SUPERSEDED by `05_SC_evidence_and_rebuttal_B.md` (kept for its evidence; nothing here is landed)
 
 Source: `audits/05_SC_audit.md` §16 (the detective and noir precedent) and F-SC-14. Builds on SC-P3
 (the hearing; the case file as the hearing's record) and on the plan's CR-61 (the case file) and

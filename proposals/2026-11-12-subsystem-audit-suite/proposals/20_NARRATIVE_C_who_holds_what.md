@@ -4,6 +4,12 @@ Folded: 2026-11-12 by `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md`. Nothing h
 
 Reconciled: 2026-11-12, U5d closure — folded **A-32** and **A-33**. Who holds a seat is learned by the seat's reach (realm-wide shipped, with presence, jurisdiction and telling built as the test arm, A-32), so edit 1's build-time `held_by` deposit and the later Event agree with the shipped reach. A holder's death is learned apart, by presence, trail and telling (A-33): a `held_by` claim may be stale because its holder is dead and the believer does not know it; this file's "the claim can be stale" covers it, and no edit corrects the belief on the death. Blame under an empty seat reads the believed holder (`U5d_STORY_owed_edits.md` §3).
 
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 rows who_holds_what (CONFORMS; the `_stance_arm` ordering AMBIGUOUS), §2 row edit 5 (`release` polarity; A-22, A-37), §7, 7b; `unified/U3_CONFLICT_LEDGER.md` C3-K3; `unified/U3_DEPENDENCY_ORDER.md` §1 item 38, §3.1). Changed: (1) edit 2's `[UNVERIFIED]` call site is resolved at the tree: `epistemic.py::claim_subjects` (`:185`) reads a `hold` through `_hold_tenure_ends` (`:167`, H-71, used at `:246` and in the sighting walk at `:1038`); the `held_by` deposit is added where those ends are produced; (2) edit 4 lands after the scar-cap Addendum's `regard_sign`/`beneficiary` term (B10; C3-K3) and adds `holder_gain` to the same `r` before the sign rule, one clamp, one `stance_scale`; its code used `_regard_of`, which does not exist in `decision/choose.py` (read here: the arm memoises `regard(p, subject, fx)` in `memo`), so the code now uses that memo; (3) edit 5's "stated limit" is decided at its owner (R5 §2): the Addendum's `regard_sign` column is `-1` on `release` and on any row that ends a tie to its subject, so `stance_polarity: declared` no longer makes a man likelier to leave a lord he honours; the row values are the CHAR lane's to write in that Addendum (listed); (4) tests named; (5) batch order: this file lands before `20_NARRATIVE_B_what_he_was_owed.md` inside B38 (NARR_B imports `believed_holder`; U3 §1 item 38 lists them the other way, corrected here); (6) tier.
+
+Depends on: `02_CHAR_scar_cap_and_regard_unit.md` Addendum (B10; `_stance_arm`'s merged term and the `regard_sign` column); `18_DETERMINISM_notice_is_a_draw.md` (B11); `06_FA_seat_terms_and_turnover.md`, `06_FA_seat_terms_by_body_B.md` (B21) and `06_FA_war_lives_in_seats_B.md` (B23), which supply the changes of holder commit 2 deposits; `30_WR_A_the_era_is_a_named_period.md` and `30_GO_F_the_plot_as_the_player_is_shown_it.md` (B38) read `believed_holder` after it lands.
+Lands in batch: B38 (lane WR), after `20_NARRATIVE_A_stands_for.md` and before `20_NARRATIVE_B_what_he_was_owed.md`; three commits, each a declared mover with its control.
+Tier: sonnet / high.
+
 ## Status: PROPOSED
 
 Source: `audits/20_NARRATIVE_CHURN.md` F-NARR-04 (nothing is aimed), F-NARR-05 (allegiance never moves),
@@ -71,8 +77,10 @@ close a `hold` whose object is an Office or a Rung, each recipient of the Event'
 receives `Claim(subject = the object, predicate = "held_by", value = the subject of the live hold
 after the Event, or None)`, with the Event's own source, chain and confidence (so a told succession
 is hearsay and can be disbelieved, and the notice draw of `18_DETERMINISM_notice_is_a_draw.md` governs
-it like any other deed). Behind `Fixtures deposit_holder` (`off` control / `on`).
-`[UNVERIFIED: the exact call site inside witness's deposit loop; read at build.]`
+it like any other deed). Behind `Fixtures deposit_holder` (`off` control / `on`). Call site (read at
+the tree): `claim_subjects` (`epistemic.py:185`) produces a `hold`'s ends through `_hold_tenure_ends`
+(`:167`; called at `:246`, and at `:1038` in the sighting walk); the `held_by` claim is minted beside
+those ends for each recipient, so the deposit and the sighting read one rule.
 
 **3. `engine/season/queries/person_q.py` — new, beside `known_persons`.**
 
@@ -85,14 +93,19 @@ def believed_holder(p: Person, x: str, at: Optional[int] = None) -> Optional[str
 ```
 
 **4. `engine/season/decision/choose.py::_stance_arm`, at the `ABSENT: H-195 holder` marker
-(`:82`, `:101-121`).** After `r = memo[subject]`:
+(`:82`, `:101-121`).** Landing order on this one function (C3-K3): the scar-cap Addendum's term
+(`regard_sign(row) × regard(p, subject)` plus `regard(p, b)` for a beneficiary, B10, which also carries
+`17_CENSUS_C1A_02` W4) first; this term after it, added to the same `r` before the sign rule, under one
+clamp and one `stance_scale`. After `r` is formed:
 
 ```python
     hg = fx.get("holder_gain")
     if hg:
         h = believed_holder(p, subject)
         if h is not None and h != p.id:
-            r = r + hg * _regard_of(p, h, fx, memo)        # the same `regard`, memoised per subject
+            if h not in memo:
+                memo[h] = regard(p, h, fx)                 # the same `regard`, memoised per subject
+            r = r + hg * memo[h]
 ```
 
 The sign rule that follows is untouched: on a contested row whose subject is its opponent the sum is
@@ -103,14 +116,23 @@ replacing H-195's `absent` with `assumption`; `[ASSUMPTION; medium; Jordan to co
 **5. Nothing is built for "the oath meets a new holder": it falls out.** A `held_by` claim that lands
 on a seat a man is sworn to is a claim about his own tenure's object, which `attention_key` already
 ranks at tier 1 (`world_q.py:3867-3868`, `own_purview`); the candidates on that seat then read his
-regard for the new holder through edit 4. **Stated limit, owed to another owner:** `release` is an
-uncontested row, so under `stance_polarity: declared` it takes `+regard`, which makes a man *likelier*
-to leave a lord he honours. An act that ends a tie must read regard for the tie's other end with the
-opposite sign. Owner: the row (`verb_table.yaml: release`) and `decision/options.py`'s polarity rule;
-listed for the BINDING verb lane and CHAR (the owners of the row and of the polarity), not decided
-here. Until it lands, gate 4 reads `release` and reports the sign it finds.
+regard for the new holder through edit 4. **The `release` sign, decided at its owner** (R5 §2): `release`
+is an uncontested row, so under `stance_polarity: declared` it took `+regard`, which made a man
+*likelier* to leave a lord he honours. The owner is the `regard_sign` column of
+`02_CHAR_scar_cap_and_regard_unit.md`'s Addendum (how the act treats its subject): `release` and any row
+that ends a tie to its subject carry `regard_sign: -1`, so the act reads regard for the tie's other end
+with the opposite sign [ASSUMPTION: the column exists once that Addendum lands in B10 — basis: C1A_02's
+head describes `regard_sign` as landing before W4]. The row values are written by the CHAR lane in that
+Addendum (listed for it); A-37's imposed services are not this case (they end by pardon or term, not by
+the bound man's `release`). Gate 4 reads `release` and reports the sign it finds.
 
 ## The gate that shows it worked (execution artifacts)
+
+Tests: NEW `engine/season/tests/test_held_by.py`: `test_build_seeds_one_claim_per_seat_under_purview`
+(gate 2), `test_seed_holders_false_reproduces_base_hash` (gate 1), `test_conferral_deposits_held_by_to_the_reach`
+(commit 2), `test_far_person_keeps_the_old_holder_until_told` (gate 5, AX-7),
+`test_holder_gain_ranks_march_on_a_hated_holders_rung_higher` (gate 3). Gates 4 and 6 are realm readings
+printed in the commit body (seeds 0 to 2, four seasons), with `20_NARRATIVE_F`'s `--overlaps` (formerly `--crossings`) for G4.
 
 1. Control: `seed_holders=False`, `deposit_holder off`, `holder_gain 0` reproduce the base hashes.
 2. H-195's own trigger: the share of persons holding a `held_by` claim at build, by seed, is above 5 %
@@ -153,7 +175,8 @@ here. Until it lands, gate 4 reads `release` and reports the sign it finds.
 
 ## Cost class
 
-Small build (three commits). No design decision is open except the `release` polarity (edit 5).
+Small build (three commits). No design decision is open; the `release` polarity (edit 5) is decided at
+its owner and its row values are the CHAR lane's.
 
 ## Dependency edges
 

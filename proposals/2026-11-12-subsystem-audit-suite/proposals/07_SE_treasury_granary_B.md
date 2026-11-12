@@ -2,7 +2,12 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-23** and **A-57 / A-58**. The addendum's P-16 (an absentee duke's treasury still feeds his duchy) gains: a duke in custody forms no act through his seat (A-23), so he cannot withhold or release; the rule of relief still runs (it is no act). A treasury sits at a seat's rung: when that rung is seized by a victor its seats pass with it (A-58, A-66), and the stores on the rung go with the rung's `hold` (stores are `Rung.stores`; no separate transfer is written).
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — C3-N1 (T-8: the geography's settled provinces are 16 and include the foreign `T16`; "the sixteen settled territories" gains that qualifier, which U3 decided over R3 7b-13's "the territories"); A-44/A-75 applied to §6's `ED-WR-0011` line by the same R3 §2 reading as its two siblings (the cast is no longer closed); tier and batch added (R3 7b-0; U3 B12). `07_SE_ground_and_granaries.md` now carries this file's rung in its own body (its wave-3 line), so the supersession below is also written there.
+
 ## Status: PROPOSED
+
+Lands in batch: B12 (world motion and ground), with `07_SE_ground_and_granaries.md` (U3 §1 item 13).
+Depends on: `07_SE_ground_and_granaries.md` (B12, `endowment_mode`, `granary_seasons`).
 
 Carries findings F-SE-17, F-SE-22 and F-SE-23 and resolutions R-SE-28, R-SE-29 and R-SE-30 of
 `audits/07_SE_audit_addendum_B.md`. It supersedes **only** resolution R3 and the territory-rung clause
@@ -19,7 +24,8 @@ or module changes. The larder ladder reads it as it reads any rung above a home.
 
 ## 2. The problem, with evidence
 
-- **Fourteen of the sixteen settled territories have no seat at the territory rung.** `build_realm(0)`
+- **Fourteen of the sixteen settled territories (the foreign `T16` included; C3-N1) have no seat at the
+  territory rung.** `build_realm(0)`
   seats 34 offices: `terr_T1` 10, `terr_T9` 6, `terr_T15` 1 (no settlement there), `duchy_hafenmark` 5,
   `duchy_valorsmark` 1, `duchy_varfell` 4, `r_valoria` 4, the foreign `set_alt_1` 2, one with no rung
   (addendum §8, E-2 and E-7; seed 0, no season run).
@@ -123,7 +129,8 @@ take a candidate that moves stock off the ladder, not to refuse relief candidate
 
 ED-SE-0053's standing order (no hearth larder, no delivery across `contain`): no matter is delivered;
 the draw reads up the ladder as ED-IN-0246 built it. H-160 limit 3 (the silent dearth is a balance
-number): untouched. ED-WR-0011: no person is minted. H-309 (a holder who migrates keeps his seat): his
+number): untouched. The cast: no person is minted here (named births are `23_STORY_B`'s, A-75; the cast
+is no longer closed, A-44). H-309 (a holder who migrates keeps his seat): his
 treasury keeps feeding his duchy; named in the addendum's §5 (P-16).
 
 ## 7. NERS reading (definitions: `CLAUDE.md` §0.06; E last)
@@ -145,4 +152,6 @@ treasury keeps feeding his duchy; named in the addendum's §5 (P-16).
 ## 8. Cost class
 
 Edit, inside the first proposal's small build. Hash EQUAL at the shipped arms; under `ground` it is part
-of that flip's declared mover.
+of that flip's declared mover. The execution artifact is a test in `07_SE_ground_and_granaries.md`'s
+`engine/season/tests/test_endowment.py`: `test_every_draw_source_above_a_settlement_is_a_seat_rung` (with
+the planted `terr_T15` failure as its mutation). Tier: `sonnet` (R3 7b-0).

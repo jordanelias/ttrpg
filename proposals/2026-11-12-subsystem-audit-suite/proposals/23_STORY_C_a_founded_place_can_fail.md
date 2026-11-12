@@ -2,6 +2,12 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-55** (fixed map; an empty founded household may lapse). The closing sentence ("A town-scale founding and abandonment remain PES-SE J-3, Jordan's") is answered: no node of the settlement registry is added or removed; this file's lapse is the whole of what may end. The lapse draw is on the four-band ladder (A-54), as written. `lapse_draw` still ships `off`; the ruling licenses turning it on as a declared mover after its reading.
 
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row founded_place (AMBIGUOUS: the matrix cell stated without its class), §2 rows closing sentence (A-55) and the draw (A-54), §7, 7b; `unified/U1_GLOSSARY.md` "lapse"; `unified/U3_DEPENDENCY_ORDER.md` §1 item 39, §3.1, §5.1 rows `write_matrix.yaml`, `effects_founding.py`). The body now follows the head. Changed: (1) the sentence "A town-scale founding and abandonment remain PES-SE J-3, Jordan's" is deleted (A-55 answered it: a fixed map; an empty founded household may lapse; `abandonment_kinds` excludes settlements); (2) the matrix edit is stated in the tree's own columns: R5 7b wrote `writer: world_or_act`, but `write_matrix.yaml`'s `(Rung, exists)` row (read at `:382-388`: `steps: [RES]`, `class: "ACTS"`, `social: "true"`, `emits: rung.founded`) has no `writer:` column; `04` invariant 5's `act_only` / `world_or_act` is the row's `class:` (`"ACTS"` / `"MATTER/ACTS"`, the `(Rung, stores)` precedent at `:389-393`); (3) the draw's numbers are set at calibration (A-5) and the whole-dice sentence is dropped; the draw is keyed (A-30); (4) vocabulary: the end of an empty founded rung is an **abandonment** (`rung.abandoned`); "lapse" is a term's end unpaid (`matter.lapsed`), so the proposed keys are renamed `abandonment_kinds`, `_abandonment`, `abandonment_draw`, `abandonment_pool`, `abandonment_ob`, `abandonment_patience` (the earlier `lapse_*` names in the head lines above mean these). The glossary row names `22_HAPPENINGS_*` as the files whose text changes; at the tree the word is used in this file, which is where the change is made; (5) tests named; (6) dependency, batch and tier lines.
+
+Depends on: `18_DETERMINISM_task_draw_for_uncontested_verbs.md` (B07); `07_SE_population_regrowth_B.md`, `14_VERBS_MATERIAL_A_mending.md`, `14_VERBS_MATERIAL_C_works.md` (B12; a founding executes, `restore`/`work` drawn); `07_SE_valley_scenario.md` (B12, the gate's fixture); `14_VERBS_MILITARY_A_movement.md` (B22); `23_STORY_A_what_a_roll_leaves.md` (B38, `stake_stores` and `stake_amount`); `23_STORY_E_first_playable_the_lean_year.md` adds the gate's `hearth` works row.
+Lands in batch: B39 (lane SE), after `23_STORY_B`; edit 2 (`_end_rung`, hash-equal) its own commit; the matrix row, edits 1, 3, 4 one commit (hash-equal at `abandonment_draw: off`). It is the last editor of `write_matrix.yaml` in U3's file census.
+Tier: opus for the matrix-row reading (the design-first part); sonnet / high for the code and tests.
+
 ## Status: PROPOSED (one write-matrix cell is touched; named under "Where it meets Layer 1")
 
 Source: `audits/23_STORY_ENABLEMENT.md` §2 row S-38, §4.2 G3; `16_PESSIMIST_SE.md` §3.5 (*"a founder's
@@ -14,7 +20,7 @@ on their own works and drawn), `14_VERBS_MATERIAL_A_mending.md` (`restore`, `wor
 
 ## What it changes in `engine/season/` at runtime
 
-At ship, nothing (`lapse_draw` is `off`). With it on: each season at MATTER, a rung of a kind `found`
+At ship, nothing (`abandonment_draw` is `off`). With it on: each season at MATTER, a rung of a kind `found`
 can make, under which nobody resides and no Site stands above condition zero, is put to one graded draw;
 it stands, stands and loses part of what was staked on it, or is abandoned (the rung ends, what was left
 of its stake returns to its parent). A declared hash mover only in worlds that hold such a rung.
@@ -42,14 +48,14 @@ whose odds worsen the longer it stands empty and improve with what was staked on
 being near. Ladder step 3 (PES-SE J-3 option A's own sentence: *"put to a draw each season, its odds
 worsening the longer it stands empty; on a failure it ends and its stake returns to its parent"*) and
 step 4 (`raze`'s cascade as the one way a Rung ends). It stays inside SE-9(a): no node of the settlement
-registry can be closed by it. A town-scale founding and abandonment remain PES-SE J-3, Jordan's.
+registry can be closed by it.
 
 ## Exact edits, by owner
 
-**1. `engine/season/rosters.yaml` — `lapse_kinds`.**
+**1. `engine/season/rosters.yaml` — `abandonment_kinds`.**
 
 ```yaml
-lapse_kinds:
+abandonment_kinds:
   source: "STORY-C: the Rung kinds an empty place of which may be abandoned. The kinds `found` makes
            under strict ascent (a hearth under a settlement, a community under a territory); never a
            `raze_target_kinds` member, never a registry settlement or anything above one."
@@ -65,16 +71,17 @@ The Layer 1 gap `_eff_raze`'s docstring records (Sites and Records whose `rung` 
 Rung; `H-228`) is unchanged and not widened: a rung this pass may end has, by its own condition, no
 resident and no standing Site.
 
-**3. `engine/season/loop/matter.py` — `_lapse(w, token)`, after the wear pass**, skipped at
-`lapse_draw == "off"`. For each Rung `r` of a `lapse_kinds` kind with no live `reside` or `contain` edge
+**3. `engine/season/loop/matter.py` — `_abandonment(w, token)`, after the wear pass**, skipped at
+`abandonment_draw == "off"`. For each Rung `r` of a `abandonment_kinds` kind with no live `reside` or `contain` edge
 of a Person naming it and no Site under it above condition 0:
 
-- **Pool:** `lapse_pool`, plus one for each whole `works_cost` price of matter the rung still holds
+- **Pool:** `abandonment_pool`, plus one for each whole `works_cost` price of matter the rung still holds
   (what was staked on it and not spent), plus one where the holder of a live `hold` on `r` stands in
   `r`'s parent rung.
-- **Obstacle:** `lapse_ob`, plus one for each `lapse_patience` seasons since `r` last had a resident or
+- **Obstacle:** `abandonment_ob`, plus one for each `abandonment_patience` seasons since `r` last had a resident or
   a Site above zero (or since it was minted, if never).
-- One draw through the route DET-A gives the uncontested verbs, keyed on `(r.id, w.tick)`.
+- One draw on the four-band ladder (A-54) through the one sampler, keyed `H(seed, tick, r.id,
+  "abandonment")` (A-30), the same route DET-A gives the uncontested verbs.
 
 | band | writes | emits |
 |---|---|---|
@@ -82,15 +89,24 @@ of a Person naming it and no Site under it above condition 0:
 | Partial | one `stake_stores` step of the rung's matter moves to its parent rung, two-sided (`_shift`, the founding's own mover) | `stores.changed` |
 | Failure | all remaining matter moves to the parent, two-sided; `_end_rung(w, r.id)` | `stores.changed`, `rung.abandoned` |
 
-`rung.abandoned` is a new kind on the matrix row `(Rung, exists)`, beside `rung.razed`. Its `causes`
-are the rung's own last `stores.changed` or minting Event, never `ROOT` (PES-SE-A edit 3's rule for a
-MATTER death).
+`rung.abandoned` is a new kind on the matrix row `(Rung, exists)` (beside `rung.founded`; `rung.razed` is
+declared on `raze`'s verb row, `verb_table.yaml:1432`). Its `causes` are the rung's own last
+`stores.changed` or minting Event, never `ROOT` (PES-SE-A edit 3's rule for a MATTER death).
 
-**4. `engine/season/data/fixtures.py`** — `lapse_draw = "off"` (control, SHIPPED) `/ "on"`;
-`lapse_pool` (proposed 2), `lapse_ob` (proposed 1), `lapse_patience` (proposed 2 seasons), each with a
-hole-register row graded `assumption` and a sweep `[ASSUMPTION; medium; Jordan to correct]`. At the
-proposed values a fresh founding holding its stake and with its founder near rolls four dice against an
-obstacle of 1, and the same lot four seasons empty, stripped and unheld rolls two against 3.
+**3b. `engine/season/write_matrix.yaml`, the row `(Rung, exists)`** (`:382-388`): `steps: [RES]` →
+`[RES, MAT]`; `class: "ACTS"` → `"MATTER/ACTS"` (`04` §B.13 inv. 5, `:497`: a MAT step needs
+`world_or_act`, which is this class, on `(Rung, stores)`'s precedent at `:389-393`); `emits` gains
+`rung.abandoned`; `by:` gains the sentence naming this pass and `_end_rung` as the one writer of a Rung
+ending. The `social:` cell is read at landing against `state/world.py:64-107` (no social quantity moves at
+MATTER): if `social: "true"` refuses the MATTER write, that is the Layer 1 refusal the fallback below
+answers. Data, checked by the loader at import.
+
+**4. `engine/season/data/fixtures.py`** — `abandonment_draw = "off"` (control, SHIPPED) `/ "on"`;
+`abandonment_pool`, `abandonment_ob`, `abandonment_patience` (seasons), each with a hole-register row
+graded `assumption` and a sweep `[ASSUMPTION; medium; Jordan to correct]`, their values set at the
+calibration with the A-5 sampler (starting points: `pool_default`, the `routine` difficulty level, two
+seasons). The intent the values encode: a fresh founding holding its stake and with its founder near is
+likely to stand; the same lot four seasons empty, stripped and unheld is likely to go.
 
 **5. Nothing for growth, and nothing for the founder.** A place with a resident or a standing Site is
 never drawn for. It gets one when someone `build`s and `work`s there (MAT-C, MAT-A), when a migrant
@@ -101,7 +117,7 @@ others came it is no longer drawn for at all.
 ## Where it meets Layer 1
 
 - **`write_matrix.yaml`, the cell `(Rung, exists)`.** Its closer today is RESOLVE through `raze`. This
-  proposal adds MATTER as a writer of that cell for `lapse_kinds` only. Layer 1's account of MATTER is
+  proposal adds MATTER as a writer of that cell for `abandonment_kinds` only. Layer 1's account of MATTER is
   the three motions (matter wears, memory decays, bodies fall, `09_WR` reads it so); an empty place
   going back to the land is matter wearing at the scale of a rung, and the write is material, not
   social (`state/world.py:64-107`: no social quantity moves at MATTER). That reading is this lane's
@@ -113,8 +129,15 @@ others came it is no longer drawn for at all.
 
 ## The gate (execution artifact)
 
+Tests: NEW `engine/season/tests/test_abandonment.py`: `test_off_leaves_every_hash_and_no_abandoned_event`,
+`test_peopled_or_built_rung_is_never_drawn_for`, `test_matter_is_conserved_across_an_abandonment`,
+`test_settlement_is_never_ended`, `test_abandonment_season_differs_between_seeds`,
+`test_rung_abandoned_cites_a_cause_not_root`, `test_member_also_in_raze_target_kinds_is_refused_at_load`;
+`test_end_rung_extraction_is_hash_equal` for edit 2. The story-bar plants below are tests in
+`engine/season/tests/test_storybar.py` (exists).
+
 The valley fixture with one works whose plan is a `hearth` (`23_STORY_E` adds the row); 20 seeds,
-8 seasons; arms `lapse_draw` off and on, with MAT-C and MAT-A on in both.
+8 seasons; arms `abandonment_draw` off and on, with MAT-C and MAT-A on in both.
 
 1. **Control.** `off`: no `rung.abandoned` at any seed; edit 2 alone leaves every pinned hash equal.
 2. **Both outcomes.** `on`: among the seeds at which the founding executed, the rung stands at the end
@@ -131,7 +154,7 @@ plant whose `rung.abandoned` cites `ROOT` reads no S-38.
 
 ## The falsifier
 
-- A settlement, or any rung not of a `lapse_kinds` kind, ended by this pass.
+- A settlement, or any rung not of a `abandonment_kinds` kind, ended by this pass.
 - A peopled or built place drawn for.
 - Every empty founding abandoned in the same season across seeds: the draw is not keyed per rung and
   tick, or the obstacle is being read as a deadline.

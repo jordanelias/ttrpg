@@ -4,7 +4,12 @@ Folded: 2026-11-12, lane 29 (`proposals/29_DICE_one_opposed_rule_form_and_tuning
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.2, §1.3) — superseded by `03_PC_duel_round_and_approach_B.md` where the two differ (its §1 table), and by four rulings: A-4 (a duel inside a battle is called from inside as a nested contest: round state lives in the calling loop's frame, never on an adapter; the cap is `U5b_PC_rulings_in_the_fight.md` §1), A-1 (auto-resolve is the one resolver: equal plans agree exactly, not in expectation), A-31 (longer fights: the approach is calibrated after the damage scale, `U5b_PC_rulings_in_the_fight.md` §4–§5) and the standing rule (the upset flip becomes a tracked riposte, `18_DETERMINISM_no_certain_matchup.md`). §2, §3, §5, §6 and §7 carry the changes in place; the author's text stands elsewhere.
 
-## Status: PROPOSED
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §2 row A-30 (the per-round stream is a key, not a sequential `getrandbits` draw: §2 and §7 step 2 rewritten; the key function is `11_GO_one_draw_owner.md`'s), §2 row on `YIELD_HEALTH_FRAC` (A-24 and `16_PESSIMIST_PC_A_the_yield_is_a_draw.md`: §4's threshold bullet removed), §6.1 (d) (the "typed record the host holds" sentence in §6 removed: state lives in the calling loop's frame), §7 test 9 (this file is implemented through PB; its build table points there); `U1_OWNERS_AND_VOCABULARY.md` D-U1-11b (the cap's refusal is the typed `Refusal(depth_cap)`, not `NESTING-CAP`) and §2's nested-duel row (`nested_entry` stays as U1 names it, so `R1_READ.md` 7b-12's Option A, deleting it for `seam.contest`, is **not** applied: the decision wins over the read lane), §4 P-03 (`APPROACHES` lives in `modules/combat/vocabulary.py`, order `defensive, normal, aggressive`); `U3_CONFLICT_LEDGER.md` C3-N4 (the §1 figures are half-score history), `U3_DEPENDENCY_ORDER.md` B16 ("marked superseded"). **Status: SUPERSEDED IN PART by `03_PC_duel_round_and_approach_B.md` (PB); build from PB, read this file for intent.**
+
+**Depends on:** `03_PC_duel_round_and_approach_B.md` (B16), which carries every build step.
+**Lands in batch:** B16 (`B16-pc-round`, PC), as the superseded companion of PB; no edit of its own lands.
+
+## Status: PROPOSED (superseded in part by `_B`; see the line above)
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-12) — ED-SC-0013's ledger row opened: it records the auto/manual duality doctrine as PROPOSED, not RULED. No edit of the proposal depends on the difference (Jordan's ruling 1 of 2026-11-12 governs auto-resolve).
 
@@ -48,7 +53,7 @@ class DuelState:                 # what one party carries from round to round. (
 
 @dataclass(frozen=True)
 class DuelRoundInput:
-    fighters: PersonalCombatInput        # who they are: ends, attributes, kits, faculties, slots, terms
+    fighters: PersonalCombatInput        # who they are: ends, attributes, kits, scores + addends (D-U1-08), slots, terms
     states: tuple                        # (DuelState, DuelState), in claimant order
     approaches: tuple                    # one member of APPROACHES per party
     round: int                           # 1-based
@@ -69,8 +74,9 @@ class DuelRoundOutcome:
   approach, call `wrapper.engagement` once, apply the between-round recovery `wrapper.fight` applies
   now (`wrapper.py:613-615`), lift the states. It keeps nothing.
 - `fight(inp, rng, decide)` becomes the loop over `round`: for each turn ask each party's decider for
-  an approach (or `withdraw`), draw that round's private stream from the fight's stream
-  (`random.Random(rng.getrandbits(64))`), call `round`, stop on a felling, a yield, a withdrawal or the
+  an approach (or `withdraw`), take that round's draws from the key `H(fight_key, 'round', r)`, each draw
+  inside the round keyed `(r, phase, purpose)` through `11_GO_one_draw_owner.md`'s owner (A-30: no sequential
+  `getrandbits` chain), call `round`, stop on a felling, a yield, a withdrawal or the
   twelfth turn. `wrapper.fight` shrinks to that loop or is deleted in its favour. *(Reconciled, sweep
   D-11:)* the upset flip does not stay on the unread integer; it is replaced by the tracked riposte of
   `18_DETERMINISM_no_certain_matchup.md`, which a round's trackers carry.
@@ -87,13 +93,15 @@ class DuelRoundOutcome:
 | grid round | *(Reconciled, A-4:)* the skirmish's own loop (the cell field at weight 1, `04_CODE_ARCHITECTURE.md:811`) calls `round` once per attack action through the `duel` callable its adapter hands it, holding the two `DuelState`s in that loop's frame | the acting unit's player or NPC decider | when the grid battle folds |
 
 A grid attack and a duel turn are the same call with the same record; the grid only decides when the
-next round happens and who else acts in between. The per-round stream makes a fight replay equal
-whether its rounds are called in one frame or across grid turns: round `r`'s seed is the `r`-th
-64-bit draw of the fight's seed, recomputable from `(seed, r)` with nothing stored.
+next round happens and who else acts in between. The per-round key makes a fight replay equal
+whether its rounds are called in one frame or across grid turns: round `r`'s draws are keyed
+`H(fight_key, 'round', r)`, recomputable from `(fight_key, r)` with nothing stored and with no draw
+depending on another round's count (A-30).
 
 ## 3. The approach (the choice surface)
 
-- `modules/combat/wrapper.py`: `APPROACHES = ('aggressive', 'normal', 'defensive')`, a closed set
+- `modules/combat/vocabulary.py`: `APPROACHES = ('defensive', 'normal', 'aggressive')` (owner and order per
+  PB §3 and `U1_OWNERS_AND_VOCABULARY.md` §4 P-03), a closed set
   beside `TURN_CHOICES`; the decider's set becomes `APPROACHES + ('withdraw',)`, with `engage` kept as
   a synonym of `normal` so every existing decider is unchanged.
 - An approach is a **prior on gates the engine already rolls**, never a command (the held Plan-layer
@@ -104,11 +112,11 @@ whether its rounds are called in one frame or across grid turns: round `r`'s see
 - **Both ends must cost, in the same change.** Today the aggressive end is strictly better. The engine
   already has the cost side and under-charges it: deep commits raise `overcommit_exposure`
   (`combat_systems.py:1164-1175`) and readiness debt (`wrapper.py:287`), and a defender who out-reads
-  a deep commit steals the initiative (`wrapper.py:325-329`). The proposal adds no new mechanic; it
-  requires that the lean's magnitude and the three existing cost coefficients be swept together on the
-  workbench until, in a mirror, no approach beats `normal` by more than the disjoint-seed band and
-  each approach beats one other in some matchup (aggressive against a wounded or out-reached
-  opponent; defensive against an aggressive one). The values are `[SIM-CALIBRATE]` and go in `CFG`.
+  a deep commit steals the initiative (`wrapper.py:325-329`). *(Reconciled, W3-1: the joint sweep of the
+  lean and the three cost coefficients is superseded by PB §3 and steps 3a–3e: the approach's own
+  coefficients `APPROACH_COMMIT_K`, `APPROACH_COUNTER_K`, `APPROACH_BREAK_K`, `APPROACH_SIGMA_K` (0 shipped),
+  and `DISP_INIT_K` retired to 0; the acceptance criterion, no approach outside the control band of `normal`
+  in a mirror and each best in one named matchup, is PB's.)*
 - A skill or lever a character has equipped modulates the gates an approach leans on, which is the
   sense in which "skills correspond to levers": a fighter with a counter lever gains more from
   `defensive`, one with a tempo lever from `aggressive`.
@@ -127,8 +135,8 @@ whether its rounds are called in one frame or across grid turns: round `r`'s see
   and the chooser is stated in `audits/02_CHAR_audit.md` (the section on the NPC and chooser intent);
   this proposal consumes that statement and adds no rule of its own. Until CHAR supplies a temperament
   reading the NPC decider returns `normal`, which is today's fight.
-- The concession threshold (`YIELD_HEALTH_FRAC`, one number for everyone) becomes a per-party input on
-  the record when CHAR names its source; until then it stays the config value.
+- *(Reconciled, W3-1: the concession threshold bullet is removed. Under the standing rule (A-24) the yield
+  is a draw on the party's Spirit, `16_PESSIMIST_PC_A_the_yield_is_a_draw.md`; PB §5 "Concession" carries it.)*
 - The reason trail: each round's trace gains one `approach` event per party with the view fields the
   decider read; the band's Event already carries the ending, and `03_PC_typed_outcome_one_door.md`
   adds the decisive beat.
@@ -146,7 +154,9 @@ engagement through the same path:
   hands the field module a `duel` callable with each officer's record; the field module, at its own
   window, builds the `DuelRoundInput` for a pair in contact, calls `duel`, and keeps the two `DuelState`s
   in its loop's frame. The call is a nested contest counted against the cap (1); at the cap it returns
-  the typed result `NESTING-CAP`. One window is one duel round (`04_MB_manager_battle_one_resolver.md` §7).
+  the typed `Refusal(depth_cap)` (`04` §C.5; at the tree `seam/contest.py::ContestError`;
+  `U1_OWNERS_AND_VOCABULARY.md` D-U1-11b). One window is one duel
+  round (`04_MB_manager_battle_one_resolver.md` §7).
 - It hands the field module a typed result: `DuelContactResult(pair, felled, wounded, yielded)`.
   What the field does with it is MB's rule; the borrowed constraint from research is that a person's
   effect on a unit is a fraction of the unit's own cohesion, never a flat amount, because no surveyed
@@ -238,15 +248,20 @@ answered for the played case by the intent and left open for the unwatched one.
 - `scene_combat_design_v1.md` (WS-7, design-only, gated on ED-911): a multi-combatant scene is "a
   second outer loop parallel to `fight()`" that calls `engagement()` for many pairs, "wrap, never
   fork". The grid host of §2 and the field contact of §5 are that outer loop; the difference is that
-  here the round's carried state is a typed record the host holds, because a registered module keeps
-  none, where the WS-7 sketch keeps `Combatant` objects alive inside the envelope.
+  here the round's carried state is a typed record held in the frame of the module loop that calls
+  `round`, for one provider call (A-4; never on a host or adapter), where the WS-7 sketch keeps
+  `Combatant` objects alive inside the envelope.
 
 ## 7. Build order and gates
+
+*(Reconciled, W3-1: this table is the record of the first design. The executable build steps, named tests,
+gates, hash movers, lands-it and tiers are PB's §7 and its implementation section; nothing here lands on its
+own.)*
 
 | step | change | gate (execution artifact) |
 |---|---|---|
 | 1 | `fight.round` and `fight` as a loop over it, drawing from the one stream as now | every existing combat test and season hash unchanged (hash EQUAL); `round` called twelve times by hand equals `fight` at three seeds |
-| 2 | the per-round private stream | a fight run in one call and the same fight run as separate `round` calls from `(seed, r)` give identical outcomes; season pins re-recorded once, declared |
+| 2 | the per-round key `H(fight_key, 'round', r)` (A-30) | a fight run in one call and the same fight run as separate `round` calls from `(fight_key, r)` give identical outcomes; season pins re-recorded once, declared |
 | 3 | `APPROACHES`, the lean, the swept costs *(Reconciled: as PB steps 3a–3e, landed after the combat calibration batch, `U5b_PC_rulings_in_the_fight.md` §5 rows 5 and 7; added gate, pessimist R-6: a state-reading policy beats never-lean by more than the interval in some named matchup)* | all-`normal` byte-identical to step 2; the workbench table: in a mirror no approach outside the control band of `normal`; each approach best in at least one named matchup |
 | 4 | per-party deciders, the widened view, the chooser's NPC decider (returns `normal` until CHAR supplies temperament) | *(Reconciled, A-1 / addendum C-2: the gate is exact, equal plans give the identical outcome and hash whoever supplied them, PB step 4; the reading in expectation below is a balance reading of the choice, not the gate.)* REM-31's equality test green; a scripted NPC decider that differs moves the hash; the fidelity reading: over 300 seeds, the played fighter's felled share under the best of a small set of scripted policies, set beside his share under the NPC decider, with the disjoint-seed band, reported in the commit body |
 | 5 | *(Reconciled, A-4:)* the `duel` callable (the `combat.round` role, nested, cap 1) handed to the field module and called at its window on a reported contact | a seeded field with two planted officers in contact shows one duel round per field turn in the trace and a `DuelContactResult` in the field's result; with the contact report off, the field's hash is unchanged |

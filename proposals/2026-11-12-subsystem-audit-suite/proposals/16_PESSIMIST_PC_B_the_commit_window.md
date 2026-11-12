@@ -2,7 +2,16 @@
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.5) — order only. A-31 (longer fights) lands the damage scale first; this proposal is the second step of the one combat calibration batch and shares its single re-record (`U5b_PC_rulings_in_the_fight.md` §5 row 5); the approach (`03_PC_duel_round_and_approach_B.md` step 3) lands after both. The prototype readings below are re-taken at the new scale before `DEEP_FRAC` ships.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS), §7/§7b (test file, gate
+commands, tier); U3 B15, §4.1 row 56 (REV: the calibration batch lands before the round, UPR §5's own order), §6.2
+(`pF_story.py`, `pP_window.py` are not in the repository); U1 glossary *faculty* (retired as a suite word: "trained
+score" in the prototype table). Changed: the gate's committed form, the cost line, one table label.
+
 ## Status: PROPOSED
+
+Lands in batch: **B15** (PC; the calibration batch), first of the pessimist rows (UPR §5 row 5: PC_B → PC_D → the
+riposte → PC_A), after the A-31 damage scale (`U5b_PC_rulings_in_the_fight.md`). Depends on: nothing unlanded beyond
+that batch's damage scale.
 
 Source: `audits/16_PESSIMIST_PC.md` §1.3, §2.1, §2.6 (F-PES-PC-04, F-PES-PC-02). Bears on
 `03_PC_duel_round_and_approach_B.md` §3 (the approach leans commit depth and the counter) and on the PC
@@ -79,7 +88,7 @@ today, but only because the tier is unreachable; the prototype shows it has work
 | ripostes / binds / grapples per exchange | 14.7% / 5.7% / 18.1% | 16.4% / 6.0% / 27.5% |
 | season-default mirror, A felled (control seeds) | 49.9% (52.1%) | 50.4% (50.1%) |
 | turns, wounding blows, lead-change share | 3.36, 3.18, 34.1% | 3.25, 3.17, 34.3% |
-| faculty 3 against 2, A felled | 34.8% | 37.6% |
+| trained score 3 against 2, A felled | 34.8% | 37.6% |
 | longsword against arming, A felled | 19.2% | 19.8% |
 | rapier against longsword, unarmoured | 52.5% | 52.4% |
 | **A's depth forced to 3.9 / 3.0 / 2.3, A felled** | **45.3 / 49.0 / 54.4** | **52.0 / 47.6 / 51.5** |
@@ -104,7 +113,15 @@ the approach.
 
 ## Gate (execution artifacts)
 
-1. `pF_story.py` F3 re-run: the share of exchanges at or above the deep edge is between a quarter and
+The probes were lane scratch (not in the repository). NEW `tests/valoria/test_combat_deep_commit.py`:
+`test_deep_edge_equals_four_at_full_room` (byte-identity at `range_avail >= RANGE_COMMIT_PEAK`),
+`test_deep_edge_follows_the_window`, `test_share_at_deep_edge_between_a_quarter_and_two_fifths` (gate 1),
+`test_forced_depths_within_interval_after_change` (gate 2). Command:
+`python -m pytest tests/valoria/test_combat_deep_commit.py -q -m combat`; gate 3 is the workbench
+(`systems/combat/combat_engine_v1/workbench/balance.py`, the families named); gate 4 the exporter. Before editing, the
+readers of the two old keys are found by `rg -n "DEEP_COMMIT|LUNGE_COMMIT" modules systems engine tests`.
+
+1. The `pF_story.py` F3 reading, committed as gate 1's test: the share of exchanges at or above the deep edge is between a quarter and
    two fifths for every roster weapon.
 2. The forced-depth reading re-run at n 3,000: no forced depth beats another by more than the interval
    of the difference in the season-default mirror; with `DEEP_FRAC` set so the edge returns to 4.0 the
@@ -130,4 +147,6 @@ forced to the middle by more than the interval; or fewer than one exchange in te
 
 ## Cost class
 
-Small build, with a calibration re-record.
+Small build, with a calibration re-record. Tier: `sonnet`, effort `high`. Hash movers declared: every world with a
+fought scene (the batch's one re-record). Lands it: B15, order the two functions with `DEEP_FRAC`/`LUNGE_FRAC` (at
+full room hash-equal) → the five call sites → the workbench readers → the exporter re-derive.

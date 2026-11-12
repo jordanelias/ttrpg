@@ -1,6 +1,10 @@
 # INST-BYZ-GROUNDING — what the tree's own research adds to the Byzantine design: an ordered plan
 
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (BYZ_G: CONFORMS; "breach kind of `staple` MISSING until COL_A rows land"), §7 (INCOMPLETE: item 2 blocked), 7b.0; `U3_CONFLICT_LEDGER.md` C3-C10 (a held instrument is a `proofs` level); `U5_FINDINGS_CLOSURE_U5d.md` Part 7.2 (BYZANTINE §14 item 4 closed by the synthesis: no barred order). Changed: item 1 reads the audit as a referent when read and a person opens it (X-12; "nothing is docketed by the engine", VENICE-C §4), so its runtime row and gate no longer docket a matter; item 2's kind is decided at the kit (**the kit emits no breach kind**: `breaches` is a read, SYNTHESIS-A §4; a breach of a forbearance is the forborne act's own success kind, read from COLONIAL-A's `staple` row at landing), and the row ships off until the place filter PAPACY-C requests exists; item 3's last reading and item 5.3 follow the closed §14 item 4; item 4 reads `proofs` levels.
+
 ## Status: PROPOSED (an executable plan for a later session; ratifies nothing; nothing here is built)
+
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B40** (`U3_DEPENDENCY_ORDER.md` §1 item 40, "the four grounding files"), after BYZANTINE-F. Depends on: `15_INSTITUTIONS_BYZANTINE_A` to `_F` (B32, B33, B40), `15_INSTITUTIONS_VENICE_C` (B32, the `audit_at_exit` key), `15_INSTITUTIONS_COLONIAL_A` (B32, the `staple` form) and `_C` (B33, the `audit` row), SC-P8 (`05_SC_evidence_and_rebuttal_B.md`, `12_ARCS_cited_evidence.md`, B24). Lane tag: FA. Tier: `sonnet`, item by item, effort `medium` (items 1, 2) and `high` (items 3, 4); one `opus` read of item 1's band table. Named test: `engine/season/tests/test_inst_byz_g.py` for the hand-built gates of items 2 and 4; items 1 and 3 are runs of `harness/institution.py` quoted in the commit. Standing sentences: *Pool*, *Failure writes*, *Draw keys* — the plan adds no roll, row or draw (A-6 to A-8, A-81, A-30 are the composed verbs').
 
 Source: `audits/15_INSTITUTIONS_BYZANTINE.md` §18 (the re-grounding of 2026-11-12);
 `unified/RESEARCH_MAP_INSTITUTIONS_A.md` §1, §3, §4. Composes on proposals `15_INSTITUTIONS_BYZANTINE_A`
@@ -16,10 +20,10 @@ mechanism; the citation says why the shape is worth building, never that a behav
 
 | item | change at runtime | when absent |
 |---|---|---|
-| 1 audit at exit on fiscal and frontier seats | a hearing is docketed when the `hold` on three named seats closes | hash EQUAL |
+| 1 audit at exit on fiscal and frontier seats | when the `hold` on three named seats closes, the departed holder is read as an `audit` referent on the questions of those who may open (`world_q.audits_due`); a person opens the case or not | hash EQUAL |
 | 2 the treaty gate's goal | NPC-090 forms `open_case` against persons he knows breached the treaty staple | his present orientation row stands; no case forms |
 | 3 readings (five lines in the scenario report) | none: the report reads the log | — |
-| 4 the precedent file | none new: a gate that the existing `evidence` term reads an entered instrument | — |
+| 4 the precedent file | none new: a gate that a cited entered instrument is a `proofs` level | — |
 | 5 design-first notes for batch G | none | — |
 
 Items 3 and 4 change nothing at runtime and say so.
@@ -65,20 +69,24 @@ foreign seats are audited by the far superior's seat (`off_altonian_court`, synt
 is who "may open" under X-12's rule; whether that seat's holder does is his own choice.
 
 *What is drawn.* The hearing is X-12's `audit` row: graded verdicts, the SC lane's obstacle, the
-departed holder's `requisition` and `transfer` Events as `evidence`. Nothing here adds a term.
+departed holder's `requisition` and `transfer` Events as cited items (`proofs` levels for whichever side
+cites them, C3-C10). Nothing here adds a term. Nobody is made to open it: `audits_due` offers the
+referent and the chooser decides (VENICE-C §4).
 
 *Depends on.* `15_INSTITUTIONS_VENICE_C_roll_lot_ballot.md` or `15_INSTITUTIONS_COLONIAL_C_audit_and_charter.md`
 landing the key and the row (whichever the synthesis's plan schedules first); proposal B for a
 treasurer who has collected anything.
 
 *Gate (execution artifact).* On the `roga` case file (proposal F), seeds 0 to 199: plant a `revoke`
-of the treasurer in season 4. Read: a matter docketed under `audit` naming her in every seed in
-which the `revoke` closes the hold; verdict bands over seeds, none empty and none above 0.9; in the
-arm where she collected nothing, the `evidence` term reads 0. *Control:* the three lines absent,
-`content_hash` equal to proposal F's own run.
+of the treasurer in season 4. Read: an `audits_due` referent naming her on the questions of those who
+may open, in every seed in which the `revoke` closes the hold; an `open_case` under `audit` in some seeds
+and not all (a person's choice); over the seeds where a case opened, verdict bands none empty and none
+above 0.9; in the arm where she collected nothing, her side's opponent files no `proofs` item of her
+collections. *Control:* the three lines absent, `content_hash` equal to proposal F's own run.
 
-*Falsifier.* If the audit is docketed in a seed where the hold did not close (the `revoke` drew
-Failure), the occasion is wrong. If the verdict distribution is the same with and without recorded
+*Falsifier.* If the referent appears in a seed where the hold did not close (the `revoke` drew
+Failure), the occasion is wrong. If a case opens in every seed in which the hold closed, the engine is
+docketing (a trigger, not a person). If the verdict distribution is the same with and without recorded
 collections, the hearing reads nothing and the item is decoration.
 
 *Cost.* edit (content), once X-12's key exists.
@@ -107,11 +115,14 @@ Inquisitors' and the Riskbreakers' rows already use (`object: {kind: deed_doers,
       strictness is a goal at all. Revert: delete the row.]
 ```
 
-The kind in angle brackets is **not invented here**. It is the Event kind the kit emits when an
-instrument of form `staple` is breached (synthesis X-09, X-10: `breaches` over forms; the form is
-`15_INSTITUTIONS_COLONIAL_A_instruments.md`'s). The executor reads that proposal's emitted kind and
-writes it; the loader refuses a kind outside `data/verbs.py::DEED_KINDS`, which is the check that it
-exists.
+The kind in angle brackets is **not invented here**, and it is not a breach kind: the kit emits none
+(`world_q.breaches` and `person_q.kept` are reads, SYNTHESIS-A §4; COLONIAL-A edits 5, 6). A breach of a
+`staple` is a forborne act done by a bound party over the clause's ground, so the row's `kinds:` is the
+success kind of the act the `staple` row's `forbears` clause names (`15_INSTITUTIONS_COLONIAL_A`'s row,
+read at landing); the loader refuses a kind outside `data/verbs.py::DEED_KINDS`, which is the check that
+it exists. That kind is done everywhere, not only past the gate, so the row **ships off** until
+`data/goals.py` gains the place filter PAPACY-C requests for its own `deed_doers` row (deeds whose claim
+subject lies under a named rung); with the filter, the row's `under:` names the treaty ground.
 
 *Gate.* Hand-built on the realm with `foreign=True`: one person holds a claim of a breach by a
 merchant; the Kommerkiarios is told it. Over 200 seeds his chooser forms `open_case` against the
@@ -134,7 +145,7 @@ from the log, with what would show the story did not occur.
 | **what the hand took** | `transfer` Events received by a holder of a `passes_through` seat from the makers of instruments then in that hand | the purchased toll-post, "maximally vulnerable to legislative removal once visible" (`research/rise_to_power_roster_system_research_v1.md:493-497`) | no such transfer in any seed, or no difference in entry rate between papers with and without one |
 | **the servant after the reign** | after a `succeed` on a seat, the `revoke`s by the new holder against seats on its `passes_through`, split by whether each old holder also holds a dignity | the succession cascade, sparing those with "independently-earned transferable Standing" (`rise_to_power…:391-394`) | the split shows no difference over seeds |
 | **what he kept** | stores at rungs a departed hand's holder moved goods to, before and after his `hold` closed | the endowment that "is NOT auto-stripped" (`rise_to_power…:292-294`) | — (a count; reported, not gated) |
-| **the lord who outgrew his minister** | `revoke`s of a chamberlain-class seat by the holder of the seat it serves, with no opposing act | Basil Lekapenos' removal, "distinctively non-violent" (`rise_to_power…:256-258`) | only meaningful if §14 item 4 is taken as (B); otherwise omitted |
+| **the lord who outgrew his minister** | `revoke`s of a chamberlain-class seat by the holder of the seat it serves, with no opposing act | Basil Lekapenos' removal, "distinctively non-violent" (`rise_to_power…:256-258`) | omitted: §14 item 4 is closed with no barred order (`U5_FINDINGS_CLOSURE_U5d.md` 7.2), so no chamberlain class exists to read |
 
 *Gate.* The report prints the first two on `chancery` and `roga` at seeds 0 to 19. *Control:* the
 same lines on the base realm print zeros (no `passes_through`, no `acclamation`).
@@ -146,14 +157,15 @@ same lines on the base realm print zeros (no `passes_through`, no `acclamation`)
 *Mechanism and source.* "The excerpts on embassies constitute a precedent file, which is a
 negotiating advantage before either party speaks" (`06-part-V-dossiers.md:39`).
 
-*Decided.* Nothing is added. Proposal C makes an entry a Record a hand's holder holds; SC's cited
-evidence (`05_SC_evidence_and_rebuttal*.md`, the SC-P8 the audits cite) lets a held Record enter the
-`evidence` term. The plan is to show that the two compose.
+*Decided.* Nothing is added. Proposal C makes an entered instrument a sealed Record a hand's holder
+holds; SC's cited evidence (`05_SC_evidence_and_rebuttal*.md`, the SC-P8 the audits cite) lets a held
+Record be filed as an item, which enters the roll as a `proofs` level (C3-C10). The plan is to show
+that the two compose.
 
 *Gate.* A planted hearing before the Sovereign's seat on a petition to amend the founding papers,
 two arms over 200 seeds: the clerk cites an entered instrument he holds; he cites nothing. The
-exact `evidence` term differs between arms (no draw needed to see it) and all four bands occur in
-both. *Falsifier.* Equal terms: an entry is not citable and proposal C's "the entry is the proof"
+recorded `proofs` levels differ between arms (no draw needed to see it) and all four bands occur in
+both. *Falsifier.* Equal levels: an entry is not citable and proposal C's "the entry is the proof"
 is prose.
 
 *Cost.* small build (a test fixture), after C and SC-P8.
@@ -174,9 +186,10 @@ must contain when it is designed, so that it is designed once.
    resolvers"); the age of the grant is a term in the odds of revoking it
    (`research/fa_se_historical_precedent_research_v1.md:262-266`); the centre "that intervenes early
    still wins cleanly" (`rise_to_power…:526`).
-3. **The barred servant is an oath, and has two endings.** Audit §14 item 4 and §18.3 C-2, C-4.
-   If Jordan takes (B), the form is the ruled one (an oath of renunciation as a collateral of the
-   succession rule), and the readings of item 3 are its gate.
+3. **The barred servant is an oath, and has two endings.** Audit §14 item 4 and §18.3 C-2, C-4. Closed
+   by the synthesis with no barred order (the deed order bars a clerk by his odds;
+   `U5_FINDINGS_CLOSURE_U5d.md` 7.2); the 2026-07-12 closure's ruled form (an oath of renunciation as a
+   collateral of the succession rule) is recorded here for batch G should a design reopen it.
 4. **A settler garrison answers a muster by its own regard.** `proactive_governance…:104`;
    `research/pre_firearms_formations/04_high_medieval.md:156`. An interface to the MB and FA lanes:
    the answer to a `dispatch` is the addressee's draw. Not designed here.
@@ -190,7 +203,7 @@ must contain when it is designed, so that it is designed once.
 | # | file (owner of the fact) | edit | item |
 |---|---|---|---|
 | 1 | `engine/season/offices.yaml` | `audit_at_exit: audit` on `off_lord_treasurer`, `off_katepano`, `off_kommerkiarios` | 1 |
-| 2 | `engine/season/goals.yaml` | the row `goal_kommerkiarios_side_roads`, with the kit's breach kind | 2 |
+| 2 | `engine/season/goals.yaml` | the row `goal_kommerkiarios_side_roads`, with the `staple`'s forborne success kind; shipped off until the place filter | 2 |
 | 3 | the scenario report of `15_INSTITUTIONS_SYNTHESIS_D_first_playable.md` §1 (harness) | five reading lines | 3 |
 | 4 | a test fixture beside proposal C's gate | the two-arm hearing | 4 |
 

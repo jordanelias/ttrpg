@@ -1,5 +1,10 @@
 # MB · a unit's own prowess: columns of its row, one function that composes its pool, and no baseline lent by its side
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AND_VOCABULARY.md` D-U1-11p (*prowess* is a unit's quality only: already so), D-U1-11o and `U1_GLOSSARY.md` *band* (§1's "subformation" row is the unit's **formation**, its cell arrangement, and `bands` is `layers`), `R1_READ.md` §1.2 (CONFORMS; "no function sums it over an army" stays the author's CONVENTION); `U3_DEPENDENCY_ORDER.md` (node B31; `Depends on:` / `Lands in batch:` added; INCOMPLETE item 1 closed by order, since the troop file lands in B17 before B31). **Order note:** U3's node table puts this file in B31, but 27B-1 and 27B-2 are `04_MB_cr12_linear_law.md` step 2 ("one function returns the pool's base term", that file's first `Folded:` item) and `U5b_MB_rulings_in_the_field.md`'s head item (3) places them in the field calibration batch; so 27B-1/27B-2 land in B19 with CR-12 step 2 and 27B-3/27B-4 in B31 (reported for U3/U4).
+
+**Depends on:** 27B-1/27B-2 on nothing unlanded (they are CR-12 step 2); 27B-3/27B-4 on `04_MB_unit_loadout_and_weapon_in_hand_B.md` stage 1 (B17); gate 2 on `04_MB_campaign_party_economy.md` §1 (B31); gate 5 on `04_MB_cell_hierarchy_as_data.md` (B19).
+**Lands in batch:** 27B-1, 27B-2 in B19 (`B19-mb-field-calibration`, first, with CR-12 step 2); 27B-3, 27B-4 in B31 (`B31-mb-loadout-economy`, last; U3 §4.1 row 80).
+
 ## Status: PROPOSED
 
 Lane MB (the Record's key set is IN's; the carry leaf is PC's). Serves ruling **A-59**
@@ -54,7 +59,7 @@ it; that literal becomes a troop row with the same values, so nothing moves ther
 | equipment | the arm in hand: `primary` or `secondary`, with its `class` | troop row, unit row override of `secondary`; state `Subunit.in_hand` | reach, support ranks, melee or missile (`…_B.md` §2, §4) |
 | | `armour` tier | troop row | die-equivalents against the attacker's net (`16_PESSIMIST_MB_partition_and_the_pair_rule.md` edit 3); the rally step |
 | | the load | `strength` against the masses carried | `(fatigue_factor, step_factor)` on the column ledger's drain and rest and on the step (`…_B.md` §5; `26_MASS_BATTLE_movement_and_fatigue_as_data.md`) |
-| subformation | `ranks`, `files`, `shape`, `distribution`, `bands` | unit row, defaults on the troop row (`04_MB_cell_hierarchy_as_data.md` §2, §4) | frontage, support depth, fatigue damping, shock absorbed, the wrap resisted |
+| subformation (A-59's word; the unit's **formation**, its cell arrangement, D-U1-11o) | `ranks`, `files`, `shape`, `distribution`, `layers` (was `bands`) | unit row, defaults on the troop row (`04_MB_cell_hierarchy_as_data.md` §2, §4) | frontage, support depth, fatigue damping, shock absorbed, the wrap resisted |
 | tactics | `role` and its instructions, `stance`, `standing_orders`, `post` | unit row | the stance term, brace, yield, targeting; applied through `obey` (`27_MB_A`) |
 
 Nothing in the table is new except the last column's statement of where it is read.
@@ -89,7 +94,7 @@ dealt    = K_LINEAR * frontage(pair) * PAY_PER_NET * max(0, net) * (1 + quality)
   changes what his unit does and whether it stands; he does not add to its dice.
 - **Numbers are not in it** (A-60). They are in `frontage(pair)`, in the depth that rests a column, and in how
   long the body lasts.
-- **Subformation and tactics are not multipliers on prowess.** They decide which of the unit's cells are in
+- **Formation (A-59's "subformation") and tactics are not multipliers on prowess.** They decide which of the unit's cells are in
   the pair, how many ranks support them, which arcs are exposed and which levels apply. That is the sense in
   which prowess is "impacted by subformation with tactics": the same row fights differently four deep than
   one deep, braced than advancing.
@@ -229,10 +234,9 @@ closing critique.
 
 **INCOMPLETE, with what is missing.**
 
-1. *27B-3 and 27B-4*: `references/troops.yaml`, `tools/export_troops.py` and `troop_types/table.py` do not
-   exist. Missing: loadout B stage 1. Until then the `infantry` row can be carried as one more entry of
-   `TROOP_TYPE_STATS` (`troop_types/registry.py:44`), which makes 27B-3 codable today at the cost of a second
-   move later; the builder chooses and says which.
+1. *(Closed by order, W3-1.)* 27B-3 and 27B-4 need `references/troops.yaml`, `tools/export_troops.py` and
+   `troop_types/table.py`, which loadout B stage 1 creates in B17; they land in B31, after it, so the interim
+   `TROOP_TYPE_STATS` entry is not needed.
 2. *The drill step* (a cohort's `arms` rank as a step on `power`): no read is specified by any proposal
    (`14_VERBS_MILITARY_B_train.md` §1 item 3 hands it to MB; the first MB audit's step 8). It is a design
    only. Missing: the size of the step, its cap, and the host-side read in `_order_of_battle`. Not built by

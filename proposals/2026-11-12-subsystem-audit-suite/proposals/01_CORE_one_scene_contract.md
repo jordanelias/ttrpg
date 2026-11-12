@@ -2,7 +2,11 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-03, C-U5a-04) — Edit 3: `decide=None` does not mean the module's own policy. It asks the decider the host builds for that person from `decision/` (sampled through `_sample_order`, never a top-score pick: `18_DETERMINISM_SWEEP.md` D-06), and a module default is the named interim until one exists; the outcome carries a typed `trace`; the closed choice tuple is exported (`11_GO_player_surface_contract_B.md` §6 rules 2–4, which govern). Edit 1's role-keyed `deciders` mapping is the one `PlayHost` shape: `05_SC_playable_hearing_B.md` edit 4 reads it. Edit 5 (the player is shown all his questions) is the register's D-62, option B; it lands on that answer and is dropped on A.
 
-Folded: 2026-11-12 by `audits/28_SCENE_ACCESS.md` (rulings A-63, A-64). Nothing here is deleted; two statements are added. (1) **A played scene has two people in it.** Under A-63 a face-to-face scene engages its counterparty for that round. Edit 4's `play(…, apply=True)` runs the act through the season's own fold, so the `occupied` clause and the counterparty's received-scene debit apply to a standalone scene exactly as in a season; with `apply=False` the provider is called directly, neither is asked, and the runner's output must say so (`28_CORE_scene_access_A_occupancy_and_precedence.md` §2, §3). (2) **Edit 5's list of questions is where a host is asked.** An ask for audience addressed to the player's person, and the claim that a visitor was kept waiting at his door, arrive in `View.questions`; granting is his own `commit`, formed from the Candidates an NPC host is offered (`28_CORE_scene_access_B_appointments.md` §6). No host-side decider is added to `PlayHost`: whether a visitor is seen first is the fold's precedence draw, not a decision of the person visited.
+Folded: 2026-11-12 by `audits/28_SCENE_ACCESS.md` (rulings A-63, A-64). Nothing here is deleted; two statements are added. (1) **A played scene has two people in it.** Under A-63 a face-to-face scene engages its counterparty for that round. Edit 4's `play(…, apply=True)` runs the act through the season's own fold, so the `engaged` clause and the counterparty's received-scene debit apply to a standalone scene exactly as in a season; with `apply=False` the provider is called directly, neither is asked, and the runner's output must say so (`28_CORE_scene_access_A_occupancy_and_precedence.md` §2, §3). (2) **Edit 5's list of questions is where a host is asked.** An ask for audience addressed to the player's person, and the claim that a visitor was kept waiting at his door, arrive in `View.questions`; granting is his own `commit`, formed from the Candidates an NPC host is offered (`28_CORE_scene_access_B_appointments.md` §6). No host-side decider is added to `PlayHost`: whether a visitor is seen first is the fold's precedence draw, not a decision of the person visited.
+
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.1 rows (CONFORMS with a wording ambiguity; Edit 4 AMBIGUOUS), §2 rows A-48, A-30, A-4/A-72, §7, §7b-3, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-11b, ledger P-01, R-35, S-16; `unified/U1_GLOSSARY.md` *scene*; `unified/U3_CONFLICT_LEDGER.md` §9; `unified/U3_DEPENDENCY_ORDER.md` node B34). Changed: Edit 3's "the entry asks the decider the host built" (here and in the U5a line above) is rewritten — a registered module holds no state and cannot ask the host: the **wrapper** resolves the person's decider and passes it as `decide=`; Edit 4's `apply=False` calls `seam.contest` (so the depth cap and the one ladder run), not the provider; the seed becomes the keyed stream `draw_factory(seed, tick)(person, purpose)` (A-30; `engine/season/state/ids.py:49`); Edit 5 lands (A-48 B: the player sees a list of questions; NPCs take the first); `deciders` carries the nesting cap (A-4, A-72: a battle may call one duel round, a duel round calls nothing; `Refusal(depth_cap)`, D-U1-11b); the fixture `duel` is specified; named tests; lands-it and tier. A module's playable form is a **scene instance** (glossary), the `04` §B.9 `Scene` keeps its own sense.
+
+**Lands in batch:** B34. **Depends on:** `05_SC_playable_hearing_B.md` (B24; its decider reads `deciders`), `11_GO_player_surface_contract_B.md` (B34), `engine/dice_engine/draw.py` and the A-30 key (B06), `28_CORE_scene_access_A_occupancy_and_precedence.md` (B28; the `engaged` clause the Folded line names).
 
 ## Status: PROPOSED
 
@@ -55,7 +59,12 @@ class PlayHost:
 
 `decide` (today's single field) becomes `deciders["combat.fight"]`; a constructor argument `decide=`
 is kept for the three existing callers and maps to that key. A role with no decider is automated for
-that host, so a client may play fights and leave hearings to the engine.
+that host, so a client may play fights and leave hearings to the engine. **The nesting cap (A-4, A-72):** a
+role invoked from inside another role's call (a duel round called from a field) is reached through
+`seam.contest` at `depth + 1`; beyond `Fixtures.contest_nesting_cap` (1, U1 ledger P-01) the call returns the
+typed `Refusal(depth_cap)` (D-U1-11b), so a battle may call one duel round and a duel round calls nothing.
+The person-supplied decider handed through the adapter is one declared class of adapter input (A-4; its
+Layer 1 text is owed, `OWED_TO_UNIFICATION.md` §A).
 
 ### 2 · owner `engine/season/seam/wrappers/_entry.py` — the party test, once
 
@@ -74,13 +83,15 @@ modules do, and no module is touched by this proposal.
 A module entry that can be played has the signature `fn(inp, rng, *, decide=None) -> outcome` and
 exports, from its own package: a frozen view type (what the decider is shown: the person's own state and
 what he perceives, never the opponent's true state), and a closed tuple of choices
-(`modules/combat/wrapper.py::TURN_CHOICES` is the precedent). With `decide=None` the entry asks the
-decider the host built for that person (his own, sampled; see the `Reconciled:` line); a module default
-is the named interim. `decide` draws nothing, writes nothing and holds no token (`PlayHost`'s existing rule). The
+(`modules/combat/wrapper.py::TURN_CHOICES` is the precedent). A registered module holds no state and does
+not ask the host (`holonic` §45; `04` §A.2): the **wrapper** (`seam/wrappers/<m>.py`, the adapter) resolves
+the person's decider — `played_by(host, role, parties)`, else the sampled decider the host builds for that
+person from `decision/` (`_sample_order`, D-06) — and passes it as `decide=`; with neither, the entry runs
+its named interim policy. The module only calls what it is handed. `decide` draws nothing, writes nothing and holds no token (`PlayHost`'s existing rule). The
 witnessed fidelity the doctrine names is a decider that returns the module's own policy choice after
 being shown the view: no third mode is built.
 
-### 4 · owner new `engine/season/harness/scene.py` — a module's scene, alone
+### 4 · owner new `engine/season/harness/scene.py` — a module's scene instance, alone
 
 ```python
 def play(role: str, fixture: dict, *, seed: int = 0, decide=None, apply: bool = False) -> dict
@@ -94,6 +105,16 @@ ladder grades it at; or (b) `apply=True`: runs a one-act season with that act as
 return, so the fold's `writes_at(degree)` and emissions happen and the returned world carries the
 consequences. Both use `host=PlayHost(persons={actor}, deciders={role: decide})` when `decide` is given.
 It is an instrument; it adds no rule and reads no file a module does not already receive.
+
+**(a) restated (R2 §7b-3):** `apply=False` calls `seam.contest(w, rung, prize, claimants, depth=0,
+max_depth=fixture["max_depth"], causes=[], verb=…, subject=…, rng=…, host=…)` (`seam/contest.py:182`), not
+`provider.resolve`, so the depth cap and the one ladder run and the degree is the one ladder's. **The
+seed:** the generator is the keyed stream `draw_factory(seed, tick)(person, f"{role}:{act_id}")`
+(`engine/season/state/ids.py:49`; A-30: one draw per key, no recorder), not `random.Random(seed)`; the
+combat seam's `random.Random(seed)` (`seam/wrappers/combat.py:394-395`) is replaced in the same edit.
+**Fixtures:** `harness/scene.py::FIXTURES`, a dict keyed by name; `duel` is `harness/headless.py::build_world(seed)`
+(`:51`) with an authored `fight` act between its first two persons and `max_depth: 0`
+`[ASSUMPTION: the fixture's world; basis: the headless builder is the precedent named above]`.
 
 `python -m engine.season.harness.scene combat.fight --fixture duel --seed 0` is the entry point a
 subsystem's standalone instructions cite.
@@ -115,6 +136,13 @@ slate object is built.
 2. A season run with `PlayHost(deciders={})` and one with no host produce one content hash.
 3. For each module that later accepts `decide`: the same two controls, and a planted deviating decider
    that moves the result.
+
+**Named tests** (new, `engine/season/tests/test_scene_contract.py`): `test_echo_decider_equals_no_decider`
+(1); `test_empty_deciders_is_hash_equal_to_no_host` (2); `test_a_deviating_decider_moves_a_played_module`
+(3, per module as it lands); `test_apply_false_goes_through_seam_contest` (a planted `max_depth` 0 call is
+refused `Refusal(depth_cap)` for a nested role); `test_a_duel_round_called_from_a_battle_may_not_call_a_third_scene`
+(A-72); `test_the_wrapper_not_the_module_resolves_the_decider` (a source scan: no `modules/` file names
+`PlayHost`).
 
 ## Falsifier
 
@@ -138,3 +166,8 @@ season's result for the same act, world and seed.
 
 Edits 1, 2, 5: edit. Edit 4: small build. Edit 3: each module lane's own build, design-first where the
 module has no per-turn choice yet (mass battle's orders, the hearing's moves).
+
+**Lands it and tier.** The B34 batch, an IN `valoria-author` session on `sonnet` (`high`), closed by B34's
+`methodology-close` with its terminal `opus` critique once. Edit 5 lands (A-48 B). **Hash movers.** None with
+no host (gate 2 is the control); the combat seam's stream change is a mover only if B06 has not already keyed
+it (then it is B06's).

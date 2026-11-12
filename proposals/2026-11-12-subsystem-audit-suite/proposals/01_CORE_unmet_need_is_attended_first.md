@@ -1,5 +1,9 @@
 # CORE — within his own purview, a person attends to an unmet need before routine news
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.1 row (CONFORMS, with the read lane's assumption), §7 (INCOMPLETE: no named test, no hash values), §7b-17, §7b-T; `unified/U3_DEPENDENCY_ORDER.md` node B10). Completed: a named test; the standing-rule reading stated at the site (the tier-1 order is an attention order that admits a question, and the act is still drawn by the chooser's sampler, A-9; it decides no consequential outcome) `[ASSUMPTION: an attention order is bookkeeping — basis: R2 §1.1]`; the hash re-records are named as readings the batch takes on its base; lands-it and tier. No other change.
+
+**Lands in batch:** B10, with and before `02_CHAR_goal_lean_on_its_own_question.md` (gate 2 reads both). **Depends on:** B09.
+
 ## Status: PROPOSED
 
 Source: `audits/01_CORE_audit_addendum_B.md` F-CORE-20. Read at `785bc62`.
@@ -61,7 +65,10 @@ otherwise. The stem is read from its owner; no predicate is spelt at the site. T
 sentence is replaced by the rule. `[ASSUMPTION; medium; Jordan to correct; revert: (1, 0.0)]`.
 
 It is a rule about a class of claim, not about a person, a place or an outcome: any holder of any rung
-or seat whose ground records a shortfall is subject to it, and nothing is forced to happen.
+or seat whose ground records a shortfall is subject to it, and nothing is forced to happen. The order is a
+fixed sort of the questions he attends to, not an outcome: which act he takes about the question is still
+the chooser's sampled draw (A-9; the standing rule), and the `need` it reads is his own held claim's value
+(his ledger), so no omniscience enters (`04` §A.2's `world_q` row; PART D row 42).
 
 ## Gate (execution artifacts)
 
@@ -73,8 +80,13 @@ or seat whose ground records a shortfall is subject to it, and nothing is forced
    hungry town at two or more of the three seeds, and none with the steward's `hold` removed
    (`scarce.build(steward_holds=False)`, the harness's own control). Alone, this edit's reading is one
    of three, as measured above.
-3. The realm: `corpus_run` seed 0 and a two-season `build_realm(0)` hash are re-recorded, said plainly
-   as re-records.
+3. The realm: `corpus_run` seed 0 and a two-season `build_realm(0)` hash are re-recorded in
+   `engine/season/tests/_realm_goldens.py` (`01_CORE_tests_one_golden_owner.md`), said plainly as re-records;
+   the values are read on the batch's base, not typed here.
+4. Named test (new, `engine/season/tests/test_attention_key.py`):
+   `test_a_shortfall_claim_sorts_first_larger_first_in_tier_one` (a hand-built holder with two shortfall
+   claims of 8 and 15 and a routine `stores.changed` claim, all tier 1: the 15 first, then the 8, then the
+   routine one) and `test_tier_two_order_is_unchanged`.
 
 ## Falsifier
 
@@ -97,6 +109,10 @@ carries it).
 ## Cost class
 
 Edit (one line and a docstring), hash mover; its second link is the CHAR lane's proposal.
+
+**Lands it and tier.** The B10 batch, an IN `valoria-author` session on `sonnet` (`high`), closed by B10's
+`methodology-close` once. **Hash movers.** Every world in which a tier-1 holder holds a shortfall claim
+(declared; re-pinned once with B10).
 
 ## Dependency edges
 

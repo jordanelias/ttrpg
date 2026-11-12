@@ -6,13 +6,17 @@ Re-grounded: 2026-11-12 against the tree's research (`unified/RESEARCH_MAP_INSTI
 
 Reconciled: 2026-11-12, U5d closure — folded **A-13**: `audit_at_exit` is a ruled seat fact; a seat declaring none is not audited. No step changes.
 
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (COL_C: closing arm AMBIGUOUS, fallback stated; `audited` stale), §2 (A-39 row), §7, 7b.0, 7b.7 ("`audited` -> `audit_at_exit`; `quo_warranto` closing arm: take the file's fallback … unless the conferring seat's `revocation` basis reaches"); `U3_CONFLICT_LEDGER.md` C3-C10 (`proof_step` is deleted; a cited Record is a `proofs` level); `U1_OWNERS_AND_VOCABULARY.md` D-U1-11k (`distance`). Changed: the body now follows this file's first `Reconciled:` line (`audit_at_exit: audit`, `world_q.audits_due`; `audited:` removed); `quo_warranto` ships the fallback (`ban` at Overwhelming and Success) and the closing arm requested of SC is withdrawn (where the grantor's seat holds a `revocation` basis over the conferred seat, his own `revoke` is the route, `04` §C.2 T-o); the appeal is on new grounds only (A-39); the gate's control is `proof_level: None`; `remove` → `distance`.
+
 ## Status: PROPOSED
+
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B33**, after COLONIAL-B (`U3_DEPENDENCY_ORDER.md` §1 item 33). Depends on: `05_SC_acquittal.md` and `05_SC_arrangement_rows_that_bind.md` (B27: SC-P6, SC-P4's band map), `05_SC_obstacle_difficulty_and_modifiers_B.md` (B05), `06_FA_seat_terms_and_turnover.md` (B21, FA-P3), `15_INSTITUTIONS_VENICE_C` (B32, `audit_at_exit` and `audits_due`); CR-60 and CR-61 are v11 plan positions, MISSING until `STAGES.md` step 5 (the realm reading waits on them). Lane tag: FA. Tier: `sonnet` producer, effort `high`; one `opus` read of the 400-and-400 arms. Named test: `engine/season/tests/test_audit_and_charter.py` (as named below). Standing sentences: *Pool* — the bench's `determine` is SC's roll on the one pool rule (A-6, A-7, A-8). *Failure writes* — an audit's Failure is an acquittal, whose quittance is a Record the officer holds and the room witnessed (A-81). *Draw keys* — no draw is added (`determine`'s key is SC's, A-30).
 
 Source: `audits/15_INSTITUTIONS_COLONIAL.md` §2.1, §6.2, §8, §12 batch C-3. Depends on and does not redo:
 SC-P4 (`proposals/05_SC_arrangement_rows_that_bind.md`: a band-keyed `disposes:`), SC's hearing reach
 (`05_SC_playable_hearing_B.md`; hole row H-254), `05_SC_acquittal.md`, `05_SC_evidence_and_rebuttal_B.md`
 (evidence as a weighted, answerable term; **that file's deterministic entry is the SC lane's to repair
-under the standing rule; this file uses only the `evidence` term's sign and unit**), SC-B (the obstacle
+under the standing rule; this file uses only the item weight that enters the roll as `proofs` levels, C3-C10**), SC-B (the obstacle
 form), FA-P3 (`06_FA_seat_terms_and_turnover.md`: `term:` on an `offices.yaml` row), FA-P1
 (`06_FA_decree_binds.md`: the recall occasion; it names "the Recall as a scene" and "`Submit to audit`"
 as not built: this file is those two). Nothing is ratified by being written.
@@ -21,8 +25,8 @@ as not built: this file is those two). Nothing is ratified by being written.
 
 1. `open_case` may docket a matter under two new arrangement rows, `audit` and `quo_warranto`. A
    `determine` under either **rolls**, as every `determine` does, and opens what its band names.
-2. Under `quo_warranto`, an instrument whose form `hardens` weighs more as evidence the longer it has
-   been held.
+2. Under `quo_warranto`, an instrument whose form `hardens` weighs more as a cited item (`proofs` levels)
+   the longer it has been held.
 3. A seat conferred by a grant carries the grant's term (content; FA-P3's mechanism).
 4. With no matter docketed under either row nothing moves (the rows are data; a computed `open_case`
    writes `DOCKET_ARRANGEMENT: None` today, `05_SC_arrangement_rows_that_bind.md` problem 3, and CR-60 /
@@ -60,7 +64,7 @@ and SC-P4's mapped `disposes:`.
     records_dissent:    true
     venue_min_rank:     settlement
     term_required:      true
-    appeal_basis:       determine
+    appeal_basis:       determine       # admitted on new grounds only (A-39)
     interposed:         [office, procedure, document]
     order:              rank
     proofs:             [testimony, record]
@@ -76,12 +80,12 @@ and SC-P4's mapped `disposes:`.
     records_dissent:    true
     venue_min_rank:     duchy
     term_required:      true
-    appeal_basis:       determine
+    appeal_basis:       determine       # admitted on new grounds only (A-39)
     interposed:         [person, procedure, document]
     order:              rank
     proofs:             [record, testimony, oath]
     standard:           demanding
-    disposes:           {Overwhelming: release, Success: release, Partial: oblige}
+    disposes:           {Overwhelming: ban, Success: ban, Partial: oblige}   # the fallback, taken
     disposal_reach:      realm
 ```
 
@@ -95,38 +99,37 @@ Notes on the cells, each `[ASSUMPTION; medium; this lane's; a data edit reverts 
   until a Record disposal site exists [`arrangements.yaml:270-271`], so this cell waits on that site and
   is inert before it); Failure → nothing is opened and `05_SC_acquittal.md`'s quittance is the officer's.
 - `quo_warranto`, by the band of the bench's `determine` on "the holder has no warrant": Overwhelming and
-  Success → the conferred seat's `hold` is closed. **`release` is not a `disposes:` value today** (the
-  enum is `<tenure kind> | Record | none`, `arrangements.yaml:27-28`): a *closing* disposal is a
-  new cell value this row needs and SC-P4 does not supply. Stated as the one code dependency this file
-  adds to the SC lane: `loop/effects_information.py::_disposal` gains a closing arm for a row whose
-  band cell is `release`, closing the `hold` the docketed matter names under the gate's existing
-  `determination` closure basis (`arrangements.yaml:198-200` records that arm admitting a bench's
-  closure of a `ban`) [UNVERIFIED: that the basis admits a `hold`; if it does not, the row ships with
-  `Overwhelming: ban, Success: ban` on the holder from that one seat, which FA-P3's scoped ban makes
-  equivalent]. Partial → the grant stands for a fee: an `oblige` whose `due` is one `transfer.made` to
+  Success → a `ban` on the holder from that one seat (FA-P3's scoped ban bars him from the conferred seat
+  and its like), **the file's own fallback, taken** (`R4_READ.md` 7b.7). `release` is not a `disposes:`
+  value (the enum is `<tenure kind> | Record | none`, `arrangements.yaml:27-28`) and no listed gate basis
+  lets a bench close a `hold` (`04` §C.2), so the closing arm once requested of SC is withdrawn. Where
+  the grantor's own seat holds a `revocation` basis over the conferred seat (T-o, `04` §C.2), the
+  calling-in can also be his `revoke`, an act with its own draw (BINDING-C); the bench is the route when
+  it does not. Partial → the grant stands for a fee: an `oblige` whose `due` is one `transfer.made` to
   the grantor's rung. Failure → the grant stands; the docket's closing Record is the holder's evidence
   in any later calling-in.
 
 **2. Who may open, and where** — no new predicate; three facts already asked:
 
 - `open_case` is `remit:determine` (`verb_table.yaml`). An `audit` is opened through a seat whose purview
-  reaches the audited seat's rung; the bench is `judging_set`'s. **The opener's `remove` from the
-  audited ground enters every `determine` and `speak` in the hearing** (`…_B_distance.md`), so an audit
+  reaches the audited seat's rung; the bench is `judging_set`'s. **The opener's `distance` from the
+  audited ground enters every `determine` and `speak` in the hearing** (`…_B_distance.md`; OBS member 20), so an audit
   held from the capital is a weaker instrument than one held on the spot, and the inspector is a man
   `dispatch`ed there who holds a `determine` seat (the *visita*; the Carolingian *missus*).
-- The occasion: `world_q.vacancies`' sibling. When a `hold` on a seat whose row carries `audited: true`
-  closes (term matured, revoked, released, died), the closing is a `tenure.closed` claim; for a holder
-  of the conferring seat who holds that claim, the departed officer and the seat ride his question as
-  `Person` and `Office` referents, by the same stamp FA-P1's `recalls` uses. He may open the audit, or
-  not: a successor who needs the old governor's friends often does not.
-- `offices.yaml`: a seat row may carry `audited: true | false` (default false; loader refuses another
-  value). Set true on every seat an instrument `confers:` (the form carries it into the established
-  seat) and proposed for `off_lord_treasurer`, `off_royal_marshal`, `off_military_commander_hm`
-  `[ASSUMPTION; content; Jordan to correct]`.
+- The occasion: `world_q.audits_due` (SYNTHESIS-A §4; X-12), `world_q.vacancies`' sibling. When a
+  `hold` on a seat whose row carries `audit_at_exit: audit` closes (term matured, revoked, released,
+  died), for a person who holds the `tenure.closed` claim and may open (VENICE-C §4's set), the departed
+  officer and the arrangement ride his question as `Party` referents, read when read. He may open the
+  audit, or not: a successor who needs the old governor's friends often does not.
+- `offices.yaml`: the seat-row key is `audit_at_exit: <arrangement id>` (A-13; X-12), not `audited:`.
+  A form's `confers:` block carries `audit_at_exit: audit` into the established seat (SYNTHESIS-A §1),
+  and it is proposed for `off_lord_treasurer` (BYZANTINE-GROUNDING item 1), `off_royal_marshal`,
+  `off_military_commander_hm` `[ASSUMPTION; content; Jordan to correct]`.
 
-**3. `engine/season/data/fixtures.py: prescription_seasons = 8`** (seasons per unit of evidence weight;
-sweep {4, 8, 16}; NUMBER row, graded `assumption`). Reader: where SC's `evidence` term weighs a cited
-Record that is a `dispensation` whose form has `hardens: true`, its weight is
+**3. `engine/season/data/fixtures.py: prescription_seasons = 8`** (seasons per unit of item weight;
+sweep {4, 8, 16}; NUMBER row, graded `assumption`). Reader: where SC's evidence weight function weighs a
+cited Record (an item entering the roll as `proofs` levels, C3-C10) that is a `dispensation` whose form
+has `hardens: true`, its weight is
 `1 + min(3, held_seasons // prescription_seasons)`, `held_seasons` read from the citing party's own
 `hold` on the Record (`Tenure.since`). One clause at the single owner of evidence weight
 (`05_SC_evidence_and_rebuttal_B.md`'s weight function; until it lands, `world_q.proofs`). The cap is the
@@ -146,12 +149,15 @@ so no seat in the built realm changes.
   residents each holding a firsthand `requisition.taken` claim of the officer's doing): 400 seeded
   `determine` rolls with the three testimonies cited and 400 with none. Printed: band shares per arm.
   Pass: the cited arm's Overwhelming + Success share is higher, **and each arm contains at least three
-  bands**. Control: `proof_step: 0` equalises the arms within sampling.
+  bands**. Control: `proof_level: None` (OBS §3; `proof_step` is deleted) equalises the arms within
+  sampling.
 - **Age is odds, not outcome.** Under `quo_warranto`, the same instrument held 0 seasons and 16 seasons:
   400 rolls each; the older arm's Failure share (the grant stands) is higher; both arms contain a band in
   which the grant falls.
-- Distance: the same audit determined at `remove` 0 and at `remove` 3: shares differ in the direction of
-  the term.
+- Distance: the same audit determined at `distance` 0 and at `distance` 3: shares differ in the direction
+  of the term.
+- Appeal (A-39): an appeal of an `audit` verdict naming no new ground is refused; one naming an excluded
+  testimony is admitted.
 - Realm reading (after CR-60/61 and FA-P3): seeds 0–4, six seasons, with one `farm` seeded
   (`…_E_scenario.md`): the report prints whether an audit was opened at the term's end and its band.
 
@@ -181,9 +187,9 @@ react because they hold a claim of the verdict and judge the mover by it, each b
   a dead officer: no one to docket).
 - **S.** Rows in the one proceedings file; the one `determine` roll; hands back to the season by the
   Tenure its band opens.
-- **E, last.** Two rows, one fixture, one seat key, one closing arm requested of SC. The closing arm is
-  the only code; if SC declines it the fallback is data.
+- **E, last.** Two rows and one fixture; the seat key is A-13's `audit_at_exit`. No code beyond the
+  evidence weight's one clause: the calling-in ships on the existing `ban`.
 
 ## Cost class
 
-Edit (rows, fixture, key); one small build requested of the SC lane (the closing arm).
+Edit (rows, fixture, key); the closing arm once requested of SC is withdrawn.

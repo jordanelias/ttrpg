@@ -10,6 +10,11 @@ wrote its export and roller proposals for whole dice and listed the other sample
 answered B. §1 is therefore the plan those proposals did not have. It decides nothing new except where
 marked **(U5a)**.
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U3_CONFLICT_LEDGER.md` C3-L1 and `R1_READ.md` §1.3 / 7b-18 (row 1: the margin is quantised once at the ladder to integer milli-units; row 6: `_MARGIN_EPS` deleted; `04:903` and D-29 bind as written, no Layer 1 text owed), C3-D2 (the Order: row 4, the field's sampler, lands here in B05; the field calibration batch lands after the keyed draw), `U5b_MB_rulings_in_the_field.md` §1 row 2 (row 4: the melee pair is not an opposed roll; no `obstacle:` contract key), `10_DICE_advantage_sources_for_the_arcs.md` as reconciled (§2: Edit B is bilateral, `29_DICE` item 29-4 step 5), U1 §4 R-27 (§2: the in-fight σ and the season's `wound_step` are sized by one calibration); test 9 (row 2's call sites listed from the tree, including the off-loop social-contest oracles, which are re-pointed in the same commit; tests per row; tier; `Depends on:` / `Lands in batch:`; U3 §4.1 rows 23–24 put §4 in B09).
+
+**Depends on:** `10_DICE_one_roller_one_fraction_rule.md` (B05, the MB composition) and `U5a_capability_home_and_two_inputs.md` Part B (B05, the same batch); §4 on `16_PESSIMIST_CORE_a_refusal_is_remembered.md` and `01_CORE_claim_fade_as_read.md` (B09).
+**Lands in batch:** §1–§3 in B05 (`B05-one-roll`, IN), before `11_GO_one_draw_owner.md` (B06); §4 in B09 (`B09-memory`).
+
 ## What it changes in `engine/season/` at runtime
 
 §1 changes every graded draw outside combat: the social roll, the graded inquiries, the task draw and the
@@ -21,19 +26,20 @@ wound's level. §3 moves nothing. §4 is a declared mover for an actor who has f
 
 | # | owner | exact edit |
 |---|---|---|
-| 1 | `modules/social_contest/roll.py::roll` | `roll_net(pool, rng)` → `roll_net_continuous(pool, rng)`; the margin is `net + net_boost(leverage, pool) − obstacle`, a real number, graded by `degree_from_net` as it is; `settle_record` is not called |
-| 2 | `engine/dice_engine/sigma_leverage.py` | `band_odds(pool, ob, …)` keeps its name and signature and returns the four band shares from the Normal closed form of the same sampler (the bands' edges read from `BAND_FLOORS`); `record_odds` follows; `_net_counts`, `_dice_dealt`, `roll_net`, `settle_margin`, `settle_record` are deleted. `p_success` is the same closed form and is kept as its one-band case. `eff_ob`, `effective_ob`, `sigma_space_ob_shift` have no caller and leave with the kernel (SC-P2) |
+| 1 | `modules/social_contest/roll.py::roll` | `roll_net(pool, rng)` → `roll_net_continuous(pool, rng)`; the margin is `net + net_boost(leverage, pool) − obstacle`, converted once at the ladder to integer milli-units (`round(MARGIN_SCALE × margin)`, `MARGIN_SCALE = 1000`) and graded by `degree_from_net` against `BAND_FLOORS` in the same units (`04:903`, D-29; C3-L1, W3-1); `settle_record` is not called |
+| 2 | `engine/dice_engine/sigma_leverage.py` | `band_odds(pool, ob, …)` keeps its name and signature and returns the four band shares from the Normal closed form of the same sampler (the bands' edges read from `BAND_FLOORS`); `record_odds` follows; `_net_counts`, `_dice_dealt`, `roll_net`, `settle_margin`, `settle_record` are deleted. `p_success` is the same closed form and is kept as its one-band case. `eff_ob`, `effective_ob`, `sigma_space_ob_shift` have no caller and leave with the kernel (SC-P2). *Call sites (W3-1, grepped at the tree):* `roll_net` at `modules/social_contest/roll.py:165` (row 1) and in the off-loop oracles `systems/social_contest/sim/contest/faction.py:144-145`, `agon_harness.py:259`, `resolver.py:32`, which are re-pointed to `roll_net_continuous` in the same commit (one sampler, A-5); `settle_record` at `engine/season/seam/wrappers/sigma.py:552`; `_dice_dealt`, `_net_counts`, `settle_margin` only inside `sigma_leverage.py` (`:364`, `:368`, `:397`, `:412`). `modules/combat/core.py:62`'s `roll_net` is already `roll_net_continuous` and is untouched |
 | 3 | `modules/social_contest/roll.py::_chance_floor_cap` | solved on the closed form (the pool's cap is the obstacle at which Partial-or-better equals the one-pool chance at the fixed ceiling); `16_PESSIMIST_DICE_soft_ceiling.md`'s `saturate` reads that cap unchanged. With a signed channel the floor is solved at the largest lawful disadvantage (the soft cap's `−M_MAX`), not "at no advantage" **(U5a; closes the pessimist's P-iii (c))** |
-| 4 | `modules/mass_battle/resolution.py` (MB's lane, U5b) | `roll_pool`, `roll_pool_fractional`, `compute_degree`, `_sigma_softcap`, `_sigma_net_boost` become calls to the owner: `roll_net_continuous`, `degree_label`, `soft_cap`, `net_boost` (`10_DICE_one_roller_one_fraction_rule.md` Edit C, with the sampler changed). The opposed roll stays and is named (`obstacle: opposed_roll` on the provider's contract row); its floor reads `sigma_leverage.OB_MIN` |
+| 4 | `modules/mass_battle/resolution.py` (MB's lane, U5b) | `roll_pool`, `roll_pool_fractional`, `compute_degree`, `_sigma_softcap`, `_sigma_net_boost` become calls to the owner: `roll_net_continuous`, `degree_label`, `soft_cap`, `net_boost` (`10_DICE_one_roller_one_fraction_rule.md` Edit C, with the sampler changed). *(W3-1:)* the melee pair is not an opposed roll (`U5b_MB_rulings_in_the_field.md` §1 row 2: each side paid by its own net), so no `obstacle: opposed_roll` key is created on the contract row; a check that keeps a stated obstacle reads `sigma_leverage.OB_MIN` for its floor |
 | 5 | `engine/dice_engine/dice_engine.py`, `sigma_leverage.py` | below one die there is one rule: `continuous_engine_sample` and `net_boost` take the pool as it is for `pool > 0` (spread and boost both scale with `√pool`); the floor at one die is removed from the sampler and the boost. A person never reaches it (`pool_floor` is five); an aggregate may (F-DICE-19) |
-| 6 | `engine/dice_engine/dice_engine.py` | `_MARGIN_EPS` in `degree_from_net` (`…one_fraction_rule.md` Edit A, unchanged); `BAND_FLOORS`, the per-die pair asserted against `FACE_NET`, `LEVEL_SIGMA` unannotated (`10_DICE_exported_face_rule_and_band_edges.md` Edits A, D). `FACE_NET` is kept as the derivation of `MU_PER_DIE` and `SIGMA_PER_DIE`; no game path deals a face. `roll_pool` loses its last season and module caller; whether it stays for the retained off-loop oracles (`systems/threadwork/sim`, `systems/fieldwork/sim`) is those subsystems' question and is not decided here |
+| 6 | `engine/dice_engine/dice_engine.py` | *(W3-1, C3-L1: no `_MARGIN_EPS`; `…one_fraction_rule.md` Edit A is withdrawn)*; `MARGIN_SCALE`, `BAND_FLOORS` in milli-units, the per-die pair asserted against `FACE_NET`, `LEVEL_SIGMA` unannotated (`10_DICE_exported_face_rule_and_band_edges.md` Edits A, D). `FACE_NET` is kept as the derivation of `MU_PER_DIE` and `SIGMA_PER_DIE`; no game path deals a face. `roll_pool` loses its last season and module caller; whether it stays for the retained off-loop oracles (`systems/threadwork/sim`, `systems/fieldwork/sim`) is those subsystems' question and is not decided here |
 | 7 | `references/module_contracts.yaml`; the three wrappers' `resolver` strings | one name for all three providers, `d_sigma` (combat's existing string); the three tests that pin the strings re-pin in the same commit. The three-name vocabulary of the export proposal's Edit C is not created |
 | 8 | tests | `engine/tests/test_band_odds.py` and `test_settle_margin.py` (enumeration against the face table) are replaced by the closed form against a sampled check at a stated n and tolerance (an *approximation* claim, so a tolerance is honest); `tests/valoria/test_fractional_pool.py` is deleted with its subject; `engine/tests/goldens/sigma_leverage_parity.json` is regenerated for the functions that remain |
 | 9 | the two docstrings (`continuous_engine_sample`, `roll_net_continuous`) | *"The sampler every provider draws from (ED-833; Jordan, 2026-11-12). Same mean and variance as the d10 face rule it is derived from."* The export proposal's Edit B wording (combat only) is not used |
 
 **Order.** After `10_DICE_one_roller_one_fraction_rule.md`'s mass-battle composition is designed with MB
 (U5b) and before `11_GO_one_draw_owner.md` / the keyed draw (A-30), so the goldens move once for the sampler
-and once for the draw key, each said plainly.
+and once for the draw key, each said plainly. *(W3-1, C3-D2:)* row 4 (the field's sampler,
+`U5b_MB_rulings_in_the_field.md` §1) lands here in B05; the field calibration batch lands after the keyed draw.
 
 **Gate.** (1) One sampler: `grep -rn "randint(1, 10)" modules/ engine/season/` prints nothing; under
 `engine/dice_engine/` the one call is in `roll_pool`. (2) Shown odds are dealt odds: for pools 5 to 12 and
@@ -46,15 +52,23 @@ not a balance claim). (5) The port: `tools/export_sim_params.py --check` passes 
 **Falsifier.** A graded act outside combat that draws a d10 face; `band_odds` differing from the dealt
 frequency beyond the stated tolerance; two obstacles a quarter apart composing one chance.
 **Hash movers.** Every world in which a graded act resolves; all goldens, re-pinned once.
+**Tests (W3-1).** Row 8's replacements: `engine/tests/test_band_odds.py` (closed form against a sampled check),
+`tests/valoria/test_degree_ladder_single_owner.py::test_quantised_margins_sum_in_either_order` (C3-L1's
+falsifier), gate (1) as `engine/season/tests/test_mass_battle_module.py::test_no_d10_face_in_mass_battle` plus a
+sibling for `modules/social_contest`; gate (2)'s 200,000-roll check is a one-time reading in the commit body.
+**Lands:** an IN-lane implementation session under `/methodology-execute` with SC, MB and GO review; edits
+`sonnet`, the re-pin's reading `opus`.
 
 ## §2 · The wound (A-8)
 
 A wound is a named level against the wounded roller, through the signed advantage channel:
-`10_DICE_advantage_sources_for_the_arcs.md` Edits A–D stand as written. The obstacle-term form of
+`10_DICE_advantage_sources_for_the_arcs.md` Edits A–D stand, with Edit B bilateral (the bearer's wound is
+also a level for the roller when the bearer defends; `29_DICE` item 29-4 step 5, absorbed there by W3-1). The obstacle-term form of
 `audits/10_DICE_audit_addendum_B.md` §5.4 (from ED-PC-0005/0006, which A-8 replaces) is not built, and
 `obstacle_terms` ships with the one generic member `capability` and no `wounds`. Combat already spends a
 wound as sigma (`combat_systems.wound_impairment`), so the season and the fight agree on the channel; the
-level's size at each scale is the calibration's.
+level's size at each scale is the calibration's: the in-fight σ (`CFG`) and the season's `wound_step` are two
+sites of one rule, sized together in PC's calibration batch (B15; U1 §4 R-27).
 
 ## §3 · Edits decided by the audits and carried by no file (hash EQUAL)
 

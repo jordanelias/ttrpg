@@ -6,7 +6,11 @@ Re-grounded: 2026-11-12 (audit §15.3 C-1, §15.4 items 1 to 3) — three amendm
 
 Reconciled: 2026-11-12, U5d closure — folded **A-35**, **A-36** and **A-14**. Item 4 (`head_of_faction`), held for Jordan in the Status line, is ruled B and un-held: the Confessor may strip a Church officer by `revoke`'s resistible draw (`14_VERBS_BINDING_C_turnover.md`), which overwrites the 2026-10-11 `revocation: null` for those rows. Rewritten within item 4 and edit 9: the row values change `null → head_of_faction` for the Church officers **except `off_confessor`, which keeps `null`** (A-36: nobody judges him; death or resignation only); the Löwenritter rows keep `null` until a head seat is authored for them (`06_FA_seat_terms_by_body_B.md` edit 4). The election's ballots are each a draw on the voter inside the presiding act (A-14), as the grounding plan's item 1 writes it.
 
-## Status: PROPOSED (item 4, `head_of_faction`, is held for Jordan: it overwrites a ruling of 2026-10-11)
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (PAP_B rows), §2 (SYN_E/PAP_B/PAP_G electorate row), 7b.0, 7b.7; `U3_CONFLICT_LEDGER.md` C3-L9, §9 (the gate's two electors, `quorum: 2`); `U1_OWNERS_AND_VOCABULARY.md` F-36, F-37, S-24; `OWED_TO_UNIFICATION.md` §B (the default election has two electors). Changed: the Status line no longer holds item 4 (A-35 ruled it); `patronage` is no Seat field but a table keyed by seat id (C3-L9; the home decided here on the F-12 precedent, see §1); `quorum_share` stands beside `quorum` and the pass test needs a vote for (PAPACY-GROUNDING item 1); the middle outcome emits `matter.undetermined` (the head's X-15 line, the body was stale); the gate runs four hand-built electors and the built realm's two; `obligation` enters a ballot as a leverage source, not an obstacle subtraction (C3-C10). New text says "holder of a Church seat" for "Church officer" (U1 glossary *officer*).
+
+## Status: PROPOSED
+
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B32** (institutions kit, FA), after PAPACY-A and before `14_VERBS_BINDING_B` (`U3_DEPENDENCY_ORDER.md` §1 item 32). Depends on: `13_SC_draw_for_unrolled_contests.md` (B07, the ballot loop), `14_VERBS_BINDING_C_turnover.md` (B21, the `confer` and `revoke` draws), `15_INSTITUTIONS_PAPACY_grounding_mechanisms.md` item 1 (lands inside this batch), CR-35 (a v11 plan position: MISSING until `STAGES.md` step 5 carries or retires it; the election arm of the gate waits on it). Lane tag: FA. Tier: `sonnet` producer, effort `high`; one `opus` read of the gate's output. Named test: `engine/season/tests/test_inst_pap_b.py` (each gate bullet one function). Standing sentences: *Pool* — each ballot's pool is the one pool rule on the elector's trained `determine` score (A-6); talent enters as levels (A-7, U1 §4); a wound is a level (A-8). *Failure writes* — a dismissed candidacy's `matter.dismissed` and an inconclusive one's `matter.undetermined` are witnessed by the sitting bench and deposit their claims to each member present; a resisted `revoke`'s `revocation.resisted` is witnessed by those present (A-81). *Draw keys* — this file adds no draw of its own; the ballot is the SC lane's (`H(w.world_seed, w.tick, <elector id>, "determine.ballot")`) and the strip is `revoke`'s (`14_VERBS_BINDING_C`), each keyed per A-30.
 
 Source: `audits/15_INSTITUTIONS_PAPACY.md` F-PAP-02, F-PAP-03, F-PAP-09; §6 rows P-1, P-2, P-9; §12 R-2,
 R-3, R-6, R-9; §13 items 1 and 3. Composes on CR-35 (the `election` gate arm, the `hold` disposal, the
@@ -15,17 +19,20 @@ obstacle (`05_SC_obstacle_difficulty_and_modifiers_B.md`). Batch 2.
 
 ## What it changes in `engine/season/` at runtime
 
-1. A seat row may declare `patronage:`. With no row declaring it, nothing moves (hash EQUAL). With the
-   seven Church rows declaring `own_faction`, a Crown or Löwenritter seat's `confer` on a Church seat is
+1. A seat may be named in `rosters.yaml: tables.patronage`. With no seat named, nothing moves (hash
+   EQUAL). With the seven Church seats named `[own_faction]`, a Crown or Löwenritter seat's `confer` on a Church seat is
    refused at `may_fill`, and the Confessor's is admitted wherever the seat stands. A declared mover for
    `confer` formation on those seats (`world_q.vacancies` stops offering them to seats that may not fill).
 2. A `conclave` arrangement row. Hand-built until a computed docket names a row (CR-35's own REACH note).
-3. A declared row may state its pass mark as a share of the ballots cast (`quorum_share`) instead of a
-   head count (`quorum`), and a hold-disposing declared row grades the count into three outcomes. The
+3. A declared row may state its pass mark as a share of the ballots cast (`quorum_share`) beside its
+   head-count floor (`quorum`, PAPACY-GROUNDING item 1), and a hold-disposing declared row grades the
+   count into three outcomes. The
    ballot itself (each seated member's vote a draw, his commits its odds) is the SC lane's
    (`13_SC_draw_for_unrolled_contests.md`, row "the ballot"; determinism sweep C-14) and is not redone
    here. A declared mover wherever a declared determination executes (in the realm today: none).
-4. Held: a third `revocation_bases` member.
+4. A third `revocation_bases` member, `head_of_faction` (A-35: the head strips a holder of one of his
+   faction's seats by `revoke`'s resistible draw). A declared mover for `revoke` formation on the
+   Church seats edit 9 names.
 
 ## The problem (evidence)
 
@@ -46,19 +53,25 @@ obstacle (`05_SC_obstacle_difficulty_and_modifiers_B.md`). Batch 2.
 
 ### 1. `patronage:` — the right of appointment as data on the seat
 
-A closed roster `patronage_bases` and an optional seat key naming a **list** of its members. A seat may be
-filled through a seat that satisfies **any** listed basis:
+A closed roster `patronage_bases` and a table `rosters.yaml: tables.patronage`, keyed by seat id, whose
+value is a **list** of its members. The Seat tuple gains no field (`04` §B.7; A-13 rules three facts
+and this is not one of them; C3-L9). The home is decided here, ladder step 4: a datum about a carrier
+whose field Layer 1 forbids lives in a table keyed by the carrier's id (`U1_OWNERS_AND_VOCABULARY.md`
+F-12, `tables.territory_weight`, for a Rung). `[ASSUMPTION: the table rather than an arrangement or
+instrument row — basis: an appointment is made by `confer`, which names no arrangement row, so C3-L9's
+"arrangement (or instrument) row" has no row to carry it; reversible by U1 or by Jordan taking J-R4-1
+option A]`. A seat may be filled through a seat that satisfies **any** listed basis:
 
 | member | rule (in `state/gate.py`, one owner, refused at import if a member has no rule) |
 |---|---|
 | `purview` | today's rule: `purview_reaches(via, off.rung)` |
 | `own_faction` | `seat_faction(via) == faction_prop_id(off.faction)` (the seat exercised belongs to the faction the filled seat belongs to); no purview walk |
 
-Absent key = `[purview]`, so every existing row keeps today's behaviour. `inheritance` and (after CR-35)
-`elected` rows are untouched: `FILLED_BY` already takes them out of `confer`.
+A seat absent from the table = `[purview]`, so every existing seat keeps today's behaviour. `inheritance`
+and (after CR-35) `elected` rows are untouched: `FILLED_BY` already takes them out of `confer`.
 
-Content: the six `appointed` Himmelenger rows and `off_archbishops_rep` declare `patronage: [own_faction]`.
-A see on ducal ground (PAPACY-E) declares `[purview, own_faction]`: the lord and the Confessor may each
+Content: the `appointed` Himmelenger seats and `off_archbishops_rep` are named `[own_faction]` in the table.
+A see on ducal ground (PAPACY-E) is named `[purview, own_faction]`: the lord and the Confessor may each
 fill it, each by the `confer` draw, each displacing the other's man with the incumbent as `opposition`
 (the verb lane's shape). That is the investiture contest, as a standing feature of the row, not a rule.
 
@@ -69,7 +82,9 @@ CR-35's `election` row specialised by data (a second row, not a second mechanism
 ```yaml
   - id:               conclave
     disposal:          declared
-    quorum_share:       [2, 3]      # NEW KEY, declared rows only: see 3
+    quorum:             2           # the floor: fors needed (PAPACY-GROUNDING item 1; the precedent of
+                                    #   `excommunication_deliberation`)
+    quorum_share:       [2, 3]      # NEW KEY, declared rows only, combinable with `quorum`: see 3
     bench_basis:        determine
     floor:              closed
     records_dissent:    true
@@ -90,21 +105,25 @@ CR-35's `election` row specialised by data (a second row, not a second mechanism
 ### 3. The ballot is drawn (SC's); the pass mark is a share; the count is graded
 
 - **The ballot** is `13_SC_draw_for_unrolled_contests.md`'s: on a declared row each seated member's ballot
-  is his own draw (his `determine` pool against `plain` plus the room's `standard`, his live commits on
-  the matter as favour or hostility); Success or better is a vote for, Failure against, Partial an
+  is his own draw (his `determine` pool against `plain` plus the room's `standard`; his live commits on
+  the motion as the `lean` source and what he owes the candidate as the `obligation` source, both
+  leverage levels, `U5c_SC_one_obstacle_form.md` §3; C3-C10); Success or better is a vote for, Failure against, Partial an
   abstention. A committed elector usually votes as he committed and sometimes does not. This proposal
-  adds nothing to it.
-- **The pass mark as a share.** A declared row carries `quorum: <int>` (today) **or** `quorum_share:
-  [n, d]`: the fors must be at least `n/d` of the ballots cast for or against (abstentions are not cast).
-  A share survives a bench that shrinks through death or grows through new sees; a head count does not.
+  adds nothing to it but one eligibility line: **a candidate casts no ballot on his own candidacy**
+  (PAPACY-GROUNDING item 1.4).
+- **The pass mark as a share, above a floor.** A declared row carries `quorum: <int>` (today, the fors
+  needed) and may carry `quorum_share: [n, d]` beside it: the candidacy is carried only when
+  `fors >= max(1, quorum)` **and** `fors * d >= n * (fors + againsts)` (abstentions are not cast). A
+  share survives a bench that shrinks through death or grows through new sees; the floor keeps an
+  election with no vote for it, or with one man's, from carrying (PAPACY-GROUNDING item 1.1 to 1.3).
   The count is arithmetic on draws.
 - **Three outcomes on a hold-disposing declared row** (an election), so that a narrow result is neither a
   win nor a dead end:
 
   | the count | outcome |
   |---|---|
-  | fors ≥ `n/d` of ballots cast | the candidate holds the seat (CR-35's `hold` disposal); the division is recorded where `records_dissent` |
-  | fors a simple majority, short of `n/d` | no election; the candidacy **stays on the docket** for the next sitting (the scrutiny was inconclusive); emits `election.inconclusive` |
+  | the pass test above holds | the candidate holds the seat (CR-35's `hold` disposal); the division is recorded where `records_dissent` |
+  | fors a simple majority, short of the pass test | no election; the candidacy **stays on the docket** for the next sitting (the scrutiny was inconclusive); emits `matter.undetermined` (X-15; `election.inconclusive` is not added) |
   | fors not a majority | the candidacy is dismissed (SC-P6's `matter.dismissed`); he may petition again; other petitions stand |
 
 - **Who is on the bench** is CR-35's (the live seats of the vacant seat's faction whose grant carries
@@ -113,54 +132,76 @@ CR-35's `election` row specialised by data (a second row, not a second mechanism
 - **What the vacancy costs** is not a counter: while the head seat is empty nobody exercises its `confer`,
   `revoke` or its bench, so the Church's own vacancies stay open and its sentences cannot be absolved.
 
-### 4. (HELD) `head_of_faction`
+### 4. `head_of_faction` (ruled: A-35)
 
-`rosters.yaml: revocation_bases` gains `head_of_faction`; `REVOCATION_RULES["head_of_faction"]`: the seat
-exercised is the `head_seat` of the faction the stripped seat belongs to. The six `appointed` Himmelenger
-rows and `off_archbishops_rep` change `revocation: null → head_of_faction`. The strip is the verb lane's
-`revoke` draw (the holder is the opposition; Failure: he holds, `revocation.resisted`). `off_confessor`
-stays `null` (audit §13 item 2).
+`rosters.yaml: revocation_bases` gains `head_of_faction` (A-35 is Jordan's ruling, so this third value of
+a closed roster is licensed); `REVOCATION_RULES["head_of_faction"]`: the seat exercised is the
+`head_seat` of the faction the stripped seat belongs to (`rosters.yaml: factions.<f>.head_seat`, U1 F-02).
+The `appointed` Himmelenger rows and `off_archbishops_rep` change `revocation: null → head_of_faction`.
+The strip is the verb lane's `revoke` draw (the holder is the opposition; Failure: he holds,
+`revocation.resisted`, BIND_C's name). `off_confessor` stays `null`: A-36, nobody judges the Confessor;
+he leaves by death or resignation only. The Löwenritter rows stay `null` until a head seat is authored
+for them (A-35).
 
 ## Exact edits
 
 1. `engine/season/rosters.yaml`: new roster after `binds_bases`:
    `patronage_bases: {open: false, values: [purview, own_faction], source: "PAPACY-B", note: "WHO MAY
-   FILL A SEAT FOR SOMEBODY ELSE -- the seat's fourth rostered basis. The rule is behaviour and lives in
-   state/gate.py::PATRONAGE_RULES."}`
-2. `engine/season/state/carriers.py::Office`: field `patronage: tuple = ("purview",)`; `__post_init__`
-   refuses a member off the roster (the `conferral` refusal's shape).
+   FILL A SEAT FOR SOMEBODY ELSE -- a closed set of rule names, read through tables.patronage. The rule is
+   behaviour and lives in state/gate.py::PATRONAGE_RULES."}`; and `tables.patronage: {}` (empty at this
+   edit).
+2. `engine/season/data/rosters.py`: the loader of `tables.patronage` refuses a key that is no
+   `offices.yaml` row and a member off `patronage_bases`. **No `Office` field** (C3-L9).
 3. `engine/season/state/gate.py`: `PATRONAGE_RULES = {"purview": …, "own_faction": …}` with an import-time
-   totality check beside `check_filled_by`; `may_fill`'s last line becomes
-   `return any(PATRONAGE_RULES[b](w, w.offices[via], off) for b in off.patronage)`.
-4. `engine/season/harness/populated.py::build_realm`: the seat overlay passes a row's `patronage:`.
-5. `engine/season/offices.yaml`: `patronage: [own_faction]` on `off_cardinal_fortitude`, `…_justice`,
-   `…_prudence`, `…_temperance`, `off_senior_inquisitor`, `off_archbishops_rep`.
-6. `engine/season/arrangements.yaml`: the `conclave` row; `data/arrangements.py`: `quorum_share` added to
-   `_ARRANGEMENT_KEYS` (the key-count test is re-recorded and says why), validated as two positive ints
-   `n <= d`, lawful only on `disposal: declared`, exclusive with `quorum`.
+   totality check beside `check_filled_by`; one reader `patronage_of(off_id) -> tuple` (the table's list,
+   else `("purview",)`); `may_fill`'s last line becomes
+   `return any(PATRONAGE_RULES[b](w, w.offices[via], off) for b in patronage_of(off.id))`.
+4. (withdrawn: `build_realm` passes nothing; the table is read where the gate reads it.)
+5. `engine/season/rosters.yaml: tables.patronage`: `[own_faction]` for `off_cardinal_fortitude`,
+   `…_justice`, `…_prudence`, `…_temperance`, `off_senior_inquisitor`, `off_archbishops_rep` (a declared
+   mover for `confer` formation on those seats).
+6. `engine/season/arrangements.yaml`: the `conclave` row (with `quorum: 2`); `data/arrangements.py`:
+   `quorum_share` added to `_ARRANGEMENT_KEYS` (the key-count test is re-recorded and says why),
+   validated as two positive ints `n <= d`, lawful only on `disposal: declared`, **combinable with
+   `quorum`** (PAPACY-GROUNDING item 1 edit 1; U1 F-36).
 7. `engine/season/loop/effects_information.py` (the ballot loop `13_SC_draw_for_unrolled_contests.md`
-   edit 3 adds): the pass test reads the row's `quorum` (fors ≥ the integer) or `quorum_share`
-   (`fors * d >= n * (fors + againsts)`); for a row whose `disposes:` is `hold` it applies the
-   three-outcome table. `verb_table.yaml: determine` gains the emitted kind `election.inconclusive`.
-8. `engine/season/arrangements.yaml: excommunication_deliberation`: `quorum: 2` → `quorum_share: [2, 3]`
-   `[ASSUMPTION; revert: quorum: 2]`.
-9. (HELD) the `head_of_faction` roster member, rule and seven row values.
+   edit 3 adds): the pass test is `fors >= max(1, row.get("quorum", 1))` and, where the row carries
+   `quorum_share: [n, d]`, `fors * d >= n * (fors + againsts)`; before casting, a seated member who is the
+   party of the docketed petition is skipped; for a row whose `disposes:` is `hold` it applies the
+   three-outcome table. `verb_table.yaml: determine` gains the emitted kind `matter.undetermined` (the
+   kit's one middle kind, SYN-A §6), not `election.inconclusive`.
+8. `engine/season/arrangements.yaml: excommunication_deliberation`: keeps `quorum: 2` and gains
+   `quorum_share: [2, 3]` beside it `[ASSUMPTION; revert: no share]` (`R4_READ.md` 7b.7).
+9. The `head_of_faction` roster member (`rosters.yaml: revocation_bases`), its rule
+   (`state/gate.py::REVOCATION_RULES`, the import-time check extended), and the row values of §4
+   (`offices.yaml`). Ruled (A-35); `off_confessor` stays `null` (A-36).
 
 ## Gate
 
 Hand-built, real fold, `PYTHONHASHSEED=0`:
 
 - `patronage`: the King's `confer` on a vacated `off_cardinal_prudence` → refused at `may_fill`; the
-  Confessor's → admitted and rolled. With the key deleted from the row the King's is admitted (control).
-- Election (after the SC ballot lands): four electors, the Confessor's seat vacated, one candidate's
-  petition docketed under `conclave`. Arm B: three electors committed for, none against. Arm C: two for,
-  two against. Each over 200 seeds: all three outcomes of the table occur in at least one arm; P(seat
-  opened) is higher in B than in C; neither is 0 or 1. The exact probability of each outcome is printed
-  from the per-ballot odds (no sampling claim rests on the 200).
+  Confessor's → admitted and rolled. With the seat's entry deleted from `tables.patronage` the King's is
+  admitted (control).
+- Election, hand-built arm (after the SC ballot lands): **four hand-built electors** (the spine fixture;
+  `determine` planted on four seats of one faction, said so in the test), the Confessor's seat vacated,
+  one candidate's petition docketed under `conclave`. Arm B: three electors committed for, none against.
+  Arm C: two for, two against. Each over 200 seeds: all three outcomes of the table occur in at least one
+  arm; P(seat opened) is higher in B than in C; neither is 0 or 1. The exact probability of each outcome
+  is printed from the per-ballot odds (no sampling claim rests on the 200).
+- Election, built-realm arm (the electorate in force: **two electors**, `off_cardinal_justice` and
+  `off_senior_inquisitor`; `workplans/valoria_master_workplan_v11_part12.md:366`, ED-IN-0301): a case file
+  of PAPACY-F's shape whose one set-up act is the Confessor's `release`, and a petition by NPC-039. 200
+  seeds: the seat opens in some and not all; the exact probability is printed from the two ballots' odds.
+  With `off_senior_inquisitor` also vacated the seat opens in no seed (one elector is below the floor).
+  Zero ballots: every elector's draw pinned to Partial carries nothing (PAPACY-GROUNDING item 1's gate).
 - Share against head count: the same bench with one elector removed: under `quorum_share: [2, 3]` the
   pass mark moves with the bench; under `quorum: 3` it does not (control).
-- Realm control: `build_realm(0)` one and two seasons, base hash, with no row declaring `patronage` and
+- Realm control: `build_realm(0)` one and two seasons, base hash, with `tables.patronage` empty and
   the `conclave` row absent.
+- Strip (A-35): the Confessor's `revoke` of `off_cardinal_prudence`'s holder forms and rolls; Failure
+  leaves him seated and emits `revocation.resisted`; the same act on `off_confessor` by any seat is
+  refused at formation (`revocation: null`).
 
 ## Falsifier
 
@@ -172,7 +213,9 @@ filled through a seat of another faction. An inconclusive candidacy that leaves 
 
 N: cut `patronage` and the Church is a royal department (today) or, with a blanket same-faction rule, no
 lord can ever invest a bishop; cut the share and a conclave's pass mark is wrong the day a Cardinal dies;
-cut the middle outcome and a near-miss is the same as a rout. R: a player who is an elector chooses whom
+cut the middle outcome and a near-miss is the same as a rout. An undetermined candidacy stays on the
+docket and a vacant chair leaves the Church's sentences unabsolved, so a stalled election is pressure, not
+stillness (A-80). R: a player who is an elector chooses whom
 to commit to and when to move the election; a candidate canvasses commits by `argue`; a faction with more
 than a third of the bench can keep the chair empty and pays for it. With no player the arms each back
 their own. S: one `may_fill`, the SC lane's one ballot, the SC obstacle unchanged; `quorum_share` and
@@ -181,4 +224,4 @@ the investiture contest, the long vacancy and the contested election they buy.
 
 ## Cost class
 
-Small build (1-8). Item 9: edit, after Jordan.
+Small build (1-8). Item 9: edit (ruled, A-35).

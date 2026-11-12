@@ -2,9 +2,16 @@
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Parts 3–4; `U5b_VERBS_military_physical_residue.md`) — (1) **Layer 1** (`04` §B.13 invariant 12, §C.4; the loader's refusals at `data/verbs.py:848-851`, `:872-876`): a band-keyed `writes:` belongs to a row that declares `contests:`. `move` and `migrate` write different cells by band, so each declares `contests: "a task"` (residue §1, shape (b)); the route roster has one name, `graded_tasks`, and Edit 4's two `graded_inquiries` lines become that prize binding. (2) **A-5, A-6, A-7**: the draw is the one sampler; the pool is the one pool rule on the mover's `wayfaring` score, `wayfaring` a definition row on U1's surface. (3) **A-25**: `sworn_there` is a named level for the roller, not −1 on the obstacle. (4) **A-58**: a person's `move` onto land another holds is not a march in force and is no aggression; only `march` musters. A-63 and A-64 (an interaction occupies the person visited; precedence by rung; appointments) bear on what a traveller finds on arrival: reaching a busy person is a constraint this row's `whereabouts_named` journey can end in, and the occupancy itself is CORE's edit with A-9's scene order (`16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md`, U5a's), not this row's. A-62: a refused journey's Event carries Observations (the `with` deposit), never a changes list, as written. (5) A-56 names `migrate` among the common people's heavy moves; the row is its carrier as written. The bands' meanings, the class, the stamp terms, the `at` Observation and the `with` deposit (one owner: this file) stand.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head line above applied to the body (`unified/work/R4_READ.md` §1.3, 7b.5; F-R4-01, F-R4-07): Edit 1 and Edit 5 rows declare `contests: "a task"`; Edit 4's two `graded_inquiries` lines and its `verb_capability` lines are deleted (the prize binds the roll; `wayfaring` is a definition row on U1's surface and the row's own `capability:` cell names it, U1 D-U1-07, C-04); `sworn_there` is a `favour` level, not −1 (C3-C10); the `journey` difficulty is split into the named level `routine` and the OBS member `distance` (one member for hops between two rungs, U1 D-U1-04, D-U1-11k); the five remaining modifier rows are not OBS members and stay INCOMPLETE pending U1 (R4 7b.8); the 27-lane fold cites C3-L11 (recovered strength computed when read); A-81, A-30, U3 batch B22, R4 7b.0 block.
+
 ## Status: PROPOSED
 
-Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (ruling A-69, with A-67 and A-68). Nothing here is deleted; one edge is named. An army that comes back from a field, a drawn aggressor returned to his station at once among them, carries what the field cost: its unit rows hold lowered strength, men injured and men fled, and the stamina each unit ended with. This file's journey body moves the commander; the Record he holds carries the rest and no write is added here. Two terms of the injured's recovery draw read this file's facts: whether the army marched this round, and where it is stationed (`27_MB_E_what_an_army_carries_back.md` §3, §4). The recovery's rate and span are not established in the tree's research and ship as parameters with a control.
+Lands in batch: B22 (`unified/U3_DEPENDENCY_ORDER.md` §3.1); `17_CENSUS_C1A_02_wires_and_corrections.md` W2's closing gate for these rows rides in it (U3 §4.1 row 37). Edits 1–3 and 6 may land before Edit 4 within the batch (§3's order).
+Depends on: `18_DETERMINISM_task_draw_for_uncontested_verbs.md` item 4 (B07; C3-R1) and `U5c_VERBS_residue_and_governance_owner.md` §1 (B07: the `a task` prize); `05_SC_obstacle_difficulty_and_modifiers_B.md` and `U5c_SC_one_obstacle_form.md` (B05: `difficulty`, the `favour` source); `14_VERBS_MATERIAL_B_stores.md` (B12: lands the `distance` member and `distance_step`); `16_PESSIMIST_MB_one_stamina_ledger.md` (B19); `27_MB_E_what_an_army_carries_back.md` (B22); U1's capability surface (`wayfaring`'s definition row, CAP Part A, B04). Cut edge (U3 §4.1 row 79, LATER): `26_MASS_BATTLE_movement_and_fatigue_as_data.md` (B31) — the march reads today's pace and fatigue constants until that file exports them.
+Lane: MB. Tier (R4 7b.0 (1)): `sonnet` producer, effort `high`; one `opus` read of the band table (iii). Test file: `engine/season/tests/test_vm_mil_a_movement.py` (one function per §4 reading; `aperture 2 s` called inside it).
+Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the mover's trained `wayfaring` score (A-6; `pool_default` until the definition row and a cast rank exist); talent as levels (A-7); a wound a level against the roll (A-8) — `body_below_first_band` below is an obstacle on the journey only if U1 keeps it a member, and must not count the same wound twice. Draws: `H(w.world_seed, w.tick, <actor id>, "move.task")`, `"migrate.task"` (A-30). **A-81:** every band writes: Failure lays one leg (`Person.travel_leg`) and emits `travel.turned_back`, witnessed by those present; a refusal on `with` deposits to the actor (Edit 6).
+
+Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (ruling A-69, with A-67 and A-68). Nothing here is deleted; one edge is named. An army that comes back from a field, a drawn aggressor returned to his station at once among them, carries what the field cost: its unit rows hold lowered strength, men injured and men fled, and the stamina each unit ended with. This file's journey body moves the commander; the Record he holds carries the rest and no write is added here. Two terms of the injured's recovery draw read this file's facts: whether the army marched this round, and where it is stationed (`27_MB_E_what_an_army_carries_back.md` §3, §4). The recovery's rate and span are not established in the tree's research and ship as parameters with a control. *(W3-4a, C3-L11:)* the recovered share is computed when read from the army Record's loss ledger by a keyed graded draw and written only by an act (recall, rally, muster); no MATTER write and no clock.
 
 Folded: 2026-11-12 by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (row M-7). Nothing here is deleted; one edge is named and one cross-reference added. (1) **The journey's band reaches the field.** `_relocate` is the one journey body and `_eff_march` calls it; when this proposal's bands land, an army whose march folds the journey's `Partial` ("arrives spent") enters its field at a lower share of stamina, through the one input `entry_stamina` (`16_PESSIMIST_MB_one_stamina_ledger.md` step 3; the value, a seed, is `fatigue.entry.march_partial` in `26_MASS_BATTLE_movement_and_fatigue_as_data.md` §3). `_eff_march` "passes nothing and is unmoved" (Edit 4) until then, and nothing in this file changes. The sourced case is Crécy: an army attacking the same afternoon after a march of about twelve miles, against one "rested and fed" (`research/historical/mass_battle_movement_and_behaviour_grounding.md` T5). (2) **What the tree now holds on march rates**, for whoever sets `journey` difficulties: a Roman training march of 20 Roman miles in five summer hours as usually quoted from Vegetius (tool-read, second-hand); about fifteen miles a day for Alexander's whole army (snippet only); a fighting march made only in the cool with rest days (Arsuf, tool-read). Same note, rows M4 to M6. None is a figure to build on; all three agree that a day's march by an army is tens of kilometres at most and far less under threat.
 
@@ -53,6 +60,9 @@ commits in the order of §3.
     eligibility: ["own"]
     beneficiary: "actor"
     referent_class: Rung
+    contests:    "a task"        # shape (b): bands write different cells (VRES §1)
+    capability:  none            # `wayfaring` once its definition row lands (U1 D-U1-07)
+    difficulty:  routine         # + `distance` (OBS member 20), the hops between origin and destination
     referent_class_note: "14-VM-A: `migrate`'s class. FORMED ONLY ON A PLACE: `places_named` (told of, not lived under), `home_when_away` (his own `reside` object when his live `contain` is elsewhere) and `whereabouts_named` (the rung his own ledger's newest `at` claim gives for a Person the question names). Not on a person, a Record or the rung he stands on (H-329). REVERT: delete this column and the two stamp terms."
     requires:    "a contain path exists, and the actor may enter the destination"
     requires_typed:
@@ -112,18 +122,25 @@ needs no change in `loop/witness.py`; `broke_observed` carries a bool.]`
 
 **Edit 4 — the draw.**
 
-- `engine/season/rosters.yaml: graded_inquiries.values` gains
-  `move: {provider: "social_contest", module_entry: "social_contest.roll"}` and the same for
-  `migrate`; `verb_capability` gains `move: wayfaring`, `migrate: wayfaring`.
-- Obstacle rows, in the table `05_SC_obstacle_difficulty_and_modifiers_B.md` adds (its name governs):
+- *(W3-4a: the two `graded_inquiries` lines and the `verb_capability` lines are deleted.)* Both rows are
+  contest rows on the `a task` prize (VRES §1 shape (b)); the prize row binds the roll, so neither joins
+  the route roster. The capability is the row's own `capability:` cell (`wayfaring` once U1's surface
+  defines it; C-04, D-U1-07), not a `verb_capability` line.
+- Obstacle and leverage, through the one composer (`U5c_SC_one_obstacle_form.md`):
 
-  | verb | difficulty | modifiers (each a named row, a number in data) |
-  |---|---|---|
-  | `move` | `journey`: 1 when origin and destination share a settlement, 2 a province, 3 beyond (the depth of the common ancestor in the containment tree; `world_q.ancestry`, the one walk) | `winter` +1 · `body_below_first_band` +1 · `destination_occupied` +1 |
-  | `migrate` | `journey` | the three above · `foreign_holder` +1 (the destination's `holder_faction_of` is not the migrant's faction) · `larder_short` +1 · `sworn_there` −1 (a live sworn `oblige` to a seat whose purview reaches it) |
+  | verb | difficulty | obstacle members | leverage (levels for the roller, A-25) |
+  |---|---|---|---|
+  | `move` | `routine` | `distance` (OBS member 20: the hops between origin and destination on the containment tree, `world_q.ancestry`, the one walk; fixture `distance_step`) · `winter` · `body_below_first_band` · `destination_occupied` | — |
+  | `migrate` | `routine` | the four above · `foreign_holder` (the destination's `holder_faction_of` is not the migrant's faction) · `larder_short` | `sworn_there`: a `favour` level (a live sworn `oblige` to a seat whose purview reaches the destination; C3-C10) |
 
-  `[ASSUMPTION; medium; Jordan to correct]` for every number. The values that reproduce nothing are
-  not available here: there is no draw today, so every arm of this edit is a mover.
+  The earlier `journey` difficulty (1 / 2 / 3 by the depth of the common ancestor) is the same quantity
+  as `distance` (F-R4-08) and is not a second ladder: difficulty is a named level (D-U1-04). **INCOMPLETE
+  (blocked on U1, R4 7b.8):** `winter`, `body_below_first_band`, `destination_occupied`, `foreign_holder`
+  and `larder_short` are not members of OBS §2's roster; U1 decides which become members and which fold
+  into existing ones (R4 suggests `foreign_holder` → a `rank_gap`-like member, `larder_short` →
+  `stakes`); until then they ship absent (0), so the control is `routine` + `distance`.
+  `[ASSUMPTION; medium; Jordan to correct]` for every number. There is no draw today, so every arm of this
+  edit is a mover.
 - `loop/effects_migration.py::_eff_move(w, a, res)`: after the declines (custody, arrival-only, the
   ladder, and **a destination that is his live `contain` object**, H-140), dispatch on `res.degree`:
   `Failure` → `Change((Subject.entity("persons", a.actor, fields=("travel_leg",)),), lay_one_leg)`;
@@ -135,6 +152,9 @@ needs no change in `loop/witness.py`; `broke_observed` carries a bool.]`
 **Edit 5 — the `migrate` row** (`verb_table.yaml:1153`): cell, class and refusals unchanged;
 
 ```yaml
+    contests:    "a task"        # shape (b)
+    capability:  none            # `wayfaring` once defined
+    difficulty:  routine
     writes:
       Overwhelming: ["Tenure.until", "Tenure.since"]
       Success:      ["Person.travel_leg", "Tenure.until", "Tenure.since"]
@@ -170,8 +190,8 @@ a `hold`; absence is not vacancy; removal is `revoke`'s), with no code change.
 - **Downstream read.** A person who moved to `whereabouts_named`'s rung executes, the next round or
   season, an act whose cell asks `with` of the person he went to. One such pair in the three seeds
   is the artifact; none is a reading that the chooser does not yet want to (CHAR's), stated as such.
-- **Control.** Same seed twice: equal `content_hash` (the draw is seeded). The route row removed:
-  every admitted journey arrives, band `Success` only.
+- **Control.** Same seed twice: equal `content_hash` (the draw is seeded). The `contests:` column
+  removed (Edit 1's first commit, flat columns): every admitted journey arrives, band `Success` only.
 - **Falsifier (planted).** `_eff_move` ignoring `res.degree`: (iii) fails, no `travel.turned_back`.
   `whereabouts_named` returning the person's rung id itself: (ii) fails. The `legs` argument
   dropped: a Partial and a Success leave equal `travel_leg` lengths.
@@ -191,7 +211,9 @@ a `hold`; absence is not vacancy; removal is `revoke`'s), with no code change.
 
 ## 6. Cost class
 
-Small build; six declared movers. Depends on the graded route running a degree-keyed effect
-(`audits/14_VERBS_MILITARY.md` S1, `[UNVERIFIED]`) and on SC-B's composer for the modifier rows; with
-neither, Edits 1 to 3 and 6 land alone and the journey stays certain, which this proposal then leaves
-open as F-VM-04 and F-VM-05.
+Small build; six declared movers. Depends on the `a task` prize (VRES §1) and 18-A's loader edit (B07)
+for the degree-keyed rows, and on the one obstacle composer (B05) for the terms; *(W3-4a: the earlier
+`[UNVERIFIED]` dependency on "the graded route running a degree-keyed effect" is replaced: a route row
+cannot carry band-keyed writes, `data/verbs.py:848-876`, so these rows are contest rows).* With neither,
+Edits 1 to 3 and 6 land alone and the journey stays certain, which this proposal then leaves open as
+F-VM-04 and F-VM-05.

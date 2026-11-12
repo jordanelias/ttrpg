@@ -1,6 +1,11 @@
 # U5d-WR — owed edits: the WR resolutions decided with no proposal file
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §1 found it CONFORMS and R3 §2 found no ruling it contradicts. Added: batches (U3 B12 for §2 (a), §3, §4; §2 (c) in B37, cut edges §4.1 rows 49–50; §1 placed in B12 beside §3 `[ASSUMPTION: U3 places no batch for §1; it is a one-line harness reading]`); §2 (c) names U1 ledger F-42 (one fixture set for illness and age, `22_HAPPENINGS_A`'s; `16_PESSIMIST_WR_C`'s fixtures and its `born` write are withdrawn by the WR rewrite lane of R5, not here); tier (R3 7b-0).
+
 ## Status: PROPOSED (a plan for a later implementation lane; nothing here was executed)
+
+Lands in batch: B12 (world motion and ground) for §1, §2 (a), §3, §4, after `16_PESSIMIST_GAME_the_world_draws` (U3 §1 item 13); §2 (c) in B37 (happenings) with `22_HAPPENINGS_A`.
+Depends on: `16_PESSIMIST_WR_B` (B12); `22_HAPPENINGS_A` (B37) for §2 (c).
 
 Author: U5d closure lane (Fable), 2026-11-12. Carries `audits/09_WR_audit.md` R-06 (H-257);
 `audits/09_WR_audit_addendum_B.md` F-WR-23; `audits/16_PESSIMIST_WR.md` R-4; and the sequencing the
@@ -29,7 +34,8 @@ edit 1's non-zero lattice weight (else the flip is an exponential collapse nobod
 `09_WR_B_weather_with_memory_and_the_year.md` (one ladder for wear, hunger and harvest, A-54). (c)
 `22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md` edit 1 (authored ages) before any non-zero
 `illness_rate` or `age_step` (A-15's own condition), with
-`16_PESSIMIST_WR_C_illness_on_the_body_ladder.md` as the bout's graded form. Gate for each: the
+`16_PESSIMIST_WR_C_illness_on_the_body_ladder.md` as the bout's graded form, reduced to one fixture set,
+`22_HAPPENINGS_A`'s (U1 ledger F-42; C3-K4). Gate for each: the
 control arm reproduces the base hash before the flip; the flip is one declared re-pin.
 
 ## §3 — a believed wound is cleared (F-WR-23; owed at PC's and CHAR's owner)
@@ -58,4 +64,4 @@ an order that never ships a fixed outcome. E: one code edit, one harness line, t
 
 ## Cost class
 
-Edits.
+Edits. Tier: `sonnet` (R3 7b-0).

@@ -1,6 +1,12 @@
 # Census (REST) 2 — wiring: four cut wires this census closes itself, and the ledger of those other proposals carry
 
-Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-20) — W3 stands, with one change to its edits 3–4: the comparison is not a second hand-written read of `thread_sensitivity_gate`. It is a `gate` row of `rosters.yaml: tables.capability_uses` at the site `told_retain` (`{use: told_retain, role: gate, key: prac.thread_sensitivity, side: subject}`), read through the one reader `capability_admits` (`unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3 amendment 5, §8). `retainable(...)` keeps its signature and calls that reader for the `thread_substrate` branch; `loop/witness.py` calls `retainable` as written. Jordan's answer A-11 (a capability never gates, except Thread Sensitivity) admits this gate and no other. W1, W2 and W5 are unchanged.
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-20) — W3 stands, with one change to its edits 3–4: the comparison is not a second hand-written read of `thread_sensitivity_gate`. It is a `gate` row of `rosters.yaml: tables.capability_uses` at the site `told_retain` (the row's `side` and `retainable`'s signature are corrected by the wave 3 line below), read through the one reader `capability_admits` (`unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3 amendment 5, §8). `loop/witness.py` calls `retainable`. Jordan's answer A-11 (a capability never gates, except Thread Sensitivity) admits this gate and no other. W1, W2 and W5 are unchanged.
+
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row REST_2 W3 AMBIGUOUS, §2 rows REST_2:W3 and W3 vs A-33, §7, 7b; `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3 item 5, the site table row `own_state_gate, told_retain`, §8; `unified/U3_DEPENDENCY_ORDER.md` §1 items 20, 24, 32, 35, §4.1 row 85). Changed: (1) W3's edits 3-4 are rewritten to the head: `retainable(p, predicate, fx)` takes the hearer's `Person` and calls `capability_admits(p, "told_retain", fx)`; the old signature `(hearer_sensitivity, gate, predicate)` could not call a reader that takes a `Person` (R5 §1); (2) the use row is U1's (`gate · prac.thread_sensitivity · actor · gain: thread_sensitivity_gate`, the hearer being the person the reader is called on), not the earlier `side: subject`; U1 decides over the U5a head where they differ; (3) W3's Layer 1 placement is stated at the site (R5 §1 pick: a retention rule at WITNESS through the one reader, no `capability` eligibility kind; 04 `:180` lists no Person field among WITNESS's reads, so the site names this); (4) W3's test file and test names; (5) batch and tier lines. W1, W2, W5 unchanged.
+
+Depends on: W1 `04_MB_manager_battle_one_resolver.md` §2 (B20); W2 `05_SC_playable_hearing_B.md` (B24); W3 `14_VERBS_PHYSICAL_D_thread_read.md` stage 1 (B35) and U1's capability block (B04: the `capability_uses` table and `capability_admits`); W5 `15_INSTITUTIONS_PAPACY_B_patronage_election_discipline.md` (B32).
+Lands in batch: W1 in B20, W2 in B24, W3 in B35 (after `14_VERBS_PHYSICAL_D` stage 1), W5 in B32 (`U3_DEPENDENCY_ORDER.md` §1, §4.1 row 85, SPLIT). One commit each.
+Tier: sonnet / high for W1, W2, W5 and W3's code; opus for W3's Layer 1 placement, already taken here.
 
 ## Status: PROPOSED
 
@@ -170,21 +176,33 @@ field U2 may add).
    kind outside `values`, a predicate under two kinds, and a predicate that is not an
    `observation_terms` member. `data/verbs.py` refuses, at import, a `thread_read` `observes:` term
    that the roster does not class `thread_substrate` (the two files cannot drift).
-3. **Reader** (`queries/person_q.py`, pure, no token: `04` §A.2 `queries/person_q` row):
+3. **Reader** (`queries/person_q.py`, pure, no token: `04` §A.2 `queries/person_q` row; reads the
+   hearer's own sheet through the one `gate` reader, U1 §8):
 
    ```
-   def retainable(hearer_sensitivity: Optional[int], gate: int, predicate: str) -> bool:
-       """May a mind of this sensitivity hold a claim of this predicate? `mundane`: always.
-       `thread_substrate`: only at or above the gate (H-85, H-239)."""
-       return KNOWLEDGE_KIND_OF.get(predicate, "mundane") == "mundane" or (
-           hearer_sensitivity is not None and hearer_sensitivity >= gate)
+   def retainable(p, predicate: str, fx) -> bool:
+       """May this mind hold a told claim of this predicate? `mundane`: always. `thread_substrate`: only
+       where capability_admits(p, "told_retain", fx) is true (U1 s3 item 5; the one gate A-11 admits;
+       H-85, H-239)."""
+       kind = KNOWLEDGE_KIND_OF.get(predicate, "mundane")
+       return kind == "mundane" or capability_admits(p, "told_retain", fx) is True
    ```
+
+   `capability_admits` returns `bool | UNKNOWN` (U1 §8): an UNKNOWN (an unauthored hearer) is not
+   admitted, which keeps today's reading of a hearer with no sensitivity. The use row, in
+   `rosters.yaml: tables.capability_uses`: `{use: told_retain, role: gate, key: prac.thread_sensitivity,
+   side: actor, gain: thread_sensitivity_gate}` (U1's site table; the comparison is the same one the verb's
+   `own_state_gate` makes against the one `thread_sensitivity_gate` fixture).
 
 4. **The gate, at one site.** `loop/witness.py`, told channel, immediately before the `tc = Claim(…)`
-   construction: `if not person_q.retainable(p.thread_sensitivity,
-   w.fixtures.get("thread_sensitivity_gate"), _held.predicate): continue`. The hearer still receives the
-   event-kind claim `(subject, "news.told", True)`: he knows he was told something; he does not hold
-   it. No new Event kind, no new write class (the deposit that does not happen is WITNESS's own).
+   construction: `if not person_q.retainable(w.persons[pid], _held.predicate, w.fixtures): continue`. The
+   hearer still receives the event-kind claim `(subject, "news.told", True)`: he knows he was told
+   something; he does not hold it. No new Event kind, no new write class (the deposit that does not
+   happen is WITNESS's own). **Named at the site (Layer 1):** WITNESS reading a field of the hearer's own
+   sheet is a retention rule, not an eligibility kind; `04` `:180` lists no Person field among WITNESS's
+   reads and PART D 33 / §F.27 keep capability out of eligibility, so the comment at this line says the
+   one gate A-11 admits is read here through `capability_admits` and that no `capability` eligibility kind
+   is added (`04` B4 third disposition, `unified/work/R5_READ.md` §1).
 5. **What is not gated.** First-hand deposits: the reader's own finding passes the verb's gate already.
    Documents: a `Record` whose content is a thread-substrate claim is `14_VERBS_MATERIAL_E_knowledge.md`'s
    subject `[UNVERIFIED: not opened for this rule]`; if a non-sensitive reader can take the claim from
@@ -194,11 +212,15 @@ field U2 may add).
 and takes no token; `data/loaders` owns cross-validation. All three edits sit in their rows.
 `holonic_ARCHITECTURE.md` is not touched. Conformant.
 
-**Gate (execution artifact).** A test beside `engine/season/tests/test_k3_thread_sensitivity.py`, on a
-hand-built world through the real fold: a sensitive teller holding one thread-substrate claim and one
-mundane claim tells both to (a) a hearer below the gate and (b) a hearer at it. Asserted: (a) gains a
+**Gate (execution artifact).** NEW `engine/season/tests/test_told_retain.py`, beside
+`engine/season/tests/test_k3_thread_sensitivity.py`, on a hand-built world through the real fold: a
+sensitive teller holding one thread-substrate claim and one mundane claim tells both to (a) a hearer
+below the gate and (b) a hearer at it. Tests:
+`test_hearer_below_gate_keeps_the_mundane_claim_and_news_told_not_the_substrate_claim` ((a) gains a
 `told_by` claim for the mundane predicate and none for the thread-substrate one, and gains `news.told`
-for both tellings; (b) gains both. `assert checked == 4` (four hearer-claim pairs).
+for both tellings); `test_hearer_at_gate_keeps_both` ((b) gains both; `assert checked == 4`, four
+hearer-claim pairs); `test_empty_substrate_list_gains_both` (the falsifier below, as a test). Run: that
+file, then `engine/season/tests/test_k3_thread_sensitivity.py` (the verb's gate, same fixture).
 
 **Falsifier.** Empty `predicates.thread_substrate` in a copy of the roster: (a) gains both and the test
 fails. Control: the mundane claim in the same run, same hearer.
@@ -244,5 +266,7 @@ constant), leaving the matrix row declared and unwritten like `(Rung, envelope)`
 
 ## Order
 
-W1 and W2 are independent of everything and can land first. W3 after `14_VERBS_PHYSICAL_D` stage 1. W5
-with Papacy B. No cycle: none of the four depends on another.
+W1 and W2 are independent of each other; each lands with the proposal whose code it touches (W1 in B20
+after `04_MB_manager_battle_one_resolver.md` §2, W2 in B24 after `05_SC_playable_hearing_B.md`'s roster
+note). W3 in B35 after `14_VERBS_PHYSICAL_D` stage 1. W5 with Papacy B in B32. No cycle: none of the four
+depends on another.

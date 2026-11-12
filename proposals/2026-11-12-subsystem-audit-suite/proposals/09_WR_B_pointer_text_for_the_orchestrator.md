@@ -1,6 +1,11 @@
 # WR · Pointer and register text for files only the orchestrator edits
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §1 found it CONFORMS (the counts in edit 4 are `hole_register.yaml` cite text, not `CURRENT.md`, so CLAUDE.md §1's pointer-index rule is not crossed) and R3 §2 found no ruling it contradicts; only the batch and the tier are added (U3 B03; R3 7b-0).
+
 ## Status: PROPOSED
+
+Lands in batch: B03 (hygiene, hash EQUAL), after `16_PESSIMIST_CORE_no_stored_plan` (U3 §1 item 4).
+Depends on: nothing proposed (text only); edit 2's "after the move" sentence waits on `09_WR_B_threadwork_session_and_practitioner.md` (B35).
 
 The first WR audit (`audits/09_WR_audit.md` §6.2, R-11, R-12, R-20) and its addendum B
 (`audits/09_WR_audit_addendum_B.md` §6, §2.3 F-WR-22, R-31) reach conclusions whose edits land in
@@ -121,4 +126,4 @@ where a reader looks first.
 
 ## Cost class
 
-Edit (text only).
+Edit (text only). Tier: `sonnet` (R3 7b-0).

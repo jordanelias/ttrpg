@@ -4,11 +4,16 @@ Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-01 — E-6's strike
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-05) — admission is decided: it rides the citing speech's band (`19_LACUNA_admission_rides_the_citing_draw.md`). E-2's stage is written only for an item the band enters, at half weight on a Partial. E-5 item 1's owner of "contradicts" is the pairing step `decision/options.py::_pair`, as `05_SC_evidence_and_rebuttal_B.md` problem 4 found, not `decision.agreement`. E-9 and E-10 are closed in `U5c_FI_residue.md` §4.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.5 row FI_05_B, §3 row *entry of a cited item*, §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` §2 *evidence* edge, ledger S-01, S-02, R-25; `unified/U1_GLOSSARY.md` *exhibit*; `unified/U3_CONFLICT_LEDGER.md` C3-C1, C3-Y3, §9). The body follows its two head lines: E-2 enters an item by the citing speech's band (ADM's table, C-05), not "Success or better"; E-5 item 1's owner is `decision/options.py::contradicts` (the predicate `_pair` applies, exposed once by `05_SC_evidence_and_rebuttal_B.md` edit 2), not `decision.agreement`; E-6's and the gate's `proof_step` / `world_q.hearing` reading is the `proofs` leverage source (A-25; OBS §3; `proof_step` deleted); citations of SC-P8 and SC-P3 read their successors (EVID_B, HEAR_B); §7's "proofs on the obstacle" and "one `speak` is one act" read the reconciled forms; an entered item is an **exhibit** (glossary); named tests; lands-it and tier.
+
+**Lands in batch:** B24, last of the evidence cycle (HEAR_B → ADM → EVID_B → this file, C3-Y3). **Depends on:** `08_FI_06_testimony-names-a-hand.md` (B11), `08_FI_07_shortest-playable-case.md` §2 (B11), `05_SC_playable_hearing_B.md`, `19_LACUNA_admission_rides_the_citing_draw.md`, `05_SC_evidence_and_rebuttal_B.md` (B24).
+
 ## Status: PROPOSED (an interface statement; the consumer is SC's and design-first there)
 
 Supersedes `08_FI_05_evidence-interface.md` (first FI lane). Carries `audits/08_FI_audit.md` F-FI-09, R-29 and
 `audits/08_FI_audit_addendum_B.md` §B4, R-41, R-42, R-43. Written against `05_SC_evidence_and_rebuttal.md`
-(SC-P8) and `05_SC_playable_hearing.md` (SC-P3), which it cites and does not redo. Where it meets a ruled
+(SC-P8) and `05_SC_playable_hearing.md` (SC-P3), both since superseded by `05_SC_evidence_and_rebuttal_B.md`
+(EVID_B) and `05_SC_playable_hearing_B.md` (HEAR_B), which it cites and does not redo. Where it meets a ruled
 item the conflict is named in §7 and not resolved. No code is made to read `.designs/` or `.audit/`.
 
 ## What this changes in `engine/season/` at runtime
@@ -54,8 +59,10 @@ One reader: `queries/person_q.py::proof_kind(c) -> str` for claims (World-free),
 for a Record. The arrangement row's `proofs:` list admits or drops a kind (its first reader, as SC-P8 has
 it).
 
-**E-2. The case file holds what was said.** When a `speak` that cites grades `Success` or better, the host
-appends one stage per cited item to the matter's case file (CR-61's Record; SC-P8 edit 2). For a claim the
+**E-2. The case file holds what was said.** When a `speak` that cites folds, the host appends one stage
+per cited item **the speech's band enters** to the matter's case file (CR-61's Record; EVID_B edit 4), by
+`19_LACUNA_admission_rides_the_citing_draw.md`'s table: `Failure` none, `Partial` at half weight, `Success`
+whole, `Overwhelming` whole with the `first` mark. An entered item is an **exhibit** (HEAR_B's `Exhibit`). For a claim the
 stage carries the `Said` (`state/carriers.py`: subject, predicate, value, confidence, chain), the citer and
 the act id; for a Record, the Record's id. `Said` is the carrier the told channel already uses for "what
 was said", so no carrier is added. A later answer is compared with the stage, never with a ledger.
@@ -74,8 +81,9 @@ it.
 **E-5. Three ways to answer an item.** Each compares held things; none reads the Event log.
 
 1. *Contradiction.* An answering `speak` cites a claim on the same `(subject, predicate)` with a different
-   value. Asked of the one owner of "pairs and disagrees" that SC-P8 names (`decision.agreement`, already
-   called resolver-side by `loop/matter.py::_standing_crossings`) `[as cited by SC-P8; not opened here]`.
+   value. Asked of the one owner of "pairs and disagrees": `decision/options.py::contradicts(a, b)`, the
+   predicate the pairing step `_pair` applies (`decision/options.py:1491-1521`), exposed once by EVID_B
+   edit 2; the host computes the relation and hands it to the module as each exhibit's `pairs` (C-05).
 2. *Impeachment of a document.* An answering `speak` cites a held deed claim whose subject is the cited
    Record and whose kind is a `rosters.yaml: covert_kinds` member (today `record.forged`). The found deposit
    mints exactly that claim, `(record id, record.forged, True)`, source `inferred`, to whoever examined the
@@ -91,12 +99,11 @@ it.
 entered item only when the answering `speak` itself grades `Success` or better (SC-P8 edit 3).
 *(Reconciled, D-01: graded as `05_SC_evidence_and_rebuttal_B.md` `standing` rules 1–2 now state it, so
 the two lanes hold one rule: Failure the item stands, Partial both halved, Success struck, Overwhelming
-struck with the origin-wide strike or fault; the weights enter the answer's obstacle, never the band.
-Whether ADMISSION rides the citing `speak`'s band (this file's E-2) or filing is draw-free (SC's `_B`)
-is left to `19_LACUNA_admission_rides_the_citing_draw.md`, which owns that question; either way no item
-is admitted or struck with certainty by the paperwork alone.)* The verdict
-remains `determine`'s roll, moved by `proof_step` per standing item through `world_q.hearing` (SC-P8 edit
-4). A false item that answers a true one strikes it; that is the risk a forger runs and the reason a
+struck with the origin-wide strike or fault; the weights move the answer's odds, never the band. Admission
+rides the citing `speak`'s band (E-2; ADM decides it); no item is admitted or struck with certainty by the
+paperwork alone.)* The verdict remains `determine`'s roll, moved by the `proofs` leverage source (one
+`proof_level` per whole unit of standing weight for a side, OBS §3; composed inside the module from
+`standing`, EVID_B), never by an obstacle subtraction (A-25). A false item that answers a true one strikes it; that is the risk a forger runs and the reason a
 finding matters.
 
 **E-7. Bluster is the control; citing costs disclosure.** An act that cites nothing rolls exactly as
@@ -120,11 +127,12 @@ verb row emits (forging, seizure, requisition, arrest, a field won) and not for 
 4. `08_FI_03` §2 as amended by `08_FI_07` §2 (an admitted look teaches its reads), so that an inquirer comes
    to hold the firsthand cell that contradicts a told one.
 
-## What SC builds (named, by SC-P8's own numbering; not authored here)
+## What SC builds (named, by its successors' numbering; not authored here)
 
-SC-P8 edit 1 with `cites` in place of `{kind, ref}`; edit 2 with the `Said` in the stage; edits 3 and 4
-unchanged; edit 5 read as E-5 item 2; SC-P3 edits 2 and 3. `queries/inputs.py::SocialContestInput` gains
-no field: `proofs` stays one float, now computed from standing stages.
+EVID_B edits 1–7 (the operand `cites`, the `Said` in the stage, `contradicts`, `standing` inside the module,
+the host passing the exhibits); HEAR_B edits 1–10 (the sitting); ADM (entry by band).
+`queries/inputs.py::SocialContestInput` gains `exhibits` (EVID_B edit 5) and carries `proof_level` raw;
+`proofs` stays one float on the control arm (`world_q.proofs`).
 
 ## Left to SC, with the options stated
 
@@ -133,8 +141,9 @@ no field: `proofs` stays one float, now computed from standing stages.
 - *The opponent's own word.* His live `commit` to a Proposition that contradicts his plea, cited against
   him (that design's commitment store; SC-02's mirror made public).
 - *A judge whom evidence moves more, or less.* The archived Pressure Points (Evidence, Consequence,
-  Authority, Loyalty) and corpus cases NPC-001 and NPC-071 want it; SC-P7's `trait_advantages` roster is
-  the door, with `side: subject`.
+  Authority, Loyalty) and corpus cases NPC-001 and NPC-071 want it; carried by
+  `02_CHAR_which_ground_moves_whom.md` (the four `moved_by_*` traits as `edge` rows of `capability_uses`,
+  `side: subject`; SC-P7's `trait_advantages` is superseded into those rows).
 - *Not taken now:* the companion's softened Triangle Strategy rule (an unsupported case may not reach
   Overwhelming, through `dice_engine.BandExtension`). `determine`'s three non-Failure bands open the same
   edge today (H-301; H-162 item 2), so the veto would change nothing. It becomes worth building the day a
@@ -143,17 +152,22 @@ no field: `proofs` stays one float, now computed from standing stages.
 ## Gate (execution artifact)
 
 On SC-P3's `build_hearing` world, extended with one forged Record and one examiner:
-(a) the accuser cites a firsthand deed claim: the case file gains one stage carrying its `Said`; `hearing`
-rises by `proof_step`; each judge holds the told copy with the accuser on its chain.
+(a) the accuser cites a firsthand deed claim at a planted `Success`: the case file gains one stage carrying
+its `Said`; the determiner's `levels` gain one `proofs` level for the accuser's side and his obstacle is
+unchanged; each judge holds the told copy with the accuser on its chain.
 (b) the accused answers with a held claim on the same cell and a different value, at a planted `Success`:
-one `struck` stage; `hearing` returns.
-(c) the accuser cites the forged Record: `hearing` rises as for a true one.
+one `struck` stage; the `proofs` level is gone.
+(c) the accuser cites the forged Record: the `proofs` level rises as for a true one.
 (d) the examiner, holding `(record, record.forged, True)` from a `Partial` find, answers: the Record's stage
 is struck; after the barrier each judge holds the forging as a told claim and `reception` of the accuser in
 the next `speak` is lower than in (a).
 (e) with `08_FI_06` on, a cited `(victim, person.died, True)` leaves each judge able to name the accused
 (`deed_doers`); with it off, nobody but the eyewitness can.
-Control: `cites` empty throughout reproduces SC-P3's `--auto` content hash.
+Control: `cites` empty throughout reproduces HEAR_B's `--auto` content hash.
+**Named tests** (new, `engine/season/tests/test_fi_evidence_interface.py`): `test_a_cited_claim_enters_by_band_and_is_told`
+(a), `test_an_answer_at_success_strikes_the_stage` (b), `test_a_forged_record_counts_until_answered` (c),
+`test_an_impeachment_lowers_reception_of_the_accuser` (d), `test_a_cited_death_names_the_doer_only_with_told_pairing`
+(e), `test_no_cites_is_hash_equal` (control); `test_a_cited_id_not_held_is_refused_before_the_draw`.
 
 ## Falsifiers
 
@@ -166,11 +180,12 @@ Control: `cites` empty throughout reproduces SC-P3's `--auto` content hash.
 
 ## §7 Conflicts with ruled items, named and not resolved
 
-- **Proofs on the obstacle, not in the pool** (ED-SC-0034; the archived *"+1D per Finding"* and *"+2D
-  Recall"*): the built placement is kept; SC's audit lists the difference (G-33).
-- **One `speak` is one act.** Presenting item by item inside one sitting needs the nested run
-  (`21_RECONCILIATION.md` step 15), which is unbuilt. Here a hearing is several `speak` acts over rounds
-  (SC-P3), each with its chosen subset.
+- **Proofs neither in the pool nor on the obstacle** (ED-SC-0034; the archived *"+1D per Finding"* and *"+2D
+  Recall"*): standing items reach the roll as `proofs` levels on the leverage channel (A-25; OBS §3); SC's
+  audit lists the difference (G-33).
+- **One `speak` is one act.** Out of a sitting a hearing is several `speak` acts over rounds, each with its
+  chosen subset; in a sitting, presenting item by item is HEAR_B's module entry (`social_contest.hearing`,
+  `ED-IN-0285` (13)), which the nested run of `21_RECONCILIATION.md` step 15 was the earlier name for.
 - **Hearing by presence** (H-323; private whispers are not built). A citation reaches everyone in the
   room. Showing evidence privately to one judge is not representable and is not proposed.
 - **No verifier** (2026-08-18 Q5). Kept: every comparison is between two held items, and a false one can
@@ -192,4 +207,8 @@ one operand, one deposit trigger, two small readers, against trials that today a
 ## Cost class
 
 FI's four edits: edit (items 1 and 2), small build (`08_FI_06`), small build (`08_FI_07` §2). SC's consumer:
-design-first, then small builds, after CR-61, SC-02 and SC-P3.
+design-first, then small builds, after CR-61, SC-02 and HEAR_B.
+
+**Lands it and tier.** FI's edits 1–2 in the B24 batch, an FI `valoria-author` session on `sonnet` (`high`),
+last of the evidence cycle; closed by B24's `methodology-close`. **Hash movers.** Nothing until SC's consumer
+cites (control: `cites` empty).

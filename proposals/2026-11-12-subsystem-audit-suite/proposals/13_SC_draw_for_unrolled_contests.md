@@ -2,7 +2,11 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-07, C-11, C-12) — of the five rolls here, three yield and two stand. Negotiation: acceptance is not the offerer's roll; it is the accepter's own sampled `commit` (`05_SC_negotiation_scene.md`; `14_VERBS_SOCIAL1_B_documents_and_obedience.md` §3), because one person's roll cannot open another's edge (`04` D-10a). Questioning: the `interview` row is `14_VERBS_SOCIAL2_C_case_question_confession.md` §3's. Docketing: `carry`'s draw is `14_VERBS_SOCIAL1_D_grievance_and_settlement.md` §1's, and `open_case` on one's own bench is a remit act and is not drawn. The ballot stands, owned by the hearing's close (edits 3 and 4 yield to `U5c_SC_proceedings_residue.md` §6; Jordan, A-14). The appeal stands as `19_LACUNA_verdict_ladder_and_reversal.md`'s, on new grounds only (A-39).
 
-## Status: PROPOSED
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row (VIOLATES for `carry`/`open_case`), §2 row A-81, §7; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-02, D-U1-07, D-U1-11i, ledger C-04; `unified/U3_CONFLICT_LEDGER.md` C3-R1, C3-C11, C3-C13, §9; `unified/U3_DEPENDENCY_ORDER.md` node B07). The body is brought to the head: every one of the five rolls is carried by its owner, so the resolution table and the exact edits (which used loader keys that do not exist, `emits_by_degree`/`writes_by_degree`, put a docketing write on a graded route that the loader refuses, `data/verbs.py:872-876`, `audits/25_GROUNDING_ENGINE.md` G-01, and read the half-score opposition and a subtracted regard) are removed and replaced by a pointer table; the standing rule, the "outside this lane" list and an integration check stand. The `verb_capability` rows become the verb-row column's (U1 §5) and are each owner's.
+
+**Lands in batch:** no code of its own (node B07 kept for the order). Its check is read once, at the close of B28, the last batch that carries one of the five. **Depends on:** `05_SC_negotiation_scene.md` (B24), `14_VERBS_SOCIAL2_C_case_question_confession.md` §3 (B25), `19_LACUNA_verdict_ladder_and_reversal.md` (B27), `U5c_SC_proceedings_residue.md` §6 (B27), `14_VERBS_SOCIAL1_D_grievance_and_settlement.md` §1 (B28), `18_DETERMINISM_task_draw_for_uncontested_verbs.md` item 4 (B07; the loader edit any graded-route row with writes needs, C3-R1).
+
+## Status: PROPOSED — a pointer file: each of its five rolls is carried by the owner named below
 
 Written by the contest-interrogation lane (`audits/13_SC_contest_interrogation.md` §4 cells 8–11, §8
 R-7, R-8) under the standing rule Jordan set on 2026-11-12 (`AUDIT_BRIEF.md`, *"We do not do
@@ -38,19 +42,17 @@ alone.
 
 ## The resolution, decided
 
-One roll, one composition (SC-B's terms and `13_SC_tuning_tables.md`'s tables), routed by what exists:
-an act against a **person** contests a prize (the prize-row path through `loop/sides.py::sides_of`, so
-the counterparty's score, regard and the room are read exactly as for `tell` and `argue`); an act with
-**no person against it** takes the graded route (`rosters.yaml: graded_inquiries`, the path `research`
-uses: `provider: social_contest`, `module_entry: social_contest.roll`, no prize). No new resolver.
+One roll, one composition (`U5c_SC_one_obstacle_form.md`: the even line, difficulty, `opposed_ob` on the
+trained score, hostile terms; what a party brings is leverage), routed by what exists. Each contest has one
+owner; this file states the rule and checks that all five draw.
 
-| contest | verb row edit | route | pool (capability key) | obstacle terms (T1 level + …) | bands (writes / emits) |
-|---|---|---|---|---|---|
-| negotiation | `covenant`: `contests: "a proposition"` | prize, counterparty = the row's `counterparty` | `argue` | `routine` + counterparty's score/2 + **terms' cost** (his pursuits against the uttered terms: `person_q.pursuit_lean` summed over what the terms commit him to, × `proof_step`, the evidence unit) − regard | Overwhelming / Success: `covenant.accepted` (the commit is written as offered); Partial: `covenant.countered` (a counter-offer Proposition at half the concession, his to accept by his own `covenant`); Failure: `covenant.refused` |
-| questioning | `interview`: `contests: "a standing"` | prize, counterparty = the witness | `inquiry` | `plain` + witness's score/2 − regard (a friendly witness talks) | Overwhelming / Success: `finding.made` (as today); Partial: `finding.partial` (the claim at half confidence); Failure: `finding.none` |
-| docketing | `carry`, `open_case`: graded route | graded, subject = the bench's rung | the actor's `copying` | `routine` + the room's `standard` (T2) − reception (the bench's regard for him) | Overwhelming / Success: the item is docketed (today's write); Partial: docketed at the next sitting (the date one season later); Failure: `case.declined` (nothing docketed; the petition Record stands, so he may carry it again) |
-| the ballot | `determine` on a `declared` row | each seated member's ballot is a draw by that member: his `determine`-capability pool against `plain` + the room's standard, with his live commits on the matter (`declared_votes`' own read, per member) as favour (−) or hostility (+) at `proof_step` per commit | that member's | as stated | each ballot's band is his vote: Success+ for, Failure against, Partial abstains; the row's `quorum` counts the fors. The count is arithmetic; each vote is a draw |
-| appeal | `determine` with `payload.appeal: <prior disposal>` on a row whose `appeal_basis` is `determine` | prize, as `determine` | the appellant's `copying` | the original row's T1 level + `standard` + **one level** (`routine` → `demanding`: an appeal climbs against a standing verdict) − evidence | Success+: the prior disposal Tenure is closed; Partial: its term is halved; Failure: it stands |
+| contest | owner (the file that carries the row and the edit) | route and form, as the owner decides it |
+|---|---|---|
+| negotiation | `05_SC_negotiation_scene.md`; `14_VERBS_SOCIAL1_B_documents_and_obedience.md` §3 | acceptance is the accepter's own sampled `commit` (C-07: one person's roll cannot open another's edge, `04` PART D row 10a); covenants are made in person (A-21) |
+| questioning | `14_VERBS_SOCIAL2_C_case_question_confession.md` §3 (the `interview` row); `19_LACUNA_questioning_has_an_approach_and_a_cost.md` (the approach) | `interview` contests a prize against the witness; the witness's trained score opposes (A-79); `interview` engages the interviewee's scene (A-63; C3-C13) |
+| docketing | `14_VERBS_SOCIAL1_D_grievance_and_settlement.md` §1 (`carry`) | `carry`'s draw is that file's; `open_case` on one's own bench is a remit act and is not drawn. A docketing write on a graded route needs 18-A's loader edit (C3-R1) |
+| the ballot | `U5c_SC_proceedings_residue.md` §6 (the hearing's close); A-14 | each vote is a draw on the voter inside the presiding person's act; the `lean` leverage source (OBS §3); `ballots` default 1 |
+| appeal | `19_LACUNA_verdict_ladder_and_reversal.md` | on new grounds only (A-39); the appellate bench writes `reversed`; the disposing seat's bench closes the edge by its own `pardon` |
 
 Two rules hold across the table:
 
@@ -58,44 +60,37 @@ Two rules hold across the table:
   counterparty may still decline to negotiate (not answer), which is his act formed by the chooser; an
   offer once made resolves by the draw. This keeps the person-side decision (CHAR's chooser, AX-2) and
   removes the deterministic acceptance.
-- **Evidence and pursuit costs are terms on the draw, never a gate.** The terms' cost and a cited item
-  shift the obstacle; neither fixes the band (the standing rule's *"not 'evidence enters when presented'"*).
+- **Evidence and pursuit costs reach the draw, never as a gate.** A hostile cost is an obstacle term; a
+  cited item is leverage (`proofs`, A-25); neither fixes the band (the standing rule's *"not 'evidence
+  enters when presented'"*).
+- **Every band writes something readable (A-81).** A Failure band names its durable write: a witnessed
+  Failure Event deposits a claim to those present, a solitary act deposits the actor's own claim of the
+  failure (C3-C11). Each owner states it at its row.
 
 ### Outside this lane, listed for the owning lanes
 
 - The binding acts (`issue`, `confer`, `revoke`, `pardon`, `release`, `surrender`, `establish`): *"a decree
   binds"* is the rule's own case — `audits/14_VERBS_BINDING.md` / the INSTITUTIONS brief.
 - `comply`, `evade / defy`, `construe`, `conceal`: `audits/14_VERBS_SOCIAL1.md` / `SOCIAL2.md`.
-- SC's played hearing: *present* and *answer* resolve with "no draw: the heavier stands"
-  (`audits/05_SC_audit_addendum_B.md` B4.2) and the strike in `05_SC_evidence_and_rebuttal.md`: the SC
-  lane's to give a draw (G-65).
+- SC's played hearing: *present* and *answer* (`05_SC_playable_hearing_B.md`, `05_SC_evidence_and_rebuttal_B.md`,
+  `19_LACUNA_admission_rides_the_citing_draw.md`): `answer` is a rolled move (D-02), entry rides the citing
+  draw.
 
 ## Exact edits, by owner
 
-1. `engine/season/verb_table.yaml`: `covenant` and `interview` gain `contests:` and band-keyed
-   `emits_by_degree` / `writes_by_degree` as tabled; `carry` and `open_case` gain band maps; `determine`
-   gains the `appeal` operand (`requires_operands`) and the appeal's band map; each row gains its
-   `difficulty:` (`13_SC_tuning_tables.md` T1).
-2. `engine/season/rosters.yaml`: `graded_inquiries` gains `carry` and `open_case` (the existing route;
-   the roster's name is now wider than "inquiries" — renaming it is a separate edit and not proposed
-   here); `verb_capability` gains `covenant: argue`, `interview: inquiry`, `carry: copying`,
-   `open_case: copying`; new emitted kinds `covenant.accepted`, `covenant.countered`, `covenant.refused`,
-   `finding.partial`, `case.declined` on the emitted-kind roster with their WITNESS deposit modes.
-3. `engine/season/loop/effects_information.py`: the `covenant`, `carry`, `open_case` and `determine`
-   effects read the band (as `_eff_determine` already reads it for `Tenure.degree`); the ballot loop over
-   seated members on a `declared` row calls `seam.contest` once per member with that member as actor
-   (the per-member generator `H(seed, tick, member, "ballot:<matter>")`, `04 PART D row 35`).
-4. `engine/season/queries/world_q.py::declared_votes`: returns each member's commit count (his odds
-   operand) instead of the total; the total becomes the count of Success-or-better ballots.
-5. No change to `modules/social_contest/roll.py`: every new act is one more record on the one roll.
+None here: each edit is its owner's (table above). Removed from this file (superseded): the `covenant`
+`contests:` row, the `interview` row (S2_C §3's), `carry`/`open_case` on the graded route, the ballot loop
+and `world_q.declared_votes`'s per-member count (proceedings residue §6's), the appeal row (LACUNA's), and the
+`verb_capability` rows (the verb-row `capability:` column, U1 §5, each owner's).
 
 ## Gate (execution artifacts)
 
 - Exact: for each new row, `odds_of` mode (a) on a planted act returns four non-zero-sum bands, and
   no cell of the audit's planted grid gives P(Failure) 0 or 1.
-- Realm, `build_realm(0)` and `(1)`, two seasons, `PYTHONHASHSEED=0`: the tap (`realm_tap.py`) shows
-  rolls for `interview`, `carry`, `open_case`; `case.declined` and `finding.partial` occur at least once
-  across the two seeds; the docket length differs from the base commit (declared mover).
+- Realm, `build_realm(0)` and `(1)`, two seasons, `PYTHONHASHSEED=0`, after B28: rolls occur for
+  `interview` and `carry` (read from SC-P1's record; the absent scratch `realm_tap.py` is restated as
+  `engine/season/tests/test_sc_calibration_targets.py::test_every_rolled_verb_with_five_rolls_shows_more_than_two_obstacles`
+  and, for this file, `engine/season/tests/test_every_contest_draws.py::test_five_contest_types_each_take_more_than_one_value`).
 - A planted `declared` sitting of five members with commits 3 for / 2 against, run at 200 seeds: the
   matter carries in some seeds and fails in others (the count is not the verdict).
 - Determinism: same seed, same hash, twice.
@@ -118,5 +113,8 @@ Any of the five contest types whose outcome, over 200 seeds of one planted state
 
 ## Cost class
 
-Small build per row (data plus four effect bodies); the ballot loop is the one new piece of host code.
-Lanes: SC (rows, effects), IN/CORE (rosters), FA (the `declared` rows), FI (`finding.partial`).
+None of its own (each owner's cost class governs). The integration test is an edit.
+
+**Lands it and tier.** The test `test_every_contest_draws.py` is written in the B28 batch after its last
+owner lands, `sonnet` (`high`, `valoria-author`), read at B28's `methodology-close`. **Hash movers.** None of
+its own.

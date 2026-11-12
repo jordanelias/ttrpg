@@ -2,6 +2,10 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-20) — edits 2 to 5 land as one change to `questions_for` with `16_PESSIMIST_FI_C_what_a_deed_leaves_behind.md` edit 4 (`U5c_FI_residue.md` §1). `holders_named` and `seed_seat_news` are the one reader and the one build step for seat knowledge across families. Edit 6 ships realm-wide for seat changes with by-presence the test arm (Jordan, A-32); a death is not seeded and travels by presence, trail and telling (A-33).
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.5 row FI-01 (CONFORMS), §7 (INCOMPLETE: the one test unnamed; scratch probe), §7b-17, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` ledger S-18; `unified/U3_DEPENDENCY_ORDER.md` node B11, §6.2). Added: the one test is named (`test_r7_a_silent_seat_change_moves_no_candidate`, 7b-17); the scratch `r08_probe.py` and `dynamics.py` readings are restated by that test and by `U5c_FI_residue.md` §1's tests; edit 7's `measured:` rewrite lands as R-07's and R-08's `reading:` (`01_CORE_requirements_reading_record.md`); lands-it and tier. No other change.
+
+**Lands in batch:** B11, one commit with `16_PESSIMIST_FI_C` edit 4 (`U5c_FI_residue.md` §1's order). **Depends on:** B02 (`requirements.yaml`'s `reading:` shape; `test_season_shape.py` serial order B02 → B11); plan position CR-29 (the `reach` roster) `[PL]`, better measured after it.
+
 ## Status: PROPOSED
 
 Carries audit `audits/08_FI_audit.md` F-FI-01 and resolutions R-01, R-02, R-03. Builds a decision already
@@ -18,7 +22,8 @@ Stamps over the asker's OWN live edges are unchanged. A declared hash mover on e
 
 ## The problem, with evidence
 
-`r08_probe.py` (scratchpad `runs/FI/`; `build_realm(0..2)`, tick 0, `PYTHONHASHSEED=0`). A `hold` is edited
+`r08_probe.py` (scratchpad `runs/FI/`, not in the repository; restated by edit 8's test; `build_realm(0..2)`,
+tick 0, `PYTHONHASHSEED=0`). A `hold` is edited
 directly on the World: no Event, no WITNESS; the subject's ledger and own tenures are byte-identical before
 and after.
 
@@ -74,19 +79,20 @@ function: `sittings_before` and `docket_question` already require a held claim.
    `claim_subjects`' own subjects so the starting ledger and a played deposit are one shape. Until CR-29
    lands the map is "the seats of his own realm" (audit §11 item 1, option A, shipped; option B the
    control).
-7. **`engine/season/requirements.yaml`, R-07 and R-08 `measured:`.** Replace *"IMPERFECT KNOWLEDGE IS
+7. **`engine/season/requirements.yaml`, R-07 and R-08** (their `reading:` records, `01_CORE_requirements_reading_record.md`; the `measured:` field is retired there). Replace *"IMPERFECT KNOWLEDGE IS
    STRUCTURAL AND HOLDS"* / *"NON-OMNISCIENCE HOLDS, structurally"* with the reading: holds for claims;
    referents were world-read until this position; cite the probe.
-8. **One test, in `engine/season/tests/test_season_shape.py` beside the `r7` group** (it executes the
-   behaviour and its subject crosses into the engine's decisions, `CLAUDE.md` §0.1 pt 5's predicate): a
-   silent seat change moves no candidate; the same change by a witnessed act does; the unrelated-seat arm
-   is the control. Add its name to R-07's `measure:`.
+8. **One test, `engine/season/tests/test_season_shape.py::test_r7_a_silent_seat_change_moves_no_candidate`,
+   beside the `r7` group** (it executes the behaviour and its subject crosses into the engine's decisions,
+   `CLAUDE.md` §0.1 pt 5's predicate): a silent seat change moves no candidate; the same change by a
+   witnessed act does; the unrelated-seat arm is the control. Add its name to R-07's `measure:`.
 
 ## Gate (execution artifact)
 
-`r08_probe.py` re-run on the edited tree: P1 and P2 read *candidates moved: no*; both controls unchanged.
-Then the positive arm: the same seat change performed by a real `confer` / `release` the subject is
-admitted to (or told of) moves his candidates in the next round.
+Edit 8's test (the `r08_probe.py` reading restated) on the edited tree: P1 and P2 read *candidates moved:
+no*; both controls unchanged. Then the positive arm: the same seat change performed by a real `confer` /
+`release` the subject is admitted to (or told of) moves his candidates in the next round. Also
+`U5c_FI_residue.md` §1's `test_fi_referents.py` group.
 
 ## Falsifier
 
@@ -110,5 +116,6 @@ four small edits against a class of five world reads: cheaper than what it repla
 
 ## Cost class
 
-Small build. Lanes: FI (reader), CHAR (goals), FA (conferral). Depends on nothing; better measured after
-CR-29.
+Small build. Lands it and tier: the B11 batch, an FI `valoria-author` session on `sonnet` (`high`), closed by
+B11's `methodology-close` once. Lanes: FI (reader), CHAR (goals), FA (conferral). Depends on nothing; better
+measured after CR-29. **Hash movers.** Every realm world (declared).

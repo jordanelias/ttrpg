@@ -8,6 +8,11 @@ Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (ruling A-5
 
 Folded: 2026-11-12 by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (rows B-12, S-1, M-8, M-1). Nothing here is deleted. (1) **A body itself in melee contact does not volley**, whichever weapon is in hand; a body not in contact may shoot into a melee (Agincourt and Crécy as page-read, `research/historical/mass_battle_maneuver_sequences_grounding.md` §5). This is added to §4: without it a reached missile body with no switch order still shoots while it is fought, which stage 3's gate does not catch; the gate gains the row "a reached archer body with no order: zero volley events after its first tick in contact". (2) **The archer's switch is sourced** for Agincourt ("when the archers ran out of arrows, they 'dropped their bows' and attacked with 'hatchets, swords, spears and the mallets'") and **not found** for Crécy; the `volleys_spent` trigger stands on the first. (3) **Per-arm `range`** takes the stated scale's values (javelin about six cells, bow and crossbow the board, sling and engines not established and left at `[2, 8]`): `26_MASS_BATTLE_cell_scale_and_time.md` §2. (4) **No historical magnitude exists for what a second weapon costs** in fatigue or speed (`…_movement_and_behaviour_grounding.md` T7): the trade is Jordan's design, the form here is confirmed, and every `mass_kg` and `strength` stays a seed. (5) `pace` joins the troop row and `MB_CAVALRY_SPEED_MULT` leaves the code (`26_MASS_BATTLE_movement_and_fatigue_as_data.md` §1); the carry `step_factor` multiplies it.
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AND_VOCABULARY.md` D-U1-11d (the carry rule's home is `engine/substrate/combat_kit.py::carry_demand_of`; the mass-battle host calls it and hands the factors in; `R1_READ.md` §1.2's conditional "the host resolves `combat.carry_demand`" does not apply, since U1 took the leaf, not a composition role), §1.2 (the loader's data dependency on personal combat's export, stated), `U3_CONFLICT_LEDGER.md` C3-N18 (the roster counted is named; six of ten re-counted at `modules/mass_battle/equipment/weapons.py:38-47`: this file's count is the right one), D-U1-11c (the troop file is the home of table-shaped MB content); test 9 (call sites, tests, lands-it, tier; `Depends on:` / `Lands in batch:`, U3 §4.1 row 61 SPLIT).
+
+**Depends on:** stages 1–2 on nothing unlanded (the exporter shape is `tools/export_battle_orders.py`'s); stages 3–4 on `03_PC_loadout_and_carry.md` (B18: `carry_demand_of` in `combat_kit.py`), `03_PC_weapon_records_in_the_export.md` (B14: `mass` in the export), `04_MB_cell_hierarchy_as_data.md` (B19, the arrangement), `16_PESSIMIST_MB_one_stamina_ledger.md` (B19), `04_MB_manager_battle_one_resolver.md` §2 (B20, standing orders carry `in_hand`).
+**Lands in batch:** stages 1–2 in B17 (`B17-mb-scale`, MB); stages 3–4 in B31 (`B31-mb-loadout-economy`, MB).
+
 Lane MB, with PC (the carry leaf and the melee roster), SE (training sites) and CHAR (the capability
 surface). **Supersedes `04_MB_unit_loadout_and_weapon_in_hand.md`** (the first MB lane's; that file is left
 unedited). It keeps that proposal's state design (`in_hand` on the subunit, changed by an order, costing a
@@ -38,7 +43,9 @@ field today, so nothing moves until the first audit's steps 1 to 5 land.
    becomes `dr`.
 3. **The first lane's merge has nowhere to go.** Personal combat's roster (`modules/combat/weapons.py`,
    54 keys) holds no bow, crossbow, sling, javelin, pike, lance or engine. Six of `ARSENAL`'s ten classes
-   have no record there, and an archer's primary weapon has none.
+   (`pike, javelin, bow, crossbow, sling, siege`; `ARSENAL` registered at
+   `modules/mass_battle/equipment/weapons.py:38-47`; the roster counted is the personal record roster
+   `WEAPONS`, C3-N18, re-counted by W3-1) have no record there, and an archer's primary weapon has none.
 4. **No second weapon, no state for the one in hand, no cost for carrying** (first audit F-MB-19, by run:
    reached archers volley through the melee; stamina saturates within one engagement).
 
@@ -52,7 +59,9 @@ field today, so nothing moves until the first audit's steps 1 to 5 land.
 - Reader: `modules/mass_battle/troop_types/table.py`, loaded once. It reads a data file and imports no
   `engine` code. It refuses, by name: an unknown column; a troop row naming an arm, armour tier, role or
   site kind that is not a member of its closed set; an arm whose mass is stated both here and in personal
-  combat's export; a `secondary` equal to the `primary`.
+  combat's export; a `secondary` equal to the `primary`. The third refusal reads
+  `engine/engine_params/combat_engine_v1.json` (its `weapons` section) as a **data** dependency, never an
+  import of `modules/combat/` (`R1_READ.md` §1.2).
 - Every table in "the problem" item 1 becomes a function of this loader with its present name and
   signature (`stats_for`, `reach_for`, `is_mounted`, `cell_cap_for`, `roles_for`, `loadout_for`,
   `training_site_for`), so no call site changes at stage 1.
@@ -165,7 +174,9 @@ corrections.
 - **The leaf must take masses.** `carry_demand(weapons: tuple, armour: str)` reads keys of personal
   combat's export; a troop's bow or pike has no key there. The interface mass battle needs is the same
   rule with its argument spelled as masses, `carry_demand_of(masses: tuple, armour: str)`, which the keyed
-  form calls. One function body; the PC lane owns the one-line change.
+  form calls. One function body, in `engine/substrate/combat_kit.py` (D-U1-11d); the PC lane owns it. The
+  caller is the host, `seam/wrappers/mass_battle.py::field_input` (and the army constructors' input
+  builders); `modules/mass_battle/` neither imports nor copies it.
 - **Order.** A second weapon can change a field only where the first weapon does. On today's one-rank
   bodies a change of reach class changes nothing (pike against heavy infantry, 440 of 440). Stage 4 lands
   after the arrangement change of `04_MB_cell_hierarchy_as_data.md`, or its gates cannot be read.
@@ -179,6 +190,20 @@ corrections.
 | 3 | `in_hand`, the two triggers, the tick | digests equal with every `secondary` null; archers with `secondary: arming` and the order `(enemy_range:2, {in_hand: secondary})`: volley events stop at the order's tick, one tick with no melee from that body, then melee without the missile handicap |
 | 4 | the carry factors | with a `secondary` and `strength` at the seed: stamina at tick 7 and first-contact tick differ from the same body without it; at a raised `strength` they do not; over 72 ticks the carrying side recovers more slowly out of contact; the factor handed in equals the leaf evaluated on the same masses, asserted by calling it |
 | 4, after arrangement | the trade is a trade | a pike body four ranks deep with `secondary: arming` and a `flanked` switch order, against the same body with no secondary, flanked by cavalry: the switching body's share lost differs beyond the same-run control at n 200; against a frontal charge it does not win more than the control |
+
+**Tests (W3-1).** Stage 1: the exporter's `--check` (a new `tests/valoria/test_export_troops.py` beside
+`test_engine_params_bridge.py`: `test_round_trip`, `test_unknown_arm_key_refused_by_name`,
+`test_mass_stated_twice_refused`); `tests/valoria/test_field_golden_pins.py` for the digests. Stage 2:
+`tests/valoria/test_mass_battle_order_of_battle.py::test_a_new_row_charges_and_wheels_with_no_code_edit`.
+Stage 3: `tests/valoria/test_mass_battle_ammo.py::test_switch_stops_volleys_and_costs_a_tick`,
+`::test_reached_archers_with_no_order_stop_volleying`. Stage 4:
+`tests/valoria/test_mass_battle_order_of_battle.py::test_the_factor_handed_in_equals_carry_demand_of`.
+**Call sites.** `troop_types/table.py` loader functions replace the tables at their present names
+(`stats_for`, `reach_for`, `is_mounted`, `cell_cap_for`, `roles_for`, `loadout_for`, `training_site_for`);
+`percell.update_stamina` and `Subunit._node_advance` read the factors. **Hash movers:** none at stages 1–3
+with every `secondary` null; stage 4 only rows naming a second weapon. **Lands:** an IN-lane implementation
+session under `/methodology-execute` with MB review; stages 1–2 mechanical (`sonnet`, `haiku` for the
+transcription check), stages 3–4 `sonnet`.
 
 ## Falsifier
 

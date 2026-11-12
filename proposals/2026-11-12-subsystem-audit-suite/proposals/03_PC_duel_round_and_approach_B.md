@@ -6,6 +6,11 @@ Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-11 — the upset fl
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.3, §1.4) — five rulings folded. A-4: a duel inside a field or a skirmish is a nested contest counted against a cap of 1, and callables supplied for persons are one declared class of adapter input (§4, §8 items 4–5, step 5; the cap and the seam function are `U5b_PC_rulings_in_the_fight.md` §1). A-9: a turn is a short sequence, which admits the in-round consult (§8 item 3; one sentence owed to the ratified suspension). A-31 and D-40: steps 3a–3e land after the damage scale and the commit window, the transfer ships at a coefficient of 0, and step 3 gains the pessimist's gate (§3, §7). A-6, A-7, A-8: `faculties` on the record is the trained score, talent is the module's attribute sigma, a carried wound is a level (`U5b_PC_rulings_in_the_fight.md` §2–§3). The yield is a draw for every party (`16_PESSIMIST_PC_A_the_yield_is_a_draw.md`), so §5's last bullet is answered.
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.1 (PB stream row VIOLATES A-30: §1, §2 and step 2 rewritten to the per-round key; `approach_of` AMBIGUOUS: takes a `PersonInterior`, and the decider closure captures a frozen snapshot, not a `Person`; `CombatTurnView` field list stated closed, Option B (REM-31 precedent, CONVENTION) taken; `approach_responses` loader refusal added), §2 row A-30, 7b-2 (key, tests, lands-it), 7b-3 / `U1_OWNERS_AND_VOCABULARY.md` D-U1-08 (`faculties` replaced by `scores` + `addends`; the U5b line above that calls `faculties` "the trained score" is superseded by D-U1-08), D-U1-11b (`NESTING-CAP` → the typed `Refusal(depth_cap)`; `nested_entry` kept as U1 §2 names it, so 7b-12's Option A is not applied), §6.1 (a) and `U3_CONFLICT_LEDGER.md` C3-N4 (§3's readings captioned as half-score history), test 9 (the scratch probe `pI_approach2.py` becomes a written workbench file; `Depends on:` / `Lands in batch:` from `U3_DEPENDENCY_ORDER.md`). §8's conflicts and the author's measurements are kept.
+
+**Depends on:** `11_GO_one_draw_owner.md` (B06: the key function); `U5a_CORE_owed_edits.md` §E row 1 (B03: the frozen `PersonInterior`); `02_CHAR_choice_alignment.md` (B10: the `choices: approach:` cells); `U5b_PC_rulings_in_the_fight.md` §2–§5, `16_PESSIMIST_PC_A_the_yield_is_a_draw.md`, `16_PESSIMIST_PC_B_the_commit_window.md`, `18_DETERMINISM_no_certain_matchup.md` (B15: calibration before steps 3a–3e; U3 §4.1 rows 56–58 reverse those edges). Step 5 depends on `U5b_PC_rulings_in_the_fight.md` §1 (`nested_entry`, B30).
+**Lands in batch:** steps 1–4 in B16 (`B16-pc-round`, PC); step 5 in B30 (`B30` MB nested, after UPR §1).
+
 ## Status: PROPOSED
 
 Lane: PC, with CORE (the suspension, the adapter row), MB (the cell field at weight 1, a duel inside a
@@ -29,7 +34,8 @@ adds a caller in the field's adapter.
 ## 1. What stands from the first proposal, and what this one changes
 
 **Stands, unchanged:** the round is the unit and `wrapper.engagement` is that unit; `fight` becomes a
-loop over it; the three typed records; the second composition row; a per-round private stream; one
+loop over it; the three typed records; the second composition row; per-round draws that do not depend on
+the fight's earlier draws (now a per-round **key**, A-30, §2); one
 decider per party with the played person's and the NPC's supplied through one parameter; `decide=None`
 is today's fight; the falsifiers of its §8.
 
@@ -54,12 +60,17 @@ class DuelState:                 # what one party carries from round to round. I
     stamina: Optional[float] = None      # None: start of a fight (the module derives the maximum)
     conc: Optional[float] = None
     poise: float = 1.0
-    form: Optional[str] = None           # the weapon record in hand when the last round ended (a half-sword
-                                         # form persists; F-PC-16). None: the kit's own record
+    form: Optional[str] = None           # the weapon record in hand when the last round ended. None: the kit's
+                                         # own record. (W3-1, 7b-4:) after `03_PC_weapon_form_at_round_start.md`
+                                         # (B14, before this file) the half-sword grip no longer crosses a round,
+                                         # so `form` carries the selected weapon (primary or secondary) for the
+                                         # switch of `03_PC_loadout_and_carry.md` item 5
 
 @dataclass(frozen=True)
 class DuelRoundInput:
-    fighters: PersonalCombatInput        # who they are: ends, attributes, kits, faculties, terms
+    fighters: PersonalCombatInput        # who they are: ends, attributes, kits, terms, and the roll's numbers raw:
+                                         # `scores`, `addends`, `pool_add`, `pool_floor`, `opposition_rate`
+                                         # (D-U1-08; carried once, here, not repeated on the round input)
     states: tuple                        # (DuelState, DuelState), in claimant order
     plans: tuple                         # per party: {phase: approach}; a missing phase is `normal`
     round: int                           # 1-based
@@ -80,8 +91,10 @@ class DuelRoundOutcome:
   draw `first` (the coin `wrapper.fight` draws at `wrapper.py:593`, moved inside the round so the
   round's stream is complete); call `wrapper.engagement` once; apply the between-round recovery
   (`wrapper.py:613-615`); lift the states. It keeps nothing.
-- `fight(inp, rng, deciders)` is the loop over `round` with the states in its own frame. Each round's
-  stream is `random.Random(rng.getrandbits(64))`, so round `r` is recomputable from the fight's seed.
+- `fight(inp, rng, deciders)` is the loop over `round` with the states in its own frame. Round `r`
+  draws from the key `H(fight_key, 'round', r)`; each draw inside the round is keyed `(r, phase, purpose)`;
+  no draw depends on another round's count (A-30). The function that makes a key into a draw is
+  `11_GO_one_draw_owner.md`'s `Draw.u`. Round `r` is recomputable from `(fight_key, r)`.
 - The carried set is exactly what a probe finds differing at a later `turn_start`
   (`probe_round_state.txt`): damage, stamina, concentration, poise and the weapon form. Initiative,
   grip, lunge, facing, swing room and the selected mode are reset or re-derived inside the round
@@ -118,7 +131,9 @@ nothing and reorders nothing.
 the measurements below apply as taken. All are `[SIM-CALIBRATE]` and live in `CFG`.
 
 **What was measured (all `PYTHONHASHSEED=0`; scripts and outputs in the scratchpad named in the
-addendum §B11).**
+addendum §B11).** *(Half-score fight; superseded by `29_DICE` gates 2–5; re-read at UPR §5 row 7
+(`U3_CONFLICT_LEDGER.md` C3-N4). The figures are the record of the first measurement, not the shipped
+reading.)*
 
 | reading | result |
 |---|---|
@@ -183,14 +198,18 @@ of one value, and `plans` on the round input is that plan given in advance, so a
 needs none. Every consult emits one `approach` trace event carrying the view the decider read.
 
 `CombatTurnView` gains `phase`, `round`, `closed`, the fighter's own leans in force and both parties'
-lifted wound quantities (as now). It still carries no `Combatant` and no `World`.
+lifted wound quantities (as now). It still carries no `Combatant` and no `World`. *(Reconciled, W3-1,
+`R1_READ.md` §1.1:)* its fields are this closed list and nothing else: `phase, round, closed, own_leans,
+own_wounds, foe_wounds` plus the fields it carries today; each is what a fighter can see of the fight.
+Nothing checks that the list holds only perceivable fields (Layer 1 grade CONVENTION); the REM-31
+precedent is followed (R1's Option B) and no scan is added (CLAUDE.md §0.1 pt 5).
 
 | mode | the loop that calls `round` | who answers a consult | where `DuelState` lives |
 |---|---|---|---|
 | AUTOMATED fight | `fight`, from the season's provider | each party's decider (§5) | `fight`'s frame |
 | duel, moment by moment | the same `fight`; the played person's decider is the host's call-out (REM-31), consulted at each phase; the trace of each exchange is rendered between consults | the player for his fighter, §5 for the other | `fight`'s frame |
 | grid attack | the skirmish's loop (the cell field at weight 1, Layer 1 `04:811`); one `round` per attack action | the attacking unit's player or decider gives **one** approach; it is the plan for every phase | the skirmish module's loop frame |
-| a duel inside a field | the field module's loop; one `round` per window per officer contact (`04_MB_manager_battle_one_resolver.md` §7). *(Reconciled, A-4:)* a nested contest at depth 1, counted against `contest_nesting_cap` (1); at the cap the callable returns the typed result `NESTING-CAP` and the contact stays unresolved | each fighter's decider or standing order | the field module's loop frame |
+| a duel inside a field | the field module's loop; one `round` per window per officer contact (`04_MB_manager_battle_one_resolver.md` §7). *(Reconciled, A-4:)* a nested contest at depth 1, counted against `contest_nesting_cap` (1); at the cap the callable returns the typed `Refusal(depth_cap)` (D-U1-11b; at the tree `seam/contest.py::ContestError`, `U5b_PC_rulings_in_the_fight.md` §1 edit 2) and the contact stays unresolved | each fighter's decider or standing order | the field module's loop frame |
 
 For the last two, the module that owns the grid or the field does not name `modules/combat/`. Its host
 adapter resolves the `combat.round` composition role and passes the module a `duel` callable
@@ -206,7 +225,7 @@ two bare names that file owns (`deliberation_memo`, `_sample_order`); `decision/
 (AX-2), and this function takes none.
 
 ```python
-def approach_of(p: Person, view: "CombatTurnView", fx, draw=None) -> str:
+def approach_of(p: PersonInterior, view: "CombatTurnView", fx, draw=None) -> str:   # a frozen snapshot (04 §C.3)
     """THE APPROACH `p` TAKES AT THIS CONSULT. Candidates: `normal`, and each other APPROACHES value that
     carries an authored cell or a matching response row. Score: `score_terms`' pursuit dot, with the
     alignment of the VALUE in place of the verb's (`data.verbs.align_choice('approach', value, axis)`),
@@ -231,7 +250,9 @@ def approach_of(p: Person, view: "CombatTurnView", fx, draw=None) -> str:
   (`Untouched`, `Wounded`). A matching row adds its weight to that value's score. It is content a
   designer authors (a fighter presses a wounded man; a wounded fighter guards); the engine ships none.
   A row is data about how persons respond, read person-side from what the person can see; no person,
-  faction or outcome is named in it.
+  faction or outcome is named in it. The loader (`data/rosters.py`) reads the table at load even while
+  it is empty (ID-13) and refuses, naming the row, a `value` outside `APPROACHES`, a `phase` outside
+  `PHASES` and a band outside the view's wound bands.
 - **Departure from the optimum.** `_sample_order`'s Gumbel rule at the person's own temper
   (`02_CHAR_resolve_and_temper.md`), so two persons of one temperament differ by their steadiness and
   nothing else. The noise is keyed by the value, not the round (the precedent's reason: a person's
@@ -242,8 +263,10 @@ def approach_of(p: Person, view: "CombatTurnView", fx, draw=None) -> str:
   as a swept arm that ships off; an analytic table of approach against approach would be a second
   formula (Layer 1 §27.2).
 - **Who builds the decider.** `seam/wrappers/combat.py::resolve` builds one decider per claimant:
-  `host.decide` for a claimant in `host.persons`, otherwise a closure over that `Person` calling
-  `approach_of`. The module entry receives a mapping of callables and cannot tell them apart. A
+  `host.decide` for a claimant in `host.persons`, otherwise a closure over that claimant's frozen
+  `PersonInterior` snapshot (built by its one builder before the call, `U5a_CORE_owed_edits.md` §E row 1;
+  never the live `Person`, `hol` §44.3) calling `approach_of`. The module entry receives a mapping of
+  callables and cannot tell them apart. A
   standing order (a squad member's, MB's) is a third supplier of the same callable, evaluated
   host-side from a typed record on the input, as `FieldOrder` is for a side
   (`queries/inputs.py:195-201`).
@@ -278,15 +301,31 @@ Where this cannot be made to fit, it is named in §8 (items 4 and 5).
 | step | change | gate (execution artifact) |
 |---|---|---|
 | 1 | `fight.round`; `fight` as a loop over it on the one stream; `DuelState` with `form`; `first` drawn inside the round | every combat test and season hash unchanged; twelve `round` calls by hand equal `fight` at three seeds, including a longsword against plate (the case in which the form is carried) |
-| 2 | the per-round private stream | a fight in one call and the same fight as separate `round` calls from `(seed, r)` are identical; season pins re-recorded once, declared |
-| — | *(Reconciled, A-31, pessimist R-6.)* Steps 3a to 3e land **after** the combat calibration batch (`U5b_PC_rulings_in_the_fight.md` §5 row 5: the damage scale, then `16_PESSIMIST_PC_B_the_commit_window.md`), because every reading in §3 was taken on a three-blow fight with an unreachable deep tier. Step 3 as a whole gains one gate: a state-reading policy (press the wounded; guard when hurt) beats never-lean by more than the interval in some named matchup, or the menu is not shipped | the pessimist's `pI_approach2.py` table re-run |
+| 2 | the per-round key `H(fight_key, 'round', r)` (A-30) | a fight in one call and the same fight as separate `round` calls from `(fight_key, r)` are identical; season pins re-recorded once, declared |
+| — | *(Reconciled, A-31, pessimist R-6.)* Steps 3a to 3e land **after** the combat calibration batch (`U5b_PC_rulings_in_the_fight.md` §5 row 5: the damage scale, then `16_PESSIMIST_PC_B_the_commit_window.md`), because every reading in §3 was taken on a three-blow fight with an unreachable deep tier. Step 3 as a whole gains one gate: a state-reading policy (press the wounded; guard when hurt) beats never-lean by more than the interval in some named matchup, or the menu is not shipped. *(W3-1, test 9:)* the pessimist's scratch `pI_approach2.py` is not in the tree, so this step first writes it as `systems/combat/combat_engine_v1/workbench/approach_policy_probe.py` (beside `build_levers.py`) | the probe's printed table: per named matchup, the state-reading policy's win share, never-lean's, and the disjoint-seed interval at n ≥ 2,000; expected reading: at least one matchup where the difference exceeds the interval (else the menu is not shipped) |
 | 3a | `APPROACHES`, `PHASES`, the lean as live state, the consult points; the `exchange` lean on commit and counter | all-`normal` byte-identical to step 2; `build_levers.py`-style table at n ≥ 2,000: each approach within 3 points of `normal` in the arming mirror; the mace and rapier mirrors show opposite signs |
 | 3b | the `bind` lean on `disengage_attempt_p` | all-`normal` byte-identical; `disengage` events per fight rise under `defensive` and fall under `aggressive` for a spear against an arming sword |
 | 3c | the conserved transfer, `APPROACH_SIGMA_K` *(ships at 0, D-40)* | at 0, byte-identical; at the chosen value the nine-cell arming mirror is level within the control band, mean rounds are monotone in the summed lean, and the undecided share is reported |
 | 3d | the `measure` lean | only together with both of its costs; not specified here |
 | 3e | `DISP_INIT_K = 0` | `build_levers.py disposition 2000`: disposition 7 and 1 inside 50 ± 3 against neutral (they read 57.7 and 40.8 today); season hash EQUAL |
 | 4 | per-party deciders, the widened view, `choose.approach_of`, the `CHOICE_RANGES` pointer, the empty `approach_responses` table | equal plans supplied by a constant, by a host callback and by `approach_of` give identical outcomes and one `World.content_hash()` (REM-31's test, extended); a differing script moves it; with one cell authored, two hand-built persons opposed on that axis answer differently at temperature 0; with none authored `build_realm(0)` is hash EQUAL |
-| 5 | the `duel` callable built by the field's (or skirmish's) adapter through `nested_entry` and handed to the module *(Reconciled, A-4: nested, cap 1)* | a seeded field with two planted officers in contact shows one round per window in the trace; with no contact reported the field's hash is unchanged; with the cap at 0 the contact is reported unresolved with `NESTING-CAP` and the field's draw count is unchanged |
+| 5 | the `duel` callable built by the field's (or skirmish's) adapter through `nested_entry` and handed to the module *(Reconciled, A-4: nested, cap 1; lands in B30)* | a seeded field with two planted officers in contact shows one round per window in the trace; with no contact reported the field's hash is unchanged; with the cap at 0 the contact is reported unresolved with `Refusal(depth_cap)` and the field's draw count is unchanged |
+
+**Implementation (test 9; `R1_READ.md` 7b-2, checked against the tree).**
+
+- *Tests* (existing files): `engine/season/tests/test_rem31_grid_suspension.py::test_twelve_round_calls_equal_one_fight`
+  and `::test_a_fight_in_one_call_equals_the_same_fight_as_separate_round_calls_from_the_key` (steps 1–2);
+  `engine/season/tests/test_combat_module.py::test_round_keeps_no_state_between_calls` and
+  `::test_all_normal_plans_draw_the_same_count_as_today` (steps 1, 3a); step 4's equality test extends REM-31's
+  in `test_rem31_grid_suspension.py`; `approach_responses`' refusals in the roster loader's test beside the other
+  `rosters.yaml` refusals. Steps 3a/3b/3e read `systems/combat/combat_engine_v1/workbench/build_levers.py`'s
+  tables (in the tree; the artifact).
+- *Falsifier and control:* §9; the control for every step is the all-`normal` byte-identity.
+- *Hash movers:* step 2 (every season fight, once, declared); step 3e (the workbench disposition table only);
+  steps 1, 3a–3d, 4 hash EQUAL with nothing authored; step 5 with no contact reported EQUAL.
+- *Lands:* an IN-lane implementation session under `/methodology-execute` with PC review; steps 1–2 `sonnet`;
+  step 3 `sonnet` with the workbench sweep run by `haiku` (`valoria-measure`) and read by `opus` (a calibration
+  judgment); step 4 `sonnet`; step 5 `sonnet` in B30.
 
 ## 8. Conflicts with ruled, ratified or recorded items (named, not resolved)
 

@@ -1,6 +1,21 @@
 # 16 · PESSIMIST · FI · D — Withhold the three inquiry rows that have no product, until they have one
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS: a withheld verb forms no
+Candidate, so `04` §B.13 inv. 4 is not engaged), §2 (A-81: the three rows are in the measured gap, "the 53 owed a draw";
+withholding is the interim and each product proposal gives its row a graded band with a write), §7/§7b (R-05 opened at
+the tree, the gate on a committed test and `aperture`, tier); U3 B26, §6.2 (`fi_arms.py`, `p5_crime.py` are not in the
+repository). Changed: edit 2's basis (the row was read), the gate.
+
 ## Status: PROPOSED
+
+Lands in batch: **B26** (FI; the fixture is IN's file). Depends on: `08_FI_03_playable-inquiry.md` and
+`19_LACUNA_conclusion_is_a_committed_assertion.md` (B11), which name the products; CP-T06-05 and B10-15 (plan positions,
+MISSING as code until v12 disposes them) for `interview` and `thread_read`.
+
+**A-81.** Every scene writes a durable change. The three rows as formed write nothing and grade nothing (a
+`finding.made` claim of the actor's own admission, which cannot fail): withholding them from formation removes 157
+still scenes from a seeded realm. Each product proposal's change that removes its row from `withheld_verbs` must give
+the row a graded band with a write in the same change (A-81 consequence 2), or the row stays withheld.
 
 Carries `audits/16_PESSIMIST_FI.md` F-PES-FI-05 (the part with a clear owner) and F-PES-FI-11 (two of
 its fixed outcomes). It is the formation half of the first FI audit's sentence on `reconstruct`,
@@ -58,10 +73,12 @@ formable, it moves every seeded season"*). No new mechanism.
    is today's behaviour).
 2. **`engine/season/requirements.yaml`, R-05's `measured:` text**: the three rows are named as
    withheld, with the product each waits on, so the row does not count them as verbs "built out on
-   execution" (the phrase is the first FI audit's reading of the row, F-FI-03; this lane did not
-   open the row's text). Text only; the row's status is unchanged by this proposal.
+   execution" (the phrase is the first FI audit's reading of the row, F-FI-03). Read 2026-11-12:
+   `requirements.yaml` R-05 (`:926`) is `status: not_met` and its `measured:` text counts executing verbs
+   ("13 of 38 AS OF 2026-09-20"); the sentence added names the three rows as withheld, beside that count.
+   Text only; the row's status is unchanged by this proposal.
 3. **The three product proposals named above** each carry one more line: remove the row from
-   `withheld_verbs`.
+   `withheld_verbs`, in the same change that gives the row a graded band with a write (A-81).
 
 ## Not edited here, named for the orchestrator
 
@@ -76,6 +93,13 @@ that has them, with `commit` following (95 to 180). What a scene is spent on is 
 this lane measured it and does not author it.
 
 ## Gate (execution artifact)
+
+Committed: NEW `engine/season/tests/test_withheld_inquiry_rows.py`: `test_three_rows_form_no_candidate`,
+`test_hand_built_interview_and_reconstruct_still_execute` (the rows are not deleted). Command:
+`python -m pytest engine/season/tests/test_withheld_inquiry_rows.py -q`; then
+`python -m engine.season.harness.aperture` at seeds 0-2: the three verbs attempted 0 times (expected reading), and
+`report` / `delta HEAD` moving every seeded realm once (declared). `fi_arms.py` was lane scratch (not in the
+repository); its census comparison, once committed as an `aperture` arm, is:
 
 `fi_arms.py 0 3 ship` after the edit reproduces `nod3`'s per-verb census for every verb (the same
 candidates are removed one layer down; a difference is a finding about `opening_set`'s read of the
@@ -101,4 +125,6 @@ three strings in one tuple; the vocabulary a seeded run uses is three verbs shor
 
 ## Cost class
 
-Edit. Lane FI (the fixture is IN's file; the rows are FI's).
+Edit. Lane FI (the fixture is IN's file; the rows are FI's). Tier: `sonnet`, effort `high`. Hash movers
+declared: every seeded realm (157 of 1,394 acts at seed 0); one re-pin in B26. Lands it: B26, after
+`16_PESSIMIST_FI_B`; order 1 → 2, then the test.

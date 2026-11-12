@@ -2,7 +2,11 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-17 / A-18**, **A-19** and the land rulings. The Status line's "canon amendment … Jordan's" is answered: the south fought, ranked third and was relegated despite it (A-17), so the seeding ships on option A (Varfell's founding deed held realm-wide at the third confidence, A-18) and the drafted wording A1 to A4 (audit §4.6) is the canon text owed; a canon sentence changes only by that ruling, and no suite lane applies it. The seeded counts keep their `[ASSUMPTION; Jordan to correct]` (only the order is ruled). When the royal line fails the crown goes by the deed race (A-19): this ledger is what sets each claimant's odds, with the founding order a head start. `took_by_force` gains a live producer: a victor who seizes a place takes its seats with it (A-58, A-66; `U5d_FA_land_and_seats_pass_on_a_won_march.md`), and the `rung.seized` deed that names those seats is the dominance deed this helper reads, so a conqueror's standing in the seat starts from his own deeds and nothing before him passes. An occupier who does not seize holds no seat and enters no chain.
 
+Reconciled: 2026-11-12, wave 3 lane W3-4b — rewritten against A-43, A-51, A-87 to A-91 and the re-grounding plans (`OWED_TO_UNIFICATION.md` §B); applied `R4_READ.md` §1.7 (SYN_B: prehistory AMBIGUOUS, "Events are written with no act"), §2 (A-51 row; the per-regime gate row; the A-44 row), §7, 7b.0, 7b.7; `U3_CONFLICT_LEDGER.md` §9 ("prehistory (A-51: tradition, not simulated seasons)"), C3-C10 (a certificate weighs as `proofs` levels); `U3_DEPENDENCY_ORDER.md` §4 rows 75, 76, 84 (the split: the ledger reader in B32, the prehistory in B39). Changed: §2 states the prehistory Events as `ROOT`-caused build-time Events whose only product is the cast's told claims (tradition and hearsay); gate 2 reports the ordering per regime; the `holder: null` question is settled at the tree (§6); the deed race of A-19 and the zero-coherence holder of A-43 are placed; `presumption_gain` is this file's one fixture (ships 0; F-34).
+
 ## Status: PROPOSED — the canon amendment it drafts is NOT APPLIED and is Jordan's; the seeded counts are `[ASSUMPTION; Jordan to correct]`
+
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in two batches (`U3_DEPENDENCY_ORDER.md` §4 rows 75, 76, 84): **B32** — edit 1 (the chain in `legitimacy`), edit 3's seeded rows, edit 4 (`recites`), with `22_HAPPENINGS_B` edit 3 (the deed race's odds, A-19) right after it; **B39** — edit 2 (the prehistory), with `12_ARCS_case_on_the_realm.md`. Depends on: `15_INSTITUTIONS_SYNTHESIS_A` (B32), `14_VERBS_BINDING_C_turnover.md` (B21, edit 9's believed holder), `14_VERBS_SOCIAL2_B_a_word_with_content.md` (B25), `05_SC_evidence_and_rebuttal_B.md` (B24), `12_ARCS_case_on_the_realm.md` (B39, for edit 2); CR-36 (a v11 plan position, MISSING until `STAGES.md` step 5: `resolution` and its disposal site; edit 3 lands the roster row alone if CR-36 has not). Lane tag: FA. Tier: `sonnet` producer, effort `high`; one `opus` read of gates 2 and 4 (who orders the founders how is a judgment about pursuits). Named test: `engine/season/tests/test_inst_syn_b_deed_ledger.py` (gates 1, 3, 5 as functions; gates 2 and 4 are its reading functions, printed). Standing sentences: *Pool* — the hearing's roll is SC's on the one pool rule (A-6, A-7, A-8). *Failure writes* — this file adds no contested row (A-81 is `determine`'s). *Draw keys* — no draw is added; the prehistory is folded under the pinned roll (A-30's keys are the fold's).
 
 Source: Jordan, 2026-11-12, as `INSTITUTIONS_BRIEF.md` records it: *"current kingdom royalty is because of
 nobility by deed/achievement"*; *"Royalty by noble conquest, i.e. the first king had the greatest
@@ -22,8 +26,8 @@ through the fold), `14_VERBS_BINDING_C` edit 9 (a person's own reading of who ho
    value of the landing commit) it is today's function exactly.
 2. A built realm holds three dead founders, their Secession deeds as Events, and four seeded Records: two
    in the Church's archive, two in the Crown's chancery. A declared build-hash mover.
-3. A Record may carry `recites`; a cited certificate weighs in SC's `evidence` term by the recited deeds
-   left standing.
+3. A Record may carry `recites`; a cited certificate weighs as SC's `proofs` levels (leverage, C3-C10) by
+   the recited deeds left standing.
 4. `off_duchess_hafenmark` is filled by inheritance through a title nobody holds at build.
 
 No legitimacy number is stored. No rank is stored. No title type, tenure kind or verb is added.
@@ -117,10 +121,16 @@ first Dukes; canon names none.
 
 **`engine/season/harness/populated.py::build_realm`**, a prehistory block before tick 0: for each
 founder, a `hold` on his seat opened and closed; for each `deeds` row, an Event of its kind with the
-founder as doer, placed at the realm rung, written through the gate; the first Almqvist's death a
-`person.died` with no doer (canon `:116`). The present holders' holds open after their founders' close,
-so `prior_holders` reads one step for each seat `[ASSUMPTION; intermediate holders, if Jordan names any,
-are further rows and lengthen the chain]`.
+founder as doer, placed at the realm rung; the first Almqvist's death a `person.died` with no doer
+(canon `:116`). **These Events are `ROOT`-caused build-time Events** (`04` §B.9: `Event.causes`
+"NON-EMPTY or [ROOT]"): no act is invented for them, and **their only product is the cast's told
+claims, tradition and hearsay** (A-51: the prologue simulates five years before play and "everything
+older stays tradition and hearsay"; the Secession is older). No season is simulated for them, no `hold`
+is opened for a living person by this block, no age or birth pass runs, and no store, stance or tenure
+of a living person is written beyond the founders' closed holds the chain reads. The present holders'
+holds open after their founders' close, so `prior_holders` reads one step for each seat `[ASSUMPTION;
+intermediate holders, if Jordan names any, are further rows and lengthen the chain]`. A-51's five-year
+prologue (`21_PROCEDURAL_C_prologue_and_case_seeds.md`, B39) runs after this block and over it.
 
 **How the cast comes to hold them.** By the fold's own deposits and no constructed Claim (ARCS §6 row
 16): the Events are witnessed at their place by the persons the kind's reach admits. `[UNVERIFIED]` what
@@ -211,8 +221,13 @@ its holder, and it works by what it told.
 `15_INSTITUTIONS_COLONIAL_D` edit 4, unchanged: `off_duchess_hafenmark.conferral: null → inheritance`;
 `rosters.yaml: successions` gains `off_duchess_hafenmark: off_heir_hafenmark`; a title row
 `off_heir_hafenmark`, vacant at build. `[ASSUMPTION; medium; Jordan to correct; revert: the three edits
-together]`. `[UNVERIFIED]` that the loader admits a seat row with `holder: null` (three family files
-raise the same question; the first of them to land settles it for all).
+together]`. **Settled at the tree (was `[UNVERIFIED]`):** the build does **not** admit a seat row with
+`holder: null` today: `harness/populated.py:1771-1776` slugs the row's `holder` into a person id and
+raises `Unspecified` when that person is not built (unless the cast is deliberately partial). The one
+edit that admits a vacant row is carried by `15_INSTITUTIONS_BYZANTINE_A` (its six vacant dignities are
+the first vacant rows in the one order, B32): a row whose `holder` is `None` mints its Office with no
+`hold`, and `data/rosters.py:204` (`OFFICES_BY_HOLDER`) skips it. This file, COLONIAL-D and PAPACY-E
+cite that edit.
 
 ### 7. Canon
 
@@ -228,7 +243,11 @@ item 1.
 2. **The order, per observer.** After edits 1 to 3 at `presumption_gain` 0.5: the probe prints, per cast
    person, how he orders the three holders by `legitimacy(p, holder, seat)`. Pass: among persons holding
    claims of all six seeded deeds, a majority order them king, Hafenmark, Varfell, **and at least one
-   does not** (unanimity would mean pursuits are not read). Planted: swap the Hafenmark and Varfell
+   does not** (unanimity would mean pursuits are not read). The ordering is also **reported per regime**
+   (A-82, A-87 to A-91: the regime cores of `rosters.yaml: regime_cores`, U1 F-26): Varfell's people are
+   anti-caste and unhappy with the royal order, the Restoration's principals are against it (A-91 (4)),
+   so the Varfell and Restoration columns may order differently and are expected to; the pass reads the
+   whole cast, the per-regime table is reported, not asserted. Planted: swap the Hafenmark and Varfell
    counts; the majority ordering swaps.
 3. **The chain.** Hand-built: an heir whose predecessor `p` knows reads own + 0.5 × the predecessor's;
    one whose predecessor `p` has never heard of reads own; a third holder reads 0.25 of the founder; a
@@ -259,7 +278,11 @@ item 1.
 It ranks nobody. It makes no one king. It does not make the Church tell or the clerk keep: each is a
 person's choice through the one chooser. It gives a dead founder's deeds to no living person: they are
 the founder's, and what the living holder gets is a discounted reading of them in other people's eyes.
-It does not decide who credits the south (§10 item 1 of the audit).
+It does not decide who credits the south (§10 item 1 of the audit; A-17, A-18 since decided it).
+It needs no edit for a holder at zero coherence (A-43): he keeps his seats and his chain; the deeds others
+hold of him still read, while what they would infer of his motives does not (the A-43 plan's reader,
+U1 F-30), and `legitimacy` reads deeds and stance only. The three founders are authored persons outside
+A-44's generated cap (`ED-WR-0011`); U1 counts them with the other authored additions (`R4_READ.md` §2).
 
 ## NERS reading
 
@@ -271,7 +294,8 @@ It does not decide who credits the south (§10 item 1 of the audit).
   ruler needs.
 - **R.** A player wins rank by deeds and then must get them written, kept and told; can steal, forge or
   burn a certificate; can be refused consecration. With no player the founders fade at different rates
-  in different places and a disputed succession turns on who still remembers what. Complete at the
+  in different places and a disputed succession turns on who still remembers what: when the line fails,
+  this ledger is what sets each claimant's odds in the deed race (A-19; `22_HAPPENINGS_B` edit 3, B32). Complete at the
   extremes: unknown predecessor, own deeds only; no deeds, stance alone; no paper, the hearing runs on
   testimony.
 - **S.** One function, `deed_term`'s scoring, the existing fade, the existing mint, SC's evidence term.

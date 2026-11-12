@@ -2,7 +2,21 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-40** and **A-54**. A-40 rules the wearing-down a real condition of places with one Site per territory: edit 1's "pulled only by a broken Site of its own or a bordering territory" reads on that one Site per territory. The break draw of edit 2 is on the four-band ladder (as written). Edits 1–2 land before any non-zero `lattice_coupling` (`U5d_WR_owed_edits.md` §2 (a)).
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS: a licensed clock writing
+its own cell; the draw keyed by purpose), §7/§7b (the covering test file exists; test names; order; tier); U3 B12,
+C3-D6 (after `09_WR_B_draws_not_thresholds.md` and `09_WR_world_motion.md`, before `16_PESSIMIST_GAME_the_world_draws.md`),
+§4.1 row 48 (LATER: the Mend arrives in B35; the calamity ships at `lattice_coupling` 0), §6.2 (`p3_calamity.py` and the
+`runs/PES_WR/` readings are not in the repository); the wear draw's owner is `09_WR_B_draws_not_thresholds.md` edit 1
+(`16_PESSIMIST_GAME_the_world_draws.md`'s wear half is struck in its favour). Changed: the dependency bullet, the gate's
+test names, the cost line; the three rupture fixtures marked for the joint calibration (their values were read on the
+whole-dice sampler).
+
 ## Status: PROPOSED
+
+Lands in batch: **B12** (WR), edits 1-2 before any non-zero `lattice_coupling`. Depends on: `09_WR_world_motion.md` (B12),
+`09_WR_B_draws_not_thresholds.md` edit 1 (B12, the ordinary wear's draw), `U5d_WR_owed_edits.md` §2 (a) (B12); edit 3's
+answer, the Mend, is `09_WR_B_threadwork_session_and_practitioner.md` (B35). Edit 4 is at CORE's owner
+(`queries/world_q.py::questions_for`) and lands in this batch with CORE's review.
 
 Source: `audits/16_PESSIMIST_WR.md` §2.2, F-PES-WR-02, F-PES-WR-11. Read at `d161a61`. Reference only
 (`CLAUDE.md` §0.05). Lane WR (owner: `loop/matter.py::_lattice_strain` and the wear loop).
@@ -13,8 +27,8 @@ It amends one scheduled step of a sibling proposal and depends on two others:
   at Askeheim in place). The wound row and the build switch stand. The flip does not, until edits 1 and
   2 below land: run as scheduled it is the exponential of §"The problem".
 - **depends on** `09_WR_B_threadwork_session_and_practitioner.md` (the Mend working, drawn, costing the
-  practitioner by degree) for edit 3, and on `16_PESSIMIST_GAME_the_world_draws.md` (`wear_draw`) for the
-  ordinary wear's own draw, which this proposal does not repeat.
+  practitioner by degree) for edit 3, and on `09_WR_B_draws_not_thresholds.md` edit 1 (`wear_draw`, the
+  ordinary wear's own draw, A-54), which this proposal does not repeat.
 
 ## What it changes in `engine/season/` at runtime
 
@@ -103,8 +117,9 @@ resolved on the one ladder (`seam/ladder.py`, `degree_from_net`):
 | Partial | holds | none |
 | Failure | **knits**: recovers one season's pull | emits `condition.worn` with a positive delta (the fabric held) |
 
-Fixtures, each `[ASSUMPTION; medium; Jordan to correct]` with its hole row: `rupture_band=100`,
-`rupture_base=2`, `rupture_pool_cap=6`. `write_matrix.yaml`'s `(Site, condition)` MAT row gains the kind
+Fixtures, each `[ASSUMPTION; medium; Jordan to correct]` with its hole row (ids from
+`references/id_reservations.yaml` `next_free`): `rupture_band=100`, `rupture_base=2`, `rupture_pool_cap=6` (the last
+two were sized on the whole-dice sampler; re-read at the joint calibration of A-5/A-6 before the weight leaves 0). `write_matrix.yaml`'s `(Site, condition)` MAT row gains the kind
 `site.ruptured`. L5 is kept: this is matter's licensed clock writing its own cell; no social row is
 written and nobody is made to act.
 
@@ -132,8 +147,11 @@ absence: "attempted 0/0/0 — no question the realm delivers carries a Site amon
 
 ## The gate that shows it worked
 
-`engine/season/tests/test_in35_lattice_coupling.py`, on `build_realm` with the wound planted and the
-weight at 250, nobody acting, fourteen seasons, seeds 0 and 1:
+`engine/season/tests/test_in35_lattice_coupling.py` (exists) gains `test_yield_at_season_13_differs_between_seeds`,
+`test_a_rupture_is_emitted_and_its_season_differs`, `test_front_stops_where_the_source_is_mended`,
+`test_weight_zero_is_the_base_hash`, and the played reading `test_restore_or_mend_attempted_at_a_crossed_site`
+(after edit 4). Command: `python -m pytest engine/season/tests/test_in35_lattice_coupling.py -q`. On `build_realm`
+with the wound planted and the weight at 250, nobody acting, fourteen seasons, seeds 0 and 1:
 
 - the realm's yield at season 13 **differs between the two seeds** and is above 719 in both (the front
   advances only by drawn breaks);
@@ -147,8 +165,9 @@ standing at a crossed Site, in at least one of two seeds.
 
 ## The falsifier
 
-`runs/PES_WR/p3_calamity.py 0 14 250` and `… 1 14 250` printing the same ring table (4,810 → 719) at both
-seeds after the change. Before it, they do (the rule takes no draw).
+The ring table (4,810 → 719) the same at both seeds after the change (the scratch `runs/PES_WR/p3_calamity.py 0 14 250`
+and `… 1 14 250`, not in the repository, printed it the same before; `test_yield_at_season_13_differs_between_seeds` is
+its committed form).
 
 ## NERS reading
 
@@ -170,4 +189,6 @@ seeds after the change. Before it, they do (the rule takes no draw).
 ## Cost class
 
 Edits 1 and 3: edit. Edit 2: small build. Edit 4: small build at CORE's owner. The weight's flip is a
-declared hash mover and its own commit, after the threadwork module.
+declared hash mover and its own commit, after the threadwork module. Tier: `sonnet`, effort `high`. Hash movers
+declared: none at `lattice_coupling` 0 (edits 1-3 behind the weight); edit 4 moves the question set wherever a crossing
+is witnessed. Lands it: B12, order 1 → 2 → 3 → 4, each with its test; the flip after B35.

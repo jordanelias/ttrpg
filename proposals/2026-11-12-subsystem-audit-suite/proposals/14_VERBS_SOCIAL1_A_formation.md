@@ -1,8 +1,13 @@
 # VERBS SOCIAL1 · A — form only what can be done: believed co-location, and `covenant` on a Proposition
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-19) — `believed_with` and the `with_belief_window` fixture are not added: the one reader of believed co-location is `person_q.present_persons` (`08_FI_02_rumour-that-travels.md` edit 5; fixture `telling_hearers`). R-WITH, the reading conjunct by conjunct, stands. A refusal on the `with` conjunct teaches its actor (decision register D-46; `U5c_VERBS_residue_and_governance_owner.md` §3).
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head line applied to the body (`unified/work/R4_READ.md` §1.5, 7b.6; U5c C-19): "The resolution, decided" item 1 and edits 1 to 3 are replaced (no `believed_with`, no `with_belief_window`; formation reads `person_q.present_persons` under `08_FI_02`'s `telling_hearers` fixture); the gate's control is that fixture's `known` arm; U3 batch B11, R4 7b.0 block. This file adds no draw.
 
 ## Status: PROPOSED
+
+Lands in batch: B11 (`unified/U3_DEPENDENCY_ORDER.md` §3.1), after `08_FI_02_rumour-that-travels.md` edit 5 in the same batch.
+Depends on: `08_FI_02_rumour-that-travels.md` edit 5 (`person_q.present_persons`, the `telling_hearers` fixture; MISSING in the tree until it lands); `02_CHAR_offer_what_can_be_done.md` (B10: the one decline this reading sits inside).
+Lane: SC. Tier (R4 7b.0 (1)): `sonnet` producer, effort `medium`; one `opus` read of the before/after refusal table. Test file: `engine/season/tests/test_vm_s1_a_formation.py` (the planted-failure arms and the `aperture 2 s` reading as functions).
 
 Batch S1-A of `audits/14_VERBS_SOCIAL1.md` §14. Written under `VERBS_BRIEF.md` (FAMILY = SOCIAL1).
 Authored in part by Fable; completed by Opus after the Fable usage limit (2026-11-12). Reference only
@@ -40,16 +45,14 @@ the same refused act is formed next round. Cause of the fifth: the `covenant` ro
 
 ## The resolution, decided
 
-1. **R-WITH.** One person-side reader, `queries/person_q.py::believed_with(claims, other, now, window) ->
-   bool`: True when the newest FIRSTHAND claim in `claims` that names `other` — a `seen` claim with
-   `Seen.who == other`, a deed claim whose subject is `other`, or a told claim whose last teller
-   (`chain[-1]`) is `other` (the three sources `known_persons` already reads, restricted to firsthand
-   contact) — has `when >= now - window`. A firsthand claim is deposited by WITNESS only to persons present
-   at the Event, so a recent one is the person's own evidence that `other` is near. `window` is the
-   fixture `with_belief_window`. No world read (AX-2).
+1. **R-WITH.** *(W3-4a, C-19: the reader is not this file's.)* The one person-side reader of "who I believe
+   is with me" is `queries/person_q.py::present_persons(p.ledger, p.id)` (`08_FI_02_rumour-that-travels.md`
+   edit 5), under its fixture `telling_hearers`; a person whose newest firsthand claim at a place is
+   `absent` drops out of it (`U5c_VERBS_residue_and_governance_owner.md` §3). No world read (AX-2). This
+   file adds no second reader and no second fixture.
 2. **Read by conjunct, never by verb.** In formation, for every row whose `requires_typed` carries a
-   `relation` conjunct with `relation: with`, the conjunct's `of:` operand must be `believed_with` the
-   actor: in `_person_bags`, a fanned person (`to`) failing it forms no bag; in `opening_set`, a referent
+   `relation` conjunct with `relation: with`, the conjunct's `of:` operand must be in `present_persons` of
+   the actor: in `_person_bags`, a fanned person (`to`) failing it forms no bag; in `opening_set`, a referent
    bound to `subject` failing it forms no Candidate. Where CHAR-OFFER (`02_CHAR_offer_what_can_be_done.md`)
    has landed, this is one reading inside its one decline; until then, it is one helper in
    `decision/options.py` called at those two sites.
@@ -64,37 +67,19 @@ audit file, for Jordan).
 
 ## Exact edits, by owner, in landing order
 
-1. `engine/season/data/fixtures.py` — a scalar:
-   ```
-   with_belief_window=<ticks of one season>,   # S1-A R-WITH; H-<next>; swept: 0 (only same-tick contact),
-                                               # one season (SHIPPED), None = unbounded (CONTROL: today's formation)
-   ```
-   The shipped value is read from the calendar's season length, not spelt (`loop/calendar.py` owns it);
-   `[UNVERIFIED]` the name of that constant. A NUMBER row in `engine/season/hole_register.yaml` with the
-   three-point sweep, allocated from `references/id_reservations.yaml`.
-2. `engine/season/queries/person_q.py` — beside `known_persons`:
-   ```python
-   def believed_with(claims, other: str, now: int, window: "int | None") -> bool:
-       """S1-A R-WITH: does the holder's own FIRSTHAND contact place `other` with him recently? ..."""
-       if window is None:
-           return True                      # the control: today's formation
-       newest = max((c.when for c in claims or () if c.firsthand and _names_in_contact(c, other)),
-                    default=None)
-       return newest is not None and newest >= now - window
-   ```
-   `_names_in_contact` reads the same three sources and roster keys as `known_persons`
-   (`KNOWN_PERSON_CLAIM`), restricted to `c.firsthand`; one helper both call, so the two cannot disagree on
-   what a contact is.
-3. `engine/season/decision/options.py` —
-   - `_person_bags`: compute once per row `with_ops = row.with_operands()` (a new read-only method on
-     `VerbRow`, `data/verbs.py`, returning the `of:` operands of its `relation: with` conjuncts; no verb
-     name). In the `for who in people` loop, skip `who` when any fanned name is in `with_ops` and
-     `not believed_with(p.ledger, who, now, fx.get("with_belief_window"))`.
+1. *(W3-4a: the `with_belief_window` fixture is withdrawn, C-19.)* No fixture is added here: the window
+   and its control are `08_FI_02`'s `telling_hearers` (`known` is the control arm that reproduces today's
+   formation).
+2. *(W3-4a: `believed_with` is withdrawn, C-19.)* No reader is added to `queries/person_q.py`; formation
+   calls `present_persons(p.ledger, p.id)` once per deliberation (`08_FI_02` edit 5).
+3. `engine/season/data/verbs.py` and `engine/season/decision/options.py` —
+   - `VerbRow.with_operands()` (new, read-only, `data/verbs.py`): the `of:` operands of the row's
+     `relation: with` conjuncts; no verb name.
+   - `_person_bags`: compute once per row `with_ops = row.with_operands()` and once per deliberation
+     `near = present_persons(p.ledger, p.id)`. In the `for who in people` loop, skip `who` when any fanned
+     name is in `with_ops` and `who not in near`.
    - `opening_set`: where a referent binds `subject`, skip it when `"subject" in row.with_operands()` and
-     `believed_with` fails.
-   - `now`: the deliberation's tick as the question or view carries it; `[UNVERIFIED]` which object holds
-     it at formation. If neither does, the person's own latest claim tick (`max(c.when for c in
-     p.ledger)`) is a person-side now and needs no world read.
+     the referent is not in `near`.
 4. `engine/season/verb_table.yaml`, row `covenant` — add after `beneficiary_note:`:
    ```yaml
        referent_class: Proposition
@@ -117,11 +102,12 @@ the commit body:
 
 ## Falsifier and control
 
-- **Control:** `with_belief_window = None` reproduces the before hash byte for byte (the reader returns True
-  and no bag is dropped). If it does not, the edit has moved something other than formation.
-- **Planted failure:** a hand-built person whose only claim naming B is firsthand at tick 0, deliberating
-  at tick `window + 1`, forms no `argue` to B; the same person with one firsthand claim at `window - 1`
-  forms it. If the first arm forms, the conjunct is not being read.
+- **Control:** `telling_hearers: known` (`08_FI_02`'s control arm: `present_persons` returns every known
+  person) reproduces the before hash byte for byte, no bag dropped. If it does not, the edit has moved
+  something other than formation.
+- **Planted failure:** a hand-built person whose ledger places B elsewhere (B not in `present_persons`)
+  forms no `argue` to B; the same person whose newest firsthand claim places B with him forms it. If the
+  first arm forms, the conjunct is not being read.
 - **The claim this could get wrong:** that firsthand contact implies co-location. If a firsthand claim can
   be deposited to someone not present (a channel that deposits remotely), the reader over-forms; check
   `loop/witness.py`'s firsthand deposit rule at landing and say so in the commit body.
@@ -132,12 +118,12 @@ the commit body:
   bottom-up the reader composes three existing claim sources; laterally one rule repairs eight rows by
   their conjunct. Removing it leaves ~80 refused acts per two seasons.
 - **R:** adds no option; makes a person spend his scenes on people he believes are near. Complete at its
-  extremes: window 0 forms only on same-tick contact; `None` is today.
-- **S:** one reader, read by conjunct; the fold untouched, so world-only truth still decides.
-- **E, last:** one function, one fixture, one row method and one class line against the largest
-  dead-end share in the family.
+  extremes: `telling_hearers`' narrowest arm forms only on present contact; `known` is today.
+- **S:** one reader (FI's), read by conjunct; the fold untouched, so world-only truth still decides.
+- **E, last:** one row method, two formation reads and one class line against the largest dead-end share
+  in the family.
 
 ## Cost class
 
-Edit: one reader, two formation reads, one fixture, one row key. Declared re-record of the season pins that
+Edit: one row method, two formation reads, one row key. Declared re-record of the season pins that
 carry these formations.

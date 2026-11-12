@@ -6,7 +6,11 @@ Re-grounded: 2026-11-12 (audit §18) — no edit of this file changes; one readi
 
 Reconciled: 2026-11-12, U5d closure — folded **A-19**, **A-35**, **A-36** and **A-15**. Accession to a failed royal line is the deed race (heir, consort, princess and both houses' heads; odds from what others believe of each claimant's deeds; the founding order a head start), which is this file's "opposition over three sets" read through `14_VERBS_BINDING_C`'s `succeed` row. The recall of a Cardinal by the Confessor (edit 3's draw) is un-held (A-35); no recall reaches the Confessor (A-36). Natural death (A-15) supplies the vacancies this file's accession needs.
 
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (BYZ_E: body `opposition` over three sets and `favourable` steps VIOLATE C-01; `revoke` Partial VIOLATES `04` §B.8 T-n and conflicts with BINDING-C), §2 (A-14, A-19, A-35, A-36 rows; the BIND_C `revoke` row: "BIND_C governs"), §6 (C3-N20: the "tenth row"), §7, 7b.0, 7b.7 ("Failure kinds `succession.contested`, `revocation.resisted` (BIND_C); Partial `revoke` per BIND_C (unseat without the disposal); delete `hostile`/`favourable` step lists"); `U3_CONFLICT_LEDGER.md` C3-C10, C3-N20; `U1_OWNERS_AND_VOCABULARY.md` D-U1-01 (a seat helps only as the exercised seat's `modifier:`; one above stands against as `rank_gap`), F-33 (`provisional_term` is BINDING-C's). Changed: the body now follows this file's first `Reconciled:` line, which it had not (`reception` over three audiences; a docketed rival as `opposition`; BINDING-C's kinds and term); the step lists become levels and named members; **`revoke`'s Partial takes BINDING-C's form** (the hold closes, no disposal): an actorless opening of a `ban` at a later tick has no basis (`04` §B.8 T-n: a term only closes), so the first `Reconciled:` line's "the form the synthesis assumes" is superseded by `R4_READ.md` §2; the ordinal "tenth" is gone; §2 and §6 follow A-19, A-14, A-35.
+
 ## Status: PROPOSED
+
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B32**, after BYZANTINE-A (`U3_DEPENDENCY_ORDER.md` §1 item 32), with `22_HAPPENINGS_B` edit 3 (the deed race's odds, A-19; §4 rows 75, 76). Depends on: `14_VERBS_BINDING_C_turnover.md` (B21: `succeed`'s and `revoke`'s rows, bands, kinds and `provisional_term`), `05_SC_arrangement_rows_that_bind.md` (B27), `15_INSTITUTIONS_BYZANTINE_A` and `_SYNTHESIS_B` (B32: `legitimacy`'s chain); CR-35, CR-37, CR-91 are v11 plan positions, MISSING until `STAGES.md` step 5 (§2's widening of `may_claim` waits on CR-35). Lane tag: FA. Tier: `opus` for edits 1 and 3's terms (contested rows whose bands decide a story); `sonnet` for edit 4. Named test: `engine/season/tests/test_inst_byz_e.py`. Standing sentences: *Pool* — `succeed`'s and `revoke`'s pools are BINDING-C's, the one pool rule on the actor's trained score (A-6); talent enters as levels (A-7); a wound is a level (A-8). *Failure writes* — `succession.contested` and `revocation.resisted` are witnessed by those present and deposited to them; the resisted recall is a deed a later `arrest` or `march` can cite (A-81). *Draw keys* — BINDING-C's: `H(w.world_seed, w.tick, <seat id>, "succeed.draw")`, `H(w.world_seed, w.tick, <holder id>, "revoke.draw")` (A-30).
 
 Source: `audits/15_INSTITUTIONS_BYZANTINE.md` §2.8 to §2.11, §3, §7.0, §17; the standing rule of
 `AUDIT_BRIEF.md` ("the ruled-in `succession` rules wherever the tree resolves an heir by a fixed
@@ -20,9 +24,9 @@ positions (CR-35, CR-37) by one clause each. Ratifies nothing.
    (`loop/effects_governance.py::_eff_succeed`, `:145-182`).
 2. `revoke` is a draw. Today an admitted revocation closes the hold with certainty. The ruled
    disposal (an appointed seat revoked costs a ban, 2026-10-21, `gate.py::REVOCATION_DISPOSAL`) is
-   kept in every band in which the hold closes.
-3. `arrangements.yaml` gains a tenth row, `acclamation`. Data only until a `convene` names it.
-4. With `procedure_draws: off` (the control arm) both verbs resolve as today.
+   kept at Overwhelming and Success; at Partial the hold closes without it (BINDING-C's Partial).
+3. `arrangements.yaml` gains the row `acclamation`. Data only until a `convene` names it.
+4. With the roll pinned (the control; `procedure_draws` is not added) both verbs resolve as today.
 
 ## The problem (evidence)
 
@@ -53,19 +57,19 @@ is a set, as a bench is).
 
 | term | reads |
 |---|---|
-| pool | `faculty(w, p, "succeed")`; `verb_capability.succeed` → `argue` `[ASSUMPTION; medium]` (a claim is made before people) |
+| pool | BINDING-C's row: the one pool rule on the claimant's trained score for `succeed`'s capability (`[ASSUMPTION; medium]`: `argue`, a claim is made before people) |
 | `difficulty` | by the rung kind of the seat's rung |
-| `opposition` | minus the mean, over three sets, of each set's mean `legitimacy(q, claimant, seat)` (proposal A's function, each `q` reading his own ledger; the resolver sums as `world_q.reception` sums a bench): the live holders of seats on the seat's rung and the rungs directly beneath it; the persons sworn to the seat (`gate.py::sworn_to`); the persons, cohorts by weight, residing where the seat's holder last resided. An empty set is left out of the mean |
-| `hostile` | one step per other person eligible to claim the same seat who is alive |
-| `favourable` | one step each: the claimant holds the seat's `successions` title; he holds a dignity; a live occasion under `acclamation` stands at his place |
-| `standard` | raised one step at that open floor (more eyes, and a wider telling on success) |
+| `reception` (OBS member 8, hostile half) | three audiences, each member `q` reading `legitimacy(q, claimant, seat)` (SYNTHESIS-B's chain, his own ledger; the resolver sums as `world_q.reception` sums a bench): the live holders of seats on the seat's rung and the rungs directly beneath it; the persons sworn to the seat (`gate.py::sworn_to`); the persons, cohorts by weight, residing where the seat's holder last resided. An empty audience is left out |
+| `opposition` (OBS member 2) | a rival who has docketed a claim on the same seat (A-19's deed race: heir, consort, princess and both houses' heads may claim); his trained score; none without a docketed rival |
+| `standard` | raised one step at an open floor under `acclamation` (more eyes, and a wider telling on success) |
+| levels (leverage, C3-C10) | `favour` from the favourable half of the same three audiences' `legitimacy`, and from a live occasion under `acclamation` at his place; `office` from the title seat he exercises (`Act.via` names the `successions` title; its row's `modifier:`, D-U1-01a; none ships). The dignity step is dropped (this file's first `Reconciled:` line) |
 
 | degree | writes | emits |
 |---|---|---|
 | Overwhelming | the hold opens; the title closes | `succession.claimed`, `tenure.closed` |
 | Success | the same | the same |
-| Partial | the hold opens with `Term(tick + provisional_term · season)`; the title stays | `succession.claimed` |
-| Failure | nothing; the title stays; the seat stays vacant | `succession.unrecognised` |
+| Partial | the hold opens with `Term(tick + provisional_term · season)` (BINDING-C's one fixture, shipped 2); the title stays | `succession.claimed` |
+| Failure | nothing; the title stays; the seat stays vacant | `succession.contested` (BINDING-C's name) |
 
 A provisional holder may `succeed` again while his term runs; a Success or better removes the term
 and closes the title. Every band is recoverable.
@@ -73,7 +77,9 @@ and closes the title. Every band is recoverable.
 **2. Who may claim (a clause for CR-35, not built here).** Eligibility stays the gate's
 (`gate.py::may_claim`). CR-35 schedules the contested arm; this file asks that it widen `may_claim`
 to any person who holds a claim on the seat (CR-91's grounds) and not only the title's holder, so
-that the title is the largest term in the odds and not the gate. `offices.yaml:193`'s own mark on
+that the title is a large term in the odds and not the gate. For the crown A-19 rules the set: when the
+line fails, heir, consort, princess and both houses' heads may claim, the founding order a head start
+(SYNTHESIS-B's ledger), which `22_HAPPENINGS_B` edit 3 carries. `offices.yaml:193`'s own mark on
 `off_king.conferral: inheritance` is `[ASSUMPTION; medium; Jordan to correct]`; RS-27 rules that the
 heir "still has to claim", and is silent on who else may. `[UNVERIFIED]` `may_claim`'s body
 (`gate.py:770-786`, not opened).
@@ -83,20 +89,22 @@ heir "still has to claim", and is silent on who else may. `[UNVERIFIED]` `may_cl
 
 | term | reads |
 |---|---|
-| pool | `faculty(w, p, "revoke")` → `argue` `[ASSUMPTION; medium]` |
+| pool | BINDING-C's row: the one pool rule on the revoker's trained score (`[ASSUMPTION; medium]`: `argue`) |
 | `difficulty` | by the rung kind of the stripped seat's rung |
-| `opposition` | the mean regard for the holder among the persons sworn to **his** seat (`establishment_of`): a governor's own men |
-| `favourable` | one step each: the revoker holds a deed claim against the holder from the window (a writ returned at his hand, a `compliance.withheld`, FA's suspicion fold); a person sworn to the revoker's seat is present where the holder is |
-| `hostile` | one step if the holder also holds a dignity of grade 4 or above (the disgraced man still outranks his judges) |
+| `reception` (hostile half) | one audience: the persons sworn to **his** seat (`establishment_of`), each reading his regard for the holder: a governor's own men |
+| `rank_gap` (OBS member 6) | where a seat the holder holds stands above the revoker's exercised seat; the dignity-grade step is dropped (D-U1-01) |
+| levels (leverage, C3-C10) | `proofs` for a deed claim the revoker holds against the holder from the window (a writ returned at his hand, a `compliance.withheld`, FA's suspicion fold). The step for "a person sworn to the revoker's seat is present where the holder is" has no OBS §3 source and is dropped; listed for U1 with the other unplaced members (`R4_READ.md` 7b.8) |
 
 | degree | writes | emits |
 |---|---|---|
 | Overwhelming, Success | the hold closes now; the ruled disposal opens | `tenure.closed` |
-| Partial | the hold closes at the season's end (`Tenure.until` set ahead); the ruled disposal opens then | `tenure.closed` at that tick |
-| Failure | nothing closes; the revoker holds a firsthand deed claim `(holder, recall.defied, True)` | `recall.defied` |
+| Partial | the hold closes now; no disposal (BINDING-C's Partial: unseated without the ban) | `tenure.closed` |
+| Failure | nothing closes; the effect emits `revocation.resisted` (BINDING-C's name), WITNESS deposits it to the revoker and those present | `revocation.resisted` |
 
-`recall.defied` is a new deed kind; it is the ground a later `arrest` or `march` can cite. It is not
-a dominance kind.
+No recall reaches `off_confessor` (A-36: `revocation: null`).
+
+`revocation.resisted` is the ground a later `arrest` or `march` can cite. It is not a dominance kind.
+(`recall.defied` is not added: F-R4-11.)
 
 **4. `arrangements.yaml`** — appended last:
 
@@ -136,21 +144,21 @@ and `succeed` opens a hold, so a banned person's claim is refused at eligibility
 
 **6. Interface for the papacy lane (not built here).** *Short list, then appointment:* a seat filled
 by a body's vote from which a second seat confers is one existing shape used twice: a `declared`
-disposal (the body's members `commit` to candidates, quorum as on `excommunication_deliberation`)
-that makes eligible the persons committed to, then a drawn `confer` by the appointing seat among
-them. *Consecration:* a named `favourable` term in edit 1, for the papacy lane to define and own. This
-file defines neither, and takes no position on FA audit §11 item 3; under option (B) there
-(`head_of_faction`), the recall of a Cardinal by the Confessor is edit 3's draw.
+disposal (each member's ballot a draw inside the presiding act, A-14; quorum as on
+`excommunication_deliberation`) that makes eligible the persons it carries, then a drawn `confer` by the
+appointing seat among them. *Consecration:* a held certificate cited by the claimant is a `proofs`
+level in edit 1 (PAPACY-C as reconciled). FA audit §11 item 3 is ruled (A-35, `head_of_faction`): the
+recall of a Cardinal by the Confessor is edit 3's draw; nobody recalls the Confessor (A-36).
 
 ## Gate (execution artifacts)
 
 1. *Accession.* 400 seeds, a hand-vacated throne, the title-holder claiming: all four bands occur;
    the Success-or-better rate with the title exceeds the rate for the same person with the title
-   stripped (the title is odds); with `presumption_gain: 0` both rates fall (the house's standing is
-   odds). With `procedure_draws: off` every seed opens the hold.
+   stripped (the title is odds); with `presumption_gain` raised from its shipped 0 to 0.5 both rates
+   rise (the house's standing is odds). With the roll pinned to Success every seed opens the hold.
 2. *Recall.* 400 seeds, a hand-placed `revoke` of a governor with three men sworn to his seat, in two
-   arms (their regard for him high, low): `recall.defied` occurs in both and is more frequent in the
-   first.
+   arms (their regard for him high, low): `revocation.resisted` occurs in both and is more frequent in
+   the first; no Partial seed opens a `ban` at any tick.
 3. *In play.* FA's `succession` situation (`06_FA_playable_scenario.md`) under the auto chooser,
    seeds 0 to 19: the distribution of bands, of provisional holds confirmed, and of seasons the seat
    stood vacant.
@@ -158,9 +166,8 @@ file defines neither, and takes no position on FA audit §11 item 3; under optio
 ## Falsifier
 
 Seat a title-holder whom every person present regards at the minimum, and a rival-free field: if he
-is seated in every seed, the opposition term is not read. Remove the ruled disposal from the Partial
-band: a planted assertion that a closed appointed hold always carries a ban fails, which shows the
-ruling is kept only by the edit as written.
+is seated in every seed, the `reception` term is not read. A Partial `revoke` that opens a `ban` at any
+later tick (an actorless opening): the edit is wrong.
 
 ## NERS
 
@@ -171,8 +178,8 @@ bottom-up (a crowd's regard is a third of the opposition), laterally (rival clai
 where (at an open floor or not), and whom to recall first are choices with different odds; the
 no-player half is the contested accession. Completeness: a seat nobody is eligible for stays vacant
 and the season runs. S: the contest seam, the obstacle form, `legitimacy`, the gate's bases and the
-ruled disposal are unchanged owners. E, against that: two rows' bands, one arrangement row, two
-emitted kinds, one fixture (`provisional_term`, shared with proposal A).
+ruled disposal are unchanged owners. E, against that: two rows' terms, one arrangement row, no new
+kind and no fixture of its own (`provisional_term` is BINDING-C's).
 
 ## Cost class
 

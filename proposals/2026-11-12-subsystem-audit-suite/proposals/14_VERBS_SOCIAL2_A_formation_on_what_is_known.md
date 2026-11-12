@@ -1,8 +1,14 @@
 # 14 · VERBS · SOCIAL2 · A — formation on what the person can know: a docket class, a Record sub-kind, a present subject
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-19, C-28) — edit 2 (`Record.<kind>`): `_stamped` carries both pairs, the bare `Record` and the qualified one, so `research` and `seize` still form (`research` was missing from this file's list of bare-`Record` rows, `audits/14_VERBS_MATERIAL.md` §17.2); it lands as one commit across families. §4 reads `person_q.present_persons`.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — R4 graded this file COMPLETE but for the uniform block (`unified/work/R4_READ.md` §7); applied: the block (7b.0), U3 batch B25 and the co-landing order of `unified/U3_CONFLICT_LEDGER.md` C3-Y10 (this file's kind lists commit after `_SOCIAL2_B` and `_SOCIAL2_C` add their kinds) and edge cut row 46 (the `research` pair lands here), the `[UNVERIFIED]` at `world_q.py:3714` settled at the tree, A-63/A-64 for `interview` (C3-C13), the scratch probe restated as a named test (U3 §6.2's rule), and the control hashes marked as readings before batch B01.
 
 ## Status: PROPOSED
+
+Lands in batch: B25 (`unified/U3_DEPENDENCY_ORDER.md` §3.1), co-landing with `14_VERBS_SOCIAL2_B` and `_C` (C3-Y10): edit 2's cross-family commit (the qualified `Record.<kind>` classes, `research`'s `_stamped` pair included, U3 §4.1 row 46) lands after S2_B and S2_C add their kinds.
+Depends on: `08_FI_02_rumour-that-travels.md` edit 5 (B11: `present_persons`, `telling_hearers`).
+Lane: FI. Tier (R4 7b.0 (1)): edits 1, 3, 5 `sonnet`, effort `medium`; edit 2 (cross-family, one commit) `sonnet`, effort `high`, with one `opus` read of the executions-not-lower table. Test file: `engine/season/tests/test_vm_s2_a_formation.py` (the falsifier's hand-built world and the gate's three seeds as functions).
+Standing: this file adds no draw (formation only). An `interview` is a visit: it occupies its interviewee for the round (A-63); precedence by rung, appointments and the waiting petition are `28_CORE_scene_access_A`–`C`'s (A-64; C3-C13).
 
 Carries `audits/14_VERBS_SOCIAL2.md` §3 (`open_case` formation), §4 (`construe` formation), §5 (`speak`
 formation), §6 (`tell` formation, adopted from FI-02), §7 (`interview` formation). Batch S2-A.
@@ -49,8 +55,9 @@ named shape), step 5 for the rest.
      this proposal and the measurement. `speak`'s `subject_may_be_self` is unchanged (the accused's own
      docket question carries himself as `Matter`).
    - Consequence: `open_case` (class `Person`) no longer forms on a docketed matter, because
-     `own_referents_of_class` stamps a question's plain referents only `[UNVERIFIED: read the function at
-     :3714 before landing; if it also walks `classes`, exclude `Matter` there]`.
+     `own_referents_of_class` stamps a question's plain referents only. *(Verified by W3-4a at
+     `queries/world_q.py:3714-3737`: its body is `_of_stamped_class(w, q.referents, classes)`, the plain
+     `referents` and never `classes`; no exclusion is needed.)*
 2. **A Record sub-kind class.**
    - `rosters.yaml: referent_classes`: the `Record` class is qualified: `Record.<kind>`, `<kind>` a
      `record_kinds` member. Authored on the row (data a designer reads), validated by
@@ -86,14 +93,18 @@ families) → the gate.
 
 ## Gate (execution artifact)
 
-`build_realm(s)`, s = 0, 1, 2, one season, `PYTHONHASHSEED=0`, read by `aperture 1 s` and the family probe
-(`scratchpad/runs/VERBS_SOCIAL2/probe_state.py`):
+`build_realm(s)`, s = 0, 1, 2, one season, `PYTHONHASHSEED=0`, read by `aperture 1 s` and the family probe.
+The probe (`scratchpad/runs/VERBS_SOCIAL2/probe_state.py`) is not in the repository, so the batch first
+writes its readings (per verb: attempted, executed, refused by deciding read) as a function of
+`engine/season/tests/test_vm_s2_a_formation.py` over `harness/aperture.py`'s per-verb counts
+(`verb_counts`, `:704`), with the expected reading below, and the gate reads that test (U3 §6.2):
 - refusals 0 for: `speak` on `exists:DocketItem=0`; `open_case` on clause `write`; `construe`, `comply`,
   `evade / defy` on `record_subkind`; `interview` on `exists:Person=0`, and self-subject 0.
 - executions of `speak`, `open_case`, `interview`, `comply` not lower than the baseline (1/5/4; 6/8/5;
   5/3/5; 0) at each seed. A fall is the stopping rule (CP-T05-04's AM-A-09 rule): revert that edit.
 - Control: the pre-edit tree's hashes at the three seeds (5ab73af282d0, aa58ef0b71c9, a21ab6e12e35 from
-  the probe).
+  the probe: readings of the working tree before batch B01, which re-records every pin; the landing batch
+  re-reads them on its own base and quotes those, C3-N27's rule).
 
 ## Falsifier
 

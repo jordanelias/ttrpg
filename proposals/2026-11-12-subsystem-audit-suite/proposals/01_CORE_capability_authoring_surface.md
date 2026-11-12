@@ -2,6 +2,10 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-08, C-U5a-11) — the home proposed here (`references/descriptor_registry.yaml: capabilities`, the verb-row column) is the decided one: `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §1. Changed by that file and by Jordan's answers: Edit 1's `kinds` drops `attribute`, `untrained_rules` is `[default, none]`, every row carries `gloss`, `growth_rules` gains `fixed`; Edit 8's values are U1 §5's (`arrest: arms`, `lie: deception`, `determine: law`, each `none` with a note until its definition row exists); Edit 9 is kept as `max(untrained score, rank)` and its `untrained: attribute` arm is removed (A-7: talent and training are two inputs, never folded); **Part three is withdrawn** (A-11: a capability never gates an act). The roll these rows feed is U1 §4; the ordered plan is `U5a_capability_home_and_two_inputs.md`.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.1 row 1, §2 row 1, §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-07, ledger C-02, C-03, C-04, C-09; `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §2, §3, §5, §11 batch U1-A; `unified/U3_CONFLICT_LEDGER.md` C3-N27). The body now follows the head it already carried: Edit 1's block is U1 §2's (`kinds [skill, aptitude, trait]`, `grows_by [train, practice, use, fixed]`, `untrained [default, none]`, `scale: [0, 7]`, `gloss` required); Edit 2's row and refusals carry `gloss`; Edit 8's table is U1 §5's; Edit 9 is `max(untrained score, rank)` with no `untrained: attribute` arm; Part three's body is replaced by a one-line pointer (A-11); the "Not here" paragraph names U1 §3's columns; named tests, the check's hash caveat (B01 moves the pin) and lands-it and tier are added. Layer 1: the verb-row column meets `04` §B.13 against §C.4 (AMBIGUOUS); U1 §1 picks the column under B4's third disposition (a missing value is a load refusal, MECHANICAL); nothing in `04` is edited.
+
+**Lands in batch:** B04 (Part one; Edit 8's values with CAP A2/A3), Edit 9 in B05 (CAP Part B, U1-B). **Depends on:** B02 (`01_CORE_tests_one_golden_owner.md`, the one pin file); `10_DICE_capability_axiom_map.md` (B04); `U5a_capability_home_and_two_inputs.md` Part A (B04); each new capability's definition row before any verb cell names it (`deception`, `law`: `05_SC_hearing_capabilities.md`, B04).
+
 ## Status: PROPOSED
 
 Source: `audits/01_CORE_audit_addendum_B.md` §5 (the brief's §14), F-CORE-15. Read at `785bc62`.
@@ -10,7 +14,7 @@ Source: `audits/01_CORE_audit_addendum_B.md` §5 (the brief's §14), F-CORE-15. 
 
 Part one changes nothing a season computes: the same pools, the same obstacles, the same content hash at
 shipped data. It moves where three facts are authored and adds a refusal at load. Part two moves play
-(each edit a declared hash mover with its control). Part three is held on a question for Jordan.
+(each edit a declared hash mover with its control). Part three is withdrawn (A-11: a capability never gates an act).
 
 ## The problem, with evidence
 
@@ -47,32 +51,38 @@ loaders derive the maps every reader already imports. Nothing is added to `facul
 
 ```yaml
 capabilities:
-  kinds: [attribute, skill, aptitude, trait]        # closed
-  growth_rules: [train, practice, use]              # closed; each names a rule the engine implements
-  untrained_rules: [default, attribute]             # closed; what a non-holder rolls
+  source: "U1; A-6, A-7, A-11 (2026-11-12)"
+  kinds:    [skill, aptitude, trait]              # closed. The ten attributes are defined in `attributes:` and are not re-defined
+  grows_by: [train, practice, use, fixed]         # closed; each names a rule the engine implements
+  untrained: [default, none]                      # closed; what a non-holder brings (U1 §4)
   rows:
-    copying: {kind: skill, base: attr.mind.focus,      untrained: default, grows_by: [train, practice], scale: {floor: 0, ceiling: 7}, source: "rosters.yaml vocation_attribute (CR-20)"}
-    argue:   {kind: skill, base: attr.social.charisma, untrained: default, grows_by: [train, practice], scale: {floor: 0, ceiling: 7}, source: "rosters.yaml vocation_attribute (CR-20)"}
-    inquiry: {kind: skill, base: attr.mind.acuity,     untrained: default, grows_by: [train, practice], scale: {floor: 0, ceiling: 7}, source: "rosters.yaml vocation_attribute (CR-20)"}
-    arms:    {kind: skill, base: attr.body.agility,    untrained: default, grows_by: [train, practice, use], scale: {floor: 0, ceiling: 7}, source: "rosters.yaml vocation_attribute (CR-20); CP-T03-04 (iv)"}
+    copying: {kind: skill, gloss: "Carries a text or a message on exactly as it was given.", base: attr.mind.focus,      opposed_by: none,           untrained: default, grows_by: [train, practice],      scale: [0, 7], source: "rosters.yaml vocation_attribute (CR-20)"}
+    argue:   {kind: skill, gloss: "Makes a case to someone's face and moves them by it.", base: attr.social.charisma, opposed_by: attr.mind.will, untrained: default, grows_by: [train, practice], scale: [0, 7], source: "rosters.yaml vocation_attribute (CR-20); ED-IN-0350"}
+    inquiry: {kind: skill, gloss: "Finds things out: from a record, a place or a watched person.", base: attr.mind.acuity,     opposed_by: attr.mind.will, untrained: default, grows_by: [train, practice],      scale: [0, 7], source: "rosters.yaml vocation_attribute (CR-20)"}
+    arms:    {kind: skill, gloss: "Fights with a weapon in hand.", base: attr.body.agility,    untrained: default, grows_by: [train, practice, use], scale: [0, 7], source: "rosters.yaml vocation_attribute (CR-20); CP-T03-04 (iv)"}
 ```
 
-The four rows are today's four vocations with today's attributes, moved. `opposed_by:` is an optional
-key (absent on all four, as `vocation_attribute.opposed_by` is empty). `use` is `_grown`'s rule (a fight
-that drew blood). The ten attributes stay where they are in the same file; a `kind: attribute` row is
-not written for them (they are already defined; a second definition would be a second owner).
+The four rows are today's four vocations with today's attributes, moved; `opposed_by` values are U1 §2's
+table (`copying: none`, OBS §2; `argue` and `inquiry` `attr.mind.will`; `arms` absent, which reads `base`).
+`gloss` is required and non-empty on every row (the exporter refuses an empty one); its text is
+`02_CHAR_capability_definitions.md` Edit 1's. `use` is `_grown`'s rule (a fight that drew blood); `fixed`
+is a trait's (it does not grow). `untrained: none` means a non-holder brings nothing (a trait). The ten
+attributes stay where they are in the same file and are not a capability kind: an attribute is the
+**talent** input of U1 §4, a capability's rank its **training** input (A-7), never folded.
 
 ### Edit 2 · owner `tools/export_descriptors.py`, `engine/substrate/descriptors.py`
 
 The exporter cooks the block into the existing artifact; the leaf gains
 
 ```python
-CAPABILITIES: Mapping[str, CapabilityRow]     # frozen; id -> (kind, base, opposed_by, untrained, grows_by, floor, ceiling)
+CAPABILITIES: Mapping[str, CapabilityRow]     # frozen; id -> (kind, gloss, base, opposed_by, floor, ceiling, untrained, grows_by)
 def capability(name) -> CapabilityRow         # raises ValueError naming the roster, as resolve_pursuit does
 ```
 
-The exporter's `--check` refuses a `base` or `opposed_by` that is none of the ten, a `kind`, rule or
-`untrained` outside its closed set, and a `floor` above a `ceiling`.
+The exporter's `--check` (a `_capability_roster(reg)` validator beside `_heritage_roster`, U1 §11 U1-A step 1)
+refuses a `base` or `opposed_by` that is none of the ten attribute keys or `none`, a `kind`, growth rule or
+`untrained` value outside its closed set, an empty `gloss`, and a `scale` that is not `[int, int]` with floor
+≤ ceiling. `engine/engine_params/descriptors.json` is re-derived with the tool, never by hand.
 
 ### Edit 3 · owner `engine/season/verb_table.yaml`, `engine/season/data/verbs.py` — a `capability:` column
 
@@ -80,7 +90,8 @@ The exporter's `--check` refuses a `base` or `opposed_by` that is none of the te
 `capability: <the same key>`. The loader refuses (as it refuses a missing `beneficiary:`): a contested
 or graded row with no `capability:` key; a value that is neither a `CAPABILITIES` id nor `none`; `none`
 without a `capability_note:`; a `capability:` on a row that neither contests nor is graded (a column
-nothing reads). In part one the five undeclared contested rows carry `capability: none` and a note that
+nothing reads) unless the row declares `magnitude: rate` (U1 §11 U1-A step 2; D-U1-09). The task's
+difficulty is the sibling column `difficulty:` on the same row (D-U1-04), landed by OBS §4 step 1a in B05, not here. In part one the five undeclared contested rows carry `capability: none` and a note that
 says so plainly (*"undeclared at authoring; every person rolls the untrained default"*), which is their
 behaviour today.
 
@@ -128,57 +139,62 @@ the literal was a third copy of the second.
 
 **Gate (part one).** `python tools/export_descriptors.py --check` passes; the driver constructs; a
 same-seed `headless --case NPC-088 --seasons 2 --seed 0` prints hash `5405522c36b0399247f83fd9f6d29494`
-(the first audit's reading); `corpus_run` seed 0 reproduces its executed-verb and degree tallies.
+(the first audit's reading at the working tree before B01; every such pin moves at B01, so re-read it on the
+batch's base and quote that, C3-N27); `corpus_run` seed 0 reproduces its executed-verb and degree tallies.
+**Named tests** (new file `engine/season/tests/test_u1_capability_surface.py`, U1 §11 U1-A):
+`test_deleting_the_block_refuses_the_load`, `test_a_contested_row_with_no_capability_is_refused_naming_it`,
+`test_a_capability_naming_no_definition_is_refused`, `test_derived_vocation_maps_equal_the_retired_rosters`
+(`==` against the retired rosters' values captured as literals, not `approx`).
 **Falsifier.** Delete `capability:` from `argue`'s row: the load refuses naming the row. Change
 `argue`'s `base` to a name outside the ten: the exporter's `--check` refuses. Either passing silently
-falsifies the edit.
+falsifies the edit. **Control.** The batch's base tree (hash EQUAL).
 
 ## Part two — the two things that move play (each its own commit)
 
 ### Edit 8 · the five undeclared contested rows declare a capability
 
-| verb | prize | proposed | ground |
+| verb | prize | decided (U1 §5) | ground |
 |---|---|---|---|
-| `lie` | a standing, counterparty `to` | `copying` | `tell` and `speak`, the same prize and shape; a lie is a telling of a false value (precedent) |
-| `determine` | a proposition | `argue` | `argue` contests the same prize `[ASSUMPTION; medium; Jordan to correct; revert: none]` |
-| `interrogate` | a proposition, a detained subject | `inquiry`, `opposed_by: attr.mind.will` on the row's opposition | it is a question put to find something out, the three graded inquiries' vocation `[ASSUMPTION; medium; revert: none]` |
-| `arrest` | a standing, by `remit:dispatch` | `argue` | the roll is the social provider's; an arrest carried by force is `capture` (`arms`) `[ASSUMPTION; low; revert: none]` |
-| `march` | a field | `none`, noted | the field reads weights and orders and never calls `faculty`; a commander's capability is the MB lane's input |
+| `lie` | a standing, counterparty `to` | `deception` on whichever row resolves a lie; `capability: none` with a note until the `deception` definition row lands (`05_SC_hearing_capabilities.md`, B04) | the verb is SC's; a lie is not a faithful copy (U1 §5) |
+| `determine` | a proposition | `law`; interim `argue` until `law`'s definition row lands | one thing gets one name; FA's `judgment` collides with the role `judgement` (U1 §5; C-U5a-11) |
+| `interrogate` | a proposition, a detained subject | `inquiry` (the row's `opposed_by` is the definition row's, `attr.mind.will`) | unanimous across lanes (U1 §5) |
+| `arrest` | a standing, by `remit:dispatch` | `arms` | FA (the verb's lane), DICE and lane A agree; `capture`'s precedent (U1 §5) |
+| `march` | a field | `none`, noted | the field's capability enters at the `field` site, on the commander's record (`27_MB_A`) |
 
-Each is one value on one row, shipped behind the row's own revert. **Gate.** `corpus_run` seed 0, 1, 2
+Each is one value on one row, shipped behind the row's own revert. Lane A's interim `verb_capability`
+rows (`interrogate: inquiry`, `arrest: arms`, `determine: argue`) move to this column (D-U1-07). **Gate.** `corpus_run` seed 0, 1, 2
 before and after: the share of `Failure` among graded `determine`/`lie` outcomes for persons who hold
 the key against persons who do not (a difference with the same-seed control is the reading; no balance
 claim is made from it).
 
 ### Edit 9 · a first rank is never a loss, so a skill can be acquired
 
-`faculty`'s base becomes: for a holder of the key, `max(untrained_value, rank)`; for a non-holder,
-`untrained_value`, where `untrained_value` is `pool_default` under `untrained: default` and the base
-attribute (else `pool_default`) under `untrained: attribute`. At shipped data every held key is at
+The score (`seam/wrappers/pool.py::score`, U1 §8) becomes: for a holder of the capability,
+`max(untrained score, rank)`; for a non-holder, the untrained score, which is `pool_default` under
+`untrained: default` and nothing under `untrained: none`. The attribute is never a fallback for the score
+(A-7: talent and training are two inputs; talent enters as levels, U1 §4). At shipped data every held key is at
 `pool_default` or above, so this is hash EQUAL until someone holds a rank below it. Then
 `raised_capability` may mint: a non-holder's `train` writes `{key: 1}` and his pool is unchanged until
-the rank passes the default. `[ASSUMPTION; medium; Jordan to correct; revert: restore the never-minted
+the rank passes the default, and the rank never passes the row's `scale` ceiling. `[ASSUMPTION; medium; Jordan to correct; revert: restore the never-minted
 rule]`. **Gate.** A seeded two-season realm run in which a person with no `argue` key trains it:
 `capability.raised` is emitted, his `argue` pool is not lower than before, and a second training raises
-it. **Falsifier.** His pool after the first rank is below `pool_default`.
+it; named test `engine/season/tests/test_u1_two_inputs.py::test_a_first_rank_never_lowers_a_pool` (U1 §11
+U1-B). **Falsifier.** His pool after the first rank is below `pool_default`. Lands in B05 with CAP Part B.
 
 ### Not here · where a capability enters a person's own choice
 
 Which attribute grades a told claim (`decision/options.py:1627`, a name in code) and the
 Thread-Sensitivity gate's two hard-wired stems are the decision layer's uses of a capability. The CHAR
-lane's `02_CHAR_capability_uses_table.md` resolves both with one table of uses (`use`, `key`, `form`,
-`gain`) and is their owner; this proposal does not repeat them. The two fit by construction: that
-table's `key` is *"a registry key (an attribute or a practitioner stat)"*, and a capability id defined
-in this proposal's block is a registry key of the same registry, so a use row may name a skill exactly
-as it names an attribute.
+lane's `02_CHAR_capability_uses_table.md` resolves both with one table of uses, `rosters.yaml:
+tables.capability_uses` (columns `use, role, key, side, when, level, per, against, gain, add, floor`;
+U1 §3), and is their owner; this proposal does not repeat them. The two fit by construction: that
+table's `key` is a capability id, a registry key (an attribute or a practitioner stat), or the selectors
+`verb` / `verb.base` (U1 §3 amendment 1), so a use row may name a skill exactly as it names an attribute.
 
-## Part three — held (survivor in the addendum's §9)
+## Part three — withdrawn
 
-Whether a capability may gate an *act* (as distinct from weighting a choice). The carrier would be the
-CHAR table's `form: at_least` read by a `requires` cell (one own-state stem, `own:<registry key>`, in
-place of the two stems named for Thread Sensitivity), with the threshold on the verb row. Built only if
-Jordan rules that a capability may gate an act; under the present ruling the gate has exactly the one
-member it has now.
+Withdrawn by A-11 (a capability never gates an act; Thread Sensitivity is the one `gate`, at two use
+sites, U1 §3 amendment 5). Nothing here is built.
 
 ## NERS reading (definitions: `CLAUDE.md` §0.06)
 
@@ -196,5 +212,10 @@ member it has now.
 
 ## Cost class
 
-Part one: edit plus a small build (the exporter and the leaf). Part two: three edits, each a hash mover.
-Part three: design-first.
+Part one: edit plus a small build (the exporter and the leaf). Part two: two edits, each a hash mover
+(Edit 8 per row; Edit 9 inside CAP Part B's one re-pin). Part three: withdrawn.
+
+**Lands it.** Part one: the B04 batch (U1 §11 U1-A), a `methodology-execute` batch with one commit per edit,
+author `valoria-author` on `sonnet` (`high`), close `methodology-close` with its terminal `opus` critique
+once per batch. Edit 8: the same batch, one commit per row, each a declared mover said plainly as a
+re-record (CLAUDE.md §7). Edit 9: the B05 batch (U1-B), same tiers.

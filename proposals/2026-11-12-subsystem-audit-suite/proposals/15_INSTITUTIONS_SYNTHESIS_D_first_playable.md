@@ -2,7 +2,11 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-12**, **A-14** and **A-10**: the first playable is a scenario on the season loop (no module); its ballots are draws on each voter inside the presiding act; a seat in it may carry a modifier once the kit authors one. No step changes.
 
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (SYN_D: CONFORMS), §2 (A-80 row), §7 (INCOMPLETE: the A-80 arm), 7b.0, 7b.7; `U3_CONFLICT_LEDGER.md` C3-C12 (one entrenched-world arm, read by `23_STORY_D`); `U3_DEPENDENCY_ORDER.md` (B40; the I-n batches mapped to the handles); `U1_OWNERS_AND_VOCABULARY.md` D-U1-11k (`remove` → `distance`); `U1_GLOSSARY.md` *scenario*. Changed: gate 8 (A-80); the borrowing and roll report lines read the lapse when read and say "list" (VENICE-B, -C as reconciled); `remove` → `distance`; the batch names. In new text the standalone setup is a **scenario**; its YAML is the scenario's case file (ARCS-01's file shape); `situation` stays the name of FA-P4's argument.
+
 ## Status: PROPOSED
+
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B40** (institutions scenarios, FA), first (`U3_DEPENDENCY_ORDER.md` §1 item 40). Depends on: `06_FA_playable_scenario.md` (B21, the runner), `12_ARCS_case_on_the_realm.md` (B39, the case delta and tick-0 prehistory), and the kit's batches B32 and B33 (every cut's content). This file's "I-n" batch names are SYNTHESIS-E's; in the suite's one order I-1 to I-8 fall in B32 and B33 (SYNTHESIS-E's mapping) and the prehistory in B39, so every cut runs after B39. Lane tag: FA. Tier: `sonnet` (harness), effort `high`; one `opus` read of gates 1 to 3 and 8. Named test: none (its own sentence, CLAUDE.md §0.1 pt 5); the gates are runs of `python -m engine.season.harness.institution INST-01 8 <seed>` quoted in the commit. The `counting_house.py` probe `U3_DEPENDENCY_ORDER.md` §6 lists is not written and is no gate here (§1). Standing sentences: *Pool*, *Failure writes*, *Draw keys* — the scenario adds no roll, no row and no draw; each is the composed proposals' (A-6 to A-8, A-81, A-30). *Entrenchment* — gate 8 (A-80).
 
 Source: `audits/15_INSTITUTIONS_SYNTHESIS.md` §6, §7.6, §9.3; the standing requirement of
 `AUDIT_BRIEF.md` (playable alone, one code path, integrated, no GM). Merges the first cuts of
@@ -10,8 +14,8 @@ Source: `audits/15_INSTITUTIONS_SYNTHESIS.md` §6, §7.6, §9.3; the standing re
 `15_INSTITUTIONS_COLONIAL_E` (The Farm of the Southern Tolls) and `15_INSTITUTIONS_PAPACY.md` §11's
 third scenario (The Sentence) into one scenario on the realm. Composes on `06_FA_playable_scenario.md`
 (FA-P4: `play`, `situation`, `digest`, `offered`), `06_FA_shortest_loop_B.md` (FA-B4: `world="realm"`),
-`12_ARCS_case_on_the_realm.md` (a case is a delta; prehistory through the fold). Batch I-9. Ratifies
-nothing.
+`12_ARCS_case_on_the_realm.md` (a case is a delta; prehistory through the fold). Batch I-9 of
+SYNTHESIS-E, which is B40 in the suite's one order. Ratifies nothing.
 
 ## What it changes in `engine/season/` at runtime
 
@@ -113,7 +117,7 @@ term list.
 
 | way to meet the bill | acts | which institution it crosses into | what follows by somebody else's choice |
 |---|---|---|---|
-| tax a duchy | `requisition` at `remove`, against the cohort's `regard` and the `homage` the cohort knows of | the ducal house | the duke's `breaches` occasion: `petition`, withhold the relief, `release` (he is `excused`), `march` |
+| tax a duchy | `requisition` at `distance`, against the cohort's `regard` and the `homage` the cohort knows of | the ducal house | the duke's `breaches` occasion: `petition`, withhold the relief, `release` (he is `excused`), `march` |
 | borrow | `petition` the house head; `covenant` (a `debt`); later `transfer` at each stage, or not | the house | the reckoning; a lapse; the bond told, or handed on; with cut 3, a suit before a Church bench |
 | farm the southern tolls | `covenant`, form `farm`, to a person he knows | the grantee and the people of Stillhelm | the farmer's levies and rent; petitions; migration; an `audit` when his hold closes |
 | levy in Himmelenger | `requisition` in `terr_T9` | the Church | a churchman's `open_case`; a sentence; an `avoidance` whose addressees are his own sworn men |
@@ -147,10 +151,10 @@ omitted.
 | `collected` — rendered, taken, partial, resisted, per place, each with its term list | `requisition.*` Events | BYZ-F; COL-E |
 | `carried` — transfers between places by band and what arrived | `transfer.*` Events | COL-E |
 | `dignities` — held, conferred, resisted, provisional | `tenure.opened` on dignity rows; `appointment.resisted` | BYZ-F |
-| `hands` — entered, held over, returned by a clerk, returned by the clock, per body or seat; the busiest hand's share | `document.*` Events; `term.matured` on `hand:` stages | BYZ-F |
+| `hands` — entered, held over, returned by a clerk, returned by the clock, per body or seat; the busiest hand's share | `document.*` Events; "returned by the clock" read when read (an unentered `hand:` stage whose due has passed; BYZ-C as reconciled) | BYZ-F |
 | `instruments` — per live instrument: form, parties, `dues` stamped, acts occasioned by one, `kept` as each party reads it | `dues`; `occasioned_by`; `person_q.kept` | COL-E |
-| `bonds` — minted, reckoning by band, extended, lapsed, handed on; the largest share of a bench with a live edge to one person | `debt` Records; `debt.lapsed`; `record.given`; `owed_to` | VEN-D |
-| `rolls` — per roll seat: enrolled, lapsed by term; `lot.seen`, `lot.empty`; council holders in order | `oblige` Tenures; `lot.*` | VEN-D |
+| `bonds` — minted, reckoning by band, extended, lapsed, handed on; the largest share of a bench with a live edge to one person | `debt` Records; the lapse read from `world_q.owed` after the last stage's `term.matured` (VEN-B; no `debt.lapsed` kind); `record.given`; `owed_to` | VEN-D |
+| `lists` — per list seat: enrolled, lapsed by term; `lot.seen`, `lot.empty`; council holders in order | `oblige` Tenures; `lot.*` | VEN-D |
 | `seats` — per faction named: who holds which seat; each `confer`, `revoke`, `succeed` with its band, its `Act.via` and its term list | `tenure.*`; the contest Events | PAP-F; BYZ-F |
 | `certificates` — Records carrying `recites`, by keeper; tellings of recited deeds by keeper; the mean chain term of `legitimacy` per founding seat | `w.records`; `tell` Events citing a held Record; `person_q.legitimacy` over the cast | SYN-B gate 4 |
 | `sanctions` — sentences by band; writs published and their `force`; answers by band; releases by excused and unexcused men | `ban.opened`; `dispensation.issued` of form `avoidance` or `interdict`; `compliance.*`; `tenure.closed` on `oblige` | PAP-D |
@@ -186,6 +190,14 @@ is the game's draws and its reader is a person deciding a tuning value).
    borrow and pay; borrow and default; farm and neglect) reach different endings on some seed, and any
    two of them are told apart by their distribution of endings over twenty seeds each. Manual; the
    close's reading, not a test's.
+8. **Entrenchment moves the world (A-80; C3-C12).** An arm in which every contest resolves at its
+   control band, so every position holds (no bond is met or sued, no levy is resisted or yielded beyond
+   its control band, no audit is determined). The report prints, per seed and season, the count of acts
+   whose question cites an Event of the King's or an instrument of the case (a petition, a `tell`, a
+   `migrate`, an `evade / defy`, a `release`). Expected reading: non-zero in every seed and rising while
+   the bill stays unmet (held positions are referents others act on). The count is the story census's
+   instrument (`23_STORY_D`, the entrenched-world arm); this gate reads it, it does not define it.
+   Control: the same seeds with the case's instruments absent.
 
 ## Falsifier
 

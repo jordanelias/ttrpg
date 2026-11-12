@@ -2,6 +2,10 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-13) — lands first among the hash movers, so each later mover re-records one file. E (the dice golden) is superseded in content by A-5: the golden is regenerated for the functions that remain after the whole-dice roll is deleted (`U5a_DICE_owed_edits.md` §1 row 8), not trimmed to 735 rows. D's kept pin `len(VERB_TABLE) == 67` is re-recorded by the commit that splits `tie / knot` (A-28).
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.1 row T1, §2 row literals/item D, §6 rows *749 acts*, *regime_gain control*, §7, §7b-T; `unified/U3_CONFLICT_LEDGER.md` C3-N14, C3-N27, C3-N30; `unified/U3_DEPENDENCY_ORDER.md` node B02, §6.2). Changed: item E's body is replaced by the head's sentence (A-5: regenerate the golden for the functions that remain; no "735 rows", no TN-7-only emit); the literals are named as `main`'s readings, which move at B01 (lane A's rebase) and again with A-5 (B05), A-9 (B08) and A-30 (B06) — this file lands first (B02) so each re-pin is one edit (C3-N27); item D's verb-roster pin is a reading quoted with its batch, re-read at B25 and B38 (C3-N30); "749 acts" is "749 folded acts (821 attempted)" (C3-N14); each pin's arm (control or shipped) is stated; the two scratch probes are replaced by the go07 test itself; lands-it and tier added.
+
+**Lands in batch:** B02, first among the hash movers' prerequisites. **Depends on:** B01 (lane A rebased; its re-recorded pins are discarded and re-read on the working tree, C3-A2).
+
 ## Status: PROPOSED
 
 Source: `audits/01_CORE_audit_addendum_C_tests.md` F-TEST-02, F-TEST-03, F-TEST-08. Read at `785bc62`.
@@ -28,9 +32,11 @@ The content hash of every world is stationary.
    so the hash they pin is the hash of the tree as it stood several items ago, reproduced in process.
    Three more pin a withheld or switched-off arm.
 3. **One literal pins the shipped played realm.** `test_strife_credit.py:41`
-   (`5ab73af282d0779646c38839fbab85d8`, seed 0, one season). Probe (`probe_realm_sweep.py`,
-   `PYTHONHASHSEED=0`): `build_realm(0)` + `populated.run(1, 0)` reads that value, 749 acts, 13,379
-   Events, in 7.3 s. Seeds 1 and 2 at the shipped configuration read `aa58ef0b…` and `a21ab6e1…`
+   (`5ab73af282d0779646c38839fbab85d8`, seed 0, one season: the **shipped** arm; the six copies of
+   `25660615…` in item 1 are the **`regime_gain = 0` control** arm). Probe (`probe_realm_sweep.py`, a scratch
+   script not in the repository, `PYTHONHASHSEED=0`): `build_realm(0)` + `populated.run(1, 0)` reads that
+   value, 749 folded acts (821 attempted, `audits/25_GROUNDING_ENGINE.md` L-18; C3-N14), 13,379 Events, in
+   7.3 s. Seeds 1 and 2 at the shipped configuration read `aa58ef0b…` and `a21ab6e1…`
    (`probe_realm_gates.py`), which are pinned only as the `regime_gain = 0` control and happen to
    equal the shipped reading there.
 4. **The count pins are a second, coarser tripwire over the same runs.**
@@ -65,7 +71,13 @@ SHIPPED = {(0, 1): "5ab73af282d0779646c38839fbab85d8",                # (seed, s
 CENSUS = {(0, 1): dict(acts=749, log=13379), ...}                      # read with populated.run
 ```
 
-Seeds 1 and 2 are re-read at the edit (the values above are this audit's probe; the edit records its own).
+Seeds 1 and 2 are re-read at the edit (the values above are this audit's probe, readings of `main` at the
+working tree; the edit records its own on its base). Every literal here is `main`'s reading and moves at
+B01 (lane A's rebase re-records the pins, C3-A2, C3-N27), then once each with A-5 (the one sampler, B05),
+A-30 (the keyed draw, B06) and A-9 (the scene order, B08); because this file lands first, each of those
+re-pins is one edit to `_realm_goldens.py`. The scratch probes `probe_realm_sweep.py` and
+`probe_realm_gates.py` are not needed: the go07 test (B) runs `build_realm(s)` + `populated.run(1, s)` and is
+the instrument (U3 §6.2).
 
 **B. One test owns the shipped pin.** `test_go07_canonical_digest.py::test_go07_control_the_world_did_not_move_only_its_digest`
 drops `revert_cr79(monkeypatch)` and its `BASE` block and asserts `SHIPPED` and `CENSUS` at the three
@@ -118,33 +130,32 @@ right-hand column, which is already there:
 | the fork tuples `(31, 3)`, `(28, 2)`, `(28, 2)`, `_TRAIN_KIND_GAP`, the `{none: (10, 31), …}` dict (`:14829-15143`, `:15507-15555`) | `windows >= 90`; `bad_windows == 0`; every arm `genuine > 0`; `got["total"]["diverged"] > 0`; `5 * acts_differ > genuine` |
 | the one-round arm's event census (`:16649`) | `d.resolved` non-empty; the planted-round tests |
 | `total == 85` `raise SystemExit` statements (`:949`, with the 260-line narrative above it) | `test_h115_the_degree_branches_raise_unspecified_not_systemexit` |
-| `len(VERB_TABLE) == 67` at `:2310` | the same assertion at `:15933` (R-05's denominator, once) |
+| `len(VERB_TABLE) == 67` at `:2310` | the same assertion at `:15933` (R-05's denominator, once). It is a reading of `main` (67 rows, U3 T-7), re-read and re-recorded at B25 (A-28's `tie`/`knot` split, 68) and B38 (`riot`, if it lands, 69) and quoted with its batch, never typed into prose (C3-N30) |
 
 The single tripwire for "something moved" is the shipped realm hash in B, which is strictly more
 sensitive than any count: it covers every Event, receipt and observation.
 
-**E. The dice golden carries live rows only.** In `tools/gen_sigma_parity_goldens.py`, emit `m1` rows
-at target number 7 only and no `groundup/degree` rows; regenerate with the tool (735 rows). In
-`engine/tests/test_sigma_leverage_parity.py` delete `_SUPERSEDED_TN_ROWS`, `_PRE_RULING_DEGREE_ROWS`,
-`test_the_superseded_rows_are_exactly_the_non_7_TN_ones`, `test_the_superseded_degree_rows_are_the_pre_ruling_ladder`
-and `TestPoolAwareDegree` (the last with the kernel, per `05_SC_sc05_kernel_retirement.md`);
-`test_a_superseded_TN_is_refused_not_silently_answered` becomes two direct calls
-(`SL.net_boost(0.7, 5, tn=6)`, `SL.p_success(3.0, 5, 0.7, 8)`, each `pytest.raises(KeyError)`);
-`test_golden_table_is_not_vacuous` keeps `by_oracle["m1"] >= 731` and the function set.
+**E. The dice golden carries live rows only (superseded in content by A-5).** The golden is regenerated
+with `tools/gen_sigma_parity_goldens.py` for the functions that remain after the whole-dice roll is deleted
+(`U5a_DICE_owed_edits.md` §1 row 8), in that batch (B05), never trimmed by hand; the row count is whatever the
+tool writes and is quoted in the commit. In `engine/tests/test_sigma_leverage_parity.py` the superseded-row
+helpers and their tests go with the functions they covered (`_SUPERSEDED_TN_ROWS`, `_PRE_RULING_DEGREE_ROWS`,
+`TestPoolAwareDegree` with the kernel, per `05_SC_sc05_kernel_disposition_B.md`); `test_golden_table_is_not_vacuous`
+keeps a floor read off the regenerated table at that commit.
 
 ## Gate (execution artifact)
 
 `python -m pytest engine/season/tests/test_go07_canonical_digest.py -q` green with the three shipped
 pins; `git grep -cE '"[0-9a-f]{32}"' -- engine/season/tests` reads one file for every trajectory
 literal (`_realm_goldens.py`) plus the encoding vectors in `test_go07_canonical_digest.py`;
-`python tools/gen_sigma_parity_goldens.py --check` prints `current (735 rows)`;
+`python tools/gen_sigma_parity_goldens.py --check` prints `current` (at B05, with the regenerated count);
 `python -m pytest engine/tests/test_sigma_leverage_parity.py -q` green.
 
 ## Falsifier
 
 Sweep any shipped fixture in process (`DEFAULT_FIXTURES._v["regime_gain"] = 0.0`) and run the go07
-file: the seed-0 pin must redden (it reads `25660615…`). If it stays green the owner is not what the
-test reads. For E: restore one target-number-6 row to the JSON by hand; `--check` must print `stale`.
+file: the seed-0 pin must redden (it reads `25660615…`, the control arm). If it stays green the owner is not
+what the test reads. For E: hand-edit one row of the regenerated JSON; `--check` must print `stale`.
 
 ## NERS reading
 
@@ -164,3 +175,7 @@ test reads. For E: restore one target-number-6 row to the JSON by hand; `--check
 
 Edit. Mechanical in fourteen files; the judgement is only in D (confirm each kept assertion still
 stands alone), which the table settles.
+
+**Lands it and tier.** The B02 batch (hash EQUAL), first commit: an IN `valoria-author` session on `sonnet`
+(`high`), closed by B02's `methodology-close` once. Item E lands in B05 with the sampler. **Hash movers.**
+None (tests only); the control is the base tree's go07 run.

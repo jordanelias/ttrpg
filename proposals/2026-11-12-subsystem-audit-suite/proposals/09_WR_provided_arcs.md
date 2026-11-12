@@ -1,8 +1,13 @@
 # WR · What the provided arcs need from the world, the clocks and the practitioner
 
-Reconciled: 2026-11-12, U5d closure — folded **A-47** (a threshold may open a mandatory scene, never decide it; against the register's recommendation) and **A-15**. Edit 1 ("a private tally becomes a question") is rewritten in one respect: when the tally reaches its count the question is **mandatory** (it is placed first on the person's slate and cannot be declined for another; for the player it heads A-48's list and must be answered), and its outcome is the drawn act the scene resolves; the crossing itself still writes nothing. Edit 4's restatements of the "forced by threshold" and "automatic clock" arcs read "the threshold opens a scene" for all of them (the audit's 19 `forced_by_threshold` cases; the register counts 27 threshold-closed or -forced arcs). Edit 2 (a body that mends when fed) lands after `U5d_WR_owed_edits.md` §3. ARC-02 (a state change with no actor) is now reachable through natural death (A-15).
+Reconciled: 2026-11-12, U5d closure — folded **A-47** (a threshold may open a mandatory scene, never decide it; against the register's recommendation) and **A-15**. Edit 1 ("a private tally becomes a question") is rewritten in one respect: when the tally reaches its count the question is **mandatory** (it is placed first on the person's slate and cannot be declined for another; for the player it heads A-48's list and must be answered), and its outcome is the drawn act the scene resolves; the crossing itself still writes nothing. Edit 4's restatements of the "forced by threshold" and "automatic clock" arcs read "the threshold opens a scene" for all of them (A-47's class is the register's 27 threshold-closed or -forced arcs; the audit's 19 `forced_by_threshold` cases are its forced subset, C3-N12, `[ASSUMPTION: the 19 are a subset of the 27 — basis: `forced_by_threshold` is one of the two kinds the 27 count]`). Edit 2 (a body that mends when fed) lands after `U5d_WR_owed_edits.md` §3. ARC-02 (a state change with no actor) is now reachable through natural death (A-15).
+
+Reconciled: 2026-11-12, wave 3 (W3-3) — C3-N12 (the two counts named in the head above); edit 1's body carries the head's mandatory question (A-47) through `Question.mandatory`, the field `12_ARCS_arcs_as_staged_goals.md` adds (R3 §1: a season-local value, cross-lane dependency); tier and batch added (R3 7b-0; U3 B12). R3 §2 found the body's "Nothing fires … what he does with it is his (L5)" in agreement with the head; it is kept.
 
 ## Status: PROPOSED
+
+Lands in batch: B12 (world motion and ground), after `09_WR_B_weather_with_memory_and_the_year.md` and before `07_SE_kernel_repairs.md` (U3 §1 item 13); edit 2 after `U5d_WR_owed_edits.md` §3 (same batch, per the head).
+Depends on: `12_ARCS_arcs_as_staged_goals.md` (B10, `Question.mandatory`); `U5d_WR_owed_edits.md` §3 (B12, edit 2).
 
 Carries §13 of `audits/09_WR_audit.md` (the adjudication table is there; this file holds the edits) and
 finding F-WR-08. Evidence ids (E-nn) are that file's §12.
@@ -56,8 +61,10 @@ Add `rosters.yaml: tally_axes`, the closed registry L3 clause 1 asks for, shippe
 
 `world_q.tally_reached(w, p) -> tuple` returns, for each axis whose `counts` kinds number at least `at`
 among the claims in `p`'s **own** ledger about one referent, that referent. `questions_for` appends it to
-the `added` splice as a classed referent (the `vacancies` shape: a standing occasion, no new source), so
-the rows that declare that class form on it and the person chooses. Nothing fires: a full tally is an
+the `added` splice as a classed referent (the `vacancies` shape: a standing occasion, no new source),
+stamped `mandatory` (`Question.mandatory`, `12_ARCS_arcs_as_staged_goals.md`; A-47: placed first on his
+slate, not declinable for another, heading A-48's list for the player), so the rows that declare that class
+form on it and the person chooses among them; the scene's outcome is the drawn act he takes. Nothing fires: a full tally is an
 occasion, and what he does with it is his (L5). "Irreversible" in the cases (ARC-47, NSC-08) is restated:
 a tally is what he still holds; claims decay and evict, so a grudge nobody refreshes fades. That is the
 design's replacement for a monotone counter and is not softened.
@@ -124,4 +131,4 @@ its ceiling (`Person.body_ceiling`, CP-T03-07) or a downward crossing count move
 ## Cost class
 
 Edit 1: small build; the rows' content is design-first per arc. Edit 2: small build, on CP-T10-04's order.
-Edits 3, 4: edit.
+Edits 3, 4: edit. Tier: `sonnet` (R3 7b-0).

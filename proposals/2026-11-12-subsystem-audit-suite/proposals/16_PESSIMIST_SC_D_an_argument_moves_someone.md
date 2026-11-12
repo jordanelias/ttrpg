@@ -1,6 +1,22 @@
 # 16 · PESSIMIST · SC · D — An argument moves someone: a lost argument moves the arguer, a held one is called held
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-79: the band shares quoted are
+whole-dice at the old default pair; A-79's centre for an even argument on a routine matter is 59% fail, 16% half-land,
+25% carry, and the tables are re-measured there; A-81: the Partial band's write named; A-80: a held position is a
+source of motion, `30_WR_D_momentum_and_its_brakes.md` §4), §1 (CONFORMS: writes and emits keyed together), §7/§7b
+(tests, tier); `unified/U5_CONFLICTS_U5c.md` C-15 (this file is the one carrier of `argument.held`; `08_FI_04` defers);
+U3 B27, §6.2 (`p5_argue.py`, `d_projection.py`, `realm_sc.py` are not in the repository). Changed: "The problem"'s and
+the projection's figures marked, the Partial bullet, the gate.
+
 ## Status: PROPOSED (not ratified by being written; `CLAUDE.md` §2)
+
+Lands in batch: **B27** (SC), after `16_PESSIMIST_SC_C`. Depends on: `02_CHAR_which_ground_moves_whom.md` (B24) and
+`08_FI_04_small-edits.md` (B11).
+
+**Whole-dice figures.** "Pool 2 against Ob 2", the 0.75 / 0.18 / 0.07 table, the projection's 0.81, and "fails 0.33,
+succeeds 0.47" were read on the whole-dice sampler and the old opposition (A-5, A-79). Under A-79 an even argument on a
+routine matter fails 59%, half-lands 16%, carries 25%; the share in which somebody moves after this edit is
+`1 − P(Partial)`, about 0.84 at that centre, and the tables are re-measured there in the landing commit.
 
 Finding: `audits/16_PESSIMIST_SC.md` F-PES-SC-06 (§2.5, §1.2). Runs: `runs/PES_SC/p5_argue.py`,
 `d_projection.py`, `realm_sc.py` (seed 1, four seasons).
@@ -44,7 +60,13 @@ called "won" moved something*).
   ordinal, which `consequence_pursuits` already reads as *"a failure moves him AGAINST the way the act
   points"* and which the plan names as intended and unbuilt for `determine` (`_eff_determine`'s
   docstring, H-221). Ladder step 3 (that intent) and step 4 (the sibling's method).
-- Partial: nobody moves, and the Event is `argument.held`.
+- Partial: nobody's pursuits move, and the Event is `argument.held`. The scene is not still (A-81): the Event is
+  witnessed and deposited as a claim in the hearer's ledger and each witness's (a belief gained: that the
+  position held), which `30_WR_D_momentum_and_its_brakes.md` §3 counts as a durable write ("a claim deposited
+  in the actor's or a counterparty's ledger counts") `[ASSUMPTION: that definition is the suite's, not yet
+  checked against `write_matrix.yaml` by a lane — basis: A-81's own assumption]`. A held position is a source
+  of motion (A-80): the arguer who could not move the hearer turns to another means on the same matter
+  (`30_WR_D` §4); this row adds no write for it.
 
 The write at Failure is the actor writing his own field, the cleanest ownership the row has (the Success
 write is the actor writing another person's pursuits, admitted by the row's band-keyed `writes:`).
@@ -107,9 +129,15 @@ is `05_SC_obstacle_difficulty_and_modifiers_B.md`'s `regard` term (G-60).
 
 ## Gate (an execution artifact)
 
+The probes were lane scratch (not in the repository). NEW `engine/season/tests/test_argue_failure_moves_the_arguer.py`:
+`test_failure_moves_arguer_one_step_toward_hearer`, `test_partial_emits_argument_held_and_moves_nobody`,
+`test_partial_deposits_a_claim_in_the_hearers_ledger` (A-81), `test_backstep_zero_reproduces_todays_failure`
+(the control, with edit 1's `writes.Failure` reverted). Command:
+`python -m pytest engine/season/tests/test_argue_failure_moves_the_arguer.py -q`. The scratch readings, once committed:
+
 `p5_argue.py` (a) after the edit: "who changed" is non-empty in every Failure and every Success row,
 empty in every Partial row, and the share of arguments in which somebody moved is `1 − P(Partial)`
-(0.81 at the default pair). (d): after 200 arguments the arguer's pursuits have moved. A realm reading
+(re-measured at A-79's centre). (d): after 200 arguments the arguer's pursuits have moved. A realm reading
 at the batch close: `harness/conviction_spread.py` over three seasons, seeds 0 and 1, before and after;
 the proposal is withdrawn or `argue_backstep` lowered if the spread of pursuits across persons
 collapses.
@@ -133,4 +161,6 @@ declined cases: a mover who holds no pursuit, or who already stands where the ot
 
 ## Cost class
 
-Edit (one row, one effect hunk, one function signature, one fixture, one kind).
+Edit (one row, one effect hunk, one function signature, one fixture, one kind). Tier: `sonnet`, effort `high`. Hash
+movers declared: every world where an `argue` is rolled; one re-pin at B27's close. Lands it: B27, order 2 (signature,
+hash-equal) → 3 → 4 (fixture at control) → 1 (the row's bands and the new kind) → 5 (the `deed:argument.held` cells).

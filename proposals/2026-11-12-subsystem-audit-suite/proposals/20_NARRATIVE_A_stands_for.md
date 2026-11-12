@@ -4,6 +4,12 @@ Folded: 2026-11-12 by `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md` (Jordan's 
 
 Folded: 2026-11-12 by `audits/31_HOUSE_STANCES_AND_CAST_VALUES.md` (Jordan's A-87 to A-90). Nothing here is deleted. (1) **The roster becomes ten** (`31_WR_A` §1: `caste_order`, `royal_order`, `parliamentary_rule`, `militarism`, `einhir_folk`), and the cast's values on them are authored (`31_WR_A` §4); this file's `stands_for` applies unchanged. (2) **This file is the precondition for those rows to discriminate**: with the values applied to `build_realm(0)`, the shipped reading (above zero) gives 1,032 / 0 / 3 over the 1,035 pairs and `stands` gives 357 / 247 / 431 (audit 31 P-31-2; this file's 130 / 779 / 126 is the same reading before the values). Land `31_WR_A` commit 2 after this file's commit 2. (3) **A-89 re-authors twelve `solmund_orthodoxy` cells** (Hafenmark's four, five of Valorsmark's, three of Varfell's), so the E-N01 sets move: Hafenmark no longer stands for nothing (it stands for the faith, the caste and assembly), and Valorsmark's split becomes seven of eleven for the faith. (4) **Gate 2's told claims are few**: nine and five tellings between cast members in two seasons at seeds 0 and 1 (P-31-7), so its "non-zero count at two seeds or more" is at risk on count, not on the reading; the falsifier's first line already names the remedy (`08_FI_02`). (5) `confliction`, `conviction_after_crisis` and the scar reach every roster member; `31_WR_A` adds a `vowed:` list so that the five new members, which are opinions and not creeds, take no scar from the shared vow column.
 
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row stands_for CONFORMS, §2 rows `conviction_after_crisis` (A-24, A-89) and the three readings (A-87, A-89), §7, 7b; `unified/U3_CONFLICT_LEDGER.md` C3-K2; `unified/U3_DEPENDENCY_ORDER.md` §1 item 38, §3.1, §4.1 row 88; `unified/U1_GLOSSARY.md` "creed", "regime"). Changed: (1) edit 4b follows C3-K2, which reverses R5's order: `16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` lands first (B10) with the one signature `conviction_after_crisis(p, among=None, band=None, shared=False, reading="any")`, and this file's edit 4b passes `reading="stands"` to it and flips with `held_reading` (U3 decides over R5 §2's "NARR_A first"); (2) edit 4b's sentence that the crisis's being a rule "is `20_NARRATIVE_E` edit 3 and Jordan's" is replaced: A-24 ruled the crisis drawn and seen, and CHAR_A is its one emitter; (3) the evidence table states "before the `31_WR_A` values" and gives the after-values reading beside it; (4) where "creed" named a person's affiliation it now says "affiliation" (glossary: a creed is a faction's declared affiliations); "regime" where it meant the credit term now names `commensurate`; (5) dependency, batch and tier lines; the new hole-register row takes its id from B00's block.
+
+Depends on: `16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` (B10; the composed signature); `02_CHAR_scar_is_a_wound.md` (B10); `08_FI_02_rumour-that-travels.md` (B11; the told claims gate 2 counts); `09_WR_strand_conclusion.md` (B12); `09_WR_story_instruments_that_can_fail.md` (B36); `30_WR_B_regimes_who_believes_whom.md`, `30_WR_G_regime_opinions_and_the_pull_of_ones_own.md`, `31_WR_A_house_cores_and_the_cast_on_the_opinion_axes.md` (B38, co-landers; this file's commits land before `30_WR_B` commit 2's gate, `30_WR_G` commit 4 and `31_WR_A` commit 2).
+Lands in batch: B38 (lane WR), first item, with `20_NARRATIVE_F_story_inventory_and_gate.md`'s `stands_for` clause (§4.1 row 88). Commit 1 (`any`) hash-equal; commit 2 (`stands`) a declared mover.
+Tier: sonnet / high.
+
 ## Status: PROPOSED
 
 Source: `audits/20_NARRATIVE_CHURN.md` F-NARR-01 (the regime is a constant), §2 edges R1, R2, V3, S4;
@@ -23,9 +29,9 @@ world in which a told claim lands between two persons holding convictions, which
 3. `world_q.incompatible_span` (a reading; the strife harness and CR-97 print it) discriminates.
 4. `person_q.confliction` counts a strained pair only where the person stands for both; it is damped
    out of the score today (`confliction_weight` 0) so this moves nothing until that arm is flipped.
-5. `person_q.conviction_after_crisis` folds a broken creed only into an incompatible creed the person
-   stands for. Today it folds into any incompatible creed held above zero, which converted five persons
-   into the creed each stood against in three seasons at seed 0 (audit §4.4).
+5. `person_q.conviction_after_crisis` folds a broken affiliation only into an incompatible affiliation
+   the person stands for. Today it folds into any incompatible affiliation held above zero, which
+   converted five persons into the affiliation each stood against in three seasons at seed 0 (audit §4.4).
 
 No carrier, verb, Event kind or roster member is added. `Person.conviction` is unchanged.
 
@@ -52,6 +58,10 @@ Three readers read that intensity three ways:
 The third reading makes a person who stands against the Restoration at intensity 1 a *holder* of
 `einhir_restoration`, and so incompatible with every holder of `solmund_orthodoxy`, himself included.
 Read on `build_realm(0)`:
+
+Before the `31_WR_A` values (the tree as read); after them (audit 31 P-31-2, the ten-member roster with
+the cast's values) the same row reads 1,032 / 0 / 3 held above zero and 357 / 247 / 431 stood for. The
+figures are of two trees, not a contradiction; the other rows below are before the values.
 
 | | held above zero (today) | stood for (`v ≥ 3`) |
 |---|---|---|
@@ -113,7 +123,8 @@ def stands_for(p: Person, reading: str = "stands") -> frozenset:
 `stance_polarities`), refused if unrostered (`require_member`, the `_stance_arm` precedent).
 
 **2. `engine/season/data/fixtures.py`.** `held_reading="any"` with a NUMBER-free `[JUSTIFIED: …]` line
-naming a new `hole_register.yaml` row (kind `RULING`, grade `assumption`, H-275's shape): *swept `any`
+naming a new `hole_register.yaml` row (its id from B00's block; kind `RULING`, grade `assumption`, the
+shape of H-275, CR-79's regime-credit row, `U3_CONFLICT_LEDGER.md` T-3): *swept `any`
 (control, the tree before this item) / `stands` (live)*, `[ASSUMPTION; medium; Jordan to correct;
 revert: set it back to `any`]`.
 
@@ -138,17 +149,21 @@ affiliations (an intensity above 0, `person_q`'s reading)" is replaced by the po
 passes (`decision/choose.py::deliberation_memo` already holds `fx`): the sum runs over the incompatible
 pairs both of whose members are in `stands_for(p, reading)`. At `any` it is today's sum exactly.
 
-**4b. `engine/season/queries/person_q.py::conviction_after_crisis`** takes the same reading. Its
-docstring records the choice this reverses: *"[ASSUMPTION: the draft's "held above threshold" is read
+**4b. `engine/season/queries/person_q.py::conviction_after_crisis`** takes the same reading. Its one
+signature is `(p, among=None, band=None, shared=False, reading="any")`, written by
+`16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` in B10 with `reading` at `"any"` (hash-equal
+to today's selector); this edit passes `reading="stands"` to that function and flips with `held_reading`
+(C3-K2). Its Failure arm's candidate set is `stands_for(p, reading)`. Its docstring records the choice
+this reverses: *"[ASSUMPTION: the draft's "held above threshold" is read
 as held at all, i.e. above 0.]"* Under `stands`, the affiliation in crisis, the heir of a FOLD and the
 "something else is held" test of RESTABILISE and DESTROYED each read `stands_for`; under `any` the
 function is today's. The observed effect of today's reading (audit §4.4, seed 0, three seasons): three
 members of the Crown's faction at `solmund_orthodoxy` 2 with `einhir_restoration` 1 end at
 `einhir_restoration` 3 with no orthodoxy; a fourth goes from orthodoxy 3 to Restoration 4; a
-Löwenritter from orthodoxy 2 and `thread_truth` 3 to Restoration 5. A creed held at 1 is a position
-against it (`conviction_stand` −0.6), and the fold makes it the heir. Whether the crisis should be a
-rule at all is `20_NARRATIVE_E` edit 3 and Jordan's (audit §10); which creeds count as held is this
-edit and is not.
+Löwenritter from orthodoxy 2 and `thread_truth` 3 to Restoration 5. An affiliation held at 1 is a
+position against it (`conviction_stand` −0.6), and the fold makes it the heir. The crisis itself is
+drawn and seen (A-24), and `16_PESSIMIST_CHAR_A` is its one emitter (`20_NARRATIVE_E` edit 3 is struck
+in its favour); which affiliations count as held is this edit.
 
 **5. Not edited here: the scar writer.** `person_q._held(p.conviction, violated)` (`:764`, through
 `broken_by`) is the same boolean, and CHAR's `02_CHAR_scar_is_a_wound.md` fixture 1 (`scar_hold:
@@ -186,7 +201,7 @@ excludes. `test_the_realm_reaches_commensurate…` is kept.
 
 ## NERS reading
 
-- **N.** Cut the change and the regime stays a constant: R13 ("an assemblage of institutions with
+- **N.** Cut the change and the regime credit (`commensurate`) stays a constant: R13 ("an assemblage of institutions with
   commensurate dominant modes of understanding") has no two assemblages to tell apart, CR-79's term
   cannot do what it was ratified for, and every later position that reads `commensurate` (CR-97's span
   column, the strife guard's S5 arm) measures a base rate. Top-down (the era's regimes), bottom-up (one
@@ -201,8 +216,10 @@ excludes. `test_the_realm_reaches_commensurate…` is kept.
 
 ## Cost class
 
-Edit. One session with its sweep. Depends on nothing; `02_CHAR_scar_is_a_wound.md` should land after
-it or adopt its function.
+Edit. One session with its sweep. Lands in B38 after its B10 dependencies (head). `02_CHAR_scar_is_a_wound.md`
+lands earlier (B10), so edit 5's "one owner" is owed by whichever lands first: listed for the CHAR rewrite
+lane (its `primary` arm, for affiliations, calls `stands_for`, which it then writes at `held_reading: any`;
+this file's edit 1 reads "exists" if so).
 
 ## Dependency edges
 

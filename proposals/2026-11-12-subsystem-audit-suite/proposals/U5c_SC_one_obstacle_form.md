@@ -2,6 +2,10 @@
 
 Folded: 2026-11-12, lane 29 (`audits/29_ONE_OPPOSED_RULE.md`; `proposals/29_DICE_one_opposed_rule_form_and_tuning.md` edit 4), on Jordan's A-71 — §2's form gains one leading term and fixes one operand; the roster, the composer, the record and the order stand. `hard = even + difficulty + opposed_ob(score, opposition_rate) + Σ raw_i × step_i`, where `even = MU_PER_DIE × pool_add` (derived in the module; roster member `even`, first, whose host function is the one that carries `pool_add` onto the record, so §1's pairing rule holds) and `opposed_ob` reads the **trained score** of the person opposite, or the ordinary score (`pool_default`) where nobody is. This is the same number as "0.4 × the opponent's pool" in the conformance table above; it is written this way because the fight reads the same `opposed_ob` at the same rate and has no even line. The floor `max(OB_MIN, …)` no longer binds on any social roll (the even line is above it) and is left as written.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row OBS, §3 rows *seat modifier*, *the opposition*, *the obstacle roster*, §7, §7b-17, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-01, D-U1-02, D-U1-04, D-U1-11j, D-U1-11k, ledger R-16 to R-26; `unified/U1_GLOSSARY.md` *modifier*, *difficulty level*, *rank_gap*; `unified/U3_CONFLICT_LEDGER.md` C3-A3 (2), C3-L5, C3-N9). Changed: §2's form line carries the head's leading term `even` (body brought to the head); §1's score row names the **trained score** (D-U1-02); §1 gains the lane A sentence (C3-A3 (2)); the conflict with U1 §3 item 6 is closed by D-U1-01 — §3 `office` defender column struck ("—"), `office_level` → the exercised seat's `modifier:` (`offices.yaml`), the bench die is that `modifier:`'s first authored value, and the A-12 row of the conformance table says so; §4 step 1a retires lane A's `rosters.yaml: task_difficulty` into the `difficulty:` column (D-U1-04) and step 5's `standing_dice` becomes the bench seats' `modifier:`; the roster's member count is never typed (C3-N9: read `len(rosters.yaml: obstacle_terms.values)` at landing); `remove` is folded into `distance` (D-U1-11k); the leverage roster is written in full with `wounds` (A-8) and `waiting` (28C); the gate's scratch probes become named tests; lands-it and tier added. The choice key for `calm`/`press` is `questioning` (U1 ledger P-03); the leverage source keeps the name `approach`.
+
+**Lands in batch:** B05 (steps 0–5; step 6+ with each verb proposal's own batch). **Depends on:** B01 (lane A's `obstacle_terms`, `task_difficulty`, `ob_terms`, the starting point), B04 (CAP Part A; `opposed_ob`), `29_DICE_one_opposed_rule_form_and_tuning.md` items 29-1 to 29-4 (B05), `05_SC_contest_record_on_event.md` (B05, the record, C3-L5), `13_SC_tuning_tables.md` (B05). `05_SC_evidence_and_rebuttal_B.md` is a LATER edge (B24; U3 §4.1 row 25).
+
 ## Status: PROPOSED (a reconciliation written by the U5c closure lane; a plan for a later implementation lane, executed by nobody here; not ratified by being written, `CLAUDE.md` §2)
 
 Carries: `unified/U5_CONFLICTS_U5c.md` C-01 to C-06, C-21, C-23 (the obstacle half); findings F-SC-03,
@@ -23,7 +27,7 @@ The answers landed while this was being written. The form below needs none of th
 | A-25 (favourable circumstances raise the speaker; hostile ones raise the obstacle) | confirms the split this file is built on (§2, §3) |
 | A-26 (an equal opponent costs 0.4 per point) | the opposition term's rate. `opposed_ob` stays the one owner (§1); its value changes from half the score to 0.4 per point, and `05_SC_opposed_obstacle_parity.md` is the carrier. Steps 0 to 4 of §4 land at the rate in force today (half the score), which is what keeps them hash-equal: the "1.0" and "2.0" written below are that rate's figures. The rate changes once, at step 5, as a declared mover (the stand-in becomes `0.4 × pool_default`) |
 | A-5 (the bell curve everywhere), A-6 (score plus a base, floor five), A-7 (two inputs) | the sampler and the pool rule under the form. The pool and the opposing score are read through `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §4 as U5a rewrote it; this file names no formula for either. Every probability quoted below (§4 step 5, §6, the gate's exact-odds rows) is whole-dice arithmetic and is recomputed against the re-centred sampler in the one calibration step (§4 step 5), together with A-26's rate |
-| A-12 (a seat carries a modifier) | `rank_gap` (§2 member 6) is the half that stands against an act; the half that helps is declared once, as the source `office` (§3), whose first member is T13 T4's bench die. It does not double-count with `regard`: `regard` reads stance rows only, never rank or heritage (§2 member 7). The Layer 1 amendment text for `04` §B.7 is owed by the unification stage and is not applied here |
+| A-12 (a seat carries a modifier) | `rank_gap` (§2 member 6) is the half that stands against an act; the half that helps is declared once, as the source `office` (§3), which reads the exercised seat row's `modifier:` (`offices.yaml`, D-U1-01a); T13 T4's bench die is that column's first authored value on the bench seats. It does not double-count with `regard`: `regard` reads stance rows only, never rank or heritage (§2 member 7). The Layer 1 amendment text for `04` §B.7 is owed by the unification stage and is not applied here |
 | A-14 (a vote is a draw on the voter) | the `lean` source (§3) |
 
 What does not move: the roster, the composer, the record, the landing order, the falsifier. Steps 0 to 4 of
@@ -81,7 +85,7 @@ the roster's shape.
 | which host function reads each term | `engine/season/seam/wrappers/sigma.py::OBSTACLE_TERMS` (member → one function; refused at import for a member with no function or a function with no member, as `ADVANTAGE_SOURCES` is) |
 | each term's size | one fixture per term in `engine/season/data/fixtures.py`, control 0, with a NUMBER row in `hole_register.yaml` |
 | the ruled divisor | `engine/dice_engine/sigma_leverage.py::opposed_ob` (DICE map §G edit 5), shared with combat |
-| the score a person rolls and opposes with | `engine/season/seam/wrappers/pool.py::score` (`10_DICE_one_score_two_roles.md` edit A) |
+| the score a person rolls and opposes with | `engine/season/seam/wrappers/pool.py::score`, the **trained score** (`max(pool_default, held rank)`; no addend, no seat, no attribute; A-79, D-U1-02) (`10_DICE_one_score_two_roles.md` edit A) |
 | the set of leverage sources | `rosters.yaml: advantage_sources` and `sigma.py::ADVANTAGE_SOURCES` (existing) |
 
 The typed record carries the terms as one field, not one field per term:
@@ -92,10 +96,16 @@ because they are not step products. This replaces SC-B edit 4's field list and t
 `.obstacle_terms` float; a verb proposal that adds a term adds a roster member, one host function and one
 fixture, and never a field.
 
+Implementation lane A (`c5bf18a`, unmerged) built `roll.py::obstacle_terms`, `rosters.yaml: task_difficulty`
+and `ob_terms`; B05 starts from that code, replaces its `score / 2` and the room's subtraction by this form,
+and keeps one roster (`obstacle_terms`) and one record field (`Margin.terms`, carried on the Event by SC-P1)
+under the names U1 fixes (C3-A3 (2); D-U1-04).
+
 ### §2 The form
 
 ```
-hard   = difficulty + opposed_ob(opposition if a person opposes else pool_default) + Σ raw_i × step_i
+hard   = even + difficulty + opposed_ob(opposition if a person opposes else pool_default, opposition_rate) + Σ raw_i × step_i
+         # even = sigma_leverage.even_line(pool_add) = MU_PER_DIE × pool_add; opposition is the trained score (A-79)
 ob     = max(OB_MIN, min(hard, cap(pool)))            # the existing ceiling rule (H-213), then the floor
 terms  = ((name, value), …) in roster order, + ("ceiling", −clip) and ("floor", +lift) where a bound acted
 ```
@@ -112,8 +122,10 @@ the obstacle). The values in `terms` sum exactly to `ob`.
 - **`obstacle_default` is deleted** with its fixture and H-127's row. `10_DICE_one_score_two_roles.md`'s
   `opposition_fallback` fixture is not added: its `stand_in` arm is this form's control (§4, commit 1a),
   and its sentence *"a non-person subject … is opposed at `obstacle_default`, as today"* is superseded.
-- **The roster, in order.** Each member is listed once, with the proposal that first states it. A member
-  lands with its reader, in that proposal's own commit.
+- **The roster, in order.** `even` first (A-79), then the members below. Each member is listed once, with
+  the proposal that first states it. A member lands with its reader, in that proposal's own commit. The
+  count is never typed in prose (`04` §G.3.3; C3-N9): read it at landing as
+  `python -c "import yaml; print(len(yaml.safe_load(open('engine/season/rosters.yaml'))['obstacle_terms']['values']))"`.
 
 | # | member | what stands against the act | read from (single owner) | applies to | first stated |
 |---|---|---|---|---|---|
@@ -136,7 +148,7 @@ the obstacle). The values in `terms` sum exactly to `ob`.
 | 17 | `scar` | his scar shift against the referent | `02_CHAR_scar_is_a_wound.md`'s owner | `forgive` | S1-D §2 |
 | 18 | `divergence` | how far the maker believes the terms lean against the counterparty | the maker's own claims; `divergence_step` | `covenant` | S1-B §3 |
 | 19 | `unwelcome` | the document's terms against the receiver's pursuits | the receiver's pursuits and the Record; `unwelcome_step` | `give` | S1-B §1 |
-| 20 | `distance` | how far apart two rungs are | the count of `contain` edges on the ladder path; `distance_step` | `comply`, `transfer` | S1-B §2; M-B §2 (as `carriage`) |
+| 20 | `distance` | how far apart two rungs are | the count of `contain` edges on the ladder path; `distance_step` | `comply`, `transfer`, the institutions' `remove` (D-U1-11k) | S1-B §2; M-B §2 (as `carriage`) |
 | 21 | `purview` | the issuing seat's reach over the actor's place | `state/gate.py::purview_reaches` | `evade / defy` | S1-B §2 |
 | 22 | `watch` | who is there to see or stop it | the presence cache at the act's place less the actor, or the sworn weight there where the row says `guard`; `watch_step` | `conceal`, `evade / defy`, `sabotage`, `destroy_record`, `seize` of a Rung | M-A; M-D; S1-B (as `witnesses`); S1-C (as `notoriety`) |
 | 23 | `backlog` | matters already on that docket | the docket; `backlog_step` | `carry` | S1-D §1 |
@@ -151,15 +163,17 @@ the obstacle). The values in `terms` sum exactly to `ob`.
   `rank_gap`); `contradiction` and `notoriety` as S1-C wrote them (each reads another person's ledger at
   RESOLVE, `04` §B.2; the first is done at WITNESS by `16_PESSIMIST_SC_E` edit 1, the second is `watch`);
   `carriage`, `witnesses` (second names for `distance`, `watch`); every per-verb obstacle table (their keys
-  are members above). Two members proposed by the institutions lanes, `obligation` and `remove`
-  (`15_INSTITUTIONS_VENICE_A`, `15_INSTITUTIONS_COLONIAL_B`), are that family's to place; `remove` reads as
-  the same quantity as `distance` and should be one member.
+  are members above). Of the two members proposed by the institutions lanes, `remove`
+  (`15_INSTITUTIONS_COLONIAL_B`) is the same quantity as `distance` and is that one member with the one
+  fixture `distance_step` (D-U1-11k); `obligation` (`15_INSTITUTIONS_VENICE_A`) is a favourable term and is
+  leverage, not a member (A-25; C3-C10).
 
 ### §3 Leverage: everything a party brings
 
-`rosters.yaml: advantage_sources`, in order: `effort` (existing), `capability` (the DICE map's `edge` rows,
-which absorb `05_SC_capability_surface.md`'s `trait_advantages` once the capability surface names their
-home), `proofs`, `favour`, `approach`, `custody`, `office`, `lean`. Each source returns two lists of `LEVEL_SIGMA` names,
+`rosters.yaml: advantage_sources`, in order: `effort` (existing), `capability` (the `edge` rows of
+`capability_uses`, which absorb `05_SC_capability_surface.md`'s `trait_advantages`, U1 §3), `proofs`,
+`favour`, `approach`, `custody`, `waiting` (`28_CORE_scene_access_C_the_petition_that_waits.md`, inserted
+after `custody`), `office`, `lean`, `wounds` (A-8; `10_DICE_advantage_sources_for_the_arcs.md`; U1 ledger R-24). Each source returns two lists of `LEVEL_SIGMA` names,
 the actor's and the other side's; `levels_to_net_sigma(aggressor, defender)` nets them; `net_boost` applies
 the soft cap. Bounded, monotone and uniform at every pool.
 
@@ -169,7 +183,7 @@ the soft cap. Bounded, monotone and uniform at every pool.
 | `favour` | one `favour_level` per whole unit of: the audience's favourable `reception × reception_gain`; the counterparty's favourable stance (`clamp(stance_toward / STANCE_MAX) × regard_step`); a live `tie` of the actor to the counterparty; a favourable plea | — | `favour_level` (first value `major`; control `None`) |
 | `approach` | `press` on `interview` or `interrogate`: one `press_level` for the questioner in the engagement draw | one against the questioned person's answering `lie` | `press_level` (first value `minor`; control `None`) |
 | `custody` | one level per season the prisoner has been held, capped by the soft cap | — | `custody_level` |
-| `office` | the seat the actor exercises carries a modifier (Jordan, A-12): one `office_level` where the row's audience is a bench or body he sits on or presides over | the same for a seated counterparty acting through his seat | T13 T4's `standing_dice` is this source's first and only member and stands (A-12). T13 states it as a die; the calibration step (§4 step 5) restates it once in the unit the re-centred sampler uses (a die or an `office_level`), never both |
+| `office` | the seat the actor exercises (`Act.via`) carries a modifier (Jordan, A-12): one level, the exercised seat's `modifier:` (`offices.yaml`, a `LEVEL_SIGMA` name, D-U1-01a), where the row's audience is a bench or body he sits on or presides over | — (struck, D-U1-01: a counterparty's seat enters once, as `rank_gap`; in a two-sided proceeding each party's seat enters on his own roll's actor side) | no global fixture; T13 T4's bench die is the bench seats' first authored `modifier:` value and is restated once in the level unit at §4 step 5, never as dice |
 | `lean` | a bench member's own ballot: one `lean_level` per live public commit of his for the motion | one per commit of his against it | `lean_level` (`U5c_SC_proceedings_residue.md` §6) |
 
 Units round half up. A source with nothing to say returns two empty lists. `believed_input` fills the
@@ -180,12 +194,12 @@ believer's own sources and leaves the other side's `None` without a claim.
 | step | lands | hash |
 |---|---|---|
 | 0 | `10_DICE_one_score_two_roles.md` edits A and C (`score()`; the four `verb_capability` rows, with `lie: deception` and `determine: law` once `05_SC_hearing_capabilities.md`'s rows exist); DICE map §G edit 5 (`opposed_ob`) | equal (no caller changes) |
-| 1a | this form at the control arm: the roster with members 1 and 2 only; `difficulty_ob` 0 / 1 / 2 / 3; **every one of the ten rolled rows `routine`** (`tell`, `lie`, `argue`, `speak`, `determine`, `arrest`, `interrogate`, `research`, `examine`, `surveil`), so each composes 1 + 1.0 = 2.0; `obstacle_default` deleted; `Margin.terms` | moves only for an act whose counterparty holds a score in a capability the verb reads (none observed at seeds 0 and 1: the held keys are `inquiry`, which no person-subject row reads) |
+| 1a | this form at the control arm: the roster with `even` (at `pool_add` 0, i.e. 0) and members 1 and 2 only; the `difficulty:` column with roster `difficulty_levels`; `difficulty_ob` 0 / 1 / 2 / 3; lane A's `rosters.yaml: task_difficulty`, `data/verbs.py::_load_task_difficulty` and `Fixtures obstacle_model`'s `task` arm deleted, each of its rows becoming `difficulty: routine` (D-U1-04); **every one of the ten rolled rows `routine`** (`tell`, `lie`, `argue`, `speak`, `determine`, `arrest`, `interrogate`, `research`, `examine`, `surveil`), so each composes 1 + 1.0 = 2.0; `obstacle_default` deleted; `Margin.terms` | moves only for an act whose counterparty holds a score in a capability the verb reads (none observed at seeds 0 and 1: the held keys are `inquiry`, which no person-subject row reads) |
 | 1b | PES-A edits 1 to 5 (the favourable room as `proofs` and `favour` levels; the hostile half stays the `reception` term) | declared mover: every `speak` that rolled with `proofs > 0` or `reception > 0` (seven rolls in four seed-seasons, 13 §3.2) |
 | 2 | SC-P1 as reconciled: `margin_endings` values `[pool, ob, net, margin, terms, levels, leverage]` | declared mover (every Event of a social roll gains the tuple) |
 | 3 | T13 commit 1 (members 3, 5, 7 with every step at 0, every `standard` `plain`, `standing_dice` 0, admission off) | equal to step 2 |
 | 4 | CAL's test file, read red against step 3 on C1 and C8 | no hash |
-| 5 | T13 commit 2: `difficulty_ob` 0 / 0.5 / 1 / 1.5; `interrogate` → `demanding`; the inquiries stay `routine` (1.5 unopposed: P(Failure) 0.58 at pool 2, inside C6; `demanding` would be today's 2.0 and fail C6); row standards; `regard_step` 1.0; `standing_dice` 1; admission on | declared mover; CAL green |
+| 5 | T13 commit 2 with A-5, A-6, A-7 and A-79 calibrated together: `pool_add` 6, `pool_floor` 5, `opposition_rate` `MU_PER_DIE`; `difficulty_ob` 0 / 0.5 / 1 / 1.5 above the even line; `interrogate` → `demanding`; the inquiries stay `routine`; row standards; `regard_step` 1.0; the bench seats' `modifier:` first value (the former `standing_dice` 1, restated as a level); admission on. The whole-dice probabilities written here earlier (P(Failure) 0.58 at pool 2) are void under A-5 and are re-read on the re-centred sampler | declared mover; CAL green |
 | 6+ | each verb proposal's members, one commit per proposal, each with its step at control 0 first | equal at control; a declared mover when the step ships |
 
 Lanes: SC (the module, `sigma.py`), IN and CORE (the roster, the verb column, the loader, fixtures), DICE
@@ -217,13 +231,22 @@ at HEAD.
 
 1. Unit, over a lattice of quarter-step operands: `terms` sum exactly to `ob`; every name is a roster
    member; a planted negative term raises; a roster member with no host function refuses at import.
-2. Exact odds through the module (no draw): PES-A's table of levels reproduced row for row
-   (`runs/PES_SC/n1_favour_two_ladders.py`); F-SC-16's rows (pool 2 against a score of 8, proofs 0, 1, 2, 4)
-   give four different odds; PES-DICE's gate 2 (four levels, four obstacles on an unopposed row).
+   Named tests (new, `engine/season/tests/test_obstacle_form.py`): `test_terms_sum_to_ob`,
+   `test_a_negative_term_raises`, `test_every_roster_member_has_a_host_function`.
+2. Exact odds through the module (no draw): PES-A's table of levels reproduced row for row;
+   F-SC-16's rows (pool 2 against a score of 8, proofs 0, 1, 2, 4) give four different odds; PES-DICE's
+   gate 2 (four levels, four obstacles on an unopposed row). The probe that first read this
+   (`runs/PES_SC/n1_favour_two_ladders.py`) is **not in the repository**: the batch first writes it as
+   `test_obstacle_form.py::test_favour_and_proof_levels_change_odds_at_every_pool` (closed-form `band_odds`
+   on the re-centred sampler, asserting four distinct values with `!=`, no `approx`), expected: four
+   strictly increasing Success-or-better shares for proofs 0, 1, 2, 4.
 3. Step 1a, `build_realm(0)` and `(1)`, two seasons: a printed count of rolled acts whose obstacle differs
    from the base commit, each with its terms; expected zero, or only acts against a holder of the read key.
-4. Step 5: CAL's test green; the realm tap (`runs/SC_INT/realm_tap.py` shape) shows more than two obstacle
-   values for every rolled verb with five or more rolls.
+   Named test: `test_obstacle_form.py::test_step_1a_composes_todays_obstacle_at_control`.
+4. Step 5: CAL's test green; the realm reading (the absent `runs/SC_INT/realm_tap.py`, written first as
+   `engine/season/tests/test_sc_calibration_targets.py::test_every_rolled_verb_with_five_rolls_shows_more_than_two_obstacles`,
+   reading `Margin.terms` off SC-P1's record over `build_realm(0..2)`, two seasons) shows more than two
+   obstacle values for every rolled verb with five or more rolls.
 5. A hand-built fold, two NPCs, one `argue`, the hearer holding one stance row toward the arguer at
    `(arguer, +4, 5)` in one arm and `(arguer, −4, 5)` in the other: the hostile arm's `terms` show `regard`
    0.8 × `regard_step`; the friendly arm's `levels` show `favour` and its `terms` show no `regard`.
@@ -261,3 +284,9 @@ ledger read (gate 1's sibling in `test_sc02_reception.py`), otherwise CONVENTION
 
 Small build for steps 1a to 3 (one module function, one host table, one roster, the record). Edits
 thereafter. Declared movers at 1b, 2, 5 and each shipped step.
+
+**Lands it and tier.** The B05 batch (`methodology-execute`, one commit per step of §4), SC and IN lanes:
+`valoria-author` on `sonnet` (`high`) for steps 0–4 and 6+; step 5's calibration read on `opus`; one
+`methodology-close` with its terminal `opus` critique for the batch. **Control.** Every fixture at its
+control arm reproduces the base tree's hashes (steps 0, 1a, 3). **Hash movers.** Steps 1b, 2, 5; each step
+6+ when its fixture ships; every pin re-recorded once at B05's close, said plainly (CLAUDE.md §7).

@@ -1,8 +1,13 @@
 # 07 · SE — the settlement game as a scenario: three towns, one granary, one seat
 
-Reconciled: 2026-11-12, U5d closure — folded **A-54**, **A-50** and **A-56**. The scenario's seasons draw their harvest on the four-band ladder with the steward's skill in the pool, so the player's stewardship is felt as odds; its three towns' starting stores may be drawn within the fixture's bounds; its cohorts form the heavy moves only, so a starved town answers by petition, flight, refusal or riot. The P-13 change stands (the granary at the steward's seat rung).
+Reconciled: 2026-11-12, U5d closure — folded **A-54**, **A-50** and **A-56**. The scenario's seasons draw their harvest on the four-band ladder with the steward's skill as named levels on the place's draw (wave 3, D-U1-09, replacing "in the pool"), so the player's stewardship is felt as odds; its three towns' starting stores may be drawn within the fixture's bounds; its cohorts form the heavy moves only, so a starved town answers by petition, flight, refusal or riot. The P-13 change stands (the granary at the steward's seat rung).
+
+Reconciled: 2026-11-12, wave 3 (W3-3) — D-U1-09 applied to the head's A-54 phrase (the steward's skill is named levels at site `settlement_effect`, not a pool term); 7b-7 (a named pytest file for the loader's refusals and the gate's three readings, the CLI commands kept as the readable form); tier and batch added (R3 7b-0; U3 B12, last). R3 §1's question whether "one code path" is met by sharing `SeasonDriver` only is answered by the file as written: the valley runs the unmodified driver, the registered entries and the shipped chooser, and a played seat is the existing `dispatching_chooser`, `[ASSUMPTION: U3 left no row on it — basis: CLAUDE.md §0 "one code path" names the loop, which is shared]`.
 
 ## Status: PROPOSED
+
+Lands in batch: B12 (world motion and ground), last in U3 §1 item 13.
+Depends on: nothing proposed for the build; its `field` towns wait on `07_SE_ground_and_granaries.md` (B12, the `field` site kind), its weight readings on `07_SE_population_census.md` (B12).
 
 Carries finding F-SE-13 and §9 of `audits/07_SE_audit.md` (the standing requirement: playable alone, one
 code path, integrated). It proposes a scenario seed and its printer, built from parts that exist. It is
@@ -127,6 +132,10 @@ band below `fed`; `hoard` refuses every such candidate. `auto` is the shipped ch
   expected first reading: the candidates `relieve` needs are formed once per crossing (H-160 limit 3,
   ruled a balance number) and name one kind.
 - **Control.** `--policy auto` twice at one seed gives one hash.
+- **Named tests (7b-7).** New file `engine/season/tests/test_valley.py`: `test_auto_twice_gives_one_hash`,
+  `test_valley_yaml_refuses_a_site_kind_the_roster_lacks`,
+  `test_hoard_and_relieve_end_differently_or_the_finding_is_reported` (asserts that it asserted over the
+  three seeds; a same-hash result is reported, not failed, per the falsifier above).
 
 ## 6. NERS reading
 
@@ -140,4 +149,4 @@ band below `fed`; `hoard` refuses every such candidate. `auto` is the shipped ch
 
 ## 7. Cost class
 
-Small build. No hash moves: nothing shipped reads the new files.
+Small build. No hash moves: nothing shipped reads the new files. Tier: `sonnet` (harness; R3 7b-0).

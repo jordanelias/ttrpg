@@ -2,7 +2,21 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-19**, **A-20** and **A-58**. Decision 1 (`may_sit`: an individual) is the first eligibility of the deed race and of a conquest's seats (a cohort taker leaves the seat vacant). Decision 2 stands and the "Jordan call of §5 for the crown's fallback" is answered (the race). Decision 4 (a war has two parties and a declarer of one) composes with A-20: the declarer must also be able to wage it for the declaration to be de jure (`may_wage`, `06_FA_war_lives_in_seats_B.md` edit 1); a member's WAR utterance without a muster seat is a call for war, not a war. No step is deleted.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (P:1 `may_sit` asked at fold and
+gate; P:3 the incompatibility default stays in the loader, only exceptions are data, `04` PART D 27a; P:4 AMBIGUOUS
+against `04` §F.24a, rewritten as typed `requires` instead of an untyped `_req_utter` body), §2 (A-19: the
+"Interaction" pointer re-aimed at `22_HAPPENINGS_B`; A-20: `may_wage` is the declaration's conjunct, owned by
+`06_FA_war_lives_in_seats_B.md` edit 1), §7/§7b (stem registration, tests, tier); U3 B21, C3-D5 (order in B21), §4.1
+rows 72-73 (`may_wage` lands in B21 with war-lives edits 1-3; the `may_seat` part with `15_INSTITUTIONS_VENICE_C` in B32);
+U1 glossary *rung* ("ladder" for a chain of seats → "chain of seats"; the requested term and refusal clause renamed).
+Resolved at the tree: `utter`'s row carries `requires: "—"` and `emits_on_refusal: []` (read 2026-11-12), so the edit
+adds a refusal kind (inv. 4).
+
 ## Status: PROPOSED
+
+Lands in batch: **B21** (FA), after `06_FA_remit_grant_by_row.md`, `14_VERBS_BINDING_C_turnover.md` and
+`06_FA_war_lives_in_seats_B.md` edits 1-3 (`may_wage`); the part that reads VENICE-C's `may_seat` lands in **B32** with it
+(U3 §4.1 row 73). Depends on: those files; `data/requires.py` typed forms (exist).
 
 Source: `audits/16_PESSIMIST_FA.md` F-PES-FA-01, -04, -05 (premises P2, P3, P4; runs `pf2_premise.py` P2 to
 P4 and `pf2b_followup.py` §2, §3, §7, §8, seed 0). Binds on, and does not redo:
@@ -19,9 +33,9 @@ attempted, its outcome is the sibling proposals' draw.
 
 1. A cohort (a village, a ward) cannot be named to a seat or claim one. Today a peasant cohort can be made
    heir and then King.
-2. A `confer` across ladders (the exercised seat's faction is not the seat's) is harder, by a named
+2. A `confer` across chains of seats (the exercised seat's faction is not the seat's) is harder, by a named
    obstacle term, once `confer` draws; and a holder cannot confer a seat on himself through a seat that is
-   not above it in the same ladder.
+   not above it in the same chain of seats.
 3. Joining a faction is an offer the faction's side answers, not a sentence the joiner speaks. Today the
    King joins the insurgents by saying so and the insurgents' view gains the realm's holdings.
 4. A `WAR` Proposition is formed only between two different factions that exist, by a member of one of
@@ -56,9 +70,9 @@ faction Proposition he is not already in; the count is the gate's first reading.
 | # | decision | ladder step |
 |---|---|---|
 | 1 | **A seat is held by an individual.** One predicate, asked where `may_fill` and `may_claim` are asked: the person who would own the opened seat-`hold` is not a cohort. If VENICE-C's `may_seat(w, off, person)` lands first, this is its first conjunct and no second predicate is written | 5; 4 (`Person.is_cohort` already splits the two kinds of agent) |
-| 2 | **Cross-ladder conferral is admitted and priced.** `may_fill` is not narrowed: until an election arm exists (CR-35, PAPACY-B, VENICE-C), narrowing leaves the Church's head and Varfell's duke filled by nobody, which is worse. What changes: VB-C's `confer` obstacle gains one term, `ladder`, a step harder by a fixture when `office_faction(via) != office_faction(off)`, and the opposition is then the seat's body (VB-C already reads `reception` with that audience). **And the self-conferral is refused across ladders**: `to == actor` is admitted only where the exercised seat and the conferred seat are of one faction | 3 (VB-C's table; `counterparty_may_be_self` is D2's, kept inside a ladder), 5 |
+| 2 | **Cross-chain conferral is admitted and priced.** `may_fill` is not narrowed: until an election arm exists (CR-35, PAPACY-B, VENICE-C), narrowing leaves the Church's head and Varfell's duke filled by nobody, which is worse. What changes: VB-C's `confer` obstacle gains one term, `cross_chain`, a step harder by a fixture when `office_faction(via) != office_faction(off)`, and the opposition is then the seat's body (VB-C already reads `reception` with that audience). **And the self-conferral is refused across chains of seats**: `to == actor` is admitted only where the exercised seat and the conferred seat are of one faction | 3 (VB-C's table; `counterparty_may_be_self` is D2's, kept inside one chain), 5 |
 | 3 | **Joining is `covenant`'s shape, not `commit`'s alone.** A `commit` to a faction Proposition by a non-member is admitted when a live member whose seat-grant carries `confer`, or the faction's `head_seat` holder, has `commit`ted to a Proposition naming the joiner (an admission the joiner's own ledger holds). Where a faction has no such seat (the Guilds, Schoenland, Altonia, an unrostered party), any live member's admission serves. Leaving stays the member's own `release` (AX-1). A member of one faction may hold a second membership only where `rosters.yaml` says the pair is compatible; the default for two rostered factions is incompatible | 4 (`covenant`: two commits make it in force; `terms_sourced` forms a commit from a held paper), 5 |
-| 4 | **A war has two parties and a declarer who belongs to one.** `utter` of mood `WAR` is refused unless `subject != value`, both are Propositions with at least one live `commit`, and the utterer is a live member of one. Which commit keeps the war de jure is `06_FA_war_lives_in_seats_B.md`'s and is not re-decided | 3 (`10_FACTIONS_AND_DEPLOYMENT.md` §2: a war is between factions), 5 |
+| 4 | **A war has two parties and a declarer who belongs to one and can wage it.** `utter` of mood `WAR` is refused unless `subject != value`, both are Propositions with at least one live `commit`, and the utterer is a live member of one; under A-20 (war lives in the seats that wage it) the declarer must also hold a seat that may wage it (`may_wage`, `06_FA_war_lives_in_seats_B.md` edit 1, which owns that conjunct; this file's conjuncts compose with it). A member's `WAR` utterance without such a seat is refused as a declaration (it is a call for war, an ordinary utterance of another mood). Which commit keeps the war de jure is `06_FA_war_lives_in_seats_B.md`'s and is not re-decided | 1 (A-20), 3 (`10_FACTIONS_AND_DEPLOYMENT.md` §2: a war is between factions), 5 |
 
 Held back, as a ruled item (R-16 is the FA lane's proposal; the consort's remit is a provided-character
 reading): the Queen consort's `off_widow_regent` row. See "Interaction" below.
@@ -72,43 +86,58 @@ reading): the Queen consort's `off_widow_regent` row. See "Interaction" below.
    (`confer.refused`, `succession.refused`) where the gate would raise. `decision/options.py`'s counterparty
    fan for `confer` drops cohorts through the same predicate (formation follows admission).
 2. **`engine/season/loop/predicates.py::_req_confer`**: after the existing `may_fill` conjunct, refuse
-   (`_refuse("self_across_ladders", …)`) when `to == a.actor` and
+   (`_refuse("self_across_chains", …)`) when `to == a.actor` and
    `w.offices[a.via].faction != w.offices[obj].faction` (`Office.faction` is the resolved faction,
    `gate.py:505-507`). **`14_VERBS_BINDING_C_turnover.md`'s obstacle table**, row `confer`: add the term
-   `ladder` (`cross_ladder_step`, fixture, control 0, proposed 2), read by SC-B's one obstacle owner. This
+   `cross_chain` (`cross_chain_step`, fixture, control 0, proposed 2), read by SC-B's one obstacle owner. This
    file requests the term of that owner; it does not edit the table.
 3. **`engine/season/rosters.yaml: terms_sourced`**, cell `commit`: add the admission source (a
    Proposition of mood `OUGHT` whose `subject` is the joiner and `value` the faction Proposition, held as
    a claim in the joiner's ledger and `commit`ted to by an admitting member).
-   **`engine/season/loop/predicates.py`**: `commit`'s precondition (the row is typed; the conjunct is a
-   `relation` cell of stem `admitted`, owner `queries/world_q.py::admitted_to(w, person, prop)`): true when
-   `prop` is not a rostered faction Proposition and has no live member, or the person is already a member,
-   or an admission stands. **`rosters.yaml: factions`**: a `compatible_with:` list per row, default empty.
-4. **`engine/season/verb_table.yaml`, row `utter`** (`requires: "—"` today, no cell) and
-   **`engine/season/loop/predicates.py`**: a registered precondition `_req_utter` (the untyped route
-   `_req_confer` and its siblings use), true for every mood but `WAR`; for `WAR`: `subject != value`;
-   `world_q.members(w, subject)` and `members(w, value)` both non-empty; the actor in one of them. The row
-   gains `emits_on_refusal` if it has none `[UNVERIFIED: the row's refusal column was not read]`. The
-   `commit` cell of edit 3 joins `commit`'s existing typed `requires` ("the Proposition exists"); the stem
-   name `admitted` is this file's proposal, not an existing stem.
+   **`engine/season/data/requires.py`**: `REQUIRES_STEMS` (`:851`) gains `admitted`, a `Relation` stem asked of
+   `of` and the actor, whose reader is `queries/world_q.py::admitted_to(w, person, prop)`: true when `prop` is
+   not a rostered faction Proposition and has no live member, or the person is already a member, or an
+   admission stands. `commit`'s typed `requires` gains the `relation` cell `admitted` beside its existing
+   "the Proposition exists". **`rosters.yaml: factions`**: a `compatible_with:` list per row, default empty;
+   the rule "two rostered factions are incompatible unless one row lists the other" is the loader's
+   (`data/rosters.py`), stated once in code, and the data carries only the exceptions (`04` PART D 27a: a
+   proper noun in the content layer is a declaration, not a rule).
+4. **`engine/season/verb_table.yaml`, row `utter`** (`requires: "—"`, `emits_on_refusal: []` today, read
+   2026-11-12): the `WAR` mood's conditions as **typed** `requires` (`04` §F.24a: a per-verb predicate body is
+   the shape that grows a second resolver; `data/requires.py` already has the forms): `requires_typed` gains,
+   for mood `WAR`, `Existence(world_q.members(subject))`, `Existence(world_q.members(value))` and
+   `Relation(actor in members(subject) or members(value))`, plus `may_wage`'s conjunct as
+   `06_FA_war_lives_in_seats_B.md` edit 1 writes it. `subject != value` is a payload well-formedness refusal at
+   Act construction (`04` `:1203-1208`), not a predicate. The row gains `emits_on_refusal: [utter.refused]`
+   (the clause that can now fail needs a kind, inv. 4). No `_req_utter` is written. The stem name `admitted` is
+   this file's proposal, not an existing stem.
 
-## Interaction with a sibling proposal (named, not resolved here)
+## Interaction with a sibling proposal (answered by A-19)
 
 `06_FA_remit_grant_by_row.md` R-16 sets `off_widow_regent.remit_acts: []` while the King lives. Measured
 consequence: with the King and the heir dead, the only seats able to fill `off_heir` are `off_king` and
 `off_widow_regent` (`pf1`); with the consort's `confer` gone, **nobody can ever name an heir and nobody
 can ever claim the throne** (the same end state `pf2b` §7 reaches by killing all three). R-16 is right
-about the living King; it needs the fallback PES-FA-C carries (or the regency it mentions, conferred by
-someone who exists), or it moves the realm's dead end one death earlier.
+about the living King; the fallback for an empty throne is the deed race (A-19: heir, consort, princess and
+both houses' heads may claim), built by `22_HAPPENINGS_B_the_throne_is_never_stranded.md` edits 1-2, so the
+throne is claimable without anyone naming an heir. The "Jordan call" this section once named is answered.
 
 ## Gate (execution artifacts)
 
-Re-run `pf2_premise.py 0`, `pf2b_followup.py 0`:
+`pf1_static.py`, `pf2_premise.py`, `pf2b_followup.py` were lane scratch (not in the repository, U3 §6.2). The
+readings are written first as NEW `engine/season/tests/test_fa_eligibility.py`: `test_cohort_cannot_be_named_heir`
+(G1), `test_self_conferral_across_chains_refused` (G2), `test_non_member_commit_refused_without_admission` (G3),
+`test_war_between_same_faction_refused` and `test_war_utterance_without_a_waging_seat_is_not_a_declaration` (G4);
+`engine/season/tests/test_faction_q.py` (exists) stays green. Command:
+`python -m pytest engine/season/tests/test_fa_eligibility.py engine/season/tests/test_faction_q.py -q`. G3's first
+reading (executed non-member commits, seeds 0 to 2, three seasons) is printed by `harness/aperture.py`'s per-verb
+census before edit 3 lands `[ASSUMPTION: aperture's census can be filtered by verb and membership — basis: the
+harness listing]`. Readings:
 
 - **G1** the Queen names a cohort heir: `confer.refused`; control, she names an individual:
   `tenure.opened` (or VB-C's band).
-- **G2** the Queen confers the Confessor's seat on herself: `confer.refused` (`self_across_ladders`);
-  control, the King confers the heir's title on himself (one ladder): admitted as today.
+- **G2** the Queen confers the Confessor's seat on herself: `confer.refused` (`self_across_chains`);
+  control, the King confers the heir's title on himself (one chain of seats): admitted as today.
 - **G3** the King's `commit` to the Restoration Movement with no admission: refused; with a member's
   admission in his ledger: `commitment.made`. Control: a member's re-commit and every non-faction `commit`
   are unchanged. First reading before the edit: over seeds 0 to 2, three seasons, how many executed
@@ -123,7 +152,7 @@ Re-run `pf2_premise.py 0`, `pf2b_followup.py 0`:
 
 G3's first reading: if computed play today contains non-member commits to factions that other persons
 then act on, edit 3 removes live behaviour and its cost must be stated before it lands. G2 is wrong if a
-regency is meant to be exactly this act (a consort taking a vacant seat of another ladder); the provided
+regency is meant to be exactly this act (a consort taking a vacant seat of another chain of seats); the provided
 character NPC-032 says she has no action economy of her own, which is why it is refused here.
 
 ## NERS reading (E last)
@@ -140,4 +169,7 @@ character NPC-032 says she has no action economy of her own, which is why it is 
 
 ## Cost class
 
-Edits 1, 2, 4: edit. Edit 3: small build (one Query, one roster key, one typed cell).
+Edits 1, 2, 4: edit. Edit 3: small build (one Query, one roster key, one typed cell). Tier: `sonnet`, effort
+`high`; `opus` for edit 3's admission default (incompatible by default) only. Hash movers declared: (1), (2), (4)
+none in shipped runs; (3) every run in which a person commits to a faction Proposition he is not in (G3's first
+reading). Lands it: B21, order 1 → 2 → 4 (after `may_wage`) → 3; the `may_seat` conjunct form in B32.

@@ -1,8 +1,14 @@
 # 14 · VERBS · SOCIAL2 · D — `tie`: a chosen bond, drawn for, read by the telling; `knot` handed to the Thread lane
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-21) — `tie_obstacle` is folded into the one roster (`U5c_SC_one_obstacle_form.md` §2). The split of `tie` and `knot` (edit 6) is Jordan's A-28.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — applied `unified/work/R4_READ.md` §1.6 and 7b.6: edit 3 is written from the row, not "re-landed" (the attempt `53ed995d` is not reachable from this clone); edits 2 and 5 fold into the one composer and the `favour` source (C-21, the head line; C3-C10); edit 4's `band_entry` is `task_fraction` (U1 D-U1-11l); `obstacle_default` (deleted, C-04) is the composer's stand-in; edit 6's count is a reading at its batch, never typed (`unified/U3_CONFLICT_LEDGER.md` C3-N30); A-81, A-30, U3 batch B25, R4 7b.0 block.
 
 ## Status: PROPOSED
+
+Lands in batch: B25 (`unified/U3_DEPENDENCY_ORDER.md` §3.1), after `08_FI_08_knots-season-form.md` §3 in the same batch.
+Depends on: `08_FI_02_rumour-that-travels.md` (B11: two-hop told chains, `present_persons`); `08_FI_08_knots-season-form.md` (B25); `U5c_SC_one_obstacle_form.md` (B05: `regard`, the `favour` source; `rank_gap` lands with `14_VERBS_BINDING_A` in B21).
+Lane: FI. Tier (R4 7b.0 (1)): `sonnet` producer, effort `high`; one `opus` read of the `tie_gain` arms. Test file: `engine/season/tests/test_vm_s2_d_tie.py` (the gate's arms and the three falsifiers as functions).
+Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the actor's trained score (A-6); talent as levels (A-7); a wound a level against the roll (A-8). The draw takes `H(w.world_seed, w.tick, <actor id>, "tie.standing")` (A-30). **A-81:** `bond.refused` is witnessed by both parties (a claim of it to each): a refused bond is a remembered deed.
 
 Carries `audits/14_VERBS_SOCIAL2.md` §10. Batch S2-D. Follows `08_FI_08_knots-season-form.md` §3 (the
 reader first, then the producer) and does not redo it.
@@ -66,17 +72,41 @@ opener per kind: a `kind` operand would be a scale-local dialect).
      effect_decline_note: "<the H-182 text for knot; owned by the 29f / Thread lane; FI-08 §1>"
    ```
    `resolvable_verbs()` admits `tie` once its effect exists; `knot` stays out.
-2. **`rosters.yaml`**: `verb_capability: tie: "copying"`; new `tie_obstacle` (`obstacle_default` base;
-   the partner's `regard` of the actor below zero +1, above +1 −1; rank gap per rung +1).
+2. **`rosters.yaml`**: `verb_capability: tie: "copying"` (the row's own `capability:` cell at CAP A2/A3,
+   D-U1-07). *(W3-4a: no `tie_obstacle` table, C-21.)* The obstacle, through the one composer:
+   `difficulty` + `opposition` (the partner's trained score, A-79) + `regard` (OBS member 7: the partner's
+   hostile stance toward the actor) + `rank_gap` (member 6); the partner's favourable stance is a `favour`
+   level for the actor (OBS §3), not a −1.
 3. **`loop/effects_information.py`** (the module holding `_eff_commit`, beside it; the `"tie"` literal
-   must sit in a file `_derive_openers_from_effects` walks): `_eff_tie(w, a, res)` re-lands IN-32's body (attempt
-   `53ed995d`) with `degree=res.degree` on the new `Tenure(..., "tie", ...)`, id salted
-   `f"tie:{to}:{a.id}"`; declines `NO_CHANGE` where the actor already owns a live `tie` to `to`.
-4. **`decision/options.py::teller_weight`**: IN-32's `tied` term, reading the hearer's own live `tie` to
-   the teller and its `degree` (`band_entry`-scaled, Partial half), times fixture `tie_gain`.
-5. **`rosters.yaml: tell_obstacle`** (S2-C §4): the `tie: -1` key reads the teller's own live `tie` to the
-   hearer.
-6. `data/verbs.py`: the verb count read by R-05's instrument moves 67 → 68; no code names the count.
+   must sit in a file `_derive_openers_from_effects` walks). *(W3-4a: written from the row; the earlier
+   "re-lands IN-32's body (attempt `53ed995d`)" is withdrawn — that commit is not reachable from this
+   shallow clone, so its body cannot be the source.)*
+   ```python
+   @effect_for("tie")
+   def _eff_tie(w, a, res=None) -> Change:
+       to = _operand(a, "to")
+       if res is None or to is None or to not in w.persons:
+           return NO_CHANGE
+       if any(t.kind == "tie" and t.subject == a.actor and t.object == to and t.live for t in w.tenures):
+           return NO_CHANGE                      # he already owns a live tie to `to`
+       edge = Tenure(H(w.world_seed, w.tick, a.actor, f"tie:{to}:{a.id}"), a.actor, to, "tie",
+                     since=w.tick, degree=res.degree)
+       return Change((Subject.edge(edge),), lambda: w.add_tenure(edge))
+   ```
+   Typed in: `(World, Act, Resolution)`; out: `Change`. The edge is the actor's own (T-m); no edge is
+   opened for the partner (directed, `04` §A.3 row 9). The names are `_eff_commit`'s, read at the tree
+   (`loop/effects_information.py:1252-1310`: `@effect_for`, `_operand(a, …)`, `Tenure(id, subject, object,
+   kind, since=…)`, `Change((Subject.edge(nt),), lambda: w.add_tenure(nt))`); `degree=` is the `Tenure`
+   field `determine`'s `_disposal` already fills (`04` §F.4).
+4. **`decision/options.py::teller_weight`**: a `tied` term reading the hearer's own live `tie` to the teller
+   and its `degree`, scaled by `rosters.yaml: task_fraction[degree]` (W3-4a: was `band_entry`, the same
+   values under a second name; Partial half), times fixture `tie_gain` (control 0; NUMBER row).
+5. *(W3-4a: no edit.)* The teller's own live `tie` to the hearer already enters a telling's odds as the
+   `favour` source (OBS §3: "a live `tie` of the actor to the counterparty"); `tell_obstacle` is not added
+   (`14_VERBS_SOCIAL2_C` §4 as reconciled).
+6. `data/verbs.py`: the split adds one verb row, so the count read by R-05's instrument moves; no code
+   names the count, and the count is quoted as a reading at the batch that lands it (B25), never typed
+   into prose (C3-N30: 67 today, T-7; `01_CORE_tests_one_golden_owner.md` item D re-reads its pin at B25).
 
 ## Gate (execution artifact)
 
@@ -95,8 +125,8 @@ term).
 
 N: the one chosen person-to-person bond; without it friendship exists only as regard, which nobody
 chooses. R: networks of trust form with no player and change who believes whom. S: directed edges owned
-by their party, closed by `release`; the bond enters the telling's odds as one more modifier. E, last:
-one row split, one effect re-landed, one term and one roster key.
+by their party, closed by `release`; the bond enters the telling's odds as a `favour` level, as every
+favourable circumstance does. E, last: one row split, one effect written, one term.
 
 ## Cost class
 

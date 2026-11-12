@@ -6,7 +6,11 @@ Re-grounded: 2026-11-12 against the tree's research (`unified/RESEARCH_MAP_INSTI
 
 Reconciled: 2026-11-12, U5d closure — folded **A-41**, **A-21 / A-22** and **A-37**. No `corvee` form is added to `forms:` (the audit's §11 item 3 took neither offered option): caste stays informal and is expressed through regard, vote blocks and tiered practice, none of which is an instrument. A form's `basis` (`command` or `purview`, X-33) rests on ruled ground. An imposed service is not closed by the obliged party's own `release` (A-37): a form whose `due` is a service imposed by a bench carries no self-release clause.
 
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (COL_A: CONFORMS), §7 (COMPLETE, uniform), 7b.0; `U3_CONFLICT_LEDGER.md` C3-N31 (the form count is read by command). Changed: the implementation block; the edit 1 example's top-level key follows this file's first `Reconciled:` line (`forms:`); the loader gate counts the forms by command; the realm reading seeds SYNTHESIS-B's two `homage` instruments (not three: the Grand Master's oath has none). Nothing else.
+
 ## Status: PROPOSED
+
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B32**, first (`U3_DEPENDENCY_ORDER.md` §1 item 32). Depends on: `06_FA_decree_binds.md` (B21, FA-P1: a writ's terms reach its addressee). Lane tag: FA. Tier: `sonnet` (loader, readers), effort `high`; no `opus` node. Named test: `engine/season/tests/test_instruments.py` (as named below). Standing sentences: *Pool* — no roll is added; a performing act is rolled on its own row (A-6, A-7, A-8). *Failure writes* — no contested row is added (A-81). *Draw keys* — no draw is added (A-30).
 
 Source: `audits/15_INSTITUTIONS_COLONIAL.md` §4, §6.1, §10, §12 batch C-1. Cross-lane: the `covenant`
 and `issue` rows are the SOCIAL and BINDING verb lanes' (`proposals/14_VERBS_SOCIAL2_A_formation_on_what_is_known.md`,
@@ -62,7 +66,7 @@ way (a tribute is a `transfer` between places).
 the count. Row schema, every key required unless marked:
 
 ```yaml
-instruments:
+forms:                               # SYNTHESIS-A edit 1: `forms:` and `seeded:` are the two top-level keys
   - id:          farm
     made_by:     covenant            # issue | covenant
     grantor_act: issue               # a rosters.yaml: remit_acts member the granting seat must hold
@@ -150,15 +154,16 @@ again by the same party.
 
 One test file, `engine/season/tests/test_instruments.py`, and one seeded reading:
 
-- loader refusals: each malformed row above raises naming the row; the ten shipped rows load.
+- loader refusals: each malformed row above raises naming the row; every shipped row loads (the count
+  read by command at the run: these ten plus SYNTHESIS-A's six; C3-N31).
 - on a hand-built two-seat world with one `tribute` made at tick 0, `every: 1`: `dues(payer)` names the
   payee's rung in season 1; after a `transfer.made` by the payer to that rung it does not; in season 2 it
   does again.
 - `kept` as the **payee** reads it is +1 after a season whose payment he witnessed and −1 after a season
   whose payment was made and not witnessed by him (the claim withheld from his ledger): the two readings
   differ by construction.
-- realm reading: `build_realm(0)` with the three `homage` instruments of proposal D seeded, two seasons,
-  seeds 0–2: the count of `dues` referents stamped, and of acts whose `occasioned_by` is one, printed.
+- realm reading: `build_realm(0)` with SYNTHESIS-B §3's two seeded `homage` instruments (NPC-050's and
+  NPC-052's; the Grand Master's oath has no instrument), two seasons, seeds 0–2: the count of `dues` referents stamped, and of acts whose `occasioned_by` is one, printed.
 
 ## Falsifier
 

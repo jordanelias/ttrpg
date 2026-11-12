@@ -4,6 +4,11 @@
 
 Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (ruling A-59; decisions 4 to 8). Nothing here is deleted. §1's site, its bands' sense and its table of kinds stand; three things in §1 are amended, and `27_MB_A_command_and_the_obedience_draw.md` carries the detail. (1) **The pool.** "The commander's Command; a unit with an officer adds 1" reads one input and makes every officer worth one die. A-59 makes command a learned skill with social and mental attributes (two inputs, A-7), so the pool is the one pool rule on the roller's trained `command` and his Presence and Reason enter as levels; the roller is each person who has to pass the order on: the unit's officer for a standing order, the commander and then the officer for an improvised one. (2) **Distance and signal.** An improvised order pays a step for each band of distance from the commander's post; a prearranged signal carries the field. (3) **The bands.** Partial is late, by one tick plus the distance bands; on a unit that holds orders on two signals a Partial answers the wrong one (misreading, and only there); Failure is as written. The `obey_ob` values become steps over the one task obstacle (`27_MB_A` §4), because under A-6 a pool of score plus six passes an obstacle of 1 almost always. "It does not touch the per-battle multiplier" (last bullet of §1) is now answered: A-59 lowers it and `27_MB_C_dynamic_strength_and_the_residual_chance.md` tests its removal. §3's doctrine rows gain a default post for the commander (`27_MB_D` §1).
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §2 row A-6/A-7/A-59 and §6.1 (e) (§1's pool and absolute obstacle are retracted by `27_MB_A` §4: the pseudocode is replaced by the one pool rule on the roller's trained `command` with talent as levels and `orders.obey.step` over the one task obstacle; the table of kinds keeps its rows as steps), §2 row A-30 ("the scoped RNG" → keyed draws), A-59/A-77 (the multiplier sentence answered and removed), §1.2 D-27a watch (no proper noun in a doctrine row), U1 §4 M-08 (the owner of the obedience data is `references/troops.yaml: orders.obey`, exported to `battle_orders.json`), D-U1-11g (the Command input is `27_MB_A`'s `command` capability); test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`).
+
+**Depends on:** `04_MB_manager_battle_one_resolver.md` §2 and §4 (B20); `26_MASS_BATTLE_cell_scale_and_time.md` §3 (B19, the bouts and the lull); `27_MB_A_command_and_the_obedience_draw.md` (B19, `obey`); `11_GO_one_draw_owner.md` (B06).
+**Lands in batch:** B20 (`B20-mb-orders`, MB), with `04_MB_manager_battle_one_resolver.md` §2–§6.
+
 Lane MB (the chooser's side is CHAR's). Carries rows B-2, B-3, B-9 and B-13 of
 `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`. **Extends `04_MB_manager_battle_one_resolver.md`** §2
 (standing orders) and §4 (the general's action), which are kept and amended in place. The sequences are in
@@ -42,16 +47,23 @@ what their armies do. No natural season fights an army field today.
 At the one place an order's behaviour is applied (`core/contact.py::check_orders`), and for a general's
 `signal` and `order` actions:
 
+*(Reconciled, W3-1: the pool and obstacle are `27_MB_A_command_and_the_obedience_draw.md` §4's, which
+retracts this section's first form, "the commander's Command; a unit with an officer adds 1" over an absolute
+`obey_ob`.)* The roller is each person who has to pass the order on (the unit's officer for a standing order;
+the commander and then the officer for an improvised one); his pool is the one pool rule on his trained
+`command` (A-6, A-7), his Presence and Reason enter as levels; the obstacle is the one task obstacle plus the
+step for the kind of order below (`orders.obey.step`); the draw is `core/contact.py::obey`, keyed
+`(field, tick, unit, "obey", link)` (A-30). The bands keep this section's sense:
+
 ```
-pool     = commander's Command (the side's general; a unit with an officer adds 1)
-obstacle = orders.obey_ob[kind]            # data, below
 degree   -> Overwhelming, Success : applied this tick
-            Partial               : applied next tick
+            Partial               : applied late (one tick plus the distance bands; on a unit holding orders
+                                    on two signals, the wrong one: 27_MB_A §4)
             Failure               : not applied; the order stays pending and may fire again
                                     when its trigger next holds, once per phase
 ```
 
-| kind of order | `obey_ob` (seed) | why it differs |
+| kind of order | step over the task obstacle (`orders.obey.step`, seed) | why it differs |
 |---|---|---|
 | keep doing what the body is doing (`hold`, `stance` unchanged) | 0: no draw | nothing is asked |
 | a change of stance, target or route; a weapon switch | 1 | the ordinary order |
@@ -59,14 +71,15 @@ degree   -> Overwhelming, Success : applied this tick
 | act together on a signal across several units | 1, +1 for each unit beyond three | SQ 7 step 4; DBA's cost of moving separated groups |
 | anything, for a body with Discipline 1 or `raw` | +1 | `14_VERBS_MILITARY_D`'s `raw` column, read here |
 
-- The draw is the module's, on the scoped RNG, **whoever issued the order** (a standing order, a decider, a
-  replayed intervention), so the draw sequence does not depend on who decided.
+- The draw is the module's, keyed (A-30), **whoever issued the order** (a standing order, a decider, a
+  replayed intervention), so the draws do not depend on who decided.
   `04_MB_manager_battle_one_resolver.md`'s gate 1 becomes: a decider returning `none` gives an equal outcome
   and an equal draw count; its gate 2 (replay from the interventions list) holds unchanged.
-- The values are seeds in `engine/engine_params/battle_orders.json` beside the vocabulary; `obey: off` is the
-  control and is today's certainty.
-- This is friction where the sources put it. It does not touch the per-battle multiplier
-  (`ED-MB-0016`); see the audit's §7 item 2.
+- The values are seeds authored in `references/troops.yaml: orders.obey` and exported to
+  `engine/engine_params/battle_orders.json` beside the vocabulary (U1 M-08); `obey: off` is the control and is
+  today's certainty.
+- This is friction where the sources put it. *(A-59, A-77: the per-battle multiplier (`ED-MB-0016`) is
+  lowered and ships at zero when `27_MB_C`'s first test arm passes.)*
 
 ### 2. Two triggers, three lull actions
 
@@ -104,7 +117,9 @@ orders. Nothing below is a new mechanism; a row that needs one names it.
 
 ### 4. What is deliberately not built
 
-- No manoeuvre name is read by the resolver. A doctrine row is data that writes orders.
+- No manoeuvre name is read by the resolver. A doctrine row is data that writes orders. Doctrine row keys
+  name manoeuvres (`envelopment`, `refused_flank`), never a battle or a person: the proper nouns of the
+  sources (Cannae, Arsuf, Crécy) stay in this prose and out of `troops.yaml` (`04` D-27a).
 - No view of the enemy's orders. The commander sees his own side and what is in contact
   (`04_MB_manager_battle_one_resolver.md` §4), which the tree's own research asks for
   (`research/pre_firearms_formations/16_historical_vs_gamedesign_audit.md:66-68`).
@@ -118,7 +133,7 @@ orders. Nothing below is a new mechanism; a row that needs one names it.
 |---|---|
 | `modules/mass_battle/core/contact.py::check_orders` | the obedience draw; the two triggers' tests |
 | `modules/mass_battle/hierarchy/units.py` | `_ORDER_TRIGGER_KINDS` gains two; `_ORDER_SAFE_FIELDS` gains `pursue`, `reform`; `feign` as the accepted spelling of the pseudo-field |
-| `tools/export_battle_orders.py`, `engine/engine_params/battle_orders.json` | `obey_ob`, the on/off arm, the new triggers and behaviours |
+| `references/troops.yaml: orders.obey`, `tools/export_battle_orders.py`, `engine/engine_params/battle_orders.json` | the `step` table, the on/off arm (U1 M-08); the new triggers and behaviours |
 | `modules/mass_battle/massbattle.py` | the three lull actions, applied between bouts |
 | `references/troops.yaml: doctrines` | the rows of §3 as named doctrine entries, each a list of `(class of unit, post, standing_orders)`; `balanced` stays today's and has none |
 | `modules/mass_battle/orchestration.py` | the bait's own draw before `feigned_retreat_recognized` is asked |
@@ -139,6 +154,14 @@ orders. Nothing below is a new mechanism; a row that needs one names it.
    the next bout's loss on that post differs from the unrelieved control beyond the control's spread.
 6. `git grep -n "envelop\|cannae\|refused" modules/mass_battle/massbattle.py modules/mass_battle/battle_loop.py`
    prints no branch on a manoeuvre's name.
+
+**Tests (W3-1).** `tests/valoria/test_conditional_orders.py::test_obey_on_spreads_the_applied_tick`
+(gate 1, `assert checked >= 200`), `::test_three_issuers_equal_outcomes` (gate 2);
+`tests/valoria/test_mass_battle_maneuvers.py::test_feigned_flight_three_outcomes`,
+`::test_envelopment_wings_sometimes_never_close`, `::test_relieve_brings_the_fresher_unit_forward` (gates
+3–5); gate 6's grep in the commit body. **Hash movers:** none with `obey: off`; the flip moves every army field
+with orders. **Lands:** an IN-lane implementation session under `/methodology-execute` with MB review;
+`sonnet`, the doctrine readings `haiku` read by `opus`.
 
 ## Falsifier
 
@@ -162,4 +185,4 @@ doctrine's name.
 ## Cost class
 
 Small build, after `04_MB_manager_battle_one_resolver.md` §2 and the bouts of
-`26_MASS_BATTLE_cell_scale_and_time.md`. The Command input is the first audit's §14 (CHAR).
+`26_MASS_BATTLE_cell_scale_and_time.md`. The Command input is `27_MB_A`'s `command` capability (D-U1-11g).

@@ -2,6 +2,15 @@
 
 ## Status: PROPOSED
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `unified/work/R5_READ.md` §1 row
+(CONFORMS; PART D 41a's permutation test added to the gate), §2 (no ruling binds this file), §7/§7b (gate
+command, pre-deletion grep, tier); `unified/U3_DEPENDENCY_ORDER.md` B03 and §6.2 (the probes `knock.py`,
+`qreuse_small.py` are not in the repository). Changed: the gate is restated as commands that exist; the
+probe readings stay as the producing lane's evidence and no gate rests on them; implementation block added.
+
+Lands in batch: **B03** (IN, hash-equal text and deletions). Depends on: nothing (no proposal, no
+unlanded symbol).
+
 Carries F-PES-CORE-07 of `audits/16_PESSIMIST_CORE.md` (§1.1 pt 4, §2 row 1). Reference only
 (CLAUDE.md §0.05). A deletion.
 
@@ -58,12 +67,31 @@ anyone wants it; nothing measured here argues for it.
    `:16671-16713`) and the fingerprint assertion in
    `engine/season/tests/test_in53_vacancy_need.py:439-447`. Both test that the skip is *safe*; with no
    skip there is nothing to keep safe. `[the bodies of the two tests were located by grep, not read]`
+   Also strike the pointer comment at `test_season_shape.py:16301` that names the deleted test.
+   **Before deleting** (order of edits: this check, then edit 1, then 2, then 3):
+   `rg -n '_inputs_fingerprint|_queued\b|\._inputs\b' engine/` must return only the lines edits 1-3
+   delete (run 2026-11-12, it returns `deliberate.py:23,191-201,262,308,468-481`, `driver.py:349,357,472-473`,
+   `test_season_shape.py:16301,16671-16756`, `test_in53_vacancy_need.py:30,439-447`, and four `cite:` strings
+   in `engine/season/hole_register.yaml` (`:4321`, `:4334`, `:4346`, `:4574`), which are measured-history
+   prose read by no code and stay as written; a hit anywhere else is a reader this proposal missed: stop).
 
 ## Gate (an execution artifact, §0.2)
+
+Commands (report BEFORE delta, per the CONTROL block of `skills/layer-conformance/SKILL.md`):
+`python -m engine.season.harness.report && python -m engine.season.harness.delta HEAD`, expected
+reading `PROBE FLIPS 0` and:
 
 - Realm seed 0, three seasons: hashes `5ab73af2…`, `bacd687f…`, `52ff67bc…` unchanged.
 - Headless seed 0, four seasons: `19081c4a, 5405522c, 383206ba, 4cf2b09f` unchanged.
 - `engine/season/tests` goldens unchanged except the deleted reuse cases.
+- PART D 41a's permutation observable still passes (deleting a cross-round queue cannot create order
+  dependence, but this is the only test that would see it):
+  `python -m pytest engine/season/tests/test_rem31_grid_suspension.py -q -k "deliberation_order or same_permutation"`.
+
+The figures above (0 of 1,137; 0 of 38; 516 of 527; the `qcut.py` control) came from lane scratch
+scripts (`run_dump.py`, `knock.py`, `qreuse_small.py`, `qcut.py`) that are not in the repository
+(`unified/U3_DEPENDENCY_ORDER.md` §6.2): they are the evidence for the proposal, not its gate. The gate
+is the pinned hashes, which need no probe.
 
 ## Falsifier
 
@@ -80,3 +108,6 @@ world is the evidence this proposal lacked: keep the branch and cite it.
 ## Cost class
 
 Edit (a deletion). No golden re-record expected; if one is needed the falsifier has fired.
+Tier: `sonnet`, effort `high` (a bounded deletion at a named owner; no judgment node). Lands it: one
+commit in B03, no golden re-record; hash movers declared: none. If the falsifier fires, revert and cite
+the world that reuses a tail.

@@ -1,4 +1,8 @@
-# 28 · CORE · SCENE ACCESS · A — a visit occupies the person visited, and office orders who is seen first
+# 28 · CORE · SCENE ACCESS · A — a visit engages the person visited, and office orders who is seen first
+
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.7 row 28A (CONFORMS to the drafted amendment; VIOLATES `04` PART D row 36 as ratified until Jordan applies it), §2, §6 row *J-U5a-05 baseline*, §7, §7b-T; `unified/U1_GLOSSARY.md` *occupy* (a visited person's being busy is **engaged**; "occupy" is an army's holding of ground, A-66), *level*; `unified/U3_CONFLICT_LEDGER.md` C3-K8, C3-N5, C3-C13; `OWED_TO_UNIFICATION.md` §A row (PART D row 36), §B lane 28 (gate rows out of order)). Changed: the vocabulary follows the glossary throughout this file (the fixture `engagement`, the clause and constant `engaged` / `ENGAGED_CLAUSE`, the row property `VerbRow.engages`, a visit **engages** its counterparty; the test file `test_scene_access_engagement.py`); the person key of `_canonical_order` **ships at its control** until Jordan applies the drafted PART D row 36 amendment (edit 8; C3-K8), and edits `_canonical_order` after B08; the problem section states the three denominators in one sentence and names its own reading as A-63's measurement (C3-N5); gate rows are renumbered in order (row 10, the DELIBERATE falsifier, now follows row 9); the scratch `ordp.py` strata-cut arm is promoted into `harness/access.py`; `precedence_level` and `appointment_level` keep their names (they are `LEVEL_SIGMA` levels, glossary *level*). For another lane: `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` (W3-5a) cites the `occupied` clause, now `engaged`.
+
+**Lands in batch:** B28. **Depends on:** B08 (`16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` edits 1–4; `18_DETERMINISM_rival_acts_in_one_fold.md`), B05 (`U5c_SC_one_obstacle_form.md`, levels and `rank_gap`), B11 (`14_VERBS_SOCIAL1_A_formation.md`), Jordan's PART D row 36 amendment for the person key to leave its control.
 
 ## Status: PROPOSED (a plan for future execution; nothing here is executed by the authoring lane)
 
@@ -9,11 +13,11 @@ the same re-order). Reference only (CLAUDE.md §0.05). Not ratified by being wri
 
 ## What it changes in `engine/season/` at runtime (first)
 
-With the new fixture `occupancy` at `off` (the control, shipped in the first commit): nothing; every
+With the new fixture `engagement` at `off` (the control, shipped in the first commit): nothing; every
 content hash is the A-9 tree's. At `seat_and_debit`:
 
 1. In RESOLVE, a face-to-face interaction whose counterparty is already in another scene this round, or
-   has no scene action left this season, is refused at a new clause, `occupied`, and emits
+   has no scene action left this season, is refused at a new clause, `engaged`, and emits
    `visitor.kept_waiting`. It costs the visitor his scene, as every refusal does.
 2. A person received in a visitor's scene does not also run a scene of his own that round: his released
    scene goes back to the head of his queue and its debit is withdrawn.
@@ -37,6 +41,10 @@ audit §1.3). Nothing is added to `World`, to any carrier's fields or to any Eve
   `_spent` is debited at release (`:294`) for the opener only.
 - Measured (audit §1.3; realm, seeds 0, 1, 2, two seasons): in 16 of 22, 24 of 37 and 16 of 25 rounds in
   which a person is the counterparty of an executed face-to-face act, he also executes an act of his own.
+  Three denominators are in use and are not one figure (C3-N5): `audits/16_PESSIMIST_CORE.md`'s 62 of 87
+  counts acts *about* a person; this file's 22 / 37 / 25 count rounds with a face-to-face meeting; the
+  scene-access audit's 24 / 42 / 31 count meetings. This file's per-round reading is A-63's *"measure
+  before it ships"* (the throughput the ruling concerns); 62 of 87 is not a gate.
   Two to five rounds per run have two visitors on one person; 26 to 48 *attempted* rounds do.
 - `loop/resolve.py:51-58`: the order among those acts is `(stratum, H(seed, tick, actor, "order:…"))`.
   Which of two visitors reaches a person first is a hash of the acts' content.
@@ -46,21 +54,21 @@ audit §1.3). Nothing is added to `World`, to any carrier's fields or to any Eve
 Ladder: step 1 (A-63, A-64, A-62); step 4 for each mechanism (the precedents are named at the edit);
 step 5 for the two choices marked **(decided here)**.
 
-### 1. Which acts occupy: read off the row, no list
+### 1. Which acts engage: read off the row, no list
 
-A row **occupies its counterparty** when its typed cell asks the `with` relation of the operand its
+A row **engages its counterparty** when its typed cell asks the `with` relation of the operand its
 `counterparty:` column names. That is the cell's own statement that the two must be in one place. Today:
 `accept`, `argue`, `capture`, `challenge`, `give`, `lie`, `tell`. A paper (`petition`, `issue`), a
-conferral and an oath to a seat occupy nobody. `covenant` joins the day its lane adds `with` to its cell
+conferral and an oath to a seat engage nobody. `covenant` joins the day its lane adds `with` to its cell
 (A-21 keeps covenants in person; `14_VERBS_SOCIAL1_B_documents_and_obedience.md`), with no edit here.
 The counterparty must be an individual (`Person.is_cohort`, the owner the `individual` stem already
-reads, `queries/world_q.py:4599-4606`): a crowd is not occupied by one speaker.
+reads, `queries/world_q.py:4599-4606`): a crowd is not engaged by one speaker.
 
 **Force is not kept waiting (A-80).** A row whose prize is `the body` (`contests: "the body"`: today
 `accept`, `capture`; `fight` names no counterparty) asks for no one's attention. Such a row **intrudes**:
-it is never refused at `occupied`, whatever the target is doing, and when it is admitted the target is
+it is never refused at `engaged`, whatever the target is doing, and when it is admitted the target is
 engaged in it if he was free, so those who call on him later that round are turned away. Read off the
-row's `contests:` cell, no verb named. So the rows that can be refused at `occupied` are the five that
+row's `contests:` cell, no verb named. So the rows that can be refused at `engaged` are the five that
 want a hearing (`argue`, `challenge`, `give`, `lie`, `tell`), and a closed door stops talk, never a
 seizure: entrenchment in access leaves force as an option, at force's own price and draw. (The baseline
 tables of the audit count all seven rows; `capture` executes 0, 2 and 4 times in them and `accept` 0.)
@@ -77,9 +85,9 @@ dropped at the next barrier). It is in no carrier, no hash and no Event. Walking
   back to the driver, which puts it at the head of that person's queue and withdraws the release debit
   (the inverse of `deliberate.py:294`). Precedent: `deliberate.py:187-189`, *"a queued scene is deferred,
   not dropped"*. Otherwise the actor is engaged in his own scene.
-- **The counterparty.** For an occupying act that has passed eligibility, its precondition and the
+- **The counterparty.** For an engaging act that has passed eligibility, its precondition and the
   counterparty clause: if the counterparty is engaged in another scene, or his budget Query reads 0, the
-  act is refused at `occupied`. Otherwise the counterparty is engaged in this scene. Two interactions
+  act is refused at `engaged`. Otherwise the counterparty is engaged in this scene. Two interactions
   with one person in one scene seat him once.
 - **Across rounds** nothing is carried except what the engine already carries: the season's budget
   remainder (the Query), the deferred scene in the person's own queue, and an appointment (proposal B).
@@ -92,7 +100,7 @@ At `scenes_per_round` above 1 (swept, H-124) the rule reads "in at most `scenes_
 A-63 gives two arms (*debited* or *unavailable to a second visitor*). They are one rule at two grains:
 the round's seat (§2) and the season's budget. `SeasonDriver.season` already promotes realised acts into
 a season-local set after the fold (`driver.py:519-534`, `_realised`); in the same pass it adds, for each
-admitted occupying act, the act's scene id to `self._received[counterparty]` (a set of scene ids, reset
+admitted engaging act, the act's scene id to `self._received[counterparty]` (a set of scene ids, reset
 with the other season locals at `:472`). `ask_budget` becomes
 
 ```python
@@ -115,7 +123,7 @@ only on a person whose budget is below the round count (a wounded or travelling 
 
 - **The group.** `loop/resolve.py::rival_key` (the function `18_DETERMINISM_rival_acts_in_one_fold.md`
   adds) gains one key: `("round", person)` for a scene whose actor is that person and for every scene
-  holding an occupying act that names him. Groups that share a scene are merged. As in that proposal, a
+  holding an engaging act that names him. Groups that share a scene are merged. As in that proposal, a
   group is re-ordered **among the positions it already holds**, so no scene outside it moves. A member
   may thereby fold inside another stratum's run (a visitor's `social` scene in the place of the host's
   `binding_decision` one). What the strata protect was measured as nothing at seed 0 (0 of 821 acts
@@ -157,17 +165,17 @@ ranks as it ranks any candidate (proposal B). The precedence net is not an input
 
 ## Exact edits, by owner (in landing order; all after A-9's edits 1 to 4)
 
-1. **`engine/season/data/verbs.py`** — `VerbRow.occupies` (a derived property: `counterparty` set and the
-   typed cell holds a `relation` conjunct `with` of that operand) and `VerbRow.intrudes` (`occupies` and
-   the row's `contests` is the prize `the body`: seats the target, never refused at `occupied`);
-   `OCCUPIED_CLAUSE = "occupied"` beside
-   `COUNTERPARTY_CLAUSE` (`:452-457`), *derived like the other two: a keyed row keys it iff it occupies*;
+1. **`engine/season/data/verbs.py`** — `VerbRow.engages` (a derived property: `counterparty` set and the
+   typed cell holds a `relation` conjunct `with` of that operand) and `VerbRow.intrudes` (`engages` and
+   the row's `contests` is the prize `the body`: seats the target, never refused at `engaged`);
+   `ENGAGED_CLAUSE = "engaged"` beside
+   `COUNTERPARTY_CLAUSE` (`:452-457`), *derived like the other two: a keyed row keys it iff it engages*;
    the loader's keyed-row rule (`:953-969`) adds it to the expected clauses.
-2. **`engine/season/verb_table.yaml`** — each of the seven occupying rows declares the one shared kind
+2. **`engine/season/verb_table.yaml`** — each of the seven engaging rows declares the one shared kind
    `visitor.kept_waiting` beside its own refusal kind (so loader invariant 7 derives it; `04` PART D row
-   25). A keyed row (`tell`) gains the key `occupied: ["tell.refused", "visitor.kept_waiting"]`. A flat
+   25). A keyed row (`tell`) gains the key `engaged: ["tell.refused", "visitor.kept_waiting"]`. A flat
    row lists it second (`emits_on_refusal: ["argument.refused", "visitor.kept_waiting"]`) and the fold
-   keeps it only at the `occupied` clause: `dispatch`'s `person.demanded` is the precedent for a kind a
+   keeps it only at the `engaged` clause: `dispatch`'s `person.demanded` is the precedent for a kind a
    flat row declares and the act earns (`loop/resolve.py::_demand_earned`, `:323-340`; the loader's
    flat-row exemption, `data/verbs.py:1017-1026`). No row is re-keyed.
 3. **`engine/season/loop/resolve.py`** —
@@ -175,15 +183,15 @@ ranks as it ranks any candidate (proposal B). The precedence net is not an input
      `_canonical_order`, shared with `loop/encounter.py` as today.
    - `resolve`: fills the driver's round-local `engaged`; the deferral of an engaged opener's scene
      (returned as `self._deferred`); `_admits` reads `engaged` and a `remaining(pid)` callable and asks
-     the `occupied` clause after the counterparty clause (`:305-312`). `loop/encounter.py` reads the same
+     the `engaged` clause after the counterparty clause (`:305-312`). `loop/encounter.py` reads the same
      mapping and adds to it only for a sitting's attendees. A sibling of `_demand_earned`,
-     `_waiting_earned(kinds, at_occupied)`, drops `visitor.kept_waiting` from a refusal at any other
+     `_waiting_earned(kinds, at_engaged)`, drops `visitor.kept_waiting` from a refusal at any other
      clause.
    - **The claim is about the host.** An `Event` has no subject (`state/carriers.py:246-262`; `04:402`);
      WITNESS takes a deposit's subjects from the actor, the changes and `epistemic.py::act_refs(act)`,
      which returns the act's `subject` operand only (`epistemic.py:137-149`; `loop/witness.py:675-677`).
      For `tell` that is the topic. So `act_refs` gains a second argument, the Event, and for a kind in
-     `data/verbs.py::KEPT_WAITING_KINDS` (derived: the kinds declared at the `occupied` clause) it also
+     `data/verbs.py::KEPT_WAITING_KINDS` (derived: the kinds declared at the `engaged` clause) it also
      returns the operand the row's `counterparty:` names. The one call site passes the Event. Every other
      kind's deposits are byte-identical.
 4. **`engine/season/loop/driver.py::season`** — `self._received` reset at `:472`, promoted in the pass at
@@ -194,7 +202,7 @@ ranks as it ranks any candidate (proposal B). The precedence net is not an input
    each round.
 5. **`engine/season/loop/deliberate.py:175-176`** — `ask_budget` calls that helper.
 6. **`engine/season/queries/world_q.py`** — `office_rank`.
-7. **`engine/season/data/fixtures.py`** — `occupancy: off | seat | seat_and_debit` (control `off`);
+7. **`engine/season/data/fixtures.py`** — `engagement: off | seat | seat_and_debit` (control `off`);
    `precedence_level` and `appointment_level` (`LEVEL_SIGMA` names; first values `minor` and `major`;
    control `None`, at which the group is ordered by the bare draw); each with a `hole_register.yaml`
    row graded `assumption`, ids allocated at build from `references/id_reservations.yaml`.
@@ -202,7 +210,10 @@ ranks as it ranks any candidate (proposal B). The precedence net is not an input
    never breaks a tie"*: *"Where several scenes claim one person's round, office rank is a declared
    weight of a keyed precedence draw (Jordan, A-64) and never a sort key: a lower rank is sometimes seen
    first."* #353 §27's order sentence (already owed under A-9) gains *"…and scenes that claim one
-   person's round are ordered among themselves by that draw."*
+   person's round are ordered among themselves by that draw."* **Until Jordan applies it, the person key of
+   `_canonical_order` ships at its control** (`precedence_level` `None`: the group is ordered by the bare
+   draw, rank weighs nothing), so the shipped tree honours PART D row 36 as ratified; this file edits
+   `_canonical_order` after B08 (C3-K8).
 
 ## Gate (execution artifacts, §0.2): what the measurement must show before this ships
 
@@ -211,7 +222,7 @@ Realm, `build_realm`, seeds 0 to 4, four seasons, `PYTHONHASHSEED=0`, on the tre
 
 | # | reading | passes when |
 |---|---|---|
-| 1 | control: `occupancy: off` | content hash equal to the pre-edit tree at every seed |
+| 1 | control: `engagement: off` | content hash equal to the pre-edit tree at every seed |
 | 2 | executed acts, `seat_and_debit` against `off` | not below 95% at any seed (the crude arm's worst reading is 96.1%) |
 | 3 | admitted face-to-face interactions, `seat_and_debit` against `off` | not below 60% at four seeds of five (the crude host-always-first arm reads 46% to 50%; a design that does no better than that arm fails) |
 | 4 | `visitor.kept_waiting` Events | above zero at every seed, each with a cause chain to its act |
@@ -220,24 +231,24 @@ Realm, `build_realm`, seeds 0 to 4, four seasons, `PYTHONHASHSEED=0`, on the tre
 | 7 | planted: host of rank 4, visitors of rank 7 and rank 0, both present, 400 seeds | the rank-7 visitor is first more often; neither share is 0 or 1; the host keeps his own scene against the rank-0 visitor more often than not and loses it to the rank-7 visitor more often than not, neither with certainty |
 | 8 | planted: the same visit with `precedence_level` on and off | the visit's own roll has identical pool, obstacle terms and levels in both arms; sweeping the host's stance toward the visitor from minimum to maximum leaves every precedence net unchanged |
 | 9 | `seat` against `seat_and_debit` | reported: the persons for whom they differ are those with budget below the round count |
-| 11 | planted: a host engaged in a scene of his own; one visitor's `tell` and another's `capture` on him, 200 seeds | the `tell` is refused at `occupied` whenever it folds after the host's scene; the `capture` is never refused at `occupied` and resolves by its own draw |
-| 12 | **entrenched-world arm (A-80)**: `occupancy: seat_and_debit`, `precedence_level` at its strongest name, `appointments: off`; realm, seeds 0 to 4, six seasons | admitted calls by a lower office on a higher one fall toward zero (reported), **and** the story census (`harness/storybar.py --stories`, `23_STORY_D_story_census_and_gate.md`) reads the four *closed door* shapes of proposal C at a summed rate of at least one instance per two seasons at four seeds of five, and its total over all shapes is not below the `occupancy: off` arm's by more than that arm's seed-to-seed spread |
-| 10 | DELIBERATE's permutation falsifier (`engine/season/tests/test_rem31_grid_suspension.py`, named at `loop/deliberate.py:126-130`) and the `ordp.py` strata-cut arm | the first unchanged; the second reported |
+| 10 | DELIBERATE's permutation falsifier (`engine/season/tests/test_rem31_grid_suspension.py`, named at `loop/deliberate.py:126-130`) and the strata-cut arm (the scratch `ordp.py`, promoted as `python -m engine.season.harness.access SEED SEASONS --strata-cut`) | the first unchanged; the second reported |
+| 11 | planted: a host engaged in a scene of his own; one visitor's `tell` and another's `capture` on him, 200 seeds | the `tell` is refused at `engaged` whenever it folds after the host's scene; the `capture` is never refused at `engaged` and resolves by its own draw |
+| 12 | **entrenched-world arm (A-80)**: `engagement: seat_and_debit`, `precedence_level` at its strongest name, `appointments: off`; realm, seeds 0 to 4, six seasons | admitted calls by a lower office on a higher one fall toward zero (reported), **and** the story census (`harness/storybar.py --stories`, `23_STORY_D_story_census_and_gate.md`) reads the four *closed door* shapes of proposal C at a summed rate of at least one instance per two seasons at four seeds of five, and its total over all shapes is not below the `engagement: off` arm's by more than that arm's seed-to-seed spread |
 
 The two floors (95% in row 2, 60% in row 3) are set from the crude arms and are seeds `[ASSUMPTION;
 medium; Jordan to correct]`: the first is one point under the worst crude reading, the second ten points
 over the arm in which the host always wins. A run that misses row 3 is answered by `precedence_level`
 and by the formation proposals, not by raising `scenes_per_round`.
 
-**Declared hash movers:** `occupancy` other than `off`; `precedence_level` or `appointment_level` other
+**Declared hash movers:** `engagement` other than `off`; `precedence_level` or `appointment_level` other
 than `None` in a world with a rivalry group. No other fixture moves.
 
 ## Falsifier
 
-A visitor of the higher rank first at every seed (a sort, not a draw). A `capture` refused at `occupied`.
-A refusal at `occupied` that no `claim.deposited` Event cites (a still scene, A-81). A received person who also folds a
+A visitor of the higher rank first at every seed (a sort, not a draw). A `capture` refused at `engaged`.
+A refusal at `engaged` that no `claim.deposited` Event cites (a still scene, A-81). A received person who also folds a
 scene of his own in that round. A deferred scene that is neither released later nor still queued. A
-refusal at `occupied` whose counterparty was free. A precedence net that changes when a stance row
+refusal at `engaged` whose counterparty was free. A precedence net that changes when a stance row
 changes. Gate 3 at or below the crude arm.
 
 ## NERS reading (E last)
@@ -262,13 +273,13 @@ changes. Gate 3 at or below the crude arm.
 
 | outcome this file adds | the durable change it leaves (the budget debit not counted) | who can read it afterwards |
 |---|---|---|
-| a call refused at `occupied` | WITNESS deposits a `visitor.kept_waiting` claim in the visitor's ledger (he is the act's own actor, always a witness) and one about the host in the host's (he is present: `with` was read true before `occupied` is asked), and in the ledger of anyone else there | the visitor (`person_q.kept_waiting`, proposal C; `refused_before`); the host (a claim landed about him raises a question); the chronicle (the Event and its deposits) |
+| a call refused at `engaged` | WITNESS deposits a `visitor.kept_waiting` claim in the visitor's ledger (he is the act's own actor, always a witness) and one about the host in the host's (he is present: `with` was read true before `engaged` is asked), and in the ledger of anyone else there | the visitor (`person_q.kept_waiting`, proposal C; `refused_before`); the host (a claim landed about him raises a question); the chronicle (the Event and its deposits) |
 | a host received before his own scene | the visit's own bands write as they do today; the host's scene is not a resolution, it is postponed and resolves in his next round | as today |
 | the host's own scene deferred and never released before the season ends | nothing, and it is not a scene: no act of it was folded or entered the act store. Gate row 5 counts these | the gate |
 | a call admitted | the row's own band writes; this file changes none of them. A band of those rows that writes nothing today (`argue` at Partial and Failure, `tell` at every band, `verb_table.yaml`) is the verb lanes' to close under A-81, named here, not edited | — |
 
 The no-null-scene reading for this file: over a run, the count of scenes holding an act refused at
-`occupied` for which **no** `claim.deposited` Event cites the refusal. Expected 0. Its control is a unit
+`engaged` for which **no** `claim.deposited` Event cites the refusal. Expected 0. Its control is a unit
 arm with `act_refs`' new branch removed: the host-about claim is absent and the assertion goes red.
 
 A-80: this file makes a person harder to reach. What that yields is carried by proposal C (the ways
@@ -285,17 +296,17 @@ for the batch. **Cost class:** small build. **Batch id and register rows:** allo
 **Order (one commit each; every commit ships with the fixture at its control, so its hash is EQUAL
 until the last line of the commit that flips it).**
 
-| # | files and symbols (single owner) | call sites changed | data rows | named tests (`engine/season/tests/test_scene_access_occupancy.py` unless said) |
+| # | files and symbols (single owner) | call sites changed | data rows | named tests (`engine/season/tests/test_scene_access_engagement.py` unless said) |
 |---|---|---|---|---|
 | 0 | prerequisite, not this batch: A-9's edits 1 to 4; `resolve.py::rival_key` (`18_DETERMINISM_rival_acts_in_one_fold.md`) | — | — | theirs |
-| 1 | `data/verbs.py`: `VerbRow.occupies`, `VerbRow.intrudes`, `OCCUPIED_CLAUSE`, `KEPT_WAITING_KINDS`; loader: the flat-row exemption list gains the kind; a keyed occupying row must key `occupied` | none | `verb_table.yaml`: the flat lists of `argue`, `challenge`, `give` gain `"visitor.kept_waiting"`; the keyed rows `tell` and `lie` gain `occupied: ["tell.refused", "visitor.kept_waiting"]`; `accept`, `capture` unchanged (they intrude) | `test_occupies_is_read_off_the_cell_and_names_no_verb` (the set equals the rows whose cell asks `with` of the counterparty; a planted row with the conjunct joins it); `test_a_body_prize_row_intrudes_and_is_not_in_the_refusable_set` |
-| 2 | `data/fixtures.py`: `occupancy` (`off` / `seat` / `seat_and_debit`, shipped `off`); `loop/driver.py::SeasonDriver`: `_engaged`, `_deferred`, `_received` (season/round locals, reset at `:472` and at the top of the round loop `:486`), helper `_remaining(pid)` | `loop/deliberate.py:175-176` (`ask_budget` calls `_remaining`) | — | `test_occupancy_off_reproduces_the_base_hash` (seeds 0, 1, 2; realm, two seasons: `bacd687f…`, `8aae8412…`, `89109213…` at this tree, re-read after A-9's re-pin) |
-| 3 | `loop/resolve.py`: `_admits` (the `occupied` clause after `:305-312`), `_waiting_earned`, the scene-level deferral in `resolve` (before `w.acts.append`, `:1033`), seating on admit | `loop/driver.py::season` after `self.resolve(...)` (`:498`): re-queue `_deferred` at the head of `_queued[actor]`, withdraw the release debit, drop its acts from the round's `acts` before `:519`; `loop/encounter.py`: read `_engaged` | — | `test_a_second_caller_is_refused_at_occupied_and_the_first_is_not`; `test_a_person_received_does_not_fold_his_own_scene_that_round_and_folds_it_the_next`; `test_a_capture_is_never_refused_at_occupied` (gate row 11); `test_a_cohort_is_never_engaged` |
-| 4 | `epistemic.py::act_refs(a, e=None)` | `loop/witness.py:675-677` passes the Event | — | `test_the_kept_waiting_claim_is_about_the_host_and_lands_in_two_ledgers` (the no-null reading; mutation arm: the branch removed, red); `test_every_other_kind_deposits_as_before` (hash EQUAL at `occupancy: off`) |
-| 5 | `loop/driver.py::season` (`:519-534`): promote admitted occupying and intruding acts' scene ids into `_received[counterparty]`; `_remaining` subtracts `Scene.PLAIN_COST * len(...)` at `seat_and_debit` | — | — | `test_the_budget_query_falls_by_one_per_scene_received_and_no_event_carries_it` (gate row 6); `test_a_person_with_no_scene_action_left_receives_no_one` |
+| 1 | `data/verbs.py`: `VerbRow.engages`, `VerbRow.intrudes`, `ENGAGED_CLAUSE`, `KEPT_WAITING_KINDS`; loader: the flat-row exemption list gains the kind; a keyed engaging row must key `engaged` | none | `verb_table.yaml`: the flat lists of `argue`, `challenge`, `give` gain `"visitor.kept_waiting"`; the keyed rows `tell` and `lie` gain `engaged: ["tell.refused", "visitor.kept_waiting"]`; `accept`, `capture` unchanged (they intrude) | `test_engages_is_read_off_the_cell_and_names_no_verb` (the set equals the rows whose cell asks `with` of the counterparty; a planted row with the conjunct joins it); `test_a_body_prize_row_intrudes_and_is_not_in_the_refusable_set` |
+| 2 | `data/fixtures.py`: `engagement` (`off` / `seat` / `seat_and_debit`, shipped `off`); `loop/driver.py::SeasonDriver`: `_engaged`, `_deferred`, `_received` (season/round locals, reset at `:472` and at the top of the round loop `:486`), helper `_remaining(pid)` | `loop/deliberate.py:175-176` (`ask_budget` calls `_remaining`) | — | `test_engagement_off_reproduces_the_base_hash` (seeds 0, 1, 2; realm, two seasons: `bacd687f…`, `8aae8412…`, `89109213…` at this tree, re-read after A-9's re-pin) |
+| 3 | `loop/resolve.py`: `_admits` (the `engaged` clause after `:305-312`), `_waiting_earned`, the scene-level deferral in `resolve` (before `w.acts.append`, `:1033`), seating on admit | `loop/driver.py::season` after `self.resolve(...)` (`:498`): re-queue `_deferred` at the head of `_queued[actor]`, withdraw the release debit, drop its acts from the round's `acts` before `:519`; `loop/encounter.py`: read `_engaged` | — | `test_a_second_caller_is_refused_at_engaged_and_the_first_is_not`; `test_a_person_received_does_not_fold_his_own_scene_that_round_and_folds_it_the_next`; `test_a_capture_is_never_refused_at_engaged` (gate row 11); `test_a_cohort_is_never_engaged` |
+| 4 | `epistemic.py::act_refs(a, e=None)` | `loop/witness.py:675-677` passes the Event | — | `test_the_kept_waiting_claim_is_about_the_host_and_lands_in_two_ledgers` (the no-null reading; mutation arm: the branch removed, red); `test_every_other_kind_deposits_as_before` (hash EQUAL at `engagement: off`) |
+| 5 | `loop/driver.py::season` (`:519-534`): promote admitted engaging and intruding acts' scene ids into `_received[counterparty]`; `_remaining` subtracts `Scene.PLAIN_COST * len(...)` at `seat_and_debit` | — | — | `test_the_budget_query_falls_by_one_per_scene_received_and_no_event_carries_it` (gate row 6); `test_a_person_with_no_scene_action_left_receives_no_one` |
 | 6 | `queries/world_q.py::office_rank`; `loop/resolve.py::rival_key` (the `("round", person)` key), the precedence net in `_canonical_order` (`engine/dice_engine/sigma_leverage.py::roll_net`, `levels_to_net_sigma`, `net_boost`; `state/ids.py::draw_factory`) | `loop/encounter.py:72` inherits through `_canonical_order` | `data/fixtures.py`: `precedence_level`, `appointment_level` (names of `sigma_leverage.py::LEVEL_SIGMA`; shipped `None`) | `test_scene_access_precedence.py`: `test_the_higher_office_is_usually_first_and_never_always` (gate row 7, 400 seeds); `test_the_host_is_a_claimant_on_his_own_round`; `test_precedence_changes_no_input_of_the_visits_own_roll`; `test_a_stance_sweep_leaves_every_precedence_net_unchanged` (gate row 8); `test_no_scene_outside_a_group_moves` |
-| 7 | `harness/access.py` (new instrument; `python -m engine.season.harness.access SEED SEASONS [--null-scenes]`): prints the readings of audit §1.3 and gate rows 2 to 5, 9 and 12 from a run. It promotes this lane's scratch probes (`occ.py`, `face.py`); it adds no rule | none | — | `test_the_access_instrument_counts_a_planted_kept_waiting` (one planted world; `assert checked >= 1`) |
-| 8 | the measurement: run rows 2, 3, 5, 9, 10, 12 of the gate on seeds 0 to 4; flip `occupancy` to `seat_and_debit` and the two levels to `minor` / `major` only if rows 2, 3, 5 and 12 pass; one declared re-pin | the pinned goldens' one owner (`01_CORE_tests_one_golden_owner.md`) | — | the re-pin, said plainly in the commit |
+| 7 | `harness/access.py` (new instrument; `python -m engine.season.harness.access SEED SEASONS [--null-scenes] [--strata-cut]`): prints the readings of audit §1.3 and gate rows 2 to 5, 9, 10 and 12 from a run. It promotes this lane's scratch probes (`occ.py`, `face.py`, `ordp.py`); it adds no rule | none | — | `test_the_access_instrument_counts_a_planted_kept_waiting` (one planted world; `assert checked >= 1`) |
+| 8 | the measurement: run rows 2, 3, 5, 9, 10, 12 of the gate on seeds 0 to 4; flip `engagement` to `seat_and_debit` and the two levels to `minor` / `major` only if rows 2, 3, 5 and 12 pass; one declared re-pin | the pinned goldens' one owner (`01_CORE_tests_one_golden_owner.md`) | — | the re-pin, said plainly in the commit |
 
 **Control and falsifier per commit:** the control is the fixture at `off` / `None` (hash EQUAL); the
 falsifiers are the list under *Falsifier* above, each observable by a named test.
@@ -307,7 +318,8 @@ falsifiers are the list under *Falsifier* above, each observable by a named test
   rest of commit 3 does not wait on it.
 - *Commit 8's two floors* (95%, 60%) and gate row 12's rate are seeds, not measured targets. Missing:
   the first reading on the tree where A-9 and `14_VERBS_SOCIAL1_A_formation.md` have landed.
-- *The Layer 1 amendment* (edit 8 above) is drafted text. Missing: Jordan's amendment.
+- *The Layer 1 amendment* (edit 8 above) is drafted text. Missing: Jordan's amendment; until then the person
+  key ships at its control (C3-K8).
 
 ## Cost class
 

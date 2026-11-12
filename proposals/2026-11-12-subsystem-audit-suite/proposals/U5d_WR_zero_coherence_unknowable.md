@@ -1,6 +1,11 @@
 # U5d-WR — at zero coherence a person cannot be understood: legibility as the one dial on what others read of him
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §1 and §2, C3-L4 (3): reader 1 and gate (a) no longer cite `world_q.projection` (deleted by `17_CENSUS_C1A_01` D2); the per-holder view is `account`, the person's own ledger (`11_GO_player_surface_contract_B.md`). U1 §2 (one interface for the player view): edit 4's `legible` is a slot of `state/carriers.py::View`'s one closed list, added by GO with its reader, not a field this file coins. U3 §6.3: `Person.coherence` has no writer and no carrier in the suite; the readers ship and read nothing until one exists (INCOMPLETE, as the file already states). Batch and tier added (U3 B35; R3 7b-0).
+
 ## Status: PROPOSED, design-first (a plan for a later implementation lane; nothing here was executed)
+
+Lands in batch: B35 (WR thread), last in U3 §1 item 35.
+Depends on: `01_CORE_reason_trail_in_the_act_store.md` (B09); `10_DICE_believed_odds_have_a_prior.md` (B05); `11_GO_player_surface_contract_B.md` (B34, `account` and the `View` list); a writer of `Person.coherence` (CP-T07-02; no carrier in the suite, U3 §6.3).
 
 Author: U5d closure lane (Fable), 2026-11-12, on Jordan's answer A-43 (D-58), which took neither offered
 option. Carries the D-58 question of `unified/DECISIONS_FOR_JORDAN.md` and
@@ -32,9 +37,10 @@ coherence, 0 at zero, monotone; the curve between is a fixture `[ASSUMPTION; Jor
 names, each at its single owner:
 
 1. **Reasons.** What a witness learns of *why* he acted. The reason trail is
-   `01_CORE_reason_trail_in_the_act_store.md`'s; the per-holder view is `world_q.projection`
-   (`queries/world_q.py:4374-4441`). At legibility 0 his acts are still seen (an Event is an Event) and
-   carry no reason for any other holder.
+   `01_CORE_reason_trail_in_the_act_store.md`'s; the per-holder view is `account`, the holder's own
+   ledger (`11_GO_player_surface_contract_B.md`; `world_q.projection` is deleted by `17_CENSUS_C1A_01`
+   D2). At legibility 0 his acts are still seen (an Event is an Event) and carry no reason for any other
+   holder.
 2. **Prediction.** What another person expects him to do. The reader is
    `10_DICE_believed_odds_have_a_prior.md`'s believed odds: the weight on what the believer holds about
    him is multiplied by legibility, so at 0 the estimate is the prior alone (no better than a draw).
@@ -64,12 +70,14 @@ below.
    the reader **believes** it (a claim in his own ledger; AX-2), never from World truth. A reader who
    holds no claim about his coherence reads legibility 1.0 and is simply wrong in his predictions: the
    unknowable man is discovered by being wrong about him.
-4. `11_GO_player_surface_contract_B.md`'s view: one field per shown person, `legible: band`.
+4. `11_GO_player_surface_contract_B.md`'s view: one slot of `View`'s closed list (U1 §2), `legible`, a
+   band per shown person, added by the GO lane with its reader (`person_q.legibility` over the viewer's
+   own claim), not coined here.
 
 ## Gate (execution artifact)
 
 On a hand-built world with one person's coherence written to 0 and a witness holding a claim of it:
-(a) the witness's projection of his next act carries no reason; (b) the witness's believed odds for his
+(a) the witness's `account` row of his next act carries no reason; (b) the witness's believed odds for his
 next act equal the prior; (c) his `tell` deposits no usable claim; (d) his seat-`hold`s are unchanged
 and he still acts. Control: the same world with coherence at ceiling reproduces today's readings.
 
@@ -94,4 +102,4 @@ A-40. E: "you can see what he does and no longer why" is a rule a player can hol
 
 ## Cost class
 
-Design-first; small build once `Person.coherence` is written.
+Design-first; small build once `Person.coherence` is written. Tier: `sonnet` (R3 7b-0).

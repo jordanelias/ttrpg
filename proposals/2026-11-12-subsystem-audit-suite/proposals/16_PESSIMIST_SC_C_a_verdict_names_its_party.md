@@ -1,6 +1,17 @@
 # 16 · PESSIMIST · SC · C — A verdict names its party: the sentence is witnessed as done to someone, and is credited as the judge is credited
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `unified/U5_CONFLICTS_U5c.md` C-15 (this file is the
+single carrier of "a restraint edge read as two ends"; `08_FI_04` §1/§3 and `14_VERBS_SOCIAL1_C` defer to it) and C-36
+(A-38: a verdict serves the petitioner, or a seat he names; the clause added as resolution item 4); `R5_READ.md` §1
+(CONFORMS), §2 (A-38 clause; A-39 not engaged), §7/§7b (tests, tier); U1 glossary *party* (the one acted on is the
+**counterparty**, the one served the **beneficiary**; "patient" is refused: the proposed roster is named
+`counterparty_kinds`); U3 B27, §6.2 (`p4_verdict.py`, `p3_hearing_ends.py`, `realm_sc.py` are not in the repository).
+Changed: the roster's name, resolution item 4 added, the gate's test names.
+
 ## Status: PROPOSED (not ratified by being written; `CLAUDE.md` §2)
+
+Lands in batch: **B27** (SC with IN, CHAR), after `05_SC_acquittal.md` (B27, SC-P6, for item 3) and before
+`16_PESSIMIST_SC_D`. Depends on: `08_FI_06_testimony-names-a-hand.md` (B11) for a told sentence naming its judge.
 
 Finding: `audits/16_PESSIMIST_SC.md` F-PES-SC-03 (§2.4, §2.3). Runs: `runs/PES_SC/p4_verdict.py`,
 `p3_hearing_ends.py` (b), `realm_sc.py` (seed 1). Edit 1 is SC's; edit 2 touches `person_q.regard`,
@@ -65,6 +76,12 @@ second case against him the same season.
    the empty-changes rule no longer lands the claim on the act's subject; the claim names the case file
    and, through `DOCKET_PETITION`, the matter. Until SC-P6 lands the asymmetry stays and is this
    proposal's stated residue.
+4. **The party a verdict serves is the petitioner, or a seat he names** (A-38; C-36). The sentenced party is
+   the counterparty (items 1-3); the one served is the beneficiary. Where the petitioner names a seat, the
+   disposal edge's object is that seat: the existing `oblige` with the seat as object, read as two ends by
+   item 1 like any imposed edge. A remedy to his person is a `damages` disposal kind: design-first, a store
+   movement the bench orders; not built here and named for the SC lane's verdict proposals
+   (`19_LACUNA_verdict_ladder_and_reversal.md`). A-39 (appeal on new grounds only) is not engaged by this file.
 
 ## Exact edits
 
@@ -79,7 +96,7 @@ second case against him the same season.
    new name. The docstring's *"any other subject, including a non-`hold` Tenure id … passes through"*
    is narrowed to the kinds that still do.
 2. **`engine/season/rosters.yaml` and `queries/person_q.py::PAIRED_KINDS`** — a closed roster
-   `patient_kinds` (`matter.determined`, `arrest.made`), unioned into `PAIRED_KINDS`
+   `counterparty_kinds` (`matter.determined`, `arrest.made`), unioned into `PAIRED_KINDS`
    (`person_q.py:226`, today *the deed kinds no single row emits*). The reason is that definition's own
    (`:223-225`): a paired kind is one *"whose claim subject may be the doer OR the patient"*, and after
    edit 1 these two are. Without it `attributed_deeds` reads `(party, matter.determined, True)` as an act
@@ -91,7 +108,7 @@ second case against him the same season.
    judge, strangers are unmoved, and the convict's own regard for his judge no longer rises. Declared;
    it removes the inversion measured in the audit's §2.4.
 3. **`engine/season/queries/person_q.py::deeds_judged`** — a third returned half, `sentenced`: over
-   every deed claim `(referent, k, True)` with `k` in `patient_kinds` that `p` holds and whose paired
+   every deed claim `(referent, k, True)` with `k` in `counterparty_kinds` that `p` holds and whose paired
    doer (where the pairing names one) is not `referent`, the sum of `−relation`, with
    `relation = 1 + regard_gain × clamp(stance_toward(p, doer) / STANCE_MAX, −1, 1)` when a doer is
    paired and `1` when none is (a told copy carries no sighting today; `08_FI_06_testimony-names-a-hand.md`
@@ -105,6 +122,13 @@ second case against him the same season.
    is named, not made, here.
 
 ## Gate (an execution artifact)
+
+The probes were lane scratch (not in the repository). NEW `engine/season/tests/test_verdict_witnessed.py`:
+`test_every_witness_holds_a_claim_naming_the_convicted` (all three disposal kinds; the never-determined control holds
+none), `test_judge_regard_signed_by_stance_toward_the_convicted`, `test_sentence_gain_orders_three_planted_hearers`,
+`test_sentence_gain_zero_moves_no_regard`, `test_failed_determination_publishes_no_accused_after_sc_p6` (after
+`05_SC_acquittal.md`). Command: `python -m pytest engine/season/tests/test_verdict_witnessed.py -q`. The scratch reading,
+once committed:
 
 `p4_verdict.py` after edits 1–2: "new claims naming the party" is at least 1 for every witness in all
 three arms, 0 in the control; regard for the judge is 0.0 for a witness with no stance toward the
@@ -133,4 +157,7 @@ naming the party. Present today for every person.
 
 ## Cost class
 
-Edit 1–2: edit. Edits 3–4: small build behind a control at 0 (design-first only in its magnitude).
+Edit 1–2: edit. Edits 3–4: small build behind a control at 0 (design-first only in its magnitude). Tier: `sonnet`,
+effort `high`; the `damages` disposal kind (resolution item 4) is design-first and not built here. Hash movers
+declared: any world where `matter.determined` or `arrest.made` is emitted (edits 1-2); none from edits 3-4 at
+`sentence_gain = 0`. Lands it: B27, order 1 → 2 (one commit, the PAIRED_KINDS change with the widened ends) → 3 → 4.

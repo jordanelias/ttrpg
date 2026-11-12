@@ -2,14 +2,18 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-41**, **A-22**, **A-17** and the land rulings (this file was written before the answers were recorded and cites none). Edit 7 ("the survivors, reshaped by the research") is closed by the answers: the south's part is A-17 (fought, ranked third); forced labour keyed on caste took neither option (A-41: no instrument; regard, vote blocks, tiered practice); the sale of office was closed by the synthesis (composed, no form). The order's bearer (edit 1) carries an order that binds only those its issuer commands (A-22). The commission that forbears war and treaty (edit 5) is read against the land rulings: a commissioned officer who wins a field still chooses to seize, occupy or withdraw, and a commission's forbearance clause is what makes a seizure a breach.
 
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (COL_F: CONFORMS; `[UNVERIFIED]` doer of `field.won`), §7 (INCOMPLETE: that doer; edit 4 may be inert), 7b.0; `U1_OWNERS_AND_VOCABULARY.md` D-U1-11k (`distance`); `U3_CONFLICT_LEDGER.md` C3-L9 (`eligible_from` is a table); the colonial files as reconciled (COLONIAL-B §2 withdrawn: the four rows are their verb lanes'; `requisition`'s Failure kind is `requisition.resisted`). Changed: `remove` → `distance` throughout; edit 1 cites `issue`'s owner, not COLONIAL-B §2, and reads the bearer's telling under A-21; edit 2's `amounts` are on two seeded oaths (SYNTHESIS-B: the Grand Master's has no instrument); edit 3's eligibility is a table entry; **edit 7's body follows this file's first `Reconciled:` line** (§11 item 2 closed by the synthesis; item 3 answered by A-41, not "Jordan's"); edit 8's refusal kind is `requisition.resisted`. The `field.won` doer stays `[UNVERIFIED]`, with this file's one-edge fallback.
+
 ## Status: PROPOSED (an executable plan for a later session; not ratified by being written, CLAUDE.md §2)
+
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B40** (`U3_DEPENDENCY_ORDER.md` §1 item 40, "the four grounding files"), after COLONIAL-E. Depends on: `15_INSTITUTIONS_COLONIAL_A` (B32), `_B`, `_C`, `_D` (B33), `_E` (B40), `15_INSTITUTIONS_VENICE_grounding_E` (B40, edits 1 and 3); CP-T09-08 (`_eff_dispatch`, no carrier in the suite: edit 1's bearer waits on it). Lane tag: FA. Tier: `sonnet`, item by item, effort `high` for edits 2 and 8, `medium` for the content edits; one `opus` read of gate 6's report. Named test: `engine/season/tests/test_inst_col_f.py` for the hand-built gates 2 to 5 (decidable: they are folds, not report runs); gates 1 and 6 are runs quoted in the commit. Standing sentences: *Pool*, *Failure writes*, *Draw keys* — no roll, contested row or draw is added (A-6 to A-8, A-81, A-30 are the composed verbs').
 
 Source: `audits/15_INSTITUTIONS_COLONIAL.md` §16 (the re-grounding of 2026-11-12) and
 `unified/RESEARCH_MAP_INSTITUTIONS_B.md` §2.2, §4 (rows M-14 to M-28). Batch C-6 of that audit's plan.
 Depends on and does not redo: `15_INSTITUTIONS_COLONIAL_A_instruments.md` with
 `15_INSTITUTIONS_SYNTHESIS_A_one_kit.md` edit 1 (the registry, its `forms:` and `seeded:` sections, the
-readers `dues`, `kept`, `breaches`); `…_COLONIAL_B_distance.md` (`remove`; the graded `issue`; the border
-rule; the far superior's seat, X-13); `…_COLONIAL_C_audit_and_charter.md` (rows `audit`, `quo_warranto`;
+readers `dues`, `kept`, `breaches`); `…_COLONIAL_B_distance.md` (`distance`; the border rule; the far
+superior's seat, X-13; the graded `issue` is `14_VERBS_BINDING_D_orders.md`'s); `…_COLONIAL_C_audit_and_charter.md` (rows `audit`, `quo_warranto`;
 `prescription_seasons`); `…_COLONIAL_E_scenario.md` (the report `harness/institution`);
 `15_INSTITUTIONS_VENICE_grounding_E_what_the_tree_adds.md` edits 1 and 3 (the paired officers; the
 audit Record's recital), which this file uses and does not repeat.
@@ -56,24 +60,26 @@ home and loses the moment").
 
 No obstacle term is added. The enforcing agent is a person, and the engine already has what he does:
 
-1. the issuer `issue`s the writ **in the room** to a sworn man of his own seat (co-located: not rolled,
-   COL-B §2) and `give`s him the Record;
+1. the issuer `issue`s the writ **in the room** to a sworn man of his own seat (at `distance` 0;
+   `issue`'s row is `14_VERBS_BINDING_D`'s) and `give`s him the Record;
 2. he `dispatch`es the man (CP-T09-08, as `14_VERBS_BINDING` adopts it); the journey is the man's own
    legs and scene budget (`loop/effects_migration.py::_relocate`);
 3. arrived, the bearer `tell`s the writ's terms to the addressee. `tell` is a draw on the **bearer's**
-   capability at `remove` 0. A landed telling deposits the content claim, which is FA-P1's test for a
+   capability at `distance` 0. Under A-21 the terms also travel with the news of the issue; the bearer
+   is one sure way the news arrives, and he is there to see the answer. A landed telling deposits the content claim, which is FA-P1's test for a
    writ being addressed to someone (COL-A edit 5: "he holds it, or his own ledger holds its content
    claim") `[UNVERIFIED: that a content claim received by `tell`, and not by the issue's own deposit,
    satisfies `writs_addressed`; if it does not, one clause there, owner FA-P1]`;
 4. the bearer is present when the addressee answers, so the answer is witnessed first-hand by the
-   issuer's own man: what COL-B's Overwhelming band buys by luck, presence buys by cost.
+   issuer's own man: presence buys by cost what a far issuer otherwise learns only if someone travels to
+   tell him.
 
 What it costs: a person's seasons, the chance he does not arrive, and what he chooses to say. A bearer
 who softens or sharpens the terms has made an ordinary `lie` or an ordinary true telling; the issuer
 learns which only if someone tells him.
 
 **The one edit** is to proposal E's report: a line per seed counting orders that went by bare `issue`
-at `remove` ≥ 1 and orders that went by bearer, with each arm's band shares.
+at `distance` ≥ 1 and orders that went by bearer, with each arm's band shares.
 
 ### Edit 2 — the lord's reward (M-18) · `instruments.yaml: forms.homage`; `data/instruments.py`; `queries/world_q.py::dues` · small build
 
@@ -100,8 +106,9 @@ read as "the commander is the grantee or sworn to his seat", which is the same t
 
 Loader (`data/instruments.py`): `after.kind` a `DEED_KINDS` member; `after.of` in `{grantor, grantee}`
 and not the clause's own `by:`; `within` a positive int; a clause carries `every:` or `after:`, never
-both. `homage`'s row gains the clause above; `amounts` for it is content on the three seeded oaths
-`[ASSUMPTION; 1 unit of the house's home matter kind; sweep {0, 1, 2}; Jordan to correct]`.
+both. `homage`'s row gains the clause above; `amounts` for it is content on the two seeded `homage`
+instruments (SYNTHESIS-B §3; the Grand Master's oath has none) `[ASSUMPTION; 1 unit of the house's home
+matter kind; sweep {0, 1, 2}; Jordan to correct]`.
 
 **Why stores and not a grant of ground.** A clause names one deed kind. `transfer.made` makes the reward
 cost the lord what he holds, so a war that took stores can pay its victors and a war that took nothing
@@ -127,8 +134,8 @@ has breached on his side, visibly to the host.
 
 **The hostage as pupil is composed and needs no row.** While he resides at the host's settlement the
 ward may `oblige` to a seat of the host's (his own act, through the one chooser); that puts him on the
-host's establishment and, where the host's seats name `eligible_from` that roll, makes him eligible for
-them. He may come home holding a foreign oath. The reading is in edit 8.
+host's establishment and, where `rosters.yaml: tables.eligible_from` names that seat's list for the
+host's seats (VENICE-C §2 as reconciled), makes him eligible for them. He may come home holding a foreign oath. The reading is in edit 8.
 
 ### Edit 4 — the farm hardens (M-22) · `instruments.yaml: forms.farm` · one cell
 
@@ -191,10 +198,12 @@ to severity of sanction"); `PMP:485-489`, `:641` (the declared figure against th
 
 ### Edit 7 — the survivors, reshaped by the research · the audit's §11 only
 
-No engine edit. Audit §11 item 2 (venality) gains what five sources say follows from a sold office, and
-a third shape (sale only in a declared emergency, `PHS:369-372`). Item 3 (forced labour) gains the
-tree's one finding on a draft: it was reciprocal (`PGS:95`), so option A's form must carry the
-grantor's return or it is not the institution. Both stay Jordan's.
+No engine edit. Audit §11 item 2 (venality) gained what five sources say follows from a sold office, and
+a third shape (sale only in a declared emergency, `PHS:369-372`); the synthesis closed it (a sale is a
+composed `transfer` then `confer`; no form `purchase`). Item 3 (forced labour) gained the tree's one
+finding on a draft, that it was reciprocal (`PGS:95`); Jordan answered it with neither option (A-41: no
+corvee instrument; caste is regard, vote blocks and informally tiered practice), so no form is built and
+the finding is kept as a referent. Neither stays open.
 
 ### Edit 8 — six stories and their readings · proposal E's report (`harness/institution`) · small build inside C-5's report
 
@@ -206,7 +215,7 @@ the audit's §8 rows.
 |---|---|---|
 | the unpaid bond | `PHS:461` | `field.won` with a sworn house's men; no `transfer.made` from the lord's rung to that house inside the reward term; that house's `kept` on its `homage`; its band on the lord's next summons |
 | invited in | `PA:64-98`; `GM:290-291` | `covenant.offered` to a seat under another root by a holder at war at home or holding a breach against his lord; a foreign `march.declared` on his side after it |
-| the garrison that ate the town | `HCC:71`, `:67` | repeated `requisition.taken` by an obligee of a far seat at his own residence; the cohort's `regard` for that seat by season; the first `requisition.refused` |
+| the garrison that ate the town | `HCC:71`, `:67` | repeated `requisition.taken` by an obligee of a far seat at his own residence; the cohort's `regard` for that seat by season; the first `requisition.resisted` |
 | the post let go | `HCC:138` | a far officer's `oblige` closing by term with no `transfer.made` from his conferrer in the term; the conferrer's purview over the place before and after; no `march.declared` following |
 | the privilege carried off | `PGS:84` | a second `staple` issued elsewhere to a body that holds one; the first unrenewed; `exchange.made` by its obligees at each place by season |
 | the hostage who came home another's man | `RTP:360-363` | a ward's `oblige` to a seat of the host's during a `wardship`; at term, his `residence.changed` home; his seats there and whose oath he still holds |
@@ -216,7 +225,7 @@ the audit's §8 rows.
 | # | file (single owner) | edit | class |
 |---|---|---|---|
 | 1 | `engine/season/harness/institution` (proposal E's report) | the bearer line | edit |
-| 2 | `engine/season/instruments.yaml: forms.homage`; `data/instruments.py`; `queries/world_q.py::dues` (and `person_q.kept`'s period walk, which shares it) | clause key `after:` with `within:`; one clause on `homage`; `amounts` on three seeded oaths | small build |
+| 2 | `engine/season/instruments.yaml: forms.homage`; `data/instruments.py`; `queries/world_q.py::dues` (and `person_q.kept`'s period walk, which shares it) | clause key `after:` with `within:`; one clause on `homage`; `amounts` on the two seeded `homage` instruments | small build |
 | 3 | `instruments.yaml: forms.wardship` | one `due` on the sender | edit |
 | 4 | `instruments.yaml: forms.farm` | `hardens: true` | edit |
 | 5 | `data/instruments.py`; `instruments.yaml: forms.commission`, `seeded:` | `over: any`; two `forbears`; two seeded commissions | edit |
@@ -262,7 +271,7 @@ together (shared file: the report); otherwise 2 to 5 are their own batch (shared
 - "Nothing changes with the rows absent": gate 1.
 - "`after:` ties the reward to service": gate 2's planted failure not reddening.
 - "A bearer changes an order's odds": gate 6 printing equal band shares in both arms over the five
-  seeds, with the arms' `remove` values printed and unequal.
+  seeds, with the arms' `distance` values printed and unequal.
 - "The farm hardens": gate 4's two arms equal.
 - "The research's shapes arise unscripted": if across the five seeds no story of edit 8 shows in the
   mechanism world and none in the control, the forms are expressible and unplayed; if they show equally
@@ -298,6 +307,6 @@ edit 1 depends on `dispatch` writing something, which is the BINDING lane's.
 
 The Mongol patent, the resident and the subsidiary treaty, the mission, the *encomienda* by name and the
 companies' boardroom remain memory-grade (map §3); nothing here is built on them. A relay or road that
-shortens `remove`, a reach cap, a stored entrenchment count, a price for an office and a billeting
+shortens `distance`, a reach cap, a stored entrenchment count, a price for an office and a billeting
 order as a kind of its own are refused in the audit's §16.2 with their reasons. The paired officers and
 the audit's recital are the Venice grounding proposal's edits 1 and 3.

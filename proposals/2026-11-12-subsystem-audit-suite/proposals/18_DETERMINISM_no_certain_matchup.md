@@ -2,6 +2,12 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §1) — the form is closed by the decision register (the upset happens inside the fight, at the deciding blow); the option not taken stays not taken. Combat already draws from the one sampler; A-31 (longer fights) recalibrates the damage this riposte carries.
 
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row no_certain_matchup, §2 row head and "Option not taken", §7, 7b; `unified/U3_DEPENDENCY_ORDER.md` §1 item 15, §3.1, §4.1 rows 51, 58; `unified/U1_GLOSSARY.md` "riposte"). Changed: (1) the riposte's draw is keyed `H(seed, tick, scene id, "upset:<turn>")` through the one `Draw` owner (A-30; B06), replacing "the same draw position the flip uses today", an ordinal-stream argument A-30 retires; gate 3's control is restated for a keyed draw; (2) the tracker restore is specified (a snapshot taken at the site that sets `result`); (3) "Option not taken, for the orchestrator" is closed by ladder step 5 (this file's own reading; R5 §2): not a Jordan item; (4) the chance is re-read after A-31/A-79 only if the deciding-blow rate changes; (5) the E5 probe becomes a named test in a named file; (6) batch and tier lines.
+
+Depends on: `03_PC_typed_outcome_one_door.md` (B14; R-PC-03 is superseded by this file, U3 §4.1 row 51); `14_VERBS_PHYSICAL_A_custody_and_force.md` A3 (B15; the mortal-wound draw that follows any felling); `16_PESSIMIST_GO_keyed_draw_no_recorder.md` and `11_GO_one_draw_owner.md` (B06, the keyed draw). `03_PC_duel_round_and_approach_B.md` (B16) depends on this file, not the reverse (§4.1 row 58, REV).
+Lands in batch: B15 (lane PC), after `16_PESSIMIST_PC_D` and before `16_PESSIMIST_PC_A`; one commit with its test, inside B15's one re-record of the combat goldens.
+Tier: sonnet / high.
+
 ## Status: PROPOSED
 
 Source: `audits/18_DETERMINISM_SWEEP.md` C-13; `audits/03_PC_audit.md:332` (*"at season scale heavy
@@ -32,25 +38,30 @@ unchanged in distribution (same probability, same point in the fight).
 **Conflict named:** the form of the upset was recorded as Jordan's call (`config.py`, ED-PC-0036;
 `03_PC_duel_round_and_approach_B.md:261` and the PC audit §11 item 3). The standing rule (2026-11-12,
 later) answers whether: the season must see upsets (ladder step 1). It does not answer the form; this
-proposal takes the smallest diegetic form (ladder step 5) and the two options are listed below for the
-orchestrator.
+proposal takes the smallest diegetic form (ladder step 5); the option not taken is recorded below as
+closed, not as a question.
 
-- **The riposte.** At the felling that decides a fight, before the trackers are final, draw once on the
-  fight's own `rng` (the same draw position the flip uses today, so the stream is unmoved): with
+- **The riposte.** At the felling that decides a fight, before the trackers are final, draw once, keyed
+  `H(seed, tick, scene id, "upset:<turn>")` through the one `Draw` owner (A-30; B06), so the draw consumes
+  no position of the fight's own stream: with
   probability `UPSET_FLOOR` the felling blow is turned — the would-be-felled party lands a counter
   through **the one damage site** (`_wound('riposte', loser, winner, d)`, `d` = the damage the felling
-  blow carried), the felling is undone on his tracker (restored to the wound state before that blow),
-  and the fight continues from that state (it is not ended by fiat; the riposte may itself fell, or the
+  blow carried), the felling is undone on his tracker (the loser's wound state is set to the snapshot
+  taken immediately before the deciding blow was applied; the snapshot is taken at the site that sets
+  `result`, `wrapper.py:618-624`), and the fight continues from that state (it is not ended by fiat; the riposte may itself fell, or the
   fight may run on and end otherwise). Emitted as `riposte(turn, by)`, an in-model event.
 - **Graded and recoverable.** Because the fight continues, the riposte is not a reversed verdict: the
   underdog may fell, wound or merely survive, by the dice that follow. The `result` integer is whatever
   the continued fight ends with; the flip is deleted.
 - **Odds.** `UPSET_FLOOR` stays the designer's number (ED-PC-0036), now the chance that a decisive
-  blow is turned. The mortal-wound draw (`14_VERBS_PHYSICAL_A` A3) still follows any felling.
+  blow is turned. The mortal-wound draw (`14_VERBS_PHYSICAL_A` A3) still follows any felling. A-31's
+  longer fights and A-79's fight obstacle (0.8) change how many blows a fight has, not this chance; the
+  floor is re-read after B15's calibration only if the deciding-blow rate per fight changes.
 
-Option not taken, for the orchestrator: a per-exchange critical opening inside `core.resolve` (a floor
-on the defender's landing chance). It changes every exchange's odds and every calibration figure; the
-riposte changes one point per decided fight. Either satisfies the rule; two would not be allowed.
+Option not taken (closed at ladder step 5 by this file's reading; not a Jordan item): a per-exchange
+critical opening inside `core.resolve` (a floor on the defender's landing chance). It changes every
+exchange's odds and every calibration figure; the riposte changes one point per decided fight. Either
+satisfies the rule; two would not be allowed.
 
 ## Exact edits, by owner
 
@@ -62,14 +73,21 @@ riposte changes one point per decided fight. Either satisfies the rule; two woul
 
 ## Gate (execution artifacts)
 
-1. The 03 PC audit's E5 probe (heavy against light, 1,000 seeded season fights): the light fighter fells
-   or survives the heavy in a share strictly above 0, and the fold's Events show it (`Event.ending`).
+Tests: NEW `tests/valoria/test_combat_riposte.py`, beside `tests/valoria/test_combat_duel_terms.py`
+(exists), written as the batch item's first commit:
+`test_riposte_event_changes_the_tracker`, `test_upset_floor_zero_gives_zero_of_1000_and_pinned_hash`,
+`test_light_fells_or_survives_heavy_in_some_season_fights` (the E5 probe as a test, n = 1,000 seeded).
+
+1. The 03 PC audit's E5 probe, now `test_light_fells_or_survives_heavy_in_some_season_fights` (heavy
+   against light, 1,000 seeded season fights): the light fighter fells or survives the heavy in a share
+   strictly above 0, and the fold's Events show it (`Event.ending`).
 2. Workbench: the roster's head-to-head win-rates at n = 1,000 lie within the sampling interval of
-   today's (the riposte replaces a same-probability flip).
-3. Control: `UPSET_FLOOR = 0` → 0 of 1,000, and every season hash equal to today's tree run at
-   `UPSET_FLOOR = 0` (today's `rng.random()` at `wrapper.py:622` is called on every decided fight
-   whatever the floor, so the riposte must keep that one call in the same position; read at
-   `wrapper.py:622`).
+   today's (the riposte replaces a same-probability flip), read with
+   `systems/combat/combat_engine_v1/workbench/balance.py` (CLAUDE.md §9).
+3. Control: `UPSET_FLOOR = 0` → 0 ripostes of 1,000, and the season hash equal to the same tree with the
+   riposte branch deleted at `UPSET_FLOOR = 0`. Because the draw is keyed (it consumes no stream
+   position), this control holds by construction; the one re-pin is today's flip leaving the stream
+   (`wrapper.py:622` calls `rng.random()` on every decided fight), recorded once at B15's close.
 
 **Declared hash movers:** every world with a decided season fight.
 
@@ -83,7 +101,7 @@ in 1,000 mismatches at `UPSET_FLOOR` 0.05.
 - **N**: the designer's 95 % cap was meant to make no matchup certain; at the season it does not; this
   makes it do so.
 - **R**: a lucky blow becomes a story the witnesses carry; a feared champion can fall.
-- **S**: one damage site, one draw position, one outcome the fold reads; the workbench and the season
+- **S**: one damage site, one keyed draw, one outcome the fold reads; the workbench and the season
   agree.
 - **E** (last): one deleted line, one call through an existing function.
 

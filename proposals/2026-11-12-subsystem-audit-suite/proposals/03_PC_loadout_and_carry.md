@@ -2,6 +2,11 @@
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.2, §1.4) — the addendum's §B7 amendments and the MB addendum's two corrections are folded. (1) The round it builds on is `03_PC_duel_round_and_approach_B.md` (state in the calling loop's frame; a choice per phase), not the first proposal's. (2) `in_hand` and the half-sword `form` are **one field**: the key of the record currently held (item 5). (3) The leaf takes masses: `carry_demand_of(masses, armour)` is the one body and `carry_demand(weapons, armour)` calls it, because a troop's bow or pike has no key in the personal roster (item 2; MB addendum C-3, R-36). (4) "One roster" is decided as one owner a fact: a weapon's mass lives in personal combat's export when its key is there and in `references/troops.yaml: arms` when it is not, refused if stated in both (item 4; `04_MB_unit_loadout_and_weapon_in_hand_B.md` §2; `03_PC_weapon_records_in_the_export.md` item 6). (5) On the capability surface the carry cost is the `threshold` role with two holders, a person's Strength and a troop row's `strength` (U1 §9). The statements about mass battle marked `[UNVERIFIED]` below are confirmed or corrected in `04_MB_unit_loadout_and_weapon_in_hand.md`'s table.
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AND_VOCABULARY.md` D-U1-11d (the carry rule is one pure function **in** `engine/substrate/combat_kit.py`; the host computes each party's shortfall for every kit he may wield and hands it raw on `PersonalCombatInput` and the unit row; neither module holds a copy or calls the leaf). This answers `R1_READ.md` §1.1's AMBIGUOUS placement row; R1 7b-5's [DECISION] (a `combat.carry_demand` composition role in `modules/combat/combat_systems.py`) is **not** applied: the U1 decision wins over the read lane. Also: §6.1 (c) (the MB statements are confirmed or corrected in `04_MB_unit_loadout_and_weapon_in_hand.md`'s table and `_B` decides the roster: item 4's "one weapon roster or a declared key map" is replaced by the one-owner-per-fact rule of head item (4)); 7b-4 (`DuelState.form` is kept as the key of the record in hand); U1 glossary *unit* ("unit row"); test 9 (call sites, tests, `Depends on:` / `Lands in batch:` from `U3_DEPENDENCY_ORDER.md`, §4.1 row 61).
+
+**Depends on:** `03_PC_duel_round_and_approach_B.md` steps 1–4 (B16: `DuelState.form`, the per-phase consult); `03_PC_weapon_records_in_the_export.md` (B14: `mass` in the export); `04_MB_unit_loadout_and_weapon_in_hand_B.md` stages 1–2 (B17: the troop file as data). `04_MB_unit_loadout_and_weapon_in_hand_B.md` stages 3–4 depend on this file and land after it in B31 (U3 §4.1 row 61, SPLIT).
+**Lands in batch:** B18 (`B18-pc-content`, PC), after `03_PC_person_inputs_content.md` Parts B–D.
+
 ## Status: PROPOSED
 
 Lane: PC, with MB (troop loadouts), SE (stores as arms) and CHAR (the capability surface). Source:
@@ -55,8 +60,9 @@ rung 5 for where it lives).
 1. **A loadout is a kit with a secondary.** `kits` becomes `(primary, secondary, armor)` per party,
    `secondary` defaulting to none; `kit_of` returns the two highest-ranked weapon kinds the person's
    rungs stock instead of one. `rosters.yaml: arms_kinds` needs no new column.
-2. **Carried mass is the quantity, Strength demand is the unit.** A leaf beside
-   `engine/substrate/combat_kit.py`, reading the typed export and nothing else, owns one function:
+2. **Carried mass is the quantity, Strength demand is the unit.** The leaf
+   `engine/substrate/combat_kit.py` itself (the kit data's owner, D-U1-11d), reading the typed export and
+   nothing else, owns one function:
 
    ```python
    def carry_demand_of(masses: tuple, armour: str) -> float:      # (Reconciled) the ONE body
@@ -75,12 +81,17 @@ rung 5 for where it lives).
    fatigue as `ACT_WEIGHT / D_WT × short` stamina per action, added in `act_cost` where the harness
    term sits now (the harness term moves into `carry_demand`, same value); movement as a factor on
    `close_rate`, `1 / (1 + CARRY_CLOSE_K × short)`, one new `[SIM-CALIBRATE]` coefficient in `CFG`,
-   0 as the control. A fighter at or over the demand pays nothing, as now.
-4. **A unit reads the same function.** Mass battle's fatigue and speed for a troop type call
-   `carry_demand` over that type's loadout with the troop's own strength score, which requires its
-   loadout to name weapons the function knows. The prerequisite is one weapon roster or a declared
-   key map between `ARSENAL` and `WEAPONS`; which survives is MB's and the holistic stage's call, and
-   is the capability surface's equipment question (audit §14).
+   0 as the control. A fighter at or over the demand pays nothing, as now. *(Reconciled, D-U1-11d:)*
+   the host (`seam/wrappers/combat.py::combat_input`) evaluates `carry_demand` and hands each party's
+   `short` raw on `PersonalCombatInput` (one value per kit he may have in hand: with the primary, with the
+   secondary); `combat_systems.act_cost` (`:168`) and `close_rate` (`:1380`) read it from the Combatant the
+   module builds from its input. `modules/combat/` imports nothing from `engine/substrate/` for this.
+4. **A unit row is charged by the same function.** *(Reconciled, D-U1-11d and head item (4):)* the
+   mass-battle host evaluates `carry_demand_of` over the troop row's loadout masses with the troop's own
+   `strength` and hands the shortfall (as `(fatigue_factor, step_factor)` per in-hand state,
+   `04_MB_unit_loadout_and_weapon_in_hand_B.md` §5) on the unit row's input; a weapon's mass comes from
+   personal combat's export where its key is there and from `references/troops.yaml: arms` where it is not,
+   refused if stated in both. No key map and no roster merge.
 5. **The weapon in hand is round state, and changing it costs the round's tempo.** *(Reconciled:)*
    `DuelState.form` (PB §2) **is** this field: the key of the record in hand, whether a half-sword form
    of the primary or the secondary; no second field is added. The choice set a decider may answer at a
@@ -111,6 +122,27 @@ A carried secondary that costs nothing at any Strength; a switch that takes no t
 person with the same loadout and strength score who are charged different demands; a second
 `carry_demand` in either module.
 
+## Implementation (test 9, W3-1)
+
+- **Order of edits.** (1) `engine/substrate/combat_kit.py`: `carry_demand_of`, `carry_demand` (the export's
+  `kit` section gains `mass`, landed by `03_PC_weapon_records_in_the_export.md`); (2) `PersonalCombatInput`
+  gains the per-party `short` pair; `seam/wrappers/combat.py::combat_input` fills it; (3)
+  `combat_systems.act_cost` takes the harness term from the input and adds the carry term; `close_rate` gains
+  `CARRY_CLOSE_K` (in `CFG`, exported, 0 shipped); (4) `queries/world_q.py::kit_of` returns
+  `(primary, secondary, armor)`; (5) `switch` in the consult's choice set (after PB step 4).
+- **Call sites.** `combat_systems.act_cost` (called at `wrapper.py:286`), `close_rate` (called at
+  `wrapper.py:237`); `kit_of`'s callers in `seam/wrappers/combat.py`; the MB host's `field_input` (stage 3 of
+  `04_MB_unit_loadout_and_weapon_in_hand_B.md`, B31).
+- **Tests.** `tests/valoria/test_combat_units_refactor.py::test_carry_demand_of_equals_the_keyed_spelling`;
+  `engine/season/tests/test_cp_t03_03_kit.py::test_kit_of_returns_a_secondary_when_two_kinds_are_stocked`;
+  `tests/valoria/test_combat_units_refactor.py::test_a_switch_debits_one_act_threshold`; MB side (B31):
+  `tests/valoria/test_mass_battle_order_of_battle.py::test_the_factor_handed_in_equals_carry_demand_of`.
+- **Gate** as above; the workbench cells are a one-time reading in the commit body (`R1_READ.md` 7b-20).
+- **Hash movers.** None while every kit holds one weapon (control: the harness term relocated, same value);
+  persons with a secondary.
+- **Lands:** an IN-lane implementation session under `/methodology-execute` with PC review; items 1–3 and 5
+  `sonnet`; the workbench reading `haiku` (`valoria-measure`) read by `opus`.
+
 ## NERS reading
 
 - N: from above, the stated trade (fight in either mode, pay for it) has no carrier at either scale;
@@ -126,6 +158,4 @@ person with the same loadout and strength score who are charged different demand
 ## Cost class
 
 Small build in PC (items 1, 2, 3, 5). Design-first in MB for items 4 and 6 (carried by
-`04_MB_unit_loadout_and_weapon_in_hand_B.md`). *(Reconciled:)* depends on
-`03_PC_duel_round_and_approach_B.md` steps 1 to 4 for item 5 and on
-`03_PC_weapon_records_in_the_export.md` (the `mass` field in the export) for item 2.
+`04_MB_unit_loadout_and_weapon_in_hand_B.md`). Dependencies: the `Depends on:` line at the head.

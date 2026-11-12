@@ -2,7 +2,12 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-50** (some starting state is drawn, small and bounded), **A-54** and the addendum's decisions. §4 (c)'s world-gen stocking ("one season of yield per settlement and a granary") becomes the centre of a bounded draw: each settlement's starting stock is drawn around that value within the bounds `21_PROCEDURAL_D_world_cards_and_churn.md` authors, so some larders start low; with the bound at zero width the edit is the text as written (the control). The granary's rung is `07_SE_treasury_granary_B.md`'s (the nearest seat-bearing rung), not every territory rung (P-7). The yield the endowment feeds is drawn on the four-band ladder (A-54; `09_WR_B_draws_not_thresholds.md`), so the endowment is the pool's ground, not a fixed output. The gate gains the migration arm of `U5d_SE_owed_edits.md` §10.
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — the body follows the head on the granary's rung (U1 ledger F-15; R3 §3): §1 item 2, R2 and edit (c) now stock the nearest seat-bearing rung above a settlement (`world_q.treasury_above`, `07_SE_treasury_granary_B.md`), not every territory rung; R3 §2 (A-44, A-75): §6's `ED-WR-0011` line reworded; U3 §6.2 (the reading on the scratch `se_ground.py` is restated as a named test in `test_endowment.py`, written first, U3 §6.1); tier and batch (R3 7b-0; U3 B12, with the cut LATER edge to `21_PROCEDURAL_D`).
+
 ## Status: PROPOSED
+
+Lands in batch: B12 (world motion and ground), with `07_SE_treasury_granary_B.md`, after `07_SE_kernel_repairs.md` (U3 §1 item 13).
+Depends on: `07_SE_treasury_granary_B.md` (B12, `world_q.treasury_above`); `09_WR_B_draws_not_thresholds.md` edits 1–2 (B12, the drawn yield and body); `21_PROCEDURAL_D_world_cards_and_churn.md` (B39) for the bounded starting draw only (cut edge §4.1 row 42, LATER: the stocking runs at its zero-width control without it).
 
 Carries findings F-SE-01, F-SE-03, F-SE-04 and resolutions R-SE-01, -02, -03, -11 of
 `audits/07_SE_audit.md`. It amends three open positions rather than adding one: CP-T08-02 (endowment by
@@ -16,8 +21,9 @@ With the arm on (`ground`):
 1. `harness/populated.py::build_realm` mints producing Sites per settlement from an authored table keyed
    by territory instead of one of every producing kind everywhere.
 2. `build_realm` seeds stores: every producing settlement starts with one season of its own yield, and
-   every territory rung starts with `granary_seasons` seasons of the eaten-kind deficit of the
-   settlements beneath it.
+   each granary rung (the nearest rung above a settlement at which a seat sits, `world_q.treasury_above`,
+   `07_SE_treasury_granary_B.md`) starts with `granary_seasons` seasons of the eaten-kind deficit of the
+   settlements it is the granary of.
 3. `modules/settlements/larder.py::larder_draw` walks on up the ladder for the remainder when the first
    stocked rung cannot cover the want (H-303's resolution; its own fixture arm, shipped at today's rule).
 
@@ -66,15 +72,15 @@ not a second copy avoided, it is a fact missing; the canon file states each terr
 character in its `sub:` and `description:` strings, which are not typed, so the typed head is new and
 `rosters.yaml` is where code reads it. `ground_class` is not built.
 
-**R2. World-gen stocks the realm.** A settlement starts with one season of its own yield; a territory
-rung starts with a granary. Ladder step 4: CR-22's own SEASON-0 FLOOR RULE offers this (*"or a prior
+**R2. World-gen stocks the realm.** A settlement starts with one season of its own yield; its granary
+rung (the nearest seat-bearing rung above it, `07_SE_treasury_granary_B.md`) starts with a granary. Ladder step 4: CR-22's own SEASON-0 FLOOR RULE offers this (*"or a prior
 position stocks the larders as world-gen content"*); this takes that branch.
 
 **R3. The relief path that gates the flip is the larder ladder, which already executes.** The draw
-walks home first, then up (`larder.py:55-62`), so a territory rung holding grain feeds every settlement
-beneath it at MATTER with no act. What fills it is `requisition` into a territory seat's rung (built),
-then CP-T08-07's standing levy (planned). The flip's gate becomes: *in a seeded realm run under `ground`,
-at least one settlement's draw names its territory rung as `source`, and the granary's runway is at
+walks home first, then up (`larder.py:55-62`), so a granary rung holding grain feeds every settlement
+beneath it at MATTER with no act. What fills it is `requisition` into its seat's rung (built), then
+CP-T08-07's standing levy (planned). The flip's gate becomes: *in a seeded realm run under `ground`, at
+least one settlement's draw names its granary rung as `source`, and the granary's runway is at
 least `granary_seasons` seasons*. Acts that refill it (`requisition`, `transfer`) are a reading at the
 flip, not its gate. AM-E-13's limit is replaced by this one.
 
@@ -141,8 +147,11 @@ function in `data/fixtures.py` returning the `uniform` list or the `ground` row 
 first); one Site per list entry, id `s_<slug>_<kind>` for the first of a kind and `s_<slug>_<kind>_<n>`
 for the rest, so the `uniform` arm mints today's ids byte for byte. After the garrison loop, when
 `endowment_mode == "ground"`: each settlement's `stores` is set to one season of its Sites' base yield,
-and each territory rung's `stores` to `granary_seasons × Σ max(0, want_k − yield_k)` over the cohorts
-and Sites beneath it, per eaten kind. Both are world-gen writes before any season (the precedent is
+and each granary rung's `stores` (`world_q.treasury_above(w, settlement)` for every settlement, grouped
+by the rung it returns; `07_SE_treasury_granary_B.md` owns the rung and the re-keyed seed) to
+`granary_seasons × Σ max(0, want_k − yield_k)` over the cohorts and Sites of the settlements it serves,
+per eaten kind. The starting value is the centre of A-50's bounded draw (`21_PROCEDURAL_D`), at zero
+width the value as written. Both are world-gen writes before any season (the precedent is
 `harness/scarce.py`'s planted treasury).
 
 **(d) `modules/settlements/larder.py::larder_draw` and `queries/inputs.py::LarderInput` — the remainder
@@ -169,7 +178,8 @@ a fifth element `parts: ((rung, units), ...)` and `subsist.py`'s debit loop sums
 `(src, take)`. The fixture is `larder_walk` (`data/fixtures.py`, swept `first / through`), projected by
 `world_q.larder_input`. The module docstring's rule text is rewritten in the same commit.
 
-**(e) Tests.** `engine/season/tests/test_endowment.py` (CP-T08-02's, re-aimed): under `ground` every
+**(e) Tests.** `engine/season/tests/test_endowment.py` (CP-T08-02's, re-aimed; absent on `main`, written as
+the batch's first commit, U3 §6.1): under `ground` every
 settlement of T5 holds a `field` and none holds a `seam`; T17's hold a `seam` and no `field`; a geography
 territory with a settlement and no row refuses at load. `test_hunger.py::test_i` is re-recorded under
 `ground` to assert the opposite (no cohort short at season 0) and kept as written under `uniform`.
@@ -184,7 +194,13 @@ value, and its exit records the band spread across settlements, not only "at lea
 
 - **Execution artifact.** Under `ground`, `granary_seasons 4`, seed 0, eight seasons, no acts: the
   hunger band differs between at least two settlements in every season after the first, with the weather
-  draw off; at least one draw cell's `source` is a territory rung; no cohort is short at season 0.
+  draw off; at least one draw cell's `source` is a granary rung; no cohort is short at season 0.
+- **The named test** (U3 §6.2: the scratch `se_ground.py` is not in the repository, so its reading is
+  first written as a test): `test_endowment.py::test_ground_granaries_feed_the_highlands_then_run_down`
+  (`ground`, `granary_seasons 4`, seed 0, eight seasons, no acts; expected: no highland cohort below full
+  body while its granary holds grain, granary grain falling each season, highland body falling after the
+  granary reaches 0, every lowland cohort at full body; control `granary_seasons 0`: the highland cohorts
+  fall from season 0), each loop asserting it asserted.
 - **The reading already taken on a hand-made copy** (`se_ground.py 0 8 4`, not a repo artifact: harbours
   deleted from the 11 highland settlements, their five territory rungs stocked with four seasons of
   deficit, lowland settlements stocked with one yield): seasons 0 to 2, all 11 highland cohorts at body
@@ -205,10 +221,12 @@ value, and its exit records the band spread across settlements, not only "at lea
 
 - **ED-SE-0053's standing order** (*"do not re-propose hearth larders or any delivery move across a
   `contain` edge; matter moves only by `transfer`"*): no matter is delivered here. Stock enters a
-  territory rung by an act (`requisition`, `transfer`) or by world-gen; the draw reading up the ladder is
+  granary rung by an act (`requisition`, `transfer`) or by world-gen; the draw reading up the ladder is
   the rule ED-IN-0246 item 3a already built.
 - **H-160 limit 3** (ruled a balance number): untouched.
-- **ED-WR-0011** (a closed authored cast): no person is minted.
+- **The cast:** this arm mints no `Person` (a cohort's weight is a count). The cast is no longer closed
+  (A-44: about 94 generated persons plus kin; A-75: named births behind `birth_rate`); named births are
+  `23_STORY_B_a_house_continues.md`'s.
 - **Canon**: `valoria_geography_v30.yaml` is read, not edited. If Jordan prefers the endowment as a typed
   field of the canon file, the table moves there unchanged; that is a canon amendment and is his.
 
@@ -232,4 +250,4 @@ value, and its exit records the band spread across settlements, not only "at lea
 
 Small build (the table, the loader, the loop, the stores seed), plus one edit to a pure module function
 with its record type. Hash: EQUAL at the shipped arms; the `ground` flip, the `granary_seasons` flip and
-the `larder_walk` flip are each a declared mover in a commit of their own.
+the `larder_walk` flip are each a declared mover in a commit of their own. Tier: `sonnet` (R3 7b-0).

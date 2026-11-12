@@ -1,5 +1,10 @@
 # MB · the commander as a chooser: what he decides, what he is shown, and what each order costs him
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.2 (`officer_pool` showing the true pool VIOLATES `04` D-42) with 7b-16 [DECISION] (the host builds each officer's pool as the commander believes it, from his own claims, `None` when he holds none, shown "unknown"; the "true value until the belief model supplies one" paragraph and INCOMPLETE item 2 removed), §1.2 watch row (`obey_odds` is one draw's band odds from the dice owner, not a field closed form; the manager proposal's §8 refusal is of a field's: stated once), `U1_GLOSSARY.md` *band* (`reach_bands` → `reach_steps`, distance steps), D-U1-11f (`standing_order_cap`); test 9 (INCOMPLETE item 3 closed by order: the manager's §4 lands earlier in B20; `Depends on:` / `Lands in batch:`).
+
+**Depends on:** `27_MB_A_command_and_the_obedience_draw.md` 27A-3, 27A-4 (B19); `04_MB_manager_battle_one_resolver.md` §2, §4, §5 (B20, earlier in the batch); `10_DICE_believed_odds_have_a_prior.md` (B05) and the believed-estimate route of `U5b_MB_residue.md` §5 for the believed officer pool; `26_MASS_BATTLE_cell_scale_and_time.md` §3 (B19); CHAR's cells for 27D-4.
+**Lands in batch:** B20 (`B20-mb-orders`, MB), after `04_MB_playable_field_scenario.md` A, C, D; 27D-4 returned to CHAR.
+
 ## Status: PROPOSED
 
 Lane MB for the read surface and the costs; **CHAR owns the scoring** (the cells, the temperament and the
@@ -39,7 +44,7 @@ commander) it changes what that commander does at a window. No natural season fi
 | in the season, before any field | composition | troop rows; the Record's ops (`armyrecord.OPS`) | `recruit`, `form_unit`, `assign_troops`, `disband_unit` (`14_VERBS_MILITARY_C`, `_D`) |
 | | the formation | `troops.yaml: formations` | `order_unit`, army-level payload |
 | | each unit's post, ranks, files, second weapon, role, stance | the unit row's columns | `order_unit` |
-| | each unit's standing orders (at most four) and the signals they wait on | `battle_orders.json: triggers`, `behaviours` | `order_unit` |
+| | each unit's standing orders (at most `standing_order_cap`, D-U1-11f) and the signals they wait on | `battle_orders.json: triggers`, `behaviours` | `order_unit` |
 | | **who commands each unit** | persons of his faction; the row's `officer` | `order_unit` |
 | | **where he rides** | the unit names of his own Record; `commander_post` | `order_unit` |
 | | a doctrine, which writes most of the above at once | `troops.yaml: doctrines` | the doctrine choice (`04_MB_playable_field_scenario.md` step 5a) |
@@ -58,10 +63,10 @@ already computes for the draw:
 
 ```python
 units: tuple   # ((name, share, routed, in_contact, in_hand, orders_pending,
-               #   reach_bands, steady, officer_pool), ...)
-               # reach_bands: whole distance bands from his post to the unit (27_MB_A §4)
+               #   reach_steps, steady, officer_pool), ...)
+               # reach_steps: whole distance steps from his post to the unit (27_MB_A §4; "band" is kept for a degree)
                # steady: 'disciplined' | 'ordinary' | 'unsteady'
-               # officer_pool: the dice of the unit's officer, or None
+               # officer_pool: the dice of the unit's officer AS THE COMMANDER BELIEVES THEM, or None ("unknown")
 ```
 
 and one pure function, beside `obey`, that a player's surface and an NPC's decider both call:
@@ -71,12 +76,17 @@ obey_odds(view, action, me: CommandRecord) -> (p_at_once, p_late, p_not)
 ```
 
 - It is `engine/dice_engine/sigma_leverage.py::band_odds` on the same pool, levels and obstacle `obey` would
-  compose, for each link, composed. It is the closed form of the same sampler (U1 §4, last row), not a second
-  rule, and it draws nothing.
-- A commander's own pool is known to him (`seam/wrappers/pool.py:78-82`). His officers' pools are shown as he
-  **believes** them where the belief model supplies a value and as their true value until it does
-  `[ASSUMPTION; the knowledge model's reach to a capability rating was not verified by this lane; the
-  dependency is CHAR's and `10_DICE_believed_odds_have_a_prior.md`'s]`.
+  compose, for each link, composed. It is the closed form of the same sampler for **one draw** (U1 §4, last
+  row), not a second rule, and it draws nothing. It is not the field closed form that
+  `04_MB_manager_battle_one_resolver.md` §8 refuses: that refusal is of an odds function for a whole field
+  (the auto-resolve formula Layer 1 names); a single order's band odds from the dice owner is the same shape
+  the social roll already shows.
+- A commander's own pool is known to him (`seam/wrappers/pool.py:78-82`). *(Reconciled, W3-1, 7b-16; `04`
+  D-42, ladder step 3.)* His officers' pools are shown **only as he believes them**: the host builds each from
+  the commander's own claims about that officer (`person_q` over his ledger, the same believed route as
+  `U5b_MB_residue.md` §5) and hands it in on the input beside the officer's `CommandRecord`; `None` when he
+  holds no claim, shown as "unknown". The module copies the handed value into the view and never reads the
+  officer's true record for it.
 - He is shown nothing of the enemy but what is in contact with his own units, as that proposal's §4 already
   rules; the enemy's orders, posts and officers are never in the view.
 - Before the field, the estimate is the resolver sampled on what he believes of the enemy
@@ -93,7 +103,7 @@ Nothing below is a new meter. Each cost is a consequence of a rule in the propos
 | **a missed order is still spent** | on `late` it takes effect when the moment may have passed; on `not carried out` the window is gone and the order waits for its trigger | `27_MB_A` §4 |
 | **improvising costs more than preparing** | an improvised order to an officered unit is two draws and carries the distance term; a standing order is one draw with none; a signal carries the field but is one draw for each unit and harder past three | `27_MB_A` §3, §4 |
 | **a plan's size** | each further signal on a unit is something it can misread; each further unit on a signal is a step harder; each standing order past the first waits behind it | `27_MB_A` §4; manager proposal §2 |
-| **his post** | forward: fewer distance bands, and `rally` reaches a unit he is beside. But his unit can be struck, and then every unit draws to stand; and his unit in contact with an enemy officer's is a duel he fights | `26_…_rout_pursuit_and_giving_ground.md` §1; `U5b_MB_rulings_in_the_field.md` §3 (A-4) |
+| **his post** | forward: fewer distance steps, and `rally` reaches a unit he is beside. But his unit can be struck, and then every unit draws to stand; and his unit in contact with an enemy officer's is a duel he fights | `26_…_rout_pursuit_and_giving_ground.md` §1; `U5b_MB_rulings_in_the_field.md` §3 (A-4) |
 | **his officers** | a good officer on one unit is not on another; the span check limits how many units he may leave without one | `armies.py:176-193` |
 | **restraint** | an order to hold a victorious unit is a step harder than an order to act, and its failure is a unit gone from the field | `26_MASS_BATTLE_maneuver_orders.md` §1, restrain row; MV P5 |
 | **what the season remembers** | each draw that changed the end state is an Observation on the band Event; whoever witnessed the field holds a claim that his order was not carried out, or that his wing went early | `27_MB_C` §3; `04_MB_manager_battle_one_resolver.md` §6 |
@@ -183,7 +193,7 @@ and is marked INCOMPLETE and returned to CHAR.**
 | item | file :: symbol (single owner) | edit | hash |
 |---|---|---|---|
 | 27D-1 | `modules/mass_battle/core/contact.py` :: new `obey_odds(view, action, me)` | calls `_obey_terms` (27A-4's helper, the one composition of pool, levels and obstacle) for each link and `engine.dice_engine.sigma_leverage.band_odds(pool, ob, boost)` on the result; composes two links by multiplying the at-once shares and summing the rest; draws nothing | none |
-| 27D-2 | `modules/mass_battle/massbattle.py` :: `FieldWindowView.units`, `GeneralAction` (both created by `04_MB_manager_battle_one_resolver.md` §4) | the three view fields, computed where the view is built: `reach_bands` by the same function `obey` uses, `steady` from the unit's Discipline and `raw`, `officer_pool` from `Subunit.officer_record`; `GeneralAction.reasons: tuple = ()`, copied untouched into `FieldOutcome.interventions` | none with no decider |
+| 27D-2 | `modules/mass_battle/massbattle.py` :: `FieldWindowView.units`, `GeneralAction` (both created by `04_MB_manager_battle_one_resolver.md` §4) | the three view fields, computed where the view is built: `reach_steps` by the same function `obey` uses, `steady` from the unit's Discipline and `raw`, `officer_pool` copied from the believed value the host handed in (7b-16; never from `Subunit.officer_record`'s true score); `GeneralAction.reasons: tuple = ()`, copied untouched into `FieldOutcome.interventions`. Host side: `seam/wrappers/mass_battle.py::field_input` builds the believed pools from the commander's claims | none with no decider |
 | 27D-3 | `modules/mass_battle/armyrecord.py` :: `order`, `options`; `references/troops.yaml: doctrines.<name>.commander_post`; `engine/season/harness/military_menu.py` | `order` accepts `commander_post` and `officer` (27A-3 adds the keys; this adds the menu's closed sets: unit names; persons of the faction, handed in as facts); `options()` gains `unofficered` and `post_names_no_unit`; the menu lists both and prints `obey_odds` beside each window action | none (withheld verbs) |
 | 27D-4 | `engine/season/seam/wrappers/mass_battle.py::resolve` (`:355`); `engine/season/decision/` | forward `host.decide` for either side's commander by the one parameter; the chooser's decider over `GeneralAction`'s closed set | INCOMPLETE |
 
@@ -231,9 +241,9 @@ contact).
    answers at a window; how temperament and conviction weigh `rally` against `signal`; the wording of
    `reasons`. Returned to CHAR. Until it lands an unplayed commander has no decider and his standing orders
    decide, which is a complete behaviour and not a stub.
-2. *Believed officer pools*: whether the knowledge model can hold a belief about another person's
-   capability rating was not verified. Missing: that read, from CHAR and
-   `10_DICE_believed_odds_have_a_prior.md`. Until then the view shows the true value, which is a breach of
-   non-omniscience confined to a commander's own officers; it is declared here and not hidden.
-3. *27D-1 to 27D-3 cannot be coded before `FieldWindowView` and `GeneralAction` exist* (the manager
-   proposal's §4). Missing: that proposal landed.
+2. *(Closed, W3-1, 7b-16.)* The view shows a believed pool or "unknown", never the true value.
+3. *(Closed by order, W3-1.)* `FieldWindowView` and `GeneralAction` land earlier in B20 with the manager
+   proposal's §4.
+
+**Added test (W3-1):** `tests/valoria/test_army_battle.py::test_officer_pool_is_believed_or_unknown` (a commander
+holding no claim about an officer sees `None`; one holding a false claim sees the false value).

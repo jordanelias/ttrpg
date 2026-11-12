@@ -2,6 +2,11 @@
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2) — two changes. (1) **The standing rule** (`audits/14_VERBS_MILITARY.md` §0.5 lists this file's fixed rule): a unit that stood does not gain `experience` with certainty; the write in §1 is one draw for each eligible unit on the one sampler, the gain on Success or better (`U5b_MB_rulings_in_the_field.md` §5). The conditions for eligibility, the reset on destruction and the dilution rule stand as bookkeeping. Arrears stay arithmetic (they set odds); what unpaid men do is drawn in `14_VERBS_MILITARY_C_the_muster.md` (`discharge_troops`' Failure band; the dispersal draw). A-59 makes `experience` one of the columns a unit's own prowess is composed from (`proposals/27_MB_*`); this file owns its write. (2) **A-2** confirms the carrier: `experience` and `arrears` are columns of the unit row (the ruling's own list names experience); no unit holds a history of its own.
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.2 (CONFORMS; R1's "discipline" flag needs no edit: the troop row's `discipline` is a combat quality, not a Rung aggregate), A-30 (the veterancy draw is keyed), test 9 (tests, call sites, lands-it, tier; the `[UNVERIFIED]` on H-158's two functions settled at the tree: `queries/world_q.py:2748 upkeep_of`, `loop/effects_economy.py::_renewals`, re-exported by `loop/effects.py:102`); `U3_DEPENDENCY_ORDER.md` B31. **Not applied:** `U1_GLOSSARY.md` *arm* names this file for "`arm` → `branch`", but the key `veterancy: {arm: off | steps}` here is a switch setting (the glossary's own sense of *arm*, a setting of an experiment), not a branch of service; it stays (correction reported).
+
+**Depends on:** `04_MB_unit_loadout_and_weapon_in_hand_B.md` stages 1–2 (B17: the troop file, its exporter and reader); `04_MB_typed_outcome_and_one_path.md` (B17: `FieldOutcome.parts`); `27_MB_E_what_an_army_carries_back.md` (B22: the `assigned`/`absent` write §1 reads); `11_GO_one_draw_owner.md` (B06: the key); FA/SE payment path (their proposals).
+**Lands in batch:** B31 (`B31-mb-loadout-economy`, MB), with `U5b_MB_rulings_in_the_field.md` §5.
+
 ## Status: PROPOSED
 
 Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (rulings A-59 and A-69). Nothing here is deleted. (1) **A-59**: `experience` is the unit row's term in the quality that `prowess(atom)` turns into dice, added at `orderofbattle._spec_for` as §1 says; `arrears` lowers the unit's steadiness, which is read by the order term, the stand draw and the obedience draw's `unsteady` step (`27_MB_B_unit_prowess_on_the_row.md` §1; `27_MB_A` §4). (2) **A-69**: a unit's losses are written on its own row (`assigned` falls; injured and fled men are held in an `absent` column and may return by a draw), and its strength is then read from the row alone and no longer from the cohort's body share. §1's "a unit destroyed is reset" and the dilution rule read `assigned` after that write; men returning from `absent` are the unit's own and do not dilute its `experience` (`27_MB_E_what_an_army_carries_back.md` §2, §3).
@@ -59,7 +64,7 @@ today's behaviour as the control. No natural season fights an army field today.
   place a unit's stats are assembled.
 - **Write:** `engine/season/loop/effects_combat.py::_eff_march`, on a band that is not `Lost` for the
   unit's side, for each unit whose part in `FieldOutcome.parts` (a) lost troops and (b) did not rout:
-  *(Reconciled, the standing rule: one draw for each eligible unit, pool the unit officer's `command` score by the one pool rule, else the commander's, else the untrained default; obstacle `veterancy.ob` plus one a step already held; on Success or better)* `experience += 1` up to the cap, through the army verbs' one write path
+  *(Reconciled, the standing rule: one draw for each eligible unit, keyed `H(seed, tick, unit, "veterancy")` (A-30), pool the unit officer's `command` score by the one pool rule, else the commander's, else the untrained default; obstacle `veterancy.ob` plus one a step already held; on Success or better)* `experience += 1` up to the cap, through the army verbs' one write path
   (`armyrecord.apply`). A unit whose part is destroyed (share 0) is reset to 0. Condition (a) is the
   Field of Glory rule (a unit that stood in reserve and was never touched learns nothing) and keeps the
   write from being a clock.
@@ -74,8 +79,8 @@ today's behaviour as the control. No natural season fights an army field today.
   every row, so nothing is charged at landing). The archived design's distinction is expressed by the
   rows: levy and light troops at 0, professionals above it.
 - **Who pays, and how, is not designed here.** The campaign has an owner for "a seat pays, per term,
-  those it keeps" (`queries/world_q.py::upkeep_of`, `loop/effects.py::_renewals`, H-158
-  `[UNVERIFIED beyond the register row: neither function was opened]`). The edge mass battle needs from
+  those it keeps" (`queries/world_q.py::upkeep_of`, `:2748`; `loop/effects_economy.py::_renewals`,
+  re-exported at `loop/effects.py:102`; H-158; located at the tree by W3-1). The edge mass battle needs from
   FA and SE is one query: *for this army, were its troops paid last season?* The cheapest faithful form
   is for the army's holder's seat to owe `sum(upkeep x troops / 100)` through that same path, to the
   cohorts the troops were drawn from.
@@ -136,6 +141,23 @@ today's behaviour as the control. No natural season fights an army field today.
 Experience gained by a unit that took no losses, or kept by one that was destroyed; a veteran unit that
 fights exactly as a fresh one; arrears that lower a levy; any result that moves with the arm `off` and
 every `upkeep` 0; a second payment path beside the seat's.
+
+## Implementation (test 9, W3-1)
+
+- **Order.** (1) troop file `veterancy` header and `upkeep` column (after loadout_B stage 1); (2) unit-row keys
+  in `armyrecord.py` and `rosters.yaml: record_kinds.values.army`; (3) `_spec_for` reads; (4) the `_eff_march`
+  write; (5) `assign`'s dilution; (6) the unfed step in `field_input`.
+- **Call sites.** `armyrecord.to_order_of_battle` → `orderofbattle._spec_for`; `loop/effects_combat.py::_eff_march`
+  through `armyrecord.apply`; `armyrecord.assign` (called by the `assign_troops` verb's effect);
+  `seam/wrappers/mass_battle.py::field_input`.
+- **Tests.** Gate 1: `tools/ci_golden_modes_check.py` and `tests/valoria/test_field_golden_pins.py`. Gates 2 and 4:
+  `tests/valoria/test_mass_battle_army_record.py::test_experience_rises_only_for_a_unit_that_lost_and_stood`,
+  `::test_a_destroyed_unit_resets_experience`, `::test_assigning_more_than_half_lowers_experience_one_step`.
+  Gate 5: `tests/valoria/test_mass_battle_order_of_battle.py::test_arrears_lower_discipline_only_with_upkeep`.
+  Gate 6: `engine/season/tests/test_march.py::test_unfed_side_starts_one_morale_lower`. Gate 3 is a module reading
+  in the commit body.
+- **Hash movers:** none at the seeds; veterancy `steps` and arrears each a declared flip.
+- **Lands:** an IN-lane implementation session under `/methodology-execute` with MB review; `sonnet`.
 
 ## NERS (definitions `CLAUDE.md` §0.06)
 

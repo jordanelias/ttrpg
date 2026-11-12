@@ -2,7 +2,14 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-22) — each row takes the route shape with flat `writes:`, or declares `contests: "a task"` where two bands write different cells; no route row keys `writes:` by band (`U5c_VERBS_residue_and_governance_owner.md` §1).
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head applied to the body (`unified/work/R4_READ.md` §1.2, 7b.4; F-R4-01): `found` and `build` take shape (b), `contests: "a task"` (their Failure band writes `Rung.stores` while winning bands write the made thing: different cells), so they are **not** `graded_tasks` members; the refused `stores` key is struck (C3-R7: G-05's fallback is the plan) and, read at the tree, a contested row keys **one** refusal kind (`data/verbs.py:945-967`), so both rows keep a flat refusal kind and the shortfall is told apart by the refusal's `observed` reads (`R4_READ.md` 7b.4's "keys `requires`, `write`" corrected: `requires` is not a clause name and a contested row cannot key two); `works_outlay` stays as the rows' own content table (it scales the stake consumed, a different quantity from `task_fraction`; U1 §3 "cost / price"); A-81 (C3-C11), A-30, U3 batch B12 and edge cut row 46, R4 7b.0 block.
+
 ## Status: PROPOSED
+
+Lands in batch: B12 (`unified/U3_DEPENDENCY_ORDER.md` §3.1), after `14_VERBS_MATERIAL_A_mending.md`. The `_stamped` pair for `research` (`14_VERBS_SOCIAL2_A` edit 2) lands in B25 (U3 §4.1 row 46): until then the works stamp of (a)(i) is carried on the classed tuple as `Record` with the plan kind on the stamp, and `Record.works` replaces it when SOCIAL2-A edit 2 lands. `[ASSUMPTION: the interim class — basis: the cut edge row 46 says the works rows land in B12 and the qualified classes in B25]`.
+Depends on: `14_VERBS_MATERIAL_A_mending.md` §2 (B12: `graded_amount`); `U5c_VERBS_residue_and_governance_owner.md` §1 (B07: the `a task` prize); `18_DETERMINISM_task_draw_for_uncontested_verbs.md` item 4 (B07); `08_FI_04_small-edits.md` (B11); `05_SC_obstacle_difficulty_and_modifiers_B.md` (B05: `difficulty`).
+Lane: SE. Tier (R4 7b.0 (1)): `sonnet` producer, effort `high`; the two contested rows and `works_outlay`'s bands `opus`; one `opus` read of the gate's spread. Test file: `engine/season/tests/test_vm_mat_c_works.py` (one function per §5 gate; the probe below is re-written as that test's first function).
+Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the actor's trained score in the row's `capability:` (A-6; `pool_default` while none is authored); talent as levels (A-7); a wound a level against the roll (A-8). Draws: `H(w.world_seed, w.tick, <actor id>, "found.task")`, `"build.task"` (A-30). **A-81:** the Failure band writes `Rung.stores` (the lost outlay) and emits `found.failed` / `build.failed`, witnessed by those present at the paying rung (a claim of it to each), so a failed founding is a durable write twice over.
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-05) — a keyed refusal cannot name an effect-side clause other than `write` (`data/verbs.py:945-967`); the `stores` key needs a named typed conjunct or falls under `write`.
 
@@ -71,6 +78,7 @@ that row maps to. That is the person-side reading of `_eff_found`'s and `_eff_bu
 ```yaml
   - verb:        "found"
     referent_class: Record.works
+    contests:    "a task"      # shape (b): Failure writes a different cell than the winning bands
     capability:  none          # `labour` when authored
     difficulty:  demanding
     writes:
@@ -83,13 +91,11 @@ that row maps to. That is the person-side reading of `_eff_found`'s and `_eff_bu
       Success:      ["rung.founded"]
       Partial:      ["rung.founded"]
       Failure:      ["found.failed"]
-    emits_on_refusal:
-      requires: ["found.refused"]
-      stores:   ["found.short"]
-      write:    ["found.refused"]
+    emits_on_refusal: ["found.refused"]     # a contested row keys one refusal kind
 
   - verb:        "build"
     referent_class: Record.works
+    contests:    "a task"
     capability:  none          # `craft` when authored
     difficulty:  demanding
     writes:
@@ -102,19 +108,17 @@ that row maps to. That is the person-side reading of `_eff_found`'s and `_eff_bu
       Success:      ["site.built"]
       Partial:      ["site.built"]
       Failure:      ["build.failed"]
-    emits_on_refusal:
-      requires: ["build.refused"]
-      stores:   ["build.short"]
-      write:    ["build.refused"]
+    emits_on_refusal: ["build.refused"]
 ```
 
-The refusals become keyed (invariant 4's per-clause half, `requisition`'s shape): `stores` is §27.1's
-scarcity channel (*the second builder on an emptied store gets a different Event*), now told apart from a
-malformed act. `[GROUNDED, 25 G-05: the loader refuses it. A keyed row keys exactly its failable
-clauses, a derived set: `eligibility`, each NAMED top-level typed conjunct, `write`, `counterparty`
-(`data/verbs.py:945-967`); a key outside the set is refused as a kind nothing reads. So `stores` is
-keyable only as a named typed conjunct (the stem exists, `data/requires.py:852`); as the effect's decline
-`_cost`'s shortfall is reported under `write`.]`
+*(W3-4a: the keyed refusal is struck.)* The first writing keyed the refusals per clause with a `stores`
+key, so the second builder on an emptied store would get a different Event (§27.1's scarcity channel).
+`audits/25_GROUNDING_ENGINE.md` G-05 refuted the `stores` key (a keyed row keys exactly its failable
+clauses, `data/verbs.py:945-967`), and the same loader block says a **contested** row may key its refusals
+to one kind only, unless it keys `counterparty`. Both rows are contested, so each keeps one flat refusal
+kind. The scarcity case is still told apart: `_cost`'s shortfall declines under the `write` clause and the
+refusal Event's `observed` reads say which check failed (`14_VERBS_BINDING_D`'s precedent), so a witness
+can tell a short store from a malformed act.
 
 **(d) `engine/season/data/fixtures.py`.** One table, per-mille of the plan's `works_cost`:
 
@@ -124,9 +128,12 @@ keyable only as a named typed conjunct (the stem exists, `data/requires.py:852`)
 ```
 
 For `found` it is the share of the stake **consumed** (the rest arrives in the new Rung, two-sided, as
-today); for `build` the share of the price consumed (one-sided, as today). The control is `found` all 0
+today); for `build` the share of the stake (the plan's `works_cost`) consumed (one-sided, as today;
+"stake" is the glossary's word for what an actor puts down on a drawn act, `unified/U1_GLOSSARY.md`). The control is `found` all 0
 and `build` all 1000 with Failure refused, which is today's arithmetic. `[ASSUMPTION; medium; Jordan to
-correct; swept]`
+correct; swept]`. It is the rows' own content table, not a second share table: it scales the stake
+**consumed**, a different quantity from `task_fraction`'s share of an effect (U1 §3 "cost / price"; R4
+F-R4-09); NUMBER row in `hole_register.yaml`.
 
 **(e) `engine/season/loop/effects_founding.py`.** `_cost(w, rec, plan, res)` returns the payer and, per
 kind, `(consumed, carried)` whole units from the table (`ceil`), declining when the payer cannot meet the
@@ -134,7 +141,8 @@ band's total, except that a `Partial` the payer cannot meet is priced as `Failur
 `_eff_found`: at a winning band mint the Rung, its `contain`, the founder's `hold`; `_shift` the carried
 part into it and `_debit` the consumed part; at Failure only the `_debit`, naming the payer, earning
 `found.failed`. `_eff_build`: at a winning band mint the Site at condition 0 and `_debit` the outlay; at
-Failure only the `_debit`. Both keep every other decline. `rosters.yaml: graded_acts` gains both.
+Failure only the `_debit`. Both keep every other decline. Neither row joins `graded_tasks`: both are
+contest rows on the `a task` prize (VRES §1 shape (b)).
 
 ## 4. Order of landing
 
@@ -147,7 +155,10 @@ More `planned_works` rows are Jordan's content and are what makes the batch visi
 
 ## 5. Gate and falsifier
 
-- **Execution artifact.** `mat_probe.py s 4` re-run at seeds 0 to 2: `found` and `build` form only on a
+- **Execution artifact.** `mat_probe.py` is a scratch probe not in the repository (U3 §6.2's rule): the
+  batch first writes its reading as the first function of `engine/season/tests/test_vm_mat_c_works.py`
+  (per seed, the subject-class counts of `found`/`build` Candidates and the executed kinds over four
+  seasons; expected reading below), then runs it at seeds 0 to 2: `found` and `build` form only on a
   works of their own plan family (the subject-class line reads `Record:works` alone), `rung.founded` or
   `site.built` ≥ 1 at some seed, then `site.worked` on the built Site, then `world_q.capacity` of the
   court's rung above the control's. Across seeds 0 to 19 on a one-works fixture the stores left at the

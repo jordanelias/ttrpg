@@ -2,7 +2,34 @@
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2) — order and one consumer. Steps 1 and 2 land in the field calibration batch, before the pair rule (`U5b_MB_rulings_in_the_field.md` §6 row 4); step 3's `entry_stamina` has its writers named by `26_MASS_BATTLE_movement_and_fatigue_as_data.md`. The loadout's fatigue factor (`04_MB_unit_loadout_and_weapon_in_hand_B.md` §5) multiplies this ledger's drain and divides its rest, and nothing else.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 and §2 (A-69, A-2: the record of the
+returned stamina names its one writer and its matrix row; the module returns it and writes nothing, `04` §G.2.1, §A.2
+`:158`), §7/§7b (tests, tier); U1 D-U1-11e (`FieldOutcome.stamina_left` is declared once, by
+`26_MASS_BATTLE_movement_and_fatigue_as_data.md`; this file reads it and re-declares nothing), D-U1-11c (the stamina
+constants become rows of `references/troops.yaml`), §2 campaign row (losses and fatigue written to the army Record);
+U3 B19 (steps 1-2), §4.1 row 64 (step 3 and the A-69 write land in B31 with the movement-and-fatigue file), row 63
+(`27_MB_E` reads this ledger), C3-L11 (recovery is computed when read). **Corrected at the tree:** R5 7b's writer
+`loop/effects_army.py` `[ASSUMPTION]` is not the field's fold: a field is folded by `_eff_march`
+(`loop/effects_combat.py:451`), and the army Record's content cell `(Record, subject_matter)` is already a RESOLVE row
+(`write_matrix.yaml:353-358`, written today by `effects_army.py`'s four army verbs through
+`modules/mass_battle/armyrecord.py`), so no new matrix row is needed. Changed: the A-69 fold's write named, step 3's
+"what writes a lower value" closed by the audit-26 fold, the gate's test file.
+
 ## Status: PROPOSED
+
+Lands in batch: **B19** for steps 1-2 (MB; the field calibration batch, before the pair rule); **B31** for step 3 and the
+A-69 record write (with `26_MASS_BATTLE_movement_and_fatigue_as_data.md`, which declares `stamina_left`). Depends on:
+`04_MB_unit_loadout_and_weapon_in_hand_B.md` (B17), `26_MASS_BATTLE_movement_and_fatigue_as_data.md` (B31) for step 3.
+
+**The one writer of the recorded stamina (A-69, A-2).** The module returns `FieldOutcome.stamina_left` per part and
+writes nothing (a module holds no token). The season records it at RESOLVE (ACTS token) in `_eff_march`
+(`loop/effects_combat.py:451`), which already folds the field: it replaces the army Record's content with the one
+`modules/mass_battle/armyrecord.py` returns after setting each unit row's stamina from `stamina_left`, through the
+existing `(Record, subject_matter)` row (`steps: [RES]`). Edits that come with it: `verb_table.yaml`'s `march` row
+declares `Record.subject_matter` in its `writes` at the bands that fought a field, and the matrix row's `by:` note
+names `march` beside the four army verbs `[ASSUMPTION: `march`'s effect is the field's fold — basis:
+`effects_combat.py:451`; verify the band set at landing]`. What a later read sees after rest is computed when read
+(C3-L11), not written by a clock.
 
 Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (rulings A-69 and A-59). Nothing here is deleted. (1) **A-69**: "armies carry fatigue ... back", through this ledger and no other. Step 2's returned stamina is returned **per part** (`stamina_left`); the season records it on the unit's row as a crossing (the round and the value), and step 3's `entry_stamina` for a second field of the same round is that value plus one lull's recovery, computed when the input is built. That is a fourth writer of the entry share beside the three audit 26 named, and it replaces the flat second-field seed where a record exists (`27_MB_E_what_an_army_carries_back.md` §4). Whether tiredness outlasts a round boundary is not decided: the length of a round in the fiction was not read, and the parameter ships at 0. (2) **A-59**: the fatigue level is one of the terms a unit brings to a pair from its own columns; with step 1's deletion of the `stam_pen` term the base dice (`prowess`) hold no stamina term at all (`27_MB_B_unit_prowess_on_the_row.md` §2). The gate's "friction pinned off for the test" stands until the multiplier is deleted, after which it has nothing to pin.
 
@@ -66,15 +93,19 @@ If any golden moves at step 1, the unit ledger was not inert on that path: stop,
 |---|---|
 | `engine/season/queries/inputs.py::MassBattleInput` | new field `entry_stamina: tuple[float, float] = (1.0, 1.0)`, each side's share of full stamina at the start, in `[0, 1]` |
 | `modules/mass_battle/massbattle.py::resolve_field` | after each `Unit` is built: `for b in unit.col_grid: b.stamina = STAMINA_MAX * share`; at `1.0` nothing is written |
-| `engine/season/seam/wrappers/mass_battle.py::field_input` | passes `(1.0, 1.0)`. **What writes a lower value is not decided here**: it is the campaign layer's (a march's length, a ration short, a second field this season) and the loadout proposal's (a kit's carry cost), each through this one field |
+| `engine/season/seam/wrappers/mass_battle.py::field_input` | passes `(1.0, 1.0)` at the default. What writes a lower value is decided by the audit-26 fold above (`26_MASS_BATTLE_movement_and_fatigue_as_data.md` §3: the march's band, a second field in one round, a short ration) and by the A-69 record (the value carried back), each through this one field |
 
 The `PER_CELL` off arm has no column grid; there `entry_stamina` other than `(1.0, 1.0)` is refused
 loudly rather than ignored.
 
 ## Gate (execution artifact)
 
-One test in the file covering `resolve_field`: a mirror field, n 100 seeds, friction pinned off for
-the test; `entry_stamina (0.5, 1.0)` loses more often than `(1.0, 1.0)` by more than the sampling band
+`p5_tired.py` was lane scratch, not in the repository. NEW `tests/valoria/test_mass_battle_entry_stamina.py` (beside
+`test_mass_battle_army_record.py`, which exists): `test_entry_stamina_half_loses_more`, `test_default_equals_omitted`,
+`test_returned_stamina_below_100_after_a_fought_field`, and (B31) `test_marched_field_records_stamina_left_on_the_army_record`.
+Command: `python -m pytest tests/valoria/test_mass_battle_entry_stamina.py -q`; step 1's gate is the goldens under
+`engine/tests/` (`python -m pytest engine/tests -q`), unchanged. The test: a mirror field, n 100 seeds, friction pinned
+off for the test; `entry_stamina (0.5, 1.0)` loses more often than `(1.0, 1.0)` by more than the sampling band
 (the measured gap is 36 → 15 wins); `(1.0, 1.0)` equals the field with the argument omitted, field for
 field; the returned stamina is below 100 at the end of a fought field. Step 1's own gate is the
 existing goldens, unchanged.
@@ -97,4 +128,6 @@ stamina of 100 after eighteen ticks of contact.
 
 ## Cost class
 
-Edit (steps 1 and 2), small build (step 3).
+Edit (steps 1 and 2), small build (step 3). Tier: `sonnet`, effort `high`. Hash movers declared: none at steps 1-2 (the
+goldens are the falsifier); step 3 none at its default; the A-69 record write moves every world with a fought field
+(re-pinned in B31). Lands it: steps 1 → 2 in B19; step 3 and the record write in B31.

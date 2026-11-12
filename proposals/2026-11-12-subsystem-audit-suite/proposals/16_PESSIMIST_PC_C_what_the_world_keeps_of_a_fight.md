@@ -2,12 +2,23 @@
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.5) — one consistency note; no edit changes. A-33 (news of a death travels by presence, trail and telling, apart from the seat's news): the `fell_to_hand` Observation rides the death's own Event, so the killer's name reaches exactly those the death reaches and no further; nothing here widens who learns of it. The scene's `shape` is also what a nested round returns to a field (`U5b_PC_rulings_in_the_fight.md` §1), so an officers' duel inside a battle is retold by the same five facts.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (AMBIGUOUS against `04` §C.6: an
+Observation that names a doer reaches only channels that mint attribution) and §2 (A-33), U1 D-U1-06 (`observed` is the
+one channel; every predicate here is a member of the closed roster `rosters.yaml: observation_terms`, which resolves the
+`[name it at landing]`; `fell_to_hand` and `first_blood` are deposited only through channels whose
+`observation_terms.supplied_by` includes `who`), D-U1-11a (the victor's `fight_endings` member is `prevailed`, not
+`standing`), §7/§7b (gate row 5, test file, tier); U3 B14, §6.2 (`pS_season.py`, `pS2.py` are not in the repository).
+Changed: the head paragraph's member name, edit 1's roster sentence, edit 2's variable name, the gate.
+
 ## Status: PROPOSED
+
+Lands in batch: **B14** (PC), after `03_PC_typed_outcome_one_door.md` Part A and `03_PC_weapon_form_at_round_start.md`
+(B14). Depends on: Part A's `CombatOutcome` and `fell_to`.
 
 Source: `audits/16_PESSIMIST_PC.md` §3.3 (F-PES-PC-05, F-PES-PC-06). Extends, and does not restate,
 `03_PC_typed_outcome_one_door.md` Part A (the typed `CombatOutcome`, its `DecisiveBeat`, the `fell_to`
-Observation and the `standing` member of `fight_endings`). Reference only (`CLAUDE.md` §0.05); not
-ratified by being written.
+Observation and the victor's member of `fight_endings`, `prevailed` by D-U1-11a). Reference only (`CLAUDE.md`
+§0.05); not ratified by being written.
 
 ## What it changes in `engine/season/` at runtime (first)
 
@@ -59,10 +70,15 @@ class SceneShape:
 `Observation(actor, "fight_turns", shape.turns)`, `Observation(shape.first_blood, "first_blood", True)`
 when not `None`, and `Observation(actor, "lead_changes", shape.lead_changes)`. Five facts, each one a
 number or a name the scene already computed; a narrator, the chronicle and a played person's display
-read them off the log. The predicates go on the roster `fell_to` goes on `[name it at landing]`.
+read them off the log. The predicates are members of `rosters.yaml: observation_terms` (`:1273`, the closed
+roster `fell_to` also joins, D-U1-06); the loader refuses a predicate on `observed` that is not a member.
+**Who may hold the names.** `first_blood` and `fell_to_hand` name a person as a doer: WITNESS deposits them only
+through channels whose `observation_terms.supplied_by` includes `who` (`co_located`, `witness_key`), never through
+`document_key`, `post_remit` or `chronicle` (`04` §C.6: attribution per channel). The counts (`blows_landed`,
+`fight_turns`, `lead_changes`) name no doer and ride every channel the Event's other facts ride.
 
 **2. The hand.** For a felled party who is the act's *actor*, `_eff_kill`'s Subject carries
-`Observation(felled, "fell_to_hand", standing_party)`. `queries/person_q.py::deed_doer` reads a
+`Observation(felled, "fell_to_hand", prevailing_party)`. `queries/person_q.py::deed_doer` reads a
 `fell_to_hand` Observation on the claim's Event first and returns its value; the `seen.who` pairing
 stands for every other case. This closes the stated limit at its site and guesses nothing: the fold
 knows who the other claimant was.
@@ -83,7 +99,13 @@ state outliving the call) and a new Event kind per beat (the fold's kinds are th
 
 ## Gate (execution artifacts)
 
-1. The S1 probe re-run: the three Events of the seed-1003 fight carry `fight_turns 8`, `blows_landed`
+The S1 and S7 probes were lane scratch (not in the repository). NEW `tests/valoria/test_combat_scene_shape.py` (beside
+`test_combat_audit_pins.py`, which exists): `test_scene_shape_is_a_pure_fold_over_trace`,
+`test_fell_to_hand_names_the_prevailing_party` (gate 2), `test_played_and_automated_scenes_carry_equal_observations`
+(gate 4), `test_document_post_remit_and_chronicle_witnesses_hold_no_fell_to_hand` (gate 5). Command:
+`python -m pytest tests/valoria/test_combat_scene_shape.py -q -m combat`. Readings:
+
+1. The S1 reading (a fight at world seed 1003): the three Events of the seed-1003 fight carry `fight_turns 8`, `blows_landed`
    for both parties summing to 5, `first_blood` and `lead_changes`.
 2. The S7 probe re-run over 100 fights: in every scene where the actor is felled, `deed_doer` on the
    bystander's `person.died` claim returns the standing party; before the change it returns `None` or
@@ -91,6 +113,8 @@ state outliving the call) and a new Event kind per beat (the fold's kinds are th
 3. Control: with the Observations withheld the pre-change hash returns.
 4. A played `fight` and an automated one from equal choices carry equal Observations (the module
    computes them from the same trace).
+5. A `document_key`, `post_remit` and `chronicle` witness of the death holds no `fell_to_hand` and no
+   `first_blood` (the hand reaches only `who`-supplying channels).
 
 ## Falsifier
 
@@ -112,4 +136,6 @@ self-defence after which no witness can name the killer.
 
 ## Cost class
 
-Edit, after `03_PC_typed_outcome_one_door.md` Part A.
+Edit, after `03_PC_typed_outcome_one_door.md` Part A. Tier: `sonnet`, effort `high`. Hash movers declared: every log
+with a fought scene (`Event.observed` is hashed); one re-pin at B14's close. Lands it: B14, order the roster members →
+`SceneShape` and the module fold → the seam's return → `_eff_kill`'s Observations → `deed_doer` → the chronicle line.

@@ -2,6 +2,12 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-19) — D1's and D3's edits to `tests/valoria/test_flow_skeletons.py`, and gate item 3's run of that file, are conditional: `01_CORE_tests_delete_what_cannot_fail.md` row 2 deletes the file. If that proposal has landed, skip those edits and that gate line; if this one lands first, make them (the file must stay green until it is deleted). No other edit here changes. D3's whole-file deletion of `co_movement.py` supersedes `17_CENSUS_REST_1_deletions.md` D1 row 6 (a field inside it).
 
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row C1B_01 CONFORMS, §2 row C1B_01:D3 none, §7 COMPLETE but for the tier, 7b; `unified/U3_DEPENDENCY_ORDER.md` §3.1, §4.1 rows 7-8). Changed: the dependency and batch lines and the tier, nothing in the batches. One U3 cut corrected at the file: §4.1 row 8 ("the C1B item that touches the SC05 kernel lands in B24") names an item this file does not carry: the SC-05 kernel's rows are `05_SC_sc05_kernel_disposition_B.md`'s, and this file only reuses that proposal's hash gate (gate item 1), so nothing here moves to B24.
+
+Depends on: `01_CORE_tests_delete_what_cannot_fail.md` (B02; the `test_flow_skeletons.py` edits are conditional on it, head above). The edge to `04_MB_unit_loadout_and_weapon_in_hand.md` is cut (SUP: that file is superseded by its `_B`). `09_WR_threadwork_module.md` (B03) co-lands: its edit 2 should say the two files are deleted, not moved (owed by the WR rewrite lane).
+Lands in batch: B03 (lane IN, cross-lane MB, WR, PC), three commits (D1, D2, D3); D1 in one commit with `17_CENSUS_REST_1_deletions.md` D1 rows 4-5 (same file, `conviction.py`).
+Tier: sonnet / high.
+
 ## Status: PROPOSED
 
 Carries `audits/17_CENSUS_C1B.md` §3.1 (the 21 dead rows this lane newly finds). The 80 dead rows that

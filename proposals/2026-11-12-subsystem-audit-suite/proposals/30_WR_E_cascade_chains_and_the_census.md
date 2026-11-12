@@ -1,6 +1,11 @@
 # WR-30-E — cascade chains and the census: the chains written link by link, an instrument that tells compounding from correspondence, and the gates for eras, regimes, strife, endings and cascades
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §1 found it CONFORMS (harness only) and R3 §2 found no ruling it contradicts; added: the serial order on `harness/storybar.py` (C3-K7), the batch (U3 B38), and the glossary's reading of "regime" in E-07 and C13 (they read `30_WR_B`'s creed bodies and, after `31_WR_A`, `core_standing`'s cores; "regime" in A-82's sense is the latter). Tier already named.
+
 ## Status: PROPOSED
+
+Lands in batch: B38 (narrative and regimes), after `30_WR_D` and before `30_GO_F` (U3 §1 item 38). Edits `harness/storybar.py` after `30_WR_C`, before `31_WR_B` commit 3 (C3-K7: one commit per proposal, never concurrently).
+Depends on: see "Dependencies" below (`23_STORY_D` and `20_NARRATIVE_F` land in B36).
 
 Source: `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md` §4, §7, F-30-09, F-30-10. Jordan, 2026-11-12: *"cascade effects and compounding are real"*; A-80; A-81. Reference only (`CLAUDE.md` §0.05). Lane WR; owner file IN's (`engine/season/harness/storybar.py`).
 

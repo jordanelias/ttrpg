@@ -2,6 +2,10 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-15, C-16) — §1's `argument.held` row and §3's second bullet are withdrawn as duplicates (carried once by `16_PESSIMIST_SC_D_an_argument_moves_someone.md` edit 1 and `16_PESSIMIST_SC_C_a_verdict_names_its_party.md` edit 1). §6 is read as the decision register's D-74, taken B: fix the witness code, not Layer 1. No lane applies a Layer 1 hunk; a read no refactor removes is listed for an amendment text. §4's budget row lands last, with `test_n3` read before and after.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.5 row FI-04 (CONFORMS; §4 budget row same defect as CHAR B1), §7 (INCOMPLETE: §6 names no symbols), §7b-T; `unified/U3_CONFLICT_LEDGER.md` C3-L8; `unified/U3_DEPENDENCY_ORDER.md` node B11, §4.1 row 11; `DECISIONS_ANSWERED.md` D-74). The body follows its head and the decisions: §1's `argument.held` row and §3's second bullet are removed (withdrawn as duplicates, carried once by `16_PESSIMIST_SC_D` edit 1 and `16_PESSIMIST_SC_C` edit 1); **§4's budget row is deleted** (C3-L8: `budget_office_bonus` is removed, carried by `U5a_CORE_owed_edits.md` §H; the head's "lands last" is overtaken); §6 is D-74 (fix the witness code, not Layer 1) with its symbols named; §5's `[UNVERIFIED]` on ED-FI-0002 is settled (it lives in `registers/editorial_ledger_fi_archive.jsonl`); named tests; lands-it and tier. The three reads no refactor removes are listed for an amendment text (receipt), not applied.
+
+**Lands in batch:** B11 (each row independent; one commit each); the `17_CENSUS_REST_1_deletions` row that needs this file lands with it (U3 §4.1 row 11).
+
 ## Status: PROPOSED
 
 Carries audit `audits/08_FI_audit.md` resolutions R-10 to R-17, R-22 to R-24, R-26. Each row is
@@ -12,8 +16,7 @@ Layer 1 and is also listed in the audit's §11.
 
 §1: two Event kinds renamed. §2: `research` needs presence; a repeated ungraded finding deposits nothing; a
 forgotten trail claim stops closing its trail. §3: a razing is witnessed where it happened; custody
-receipts name the prisoner and the seat. §4: a writ lapses; a held paper stops buying a scene. §5–§6:
-nothing.
+receipts name the prisoner and the seat. §4: a writ lapses. §5–§6: nothing.
 
 ## 1. Names (R-10, R-11)
 
@@ -22,10 +25,13 @@ nothing.
 | `verb_table.yaml`, the six inquiry rows' `emits_on_refusal` | `finding.none` | `inquiry.refused` | CP-T05-03 split `tell.refused` from `news.untold` |
 | same rows, `Failure` band | `finding.none` | unchanged | — |
 | `rosters.yaml: undeposited_kinds` | `[finding.none]` | `[finding.none, inquiry.refused]` until CP-T06-04 lands, then per that card | — |
-| `verb_table.yaml`, `argue`, `Partial` | `argument.won` | `argument.held` | `speak`'s `matter.held` |
 
-Gate: `corpus_run`'s per-kind census shows `inquiry.refused` > 0 and `finding.none` only with a degree;
-`argument.won` never with an empty `changes[]`. Movers (kinds are in the log).
+(`argue`'s `Partial` rename to `argument.held` is withdrawn here: carried once by
+`16_PESSIMIST_SC_D_an_argument_moves_someone.md` edit 1, C-15.)
+
+Gate: `corpus_run`'s per-kind census shows `inquiry.refused` > 0 and `finding.none` only with a degree.
+Named test (new): `engine/season/tests/test_fi_small_edits.py::test_inquiry_refused_is_split_from_finding_none`.
+Movers (kinds are in the log).
 
 ## 2. Wiring (R-12, R-13, R-15)
 
@@ -47,9 +53,8 @@ Gate: `corpus_run`'s per-kind census shows `inquiry.refused` > 0 and `finding.no
 - **`queries/world_q.py::event_place`.** For an act-caused Event whose actor has no place after the write,
   fall back to the place he departed in that write (`World.departed_from`, the limb H-206 added for a
   death). Gate: `test_in12_raze.py`'s razing is held by those who stood in the town, not by "somebody".
-- **`epistemic.py::_hold_tenure_ends`.** Expand a `detain` or `ban` edge to `(prisoner, seat)` as it expands
-  a `hold` to `(holder, held)`. The other kinds stay opaque, as its docstring argues. Gate: `arrest.made`
-  deposits a claim about the prisoner.
+(The second bullet, `_hold_tenure_ends` expanding a `detain`/`ban` edge, is withdrawn: carried once, wider,
+by `16_PESSIMIST_SC_C_a_verdict_names_its_party.md` edit 1, C-15.)
 
 ## 4. Dead carrier and a mis-read edge (R-24, R-22)
 
@@ -57,10 +62,10 @@ Gate: `corpus_run`'s per-kind census shows `inquiry.refused` > 0 and `finding.no
   its last declared stage maturing: `issue` already winds stages (`_declared_stages`) and MATTER matures
   them; `comply`'s cell gains "the writ's last stage has not matured". Gate: H-259's eight-season run: the
   writ stops admitting `comply` after its last stage. FA's lane to place.
-- **`decision/budget.py::budget`** counts live `hold`s whose object is an Office (S26.3: the budget varies
-  *by office*), not every `hold`: a held Record, Proposition or rung stops paying `budget_office_bonus`
-  (H-92). CHAR's owner; listed here because every document the information verbs mint is such a `hold`
-  (`create_record` 130 / 116 / 117 a season). Gate: `p_carin`'s budget unchanged by her first record.
+- **`decision/budget.py::budget`**: **deleted** (C3-L8). `budget_office_bonus` is removed altogether
+  (`04` §A.3 row 15 refuses an office bonus in `budget`), so a held Record, Proposition or rung no longer
+  buys a scene (H-92) because no `hold` does; carried by `U5a_CORE_owed_edits.md` §H. The evidence stays:
+  every document the information verbs mint is a `hold` (`create_record` 130 / 116 / 117 a season).
 
 ## 5. Text, rows and pointers (R-14, R-16, R-17; no behaviour)
 
@@ -76,17 +81,23 @@ Gate: `corpus_run`'s per-kind census shows `inquiry.refused` > 0 and `finding.no
   the knots oracle's tracks and gates, so a reader of the contract is not told the module holds an
   Evidence Track.
 - **`registers/editorial_ledger_fi.jsonl`.** Write the two rows `HANDOFF_FI.md` names as unwritten
-  (ED-FI-0009's FI-01 build; ED-FI-0002's FI-02/FI-03 build) and correct the handoff's pointer if
-  ED-FI-0002 lives in the archive ledger [UNVERIFIED by the audit].
+  (ED-FI-0009's FI-01 build; ED-FI-0002's FI-02/FI-03 build) and correct the handoff's pointer: ED-FI-0002
+  lives in `registers/editorial_ledger_fi_archive.jsonl` (verified by grep; settled).
 
 ## 6. Layer 1: `04_CODE_ARCHITECTURE.md` §A.2, the `loop/witness` row (R-26; also audit §11 item 2)
 
-Ratified; not edited by this proposal. Decided preference, for Jordan's merge: **restore the row for the
-two `decision/` imports** (move `refracted_confidence` and `ledger_weigh`'s arithmetic behind a per-holder
-projection a `queries/` function builds at the barrier; `witness.py` then imports no `decision/`), **and
-amend the row** for the three reads no refactor removes: the driver's `findings` store, older Events by id,
-and the ledger id set. The alternative is to amend the row for all five. Gate for the refactor: the same
-content hash at seeds 0–2 before and after.
+Ratified; not edited by this proposal. Decided (D-74, taken B: fix the witness code, not Layer 1): **the two
+`decision/` imports are removed from the code**. `loop/witness.py:46` imports `ledger_weigh` and
+`refracted_confidence` from `decision/options.py`; both functions move to `queries/person_q.py` (person-side,
+World-free arithmetic over a holder's own ledger and interior), `decision/options.py` re-imports them from
+there (`04` §C.3: `decision/` imports `person_q`), and `witness.py` imports them from `queries/person_q.py`,
+so it imports nothing from `decision/` `[ASSUMPTION: the target module; basis: the "per-holder projection a
+`queries/` function builds" this section first named, and `04` §C.3's import rule]`. The three reads no
+refactor removes (the driver's `findings` store, older Events by id, the ledger id set) are listed for an
+amendment text to `04` §A.2's `loop/witness` row, drafted by the unification stage and applied only by
+Jordan; nothing in `04` is edited here. Gate for the refactor: the same content hash at seeds 0–2 before and
+after; named test (new): `engine/season/tests/test_fi_small_edits.py::test_witness_imports_nothing_from_decision`
+(a source scan of `loop/witness.py`).
 
 ## Falsifiers
 
@@ -102,3 +113,6 @@ mechanic.
 ## Cost class
 
 Edit, throughout, except §6's refactor (small build).
+
+**Lands it and tier.** The B11 batch, an FI `valoria-author` session on `sonnet` (`high`), one commit per row,
+closed by B11's `methodology-close` once. **Hash movers.** §1–§3 (declared); §6's refactor none (gate).

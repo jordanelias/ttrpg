@@ -2,7 +2,21 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-54** (the one four-band ladder). R1's scoping stands (only grown kinds follow the weather). What the factor is changes: for a grown kind the season's yield is the band of a keyed draw on the shared ladder (pool: the place's endurance with the steward's skill; obstacle: the season's hardship), not a multiplier drawn from a table; the receipt of R2 carries the band beside the produced map. J-2 is closed (B). Edits 3 and 4 are unchanged.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-54: R1 and edit 1's factor is the
+yield factor of the band of the season's keyed draw, not a table multiplier; the grown scoping stands), U3 C3-R7 (25 G-06
+refuted the primary: `World.write` takes no `spec=`; the stated fallback, a `spec` pass-through on `write`, is the plan and
+the primary sentence is struck), §7/§7b (tests, tier); U3 B12, C3-D6, §6.2 (`pes_noacts.py`, `kernel.py`,
+`pes_supply.py` are not in the repository). **Not applied:** R5 §1's pick for edit 2 (convert the closure write to a
+`Change` so CORE record edit 1's `delta` carries before and after, with no `spec`): U3 C3-R7 decided the fallback for
+this file and the decision governs; R5's form is recorded as an alternative at edit 2. **Correction to R5 §2:** the
+owner of the harvest band draw is `09_WR_B_weather_with_memory_and_the_year.md` edit 1 (`season_factor_of` returns the
+band's yield factor), not `09_WR_B_draws_not_thresholds.md`.
+
 ## Status: PROPOSED
+
+Lands in batch: **B12** (SE), after `16_PESSIMIST_SE_A` (C3-D6). Depends on: `09_WR_B_weather_with_memory_and_the_year.md`
+edit 1 (the band draw `season_factor_of` returns), `07_SE_treasury_granary_B.md` (R-SE-28, the stock edit 4's check
+reads), `16_PESSIMIST_CORE_the_record_holds_what_changed.md` edit 1 (B09, receipts).
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-06) — `World.write` takes no `spec=` today (`state/world.py:1138-1148`); the receipt edit the proposal named as its fallback is required.
 
@@ -88,17 +102,23 @@ f = factor[rung] if k in inp.grown else 1
 produced[k] = produced.get(k, 0) + int(base * (max(0, condition) / inp.scale) * f)
 ```
 
+`factor[rung]` is what `queries/world_q.py::season_factor_of` returns for the rung's territory: under A-54 the
+yield factor of the band of the season's keyed draw on the shared ladder (pool: the place's endurance, with the
+steward's skill as `edge` levels at site `settlement_effect`, D-U1-09; obstacle: the season's hardship), owned by
+`09_WR_B_weather_with_memory_and_the_year.md` edit 1. This file does not draw; it scopes the factor to grown kinds.
 At factor 1.0 the float expression is operand for operand today's, so no truncation moves.
 
 ### 2 · `loop/matter.py` (the `yield` write, `:781-785`)
 
-The write passes the produced map as the receipt's `spec` (the Receipt already has the field:
-`Receipt(subject, mode, driver, field, delta, spec, serial)`), e.g. `spec=tuple(sorted(produced.items()))`
-`[GROUNDED, 25 G-06: it does not. `World.write`'s parameters are `thing, token, apply, record_kind,
-fieldname, driver, caused_person_exists, emits, causes, subject, actor, via, change, matured_term,
-observed` (`state/world.py:1138-1148`); its two mint sites pass no `spec` (`:1442`, `:1494`), though
-`Gate.mint` takes one (`state/gate.py:1905-1906`) and `StateChange` has the field
-(`state/carriers.py:197-205`). The edit is a `spec` parameter on `write` passed through at `:1442`]`.
+`World.write` gains a `spec` parameter, passed through to `Gate.mint` at its mint sites (`state/world.py:1442`,
+`:1494`); the `yield` write passes the produced map, `spec=tuple(sorted(produced.items()))`, and, under A-54, the
+band of the season's draw beside it. Grounding (25 G-06): `World.write`'s parameters today are `thing, token,
+apply, record_kind, fieldname, driver, caused_person_exists, emits, causes, subject, actor, via, change,
+matured_term, observed` (`state/world.py:1138-1148`); `Gate.mint` already takes a `spec` (`state/gate.py:1905-1906`)
+and `StateChange` has the field (`state/carriers.py:197-205`). (The earlier sentence that the write already took
+`spec` is struck, C3-R7.) *Alternative, not taken here (R5 §1):* convert the closure write to a `Change` with
+`Subject.entity("rungs", rid, fields=("yield",))`, so `Receipt.delta` (CORE record edit 1) carries the before and
+after with no second route; U3 C3-R7 chose the `spec` pass-through for this file.
 
 ### 3 · `modules/settlements/fortification.py`
 
@@ -132,6 +152,14 @@ if ration and not any(all((w.rungs[r].stores or {}).get(k, 0) >= n for k, n in r
 `H-241`'s sweep arm *"True on empty treasuries"* becomes a test of this refusal.
 
 ## Gate (execution artifacts)
+
+The scratch scripts are not in the repository. Tests: `engine/season/tests/test_season_weather_per_territory.py`
+(exists) gains `test_ore_and_timber_ignore_the_weather` (1); NEW `engine/season/tests/test_fortification_adds.py`:
+`test_second_wall_never_lowers_the_first`, `test_half_strength_pair_reads_075`, `test_no_garrison_reads_zero` (3);
+`test_yield_receipt_carries_the_produced_map` (2) in `test_season_weather_per_territory.py`; and H-241's sweep arm
+as `test_field_provisioning_refused_on_empty_treasuries` (4) in `engine/season/tests/test_hunger.py` `[ASSUMPTION: the
+nearest existing file covering subsistence fixtures — basis: SE_A's gate]`. Command:
+`python -m pytest engine/season/tests/test_season_weather_per_territory.py engine/season/tests/test_fortification_adds.py engine/season/tests/test_hunger.py -q`.
 
 1. `engine/season/tests/test_season_weather_per_territory.py`: weather arm on, eight seasons at seed 0:
    realm ore and timber yield equal the weather-off run season for season; grain differs. Control: the
@@ -173,4 +201,6 @@ lane's endowment).
 
 ## Cost
 
-Small. Edit 4 depends on nothing; edits 1 to 3 are independent of each other.
+Small. Edit 4 depends on nothing; edits 1 to 3 are independent of each other. Tier: `sonnet`, effort `high`. Hash
+movers declared: edit 2 (every world where a yield is written); edits 1, 3, 4 none at the shipped values. Lands it:
+B12, after SE_A; one commit per edit.

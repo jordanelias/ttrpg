@@ -4,7 +4,12 @@ Folded: 2026-11-12 by `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md`. Nothing h
 
 Reconciled: 2026-11-12, U5d closure — folded **A-54** (the one four-band ladder; against this file's multiplier form). Edits 1–2 are rewritten in what the draw is: the season's and the spell's draws are keyed draws on `degree_from_net`, pool the place's endurance (with its steward's skill, A-54's own words) and obstacle the season's hardship; the spell enters as an obstacle term shared by every territory under the parent rung for the year, not as a multiplier. "Mean one" becomes a calibration target for the band magnitudes (a declared sweep), not a property of a table. The keys (year, parent rung), the control (`()`), edit 3 (the leg's price) and edit 4 (the `site_band` ending reached by a draw) stand.
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — the body follows the U5d head (R3 §2, 7b-11, U1 ledger F-21): "The resolution"'s R-27 and "Mean one" bullets, edit 1's code and edit 2 are rewritten from a multiplier to a keyed draw on `degree_from_net` with the spell as a shared obstacle term and "mean one" as a calibration reading over band factors; the steward's part is named levels at site `settlement_effect` (D-U1-09, which overrides 7b-11's "the steward's `rate`"); the year is read from its one owner, `rosters.yaml: seasons_of_year` (`20_NARRATIVE_E` edit 1; D-U1-10, C3-K11), not `len(season_factor_draw)`; every pool and obstacle is a `[CALIBRATE]` row (R3 §2 last row; joint calibration, OWED §B); gate items (4) and edit 2's falsifier are re-read on the new form; tier and batch split (R3 7b-0; U3 B12 for the year and the spell, B38 for the era reading, cut edge §4.1 row 45). The problem section's evidence is kept as what `main` holds.
+
 ## Status: PROPOSED
+
+Lands in batch: B12 (world motion and ground), after `16_PESSIMIST_WR_A_the_road_is_drawn` (U3 §1 item 13), for edits 1–4; the era reading of the spell (`30_WR_A` commit 4's `dearth` row) lands in B38.
+Depends on: `20_NARRATIVE_E_the_year_and_the_reason.md` edit 1 (head of B12, `seasons_of_year`); `09_WR_B_draws_not_thresholds.md` (B12, the one shape); `07_SE_capability_rate_B.md` / the capability architecture's `settlement_effect` site (B04/B12) for the steward's levels; CP-T10-01 (plan position, `route` and `route_pricing`, edit 3; MISSING until STAGES.md step 5 carries it).
 
 Carries findings F-WR-19 and F-WR-20 of `audits/09_WR_audit_addendum_B.md` (§5.3, §5.4), its resolutions
 R-23, R-26 and R-27, and step 4 of its §3.8. Sits beside the first lane's `09_WR_world_motion.md` (the
@@ -53,15 +58,20 @@ holds, so the design's survival terminal (the Rupture: "all factions lose", `wc_
 
 ## The resolution, decided
 
-- **R-27 · a spell.** Weather gains a second keyed draw on a coarser clock and a coarser place: the
-  **year** (`tick // len(season_factor_draw)`) and the territory's **parent rung** (`state/containment.py::parent_of`, the
-  one owner `state/gate.py` already imports). The spell is a multiplier drawn once per (seed, year, region), shared by every
-  territory under that region for the whole year; the season's own draw stays per territory and per
-  season. Factor = `season_factor × spell × choice(season entry)`. Duration and neighbourhood come from the
-  key, and no state is stored: the spell a territory is in is a function of `(world_seed, year, rung)`, as
-  the season of the year already is.
-- **Mean one.** Every arm's members are chosen with arithmetic mean one, so a forcing moves variance and
-  not the long-run harvest. A bias, if wanted, is `season_factor` (the constant), declared as such.
+- **R-27 · a spell, as an obstacle term (A-54).** The season's harvest is one keyed draw on the shared
+  ladder (`dice_engine.degree_from_net`): **pool** the place's endurance, with its steward's skill as named
+  levels (`edge` row, site `settlement_effect`, `side: steward`; D-U1-09); **obstacle** the season's
+  hardship plus a **spell term** drawn on a coarser clock and a coarser place: the **year** (read from
+  `rosters.yaml: seasons_of_year`, `20_NARRATIVE_E` edit 1: `year = tick // len(SEASONS_OF_YEAR)`) and the
+  territory's **parent rung** (`state/containment.py::parent_of`, the one owner `state/gate.py` already
+  imports). The spell term is drawn once per (seed, year, region) and shared by every territory under that
+  region for the whole year; the season's own draw stays per territory and per season. The four bands map
+  to four yield factors. Duration and neighbourhood come from the key, and no state is stored: the spell a
+  territory is in is a function of `(world_seed, year, rung)`, as the season of the year already is.
+- **Mean one is a calibration reading, not a table property.** The four band factors are swept (a
+  declared sweep in `rosters.yaml`), and the reading recorded at three seeds is the realm's long-run
+  harvest under the live arm against the control: a forcing should move variance and not the long-run
+  harvest. A bias, if wanted, is `season_factor` (the constant), declared as such.
 - **R-23 · the leg's price is not world state.** It is a pure function of two settlement ids and the
   loaded geography (`data/geography.py`'s adjacency and terrain matrices: identical for every person,
   changed by no act). `decision/budget.py::budget(p, v, k, fx)` (`:18`) already takes `fx` on exactly that
@@ -81,37 +91,44 @@ holds, so the design's survival terminal (the Rupture: "all factions lose", `wc_
 
 ## The edits
 
-### Edit 1 · the spell (`engine/season/data/fixtures.py`, `queries/world_q.py::season_factor_of`)
+### Edit 1 · the season's draw and the spell term (`engine/season/data/fixtures.py`, `rosters.yaml`, `queries/world_q.py::season_factor_of`)
 
 `fixtures.py`, beside `season_factor_draw`:
 
 ```python
-    season_spell_draw=(),        # R-27: the year's regional multipliers, equally likely, mean one;
-                                 # swept () (control) / (0.6, 1.0, 1.4)  [ASSUMPTION; medium; Jordan to correct]
+    season_spell_draw=(),        # R-27: the year's regional obstacle terms, equally likely;
+                                 # swept () (control) / (-1, 0, +1)  [ASSUMPTION; medium; Jordan to correct]
 ```
 
-`season_factor_of` gains, after `s = season_of_year(w)` and before the season draw:
+`season_factor_draw` keeps its `()` control; when non-empty it is refused at load unless its length equals
+`len(SEASONS_OF_YEAR)` (D-U1-10). `rosters.yaml` gains `season_band_factors: {Overwhelming: …, Success: …,
+Partial: …, Failure: …}` (the four yield factors, a declared sweep) `[CALIBRATE; joint calibration, OWED §B]`.
+`season_factor_of`, when the arm is on, composes (structure):
 
 ```python
-    spells = w.fixtures.get("season_spell_draw")
-    spell = 1.0
-    if spells:
-        year = w.tick // len(w.fixtures.get("season_factor_draw"))
-        region = parent_of(w, territory) if territory else None   # `state/containment.py`; "world" if none
-        region = region or "world"
-        spell = draw_factory(w.world_seed, lambda: year)(region, "season_spell").choice(spells)
-    return base * spell * draw.choice(outcomes)
+    year = w.tick // len(SEASONS_OF_YEAR)                      # D-U1-10: the year's one owner
+    region = (parent_of(w, territory) if territory else None) or "world"   # `state/containment.py`
+    spell = (draw_factory(w.world_seed, lambda: year)(region, "season_spell").choice(spells)
+             if spells else 0)                                 # shared by every territory under `region`
+    pool = endurance_of(territory) + steward_levels            # place's endurance; D-U1-09 `settlement_effect` edge
+    obstacle = hardship_of(season_of_year(w)) + spell          # the season's hardship plus the shared spell term
+    band = degree_from_net(roll(pool, obstacle, draw))         # the one ladder; `draw` keyed as today
+    return base * SEASON_BAND_FACTORS[band]
 ```
 
-A spell table with no season table refuses at load (a spell needs a year to last). The docstring's
-"two territories at one tick draw independently" becomes "their season draws are independent; their spell
-is shared when they share a parent rung".
+`endurance_of`, `hardship_of` and the steward's levels are `[CALIBRATE]` rows (CP-T10-03's `season_terms`
+for hardship by season; the capability architecture's `settlement_effect` site for the steward), read by
+this one function. A spell table with no season table refuses at load (a spell needs a year to last). The
+docstring's "two territories at one tick draw independently" becomes "their season draws are independent;
+their spell term is shared when they share a parent rung".
 
-### Edit 2 · arm members with mean one (B10-18's arm, `fixtures.py:535`'s sweep comment)
+### Edit 2 · the band factors are a sweep with a mean-one reading (B10-18's arm)
 
-The swept live arm `((0.5, 1.0, 2.0),) * 4` becomes `((0.5, 1.0, 1.5),) * 4`. One value moves; the
-control is untouched. Recorded in the B10-18 card as the arm it flips to. `[ASSUMPTION; medium; Jordan to
-correct; revert: restore 2.0]`
+Not a table edit. The live arm's four `season_band_factors` are swept, and the reading recorded at three
+seeds over eight seasons is the realm's mean harvest factor under the arm against the control's; the
+calibration target is a mean of one (a forcing moves variance, not the long-run harvest). The former
+change of `((0.5, 1.0, 2.0),) * 4` to `((0.5, 1.0, 1.5),) * 4` is withdrawn with the multiplier form.
+`[ASSUMPTION; medium; Jordan to correct]` for the factors.
 
 ### Edit 3 · the leg's price reaches the chooser (`decision/budget.py`, `loop/driver.py`)
 
@@ -140,7 +157,8 @@ floor (a world with every Site fallen still rolls, so its loss is likely and not
 it plus one for each band below the named one. Failure: the ending is reached this season, and the edges
 returned are the fallen Sites; Partial: not reached, and the season's report carries the row as `near`
 (a reading, writing nothing); Success or Overwhelming: nothing. Recoverable: a restored Site moves from the
-obstacle to the pool, so restoration lowers the odds the next season. The draw is keyed by
+obstacle to the pool, so restoration lowers the odds the next season `[CALIBRATE: pool scale and
+per-Site obstacle, joint calibration, OWED §B]`. The draw is keyed by
 `(seed, tick, row)`, so `endings_reached` returns the same answer at every call in a season (`T-a`: a read,
 recomputed, storing nothing) and advances no draw ordinal (`season_factor_of`'s precedent: a keyed draw
 inside a Query). `endings_reached`'s antecedents are the `condition.band_crossed` Events that took each
@@ -159,9 +177,11 @@ Passes when: (1) every control reproduces `build_realm(0)` and the one- and two-
 `season_spell_draw = (0.6, 1.0, 1.4)`, two territories under one parent rung read the same spell in every
 season of a year and may differ the next year, and two under different parents may differ in the same
 season; (3) the spell is a function of `(seed, year, region)` only (same inputs, same spell, from two
-processes); (4) under the live arm with spells, at three seeds over eight seasons, at least one territory
-reads `shortfall` in two consecutive seasons, using CR-73's reading (`[UNVERIFIED]` until run; the
-falsifier below says what failing looks like); (5) a planted `site_band` row over a planted world reads
+processes); (4) re-read on the drawn form: under the live arm with spells, at three seeds over eight
+seasons, at least one territory reads `shortfall` in two consecutive seasons (a hard spell raising the
+obstacle for a year), using CR-73's reading, and the same territory does not do so at every seed (the draw
+did not collapse into a threshold) (`[UNVERIFIED]` until run; the falsifier below says what failing looks
+like); (5) a planted `site_band` row over a planted world reads
 never reached when no harbour is below the band (ineligible); over 200 seeds with every harbour below it,
 reached at most seeds and **not** at all of them; with one harbour in three below, reached at fewer seeds
 than that and at more than zero; (6) two calls in one season return the same answer and leave the draw
@@ -170,8 +190,10 @@ ordinal unchanged; (7) the loader refuses `site_band` beside `under:` and beside
 ## The falsifier
 
 For edit 1: the spell differs between two territories of one region in one season (the key leaked the
-territory), or is the same for every year (the year is not in the key). For edit 2: the realm's stores at
-season 8 under the live arm exceed the control's by more than the control's own seed-to-seed spread. For
+territory), or is the same for every year (the year is not in the key), or the year is read from
+`season_factor_draw`'s length rather than `SEASONS_OF_YEAR`. For edit 2, re-read on the drawn form: the
+recorded mean harvest factor under the chosen band factors departs from one by more than the control's own
+seed-to-seed spread, and the factors are nevertheless shipped (the calibration reading was ignored). For
 edit 3: any `World` reaching `decision/`. For edit 4: a `site_band` row reached while no selected Site is
 at or below its band (eligibility leaked); or a state at which the row is reached at every seed or at none
 across 200 seeds while eligible (the draw has collapsed into a threshold).
@@ -188,10 +210,11 @@ across 200 seeds while eligible (the draw has collapsed into a threshold).
   nearby". A priced journey makes going yourself or sending someone a strategic choice.
 - **S.** One draw primitive, one more key; the year already read off the table's length; the leg's price
   on `fx`'s precedent; the ending on the roster's own grammar. Calculations consistent: the spell and the
-  season draw are both multipliers on the one factor owner.
+  season's hardship are both obstacle terms of one draw on the one ladder, and the year has one owner.
 - **E, last.** Two fixture values, one keyed draw, one pure function and one selector, against the
   incident the design names first and the end it names last. High.
 
 ## Cost class
 
-Edits 1, 2: edit (data and four lines). Edit 3: small build. Edit 4: small build, no row.
+Edit 1: small build (one draw composed on the ladder, one roster table). Edit 2: a calibration reading.
+Edit 3: small build. Edit 4: small build, no row. Tier: `sonnet` (R3 7b-0).

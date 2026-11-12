@@ -2,6 +2,12 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-15) — D2 stands. Its premise that no proposal names the projection is corrected: `09_WR_B_chronicle_that_tells.md` (R-32), `09_WR_B_threadwork_session_and_practitioner.md`, `19_LACUNA_verdict_ladder_and_reversal.md` and `02_CHAR_voices_and_the_room.md` did; each now carries a `Reconciled:` line re-pointing it at `account` or at its own helper, so the deletion still leaves no reader behind. Order unchanged: after `11_GO_player_surface_contract_B.md`.
 
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §2 row C1A_01:D2, §7 and 7b; `unified/U3_CONFLICT_LEDGER.md` C3-L4, C3-Y9; `unified/U3_DEPENDENCY_ORDER.md` §4.1 rows 2-6; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-11n). Changed: (1) the D2 `FORK:` row carries the sha `60d13a7` (verified: `git log -1 --format=%h -- engine/season/tests/test_person_projection.py` returns it, and `git cat-file -e 60d13a7:engine/season/tests/test_person_projection.py` succeeds; it is a shallow-boundary commit that holds the file's text); (2) the player's reading is `account` alone: the host-side `receipt` is deleted by C3-L4 (a person's own outcome is a firsthand claim in his own ledger), so the two sentences naming `receipt` now name `account` only; (3) the order: GO-B is adopted by the suite, and D2 lands in B03, before GO-B's `account` is built (B34); the four re-pointed files depend on D2, not the reverse (§4.1 REV, C3-Y9); (4) tier named.
+
+Depends on: none that must land first (the edges to `02_CHAR_voices_and_the_room`, `09_WR_B_chronicle_that_tells`, `09_WR_B_threadwork_session_and_practitioner`, `11_GO_player_surface_contract_B`, `19_LACUNA_verdict_ladder_and_reversal` are reversed by `U3_DEPENDENCY_ORDER.md` §4.1 rows 2-6: those files depend on D2). D1's `defects` deletion co-lands with `17_CENSUS_C1A_02_wires_and_corrections.md` W3 (the loader check), which lands in B10 (`U3_DEPENDENCY_ORDER.md` §3.1, §4.1 row 35): D1's `defects` row therefore moves to B10 and lands in W3's commit; the rest of D1, D2 and D3 land in B03.
+Lands in batch: B03 (lane IN), three commits.
+Tier: sonnet / high for all three batches (deterministic deletions with named greps).
+
 ## Status: PROPOSED
 
 Author: census lane C1A. Audit: `audits/17_CENSUS_C1A.md` (findings F-C1A-01, F-C1A-06; rows in its §3
@@ -54,25 +60,31 @@ returns a use outside the deleted lines.
 | `engine/season/tests/test_person_projection.py` | the file (115 lines, 5 tests, all on the deleted names) |
 
 `FORK:` row (the sha is the last commit touching the test file; in this clone
-`git log -1 --format=%h -- engine/season/tests/test_person_projection.py` gives `60d13a7`, and the clone
-is shallow, so run `git fetch --unshallow` and re-read it before writing the row):
+`git log -1 --format=%h -- engine/season/tests/test_person_projection.py` gives `60d13a7`, a
+shallow-boundary commit that holds the file; after `git fetch --unshallow`, re-run the command and use its
+result if it differs. [ASSUMPTION: the true last-touch commit is at or before `60d13a7`, and any commit
+holding the final text suffices, as the `FORK:` convention states — basis: `git cat-file -e
+60d13a7:engine/season/tests/test_person_projection.py` succeeds]):
 
 ```
-| `engine/season/tests/test_person_projection.py` | `FORK:<sha8>` | FORKED (<date>, census C1A D2: the five tests of `world_q.projection` / `witnessed` / `PersonProjection`, v9 PC-06 S-2/L-1, a per-person client read that no harness, tool or plan called; the player's reading is the ledger-only `account` and the host-side `receipt` of the player surface contract; `<sha8>` is the last commit touching it, so the text there is the file) |
+| `engine/season/tests/test_person_projection.py` | `FORK:60d13a7` | FORKED (<landing date>, census C1A D2: the five tests of `world_q.projection` / `witnessed` / `PersonProjection`, v9 PC-06 S-2/L-1, a per-person client read that no harness, tool or plan called; the player's reading is the ledger-only `account` of the player surface contract; `60d13a7` is the last commit touching it in a shallow clone, so the text there is the file) |
 ```
 
 Why dead and not a missing wire: the proposal the suite accepted for the player's reading,
-`11_GO_player_surface_contract_B.md` §3-§4, reads the person's own ledger (`account`) and walks forward
-from his own act (`receipt`). `PersonProjection` hands a client copies of whole Events selected by
+`11_GO_player_surface_contract_B.md` §3-§4, reads the person's own ledger (`account`); the outcome of his
+own act reaches him as a firsthand claim in that ledger (`unified/U3_CONFLICT_LEDGER.md` C3-L4: the
+host-side walk once called `receipt`, renamed `act_result` by D-U1-11n, is deleted). `PersonProjection` hands a client copies of whole Events selected by
 witness, and its docstring (`world_q.py:4384-4388`) leaves open whether an inferred Event belongs there.
 Wiring it would add a second owner of "what a client reads for one person".
 
-**Order:** after GO-B is accepted. If GO-B is rejected, hold D2: the projection is then the only typed
-client read in the tree.
+**Order:** GO-B is accepted (the suite adopts it; `unified/work/R5_READ.md` §2 row C1A_01:D2), so D2
+lands in B03, before GO-B builds `account` in B34: the projection has no caller, so nothing reads the gap
+between the two batches (`U3_DEPENDENCY_ORDER.md` §4.1 row 4, REV; C3-Y9).
 
-Also correct, in the same commit: `09_WR_B_threadwork_session_and_practitioner.md:170, :214` and
-`09_WR_B_chronicle_that_tells.md:29-32` describe `PersonProjection` as a present reader; the unification
-lane should point them at `account`.
+The readers that described `PersonProjection` as present (`09_WR_B_threadwork_session_and_practitioner.md`,
+`09_WR_B_chronicle_that_tells.md`, `19_LACUNA_verdict_ladder_and_reversal.md`,
+`02_CHAR_voices_and_the_room.md`) are re-pointed at `account` by their own `Reconciled:` lines
+(C-U5a-15); this commit edits none of them.
 
 Gate: `python -c "import engine.season.queries.world_q"` exits 0 and a seeded one-season `content_hash`
 at seed 0 equals the hash before the commit. No shape test or registry enumerates the deleted names

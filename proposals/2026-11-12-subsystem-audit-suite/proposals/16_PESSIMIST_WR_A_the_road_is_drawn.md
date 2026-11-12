@@ -2,7 +2,21 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-54** and **A-5**: the road's draw is on the one ladder with the one sampler, as written; no step changes. A march's passage is not this file's (an army's arrival is the field's end state); a march into another's held territory is aggression by A-58; a win leaves the marcher standing there to seize, occupy or withdraw (A-66), and a draw returns him to his station (A-67).
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-5, A-6, A-7: `road_base = 2` and
+integer border counts were a whole-dice obstacle; the obstacle is the task composer's form of U1 architecture §4, with
+`road_base` a difficulty level set by the joint calibration and the borders, the weather and a war as named terms of the
+same obstacle), §1 (CONFORMS; the module home decided), §7/§7b (test file and names, tier); A-30 (the draw is keyed
+`H(seed, tick, pid, "road:<leg>")`); A-54 (the weather term reads the band of the season's draw, not "the lowest outcome
+of its table"); U3 B12, C3-D6, §6.1 (`test_travel.py` does not exist: written as the batch's first commit), §6.2
+(`p2_play.py` is not in the repository); STAGES.md (CP-T10-02 is a v11 card; the home is decided here for the v12 card).
+Changed: the obstacle bullet, edit 1's `road_base`, edit 3's home, the gate and the falsifier's form.
+
 ## Status: PROPOSED
+
+Lands in batch: **B12** (WR), after `16_PESSIMIST_GAME_the_world_draws.md` and `U5d_WR_owed_edits.md` §2 (a), §3, §4
+(C3-D6). Depends on: `07_SE_kernel_repairs.md` §4 (R-SE-09, the same-place decline) and
+`09_WR_B_weather_with_memory_and_the_year.md` edit 3 (`leg_price`) and edit 1 (the season's band), both B12;
+`engine/dice_engine/draw.py` (B06).
 
 Source: `audits/16_PESSIMIST_WR.md` §2.3, F-PES-WR-06. Read at `d161a61`. Reference only (`CLAUDE.md`
 §0.05). Lane WR (the owner is `loop/matter.py`'s travel pass and `loop/effects_migration.py::_relocate`).
@@ -49,11 +63,18 @@ through the gate at cells the write matrix already licenses for MATTER (`(Person
 **State sets the odds; the draw sets the outcome.**
 
 - *Pool:* `seam/wrappers/pool.py::faculty(w, traveller, "move")`, the one owner of a person's pool for a
-  verb (so a capability a designer attaches to `move` is read here with no engine edit).
-- *Obstacle:* `road_base` (fixture) + the leg's border count (`leg_price`'s distance, the one owner)
-  + 1 for each crossed territory whose `season_factor_of` this tick is the lowest outcome of its table
-  (bad weather; 0 while the table ships `()`) + 1 for each crossed territory in which a field was fought
-  this tick or the last (`field.lost` / `field.won` placed there: a war on the road).
+  verb (`pool_of(score, addends, pool_add, pool_floor)`, A-6; so a capability a designer attaches to `move`
+  is read here with no engine edit).
+- *Obstacle:* composed as every task obstacle is (U1 architecture §4: the even line, the difficulty, the
+  stand-in for nobody opposite), with `road_base` the difficulty (a `difficulty_levels` member, its size set
+  by the joint calibration of A-5/A-6/A-7, not 2), and three named hostile terms (A-25): the leg's border
+  count (`leg_price`'s distance, the one owner), one step for each crossed territory whose season draw this
+  tick landed Failure (bad weather, A-54; none while the weather arm ships at its control), and one step for
+  each crossed territory in which a field was fought this tick or the last (`field.lost` / `field.won` placed
+  there: a war on the road). The step's size is one fixture, `road_step_ob`, set with `road_base` at the
+  calibration.
+- *Draw:* keyed `H(seed, tick, pid, "road:<leg index>")` through the one keyed-draw owner (A-30), carried on the
+  typed input as `draw_key`.
 - *Degree:* `engine/dice_engine/dice_engine.py::degree_from_net` through `seam/ladder.py::degree_of`, the
   single ladder.
 
@@ -76,16 +97,19 @@ them. The traveller's `contain` edge moves at the act, as now (presence is ratif
 
 ## The edits
 
-1. **`engine/season/data/fixtures.py`** — `road_hazard="off"` (swept `off` / `on`), `road_base=2`,
-   `road_step=100` (one body band is 300 wide at `band_floors.body`; a third of a band), each
-   `[ASSUMPTION; medium; Jordan to correct; revert: road_hazard = off]`, each with a hole-register row
-   as `body_step` has (H-125's shape).
+1. **`engine/season/data/fixtures.py`** — `road_hazard="off"` (swept `off` / `on`), `road_base=<a
+   difficulty level, calibration>`, `road_step_ob=<calibration>`, `road_step=100` (the body fall; one body
+   band is 300 wide at `band_floors.body`; a third of a band), each `[ASSUMPTION; medium; Jordan to correct;
+   revert: road_hazard = off]`, each with a hole-register row as `body_step` has (H-125's shape; ids from
+   `references/id_reservations.yaml` `next_free`).
 2. **`engine/season/queries/inputs.py`** — `RoadInput(travellers: tuple)`, each
-   `(pid, pool: int, obstacle: int, draw_key: str)`; `RoadOutcome(rows: tuple)`, each `(pid, degree)`.
-   No `World` crosses.
+   `(pid, pool: int, obstacle: float, draw_key: str)` (the obstacle a declared float, A-29);
+   `RoadOutcome(rows: tuple)`, each `(pid, degree)`. No `World` crosses.
 3. **The module entry** — `exposure(inp: RoadInput) -> RoadOutcome`, pure, rolling through the module's
-   own roll owner as `modules/fieldwork/find.py` does; home as CP-T10-02's card names, else
-   `modules/settlements/` (the module MATTER already calls twice). One `composition_roles:` row in
+   own roll owner as `modules/fieldwork/find.py` does; home `modules/settlements/exposure.py` (the module
+   MATTER already calls twice; decided here for the v12 card of CP-T10-02, whose v11 text names no home)
+   `[ASSUMPTION: settlements is the right module family for a travel hazard — basis: this file's own
+   fallback; revert: a `modules/travel/` package if the v12 card says so]`. One `composition_roles:` row in
    `references/module_contracts.yaml` (`settlements.exposure`, kind `step_call`) and one tuple in
    `loop/matter.py::STEP_CALLS`, so `registrar.require_entries` refuses a missing row at construction.
 4. **`engine/season/queries/world_q.py`** — `road_input(w)`: the travellers with a non-empty
@@ -101,7 +125,10 @@ them. The traveller's `contain` edge moves at the act, as now (presence is ratif
 
 ## The gate that shows it worked
 
-`engine/season/tests/test_travel.py` (the file covering the travel pass), on `build_realm`:
+NEW `engine/season/tests/test_travel.py` (no such file exists; `test_migrate_capacity.py` and `test_march.py` reference
+`travel_leg`; written as the batch's first commit, U3 §6.1): `test_road_degrees_not_all_equal_over_forty_journeys`,
+`test_four_borders_fail_more_than_one`, `test_road_hazard_off_hash_equal`, `test_hurt_traveller_is_tended_in_some_seed`,
+`test_one_leg_ends_per_barrier`. Command: `python -m pytest engine/season/tests/test_travel.py -q`. On `build_realm`:
 
 - with `road_hazard` on and forty hand-built journeys of three borders by one person kind (PROXY), the
   degrees **are not all equal**, at least one traveller arrives spent and at least one arrives hurt, and
@@ -114,9 +141,10 @@ them. The traveller's `contain` edge moves at the act, as now (presence is ratif
 
 ## The falsifier
 
-`runs/PES_WR/p2_play.py SEED 3 shipped` after the change must no longer print
-`individuals who travelled N, harmed 0` at every seed, nor `max moves by one person in one season 3` for
-journeys that cross borders. If it does with `road_hazard` on, the draw is not reached by computed play
+The scratch `runs/PES_WR/p2_play.py SEED 3 shipped` (not in the repository) printed
+`individuals who travelled N, harmed 0` at every seed and `max moves by one person in one season 3`; after the
+change, with `road_hazard` on, a three-season realm run at seeds 0-2 read through `harness/aperture.py`'s per-person
+census must show neither for journeys that cross borders. If it does with `road_hazard` on, the draw is not reached by computed play
 and the fault is upstream (the chooser forms no cross-border `move`).
 
 ## NERS reading
@@ -139,4 +167,7 @@ and the fault is upstream (the chooser forms no cross-border `move`).
 
 ## Cost class
 
-Small build (design decided here; a declared hash mover when `road_hazard` flips, its own commit).
+Small build (design decided here; a declared hash mover when `road_hazard` flips, its own commit). Tier: `opus` for
+the calibration of `road_base` and `road_step_ob`, `sonnet`, effort `high`, for the code. Lands it: B12, order the
+typed pair and the module entry with its composition row (hash-equal) → `road_input` → `_relocate`'s legs → the travel
+pass behind `road_hazard` off → the flip in its own commit.

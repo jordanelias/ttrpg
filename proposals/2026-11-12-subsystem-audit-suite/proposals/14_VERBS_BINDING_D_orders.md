@@ -1,8 +1,14 @@
 # VB-D — an order orders something, goes down the chain, and takes hold by a draw
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-25) — the prize `an order` is not added: `issue` and `dispatch` contest `a standing` (same hearer, same step; `U5c_VERBS_residue_and_governance_owner.md` §2). The term `standing` is `rank_gap`; a writ's band is the content key `force`. §13.4 decision 1 is answered (Jordan, A-22: command): commit D2 ships behind its revert. A decree is proclaimed (A-21).
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head applied to the body (`unified/work/R4_READ.md` §1.1, §2, 7b.3): every `an order` → `a standing` and edit 7 deleted; `standing` (the term) → `rank_gap` (U1 R-21, D-U1-01); A-21 answers FA §11 item 1 and corrects item 10 and gate D3 (an answer forms on any writ that is learned of; `force` enters the answer rows' obstacle); D4's dependency corrected at the tree (`loop/effects_migration.py::_relocate` exists, `:98`; the missing piece is a `dispatch` effect and its destination operand, CP-T09-08, which no suite proposal carries: `unified/U3_DEPENDENCY_ORDER.md` §6.3); A-81 (C3-C11), A-30 keys, U3 batch B21, R4 7b.0 block.
 
 ## Status: PROPOSED
+
+Lands in batch: B21 (`unified/U3_DEPENDENCY_ORDER.md` §3.1), after `16_PESSIMIST_FA_A` and before `06_FA_war_lives_in_seats_B` (C3-D5's order). D4 does not land in B21: it waits on a carrier of CP-T09-08 (none in the suite).
+Depends on: `05_SC_obstacle_difficulty_and_modifiers_B.md` and `U5c_SC_one_obstacle_form.md` §4 steps 0–2 (B05: `difficulty`, `opposition`, `regard`; `rank_gap` lands with `14_VERBS_BINDING_A` in B21); `U5c_VERBS_residue_and_governance_owner.md` §2 (B07: the `a standing` row is existing; `rank_gap`, `regard` per its table); `06_FA_decree_binds.md` and `06_FA_remit_grant_by_row.md` (B21).
+Lane: FA. Tier (R4 7b.0 (1)): D1, D2 `sonnet` producer, effort `high`; D3 (the contested row and its terms) `opus` producer; one `opus` read of the 40-seed `force` table. Test file: `engine/season/tests/test_vb_d_orders.py` (one function per gate D1–D3; D4's function is written when D4 lands).
+Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the issuer's trained score (A-6), talent as levels (A-7), a wound a level against the roll (A-8); the issuer's exercised seat helps him only as the `office` level (D-U1-01). Draws: `H(w.world_seed, w.tick, <actor id>, "issue.standing")`, `H(w.world_seed, w.tick, <actor id>, "dispatch.standing")` (A-30).
 
 Source: `audits/14_VERBS_BINDING.md` §0.1, §0.2, §4 (`dispatch`), §6 (`issue`), §13.4 decision 1; batch D.
 Binds on, and does not redo: `06_FA_decree_binds.md` (FA-P1: terms reach the addressee, answers form,
@@ -16,8 +22,9 @@ defiance is an occasion), CP-T09-07 (b) and CP-T09-08 (`dispatch` sends an oblig
    ambitions (the OUGHTs he is committed to).
 2. `issue` and `dispatch` admit an addressee only if the exercised seat **commands** him (a new basis,
    `command`), and form `to` over the persons the actor can read as his.
-3. `issue` and `dispatch` are contested (a new prize `an order`): a writ is minted at every band with its
-   `force` written on it; an order to go is obeyed, grudged or refused by a draw.
+3. `issue` and `dispatch` are contested (the existing prize `a standing`: one person opposite, fought at
+   RESOLVE; no prize `an order` is added, C-25): a writ is minted at every band with its `force` written on
+   it; an order to go is obeyed, grudged or refused by a draw.
 
 All are declared movers for the realm. (2) is §13.4 decision 1 of the audit and ships behind its revert.
 
@@ -46,8 +53,9 @@ All are declared movers for the realm. (2) is §13.4 decision 1 of the audit and
   predicate); (c) the unseated persons within `via`'s purview. Everyone else may be petitioned, not
   ordered. One predicate, `state/gate.py::commands(w, actor, via, person) -> bool`, beside
   `purview_reaches`; one `requires` basis value, `command`.
-- **The draw**: prize `an order`, opponent `to`, through SC-B's obstacle: `difficulty` `routine`,
-  `opposition` (his score), `regard` (his stance toward the issuer), `standing` (VB-C's term).
+- **The draw**: prize `a standing`, opponent `to`, through the one obstacle composer: `difficulty`
+  `routine`, `opposition` (his trained score, A-79, D-U1-02), `regard` (his stance toward the issuer),
+  `rank_gap` (OBS §2 member 6).
   `issue` mints the Record at every band (the paper exists: bookkeeping) and writes the band into its
   content as `force`; Failure is a dead letter. `dispatch` (after CP-T09-08): O/S relocate, Partial
   relocates and emits `order.grudged`, Failure relocates nobody and emits `order.refused`.
@@ -81,27 +89,37 @@ All are declared movers for the realm. (2) is §13.4 decision 1 of the audit and
 
 **Commit D3 — the draw on `issue`.**
 
-7. `rosters.yaml: contest_subsystems.prizes`: add `"an order"` (the `a seat` row's fields).
-8. `verb_table.yaml`, `issue`: `contests: "an order"`, `difficulty: routine`; `writes` at every band
+7. *(Deleted, W3-4a: no prize `an order`; `a standing` exists in `rosters.yaml: contest_subsystems.prizes`.)*
+8. `verb_table.yaml`, `issue`: `contests: "a standing"`, `difficulty: routine`; `writes` at every band
    `["Record.exists"]`; `emits` O/S/P `["dispensation.issued"]`, Failure `["dispensation.ignored"]`;
    `emits_on_refusal` flattened to one kind, `issue.refused`, keyed under every clause (a contested row
    keys one kind unless it keys `counterparty`; `determine`'s v9 SC-03b precedent) — `issue.unauthorized`
-   is retired into it, and the refusal's `observed` reads still say which clause failed.
+   is retired into it, and the refusal's `observed` reads still say which clause failed. **Durable write
+   of the Failure band (A-81; C3-C11):** the writ exists at every band, and `dispensation.ignored` is
+   proclaimed like any decree (A-21): whoever learns of the issue holds a claim of it and of its `force`,
+   so a dead letter is itself a remembered deed against the issuing seat.
 9. `loop/effects_information.py::_eff_issue`: pass `res.degree` into the content as `force` (a
    `dispensation` key; `rosters.yaml: record_kinds` gains `force` for that kind).
-10. Cross-lane, listed for FA (not edited): FA-P1's answer formation reads `force` (no answer forms on a
-    `Failure` writ), and the answer rows' obstacles read it (`evade / defy` harder against a strong writ).
+10. Cross-lane, listed for FA (not edited): under A-21 an answer forms for whoever learns a decree was
+    issued, at every `force` band, Failure included; the answer rows' obstacles read `force` (`evade /
+    defy` harder against a strong writ, `comply` easier). *(W3-4a: the earlier "no answer forms on a
+    `Failure` writ" contradicted A-21 and is struck.)*
 
 **Commit D4 — `dispatch` (after CP-T09-07 (b) and CP-T09-08).**
 
-11. `verb_table.yaml`, `dispatch` (CP-T09-08's rebuilt row): `contests: "an order"`, `difficulty:
-    routine`, `counterparty: to`; the `authority` conjunct `basis: command`; writes CP-T09-08's
-    `contain` pair and `Person.travel_leg` at O/S/P, `[]` at Failure; emits `order.given` at O/S,
-    `order.given`, `order.grudged` at Partial, `order.refused` at Failure.
+11. `verb_table.yaml`, `dispatch` (CP-T09-08's rebuilt row): `contests: "a standing"`, `difficulty:
+    routine`, `counterparty: to`; the `authority` conjunct `basis: command`; writes the `contain` pair and
+    `Person.travel_leg` at O/S/P through the existing journey body `loop/effects_migration.py::_relocate(w,
+    a, dest, mover=to)` (T, `:98`; the `mover` argument already relocates someone other than the actor,
+    `_eff_march`'s precedent), `[]` at Failure; emits `order.given` at O/S, `order.given`, `order.grudged`
+    at Partial, `order.refused` at Failure (witnessed by the issuer and the man ordered: the refusal is a
+    remembered deed, A-81). **INCOMPLETE (blocked):** the `dispatch` effect and its destination operand
+    (where the man is sent) are CP-T09-08's design, which no suite proposal carries
+    (`unified/U3_DEPENDENCY_ORDER.md` §6.3 "`_eff_dispatch` … no carrier"); not decidable from the tree.
 12. Until CP-T09-08 lands, D2's fan applies to the current row (`referent_class: Person`, `writes: []`):
     no order goes up the chain and no self-order forms.
 
-Order: D1, D2, D3 (after SC-B and FA-P1), D4 (after CP-T09-08).
+Order: D1, D2, D3 (after SC-B and FA-P1), D4 (after a carrier of CP-T09-08 exists).
 
 ## Gate (execution artifact)
 
@@ -109,8 +127,9 @@ Order: D1, D2, D3 (after SC-B and FA-P1), D4 (after CP-T09-08).
   `commit` formed counts recorded before and after.
 - D2: same: 0 writs and 0 orders whose addressee the seat does not command (the probe's one writ to the
   King and four orders to him → 0).
-- D3: FA-B4's `recall` scenario, 40 seeds: all four `force` bands occur; at Failure no answer forms; at
-  Success the Count is offered his answers (FA-P1's gate).
+- D3: FA-B4's `recall` scenario, 40 seeds: all four `force` bands occur; at every band, Failure included,
+  the Count is offered his answers once he learns of the issue (A-21; FA-P1's gate), and the answer's
+  composed obstacle carries `force` (its value differs between a Failure and a Success writ).
 - D4: a seeded run in which a dispatched obligee's `contain` moves at O/S/P and does not at Failure.
 
 ## Falsifier
@@ -120,8 +139,10 @@ the roll: one `force` band only.
 
 ## What it does not do
 
-It does not decide which Propositions are orders (R-27), whether a decree is proclaimed or delivered (FA
-§11 item 1), or how an addressee answers (FA-P1). It adds no relocation body (CP-T09-08's `_relocate`).
+It does not decide which Propositions are orders (R-27) or how an addressee answers (FA-P1). A decree is
+proclaimed (A-21), which answers FA §11 item 1: D3 writes `force` on the Record and `force` enters the
+answer rows' obstacle; it does not decide whether an answer forms. It adds no relocation body (the journey
+is `_relocate`, existing).
 
 ## NERS reading
 
@@ -132,5 +153,5 @@ one basis value and one written band replace a class of nonsense and a certainty
 
 ## Cost class
 
-Medium: one class column and a stamp term, one gate predicate and basis value, one prize, two contested
-rows, one Record key; cross-lane items for FA.
+Medium: one class column and a stamp term, one gate predicate and basis value, two contested rows on an
+existing prize, one Record key; cross-lane items for FA.

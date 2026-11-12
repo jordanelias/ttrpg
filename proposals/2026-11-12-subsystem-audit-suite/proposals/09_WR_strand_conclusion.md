@@ -4,11 +4,16 @@ Folded: 2026-11-12 by `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md` (F-30-06, 
 
 Reconciled: 2026-11-12, U5d closure — folded **A-45**, **A-46** and the addendum's standing-rule pass. Edit 3 (bounding the same-doer link: a doer's later deed joins a strand he opened, or joins by its subject) was listed for Jordan as the audit's §11 item 1; A-45 rules it (several strands that can each end), so edit 3 is no longer conditional and its `[ASSUMPTION]` reads as ruled, with the unbounded link kept as the control arm. A-46 adds one strife move: leaving a faction's creed or its head seat (a `release` of that `commit` or that seat-`hold`) is a move of the era; a routine release is not. Step added to edit 2: the move roster gains that kind, keyed on the released edge's object being a faction's creed Proposition or its `head_seat`. Edits 1–2's rules are eligibility; a strand concludes only on its closing move's drawn degree (`09_WR_B_draws_not_thresholds.md` edit 4).
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 (A-45): the Status paragraph's "listed in the audit's §11 with both options", resolution item 3's "not decided here", edit 3's heading, and the NERS and cost lines that waited on §11 now read as ruled (A-45 took several strands that can each end; the unbounded link stays as the control arm); A-46's added move is written into edit 2 (the head's step); tier and batch added (R3 7b-0; U3 B12).
+
 ## Status: PROPOSED
 
-Carries finding F-WR-02 of `audits/09_WR_audit.md`. Evidence ids (E-nn) are that file's §12. One part of it
-(edit 3) narrows a ratified assumption and is listed in the audit's §11 with both options; edits 1 and 2
-follow the ratified text and need no ruling.
+Lands in batch: B12 (world motion and ground), before `09_WR_B_draws_not_thresholds.md` edit 4 (which reads edits 1–2 as eligibility; U3 §1 item 13).
+Depends on: nothing proposed (every symbol named is on `main`).
+
+Carries finding F-WR-02 of `audits/09_WR_audit.md`. Evidence ids (E-nn) are that file's §12. Edit 3
+narrows a ratified assumption and is ruled by A-45 (the bounded link; the unbounded one is the control
+arm); edits 1 and 2 follow the ratified text and need no ruling.
 
 ## What it changes in `engine/season/` at runtime
 
@@ -46,8 +51,8 @@ petition being filed, not because of it.
    (`world_q.py:5212-5213`: *"a move that content-opens … is never terminal, though its kind is in
    `concludes`"*) holds for every opener.
 2. **A kind that can open a strand by content does not conclude one at the person reading.**
-3. (§11 item 1, not decided here.) **The same-doer link clause is bounded**, so one busy person does not
-   join the realm's strife into one strand.
+3. (Ruled A-45.) **The same-doer link clause is bounded**, so one busy person does not join the realm's
+   strife into one strand; a doer's later deed joins a strand he opened, or joins by its subject.
 
 ## The edits
 
@@ -88,11 +93,16 @@ drift: a kind in `CONTENT_OPENING_KINDS` that is also in `CONCLUDING_KINDS` rais
 naming the kind. `tests/test_strife_kinds.py`'s re-derivation of `concludes` takes the same exclusion
 (the test is the roster's existing check, edited with it).
 
+A-46 (the head's step): the move roster gains one kind, a `release` whose released edge's object is a
+faction's creed Proposition (a `commit`) or that faction's `head_seat` (a seat-`hold`, `rosters.yaml:
+factions.head_seat`), coded as a move of the era; a routine release is not a move. The keying reads the
+released edge's object, never the releaser's id.
+
 Not removed, and why: `dispensation.issued`, `transfer.made`, `record.given` and `tenure.opened` are
 concessions and settlements in the study (CO, XS, CP), which do conclude. Whether a *grant* can be told
 from a *burden* is CR-67's question (`world_q.py:4775-4778`) and is left there.
 
-### Edit 3 · the same-doer clause of `_links` (§11 item 1; written here so the edit is on file)
+### Edit 3 · the same-doer clause of `_links` (ruled A-45; the unbounded clause is the control arm)
 
 `world_q.py:5081-5083`:
 
@@ -147,9 +157,9 @@ mover through the same consumer.
   is R6's "or it is not a flow" read honestly: it is an open matter.
 - **S.** One terminal rule for both readings; no second ladder.
 - **E, last.** Two lines of code and two roster members against the only "it is over" signal the design
-  has. High. Edit 3 is costlier (a new set on `_Chain`) and buys legibility at the strand level; its ratio
-  depends on the ruling in §11.
+  has. High. Edit 3 is costlier (a new set on `_Chain`) and buys legibility at the strand level, the form
+  A-45 ruled.
 
 ## Cost class
 
-Edit (1, 2). Small build (3), design-first on §11 item 1.
+Edit (1, 2). Small build (3), ruled (A-45). Tier: `sonnet` (R3 7b-0).

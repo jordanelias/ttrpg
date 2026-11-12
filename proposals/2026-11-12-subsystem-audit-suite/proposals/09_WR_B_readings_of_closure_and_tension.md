@@ -4,7 +4,12 @@ Folded: 2026-11-12 by `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md` (A-80, A-8
 
 Reconciled: 2026-11-12, U5d closure — folded **A-45**. The readings count strands as several (the bounded link of `09_WR_strand_conclusion.md` edit 3 is the ruled form), so "closed by act / by clock" (edit 1) is reported per strand and the one-river reading is kept as the control column.
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §1 found it CONFORMS (harness only) and R3 §2 found no ruling it contradicts; added: the serial order on `harness/storybar.py` (C3-K7), the co-landing with the chronicle (C3-Y9), batch and tier (U3 B36; R3 7b-0).
+
 ## Status: PROPOSED
+
+Lands in batch: B36 (WR story instruments), co-landing with `09_WR_B_chronicle_that_tells.md` (C3-Y9). Edits `harness/storybar.py` after `09_WR_story_instruments_that_can_fail.md`, before `16_PESSIMIST_WR_D_small_clock_repairs_and_two_readings.md` (C3-K7: one commit per proposal, never concurrently).
+Depends on: `09_WR_story_instruments_that_can_fail.md` (B36).
 
 Carries findings F-WR-13, F-WR-15, F-WR-16 and F-WR-21 of `audits/09_WR_audit_addendum_B.md`, its
 resolutions R-29 and R-30, and steps 1 and 7 of its §3.8. Evidence ids (EB-nn) are that file's §9; E-nn are
@@ -153,4 +158,4 @@ lawlessly); a `flat` control whose hash equals the shipped arm's (the control di
 
 ## Cost class
 
-Small build (harness only), hash EQUAL.
+Small build (harness only), hash EQUAL. Tier: `sonnet` (harness; R3 7b-0).

@@ -1,6 +1,11 @@
 # PC — a typed combat outcome, one door onto the engine, and the small edits that ride with them
 
-Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.1, §1.2, §1.4) — four changes. (1) Part A: the upset flip is not left as a workbench rule; `18_DETERMINISM_no_certain_matchup.md` deletes it and makes the upset a riposte through the one damage site, so `result` and the trackers agree by construction and R-PC-03's comment edit is superseded by that file's edit 2. (2) Part A's record gains `shape` after it lands (`16_PESSIMIST_PC_C_what_the_world_keeps_of_a_fight.md`). (3) Part B's four new fields follow the decided surface: `skills` and the lever values are slot numbers composed host-side from capability rows (U1 §2–§3); `faculties` is the trained score and the record carries `pool_add`, `pool_floor`, `fight_opposition_rate` raw (`U5b_PC_rulings_in_the_fight.md` §2). (4) Part C gains R-PC-42 beside R-PC-17: the workbench's `degree_distribution` calls the roll's owner.
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.1, §1.2, §1.4) — four changes. (1) Part A: the upset flip is not left as a workbench rule; `18_DETERMINISM_no_certain_matchup.md` deletes it and makes the upset a riposte through the one damage site, so `result` and the trackers agree by construction and R-PC-03's comment edit is superseded by that file's edit 2. (2) Part A's record gains `shape` after it lands (`16_PESSIMIST_PC_C_what_the_world_keeps_of_a_fight.md`). (3) Part B's four new fields follow the decided surface: `skills` and the lever values are slot numbers composed host-side from capability rows (U1 §2–§3); the record carries the trained `scores`, the `addends`, `pool_add`, `pool_floor` and `opposition_rate` raw (`U5b_PC_rulings_in_the_fight.md` §2; wording corrected by W3-1 below: `faculties` and `fight_opposition_rate` are retired names). (4) Part C gains R-PC-42 beside R-PC-17: the workbench's `degree_distribution` calls the roll's owner.
+
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AND_VOCABULARY.md` D-U1-11a (the victor's `fight_endings` member is `prevailed`, not `standing`, which already names S18.2's gap, a prize and the MB standing order), D-U1-06 / `U3_CONFLICT_LEDGER.md` C3-L5 (`fell_to` rides `Event.observed` as a member of `rosters.yaml: observation_terms`; the `Event.observed` docstring is amended at the code, `04` §B.9 is not edited; this answers `R1_READ.md` §1.1's AMBIGUOUS row), D-U1-08 (`faculties` → `scores` + `addends`; U1 §4 R-09: `fight_opposition_rate` is not created, the rate is `opposition_rate`), `U1_GLOSSARY.md` *skill* (the record's `skills` field is `axes`); `R1_READ.md` §1.1 (the record is not a `Margin`: stated once, Part A), §2 row A-81 and C3-C11 (an undecided fight's Event names its durable write), test 9 (order of Parts, lands-it, tier; `Depends on:` / `Lands in batch:` from `U3_DEPENDENCY_ORDER.md`, §4.1 row 51 cuts the edge to `18_DETERMINISM_no_certain_matchup.md` as SUP).
+
+**Depends on:** `U5a_DICE_owed_edits.md` §1 (B05: R-PC-42 reads `sigma_leverage.band_odds`); `U5b_PC_rulings_in_the_fight.md` §2 for the raw roll numbers on the record (B15; Part B's four fields land first with defaults). Not on `18_DETERMINISM_no_certain_matchup.md` (U3 §4.1 row 51: R-PC-03 is superseded by it; this record does not wait).
+**Lands in batch:** B14 (`B14-pc-outcome`, PC), first in the batch (C3-L5), before `03_PC_weapon_records_in_the_export.md`, `03_PC_weapon_form_at_round_start.md`, `16_PESSIMIST_PC_C…` and `U5b_PC_residue.md` §7–§8.
 
 ## Status: PROPOSED
 
@@ -81,20 +86,31 @@ class CombatOutcome:
   D-11:)* the upset is no longer a flip of that integer: `18_DETERMINISM_no_certain_matchup.md` makes it
   a riposte the trackers record, so the season sees it through `wounds`, which is the surface this
   record carries.
-- `rosters.yaml: fight_endings` gains `standing`. `loop/effects_combat.py::fight_ending` returns
-  `standing` for a party who is neither felled nor the yielder when the other party is; `undecided`
-  only when neither is. **Declared hash mover** for every log that carries the field.
+- `rosters.yaml: fight_endings` gains `prevailed` (D-U1-11a). `loop/effects_combat.py::fight_ending`
+  (`:317`) returns `prevailed` for a party who is neither felled nor the yielder when the other party is;
+  `undecided` only when neither is. **Declared hash mover** for every log that carries the field.
+  *(A-81, C3-C11:)* an `undecided` fight still writes: its Event is witnessed and WITNESS deposits it to
+  those present (`co_located` firsthand), and each party holds his own claim of the fight.
 - `loop/effects_combat.py::_eff_kill`: a felled party's Subject carries
   `Observation(victim, "fell_to", f"{beat.source}:{beat.weapon}")` beside what it carries now, on
-  `CP-T04-01`'s `broke_observed` precedent (an Event has no payload, so a cause rides `Event.observed`).
-  `[ASSUMPTION; medium; Jordan to correct; revert: drop the Observation]`. **Declared hash mover** for
-  every log with a felling.
+  `CP-T04-01`'s `broke_observed` precedent (`effects_combat.py:308`; an Event has no payload, so a cause
+  rides `Event.observed`). *(Reconciled, D-U1-06:)* `observed` is the one channel for a derived outcome
+  WITNESS deposits; `fell_to` is added to the closed roster `rosters.yaml: observation_terms` (`:1273`) in
+  the same commit (a term outside it is refused), and `state/carriers.py::Event.observed`'s comment gains
+  *"and the outcomes an effect derives from the scene it wrote (a felling's source, a body that broke
+  first, a named draw), as Observations WITNESS deposits; never an actor, a target or a recipient
+  (S19.3)"*. `fell_to` names a source and a weapon, never a doer. `[ASSUMPTION; medium; Jordan to correct;
+  revert: drop the Observation and the roster member]`. **Declared hash mover** for every log with a felling.
+- *(Reconciled, `R1_READ.md` §1.1:)* this record is not a `Margin`, and must not be "fixed" into one:
+  combat's degree is read off its wound state (`04:710-722`, the 2026-09-03 ruling: "the degree is READ
+  OFF THE SUBSYSTEM"); deleting `winner` removes the one field that contradicted D-24.
 
 ### Part B — one door
 
 - `PersonalCombatInput` gains four fields, each defaulting to `()` so every existing record is the
-  record it was: `traditions`, `techniques` (each party's `{name: level}`), `skills` (each party's
-  `{axis: bonus}`) and `dispositions`. `fight.py` passes them to `Combatant` as it passes kits. The
+  record it was: `traditions`, `techniques` (each party's `{name: level}`), `axes` (each party's
+  `{axis: bonus}`; named `axes`, not `skills`, U1 glossary) and `dispositions`. `fight.py` passes them to
+  `Combatant` (whose own attribute stays `skills`) as it passes kits. The
   season fills none of them until a carrier exists (`03_PC_person_inputs_content.md`).
 - `fight(inp, rng, decide=None, cfg=None, max_bouts=None)`: the two extra parameters are the
   workbench's (a config overlay and a bout cap), forwarded to `wrapper.fight`; the host never passes them.
@@ -123,7 +139,7 @@ class CombatOutcome:
 
 - `engine/season/tests/test_combat_module.py`'s oracle comparison, re-pointed at the record's fields,
   run once at the close.
-- Season hashes: seeds 0 to 2 equal to the pre-change hashes with the `standing` value and the
+- Season hashes: seeds 0 to 2 equal to the pre-change hashes with the `prevailed` value and the
   `fell_to` Observation each reverted; each one moved alone and named in the commit body.
 - A workbench trace and an entry call at one seed and one matchup produce identical event lists.
 - `python tools/export_engine_params.py --check` green after R-PC-18; the count of `combat_systems.py`
@@ -132,7 +148,7 @@ class CombatOutcome:
 ## Falsifier
 
 - For Part A: any reader of a deleted key (the build fails at that reader); a hand-built fight whose
-  log names the felled party `standing`.
+  log names the felled party `prevailed`.
 - For Part B: one seed at which the workbench's result differs from the entry's on the same record.
 - For R-PC-17: the combat goldens under `engine/tests/` and `tests/valoria/r3_identity_golden.json`;
   a moved golden is the finding, re-recorded only with the move stated.
@@ -150,3 +166,16 @@ class CombatOutcome:
 ## Cost class
 
 Small build (Part A and Part B); edits (Part C). Two declared movers.
+
+## Implementation (test 9, W3-1)
+
+- **Order.** (1) Part A in two commits: the record and `resolve`'s return (hash EQUAL), then `prevailed`
+  and `fell_to` (the two declared movers, each alone); (2) Part C's rows, each its own commit, R-PC-17 and
+  R-PC-18 after Part A (R-PC-18 re-derives the export; R-PC-42 after `U5a_DICE_owed_edits.md` §1);
+  (3) Part B last (the workbench calls the entry Part A's record defines).
+- **Tests.** `engine/season/tests/test_combat_module.py` (existing; the oracle comparison re-pointed):
+  `test_resolve_returns_no_winner_key`, `test_the_party_left_standing_is_prevailed`,
+  `test_a_felling_deposits_fell_to_under_observation_terms`; `tests/valoria/test_combat_invariants.py` for
+  R-PC-17; the export's `--check` for R-PC-18.
+- **Lands:** an IN-lane implementation session under `/methodology-execute` with PC review; edit class,
+  `sonnet`; the golden re-record judgment for R-PC-17 `opus`.

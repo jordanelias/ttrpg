@@ -4,6 +4,10 @@
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-26) — the grammar file opened: the stems are `held_by` and `dispute`, and there is no `capability` stem (capability is never a requirement), so an own-state reader has no `capability` conjunct to answer.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.2 row (CONFORMS except item 2), §2 rows A-11, A-56, §7, §7b-7, §7b-T; `unified/U3_CONFLICT_LEDGER.md` C3-N13, C3-N27; `unified/U3_DEPENDENCY_ORDER.md` node B10, §6.2). Changed: item 2 no longer lists "his own `capability`" among the stems (A-11: a capability never gates an act; G-26: there is no `capability` stem; `train`'s decline stays its effect's), per R2 §7b-7; the refusal-rate figure names its definition (C3-N13); the A-56 check on item 5's rows is recorded (`grep -n -i riot engine/season/verb_table.yaml` finds none; if the SE lane carries a cohort heavy move on `sabotage`, `sabotage` leaves item 5); scratch `probe2.py` marked and restated as named tests; hash literals carry the B01 caveat; lands-it and tier.
+
+**Lands in batch:** B10. **Depends on:** B09; `U5d_SE_cohort_heavy_moves_and_caste.md` (R3's; it decides whether a riot rides `sabotage`, A-56).
+
 Written by the CHAR audit lane (`audits/02_CHAR_audit.md`, findings F-CHAR-05, F-CHAR-07, F-CHAR-11).
 Ratifies nothing. Reference under `CLAUDE.md` §0.05.
 
@@ -17,7 +21,9 @@ hand-built act still folds exactly as today.
 ## The problem, with evidence
 
 **Four in ten resolved acts are refusals, and the refusals teach nothing.** Read on `build_realm`,
-two seasons, shipped chooser, `PYTHONHASHSEED=0` (scratch `probe2.py`):
+two seasons, shipped chooser, `PYTHONHASHSEED=0` (scratch `probe2.py`, not in the repository; hashes are
+`main`'s at the working tree and move at B01, C3-N27). Definition, named beside the figure (C3-N13):
+`.refused` Events over resolved acts — 656 of 1,529 (42.9%) at seed 0, 620 of 1,519 (40.8%) at seed 1:
 
 | | seed 0 (`bacd687f`) | seed 1 (`8aae8412`) |
 |---|---|---|
@@ -63,10 +69,10 @@ and `challenge`, `forge`, `sabotage`, `train` and `create_record` do not carry i
 | # | decided | ladder step |
 |---|---|---|
 | 1 | One decline: after operands bind, `opening_set` evaluates the row's own `requires_typed` against a reader of the ACTOR'S OWN STATE and declines on a conjunct that reader answers `False` | 4 and 5. `OwnStateReader` and the K-3 branch are the precedent (*"the SAME cell, asked of the same answerer the fold delegates to, so the two cannot disagree"*); one rule with one owner is what §8 asks for |
-| 2 | The reader answers exactly the stems an actor cannot be wrong about when the subject is himself: the existing `OWN_STATE_STEMS`, his own live Tenures (`hold`, `commit`, `oblige`), his own `capability`, and his own judgement of a dispute (`person_q.holds_dispute`). Every other stem is UNKNOWN there and stays clause 4's | 3. §F1's asymmetry, as `opening_set` states it: *"being alone in a room is not a belief anyone can be wrong about"*. A belief about the world still forms the candidate and is refused by the fold, which is R-07 working |
+| 2 | The reader answers exactly the stems an actor cannot be wrong about when the subject is himself: the existing `OWN_STATE_STEMS`, his own live Tenures (`hold`, `commit`, `oblige`), and his own judgement of a dispute (`person_q.holds_dispute`). There is no `capability` stem and none is added (A-11: a capability never gates an act; G-26); `train`'s decline on a held key stays its effect's (`loop/effects_combat.py:812-814`). Every other stem is UNKNOWN there and stays clause 4's | 3. §F1's asymmetry, as `opening_set` states it: *"being alone in a room is not a belief anyone can be wrong about"*. A belief about the world still forms the candidate and is refused by the fold, which is R-07 working |
 | 3 | The roster rows that item 1 makes redundant are deleted in the same commit as the reading that shows the candidate sets equal; the ones that WIDEN referents (`terms_sourced`, `warrant_sourced`, `vocation_sourced`) are sources, not declines, and stay | 5. A second copy kept "for safety" is the two-owner defect |
 | 4 | Whether the ACTOR is an individual is his own state, so the widened reader of item 1 answers the `individual` stem when it is asked of the actor (and stays UNKNOWN for anybody else) | 4. `Person.is_cohort` is the carrier's own predicate; the stem's note says *"whether a person is an individual NOW is the world's to decide"* of OTHER persons, which is unchanged |
-| 5 | The rows a population does not take gain the conjunct `relation: individual` of `actor` that `fight` already carries. Proposed set: `challenge` (it opens the duel `accept` already bars a cohort from), `forge`, `sabotage`, `train`, `create_record`, `conceal`, `interview`, `surveil` | 4 for `challenge` (its sibling rows' own conjunct); the rest [ASSUMPTION; medium; Jordan to correct; revert: drop the conjunct from the row]. No new column and no new roster: the stem exists |
+| 5 | The rows a population does not take gain the conjunct `relation: individual` of `actor` that `fight` already carries. Proposed set: `challenge` (it opens the duel `accept` already bars a cohort from), `forge`, `sabotage`, `train`, `create_record`, `conceal`, `interview`, `surveil`. None is one of a population's heavy moves (A-56: petition, migrate, work, tend, comply or refuse, riot; `riot` has no verb row today); if `U5d_SE_cohort_heavy_moves_and_caste.md` carries a riot on `sabotage`, `sabotage` leaves this set | 4 for `challenge` (its sibling rows' own conjunct); the rest [ASSUMPTION; medium; Jordan to correct; revert: drop the conjunct from the row]. No new column and no new roster: the stem exists |
 
 ## The exact edits, by owner
 
@@ -102,6 +108,11 @@ and `challenge`, `forge`, `sabotage`, `train` and `create_record` do not carry i
   `build_realm(s)`, s = 0–2, with the roster and without it, compared as sets. Equal → delete.
   Unequal → the roster stays and the difference is recorded on its row.
 
+**Named tests** (new, `engine/season/tests/test_offer.py`): `test_a_person_with_no_dispute_forms_no_challenge_and_one_with_it_does`;
+`test_a_cohort_forms_none_of_the_individual_rows`; `test_the_casts_round_0_formations_of_those_rows_are_equal`;
+`test_candidate_sets_equal_with_and_without_each_deleted_roster` (seeds 0–2, round 0; a roster whose sets differ
+is not deleted); `test_no_capability_stem_is_answered`.
+
 ## Falsifier
 
 A hand-built person holding no dispute against `p_x` forms no `challenge` on `p_x`; given one planted
@@ -116,12 +127,12 @@ then need the refusal deposited as a claim, which is a WITNESS change and anothe
   friction point of the whole play surface. From the world's: 40% of a realm's scenes produce
   `*.refused`, which is noise in every chronicle. From the cohort's: a population that duels is not a
   population.
-- **R.** Completeness at the extremes: a person with no dispute, no capability and no seat is offered
-  less, which is what being that person means. Nothing is taken from the mistaken-belief path, the one
+- **R.** Completeness at the extremes: a person with no dispute and no seat is offered less, which is
+  what being that person means (a capability never narrows what he is offered, A-11). Nothing is taken from the mistaken-belief path, the one
   refusal that is a story.
 - **S.** One decline, read off the row's own cell, asked of the same answerer the fold asks. The scale
   transition is cleaner: what a cohort does is what a body of people does.
-- **E (last, as a ratio).** One reader widened by four stems and one existing conjunct on eight rows replace up to five rosters
+- **E (last, as a ratio).** One reader widened by its own-state stems and one existing conjunct on eight rows replace up to five rosters
   and their loaders; the rule a reader must learn falls from nine to one.
 
 ## Cost class
@@ -129,3 +140,7 @@ then need the refusal deposited as a claim, which is a WITNESS change and anothe
 Design-first for the stem list (item 2), then small build; the cohort conjunct is verb-table content.
 Shared files: `verb_table.yaml` (the verb cluster, serialise), `rosters.yaml`, `data/verbs.py`,
 `data/requires.py`, `queries/person_q.py`, `decision/options.py`.
+
+**Lands it and tier.** The B10 batch: the stem list's design read on `opus` (item 2, now narrowed to Tenures
+and dispute), then `valoria-author` on `sonnet` (`high`); one `methodology-close`. **Hash movers.** Both
+edits (declared; re-pinned once with B10).

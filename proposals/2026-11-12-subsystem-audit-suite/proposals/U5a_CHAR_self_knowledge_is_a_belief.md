@@ -1,5 +1,9 @@
 # U5a · CHAR — self-knowledge is a belief, built narrowly: a gift a man does not know he has, a motive he does not recognise
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.3 row (CONFORMS, one dependency gap), §2 row A-34 (NPC-021), §7, §7b-16, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-06, ledger S-26; `unified/U3_DEPENDENCY_ORDER.md` node B10). Changed: edit 6 (b)'s dependency is stated — `fed_by` lives on the provider's returned record, which WITNESS cannot read; per D-U1-06 (which governs where it differs from the read lane's §7b-16), the act's effect puts the shown capability on `Event.observed` as an `observation_terms` member and WITNESS deposits it to the actor alone, so (b) lands only after `fed_by` exists (U1-B, B05), and until then (a) alone carries coming to know; **NPC-021** is carried by `16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` (the crisis of faith deposits its own claim to him), said at edit 2; the reason-trail reader is `decision/score_parts.py` (the renamed `voices.py`, glossary *voice*); named tests; lands-it and tier.
+
+**Lands in batch:** B10 (edits 1–6 (a)); edit 6 (b) after U1-B (B05) and with the `observation_terms` member. **Depends on:** `02_CHAR_capability_uses_table.md` (B04), `U5c_SC_one_obstacle_form.md` (B05), `02_CHAR_voices_and_the_room.md` (B10, for edit 5's reader).
+
 ## Status: PROPOSED (a plan for future execution; nothing here is executed by the closing lane)
 
 Authored by the U5a unification-closure lane, 2026-11-12. Carries the one survivor of
@@ -47,8 +51,11 @@ himself he still knows by construction. No second answer on every own-state read
    outside it may not be marked unaware (refused at load).
 2. **`references/npc_registry.yaml`**, **`engine/season/data/cast.py`**: an optional cast-row key
    `unaware: [<key>, …]`, each a `self_believed` member the row actually holds; `unaware_of(r)` validates
-   it and refuses otherwise. Content for the three cases is authored by the CHAR content pass: NPC-004
-   `unaware: [prac.thread_sensitivity]`; NPC-012 the pursuit his case names.
+   it and refuses otherwise. Content for the cases is authored by the CHAR content pass: NPC-004
+   `unaware: [prac.thread_sensitivity]`; NPC-012 the pursuit his case names. NPC-021 (faith privately
+   challenged) needs no `unaware:` row: his doubt is carried by the crisis-of-faith draw of
+   `16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md`, which deposits its own claim to him (the
+   table above, row *his creed*); A-34's three named cases are thereby all carried.
 3. **`engine/season/harness/populated.py::build_realm`** (the one seeder): for every cast person and every
    `self_believed` key he holds that is **not** marked, one firsthand claim in his own ledger,
    `(self, "self:<key>", True)`. A marked key seeds none.
@@ -58,16 +65,20 @@ himself he still knows by construction. No second answer on every own-state read
    form: he does not deliberately read the Thread. The fold's own read of the field is unchanged, so a
    hand-built act still folds. Every other own-state stem is answered from the field as today.
 5. **`engine/season/decision/sheet.py`** and the reason trail's readers
-   (`decision/voices.py` when `02_CHAR_voices_and_the_room.md` lands; `harness/chronicle.py`): a pursuit
+   (`decision/score_parts.py` when `02_CHAR_voices_and_the_room.md` lands; `harness/chronicle.py`): a pursuit
    he holds no `self:` claim for is not listed on his sheet and its voice is attributed as *unrecognised*
    (kind `pursuit`, owner withheld). The score is untouched: the motive still biases every decision, which
    is NPC-012's first need.
 6. **How he comes to know** (both existing mechanisms, no new verb): (a) he is told: a `tell` whose claim
    is `(him, "self:<key>", True)` deposits as any told claim and is graded by his regard for the teller,
    so he may disbelieve it; (b) it shows: when a use row keyed on the capability contributes to one of his
-   own graded acts at Overwhelming (the `fed_by` record of U1 architecture §8 names it), WITNESS deposits
-   `self:<key>` to him alone (the `witness_key` channel's rule). The band is the act's own draw; no second
-   draw is taken.
+   own graded acts at Overwhelming (the `fed_by` record of U1 architecture §8 names it), the act's effect
+   adds an Observation `capability_shown:<key>` to the Event's `observed` (D-U1-06: `observed` is the one
+   channel for a per-Event fact WITNESS may deposit; the member joins the closed roster
+   `rosters.yaml: observation_terms` `[ASSUMPTION: the member's name]`), and WITNESS deposits `self:<key>`
+   to him alone (the `witness_key` channel's rule). The band is the act's own draw; no second draw is taken.
+   **Dependency:** `fed_by` exists only after U1 §11 U1-B (B05); until then (b) is not built and (a) alone
+   carries coming to know.
 
 ## Gate (execution artifacts)
 
@@ -81,6 +92,11 @@ himself he still knows by construction. No second answer on every own-state read
    the candidate forms next round.
 4. NPC-012 marked on one pursuit: `decision_spread --decisions` reads the same deciders with and without
    the mark (the score did not move); his sheet omits the pursuit.
+
+Named tests (new, `engine/season/tests/test_self_knowledge.py`): `test_no_row_marked_is_hash_equal_before_seeding`
+(1); `test_an_unaware_holder_forms_no_thread_read_and_his_twin_does` (2);
+`test_a_told_self_claim_is_weighed_by_regard_for_the_teller` (3); `test_an_unrecognised_pursuit_moves_no_score_and_leaves_the_sheet` (4);
+`test_a_shown_capability_is_deposited_to_the_actor_alone` (6 (b), after B05).
 
 ## Falsifier
 
@@ -104,5 +120,9 @@ one reader. **E (last).** One roster, one cast key, one seeded claim per held ke
 
 ## Cost class
 
-Small build, then content (two or three cast rows). Lands after `02_CHAR_capability_uses_table.md` (the
-gate's row) and with or after the reason trail.
+Small build, then content (two cast rows; NPC-021 is carried by `16_PESSIMIST_CHAR_A`). Lands after
+`02_CHAR_capability_uses_table.md` (the gate's row) and with or after the reason trail.
+
+**Lands it and tier.** The B10 batch, a CHAR/IN `valoria-author` session on `sonnet` (`high`), closed by B10's
+`methodology-close` once; edit 6 (b) in the first batch after B05 that touches WITNESS. **Hash movers.** The
+build hash once when edit 3 seeds the `self:` claims (declared); none with no row marked otherwise.

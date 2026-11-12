@@ -4,6 +4,11 @@
 
 Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (rulings A-59 and A-69). Nothing here is deleted. (1) **§3's last row** (`MB_FRICTION_SIGMA`, "ruled; read, not proposed", arms 1.1, 0.55, 0) becomes a test with a criterion written before the run: six arms (the three values, each with the named draws on, plus the bare engine and a small named level), five readings, four planted defects, in `27_MB_C_dynamic_strength_and_the_residual_chance.md` §4. It is the reading that tells the multiplier's removal from its lowering, and by ruling A-77 its first arm passing ships the multiplier at zero (the small named level only if it fails). "Friction as shipped and again pinned off" in §3's first sentence stands for every other sweep until that test's commit. (2) **One reading is added to the instrument**: the flip share, the share of fields whose end state changes when one source's draws alone are re-keyed. (3) **Rows T-11 to T-18** join §1's table: orderings for what an army carries back (the recoverable share of a loss, a routed against a standing unit, pursued against unpursued, strength some rounds later, recovery at rest against on the march, fled men returning with no act and with a recall, a second field in one round, the share of the fled who desert), in `27_MB_E_what_an_army_carries_back.md` §5. No historical figure for the wounded, for recovery or for the return of fled men exists in the tree, so none of the seven has a band.
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §7 test 9 (the `[UNVERIFIED]` on `tests/sim/gauge_mb.py` settled by opening it: 576 lines, a `TESTS` list driven by `matchup()`/`run()`, and a casualty readout already (`casualty_verdict`, `LOSER_CAS_BAND`, `WINNER_CAS_MAX`), so a ratio block fits beside `run()` and the fallback home is not needed; note the gauge builds its units from `systems.mass_battle.sim.engine`, not the season's constructors, so the new block builds its own scenarios through `orderofbattle` and `massbattle.resolve_field` as §2 says), §2 row A-77 (§3's `MB_FRICTION_SIGMA` row is the multiplier test of `27_MB_C` §4, not a read-only sweep), U1 §4 M-08 (§3's `obey_ob` is `troops.yaml: orders.obey`'s `step`, `27_MB_A` §4), `U3_CONFLICT_LEDGER.md` C3-D2 (§4's order: the field's sampler lands in B05, the key in B06, and this block is read last in B19); test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`).
+
+**Depends on:** the one sampler for the field (`U5b_MB_rulings_in_the_field.md` §1, B05) and the keyed draw (`11_GO_one_draw_owner.md`, B06); the mechanisms its rows read (`26_MASS_BATTLE_rout_pursuit_and_giving_ground.md`, `16_PESSIMIST_MB_rout_has_two_exits.md`, `26_MASS_BATTLE_cell_scale_and_time.md`), each printing "no mechanism" until landed.
+**Lands in batch:** B19 (`B19-mb-field-calibration`, MB), read last in the batch; its T-rows are the batch's gate.
+
 Lane MB. Carries rows R-1 to R-5, B-10 and B-11 of `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`.
 Sources: `research/historical/mass_battle_casualties_and_results_grounding.md` (**CR**),
 `…_movement_and_behaviour_grounding.md` (**MV**), `…_wargame_models_grounding.md` (**WG**). Reference, not
@@ -59,8 +64,9 @@ scenario through the season's own constructors (`orderofbattle`, `massbattle.res
 read is what a season fights; the win-share block's own constructors are left as they are and are re-read
 after the arrangement flip, as `04_MB_cell_hierarchy_as_data.md` gate 6 already says. The block prints the
 table with the reading, the band, n, and the same-run control for each row, and writes nothing tracked.
-`[UNVERIFIED: `gauge_mb.py` was not opened by this lane; if its shape cannot carry a ratio row, the block
-goes beside `lanchester_signature.py` under `systems/mass_battle/sim/` and the gauge is left alone.]`
+*(W3-1, opened at the tree:)* `gauge_mb.py` is a `TESTS` list run by `matchup()`/`run()` with a casualty
+readout already (`casualty_verdict`, `:448`); the block is a function `run_results()` beside `run()`
+(`:523`), with its own `RESULTS` table, invoked by a `--results` argument; the win-share block is untouched.
 
 Scenarios, each with its control beside it:
 
@@ -84,15 +90,17 @@ One constant at a time, each against its own control arm, n 400, friction as shi
 | `pursuit_damage`'s scale (`CASUALTY_SCALE` as used there) | today; half; quarter | T-3 (the pessimist lane measured a mean 73% of survivors lost in one call, which puts T-3 near its top) |
 | `max_bouts` | 1, 2, 4, 6 | T-4 |
 | `fatigue.fast_move_drain` | 0, 2, 4 | the envelopment doctrine's win share; T-8 unaffected |
-| `obey_ob` | off; seeds | spread of T-4; the manoeuvre rows' failure shares |
+| `orders.obey` (`step`, `27_MB_A` §4; U1 M-08) | off; seeds | spread of T-4; the manoeuvre rows' failure shares |
 | `deployment.cell_troops` | cap arm; 16 | every row, read twice: the instrument's whole point is that the two arms are reported side by side |
-| `MB_FRICTION_SIGMA` (ruled; **read, not proposed**) | 1.1; 0.55; 0 | every row: how much of each reading is the day's luck. For the audit's §7 item 2 |
+| `MB_FRICTION_SIGMA` *(W3-1, A-77: no longer read-only; the six-arm test of `27_MB_C` §4 runs it and ships 0 if its first arm passes)* | 1.1; 0.55; 0 | every row: how much of each reading is the day's luck |
 
 ### 4. Order
 
 After rulings A-5 and A-6 move the battle's sampler to the bell curve and re-centre it
 (`unified/DECISIONS_ANSWERED.md:11-12`): every reading moves with the sampler, so a pass before that is spent.
-After the `Drawn` band and the amended pessimist proposal: T-3 has no numerator without pursuit.
+*(W3-1, C3-D2:)* the field's sampler lands in B05 and the keyed draw in B06; this block is read last in the
+field calibration batch (B19). After the `Drawn` band and the amended pessimist proposal: T-3 has no
+numerator without pursuit.
 
 ## Gate (execution artifacts)
 
@@ -102,6 +110,12 @@ After the `Drawn` band and the amended pessimist proposal: T-3 has no numerator 
    band; with the winner's and loser's losses swapped in the readout, T-2 reads below 1.
 3. Side symmetry: every even scenario's win share for side A is inside the sampling band of side B's.
 4. Two runs at the same seeds print the same table.
+
+**Tests and lands (W3-1).** The instrument is not a test and has no CI row (`CLAUDE.md` §0.1 pt 5); its gate
+is `python tests/sim/gauge_mb.py --results` printed in the batch's commit body. Gates 2 and 4 are run by the
+landing session with the planted defects and recorded there. **Hash movers:** none (an instrument).
+**Lands:** an IN-lane implementation session under `/methodology-execute` with MB review; the block
+`sonnet`, the runs `haiku` (`valoria-measure`), the reading `opus` (the batch's judgment node).
 
 ## Falsifier
 

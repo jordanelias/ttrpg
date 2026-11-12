@@ -1,10 +1,15 @@
 # MB · the headcount field: one survivor share, one scale, a drawn field
 
-Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2) — three rulings folded. (1) **A-3**: the field returns its end state and the host reads the band; the module-side `verdict` this file adds to `_grade` is withdrawn in favour of `04_MB_manager_battle_one_resolver.md` §1 (`_grade` returns shares and the `routed` / `conceded` flags; `seam/ladder.py::field_degree` reads `Won`, `Lost` or `Drawn` by the same three-line rule stated below). The rule, the `Drawn` band, the one share and the one scale stand. (2) **A-57, A-58**: on `Drawn` the defender keeps the land; this file's "no mover; nobody arrives" is kept and is its own choice (`26_MASS_BATTLE_aggression_and_land.md` §2); on `Won` onto land another holds the title and its seats pass by `U5d_FA_land_and_seats_pass_on_a_won_march.md`, after this file's writes. (3) **A-4 and the squad**: `field_subunits="person"` stays the arm for a side of persons facing troops; a field of two sides of named persons only goes to the squad entry (`U5b_MB_rulings_in_the_field.md` §3). `field_walls_dr=3` keeps its value and changes its unit when `16_PESSIMIST_MB_partition_and_the_pair_rule.md` edit 3 lands (walls as dice on the attacker's roll, not armour subtracted from damage); the module's dice are the one sampler (A-5; same file §1).
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2) — three rulings folded. (1) **A-3**: the field returns its end state and the host reads the band; the module-side `verdict` this file adds to `_grade` is withdrawn in favour of `04_MB_manager_battle_one_resolver.md` §1 (`_grade` returns shares and the `routed` / `conceded` flags; `seam/ladder.py::field_degree` reads `Won`, `Lost` or `Drawn` by the same three-line rule stated below). The rule, the `Drawn` band, the one share and the one scale stand. (2) **A-57, A-58**: on `Drawn` the defender keeps the land; *(W3-1: "no mover; nobody arrives" is superseded by A-67, A-68, A-70: each army returns at once to its station, see the `Drawn` write below)*; on `Won` onto land another holds the title and its seats pass by `U5d_FA_land_and_seats_pass_on_a_won_march.md`, after this file's writes. (3) **A-4 and the squad**: `field_subunits="person"` stays the arm for a side of persons facing troops; a field of two sides of named persons only goes to the squad entry (`U5b_MB_rulings_in_the_field.md` §3). `field_walls_dr=3` keeps its value and changes its unit when `16_PESSIMIST_MB_partition_and_the_pair_rule.md` edit 3 lands (walls as dice on the attacker's roll, not armour subtracted from damage); the module's dice are the one sampler (A-5; same file §1).
 
 ## Status: PROPOSED
 
-Folded: 2026-11-12 by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (rows R-10, R-7, R-2, S-1). Nothing here is deleted. (1) **The three-valued verdict is the historical definition of a result** (one side "finally broke and fled", or neither did: `research/historical/mass_battle_casualties_and_results_grounding.md` A11, D4) and is what rulings A-57 and A-58 read: on a march onto land another holds, `won` passes the land and its seats, `drawn` leaves the defender holding, `lost` takes nothing in either direction (`U5d_FA_land_and_seats_pass_on_a_won_march.md`; `26_MASS_BATTLE_aggression_and_land.md` §2). A conceded defender is `won` for the aggressor under the rule in this file and so loses the ground. (2) **On `Drawn`, "no mover" stands**: A-58 settles the land and does not say where the aggressor's army then is; this file's write is kept and that question is listed open, not assumed. (3) **A drawn bout is not yet a drawn battle**: with `max_bouts` above 1 the wrapper fights again in the same scene and returns one band (`26_MASS_BATTLE_cell_scale_and_time.md` §3); at 1, this file is unchanged. (4) The one weight-to-troops owner puts season armies at 60 to 900 men, which is what fixes the cell's scale at sixteen men (same file §1). (5) The measured loser-to-winner loss of this path can be read against Krentz's table as a ratio (`26_MASS_BATTLE_calibration_targets.md` T-2).
+Folded: 2026-11-12 by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (rows R-10, R-7, R-2, S-1). Nothing here is deleted. (1) **The three-valued verdict is the historical definition of a result** (one side "finally broke and fled", or neither did: `research/historical/mass_battle_casualties_and_results_grounding.md` A11, D4) and is what rulings A-57 and A-58 read: on a march onto land another holds, `won` passes the land and its seats, `drawn` leaves the defender holding, `lost` takes nothing in either direction (`U5d_FA_land_and_seats_pass_on_a_won_march.md`; `26_MASS_BATTLE_aggression_and_land.md` §2). A conceded defender is `won` for the aggressor under the rule in this file and so loses the ground. (2) *(W3-1: superseded by A-67, A-68, A-70, which answer the question this item left open: a drawn aggressor's army is at once back at its station, a drawn defender's at its own base; the `Drawn` write below carries it.)* (3) **A drawn bout is not yet a drawn battle**: with `max_bouts` above 1 the wrapper fights again in the same scene and returns one band (`26_MASS_BATTLE_cell_scale_and_time.md` §3); at 1, this file is unchanged. (4) The one weight-to-troops owner puts season armies at 60 to 900 men, which is what fixes the cell's scale at sixteen men (same file §1). (5) The measured loser-to-winner loss of this path can be read against Krentz's table as a ratio (`26_MASS_BATTLE_calibration_targets.md` T-2).
+
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §2 rows A-67/A-68/A-70 and 7b-10 (the `Drawn` write re-homes each army at once to its station and writes losses and fatigue, A-69; the two head items that kept "no mover" are marked superseded), §2 row A-3 (stands; its Layer 1 text is now on `OWED_TO_UNIFICATION.md` §A by `U3_CONFLICT_LEDGER.md` C3-L2), §2 row A-81/A-80 (each band names its durable write; a drawn field raises pressure), §1.2 (the struck `verdict` text is removed, not left beside the new), test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`; U3 §4.1 row 60 reverses the edge to `U5d_FA_land_and_seats_pass_on_a_won_march.md`).
+
+**Depends on:** nothing unlanded (`recruitment.under_arms_cap`, `seam/ladder.py::field_degree`, `loop/effects_migration.py::_relocate` and the gate's `muster` basis are in the tree); the one sampler for the module's dice (`U5b_MB_rulings_in_the_field.md` §1, B19) does not block this file.
+**Lands in batch:** B17 (`B17-mb-scale`, MB), first; `U5d_FA_land_and_seats_pass_on_a_won_march.md` (B23) depends on it.
 
 Lane MB (the seam edits are IN). Carries resolutions R-01, R-02, R-03, R-16, R-18, R-19 of
 `audits/04_MB_audit.md` §6.2. Reference, not mechanism (`CLAUDE.md` §0.05).
@@ -50,7 +55,7 @@ step 5, R-03 step 4 (`Invested` is already a band nobody wins; the module alread
 
 - `_grade(unit_a, unit_b)`: delete the `by_troops` parameter and its `else` branch. Both shares are
   `unit.hp / max(1.0, unit.hp_max)`.
-- *(Reconciled, A-3:)* `_grade` returns each side's share and its `routed` / `conceded` flags, and **no** `verdict`; the rule below is evaluated by the host's `field_degree`, where `combat_degree` reads a scene. ~~`_grade` returns `verdict` in place of `attacker_wins` and `degree`:~~
+- *(Reconciled, A-3:)* `_grade` returns each side's share and its `routed` / `conceded` flags, and **no** `verdict`; the rule below is evaluated by the host's `field_degree`, where `combat_degree` reads a scene:
 
   ```
   a_out = unit_a.routed or unit_conceded(unit_a)
@@ -94,7 +99,16 @@ after `unopposed` and `invested`.
 - the loser's write is capped as the winner's is: `min(1.0, max(0.0, mine))` at `:637`;
 - on `Drawn`: every member of both sides (or the drawn cohorts of a side that fought as an army) has
   `body` scaled by his own side's (or own part's) share, under `field_casualty_model` as the winners'
-  write is today; no stance row; no mover; the ration debit as on `Won` and `Lost`.
+  write is today; no stance row; *(W3-1, A-67, A-68, A-70, 7b-10:)* **each army returns immediately to its
+  station** (the aggressor's to where the march began, A-67/A-68; the defender's to its own base, A-70),
+  through `loop/effects_migration.py::_relocate` under the gate's `muster` basis (`state/gate.py:306-317`),
+  in the same fold; losses and fatigue are written for each (A-69; `27_MB_E_what_an_army_carries_back.md`);
+  the ration debit as on `Won` and `Lost`.
+- *(A-81, A-80:)* every band names its durable write: `Won`/`Lost` the shares and `field.won`/`field.lost`;
+  `Drawn` the shares, the re-homing and `field.drawn`, witnessed by those present; and a drawn field that
+  leaves the defender holding is not stillness: the defender's regard and grievance toward the aggressor move
+  by A-68's draw (the FA lane's reader, `U5d_FA_land_and_seats_pass_on_a_won_march.md`; `[ASSUMPTION: that
+  reader carries the drawn case — basis: A-68 and A-85 name the draw for any unopposed or contested entry]`).
 
 ## Gate (execution artifacts)
 
@@ -106,9 +120,16 @@ after `unopposed` and `invested`.
    override) folds a `field.won` for the unmodified Crown pair at some seed in 0 to 11 and a
    `field.lost` or `field.drawn` at another.
 4. Season: a hand-built stalemate folds `field.drawn`; both sides' bodies fall by their own shares;
-   no `stance` row is added to anyone; nobody is re-homed.
+   no `stance` row is added to anyone; each army is at its station after the fold (A-67, A-70).
 5. Control: `build_realm(0)`, one season, content hash equal to the base (no field is fought there).
    Seed 2's one-season pin is re-recorded, and the commit says so.
+
+**Tests (W3-1).** `engine/season/tests/test_march.py` (existing): gate 3's real-fold test;
+`::test_a_drawn_field_returns_each_army_to_its_station`, `::test_a_drawn_field_writes_both_sides_losses`
+(gate 4). Gates 1–2: `engine/season/tests/test_mass_battle_module.py::test_no_share_exceeds_one`,
+`::test_realm_weight_pairs_vary_by_seed`. Gate 5: the realm pin test. **Hash movers:** every fought field;
+seed 2's one-season pin. **Lands:** an IN-lane implementation session under `/methodology-execute` with MB
+review; `sonnet`.
 
 ## Falsifier
 
@@ -125,7 +146,7 @@ falls; or twelve seeds of the unmodified realm pair that all fold one band.
   a drawn field leaves two hurt armies facing each other, which is a situation, where a false defeat
   was an accounting entry.
 - **S.** One methodology for the share on both paths; one deployment rule; `Drawn` pauses correctly
-  (nobody moves, the place is still contested) as `Invested` does.
+  (both armies go home at once, the place is still the defender's, A-67/A-70) as `Invested` does.
 - **E, last, against the above.** Net deletion: one parameter, one fixture, three constants, one dead
   ladder. A player can predict that more men survive when fewer are hit.
 

@@ -1,8 +1,14 @@
 # 14 · VERBS · MATERIAL · A — the family's draw; `restore`, `work`, `sabotage`, `tend`
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-22, C-23, C-32) — §2: the family's draw takes one of two loadable shapes (`U5c_VERBS_residue_and_governance_owner.md` §1); `graded_acts` is not added beside the route roster `graded_tasks` of `18_DETERMINISM_task_draw_for_uncontested_verbs.md`, and a band-keyed `writes:` on a route row does not load (`04` §B.13 invariant 12). The share table is `task_fraction`, first values 1 / 1 / 0.5 / 0; `effect_share` 1000 / 700 / 350 / 0 is a sweep arm of it. §6 owns the `tend` row.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head applied to the body (`unified/work/R4_READ.md` §1.2, 7b.4; F-R4-01, F-R4-09): §2 rows 1, 2, 3, 5, 6 rewritten (no `graded_acts` rename: the roster is 18-A's `graded_tasks`, U1 D-U1-11i; no `effect_share` fixture: the one share table is `rosters.yaml: task_fraction`, U1 R-32, D-U1-11l; the three obstacle members and `watch_step` are OBS's members, landed here as their first reader per OBS §4 step 6+); `restore`, `work`, `tend` take shape (a) (flat columns, failed draw in `emits_on_refusal`'s `draw` clause); `sabotage` takes shape (b) (`contests: "a task"`); the `[UNVERIFIED]` on covert masking settled at the tree (`covert_kinds` is read only by `epistemic.trail_of`, `epistemic.py:368-394`; `observers_for` masks no actor), and the masking clause is not added (`04` §C.6: covertness is presence); `tend`'s capability is `healing` once its definition row lands (U1 capability architecture §5); the `wound` member here is the patient's injury, not the tender's A-8 wound level; A-81 (C3-C11), C3-R1, A-30 keys, U3 batch B12, R4 7b.0 block.
 
 ## Status: PROPOSED
+
+Lands in batch: B12 (`unified/U3_DEPENDENCY_ORDER.md` §3.1), with `07_SE_kernel_repairs.md` before it in the batch (C3-D6: SE kernel, ground, treasury, census, regrowth, then MATERIAL A–C).
+Depends on: `18_DETERMINISM_task_draw_for_uncontested_verbs.md` items 1, 2, 4 (B07: `graded_tasks`, `task_fraction`, the `draw` refusal clause, the loader edit at `data/verbs.py:848-876`; C3-R1); `U5c_VERBS_residue_and_governance_owner.md` §1 (B07: the `a task` prize); `U5c_SC_one_obstacle_form.md` §2 and `05_SC_obstacle_difficulty_and_modifiers_B.md` (B05: members `ruin` 27, `wound` 28, `watch` 22 with `watch_step`; the `difficulty:` column); `08_FI_01_claim-sourced-referents.md` edit 1 (B11: `holders_named`, for `sabotage`).
+Lane: SE (fabric); cross-lane rows named in §10. Tier (R4 7b.0 (1)): `sonnet` producer, effort `high`, for every row; one `opus` read of each gate's band table. Test file: `engine/season/tests/test_vm_mat_a_mending.py` (one function per §8 gate; `aperture 2 s` called inside it).
+Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the actor's trained score in the row's `capability:` (A-6; the untrained `pool_default` while the row names none); talent enters as levels from the governing attribute (A-7); the actor's own wound is a level against his roll (A-8). Every draw takes `H(w.world_seed, w.tick, <actor id>, "<verb>.task")` (A-30). **A-81:** a failed `restore`, `work` or `tend` emits its `draw` refusal kind, witnessed by those present (a claim of it to each) and, for an actor alone, deposited as his own firsthand claim `(self, <verb>.failed, True)`; `sabotage`'s Failure `sabotage.seen` is a deed naming him, deposited to those present.
 
 Batch M-A of `audits/14_VERBS_MATERIAL.md` §18 (sections §8, §16, §9, §12 and decisions D-1 to D-7 of its
 §0.4). Written under `VERBS_BRIEF.md` and the standing rule of `AUDIT_BRIEF.md` (*we do not do
@@ -21,22 +27,24 @@ landed here are what batches M-B to M-E reuse.
 
 | # | owner | edit |
 |---|---|---|
-| 1 | `engine/season/rosters.yaml` | `graded_inquiries:` renamed `graded_acts:` (the map is unchanged: verb → `{provider, module_entry}`; its note gains *"an act graded with no prize: an inquiry, or a material act (14_VERBS_MATERIAL)"*). `data/rosters.py::GRADED_INQUIRIES` → `GRADED_ACTS`; `manifest/registry.py::check_graded_inquiries` → `check_graded_acts`; `loop/resolve.py` imports the new name. `_grade` is not edited: its draw is already keyed per act |
-| 2 | `engine/season/data/fixtures.py` | `effect_share={"Overwhelming": 1000, "Success": 700, "Partial": 350, "Failure": 0}` (per-mille of an effect's full magnitude; swept `1000/700/350/0`, `1000/500/250/0`, and the control `1000/1000/1000/0`, which is today's whole magnitude at every winning band); `watch_step=0.5` (swept 0 / 0.5 / 1); each with a `hole_register.yaml` row graded `assumption`, `site:` set. `[ASSUMPTION; medium; Jordan to correct]` |
+| 1 | `engine/season/rosters.yaml` | *(W3-4a: no rename here.)* The route roster is renamed once, `graded_inquiries` → `graded_tasks`, in `18_DETERMINISM_task_draw_for_uncontested_verbs.md` item 2's commit (U1 D-U1-11i); this family's shape-(a) rows join it as members. `_grade` is not edited: its draw is already keyed per act |
+| 2 | `engine/season/rosters.yaml: task_fraction` | *(W3-4a: replaces the `effect_share` fixture.)* The one share table, `{Overwhelming: 1, Success: 1, Partial: 0.5, Failure: 0}` (U1 R-32, C-23; added with 18-A in B07; if 18-A has not added it when this batch lands, this commit adds it with that note). `effect_share` 1000 / 700 / 350 / 0 and 1000 / 500 / 250 / 0 are **sweep arms of `task_fraction`**, not a second table; the control arm `1 / 1 / 1 / 0` is today's whole magnitude at every winning band. `watch_step=0.5` (swept 0 / 0.5 / 1; control 0) lands here with a NUMBER row in `hole_register.yaml`: it is OBS §2 member 22's fixture, and a member lands with its first reader (OBS §2), which is this batch (B12) `[ASSUMPTION; medium; Jordan to correct]` |
 | 3 | `engine/season/loop/effects_shared.py` | new, the one reader of the ladder: |
 
 ```python
-def graded_amount(w: "World", res: "Resolution | None", full: int, table: str = "effect_share") -> int:
-    """How much of `full` an act at `res.degree` achieves: ceil(full x Fixtures[table][band] / 1000), so any
-    winning band moves at least one unit of a non-zero `full`; 0 at Failure. A graded row's effect reaching
-    here with `res is None` is a caller defect (InstrumentDefect), as a missing operand is."""
+def graded_amount(w: "World", res: "Resolution | None", full: int, table: str = "task_fraction") -> int:
+    """How much of `full` an act at `res.degree` achieves: ceil(full x TASK_FRACTION[band]) where
+    `table` names `rosters.yaml: task_fraction` (or a row's own content table of the same shape, U1 §3
+    "cost / price"), so any winning band moves at least one unit of a non-zero `full`; 0 at Failure. A
+    graded row's effect reaching here with `res is None` is a caller defect (InstrumentDefect), as a
+    missing operand is."""
 ```
 
 | # | owner | edit |
 |---|---|---|
 | 4 | `loop/effects_economy.py::_rise`, `_fall` | take `res`; return `graded_amount(w, res, (headroom * num) // den)` (and the footroom likewise). The docstring's *"`× f(degree)` IS NOT BUILT"* paragraph is replaced: it is built, by this function; H-164's row narrows to the unbuilt `share` sweep |
-| 5 | `engine/season/verb_table.yaml`, header | one paragraph under the `OBSTACLE` note: a row in `graded_acts` declares `difficulty:`, `capability:`, Degree-keyed `writes:` and `emits:` whose Failure band is a kind of its own (`<verb>.failed`), and keeps `emits_on_refusal` for an act the world would not admit. `data/verbs.py` refuses a `graded_acts` row whose Failure band shares a kind with `emits_on_refusal` (FI-04 §1 lifts the one exception, `finding.none`) |
-| 6 | `rosters.yaml: obstacle_terms` (SC-B's roster) | append `ruin`, `wound`, `watch`, each `+`, applying to *a graded material act*; the host builder (`seam/wrappers/sigma.py::contest_input`, where `forgery_quality` already enters) carries each raw, 0 where the row does not name it; the module composes them (`modules/social_contest/roll.py::obstacle`) |
+| 5 | `engine/season/verb_table.yaml`, header | one paragraph under the `OBSTACLE` note (W3-4a, VRES §1): a material act takes one of two shapes. **(a)** a member of `graded_tasks` declares `difficulty:` (a `difficulty_levels` member, D-U1-04), `capability:`, **flat** `writes:` and `emits:`, and its failed draw is the keyed `emits_on_refusal` clause `draw` (`<verb>.failed`), beside the clauses for an act the world would not admit; the band reaches the effect through `graded_amount`. **(b)** a row whose bands write different cells or emit different kinds declares `contests: "a task"` with Degree-keyed `writes:`/`emits:`. The loader (18-A item 4) refuses a band-keyed column on a row with neither. **Keying the refusals (read at the tree, `data/verbs.py:945-967`):** a keyed row keys exactly its failable clauses, a set the loader derives (`eligibility` iff an alternative other than `own`; each named top-level typed conjunct, and a keyed row with a precondition must name every conjunct; `write` iff the row writes; `counterparty` iff it names one). So each shape-(a) row writes `draw: [<verb>.failed]` beside today's flat refusal kind under **each derived clause** (written out at landing from the row; `<each derived clause>` below is that list, not a literal key), and a shape-(b) row keeps one flat refusal kind (a contested row keys one kind unless it keys `counterparty`) |
+| 6 | `rosters.yaml: obstacle_terms` (OBS's roster) | append `ruin` (member 27), `wound` (member 28: the **patient's** injury as the task's difficulty, not the tender's own wound level, which is an A-8 level on his pool) and `watch` (member 22, fixture `watch_step`), in OBS §2's roster order: they are members of `U5c_SC_one_obstacle_form.md` §2's one roster, and each lands with its first reader, in that reader's commit (OBS §2), which is this batch; no other proposal adds them again. The host builder (`seam/wrappers/sigma.py::contest_input`, where `forgery_quality` already enters) carries each raw, 0 where the row does not name it; the module composes them (`modules/social_contest/roll.py::obstacle`) |
 | 7 | `rosters.yaml: referent_classes` | add `Worn`, `Unfinished`, `Resented`, `Wounded`, each with a one-sentence note and each occasion-only and non-collection (`Detainee`'s shape; `data/verbs.py` exports the four names as it exports `DETAINEE_CLASS`) |
 
 ## 3. `restore`
@@ -71,20 +79,12 @@ def fabric_known(w: World, p: Person) -> tuple:
     referent_class: Worn
     capability:  none          # `craft` when Jordan authors it (CORE Edit 3); note: every person rolls the untrained default
     difficulty:  routine       # + `ruin`: one step per `band_floors` floor of the site's kind above its condition
-    writes:
-      Overwhelming: ["Site.condition"]
-      Success:      ["Site.condition"]
-      Partial:      ["Site.condition"]
-      Failure:      []
-    emits:
-      Overwhelming: ["site.restored"]
-      Success:      ["site.restored"]
-      Partial:      ["site.restored"]
-      Failure:      ["restore.failed"]
-    emits_on_refusal: ["restore.refused"]
+    writes:  ["Site.condition"]            # shape (a): one cell; the band scales it (task_fraction)
+    emits:   ["site.restored"]
+    emits_on_refusal: {draw: ["restore.failed"], <each derived clause>: ["restore.refused"]}   # see the note under §2 row 5
 ```
 
-`rosters.yaml: graded_acts.values` gains `restore: {provider: "social_contest", module_entry:
+`rosters.yaml: graded_tasks.values` gains `restore: {provider: "social_contest", module_entry:
 "social_contest.roll"}`. `_eff_restore`: `delta = _rise(w, site, res)`. `sigma.py::contest_input`: `ruin`
 = the count of `w.fixtures.band_floors(site.kind)` values above `site.condition` (0 for an empty cell).
 
@@ -101,12 +101,12 @@ block and `band_floors`' note (*"AN EMPTY CELL IS NOT A WORKABLE SITE"*) are rew
     referent_class: Unfinished
     capability:  none          # `labour` when authored
     difficulty:  routine
-    writes:  {Overwhelming: ["Site.condition"], Success: ["Site.condition"], Partial: ["Site.condition"], Failure: []}
-    emits:   {Overwhelming: ["site.worked"], Success: ["site.worked"], Partial: ["site.worked"], Failure: ["work.failed"]}
-    emits_on_refusal: ["work.unavailable"]
+    writes:  ["Site.condition"]            # shape (a)
+    emits:   ["site.worked"]
+    emits_on_refusal: {draw: ["work.failed"], <each derived clause>: ["work.unavailable"]}   # see the note under §2 row 5
 ```
 
-`graded_acts` gains `work`. `_eff_work`: the works branch reads `_rise(w, fabric, res)`; a hand-declared
+`graded_tasks` gains `work`. `_eff_work`: the works branch reads `_rise(w, fabric, res)`; a hand-declared
 delta is scaled by `graded_amount` the same way. The `requires_typed` cell is unchanged (J-M1).
 
 ## 5. `sabotage`
@@ -123,6 +123,7 @@ def fabric_resented(w: World, p: Person) -> tuple:
 ```yaml
   - verb:        "sabotage"
     referent_class: Resented
+    contests:    "a task"      # shape (b): Partial and Failure emit a second kind (VRES §1)
     capability:  none          # `craft` when authored
     difficulty:  demanding     # + `watch`: world_q.guard_weight(site.rung) x Fixtures watch_step
     requires_typed:            # `restore`'s cell, plus CHAR item 5's conjunct
@@ -140,10 +141,19 @@ def fabric_resented(w: World, p: Person) -> tuple:
 ```
 
 `rosters.yaml: covert_kinds.values` gains `site.damaged` (so `epistemic.trail_of` holds the hand for an
-`examine` of the Site). `sabotage.seen` is an ordinary deed kind naming the actor. `[UNVERIFIED: how
-`loop/witness.py` masks `who` for a covert kind today; if it does not, the edit is one clause in
-`epistemic.observers_for`: an Event of a `COVERT_KINDS` kind admits its actor alone to the `seen` terms,
-and everyone else present to the event-kind claim.]` `_eff_sabotage`: `delta = -_fall(w, site, res)`.
+`examine` of the Site). `sabotage.seen` is an ordinary deed kind naming the actor. `sabotage` is not a
+`graded_tasks` member (it is a contest row). `_eff_sabotage`: `delta = -_fall(w, site, res)`.
+
+*(W3-4a: the earlier `[UNVERIFIED]` is settled at the tree.)* `covert_kinds` is read by
+`epistemic.trail_of` alone (`epistemic.py:368-394`, the inquiry's trail); `observers_for` masks no actor,
+and no masking clause is added: covertness is a property of presence (`04` §C.6, `co_located` mints the
+change claims and an attribution claim), so a second covertness mechanism would be two rules for one
+thing. Consequence for the gate: a person co-located with the Site at the act holds the attribution at
+every band. **INCOMPLETE (not decidable from the repository):** whether an `Overwhelming`/`Success`
+sabotage is unseen by persons who stand at the Site needs either a formation conjunct that the actor acts
+where no other person stands (the typed grammar has no such stem) or a masking rule `04` §C.6 does not
+carry; the SE and FI owners decide. Until then the gate reads the hidden hand on a fixture where nobody
+else stands at the Site.
 
 ## 6. `tend`
 
@@ -153,12 +163,14 @@ as `Wounded`.
 ```yaml
   - verb:        "tend"
     referent_class: Wounded
-    capability:  none          # `physic` when authored
-    difficulty:  routine       # + `wound`: one step per `band_floors.body` floor above the patient's body
-    writes:  {Overwhelming: ["Person.body"], Success: ["Person.body"], Partial: ["Person.body"], Failure: []}
-    emits:   {Overwhelming: ["body.tended"], Success: ["body.tended"], Partial: ["body.tended"], Failure: ["tend.failed"]}
-    emits_on_refusal: ["tend.refused"]
+    capability:  none          # `healing` once its definition row lands (U1 capability architecture §5)
+    difficulty:  routine       # + `wound` (OBS member 28): one step per `band_floors.body` floor above the patient's body
+    writes:  ["Person.body"]               # shape (a)
+    emits:   ["body.tended"]
+    emits_on_refusal: {draw: ["tend.failed"], <each derived clause>: ["tend.refused"]}   # see the note under §2 row 5
 ```
+
+`graded_tasks` gains `tend`.
 
 `_eff_tend`: `whole = p.body + graded_amount(w, res, max(p.body, p.body_ceiling) - p.body)`, and the
 `Change` carries `body_observed(who, whole)` as `_eff_kill` carries it, so a believer's newest body claim
@@ -166,7 +178,8 @@ is the mended one. `03_PC_exits_withdrawal_recovery.md` Part C's `tend_fraction`
 
 ## 7. Order of landing
 
-1. §2 rows 1 to 7 (one commit; hash EQUAL: no row has joined).
+1. §2 rows 2 (`watch_step` only), 3, 4, 5, 6, 7 (one commit; hash EQUAL: no row has joined, each member
+   ships at its control 0); row 1 and `task_fraction` are 18-A's, landed before this batch.
 2. `07_SE_kernel_repairs.md` §3 (a wear of zero emits nothing), if not already landed.
 3. `tend` (smallest; re-records the realm goldens once).
 4. `restore`, with `fabric_news` and `fabric_known`.
@@ -185,9 +198,13 @@ is the mended one. `03_PC_exits_withdrawal_recovery.md` Part C's `tend_fraction`
   three or more distinct garrison conditions; at `Overwhelming` and `Success` no co-located ledger names
   him and a planted-`Success` `examine` does; a `march` on the town reads lower `fortification_of` than
   the control. Realm: `exists:Site=0` refusals 0.
-- **The draw itself.** With `effect_share` at the control (`1000/1000/1000/0`) and a planted `Success`
+- **The draw itself.** With `task_fraction` at its control arm (`1 / 1 / 1 / 0`) and a planted `Success`
   on every act, the four effects reproduce today's magnitudes (the existing hand-built tests, with the
-  planted `Resolution`).
+  planted `Resolution`). With `task_fraction` shipped (`1 / 1 / 0.5 / 0`), a planted `Partial` moves
+  `ceil(full × 0.5)`.
+- **A-81.** In each fixture above, a planted `Failure` leaves at least one new claim in some ledger (the
+  witnesses' claim of the refusal Event, or the actor's own `(self, <verb>.failed, True)`); count of
+  Failure acts with zero durable writes, expected 0.
 - **Planted failure for the batch.** Pin `_grade` to `Success`: every spread above collapses to one value
   and each gate must go red.
 

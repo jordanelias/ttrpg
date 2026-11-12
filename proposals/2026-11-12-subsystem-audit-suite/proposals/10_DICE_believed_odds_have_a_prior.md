@@ -2,6 +2,11 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-13) — stands. Under A-5 `band_odds` is the closed form of the one sampler (same name and signature); the prior for a stranger is an ordinary person's pool and mid-point talent (U1 architecture §4). Edit D (the roll's record on its Event) is one proposal with `10_DICE_capability_axiom_map.md` §D's `fed_by` and SC's `Margin.terms`; under A-5 the record carries the continuous margin, not a settled integer.
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AND_VOCABULARY.md` D-U1-06 / U1 §4 R-30 / `U3_CONFLICT_LEDGER.md` C3-L5 (Edit D is **withdrawn**: no `Event.roll` field; the roll's record rides the act's Resolution and reason trail, `fed_by`, `terms`, `levels`, and where a reader needs it witnessed its parts go on `Event.observed` as `observation_terms` members; the persistence of a social roll's terms lands with `05_SC_contest_record_on_event.md` in B05; `R1_READ.md` §1.3's AMBIGUOUS row answered), `R1_READ.md` §2 row A-5 (`settled_margin` struck: there is no settled margin), §1.3 (Edit A's prior reaches the obstacle through `opposed_ob`, A-79, `29_DICE` item 29-4 step 3), §6 (problem 1's figures are whole-dice readings of the old regime); test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`).
+
+**Depends on:** `10_DICE_one_score_two_roles.md` (B05: the opposing role reads the trained score); `29_DICE_one_opposed_rule_form_and_tuning.md` item 29-4 (B05); `10_DICE_advantage_sources_for_the_arcs.md` (B05, before it).
+**Lands in batch:** B05 (`B05-one-roll`, IN), after `10_DICE_advantage_sources_for_the_arcs.md`; Edit C's believed estimates land with `U5b_PC_residue.md` §8 (B14) and `U5b_MB_residue.md` §5.
+
 ## Status: PROPOSED
 
 Carries finding F-DICE-14 and §15 of `../audits/10_DICE_audit.md`. Lane: IN (the seam's believed-odds
@@ -22,7 +27,8 @@ do not change: this is the person's estimate, never the dealt odds.
 
 1. **The chooser's odds query answers for one verb.** Realm, seed 0, one season, the query spied at
    `sigma.py::believed_chance` (audit §12, E-19): asked 4,929 times; a figure 102 times, all for
-   `determine` (0.26, 0.4346, 0.5765: the default pair at effort 0, 1, 2); `None` 3,813 times for
+   `determine` (0.26, 0.4346, 0.5765: the default pair at effort 0, 1, 2; whole-dice readings of the regime
+   before A-5, W3-1); `None` 3,813 times for
    `march` and 1,014 for `accept` (another module's prize; no believed mode exists for a fight or a
    field, `sigma.py:383-388`).
 2. **`None` reads as certainty.** `decision/choose.py::odds_weight`: *"`return 1.0 if chance is None`"*.
@@ -66,6 +72,10 @@ if person_subject and key and subject != p.id:
         return None                                     # the control: he cannot say
 ```
 
+*(W3-1, A-79:)* `opposition` is a **score**, and the believed obstacle composes it as the dealt one does,
+`opposed_ob(opposition, opposition_rate)` (`29_DICE_one_opposed_rule_form_and_tuning.md` item 29-4 step 3:
+`opposition if not None else pool_default`), never as a pool.
+
 **B. `engine/season/data/fixtures.py`**: `believed_prior`, arms `none` (control) / `ordinary` (SHIPPED),
 with its hole-register row beside H-248, graded `assumption`. [ASSUMPTION; medium; Jordan to correct;
 revert: `believed_prior` `none`.]
@@ -78,11 +88,12 @@ reading the holder's ledger and nothing of the World. `believed_chance` then ask
 provider instead of falling through to the social roll, and `odds_weight` is unchanged: it sums the
 shares of the bands the verb writes in.
 
-**D. The record of a roll, for a reason trail** (CORE's carrier; the dice lane states what exists).
-The provider already returns the whole record. The cheapest carrier is one optional field on the first
-Event a graded act emits, `roll: (pool, ob, leverage, net, settled_margin)`, filled from
-`Resolution.result` where it holds a `net`/`ob` pair. It enters `World.content_hash` and so moves every
-hash once; it is proposed to CORE and not built here.
+**D. The record of a roll, for a reason trail.** *(Reconciled, W3-1: withdrawn by D-U1-06 and C3-L5.)* The
+first text proposed one optional `Event.roll: (pool, ob, leverage, net, settled_margin)` field; there is no
+settled margin under A-5, and no new Event field is added. The roll's record is the provider's returned
+record with its `fed_by` reason trail (`U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §8, U1 §4 R-30) and the
+obstacle's named `terms`; its persistence for a social roll is `05_SC_contest_record_on_event.md`'s (B05);
+a part that must be witnessed rides `Event.observed` as an `observation_terms` member.
 
 ## The gate (execution artifacts)
 
@@ -113,4 +124,9 @@ never told, the query has read the World.
 
 ## Cost class
 
-Edit (A, B), a declared mover. C and D are design-first in the lanes named.
+Edit (A, B), a declared mover. C is design-first in the lanes named; D is withdrawn.
+
+**Tests and lands (W3-1).** `engine/season/tests/test_odds_of.py` (exists): the gate-3 twin
+`test_mode_b_with_no_claim_uses_the_ordinary_prior_at_the_shipped_arm`, and the falsifier as
+`test_mode_b_never_equals_mode_a_for_an_untold_strong_opponent`. Lands: an IN-lane implementation session
+under `/methodology-execute` with CHAR review; edit class, `sonnet`.

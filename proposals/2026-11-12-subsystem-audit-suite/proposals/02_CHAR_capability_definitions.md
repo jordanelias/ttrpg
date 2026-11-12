@@ -2,14 +2,19 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-08) — the table this file would not name a path for is `references/descriptor_registry.yaml: capabilities` (`unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §1–§2); `gloss` is a required field of that block.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.2 row 1, §7, §7b-T; `unified/U1_GLOSSARY.md` *rank*, *ability*; `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §2, §3 amendment 5, §11 U1-A; `unified/U3_CONFLICT_LEDGER.md` C3-N27). Changed: the body names the decided path (`references/descriptor_registry.yaml: capabilities`) instead of "the table"; Edit 2 says `rank_at_least` reads the **capability rank** and selects levels of a use row, never a condition of attempting an act (A-11); "an ability is not a fifth kind" → "not a kind" (kinds are `skill, aptitude, trait`); Edit 5 lands once with CORE Edit 6 (one dataclass); the check gains named tests, the pin caveat and lands-it and tier.
+
+**Lands in batch:** B04. **Depends on:** `01_CORE_capability_authoring_surface.md` Edit 1 (the block it adds `gloss` to; same batch, CORE first); B02 (the pin file).
+
 ## Status: PROPOSED
 
 Written by the CHAR audit lane, addendum B (`audits/02_CHAR_audit_addendum_B.md`, §B4, F-CHAR-16,
 F-CHAR-19, F-CHAR-21; B6.2 rows 4 to 6, 13, 14, 18, 22, 24). Ratifies nothing. Reference under
 `CLAUDE.md` §0.05. **It adds to, and does not restate,** `10_DICE_capability_axiom_map.md` (the ten
 roles, the definition row, the uses table) and `01_CORE_capability_authoring_surface.md` (the same
-row, the verb column, the cast row's `capabilities:`). Where those two differ on the file that holds
-the definition, this proposal takes no side: every edit below names the table, not the path.
+row, the verb column, the cast row's `capabilities:`). The file that holds the definition is decided:
+`references/descriptor_registry.yaml: capabilities` (U1 §1, D-U1-07); "the capability definition table"
+below means that block.
 
 ## What this changes in `engine/season/` at runtime
 
@@ -63,9 +68,12 @@ a capability use that fired. The four existing rows, for Jordan to correct:
 ### Edit 2 · `rank_at_least` as a `when` key (step 4: the map's `when` roster)
 
 One more member of the uses table's closed `when` keys: `rank_at_least: <n>` holds when the holder's
-rank in the row's `key` is at least `n`. It is how a skill's higher level changes *what* it does: two
-rows on one key, the second under `rank_at_least: 3`. One comparison in the uses reader; no row
-ships.
+**capability rank** (the held rank on the row's `scale`, never a seat rank) in the row's `key` is at
+least `n`. It is how a skill's higher rank changes *what* it does: two use rows on one key, the second
+under `rank_at_least: 3`, selecting which levels apply. It is never a condition of attempting an act and
+never a `requires` stem (A-11; U1 §3 amendment 5: Thread Sensitivity is the one `gate`); the archived
+"Level 3 = qualitative unlock" is read as a different use row, not an unlocked act. One comparison in the
+uses reader; no row ships.
 
 ### Edit 3 · a bundle may grant at a rank (step 4: CORE's edits 5 and 9)
 
@@ -95,7 +103,7 @@ surfaced these six on the day they were authored.
 `decision/sheet.py::DevelopmentSheet` gains `thread_sensitivity`, `heritage` and `tenures` (a frozen
 tuple of the person's own live edges as `(kind, object)`: his seats, oaths, commits and residence).
 Own state only, copies only, as its other fields are. CORE's edit 6 adds `attributes`; the two edits
-are one change to one dataclass.
+are one change to one dataclass and land once, in one commit of B04 (CAP Part A names it).
 
 ### Edit 6 · three register rows (step 1)
 
@@ -106,11 +114,12 @@ were taken at 0.
 
 ## What a definition must carry, in one place
 
-The full field list by kind (skill, ability, aptitude, trait), with the tradition's word for each and
-its reader, is the table in the addendum's §B4 (c). In short: the map's six fields, plus `gloss`; a
-use row per effect, with `when` (now including `rank_at_least`); and nothing about loss, because a
-capability is never lost. An *ability* is not a fifth kind: it is a trait or aptitude whose use row
-names its scene's site, and a combat ability waits on the combat module exporting its lever roster.
+The full field list by kind (skill, aptitude, trait), with the tradition's word for each and
+its reader, is the table in the addendum's §B4 (c) as decided in U1 §2: `kind`, `gloss`, `base`,
+`opposed_by`, `scale`, `untrained`, `grows_by`; a use row per effect, with `when` (now including
+`rank_at_least`); and nothing about loss, because a capability is never lost. An *ability* is not a
+kind: it is a trait or aptitude whose use row names its scene's site, and a combat ability waits on the
+combat module exporting its lever roster.
 
 ## The gate (an execution artifact)
 
@@ -119,6 +128,15 @@ definition row with no `gloss`, and a cast row with an unlisted key, each refuse
 message naming the row. (c) `describe("inquiry")` returns the sentence; a `DevelopmentSheet` for
 `p_npc_001` shows Thread Sensitivity 75. (d) With a test row `{…, when: {rank_at_least: 3}}`, a
 holder at rank 2 and one at rank 3 read different levels from the generic advantage source.
+The NPC-088 hash `5405522c…` is the working tree's reading before B01; every such pin moves at B01, so
+the batch re-reads it on its base and quotes that (C3-N27).
+
+**Named tests** (in `engine/season/tests/test_u1_capability_surface.py`, the B04 file of U1 §11 U1-A):
+(b) `test_a_definition_row_with_no_gloss_is_refused_naming_it`, `test_a_cast_row_key_neither_read_nor_unread_listed_is_refused`;
+(c) `test_describe_returns_the_gloss`, `test_development_sheet_shows_thread_sensitivity_heritage_and_tenures`
+(`p_npc_001` reads Thread Sensitivity 75);
+(d) `test_rank_at_least_selects_a_second_use_row` (a planted row; holders at capability rank 2 and 3 read
+different levels; `==` on the level names, not `approx`). (a) is the batch's hash check.
 
 ## The falsifier
 
@@ -141,3 +159,7 @@ search finds a reader of a deleted key (it was not unread). Or (d)'s two holders
 ## Cost class
 
 Edit. Edit 4's deletions are content edits to a file code reads; one re-check of the build hash.
+
+**Lands it.** The B04 batch (U1 §11 U1-A), an IN `valoria-author` session on `sonnet` (`high`), one commit
+per edit after CORE Edit 1; closed by the batch's `methodology-close` once. **Hash movers.** None
+(control: the batch's base tree); edit 4 re-checks `build_realm(0)`'s build hash.

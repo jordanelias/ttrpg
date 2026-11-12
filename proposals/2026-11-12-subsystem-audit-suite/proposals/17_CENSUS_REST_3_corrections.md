@@ -1,5 +1,11 @@
 # Census (REST) 3 — text corrections: stale pointers, false registry notes, a header that claims a check that does not exist, and the census script's own defects
 
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row REST_3 CONFORMS, §7, 7b; `unified/U3_CONFLICT_LEDGER.md` C3-N8, C3-L4; `unified/U3_DEPENDENCY_ORDER.md` §1 items 4 and 34, §3.1). Changed: (1) "23 rows" is 22 (C3-N8; recounted here: the table holds 25 lines, 27 substrings counting H-245/246/247 as three, over 22 distinct ids; no 23rd id is missing from it); (2) section A's check no longer depends on a scratch script: it is the register's own checks plus a grep for the old substrings (G-B); (3) section D's C-5 is marked for the GO rewrite lane, with its writers named as the suite now orders them; (4) batch and tier lines.
+
+Depends on: `11_GO_pointer_and_stale_text_resolutions.md` (B03; its row 8 edits `combat`'s `parity:`, which C-1 does not repeat).
+Lands in batch: B03 (lane IN), one `[cleanup]` commit.
+Tier: sonnet / high.
+
 ## Status: PROPOSED
 
 Author: Fable census lane, PART=REST. Source: `audits/17_CENSUS_REST.md` §3, §4, §5, §10. Read at
@@ -13,7 +19,7 @@ Author: Fable census lane, PART=REST. Source: `audits/17_CENSUS_REST.md` §3, §
 The reason to make the edits is the next reader: a pointer that names the wrong file sends a session to
 code that is not the owner (CLAUDE.md §0.1 pt 3, "open `F` at `:L`").
 
-## A. `engine/season/hole_register.yaml` — 27 exact substrings in 23 rows
+## A. `engine/season/hole_register.yaml` — 27 exact substrings in 22 rows
 
 One cause covers thirteen of them: `loop/effects.py` was split into
 `loop/effects_{army,combat,economy,founding,governance,information,migration,shared}.py`; `effects.py`
@@ -55,9 +61,11 @@ and reverted); H-357, H-358, H-361 ×3 (all exist; the census opened a stale wor
 to `proposals/2026-09-05-proceedings-subsystem/19_PLAN.md`).
 
 **Check after the edit:** `python -m engine.season.harness.register --check` and `--verify-citations`
-unchanged; `python scratchpad/census_rest/c5.py` (the corrected resolver; 837 pointers) reports only the
-pointers listed under "Not edited" and the bare-filename shorthands (a filename repeated after its full
-path was given once in the same field). That script is a one-off and is not to be kept (§0.1 pt 5).
+unchanged; and for each row of the table, `grep -cF '<old substring>' engine/season/hole_register.yaml`
+reads 0 and `grep -cF '<new substring>' engine/season/hole_register.yaml` reads at least 1 (27 pairs;
+the falsifier is a pair that reads otherwise). The census resolver that found them
+(`scratchpad/census_rest/c5.py`, 837 pointers) is a one-off, not in the repository and not to be kept
+(§0.1 pt 5); it is not part of this check.
 
 ## B. `references/module_contracts.yaml` — two rows a port decision would read
 
@@ -121,6 +129,11 @@ design document would make the document the head, which §0.05 clause 1 forbids.
   kind of its own (`conviction.folded`), that one is the row's only addition." Measured for scale: 883
   `(Person, scar)` writes and 2 `(Person, conviction)` writes in three seasons at seed 0, 0 Events of
   either kind; the scar Event should land after `02_CHAR_scar_cap_and_regard_unit.md`'s cap.
+  **For the GO rewrite lane (W3-1):** `U3_DEPENDENCY_ORDER.md` §1 item 34 marks
+  `11_GO_player_surface_contract.md` superseded except its §2; if §4 survives, the two writers are now
+  carried by `16_PESSIMIST_CORE_the_record_holds_what_changed.md` (`scar.taken` only, B09; C-U5a-09) and
+  `16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` (the one emitter of `conviction.moved`,
+  B10), and the sentence above points at them.
 - **C-6 · for the WR lane (`09_WR_story_instruments_that_can_fail.md`), a reading, not an edit.**
   `rosters.yaml: strife_kinds` names `tenure.opened` (in `joins` and `concludes`) and `stance.moved` (in
   `never`). In the Event log those kinds are emitted by one verb each (`confer`; `forgive`), 0 times in

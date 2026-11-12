@@ -2,7 +2,12 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-10** and **A-47**. A-10 (governance is the loop's own verbs) confirms that the subsystem's exit is this instrument reading and no module. In the `recall` scenario the threshold opens the Duke's question; whether the player is revoked is the Duke's choice and then `revoke`'s resistible draw, so `loop_closed`'s `responded` counts attempts and reports their bands. `vacated` gains the cause `conquest` (A-58: seats pass with holdings when a place is seized) beside death, release, revocation and term.
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — the `loop_closed` table follows the head: `responded` counts attempted acts and reports each one's band (A-47, A-24), not executed acts only; `vacated` gains the cause `seizure` (A-58), named as U3 decided the mechanism (C3-L7: the seat's `hold` closes by its `revocation: holder_of_rung` basis inside the seizer's `seize` act, C3-L12; the head's word "conquest" is that cause). 7b-3 (two named tests in the shared file), tier and batch added (R3 7b-0; U3 C3-D5).
+
 ## Status: PROPOSED
+
+Lands in batch: B21 (FA governance), last in C3-D5's order. The `seizure` cause reads nothing until B23 (the land plan) lands.
+Depends on: `06_FA_playable_scenario.md` (B21); its gate 1 and the exit on `06_FA_decree_binds.md` and `06_FA_seat_terms_and_turnover.md` (B21).
 
 Source: `audits/06_FA_audit_addendum_B.md` §B3.5, §B6.1; the standing requirement of `AUDIT_BRIEF.md`
 ("each subsystem is a playable game"). **Extends** `06_FA_playable_scenario.md` (the first lane's
@@ -69,8 +74,8 @@ for the verb named):
 |---|---|
 | `ordered` | Events of `issue`'s kind |
 | `answered` | Events of `comply`'s, `evade / defy`'s or `construe`'s kind whose actor is an addressee of the writ named (`person_q.addressed_to`) |
-| `responded` | executed `revoke`, `open_case` or `arrest` acts whose actor issued a writ the act's subject (or the holder of the seat it names) withheld compliance on, earlier in the log |
-| `vacated` | closes of a `hold` on an Office, by cause: death, release, revocation, term |
+| `responded` | attempted `revoke`, `open_case` or `arrest` acts whose actor issued a writ the act's subject (or the holder of the seat it names) withheld compliance on, earlier in the log; each reported with the band it reached (`revoke` is a resistible draw, A-24/A-47) |
+| `vacated` | closes of a `hold` on an Office, by cause: death, release, revocation, term, seizure (A-58; C3-L7) |
 | `filled` | opens of a `hold` on an Office after a close of a `hold` on the same Office |
 | `persons` | distinct actors over the five |
 
@@ -101,6 +106,9 @@ Three commands at `PYTHONHASHSEED=0`:
   a planted `comply` by a non-addressee does not count as `answered`.
 - A realm that closes the loop only through one person's five acts fails `persons ≥ 3`: a loop one
   officer closes on himself is a script, not a realm.
+- Named tests (7b-3), in `06_FA_playable_scenario.md`'s new file `engine/season/tests/test_governance_spine_play.py`:
+  `test_loop_closed_reads_one_issue_as_ordered_1_and_four_zeros`, `test_a_non_addressee_comply_is_not_answered`,
+  `test_world_realm_reproduces_populated_run_hash`.
 
 ## What it does not do
 
@@ -121,4 +129,5 @@ treaty or vote in the loop: none of them executes yet, and a loop that waits on 
 ## Cost class
 
 Small build (harness only). No mover. Depends on `06_FA_playable_scenario.md`; its gate 1 and the
-exit depend on `06_FA_decree_binds.md` and `06_FA_seat_terms_and_turnover.md`.
+exit depend on `06_FA_decree_binds.md` and `06_FA_seat_terms_and_turnover.md`. Tier: `sonnet` (harness;
+R3 7b-0).

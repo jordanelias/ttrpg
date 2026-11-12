@@ -2,11 +2,16 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-40**, **A-54**, **A-55** and **A-57 / A-58**. Edit 1 (the Calamity's source as an authored initial condition): A-40 rules the wearing-down a real condition of places, one Site per territory, no new entity kind, so the source is a Site of the territory and the edit's form stands; its flip waits on `16_PESSIMIST_WR_B_the_calamity_strains_and_breaks.md` edits 1–2 (`U5d_WR_owed_edits.md` §2) and its wear is drawn on the four-band ladder (A-54). Edit 2 (an unheld place is taken by occupation) stands: ground no party holds is outside the land ruling, so `seize` remains its act. The note under edit 3 ("`seize` admits a held, occupied territory") is rewritten: held land is taken by `seize` on the occupation licence, as the note says, by a victor who chooses to (A-66), and the seats anchored on it pass with it (`U5d_FA_land_and_seats_pass_on_a_won_march.md`); a faction present by the holder's leave does not occupy. Edit 3's victory selector counts places on the fixed map (A-55) and is reached by a draw.
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 (A-15 rules natural death on, after the 46 ages are authored): the Status sentence "decided by nobody but Jordan" and edit 4 now carry A-15's condition (`age_at_build` authored first by `22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md` edit 1, per `U5d_WR_owed_edits.md` §2 (c); then `illness_rate`/`age_step` flip as one declared mover); C3-N1 (the territory count gets its qualifier, T-8); tier and batch added (R3 7b-0; U3 B12, edit 4 with B37).
+
 ## Status: PROPOSED
 
+Lands in batch: B12 (world motion and ground) for edits 1–3, after `09_WR_B_draws_not_thresholds.md` edits 1–3 (U3 §1 item 13); edit 4's flip in B37 (happenings) after `22_HAPPENINGS_A` edit 1.
+Depends on: `09_WR_B_draws_not_thresholds.md` (B12); `16_PESSIMIST_WR_B_the_calamity_strains_and_breaks.md` edits 1–2 (B12) for edit 1's coupling flip; `22_HAPPENINGS_A` edit 1 (B37, the ages) for edit 4.
+
 Carries findings F-WR-04 and F-WR-06 of `audits/09_WR_audit.md`, and its §6 resolutions R-03, R-04, R-05
-and R-07. Evidence ids (E-nn) are that file's §12. Edit 4 touches a ruled deferral and is §11 item 2 there;
-it is written here so the edit is on file, and decided by nobody but Jordan.
+and R-07. Evidence ids (E-nn) are that file's §12. Edit 4 (natural death) is ruled: A-15, on after the 46
+ages are authored.
 
 ## What it changes in `engine/season/` at runtime
 
@@ -35,7 +40,7 @@ the first has an ending nobody can reach.
 | T15 holds no Site, no settlement, no holder; `build_realm` mints Sites at settlements and hearths only | E-13; H-236 |
 | a holder's death closes his `hold`; no verb opens a hold on a place nobody holds | `state/world.py::remove_person`; `effects_information.py:1061`; H-166, H-186 |
 | with forcing on, three seasons: unheld territories stay at 1 at seeds 0 and 1 (no land-holder died); vacant offices go 0, 3, 5 of 35 at seed 0 and 0, 0, 1 of 34 at seed 1; one hold is opened in each run | E-16 |
-| `peninsular_sovereignty` selects 16 territories; 15 are settled and held at build; GD-1 and the design both say 15 | E-13; `rosters.yaml: endings`; `victory_v30.md` §0 (intent) |
+| `peninsular_sovereignty` selects 16 territories (`T16` excluded; `T15` unsettled; C3-N1, T-8); 15 are settled and held at build; GD-1 and the design both say 15 | E-13; `rosters.yaml: endings`; `victory_v30.md` §0 (intent) |
 
 ## The resolution, decided
 
@@ -100,13 +105,16 @@ keeps the three clauses that have no carrier (Accord, Turmoil, two Accountings).
 
 A structural predicate, not an entity: no territory id is named.
 
-### Edit 4 · natural death (§11 item 2; not decided here)
+### Edit 4 · natural death (ruled A-15: on, after the 46 ages are authored)
 
-`illness_rate` and `age_step` are deferred by Jordan (ED-IN-0317). The evidence that bears on the deferral:
-with `illness_rate` 0.05, deaths over three seasons go 0 → 8 (seed 0) and 1 → 4 (seed 1), `tenure.closed`
-2 → 10 and 6 → 8, `oblige` executed 42 → 146 at seed 0 (E-11, E-12). The edit, if ruled: one value in
-`data/fixtures.py`, a declared mover, with `age_at_build` authored first (the research lane file's T-WR-8:
-no source authors an age, so ageing from 0 at tick 0 is a different mechanism from the one intended).
+ED-IN-0317's deferral is superseded by A-15. The order: first `age_at_build` is authored for the cast
+(`22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md` edit 1, per `U5d_WR_owed_edits.md` §2 (c); the
+research lane file's T-WR-8: no source authors an age, so ageing from 0 at tick 0 would be a different
+mechanism); then `illness_rate` and `age_step` flip in `data/fixtures.py` together, as **one declared
+mover** in their own commit (values from H-208's row and `22_HAPPENINGS_A`, one fixture set, U1 ledger
+F-42). The evidence that bears on the size: with `illness_rate` 0.05, deaths over three seasons go 0 → 8
+(seed 0) and 1 → 4 (seed 1), `tenure.closed` 2 → 10 and 6 → 8, `oblige` executed 42 → 146 at seed 0
+(E-11, E-12).
 
 ## The gate that shows it worked
 
@@ -153,4 +161,5 @@ Controls: every switch off reproduces `build_realm(0)`'s hash and the one- and t
 ## Cost class
 
 Edit 1: small build, plus a content assumption that is Jordan's to correct. Edit 2: edit. Edit 3: edit.
-Edit 4: one value, held on a ruling.
+Edit 4: two values, one declared mover, after the ages (A-15). Tier: `sonnet` (R3 7b-0). The wound's Site
+kind stays INCOMPLETE as Jordan's content.

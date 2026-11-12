@@ -6,6 +6,12 @@ Reconciled: 2026-11-12, U5d closure — folded **A-12**, **A-23** and the story 
 
 Folded: 2026-11-12 by `audits/28_SCENE_ACCESS.md` (ruling A-64). Nothing here is deleted; edit 5's owed petition clause is carried by `28_CORE_scene_access_C_the_petition_that_waits.md` §1. `dues_unmet(p, x)` gains its second clause there: a petition of `p`'s addressed to `x` of which he holds a claim that it lapsed or was returned, and a promise of `x`'s to receive him that ended at its term while he was turned away. A separate, lighter term, `waiting_valence × kept_waiting(p, x)`, reads his own claims of being kept waiting at `x`'s door (the Event `visitor.kept_waiting`) and fades as they fade. The `[UNVERIFIED]` in edit 5 (what the lapse's deposit names) stands: that file relies on `U5c_SC_proceedings_residue.md` §4 item 6 appending the `lapsed` stage to the petition Record.
 
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row what_he_was_owed CONFORMS, §2 row edit 1 vs `30_WR_D` (A-80, A-81), §7, 7b; `30_WR_D_momentum_and_its_brakes.md` commit 1 (the amended text, copied, not paraphrased); `unified/U3_CONFLICT_LEDGER.md` C3-D8; `unified/U3_DEPENDENCY_ORDER.md` §1 item 38, §3.1). Changed: (1) edits 1 and 2 are replaced by `30_WR_D` commit 1's amended form (`dues_unmet(p, x, window)`, the window and the netting; `regard` passes `estimate_window_seasons`), so the body no longer carries the compounding form the head says must not ship; (2) tests are named in `30_WR_D`'s file name, `engine/season/tests/test_narrative_dues.py`, with that file's four and this file's two; the planted world is built inside the test (no probe file); (3) batch order: this file needs `20_NARRATIVE_C_who_holds_what.md`'s `believed_holder`, so inside B38 NARR_C lands before it; U3 §1 item 38 lists NARR_B before NARR_C, which cannot import at the tree (the reader would not exist) and is corrected here; C3-D8 (this file before `28_CORE_scene_access_C_the_petition_that_waits.md`) stands; (4) tier.
+
+Depends on: `20_NARRATIVE_C_who_holds_what.md` (B38, `believed_holder`; lands first); `30_WR_D_momentum_and_its_brakes.md` commit 1 (carried inside this file's first commit, as that file says); `U5c_SC_proceedings_residue.md` §4 item 6 (B27; the petition's `lapsed` stage, for the clause `28_CORE_scene_access_C` adds).
+Lands in batch: B38 (lane WR), after `20_NARRATIVE_C`, before `28_CORE_scene_access_C_the_petition_that_waits.md` (C3-D8). Commit 1 (`dues_valence` 0) hash-equal; the live value a declared mover.
+Tier: sonnet / high.
+
 ## Status: PROPOSED
 
 Source: `audits/20_NARRATIVE_CHURN.md` F-NARR-02 (an omission has no author), F-NARR-03 (an office owes
@@ -70,14 +76,18 @@ the dice of what follows; one who is already hated may find it the last straw. N
 **1. `engine/season/queries/person_q.py` — new, beside `held_against`.**
 
 ```python
-def dues_unmet(p: Person, x: str) -> int:
-    """HOW MANY OF `p`'S OWN DUES LAPSED UNMET AT `x`'S DOOR: his own `oblige` edges (`p.tenures`) that
-    carry a `term` and ended at or after it (`until >= term.matures_at`: MATTER's closure; a `release`
-    ends an edge before its term and is his own act, not a due unmet), whose seat he BELIEVED `x`
-    held when it lapsed -- his newest `held_by` claim on that seat with `when <= until`
-    (`believed_holder`, proposal C's reader). Each edge once. 0 for a seat he holds no such belief
-    of: a man who does not know who failed him blames no one. Person-side, own state and own ledger
-    only (AX-2); nothing is stored (T-a)."""
+def dues_unmet(p: Person, x: str, window: int) -> int:
+    """HOW MANY OF `p`'S OWN DUES LAPSED UNMET AT `x`'S DOOR, INSIDE THE ESTIMATE WINDOW: his own
+    `oblige` edges (`p.tenures`) that carry a `term` and ended at or after it (`until >=
+    term.matures_at`: MATTER's closure; a `release` ends an edge before its term and is his own act,
+    not a due unmet) with `until` inside the last `window` seasons, whose seat he BELIEVED `x` held
+    when it lapsed -- his newest `held_by` claim on that seat with `when <= until` (`believed_holder`,
+    proposal C's reader) -- LESS one for each such lapse followed by a newer `oblige` edge of his to
+    the same seat that is live or was ended by his own `release` (the tie renewed). Never below 0.
+    0 for a seat he holds no such belief of: a man who does not know who failed him blames no one.
+    Person-side, own state and own ledger only (AX-2); nothing is stored (T-a). The window and the
+    netting are `30_WR_D_momentum_and_its_brakes.md` commit 1's brake (A-80): without them the count
+    only rises. [ASSUMPTION; medium; Jordan to correct; revert: count every lapse.]"""
 ```
 
 **2. `person_q.regard`** (`:424-453`): after the `judged`/`told` block,
@@ -85,10 +95,12 @@ def dues_unmet(p: Person, x: str) -> int:
 ```python
     dv = float(fx.get("dues_valence"))
     if dv:
-        stored -= dv * dues_unmet(p, referent)
+        stored -= dv * dues_unmet(p, referent, int(fx.get("estimate_window_seasons")))
 ```
 
-with the `>= 0` refusal the other gains carry. The docstring's formula gains the term.
+with the `>= 0` refusal the other gains carry; the window is the argument `legitimacy` and `stability`
+take (`person_q.py:537`, `:566`) and the fixture `harness/storybar.py:270` already reads. The
+docstring's formula gains the term.
 
 **3. `engine/season/data/fixtures.py`.** `dues_valence=0.0`, swept `0` (control) / `2` / `4` (a stance
 row's valence is −5 to +5 at weight 1; 2 is a moderate grievance per lapsed oath, 4 a heavy one), with a
@@ -112,6 +124,14 @@ so an unpaid oath can help clear the betrayal band exactly as a deed can. One fu
   made; without them it is an accident, and this proposal still blames him for it.
 
 ## The gate that shows it worked (execution artifacts)
+
+Tests: NEW `engine/season/tests/test_narrative_dues.py` (the file `30_WR_D` commit 1 names), written as
+the first commit: `test_a_lapse_older_than_the_window_is_not_counted`,
+`test_a_renewed_tie_nets_the_lapse_before_it`, `test_two_lapses_and_one_renewal_count_one`,
+`test_the_count_is_never_negative` (`30_WR_D`'s four); `test_no_belief_about_the_holder_reads_zero`;
+`test_paid_arm_blames_only_the_unpaid_half` (gate 3, on world (i), built inside the test: three held
+seats, four sworn persons each, one-season terms, half paid). Run that file and
+`engine/season/tests/test_strife_credit.py` (the other `regard` terms).
 
 Two worlds, because the shipped realm cannot yet show it (its four built oaths carry no term, and the
 oaths sworn in play go to a seat nobody holds, audit E-N14): **(i)** a planted realm of three held
@@ -166,7 +186,8 @@ terms are four), once in-play oaths reach held seats. `PYTHONHASHSEED=0`, propos
 
 ## Cost class
 
-Edit. After `20_NARRATIVE_C`. One session with its sweep and the paid arm.
+Edit. After `20_NARRATIVE_C` in B38, with `30_WR_D` commit 1 inside its first commit. One session with
+its sweep and the paid arm.
 
 ## Dependency edges
 

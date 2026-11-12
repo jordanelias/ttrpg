@@ -1,5 +1,9 @@
 # U5c · SC — proceedings residue: the SC findings no proposal carried, as one ordered plan
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row RES (VIOLATES §4 item 6; AMBIGUOUS §4 item 5), §7, §7b-11, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-01, ledger S-03; `unified/U3_DEPENDENCY_ORDER.md` node B27, §6.2). Layer 1 rewrites: §4 item 6 — the MATTER lapse pass may not append to `(Record, stages)`, whose matrix row is `steps: [RES]`, `class: ACTS` (verified at `engine/season/write_matrix.yaml:346-352`; this settles the item's `[UNVERIFIED]` mark the other way), so the lapse is read from its Event (`world_q.lapsed_at`) and nothing is appended; §4 item 5 — `fresh` splits into a typed existence conjunct and an Act schema constraint refused at construction (`04` §F.24a: a conjunct cannot ask about the act's own payload). §6's `Seat.weight` follows D-U1-01 (a seat's help is its row's `modifier:` as one `office` level; the quorum counts votes). Scratch probes become named tests; lands-it and tier added.
+
+**Lands in batch:** B27 (§1 with SC-P1, B05, as its own `[editorial]` commit; §2 and §6 inside B24 with HEAR_B; §3 and §8 part 2 design-first, unscheduled). **Depends on:** `05_SC_contest_record_on_event.md` (B05), `05_SC_playable_hearing_B.md` (B24), `16_PESSIMIST_SC_C_a_verdict_names_its_party.md` and `16_PESSIMIST_SC_D_an_argument_moves_someone.md` (B27), plan position CR-61 `[PL]`.
+
 ## Status: PROPOSED (written by the U5c closure lane; a plan for a later implementation lane, executed by nobody here; not ratified by being written, `CLAUDE.md` §2)
 
 Carries the SC-family rows of `unified/U5_FINDINGS_CLOSURE_U5c.md` whose carrier column reads **RES**, and
@@ -50,8 +54,8 @@ Depends on `05_SC_playable_hearing_B.md` edit 9 (`governance_spine.build_hearing
    `ending` carries `terms`. Assert it checked 40 worlds (`CLAUDE.md` §0.1 pt 2).
 2. Delete `BAR_FIXTURES` and its *"OFF THE SWEEP"* note.
 
-Gate: the file green on the landing commit; red with the roll pinned to Success (the instrument can see a
-verdict that cannot be lost). Hash: none (a test).
+Gate: the file (`engine/season/tests/test_sc01_the_bar.py`, exists) green on the landing commit; red with
+the roll pinned to Success (the instrument can see a verdict that cannot be lost). Hash: none (a test).
 
 ## §3 The bundle: one act, several matters (G-25; design-first)
 
@@ -89,23 +93,35 @@ P4 is a proposed design. So the key exists and its default is 1.
    no `failed` stage whose tick is at or after the tick of the sitting's `date.fired`. Refusal kind
    `determine.refused`, keyed `sitting`. With `ballots` 1 it cannot bind (a failure dismisses); it is what
    stops a bench with `ballots` 3 asking three times in one fold.
-5. **The re-opening rule.** `open_case` and `carry` gain a typed conjunct `fresh`: the matter has no case
-   file or petition whose newest stage is `dismissed` or `lapsed` within `docket_lapse` seasons, unless
-   the act carries `cites` (`05_SC_evidence_and_rebuttal_B.md`) naming a held item that is not among that
-   file's `filed` or `excluded` stages. Refusals `case.refused` and `carry.refused`, keyed `fresh`. A
-   person who holds a claim of the dismissal or lapse does not form the act
-   (`02_CHAR_offer_what_can_be_done.md`'s one decline, read off the conjunct).
-6. `engine/season/loop/matter.py`, the lapse pass: when it lapses an item that names a case file or a
-   petition, append `(tick, "lapsed", <date id>)` to that Record's stages in the same write.
-   `[UNVERIFIED: that `(Record, stages)` admits the MATTER step in `write_matrix.yaml`; MATTER already
-   matures stages, so the cell is expected `world_or_act`; the loader's refusal at import is the check.]`
+5. **The re-opening rule**, in two parts (`04` §F.24a: a predicate conjunct cannot ask about the act's own
+   payload).
+   (a) `open_case` and `carry` gain a typed existence conjunct `fresh`: the matter's file carries no
+   `dismissed` stage, and its docket item no `matter.lapsed` Event (read by `world_q.lapsed_at`, item 6),
+   within `docket_lapse` seasons of now. Refusals `case.refused` and `carry.refused`, keyed `fresh`.
+   (b) "Something new" is an **Act schema constraint, refused at construction** as `issue`'s and
+   `open_case`'s other schema cells are: an `open_case` or `carry` re-opening such a matter must carry
+   `new_items: (ids)`, each a held item (`cites`, `05_SC_evidence_and_rebuttal_B.md`) not among the file's
+   `filed` or `excluded` stages; with it, the conjunct (a) is waived for that act. A person who holds a
+   claim of the dismissal or lapse and no new item does not form the act (`02_CHAR_offer_what_can_be_done.md`'s
+   one decline, read off the conjunct).
+6. **The lapse is read from its Event, not appended.** `engine/season/loop/matter.py`'s lapse pass keeps
+   its own `DocketItem` write and its `matter.lapsed` Event (`loop/matter.py:442-456`) and appends nothing
+   to a `Record`: `(Record, stages)` is `steps: [RES]`, `class: ACTS` (`write_matrix.yaml:346-352`), so a
+   MATTER append would be refused by the gate. "The newest stage is `lapsed`" is read by a new
+   `queries/world_q.py::lapsed_at(w, item_or_file) -> Optional[int]`, the tick of the `matter.lapsed`
+   Event that cites the item (the log is the record); the next `convene` may write a `lapsed` stage under
+   its own act if a stage is wanted for display (as C-17 does for `voided`).
 
-Gate: `runs/PES_SC/p3_hearing_ends.py` re-run: (a) `k` determinations in one fold bind the party at most
+Gate (the scratch `runs/PES_SC/p3_hearing_ends.py` is not in the repository; it is written first as
+`engine/season/tests/test_proceedings_residue.py`, one test per reading): (a)
+`test_a_party_is_bound_at_most_once_per_sitting` — `k` determinations in one fold bind the party at most
 once per sitting; (b) at `ballots` 1 a planted `Failure` leaves no docket item naming the party and one
 `dismissed` stage; at 3, two planted failures leave the item and two `failed` stages, the third
-dismisses; (c) after a lapse or a dismissal, `open_case` on the same party is refused on `fresh`, and the
-same act carrying one new held item is admitted; (d) `05_SC_acquittal.md`'s own gate, with its last clause
-read as (c). Falsifier: a planted `Success` that does not open the disposal; a second `determine` at one
+dismisses (`test_ballots_count_failures_to_dismissal`); (c) after a lapse or a dismissal, `open_case` on
+the same party is refused on `fresh`, and the same act carrying one new held item in `new_items` is
+admitted (`test_a_matter_is_not_reopened_without_something_new`); (d) `05_SC_acquittal.md`'s own gate,
+with its last clause read as (c); (e) `test_the_lapse_pass_writes_no_record_stage` (a planted lapse leaves
+the file's stages unchanged and `lapsed_at` returns the Event's tick). Falsifier: a planted `Success` that does not open the disposal; a second `determine` at one
 sitting that reaches the roll; a re-opened matter with nothing new. Hash: declared mover wherever a
 `determine` fails or a matter lapses.
 
@@ -113,8 +129,10 @@ sitting that reaches the roll; a re-opened matter with nothing new. Hash: declar
 
 1. `engine/season/verb_table.yaml`, `open_case`: `counterparty: subject`. The fold's existing counterparty
    clause refuses `subject == actor`, and `opening_set`'s person-side self decline stops the act forming
-   (`interview`'s precedent in `14_VERBS_SOCIAL2_A` edit 5). Gate: `realm_sc.py 1 4` re-run shows no
-   `case.opened` whose party is its actor (two of eight today). Hash: declared mover.
+   (`interview`'s precedent in `14_VERBS_SOCIAL2_A` edit 5). Gate: the scratch `realm_sc.py 1 4` is
+   restated as `test_proceedings_residue.py::test_no_case_is_opened_on_its_actor` over `build_realm(1)`,
+   four seasons: no `case.opened` whose party is its actor (two of eight at the audit's reading). Hash:
+   declared mover.
 2. Petition formation is not edited here: `14_VERBS_SOCIAL2_B_a_word_with_content.md` §3, as reconciled,
    fans `to` over the holders the petitioner's own ledger names for the seats over his home. That is the
    person-side form of PES-SC res. 5 (which proposed `judging_set`, a world read).
@@ -131,8 +149,9 @@ Two proposals each gave the ballot a home: `13_SC_draw_for_unrolled_contests.md`
    source `lean` (one `lean_level` per live public commit of his for the motion as aggressor, per commit
    against as defender; `world_q.declared_votes` returns the per-member counts that fill `Seat.lean`).
    `lean` joins `advantage_sources` after `custody` (`U5c_SC_one_obstacle_form.md` §3).
-3. A ballot at Success or better is a vote for; at Failure against; at Partial an abstention. The provider
-   sets `veto` when the votes for, weighted by `Seat.weight`, do not reach the row's `quorum`; the ladder
+3. A ballot at Success or better is a vote for; at Failure against; at Partial an abstention. A seat's help
+   on his own ballot is his seat row's `modifier:` as one `office` level (D-U1-01; no "office weight"). The
+   provider sets `veto` when the votes for do not reach the row's `quorum`; the ladder
    then takes the minimum (`04` §C.5: a veto can only demote), so the determining act folds at `Failure`
    and §4 applies.
 4. `engine/season/verb_table.yaml`, `determine`: the `vote` conjunct (`world_q.declared_votes` as a hard
@@ -140,8 +159,8 @@ Two proposals each gave the ballot a home: `13_SC_draw_for_unrolled_contests.md`
 5. `13_SC_draw_for_unrolled_contests.md` edits 3 and 4 are superseded by this section.
 
 Gate: a planted `declared` sitting of five seats with commits three for and two against, 200 seeds: the
-matter carries at some seeds and fails at others; with one seat's weight doubled the share that carries
-moves. Falsifier: a sitting whose outcome is the same at every seed. Hash: declared mover wherever a
+matter carries at some seeds and fails at others; with one seat's row given `modifier: minor` the share that
+carries moves (`engine/season/tests/test_sc_hearing_ballots.py::test_a_declared_sitting_carries_at_some_seeds_only`). Falsifier: a sitting whose outcome is the same at every seed. Hash: declared mover wherever a
 `declared` row is docketed (none in computed play today).
 
 ## §7 A won argument over an agreeing hearer is not "refused" (F-PES-SC-12)
@@ -149,8 +168,9 @@ moves. Falsifier: a sitting whose outcome is the same at every seed. Hash: decla
 `engine/season/verb_table.yaml`, `argue`: `emits_on_refusal` keyed, with `write: [argument.moot]` (new
 kind; the other clauses keep `argument.refused`). Today a Success whose write declines (the hearer holds
 no pursuit, or already stands where the arguer does) is emitted as `argument.refused` at degree Success.
-Lands with `16_PESSIMIST_SC_D_an_argument_moves_someone.md`, which touches the same row. Gate:
-`p5_argue.py` (e): 0 `argument.refused` at degree Success. Hash: declared mover.
+Lands with `16_PESSIMIST_SC_D_an_argument_moves_someone.md`, which touches the same row. Gate: the scratch
+`p5_argue.py` (e) is restated as `test_proceedings_residue.py::test_no_argument_refused_at_degree_success`
+(realm seeds 0–2, two seasons): 0 `argument.refused` at degree Success. Hash: declared mover.
 
 ## §8 Who a verdict is for: the petitioner, or a seat he names (answered by Jordan, A-38)
 
@@ -199,6 +219,12 @@ refuse the other shape), except §4 item 5's person-side decline (CONVENTION unt
 
 §1, §5, §7: edit. §2, §4, §8 part 1: small build. §6: inside `05_SC_playable_hearing_B.md`'s build. §3,
 §8 part 2: design-first.
+
+**Lands it and tier.** §1: one `[editorial]` commit after SC-P1 (B05), `sonnet`. §2, §6: B24 with HEAR_B. §4,
+§5, §7, §8 part 1: the B27 batch (`methodology-execute`, one commit per section), `valoria-author` on
+`sonnet` (`high`), one `methodology-close` with its terminal `opus` critique. §3, §8 part 2: a design pass on
+`opus` first (INCOMPLETE: §3 waits on CR-61's case file naming its matters; §8 part 2 on an owner for the
+damages amount). **Hash movers.** §4–§7 as each states.
 
 ## Jordan's answers this file is conformed to (`unified/DECISIONS_ANSWERED.md`)
 

@@ -2,7 +2,11 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-36**, **A-35** and **A-23**. The closing sentence ("It does not decide who may judge the Confessor") is answered: nobody; he leaves by death or resignation, so no crossing in this file may route a sentence, an audit or a recall to `off_confessor`, and a dispute between the two keepers of certificates has no room above it (it ends in a draw at the seat, in schism or in a field). Every other Church officer may be stripped by the head by a resistible draw (A-35). A party in custody forms no act through his seat (A-23), which is one more way a bench's process reaches an officer without unseating him.
 
+Reconciled: 2026-11-12, wave 3 lane W3-4b — rewritten against A-21, A-22, A-36 (the body's open questions) and the leverage channel; applied `R4_READ.md` §1.7 (SYN_C: CONFORMS; e7 `[UNVERIFIED]`, fallback in file), §7, 7b.0; `U3_CONFLICT_LEDGER.md` C3-C10 (what helps a party is levels: the immunity and a certificate are `proofs` levels, `proof_step` is deleted); `U1_OWNERS_AND_VOCABULARY.md` S-18 (`person_q.holders_named` is the reader of who holds a seat as he knows it). Changed: §7 follows A-22 (an order binds by command) and A-21 (a decree is proclaimed), and the two "if Jordan rules" conditionals are removed; §4 and §5 state the halves as `proofs` levels on each side, not a `proof_step` term; §1's `[UNVERIFIED]` names its reader; the gates read `obligation` as a level; the closing sentence follows A-36.
+
 ## Status: PROPOSED
+
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B33**, last (`U3_DEPENDENCY_ORDER.md` §1 item 33). Depends on: `15_INSTITUTIONS_SYNTHESIS_A`, `_COLONIAL_A` (B32), `_PAPACY_D`, `_VENICE_A`, `_VENICE_B` (B33), `14_VERBS_BINDING_D_orders.md` (B21, the `authority` conjunct), `14_VERBS_BINDING_C_turnover.md` edit 9 / `14_VERBS_SOCIAL2_B` (`holders_named`); CR-60 and CR-88 are v11 plan positions, MISSING until `STAGES.md` step 5 (gates 2 and 5 wait on them). Lane tag: FA. Tier: `sonnet` producer, effort `high`; one `opus` read of gates 2 and 7 (whether a sanction is a switch). Named test: `engine/season/tests/test_inst_syn_c_crossings.py`. Standing sentences: *Pool* — every roll is an existing verb's on the one pool rule (A-6, A-7, A-8). *Failure writes* — no contested row is added (A-81 is the verbs'). *Draw keys* — no draw is added (A-30).
 
 Source: `audits/15_INSTITUTIONS_SYNTHESIS.md` §5 (the interlock map; the chains of §5.2) and §6; Jordan,
 as `INSTITUTIONS_BRIEF.md` records it: *"which sanctions and favours cross institutions (excommunication
@@ -25,7 +29,7 @@ rule because half of it belonged to the other.
 3. A suit for debt may be docketed before any bench that sits over the debtor. No code; stated because
    it is how a bond reaches a throne.
 4. Two certificates for one seat on opposite sides of a hearing stand against each other, item by item.
-5. A grant that forbears a levy is `evidence` against that levy, when the levied know of it.
+5. A grant that forbears a levy is a `proofs` level for the levied against that levy, when they know of it.
 6. A hand may belong to another faction than the seat whose paper it passes.
 7. A sanction's publication addresses everyone on the issuing seat's ground; an order addresses only
    those the seat commands. One key on the form row.
@@ -79,9 +83,9 @@ Two readers and no third:
 
 - **`person_q.owed_to`** (`15_INSTITUTIONS_VENICE_A` edit 3): an edge toward a seat whose holder, as
   `p`'s own ledger names him, `p` is excused from counts 0. This replaces VEN-A's ban-keyed lift.
-  `[UNVERIFIED]` that a person can read who holds a seat he is sworn to: `20_NARRATIVE_CHURN.md`
-  F-NARR-04 finds no `held_by` claim is deposited today; the reading is the one `14_VERBS_BINDING_C`
-  edit 9 adds (his newest `tenure.opened` claim naming the seat). Until that lands the predicate takes
+  Who holds a seat as `p` knows it is `person_q.holders_named` (U1 S-18; C-20; `14_VERBS_SOCIAL2_B`,
+  with `14_VERBS_BINDING_C` edit 9's newest `tenure.opened` claim naming the seat): `20_NARRATIVE_CHURN.md`
+  F-NARR-04 finds no `held_by` claim is deposited today. Until that lands the predicate takes
   the seat and reads the avoided or breaching person from the writ or instrument, which names him.
 - **CR-88's duty decline** (when built; `15_INSTITUTIONS_PAPACY_D` edit 8, generalised): it does not
   decline `p`'s own `release` of an `oblige` to a seat whose holder `p` is excused from. Whether he
@@ -113,22 +117,24 @@ Church `ban` and may be published by an `avoidance`.
 
 ### 4. Rival certificates — a request to SC's evidence owner (not edited)
 
-`05_SC_evidence_and_rebuttal_B.md` already has the arithmetic: items filed `for` the docket are `proofs`,
-items filed `against` are `rebuttals`, and the `evidence` term is `proof_step × (rebuttals − proofs)`. A
-rival's deeds do not contradict the claimant's (they are different cells), so nothing is struck; they
-stand against. The one sentence asked of that file's owner: **a Record carrying `recites` for a seat is
+`05_SC_evidence_and_rebuttal_B.md` files items `for` and `against` the docket; under the one leverage
+channel each side's standing items are that side's `proofs` levels (`U5c_SC_one_obstacle_form.md` §3: one
+`proof_level` per whole unit of weight standing; `proof_step` is deleted), netted by
+`levels_to_net_sigma` under the soft cap. A rival's deeds do not contradict the claimant's (they are
+different cells), so nothing is struck; they stand against, as the other side's levels. The one sentence asked of that file's owner: **a Record carrying `recites` for a seat is
 admissible on either side of any docketed matter whose petition names that seat**, each recited deed
 filed as one item (`15_INSTITUTIONS_SYNTHESIS_B` edit 4). A certificate does not outrank another by who
-made it: a bench's disposition to the body that made it is already in `reception`, and an impeachment
+made it: a bench's hostility to the body that made it is already in `reception` (its favour in
+`favour`), and an impeachment
 that draws Overwhelming strikes every item of the forged paper's origin by that file's rule 1.
 
 ### 5. A grant against a levy — a request to the MATERIAL lane (not edited)
 
-On `requisition` and `seize` (`14_VERBS_MATERIAL_B` §4, `14_VERBS_MATERIAL_D` §6), the `evidence` term
-has two halves: for the actor, a held assessment and the instrument that confers the exercised seat
-(`15_INSTITUTIONS_COLONIAL_B` §2); **against** him, a live instrument one of whose `forbears` clauses
-names this act's success kind over this ground, when the levied cohort or holder holds its content
-claim. Unit: SC's `proof_step` per instrument. An immunity nobody on the ground has heard of protects
+On `requisition` and `seize` (`14_VERBS_MATERIAL_B` §4, `14_VERBS_MATERIAL_D` §6), the `proofs` source
+has two sides: the actor's levels, a held assessment and the instrument that confers the exercised seat
+(`15_INSTITUTIONS_COLONIAL_B` §2); **the other side's** levels, a live instrument one of whose `forbears`
+clauses names this act's success kind over this ground, when the levied cohort or holder holds its
+content claim. Unit: one `proof_level` per instrument (C3-C10: nothing is subtracted from the obstacle). An immunity nobody on the ground has heard of protects
 nothing; one the whole town holds makes the levy harder and its taking a known breach.
 
 ### 6. `engine/season/data/rosters.py::_load_offices` — a hand's faction is free
@@ -144,7 +150,8 @@ stands.
 
 `14_VERBS_BINDING_D_orders.md` edits 3 to 5 narrow `issue`'s addressees from purview over a person's
 place to **command**: a seat's sworn men, the holders of seats it may revoke, and the unseated within
-its purview (that audit's §13.4 decision 1, listed for Jordan). `15_INSTITUTIONS_PAPACY_D` §3 addresses a
+its purview (that audit's §13.4 decision 1, since ruled: A-22, command; a writ to a superior is a
+petition). `15_INSTITUTIONS_PAPACY_D` §3 addresses a
 writ of avoidance "to the persons its issue reaches". Under command a see could not address a lord's
 seated vassals at all, and they are the persons the sanction is aimed at.
 
@@ -152,13 +159,11 @@ Decided: the basis is a property of the **form**. A form row carries `basis: com
 (default `command`); `issue`'s `authority` conjunct asks the basis the chosen form names, and the bare
 decree (no form) asks `command`. `avoidance` is `purview`: a sentence is published to everyone on the
 issuing seat's ground, and it orders nobody to do anything (its clauses are all forbearances). `interdict`
-and `tithe` stay `command`: they address the issuer's own seat-holders. If Jordan takes territorial
-authority for every writ (that decision's option A), the key reads `purview` on every row and is inert.
-One conjunct, one reader, no second predicate: both basis values are that proposal's. A form whose
-`basis` is `purview` is a publication in the other sense too: its terms reach its addressees with the
-news of its issue (`06_FA_decree_binds.md` edit 2's deposit), whichever way Jordan rules on whether an
-*order* must be delivered by hand (`audits/06_FA_audit.md` §11 item 1; `audits/14_VERBS_SOCIAL1.md` §15
-D1). A sentence handed from parish to parish one paper at a time is not a sentence.
+and `tithe` stay `command`: they address the issuer's own seat-holders (A-22). One conjunct, one reader,
+no second predicate: both basis values are that proposal's. Every form's terms reach whoever learns of
+its issue with the news (A-21, a decree is proclaimed; `06_FA_decree_binds.md` edit 2's deposit), so a
+`purview` form is a publication in the other sense too; `basis` settles whom it addresses, not who may
+know it. A sentence handed from parish to parish one paper at a time is not a sentence.
 
 Ladder step 5: the distinction is the instrument's, and `instruments.yaml` is where an instrument's facts
 live. `[UNVERIFIED]` that the `authority` conjunct can read a value sourced from the act's `form`
@@ -171,14 +176,14 @@ Hand-built worlds through the real fold, `PYTHONHASHSEED=0`.
 
 1. **Excused by his own compliance.** A lord, a vassal sworn to his seat, a published `avoidance` naming
    the lord. Arm A: the vassal's `comply` drew Success. Arm B: it drew Failure. The lord then `petition`s
-   the vassal: the recorded term list carries `obligation` at 0 in A and at `obligation_step` in B. Arm
-   C: the vassal never received the writ: as B.
+   the vassal: the recorded levels carry no `obligation` level in A and one in B (at `obligation_level`
+   live). Arm C: the vassal never heard of the writ: as B.
 2. **The oath stays his.** Over 200 seeds of arm A with CR-88's decline built: the vassal's `oblige`
    closes only by his own `release`; a vassal with a planted grievance releases more often than one
    without, and neither always nor never (`15_INSTITUTIONS_PAPACY_D`'s gate, now through `excused`).
 3. **Excused by a breach.** A duke under a seeded `homage`; the King's `requisition` inside the duchy
    succeeds and the duke witnesses it. `kept` as the duke reads it is below zero; `excused(duke, king)`
-   is True; the King's next ask of him carries `obligation` at 0. Control: the levy unwitnessed by the
+   is True; the King's next ask of him carries no `obligation` level. Control: the levy unwitnessed by the
    duke and untold: `excused` False.
 4. **The secular arm.** Two conferrers addressed by one `avoidance`; one complies, one defies. The
    first has no `confer` candidate naming the avoided man; the second has, and its Event is a deed the
@@ -209,7 +214,8 @@ It gives no institution a power over another. It adds no sanction: every sanctio
 `15_INSTITUTIONS_COLONIAL_C`'s calling-in. It does not try usury: a bond whose `amount` exceeds what was
 advanced in the same kind at the same place is a fact an inquiry can reconstruct
 (`15_INSTITUTIONS_VENICE_B`), and a goal row that acts on it needs a deed pairing no reader has; it is
-recorded as not built. It does not decide who may judge the Confessor (audit §10 item 3).
+recorded as not built. Nobody judges the Confessor (A-36; audit §10 item 3): no crossing here routes a
+sentence, an audit or a recall to `off_confessor`.
 
 ## NERS reading
 
@@ -222,8 +228,8 @@ recorded as not built. It does not decide who may judge the Confessor (audit §1
   player, a sentence on a loved lord and on a hated one play out differently from one rule. Complete at
   the extremes: nobody complies, nothing happens; everyone complies, the man is alone, alive, and can
   swear a penance.
-- **S.** One predicate where three keyed lifts stood; one forum rule (the gate's own); `evidence` with
-  two halves in SC's one term. Nothing pauses differently: each crossing is a hearing, an ask or a levy
+- **S.** One predicate where three keyed lifts stood; one forum rule (the gate's own); `proofs` levels on
+  both sides of SC's one leverage channel. Nothing pauses differently: each crossing is a hearing, an ask or a levy
   like any other.
 - **E, last.** One predicate, one clause, two requests, two sentences of comment. The player's rule of
   thumb: *a sanction is worth what the people around its target decide it is worth.*

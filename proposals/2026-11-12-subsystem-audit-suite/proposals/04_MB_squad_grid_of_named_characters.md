@@ -6,11 +6,16 @@ Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2
 
 Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-01 to GM-03; GC-8, GC-9) — Ogre Battle is now sourced as a battle referent (`research/game_precedent_suite/grounding/ogre_battle.md`). Two notes added in place: the stated reason for not adopting "a member's row decides what it does" no longer holds, and "who can be reached" is not established as what the referents share. No edit of the proposal was changed; the choice between the two row rules is the MB lane's.
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` 7b-11 (the sixth composition row's `entry:` kind and verb), §1.2 (the struck wrapper text in §3 removed; the body's pointers moved from the first PC proposal to `_B`), `U1_OWNERS_AND_VOCABULARY.md` D-U1-11f (the per-person standing-order cap is `standing_order_cap`), D-U1-11b (the nested round's typed refusal), `U1_GLOSSARY.md` *exchange* (the squad's round of pairings is a **pairing round**; `FIELD_EXCHANGES` keeps its name), *command* (the leader's capability is `command`, `27_MB_A`), A-30 (the estimate's stream is keyed), the conflicts list marked answered as the head says; test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`). The row-rule choice that `24_GROUNDING_GAMES.md` GC-9 left to the MB lane is not decided here (it is a design choice; no ruling or precedent settles it; the reach rule stays as written).
+
+**Depends on:** `03_PC_duel_round_and_approach_B.md` steps 1–4 (B16); `U5b_PC_rulings_in_the_fight.md` §1 (`nested_entry`, B30); `04_MB_manager_battle_one_resolver.md` §2 and §7 (B20, B30); `11_GO_one_draw_owner.md` (B06).
+**Lands in batch:** B30 (MB nested): after UPR §1, PB step 5 and the manager's §7, before `U5b_MB_rulings_in_the_field.md` §3.
+
 Lanes MB (the scale rule, the squad sheet, the host), PC (the round entry it calls), CHAR (the leader's
 capability, the chooser's decider), IN (the seam). Carries R-41 of
-`audits/04_MB_audit_addendum_B.md` §B6 and its §B4.6. Builds on `03_PC_duel_round_and_approach.md` §2 and
-§5.1 (or its `_B` successor where one exists) and on the first MB audit's §15. Reference, not mechanism
-(`CLAUDE.md` §0.05).
+`audits/04_MB_audit_addendum_B.md` §B6 and its §B4.6. Builds on `03_PC_duel_round_and_approach_B.md` §2 and
+§4 (the first proposal's §5.1 for the standing-order shape) and on the first MB audit's §15. Reference, not
+mechanism (`CLAUDE.md` §0.05).
 
 ## What it changes in `engine/season/` at runtime
 
@@ -70,7 +75,7 @@ What a member brings is on the member:
 | datum | where it lives | default |
 |---|---|---|
 | **place** on the grid: `front` or `rear`, and a file 1 to 3 | the standing-order Record the first lane keeps for `marshal` (a seat's `order_of_battle` Record gains `places: ((person, row, file), ...)`) | assigned in claimant order, front row first |
-| **standing orders**: at most four rows of `(condition, response)` | the same Record, per person | `()`: fight the one opposite at the `normal` approach |
+| **standing orders**: at most `standing_order_cap` rows (seed 4, `battle_orders.json`, D-U1-11f) of `(condition, response)` | the same Record, per person | `()`: fight the one opposite at the `normal` approach |
 | **leader** | the acting person for the attackers; the holder of the target for the defenders | — |
 | kit, attributes, skills, wounds | the person, read by `combat_input` as for any duel | — |
 
@@ -86,12 +91,16 @@ What a member brings is on the member:
 
 *(Reconciled, A-4 / Layer 1 §44.3:)* a registered entry, `modules/mass_battle/squad.py::resolve_squad`,
 reached by its own composition row and handed a `duel` callable (the PC lane's `combat.round` role,
-built by the adapter through `nested_entry`); it calls nothing else in any module. ~~New
-`engine/season/seam/wrappers/squad.py`, called by the mass-battle provider for a squad field.~~
+built by the adapter through `nested_entry`; at the cap it returns the typed depth-cap refusal, D-U1-11b);
+it calls nothing else in any module. No `engine/season/seam/wrappers/squad.py` is created.
+
+The composition row (`R1_READ.md` 7b-11): `mass_battle.resolve_squad {target:
+"modules.mass_battle.squad:resolve_squad", entry: verb_call, verb: march, needed_by:
+"engine/season/seam/wrappers/mass_battle.py::resolve (the scale rule)"}`.
 
 ```
 state: one DuelState per person (the PC proposal's record), held in this entry's loop frame for the length of the call
-each exchange (at most FIELD_EXCHANGES, the troop file's header; seed 3, the engine's three phases):
+each pairing round (at most FIELD_EXCHANGES, the troop file's header; seed 3, the engine's three phases):
     for each standing member, in initiative order (the round's own; the host adds none):
         target = his standing order's target word, resolved on the grid:
                  a front-row member may be struck by anyone;
@@ -121,15 +130,15 @@ or at the exchange cap
   only by ranged or column attacks is one search snippet (grounding/unicorn_overlord.md). The reach rule
   above is therefore this proposal's own design, with snippet-grade precedent from one game.]`
 - **The leader.** A leader adds nothing by rule. What he adds is a capability read through the capability
-  surface the CHAR lane owns (a command capability, the first audit's §14), applied as the PC proposal
+  surface the CHAR lane owns (the `command` capability, `27_MB_A_command_and_the_obedience_draw.md`), applied as the PC proposal
   applies any lever: a prior on gates the duel already rolls for his squad's members. Until that
   capability exists a leader is only the person whose fall fires `leader_down`.
 - **Decider.** A played member is asked for his approach between exchanges through the same callable the
   duel uses; an unplayed one is served by his standing orders, or by the chooser. Delegated and commanded
   are the same rounds (the manager proposal's three conditions hold here unchanged: one entry, a decider
   that draws nothing, a recorded list of choices that replays exactly).
-- **Prediction.** `field_estimate` on a squad field is samples of the same host on a private stream, as
-  for a field of troops.
+- **Prediction.** `field_estimate` on a squad field is samples of the same host on a private keyed stream
+  (A-30), as for a field of troops.
 
 ### 4. The outcome (one shape for both scales)
 
@@ -168,6 +177,14 @@ on `field.won` needs (first audit §5.5).
    prints nothing (the role, not an import).
 6. A side with one cohort member is not a squad: the field goes to `resolve_field`.
 
+**Tests (W3-1).** New `engine/season/tests/test_squad_field.py`: `test_seed2_field_is_a_fought_squad_band`
+(gate 1), `test_two_sheets_hurt_different_persons` (gate 2), `test_rear_member_unreachable_by_melee`
+(gate 3, `assert checked >= 1` over exchanges), `test_decider_equal_to_standing_orders_changes_nothing`
+(gate 4), `test_one_cohort_member_routes_to_resolve_field` (gate 6); gate 5's grep in the commit body.
+**Hash movers:** the squad fields the shipped realm fights (seed 2's pin), declared. **Lands:** an IN-lane
+implementation session under `/methodology-execute` with MB and PC review; the row rule and exchange cap
+seeds read by `opus`, the build `sonnet`.
+
 ## Falsifier
 
 A squad field whose result does not change when a member's kit, wounds or place changes; a rear member
@@ -190,10 +207,10 @@ second duel resolver anywhere.
 ## Cost class
 
 Design-first for the row rule and the exchange cap (both seeds); small build after
-`03_PC_duel_round_and_approach.md` steps 1 to 4. Blocked on that proposal and on nothing in
+`03_PC_duel_round_and_approach_B.md` steps 1 to 4. Blocked on that proposal and on nothing in
 `modules/mass_battle/`.
 
-## Conflicts with ruled or ratified items, named and not resolved
+## Conflicts with ruled or ratified items (named; answered since, head item (4))
 
 - **"One engine at every fidelity"** (2026-07-08) read as "every `march` goes to the cell engine": the
   scale rule contradicts that reading. Read as it is written, about the played and the delegated

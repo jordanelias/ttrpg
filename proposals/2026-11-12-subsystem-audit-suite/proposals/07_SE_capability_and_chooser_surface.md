@@ -2,7 +2,12 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-12**, **A-54** and **A-56**. §3 and §4 are superseded by `07_SE_capability_rate_B.md` (as the addendum says); §5 and §6 stand. NPC-083's "methods handing influence to internal factions" stays outside this file. A cohort's candidate surface is the heavy-move list (`U5d_SE_cohort_heavy_moves_and_caste.md`), so the chooser terms here bind named persons and the seven cohort moves only.
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 and C3-C2/D-U1-09: §3 and §4 deleted (a pointer section stands in their place), and §1 and §7, which described and checked the same superseded multiplier, reduced to pointers; §5 (d) and the §6 table row re-pointed; §5 (e)'s "never an `is_cohort` test" sentence replaced by a pointer to the heavy-moves roster (A-56; R3 §1: the row-declared alternative is a `scale:`-like key `04` §A.3 row 4 deletes); C3-N2 (the 708-of-1,529 figure named against the GAME pessimist's 43%); tier and batch (R3 7b-0; U3 B12). §2, §5 (a)–(c) and §6 stand as reference.
+
 ## Status: PROPOSED
+
+Lands in batch: B12 (world motion and ground), §5–§6 after `07_SE_capability_rate_B.md` (U3 §1 item 13); text only.
+Depends on: `07_SE_capability_rate_B.md` (B12) and `U5d_SE_cohort_heavy_moves_and_caste.md` (B38), as pointers.
 
 Carries §14 (capability authoring surface) and the NPC and chooser points of `audits/07_SE_audit.md`.
 It extends the existing owners. It defines no capability, no second pool reader and no settlement-local
@@ -10,9 +15,11 @@ dialect.
 
 ## 1. What changes in `engine/season/` at runtime
 
-With the shipped data, nothing. The change is that three uncontested settlement effects read one
-declared multiplier from the roster the pool reader already reads, so that a person who holds a named
-capability raises a fabric faster, and the mapping is authored as data.
+Nothing from this file (Reconciled, wave 3). The runtime change this section described (three uncontested
+settlement effects reading a capability multiplier) is superseded by `07_SE_capability_rate_B.md` as decided
+in C3-C2 and D-U1-09: a verb that becomes a task row takes its capability through the task draw
+(`18_DETERMINISM_task_draw_for_uncontested_verbs.md`), and `rate` survives only for magnitudes no draw
+decides.
 
 ## 2. The problem, with evidence
 
@@ -28,64 +35,17 @@ capability raises a fabric faster, and the mapping is authored as data.
   provision bound), `Person.body` (the fall), presence (`share`), and a seat's remit and purview.
   None is a skill.
 
-## 3. The resolution, decided
+## 3. and 4. Superseded (pointer)
 
-**The existing owner is `rosters.yaml: verb_capability`** (verb → capability key), with
-`vocation_attribute` (key → attribute) and `Person.capability` / `Person.attributes` as carriers, read
-through `pool.py::_capability` and `_authored_attribute`. Ladder step 4: a contested verb gets its dice
-from that table; an uncontested verb that should answer to skill gets its *rate* from the same table.
-Routing `restore` through a contest was rejected at `effects_economy.py:126-128` (a prize no subsystem
-claims) and stays rejected.
-
-**The interface SE needs from the merged capability surface** (for the holistic stage):
-
-1. `verb_capability[verb] -> key | absent`, as now. SE adds rows, never a table.
-2. One host function `rate(w, person, verb) -> (num, den)`, beside `faculty` in `seam/wrappers/pool.py`:
-   the per-mille multiplier a held capability gives an uncontested effect, read from a roster table
-   `capability_rate` keyed by capability key (a map from held score to per-mille, with `default: 1000`).
-   `(1000, 1000)` when the verb has no row or the person holds no key: the control, today's arithmetic.
-3. A capability definition must therefore say, for SE to use it: its **key**; the **verbs** it serves
-   (rows of `verb_capability`); for each uncontested verb, its **rate table**; and its **growth rule**
-   (already `train`, and `_eff_kill`'s build-by-doing, both reading the key off `verb_capability`).
-   SE needs nothing else, and reads none of it except through `rate`.
-
-## 4. The exact edits
-
-**(a) `engine/season/rosters.yaml`.** `verb_capability` gains (shipped commented out until a capability
-of that name is authored by Jordan; the names are placeholders, `[ASSUMPTION]`):
-
-```yaml
-      # restore: "building"     # raising and mending a fabric
-      # work:    "building"
-      # build:   "building"
-```
-
-and a new table read by one function:
-
-```yaml
-  capability_rate:
-    source: "proposals/2026-11-12-subsystem-audit-suite/proposals/07_SE_capability_and_chooser_surface.md; H-164"
-    row: H-164
-    note: "Per-mille multiplier on an uncontested effect's magnitude, by the held score of the verb's capability key."
-    default: 1000
-    rates: {}                 # e.g. building: {0: 500, 1: 750, 2: 1000, 3: 1250, 4: 1500}
-```
-
-**(b) `engine/season/seam/wrappers/pool.py`** gains `rate(w, p, verb)` as specified. It reads
-`VERB_CAPABILITY`, `_capability` and the new table; nothing else.
-
-**(c) `engine/season/loop/effects_economy.py::_rise`** takes the act and applies the rate:
-
-Old: `return (headroom * num) // den`
-
-New: `rn, rd = rate(w, w.persons.get(a.actor), a.verb); return min(headroom, (headroom * num * rn) // (den * rd))`
-
-The `min` keeps the ceiling a bound (a rate above 1000 raises the pace, never the ceiling). `_fall`
-takes the same rate for `sabotage`. `H-164`'s row narrows: `f(degree)` is answered by `rate` for the
-uncontested case.
-
-**(d) Nothing in `modules/settlements/`.** The module stays capability-blind: a rate is a host read of a
-person, and the module reads no person beyond the weights its input records carry.
+Superseded by `07_SE_capability_rate_B.md` (this file's U5d head; R3 §2; C3-C2, D-U1-09) and deleted here,
+not left beside their replacement. What they carried is decided elsewhere: the capability's home is
+`references/descriptor_registry.yaml: capabilities` and the verb row's `capability:` column (D-U1-07;
+`rosters.yaml: verb_capability` and `vocation_attribute` are deleted by CAP A2/A3, and no
+`capability_rate` table is created); `restore`, `work` and `build` resolve by the task draw's band; `rate`
+(`07_SE_capability_rate_B.md` §4 (c), reading `pool.py::score`) remains for CP-T08-01's `labour` hand
+weights only; a steward's skill on the place's seasonal draw is named levels (`edge`, site
+`settlement_effect`), not a pool term or a multiplier. `modules/settlements/` stays capability-blind (the
+former §4 (d), which `07_SE_capability_rate_B.md` keeps).
 
 ## 5. The NPC and chooser surface (points a to e)
 
@@ -110,22 +70,26 @@ chooser intent as established from code plus ruling); it is cited, not redone. F
   same amount, and a cohort differs from its neighbour only by its territory's `alpha/beta` ratio. What
   makes a settlement choice a person's: an amount he chose (`07_SE_arc_needs.md` §3 b), a destination he
   chose among places he knows (CR-49's `referent_class: Rung` for `transfer`, `exchange` and `migrate`),
-  and a rate that is his (this file). The reason trail exists for acts (`Event.observed`,
+  and a capability that bears on his act (the task draw, `18_DETERMINISM_task_draw_for_uncontested_verbs.md`;
+  `07_SE_capability_rate_B.md`). The reason trail exists for acts (`Event.observed`,
   `Term.declared_by`: a lapse cites the last hand that wound the clock) and is missing for the act not
   taken: a steward who let a town starve leaves no record that he knew.
-- **(e) Missing, as proposals.** This file (rate); `07_SE_arc_needs.md` (amount as a choice);
-  `07_SE_kernel_repairs.md` D (arrival knowledge). Cross-listed to CHAR, not proposed here: a cohort
+- **(e) Missing, as proposals.** `07_SE_capability_rate_B.md` (capability on a settlement act);
+  `07_SE_arc_needs.md` (amount as a choice); `07_SE_kernel_repairs.md` D (arrival knowledge). A cohort
   performs every individual verb (read at seed 0, two seasons: 708 of 1,529 resolved acts are cohorts',
-  among them `create_record` 115, `challenge` 60, `forge` 47, `research` 30), which is S9.1's one class
-  working as ruled and a population behaving as a clerk and a duellist; the fix, if one is wanted, is a
-  declared requirement those verbs' rows carry and a cohort does not meet, never an `is_cohort` test.
+  among them `create_record` 115, `challenge` 60, `forge` 47, `research` 30; a different denominator from
+  the GAME pessimist's 43% of all acts, C3-N2). The fix is ruled (A-56: a few heavy moves) and carried by
+  `U5d_SE_cohort_heavy_moves_and_caste.md`: the roster `rosters.yaml: cohort_moves`, applied at the one
+  formation site keyed on `Person.is_cohort` (a property read off `weight`, `state/carriers.py:844-850`).
+  The alternative this paragraph once named (a requirement the verbs' rows declare) is a row-declared scale
+  key, which `04` §A.3 row 4 deletes ("`scale:` … the loader rejects the key"), and is withdrawn.
 
 ## 6. The RPG axioms in play, in the tradition's words
 
 | axiom | state in SE |
 |---|---|
 | a skill adds dice to a test | not applicable: no settlement verb is a test |
-| a skill sets how much an untested task accomplishes (extended or downtime work) | absent; this proposal's `rate` |
+| a skill sets how much an untested task accomplishes (extended or downtime work) | absent; the task draw (`18_DETERMINISM_task_draw_for_uncontested_verbs.md`) and `07_SE_capability_rate_B.md` |
 | many hands make light work (helping) | inverted: `share` divides one act's rise by the persons present (`fabric.py:37`), so a crowd at a wall makes each hand weaker and the sum the same |
 | resources are tracked and upkeep is paid (lifestyle, supply) | present for cohorts and sworn men (`subsist`, `_renewals`); named persons eat nothing (ruled, ED-IN-0255) |
 | encumbrance and travel time | absent: a move costs one leg whatever the distance (H-328) |
@@ -133,13 +97,8 @@ chooser intent as established from code plus ruling); it is cited, not redone. F
 
 ## 7. Gate, falsifier, cost
 
-- **Gate.** `engine/season/tests/test_works_founding.py` gains: with `capability_rate.rates.building`
-  authored and one person holding `building: 4`, his `restore` raises a harbour at 500 by 1.5 times what
-  an unskilled person's raises it, clamped at the ceiling; with `rates: {}` both raise it alike and the
-  hash is the base.
-- **Falsifier.** A rate above 1000 lifting a fabric over its works' ceiling; a verb with no row reading
-  anything but 1000.
-- **NERS.** N: without it a capability a designer authors cannot touch a settlement. R: who mends the
-  wall starts to matter. S: one table, one reader, the methodology of `faculty`. E, last: one function
-  and one table.
-- **Cost class.** Edit. Hash EQUAL while `rates` is empty.
+- **Gate, falsifier.** None of this file's own: §3–§4 are superseded, and §5–§6 are reference (prose, no
+  edit). The gate of the capability on a settlement act is `07_SE_capability_rate_B.md`'s; the cohort
+  surface's is `U5d_SE_cohort_heavy_moves_and_caste.md`'s.
+- **NERS.** §5–§6 are a reading, not a design object; the design objects they point at carry their own.
+- **Cost class.** Edit (text only). Tier: `sonnet` (R3 7b-0).

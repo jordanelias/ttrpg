@@ -2,7 +2,19 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-30**: Jordan chose option A (the draw is a function of its key). The "one question to Jordan" is closed; the Layer 1 row is rewritten by the ruling (text owed, not applied). With A-5 the sampler the key feeds is the one bell-curve sampler. No step changes.
 
-## Status: PROPOSED — touches a ratified Layer 1 row; returned to Jordan with two options (audit §7)
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-30: the Status line no longer says
+"returned to Jordan"), §1 (AMBIGUOUS against `04` PART D 35's "no counter": the per-key index `n` inside one key is
+permitted, a d10 pool drawing six or more from one key, and the row is rewritten by A-30, text owed in
+`OWED_TO_UNIFICATION.md` §A; `04` is not edited), §7/§7b (tests, order, tier); U3 B06, C3-Y10 (co-lands with
+`11_GO_one_draw_owner.md`: this file's key function is that file's `Draw.u` body), C3-D3 (the keyed draw, B06, before the
+task draw, B07), C3-L3 (no float recorder either: parity by `fmath` vectors); STAGES.md (the v11 workplan rows move to the
+v12 plan). Changed: Status, the edits table's workplan row, the gate's test names.
+
+## Status: PROPOSED (A-30 taken: option A; the Layer 1 RNG row text is owed to Jordan's amendment, not applied)
+
+Lands in batch: **B06** (IN/GO; one re-pin of every seeded result, shared with `11_GO_one_draw_owner.md`). Depends on:
+`11_GO_one_draw_owner.md` (B06, the `Draw` type and its single constructor; one commit pair, one re-pin). Every later
+draw site in the suite (B07 onward) is written against this owner.
 
 Carries F-PES-GO-02 of `audits/16_PESSIMIST_GO.md` (§1.1). Lanes GO, IN (PC, MB and DICE touch their
 draw sites). Read at `826b747`. Reference only (`CLAUDE.md` §0.05); not ratified by being written.
@@ -87,11 +99,17 @@ that is no longer limited to them.
 |---|---|---|
 | `engine/season/state/ids.py` | IN | `H2` beside `H`; `draw_factory` returns `seeded(...)` |
 | `engine/dice_engine/draw.py` | DICE | `Draw.u` as above (the rest as `11_GO_one_draw_owner.md`) |
-| `workplans/valoria_master_workplan_v11_part3.md` B10-20; `…_part5.md` GO-16, GO-08 | GO | GO-16 leaves the batch (its entry deleted, the order line and the freeze row's "the draw log's digest" with it); GO-08's text as above; exit line 4 drops `export_oracle_draws --check` |
-| `architecture/meta/04_CODE_ARCHITECTURE.md` §C.12 | **Jordan** | the RNG row: "the draw (built) · a function of its key, `H(seed, tick, subject, purpose)`; no generator object, nothing global · see rejection 4"; rejection 4's last two sentences ("not yet load-bearing, because no roll exists yet") replaced by the measured count |
+| the v12 cards for B10-20, GO-16 and GO-08 (not the v11 lines `workplans/valoria_master_workplan_v11_part3.md` B10-20 and `…_part5.md` GO-16, GO-08, which this session's content supersedes) | GO | GO-16 is not carried into v12 (the order line and the freeze row's "the draw log's digest" with it); GO-08's text as above; exit line 4 drops `export_oracle_draws --check` (a plan edit for the v12 author) |
+| `architecture/meta/04_CODE_ARCHITECTURE.md` §C.12 | **Jordan** (A-30 ruled the substance; the text is owed, `OWED_TO_UNIFICATION.md` §A, applied only by his amendment; no lane edits `04`) | the RNG row: "the draw (built) · a function of its key, `H(seed, tick, subject, purpose)`; an index `n` within one key; no generator object, nothing global · see rejection 4"; rejection 4's last two sentences ("not yet load-bearing, because no roll exists yet") replaced by the measured count |
 | every seeded golden under `engine/season/tests/`, `engine/tests/` | IN | one re-record, said plainly in the commit (§7) |
 
 ## The gate (execution artifacts)
+
+`probe.py census` was lane scratch, not in the repository. Committed: NEW `engine/tests/test_draw_keyed.py` (CI job
+`sim-regression`, CLAUDE.md §3; `engine/dice_engine/` has no tests directory): `test_u_is_a_function_of_the_key`,
+`test_n_zero_is_the_key_itself`, `test_n_one_remixes_with_h2`, `test_no_random_Random_in_runtime_code` (the `rg -n
+"random\.Random\(" engine modules` scan outside tests returns nothing). Command:
+`python -m pytest engine/tests/test_draw_keyed.py -q`. Readings:
 
 1. A census run as above on the new tree: zero `random.Random` instances constructed in a computed
    season (`grep -rn "random\.Random(" engine modules` outside tests → none).
@@ -127,4 +145,8 @@ world"), and this makes it true across the oracle and the port, not only inside 
 
 ## Cost class
 
-Small build plus one re-pin; deletes a BUILD position (GO-16) and part of another (GO-08).
+Small build plus one re-pin; deletes a BUILD position (GO-16) and part of another (GO-08). Tier: `opus` for gate 3's
+two-sample check design (the judgment that the re-pin is a stream change, not a balance change), `sonnet`, effort
+`high`, for the code. Hash movers declared: every seeded content hash and golden, once, shared with
+`11_GO_one_draw_owner.md`. Lands it: B06, order `H2` and `Draw.u` → `draw_factory` returns `seeded` → the two outside
+generators → the re-pin with gate 3.

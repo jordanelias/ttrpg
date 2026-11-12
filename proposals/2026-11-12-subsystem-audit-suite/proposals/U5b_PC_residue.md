@@ -8,6 +8,11 @@ audit and written into no proposal ("an edit", "recorded for the PC lane"), or a
 handed to this family. Reference only (CLAUDE.md §0.05). Sections are independent unless a dependency is
 named; each is commit-sized.
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.1 (§4 edit 2 VIOLATES `hol` §53 / `04` §C.12 rejection 5: the new `raise ValueError` is replaced by a signature with no default stream, so a missing stream fails at the call site, not by a runtime raise in a path the port reaches), §1.1 and §2 row A-30 (§7's "position after the mortal-wound draw" is a counter: the mark draw takes its own key; §8's private stream is keyed), `U1_OWNERS_AND_VOCABULARY.md` §4 R-27 (§1 names the one calibration that sizes the in-fight wound σ and the season's `wound_step` together), `U1_GLOSSARY.md` *skill* (§1 item 4: the slot family is `axis`), 7b's "`[grep at landing]` sites by grep now" (§2, §4 and §6 resolved at the tree; §6's importer count corrected from three to five), test 9 (`Depends on:` / `Lands in batch:` per section from `U3_DEPENDENCY_ORDER.md`). §10 stays INCOMPLETE (reason at the section).
+
+**Depends on:** §7 on `14_VERBS_PHYSICAL_A_custody_and_force.md` A3 for item 3's reading only (the keyed draw removes the order dependency); §8 on `10_DICE_believed_odds_have_a_prior.md` Edits A–B (B05); §1's fit and §3's census on the combat calibration batch (B15); all keyed draws on `11_GO_one_draw_owner.md` (B06).
+**Lands in batch:** §2, §4–§10 in B14 (`B14-pc-outcome`, PC; U3 places §7–§8 there); §1 items 1–2 in B14 and the fit (item 3) with B15; §3 in B18 (`B18-pc-content`, before `03_PC_person_inputs_content.md` Part B).
+
 ## What it changes in `engine/season/` at runtime
 
 §4 edit 1 refuses a fight between a person and himself at the seam (no shipped act reaches it). §7 moves
@@ -33,9 +38,14 @@ isolated (`[UNVERIFIED]` there).
    attribute or skill axis moves the season-default mirror no more than one point of trained score does**
    (about fifteen points near parity, `pD_skill.py`). A lever outside the bound is reported by the table,
    not gated.
-4. Skills are bounded where they are authored: the `skill` slot family of
+4. Combat axes are bounded where they are authored: the `axis` slot family (was `skill`; U1 glossary) of
    `03_PC_person_inputs_content.md` Part A takes its bounds from the capability row (U1 §2 `scale`), and
    `technique` and `grab` are not members of the family until a sweep shows them outside the interval.
+5. *(W3-1, U1 §4 R-27:)* one quantity, two sites, one calibration: the in-fight wound σ
+   (`CFG['WOUND_ATK_OB']`, `CFG['WOUND_DEF_OB']`, read by `combat_systems.wound_impairment`) stays the
+   module's own rule, and the season's carried-wound level (`Fixtures.wound_step`, `U5b_PC_rulings_in_the_fight.md`
+   §3) reads none of them; both are sized in the one combat calibration batch (B15,
+   `U5b_PC_rulings_in_the_fight.md` §5 row 5), and the batch's commit states the two values side by side.
 
 **Gate.** `build_levers.py` prints the attribute and skill ladders with the bound beside each; `READ_SCALE`
 at 1.0 is byte-identical (`tools/ci_golden_modes_check.py` is mass battle's; here the combat goldens and
@@ -52,7 +62,9 @@ disarm nobody).
 1. `contact.py`: the note above `GRAB_OUTCOMES` states what each outcome does (a poise or an initiative
    shift) and that none removes a weapon, moves a fighter to the ground or holds him.
 2. The names are trace vocabulary and are **not shown to a player**: the workbench's `narrate.py` and
-   `commentary.py` render them by effect ("his balance is taken") `[grep the two files at landing]`.
+   `commentary.py` render them by effect ("his balance is taken"). *(W3-1, grepped at the tree:)* neither
+   file renders a `GRAB_OUTCOMES` member today (`grep -n "disarm\|foot_pin\|GRAB_OUTCOMES"` over both prints
+   nothing), so there is no edit now; the rule binds the first rendering added.
 3. The port does not carry the contact axis until one outcome has an effect a fold or a grid reads: one
    line in `11_GO_port_gate_order_and_coverage.md`'s coverage list (U5d's file; named for that lane).
 
@@ -82,12 +94,20 @@ no CI row.
 1. `engine/season/seam/wrappers/combat.py::resolve`: take `fight_estimate`'s `PARTY-GAP` line (`:257`,
    `actor == target`) so one id as both claimants is refused before the engine is called. Today it
    resolves and names a winner (`pS_season.py` S3).
-2. `modules/combat/wrapper.py:565`: `rng=rng or random.Random()` becomes a refusal (`raise ValueError("a
-   fight needs the caller's seeded stream")`); `fight.py` always passes one. The workbench's callers pass
-   `random.Random(seed)` already or gain one line `[grep at landing]`.
+2. *(Reconciled, W3-1, `R1_READ.md` §1.1: the first text made this a `raise ValueError`, a new raise in a
+   path the port reaches, `hol` §53, `04` §C.12 rejection 5.)* `modules/combat/wrapper.py:555`:
+   `def fight(A, B, cfg=None, rng=None, …)` becomes `def fight(A, B, cfg, rng, …)` (no default for either;
+   `cfg=None` still means `CFG` inside), and the fallback `rng=rng or random.Random()` at `:565` is deleted, so
+   a missing stream is a signature error at the call site, not a branch. Callers (grepped at the tree): every
+   `wrapper.fight` call already passes a stream; the three that omit `cfg` gain `cfg=None` explicitly:
+   `modules/combat/fight.py:111`, `tests/valoria/test_combat_ob_from_defender_consumers.py:96`,
+   `engine/season/tests/test_combat_module.py:54`.
 
 **Gate.** A hand-built self-fight returns `PARTY-GAP`; `git grep -n "random.Random()" modules/combat`
-prints nothing. **Falsifier.** A combat test that passes with no stream supplied. **Movers.** None.
+prints nothing; `inspect.signature(wrapper.fight).parameters['rng'].default is inspect._empty`.
+**Falsifier.** A combat test that passes with no stream supplied. **Movers.** None. **Tests:**
+`engine/season/tests/test_combat_module.py::test_a_self_fight_is_refused_party_gap`,
+`::test_wrapper_fight_has_no_default_stream`.
 
 ## §5 · Six stale texts (R-PC-39; F-PC-22)
 
@@ -111,8 +131,10 @@ Each corrected at its site, when its file is next touched or in one commit:
    item of that recalibration. A plan edit; no code. With A-31's batch landing first, PC-08's row is read
    after it.
 2. `systems/combat/combat_engine_v1/workbench/trace.py` shadows the standard library's `trace` once its
-   directory is on `sys.path`. It is renamed `fight_trace.py` with its three importers `[grep at
-   landing]`, or left and the shadow recorded in the workbench README if `03_PC_typed_outcome_one_door.md`
+   directory is on `sys.path`. It is renamed `fight_trace.py` with its importers, **five** at the tree
+   (W3-1 grep, corrected from three): `workbench/commentary.py:205`, `workbench/server.py:26`,
+   `workbench/narrate.py:109`, `systems/combat/combat_engine_v1/state_graph.py:195`,
+   `tests/valoria/test_combat_tradition_levers.py:138`; or left and the shadow recorded in the workbench README if `03_PC_typed_outcome_one_door.md`
    Part B (which rewrites this file's entry) lands first and removes the path insert. The path inserts in
    `modules/combat/` themselves are the declared shrink-only seam (`engine/substrate/pc_engine.py`) and
    get no edit.
@@ -130,9 +152,10 @@ his limit who mends clean is such a thing.
 1. `rosters.yaml: body_mark_models` gains `drawn`; `data/fixtures.py`: the swept set becomes `none`
    (control) / `deepest_gate` (today) / `drawn`; the shipped value stays `deepest_gate` until the gate is
    read.
-2. `_marks` under `drawn`: for each survivor at his limit, one roll on the scene's seam stream (the
-   position after the mortal-wound draw of `14_VERBS_PHYSICAL_A` A3, which already rolls there): pool his
-   body band, obstacle the fixture `mark_ob`, on the one sampler. Failure: the ceiling falls two bands'
+2. `_marks` under `drawn`: for each survivor at his limit, one roll keyed `H(seed, tick, victim,
+   "fight.mark")` (A-30: its own key, never a position in the scene's stream after the mortal-wound draw
+   of `14_VERBS_PHYSICAL_A` A3): pool his body band, obstacle the fixture `mark_ob`, on the one sampler.
+   Failure: the ceiling falls two bands'
    worth (`marked_ceiling` applied twice); Partial: it falls as today; Success and better: no mark. One
    Observation `marked` on the Event.
 3. A3's Partial band ("left for dead, the lasting mark follows") keeps its certainty: that mark is the
@@ -140,8 +163,10 @@ his limit who mends clean is such a thing.
 
 **Gate.** 200 seeded fights that leave a survivor at his limit: the three outcomes each occur; control
 (`deepest_gate`) reproduces the pre-change hash. **Falsifier.** Under `drawn`, a mark on every such
-survivor. **Movers.** At the flip: every fight with a survivor at his limit. **Lands with** the
-calibration batch, after A3.
+survivor. **Movers.** At the flip: every fight with a survivor at his limit. **Lands:** B14 with the
+fixture shipped at `deepest_gate` (U3); the flip is read with the calibration batch, after A3 (B15).
+**Tests:** `engine/season/tests/test_combat_module.py::test_drawn_marks_yield_all_three_outcomes_over_200_seeds`
+(`assert checked >= 200`), `::test_deepest_gate_reproduces_the_pre_change_hash`.
 
 ## §8 · A fight can be priced by believed odds (addendum C-9; U5a F-DICE-14 Edit C)
 
@@ -150,7 +175,8 @@ module, so `choose.odds_weight` never prices a `fight`, `accept` or `capture`.
 
 1. `believed_chance`: for a row whose prize binds the `personal_combat` provider, the answer is the
    `estimate` provider's (`seam/wrappers/combat.py:235-296`, `fight_estimate`: the resolver sampled on a
-   private stream, moving no hash), read over the bands asked, **on the believer's own picture of the
+   private stream keyed `H(seed, tick, believer, "estimate.fight")` (A-30), moving no hash), read over the
+   bands asked, **on the believer's own picture of the
    opponent** (his kit and wounds as the believer's ledger gives them; the world's where he has seen
    them). A person who knows nothing of the opponent's kit gets the default kit, not the true one.
 2. No closed form and no table: an estimate is the resolver sampled (Layer 1 §27.2; A-1).
@@ -188,6 +214,18 @@ assertions all sit under a condition can pass by asserting nothing (CLAUDE.md §
    touches each file (the one file covering the edit, CLAUDE.md §0.4).
 
 **Gate.** With the roster emptied in process, each of the ten fails on its counter. **Movers.** None.
+
+**INCOMPLETE (W3-1, test 9):** the ten loops are not named. The tests lane's `scan_tests.py` is not in the
+repository and this lane did not re-derive the list; blocking reason: identifying an all-conditional loop
+needs each candidate file in `tests/valoria/` read (the scan's own job). Completing step: the landing
+session writes the scan as a one-time reading (output in the commit body, no CI row) and names the ten
+here before editing them.
+
+## Lands and tier (all sections, W3-1)
+
+An IN-lane implementation session under `/methodology-execute` with PC review; edits (§2, §4, §5, §6, §9,
+§10) `sonnet`; §1's isolation and §3's census run by `haiku` (`valoria-measure`) and read by `opus`; §7, §8
+`sonnet`.
 
 ## NERS reading (E last)
 

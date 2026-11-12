@@ -1,5 +1,9 @@
 # 28 · CORE · SCENE ACCESS · B — an appointment is the host's own commitment, and what a visitor of lower rank can do
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.7 row 28B (CONFORMS; the no-op check to confirm), §7, §7b-T; `unified/U1_GLOSSARY.md` *occupy* → *engaged*, *resolve*; `unified/U1_OWNERS_AND_VOCABULARY.md` ledger S-09; `unified/U3_DEPENDENCY_ORDER.md` node B28). Changed: a visit **engages** its counterparty (glossary; proposal A's words follow); the open check is settled at the tree — `Tenure.term` on `commit` is a check-only second pair exactly as on `oblige` (`engine/season/verb_table.yaml:1221-1222`: *"The second pair is check-only (class, step, partition); the effect runs once, on the first"*; `confer` the same at `:280-281`), so the gate's no-op refusal (`NoOpReceipt`, `state/gate.py`) is not asked of it separately; §2's "pool `resolve`" is named as `14_VERBS_SOCIAL1_D`'s pool, whose word the glossary moves to its capability's name (*resolve* is the RESOLVE step and `faction_q.resolve`). The three self-declared INCOMPLETE items stand with their blocking reasons. No other change.
+
+**Lands in batch:** B28, after proposal A in the same batch. **Depends on:** `28_CORE_scene_access_A_occupancy_and_precedence.md` (B28), `14_VERBS_SOCIAL2_B_a_word_with_content.md` §1 (B25; typed `utter`, commit 4), `14_VERBS_SOCIAL1_D_grievance_and_settlement.md` §4 (B28; `commit`'s draw).
+
 ## Status: PROPOSED (a plan for future execution; nothing here is executed by the authoring lane)
 
 Carries `audits/28_SCENE_ACCESS.md` §4. Serves Jordan's A-64 (2): *"for appointments to be made"*
@@ -75,7 +79,8 @@ below; no site spells the string.
 The host forms `commit` on the Proposition as he forms it on any Proposition a question of his carries
 (`verb_table.yaml` `commit`, `referent_class: Proposition`). Whether he ranks it above his other
 business is his chooser's score (§6). Whether it takes is `commit`'s draw
-(`14_VERBS_SOCIAL1_D_grievance_and_settlement.md` §4: pool `resolve`, obstacle `plain` +
+(`14_VERBS_SOCIAL1_D_grievance_and_settlement.md` §4: that file's pool, written there as `resolve` and to be
+renamed to its capability's name per the glossary, obstacle `plain` +
 `cross_pressure` + `violated`; Failure writes nothing and emits `commitment.refused`), and its band is
 the Tenure's `degree`.
 
@@ -105,7 +110,7 @@ def appointment_with(w, host: str, visitor: str) -> Optional[Tenure]:
     `visitor`, or None. Read by the precedence draw (proposal A §4)."""
 
 def appointment_outcome(w, t: Tenure) -> str:
-    """For such an edge, live or ended: `kept` (an admitted occupying act by the visitor naming the host,
+    """For such an edge, live or ended: `kept` (an admitted engaging act by the visitor naming the host,
     emitted within the edge's span); `withdrawn` (ended before its term: the host's `release`);
     `turned_away` (ended at its term, or still live, with a `visitor.kept_waiting` of that visitor at
     that host inside the span and no admitted visit); `unused` (ended at its term with neither)."""
@@ -124,7 +129,7 @@ honoured and sometimes not: the king arrives, or the host's own business draws h
 
 ### 4. What a visitor of lower rank can do (each an existing act; none a gate)
 
-| route | acts | whom it occupies | its draw | source in the tree |
+| route | acts | whom it engages | its draw | source in the tree |
 |---|---|---|---|---|
 | wait and call again | the same visit next round | the host, if admitted | precedence, then the visit's own | proposal A; retry is discounted by `16_PESSIMIST_CORE_a_refusal_is_remembered.md` |
 | ask for an appointment | `utter` the ask; the host's `commit` | nobody until kept | `utter`'s; `commit`'s; precedence with the level | §1 to §3 |
@@ -168,7 +173,9 @@ No edit to the docket. Two statements so the two kinds of appointment do not div
    `Term(w.tick + n, a.id)` shape (`loop/effects_governance.py:39-55`), moved to `loop/effects_shared.py`
    so both effects call one constructor.
 3. **`engine/season/verb_table.yaml`** `commit` — `writes:` gains `Tenure.term` (check-only, `oblige`'s
-   and `confer`'s precedent: the fold gates exactly the pairs a verb declares).
+   and `confer`'s precedent: the fold gates exactly the pairs a verb declares; the second pair is
+   check-only and the effect runs once, on the first, `verb_table.yaml:1221-1222`, so `NoOpReceipt` is not
+   asked of it alone).
 4. **`engine/season/queries/world_q.py`** — `appointment_with`, `appointment_outcome`.
 5. **`engine/season/decision/options.py`** — the ask's `said` (§1), inside S2-B's derivation.
 6. **`engine/season/loop/resolve.py`** — the precedence draw's second level (proposal A §4) calls

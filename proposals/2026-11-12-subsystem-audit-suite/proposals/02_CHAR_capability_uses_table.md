@@ -2,6 +2,10 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-08) — adopted as `rosters.yaml: tables.capability_uses` with the `role` column (`unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3); `form` is implied by `role`. A `key` may also be a capability id from `descriptor_registry.yaml: capabilities` or the selectors `verb` / `verb.base`.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.2 row 2, §2 row 2, §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` ledger C-06, C-07, C-08, C-14, C-23; `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3, §8, §11 U1-A steps 4–5). The body now follows the head: the yaml sample carries U1 §3's columns (`use, role, key, side, when, level, per, against, gain`; `role` replaces `form`, which it implies: `judgement` is `about_mid`, `gate` is `at_least`); `capability_use_sites` is U1 §3's map from a site to its one reader; the bullet "It does not absorb `vocation_attribute`" is deleted (U1 §1 deletes that roster; the governing attribute is the definition row's `base`); `test_k3_thread_sensitivity.py`'s name is verified (`engine/season/tests/test_k3_thread_sensitivity.py` exists); named tests, lands-it and tier added. `capability_factor` / `capability_admits` stand (U1 §8 adopts them).
+
+**Lands in batch:** B04 (U1 §11 U1-A steps 4–5). **Depends on:** `01_CORE_capability_authoring_surface.md` Edits 1–4 (B04, first); B02 (the pin file).
+
 ## Status: PROPOSED
 
 Written by the CHAR audit lane (`audits/02_CHAR_audit.md` §14). Ratifies nothing. Reference under
@@ -44,36 +48,45 @@ decision layer's half is in function bodies.
 
 ## The resolution, decided
 
-One roster table, beside `vocation_attribute`, lists every place a capability enters a person's own
-choice. Ladder step 4: `vocation_attribute` is the precedent (a closed table, both ways, refused at
-import; a row is `{vocation: attribute key}`).
+One roster table lists every place a capability changes an outcome, a person's own choice among them
+(U1 §3: the one table, closed both ways). Ladder step 4: `vocation_attribute` was the precedent (a closed
+table, both ways, refused at import); it is itself deleted by U1 §1, its `base`/`opposed_by` facts moving
+to the definition row.
 
 ```yaml
 # engine/season/rosters.yaml
+capability_roles: {values: [dice, addend, opposes, edge, circumstance, resource, threshold, rate, judgement, gate]}
+capability_use_sites:          # a map: site -> its one reader (U1 §3 amendment 7)
+  told_claim_credit: decision/options.py::competence
+  choice_temper:     decision/choose.py::temper
+  own_state_gate:    queries/person_q.py::OwnStateReader (capability_admits)
 tables:
   capability_uses:
-    # WHERE A CAPABILITY ENTERS A PERSON'S OWN CHOICE. One row per USE. `use` is a member of the closed
-    # roster `capability_use_sites` (a fact of code: each site is one reader). `key` is a registry key
-    # (`descriptor_registry.yaml`: an attribute or a practitioner stat). `form` is how the held value
-    # becomes a factor: `about_mid` (1 at the scale's mid-point, monotone, the form `options.competence`
-    # has) or `at_least` (a gate against a fixture). `gain` names the Fixture that scales it.
+    # EVERY PLACE A CAPABILITY CHANGES AN OUTCOME. One row per use. `use` is a member of
+    # `capability_use_sites`. `role` is a `capability_roles` member; for the choice-side rows `judgement`
+    # (a factor about the scale's mid-point, the form `options.competence` has) and `gate` (against a
+    # fixture; Thread Sensitivity only, A-11). `key` is a capability id, a registry key (an attribute or a
+    # practitioner stat) or the selectors `verb` / `verb.base`. `side` is whose sheet is read. `gain` names
+    # the Fixture that scales it.
     rows:
-      - {use: told_claim_credit, key: attr.social.attunement,   form: about_mid, gain: competence_gain}
-      - {use: choice_temper,     key: attr.mind.focus,          form: about_mid, gain: temper_gain}
-      - {use: own_state_gate,    key: prac.thread_sensitivity,  form: at_least,  gain: thread_sensitivity_gate}
+      - {use: told_claim_credit, role: judgement, key: attr.social.attunement,  side: actor, gain: competence_gain}
+      - {use: choice_temper,     role: judgement, key: attr.mind.focus,         side: actor, gain: temper_gain}
+      - {use: own_state_gate,    role: gate,      key: prac.thread_sensitivity, side: actor, gain: thread_sensitivity_gate}
 ```
 
-- **Closed both ways**, as `vocation_attribute` is: a `use` that no reader registers is refused at
-  import, and a reader whose `use` has no row reads "no capability" (a factor of exactly 1, or UNKNOWN
-  for a gate), never a default.
-- **The form is a closed set of two**, each implemented once in `engine/substrate/` beside the
-  attribute scale: `about_mid(value, floor, ceiling, gain)` and `at_least(value, threshold)`. A third
-  form is a code change and a design decision, which is the right price for a new axiom.
+- **Closed both ways**: a `use` that no reader registers is refused at import, and a reader whose `use`
+  has no row reads "no capability" (a factor of exactly 1, or UNKNOWN for a gate), never a default. The
+  loader also refuses an unknown site, role or key, a field the role does not take, and a `gate` row on any
+  key but `prac.thread_sensitivity` or at any site but `own_state_gate` / `told_retain` (U1 §11 U1-A step 4).
+- **The factor forms are a closed set of two**, each implemented once in `engine/substrate/` beside the
+  attribute scale: `about_mid(value, floor, ceiling, gain)` (role `judgement`) and `at_least(value,
+  threshold)` (role `gate`). A third form is a code change and a design decision, which is the right
+  price for a new axiom.
 - **`Person.thread_sensitivity` stays a field** (its write-matrix row and its `ts:` loader are
   untouched); the row only names it by its registry key so the gate is listed with the other uses.
-- **It does not absorb `vocation_attribute`.** Pools are `faculty`'s and reach the chooser only through
-  `View.odds`. The holistic stage may merge the two tables; this proposal keeps one owner per fact and
-  states the interface.
+- The other sites and roles (`social_roll`, `fight`, `field`, `task`, `notice`, …; `dice`, `edge`, …) are
+  U1 §3's and land with their readers (U1 §11 U1-A step 4, U1-E); this proposal carries the three
+  choice-side rows.
 
 **The interface the decision layer needs from the merged authoring surface** (for the holistic stage):
 
@@ -87,14 +100,14 @@ and nothing else: no attribute name, no scale constant and no pool arithmetic un
 
 ## The exact edits, by owner
 
-1. `engine/season/rosters.yaml` — the table above and the roster `capability_use_sites:
-   [told_claim_credit, choice_temper, own_state_gate]`.
-2. `engine/season/data/rosters.py` — `_load_capability_uses`, on `_load_vocation_attribute`'s shape
-   (every `key` resolved through `substrate.descriptors`, every `gain` a registered Fixture).
+1. `engine/season/rosters.yaml` — `capability_roles`, the map `capability_use_sites` and the table above.
+2. `engine/season/data/rosters.py` — `_load_capability_uses`, on the retired `_load_vocation_attribute`'s
+   shape (every `key` resolved through `substrate.descriptors`, every `gain` a registered Fixture, the
+   refusals listed above).
 3. `engine/substrate/descriptors.py` — `about_mid` and `at_least` beside `ATTRIBUTE_FLOOR` /
    `ATTRIBUTE_CEILING`; `scale_of(key)` returning `(floor, ceiling)` for an attribute or a practitioner
    stat.
-4. `engine/season/decision/options.py::competence` — reads its key and form from the table; the
+4. `engine/season/decision/options.py::competence` — reads its key and role from the table; the
    module-level `COMPETENCE_ATTRIBUTE`, `COMPETENCE_MID` and the `assert` are deleted.
 5. `engine/season/queries/person_q.py::OwnStateReader` — the gate's key and threshold fixture come from
    the row; the two stems stay (they are the grammar's).
@@ -102,8 +115,13 @@ and nothing else: no attribute name, no scale constant and no pool arithmetic un
 ## Gate, falsifier
 
 - Hash EQUAL at seeds 0–2 (`build_realm`, one season).
-- `engine/season/tests/test_cr19_competence_gain.py` and `test_k3_thread_sensitivity.py` stay green
-  unedited [UNVERIFIED: the second file's exact name; the K-3 tests are named in H-239's cite].
+- `engine/season/tests/test_cr19_competence_gain.py` and `engine/season/tests/test_k3_thread_sensitivity.py`
+  (both exist) stay green unedited.
+- Named tests (new, in `engine/season/tests/test_u1_capability_surface.py`, U1 §11 U1-A):
+  `test_a_gate_row_on_another_capability_is_refused`, `test_a_use_with_no_registered_reader_is_refused`,
+  `test_repointing_told_claim_credit_moves_the_factor_with_no_decision_edit` (the falsifier below, as a test).
+- The B04 pin (`build_realm` hashes) is the working tree's reading before B01; re-read on the batch's base
+  (C3-N27).
 - Falsifier: re-point the `told_claim_credit` row at `attr.mind.perception` in a test's rebound table
   and a hand-built hearer's refracted confidence follows Perception and ignores Attunement, with no
   edit under `decision/`.
@@ -122,3 +140,6 @@ and nothing else: no attribute name, no scale constant and no pool arithmetic un
 ## Cost class
 
 Edit. Lands before or with CR-93's first build, so that build adds rows and no constants.
+
+**Lands it.** The B04 batch (U1 §11 U1-A steps 4–5), an IN `valoria-author` session on `sonnet` (`high`),
+closed by the batch's `methodology-close` once. **Hash movers.** None (control: the batch's base tree).

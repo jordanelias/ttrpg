@@ -1,5 +1,11 @@
 # 21 · PROCEDURAL E — names by grammar, and the document templates generation needs
 
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row names_and_texts CONFORMS, §2 (no ruling binds it), §7, 7b; `unified/U3_DEPENDENCY_ORDER.md` §1 item 39, §3.1). Changed: tests named; the `--names` flag stated as an edit to `harness/worldgen.py` (PROC_A (d)); the name lists marked INCOMPLETE at the item with the blocking reason; dependency, batch and tier lines. No body text is superseded.
+
+Depends on: `21_PROCEDURAL_B_cast_and_seats.md` (B39; `generate_person` calls `name_for`); `21_PROCEDURAL_A_worldgen_tables_and_ground.md` (B39; `harness/worldgen.py`).
+Lands in batch: B39 (lane WR), after `21_PROCEDURAL_B`; the loader and checks one commit (inert while the lists are empty); the lists when authored, one commit each.
+Tier: sonnet / high for the loader, checks and tests; the lists are content (Jordan's, or opus-drafted for his correction).
+
 ## Status: PROPOSED (2026-11-12; Fable design lane; ratifies nothing; reference under CLAUDE.md §0.05)
 
 Carries `audits/21_PROCEDURAL_GENERATION.md` §4.9; plan batch **PG-8**. Depends on
@@ -81,6 +87,11 @@ The heritage keys are exactly `HERITAGES`; the loader refuses a missing or an ex
 list for a heritage that the generator can draw is refused when `variable` is on (a heritage with no name
 would silently fall back to role labels and report the grammar built).
 
+**INCOMPLETE (the lists), blocked on content:** the `given`, `patronymic_suffix`, `byname` and `device`
+lists are names in the setting's languages; no source in the repository supplies them, and authoring them
+is Jordan's (or a drafted list for his correction). Until they exist the loader, the checks and the tests
+land and the generator keeps proposal B's role labels.
+
 **(b) `engine/season/data/worldgen.py`:**
 
 ```python
@@ -106,6 +117,11 @@ carry `subject_matter` as a mapping with exactly the template's keys. Rendering 
 layer's and the chronicle's; the engine stores the structure, never a sentence.
 
 ## 5. Gate
+
+Tests: NEW `engine/season/tests/test_worldgen_names.py`: `test_no_enumerable_name_is_reserved`,
+`test_planted_reserved_fragment_is_refused_by_name`, `test_same_seed_same_names`,
+`test_missing_or_extra_heritage_key_is_refused`. The `--names N --seed S` flag is an edit to
+`harness/worldgen.py` (proposal A (d)'s instrument), in this commit.
 
 - Import-time: with the lists filled, `enumerate_names` over all five heritages yields 0 members of
   `reserved_names()`; a planted reserved fragment is refused by name (the falsifier for the check).

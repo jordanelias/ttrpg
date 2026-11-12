@@ -4,6 +4,11 @@
 
 Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (rulings A-59 and A-69). Nothing here is deleted. (1) **A-69** (`unified/DECISIONS_ANSWERED.md:90`: armies carry fatigue and losses back; some losses are injury or flight, so some numbers recuperate) is the ruling for §4's last bullet, "what the field does not decide: who among the hurt dies". The field's fields stand as written; the season-side write divides a part's `fight_loss` by a draw into dead and injured, and for a part that ended routed and unrallied draws the share of its survivors that fled; the men lost in pursuit stay dead or taken. The loss is written on the unit's row and the injured and fled may return by a draw: `27_MB_E_what_an_army_carries_back.md`. **Not established** in the tree's research, and not quoted there: the ratio of dead to injured, the rate and span of recovery, and how many of the fled desert rather than regroup. **Ruled since, A-78** (`unified/DECISIONS_ANSWERED.md:103`): the dead, the captured (§4's `taken`) and the deserters are permanent losses; the injured and those who fled and regrouped return in part with nobody acting. (2) Each part's outcome also carries its end-state word and `stamina_left`, so fatigue is carried on the one ledger. (3) **A-59**: §1's fourth trigger ("the army's general is removed from command") reads the commander's post, a column of the army Record: he falls when the unit he rides with is struck (`27_MB_A_command_and_the_obedience_draw.md` §3). The stand draw, hold-or-chase, rally, recall and `taken` are among the named draws that carry a field's chance once the side-wide multiplier is lowered or removed, and each is listed on the result (`27_MB_C_dynamic_strength_and_the_residual_chance.md` §3). The Command rolls here take the commander's two inputs.
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.2 (`stand_draw` "on the module's own ladder" VIOLATES `hol` §39.4 / `04` D-30: it reads the one ladder `dice_engine.degree_from_net`, as `27_MB_A` §4 and `U5b_MB_rulings_in_the_field.md` §1 already say; §1 and the NERS S line rewritten), §2 row A-61 (§1's "listed for Jordan" sentence answered: a body may break below its floor by the stand draw, built behind the switch with the band-only reading as the control), §2 row A-24 (§3's two no-draw defaults marked as role properties, `[ASSUMPTION]`), A-30 (the stand, hold-or-chase and `taken` draws are keyed), `U1_OWNERS_AND_VOCABULARY.md` D-U1-11e (this file's `FieldOutcome` fields named; U1 assigns `fight_loss` to `26_MASS_BATTLE_cell_scale_and_time.md`, but §4 here is the proposal that defines it: corrected at the proposals, `fight_loss` is declared here); test 9 (the `[UNVERIFIED]` re-targeting site checked: `orchestration.py:2191` is `run_multi_unit_battle`, the harness loop `04_MB_typed_outcome_and_one_path.md` §2 moves out of `modules/`, so it is not the season's re-targeting site; left INCOMPLETE with that reason; tests, lands-it, tier; `Depends on:` / `Lands in batch:`; U3 §4.1 row 66).
+
+**Depends on:** `16_PESSIMIST_MB_rout_has_two_exits.md` (B19, amended in place); `04_MB_typed_outcome_and_one_path.md` (B17); `27_MB_A_command_and_the_obedience_draw.md` §3 (B19, the general's post); the officer-felled trigger reaches a field only when `04_MB_manager_battle_one_resolver.md` §7 lands (B30; U3 §4.1 row 66, LATER); named captives' custody on `14_VERBS_PHYSICAL_A_custody_and_force.md` A2 (B29).
+**Lands in batch:** B19 (`B19-mb-field-calibration`, MB), with `16_PESSIMIST_MB_rout_has_two_exits.md`.
+
 Lane MB (the outcome fields are IN's; captives are the PHYSICAL lane's custody). Carries rows B-4, B-5, B-7,
 B-8, R-2, R-3 and R-4 of `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`. **Builds on
 `16_PESSIMIST_MB_rout_has_two_exits.md`** (rally and pursuit at the end of a field), which is kept and amended
@@ -45,8 +50,10 @@ wherever an army field is fought; none in a natural season today.
 ### 1. The stand draw
 
 One function, `orchestration.stand_draw(unit, atom, shock) -> str`, returning `stands`, `gives_ground` or
-`breaks`. It is a roll of the body's Discipline pool against an obstacle; the ladder's bands map as Success
-or better `stands`, Partial `gives_ground`, Failure `breaks`.
+`breaks`. It is a roll of the body's Discipline pool against an obstacle, on the one sampler and graded on
+the one ladder, `dice_engine.degree_from_net` (W3-1; never the module's own `resolution.compute_degree`,
+which `U5b_MB_rulings_in_the_field.md` §1 deletes), keyed `(field, tick, unit, "stand")` (A-30); its bands
+map as Success or better `stands`, Partial `gives_ground`, Failure `breaks`.
 
 | it is called when | once per |
 |---|---|
@@ -72,9 +79,9 @@ or better `stands`, Partial `gives_ground`, Failure `breaks`.
   between holding and running (CR D4).
 - `breaks`: the body routs by the existing `rout_resolution` path, at whatever its losses are.
 - The values are seeds. The table is data (`troops.yaml: stand`), not constants in the function.
-- The casualty breakpoint band stays exactly as it is and remains the *attrition* trigger. Whether a body may
-  break below its floor at all is listed for Jordan in the audit's §7 item 1; `stand_draw: off` is option (b)
-  there and the control here.
+- The casualty breakpoint band stays exactly as it is and remains the *attrition* trigger. *(W3-1, A-61:)*
+  a body may break below its floor, by this stand draw beside the band; the ruled 15% onset is not edited;
+  `stand_draw: off` (the band-only reading) is the control.
 
 ### 2. Giving ground is reported
 
@@ -90,7 +97,9 @@ When the body a unit is fighting breaks and the field goes on:
   `enemy_broken` (`26_MASS_BATTLE_maneuver_orders.md`): ordered `hold`, a Success or better keeps it in hand
   and it takes its next target; a Partial keeps it but costs it a tick; a Failure sends it after the runners.
   Ordered `pursue`, or with no order and a mounted or `Pursue`-role body, it pursues without a draw. A foot
-  body with no order holds without a draw.
+  body with no order holds without a draw. `[ASSUMPTION: the no-order default is a property of the role, like
+  a stance, not the outcome of a contested event — basis: A-24 names fixed-outcome rulings (a crisis of faith,
+  a scruple, swearing to a seat), not role defaults; the order-given case is drawn by `obey`]`
 - A pursuing body leaves the fight for the rest of the bout, inflicts `pursuit_damage` on the broken body
   (the amended pessimist function), and re-enters the next bout with its columns' stamina reduced by one
   clash's drain per tick it chased (`fatigue.clash_drain`). A commander may recall it at the lull by the
@@ -103,7 +112,8 @@ When the body a unit is fighting breaks and the field goes on:
 - The field returns, per side and per part: `fight_loss` (share of its men lost before it broke or the field
   ended) and `pursuit_loss` (share lost after it broke), and of the second, `taken` (share of those lost who
   were taken alive).
-- `taken` is a draw at the end of the pursuit, per pursued part: the pursuer rolls its pool against Ob 2;
+- `taken` is a draw at the end of the pursuit, per pursued part, keyed `(field, part, "taken")` (A-30): the
+  pursuer rolls its pool against Ob 2;
   the share taken is 0 on Failure, a quarter on Partial, a half on Success, three-quarters on Overwhelming.
   `[seeds. The only figures read are single battles: Zama, 20,000 dead and about as many captured;
   Cynoscephalae, 8,000 killed and 5,000 taken; Pharsalus, 6,000 to 15,000 killed and 24,000 taken (CR A6,
@@ -132,10 +142,10 @@ envisage more heavily equipped troops succeeding" (MV P1, `[D]`).
 
 | file (owner) | edit |
 |---|---|
-| `modules/mass_battle/orchestration.py` | `stand_draw`; the `enemy_broken` handling at the target-assignment step `[UNVERIFIED: the function that re-targets a freed body was not opened; the first audit places pairings at `orchestration.py:2191-2495`]`; `taken` draw beside `pursuit_damage` |
+| `modules/mass_battle/orchestration.py` | `stand_draw`; the `enemy_broken` handling at the target-assignment step **INCOMPLETE (W3-1): the season path's re-targeting site is not named. `orchestration.py:2191` is `run_multi_unit_battle`, the harness loop `04_MB_typed_outcome_and_one_path.md` §2 moves to `systems/mass_battle/sim/multi.py`, so the first audit's pointer is not the site; the landing session greps the season path (`battle_loop.run_battle` → pair formation) and names it before editing**; `taken` draw beside `pursuit_damage` |
 | `modules/mass_battle/battle_loop.py` | the four call sites of section 1; `:408-413` becomes a `stand_draw` per unit, with a unit that `breaks` routed and the others standing |
 | `references/troops.yaml` | `stand` (the obstacle table and the on/off arm); `armour.*.rally_step` |
-| `FieldOutcome` and its parts (`engine/season/queries/inputs.py`) | `fight_loss`, `pursuit_loss`, `taken`, `gave_ground` (the pessimist proposal's `pursuit_loss` per side becomes per part) |
+| `FieldOutcome` and its parts (`engine/season/queries/inputs.py`) | `fight_loss`, `pursuit_loss`, `taken`, `gave_ground` (the pessimist proposal's `pursuit_loss` per side becomes per part); declared here and nowhere else (D-U1-11e; `rallied` lands with `16_PESSIMIST_MB_rout_has_two_exits.md` in the same batch) |
 | `engine/season/loop/effects_combat.py::_eff_march` | writes `body` from `fight_loss` and the untaken part of `pursuit_loss`; puts `taken` on the band Event; hands named captives to the `capture` custody write |
 
 ## Gate (execution artifacts)
@@ -155,6 +165,15 @@ envisage more heavily equipped troops succeeding" (MV P1, `[D]`).
 6. Rally: a routed side of unarmoured foot rallies in more fields than the same side in heavy armour, same
    seeds, same general.
 
+**Tests (W3-1).** Gate 1: `tests/valoria/test_field_golden_pins.py`; gates 2–3:
+`tests/valoria/test_mass_battle_routes.py::test_stand_draw_breaks_some_levy_below_the_floor`
+(`assert checked >= 200`), `::test_a_generals_fall_breaks_some_units_not_all`; gate 4:
+`tests/valoria/test_mass_battle_maneuvers.py::test_hold_order_keeps_horse_in_hand_in_some_fields`; gate 5:
+`engine/season/tests/test_march.py::test_taken_persons_arrive_in_custody_with_body_unchanged`; gate 6:
+`tests/valoria/test_mass_battle_yield.py::test_unarmoured_rally_more_than_heavy`. **Hash movers:** none with
+`stand_draw: off`; the flip moves every army field. **Lands:** an IN-lane implementation session under
+`/methodology-execute` with MB review (PHYSICAL for custody); `sonnet`, the seed readings `haiku` read by `opus`.
+
 ## Falsifier
 
 A body that never breaks below its casualty floor with the draw on; a general's fall that routs every unit in
@@ -170,7 +189,7 @@ by the field; any of these draws returning one band at every seed.
   draw and envelopment is free.
 - **R.** Keep the horse in hand or let it chase; guard the general; spare or take. With no player: the wing
   that chased and never came back; the levy that ran at the first charge and lived.
-- **S.** One draw function, on the module's own ladder, called at four events; existing states for all three
+- **S.** One draw function, on the one ladder (`degree_from_net`), called at four events; existing states for all three
   results; one rearguard constant and one recall rule already in the file.
 - **E, against that.** One function, one table, one trigger, four outcome fields; a certainty removed.
 

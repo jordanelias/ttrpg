@@ -1,8 +1,14 @@
 # VB-B — the room: one sitting per seat, a judge asked only about the parties before him, mercy only for the restrained and only by a draw
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-11, C-25) — `determine` names the prize `a verdict` (the hearing's entry, with the ballot inside it; Jordan, A-14). Edit 12's audience is the `bench` cell the `a matter` row already carries. `pardon` stays on `a matter`, and it is the only way but the term that an imposed edge ends (A-37).
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — applied `unified/work/R4_READ.md` 7b.3 (BIND_B: the `Restrained` stamp reads seats that are the restraint's object; gate and falsifier added), §1.1 (the `determination` closure basis confirmed at `loop/effects_governance.py:376-380`: a `detain`/`ban` closes only through the seat that is the edge's object), `unified/U3_CONFLICT_LEDGER.md` C3-C13 (A-63/A-64: a sitting occupies its parties), C3-C11 (A-81: `pardon.denied` is a witnessed deed), U3 batch B32, R4 7b.0 block. No design change.
 
 ## Status: PROPOSED
+
+Lands in batch: B32 (`unified/U3_DEPENDENCY_ORDER.md` §3.1).
+Depends on: `05_SC_obstacle_difficulty_and_modifiers_B.md` (B05: `difficulty`, `stakes`, `standard`, `reception`); `05_SC_playable_hearing_B.md` (B24: the `a verdict` row for `determine`); `05_SC_acquittal.md` and `05_SC_arrangement_rows_that_bind.md` (B27); `U5c_VERBS_residue_and_governance_owner.md` §2 (B07: `audience_of`, the `bench` room).
+Lane: FA. Tier (R4 7b.0 (1)): B1–B3 `sonnet` producer, effort `high`; B4 (the contested row) `sonnet` producer with one `opus` read of the 40-seed band table. Test file: `engine/season/tests/test_vb_b_sittings.py` (one function per gate B1–B4).
+Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the pardoner's trained score (A-6); talent enters as levels (A-7); a wound is a level against the roll (A-8). The `pardon` draw takes `H(w.world_seed, w.tick, <actor id>, "pardon.matter")` (A-30). A sitting occupies the persons before the bench and the judge for the round it runs (A-63); who is seen first, appointments and the petition that waits are `28_CORE_scene_access_A`–`C`'s (A-64; C3-C13); `convene` and `determine` read those owners and add no rule here.
 
 Source: `audits/14_VERBS_BINDING.md` §0.1, §0.2, §2 (`convene`), §3 (`determine`), §9 (`pardon`); batch B.
 Binds on: `05_SC_acquittal.md` (SC-P6), `05_SC_arrangement_rows_that_bind.md` (SC-P4),
@@ -96,7 +102,11 @@ refusals.
       Failure:      ["pardon.denied"]
     ```
     `emits_on_refusal: ["pardon.refused"]` stays. The man pardoned is no opponent: the row declares no
-    `counterparty` and SC-B's `opposition` term is absent.
+    `counterparty` and SC-B's `opposition` term is absent. `difficulty: routine` names a member of
+    `rosters.yaml: difficulty_levels` (U1 D-U1-04). **Durable write of the Failure band (A-81; C3-C11):**
+    `pardon.denied` is witnessed by the bench (`judging_set`) and the restrained man where present, and
+    deposits a claim of the denial to each, so a refused mercy is a remembered deed against the pardoner's
+    seat.
 11. `loop/effects_governance.py::_eff_pardon`: at `Partial`, close only the `detain` edges (a ban
     stands: commutation); else unchanged. `_RESTRAINT_ENDED` is read per band from the row's `emits`
     (the `Partial` list has one kind), so no kind is spelt in the effect.
@@ -113,7 +123,10 @@ Order: B1 (independent), B2 and B3 (independent of SC), B4 after SC-B. SC-P6 and
   `off_king`.
 - B2: `aperture 2 0` and `2 1`: `determine.refused` keyed `party` and `docket` → 0; `matter.determined`
   not below 0/1. If executions fall (RL2's mode), the reading is recorded and B2 is held, not shipped.
-- B3: same: `pardon` formed → 0 persons and `pardon.refused` → 0 while no restraint is live.
+- B3: same: `pardon` formed → 0 persons and `pardon.refused` → 0 while no restraint is live. Plus (R4
+  7b.3): a `pardon` formed through a seat that is not the edge's object is refused at formation (the
+  `Restrained` stamp reads seats the asker holds that grant `determine` AND are the object of the
+  restraint); a new holder of that seat may pardon (`15_INSTITUTIONS_PAPACY_D` §5).
 - B4: hand-built world with one `detain` and one `ban` on a bench seat (the `interrogate` tests'
   fixture), 40 seeds: Partial ends the custody and keeps the ban; Failure ends nothing and emits
   `pardon.denied`; the act re-forms next scene.
@@ -122,7 +135,8 @@ Order: B1 (independent), B2 and B3 (independent of SC), B4 after SC-B. SC-P6 and
 
 - B1: revert the salt: the collision returns.
 - B2: stamp every plain referent as `Party`: refusals at `party` return.
-- B3: widen `restrained_on_seats` to every person: refusals return.
+- B3: widen `restrained_on_seats` to every person: refusals return. Stamp `Restrained` for a restraint
+  whose object is another bench's seat: refusals return (the gate's `determination` basis has no route).
 - B4: pin the roll: one band only.
 
 ## What it does not do

@@ -1,6 +1,13 @@
 # U5c · VERBS — the residue: two shapes for a drawn act with nobody opposite, one prize roster for the governance rows, and four closings
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — applied `unified/U3_CONFLICT_LEDGER.md` C3-C9 (§4 edit 1 replaced: the fold declines resolver-side, formation reads the party's own ledger; text of `unified/work/R4_READ.md` 7b.1), C3-C11 (the failed draw's durable write, A-81), C3-R1 (18-A's loader edit is the dependency), the U3 batch split (§4.1 rows 28 to 31), R4 §2 on `succeed` (A-19: a docketed rival opposite), U1 D-U1-01 (`rank_gap` is the against-half of the seat's two channels) and D-U1-11i (`graded_tasks`); R4 7b.0 implementation block added. No design change beyond those rows.
+
 ## Status: PROPOSED (written by the U5c closure lane; a plan for a later implementation lane, executed by nobody here; not ratified by being written, `CLAUDE.md` §2)
+
+Lands in batch: B07 for §1, §2 and §4 (`unified/U3_DEPENDENCY_ORDER.md` §3.1); §3 in B09 with `16_PESSIMIST_CORE_a_refusal_is_remembered.md` (U3 §4.1 row 28); §6 and the `audience_of` readers that name `present_persons` / `holders_named` in B11 after `08_FI_01`/`08_FI_02` build them (rows 29, 30); the hearing's `a verdict` row in B24 with `05_SC_playable_hearing_B.md` (row 31).
+Depends on: `18_DETERMINISM_task_draw_for_uncontested_verbs.md` items 1, 2 and 4 (B07; item 4 edits the two loader refusals at `engine/season/data/verbs.py:848-876` that refuse a band-keyed route row, C3-R1); `U5c_SC_one_obstacle_form.md` §4 steps 0 to 2 and `05_SC_obstacle_difficulty_and_modifiers_B.md` (B05).
+Lane: IN (rosters, registry, loader); each verb lane lands its own rows. Tier (R4 7b.0 (1)): §1 and §2 loaders and rosters `sonnet` producer, effort `high`, then one `opus` read of the gate output; §3 and §4 `sonnet` producer plus the `opus` gate read. Test file: `engine/season/tests/test_vres_task_and_prize.py` (one function per gate below).
+Draw key: the `a task` prize's draw takes `H(w.world_seed, w.tick, <actor id>, "<verb>.task")` (A-30; `04` PART D 35) through the one draw owner (`11_GO_one_draw_owner.md`, B06).
 
 Carries the rows of `unified/U5_FINDINGS_CLOSURE_U5c.md` Part 4 whose carrier column reads **VRES**, and
 conflicts C-22, C-23, C-25, C-30, C-34 and the fourth row of C-10 in `unified/U5_CONFLICTS_U5c.md`.
@@ -48,6 +55,12 @@ Exact edits:
    magnitude) are (a); a row whose Partial opens a different edge or writes a different field than its
    Success is (b). No row is left on a flat fold: 18-A item 1's loader refusal is the check.
 
+**A failed draw still moves the world (A-81; C3-C11).** "Nothing is written" above means no typed cell. The
+refusal Event of shape (a) and the Failure Event of shape (b) are witnessed: those present hold a claim of
+the failure (the Event's kind, through WITNESS's `co_located` channel), and an actor alone deposits his own
+firsthand claim `(self, <verb>.failed, True)` by his own Observation. That deposit is the band's durable
+write, which the no-null-scene reading counts; each verb proposal names it per row.
+
 Gate: the loader accepts every converted row and refuses three planted ones (a band-keyed `writes:` on a
 route row; a flat `writes:` on a `contests:` row; a row that writes and is in no class). Falsifier: a route
 row whose Failure writes a cell. Hash: none from this section; each row is its own proposal's mover.
@@ -83,7 +96,7 @@ The nine rows, read through that roster (each row's bands, classes and filters s
 |---|---|---|---|---|
 | `confer` | `a seat` | the incumbent when displacing, else the stand-in | `stakes`, `rank_gap`, `reception` | `14_VERBS_BINDING_C_turnover.md` §1 |
 | `revoke` | `a seat` | the holder | `stakes`, `rank_gap`, `reception` | same, §2 |
-| `succeed` | `a seat` | the stand-in | `rank_gap`, `reception` | same, §3 |
+| `succeed` | `a seat` | a docketed rival claimant where one exists (A-19: heir, consort, princess and both houses' heads may claim; odds from what others believe of each deed), else the stand-in | `rank_gap`, `reception` (each audience reading `legitimacy(q, claimant, seat)`, `15_INSTITUTIONS_BYZANTINE_E` e1) | same, §3 |
 | `establish` | `a seat` | the stand-in | `rank_gap`, `reception` | `14_VERBS_BINDING_A_formation.md` §2 |
 | `determine` | `a verdict` | the other party's case | the hearing's own (`standard`, `reception`, `first_heard`, `plea`) | `14_VERBS_BINDING_B_sittings.md` §2; the hearing |
 | `pardon` | `a matter` | the stand-in | `stakes`, `standard`, `reception` | same, §3 and §4 |
@@ -94,7 +107,10 @@ The nine rows, read through that roster (each row's bands, classes and filters s
 Reconciliations this table makes, each on the losing file's head:
 
 - **`rank_gap`, not `standing`.** The word `standing` already names a prize, a Sensation field and two
-  content keys. A-12 licenses the term; the name is this lane's.
+  content keys. A-12 licenses the term; the name is this lane's. U1 D-U1-01 fixes the two channels: the
+  seat a counterparty holds above the actor's stands against the act as `rank_gap` (fixture `rank_step`,
+  OBS §2 member 6); the seat the actor exercises helps him only as the `office` leverage source read off the
+  seat row's `modifier:`; no row reads one seat twice.
 - **`regard` or `reception`, never both** (`U5c_SC_one_obstacle_form.md` §2 members 7 and 8). A row heard by
   an audience reads `reception`; a row with one person opposite and no audience reads `regard`. So
   `revoke` drops `regard`: the holder's resistance is already the `opposition` term.
@@ -165,11 +181,20 @@ this one removes the referent.
 Jordan, A-37: an imposed service ends by the bench's `pardon` or its term, as detention and banishment
 do. This overwrites the earlier ruling that a convict has one free release.
 
-1. `14_VERBS_BINDING_A_formation.md` §1 adds `own_edge_declines` to `release`. Read it one clause wider:
-   an edge whose opening Event is a disposal (a `determine` branch's `oblige`, `detain` or `ban`) is not
-   the party's to close, by `release` or any other row of his. Who opened an edge is read from the log
-   (the opening Act; a Tenure carries no opener field, `state/carriers.py`, the note under `Tenure`), so
-   the clause is a query over the Event that opened the edge, and adds no field.
+1. *(Replaced by W3-4a under C3-C9; the earlier text read the log from formation, which `04` §B.9 forbids:
+   `state/acts` is resolver-side and no person-side Query reaches it.)* `14_VERBS_BINDING_A_formation.md` §1
+   keeps `own_edge_declines` (formation reads the row's own `domain:`). A **second** decline, person-side,
+   in `decision/options.py::opening_set`: a `release` referent is dropped when the actor's own ledger holds a
+   claim of an Event of kind `matter.determined` (T, `verb_table.yaml:406-408`) whose patient is the actor
+   and whose object is the referent's edge `[UNVERIFIED: the claim's value shape; read `loop/witness.py`'s
+   deposit for `matter.determined` before landing]`; the kinds `ban.opened` and `detention.opened` join the
+   decline only if `15_INSTITUTIONS_PAPACY_D` lands them (they are not in the tree). The **fold** check is
+   resolver-side: `loop/predicates.py::_req_release` (T, `:429`) refuses (`release.refused`, clause `own`) an
+   edge whose opening Event was caused by an Act of verb `determine`, read through
+   `state/attribution.py::causing_act` (T, `:91`). No field is added to `Tenure`. Order of edits: the fold
+   clause first (a planted release is refused), then the formation decline (the candidate is gone).
+   Falsifier for the split: the person-side decline removed, the formation returns and the fold still
+   refuses (the control).
 2. `_eff_determine`'s docstring (`loop/effects_information.py:531-535`) records the price C-1 ruled:
    *"`oblige` is in `release`'s domain, so that price is paid as ruled"*. The sentence is replaced by this
    clause's, citing A-37; the gate basis for closing a disposal stays `determination`, through the seat

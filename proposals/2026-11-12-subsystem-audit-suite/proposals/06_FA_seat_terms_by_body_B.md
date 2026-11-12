@@ -2,7 +2,12 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-36**, **A-35** and **A-15**. Edit 3's sentence for CR-37 ("deposition is the turnover of a life seat") excludes the Confessor: nobody judges him, so his seat ends by death or resignation only and no deposition occasion is offered for `off_confessor`. Every other Church officer's turnover is the head's strip by a resistible draw (A-35; `15_INSTITUTIONS_PAPACY_B_patronage_election_discipline.md` item 4, un-held); the Löwenritter stay unstrippable until edit 4's `head_seat` row for `off_grand_master` lands, after which the same basis reaches them. A-15 makes "emptied by death" a live route for the life seats, so this file's rule (a term only where the body rotates) no longer leaves them permanent.
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — C3-K11 / D-U1-10 (the unit sentence reads the declared year, `20_NARRATIVE_E` edit 1, not "a year of four seasons"); edit 2 follows the first lane's reconciled edit 3 (no `Office.term` field: the row's `term:` is the default the conferral writes onto the Tenure's `term?`, C3-C15); edit 4's `[UNVERIFIED]` loader check verified at the tree (`data/rosters.py:1320`, `require_member(_hs, SEAT_ROW_BY_ID, …)`, law CR-86) and the tag removed; 7b-6 (the gate's scratch `build_probe.py` is not in the tree, U3 §6.2: replaced by named tests in `test_faction_q.py` and a hash command); tier and batch (R3 7b-0; U3 C3-D5).
+
 ## Status: PROPOSED
+
+Lands in batch: B21 (FA governance), after `06_FA_seat_terms_and_turnover.md`, `06_FA_remit_grant_by_row.md` and `22_HAPPENINGS_B` edits 1–2 (C3-D5).
+Depends on: `06_FA_seat_terms_and_turnover.md` (B21, the mechanism); `06_FA_remit_grant_by_row.md` (B21, the `off_guild_leader` row); `20_NARRATIVE_E_the_year_and_the_reason.md` edit 1 (B12, the declared year, prose only).
 
 Source: `audits/06_FA_audit_addendum_B.md` C-6, F-FA-16, §B6.1 R-25, R-26; evidence E-B1, E-B2.
 **Supersedes, in content only,** the first authoring named in `06_FA_seat_terms_and_turnover.md` ("the
@@ -50,9 +55,11 @@ a clock only where its body rotates.** Everywhere else the design's turnover is 
 that seated the holder, and that is already owned (CR-35 the election arm, CR-37 deposition) or is the
 recall of the first lane's `06_FA_decree_binds.md`.
 
-The unit is the design's own: a year of four seasons (the "year-arc" of every ladder obligation; the
-annual Assembly; the annual renewal of an alliance or an embargo). No source gives a term length, so
-the number is an assumption with a sweep.
+The unit is the design's own: a year (the "year-arc" of every ladder obligation; the annual Assembly;
+the annual renewal of an alliance or an embargo), whose length in seasons is the declared year
+(`rosters.yaml: seasons_of_year`, `20_NARRATIVE_E` edit 1; D-U1-10). The value `term: 4` below is
+authored in seasons and equals one year while that roster has four members. No source gives a term
+length, so the number is an assumption with a sweep.
 
 ## Exact edits, by owner
 
@@ -69,8 +76,8 @@ edits 1 to 5 have landed:
 
 Each value `[ASSUMPTION; medium; Jordan to correct; revert: no `term:` keys]`, swept `{4, 8}`.
 
-**2. Nothing in code.** The loader, `Office.term`, `_eff_confer` and `_req_confer` are the first
-lane's.
+**2. Nothing in code.** The loader's `term:` key, `_declared_term` (reading the row through
+`SEAT_ROW_BY_ID`; no `Office.term` field, C3-C15), `_eff_confer` and `_req_confer` are the first lane's.
 
 **3. The plan (owner: the plan), one sentence on CR-37's entry:** deposition is the turnover of a life
 seat, and its first occasions are the three the design names for Varfell (§1.3a): a holder absent from
@@ -82,8 +89,8 @@ none is built here.
 faction): add `"Löwenritter": off_grand_master` and `"Restoration Movement": off_restoration_leader`.
 Add a `headless:` note naming the Guilds as headless by design (a council) and Altonia and Schoenland
 as WR's content. `data/rosters.py` already refuses a seat id the offices file lacks
-[UNVERIFIED: that the loader checks membership; if it does not, the check is one line beside
-`OFFICES_REMIT_UNRULED`'s].
+(`data/rosters.py:1320`: `require_member(_hs, SEAT_ROW_BY_ID, …)`, law "CR-86 — a head seat is an
+`offices.yaml` seat"; verified at `main`).
 
 ## Gate (execution artifact)
 
@@ -92,14 +99,18 @@ as WR's content. `data/rosters.py` already refuses a seat id the offices file la
   reported (it may be 0 until `confer` is chosen for a reason; the first lane's `06_FA_office_capabilities.md`
   and the vacancy occasion are what move it). No `term.matured` on the Confessor's, the Duke of
   Varfell's or a Jarl's `hold` in any run.
-- `build_probe.py` (addendum E-B1) re-run: `head` is a person for the Löwenritter and the Restoration
-  Movement and still `None` for the Guilds.
+- The addendum's `build_probe.py` (E-B1) is a scratch script not in the repository (U3 §6.2); its reading
+  is a test in `engine/season/tests/test_faction_q.py`, written before edit 4:
+  `test_head_is_a_person_for_the_lowenritter_and_the_restoration_movement_and_none_for_the_guilds` (on
+  `build_realm(0)`: `faction_q.head(w, fac)` for the three).
 
 ## Falsifier
 
-- Control: with no `term:` key the twelve-season hash equals the pre-item hash.
+- Control: with no `term:` key the twelve-season hash equals the pre-item hash (command: `python -m
+  engine.season.harness.report`, then `delta HEAD`, the layer-conformance control).
 - A life seat that matures: the gate's second sentence, read on every seed.
-- Mutation for edit 4: name a seat id the offices file lacks and the load fails.
+- Mutation for edit 4: name a seat id the offices file lacks and the load fails
+  (`test_head_seat_naming_an_absent_seat_fails_the_load`, same file).
 
 ## What it does not do
 
@@ -122,4 +133,4 @@ Parliament, because the tree seats no parliament (addendum §B3.2).
 ## Cost class
 
 Edit (data). Two declared movers (the termed rows; `head_seat`). Depends on
-`06_FA_seat_terms_and_turnover.md`.
+`06_FA_seat_terms_and_turnover.md`. Tier: `sonnet` (data edit; R3 7b-0).

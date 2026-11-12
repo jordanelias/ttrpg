@@ -8,13 +8,18 @@ filed under "none (pointer edit)" or "an edit, no proposal file needed", two lis
 separately and that must be one, or an item another closure handed to this family. Reference only
 (CLAUDE.md §0.05). Sections are independent and commit-sized.
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §7 test 9 (the scratch probes `p10_edges.py` and `p11_extremes.py` written as files with expected outputs; tests, tier; §4's `[UNVERIFIED: which of the 35]` left marked: the tests lane's scan is not in the tree), `U3_CONFLICT_LEDGER.md` C3-L12 (§2's H-355 line: the land passes by the aggressor's `seize` after a win, not by the field), A-30 (§5's estimate stream keyed), `U1_GLOSSARY.md` *role* (§1: "unit role", qualified); `Depends on:` / `Lands in batch:` from `U3_DEPENDENCY_ORDER.md` (B17; §3 SPLIT to B22, §4.1 row 62).
+
+**Depends on:** §5 on `10_DICE_believed_odds_have_a_prior.md` Edits A–B (B05) and `04_MB_playable_field_scenario.md` §F; §3 on `07_SE_campaign_supply_and_muster.md` (B22); §4 item 1 on the field calibration batch (B19).
+**Lands in batch:** B17 (`B17-mb-scale`, MB) with `04_MB_typed_outcome_and_one_path.md` (§1, §2, §6, §7, §9); §3 in B22 with SE's supply file; §4 item 1 after B19; §5 after B05.
+
 ## What it changes in `engine/season/` at runtime
 
 §1 changes which roles a menu offers (no shipped person forms an army verb, so no season moves). §5 lets
 the chooser price a `march` by what the marcher believes, behind the shipped `odds_weighting`. §6 refuses
 a side past the module's stated ceiling. The rest moves nothing.
 
-## §1 · One list of roles that leave the menu (first audit R-10; pessimist F-PES-MB-08, resolution 7)
+## §1 · One list of unit roles that leave the menu (first audit R-10; pessimist F-PES-MB-08, resolution 7)
 
 Two lanes listed them from two instruments. The first reads `ROLE_INSTRUCTION_PRIMITIVES` (keywords with
 no primitive); the second ran each role against no role, friction off, n 60, and counted fields identical
@@ -35,8 +40,11 @@ file lands they are the `roles` column of `references/troops.yaml`); the keyword
 `screen`, `pursue`, `volley`, `shoot_move`, `harass` leave `ROLE_SPEC`. This replaces the list in
 `04_MB_typed_outcome_and_one_path.md` §2 (its fifth bullet) and the list under F-PES-MB-08.
 **Gate.** `p10_edges.py` part (b) re-run: no role on any menu reads "identical in 60 of 60" against no
-role; `tools/ci_golden_modes_check.py` digests equal. **Falsifier.** A menu row whose removal changes a
-field. **Movers.** None.
+role; `tools/ci_golden_modes_check.py` digests equal. *(W3-1, test 9: the scratch `p10_edges.py` is first
+written as `systems/mass_battle/sim/role_edges_probe.py`: each unit role against no role, friction off, n 60,
+printing the count of identical fields; expected after the edit: no row at 60 of 60.)* **Falsifier.** A menu
+row whose removal changes a field. **Movers.** None. **Tests:**
+`tests/valoria/test_mass_battle_role_instructions.py::test_no_menu_offers_a_role_without_a_primitive`.
 
 ## §2 · Pointer, status-line and comment edits (first audit R-12, R-13, R-14, R-23, R-28; addendum R-37, R-38, R-43)
 
@@ -50,7 +58,7 @@ field. **Movers.** None.
 | R-37 | `proposals/mass_battle_fighting_withdrawal_v1.md` Status; `modules/mass_battle/orchestration.py:287` | the Status reads "BUILT, on by default" (`MB_YIELD_*` default `'1'`, `config.py:262-272`); `reform_check`'s docstring states its flag's value (`REFORM_CHECK_ENABLED` defaults `'1'`, `:278`); the "melee sidearm" comment (`troop_types/registry.py:116-122`) goes when `arms` lands |
 | R-38 | `architecture/meta/03_VERBS_AND_LOOPS.md:261`, `10_FACTIONS_AND_DEPLOYMENT.md:89` | **Layer 1 text, IN's, owed and not applied here:** the ED-IN-0306 amendment note that `04_CODE_ARCHITECTURE.md:813` already carries is added at both sites. A-2 confirms the ruling it records; the edit decides nothing |
 | R-43 | none | the flow skeleton's dead anchors: archived reference, not repaired; `[UNVERIFIED: what tests/valoria/test_flow_skeletons.py still checks of it]` is opened by whoever next touches that test |
-| — | `engine/season/hole_register.yaml` | H-250, H-354, H-359, H-308: as `04_MB_headcount_grade_and_scale.md` lists. H-355: closed by A-57 and A-58 (the land passes on an aggressor's win; a routed defender is re-homed). H-151: closed (its own `default:` says so). H-360: pointed at the per-part outcome |
+| — | `engine/season/hole_register.yaml` | H-250, H-354, H-359, H-308: as `04_MB_headcount_grade_and_scale.md` lists. H-355: closed by A-57, A-58 and A-66 (the land may pass after an aggressor's win, by his own `seize`, C3-L12; a routed defender is re-homed). H-151: closed (its own `default:` says so). H-360: pointed at the per-part outcome |
 
 **Gate.** `python -m engine.season.harness.register --requirements` loads; `python tools/freshness_gate.py`
 as CI runs it. **Movers.** None.
@@ -95,7 +103,8 @@ AQ-X1). The two are reconciled without letting an NPC read the world's odds:
    claims** about the defenders' strength and walls; a person who holds no such claim gets `None`
    ("cannot say"), which `10_DICE_believed_odds_have_a_prior.md` Edits A–B (U5a's) already price as a
    prior, not as certainty.
-2. The estimate is samples of the one resolver on a private stream; its count for this caller is the
+2. The estimate is samples of the one resolver on a private stream keyed `H(seed, tick, believer,
+   "estimate.field")` (A-30); its count for this caller is the
    fixture `believed_field_samples` (seed 40), and a cache keyed on the frozen input is lawful
    (`04_MB_manager_battle_one_resolver.md` §8). No closed form (A-1).
 3. AQ-X1's sentence at the wrapper is restated: no NPC reads the **world's** odds; any person may reckon
@@ -117,7 +126,9 @@ a `march` Candidate is scored under `odds_weighting: believed`.
    sides that reach `resolve_field` are blocks.
 
 **Gate.** `p11_extremes.py` re-run: 0 and 1 a side never enter `run_battle`; 20,000 a side returns
-`SCALE-GAP`. **Movers.** None in shipped play.
+`SCALE-GAP`. *(W3-1, test 9: written first as `systems/mass_battle/sim/extremes_probe.py`; expected output
+the three lines above.)* **Tests:** `engine/season/tests/test_mass_battle_module.py::test_past_the_ceiling_returns_scale_gap`,
+`::test_empty_sides_never_reach_run_battle`. **Movers.** None in shipped play.
 
 ## §7 · Plan rows (first audit §6.1; pointer edits in `workplans/`)
 
@@ -151,6 +162,11 @@ The first audit's table names a proposal for each; the text of that proposal hol
 
 **Movers.** R-24 and R-25 move fields in which a body drifts (army fields only; none in natural play).
 R-29 moves nothing.
+
+## Lands and tier (W3-1)
+
+An IN-lane implementation session under `/methodology-execute` with MB review; edits `sonnet`; the probes run
+by `haiku` (`valoria-measure`); §5 `sonnet`.
 
 ## NERS reading (E last)
 

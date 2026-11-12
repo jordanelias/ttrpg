@@ -2,6 +2,12 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-50**, **A-53**, **A-54** and **A-55**. The variable layer (`variable=`, shipped `off`) is licensed to flip: some starting state is drawn, small and bounded (grudges, low granaries, illness), each table a declared mover at its flip. A world that fails its checks is replaced by the next seed by default; "play it anyway" sits behind a setting (A-53). The ground PG-1 draws is on the fixed map (A-55: no settlement node is added or removed) and feeds the harvest draw as pool ground (A-54). `prologue_seasons: 0` in the table sketch is PG-4's and is five years under A-51 (see `21_PROCEDURAL_C` as reconciled).
 
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row worldgen_tables CONFORMS, §2 rows (c) redraw (A-53) and (h) `climate` (A-54), §7, 7b; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-09, D-U1-10; `unified/U3_DEPENDENCY_ORDER.md` §1 item 39, §3.1, §6.1). The body now follows the head. Changed: (1) (c)'s failure order follows A-53: redraw within the seed up to `max_attempts` (this file's stability device), then the next seed by default, and a setting `play_failed_world` that accepts the last attempt instead (§1's sentence and (c) both); (2) `climate` no longer supplies per-thousand chance rates (the form A-54 replaced): it supplies, per territory, the place's `endurance` (the pool ground of the season's four-band draw) and a `hardship` base (the obstacle ground), drawn inside canon's terrain bands; a steward's skill enters that draw as named levels for the place (D-U1-09), not here; `ClimatePlan` follows; (3) the `prologue_seasons` sketch line points at PROC_C's year-derived value; (4) the test file is written first, as U3 §6.1 orders; (5) dependency, batch and tier lines.
+
+Depends on: `07_SE_ground_and_granaries.md` and `07_SE_population_census.md` (B12; `site_endowment`, `endowment_for`); `09_WR_B_draws_not_thresholds.md` and `09_WR_B_weather_with_memory_and_the_year.md` (B12; the reader of `climate`); `20_NARRATIVE_E_the_year_and_the_reason.md` edit 1 (B12, the year).
+Lands in batch: B39 (lanes WR / SE), first item; PG-0 one commit (hash-equal, `variable=False`), PG-1 one commit.
+Tier: sonnet / high.
+
 ## Status: PROPOSED (2026-11-12; Fable design lane; ratifies nothing; reference under CLAUDE.md §0.05)
 
 Carries `audits/21_PROCEDURAL_GENERATION.md` §4.0–§4.3, §5, §6, resolutions R-21-02, -03, -13; plan
@@ -13,9 +19,10 @@ batches **PG-0** and **PG-1**. Builds on, and does not restate, `proposals/07_SE
 
 With `build_realm(variable=False)` (shipped): nothing; every hash is the base hash.
 With `variable=True`: the realm's producing sites, starting stores, garrison condition, cohort weights
-and each territory's climate base rates are drawn from tables by the world seed, inside the bands canon
-and the SE lane's endowment rows set. Two seeds then build two different realms. A realm that fails the
-invariants raises; one that fails the story-possibility bars is redrawn.
+and each territory's climate ground (`endurance`, `hardship`) are drawn from tables by the world seed,
+inside the bands canon and the SE lane's endowment rows set. Two seeds then build two different realms.
+A realm that fails the invariants or the story-possibility bars is redrawn within its seed up to
+`max_attempts`, then replaced by the next seed (A-53); `play_failed_world` accepts the last attempt instead.
 
 ## 2. The problem, with evidence
 
@@ -58,7 +65,8 @@ changes nothing while `variable` is off.
 meta:
   authority: "AUTHORED FOR PLAY. Not canon. Read by engine/season/data/worldgen.py and nothing else."
   schema: 1
-max_attempts: 8            # redraws on a V2 failure before the build raises
+max_attempts: 8            # redraws within the seed on a V1 or V2 failure before the next seed is taken (A-53)
+play_failed_world: false   # A-53's setting: true accepts the last attempt instead of moving to the next seed
 scenario:                  # THE ONLY BLOCK IN WHICH A ROW MAY NAME A FACTION, HOUSE OR PERSON (04 PART D row 27a)
   pinned_persons: []       # case ids that generation may not move, re-home or re-seat
 ground: {}                 # PG-1
@@ -68,7 +76,7 @@ cast_quota: {}             # PG-2 (proposal B)
 lifepaths: {}              # PG-2
 relations: {}              # PG-2
 local_seats: {}            # PG-3
-prologue_seasons: 0        # PG-4 (proposal C)
+prologue_seasons: 0        # PG-4 (proposal C): 0 is the off arm; A-51's five years are 5 × len(SEASONS_OF_YEAR), derived there, never typed here
 ```
 
 **(b) New module `engine/season/data/worldgen.py`** (beside `data/cast.py`; one read per process, that
@@ -82,7 +90,7 @@ class StorePlan:     settlement: str; kind: str; amount: int               # an 
 @dataclass(frozen=True)
 class CohortPlan:    settlement: str; weight: int; stance_seed: int        # Person.weight; a stance value toward the holder
 @dataclass(frozen=True)
-class ClimatePlan:   territory: str; rates: Mapping[str, int]              # per-territory base rates the MATTER draws read
+class ClimatePlan:   territory: str; endurance: int; hardship: int         # A-54: the place's pool ground and the season's obstacle ground
 @dataclass(frozen=True)
 class RealmPlan:
     seed: int; attempt: int
@@ -107,9 +115,15 @@ ever returns "the largest weight".
 **(c) `engine/season/harness/populated.py::build_realm`** gains `variable: bool = False` and, when true,
 calls `worldgen.draw` once before the site loop and mints from `plan.sites`, `plan.stores`,
 `plan.cohorts` instead of the uniform loops at `:1215-1220` (producing sites), `:1258-1261` (garrison
-condition) and `seat_cohorts`'s rows. On a V1 defect: raise, listing the defects. After the build, if
-`bars` is non-empty: `possibility(w)`; on a miss, rebuild with `attempt + 1`; after `max_attempts`, raise
-naming the bars missed and the counts reached.
+condition) and `seat_cohorts`'s rows. On a V1 defect, or (if `bars` is non-empty) a V2 miss read by
+`possibility(w)` after the build: rebuild with `attempt + 1` (same seed: the table-edit stability
+property holds); after `max_attempts`, by default take `seed + 1` and start again at attempt 0, logging
+the seed's defects and the bars missed with their counts (A-53: a world that fails its checks is
+replaced by the next seed); with `play_failed_world: true`, accept the last attempt and print its
+defects instead. [ASSUMPTION: attempts first, then the next seed — basis: A-53 names the next seed as the
+replacement; the attempt counter is this file's stability device.] A table that fails at every seed of a
+`--range` run is reported by the instrument, not looped on forever: the build raises after
+`max_attempts` seeds in a row, naming the table.
 
 **(d) New `engine/season/harness/worldgen.py`** (an instrument; no loop step imports it):
 `--seed N --sheet` prints, per territory and settlement, the canon band, the drawn value and the live
@@ -117,7 +131,10 @@ query beside each other (sites, conditions, stores, cohort weight, expected yiel
 then the V2 counts; `--range N` builds seeds `0..N-1` (build only, about 1.4 s for three builds today,
 audit P1) and prints, per metric, min, quartiles and max, and the rejection rate.
 
-**(e) Tests** (`engine/season/tests/test_worldgen_switch.py`; each executes the build):
+**(e) Tests** (NEW `engine/season/tests/test_worldgen_switch.py`, written as the batch's first commit,
+`U3_DEPENDENCY_ORDER.md` §6.1; each executes the build; names: `test_variable_false_reproduces_the_pinned_hash`,
+`test_two_seeds_differ_in_at_least_n_settlements`, `test_table_edit_on_one_territory_moves_no_other_draw`,
+`test_same_seed_twice_equal_plan_and_hash`, and `test_failed_world_takes_the_next_seed_unless_play_failed_world`):
 - `variable=False` reproduces the pinned realm hash at seeds 0, 1, 2;
 - with one filled table, `build_realm(0, variable=True)` and `build_realm(1, variable=True)` differ in at
   least one site or store (the assertion that asserts it asserted: it counts the differing settlements and
@@ -159,10 +176,12 @@ ground:
   cohort_stance_by_O:  {0: [-2, 0], 1: [-1, 0], 2: [-1, 1], 3: [0, 1], 4: [0, 2]}   # canon stats[2] -> stance seed toward the holder
   poi: by_draw          # each territory's poi_catalog counts are placed on its settlements by keyed draw; `none` leaves them unplaced
 climate:
-  by_terrain:           # base rates per season, integers per thousand, read by the MATTER weather draw (09_WR_B_weather…)
-    lowland:  {poor_yield: [80, 160],  illness: [20, 60]}
-    upland:   {poor_yield: [140, 260], illness: [20, 50]}
-    coastal:  {poor_yield: [60, 140],  illness: [40, 90]}
+  by_terrain:           # A-54: per territory, the ground of the season's four-band draw (pool against obstacle), [lo, hi]
+    lowland:  {endurance: [3, 5], hardship: [1, 2]}     # endurance: the place's pool ground; hardship: the season's obstacle ground (difficulty levels)
+    upland:   {endurance: [2, 4], hardship: [2, 3]}
+    coastal:  {endurance: [3, 5], hardship: [1, 3]}
+  # read by nothing until `09_WR_B_draws_not_thresholds.md` names its reader; a steward's skill enters that
+  # draw as named levels for the place (an `edge` row at site `settlement_effect`, D-U1-09), never here
 bars:
   deficit_settlements: 3   # settlements whose expected yield is under their cohort's draw AND that border a surplus settlement
   aggrieved_cohorts: 3     # cohorts with a negative stance toward a holder who can be petitioned
@@ -175,9 +194,10 @@ set; the three above are placeholders to be replaced by that set at build of the
 **(i) `build_realm`**: under `variable=True` and `endowment_mode == "drawn"`, stores are set to
 `spread(…)` seasons of the settlement's drawn Sites' base yield (the SE lane sets exactly one season under
 `ground`); garrison and site conditions from the bands; cohort rows from `plan.cohorts` (the authored
-`cohorts.yaml` rows remain the off arm); `plan.climate` is written where the WR lane's weather proposal
-reads its base rate (that proposal names the owner; if it has not landed, `climate` is drawn, shown on the
-sheet and read by nothing, and the sheet says so).
+`cohorts.yaml` rows remain the off arm); `plan.climate` is written where the WR lane's four-band season
+draw reads the place's endurance and the season's hardship (`09_WR_B_draws_not_thresholds.md` names the
+owner; if it has not landed, `climate` is drawn, shown on the sheet and read by nothing, and the sheet
+says so).
 
 **(j) `possibility(w)`** computes `deficit_settlements` from `world_q.subsistence_draw` and `SITE_YIELD`
 (existing readers), `aggrieved_cohorts` from cohort stance rows and `world_q` seat scope.
@@ -217,6 +237,7 @@ sheet and read by nothing, and the sheet says so).
 
 ## 8. Cost and dependencies
 
-PG-0 small build, depends on nothing. PG-1 small build, after `07_SE_ground_and_granaries.md` (the
-`site_endowment` table and `endowment_for`), CR-22 (hunger binds) for the play half of the gate, and
-`09_WR_B_weather_with_memory_and_the_year.md` for a reader of `climate`.
+PG-0 small build, depends on nothing it does not find landed by B39. PG-1 small build, after
+`07_SE_ground_and_granaries.md` (the `site_endowment` table and `endowment_for`), CR-22 (hunger binds)
+for the play half of the gate, and `09_WR_B_draws_not_thresholds.md` /
+`09_WR_B_weather_with_memory_and_the_year.md` for a reader of `climate` (all B12).

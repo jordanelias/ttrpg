@@ -2,9 +2,15 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-07, C-U5a-10, C-U5a-13) — three changes. (1) Item 3 and the gate follow `16_PESSIMIST_DICE_task_difficulty_and_throughput.md`: a task nobody has ranked is `plain`; the route never ships on `obstacle_default`; gate item 5. (2) Item 4 is rewritten to `04` §B.13 invariant 12 and §C.4 (a `Degree`-keyed column belongs to a verb that declares `contests:`): a `task` row keeps flat `writes:` and `emits:`, scales its magnitude by `task_fraction`, and carries its failed draw as the keyed `emits_on_refusal` clause `draw`, which is the form the three graded inquiries already have; a verb whose bands write different cells declares `contests:`. (3) The roll is the one sampler (A-5); the pool is the one pool rule (U1 architecture §4), at the uses-table site `task`.
 
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/OWED_TO_UNIFICATION.md` §B "item 2 contradicts item 4"; `unified/work/R5_READ.md` §1 row task_draw (AMBIGUOUS, three readings), §2 rows item 2 vs 4, item 3, A-81, §7, 7b; `unified/U3_CONFLICT_LEDGER.md` §9 cross-cutting (item 4 decides, C-22), C3-R1, C3-D3, C3-C2, C3-N27; `U5c_VERBS_residue_and_governance_owner.md` §1 (shapes (a), (b), inquiry); `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-04, D-U1-07, D-U1-09, D-U1-11i, -11j, -11l; U1 capability site `task`; `unified/U3_DEPENDENCY_ORDER.md` §1 item 8). Changed: (1) item 2's loader text, which still described the pre-C-U5a-10 shape ("a routed row's `writes:` is degree-keyed"), is replaced by item 4's: only the second refusal (`data/verbs.py:872-876`) is edited, by a `form: inquiry | task` field on each route row; the first (`:848-851`) is invariant 12 and stays, because a row whose bands write different cells declares `contests: "a task"` (shape (b)) and passes it unedited. U3's C3-R1 and §1 item 8 say "the two loader refusals edited"; at the tree (`data/verbs.py:848-851` read here) the first needs no edit once shape (b) declares `contests:`, so that wording is corrected here; (2) item 3 gains the stand-in clause for a task with nobody opposite and takes the pool from the `task` site (U1), not `verb_capability`; (3) item 4 names A-81 and the durable write of a Failure; (4) the draws use the one `Draw` owner (C3-D3); (5) gate 1 no longer cites a scratch probe: it is a named test; tests, failure kinds and the roster row shape are named; the control pins carry C3-N27's note; (6) batch and tier lines. A lost task draw keeps the clause name `draw` and its `emits_note` says it is a loss, not a refusal (04 §C.4 `:727-728`; R5 §1 reading (2)), so the refusal-rate readings count it as a loss.
+
+Depends on: `13_SC_tuning_tables.md` T1 and OBS §4 step 1a (B05: the `difficulty:` column, D-U1-04); `16_PESSIMIST_DICE_task_difficulty_and_throughput.md` (B05 code part; its text amendments land here, U3 §4.1 row 19); U1's capability block (B04: the `task` site); the one sampler (B05) and the keyed draw `engine/dice_engine/draw.py` (B06, C3-D3).
+Lands in batch: B07 (lane IN; one re-pin), first item of the batch; `U5c_VERBS_residue_and_governance_owner.md` §1-§2, `U5b_VERBS_military_physical_residue.md` §1 and `13_SC_draw_for_unrolled_contests.md` follow it in B07. Every verb proposal whose rows rely on a route or a task contest names this file as its dependency (C3-R1).
+Tier: opus for the loader and roster design (the Layer 1 reading, taken above); sonnet / high for the 22 rows, the effects and the tests.
+
 ## Status: PROPOSED
 
-Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-01, L-10) — step 2 gains the two loader refusals (`data/verbs.py:848-851`, `:872-876`) that today refuse a routed row that writes; step 3's pool reader is `seam/wrappers/pool.py::faculty`. The resolution is unchanged.
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-01, L-10) — step 2 names the two loader refusals (`data/verbs.py:848-851`, `:872-876`) that today refuse a routed row that writes (only the second is edited: see the wave 3 line above); step 3's pool reader is `seam/wrappers/pool.py::faculty`. The resolution is unchanged.
 
 Source: `audits/18_DETERMINISM_SWEEP.md` C-01, C-03, C-05, C-08, C-09, C-15 (and D-05, D-10). Standing
 rule: `AUDIT_BRIEF.md` (Jordan, 2026-11-12, *"we do not do deterministic"*). Reference only (CLAUDE.md
@@ -59,29 +65,57 @@ roller, one loader refusal; no second resolver).
    refusals. Every `task` row is `{provider: "social_contest", module_entry: "social_contest.roll"}`,
    the pair a prize row already binds, so **no roll and no resolver is added** (the provider's name is
    historical; the roll is the generic pool-against-obstacle draw, `engine/dice_engine` underneath).
-   **Two loader refusals must be edited in the same commit, or no converted row loads** (grounded,
-   `audits/25_GROUNDING_ENGINE.md` G-01): `data/verbs.py:848-851` refuses a degree-keyed `writes:` on
-   a row with no `contests:` (*"Nothing resolves a degree for it"*), and `:872-876` refuses a routed
-   row with a non-empty `writes:` (*"A graded verb keys its emissions by Degree and writes
-   nothing"*). Both conditions become "no `contests:` **and no route**" and "a routed row's `writes:`
-   is degree-keyed, never flat" respectively. The fold needs no edit: `_grade` hands its
-   `Resolution` to `_fold` (`loop/resolve.py:897`), which selects `row.writes_at(degree)` (`:450`)
-   and calls each effect with it (`:967`).
-3. **Odds, from state; outcome, from the draw.** Pool = `seam/wrappers/pool.py::faculty` (`:78`; the verb's
-   `verb_capability` key, else `pool_default`). Obstacle = `roll.py::obstacle` — the task's difficulty
-   (the row's `difficulty:` level, `plain` where the owning verb lane has stated none; the route lands
-   with or after the column `13_SC_tuning_tables.md` T1 puts on the verb row, never on `obstacle_default`) plus the named modifiers that already exist (a person subject's opposition, the
-   room). Each term lands in `Margin.terms` (the reason trail), unchanged machinery.
+   **One loader refusal is edited in the same commit, or no converted route row loads** (grounded,
+   `audits/25_GROUNDING_ENGINE.md` G-01; the shapes of `U5c_VERBS_residue_and_governance_owner.md` §1).
+   Each `graded_tasks` row carries `form: inquiry | task`. The second refusal (`data/verbs.py:872-876`,
+   `if _graded and (not emits_by_degree or row.writes): raise SystemExit`) becomes: a `form: inquiry`
+   row (`research`, `examine`, `surveil`, carried unchanged) keys `emits:` by Degree and writes nothing,
+   as today; a `form: task` row may carry a flat non-empty `writes:` and a flat `emits:`, must declare
+   `emits_on_refusal` keyed with the clause `draw`, and must not declare `contests:` (a route row with a
+   Degree-keyed `writes:` or `emits:` is refused, naming the verb). The first refusal
+   (`data/verbs.py:848-851`, a Degree-keyed `writes:` with no `contests:`) is **not edited**: it is
+   `04` §B.13 invariant 12 (`:504-506`), and a verb whose bands write different cells declares
+   `contests: "a task"` (shape (b), VRES §1) and passes it as it stands. Roster row shape:
+   `graded_tasks: {tend: {provider: social_contest, module_entry: social_contest.roll, form: task},
+   research: {provider: social_contest, module_entry: social_contest.roll, form: inquiry}, ...}` (the 22
+   `task` rows of item 5, the 3 inquiry rows unchanged). The name `graded_tasks` is U1's (D-U1-11i). The
+   fold needs no edit: `_grade` hands its `Resolution` to `_fold` (`loop/resolve.py:897`), which selects
+   `row.writes_at(degree)` (`:450`) and calls each effect with it (`:967`).
+3. **Odds, from state; outcome, from the draw.** Pool: the `task` site's rows of
+   `rosters.yaml: tables.capability_uses` (U1's site table: as `social_roll`), through the one pool rule
+   read by `seam/wrappers/pool.py::faculty` (`:78`; the verb's capability from its row's `capability:`
+   cell, D-U1-07, which replaces the `verb_capability` side roster; an untrained actor reads
+   `pool_default`, D-U1-11j). Obstacle = `roll.py::obstacle` — the task's difficulty
+   (the row's `difficulty:` level, a member of `rosters.yaml: difficulty_levels`, D-U1-04; `plain` where
+   the owning verb lane has stated none; the route lands with or after the column OBS §4 step 1a and
+   `13_SC_tuning_tables.md` T1 put on the verb row, never on `obstacle_default`, which D-U1-11j deletes)
+   plus the named modifiers that already exist (a person subject's opposition, the room). **Where nobody
+   stands opposite** (a task with no person subject), the opposition term is the stand-in
+   `opposed_ob(pool_default, opposition_rate)`, the untrained score through the one owner
+   `sigma_leverage.opposed_ob` (`16_PESSIMIST_DICE_task_difficulty_and_throughput.md` (a), as that file's
+   wave 3 line words it under D-U1-02; U1 site `task`: `opposes` reads the stand-in); the composer's even
+   line `even_line(pool_add)` is its own leading term, never part of the opposition. Each term lands in `Margin.terms` (the reason trail), unchanged machinery. Every draw goes
+   through the one `Draw` owner `engine/dice_engine/draw.py` (B06; C3-D3), keyed `H(seed, tick, actor,
+   "task:" + a.id)` (A-30). A task row carries no `rate` row: its capability enters through this draw
+   alone (D-U1-09, C3-C2).
 4. **Graded, recoverable effects.** A converted `task` row keeps its flat `writes:` and `emits:`
    (`04` §B.13 invariant 12: a `Degree`-keyed column belongs to a verb that declares `contests:`); its
    magnitude is scaled by `task_fraction`, and its failed draw is the row's keyed `emits_on_refusal`
-   clause `draw` (the form `finding.none` already has for the three graded inquiries). A verb whose bands
-   must write different cells declares `contests:` and is a contest row. Default band map, used where the owning verb lane has not stated one —
-   **the verb lane's row supersedes this default** (one owner per row):
+   clause `draw` (the form `finding.none` already has for the three graded inquiries); the clause's
+   `emits_note` says the Event reports a lost draw, not a refusal (04 §C.4 `:727-728`: a refusal is a
+   precondition failed, a loss is a contest that went against you), and the refusal-rate readings
+   (`harness/corpus_run.py`'s graded-loss count) count it as a loss. A verb whose bands
+   must write different cells declares `contests: "a task"` and is a contest row (shape (b)). Default band map, used where the owning verb lane has not stated one —
+   **the verb lane's row supersedes this default** (one owner per row). **A-81 (no scene is still)
+   holds at every band:** this file carries 53 of A-81's measured gap ("the 53 owed a draw": 22 `task`
+   rows, 20 `bookkeeping` or outside rows, 11 `contest` rows owed to their lanes); the Failure band
+   writes no typed cell, and its durable write is the `<verb>.failed` Event and the claims WITNESS
+   deposits of it (those present hold it; an actor alone deposits his own firsthand claim of it, VRES §1),
+   which the no-null-scene reading counts:
 
    | band | writes | emits |
    |---|---|---|
-   | Failure | none | `<verb>.failed` (a new kind per row, so the act is witnessed and can be retried) |
+   | Failure | none | `<verb>.failed` (a new kind per row, so the act is witnessed and can be retried; the kinds are `tend.failed`, `train.failed`, `recruit.failed`, `work.failed`, `restore.failed`, `build.failed`, `found.failed`, `raze.failed`, `sabotage.failed`, `requisition.failed`, `forge.failed`, `conceal.failed`, `survey.failed`, `reconstruct.failed`, `thread_read.failed`, `open_case.failed`, `carry.failed`, `marshal.failed`, `issue.failed`, `destroy_record.failed`, and `travel.failed` for both travel rows `move` and `migrate` (below); `EVENT_KINDS` derives them, 04 §B.13 inv. 7) |
    | Partial | the effect at half magnitude where it has one (the `f(degree)` hook H-164 already names in `effects_economy.py::_rise`: `task_fraction: {Failure: 0, Partial: 0.5, Success: 1, Overwhelming: 1}`, one roster); for a finding, the claim at half confidence and the hand withheld (`_found_claims`' existing Partial shape); for a document, a flawed one (below) | the success kind |
    | Success | as today | as today |
    | Overwhelming | as today (13 measured Overwhelming at 0 of 284 at pool 2: nothing is hung on it) | as today |
@@ -104,13 +138,15 @@ roller, one loader refusal; no second resolver).
 
 ## Exact edits, by owner
 
-1. `engine/season/rosters.yaml` — `graded_inquiries` renamed `graded_tasks`, the `task` rows added
-   (one line each, the pair above); new rosters `bookkeeping_verbs` (`{verb: why}`), `task_fraction`,
+1. `engine/season/rosters.yaml` — `graded_inquiries` renamed `graded_tasks`, every row gaining
+   `form: inquiry | task`, the `task` rows added (one line each, the pair above plus `form: task`); new rosters `bookkeeping_verbs` (`{verb: why}`), `task_fraction`,
    `forge_quality`; `default_forgery_quality` retired from `data/fixtures.py` (its reader reads
    `forge_quality`).
 2. `engine/season/data/rosters.py` — `GRADED_TASKS`, `BOOKKEEPING_VERBS`, `TASK_FRACTION` exported;
    `GRADED_INQUIRIES` deleted (readers: `loop/resolve.py`, `manifest/registry.py`, `data/verbs.py`).
-3. `engine/season/data/verbs.py` — the two refusals in item 1, at load.
+3. `engine/season/data/verbs.py` — at load: item 1's two class refusals (a writing row in no class; a
+   `bookkeeping` row touching the listed cells), and item 2's one edit of the route refusal at `:872-876`
+   (by `form:`); `:848-851` unedited.
 4. `engine/season/verb_table.yaml` — for each `task` row: the `<verb>.failed` kind keyed under
    `emits_on_refusal` clause `draw` (item 4); the flat `writes:` and `emits:` are unchanged; `EVENT_KINDS`
    gains the new kinds.
@@ -123,16 +159,32 @@ roller, one loader refusal; no second resolver).
 
 ## Gate (execution artifacts)
 
-1. Realm, `PYTHONHASHSEED=0`, seeds 0, 1, 2, two seasons each (the probe above, extended to print the
-   band of each act): for every converted verb with ≥ 10 resolved acts, at least two bands occur, and
-   no such verb is 100 % one band; success events carrying a degree rise from 164 to at least 90 % of
-   non-bookkeeping success events.
-2. Control: `task_draw_arm: off` reproduces `5ab73af282d0779646c38839fbab85d8` (seed 0, one season),
-   `8aae8412c221edb44ffd45d91bae2671` and `891092133b77dfb4fc789fb9bd9446c2` (seeds 1, 2, two seasons).
+Tests: NEW `engine/season/tests/test_task_draw.py`, written as the batch item's first commit:
+`test_converted_verb_resolves_in_at_least_two_bands` (gate 1; the loop asserts `checked >= 10` verbs),
+`test_task_draw_arm_off_reproduces_the_pinned_hash` (gate 2),
+`test_trained_tender_fails_less_than_default_and_neither_is_zero` (gate 3),
+`test_bookkeeping_row_that_writes_a_body_is_refused_at_load` and
+`test_task_row_without_a_route_is_refused_at_load` (gate 4), and
+`test_loader_accepts_shapes_a_and_b_and_refuses_a_band_keyed_route_row` (gate 6). Run that file, then
+`engine/season/tests/test_season_shape.py -k graded` for the renamed roster's readers.
+
+1. Realm, `PYTHONHASHSEED=0`, seeds 0, 1, 2, two seasons each, read by
+   `test_converted_verb_resolves_in_at_least_two_bands`, which counts each Event carrying a `degree` by
+   the verb of the act in its `causes` (the scratch probe `…/scratchpad/det_probe.py` that first measured
+   this is not in the repository and is replaced by this test): for every converted verb with ≥ 10
+   resolved acts, at least two bands occur, and no such verb is 100 % one band; success events carrying
+   a degree rise from 164 to at least 90 % of non-bookkeeping success events.
+2. Control: `task_draw_arm: off` reproduces the pinned hashes of seed 0 (one season) and seeds 1, 2 (two
+   seasons). At the working tree before B01 they read `5ab73af282d0779646c38839fbab85d8`,
+   `8aae8412c221edb44ffd45d91bae2671` and `891092133b77dfb4fc789fb9bd9446c2`; every such pin moves at B01
+   and at B05/B06's re-pins, so the test reads the pins current at B07, not these strings (C3-N27).
 3. Odds respond to state: `tend` by a tender holding `healing` 3 against `pool_default`, 200 planted
    `tend` acts each — the trained tender's Failure share is lower, and neither is 0.
 4. Loader: plant `tend` into `bookkeeping_verbs` → load refuses naming `tend`; delete `reconstruct`'s
    route → load refuses naming `reconstruct`.
+6. Loader shapes (U3 §1 item 8; VRES §1 gate): the loader accepts every converted row in shape (a) and
+   (b), and refuses three planted rows: a band-keyed `writes:` on a route row, a flat `writes:` on a
+   `contests:` row, a writing row in no class.
 
 5. Throughput (from `16_PESSIMIST_DICE_task_difficulty_and_throughput.md` (d)): for each converted verb,
    the count of Events at each band per season with `task_draw_arm` on, beside its success Events with

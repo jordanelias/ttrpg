@@ -6,7 +6,11 @@ Re-grounded: 2026-11-12 against the tree's research (`unified/RESEARCH_MAP_INSTI
 
 Reconciled: 2026-11-12, U5d closure — folded **A-17 / A-18**, **A-19** and the land rulings. The part held back in the Status line (the counts in edit 2 depend on the audit's §11 item 1) is released on option A: the south fought, ranked third, and its founding deed is held realm-wide at the third confidence; the counts stay `[ASSUMPTION; Jordan to correct]`, only the order is ruled. Edit 5 (`FILLED_BY["annex"]` gains a taking basis) is rewritten: a won march's arrival fills nothing by itself, because a victor chooses to seize, occupy or withdraw (A-66); when he seizes a place its seats pass to him in the seizure's own write (A-58; `U5d_FA_land_and_seats_pass_on_a_won_march.md` edit 2), so the `annex` taking basis is needed only as that proposal's named revert (seats close and stand vacant for the seizer's conferral) and is not built otherwise; `place.surrendered` under a `capitulation` carries the seats the same way. An empty throne is claimed in the deed race (A-19), which reads this file's accomplishment ledger.
 
-## Status: PROPOSED — one part HELD BACK for Jordan (the counts in edit 2 depend on `audits/15_INSTITUTIONS_COLONIAL.md` §11 item 1)
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (COL_D: `accomplishment` stale, replaced by SYNTHESIS-B's chain; e5 not built, A-66, A-58), §2 (A-17/A-18; the per-regime gate row), §7 (INCOMPLETE: edit 1 replaced; test file stale), 7b.0, 7b.7; `U3_DEPENDENCY_ORDER.md` §4 row 86 (the split: the ledger reading in B33, the founders' prehistory in B39), §6 (`test_accomplishment.py` MISSING and its function gone); `U3_CONFLICT_LEDGER.md` C3-L12 (title moves only by the act the victor forms). Changed: the Status line follows A-17 (the held-back part is released on option A; the counts stay `[ASSUMPTION]`); **edits 1, 2, 3 and 5 are removed from the body** and replaced by pointers (1, 2, 3 are SYNTHESIS-B's, as this file's first `Reconciled:` line says; 5 is not built, as its U5d line says), so no second statement stands beside the rule; edit 4's vacant title cites BYZANTINE-A's vacant-row edit; the test is `test_inst_col_d_ledger.py`.
+
+## Status: PROPOSED (the part once held back is released by A-17/A-18; the seeded counts stay `[ASSUMPTION; Jordan to correct]`, only the order is ruled)
+
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in two batches (`U3_DEPENDENCY_ORDER.md` §4 row 86): **B33**, after COLONIAL-C, edit 4 and the gate's chain reading; **B39**, the founders' prehistory reading with `12_ARCS_case_on_the_realm.md` (SYNTHESIS-B §2 lands there). Depends on: `15_INSTITUTIONS_SYNTHESIS_B` (B32/B39), `15_INSTITUTIONS_COLONIAL_A` (B32), `15_INSTITUTIONS_BYZANTINE_A` (B32, the vacant-row edit), `12_ARCS_case_on_the_realm.md` (B39). Lane tag: FA. Tier: `sonnet`, effort `medium` (edit 4) and `high` (the test); one `opus` read of the per-regime ordering. Named test: `engine/season/tests/test_inst_col_d_ledger.py` (replaces `test_accomplishment.py`, whose function is not added). Standing sentences: *Pool*, *Failure writes*, *Draw keys* — no roll, contested row or draw is added (A-6 to A-8, A-81, A-30).
 
 Source: Jordan, 2026-11-12, as `INSTITUTIONS_BRIEF.md` records it: *"current kingdom royalty is because
 of nobility by deed/achievement"*; *"Royalty by noble conquest, i.e. the first king had the greatest
@@ -18,14 +22,16 @@ family needs of each and authors only the parts no lane owns. Nothing is ratifie
 
 ## What it changes in `engine/season/` at runtime
 
-1. A person's estimate of another's standing includes a discounted share of the deeds of those who held
-   the same seat before him, **as the estimating person's own ledger holds them**.
-2. A built realm holds three dead founders and their Secession deeds as Events the cast has been told
-   of. Declared hash mover.
-3. The three built vassal oaths (`off_king.obligees`) are made under a `homage` instrument.
+1. (SYNTHESIS-B §1.) A person's estimate of another's standing includes a discounted share of the deeds
+   of those who held the same seat before him, **as the estimating person's own ledger holds them**: the
+   chain term of `person_q.legitimacy`.
+2. (SYNTHESIS-B §2.) A built realm holds three dead founders and their Secession deeds as `ROOT`-caused
+   build-time Events whose product is the cast's told claims (A-51). Declared hash mover.
+3. (SYNTHESIS-B §3.) Two of the three built vassal oaths are held under seeded `homage` instruments; the
+   Grand Master's has none.
 4. `off_duchess_hafenmark` is filled by inheritance through a title nobody holds at build.
-5. A seat whose `conferral` is `annex` is filled by the holder of the seat through which its ground was
-   taken. No seat in the built realm declares `annex`, so nothing moves until content does.
+5. (Not built.) A won march fills no seat by itself (A-66); a seizure carries the seats in its own write
+   (A-58).
 
 ## The problem (evidence)
 
@@ -53,43 +59,18 @@ rolled hearing, a rolled field, or persons releasing and swearing oaths.
 
 ## Exact edits, by owner
 
-**1. `engine/season/queries/person_q.py::accomplishment(p, q, fx) -> float`.**
+**1.** (Replaced by SYNTHESIS-B §1: no `person_q.accomplishment`; the recursion is one term of the
+existing `person_q.legitimacy(p, holder, window, seat, fx)`, cut at a holder `p` believes took the seat
+by force; `presumption_gain` ships 0, sweep {0, 0.5, 0.75, 1.0}. Its readers (`standing_crossed`;
+`reception` where the subject of the act is a seat) call `legitimacy` with the seat.)
 
-```
-accomplishment(p, q) = own(p, q) + presumption_gain × Σ over seats s that p believes q holds
-                                     accomplishment(p, predecessor(p, s, q))
-```
+**2.** (Replaced by SYNTHESIS-B §2, B39: three founders, deeds 3, 2, 1, `ROOT`-caused build-time Events
+whose only product is told claims, A-51. A-17/A-18 decided the south's part: Varfell's deed is held
+realm-wide at the third confidence; the earlier "option B, zero in northern ledgers" is superseded.)
 
-- `own(p, q)`: the sum of `deeds_judged(p, q)`'s two parts (judged and told), unchanged.
-- "seats `p` believes `q` holds" and `predecessor(p, s, q)`: read from `p`'s own claims of
-  `tenure.opened` and `tenure.closed` on `s` (the person whose closing claim is the latest before `q`'s
-  opening claim). A seat whose history `p` does not know contributes nothing: an heir is a nobody to a
-  stranger.
-- Recursion ends when `p` knows no predecessor; depth is bounded by the claims held.
-- `data/fixtures.py: presumption_gain = 0.5` (dimensionless; sweep {0, 0.5, 0.75}; NUMBER row, graded
-  `assumption`; `0` is the control and reproduces `own`).
-- **Readers** (each an existing site that reads `deeds_judged` for a seat-holder's standing; this edit
-  swaps the call, adds no site): the `rank`/standing gap behind `standing.band_crossed`
-  (`queries/world_q.py::standing_crossed`) and `world_q.reception` where the speaker is heard *as the
-  holder of a seat* [UNVERIFIED: which of `reception`'s terms reads `deeds_judged`; CHAR's
-  `02_CHAR_scar_cap_and_regard_unit.md` owns the unit].
-
-**2. Three founders and their deeds, seeded through the gate (HELD BACK: the counts).**
-`engine/season/harness/populated.py::build_realm`, in the prehistory block ARCS' proposal adds (acts and
-witnessed Events before tick 0, never constructed Claims): for each of `off_king`,
-`off_duchess_hafenmark`, `off_duke_varfell`, a founder person (a `references/npc_registry.yaml` row,
-`status: proposed`, dead at build), a `hold` on the seat opened and closed in prehistory, and `field.won`
-Events with the founder as doer: **three, two and one** `[ASSUMPTION; the counts carry Jordan's order and
-nothing else; under §11 item 1 option B Varfell's is zero in northern ledgers and one in southern]`. The
-cast receives them `told_by` at build by the existing acquaintance route, each person weighing them by
-his own pursuits. The first Almqvist's death (canon :116, "widely suspected assassination", perpetrator
-TBD) is a `person.died` with no doer in anyone's ledger.
-
-**3. `homage`.** `offices.yaml: off_king.obligees` rows become `{case: "NPC-050", form: homage}` (the
-loader accepts a bare id as today; a mapping names an `instruments.yaml` row). `build_realm` mints one
-`dispensation` per such oath (maker: the King; `to`: the vassal; `form: homage`; held by both) beside the
-`oblige` it already opens. The Grand Master's oath (NPC-070) keeps a bare id: the Löwenritter's bond is
-the crown lane's to name.
+**3.** (Replaced by SYNTHESIS-B §3: the two `homage` instruments are `seeded:` rows reciting their
+founders' deeds, kept by the Chief Parliamentary Clerk; `obligees:` keeps bare ids and the mapping form
+is not added.)
 
 **4. `offices.yaml: off_duchess_hafenmark.conferral: null → inheritance`; `rosters.yaml: successions`
 gains `off_duchess_hafenmark: off_heir_hafenmark`; `offices.yaml` gains the title seat
@@ -97,25 +78,27 @@ gains `off_duchess_hafenmark: off_heir_hafenmark`; `offices.yaml` gains the titl
 `remit_acts: []`, `holder: null`).** `[ASSUMPTION; medium; Jordan to correct; revert: the three edits
 together]`. Ladder step 4: `off_king`'s shape (IN-61). Canon gives Baralta no heir (:143), so the title
 is vacant at build and **Hafenmark's succession is open from the first season**: whom she designates,
-and whether a deed-claimant petitions instead, is play. [UNVERIFIED: that the loader admits a seat row
-with `holder: null`; six rows are minted from the row alone, `offices.yaml:124-131`, each with a holder.]
+and whether a deed-claimant petitions instead, is play. Settled at the tree (was `[UNVERIFIED]`): the
+build refuses a row with `holder: null` today (`harness/populated.py:1771-1776`); BYZANTINE-A's vacant-row
+edit (B32) admits it.
 
-**5. `state/gate.py::FILLED_BY["annex"]`** gains the taking basis: a `hold` on an `annex` seat may be
-opened for the person who holds the seat `Act.via` of the act that took the seat's rung, in the same act
-(`seize` at Overwhelming or Success under `…_B_distance.md`; a won `march`'s arrival; a
-`place.surrendered` under a `capitulation`). Today `FILLED_BY` keeps `conferral` for `annex`
-(`rosters.yaml: conferral_bases` note). `[ASSUMPTION; medium; Jordan to correct — this narrows a ruled
-roster's unruled half; ladder step 4 on Jordan's statement that the founding seats were won by conquest;
-revert: the mapping's entry]`. Owner: FA.
+**5.** (Not built; this file's U5d line.) A won march's arrival fills nothing by itself: the victor
+chooses to seize, occupy or withdraw (A-66), and title moves only by the act he forms (`seize`; C3-L12);
+when he seizes, the place's seats pass in the seizure's own write (A-58;
+`U5d_FA_land_and_seats_pass_on_a_won_march.md` edit 2). `FILLED_BY["annex"]`'s taking basis exists only
+as that proposal's named revert (seats close and stand vacant for the seizer's conferral).
+`place.surrendered` under a `capitulation` carries the seats the same way.
 
 ## Gate (execution artifact)
 
-- `engine/season/tests/test_accomplishment.py`: on a hand-built world, an heir whose predecessor `p`
-  knows of reads `own + 0.5 × predecessor's`; an heir whose predecessor `p` has never heard of reads
-  `own`; `presumption_gain: 0` reads `own` for both; a three-holder chain reads `0.25` of the founder.
-- Realm: `build_realm(0)` after edits 1–2: the probe prints, per cast person, his ordering of the three
-  seat-holders by `accomplishment`. Pass: a majority order them king, Hafenmark, Varfell, **and at least
-  one person does not** (the ledger is each person's own; unanimity would mean pursuits are not read).
+- `engine/season/tests/test_inst_col_d_ledger.py` (B33): on a hand-built world, through
+  `legitimacy(p, holder, window, seat, fx)` at `presumption_gain` 0.5: an heir whose predecessor `p` knows
+  of reads own + 0.5 × predecessor's; an heir whose predecessor `p` has never heard of reads own;
+  `presumption_gain: 0` reads own for both; a three-holder chain reads 0.25 of the founder. The vacant
+  title `off_heir_hafenmark` builds (BYZANTINE-A's edit).
+- Realm (B39, after SYNTHESIS-B §2): SYNTHESIS-B's gate 2 (per cast person, the ordering of the three
+  seat-holders; a majority king, Hafenmark, Varfell and at least one person not; reported per regime,
+  A-87 to A-91). Not repeated here.
 - After two seasons at seeds 0–2: the orderings are printed again; the count of persons whose ordering
   changed is reported (not asserted: it is zero today if no deed is done, and that is a finding about
   the realm, not this edit).
@@ -142,9 +125,9 @@ mechanism beyond naming it (`recognition` is the crown and Church lanes' instrum
 - **R.** A player's deed can out-rank a dynasty in some ledgers; the world tells and forgets founders by
   itself; complete at the extremes (unknown predecessor: own deeds only; no deeds: zero).
 - **S.** One fold on the one deed reader; the same unit; no second standing ladder.
-- **E, last.** One function, one fixture, three seeded persons, five content cells, one gate entry.
+- **E, last.** Three content cells and one gate entry here; the function, fixture and seeded persons are
+  SYNTHESIS-B's.
 
 ## Cost class
 
-Small build (the fold and its test); the seeding is a declared mover with re-pins; edits 3–5 are content
-in FA's files.
+Edit (edit 4, content in FA's files) and the test; the fold and the seeding are SYNTHESIS-B's.

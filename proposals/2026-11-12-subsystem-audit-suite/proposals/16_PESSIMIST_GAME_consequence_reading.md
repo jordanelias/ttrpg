@@ -2,16 +2,31 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-15**, **A-19** and the land rulings (**A-57, A-58, A-66**): the game gate's clauses (`person.died` and `tenure.closed` among the causes of another's executed act; the played skeleton differing between seeds) now have producers the rulings order: natural death, the deed race for an empty throne, and a victor's seizure passing land and seats. The reading gains one column, tenure changes by cause (death, term, revocation, claim, conquest). No other step changes.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: U3 C3-K5 and C-U5a-01 (one instrument per property: the
+removal test of `16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md` is R-01's and R-02's `measure:`; this file's
+`requirements.yaml` edit is **withdrawn** and the status rule that rode it is removed; the propagation reading is a
+chronicle reading wired to no `measure:`); `R5_READ.md` §2 (the collision on R-01/R-02 `measure:`; R5's "list both
+commands" is superseded by C3-K5), §7/§7b (signatures, tests, tier); U3 B02, §6.2 (`runs/PES_GAME/*`, `x2_death.py`
+are not in the repository). **Corrected at the tree:** `01_CORE_requirements_reading_record.md` §2 is withdrawn and
+`harness/chronicle.py` has no `--propagation` flag (its arguments are `--seed` (required), `--seasons`, `--arm`, `--cap`,
+`--all-acts`, `--chains`, `--min-depth`, read 2026-11-12), so this file adds the flag itself and composes on nothing
+of CORE 03 §2; the gate runs per `--seed`. Changed: the head paragraph, "What it changes", the status section, the
+edits, the gate command.
+
 ## Status: PROPOSED
 
+Lands in batch: **B02** (IN), after `16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md`. Depends on: nothing
+unlanded (`harness/chronicle.py`, `corpus_run`'s census and `verb_table.yaml` exist).
+
 Source: `audits/16_PESSIMIST_GAME.md` F-PES-GAME-01, F-PES-GAME-02, §1.1, §1.2. Read at `4995824`.
-Reference only (`CLAUDE.md` §0.05). **Amends** `01_CORE_requirements_reading_record.md` §2 (the chain
-reading for R-01 and R-02); it does not add a second reading beside it. Lane IN.
+Reference only (`CLAUDE.md` §0.05). Lane IN. A reading beside the removal test, not a second `measure:` for the
+same property (C3-K5): the removal test asks whether one person's choice changes others' acts; this asks whether
+the played world's state differs from a world where nobody acts.
 
 ## What it changes in `engine/season/` at runtime
 
-Nothing in the loop. The one harness reading CORE 03 §2 adds (`harness/chronicle.py --propagation`)
-prints three more columns, and `requirements.yaml` R-01 and R-02 are read on them.
+Nothing in the loop. `harness/chronicle.py` gains a `--propagation` reading that prints three columns. No
+`requirements.yaml` row reads it.
 
 ## The problem, with evidence
 
@@ -36,7 +51,7 @@ assertion.
 
 ## The resolution (decided)
 
-The propagation reading reports, per seed, beside CORE 03's chain count and fork divergence:
+The propagation reading reports, per seed:
 
 1. **Moved by persons** — the state projection of the played arm against the **null arm** (the same
    built world, a chooser that returns no act, MATTER and CALENDAR running), by component: persons,
@@ -52,26 +67,31 @@ The propagation reading reports, per seed, beside CORE 03's chain count and fork
    `matter.determined`, `news.told`, `body.changed`: emitted, and of those, how many stand among the
    causes of another person's executed act.
 
-**The statuses are read on these.** `[ASSUMPTION; medium; Jordan to correct]` R-01 reads `met` when, at
-each of three seeds, column 2 is above zero and column 3 is above zero for at least `person.died` or
-`tenure.closed` wherever one was emitted; R-02 reads `met` when a withheld act (CORE 03's fork) changes
-column 1 in a component other than records, propositions and ledgers. Otherwise `partial`, in the commit
-that lands the reading, with the line recorded in `reading:`. On today's tree both would read `partial`
-(§ evidence above). No threshold beyond "above the null arm".
+**No status is read on these** (C3-K5: the removal test is R-01's and R-02's `measure:`). The columns are
+a reading a session runs and reports beside it; no threshold beyond "above the null arm" is stated.
 
 ## Edits
 
-- `engine/season/harness/chronicle.py`: `--propagation` (CORE 03's flag) gains the null arm and the three
-  columns; `proj` and the seam count are two pure functions (source: `runs/PES_GAME/pes.py::proj`,
-  `seam_edges`; the engine map in that scratch file is NOT carried — column 2 reads the verb table).
-- `engine/season/requirements.yaml`: R-01 and R-02 `measure:` name the command; `status:` follows the
-  first reading.
-- Nothing else. No test asserts the columns' values (they are readings); the instrument's own control is
-  below.
+- `engine/season/harness/chronicle.py`: a `--propagation` flag (new; `main`'s parser at `:204`), running the
+  played arm and the null arm (the same built world, a chooser that returns no act, MATTER and CALENDAR
+  running) for `--seed` and `--seasons`, and printing the three columns. Three pure functions over `World`
+  (they read the stores the content hash reads and own no rule):
+  `moved_by_persons(w_played, w_null) -> dict[str, int]` (column 1, by component),
+  `answered_outside_writing(w, verb_table) -> int` (column 2; reads `verb_table.yaml`'s `writes` column and
+  `corpus_run`'s `EMITS AND WRITES NOTHING` census, the engine map in the scratch file is NOT carried),
+  `terminals_answered(w) -> dict[str, tuple[int, int]]` (column 3: emitted, and among another person's
+  executed act's causes). Source of the projection: the scratch `runs/PES_GAME/pes.py::proj`, rewritten here,
+  not copied (the scratch is not in the repository). The docstring and `--help` define the reading in one
+  sentence (CLAUDE.md §4).
+- Nothing else. No `requirements.yaml` edit (withdrawn, C3-K5).
 
 ## Gate
 
-`python -m engine.season.harness.chronicle --propagation --seeds 0 1 2 --seasons 3` prints the columns.
+NEW `engine/season/tests/test_chronicle_propagation.py`: `test_null_arm_against_itself_reads_zero_in_every_column`
+(control a), `test_planted_body_hazard_moves_persons_and_seat_holds` (control b; the plant replaces the scratch
+`x2_death.py`: the bodies hazard set to 1 for one seat-holder). Command:
+`python -m pytest engine/season/tests/test_chronicle_propagation.py -q`, then
+`python -m engine.season.harness.chronicle --seed N --seasons 3 --propagation` for N in 0, 1, 2 prints the columns.
 **The instrument's control, both directions** (§0.1 pt 4): (a) the null arm against itself reads zero in
 every column; (b) a planted consequence is seen — the bodies hazard set to 1 for one seat-holder
 (`x2_death.py`'s proxy) moves `persons` and `seat holds` in column 1 and puts a `person.died` in column
@@ -83,10 +103,12 @@ except the one `capture` death.
 
 ## NERS
 
-- **N.** Without it the two `met` rows that carry the loop's central claim cannot fail. Cut the null arm
-  and the reading again counts correspondence.
+- **N.** Without it nothing reports whether the played world differs from a world where nobody acts. Cut
+  the null arm and the reading again counts correspondence.
 - **R.** Completeness: the reading is defined at the extreme (nobody acts) and uses it as its zero.
-- **S.** One reading for R-01/R-02, not two; consistent with `aperture`'s control line.
-- **E** (last): two pure functions and three printed columns.
+- **S.** One instrument per property (C3-K5): the removal test measures R-01/R-02; this reports state moved;
+  consistent with `aperture`'s control line.
+- **E** (last): three pure functions and three printed columns.
 
-Cost class: edit (after CORE 03 lands; it can land with it).
+Cost class: edit. Tier: `sonnet`, effort `high`. Hash movers declared: none (a harness reading). Lands it: B02,
+after the nine-gate file; one commit with its test file.

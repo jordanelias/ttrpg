@@ -1,5 +1,9 @@
 # U5a · CORE — the owed edits: resolutions the CORE audits decided and no proposal carried
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.3 rows CORE owed (B rows 6, 18 AMBIGUOUS; I AMBIGUOUS), §2 rows A-62, A-49, §7, §7b-15, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-11n; `unified/U3_CONFLICT_LEDGER.md` C3-L4, C3-L8, C3-N27, §10; `unified/U3_DEPENDENCY_ORDER.md` node B03, §4.1 row 12). Changed: A row 10 and "Not carried here" cite Jordan's A-62 (amend `04` D-51; budget is a Query; a refusal Event carries no changes list; #353 holds; build nothing; the `04` D-51 amendment text is owed, not applied) in place of "held for a ruling: J-U5a-03"; F rule 1 follows A-49 (the reveal comes only after the line ends and no continuation is taken); **H is no longer an input to IN-14**: C3-L8 removes the office bonus (`04` §A.3 row 15 refuses it), a declared mover; I's Query moves to `queries/faction_q.py::standing` composing on `faction_q.resolve` (`04` §A.2 names the module; R2 §7b-15); B rows 6 and 18 are stated as boot (loader-family) refusals, not raises in play (`04` §C.12); B row 17's and I's GO reader is `account` (C3-L4; the host-side `receipt` is deleted, D-U1-11n); the hash pins carry the B01 caveat (C3-N27); lands-it and tier added.
+
+**Lands in batch:** B03 (A, B, C, D, E, H); F in B34 with `11_GO_player_surface_contract_B.md` §8 (U3 §4.1 row 12); I with its first caller (B21 FA scenario or B34 GO surface). **Depends on:** `01_CORE_tests_one_golden_owner.md` (B02).
+
 ## Status: PROPOSED (a plan for future execution; nothing here is executed by the closing lane)
 
 Authored by the U5a unification-closure lane, 2026-11-12, from `audits/01_CORE_audit.md` (§6.2 resolutions
@@ -17,7 +21,7 @@ and 18 change behaviour only on inputs no computed season produces (a zero depth
 generator, a hand-built act carrying its own obstacle, a zero round budget). Section C is a performance
 edit with the content hash EQUAL. Section E row 1 is hash EQUAL and makes one class of client defect
 unwritable; row 2 refuses an undeclared Event kind at the log. Section B row 17 and Section F add reads.
-No section is a declared hash mover.
+Section H (C3-L8) is the one declared hash mover: a seat-holder's scene budget loses the office bonus.
 
 ## Who lands it, and in what order
 
@@ -32,11 +36,15 @@ shared file, CLAUDE.md §9). Order, by shared file and dependency:
    `loop/deliberate.py`'s neighbours and each needs the headless hash as its control).
 5. **C** (after `01_CORE_tests_one_golden_owner.md` lands, so "hash EQUAL" is read against one file).
 6. **B rows 13–17**, **D**, **F** (harness; any order; F after `11_GO_player_surface_contract_B.md` §8).
-7. **E row 3** only when workplan CR-07's pre-flight passes. **H** is an input to workplan IN-14, not a build.
+7. **E row 3** only when workplan CR-07's pre-flight passes. **H** (C3-L8): one commit, a declared mover,
+   after C.
 8. **G** is the orchestrator's (Layer 0).
 
-Dependencies on other proposals are named per row. Nothing here depends on a ruling except A row 10's
-wording (J-U5a-03 in `unified/U5_CONFLICTS_U5a.md`).
+Dependencies on other proposals are named per row. Nothing here waits on a ruling: A row 10's wording is
+answered by A-62.
+
+**Tier.** `valoria-author` on `sonnet` (`high`) under `methodology-execute`; one `methodology-close` with its
+terminal `opus` critique per batch (B03; B34 for F).
 
 ---
 
@@ -53,7 +61,7 @@ wording (J-U5a-03 in `unified/U5_CONFLICTS_U5a.md`).
 | 7 | H-82 | `grade: measured`; `cite:` names `state/log.py:84-87` and `tools/m1_acceptance.py`'s sweep (0 violations over 49,735 Events, 24 seeds × 4 seasons) | audit res. 15 |
 | 8 | H-24 | `cite:` filled with the two writers, `loop/census.py:97-100` and `loop/matter.py:277-281` | audit res. 16 |
 | 9 | the B10-18b card's base figure | not a register row: the card's own first step (CR-46 re-reads) takes this audit's reading as its input: 23 of 67 verbs executed, 13 only refused, 30 never attempted (corpus, seed 0, `601e715`); 30 executed of 48 attempted on the realm (seed 0, three seasons, `d161a61`). No edit to the card by this file | audit §6.1 |
-| 10 | D-51 (the row that tracks `04` PART D row 51) | `cite:` says *"behaviour holds (a refused act costs its scene: `loop/deliberate.py:294`, `_spent`, debited at release); the construction's falsifier fails (27 refusal Events, 0 with `changes[]`; headless, seed 0, three seasons). Two Layer-1 sources: `04` D-51 (a debit receipt) and #353 `:877`, `:912-913` (budget is a Query, never a field; H-28). Held for a ruling: J-U5a-03."* If no row tracks D-51, none is created (a register row for a Layer-1 row is not a hole in the game) and the same sentence goes to `loop/deliberate.py:294` as the site's own note | addendum B res. 9; F-CORE-17 |
+| 10 | D-51 (the row that tracks `04` PART D row 51) | `cite:` says *"behaviour holds (a refused act costs its scene: `loop/deliberate.py:294`, `_spent`, debited at release); the construction's falsifier fails (27 refusal Events, 0 with `changes[]`; headless, seed 0, three seasons). Two Layer-1 sources: `04` D-51 (a debit receipt) and #353 `:877`, `:912-913` (budget is a Query, never a field; H-28). Answered by Jordan's A-62: #353 holds (budget is a Query; a refusal Event carries no `changes[]`); `04` D-51 is to be amended (text owed, not applied); nothing is built."* If no row tracks D-51, none is created (a register row for a Layer-1 row is not a hole in the game) and the same sentence goes to `loop/deliberate.py:294` as the site's own note | addendum B res. 9; F-CORE-17 |
 
 **Not carried (withdrawn by this lane).** Audit res. 13 (mark `(Person, weight)` `unproduced`): workplan
 CR-08 (B10-18) builds the CENSUS writer, so the row gets a producer, not a mark (C-U5a-02).
@@ -66,12 +74,12 @@ and fall by the rows whose grade moved (the audit's reading at `601e715`: R2 27,
 
 | row | owner | exact edit | gate · falsifier | source |
 |---|---|---|---|---|
-| 1 | `engine/season/seam/contest.py:222-233` | delete the paragraph that says wiring the engines is out of scope (the next line dispatches to them); keep one line: what `contest` dispatches and where the provider is resolved | hash EQUAL (`headless --case NPC-088 --seasons 2 --seed 0` → `5405522c36b0399247f83fd9f6d29494`) | F-CORE-08 a |
+| 1 | `engine/season/seam/contest.py:222-233` | delete the paragraph that says wiring the engines is out of scope (the next line dispatches to them); keep one line: what `contest` dispatches and where the provider is resolved | hash EQUAL (`headless --case NPC-088 --seasons 2 --seed 0` → `5405522c36b0399247f83fd9f6d29494`, the working tree's reading before B01; re-read on the batch's base, C3-N27) | F-CORE-08 a |
 | 2 | `engine/season/loop/driver.py:110-112` | delete the sentence that says the seam does not return yet (retracted thirty lines below) | same | F-CORE-08 a |
 | 3 | `engine/season/loop/matter.py:663`; `loop/resolve.py:154` | `matter.py`: "read by `harness/populated.py:2012`", not `census`. `resolve.py`: the trace names H-75, the cause its own comment gives, not H-33 | same | F-CORE-08 a |
 | 4 | `engine/season/loop/resolve.py:861-863` (`_contest`) | on `ContestError`, emit the row's refusal through `_refuse_party_gap`, as the `ContestRefused` arm two lines above does; an act never leaves the fold with no Event | a hand-built act folded at `contest_max_depth=0` yields one refusal Event of the row's kind; headless hash EQUAL at the shipped cap. Falsifier: `[]` returned at cap 0 | audit res. 20 |
 | 5 | `engine/season/state/world.py:437` (`__init__`), `loop/matter.py:666` | initialise `_subsistence_shortfall` beside `_departed`; clear it at the start of MATTER's subsistence pass; docstring says who reads it (`harness/populated.py`). It stays out of `content_hash` (an instrument's read, not state) | hash EQUAL; `populated`'s census prints the same shortfall as before at seed 0 | audit res. 18 |
-| 6 | `engine/season/seam/wrappers/sigma.py:533` | `rng is None` raises `InstrumentDefect` naming the caller, in place of `random.Random()`. The second site, `modules/combat/wrapper.py:565` (`rng=rng or random.Random()`), is the PC lane's module and is named for U5b; same edit | hash EQUAL (the driver always hands one); a direct call with `rng=None` raises. Falsifier: any season test that relied on the fallback goes red, which is the finding | audit res. 19; addendum B C5 |
+| 6 | `engine/season/seam/wrappers/sigma.py:533` | `rng is None` raises `InstrumentDefect` naming the caller, in place of `random.Random()`. The second site, `modules/combat/wrapper.py:565` (`rng=rng or random.Random()`), is the PC lane's module and is named for U5b; same edit | hash EQUAL (the driver always hands one); a direct call with `rng=None` raises. This is a boot/instrument refusal (a caller handed no generator), the loader-family refusal `04` §C.12's table asks for, not a new `raise` in play. Falsifier: any season test that relied on the fallback goes red, which is the finding | audit res. 19; addendum B C5 |
 | 7 | `engine/season/loop/predicates.py:1-4, :685-710` | the head and tail comments enumerate the nine registered predicates (`confer, convene, dispatch, establish, interrogate, oblige, release, revoke, succeed`) by reading the registry, or carry no count | none (comment) | F-CORE-19 |
 | 8 | `engine/season/data/fixtures.py:434-437` | the sentence "exactly one writer … which ZEROES it" replaced by the writers at HEAD (a cast overlay, `cast.capability_of`, `_eff_train`, `_grown`), or deleted | none | F-CORE-19 |
 | 9 | `engine/season/data/requires.py:16-23, 765-771`; `data/__init__.py:4` | references to `shape.py` as the home of `WorldReader`/`LedgerReader` and of the loaders' importer corrected to the modules that hold them | none | F-CORE-19 |
@@ -82,8 +90,8 @@ and fall by the rows whose grade moved (the audit's reading at `601e715`: R2 27,
 | 14 | `engine/season/cases/chain/{ARC1,ARC2,ARC3,NPC1,NPC2,NPC3}.yaml`; `harness/run_cases.py::_tolerant_yaml` | normalise the six files to plain YAML (strip the markdown fence and transcript preamble, which carry no case content); `ARC3.yaml` gains one comment stating that 37 lines above the first `- id:` were lost at authoring; delete the recovery path so the loader is `load_yaml`; the lost case is closed as unrecoverable | `run_cases.load_cases()` returns 46 NPC and 97 ARC cases with `CORPUS_DEFECTS == []`; the case ids before and after are the same set. Falsifier: a case id present before and absent after | addendum B res. 26; F-CORE-23 |
 | 15 | `engine/season/harness/report.py:171, :301, :76-81` | import `TRACE` at module scope; derive the step-sequence text from `data/matrix.py::Step` (ENCOUNTER included); drop the hand count "46 unique NPCs" for `len()` of what was loaded | `python -c "import engine.season.harness.report as r; r.emit"` resolves `TRACE` without `__main__` (do not run `emit` against the tracked `engine/season/runs`: send output to a scratch path) | addendum B res. 27 |
 | 16 | `engine/season/harness/run_cases.py::grade`, `harness/report.py` | the verdict `PLAYABLE` is renamed `DECLARED-PRESENT` (every declared token resolves to something present); "playable" is kept for a played run | `python -m engine.season.harness.run_cases` prints no `PLAYABLE`; the two tests that name the verdict (`test_playable_requires_that_every_core_row_was_actually_aimed_at` and its sibling) are renamed with it. Falsifier: `git grep -n PLAYABLE engine/season/harness` non-empty | addendum B res. 28 |
-| 17 | `engine/season/queries/world_q.py`, beside `event_place` | new read `event_place_at(w, e)`: the rung of the actor's `contain` edge live at `e.emitted_at` (a closed edge is kept with `since`/`until`, so the answer is recoverable); `event_place` is unchanged and stays WITNESS's read at the Event's own tick. First reader: `harness/chronicle.py`'s per-act line (the reason trail's Edit 5) and `11_GO_player_surface_contract_B.md`'s `receipt` | realm, seed 0, two seasons: for the 39 season-0 act Events whose `event_place` differs a season later, `event_place_at` answers the season-0 place. Falsifier: any of the 39 answers the later place | `16_PESSIMIST_CORE.md` res. 7; F-PES-CORE-08 |
-| 18 | `engine/season/loop/driver.py:479` (where `scene_budget` is read) | a `scene_budget < 1` raises the fixture's refusal naming the fixture: a season with no round is not a season (a loader-family refusal, CLAUDE.md §0.05; not a tree-wide guard) | `SeasonDriver` constructed with `scene_budget = 0` refuses; the shipped value loads. Falsifier: a season runs at 0 and deposits nothing | `16_PESSIMIST_CORE.md` res. 8; F-PES-CORE-10 |
+| 17 | `engine/season/queries/world_q.py`, beside `event_place` | new read `event_place_at(w, e)`: the rung of the actor's `contain` edge live at `e.emitted_at` (a closed edge is kept with `since`/`until`, so the answer is recoverable); `event_place` is unchanged and stays WITNESS's read at the Event's own tick. First reader: `harness/chronicle.py`'s per-act line (the reason trail's Edit 5); the GO surface reads the outcome through `account`, not a host-side `receipt` (C3-L4) | realm, seed 0, two seasons: for the 39 season-0 act Events whose `event_place` differs a season later, `event_place_at` answers the season-0 place. Falsifier: any of the 39 answers the later place | `16_PESSIMIST_CORE.md` res. 7; F-PES-CORE-08 |
+| 18 | `engine/season/loop/driver.py:479` (where `scene_budget` is read) | a `scene_budget < 1` raises the fixture's refusal naming the fixture: a season with no round is not a season (a loader-family refusal, CLAUDE.md §0.05; not a tree-wide guard) | `SeasonDriver` constructed with `scene_budget = 0` refuses at construction (a boot refusal that aborts, `04` §C.12's loader family; never a raise in play); the shipped value loads. Falsifier: a season runs at 0 and deposits nothing | `16_PESSIMIST_CORE.md` res. 8; F-PES-CORE-10 |
 
 ## C · The hot path (`F-CORE-09`; small build; hash EQUAL)
 
@@ -128,7 +136,9 @@ present 6 / 39,482 and lists the scar and practice loops among the amplifiers wi
 | 2 | `04` §B.13 #7: *"the Event-kind roster is derived … and the log accepts no other kind"*; D-25 | the roster is held at `loop/resolve.py::_act_events` and `World.write`; `state/log.py::EventLog.append` checks no kind; MATTER's crossings append literal kinds (`matter.py:126-129, 256-258`); H-220 records probes and tests appending undeclared kinds | `EventLog.append` takes the derived roster (`data/verbs.py::EVENT_KINDS`, handed in at `World` construction; `state/` does not import `data/`) and refuses a kind outside it; MATTER's two crossing kinds are declared where the roster derives (`rosters.yaml: logged_kinds`) if they are not already. Probes and tests that append an undeclared kind declare a test kind through the same roster parameter | MECHANICAL (one path, one refusal) | a planted `w.log.append(Event(kind="zz.undeclared", …))` raises; headless and realm hashes EQUAL. Falsifier: the planted append succeeds, or a shipped MATTER kind is refused (it was undeclared: declare it, do not weaken the check) |
 | 3 | `04` §A.3 row 4: *"`scale:` on modules and on seven verb rows — deleted; the loader rejects the key"*; §B.13 #10 | 15 rows of `verb_table.yaml` carry `scale:` at `785bc62`; `data/verbs.py:129-137, 619-621` say the invariant is about a different field | **Workplan CR-07 is the build; this row adds its Layer-1 ground and its order.** (a) First: give the registry-derived seat `off_npc_084` (guild leader, `rung` None) a scope at its owner (the seat's row in the cast/office registry), which is the one cause of CR-07's failed pre-flight (`Act.via.scope` missing on 19 of 309 acts). (b) Re-run CR-07's pre-flight (seeds 0–2, two seasons). (c) CR-07's deletion as written there; and `data/verbs.py:129-137, 619-621` corrected to say the invariant is enforced. Count rows by symbol at the edit (15 here, 13 in the entry) | MECHANICAL at load (unknown-key refusal) | CR-07's own: the loader loads; `grep -n "scale:" engine/season/verb_table.yaml` finds none; a planted `scale:` key fails the load naming the row. Falsifier: the planted key loads |
 
-**Not carried here.** D-51 (J-U5a-03). The office bonus (`04` §A.3 row 15): ledgered (`ED-IN-0246`), IN-14.
+**Not carried here.** D-51: answered by A-62 (amend `04` D-51; #353 holds; build nothing; the amendment
+text is owed, `OWED_TO_UNIFICATION.md` §A). The office bonus (`04` §A.3 row 15): carried by §H as C3-L8
+decides it (removed).
 Provider returns (§C.5/D-24 against §C.4): superseded by ruling; `04`'s marker is IN-44's. H-145 (a closure
 write's receipt): workplan NM-W9.
 
@@ -138,8 +148,11 @@ write's receipt): workplan NM-W9.
 (`python -m engine.season.harness.play_surface --seed S --person P --seasons K [--scenario NAME]`). This row
 adds its end conditions, at the same owner (`engine/season/harness/play_surface.py`), and nothing else:
 
-1. the runner stops and prints the ending when `SeasonDriver.season(...)["endings"]` is non-empty
-   (`world_q.endings_reached` is computed every season and shown to no one today);
+1. when `SeasonDriver.season(...)["endings"]` is non-empty (`world_q.endings_reached` is computed every
+   season and shown to no one today), the runner stops on the ending **only when the seated person has no
+   continuation** (rule 2's test) and prints the ending, and the reveal, then (A-49: reveal only after the
+   line ends and no continuation is taken, on top of never-reveal in play); with a continuation it records
+   the ending and plays on;
 2. it stops when the seated person is dead and `carry_on` (`play_surface.py:61-95`) returns no continuation;
    with a continuation it re-seats and says so;
 3. it stops at `--seasons K`.
@@ -147,8 +160,9 @@ adds its end conditions, at the same owner (`engine/season/harness/play_surface.
 The archived design's third end (a player concludes after two of three starting convictions resolve) has
 no field to read and is **not built**; it is design-first and belongs to CHAR if wanted.
 
-**Gate.** A world with a planted roster ending reached in season 1 ends the transcript at season 1 with the
-ending's id; a seated person killed with an heir continues under the heir; the transcript's content hash
+**Gate.** A world with a planted roster ending reached in season 1 and a seated person with no continuation
+ends the transcript at season 1 with the ending's id and the reveal; the same with a continuation plays on
+and shows no reveal; a seated person killed with an heir continues under the heir; the transcript's content hash
 equals the plain run's at seeds 0–2 (GO B's own gate 1). **Falsifier.** The transcript runs to `K` past a
 non-empty `endings`. **Hash movers.** None (a reader).
 
@@ -161,14 +175,20 @@ balance regression from noise (`engine/tests/goldens/` holds one pure-function d
 §7 stands. Evidence: `engine/tests/goldens/` holds `sigma_leverage_parity.json` only (addendum C §5). The
 file stays within its line cap (one sentence for one).
 
-## H · Input to workplan IN-14 (`F-CORE-06`; B10-16; delegated-ruled)
+## H · The office bonus is removed (`F-CORE-06`; C3-L8)
 
-No build here. The audit's readings for the position: `rounds = scene_budget` (`loop/driver.py:479`) and
-`scenes_per_round` releases per round (`loop/deliberate.py:287`) cap a seat-holder's `budget` at the round
-count; H-10's cite measured 5 → 6 with five releasable. IN-14's exit should read: *a seated person spends
-budget plus bonus scenes in one season* (seed 0, the realm), with the one-round arm as its control. The
-pessimist's bound applies: the budget the chooser is *shown* is not free (`qcut.py 0 2`: 812/799 acts
-against 821/882), so IN-14 re-records, as its card already declares.
+IN-14 and CP-T08-10 are retired by C3-L8: `04` §A.3 row 15 refuses an `office_bonus` in `budget` by name
+(`architecture/meta/04_CODE_ARCHITECTURE.md:202`), later than the design that carried it, and A-12, A-13 and
+A-64 give rank its reach without buying scenes (a modifier on rolls, the establishment's hands, precedence
+of access). Edit: `engine/season/decision/budget.py:58` loses the `offices × budget_office_bonus` term and
+`engine/season/data/fixtures.py:592` the fixture `budget_office_bonus` (and its NUMBER row in
+`hole_register.yaml`); H-92 and H-330 are re-graded resolved. One declared mover, said plainly as a
+re-record (CLAUDE.md §7). **Gate.** `budget()` of a planted person with three live holds equals his budget
+with none (named test, new: `engine/season/tests/test_budget.py::test_a_seat_buys_no_scene`); the realm's
+seeds 0–2 re-pinned in the same commit. **Falsifier.** A held `hold` of any kind (a rung, a book, a survey
+sheet) raising `budget()`. Reversible on Jordan's word (C3-L8). The audit's readings (`rounds = scene_budget`,
+`loop/driver.py:479`; `scenes_per_round`, `loop/deliberate.py:287`; H-10's 5 → 6) are kept as the evidence of
+what is removed.
 
 ## I · The four strategic queries get one reader (`F-C1A-05`, `audits/17_CENSUS_C1A.md` §2, §6 item 1)
 
@@ -181,22 +201,27 @@ carried it.
 **Decided (ladder step 4: `endings_reached`, the precedent for a strategic reading as a Query the host
 reads and nobody stores).** One composing resolver-side Query, and the two surfaces that call it.
 
-1. `engine/season/queries/world_q.py`: `faction_standing(w, faction_prop_id, rung_id) -> FactionStanding`,
-   a frozen record of exactly the four readings and nothing computed twice: `footprint` (rung ids),
+1. `engine/season/queries/faction_q.py`: `standing(w, faction_prop_id, rung_id) -> FactionStanding`, beside
+   `faction_q.resolve` (`04` §A.2 names `faction_q` the owner of a faction's composed view; §B.6.1's
+   `Faction` is a Query return; B4's third disposition picks the module the spec names, R2 §7b-15), composing
+   `faction_q.resolve(w, faction_prop_id).holdings` as the footprint and calling `world_q.density`,
+   `world_q.sovereign_fraction`, `world_q.provinces_of` for the rest. `FactionStanding` is a frozen return
+   record dropped with the view (`04` PART D row 47). It holds exactly the four readings and nothing computed
+   twice: `footprint` (rung ids),
    `present` and `persons` (`density`'s pair at `rung_id`), `sovereign_share` and `undetermined`
    (`sovereign_fraction(w, rung_id)`, with which holder is largest), `provinces` (`provinces_of`'s row for
    this faction). It takes no token, stores nothing and emits nothing. It carries no `TRACE.query` row of
    its own, for the reason `endings_reached` gives (a read-only step moves no committed artifact); the
    inner `sovereign_fraction` row is reached only when a host asks, never inside `season()`.
-2. Callers, each by its own proposal and neither inside the season loop: the host-side reading of
-   `11_GO_player_surface_contract_B.md` (the faction view of a seated person, beside the receipt), and the
+2. Callers, each by its own proposal and neither inside the season loop: the host-side faction view of
+   `11_GO_player_surface_contract_B.md` (a seated person's faction, beside `account`), and the
    per-season print of `06_FA_playable_scenario.md`'s gate. What a faction's view *shows* of the record is
    FA's choice; the record is the whole of what there is to show.
 3. A person's own reading of where a faction stands stays a belief (AX-2): this record is resolver-side and
    may not be handed to `decision/`. An NPC weighs territory through the claims he holds, as today.
 
 **Gate.** On `build_realm(0)` played one season: for every faction with a live hold,
-`faction_standing(...).footprint` is non-empty and equals `footprint(w, f)`; summed `present` over factions
+`faction_q.standing(...).footprint` is non-empty and equals `footprint(w, f)`; summed `present` over factions
 at the realm rung does not exceed `persons`; the season's content hash is EQUAL with and without one call
 per faction per season (a reader). **Falsifier.** After GO-B's host and FA's scenario land,
 `grep -rn "footprint(\|density(\|sovereign_fraction(\|provinces_of(" engine/season --include=*.py` outside
@@ -214,5 +239,5 @@ refusal form for a missing generator, one place for an Event's kind check, one w
 
 ## Cost class
 
-Edit, except C, E row 1 and I (small build). No hash mover. No guard (CLAUDE.md §0.1 pt 5): every check added
-is a loader's or a log's own refusal at its owner.
+Edit, except C, E row 1 and I (small build). One hash mover (H). No guard (CLAUDE.md §0.1 pt 5): every check
+added is a loader's or a log's own refusal at its owner.

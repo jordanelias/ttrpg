@@ -1,8 +1,13 @@
 # 07 · SE — a capability's rate on an untested act, on the suite's one capability surface (supersedes two sections of `07_SE_capability_and_chooser_surface.md`)
 
-Reconciled: 2026-11-12, U5d closure — folded **A-54** and **A-12** against one row of the audit addendum's §6 that this file implements ("stewardship … No passive bonus from a holder to his domain's yield … declined"). Overruled: A-54 rules that a steward's skill bears on the harvest draw. The form: the steward (the holder of the seat whose rung is the place's treasury rung) contributes to the **pool** of the place's seasonal draw through `rate(person, work)`; it is a term in a draw, not a multiplier on a fixed yield, so the place can still fail under a good steward. A seat's own modifier (A-12) enters the same draw through the one obstacle composer. `rate`'s form (`about_mid` on `faculty`) and the row declaration (`magnitude: rate`) are unchanged; the two inputs to a roll are `U5a_capability_home_and_two_inputs.md`'s.
+Reconciled: 2026-11-12, U5d closure — folded **A-54** and **A-12** against one row of the audit addendum's §6 that this file implements ("stewardship … No passive bonus from a holder to his domain's yield … declined"). Overruled: A-54 rules that a steward's skill bears on the harvest draw. The form: the steward (the holder of the seat whose rung is the place's treasury rung) contributes named levels (`edge` row, site `settlement_effect`, `side: steward`, `per: mid`) to the place's seasonal draw; the place, not the steward, is the roller (D-U1-09, wave 3, replacing "contributes to the **pool** … through `rate(person, work)`"); it is a term in a draw, not a multiplier on a fixed yield, so the place can still fail under a good steward. A seat's own modifier (A-12) is the seat row's `modifier:`, read by the `office` leverage source on rolls made through that seat (D-U1-01); the place's draw is not such a roll. `rate`'s form (`about_mid`, now on `score`, D-U1-09) and the row declaration (`magnitude: rate`) are unchanged; the two inputs to a roll are `U5a_capability_home_and_two_inputs.md`'s.
+
+Reconciled: 2026-11-12, wave 3 (W3-3) — applied D-U1-09 (§3 item 2 and §4 (c): `faculty` → `score`, the trained rank on the capability's own scale; the head's A-54 sentence above → named levels at `settlement_effect`; a `magnitude: rate` row that is also a task row is refused at load), C3-C2 (§4 (d)'s multiplier deleted: a task row's capability enters through the task draw of `18_DETERMINISM_task_draw_for_uncontested_verbs.md`, whose band sets the rise), D-U1-07 / R3 §2 (the capability's home named: `references/descriptor_registry.yaml: capabilities`, its `scale: [floor, ceiling]`, C-03; R3's "re-fit `about_mid` to score plus base, floor five" is not applied, since D-U1-09 reads the rank, not the pool), D-U1-01 (the head's seat-modifier sentence). §4 (e) kept as D-U1-09's one remaining `rate` use (labour hand weights), with C3-C2's wording for (e) marked DISPUTED below. R3 §1 Option A (move `rate` to `queries/world_q.py`) is DISPUTED and not applied: `seam/wrappers/pool.py:15` imports `queries.world_q.practice`, so `world_q` importing `pool` closes a cycle, and U1's reader interface places it at `pool.py::rate` (`U1_CAPABILITY_AUTHORING_ARCHITECTURE.md:306`). Tier and batch added (R3 7b-0; U3 B12).
 
 ## Status: PROPOSED
+
+Lands in batch: B12 (world motion and ground), after `14_VERBS_MATERIAL_A`–`_C` and before `07_SE_capability_and_chooser_surface.md` §5–§6 (U3 §1 item 13).
+Depends on: `01_CORE_capability_authoring_surface.md`, `02_CHAR_capability_uses_table.md` (`about_mid`), `U5a_capability_home_and_two_inputs.md` (all B04); `18_DETERMINISM_task_draw_for_uncontested_verbs.md` (B07, the task draw and its loader edit); CP-T08-01 (plan position, `labour`; MISSING until STAGES.md step 5 carries it).
 
 Carries finding F-SE-21 and resolution R-SE-32 of `audits/07_SE_audit_addendum_B.md` (its §6). It
 supersedes **only** §3 (the interface) and §4 (the roster rows and the `capability_rate` table) of
@@ -44,8 +49,12 @@ capability factor in the game.
    rule. A row with `magnitude: rate` and no `capability:` is refused; a `capability:` on an uncontested
    row without `magnitude: rate` is refused as that proposal already says.
 2. **The factor is `about_mid`.** `rate(person, verb) = about_mid(score(person, verb), floor, ceiling,
-   gain)`, with `floor` and `ceiling` from the capability's own row in the CORE block and `gain` one
-   fixture, `effect_rate_gain`, shipped 0. No per-capability table. `[UNVERIFIED: that `about_mid`
+   gain)`, where `score` is `seam/wrappers/pool.py::score`, the trained rank on the capability's own scale
+   (D-U1-09: not `faculty`, which carries `pool_add`), `floor` and `ceiling` are the capability definition
+   row's `scale: [floor, ceiling]` at `references/descriptor_registry.yaml: capabilities` (D-U1-07, C-03),
+   and `gain` is one fixture, `effect_rate_gain`, shipped 0. No per-capability table. A row that is a task
+   row (18-A) may not also declare `magnitude: rate`; the loader refuses it (D-U1-09: one capability, one
+   channel per act). `[UNVERIFIED: that `about_mid`
    returns exactly 1 at gain 0. The CHAR proposal ships its own new use at gain 0 and calls the hash
    EQUAL, which requires it; the function is not yet written.]`
 3. **No capability named is exactly 1.** A row that names none, and a person who holds none on a row
@@ -60,78 +69,94 @@ capability factor in the game.
 
 **(a) `engine/season/data/verbs.py` (the CORE proposal's Edit 3, amended).** `VerbRow` gains
 `magnitude: str = ""` with the closed set `("", "rate")`; the refusal rule becomes: `capability:` is
-allowed when the row `contests`, is graded, or has `magnitude == "rate"`.
+allowed when the row `contests`, is graded, or has `magnitude == "rate"`; and a row that is a task row
+(18-A's `graded_tasks`) **and** declares `magnitude: rate` is refused (D-U1-09).
 
-**(b) `engine/season/verb_table.yaml`.** No row is edited by this proposal. When Jordan authors the
-capability, the rows `restore`, `work`, `build` (and `craft`, CP-T08-04) gain `capability: <its id>` and
-`magnitude: rate`. Names are his content.
+**(b) `engine/season/verb_table.yaml`.** No row is edited by this proposal. `restore`, `work`, `build` and
+`craft` (CP-T08-04) become task rows under 18-A and take their capability at the `task` site, with no
+`rate` row (`U1_CAPABILITY_AUTHORING_ARCHITECTURE.md:254`). Names are Jordan's content.
 
-**(c) `engine/season/seam/wrappers/pool.py`**, beside `faculty` (the one pool reader):
+**(c) `engine/season/seam/wrappers/pool.py`**, beside `faculty` (the one pool reader; U1's reader
+interface, `U1_CAPABILITY_AUTHORING_ARCHITECTURE.md:306`):
 
 ```python
 def rate(w, p, verb) -> Fraction:
-    """The factor a held capability gives an untested effect of `verb`. Fraction(1) where the row
+    """The factor a held capability gives an untested magnitude of `verb`. Fraction(1) where the row
     declares no `magnitude: rate`, where `p` is None, and at `effect_rate_gain` 0."""
     row = VERB_TABLE[verb]
     if p is None or row.magnitude != "rate":
         return Fraction(1)
-    cap = descriptors.capability(row.capability)
-    return about_mid(faculty(w, p, verb), cap.floor, cap.ceiling, w.fixtures.get("effect_rate_gain"))
+    lo, hi = descriptors.CAPABILITIES[row.capability]["scale"]
+    return about_mid(score(w, p, verb), lo, hi, w.fixtures.get("effect_rate_gain"))
 ```
 
-`about_mid` and `descriptors.capability` are the CHAR and CORE proposals'. `[UNVERIFIED: `about_mid`'s
-return type; the CHAR proposal gives its signature and says it returns a factor. If it returns a float,
-`rate` converts at this one site so the effect's integer arithmetic stays exact.]`
+`about_mid` is `02_CHAR_capability_uses_table.md`'s; `descriptors.CAPABILITIES` is CAP A1's (D-U1-07, the
+`ATTRIBUTES` precedent in `engine/substrate/descriptors.py`); `score` is `pool.py::score` (lane A's split of
+`faculty`, B01). `[UNVERIFIED: `about_mid`'s return type; the CHAR proposal gives its signature and says it
+returns a factor. If it returns a float, `rate` converts at this one site so integer arithmetic stays
+exact.]` `rate` stays in `pool.py` (not `queries/world_q.py`): `pool.py:15` imports
+`queries.world_q.practice`, so the reverse import would be a cycle.
 
-**(d) `engine/season/loop/effects_economy.py::_rise` and `_fall`.**
+**(d) `engine/season/loop/effects_economy.py::_rise` and `_fall`: no multiplier (C3-C2).** A task row's
+capability enters through the task draw (`18_DETERMINISM_task_draw_for_uncontested_verbs.md`, one pool rule,
+A-6/A-7); the band sets the rise (the `f(degree)` H-164 records as NOT BUILT is the band, through
+`task_fraction`), and no `rate` row sits on a task row. `_rise` and `_fall` keep their arithmetic and read
+no `rate`. The former edit (`min(headroom, headroom × num × rate // den)`) is withdrawn; it was a second
+ladder for one quantity.
 
-Old: `return (headroom * num) // den`
-
-New: `r = rate(w, w.persons.get(a.actor), a.verb); return min(headroom, (headroom * num * r.numerator) // (den * r.denominator))`
-
-The `min` keeps the ceiling a bound. H-164's row narrows: `f(degree)` is answered by `rate` for the
-uncontested case.
-
-**(e) CP-T08-01's `labour(w, rung)`** (planned): each present person's hands are weighted by
-`rate(w, p, "work")`. A cohort is a `Person`, so a cohort row that carries a capability
-(`cohorts.yaml`, through the cast surface of the CORE proposal's Edit 5, which validates
-`capabilities:` on any cast row) makes a mining people mine better than a farming people set to the same
-seam. Shipped: no cohort row carries one, so every weight is 1.
+**(e) CP-T08-01's `labour(w, rung)`** (planned): each present person's hands are weighted by `rate` (D-U1-09:
+`rate` remains for magnitudes no draw decides, and the labour weight is one). A cohort is a `Person`, so a
+cohort row that carries a capability (`cohorts.yaml`, through the cast surface of the CORE proposal's Edit
+5) makes a mining people mine better than a farming people set to the same seam. Shipped: no cohort row
+carries one, so every weight is 1. **DISPUTED (C3-C2's wording):** C3-C2 orders "the multiplier in §4 (d),
+(e) is deleted", while the same row adopts D-U1-09, which keeps `rate` for "CP-T08-01's `labour` hand
+weights"; this lane applies D-U1-09 for (e), the more specific decision. **INCOMPLETE, two blocking
+points:** (1) which verb row the labour weight reads: `rate(w, p, "work")` reads 1 for everyone once `work`
+is a task row (it cannot declare `magnitude: rate`), so the labour weight needs a non-task row or a
+capability id argument, a decision for CP-T08-01's landing; (2) the caller: `labour` is planned in
+`queries/world_q.py`, which cannot import `pool.py` (the cycle above), so the weights are computed by the
+caller in `loop/` and passed in, `[ASSUMPTION: the yield pass at MATTER computes them — basis: it is the
+reader of `labour` named by CP-T08-01]`.
 
 **(f) Nothing in `modules/settlements/`.** A rate is a host read of a person; the module's inputs carry
 the factor it already has (`ProduceInput.factor`, under CP-T08-01).
 
 ## 5. What a capability definition must say for the settlement layer to use it
 
-Its id; its kind and scale (the CORE block's fields); its growth rule; and, on the verb rows it serves,
-`capability:` with `magnitude: rate`. Nothing else, and the settlement layer reads none of it except
-through `rate`.
+Its id; its kind and `scale` (`descriptor_registry.yaml: capabilities`, D-U1-07); its growth rule; and, on
+the verb rows it serves, `capability:` (a task row) or `capability:` with `magnitude: rate` (a non-task
+magnitude). Nothing else, and the settlement layer reads none of it except through the task draw and
+`rate`.
 
-**Declined, with the reason.** A passive rate from a seat holder onto his domain's yield (the *domain
-turn* of the tradition). A yield that changes with who sits over it is a quantity moving with no act,
-and no ruling licenses it. Stewardship reaches a place through the steward's acts: what he raises
-(`rate`), and how much he takes or gives (the first lane's amount as a choice).
+**Overruled by A-54 (see the head).** This paragraph declined a passive rate from a seat holder onto his
+domain's yield; A-54 rules that a steward's skill bears on the harvest draw. The form is the steward's
+named levels on the place's draw (`edge`, site `settlement_effect`, D-U1-09), not a rate and not a
+multiplier. Stewardship also reaches a place through the steward's acts: what he raises (the task draw),
+and how much he takes or gives (the first lane's amount as a choice).
 
 **Not yet possible.** A trade skill: `exchange` has no magnitude a rate could scale until a price exists
 (CP-T08-05, CR-67).
 
 ## 6. The gate, and the falsifier
 
-- **Execution artifact.** `engine/season/tests/test_works_founding.py` gains: with a test-rebound verb
-  table in which `restore` names a capability with `magnitude: rate` and `effect_rate_gain` non-zero,
-  two persons of unequal held score raise the same worn harbour by unequal amounts, both clamped at the
-  ceiling; with `effect_rate_gain` 0 they raise it alike and the hash is the base. Under CP-T08-01, a
-  cohort holding the capability yields more from one seam than an equal cohort that does not.
-- **Falsifier.** A rate lifting a fabric over its works' ceiling; a row with no `magnitude: rate`
-  reading anything but 1; the loader accepting `capability:` on an uncontested row that declares no
-  magnitude.
+- **Execution artifact.** `engine/season/tests/test_works_founding.py` gains:
+  `test_rate_is_one_without_magnitude_rate_or_at_gain_zero` (a test-rebound verb table with a non-task row
+  declaring `magnitude: rate`; two persons of unequal held score read unequal factors at
+  `effect_rate_gain` non-zero and equal factors at 0, and the hash is the base);
+  `test_a_task_row_declaring_magnitude_rate_is_refused_at_load` (D-U1-09). The skill-on-`restore`
+  reading moves to 18-A's task-draw tests (two persons of unequal score raise the same worn harbour by
+  unequal shares across seeds, by band). Under CP-T08-01, a cohort holding the capability yields more
+  from one seam than an equal cohort that does not.
+- **Falsifier.** A row with no `magnitude: rate` reading anything but 1; the loader accepting
+  `capability:` on an uncontested row that declares no magnitude, or `magnitude: rate` on a task row;
+  `_rise` reading `rate` (a second ladder).
 - **Control.** The shipped table and fixtures reproduce every pinned hash.
 
 ## 7. NERS reading (definitions: `CLAUDE.md` §0.06; E last)
 
 - **N.** Without it a capability Jordan authors cannot touch a settlement, and with the first lane's
   version it could, by a table no other subsystem shares. From the designer's side (top-down) a skill is
-  one row and a column value; from the roller's side (bottom-up) it is the same `faculty`; laterally the
+  one row and a column value; from the roller's side (bottom-up) it is the same `score`; laterally the
   decision layer, the dice and the settlement effects use one form.
 - **R.** Who mends the wall, and which people work which ground, start to matter; peoples become
   unlike as places do. Completeness: gain 0, no row and no holder each read exactly 1.
@@ -141,3 +166,5 @@ and no ruling licenses it. Stewardship reaches a place through the steward's act
 ## 8. Cost class
 
 Edit, after the CORE and CHAR proposals land (it reads both). Hash EQUAL while no row declares a rate.
+Tier: `opus` for the ladder question (decided in U3/U1: C3-C2, D-U1-09), then `sonnet` for the build
+(R3 7b-0).

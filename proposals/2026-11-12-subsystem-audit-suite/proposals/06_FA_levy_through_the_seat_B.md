@@ -4,7 +4,12 @@ Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-07 — note added t
 
 Reconciled: 2026-11-12, U5d closure — folded **A-22** (command). `may_levy`'s conjunct `purview_reaches(seat, residence of the cohort)` stands: a cohort is "the unseated in its land", one of the three classes a seat commands, so the levy is an order to those the seat commands and no rewrite of edits 1–6 is owed. What changes is the reason given: the basis is command over the unseated on the seat's ground, not territorial authority over everyone there; a seated person resident on that ground is not levied through it. One gate arm added: a seat-holder residing in the levying seat's land is not raisable through `may_levy` unless he is its sworn man or holds a seat it may revoke.
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — U3 order applied (batch B21; cut edge §4.1 row 71: `06_FA_war_lives_in_seats_B.md` edits 1–3 land before this file in B21, so edit 4 calls `may_wage` and the inline fallback is not needed); U3 §6.2 (the gate's scratch probe `levy_probe.py` is not in the tree: the gate now first writes the named test file below); tier (R3 7b-0). R3 §1 found the edits CONFORMS (its note on `may_*` predicates in `state/gate.py` is recorded once for all such predicates, not per row); no body text was superseded.
+
 ## Status: PROPOSED
+
+Lands in batch: B21 (FA governance), after `06_FA_war_lives_in_seats_B.md` edits 1–3 and before `16_PESSIMIST_FA_B` (C3-D5).
+Depends on: `06_FA_war_lives_in_seats_B.md` edits 1–3 (B21, `state/gate.py::may_wage`); every other symbol named is on `main`.
 
 Source: `audits/06_FA_audit_addendum_B.md` F-FA-15, §B4.1 (the levy and command rows), §B6.1 R-24;
 evidence E-B3, E-B9. Cross-lane: the six army verbs are ED-IN-0306's and the MB lane's
@@ -112,7 +117,15 @@ each gains the refused twin of the gate below.
 
 ## Gate (execution artifact)
 
-The addendum's probe, re-run after the edit, must read:
+The addendum's probe (`levy_probe.py`) is a scratch script not in the repository (U3 §6.2), so the gate's
+first step writes its reading as a test: new file `engine/season/tests/test_fa_levy_through_the_seat.py`
+on `build_realm(0)`, written red against the control (today the unseated mint executes) and green after
+the edits, one test per bullet below: `test_an_unseated_member_cannot_mint_the_army`,
+`test_the_duke_through_his_seat_mints_and_recruits_in_his_territory`,
+`test_a_cohort_resident_in_another_factions_territory_is_refused`,
+`test_a_seat_without_the_muster_act_is_refused`, `test_army_presets_mint_three_armies_by_seated_leaders`,
+and the A-22 arm `test_a_seated_resident_is_not_levied_unless_sworn_or_revocable`. The test, re-run after
+the edit, must read:
 
 - `p_npc_002` (no seat): the mint is refused (`record.refused` or the row's refusal kind);
 - `p_npc_052` through `off_duke_varfell`: `record.created`, then `army.recruited` for a cohort in a
@@ -155,4 +168,4 @@ appointment. It adds no upkeep (addendum R-31).
 
 ## Cost class
 
-Small build. No computed mover. MB lane reviews edits 2, 3 and 5.
+Small build. No computed mover. MB lane reviews edits 2, 3 and 5. Tier: `sonnet` (R3 7b-0).

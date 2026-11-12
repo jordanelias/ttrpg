@@ -2,6 +2,10 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §1) — Option A is confirmed by the decision register (D-48, taken A by the ladder; reversible on Jordan's word). `16_PESSIMIST_CORE_a_refusal_is_remembered.md` and `U5a_DICE_owed_edits.md` §4 read present confidence through this file's one function.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.1 row CORE 01 (AMBIGUOUS), §7, §7b-2, §7b-T; `unified/U3_DEPENDENCY_ORDER.md` node B09, §6.2). Layer 1 rewrite (`04` §B.13 invariant 7: the log accepts only a kind an emission column declares; `04` §A.2: MATTER's may-read column does not list ledgers): the `claim.forgotten` Event is **deleted** (ladder step 5: no requirement cites a fade, this file's own N paragraph), so MATTER stops walking ledgers and emits nothing for memory; a reader that wants the moment a claim fell to zero calls `present_confidence` at two ticks. The reader list's `[UNVERIFIED]` is settled by a grep at this tree (sites listed in edit 2); the scratch probe becomes named tests; lands-it and tier added.
+
+**Lands in batch:** B09. **Depends on:** `01_CORE_tests_one_golden_owner.md` (B02; one pin file for the re-pin); `U5a_DICE_owed_edits.md` §4 and `16_PESSIMIST_CORE_a_refusal_is_remembered.md` read through this file's function (same batch, after it).
+
 ## Status: PROPOSED
 
 Source: `audits/01_CORE_audit.md` F-CORE-01, resolution 1, §11. Not ratified by being written.
@@ -9,8 +13,8 @@ Source: `audits/01_CORE_audit.md` F-CORE-01, resolution 1, §11. Not ratified by
 ## What changes in `engine/season/` at runtime
 
 MATTER stops writing `Claim.confidence` once per live claim per season and stops emitting
-`claim.decayed`. A claim's present confidence is computed where it is read. The Event log holds one
-Event when a claim's confidence reaches zero, and none before. `World.content_hash()` moves (a declared
+`claim.decayed`. A claim's present confidence is computed where it is read. The Event log holds no Event
+for fading. `World.content_hash()` moves (a declared
 mover): fewer Events, and `Claim.confidence` holds the deposited value.
 
 ## The problem, with evidence
@@ -54,23 +58,31 @@ Fading is a function of a claim's deposited confidence and its age.
    its assignments). Known sites: `state/ledgers.py::eviction_key`'s caller, `queries/person_q.py`
    (`LedgerReader._best`, `:1057`), `loop/deliberate.py:547` (the inputs fingerprint),
    `seam/wrappers/sigma.py:290`. The reader needs `tick` and the fixture `claim_decay`; `LedgerReader`
-   is constructed with both. `[UNVERIFIED: the full reader list; `loop/witness.py` and
-   `decision/options.py` were not opened.]`
-3. **`engine/season/loop/matter.py:471-501`**: replace the per-claim write with one pass that finds
-   claims whose `present_confidence` reached zero *this* tick and emits one `claim.forgotten` Event per
-   such claim, `causes=[the deposit Event]`, no state write (the pattern `_crossings` already uses,
-   `matter.py:126-129`: a crossing emits, a level does not).
+   is constructed with both. Settled by `grep -rn "\.confidence\b" --include=*.py engine/season` (non-test,
+   non-harness) at this tree, the code reads besides: `queries/person_q.py:1072`, `:1078`, `:1201`, `:1273`;
+   `queries/world_q.py:848` (`reception`); `loop/witness.py:260`, `:988`; `decision/options.py:1706`;
+   `decision/questions.py:107`; `state/ledgers.py` (two sites). The `decision/` readers read through the
+   ledger reader the person is handed (constructed with `tick` and `claim_decay`), never `World`; the
+   executing session re-runs the grep before the edit and routes every site found.
+3. **`engine/season/loop/matter.py:471-501`**: the per-claim write is deleted and nothing replaces it:
+   MATTER stops walking ledgers (its may-read column does not list them, `04` §A.2). No Event marks a
+   claim reaching zero: "it reached zero" is a function of `present_confidence`, and a reader that wants
+   the moment calls it at two ticks. If an Event is later wanted, it is added as a `(Claim, exists)`-style
+   matrix row written at WITNESS/CENSUS when eviction removes the claim, so invariant 7 derives the kind;
+   it is not built here.
 4. **`engine/season/write_matrix.yaml`**, row `(Claim, confidence)`: remove `MAT` from `steps:` and
-   `claim.decayed` from `emits:`; add `claim.forgotten` to the crossing kinds' owner
-   (`rosters.yaml: fold_kinds` or the row MATTER's crossings already declare `[UNVERIFIED which]`).
+   `claim.decayed` from `emits:`. No new kind.
 5. **`engine/season/requirements.yaml`**, **`harness/corpus_run.py:72`**: raise `MAX_SEASONS` to the
    corpus maximum (16) once the gate below reads flat.
 
 ## Gate (execution artifact)
 
-`probe_growth.py 8` at seeds 0, 1, 2: new log entries per season within ±20 % of season 1's from
-season 1 onward; no `claim.decayed` in the log; two runs at one seed give one hash. The seeded goldens
-re-pin, said plainly in the commit.
+`probe_growth.py` (a scratch script, not in the repository) is restated as new tests in
+`engine/season/tests/test_claim_fade_as_read.py`: `test_present_confidence_matches_the_schedule_of_the_old_write`
+(a hand-built ledger, ticks 0 to 7, `==` against the old write's values for a claim with a deposit Event);
+`test_no_claim_decayed_in_an_eight_season_log` (headless, seeds 0, 1, 2, eight seasons); and
+`test_log_growth_per_season_is_flat` (new log entries per season within ±20 % of season 1's from season 1
+onward). Two runs at one seed give one hash. The seeded goldens re-pin, said plainly in the commit.
 
 ## Falsifier
 
@@ -89,9 +101,14 @@ proposal read wrong, except where assumption 1 names it.
   The no-player half is unchanged; forgetting entirely still leaves a record.
 - **S.** "Calculations consistent in methodology": a band crossing emits and a level does not is
   already the rule for Sites and bodies; this applies it to memory.
-- **E (last, against the above).** One function replaces a write, a matrix step and an Event kind.
+- **E (last, against the above).** One function replaces a write, a matrix step and an Event kind, and adds
+  none.
 
 ## Cost class
 
 Small build; hash mover; Layer-1-descended row touched — listed in the audit's §11 with the
-alternative (one aggregated `ledger.faded` Event per person per season).
+alternative (one aggregated `ledger.faded` Event per person per season), not taken.
+
+**Lands it and tier.** The B09 batch, an IN `valoria-author` session on `sonnet` (`high`), closed by B09's
+`methodology-close` with its terminal `opus` critique once. **Hash movers.** Every world (fewer Events;
+`Claim.confidence` holds the deposited value), re-pinned once in `_realm_goldens.py`, said plainly.

@@ -2,6 +2,10 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §4) — amended by `U5a_CHAR_owed_amendments.md` §4 (F-PES-CHAR-08: a deed with a person subject is judged through `_bond`).
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.2 row (CONFORMS), §2 row A-19, §7, §7b-17, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` ledger S-12, S-14; `unified/U3_DEPENDENCY_ORDER.md` node B10, §6.2). Changed: "Kin as an eligibility … is Jordan's" is replaced by the pointer to A-19 (the crown when the line fails is the deed race: heir, consort, princess and both houses' heads may claim; kin stays a ground nothing reads as a rule); the scratch `probe_foils.py` reading becomes named tests; the `to:` id form is stated with its open mapping; lands-it and tier.
+
+**Lands in batch:** B10. **Depends on:** `U5a_CHAR_owed_amendments.md` §4 (B10, `_bond`); `02_CHAR_scar_cap_and_regard_unit.md` Addendum (B10, `regard_sign`; the falsifier names it).
+
 ## Status: PROPOSED
 
 Written by the CHAR audit lane, addendum B (`audits/02_CHAR_audit_addendum_B.md`, F-CHAR-18, B3.2
@@ -17,8 +21,9 @@ new carrier, no new tenure kind, no rule keyed on a ground.
 
 ## The problem, with evidence
 
-**The designed foils are not foils.** `probe_foils.py` (`build_realm(0)` and `(1)`, identical; ten
-named persons; six common referents; temperature 0):
+**The designed foils are not foils.** `probe_foils.py` (a scratch script, not in the repository; its reading
+is restated by the named tests below) (`build_realm(0)` and `(1)`, identical; ten named persons; six common
+referents; temperature 0):
 
 | pair | the design calls it (`npc_foils_v30`) | cosine of pursuit vectors | Kendall of score orders | stored stance either way |
 |---|---|---|---|---|
@@ -70,7 +75,10 @@ relation is authored once, and what he feels is derived from it and from what he
      - {to: NPC-050, ground: rivalry, valence: -1, weight: 2}
    ```
 
-   `to` is a cast id; `ground` a `relation_grounds` member; `valence` is −1 or +1; `weight` a whole
+   `to` is a registry case id (`NPC-050`), mapped to the seated person id (`p_npc_050`) by the same mapping
+   `build_realm` uses when it seats the cast `[UNVERIFIED: the mapping function's name was not found by grep
+   at this tree; the executing session reuses whichever function mints the seated id, and adds none]`;
+   `ground` a `relation_grounds` member; `valence` is −1 or +1; `weight` a whole
    number in the stance row's own unit, bounded by `data/cast.py::STANCE_MAX`. A relation is
    authored on the side that holds it: a symmetric one is two rows, one on each person, and they need
    not agree (the design's *"asymmetric rivalry"*, and its rulers who misread each other).
@@ -106,17 +114,21 @@ relation is authored once, and what he feels is derived from it and from what he
 - **Strain, capacity, break, rupture, cascade, inheritance.** Design-first; PP-724 §3 and §7 are
   provisional and unbuilt, and a relation that changes belongs to the acts that change it (`forgive`,
   a vow-break, a witnessed betrayal through `deeds_judged`), which already move regard.
-- **Kin as an eligibility.** Whether an heir must be kin is the NPC research lane's K-NPC-6 and is
-  Jordan's (a dynastic game and a title game differ). `kin` here is a ground nothing reads as a rule.
+- **Kin as an eligibility.** Answered by A-19 (the crown when the line fails is the deed race: the heir,
+  the consort, the princess and both houses' heads may claim; odds from what others believe of each deed).
+  `kin` here is a ground nothing reads as a rule.
 - **A unified bond primitive.** One row type and one claim; the knot and the tie stay what they are.
 
 ## The gate (an execution artifact)
 
 (a) No `relations:` key: `build_realm(0).content_hash()` EQUAL. (b) With the six rows above:
-`probe_foils.py` reads eleven directed pairs with a stance among the ten (five today); for Almud and
+eleven directed pairs hold a stance among the ten (five today); for Almud and
 Baralta, the rank of a hostile act (`challenge`, `open_case`) on the rival is higher than the same
 act on a person toward whom he holds no row, and the rank of `confer` on the rival lower. (c) Each
 holder's ledger holds the `bond:` claim at build, and a `tell` about the other can carry it.
+Named tests (new, `engine/season/tests/test_relations.py`): `test_no_relations_key_is_hash_equal` (a);
+`test_six_rows_give_eleven_directed_stance_pairs` and `test_a_rival_ranks_hostile_acts_higher_than_a_stranger`
+(b); `test_each_holder_holds_the_bond_claim_at_build` (c); `test_an_unknown_ground_or_id_is_refused`.
 
 ## The falsifier
 
@@ -140,3 +152,7 @@ lane's `regard_sign` column lands first). Or the build hash moves with no row au
 ## Cost class
 
 Edit (roster, loader, seeder), then content.
+
+**Lands it and tier.** The B10 batch, an IN/CHAR `valoria-author` session on `sonnet` (`high`), closed by
+B10's `methodology-close` once. **Hash movers.** None with no row authored (control); the content is a
+declared build-hash mover. **INCOMPLETE, content:** the six rows' numbers are placeholders for Jordan.

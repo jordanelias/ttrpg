@@ -2,6 +2,12 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-18) — D1 row 6 (`CoMovementCard.card_id`) is withdrawn: `17_CENSUS_C1B_01_deletions.md` D3 deletes `systems/threadwork/sim/co_movement.py` whole, so there is no field to cut. D1 row 1's condition does not fire: the dice proposals as reconciled to Jordan's answer A-5 (`U5a_DICE_owed_edits.md` §1) give `RollResult.pool_size` no reader, so the row stands. D1 rows 4–5 and `17_CENSUS_C1B_01_deletions.md` D1 edit the same file (`systems/characters/sim/conviction.py`); land them in one commit or re-read the line numbers. D2 and D4 are unchanged.
 
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §2 row REST_1:D1 row 1, §7, 7b; `unified/U3_DEPENDENCY_ORDER.md` §1 item 4, §4.1 rows 9-11, §5.1 row `dice_engine.py`). Changed: (1) the head's withdrawal of D1 row 6 and its answer to row 1's condition now replace the stale row and the stale note in the body, not sit beside them; (2) the order of D1 row 1 against the A-5 sampler batch: R5 §2 asked "after the A-5 batch"; U3 decides the reverse (§4.1 rows 9-10, SUP: the row stands whatever the dice proposals do; the file census orders `dice_engine.py` B03 → B05 → B06), and the U3 decision is applied: row 1 lands in B03 and B05 re-reads `dice_engine.py` after it; (3) D2 lands in B11 with `08_FI_04_small-edits.md` (§4.1 row 11, SPLIT); (4) batch and tier lines.
+
+Depends on: `17_CENSUS_C1B_01_deletions.md` (B03; D1 rows 4-5 share its commit). D2: `08_FI_04_small-edits.md` (B11). No dependency on `10_DICE_one_roller_one_fraction_rule.md` or `U5a_DICE_owed_edits.md` (cut, SUP).
+Lands in batch: B03 (D1, D4; lane IN); B11 (D2, with `08_FI_04`).
+Tier: sonnet / high.
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-30) — the test at `test_season_shape.py:4729-4731` is named.
@@ -34,18 +40,17 @@ Cut test for each: delete the field, run the one file named, same-seed hash unch
 | 3 | `Subunit.merged_cells` | `modules/mass_battle/hierarchy/units.py:434` delete the field; `:1121` drop `; self.merged_cells = set()`; `:1149` delete the line; `:1103` drop the name from the docstring list | none | `tests/valoria/test_mass_battle_maneuvers.py` |
 | 4 | `ConvictionThresholdState.destabilised` | `systems/characters/sim/conviction.py:165` field; `:249` docstring line; `:255` the local; `:261` the keyword | none | `engine/tests/test_knots_ed912.py` |
 | 5 | `ConvictionThresholdState.any_crisis` | same file `:168` field; `:252` docstring line; `:264` the keyword | none | same |
-| 6 | `CoMovementCard.card_id` | `systems/threadwork/sim/co_movement.py:65` field; `:128`, `:132` the keyword; keep the tuple unpack at `:124` (the catalogue rows carry the id as their first element; rename the local `_card_id`) | none | `tests/valoria/test_threadwork_mending_parity.py` |
+| 6 | ~~`CoMovementCard.card_id`~~ | **WITHDRAWN** (C-U5a-18): `17_CENSUS_C1B_01_deletions.md` D3 deletes `co_movement.py` whole | — | — |
 
 Notes on risk.
 
-- **#1 has one condition.** `10_DICE_one_roller_one_fraction_rule.md` changes how a fractional pool is
-  rolled. If that lands first and the dice rolled can differ from the pool asked, `pool_size` then
-  carries a fact `len(rolls)` does not, gains a reader in that proposal's receipt, and this row is
-  withdrawn. At this tree `pool_size == len(rolls)` by construction (`dice_engine.py:211-215`).
+- **#1 stands.** Its condition (a fractional pool rolled so that the dice differ from the pool asked)
+  does not fire: under A-5 the reconciled dice proposals (`U5a_DICE_owed_edits.md` §1) give `pool_size`
+  no reader (C-U5a-18). At this tree `pool_size == len(rolls)` by construction (`dice_engine.py:211-215`).
+  It lands in B03; B05's sampler edits re-read `dice_engine.py` after it (line numbers move).
 - **#4, #5** trim a retained oracle (ED-IN-0283 keeps the scar model; `02_CHAR_audit.md` §6 row 27).
-  The retention is of the model. `scar_counts`, which a test reads, stays.
-- **#6** is moot if `09_WR_threadwork_module.md` lands first and rewrites the card record; then the
-  rule is the same one stated there: an outcome field with no reader at landing is not carried.
+  The retention is of the model. `scar_counts`, which a test reads, stays. One commit with
+  `17_CENSUS_C1B_01_deletions.md` D1 (same file).
 - No `FORK:` row: no file is deleted (CLAUDE.md §1 retires *files*).
 
 **Gate:** each named file green; `python -m engine.season.harness.register --requirements` unchanged;
@@ -123,4 +128,4 @@ roster, one gate branch, two contract rows; no behaviour lost.
 
 ## Cost class
 
-Edit, all three batches. D1 and D4 can land today; D2 waits for `08_FI_04_small-edits.md`.
+Edit, all three batches. D1 (rows 1-5) and D4 land in B03; D2 waits for `08_FI_04_small-edits.md` (B11).

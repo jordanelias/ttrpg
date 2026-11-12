@@ -1,5 +1,9 @@
 # U5c · FI — fieldwork residue: one change to the question loop, the order across three lanes, and the reconciled inquiry rows
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row FRES (CONFORMS), §7 (INCOMPLETE: scratch probes, no named tests), §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-11i, ledger S-07, S-21, S-22; `unified/U1_GLOSSARY.md` *task*, *inquiry*, *party* ("patient" → counterparty); `unified/U3_DEPENDENCY_ORDER.md` node B11, §6.2). Changed: the four scratch probes the gates read (`r08_probe.py`, `p1_belief.py`, `p1d_where.py`, `fi_arms.py`; none is in the repository) are restated as named tests the batch writes first, with the expected readings quoted here; `graded_inquiries` is `graded_tasks` (D-U1-11i: renamed once in 18-A's commit, B07); §4's "judge whom evidence moves" points at the reconciled carrier (`02_CHAR_which_ground_moves_whom.md`'s `edge` rows; SC-P7 edit 3 is superseded); §7's "patient" is the counterparty (glossary); lands-it and tier. The order, the reconciled slants and the two-act conclusion stand.
+
+**Lands in batch:** B11 (§1–§3, §6; §7 and §8 inside their sources' batches, B11 and B26). **Depends on:** B07 (`graded_tasks` and 18-A's loader edit), B10 (CHAR's chooser), plan position CR-29 (the `reach` roster) `[PL]`.
+
 ## Status: PROPOSED (written by the U5c closure lane; a plan for a later implementation lane, executed by nobody here; not ratified by being written, `CLAUDE.md` §2)
 
 Carries the rows of `unified/U5_FINDINGS_CLOSURE_U5c.md` whose carrier column reads **FRES**, and conflicts
@@ -27,17 +31,20 @@ Order, one commit: (1) `08_FI_01` edit 1 (`holders_named`, `vacant_named`); (2) 
 (`seed_seat_news`) in the same commit, so the realm does not start blind; (5) `08_FI_01` edits 7 and 8
 (the requirement text; the one test).
 
-Gate (one run of each, quoted in the commit body): `runs/FI/r08_probe.py` P1 and P2 read *candidates moved:
-no*, both controls unchanged; `runs/PES_FI/p1_belief.py` `dead-silent` loses 0 candidates;
-`p1d_where.py` reads 38 → 38; the positive arms (the same changes made by a witnessed act) move the
-candidates. `confer`, `petition` and `challenge` formed counts at seeds 0 to 2, before and after.
+Gate (one run of each, quoted in the commit body). The three probes are scratch scripts not in the
+repository; the batch first writes their readings as tests in `engine/season/tests/test_fi_referents.py`:
+`test_a_silent_seat_change_moves_no_candidate` (the `r08_probe.py` P1 and P2 readings: *candidates moved:
+no*, both controls unchanged; it is `08_FI_01`'s "one test"), `test_a_silent_death_removes_no_candidate`
+(`p1_belief.py` `dead-silent`: 0 candidates lost), `test_who_is_where_is_read_from_the_askers_ledger`
+(`p1d_where.py`: 38 → 38), and `test_a_witnessed_change_does_move_the_candidates` (the positive arms).
+`confer`, `petition` and `challenge` formed counts at seeds 0 to 2, before and after, are quoted.
 Falsifier: `08_FI_01`'s and `16_PESSIMIST_FI_C`'s, unchanged. Hash: declared mover on every realm world.
 
 ## §2 The order across the FI, pessimist and LACUNA proposals, and CR-29's gate (R-06; F-PES-FI-10)
 
 | # | lands | needs | gate (the proposal's own unless stated) |
 |---|---|---|---|
-| 1 | `16_PESSIMIST_FI_D` (three product-less rows withheld) | nothing | `fi_arms.py 0 3 ship` reproduces `nod3`'s census |
+| 1 | `16_PESSIMIST_FI_D` (three product-less rows withheld) | nothing | `fi_arms.py 0 3 ship` reproduces `nod3`'s census (the scratch `fi_arms.py` is restated first as `engine/season/tests/test_fi_arms.py`, parametrised over its arms `ship`, `draw1`, `nod3`, `nochron` as fixture sweeps; each row below reads it) |
 | 2 | plan CR-29, taken first in B10-14 (`08_FI_02` edit 1) | the `reach` roster | **added here:** `fi_arms.py 0 3` and `1 2` under the new channel: `march` and `migrate` attempts inside the spread of today's `ship` and `draw1` arms (29 and 14 marches; 116 and 74 migration attempts at seed 0). `nochron` read 4 and 17. If the reading is outside, the roster lacks the kinds those candidates form on: add roster rows, never a second channel |
 | 3 | `08_FI_02` edits 2 to 5 as reconciled (§6); `16_PESSIMIST_FI_A` edits 1 to 3 and 5 | 2 | two-hop chains above 0 at two of three seeds |
 | 4 | §1 above | 2, 3 | §1 |
@@ -81,8 +88,9 @@ design (`08_FI_audit_addendum_B.md` F-FI-13, R-47). Gate: `register --requiremen
   `bears_on` column may then say it bears on `definition`. Waits on CR-36/37.
 - **The opponent's own word:** no new kind. A held claim of his `commitment.made` is `testimony`; set
   against his plea it is an ordinary contradiction (EVID rule 2).
-- **A judge whom evidence moves more or less:** `05_SC_capability_surface.md` edits 3 and 4, on the
-  leverage channel.
+- **A judge whom evidence moves more or less:** `02_CHAR_which_ground_moves_whom.md` (the `moved_by_*`
+  traits as `edge` rows of `capability_uses`, on the leverage channel); `05_SC_capability_surface.md` edit 3
+  is superseded into those rows and its edit 4 (the believed trait) stands.
 - **The band ceiling for an unsupported case (E-9):** not built; it becomes worth building when a
   disposal's `degree` has a reader, which `05_SC_arrangement_rows_that_bind.md` supplies. Recorded so the
   next reader does not re-derive it.
@@ -92,7 +100,7 @@ design (`08_FI_audit_addendum_B.md` F-FI-13, R-47). Gate: `register --requiremen
 The pessimist measured that `create_record` and `utter` hold about 550 to 625 of the acts carried out in
 three seasons, and that with every information verb cut the realm marches 53 times for 29, moves 94 times
 for 21 and determines three matters for none. The fix is the chooser's scoring and is another family's.
-This lane fixes only the acceptance, so the claim cannot be made by writing: on the `fi_arms.py` shape,
+This lane fixes only the acceptance, so the claim cannot be made by writing: on `test_fi_arms.py`'s shape,
 seed 0, three seasons, against the `draw1` control, a fix must show (a) acts carried out that are not
 information verbs above the control's spread (367 and 332 today); (b) information Events answered by a
 non-information act above 23; (c) `march`, `move` and `determine` counts reported beside both. A fix that
@@ -128,7 +136,8 @@ degree-keyed `writes:` with no `contests:` does not load (`engine/season/data/ve
 rules out (`rosters.yaml: inquiry_modules`, SM-3; the loader's own message: *"giving an inquiry a prize is
 scripting drift"*). So the conclusion is two acts, both of which exist:
 
-1. **`reconstruct` reasons.** `rosters.yaml: graded_inquiries` gains `reconstruct` (the existing route).
+1. **`reconstruct` reasons.** `rosters.yaml: graded_tasks` (renamed from `graded_inquiries` in 18-A's
+   commit, D-U1-11i) gains `reconstruct` (the existing route; it is an inquiry, writing nothing).
    Row: `writes: []`; `emits:` Overwhelming, Success, Partial `[conclusion.reached]`, Failure
    `[finding.none]`; `difficulty:` as `U5c_SC_one_obstacle_form.md` §4 gives the inquiries; leverage source
    `proofs`: one level per independent origin beyond the first among the claims it reasons from.
@@ -136,7 +145,7 @@ scripting drift"*). So the conclusion is two acts, both of which exist:
    (`14_VERBS_MATERIAL_E` §3 item 1), carried on the act as `concluded`, choice-sourced where his ledger
    names several doers.
 2. **Its product is a deposit to its maker.** At WITNESS the observation deposit lands one claim on the
-   actor: `(the deed's patient or object, concluded:<deed kind>, doer)`, source `inferred`. What it shows
+   actor: `(the deed's counterparty or object, concluded:<deed kind>, doer)`, source `inferred`. What it shows
    is read off `rosters.yaml: finding_terms` by band, the table that already decides what a finding shows:
    Partial withholds the hand; Success names it; Overwhelming names it at full confidence. Nothing wrong
    is deposited by the roll (K-37): the doer is whoever his own ledger names.
@@ -187,3 +196,7 @@ reading of `questions_for` until `08_FI_01` edit 8's test lands, then MECHANICAL
 
 §1: small build (as its sources). §2 to §5: edit or none. §6: edit. §7, §8: small builds inside their
 sources' batches.
+
+**Lands it and tier.** The B11 batch (`methodology-execute`, in §2's order), an FI `valoria-author` session on
+`sonnet` (`high`); one `methodology-close` with its terminal `opus` critique. **Hash movers.** §1 on every
+realm world; §6 to §8 as their sources state (declared).

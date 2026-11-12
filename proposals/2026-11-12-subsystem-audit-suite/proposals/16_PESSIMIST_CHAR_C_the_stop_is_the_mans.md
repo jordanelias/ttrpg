@@ -2,7 +2,18 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §1) — item 4 (the draw) is **no longer held**: Jordan's answer A-24 (D-28) makes a scruple a drawn tendency; `scruple_temperature` ships above 0 when the gate is armed, and the threshold arm is the control. Arming the gate is its own flip (`U5a_CHAR_owed_amendments.md` §8).
 
-## Status: PROPOSED — one part HELD BACK (the draw: it meets a RULED item; both options in "For Jordan")
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-24 / D-28: the Status and "For
+Jordan" closed; the shipped temperature stated as an assumption; A-34: `Scene.forgone` is not a belief), §1 (item 5:
+`Scene.forgone` lands only with its reader, ID-13; `scruple.overridden` rides `Act.scene`, not `payload`, and is declared
+in the verb table so inv. 7 derives it; the Event names no subject, `04` §B.9 `:433`), §7/§7b (tests, tier); U3 B10,
+§6.2 (`c2_stopped.py` not in the repository). Changed: Status line, item 4's heading, item 5's carrier, the edits
+table's last rows, the gate, "For Jordan".
+
+## Status: PROPOSED (A-24 taken: item 4, the draw, is no longer held; arming the gate is its own flip, `U5a_CHAR_owed_amendments.md` §8)
+
+Lands in batch: **B10** (IN/CHAR). Depends on: `01_CORE_reason_trail_in_the_act_store.md` (B09; the reader of
+`Scene.forgone` lands in the same commit as the field), `16_PESSIMIST_CHAR_B_a_pursuit_does_what_its_name_says.md`
+(B10, before this), `U5a_CHAR_owed_amendments.md` (B10; §8 is the arming).
 
 Written by the CHAR pessimist lane (`audits/16_PESSIMIST_CHAR.md`, F-PES-CHAR-02). Ratifies nothing;
 reference under `CLAUDE.md` §0.05. It is the build of H-146's remaining position (arming the ruled
@@ -65,8 +76,9 @@ refused at load, on `refusing_pole`'s precedent); `options.refuses` returns Fals
 sits past the tolerance toward the refused pole (0.0 when it does not, or for a verb outside the set).
 `refuses` becomes `scruple(...) > 0` and keeps its callers.
 
-**4. The draw (HELD BACK).** New fixture `scruple_temperature` (control 0: today's threshold; swept
-0.1 / 0.2 / 0.4). At a non-zero value the candidate is struck with probability
+**4. The draw (A-24: ships).** New fixture `scruple_temperature` (control 0: today's threshold; swept
+0.1 / 0.2 / 0.4). Shipped value `0.2` when the gate is armed `[ASSUMPTION: the proposal's own gate arm —
+basis: gate 4; Jordan did not give a value; revert: 0, the threshold]`. At a non-zero value the candidate is struck with probability
 `1 − exp(−margin / scruple_temperature)`, on the person's own draw keyed
 `scruple:<verb>:<subject>` (the chooser's `draw`, keyed by candidate as `choice:` is, so a fork stays
 attributable). A large margin is refused nearly always and never certainly; a small one usually gives
@@ -76,11 +88,17 @@ way.
 before the sample), so the struck candidate's score is known. Where a struck candidate out-scored the
 candidate that leads the released scene, the `Scene` carries it: `Scene.forgone: tuple[(verb, subject,
 margin)]` (a new field on the carrier; owner `state/carriers.py`, the CORE lane; cross-listed with
-`01_CORE_reason_trail_in_the_act_store.md`, which owns where a reason is stored). Where a candidate
-with a positive margin is NOT struck and the act resolves, the fold emits `scruple.overridden` (degree
-none, subject the actor, the act among its causes): the person and those present hold a claim that he
-did what he holds wrong. `02_CHAR_scar_is_a_wound.md`'s trigger list may name that kind; this proposal
-does not write a scar.
+`01_CORE_reason_trail_in_the_act_store.md`, which owns where a reason is stored). The field lands in the
+same commit as that file's reader (ID-13, `04` `:401`: a field with no reader is not carried). Where a
+candidate with a positive margin is NOT struck and the act resolves, the fold emits `scruple.overridden`
+(degree none, the act among its causes; an `Event` has no subject field, `04` §B.9 `:433`, so the actor is
+reached through the act in `causes`, which WITNESS reads from the act store, `04` `:180`): the person and
+those present hold a claim that he did what he holds wrong. The fold finds the margin on `a.scene.forgone`
+and the act's own entry (the `Act.scene` field, `04` `:426`), not in `payload`. `scruple.overridden` is
+declared in `verb_table.yaml`'s emission columns so loader inv. 7 (`04` `:500`) derives it into the
+Event-kind roster. `02_CHAR_scar_is_a_wound.md`'s trigger list may name that kind; this proposal does not
+write a scar. `Scene.forgone` is the chooser's record of what was given up, not a belief the person holds
+about himself (A-34 builds self-knowledge narrowly; this file adds none).
 
 ## Exact edits, by owner
 
@@ -90,14 +108,21 @@ does not write a scar.
 | `engine/season/data/rosters.py` | `refusable(axis)` loader and its two load-time refusals |
 | `engine/season/decision/options.py` | `refusal_tolerance` returns the share; `scruple`; `refuses` composes on it; the gate at `:170` is removed from `opening_set` |
 | `engine/season/decision/choose.py::make_ranker` | after `_scores` is built: strike by `scruple` (threshold or draw), collect `forgone`; `release` passes it to the `Scene` |
-| `engine/season/data/fixtures.py` | `scruple_temperature=0` (control), hole row, sweep 0 / 0.1 / 0.2 / 0.4 |
-| `engine/season/state/carriers.py` | `Scene.forgone: tuple = ()` (CORE's file; cross-listed) |
-| `engine/season/verb_table.yaml`, `loop/resolve.py` | `scruple.overridden` declared and emitted where the act's payload carries a positive margin `[UNVERIFIED: the cheapest carrier from chooser to fold; `payload` is the existing one]` |
+| `engine/season/data/fixtures.py` | `scruple_temperature=0` (control; `0.2` shipped when armed, item 4), hole row (id from `references/id_reservations.yaml` `next_free`), sweep 0 / 0.1 / 0.2 / 0.4 |
+| `engine/season/state/carriers.py` | `Scene.forgone: tuple = ()` (CORE's file; cross-listed; lands with the reader of `01_CORE_reason_trail_in_the_act_store.md`) |
+| `engine/season/verb_table.yaml`, `loop/resolve.py` | `scruple.overridden` declared in the emission columns and emitted by the fold where `a.scene.forgone` gives the act's own candidate a positive margin (carrier: `Act.scene`, not `payload`) |
 | `engine/season/harness/interactions.py:311-313` | reads `scruple` in place of `refuses` (it prints the gate per verb today) |
 
 ## Gate (an execution artifact)
 
-`c2_stopped.py` repeated on the edited tree, seeds 0 and 1:
+`c2_stopped.py` was lane scratch, not in the repository (U3 §6.2); its readings are committed first as
+NEW `engine/season/tests/test_scruple.py`: `test_unarmed_hash_equal` (gate 1),
+`test_refusable_set_is_closed_and_cell_nonzero` (item 1's load refusals),
+`test_armed_threshold_refuses_some_not_all_and_never_move_transfer_exchange` (gate 2),
+`test_share_not_projected_weight_is_the_tolerance` (gate 3),
+`test_draw_strikes_some_not_all_at_margin_005_and_08` (gate 4; 200 draws keyed `scruple:<verb>:<subject>`),
+`test_forgone_scores_exceed_released_lead` (gate 5). Command: `python -m pytest engine/season/tests/test_scruple.py -q`.
+The table in "The problem" is the producing lane's evidence. Readings, seeds 0 and 1:
 
 1. Unarmed: 0 refused, hash `bacd687f` after two seasons at seed 0.
 2. Armed, threshold: the number of persons with any candidate refused is strictly between 0 and 46, and
@@ -132,9 +157,12 @@ property of the table.
 ## Cost class
 
 Small build. Items 1 to 3 are an edit and can land alone (they make H-146 armable). Item 5 needs CORE's
-carrier field.
+carrier field. Hash movers declared: none unarmed; every seeded result once armed (the arming flip,
+`U5a_CHAR_owed_amendments.md` §8, is its own commit). Tier: `sonnet`, effort `high`; the refusable list is
+content (ASSUMPTION, CHAR content pass). Lands it: B10, after `_CHAR_B`; order of edits 1 → 2 → 3 (hash-equal),
+then 5 with the reason-trail reader, then 4's fixture at the control.
 
-## For Jordan (item 4 only)
+## For Jordan (CLOSED by A-24 / D-28, 2026-11-12: Option B, a scruple is a drawn tendency; the threshold is the control arm. Kept as the finding.)
 
 ED-IN-0261 (RULED) words the gate as a threshold: *"the weighting is a threshold for certain actions"*.
 The standing rule of 2026-11-12 says no consequential outcome is a fixed function of state. Option A:

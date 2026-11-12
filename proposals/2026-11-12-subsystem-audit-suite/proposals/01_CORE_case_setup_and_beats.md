@@ -1,5 +1,9 @@
 # CORE 02 — a case builds its own world and states its beats
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.1 row CORE 02 (CONFORMS), §2 row (A-44, A-50, A-51 via the ARCS file), §7, §7b-T; `unified/U3_DEPENDENCY_ORDER.md` node B39). This file is extended and in two places overruled by `12_ARCS_case_on_the_realm.md` (base `realm` for cast cases; a setup is a delta on the realm, which is now a generated cast with a five-year prologue, A-44, A-50, A-51): `who:` resolves by registry case id (`p_npc_088`), never by name; **`knows:` is struck** (the loader refuses a new Claim construction site, `corpus_run.py:384-387`; what a person knows at the start is prehistory folded through RESOLVE and WITNESS); the beat matcher's `actor_of` read is lawful for a harness observer and is said at the site; `harness/arc.py` exists (verified: `_reach`, `shuffled_causes`); named tests, lands-it and tier.
+
+**Lands in batch:** B39, with and before `12_ARCS_case_on_the_realm.md`. **Depends on:** `21_PROCEDURAL_C_prologue_and_case_seeds.md` (B39).
+
 ## Status: PROPOSED
 
 Source: `audits/01_CORE_audit.md` F-CORE-02, F-CORE-04, F-CORE-05; resolutions 2, 3, 4; §13.
@@ -33,20 +37,21 @@ shape-neutral specification (`CASE_BRIEF.md`); the overlay is where a case meets
 ```yaml
 setup:
   span_seasons: 6            # integer; `ongoing: true` beside it where the source says so
-  cast:                      # extends the existing `cast:` keys (corpus_run.CAST_KEYS)
-    - who: Carin Vedel
+  base: realm                # `realm` (cast cases) or `template` (12_ARCS_case_on_the_realm.md)
+  cast:                      # extends the existing `cast:` keys (corpus_run.CAST_KEYS); on `realm`, a delta only
+    - who: p_npc_088         # registry case id, never a name match
       capability: {copying: 3}
       pursuits: {stability: 0.9, community: 0.3}     # pursuit_axes keys; refused off-roster
       office: {post: ..., conferral: ...}            # as today
       holds: [rec_einhir]                            # ids declared under `records:`
-      knows: [{about: p_bailiff, predicate: ..., value: ...}]   # firsthand claims at tick 0
+  prehistory: [{actor: p_npc_088, verb: ..., subject: ...}]   # folded through RESOLVE and WITNESS; no `knows:` key
   records: [{id: rec_einhir, kind: ..., subject_matter: {...}}] # checked by Record.__post_init__
   dates:   [{id: d_assize, venue: <rung>, due_at: 2, holder: <cast who>}]
   player:  {who: <cast who>, policy: echo | first_offered | <named policy>}
 beats:
   - id: b1
     kind: record.created            # an Event kind on the derived roster
-    actor: Carin Vedel              # optional; resolved to the seated person
+    actor: p_npc_088                # optional; the seated person by registry case id
     subject: rec_einhir             # optional
     after: null                     # optional beat id that must precede
     caused_by: null                 # optional beat id reachable through causes[]
@@ -57,14 +62,16 @@ beats:
 
 ### Edits, by owner
 
-1. **`harness/corpus_run.py`**: `CAST_KEYS` gains `pursuits`, `holds`, `knows`; `build_at` builds from
-   `setup:` when present and falls back to the template when absent (so the 135 un-authored cases run
+1. **`harness/corpus_run.py`**: `CAST_KEYS` gains `pursuits`, `holds` (not `knows`: struck, see the
+   `Reconciled:` line); `build_case` dispatches on `base` (`12_ARCS_case_on_the_realm.md`); `build_at` builds
+   from `setup:` when present and falls back to the template when absent (so the 135 un-authored cases run
    as today, hash EQUAL). `seasons_for` reads `setup.span_seasons`. Unknown keys are refused at load,
    as `_check_cast` does today.
-2. **`harness/arc.py`** (the existing arc harness `[body not opened: UNVERIFIED that its shape fits]`):
-   `match_beats(w, driver, beats) -> list[BeatResult]`, a pure read over `w.log` and `driver.act_of`:
-   kind equality, actor through `state/attribution.py::actor_of`, subject through the Event's changes,
-   `after` by log order, `caused_by` by a walk of `causes[]`. No new Event kinds, no writes.
+2. **`harness/arc.py`** (the existing arc harness, 400 lines; verified: `_reach` `:223` walks causes,
+   `shuffled_causes` `:213`, `read_arcs` `:335`): `match_beats(w, driver, beats) -> list[BeatResult]`, a pure
+   read over `w.log` and `driver.act_of`: kind equality, actor through `state/attribution.py::actor_of`
+   (`:73`; a resolver-side read, lawful for a harness observer, said in the docstring), subject through the
+   Event's changes, `after` by log order, `caused_by` by `_reach`. No new Event kinds, no writes.
 3. **`harness/corpus_run.py::run_case`**: runs the on-arm and, where `off_arm:` is stated, the off-arm;
    status vocabulary gains `BEATS n/m` and loses `RUNS-UNDECLARED` for authored cases. `R2` stops being
    `NOT-COMPUTABLE` for them.
@@ -80,6 +87,9 @@ beats:
 
 Per authored case, seeds 0, 1, 2: every non-optional beat matched in the on-arm; the off-arm's
 withheld beat absent; two cases at the same scale hash differently at tick 0. Printed by `corpus_run`.
+Named tests (new, `engine/season/tests/test_case_setup_and_beats.py`): `test_an_unauthored_case_hashes_as_before`;
+`test_beats_match_on_arm_and_not_off_arm`; `test_echo_policy_leaves_the_hash_equal`;
+`test_a_knows_key_is_refused_at_load`; `test_who_resolves_by_registry_id_only`.
 
 ## Falsifier
 
@@ -105,3 +115,6 @@ This is an instrument, not a design object in play, so N, R and S are read on wh
 
 Small build in the harness, then data authoring per case (each lane's). No hash moves for un-authored
 cases. No guard: nothing here runs in CI unless a later decision puts `corpus_run` there.
+
+**Lands it and tier.** The B39 batch, an IN `valoria-author` session on `sonnet` (`high`), closed by B39's
+`methodology-close` once; case data by each lane.

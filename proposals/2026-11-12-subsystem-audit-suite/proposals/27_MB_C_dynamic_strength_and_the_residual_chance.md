@@ -4,6 +4,11 @@
 
 Folded: 2026-11-12, ruling **A-77** (`unified/DECISIONS_ANSWERED.md:102`), Jordan's answer to audit 27 §9 item 1: *ship zero when the first test arm passes*; the small named level is used only if the first arm fails. So §4's criterion is no longer a recommendation awaiting his word: it is the rule. Its first arm passing licenses the deletion of §2 at zero, in the commit that carries the test's table; its second arm (§5's level) is reached only on the first arm's failure; its third arm (neither) is unchanged. This overwrites `ED-MB-0016`'s magnitude one step past "lower", on his word. The last section ("Conflict with a ruled item") and §5's third bullet are amended below to say so. Nothing else changes: the test is still run, the criterion is still written before the run, and nothing ships before the table exists.
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AND_VOCABULARY.md` D-U1-06 / `U3_CONFLICT_LEDGER.md` C3-L5 (the named draws ride `Event.observed` as members of `rosters.yaml: observation_terms`, `draw:<name>`; no `Event.draws` field; `R1_READ.md` §1.2's AMBIGUOUS row answered), D-U1-11e (`report.draws` is this file's `FieldOutcome` field), `U3_CONFLICT_LEDGER.md` C3-C6 (27C-3 (h) owns the one edit of the LINEAR band; INCOMPLETE item 4 closed), C3-D2 (the field calibration batch lands after the keyed draw B06, so reading 3 has one key per purpose; INCOMPLETE item 2 closed; §5's fortune level is keyed, not on "the scoped RNG"), `U3_DEPENDENCY_ORDER.md` B19 (the "results" block lands earlier in the same batch; INCOMPLETE item 3 closed by order), §2's planted-collapse note (the CR-12 gate now names both carriers); `Depends on:` / `Lands in batch:`.
+
+**Depends on:** `27_MB_A_command_and_the_obedience_draw.md` (B19), `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` and `16_PESSIMIST_MB_rout_has_two_exits.md` (B19), `16_PESSIMIST_MB_partition_and_the_pair_rule.md` (B19), `26_MASS_BATTLE_calibration_targets.md` (B19, the "results" block), `04_MB_manager_battle_one_resolver.md` §6 and `04_MB_typed_outcome_and_one_path.md` (B17/B20) for 27C-1; `11_GO_one_draw_owner.md` (B06).
+**Lands in batch:** B19 (`B19-mb-field-calibration`, MB): 27C-1 with the named draws; 27C-2's table read last; 27C-3 in the batch's one re-record, at zero if the first arm passes (A-77).
+
 Lane MB (the report's fields ride the typed outcome, IN's). Serves ruling **A-59**
 (`unified/DECISIONS_ANSWERED.md:73`) clauses (3) and its answer B: *"the overall army prowess as a grand
 formation of these units is dynamic so a static fighting value is misleading as the overall placement of
@@ -78,7 +83,8 @@ Move a unit, turn one, tire one or change its orders and the set changes; nothin
   two legacy modes, which did not pin it (`config.py:324-327`), stop differing for that reason.
 - `04_MB_cr12_linear_law.md`'s gate uses `MB_FRICTION_SIGMA=4` as its planted collapse; with the constant
   gone that plant becomes the fortune level's seed set to its maximum, or, if no residual ships, a planted
-  `PAY_PER_NET` of zero. The owner of that gate picks; it is named here so the deletion does not strand it.
+  `PAY_PER_NET` of zero. *(W3-1:)* that gate now names both carriers (its `Reconciled:` line), so the deletion
+  does not strand it.
 
 ### 3. Where the chance in a field is, after
 
@@ -175,8 +181,8 @@ parameter and reading 3 as one added function. It writes nothing tracked and gat
 
 ### 5. What may stay: a named level, and only if the criterion asks for it
 
-If arm F ships: `fortune` is one signed level per side **per bout**, drawn on the scoped RNG at the bout's
-start as a normal value in sigma units with spread `fortune.sigma`, added to that side's levels in every pair
+If arm F ships: `fortune` is one signed level per side **per bout**, drawn by the key `(field, bout, side,
+"fortune")` (A-30) at the bout's start as a normal value in sigma units with spread `fortune.sigma`, added to that side's levels in every pair
 and capped with them by the sampler's one soft cap (`engine/dice_engine/sigma_leverage.py::soft_cap`, ceiling
 1.5). It is listed in `report.draws` by name. Data: `deployment.fortune: {sigma: 0}` in the troop file's
 header, where zero is removal.
@@ -198,7 +204,7 @@ header, where zero is removal.
 | `modules/mass_battle/core/exchange.py`, `orchestration.py`, `battle_loop.py`, `config.py` (MB) | §2's deletion, in the licensed commit |
 | `modules/mass_battle/` draw sites (MB) | one `trace_event('draw', …)` each |
 | `engine/season/queries/inputs.py::FieldOutcome` (IN) | `report.draws`; `fortune` withdrawn |
-| `engine/season/loop/effects_combat.py::_eff_march` (IN) | writes the draws that changed the end state as Observations on the band Event |
+| `engine/season/loop/effects_combat.py::_eff_march` (IN) | writes the draws that changed the end state as Observations on the band Event's `observed`, each predicate `draw:<kind>` a member of `rosters.yaml: observation_terms` (added in the same commit; D-U1-06); no new Event field |
 | `references/troops.yaml: deployment.fortune` (MB) | only if arm F ships |
 | `tools/ci_golden_modes_check.py` (MB) | the pin removed with the constant |
 | `registers/editorial_ledger_mb.jsonl` (MB) | a superseding row on `ED-MB-0016` citing A-59, A-77 and the test's table, in the same commit |
@@ -323,14 +329,10 @@ plainly in the commit.
    `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md`; `16_PESSIMIST_MB_rout_has_two_exits.md`; the pair rule.
    What **can** be run today is K against R0 (1.1 against 0, no named draws), which is the pessimist lane's
    measurement and decides nothing.
-2. *Reading 3 (the flip share) needs one stream for each source of draws.* The module has one scoped RNG
-   (`rngsource.get()`, `using()`), and A-30's keyed draw is not landed. Missing: either A-30, or a
-   per-purpose child stream inside `rngsource` (`rngsource.for_purpose(name)`), which is engine code and so
-   a decision for the A-30 owner, not for this instrument.
-3. *The "results" block of `gauge_mb.py` does not exist*, and that file's `matchup` (`:472`) builds through
-   harness constructors and the multi-turn mode that `04_MB_typed_outcome_and_one_path.md` §2 removes.
-   Missing: `26_MASS_BATTLE_calibration_targets.md` §2 landed, or the builder creates the block with 27C-2
-   and says so.
-4. *`lanchester_signature.py`'s LINEAR band* (item h) is also `04_MB_cr12_linear_law.md`'s gate ("LINEAR in
-   band"). The two proposals touch one row. Missing: nothing to design; the CR-12 builder and this one must
-   make the edit once, in whichever lands second.
+2. *(Closed by order, W3-1, C3-D2.)* Reading 3 needs one key per source of draws; the field calibration batch
+   lands after A-30's keyed draw (B06), so each source is re-keyed alone. No `rngsource.for_purpose` is needed.
+3. *(Closed by order, W3-1.)* The "results" block of `gauge_mb.py` lands earlier in the same batch with
+   `26_MASS_BATTLE_calibration_targets.md` §2 (`run_results()` beside `run()`, building through the season's
+   constructors), so 27C-2 adds its arms to an existing block.
+4. *(Closed, W3-1, C3-C6.)* The LINEAR band's one edit is this file's 27C-3 (h); `04_MB_cr12_linear_law.md`'s
+   gate reads the band as that commit leaves it.

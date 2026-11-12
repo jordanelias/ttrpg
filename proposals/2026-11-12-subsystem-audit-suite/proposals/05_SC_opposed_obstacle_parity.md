@@ -4,16 +4,18 @@ Folded: 2026-11-12, lane 29 (`audits/29_ONE_OPPOSED_RULE.md`; `proposals/29_DICE
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-33) — un-held by Jordan's answer A-26 (0.4 per point: an even contest is even). The "HELD BACK" in the Status line below is superseded and this file is the carrier of the rate. Read with two things: the rate's one owner is `opposed_ob` (`U5c_SC_one_obstacle_form.md` §1), and it changes once, in that file's §4 step 5, together with A-5 (the bell curve), A-6 (score plus a base) and A-7 (two inputs), so the 0.4 is set against the re-centred sampler and not the whole-dice one this file measured.
 
-## Status: PROPOSED — HELD BACK. It would overwrite a RULED item (Jordan, 2026-08-14: an opposed
-obstacle is *"their corresponding score/2 plus whatever specific modifiers exist for them in that
-instance"*). Listed in `audits/05_SC_audit.md` §11 with both options. Nothing here ratifies on merge.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row SC-P5, §2 rows SC-P5 Status and A-80, §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-02, D-U1-11j, ledger R-07 to R-10, R-16; `unified/U3_CONFLICT_LEDGER.md` C3-C12, `OWED_TO_UNIFICATION.md` §A row on `degree_from_net`'s docstring). Changed: the Status line is no longer HELD BACK (A-26 un-held it; A-79 makes it the one rule for fight and argument); "The two options" is replaced by the decision (option B, at `opposition_rate`); edit 1 reads the opponent's **trained score** and names the even line (D-U1-02); edit 2's "no edit" on H-127 is superseded by C-04 (`obstacle_default` deleted; the stand-in is `opposed_ob(pool_default, opposition_rate)`); the problem tables are marked whole-dice history (A-5); A-80's entrenched-world control is cited (C3-C12); the docstring that still states the 2026-08-14 form is named as owed to B05; lands-it and tier added.
+
+**Lands in batch:** B05 (the joint calibration step, `U5c_SC_one_obstacle_form.md` §4 step 5). **Depends on:** `29_DICE_one_opposed_rule_form_and_tuning.md` item 29-1 (`opposed_ob`, B05), `U5c_SC_one_obstacle_form.md` (B05), `U5a_capability_home_and_two_inputs.md` Part B (the trained score, B05).
+
+## Status: PROPOSED — un-held by Jordan's A-26 (2026-11-12: an equal opponent costs 0.4 per point), which overrides the 2026-08-14 half-score ruling; A-71/A-79 make it the one opposed rule for argument and fight. This file carries the rate.
 
 Source: audit F-SC-03; hole rows H-288 (RULING), H-296, H-127 (the inversion).
 
 ## What it changes in `engine/season/` at runtime
 
-Under option B, the obstacle a PERSON opponent contributes becomes `MU_PER_DIE × score` where it is
-`score / 2` today. Every contested social act against a person who holds a score moves; in the
+The obstacle a PERSON opponent contributes becomes `opposition_rate × trained score` (live `MU_PER_DIE`,
+0.4 per point) where it is `score / 2` today. Every contested social act against a person who holds a score moves; in the
 shipped realm that is nobody (all pools and oppositions fall to the defaults; `aperture 2 0`:
 *"`argue`: pools rolled [2] over 9 actors"*), so the realm hash is unchanged until attributes are
 seated (`build_realm(cast_attributes=True)`). Under option A nothing changes.
@@ -37,48 +39,56 @@ Swapping sides does not swap the result: 6 against 3 succeeds 0.570 of the time,
 score of 2 composes Ob 1.0, one holding none composes `obstacle_default` 2 (H-127's inversion,
 reproduced: P(Failure) 0.42 against 0.74 at pool 2).
 
+*(The tables of this section are whole-dice history: they were measured on the whole-dice social roll
+that A-5 retires. The live arm's closed forms are lane 29's, quoted in the Folded line above.)*
+
 Control (the same pairs at `Ob = MU_PER_DIE × s`): P(Failure) 0.358 / 0.393 / 0.410 / 0.421 / 0.436
 and P(Success or better) 0.324 / 0.372 / 0.394 / 0.407 / 0.423 at s = 2 / 4 / 6 / 8 / 12 — flat, and
 near the Partial boundary, as an even contest reads on a four-band ladder.
 
-## The two options
+## Decided
 
-- **A — keep `score / 2` (the ruling as it stands).** A contested social act is an attempt against a
-  defence, and the defence is deliberately worth more than the attack: the status quo holds, the
-  person acted upon has the advantage, and the more skilled the pair the more it holds. Cost: no
-  contest is "between equals"; an arrest, an argument and a hearing all favour whoever is acted on,
-  by an amount that grows with skill (H-296's 20 % and 29 %).
-- **B — `MU_PER_DIE × score` (this proposal).** The opponent's score is priced at what a die of it
-  would net, so equal parties are even and the acting side wins by being better, by the room
-  (`reception`, `proofs`) or by effort. Cost: it replaces a ruled constant with a derived one, and
-  every authored expectation built on `score/2` (H-213's per-pool caps, `chance_floor`) is re-read.
+Option B (A-26, 2026-11-12: *0.4 per point; an even contest is even*), made the one opposed rule for the fight
+and the argument by A-71 and A-79. The 2026-08-14 half-score form (option A) is the control arm only
+(`opposition_rate` 0.5). A-79's own reading keeps a position hard to move (an even argument on a routine
+matter fails 59%), and A-80 requires that entrenchment still moves the world: the control that shows it is the
+entrenched-world arm carried by `28_CORE_scene_access_A_occupancy_and_precedence.md` gate row 12,
+`28_CORE_scene_access_C_the_petition_that_waits.md` gate row 7 and `23_STORY_D_story_census_and_gate.md` (C3-C12).
 
-They are different games: A is a world where moving anyone is uphill; B is one where contests are
-symmetric and institutions (the room's terms) supply the asymmetry.
+## Exact edits
 
-## Exact edits (option B only)
-
-1. `modules/social_contest/roll.py::obstacle` — `ob = float(inp.opposition) * inp.opposition_rate`
-   where `opposition_rate` is a new field of `queries/inputs.py::SocialContestInput`, filled by
-   `seam/wrappers/sigma.py::_frame` from a fixture `opposition_rate` whose shipped value is `0.5`
-   (option A, the control) and whose swept arm is `dice_engine.MU_PER_DIE` (read from the owner, not
-   typed). A NUMBER row in `hole_register.yaml` carries the sweep.
-2. H-127's inversion, independent of A/B and not ruled: in `seam/wrappers/sigma.py::_opposition_of`,
-   a held score below `obstacle_default / opposition_rate` is not floored (the row's own stated
-   revert is the floor). DECIDED: no floor — a person with a low score SHOULD be easier to move than
-   an unknown; the defect is the stand-in's size, which is H-127's own swept value. No edit.
+1. `modules/social_contest/roll.py::obstacle` — the opposition term is
+   `sigma_leverage.opposed_ob(inp.opposition, inp.opposition_rate)`, where `inp.opposition` is the
+   opponent's **trained score** (`pool.py::score`; no base dice, no practice addend, no seat; A-79,
+   D-U1-02) and `opposition_rate` is a field of `queries/inputs.py::SocialContestInput`, filled by
+   `seam/wrappers/sigma.py::_frame` from the fixture `opposition_rate` (control `0.5`, the 2026-08-14 form;
+   live arm `dice_engine.MU_PER_DIE`, read from the owner, not typed). A NUMBER row in `hole_register.yaml`
+   carries the sweep. The social composer leads with the even line `even_line(pool_add)` (OBS §2); the
+   fight reads the same `opposed_ob` and has no even line. `engine/dice_engine/dice_engine.py::degree_from_net`'s
+   docstring, which still records the 2026-08-14 opposed form, is rewritten in the same batch (B05;
+   `OWED_TO_UNIFICATION.md` §A).
+2. H-127's inversion: superseded by C-04. `obstacle_default` and its fixture are deleted (OBS §2,
+   §4 step 1a); a person without a held score opposes with the untrained score `pool_default`, and where
+   nobody stands opposite the stand-in is `opposed_ob(pool_default, opposition_rate)`. A person with a low
+   held score is never easier to move than an unknown: a first rank is never below the untrained score
+   (`max(untrained score, rank)`, U1 §4). No floor edit.
 
 ## Gate
 
-`engine/season/tests/test_sc01_obstacle_ceiling.py`: at the swept arm, exact `band_odds` for equal
-pairs s ∈ {2, 4, 8, 12} have P(Failure) within 0.10 of each other; at the control arm they reproduce
-the table above. `build_realm(0)` hashes equal on both arms (nobody holds a score).
+`engine/season/tests/test_sc01_obstacle_ceiling.py` (exists): at the control arm the whole-dice table above
+is no longer reproducible after A-5 lands (the sampler changes); the test's control reads the base tree's
+closed form. At the live arm, on the re-centred sampler (A-5, A-6), equal trained ranks 0, 2, 4, 7 meet a
+`plain` row with P(margin ≥ 0) within 0.005 of 0.5 (lane 29's closed form: 50.0%), named
+`engine/season/tests/test_sc_calibration_targets.py::test_equal_ranks_at_plain_are_even` (the file is
+MISSING from the tree and is written as B05's first commit, U3 §6.1). `build_realm(0)` hashes equal on both
+arms until a cast row holds a score.
 
 ## Falsifier
 
-For equal pairs, P(Failure) rises 0.186 from s = 2 to s = 12 today (0.420 → 0.606) and 0.078 at the
-swept arm (0.358 → 0.436). If a re-run at the swept arm shows a rise above 0.10, the rate is not the
-cause and this proposal is wrong. What the rate does NOT fix, stated: a one-sided roll is never
+For equal pairs, P(Failure) rises 0.186 from s = 2 to s = 12 on the whole-dice roll (0.420 → 0.606) and
+0.078 at the swept arm (0.358 → 0.436), both history. On the live arm: if equal trained ranks at `plain`
+read outside 0.5 ± 0.005 at any rank, or an opposition value moves with a practice addend, a seat or an
+attribute, the rule is not what A-79 rules and this edit is wrong. What the rate does NOT fix, stated: a one-sided roll is never
 complementary under a four-band ladder (6 against 3 succeeds 0.630 and 3 against 6 succeeds 0.124 at
 the swept arm; the rest is Partial and Failure mass), so "swapping sides flips the result" needs a
 two-sided roll, which is a different mechanism and is not proposed.
@@ -86,7 +96,7 @@ two-sided roll, which is a different mechanism and is not proposed.
 ## NERS reading
 
 - **N**: holds lateral (combat and mass battle are two-sided) and bottom-up (the dice's mean is the
-  owner's); top-down it is a design choice, which is why it is held back.
+  owner's); top-down it was a design choice, which Jordan made (A-26, A-79).
 - **R**: B lets a player intuit "equal means even"; A is a defensible world-statement.
 - **S**: *calculations consistent in methodology* — the one flag against A: the obstacle is priced in
   a unit (half-points) the pool is not (0.4 per die).
@@ -94,4 +104,9 @@ two-sided roll, which is a different mechanism and is not proposed.
 
 ## Cost class
 
-Edit, after a ruling.
+Edit (the ruling is given: A-26, A-79).
+
+**Lands it and tier.** The B05 batch, at OBS §4 step 5 (the joint calibration with A-5, A-6, A-7):
+`valoria-author` on `sonnet` (`high`) for the edit; the calibration read on `opus`; one `methodology-close`
+for the batch. **Hash movers.** Every social roll against a person who holds a score, and the stand-in's
+size at the live arm; re-pinned once with B05, said plainly.

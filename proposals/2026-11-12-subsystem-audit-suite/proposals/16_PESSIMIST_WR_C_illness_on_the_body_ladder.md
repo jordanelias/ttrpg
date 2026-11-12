@@ -2,24 +2,37 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-15** (natural death on, after the 46 ages are authored). "Ships dark … switches nothing on" no longer holds as the end state: the rate goes live behind the authored ages (`22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md` edit 1 owns `Person.born`; this file's edit 4 authors ages into the same field and is merged under it: one writer). The graded bout (a draw on the ladder; death only at body zero) is the form the live rate takes. One re-pin of every seeded result when the rate leaves zero, declared. Order: `U5d_WR_owed_edits.md` §2 (c).
 
-## Status: PROPOSED
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: U3 C3-K4 and U1 F-42 (`22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md`
+owns the bodies pass and the spell, its four-band table, its fixtures and `mortal_terms`, one ladder for one quantity
+with `14_VERBS_PHYSICAL_A` A3; this file is **reduced to its exposure terms**, already folded into HAP_A edit 2: its
+own band table, its fixtures `illness_step`, `illness_pool_base`, `illness_base`, `age_band`, and its edits 1-4 are
+withdrawn and removed from the body), C3-K10 (one writer of `Person.born`: HAP_A edit 1; this file consumes it), C3-K11 /
+D-U1-10 (the year's length is `rosters.yaml: seasons_of_year`; the literal `-4 × age` is gone), `R5_READ.md` §2 (A-15:
+natural death is on behind the authored ages; the "ships dark" paragraphs rewritten), §7/§7b (the covering test file);
+U3 B37, §4.1 row 49. Kept: the finding (the problem section), the correction to `09_WR_B_draws_not_thresholds.md`, the
+"no individual dies in a season he entered at full body" property (HAP_A keeps it too), and edit 5's named dependency.
+
+## Status: PROPOSED (reduced: carried by `22_HAPPENINGS_A` edit 2, C3-K4)
+
+Lands in batch: **B37** (WR), with `22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md` and `U5d_WR_owed_edits.md` §2 (c)
+(U3 §4.1 row 49). Depends on: HAP_A edits 1-4 (B37); `09_WR_B_draws_not_thresholds.md` (B12).
 
 Source: `audits/16_PESSIMIST_WR.md` F-PES-WR-07. Read at `d161a61`. Reference only (`CLAUDE.md` §0.05).
-Lane WR (owner: `loop/matter.py`'s bodies pass, `queries/world_q.py::body_hazard`).
+Lane WR (owner of the finding; the bodies pass's owner is HAP_A).
 
 It corrects one line of a sibling proposal: `09_WR_B_draws_not_thresholds.md` lists illness among the
 things that "already comply" with the standing rule. It complies with one clause of three.
 
-It does **not** switch natural death on. `illness_rate` and `age_step` stay at 0 (ED-IN-0317, the WR
-audit's §11 item 2, Jordan's). This changes the shape of a mechanism that ships dark, so that when the
-rate is set the thing switched on is the one the standing rule describes.
+Under A-15 natural death is on, behind the 46 authored ages and a rate: the rate leaves 0 in the batch that lands
+the ages (HAP_A edit 1), one re-pin of every seeded result, declared. The rate-0 arm stays the control.
 
 ## What it changes in `engine/season/` at runtime
 
-Nothing at the shipped rates (the pass is skipped at `matter.py:726`; the control is byte identical).
-With a non-zero rate: an exposed person takes one draw on the one ladder; the degree lowers his **body**
-by a step or two or not at all; he dies only when his body reaches zero, through `_die`, as a starved
-cohort does. A person's age is authored where an age exists.
+Nothing of its own: the graded spell on the body is HAP_A's (edits 2-4). This file's two exposure facts are read
+there: dearth in the person's settlement raises the chance of a spell (HAP_A's `want_term`), and age past onset
+raises it (HAP_A's age term and edit 3's step per `spell_age_every`). With a non-zero rate an exposed person takes
+one draw on the one ladder; the degree lowers his **body** or not; he dies only when his body reaches zero,
+through `_die`, as a starved cohort does.
 
 ## The problem, with evidence
 
@@ -54,52 +67,32 @@ Ladder step 4, by two precedents in the same barrier: the hunger fall (`matter.p
 `(Person, body)`, `_crossings` on `band_floors["body"]`, `_die` at zero) and the keyed draw the pass
 already takes. Illness becomes a *fall of the body*, so every reader of the body already reads it: the
 budget (`decision/budget.py`), the band crossing a co-located person witnesses, `wounded_with` and
-`tend`.
+`tend`. **The form is HAP_A's** (C3-K4): its spell is the one graded draw of the bodies pass, with
+`mortal_terms` the one owner of how hard a body is to kill. This file's contribution is two exposure terms,
+already folded into HAP_A edit 2:
 
-- *Exposure* (eligibility for the draw): `illness_rate`, as now, keyed per person per season; 0 is the
-  control and takes no draw.
-- *Pool (what resists):* `illness_pool_base` + the number of body bands he stands above the lowest
-  (`decision/budget.py::bands_below` over `band_floors["body"]`, the one band table): a hale body
-  resists better than a failing one.
-- *Obstacle (what he faces):* `illness_base` + `age_of(w, pid) // age_band` (the old face more;
-  replaces `age_step`'s additive chance) + 1 if the cohort of his settlement went short at this barrier
-  (`w._subsistence_shortfall`: dearth breeds sickness) + the season-of-year term when CP-T10-03's
-  `season_terms` lands (listed, not built here).
-- *Degree* (`seam/ladder.py`, `degree_from_net`):
-
-| degree | his body | write |
-|---|---|---|
-| Overwhelming, Success | unchanged | none |
-| Partial | falls `illness_step` | `body.changed`, then `_crossings` |
-| Failure | falls `2 × illness_step` | the same |
-
-Death is `body <= 0` → `_die`, the existing line (`matter.py:709-711`'s shape). A person at full body
-needs several bad seasons to die of illness; a person already wounded or starved can die of one.
+- *Dearth breeds sickness:* where the cohort of a person's settlement went short at this barrier
+  (`w._subsistence_shortfall`), the chance of a spell rises; HAP_A's `want_term` is the one reader of that fact.
+- *The old face more:* age past `age_onset` raises the chance (HAP_A's age term) and stiffens the spell (HAP_A
+  edit 3's step per `spell_age_every` seasons), replacing `age_step`'s flat additive chance for the whole cast.
 
 ## The edits
 
-1. **`engine/season/queries/world_q.py::body_hazard`** — keeps the name and the refusals
-   (`[0, 1]`, NaN); returns the exposure chance only (`illness_rate`, 0 for a cohort). New beside it:
-   `illness_odds(w, pid) -> (pool, obstacle)`, the rule above, a pure read.
-2. **`engine/season/loop/matter.py:726-731`** — the block becomes: exposed? → roll `illness_odds`
-   through the ladder → on Partial or Failure the body write of `:699-711` (factored into one local
-   helper that the hunger fall and this both call, so *what a body fall writes* has one owner in the
-   file) → `_die` at zero.
-3. **`engine/season/data/fixtures.py`** — `illness_step=100`, `illness_pool_base=2`, `illness_base=2`,
-   `age_band=40` (ten years of seasons), each `[ASSUMPTION; medium; Jordan to correct]` with a hole row;
-   `age_step` is retired in the same commit (delete, `FORK:` row; its one reader is `body_hazard`).
-4. **`engine/season/data/cast.py`** — `age_of(row) -> Optional[int]` on `thread_sensitivity_of`'s shape:
-   a cast row's `age:` (in years) gives `Person.born = -4 × age`; a row with none keeps `age_at_build`.
-   `references/npc_registry.yaml` carries `age: null [GAP]` on 29 of 46 rows; filling them is content
-   and Jordan's, and the loader works with the gaps.
-5. **Dependency, not built here:** `tend` must clear a believed wound (WR F-WR-23: `_eff_tend` and a
-   MATTER rise write no body Observation), or every person who recovers draws `tend` every season
-   after.
+None of its own (C3-K4): edits 1-4 of the earlier text (a separate `illness_odds`, its own block at
+`loop/matter.py:726-731`, the fixtures `illness_step`, `illness_pool_base`, `illness_base`, `age_band`, and
+`data/cast.py::age_of` writing `Person.born = -4 × age`) are withdrawn. Ages enter through HAP_A edit 1, the one
+writer of `Person.born`, counted in seasons of the declared year (`len(SEASONS_OF_YEAR)`, D-U1-10).
+
+**Dependency, named for HAP_A and the `tend` owner (`14_VERBS_MATERIAL_A_mending.md` §6), not built here:** `tend`
+must clear a believed wound (WR F-WR-23: `_eff_tend` and a MATTER rise write no body Observation), or every person
+who recovers draws `tend` every season after.
 
 ## The gate that shows it worked
 
-The test file that covers the bodies pass (`grep -rl body_hazard engine/season/tests`), on
-`build_realm`, test arms only (the shipped rate stays 0):
+The test file that covers the bodies pass is `engine/season/tests/test_in34_bodies_clock.py` (exists; `grep -rl
+body_hazard engine/season/tests` finds it), HAP_A's gate file. This file's readings are asserted there, beside HAP_A's
+three arms: `test_dearth_raises_the_spell_share` and `test_no_individual_dies_in_a_season_entered_at_full_body`. Command:
+`python -m pytest engine/season/tests/test_in34_bodies_clock.py -q`. The readings, on `build_realm`, test arms:
 
 - with exposure at 0.5 over eight seasons at seeds 0 and 1: `body.changed` Events from the pass carry
   at least two distinct falls; **no individual dies in a season he entered at full body**; the set of
@@ -125,11 +118,11 @@ Today that is every illness death; after the change it must be none.
 - **R.** The no-player half: people sicken, linger, recover or die unwatched, each stage an Event.
   Completeness: a cohort takes no draw (its bound is hunger, ED-IN-0255); a body at zero is `_die`'s;
   rate 0 is today.
-- **S.** One ladder, one body-fall writer, one band table. `age_step`'s second arithmetic goes.
-- **E** (last): one pure read, one changed block, four fixtures, one loader function. The player's
-  sentence: *the old, the hungry and the already hurt sicken more easily, and sickness kills by stages*.
+- **S.** One ladder, one body-fall writer, one band table (HAP_A's). `age_step`'s second arithmetic goes.
+- **E** (last): two exposure terms in HAP_A's one reader, no table of its own. The player's sentence: *the old,
+  the hungry and the already hurt sicken more easily, and sickness kills by stages*.
 
 ## Cost class
 
-Small build. No hash moves at the shipped rates (assert it: the three-hash equality
-`test_season_weather.py` holds for the weather control is the pattern).
+Edit (two assertions in HAP_A's test file; the code is HAP_A's). Tier: `sonnet`, effort `high`. Hash movers
+declared: HAP_A's (one re-pin when the rate leaves zero behind the authored ages, A-15). Lands it: B37, with HAP_A.

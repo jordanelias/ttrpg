@@ -2,6 +2,10 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-08) — two row keys are added by other files and are read here as members of the same row: `ballots` (the count of failed askings that dismisses, default 1; `05_SC_acquittal.md`) and `disposes_to: petition` (`U5c_SC_proceedings_residue.md` §8; Jordan, A-38: a verdict serves the petitioner or a seat he names).
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row SC-P4 (AMBIGUOUS in spec), §2 row A-80, §7, §7b-T; `unified/U3_CONFLICT_LEDGER.md` C3-C12). Changed: the departure from Layer 1 is named at the site (`ban` and `detain` are disposal kinds the code already ships beyond `04` §B.8's tenure-kind list; this edit extends the union; B4's third disposition; `04` is not edited); A-80's entrenched-world control is cited (C3-C12); "What it does not do" is brought up to `05_SC_acquittal.md` as reconciled (a Failure now writes the `failed` stage and counts toward dismissal, A-81); the readers named for the key review are the reconciled ones; lands-it and tier added.
+
+**Lands in batch:** B27. **Depends on:** plan positions CR-60, CR-61 and B10-18c's close (edit 5) `[PL]`; `05_SC_acquittal.md` (B27).
+
 ## Status: PROPOSED
 
 Source: `audits/05_SC_audit.md` F-SC-06, §13 (ARC-10, ARC-21, ARC-31, EMG-X6); hole rows H-281, H-162.
@@ -53,13 +57,18 @@ not a new one). **(b) A key with no reader when B10-18c closes is deleted in tha
 2. `engine/season/loop/effects_information.py::_eff_determine` — `kind = row_map[res.degree]` where
    `res` is present; a hand-built call with no contest takes the map's `Success` entry (the scalar
    case is unchanged). `_disposal` is unchanged (one literal `Tenure(...)` per kind).
-3. `engine/season/state/gate.py::DISPOSABLE_KINDS` — union over the map's values.
+3. `engine/season/state/gate.py::DISPOSABLE_KINDS` — union over the map's values. **Layer 1, named at the
+   site:** `04` §B.8's tenure-kind list does not name `ban` or `detain`; the code already ships both as
+   disposal kinds (the `determination` basis, `04` §C.2) and this edit extends the union. The spec row is
+   behind the code; under `skills/layer-conformance` B4's third disposition the departure is recorded in
+   `DISPOSABLE_KINDS`'s docstring, and `04` is not edited (CLAUDE.md §0.05).
 4. `engine/season/arrangements.yaml` — no row changes in this proposal. The first re-authoring is
    content (Jordan's or a later position's), e.g. `legal_trial: {Overwhelming: ban, Success: detain,
    Partial: oblige}`; it is named here only as the falsifier's fixture.
 5. At B10-18c's close: for each of the ten keys above and `speech_kinds`, either cite the reader that
-   landed (CR-59 `appeal_basis`; CR-62 the plea ids; SC-P3's proofs filter may read the row's
-   `proofs`), or delete the key from `_ARRANGEMENT_KEYS`, the loader body and every row. The
+   landed (`appeal_basis`: `19_LACUNA_verdict_ladder_and_reversal.md` and CR-59; CR-62 the plea ids;
+   `proofs`: the admission filter of `13_SC_tuning_tables.md` T5 and `05_SC_evidence_and_rebuttal_B.md`;
+   `ballots`, `disposes_to`: `05_SC_acquittal.md`, `U5c_SC_proceedings_residue.md` §8), or delete the key from `_ARRANGEMENT_KEYS`, the loader body and every row. The
    transcription survives where it came from (`proposals/2026-09-05-proceedings-subsystem/
    03_PARAMETERS.md` §E.2).
 
@@ -69,15 +78,26 @@ not a new one). **(b) A key with no reader when B10-18c closes is deleted in tha
 three planted margins, opens three different Tenure kinds; a scalar row opens one. Content hashes of
 `build_realm(0)` at 0, 1 and 2 seasons are unchanged by edits 1–3.
 
+Named tests (added to `engine/season/tests/test_arrangements.py`, exists):
+`test_a_band_mapped_disposes_opens_the_kind_its_band_names`, `test_a_scalar_disposes_normalises_to_itself`,
+`test_a_map_naming_a_band_determine_does_not_write_at_is_refused`.
+
+**Control for A-80.** A-79 makes positions hold; A-80 requires entrenchment still to move the world. The
+control arm is the entrenched-world arm carried by `28_CORE_scene_access_A_occupancy_and_precedence.md`
+gate row 12, `28_CORE_scene_access_C_the_petition_that_waits.md` gate row 7 and
+`23_STORY_D_story_census_and_gate.md` (C3-C12).
+
 ## Falsifier
 
-A fourth planted margin at `Failure` opens nothing (the map cannot reach the band the row does not
-write at). If any seeded hash moves at edits 1–3, a scalar row was not normalised to itself.
+A fourth planted margin at `Failure` opens no Tenure (the map cannot reach the band the row does not
+write at; the Failure band's own write is the `failed` stage of `05_SC_acquittal.md`). If any seeded hash moves at edits 1–3, a scalar row was not normalised to itself.
 
 ## What it does not do
 
-It gives `Failure` no consequence (H-219, H-221: design-first; ARC-21's *"a failed formal challenge
-… must weaken the challenging institution"* stays unrepresented and is listed in audit §13). It
+It gives `Failure` no disposal: a Failure writes the case file's `failed` stage and counts toward
+dismissal (`05_SC_acquittal.md`, `ballots`), so it is never a still band (A-81); what a failed challenge
+costs the challenging institution (H-219, H-221; ARC-21's *"a failed formal challenge … must weaken the
+challenging institution"*) stays design-first and is listed in audit §13. It
 does not make a `Record`-disposing row determinable (`parliamentary_debate`, `council_of_state`):
 that needs the `resolution` Record kind (CR-36/CR-37, B10-17).
 
@@ -93,3 +113,7 @@ that needs the `resolution` Record kind (CR-36/CR-37, B10-17).
 ## Cost class
 
 Edit (items 1–3); the key deletion is an edit at a batch close.
+
+**Lands it and tier.** The B27 batch, an SC `valoria-author` session on `sonnet` (`high`), closed by B27's
+`methodology-close`; edit 5 at B10-18c's close. **Hash movers.** None at edits 1–3 (control: every seeded
+row scalar); each row re-authored to a band map is a declared mover.

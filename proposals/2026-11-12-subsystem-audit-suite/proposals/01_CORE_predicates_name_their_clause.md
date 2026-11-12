@@ -1,5 +1,9 @@
 # CORE — a governance refusal that never crashes and says which clause refused
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.1 row (CONFORMS), §7 (INCOMPLETE: clause names for `establish` only; scratch probe; no named test), §7b-17, §7b-T; `unified/U3_DEPENDENCY_ORDER.md` node B09, §6.2). Completed: the clause names of `oblige` and `succeed` are written from the branch comments at `engine/season/loop/predicates.py` (`_req_oblige` `:467`, `_req_succeed` `:183`; `confer`'s are the decorator's, `establish`'s the docstring list), marked `[ASSUMPTION]` for the FA lane to correct; the scratch probe is restated as named tests; the hash literal carries the B01 caveat; lands-it and tier. No other change.
+
+**Lands in batch:** B09 (step one hash EQUAL; step two one commit per row, each a declared mover). **Depends on:** the FA lane's authored kinds for step two (B21 may re-key them; the channel lands here).
+
 ## Status: PROPOSED
 
 Source: `audits/01_CORE_audit_addendum_B.md` F-CORE-14. Read at `785bc62`.
@@ -69,11 +73,21 @@ lives once.
 
 The twenty-one bare `return False` in `confer`, `establish`, `oblige`, `succeed` become
 `return _refuse("<clause>", "<ids>")`, each clause a short fixed phrase taken from the docstring's own
-numbered list (`establish`: `office resolves`, `rung held`, `conferral basis`, `filler`, `re-founding`,
-`may fill`, `reduction needs revocation`).
+numbered list or the branch's own comment:
 
-**Gate.** `probe_predicates.py` re-run: nine predicates, zero bare refusals, zero raises on the planted
-list operand; `headless --case NPC-088 --seasons 2 --seed 0` prints `5405522c36b0399247f83fd9f6d29494`.
+| predicate | clauses (in branch order) |
+|---|---|
+| `establish` | `office resolves`, `rung held`, `conferral basis`, `filler`, `re-founding`, `may fill`, `reduction needs revocation` |
+| `confer` | `office`, `basis`, `conferee`, `purview`, `held`, `displacement` (the decorator below) |
+| `oblige` | `seat` (an opener takes a seat's id), `binds` (the seat's `binds` admits the joiner), `own_seat` (the occupant is not his own seat's obligee), `one_edge` (one edge per person and seat), `banned` (a banned man serves no seat) `[ASSUMPTION: names from the comments at `predicates.py:494-502`]` |
+| `succeed` | `operand` (an unhashable subject; after edit 1 the shared read), `banned` `[ASSUMPTION: from the comments at `predicates.py:192-194`]` |
+
+**Gate.** `probe_predicates.py` (a scratch script, not in the repository) is restated as new tests in
+`engine/season/tests/test_predicates_clause.py`: `test_every_refusing_branch_names_a_clause` (an `ast` walk of
+the nine registered predicates: zero bare `return False`, with a population floor of nine and a planted bare
+branch caught) and `test_a_list_operand_is_refused_not_raised` (each predicate on `{"subject": ["a", "b"]}`
+refuses, none raises); `headless --case NPC-088 --seasons 2 --seed 0` prints `5405522c36b0399247f83fd9f6d29494`
+(the working tree's reading before B01; re-read on the batch's base, C3-N27).
 **Falsifier.** Any predicate still raising on `{"subject": ["a", "b"]}`; a changed headless hash.
 
 ## Step two (a declared hash mover; one commit per row)
@@ -101,7 +115,7 @@ supplies the channel.
 
 **Gate.** A seeded season in which a `confer` is refused at the purview clause emits the purview kind and
 not the cardinality kind, and the actor's ledger holds a claim keyed by it (so §F1 clause 4 can decline
-the same act through the same seat next round). **Falsifier.** Two refusals for different clauses
+the same act through the same seat next round). Named test: `test_predicates_clause.py::test_a_keyed_predicate_row_emits_its_clauses_kind`. **Falsifier.** Two refusals for different clauses
 emitting one kind on a keyed row.
 
 ## NERS reading
@@ -118,3 +132,7 @@ emitting one kind on a keyed row.
 ## Cost class
 
 Step one: edit. Step two: small build plus data authoring by the FA lane.
+
+**Lands it and tier.** The B09 batch, an IN `valoria-author` session on `sonnet` (`high`), closed by B09's
+`methodology-close` once; step two's kinds authored by the FA lane in the same batch or B21. **Hash movers.**
+Step one none; step two each keyed row (declared).

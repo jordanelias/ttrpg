@@ -4,6 +4,11 @@
 
 Folded: 2026-11-12, ruling **A-78** (`unified/DECISIONS_ANSWERED.md:103`), Jordan's answer to audit 27 §9 item 2: *"a beaten commander still loses their troops who died or got captured or deserted. a beaten commander who does nothing recovers some of the troops who were injured or who fled and regrouped"*. Three amendments, made in the body below. (1) **Permanent losses are the dead, the captured and the deserters; recoverable losses are the injured and those who fled and regrouped.** (2) **The recalled-only default is dropped.** Men who fled drift back without any command, in part, by a drawn graded process: the unprompted arm is the default. Those who never come back within the window are the deserters. (3) **Acting recovers more or sooner** (a recall, a rally, a muster): taken as yes, marked ASSUMPTION and reversible by one switch, because the ruling does not state it. Still not established in the tree's research, and so still not quoted: how many of the fled desert and how many regroup, and the rate and the window of return; §5 gives the targets.
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U3_CONFLICT_LEDGER.md` C3-L11 (recovery is **computed when read**, not a motion step: the Record keeps each loss with its kind and tick, the strength a reader sees adds the recovered share of the recoverable kinds by a keyed graded draw, and an act writes the recovered men into the Record; no MATTER row, no clock; §3, the exact edits and 27E-4 rewritten; `R1_READ.md` §1.2's licensed-clock row is answered by this third option; `U3_DEPENDENCY_ORDER.md` §6.3: the WR motion-step symbol is not needed, so INCOMPLETE item 2 is closed), the `recuperation: on` mover ("moves every reader of an army's strength"), A-30 (§1's two draws keyed), `U1_OWNERS_AND_VOCABULARY.md` D-U1-11e corrected by order (`stamina_left` is declared by 27E-2 here, which lands in B22, before `26_MASS_BATTLE_movement_and_fatigue_as_data.md` in B31; that file reads it and declares nothing), D-U1-10 (INCOMPLETE item 5: a round is one of `scene_budget` slots in a season tick; its length in the fiction is still unread); `Depends on:` / `Lands in batch:` (U3 §4.1 row 63).
+
+**Depends on:** `04_MB_typed_outcome_and_one_path.md` (B17); `16_PESSIMIST_MB_one_stamina_ledger.md` steps 1–2 and `16_PESSIMIST_MB_rout_has_two_exits.md`, `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` §4 (B19); `14_VERBS_MILITARY_C`, `_D` (B22, the acts that write recovered men); SE's ration debit and the cohort's dead (SE, `22_HAPPENINGS_A`).
+**Lands in batch:** B22 (`B22-mb-armies`, MB), after `14_VERBS_MILITARY_C`/`_D` and `14_VERBS_PHYSICAL_B`, before `07_SE_campaign_supply_and_muster.md`.
+
 Lane MB (the season-side write is IN's; a cohort's own deaths are SE's and the census's; custody is the
 PHYSICAL lane's). Serves ruling **A-69** (`unified/DECISIONS_ANSWERED.md:90`), Jordan: *"armies carry fatigue
 and losses back. losses are written. however some losses will be due to injury not death or from fleeing, so
@@ -74,7 +79,8 @@ draws and their terms and is read by a target (§5, T-18), never an input with a
 
 - **Two draws, season-side, in `_eff_march`'s one casualty write, per part:** (a) of `fight_loss`, the share
   that is injured and not dead; (b) for a routed, unrallied part, the share of its survivors that fled. Each
-  is a draw on the one sampler and ladder whose band selects a share from a four-row table
+  is a draw on the one sampler and ladder, keyed `(field, part, "injured")` and `(field, part, "fled")` (A-30),
+  whose band selects a share from a four-row table
   (`aftermath.injured_share`, `aftermath.fled_share`), the form `26_…` §4 already uses for `taken`.
 - **Odds terms, each a fact the outcome carries** (signs are the design; sizes are parameters):
   for (a): the side held the field at the end (its hurt are gathered: raises the injured share); the part was
@@ -92,8 +98,9 @@ A-69: "losses are written". The owner is the army Record's unit row (A-2), throu
 path, as `04_MB_campaign_party_economy.md` §1 writes `experience`.
 
 - `assigned` counts fall by the whole loss: dead, injured, fled and taken.
-- The unit row gains one column, `absent: ((cohort, kind, count), ...)`, `kind` in the closed set
-  `(injured, fled)`, exported with the Record's key set. Men in `absent` are alive, are still the cohort's,
+- The unit row gains one column, `absent: ((cohort, kind, count, tick), ...)`, `kind` in the closed set
+  `(injured, fled)`, `tick` the season of the loss (the read below needs it; C3-L11), exported with the
+  Record's key set. Men in `absent` are alive, are still the cohort's,
   and still count against what the army may hold of that cohort (`armyrecord.cohort_claims`).
 - `armyrecord` gains two ops on the existing `mass_battle.army` composition row: `lose` (args: unit, and per
   cohort the four counts) and `restore` (args: unit, cohort, kind, count).
@@ -114,11 +121,18 @@ path, as `04_MB_campaign_party_economy.md` §1 writes `experience`.
 
 ### 3. Return is a draw, graded, partial, and it happens whether or not the commander acts (A-78)
 
-Both recoverable kinds return **unprompted**: "a beaten commander who does nothing recovers some". The
-carrier is the world's motion (A-54: a draw on the one ladder, a place's endurance against the season's
-hardship, and a person's skill bears on it), once a round, for each unit row with absent men. Nobody has to
-form an act for it to run. What a commander does changes its odds and adds a draw of his own; it is never a
-precondition.
+Both recoverable kinds return **unprompted**: "a beaten commander who does nothing recovers some".
+*(Reconciled, W3-1, `U3_CONFLICT_LEDGER.md` C3-L11: computed when read, by the D-48 precedent; this replaces
+the first text's "world-motion step once a round", which would have needed a MATTER row for an army's
+strength that `write_matrix.yaml` does not have and a clock `holonic` §29 forbids.)* The Record keeps each
+recoverable loss with its kind and tick (`absent`). The strength any reader sees is `assigned` plus the
+recovered share of each `absent` entry, a keyed graded draw `H(seed, army, loss, season)` for each season
+elapsed since the loss, on the terms below (A-54's form: a place's endurance against the season's hardship),
+**computed when read** by one host reader; nothing is written by the passage of time. An act on the army
+(a recall, a rally, a muster, `assign_troops`, or any army verb that writes the Record) first writes the
+recovered men into `assigned` through `restore` and drops them from `absent`, so the next read adds nothing new
+for them. Nobody has to form an act for the return to count; what a commander does changes its odds and adds
+a draw of his own; it is never a precondition.
 
 **The injured.** Where the army stands:
 
@@ -128,8 +142,8 @@ levels    + a healer's `tend` on the army this round (his `healing` rank, as a n
 obstacle  the season's hardship                                            (A-54's obstacle)
           + the army marched this round        + its ration was short (SE's debit)
           + the unit ended its last field routed
-band  ->  aftermath.recover_share[band] of the injured return to `assigned`; the rest stay absent
-          and are drawn again next round
+band  ->  aftermath.recover_share[band] of the injured count as returned, at the read; the rest stay
+          absent and are drawn again for the next season elapsed
 ```
 
 - The four terms are A-69's four words: rest (did it march), supply (the ration), place (the station's
@@ -145,13 +159,14 @@ pool      the endurance of the place the army is stationed at
 obstacle  the season's hardship
           + the unit is in `arrears`             + the army stands far from the cohort's home
           + the part was ridden down by horse    + the cohort's stance toward the commander is hostile
-band  ->  aftermath.regroup_share[band] of the fled return to `assigned`; the rest stay absent
-          and are drawn again next round
+band  ->  aftermath.regroup_share[band] of the fled count as returned, at the read; the rest stay
+          absent and are drawn again for the next season elapsed
 ```
 
-- Men who fled and are still absent when `aftermath.window` rounds have passed are struck from the row as
-  **deserted**, and the strike is an Observation on the round's Event (how many, from which unit). That is
-  the only place desertion is counted, and it is a result, not a rate.
+- Men who fled and are still absent when `aftermath.window` seasons have passed are read as **deserted**; the
+  next act on the Record strikes them from `absent`, and the strike is an Observation on that act's Event (how
+  many, from which unit; an `observation_terms` member, D-U1-06). That is the only place desertion is counted,
+  and it is a result, not a rate.
 - The four terms are a design, with the signs stated and the sizes parameters; none is sourced. Each is a
   fact its owner already holds (the Record's `arrears`; the station and the cohort's rung; the outcome's
   pursuit; a stance row).
@@ -233,14 +248,13 @@ The works audit 26 lists as not reached at any tier above a snippet (`audits/26_
 
 | file (owner) | edit |
 |---|---|
-| `engine/season/queries/inputs.py::FieldOutcome` parts (IN) | `stamina_left`; the end-state word per part |
+| `engine/season/queries/inputs.py::FieldOutcome` parts (IN) | `stamina_left` (a share in [0, 1]; declared here, the first to land, D-U1-11e by order); the end-state word per part |
 | `modules/mass_battle/armyrecord.py` (MB) | the `absent` column; `lose`, `restore`; `to_order_of_battle` reads `assigned` alone under the arm; `options()` reports units with absent men |
 | `engine/season/rosters.yaml: record_kinds.values.army` (IN) | the unit row's key set gains `absent`, `last_field` |
 | `engine/season/loop/effects_combat.py::_eff_march` (IN) | the two draws of §1; `lose` through the army write path; the cohort's body by the dead share only; `last_field` |
 | `engine/season/seam/wrappers/mass_battle.py` (IN) | `_order_of_battle` stops passing fitness under the arm; `field_input` computes `entry_stamina` per part from `last_field` |
-| the world-motion step (WR; A-54's owner) | the injured's recovery draw as one more motion, reading the Record |
-| the world-motion step (WR; A-54's owner) | the fled's return draw, the same motion with its own terms; the strike at the window, as an Observation |
-| `engine/season/loop/effects_army.py` (IN) | `assign_troops` on a unit with fled men is one further draw that round (the recall), behind `aftermath.acting` |
+| `engine/season/queries/world_q.py` (IN) *(W3-1, C3-L11)* | new `army_strength(w, record, unit)`: `assigned` plus the recovered share of each `absent` entry by the keyed graded draws of §3, computed when read; the one reader every consumer of an army's strength calls (`seam/wrappers/mass_battle.py::_order_of_battle`, `armyrecord.options` via the host, the military menu) |
+| `engine/season/loop/effects_army.py` (IN) | every army verb that writes the Record first writes the read's recovered men through `restore` and strikes the deserted (with the Observation); `assign_troops` on a unit with fled men adds one further draw (the recall), behind `aftermath.acting` |
 | `references/troops.yaml: aftermath`, `fatigue.carry_rounds` (MB) | the tables and switches; every value marked not established |
 
 ## Gate (execution artifacts)
@@ -302,10 +316,10 @@ not opened. Line numbers at `faf0cea`.
 
 | item | file :: symbol (single owner) | edit | hash |
 |---|---|---|---|
-| 27E-1 | `modules/mass_battle/armyrecord.py` :: the unit row; new `lose(record, name, losses)`, `restore(record, name, cohort, kind, count)`; `OPS` (`:276`), `_apply`; `cohort_claims`; `options`; `validate`. `engine/season/rosters.yaml: record_kinds.values.army` | the row gains `absent: ((cohort, kind, count), ...)` and `last_field: (round, stamina_left) or None`, both optional and absent by default; `ABSENT_KINDS = ('injured', 'fled')`; `lose` lowers `assigned` by the four counts and appends the injured and fled to `absent`; `restore` moves a count back; `cohort_claims` counts absent men; `options()` gains `absent_men` | equal (no caller yet) |
+| 27E-1 | `modules/mass_battle/armyrecord.py` :: the unit row; new `lose(record, name, losses)`, `restore(record, name, cohort, kind, count)`; `OPS` (`:276`), `_apply`; `cohort_claims`; `options`; `validate`. `engine/season/rosters.yaml: record_kinds.values.army` | the row gains `absent: ((cohort, kind, count, tick), ...)` (the tick: W3-1, C3-L11) and `last_field: (round, stamina_left) or None`, both optional and absent by default; `ABSENT_KINDS = ('injured', 'fled')`; `lose` lowers `assigned` by the four counts and appends the injured and fled to `absent`; `restore` moves a count back; `cohort_claims` counts absent men; `options()` gains `absent_men` | equal (no caller yet) |
 | 27E-2 | `engine/season/queries/inputs.py` :: `FieldOutcome` parts gain `stamina_left: float`, `ended: str`; `modules/mass_battle/massbattle.py::_grade` fills them from each unit's column blocks; `engine/season/seam/wrappers/mass_battle.py::field_input` (`:225`) computes `entry_stamina` per part from the row's `last_field` when its round is the current round, else the proposal 26 writers | equal with `fatigue.carry: off` |
 | 27E-3 | `engine/season/loop/effects_combat.py::_eff_march`, inside `_casualties` (`:630`); `engine/season/seam/wrappers/mass_battle.py::_order_of_battle` (`:192-214`); `modules/mass_battle/armyrecord.py::to_order_of_battle` (`:256`) | under `recuperation: on`: for each army part, the two draws of §1, then one `ArmyCommand(record, 'lose', …)` through the `mass_battle.army` composition row and the army verbs' write path; the cohort's `body` scaled by the dead share only; `_order_of_battle` passes fitness 1.0 and `to_order_of_battle` reads `assigned` less nothing (the loss is already in it). **These three edits are one commit** | moves army fields |
-| 27E-4 | the world-motion step (WR's owner, A-54); `engine/season/loop/effects_army.py` (`assign_troops`) | once a round, for each army Record with absent men: the injured's draw and the fled's draw of §3, each ending in `ArmyCommand(record, 'restore', …)`; at the window, the strike with its Observation; behind `aftermath.acting`, a recall adds one draw | moves rounds after an army field |
+| 27E-4 | `engine/season/queries/world_q.py::army_strength` (new); `engine/season/loop/effects_army.py` | *(W3-1, C3-L11)* the read computes the injured's and the fled's returns by §3's keyed draws for each season elapsed; every army verb's write first applies them through `ArmyCommand(record, 'restore', …)` and strikes the deserted at the window with its Observation; behind `aftermath.acting`, a recall adds one draw | moves every reader of an army's strength |
 
 **Data rows and schema.** `references/troops.yaml`, new section (every value absent until set; the loader
 refuses `recuperation: on` while any is absent):
@@ -337,7 +351,9 @@ at `:257`. Tests that read the fitness loop today: `tests/valoria/test_army_batt
 - `tests/valoria/test_mass_battle_army_record.py`: `test_lose_lowers_assigned_by_the_four_kinds_and_holds_two`;
   `test_restore_returns_absent_men_and_refuses_more_than_are_absent`;
   `test_absent_men_still_count_against_their_cohort`; `test_absent_kinds_are_a_closed_set`.
-- `engine/season/tests/test_march.py`: `test_recuperation_off_is_the_body_loop_unchanged` (control, hashes
+- `engine/season/tests/test_march.py`: `test_the_strength_read_twice_at_one_tick_is_one_value` and
+  `test_an_act_after_the_read_writes_the_share_and_the_next_read_adds_nothing_new` (C3-L11's falsifier);
+  `test_recuperation_off_is_the_body_loop_unchanged` (control, hashes
   equal); `test_a_loss_is_never_counted_in_both_the_body_and_the_row` (gate 2; reddens on a planted
   "still multiply by fitness"); `test_a_second_field_in_one_round_is_entered_at_the_stamina_left` (gate 6).
 - `engine/season/tests/test_cr_24_winner_casualties.py`: `test_winner_and_loser_write_losses_the_same_way`.
@@ -352,8 +368,9 @@ three sweep points of each parameter; they have no numeric band, because no figu
 **Falsifier and its control.** As "Falsifier" above. Controls: `recuperation: off` (today), `return: off`
 (nobody returns), `acting: off` (acts add nothing), `carry: off`.
 
-**Hash movers.** None at the shipped arms. `recuperation: on`: every army field's fold and every round
-after one in which men are absent. `carry: on`: a second field in a round.
+**Hash movers.** None at the shipped arms. `recuperation: on`: every army field's fold, and every reader of an
+army's strength (C3-L11: the read moves, the Record does not until an act writes it). `carry: on`: a second
+field in a round.
 
 **Dependencies.** 27E-1: none. 27E-2: `04_MB_typed_outcome_and_one_path.md` (the per-part outcome) and
 `16_PESSIMIST_MB_one_stamina_ledger.md` steps 2 and 3. 27E-3: those, and
@@ -373,10 +390,9 @@ after one in which men are absent. `carry: on`: a second field in a round.
 1. *Every share table and the window* (27E-3, 27E-4). The form is decided; no value exists. Missing: the
    source search of §6 filed under `research/historical/`, or values set by Jordan. The loader's refusal
    above is what stops a guessed value from shipping.
-2. *The world-motion step* (27E-4). A-54 rules the form; this lane did not open its owner
-   (`U5d_WR_owed_edits.md`, `16_PESSIMIST_GAME_the_world_draws.md`, cited by title), so the function that
-   runs a motion, the reader of a place's endurance and the season's hardship, and where a Record-reading
-   motion registers are not named. Missing: those three symbols from the WR lane.
+2. *(Closed, W3-1, C3-L11.)* No motion step: the return is computed when read by `world_q.army_strength`. Still
+   owed from WR's owners for the read's terms: the reader of a place's endurance and of the season's hardship
+   (A-54's pool and obstacle), named by `16_PESSIMIST_GAME_the_world_draws.md`.
 3. *The cohort's dead* (27E-3). Scaling a cohort's `body` by the dead share keeps today's owner, but `tend`
    then restores the cohort and the dead with it at the cohort's scale. The right owner is the census's
    `weight`, which is SE's (`22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md`,
@@ -386,7 +402,8 @@ after one in which men are absent. `carry: on`: a second field in a round.
 4. *The captured cohort share*: "a count on the band Event until SE has a place for prisoners"
    (`26_…` §4). Missing: SE's carrier.
 5. *The length of a round in the fiction* was not read, so `carry_rounds` has no reasoned value beyond its
-   control of 0. Missing: one read of the loop's calendar (A-51's record names the same gap).
+   control of 0. *(W3-1: D-U1-10 fixes the unit: a tick is a season, four to a year, and a round is one of
+   `scene_budget` slots in a season, `Claim.round`; its length in the fiction is still unread.)*
 6. *Symbols not opened*: where the army verbs' write path takes an `ArmyCommand` from a non-verb caller
    (`_eff_march` is the first effect outside `effects_army.py` to write the Record), and the current
    round's index as `field_input` can read it.

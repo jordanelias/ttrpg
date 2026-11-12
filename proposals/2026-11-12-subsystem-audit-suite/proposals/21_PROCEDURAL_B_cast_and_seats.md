@@ -2,7 +2,13 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-44**, **A-15**, **A-41 / A-42** and **A-19**. The hold on decision D-1 is lifted: about 94 generated persons plus kin, capped, with `cast_cap` the dial (it overwrites `ED-WR-0011` by Jordan's answer). `Person.born` is written for every generated person, and the 46 principals' ages are now owed content (A-15 turns natural death on only after they are authored); `22_HAPPENINGS_A` edit 1 is the one writer from authored ages and this file's generator writes through the same field. Heritage is generated per person, and the caste tiers that read it are data (`U5d_SE_cohort_heavy_moves_and_caste.md` edit 4; the territory weight of `U5d_FA_owed_edits.md` §4). Local seats are filled by `confer` in the prologue; an empty inherited seat is claimed in the deed race (A-19), so a generated kinsman is a possible claimant only through a listed title.
 
-## Status: PROPOSED (2026-11-12; Fable design lane; ratifies nothing; reference under CLAUDE.md §0.05). HELD BACK on decision D-1 (it overwrites `ED-WR-0011`, RULED).
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 rows cast_and_seats ((d) VIOLATES; `lifepaths.formation` VIOLATES; PG-3 CONFORMS), §2 rows Status (A-44, A-19) and `kin_slots` (A-19), §7, 7b; `unified/U3_CONFLICT_LEDGER.md` C3-L13, C3-K10; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-10; `unified/U3_DEPENDENCY_ORDER.md` §1 item 39, §3.1). The body now follows the head. Changed: (1) the Status line's hold is removed (A-44 answered D-1; `ED-WR-0011` is overwritten by Jordan's answer); (2) edit (d): CENSUS writes no interior (C3-L13, `04` §A.2 `:179`, inv. 5 `:497`, `:244`): a person individuated in play is minted as today (`exists`, with its identity fields, and `weight`; the person rung and `contain` edge), taking only his name and `born` from `generate_person` keyed by the demand; heritage, attributes, pursuits, relations and seed claims are written at world build only, and an arrival gains pursuits by his own first acts and claims by WITNESS; §1, §3 item 2 and the NERS R line follow; (3) `lifepaths.formation` is keyed by institution kind, not by faction names (`04` PART D 27a; this file's own V1); (4) ages are authored in years and converted through the one owner of the year (D-U1-10), not as seasons that restate "4"; every generated person is aged through `22_HAPPENINGS_A` edit 1's writer of `Person.born` (C3-K10); (5) `bars.heirs` states that A-19's deed race reads the claimant set; (6) tests named; (7) dependency, batch and tier lines.
+
+Depends on: `21_PROCEDURAL_A_worldgen_tables_and_ground.md` (B39); `01_CORE_capability_authoring_surface.md`, `02_CHAR_capability_definitions.md` (B04, the definition table); `02_CHAR_relations_have_a_ground.md` (B10); `08_FI_01_claim-sourced-referents.md` (B11); `07_SE_population_census.md` (B12); `20_NARRATIVE_E_the_year_and_the_reason.md` edit 1 (B12, the year); `06_FA_seat_terms_and_turnover.md`, `06_FA_seat_terms_by_body_B.md`, `14_VERBS_BINDING_C_turnover.md` (B21); `15_INSTITUTIONS_BYZANTINE_A_dignities_and_the_roll.md` (B32), `15_INSTITUTIONS_COLONIAL_D_accomplishment.md`, `15_INSTITUTIONS_VENICE_B_debt_instrument.md` (B33); `22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md` (B37, the `born` writer); `U5d_SE_cohort_heavy_moves_and_caste.md` (B38).
+Lands in batch: B39 (lanes WR / CHAR / FA), after `21_PROCEDURAL_A`; PG-2 and PG-3 one commit each; the census edit (d) its own commit with its test.
+Tier: opus for the CENSUS reading (taken above) and the faction-kind roster; sonnet / high for the tables, generator and tests.
+
+## Status: PROPOSED (2026-11-12; Fable design lane; ratifies nothing; reference under CLAUDE.md §0.05). A-44 taken: decision D-1 answered (about 94 generated persons plus kin, capped; `cast_cap` the dial), `ED-WR-0011` overwritten by Jordan's answer.
 
 Carries `audits/21_PROCEDURAL_GENERATION.md` §4.4, §4.5, §14, resolutions R-21-04, -09, -12; plan batches
 **PG-2** and **PG-3**. Depends on `21_PROCEDURAL_A_worldgen_tables_and_ground.md` (the switch, `pick`,
@@ -15,7 +21,9 @@ With them on: the build mints a generated supporting cast beside the 46 authored
 local claimants, rivals, creditors), each with a name, heritage, birth season, attribute ranks from a
 lifepath, pursuits with a possible deviation, and relations written as stance rows and firsthand claims.
 Local seat templates are instantiated per settlement and stand vacant until a person's act fills them.
-When CENSUS individuates a demanded person, it draws that person with the same function.
+When CENSUS individuates a demanded person, it takes his name and birth season from the same function and
+writes nothing of his interior (C3-L13): he begins thin and is formed by his own acts and what he
+witnesses.
 
 ## 2. The problem, with evidence
 
@@ -36,7 +44,9 @@ When CENSUS individuates a demanded person, it draws that person with the same f
 
 1. **Three tiers** (audit §4.4): A the authored principals, untouched; B a generated supporting cast at
    build; C cohorts, individuated on demand.
-2. **One function, two call sites:** `generate_person` serves the build and CENSUS.
+2. **One function, two call sites:** `generate_person` serves the build (the whole plan) and CENSUS (the
+   name and `born` only; `04` §A.2 `:179` licenses CENSUS `exists`, `weight`, `envelope`, and inv. 5
+   keeps interior cells at RESOLVE and WITNESS, C3-L13).
 3. **Slots, not a head-count:** a generated person exists because a structural role needs filling (kin of a
    principal, keeper of a serving building, claimant to a local seat, rival for a contested seat,
    counterpart of a debt). No slot, no person.
@@ -59,7 +69,7 @@ When CENSUS individuates a demanded person, it draws that person with the same f
 **(a) `engine/season/worldgen.yaml`:**
 
 ```yaml
-cast_cap: 120                      # hard ceiling on generated persons at build; the dial for D-1 and for season cost
+cast_cap: 120                      # hard ceiling on generated persons at build; the dial A-44 names (D-1 answered) and for season cost
 cast_quota:                        # generated keepers and locals per settlement, by type (sums to 94 on the canon map)
   Seat: 6
   City: 5
@@ -73,11 +83,11 @@ kin_slots:                         # per principal, each filled with the stated 
   spouse: 500
   sibling: 400
   parent: 250
-min_parent_age: 64                 # seasons between a parent's birth and a child's (16 years IF a year is 4 seasons: the generator reads the year's length from the roster `world_q.season_of_year` reads, and this value is in seasons)
-age_bands:                         # seasons before tick 0, [lo, hi], by slot; written to Person.born as a negative int
-  heir: [64, 120]
-  keeper: [100, 240]
-  elder: [200, 280]
+min_parent_age_years: 16          # years between a parent's birth and a child's; converted to seasons by len(rosters.yaml: seasons_of_year) (D-U1-10), never by a typed 4
+age_bands_years:                   # years before tick 0, [lo, hi], by slot; the generator draws a season count in [lo × Y, hi × Y] (Y = len(SEASONS_OF_YEAR)) and writes it through `22_HAPPENINGS_A` edit 1's one writer of Person.born (C3-K10)
+  heir: [16, 30]
+  keeper: [25, 60]
+  elder: [50, 70]
 deviation: 333                     # per thousand: chance one pursuit is re-drawn from the opposite end of the local distribution
 relations_per_person: 3            # drawn relations beyond the slot's anchor relation
 seed_claims: 6                     # firsthand claims a generated person starts with, about own relations and place
@@ -86,10 +96,10 @@ lifepaths:
     hearth_born:   {weight: {Village: 5, Town: 3, City: 1}, adds: {endurance: 1}}
     street_born:   {weight: {Town: 2, City: 4, Seat: 4},    adds: {attunement: 1}}
     hall_born:     {weight: {Seat: 2, City: 1, Fortress: 1}, adds: {presence: 1}}
-  formation:                       # weights by institution of the slot (null = unaffiliated)
-    apprenticed:   {weight: {Guild: 5, null: 2},  adds: {focus: 1},     practice: {craft: 1}}
-    schooled:      {weight: {Church: 4, Einhir: 4, Crown: 2}, adds: {cognition: 1}, practice: {letters: 1}}
-    mustered:      {weight: {"Löwenritter": 6, Altonian: 6, Crown: 1}, adds: {endurance: 1}, practice: {arms: 1}}
+  formation:                       # weights by the KIND of the slot's institution (none = unaffiliated); never by a faction's name (04 PART D 27a)
+    apprenticed:   {weight: {guild: 5, none: 2},  adds: {focus: 1},     practice: {craft: 1}}
+    schooled:      {weight: {church: 4, tradition: 4, ruling_house: 2}, adds: {cognition: 1}, practice: {letters: 1}}
+    mustered:      {weight: {order: 6, foreign_crown: 6, ruling_house: 1}, adds: {endurance: 1}, practice: {arms: 1}}
   vocation:                        # the slot's role fixes this row; it is not drawn
     priest:  {adds: {grace: 1},    practice: {rite: 1}}
     factor:  {adds: {cognition: 1}, practice: {accounts: 1}}
@@ -107,8 +117,17 @@ relations:
   weights_by_reach: {same_hearth: 5, same_institution: 4, same_settlement: 3, kin_of_kin: 2, same_territory: 1}
 bars:
   rival_pairs: 6                   # pairs with opposed top pursuits who share a venue or an institution
-  heirs: all                       # every seat whose conferral is `inheritance` has a living eligible heir
+  heirs: all                       # every seat whose conferral is `inheritance` has a living eligible heir; A-19's deed race reads the claimant set (a generated kinsman claims only through a listed title, `22_HAPPENINGS_B`); the bar guarantees a claimant, never a winner
 ```
+
+**Formation keys are institution kinds** (R5 §1; `04` PART D 27a: a proper noun in a rule-bearing file is
+a scenario declaration or a defect; G.1.6: a rule that branches on a member is drift). The kinds are a
+closed roster added in this commit, `rosters.yaml: faction_kinds: [guild, church, tradition,
+ruling_house, order, foreign_crown, movement]`, and a map `rosters.yaml: factions.kind` beside
+`head_seat` giving each faction its kind (the world roster, which 27a licenses to name factions)
+[ASSUMPTION: medium; the seven kinds and each faction's kind are this file's draft, Jordan to correct —
+basis: no `kind` key exists in `rosters.yaml: factions` (read: it carries `from_names: faction` and
+`head_seat` only)]. `worldgen.load` refuses a formation key outside `faction_kinds`, naming the row.
 
 Capability ids in `adds:` and practice keys are **references**: `worldgen.load` checks each against the
 capability definition table and refuses an unknown id by name. The ids above are the nine of the present
@@ -153,14 +172,23 @@ of Goldenfurt"), which is unique and collision-free.
 and when `variable` is true: `plan.persons = [generate_person(…) for slot in slots(…)]` truncated at
 `cast_cap` in slot-priority order (kin, local seat claimants, keepers, rivals, creditors); then for each:
 the same minting the authored cast gets (`Person`, its `person` rung, `contain` and `reside` tenures;
-`:1315-1321`), `born`, `heritage`, `attributes` (through `Person.attributes`, the CR-20 carrier; this
-requires `cast_attributes` semantics for generated persons regardless of that switch's default for the
-authored cast, and says so in the docstring), `pursuits`, stance rows and seed claims.
+`:1315-1321`), `born` (through `22_HAPPENINGS_A` edit 1's one writer, C3-K10), `heritage`, `attributes`
+(through `Person.attributes`, the CR-20 carrier; this requires `cast_attributes` semantics for generated
+persons regardless of that switch's default for the authored cast, and says so in the docstring),
+`pursuits`, stance rows and seed claims. This is world build (`04` §F.31: the world-generation roster),
+not CENSUS, so every field may be written here.
 
-**(d) `engine/season/loop/census.py`** (the individuation site): the minted person is
+**(d) `engine/season/loop/census.py`** (the individuation site; C3-L13): CENSUS individuates the
+demanded person as today (`loop/census.py:105-109`: `Person(pid, …, born=…)`, the person rung, its
+`contain` edge, weight 1 from the envelope), i.e. the cells `04` §A.2 `:179` licenses it (`exists`,
+`weight`, `envelope`). Two of the minted tuple's identity fields come from
 `generate_person(w.world_seed, Slot(key=f"census:{demand_event_id}", role=<the demanded post's vocation>,
-home=<the demanding rung>, …), …)`. Same tables, same draws, keyed by the demand, so a replay
-individuates the same person.
+home=<the demanding rung>, …), …)`: the name and `born` (in place of today's `pid` and `w.tick -
+age_at_build`), keyed by the demand, so a replay individuates the same person. Nothing else of the plan is
+written at CENSUS: heritage is written at world build only (`04` `:244`), and pursuits, relations and seed
+claims are ACTS and INTERIOR cells (inv. 5, `:497`); the arrival gains pursuits by his own first acts at
+RESOLVE and claims by WITNESS. If a generated interior at individuation is ever wanted, it is a Layer 1
+question (a matrix row `(Person, pursuits) steps [RES, CEN]` against inv. 5), not built here.
 
 **(e) V1 additions** (`worldgen.invariants`): no name equal to a canon name, a cast name or another
 generated name in the same settlement; `born` of a child at least `min_parent_age` after the parent's;
@@ -206,6 +234,18 @@ may be one of the founding deed kinds.
 
 ## 5. Gate
 
+Tests: `engine/season/tests/test_worldgen_switch.py` (PROC_A's file) gains
+`test_lifepaths_name_no_proper_noun_outside_scenario`, `test_formation_key_outside_faction_kinds_is_refused`,
+`test_generated_person_is_aged_through_the_one_born_writer` and `test_cast_quota_empty_gives_pg1_hash`;
+NEW `engine/season/tests/test_census_generated_arrival.py`: `test_arrival_carries_name_and_born_only`,
+`test_same_demand_same_seed_same_person`, `test_census_writes_no_pursuits_heritage_or_claims`,
+`test_arrival_acts_in_the_following_season` (the 04 PART E row 9 case: a `dispatch` to a post nobody
+holds individuates a person who acts next season, and `person.individuated` cites the demand). The
+`--range` readings below are printed by `harness/worldgen.py` (PROC_A (d)); the CHAR audit's Kendall
+reading is a scratch probe not in the repository, so that clause is read by
+`test_opposed_generated_persons_rank_fifteen_candidates_apart` in the same test file (negative tau for
+opposed pursuits, near zero for near-equal ones).
+
 - **PG-2**, `--range 20`: cast size within `cast_cap` in every world; 0 name collisions; V1 clean. Play,
   3 seeds × 2 seasons: every generated person acts at least once; acts whose subject is a generated person
   number more than zero; the share of resolved acts by generated persons is printed. Variety: two worlds
@@ -213,7 +253,7 @@ may be one of the founding deed kinds.
   Character: the CHAR audit's Kendall reading over fifteen candidates separates two generated persons with
   opposed pursuits (negative tau) and not two with near-equal ones. Control: `cast_quota: {}` gives PG-1's
   hash. A demanded person (a `dispatch` to a post nobody holds, the row 9 acceptance case) is individuated
-  with relations into the place and acts in the following season.
+  with a name and `born` only and acts in the following season (C3-L13).
 - **PG-3**, after proposal C's prologue: every settlement of a listed type has its local seats, and each
   filled seat's `tenure.opened` cites a `confer` or an election Event (an act filled it). Over 20 seeds the
   holder of a given local seat differs in at least half the worlds. `bars.contested_seats` met in every
@@ -235,17 +275,17 @@ may be one of the founding deed kinds.
   culprit, heir and clerk is one of 46 or does not exist. What the cut loses is not provided elsewhere:
   cohorts cannot hold a seat, owe a debt or be accused.
 - **R:** the no-player half (kin and rivals generate succession and feud with nobody watching);
-  customization by table; a person arriving mid-game is as formed as one present at the start. Risk named:
-  a cast the player cannot remember (RimWorld's 12 against Dwarf Fortress's 200); `cast_cap` is the dial
-  and D-1 the decision.
-- **S:** one generator for build and CENSUS; relations and attributes on carriers that exist; no second
+  customization by table; a person arriving mid-game begins thin and is formed by what he does and sees
+  (C3-L13: the intended game, not a loss). Risk named: a cast the player cannot remember (RimWorld's 12
+  against Dwarf Fortress's 200); `cast_cap` is the dial (A-44).
+- **S:** one generator for build and (name and birth only) CENSUS; relations and attributes on carriers that exist; no second
   capability scheme; seats filled by the same verbs play uses.
 - **E, last:** three tables and one function against a realm with a society in it. The slot rule keeps the
   count tied to roles that have readers.
 
 ## 8. Cost and dependencies
 
-PG-2: design-first (D-1), then small build. Needs `02_CHAR_capability_definitions.md` and
+PG-2: small build (D-1 answered by A-44). Needs `02_CHAR_capability_definitions.md` and
 `01_CORE_capability_authoring_surface.md` (the definition table), `02_CHAR_relations_have_a_ground.md`
 (the relation carrier), `07_SE_population_census.md` (CENSUS as the one writer of weight).
 PG-3: small build. Needs `06_FA_seat_terms_and_turnover.md`, `06_FA_seat_terms_by_body_B.md`,

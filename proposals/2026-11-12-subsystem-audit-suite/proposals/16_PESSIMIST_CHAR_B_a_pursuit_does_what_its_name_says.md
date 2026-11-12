@@ -2,7 +2,16 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §4) — extended to creeds by `U5a_CHAR_owed_amendments.md` §7 (`affiliation_signatures`, same reader).
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS), §2 (A-83: no
+contradiction; the signatures are the floor a regime's pressure acts on, lane 30), §7/§7b (named tests, the
+`--words` expected reading, tier); U3 B10 (after `16_PESSIMIST_CHAR_A`, `U5a_CHAR_owed_amendments.md`), §6.2 (the
+probes are not in the repository). Not completed: step 2's cell values (content, Jordan's and the CHAR content
+pass's): left INCOMPLETE at step 2 with that reason.
+
 ## Status: PROPOSED
+
+Lands in batch: **B10** (IN/CHAR). Depends on: `U5a_CHAR_owed_amendments.md` (B10; its §7 extends the signatures to
+creeds, `affiliation_signatures`, same reader). Step 1 depends on nothing unlanded.
 
 Written by the CHAR pessimist lane (`audits/16_PESSIMIST_CHAR.md`, F-PES-CHAR-01). Ratifies nothing;
 reference under `CLAUDE.md` §0.05. It leaves the ruled basis alone (fifteen pursuits on seven bipolar
@@ -102,6 +111,8 @@ pursuit_signatures:              # what the NAME must mean in acts: a floor, not
   (−0.21).
 
 **Step 2. The cells** (Jordan's content, design-first; the lane states the order, not the values).
+**INCOMPLETE (blocked on content, not on the repository):** the cell values are Jordan's or the CHAR
+content pass's; no lane can author them.
 First the rows for the uncelled verbs a signature names (`forgive`, `pardon`, `tend`, `arrest`,
 `capture`, `raze`, `sabotage`, `conceal`, `examine`), then the cells of the five loud rows, each change
 read back through `--words`. A cell is authored in `tables.alignment` and nowhere else; no pursuit ×
@@ -119,11 +130,22 @@ nonsense triggers at their source.
 
 ## Gate (an execution artifact)
 
-1. Step 1: `conviction_spread --words` runs and reports the breaks; the realm hash at seed 0 after two
-   seasons is `bacd687f` (unchanged).
-2. Step 2: breaks = 0; then `c1_two_men.py` (c) repeated: no pursuit's single-pursuit holder tops a verb
-   its signature opposes in any reading, and at most two pursuits share a top verb (today four share
-   `forge` and three `utter`).
+The probes named above (`a0_words.py`, `a1_norms.py`, `a2_sig.py`, `c1_two_men.py`, `d1_cuts.py`) were lane
+scratch, not in the repository (U3 §6.2). `--words` is the committed form of `a0_words.py` and `a2_sig.py`.
+NEW `engine/season/tests/test_pursuit_signatures.py`: `test_signature_roster_names_only_real_pursuits_and_verbs`,
+`test_signature_breaks_reports_a_planted_break` (a planted cell flips a favoured verb's lean below zero),
+`test_loader_raises_when_breaks_nonempty` (step 3 only). Command:
+`python -m pytest engine/season/tests/test_pursuit_signatures.py -q`.
+
+1. Step 1: `python -m engine.season.harness.conviction_spread --words` runs and prints
+   `signature_breaks: 13 of 15 pursuits, 35 clauses` against the starting roster above; the realm hash at
+   seed 0 after two seasons is `bacd687f` (unchanged).
+2. Step 2: breaks = 0 (`--words` prints `signature_breaks: 0`); then the live-candidate reading of
+   `c1_two_men.py` (c), committed first as a `--signatures` mode of `harness/decision_spread.py`
+   (`[ASSUMPTION: that harness builds a realm and calls `score_terms`; `conviction_spread` declares it builds
+   none — basis: both module docstrings]`): no pursuit's single-pursuit holder tops a verb its signature
+   opposes in any reading, and at most two pursuits share a top verb (today four share `forge` and three
+   `utter`).
 3. The scar's sign test, re-read: no favoured verb of a pursuit is in that pursuit's violated set
    (today `give` wounds `love`).
 
@@ -151,7 +173,10 @@ the candidate set is deciding, and the repair belongs to F-CHAR-01 and F-CHAR-08
 ## Cost class
 
 Step 1: edit (one roster key, one reader, one flag). Step 2: design-first content (the cells are
-Jordan's). Step 3: edit.
+Jordan's). Step 3: edit. Tier: `sonnet`, effort `high` for steps 1 and 3; step 2 is `opus` with Jordan
+(content). Hash movers declared: none for steps 1 and 3; step 2 re-records every golden that plays a season.
+Lands it: step 1 in B10; steps 2 and 3 when the content is given (step 3 in the same commit as the cells that
+empty `signature_breaks()`).
 
 ## Dependencies
 

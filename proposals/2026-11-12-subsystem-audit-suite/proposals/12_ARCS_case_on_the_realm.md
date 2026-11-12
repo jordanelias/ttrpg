@@ -2,6 +2,10 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-44**, **A-50** and **A-51**. A case is a delta on the realm; the realm is now a generated cast of about 94 persons plus kin under a cap (A-44) with some bounded starting state drawn (A-50), and it has run a five-year prologue before play (A-51; the year's length is read from the code: `queries/world_q.py::season_of_year` takes it as `len(season_factor_draw)`, which ships `()`, so no year is declared at the shipped fixtures and the swept arms declare four seasons; five years is five times the declared length, twenty seasons under a four-entry table, and the prologue needs a declared year, `21_PROCEDURAL_C_prologue_and_case_seeds.md` as reconciled). So: the delta is applied to the world **after** generation and before the prologue where it states a standing fact, and after the prologue where it states the opening situation; knowledge seeded "as prehistory through the fold" is seeded inside those five years, not as a single pre-tick pass. The three controls stand; each is read on a fixed generation seed so a beat's absence in the off-arm is not a difference of cast.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.6 row ARCS-01 (CONFORMS), §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-10; `unified/U3_CONFLICT_LEDGER.md` C3-K11, C3-L13; `unified/U3_DEPENDENCY_ORDER.md` node B39, §4.1 rows 84, 86, 87). Changed: the year the five-year prologue is measured on is the one owner `rosters.yaml: seasons_of_year` (four seasons, ED-IN-0332; landed by `20_NARRATIVE_E_the_year_and_the_reason.md` edit 1 at the head of B12), not `len(season_factor_draw)` as the U5d line above reads it (D-U1-10, C3-K11); the beat matcher's use of `state/attribution.py::actor_of` (a resolver-side read) is stated as lawful for a harness observer; `harness/arc.py` is verified to exist with `_reach` (`:223`) and `shuffled_causes` (`:213`); the three items other lanes split into this batch are named; tests named; lands-it and tier. `01_CORE_case_setup_and_beats.md` now carries a `Reconciled:` line pointing here (the contradiction on `knows:` and `who:` is closed there).
+
+**Lands in batch:** B39. **Depends on:** `21_PROCEDURAL_C_prologue_and_case_seeds.md` (B39, the prologue and its year), `20_NARRATIVE_E_the_year_and_the_reason.md` edit 1 (B12), `01_CORE_case_setup_and_beats.md` (B39, same batch, this file's base). **Takes into this batch:** `15_INSTITUTIONS_SYNTHESIS_B` prehistory, `15_INSTITUTIONS_COLONIAL_D` founders-as-prehistory, `17_CENSUS_C1B_02_wires` W-2 (U3 §4.1 rows 84, 86, 87).
+
 ## Status: PROPOSED
 
 Source: `audits/12_ARCS_adjudication.md` §2.2, §5, §6 rows 9 and 16. Extends
@@ -50,14 +54,22 @@ overlay files under `cases/exercises/` gain two typed blocks. The game behaves i
   builder unchanged (hash EQUAL for unauthored cases); the realm arm calls `build_realm(seed)` then applies
   the delta with the constructors `build_at` already uses (`_seat_office`, `add_tenure`), validated at
   load as `_check_cast` validates a cast today.
-- `harness/arc.py`: `match_beats(w, d, beats) -> list` (pure read; reuses `_reach` for `caused_by`).
+- `harness/arc.py` (exists, 400 lines; `_reach` `:223`, `shuffled_causes` `:213`): `match_beats(w, d, beats)
+  -> list` (pure read; reuses `_reach` for `caused_by`). It reads `state/attribution.py::actor_of` (`:73`), a
+  resolver-side read; that is lawful because a harness is an observer outside the simulation, not a
+  person-side reader (`04` §B.9: no person-side Query reaches the act store), and is said in its docstring.
 - `cases/exercises/NPC-088.yaml` first; then by §5's stages.
 
 ## Gate (execution artifact)
 
 NPC-088 on the realm, seeds 0, 1, 2: `record.created` by `p_npc_088` and `term.matured` matched; the
 off-arm (her copying capability and workshop Record withheld) matches neither; the null matches no causal
-beat; unauthored cases hash as before.
+beat; unauthored cases hash as before. Named tests (new, `engine/season/tests/test_case_on_the_realm.py`):
+`test_npc088_beats_match_on_the_realm`, `test_npc088_off_arm_matches_neither`,
+`test_the_null_matches_no_caused_by_beat`, `test_unauthored_cases_hash_as_before`,
+`test_a_setup_key_outside_the_closed_set_is_refused`, `test_a_prehistory_act_that_writes_a_terminal_beat_is_refused`.
+**INCOMPLETE, not decidable here:** the per-case `prehistory` lists and `beats` are content each lane authors
+from its §13 table.
 
 ## Falsifier
 
@@ -77,3 +89,7 @@ against a second cast avoided.
 
 Small build, then data per case. Realm cases cost about two seconds to build and are slower per season
 than the template; the corpus run's wall time rises with each authored case.
+
+**Lands it and tier.** The B39 batch, a WR/IN `valoria-author` session on `sonnet` (`high`) for the builder
+and matcher; case content per lane; closed by B39's `methodology-close` once. **Hash movers.** None for
+unauthored cases (control).

@@ -2,7 +2,9 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-13) — superseded by `05_SC_playable_hearing_B.md` (`ED-IN-0285` (13): a hearing is the module's own scene, not the season loop on a fixture). Kept for its evidence; no edit of it is to be landed.
 
-## Status: PROPOSED
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4/§1.5 SUPERSEDED row, §7; `unified/U3_DEPENDENCY_ORDER.md` node B24). Document status only: the Status line is set to SUPERSEDED by `05_SC_playable_hearing_B.md` (the earlier `Reconciled:` line already said so); no edit of this file is landed; its body is kept as the evidence its successor cites. **Lands in batch:** none (node B24 kept for the order).
+
+## Status: SUPERSEDED by `05_SC_playable_hearing_B.md` (kept for its evidence; nothing here is landed)
 
 Source: `audits/05_SC_audit.md` F-SC-01, F-SC-05, F-SC-07 and §9; the standing requirement (each
 subsystem playable alone, conformant, integrated). Composes on plan items already written

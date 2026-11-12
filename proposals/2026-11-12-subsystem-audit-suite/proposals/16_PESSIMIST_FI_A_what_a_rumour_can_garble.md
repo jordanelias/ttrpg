@@ -1,6 +1,22 @@
 # 16 · PESSIMIST · FI · A — What a rumour can garble: quantities drift, existence does not, a deed loses its hand
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (D-44 / D-45, ladder-closed in
+`unified/DECISIONS_ANSWERED.md`: "For Jordan" CLOSED, loss only; the drift is named as noise under D-45), §7/§7b (merged
+body, tests, tier); U3 C3-K1 (one merged body with `16_PESSIMIST_SC_E_an_honest_teller_is_not_marked.md` edit 2; **this
+file lands first**, SC_E composes on it; one re-pin at B11's close), B11, C3-K6's sibling (`covert_kinds`, not touched
+here). **Corrected from R5 7b:** R5 ordered SC_E first; U3 C3-K1 orders this file first, and U3 governs. The stem is
+the `stem` argument `_told_value` already takes (`loop/witness.py:141`), not a `held.predicate_stem` attribute.
+
 ## Status: PROPOSED
+
+Lands in batch: **B11** (FI). Depends on: `08_FI_02_rumour-that-travels.md` (B11, edit 5 amends its tier list) and
+`08_FI_06_testimony-names-a-hand.md` (B11, edit 4 needs its sighting). Followed in B11 by
+`16_PESSIMIST_SC_E_an_honest_teller_is_not_marked.md` (C3-K1).
+
+**D-45 (no engine-authored wrong conclusions).** The lossy copy of a quantity on a `Partial` telling is noise
+bounded by `told_drift_band` (`H-155`), sign-preserving; it never changes an existence, a relation or a hand.
+A wrong conclusion in the tree comes only from a person (a lie, a forgery); this file narrows the drift to
+make that true of existence readings too.
 
 Carries `audits/16_PESSIMIST_FI.md` F-PES-FI-02 and F-PES-FI-06 (§2.1). Amends, and does not replace,
 `08_FI_02_rumour-that-travels.md` (edit 2's tier list) and depends on `08_FI_06_testimony-names-a-hand.md`
@@ -57,14 +73,27 @@ grammar stores as a number (`_as_number`), and it takes the boolean's rule.
    `threshold_predicate`), so the set is whatever the table compares against a threshold: `stores`
    and `condition` today. Derived, not a roster, on `CELL_STEMS`' own precedent.
 2. **`engine/season/loop/witness.py::_told_value`**, the numeric branch: add the conjunct
-   `stem in QUANTITY_STEMS`. A numeric value on any other stem falls through to the last line and is
-   deposited as held.
+   `stem in QUANTITY_STEMS` (`stem` is the function's existing argument, `witness.py:141`, derived from
+   `held.predicate` when the caller omits it). A numeric value on any other stem falls through to the last
+   line and is deposited as held. The body after both this commit and SC_E's (C3-K1, one merged body):
+
+   ```python
+   if isinstance(held.value, (int, float)) and not isinstance(held.value, bool) and stem in QUANTITY_STEMS:
+       own = [c for c in w.persons[pid].ledger
+              if c.firsthand and c.subject == held.subject and c.predicate == held.predicate]
+       if own and w.fixtures.get("knower_hears_true"):          # SC_E's commit adds these three lines
+           return LedgerReader(own).belief_among().value
+       return drifted(held.value, w.fixtures.get("told_drift_band"), sel)
+   # any other numeric value (an existence reading stored as 0/1) falls through and is deposited as held
+   ```
 3. **`engine/season/queries/person_q.py::lie_said_of`**: the `isinstance(held, (int, float))` branch
    takes the whole-band drift only where the claim's stem is in `QUANTITY_STEMS`; a numeric value on
    another cell stem is negated by truthiness (`0 if held else 1`). A liar may then say that a living
    man is gone, which the hearer's clause 4 reads (`p1c_exists.py`: `(King, exists:Person, 0)` declines
    `challenge`, `interview`, `train` on the King): the first lie in the tree that changes what its
-   hearer will attempt about a person.
+   hearer will attempt about a person. SC_E's later commit changes the return to a tuple of `Said` (both
+   drifts for a `QUANTITY_STEMS` stem; the one negation for any other numeric cell stem; a `bool` as
+   today); this commit keeps the single return and SC_E's adapts it.
 4. **`engine/season/loop/witness.py`, the told deposit** (after `08_FI_06` gives a told deed its
    sighting on the same chain): at a degree whose `finding_terms` row lacks the hand term
    (`loop/witness.py::HAND_TERM`), deposit the deed claim without its sighting. One table, read by the
@@ -77,6 +106,12 @@ grammar stores as a number (`_as_number`), and it takes the boolean's rule.
    the realm holds to every deed.
 
 ## Gate (execution artifact)
+
+`p2_proxy.py`, `told_dump.py` and `p1c_exists.py` were lane scratch (not in the repository, U3 §6.2). Written
+first, in `engine/season/tests/test_cr27_lie.py` (exists): `test_existence_lie_is_a_negation`,
+`test_partial_telling_passes_an_existence_reading_whole`, `test_quantity_still_drifts_on_a_partial_telling`
+(the control), `test_partial_told_deed_withholds_the_hand` (edit 4, after `08_FI_06`). Command:
+`python -m pytest engine/season/tests/test_cr27_lie.py -q`. The scratch readings, once committed:
 
 - `p2_proxy.py`, unchanged script: `(King, exists:Person, 1)` reads `1` at every hop; `(S, condition, 3)`
   is decided by whether `condition` is in `QUANTITY_STEMS` (it is, as a `ScalarThreshold` stem; it keeps
@@ -102,7 +137,7 @@ by a rule. S: one ladder for "how much of a deed a band shows" (`finding_terms`)
 deposits, where today the finder's deposit is graded and the hearer's is not. E, last: one derived
 set, two conjuncts, one roster row reordered; no new object.
 
-## For Jordan (one survivor; two options that make different games)
+## For Jordan (CLOSED by D-44 and D-45, ladder-closed 2026-11-12, `unified/DECISIONS_ANSWERED.md`: "a rumour may lose the doer, not replace him"; "no engine-authored wrong conclusions". Loss only ships; substitution is not built. Kept as the finding.)
 
 **May a garbled deed name the wrong person?** Edit 4 makes distortion a *loss* (the hand is withheld).
 The other reading of "a rumour distorts" is *substitution*: at `Partial`, the hand or the victim is
@@ -116,4 +151,7 @@ table).
 
 ## Cost class
 
-Edit (1 to 3, 5). Edit 4 is an edit on top of `08_FI_06` (small build, proposed). Lane FI.
+Edit (1 to 3, 5). Edit 4 is an edit on top of `08_FI_06` (small build, proposed). Lane FI. Tier: `sonnet`,
+effort `high`. Hash movers declared: every world with a `Partial` telling or a lie on an existence reading (3 of
+7 landed tellings at seed 0); one re-pin at B11's close with SC_E. Lands it: B11, order 1 → 2 → 3 → 5, then 4
+after `08_FI_06`; SC_E's edit 2 follows.

@@ -1,6 +1,11 @@
 # WR-31-C — what the stances feed: the founding deeds and the race for the crown, the vote, the strands, the chronicle and the player's view of regimes
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §1 found it CONFORMS and R3 §2 found no ruling it contradicts. Added: batch and dependencies (U3 B38; commit 1 rides the institutions batches); `U5d_FA_owed_edits.md` §4's weight is now authored as `rosters.yaml: tables.territory_weight` (U1 ledger F-12), which `block_lean` reads through `faction_q.weight`; U3 §6.3 (no goal row carries `axis:`; commit 2 ships at its control until rows are authored); commit 3's storybar edit is placed in C3-K7's serial order after `31_WR_B` commit 3 `[ASSUMPTION: C3-K7 does not list this file; it edits `harness/storybar.py`, so it is placed last — basis: C3-K7's rule that no two proposals edit the file concurrently]`. Tier already named.
+
 ## Status: PROPOSED (four small edits, each a request to the file that owns its site; the ten phrase pairs are `[ASSUMPTION; Jordan to correct]`)
+
+Lands in batch: B38 (narrative and regimes), after `31_WR_B` and before `30_WR_A` (U3 §1 item 38); commit 1's step rows land with `15_INSTITUTIONS_BYZANTINE_E` and `15_INSTITUTIONS_VENICE_C` in their batches (B32/B40).
+Depends on: `31_WR_A` (B38); `20_NARRATIVE_D` (B38); `U5d_FA_owed_edits.md` §4 (B21); `15_INSTITUTIONS_SYNTHESIS_B` (B32); `30_GO_F` (B38).
 
 Source: A-17 to A-19 (the founding order and the deed race), A-41, A-42 (vote blocks), A-45 (strands), A-82 ("visible to the player as factions of opinion, not as numbers"), A-87 to A-90. `audits/31_HOUSE_STANCES_AND_CAST_VALUES.md` §5, §10. Reference only (`CLAUDE.md` §0.05). Lane WR with FA and GO.
 
@@ -35,7 +40,7 @@ The founding order stays a head start (the seeded confidences); the stances deci
 
 ## 2. The vote (A-41, A-42)
 
-`U5d_FA_owed_edits.md` §4 gives a faction and a territory a political weight that a ballot's draw reads. Two additions:
+`U5d_FA_owed_edits.md` §4 gives a faction and a territory a political weight that a ballot's draw reads (authored as `rosters.yaml: tables.territory_weight`, keyed by territory id; U1 ledger F-12). Two additions:
 
 - **`thrust_axes.bears`** (commit 2, `engine/season/rosters.yaml: thrust_axes`): which poles a matter on that line speaks to, sign included. `revive_einhir: {einhir_restoration: 1, einhir_folk: 1}`, `suppress_einhir_revival: {einhir_restoration: -1, einhir_folk: -1}`, `overthrow_caste: {caste_order: -1}`, `uphold_caste: {caste_order: 1}`, `uphold_church: {solmund_orthodoxy: 1}`, `overthrow_church: {solmund_orthodoxy: -1}`, `altonian_ascendancy: {altonian_civics: 1}`, `purge_altonia: {altonian_civics: -1}`. The other six axes bear on none. Each a plain reading of the axis's own name; `[ASSUMPTION; medium; Jordan to correct]`.
 - **The ballot's roll** (`15_INSTITUTIONS_VENICE_C` edit 5) gains one more step row: *"the matter's goal row names an `axis:` that bears on a pole: the voter's own `conviction_stand` on that pole, times the sign, above 0: one step for; below 0: one step against."* A voter with no key on the pole takes no step, so the Church's men are unmoved by a caste measure (A-88) and decide it on other terms.

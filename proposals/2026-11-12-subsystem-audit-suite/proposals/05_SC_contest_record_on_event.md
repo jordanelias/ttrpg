@@ -2,6 +2,10 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-06) — `margin_endings` values are `[pool, ob, net, margin, terms, levels, leverage]`: `terms` and `levels` replace `room`, because the room is no longer one number subtracted from the obstacle (`U5c_SC_one_obstacle_form.md` §5).
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row SC-P1, §3 row `margin_endings`, §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-06, ledger R-29; `unified/U1_GLOSSARY.md` *margin*; `unified/U3_CONFLICT_LEDGER.md` C3-L1, C3-L5, C3-C16). Changed: the body follows the head (`room` → `terms` and `levels` in edit 1, its explanation and the gate); "settled margin" → the margin (A-5 removes settling; the real margin is quantised once at the ladder, C3-L1); this file carries the persistence of lane A's `ob_terms` (F-SC-04) in B05 (C3-L5); the use of `Event.ending` is named as a departure from `04` §B.9 at the site (B4 third disposition, C3-C16), consistent with D-U1-06 (no new Event field; `observed` is not used, so no hearer learns the speaker's pool; `margin_endings` is the roll record's owner, U1 ledger R-29); falsifier (b)'s `[UNVERIFIED]` is narrowed by a grep; lands-it and tier added.
+
+**Lands in batch:** B05 (OBS §4 step 2). **Depends on:** `U5c_SC_one_obstacle_form.md` steps 0–1b (B05; `Margin.terms`, `levels`). **Read by:** `11_GO_player_surface_contract_B.md` (B34, reads the record, adds no store).
+
 ## Status: PROPOSED
 
 Source: `audits/05_SC_audit.md` F-SC-04; closes `engine/season/hole_register.yaml` H-284.
@@ -9,8 +13,8 @@ Source: `audits/05_SC_audit.md` F-SC-04; closes `engine/season/hole_register.yam
 ## What it changes in `engine/season/` at runtime
 
 Every Event a contested or graded act emits through the social contest provider gains a non-empty
-`Event.ending` tuple naming the pool, the obstacle, the net and the settled margin of the draw that
-graded it. The content hash of every world in which a social roll executes moves once (a declared
+`Event.ending` tuple naming the pool, the obstacle, the net and the margin of the draw that graded it,
+with the obstacle's `terms` and the leverage `levels`. The content hash of every world in which a social roll executes moves once (a declared
 mover). No odds, band or write changes.
 
 ## The problem (evidence)
@@ -34,7 +38,12 @@ mover). No odds, band or write changes.
 Reuse `Event.ending` (ladder step 4, the combat precedent). Do not add an `Observation` to
 `Event.observed`: WITNESS deposits observed reads into ledgers (`loop/matter.py`'s stock-report note),
 and a hearer must not learn the speaker's pool from having been in the room. `ending` is the
-provider's own record of how the contest ended and is read resolver-side.
+provider's own record of how the contest ended and is read resolver-side. **Layer 1:** `04` §B.9's
+`Event` record names `degree?` and no `ending`; the field already ships for combat (H-266). Its use for a
+margin provider's tuple is named here as a departure (`skills/layer-conformance` B4, third disposition;
+C3-C16), with its readers named (`harness/chronicle.py`, the GO surface's account): it carries no actor,
+target or subject (`04` PART D row 9). This file also carries the persistence of lane A's `ob_terms`
+(`c5bf18a` kept them on the roll's in-memory result, F-SC-04): they persist as `terms` here, in B05 (C3-L5).
 
 Rejected: a driver-side map (`SeasonDriver.resolution_of`) — it is outside `World`, so it is neither
 hashed nor saved, and "recoverable from the log" would be false after a load. Rejected: a new `Event`
@@ -48,20 +57,21 @@ field (`margin`) — a second carrier for one fact per provider (shape divergenc
    ```yaml
    margin_endings:
      source: "SC-P1 (H-284): what a margin provider's contest leaves on its Events"
-     values: ["pool", "ob", "net", "margin", "room", "leverage"]     # ordered; the tuple's keys
+     values: ["pool", "ob", "net", "margin", "terms", "levels", "leverage"]     # ordered; the tuple's keys
    ```
 
-   `room` is `reception_gain·reception + proof_step·proofs` as the module composed it and
-   `leverage` the act's net sigma: the two terms a narrative needs to say WHY (the bench was against
-   him; he pressed). `sigma.resolve` adds `room` to its returned dict (it already returns
-   `leverage`); the module exposes the term by returning it beside the obstacle from one helper, so
-   the host does no arithmetic.
+   `terms` is `Margin.terms`, the obstacle's named terms in roster order summing to `ob` (OBS §2, §5);
+   `levels` is `sigma.resolve`'s `((source, aggressor n, defender n), …)` (OBS §5); `leverage` the act's net
+   sigma: what a narrative needs to say WHY (the bench was against him; he pressed; the proofs stood).
+   The module returns `terms` beside the obstacle from one helper and `sigma.resolve` returns `levels`
+   (it already returns `leverage`), so the host does no arithmetic.
 
 2. `engine/season/loop/resolve.py::_fold` — after `_degree` is bound (`:406`), where
    `resolution is not None` and `resolution.result` carries a `net`/`ob` pair (the same test
    `seam/ladder.py::degree_of` makes at `:256`), build
-   `tuple((k, resolution.result[src]) for k, src in MARGIN_ENDING)` with `margin` read from
-   `settled_margin`, and seed `carried["ending"]` with it before the write loop. The fold's existing
+   `tuple((k, resolution.result[src]) for k, src in MARGIN_ENDING)` with `margin` read from the
+   result's margin (today's key `settled_margin`, `sigma.py:555`; A-5 removes settling, so the key names a
+   real margin quantised once at the ladder, C3-L1), and seed `carried["ending"]` with it before the write loop. The fold's existing
    `replace(e, …, ending=_ending)` at `:566` then stamps it on every Event of the act — including the
    Failure band's, which today returns through the same loop with `changed` empty.
    A refusal (`_refuse_party_gap`) carries none: no dice were dealt.
@@ -77,16 +87,19 @@ returned.
 
 `engine/season/tests/test_sc01_provider.py` gains one test: fold one `argue` on `probes.tiny_world`
 at a fixed seed; assert the emitted Event's `ending` equals the provider's returned pool, obstacle,
-net and settled margin for that act (read by calling `sigma.resolve` with the act's own generator),
+net, margin, `terms` and `levels` for that act (read by calling `sigma.resolve` with the act's own generator),
 and that `seam/ladder.py::degree_of` over that tuple reproduces `Event.degree`. Re-pin the seeded
-goldens in the same commit and say so (CLAUDE.md §7).
+goldens in the same commit and say so (CLAUDE.md §7). Named test:
+`test_sc01_provider.py::test_a_social_roll_event_carries_its_margin_ending`; and
+`::test_no_claim_predicate_is_a_margin_ending_after_witness` (falsifier (b)).
 
 ## Falsifier
 
 (a) Plant a second `Margin` (net + 3) at the entry: the test must go red (the tuple follows the roll,
 not a recomputation). (b) After a WITNESS barrier, no `Claim` in any ledger has a predicate drawn from
 `margin_endings` — if one does, the record leaked person-side and the edit is wrong.
-`[UNVERIFIED]`: that WITNESS never deposits `Event.ending`; the falsifier is the check.
+Narrowed: `grep -n "\.ending" engine/season/loop/witness.py engine/season/loop/epistemic.py` finds no
+read of `Event.ending` at this tree; the falsifier test stays the check (an absence by grep is not a run).
 
 ## NERS reading
 
@@ -102,3 +115,7 @@ not a recomputation). (b) After a WITNESS barrier, no `Claim` in any ledger has 
 ## Cost class
 
 Edit (one fold site, one roster, a golden re-pin).
+
+**Lands it and tier.** The B05 batch at OBS §4 step 2, an SC `valoria-author` session on `sonnet` (`high`),
+closed by the batch's `methodology-close` once. **Hash movers.** Every world in which a social roll executes
+(declared; re-pinned once with B05).

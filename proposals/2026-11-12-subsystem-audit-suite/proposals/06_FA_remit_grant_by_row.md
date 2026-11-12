@@ -2,7 +2,12 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-19** and **A-23**. Edit 1's `off_widow_regent: remit_acts: []` (R-16) lands only together with the deed race (`22_HAPPENINGS_B_the_throne_is_never_stranded.md` as reconciled), which gives the throne a filler when King and heir are both dead; landing it alone strands the throne one death earlier (`audits/16_PESSIMIST_FA.md` F-PES-FA-11). The note's "a regency is a termed `confer` or the heir's claim" gains: or a claim in the race by the consort herself (A-19 lists her among those who may claim). A-23: a grant is not exercised while its holder is in custody; no row edit follows from it.
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — 7b-4 applied after checking it against the tree: edit 2 also rewrites `authored_remit`, which is at `data/rosters.py:940-962` (the union is `:962`), not at `harness/populated.py:1723-1726` (a comment); edit 4 names the two tests that read the old state, opened (`test_governance_build.py:2481-2493` imports `OFFICES_REMIT_UNRULED`; `test_season_shape.py:6351`'s `assert not ungranted`), and replaces the non-existent `test_fa01_head_seats.py` by the files that read head seats (`test_faction_q.py`, `test_cr86_realm_structure.py`); the `state/gate.py:287`, `:320` comments are reworded in the same commit. R3 §2 found no stale body beyond the head (A-13: rows silent is correct). Batch and tier added (U3 C3-D5, R3 7b-0).
+
 ## Status: PROPOSED
+
+Lands in batch: B21 (FA governance), second in C3-D5's order (after `06_FA_seat_terms_and_turnover.md`); `off_widow_regent: remit_acts: []` lands only with `22_HAPPENINGS_B_the_throne_is_never_stranded.md` (the next item in B21), per the head.
+Depends on: `22_HAPPENINGS_B_the_throne_is_never_stranded.md` (B21) for the regent row only; every other symbol is on `main`.
 
 Source: `audits/06_FA_audit.md` F-FA-03, §6.2 R-04 and R-16, §13 (NPC-032, NPC-034, NPC-036, NPC-072,
 NPC-082), §15 (c); `engine/season/offices.yaml` J-8.
@@ -66,19 +71,29 @@ command or keep order; each is `[ASSUMPTION; medium; Jordan to correct; revert: 
   leader calls the forum.
 
 **2. `engine/season/data/rosters.py`.** Delete `OFFICES_REMIT_UNRULED` and its membership check
-(`:926-935`).
+(`:926-935`), **and** change `authored_remit(row, held=())` (`:940-962`) to `return
+sorted(set(row["remit_acts"]))`: the union `| (set(held) & OFFICES_REMIT_UNRULED)` at `:962` is where the
+kept acts enter, and the docstring's "`held` IS WHAT THE SEAT HAD BEFORE THE OVERLAY …" paragraph
+(`:949-…`) goes with it.
 
-**3. `engine/season/harness/populated.py`.** `authored_remit(row, held)` returns the row's `remit_acts` and
-no longer unions the kept acts (`:1723-1726`); the `unauthored` branch (`:1736-1740`) stays for a future
-seat with no row and is no longer reached by the shipped cast.
+**3. `engine/season/harness/populated.py`.** No code change: it keeps calling `authored_remit` (its comment
+at `:1723-1726` loses the `remit_unruled` clause). The `unauthored` branch (`:1736-1740`) stays for a future
+seat with no row and is no longer reached by the shipped cast. The comments at `state/gate.py:287` and
+`:320` that cite `meta: remit_unruled` are reworded in the same commit to "a seat holds a remit act iff its
+row names it".
 
-**4. Tests that read the old state** (named so the builder re-records rather than discovers; both are taken
-from the notes that describe them, `offices.yaml:122-123` and the FA-01 handoff row, and were not opened:
-[UNVERIFIED]):
-`test_season_shape.py`'s remit-default test asserts `not ungranted`; a seat with an empty remit becomes
-lawful (the heir, the princess, the consort hold titles, not powers), so that assertion narrows to "every
-seat's grant equals its row's". `test_fa01_head_seats.py` reads each head executing a computed `dispatch`
-through his seat: the Restoration leader's row names only `issue`, so his arm re-records on `issue`.
+**4. Tests that read the old state** (opened at `main`):
+(i) `engine/season/tests/test_season_shape.py:6351-6354`: `assert not ungranted` passes today "only through
+that leak" (its own comment); a seat with an empty remit becomes lawful (the heir, the princess, the consort
+hold titles, not powers), so the assertion narrows to "every seat's grant equals its row's".
+(ii) `engine/season/tests/test_governance_build.py:2481-2493` imports `OFFICES_REMIT_UNRULED, REMIT_DEFAULT`
+and asserts the unruled set non-empty: rewritten to assert each seat's grant equals its row's (J-8's
+premise is gone).
+(iii) The head seats' executions: `test_fa01_head_seats.py` does not exist (`ls engine/season/tests | grep
+fa01` returns nothing); the files that read head seats are `test_faction_q.py` and
+`test_cr86_realm_structure.py` (`grep -rl head_seat engine/season/tests`). Each arm that reads a head
+executing a computed `dispatch` through his seat re-records on what his row names (the Restoration leader's
+row names only `issue`).
 
 ## Gate (execution artifact)
 
@@ -115,3 +130,4 @@ cases flag as UNCLEAR (NPC-036's goals, NPC-072's territory).
 ## Cost class
 
 Edit. Declared hash mover for `build_realm`; goldens re-recorded old to new in the commit body.
+Tier: `sonnet` (data edit; R3 7b-0).

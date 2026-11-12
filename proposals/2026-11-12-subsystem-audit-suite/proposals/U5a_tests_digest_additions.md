@@ -1,5 +1,9 @@
 # U5a · TESTS — what the six test digests add to the three test proposals
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.3 row tests (CONFORMS), §7 (INCOMPLETE: sites unopened), §7b-T; `unified/U3_CONFLICT_LEDGER.md` C3-N30; `unified/U3_DEPENDENCY_ORDER.md` nodes B02, B08). Changed: §E's verb-roster rule is aligned with T1 D and C3-N30 (the one pin T1 keeps at `test_season_shape.py:15933` is a reading re-recorded at B25 and B38, not deleted); §G is placed in B08 with the scene order; lands-it and tier added. Left INCOMPLETE, with the reason: most sites are read from the digests and not opened (this lane runs and edits no test); the executing session's first step per row is to open the site, as the file already orders.
+
+**Lands in batch:** B02 (§A–§C, §E, §F with T1–T3); §D2 after T1 in B02; §D3 with the `tend` draw (`14_VERBS_MATERIAL_A` §6, B12); §G in B08 with `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md`.
+
 ## Status: PROPOSED (a plan for future execution; nothing here is executed by the closing lane)
 
 Authored by the U5a unification-closure lane, 2026-11-12. `audits/01_CORE_audit_addendum_C_tests.md`
@@ -88,8 +92,10 @@ the `ever` literal at `:8164`, `:9425`, `:11122`; `test_governance_build.py:913`
 that property (a floor, a set inclusion, an equality between two readings of the same run). A pin that
 states none, and whose re-pin log shows it moved with unrelated commits, is deleted with its log. A pin
 on a closed roster's size that a loader already refuses (`len(REFERENT_CLASSES) == 8`, `len(VERB_TABLE)`)
-is deleted: the loader is the owner. `len(VERB_TABLE) == 67` goes in any case when Jordan's answer A-28
-splits `tie / knot` (68).
+is deleted: the loader is the owner. The one exception is the pin T1 D keeps at `test_season_shape.py:15933`
+(R-05's denominator): it is a reading of `main` (67), re-read and re-recorded at B25 (A-28's `tie`/`knot`
+split, 68) and B38 (`riot`, 69, if it lands), quoted with its batch (C3-N30); every other copy of
+`len(VERB_TABLE) == 67` is deleted.
 
 ## F. Two statements of addendum C the digests correct
 
@@ -130,8 +136,11 @@ seven tests; for section B the commit body lists, per line, the mutation made an
 
 ## Order, dependencies, who lands it
 
-An IN-lane session, in the same batch as T2 and T3 (the same files). D2 after T1. D3 with the `tend`
-draw. G with the scene-order proposal. Sections A–C and F have no dependency.
+An IN-lane session, in the same batch as T2 and T3 (the same files): B02. D2 after T1 (B02). D3 with the
+`tend` draw (B12). G with the scene-order proposal (B08). Sections A–C and F have no dependency.
+**Tier.** `valoria-author` on `sonnet` (`high`); closed by each batch's `methodology-close`. **INCOMPLETE,
+blocking reason:** the `[UNVERIFIED]` sites must be opened by the executing session before each edit (this
+lane runs and edits no test); no row is decidable further from the repository without opening them.
 
 ## NERS reading
 

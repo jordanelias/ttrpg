@@ -2,6 +2,10 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-09) — three checks in the carry table (rebuttal, defeat by named fault, who bears the question) asserted a fixed outcome; each now asserts a share over seeds, as the sweep's D-01 and D-03 already made the mechanisms they test (`05_SC_evidence_and_rebuttal_B.md` rule 2; `05_SC_playable_hearing_B.md`: silence adds levels and concedes nothing). The carry list and the retirement are unchanged.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row SC-05, §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-01; `unified/U3_DEPENDENCY_ORDER.md` node B24, §4.1 row 8). Changed: the ten checks are named (they were a glob); the carry table's "SC-P7 trait rows; the turn view's `insight` gate" reads the `edge` rows of `capability_uses` and the drawn bench reading (`05_SC_capability_surface.md`, `05_SC_hearing_capabilities.md` as reconciled); `ED-1057`'s "office weight" is the seat row's `modifier:` read as one `office` level (D-U1-01); the C1B deletion item touching this kernel lands in B24 after HEAR_B (U3 §4.1 row 8); lands-it and tier added.
+
+**Lands in batch:** B24, last in the batch (after `05_SC_playable_hearing_B.md` and its checks). **Depends on:** `05_SC_playable_hearing_B.md`, `05_SC_evidence_and_rebuttal_B.md` (B24); `17_CENSUS_C1B_01_deletions.md`'s kernel item (B24 split).
+
 ## Status: PROPOSED — supersedes `05_SC_sc05_kernel_retirement.md` (SC-P2), which it keeps in every edit it does not restate
 
 Source: `audits/05_SC_audit_addendum_B.md` §B2 (C-2, C-3, F-SC-18), §B3; `audits/05_SC_audit.md`
@@ -71,7 +75,7 @@ what makes it one path). Nothing here is Jordan's to answer.
 | defeat by named fault, per venue | `DefeatCatalogue` | roster `hearing_faults`, the row's `faults:` | a row with `silence` in its list adds levels against a resting bearer in the closing draw and a row without adds none; in neither is the rung conceded without the draw |
 | who bears the question | `ProofBar`, `GraceThreshold` | the row's `bears:` | swapping `bears:` on one hand-built world moves the closing draw's odds toward the other side over 200 seeds; no single result is fixed by the swap |
 | a ballot per seat that can cross the room | `VoteAtClose`, `ED-1057` | `HearingOutcome.ballots` on `declared` rows | a seeded bench where the board favours one side and one seat votes the other |
-| what moves this judge, read in bands | `armature.py`, `appraise.py` | SC-P7 trait rows; the turn view's `insight` gate | a trait row changes one seat's ballot odds and no other's |
+| what moves this judge, read in bands | `armature.py`, `appraise.py` | `edge` rows of `capability_uses` (SC-P7 edit 3 as superseded); the drawn bench reading (`insight` sets the confidence, never a threshold) | a trait row changes one seat's ballot odds and no other's |
 | effort as the attendee's budget | `Reserve` | `Act.effort` | an attendee at effort 0 makes no move |
 | the run's shape (rout, reversal, collapse, split) | `narrative.py` | a reader of `HearingOutcome.exchanges` in the harness | the four shapes are each produced by a hand-built exchange list |
 
@@ -91,11 +95,24 @@ the adjudicator profiles; `GAMES`, `MECHANICS`, the design-memo dictionaries, `_
 | ledger id | what it ratified for the kernel | disposition | by |
 |---|---|---|---|
 | `ED-1056` | Face scale-binding (`Charisma × 3`) | lapses; unreachable through the public entry (`_as_contestant` never sets `charisma`) | step 2 |
-| `ED-1057` | a bench ballot weighted by standing | behaviour carried (per-seat ballot, office weight) | step 1 (the later statement that office weight enters roll and obstacle, R-38 as recorded in `PD/…primitives-and-kinds.md`) |
+| `ED-1057` | a bench ballot weighted by standing | behaviour carried (per-seat ballot; a seat's help is its row's `modifier:` as one `office` level, D-U1-01) | step 1 (the later statement that office weight enters roll and obstacle, R-38 as recorded in `PD/…primitives-and-kinds.md`) |
 | `ED-1059` | Guild Arbitration heard by a panel | a row's data, if such a row is authored | step 3 (`arrangements.yaml` is the owner) |
 | `ED-1060` | Terminal Doubt | lapses; never consumed by any resolver line | step 2 |
 | `ED-1061` | the Guilds boost derives from the venue, not a GM | the principle is the no-GM rule; the table dies | step 1 |
 | `ED-1062` | the armature's fourth axis; the two-genre compression; CR5's scope | the armature survives as seat leanings in trait rows; genre and CR5 die with the Style grid | step 1 (the 2026-09-05 scope ruling; `ED-SC-0033`) |
+
+**The ten checks, named** (rows of the carry table in order; `engine/season/tests/`):
+1. `test_sc_hearing_sitting.py::test_two_scripted_deciders_differing_in_one_move_leave_different_standing`;
+2. `test_sc_hearing_sitting.py::test_concede_descends_one_rung_and_is_witnessed`;
+3. `test_sc_hearing_evidence.py::test_an_off_rung_item_enters_at_half_and_a_same_origin_second_adds_less`;
+4. `test_sc_hearing_evidence.py::test_an_answer_strikes_by_its_band_in_a_share_strictly_between_0_and_1`
+   (with `::test_a_struck_item_adds_no_proofs_level`);
+5. `test_sc_hearing_sitting.py::test_silence_adds_levels_only_where_the_row_lists_it`;
+6. `test_sc_hearing_sitting.py::test_swapping_bears_moves_the_closing_odds_over_200_seeds`;
+7. `test_sc_hearing_ballots.py::test_a_seat_can_vote_against_the_board`;
+8. `test_sc_hearing_ballots.py::test_a_trait_row_moves_one_seats_ballot_odds_only`;
+9. `test_sc_hearing_sitting.py::test_an_attendee_at_effort_zero_makes_no_move`;
+10. `test_sc_hearing_shapes.py::test_four_run_shapes_from_hand_built_exchange_lists`.
 
 ## Exact edits, by owner
 
@@ -149,3 +166,7 @@ exist), that mechanism was not carried and the deletion waits.
 
 Small build (a deletion wave with registry repoints), after a small build it depends on. Cross-lane
 on `references/` and the ledger.
+
+**Lands it and tier.** The last commit of the B24 batch, an SC `valoria-author` session on `sonnet` (`high`),
+closed by the batch's `methodology-close`; the ledger row (edit 4) is the orchestrator's. **Hash movers.**
+None (unreachable code; the gate's equal hashes are the control).

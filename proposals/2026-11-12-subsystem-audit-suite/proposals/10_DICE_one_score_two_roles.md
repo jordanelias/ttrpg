@@ -1,8 +1,13 @@
 # DICE — one score, two roles: what a person rolls is what he opposes with
 
-Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-11, C-U5a-12) — the one-read-two-roles rule stands. Changed by Jordan's answers: `score` is the **trained rank** (`max(untrained score, rank)`), with no attribute folded in (A-7; the `max(int(attr), int(have))` branch of Edit A goes, and the attribute is read separately as talent); what the opponent contributes is his **pool** under the same pool rule times `opposition_rate` (A-6, A-26), not `score / 2`. Edit C's values are U1 §5's: `lie: deception`, `determine: law` (each `none` with a note until SC's definition rows exist), `interrogate: inquiry`, `arrest: arms`, on the verb row's `capability:` column. The gate gains a row at an obstacle below `OB_MIN` (`U5a_DICE_owed_edits.md` §3 row 11). Figures quoted here are whole-dice figures at the old regime.
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-11, C-U5a-12) — the one-read-two-roles rule stands. Changed by Jordan's answers: `score` is the **trained rank** (`max(untrained score, rank)`), with no attribute folded in (A-7; the `max(int(attr), int(have))` branch of Edit A goes, and the attribute is read separately as talent); what the opponent contributes is his **trained score** times `opposition_rate`, through `opposed_ob` (A-26, A-79; corrected from "his pool under the same pool rule" by W3-1 per D-U1-02), not `score / 2`. Edit C's values are U1 §5's: `lie: deception`, `determine: law` (each `none` with a note until SC's definition rows exist), `interrogate: inquiry`, `arrest: arms`, on the verb row's `capability:` column. The gate gains a row at an obstacle below `OB_MIN` (`U5a_DICE_owed_edits.md` §3 row 11). Figures quoted here are whole-dice figures at the old regime.
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-04) — the `opposition_fallback` fixture is not added, and the sentence that a non-person subject is opposed at `obstacle_default` is superseded: opposition is never absent, and where nobody stands opposite the term is `opposed_ob(pool_default)` (`16_PESSIMIST_DICE_task_difficulty_and_throughput.md` (a); `U5c_SC_one_obstacle_form.md` §2). `obstacle_default` is deleted.
+
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — the body is brought to its two heads: rows applied: `R1_READ.md` 7b-6 and §2 rows (Edit A: training only, no attribute; Edit B: `_opposition_of` returns the trained score, no `opposition_fallback`; Edit C: U1 §5's values on the verb row's `capability:` column; "What it changes" restated on the one rule; the whole-dice `pool_default / 2` figures removed, one sentence naming the inversion kept), `U1_OWNERS_AND_VOCABULARY.md` D-U1-02 (the first head line's "his pool" corrected to "his trained score"), D-U1-08 (Edit D: `scores` and `addends`, carried by `U5b_PC_rulings_in_the_fight.md` §2), `U3_CONFLICT_LEDGER.md` C3-A3 (Edit A starts from implementation lane A's `pool.py::score` split, `c5bf18a`, with its `max(attr, have)` removed), `U5_CONFLICTS_U5c.md` C-04 (`obstacle_default` deleted; nobody opposite is `opposed_ob(pool_default, rate)`); test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`).
+
+**Depends on:** `U5a_capability_home_and_two_inputs.md` Part A (B04); `29_DICE_one_opposed_rule_form_and_tuning.md` item 29-1 (`opposed_ob`, B04); `U5c_SC_one_obstacle_form.md` (B05); implementation lane A's branch rebased (B01, C3-A2).
+**Lands in batch:** Edits A and C in B04 (`B04-capability-home`, with OBS step 0, U3 §1 B04); Edit B in B05 (`B05-one-roll`).
 
 ## Status: PROPOSED
 
@@ -12,13 +17,13 @@ depends on in the character lane.
 
 ## What it changes in `engine/season/` at runtime
 
-It is a declared mover. A contested social act against a **person** who holds no capability key and no
-attribute is opposed at `pool_default / 2` (shipped: 1.0) instead of at `obstacle_default` (shipped: 2.0).
-At the shipped pair that takes Partial-or-better from 26.00 % to 58.00 % and Success-or-better from 7.00 %
-to 26.00 % for `tell`, `lie`, `argue`, `speak` against a person, and for `arrest`, `determine` and
-`interrogate` once they name a key. A non-person subject (a Record, a Rung, a Proposition) is opposed at
-`obstacle_default`, as today. Every world hash that grades a person-opposed roll moves; the control arm
-that reproduces today's bytes is stated below.
+*(Reconciled, W3-1, 7b-6.)* It is a declared mover. A person is opposed at `opposition_rate × his trained
+score` (`opposed_ob`, `29_DICE_one_opposed_rule_form_and_tuning.md`); a person who holds no key is opposed at
+his untrained score, `pool_default`, by the same function; where nobody stands opposite, the term is
+`opposed_ob(pool_default, opposition_rate)` (C-04; `obstacle_default` is deleted). The control arm
+(`opposition_rate` 0.5, `pool_add` 0) is today's bytes. The defect this removes is the inversion: today a
+person who holds no score is harder to move than one who holds a low one (problem 1). Every world hash that
+grades a person-opposed roll moves at the live arm; the readings are `29_DICE`'s gates.
 
 ## The problem, with evidence
 
@@ -44,10 +49,10 @@ that reproduces today's bytes is stated below.
 
 ## The resolution, decided
 
-Ladder step 3 (a ruling and a register row answer the form) with step 4 for the precedent. The ruling
-(Jordan, 2026-08-14, carried in `dice_engine.degree_from_net`'s docstring) is *"their corresponding
-score/2 plus whatever specific modifiers exist for them in that instance"*. A person's corresponding
-score is the score he rolls: one read, two roles. Practice is excluded from the opposing role on
+Ladder step 3 (a ruling and a register row answer the form) with step 4 for the precedent. The ruling of
+2026-08-14 (*"their corresponding score/2 plus whatever specific modifiers exist for them in that instance"*)
+is overridden in its rate by A-26 and A-79 (`opposed_ob(trained score, opposition_rate)`); its form stands: a
+person's corresponding score is the score he rolls: one read, two roles. Practice is excluded from the opposing role on
 `_opposition_of`'s existing statement (*"the practice addend raises a pool, not an opposition"*), which
 stands. `obstacle_default` keeps the job H-127 gives it. The magnitude stays an `assumption`
 (`pool_default`, H-126, swept 1 / 2 / 4): [ASSUMPTION; medium; Jordan to correct; revert: the control
@@ -60,46 +65,52 @@ arithmetic moves:
 
 ```python
 def score(w, p, verb) -> int:
-    """What `p` holds for `verb`'s vocation: the larger of the held key and the vocation's attribute,
-    else `pool_default`. The base of his pool AND the score an opponent halves. No addend."""
-    have, attr = _capability(p, verb), _authored_attribute(p, verb)
-    if attr is not None:
-        return int(attr) if have is None else max(int(attr), int(have))
-    return int(have if have is not None else w.fixtures.get("pool_default"))
+    """(W3-1, A-7, 7b-6) What `p` is trained in for `verb`'s capability: the held rank, else the untrained
+    score `pool_default`. No attribute (talent enters as levels) and no addend. The base of his pool AND the
+    score an opponent's `opposed_ob` reads."""
+    have = _capability(p, verb)
+    return max(int(w.fixtures.get("pool_default")), int(have)) if have is not None else int(w.fixtures.get("pool_default"))
 
 def faculty(w, p, verb) -> int:
-    return score(w, p, verb) + sum(int(add(w, p, verb)) for add in POOL_ADDENDS)
+    addends = sum(int(add(w, p, verb)) for add in POOL_ADDENDS)
+    return pool_of(score(w, p, verb), addends, w.fixtures.get("pool_add"), w.fixtures.get("pool_floor"))
 ```
+
+Implementation lane A's `c5bf18a` already split `score()` from the addends; B05 starts from it and removes its
+`max(attr, have)` branch (C3-A3).
 
 **B. `engine/season/seam/wrappers/sigma.py::_opposition_of`.** A person subject always has a score:
 
 ```python
 if subject and subject in w.persons:
-    person = w.persons[subject]
-    opposing = _opposing_attribute(person, verb)          # CR-96's `opposed_by`, unchanged
-    base = score(w, person, verb)
-    return float(max(base, opposing) if opposing is not None else base)
-return None                                               # not a person: the module's stand-in
+    return float(score(w, w.persons[subject], opposing_verb))   # the trained score (29 item 29-4 step 1);
+                                                                # the capability the row's `opposed_by` names, else the verb's own
+return None                                                     # nobody opposite: the module's stand-in,
+                                                                # opposed_ob(pool_default, rate) (C-04)
 ```
 
-A new fixture `opposition_fallback` with arms `score` (SHIPPED) and `stand_in` (the control: return `None`
-where the person holds neither, today's bytes) carries the switch; it gets its hole-register row beside
-H-127 with the two arms as its sweep. `believed_input` is unchanged: a believer still needs a claim.
+*(W3-1, C-04:)* no `opposition_fallback` fixture is added and none of its hole-register row: the control arm is
+`opposition_rate` 0.5 with `pool_add` 0. The attribute does not oppose (A-7: talent is a level on the
+subject's side through the `edge` row `against`, `U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3).
+`believed_input` is unchanged: a believer still needs a claim, or takes the ordinary prior
+(`10_DICE_believed_odds_have_a_prior.md`).
 
-**C. `engine/season/rosters.yaml: verb_capability`.** Four rows, each on a vocation that already exists
-(so `VOCATIONS` and `train`'s candidate count do not grow): `lie: copying` (the same act as `tell`, one of
-them false), `interrogate: inquiry`, `arrest: arms`, `determine: argue`. Each is an `assumption` under
-H-126's existing sweep; H-312 closes on the `interrogate` row.
+**C. The verb row's `capability:` column** (`engine/season/verb_table.yaml`; U1 §5, D-U1-07: the verb's
+capability lives on its row, not in `rosters.yaml: verb_capability`). Four values: `interrogate: inquiry`,
+`arrest: arms`; `lie: deception` and `determine: law`, each `capability: none` with a note until SC authors the
+`deception` and `law` definition rows (lane A's interim `determine: argue` stands until then, D-U1-07). Each is
+an `assumption` under H-126's existing sweep; H-312 closes on the `interrogate` row.
 
 **D. `modules/combat/core.py::ob_from_defender` (PC lane, cross-listed, not edited here).** Once `score`
-exists, `PersonalCombatInput` can carry it beside `faculties`, and the note at `core.py:113-116` is
-resolved by reading `score` for the Ob and `faculty` for the pool. That is the PC lane's edit and its
+exists, `PersonalCombatInput` carries `scores` and `addends` raw in place of `faculties` (D-U1-08;
+`U5b_PC_rulings_in_the_fight.md` §2), and the note at `core.py:113-116` is resolved by reading the score for
+the Ob (`opposed_ob`) and `pool_of(score, addends, …)` for the pool. That is the PC lane's edit and its
 goldens; this proposal only supplies the reader.
 
 ## The gate (execution artifacts)
 
-1. At `opposition_fallback = stand_in`, `python -m engine.season.harness.headless --seasons 2 --seed 0`
-   prints today's `CONTENT HASH` (the control).
+1. At the control arm (`opposition_rate` 0.5, `pool_add` 0; W3-1), `python -m engine.season.harness.headless
+   --seasons 2 --seed 0` prints today's `CONTENT HASH`.
 2. At the shipped arm, `python -m engine.season.harness.aperture 1 0`'s `DEGREES RESOLVED` line for
    `tell` is read before and after and reported, both arms, seeds 0 to 2 (a number with its control).
 3. `engine/season/tests/test_odds_of.py` and `test_sc01_obstacle_ceiling.py`, re-pinned where they pin
@@ -107,19 +118,19 @@ goldens; this proposal only supplies the reader.
 
 ## The falsifier
 
-`odds_of` for a `tell` at an unauthored hearer must equal `band_odds(2, 1.0)`; for a hearer holding the
-key at 2 it must be the same tuple (no inversion); for a Record subject it must stay `band_odds(2, 2.0)`.
-For `interrogate`, raising the subject's `inquiry` score must lower Partial-or-better (H-312's probe,
-which today prints an unchanged tuple).
+`odds_of` for a `tell` at an unauthored hearer must equal the odds at a hearer holding the key at
+`pool_default` (no inversion; W3-1: the whole-dice tuples of the first text are moot under A-5); a hearer
+holding a higher key must give lower odds. For `interrogate`, raising the subject's `inquiry` score must lower
+Partial-or-better (H-312's probe, which today prints an unchanged tuple).
 
 ## NERS reading (E last)
 
 - **N.** Cut the fallback read and persons differ in pool but an unauthored person stays twice as hard to
   move as an authored one; the inversion returns. Holds top-down (the ruling), lateral (combat already
   reads it this way) and bottom-up (one function).
-- **R.** *Makes players feel they impact the world*: the shipped default person-to-person roll fails 74 %
-  of the time and Failure writes nothing; at the ruled derivation it fails 42 %. Completeness: the
-  inversion is an extreme where the composition breaks.
+- **R.** *Makes players feel they impact the world*: an unauthored opponent stops being the hardest one to
+  move. Completeness: the inversion is an extreme where the composition breaks. (The first text's 74 % and
+  42 % were whole-dice readings of the old regime, removed by W3-1.)
 - **S.** One score read by the pool and the obstacle, in the social roll and (after D) in a fight.
 - **E, as a ratio.** One function split in two, one fixture, four roster rows; one stand-in's scope
   narrowed to what its register row says it is.
@@ -127,3 +138,8 @@ which today prints an unchanged tuple).
 ## Cost class
 
 Edit, with re-pins. A declared mover; the trajectory figures of gate 2 go in the commit body.
+
+**Tests and lands (W3-1).** `engine/season/tests/test_odds_of.py` and `test_sc01_obstacle_ceiling.py`
+(gate 3); new `engine/season/tests/test_odds_of.py::test_an_unauthored_hearer_is_not_harder_than_a_held_one`
+(the falsifier) and `::test_score_reads_no_attribute`. Lands: an IN-lane implementation session under
+`/methodology-execute` with CHAR and SC review; `sonnet`.

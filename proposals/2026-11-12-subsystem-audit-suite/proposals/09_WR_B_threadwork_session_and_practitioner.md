@@ -4,7 +4,12 @@ Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-15) —
 
 Reconciled: 2026-11-12, U5d closure — folded **A-43**, **A-40**, **A-11** and **A-5**. Edit 3 (R-25: `coherence` is world-only for its owner, not an `OWN_STATE_STEMS` member) stands and is joined by its other half, what **others** read of him: `U5d_WR_zero_coherence_unknowable.md` (legibility as the one dial; at zero he keeps seats and goals and cannot be understood). The sentence offering Jordan a visible band for the player's own person is not answered by A-43 (which speaks of what others can know of him) and stays as written. The breach and the strain draws are on the one sampler (A-5); Thread Sensitivity stays the one gate (A-11); a working's subject is a Site (A-40).
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §1 Option A / 7b-10: `WorkingInput.draw: object` becomes `draws: tuple` of pre-drawn integers, so the module's input is a plain record (`holonic` §45 typed records; the `modules/settlements` precedent); R3 §2 (A-5, A-6, A-7): the strain draw's single-input pool and obstacle are marked `[ASSUMPTION: single input pending U5a]` and pointed at the capability architecture's `thread` site row; the body follows the U5a head (edit 3 point 3 and the falsifier read `account`, not `PersonProjection`); tier and batch added (R3 7b-0; U3 B35).
+
 ## Status: PROPOSED
+
+Lands in batch: B35 (WR thread), first in U3 §1 item 35.
+Depends on: `09_WR_threadwork_module.md` edit 3 (B03, the typed parameter file and `thread_operations`); `17_CENSUS_C1B_01_deletions` (B03); `17_CENSUS_C1A_01` D2 (B03, `account` replaces the projection); B10-15's rows and CP-T07-02's host (plan positions; MISSING until STAGES.md step 5 carries them) for edit 4's play.
 
 Carries findings F-WR-17 and F-WR-18 of `audits/09_WR_audit_addendum_B.md` (§4.2, §4.3), its resolutions
 R-21, R-22, R-25 and R-34, its §2.2 correction 9 and its §4.5. **Supersedes edits 1, 2 and 4 of the first
@@ -89,7 +94,8 @@ class WorkingInput(NamedTuple):
     in_equilibrium: bool              # CP-T07-05's read, projected by the host
     prior_ops: int                    # operations already made in this contact; 0 for the season's fold
     fatigue: int                      # Thread Fatigue accrued in this contact; 0 for the season's fold
-    draw: object                      # the host's keyed draw (`ids.draw_factory`)
+    draws: tuple                      # integers the host pre-drew with `ids.draw_factory`, keyed
+                                      # (seed, tick, actor, "thread", prior_ops); the module indexes them, never mints
 
 class WorkingOutcome(NamedTuple):
     degree: str                       # the shared ladder's band, or "refused"
@@ -113,10 +119,16 @@ Focus cap (`ops_per_contact`) is an eligibility check (whether a further operati
 and is the only refusal. Fatigue never closes the window by itself: each operation made with `fatigue`
 above zero is followed by a **strain draw** on the shared ladder (`dice_engine.degree_from_net`, the one
 owner), whose obstacle is the operation's own plus `fatigue / (fatigue_scale_per_will × spirit)`, rounded,
-and whose pool is the practitioner's will. Overwhelming or Success: contact holds. Partial: contact holds and
-the operation's Coherence cost rises one band. Failure: `contact_lost` is true, the operation's effect
-still lands at its own degree, and the host ends the contact. State sets the odds; the draw sets whether he
-can go on. The draw is keyed (`draw`, the host's mint), so a seed replays it.
+and whose pool is the practitioner's will `[ASSUMPTION: single input pending U5a — A-7 rules two inputs and
+A-6 a score plus base, floor five; the capability architecture's `thread` site row
+(`U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3) reads Focus as an `edge` and Will as the `resource` that
+scales fatigue, so this pool and obstacle are re-expressed on that form when CAP lands, `[CALIBRATE]` in
+the joint calibration, OWED §B]`. Overwhelming or Success: contact holds. Partial: contact holds and the
+operation's Coherence cost rises one band. Failure: `contact_lost` is true, the operation's effect still
+lands at its own degree, and the host ends the contact. State sets the odds; the draw sets whether he can
+go on. The host pre-draws the integers the call needs (the operation's roll and the strain roll) under
+keys that include `prior_ops`, and passes them in `draws`, so a seed replays it and the module holds no
+draw handle (R3 §1, Option A: a plain record; the module never mints).
 
 ### Edit 2 · three entries, one cost rule (`modules/threadwork/`, `references/module_contracts.yaml`, `seam/wrappers/threadwork.py`, `rosters.yaml`; replaces the first lane's edit 2)
 
@@ -171,7 +183,8 @@ breach Event). The practitioner who works deep past his band will usually break,
    faculty judging itself.)
 3. The host passes `resting_point` and `displacement` to the module in `Practitioner` and to nothing else:
    not to `choose`, not to `play_surface`'s callback (which receives `(p, v, s, ask_budget, auto)`), and not
-   into `PersonProjection` (which holds claims and witnessed Events only, `world_q.py:4409-4431`).
+   into `account` (the person's own ledger, `11_GO_player_surface_contract_B.md`; `PersonProjection`,
+   `world_q.py:4409-4431` on `main`, is deleted by `17_CENSUS_C1A_01` D2).
 
 ### Edit 4 · the Warden's season (`engine/season/harness/exercises.py`, one overlay case; replaces the first lane's edit 4)
 
@@ -215,7 +228,8 @@ refuses at construction; `thread_read` with `subject == actor` is refused; and t
 A `WorkingInput` field or parameter row that changes nothing when varied (`prior_ops` not read); a
 consequential outcome (contact held or lost, the Coherence cost, the breach) that is the same for every
 draw at a given state; a
-Coherence value reachable from `choose`'s arguments, the callback's, or a `PersonProjection`; a `mend`
+Coherence value reachable from `choose`'s arguments, the callback's, or `account`; a `draws` tuple too
+short for the call (the module minting a draw of its own); a `mend`
 whose cost is non-zero with `restorative: 0`; a second resolver anywhere for the played working.
 
 ## NERS reading
@@ -237,4 +251,6 @@ whose cost is non-zero with `restorative: 0`; a second resolver anywhere for the
 ## Cost class
 
 Edits 1, 2: small build (on the first lane's move). Edit 3: edit. Edit 4: design-first on B10-15's rows
-before it can be played.
+before it can be played. Tier: edits 1–2 `opus` (the session shape and the entry declarations), edits 3–4
+`sonnet` (R3 7b-0). The `[ASSUMPTION]` values (overweave, fatigue scale, Focus cap) stay INCOMPLETE as
+content until CAP and the joint calibration land.

@@ -1,5 +1,9 @@
 # 28 · CORE · SCENE ACCESS · C — the petition that cannot get through: what waiting does, read from what happened
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.7 row 28C (CONFORMS except `petition_state.now`; the regard unit; the inherited lapse write), §7, §7b-14, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` §3 *regard*, ledger R-24, S-11; `unified/U1_GLOSSARY.md` *occupy* → *engaged*, *level*; `unified/U3_CONFLICT_LEDGER.md` C3-D8, C3-K7; `unified/U3_DEPENDENCY_ORDER.md` node B38). Layer 1 rewrite (`04` §C.11 / AX-2: the engine owes a person the arithmetic of what he holds and nothing else): `petition_state`'s `now` (the world's present value) is for the chronicle and the harness only; the person-facing form is `person_q.petition_state_held(p: PersonInterior, rid)`, whose `now` is the reader's own held claim (the player's surface and a bench read their own). The `regard` addend is in the stance row's unit (U1 §3: `waiting_valence` is a valence in that unit; one fully remembered rebuff is `waiting_valence` stance steps), so `regard` keeps one unit. The inherited clause "as the lapse already appends `lapsed`" follows `U5c_SC_proceedings_residue.md` §4 item 6 as rewritten (the lapse is read from its `matter.lapsed` Event; MATTER appends no stage). A visit **engages** its counterparty (glossary). Order: after `20_NARRATIVE_B` in B38 (C3-D8); `harness/storybar.py` edited after `23_STORY_D` and before `30_WR_B` (C3-K7). Named test added for the person-facing read; the rest stands.
+
+**Lands in batch:** B38. **Depends on:** `28_CORE_scene_access_A_…` and `_B_…` (B28), `20_NARRATIVE_B_what_he_was_owed.md` and `20_NARRATIVE_C_who_holds_what.md` (B38, first), `23_STORY_D_story_census_and_gate.md` (B36), `U5c_SC_one_obstacle_form.md` (B05), `14_VERBS_SOCIAL1_D_grievance_and_settlement.md` (B28).
+
 ## Status: PROPOSED (a plan for future execution; nothing here is executed by the authoring lane)
 
 Carries `audits/28_SCENE_ACCESS.md` §5 and §6. Serves Jordan's A-64 (3): *"someone is trying to petition but
@@ -73,7 +77,11 @@ def kept_waiting(p: Person, x: str) -> float:
 ```
 
 `person_q.regard` (`:424-453`), after the dues term NARRATIVE_B adds:
-`stored -= float(fx.get("waiting_valence")) * kept_waiting(p, referent)`.
+`stored -= float(fx.get("waiting_valence")) * kept_waiting(p, referent)`, in the stance row's unit
+(`Σ valence × weight`, U1 §3): `kept_waiting` counts fully remembered rebuffs, so one is worth
+`waiting_valence` stance steps, and the sum is bounded by `stance_term`'s ±`STANCE_MAX` clamp
+(`02_CHAR_scar_cap_and_regard_unit.md` item 3). At `regard_unit: stance` this is the same unit as the judged
+and told halves; no second unit for regard.
 
 `person_q.dues_unmet(p, x)` (NARRATIVE_B edit 1) gains the owed second clause, each origin once
 (ED-IN-0322): a petition of his own addressed to `x` of which he holds a claim that it lapsed or was
@@ -118,10 +126,18 @@ added in the commit that lands their rows. The loader refuses a kind the derived
 A petition is not edited. What intensifies is the thing it is about, and a reader is shown both:
 
 ```python
+# queries/world_q.py  (resolver-side: the chronicle and the harness only)
 def petition_state(w, rid: str) -> dict:
     """{filed: the creating Event's tick, stage: the newest stage label, rebuffs: `rebuffs(w, rid)`,
     then: the terms Proposition's value, now: `WorldReader.read(terms.subject, terms.predicate)` where the
-    predicate is a stem the world answers (else None)}. A read; nothing is written."""
+    predicate is a stem the world answers (else None)}. A read; nothing is written. Never handed to a
+    person-side reader: `now` is world truth."""
+
+# queries/person_q.py  (person-side; no World)
+def petition_state_held(p: PersonInterior, rid: str) -> dict:
+    """The same keys as `petition_state`, with `now` read from `p`'s own ledger claim about the terms'
+    subject and predicate (newest, then most confident; else None), and `rebuffs` the rebuffs `p` himself
+    holds claims of. What the player's surface shows and what a bench member weighs."""
 ```
 
 `then` against `now` is the growth of the demand: a petition filed on a shortfall of three, read when
@@ -157,15 +173,17 @@ one sometimes waits.
 |---|---|---|
 | the person petitioned | that this man was kept waiting at his door, each time | the claim deposited from `visitor.kept_waiting` is about him and he is present (proposal A edit 3); the ask and the petition name him |
 | those present | the same, with the visitor as doer | the ordinary witness deposit; it travels by `tell`, and a lord who keeps petitioners waiting acquires that reputation through `reception` |
-| the bench or clerk who finally reads the paper | `then`, `now`, and the levels standing for the petitioner | the roll's named terms (`U5c_SC_one_obstacle_form.md`'s reason line) |
-| the chronicle and the player's surface | one line per petition from `petition_state`; and a story class, *kept waiting, then …* | `harness/chronicle.py`: a `visitor.kept_waiting` or lapse Event in the cause chain of a later act by the same person toward the same holder or a seat above |
+| the bench or clerk who finally reads the paper | `then`, his own `now` (`petition_state_held`), and the levels standing for the petitioner | the roll's named terms (`U5c_SC_one_obstacle_form.md`'s reason line) |
+| the player's surface | one line per petition from `petition_state_held` (what his character holds) | `04` §C.11 |
+| the chronicle | one line per petition from `petition_state` (the true `now`); and a story class, *kept waiting, then …* | `harness/chronicle.py`: a `visitor.kept_waiting` or lapse Event in the cause chain of a later act by the same person toward the same holder or a seat above |
 
 ## Exact edits, by owner (in landing order)
 
 1. **`engine/season/rosters.yaml`** — `rebuff_kinds` (closed, validated against the derived Event
    kinds); `advantage_sources` gains `waiting`.
-2. **`engine/season/queries/world_q.py`** — `rebuffs`, `petition_state`, beside `issuing_seat` (whose
-   creating-Event scan they share).
+2. **`engine/season/queries/world_q.py`** — `rebuffs`, `petition_state` (chronicle and harness only),
+   beside `issuing_seat` (whose creating-Event scan they share); **`queries/person_q.py`** —
+   `petition_state_held` (the person-facing read).
 3. **`engine/season/queries/person_q.py`** — `kept_waiting`; the `regard` term; `dues_unmet`'s second
    clause (in the commit that lands NARRATIVE_B's first, or after it).
 4. **The leverage composer** (`U5c_SC_one_obstacle_form.md` §3's one function) — the `waiting` source.
@@ -188,7 +206,8 @@ one sometimes waits.
 
 ## Falsifier
 
-`now` equal to `then` after the world moved (the content was stored, not read). A band at certainty in
+`now` equal to `then` after the world moved (the content was stored, not read). A person-facing `now` that
+equals the world's value where the reader holds no claim of it (world truth shown). A band at certainty in
 gate 3. A regard that fell where the log holds no rebuff (moved by time alone, against ED-IN-0345). A
 person-side reader that names `World`. Gate 4 with no verb moved: the grievance has nothing to ride,
 which is a finding about the closing verbs, as NARRATIVE_B's own falsifier says.
@@ -249,12 +268,12 @@ the fixtures make it, the four shapes still occur at a stated rate.
 
 | outcome | the durable change it leaves | who can read it afterwards |
 |---|---|---|
-| a call refused at `occupied` | the kept-waiting claims in the caller's and the host's ledgers (proposal A) | `kept_waiting`; the host's questions; `rebuffs` |
-| a paper declined by the room or returned by a clerk | today the deposits of `carry.refused` only. **Added here:** the declining act appends a stage to the petition Record, `(tick, "declined", act id)`, as the lapse already appends `lapsed` (`U5c_SC_proceedings_residue.md` §4 item 6). The paper carries its own history to whoever next holds it | any holder of the Record (the content deposit); `petition_state`; a bench reading the file |
-| a matter lapsed on the docket | MATTER's write taking the item off, and the `lapsed` stage | as above |
+| a call refused at `engaged` | the kept-waiting claims in the caller's and the host's ledgers (proposal A) | `kept_waiting`; the host's questions; `rebuffs` |
+| a paper declined by the room or returned by a clerk | today the deposits of `carry.refused` only. **Added here:** the declining act appends a stage to the petition Record, `(tick, "declined", act id)`, under its own act (an ACTS write at RESOLVE, `(Record, stages)` being `RES`/`ACTS`); the lapse, by contrast, is read from its `matter.lapsed` Event (`world_q.lapsed_at`, `U5c_SC_proceedings_residue.md` §4 item 6 as rewritten: MATTER appends no stage). The paper carries its own history to whoever next holds it | any holder of the Record (the content deposit); `petition_state_held`; a bench reading the file |
+| a matter lapsed on the docket | MATTER's write taking the item off, and its `matter.lapsed` Event (read by `world_q.lapsed_at`) | as above |
 | the man who waits and does nothing | no scene was spent, so no scene is still; his claims fade by the read | — |
 
-The no-null-scene reading for this file: of the scenes in a run that hold a `carry` or an occupying act,
+The no-null-scene reading for this file: of the scenes in a run that hold a `carry` or an engaging act,
 the count with no gate write and no `claim.deposited` citing them. Expected 0. Control: the planted
 decline of commit 4 with its stage write removed, where the count is 1.
 
@@ -266,7 +285,7 @@ critique per batch. **Cost class:** small build.
 
 | # | files and symbols (single owner) | call sites changed | data rows | named tests (`engine/season/tests/test_scene_access_waiting.py`) |
 |---|---|---|---|---|
-| 1 | `data/rosters.py`: `REBUFF_KINDS` (validated against `data/verbs.py::EVENT_KINDS`); `queries/world_q.py`: `rebuffs`, `petition_state` beside `issuing_seat` (`:1573`), sharing `_creating_act` (`:1590`) | none | `rosters.yaml`: `rebuff_kinds: [visitor.kept_waiting, carry.refused, matter.lapsed]` | `test_rebuffs_counts_what_the_log_holds_and_nothing_else`; `test_petition_state_reads_now_without_writing_the_record` (gate row 2: the Record's encoding byte-identical) |
+| 1 | `data/rosters.py`: `REBUFF_KINDS` (validated against `data/verbs.py::EVENT_KINDS`); `queries/world_q.py`: `rebuffs`, `petition_state` beside `issuing_seat` (`:1573`), sharing `_creating_act` (`:1590`); `queries/person_q.py`: `petition_state_held` | none | `rosters.yaml`: `rebuff_kinds: [visitor.kept_waiting, carry.refused, matter.lapsed]` | `test_rebuffs_counts_what_the_log_holds_and_nothing_else`; `test_petition_state_reads_now_without_writing_the_record` (gate row 2: the Record's encoding byte-identical); `test_petition_state_held_reads_now_from_the_readers_own_ledger` (a reader holding no claim of the lowered stores reads the old `now` or `None`) |
 | 2 | `queries/person_q.py`: `kept_waiting` beside `held_against` (`:85`); `regard` (`:424`): the `waiting_valence` term; `data/fixtures.py`: `waiting_valence = 0.0` | none (`regard`'s callers are unchanged) | — | `test_kept_waiting_reads_own_ledger_only` (the `decision/` World scan stays green); `test_regard_is_unchanged_at_valence_zero` (hash EQUAL); `test_kept_waiting_fades_to_zero_with_no_write` (gate row 5) |
 | 3 | `queries/person_q.py::dues_unmet`: the second clause | `regard`, and CR-88's `grievance_against` when it exists | — | `test_a_lapsed_paper_and_a_promise_broken_by_a_crowded_day_are_each_one_origin` |
 | 4 | the leverage composer of `U5c_SC_one_obstacle_form.md` §3: the source `waiting`; `loop/effects_information.py::_eff_carry`: at the declining band, append `(tick, "declined", a.id)` to the Record's stages | the composer's callers for `carry`, `speak` and the hearing's closing draw | `rosters.yaml: advantage_sources` gains `waiting` after `custody`; `verb_table.yaml` `carry`: the declining band's `writes:` gains `Record.stages`; `data/fixtures.py`: `waiting_level` (shipped `None`) | `test_three_rebuffs_shift_the_bands_and_fix_none` (gate row 3, 400 seeds per arm); `test_a_declined_paper_carries_a_stage` (the no-null reading; mutation arm: the write removed, the count is 1) |
@@ -274,16 +293,16 @@ critique per batch. **Cost class:** small build.
 | 6 | the measurement (gate rows 4, 6, 7) and the flips of `waiting_valence` to `0.5` and `waiting_level` to `minor`; one declared re-pin | the goldens' one owner | — | the re-pin |
 
 **Gate row 7 (added; the entrenched-world arm, A-80).** Realm, seeds 0 to 4, six seasons, proposal A's
-arm of row 12 (`occupancy: seat_and_debit`, the strongest `precedence_level`, `appointments: off`): the
+arm of row 12 (`engagement: seat_and_debit`, the strongest `precedence_level`, `appointments: off`): the
 census reads `S-28a` + `S-28b` + `S-28c` at a summed rate of at least one instance per two seasons at
 four seeds of five; `S-28d` reads 0 (no leave can be given in this arm), which is the control that the
 arm is in fact entrenched. `[ASSUMPTION; medium; Jordan to correct: the rate is a seed]`.
 
 **Gate row 8 (added; A-81).** `python -m engine.season.harness.access SEED 4 --null-scenes` at seeds 0
-to 4: 0 scenes holding a `carry` or an occupying act with no durable change.
+to 4: 0 scenes holding a `carry` or an engaging act with no durable change.
 
 **Control and falsifier:** every fixture at its control (hash EQUAL); the falsifiers above, plus: the
-entrenched arm reading no more *kept out* stories than the `occupancy: off` arm reads (the door made
+entrenched arm reading no more *kept out* stories than the `engagement: off` arm reads (the door made
 nothing move); a still scene in gate row 8.
 
 **Declared hash movers:** `waiting_valence` and `waiting_level` off their controls where the log holds a

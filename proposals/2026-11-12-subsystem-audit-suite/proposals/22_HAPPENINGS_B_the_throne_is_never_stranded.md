@@ -2,6 +2,12 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-19** (the deed race), **A-33**, **A-23** and **A-57 / A-58**. The audit's §4 item 3 is answered with this file's list: the heir, the consort, the princess and the heads of both houses may each claim; the odds are what others believe of each claimant's deeds; the founding order is a head start and never a right, so edit 2's `[ASSUMPTION … revert: the single title]` on the set-of-titles shape reads as ruled. A claimant in custody forms no claim through a seat (A-23) but may still claim in his own person, since `succeed` is his own act. A claimant may not know the holder is dead (A-33): the vacancy forms the occasion, the death does not travel with it. A seat anchored on a territory or settlement can also pass by conquest (seats go with the land when a victor seizes it, A-58 and A-66); `off_king` is anchored on the realm rung, which is no march target (`rosters.yaml: march_target_kinds`), so the throne itself never passes by a field and option (b) of the audit's item 3 ("a house takes the throne by conquest") stays untaken.
 
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row throne CONFORMS, §2 row whole (A-19 check on edit 4), §7, 7b; `unified/U3_CONFLICT_LEDGER.md` C3-K9, C3-D5; `unified/U3_DEPENDENCY_ORDER.md` §1 items 21 and 32, §3.1, §4.1 rows 75-76). Changed: (1) edit 4's request is checked against A-19 and stated so (the first listed title is "designated" only for the favourable term: a head start, never a right); (2) the dependency on `06_FA_remit_grant_by_row.md` R-16 is written (it must have emptied `off_widow_regent.remit_acts` before the consort's claim can close her seat as "a title that exists to pass a seat"; else she keeps both); (3) tests named; (4) batch lines. One U3 row corrected at the tree: §4.1 rows 75-76 and §1 item 32 move "edit 3 (the deed race's odds)" to B32; this file's edit 3 is the loader and its seven readers, which must land with edit 2's shape change (a list the readers cannot read would break `may_claim`), and the odds are edit 4's request to BYZ-E; so edits 1-3 land in B21 and edit 4's request is met in B32 by `15_INSTITUTIONS_BYZANTINE_E_accession_recall_and_the_crowd.md`.
+
+Depends on: `06_FA_seat_terms_and_turnover.md` and `06_FA_remit_grant_by_row.md` (B21, before this file, C3-D5); `14_VERBS_BINDING_C_turnover.md` (B21; VB-C's `succeed` draw). `16_PESSIMIST_FA_A_dismissal_survives_the_king.md` edit 1 is rewritten to this file's shape and lands after it (C3-K9). Edit 4 is met by `15_INSTITUTIONS_BYZANTINE_E_*` and `15_INSTITUTIONS_SYNTHESIS_B_the_deed_ledger.md` (B32).
+Lands in batch: B21 (lane FA), edits 1-3, after `06_FA_remit_grant_by_row` and before `06_FA_seat_terms_by_body_B` (C3-D5); edit 1 may land alone earlier.
+Tier: sonnet / high.
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-09) — `may_claim`'s body opened (`state/gate.py:770-786`); the edit table's row stands, and two further single-title readers of `SUCCESSIONS` are named beside it.
@@ -89,12 +95,18 @@ order (HAPPENINGS-B)"*. `[ASSUMPTION; medium; Jordan to correct; revert: the sin
 **4. Request to VB-C and BYZ-E (not edited there).** BYZ-E's `favourable` term *"the claimant holds the
 seat's `successions` title"* reads **the first listed title** as the designated one; holding a later one
 earns no step. Its `hostile` term (*"one step per other person eligible to claim the same seat who is
-alive"*) then has persons to count. That is the whole of how the heir is favoured and not certain.
+alive"*) then has persons to count. That is the whole of how the heir is favoured and not certain. This
+agrees with A-19 ("founding order a head start, not a right"): the first listed title is the designated
+one for the favourable term only, every listed title may claim, and the odds come from what others believe
+of each claimant's deeds (SYN-B, BYZ-E), not from the list's order.
 
 ## Gate (execution artifacts)
 
-`engine/season/tests/test_in61_heir_hears_vacancy.py` (the file covering the claim), on the built realm
-with the deaths planted through `_die`:
+`engine/season/tests/test_in61_heir_hears_vacancy.py` (exists; the file covering the claim), on the built
+realm with the deaths planted through `_die`. Tests: `test_g1_heir_holds_in_most_seeds_not_all` (40 seeds),
+`test_g2_both_dead_throne_claimable`, `test_g3_queens_seat_confer_opens`,
+`test_single_title_row_reproduces_todays_certain_claim` (the control), `test_unknown_title_id_is_refused_at_import`,
+and `test_consort_claim_closes_her_seat_only_when_its_remit_is_empty` (the R-16 dependency):
 
 - **G1** King dead, heir alive, VB-C on, 40 seeds: the heir holds the throne at the end of four seasons
   in most seeds **and not in all**; in at least one seed another listed title's holder does, or the hold
@@ -130,5 +142,6 @@ left with FA.
 
 ## Cost class
 
-Edit (data) plus one small build (the tuple at seven sites). Lands after VB-C's C3; edit 1 may land
-alone at any time.
+Edit (data) plus one small build (the tuple at seven sites). Lands after VB-C's C3 and after R-16
+(`06_FA_remit_grant_by_row.md`) has emptied `off_widow_regent.remit_acts`, in B21; edit 1 may land alone
+at any time.

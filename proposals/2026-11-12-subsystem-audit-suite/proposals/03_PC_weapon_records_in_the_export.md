@@ -2,6 +2,11 @@
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.4) — item 6 is confirmed from the MB side and named: one owner a fact, not one file (`04_MB_unit_loadout_and_weapon_in_hand_B.md` §2, R-36): an arm's mass lives here when its key is in this roster and in `references/troops.yaml: arms` when it is not, and that loader refuses a mass stated in both. The carry leaf reads the exported `mass` through its keyed spelling and takes bare masses for a troop row (`03_PC_loadout_and_carry.md` as reconciled). A-29 (declared floats) means the `derived` section's 1e-9 parity is stated against the float contract `11_GO_float_contract.md` carries (U5d's), not against integers. No edit below changes.
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U3_CONFLICT_LEDGER.md` C3-N17 (the inline-literal count: 86 in the four files named, 8 elsewhere), C3-N18 (the roster counted is named; re-counted at the tree: `ARSENAL` registers ten classes at `modules/mass_battle/equipment/weapons.py:38-47` and the personal roster has a record for none of `pike, javelin, bow, crossbow, sling, siege`, so the true count is **six** of ten, which `04_MB_unit_loadout_and_weapon_in_hand_B.md` problem 3 states; the "five" below omitted `siege`), `R1_READ.md` §7 test 9 (the 1e-9 parity script is not in the tree: per `WAVE3_REWRITE_ORDER.md` rule 4 the gate first writes it as a workbench file with its expected output; it adds no CI row, CLAUDE.md §0.1 pt 5), tests, lands-it, tier; `Depends on:` / `Lands in batch:` from `U3_DEPENDENCY_ORDER.md`.
+
+**Depends on:** nothing (U3 node row).
+**Lands in batch:** B14 (`B14-pc-outcome`, PC), after `03_PC_typed_outcome_one_door.md`; before `03_PC_loadout_and_carry.md` (B18) and `04_MB_unit_loadout_and_weapon_in_hand_B.md` (B17), which read the exported `mass`.
+
 ## Status: PROPOSED
 
 Lane: PC, with GO (the port reads the export) and MB (one weapon roster). Source:
@@ -31,7 +36,7 @@ count, addendum §B11):
 | `combat_systems.py`, 18 module constants (the first audit's F-PC-10) | none |
 | `combatant.py`, 8 constants: the whole wound and stamina model (`WOUND_INTERVAL_BASE`, `SPI_WI_W`, `STR_HEALTH_W`, `MAXWOUNDS_DIV`, `MAXWOUNDS_ADD`, `MAXWOUNDS_CAP`, `STAMINA_PER_END`, `STAMINA_PER_SPIRIT`) | none |
 | `ability_primitives.py`: 30 abilities and 3 bounds; `traditions.py`: 8 traditions, the adjacency and 2 familiarity constants | none |
-| inline literals in function bodies (the engine's own `structure_scan.py` counts 94: `weapon_physics` 40, `combat_systems` 24, `geometry` 13, `contact` 9) | none |
+| inline literals in function bodies (the engine's own `structure_scan.py` counts 94: `weapon_physics` 40, `combat_systems` 24, `geometry` 13, `contact` 9; 86 in these four files, 8 elsewhere, C3-N17) | none |
 
 So a port regenerating from the export has the coefficients of the σ assembly and no weapon to apply
 them to, no Health and no Wound Interval. The engine's central design claim (a weapon is its physical
@@ -44,8 +49,9 @@ at this SHA.
 
 **The roster's coverage, for the one-roster merge the MB lane proposes**
 (`04_MB_unit_loadout_and_weapon_in_hand.md`, its R-27: personal combat's roster becomes the only
-one). The personal roster is melee only. It has no pike, javelin, bow, crossbow or sling, which are
-five of the ten classes of `modules/mass_battle/equipment/weapons.py::ARSENAL`; no shield (ruled out
+one). The personal roster (`modules/combat/weapons.py::WEAPONS`) is melee only. It has no pike, javelin,
+bow, crossbow, sling or siege record, which are six of the ten classes of
+`modules/mass_battle/equipment/weapons.py::ARSENAL` (`:38-47`; corrected from "five", W3-1, C3-N18); no shield (ruled out
 of scope, ED-PC-0055 last row); no unarmed record (the first audit's F-PC-12). The engine has no
 ranged resolution at all.
 
@@ -80,7 +86,11 @@ ranged resolution at all.
 - A script that rebuilds every weapon from the exported `weapons` and constant sections **alone**
   (no import of `modules/combat/weapons.py`) and recomputes the `derived` section reproduces it to
   1e-9 for all 50. This is the round trip the port will have to pass; run once here it shows the
-  export is sufficient.
+  export is sufficient. *(W3-1, test 9:)* the step first writes the script as
+  `systems/combat/combat_engine_v1/workbench/export_parity_probe.py` (reads only
+  `engine/engine_params/combat_engine_v1.json`; asserts no `modules.combat.weapons` in `sys.modules`
+  after it runs). Expected output: `50 weapons; max |derived − recomputed| <= 1e-9` and exit 0; a
+  planted control (one exported mass edited in a copy) prints the weapon and exits 1. Not a CI row.
 - `structure_scan.py` section [H] (dead exported keys) still prints `[]`.
 - `build_realm(0)` one-season hash EQUAL.
 
@@ -105,3 +115,12 @@ second copy of a weapon's mass in MB's tables after the merge for a weapon the p
 ## Cost class
 
 Edit (the exporter and one regenerated artifact). The parity script is a one-off run, not a new gate.
+
+## Implementation (test 9, W3-1)
+
+- **Order.** Exact edits 1 → 2 (regenerate with `--build`, never by hand) → 4 → 3; then the parity probe.
+- **Tests.** `tests/valoria/test_engine_params_bridge.py` and `tests/valoria/test_combat_invariants.py`
+  (existing; both read the export) plus `tests/valoria/test_engine_params_bridge.py::test_kit_weapons_lists_no_halfsword_form`
+  and `::test_every_constant_defined_in_the_five_modules_is_exported` (the falsifier's second clause).
+- **Hash movers:** none in a season (`build_realm(0)` EQUAL); the export file itself (schema 7 → 8).
+- **Lands:** an IN-lane implementation session under `/methodology-execute` with PC and GO review; `sonnet`.

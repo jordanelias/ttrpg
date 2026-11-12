@@ -4,7 +4,12 @@ Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-08 — the heir's `
 
 Reconciled: 2026-11-12, U5d closure — folded **A-19** (the crown by the deed race), **A-10** and **A-21**. The `succession` situation no longer assumes one title and a first valid claim: `successions` is a set of titles (`22_HAPPENINGS_B_the_throne_is_never_stranded.md` edit 2 as reconciled) and the claim is a draw whose odds read what others hold of each claimant's deeds; the scenario-local mapping in `play` is a tuple of titles and the digest reports every claimant and the band. The `order` situation is A-21's proclaimed decree as written. A-10 confirms the form (a scenario on the season loop; no governance module), so the audit's §11 item 2 no longer hangs over this file. Steps rewritten: the `succession` row of the situation table and the last paragraph of the edits (the mapping's value shape). The gate gains one arm: with two listed titles held, the seat goes to each in at least one seed of the swept set.
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — the body follows the U5d head: R3 §2 (the `succession` row of the situation table is rewritten to a set of titles and a per-claimant digest; the mapping's value shape is stated); R3 §1 Option A (the in-place `SUCCESSIONS` change is made inside `try/finally` and restored after the run, which the body did not state); 7b-3 (a named pytest file for `situation`, `digest`, `play`); 7b-0 (tier); U3 C3-D5 (batch B21, its order). The three situations, the four functions and the fixture's bases are unchanged.
+
 ## Status: PROPOSED
+
+Lands in batch: B21 (FA governance), second to last in C3-D5's order, before `06_FA_shortest_loop_B.md`.
+Depends on: `22_HAPPENINGS_B_the_throne_is_never_stranded.md` edit 2 (B21, the set-of-titles shape of `successions`); `06_FA_decree_binds.md` (B21, the `order` situation's answers); `06_FA_seat_terms_and_turnover.md` (B21, the termed `vacancy`); `14_VERBS_BINDING_C_turnover.md` (B21, the `succeed` draw).
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-28) — all three readers of `SUCCESSIONS` hold the one dict by `from`-import; an in-place change reaches them and a rebinding does not.
 
@@ -43,7 +48,7 @@ could have produced.
 |---|---|---|
 | `vacancy` | the Count of chain `a` `release`s his seat | the player, as Duke of `a`, is offered `confer` onto it; with FA-P3, a termed seat does the same on a clock |
 | `order` | the Sovereign `issue`s a writ addressed to the player's seat-holder | with FA-P1: `comply`, `evade / defy`, `construe`, and the recall that follows defiance |
-| `succession` | the Sovereign holds a second seat registered in a scenario-local `successions` row to a title the player holds, then `release`s it | the heir's `succeed` (a draw with graded bands, `14_VERBS_BINDING_C_turnover.md`: the claim may be contested, delayed or fail); a banned heir is refused (eligibility) |
+| `succession` | the Sovereign holds a second seat registered in a scenario-local `successions` row to a **set of titles** (a tuple; the player holds one of them and at least one other spine person holds another, A-19), then `release`s it | every listed title-holder may claim (`succeed`, a draw whose odds read what others hold of each claimant's deeds, `14_VERBS_BINDING_C_turnover.md`, `22_HAPPENINGS_B` edit 2: the claim may be contested, delayed or fail); the digest prints each claimant and the band his claim reached; a banned claimant is refused (eligibility) |
 
 *(Reconciled, D-08: under the standing rule `release`, `issue`, `confer` and `succeed` resolve by a
 draw once their verb lanes land, so a set-up act at tick 0 can come out otherwise. The scenario does
@@ -95,7 +100,12 @@ conferral_bases` and `revocation_bases`. The spine's `content_hash` moves at bui
 The `succession` situation needs a title that passes a seat. `rosters.yaml: successions` is keyed on
 `offices.yaml` row ids, which the spine does not use; `play` therefore passes the gate a scenario-local
 mapping through the same indirection the tests use (`monkeypatch` of `SUCCESSIONS` in
-`test_in61_succession.py`), scoped to the run. [GROUNDED, 25 G-28: all three readers hold a
+`test_in61_succession.py`), scoped to the run. The mapping's shape is `dict[office_id, tuple[title, ...]]`
+(the set-of-titles shape of `22_HAPPENINGS_B` edit 2, A-19). The in-place change is made inside
+`try/finally`: `play` records the entries it sets and, in `finally`, restores each key's prior value (or
+deletes a key it added), so a run that raises leaves `SUCCESSIONS` as the loader built it (R3 §1, Option A:
+a harness-scoped mutation restored after the run, the test's own pattern; `04` §A.1 ID-12's one loader is
+not bypassed for the game path). [GROUNDED, 25 G-28: all three readers hold a
 `from`-import of the one dict object and read it at call time: `state/gate.py:54` (`:743`, `:782`),
 `decision/options.py:34` (`:240`), `loop/effects_governance.py:16` (`:164`). An in-place change reaches all
 three, which is what the test does (`monkeypatch.setitem(SUCCESSIONS, …)`, `test_in61_succession.py:161`);
@@ -108,13 +118,22 @@ Three commands, each printing a digest that contains the scenario's beat, at see
 1. `play 0 2 vacancy --pick <the confer candidate>`: a `tenure.opened` line naming the vacant Count's seat
    and the conferee; then the same command with no `--pick` (the control) prints whatever the chooser did,
    and its `content_hash` equals `populated.run`'s for the same world and seasons.
-2. `play 0 3 succession --pick <the succeed candidate>`: a `succession.claimed` line; with the player's
-   person banned first, the pick is refused and the digest says `succession.refused`.
+2. `play 0 3 succession --pick <the succeed candidate>`: a line per claimant with the band his claim
+   reached (a `succession.claimed` line where one carried); with the player's person banned first, the pick
+   is refused and the digest says `succession.refused`. Arm (the head's): with two listed titles held, the
+   seat goes to each in at least one seed of the swept set.
 3. `play 0 4 order` (after FA-P1): an answer line for the writ either way. Before FA-P1 this scenario
    prints the writ and no answer, which is the audit's F-FA-01 made visible; it is still shipped, because a
    scenario that shows an absence is an instrument doing its job.
 
 Each ending is reached once: a pick that `release`s the player's only seat ends the run on "holds no seat".
+
+Named tests (7b-3), new file `engine/season/tests/test_governance_spine_play.py`:
+`test_pick_none_reproduces_populated_run_hash` (the control), `test_digest_on_an_empty_log_prints_nothing`,
+`test_digest_prints_one_line_for_a_planted_tenure_opened`,
+`test_a_refused_opening_act_stops_the_run_naming_the_event`, `test_successions_is_restored_after_play`
+(also when `play` raises), `test_a_two_title_succession_digest_names_each_claimant`. The three CLI commands
+above stay as the human-readable reading.
 
 ## Falsifier
 
@@ -141,5 +160,6 @@ seat's season of rule runnable, observable and endable, which is what "plays alo
 
 ## Cost class
 
-Small build. One declared mover (the spine fixture's build hash). Depends on nothing; FA-P1 and FA-P3 make
-scenarios 3 and 1 richer.
+Small build. One declared mover (the spine fixture's build hash). FA-P1 and FA-P3 make scenarios 3 and 1
+richer; the `succession` scenario's set-of-titles shape needs `22_HAPPENINGS_B` edit 2 (see Depends on).
+Tier: `sonnet` (harness; R3 7b-0).

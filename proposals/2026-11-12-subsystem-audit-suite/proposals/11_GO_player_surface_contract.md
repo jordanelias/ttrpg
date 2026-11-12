@@ -4,7 +4,11 @@ Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-21) —
 
 Reconciled: 2026-11-12, U5d closure — superseded by `11_GO_player_surface_contract_B.md` (the addendum's R50–R57). Nothing here is to be built from; the rulings A-48, A-49 and A-9 are folded there.
 
-## Status: PROPOSED
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.4 SURF row and §7 (SUPERSEDED by `_B`, **except §2 `explain`, restated nowhere else and live**: the status line now says so; the other sections stand as the superseded record and are not an instruction); `U1_OWNERS_AND_VOCABULARY.md` D-U1-11n is not needed here (this file has no `receipt`); `R1_READ.md` §2 row A-30 (the chooser table's draw row loses "replayed in parity"); §2's argument typed `PersonInterior` (`U5a_CORE_owed_edits.md` §E item 1, B03), replacing the `Person` assumption; test 9 for §2 only (tests, lands-it, tier). `U3_DEPENDENCY_ORDER.md` B34.
+
+**Depends on (§2):** `U5a_CORE_owed_edits.md` §E item 1 (B03: the frozen `PersonInterior`). **Lands in batch:** B34 (`B34-go-surface`), with `11_GO_player_surface_contract_B.md`.
+
+## Status: SUPERSEDED by `11_GO_player_surface_contract_B.md`, except §2 (`explain`), which is live and lands in B34
 
 Carries audit findings F-GO-07 and F-GO-08, and the audit's §13 and §14 (`audits/11_GO_audit.md`).
 Lane: GO, IN (the readers live in `engine/season/decision/` and `queries/person_q.py`, which are IN's
@@ -80,9 +84,19 @@ class Derivation:
 ```
 
 First `Value`s, in the order a player meets them: an `OfferRow`'s `pursuit` and `stance`; a belief the
-chronicle shows; the person's own `body` and `stores` readings. `PersonInterior` is not built
-(`audits/02_CHAR_audit.md` F-CHAR-12); until it is, the reader takes `Person` under `decision/`'s path
-scan `[ASSUMPTION; medium; revert: wait for PersonInterior]`.
+chronicle shows; the person's own `body` and `stores` readings. *(W3-1.)* The argument is the frozen
+`PersonInterior` that `U5a_CORE_owed_edits.md` §E item 1 builds in `state/carriers.py` (B03, before this
+batch); the `Person` interim is withdrawn.
+
+**Build (W3-1, §2 only; the live section).** Order: (1) write `tests/valoria/test_explain.py` with
+`test_explain_takes_no_world` (a signature test, as `choose`'s: `inspect.signature(person_q.explain)` has
+exactly the parameters `p`, `v`, and `p`'s annotation is `PersonInterior`) and
+`test_a_fact_held_by_no_claim_appears_in_no_derivation` (plant a `World` fact his ledger holds no claim of;
+expect it in no `Derivation.terms`); both fail first (`explain` does not exist). (2) Add `Derivation` and
+`explain` to `engine/season/queries/person_q.py`, reading only `p`'s own ledger. (3) Gate: both tests pass,
+and the realm hash at seed 0, one season is EQUAL (a reader that writes nothing). Falsifier: a `Derivation`
+naming an actor the person holds no claim about fails the second test; control: the EQUAL hash. Hash
+movers: none. Lands it: the GO lane's B34 session (IN reviews `person_q`); `sonnet`, small build.
 
 ### 3. The aftermath (`decision/sheet.py`, beside `chronicle`)
 
@@ -147,7 +161,7 @@ the reading.
 |---|---|---|---|
 | what a person may do | `verb_table.yaml`, `rosters.yaml`, `offices.yaml`, `arrangements.yaml` (GO-09) | `decision/options.py::opening_set` and its operand derivations | in the core, inside DELIBERATE's per-person map, with no `World` |
 | what a person wants | `goals.yaml`, `cohorts.yaml`, `npcs.yaml`, the pursuit cells in `verb_table.yaml` | `decision/choose.py::score_terms`, `_sample_order` | same |
-| the draw | — | `Draw.u` and the Gumbel transform through `fmath` | same; replayed in parity |
+| the draw | — | `Draw.u` (the keyed mix, A-30) and the Gumbel transform through `fmath` | same; parity by the `(key, n) → u` vectors |
 | the player's pick | — | nothing: `release` packs indices | `game/` supplies the indices through the callback |
 
 The chooser never runs in `game/`. `game/` holds no rule about who may do what.

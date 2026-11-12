@@ -1,6 +1,11 @@
 # 07 · SE — kernel repairs: amounts, the no-op wear write, the same-place move, arrival, and three stale pointers
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 (A-81: a refusal at the fold that leaves no trace is a null scene): items A and C gain that formation excludes the malformed act first (CR-49's class for `move`/`transfer`, carried by `U5d_SE_owed_edits.md` §2 and §7), and the fold refusal stays as the backstop and leaves the actor's own claim of the refusal (the `a_refusal_is_remembered` carrier); tier and batch added (R3 7b-0; U3 B12). The edits' mechanism, gates and falsifiers are unchanged.
+
 ## Status: PROPOSED
+
+Lands in batch: B12 (world motion and ground), after `09_WR_provided_arcs.md` and before `07_SE_ground_and_granaries.md` (U3 §1 item 13).
+Depends on: nothing proposed for A–E; the A-81 refusal write rides `16_PESSIMIST_CORE_a_refusal_is_remembered.md` (B09); the formation half rides `U5d_SE_owed_edits.md` §2, §7 (B12).
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-18) — `held_by` is a cell stem a ledger answers (`data/requires.py:851-901`); the arrival report's holder line needs no wait.
 
@@ -43,6 +48,12 @@ price cell) return `NO_CHANGE` when it is false, before they build their `Change
 `_debit` themselves raise `InstrumentDefect` on a non-whole amount, so a new caller that skips the check
 fails loudly rather than moving matter. `_eff_requisition`'s docstring sentence that a requisition of 0
 is declined becomes true.
+
+A-81 (no scene leaves the world unchanged): the refusal at the effect is the backstop, not the path.
+Formation is where a non-whole amount is excluded first (the chooser forms amounts from `amount_shares`
+and claims, `U5d_SE_owed_edits.md` §7, so a computed act never carries one); a hand-built or played act
+that reaches the effect with one is refused, and the refusal leaves the actor's own claim of it through the
+`a_refusal_is_remembered` carrier (`16_PESSIMIST_CORE_a_refusal_is_remembered.md`), a durable write.
 
 **Gate.** `engine/season/tests/test_in33_exchange.py` and `test_demand_delivery.py` gain the row's own
 sweep (−5, 0, 1, 2.5, `True`) through the real fold on `harness/scarce.build`: only 1 moves stock; every
@@ -101,7 +112,10 @@ refused as a no-op. `move` follows `migrate`.
 
 `home_of` is imported from `queries/world_q` (already this file's source for `residence_of`). The row's
 refusal stays `travel.blocked`; the formation side (a `to` that is the mover's own rung should not form)
-is CR-49's shape applied to `move` and is the CHAR lane's (`decision/options.py`), cross-listed.
+is CR-49's shape applied to `move` (`U5d_SE_owed_edits.md` §2's `referent_class` narrowing), and it is
+the primary exclusion: a computed act no longer forms the same-place move, and the effect's decline is the
+backstop for a hand-built or played act. That backstop refusal leaves the mover's own claim of it (A-81
+consequence 1; `16_PESSIMIST_CORE_a_refusal_is_remembered.md`), so it is not a null scene.
 
 **Gate.** `test_migrate_capacity.py` gains the pair (same place refuses; one rung up moves).
 **Falsifier:** `aperture 2 0` still shows a `travel.moved` whose destination equals the mover's rung
@@ -153,3 +167,4 @@ only.
 ## 8. Cost class
 
 Edit (A, B, C, E); small build (D). Three declared movers, each its own commit, each re-recorded once.
+Tier: `sonnet` (R3 7b-0).

@@ -6,7 +6,11 @@ Re-grounded: 2026-11-12 (audit §15) — one correction and four additions, carr
 
 Reconciled: 2026-11-12, U5d closure — folded **A-21 / A-22**, **A-37** and **A-36**. The reach of a published sentence is the form's `basis` (X-33) on ruled ground: an `avoidance` is a publication and reaches by the news of its issue (A-21); an `interdict` is an order and binds those the issuing seat commands (A-22). A penance that is an imposed service ends by the bench's pardon or its term, never by the penitent's own `release` (A-37, which overwrites "one free release"). No sentence may be passed on the Confessor (A-36).
 
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (PAP_D: CONFORMS; `writ_terms_forms` roster stale, edit 5 withdrawn), §2 (A-39 row), §7 (INCOMPLETE: `writ_terms_forms`; A-39 grounds), 7b.0, 7b.7 ("delete edit 5; add to §6: an appeal is admitted only on new grounds"); `U3_CONFLICT_LEDGER.md` C3-C10 (penance is a `proofs` level); `U1_OWNERS_AND_VOCABULARY.md` F-36 (`quorum` beside `quorum_share`). Changed: the body now follows this file's first `Reconciled:` line, which it had not: §3 and §4 publish through the kit's forms `avoidance` and `interdict` (no typed `terms` form, no `writ_terms_forms`); edits 5 and 6 are withdrawn; edit 7 reads `person_q.forborne`; §5's penance is a `proofs` item; §6 admits an appeal on new grounds only (A-39); the declared row carries `quorum: 2` beside its share; CR-60's key is `scope_rung:` (PAPACY-A as reconciled).
+
 ## Status: PROPOSED
+
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B33**, after PAPACY-C (`U3_DEPENDENCY_ORDER.md` §1 item 33); PAPACY-GROUNDING items 2 and 3 land with it. Depends on: `05_SC_acquittal.md` and `05_SC_arrangement_rows_that_bind.md` (B27, SC-P4's band map and SC-P6), `06_FA_decree_binds.md` (B21, FA-P1), `14_VERBS_BINDING_B_sittings.md` (B32), `14_VERBS_BINDING_D_orders.md` (B21), `15_INSTITUTIONS_SYNTHESIS_A` (B32, the forms and `person_q.forborne`), `15_INSTITUTIONS_SYNTHESIS_C` edit 1 (B33, `excused`); CR-60 and CR-88 are v11 plan positions, MISSING until `STAGES.md` step 5 (the absent party waits on CR-60; edit 8 on CR-88). Lane tag: FA. Tier: `sonnet` producer, effort `high`; one `opus` read of the "answers differ" and "oath" arms. Named test: `engine/season/tests/test_inst_pap_d.py`. Standing sentences: *Pool* — the sentence is `determine`'s roll and each answer `comply`'s or `evade / defy`'s, on the one pool rule (A-6, A-7, A-8). *Failure writes* — a sentence's Failure is an acquittal whose `matter.dismissed` is witnessed by the room and deposited to each present ("the attempt is itself an Event others hear of"); a Failure to comply is `compliance.withheld`, a deed the issuer's faction holds (A-81). *Draw keys* — no draw is added; `determine`, `pardon` and the answer rows key their own (A-30).
 
 Source: `audits/15_INSTITUTIONS_PAPACY.md` F-PAP-05, F-PAP-09, F-PAP-10; §3.4; §6 rows P-4 to P-8, P-10;
 §12 R-7, R-8, R-16; §13 (ARC-21, ARC-41, NPC-004). Composes on FA-P1 (`06_FA_decree_binds.md`: a writ's
@@ -21,12 +25,12 @@ draw), CR-74 (the CH signature; its carrier is in PAPACY-A). Batch 5.
    opens (the realm at seeds 0 and 1, three seasons: none; audit E-1).
 2. The two Church hearing rows that dispose `ban` become band-keyed (SC-P4's shape): Partial binds the
    party to the bench by an `oblige` instead of excluding him. A declared mover where they execute.
-3. A `dispensation` may carry a typed `terms` form, `avoid` or `withhold`. A person whose own last answer
-   to such a writ is `comply` declines the named verbs toward the named person, or toward residents of the
-   named rung, while the writ is in his ledger; and CR-88's duty decline does not bar his `release` of his
+3. A `dispensation` may be of the kit's form `avoidance` or `interdict` (`engine/season/instruments.yaml`).
+   A person whose own live `oblige` carries `OBEYED_WRIT` for such a writ declines its forborne verbs
+   toward the named person, or toward residents of the named rung (`person_q.forborne`); and CR-88's duty decline does not bar his `release` of his
    own tie to a seat the avoided person holds. With no such writ issued (every world today): nothing moves.
-4. `pardon`'s roll reads a matured termed `oblige` of the penitent to the pardoning seat as a favourable
-   evidence item. Fixture `penance_weight`, control 0.
+4. `pardon`'s roll reads a matured termed `oblige` of the penitent to the pardoning seat as a `proofs`
+   item for him (leverage, C3-C10). Fixture `penance_weight`, control 0.
 
 No verb, tenure kind or stored quantity is added. No sentence is automatic.
 
@@ -60,9 +64,10 @@ No verb, tenure kind or stored quantity is added. No sentence is automatic.
   exclusion). The gate already admits a bench opening an `oblige` on itself (`may_determine`).
 - Failure: acquittal (SC-P6). The attempt is itself an Event others hear of.
 - Odds: the SC obstacle; this lane's rows carry `standard` (T2: demanding; hard) and `stakes` (`ban`).
-  Under the declared row the sentence passes by the SC lane's ballot draw at `quorum_share: [2, 3]`
-  (PAPACY-B edit 8), and the band of the disposal is the determiner's own roll.
-- The absent party: with CR-60's realm `scope:` on three benches (PAPACY-A edit 3) the bench sits over him
+  Under the declared row the sentence passes by the SC lane's ballot draw at `quorum: 2` beside
+  `quorum_share: [2, 3]` (PAPACY-B edit 8 as reconciled), and the band of the disposal is the
+  determiner's own roll. No sentence may be passed on the Confessor (A-36).
+- The absent party: with CR-60's realm `scope_rung:` on three benches (PAPACY-A edit 3) the bench sits over him
   wherever he stands in the realm. He is cited by a writ (below) or a carried `petition`; if he does not
   come he cannot `speak` or cite in answer, so the accuser's evidence stands unanswered. Contumacy is not
   a rule; it is an empty side of the room.
@@ -80,22 +85,19 @@ against him, which are in the same ledgers.
 
 ### 3. Publication: the writ of avoidance
 
-After a sentence, a seat of the sentencing faction with `issue` may publish it: a `dispensation` whose
-`terms` are
-
-```yaml
-terms: {avoid: <person id>, verbs: [exchange, give, oblige, tend, train, covenant]}
-```
-
-addressed to the persons its issue reaches. `[UNVERIFIED: whether `issue` admits an addressee outside the
-issuing seat's purview. If it does not, the sentence is published see by see, each within its own ground
-(PAPACY-E), which is the historical form.]` The verb lane's draw writes the writ's `force` band.
+After a sentence, a seat of the sentencing faction with `issue` may publish it: a `dispensation` of the
+kit's form `avoidance` (SYNTHESIS-A §1: `basis: purview`; `forbears` clauses `by: addressee` over the
+named person for `exchange.made`, `record.given`, `duty.taken`, `covenant.offered` and, the secular arm,
+`tenure.opened`), naming the excluded man. Its reach is the form's `basis`: a publication reaches
+everyone on the issuing seat's ground with the news of its issue (A-21, X-33), so the earlier
+`[UNVERIFIED]` on `issue`'s reach is answered; a sentence that must reach beyond one ground is published
+see by see (PAPACY-E), which is the historical form. The verb lane's draw writes the writ's `force` band.
 
 Each addressee answers with the existing rows (FA-P1 forms them on a writ his ledger names him in):
 
 | his answer | what it means here |
 |---|---|
-| `comply` (Overwhelming / Success) | he shuns: `decision/options.py::opening_set` declines the listed verbs toward the avoided person while the writ's terms are in his ledger and his newest own answer to it is `compliance.given`. If he owns a live `oblige` or `commit` toward a seat the avoided person holds, CR-88's duty decline does not bar his `release` of it. Whether he releases is his own score |
+| `comply` (Overwhelming / Success) | he shuns: `decision/options.py::opening_set` declines the forborne verbs toward the avoided person while `person_q.forborne(p)` lists them (his own live `oblige` carrying `OBEYED_WRIT`, SYNTHESIS-A §4). If he owns a live `oblige` or `commit` toward a seat the avoided person holds, CR-88's duty decline does not bar his `release` of it. Whether he releases is his own score |
 | `comply` (Partial) | he shuns where he is seen: the decline applies only at a venue where another addressee stands; elsewhere `conceal` forms |
 | `evade / defy` | he deals with him as before; `compliance.withheld` is a deed the issuer's faction acts against (the existing vow column: `evade / defy` −0.3) |
 | `construe` | he reads the terms narrowly (the existing row) |
@@ -108,13 +110,11 @@ no discontented vassals changes nothing but the bench's reputation.
 
 ### 4. Interdict
 
-The same instrument, addressed to the sanctioning faction's own seat-holders and sworn in a place:
-
-```yaml
-terms: {withhold: [tend, transfer, train, determine], at: <rung id>}
-```
-
-A complier declines the listed verbs toward persons residing under the rung. What the residents then
+The same mechanism through the kit's form `interdict` (SYNTHESIS-A §1: `basis: command`; `forbears`
+clauses `by: addressee` over the named rung for `transfer.made` and `matter.determined`; `tend` and
+`train` join when their lanes land a success kind), addressed to the sanctioning faction's own
+seat-holders and sworn in a place (an order binds those the issuing seat commands, A-22). A complier
+declines the forborne verbs toward persons residing under the rung. What the residents then
 experience is the engine's own: wounds untended, no alms in a shortfall, no teaching, no local bench; each
 is a claim in their ledgers (`stability`'s signs) and their regard for whoever they hold responsible. A
 see-holder who defies keeps serving and answers to his head (PAPACY-B P-9).
@@ -124,15 +124,18 @@ see-holder who defies keeps serving and answers to his head (PAPACY-B P-9).
 `pardon` closes the `ban` through the seat that is its object (existing rule; so a new holder of that
 seat may absolve what his predecessor imposed, and nobody else may). The verb lane makes it a draw with
 Partial as commutation. This proposal adds one favourable item: if the penitent has owned an `oblige` to
-that seat, with a term, opened after the ban and matured, the `evidence` term reads `penance_weight`.
-First value 2 (proof-weight units), control 0, sweep 0 / 1 / 2 / 4, owner `data/fixtures.py` with one
+that seat, with a term, opened after the ban and matured, his side files one `proofs` item of weight
+`penance_weight` (leverage, C3-C10). First value 2 (proof-weight units), control 0, sweep 0 / 1 / 2 / 4, owner `data/fixtures.py` with one
 NUMBER row in `hole_register.yaml`. The route for a great man is therefore: swear, serve the term, ask.
 
 ### 6. Appeal
 
-The rows' existing `appeal_basis: determine` and CR-59. An appeal from a see's bench to Himmelenger's is a
-`petition` to the higher bench and its own `determine`; its evidence includes the first bench's case file
-(CR-61). Success closes the first disposal; Partial terms it; Failure leaves it and spends the appeal.
+The rows' existing `appeal_basis: determine` and CR-59. An appeal is admitted only on new grounds:
+evidence the first bench excluded, a voided stage, or a new item from a distinct source (A-39); the
+ground is named on the appeal's petition and the SC loader refuses one without it (R2's carrier). An
+appeal from a see's bench to Himmelenger's is a `petition` to the higher bench and its own `determine`;
+its evidence includes the first bench's case file (CR-61). Success closes the first disposal; Partial
+terms it; Failure leaves it and spends the appeal.
 
 ## Exact edits
 
@@ -146,18 +149,16 @@ The rows' existing `appeal_basis: determine` and CR-59. An appeal from a see's b
    `hierarchical` and `precedent` poles; sign only; Jordan to correct]`. With no cell the kind scores 0 and
    only the bond half is silent: the control.
 4. `engine/season/arrangements.yaml`: the band map on the two rows (after SC-P4's loader lands).
-5. `engine/season/rosters.yaml`: closed roster `writ_terms_forms: {avoid: [person, verbs], withhold: [rung,
-   verbs]}`; `data/verbs.py` loader refuses a verb the table lacks.
-6. `engine/season/loop/effects_governance.py` (`issue`'s effect): accepts `terms` of a rostered form and
-   refuses a malformed one on the existing `terms` clause (`issue.refused`).
+5. (Withdrawn, X-02: no `writ_terms_forms`; the forms `avoidance` and `interdict` are rows of
+   `engine/season/instruments.yaml`, SYNTHESIS-A §1.)
+6. (Withdrawn with 5: `issue`'s `form` is the kit's `choice_sourced` operand, SYNTHESIS-A §2.)
 7. `engine/season/decision/options.py::opening_set`: one person-side decline, the shape of
-   `held_document_declines`: reads the person's OWN ledger (`content:dispensation` claims naming him an
-   addressee, FA-P1 change 1; his own `compliance.given` claim) and declines the form's verbs toward the
-   form's object. `[UNVERIFIED: that a person's own claim of his answer names the writ it answered; if it
-   does not, FA-P1's owner adds the writ id to that claim's value, one field.]`
+   `held_document_declines`, reading `person_q.forborne(p)` (SYNTHESIS-A §4: his own live `oblige`
+   carrying `OBEYED_WRIT` and the forbears clauses of that writ's form), and declining those verbs toward
+   the form's named object. Person-side: his own Tenures and his own content claim.
 8. CR-88's duty decline (when built): one exception, read from the same person-side fact as edit 7.
 9. `engine/season/data/fixtures.py`: `penance_weight` (0 ships); `seam/wrappers/sigma.py` host input for
-   `pardon` reads the matured `oblige` world-side and adds the item.
+   `pardon` reads the matured `oblige` world-side and adds the `proofs` item.
 10. `harness/strife_moves.yaml` CH: `kinds` gains `ban.opened`, `detention.opened` (PAPACY-A edit 5).
 
 ## Gate
@@ -173,6 +174,8 @@ Hand-built, real fold, `PYTHONHASHSEED=0`:
 - **The oath**: a vassal with a planted grievance and one without, same writ: over 200 seeds the first
   releases his `oblige` more often than the second, and neither always nor never.
 - **Penance**: `pardon` odds printed exactly at `penance_weight` 0 and 2 with a matured `oblige` planted.
+- **Appeal (A-39)**: an appeal petition naming no new ground is refused at formation; one naming an
+  excluded item is admitted and rolled.
 - **Strife**: `strife 3 0 1 2` reports CH above 0 in the planted world and labels a secular arrest as
   residue; `content_hash` unchanged by the reading.
 
@@ -192,8 +195,8 @@ bench; a player bishop decides whether to publish; with no player a sentence on 
 a loved one play out differently from the same rule. Complete at the extremes: nobody complies, nothing
 happens; everyone complies, the man is alone and still alive and can sue for pardon. S: one sentence
 route (`determine`), one instrument (`dispensation`), the answer rows that already exist, the obstacle
-unchanged; interdict and avoidance are one form with two objects. E (last): two Event kinds, one roster,
-one decline, one fixture, for excommunication, interdict, Canossa and the martyr.
+unchanged; interdict and avoidance are two rows of one registry. E (last): two Event kinds, one decline,
+one fixture, for excommunication, interdict, Canossa and the martyr.
 
 ## Cost class
 

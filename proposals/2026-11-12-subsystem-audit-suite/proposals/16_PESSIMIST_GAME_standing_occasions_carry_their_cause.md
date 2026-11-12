@@ -2,7 +2,16 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-47** and **A-33**. A mandatory scene opened by a threshold carries as its cause the Event that armed the last stage, by this file's rule. An act formed on a vacancy cites the seat's news; it does not cite the death unless the actor holds a claim of it (A-33). No step changes.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS: an Event id in `causes[]` is
+resolver-side and reaches no person), §7/§7b (COMPLETE but for the tier: tier and the loader constant's name added); U3
+B09, §6.2 (`x2_death.py`, `x2b_death_detail.py` are scratch; the gate's test plants the death itself); U1 glossary
+*occasion* (the Event that opened a standing occasion is its **opening Event**). No body text changed beyond those lines.
+
 ## Status: PROPOSED
+
+Lands in batch: **B09** (IN), after `16_PESSIMIST_CORE_the_record_holds_what_changed.md` in that batch's order. Depends on:
+nothing unlanded (`World.last_emission_of`, `_occasion_ids`, the `strife_kinds` loader check exist);
+`01_CORE_reason_trail_in_the_act_store.md` (B09) is independent and compatible (below).
 
 Source: `audits/16_PESSIMIST_GAME.md` F-PES-GAME-03; premise 2.1 link 4. Read at `4995824`. Reference
 only (`CLAUDE.md` §0.05); not ratified by being written. Lane IN (cross-cutting; the owner is
@@ -67,8 +76,10 @@ standing_occasion_opened_by:
 ```
 
 `[ASSUMPTION; medium; Jordan to correct]` the kind lists are this proposal's reading of each source's
-docstring; the loader (`data/rosters.py`) refuses a kind that is not an `emits` of some verb row or a
-MATTER/CALENDAR kind, by the check that already validates `strife_kinds`.
+docstring; the loader (`data/rosters.py`) exposes it as `STANDING_OCCASION_OPENED_BY` and refuses a kind
+that is not an `emits` of some verb row or a MATTER/CALENDAR kind, by the check that already validates
+`strife_kinds`. Verify at landing: `rg -n "STANDING_OCCASION_OPENED_BY" engine` returns the loader constant and
+`_occasion_ids`' read.
 
 ### 2 · owner `engine/season/loop/resolve.py::_occasion_ids` — the one branch
 
@@ -117,4 +128,8 @@ fixture is ignored.
 - **E** (last, as a ratio): one roster, one branch, one fixture, for the reason of every closing act.
 
 Cost class: edit. Depends on nothing. `01_CORE_reason_trail_in_the_act_store.md` (the Scene store) is
-compatible and independent: it keeps the *question*; this keeps the *occasion's Event*.
+compatible and independent: it keeps the *question*; this keeps the *opening Event*. Tier: `sonnet`, effort
+`high`. Hash movers declared: every Event folded from an act on a classed referent (`causes` is hashed); the
+control `standing_occasion_cause: False` reproduces every base hash. Lands it: B09, one commit (roster, branch,
+fixture, test); command `python -m pytest engine/season/tests/test_in53_vacancy_need.py engine/season/tests/test_in50_refusals_carry_the_occasion.py -q`
+(both exist).

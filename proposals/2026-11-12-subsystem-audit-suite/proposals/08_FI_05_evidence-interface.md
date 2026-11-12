@@ -2,7 +2,9 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-13) — superseded by `08_FI_05_evidence-interface_B.md`. Kept for its comparison table; no edit of it is to be landed.
 
-## Status: PROPOSED (an interface statement for the SC lane to cite; design-first on the SC side)
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4/§1.5 SUPERSEDED row, §7; `unified/U3_DEPENDENCY_ORDER.md` node B24). Document status only: the Status line is set to SUPERSEDED by `08_FI_05_evidence-interface_B.md` (the earlier `Reconciled:` line already said so); no edit of this file is landed; its body is kept as the evidence its successor cites. **Lands in batch:** none (node B24 kept for the order).
+
+## Status: SUPERSEDED by `08_FI_05_evidence-interface_B.md` (kept for its evidence; nothing here is landed)
 
 Carries audit `audits/08_FI_audit.md` F-FI-09 and resolution R-29. It states what FI supplies; what a
 contest does with it is SC's (the obstacle has one owner, the module: ED-SC-0033 clause 3). Where this

@@ -2,6 +2,11 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-49**, **A-48**, **A-1** and **A-53**. §4 built E1 (the truth is never shown) "because it needs nothing"; A-49 rules E2 on top of it: after a line ends and no continuation is taken, the client may show the developer's chain (`harness/chronicle.py`'s reading of the log); never in play, and never when a continuation would carry the truth to the next seat. Step added to §4: one host-side reading, gated on the line's end and on no continuation. §3's display cap stays the client's constant; triage of the question list is player gameplay (A-48). A world that fails its checks is replaced by the next seed by default, with play-it behind a setting (A-53), stated in the campaign frame.
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §2 row A-49 (§4 "End": the sentence returning the reveal to Jordan is removed; A-49 answered it as the head says), `U3_CONFLICT_LEDGER.md` C3-L4 and `U1_OWNERS_AND_VOCABULARY.md` D-U1-11n (§2's played row: the outcome of his own act reaches him as a firsthand claim read by `account`, no host-side `receipt`), A-30 (the "draw log" of §2 and gate 2 is the same keyed draws: no draw log is recorded); `U3_CONFLICT_LEDGER.md` C3-N13 (the 42.5% is named by its definition, "matched in another person's ledger": already so); test 9 (named tests, call sites, lands-it, tier; `Depends on:` / `Lands in batch:`).
+
+**Depends on:** `11_GO_player_surface_contract_B.md` (B34, earlier in the batch); `11_GO_one_draw_owner.md` (B06) for the keyed-draw equality of gate 2.
+**Lands in batch:** B34 (`B34-go-surface`, GO), after `11_GO_player_surface_contract_B.md`.
+
 ## Status: PROPOSED
 
 Carries `audits/11_GO_audit_addendum_B.md` §B3.4, §B3.5, §B3.7 and resolutions R56, R60–R65. Lane: GO
@@ -51,7 +56,7 @@ and is the control.
 
 | fidelity | when | what the player gets (SURF-B) |
 |---|---|---|
-| **played** | his person is a party to a suspended scene and the host supplies a decider | the turn view, the choice, the `trace` between turns, then the `receipt` |
+| **played** | his person is a party to a suspended scene and the host supplies a decider | the turn view, the choice, the `trace` between turns, then the outcome of his own act as the firsthand claim `account` reads (C3-L4; no host-side `receipt`) |
 | **watched** (the doctrine's "witnessed") | his person is present and not a party, or is a party and the player declines to decide | the `account` rows WITNESS deposits firsthand; for a field, MB's per-phase Observations; no choice |
 | **auto** | his person is absent | whatever is later told to him, with its teller and remove, or nothing |
 
@@ -60,8 +65,8 @@ of ED-SC-0013 as ruled, and the code already has that shape. **Fork C (the calib
 needs no number.** Two clauses replace it:
 
 - *Equal on matched decisions.* A played scene whose decider returns what the automated call would
-  have chosen reproduces the automated outcome and draw log. This is a pin (GATE §3), not a
-  distribution test.
+  have chosen reproduces the automated outcome and the same keyed draws (A-30; no draw log is recorded).
+  This is a pin (GATE §3), not a distribution test.
 - *No decider means the person's own policy.* A scene with no decider asks the per-person decider
   the chooser supplies (PC §4 for the duel; MB's standing orders for a side nobody plays), never a
   module constant. Today `decide=None` in `modules/combat/fight.py` is "the engine's own
@@ -114,8 +119,8 @@ legibility of each decision:
   boundary) say the same thing; it is decided, and the snapshot format is R44's.
 - **End.** The line is extinct (built), or the player concludes. A conclusion writes nothing: it is
   `chronicle(p)` and the whole `account` read at that moment. No victory screen is derived from
-  `requirements.yaml`. Whether an ending may show the player what his person never knew is the one
-  question this addendum returns to Jordan (addendum §B6.3).
+  `requirements.yaml`. *(W3-1, A-49:)* what his person never knew is shown only after the line ends and
+  no continuation is taken (the head's one host-side reading), never in play.
 - **Standalone.** Each subsystem's playable game is its lane's scenario builder run through the
   same transcript runner and, in the port, the same five readings and scene pair. There is no
   separate "skirmish mode" code path: a scenario is a world.
@@ -137,12 +142,20 @@ legibility of each decision:
 1. `overrides = {}` reproduces the plain hash; a seated person with `take_ranked` does too (holds
    today at seed 0).
 2. For each suspended scene with a decider: the played run whose decider returns the automated
-   choice reproduces outcome and draw log (PC's and MB's own gate; listed here because fork C rests
-   on it).
+   choice reproduces the outcome and the same keyed draws (PC's and MB's own gate; listed here because
+   fork C rests on it).
 3. A `Fixtures` with `scene_budget` swept to 3 gives the seated person three scenes and moves the
    hash; nothing else in the engine reads a difficulty.
 4. `creation_sheet` on a built realm shows a non-empty `holdings` for a seat holder and takes no
    `World` (the path scan).
+
+**Tests (W3-1).** Gate 1: `engine/season/tests/test_rem31_grid_suspension.py` (the equality test, existing);
+gate 3: `engine/season/tests/test_play_surface.py::test_scene_budget_overlay_gives_three_scenes` *[ASSUMPTION:
+the file name; basis: `harness/play_surface.py`'s own test, to be created beside the existing ones if absent]*;
+gate 4: `engine/season/tests/test_season_shape.py`'s `decision/` path scan plus
+`::test_creation_sheet_shows_holdings_for_a_seat_holder`. **Call sites:** `decision/sheet.py::creation_sheet`;
+`harness/play_surface.py::seat`; the exporters named in edit 3. **Lands:** an IN-lane implementation session
+under `/methodology-execute` with GO review; edits `sonnet`.
 
 ## The falsifier
 

@@ -1,6 +1,11 @@
-# GO — the float contract: one accumulation rule, one owner for each transcendental, and a recorded log
+# GO — the float contract: one accumulation rule, one owner for each transcendental, and parity vectors (no recorded log)
 
 Reconciled: 2026-11-12, U5d closure — folded **A-29** (declared floats now). Part C's proposed reading is the ruled one: Layer 1 step 13 is amended to name the float contract (text owed, drafted by the unification stage, not applied by a suite lane), integer state stays possible later, and the audit's §11 survivor is closed. Parts A and B land as written. Consequence recorded for the save: a save is a state snapshot (`U5d_GO_owed_edits.md` §1).
+
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U3_CONFLICT_LEDGER.md` C3-L3 (**no float recorder**: Part B's harness recorder, the `oracle_draws.json` stream of transcendental results and the port's replay of recorded bits are removed; parity is shown by `fmath` vectors at a stated tolerance, the same instrument that replaced the draw log; gate 2 and the build-file edit rewritten; Part A stands; the U5d head's "Parts A and B land as written" is superseded for Part B's recorder), `R1_READ.md` §2 row A-29 (Part C is the ruled reading C2: the "recommended C2 now, C1 later" discussion is removed; the Layer 1 step-13 text is owed, `OWED_TO_UNIFICATION.md` §A, not applied), A-30 (no recorder of any kind); test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`). R1's placement question (a non-dice `fmath` leaf under `engine/dice_engine/`) was not decided by U1 and is left as written.
+
+**Depends on:** nothing unlanded for Part A; `11_GO_one_draw_owner.md` (B06) for `Draw.normal`/`beta`'s use of `fmath`.
+**Lands in batch:** B06 (`B06-keyed-draw`, IN/GO), with `11_GO_one_draw_owner.md` and `U5d_GO_owed_edits.md`.
 
 ## Status: PROPOSED
 
@@ -12,7 +17,7 @@ call sites). One part of it touches ratified Layer 1 text and is therefore also 
 Nothing a seeded run can observe on CPython 3.11, where builtin `sum()` already accumulates left to
 right: every hash is EQUAL. On 3.12 and later, float sums on the decision path stop depending on the
 interpreter's compensated summation. The transcendental functions keep their values; they gain one
-owner and an optional recorder that the engine path never installs.
+owner, and the port checks its own against them by exported vectors (no recorder, C3-L3).
 
 ## The problem, with evidence
 
@@ -40,8 +45,8 @@ owner and an optional recorder that the engine path never installs.
 
 ## The resolution, decided
 
-Three parts. A and B are decided here (ladder step 4: the tree's own precedents, `_ltr_sum` and GO-16's
-recorder). C overwrites ratified text and goes to Jordan with two options.
+Three parts. A and B are decided here (ladder step 4: the tree's own precedent `_ltr_sum`; and the
+port-gate file's replacement of the draw log by vectors, C3-L3). C is ruled by A-29 (C2).
 
 ### A. One accumulation rule (step 4: CR-01's fix, promoted)
 
@@ -57,58 +62,47 @@ ten sites in item 3, and `seam/wrappers/sigma.py:438`. Integer sums (`resolve.py
 `effects_economy.py:97`, `carriers.py:648`, the weight sums in `world_q.py`) are left alone; the rule is
 "a float sum goes through `ltr_sum`", stated once in `fmath.py`'s docstring.
 
-### B. One owner per transcendental, and a recorded log (step 4: GO-16's shape, reused)
+### B. One owner per transcendental, and parity vectors (C3-L3)
 
 `fmath.py` also exposes `log`, `exp`, `tanh`, `erf`, `sin`, `cos`, `atan2`, `hypot`, `powf` (`x ** y` for
 a float exponent), each a one-line call to `math`. The 9 season and combat sites and the 44 mass-battle
 sites call these instead of `math.*`. `sqrt` stays on `math`: IEEE-754 requires it correctly rounded.
 
-A harness-installed recorder (never installed on the engine path, exactly as GO-16's) appends per call
-`(function, operand bits, result bits)`. `tools/export_oracle_draws.py` writes that stream beside the
-uniforms for every pinned run. The port's parity job:
-
-- compares its own library's result with the recorded bits **at each call**, and reports a mismatch as a
-  named site and operand, which is the thing a bare hash divergence cannot say; and
-- in replay mode uses the recorded bits, so that one library difference does not cascade and the hash
-  goes on testing the port's logic.
-
-This is what the build file's "slice 3's float pin" was reaching for. **Slice 3 is struck as a name**;
-the `fmath` stream is the float pin, and it rides slices 1 and 2 and the module-scene pins.
+*(Reconciled, W3-1, C3-L3: the first text's harness recorder of `(function, operand bits, result bits)`,
+its `tools/export_oracle_draws.py` stream and the port's replay of recorded bits are removed; A-30 retires
+recorders and one parity instrument serves draws and floats alike.)* **Parity is shown by `fmath` vectors:**
+for each `fmath` function, a set of inputs covering the operand ranges its call sites reach, with the
+oracle's outputs, exported once and read by the port's test at a stated tolerance (bit-equal for `ltr_sum`
+and the IEEE-754-exact operations; a stated ulp bound for the transcendentals). A mismatch names the function
+and the input, which a bare hash divergence cannot. **Slice 3 is struck as a name**; the `fmath` vectors are
+the float pin, and they ride slices 1 and 2 and the module-scene pins.
 
 Edit, `…-v10-09-build-B10-20.md:177` — old: "`betavariate` and the chooser's Gumbel draw reach the port as
 recorded values; the chooser's `math.log` over them is slice 3's float pin (CR-01's precedent)." New:
-"Every non-`sqrt` transcendental the oracle calls goes through `engine/dice_engine/fmath.py`; the pinned
-runs record each call's operand and result bits in `oracle_draws.json`, and the port's replay compares
-and substitutes them (CR-01's precedent, generalised)."
+"Every non-`sqrt` transcendental the oracle calls goes through `engine/dice_engine/fmath.py`; parity is shown
+by `fmath` vectors (inputs and expected outputs at the stated tolerance), exported once and read by the port's
+test; no stream is recorded (A-30, C3-L3). Draws reach the port by the keyed hash, not as recorded values."
 
 GO-08's `primitives` block gains: `ltr_sum` vectors (three orderings of one list that differ under
-compensated summation) and, per `fmath` function, the first N recorded calls as vectors.
+compensated summation) and, per `fmath` function, its vector set as above.
 
-### C. Step 13's "integer domain" (ratified text; §11 of the audit)
+### C. Step 13's "integer domain": declared float state (ruled, A-29)
 
-The decision here is the reading to propose, not the ruling. Two defensible options:
-
-- **C1, integer state.** The hash folds no float. `Person.pursuits` and `Person.stance` values become
-  fixed-point integers on a declared scale (the precedent is `Fixtures condition_scale = 1000`), the
-  encoder refuses a float, and step 13's sentence is true as written. Transient arithmetic stays float
-  behind A and B. Cost: design-first; the argue and determine effects that move `pursuits` quantise, so
-  every realm hash moves once and some choices change at the margin.
-- **C2, declared float state.** Step 13's sentence is amended to "…prints the Python oracle's hash",
-  with the float contract (A, B and "hashed floats are produced only by `+ - * /`, `sqrt` and `fmath`")
-  named as the condition. Cost: an edit to ratified Layer 1; no behaviour change.
-
-They differ as games in one respect: under C1 a run is reproducible from seed and acts on any machine
-the game ships on, which is what makes replay-based saves and shared seeds safe; under C2 it is
-reproducible only where the math library agrees, so saves must be state snapshots. This proposal
-recommends **C2 now and C1 only if replay-saves or shared seeds are wanted**, because A and B give the
-port everything parity needs without moving the game.
+*(Reconciled, W3-1: the two-option discussion is removed; A-29 ruled C2.)* Step 13's sentence is amended to
+"…prints the Python oracle's hash", with the float contract (A, B, and "hashed floats are produced only by
+`+ - * /`, `sqrt` and `fmath`") named as the condition. The amendment text is owed to Jordan's merge
+(`OWED_TO_UNIFICATION.md` §A) and is not applied by any suite lane. Integer state stays possible later. A
+consequence: a run is reproducible only where the math library agrees, so a save is a state snapshot
+(`U5d_GO_owed_edits.md` §1). A margin graded by the ladder is quantised at the seam
+(`U5a_DICE_owed_edits.md` §1 row 1, C3-L1), so `04:903` and D-29 hold without a further amendment.
 
 ## The gate (execution artifacts)
 
 1. `PYTHONHASHSEED=0` realm hash at seeds 0–2, one season, under CPython 3.11 and 3.13: equal to each
    other and, on 3.11, equal to the value before the edit.
-2. With the recorder installed, the count of recorded `fmath` calls equals the count from a shim on
-   `math`'s nine functions over the same run (the completeness test GO-16 already specifies for draws).
+2. *(W3-1, C3-L3:)* the exported `fmath` vectors round-trip (`tools/export_engine_params.py --check` or the
+   exporter that carries GO-08's `primitives` block), and a Python re-run of every vector through `fmath`
+   reproduces its expected output bit for bit; a planted change of one function's body fails it.
 3. `grep -rnE "math\.(log|exp|tanh|erf|sin|cos|atan2|hypot)\(" engine/season engine/dice_engine modules`
    (tests and `fmath.py` excluded) prints nothing.
 
@@ -116,7 +110,7 @@ port everything parity needs without moving the game.
 
 A float `sum()` left on the decision path: plant a list whose compensated and left-to-right sums differ
 in the last bit at one such site and the 3.11 and 3.13 hashes of gate 1 separate. A `math.tanh` left in
-a module: gate 2's counts differ.
+a module: gate 3's grep prints it.
 
 ## NERS reading (§0.06; E last)
 
@@ -130,5 +124,10 @@ a module: gate 2's counts differ.
 
 ## Cost class
 
-A and B: small build (one leaf, about sixty mechanical call-site edits, one exporter stream). C1:
-design-first. C2: edit.
+A and B: small build (one leaf, about sixty mechanical call-site edits, one vector block in the exporter).
+C: edit (Layer 1 text owed, Jordan's merge).
+
+**Tests and lands (W3-1).** New `engine/tests/test_fmath.py`: `test_ltr_sum_is_left_to_right_on_three_orderings`,
+`test_every_vector_reproduces_bit_for_bit`; gate 3's grep as `tests/valoria/test_fmath_one_owner.py::test_no_math_transcendental_outside_fmath`.
+Lands: an IN-lane implementation session under `/methodology-execute` with GO, PC and MB review; the call-site
+edits `haiku`-assisted, the leaf and vectors `sonnet`.

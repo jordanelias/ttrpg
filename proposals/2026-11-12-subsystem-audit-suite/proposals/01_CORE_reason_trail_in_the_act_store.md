@@ -1,5 +1,9 @@
 # CORE — the reason for an act, kept where the act is kept
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.1 row (VIOLATES as written at `deliberate.py:303`), §7, §7b-1, §7b-T; `unified/U3_CONFLICT_LEDGER.md` C3-C16, C3-N27; `unified/U3_DEPENDENCY_ORDER.md` node B09, §6.2). Layer 1 rewrite (`04` §A.2: `loop/deliberate` owns nothing and holds no token; §C.1: `scenes = deliberate(frozen)` is a map; PART D rows 41, 41a): Edit 2 no longer writes the Scene store from DELIBERATE — **RESOLVE**, which holds the ACTS token and the act store, stores each Scene as it appends that Scene's acts; DELIBERATE keeps returning its map and stores nothing. The departure of a stored `Scene.decided` field (if `U5a_CHAR_owed_amendments.md` §5 lands it) from `04` §B.9 is named (C3-C16). The scratch probe becomes named tests; the hash literal carries the B01 caveat; lands-it and tier added.
+
+**Lands in batch:** B09. **Depends on:** `02_CHAR_reason_trail_and_small_edits.md` Part A (B09, the `watch` hook the chronicle line reads).
+
 ## Status: PROPOSED
 
 Source: `audits/01_CORE_audit_addendum_B.md` F-CORE-12, §6 (d). Read at `785bc62`.
@@ -48,11 +52,15 @@ class ActStore:
     def scenes(self) -> tuple                    # in release order
 ```
 
-### 2 · owner `engine/season/loop/deliberate.py:303`, `loop/resolve.py:171`, `loop/driver.py:322`
+### 2 · owner `engine/season/loop/resolve.py` (and `loop/deliberate.py:303`, `loop/resolve.py:171`, `loop/driver.py:322`)
 
-`self.scenes[sc.id] = sc` becomes `w.acts.add_scene(sc)`; `_occasion_of` reads `w.acts.scene_of(a.id)`;
-`SeasonDriver.scenes` is deleted. `epistemic._term_why` (the one other reader of `Scene.occasion`) reads
-the same accessor.
+`loop/deliberate.py` keeps returning its `Scene` map exactly as `04` §C.1 draws it and stores nothing (its
+line `:303`, `self.scenes[sc.id] = sc`, is deleted with `SeasonDriver.scenes`). `loop/resolve.py::resolve`,
+which holds the ACTS token and the act store, calls `w.acts.add_scene(sc)` for each Scene of its `scenes`
+argument immediately before it appends that Scene's acts (`w.acts.append`, `resolve.py:1033`). `_occasion_of`
+reads `w.acts.scene_of(a.id)`; `epistemic._term_why` (the one other reader of `Scene.occasion`) reads the
+same accessor. A write from DELIBERATE would be a store write by a step that holds no token, on the frozen
+world, and order-sensitive on a repeated id (`04` PART D rows 41, 41a).
 
 ### 3 · the deciding term — owned by the CHAR lane's proposal, not this one
 
@@ -62,7 +70,11 @@ decision, with no carrier and no field. That is the owner of *which term decided
 adds no field for it. The two fit: the hook supplies the deciding term while the process runs, and the
 Scene store (edits 1–2) is what the hook's reader keys its record on after the season ends. What stays
 unrecorded under both is the deciding term of a past season in a reloaded world; if that is wanted it
-is one optional attribute on the stored Scene, stamped by the watcher's caller, and is not built here.
+is one optional attribute on the stored Scene, stamped by the watcher's caller, and is not built here. If
+`U5a_CHAR_owed_amendments.md` §5's `Scene.decided` lands, it is a field beyond `04` §B.9's `Scene` record
+(`(id, person, occasion, place, interactions)`; the code's names differ, `state/carriers.py:602-632`): the
+departure is named at `Scene`'s docstring with its one reader (`harness/chronicle.py`) under B4's third
+disposition, and `04` is not edited (C3-C16).
 
 The standing-occasion case needs no new field: the stored Scene's `occasion.source` and
 `occasion.about` are the record, and `causes[]` stays `[act]` (an occasion that is no Event is not a
@@ -83,10 +95,14 @@ CHAR proposal's watcher supplied one). This is the first reader, so the store is
 
 ## Gate (an execution artifact)
 
-`probe_reason.py` re-run after the edit: `SeasonDriver` has no `scenes` attribute; 58 of 58 acts answer
-`w.acts.scene_of`; a second `SeasonDriver(w)` constructed after three seasons prints the same `for:`
-line for a season-0 act as the first driver did; the content hash at seed 0 after three seasons is
-`383206baa7e7807e28cd609d2bb5f080` (this addendum's reading).
+`probe_reason.py` (a scratch script, not in the repository) is restated as new tests in
+`engine/season/tests/test_scene_store.py`: `test_the_driver_holds_no_scenes`; `test_every_stored_act_answers_scene_of`
+(58 of 58 on the headless world, seed 0, three seasons, at the audit's reading); `test_a_fresh_driver_answers_a_season_0_acts_question`
+(a second `SeasonDriver(w)` prints the same `for:` line); `test_hash_equal_with_the_scene_store_unfolded`
+(the content hash at seed 0 after three seasons equals the base tree's: `383206baa7e7807e28cd609d2bb5f080` is
+`main`'s reading at the working tree; re-read on the batch's base, C3-N27). The existing
+`engine/season/tests/test_g2_token.py::test_g2_deliberate_mutates_no_store_by_any_route` is the falsifier of the
+Layer 1 rewrite: a store write inside DELIBERATE turns it red.
 
 ## Falsifier
 
@@ -106,3 +122,6 @@ the edit. A changed content hash falsifies edit 4's claim.
 ## Cost class
 
 Edit (four files). Hash EQUAL.
+
+**Lands it and tier.** The B09 batch, an IN `valoria-author` session on `sonnet` (`high`), closed by B09's
+`methodology-close` once. **Hash movers.** None (edit 4: not folded; control: the base tree's hash).

@@ -1,6 +1,15 @@
 # 16 · PESSIMIST · FI · B — A paper its holder knows is false is not read as true
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS), §7/§7b (edit 4 located, tests,
+tier); U3 B26, §6.2 (`p3b_knows.py`, `p3_forgery.py` are not in the repository); U1 D-U1-01 and architecture §4 (what is
+not training reaches a roll as a named level, never a die: the "one more die" in "Not edited here" restated as a level).
+Changed: edit 4's location, the gate, one sentence of "Not edited here".
+
 ## Status: PROPOSED
+
+Lands in batch: **B26** (FI). Depends on: `08_FI_05_evidence-interface_B.md`, `19_LACUNA_admission_rides_the_citing_draw.md`
+(B24) and `18_DETERMINISM_notice_is_a_draw.md` (B11) for what makes a holder know; the edits themselves read only
+`COVERT_KINDS` and the holder's ledger (exist).
 
 Carries `audits/16_PESSIMIST_FI.md` F-PES-FI-03 (§2.3) and the correction to addendum B's C-3 (§2.2).
 Compatible with `08_FI_05_evidence-interface_B.md` (a forgery "cites at full weight until someone cites
@@ -62,8 +71,14 @@ thing"* as "he knows of this deed"; `rosters.yaml: covert_kinds` is the data tha
    name he knows only from a paper he knows is false is not a name he has heard.
 4. **`engine/season/decision/options.py`, the record-sourced operand derivation** (`_derive_operand`'s
    `held=` channel): where `record_sourced_operands` maps the operand to a key and that key's value is
-   `None` or an empty list, the bag is not formed. `[UNVERIFIED: the line of the fallback that binds the
-   Record's id; the behaviour is measured, the edit is stated by its effect]`.
+   `None` or an empty list, the bag is not formed. The one reader of the roster is
+   `decision/options.py::_content_answer` (`:948` on 2026-11-12; `key = RECORD_SOURCED_OPERANDS.get(...)` at
+   `:959`) and the answerable set `_RECORD_ANSWERABLE` (`:970`); the fallback that binds the Record's own id is
+   found before editing by `rg -n "_content_answer\|_RECORD_ANSWERABLE" engine/season/decision/options.py` and
+   reading each call site: the edit is at the call site that substitutes the Record id when `_content_answer`
+   returns `None`.
+
+Order of edits: 1 → 2 → 3 (hash-equal in shipped runs) → 4 (the mover), one commit each.
 
 ## Not edited here, named
 
@@ -71,13 +86,20 @@ thing"* as "he knows of this deed"; `rosters.yaml: covert_kinds` is the data tha
   of detection. Today `research`'s pool is `seam/wrappers/pool.py::faculty(w, p, verb)` plus
   `POOL_ADDENDS`, each `add(w, p, verb)`: no addend can see which Record is examined, so none can ask
   whether the examiner holds a second paper of the same kind about the same subject that says otherwise
-  (`person_q.ABOUT_KEYS` is the key that would pair them). That is one more die for *comparing two
-  rolls*, and it needs the act in the addend's signature; `10_DICE_advantage_sources_for_the_arcs.md` is
-  where advantage sources are being gathered. Named for DICE; no edit here.
+  (`person_q.ABOUT_KEYS` is the key that would pair them). That is a named level for *comparing two
+  papers* (a leverage source; what is not the roller's training reaches the roll as a level, never a die,
+  U1 D-U1-01), and it needs the act in the source's signature; `10_DICE_advantage_sources_for_the_arcs.md`
+  is where advantage sources are being gathered. Named for DICE; no edit here.
 - **What a forgery says.** `_eff_forge` writes the forger in as `head` for every forger (F-FI-10;
   `08_FI_02` §4 item 9 leaves it a declared default).
 
 ## Gate (execution artifact)
+
+The probes were lane scratch (not in the repository, U3 §6.2). Written first as NEW
+`engine/season/tests/test_doubted_paper.py`: `test_holder_who_saw_the_forging_forms_no_candidate_off_the_sheet`,
+`test_control_ledger_without_the_claims_forms_them`, `test_empty_sheet_key_forms_no_bag`,
+`test_ledger_names_skips_a_doubted_paper`. Command: `python -m pytest engine/season/tests/test_doubted_paper.py -q`;
+then `report` / `delta HEAD` (hash equal through edit 3). The scratch readings, once committed as those tests:
 
 `p3b_knows.py`, unchanged: row 1 reads 0 candidates addressed off the sheet and row 2 (control) reads
 19; row 4 reads 0. `p3_forgery.py`: 0 candidates with `to` equal to a Record id on the surveyed sheet.
@@ -100,4 +122,6 @@ tell, or cite the finding. S: one test (`holds a covert-kind claim on the thing`
 
 ## Cost class
 
-Edit. Lane FI.
+Edit. Lane FI. Tier: `sonnet`, effort `high`. Hash movers declared: none for edits 1-3 at seeds 0-2; edit 4
+moves every world where a sheet key is empty (re-pinned once in B26). Lands it: B26, after
+`19_LACUNA_questioning_has_an_approach_and_a_cost.md`, before `16_PESSIMIST_FI_D`.

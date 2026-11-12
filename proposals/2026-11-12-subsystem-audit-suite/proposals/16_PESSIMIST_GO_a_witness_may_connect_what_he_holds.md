@@ -1,6 +1,15 @@
 # GO — a witness may connect what he holds: `Seen.why` is the antecedent he himself holds, by a draw
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS; the hazard taken: the primary
+path to the antecedent claim is the look-up through the `claim.deposited` Event whose `causes[0]` is `c.id`, and the
+minted-id formula is the fallback, so WITNESS is not coupled to id minting), §7/§7b (tests, tier); U3 B09, §6.2
+(`probe.py` is not in the repository); U1 D-U1-07 (a capability's verb binding is the verb row's `capability:` column,
+not `VERB_CAPABILITY`). Changed: §1's order of paths, §2's capability pointer, the gate's test names.
+
 ## Status: PROPOSED
+
+Lands in batch: **B09** (IN/CHAR). Depends on: nothing unlanded (`epistemic.py` term readers, `observation_terms`,
+`Chronicle`, `chronicle --chains --min-depth 2` exist).
 
 Carries F-PES-GO-04 of `audits/16_PESSIMIST_GO.md` (§2.2, §2.5). Lanes IN, CHAR (the owner files are
 `engine/season/epistemic.py`, `rosters.yaml`, `decision/sheet.py`); GO measured it at the player's
@@ -49,10 +58,12 @@ Ladder step 5, on two precedents (step 4): `Seen.who` (a term a channel supplies
 
 For a witness `pid` of Event `e`: walk `e.causes` in order, skipping `ROOT` and act ids. For the
 first cause that is an Event `c` (`state/attribution.py::event_by_id`) for which `pid`'s ledger holds
-a claim WITNESS deposited from `c` (the ids WITNESS itself mints: `H(seed, c.emitted_at, pid,
-f"seen:{c.id}")`, else `…f"claim:{c.id}:0"`; `[ASSUMPTION; verify at build: a deposit's tick is the
-Event's `emitted_at`; if not, the claim id is looked up through the `claim.deposited` Event whose
-`causes[0]` is `c.id`]`), `why` is that claim's id. Otherwise `None`.
+a claim WITNESS deposited from `c`, `why` is that claim's id. Otherwise `None`. **The claim is found by
+look-up**: the `claim.deposited` Event whose `causes[0]` is `c.id` and whose receipt names `pid`'s ledger
+(the record the tree already writes). The id formula WITNESS mints (`H(seed, c.emitted_at, pid,
+f"seen:{c.id}")`, else `…f"claim:{c.id}:0"`) is only a fallback, used if the look-up is measured too
+slow at build, and then only after verifying that a deposit's tick is the Event's `emitted_at`
+`[ASSUMPTION; verify at build]`: the look-up does not couple WITNESS to how ids are minted.
 
 It is an id in his own ledger, so it leaks nothing: he already holds the thing it points to. It is
 not a motive and does not say the later actor *decided because of* the earlier act
@@ -84,9 +95,9 @@ connection_chance = 0.0      # CONTROL (shipped at first landing): no draw, hash
 antecedent); the draw decides; a well-placed witness still misses it sometimes (the standing rule).
 His own act is not a draw: where `pid` is the actor (`doer` is stamped), `why` is the occasion he
 acted on, with certainty, because "a person always knows his own act" (`state/carriers.py:375`) is
-an eligibility fact, not an outcome. When CHAR's attributes land, the modifier is the capability
-key the inquiry verbs already read (`VERB_CAPABILITY`), through the same fixture block; no second
-ladder.
+an eligibility fact, not an outcome. When CHAR's capabilities land, the modifier is the capability the
+inquiry verbs' rows name (the verb row's `capability:` column, U1 D-U1-07; `VERB_CAPABILITY` is its
+interim), through the same fixture block; no second ladder.
 
 ### 3. Where the code changes
 
@@ -105,6 +116,14 @@ Nothing in `decision/choose.py` reads it: no choice changes. A chooser term that
 claim is a separate design, not proposed.
 
 ## The gate (execution artifacts)
+
+`probe.py base` was lane scratch, not in the repository; the chain reading is the existing
+`python -m engine.season.harness.chronicle --seed N --seasons 2 --chains --min-depth 2`. Committed first: NEW
+`engine/season/tests/test_seen_why.py`: `test_control_chance_zero_takes_no_draw_and_hash_equal` (gate 1),
+`test_every_why_names_a_claim_in_the_holders_ledger` (gate 2, `checked >= 100`),
+`test_share_with_why_inside_binomial_band` (gate 3), `test_document_channel_never_carries_why` (the falsifier's
+second clause), `test_chronicle_threads_empty_at_control` (gate 5). Command:
+`python -m pytest engine/season/tests/test_seen_why.py -q`.
 
 1. Control: `connection_chance = 0.0`, seeds 0–2, two seasons: every hash equal to today's
    (`bacd687f…`, `8aae8412…`, `89109213…` at `826b747`); `seen` claims with `why`: 0.
@@ -145,4 +164,6 @@ the control.
 
 ## Cost class
 
-Small build; hash EQUAL at the control, a declared mover when the chance is raised.
+Small build; hash EQUAL at the control, a declared mover when the chance is raised. Tier: `sonnet`, effort
+`high`. Lands it: B09, one commit at the control (readers, roster rows, fixture at 0.0, `Chronicle.threads`, tests);
+raising the chance is its own commit and re-pin.

@@ -1,13 +1,19 @@
-# NARRATIVE-F — the story bar counts crossings: an inventory reading, its controls, and the gate the narrative basis must pass
+# NARRATIVE-F — the story bar counts overlaps: an inventory reading, its controls, and the gate the narrative basis must pass
 
 Folded: 2026-11-12 by `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md`. Nothing here is deleted. (1) Edit 2's **reign line** ("believed holder of the realm's head seat by plurality of ledgers") stays as the observer's line; the era itself is now read by `world_q._eras` with a ruler, conditions and the turn that opened it (`30_WR_A`), and per person by `era_known`; the chronicle prints the world's era in the omniscient render and the focalizer's in `--focus` (`30_GO_F`). (2) The arms gain `entrenched` (every contested draw falls to the holder: A-80), `custom_off` and `custom_on` (A-83) (`30_WR_E` instructions 2 and 5; `30_WR_G`). (3) The gate gains clauses C7 to C13 beside this file's eight (`30_WR_E` §4): compounding by the fork lift, a held world that still moves, no null scene (A-81), the pull felt and resisted, an era that can end and not on a timer, strands that stay several, regimes that are more than one and move. Class G5 (across a fault line) is read by sign as written and, once `credit_form: accord` exists, also by accord band. (4) This file's clause 2 ("no class holds more than 60%") and `30_WR_E`'s C13 use the same share; one number, one place: it is this file's.
 
 Reconciled: 2026-11-12, U5d closure — folded **A-45**, **A-46** and **A-15**: the gate's story families gain supply the rulings order (a succession by natural death; a split by leaving a creed or head seat; several strands that can each end), so the clauses that read 0 "by ruling" are re-read after those land. No step changes.
 
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row story_inventory CONFORMS, §2 row arms (none), §7, 7b; `unified/U1_GLOSSARY.md` "crossing"; `unified/U3_CONFLICT_LEDGER.md` C3-K7, C3-K2; `unified/U3_DEPENDENCY_ORDER.md` §1 item 36, §4.1 row 88, §6.2). Changed: (1) vocabulary: in the glossary "crossing" is a recorded change of band (`loop/matter.py::_crossings`), and the story bar's sense (a person standing on two things at once) is an **overlap**; this file's reading is renamed `overlaps(...)` behind `--overlaps` (it was `crossings` / `--crossings`; a file that still cites `--crossings` means this flag); (2) class G6 reads `16_PESSIMIST_CHAR_A`'s `conviction.moved` (`20_NARRATIVE_E` edit 3 is struck in its favour, C3-K2); (3) the reading's body and the tests are named (7b); the audit's `narr_probe.py` is not in the repository and is replaced by this block, not run; (4) the serial order on `harness/storybar.py` (C3-K7) and the batch lines; (5) tier.
+
+Depends on: `09_WR_story_instruments_that_can_fail.md` (B36, the arms and edge null, first); `09_WR_B_readings_of_closure_and_tension.md` and `09_WR_B_chronicle_that_tells.md` (B36); `09_WR_strand_conclusion.md` (B12). Each class's reader is its proposal's (`n/a (no reader)` until it lands).
+Lands in batch: B36 (lane WR), editing `harness/storybar.py` after `16_PESSIMIST_WR_D_small_clock_repairs_and_two_readings.md` and before `23_STORY_D_story_census_and_gate.md` (C3-K7); its G5 clause (the `stands_for` split) lands in B38 with `20_NARRATIVE_A` (§4.1 row 88). Hash-equal (harness only).
+Tier: sonnet / high.
+
 ## Status: PROPOSED
 
 Source: `audits/20_NARRATIVE_CHURN.md` §4 (the story inventory), §7.2 (the five pulls), §11 (the probe
-`narr_probe.py` this reading is lifted from). Composes on, and does not restate, the WR lane's
+`narr_probe.py` this reading is lifted from; that probe is not in the repository, and this block replaces it). Composes on, and does not restate, the WR lane's
 `09_WR_story_instruments_that_can_fail.md` (forcing arms, the edge null, the shape line) and
 `09_WR_B_readings_of_closure_and_tension.md` (close by act against by clock), and the plan's CR-97 (plot
 points per strand) and CR-99 (the strife guard as a function). Reference only (`CLAUDE.md` §0.05).
@@ -25,7 +31,7 @@ what did he do".
   *per strand* (an opening, a turn, a consequence act); a strand is strife, and by season six the realm
   is one strand (WR F-WR-02). Neither reads a person standing on two things at once.
 - The audit's probe did, by hand, at seeds 0 to 2 over four seasons, and found the count of every
-  crossing class to be zero or a base rate: no grievance for a due unmet (none can exist), no act on a
+  overlap class to be zero or a base rate: no grievance for a due unmet (none can exist), no act on a
   seat that reads its holder (H-195), no member acting on his own side's creed, told claims at one
   `commensurate` sign in two seeds of three, changes of conviction unseen. It also found that clearing
   every conviction at build leaves the executed-verb profile within the seed spread (audit §4.3).
@@ -43,8 +49,8 @@ behind a flag).
 
 ## Exact edits, by owner
 
-**1. `engine/season/harness/storybar.py` — `crossings(w, d, bounds, snaps) -> dict`, behind
-`--crossings`.** `snaps` is a per-season snapshot taken in `on_season` of the person-side readings (so
+**1. `engine/season/harness/storybar.py` — `overlaps(w, d, bounds, snaps) -> dict`, behind
+`--overlaps`.** `snaps` is a per-season snapshot taken in `on_season` of the person-side readings (so
 a pull is read as it stood when the act was formed, never from the end state). Classes, each counted
 over **executed** acts (`corpus_run.attempts`, the one owner of made and refused):
 
@@ -55,7 +61,7 @@ over **executed** acts (`corpus_run.attempts`, the one owner of made and refused
 | G3 a new holder meets an old oath | an act by `p` on a seat he is sworn to, within two seasons of his `believed_holder` of it changing | `20_NARRATIVE_C` |
 | G4 an enemy with a place | a contested act (the row declares `contests:`) by `p` on a seat or rung whose `believed_holder` he regards below 0 | `20_NARRATIVE_C` |
 | G5 across a fault line | an act whose occasion is a told claim, split by `commensurate(hearer, last teller)`: −1, 0, +1 | `20_NARRATIVE_A` |
-| G6 a creed broken and seen | a `conviction.moved` Event with at least one deposit in a ledger other than the person's | `20_NARRATIVE_E` edit 3 |
+| G6 a conviction broken and seen | a `conviction.moved` Event with at least one deposit in a ledger other than the person's | `16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` (the one emitter; `20_NARRATIVE_E` edit 3 struck) |
 | closes | closing Events by act and by clock | `09_WR_B_readings_of_closure_and_tension.md` (called, not restated) |
 
 Until a proposal lands its class prints `n/a (no reader)`, never 0: an absent reading is not a zero.
@@ -74,18 +80,26 @@ ablations, composed from fixtures and a builder switch, each a control this lane
 `noconv` (every `Person.conviction` cleared at build: `decision_spread.apply_control`'s precedent for a
 build-time ablation) and `basis_off` (every fixture of `20_NARRATIVE_A` to `E` at its control).
 
-**4. `engine/season/tests/test_storybar.py`.** Planted logs, one per class: a planted lapsed oath, a
-believed holder and an act on him reads G1 = 1; with the belief removed, 0. A planted told claim across
-an incompatible pair reads G5(−1) = 1. A class with no reader prints `n/a`. The block changes no hash.
+**4. `engine/season/tests/test_storybar.py`** (exists). Planted logs, one per class: a planted lapsed
+oath, a believed holder and an act on him reads G1 = 1; with the belief removed, 0. A planted told claim
+across an incompatible pair reads G5(−1) = 1. A class with no reader prints `n/a`. The block changes no
+hash. Tests: `test_g1_planted_lapsed_oath_reads_one_and_zero_without_the_belief`,
+`test_g5_told_claim_across_an_incompatible_pair_reads_minus_one`, `test_class_with_no_reader_prints_na`,
+`test_overlaps_block_moves_no_hash`.
+
+The body of the reading, as specified above: `overlaps(w, d, bounds, snaps) -> dict` keyed by class
+`G1`..`G6` plus `closes`, each a count over executed acts (`corpus_run.attempts`), printing
+`n/a (no reader)` for a class whose reader has not landed (detected by import of the reader's symbol,
+never by a zero).
 
 ## The gate (the bar; it can fail, and it fails today)
 
 Run, `PYTHONHASHSEED=0`, one process per seed and arm:
 
 ```sh
-python -m engine.season.harness.storybar --base-seed 0 --n 5 --seasons 6 --arms basis_off on --crossings --executed-only
-python -m engine.season.harness.storybar --base-seed 0 --n 5 --seasons 6 --arms on noconv --crossings --executed-only
-python -m engine.season.harness.storybar --base-seed 0 --seasons 6 --draw-seeds 0 1 2 3 --crossings
+python -m engine.season.harness.storybar --base-seed 0 --n 5 --seasons 6 --arms basis_off on --overlaps --executed-only
+python -m engine.season.harness.storybar --base-seed 0 --n 5 --seasons 6 --arms on noconv --overlaps --executed-only
+python -m engine.season.harness.storybar --base-seed 0 --seasons 6 --draw-seeds 0 1 2 3 --overlaps
 python -m engine.season.harness.storybar --base-seed 0 --n 3 --seasons 3 --arms off all --executed-only
 python -m engine.season.harness.strife 4 0 1 2 --strands
 ```
@@ -94,9 +108,9 @@ python -m engine.season.harness.strife 4 0 1 2 --strands
 
 1. **A control.** Under `basis_off`, G1 to G4 and G6 read 0 at every seed, and G5 counted between two
    persons who both hold a conviction has one sign at three seeds of five or more (today's reading,
-   reproduced). If `basis_off` shows crossings, the reading is counting something else.
+   reproduced). If `basis_off` shows overlaps, the reading is counting something else.
 2. **Non-degenerate.** Under `on`, pooled over five seeds: at least four of the six classes are above
-   zero at three seeds or more; no class holds more than 60% of all crossings; G5 between two convinced
+   zero at three seeds or more; no class holds more than 60% of all overlaps; G5 between two convinced
    persons shows all three signs.
 3. **Not one run.** The five seeds' class vectors are not all equal, and at least three are distinct.
 4. **Not a fixed function of state.** On one built world, the class vector differs between at least
@@ -112,15 +126,15 @@ python -m engine.season.harness.strife 4 0 1 2 --strands
    and no code's share rises by more than the off arm's seed spread; BLIND (fewer than two codes off) is
    reported as BLIND and the guard is re-read at the horizon the plan's risk 8 names.
 
-**Today** clause 1 holds and clauses 2, 5 and 6 fail (audit §4: every crossing class zero or one-signed;
+**Today** clause 1 holds and clauses 2, 5 and 6 fail (audit §4: every overlap class zero or one-signed;
 `noconv` within the spread; 23 closes by clock against 3 by act, WR `_B`). That is the bar failing on
 the shipped engine, which is what makes it a bar.
 
 ## The falsifier
 
 - Clause 2 passing under `basis_off`: the classes are too loose (they count coincidence). Tighten the
-  windows, or the class is not a crossing.
-- Clause 4 failing with clause 2 passing: the crossings are scripted by the build (the same people
+  windows, or the class is not an overlap.
+- Clause 4 failing with clause 2 passing: the overlaps are scripted by the build (the same people
   cross the same lines every time): the pulls are reading authored state only, and nothing in play
   moves them.
 - A class above zero whose acts, read in the chronicle, do not read as that story to a person: the
@@ -129,7 +143,7 @@ the shipped engine, which is what makes it a bar.
 ## NERS reading
 
 - **N.** Without it, each of five proposals gates on a private reading and the claim "the engine now
-  produces crossings" has no instrument. It is the measure of the audit's central finding.
+  produces overlaps" has no instrument. It is the measure of the audit's central finding.
 - **R.** It measures the no-player half and nothing else. Complete: an empty world prints `n/a` and 0.
 - **S.** It lives in the one story instrument, uses the one made/refused rule, the one closure reading
   and the one strife guard; it adds no second bar beside WR's.

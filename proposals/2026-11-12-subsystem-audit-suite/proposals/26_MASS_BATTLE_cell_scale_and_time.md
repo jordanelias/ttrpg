@@ -1,5 +1,10 @@
 # MB · one scale for the cell, the tick and the battle: sixteen men, four seconds, bouts with lulls
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.2 (the wrapper bout loop VIOLATES `hol` §44.3: a wrapper holds no state, decides nothing and drives no clock) with 7b-15 [DECISION] Option A (the bout loop and the lull window live inside `modules/mass_battle/massbattle.py::resolve_field` in one provider call, state in its loop frame; the wrapper calls once and reads one band); U3 did not find Option B required by `27_MB_E`, so A stands; `U1_GLOSSARY.md` *approach* (`approach_rows` → `opening_rows`, the opening distance), *round* ("season round" → season); D-U1-11e (`bouts` is this file's `FieldOutcome` field; U1 also lists `fight_loss` here, but `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` §4 is the proposal that defines it, so it is declared there: the row corrected at the proposals); U1 §3 *stamina* (stamina crosses the boundary as a share in [0, 1]); A-30 (each bout's draws keyed); test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`; U3 §4.1 row 65 LATER for the lull actions).
+
+**Depends on:** `04_MB_cell_hierarchy_as_data.md` (B19: the `deployment` header); `04_MB_headcount_grade_and_scale.md` and `04_MB_typed_outcome_and_one_path.md` (B17); `16_PESSIMIST_MB_one_stamina_ledger.md` steps 1–2 (B19); the lull's `GeneralAction` reaches a drawn order only when `04_MB_manager_battle_one_resolver.md` §4 lands (B20; U3 §4.1 row 65, LATER: until then the lull applies standing orders only).
+**Lands in batch:** B19 (`B19-mb-field-calibration`, MB), with `04_MB_cell_hierarchy_as_data.md`.
+
 ## Status: PROPOSED
 
 Lane MB (the scene sequence is IN's). Carries rows S-1, B-9, R-5 and R-6 of
@@ -81,7 +86,7 @@ deployment:
   | `sling`, `siege` | `[2, 8]` | **not established**; today's value kept | — |
 
   `[2, 8]` for every arm stays as the control arm.
-- `formations.<name>.approach_rows` becomes a rule with a floor: the longest `range[1]` among the missile
+- `formations.<name>.opening_rows` (was `approach_rows`; U1 glossary) becomes a rule with a floor: the longest `range[1]` among the missile
   arms on either side, capped so both lines fit the field, floor 3. Two armies with no missiles start three
   rows apart as now. An army facing bows starts in range and must cross it.
 - A bow's rate against a crossbow's is sourced ("up to ten arrows per minute" against "about twice a minute",
@@ -92,10 +97,12 @@ deployment:
 
 ### 3. A battle is bouts with lulls
 
-- A field scene is a sequence of at most `max_bouts` calls of the one entry, `massbattle.resolve_field`. A
-  later bout is fought when the one before folded `Drawn` and neither commander withdrew. Its input is the
-  first bout's with three things carried: each part's surviving troops, each part's stamina
-  (`entry_stamina`, per part), each part's morale. Nothing else is state.
+- *(Reconciled, W3-1, 7b-15 Option A; `hol` §44.3.)* A field scene is **one** call of the one entry,
+  `massbattle.resolve_field`, which loops over at most `max_bouts` bouts (an input field). A later bout is
+  fought when the one before ended drawn and neither commander withdrew. The loop carries three things in
+  its own frame from bout to bout: each part's surviving troops, each part's stamina (a share in [0, 1] at the
+  boundary, U1 §3), each part's morale. Nothing else is state, and nothing is held on the wrapper; every draw
+  of a bout is keyed `(field, bout, tick, unit, purpose)` (A-30).
 - **The lull between bouts is the commander's window.** In it a played or chooser-served commander takes
   one `GeneralAction` (`04_MB_manager_battle_one_resolver.md` §4); the lull adds three that only make sense
   out of contact, each a row of `26_MASS_BATTLE_maneuver_orders.md`: `relieve` (two units of one post swap
@@ -104,22 +111,23 @@ deployment:
 - The scene's end state is ruling A-3's, read at the last bout: won, lost, or drawn when the bouts run out
   ("night ends it": SQ 10 step 7). Ruling A-9 is what makes a scene a short sequence whose step may hang on
   the band before it; this is that, for the field.
-- **One resolver** (ruling A-1): every bout is the same call. A delegated battle runs the same sequence with
-  standing orders in place of the commander's lull actions. Replay holds bout by bout from the interventions
-  list.
-- This amends `04_MB_playable_field_scenario.md` §C, which left a drawn field to the next season round's
-  acts. Those acts remain for a battle that is still drawn after the last bout.
-- The season calls the entry once per bout. `run_multi_turn_battle` is not revived; the first MB lane's
+- **One resolver** (ruling A-1): every bout is the same bout function inside the one entry. A delegated battle
+  runs the same sequence with standing orders in place of the commander's lull actions. Replay holds bout by
+  bout from the interventions list (`(side, bout, window, GeneralAction)`).
+- This amends `04_MB_playable_field_scenario.md` §C, which left a drawn field to the next season's acts. Those
+  acts remain for a battle that is still drawn after the last bout.
+- The season calls the entry once per scene. `run_multi_turn_battle` is not revived; the first MB lane's
   removal of it from `modules/` stands.
 
 ## Exact edits
 
 | file (owner) | edit |
 |---|---|
-| `references/troops.yaml`, `tools/export_troops.py` | `deployment.scale`, `deployment.max_bouts`; per-arm `range` values; `approach_rows: auto` with the floor |
+| `references/troops.yaml`, `tools/export_troops.py` | `deployment.scale`, `deployment.max_bouts`; per-arm `range` values; `opening_rows: auto` with the floor |
 | `modules/mass_battle/orderofbattle.py::_place` | reads the approach rule; `_APPROACH_ROWS` becomes the floor's default |
 | `engine/season/queries/inputs.py::MassBattleInput` | `entry_stamina`, entry troops and entry morale may be given per part (the per-side form of `16_PESSIMIST_MB_one_stamina_ledger.md` is the one-part case) |
-| `engine/season/seam/wrappers/mass_battle.py::resolve` | the bout loop: call, read the band, stop or build the next input from the outcome's parts; forwards the lull to `host.decide` |
+| `modules/mass_battle/massbattle.py::resolve_field` *(W3-1, 7b-15)* | gains `max_bouts` (from `MassBattleInput`) and the bout loop: run a bout, read its end state, on drawn and no withdrawal open a lull window (the decider's `GeneralAction` set plus `relieve`, `reform`, `commit`), build the next bout from the carried troops, stamina and morale held in the loop's frame, stop at a decision or at `max_bouts` |
+| `engine/season/seam/wrappers/mass_battle.py::resolve` | calls the entry once and reads one band; forwards `host.decide` as the `decide` parameter (no loop, no state) |
 | `FieldOutcome` (`04_MB_typed_outcome_and_one_path.md`) | `bouts: int`; `report` is per bout; a duration line is `bouts x bout_minutes` |
 
 ## Gate (execution artifacts)
@@ -136,9 +144,20 @@ deployment:
 6. A delegated six-bout field and the same field replayed from its recorded interventions: equal in every
    part. The report's duration reads between 30 and 180 minutes.
 
+**Tests (W3-1).** Gate 1: `tests/valoria/test_field_golden_pins.py`; gates 2–4:
+`tests/valoria/test_mass_battle_ammo.py::test_bows_shoot_before_contact`, `::test_javelin_range_is_six`,
+`::test_a_body_in_contact_does_not_volley`; gates 5–6:
+`engine/season/tests/test_mass_battle_module.py::test_max_bouts_lowers_the_drawn_share`,
+`::test_a_bout_1_decision_equals_the_one_bout_run`, `::test_six_bout_replay_from_interventions_is_equal`,
+`::test_the_wrapper_calls_the_entry_once`. **Hash movers:** each flip (`range`, `opening_rows: auto`,
+`max_bouts: 6`) its own commit, every army field. **Lands:** an IN-lane implementation session under
+`/methodology-execute` with MB review; sections 1–2 `sonnet`, section 3 `sonnet` with the drawn-share
+reading `haiku` read by `opus`.
+
 ## Falsifier
 
-A second battle loop anywhere under `modules/`; a bout whose input carries anything but troops, stamina and
+A second battle loop anywhere under `modules/` beyond the bout loop inside `resolve_field`; a loop or carried
+state on the wrapper; a bout whose input carries anything but troops, stamina and
 morale; a resolver constant that reads `scale`; shooting through a melee by the body being fought.
 
 ## NERS (definitions `CLAUDE.md` §0.06; E last)
@@ -151,7 +170,7 @@ morale; a resolver constant that reads `scale`; shooting through a melee by the 
   zone; complete at the extreme of one bout (today).
 - **S.** One entry called several times; pauses at a boundary that already exists; the same methodology as a
   duel's rounds.
-- **E, against that.** Five numbers, one rule for the approach, one loop in the wrapper.
+- **E, against that.** Five numbers, one rule for the opening distance, one loop inside the entry.
 
 ## Cost class
 

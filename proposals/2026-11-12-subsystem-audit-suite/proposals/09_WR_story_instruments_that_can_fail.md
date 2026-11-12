@@ -2,7 +2,12 @@
 
 Folded: 2026-11-12 by `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md` (F-30-08). Nothing here is deleted. This file's `edge_null` shows that a chain's links are not coincidence of count; it cannot show that the first act made the second likelier. `30_WR_E_cascade_chains_and_the_census.md` §2 adds the third control, the **fork lift**: one built world forked under several draw seeds before an event that is itself a draw, comparing what follows where it occurred and where it did not (`fork_lift`, on `storybar.fork` and `draw_seed_arm`). It also adds two arms to edit 1's roster (`entrenched`, and `custom_off` / `custom_on`) and the `--null-scenes` reading. Edit 3's shape line prints per strand its state and subject once `30_WR_C` commit 2 lands. Edit 5's `why` gains `era`, `story` and `left` (`30_GO_F`).
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 (A-15 rules natural death on, superseding ED-IN-0317's deferral): edit 1's caveat is deleted and the `bodies` and `all` arms kept; 7b-12 applied after checking it at the tree (`hole_register.yaml` H-208's `sweep:` reads "age_step 0.01 (a test arm, not a chosen value)", so the `bodies` arm is that value, read from the row); C3-K7 (serial order on `harness/storybar.py`); tier and batch added (R3 7b-0; U3 B36).
+
 ## Status: PROPOSED
+
+Lands in batch: B36 (WR story instruments), first in U3 §1 item 36. Edits `harness/storybar.py` after `16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md` (B02), before `09_WR_B_readings_of_closure_and_tension.md` (C3-K7: one commit per proposal, never concurrently).
+Depends on: nothing proposed beyond the storybar order; H-208's `sweep:` row gains `illness_rate 0.05` in the same commit as edit 1 (below).
 
 Carries findings F-WR-01 (edit 4), F-WR-03 (edits 1 to 3) and the reason-trail need of audit §5.5
 (edit 5) of `audits/09_WR_audit.md`. Evidence ids (E-nn) are that file's §12.
@@ -64,11 +69,15 @@ already owns (`_resolve_arm`, `w.fixtures.sweep`), so the story bar holds no sec
 ARMS = {
     "off":      {},
     "weather":  {"season_factor_draw": ((0.5, 1.0, 2.0),) * 4},      # H-26's swept arm
-    "bodies":   {"illness_rate": <H-208's test arm>},                 # read from the row, not typed here
+    "bodies":   {"age_step": 0.01},                                   # H-208's own test arm (its `sweep:`)
     "lattice":  {"lattice_coupling": 250},                            # H-235's swept arm
-    "all":      <the union of the three>,
+    "all":      {**weather, **bodies, **lattice},                     # the union of the three
 }
 ```
+
+`{"illness_rate": 0.05}` joins H-208's `sweep:` list in the same commit as "illness_rate 0.05 (a test arm;
+the value `09_WR_world_motion.md` edit 4 and the WR addendum read)", so an illness-only arm is a member of
+the row's own sweep before any instrument reads it.
 
 `drive()` applies the arm with `w.fixtures.get(name)` then `w.fixtures.sweep(name, value)` on the freshly
 built world before the chooser is made (the two lines `harness/arms.py:205-207` already uses). The module
@@ -77,9 +86,8 @@ the control and must still read EQUAL.
 
 Typed interface: unchanged. `drive(seed, seasons, arm, cap=None, …) -> (world, driver, bounds)`.
 
-⚠ `illness_rate` and `age_step` are deferred by ruling (ED-IN-0317) **as shipped values**. An instrument
-arm that sweeps a fixture on a copy of the world ships nothing; H-208's own row lists test arms. If Jordan
-reads the deferral as covering instrument arms too, drop `bodies` and `all`; the other two stand.
+(The earlier caveat on ED-IN-0317's deferral of `illness_rate` and `age_step` is deleted: A-15 rules
+natural death on, after the 46 ages are authored; the arms stand.)
 
 ### Edit 2 · the null (`engine/season/harness/storybar.py`, `chronicle.py`, `tests/test_cr69_chains.py`)
 
@@ -180,5 +188,5 @@ prints `EQUAL`; the third prints an edge null beside the chain ends; the fourth 
 
 ## Cost class
 
-Edit (1, 4, 5) and small build (2, 3). One session. No design decision is needed except the reading of
-ED-IN-0317 flagged at edit 1.
+Edit (1, 4, 5) and small build (2, 3). One session. No design decision is needed (A-15 answered the one
+that was flagged at edit 1). Tier: `sonnet` (harness; R3 7b-0).

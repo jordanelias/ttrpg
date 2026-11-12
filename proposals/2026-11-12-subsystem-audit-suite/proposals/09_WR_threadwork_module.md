@@ -4,7 +4,12 @@ Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-17) —
 
 Reconciled: 2026-11-12, U5d closure — folded **A-40**, **A-43**, **A-28** and **A-5**. Edits 1, 2 and 4 are superseded by `09_WR_B_threadwork_session_and_practitioner.md`; edit 3 (the tables as one typed file under `engine/engine_params/`) stands. The working's subject is a Site of a territory (A-40). `knot` is the Thread lane's verb after the `tie` / `knot` split (A-28), so this module's verb list gains it and the requirement instrument's count moves. Every thread roll is the one sampler's (A-5). What zero Coherence does is `U5d_WR_zero_coherence_unknowable.md` (A-43): continuity kept, the person unreadable to others.
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 / §1 and C3 §9 (the superseded text of edits 1, 2 and 4 is deleted, not left beside its replacement). Corrected at the documents: R3 asked to delete edits 1, 2 and 4 whole, but the successor keeps two parts of them by name ("the first lane's `Practitioner` stands unchanged"; "the first lane's move stands"), so those two parts are kept and only what the successor replaces is deleted (`WorkingInput`/`WorkingOutcome`, the single composition row, the scenario case); edit 2's sentence on `threadcut.py`, `co_movement.py`, `collective.py` and `opposing.py` now follows the U5a head. Edit 3 gains `knot` (A-28, the head). The gate and the falsifier are narrowed to what this file still lands; tier and batch added (R3 7b-0; U3 B03).
+
 ## Status: PROPOSED
+
+Lands in batch: B03 (hygiene, hash EQUAL) for edit 3, last in U3 §1 item 4; the kept move of edit 2 lands with `09_WR_B_threadwork_session_and_practitioner.md` (B35).
+Depends on: `17_CENSUS_C1B_01_deletions.md` D3 (B03) for the move; nothing proposed for edit 3.
 
 Carries finding F-WR-05 of `audits/09_WR_audit.md`, its §9 (playable standalone and integrated), its §14
 (capability authoring surface, the threadwork rows) and §6 resolutions R-08 and R-09. Evidence ids (E-nn)
@@ -58,42 +63,30 @@ class Practitioner(NamedTuple):       # one person, as a working reads him: no i
     displacement: int
     resilience: int                   # R-14's term; 0 until its slot is ruled
 
-class WorkingInput(NamedTuple):
-    operation: str                    # a `rosters.yaml: thread_operations` member (edit 3)
-    actor: Practitioner
-    depth: str; breadth: str; distance: str      # the Three-Axis Ob's keys
-    target_kind: str                  # "site" | "person" | "self"
-    in_equilibrium: bool              # CP-T07-05's read, projected by the host
-    draw: object                      # the keyed draw the host mints (`ids.draw_factory`), never an rng of the module's
-
-class WorkingOutcome(NamedTuple):
-    degree: str                       # the shared degree ladder's band
-    coherence_delta: int              # what the actor's displacement moves by (0 for a Mending, ED-871)
-    resting_point_delta: int          # own-configuration Mending only
-    strain: int                       # what the target's fabric loses; 0 until H-236's source is ruled
-    observed: tuple                   # what a witness would read (CP-T07-08's breach)
 ```
+
+`WorkingInput` and `WorkingOutcome` are **not** defined here: they are `09_WR_B_threadwork_session_and_practitioner.md`
+edit 1's (the session's two integers, the typed refusal, `draws: tuple`). The `Practitioner` above stands
+as that file uses it.
 
 ### Edit 2 · the entries (`modules/threadwork/`, moved from `systems/threadwork/sim/`)
 
-`modules/threadwork/working.py::work(inp: WorkingInput) -> WorkingOutcome` is `_resolve_operation` with its
-three side effects removed: no `apply_coherence_delta` (the delta is returned), no `world` argument, no
-module store. `coherence.py` keeps its pure arithmetic (`_displacement_band`, the elastic and plastic
-steps) as functions over `(resting_point, displacement)`; `_practitioner_state`, `_store`, `reset_all` and
-their siblings in `threadcut.py` and `co_movement.py` are deleted. `collective.py` and `opposing.py` take
-`tuple[Practitioner, ...]`. `rendering.py` (already struck, "No entry point") is deleted with a `FORK:` row.
+The move (kept: `09_WR_B_threadwork_session_and_practitioner.md` edit 2 says "the first lane's move
+stands"): `modules/threadwork/working.py::work(inp: WorkingInput) -> WorkingOutcome` is
+`_resolve_operation` with its three side effects removed: no `apply_coherence_delta` (the delta is
+returned), no `world` argument, no module store. `coherence.py` keeps its pure arithmetic
+(`_displacement_band`, the elastic and plastic steps) as functions over `(resting_point, displacement)`;
+`_practitioner_state`, `_store` and `reset_all` are deleted; `threadcut.py` and `co_movement.py` are
+deleted whole before the move (the U5a head: `17_CENSUS_C1B_01_deletions.md` D3); `collective.py` and
+`opposing.py` move as inputs to `work` through `WorkingInput.helpers` and `WorkingInput.opposed_by` (the
+U5a head, `17_CENSUS_C1B_02_wires.md` W-3). `rendering.py` (already struck, "No entry point") is deleted
+with a `FORK:` row.
 
-`references/module_contracts.yaml`, `composition_roles:` gains
+(Wave 3: the single composition row this edit declared, `threadwork.work` with no declaration of where it
+is checked, is deleted here, superseded by `09_WR_B_threadwork_session_and_practitioner.md` edit 2's three
+entries, each declared where its kind is checked.)
 
-```yaml
-  threadwork.work:
-    module: threadwork
-    entry: step_call          # `fieldwork.find`'s kind: the host calls it inside RESOLVE's fold
-    input: WorkingInput
-    output: WorkingOutcome
-```
-
-and the `threadwork` contract's `sim_module:` re-points to `modules/threadwork/working.py`;
+The `threadwork` contract's `sim_module:` re-points to `modules/threadwork/working.py`;
 `registry_system: "threadwork"   # Key Type Registry vocabulary` is deleted (the Key substrate is retired,
 ED-IN-0232). `rosters.yaml: modules.threadwork.home` becomes `modules/threadwork/`.
 
@@ -109,21 +102,15 @@ thread-sensitivity gates (`DEPTH_TS_MINIMUM`, `LEAP_OB_TS_LOW/HIGH`), the cost t
 (`COHERENCE_COST_BY_SCALE`) and three magnitudes tagged invented. They move to one typed file under
 `engine/engine_params/` behind the existing exporter's `--check` (`tools/export_engine_params.py`), the
 shape combat's parameters already have, and the module reads the loaded form. The operation roster
-(`leap, weave, pull, past_pull, lock, dissolve, mend`) becomes `rosters.yaml: thread_operations`, read by
+(`leap, weave, pull, past_pull, lock, dissolve, mend`, and `knot` once the `tie`/`knot` split lands, A-28)
+becomes `rosters.yaml: thread_operations`, read by
 the verb table's thread rows (CP-T07-03, -04, -11) and by the loader, so a row naming an operation the
 module does not have is refused at import.
 
-### Edit 4 · the standalone scenario (`engine/season/harness/exercises.py`'s overlay, one case)
+### Edit 4 · deleted (wave 3)
 
-No new harness. A threadwork exercise is a hand-built world of three rungs (a settlement, a hearth, one
-Site below its floor), two persons (a practitioner with `thread_sensitivity` at the gate and a witness),
-run through `SeasonDriver.season` with `play_surface.dispatching_chooser` binding the practitioner to a
-callback. The choice surface is the thread rows B10-15 lands (`weave`, `lock`, `mend`, `ward`,
-`thread_read`); the stakes are the Site's condition against its floor and the practitioner's Coherence
-band; the end condition is the Site above its floor, or the practitioner past his human band (CP-T07-07's
-permanent set). Outcome legibility is the witness's ledger: what he holds after each working. Until
-B10-15 lands the rows, this scenario cannot be played, and the proposal says so rather than supplying a
-second chooser.
+Superseded whole by `09_WR_B_threadwork_session_and_practitioner.md` edit 4 (the Warden's season), which
+replaces this case and its end conditions; nothing of it is kept here.
 
 ## The gate that shows it worked
 
@@ -135,15 +122,17 @@ python tools/export_engine_params.py --check
 PYTHONHASHSEED=0 python -m engine.season.harness.aperture 1 0                 # realm hashes unchanged
 ```
 
-Passes when the four oracle files are green on the same expected numbers, the import artifact shows no
-`systems/threadwork` path under any engine module, the round-trip is clean, and `build_realm(0)` and the
-one-season pin are EQUAL.
+Passes when (edit 3, B03) the round-trip is clean, the loader refuses a thread row naming an operation the
+roster lacks, the four oracle files are green on the same expected numbers reading the loaded tables, and
+`build_realm(0)` and the one-season pin are EQUAL; and (the kept move, B35, under the successor's gate)
+the import artifact shows no `systems/threadwork` path under any engine module.
 
 ## The falsifier
 
-Two calls of `work` with equal `WorkingInput` returning different outcomes (held state survived the move);
-a `WorkingInput` whose `Practitioner` differs from another only in `resting_point` returning the same
-`coherence_delta` band crossing (the state is not being read from the input).
+Edit 3: a table value read from `operations.py` after the move to `engine/engine_params/` (a second copy
+survived), or a thread row naming an unrostered operation that loads. The move: two calls of `work` with
+equal input returning different outcomes (held state survived the move); the successor's falsifier covers
+the session.
 
 ## NERS reading
 
@@ -160,5 +149,4 @@ a `WorkingInput` whose `Practitioner` differs from another only in `resting_poin
 
 ## Cost class
 
-Small build (edits 1, 2), edit plus exporter row (edit 3), design-first on B10-15's rows before edit 4
-can be played.
+Edit plus exporter row (edit 3); the kept move is the successor's small build. Tier: `sonnet` (R3 7b-0).

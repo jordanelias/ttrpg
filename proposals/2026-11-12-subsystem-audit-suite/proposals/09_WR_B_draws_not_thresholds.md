@@ -4,7 +4,12 @@ Folded: 2026-11-12 by `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md`. Nothing h
 
 Reconciled: 2026-11-12, U5d closure — folded **A-54**, **A-47** and **A-57 / A-58**. A-54 confirms this file's one shape (eligibility by state, then a keyed draw on the shared ladder) for the world's motion; `16_PESSIMIST_GAME_the_world_draws.md`'s table form is withdrawn in its favour. A-47 agrees with edit 3 (an ending's selector is eligibility; the crossing decides nothing). The owed line for FA / MB ("`seize` on an occupation licence … must resolve by a draw against the place's resistance") stands as written: the taking is an act the victor forms after the field (A-66), and its draw is `seize`'s own row's (`14_VERBS_MATERIAL_D_paper.md` §6); the field's end state decides only who stands on the ground.
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 (A-5, A-6, A-7): every pool and obstacle below that is written as a count or "a fixture row" is a `[CALIBRATE]` row under the capability architecture's form (pool from the roller's score plus base, floor five; obstacle from the task's difficulty and named terms), set by the one joint calibration of A-5/A-6/A-7/A-26/A-31 (`OWED_TO_UNIFICATION.md` §B last bullet), not here; C3-R1 (edit 4 relies on a graded row's writes keyed by degree, which loads only after `18_DETERMINISM_task_draw_for_uncontested_verbs.md` item 4's loader edit, B07); edit 2 names the census file's per-head scaling as its Partial band's magnitude (the shared owner, R3 §2's census row); tier and batch split (R3 7b-0; U3 B12 for edits 1–3, B38 for edit 4, cut edge §4.1 row 44).
+
 ## Status: PROPOSED
+
+Lands in batch: edits 1–3 in B12 (world motion and ground), right after `20_NARRATIVE_E` edit 1 (U3 §1 item 13); edit 4 in B38 with `30_WR_A_the_era_is_a_named_period.md`.
+Depends on: `18_DETERMINISM_task_draw_for_uncontested_verbs.md` item 4 (B07, the loader edit, for edit 4, C3-R1); `09_WR_strand_conclusion.md` (B12, edits 1–2 as eligibility, for edit 4); `09_WR_world_motion.md` (B12).
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-20) — `_seize_rung` takes no draw today (opened); the FA/MB item's premise is confirmed.
 
@@ -60,8 +65,8 @@ keyed by `(seed, tick, subject, purpose)` and advances no ordinal (`season_facto
 ### Edit 1 · wear is drawn (`loop/matter.py`, `data/fixtures.py`; WR's)
 
 Per Site per season, one keyed draw `draw_factory(world_seed, tick)(site.id, "wear")`; obstacle from the
-kind's wear row plus the lattice pull (strain makes bad seasons likelier, not certain), pool a fixture row.
-Bands: Overwhelming 0, Success half the rate, Partial the rate, Failure twice the rate. A wear-0 kind draws
+kind's wear row plus the lattice pull (strain makes bad seasons likelier, not certain), pool a fixture row
+`[CALIBRATE: the wear pool and the obstacle's per-point size, joint calibration, OWED §B]`. Bands: Overwhelming 0, Success half the rate, Partial the rate, Failure twice the rate. A wear-0 kind draws
 nothing (eligibility: nothing wears it). The crossing stays a comparison on the drawn condition: the
 outcome was the draw. Fixture `wear_draw: False` (control) is today's exact rate; `True` is the arm.
 Recoverable: `restore` raises condition and the next season draws again. `[ASSUMPTION; medium; Jordan to
@@ -71,8 +76,11 @@ obstacle on its neighbours' wear draws, so a front advances unevenly and can sta
 ### Edit 2 · the hungry body is drawn (listed for SE, `modules/settlements/subsist`; the shape stated)
 
 On a short draw, a keyed draw per cohort with obstacle from the shortfall's depth (how far the larder fell
-short of want) and pool from the cohort's own body: Overwhelming 0, Success half `body_step`, Partial
-`body_step`, Failure twice. Control: exactly `body_step`. H-125's own question ("is starvation a season or a
+short of want) and pool from the cohort's own body `[CALIBRATE: the body-to-pool and depth-to-obstacle
+conversions, joint calibration, OWED §B]`: Overwhelming 0, Success half `body_step`, Partial `body_step`,
+Failure twice. Control: exactly `body_step`. Under `07_SE_population_census.md`'s `hunger_loss:
+per_head` the Partial band's magnitude is that file's `body_step × units // weight` (per head), and the
+other bands scale from it; this edit owns the draw, that file the magnitude. H-125's own question ("is starvation a season or a
 campaign") then has a spread for an answer, not a single number.
 
 ### Edit 3 · endings are reached by draws (`queries/world_q.py::_ending_edges`; WR's, beside the first lane's edit 3)
@@ -81,7 +89,7 @@ Every `endings` row: its selector is **eligibility** (the holds or Sites stand a
 keyed draw `draw_factory(world_seed, tick)("realm", f"ending:{name}")`. For a holds row: pool from the
 seasons the condition has stood (computed from the antecedent Events' ticks, no stored counter) and the
 share of holds opened by an act; obstacle a fixture row plus the holds the condition reads that no act opened (inherited at build,
-so conquest counts for more than inheritance). The
+so conquest counts for more than inheritance) `[CALIBRATE: both, joint calibration, OWED §B]`. The
 draw is the condition's: Success or Overwhelming reaches the ending; Partial reports `near`; Failure does
 not reach it this season. For a `site_band` row, as
 `09_WR_B_weather_with_memory_and_the_year.md` edit 4. A reported ending still "emits no Event, halts
@@ -98,7 +106,10 @@ reopen); at Failure the move is not terminal. A terminal-eligible kind whose Eve
 (its verb resolves without a roll) concludes nothing, and is listed for the verb's owner: the verb must
 roll (the standing rule), not be read as a conclusion. `Move.terminal` becomes
 `bool(term(e, a)) and not opening and e.degree in CONCLUDING_DEGREES`, with
-`CONCLUDING_DEGREES = ("Success", "Overwhelming")` declared once beside `CONCLUDING_KINDS`.
+`CONCLUDING_DEGREES = ("Success", "Overwhelming")` declared once beside `CONCLUDING_KINDS`. Depends on
+18-A's loader edit (B07): a terminal-eligible verb that becomes a graded row carries writes keyed by
+degree only once `data/verbs.py`'s two refusals (`:848-851`, `:872-876`) are edited; the row shape is
+(a) or (b) per VRES §1 (C3-R1).
 
 ### Listed for other lanes (not edited here)
 
@@ -148,3 +159,4 @@ threshold); any outcome reached while ineligible (the eligibility leaked); a con
 ## Cost class
 
 Edit 1: small build (one draw, one fixture). Edit 2: small build, SE's. Edit 3: small build. Edit 4: edit.
+Tier: `sonnet` (R3 7b-0).

@@ -2,7 +2,12 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-57 / A-58** and the pessimist's constraint. R-SE-34 ("an army whose holder stands on land his faction does not hold eats from his seat's treasury") is read once a season, not per field (R-PES-SE-14). A victor may occupy without seizing (A-66): while he does, his army stands on land his faction does not hold, so R-SE-34's standing ration and R-SE-36 ("nothing, by rule … living off the occupied place is a `requisition`") apply to him for as long as the occupation lasts; they stop applying only if he seizes the place (`U5d_FA_land_and_seats_pass_on_a_won_march.md`), after which its own ladder feeds his men. A drawn aggressor's army is back at its station (A-67) and eats there.
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 (A-69, A-78, with C3-L11): `under_arms` reads the army Record's strength after its written losses, and the recoverable share is computed when read by MB's reader (C3-L11), never written back to `Person.weight`; R3 §1 (e) Option A (MATTER reads through a `world_q` Query, precedent named); R3 §1 (a) corrected at the tree: the entry kind `query` is a composition row's `entry:` value in `references/module_contracts.yaml` (precedents `settlements.larder_draw`, `settlements.provision`), not a `rosters.yaml: module_kinds` member (that roster lists module types); tier and batch (R3 7b-0; U3 B22).
+
 ## Status: PROPOSED
+
+Lands in batch: B22 (MB armies), after `27_MB_E_what_an_army_carries_back.md` (C3-L11) and with `U5b_MB_residue`'s realm item (U3 §1 item 22; cut edge §4.1 row 62).
+Depends on: `07_SE_ground_and_granaries.md` (B12, `endowment_mode`, `site_endowment`); `27_MB_E_what_an_army_carries_back.md` (B22, the loss ledger read by (a)); CP-T08-01 (plan position, for (c) only; MISSING until STAGES.md step 5 carries it).
 
 Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-09; GC-4) — the precedent paragraph's "Bannerlord's wages are memory-grade" corrected: they are page-read at `research/game_precedent_suite/tutorials/T02_warband.md:17`. No edit of the proposal changed.
 
@@ -92,7 +97,14 @@ Records' `subject_matter` in id order; output `((cohort id, weight units), ...)`
 has under arms rounded *up* to whole weight units by the module's own `TROOPS_PER_WEIGHT`. The module
 owns its record shape and its constant; the host learns neither. `[UNVERIFIED: the Record's per-cohort
 field; `world_q.other_army_records` and `recruit_limit`'s `raised` argument show the data is held, the
-field's name was not read.]` Registered as a composition row, kind `query`.
+field's name was not read.]` The strength it reads is the Record's present strength after the losses a
+field wrote (A-69: "losses are written … in the row/ledger that already holds a unit's strength"), with the
+recoverable share (injured, fled and regrouped; A-78) added as MB's reader computes it when read (C3-L11,
+`27_MB_E_what_an_army_carries_back.md`); a recovered man returns to the Record, never to `Person.weight`
+(J-C-2). Registered as a composition row in `references/module_contracts.yaml` with `entry: query` (the
+`settlements.larder_draw` and `settlements.provision` rows are the precedent, `module_contracts.yaml:36`,
+`:95-98`), and declared in `world_q.QUERY_ENTRIES` so `manifest/registrar.py::require_entries` refuses its
+absence.
 
 **(b) `engine/season/queries/world_q.py` — two readers.**
 
@@ -120,7 +132,11 @@ weight is `person.weight − away.get(pid, (0, None))[0]`. The module (`larder_d
 units, treasury))` (the existing entry, by role string) and debit `p.consumed` from the treasury through
 the owner of debits, emitting `stores.changed`; where `p.troops < Σ weight units` the write carries a
 `shortfall:<kind>` Observation exactly as a drained larder's does. Nothing else is written: an unfed army
-is bounded at its next field by the same `provision` call, which is already built.
+is bounded at its next field by the same `provision` call, which is already built. MATTER reads the army
+Records and the march only through the `world_q.away` Query (b), as it already reads `body_hazard`
+(`world_q.py:1248`) and `residence_of` (`:1716`); `04` §A.2's `may read` column for `loop/matter` is a
+summary and this is that precedent (R3 §1 (e), Option A). The alternative (the debit at RESOLVE on the act
+that keeps the army out) is not taken.
 
 **(f) `engine/season/rosters.yaml`** — beside the first lane's `site_endowment`, one table read by the
 same loader:
@@ -190,4 +206,4 @@ to one entry on one stock, and the field-time call already nets what was eaten.
 ## 8. Cost class
 
 Small build, split across lanes: (a) is MB's edit; (c) rides CP-T08-01; (f) rides the endowment build.
-Hash EQUAL at every shipped arm; each flip a declared mover in its own commit.
+Hash EQUAL at every shipped arm; each flip a declared mover in its own commit. Tier: `sonnet` (R3 7b-0).

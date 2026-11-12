@@ -1,6 +1,10 @@
 # 08 · FI · 08 — Knots in the season: a directed edge, strain as a reading, and the order that makes a tie worth building
 
-## Status: PROPOSED (§1 and §2 are edits; §3 is sequencing; §4 is design-first)
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.5 row FI-08 (CONFORMS), §2 row A-28, §7, §7b-T; `unified/U1_GLOSSARY.md` *knot, tie*; `unified/U3_DEPENDENCY_ORDER.md` node B25). Jordan's A-28 splits `tie` and `knot` (the verb roster 67 → 68) and sends the **knot** to the Thread lane: §1 (witnessing through a knot one owns) and §4 (knot strain and rupture) are **handed to the WR threadwork lane** (`09_WR_threadwork_module.md`, `14_VERBS_SOCIAL2_D_tie.md`'s knot half) and are kept below as their evidence, not landed from this file; §2 (the oracle fails loudly) and §3 (the `tie` re-land) stay here, §3 coordinated with `14_VERBS_SOCIAL2_D_tie.md`'s split. Named tests, lands-it and tier added.
+
+**Lands in batch:** B25 (§2, §3; with `14_VERBS_SOCIAL2_D_tie.md`). **Depends on:** `08_FI_02_rumour-that-travels.md` (B11; its two-hop gate and `present_persons`). **Handed:** §1, §4 to the Thread lane (B35, `09_WR_threadwork_module.md`).
+
+## Status: PROPOSED (§2 is an edit; §3 is sequencing; §1 and §4 are handed to the Thread lane, A-28)
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-29) — the knot index's pair order opened (`queries/cache.py:95`, owner first); §1's line stands as written.
 
@@ -39,7 +43,8 @@ bond it is two edges). §2 touches only the unplugged oracle. §3 and §4 change
 
 ## Edits and decisions
 
-**1. A person witnesses through a knot he owns (R-48).** `epistemic.py::_ch_witness_key`'s last line reads
+**1. A person witnesses through a knot he owns (R-48).** *Handed to the Thread lane (A-28); kept as evidence,
+not landed from this file.* `epistemic.py::_ch_witness_key`'s last line reads
 `(pid, anchor) in knots` (reading the index pair as owner first `[GROUNDED, 25 G-29: opened. The pair is
 `(t.subject, t.object)`, `queries/cache.py:95`: owner first, so `(pid, anchor)` is the line]`).
 The code is the defect and Layer 1 is not edited to match it (`CLAUDE.md` §0.05).
@@ -56,8 +61,9 @@ decline the register names as the untried lever is in place, so a tie forms only
 own ledger presents as a person he has seen since he last moved (`08_FI_02` edit 5's `present_persons`
 reader serves both). Until then the row stays declined, as it is.
 
-**4. Strain is a reading, and a rupture is an act (R-34; design-first).** The form is decided; the kinds
-and the threshold are a design pass.
+**4. Strain is a reading, and a rupture is an act (R-34; design-first).** *Handed to the Thread lane (A-28):
+a knot's strain is the Thread lane's; kept as evidence.* The form is decided; the kinds and the threshold are
+a design pass.
 - `queries/person_q.py::knot_strain(p, partner, since) -> int`: a count, over `p`'s **own** ledger since the
   bond opened, of claims naming the partner whose kind is a member of a new roster, `knot_strain_kinds`.
   Person-side, World-free, stored nowhere. Two partners can read the same bond differently, which is ruling
@@ -86,6 +92,10 @@ and the threshold are a design pass.
 - §4 (after its design pass): two partners holding different claims of one breach read different strain;
   the one over the threshold forms `release` on the bond and the other does not.
 
+Named tests (new, `engine/season/tests/test_knots_season_form.py`): `test_the_oracle_raises_on_a_failed_lateral_import`
+(§2; with the existing `engine/tests/test_knots_ed912.py` green); `test_tied_is_called_and_tie_gain_arms_hash_differently`
+(§3, at re-land). §1's and §4's tests go with them to the Thread lane.
+
 ## Falsifiers
 
 - §1: if any shipped builder plants a one-sided `knot` and a test relied on the partner witnessing through
@@ -106,4 +116,8 @@ build re-landed in the right order, against a relation the game currently names 
 ## Cost class
 
 §1, §2: edit. §3: small build (re-land), after `08_FI_02`. §4: design-first, then small build. Lanes: FI;
-CHAR (`teller_weight`, the decline); T07 (`thread_read`, the use-sites).
+CHAR (`teller_weight`, the decline); T07 (`thread_read`, the use-sites); §1 and §4 the Thread lane's (A-28).
+
+**Lands it and tier.** §2 and §3 in the B25 batch with `14_VERBS_SOCIAL2_D_tie.md`, an FI `valoria-author`
+session on `sonnet` (`high`), closed by B25's `methodology-close` once. **Hash movers.** §3's re-land
+(declared); §2 none.

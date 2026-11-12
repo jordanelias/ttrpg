@@ -1,11 +1,19 @@
 # PC — a new engagement opens with the weapon as issued: the half-sword form does not cross the round boundary
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.1 and 7b-4 (`DuelState.form` is kept, not made unneeded: `03_PC_loadout_and_carry.md` item 5 uses it as the key of the record in hand; after this file the field carries the selected weapon, not a grip), test 9 (the scratch probe `probe_round_state.py` is not in the tree: per `WAVE3_REWRITE_ORDER.md` rule 4 the gate first writes it as a workbench file with its expected output, which overrides R1 7b-4's "commit body only"; tests, lands-it, tier; `Depends on:` / `Lands in batch:` from `U3_DEPENDENCY_ORDER.md`). The S line of the NERS reading is corrected to match.
+
+**Depends on:** nothing (U3 node row: no dependency).
+**Lands in batch:** B14 (`B14-pc-outcome`, PC), after `03_PC_typed_outcome_one_door.md` and `03_PC_weapon_records_in_the_export.md`, before PB (B16).
+
 ## Status: PROPOSED
 
 Lane: PC. Source: `audits/03_PC_audit_addendum_B.md` F-PC-16. Read at `2c24c81`. Reference only
 (CLAUDE.md §0.05); not ratified by being written. Independent of the round entry
-(`03_PC_duel_round_and_approach_B.md`); if it lands first, that proposal's `DuelState.form` field is
-not needed.
+(`03_PC_duel_round_and_approach_B.md`) and lands before it (B14). *(Reconciled, W3-1, 7b-4:)*
+`DuelState.form` is kept: `03_PC_loadout_and_carry.md` item 5 uses it as the key of the record in hand
+(the primary or the secondary). This proposal resets the half-sword **form** at the engagement boundary
+(`c.weapon = S.base_form(c)`), so after it `DuelState.form` carries only the *selected weapon* across
+rounds, not a grip.
 
 ## What it changes in `engine/season/` at runtime
 
@@ -51,7 +59,11 @@ and its stated reason covers the form word for word).
 
 ## Gate (execution artifacts)
 
-- `probe_round_state.py` re-run: 0 fighter-starts enter an engagement in a half-sword form.
+- *(W3-1, test 9:)* the probe is first written into the tree as
+  `systems/combat/combat_engine_v1/workbench/round_state_probe.py` (from the addendum's scratch
+  `probe_round_state.py`: for N fights over the four matchups, count fighter-starts whose
+  `engagement_start` event shows a `_halfsword` record). Expected output before the edit: 1,142 of 3,318
+  at 800 fights (the addendum's reading); after: **0** fighter-starts enter an engagement in a half-sword form.
 - Fights between weapons that never half-sword, and every fight off rigid armour: byte-identical at
   the same seeds (the season's hash EQUAL follows).
 - `python systems/combat/combat_engine_v1/workbench/armour_participation.py --drift` printed in the
@@ -71,11 +83,23 @@ fighter's weapon; a fight between two arming swords whose trace differs from tod
   carry. Laterally it matters only to four weapons against rigid armour, and the proposal says so.
 - R: completeness at an extreme: the estoc, the roster's most decisive plate weapon, currently opens
   nine engagements in ten at open measure while still gripped for the close.
-- S: one reset for all per-engagement geometry; the round's carried state shrinks to the four
-  quantities that are a fighter's condition.
+- S: one reset for all per-engagement geometry; the round's carried state is the four quantities that
+  are a fighter's condition plus the selected weapon (`form`, kept for the switch; 7b-4), never a grip.
 - E, last: two lines and one regenerated reference table.
 
 ## Cost class
 
 Edit, plus one deliberate re-record of `workbench/data/combat_armour_reference.json` and of any pin
 that fights a half-swording weapon in rigid armour.
+
+## Implementation (test 9, W3-1)
+
+- **Order.** (1) write `workbench/round_state_probe.py` and record its pre-edit reading; (2) `base_form`
+  in `combat_systems.py`; (3) the reset line in `wrapper.py`'s open-measure loop; (4) re-run the probe,
+  `armour_participation.py --drift`, then `--update` once.
+- **Tests.** `tests/valoria/test_combat_invariants.py` (existing, must pass);
+  `engine/season/tests/test_combat_module.py::test_no_engagement_opens_in_a_halfsword_form` (a longsword
+  against plate at three seeds; assert every `engagement_start` weapon key is a base key; `assert checked >= 1`).
+- **Hash movers:** the armour reference and any pin that fights a half-swording weapon in rigid armour;
+  season hash EQUAL (every person fights with an arming sword in light armour).
+- **Lands:** an IN-lane implementation session under `/methodology-execute` with PC review; `sonnet`.

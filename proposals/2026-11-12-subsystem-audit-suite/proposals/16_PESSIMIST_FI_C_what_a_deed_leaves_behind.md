@@ -2,7 +2,18 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-20) — edit 4 lands as one change to `questions_for` with `08_FI_01_claim-sourced-referents.md` edits 2 to 5 (`U5c_FI_residue.md` §1); one function, one commit, one gate.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS; edit 4 moves toward `04` PART D
+2 and 42), §7/§7b (edit 2 moved off the v11 workplan line onto the v12 card, per STAGES.md: this session's content wins
+over v11; tests; tier); U3 C3-K6 (this file adds the three `covert_kinds` members in B11; `21_PROCEDURAL_C` adds the
+per-kind keys `leaves`, `fade`, `channels` to every member, these three included, in B39), B11, §6.2; A-33 (news of a
+death travels by presence, trail and telling: this file is the trail); U1 glossary *rung* ("his own ladder" → "his own
+chain of seats"). Changed: edit 2's target, edit 4's wording, the gate's probe rows.
+
 ## Status: PROPOSED
+
+Lands in batch: **B11** (FI; IN for edit 4). Depends on: `08_FI_01_claim-sourced-referents.md` edits 2-5 (B11; edit 4 lands
+with them as one change to `questions_for`, C-20), `08_FI_02_rumour-that-travels.md` edit 5 (`present_persons`, B11), and
+CP-T06-04 (a v11 plan position, MISSING as code until v12 disposes it; only the gate's last row waits on it).
 
 Carries `audits/16_PESSIMIST_FI.md` F-PES-FI-01 (§2.4) and F-PES-FI-04 (§2.5). Extends two scheduled
 B10-14 cards (CP-T06-01, CP-T06-02) by data and by one sentence each; depends on `08_FI_02` edit 5
@@ -64,16 +75,17 @@ readings into an actor's ledger: `p4_detective.py`'s `(paper, exists:Record, 1)`
    that writes a place or an alias leaves a trail"*, so `site.damaged`, `rung.razed`, `cover.assumed`)
    and the place index (CP-T06-02: *"`surveil` finds the covert deeds done at the place it watches (the
    latest per kind and place only)"*). Neither card reaches a killing: it writes a Person, not a place.
-2. **CP-T06-01's definition** (`workplans/valoria_master_workplan_v11_part3.md:119`) gains the third
-   object: *"a deed that writes a place, an alias **or a person** leaves a trail"*; and **CP-T06-02's
-   place side is read by `examine` as well as `surveil`** (for the Site's rung), once F-FI-12's operand
-   repair lets `examine` form. No index beyond CP-T06-02's own.
+2. **The v12 card for CP-T06-01** (not the v11 line `workplans/valoria_master_workplan_v11_part3.md:119`,
+   which this session's content supersedes, STAGES.md) carries the third object: *"a deed that writes a
+   place, an alias **or a person** leaves a trail; `examine` reads the place side as `surveil` does"* (for
+   the Site's rung, once F-FI-12's operand repair lets `examine` form). No index beyond CP-T06-02's own.
+   This is a plan edit for the v12 author, not a code edit.
 3. **`engine/season/loop/witness.py::witness`**, at the event-kind deposit: for each change of the
    Event that ended an entity (the write-matrix field `<Kind>.exists`, set false), deposit
    `(entity, exists:<Kind>, 0)` to the same witness, same source and confidence. Keyed on the field
    written, never on an event kind or a verb.
 4. **`engine/season/queries/world_q.py::questions_for`, the claim loop.** Clause 1 keeps `reach(w, p)`
-   for Rungs and for what he holds (a man knows his own ladder and lands: `08_FI_01`'s R-03). For a
+   for Rungs and for what he holds (a man knows his own chain of seats and lands: `08_FI_01`'s R-03). For a
    Person subject, clauses 1 and 2 are replaced by a person-side test: the subject is in
    `person_q.present_persons(p.ledger, p.id)` (`08_FI_02` edit 5's reader: those he has seen since he
    last moved) or is named by a claim that landed since `floor`, and his newest `exists:Person` claim on
@@ -83,7 +95,17 @@ readings into an actor's ledger: `p4_detective.py`'s `(paper, exists:Record, 1)`
 
 ## Gate (execution artifact)
 
-| probe (unchanged scripts) | today | after |
+`p5_crime.py`, `p1_belief.py`, `p1c_exists.py`, `p1d_where.py`, `p4_detective.py` were lane scratch (not in the
+repository, U3 §6.2). Written first as NEW `engine/season/tests/test_deed_trail_at_place.py`:
+`test_surveil_at_the_place_of_a_killing_finds_the_deed_at_partial`, `test_bystander_holds_exists_person_zero`,
+`test_examine_finds_site_damaged`, `test_questions_for_does_not_read_place_of_for_a_person_subject` (the
+`p1d_where` pair: relocate a person with no Event, the subject's candidates are unchanged),
+`test_unevented_deletion_moves_no_candidate` (the `p1_belief` pair). Re-record
+`engine/season/tests/test_fi03_trail.py::test_the_realm_seed_twice_in_one_process_gives_one_hash_and_reaches_no_find`
+(`:793`, exists), said plainly in the commit. Command:
+`python -m pytest engine/season/tests/test_deed_trail_at_place.py engine/season/tests/test_fi03_trail.py -q`.
+
+| reading (the scratch scripts' cases, committed as the tests above) | today | after |
 |---|---|---|
 | `p5_crime.py` (a): visitor's `surveil` at the place, 40 acts | holds nothing of the King | at `Partial`: `(King, person.died)`, hand withheld; at `Success`: the killer named |
 | `p5_crime.py` (a), bystander arm | hold `person.died` | also hold `(King, exists:Person, 0)`; their candidates naming him decline by clause 4 |
@@ -120,4 +142,8 @@ makes it a draw); edit 4 removes a certainty (the engine telling a man who is wh
 
 ## Cost class
 
-Edit (1, 3, 4); small build (2, inside CP-T06-01). Lanes FI; IN for edit 4 with `08_FI_01`.
+Edit (1, 3, 4); small build (2, inside CP-T06-01). Lanes FI; IN for edit 4 with `08_FI_01`. Tier: `opus` for
+edit 4 (the judgment: which readings stay world reads), `sonnet`, effort `high`, for edits 1 and 3. Hash movers
+declared: every seeded world (edit 3's deposits, edit 4's question set); one re-pin at B11's close. Lands it:
+B11, after FI_A and SC_E (C3-K1), before `18_DETERMINISM_notice_is_a_draw.md`; order 1 → 3 → 4 (with `08_FI_01`
+edits 2-5).

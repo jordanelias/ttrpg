@@ -2,6 +2,11 @@
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.1, §1.4, §1.5) — four changes. (1) The authoring home is decided: `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §1–§3 (definitions in `references/descriptor_registry.yaml`, uses in `rosters.yaml: tables.capability_uses`); Part A's slots are that surface's `fight` site, not a second scheme. (2) A-7, A-6: the `pool` slot is the **trained score** alone (dice by the one pool rule); talent is the `attr` family, applied by the module's own sigma; the opponent's obstacle keeps its value (A-31) (`U5b_PC_rulings_in_the_fight.md` §2). (3) Addendum R-PC-43: `technique` and `grab` are not exposed as `skill` slots until a sweep shows them outside the interval, and a skill's bound is its capability row's (`U5b_PC_residue.md` §1). (4) Pessimist R-9: Part B admits a kind only with its census row (`U5b_PC_residue.md` §3). A-11 stands: a capability supplies numbers and gates no act; the tradition's access table gates which technique rows compose, not whether a person may fight.
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §2 row A-71/A-79 (Part A: "at the fight's own rate (A-31)" deleted; one rate `opposition_rate`, one operand, `29_DICE_one_opposed_rule_form_and_tuning.md`), `U1_OWNERS_AND_VOCABULARY.md` D-U1-08 (the `pool` slot carries `scores` and `addends` raw; the pool is `sigma_leverage.pool_of`), `U1_GLOSSARY.md` *skill* (the slot family `skill` is renamed `axis`: the six combat axes are not U1 skills; the U5b line above keeps the old word as history), `R1_READ.md` §1.1 Part B (the `[UNVERIFIED]` on `rung_kinds` settled by `audits/25_GROUNDING_ENGINE.md` V-18 and re-read at the tree), Part D's pointer moved to PB; test 9 (tests, call sites, lands-it; `Depends on:` / `Lands in batch:` from `U3_DEPENDENCY_ORDER.md`). Content values stay `[ASSUMPTION; low; Jordan to correct]`. R1's flag on the tradition access table (a capability-shaped gate on which lever rows compose, not on an act) needs no rewrite here and is carried by `U1_CAPABILITY_AUTHORING_ARCHITECTURE.md`.
+
+**Depends on:** `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` batches U1-A / U1-B (the `fight` site rows and the two-input roll); `U5b_PC_residue.md` §3 (B14: the roster census that admits a kind); `U5b_PC_rulings_in_the_fight.md` §2 (B15: the record's raw roll numbers); CHAR attribute authoring for Part D (design-first there).
+**Lands in batch:** B18 (`B18-pc-content`, PC): Parts B–D after the census; Part A's slot tuples with the export in the same batch.
+
 ## Status: PROPOSED
 
 Lane: PC, with CHAR (who authors a person) and SE (stores as arms). Source: `audits/03_PC_audit.md`
@@ -39,8 +44,8 @@ tuples in the same form, exported in the typed export's `attributes` section:
 | slot family | members (as the engine reads them today) | read at | scale |
 |---|---|---|---|
 | `attr` | `strength, agi, end, att, spirit, focus` | `attributes.SPEC`, by `registry_key` | registry's 1 to 7 |
-| `pool` | `faculty` *(Reconciled, A-7:)* the party's **trained score** (training gives dice; never the larger of attribute and key). The opponent's obstacle is read from the defender's score at the fight's own rate (A-31) | `core.py:54-58`, `:102-124` | a real number; the pool is `max(pool_floor, score + pool_add)`, unrounded |
-| `skill` | `balance, parry, dodge, bind` *(Reconciled, R-PC-43: `technique` and `grab` measured inside the interval, 50.1% and 47.6% at +1, and are withheld from the slot family until a sweep shows otherwise)*; the engine's read sites for all six stand | `combat_systems.py:198`, `:345-362`, `:1060`; `contact.py:46` | additive σ bonus, 0 untrained |
+| `pool` | `scores`, `addends` *(Reconciled, A-7, D-U1-08:)* the party's **trained score** (training gives dice; never the larger of attribute and key) and his registered pool addends, carried raw beside `pool_add`, `pool_floor`, `opposition_rate`. The opponent's obstacle is `opposed_ob(the defender's trained score, opposition_rate)`, the one rule (`29_DICE_one_opposed_rule_form_and_tuning.md`, A-79) | `core.py:54-58`, `:102-124` | a real number; the pool is `sigma_leverage.pool_of(score, addends, pool_add, pool_floor)` = `max(pool_floor, score + addends + pool_add)`, unrounded |
+| `axis` (was `skill`; renamed, U1 glossary: these are combat axes, not U1 skills) | `balance, parry, dodge, bind` *(Reconciled, R-PC-43: `technique` and `grab` measured inside the interval, 50.1% and 47.6% at +1, and are withheld from the slot family until a sweep shows otherwise)*; the engine's read sites for all six stand | `combat_systems.py:198`, `:345-362`, `:1060`; `contact.py:46` | additive σ bonus, 0 untrained |
 | `lever` | `visual, precommit, tactile, tempo, balance, measure, leverage, counter_select, counter_success, anti_overcommit, edge_read, spine_press, edge_grab, choke_control, facing_regime` | `ability_primitives.py:188-218` and its callers | a factor (`*`) or a bonus (`+`) |
 | `temper` | `disp` (the aggression axis) | `combat_systems.py:190-193` | 1 to 7, 4 neutral |
 | `kit` | `weapon`, `armor` | `combatant.py:112` | a `weapons.py` key; an armour tier |
@@ -66,8 +71,10 @@ host-side composition, not module code; the module keeps `ability_factor`'s clam
   | `harness_plate` | armor | `heavy` | 3 |
 
 - `arms_at_build: kinds:` seeds a small count on the rung kinds that would hold them (a settlement's
-  armoury, a seat-holder's own holding). `[UNVERIFIED: the `rung_kinds` roster was not opened; the
-  loader refuses a key that is not a member, so a wrong name fails at import, not silently]`.
+  armoury, a seat-holder's own holding). The `rung_kinds` members are `person, hearth, community,
+  settlement, territory, province, duchy, realm` (`rosters.yaml:287-290`; `audits/25_GROUNDING_ENGINE.md`
+  V-18); the loader refuses a key that is not a member (`data/rosters.py::_check_arms_at_build`), so a
+  wrong name fails at import.
 - The ranking is by the engine's own measured ordering against an arming sword at light armour, not by
   taste; a different ranking is one edit.
 - *(Reconciled, pessimist R-9.)* A kind joins `arms_kinds` only with its row of the roster census named
@@ -99,7 +106,7 @@ host-side composition, not module code; the module keeps `ability_factor`'s clam
 - Authored attributes for realm persons are CHAR's (nothing generates a person's attributes today);
   the combat seam already reads them.
 - Tradition and disposition: no carrier is proposed here. PC-21 (design-first) owns where a tradition
-  lives; the approach choice in `03_PC_duel_round_and_approach.md` supplies the per-phase temperament.
+  lives; the approach choice in `03_PC_duel_round_and_approach_B.md` §5 supplies the per-phase temperament.
 
 ## Gate (execution artifacts)
 
@@ -116,6 +123,24 @@ host-side composition, not module code; the module keeps `ability_factor`'s clam
 A realm in which every fight is still pool 8 against obstacle 1.0 after the content lands; a person
 with no stocked weapon who still fights with an arming sword; a skill or lever value that changes an
 outcome without appearing in the record.
+
+## Implementation (test 9, W3-1)
+
+- **Order of edits.** Part A (slot tuples in `modules/combat/attributes.py`, exported; `PersonalCombatInput`
+  per-family mappings) → Part C (`unarmed` record; generated artifacts re-derived by their generators) → Part B
+  (roster rows, one kind per census row) → Part D (`lifepath_templates`).
+- **Call sites.** The host fills the slots in `seam/wrappers/combat.py::combat_input` from the capability
+  surface (`U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §8 reader interface); `modules/combat/fight.py:44-52`
+  reads them; `queries/world_q.py::kit_of` returns `unarmed` (Part C).
+- **Tests.** `tests/valoria/test_combat_invariants.py` (existing; Part C must pass it);
+  `engine/season/tests/test_cp_t03_04_arms.py::test_an_arms_kind_outside_rung_kinds_is_refused_at_import`,
+  `::test_an_arms_kind_key_outside_the_weapons_export_is_refused_at_import`;
+  `engine/season/tests/test_cp_t03_03_kit.py::test_a_person_with_no_stocked_weapon_fights_unarmed_when_arms_kinds_is_nonempty`
+  and `::test_kit_of_unchanged_while_arms_kinds_is_empty` (the control).
+- **Gate** as above. **Hash movers:** Part A none; Parts B/D every season fight between persons whose inputs
+  differ; Part C `r3_identity_golden.json` and the armour reference.
+- **Lands:** an IN-lane implementation session under `/methodology-execute` with PC review; Parts A, C, D
+  `sonnet`; Part B's content is Jordan's (`[ASSUMPTION; low]`), its census reading `haiku` read by `opus`.
 
 ## NERS reading
 

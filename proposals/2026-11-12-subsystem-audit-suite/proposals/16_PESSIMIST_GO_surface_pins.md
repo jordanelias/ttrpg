@@ -1,6 +1,18 @@
 # GO — the pins see the player's surface: an offer digest per pinned seat, and words for kinds and verbs
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS: an exporter's `--check`
+round trip), §7/§7b (the derivable key sets named, tests, dependencies, tier); U3 B41, §6.3 (`tools/export_oracle_pins.py`
+and `harness/port_oracle.py` are built by GO-08 in this batch), §6.2 (`probe.py` is not in the repository); U1 D-U1-11n
+(the GO host-side reading `receipt` is renamed `act_result`); STAGES.md (this session's content wins over v11: the
+workplan row moves to the v12 card). Not completed: the ~150 display strings (content, Jordan's or under his review),
+marked INCOMPLETE at §3.
+
 ## Status: PROPOSED
+
+Lands in batch: **B41** (GO), first in the batch, before `11_GO_port_gate_order_and_coverage.md` builds GO-08's exporter
+with this block in it. Depends on: GO-07 (the canonical digest; `engine/season/tests/test_go07_canonical_digest.py`
+exists), GO-08 (built in B41), `11_GO_player_surface_contract_B.md` (B34; when its `Offer` lands the digested tuple
+becomes `Offer.rows`).
 
 Carries F-PES-GO-01, F-PES-GO-09 (in part) and F-PES-GO-12 of `audits/16_PESSIMIST_GO.md`. Lanes GO, IN.
 Read at `826b747`. Reference only (`CLAUDE.md` §0.05); not ratified by being written (§2). It amends
@@ -23,7 +35,7 @@ collections and the log. It does not fold a `Question` (`state/carriers.py:538`:
   run. **78.3% of what a player is offered moves no pinned value.**
 - Control that the instrument can see a difference: one seat taking one different row moves the hash
   (`probe.py lever 0 p_npc_004 last` → `c093236b…`).
-- The readings the `11_GO` proposals add (`Situation`, `Offer`, `receipt`, `account`, `dossier`) are
+- The readings the `11_GO` proposals add (`Situation`, `Offer`, `act_result` (formerly `receipt`, D-U1-11n), `account`, `dossier`) are
   not hashed either; their gate is a transcript whose `content_hash` equals the plain run's, which by
   the above is satisfied by any transcript.
 - Of the 72 / 75 / 80 Event kinds and 46 / 46 / 48 verbs that occurred at seeds 0–2 (two seasons),
@@ -84,7 +96,11 @@ display string. `tools/export_names.py --check` gains one rule: every key of `ve
 invariant 7: "the Event-kind roster is **derived** from every emission column") has an entry, and no entry names a key that is in
 neither. This is the exporter's own round-trip for its own chain (§0.05's licensed form), not a
 tree-wide guard. The strings are authored once, by Jordan or under his review, in the YAML; the
-port reads `names.json`.
+port reads `names.json`. The key sets are derivable now: `python -c "from engine.season.data.verbs import
+VERB_TABLE; print(sorted(VERB_TABLE))"` (the verb keys) and the derived Event-kind roster of loader inv. 7 (the
+`event_kind` keys) are what `--check` will require. **INCOMPLETE (blocked on content, not the repository):** the
+display strings (about 150) are Jordan's or authored under his review; the rule and the key sets land first with
+the strings filled as the authoring task delivers them (the `--check` rule ships with the strings, or reds).
 
 ## Exact edits, by file and owner
 
@@ -94,10 +110,16 @@ port reads `names.json`.
 | `engine/season/state/world.py` | IN | `_canonical` exposed as `canonical` (rename; the hash's call sites follow) |
 | `tools/export_oracle_pins.py` (unbuilt, GO-08) | GO | the `surface` block in `--build` and `--check` |
 | `engine/season/harness/port_oracle.py` (unbuilt, GO-08) | GO | one printed line per seat |
-| `workplans/valoria_master_workplan_v11_part5.md`, GO-08's REMAINING UNBUILT | GO | add "the `surface` block (per seed, the declared seats' offer digests)" |
+| the v12 card for GO-08 (not `workplans/valoria_master_workplan_v11_part5.md`, which this session's content supersedes) | GO | add "the `surface` block (per seed, the declared seats' offer digests)" (a plan edit for the v12 author) |
 | `references/names_index.yaml`, `tools/export_names.py` | IN | classes `verb`, `event_kind`; the completeness rule |
 
 ## The gate (execution artifacts)
+
+`probe.py` (`runs/PES_GO/`) was lane scratch, not in the repository. Committed first: NEW
+`engine/season/tests/test_surface_trace.py`: `test_trace_run_hash_equals_plain_run` (gate 1),
+`test_truncating_pick_changes_every_digest_and_not_the_hash` (gate 2; the truncating pick is written in the
+test), `test_one_seat_one_different_row_moves_the_hash` (the instrument's control). Command:
+`python -m pytest engine/season/tests/test_surface_trace.py -q`; gate 3 is `python tools/export_names.py --check`.
 
 1. `surface_trace(0, 2, seats)`'s run hash equals `bacd687f1470883b412be9638d0b0f88` (the plain
    two-season hash at seed 0 at `826b747`; re-take at the build commit), under `PYTHONHASHSEED` 0, 1, 2.
@@ -126,4 +148,7 @@ person and leaves every `digest` equal. A `surface` block whose `content_hash` d
 
 ## Cost class
 
-Small build (the function and the block), and an authoring task (about 150 strings).
+Small build (the function and the block), and an authoring task (about 150 strings). Tier: `sonnet`, effort
+`high` for the code; `opus` for the seat-set rule; the strings are Jordan's. Hash movers declared: none (the
+`_canonical` → `canonical` rename moves no value). Lands it: B41, order `canonical` rename → `surface_trace` with its
+test → the `surface` block in GO-08's exporter → the names classes and rule with the strings.

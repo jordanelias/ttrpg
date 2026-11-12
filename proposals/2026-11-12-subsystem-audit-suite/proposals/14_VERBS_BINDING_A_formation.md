@@ -1,8 +1,14 @@
 # VB-A — a tie is released only where it is held, and an office is founded only over land that can carry one
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-10, C-25) — edit 14's audience is the `heard_by: seat_body` cell on the `a seat` prize row, read by one function (`U5c_VERBS_residue_and_governance_owner.md` §2). The term `standing` is the roster member `rank_gap`. §1's `own_edge_declines` also declines an edge a disposal imposed: a party does not release his own sentence (Jordan, A-37; `U5c_VERBS_residue_and_governance_owner.md` §4).
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — applied `unified/U3_CONFLICT_LEDGER.md` C3-C9 (the A-37 clause: the fold refuses resolver-side in `_req_release`, formation reads only the actor's own ledger; new edit 4a), C3-C11 (A-81: each band of `establish` names its durable write), the body's stale `standing` replaced by `rank_gap` (`unified/work/R4_READ.md` §1.1, U1 R-21, D-U1-01), U3 batch B21 and its dependencies, R4 7b.0 implementation block. R4's `[UNVERIFIED]` on `PersonInterior.tenures` is settled at the tree: `opening_set` takes a `Person` (`decision/options.py:63`) and already reads `p.tenures` with `t.live` (`_held_objects`, `:973-976`); no `PersonInterior` class exists.
 
 ## Status: PROPOSED
+
+Lands in batch: B21 (`unified/U3_DEPENDENCY_ORDER.md` §3.1), after `22_HAPPENINGS_B` edits 1–2 and `06_FA_seat_terms_by_body_B`, before `U5d_FA_owed_edits` §2 (C3-D5's order inside B21). `17_CENSUS_C1A_02_wires_and_corrections.md` W2's closing gate for these rows rides in this batch (U3 §4.1 row 36).
+Depends on: `05_SC_obstacle_difficulty_and_modifiers_B.md` edits 1–6 and `U5c_SC_one_obstacle_form.md` §4 steps 0–2 (B05: the `difficulty:` column, `reception`, `rank_gap`); `U5c_VERBS_residue_and_governance_owner.md` §2 (B07: the `a seat` prize row and `audience_of`) and §4 (B07: the A-37 clause).
+Lane: FA. Tier (R4 7b.0 (1)): A1 and A2 `sonnet` producer, effort `high`; A3 (the contested row and its obstacle terms) `opus` producer; one `opus` read of each gate's output. Test file: `engine/season/tests/test_vb_a_formation.py` (one function per gate A1–A3; `aperture 2 s` is called inside it).
+Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, U1 D-U1-08) on the actor's trained score (A-6); talent enters as levels from the governing attribute (A-7); a wound is a level against the roll (A-8). The `establish` draw takes `H(w.world_seed, w.tick, <actor id>, "establish.seat")` (A-30; `04` PART D 35). A-81: see edit 12's band list.
 
 Source: `audits/14_VERBS_BINDING.md` §0.1, §0.2, §5 (`establish`), §10 (`release`); batch A of its landing
 order. Evidence: `aperture 2 0` `[FA]` and `aperture 2 1` (realm, seeds 0 and 1, two seasons,
@@ -48,7 +54,12 @@ computes it), and the founded-office id moves to the module both its readers can
 already-founded filter is no second copy of the rule.
 
 **The founding is drawn** (audit §0.2): prize `a seat`, no person opponent, obstacle `difficulty`
-`demanding` + `reception` of the holding's seated persons + `standing`. Partial founds with half the
+`demanding` + `reception` of the holding's seated persons + `rank_gap` (OBS §2 member 6; U1 D-U1-01: a seat
+above the actor's stands against the act only as this term; the actor's own exercised seat helps him only
+as the `office` leverage source). This file is the first in B21's order to read `rank_gap`, so commit A3
+lands the member in `rosters.yaml: obstacle_terms` (OBS §2's order) with its fixture `rank_step` (control
+0; NUMBER row in `hole_register.yaml`), as OBS §4 step 6+ orders (a member lands with its first reader);
+BINDING_C and D read it and do not add it again. Partial founds with half the
 derived remit; Failure founds nothing and is re-attemptable.
 
 ## Exact edits, by owner
@@ -83,6 +94,15 @@ derived remit; Failure founds nothing and is re-attemptable.
        refs = tuple(r for r in refs if r in tied)
    ```
    Import `OWN_EDGE_DECLINES` with its siblings.
+3a. *(W3-4a, C3-C9; A-37.)* The disposal clause, in two halves and never by reading the log from
+   `decision/` (`04` §B.9: `state/acts` is resolver-side). **Fold:** `loop/predicates.py::_req_release`
+   (T, `:429`) gains one clause: refuse (`release.refused`, clause `own`) an edge whose opening Event was
+   caused by an Act of verb `determine`, read through `state/attribution.py::causing_act` (T, `:91`).
+   **Formation:** in `opening_set`, after the block of edit 3, drop a `release` referent when the actor's
+   own ledger holds a claim of a `matter.determined` Event (T, `verb_table.yaml:406-408`) naming him as
+   the party and the referent's edge as its object `[UNVERIFIED: the claim's value shape; read
+   `loop/witness.py`'s deposit for `matter.determined` before landing]`. Order: the fold clause first,
+   then the formation decline. Text owner: `U5c_VERBS_residue_and_governance_owner.md` §4 edit 1.
 4. `engine/season/verb_table.yaml`, `release` row: append to `requires_note` one sentence: *"VB-A: formed
    only on a referent the actor is tied to by a live edge of a kind in `domain:` (`rosters.yaml:
    own_edge_declines`); the predicate is unchanged and stays the fold's check."* No new key (the loader
@@ -136,7 +156,12 @@ derived remit; Failure founds nothing and is re-attemptable.
     ```
     The flat `emits_on_refusal: ["establish.refused"]` stays (a contested row keys one refusal kind,
     `data/verbs.py` invariant 4's contested half). No counterparty: the opposition term is absent (SC-B:
-    *"absent for a non-person subject"*).
+    *"absent for a non-person subject"*). The obstacle's `difficulty: demanding` names a member of
+    `rosters.yaml: difficulty_levels` (U1 D-U1-04). **Durable write of every band (A-81; C3-C11):** O/S/P
+    write the office; the Failure Event `office.unrecognised` is witnessed by the holding's seated persons
+    (the `reception` audience) and the persons present, and deposits a claim of that Event to each of them,
+    so the refused founding is a remembered deed; where nobody else is present the actor deposits his own
+    firsthand claim `(self, establish.failed, True)`.
 13. `loop/effects_governance.py::_eff_establish`: read `res.degree`; at `Partial` build the office with
     `remit_acts = derived[: (len(derived) + 1) // 2]` (the derived list in its authored order). The
     office object is still built once by `office_founded_by`; the effect narrows the copy it writes.
@@ -145,11 +170,16 @@ derived remit; Failure founds nothing and is re-attemptable.
     the holding's seated persons (`world_q.establishment_of` over the seats on the rung) — the
     audience operand the audit §0.2 asks of SC-B's `reception` reader.
 
-Order: A1, A2, A3; A3 waits on SC-B's obstacle terms (edits 1–6 of that proposal).
+Order: A1 (with 3a), A2, A3; A3 waits on SC-B's obstacle terms (edits 1–6 of that proposal) and on the
+`a seat` prize row (VRES §2, B07).
 
 ## Gate (execution artifact)
 
-- A1: `aperture 2 0` and `2 1`: `release.refused` 15/15 → 0; executed not below 0/3.
+- A1: `aperture 2 0` and `2 1`: `release.refused` 15/15 → 0; executed not below 0/3. 3a: at one seed with a
+  determined case, the party's candidates hold no `release` of the disposal edge; a planted one is refused
+  naming the clause `own`; a `pardon` at Success closes it. Falsifier: a disposal edge closed by an Event
+  whose actor is its subject. Control: the formation decline removed, the candidate returns and the fold
+  still refuses.
 - A2: same instrument: `establish.refused` 7/5 → ≤1 each; the probe shows no act on a non-holding and no
   repeat of a founded holding. If `holdings_to_found` is empty for every person the reading says so and
   is reported as content (nobody holds land he may found over), not as a pass.

@@ -1,6 +1,11 @@
 # WR-30-C — strands: how one opens, grows, is joined, concludes or fails to, and several at once
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §1 found it CONFORMS and R3 §2 found no ruling it contradicts; added: the serial order on `harness/storybar.py` (C3-K7), the batch (U3 B38), and the glossary's reading of "between regimes or inside one" (§4: `30_WR_B`'s creed bodies; "regime" in A-82's sense is `core_standing`'s, U1 glossary). Tier already named.
+
 ## Status: PROPOSED
+
+Lands in batch: B38 (narrative and regimes), after `30_WR_A` and before `23_STORY_A` (U3 §1 item 38). Commit 2 edits `harness/storybar.py` after `30_WR_B`, before `30_WR_E` (C3-K7).
+Depends on: `09_WR_strand_conclusion.md` (B12); `09_WR_B_draws_not_thresholds.md` edit 4 (B38); `20_NARRATIVE_A`, `20_NARRATIVE_B` (B38); `28_CORE_scene_access_C_the_petition_that_waits.md` (B38).
 
 Source: `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md` F-30-06, F-30-07. Rulings: A-45 (several strands that can each end; a doer's later deed joins a strand he opened, or joins by its subject), A-46 (leaving a creed or a head seat is a move), A-80 (a held position must still move the world). Reference only (`CLAUDE.md` §0.05). Lane WR; owner file IN's (`engine/season/queries/world_q.py`).
 
@@ -70,7 +75,7 @@ Dormancy is set by memory, which is persons', not by an age in the strand. A dor
 
 - Capacity is unchanged (A1: realm 1, duchy 2, then n+1; `flow_capacity`, `:4896`). With eras defined by rule and condition (`30_WR_A`), the realm's one slot is the era itself, so a second realm-wide strand no longer competes for it: it is a condition of the era or it is of the era.
 - A strand is dated and named by the era it opened in ("a quarrel from the old king's time"); it can outlive the era, and an era turn is itself a move that joins every strand whose subject holds the head seat.
-- A strand is **between regimes** or **inside one** (`30_WR_B`); it has **sides** per party (`side_against`, `:4868`); it has a **closure class** (CR-97 (a'): decider, roll, threshold, open). These four, with its subject and opening kind, are what `30_GO_F` names it from.
+- A strand is **between creed bodies** or **inside one** (`30_WR_B`'s grouping; in A-82's sense a regime is read by `core_standing`, U1 glossary); it has **sides** per party (`side_against`, `:4868`); it has a **closure class** (CR-97 (a'): decider, roll, threshold, open). These four, with its subject and opening kind, are what `30_GO_F` names it from.
 
 ## Instructions to code
 

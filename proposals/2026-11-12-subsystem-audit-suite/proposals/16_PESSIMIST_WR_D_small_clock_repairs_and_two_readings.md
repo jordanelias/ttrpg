@@ -2,7 +2,20 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-40** and **A-47**. Edit 2 (`thread_read` forms on a Site) agrees with A-40 (one Site per territory). Edit 1 (a Date due in the past fires; `<=`) is a clock's tick and opens a question; where the question is one of the threshold arcs it is mandatory (A-47) and decides nothing by itself.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS: CALENDAR reads the tick and
+does not advance it, `04` PART D 45), §2 (A-47 consistent), §7/§7b (the test files located in the tree: the CALENDAR file
+is `engine/season/tests/test_sc01_fired_slot.py`; `tests/test_referent_class_stamps.py` does not exist and the
+referent-class formation test is `engine/season/tests/test_in12_step9.py`, CP-T03-08's; tier); U3 B36, C3-K7 (serial
+order on `harness/storybar.py`: after `09_WR_B_readings_of_closure_and_tension.md`, before `20_NARRATIVE_F_story_inventory_and_gate.md`),
+§6.2 (`p4_small.txt`, `p2_*` and `p2_play.py` are lane scratch, not in the repository). Changed: the gates' file names
+and test names, the cost line.
+
 ## Status: PROPOSED
+
+Lands in batch: **B36** (WR). Depends on: `09_WR_B_readings_of_closure_and_tension.md` (B36; edit 4 lands with its
+`by_act` / `by_clock` split), `09_WR_B_threadwork_session_and_practitioner.md` (B35; what edit 2's reading finds),
+`16_PESSIMIST_WR_B_the_calamity_strains_and_breaks.md` edit 4 (B12; the Site referent edit 2 forms on). Serial edge
+(C3-K7): edits `harness/storybar.py` after `09_WR_B_readings_of_closure_and_tension.md`, before `20_NARRATIVE_F`.
 
 Source: `audits/16_PESSIMIST_WR.md` F-PES-WR-01, -04, -05, -09. Read at `d161a61`. Reference only
 (`CLAUDE.md` §0.05). Lane WR. Five edits, each small, none a guard: three at a clock or a verb row, two
@@ -44,8 +57,10 @@ if d.get("fired") or due is None or due > w.tick:
     continue
 ```
 
-**Gate.** `engine/season/tests/` file covering CALENDAR: P4's three planted Dates all read `fired=True`
-after two barriers, each exactly one `date.fired`; and every committed golden is unmoved.
+**Gate.** `engine/season/tests/test_sc01_fired_slot.py` (exists; the file covering CALENDAR's Dates) gains
+`test_due_date_in_the_past_fires_once`: P4's three planted Dates (the scratch `p4_small` plant, written in the test)
+all read `fired=True` after two barriers, each exactly one `date.fired`; and every committed golden is unmoved
+(`report` / `delta HEAD`, `PROBE FLIPS 0`).
 **Falsifier.** A Date fired twice, or a base hash that moves.
 
 ## Edit 2 · `thread_read` is aimed at a place (`engine/season/verb_table.yaml`, the `thread_read` row)
@@ -64,9 +79,10 @@ the four people who clear the gate. What it *finds* there is the `threadwork.rea
 `09_WR_B_threadwork_session_and_practitioner.md` (R-21), drawn; until that lands a formed reading still
 finds nothing, and that is said in the row's note rather than hidden.
 
-**Gate.** `tests/test_referent_class_stamps.py` (the file REM-22's stamp is tested in): a practitioner
-standing at a Site named by his question forms `thread_read` on it; a question naming a Record forms
-none. **Falsifier.** A `thread_read` in any realm run whose subject is not a Site.
+**Gate.** `engine/season/tests/test_in12_step9.py` (exists; it tests that a row declaring a `referent_class` forms
+only on a referent carried as that class, CP-T03-08; the earlier name `tests/test_referent_class_stamps.py` is not a
+file in the tree) gains `test_thread_read_forms_on_a_site_and_not_on_a_record`: a practitioner standing at a Site
+named by his question forms `thread_read` on it; a question naming a Record forms none. **Falsifier.** A `thread_read` in any realm run whose subject is not a Site.
 
 ## Edit 3 · CALENDAR stays, and is marked unproven (no code edit)
 
@@ -94,8 +110,8 @@ beside the executed summary. It reads the Tenure store, the log and `act_of`; it
 stores nothing, as the module's header requires. It is the third column of the `by_act` / `by_clock`
 split `09_WR_B_readings_of_closure_and_tension.md` edit 1 adds, and lands with it.
 
-**Gate.** `test_storybar.py`: a planted world in which A confers and B revokes reads `by_another == 1`;
-the same world with A revoking his own grant reads 0.
+**Gate.** `engine/season/tests/test_storybar.py` (exists): `test_turns_counts_a_revocation_by_another`: a planted
+world in which A confers and B revokes reads `by_another == 1`; the same world with A revoking his own grant reads 0.
 
 ## Edit 5 · a cut arm and the noise floor beside every comparison (`harness/storybar.py`)
 
@@ -109,8 +125,8 @@ forcing arms are. (b) `compare` prints, per pair of arms, the L1 distance of the
 and, once per seed, the same distance between two draw seeds of the first arm. A reader then sees
 `no_calendar 38 · noise 316` and knows what it means.
 
-**Gate.** `test_storybar.py`: `no_calendar` emits no `date.fired`; the noise line is present and
-non-zero on `build_realm`. **Falsifier.** The arm's distance exceeding the noise at two seeds once
+**Gate.** `engine/season/tests/test_storybar.py`: `test_no_calendar_arm_emits_no_date_fired` and
+`test_compare_prints_a_nonzero_noise_line` on `build_realm`. **Falsifier.** The arm's distance exceeding the noise at two seeds once
 `determine` executes is the signal that edit 3's N-line has become true; that is a reading, not a
 blocking check.
 
@@ -127,4 +143,7 @@ blocking check.
 
 ## Cost class
 
-Edits 1, 2: edit. Edits 4, 5: small build in an existing harness module. No guard, no new file.
+Edits 1, 2: edit. Edits 4, 5: small build in an existing harness module. No guard, no new file. Tier: `sonnet`,
+effort `high`. Hash movers declared: none expected for edit 1 (asserted); edit 2 moves any world in which
+`thread_read` formed on a Record or a person (sideways, declared); edits 4-5 none. Lands it: B36, one commit per
+edit; command `python -m pytest engine/season/tests/test_sc01_fired_slot.py engine/season/tests/test_in12_step9.py engine/season/tests/test_storybar.py -q`.

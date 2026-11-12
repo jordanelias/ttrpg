@@ -4,7 +4,23 @@ Reconciled: 2026-11-12, U5d closure — folded the land rulings (**A-57, A-58, A
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-25) — edit 9's audience is the `heard_by: residents` cell on the `a holding` prize row, with `toward: to`, read by the one audience function (`U5c_VERBS_residue_and_governance_owner.md` §2); `contest_input` names no verb.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — applied `unified/U3_CONFLICT_LEDGER.md` C3-C5 (`unified/work/R4_READ.md` 7b.3: a matured Partial cession leaves the place unheld; nothing re-opens the surrenderer's hold), C3-L12 with C3-L7 (title and seats pass only by an act whose actor has a basis: the U5d head line's "seats in the same write" is superseded; see "The land" below), C3-C11 (A-81), A-30 keys, U3 batch B23 and its dependencies, R4 7b.0 block. The U5d head line above is kept as history; where it and this line disagree, this line follows the later decisions C3-L7 and C3-L12.
+
 ## Status: PROPOSED
+
+Lands in batch: B23 (`unified/U3_DEPENDENCY_ORDER.md` §3.1), with `U5d_FA_land_and_seats_pass_on_a_won_march.md`; E3's two unwithhold commits each a separate declared mover inside B23.
+Depends on: `14_VERBS_PHYSICAL_B_field_and_ruin.md` (B22: fields fought, `siege.pressed` produced); `06_FA_levy_through_the_seat_B.md`, `06_FA_remit_grant_by_row.md` (B21); `04_MB_playable_field_scenario.md` (B20); `U5d_FA_land_and_seats_pass_on_a_won_march.md` (B23: the seats' `revocation: holder_of_rung`, C3-L7); `U5c_VERBS_residue_and_governance_owner.md` §2 (B07: the `a holding` row, `toward: to`); `14_VERBS_BINDING_C_turnover.md` edit 2 (B21: `_provisional_term`).
+Lane: FA. Tier (R4 7b.0 (1)): E1, E3 `sonnet` producer, effort `high`; E2 (the contested row) `sonnet` producer with one `opus` read of the 40-seed band table. Test file: `engine/season/tests/test_vb_e_war_seats.py` (one function per gate; the existing `test_cp_t04_07_surrender.py` stays the effect's unit test).
+Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the surrenderer's trained score (A-6), talent as levels (A-7), a wound a level against the roll (A-8). The `surrender` draw takes `H(w.world_seed, w.tick, <actor id>, "surrender.holding")` (A-30).
+
+**The land (C3-L7, C3-L12; A-58, A-66).** `_eff_surrender` (T, `loop/effects_information.py:1092`) cedes the
+**rung's** hold to the receiver through `_take_hold` (T, `:978`), a handover of the surrenderer's own hold.
+It does not write the seats anchored on the place: their holders are other persons, and `04` §C.2 lists no
+basis by which the surrenderer's act closes their holds. Those seats pass by the **receiver's** own later
+act, exactly as after a won field: each such seat row carries `revocation: holder_of_rung`
+(`U5d_FA_land_and_seats_pass_on_a_won_march.md` e1 as rewritten by C3-L7), so the receiver, now holding
+the rung, closes and claims them through the existing revocation and claim bases, or chooses not to
+(A-66: seize, occupy without seizing, withdraw). `_take_hold` gains no `seats=` argument from this file.
 
 Source: `audits/14_VERBS_BINDING.md` §0.2, §7 (`marshal`), §8 (`surrender`); batch E, the last. Depends on
 `14_VERBS_PHYSICAL_B_field_and_ruin.md` (PHYSICAL P-B: fields fought, `siege.pressed` produced),
@@ -67,7 +83,10 @@ the field goes ahead.
    routine`; writes `["Tenure.until", "Tenure.since", "Tenure.term"]` at O/S/P, `[]` at Failure; emits
    `place.surrendered` at O/S/P, `surrender.rejected` at Failure; `emits_on_refusal` flattened to
    `surrender.refused` under every key (contested-row rule). `Tenure.term` is check-only at O/S, as on
-   `confer`.
+   `confer`. The seat edges are not in these `writes` (see "The land" above). **Durable write of the
+   Failure band (A-81; C3-C11):** `surrender.rejected` is witnessed by the place's residents (the
+   `reception` audience) and the besieger's men present, and deposits a claim of it to each; the field
+   then goes ahead.
 8. `loop/effects_information.py::_eff_surrender` → `_take_hold(..., term=_provisional_term(w, a))` at
    `Partial`; `_take_hold` gains an optional `term` passed to the `Tenure` it opens (one constructor).
 9. `seam/wrappers/sigma.py::contest_input`: `reception` audience = the residents of the place
@@ -84,12 +103,18 @@ the field goes ahead.
   `order_of_battle` for at least one side; planted: flip that order's `role`, and the field's degree or
   casualties move. Formed persons are only those with a `Front` referent.
 - E2+E3 (`surrender`): after P-B, a run with a `siege.pressed`; across 40 seeds all four bands occur;
-  after O/S `holder_faction_of(place)` is the receiver's faction; after Partial the receiver's hold
-  matures and the place reverts at `provisional_term` unless re-taken; after Failure the field is fought.
+  after O/S `holder_faction_of(place)` is the receiver's faction; after Partial the receiver's termed hold
+  matures at `provisional_term` and the place stands unheld (`holder_faction_of(place)` is `None`): a
+  vacant holding, claimable by `seize`, `establish` or a later cession, and the surrenderer may re-take it
+  only by his own act (C3-C5; `04` §B.8 T-n: a matured term only closes); after Failure the field is
+  fought. The anchored seats do not move with the cession; a receiver who then forms the seat step moves
+  them, and one who does not leaves them with their holders.
 
 ## Falsifier
 
-Stamp every known Rung as `Front`/`Besieged`: refusals return. Pin the roll: one band only. Unwithhold
+Stamp every known Rung as `Front`/`Besieged`: refusals return. Pin the roll: one band only. A test that
+reads `holder_faction_of(place)` equal to the surrenderer's faction after a Partial term matures fails
+(no basis re-opens his hold). Unwithhold
 before P-B: both rows form for nobody (empty stamps), which is the reading that shows P-B is the
 dependency, not this file.
 
@@ -101,7 +126,8 @@ covenant route), or change how the field reads an order (MB).
 ## NERS reading
 
 N: without them a commander's only war decision is to march, and every siege is a battle or a ruin. R: a
-town may refuse its lord's surrender; a provisional cession can fall back. S: the same named-class route
+town may refuse its lord's surrender; a provisional cession lapses into an unheld place both sides may
+contest. S: the same named-class route
 and Partial shape as VB-A to VB-D; one roll owner. E (last): two ledger reads and one band map.
 
 ## Cost class

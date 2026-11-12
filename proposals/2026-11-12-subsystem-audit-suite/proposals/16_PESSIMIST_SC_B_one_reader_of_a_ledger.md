@@ -1,6 +1,16 @@
 # 16 · PESSIMIST · SC · B — One reader of a ledger: what a person acts on, says, shows and plans by is one belief
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (D-48 taken A, forgetting computed when
+read: once `01_CORE_claim_fade_as_read.md` lands the stored `confidence` is the deposit-time value and the present value
+is `state/ledgers.py::present_confidence`; the weight reads that, not raw `c.confidence`), §1 (CONFORMS; the read-time
+weight is not the eviction comparator, `04` PART D 39, which keeps `confidence` and `recency` only), §7/§7b (tests, tier);
+U3 B09 (after the fade-as-read commit), §6.2 (`p2c_two_readers.py`, `p2d_stale_sighting.py`, `p2b_lie_extremes.py` are
+not in the repository). Changed: the formula, the sentence on what falls with age, edit 1, the gate's test names.
+
 ## Status: PROPOSED (not ratified by being written; `CLAUDE.md` §2)
+
+Lands in batch: **B09** (SC with IN, FI), after `01_CORE_claim_fade_as_read.md` and `16_PESSIMIST_CORE_a_refusal_is_remembered.md`
+(U3 §1 item 10). Depends on: `state/ledgers.py::present_confidence` (fade-as-read).
 
 Finding: `audits/16_PESSIMIST_SC.md` F-PES-SC-01 (§2.2). Owners touched are the telling workplan's
 (`ED-IN-0282`, lane IN) and FI's; listed for those lanes. Runs: `runs/PES_SC/p2c_two_readers.py`,
@@ -51,11 +61,13 @@ town. The plain reader believes whoever spoke last.
 
 One comparator, used by every reader of a belief; its weight includes how sure the holder still is.
 
-    weigh(c) = (c.confidence / confidence_default) × ( 1.0                              if c.chain is empty
-                                                       told_weight^hops × relation × record   otherwise )
+    weigh(c) = (present_confidence(c) / confidence_default) × ( 1.0                              if c.chain is empty
+                                                                told_weight^hops × relation × record   otherwise )
 
-`confidence` is already the quantity that falls with age (`claim_decay_per_season`) and with refraction
-(`refracted_confidence`), so no new field or clock is needed. A fresh sighting (confidence 100) still
+The present confidence is the quantity that falls with age and with refraction: refraction
+(`refracted_confidence`) sets the deposit-time `confidence`, and age is applied when read by
+`state/ledgers.py::present_confidence` (`01_CORE_claim_fade_as_read.md`, one owner of fading; D-48), so no new
+field or clock is needed. A fresh sighting (confidence 100) still
 outweighs any single told claim (at most 1.0 × its own confidence share); a sighting decayed to 5 is
 outweighed by one credible teller. Ladder step 5 (what the architecture makes plain: two owners of
 "which belief does this person hold" is the §8 defect, and `_best`'s own docstring says the comparator
@@ -68,7 +80,7 @@ read-time weighting *"multiply into nothing shared"*. They still do not: refract
 ## Exact edits
 
 1. **`engine/season/decision/options.py::teller_weight`** — `weigh(c)` multiplies its result by
-   `c.confidence / fx.get("confidence_default")` for every claim, told or not (the empty-chain branch
+   `present_confidence(c) / fx.get("confidence_default")` for every claim, told or not (the empty-chain branch
    returns that share instead of `1.0`). Control: a fixture `weigh_confidence` (bool, shipped `True`,
    swept `False`), read once per closure; at `False` the function is today's, exactly.
 2. **`engine/season/decision/options.py::ledger_weigh`** — returns the closure whenever the ledger
@@ -90,6 +102,13 @@ read-time weighting *"multiply into nothing shared"*. They still do not: refract
    (`weigh_confidence` is a switch on an existing magnitude, `claim_decay_per_season`).
 
 ## Gate (an execution artifact)
+
+The probes were lane scratch (not in the repository). NEW `engine/season/tests/test_one_reader_of_a_ledger.py`:
+`test_said_of_sheet_and_belief_contradicts_agree_on_every_cell` (the falsifier as a planted ledger),
+`test_stale_sighting_falls_to_enough_tellers`, `test_fresh_sighting_holds_against_one_teller`,
+`test_weigh_confidence_false_reproduces_today`. Command:
+`python -m pytest engine/season/tests/test_one_reader_of_a_ledger.py -q`; then `report` / `delta HEAD` (the declared mover).
+The scratch readings, once committed:
 
 `p2c_two_readers.py` after the edit: the two columns are equal on every row (32 / 32 and 27 / 27 for the
 knowing hearer). `p2d_stale_sighting.py`: at `c0 = 80` the sighting holds against one teller and falls to
@@ -117,4 +136,6 @@ Any (holder, cell) in a seeded realm season for which `said_of`'s value, the she
 ## Cost class
 
 Small build (five hunks, one fixture, three call sites; a declared hash mover that needs a realm
-before-and-after reading at the batch close).
+before-and-after reading at the batch close). Tier: `sonnet`, effort `high`. Hash movers declared: every world where a
+person holds two values for one cell from different sources; one re-pin at B09's close. Lands it: B09, order 1 → 2
+(with the control at `False`, hash-equal) → 3 → 4 → 5 → the flip to `True`.

@@ -2,6 +2,11 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-30**, **A-29** and **A-5**. GO-16 (the draw recorder) is not built: §2's order drops it and GO-08 loses the draw-log digest and gains draw vectors (`16_PESSIMIST_GO_keyed_draw_no_recorder.md`); the pins gain the surface block of `16_PESSIMIST_GO_surface_pins.md`. The freeze of §1 is of contracts; the behaviour pins are re-recorded once for the keyed draw and once for the one sampler (A-5 moves every season hash), each a declared mover named in the card. §3's module pins take inputs built by the seam, with the mass battle returning an end state (A-3).
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §2 row A-30 and `U3_CONFLICT_LEDGER.md` C3-L3 item 3 (§1 strikes "the draw and float logs" from the behaviour pins and the plan text; parity is by vectors; §2's order drops GO-16, the head's own fold now carried into the body), §2 row A-4 (§3's decider row cites `04_MB_manager_battle_one_resolver.md` §4, PROPOSED, the general's action at each window), C3-N15 (§4's figure replaced by the command, `11_GO_pointer_and_stale_text_resolutions.md` item 6), 7b-8 and `U1_OWNERS_AND_VOCABULARY.md` D-U1-11c (§5: the 91 reads are partitioned by the one-owner rule, and **the build is `04_MB_typed_outcome_and_one_path.md` §3's, landing in B17**; this file keeps the plan-text edit and the check, so no constant has two builders); §1.4 row 151 (§4's halt shape stands; a new `raise` on a port-reached path needs a `where` tag, `U5b_PC_residue.md` §4 as reconciled); test 9 (`module_scenes` scenario names, tests, order, lands-it, tier; `Depends on:` / `Lands in batch:`).
+
+**Depends on:** `16_PESSIMIST_GO_surface_pins.md` (B41, first in the batch); `11_GO_one_draw_owner.md`, `11_GO_float_contract.md`, `U5d_GO_owed_edits.md` (B06: the draw type, `fmath`, the vectors); `04_MB_typed_outcome_and_one_path.md` §3 (B17: the 91 reads); `04_MB_manager_battle_one_resolver.md` §4 (B20: the decider); `11_GO_player_surface_contract_B.md` (B34).
+**Lands in batch:** B41 (`B41-go-port-gate`, GO), after `16_PESSIMIST_GO_surface_pins.md`.
+
 ## Status: PROPOSED
 
 Carries audit findings F-GO-01, F-GO-04, F-GO-05, F-GO-06 and the mass-battle part of F-GO-08
@@ -12,9 +17,10 @@ version and edits nothing in `valoria-game`.
 
 ## What it changes in `engine/season/` at runtime
 
-Nothing in the loop. In `modules/mass_battle/`, 91 tunables stop being read from the process
-environment (their defaults become the values; hash EQUAL in an unset environment, which is every pinned
-run). The rest is exporters, pins and plan text.
+Nothing in the loop. *(W3-1.)* The 91 tunables of `modules/mass_battle/`
+stop being read from the process environment in B17, by `04_MB_typed_outcome_and_one_path.md` §3 (hash
+EQUAL in an unset environment, which is every pinned run); this file checks it. The rest is exporters,
+pins and plan text.
 
 ## 1. Split the freeze: contract now, behaviour by sync
 
@@ -32,14 +38,15 @@ naming old and new values" (`_part5.md:83`).
   float contract (`11_GO_float_contract.md`); the registry JSON's schema; the refusal record's roster
   and the halt roster (§4); the format of every pin. **A change to any of these writes an `ED-GO-` row.**
 - **The behaviour pins** are what a port is *checked against* and they move with the game: initial
-  worlds, traces, hashes, the draw and float logs, the module-scene pins (§3). They are whatever
+  worlds, traces, hashes, the module-scene pins (§3). *(W3-1, A-30, C3-L3: no draw or float log exists;
+  the draw and `fmath` vectors are contract, in GO-08's `primitives` block.)* They are whatever
   `--build` writes at the commit the port syncs to. **A mover re-runs `--build` in its own commit and
   says so in that commit; no ledger row.** The port records the oracle SHA it synced to, on its side.
 
 Edits. `_part3.md` B10-20 **Hash** line and `_part5.md:83` (GO-15 SOURCE) — old: "A later mover after
 the freeze re-builds the pins and the draw log in the same commit and writes an `ED-GO-` row naming old
-and new values and the slice it moves." New: "A later mover re-builds the pins and the logs in the same
-commit and states the move in that commit (a golden re-record, said plainly). A change to the *contract*
+and new values and the slice it moves." New: "A later mover re-builds the pins in the same commit and
+states the move in that commit (a golden re-record, said plainly). A change to the *contract*
 (the encoding, `H`, the integer or float contract, the draw type, a pin's format, the refusal or halt
 roster) writes an `ED-GO-` row." The freeze row keeps the oracle SHA and the digests and **drops the
 freeze list**: a list of everything that might still move the game is the plan's own held rows, read
@@ -53,14 +60,14 @@ there.
 | edge | today | decided | why |
 |---|---|---|---|
 | GO-05 → GO-01 | "NEEDS: GO-01, GO-12" (`_part5.md:208`) | drop GO-01 | the manifest is derived from `composition.json`; it reads nothing GO-01 writes |
-| GO-16 → the draw owner | "NEEDS: GO-12" | NEEDS the one draw owner (which absorbs GO-12's generator item) | two of three seeds build generators outside the factory the recorder is planned on |
+| GO-16 | "NEEDS: GO-12" | *(W3-1, A-30)* **not built**; the plan entry is replaced by "not built" (`11_GO_one_draw_owner.md`'s GO-16 row) | the port implements the keyed draw; there is nothing to record |
 | GO-08 → the float contract | not named | NEEDS it | "slice 3's float pin" names nothing; the `fmath` stream is that pin |
 | GO-08 → module-scene pins (§3) | not named | NEEDS them | slice 2 reaches the combat engine 0 / 2 / 4 times and a fought field 0 / 0 / 1 times at seeds 0 / 1 / 2 |
 | GO-01, GO-11, GO-05 → B10-18b merged | held by batch membership | **early landings**, as GO-13, GO-14 and GO-07 were | each is hash-EQUAL and reads no behaviour B10-11 to B10-18b change; GO-01's one need (ED-GO-0002 on `main`) is met |
 | GO-09 → B10-18b merged | held by batch membership | early landing | its `--check` then catches a registry edited without a re-export *during* the batches that edit registries, which is when it can fail |
 
 Decided order: **early** GO-01 · GO-11 · GO-05 · GO-09; **then, in one re-pin window** the draw owner →
-the float contract → GO-12 (the rest of it, §5) → GO-10 (§4) → GO-16 → module-scene pins (§3) → GO-08 →
+the float contract → GO-12 (the rest of it, §5) → GO-10 (§4) → module-scene pins (§3) → GO-08 →
 GO-15a → GO-15b. GO-06 stays listed and held on the other repository.
 
 ## 3. Module-scene pins: each registered module pinned at its own entry
@@ -87,7 +94,12 @@ module_scenes:
 ```
 
 At least: three duels (an even match, a mismatch, one that ends by yield), three fields (line against
-line; an envelopment; a rout cascade), three contested speech acts, three graded findings. The scenario
+line; an envelopment; a rout cascade), three contested speech acts, three graded findings. *(W3-1, test 9.)*
+Scenario names, one per entry, in the block's `scenario:` field: `duel_even`, `duel_mismatch`,
+`duel_yield`; `field_line`, `field_envelop`, `field_rout_cascade` (the one with subunits, below);
+`speech_even`, `speech_mismatch`, `speech_refused`; `finding_none`, `finding_partial`, `finding_full`
+`[ASSUMPTION: names chosen here; the fixture worlds are built by the builders named below — basis: the
+block needs a stable key per entry]`. The scenario
 worlds are built by the same builders the corpus uses (`harness/populated.py`, `headless.py`), and the
 input is produced by the seam wrapper (`seam/wrappers/combat.py::combat_input`, `mass_battle.py`'s
 input builder), so the pin tests **the loop's code path**, not a parallel one.
@@ -100,7 +112,7 @@ Total War). The port needs four things from the oracle for a battle a player man
 | the orders vocabulary as data | `engine/engine_params/battle_orders.json` (roles `ShieldWall`, `Hold`, `Anvil`, `Push`, `Skirmish`, `Screen`; `retreat_at`), behind `tools/export_battle_orders.py` | nothing for the vocabulary; its `--check` is wired locally and through a season test (`references/ci_checks_registry.yaml:312-318`), not as a line of CI's validators job, and exit line 4 of the card does not list it |
 | the engine's tunables | — | all 91 (§5) |
 | a per-tick record to watch and to explain | `massbattle.py::_person_report` (per-person survivor ratio, rout, who broke first) on the outcome | a per-tick trace on the typed outcome (positions, morale, casualties, orders in force), pinned by `trace_digest`; without it a port's divergence in 11,600 lines shows only in the final result |
-| a point to intervene | — | a decider on `mass_battle.resolve_field`, as `combat.fight` has (`seam/wrappers/combat.py:395`); MB's to design (the typed `Orders` record MB-08 names), GO's to host |
+| a point to intervene | — | *(W3-1, A-4)* designed: `04_MB_manager_battle_one_resolver.md` §4 (PROPOSED; B20), a general's action at each window through a decider on `mass_battle.resolve_field`, as `combat.fight` has (`seam/wrappers/combat.py:395`); GO hosts it |
 
 Auto-resolve and the played battle are then one call with and without the decider, which is what keeps
 them consistent, and the module-scene pin covers both: the automated outcome, and a played run whose
@@ -121,8 +133,9 @@ or the trace has nothing in it for a port to get wrong.
 ## 4. Halts and refusals
 
 **Problem.** GO-10 retypes four `except` sites (by symbol today: `loop/resolve.py:267`, `:498`, `:1189`;
-`loop/predicates.py:368`) and leaves "defect raises" as halts. `engine/season` holds 172 `raise`
-statements outside `data/`, `manifest/`, `harness/` and `tests/`; Layer 1 reads the engine reference as
+`loop/predicates.py:368`) and leaves "defect raises" as halts. *(W3-1, C3-N15.)* The `raise` sites are
+counted by `grep -rE '^\s*raise ' engine/season` outside `tests/`, `harness/`, `data/` and `manifest/`;
+re-run it rather than quoting a figure. Layer 1 reads the engine reference as
 giving GDScript no release-build halt (`04:966-972`).
 
 **Resolution** (step 3: §C.12 rejection 5, "the refusal must ride in the value"; step 5 for the halt).
@@ -143,25 +156,33 @@ flips `config.MB_FRICTION`). None of the 91 names appears in `engine/engine_para
 (`tools/export_sim_params.py:56-58` skips a non-literal), and no other exporter reads `config.py`.
 
 **Resolution** (step 4: `modules/combat/config.py` → `combat_engine_v1.json` behind
-`tools/export_engine_params.py --check` is the precedent). Each of the 91 becomes a literal assignment
-at its present default; an A/B harness passes the value as an argument or a fixture instead of setting
-the environment; `tools/export_engine_params.py` gains a mass-battle section writing
-`engine/engine_params/mass_battle_v1.json` with the same `--check`. The dead arm of a toggle that has
-shipped ON is deleted with its toggle where the module's lane agrees (MB's call, not GO's).
+`tools/export_engine_params.py --check` is the precedent). *(W3-1, 7b-8, D-U1-11c.)* The 91 reads are
+partitioned by the one-owner rule: those that are columns of a row a designer edits move to
+`references/troops.yaml`, exported to `engine/engine_params/troops.json` by `tools/export_troops.py --check`
+(e.g. `MB_STAMINA_DRAIN`, `MB_STAMINA_REST`, `MB_CAVALRY_SPEED_MULT`, `MB_ENVELOP_SPEED_MULT` per
+`26_MASS_BATTLE_movement…`); the rest are literals at their present default, exported by a mass-battle
+section of `tools/export_engine_params.py` to `engine/engine_params/mass_battle_v1.json` behind
+`--check`; the loader refuses a name present in both; an A/B harness passes a variant `cfg` explicitly.
+**The build is `04_MB_typed_outcome_and_one_path.md` §3's (B17, MB)**; this file adds none of it and, in
+B41, only checks it (gate 1). The dead arm of a toggle that has shipped ON is deleted with its toggle
+where the module's lane agrees (MB's call, not GO's).
 
 Edit, `_part5.md:63` (GO-12 REMAINING UNBUILT) — old: "`os.environ`-read module flags
 (`modules/mass_battle/config.py:113`, `hierarchy/units.py:33`) frozen into exported values". New: "every
 `os.environ` read under `modules/` (91 at this reading: re-count by grep) replaced by a literal at its
-default and exported by `tools/export_engine_params.py` to `engine/engine_params/mass_battle_v1.json`
-behind `--check`; no module reads the process environment".
+default, partitioned between `references/troops.yaml` (`troops.json`) and `mass_battle_v1.json` by the
+one-owner rule, each behind `--check` (done in B17 by `04_MB_typed_outcome_and_one_path.md` §3); no module
+reads the process environment".
 
 ## The gate (execution artifacts)
 
 1. `grep -rn "os.environ" modules --include=*.py` (tests excluded) prints nothing; the realm hash at
    seeds 0–2, two seasons, is equal before and after; `CASUALTY_SCALE=9 python -m … port_oracle` prints
    the same line as with the variable unset.
-2. `python tools/export_oracle_pins.py --check` OK with a `module_scenes` block of at least twelve
-   entries; a counting shim shows each scene's draws came from one `Draw` key.
+2. `python tools/export_oracle_pins.py --check` OK with a `module_scenes` block of the twelve named
+   entries; each scene's `key` re-seeds `draw.seeded(key)` and reproduces its `outcome` (written as
+   `tests/valoria/test_oracle_pins.py::test_each_module_scene_reproduces_from_its_key`, red before the
+   block exists).
 3. A planted defect world halts with the pinned `where` tag; a planted no-op write still yields its
    refusal Event (GO-10's own falsifier).
 4. The early landings each print their `--check` OK on `main` before B10-18b merges.
@@ -186,7 +207,16 @@ reds `--check` until the roster is rebuilt.
 - **E.** The card gets shorter: no freeze list, one spurious edge gone. The contract/behaviour split is
   one distinction a porter must hold, and it replaces a forty-item list.
 
+## Build order and lands-it (W3-1, test 9)
+
+Order inside B41, after `16_PESSIMIST_GO_surface_pins.md`: (1) §1 and §2's plan-text edits (`_part3.md`,
+`_part5.md`, the B10-20 build file), hash-EQUAL; (2) write gate 2's and gate 3's tests red; (3) §3's
+`module_scenes` block and §4's `halts` block in `tools/export_oracle_pins.py` (GO-08); (4) gates 1–4. Hash
+movers: none (the pins re-read the run; B06 and B05 moved the hash earlier, each declared there). Control:
+gate 1's `CASUALTY_SCALE=9` line equals the unset line. Lands it: the GO lane's B41 session (MB reviews the
+field scenes, PC the duels); `sonnet` for the exporter, `opus` for the halt roster's derivation.
+
 ## Cost class
 
-§1, §2: edit. §3: small build per module, plus MB's design-first decider and trace. §4: small build.
-§5: small build (mechanical; 91 lines and one exporter section).
+§1, §2: edit. §3: small build per module (the decider is MB's, B20). §4: small build. §5: a check here;
+the build is MB's in B17.

@@ -6,7 +6,11 @@ Re-grounded: 2026-11-12 (audit §18) — no edit of this file changes. Its histo
 
 Reconciled: 2026-11-12, U5d closure — folded **A-12** and **A-17 / A-18**. A dignity's "precedence" step, withdrawn by X-19 because a seat could add no modifier, is lawful again as a seat's modifier (A-12); it is not re-added here and may return as a named term through the one obstacle composer. The founders' seeded deeds follow the ruled order (Varfell third, realm-wide at the third confidence).
 
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (BYZ_A: e3 CONFORMS once A-12/A-13 land; e7's deposit AMBIGUOUS; "withdrawn edits 1, 2, 4 (second fixture), 5, 6 still in the body"), §2 (A-12 row; F-R4-10, F-R4-11), §7, 7b.0, 7b.7 ("delete the withdrawn edits …; e7's deposit wording …; `presumption_gain` is SYN_B's (ships 0)"); `U1_OWNERS_AND_VOCABULARY.md` D-U1-01/01a (a dignity's precedence returns only as the seat row's `modifier:`), F-33 (`provisional_term` is BINDING-C's one fixture), F-34; `U3_CONFLICT_LEDGER.md` C3-C10 (favourable terms are levels), F-R4-11 (BINDING-C's kind names). Changed: **edits 1, 2, 4's two withdrawn fixtures, 5 and 6 are removed from the body**, each replaced by a one-line pointer to SYNTHESIS-B (they were withdrawn by this file's own first `Reconciled:` line and stood beside it); "What it changes" and gate 1 follow; edit 7's deposit is WITNESS's, its favourable steps are levels, its Partial term is BINDING-C's `provisional_term` and its Failure kind `appointment.resisted`; the `[UNVERIFIED]` on vacant rows is settled at the tree and **this file carries the vacant-row build edit** for the four files that need it (SYNTHESIS-B, COLONIAL-D, PAPACY-E); the `[UNVERIFIED]` on the row reader is settled (it refuses no unknown row key today).
+
 ## Status: PROPOSED
+
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B32**, after SYNTHESIS-B and `22_HAPPENINGS_B` edit 3 (`U3_DEPENDENCY_ORDER.md` §1 item 32). Depends on: `06_FA_office_capabilities.md` (B04), `06_FA_remit_grant_by_row.md` (B21), `14_VERBS_BINDING_C_turnover.md` (B21: `confer`'s row and draw, `provisional_term`), `15_INSTITUTIONS_SYNTHESIS_A`, `_B` (B32). Lane tag: FA. Tier: `sonnet` producer, effort `high`; `opus` for edit 7's obstacle and leverage terms (a contested row whose bands decide a story, `R4_READ.md` 7b.0 (1)). Named test: `engine/season/tests/test_inst_byz_a.py`. Standing sentences: *Pool* — `confer`'s pool is the one pool rule on the conferrer's trained score (A-6); talent enters as levels (A-7); a wound is a level (A-8). *Failure writes* — a Failure emits `appointment.resisted`, witnessed by those present and deposited to them; the conferee holds it as a slight (A-81). *Draw keys* — `confer`'s draw is BINDING-C's, keyed `H(w.world_seed, w.tick, <conferee id>, "confer.draw")` (A-30).
 
 Source: `audits/15_INSTITUTIONS_BYZANTINE.md` §1.3 (D-2, D-5, D-6), §5, §6, §7.0; Jordan's fixed point
 of 2026-11-12 (`INSTITUTIONS_BRIEF.md`); the standing rule of `AUDIT_BRIEF.md`. Batch A of six.
@@ -15,16 +19,16 @@ text, and on `06_FA_office_capabilities.md` for the pool. Ratifies nothing.
 
 ## What it changes in `engine/season/` at runtime
 
-1. **At build:** one Record of a new kind `roll` exists, held by the Chief Parliamentary Clerk, and
-   every person holds, for each of the three founding seats, one deed claim whose subject is the seat.
-   A declared build-hash mover.
-2. **`person_q.legitimacy`** gains a third term, the presumption, read from those claims. At
-   `presumption_gain: 0` (the control) it is today's function exactly.
+1. (Withdrawn: the founding order and its paper are SYNTHESIS-B's seeded deeds and `homage`
+   instruments; no Record kind `roll`.)
+2. (Withdrawn: the presumption is SYNTHESIS-B's chain term in `legitimacy`; `presumption_gain` ships 0.)
 3. **Seat rows may carry `dignity:`.** Six such rows are authored in the body `Imperial Court`, vacant
    at build. A `confer` on one requires the conferee's live oath to the conferring seat and a deed
    claim the conferrer holds about him; the cited deed is what the investiture publishes.
-4. **`confer` is a draw** on the four-band ladder (§7.0 of the audit). With `procedure_draws: off`
-   (the control arm only) it resolves as today.
+4. **`confer` is a draw** on the four-band ladder (BINDING-C's row). Its control is the pinned roll
+   (`procedure_draws` is not added).
+5. **A seat row may name no holder** (`holder: null`): it is built vacant. This file carries that build
+   edit for the kit.
 
 ## The problem (evidence)
 
@@ -50,36 +54,18 @@ existing. The order decides no outcome (the standing rule): it is the confidence
 
 ## Exact edits
 
-**1. `engine/season/offices.yaml` — new top-level section, after `titles:`.**
+**1.** (Withdrawn, X-05/X-06: no `offices.yaml: founding:` section. The order is SYNTHESIS-B §2's
+seeded deeds, 3, 2, 1, in `rosters.yaml: prehistory`.)
 
-```yaml
-# THE FOUNDING ORDER (Jordan, 2026-11-12: "the first king had the greatest accomplishment in the
-# secession war, followed by the first Duke of Hafenmark and the first Duke of Varfell").
-# One row per seat won in the Secession War. `deed` is a `data/verbs.py::DEED_KINDS` member; `order`
-# is the rank of the accomplishment, read ONLY as the confidence of the claim `build_realm` deposits
-# (`fixtures: founding_confidence`), never as a gate, a tie-break or a result.
-founding:
-  roll: {holder: "NPC-008", note: "the Record of kind `roll`; drawn up at the holder's seat rung"}
-  entries:
-    - {seat: off_king,              deed: field.won, order: 1}
-    - {seat: off_duchess_hafenmark, deed: field.won, order: 2}
-    - {seat: off_duke_varfell,      deed: field.won, order: 3}   # D-1: credited_in is §14 item 2
-```
-
-`[ASSUMPTION; medium; Jordan to correct]` the deed kind (`field.won` for all three; canon says
-"wartime deeds" and no more). `[UNVERIFIED]` that `field.won` is scored by `deed_valence` for a
-subject that is a seat id: `attributed_deeds` (`person_q.py:158-175`) filters an unpaired kind on
-`c.subject == referent` and does not ask what the referent is; confirm that `field.won` is not a
-paired kind before landing.
-
-**2. `engine/season/rosters.yaml: record_kinds.values`** — add `roll: [entries]`. `entries` is the
-list of `{seat, deed, order}` mappings above, copied at mint.
+**2.** (Withdrawn, X-04: no Record kind `roll`. What this file called the Roll is SYNTHESIS-B §3's two
+`homage` instruments in the Chief Parliamentary Clerk's keeping.)
 
 **3. `engine/season/offices.yaml: seats` — one new optional key, `dignity:`**, an int in
 `[1, dignity_grades]`. A row carrying it must have `remit_acts: []` and `revocation: null` (the
 loader refuses otherwise: a dignity with a remit is an office; a revocable one is not for life).
-`[UNVERIFIED]` whether the seat-row reader refuses unknown keys; if it does, its key set gains this
-and proposal B's and C's keys in the same commit.
+Settled at the tree (was `[UNVERIFIED]`): `data/rosters.py::_load_offices` (`:152-180`) refuses no unknown
+row key today; the kit's one seat schema (SYNTHESIS-A §3) adds that refusal, and `dignity` is in it. A
+dignity's precedence on a roll, if authored, is the row's `modifier:` (A-12; D-U1-01a), never a step.
 
 Six rows, appended to `seats:` (posts are placeholders; canon names no court dignity, and research
 never supplies a canon name: `rosters.yaml`'s source-precedence ruling):
@@ -97,37 +83,26 @@ Anchored at `T1`, the capital, as the Inner Circle's appointed seats are: those 
 on the realm rung can fill today (`offices.yaml:58-60`, H-207: "at build only the six Crown T1 seats
 are satisfiable"); a dignity on the realm rung itself would sit beside the King's seat and not
 beneath it. A closed number, deliberately: a place at the table is scarce, and it falls free only by
-a death or a `release`. `[UNVERIFIED]` that `harness/populated.py` mints a row whose `holder` is null as a vacant
-seat (`establish` leaves one vacant today, FA audit E-5; the authored-row path was not traced). If it
-does not, the rows are minted by the build's own `establish` under `off_king`.
+a death or a `release`.
 
-**4. `engine/season/data/fixtures.py`** — three fixtures:
+**The vacant-row build edit (carried here for the kit; settled at the tree, was `[UNVERIFIED]`).**
+`harness/populated.py`'s minted-seat loop (`:1767-1776`) slugs `row["holder"]` into a person id and raises
+`Unspecified` when that person is not built, so a row with `holder: null` is refused today. Edit, in that
+loop, before the person lookup: a row whose `holder` is `None` builds its `Office` from the row exactly as
+a held row does and opens **no** `hold` (the seat is vacant, as a dead holder's seat is). `data/rosters.py:204`
+(`OFFICES_BY_HOLDER`) skips a `None` holder. The refusal of a named holder who is not built stays.
+SYNTHESIS-B §6, COLONIAL-D edit 4 and PAPACY-E's sees cite this edit. Test:
+`test_inst_byz_a.py::test_a_vacant_row_builds_vacant` (red before the edit: `Unspecified` naming
+`off_dignity_1a`; green after: the Office exists and no Tenure has it as object).
 
-| name | shipped | sweep | read by |
-|---|---|---|---|
-| `presumption_gain` | 0.5 | 0 (control) / 0.5 / 1.0 | `person_q.legitimacy` |
-| `founding_confidence` | `[1.0, 0.8, 0.6]` of `Claim.confidence`'s full value, by `order` | flat `[1.0, 1.0, 1.0]` / the shipped | `harness/populated.py::build_realm` |
-| `dignity_grades` | 5 | 3 / 5 / 7 | the `offices.yaml` loader |
+**4. `engine/season/data/fixtures.py`** — one fixture: `dignity_grades`, shipped 5, swept 3 / 5 / 7,
+read by the `offices.yaml` loader. (Withdrawn: `presumption_gain` is SYNTHESIS-B's, shipped 0, F-34;
+`founding_confidence` is not added, X-06.)
 
-**5. `engine/season/harness/populated.py::build_realm`** — after seats are built: mint the Roll
-through `_mint_document` (kind `roll`, content `{entries: [...]}`, at the holder's seat rung, the
-holder's `hold` riding on it), and for every person append one claim per entry:
-`(entry.seat, entry.deed, True)`, source `told_by`, confidence `full · founding_confidence[order-1]`,
-`when` the build tick. Both come from `OFFICES_FOUNDING` (the loader's one reading of edit 1).
+**5.** (Withdrawn: SYNTHESIS-B §2's prehistory block deposits the founding claims; no build-time Roll.)
 
-**6. `engine/season/queries/person_q.py::legitimacy`** — signature gains `seat: Optional[str] = None`
-and `fx=None`; body gains, after the existing sum:
-
-```python
-    if seat is not None and fx is not None and (g := float(fx.get("presumption_gain"))):
-        if not _took_by_force(p.ledger, holder, seat):        # a dominance-kind deed of `holder`'s on `seat`
-            for c in attributed_deeds(p.ledger, seat):        # the founding claims: subject is the seat
-                total += g * deed_term(p, axis_w, c) * c.confidence / CONFIDENCE_FULL
-```
-
-`_took_by_force` reads `p`'s own claims only: any `standing_routes.kinds.dominance` deed attributed
-to `holder` whose subject is `seat`. Person-side (AX-2). The two existing callers pass no `seat` and
-are unchanged; the accession draw (proposal E) and the hearing's `opposition` term pass it.
+**6.** (Replaced by SYNTHESIS-B §1: `legitimacy`'s chain term, read from the predecessors' deeds and not
+from claims whose subject is a seat; `took_by_force` is applied at each link there.)
 
 **7. `confer` on a dignity row** (`loop/predicates.py::_req_confer`; `loop/effects_governance.py::_eff_confer`;
 the row's text is the BINDING lane's):
@@ -138,51 +113,52 @@ the row's text is the BINDING lane's):
   conferrer's own ledger (`own_ledger` of `to`, the form `survey` and `tell` use). A computed act
   binds `to` from the persons the conferrer holds deed claims about and ranks them by his own
   `deeds_judged`, which replaces the positional conferee for these rows.
-- the draw, as audit §7.0: `contests: a standing`, `counterparty: to`. Pool `faculty(w, p, "confer")`.
-  Obstacle in the SC form: `difficulty` by the rung kind of the seat's rung; `opposition` the mean
-  regard for the conferee among the live holders of seats of the row's body (an empty body: none);
-  `favourable` one step each for a `cites` claim held firsthand, for the conferee's regard for the
-  conferrer above zero, and for the conferee's highest live dignity; `standard` raised at an open
-  floor.
-- by degree: Overwhelming and Success open the `hold` and deposit the cited deed, as a told claim
-  from the conferrer, on every person the act's witness channel reaches (full confidence on
-  Overwhelming, the conferrer's own on Success); Partial opens it with
-  `Term(tick + provisional_term·season)` (fixture, shipped 4, swept 2 / 4 / 8); Failure opens nothing,
-  emits `conferral.declined`, and closes nothing.
+- the draw is `14_VERBS_BINDING_C_turnover.md`'s row (its `contests:`, pool and bands; X-23). This file
+  supplies, for a dignity row only, the terms in the SC form (C3-C10: what helps is levels): obstacle
+  `difficulty` by the rung kind of the seat's rung and the `reception` of the live holders of seats of
+  the row's body toward the conferee (hostile half; an empty body: none), `standard` raised at an open
+  floor; the conferrer's levels: `proofs` for a `cites` claim held firsthand, `favour` for the
+  conferee's regard for the conferrer above zero. The conferee's own highest live dignity is **not** a
+  level here: a seat helps a roll only as the actor's exercised seat's `modifier:` (D-U1-01), and the
+  conferee is not the actor.
+- by degree: Overwhelming and Success open the `hold`, and the effect emits the investiture Event
+  carrying the cited deed as an Observation; **WITNESS deposits the told claim** through its `told_by`
+  channel to every person the kind's reach admits (`04` §A.2: `loop/witness` is the only writer of
+  claims; full confidence on Overwhelming, the conferrer's own on Success); Partial opens it with
+  `Term(tick + provisional_term·season)` (BINDING-C's one fixture, shipped 2, swept 1 / 2 / 4; F-R4-10);
+  Failure opens nothing, emits `appointment.resisted` (BINDING-C's name; F-R4-11), and closes nothing.
 
-New emitted kind: `conferral.declined` (`write_matrix.yaml` needs no row: nothing is written).
+No new emitted kind (`conferral.declined` is not added).
 
 ## Gate (execution artifacts)
 
-1. *Build.* The probe of audit E-1, extended to read `legitimacy(p, holder, seat)`: its mean over
-   persons for the three founding holders is ordered King > Hafenmark > Varfell at the shipped
-   fixtures, and the two dukes' means are above zero; at `presumption_gain: 0` each mean equals the
-   value the unedited function returns on the same build (the control; E-1's comparable reading is
-   mean `regard` 0.720, 0.000, 0.000).
+1. *Build.* The six dignity rows build vacant (the vacant-row test above); the founding order's
+   reading is SYNTHESIS-B's gate 2, reported per regime (A-87 to A-91), not repeated here.
 2. *Draw.* 200 seeds, one hand-placed `confer` of `off_dignity_3a` by the King on a sworn person with
-   one firsthand deed: all four bands occur; no band exceeds 0.9; with `procedure_draws: off` every
+   one firsthand deed: all four bands occur; no band exceeds 0.9; with the roll pinned to Success every
    seed opens the hold (the control).
 3. *Reach.* Realm, seeds 0 to 9, eight seasons: the count of `tenure.opened` on dignity rows and of
-   `conferral.declined`, reported, with the cited deed among the conferee's told claims in at least
+   `appointment.resisted` on them, reported, with the cited deed among the conferee's told claims in at least
    one other person's ledger after an opening. A zero count is a finding against reach (F-FA-02's
    cause b, the question slot), not against this mechanism, and is reported as such.
 
 ## Falsifier
 
-Reverse the three `order` values: gate 1's ordering reverses. Delete the `cites` conjunct: a seeded
-conferral names a person the conferrer holds no deed of. Set `founding_confidence` flat: the three
-presumptions are equal. If any of the three plants leaves its reading unmoved, the term is not read.
+Delete the `cites` conjunct: a seeded conferral names a person the conferrer holds no deed of. Write the
+cited deed's claim from the effect instead of WITNESS: a person outside the kind's reach holds it.
+Delete the vacant-row edit: the build raises. If any plant leaves its reading unmoved, the rule is not
+read. (The founding order's falsifiers are SYNTHESIS-B's.)
 
 ## NERS
 
-N: cut the Roll and NPC-008's custody has no object; cut the claims and the ducal houses read zero;
-cut `dignity` and the Imperial Court stays seatless. Holds top-down, bottom-up (a petitioner consults
+N: cut `dignity` and the Imperial Court stays seatless (the Roll and the founding claims are now
+SYNTHESIS-B's and carry NPC-008's custody). Holds top-down, bottom-up (a petitioner consults
 the Roll), laterally (two houses compared by one formula). R: the conferrer chooses whom to honour and
 is bound to pay (B); complete at the extremes (no deed known: no candidate forms; a seat taken by
 force reads no presumption). S: `deed_term` and `reception`'s confidence weighting; no new scoring.
-E, against that: one section, one key, one record kind, three fixtures.
+E, against that: one key, one fixture, six content rows, one build edit.
 
 ## Cost class
 
-Small build. Declared movers: the build hash (the Roll, the claims, six seats); any run in which a
-`confer` resolves.
+Small build. Declared movers: the build hash (six vacant seats); any run in which a `confer` on a
+dignity resolves.

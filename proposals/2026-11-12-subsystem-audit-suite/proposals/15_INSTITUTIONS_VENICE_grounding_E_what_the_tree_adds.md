@@ -2,7 +2,11 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-13**, **A-12** and **A-14** (this file was written before the answers were recorded and cites none): the paired officers, the secretary order and the inspection are content on the three ruled seat facts; an appointer who "answers" for his man does so by a drawn hearing, and a body's assent (edit 7) is a ballot of draws on its members. A seat's modifier, if the kit authors one, enters through the one obstacle composer. No edit is withdrawn.
 
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (VEN_E: CONFORMS; `[UNVERIFIED]` conferral `via`), §7 (COMPLETE, uniform), 7b.0; `U3_CONFLICT_LEDGER.md` C3-L9 (the keys as tables), C3-C10 (levels), C3-N20 (no ordinal for an arrangement row), C3-L12 (title by act); `U1_OWNERS_AND_VOCABULARY.md` D-U1-01 (a seat's modifier is its row's `modifier:` read by the `office` source, superseding the first `Reconciled:` line's "through the one obstacle composer"); `U1_GLOSSARY.md` *roll* (a membership is a **list**). Changed: `cooling_off` and `eligible_from` are table rows (VENICE-C as reconciled); edit 3's `[UNVERIFIED]` is resolved at the tree (`state/attribution.py:91` `causing_act` returns the `Act`, whose `via` is `state/carriers.py:721`); held reports and the pledge's discharge read as `proofs` and `world_q.owed`; the Sforza seizure points to the land rulings' seizure act, not to COL-D's withdrawn `annex`.
+
 ## Status: PROPOSED (an executable plan for a later session; not ratified by being written, CLAUDE.md §2)
+
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B40** (`U3_DEPENDENCY_ORDER.md` §1 item 40, "the four grounding files"), after SYNTHESIS-D and the family scenarios. Depends on: `15_INSTITUTIONS_COLONIAL_A` and `_SYNTHESIS_A` (B32), `_COLONIAL_C`, `_VENICE_B`, `_VENICE_D` (B33), `06_FA_remit_grant_by_row.md` (B21). Lane tag: FA. Tier: `sonnet`, item by item, effort `medium` for the content edits and `high` for edits 3 and 5; one `opus` read of gates 2 and 4. Named test: `engine/season/tests/test_inst_ven_e.py` for the hand-built gates 3, 4 and 6 (decidable here: they are folds, not report runs); gates 2 and 5 are runs of `harness/institution.py` on the Counting-House case, quoted in the commit. Standing sentences: *Pool* — every roll is an existing verb's on the one pool rule (A-6, A-7, A-8). *Failure writes* — this plan adds no contested row (A-81). *Draw keys* — no draw is added (A-30).
 
 Source: `audits/15_INSTITUTIONS_VENICE.md` §17 (the re-grounding of 2026-11-12) and
 `unified/RESEARCH_MAP_INSTITUTIONS_B.md` §2.1, §4 (rows M-1 to M-13). Batch E of that audit's plan.
@@ -54,8 +58,8 @@ defect alone"); `PGS:148`; `CGR:99` (fixed terms, no self-succession, contact wi
 `CGR:102` (near provinces a civilian under oversight, far ones a combined governor).
 
 On every subject settlement where D authors a rector, **two** rows on the same anchor, both
-`conferral: appointed`, `revocation: rung_above_in_holdings`, `term: 8`, `cooling_off: 8`,
-`audit_at_exit: audit`, each holding a `commission` (the kit's form):
+`conferral: appointed`, `revocation: rung_above_in_holdings`, `term: 8`, `audit_at_exit: audit`, and a
+`tables.cooling_off` entry of 8, each holding a `commission` (the kit's form):
 
 ```yaml
 - id: off_<place>_justice        # post label is Jordan's (names_index); functional here
@@ -96,10 +100,10 @@ larger than, its informational effect").
 
 - **The recital.** The Record the `audit` row mints at Partial (the admonition), and the `ban`'s or
   `oblige`'s opening claim at Success and Overwhelming, carry in `recites` the id of the seat through
-  which the audited hold was conferred, read from the hold's own opening Event (`tenure.opened`'s
-  `via`) `[UNVERIFIED: that a conferral's opening Event carries the conferring seat in a field the mint
-  can read; if it does not, the recital reads the audited seat row's `revocation` basis and names the
-  seat that basis resolves to, which is the same seat for every appointed row]`. One line where the
+  which the audited hold was conferred, read from the hold's opening Event's causing act:
+  `state/attribution.py::causing_act(w, e).via` (opened: `causing_act` returns the whole `Act` for
+  exactly this question, `attribution.py:91-97`; `Act.via` is `state/carriers.py:721`; the mint is
+  resolver-side, so the act-store read is lawful, `04` §B.9). One line where the
   row's disposal builds the Record's content (owner: the single document mint,
   `loop/effects_information.py::_mint_document`, as COL-C uses it). `recites` is the kit's existing
   content key (SYN-A edit 1); this is its fourth use.
@@ -117,17 +121,19 @@ ambassadors … merely fronted"; the Grand Chancellor "elected for life … the 
 structurally open to a non-noble"); `PHS:341-343` (three orders, each with a ceiling); `CGR:96`;
 `PMP:150-152`, `:459-463` (the report is cumulative, inherited, and "itself stealable").
 
-- One roll seat `off_<republic>_citizen_roll` (`binds: members_by_warrant`, `remit_acts: [issue]`),
-  distinct from the council's roll. One body `"Chancery"` in `office_bodies`. Two secretary seats on it:
-  `conferral: appointed` by the head seat, **no `term`**, `eligible_from: off_<republic>_citizen_roll`,
-  `remit_acts: [issue]`; and `eligible_from` on every council seat stays the council's roll, so a
-  secretary can never be drawn for one. That is the ceiling, and it is two existing keys.
+- One list seat `off_<republic>_citizen_roll` (`binds: members_by_warrant`, `remit_acts: [issue]`),
+  distinct from the council's list. One body `"Chancery"` in `office_bodies`. Two secretary seats on it:
+  `conferral: appointed` by the head seat, **no `term`**, `remit_acts: [issue]`, and a
+  `tables.eligible_from` entry naming `off_<republic>_citizen_roll`; every council seat's
+  `tables.eligible_from` entry stays the council's list, so a secretary can never be drawn for one. That
+  is the ceiling, and it is one existing table (VENICE-C §2 as reconciled).
 - The college's written menu (audit §1.4) is `issue`d through a secretary's seat: the drafter is not the
   proposer. No mechanism: `Act.via` already names the seat.
 - **The standing report.** The `commission` form's `due` (`record.given every 4, to: grantor_rung`,
   SYN-A) is the report. This edit states what the Record is and where it rests: a `survey` product of
   the place, `give`n to the Chancery's rung, where the secretary holds it with its predecessors. The
-  successor may be `give`n it; a held report of a place is an `evidence` item on his graded acts there
+  successor may be `give`n it; a held report of a place is a `proofs` level on his graded acts there
+  (leverage, C3-C10)
   (the colonial lane's levy and order rows already read a held assessment). It fades as every claim
   fades (`01_CORE_claim_fade_as_read.md`); it can be seized, concealed, forged (FI's verbs).
 
@@ -181,7 +187,7 @@ extraction rights transferred"); `CGR:190` (a loan "secured against a named extr
 - **The pledge is composed and needs no edit.** At the making of a `debt` the debtor `give`s the creditor
   a bearer instrument he holds; at discharge the creditor `give`s it back. D-5 holds: there is no lien
   and no creditor verb; possession is the security. A creditor who keeps it after the debt is met
-  (proposal B's `debt_state: met`) holds what he was `give`n: recovery is the debtor's suit, with his
+  (proposal B's bond with `world_q.owed` at 0) holds what he was `give`n: recovery is the debtor's suit, with his
   own discharging `transfer.made` as his evidence. The
   chooser must be able to *form* the pair, which is `14_VERBS_SOCIAL2_A`'s formation rule (an act forms
   on what the actor holds and knows); this edit adds a gate that it does.
@@ -201,7 +207,7 @@ extraction rights transferred"); `CGR:190` (a loan "secured against a named extr
   hearth venue leaves out the commune's `determine` seats, whose purview contains that hearth by
   containment (`state/gate.py::judging_set`, not opened by this pass). If it does not, the two benches
   have the same members and this row is held until SC's venue work can tell them apart.]` Either bench
-  may be asked by `open_case`; where the members differ, `regard` and `obligation` differ. The debtor
+  may be asked by `open_case`; where the members differ, `regard` and the `obligation` levels differ. The debtor
   who owes the guild's own Comptroller wants the town's court.
 
 ### Edit 7 — the outside assent; the body of the excluded (M-12, M-13) · `arrangements.yaml`, `offices.yaml`, `rosters.yaml` · content
@@ -216,15 +222,15 @@ ladder and chest, "a release valve").
   form), its purview is the hall and, one edge deep, its sworn members (`purview_reaches`): the statute
   addresses members only. To bind the town it must be `issue`d through a seat whose purview contains the
   town, so the guild's head `petition`s the commune's justice seat (edit 1) and that holder's answer
-  (issue it, issue it altered, refuse) is the ratification: an ask, rolled, with `obligation` and
-  `regard` as its terms. No row and no key. **The condition:** D anchors `off_guild_roll` at
+  (issue it, issue it altered, refuse) is the ratification: an ask, rolled, with `obligation` as a level
+  and `regard` as a term. No row and no key. **The condition:** D anchors `off_guild_roll` at
   `{duchy: "Hafenmark"}`, whose purview by containment is every Hafenmark settlement; a statute issued
   through *that* seat needs no assent. This edit therefore asks one content decision of D's rows: the
   guild's **rule-making** remit (`issue`) sits on the hall's head seat, and the duchy-anchored roll seat
   keeps only the warrant. `[ASSUMPTION; Jordan or FA to correct: it narrows a remit D authored.]`
 - A brotherhood: one `community`-rung body in `office_bodies` (`"Brotherhood"`, faction as its town's),
-  a roll seat by warrant, a head seat `conferral: elected`, `term: 4`, `eligible_from` its own roll,
-  `remit_acts: [issue, convene]`, an establishment and a chest as any house. Three rows. Nothing ties it
+  a list seat by warrant, a head seat `conferral: elected`, `term: 4`, a `tables.eligible_from` entry
+  naming its own list, `remit_acts: [issue, convene]`, an establishment and a chest as any house. Three rows. Nothing ties it
   to the council; that is the point.
 
 ## Exact edits, by owner (summary)
@@ -234,7 +240,7 @@ ladder and chest, "a release valve").
 | 1 | `engine/season/offices.yaml` (FA) | paired officer rows on each subject place D authors; one combined row for a far seat; header comment stating the convention | edit |
 | 2 | `engine/season/instruments.yaml: seeded` (kit) | one `capitulation` Record per subject commune | edit |
 | 3 | `engine/season/arrangements.yaml` row `audit` (SC/COL-C) and the mint | `recites` the conferring seat | small build |
-| 4 | `offices.yaml`, `rosters.yaml: office_bodies` | citizen roll, `Chancery`, two secretary seats | edit |
+| 4 | `offices.yaml`, `rosters.yaml: office_bodies`, `rosters.yaml: tables.eligible_from` | citizen list, `Chancery`, two secretary seats | edit |
 | 5 | `engine/season/instruments.yaml: forms`; `data/instruments.py`; `queries/world_q.py::clauses_binding` | form `condotta`; clause key `stage` | small build |
 | 5b | `offices.yaml` | `upkeep: 2` on the yard seat | edit |
 | 6 | `arrangements.yaml`; `offices.yaml` | row `guild_debt_suit`; one guild seat with `determine` at the hall | edit |
@@ -306,6 +312,8 @@ clause key, one reader branch, the loader's refusal of an unknown stage). Design
 
 The *commenda*, the merchant galleys, the Monte, the bill of exchange and the bank's partnership form
 remain memory-grade (map §3); nothing here is built on them. The Sforza seizure (an obligee who takes
-the seat he served) is the colonial lane's `annex` by conquest (COL-D edit 5) and is not redone. A
+the seat he served) is the land rulings' seizure act after a won march (A-57, A-58, A-66: title and its
+seats pass only by the act the winner forms; C3-L12), not the colonial lane's `annex` (COL-D edit 5 is
+not built), and is not redone. A
 wealth-threshold ladder, a stored purchaser's tag and a scope counter on the secret bench are refused in
 the audit's §17.2.

@@ -2,7 +2,25 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-13) — stands. Under A-5 the pool's cap is solved on the closed form of the one sampler, and against the largest lawful disadvantage (`U5a_DICE_owed_edits.md` §1 row 3); the tables here are whole-dice figures. Favourable terms are levels, not obstacle reductions (A-25).
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-5: every enumerated figure is
+whole-dice history; gates 2 and 3 restated as properties on the closed form; A-6: the floor pool is `pool_floor`, so
+"pools 1 to 12" and the one-die case are not reachable in play; A-25: edit 6's "favourable halves subtracted" struck),
+§1 (A-29: `tanh` is named in the declared float contract), §7/§7b (dependency on the closed-form cap, tier); U3 B05,
+§4.1 row 16 (CAP Part B lands with this in B05), C3-L1 (the margin is quantised at the ladder; the obstacle stays a
+real number), C3-N26 ("16.5 %" is whole-dice history, unrelated to the throughput file's). Changed: edit 6, the
+gate, the cost table's status; the evidence is kept and marked.
+
 ## Status: PROPOSED
+
+Lands in batch: **B05** (IN/DICE, SC). Depends on: `U5a_DICE_owed_edits.md` §1 row 3 (`_chance_floor_cap` solved on the
+closed form of the one sampler; until it lands this proposal reads the whole-dice `_chance_floor_cap` and its figures
+stay void), `05_SC_obstacle_difficulty_and_modifiers_B.md` (SC-B, B05; its `bound()` is the function edited),
+`U5a_capability_home_and_two_inputs.md` Part B (B05, the pool rule with `pool_floor`).
+
+**Whole-dice figures.** Every percentage below ("90.0 %", "10.0 %", the cost table, gate 3's values) was enumerated on
+the whole-dice sampler that A-5 retires; the curve and its properties survive, the figures do not and are re-derived
+on the closed form at the calibration. Under A-6 no pool in play is below `pool_floor` (5), so the one-die case and
+pools 1 to 4 are statements about the function, not about play.
 
 Carries finding F-PES-DICE-03 of `../audits/16_PESSIMIST_DICE.md`. Lanes that own the edited files: IN
 (`engine/dice_engine/sigma_leverage.py`), SC (`modules/social_contest/roll.py`, the obstacle's single
@@ -68,7 +86,9 @@ No new number: both operands exist. Properties, each checked (`runs/PES_DICE/sof
   give it more.
 
 **What it costs, stated.** Like `soft_cap` (which makes 1.0σ worth 0.874), the curve compresses values
-between the knee and the cap, so a strong opposition below a large pool's cap gets easier:
+between the knee and the cap, so a strong opposition below a large pool's cap gets easier. (Table:
+whole-dice figures, void under A-5; re-derived on the closed form at the calibration. The direction, easier
+between knee and cap, is the finding that survives.)
 
 | pool | raw Ob | hard: Ob, P+ | soft: Ob, P+ |
 |---|---|---|---|
@@ -97,7 +117,10 @@ time to choose the form. The size of the bend is Jordan's to tune and is exposed
    ```
 
    and make `soft_cap`'s body `return saturate(net_sigma, M_MAX)` (the same expression; the parity
-   goldens are the control and do not move).
+   goldens are the control and do not move). `math.tanh` is a transcendental the port must match: it is
+   listed in the declared float contract that A-29 orders (Layer 1 step 13, text owed,
+   `OWED_TO_UNIFICATION.md` §A) and checked by the `fmath` vectors (`11_GO_float_contract.md` Part A; no
+   recorder, C3-L3).
 2. **`modules/social_contest/roll.py::obstacle`**. Old:
 
    ```python
@@ -131,22 +154,30 @@ time to choose the form. The size of the bend is Jordan's to tune and is exposed
    sweep has three points and a verdict that flips across it is itself the finding, S42.2.1). It rides H-213's row (the same hole:
    how hard one matter can get); no new row.
 6. **SC-B, when it lands**: its `bound(x) = min(x, ceiling)` reads this function instead. The
-   favourable halves are still subtracted after the bound and floored at `OB_MIN`; nothing else in SC-B
-   changes.
+   favourable halves are advantage rows, levels for the speaker
+   (`16_PESSIMIST_SC_A_what_the_speaker_brings_is_leverage.md`; A-25), so `bound()` sees hostile terms
+   only; nothing else in SC-B changes.
+
+Order of edits: 1 (hash-equal alias) → 3 and 4 (the field and its host, default `hard`, hash-equal) → 2 (the
+module reads the form) → 5 (the fixture flips to `soft`: the one re-pin).
 
 ## The gate (execution artifacts)
+
+`runs/PES_DICE/pure.txt` and `soft.txt` were lane scratch, not in the repository; gate 2 is their committed
+form. Commands: `python -m pytest engine/season/tests/test_sc01_obstacle_ceiling.py -q` (exists; gains the
+gate 2 and gate 3 tests below), then `python -m engine.season.harness.report && python -m engine.season.harness.delta HEAD`.
 
 1. **Control.** At `ceiling_form: hard`, `build_realm(0)` and `build_realm(1)` through the shipped
    chooser for two seasons give `bacd687f1470883b412be9638d0b0f88` and
    `8aae8412c221edb44ffd45d91bae2671` (measured by this lane at 826b747; equal to the SC interrogation
    lane's seed-0 run and the determinism sweep's seed-1 run).
-2. **At the owner.** `runs/PES_DICE/soft.txt`'s body as a test in
-   `engine/season/tests/test_sc01_obstacle_ceiling.py`: over pools 2 to 12 and obstacles from the knee
-   to 14 in steps of 0.005, the chance of Partial-or-better is strictly decreasing and never under
-   `1 - band_odds(1, ceiling)[0]`; at one die the function equals `min`.
-3. **Ordered words give ordered odds.** For a two-die examiner, forgery qualities 0, 0.5, 1 and 3 give
-   four different chances (26.00, 16.50 → 17.48, 12.72, 10.03 %); under `hard` the last two are equal,
-   which is the assertion that can fail.
+2. **At the owner** (`test_soft_bound_is_strictly_decreasing_and_floored`): over pools `pool_floor` to
+   `pool_floor + 10` and obstacles from the knee to 14 in steps of 0.005, the chance of Partial-or-better
+   computed on the closed form (`band_odds`) is strictly decreasing and never under
+   `1 - band_odds(pool_floor, ceiling)[0]`; the `hard` arm equals `min` (the control inside the test).
+3. **Ordered words give ordered odds** (`test_four_forgery_qualities_give_four_ordered_chances`): at the
+   floor pool, forgery qualities 0, 0.5, 1 and 3 give four strictly ordered chances under `soft`; under
+   `hard` the last two are equal, which is the assertion that can fail. No figure is asserted.
 4. **The realm at the shipped arm**: the seven examinations of forged Records in seeds 0 and 1 compose
    2.699; the reading names how many bands moved. Declared hash movers: every world in which a rolled
    act composes above the fixed ceiling; re-pinned once, saying so.
@@ -174,4 +205,6 @@ one-die chance at the fixed ceiling; any hash that moves at `hard`.
 ## Cost class
 
 Edit. One alias in the dice engine, five lines in the obstacle's owner, one field, one fixture arm, one
-test body, a re-pin.
+test body, a re-pin. Tier: `sonnet`, effort `high`. Lands it: B05, with the A-5 sampler and CAP Part B (the
+`hard` control arm still equals that batch's hashes); hash movers: every world in which a rolled act
+composes above the fixed ceiling, re-pinned once with the batch.

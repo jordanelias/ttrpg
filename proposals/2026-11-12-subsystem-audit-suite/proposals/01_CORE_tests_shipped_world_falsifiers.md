@@ -2,6 +2,10 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §4) — R-09's red-today falsifier (two persons of different capability read different odds with no monkeypatched addend) is the gate of `U5a_capability_home_and_two_inputs.md` Parts B and C.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.1 row T3 (CONFORMS), §6 row *749 acts*, §7 (COMPLETE except lands-it and tier), §7b-T; `unified/U3_CONFLICT_LEDGER.md` C3-N14, C3-N27; `unified/U3_DEPENDENCY_ORDER.md` node B02, §6.1, §6.2). Added: "749 acts" reads "749 folded acts (821 attempted)" (C3-N14); the four scratch probes the readings came from are not in the repository, and the readings are restated by the new test file itself (rows 1–2) and row 5's falsifier (U3 §6.2); `test_realm_requirements.py` is MISSING from the tree and is the batch's first commit (U3 §6.1); readings are `main`'s and move at B01 (C3-N27); lands-it and tier. No other change.
+
+**Lands in batch:** B02 (hash EQUAL). **Depends on:** `01_CORE_requirements_reading_record.md` (B02; row 3's `reading:` field).
+
 ## Status: PROPOSED
 
 Source: `audits/01_CORE_audit_addendum_C_tests.md` F-TEST-01, F-TEST-06, F-TEST-07, F-TEST-11,
@@ -34,7 +38,9 @@ an accusation), which changes an instrument's table and no world. The rest is te
    | R-09 | `test_we_a_contested_acts_consequence_differs_by_degree` (skips if the combat engine is absent) | `tiny_world` · 24 act ids | two persons separating by capability without a planted pool (`test_cr17…::test_two_pools…` monkeypatches `POOL_ADDENDS`) |
 
 2. **A played realm season is cheap and nobody asserts on it.** `build_realm(0)` + one season: 7.3 s,
-   749 acts, 13,379 Events (`probe_realm_sweep.py`). Readings at seeds 0, 1, 2 (`probe_realm_gates.py`):
+   749 folded acts (821 attempted; C3-N14), 13,379 Events (`probe_realm_sweep.py`; this and the probes
+   below are scratch scripts not in the repository: the readings are `main`'s at the working tree, move at
+   B01, and are re-read by the tests this file adds). Readings at seeds 0, 1, 2 (`probe_realm_gates.py`):
    acts whose scene was occasioned by a landed claim that walks back to **another person's act**: 134 of
    749, 141 of 731, 162 of 751. With `observation_deposit_mode` swept to `none`, the resolved sequence
    `(actor, verb, subject)` first differs at position 191, 183, 182. Control for the first
@@ -102,7 +108,9 @@ def test_r02_withholding_what_acts_observe_changes_later_acts_at_the_shipped_bud
 def test_r02_control_one_seed_played_twice_is_one_sequence(): ...
 ```
 
-About 80 s of test time (twelve realm seasons).
+About 80 s of test time (twelve realm seasons). The file is MISSING from the tree and is written as B02's
+first commit (U3 §6.1): green at the base tree where the claim is a property that holds today (rows 1–2),
+and red with the cause removed (the witness-cut and same-seed controls).
 
 **Not written here, and where it goes.** R-04, R-06's magnitude, R-07's feeling/attitude half and R-09's
 separation are red at the shipped configuration by the first audit's readings (F-CORE-04: capability is
@@ -154,3 +162,6 @@ skip.
 ## Cost class
 
 Small build (rows 1, 2, 7, 8); edit (the rest).
+
+**Lands it and tier.** The B02 batch, an IN `valoria-author` session on `sonnet` (`high`), one commit per row,
+closed by B02's `methodology-close` once. **Hash movers.** None (tests and one harness table).

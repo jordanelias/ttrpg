@@ -2,7 +2,12 @@
 
 Folded: 2026-11-12 by `audits/31_HOUSE_STANCES_AND_CAST_VALUES.md` (Jordan's A-87 to A-90). Nothing here is deleted. (1) **Commit 2 is completed** by `31_WR_A_house_cores_and_the_cast_on_the_opinion_axes.md` §4: the 46 rows' values (57 cells grounded, 106 assumption, 67 no key), derived from the houses' cores Jordan gave; the INCOMPLETE mark is removed here and nowhere else. The owner file is `references/npc_registry.yaml` (`affiliations:`), not `engine/season/npcs.yaml` as commit 2 below says. (2) **Commit 1 is amended, read `31_WR_A` §1 in its place**: five rows, not three (`parliamentary_rule` beside `militarism`, A-87's one line as two poles; `einhir_folk`, A-90); 35 cells, of which `parliamentary_rule × militarism` is `true` and `caste_order × royal_order` and `einhir_folk × einhir_restoration` are `false`; and **no `concerns:` key**, because the three keys of §2 below make `data/cast.py::conviction_of` (`:253-262`) refuse every cast row (audit 31 F-31-01, probe P-31-5: 46 of 46). A `vowed:` list keeps the shared vow column off the new members. (3) **Core and fringe**: with ten axes this file's core (the exact creed set) is 25 sets among 46 persons (F-31-04); `31_WR_A` commit 3 adds the six authored **regime cores** as data and `world_q.core_standing`, which reads each person's distance from a core row (`person_q.closeness`); `accord` (commit 3 here) stays the credit form of commit 4. (4) **The link** A-87 names ("unhappy royal order due to caste") is `rosters.yaml: tables.opinion_links`. (5) **Commit 5's `circle_of`** is reused by `31_WR_B_the_revival_gathers.md`, where the pull of one's own also bears on a stand (one die in a drawn step), not only on approach.
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 and U1 ledger F-25 (the head above already says so; now the body follows): §2 and the bodies of commits 1 and 2 are deleted and replaced by pointers to `31_WR_A_house_cores_and_the_cast_on_the_opinion_axes.md` §1 and commit 2 (five rows, no `concerns:` keys, owner `references/npc_registry.yaml`), not left beside them; the "What it changes" rows 1–2 and §1's closing count follow; §3's regime bullet follows the U1 glossary (*regime*: A-82's cluster with authored cores, `31_WR_A` commit 3; the creed-exact grouping is `30_WR_B`'s creed body); U3 §6.1 (`test_custom.py` absent on `main`, written first); batch (U3 B38). §1 (the verification table), §3, §4 and commits 3–5 are kept. Tier already named.
+
 ## Status: PROPOSED (the roster rows are amended and the cast's values authored by `31_WR_A`; every cell there marked `a` is `[ASSUMPTION; Jordan to correct]`)
+
+Lands in batch: B38 (narrative and regimes), after `30_WR_B` and before `31_WR_A` (U3 §1 item 38); commits 1–2 are `31_WR_A`'s.
+Depends on: see "Dependencies" below.
 
 Source: Jordan, 2026-11-12, as `unified/DECISIONS_ANSWERED.md` records them. **A-82**: *"regimes also share to some extent common opinions on caste, religion, politics, Altonia, militarism, etc"*. **A-83**: *"regime not only who believes whom but also some commonality in thoughts opinions approaches (still individuals, but it's like having unsaid pressure from around you to behave in a particular way)"*. `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md` F-30-05, F-30-12. Reference only (`CLAUDE.md` §0.05). Lane WR with CHAR; owner files `references/descriptor_registry.yaml`, `engine/season/rosters.yaml`, `engine/season/queries/`.
 
@@ -12,8 +17,8 @@ Extends `30_WR_B_regimes_who_believes_whom.md` (whose "body" is this file's **co
 
 | commit | change | hash |
 |---|---|---|
-| 1 | three affiliations join the roster; eighteen `incompatible` cells keyed `null` | EQUAL (nobody holds the new ones); `engine/engine_params/descriptors.json` re-derived (the port's file moves, declared) |
-| 2 | the cast's intensities on the new poles | authored in `31_WR_A` §4 (was INCOMPLETE); a declared build-hash mover |
+| 1 | `31_WR_A` commit 1 (five affiliations, their cells and `vowed:`; no `concerns:` key) | as `31_WR_A` states |
+| 2 | `31_WR_A` commit 2 (the cast's values in `references/npc_registry.yaml`) | as `31_WR_A` states |
 | 3 | `world_q.accord`; `regimes` reads a core and a fringe | EQUAL (readings) |
 | 4 | the credit factor may read the graded accord in place of the sign, behind `Fixtures credit_form` | EQUAL at `sign` (control); `accord` a **declared mover** at every telling between two persons with a shared axis |
 | 5 | the pull of one's own: a person's axis weights lean toward the custom he believes his circle keeps, behind `Fixtures custom_shift` | EQUAL at 0 (control); above it a **declared mover** for every person who holds a claim of a deed by one of his circle |
@@ -29,27 +34,20 @@ Extends `30_WR_B_regimes_who_believes_whom.md` (whose "body" is this file's **co
 | **militarism** | **no** | `military-order` is a faction role template (`rosters.yaml:2086-2107`), a profile of pursuits. No affiliation says what a person thinks of rule by arms |
 | *approaches* (A-83) | **yes, and not as affiliations** | the seven bipolar axes (`descriptor_registry.yaml:178-189`: rank or equality, precedent or the new, one's own or the impartial, self or others, rigid or flexible, forward or humble, rule or outcome), onto which pursuits project and against which every verb and every deed kind is aligned (`data/verbs.py::align_kind`) |
 
-So an opinion in A-82's sense is a position on the affiliation roster (`Person.conviction`, 0 to 5, read signed by `person_q.conviction_stand`, `:456`), and an approach in A-83's sense is a lean on the seven axes. Both are data the engine reads. Three rows are missing.
+So an opinion in A-82's sense is a position on the affiliation roster (`Person.conviction`, 0 to 5, read signed by `person_q.conviction_stand`, `:456`), and an approach in A-83's sense is a lean on the seven axes. Both are data the engine reads. The rows that were missing are authored by `31_WR_A` §1 (five, after A-87 to A-90).
 
-## 2. The rows (commit 1), `[ASSUMPTION; medium; Jordan to correct; revert: delete the row and its cells]`
+## 2. The rows: see `31_WR_A` §1 (deleted here, wave 3)
 
-```yaml
-# references/descriptor_registry.yaml: affiliation_roster   (count: 5 -> 8)
-    - caste_order      # the order of descent as right: who may hold, earn and command by birth (A-41's informal tiers, held as a position)
-    - militarism       # that arms, and those who bear them, should decide the realm's affairs
-    - royal_order      # the kingdom's own order of crown, duchies and bench as the political structure one wants (the native counterpart of altonian_civics)
-  concerns:
-    caste: [caste_order]
-    arms: [militarism]
-    crown: [royal_order]
-```
-
-Names are plain words; none is a canon name, and none is taken from research (`rosters.yaml`'s source-precedence ruling). `rosters.yaml: tables.incompatible` gains the eighteen new pairs, **every one `null`** with the comment "no source either way": this file invents no strain. In particular `altonian_civics × royal_order` and `caste_order × einhir_restoration` are left `null`; whether either strains is Jordan's content. `affiliation_engagement` gains no cell (its default is `null`). `heritage_roster.engages` is untouched.
+The three-row block this section held (`caste_order`, `militarism`, `royal_order`, count 8, three
+`concerns:` keys, eighteen `null` cells) is superseded by `31_WR_A_house_cores_and_the_cast_on_the_opinion_axes.md`
+§1: five rows (`parliamentary_rule` beside `militarism`; `einhir_folk`), count 10, 35 cells, a `vowed:`
+list, and **no `concerns:` key** (three keys made `data/cast.py::conviction_of` refuse every cast row,
+audit 31 F-31-01). Nothing of the old block is kept.
 
 ## 3. Sharing "to some extent": accord, a core and a fringe
 
 - **Accord** of two persons is graded: the mean, over the affiliations both have considered (a key present in both `conviction` maps), of the product of their signed stands (`conviction_stand`: for at +1, against at −1, lukewarm near 0). Two who are both firmly for, or both firmly against, agree; one for and one against disagree; an axis only one has considered says nothing. 0 when they share none.
-- A regime keeps `30_WR_B`'s definition (a creed set with seats). Its **core** is the persons who stand for exactly that creed set. Its **fringe** is every other person who stands against no member of the creed and whose mean accord with the core's members is above 0. A person is in the core of at most one regime and may be on the fringe of several: that is "to some extent".
+- A **regime** (A-82, U1 glossary) is read by `31_WR_A`'s authored cores and `world_q.core_standing` (a person's closeness to a core row); this commit's grouping is over `30_WR_B`'s **creed bodies** (persons of exactly one creed set). For a creed body, its **core** is the persons who stand for exactly that creed set, and its **fringe** is every other person who stands against no member of the creed and whose mean accord with the core's members is above 0. A person is in the core of at most one creed body and may be on the fringe of several: that is "to some extent".
 - **Edges move as opinions move**: a crisis of faith drawn (A-24) moves a man from a core to a fringe or across; what he comes to believe of his own motives (A-34) can move him; a persuasion (`argue`) moves him one step. None is a membership flag; each is a change in `Person.conviction` by a drawn act, and the reading follows.
 - **Who believes whom**, graded: at `credit_form: accord` the credit factor is `1 + regime_gain × accord` in place of `1 + regime_gain × c` with `c` in {−1, 0, +1}. A fringe teller is believed more than a stranger and less than one of the core. This is inside the ratified assumption A12, whose listed revert is "any other monotone form" (`strife-00` §10). The ruled sign form stays the control.
 
@@ -70,9 +68,9 @@ Names are plain words; none is a canon name, and none is taken from research (`r
 
 Tier: commits 1, 3 second tier (sonnet); commits 4 and 5 third tier (opus) for the placement, with a second-tier critic; commit 2 is authoring.
 
-**Commit 1 (EQUAL).** (a) `references/descriptor_registry.yaml: affiliation_roster`: `count: 8`, the three names and three `concerns:` keys of §2. (b) Re-derive: `python tools/export_descriptors.py` then `python tools/export_descriptors.py --check` (never hand-edit `engine/engine_params/descriptors.json`). (c) `engine/season/rosters.yaml: tables.incompatible.cells`: the eighteen pairs, `null`, keyed once each (the half-matrix loader refuses a pair keyed twice, `data/affiliations.py`). (d) Tests: the covering files are `engine/season/tests/test_h10_affiliations.py`, `test_h11_affiliation_scar.py`, `test_in64_cast_integration.py`, `test_rem30_character_sheet.py` (found by `grep -rl AFFILIATIONS engine/season/tests`); any count of five or ten pairs they pin is re-pinned to eight and twenty-eight, said in the commit. Add `test_h10_affiliations.py::test_a_new_affiliation_nobody_holds_moves_no_hash` (`build_realm(0).content_hash()` before and after).
+**Commit 1: `31_WR_A` commit 1** (deleted here, wave 3; its instructions replace this commit's, including the re-derivation by `tools/export_descriptors.py --check` and the covering test files).
 
-**Commit 2 (completed by `31_WR_A` commit 2, whose instructions replace this paragraph; kept as lane 30 wrote it).** The 46 cast rows' intensities on `caste_order`, `militarism`, `royal_order` (`engine/season/npcs.yaml` rows, read by `data/cast.py::conviction_of`, `:234`). **What is missing:** the values. They are Jordan's content; this lane derives none (a value read off a faction template or a heritage would be a guess, and `conviction_of` "reads and validates, it does not guess"). Two ways to complete it, either sufficient: (i) Jordan authors them; (ii) `21_PROCEDURAL_B_cast_and_seats.md`'s generation tables gain a rule that draws them (A-44, A-50), with its own sweep. Until then the three poles are held by nobody and every reading of them prints `n/a (unheld)`.
+**Commit 2: `31_WR_A` commit 2** (deleted here, wave 3; the cast's values are authored there, owner `references/npc_registry.yaml`, not `engine/season/npcs.yaml`).
 
 **Commit 3 (EQUAL).** `engine/season/queries/world_q.py`, beside `commensurate` (`:5317`).
 
@@ -94,7 +92,7 @@ def accord(w: World, a: str, b: str) -> float:
 4. `engine/season/queries/world_q.py`: `def circle_of(w, p) -> tuple`: the doers `deed_doers(p.ledger, {"kinds": DEED_KINDS}, p.id)` names who are in `members(w, faction_of(w, p.id))` or whose `home_map` rung is his; sorted; never `p`. It rides the `View` the resolver builds for him (the route `View.odds` rides, `decision/sheet.py:40-41`), so `decision/` holds no World.
 5. `decision/choose.py::deliberation_memo` (`:130-141`): `_AXIS_W` is `project(p, shift, custom_of(p, view.circle, window), k)`; the `make_chooser` path and `harness/decision_spread.py` both take it from here (the memo's own reason for existing). `person_q.deeds_judged(p, referent, scar_shift, axis_w=None)` (`:97`) takes the weights when they are passed and computes `projected_axes(p, scar_shift)` as today when they are not; `regard` (`:424`) forwards an optional `axis_w`; `decision/choose.py`'s stance term, which already caches `regard` per subject in the memo, passes `memo[_AXIS_W]`. Every other caller of `regard` (the harness estimates, `teller_weight`) passes nothing and reads today's value.
 6. `hole_register.yaml`: LOOP row **L16 custom**: "custom believed, acts aligned, seen by the circle, custom believed"; sign `+`; bounds: `custom_shift` below 1, the estimate window, `_sample_order`, `scene_budget`, turnover of the circle (death, `migrate`, `release`); switch `custom_shift` 0.
-7. Tests, `engine/season/tests/test_custom.py` (new): `test_custom_shift_zero_is_byte_identical`; `test_a_man_with_no_claims_of_his_circle_feels_nothing`; `test_the_same_candidate_ranks_higher_when_his_circle_is_seen_to_do_its_like` (planted ledger, fixed sample); `test_he_judges_a_deed_more_as_his_circle_would`; `test_a_stranger_s_deeds_do_not_move_him`; `test_the_pull_reads_no_world` (the AX-2 path scan of `tests/test_season_shape.py` covers `decision/`; this asserts `custom_of` takes no `World`). `assert checked >= 6`.
+7. Tests, `engine/season/tests/test_custom.py` (new; absent on `main`, written as the batch's first commit, U3 §6.1): `test_custom_shift_zero_is_byte_identical`; `test_a_man_with_no_claims_of_his_circle_feels_nothing`; `test_the_same_candidate_ranks_higher_when_his_circle_is_seen_to_do_its_like` (planted ledger, fixed sample); `test_he_judges_a_deed_more_as_his_circle_would`; `test_a_stranger_s_deeds_do_not_move_him`; `test_the_pull_reads_no_world` (the AX-2 path scan of `tests/test_season_shape.py` covers `decision/`; this asserts `custom_of` takes no `World`). `assert checked >= 6`.
 
 ## The gate (execution artifacts)
 

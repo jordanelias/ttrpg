@@ -1,5 +1,10 @@
 # GO — disposition of the player-facing design references: what survives as a test, what is dead, and two owner edits
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §7 (COMPLETE but for lands-it and tier, added), `U3_CONFLICT_LEDGER.md` C3-L4 and `U1_OWNERS_AND_VOCABULARY.md` D-U1-11n (the surviving-rules table's two `receipt` / `ReceiptRow` references now read the person-side `account`: the outcome of a person's own act is a firsthand claim in his own ledger; no host-side walk); `Depends on:` / `Lands in batch:` from `U3_DEPENDENCY_ORDER.md`.
+
+**Depends on:** `11_GO_pointer_and_stale_text_resolutions.md` (B03, its item 3, which this file extends).
+**Lands in batch:** B03 (`B03-hygiene`, IN), after `11_GO_pointer_and_stale_text_resolutions.md`'s hash-equal items.
+
 ## Status: PROPOSED
 
 Carries `audits/11_GO_audit_addendum_B.md` F-GO-13, F-GO-14, F-GO-20, F-GO-21 and resolutions R48,
@@ -49,9 +54,9 @@ ratified and decide it).
 | from | rule | how the contract meets it |
 |---|---|---|
 | UI v4/v4.1 Oath II, test 1 | no control for a capability the character lacks: absent, not greyed | `opening_set` forms only what the person may attempt; a `WithheldRow` exists only for an own-state conjunct |
-| Oath II, test 3 | nothing the character's perception cannot render | every person-side reading takes no `World`; `receipt` withholds a value he does not hold |
+| Oath II, test 3 | nothing the character's perception cannot render | every person-side reading takes no `World`; `account` shows the outcome of his own act only as the firsthand claim he holds (C3-L4), and withholds a value he does not hold |
 | Oath I | the world stays present at every zoom | the `Situation` is the same record inside and outside a suspended scene; a scene adds a turn view and removes nothing |
-| Oath III | a change is shown before it is labelled | a presentation is triggered by an `AccountRow` or `ReceiptRow`, so it can only be about something he has perceived |
+| Oath III | a change is shown before it is labelled | a presentation is triggered by an `AccountRow` (C3-L4: no `ReceiptRow`), so it can only be about something he has perceived |
 | v4 §1.3 / v4.1 §1.2 | no save inside a resolution | the save boundary is the season (MODES §4) |
 | v4 §4.3.1, the contest walkthrough §0 | the player sees the numbers before he commits | he sees his **believed** odds (`OfferRow.odds`) and his own operands; a resolver-side operand (the bench's regard, the opponent's score) only as far as he holds a claim about it. The walkthrough's stronger rule ("every number the resolver uses") is refused by §C.11 |
 | v4.1 max audit, Part 0 | an inventory of playable moments, each asked: what is seen, what may be declared, what is learned | reused as the per-subsystem table of addendum §B3 |
@@ -105,4 +110,5 @@ would act on wrongly. **E:** one sentence at each of two owners tells a porter w
 
 ## Cost class
 
-Edit.
+Edit. **Lands (W3-1):** any lane's session as part of the B03 hygiene batch, GO review; `sonnet` (or `haiku`
+for the two sentence edits).

@@ -1,5 +1,11 @@
 # CENSUS C1B · corrections: one mislabelled row, and the text that rides on the deletions
 
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row C1B_03 CONFORMS, §7 COMPLETE but for the tier; `unified/U3_DEPENDENCY_ORDER.md` §1 item 4, §3.1; `unified/U5_CONFLICTS_U5a.md` C-U5a-17). Changed: C-6 is marked carried (`09_WR_threadwork_module.md`'s head now reads its edit 2 as this sentence states); the batch and tier lines. Nothing else.
+
+Depends on: `17_CENSUS_C1B_01_deletions.md` (B03; C-2 to C-5 ride its batches' commits).
+Lands in batch: B03 (lane IN): C-1 alone, C-2 with D2a, C-3 with D1, C-4 and C-5 with D3.
+Tier: sonnet / high.
+
 ## Status: PROPOSED
 
 Carries `audits/17_CENSUS_C1B.md` §3.3 and §4 (X-4). Exact text, old and new. Only C-1 stands alone;
@@ -72,7 +78,8 @@ stays as written.
 | `` `_practitioner_state`, `_store`, `reset_all` and their siblings in `threadcut.py` and `co_movement.py` are deleted. `collective.py` and `opposing.py` take `tuple[Practitioner, ...]`. `` | `` `_practitioner_state`, `_store` and `reset_all` are deleted. `threadcut.py` and `co_movement.py` are deleted whole before the move (`17_CENSUS_C1B_01_deletions.md` D3: every function in them reads or writes a module store). `collective.py` and `opposing.py` take `tuple[Practitioner, ...]` and are called by `work` through `WorkingInput.helpers` and `WorkingInput.opposed_by` (`17_CENSUS_C1B_02_wires.md` W-3), so they have a caller on the day they move. `` |
 
 A `Reconciled:` line at that proposal's head, per `UNIFICATION_BRIEF.md`'s rule, is the unification
-lane's to add; this lane edits only its own files.
+lane's to add; this lane edits only its own files. **Carried:** `09_WR_threadwork_module.md`'s head
+(C-U5a-17) reads its edit 2 as amended by this sentence; nothing further is owed here.
 
 ## What is deliberately not corrected
 

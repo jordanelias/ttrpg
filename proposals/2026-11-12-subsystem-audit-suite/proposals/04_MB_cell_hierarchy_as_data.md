@@ -8,6 +8,11 @@ Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (ruling A-5
 
 Folded: 2026-11-12 by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (rows S-1, M-5, B-9). Nothing here is deleted; three things are added and one seed is questioned. (1) **The scale is stated**: `cell_troops: 16` is sixteen men in close order on about four metres square (four files by four ranks at three feet a man, Sabin on Polybius and Vegetius, read at the page: `research/historical/mass_battle_movement_and_behaviour_grounding.md` F1), a tick about four seconds, an 18-tick engagement one bout; the block `deployment.scale` and `max_bouts` are in `26_MASS_BATTLE_cell_scale_and_time.md` §1. (2) **`approach_rows`** stops being left at 3: it is the longest missile range on the field with a floor of 3 (same file §2), because at this scale three rows is twelve metres and there is no missile phase. (3) **`ranks` seeds against the sourced depths** (same note, F3): a cell row is four men deep, so `ranks: 2` is the hoplite's eight and a Roman line's six to ten, `ranks: 4` the phalanx's sixteen. The seeds proposed below (4 for foot, 3 for missile troops, 2 for horse) come from the tier table and make ordinary foot sixteen deep; the sourced seeds are **2 for sword and spear foot, 4 for pike, 2 for horse**, missile troops not established. Section 2's gate 4 (depth is a lever) is the reading that decides between them; both are seeds. (4) `ranks` and `files` become order-settable out of contact, at a cost in ticks (`26_MASS_BATTLE_movement_and_fatigue_as_data.md` §4).
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U3_CONFLICT_LEDGER.md` C3-N11 (the season army is 60 to 900 troops, weights 2 to 30; the presets 600 to 900), `R1_READ.md` §7 test 9 (the `ranks` seed conflict decided for the sourced seeds, ladder step 4: the only evidence is the sourced note; U1 §4 M-04 passed it to U3, which left it open), `U1_OWNERS_AND_VOCABULARY.md` D-U1-11o (the designer's words: a row of `subformations` is a unit; a unit's cell arrangement is its **formation** (`ranks, files, shape`); "subformation" is never prose for an arrangement or a grouping), `U1_GLOSSARY.md` *band* (§4's `bands` → `layers`), *approach* (`approach_rows` → `opening_rows`, the opening distance; it replaces the code constant `_APPROACH_ROWS`, `orderofbattle.py:67`), *body* (a block of troops is a **block**), *post* (formation post); test 9 (the addendum's scratch probes `cells_probe`, `pike_probe` are written as files with expected outputs; tests, lands-it, tier; `Depends on:` / `Lands in batch:`). The second `Folded:` line's "(4 for foot, 3 for missile troops, 2 for horse)" stands as the record of the first seeds.
+
+**Depends on:** `04_MB_unit_loadout_and_weapon_in_hand_B.md` stages 1–2 (B17: the troop file and exporter); `04_MB_headcount_grade_and_scale.md` (B17); `16_PESSIMIST_MB_partition_and_the_pair_rule.md` (B19, before the `arm: grid` flip); the one sampler (`U5b_MB_rulings_in_the_field.md` §1, B19).
+**Lands in batch:** B19 (`B19-mb-field-calibration`, MB): sections 1–3 and the `arm: grid` flip as a step of the field calibration batch; section 4 design-first, not scheduled.
+
 Lane MB (the record edits are IN's). Carries R-30, R-32, R-33 of
 `audits/04_MB_audit_addendum_B.md` §B6 and its §B3. Depends on the troop file of
 `04_MB_unit_loadout_and_weapon_in_hand_B.md` (stage 1) and on the first MB lane's
@@ -15,9 +20,10 @@ Lane MB (the record edits are IN's). Carries R-30, R-32, R-33 of
 
 ## What it changes in `engine/season/` at runtime
 
-Every field fought by an army, and nothing else. Today a season army of 600 to 900 troops is six to eight
-cells, each body one rank deep at 200 troops a cell. After this change the same army is some forty to
-sixty cells in bodies three to five ranks deep, laid out as the engine's own instruments lay theirs out,
+Every field fought by an army, and nothing else. Today a season army of 60 to 900 troops (weights 2 to 30;
+the shipped presets 600 to 900, C3-N11) is one to eight cells, each block one rank deep at 200 troops a
+cell. After this change a preset army is some forty to sixty cells in blocks two to four ranks deep (the
+sourced seeds), laid out as the engine's own instruments lay theirs out,
 so depth, rank support, flanks and local breaks have something to act on. A declared hash mover wherever
 an army fights; no natural season fights one today (first audit F-MB-03). The cap arm reproduces today
 exactly and stays as the control.
@@ -45,14 +51,16 @@ exactly and stays as the control.
 
 ### 1. Words (R-30)
 
-At the designer's surface the levels are **army, unit, subformation, troops**, as Jordan states them:
-an army is a deployment of units in a formation; a unit is a body with a troop kind, an officer and
-orders; its subformation is how its troops are arranged in cells; troops are what a cell holds. In code:
-`Unit`, `Subunit`, the subunit's footprint, the cell. The Record's key `subformations` keeps its spelling
-(renaming a `subject_matter` key moves hashes for no behaviour) and `armyrecord.py`'s docstring states the
-mapping once: *a row of `subformations` is a unit.*
+*(Reconciled, W3-1, D-U1-11o.)* At the designer's surface the levels are **army, unit, formation, troops**:
+an army is a deployment of units in an army formation (`line`, `envelopment`, `refused_flank`); a unit is a
+block with a troop kind, an officer and orders; its **formation** is how its troops are arranged in cells
+(`ranks, files, shape`); troops are what a cell holds. A-59's grouping of units above the unit is a
+**formation post group** (`front, rear, left, right, reserve`). "Subformation" is not used in prose for
+either. In code: `Unit`, `Subunit`, the subunit's footprint, the cell. The Record's key `subformations`
+keeps its spelling (renaming a `subject_matter` key moves hashes for no behaviour) and `armyrecord.py`'s
+docstring states the mapping once: *a row of `subformations` is a unit.*
 
-### 2. The unit's subformation, and the scale of a cell (R-32)
+### 2. The unit's formation (its cell arrangement), and the scale of a cell (R-32)
 
 Troop file header (`references/troops.yaml`):
 
@@ -62,7 +70,10 @@ deployment:
   arm: grid              # grid | cap.  `cap` is today's packing and the control arm
 ```
 
-Troop row: `ranks` (seed: 4 for foot, 3 for missile troops, 2 for horse; the tier table uses 3 and 5).
+Troop row: `ranks` (seed, W3-1: the sourced depths, **2 for sword and spear foot, 4 for pike, 2 for horse**,
+and 2 for missile troops `[ASSUMPTION: missile depth not established in the sourced note — basis: the
+lowest sourced foot depth]`; the first seeds 4/3/2 came from the tier table, which uses 3 and 5; gate 4 reads
+depth as a lever either way).
 Unit row on the army Record (both optional): `ranks`, `files`.
 
 Rule, in `orderofbattle._spec_for` and the two headcount constructors (one function, three callers):
@@ -92,7 +103,7 @@ Troop file section:
 ```yaml
 formations:
   line:                       # today's rule, transcribed: the control
-    approach_rows: 3
+    opening_rows: 3           # the opening distance (was `approach_rows`; replaces `orderofbattle.py:67 _APPROACH_ROWS`)
     posts:
       front:   {rank_line: 0, across: centre}
       rear:    {rank_line: 1, across: centre}     # one clear row behind the front's depth
@@ -101,14 +112,14 @@ formations:
       reserve: {rank_line: 2, across: centre}
     default_post: {melee: front, missile: rear, mounted: [left, right]}   # alternating, as now
   envelopment:                       # the harness's build_envelopment, as a row
-    approach_rows: 3
+    opening_rows: 3
     posts: {front: {rank_line: 0, across: centre}, left: {rank_line: 0, across: wide_left}, right: {rank_line: 0, across: wide_right}, ...}
   refused_flank: { ... }             # the harness's build_refused_flank, as a row
 ```
 
 - `OrderOfBattle.formation: str = 'line'`; the Record's `strategy` key carries it (see
   `04_MB_manager_battle_one_resolver.md`, which retires the stance strategies).
-- Unit row: `post` (`front`, `rear`, `left`, `right`, `reserve`), default by the troop's class.
+- Unit row: `post` (the formation post: `front`, `rear`, `left`, `right`, `reserve`), default by the troop's class.
 - `orderofbattle._place` becomes the reader of a formation row: it places each line by the depth of the
   line in front of it, and each post across the field, exactly as it does now for the one rule. It still
   degrades to one centred line when a layout does not fit.
@@ -118,10 +129,10 @@ formations:
 
 ### 4. More than one troop kind in a unit (staged last; design-first)
 
-Unit row, optional: `bands: ((troop_type, ranks), ...)`, front to rear; default one band of the unit's
-`troop_type`. The engine seam is the one its own comments name:
+Unit row, optional: `layers: ((troop_type, ranks), ...)` (was `bands`; U1 glossary: "band" is a degree band),
+front to rear; default one layer of the unit's `troop_type`. The engine seam is the one its own comments name:
 
-- `Subunit.cell_kind: Dict[cell, troop_type]`, set at construction from `bands`, re-keyed with the other
+- `Subunit.cell_kind: Dict[cell, troop_type]`, set at construction from `layers`, re-keyed with the other
   cell maps;
 - `core/exchange.py::subunit_combat_pool`: the closed form `eff_power * eff_size` becomes the sum over
   cells of `power(cell_kind) * cell_troops / BLOCK_SIZE`, which it equals when every cell is one kind
@@ -133,7 +144,7 @@ Unit row, optional: `bands: ((troop_type, ranks), ...)`, front to rear; default 
   differently from its troop-weighted mean Q".
 
 It is last because two units one behind the other already express most of it, and because it needs
-bodies with ranks (section 2) before a band has a rank to occupy.
+blocks with ranks (section 2) before a layer has a rank to occupy.
 
 ## Exact edits
 
@@ -148,12 +159,17 @@ bodies with ranks (section 2) before a band has a rank to occupy.
 
 ## Gate (execution artifacts)
 
-1. `arm: cap`: `python3 tools/ci_golden_modes_check.py` digests equal; the addendum's `cells_probe`
-   prints today's counts.
-2. `arm: grid`: the same probe prints, for the weight-20 preset army, bodies of at least three ranks for
-   every foot unit and an army of at least thirty cells.
-3. **The pike parts from heavy infantry.** The addendum's `pike_probe` re-run on `grid`: the count of
-   fields identical between a pike line and a heavy-infantry line is below 200 of 200.
+*(W3-1, test 9: the addendum's `cells_probe` and `pike_probe` are scratch scripts not in the tree; the
+first step writes them as `systems/mass_battle/sim/cells_probe.py` (per army preset: cells per unit and
+ranks per block) and `systems/mass_battle/sim/pike_probe.py` (n fields of a pike line and a heavy-infantry
+line at one seed set; count identical results). Expected outputs are the readings in gates 1–3.)*
+
+1. `arm: cap`: `python3 tools/ci_golden_modes_check.py` digests equal; `cells_probe.py` prints today's
+   counts (heavy infantry 2 cells, crossbow 1, cavalry 2, levy 1 for the weight-20 preset).
+2. `arm: grid`: the same probe prints, for the weight-20 preset army, blocks of at least two ranks for
+   every foot unit (the sourced seeds) and an army of at least thirty cells.
+3. **The pike parts from heavy infantry.** `pike_probe.py` re-run on `grid`: the count of
+   fields identical between a pike line and a heavy-infantry line is below 200 of 200 (today 440 of 440).
 4. **Depth is a lever.** Two equal heavy-infantry bodies, one at `ranks: 2`, one at `ranks: 6`, n 200
    against the same-run control: the win counts or the loss shares differ beyond the control's spread, in
    either direction; the result is recorded, not targeted.
@@ -163,6 +179,13 @@ bodies with ranks (section 2) before a band has a rank to occupy.
 6. The law instrument and the gauge are re-read after the flip, because they and the season then fight
    the same bodies; their readings are reported, not gated.
 7. Stage 4 (bands): the synthesis's falsifier, run.
+
+**Tests (W3-1).** Gates 4 and 5 as `tests/valoria/test_mass_battle_order_of_battle.py::test_depth_is_a_lever`
+(a reading asserting the two arms differ, `assert checked >= 200`) and
+`::test_a_left_post_starts_left_of_the_front` / `::test_envelopment_row_equals_the_harness_builder`; gate 1's
+digest check is `tests/valoria/test_field_golden_pins.py`. **Hash movers:** the `arm: grid` flip (every army
+field); none under `cap`. **Lands:** an IN-lane implementation session under `/methodology-execute` with MB
+review; sections 1–3 `sonnet`; the flip's readings `haiku` (`valoria-measure`) read by `opus`.
 
 ## Falsifier
 
@@ -193,4 +216,5 @@ Sections 1 to 3: small build plus one declared flip (`arm: grid`), after
 None found. ED-909 (an army formation is an emergent composition, never a subunit shape) is kept: a
 formation row places units and gives them no shape. ED-1090 (eleven units) is unchanged. The stress
 finding that "the 15-row approach leaves an 18-tick engagement about one tick of fighting" at 5,000 a side
-(`ED-MB-0080`) bears on `approach_rows`, which becomes a datum here and is left at 3.
+(`ED-MB-0080`) bears on `opening_rows`, which becomes a datum here; its value is set by
+`26_MASS_BATTLE_cell_scale_and_time.md` §2 (the longest missile range, floor 3).

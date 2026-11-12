@@ -2,7 +2,12 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-12** and **A-56**. §3 b (amount as a choice) ships one share until a consequence path exists (`U5d_SE_owed_edits.md` §6); that path is now the cohort's own moves as well as `unrest`. NPC-083's and NPC-037's seats may carry a modifier on their rolls (A-12); no edit here authors one.
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 (A-81): §3(b) gains the write a refused or lesser `requisition` band leaves (the refuser's remembered deed); 7b-7 (named tests for (a) and (b)); C3-N22 over 7b-13 (the "two seasons" figure is left as measured and marked unverified against `07_SE_ground_and_granaries.md` §2's three-season reading, since U3 decided each file states its own horizon and U4 re-reads one instrument; 7b-13's change to "three seasons" is not applied); tier and batch (R3 7b-0; U3 B12).
+
 ## Status: PROPOSED
+
+Lands in batch: B12 (world motion and ground), after `07_SE_ground_and_granaries.md` with `07_SE_treasury_granary_B.md` and before `16_PESSIMIST_SE_A` (U3 §1 item 13).
+Depends on: nothing proposed for (a)–(c); the amount flip waits on `U5d_SE_owed_edits.md` §6 (B12, a consequence path).
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-27) — a `CHOICE_RANGES` range is a closed roster's members and needs a carrier the row writes; the share range is a three-member roster, not an integer list.
 
@@ -35,7 +40,9 @@ the table in §13 names which. Three changes are owned here because no position 
   whatever the engine can do elsewhere (`harness/scarce.py` shows it can).
 - Every computed store move is `default_transfer_amount` (1) unless a shortfall claim supplies the gap
   (`decision/options.py::_from_shortfall_claim`). In the realm the two executed `transfer`s in two
-  seasons at seed 0 each moved 1 grain against a settlement stock in the hundreds. NPC-013's
+  seasons at seed 0 each moved 1 grain against a settlement stock in the hundreds `[UNVERIFIED: C3-N22 —
+  `07_SE_ground_and_granaries.md` §2 and `07_SE_valley_scenario.md` §2 read "2 units of 13,690 in three
+  seasons" on `se_probe.py`; the horizons differ and U4 re-reads one instrument]`. NPC-013's
   *"aggressive wealth extraction"* and a cautious cardinal's are the same act.
 - `harness/populated.py:1163-1170`: a foreign faction's settlement has *"no quarter, building, site or
   garrison"*, and no stores. `p_npc_090` lives at `set_alt_1` and his one executed act in two seasons at
@@ -86,7 +93,12 @@ range over (`marshal`'s `role × retreat_at`), and a one-member range is not fan
 `_operands` computes `amount` for these two rows as `max(1, stock_known × share // 1000)` where
 `stock_known` is the actor's newest `stores:<kind>` claim about the giving rung (CR-23's stock report is
 its source; `LedgerReader` reads it) and falls back to today's derivation when he holds none. Authoring
-`[250, 500, 1000]` is the flip and a declared mover. Which share a person takes is then the chooser's
+`[250, 500, 1000]` is the flip and a declared mover. The amount is a decision; the store move itself
+resolves by the verb's own draw (`U5d_SE_owed_edits.md` §7, A-24), and every band leaves a write (A-81): a
+`requisition` that is refused, or that lands a lesser band than the share asked, leaves the refusing
+holder's deed as a claim in the requisitioner's ledger and his own (the `a_refusal_is_remembered` carrier,
+`16_PESSIMIST_CORE_a_refusal_is_remembered.md`), so a refused larger share is a grievance someone holds, not
+a null scene. Which share a person takes is then the chooser's
 ordinary ranking: the candidate's pursuit cells differ by share only if `tables.pursuit_projection` is
 given a cell for it, which is the CHAR lane's content (cross-listed in §14 of the audit).
 [GROUNDED, 25 G-27: a range is the member tuple of a closed roster (`data/verbs.py:1698-1699`), and a
@@ -110,6 +122,12 @@ rung. Shipped absent. With CR-49 (`exchange` names another rung) it gives NPC-09
   holds two `requisition` candidates differing only in `amount`, and the executed one moves that amount.
   **Control:** `[1000]` reproduces the shipped `scarce` hashes.
 - **(c)** `build_realm(0, foreign=True)` with the key absent hashes as today.
+- **Named tests (7b-7).** New file `engine/season/tests/test_corpus_world_overlay.py`:
+  `test_world_block_seats_a_cohort_stocks_a_larder_and_mints_sites`,
+  `test_world_block_refuses_an_unknown_key_a_bad_weight_a_bad_site_kind_and_a_person_scale_case`,
+  `test_case_without_world_block_hashes_as_before`. In the existing `engine/season/tests/test_demand_delivery.py`:
+  `test_amount_shares_one_member_is_not_fanned`, `test_two_members_fan_two_candidates_differing_only_in_amount`,
+  `test_a_refused_requisition_leaves_a_claim_of_the_refusal` (A-81).
 - **For the arcs:** none of these makes an arc simulate end to end alone. The execution artifact for
   that is §13's ordered list; each entry names the seeded run in which the arc's beats must occur from
   persons' acts.
@@ -124,4 +142,5 @@ rung. Shipped absent. With CR-49 (`exchange` names another rung) it gives NPC-09
 
 ## 6. Cost class
 
-Small build (a); edit plus content (b); edit (c). Hash EQUAL at every shipped arm.
+Small build (a); edit plus content (b); edit (c). Hash EQUAL at every shipped arm. Tier: `sonnet`
+(R3 7b-0).

@@ -1,6 +1,10 @@
 # PAPACY-GROUNDING — what the tree's own research adds to the Church design: an ordered plan
 
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (PAP_G: CONFORMS), §7 (COMPLETE, uniform), 7b.0; `U3_DEPENDENCY_ORDER.md` (B40, with the items that land in earlier batches named); `U3_CONFLICT_LEDGER.md` C3-C10 (item 7: `obligation` is a leverage source, not a term). Changed: the implementation block below; item 7's one sentence. Nothing else.
+
 ## Status: PROPOSED (an executable plan for a later session; ratifies nothing; nothing here is built)
+
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** The file is listed in batch **B40** (institutions scenarios, FA; `U3_DEPENDENCY_ORDER.md` §1 item 40), but its items land where "Order and dependencies" below says: item 1 inside **B32** with PAPACY-B; items 2, 3 inside **B33** with PAPACY-D (item 3 after `covenant` executes); item 4 inside **B33** with PAPACY-E; items 5 and 6 in **B40** with PAPACY-F. Depends on: `15_INSTITUTIONS_PAPACY_B` (B32), `_D` and `_E` (B33). Lane tag: FA. Tier: `sonnet`, item by item, effort `high`; one `opus` read of item 1's and item 2's gate output. Named test: none of its own; item 1's gates are functions of `test_inst_pap_b.py`, items 2 and 3 of `test_inst_pap_d.py`; items 5 and 6 are runs of `harness/institution.py` quoted in the commit. Standing sentences: *Pool* — every roll here is an existing verb's, on the one pool rule (A-6, A-7, A-8). *Failure writes* — `interdict.laid` (item 2) is itself the durable write of an `issue` whatever the hearers make of it; a pardon's Failure is PAPACY-D's (A-81). *Draw keys* — this plan adds no draw (A-30 keys belong to the verbs it composes on).
 
 Source: `audits/15_INSTITUTIONS_PAPACY.md` §15 (the re-grounding of 2026-11-12);
 `unified/RESEARCH_MAP_INSTITUTIONS_A.md` §2 to §5. Composes on `15_INSTITUTIONS_PAPACY_A` to `_F` as
@@ -211,8 +215,8 @@ listed the secular veto as decorative.
 
 *Shape, for when it is designed.* No override and no veto. The Archbishop's Representative's seat
 (`off_archbishops_rep`, NPC-034) states the Crown's objection to a candidate as an act electors
-learn of; its weight is each elector's own `obligation` and `regard` toward the objector, which are
-already per-member terms of the ballot (synthesis X-15). An elector who owes the Crown nothing
+learn of; its weight is what each elector owes the objector (the `obligation` leverage source, C3-C10)
+and his `regard` toward him, which already enter each member's ballot (synthesis X-15). An elector who owes the Crown nothing
 ignores it. The open design question is which existing act carries the objection on a declared row
 (a counter-petition, or a `tell`), and that is the SC lane's. Cross-listed in
 `15_INSTITUTIONS_BYZANTINE_grounding_mechanisms.md` (audit §18.4 item 10).

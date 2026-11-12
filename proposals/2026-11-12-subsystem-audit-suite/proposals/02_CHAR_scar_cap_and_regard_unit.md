@@ -2,6 +2,10 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-06) — item 1 is amended by `02_CHAR_scar_is_a_wound.md` (F-CHAR-17: a cap per element bounds the rate, not the stock). There is one fixture `scar_season_cap` with the domain `None | element | person`; this file's cap is its `element` arm and its gate (*median per-person maximum ≤ 4*) is replaced by that proposal's (a share strictly between 0 and 1 at eight seasons), because the old gate passes while every person is in crisis. Items 2 and 3 and the Addendum stand; item 3 gains the `stance_scale` fixture of `U5a_CHAR_owed_amendments.md` §2.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.2 row (AMBIGUOUS, same pick as U1 §1, for the `regard_sign` column), §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` §3 *regard* (the stance row's unit), ledger S-13, S-14; `unified/U3_CONFLICT_LEDGER.md` C3-K3, C3-Y8; `unified/U3_DEPENDENCY_ORDER.md` node B10, §6.2). The body follows its head: item 1's gate (*median ≤ 4*) is replaced by `02_CHAR_scar_is_a_wound.md`'s (a share strictly between 0 and 1 at eight seasons) and the fixture's domain is `None | element | person`; the per-tick tally's reset site is settled at the tree (`loop/driver.py:468`, `w.draw = 0` at the start of each tick, the precedent; driver-local scratch, `04` PART D row 34); the Addendum's `regard_sign` column names its Layer 1 ambiguity at the site (`04` §B.13 against §C.4, picked as the column by U1 §1's reasoning; B4 third disposition) and carries `17_CENSUS_C1A_02` W4's term once (C3-K3); scratch probes marked; named tests; lands-it and tier.
+
+**Lands in batch:** B10, co-landing with `02_CHAR_scar_is_a_wound.md` (C3-Y8). **Depends on:** `U5a_CHAR_owed_amendments.md` §2 (B10, `stance_scale`).
+
 ## Status: PROPOSED
 
 Written by the CHAR audit lane (`audits/02_CHAR_audit.md`, findings F-CHAR-03, F-CHAR-04, F-CHAR-08).
@@ -11,8 +15,9 @@ Ratifies nothing. Reference under `CLAUDE.md` §0.05.
 
 Three edits, each behind a fixture whose control value reproduces today's hash:
 
-1. `loop/resolve.py::_scar_witnesses` writes at most `scar_season_cap` counts per (person, element) per
-   season. Control `None` (uncapped, today). Proposed live value `1`.
+1. `loop/resolve.py::_scar_witnesses` writes at most one count per (person, element) per season at
+   `scar_season_cap: element`, one per person at `person` (`02_CHAR_scar_is_a_wound.md`). Control `None`
+   (uncapped, today).
 2. `queries/person_q.py::regard` reads its judged and told halves in the stance row's unit, as
    `heritage_regard` already does. Control arm `regard_unit: raw` (today). Proposed live arm `stance`.
 3. `decision/choose.py::stance_term` clamps the regard it reads to `±STANCE_MAX` before the gain.
@@ -25,7 +30,8 @@ Each is a declared hash mover when flipped. Nothing else moves.
 **The scar runs away.** `ED-IN-0261` rules the thresholds: 1 destabilise, 2 weight shifts, 3+ crisis.
 `_scar_witnesses` writes one count per observer per violated element per act, with no bound. Read on
 `build_realm(0)`, two seasons, shipped chooser, `PYTHONHASHSEED=0`
-(scratch `probe3.py`; `probe2.py` on the same seed and season count printed hash `bacd687f`): 83 of 83
+(scratch `probe3.py`; `probe2.py` on the same seed and season count printed hash `bacd687f`; both not in
+the repository, `main`'s readings): 83 of 83
 persons hold a scar; the median of each person's largest count is **41**, the maximum 61; 83 of 83 are
 at or over 3 on some element. A ladder whose top rung is 3 and which every person passes thirteen-fold
 in two seasons separates nobody. Two of its three readers ship at their control (`scar_weight_shift`
@@ -76,14 +82,16 @@ ships as a swept arm and its live flip is a declared mover read against the cont
 ## The exact edits, by owner
 
 1. **`engine/season/data/fixtures.py`** — three rows, each with its hole-register row (the tree's
-   declare · default · sweep discipline): `scar_season_cap` (default `None`, sweep `[None, 1, 2]`),
-   `regard_unit` (default `raw`, arms on a new roster `rosters.yaml: regard_units: [raw, stance]`),
+   declare · default · sweep discipline): `scar_season_cap` (default `None`, domain `None | element |
+   person`, `02_CHAR_scar_is_a_wound.md`),
+   `regard_unit` (default `raw`, arms on a new roster `rosters.yaml: regard_units: [raw, stance]`; the live
+   arm `stance` is the one unit of regard, U1 §3),
    `stance_clamp` (default `False`).
 2. **`engine/season/loop/resolve.py::_scar_witnesses`** — before the write, drop every (observer,
-   element) pair already written `scar_season_cap` times this tick. The tally is a per-tick scratch on
-   the driver, reset where `World.new_draw`'s ordinal is reset at the start of `season()`
-   `[UNVERIFIED: the exact reset site; the ordinal is the precedent for a per-tick counter that is not
-   world state]`. No new `Person` field, no `write_matrix.yaml` row: the count written is still
+   element) pair (or person, at `person`) already counted this tick. The tally is a per-tick scratch on
+   the driver, reset where the draw ordinal is reset at the start of each tick (`loop/driver.py:468`,
+   `w.draw = 0`; `World.new_draw`, `state/world.py:1632`, *"reset at the start of every tick by
+   `season()`"*): a local of the driver's step, not world state (`04` PART D row 34). No new `Person` field, no `write_matrix.yaml` row: the count written is still
    `(Person, scar)`.
 3. **`engine/season/queries/person_q.py`** — `deed_term` and `deeds_judged` are unchanged (three other
    readers use the raw sums: `legitimacy`, `world_q.reception`, `holds_dispute`). A sibling
@@ -97,10 +105,10 @@ ships as a swept arm and its live flip is a declared mover read against the cont
 
 ## Gate (an execution artifact, §0.2)
 
-- Scar: the scratch reading above re-run at 4 seasons, seeds 0–2, cap `None` against `1`. Reading rule,
-  stated before the run: at cap 1 the median of each person's largest count after 4 seasons is at most
-  4, and the count of persons at or over 3 is neither 0 nor everyone. If both arms read alike the cap
-  does nothing and is not kept.
+- Scar: `02_CHAR_scar_is_a_wound.md`'s gate replaces this file's (C-U5a-06): seeds 0–2, eight seasons, the
+  share of cast persons with some element at 3 or more lies strictly between 0 and 1 at the live arms (the
+  old *median ≤ 4* rule passed while every person was in crisis). Named test there:
+  `test_scar_stock.py::test_at_the_live_arms_the_share_at_three_lies_strictly_between_0_and_1`.
 - Regard: `engine/season/tests/test_told_by_channel.py::test_r07_realm_regard_differs_between_hearers_by_claim_not_stance_alone`
   already prints pairs differing beyond stance (3,270 of 11,449 at shipped gains). The new reading is
   the size, not the count. Reading rule, stated before the run: at arm `stance`, after two seasons, the
@@ -109,6 +117,10 @@ ships as a swept arm and its live flip is a declared mover read against the cont
 - Clamp: H-339's hand-set rows read ±50 at most through `stance_term` (2 × 25 at `stance_gain` 1);
   `build_realm(0)`'s one-season hash is EQUAL with the clamp on, because no shipped row stacks past 25
   (if it moves, a shipped row stacks, and that is a finding).
+- Named tests (new, `engine/season/tests/test_regard_unit.py`): `test_one_deed_is_at_most_one_step_at_arm_stance`;
+  `test_six_deeds_outweigh_a_loyalty_row_of_weight_two`; `test_stance_term_is_clamped`;
+  `test_a_capped_witness_holds_one_count_for_five_sights`; the existing
+  `engine/season/tests/test_told_by_channel.py::test_r07_…` stays green.
 
 ## Falsifier
 
@@ -135,6 +147,10 @@ size at `raw`; a holder who saw six such deeds holds a regard that outweighs a l
 Small build. Shared files: `data/fixtures.py`, `rosters.yaml`, `hole_register.yaml`,
 `loop/resolve.py`, `queries/person_q.py`, `decision/choose.py`.
 
+**Lands it and tier.** The B10 batch with `02_CHAR_scar_is_a_wound.md`, an IN `valoria-author` session on
+`sonnet` (`high`), closed by B10's `methodology-close` once. **Hash movers.** None at the controls; each flip
+declared.
+
 ## Addendum — the sign of regard by the act's character (H-337, H-282)
 
 **Problem.** `stance_term` negates regard only where the subject is the act's contested opponent
@@ -147,7 +163,13 @@ harmed.
 
 **Resolution, decided (ladder step 4, with the values left as content).** The sign becomes a column
 of the row, read by `stance_term`, in the way `beneficiary:`, `subject_may_be_self` and
-`counterparty_may_be_self` are columns of the row: `regard_sign: +1 | -1 | 0`, on a closed roster
+`counterparty_may_be_self` are columns of the row. **Layer 1, named at the site:** a verb column meets
+`04` §B.13 (*a property of a roster member travels with the roster*) against §C.4 (*a verb needing more
+columns is one the design has not finished thinking about*); the column is picked, as U1 §1 picks
+`capability:`, because a loader default makes a missing value explicit and refusable (B4's third
+disposition); `04` is not edited. This is the one term `17_CENSUS_C1A_02_wires_and_corrections.md` W4
+(`beneficiary`) also carries: it is written once, here (C-U5a-16; C3-K3), and `20_NARRATIVE_C`'s
+`holder_gain` arm is added after it in B38. The column: `regard_sign: +1 | -1 | 0`, on a closed roster
 `rosters.yaml: regard_signs`. The loader's DEFAULT reproduces today exactly (`-1` where
 `contested_against_subject()`, else `+1`), so adding the column moves no hash. Authoring a row's sign
 is then verb-table content. Proposed first values, each [ASSUMPTION; medium; Jordan to correct; revert:
@@ -160,7 +182,8 @@ other reader, the self-subject decline, untouched.
 `rosters.yaml` (the roster), `decision/choose.py::_stance_arm` (`return row.regard_sign * r` under
 `declared`; `legacy` and `regard` arms unchanged).
 
-**Gate and falsifier.** With no cell authored the one-season hash is EQUAL. H-337's own probe re-run:
+**Gate and falsifier.** With no cell authored the one-season hash is EQUAL. H-337's own probe re-run
+(restated as `engine/season/tests/test_regard_unit.py::test_sabotage_on_a_hated_person_scores_positive_with_the_cell`):
 at stance −25 the term for `sabotage` on the hated person is positive after the cell and negative
 before. `engine/season/tests/test_told_by_channel.py -k g2` (H-194's falsifier) stays green.
 

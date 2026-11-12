@@ -2,6 +2,10 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-05) — decided as written. Its edits to `05_SC_evidence_and_rebuttal_B.md` are applied there, and `08_FI_05_evidence-interface_B.md` carries the decision at its head.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.6 row ADM, §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` §2 *evidence* edge, ledger S-02, R-19 (member 11 `first_heard`); `unified/U3_CONFLICT_LEDGER.md` C3-C1, C3-Y3). R2's open check is closed at the tree: `speak` declares `contests: "a matter"` and degree-keyed `writes:` (`engine/season/verb_table.yaml`, read with `yaml.safe_load`: all four bands `[]` today), so the per-band `Record.stages` write is admitted by the loader (`04` §B.13 invariant 12). Changed: edits 1–2 are marked applied (their texts stand in EVID_B and FI_05_B); edit 4's `Exhibit` is HEAR_B's record (C3-C1) and the `first` mark is read inside the module, not handed to the host (EVID_B as reconciled); the gate reads `proofs` off the roll's `levels`, not `Margin.terms` (A-25: standing items are leverage); named tests; lands-it and tier.
+
+**Lands in batch:** B24, second in the evidence cycle (HEAR_B → this file → EVID_B → FI_05_B, C3-Y3). **Depends on:** `05_SC_playable_hearing_B.md` (B24; `Exhibit`, `build_hearing`), `05_SC_contest_record_on_event.md` (B05; `levels` on the record), plan position CR-61 (the case file) `[PL]`.
+
 ## Status: PROPOSED
 
 Carries `audits/19_LACUNA_investigation_to_proceedings.md` §5 and resolution R-19-02. Decides between
@@ -57,6 +61,9 @@ strikes it).
 
 ## Exact edits, by owner (text edits to the owning lanes' proposals; then the code those proposals name)
 
+Edits 1 and 2 are **applied** (the U5c closure wrote them into EVID_B and FI_05_B; W3-2 checked both
+bodies against them). Edits 3 and 4 are the code.
+
 1. **`proposals/2026-11-12-subsystem-audit-suite/proposals/05_SC_evidence_and_rebuttal_B.md`** (SC lane):
    - In "Where this differs from FI's E-6, and why", replace the sentence *"Putting a held item on the case
      file is an act the citer may attempt (an eligibility: he holds it, the row admits its kind) and is
@@ -85,8 +92,11 @@ strikes it).
    own token, SC `_B` edit 4): a per-band dispatch over the cited ids; `speak.writes` in
    `engine/season/verb_table.yaml` gains `Record.stages` at **all four** bands (today `[]` at every band,
    H-63), since `Failure` writes the `excluded` stage. `engine/season/data/fixtures.py`: `first_heard_ob`.
-4. `modules/social_contest/evidence.py::Exhibit` (SC `_B` edit 3) gains `first: bool`; `standing` reads it
-   only to hand the answer's obstacle term to the host (it rolls nothing, as now).
+4. `engine/season/queries/inputs.py::Exhibit` (HEAR_B's record; C3-C1) gains `first: bool`, filled by the
+   host builder from the stage's `first` mark. Inside the module, an `answer` to a `first` exhibit adds the
+   obstacle term `first_heard` (OBS §2 member 11, `first_heard_ob`) to that answer's obstacle; out of a
+   sitting, the answering `speak`'s host builder reads the stage's mark for the same member. `standing`
+   rolls nothing, as now.
 
 ## Gate (execution artifact)
 
@@ -94,13 +104,20 @@ On `build_hearing(seed)` (`05_SC_playable_hearing_B.md` edit 9) with one accuser
 claims and a Record, `PYTHONHASHSEED=0`, seeds 0-199:
 - all four bands of the filing `speak` occur; per band, the case file's new stages match the table
   (excluded at `Failure` only; weight halved at `Partial` only; `first` at `Overwhelming` only);
-- at close, `proofs` equals the band-scaled sum, read off `Margin.terms`;
+- at close, `proofs` equals the band-scaled sum, and the determiner's `levels` (SC-P1's record) show one
+  `proofs` level per whole unit of it; the obstacle is unchanged by entry (A-25);
 - every judge holds the told copies in every run where the told channel deposits, including the
   `Failure` runs;
 - the share of runs in which the matter is determined against the accused is strictly between the
   shares with nothing filed and with every item force-entered at full weight (the admission draw is
   load-bearing in both directions).
 Control: `cites` empty reproduces the base content hash.
+
+**Named tests** (new, `engine/season/tests/test_sc_hearing_admission.py`, inside the kernel file's glob):
+`test_admission_follows_the_citing_band_over_200_seeds`; `test_excluded_items_add_no_proofs_level`;
+`test_partial_enters_at_half_weight`; `test_failure_still_deposits_the_told_copy`;
+`test_first_heard_adds_the_term_to_the_answer_only`; `test_admission_is_load_bearing_in_both_directions`;
+`test_no_cites_is_hash_equal`.
 
 ## Falsifier
 
@@ -122,5 +139,9 @@ admission and the room is pretending not to have heard.
 
 ## Cost class
 
-Edit (two proposal texts), then a small build inside SC's consumer. Lanes: SC (owner of the consumer), FI
-(E-2/E-3 text).
+Edit (two proposal texts, applied), then a small build inside SC's consumer. Lanes: SC (owner of the
+consumer), FI (E-2/E-3 text).
+
+**Lands it and tier.** The B24 batch, edits 3–4 in one commit after HEAR_B's records, an SC `valoria-author`
+session on `sonnet` (`high`), closed by B24's `methodology-close`. **Hash movers.** None until `cites` is on
+(control: `cites` empty); `first_heard_ob` control 0.

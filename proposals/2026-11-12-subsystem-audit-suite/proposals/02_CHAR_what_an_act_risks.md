@@ -1,5 +1,9 @@
 # CHAR — what an act risks: a cost term for danger to the actor, read off the row's own prize and his own body
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.2 row (CONFORMS; "Spirit"/`attr.mind.will` one word), §7 (INCOMPLETE: no named tests), §7b-17, §7b-T; `unified/U1_GLOSSARY.md` *attribute* (Spirit/Will both resolve to `attr.mind.will`); `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3 (site `choice_exposure`), §8; `unified/U3_CONFLICT_LEDGER.md` C3-D7, C3-N27; `unified/U3_DEPENDENCY_ORDER.md` node B10). Changed: `risk` is the **fourth** element of the shared tuple, after `aim` lands (C3-D7), not the third; "Spirit" is named once as the display name of `attr.mind.will`; the `choice_exposure` site names its reader; the field's bands follow A-3 (`Won`, `Lost`, `Drawn`); named tests; the hash literal carries the B01 caveat; lands-it and tier. Not edited: the A-31/A-16/A-71 calibration of a fight's length (R2 §2: a note for the calibration step, no edit here).
+
+**Lands in batch:** B10, after `02_CHAR_goal_lean_on_its_own_question.md` and before `02_CHAR_voices_and_the_room.md` (C3-D7). **Depends on:** `02_CHAR_capability_uses_table.md` (B04; `capability_factor`), `10_DICE_believed_odds_have_a_prior.md` (B05; `View.odds`).
+
 ## Status: PROPOSED
 
 Written by the CHAR audit lane, addendum B (`audits/02_CHAR_audit_addendum_B.md`, F-CHAR-20, B3.2
@@ -58,7 +62,8 @@ risk(p, c) = − risk_gain · exposed(c) · (1 − chance(p, c)) · (1 + bands_b
 - `chance(p, c)` is his believed chance of coming through it, asked of the one odds query
   (`View.odds`, `seam/wrappers/sigma.py::believed_chance`). **Stated limit, read in code:** that query
   answers `None` for a band the social ladder does not carry, and the bodily rows' bands are the
-  combat module's and the field's (`Declared`, `Felled`, `Wounded`, `Untouched`; `Won`, `Lost`), which
+  combat module's and the field's (`Declared`, `Felled`, `Wounded`, `Untouched`; the field's end states
+`Won`, `Lost`, `Drawn`, A-3), which
   also do not say which party fell. So today every bodily candidate reads `None` and the term uses
   `risk_unknown_chance`, a fixture at 0.5: it separates persons by body and nerve at once, and by
   believed odds only when a module's own estimate is served through the same query (the first
@@ -69,7 +74,8 @@ risk(p, c) = − risk_gain · exposed(c) · (1 − chance(p, c)) · (1 + bands_b
 - `nerve(p)` is `capability_factor(p, "choice_exposure", fx)` (the first lane's interface, the DICE
   map's `judgement` role): 1.0 with no uses row, and with the row
   `{use: choice_exposure, role: judgement, key: attr.mind.will, gain: nerve_gain}` it falls below 1
-  for a person of high Spirit and rises above for one of low. Spirit is the attribute by Jordan's
+  for a person of high Spirit and rises above for one of low (Spirit is the display name of the key
+  `attr.mind.will`; no other key is meant or invented, glossary). Spirit is the attribute by Jordan's
   AR-44 (*"the capacity to tolerate harm and strain"*) and the adjudication's §2.2 (iv) (*"nerve is
   Spirit's"*).
 
@@ -82,13 +88,14 @@ the quantity. This proposal supplies the term it would scale and the half that i
 
 1. **`engine/season/rosters.yaml`**: `bodily_prizes: {values: ["the body", "a field"]}`, closed
    against the set of `contests:` values the verb table declares (refused at import otherwise).
-2. **`engine/season/decision/choose.py::score_terms`** (the one owner of the formula): the third
-   element of the returned tuple; `score` sums three. The chance is asked through the same `odds`
-   callable `odds_weight` receives, and is not asked at all at gain 0. With the first lane's `aim` term the
-   tuple is four; the order is `(pursuit, stance, aim, risk)`.
+2. **`engine/season/decision/choose.py::score_terms`** (the one owner of the formula): the fourth
+   element of the returned tuple, `(pursuit, stance, aim, risk)`, after `02_CHAR_goal_lean_on_its_own_question.md`
+   adds `aim` (C3-D7); `score` sums four. The chance is asked through the same `odds` callable `odds_weight`
+   receives, and is not asked at all at gain 0.
 3. **`engine/season/data/fixtures.py`**: `risk_gain` (0.0; sweep 0, 0.5, 1.0), `risk_unknown_chance`
    (0.5), `nerve_gain` (0.0), each with a hole-register row.
-4. **The uses table**: the `choice_exposure` site joins `capability_use_sites`; no row ships.
+4. **The uses table**: the `choice_exposure` site joins `capability_use_sites` with its one reader,
+   `decision/choose.py::score_terms` (U1 §3 amendment 7: the site names its reader); no row ships.
 5. **Instruments**: `harness/decision_spread.py::attribute_top` already calls `score_terms`; its
    deciding-term tally gains the `risk` column by reading the tuple's length, not a name.
 
@@ -105,7 +112,8 @@ the quantity. This proposal supplies the term it would scale and the half that i
 
 ## The gate (an execution artifact)
 
-(a) `risk_gain` 0: `build_realm(0)` one-season hash `5ab73af2`, EQUAL. (b) Two hand-built persons
+(a) `risk_gain` 0: `build_realm(0)` one-season hash `5ab73af2` (the working tree's reading before B01;
+re-read on the batch's base, C3-N27), EQUAL. (b) Two hand-built persons
 identical but for `body` (top band against the lowest), one question, the real ranker at temperature
 0 and `risk_gain` 1: the wounded one ranks `fight` and `accept` on the same subject strictly lower
 than the whole one does, and `challenge` (which contests nothing) at the same rank. (c) The same
@@ -113,6 +121,11 @@ pair, equal bodies, one holding Spirit 7 and one Spirit 1 with the `choice_expos
 non-zero `nerve_gain`: the low-Spirit person ranks the exposed acts lower. (d) Seeds 0 to 2, after
 the offer proposal lands: attempts at exposed acts by persons below the top body band fall against
 the gain-0 control.
+
+**Named tests** (new, `engine/season/tests/test_risk_term.py`): (a) `test_risk_is_zero_at_gain_zero`; (b)
+`test_a_wounded_person_ranks_fight_lower`; `test_an_uncontested_candidate_is_unchanged_at_any_gain`; (c)
+`test_spirit_moves_exposed_acts_through_the_uses_row`. (d) is a realm reading (`decision_spread`), quoted in
+the flip's commit.
 
 ## The falsifier
 
@@ -138,3 +151,6 @@ matter against the stance term's scale (the first audit's F-CHAR-08) and the cla
 ## Cost class
 
 Small build, shipped at its control; a flip after (b), (c) and the offer proposal.
+
+**Lands it and tier.** The B10 batch, an IN `valoria-author` session on `sonnet` (`high`), closed by B10's
+`methodology-close` once. **Hash movers.** None at `risk_gain` 0 (control); declared when the gain flips.

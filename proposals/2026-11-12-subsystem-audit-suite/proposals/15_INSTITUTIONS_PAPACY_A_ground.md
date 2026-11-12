@@ -2,7 +2,11 @@
 
 Re-grounded: 2026-11-12 (audit §15) — no edit of this file changes. One fact bears on it: at `build_realm(0)` the Church seats that carry `determine` are `off_confessor`, `off_cardinal_justice` and `off_senior_inquisitor` (map `unified/RESEARCH_MAP_INSTITUTIONS_A.md` §5, E-M1). Those are this file's three realm benches, and under the rule in force (`workplans/valoria_master_workplan_v11_part12.md:366`) the last two are also the whole electorate of the Confessor: audit §15.3 C-1.
 
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (PAP_A e1 CONFORMS, F-R4-14; e3 AMBIGUOUS: "one word, two reaches"), §7 (INCOMPLETE: the `scope` naming; the venue id), 7b.0, 7b.7 ("name the key `judging_scope` (or confirm it is `scope_rung`)"); `U3_DEPENDENCY_ORDER.md` (B32; §6 lists `probe_reach.py`, which is not in the tree). Changed: edit 3's key is confirmed at the tree as the existing judging-ground field `Office.scope_rung` (`state/gate.py:909`: "`scope_rung`, NOT `rung` -- AND SO NOT `purview_reaches`, AND THE DIFFERENCE IS KEPT"; `hole_register.yaml` H-32), and the row key is spelled `scope_rung:` so the row and the field carry one name and Layer 1's `scope?` (the purview scope) is not reused for the judging reach; `b_s_036_cathedral` is confirmed as a built venue (`engine/season/npcs.yaml:105`, `:141` home persons there; `hole_register.yaml` records a sitting at its bench); the gate's probe becomes a test function written first.
+
 ## Status: PROPOSED
+
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B32**, after BYZANTINE-E and before PAPACY-B (`U3_DEPENDENCY_ORDER.md` §1 item 32). Depends on: `06_FA_remit_grant_by_row.md` (B21, the end of the blanket `dispatch`); CR-60 and CR-74 are v11 plan positions (`workplans/valoria_master_workplan_v11_part12.md:165`; `_part3.md:283`), MISSING until `STAGES.md` step 5 carries or retires them: edit 3 waits on CR-60, edit 5 on CR-74; edits 1, 2, 4 do not. Lane tag: FA. Tier: `sonnet`, effort `medium` (edits) and `high` (edit 5's signature); no `opus` node. Named test: `engine/season/tests/test_inst_pap_a.py`. Standing sentences: *Pool*, *Failure writes*, *Draw keys* — this file adds no roll, no contested row and no draw (A-6 to A-8, A-81, A-30 are the verbs').
 
 Source: `audits/15_INSTITUTIONS_PAPACY.md` F-PAP-01, F-PAP-04, F-PAP-08, F-PAP-10; §12 R-1, R-4, R-5,
 R-14; evidence E-1, E-2. Batch 1 of that file's §11. Ratifies nothing.
@@ -14,7 +18,7 @@ R-14; evidence E-1, E-2. Batch 1 of that file's §11. Ratifies nothing.
 2. `off_cardinal_fortitude` grants `dispatch` by its own row. Nothing moves while the unruled `dispatch`
    is kept on every loop-built seat (`offices.yaml: meta.remit_unruled`); it is the row that keeps the
    Church's military arm in command once FA-P2 (`06_FA_remit_grant_by_row.md`) removes the blanket grant.
-3. Once CR-60's `scope:` key exists: three Church seats judge realm-wide. A declared mover (which seat
+3. Once CR-60's `scope_rung:` row key exists: three Church seats judge realm-wide. A declared mover (which seat
    may open a case or sit on a bench), inside CR-60's own re-record.
 4. The CH strife code gains a signature. Harness only; `content_hash` EQUAL.
 
@@ -58,15 +62,20 @@ ecclesiastical faction (a schismatic obedience, a foreign church) is covered wit
    - `note:` gains: *"`dispatch`: the Templars' command (PAPACY-A). [ASSUMPTION; medium; Jordan to
      correct; revert: drop `dispatch`, and the Church commands no force after FA-P2.]"*
    `off_archbishops_rep` gaining `issue` is FA-P2's edit (FA audit §13, NPC-034) and is not repeated.
-3. `engine/season/offices.yaml`, with CR-60's key (`scope:`, an anchor of the same four forms as `rung:`):
-   - `off_confessor`: `scope: {realm: true}`
-   - `off_cardinal_justice`: `scope: {realm: true}`
-   - `off_senior_inquisitor`: `scope: {realm: true}`
-   - the other four Church rows: no `scope:` (their bench ground stays their rung).
-   `[ASSUMPTION; medium; Jordan to correct; revert: no `scope:` on the three rows.]` The three are the
-   bench CR-34's test already assembles for the declared row.
+3. `engine/season/offices.yaml`, with CR-60's authoring key for the judging ground, spelled
+   `scope_rung:` (an anchor of the same four forms as `rung:`, resolved by `populated.py::resolve_anchor`
+   into the existing `Office.scope_rung`, which `state/gate.py::sits_over` reads and `purview_reaches`
+   does not):
+   - `off_confessor`: `scope_rung: {realm: true}`
+   - `off_cardinal_justice`: `scope_rung: {realm: true}`
+   - `off_senior_inquisitor`: `scope_rung: {realm: true}`
+   - the other four Church rows: no `scope_rung:` (their bench ground stays their rung, `build_realm`'s
+     default `scope_rung = rung`).
+   `[ASSUMPTION; medium; Jordan to correct; revert: no `scope_rung:` on the three rows.]` The three are
+   the bench CR-34's test already assembles for the declared row, and the two last are the Confessor's
+   whole electorate under the rule in force (PAPACY-B's built-realm arm).
 4. `engine/season/arrangements.yaml`, the comment above `excommunication_deliberation`: add one sentence,
-   *"Until three Church benches carry a realm `scope:` (CR-60, PAPACY-A) the party must stand in
+   *"Until three Church benches carry a realm `scope_rung:` (CR-60, PAPACY-A) the party must stand in
    `terr_T9`: `may_determine` asks `sits_over(seat, home_of(party))`."* A comment; no key.
 5. `engine/season/harness/strife_moves.yaml`, the CH row, and `harness/strife.py` (CR-74's files):
    - CH: `verbs: [arrest, determine, revoke]`, `kinds: [arrest.made]` (and `ban.opened`,
@@ -78,8 +87,13 @@ ecclesiastical faction (a schismatic obedience, a foreign church) is covered wit
 
 ## Gate
 
-- `probe_reach.py` (the audit's E-2 probe) re-run after edit 1: the Confessor's chain passes through
-  `terr_T9`; persons under `terr_T9` 10 of 83.
+- **First step, written before edit 1:** the audit's E-2 probe (`probe_reach.py`, not in the tree) is
+  written as `engine/season/tests/test_inst_pap_a.py::test_confessor_stands_at_himmelenger`:
+  `build_realm(0)`; walk `ancestry` from NPC-021's `reside` rung; count persons whose `reside` chain
+  contains `terr_T9`. Expected before edit 1 (red, the defect): the chain is `b_s_003_market →
+  q_s_003_market_quarter → set_s_003 → terr_T1` (audit E-2). Expected after edit 1 (green): the chain
+  passes through `terr_T9`; persons under `terr_T9` 10 of 83 (the audit's count, re-read by the test, not
+  asserted from this text: the test prints it and asserts only that the Confessor is among them).
 - After CR-60 and edit 3: `sits_over(off_confessor, terr_T1)` True; `sits_over(off_cardinal_prudence,
   terr_T1)` False; `purview_reaches(off_confessor, terr_T1)` still False (judging reach, not acting reach).
 - CR-74's own exit: a planted restraint through a Church seat reads CH; the same through a secular seat
@@ -89,14 +103,14 @@ ecclesiastical faction (a schismatic obedience, a foreign church) is covered wit
 ## Falsifier
 
 A world in which a second faction is given the `ecclesiastical` template and its seat's restraint does
-not read CH (the signature would be keyed on a name). A `scope:` that changes `purview_reaches`.
+not read CH (the signature would be keyed on a name). A `scope_rung:` that changes `purview_reaches`.
 
 ## NERS reading
 
 N: without edit 1 the head of the Church is not at the Church, so no Church bench sits over him, no
 sitting at the chapter house includes him and his co-location is with market traders; without edit 3
-every Church hearing is a city court. R: a designer changes a bench's reach by one anchor. S: `scope:` is
-CR-60's one key, the signature reads one existing roster. E (last): five edits, no new name.
+every Church hearing is a city court. R: a designer changes a bench's reach by one anchor. S: `scope_rung:`
+is CR-60's one key, writing the field that already exists, and the signature reads one existing roster. E (last): five edits, no new name.
 
 ## Cost class
 

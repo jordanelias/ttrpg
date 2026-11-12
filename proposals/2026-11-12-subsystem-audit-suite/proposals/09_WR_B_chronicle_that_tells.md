@@ -2,11 +2,16 @@
 
 Folded: 2026-11-12 by `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md`. Nothing here is deleted. `harness/chronicle.py::lines` gains three fields beside this file's `about` (`30_GO_F_the_plot_as_the_player_is_shown_it.md` instruction 7): `era` (the era of the act by `world_q.era_turns`; under `--focus`, the focalizer's `era_known` at that tick), `story` (the strand the act is a move of; under `--focus`, his own), and `left` (the act's durable writes, the definition of `30_WR_D` §3, so a line says what the act left for the next one: A-81). The omniscient render is the end reveal's body and is called in a played run only from `play_surface.reveal`, which refuses during play (A-49). The date line this file prints from `20_NARRATIVE_F`'s reign reading may print the era's name from `engine/season/telling.yaml` once that table exists.
 
-Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-15) — `world_q.projection` / `witnessed` / `PersonProjection` are deleted by `17_CENSUS_C1A_01_deletion_batches.md` D2: the one typed per-person reading is `account` (the person's own ledger) and the host-side `receipt` of `11_GO_player_surface_contract_B.md` §3–§4. The focalized telling (R-32) is therefore a selection over `account`'s rows, marked `saw` or `inferred` from each row's own source, and never over `w.log`; nothing else in this proposal changes.
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-15) — `world_q.projection` / `witnessed` / `PersonProjection` are deleted by `17_CENSUS_C1A_01_deletion_batches.md` D2: the one typed per-person reading is `account` (the person's own ledger; wave 3, C3-L4: the host-side `receipt` is deleted, and a person's own act's outcome reaches him as a firsthand claim `account` reads). The focalized telling (R-32) is therefore a selection over `account`'s rows, marked `saw` or `inferred` from each row's own source, and never over `w.log`; nothing else in this proposal changes.
 
 Reconciled: 2026-11-12, U5d closure — folded **A-49**, **A-33** and **A-43**. The focalized journal is the in-play telling and reveals nothing its holder does not hold; an omniscient reading of the log is shown only after the line ends and no continuation is taken (A-49), so the harness render that reads `w.log` is the end-of-campaign view and never a play surface. A death is told only to those who learned of it by presence, trail or telling, apart from the seat's news (A-33): a line about a vacancy does not carry the death. A person at low legibility appears in others' journals by his acts with no reason line (`U5d_WR_zero_coherence_unknowable.md`).
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — the body follows the U5a head (R3 §1, §2): "The resolution"'s R-32 paragraph, edit 3 and the NERS S line now read `account`, not `projection`/`witnessed` (deleted by `17_CENSUS_C1A_01` D2); C3-L4 ("`account`/`receipt`" → "`account`", in the head above); tier and batch added (R3 7b-0; U3 B36 and C3-Y9). The problem section's evidence (item 4) is kept as what `main` holds today.
+
 ## Status: PROPOSED
+
+Lands in batch: B36 (WR story instruments), co-landing with `09_WR_B_readings_of_closure_and_tension.md` (C3-Y9), after `17_CENSUS_C1A_01_deletion_batches.md` D2 (B03).
+Depends on: `09_WR_B_readings_of_closure_and_tension.md` edit 1 (B36, `CLOSE_CELLS`); `11_GO_player_surface_contract_B.md` (B34, `account` and the firsthand outcome claim, C3-L4); `17_CENSUS_C1A_01` D2 (B03).
 
 Carries finding F-WR-14 of `audits/09_WR_audit_addendum_B.md` (§3.3), its resolutions R-28 and R-32, its
 §2.2 correction 8, and step 2 of its §3.8. Evidence ids (EB-nn) are that file's §9; E-nn the first audit's.
@@ -51,10 +56,12 @@ by a render).
 - **Ties walking back are broken by rarity of the antecedent's verb within the seed**, then by log order.
   Wildermyth's repeat suppression (R8: an event becomes a quarter as likely each time it recurs) is the
   shipped form of "prefer the rare"; the act-id order is retired.
-- **A focalized telling is a selection over `projection(w, pid)`, never over `w.log` (R-32).** This
-  proposal adds only the flag that runs the same pick over one person's witnessed Events and marks each
-  line `saw` or `inferred` (an Event among a `claim.deposited`'s causes beside a finding is `inferred`).
-  The journal NM-W5 owes (CHAR, GO) composes on this; it is not built here.
+- **A focalized telling is a selection over `account(w, pid)`'s rows, never over `w.log` (R-32).** This
+  proposal adds only the flag that runs the same pick over the Events one person's own ledger holds
+  claims of, and marks each line `saw` or `inferred` from that row's own source (a claim deposited by a
+  witnessing channel is `saw`; one deposited beside a finding, FI-03's two-cause deposit, is `inferred`).
+  `projection`/`witnessed` are deleted by `17_CENSUS_C1A_01` D2 and are not read. The journal NM-W5 owes
+  (CHAR, GO) composes on this; it is not built here.
 
 ## The edits (`engine/season/harness/chronicle.py`)
 
@@ -63,8 +70,9 @@ by a render).
 2. `deepest_chain(rows)` keeps its signature for `--pick depth`; a new `closing_chain(rows, log, act_of)`
    is the default pick (`--pick close`), choosing the end as above and walking back with the rarity rule.
    Both are pure over their arguments, so the existing planted tests keep their meaning.
-3. `--focus <pid>` (no default) restricts the rows to acts any of whose Events are in `witnessed(w, pid)`
-   and tags each line `saw` / `inferred`. The header names the focalizer: `chronicle … focus=<pid>`.
+3. `--focus <pid>` (no default) restricts the rows to acts any of whose Events `pid`'s own ledger holds a
+   claim of, read through `account(w, pid)` (`11_GO_player_surface_contract_B.md`), and tags each line
+   `saw` / `inferred` from the row's source. The header names the focalizer: `chronicle … focus=<pid>`.
 4. The module docstring's THE PICK paragraph is rewritten to the rule above; the `[ASSUMPTION]` tag on
    CR-68's selection is kept.
 
@@ -100,11 +108,11 @@ render containing an Event the focalizer holds no deposit for.
 - **R.** Starting from closes makes the no-player half's endings the telling's subject. The `saw` /
   `inferred` tag keeps the non-omniscient requirement visible in the telling.
 - **S.** One subject read per line kind, the closing-cell set shared with the closure reading, the
-  existing projection for the viewpoint. No second attribution rule.
+  one person-side reading (`account`) for the viewpoint. No second attribution rule.
 - **E, last.** One field, one pick, one flag; the render becomes readable by someone who did not build it.
   High.
 
 ## Cost class
 
 Small build (harness only), hash EQUAL. Depends on `09_WR_B_readings_of_closure_and_tension.md` edit 1
-for `CLOSE_CELLS`; landing order: that edit first.
+for `CLOSE_CELLS`; landing order: that edit first. Tier: `sonnet` (harness; R3 7b-0).

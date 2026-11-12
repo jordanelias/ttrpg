@@ -1,14 +1,18 @@
 # FA-P5 — hygiene: stale register rows, the refusing clause, unreached queries, two names, retired contract rows
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — item 4 WITHDRAWN: the kind rename `dispensation` → `writ` by D-U1-11h (the roster key stays `dispensation`, the cited key of `read_to_addressee`, D-U1-05; prose says "writ", and "decree" for one proclaimed, A-21; a rename would move every hash for a word), and the verb rename `oblige` → `swear` by R3 §1's Option B (the verb and its Tenure kind keep one name, `04` §B.7 "`oblige : Person -> Seat`"; the glossary's *sworn* row reads off a live `oblige`). Item 3 gains the sentence R3 §1 asks for (Option A: `Faction.holdings` is the surviving named access, `04` §B.6.1). With item 4 gone the proposal declares no hash mover. Batch, dependencies and tier added (U3 B03; R3 7b-0).
+
 ## Status: PROPOSED
+
+Lands in batch: B03 (hygiene, hash EQUAL), after `16_PESSIMIST_CORE_no_stored_plan` and before `09_WR_B_pointer_text_for_the_orchestrator`'s neighbours in U3 §1 item 4.
+Depends on: nothing proposed (every symbol named is on `main`).
 
 Source: `audits/06_FA_audit.md` F-FA-09 to F-FA-12, §6.2 R-09 to R-15, R-18.
 
 ## What it changes in `engine/season/` at runtime
 
-Items 1, 2, 5 and 6 change nothing at runtime. Item 3 deletes two functions nothing calls. Item 4 renames
-one Record kind, one Event kind and one verb: behaviour is unchanged, and `World.content_hash()` moves for
-every world whose log or store uses them, which is declared.
+Items 1, 2, 5 and 6 change nothing at runtime. Item 3 deletes two functions nothing calls. Item 4 is
+withdrawn (see the head), so nothing renames and no `World.content_hash()` moves.
 
 ## The problems (evidence), and the resolution for each
 
@@ -37,23 +41,24 @@ reads the trace row for a predicate row. Ladder step 4.
 --include=*.py` outside tests returns nothing; `purview` and `subordinates` are read only by
 `harness/interactions.py:123-127`.
 *Edit:* delete `faction_q.superiors` and the standalone `faction_q.holdings` with their tests
-(`test_faction_q.py`'s three cases for them); `resolve(...).holdings` is unchanged. Keep `purview` and
+(`test_faction_q.py`'s three cases for them); `resolve(...).holdings` is unchanged, and is the surviving
+named access `04` §B.6.1 asks for (its `Faction := (… holdings : RungId[] …)` carries it; "`holdings(faction)`
+is a named Query" is met by that field, not by a second function). Keep `purview` and
 `subordinates`. Keep `head`'s `Tenure.degree` branch, which `04` §B.6.1 and §F.34 name, and add one line at
 the site: unreachable until something writes a degree on a `commit`. Ladder step 5 (`ID-13`: a role no
 caller requires is not declared).
 
-**4. Two names that say the opposite of what the thing does (R-11, R-12; H-262, H-298).**
-A `dispensation` is an order; the ordinary word means an exemption. The verb `oblige` binds only the actor;
-the ordinary word means to bind another.
-*Edit, kind:* `rosters.yaml: record_kinds.dispensation` → `writ`; `verb_table.yaml` `issue`'s `emits:
-dispensation.issued` → `writ.issued`, and the three `existence … kind: dispensation` cells → `kind: writ`;
-`references/names_index.yaml` if it carries the term. The code already says "writ" in every function and
-note that touches it (`writs_held`, `WRIT_MINTING_VERB`).
-*Edit, verb:* the VERB row `oblige` → `swear` (the code's own word: `sworn_to`, `_swear`), with its effect
-registration, predicate key and `duty.taken` unchanged. The Tenure KIND stays `oblige`, which Layer 1 names.
-Each rename is its own commit and a declared mover, as the `refract` → `construe` and `levy` →
-`requisition` renames were `[ASSUMPTION; medium; Jordan to correct; revert: the old spelling]`. Ladder
-step 4.
+**4. Two names that say the opposite of what the thing does (R-11, R-12; H-262, H-298). WITHDRAWN
+(D-U1-11h; R3 §1 Option B).** The finding stands as vocabulary: a `dispensation` is an order where the
+ordinary word means an exemption, and the verb `oblige` binds only the actor. The repair is in prose, not in
+the roster: new suite text says "writ" for any `dispensation` Record and "decree" for one proclaimed by
+`issue` (A-21; `U1_GLOSSARY.md` *writ*), and "swear" / "sworn" for the act of taking an `oblige` (the
+glossary's *sworn* row). No roster value, Event kind, verb row or cell changes, so no hash moves. The two
+renames formerly proposed here (kind `dispensation` → `writ`, Event `dispensation.issued` → `writ.issued`;
+verb row `oblige` → `swear` with the Tenure kind kept) are not to be built: the first would move every hash
+for a word and break the cited key of `read_to_addressee` (D-U1-05); the second would give one act-and-edge
+two names (test 1). H-262 and H-298 are closed by this paragraph's prose rule, `[ASSUMPTION: the hole rows
+accept a vocabulary closure — basis: D-U1-11h's decision is the vocabulary owner's]`.
 
 **5. Contract rows for a retired faction (R-09).** `references/module_contracts.yaml` `modules:` carries
 `faction_state` (`:127`) and `faction_politics` (`:797`) with stored state ("faction stats 1-7",
@@ -78,14 +83,14 @@ FA-P1. The B10-17 card's CP-T09-06 row says `off_duke_valorsmark`'s conferral is
 
 `python -m engine.season.harness.register --check` after item 1; `aperture 2 0` printing a clause in place
 of `no-read` for `establish` after item 2; the `engine/season/tests` files that import the deleted
-functions pass after item 3; for item 4, the pre- and post-rename `aperture 2 0` outputs are identical but
-for the renamed strings, and the two-season `build_realm(0)` hash is re-recorded old to new in the commit
-body; `tools/valoria_local.py --staged` after items 5 and 6.
+functions pass after item 3; item 4 has no check (withdrawn); the two-season `build_realm(0)` hash is
+equal before and after the whole proposal; `tools/valoria_local.py --staged` after items 5 and 6.
 
 ## Falsifier
 
-For item 4, an `aperture` diff showing any count change is a rename that moved behaviour, and the commit is
-wrong. For item 3, a grep that finds a caller is the falsifier, run before the deletion.
+For item 3, a grep that finds a caller is the falsifier, run before the deletion. For the proposal as a
+whole, any change of the two-season `build_realm(0)` hash means an edit moved behaviour, and that commit is
+wrong.
 
 ## NERS reading
 
@@ -95,4 +100,4 @@ of a repository that has no memory between sessions.
 
 ## Cost class
 
-Edit. Six commits; two are declared hash movers.
+Edit. Five commits (item 4 withdrawn); none is a hash mover. Tier: `sonnet` (text and data edits; R3 7b-0).

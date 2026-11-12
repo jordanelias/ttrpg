@@ -1,5 +1,9 @@
 # CORE-T2 — delete the tests that cannot fail on a behaviour change
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.1 row T2 (CONFORMS), §7 (COMPLETE except lands-it and tier), §7b-T; `unified/U3_DEPENDENCY_ORDER.md` node B02, §5.1 serial edges on `requirements.yaml` and `test_season_shape.py`). Added: lands-it, tier, batch and the serial order on the two shared files; row 6 is marked for the MB lane's landing; the row-3 falsifier's `[UNVERIFIED: read, not run]` is made the batch's first step (this lane runs nothing). No other change.
+
+**Lands in batch:** B02 (hash EQUAL). **Depends on:** nothing proposed. **Serial edges:** it edits `engine/season/requirements.yaml` and `engine/season/tests/test_season_shape.py` first in their serial orders (B02 → B03 → B09 → …; B02 → B11 → B12, U3 §5.1).
+
 ## Status: PROPOSED
 
 Source: `audits/01_CORE_audit_addendum_C_tests.md` F-TEST-04, F-TEST-05, F-TEST-09, F-TEST-10. Read at
@@ -102,7 +106,8 @@ six tests and passes; `python -m pytest engine/season/tests/test_season_shape.py
 For row 3, the mutation each substring test could not see must be seen by its named successor: in
 process, apply each staged delta as its own clamped write in `loop/resolve.py` and keep the trace
 string; `test_a_sabotage_a_restore_cancels_is_refused_after_the_fact` must redden (it would read
-`site.restored` and `site.damaged`). `[UNVERIFIED: read, not run]`. If it does not, `d10b`'s deletion is
+`site.restored` and `site.damaged`). `[UNVERIFIED: read, not run]` — the batch's first step runs this
+mutation and records the outcome in the commit body before row 3 deletes anything. If it does not, `d10b`'s deletion is
 wrong and that test gains a mixed-sign case at the ceiling (a `restore` of more than the headroom and a
 `sabotage`, folded in both orders, one end condition). For row 4: delete `View.__getattr__`'s refusal
 in process; `a_view_raises` must redden.
@@ -124,3 +129,8 @@ in process; `a_view_raises` must redden.
 ## Cost class
 
 Edit.
+
+**Lands it and tier.** The B02 batch, an IN `valoria-author` session on `sonnet` (`high`), one commit per row
+of the table, closed by B02's `methodology-close` once. Row 6 is the MB lane's file
+(`tests/valoria/test_mass_battle_maneuvers.py`): it lands in B02 only with that lane's agreement, else in the
+MB lane's first batch (B17). **Hash movers.** None.

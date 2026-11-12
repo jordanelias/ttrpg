@@ -6,7 +6,11 @@ Re-grounded: 2026-11-12 (audit §15.4 item 11) — no edit of this file changes;
 
 Reconciled: 2026-11-12, U5d closure — folded **A-17 / A-18**, **A-5** and the land rulings. The founding attestations follow the ruled order with Varfell third and its deed held realm-wide at the third confidence; the entry counts stay Jordan's to set. Any draw this file states in dice counts is the one bell-curve sampler's (A-5); no whole-dice roll is specified by it after that reading. The containment charter's `forbids: [seize, …]` binds officers who answer the charter; it does not stop a victor's seizure after a won march, and such a seizure of chartered ground is a breach every churchman who learns of it holds (the `deed_doers` row already lists `rung.seized`). The King is still not sworn to the Confessor's seat (R-13).
 
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (PAP_C: `instruments:` and `attests` "SYN_A/B replace it", body stale), §7 (INCOMPLETE: body stale vs SYN_A/B), 7b.0, 7b.7 ("replace §1 with seeded rows of `instruments.yaml` (SYN_A/SYN_B); delete `attests`"); `U3_CONFLICT_LEDGER.md` C3-C10 (a cited Record is a `proofs` level). Changed: the body now follows this file's first `Reconciled:` line, which it had not: §1 is a pointer to SYNTHESIS-B §3's seeded rows (the `offices.yaml: instruments:` section and the weights 5, 3, 2 are removed, not left beside the rule that replaced them); the consecration's bands write `recites`; "`legitimacy` is unchanged" is corrected (SYNTHESIS-B adds the chain); edits 1, 2 and 5 and the build gate follow. A consecration's Failure is named as a durable write (A-81).
+
 ## Status: PROPOSED
+
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B33**, after COLONIAL-D (`U3_DEPENDENCY_ORDER.md` §1 item 33). Depends on: `15_INSTITUTIONS_SYNTHESIS_B` (B32, the seeded rows and `recites`), `05_SC_evidence_and_rebuttal_B.md` and `12_ARCS_cited_evidence.md` (B24, a held Record cited as proof), `14_VERBS_SOCIAL2_B_a_word_with_content.md` (B25); CR-36 (a v11 plan position, MISSING until `STAGES.md` step 5: the `resolution` disposal site; the consecration row waits on it). Lane tag: FA. Tier: `sonnet` producer, effort `high`; one `opus` read of the planted hearing's odds table. Named test: `engine/season/tests/test_inst_pap_c.py`. Standing sentences: *Pool* — the bench's `determine` is SC's roll on the one pool rule (A-6, A-7, A-8). *Failure writes* — a refused consecration mints nothing and is witnessed on its open floor: every person present deposits the claim that the bench refused him (a deed of the bench's, and his own claim of the refusal) (A-81). *Draw keys* — no draw is added (`determine`'s key is SC's, A-30).
 
 Source: Jordan's fixed points of 2026-11-12 (`INSTITUTIONS_BRIEF.md`: nobility by deed; *"royalty by noble
 conquest, i.e. the first king had the greatest accomplishment in the secession war, followed by the first
@@ -17,15 +21,15 @@ proof), `14_VERBS_SOCIAL2_B_a_word_with_content.md` (telling what a held documen
 
 ## What it changes in `engine/season/` at runtime
 
-1. `harness/populated.py::build_realm` mints the Records `offices.yaml: instruments:` lists, each held by
-   the holder of the seat its row names. With the section empty or absent: nothing (hash EQUAL). With the
-   four rows below: a declared build-hash mover (four Records, four `hold` Tenures, the holders' content
-   claims).
+1. (Moved to SYNTHESIS-B §3: the founding Records are `seeded:` rows of `engine/season/instruments.yaml`,
+   minted by SYNTHESIS-A's seeded pass; two of them are in the Church's archive.)
 2. A `consecration` arrangement row. Hand-built until a computed docket names a row. Under it a
-   `determine` at Success mints a `resolution` (CR-36's site); at Partial a lesser one; at Failure none.
+   `determine` at Success mints a `resolution` (CR-36's site) reciting the cited deeds left standing; at
+   Partial one reciting the first half of them; at Failure none.
 3. One goal row for the Church. A declared mover of `goals.yaml`'s seeded goals.
 
-No legitimacy number, no title, no tenure kind, no verb. `queries/person_q.py::legitimacy` is unchanged.
+No legitimacy number, no title, no tenure kind, no verb. `queries/person_q.py::legitimacy` gains the
+chain term of SYNTHESIS-B §1 (not this file's edit).
 
 ## The problem (evidence)
 
@@ -53,49 +57,21 @@ certifies them at a hearing, keeps the writing, and tells it.** Three parts.
 
 ### 1. World-gen instruments
 
-`offices.yaml` gains a third section. One row = one Record minted at build, by the one mint
-(`_mint_document`'s path), held by the live holder of `held_at`. Unknown keys rejected.
+The founding papers are SYNTHESIS-B §3's `seeded:` rows of `engine/season/instruments.yaml` (SYNTHESIS-A
+§1's schema), not a section of `offices.yaml`. Two of them are this file's subject, in the Church's
+archive (`held_at: off_cardinal_temperance`): `ins_containment_charter` (form `immunity` over `terr_T9`,
+issued through `off_king`) and `ins_consecration_first_king` (a `resolution` through `off_confessor`
+whose `recites` lists the first king's three seeded deeds). The two ducal papers are `homage`
+instruments in the Chief Parliamentary Clerk's keeping. The order of accomplishment is carried once, as
+the founders' seeded deeds (3, 2, 1; SYNTHESIS-B §2); `attests` and the weights 5, 3, 2 are withdrawn
+(X-05, X-06). **Only the order is Jordan's**; the counts are `[ASSUMPTION; Jordan to correct]`.
 
-```yaml
-instruments:
-  - id:      ins_settlement_charter
-    kind:    dispensation
-    via:     off_king                     # the seat it was issued through
-    held_at: off_cardinal_temperance      # the archive
-    terms:   {immunity: {territory: "T9"}, forbids: [seize, requisition, arrest, raze]}
-    to:      ["NPC-020"]                  # the throne's holder, bound with his officers
-    at:      {territory: "T9"}
-    source:  "canon/03_canonical_timeline.md:58, :82, :104 (the containment grant, preserved and expanded at the settlement)"
-  - id:      ins_roll_valorsmark
-    kind:    resolution
-    via:     off_confessor
-    held_at: off_cardinal_temperance
-    terms:   {seat: off_king, attests: 5}
-    to:      []
-    source:  "Jordan 2026-11-12 (order of accomplishment); canon/03_canonical_timeline.md:78-84"
-  - id:      ins_roll_hafenmark
-    kind:    resolution
-    via:     off_confessor
-    held_at: off_cardinal_temperance
-    terms:   {seat: off_duchess_hafenmark, attests: 3}
-    to:      []
-    source:  "Jordan 2026-11-12; canon/03_canonical_timeline.md:90"
-  - id:      ins_roll_varfell
-    kind:    resolution
-    via:     off_confessor
-    held_at: off_cardinal_temperance
-    terms:   {seat: off_duke_varfell, attests: 2}
-    to:      []
-    source:  "Jordan 2026-11-12"
-```
-
-- `attests` is the Record's weight as a proof, in the unit SC's `evidence` term already uses (item weight;
-  `proof_step` per unit). **Only the order 5 > 3 > 2 is Jordan's**; the sizes are
-  `[ASSUMPTION; medium; Jordan to correct; sweep {3,2,1}, {5,3,2}, {8,4,2}]`.
-- `to: []` on the three rolls: the founders are dead and are no person of the cast. A roll is a proof for
+- A certificate weighs in a hearing by its recited deeds left standing: one item per recited deed at a
+  Record's weight, entering the roll as `proofs` levels (SYNTHESIS-B §4; `U5c_SC_one_obstacle_form.md`
+  §3). The founders are dead and are no person of the cast (`to: []`). A certificate is a proof for
   whoever's petition names the same seat (the heir, a claimant) and cites it while holding it or with its
   holder testifying.
-- The rolls sit in the Church's hands, not the houses'. A house that wants its roll in a hearing needs the
+- The papers sit in the Church's and the chancery's hands, not the houses'. A house that wants its paper in a hearing needs the
   archive's holder to cite or `give` it, a copy (`create_record`, weaker: SC's `subject` term), or
   testimony. That dependence is the Church's standing leverage, and theft, forgery or fire in the
   scriptorium is a political act.
@@ -131,12 +107,13 @@ The route, all existing acts: the claimant (or his advocate) `petition`s a Churc
 
 | band | effect |
 |---|---|
-| Overwhelming, Success | a `resolution` with `terms: {seat, attests: n}` and `to: [claimant]`, held by the determiner; `n` = the weight of the cited items left standing |
-| Partial | the same with `attests: ceil(n/2)`: a grudging consecration |
-| Failure | nothing minted; the matter is dismissed (SC-P6); he may petition again |
+| Overwhelming, Success | a `resolution` with `recites: {for: <seat>, deeds: [<the cited deed claims left standing>]}` and `to: [claimant]`, held by the determiner |
+| Partial | the same reciting the first half of them, in cited order: a grudging consecration |
+| Failure | nothing minted; the matter is dismissed (SC-P6); he may petition again; the refusal is witnessed on the open floor and held by those present (A-81) |
 
-Odds: `standard` + `evidence` (his cited items minus the standing answers, T5) + `reception` (the bench's
-disposition to him). A claimant with great deeds and a hostile Church, and one with thin deeds and a
+Odds: the obstacle's `standard` and `reception` (the bench's hostility to him) against his `proofs`
+levels (his cited items left standing after the answers, T5) and the `favour` of a friendly bench
+(leverage, C3-C10). A claimant with great deeds and a hostile Church, and one with thin deeds and a
 friendly one, are both uncertain. Consecration opens no `hold` and gates no `succeed`.
 
 What reads the certificate: (a) the `succession` contest (CR-35) and any deposition motion (CR-37), as a
@@ -162,32 +139,30 @@ is requested, not built here. Until then the row ships OFF.]`
 
 ## Exact edits
 
-1. `engine/season/offices.yaml`: the `instruments:` section above; `meta.source` line updated.
-2. `engine/season/harness/populated.py::build_realm`: one pass after seats are held: for each row, resolve
-   `held_at` to its live holder (a vacant seat: the row is skipped and reported, never re-homed), mint the
-   Record through the existing mint with the row's `kind`, `terms`, `to`, `at`, and open the holder's
-   `hold`. A loader in `data/` refuses an unknown key, a `kind` off `record_kinds`, a `via` or `held_at`
-   that is no seat row, and a field the kind does not declare.
+1. (Withdrawn: no `offices.yaml: instruments:` section. The rows are SYNTHESIS-B §3's.)
+2. (Withdrawn into SYNTHESIS-A §1: the `seeded:` pass in `build_realm` and its loader refusals, as this
+   edit specified them, are the kit's.)
 3. `engine/season/arrangements.yaml`: the `consecration` row. (`resolution` in `record_kinds` and the
    Record disposal site are CR-36's; this proposal needs CR-36's site to mint under any `disposes: Record`
    row whose docketed petition names a seat, which is how CR-36 states it.)
 4. `engine/season/goals.yaml`: the row above, shipped off until the place filter exists.
-5. Cross-lane requests, not edits: to SC-P8's owner, *a cited `resolution`'s weight is its `terms.attests`*
-   and *a `resolution` is a proof for the side whose petition names the same seat*; to FA, the house
-   carrier of audit §2.2 item 3.
+5. Cross-lane requests, not edits: SYNTHESIS-B §4's request to SC's evidence owner replaces this file's
+   (a cited Record carrying `recites` files one item per recited deed); the house carrier of audit §2.2
+   item 3 is answered by SYNTHESIS-B §1's chain (R-17).
 
 ## Gate
 
-- Build: `build_realm(0)` holds four more Records; `ins_roll_*` weights read 5, 3, 2; all four are held by
-  the Cardinal of Temperance's holder; his ledger has their content claims. Control: section absent, base
-  hash.
+- Build: SYNTHESIS-B's gate (the seeded rows; the archive's two papers held by the Cardinal of
+  Temperance's holder, his ledger holding their content claims). Not repeated here.
 - Planted hearing (hand-built, real fold): the heir petitions for consecration to `off_king`. Arm A: his
-  side cites `ins_roll_valorsmark` (given him by its holder). Arm B: no roll. Exact odds printed for both
+  side cites `ins_consecration_first_king` (given him by its holder). Arm B: no paper. Exact odds printed for both
   from the module's distribution: P(Success or better) in A exceeds B; 200 seeds per arm show all four
   bands in both. Arm C: a rival cites a contrary Record against the roll: A's advantage shrinks.
-- Planted order: the same hearing for a Hafenmark claimant citing `ins_roll_hafenmark` and a Varfell
-  claimant citing `ins_roll_varfell`, same bench and reception: the three exact odds are ordered as the
-  rolls are.
+- Planted order: the same hearing for a Hafenmark claimant citing `ins_settlement_hafenmark` and a
+  Varfell claimant citing `ins_settlement_varfell` (each given him by the clerk), same bench and
+  reception: the three exact odds are ordered as the recited deeds are (3, 2, 1).
+- Failure writes (A-81): in arm B's Failure seeds, every person present at the sitting holds a claim of
+  the refusal after WITNESS; the count of such claims is printed and asserted non-zero.
 
 ## Falsifier
 
@@ -204,10 +179,10 @@ and a new accomplishment has no way to be recognised except by being witnessed. 
 by deeds and then must get them written; can steal, forge or burn a roll; can be refused; a Church player
 chooses whom to attest and whom to preach. With no player a disputed succession turns on who holds which
 paper. It fails gracefully: no Record, the hearing still runs on testimony. S: one Record kind (CR-36's),
-one disposal site, the SC evidence term, the existing `legitimacy`; nothing is computed twice. E (last):
-one YAML section, one row, one goal row; the player's rule of thumb is *deeds must be seen, or written
+one disposal site, SC's `proofs` levels, the one `legitimacy`; nothing is computed twice. E (last):
+one arrangement row, one goal row, and the archive's two seeded papers (SYNTHESIS-B's); the player's rule of thumb is *deeds must be seen, or written
 and kept*.
 
 ## Cost class
 
-Small build (edits 1-3); edit (4); the house carrier is design-first and FA's.
+Small build (edit 3); edit (4). Edits 1, 2 and the house carrier are SYNTHESIS-A's and -B's.

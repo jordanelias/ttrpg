@@ -1,5 +1,10 @@
 # MB · command: a capability of the commander and his officers, and the draw by which an order takes effect
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AND_VOCABULARY.md` D-U1-01 (the seat's modifier reaches a roll as the `office` **level**, never dice: §2's `addends` comment is practice only, `levels` gains the march seat's `office` level, §5 rewritten to the two halves, gate 7 and its test renamed; `R1_READ.md` §1.2's "verify at U2" on a modifier column is answered by D-U1-01a: one `modifier:` column on the seat's own row, `offices.yaml`, its Layer 1 text owed), U1 §4 R-14 (`level: minor` → `level: talent_level`, the fixture), R-10/R-16 and the architecture §4 "nobody opposite" (`obey.task` is the stand-in `even_line(pool_add) + opposed_ob(pool_default, opposition_rate)`; INCOMPLETE item 2 closed), `U1_GLOSSARY.md` *band* (a distance band is a **distance step**: `bands()` → `steps()`); `R1_READ.md` §2 row A-25 (the Discipline `minor` marked `[ASSUMPTION]`), §2 row A-30 and `U3_CONFLICT_LEDGER.md` C3-D2 (B19 lands after the keyed draw B06, so INCOMPLETE item 4's interim `rngsource` order is not needed); test 9 (INCOMPLETE item 3 partly closed at the tree; `Depends on:` / `Lands in batch:`; U3 §4.1 row 67).
+
+**Depends on:** 27A-1–27A-4 on nothing unlanded beyond the one sampler (B05) and the key (B06); 27A-5 on `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` §1 (B19); 27A-6 on `U5a_capability_home_and_two_inputs.md` Part B (B05, C3-D4); the seat half of §5 on the seat row's `modifier:` column (D-U1-01a, lands with OBS §3, B05; U3 §6.3); window and lull actions on `04_MB_manager_battle_one_resolver.md` §4 (B20, LATER, U3 §4.1 row 67) and `26_MASS_BATTLE_cell_scale_and_time.md` §3 (B19).
+**Lands in batch:** 27A-1–27A-5 in B19 (`B19-mb-field-calibration`, MB), first in the batch; 27A-6 in U5a's CAP batch (B05).
+
 ## Status: PROPOSED
 
 Lane MB (the capability rows and the pool reader are CORE's and DICE's surface, U1; the seat's modifier is
@@ -63,8 +68,8 @@ site, U1 §9):
 
 ```yaml
 - {use: field, role: dice, key: command,              side: each, add: pool_add, floor: pool_floor}   # the learned skill
-- {use: field, role: edge, key: attr.social.charisma, side: each, level: minor, per: mid}             # the social attribute
-- {use: field, role: edge, key: attr.mind.acuity,     side: each, level: minor, per: mid}             # the mental attribute
+- {use: field, role: edge, key: attr.social.charisma, side: each, level: talent_level, per: mid}      # the social attribute (U1 R-14)
+- {use: field, role: edge, key: attr.mind.acuity,     side: each, level: talent_level, per: mid}      # the mental attribute
 ```
 
 - **Two inputs, as A-7 and U1 §4 assign them:** training gives dice (`pool = max(pool_floor, score + addends +
@@ -93,8 +98,9 @@ site, U1 §9):
 class CommandRecord:
     person: str            # the person id, for the report only; the module reads nothing by it
     score: int             # trained rank in `command`, or the untrained score (`pool.py::score`)
-    addends: int           # whole dice from the registered pool addends: practice, and a seat's modifier (§5)
-    levels: float          # signed sigma: the two talent rows, summed (`sigma.py::advantage_sigma`)
+    addends: int           # whole dice from the registered pool addends (practice) (D-U1-01)
+    levels: float          # signed sigma: the two talent rows, summed (`sigma.py::advantage_sigma`), and the
+                           # `office` level of the seat the march is made through (D-U1-01; the commander only)
     post: Optional[str]    # the unit he rides with (the commander only); None is the army's rear centre
     fed_by: tuple          # U1 §8's reason trail rows, echoed on the report
 ```
@@ -137,10 +143,12 @@ One function, at the one site an order's behaviour is applied:
 ```
 pool      = max(pool_floor, roller.score + roller.addends + pool_add)
 levels    = roller.levels  (+ `minor` for the roller if the unit's Discipline is 4 or more: A-25, a favourable
-                             circumstance raises the roller; 14_VERBS_MILITARY_D's `disciplined`)
+                             circumstance raises the roller; 14_VERBS_MILITARY_D's `disciplined`.
+                             [ASSUMPTION: A-25's reading extended from the social composer to the order draw —
+                             basis: the same principle; A-25 itself covers a social contest])
 obstacle  = obey.task                                   # the one task-obstacle rule, carried as a number (below)
           + obey.step[kind]                             # 26_MASS_BATTLE_maneuver_orders §1's table, as steps
-          + obey.distance * bands(roller.post, unit)    # §3's last column; 0 when it says none
+          + obey.distance * steps(roller.post, unit)    # §3's last column, in distance steps; 0 when it says none
           + obey.across  * max(0, units_on_signal - 3)  # 26's row, kept
           + obey.unsteady  (unit `raw`, or Discipline 1)
           + obey.in_contact (the unit has a cell in contact)          # CONTROL 0
@@ -162,17 +170,16 @@ band      = degree_from_net(net, obstacle)                            # the one 
 - **Misreading is not scripted.** It exists only where a commander has given one unit orders on two signals.
   A plan with one signal cannot be misread and can only be late; a plan with three is fragile. No rule names a
   manoeuvre or an outcome.
-- **Distance.** `bands` is the whole number of `obey.reach` cells between the roller's post and the unit's
-  centroid, beyond the first. Three independent designs make command local (Lost Battles: a commander spends
+- **Distance.** `steps` (a **distance step**, U1 glossary; "band" is kept for a degree) is the whole number of
+  `obey.reach` cells between the roller's post and the unit's centroid, beyond the first. Three independent designs make command local (Lost Battles: a commander spends
   on units in his own zone, WG L3; Field of Glory: command range; Total War: the general's radius, WG T2 and
   the convergence table). **No command delay as a number is established** (MV, "does not establish"), so
   `reach`, `distance` and `signal_reach` are seeds with a control (`distance: 0`).
-- **`obey.task`** is the obstacle of a task nobody opposes, by the one rule U1 §4 gives ("nobody opposite":
-  the opposition rate times an ordinary person's pool), computed host-side and carried on `MassBattleInput` as
-  one number. The module does not read a fixture table and does not restate the rule. Ruling A-71 and
-  `audits/29_ONE_OPPOSED_RULE.md` (written during this pass; its verdict read, its plan not) restate what
-  stands against a roll; whatever that lane lands as the even line of an unopposed task is the number carried
-  here, and nothing in this file changes with it.
+- **`obey.task`** is the obstacle of a task nobody opposes, by the one rule (*(W3-1)* U1 architecture §4
+  "nobody opposite", U1 §4 R-10 and R-16, A-79): `even_line(pool_add) + opposed_ob(pool_default,
+  opposition_rate)`, both functions of `engine/dice_engine/sigma_leverage.py`, computed host-side in
+  `field_input` and carried on `MassBattleInput` as one number. The module does not read a fixture table and
+  does not restate the rule.
 - **One draw per key** (A-30): each draw is keyed on (field, tick, unit, purpose `obey`, link), so the draw
   sequence does not depend on who issued the order, and a replay from the interventions list
   (`04_MB_manager_battle_one_resolver.md` §5) reproduces it.
@@ -197,18 +204,24 @@ orders:
 
 Every number is a seed. The form is what is decided.
 
-### 5. A seat's modifier (A-12)
+### 5. A seat's modifier (A-12; decided by `U1_OWNERS_AND_VOCABULARY.md` D-U1-01)
 
-- It reaches a Command draw as **whole dice in `CommandRecord.addends`**, through `POOL_ADDENDS` in the one
-  pool reader, read off the seat the march is made through (`Act.via`): U1 §3 item 6, unchanged. "Rank
-  supplies dice" (`architecture/meta/04_CODE_ARCHITECTURE.md` §B.7) is literally what an addend is. The
-  amendment text A-12 owes is the unification stage's; nothing here needs it to land first, because a seat
-  that declares no modifier adds zero.
+*(Reconciled, W3-1: this section first had the seat's modifier arrive as whole dice in `addends`; D-U1-01
+decides levels, one channel per side, and that text is replaced.)*
+
+- **The help half.** The seat the commander's march is made through (`Act.via`) helps him as a named level
+  from the leverage source `office` (`rosters.yaml: advantage_sources`), sized by that seat row's own
+  `modifier:` column (`engine/season/offices.yaml`, a `LEVEL_SIGMA` name or null; `state/carriers.py::Office`;
+  D-U1-01a), read by the one host function and summed into `CommandRecord.levels` under the soft cap. A seat
+  that declares no modifier adds nothing.
 - **It is the commander's only.** An officer is a column of a unit row, not an act through a seat, so no
-  officer has a seat addend. If the institutions kit makes an officer's post a seat, that is its row and one
+  officer has an `office` level. If the institutions kit makes an officer's post a seat, that is its row and one
   more call of the same builder; no rule here changes.
-- **No double count.** The module sees `addends` as one integer. Regard for an office-holder stays in the
-  chooser's stance term (U1 §3 item 6); no `edge` row at `field` reads a seat.
+- **The standing-against half** (a seat held above the actor's by the person acted on, as the obstacle term
+  `rank_gap`) has no case in a field: nobody's seat opposes an order. No `edge` row at `field` reads a seat;
+  regard for an office-holder stays in the chooser's stance term.
+- **No double count.** The seat enters once, as a level; `addends` is practice only. The Layer 1 text for A-12
+  is drafted in D-U1-01 and owed (`OWED_TO_UNIFICATION.md` §A), not applied.
 
 ### 6. What the other Command reads become
 
@@ -251,8 +264,9 @@ Every number is a seed. The form is what is decided.
 6. **The chain.** An improvised `order` to an officered unit consumes two draws and to an unofficered unit
    one, read from the draw trace; replay from `FieldOutcome.interventions` gives an equal outcome and an equal
    draw count at every seed.
-7. **A seat.** With a planted addend of 2 on the commander's march seat, his `CommandRecord.addends` reads 2
-   and gate 3's share moves; no officer's record changes.
+7. **A seat.** With a planted `modifier: moderate` on the commander's march seat's row, his
+   `CommandRecord.levels` rises by that level (`addends` unchanged) and gate 3's share moves; no officer's record
+   changes.
 8. `git grep -n "roll_pool(.*\.command)" modules/mass_battle` prints nothing.
 
 ## Falsifier
@@ -322,8 +336,8 @@ The artifact's reader test is `engine/season/tests/test_cp_t04_02_marshal.py`; t
 - `tests/valoria/test_mass_battle_officers.py`: `test_a_standing_order_is_rolled_by_the_units_officer`;
   `test_an_improvised_order_to_an_officered_unit_draws_twice` (gate 6, read from the draw trace).
 - `engine/season/tests/test_mass_battle_module.py`: `test_no_commander_reads_the_literal_four` (control);
-  `test_command_record_is_built_by_the_one_pool_reader`; `test_a_seat_addend_reaches_the_commander_only`
-  (gate 7; the addend planted with `pool.register_pool_addend` and removed in the test's teardown).
+  `test_command_record_is_built_by_the_one_pool_reader`; `test_a_seat_modifier_reaches_the_commander_as_a_level`
+  (gate 7, D-U1-01; the seat row's `modifier:` planted in a hand-built world).
 - **Changed:** none at `arm: off`. `tests/valoria/test_mass_battle_order_of_battle.py`'s pin of the command
   literal follows `COMMAND_DEFAULT`.
 
@@ -357,16 +371,16 @@ in U5a's CAP batch. Seed sweeps of the `obey` block: `haiku` (`valoria-measure`)
    block, `rosters.yaml` has no `tables.capability_uses`, and `pool.py` has `faculty` but no `score` or
    `talent`. Composing the record from `_capability` and `_held_attribute` directly would be a second pool
    rule. Missing: CAP Part B landed.
-2. *`obey_task`'s value*: the even line of an unopposed task is being restated by ruling A-71's lane
-   (`proposals/29_DICE_one_opposed_rule_form_and_tuning.md`, not read). Missing: that rule's owner function,
-   which `field_input` calls. Until then the field carries 0.0 and the `step` values stand alone, which is
-   the pre-A-6 reading and is only meaningful at `arm: off`.
-3. *Symbols not opened by this lane*: where `Subunit._order_idx` is reset between engagements (the same
-   site must reset `_order_due`); how a `Subunit` is addressed by its unit row's name inside the module (for
-   `commander_post` and the misread lookup); the loop variable that holds the current phase for "at most
-   once a phase"; `engine/substrate/battle_orders.py`'s reader shape. Each is a read of one function, not a
-   design question.
-4. *The keyed draw* (A-30) is not landed. Until it is, `obey` draws from `rngsource.get()` in call order;
-   the replay gate holds by order, and the per-purpose key is added when A-30's owner lands.
-5. *No seat declares a modifier today* (`offices.yaml`; A-12's fact is FA's and the institutions kit's), so
-   gate 7 can only be run with a planted addend. Missing: the seat-side row.
+2. *(Closed, W3-1.)* `obey_task`'s value is the stand-in for nobody opposite, `even_line(pool_add) +
+   opposed_ob(pool_default, opposition_rate)` (§4), whose functions lane 29 and U1 own.
+3. *Symbols not opened by this lane* (W3-1 read two at the tree): `Subunit._order_idx` is a dataclass field
+   defaulting to 0 (`hierarchy/units.py:516`), advanced only at `core/contact.py:198` and never reset (a
+   `Subunit` is built per engagement), so `_order_due` is declared beside it with the same default and needs
+   no reset; `engine/substrate/battle_orders.py` exposes each key of the export as a module constant read from
+   `_DATA` (`ROLES`, `RETREAT_AT`, `:21-24`), so `obey` is one more constant, `ORDER_OBEY`. Still unread: how a
+   `Subunit` is addressed by its unit row's name inside the module, and the loop variable for "once a phase"
+   (`battle_loop.run_battle` returns `phases`, `:21`); each is a read of one function, not a design question.
+4. *(Closed, W3-1, C3-D2.)* The field calibration batch lands after the keyed draw (B06), so `obey` is keyed
+   `(field, tick, unit, "obey", link)` from its first commit; no `rngsource` interim.
+5. *No seat declares a modifier today*: the `modifier:` column (D-U1-01a) lands with OBS §3 (B05); until a
+   seat row carries a value, gate 7 runs on a planted value in a hand-built world.

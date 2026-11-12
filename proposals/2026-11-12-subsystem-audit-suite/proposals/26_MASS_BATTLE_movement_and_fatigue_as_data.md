@@ -4,6 +4,11 @@
 
 Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (rulings A-69 and A-59). Nothing here is deleted. (1) **§3's `fatigue.entry.second_field: 0.7`** is a flat seed standing where a carried value belongs. Under A-69 a unit's stamina at the end of a field is recorded on its row and is what it enters a second field of the same round with, plus one lull's recovery; the flat seed stays as the fallback for a part with no record (`27_MB_E_what_an_army_carries_back.md` §4). Whether tiredness outlasts a round boundary is not decided: the length of a round in the fiction was not read, and `fatigue.carry_rounds` ships at 0. (2) **A-59**: pace, the carry factors and the fatigue level are terms a unit brings to a pair from its own row; none multiplies its base dice (`27_MB_B_unit_prowess_on_the_row.md` §1, §2). §4's `reform` is an order and takes effect through the obedience draw (`27_MB_A`).
 
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AND_VOCABULARY.md` D-U1-11e (U1 assigns `FieldOutcome`'s per-part `stamina_left` to this file, but `27_MB_E_what_an_army_carries_back.md` 27E-2 lands first (B22, this file B31) and declares it; corrected by order: this file reads it and declares nothing), U1 §3 *stamina / fatigue* (stamina crosses every typed boundary as a share in [0, 1]; the module's 0–100 column scale never crosses), D-U1-11c (the four constants deleted from `config.py` in the same commit that adds their rows: already so), `U1_GLOSSARY.md` *round* ("season round" → season); test 9 (call sites, tests, lands-it, tier; `Depends on:` / `Lands in batch:`; U3 §4.1 rows 64 and 79). `fatigue.carry_rounds` stays at 0 (not established).
+
+**Depends on:** `04_MB_unit_loadout_and_weapon_in_hand_B.md` stages 1–2 (B17, the troop file); `16_PESSIMIST_MB_one_stamina_ledger.md` steps 1–2 (B19).
+**Lands in batch:** B31 (`B31-mb-loadout-economy`, MB), with the one-ledger proposal's step 3 (U3 §4.1 row 64); `14_VERBS_MILITARY_A_movement.md` reads today's constants until this lands (row 79).
+
 Lane MB. Carries rows M-1 to M-5 and M-7 of `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`. Extends the
 troop file of `04_MB_unit_loadout_and_weapon_in_hand_B.md` and the ledger of
 `16_PESSIMIST_MB_one_stamina_ledger.md`; depends on both. Source keys as in the audit (**MV**, **CR**, **SQ**,
@@ -13,7 +18,7 @@ troop file of `04_MB_unit_loadout_and_weapon_in_hand_B.md` and the ledger of
 
 At the seeds marked *control*: nothing (every value is today's constant, moved). With the declared seeds on:
 horse loses most of its speed advantage in broken ground and uphill; a body that moves faster than its base
-pace arrives more tired; an army that marched hard, or fights a second field in a season round, starts
+pace arrives more tired; an army that marched hard, or fights a second field in one season, starts
 tired; a body may change its shape or depth out of contact, for a price in ticks. No natural season fights an
 army field today.
 
@@ -80,7 +85,7 @@ fatigue:
   lull_recover: 30         # BETWEEN_TURN_STAMINA_RECOVERY (orchestration.py:1810), per lull (today)
   entry:                   # share of full stamina a side starts with. CONTROL: all 1.0
     march_partial: 0.7     # the army "arrives spent" (14_VERBS_MILITARY_A: the Partial band of the journey)
-    second_field: 0.7      # a second field in one season round
+    second_field: 0.7      # a second field in one season
     unfed: 0.7             # the side's ration was short at the field (SE's debit, when provisioning is on)
 ```
 
@@ -122,7 +127,8 @@ fatigue:
 | `modules/mass_battle/hierarchy/units.py` | the step reads `pace x terrain pace`; `reform` in `_ORDER_SAFE_FIELDS`; `rekey_cells` repair; a `_reforming_until` tick on the subunit, read where the switch tick is |
 | `modules/mass_battle/percell.py::update_stamina` | the fast-move term |
 | `modules/mass_battle/massbattle.py::resolve_field` | passes the field's terrain row to the units for pace, as it passes it for dice |
-| `engine/season/seam/wrappers/mass_battle.py::field_input` | forms `entry_stamina` from the three facts |
+| `engine/season/seam/wrappers/mass_battle.py::field_input` | forms `entry_stamina` from the three facts (a share in [0, 1], U1 §3) |
+| `engine/season/queries/inputs.py::FieldOutcome` *(W3-1, D-U1-11e by order)* | none here: each part's `stamina_left` (a share in [0, 1] of full, the column ledger's 0–100 divided by 100 at the seam) is declared by `27_MB_E` 27E-2 (B22); this file's fast-move drain moves the value it reports |
 
 ## Gate (execution artifacts)
 
@@ -139,6 +145,17 @@ fatigue:
    morale ids match its troop ids, and for `reform_ticks` it deals no damage; the same order given in contact
    does not fire until contact ends; charged during the reform, it loses more than the same body charged
    after it.
+
+**Tests (W3-1).** Gate 1: the troop exporter's `--check` (`tests/valoria/test_export_troops.py`) and
+`tests/valoria/test_field_golden_pins.py`; gate 2: `tests/valoria/test_mass_battle_terrain.py::test_horse_pace_by_ground`;
+gate 3: `tests/valoria/test_mass_battle_maneuvers.py::test_fast_move_drain_tires_the_wing`; gate 4:
+`engine/season/tests/test_mass_battle_module.py::test_entry_stamina_lowers_the_tired_side`; gate 5:
+`tests/valoria/test_mass_battle_role_instructions.py::test_reform_out_of_contact_only_and_costs_ticks`;
+`::test_stamina_left_is_a_share`. **Call sites:** `units.py::_node_advance` and the continuous arm at
+`:2094-2100`; `percell.update_stamina`; `seam/wrappers/mass_battle.py::field_input`. **Hash movers:** none at the
+controls; three flips, each its own commit. **Lands:** an IN-lane implementation session under
+`/methodology-execute` with MB review; section 1 and the transcribed rows `sonnet` (mechanical), sections 2–4
+`sonnet`.
 
 ## Falsifier
 

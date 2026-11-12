@@ -4,7 +4,13 @@ Folded: 2026-11-12 by `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md`. Nothing h
 
 Reconciled: 2026-11-12, U5d closure — folded **A-46**: edit 4 (held for Jordan) is ruled in its narrow form. `commitment.ended` joins a strand only when the released edge's object is a faction's creed Proposition or its `head_seat` (the Split is a move of the era); a routine release stays `never`. Step rewritten: the roster change is one content opener keyed on the released edge's object, not the move of `commitment.ended` from `never` to `joins`; the Status line's hold is discharged for that form and the wide form is not built. The strand it joins is one of several (A-45).
 
-## Status: PROPOSED (edit 4, the strife kind list, is HELD for Jordan: it changes a ratified roster)
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row his_own_side (the key CONFORMS; content and owner AMBIGUOUS), §2 rows Status/edit 4 (A-46) and edit 1 content (A-87 to A-90), §7, 7b; `31_WR_A_house_cores_and_the_cast_on_the_opinion_axes.md` commit 4; `unified/U1_GLOSSARY.md` "creed", "regime"; `unified/U3_DEPENDENCY_ORDER.md` §1 item 38, §3.1). The body now follows the head. Changed: (1) the Status line's hold is removed (A-46 ruled the narrow form); (2) edit 1's four-row content block and the sentence giving the Crown, Hafenmark, the Guilds and the Löwenritter no creed are struck: Jordan has authored the houses' and the Church's stances (A-87 to A-90), and the `creed:` values are `31_WR_A` commit 4's rows (one owner); this file keeps the key, its loader and the readers; (3) edit 4 is rewritten to the narrow form; (4) edit 3's `release` limit points at its decided owner (`20_NARRATIVE_C` edit 5); (5) tests named; (6) dependency, batch and tier lines. One sentence for the R3 lane: `31_WR_A`'s commit table row 4 calls its content "EQUAL until `20_NARRATIVE_D` commit 2's reader ships"; with this rewrite the reader is this file's commit 1 and the content is `31_WR_A` commit 4, which is therefore the declared mover.
+
+Depends on: `20_NARRATIVE_A_stands_for.md` (B38; the same poles decide credit); `20_NARRATIVE_C_who_holds_what.md` (B38); `30_WR_D_momentum_and_its_brakes.md` (B38; LOOP row L10); `31_WR_A_house_cores_and_the_cast_on_the_opinion_axes.md` commit 4 (B38; the `creed:` values, landing after this file's commit 1).
+Lands in batch: B38 (lane WR / FA), after `20_NARRATIVE_C` and before `31_WR_A` commit 4.
+Tier: sonnet / high; the content is `31_WR_A`'s.
+
+## Status: PROPOSED
 
 Source: `audits/20_NARRATIVE_CHURN.md` F-NARR-05 (allegiance is fixed and no stand can cross it), §2
 edges A3, A5; §7.2 pull G2; evidence E-N13. Reference only (`CLAUDE.md` §0.05). Not ratified by being
@@ -13,9 +19,10 @@ written.
 ## What it changes in `engine/season/` at runtime
 
 1. `world_q.engaged_poles(faction)` also returns the poles a faction's roster row declares. With no row
-   declaring one (the first commit) every hash is EQUAL. Authoring four rows (the second commit) is a
-   **declared mover**: `opinion_of` changes for every person who stands on a pole, and with it
-   `opinion_referents` (the one consumer today).
+   declaring one (this file's first commit) every hash is EQUAL. The rows' content is
+   `31_WR_A_house_cores_and_the_cast_on_the_opinion_axes.md` commit 4, which is the **declared mover**:
+   `opinion_of` changes for every person who stands on a pole, and with it `opinion_referents` (the one
+   consumer today).
 2. `questions_for` stamps one more standing occasion: the creed Proposition of the person's **own**
    faction, when his opinion of that faction is below indifference. Behind `Fixtures stamp_own_side`
    (`False` the control, EQUAL; `True` a declared mover).
@@ -58,18 +65,11 @@ a classed referent, `commit` and `argue` form on it).
 **1. `engine/season/rosters.yaml: factions` — an optional key `creed:` on a faction row,**
 `{<affiliation>: -1 | 1}` (sign only, the `affiliation_engagement` cells' own rule), loaded and refused
 by `data/rosters.py` beside `head_seat` (an affiliation outside `AFFILIATIONS`, a value outside the two
-signs). First content, `[ASSUMPTION; medium; Jordan to correct; revert: delete the key]`, each read off
-what that faction's seated members stand for at build (E-N01), never from a document:
-
-```yaml
-"Church of Solmund":     {creed: {solmund_orthodoxy: 1}}        # 7 of 7 members
-"Restoration Movement":  {creed: {einhir_restoration: 1}}       # 4 of 4
-Varfell:                 {creed: {einhir_restoration: 1}}       # 5 of 5
-Altonia:                 {creed: {altonian_civics: 1}}          # 3 of 3
-```
-
-The Crown, Hafenmark, the Guilds and the Löwenritter get none: their members stand on no common pole,
-and inventing one would author a creed nobody wrote.
+signs). **This file writes no content.** The values are
+`31_WR_A_house_cores_and_the_cast_on_the_opinion_axes.md` commit 4 (each sign the sign of that house's
+regime core, A-87 to A-90; it contains the four rows this file once read off E-N01 and gives Valorsmark
+and Hafenmark the creed Jordan has now stated); one owner of the content, this file the owner of the key
+and its reader.
 
 **2. `engine/season/queries/world_q.py::engaged_poles`** (`:3013-3026`): the returned tuple is the
 goal pairs as today, then the faction row's `creed` pairs not already present, in roster order. The
@@ -87,20 +87,34 @@ def own_side(w: World, p: Person) -> tuple:
 appended to `added` after `propositions_heard(w, p)` (`:4265`), read only when `Fixtures
 stamp_own_side` is on. The class is `Proposition` (`World.class_of`), so the rows that declare it form:
 `argue` (he takes it up with his own side) and `commit`, which `held_edge_declines` declines on a cause
-he already holds. **Stated limit, owed:** leaving is `release`, whose row forms on a plain referent
-and whose stance sign is the wrong way round for an act that ends a tie (`20_NARRATIVE_C` edit 5, the
-same owner). Until that lands this proposal gives a dissenter a voice and not yet a door.
+he already holds. **Stated limit:** leaving is `release`, whose row forms on a plain referent; its
+stance sign, once the wrong way round for an act that ends a tie, is decided at its owner
+(`20_NARRATIVE_C` edit 5: `regard_sign: -1` in `02_CHAR_scar_cap_and_regard_unit.md`'s Addendum). Until
+that Addendum's row values land this proposal gives a dissenter a voice and not yet a door.
 
-**4. HELD — `rosters.yaml: strife_kinds`: `commitment.ended` from `never` to `joins`.** The ratified
-kind list (`strife-01` §6, ED-IN-0316) files it as everyday life, which makes the study's two
-defection links (`DA>WA`, `WN>DA`) unreachable (audit E-N03). The roster's own note gives the revert
-for any one kind ("moving one kind between `opens` and `joins`"). It is a ratified roster; audit §10
-item 2 gives the two options.
+**4. `rosters.yaml: strife_kinds` — the narrow form A-46 rules.** The ratified kind list (`strife-01` §6,
+ED-IN-0316) files `commitment.ended` as everyday life, which makes the study's two defection links
+(`DA>WA`, `WN>DA`) unreachable (audit E-N03). A-46 (B, narrow): only leaving a faction's creed or its
+head seat is a move of the era. The edit is one content entry keyed on the released edge's object:
+`commitment.ended` joins a strand when the released edge's object is a faction's creed Proposition or
+its `head_seat` (`rosters.yaml: factions.head_seat`); every other `commitment.ended` stays `never`.
+[ASSUMPTION: the qualifier's key name (`object_of: [creed_proposition, head_seat]` on the entry) is the
+strand roster owner's (`09_WR_strand_conclusion.md`, `30_WR_C`) to fix at landing — basis: no qualified
+entry exists in the roster today.] The wide form (the kind moved from `never` to `joins`) is not built.
+Gate: a planted release of a commit to a creed Proposition joins a strand; a planted routine release
+does not.
 
 ## The gate that shows it worked (execution artifacts)
 
+Tests: NEW `engine/season/tests/test_own_side.py`: `test_no_creed_key_reproduces_base` (gate 1),
+`test_creed_gives_the_conviction_term_a_nonzero_value` (gate 2, on planted rows),
+`test_rename_every_faction_and_no_reading_moves` (gate 4),
+`test_stamp_own_side_forms_argue_on_the_creed_proposition` (gate 3, planted),
+`test_routine_release_does_not_join_a_strand_and_a_creed_release_does` (edit 4), and
+`test_creed_value_outside_two_signs_is_refused_at_load`.
+
 1. Controls: no `creed:` key and `stamp_own_side False` reproduce the base hashes.
-2. With the four rows: `opinion_of` for the four factions' members has a non-zero affiliation term
+2. With `31_WR_A` commit 4's rows: `opinion_of` for the four factions' members has a non-zero affiliation term
    (print `person_q.opinion_terms`' second value); the count of members whose opinion of their own side
    is below 0 is reported per faction and is not the same number for every faction.
 3. `stamp_own_side True`, seeds 0 to 2, four seasons: executed `argue` acts whose subject is the
@@ -121,20 +135,23 @@ move, which is CHAR F-CHAR-03 again, measured from this side).
 - **N.** Cut it and a faction is a list: what its members think of it is computed and thrown away, and
   the realm's one authored doctrinal split (inside the Crown's own party) can never surface. It holds
   top-down (a faction with a creed), bottom-up (one member's doubt), lateral (the same `opinion` the
-  hearer already forms of other factions) and diagonal (`20_NARRATIVE_A`'s regimes are these poles).
+  hearer already forms of other factions) and diagonal (`20_NARRATIVE_A`'s reading of what a person
+  stands for is read on these poles).
 - **R.** No player: dissent inside the Church or the Crown arises from who was seated there. Complete:
   a faction with no pole and a person with no conviction read today's values.
 - **S.** No new formula; the stamp is the eleventh of a family, with the family's dedup and control.
-- **E, last.** Four data rows, two small functions, one fixture; against a mechanism (IN-70) that is
-  built and unread on its most interesting input. Good, and bounded by the `release` limit it states.
+- **E, last.** One key, two small functions, one fixture (the rows are `31_WR_A`'s); against a mechanism
+  (IN-70) that is built and unread on its most interesting input. Good, and bounded by the `release`
+  limit it states.
 
 ## Cost class
 
-Edit (1 to 3). Edit 4 waits on Jordan.
+Edit (1 to 4).
 
 ## Dependency edges
 
-- **Needs:** nothing to build; reads better after `20_NARRATIVE_A` (the same poles decide credit).
+- **Needs:** nothing to build first beyond the head's B38 order; reads better after `20_NARRATIVE_A`
+  (the same poles decide credit). Content: `31_WR_A` commit 4.
 - **FA:** `06_FA_war_lives_in_seats_B.md` and CR-88 (a member who has argued and lost is the person
   whose betrayal band matters); FA F-FA-16 (five factions have no head, so the regard term is empty
   for them).

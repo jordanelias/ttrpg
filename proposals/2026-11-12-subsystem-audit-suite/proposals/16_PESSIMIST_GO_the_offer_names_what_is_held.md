@@ -2,7 +2,16 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-32** and **A-33**. Seat changes ship realm-wide (A-32, with presence, jurisdiction and telling built as the test arm), so the build-time deposit of public seats' holders as record-channel claims agrees with the shipped reach. A death is not learned with the seat (A-33): a goal's `seat_holders` may name a holder the person does not yet know is dead, and the offer must not correct him. §4's creation row lists a cohort as a cohort; whether a cohort may be played is not ruled; under A-56 a played cohort would be offered the heavy moves only.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS: `creation_sheet` takes its
+reader as a parameter so `decision/` names no World), §2 (A-32, A-33, A-56: folded at the head; nothing further), §7/§7b
+(the gate's count named in an existing harness, tests, tier); U3 B34, §6.2 (`probe.py` is not in the repository). No body
+text changed beyond the gate and the cost lines.
+
 ## Status: PROPOSED
+
+Lands in batch: **B34** (IN/CHAR), after `11_GO_player_surface_contract_B.md` (B34; its `Situation.holdings` is the pair
+shape §4 reuses). Depends on: `seats_named`, `LedgerReader.latest_about`, `harness/populated.py`'s acquaintance deposit
+(exist).
 
 Carries F-PES-GO-03 and F-PES-GO-10 of `audits/16_PESSIMIST_GO.md` (§2.1, §1.5). Lanes IN, CHAR (the
 owner files are `queries/world_q.py`, `harness/populated.py`, `decision/sheet.py`); GO is the lane
@@ -126,7 +135,14 @@ the first season and shows the seat's own state, so no knowledge rule is touched
 
 ## The gate (execution artifacts)
 
-1. `probe.py base` (or the same count inside `harness/interactions.py`) at seeds 0–2, two seasons:
+`probe.py base` was lane scratch, not in the repository; its count is committed as a reading of
+`python -m engine.season.harness.interactions` (exists) and as NEW
+`engine/season/tests/test_seat_holders_from_ledger.py`: `test_goal_referent_reads_own_ledger`,
+`test_all_chances_one_reproduces_todays_referents` (gate 2), `test_creation_sheet_marks_cohorts_and_holdings`
+(gate 4), `test_unheard_holder_forms_no_question_until_a_deposit_names_him` (gate 3's story). Command:
+`python -m pytest engine/season/tests/test_seat_holders_from_ledger.py -q`.
+
+1. The count inside `harness/interactions.py` at seeds 0–2, two seasons:
    occurrences of a person named through a classed referent and outside the closure = **0**.
 2. Control, exact: with every chance set to 1.0, the set of `need` questions and their referents
    returned by `questions_for` for every person at tick 0 equals today's.
@@ -156,4 +172,7 @@ never forms for anyone at the shipped chances (the seed is too thin and ambition
 
 ## Cost class
 
-Edit plus a small build; one re-pin.
+Edit plus a small build; one re-pin. Tier: `sonnet`, effort `high`; the three chances are an `opus`-or-Jordan
+judgment (marked ASSUMPTION). Hash movers declared: ledgers at build and the questions formed from them (every
+seeded world); one re-pin in B34. Lands it: B34, order §4 (hash-equal) → §1 and §3 → §2 with the fixture and its
+register row (id from `references/id_reservations.yaml` `next_free`) → the re-pin.

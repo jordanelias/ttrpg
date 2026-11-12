@@ -6,7 +6,11 @@ Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-04) —
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-11, C-25) — the ballot has one owner, this file's `HearingOutcome.ballots` at the hearing's close: each seat's ballot is a draw on that voter (Jordan, A-14), his public commits entering as `lean` levels, and the host's `vote` conjunct is deleted (`U5c_SC_proceedings_residue.md` §6; `13_SC_draw_for_unrolled_contests.md` edits 3 and 4 yield). `determine` names the prize `a verdict` (entry `social_contest.hearing`, fought at ENCOUNTER; `U5c_VERBS_residue_and_governance_owner.md` §2).
 
-Folded: 2026-11-12 by `audits/28_SCENE_ACCESS.md` (rulings A-63, A-64). Nothing here is deleted; the sitting's attendees are no longer assumed free. (1) **A sitting seats those who move in it.** When `social_contest.hearing` runs at ENCOUNTER, each attendee who makes a move is engaged in the sitting for that round by the read that engages a visit's counterparty, and the sitting counts as a scene received in his budget Query; an attendee already engaged in another scene that round is absent, and this file's own `silence` rule (levels on the closing draw) applies to his side (`28_CORE_scene_access_A_occupancy_and_precedence.md` §2, §3). The host builds the attendees from that read; the module is not edited and holds no state. `[UNVERIFIED: how `HearingInput` lists attendees was not opened at the field; the statement binds the host-side builder, whichever shape it has.]` (2) **The petitioner's side may carry `waiting` levels** in the closing draw, one per rebuff the log records of the petition behind the matter, through the one leverage form (`28_CORE_scene_access_C_the_petition_that_waits.md` §2).
+Folded: 2026-11-12 by `audits/28_SCENE_ACCESS.md` (rulings A-63, A-64). Nothing here is deleted; the sitting's attendees are no longer assumed free. (1) **A sitting seats those who move in it.** When `social_contest.hearing` runs at ENCOUNTER, each attendee who makes a move is engaged in the sitting for that round by the read that engages a visit's counterparty, and the sitting counts as a scene received in his budget Query; an attendee already engaged in another scene that round is absent, and this file's own `silence` rule (levels on the closing draw) applies to his side (`28_CORE_scene_access_A_occupancy_and_precedence.md` §2, §3). The host builds the attendees from that read; the module is not edited and holds no state. (Settled by W3-2: `HearingInput` is this file's own record, not in the tree; its attendees are `speakers` and `bench`, and the host builder `sigma.py::hearing_input` fills both from the engagement read.) (2) **The petitioner's side may carry `waiting` levels** in the closing draw, one per rebuff the log records of the petition behind the matter, through the one leverage form (`28_CORE_scene_access_C_the_petition_that_waits.md` §2).
+
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row HEAR_B, §2 row `Speaker.score`, §4 rows *matter*, *seat*, §7, §7b-9, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-01, D-U1-01a, D-U1-02, ledger R-25, S-03 to S-06, S-16, S-23; `unified/U3_CONFLICT_LEDGER.md` C3-C1, C3-Y3; `unified/U3_DEPENDENCY_ORDER.md` node B24, §4.1 rows 13, 31). Changed: `Speaker.score` is the trained score the other side opposes at `opposition_rate` (A-26, A-79; D-U1-02), not "what the other side halves"; `argue`'s draw reads `opposed_ob`; the prize is `a verdict` in the body as in the head (C-25; U1 ledger S-23); the closing draw takes the board through the leverage channel — standing exhibits as `proofs` levels, faults as levels against — and `proof_step` leaves `HearingInput` (A-25; OBS §3); `answer`'s weight difference is in `answer_step` units (R2 §7b-9 #4, `[ASSUMPTION]`); a bench member's help is his seat row's `modifier:` (D-U1-01a), not an "office weight"; edit 4 is the one `PlayHost.deciders` shape the head line already chose; the insight gate is a drawn deposit (`05_SC_hearing_capabilities.md` as reconciled); `Exhibit` is defined here and cited by EVID_B (C3-C1); the attendee mark is settled; named tests; lands-it and tier. Edits 6 and 8 stay design-first (INCOMPLETE below, with the blocking reason).
+
+**Lands in batch:** B24 (inside it: this file's records and entry → `19_LACUNA_admission_rides_the_citing_draw.md` → `05_SC_evidence_and_rebuttal_B.md` → `08_FI_05_evidence-interface_B.md`, C3-Y3). **Depends on:** B05 (OBS; SC-P1's record), B10 (the chooser's sampler for the NPC decider), B11 (FI), plan positions CR-60 (rites) and CR-61 (the case file) `[PL: plan positions, not in the tree]`; `01_CORE_one_scene_contract.md` Edit 1 (`PlayHost.deciders`, B34 — the hearing's decider may be wired in B24 by the same field, which B34 generalises).
 
 ## Status: PROPOSED — supersedes `05_SC_playable_hearing.md` (SC-P3). Design-first for edits 6 and 8; the rest are small builds.
 
@@ -50,7 +54,7 @@ exchanges).
 
 ```python
 @dataclass(frozen=True)
-class Exhibit:                 # one item on the case file (see 05_SC_evidence_and_rebuttal_B.md)
+class Exhibit:                 # one item on the case file; defined here, cited by 05_SC_evidence_and_rebuttal_B.md (C3-C1)
     id: str; side: str         # "for" | "against" the party
     kind: str                  # a `rosters.yaml: proofs` member, derived at filing
     rung: str                  # the `issue_rungs` member it bears on
@@ -62,14 +66,15 @@ class Exhibit:                 # one item on the case file (see 05_SC_evidence_a
 class Speaker:                 # a party or an advocate
     id: str; side: str
     pools: tuple               # ((capability id, dice), ...) from the one pool reader
-    score: float               # what the other side halves (R-5's form)
+    score: float               # his trained score, which the other side opposes at opposition_rate (A-26, A-79)
     effort: int                # exchanges he will spend: his own act's `effort`
     levels: tuple              # (for, against): named sigma levels from the advantage roster
 
 @dataclass(frozen=True)
-class Seat:                    # one bench member
-    id: str; pool: int; weight: float   # office weight (FA's row)
-    lean: float                # his public commits about the party (SC-02's commit term), signed
+class Seat:                    # one bench member (a record of this module, not 04 §B.7's Seat)
+    id: str; pool: int
+    modifier: Optional[str]    # his seat row's `modifier:` (offices.yaml; D-U1-01a), a LEVEL_SIGMA name or None
+    lean: float                # his public commits about the party (SC-02's commit term), signed; read as `lean` levels
 
 @dataclass(frozen=True)
 class HearingInput:
@@ -77,7 +82,8 @@ class HearingInput:
     rung: str; bears: str              # the stage tried, and which side bears it
     speakers: tuple; bench: tuple; exhibits: tuple
     moves: tuple; faults: tuple; admits: tuple; order: str    # the row's data
-    proof_step: float; argument_step: float; fault_step: float
+    proof_level: Optional[str]; answer_step: float     # proofs as levels (OBS §3); answer's weight unit
+    argument_step: Optional[str]; fault_step: Optional[str]   # each a LEVEL_SIGMA name (levels, never an obstacle term)
 
 @dataclass(frozen=True)
 class HearingTurnView:         # the one record handed outward, to a decider
@@ -109,8 +115,8 @@ own in-run draws by calling the one ladder owner (`degree_from_net`) and returns
 | move | needs | draw | board effect by outcome |
 |---|---|---|---|
 | `present` | an unplayed exhibit of his side, of an admitted kind | none | stands on the tried rung at `weight`; on another rung, at half (the `irrelevance` fault counts it) |
-| `answer` | an exhibit whose `cell` contradicts a standing one, or a filed finding that the target is forged | one `roll`: the mover's `speak` pool against `answer_ob + proof_step × (w_target − w_answer)` (impeachment: `− finding confidence`), plus the room's modifiers | per `05_SC_evidence_and_rebuttal_B.md` `standing` rules 1–2: Failure the target stands; Partial both halved; Success the target struck; Overwhelming struck, and on a forgery every exhibit of its origin with `forgery_found` |
-| `argue` | — | one `roll`, his `capability` for the rung against the other side's `score` | Overwhelming or Success: an argument stands (`argument_step`); Partial: half, and a subsidiary matter is named for the docket; Failure: nothing |
+| `answer` | an exhibit whose `cell` contradicts a standing one, or a filed finding that the target is forged | one `roll`: the mover's `speak` pool against the obstacle `answer_ob + answer_step × max(0, w_target − w_answer)` (a hostile term only; a heavier answer or a finding's confidence reaches the roll as `proofs` levels for the mover, never a subtraction, A-25), plus the room's hostile terms | per `05_SC_evidence_and_rebuttal_B.md` `standing` rules 1–2: Failure the target stands; Partial both halved; Success the target struck; Overwhelming struck, and on a forgery every exhibit of its origin with `forgery_found` |
+| `argue` | — | one `roll`, his `capability` for the rung (D-U1-03: `argue` or `law`) against `opposed_ob(the other side's trained score, opposition_rate)` within the one obstacle form | Overwhelming or Success: an argument stands (`argument_step`); Partial: half, and a subsidiary matter is named for the docket; Failure: nothing |
 | `impugn` | a filed deed-claim about the person an opposing exhibit originates from | one `roll` | Success or better: every exhibit of that origin halved; Failure: a level against the mover for the sitting |
 | `concede` | — | none | the rung descends one step; the mover's exhibits on the conceded rung leave the board |
 | `rest` | — | none | nothing; all resting in turn closes the sitting |
@@ -133,9 +139,11 @@ a winner.
 1. Order the attendees by the row's `order`. 2. For the mover: build the view, call `decide`, apply
 the move's row, check faults, record the `Exchange`. 3. Stop when all rest in turn, when no attendee
 has effort left, or when the ladder cannot descend. 4. The closing draw: `roll(closing', rng)`, where
-`closing'` is `inp.closing` with its room term set from the board (`proof_step` × the net standing
-weight, signed by side, plus `fault_step` per fault), composed by `roll.py::obstacle`, the one owner.
-On a `declared` row each `Seat` is balloted with its own pool, weight and lean. With no exhibits and
+`closing'` is `inp.closing` with the board added on the leverage channel: one `proof_level` per whole unit
+of net standing weight for the side it stands for (OBS §3 `proofs`), standing arguments as `argument_step`
+levels, and `fault_step` levels against the side at fault; the obstacle is composed by `roll.py::obstacle`,
+the one owner, with no favourable term subtracted (A-25). On a `declared` row each `Seat` is balloted with
+its own pool, its `modifier:` as an `office` level and its `lean` as `lean` levels (A-14). With no exhibits and
 no effort, steps 1 to 3 do nothing and step 4 is today's draw.
 
 ### Who decides
@@ -156,22 +164,25 @@ NPC does in the room is a draw whose odds his interior sets, never a fixed funct
 
 1. `engine/season/rosters.yaml`: rosters `issue_rungs` (`procedure`, `fact`, `definition`,
    `justification`), `hearing_moves`, `hearing_faults`; the note on `ladder_rungs` corrected to
-   *the charge ladder (Fig. 27)*; prize row `a matter` gains `module_entry: social_contest.hearing`,
+   *the charge ladder (Fig. 27)*; prize row `a verdict` (C-25; U1 ledger S-23) gains `module_entry: social_contest.hearing`,
    `step: "ENCOUNTER"`, `declares: "Declared"` (`the body`'s and `a field`'s pair).
-2. `engine/season/verb_table.yaml`: `determine` contests `a matter` (CP-T05-01 already moves its
+2. `engine/season/verb_table.yaml`: `determine` contests `a verdict` (CP-T05-01 already moves its
    prize to a bench-heard one) and gains `Declared` cells (`writes: []`), on `march`'s precedent;
    its four bands are unchanged. `speak` stays an undeferred single draw (`social_contest.roll`):
    it is the filing act (`05_SC_evidence_and_rebuttal_B.md`).
 3. The rite block CR-60 lands (`arrangements.yaml: rites`): keys `bears:` (rung → side), `moves:`,
    `faults:`, `disclosed:` (whether the other side's filings are on the mover's board). Until CR-60,
    one default rite carries them.
-4. `engine/season/queries/inputs.py`: the records above. `PlayHost.decide` is called with whichever
-   view the provider builds `[ASSUMPTION; medium; revert: a second field, `decide_hearing`]`.
+4. `engine/season/queries/inputs.py`: the records above. The hearing's decider is
+   `PlayHost.deciders["social_contest.hearing"]` (the one `PlayHost` shape of `01_CORE_one_scene_contract.md`
+   Edit 1, C-U5a-04); the wrapper resolves it and passes it as `decide=`; the module only calls what it
+   is handed.
 5. `modules/social_contest/hearing.py`: `hear`, `closing_odds`. `references/module_contracts.yaml`
    `composition_roles`: `social_contest.hearing`, `entry: verb_call`.
 6. `engine/season/seam/wrappers/sigma.py`: `hearing_input(w, act)` (the host builder: the case file's
-   stages → exhibits; `judging_set` → seats; `faculty` and `_opposition_of` → speakers; SC-02's commit
-   term → `lean`) and a `@provider("contest", …)` path that calls the entry with the dispatching
+   stages → exhibits; `world_q.judging_set` → seats, each with its seat row's `modifier:`; `faculty` and
+   `_opposition_of` (the trained score) → speakers; SC-02's commit term → `lean`; the engagement read of
+   `28_CORE_scene_access_A` → which attendees are present) and a `@provider("contest", …)` path that calls the entry with the dispatching
    decider. It reads the case file, seats and interiors; no ledger (F8).
 7. `engine/season/loop/effects_information.py::_eff_determine`: under its own token, append the
    exchange list to the case file (`Record.stages`: one stage per entered, struck or conceded item)
@@ -180,7 +191,12 @@ NPC does in the room is a draw whose odds his interior sets, never a fixed funct
 9. `engine/season/harness/governance_spine.py::build_hearing(seed)` (SC-P3's fixture, plus three
    filed items per side) and `harness/headless.py --world hearing [--play <id>]`.
 10. `engine/season/data/fixtures.py`: `sitting_exchanges` (0 control / shipped: the attendees'
-    effort), `argument_step`, `fault_step`, each with a NUMBER row and a three-point sweep.
+    effort), `argument_step`, `fault_step` (each a `LEVEL_SIGMA` name; control `None`), `answer_step`
+    (control 0; first value the former `proof_step` 0.25 `[ASSUMPTION: R2 §7b-9 #4 — a new fixture rather
+    than reviving `proof_step`, which OBS §3 deletes]`), each with a NUMBER row and a three-point sweep.
+
+**Not decidable here (INCOMPLETE, kept):** edit 6's reading of the rite waits on CR-60 and CR-61 (plan
+positions, not in the tree); edit 8's NPC decider terms are a design pass (CHAR's, `opus` with `ners`).
 
 ## What a player sees
 
@@ -188,7 +204,8 @@ On entry: the arrangement, the rung tried and who bears it, the disposal each ba
 stakes), his own filed items, the bench's public commits about each party. Each turn: the board, his
 hand, his effort, the legal moves, and his believed chance of the verdict in the words the first
 audit's G-34 decided (what his character believes, never the room's truth). What he sees of each
-seat's leaning is gated by `insight` (`05_SC_hearing_capabilities.md`). Afterwards: the Events he
+seat's leaning is the claim WITNESS deposited in his own ledger with a confidence his `insight` sets,
+drawn and sometimes wrong (`05_SC_hearing_capabilities.md` as reconciled; never a threshold reveal). Afterwards: the Events he
 witnessed, and the roll of his own act (SC-P1).
 
 ## Gate (execution artifacts)
@@ -203,6 +220,14 @@ witnessed, and the roll of his own act (SC-P1).
    `--auto` hash (REM-31's shape: the mode is recorded nowhere).
 5. The stationary-menu run: three constant deciders (always the heaviest `present`, always `argue`,
    always `rest`) against the chooser's decider over 200 seeded sittings on each of three hands.
+
+**Named tests** (new, `engine/season/tests/test_sc_hearing_sitting.py`, inside the glob
+`05_SC_sc05_kernel_disposition_B.md` reads): gate 1 `test_hear_with_no_exhibits_is_todays_roll` and
+`test_realm_hash_equal_at_sitting_exchanges_zero`; gate 2 `test_headless_hearing_auto_twice_same_hash`;
+gate 3 `test_two_scripts_differing_in_the_first_move_differ_in_closing_obstacle`; gate 4
+`test_scripted_player_echoing_the_npc_reproduces_the_auto_hash`; gate 5
+`test_no_constant_decider_wins_on_all_three_hands`; and `test_a_favourable_exhibit_never_lowers_the_obstacle`
+(A-25). **Control.** `sitting_exchanges` 0 (hash EQUAL).
 
 ## Falsifier
 
@@ -230,3 +255,9 @@ bands), the module has named a winner.
 
 Small builds (edits 1 to 5, 7, 9, 10), design-first for the NPC decider's terms (8) and the host
 builder's reading of the rite (6, after CR-60 and CR-61).
+
+**Lands it and tier.** The B24 batch (`methodology-execute`, one commit per edit in the order 1, 4, 5, 10, 2,
+3, 6, 7, 9; edit 8 after its design pass): `valoria-author` on `sonnet` (`high`) for the small builds; the
+design pass for edits 6 and 8 on `opus` (with `ners`); one `methodology-close` with its terminal `opus`
+critique. **Hash movers.** Wherever a `determine` executes with items on file once `sitting_exchanges` leaves
+0 (declared, said plainly).

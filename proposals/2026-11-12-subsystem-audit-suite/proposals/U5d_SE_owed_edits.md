@@ -1,6 +1,11 @@
 # U5d-SE — owed edits: the settlement resolutions decided with no proposal file
 
+Reconciled: 2026-11-12, wave 3 (W3-3) — C3-C4 and R3 §1 (§3 VIOLATES as written): `Rung.envelope` is a field of the ratified `Rung` tuple (`04` §B.3; `state/carriers.py:1177`) and is not deleted by a suite proposal; IN-44 is a plan position, not a Layer 1 amendment. §3 is rewritten to "keep the field". C3-C4's stated reader ("`07_SE_population_regrowth_B.md` §4 (b) and `17_CENSUS_REST` rely on it") is corrected at the tree: neither reads the field (regrowth §4 (b) cites the `(Rung, envelope)` matrix row as a precedent; `17_CENSUS_REST_2_wiring.md:250` calls the row "declared and unwritten"), and on `main` only a harness probe writes it (`harness/probes.py:1851-1856`); its game reader is therefore owed with no carrier. The deletion survives only as Layer 1 text owed to Jordan. Tier and batch added (R3 7b-0; U3 B12).
+
 ## Status: PROPOSED (a plan for a later implementation lane; nothing here was executed)
+
+Lands in batch: B12 (world motion and ground), after `16_PESSIMIST_SE_B` and before `07_SE_population_census.md` (U3 §1 item 13).
+Depends on: `16_PESSIMIST_SE_B_harvest_walls_and_the_supply_gate.md` (B12, §4's load-time refusal); `07_SE_treasury_granary_B.md` (B12, §4, §5); CR-49 (plan position, §2; MISSING until STAGES.md step 5 carries it).
 
 Author: U5d closure lane (Fable), 2026-11-12. Carries `audits/07_SE_audit.md` R-SE-16 to -20, -22;
 `audits/07_SE_audit_addendum_B.md` F-SE-23, F-SE-24, R-SE-31, -37, -38; `audits/16_PESSIMIST_SE.md`
@@ -37,10 +42,17 @@ No code. Not done here: a fix for `restore` not reaching; it waits on the cause.
 
 ## §3 — `Rung.envelope` (R-SE-20, SE-04 (b))
 
-Delete the field through plan position IN-44 (its Layer 1 row), in IN-44's commit. Gate: `grep -rn
-"envelope" engine/season --include=*.py` returns no reader or writer before the deletion (the audit's
-claim; `[not re-opened]` by this lane). Movers: none if the field is unhashed; if `Rung` hashes it, one
-declared re-pin.
+**Keep the field (C3-C4).** `Rung.envelope` is named by the ratified `Rung` tuple (`04` §B.3, "`Rung :=
+( id, kind, matter(...), dates[], envelope, exists )`"; quoted at `state/carriers.py:1177`), so no suite
+batch deletes it. Read at `main` (wave 3, `grep -rn envelope engine/season --include=*.py`): no game-path
+reader or writer; the only write is the probe at `harness/probes.py:1851-1856` ("BIRTH IS ENVELOPE WEIGHT,
+NOT A `create`"), and `loop/census.py:88` notes "NO ENVELOPE IS DRAWN". The matrix row `(Rung, envelope)`
+(`write_matrix.yaml:375-381`, `steps: [MAT, CEN]`) stays declared. **INCOMPLETE:** its game reader is owed
+and no proposal in the suite carries one (`07_SE_population_regrowth_B.md` writes `Person.weight`, not
+the envelope). **Owed to Jordan (Layer 1 text, not applied):** if the field is to go, `04` §B.3's `Rung`
+tuple drops `envelope` and `04` §A.2's `loop/census` row drops "`envelope`" by his amendment, with
+IN-44's commit then deleting the field and the matrix row together (one declared re-pin if `Rung` hashes
+it).
 
 ## §4 — the ration's kinds at the supply flip (R-SE-22)
 
@@ -110,4 +122,4 @@ want. S: `transfer`, `migrate` and `exchange` take one class rule. E: ten short 
 
 ## Cost class
 
-Edits (§1 to §4, §8, §9, §10), a note (§5, §6), a small build (§7).
+Edits (§1, §2, §4, §8, §9, §10), a note (§3, §5, §6), a small build (§7). Tier: `sonnet` (R3 7b-0).

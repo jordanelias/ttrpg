@@ -4,9 +4,14 @@ Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2
 
 ## Status: PROPOSED
 
-Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (ruling A-59). Nothing here is deleted. (1) Step 2's "one function in `core/exchange.py` returns the pool's base term" is named `prowess(atom)` and is the only place a unit's quality becomes dice (`27_MB_B_unit_prowess_on_the_row.md` §2); step 3's base is unchanged. (2) **The gate's planted collapse (`MB_FRICTION_SIGMA=4`) uses the side-wide multiplier**, which A-59 lowers and whose removal `27_MB_C_dynamic_strength_and_the_residual_chance.md` tests. When that constant is deleted the plant needs another carrier: the named level's spread at its maximum if one ships, else a planted `PAY_PER_NET` of zero. Until that commit the gate is as written. The gate's "LINEAR in band" reads `LINEAR_BIG_WIN_BAND = (74, 83)` (`systems/mass_battle/sim/lanchester_signature.py:43`), which that file's own comment (`:38-41`) calls the band the multiplier is calibrated against; by ruling A-77 the multiplier ships at zero when its test's first arm passes, and in that commit the band becomes a printed flag and the row passes on "strictly inside (0, 100) and not below the 2 : 1 reading" (`27_MB_C` item 27C-3 (h)). The two proposals touch that one row; whichever lands second makes the edit once. (3) The removal test must run on this proposal's pair rule and not before it: on the present rule twice the men win 299 of 300 with the multiplier off (`16_PESSIMIST_MB_partition_and_the_pair_rule.md`, the problem, item 4).
+Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (ruling A-59). Nothing here is deleted. (1) Step 2's "one function in `core/exchange.py` returns the pool's base term" is named `prowess(atom)` and is the only place a unit's quality becomes dice (`27_MB_B_unit_prowess_on_the_row.md` §2); step 3's base is unchanged. (2) **The gate's planted collapse (`MB_FRICTION_SIGMA=4`) uses the side-wide multiplier**, which A-59 lowers and whose removal `27_MB_C_dynamic_strength_and_the_residual_chance.md` tests. When that constant is deleted the plant needs another carrier: the named level's spread at its maximum if one ships, else a planted `PAY_PER_NET` of zero. Until that commit the gate is as written. The gate's "LINEAR in band" reads `LINEAR_BIG_WIN_BAND = (74, 83)` (`systems/mass_battle/sim/lanchester_signature.py:43`), which that file's own comment (`:38-41`) calls the band the multiplier is calibrated against; by ruling A-77 the multiplier ships at zero when its test's first arm passes, and in that commit the band becomes a printed flag and the row passes on "strictly inside (0, 100) and not below the 2 : 1 reading" (`27_MB_C` item 27C-3 (h)). *(W3-1, `U3_CONFLICT_LEDGER.md` C3-C6: `27_MB_C` 27C-3 (h) owns the one edit of that row, in the commit that ships the multiplier at zero; this file's gate reads the band as that commit leaves it, and never edits `lanchester_signature.py:38-43, :108` itself.)* (3) The removal test must run on this proposal's pair rule and not before it: on the present rule twice the men win 299 of 300 with the multiplier off (`16_PESSIMIST_MB_partition_and_the_pair_rule.md`, the problem, item 4).
 
 Folded: 2026-11-12 by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (row R-8). Nothing here is deleted; the decision gains three supports from outside the tree, none of which is the reason it is correct (`CLAUDE.md` §0.05). The linear law is the one stated for hand-to-hand fighting, where "one soldier could only ever fight exactly one other soldier at a time" (`research/historical/mass_battle_casualties_and_results_grounding.md` D8, tool-read). Depth and numbers alone did not win Roman battles; fresh men and frontage did (same note D3, read at the page). Sabin's own board game caps how many units may attack from a zone, so numbers act through frontage (`research/historical/mass_battle_wargame_models_grounding.md` L5). No source read gives a win probability by force ratio, so the locked bar of 1.4 has no historical counterpart to be checked against; `26_MASS_BATTLE_calibration_targets.md` T-9 reads the ordering only.
+
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U3_CONFLICT_LEDGER.md` C3-C6 and `R1_READ.md` 7b-9 (the LINEAR band's one edit belongs to `27_MB_C` 27C-3 (h); this gate reads it), `R1_READ.md` §2 row A-59/A-77 (the planted collapse moves off `MB_FRICTION_SIGMA` when that constant is deleted, as the first `Folded:` line already says; the gate now names both carriers), test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:` from `U3_DEPENDENCY_ORDER.md`). The second sentence of the first `Folded:` line ("whichever lands second makes the edit once") is replaced by C3-C6's assignment.
+
+**Depends on:** `04_MB_headcount_grade_and_scale.md` (B17); `16_PESSIMIST_MB_partition_and_the_pair_rule.md` edits 2–4 (B19, the same step as step 3); `U5b_MB_rulings_in_the_field.md` §1 (B19, the one sampler).
+**Lands in batch:** B19 (`B19-mb-field-calibration`, MB): steps 1–3 with the partition's edits 2–4, before `04_MB_cell_hierarchy_as_data.md` and before `27_MB_C`'s removal test, which must run on this pair rule.
 
 Lane MB. Carries R-06 of `audits/04_MB_audit.md` §6.2; listed in that audit's §11 because it narrows the
 plain words of a standing directive. Supersedes nothing in `proposals/2026-11-08-cr12-melee-attrition-design.md`
@@ -70,10 +75,20 @@ under Lanchester") becomes true and stays.
 
 ## Gate
 
-The repaired instrument, both `PER_CELL` arms, Python 3.11 with `PYTHONHASHSEED=0`: LINEAR in band;
+The repaired instrument, both `PER_CELL` arms, Python 3.11 with `PYTHONHASHSEED=0`: LINEAR per
+`lanchester_signature.py` as edited by `27_MB_C` 27C-3 (h); until that commit, in band (74, 83) (C3-C6);
 melee exponent at or below 1.4 with an identifiable fit; volley at or above 1.6 with zero melee pairs;
-NO-ANNIHILATION passing; the frontage control reading linear; the planted collapse
-(`MB_FRICTION_SIGMA=4`) still failing LINEAR. The CI flip is proposed in the PR body, not made.
+NO-ANNIHILATION passing; the frontage control reading linear; the planted collapse still failing LINEAR
+(carrier: `MB_FRICTION_SIGMA=4` while that constant exists; after `27_MB_C` deletes it, the named level's
+spread at its maximum if one ships, else a planted `PAY_PER_NET` of zero). The CI flip is proposed in the
+PR body, not made.
+
+**Test 9 (W3-1).** The instrument is the test: `python systems/mass_battle/sim/lanchester_signature.py`
+(both `PER_CELL` arms) printed in the commit body; step 2 is hash EQUAL by `tests/valoria/test_field_golden_pins.py`
+and `tools/ci_golden_modes_check.py`; step 3's mover is every army field (declared, re-recorded once in the
+field calibration batch). **Lands:** an IN-lane implementation session under `/methodology-execute` with
+MB review; step 1 `opus` (an instrument repair with a judgment in it), steps 2–3 `sonnet`, the re-read of
+`POOL_QUALITY_SCALE` by `haiku` (`valoria-measure`) read by `opus`.
 
 ## Falsifier
 

@@ -2,7 +2,11 @@
 
 Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-06 — no *contest* roll decides consent, but the consenting party's choice is sampled (the one chooser's sampler), so acceptance is a draw whose odds his pursuits set.
 
-Folded: 2026-11-12 by `audits/28_SCENE_ACCESS.md` (rulings A-63, A-64). Nothing here is deleted. A meeting of two parties under a `disposal: mutual` row is a scene with both in it: each party who moves is engaged for that round, and the meeting is a scene received for the one who did not open it (`28_CORE_scene_access_A_occupancy_and_precedence.md` §2, §3). A party already engaged elsewhere that round is not at the table and the meeting does not open: the opener's act is refused at `occupied`, and he may call again, ask for an appointment or send his terms on paper (`28_CORE_scene_access_B_appointments.md` §4). Consent is unchanged: still each party's own sampled act.
+Folded: 2026-11-12 by `audits/28_SCENE_ACCESS.md` (rulings A-63, A-64). Nothing here is deleted. A meeting of two parties under a `disposal: mutual` row is a scene with both in it: each party who moves is engaged for that round, and the meeting is a scene received for the one who did not open it (`28_CORE_scene_access_A_occupancy_and_precedence.md` §2, §3). A party already engaged elsewhere that round is not at the table and the meeting does not open: the opener's act is refused at `engaged`, and he may call again, ask for an appointment or send his terms on paper (`28_CORE_scene_access_B_appointments.md` §4). Consent is unchanged: still each party's own sampled act.
+
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row SC-B2 (AMBIGUOUS), §2 row SC-B2 (A-21, A-81), §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` ledger S-16; `unified/U3_CONFLICT_LEDGER.md` §9; `U5_CONFLICTS_U5c.md` C-07). Layer 1 rewrite (`04` AX-1 / §B.9 `Act.actor : PersonId`; PART D row 10a, a write by a non-owner; C-07, one person's roll cannot open another's edge): "the host's two `oblige` acts" are replaced by **each party's own act** — the accepter's `accept` move is his own `oblige`, chosen by his own decider through the one chooser's sampler, and the offerer's `offer` is his own standing, conditional `oblige`, formed when he made it; the module returns data, the effect writes each edge under the act of the party it binds, and the host forms no act on anyone's behalf. `PlayHost.decide` → `PlayHost.deciders["social_contest.hearing"]` (C-U5a-04). A-21: covenants stay in person, which a sitting is. A-81: a negotiation that ends without acceptance still writes (the case file's stages and the witnessed exchanges), named in the falsifier. The design-first items stay INCOMPLETE with their blocking reason; named tests, lands-it and tier added.
+
+**Lands in batch:** B24 (after `05_SC_playable_hearing_B.md`). **Depends on:** `05_SC_playable_hearing_B.md` (B24), `28_CORE_scene_access_A_occupancy_and_precedence.md` (B28, the engagement read the Folded line names; at its control the sitting assumes attendees free), plan position CR-63 (the opening verb) `[PL]`, `exchange`'s operands (MISSING: no carrier in the suite).
 
 ## Status: PROPOSED — design-first (depends on the `exchange` verb's operands and on `05_SC_playable_hearing_B.md`)
 
@@ -56,12 +60,17 @@ things and nothing else.** Ladder: step 3 (the row's own keys), step 4 (the hear
    the counterparty would not want told (a deed claim about him) is leverage by the same path: his
    decider prices the consequence of its being told elsewhere (R-19).
 
-**The end.** `accept` returns `HearingOutcome.accepted = (offer id, accepter)`; the host opens the
-disposal by two acts, each party's own `oblige` under the offer's term (R-23: each act is its own;
-R-29: each is chosen). `exchange`'s store swap, where the offer has one, is a third act with its own
-precondition; if a party's stores no longer cover it at MATTER, his act is refused and the agreement
-is broken as any `oblige` is. All rest without acceptance: nothing is opened; the sitting's
-exchanges are still written to the case file and witnessed.
+**The end.** `accept` returns `HearingOutcome.accepted = (offer id, accepter)`. The disposal opens by two
+acts, each the act of the party it binds and each formed from that party's own choice (R-23: each act is
+its own; R-29: each is chosen; C-07): the offerer's `offer` move is his own conditional `oblige` under the
+offer's term, formed when he made it (it stands on the board and binds only on acceptance); the
+accepter's `accept` move is his own `oblige`, chosen by his own decider. The module returns data only; the
+effect writes each `oblige` edge under the act of the party it binds (`Act.actor` = that party), never
+under the opener's act and never by an act the host forms on a party's behalf (`04` PART D row 10a).
+`exchange`'s store swap, where the offer has one, is a third act with its own precondition; if a party's
+stores no longer cover it at MATTER, his act is refused and the agreement is broken as any `oblige` is.
+All rest without acceptance: nothing is opened; the sitting's exchanges are still written to the case
+file and witnessed, so the failed negotiation leaves a durable write (A-81).
 
 **How each side chooses.** *(Reconciled, D-06: consent stays a choice, and the choice is a draw —
 the decider samples through the one chooser's sampler, `05_SC_playable_hearing_B.md` "Who decides", so a
@@ -70,7 +79,7 @@ hearing's decider: each legal move is a Candidate, valued
 by the believed worth of the board the move leaves. For `accept`, that is the offer's terms in his own
 pursuits; for `offer`, his belief of what the other will accept (`closing_odds` has no meaning here;
 the decider reads the other's standing offer and its own claims about him). No special case for a
-player: `PlayHost.decide` serves a player's person in the same seat.
+player: `PlayHost.deciders["social_contest.hearing"]` serves a player's person in the same seat.
 
 ## Exact edits, by owner
 
@@ -81,9 +90,11 @@ player: `PlayHost.decide` serves a player's person in the same seat.
 3. `modules/social_contest/hearing.py::hear` — on `closing is None`, skip the closing draw and the
    ballots; apply `offer` and `accept`.
 4. `engine/season/seam/wrappers/sigma.py::hearing_input` — for a mutual row, no seats and no closing.
-5. `engine/season/loop/effects_information.py` — on an `accepted` outcome, the host's two `oblige`
-   acts (and the `exchange` act) entered for MATTER of the same round, as any act; their ordinary
-   preconditions apply.
+5. `engine/season/loop/effects_information.py` — on an `accepted` outcome, each party's `oblige` is
+   written under that party's own act (the offerer's `offer`, the accepter's `accept`, each recorded as
+   an `Act` with that party as actor and the sitting as its scene), and the `exchange` act likewise;
+   their ordinary preconditions apply at MATTER of the same round. The effect writes no edge under the
+   opener's act.
 6. `engine/season/verb_table.yaml` — a verb that opens a negotiation (`treat`, contested by nobody,
    `heard_by: none`, deferred to ENCOUNTER on the row's prize) — **design-first**: whether an existing
    verb (`petition` to a person) carries it is CR-63's, and this proposal does not choose.
@@ -97,11 +108,18 @@ player: `PlayHost.decide` serves a player's person in the same seat.
    acceptance or none, read from the decider's Candidate scores.
 3. Parity: a scripted player returning the NPC decider's pick reproduces the `--auto` hash.
 
+**Named tests** (new, `engine/season/tests/test_sc_hearing_negotiation.py`):
+`test_two_npc_negotiation_auto_twice_same_hash` (1); `test_each_oblige_is_opened_by_its_own_partys_act`
+(1: the `Act.actor` of each edge's opening act is the party it binds);
+`test_a_held_breach_claim_changes_acceptance` (2); `test_scripted_player_reproduces_auto_hash` (3);
+`test_a_negotiation_without_acceptance_still_writes_the_case_file` (A-81).
+
 ## Falsifier
 
-An agreement opened with no `accept` chosen by the accepter (consent decided by a draw). An `argue`
-success that changes the outcome without changing a ledger. An accepted `exchange` that moves stores
-the giver no longer holds.
+An agreement opened with no `accept` chosen by the accepter (consent decided by a draw). An `oblige` edge
+whose opening act's actor is not the party it binds. An `argue` success that changes the outcome without
+changing a ledger. An accepted `exchange` that moves stores the giver no longer holds. A negotiation that
+ends with no acceptance and no write.
 
 ## NERS reading
 
@@ -116,3 +134,9 @@ the giver no longer holds.
 
 Design-first (the opening verb; `exchange`'s operands); then small builds after
 `05_SC_playable_hearing_B.md`.
+
+**INCOMPLETE, not decidable from the repository:** edit 6's opening verb (`treat` or `petition` to a person)
+is CR-63's (a plan position); `exchange`'s operands have no carrier in the suite. **Lands it and tier.** A
+design pass on `opus` (with `ners`) for edit 6 and the operands; then the B24 batch, `valoria-author` on
+`sonnet` (`high`) for edits 1–5, one `methodology-close`. **Hash movers.** None at control
+(`sitting_exchanges` 0); declared when built.

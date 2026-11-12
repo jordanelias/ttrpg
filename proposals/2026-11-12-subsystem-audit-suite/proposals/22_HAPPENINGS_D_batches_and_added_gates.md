@@ -2,6 +2,12 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-15**, **A-16**, **A-19** and the land rulings (**A-57, A-58, A-66**). Batch 4 (seats pass) gains `U5d_FA_owed_edits.md` (custody, the head's strip) and no longer waits on the audit's §4 item 3; batch 5 (bodies and time) lands with natural death live once the ages are authored; batch 6 (crimes) lands `22_HAPPENINGS_C` behind its control, not dark on a decision; batch 8 gains `U5d_FA_land_and_seats_pass_on_a_won_march.md` (a victor may seize, and the seats pass with the land; or occupy; or withdraw). No gate is removed.
 
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row batches CONFORMS, §2 rows batch table (A-15, A-16, A-19) and §3 vs `16_PESSIMIST_FA_A` edit 2, §7, 7b; `unified/U3_DEPENDENCY_ORDER.md` §1 (the single order), item 37, §3.1, §5.1 row `npcs.yaml`). Changed: (1) §1's batch table is superseded as an order by `U3_DEPENDENCY_ORDER.md`'s batches B00-B41 (U3 merged it; each named proposal's batch is there); its constraint (a batch that removes senseless acts lands before one that makes acts consequential) is kept, and U3's order keeps it for this file's own content (`14_VERBS_PHYSICAL_A` A1-A2 land in B29, before §3 in B37); the "Jordan's item 1 / item 2" dependencies are answered (A-15, A-16); (2) §3's two ducal homes are decided: the territories are those `16_PESSIMIST_FA_A` edit 2 now names from the geography file (Hafenmark `terr_T8`, Gransol S-018; Varfell `terr_T12`, Sigurdshelm S-031; R5's `terr_T7` / `terr_T4` assumption is replaced there and here), and the buildings are read at the tree: `world_q.capacity` returns 1 for every building rung at S-001, S-018 and S-031 (the floor) while `b_s_001_court` already houses eight cast rows, so "the largest dwelling" cannot choose; the homes are the seat's hall or court (`b_s_018_hall`, `b_s_031_court`) [ASSUMPTION]; (3) the gate's probe is a named test; (4) batch and tier lines.
+
+Depends on: `16_PESSIMIST_FA_A_dismissal_survives_the_king.md` (B21; the duchies' seat territories); `14_VERBS_PHYSICAL_A_custody_and_force.md` A1-A2 (B29; §3 lands after `capture` has a cause); `22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md` (B37; it also edits `npcs.yaml`, the ages, first).
+Lands in batch: B37 (lane IN), last item, after `22_HAPPENINGS_C`; §3 one commit, a declared mover of every world hash and seeded pin (re-pinned once at B37's close).
+Tier: sonnet / high.
+
 ## Status: PROPOSED
 
 Source: `audits/22_HAPPENINGS.md` §2, §3. Reference only (`CLAUDE.md` §0.05). This file redoes no
@@ -14,6 +20,10 @@ By itself: the `home:` of five `npcs.yaml` rows (§3; a declared mover of every 
 residence is build state). Everything else here is ordering and gate text for other proposals.
 
 ## 1. The batches, in order, and why in that order
+
+**Superseded as an order** by `unified/U3_DEPENDENCY_ORDER.md` §1 (the suite's single order; each
+proposal below has its batch there). The table stays as this lane's finding and its constraint stays as a
+rule U3's order keeps; the "Jordan's item" dependencies are answered (item 1 by A-15, item 2 by A-16).
 
 The order is by harm stopped per edit, with one constraint: a batch that removes senseless acts lands
 before a batch that makes acts consequential, or the senseless acts become consequential first. The
@@ -99,20 +109,28 @@ barracks in another town.
 3. The Confessor lives at `b_s_036_cathedral`, where his representative's row already is.
 4. Every other row is left. A councillor who lives at court and sits on a duchy's council is ordinary.
 
-**Owner and edit.** `engine/season/npcs.yaml`, the `home:` key of those five rows. The two ducal
-buildings are named at landing from `build_realm(0)`'s settlements (the largest dwelling Site of the
-territory that PES-FA-A edit 2 names as each duchy's seat) `[UNVERIFIED: the ids; not read here]`.
+**Owner and edit.** `engine/season/npcs.yaml`, the `home:` key of those five rows: the King (NPC-020)
+and the Queen (NPC-032) → `b_s_001_court`; the Duchess of Hafenmark (NPC-050) → `b_s_018_hall` (Gransol,
+S-018, in `terr_T8`, the territory PES-FA-A edit 2 names as Hafenmark's seat); the Duke of Varfell
+(NPC-052) → `b_s_031_court` (Sigurdshelm, S-031, in `terr_T12`, Varfell's); the Confessor (NPC-021) →
+`b_s_036_cathedral`. The building ids were read from `build_realm(0)` (S-018: hall, guildhall, chapel,
+market, warehouse, townhouse; S-031: court, chancery, cathedral, barracks, guildhall, wharf, market,
+scriptorium, townhouse). "The largest dwelling Site" cannot choose among them: `world_q.capacity` reads 1
+for every building rung there (its floor) [ASSUMPTION: medium; the seat's hall or court is the ducal
+residence — basis: the building kinds read above; Jordan to correct].
 Nothing in code changes. A declared mover of every world hash and of every seeded pin: co-location
 decides who witnesses whom, so this is a large mover for five lines. **It lands after batch 1, never
 before:** if distance is what refuses most captures today, moving the cast about first changes who
 reaches whom before `capture` has a cause.
 
-**Gate.** `python -m engine.season.harness.populated` builds; a probe prints, for every seat-hold,
-whether the holder's home lies under the seat's rung (`state/gate.py::purview_reaches` over
-`world_q.home_of`): the three named heads read true and the count off-ground falls from 18 by at least
-three; the King, the Queen, the Prince and the Princess share one building. The capacity of
-`b_s_001_court` is read first (`world_q.capacity`): if the court cannot house two more, the edit names a
-second court building and says so.
+**Gate.** `python -m engine.season.harness.populated` builds; NEW
+`engine/season/tests/test_seat_holders_live_on_their_ground.py` (the probe as a test) reads, for every
+seat-hold, whether the holder's home lies under the seat's rung (`state/gate.py::purview_reaches` over
+`world_q.home_of`): `test_three_named_heads_read_true`, `test_off_ground_count_falls_by_at_least_three`
+(from 18), `test_royal_family_shares_a_building` (the King, the Queen, the Prince and the Princess in
+`b_s_001_court`). Capacity was read first, as this gate asked: `world_q.capacity(w, "b_s_001_court")` is 1
+(the floor) and eight cast rows already live there, so the build does not refuse a cast home over
+capacity and no second court building is needed.
 
 **Falsifier.** The probe's count unchanged; or the build refusing a home that is over capacity.
 

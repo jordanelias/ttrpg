@@ -4,7 +4,11 @@ Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-09) — `
 
 Re-grounded: 2026-11-12 against the tree's research (`unified/RESEARCH_MAP_INSTITUTIONS_B.md`; audit §17). No edit of this file's is changed. What changed: (1) the history this file rests on (audit §1.6, §1.11, §2.4) is still mostly memory-grade: the tree holds nothing on the *commenda*, the sea loan (cited here at "The resolution", defence (a)), the Monte or the bill of exchange; (2) the tree does hold the shapes this file builds: the loan to a prince and the lender's ruin on his default (`research/historical_concerns_action_catalogue_v1.md:148`), the loan secured on a named right (`:161`; `.audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md:190`), and public default as a restructuring, not an end (`…comparative_governance_research_v1.md:130`), which is this file's Partial band (an extension); (3) **a precedent this file did not cite and differs from:** an earlier proposal re-expressed the research's Debt and Compact as "an `oblige` Tenure with a `T-n` declared term" (`proposals/2026-09-10-settlements-factions-populations/05_COLLISIONS_AND_RESIDUE.md:22`; PROPOSED, held back), where this file follows the later K-14 (a Record kind minted by `covenant`). K-14 is the later design and carries what the Tenure cannot (an amount, a kind, a place, a bearer), so this file stands; the difference is named so that nobody lands both; (4) two mechanisms are added on this file's instrument, with no change to it: the pledge and the merchants' own court (`15_INSTITUTIONS_VENICE_grounding_E_what_the_tree_adds.md` edit 6).
 
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (VEN_B: `debt.lapsed` at MATTER AMBIGUOUS, F-R4-02), §2 (A-39 row), §7 (INCOMPLETE: the emission; the removed readers), 7b.0, 7b.7 ("delete `debts_held`/`debts_owed`; `debt.lapsed` = `term.matured` of a `debt` Record with `debt_state != met`, read when read"); `U3_CONFLICT_LEDGER.md` C3-C7 (MATTER emits `term.matured` only), C3-C10 (favourable terms are leverage). Changed: the lapse is a reading, not an emitted kind, and edit 5 (`loop/matter.py`) is withdrawn with its `logged_kinds` join; edit 3's two readers, already withdrawn by this file's first `Reconciled:` line, are removed from the body (`world_q.owed`, `dues`, `breaches` serve); the reckoning's `obligation` and `evidence` are levels (`obligation`, `proofs` sources); the suit's appeal is admitted on new grounds only (A-39).
+
 ## Status: PROPOSED
+
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B33**, after VENICE-A (`U3_DEPENDENCY_ORDER.md` §1 item 33). Depends on: `15_INSTITUTIONS_VENICE_A` (B33, the ask and the `obligation` source), `15_INSTITUTIONS_SYNTHESIS_A` (B32, the `debt` form row and `world_q.owed`), `05_SC_acquittal.md` and `05_SC_arrangement_rows_that_bind.md` (B27, the suit's bands and SC-P6), `07_SE_treasury_granary_B.md` (B12, stocked stores for the seeded reading). Lane tag: FA. Tier: `sonnet` producer, effort `high`; one `opus` read of the reckoning's band table. Named test: `engine/season/tests/test_inst_ven_b.py` (the hand-built chain is its first function). Standing sentences: *Pool* — the reckoning is `petition`'s roll on the one pool rule (A-6, A-7, A-8). *Failure writes* — a refused reckoning is witnessed by those present and deposits their claim of the refusal (a deed against the debtor, which a lender later weighs); a lapsed bond's last `term.matured` is witnessed by the holder and the committed debtors (A-81). *Draw keys* — no draw is added; the reckoning, the suit and the distraint are `petition`'s, `determine`'s and `requisition`'s, keyed per A-30 by their rows.
 
 Source: `audits/15_INSTITUTIONS_VENICE.md` §0 (the largest obstacle), §1.6, §1.11, §2.4, §6.1 part 4,
 §6.2, §14.1 rows 1–3 and 10. Batch B. Un-defers #453 K-14
@@ -16,8 +20,10 @@ document gave it. Not ratified by being written.
 1. `covenant` mints a Record of kind `debt` when the act names a `kind` and an `amount`; otherwise it
    mints a `dispensation` exactly as today.
 2. A `transfer` of that kind to the bond's place, by a person committed to its terms, counts toward it.
-3. When the bond's last stage matures at MATTER with less than `amount` counted, the loop emits
-   `debt.lapsed`, citing the minting act. No store, stance or tenure moves at that barrier.
+3. When the bond's last stage matures at MATTER, MATTER emits its `term.matured` as for any Record
+   (C3-C7); a bond whose last stage has matured with less than `amount` counted **reads** as lapsed
+   (`world_q.owed(w, rec, clause) > 0`, computed when read). No store, stance or tenure moves at that
+   barrier, and no new kind is emitted.
 4. A lapsed bond held by a seat-holder answers `requisition`'s operands against the debtor's rung, as a
    warrant; a bench hears a suit on it under a new arrangement row, `debt_suit`.
 
@@ -56,23 +62,29 @@ step 5 for the readers.
   realm's paper to the lender. A successor is not bound until he commits. Handing the bond on by `give`
   assigns the debt; handing it to a debtor extinguishes it (nobody else can present it).
 - **Discharge.** The debtor's own `transfer` (or anyone's: a patron may pay a client's debt, and that is
-  a favour) of `kind` to `at`, formed on a question about the bond. `world_q.debt_state(w, rec)` returns
-  `(counted, amount, state)` with `state ∈ {running, met, lapsed}`, computed from the log's
-  `transfer.made` Events whose causing act's question referent is the Record; stored nowhere.
+  a favour) of `kind` to `at`, formed on a question about the bond. `world_q.owed(w, rec, clause)` (the
+  kit's one amount reader, SYN-A §4) returns the amount less what is counted, computed from the log's
+  `transfer.made` Events whose causing act's question referent is the Record (resolver-side, `04` §B.9);
+  stored nowhere. The state the original text called `debt_state` (`running`, `met`, `lapsed`) is read
+  from it and the Record's stages.
 - **The reckoning (the draw).** At a stage's maturity the creditor, or a factor sworn to his seat, may
   present the bond: a `petition` to the debtor with the Record cited. It is the ask of proposal A, with
-  `obligation` (the debtor's live `commit`) favourable, `evidence` (the bond; a forged bond's quality is
-  the `subject` term against it), `regard`, and `stakes` by `amount` against the stores of the debtor's
-  rung. Bands: Overwhelming, paid in full and his standing is unhurt; Success, paid in full; Partial,
+  the debtor's live `commit` as `obligation` levels for the creditor and the bond as `proofs` levels
+  (leverage, C3-C10; a forged bond's quality is the `subject` term against it), `regard`, and `stakes`
+  by `amount` against the stores of the debtor's rung. Bands: Overwhelming, paid in full and his standing is unhurt; Success, paid in full; Partial,
   part paid and **one further stage wound on the bond** (an extension, citing this act); Failure,
   refused. What is paid is capped by what the debtor's rung holds (conservation). A debtor may also pay
   unasked; that is his choice and needs no roll.
-- **Lapse.** A clock, not a judgment: `debt.lapsed` at the last maturity if `state != met`.
+- **Lapse.** A reading, not a judgment and not a write: after the last stage's `term.matured`, a bond with
+  `owed > 0` is lapsed when read (D-48's precedent; C3-C7). WITNESS deposits the `term.matured` to the
+  holder and the committed debtors, so each holds the fact from which the lapse is read.
 - **Recourse, all ordinary verbs.** (a) *Suit*: `petition` / `open_case` before a bench whose purview
   reaches the debtor, under `debt_suit`; the bench's `determine` is SC's roll; SC-P4's band-keyed
   disposal: Overwhelming `ban` (the debt-bar: no seat under that bench's purview, FA-P3's scope) or
   `detain`; Success an `oblige` to the creditor's seat (service); Partial a new stage on the bond;
-  Failure an acquittal (SC-P6), after which the bond can no longer be cited before that bench. The
+  Failure an acquittal (SC-P6), after which the bond can no longer be cited before that bench. An appeal
+  (`appeal_basis: determine`) is admitted only on new grounds: excluded evidence, a voided stage, or a new
+  item from a distinct source (A-39). The
   defence of loss by force is the debtor's cited claim of a `rung.seized`, `requisition.taken` or
   `field.lost` on the route (the sea loan's rule, as evidence rather than as a clause). (b) *Distraint*:
   a seat-holder who holds a lapsed bond and whose seat's purview reaches the debtor's rung may
@@ -98,22 +110,21 @@ step 5 for the readers.
    `record_sourced_operands`' second reader (a held Record answers the operands it maps): the officer who
    holds the lapsed bond forms `requisition` with `kind` and `amount` from it, and the effect reads the
    debtor's `reside` rung as the place. The one new check is in `_eff_requisition`
-   (`loop/effects_governance.py:511`): an act formed on a `debt` declines unless `debt_state` is `lapsed`
-   and takes no more than the uncounted amount.
+   (`loop/effects_governance.py:511`): an act formed on a `debt` declines unless the bond reads lapsed
+   (last stage matured, `world_q.owed > 0`) and takes no more than the uncounted amount.
 2. **`engine/season/loop/effects_information.py::_eff_covenant`**: if the act's payload names `kind` and
    `amount`, mint through `_mint_document(w, a, "debt", …)`; refuse (`covenant.refused`) a `kind` off
    `matter_kinds` or an `amount` that is not a positive whole number; else today's body. One mint.
-3. **`engine/season/queries/world_q.py`**: `debt_state(w, rec)` as above; `debts_held(w, p)` (the bonds a
-   person holds) and `debts_owed(p)` (person-side: his live `commit`s whose Proposition he holds a
-   `content:debt` claim about), stamped on questions as classed referents on `Detainee`'s route so that a
-   creditor can form the reckoning and a debtor the payment.
+3. **`engine/season/queries/world_q.py`**: no reader of this file's own. The amount is `world_q.owed`
+   (SYN-A §4); the creditor's and the debtor's occasions are `world_q.dues` and `world_q.breaches`, which
+   stamp a `bearer` form's parties (X-09). `debt_state`, `debts_held` and `debts_owed` are not added.
 4. **`engine/season/loop/effects_economy.py::_eff_transfer`**: no new write. When the act's question is
    about a `debt` Record and its `to` is that bond's `at`, the Event carries the Record among its
-   subjects so `debt_state` can count it. A `transfer` to another rung counts nothing.
-5. **`engine/season/loop/matter.py`**: in the Record-stages branch, on the maturing of a `debt`'s last
-   stage with `debt_state != met`, emit `debt.lapsed` (`causes[]` the minting act; an extension's act if
-   one wound the last stage). Add the kind to `rosters.yaml: logged_kinds` / `strife_kinds.lists.joins`
-   as its own decision `[ASSUMPTION; medium; revert: `never`]`.
+   subjects so `world_q.owed` can count it. A `transfer` to another rung counts nothing.
+5. (Withdrawn, C3-C7: `loop/matter.py` is not edited and `debt.lapsed` is not a kind. MATTER emits the
+   last stage's `term.matured`; the lapse is read when read. The `logged_kinds` / `strife_kinds` join goes
+   with it: a strand that a lapse should open reads the matured term of a `debt` Record through its own
+   reader when the WR lane asks for one.)
 6. **`engine/season/arrangements.yaml`**: one row.
 
    ```yaml
@@ -143,8 +154,10 @@ step 5 for the readers.
 
 - Hand-built, real fold, one test file: utter → commit → covenant (a `debt` exists, held by the lender)
   → advance (`transfer`) → part payment (state `running`, counted) → reckoning rolled at each band by
-  seed selection (Partial winds a stage) → last stage matures → `debt.lapsed` citing the right act → suit
-  under `debt_suit` → a `ban` that refuses a `confer` inside the bench's purview and admits one outside.
+  seed selection (Partial winds a stage) → last stage matures (`term.matured`; `world_q.owed > 0`; the
+  holder holds the WITNESS claim of the maturity) → suit under `debt_suit` → a `ban` that refuses a
+  `confer` inside the bench's purview and admits one outside. Asserted: no Event of kind `debt.lapsed`
+  exists and `loop/matter.py` wrote no `Record.stages` cell.
 - Seeded: a spine fixture with one stocked hearth and its head seat (proposal D's fixture, or a
   hand-stocked `Rung.stores`), seeds 0–2, six seasons: bonds minted, reckoning bands, lapses and suits are
   **read and reported**. If no bond is minted the reading says so: the chooser does not lend, which is
@@ -175,9 +188,10 @@ readers. It makes nobody lend.
   With no player, lapses chain. Complete at the extremes: a debtor with nothing pays nothing and the
   roll cannot make him; a dead debtor's bond is paper until an heir commits.
 - **S.** One clock (`Record.stages`), one mint, one roll form (proposal A), one sanction carrier (`ban`).
-  The suit is a sitting like any other.
-- **E, last.** One record kind, one event kind, one query, one arrangement row, one branch in an effect,
-  against the largest single gap this family has.
+  The suit is a sitting like any other. A lapsed bond nobody sues is still a referent its holder and
+  every lender who learns of it read (A-80).
+- **E, last.** One record kind, one arrangement row, one branch in an effect and one in a check, against
+  the largest single gap this family has.
 
 ## Cost class
 

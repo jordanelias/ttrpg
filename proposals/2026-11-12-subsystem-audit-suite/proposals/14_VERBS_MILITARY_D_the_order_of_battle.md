@@ -2,9 +2,16 @@
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Parts 3–4; `U5b_VERBS_military_physical_residue.md`) — (1) **Layer 1**: the four rows write one cell on every band, so each is a task row with **flat** `writes:` and `emits:` (residue §1, shape (a)); `unit.unformed`, `assign.balked`, `unit.balked` and `order.unheeded` are the `draw` clause of `emits_on_refusal`; `disband_unit`'s Partial emits `army.disbanded` only and carries the half that went home as an Observation (`discharged`), not as a second kind; the band still reaches the module as `args['band']`. The roster is `graded_tasks`. (2) **A-5, A-6, A-7, A-25**: one sampler; the pool rule on `command`; `disciplined` is a named level for the roller. (3) **D-36** is closed by the ladder: three organising verbs. **A-2**: `raw` is a column of the unit row. **A-1**: every battle runs the one resolver on what these rows wrote, so `order_unit` matters to a battle nobody watches. (4) Whether a standing order is obeyed in the field now has an owner: the obedience draw of `26_MASS_BATTLE_maneuver_orders.md` (audit 26 B-3).
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head line applied to the body (`unified/work/R4_READ.md` §1.3, 7b.5; F-R4-01): Edit 3's four rows are shape (a) (flat `writes:`/`emits:`, the four Failure kinds in the `draw` refusal clause, `disband_unit`'s Partial half an Observation `discharged`); the `need` conjunct leaves the typed cell (G-04's fallback: asked at formation and by the effect, refused under `write`; C3-R7); Edit 4's `graded_inquiries`/`verb_capability` lines become `graded_tasks` membership and each row's `capability: command` cell (D-U1-07); `disciplined` is a level (C3-C10) and the hostile terms are listed for U1 (INCOMPLETE); Edit 1's module-exported `BANDS` tuple is replaced by the ladder's one `Degree` (`04` §C.5: one ladder; PART D 30); the A-78 fold's "world's motion draw" is replaced by the read of C3-L11; A-81, A-30, U3 batch B22, R4 7b.0 block.
+
 ## Status: PROPOSED
 
-Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (rulings A-59 and A-69). Nothing here is deleted. (1) **Who rolls the field-side draw.** The obedience draw audit 26 gave an owner is rolled, for a standing order, by the unit's **officer** on his own `command`, and by the commander only for a unit with none or for an order he improvises (`27_MB_A_command_and_the_obedience_draw.md` §3). The capability is the one Edit 4 gives these four verbs, defined once, with Presence and Reason as its talent. So two columns of the unit row become choices `order_unit` carries: `officer`, and on the army's own row `commander_post`, where he rides (`27_MB_D_the_commander_as_chooser.md` §1). (2) **`raw` and Discipline** are read by that draw as the `unsteady` step and the `disciplined` level, the same two terms Edit 4's table gives `order_unit`. (3) **Edit 1's `raw`, and `experience` and `arrears`, are a unit's own prowess** in A-59's sense: columns of its row, read by one function (`27_MB_B_unit_prowess_on_the_row.md`). (4) **A-69**: `assign_troops` on a unit with men who fled is their recall, drawn as this file draws it, with the cohort's stance toward the commander and the unit's arrears as terms; `options()` reports units with absent men; `understrength` and `disband` read `assigned` after losses are written to the row (`27_MB_E_what_an_army_carries_back.md` §2, §3). **Amended by A-78** (`unified/DECISIONS_ANSWERED.md:103`): fled men who regrouped return in part with no act at all, by the world's motion draw, and those still gone at the window are deserters; so this recall is not the only way back and not a precondition. It is one further draw in the round, taken to bring more back or sooner (ASSUMPTION, reversible by `aftermath.acting: off`).
+Lands in batch: B22 (`unified/U3_DEPENDENCY_ORDER.md` §3.1), after `14_VERBS_MILITARY_C_the_muster.md`; `04_MB_playable_field_scenario.md` §E lands here (U3 §4.1 row 70); `17_CENSUS_C1A_02` W2's gate rides here (row 39).
+Depends on: `14_VERBS_MILITARY_C_the_muster.md` (B22: `army_state`, the class, the keys, `present_strength`); `04_MB_headcount_grade_and_scale.md` (B17); `26_MASS_BATTLE_maneuver_orders.md` (B20); `27_MB_A_command_and_the_obedience_draw.md` (B19); `27_MB_E_what_an_army_carries_back.md` (B22); `18_DETERMINISM_task_draw_for_uncontested_verbs.md` items 2, 4 (B07). Cut edge (U3 §4.1 row 80, LATER): `27_MB_B_unit_prowess_on_the_row.md` (B31) ships with no behaviour at its control arm; the order of battle reads it when it lands.
+Lane: MB. Tier (R4 7b.0 (1)): `sonnet` producer, effort `high`; one `opus` read of the downstream field gate (the `raw` step's size is the judgment). Test file: `engine/season/tests/test_vm_mil_d_order_of_battle.py` (one function per §4 gate; the scratch probe `probe_army_s0.txt` is evidence only).
+Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the commander's trained `command` score (A-6, A-59); talent as levels from Presence and Reason (A-7); a wound a level against the roll (A-8). Draws: `H(w.world_seed, w.tick, <actor id>, "<verb>.task")` for the four rows (A-30). **A-81:** each failed draw (`unit.unformed`, `assign.balked`, `unit.balked`, `order.unheeded`) is a refusal Event witnessed by the commander and the officers of the body named (a claim of it to each), and every army Event carries the four state Observations (Edit 5).
+
+Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (rulings A-59 and A-69). Nothing here is deleted. (1) **Who rolls the field-side draw.** The obedience draw audit 26 gave an owner is rolled, for a standing order, by the unit's **officer** on his own `command`, and by the commander only for a unit with none or for an order he improvises (`27_MB_A_command_and_the_obedience_draw.md` §3). The capability is the one Edit 4 gives these four verbs, defined once, with Presence and Reason as its talent. So two columns of the unit row become choices `order_unit` carries: `officer`, and on the army's own row `commander_post`, where he rides (`27_MB_D_the_commander_as_chooser.md` §1). (2) **`raw` and Discipline** are read by that draw as the `unsteady` step and the `disciplined` level, the same two terms Edit 4's table gives `order_unit`. (3) **Edit 1's `raw`, and `experience` and `arrears`, are a unit's own prowess** in A-59's sense: columns of its row, read by one function (`27_MB_B_unit_prowess_on_the_row.md`). (4) **A-69**: `assign_troops` on a unit with men who fled is their recall, drawn as this file draws it, with the cohort's stance toward the commander and the unit's arrears as terms; `options()` reports units with absent men; `understrength` and `disband` read `assigned` after losses are written to the row (`27_MB_E_what_an_army_carries_back.md` §2, §3). **Amended by A-78** (`unified/DECISIONS_ANSWERED.md:103`): fled men who regrouped return in part with no act at all, and those still gone at the window are deserters (*W3-4a, C3-L11:* not by a MATTER "world's motion draw": the returned share is computed when read from the loss ledger by a keyed graded draw, and an act writes it); so this recall is not the only way back and not a precondition. It is one further draw in the round, taken to bring more back or sooner (ASSUMPTION, reversible by `aftermath.acting: off`).
 
 Folded: 2026-11-12 by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (rows B-3, M-5, S-1). Nothing here is deleted. (1) **§5's "standing orders obeyed in the field, which is the resolver's draw (listed for MB)" now has an owner**: an order that fires in the field takes effect by a draw on Command and Discipline, at the one site an order is applied (`26_MASS_BATTLE_maneuver_orders.md` §1). **`raw` is read there too**: a raw body's orders are a step harder to obey, beside the one step of Discipline Edit 1 gives it. The season-side draw of this proposal (`order_unit` taken in whole, in part, or not) and that field-side draw are two different acts and do not double-count: one is whether the order was given to the body, the other whether the body carries it out under contact. (2) The doctrine rows this proposal's `step` reads gain the manoeuvre set as data (same file §3); `off_doctrine` compares against them unchanged. (3) The unit row's `ranks` and `files`, which this proposal leaves to `04_MB_cell_hierarchy_as_data.md`, have sourced seeds there now (two cell rows for sword and spear foot, four for pike).
 
@@ -60,8 +67,11 @@ being written.
   trained trooper into the subformations of its kind, filling the weakest first. `disband`: every
   subformation under `SUBUNIT_ROUT_FLOOR`. `order`: for each subformation, the fields that differ
   from the doctrine row's; and `footing` set to `facts.footing_wanted`.
-- `_apply` honours `args['band']` for the four (the host passes the ladder's band name, an opaque
-  string the module compares to its own exported tuple `BANDS`):
+- `_apply` honours `args['band']` for the four. *(W3-4a, R4 §1.3: no module-exported `BANDS` tuple — a
+  second spelling of the ladder's names, `04` §C.5 "ONE ladder", PART D 30.)* The host passes the
+  ladder's own value, a member of `engine/dice_engine/dice_engine.py::Degree` (`:27`, the one type the
+  seam's `seam/ladder.py` already imports from), which the module may import (the dice engine is a
+  leaf a provider may read, U1 D-U1-08), and compares to its members:
 
   | op | Overwhelming | Success | Partial | (Failure never reaches the module) |
   |---|---|---|---|---|
@@ -85,51 +95,60 @@ beneficiary and first two conjuncts, takes `recruit`'s class column (proposal C,
 eligibility `["own"]` unchanged (FA: organising and ordering are the roll-holder's, not a seat's),
 and changes as follows.
 
+Each row (W3-4a: shape (a), flat columns; the `need` read is not a typed conjunct, see below):
+
 ```yaml
   - verb:        "form_unit"
     referent_class: Record
+    capability:  command
+    difficulty:  routine
     requires_typed:
       all:
         - {form: existence, of: subject, kind: army, conjunct: army}
         - {form: relation,  of: subject, relation: held_by,  conjunct: command}
-        - {form: relation,  of: subject, relation: unformed, conjunct: need}
-    writes: {Overwhelming: ["Record.subject_matter"], Success: ["Record.subject_matter"], Partial: ["Record.subject_matter"], Failure: []}
-    emits:  {Overwhelming: ["army.formed"], Success: ["army.formed"], Partial: ["army.formed"], Failure: ["unit.unformed"]}
-    emits_on_refusal: {army: ["form_unit.refused"], command: ["form_unit.refused"], need: ["form_unit.refused"], write: ["form_unit.refused"]}
+    writes: ["Record.subject_matter"]
+    emits:  ["army.formed"]
+    emits_on_refusal: {army: ["form_unit.refused"], command: ["form_unit.refused"], write: ["form_unit.refused"], draw: ["unit.unformed"]}
 
   - verb:        "assign_troops"
     referent_class: Record
+    capability:  command
+    difficulty:  routine
     requires_typed:
       all:
         - {form: existence, of: subject, kind: army, conjunct: army}
         - {form: relation,  of: subject, relation: held_by,    conjunct: command}
-        - {form: relation,  of: subject, relation: unassigned, conjunct: need}
-    writes: {Overwhelming: ["Record.subject_matter"], Success: ["Record.subject_matter"], Partial: ["Record.subject_matter"], Failure: []}
-    emits:  {Overwhelming: ["army.assigned"], Success: ["army.assigned"], Partial: ["army.assigned"], Failure: ["assign.balked"]}
-    emits_on_refusal: {army: ["assign_troops.refused"], command: ["assign_troops.refused"], need: ["assign_troops.refused"], write: ["assign_troops.refused"]}
+    writes: ["Record.subject_matter"]
+    emits:  ["army.assigned"]
+    emits_on_refusal: {army: ["assign_troops.refused"], command: ["assign_troops.refused"], write: ["assign_troops.refused"], draw: ["assign.balked"]}
 
   - verb:        "disband_unit"
     referent_class: Record
+    capability:  command
+    difficulty:  routine
     requires_typed:
       all:
         - {form: existence, of: subject, kind: army, conjunct: army}
         - {form: relation,  of: subject, relation: held_by,       conjunct: command}
-        - {form: relation,  of: subject, relation: understrength, conjunct: need}
-    writes: {Overwhelming: ["Record.subject_matter"], Success: ["Record.subject_matter"], Partial: ["Record.subject_matter"], Failure: []}
-    emits:  {Overwhelming: ["army.disbanded"], Success: ["army.disbanded"], Partial: ["army.disbanded", "army.discharged"], Failure: ["unit.balked"]}
-    emits_on_refusal: {army: ["disband_unit.refused"], command: ["disband_unit.refused"], need: ["disband_unit.refused"], write: ["disband_unit.refused"]}
+    writes: ["Record.subject_matter"]
+    emits:  ["army.disbanded"]          # a Partial's half sent home rides the Event as Observation `discharged` (a count)
+    emits_on_refusal: {army: ["disband_unit.refused"], command: ["disband_unit.refused"], write: ["disband_unit.refused"], draw: ["unit.balked"]}
 
   - verb:        "order_unit"
     referent_class: Record
+    capability:  command
+    difficulty:  routine
     requires_typed:
       all:
         - {form: existence, of: subject, kind: army, conjunct: army}
         - {form: relation,  of: subject, relation: held_by,      conjunct: command}
-        - {form: relation,  of: subject, relation: off_doctrine, conjunct: need}
-    writes: {Overwhelming: ["Record.subject_matter"], Success: ["Record.subject_matter"], Partial: ["Record.subject_matter"], Failure: []}
-    emits:  {Overwhelming: ["army.ordered"], Success: ["army.ordered"], Partial: ["army.ordered"], Failure: ["order.unheeded"]}
-    emits_on_refusal: {army: ["order_unit.refused"], command: ["order_unit.refused"], need: ["order_unit.refused"], write: ["order_unit.refused"]}
+    writes: ["Record.subject_matter"]
+    emits:  ["army.ordered"]
+    emits_on_refusal: {army: ["order_unit.refused"], command: ["order_unit.refused"], write: ["order_unit.refused"], draw: ["order.unheeded"]}
 ```
+
+The band still reaches the module as `args['band']` (Edit 1's table): one cell, different contents, so
+shape (a) (VRES §1). The four rows join `graded_tasks`.
 
 **The `need` conjunct binds a doctrine step only.** A command with a payload is the commander
 saying what he wants whether or not the doctrine calls for it (a player re-roling a body the
@@ -137,22 +156,30 @@ doctrine is content with). `[GROUNDED, 25 G-04: a typed conjunct cannot be waive
 without a new form (`data/requires.py:1027-1030`: a clause is one `form` of the closed
 `requires_forms` roster and nothing else). So the conjunct is asked only at formation (`belief_contradicts`)
 and in the effect for a payload-less act, `surrender`'s precedent of a faction test asked by the
-effect and not the cell; the refusal key is then `write`.]`
+effect and not the cell; the refusal key is then `write`.]` *(W3-4a: applied above — the third conjunct is
+removed from each typed cell and its refusal rides `write`.)*
 
-**Edit 4 — the draw** (`engine/season/rosters.yaml`). `graded_inquiries.values` gains the four;
-`verb_capability` gains each as `command`. Obstacle rows (SC-B's table; every number
+**Edit 4 — the draw** (`engine/season/rosters.yaml`). `graded_tasks.values` gains the four (shape (a));
+the capability is each row's `capability: command` cell (D-U1-07, U1 capability architecture §5), not
+a `verb_capability` line. Obstacle and leverage, through the one composer (every number
 `[ASSUMPTION; medium; Jordan to correct]`):
 
-| verb | difficulty | modifiers |
-|---|---|---|
-| `form_unit` | the kind's `drill_difficulty` (troop table; until it lands, `recruit`'s stand-in) | `no_training_place` +1 (no Site of the kind's training kind where the commander stands) |
-| `assign_troops` | 1 | `influx_exceeds_body` +1 · `body_raw` +1 |
-| `disband_unit` | 1 | `body_experienced` +1 a step (MB R-42's `experience`, 0 until it lands) · `arrears` +1 |
-| `order_unit` | 1 | `many_fields` +1 (more than two fields change) · `body_raw` +1 · `disciplined` −1 (the kind's Discipline 4 or more) · `undisciplined` +1 (Discipline 1) |
+| verb | difficulty | obstacle terms | leverage (A-25; C3-C10) |
+|---|---|---|---|
+| `form_unit` | `routine` | `drill_difficulty` (by troop kind, troop table; until it lands, `recruit`'s stand-in) · `no_training_place` (no Site of the kind's training kind where the commander stands) | — |
+| `assign_troops` | `routine` | `influx_exceeds_body` · `body_raw` | — |
+| `disband_unit` | `routine` | `body_experienced` (a step, MB R-42's `experience`, 0 until it lands) · `arrears` | — |
+| `order_unit` | `routine` | `many_fields` (more than two fields change) · `body_raw` · `undisciplined` (Discipline 1) | `disciplined` (the kind's Discipline 4 or more) |
+
+**INCOMPLETE (blocked on U1, R4 7b.8):** none of the obstacle terms is a member of OBS §2's closed
+roster and `disciplined` is not yet a named source of `advantage_sources`; U1 decides members, folds and
+sources (`body_raw` and `undisciplined` read the same Discipline step the field's obedience draw reads as
+`unsteady`, `27_MB_A` §3, and should be one member). Until then each ships absent: the control is `routine`.
 
 **Edit 5 — effects** (`engine/season/loop/effects_army.py`). `_apply(w, a, op, args, kind, res)`
-gains `res`: on `Failure` the band's kind and no write; otherwise `args['band']` from the ladder
-and, for a payload-less act, `facts` from `army_state`. Every Event carries the four state
+gains `res`; it is reached only on a won draw (a failed draw is the `draw` refusal, emitted with no
+write); it passes `args['band']` (the ladder's `Degree`) and, for a payload-less act, `facts` from
+`army_state`. Every Event carries the four state
 Observations after the write (proposal C's shape), so the commander's belief follows his own acts.
 
 **Edit 6 — fixtures.** `withheld_verbs` drops the four. `rosters.yaml: army_verbs`' note loses its
@@ -179,7 +206,8 @@ becomes false of the result (its folds now draw) and stays true of the plan; it 
 - **Downstream.** A field between two equal armies, one all `raw`, n 200 through
   `massbattle.resolve_field`: the raw army's win share is lower, and not 0. If it is 0 or equal,
   the `raw` step is mis-sized or unread; both are failures of this proposal's one number.
-- **Control.** `armies_at_build: off`: hashes EQUAL. The route rows removed: each act is certain.
+- **Control.** `armies_at_build: off`: hashes EQUAL. The four rows out of `graded_tasks` (no draw):
+  each act is certain.
 - **Falsifier (planted).** `raw` not passed to `Subformation`: the downstream gate reads equal
   shares. `off_doctrine` always true: a commander orders the same body every season (the act store
   shows a repeat with no change of record). The `band` argument ignored: two record outcomes, not
@@ -208,7 +236,7 @@ obeyed in the field, which is the resolver's draw (listed for MB in the audit's 
   twelfth body is refused; a failed act leaves the roll exactly as it was.
 - **S.** One state function; one band table in the module; the same draw as every graded act; the
   unit row's new field is read where the unit is built and nowhere else.
-- **E, against that.** One field, three booleans, four stems, four route rows, one band argument.
+- **E, against that.** One field, three booleans, four stems, four task rows, one band argument.
   A player can predict: a good commander with a drill ground makes steady bodies; a poor one in
   the field makes raw ones.
 

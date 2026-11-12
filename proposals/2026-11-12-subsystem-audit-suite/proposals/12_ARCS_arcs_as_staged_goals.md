@@ -4,6 +4,10 @@ Folded: 2026-11-12 by `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md`. Nothing h
 
 Reconciled: 2026-11-12, U5d closure — folded **A-47** (a threshold may open a mandatory scene, never decide it), **A-16** and **A-24**. Kept: a counter becomes stages of the holder's goal, each armed by a claim in his own ledger; a stage names no act and no outcome. Added: when a goal's last stage is armed the holder's next question on that goal is **mandatory** (it cannot be passed over for another; for a player it must be answered, A-48), so the world can corner a character; what he then does is his choice among the offered acts and its result is the drawn band. Step rewritten: the stage row gains `opens: mandatory | ordinary` (default `ordinary`), read at the one formation site; the gate for ARC-47 gains an arm in which the armed stage's question is first on her slate in every seed while her act and its band vary across seeds. Murder as an own-motive act is lawful, rarely (A-16), so NPC-088's and ARC-31's last stages may arm a killing; its gate and its draw are `22_HAPPENINGS_C_a_killing_is_a_crime_someone_commits.md`'s.
 
+Folded: 2026-11-12 by `U5a_CHAR_owed_amendments.md` §3 — *a want can be kept or laid down*: the standing `need` question for a commitment is not raised while the holder's own ledger reads the content true (a met stage predicate counts), and the holder may `release` his own `commit`, whether it was kept being read by `world_q.commitment_kept` (computed where read). It lands in this file's batch.
+
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.6 row (CONFORMS), §2 row (the missing pointer), §7, §7b-T; `unified/U3_DEPENDENCY_ORDER.md` node B10). Added: the `Folded:` pointer above, which `U5a_CHAR_owed_amendments.md` §3 said this head carries; the body's edit list carries the head's `opens: mandatory | ordinary` key; named tests; lands-it and tier. Left INCOMPLETE with its reason: item 5's `org.person` against AM-B-09 (the ruling's text was not opened by any lane; the row is dropped if it excludes person-level goals).
+
 ## Status: PROPOSED
 
 Source: `audits/12_ARCS_adjudication.md` §4 (M-LATENT, M-AIM), §5 stage 5, §6 row 1, §9 (c1, c2).
@@ -50,8 +54,11 @@ no stage rows authored the game is unchanged (hash EQUAL).
 ## Edits, by owner
 
 - `engine/season/goals.yaml`: `goal_stages:` rows for the cast, case by case, each with a `source:`
-  quoting the case need it stands for.
-- `engine/season/data/goals.py`: accept `org.person` (if allowed); nothing else.
+  quoting the case need it stands for, and the key `opens: mandatory | ordinary` (default `ordinary`; head
+  line, A-47: the last stage's question is mandatory, it opens a scene and decides nothing).
+- `engine/season/data/goals.py`: accept `org.person` (if allowed) and refuse an `opens:` value outside the
+  two; nothing else. The one formation site that reads `opens:` is `world_q.questions_for`'s ordering
+  (`Question.mandatory`), also read by `30_WR_A` commit 3.
 - `decision/`: none here; the reader is CHAR's proposal, to which the active stage's `pursuits` are the
   input.
 
@@ -60,7 +67,11 @@ no stage rows authored the game is unchanged (hash EQUAL).
 ARC-47 on the realm (`12_ARCS_case_on_the_realm.md`), seeds 0, 1, 2: with the three enabling claims
 delivered by prehistory and play, Ehrenwall's `issue` (or `petition`) toward the king's seat is chosen
 within the span; with one claim withheld (off-arm) it is not; with a false third claim planted by another
-person's `lie`, it is. The third arm is the property the old counter could not have.
+person's `lie`, it is. The third arm is the property the old counter could not have. A fourth arm (head):
+the armed stage's question is first on her slate in every seed while her act and its band vary across
+seeds. Named tests (new, `engine/season/tests/test_staged_goals.py`): `test_no_stage_rows_is_hash_equal`,
+`test_arc47_on_arm_off_arm_and_lie_arm`, `test_the_last_stage_opens_a_mandatory_question_and_decides_nothing`,
+`test_a_stage_naming_a_verb_or_outcome_is_refused_at_load`.
 
 ## Falsifier
 
@@ -79,3 +90,7 @@ reader's rule of thumb: "he will act when he has heard enough", against 84 autho
 ## Cost class
 
 Edit plus data authoring; design-first only for item 5.
+
+**Lands it and tier.** The B10 batch, a WR/IN `valoria-author` session on `sonnet` (`high`), with
+`U5a_CHAR_owed_amendments.md` §3; closed by B10's `methodology-close` once; stage rows are per-case content.
+**Hash movers.** None with no stage row (control).

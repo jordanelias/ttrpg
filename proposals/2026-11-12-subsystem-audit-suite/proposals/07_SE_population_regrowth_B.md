@@ -1,8 +1,13 @@
 # 07 · SE — a population that comes back: the rising arm of a cohort's weight, on the bodies clock at MATTER (supersedes one clause of `07_SE_population_census.md`)
 
-Reconciled: 2026-11-12, U5d closure — folded **A-51** and **A-55**. Regrowth is a cohort's weight rising on the bodies clock at MATTER; it is not a births-and-ageing pass (none is ordered) and it re-peoples only places on the fixed map (A-55). The five-year prologue (A-51) runs this rule for its twenty seasons like any other, so a world's starting weights are the prologue's result, not the authored row alone; the gate's first reading is taken after the prologue.
+Reconciled: 2026-11-12, U5d closure — folded **A-51** and **A-55**. Regrowth is a cohort's weight rising on the bodies clock at MATTER; it is not a births-and-ageing pass (none is ordered) and it re-peoples only places on the fixed map (A-55). The five-year prologue (A-51) runs this rule for its five years of the declared year (`20_NARRATIVE_E` edit 1; wave 3, replacing "twenty seasons", C3-K11, D-U1-10) like any other, so a world's starting weights are the prologue's result, not the authored row alone; the gate's first reading is taken after the prologue.
+
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 and C3-K11 (A-51: "twenty seasons" in the head → "five years of the declared year", read from `rosters.yaml: seasons_of_year`, never a literal four); R3 §2 (A-44, A-75): §6's `ED-WR-0011` line reworded; C3-C3: (c′) is decided (both branches of the weight writer at MATTER; the census file's §4 (b) is rewritten to it), so (b)'s matrix edit is made once, by the census file, which lands first in B12; tier and batch added (R3 7b-0; U3 B12).
 
 ## Status: PROPOSED
+
+Lands in batch: B12 (world motion and ground), after `07_SE_population_census.md` (U3 §1 item 13).
+Depends on: `07_SE_population_census.md` (B12, the falling branch and the `(Person, weight)` matrix step `MAT`); `20_NARRATIVE_E_the_year_and_the_reason.md` edit 1 (head of B12, the declared year; cut edge §4.1 row 43 splits the rest of NARR_E to B38).
 
 **Revised by its own lane before return (2026-11-12).** The first draft put the rising arm at CENSUS.
 Layer 1 forbids that: §29 (`architecture/holonic_ARCHITECTURE.md:1023-1029`) makes CENSUS *"DEMAND-DRIVEN
@@ -113,7 +118,9 @@ regrowth with no prior `weight.changed` is the clock's genuine first emission, t
 `matter()`, not a module outcome, because every operand is a host read (the Event log, residence, room).
 
 **(b) `engine/season/write_matrix.yaml`**, the `(Person, weight)` row (`:300-306`): `steps: [CEN]`
-becomes `steps: [MAT, CEN]`, `class: MATTER` and `social: false` unchanged, and its `by:` cell gains the
+becomes `steps: [MAT, CEN]` (made once, by `07_SE_population_census.md` §4 (b), which lands first in B12
+under C3-C3; this file checks the cell is present and adds nothing if it is), `class: MATTER` and
+`social: false` unchanged, and its `by:` cell gains the
 ground: Layer 1 §25 (*"envelope weight — births and deaths"* at MATTER; bodies a licensed clock) and §29
 (no clock at CENSUS). The sibling `(Rung, envelope)` row (`:375-381`) already carries `[MAT, CEN]` on
 DR-1; this is the same shape for the quantity that carries a cohort's population. Without the cell the
@@ -127,7 +134,8 @@ branch is a death by hunger, and §25's table puts *"births and deaths"* of enve
 too; the falls it reacts to (`sub.falls`) are in hand at `:690-711`, not at CENSUS. The first proposal's
 own phrase, *"one writer of `(Person, weight)`, two branches"*, is kept by moving both branches into
 `matter()`; CENSUS then keeps only what §29 gives it (demand-driven individuation and reconciliation).
-Whether that move is made is the first proposal's builder's call; this proposal does not depend on it.
+Decided (C3-C3): the move is made; both branches are at MATTER, and the census file's §4 (b) is
+rewritten to it.
 
 **(d) The asymmetry sweep the first proposal already requires** (`Person.weight` gains a writer where
 readers assumed a constant) covers a rising weight with no further edit: every reader it lists
@@ -154,8 +162,9 @@ readers assumed a constant) covers a rising weight with no further edit: every r
 
 ## 6. What this does not cross
 
-ED-WR-0011 (a closed authored cast, *"for now"*): no `Person` is created; the count of persons is
-asserted constant. ED-IN-0255 (only cohorts eat): untouched. L4 (no social quantity at MATTER): a
+The cast: this arm mints no `Person` (a cohort's weight is a count), and the count of persons is
+asserted constant; named births are `23_STORY_B_a_house_continues.md`'s (A-75), and the cast is no
+longer closed (A-44). ED-IN-0255 (only cohorts eat): untouched. L4 (no social quantity at MATTER): a
 cohort's weight is a body count, `social: false` on its matrix row, and births are named in MATTER's own
 table (§25). §29 (no clock at CENSUS): honoured, which is why the write is not there. The engine's refusal
 of unwound clocks (`05_COLLISIONS_AND_RESIDUE.md` rows 5 and 16) is honoured: the bodies clock is the one
@@ -179,6 +188,6 @@ the same file licenses, and §25.1 lists it among the three that are exhaustive.
 
 ## 8. Cost class
 
-Small build, buildable before or after the first proposal's thinning (it shares no writer site with it
-unless (c′) is taken). Hash EQUAL at the shipped arm; the flip a declared
-mover.
+Small build, landing after the first proposal's thinning (C3-C3: they share the MATTER pass and the
+matrix cell). Hash EQUAL at the shipped arm; the flip a declared mover. Tier: the placement was an `opus`
+decision made once in U3; the build is `sonnet` (R3 7b-0).

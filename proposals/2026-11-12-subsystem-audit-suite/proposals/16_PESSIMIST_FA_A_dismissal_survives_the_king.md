@@ -2,7 +2,26 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-19**, **A-37** and **A-58**. Edit 1's `successions: off_duke_valorsmark: off_heir` is written in the set-of-titles shape (`22_HAPPENINGS_B` edit 2) and the duchy passes to whoever takes the throne in the race, not to the heir by right; the claim is a draw. Edit 3 (a dismissing seat can pardon) stands and agrees with A-37 (an imposed bar ends by the bench's pardon or its term, never by the barred man's own release). Edit 2 anchors six council seats on a territory: under A-58 a seat goes with the land it is anchored on, so those six seats pass to the seizer when a victor standing on that territory chooses to seize it (A-66; an occupier who does not seize leaves them with their holders); the author's choice of territory is therefore also the choice of what a conquest of it carries, and this is stated at the rows.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 and U3 C3-K9 (A-19: edit 1 written in
+`22_HAPPENINGS_B` edit 2's set-of-titles shape; lands after it), §2 (A-58: one line per re-anchored row on what a
+seizure carries), §7/§7b (territories, tests replacing the `pf*` probes, tier); U3 B21, C3-D5 (order inside B21), C3-L7
+(seats pass with land only through `revocation: holder_of_rung`). **Corrections at the tree.** (1) The two seat
+territories are decidable from a file the build reads: `systems/settlements/valoria_geography_v30.yaml` places
+Hafenmark's constitutional capital, Gransol (S-018, "Baralta's court"), in `T8`, and Varfell's ducal capital,
+Sigurdshelm (S-031, `type: Seat`), in `T12`; R5 7b's `[ASSUMPTION]` `terr_T7` / `terr_T4` (lowest-numbered child) is
+replaced. (2) The U5d head line above says the six re-anchored seats pass to a seizer of the territory; under C3-L7 a seat
+passes with land only if its row carries `revocation: holder_of_rung`, and these six keep `rung_above_same_faction`
+(the ruled ED-IN-0256 (3) basis this edit brings them under), so they pass with the ducal seat, not with the territory
+alone; the per-row line says so. (3) `22_HAPPENINGS_B` edit 2 names this file's row as `off_duke_valorsmark: [off_heir]`,
+which is the "heir by right" reading the U5d head refuses under A-19; this file writes the throne's title set (for
+another lane: HAP_B's parenthetical).
+
 ## Status: PROPOSED
+
+Lands in batch: **B21** (FA). Depends on: `22_HAPPENINGS_B_the_throne_is_never_stranded.md` edits 1-2 (B21, the
+set-of-titles shape; lands first, C3-K9), `06_FA_seat_terms_and_turnover.md`, `06_FA_decree_binds.md`,
+`14_VERBS_BINDING_C_turnover.md` (B21; inside the batch this file follows BIND_C's flip and precedes
+`14_VERBS_BINDING_D`, C3-D5).
 
 Source: `audits/16_PESSIMIST_FA.md` F-PES-FA-02 (premise P5; runs `pf1_static.py`, `pf2_premise.py` P2 and
 P5, `pf2b_followup.py` §1 and §4, seed 0). Binds on, and does not redo: CP-T09-06 (the Duchy of Valorsmark's
@@ -68,19 +87,27 @@ re-raised, with its measured consequence (a King with appointment at every depth
 ## Exact edits
 
 1. **`engine/season/offices.yaml`, row `off_duke_valorsmark`**: `conferral: null` → `conferral: inheritance`.
-   **`engine/season/rosters.yaml: successions`**: add `off_duke_valorsmark: off_heir`. (`claimable_seats`
-   already returns every vacant seat whose title is the claimant's; `_eff_succeed` already opens all of
-   them in one write. No code edit.)
+   **`engine/season/rosters.yaml: successions`** (the `{seat: [title, …]}` shape of `22_HAPPENINGS_B` edit 2,
+   which lands first): add `off_duke_valorsmark` with **the same title list as `off_king`**
+   (`[off_heir, off_widow_regent, off_princess, off_duchess_hafenmark, off_duke_varfell]` as HAP_B edit 2
+   writes it), so whoever takes the throne in the deed race (A-19) takes the duchy with it: a list is
+   eligibility, the claim is the draw. (`claimable_seats` already returns every vacant seat whose title is the
+   claimant's; `_eff_succeed` already opens all of them in one write. No code edit.)
 2. **`engine/season/offices.yaml`**, the `rung:` anchor of six rows: `off_legal_advisor_hm`,
    `off_military_commander_hm`, `off_commune_rep_hm` from `{duchy: "Hafenmark"}`
-   to `{territory: "<Hafenmark's seat territory>"}` (`off_guild_comptroller` is left where it is: its
+   to `{territory: "terr_T8"}` (`off_guild_comptroller` is left where it is: its
    faction is `Guilds`, so no anchor brings it under the Duchess); `off_senior_jarl_west`, `off_skald_chief`,
-   `off_military_jarl` from `{duchy: "Varfell"}` to `{territory: "<Varfell's seat territory>"}`. The two
-   territory ids are the author's to name: Hafenmark's children are `terr_T7`, `terr_T8`, `terr_T10`,
-   `terr_T17` and Varfell's `terr_T4`, `terr_T11`, `terr_T12`, `terr_T13` at `build_realm(0)`; which holds
-   each ducal seat is not recorded in a file code reads `[UNVERIFIED]`. If the Senior Jarl **of the Western
-   Highlands** is meant to sit on his own highland territory rather than at the ducal seat, his row takes
-   that territory; the rule reaches him either way.
+   `off_military_jarl` from `{duchy: "Varfell"}` to `{territory: "terr_T12"}`. The territories are read from
+   `systems/settlements/valoria_geography_v30.yaml`: `T8` holds Gransol (S-018), *"Hafenmark constitutional
+   capital. Baralta's court"*; `T12` holds Sigurdshelm (S-031, `type: Seat`), Varfell's ducal capital (the
+   roads list names it so). Both are among the children listed at `build_realm(0)` (Hafenmark `terr_T7`,
+   `terr_T8`, `terr_T10`, `terr_T17`; Varfell `terr_T4`, `terr_T11`, `terr_T12`, `terr_T13`). The Crown's
+   officers sit on `terr_T1`, Valorsplatz's territory, the realm's other `type: Seat` settlement: the same
+   precedent. If the Senior Jarl **of the Western Highlands** is meant to sit on his own highland territory
+   rather than at the ducal seat, his row takes that territory; the rule reaches him either way.
+   Each of the six rows gains one comment line (A-58, C3-L7): *"anchored on `terr_T8` (`terr_T12`): its
+   `revocation:` is `rung_above_same_faction`, not `holder_of_rung`, so a seizure of this territory alone does
+   not carry this seat; it passes with the ducal seat"*.
 3. **`engine/season/offices.yaml`**, rows `off_duke_valorsmark`, `off_duchess_hafenmark`,
    `off_duke_varfell`: add `determine` to `remit_acts`.
 
@@ -90,8 +117,13 @@ exporter (`--check`), not by hand.
 
 ## Gate (execution artifacts)
 
-Re-run `pf2_premise.py 0` and `pf2b_followup.py 0` (scratchpad `runs/PES_FA/`), or their equivalents in a
-test file that builds the realm:
+`pf1_static.py`, `pf2_premise.py`, `pf2b_followup.py` and `pf6_fixcheck.py` were lane scratch, not in the
+repository (U3 §6.2). Their equivalents are written first as NEW `engine/season/tests/test_fa_dismissal.py`:
+`test_strippable_set_at_build_includes_six_council_seats` (G1, with the `off_king` and Guild Comptroller
+controls), `test_heir_holds_both_titles_after_one_succeed` (G2), `test_dismiss_then_pardon_through_the_ducal_seat`
+(G3), `test_pardon_through_off_king_still_refused` (G3's control). Command:
+`python -m pytest engine/season/tests/test_fa_dismissal.py engine/season/tests/test_in31_revocation_cost.py engine/season/tests/test_in61_succession.py engine/season/tests/test_in12_arrest.py engine/season/tests/test_g3_not_yours.py -q`
+(the last four exist). Readings:
 
 - **G1** `strippable(w)` at build is a superset of today's six and includes six council seats, each
   through its duke's seat. Control: `off_king` strips none of the twelve (the rule is unchanged), and the
@@ -142,4 +174,7 @@ seed 0, output `runs/PES_FA/pf6.txt`.
 
 ## Cost class
 
-Edit (data). Dependency: none to land; VB-C makes the outcomes draws.
+Edit (data). Dependency: HAP_B edit 2's shape (above); VB-C makes the outcomes draws. Hash movers declared: none
+at build (the falsifier ran in memory); the `offices.yaml` header counts and exports re-derived by their exporter's
+`--check`. Tier: `sonnet`, effort `high`. Lands it: B21, one commit per edit (1 after HAP_B edit 2; 2; 3), then the
+test file.

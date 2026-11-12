@@ -1,6 +1,11 @@
 # WR-31-A — the houses' regime cores and the cast's values on the opinion axes: five roster rows, three decided cells, a link table, and the 46 rows
 
-## Status: PROPOSED (Jordan's A-87 to A-90 are the cores; every cast cell marked `a` is `[ASSUMPTION; medium; Jordan to correct]`; four items are listed for Jordan in `audits/31_HOUSE_STANCES_AND_CAST_VALUES.md` §11)
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 (A-91: Jordan took lane 31's A in all four of J-31-1 to J-31-4): the Status no longer lists four items for Jordan, and the cells A-91 grounds move from `a` to `g` in §4: NPC-050's `solmund_orthodoxy` 4 (A-91 (1)); the Valorsmark fault line's two holders, NPC-036 the Marshal (PR, MI) and NPC-008 the Clerk (PR, MI already `g`) (A-91 (2)); the Restoration Movement's `royal_order` 1 on NPC-041, NPC-087, NPC-088 (NPC-003 already `g`) (A-91 (4)); the Revival's populace starting at the core (A-91 (3)) is carried by `31_WR_B` commit 2's cohort seeding, not by a cast cell here. One reading is marked `[UNVERIFIED]` at NPC-036 (R3 §2: whether PR 2 / MI 3 reads as standing for the militarism end only depends on `20_NARRATIVE_A`'s `stands_for` threshold, R5's lane). Batch (U3 B38). Tier already named.
+
+## Status: PROPOSED (Jordan's A-87 to A-91 are the cores and the four answered items; every cast cell marked `a` is `[ASSUMPTION; medium; Jordan to correct]`)
+
+Lands in batch: B38 (narrative and regimes), after `30_WR_G` and before `31_WR_B` (U3 §1 item 38).
+Depends on: see "Dependencies" below.
 
 Source: Jordan, 2026-11-12, as `unified/DECISIONS_ANSWERED.md` records them: **A-87** (*"varfell anti caste, hafenmark pro caste, valorsmark okay with it"*; *"correlate is restoration movement and Einhir Revival"*; *"hafenmark okay royal order, valorsmark pro royal order, varfell unhappy royal order due to caste"*; *"hafenmark parliamentary, valorsmark mixed, varfell militaristic"*), **A-88** (*"church is neutral on royal order, doesn't care about caste or parliament, cares a lot about religious affiliation and anti-einhir"*), **A-89** (*"hafenmark devout pro solmund, valorsmark pro solmund with Einhir sympathies, varfell neutral leaning Einhir with momentum building for Einhir Revival"*), **A-90** (*"einhir is both"*). Audit: `audits/31_HOUSE_STANCES_AND_CAST_VALUES.md`. Reference only (`CLAUDE.md` §0.05). Lane WR with CHAR.
 
@@ -123,10 +128,10 @@ Bound: a person with no text of his own sits within one step of his core. Heads 
 | NPC-009 | Gerik Strand | Valorsmark | 4*a | - | - | 1 | 3a | 1 | 2a | 4g | 2a | 2a | goals: "Efficient Crown administration" |
 | NPC-033 | Kolbrun Thale | Valorsmark | 1 | - | - | 1 | 2a | 1 | 2a | 4a | 2a | 2a | row: "lowest of the circle: all three low" (SO kept) |
 | NPC-035 | Theodor Kreutz | Valorsmark | 4*a | - | - | 1 | 3a | 1 | 2a | 5g | 2a | 3a | row: "sworn to Almud personally"; Royal Guard Captain |
-| NPC-036 | Wilhelm Voss | Valorsmark | 4*a | - | - | 1 | 3a | 1 | 2a | 4a | 2a | 3a | Royal Marshal: the arms side of a mixed house |
+| NPC-036 | Wilhelm Voss | Valorsmark | 4*a | - | - | 1 | 3a | 1 | 2a | 4a | 2g | 3g | Royal Marshal: the arms side of a mixed house; A-91 (2): he and the Clerk discount each other's word `[UNVERIFIED: that PR 2 / MI 3 reads as standing for the militarism end only — `20_NARRATIVE_A`'s `stands_for` threshold]` |
 | NPC-037 | Annalie Reichard | Valorsmark | 4*a | - | - | 1 | 3a | 1 | 2a | 4a | 3a | 2a | Lord Treasurer: the accounts side |
 | NPC-083 | Hedda Kronvald | Valorsmark | 3 | - | - | 1 | 2a | 1 | 3a | 4a | 2a | 2a | row: "the Pope's side"; governs a southern Crown territory "viewed as instrumental" (canon/03:100) |
-| NPC-050 | Inge Baralta | Hafenmark | 4*a | - | - | 0 | 0g | 0 | 5a | 3g | 4g | 1a | A-89 against her row's "faith privatised" (audit §11 J-31-1); canon/03:143 "Wants the Crown", "Pure RM adversary"; goals: "Hafenmark parliamentary sovereignty"; row: "a divine-right claimant behind the procedural frame" |
+| NPC-050 | Inge Baralta | Hafenmark | 4*g | - | - | 0 | 0g | 0 | 5a | 3g | 4g | 1a | A-89 against her row's "faith privatised", ruled A-91 (1) (J-31-1: devout in doctrine, set against the Church's jurisdiction); canon/03:143 "Wants the Crown", "Pure RM adversary"; goals: "Hafenmark parliamentary sovereignty"; row: "a divine-right claimant behind the procedural frame" |
 | NPC-071 | Torvi Heljason | Hafenmark | 4*a | - | - | 1 | 1a | 1 | 4a | 2a | 5g | 1a | role: Legal Advisor, "the constitutional line"; `goal_hafenmark_constitutional_order` |
 | NPC-072 | Olaf Geirson | Hafenmark | 4*a | - | - | 1 | 1a | 1 | 4a | 2a | 3a | 2a | Military Commander in a parliamentary house |
 | NPC-081 | Uta Falkenrath | Hafenmark | 5*a | - | - | 1 | 2a | 1 | 3a | 3a | 5g | 1a | role: Commune Representative, "a mediator" |
@@ -143,9 +148,9 @@ Bound: a person with no text of his own sits within one step of his core. Heads 
 | NPC-013 | Aldric Tormann | Church | 3 | - | - | 1 | 1a | 1 | - | 3a | - | - | row: the economic arm; tithes need the order kept |
 | NPC-034 | Gustav Linder | Church | 5 | - | - | 1 | 0a | 1 | - | 3a | - | - | row: seated in the King's Inner Circle; "the Church side dominates" |
 | NPC-003 | Yrsa Vossen | Restoration Movement | 1 | - | 2 | 5 | 5g | 1 | 0g | 1g | 3g | 1a | goals: "Cultural restoration", "Equity and social contract"; `goal_restoration_caste_ended` |
-| NPC-041 | Aldric Hann | Restoration Movement | 1 | - | - | 5 | 5a | 1 | 0g | 1a | - | 1a | row: "no authored vector; read off the RM reformist profile"; the faction's goal rows |
-| NPC-087 | Uwe Askeland | Restoration Movement | 1 | - | - | 4 | 5g | 1 | 0g | 1a | - | 0a | role: hedge-school teacher of Einhir education |
-| NPC-088 | Carin Vedel | Restoration Movement | 1 | - | - | 5 | 5g | 1 | 0g | 1a | - | 1a | role: copyist of suppressed Einhir texts |
+| NPC-041 | Aldric Hann | Restoration Movement | 1 | - | - | 5 | 5a | 1 | 0g | 1g | - | 1a | row: "no authored vector; read off the RM reformist profile"; the faction's goal rows |
+| NPC-087 | Uwe Askeland | Restoration Movement | 1 | - | - | 4 | 5g | 1 | 0g | 1g | - | 0a | role: hedge-school teacher of Einhir education |
+| NPC-088 | Carin Vedel | Restoration Movement | 1 | - | - | 5 | 5g | 1 | 0g | 1g | - | 1a | role: copyist of suppressed Einhir texts |
 | NPC-070 | Lisbeth Ehrenwall | Löwenritter | 2 | - | - | 1 | - | 1 | - | 3g | - | 5g | row: "Almud is faltering, I must be ready to act"; `military-order` template |
 | NPC-006 | Halvar Brandt | Löwenritter | 2 | - | - | 1 | - | 0 | - | 4g | - | 4g | `goal_lowenritter_throne_security`, `goal_lowenritter_military_security`; goals: "Strengthen peninsular defenses" |
 | NPC-005 | Sigrid Torsvald | Löwenritter | 2 | - | 3 | 1 | - | 1 | - | 4g | - | 3a | `goal_riskbreakers_royal_safety`; covert, "Minimize Thread collateral" |
@@ -162,7 +167,7 @@ Bound: a person with no text of his own sits within one step of his core. Heads 
 | NPC-010 | Dalla Virke | Independent | 1 | - | - | 1 | - | 1 | - | - | - | - | row: "outside every faction: all three at the floor" |
 | NPC-012 | Rikard Solberg | Independent | 1 | - | - | 1 | - | 2 | - | 3a | - | 1g | goals: "Maintain stable trade", "Avoid escalation" |
 
-Counts (the probe's parse of this table, P-31-0): 230 new-pole cells; 163 hold a value (57 `g`, 106 `a`), 67 are no key; 12 shipped cells re-authored. No person stands for both ends of a `true` pair, so nobody is authored into a strain; the fault lines run between persons.
+Counts (the probe's parse of this table, P-31-0): 230 new-pole cells; 163 hold a value (57 `g`, 106 `a`), 67 are no key; 12 shipped cells re-authored. After A-91 (wave 3, counted by hand from the five edited new-pole cells, not re-run): 62 `g`, 101 `a`; NPC-050's re-authored `solmund_orthodoxy` cell is now grounded as well. No person stands for both ends of a `true` pair, so nobody is authored into a strain; the fault lines run between persons.
 
 ## Instructions to code
 

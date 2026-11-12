@@ -2,7 +2,24 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §4) — `refused_before` reads present confidence through `state/ledgers.py::present_confidence` once `01_CORE_claim_fade_as_read.md` lands (one owner of fading). A failed search enters by `U5a_DICE_owed_edits.md` §4 (`finding.none` deposited to its actor only). The register's D-46, taken B, adds a private belief of absence for the `with` stem; it composes with this weight and does not replace it.
 
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (`refused_before` takes the
+`Person`, not a ledger and a separate holder: `04` §B.2 `:253`), §2 (A-81 and A-62 named; D-46 sibling), §7/§7b (named
+test file, gate command, hole-register row, tier); U3 B09, C3-Y10 (co-lands with `U5a_DICE_owed_edits.md` §4),
+§4.1 rows 24 and 28, C3-N13 (the refusal rate's definition named beside the figure). Changed: edit 1's signature;
+the probe readings are kept as evidence and the gate is restated on a committed test and a harness command.
+
 ## Status: PROPOSED
+
+Lands in batch: **B09** (IN). Depends on: `01_CORE_claim_fade_as_read.md` (B09, lands first: `present_confidence`);
+co-lands with `U5a_DICE_owed_edits.md` §4 (a failed search deposits `finding.none` to its actor, C3-Y10) and
+`U5c_VERBS_residue_and_governance_owner.md` §3 (a refusal teaches the actor, D-46 B; U3 §4.1 row 28).
+
+**A-81 and A-62.** A-81 (1) names this family as the carrier of "a refusal is remembered": a refusal is a scene,
+and its durable write is a claim, not the refusal Event's changes list, which A-62 keeps empty (the budget is a
+Query). This file carries the **refused actor's** half: the firsthand claim he already holds is weighed when he
+next chooses. The other half, a refusal by a person (a petition denied, a challenge declined) held as a deed of
+the refuser, is the `30_WR_D_momentum_and_its_brakes.md` §3 row "refused by a person"; it reads the same
+deposited claim from the refused party's side and is not built here.
 
 Carries F-PES-CORE-01 of `audits/16_PESSIMIST_CORE.md` (§1.3, §1.5). Reference only (CLAUDE.md §0.05).
 
@@ -16,7 +33,9 @@ the new fixture (`0.0`) every content hash is today's.
 
 ## The problem (evidence; seed 0, shipped realm, shipped chooser, no player)
 
-- 828 of 1,487 individuals' acts in three seasons are refused (56%); the share does not fall by season
+- 828 of 1,487 individuals' acts in three seasons are refused (56%; definition: acts by individuals, not
+  cohorts, refused at the fold, over all acts by individuals, realm seed 0, seasons 0-2; the suite's other
+  refusal rates use other definitions, `unified/U3_CONFLICT_LEDGER.md` C3-N13); the share does not fall by season
   (47%, 61%, 58%). 41% of refused opportunities are attempted again by the same person; the retry is
   refused again 328 times in 342. An executed act's opportunity is re-attempted 21% of the time: a
   refusal makes a second attempt **more** likely. (`run_dump.py 0 3`, `an1.py`.)
@@ -51,16 +70,19 @@ the driver. **(b)** depositing the `with` read. Ruled out by ED-IN-0282 for the 
 1. **`engine/season/queries/person_q.py`** (the single owner of ledger reads) — new reader:
 
    ```python
-   def refused_before(ledger, holder: str, kinds: tuple, subject: str) -> int:
-       """The present confidence (0..confidence_default) of the NEWEST firsthand claim in which
-       `holder` was himself refused this opportunity -- predicate in `kinds` (the verb row's
-       `emits_on_refusal`), subject `subject`, `doer == holder` -- or 0 when there is none, or when
+   def refused_before(p: Person, kinds: tuple, subject: str) -> int:
+       """The present confidence (0..confidence_default) of the NEWEST firsthand claim in `p.ledger`
+       in which `p` was himself refused this opportunity -- predicate in `kinds` (the verb row's
+       `emits_on_refusal`), subject `subject`, `doer == p.id` -- or 0 when there is none, or when
        he holds ANY newer claim about `subject` (news of the subject supersedes the memory: the
-       thing may have changed)."""
+       thing may have changed). Confidence is read through `state/ledgers.py::present_confidence`
+       (`01_CORE_claim_fade_as_read.md`, one owner of fading), never the stored deposit value."""
    ```
 
-   Own ledger only (AX-2); no World. "Newer" compares `(when, round)`, the pair `questions_for`'s
-   `since` already uses.
+   Own ledger only (AX-2; `04` §B.2 `:253`, the own-ledger carve-out): the reader takes the `Person`, so
+   the holder cannot differ from the asker (a `(ledger, holder)` signature would let a caller pass another
+   person's ledger). No World. "Newer" compares `(when, round)`, the pair `questions_for`'s `since`
+   already uses.
 
 2. **`engine/season/decision/choose.py`** — beside `odds_weight`, same shape:
 
@@ -78,12 +100,28 @@ the driver. **(b)** depositing the `with` read. Ruled out by ED-IN-0282 for the 
    and a hole-register row graded `assumption`, swept `0.0 / 0.5 / 1.0`. **Proposed shipped value 0.5**
    `[ASSUMPTION; medium; Jordan to correct; revert: 0.0, the control]`: half the pursuit weight is
    withheld immediately after a refusal and returns as the claim fades at `claim_decay_per_season`.
-   The id is allocated from `references/id_reservations.yaml` at build, not here.
+   The register row is a `HOLE` row in `engine/season/hole_register.yaml`, graded `assumption`, with the
+   id read from `references/id_reservations.yaml` `next_free` (read, allocate, bump, co-commit; CLAUDE.md §4)
+   at build, not here.
 
 4. **Nothing in `loop/`.** `_drop_what_was_already_done` keeps its rule; a refused act is still
    retryable and is now retried at lower odds.
 
 ## Gate (an execution artifact, §0.2)
+
+The figures in "today" came from lane scratch (`run_dump.py`, `an1.py`, `p34.py`, `refclaim.py`; not in the
+repository, `U3_DEPENDENCY_ORDER.md` §6.2). The batch's first commit writes:
+
+- NEW `engine/season/tests/test_refusal_memory.py`: `test_control_value_zero_leaves_hash_equal`,
+  `test_newer_claim_about_subject_supersedes_the_memory`, `test_factor_never_reaches_zero_below_one`,
+  `test_unwired_verb_has_factor_one`, `test_reader_takes_the_person_not_a_ledger` (a planted second
+  person's ledger cannot be passed). Command: `python -m pytest engine/season/tests/test_refusal_memory.py -q`.
+- The five readings below as a committed reading: a `--retries` mode of `harness/decision_spread.py`
+  (it already plays seasons and imports `score_terms`; `[ASSUMPTION: the nearest existing instrument —
+  basis: harness/ listing and its module docstring]`), printing the five rows for `--seed 0` over three
+  seasons; until it is written the rows are evidence, not the gate.
+- Hash control: `python -m engine.season.harness.report && python -m engine.season.harness.delta HEAD` at
+  `refusal_memory = 0.0`, expected `PROBE FLIPS 0`.
 
 On `build_realm(0)`, three seasons, `PYTHONHASHSEED=0`, the reading of §1.3 and §1.5 re-run:
 
@@ -117,4 +155,8 @@ the sum; say so and move it.
 ## Cost class
 
 Small build (two functions, one fixture, one register row), with a golden re-record at any non-control
-shipped value: say so plainly in the commit (CLAUDE.md §7).
+shipped value: say so plainly in the commit (CLAUDE.md §7). Hash movers declared: none at the control
+`0.0`; every seeded result at any shipped value (one re-pin in B09). Tier: `sonnet`, effort `high` for the
+code and tests; the shipped value 0.5 is an `opus`-or-Jordan judgment (already marked ASSUMPTION). Lands it:
+B09, after the fade-as-read commit; order of edits 1 → 2 → 3 (the reader before its caller, the fixture
+last at the control, then the shipped value in its own commit).
