@@ -122,8 +122,9 @@ Each section below has the nine parts the brief orders. Part 6 names the proposa
    and differ only at Failure. Reader: whoever comes to hold an account holds its content as a told claim
    with the writer on its chain (`loop/witness.py`, the content deposit), so a letter carries news, a
    ledger carries a stock figure, a report carries a deed, and each can be cited as a `record` proof
-   (`08_FI_05_evidence-interface_B.md` E-1). Costs: a scene. Forecloses nothing. Refusal: none (an untyped
-   declared kind the roster lacks still raises at the mint). Reason trail: the Record's maker and the
+   (`08_FI_05_evidence-interface_B.md` E-1). Costs: a scene. Forecloses nothing. Refusal: `record.refused`, for a
+   hand-built act by a writer who holds no claim on the subject or is a population; a computed act
+   never meets it, since both are read at formation. Reason trail: the Record's maker and the
    `said`'s chain.
 4. **Scales and surface.** Person scale; it reaches settlement, faction and realm only by being carried
    (`give`), filed (`petition`, `carry`) or held by a seat. The player chooses what to write about (the
@@ -284,7 +285,8 @@ Each section below has the nine parts the brief orders. Part 6 names the proposa
    `[ASSUMPTION; revert: none]`, difficulty `demanding`. Overwhelming: founded, the whole stake arrives;
    Success: founded, 350‰ of the stake consumed in the settling; Partial: founded, 700‰ consumed;
    Failure: `found.failed`, no place, 350‰ of the stake lost, the works stands and may be tried again.
-   Refusal `found.refused` stays for the scarcity case (the rung cannot pay), keyed `stores`.
+   The scarcity case (the rung cannot pay) gets its own keyed refusal, `found.short`; `found.refused`
+   stays for a malformed act.
 4. **Scales and surface.** Person (the founder), settlement (the parent), faction (who holds it). The
    player chooses which works to found and when; the engine draws what the founding cost.
 5. **Tuning hooks.** `rosters.yaml: works_cost`; `venues.yaml: planned_works` (Jordan's content; more
@@ -613,7 +615,8 @@ Each section below has the nine parts the brief orders. Part 6 names the proposa
    the conclusion's candidate is computed at CHOOSE from his ledger alone (`person_q.deed_doer`, with
    FI-06's travelling pairing) and rides the act, as `said` does; nothing to conclude is declined. The
    row joins the graded route: pool `inquiry`, difficulty `demanding`, less an `evidence` term (one
-   `proof_step` per independent chain root among the claims he holds on the deed: corroboration, e2).
+   `proof_step` per independent chain root, beyond the first, among the claims he holds on the deed:
+   corroboration, e2).
    Overwhelming and Success: he utters a HOLDS Proposition naming the deed and the doer, with the
    maker's `hold` (`_eff_utter`'s body); Partial: the Proposition names the deed and no hand; Failure:
    `finding.none`, nothing uttered (§19, J-M2 holds the alternative). A conclusion is as wrong as his

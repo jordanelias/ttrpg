@@ -16,10 +16,10 @@ to pay for).
 
 ## Verdict
 
-**The documents are mostly conformant already; the code is not.** Of the suite's finished lanes, ten
-passages made a consequential outcome a fixed function of state (D-01 to D-10). All ten are corrected in
-place, each file carrying a `Reconciled:` line at its head. Nine further passages in running lanes are
-listed for those lanes (§3) and were not edited. The running VERBS, SC-interrogation (13), WR addendum,
+**The documents are mostly conformant already; the code is not.** Of the suite's finished lanes,
+eleven passages made a consequential outcome a fixed function of state (D-01 to D-11). All eleven are
+corrected in place, in thirteen files, each carrying a `Reconciled:` line at its head. Nine further
+items in running lanes are listed for those lanes (§3) and were not edited. The running VERBS, SC-interrogation (13), WR addendum,
 LACUNA (19) and INSTITUTIONS lanes are already writing draws for most verbs; they are the owners of the
 per-verb band maps, and this file does not write a second copy of any of them.
 
@@ -54,7 +54,7 @@ binding, journeys arriving, cases docketed, stores taken). Ranked by the play it
    order (a content hash) decides who wins, with no contest. Per-verb draws: `14_VERBS_BINDING_*`; the
    rivalry: `18_DETERMINISM_rival_acts_in_one_fold.md` (new).
 
-Counts: **documents — 19 deterministic resolutions found (10 corrected in finished lanes, 9 owed to running
+Counts: **documents — 20 deterministic resolutions found (11 corrected in finished lanes, 9 owed to running
 lanes); code — 15 sites found (C-01 to C-15), 4 new proposals; 0 corrected in code (no lane edits code).**
 
 ## 1. Documents — finished lanes, corrected in place
@@ -70,6 +70,7 @@ lanes); code — 15 sites found (C-01 to C-15), 4 new proposals; 0 corrected in 
 | D-07 | `06_FA_levy_through_the_seat_B.md` | the levy decides who may raise; silent on turnout | a levy that raises the asked amount is certain | note: turnout is `recruit`'s graded draw (`14_VERBS_MILITARY` §3); this file is eligibility only |
 | D-08 | `06_FA_playable_scenario.md:40` | "the heir's `succeed`"; set-up acts at tick 0 assumed to take | succession and the set-up acts certain | `succeed` is a draw (`14_VERBS_BINDING_C`); a failed set-up act is reported as the opening situation, never forced or seed-picked |
 | D-09 | `06_FA_audit_addendum_B.md:300-305` | "a sole heir the apparatus accepts inherits"; "whether the realm splits, by the deterministic gap" | inheritance and schism by rule | the heir's claim, the election's ballots and any split are draws (BINDING_C; 13's ballot row) |
+| D-11 | `03_PC_duel_round_and_approach_B.md:261` (and the superseded `03_PC_duel_round_and_approach.md:66`, left as superseded) | the upset flip "stays on `fight`'s integer, which the fold does not read" | every season matchup decided by the larger fighter (C-13) | replaced by `18_DETERMINISM_no_certain_matchup.md` (a tracked riposte at the deciding felling) |
 | D-10 | `07_SE_audit_addendum_B.md:156` | "Governing acts do not roll … the right one to keep" | every settlement verb certain on eligibility | overruled (ladder step 1): every settlement verb that could go either way rolls through the task route; only own-rung bookkeeping is exempt |
 
 Checked and conformant (no edit): `06_FA_decree_binds.md` (suspicion's threshold raises a question the

@@ -1,5 +1,7 @@
 # PC — the duel round and the approach, B: one round, an approach per phase of the engagement, a chooser for every party
 
+Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-11 — the upset flip is no longer left on the unread integer; it becomes a tracked riposte (`18_DETERMINISM_no_certain_matchup.md`).
+
 ## Status: PROPOSED
 
 Lane: PC, with CORE (the suspension, the adapter row), MB (the cell field at weight 1, a duel inside a
@@ -258,7 +260,7 @@ in how much of the trace is shown; equal plan, state and seed give the identical
 | an approach applied by the host as a modifier on a result (a grid adding damage for "aggressive") | forbidden; the approach enters only as `plans` on the round input and is read inside `combat_systems` |
 | a table of approach against approach used by the grid, the field or the chooser to skip the round | forbidden; the round always runs; an estimate is the resolver sampled |
 | the adapter keeping round state or deciding for a person | forbidden by §44.3; state is in the calling loop's frame, the decision is the person's decider |
-| the upset flip (`wrapper.py:622-624`), which reverses a decided fight after the fact | stays on `fight`'s integer, which the fold does not read; a round has none. It is the engine's one existing override of its own outcome and the first audit's §11 item 3 is where it is decided |
+| the upset flip (`wrapper.py:622-624`), which reverses a decided fight after the fact | *(Reconciled, D-11)* leaving it on an integer the fold does not read keeps every season matchup certain, which the standing rule forbids (ladder step 1 answers §11 item 3's "whether"). Replaced by `18_DETERMINISM_no_certain_matchup.md`: at the deciding felling the blow may be turned (same `UPSET_FLOOR`, same draw position) through the one damage site, so the trackers — and a round, which carries them — see it |
 
 Where this cannot be made to fit, it is named in §8 (items 4 and 5).
 
