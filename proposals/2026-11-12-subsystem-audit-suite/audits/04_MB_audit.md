@@ -634,3 +634,329 @@ Proposal files are under `proposals/2026-11-12-subsystem-audit-suite/proposals/`
 | R-23 | inconsistency | `CP-T04-10`'s `levy`/`disband` against `recruit`/`disband_unit` | superseded by `ED-IN-0306`'s verbs | 1 | none |
 
 Resolutions decided: **23**.
+
+## 7. Research transfer
+
+Read: `research/00_INDEX.md` (§1 and the mass-battle rows), `research/by_lane/MB_mass_battle.md` (§0, §7 in
+full; headings of the rest), `research/game_precedent_suite/dispositions/D_T04.md` (the disposition table
+rows cited below). Not read: `research/pre_firearms_formations/` beyond what the lane file reports of it,
+`research/historical/`, `research/emergent_narrative_literature/` (§12). The lane file's own verdict on
+the historical corpus stands unexamined here and is relied on: written from memory, self-checked, numbers
+unsourced.
+
+**Precedents that change what to build.**
+
+| precedent (as the corpus records it) | what it changes here | where |
+|---|---|---|
+| The pre-battle panel: strength and projected result shown; fight, delegate or withdraw (Total War, Jagged Alliance 2, Bannerlord; D_T04 rows 3, 46, 55) | already transferred into code at B10-12 (`field_estimate`, `retreat_at`, `surrender`, `besiege`) and all four are dark. The transfer still owed is switching them on as one choice surface | §8 step 4; proposal 3 |
+| A priced exit: only a hero may retreat or surrender, at the cost of the army or gold (Heroes of Might and Magic, D_T04 row 34) | `retreat_at` and `surrender` need a price a chooser can weigh; today concession costs exactly what losing costs | R-03 (`Drawn` and concession are distinct endings in `FieldOutcome.ended`) |
+| Levy and professional troops are different economies; raising troops removes a cohort, not a number (Crusader Kings, Shogun 2, Jagged Alliance 2, Manor Lords; lane file T-MB-5) | the quality half is built (`TROOP_TYPE_STATS`); the population half is absent: `recruit` does not lower the cohort's working weight. An SE edge, named in §10 | not proposed here |
+| A garrison is an assignment, not a unit type (lane file T-MB-6) | confirms `mustered at the target` and R-11's re-homing of a routed defender to a held rung | R-11 |
+| Conquest is occupation, then title (Rome II, Crusader Kings 3; T-MB-14) | confirms presence-not-title on `Won` (accepted as precedent in §5.1) | none |
+| One-clock games resolve battle by strategy selection (Empires in Arms, Pax Pamir; T-MB-12) | the playable field should offer one selection per engagement, not a tactical clock: this is why proposal 3 builds rounds out of the `Drawn` band and not a pause inside `run_battle` | proposal 3 |
+| A tactics list of conditions and responses (Unicorn Overlord, D_T04 row 40) | the engine's `Order` triggers already are this; the army Record carries one of them (`fall_back_at`). Nothing to build | none |
+| Cohesion breaks before the body; most killing is in the rout (du Picq as the lane file reports him; PFF T-29) | supports a verdict that distinguishes rout from attrition (`FieldOutcome.ended`) and the pursuit gap in §5.5 | R-04 |
+
+**Tried, did not transfer.**
+
+- *Football Manager's "three fidelities of one engine"*: D_T04 row 58 marks the repository's own claim
+  CONTRADICTS, not established. The one-engine rule stands on the 2026-07-08 ruling and on Total War's
+  documented counter-example (auto-resolve "casualties may be heavier"), not on Football Manager.
+- *Total War's 30% and 20% wipe-out thresholds* (D_T04 row 6): community-tested mod discussion; a lead,
+  not a number.
+- *Ultimate General's "routers return when morale recovers"* (row 23): player claims; the engine has no
+  rally (`rally_check` is `pass`). Not built on.
+- *The pre-firearms formation matchup matrix*: single-author, over a hundred internal contradictions by
+  the lane file's count. Decorative for any constant.
+- *The gauge bands* (`mass_battle_gauge_grounding.md`): ceilings were raised after the engine exceeded
+  them and they gate nothing. Decorative.
+- *The 15 to 30% rout band's attribution to du Picq*: the lane file reports *Battle Studies* gives no
+  percentage. The band is Jordan's value and binds as a ruling, not as history.
+
+**Nulls.** The corpus records that no surveyed game keeps one person's leverage meaningful from a duel to
+a battle of thousands, and that the nearest shape (a lone commander's death routs the army) is a known
+failure (lane file T-MB-4; its Dominions leg is marked unverified at source). The engine implements that
+failure shape (`battle_loop.py:411-413`, command 0 is an instant rout) and the season never reaches it.
+ARC-23 and SCN-14 (§13) ask for exactly this seam; there is no precedent to copy, and §13 says so.
+
+## 8. Best path forward
+
+Ordered. "Alone" is what the subsystem needs to run well by itself; "compose" needs another lane.
+
+| # | what changes | where | gate (execution artifact) | unblocks | cost | alone / compose |
+|---|---|---|---|---|---|---|
+| 1 | Survivor share is `hp / hp_max`; one weight to troops owner; headcount sides deploy three rows apart; graded walls shipped | `massbattle.py` (`_grade`, `_weighted_unit`, `_person_unit`, `resolve_field`); `effects_combat.py:637`; `data/fixtures.py` (delete `field_troops_per_weight`; `field_walls_dr: 3`) | the module probe of §12 re-run: no loser above 1.0 in 400 battles; at realm weights the larger side wins more than half at 3:1 over 60 seeds; the unmodified realm pair folds through the driver to a band that varies by seed; the seed-2 pin re-recorded, said plainly | R-04, R-07 c.3, R-09 | edit | alone |
+| 2 | `Drawn` band; frozen `FieldOutcome`; per-cohort and per-person parts | `massbattle.py`; `queries/inputs.py`; `seam/ladder.py::field_degree`; `rosters.yaml` (band roster, `verb_table.yaml` `march` row); `effects_combat.py::_eff_march` | a hand-built stalemate folds `field.drawn`: both sides' bodies move by their own share, no stance row is written, nobody arrives; a planted side-ratio-for-every-cohort write reddens the army-path test | R-09, R-01, R-02 | small build | alone |
+| 3 | One code path: multi-turn and multi-unit loops and their helpers leave `modules/`; environment flags become one frozen config; dead stubs and no-ops deleted; unwired roles off the menu | `modules/mass_battle/orchestration.py`, `config.py`, `hierarchy/units.py`; `systems/mass_battle/sim/` | the reach probe re-run: every function left in `modules/mass_battle/` is entered by a season arm or a composition row; `git grep -n environ modules/mass_battle` is empty; `tools/ci_golden_modes_check.py` digests equal | the standing requirement; the port | edit (large diff, hash equal) | alone |
+| 4 | The playable field: a seeded two-faction scenario, a player chooser, the estimate before each choice, a battle report after | new `engine/season/harness/field_scene.py`; un-withhold `marshal` (retreat line only) and `surrender` inside the scenario's fixtures; `march_postures: [storm, besiege]` there | two policies at one seed end in different bands with different persons hurt; the same policy at two seeds differs; the report names who broke first on each side | R-04, R-05 (`marshal`, `surrender`, `besiege` earn their kinds) | small build | alone |
+| 5 | Armies in the realm and a reason to march: presets installed at build (fixture), a training site per faction seat, levy as a line; `field_subunits: person`; army verbs keyed by payload; a `march` candidate on a defended enemy settlement | `harness/populated.py`, realm data (SE), `troop_types/presets.py::ROLE_OF`, `data/fixtures.py`, `data/verbs.py::opportunity_key`; the candidate is CORE's and CHAR's | `aperture 2 s`, s = 0 to 2: `field.won + field.lost + field.drawn` above 0 at every seed and the `army.*` kinds out of the never-emitted list; declared hash movers | R-04, R-05, R-07 c.3, NERS-R's no-player half | small build + two declared flips | **compose** (CORE, CHAR, SE) |
+| 6 | Aftermath: a routed defender is re-homed to a rung his faction holds; a won field removes one morale row from each winner | `effects_combat.py::_eff_march` | after a folded `field.won`, `mustered(target, loser)` is empty where the loser routed and holds another rung; a faction that loses then wins starts its third field at morale 5 | R-01, R-02 | edit | alone |
+| 7 | CR-12: repair the instrument (volley scenario out of contact for the whole trajectory; a frontage coefficient in the fit or the bar read against the frontage control; bisect LINEAR 4:1), consolidate the base term, then numbers out of the melee dice and re-calibrate | `systems/mass_battle/sim/lanchester_signature.py`; `core/exchange.py`; `hierarchy/units.py` | the instrument 4 of 4 on both arms, its planted collapse still failing | none of the nine; the size-to-outcome curve | design-first, then small build | alone |
+| 8 | Command and quality from the commander and the troops' training (§14) | `MassBattleInput`, `field_input`, `rosters.yaml: verb_capability` | a field between equal armies under commanders of different capability differs in win share beyond sampling error at n 400 | R-06, R-04 | small build | compose (CHAR) |
+
+Steps 1 and 2 are the only ones that must precede everything else. Step 7 should not run ahead of them.
+
+## 9. Playable standalone and integrated
+
+The standing requirement, point by point.
+
+**Playable alone.**
+
+| element | exists today | missing |
+|---|---|---|
+| scenario seed | none that is a game. Oracle scenarios (`systems/mass_battle/sim/stress_scenarios.json`, `walkthrough_example.json`); hand-built worlds in tests (`P.tiny_world`, a re-weighted `build_realm`) | a seeded scenario world: two factions, each with a seat that may `march`, an army Record with real troop types, a defended settlement, stores |
+| choice surface, before the field | in code: the `march` target; posture `storm` or `besiege`; the standing order's retreat line; the army verbs through `harness/military_menu.py`; `surrender` for the defender | all but the target are withheld or off (`fixtures.py:1157`, `rosters.yaml:1176`); the defender has no turn (same round, `ED-IN-0301`) |
+| choice surface, during the field | none: one atomic call of up to 18 ticks | a second and third engagement when the first is `Drawn`, with a choice between (press, hold, besiege, withdraw, yield) |
+| outcome legibility | the band Event; `army.arrived`; on the `person` arm the Observation of who broke; `field_estimate`'s shares beforehand | a battle report in the season: how it ended, how long, each part's share, who broke on both sides. Today that exists only as `walkthrough.py`'s page, outside the loop |
+| stakes | `body` on both sides; morale and grudge rows; presence at the target; garrison wear on `Invested`; stores when provisioning is on | title (by design, `seize`'s); captives; a price for conceding that differs from losing; any stake at all at the shipped scale beyond the artefact of F-MB-02 |
+| end condition | per engagement: rout, concession, the tick cap | per war: none (`hole_register.yaml` H-176, no season-side ending; CORE's) |
+| instrument | `field_estimate`; `harness/arms.py` over `field_casualty_model`; `walkthrough.py`; `stress.py`; `lanchester_signature.py`; `bat.py` | one that runs the scenario under a named policy and prints the report |
+
+**One code path.** No (F-MB-05). The workbench runs loops the season cannot reach; the season runs arms the
+workbench cannot. Step 3 and step 4 close it from both sides.
+
+**Layer 1 conformance as a registered module.**
+
+| rule | reading |
+|---|---|
+| reached by composition row, never by import (`holonic_ARCHITECTURE.md` §43) | conforms: five rows; no executable import of `engine` or `systems` under `modules/mass_battle/` |
+| resolution at boot | conforms: `ENGINE-UNAVAILABLE` is the typed refusal when no driver registered the role (`seam/wrappers/mass_battle.py:426-428`) |
+| typed input | conforms (`MassBattleInput`, the four query records) |
+| typed outcome | **does not** (F-MB-06) |
+| holds no token, writes nothing, reads no `World` | conforms |
+| keeps no state | conforms for RNG and trace; **does not** for 91 environment flags and two mutable registries (F-MB-09) |
+| no simulation state behind a global name (§47) | at risk in the port: the flag constants are module globals |
+| integer arithmetic on exported scales (§48) | **does not**: the engine is float throughout. The seam is the right place to quantise (`FieldOutcome` shares as integers on the body scale); the engine's internal floats are the GO lane's question |
+
+**Integrates.** In (executed when a field is fought): member weights, stances, loyalty rows, territory and
+fortification, origin, standing orders, the army Record, stores. Out (executed): `body`, `stance`,
+`contain` legs, `stores`, `Site.condition`, the Record's `subject_matter`. Out and read by others:
+`body` gates budget and acts (`decision/budget.py`), stance feeds regard and the next morale-start, presence
+feeds `occupies` and so `seize`. Scale transition: there is no zoom. The field is resolved inside
+ENCOUNTER in one call; nothing pauses and nothing can be entered. `Declared` exists as a deferral band
+(`verb_table.yaml:807`), which is the hook a pause would use.
+
+**No GM.** What still needs one: deciding to go to war and where (MB-08); choosing an order of battle for
+a faction with real sites (the preset doctrine is a fixed split); interpreting a stalemate (R-03);
+deciding what a beaten army does (R-11); pricing a retreat.
+
+**Conflicts with ruled items, named and not resolved.**
+
+1. *Friction at sigma 1.1* (`ED-MB-0016`, closed at `ED-MB-0080`) against "choices change what happens".
+   Measured here: a 3:2 advantage in spearmen wins 10 of 20; a 5:1 advantage wins 47 of 60. The curve is
+   the one Jordan calibrated to. A player's order of battle is worth less than one standard deviation of
+   the draw. §11.
+2. *Same-round resolution* (`ED-IN-0301`, Ask C (a)) against a defender's turn. Not in conflict once
+   `Drawn` exists: the first engagement is still fought the round it is declared; later ones are new acts.
+
+**Ordered work to close each gap:** §8 steps 1, 2, 3, 4, then 5.
+
+## 10. Interfaces
+
+| with | consumes | emits | real (executed) or designed |
+|---|---|---|---|
+| CORE (loop, seam, ladder) | `Act` (`march`, payload posture), the contest seam's call, the seeded `rng` | a result dict graded to Won / Lost / Unopposed / Invested; Events `field.*`, `army.arrived`, `siege.pressed` | executed when reached; reached 3 times in two seasons at seed 0, all `Unopposed` |
+| CHAR (persons) | `Person.weight`, `stance` rows toward the faction, `is_cohort`, `body` as fitness | `body`, two stance rows per loser, a `broke` Observation | executed by hand-built acts; the loyalty row is read as zero in every built realm (H-256) |
+| FA (factions, seats) | `Act.via` → `seat_faction`; `holder_faction_of`; `leaders` for presets; standing orders held by seats | grudge rows toward the winning faction | executed; a faction's reason to march is absent (designed, MB-08) |
+| SE (settlements, sites, stores) | `fortification_of` (garrison condition); `training_sites`; `Rung.stores` through `settlements.provision` | `Site.condition` wear on `Invested`; `stores` debits | fortification executed; provisioning and siege built and off; no training site exists in the built realm, so the recruiting rule reads zero for every trained type |
+| WR (geography, territory) | the geography file: terrain polygons, rivers, province anchors | presence at a territory (occupation) | executed for terrain and river rows; territory occupation executed (`field.unopposed`) |
+| PC (personal combat) | nothing | nothing | **no edge.** A commander is not a body on the field; a duel cannot occur inside a battle; `detain` is read (prisoners do not muster) and never written by a field |
+| SC (social contest) | nothing | nothing | no edge; `surrender` is an act, not a contest; a parley before a field does not exist |
+| FI (fieldwork) | nothing | Events an investigator could find | designed only |
+| DICE | none of the substrate: the module owns its own `roll_pool` and `compute_degree` | | doubled (§4.1) |
+| GO (port) | | the largest float-dynamics body in the tree | not started; §9 |
+
+## 11. Survivors for Jordan
+
+Two. Each is listed because the brief requires it, not because the ladder left it open.
+
+1. **CR-12: do troop numbers stay in the melee dice?** This lane's resolution is (a) (§5.3, R-06,
+   proposal `04_MB_cr12_linear_law.md`), reached at ladder step 1. It is listed because it narrows the
+   plain words of a standing directive (2026-07-08: pools "solely from the subunit troop type, quality
+   and numbers").
+   - *(a) Numbers out of the dice.* Melee is linear: a bigger army wins by overlapping, enveloping and
+     outlasting. Battles between unequal armies last longer and the smaller side can hold a line; depth,
+     reserves and frontage become the decisions.
+   - *(b) Numbers stay in the dice; the linear lock is lifted for melee.* The engine stays as built
+     (exponent 1.5 to 1.7): the bigger army also hits harder per man in contact, so size snowballs,
+     battles between unequal armies end fast, and concentration beats positioning.
+2. **Friction at sigma 1.1 against the standing requirement of 2026-11-12.** A conflict between a ruled
+   magnitude and a new requirement, named and not resolved here.
+   - *(a) Keep 1.1.* War is a gamble calibrated to the historical win-rate curve; the game is about
+     whether to fight, and with what odds, not how. The choice surface that matters is then the decision
+     to march, the estimate and the exit, and proposal 3 is built for that reading.
+   - *(b) A smaller draw at the season's scale, or one a commander's capability narrows.* Composition and
+     orders become legible causes of victory; upsets become rare enough to be stories. This is the
+     reading §14 would feed (a commander's capability as the thing that narrows the draw).
+
+Nothing else survives. The scale (H-250), the grading of a stalemate (H-354), `side` against `person`
+(H-359), what a beaten side does (H-355), the role menu (H-361, A5) and MB-08's march half are all
+answered in §6.2.
+
+## 12. Evidence log
+
+All runs: Python 3.13.18 (the container's; CI is 3.11), `PYTHONHASHSEED=0`, read-only. Scripts and outputs
+are under `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/MB/`.
+
+| run | seed, size | outcome |
+|---|---|---|
+| `python -m engine.season.harness.register --requirements` | n/a | met 3, not_met 1, partial 5 (`requirements.txt`) |
+| `python -m engine.season.harness.aperture 2 0` | `build_realm(0)`, 2 seasons | `march` formed 26, attempted 13 and 12, refused 10 and 12; `field.unopposed` 3, `army.arrived` 3; `field.won`, `field.lost`, `siege.pressed`, `place.surrendered`, `order.marshaled`, all `army.*` never emitted; army verbs, `marshal`, `surrender` formed 0 (`aperture_2_0.txt`) |
+| `reach_probe.py side 3` | module, seeds 0 to 2 | 1,363 of 4,634 statements; all three fields `Failure`, attacker 0.3 |
+| `reach_probe.py side,side_big,person,orders,oob,oob_one 4` | module, seeds 0 to 3, six arms | 2,295 of 4,634 statements; per-file table in §4.2; a defender share of 1.08 on the headcount path (`reach_all.txt`) |
+| inline: `_weighted_unit` pairs through `run_battle` | seeds 0 to 19; 30 v 18, 30 v 6, 99 v 1, 120 v 60, 150 v 60, 250 v 120 at k 1; 30 v 18 at k 10 | below 100 a side: both routed at tick 2, attacker loses 20 of 20, attacker hp untouched; 120 v 60: defender alone routed, tick 2, 20 of 20 |
+| inline: losers above 1.0 | seeds 0 to 99; 600 v 120, 600 v 150, 450 v 190, 1200 v 199 | attacker wins 289; losing defender above 1.0 in 70; worst 1.638 |
+| `walls_probe.py 60` | seeds 0 to 59, five size pairs, open and walls at DR 3, 1, 0 | open: 5:1 78%, 2:1 62%, 1:1 42%, 4:1 78%, 1:2 25%; walls DR 3: 45%, 40%, 30%, 58%, 13%; DR 0 equals open (the control) |
+| inline: preset armies meeting | seeds 0 to 19, army path | levy 900 (`Reserve`) v levy 600: 6 `Success`, 14 `Partial`, survivors 0.98 and 0.96; levy 900 v a headcount side of weight 20: 3 wins of 20; spearmen 900 v 600: 10 of 20 |
+| `presets_probe.py 0 2 control` and `... presets` | `build_realm(0)`, 2 seasons | control: `field.unopposed` 3, hash `bacd687f`; presets: three levy armies (600, 900, 600), the same events, hash `0622a841` |
+| `seed2_field.py 2 1` | `build_realm(2)`, 1 season | one `field.lost`; bodies 1000 → 20 (two), → 30 (two), → 400, → 225 |
+| `python -m engine.season.harness.corpus_run` | corpus | **not completed** within this run (started, no output when the audit closed; the machine was shared with the other lanes). §13 does not rest on it |
+| `presets_probe.py 0 2 tpw30` | | **failed to run**: the probe could not replace a fixture value on a built world; not retried |
+
+**How the code was read.** Read in full, as written: `massbattle.py`, `armies.py`, `armyrecord.py`,
+`orderofbattle.py`, `troop_types/` (three files), `rngsource.py`, `core/attrition.py`,
+`engine/season/seam/wrappers/mass_battle.py`, `loop/effects_army.py`, `loop/sides.py`,
+`harness/army_presets.py`, `harness/military_menu.py`, `effects_combat.py:380-770`,
+`seam/ladder.py:190-272`, and `config.py:1-380`. Read in full **with comments and docstrings stripped**
+(original line numbers kept): `config.py:380-626`, `battle_loop.py`, `orchestration.py`,
+`hierarchy/units.py`, `geometry.py`, `percell.py`, `resolution.py`, `terrain.py`, `core/contact.py`,
+`core/exchange.py`, `core/state.py`, `equipment/`, and `perimeter.py:1-100`. The comment prose in those
+files was read only where a finding cites it.
+
+- `[SKIPPED: tests/valoria/test_*.py and engine/season/tests/test_cp_t04_*.py (43 files) — not opened; §4.5 rests on the hole register's statements about them and on the code they test]`
+- `[SKIPPED: systems/mass_battle/sim/bat.py, stress.py, validators.py, lanchester_signature.py, test_persubunit_stress.py, workbench/server.py, rout_cascade_sweep.py — outlines only; walkthrough.py:120-172, workbench/trace.py:60-116 and engine.py:284-303 read]`
+- `[SKIPPED: perimeter.py:100-173 — not reached by any season arm]`
+- `[SKIPPED: proposals 2026-09-25-squad-engagement-*, 2026-10-16-troop-stock-design*, multiunit_envelopment_plan.md, pc_formation_system.md — Status lines only (dossier); none is RATIFIED]`
+- `[SKIPPED: research/pre_firearms_formations/, research/historical/, research/emergent_narrative_literature/, the companion parts — relied on research/by_lane/MB_mass_battle.md's reading of them]`
+- `[SKIPPED: .designs/ mass_battle_v30.md and mass_battle_integration_v30.md — reference only; no finding depends on them]`
+- `[SKIPPED: hole-register rows H-148, H-149, H-175, H-241 in full — excerpts and citing rows only]`
+
+## 13. Provided arcs and characters — adjudication
+
+Cases were selected by reading every `season_requires` need in `engine/season/cases/` for one whose
+mechanism is a field, an army, a siege or a military command. "Represented" means reached in a run, not
+declared. Proposal numbers: 1 = `04_MB_headcount_grade_and_scale.md`, 2 =
+`04_MB_typed_outcome_and_one_path.md`, 3 = `04_MB_playable_field_scenario.md`.
+
+| case | need (short) | hardness | represented today? | evidence | change required | owner lane | proposal | gate |
+|---|---|---|---|---|---|---|---|---|
+| ARC-07 The Army That Stayed | a rare combat sub-outcome leaves consequences for seasons after the battle | core | **in part.** A lost field leaves a morale row that lowers the next morale-start, and cut bodies until `tend` | `massbattle.py:158-159`; `effects_combat.py:639-644`; seed-2 run (bodies) | the rare branch must cross the seam: `FieldOutcome` carries each part's `routed` and `broke_first`; ship `person` | MB | 2, 1 | a folded field in which one of two commanders routs leaves the two with different bodies and only one named `broke` (the existing CP-T04-01 falsifier, on the shipped arm) |
+| ARC-07 | a persistent condition on a unit, not cleared by the battle ending or a declared victory | core | **in part**, as above; nothing persists for a *winner* except his casualties | `effects_combat.py:570-587` | none beyond R-22's inverse (a win clears a row); the arc's own reading puts the condition in the men's ledgers, not on a unit (`proposals/2026-08-30-arc-reachability/01_arcs_01_18.md:303-320`) | MB, CHAR | 3 | a faction's morale-start after lost, lost, won reads 4, not 3 |
+| ARC-07 | the commander's stated reason for staying is true and self-serving | core | no | a won army arrives and nothing says why it stays (H-355) | R-11; the reason itself is a claim, CHAR's | CHAR (claims), MB (aftermath) | 3 | after `field.won`, the occupying force's presence is a fact a `tell` can carry |
+| ARC-07 | resolving the condition needs a distinct act nobody wants to start | core | **yes in mechanism**: `forgive` and `tend` are distinct acts | `effects_combat.py:766-847` | none in MB | CHAR | | [UNVERIFIED: whether the chooser forms `forgive` on a faction] |
+| ARC-07 | the condition is invisible to outsiders until investigated; becomes a standing drain | important | no (no upkeep; stores debit is off) | `fixtures.py:809` | provisioning on; an occupying army eats (H-212) | SE | | SE's |
+| ARC-23 The General Falls | battle phases within a turn; a stabilising act in one phase only | core | no. The engine has three phases; the season call is atomic | `battle_loop.py:459-461`; `massbattle.py:427` | engagements as rounds on `Drawn`; a personal act between rounds | MB then PC, CORE | 3 | a `Drawn` field followed by a second `march` the same season resolves a second engagement on the survivors |
+| ARC-23 | a commander's incapacitation penalises the whole force and removes a morale floor | core | no. Command is the constant 4; the commander is not on the field | `massbattle.py:184-188`; `battle_loop.py:411-413` (unreached) | command as an input read from the commander (§14); his `body` as its fitness | MB, CHAR | §14 | equal armies, one commander at half body: win share differs beyond sampling error |
+| ARC-23 | failing to stabilise escalates next turn; capture instead of death | core, important | no | no `detain` is written by a field | a field's `FieldOutcome` names the losing commander; `capture` is PC's verb | PC | | PC's |
+| ARC-23 | a threat that exists only because one person maintains it dies with her | core | not MB's | | | CHAR, FA | | |
+| ARC-43 The Battle That Ate the South | a field is triggered because another arc drew the defenders away | core | **yes in mechanism.** An empty defence is `Unopposed`; a thin one is fought thin | `seam/wrappers/mass_battle.py:391-414`; `aperture 2 0` (`field.unopposed` 3) | someone must decide to march there (step 5) | CORE, CHAR | 3 | a seeded run in which a march elsewhere empties a garrison and a second faction's march on it is `Unopposed` |
+| ARC-43 | reality-altering ability inside a battle costs a fixed multiple | core | no. No personal act occurs inside a field | | rounds (proposal 3) first; the multiplier is WR's fixture | WR, PC | | WR's |
+| ARC-43 | the battle's outcome degrades adjacent territories and a remote group | important | no | | WR reads the band Event | WR | | WR's |
+| SCN-14 personal action inside a mass battle | one personal act per unit of mass-scale time | core | no | the call is atomic | rounds on `Drawn`; one act per round is DELIBERATE's budget | MB, CORE | 3 | as ARC-23's first gate |
+| SCN-14 | acting personally suspends that actor's command for the same unit of time | core | no; and wrongly stated for this engine: "command" is not something a person exercises during a field today | | with §14's commander input: a commander who spent his round on a personal act contributes no command to that engagement | MB, CHAR | §14 | |
+| SCN-14 | a named NPC targeted during the battle changes status at the mass scale | important | no | | `FieldOutcome.parts` names persons; the inverse (a person's state into the next engagement) is the fitness read that already exists for cohorts (`_order_of_battle`: `body / condition_scale`) | MB | 2 | a commander wounded between engagements fields a smaller subunit in the next |
+| SCN-14 | a social contest before the round changes the round's starting state | important | **in part**: stance toward one's faction sets morale-start, and a contest can move stance | `massbattle.py:121-159` | none | SC | | a `tell` that lowers stance before a march lowers that side's morale-start |
+| SCN-14 | zone movement during mass combat | flavour | the engine's field is cells, not zones | | none: a different abstraction, not required | | | |
+| ARC-20, ARC-45 | whether one military leader commits her forces decides the battle, and can go either way on the same facts | core | **yes in mechanism**: an army fights only where its commander is | `seam/wrappers/mass_battle.py:206-214` | her choice is a `march` the chooser must form (step 5) | CHAR, CORE | 3 | the same world with and without her present reads different `orders_of_battle` |
+| ARC-45 | a demand coincides with capacity depleted by a separate battle | important | **yes in mechanism**: cohort bodies carry losses into the next muster | `seam/wrappers/mass_battle.py:212-214` | proposal 2's per-cohort shares make it exact | MB | 2 | two fields a season apart: the second army's strength is the first's survivors |
+| ARC-11 | a commander's redeployment leaves another place exposed | important | **yes**: `march` relocates the claimants; the origin's muster is then empty | H-355's measurement (`mustered(set_s_014)` empty after the march) | none | | | |
+| NPC-070 Lisbeth Ehrenwall | a military institution reassesses loyalty in stages; diplomacy changes its deployment | core, important | not MB's mechanism; MB reads the result (loyalty rows into morale-start, which today read zero: H-256) | `seam/wrappers/mass_battle.py:134-138` | H-256 decided (CHAR) | CHAR | | CHAR's |
+| NPC-072, NPC-082 | a named commander commands forces distinct from the council; his break has material consequence | core, important | **yes in mechanism, dark**: the army Record's holder is its commander; if he leaves the faction he can no longer command it (`effects_army.py:40-42`) and the army fights only where he stands | `effects_army.py:34-42`; `test_army_verbs.py` (not opened) | presets on (step 5) so the commander exists in a built realm | MB | 3 | in a seeded realm with presets, the commander's absence leaves his faction's side a headcount line |
+| NPC-089 | three graduated postures: probe, pressure, invasion | core | **in part**: `storm` and `besiege` exist as postures; `besiege` is off the roster; nothing lighter than a siege exists | `rosters.yaml:1159-1176` | `besiege` on (it waits on `restore` executing, the roster's own condition); a probing posture is a new roster member and a design call for FA | FA, MB | 3 | `march_postures` of three members fans three candidates, each folding a different band |
+| NPC-006 | a faction's military posture moves gradually by his acts | important | **in part, dark**: the army verbs change the Record by increments | `effects_army.py` | step 5 | MB | 3 | |
+| ARC-47 | losing two territories in a period fires a trigger | important | MB supplies the fact (`field.*`, occupation); the trigger is not MB's | | | FA, CORE | | |
+
+**Needs wrongly stated.** SCN-14's "mass-scale command capability ... SUSPENDED" presumes a commander who
+acts during the battle; in this engine command is a property of the side fixed before the field. The
+faithful reading is the one in the table (a commander's attention is spent or not per engagement).
+ARC-07's "condition on a unit" is refused at the signature by the season's design (no unit object); the
+arc-reachability reading (claims in the men's ledgers) is the one the code can carry, and the need should
+be read that way. NPC-006, NPC-082 and NPC-089 each carry an UNCLEAR need about which territory or what
+forces the person commands; under `ED-IN-0306` the answer is data: the army Record he holds.
+
+**Arcs this lane can bring up soonest, in order.**
+
+1. **ARC-11 and ARC-43's trigger** (a redeployment exposes a place; a field happens because the defenders
+   left): nothing but step 5's march candidate, which is CORE's and CHAR's. Edge: CORE → MB.
+2. **ARC-45 and ARC-20's battle half** (depleted capacity; one commander's commitment decides): steps 1,
+   2 and 5. Edge: MB → CHAR for her decision.
+3. **ARC-07** (the aftermath of a battle nobody chose): steps 1, 2, 6, then CHAR's claims and SE's upkeep.
+   Edges: MB → CHAR, MB → SE.
+4. **NPC-072, NPC-082, NPC-006** (commanders whose command is material): step 5.
+5. **ARC-23 and SCN-14** (a person's act inside a battle): steps 2, 4, then §14 and PC. These are last:
+   they need the round structure, the commander input and a duel that can target a commander, and no
+   precedent in the corpus solves the seam (§7, nulls). Edges: MB → PC, MB → CORE, CHAR → MB.
+
+The execution artifact for each is a seeded realm run in which the beat occurs from persons' acts; none
+of the gates above uses a hand-built `Resolution`.
+
+## 14. Capability authoring surface
+
+**(a) Where mass battle takes a character capability as input.** Nowhere. `MassBattleInput` carries
+weights, stances, loyalty rows, place and orders (`queries/inputs.py:205-260`); no field is a capability
+or an attribute. `march` has no row in `rosters.yaml: verb_capability` (its rows are `tell`, `speak`,
+`argue`, `research`, `examine`, `surveil`, `fight`, `accept`, `capture`). Inside the module the places a
+capability *would* enter are constants:
+
+| quantity | what the engine reads | where it comes from today |
+|---|---|---|
+| Command (span of control; a whole-side rout at 0; the cascade and recall rolls) | `Unit.command` | the literal 4 (`massbattle.py:184-188`, `orderofbattle.py:75`) |
+| Command derived from a leader | `derive_command(charisma, cognition)`, weights 2 and 1 | `config.py:528-529`; called only when a harness builds a `Unit` with both (`units.py:2862-2863`); never by the season |
+| troop quality: Power, Discipline, Morale | `Subunit.power`, `.discipline`, `.morale` | `TROOP_TYPE_STATS`, a Python dict (`troop_types/registry.py:44-71`) |
+| the side's baseline quality | `Unit.power`, `.discipline` | the literals 4 and 5 |
+| morale at the start | `_morale_start` | stance rows: data, the one live personal input |
+| what a role does | `ROLE_SPEC`, `TROOP_TYPE_ROLES` | Python dicts (`config.py:589-626`) |
+| who may be recruited as what | `TRAINING_SITE`, `TROOPS_PER_WEIGHT`, `MUSTER_FRACTION` | Python constants (`troop_types/recruitment.py:44-69`) |
+| officers | `Officer.command` | harness only; "bookkeeping only" at resolution |
+
+**(b) Data-driven, hard-coded, doubled.** Data-driven: morale-start (stance rows), the order vocabulary
+(exported to `engine/engine_params/battle_orders.json`), the army Record. Hard-coded: everything else in
+the table. Doubled: Command (a literal on two constructors plus an unused derivation with its own
+weights); the troop-type table is a second, parallel "what a kind of fighter is" beside the person-scale
+attributes, with no declared relation between them.
+
+**(c) Target shape.** The existing owner is the pair `rosters.yaml: verb_capability` (verb → capability
+key) and `vocation_attribute` (key → attribute), read through `seam/wrappers/sigma.py::faculty`, over
+`Person.capability` and the ten attributes of `references/descriptor_registry.yaml`. Mass battle should
+extend that, not add a scheme:
+
+1. `march` gets a `verb_capability` row naming a command capability (the name is Jordan's content; a
+   new vocation key, with its `vocation_attribute` row, both data).
+2. `field_input` reads the commander's `faculty` for that key by the same function every other provider
+   uses, and hands it on as `MassBattleInput.command = (attacker, defender)`, each an integer on the
+   engine's 1 to 7 Command scale, with the literal 4 as the value for a side with no commander. The
+   commander is the army Record's holder, or on a headcount side the acting person.
+3. The module uses it where it already uses `Unit.command`. `derive_command` and its two weights are
+   deleted: the derivation from attributes belongs to `vocation_attribute`, once.
+4. Troop quality stays a property of troop type, authored as data: `TROOP_TYPE_STATS`, `TROOP_TYPE_ROLES`,
+   `ROLE_SPEC`, `TRAINING_SITE` and the two recruiting numbers move to one typed file under
+   `engine/engine_params/` behind an exporter, as the order vocabulary already is.
+
+**What a capability definition must say for mass battle to use it** (the interface for the holistic
+stage): its key; that it is read at the *side* scale through one person (the commander); the integer
+scale it lands on and the value for "none"; which engine quantity it feeds (Command, and nothing else at
+first); and whether it is consumed (a commander who acted personally this round contributes none:
+SCN-14). Mass battle needs **one integer per side per engagement**, supplied by the host. It does not
+need to see the capability, the attribute or the person.
+
+**(d) Axioms.** Implemented, in the tradition's words: a dice pool of d10s against a fixed target number
+with exploding-style double successes and botches on 1 (`resolution.py:37-54`); opposed rolls graded by
+margin into four degrees; unit stat blocks by troop type (Power, Discipline, Morale); morale as a track
+that erodes and breaks; formation, facing and flanking as positional modifiers; fatigue; ammunition;
+conditional orders. Contradicted or lacking, that a designer would expect:
+
+- **Leadership does nothing.** The commander's skill is the classic input to mass combat and here it is a
+  constant.
+- **No advancement.** Troops do not gain experience from a field; a veteran and a recruit of one type are
+  identical. (`train` raises a person's capability; nothing raises a cohort's.)
+- **No hero on the field.** A named character adds his `weight` (one household) and nothing of what he
+  can do; the corpus calls this the fully fused pole (D_T04 row 50).
+- **Two unrelated stat systems.** Person attributes and troop stats share no scale and no derivation.
+- **The degree ladder and the die roller are re-implemented** in the module rather than read from the
+  substrate (§4.1), so a change to the axiom at its owner would not reach a battle.
+
+**(e) Proposals, ordered.** (1) Command as a host-supplied integer, with `march`'s `verb_capability` row:
+part of `04_MB_typed_outcome_and_one_path.md` (the input record) and §8 step 8; it waits on CHAR's
+decision of the capability's name. (2) The troop tables as one exported typed file: same proposal,
+R-08's sibling. (3) The module's `roll_pool` and `compute_degree` forward to the substrate's owners, a
+DICE-lane edit recorded here and not proposed. No private capability scheme is proposed.

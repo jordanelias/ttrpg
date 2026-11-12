@@ -115,9 +115,10 @@ three seasons, `conceal → create_record → create_record → create_record` (
 seasons has the same shape (`record.created` 252 of 440 consequence acts, E-10).
 
 **Falsifier run.** A seed in which an executed `determine`, `covenant`, `fight`/`accept` death or reached
-ending appears at shipped fixtures. Seeds 0 and 1 at three seasons: none. [Six-season readings: §12 E-08.]
-With the forcing arm on (illness 0.05) one `matter.determined` appears at each of seeds 0 and 1 (E-11):
-the route exists and needs an occasion.
+ending appears at shipped fixtures. Seed 0, three seasons: none. Seed 1, three seasons (E-12): one
+`matter.determined` (of 5 attempts), one `person.died`, one `field.lost`, no `covenant` (0/17), no
+`challenge` (0/134), no `accept` (0/35), `endings == []`. So closure is not impossible; it is rare: two
+closing Events in 5,276 attempted acts over the two seeds. The six-season readings are in §12 E-08.
 
 **Touches.** R-05 (verbs built out), R-02, R-06; NERS-R's no-player half.
 
@@ -177,8 +178,9 @@ nothing" (`:6-8`): there is no value of any reading at which it reports a defect
 refusals: seed 0, three seasons, cross-person share 23.4% over all acts, 14.4% over executed acts; 355 of
 616 acts at depth 2 or more are refused (E-07). (d) Run with the three forcing fixtures on (E-11, E-12), the
 headline does not move in a consistent direction while the world visibly changes: seed 0 cross share 23.4%
-→ 22.1%, executed share 14.4% → 13.4%, with 8 deaths, `oblige` executed 42 → 146, `confer` 0 → 1,
-`determine` 0 → 1. The instrument is insensitive to the events a reader would call story. (e) CR-69's
+→ 22.1%, executed share 14.4% → 13.4%, with deaths 0 → 8 and `oblige` executed 42 → 146; seed 1 cross share
+22.3% → 24.4%, executed share 12.8% → 12.8%, with deaths 1 → 4. Two seeds are a direction, not a balance
+claim; the direction is that the instrument does not register the events a reader would call story. (e) CR-69's
 control is inverted on real logs. `test_cr69_chains.py:99-112` asserts the shuffled-causes null reads
 **below** the linked log, on a plant of six disjoint chains. On the shipped realm it reads **above**: chain
 ends at depth 2 or more, real 29 against null 86 to 97 (seed 0, two seasons); real 44 against 104 to 114
@@ -215,11 +217,15 @@ read the world's condition feed no decision.
 the world-state Queries: `hunger`, `uncontrolled`, `closed_uses` one each, all `harness/populated.py::census`
 (a report); `sovereign_fraction`, `density`, `within`, `provinces_of` none outside this file or tests;
 `flows_in`, `presented` the strife harness only (grep, §12 E-14). With forcing on (illness 0.05, the weather
-draw, coupling 250), seed 0: 8 deaths over three seasons, 10 `tenure.closed`, the run's only `confer` and
-`determine`; seed 1: 4 deaths, 8 `tenure.closed`, one `determine` (E-11, E-12).
+draw, coupling 250), seed 0: 8 deaths over three seasons against 0, `tenure.closed` 10 against 2, `oblige`
+executed 146 against 42, one `confer` and one `determine` against none; seed 1: 4 deaths against 1,
+`tenure.closed` 8 against 6, `determine` 1 against 1 (E-11, E-12). Deaths and the seats they empty move
+with forcing at both seeds; determinations do not (the seed 1 control has one without it).
 
 **Falsifier run.** A shipped-fixture run in which a death, a shortage or a band crossing occurs after season
-0 with no act causing it. None at seeds 0 and 1, three seasons.
+0 with no act causing it. None at seed 0, three seasons. Seed 1 has one death in season 2, in the season
+of its one `field.lost`; the bodies pass is skipped at shipped rates, so it cannot be an age or illness
+death, and its causing act was not read `[UNVERIFIED]`.
 
 **Touches.** R-01, R-06; NERS-R's no-player half; T-WR-8 of the research lane file (§7).
 

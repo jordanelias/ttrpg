@@ -151,6 +151,66 @@ embedded in or arises from a mass engagement, and the instruction suite. Judge w
 and write the missing pieces as proposals. Where this intent conflicts with a ruled item, name the
 conflict and do not resolve it.
 
+## Added charge (Jordan, 2026-11-12): the NPC and AI-chooser design intent, in every audit
+
+Every audit judges its subsystem's NPC-facing and chooser-facing surface against the design intent for
+NPCs and the AI chooser. That intent is not restated here: it is what the tree records, and part of the
+job is to read it, reconcile its sources, and say what it is. Sources, in order of weight (code is the
+mechanism; prose is intent, §0.05):
+
+- ruled and built: `engine/season/decision/` (`choose.py`, `options.py`, `questions.py`, `budget.py`,
+  `sheet.py`), `queries/person_q.py`, `goals.yaml`, `npcs.yaml`, `cohorts.yaml`, the pursuit-basis worksheet
+  (`proposals/2026-09-20-pursuit-basis-worksheet.yaml`, ED-IN-0261), the conviction split (ED-IN-0251),
+  and the person-side rule (`holonic_ARCHITECTURE.md`, the NPC decision policy rows H-03/H-04/H-66/H-73/H-74
+  in `engine/season/hole_register.yaml`);
+- ratified or proposed design: `proposals/2026-09-16-conviction-decision-layer/`,
+  `2026-09-17-governance-and-behaviour/`, `2026-09-30-character-and-play-surface/` (especially
+  `03_play_surface`, `05_two_modes_of_one_bout`, `09_the_character_sheet`, `10_verbs_and_attributes`),
+  `2026-09-12-emergent-narrative-primitives-v2/`, `2026-10-24-character-layers-*.md`,
+  `2026-11-04-knowledge-model-build-plan.md`, B10-19's design-first clusters;
+- intent and vocabulary only (`.designs/`, quarantined): `npc_behavior_v30.md` (ethical stance and
+  resonance), `decision_policy_v1.md` (the precedence order Valoria decides by; DRAFT FOR RULING),
+  `player_agency_v30.md`.
+
+For each lane: (a) the NPC and chooser behaviours your subsystem needs (who decides, on what
+information, with what temperament and conviction, at what budget, with what visible reasons); (b) whether
+the same chooser serves a player-proxy and an NPC through one interface (the player and NPC are the same
+kind of agent; the player's choices come from outside, the NPC's from the chooser); (c) where the
+subsystem hard-codes an NPC rule instead of reading the chooser (scripting drift); (d) what an NPC needs
+to be *characterful* in this subsystem (distinguishable choices from distinguishable people) and what
+would make the choice legible afterwards (a reason trail the narrative can read); (e) what is missing, as
+proposals. The CHAR lane owns the reconciliation of the sources above and states, in its audit, the intent
+as it can be established from code plus ruling, marking what remains prose only; the other lanes cite that
+statement rather than redo it. Where the sources disagree, the ruled and built wins; name the
+disagreement.
+
+## Design intent stated by Jordan, 2026-11-12: mass battle
+
+Mass battle is **inspired by the Football Manager games and the Total War series.** Jordan gave no
+further text; read the two references by what each is known for, and test the subsystem against that:
+
+- from Football Manager: the player acts as a **manager** of a squad of individuals with roles, duties and
+  instructions set before and adjusted during the match; a match engine that **resolves the contest
+  automatically from those settings and the individuals' attributes**; the ability to watch, intervene,
+  change tactics and substitute during play; and legible post-match analysis that explains why the result
+  came out as it did;
+- from Total War: **formations and units on a terrain-bearing battlefield**, with morale, routing,
+  flanking, charges, fatigue and supply; a **campaign layer that feeds the battle and receives its
+  result**; and the choice to **fight a battle or auto-resolve it**, with the two kept consistent.
+
+Audit and design against this. It binds the MB lane (`modules/mass_battle/`: the orders and tactics
+surface, individuals' roles and attributes feeding unit performance, the auto-resolve path versus the
+playable battle as one code path, and the explanation of results), the PC lane (a duel inside a
+mass engagement, the same duel-round path), CHAR and CORE (officers and soldiers as characters with
+capability data, §14; the commander as an agent served by the chooser), SE and FA (the campaign layer:
+supply, muster, territory, war), GO (what the player-facing layer must show), and the instruction
+suite. Existing material to reconcile: the squad-engagement proposals
+(`proposals/2026-09-25-squad-engagement-*`), `2026-09-30-character-and-play-surface/08_mass_battle_units.md`,
+`2026-10-29-army-phase5-design.md`, `proposals/multiunit_envelopment_plan.md`,
+`proposals/mass_battle_fighting_withdrawal_v1.md`, `research/pre_firearms_formations`,
+`research/game_precedent_suite`. Judge whether the precedent has been **understood or only named** in
+the code. Where this intent conflicts with a ruled item, name the conflict and do not resolve it.
+
 ## Ground rules (from `CLAUDE.md`; read it, these are the ones that bite here)
 
 1. **Code is the mechanism; prose is reference** (§0.05). A design document is never the reason a
