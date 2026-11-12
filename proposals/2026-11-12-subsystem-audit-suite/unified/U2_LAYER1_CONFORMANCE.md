@@ -576,3 +576,31 @@ A conflict between Jordan's stated intent and a ratified Layer 1 rule is never r
 | 550 | R5 §1. | 23_STORY_C_a_founded_place_can_fail | 1 `rosters.yaml: lapse_kinds` (hearth, community); 2 `_end_rung` extracted from `_eff_raze`; 3 `loop/matter.py::_lapse`; 4 fixtures; new Event kind `rung.abandoned` on `(Rung, exists)` | 04 §B.13 inv. 5 `:497` ("`act_only` => steps within RES; `MAT` => `world_or_act`"); §A.2 `:174`; PART D 17 `:1043`; AX-5 (three motions); AX-6 | MECHANICAL at load | AMBIGUOUS | "adds MATTER as a writer of that cell" without naming the `writer:` column: `(Rung, exists)`'s row is RESOLVE-written (`raze`, `found`); a MATTER writer needs `steps: [RES, MAT]` and `writer: world_or_act` (inv. 5), and its `emits` list gains `rung.abandoned`. The proposal states the Layer 1 reading as `[ASSUMPTION]` and gives a fallback (RESOLVE, the holder's `release`). Pick the first form with the matrix-row edit stated (data, loader-checked); the fallback if U2 refuses. `_end_rung` as one owner of "a Rung ends" is G.2.1-conformant (one writer) | rewritten (W3-5b; the DONE row for the file cites section 1 rows as applied, `work/W3_5b_DONE.md`) |
 | 551 | R5 §1. | 23_STORY_D_story_census_and_gate | `harness/storybar.py`: `Beat`, `Shape`, `SHAPES`, `stories()`, `--stories`, `--world`, `--seat`, `--pin-rolls`; `tests/test_storybar.py` planted logs | 04 PART D 50 `:1080`; CLAUDE.md §0.1 pt 5; ED-IN-0225 (no carrier for arc, story or thread) | CONVENTION | CONFORMS | A reading of the log, wired into no gate; its controls (the three control shapes, the planted failure, the null arm) are the observer D 50 asks for. `SHAPES` is an instrument table, not a fact the game reads (deleting it changes nothing) | conforms |
 | 552 | R5 §1. | 23_STORY_E_first_playable_the_lean_year | `engine/season/valley.yaml` rows (persons, seats, successions, relations, planned works, prehistory); `harness/valley.py::lean_year`, `endings`, `sheet` | 04 PART E `:1115-1130`; §B.7 (seats, `successions`); AUDIT_BRIEF "playable alone, integrated, one code path" | CONVENTION | CONFORMS | A fixture world beside `harness/scarce.py`; the played seat is `play_surface.dispatching_chooser(auto, {pid: callback})`, one code path. `valley.yaml` and `harness/valley.py` do not exist in the tree (`ls`, 2026-11-12): MISSING until `07_SE_valley_scenario.md` lands | conforms |
+
+## 2. Closing note: the Layer 1 amendment of 2026-11-12 (Jordan, A-97; `ED-IN-0358`)
+
+Every row above whose disposition reads "amendment owed: `L1-…`" was graded against a Layer 1 sentence that node has
+now amended, both halves (`unified/U3_LAYER1_AMENDMENTS.md`, `unified/work/L1_APPLIED.md`). The "amendment owed"
+clause of these rows is discharged, and each is read as **conforming after its node** (A-97 being Jordan's act, not
+Layer 1 edited to match code). This note does not re-read the proposals: a row conforms only as far as its edit says
+what the amended sentence now permits.
+
+| node | rows (the `#` column) |
+|---|---|
+| `L1-A3` | 37, 500 |
+| `L1-A4` | 8 |
+| `L1-A72` | 7, 129 |
+| `L1-A9` | 64, 461 |
+| `L1-A64` | 181 |
+| `L1-A12` | 142, 149, 227, 288, 402 |
+| `L1-A13` | 142, 227, 402, 449 |
+| `L1-A20` | 360 |
+| `L1-A29` | 99, 109 |
+| `L1-A30` | 5, 29, 31, 42, 48, 106, 109, 119, 465, 496, 500, 524 |
+| `L1-A62` | 371 |
+| `L1-A96` (and `L1-A96b`, the `detention` gate basis) | 546 (the Failure branch of `22_HAPPENINGS_C`) |
+
+**Not discharged by this note:** the rows whose disposition reads "see `OWED_TO_UNIFICATION.md` §A (no node … matched
+by ruling number)" (86, 91, 232, 250, 251, 271, 522, 528, 537) are tied to no applied node and stay as written. Row
+271 in particular (`31_WR_B` commit 1, a sway drawn at WITNESS) is NOT made conforming by `L1-A92`: the amended
+`04` §B.2 admits evidence into a conviction only as a term in the person's own drawn act at RESOLVE.

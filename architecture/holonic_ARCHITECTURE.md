@@ -1,6 +1,6 @@
 # THE SEASON LOOP — A HOLONIC ARCHITECTURE, AND THE GUIDE TO BUILDING IT IN GODOT
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`. ⚠ AMENDED 2026-11-12 (Jordan-directed, A-97, ED-IN-0358): the rulings' owed amendments, appended in place so no line moves — L1-A92 (§2 T2, §9.3) · L1-A12 (§11.1) · L1-A9 (§27.1, §32 item 3) · L1-A64 (§27.1, §33) · L1-A96 (§34.1) · L1-A72 (§39.3) · L1-A3 (§39.4) · L1-A4 (§44.3).**
 ## Under `CLAUDE.md` §0.05 this document is **REFERENCE, never mechanism.** Under §0.2 **nothing in it
 ## runs.** Part X says what would make each claim done and which steps cannot be satisfied by writing.
 
@@ -119,7 +119,7 @@ This column is what makes each one real.
 | | throughline | where it stops being an aspiration |
 |---|---|---|
 | **T1** | all actions are performed by characters | `resolve` has **no faction parameter**; a faction has no verbs |
-| **T2** | characters have memories, feelings and commitments that change | **two layers, and conflating them is the most dangerous collision in the design**: the claim ledger is what they hold **TRUE**; convictions and beliefs are what they hold **RIGHT**. Evidence moves the first; argument and consequence move the second. **Nothing social moves on a clock** |
+| **T2** | characters have memories, feelings and commitments that change | **two layers, and conflating them is the most dangerous collision in the design**: the claim ledger is what they hold **TRUE**; convictions and beliefs are what they hold **RIGHT**. Evidence moves the first; argument and consequence move the second. **Nothing social moves on a clock**. ⚠ AMENDED 2026-11-12 (Jordan, A-92; A-97, node L1-A92): evidence may enter the second only as a term in the person's own drawn act at RESOLVE, never as a direct write (`04` §B.2, PART D row 18) |
 | **T3** | memories are fallible; multiple perspectives on one event | `witness(Person, Event)` is per-person **and there is no collection signature to call** |
 | **T4** | no one is omniscient | `choose` has **no `World` parameter**, and every resolver-side Query takes `World` first — so calling one from inside `choose` **fails at the call site** |
 | **T5** | demands aggregate **UPWARD** and are filtered at a rung | Petition → `carry` → DocketItem → sitting, **filtered by a named person who pays for the filtering** |
@@ -359,7 +359,7 @@ deleted on purpose.
 | **written at** | **WITNESS** | **RESOLVE** |
 
 > ⚠ **WITNESS NEVER TOUCHES A BELIEF.** If evidence can move a conviction, the moral layer has become
-> a second epistemic layer and T2 is gone. This is the single most dangerous collision in the design.
+> a second epistemic layer and T2 is gone. This is the single most dangerous collision in the design. ⚠ AMENDED 2026-11-12 (Jordan, A-92; A-97, node L1-A92): WITNESS still never touches one; what a person has learned may enter a conviction only as a term in his own drawn act at RESOLVE (`04` §B.2, PART D row 18).
 
 ## §10 · `Rung` — the holon
 
@@ -427,7 +427,7 @@ binds  in { members_by_admission, persons_by_presence }
 | `establishment[]` | the named persons the office employs. **Finite, contested, durable** |
 | `upkeep` | what the post pays its establishment out of the office's stake |
 
-### §11.1 An office adds NO verb and NO modifier
+### §11.1 An office adds NO verb and NO modifier — ⚠ AMENDED 2026-11-12 (Jordan, A-12; A-97, node L1-A12): a seat may carry ONE optional modifier, `modifier?`, a named level on rolls made through it, which helps a roll and gates nothing (`04` §B.7, PART D row 33); "neither the holder nor anyone else rolls differently" no longer holds for that level
 
 > **It makes ordinary acts eligible where they otherwise are not, and it substitutes the pool source:**
 > `pool(act by remit) = capability of the dispatched establishment member(s) actually performing it`.
@@ -971,7 +971,7 @@ blocker cannot hold a line, helping one claimant cannot starve another, a shortf
 of resolution.**
 
 > **The minimal fix is not a new function; it is a fold.** Each act sees the world its predecessors
-> left. **Sequence, not simultaneity.**
+> left. **Sequence, not simultaneity.** ⚠ AMENDED 2026-11-12 (Jordan, A-9, A-64; A-97, nodes L1-A9, L1-A64): **the fold's unit is the scene: scenes are ordered by stratum and hash; within a scene the acts apply in the chooser's order, and a step may hang on the band of the one before; and scenes that claim one person's round are ordered among themselves by a keyed precedence draw that office rank weighs and never sorts** (`04` §C.4, PART D row 36).
 >
 > **Scarcity then falls out for free** — the second claimant on an emptied granary gets a *different
 > Event* because the granary is already empty — **and no act needs to know that another act existed**,
@@ -1122,7 +1122,7 @@ ownership row (§22.3), and they move a person **between** rungs.
    service, no counter, and nothing to serialise on.**
 3. **The act array is canonicalized before resolution** — sorted by a content-derived key, never by
    completion order. ⚠ Note this sorts **one global array**; per rung the sort survives only per
-   rung, which is exactly why RESOLVE does not partition (§31).
+   rung, which is exactly why RESOLVE does not partition (§31). ⚠ AMENDED 2026-11-12 (A-9, node L1-A9): the array canonicalised is the SCENE array; a scene keeps its chooser's act order (§27.1).
 4. **Sum-then-clamp-once.**
 5. ⚠ **FIXED-POINT ARITHMETIC.**
 
@@ -1163,7 +1163,7 @@ ownership row (§22.3), and they move a person **between** rungs.
 > seeded winner. **A person loader that draws from the shared stream moves every golden for reasons
 > that have nothing to do with the people it added.**
 
-**Ties break on a hash. Rank never breaks a tie. There is no hidden turn order.**
+**Ties break on a hash. Rank never breaks a tie. There is no hidden turn order.** ⚠ AMENDED 2026-11-12 (Jordan, A-64; A-97, node L1-A64): where several scenes claim one person's round, office rank is a declared weight of a keyed precedence draw, never a sort key, so a lower rank is sometimes seen first (`04` PART D row 36).
 
 ## §34 · What the loop refuses — and whether the refusal is mechanical
 
@@ -1191,10 +1191,10 @@ column is the failure mode.**
 
 ## §34.1 · What the loop deliberately does NOT contain
 
-- **No phase in which a rung decides.** Every decision has a person's id on it.
+- **No phase in which a rung decides.** Every decision has a person's id on it. ⚠ AMENDED 2026-11-12 (Jordan, A-96; A-97, node L1-A96): one act is formed without a decision, the guard's `capture` on a Failure of the access draw to a guarded target; it carries the guard's id and is the only such act (`04` PART D row 52).
 - **No phase in which an off-board polity acts without a person.** Off-board pressure enters as an
   **Event**, which is why it needs no phase of its own.
-- **No reaction inside a season at person scale.** *"You anticipated, or you are late."*
+- **No reaction inside a season at person scale.** *"You anticipated, or you are late."* ⚠ AMENDED 2026-11-12 (Jordan, A-96; A-97, node L1-A96): one named exception, the guard's `capture` formed in the same encounter as a failed attempt on a guarded target (`04` PART D row 52).
   ⚠ **But see §40.2 — the seam qualifies this and the design has not reconciled the two.**
 - **No hidden turn order.**
 - **No step for the three deferred subsystems.** A contest **subdivides** the tick at RESOLVE.
@@ -1393,7 +1393,7 @@ the same steps over a smaller person set on a shorter clock.**
 - **No faction parameter** — a battle whose combatants are factions has deleted L1 at the seam.
 - **No subsystem-specific key type family** — a contest's outcome is an Event like any other.
 
-### §39.3 The depth cap has NO DEFAULT, for two reasons
+### §39.3 The depth cap has NO DEFAULT, for two reasons — ⚠ AMENDED 2026-11-12 (Jordan, A-72; A-97, node L1-A72): **the cap's value is data, not a default: the register fixture `contest_nesting_cap` = 1 — a field or a squad field may call one duel round inside itself; a duel round calls nothing. The caller passes it at every call; exceeding it returns the typed `Refusal(depth_cap)` (`04` §C.5).**
 
 1. **No fabricated constant enters the engine.** A default is a number somebody made up, and it will
    be cited later as though it were measured.
@@ -1404,7 +1404,7 @@ the same steps over a smaller person set on a shorter clock.**
 ### §39.4 One ladder, and the only variation is a declared, demote-only veto
 
 **There is one degree ladder for every scale of the game** — four bands read off the **margin**, never
-off the obstacle's size. A duel, a debate, a siege and an examination all use it.
+off the obstacle's size. A duel, a debate, a siege and an examination all use it. ⚠ AMENDED 2026-11-12 (Jordan, A-3; A-97, node L1-A3): the field provider returns an END STATE per side (`won` · `lost` · `drawn`) instead of a margin, and the host grades it through this same ladder by its declared band row (`04` §C.5); still one ladder.
 
 > **The one permitted variation:** a subsystem's wrapper may pass an extension that **vetoes an
 > Overwhelming and can do nothing else.** It is **injected by the wrapper, never resolved by the
@@ -1681,7 +1681,7 @@ and (b) **injects a declared, demote-only extension** into the one resolver (§3
 | never | why |
 |---|---|
 | **holds state** | it becomes a second owner of a value §22 already assigns — the read/write asymmetry hazard by construction |
-| **decides** | *"No phase in which a rung decides"*; L1 |
+| **decides** | *"No phase in which a rung decides"*; L1 — a decider supplied for a person and called by the wrapper is that person deciding, not the wrapper (A-4). ⚠ AMENDED 2026-11-12 (Jordan, A-4; A-97, node L1-A4): the clause after the dash is new |
 | **resolves** | *"a contest is `resolve` at a smaller scale, not a different function"* — a wrapper that computes an outcome **is** the second resolver |
 | **drives a clock** | §40.3 |
 

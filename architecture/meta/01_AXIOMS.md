@@ -1,6 +1,6 @@
 # THE META-ARCHITECTURE — STAGE 1 · AXIOMS, IDIOMS, SCHEMA
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`. ⚠ AMENDED 2026-11-12 (Jordan-directed, A-97, ED-IN-0358): pointers appended in place to the amended `04` rows — L1-A96 (AX-1) · L1-A92 (AX-3) · L1-A12 (§D.6, the summary table).**
 ## Scope: Jordan-directed, 2026-09-03. A **top-down** exercise to determine the ideal *logical
 ## shape* for future work. **Nothing here is built and nothing here is meant to run.**
 
@@ -75,7 +75,7 @@ than treating the number as the claim.**
 ### **AX-1 · ONLY A PERSON ACTS.**
 
 > No institution, no faction, no threshold, no clock, no rung, and no engine is ever the
-> subject of a decision. An institution acts *by a named person at a venue*.
+> subject of a decision. An institution acts *by a named person at a venue*. ⚠ AMENDED 2026-11-12 (Jordan, A-96; A-97, node L1-A96): one named exception, the engine forms the guard's `capture` on a Failure of the access draw to a guarded target; its actor is the guard, a person (`04` PART D row 52).
 
 **Why it is axiomatic.** Nothing else here implies it. A design could keep every other axiom and
 still let a faction take a turn. It is the seed of the whole shape and the chain says so: *"return
@@ -143,7 +143,7 @@ it against `AX-3`.
 **Why it is axiomatic.** A design could have one layer carrying both. This axiom is the reason
 investigation cannot become moral re-engineering: if evidence could move a conviction, then finding
 a document would change what a person believes is *right*, and the moral layer would collapse into
-a second epistemic layer.
+a second epistemic layer. ⚠ AMENDED 2026-11-12 (Jordan, A-92; A-97, node L1-A92): what a person has learned may enter a conviction only as a term in his own drawn act at RESOLVE, never as a direct write (`04` §B.2, PART D row 18); a found document still writes no conviction.
 
 The chain calls the collision *"the single most dangerous in the design"*, which is a statement
 about **consequences**, not about likelihood — and it is dangerous precisely because the two layers
@@ -975,7 +975,7 @@ abandon it.
 
 > **IS.** A standing permission attached to a **seat**, not to a person. It makes **ordinary** acts
 > eligible where they otherwise are not, and substitutes the pool source. **It adds no verb and no
-> modifier.**
+> modifier.** ⚠ AMENDED 2026-11-12 (Jordan, A-12; A-97, node L1-A12): one optional modifier, `modifier?`, a named level on rolls made through the seat; it gates nothing (`04` §B.7, PART D row 33).
 >
 > **OWNS.** `post`, `remit`, `conferral`, `revocation`, `dates`, `upkeep`. ⚠ **`establishment` was
 > on this line and is REMOVED (2026-09-03).** It is not owned, because it is not a field: *"a list of
@@ -1632,7 +1632,7 @@ the ladder has stopped being data.
 |---|---|---|
 | a **person** | the only thing that can be wrong | AX-2 · §D.1 — ⚠ its own admission test **fails today** on `convictions`/`beliefs`/`stance` (`D21`) |
 | a **faction** | a Proposition plus its `commit` edges — **and a `Faction` VIEW resolved from them for consumers** | **T-h**, derived from AX-1, not stipulated; the view is §D.11 · `ID-15` |
-| an **office** | a seat in a body carrying a remit; adds no verb and no modifier | §D.6 |
+| an **office** | a seat in a body carrying a remit; adds no verb and no modifier (⚠ AMENDED 2026-11-12, A-12, node L1-A12: save one optional `modifier?` that gates nothing, `04` §B.7) | §D.6 |
 | a **title** | a rank whose domain is a rung kind — **not an entity, and not an Office** | §D.7; the conflation is a half-landed ruling, §D.7.2 |
 | a **site** | the material particular that accumulates and gates | §D.3 |
 | **subordination** | ⚠ **CORRECTED: an `oblige` edge, owned by the person who swore it** — not a Query. The first answer was wrong and §E.1 records why | §E.1.1 |
