@@ -170,6 +170,39 @@ budget plus bonus scenes in one season* (seed 0, the realm), with the one-round 
 pessimist's bound applies: the budget the chooser is *shown* is not free (`qcut.py 0 2`: 812/799 acts
 against 821/882), so IN-14 re-records, as its card already declares.
 
+## I · The four strategic queries get one reader (`F-C1A-05`, `audits/17_CENSUS_C1A.md` §2, §6 item 1)
+
+**Finding.** `queries/world_q.py::footprint` (`:2081`) and `density` (`:2111`) are called by nothing;
+`sovereign_fraction` (`:2372`) and `provinces_of` (`:2421`) by tests only. Layer 1 names the first three as
+resolver-side Queries (`holonic_ARCHITECTURE.md` §17) and the fourth implements a ratified ruling, so they
+are not deleted. The census named FA's surface as the place for a reader and wrote none; no closure lane
+carried it.
+
+**Decided (ladder step 4: `endings_reached`, the precedent for a strategic reading as a Query the host
+reads and nobody stores).** One composing resolver-side Query, and the two surfaces that call it.
+
+1. `engine/season/queries/world_q.py`: `faction_standing(w, faction_prop_id, rung_id) -> FactionStanding`,
+   a frozen record of exactly the four readings and nothing computed twice: `footprint` (rung ids),
+   `present` and `persons` (`density`'s pair at `rung_id`), `sovereign_share` and `undetermined`
+   (`sovereign_fraction(w, rung_id)`, with which holder is largest), `provinces` (`provinces_of`'s row for
+   this faction). It takes no token, stores nothing and emits nothing. It carries no `TRACE.query` row of
+   its own, for the reason `endings_reached` gives (a read-only step moves no committed artifact); the
+   inner `sovereign_fraction` row is reached only when a host asks, never inside `season()`.
+2. Callers, each by its own proposal and neither inside the season loop: the host-side reading of
+   `11_GO_player_surface_contract_B.md` (the faction view of a seated person, beside the receipt), and the
+   per-season print of `06_FA_playable_scenario.md`'s gate. What a faction's view *shows* of the record is
+   FA's choice; the record is the whole of what there is to show.
+3. A person's own reading of where a faction stands stays a belief (AX-2): this record is resolver-side and
+   may not be handed to `decision/`. An NPC weighs territory through the claims he holds, as today.
+
+**Gate.** On `build_realm(0)` played one season: for every faction with a live hold,
+`faction_standing(...).footprint` is non-empty and equals `footprint(w, f)`; summed `present` over factions
+at the realm rung does not exceed `persons`; the season's content hash is EQUAL with and without one call
+per faction per season (a reader). **Falsifier.** After GO-B's host and FA's scenario land,
+`grep -rn "footprint(\|density(\|sovereign_fraction(\|provinces_of(" engine/season --include=*.py` outside
+`tests/` still finds only definitions. **Hash movers.** None. **Lands with** the first of its two callers;
+before that it would be a fifth caller-less Query.
+
 ## NERS reading (E last)
 
 These are corrections and conformance edits, not design objects in play. **N:** each row removes a false
@@ -177,9 +210,9 @@ statement, a crash path, an unreadable record or a departure from a ratified row
 without leaving the defect its audit measured. **R:** completeness at the extremes (a zero cap, a zero
 budget, a malformed corpus file, an undeclared kind) is what rows B4, B18, B14 and E2 buy. **S:** one
 refusal form for a missing generator, one place for an Event's kind check, one word for "playable".
-**E (last):** about twenty small edits and two small builds (C, E1), no new file but this plan.
+**E (last):** about twenty small edits and three small builds (C, E1, I), no new file but this plan.
 
 ## Cost class
 
-Edit, except C and E row 1 (small build). No hash mover. No guard (CLAUDE.md §0.1 pt 5): every check added
+Edit, except C, E row 1 and I (small build). No hash mover. No guard (CLAUDE.md §0.1 pt 5): every check added
 is a loader's or a log's own refusal at its owner.
