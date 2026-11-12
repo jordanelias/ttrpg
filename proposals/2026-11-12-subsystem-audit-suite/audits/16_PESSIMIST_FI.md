@@ -2,7 +2,7 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
-## Read at: 2eba83c (working tree)
+## Read at: 2eba83c (working tree; HEAD moved to 003f7b9 during the run by draft commits of this suite's own files; `git diff 2eba83c..003f7b9 -- engine modules systems tools references tests` is empty)
 
 Scope: `engine/season/epistemic.py`, `engine/season/loop/effects_information.py`,
 `engine/season/loop/witness.py`, `modules/fieldwork/`, the decision code that forms the information
@@ -306,7 +306,7 @@ for the receiver; realm counts from `fi_arms.py`, seed 0, three seasons).
 | # | link | O | C observed | verdict · cause |
 |---|---|---|---|---|
 | P3.1 | forged, by an act with skill in it | could go well or badly | `forge` writes with certainty once admitted; quality is one fixture (`default_forgery_quality` 1) for every forger; realm: 113 attempted, 52 written, 61 refused by the `requires` cell | DEPARTS · BEHAVIOUR (no draw: the standing rule; the determinism sweep lists `forge`) |
-| P3.1b | the making can be seen | maybe, by chance | everyone in the room holds `(paper, record.forged, True)` firsthand and a sighting naming the forger, with certainty. Realm: 12 of 52 forgeries were known forged, to up to 7 others, the instant they were made | DEPARTS · BEHAVIOUR (a forger cannot forge unseen in company, and every bystander recognises the act as forging; `18_DETERMINISM_notice_is_a_draw` is the owner) |
+| P3.1b | the making can be seen | maybe, by chance | everyone in the room holds `(paper, record.forged, True)` firsthand and a sighting naming the forger, with certainty. Realm: 12 of 52 forgeries are held as forged by up to 7 others at the end of the run (bystanders at the making: no find occurred and no telling carried one) | DEPARTS · BEHAVIOUR (a forger cannot forge unseen in company, and every bystander recognises the act as forging; `18_DETERMINISM_notice_is_a_draw` is the owner) |
 | P3.2 | a letter that purports an author | an author field that is false | a `faction_sheet` (proposition, members, holdings, seats, head) with the forger written in as `head`. There is no author, sender or seal on any Record | DEPARTS · WORD: `forge` forges a roll with oneself at its head, the same for every forger (F-FI-10) |
 | P3.3 | is believed | the reader acts as if it were true | a holder's candidates take `to` from the sheet's `head`: 19 (a hearth member) and 28 (the Duke) candidates addressed to the forger, by `challenge`, `capture`, `determine`, `exchange`, `interview`, `move`, `pardon`, `raze`, `sabotage`, `speak`, `surveil`, `train`, `transfer`. Control (surveyed sheet, `head: None`): the same candidates with `to` bound to **the paper itself** | FOLLOWS at EXECUTES, with a COMPOSITION defect: being named head earns the forger a duke's `challenge` and `capture` as readily as his `exchange` |
 | P3.3 | (FIRES) | forgeries reach readers | **0 of 52 forgeries ever left the forger's hand** (0 of 57 and 0 of 40 in the two cut arms); `give` 25 attempted, 1 executed | **INERT at FIRES** |
@@ -683,7 +683,7 @@ Columns: EXECUTES = a hand-built act produces the link (§2); FIRES = it occurre
 
 | # | story | EXECUTES | FIRES | verdict |
 |---|---|---|---|---|
-| 1 | *He went to the granary on what he believed and found it otherwise.* A stale or false quantity, acted on, refused, corrected. | yes (§2.5) | yes: 117 firsthand cells false at the end; `transfer` 70 attempted, 2 carried out, each refusal teaching the cell | **the one story that runs.** It is small, private and ends in one step |
+| 1 | *He went to the granary on what he believed and found it otherwise.* A stale or false quantity, acted on, refused, corrected. | yes (§2.5) | yes: 117 firsthand cells false at the end; `transfer` 70 attempted, 2 carried out, a refusal teaching the cell it read (§2.5) | **the one story that runs.** It is small, private and ends in one step |
 | 2 | *Word came that the seat was empty.* Realm-wide knowledge of a vacated seat. | yes | yes, by broadcast, at once, to everyone | runs, with no teller, no delay and no error |
 | 3 | *A man was introduced.* A telling that a person exists makes the hearer know of him. | yes | yes: 3 of the 7 tellings that landed in two seasons | runs; it is most of what is said |
 | 4 | *The report was wrong by the time it arrived.* A garbled quantity at second hand, acted on. | one hop | 1 told quantity in two seasons (grain 86 for 74, itself a lie); acted on: not observed | possible at one hop; not observed |
@@ -893,5 +893,8 @@ audit's sections stand, and nothing measured here changes a row of either.
 
 One mishap, corrected: a mistyped redirect wrote four small error files into the repository root
 (`p2_chain_s1.out`, `p2_proxy.out`, `p3_forgery.out`, `p4_detective.out`); they were removed at once.
-`git status --short` at the end shows this lane's files only (plus other lanes' own).
+The orchestrator commits this suite's drafts as they are written; at the end `git status --short`
+shows only files under this suite's directory (this audit, and two digests that are another lane's),
+and no process of this lane is running. One count correction to this file (four figures in §0, §3
+and §4) was made by a scripted replace rather than the editor, on this file only.
 

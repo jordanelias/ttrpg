@@ -427,3 +427,47 @@ Lane `tests6`: 77 files under `tests/valoria/` (alphabetical `test_combat_invari
 - **Conflicts / stale:** the docstring says `test_execution_map.py::test_the_render_is_deterministic` exists while the execution-map cluster retired at 28-i [UNVERIFIED].
 - **Open items:** none.
 
+### tests/valoria/test_import_cycle_game_state_npe.py
+- **What it is:** pytest file (OI-52a, ED-IN-0097; renamed in practice to a cycle census): runs `skills/valoria-vector-audit/scripts/structure_audit.py`'s `tarjan_scc`/`_cycles` over the real repo and requires exactly four import cycles in four named families.
+- **Status:** none stated; reading: live as a count pin on a process instrument's output over the game tree; names are stale.
+- **Bears on:** CORE, MB, SC, PROCESS.
+- **Content that matters:**
+  - Pinned: `len(cycles) == 4`: (1) the 9-module `systems.social_contest.sim.contest.*` cycle ("documented intentional-during-rebuild"), (2) the `modules.mass_battle` canon family, (3) `modules.mass_battle.battle_loop <-> orchestration` (matched by exact member set; `run_battle` reads orchestration's ~40 module globals by function-local import, so tests that `monkeypatch.setattr(orchestration, ...)` still reach it), (4) `engine.season.harness.exercises <-> run_cases` (a `__main__`-guarded import: not a runtime cycle) (:107-160).
+  - The `massbattle <-> units` cycle must not return (:137-142). `checked == 4` and `len(accounted) == len(cycles) == 4` close the loop against vacuity (:153-160).
+  - Structural note: the AST-only graph builder counts function-local and `__main__`-guarded imports as edges; ten modules repo-wide carry `__main__`-guarded imports and the consolidation of that rule was declined (:84-91).
+- **Conflicts / stale:** the file name, the first line of its docstring, and the test name still say `game_state_npe` / "exactly_four" while the docstring's first sentence says "THREE since step 8"; the assertion is four. `engine/autoload/game_state.py` and `canon_buckets.py` are deleted (history paragraphs). The 9-module SC cycle is stated as intentional but is a counted exception, not a retirement item.
+- **Open items:** the SC contest cycle and the MB battle_loop cycle carry "goes when ..." conditions that nothing schedules.
+
+### tests/valoria/test_knot_pool_formula.py
+- **What it is:** pytest file (ED-FI-0005 / OPT-AV-9): asserts three ARCHIVED `.designs/` documents contain the formula `(Spirit*2)+History(Relevant)+3` and the `floor(Bonds/2)+1` count cap, and not `(Bonds*2)+3`.
+- **Status:** none stated; reading: stale and a test of archived prose (confirms addendum F-TEST-04).
+- **Bears on:** FI (knot pool), CHAR (attributes), PROCESS.
+- **Content that matters:**
+  - Surfaces: `.designs/systems/_architecture/reference/derived_stats_v30.md`, `.designs/systems/fieldwork/reference/knots_v30.md`, `fieldwork_editorial.md` (:17-21); reads them as text and normalises whitespace/glyphs (:24-27).
+  - The docstring says "There is no sim/ oracle that computes the Knot Pool, so this is a doc-content guard" (:6-8); per the addendum the code is now `pool = spirit * 2` with the History addend deleted by CR-85 (`systems/fieldwork/sim/knots.py:216`), so the test is green while pinning text the code contradicts.
+  - It pins a retired attribute: `Bonds` is retired and `Spirit` is an alias of `attr.mind.will` in `test_descriptor_registry.py:27,60`.
+- **Conflicts / stale:** vs the code (above) and vs the CR-84 attribute roster (Bonds retired). Reads `.designs/` as test input, which the brief says proposals must not make tests do.
+- **Open items:** none (delete candidate per addendum T-03).
+
+### tests/valoria/test_link_values_pointers.py
+- **What it is:** pytest file for `tools/link_values_pointers.py` (value-to-pointer link, ED-IN-0079): committed link map equals a fresh build; every link token literally occurs in the linked constant's name or dict keys.
+- **Status:** none stated; reading: live; process/tooling over `sim_params.json`.
+- **Bears on:** PROCESS, CORE (sim params).
+- **Content that matters:**
+  - Anti-fabrication: token must be in the value's `name` or its dict keys (:29-38); no authoring-abbreviation tokens (`lvp._EXCLUDE_ABBR`, :41-44); the by-pointer index agrees with the flat link list (:47-52).
+  - Each loop iterates `lvp.build()["links"]` with no population floor, so an empty link list passes all three; `test_links_current` calls `lvp.check()`.
+- **Conflicts / stale:** `lvp.build()` is called three times per run (cost only). Uses the `generated_layer` fixture.
+- **Open items:** none.
+
+### tests/valoria/test_m1_acceptance_probe.py
+- **What it is:** pytest file (S2, ED-IN-0112): the probe rows of `tools/m1_acceptance.py` (stub invocations, determinism) are measured on `engine/season/` (the head) and reproducible under the fixed probe seed.
+- **Status:** none stated; reading: live; the addendum read it in full (F-TEST-12 row 9).
+- **Bears on:** CORE (the milestone instrument), PROCESS.
+- **Content that matters:**
+  - The head is asserted by module path (`m1._headless.__name__.startswith('engine.season.')`, :57) after a re-point from the superseded campaign driver (six days certified the wrong tree, 2026-09-13, :9-13). `test_engine_probe_import_succeeded` fails if the harness import fell back to blocked.
+  - Determinism row must pass and not be `(empty)`; `_run_probe_season(M1_PROBE_SEED)` twice agrees on `content_hash` and `stub_hits`; `collect()` reports at least 4 of 5 rows measured or partial; `main(['--check'])` exit code equals `1 if failed else 0` (:60-132).
+  - The different-seed test ends `... != ... or fixed.events == 0` (:112-113): when the fixed-seed season has zero events the assertion is satisfied vacuously (F-TEST-12 row 9).
+  - It deliberately does not pin the stub-call count ("the relation, not the number").
+- **Conflicts / stale:** comment at :74 says "identical seed -> identical KeyLog.content_hash()": KeyLog is retired; the code reads `World.content_hash()`. The docstring cites `return_to_game_queue.yaml S2`.
+- **Open items:** none.
+
