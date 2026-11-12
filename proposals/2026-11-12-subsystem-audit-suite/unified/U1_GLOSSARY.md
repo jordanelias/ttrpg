@@ -152,7 +152,7 @@ makes the change; new text only, no retrofit of frozen ids, CLAUDE.md §4).
 | **yield** | (PC) a fighter gives up | `fight_endings: yielded` (T) | a Site's produce → **harvest** in new prose (`yield.taken`, `Rung.yield` keep their names) | `07_SE_*` new text |
 | **prevailed** | the fight ending of a party left standing whose opponent fell or yielded | `fight_endings` (P, D-U1-11a) | `standing` | `03_PC_typed_outcome_one_door.md` |
 | **rout / break** | a unit's or side's collapse (U4d: was "a body's", which this table's *body* row refuses for troops); `rally, withdraw, run` its three end bands | `26_…rout…` (P) | "yield" (PC) at the army scale | — |
-| **counterblow** | the blow the losing fighter lands back at the felling that would decide a fight, turned by one keyed draw; the fight continues from it (renamed by U4d from "riposte": the combat module already has a fencing riposte, `config.py` `RIPOSTE_ON_FAIL`, and the ordinary word is a return thrust after a parry, not this) | `18_DETERMINISM_no_certain_matchup.md` (P; ids `counterblow(turn, by)`, `_wound('counterblow', …)`) | "riposte" (the combat lever's word), "flip" (`UPSET_FLOOR` names the old override); "upset" stays for its ordinary sense, the weaker side winning, which a counterblow can cause | — (U4d: done in nine files) |
+| **riposte** (at the felling: code id `finalblow_riposte`) | the answering blow of the fighter who is about to be felled: at the felling that would decide a fight, one keyed draw (probability `UPSET_FLOOR`) turns the blow, he lands a blow back through the one damage site, and the fight continues from there (Jordan, 2026-11-12: *"it's still a riposte. it just also happens to be a final blow"*; code names the trigger: `finalblow_riposte`) | `18_DETERMINISM_no_certain_matchup.md` (P; ids `finalblow_riposte(turn, by)`, `_wound('finalblow_riposte', …)`); the combat module's own riposte (`wrapper.py`, `RIPOSTE_ON_FAIL`, `RIPOSTE_ON_NEUTRALIZE`, `RIPOSTE_CAP`) is the same kind of return blow with a different trigger (a failed or neutralised attack) | "counterblow" (U4d's rename, reversed by Jordan), "flip" (`UPSET_FLOOR` names the old override); "upset" stays for its ordinary sense, the weaker side winning, which a riposte at the felling can cause | whether the two triggers are one code path (one owner for the riposte) is a v12 batch decision for `valoria-simplify`; U4d's nine-file rename is reversed |
 | **nested contest** | a duel round called from inside a field (A-4, depth 1) | `nested_entry` (P) | "nested scene" | — |
 | **loadout / kit** | (person) `(primary, secondary, armour)`; (troop kind) the same three | `world_q.kit_of` (T); `troops.yaml` (P*) | — one primitive, two holders | — |
 | **armour tier** | `none, light, medium, heavy` | `troops.yaml: armour` (P*) | "mail" for `medium` (the `arms_kinds` seed `harness_mail` maps to `medium`) | `03_PC_person_inputs_content.md` |
@@ -232,8 +232,8 @@ score" → untrained score (3) or choice score (3), "province" → territory (2)
 "distance band" → distance step (2), and one file each for "task difficulty", "settled margin", "reading
 record", "cut wire", "aptitude" (the attribute), "key" (a capability). Each file's last `Reconciled:` line names
 its changes; the full ledger is `work/U4D_RENAMES.md`. **Rows added:** 17 rows of terms and 10 rows of tree names (§H), plus
-**counterblow**, **removal test**, **task route** and **choice score** inside existing rows. **Words renamed:**
-riposte → **counterblow** (nine files), knockout → **removal test** (four files). **Tree-name mismatches listed
+**removal test**, **task route** and **choice score** inside existing rows. **Words renamed:**
+knockout → **removal test** (four files). (riposte → counterblow, nine files, was reversed by Jordan the same day: the word is *riposte*; the code id is `finalblow_riposte`.) **Tree-name mismatches listed
 as v12 candidates:** eight (§H: `Fixtures`, `obligees`, `subformations`/`Subformation`, MB `stance`,
 `pool.py::faculty`, `storybar`, `aperture`, `governance_spine`) plus one Layer 1 wording (Tenure *edge*).
 **Jordan's terms flagged:** four (`U4D_FOR_JORDAN.md`: regime, subformation, prowess with aptitude, rung).
@@ -248,7 +248,7 @@ chronicle, deposit, carrier, stake, habit, strand, register, key (data and draw 
 pool of tabletop play), score, talent, base, ledger, reading (a meter's figure), passage, lapse, gate (a check
 to pass), site, row, edge (the role: an advantage), member, leverage (influence or advantage), engine, surface
 (the player's surface only; the glossary heading "The capability surface" became "Capabilities"). *Fail, suite
-coinage, renamed:* riposte, knockout. *Fail, tree name, candidate:* faculty, vocation (already ordered), the
+coinage, renamed:* knockout (riposte was renamed and the rename reversed by Jordan). *Fail, tree name, candidate:* faculty, vocation (already ordered), the
 Tenure edge, fixture, obligee, storybar, aperture, spine, `subformations`. *Fail or narrowed, Jordan's word,
 listed:* regime, subformation, prowess (with aptitude), rung (for a place).
 

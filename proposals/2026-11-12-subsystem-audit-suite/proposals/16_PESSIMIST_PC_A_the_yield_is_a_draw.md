@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.5) — the draw's two inputs follow A-7 and A-8 (U1 §4); the form, the site, the bands and the gate stand. (1) **Pool:** dice come from training, never from an attribute, so the pool is the one pool rule on the party's score in the capability the check tests (none is authored for holding one's nerve, so the untrained default: `resolution_pool(pool_default)`), and **Spirit enters as talent levels** (`per: mid`) on the roll, where the first text put it in the dice. (2) **Wounds are a level, not obstacle points:** the obstacle is `YIELD_OB[terms]` alone; the wounds enter as the level `wound_impairment` already gives the wounded side, one ladder for one quantity. (3) The prototype table below was read on the first form and on a three-blow fight; it is re-read after the damage scale (A-31) inside the calibration batch (`U5b_PC_rulings_in_the_fight.md` §5 row 5). The Spirit and modifier sweeps keep their direction by construction (a level for is a level for).
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 and §2 (A-30: "the scene's own `rng`" U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fought scene" → "fight" (glossary *scene*); "the riposte" (`18_DETERMINISM_no_certain_matchup.md`) → "the counterblow" (glossary *counterblow*).
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 and §2 (A-30: "the scene's own `rng`" U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fought scene" → "fight" (glossary *scene*); "the riposte" (`18_DETERMINISM_no_certain_matchup.md`) → "the riposte" (glossary *riposte*).
 replaced by a keyed draw), §7/§7b (test file, tier; `YIELD_OB`'s shipped values stay the sweep's pick, Jordan's); U1
 D-U1-08 (the pool is `sigma_leverage.pool_of` on the trained score, not `core.resolution_pool`), D-U1-11m (the CHAR
 reader is `person_q.decisiveness`; the input field takes the same name, `decisiveness`, so one word names one thing),
@@ -13,7 +13,7 @@ in the repository). Changed: "What it changes", the pool and modifier bullets, t
 ## Status: PROPOSED
 
 Lands in batch: **B15** (PC; the calibration batch), last of its four pessimist rows (UPR §5 row 5: PC_B → PC_D → the
-counterblow → PC_A). Depends on: `14_VERBS_PHYSICAL_A_custody_and_force.md` (B15, A3), `02_CHAR_resolve_and_temper.md` (B10,
+riposte → PC_A). Depends on: `14_VERBS_PHYSICAL_A_custody_and_force.md` (B15, A3), `02_CHAR_resolve_and_temper.md` (B10,
 the `decisiveness` reader), `engine/dice_engine/draw.py` (B06), `sigma_leverage.pool_of` (B05).
 
 Source: `audits/16_PESSIMIST_PC.md` §2.2 (F-PES-PC-03). Standing rule: `AUDIT_BRIEF.md` (Jordan,

@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.5) — order only. It is the third step of the one combat calibration batch (after the damage scale, A-31, and the commit window) and shares its single re-record (`U5b_PC_rulings_in_the_fight.md` §5 row 5). Its `rng` argument to `core.strike` is the round's private stream once `03_PC_duel_round_and_approach_B.md` step 2 lands; the roster census that gates an inventory (`U5b_PC_residue.md` §3) is run after it.
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS; the draw key fixed as PC_A's: U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fought scene" → "fight" (glossary *scene*); "the riposte" (`18_DETERMINISM_no_certain_matchup.md`) → "the counterblow" (glossary *counterblow*).
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS; the draw key fixed as PC_A's: U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fought scene" → "fight" (glossary *scene*); "the riposte" (`18_DETERMINISM_no_certain_matchup.md`) → "the riposte" (glossary *riposte*).
 A-30), §7/§7b (tests extend an existing file, tier); U3 B15, §9 (the duel round's "stream → key": the `rng` the head
 line calls the round's private stream is a keyed `Draw`, not a threaded generator), §6.2 (`pC_armour.py`, `pQ2_gap.py`,
 `pQ_knee.py` are not in the repository); U1 glossary *faculty* (retired as a suite word: "trained score" in the
@@ -15,7 +15,7 @@ Lands in batch: **B15** (PC; the calibration batch), after `16_PESSIMIST_PC_B` a
 (UPR §5 row 5). Depends on: `engine/dice_engine/draw.py` (B06) for the keyed `Draw`; the A-31 damage scale (B15).
 
 Source: `audits/16_PESSIMIST_PC.md` §2.3 (F-PES-PC-07). Standing rule: `AUDIT_BRIEF.md` (Jordan,
-2026-11-12). Complements `18_DETERMINISM_no_certain_matchup.md` (the counterblow at a deciding felling),
+2026-11-12). Complements `18_DETERMINISM_no_certain_matchup.md` (the riposte at a deciding felling),
 which cannot reach the armour cases measured here: a plate mirror has no felling to turn, and a turned
 blow against plate is still divided by plate. Reference only (`CLAUDE.md` §0.05); not ratified by being
 written.
@@ -130,7 +130,7 @@ After the build, 1,500 light-against-heavy sword fights with no felling of the p
 - **N.** Top-down: the standing rule. Bottom-up: the code's own comment states a chance and computes an
   average. Lateral: the mass-battle armour participation reads the same tiers
   (`workbench/armour_participation.py`); it is not changed here and should be checked for the same
-  averaging by its lane. Diagonal: the counterblow proposal covers decided fights between near-equals; this
+  averaging by its lane. Diagonal: the riposte proposal covers decided fights between near-equals; this
   covers the armour mismatch it cannot reach. Cut it and the first plate in the world is an immunity.
 - **R.** Completeness: `none` draws nothing; `light` is unchanged in distribution.
 - **S.** One constant, one site, the scene's own stream; ranking stays an expectation, outcomes draw.

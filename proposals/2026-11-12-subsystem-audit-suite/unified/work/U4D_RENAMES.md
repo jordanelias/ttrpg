@@ -5,6 +5,8 @@ are not renamed here (they are listed as v12 candidates in `U1_GLOSSARY.md` §H 
 
 ## Suite coinages renamed (glossary and live documents)
 
+**REVERSED 2026-11-12 (Jordan):** the riposte → counterblow rename below (rows marked ~~) is undone in all nine files. The word is *riposte* ("it's still a riposte. it just also happens to be a final blow"); the proposed code ids are `finalblow_riposte(turn, by)`, `_wound('finalblow_riposte', …)`, `test_combat_finalblow_riposte.py`, `test_finalblow_riposte_event_changes_the_tracker`. The rows are kept as the record of what U4d did.
+
 | old | new | files edited |
 |---|---|---|
 | riposte (the draw at the deciding felling, `18_DETERMINISM_no_certain_matchup.md`) | **counterblow** (proposed ids `riposte(turn, by)`, `_wound('riposte', …)`, `test_combat_riposte.py`, `test_riposte_event_changes_the_tracker` → `counterblow…`) | 9: 18_DETERMINISM_no_certain_matchup, 03_PC_duel_round_and_approach, 03_PC_typed_outcome_one_door, 16_PESSIMIST_PC_A, 16_PESSIMIST_PC_B (line 13 only; its §4 table's fencing ripostes are the combat module's), 16_PESSIMIST_PC_D, U5b_PC_residue, U5b_PC_rulings_in_the_fight, U3_DEPENDENCY_ORDER |
