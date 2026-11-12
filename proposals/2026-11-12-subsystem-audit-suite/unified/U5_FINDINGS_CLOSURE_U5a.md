@@ -691,3 +691,117 @@ this lane (the one sampler, A-5; and, per file, the items below).
 | admission to the case file | SUPERSEDED | `19_LACUNA_admission_rides_the_citing_draw.md` (U5c) |
 | WR's thresholds become draws | SUPERSEDED | `09_WR_B_draws_not_thresholds.md` (U5d) |
 | institutions' list of deterministic text; the GAME pessimist's count | SUPERSEDED | U5d (one definition of a draw: an Event that carries a degree) |
+
+---
+
+# PART 4 — CENSUS (`audits/17_CENSUS_C1A.md`, `17_CENSUS_C1B.md`, `17_CENSUS_REST.md`)
+
+Abbreviations: **A1** = `17_CENSUS_C1A_01_deletion_batches.md`; **A2** = `17_CENSUS_C1A_02_wires_and_corrections.md`;
+**B1** = `17_CENSUS_C1B_01_deletions.md`; **B2** = `17_CENSUS_C1B_02_wires.md`; **B3** =
+`17_CENSUS_C1B_03_corrections.md`; **R1** = `17_CENSUS_REST_1_deletions.md`; **R2** =
+`17_CENSUS_REST_2_wiring.md`; **R3** = `17_CENSUS_REST_3_corrections.md`. A census row the census lane itself
+read as a false positive of the script is closed STALE-FALSE-POSITIVE in a group; the per-row reading is in
+the audit's own ledger and is not restated (§Z says what this lane re-read and what it tallied).
+
+## 4.1 `audits/17_CENSUS_C1A.md` — 187 rows, seven findings, the extension, the orchestrator notes
+
+| id | claim (one line) | disposition | carrier | evidence |
+|---|---|---|---|---|
+| C1A rows, 173 of 187 | a name with no caller by the script's count | STALE-FALSE-POSITIVE | — (audit §3: dynamic dispatch, a test or tool reader that is the purpose, a registry lookup) | the audit's row ledger; tallied by script here |
+| F-C1A-01 (4 rows and `witnessed`, `projection`) | the person projection is a client read with no client | RESOLVED-BY | A1 D2, as reconciled (C-U5a-15): four other proposals that named the projection are re-pointed at `account`. Order: after `11_GO_player_surface_contract_B.md` is accepted (audit §6 item 3) | imported by `tests/test_person_projection.py` only |
+| F-C1A-02 (4 rows and the rest of `decision/sheet.py`) | the character sheet's spaces are entered by tests only | SUPERSEDED | GO's closure: `11_GO_player_surface_contract_B.md` (the host calls them); A2 W1 names the closing gate; `01_CORE_one_scene_contract.md` | REST X-T1 agrees |
+| F-C1A-03 (6 rows) | six helper rows serve effects that never ran | SUPERSEDED | the verb build-outs (`14_VERBS_*`; U5b–U5d); A2 W2 names the closing gate | — |
+| F-C1A-04 | `beneficiary:` is a validated column no decision reads | RESOLVED-BY | A2 W4 as reconciled (C-U5a-16): one term in `_stance_arm` with `02_CHAR_scar_cap_and_regard_unit.md`'s `regard_sign`; ships at the control | the definition and the loader only |
+| F-C1A-05 | `footprint`, `density`, `sovereign_fraction`, `provinces_of` have no caller | RESOLVED-BY | `U5a_CORE_owed_edits.md` §I (one composing Query, `faction_standing`; its two callers are GO-B's host and FA's scenario gate). No proposal carried it before this closure | `world_q.py:2081`, `:2111`, `:2372`, `:2421`, opened |
+| F-C1A-06 | small dead matter (`cast.defects`, `SEAM_DIR`, `COMBAT_SEAM_PY`, `_FIRST`/`_SECOND`; two test-only twins) | RESOLVED-BY | A1 D1, D3; the paren check moves into the loader: A2 W3 | — |
+| F-C1A-07 | nine comment pointers name files that moved | RESOLVED-BY | A2 C1 | — |
+| §4 `faction_q.superiors` | test-only | SUPERSEDED | `06_FA_hygiene.md` (already decided; FA's closure) | — |
+| §4 `world_q.within` | strife reading, test-only | SUPERSEDED | WR's closure (U5d): the strife proposals decide whether they call it; listed in `unified/U5_CONFLICTS_U5a.md` §3 | the audit's own `[UNVERIFIED]` |
+| §4 report functions, path constants, `operands_for`, the dynamic loaders (the remaining extension names) | test-, tool- or dispatch-reached | STALE-FALSE-POSITIVE | — | audit §4 |
+| §6 item 1 | F-C1A-05 has no owner | RESOLVED-BY | as F-C1A-05 | — |
+| §6 item 2 | W4 changes what NPCs choose once on | RESOLVED-BY | C-U5a-16; the flip is ordered in `U5a_CHAR_owed_amendments.md` §8 with the other chooser flips | — |
+| §6 item 3 | D2 depends on GO-B | RESOLVED-BY | order stated in A1's `Reconciled:` line; if GO-B is rejected D2 is held | — |
+
+## 4.2 `audits/17_CENSUS_C1B.md` — 643 rows, the blind-spot table, the Layer-1 note
+
+| id | claim (one line) | disposition | carrier | evidence |
+|---|---|---|---|---|
+| C1B rows, 518 of 643 | a name with no caller by the script's count | STALE-FALSE-POSITIVE | — (audit §2: six mechanisms) | Annex A; tallied by script here |
+| 75 rows, `systems/social_contest/sim/contest/*` | the SC-05 kernel, off the loop | SUPERSEDED | `05_SC_sc05_kernel_disposition_B.md` (SC's closure, U5c) | ED-SC-0033 cl. 2 |
+| `invoke_altonian_reinforcements`; `rally_check`, `threadwork_check`; `dr_vs_piercing`, `with_keyword` (5 rows) | a stub that raises; two empty bodies that run; two demo-only functions | SUPERSEDED | MB's closure (U5b): `audits/04_MB_audit.md` F-MB-10; `04_MB_unit_loadout_and_weapon_in_hand.md` | — |
+| `newcombe`, `_reach_throttle`, `mark_belief_revision_pending` and its field, `get_knot`, `get_active_knots` | no caller anywhere | RESOLVED-BY | B1 D1. It edits `systems/characters/sim/conviction.py`, as R1 D1 rows 4–5 do: one commit (C-U5a-18) | the defs only |
+| `_effective_reach` and the flag only it reads | one test caller; a second statement of the facing-gated reach | RESOLVED-BY | B1 D2a (with the `tools/ci_golden_modes_check.py:90` key) | — |
+| `perimeter.py` target-point half (5 names) | test-only; a continuous alignment term beside the one face read | RESOLVED-BY | B1 D2b. No MB proposal in the suite names any of the five (grep), so nothing is re-pointed | `orchestration._compute_atom_sides` is the one read |
+| `threadcut.py` (6 rows), `co_movement.py` (4 rows) | no importer, no test | RESOLVED-BY | B1 D3; WR's module proposal is reconciled to it (C-U5a-17); R1 D1 row 6 is withdrawn in its favour (C-U5a-18); its `test_flow_skeletons.py` edits are conditional (C-U5a-19) | — |
+| W-1 `harness/arc.py` | the arc reader has no entry a person can run | RESOLVED-BY | B2 W-1 | run 4 of the audit |
+| W-2 `foreign_kinds` | test-only while its sibling is printed | RESOLVED-BY | B2 W-2 | empty over 2,630 acts; a plant is seen |
+| `army_presets::_commander`, `plan_for` (2 rows) | reached through `install`, which tests alone call | SUPERSEDED | `04_MB_playable_field_scenario.md` (U5b) | — |
+| threadwork `operations.py` (8), `coherence.py` (4) | the oracle's operations; tests only | SUPERSEDED | `09_WR_threadwork_module.md`, `09_WR_B_threadwork_session_and_practitioner.md` (U5d) | — |
+| W-3 `collective.py` (3), `opposing.py` (3) | moved into `modules/` and still test-only | RESOLVED-BY | B2 W-3, reading 1 (inputs to `work`), written into WR's proposal by its `Reconciled:` line (C-U5a-17) | — |
+| C-1 `capabilities.py:23` | a docstring names a module that does not exist | RESOLVED-BY | B3 C-1 | — |
+| C-2 … C-5 | corrections that ride on the deletions | RESOLVED-BY | B3 C-2 … C-5 | — |
+| C-6 | one sentence of `09_WR_threadwork_module.md` edit 2 | RESOLVED-BY | applied as a `Reconciled:` line at that file's head (C-U5a-17); the replacement sentence is B3 C-6's | — |
+| X-1, X-2, X-3, X-4 | tests over uncalled code; a demo `__main__`; empty bodies that run; text about absent code | RESOLVED-BY | each by the row above that decides it | — |
+| X-4b, X-5 | retired paths in `mechanics_index.yaml` `canon_sources:` and in about 250 provenance comments | RESOLVED-BY · no edit | accepted, nothing written (CLAUDE.md §0.1 pt 5: a process register and comments; the paths resolve through the restructure ledger) | — |
+| X-6 | all 121 probes execute | STALE-FALSE-POSITIVE | — (a reading, recorded) | run 1 |
+| §6 Layer-1 note | what is proposed conforms (`04` §A.2; `holonic` §45) | RESOLVED-BY · no edit | re-read here: B1–B3 touch no STRUCTURAL row | — |
+| a note for the dice rows | the whole-dice roller's helpers the census reads as live | RESOLVED-BY | they change under Jordan's answer A-5: `U5a_DICE_owed_edits.md` §1 (rows 4, 8); no census row is reversed by it | — |
+
+## 4.3 `audits/17_CENSUS_REST.md` — C2 … C6, the extended census, resolutions, the orchestrator's two
+
+| id | claim (one line) | disposition | carrier | evidence |
+|---|---|---|---|---|
+| C2, 26 of 72 | a field "never written" that is written by a constructor argument, `+=`, item assignment or `getattr` | STALE-FALSE-POSITIVE | — | audit §1a–§1d |
+| C2, 28 rows in the SC kernel | dead with the directory; which facts the hearing carries | SUPERSEDED | `05_SC_sc05_kernel_disposition_B.md` (U5c). The audit's "not carried" list binds what `HearingTurnView` may hold: a field enters with a reader | — |
+| C2 `pool_size`, `body_function`, `merged_cells`, `destabilised`, `any_crisis` | no reader in game code | RESOLVED-BY | R1 D1 rows 1–5. Row 1's condition does not fire (C-U5a-18) | greps in the audit's P-3 |
+| C2 `CoMovementCard.card_id` | no reader | SUPERSEDED | by B1 D3 (the file is deleted whole); R1 D1 row 6 withdrawn (C-U5a-18) | — |
+| C2 `Order.waypoint_ref` (W1) | `ally_at:D` is accepted, never fires and dams its queue | RESOLVED-BY | R2 W1; `04_MB_manager_battle_one_resolver.md` §2's row form gains the third element (MB's closure lands that sentence) | `contact.py:89-90`, `:106-110` |
+| C2 `Unit.officers` | written, read by tests only | SUPERSEDED | `04_MB_manager_battle_one_resolver.md` §7 (U5b) | — |
+| C2 threadwork outcome fields (11 rows) | result fields whose reader is an unbuilt host | SUPERSEDED | `09_WR_threadwork_module.md` (U5d), with the cut rule now in its `Reconciled:` line | — |
+| C3, 13 of 14 | registry keys read by subscript or iteration | STALE-FALSE-POSITIVE | — | `populated.py:1191-1201`, `:1283` |
+| C3 `knowledge_kinds` (W3) | a roster nothing reads; `thread_substrate` gates nothing | RESOLVED-BY | R2 W3 as reconciled (C-U5a-20): the gate is a `capability_uses` row at site `told_retain`, read through `capability_admits`; A-11 admits it. `audits/12_ARCS_adjudication.md` row 19's answer stands and its support becomes W3 | H-85's own default |
+| C5 as given (16) | 9 stale pointers; 7 artefacts of a stale worktree | RESOLVED-BY / STALE-FALSE-POSITIVE | R3 §A (the 9); the 7 are false | `c5.py`, 837 pointers |
+| C5 re-derived (28) | 17 stale pointers; 11 that resolve | RESOLVED-BY / STALE-FALSE-POSITIVE | R3 §A (27 substrings in 23 rows, with the 9 above) | — |
+| C6 as given (0); 16 targets | every composition target resolves | STALE-FALSE-POSITIVE (confirmed empty) | — | `export_composition.py --check` OK |
+| C6 `combat` `build: unwired`; `mass_battle` note | false registry text a port decision would read | RESOLVED-BY | R3 §B C-1, C-2 | `fight` executed 13 times in the corpus |
+| C6 `social_contest`, `threadwork`, `fieldwork`, retired-faction rows, 20 `parity:` values | stale | SUPERSEDED | `05_SC_sc05_kernel_disposition_B.md` edit 1; `09_WR_B_pointer_text_for_the_orchestrator.md`; `08_FI_04_small-edits.md`; `06_FA_hygiene.md` §5; `11_GO_pointer_and_stale_text_resolutions.md` row 8 | — |
+| C6 16 code-less contract rows; 19 dead path strings in notes | describe absent code and say so | RESOLVED-BY · no edit | accepted (§0.1 pt 5) | — |
+| C6 `settlement_economy`, `campaign_architecture` | two phantom contract rows | RESOLVED-BY | R1 D4 | `godot: retire`, their own notes |
+| C4 as given (0) | the script matched nothing | STALE-FALSE-POSITIVE (of the instrument) | R3 §E records why | — |
+| C4 class A (43 kinds) | emitted, no named consumer | STALE-FALSE-POSITIVE | — (WITNESS and the derived classes are consumers) | — |
+| C4 class B (39 kinds) | a named consumer waits on an Event that did not occur | SUPERSEDED | the verb build-outs (§6 of the audit; `14_VERBS_*`) | 8 of 9 `opens` kinds did not occur |
+| C4 class C (52 of 61) | refusal, deed and fold kinds of verbs that never ran | SUPERSEDED | follow their verbs | — |
+| §5a `scar.taken` | 883 gate writes, 0 Events, no emitter | RESOLVED-BY | `16_PESSIMIST_CORE_the_record_holds_what_changed.md` edit 2, after `02_CHAR_scar_is_a_wound.md`'s cap; R3 C-5's wording applied to GO's file (C-U5a-21) | writes probe, hash `52ff67bc…` |
+| §5a `conviction.moved` | 2 writes, 0 Events | RESOLVED-BY | `16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` item 4 (C-U5a-09, C-U5a-21) | — |
+| §5a `weight.changed` | no writer of `(Person, weight)` | SUPERSEDED | workplan CR-08; `07_SE_population_census.md` (as H-49, §1.2) | — |
+| §5a `coherence.changed` | no field, no writer | SUPERSEDED | `09_WR_threadwork_module.md`; `14_VERBS_PHYSICAL_D_thread_read.md` stage 2 | — |
+| §5a `record.expired`; X-R2; H-86 | `Record.ttl` has no writer and no reader; its four dependants | RESOLVED-BY | `08_FI_04_small-edits.md` (the field, FI's) then R1 D2 (the dependants); H-86 closes as irrelevant in that commit | — |
+| §5a `record.staged` | 370 writes ride the act's own Event | STALE-FALSE-POSITIVE (as a defect) | — | H-86 |
+| §5a `condition.attached`; X-R1 (W5) | `convening_attached = True` written 17 times, read by nothing | SUPERSEDED | R2 W5: `15_INSTITUTIONS_PAPACY_B_patronage_election_discipline.md`'s quorum (U5d); if not adopted, delete the key | — |
+| §5a `envelope.changed`; X-R3 | a ratified field with no writer | RESOLVED-BY · no edit | accepted: `04` §A.2 names it; nothing is built | the audit's `[UNVERIFIED: 07_SE searched by name only]` stands |
+| §5a `tenure.graded` | degree set at construction, never re-graded | SUPERSEDED | `05_SC_arrangement_rows_that_bind.md` (U5c) | — |
+| §5a the trap (`tenure.opened`, `stance.moved` in `strife_kinds`) | a roster may name a kind one verb emits | SUPERSEDED | R3 C-6, a reading for WR's strife proposals (U5d); no check built | — |
+| §6 34 verbs execute in neither instrument | wrong-referent formation; post-admission refusal without a reason | SUPERSEDED | `14_VERBS_SOCIAL1_A_formation.md`, `14_VERBS_SOCIAL2_A_formation_on_what_is_known.md`, the `14_VERBS_*` strata; the reason on the Event is `01_CORE_predicates_name_their_clause.md` (§1 above); `tie / knot`: `08_FI_08_knots-season-form.md` and A-28 | 402 of 1,440 refusals on `exists:<K>=0` |
+| X-R4 `loyalty_gain` | 0 by construction twice | SUPERSEDED | `04_MB_typed_outcome_and_one_path.md`; workplan CR-88 (U5b) | — |
+| X-R5; X-R6 | docket keys read as dict keys; twelve rows not written in the run | STALE-FALSE-POSITIVE | — (`Rung.dates`' writer stays the audit's `[UNVERIFIED]`) | — |
+| §8 `ladder_rungs` (W2) | `speech_kinds` held to its roster by a test only | RESOLVED-BY | R2 W2, written against the roster name `05_SC_playable_hearing_B.md` leaves | — |
+| §8 `witness_channel_predicates`; `venues.yaml` rows; four rosters not opened | reference text; one consumer | STALE-FALSE-POSITIVE / RESOLVED-BY · no edit | accepted | — |
+| X-T1 | the sheet's five functions are called by tests only | SUPERSEDED | as F-C1A-02 | — |
+| X-T2, X-T3, X-T5, X-T7 | threadwork oracle; SC kernel; retained oracles; combat by path | SUPERSEDED / STALE-FALSE-POSITIVE | their rows above; X-T5 and X-T7 are false | — |
+| X-T4 `stubwire.py` (D3 withdrawn) | kept: the M1 instrument reads its counter | STALE-FALSE-POSITIVE | R1 D3 | `tools/m1_acceptance.py:87-163` |
+| X-T6 | `signal:` orders, officers, `ally_at` built for nobody | SUPERSEDED / RESOLVED-BY | `04_MB_manager_battle_one_resolver.md` §2, §7 (U5b); `ally_at` is R2 W1 | — |
+| X-D1 | `write_matrix.yaml`'s header claims a check and a file that do not exist | RESOLVED-BY | R3 §C (C-3): the claimed check is removed, not built | — |
+| X-D2, X-D3 | contract rows; register pointers | RESOLVED-BY | R3 §B, §A | — |
+| X-D4 | Layer-1 documents name pre-split files | RESOLVED-BY · no edit | Layer 1 is not edited to match code; `11_GO_pointer_and_stale_text_resolutions.md` is the suite's list for the orchestrator | — |
+| X-D5 | `references/what_valoria_is_and_what_runs.md` names eleven dead paths | SUPERSEDED | the orchestrator's (audit §12); `unified/U5_CONFLICTS_U5a.md` §3 | not opened past its path list |
+| X-D6 | tests and `arms.py` name the retired balance instrument as retired | STALE-FALSE-POSITIVE | — | — |
+| §11 D1, D2, D4, W1, W2, W3, W5, C-A, C-1, C-2, C-3, C-5, C-6 | the lane's resolutions | RESOLVED-BY | R1, R2, R3 as above; D3 withdrawn by its own lane | — |
+| §12 the locked stale worktree `.claude/worktrees/agent-a737f996de1fa4752` | any tree walk reads a second, older game | SUPERSEDED | the orchestrator's (`git worktree remove`); `unified/U5_CONFLICTS_U5a.md` §3 | R3 §E item 4 |
+
+**No-deterministic and Layer-1 reading of the eight census proposals.** None fixes an outcome from state.
+R2 W3 is a hard gate, and it is the one gate Jordan's answer A-11 keeps (Thread Sensitivity); it now reads
+through the uses table. R2 W5 reads a quorum before `date.fired`: a rule of an institution, which
+`15_INSTITUTIONS_PAPACY_B…` owns. Lens B: A2 W3, R2 W2 and R2 W3's loader sit in `04` §A.2's `data/loaders`
+row; R2 W3's reader in `queries/person_q` takes no token; R2 W1 keeps state inside one `resolve_field`
+call (`holonic` §45). No STRUCTURAL row is touched; B1 D3 and R1 D4 retire files and rows with `FORK:` rows
+as CLAUDE.md §1 requires.
