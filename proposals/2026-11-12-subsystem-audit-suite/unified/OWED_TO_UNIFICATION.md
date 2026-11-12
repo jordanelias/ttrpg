@@ -19,6 +19,8 @@ Collected by the orchestrator from lane receipts, 2026-11-12. Each item names it
 | refusal receipt: `04` D-51 amended, `#353` holds | A-62 | U5a, U5b |
 | canon lines 76, 90, 96 reworded; Coup Counter wording | A-17 | `audits/15_INSTITUTIONS_SYNTHESIS.md` §4.6 |
 | `ED-MB-0016` multiplier shipped at zero if the test passes | A-77 | lane 27 |
+| `ED-IN-0352` (3): the named exception that a draw may read a strife level; the first is A-68 | A-85 | lane 30 §11 |
+| the ratified strife master: five sentences reworded for the era as a named period | A-84 | lane 30 §6 |
 
 ## B. Documents owed an edit or a check
 
@@ -37,6 +39,8 @@ Collected by the orchestrator from lane receipts, 2026-11-12. Each item names it
 - Lane 27's coding instructions (third pass): INCOMPLETE items 27A-6 (needs U5a's capability Part B: no capability block or `pool.py::score` exists), 27C-2 (the six-arm test needs the named draws, a per-purpose RNG stream per A-30 and proposal 26's instrument block), 27D-4 (the unplayed commander's decider: design only, returned to CHAR), 27E-3 and 27E-4 (no magnitude established; the motion step (WR) and cohort deaths (SE) were not opened), the 27B drill step (design only); four symbols in 27A and two in 27E were not opened. New finding: `lanchester_signature.py`'s LINEAR band (74 to 83) is both the multiplier's calibration target and CR-12's gate; removing the multiplier breaks that gate unless the row is edited once (27C-3 (h)): carry it in the v12 batch that ships the multiplier at zero.
 
 - Lane 28 (scene access): `04` PART D row 36 needs Jordan's amendment (text drafted in `proposals/28_CORE_scene_access_A_occupancy_and_precedence.md`); gate rows in proposal A are numbered out of order (9, 11, 12, 10); `research/game_precedent_suite` was not searched for this question; its finding that the 62-of-87 baseline counts acts *about* a person while real meetings are 24/42/31 per two seasons (traffic, not throughput, is the obstacle) should be read against A-63's measurement requirement; three reversible choices are listed in `audits/28_SCENE_ACCESS.md` §11; INCOMPLETE items are in its §14.
+
+- Lane 30: owed content, not a decision: the three opinion rows of `30_WR_G` §2 (caste, militarism, royal_order: names, whether any new pair strains) and the cast's values on them; until given, the rows are held by nobody; `30_WR_G` commit 2 is INCOMPLETE for that reason. Altonia already exists as a conviction pole; religion exists; politics in part. Lane 30 read audits 09, 11, 12, 15, 21 by head and grep only; `engine/season/cases/*` was left to 12_ARCS. Audit and proposal B have later uncommitted edits at the lane's close: re-read them in full.
 
 ## C. Unchecked or partly read (the stage reads these, or marks them unverified)
 
