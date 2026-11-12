@@ -471,3 +471,41 @@ Lane `tests6`: 77 files under `tests/valoria/` (alphabetical `test_combat_invari
 - **Conflicts / stale:** comment at :74 says "identical seed -> identical KeyLog.content_hash()": KeyLog is retired; the code reads `World.content_hash()`. The docstring cites `return_to_game_queue.yaml S2`.
 - **Open items:** none.
 
+### tests/valoria/test_mass_battle_ammo.py
+- **What it is:** pytest file, A6 / ED-MB-0067 Part A (proposals/2026-09-25-squad-engagement-synthesis.md): per-SUBUNIT missile ammunition ledger (`volleys`, `eff_volleys`, `drain_volleys`, `resupply_volleys`) and its gate on `volley_phase`.
+- **Status:** none stated; reading: live; strong, with controls; one stale sentence.
+- **Bears on:** MB (ranged units, ammunition, supply at the between-turn lull, kiting), SE (supply), CHAR (none).
+- **Content that matters:**
+  - Ledger lives on the Subunit, own-else-inherited-Unit like `stamina`; a first version on `percell._ColBlock` was reworked because a column is shared among subunits (ammo regenerated free or went unmetered); `test_ammo_is_independent_of_column_identity` shifts `cell_offsets_c` by 50 and asserts ammo unchanged (:151-167).
+  - `MB_AMMO_ENABLED` defaults ON, checked in a SUBPROCESS with the env var unset (:72-84); the autouse fixture sets it True and restores. `volley_phase` returns `shots`, `loss_a`, `loss_b`.
+  - Controls: the in-range control (`shots >= 1` before any exhaustion claim, :93-100); exhausted archers deal 0 loss and record 0 shots after `exhausted_at`, with `exhausted_at is not None` and `fired_ticks >= 1` asserted (:102-119); melee atoms are never gated, `volley_phase` is a no-op for two melee sides (:138-148).
+  - Resupply at `between_turn_recovery`: from 0 to `min(MB_VOLLEYS_START, MB_VOLLEYS_RESUPPLY)`, clamped at start (:122-135).
+  - F4 [HIGH]: `build_army` did not forward `volleys`, so every ranged subunit shared the parent Unit pool and melee siblings' resupply refilled it each turn; the test builds three subunits through `build_army` and checks the archer's own drain+resupply (:186-214); explicit spec override still wins (:217-222).
+  - F7: a `kite` instruction's far bound keys on ammo: with ammo it holds the volley band, with `volleys = 0` `_kite_goal` returns None (close in) (:225-243). This is the only ranged-to-melee behaviour change in the file: ammo exhaustion changes a movement goal; there is no weapon-in-hand state, no switch cost, and `troop_type='archers'` carries no secondary weapon in these fixtures.
+- **Conflicts / stale:** the docstring says campaign-adapter armies are melee-only per `massbattle.py`'s `_faction_to_unit`; that function was deleted at plan position 29b (`test_flow_skeletons.py` RETIRED_SYMBOLS). Cites `config.py`'s note and `bat.py`'s EXPECTED comment for the golden re-record.
+- **Open items:** none stated.
+
+### tests/valoria/test_mass_battle_army_record.py
+- **What it is:** pytest file, ED-IN-0306 phase 2: the rules under the season's army verbs: `troop_types/recruitment.py` (how many troops a place can raise) and `armyrecord.py` (the pure army record and its operations, `A.apply(ArmyCommand)`).
+- **Status:** none stated; reading: live; strong refusal and conservation tests; some `[ASSUMPTION]`-grade data.
+- **Bears on:** MB (army record, subformations, recruitment), SE (population, infrastructure bound the army), FA (army verbs), CORE (`MassBattleInput`, rosters), CHAR (troops are counts per cohort, not characters).
+- **Content that matters:**
+  - Recruitment: `recruit_limit(type, weight, sites, raised, FULL)` is bounded by population (`under_arms_cap(w) = int(w * TROOPS_PER_WEIGHT * MUSTER_FRACTION)`), by a per-type training site (`levy` needs none; `archers` need an `archery_range` at proportional completion; `knights_templar` have an elite floor of 0.5 of a stable), and the two bounds compose; unknown type or `full == 0` raises ValueError (:27-71). Verified in source: `TRAINING_SITE` maps 13 types to four site kinds (barracks, archery_range, stable, siege_workshop) and is tagged `ASSUMPTION; Jordan to correct` (`recruitment.py:55-69`).
+  - Record: a frozen-dict-like state `(trained, subformations, strategy)`; `raised`, `form` (max 11, a 12th refused; roles such as `ShieldWall`), `assign`/`release` conserve every trooper and never mutate (`A.by_type` unchanged, `release` undoes `assign`, :97-106); 14 ValueError refusals (over-assign, unknown cohort, duplicate name, non-string name, bad role, fractional count, bad stance, `fall_back_at` above 1, bad strategy, :109-132); `order` changes only the fields named (stance, target, fall_back_at) (:135-141); `to_order_of_battle` scales each cohort's contribution by a `fitness(cohort)` and drops empty subformations (:144-153); `validate` rejects malformed records (:156-161).
+  - `test_an_army_record_fights` runs `massbattle.resolve_field(MassBattleInput(... orders_of_battle=(a, b)))` and asserts `min(size_pct) < 1.0` ("vacuous: nobody took a casualty" guard), noting subunits under 80 troops rout at the first check (:171-179).
+  - `rosters.RECORD_KIND_KEYS['army'] == A.KEYS` (:188-190); `A.apply` dispatches `recruit, form, assign (negative count = release), order, validate` and refuses `march`, missing fields, over-cap and wrong-type recruits (:193-223); the recruit limit is per cohort.
+  - The unit of an army is (cohort, troop type, count): soldiers are counts, not named characters.
+- **Conflicts / stale:** none found; cites "RTK / Total War unit classes" as the source of the training pairing, flagged as the module's assumption.
+- **Open items:** the pairing and the 0.5 elite floor await Jordan's correction (per the source tag).
+
+### tests/valoria/test_mass_battle_maneuvers.py
+- **What it is:** pytest file, ED-1096/1097 (movement/pathing audit fix plan step 6): runs the mass-battle maneuver validators `v_envelop` and `v_sweep` on both movement paths, grid (legacy) and node (live default).
+- **Status:** none stated; reading: live, with the standing non-strict `xfail` (addendum F-TEST-10).
+- **Bears on:** MB (envelop, sweep, movement paths, discipline-degraded speed tiers).
+- **Content that matters:**
+  - Four tests call `systems.mass_battle.sim.validators.v_envelop/v_sweep(path=..., seeds=8)` and assert `r.passed`: `envelop_reaches_rear_grid`, `sweep_displaces_laterally_grid`, `sweep_displaces_laterally_node`, plus `envelop_reaches_rear_node` marked `xfail(strict=False)` (:71-175). The measurement instruments (`validators.py`) live in `systems/`, driving `modules/` through toggled process globals (`FIELD_MOVEMENT`, `MB_NODE_COHESION`, `PER_CELL`, `MB_ENVELOP_PATH`, `MB_SWEEP`), saved/restored in an autouse fixture (:43-68).
+  - The xfail reason records: a limit-cycle bug (no hysteresis between phase-1/phase-2) and a step-freeze bug were fixed; the fixture's small detachment (base cell speed 1) still stalls because discipline-degradation speed tiers `floor(base*disc_mult)` floor to exactly 0 below the top discipline tier ("disclosed-not-chased"); 11 of 20 seeds reach behind the defender; an XPASS was seen once at 2026-07-08 and not re-verified (:86-111).
+  - History worth knowing: the 'envelop'/'sweep' instructions "exist only on the legacy grid path" until fix-plan step 7 (the waypoint primitive `_resolve_maneuver_goal`); before this file every bare validator run measured the dead arm (:1-19). Gauge rows H3-H6 overshoot their historical bands in the attacker's favour after DG-1/DG-3 (unresolved partition-invariance question, ED-MB-0004 `_convergence_scale`, :150-163).
+- **Conflicts / stale:** cites `designs/audit/2026-07-04-mass-battle-cannae-gauge-audit/README.md` and `tests/coverage_matrix.md` (archived paths). The "live default" claim (node path) is unverified in this file beyond the history.
+- **Open items:** the speed-floor edge case for low-base-speed bodies is flagged "for a future movement-tier pass"; the H3-H6 overshoot question is "explicitly not decided".
+
