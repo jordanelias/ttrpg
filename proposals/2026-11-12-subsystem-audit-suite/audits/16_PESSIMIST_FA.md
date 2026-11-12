@@ -22,6 +22,111 @@ interrupted and the sections below are the partial record.**
 
 *(placeholder: replaced when the runs of §1 to §3 are in; see the note above)*
 
+## 1. NERS — the cuts, executed and read
+
+Method: `skills/ners/SKILL.md`; definitions `CLAUDE.md` §0.06. A cut is free when nothing but the cut
+thing's own bookkeeping differs. The FA lane's NERS readings (`06_FA_audit.md` §5.4) are cited; four of
+its five "survives" are attacked here. **No draw to diagnose:** none of the nine governance effects takes a
+draw (`effects_governance.py`: the `res` argument is unused in every one), so `resolution-diagnostic` has
+no subject in FA's own code; the one draw met in the probes is `arrest` (2 of 2 `arrest.resisted`), which
+is SC's and PC's.
+
+### 1.1 The executed cuts (`pf3_cut.py`, seed 0, two seasons, four arms on one built world)
+
+SHIPPED; **DRAW2** (the same world, the dice re-seeded: the noise floor, without which no arm difference is
+a measurement, §0.1 pt 4); **NO_SEATS** (all 34 live seat-holds closed at build: nobody holds an office);
+**NO_FACTION** (every live `commit` to a faction Proposition closed at build: nobody is a member of
+anything).
+
+| | SHIPPED | DRAW2 (noise floor) | NO_SEATS | NO_FACTION |
+|---|---|---|---|---|
+| acts attempted | 1,703 | 1,750 | 1,666 | PENDING_NF_ATT |
+| executed | 919 | 1,023 | 962 | PENDING_NF_EXE |
+| resolved by a draw | 121 | 156 | 182 | PENDING_NF_DRAW |
+| executed answers to another person's act | 156 | 167 | 135 | PENDING_NF_CROSS |
+| … whose antecedent is an FA act | 54 | 30 | 13 | PENDING_NF_CROSSFA |
+| persons at end | 83 | 83 | 83 | PENDING_NF_PERS |
+| stores, realm total (grain / ore / salt / timber) | 2775 / 3663 / 2109 / 703 | the same | **the same** | PENDING_NF_STORES |
+| seat-gated verbs executed (`issue`, `dispatch`, `convene`, `march`, `open_case`, `establish`) | 19, 12, 12, 13, 7, 1 | 15, 7, 6, 4, 7, 0 | 0 (by construction) | PENDING_NF_SEATV |
+| `oblige` executed | 26 | **0** | 0 | PENDING_NF_OBL |
+| seat changes (`tenure.opened` / `succession.claimed`) | 0 / 0 | 0 / 0 | n/a | PENDING_NF_TEN |
+
+PENDING_NF_READING
+
+**Reading of NO_SEATS.** With every office in the realm empty for two seasons, the same 83 persons are
+alive, the realm's stores are equal to the unit, and the totals of activity sit inside the spread between
+two dice seeds of the shipped realm (executed 962 against 919 and 1,023; cross-person answers 135 against
+156 and 167). What the seats add is their own emissions: about a hundred acts in two seasons (`issue`,
+`dispatch`, `convene`, `march`, `open_case`, `oblige`) that the same persons otherwise spend on
+`create_record`, `utter`, `research` and `surveil`, and the 17 to 41 further answers other persons give to
+those emissions (54 and 30 FA-antecedent answers against 13). **More of the realm is decided by a draw
+without offices than with them** (182 against 121 and 156), because the acts offices open are undrawn and
+the acts they displace (`research`, `surveil`) draw. The cut is therefore free in everything but paper:
+no person, store, site or holding differs because the realm has a King. This is the game lane's X1
+(agency cut) repeated one level down, and the control shows the instrument can see a difference when there
+is one: `oblige` reads 26 against 0 between two dice seeds of one world.
+
+**The noise floor is itself a finding.** Re-seeding the dice alone moves `oblige` 26 → 0, `march` 13 → 4,
+`dispatch` 12 → 7 and `convene` 12 → 6. The FA lane's per-verb counts (its E-3, E-5) are single draws
+from that spread; "13 marches by four clerks" is one seed's sentence.
+
+### 1.2 Cuts by reading and probe: the false N-lines, and what survives only untested
+
+| object | the FA lane's reading | attack | result |
+|---|---|---|---|
+| `Faction.head`, `rosters.yaml: factions.head_seat` (CR-86) | F-FA-16 proposes two more `head_seat` rows | grep the non-test readers of `.head`, `faction_q.head(`, `HEAD_SEAT`: `faction_q` itself, the `survey` Record's content, one instrument. `opinion_of`, the one decision-side reader of a faction's head, reads the creed Proposition's subject instead (`world_q.py:3055-3056`) | **false N-line: the cut is free.** Nothing that decides reads it. Adding rows to it (R-25) feeds a field with no reader; the repair is to make `opinion_of` read `faction_q.head` (§3, F-PES-FA-08) |
+| the five-field `Faction` view | steelman 2, "holds" | non-test callers of `faction_q.resolve`: `effects_information.py:829` (`survey`) and nothing else | **narrowed**: the view is necessary for one verb's document. The seam that Layer 1 says receives it (`mass_battle` wrapper, "sides") reads `members` and `leaders` through `world_q`, not the view |
+| `at_war`, the `WAR` mood | F-FA-04, C-1 | readers: `enemies_heard` and one instrument; true for 0 of 45 pairs in every computed run | free in computed play; under a hand-built declaration it changes `enemies_heard` for 1 person at the tick (P3.2) |
+| `revoke`, two revocation bases, `REVOCATION_DISPOSAL`, the ban | "N: it is the only cost a fall carries. Survives" | enumerate its reachable domain (`pf1`): 6 seats, one stripping seat, which is unfillable; `pardon` refused through 33 of 33 seats; a computed `revoke` is refused at its first clause by construction (FA §4) | **survives only untested.** As built the family's whole domain is six seats for one man's lifetime; after his death the cut is free. Proposal PES-FA-A |
+| `off_duke_valorsmark` | CP-T09-06's card | cut it (the King dies): no seat can strip any seat | load-bearing by accident: the realm's dismissal power is a second title nobody designed to carry it |
+| `off_widow_regent`'s remit | R-16: empty it while the King lives | cut it (R-16), then kill King and heir: no seat can fill `off_heir`; nobody is ever King | load-bearing by accident: it is the only route by which the throne survives the heir. R-16 needs a fallback (§3, F-PES-FA-11) |
+| `successions`, `succeed`, the claim basis | steelman 5 | propose the cut: the throne becomes `appointed`; no seat is above it, so nothing fills it | **true N-line.** A top seat needs a self-claim. It fails R at the extremes instead (§1.3) |
+| `seat_hold` / `Act.via` (authority through the seat) | steelman 1, "holds" | five standing attacks by execution (P1.1) | **holds**; the attack tried is in §2.2 |
+| `may_fill` | not attacked | enumerate fillers per seat | survives only untested: the Crown fills all 26 fillable seats |
+| `commit` as membership | "ruled; implemented" | six joins and one leaving by execution (P4.3) | survives only untested: unilateral, free, and it moves holdings between factions |
+| `oblige` (the verb an NPC executes most often among FA's) | steelman 4 | 26 executed at one dice seed, 0 at another; 75 in one season at seed 3 | what it buys in computed play is the obligee information channel; the oath clause in `purview_reaches` needs a swearer who holds a seat, not checked in these runs `[UNVERIFIED]` |
+
+### 1.3 R at the extremes (completeness)
+
+| extreme | what ran | result |
+|---|---|---|
+| a faction of zero members | every Hafenmark member leaves | view `0, 0, 0`, `head` still the Duchess: a head of nothing, and not a member |
+| a faction that does not exist | `resolve("fac_does_not_exist")` | an empty view, no refusal; `at_war` between it and a person: true |
+| a new faction | a clerk utters a creed, two persons commit | resolves as a view (2 members, 2 seats); not in the roster, so no head, no `leaders`, no `opinion_of` (which raises for an unrostered Proposition). It can be at war. Emergent factions are half-possible: countable, never regarded |
+| a hundred factions | `resolve` over ten rostered factions: 5.0 ms a sweep; `at_war` over 45 pairs: 0.1 ms (698 tenures, 70 Propositions). `at_war` scans every Proposition for every pair | no cost problem at realm size; the scan is O(Propositions × tenures) per call and was not run at 100 `[UNVERIFIED]` |
+| one seat-holder dies | P2.7 | 7 of 34 seats then empty for ever |
+| the royal line fails | P2.7 | no King, for ever; Valorsmark headless |
+| a cohort in a seat | P2.7 | a village is King |
+| a person in two factions, or in the enemy's | P4.3 | admitted; the views double-count his holdings |
+| a seat-holder in custody | P5 | governs unimpaired |
+| cast cap 0, 1, 2, 5 | the game lane's X5 (cited): the loop runs; at cap 0 to 2 no office exists | FA is absent below a cast of five |
+
+### 1.4 S: two ladders for one quantity (each is a defect even where each ladder is correct)
+
+1. **Authority over a seat.** Filling asks purview at any depth (26 seats); stripping asks the rung
+   directly above (6 seats). Appoint and dismiss are not opposites.
+2. **Who is under a seat.** `issue` asks the person's residence; `confer` and `revoke` ask the seat's rung;
+   `dispatch` asks nothing (`_req_dispatch`: "the named person exists"); a levy of stores asks the seat, a
+   levy of men asks a Record (F-FA-15, cited). Proposal PES-FA-C.
+3. **Who heads a faction.** `faction_q.head` (the head seat's holder) and `opinion_of` (the creed's
+   subject, fixed at build).
+4. **Who may undo a dismissal.** Dismissal is `remit:revoke`; its ban is lifted by `remit:determine` at the
+   same seat; no seat that can strip holds both.
+5. **Pauses correctly.** Nothing in FA pauses anything: a vacancy, a war and a detention suspend no act of
+   the seat or the person concerned (a prisoner issues writs; a vacant throne's ladder goes on appointing
+   through the Queen's seat).
+
+### 1.5 E, last, as a ratio against what N and R found
+
+The seat-authority model is legible (six remit keys, one `via`) and that judgement of the FA lane stands.
+What N and R found changes the ratio for three objects. The dismissal family carries two bases, a disposal
+mapping with import-time totality checks, a restraint kind and a pardon verb, to govern six seats until
+one man dies: the overhead is large against what it delivers. The `Faction` view carries a `head`
+resolution with a graded-commit branch nothing writes and a seat branch nothing reads. `at_war` carries a
+ratified Query, a mood and a Layer-1 page for a state no computed act enters and no rule consults. None of
+these should be amputated (E is not an independent axis); each needs its reader or its occasion built,
+or it is overhead.
+
 ## 2. Premise audit
 
 Method: `skills/premise-check/SKILL.md`, SLICE scope (the orchestrator named the sentences). The ordinary

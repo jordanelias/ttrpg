@@ -197,6 +197,7 @@ A false N-line is a claim that a thing is necessary which a cut shows to be free
 | the settlement verbs (`build`, `found`, `raze`, `sabotage`, `exchange`, `work`, `restore`) | remove them | nothing but refusals; site condition and stores identical with and without persons | false N-line today |
 | compliance (`comply`, `evade / defy`) | remove both | nothing: `compliance.impossible` 137 of 137 + 21 of 21 | false N-line today (FA audit: decrees are emission-only) |
 | the named individuals (46 cast persons) | `build_realm(0, cap=0)`: 37 cohorts, no individual, no office (X5) | the loop runs; 1,049 acts in three seasons against 2,630 with the cast; sites, stores and bodies end the same | the cast is necessary to the *paper*, not to the *world* |
+| the populace as deliberating persons (37 cohorts, 43% of all acts) | X6: a cohort's chooser returns no act; MATTER still feeds it | the cohorts' own paper (propositions 269 → 156, their records, forgeries and covers) and their self-tending (bodies stay at 940); **the 46 individuals execute 798 acts with the cohorts acting and 793 without, no verb moving by more than ten**; no seat, site, rung or person differs; executed answers 513 → 289 | **false N-line today**: the named persons do not respond to anything the populace does (§7 J-2) |
 | persons at all | the NULL arm | paper, promises, the docket, memory; no seat, site, rung or (bar one) life | the world does not need its people |
 | memory decay as logged Events | drop `claim.decayed` from the log | nothing reads it as a cause in any seam cell above; it is 65% of the log at six seasons (WR run, seed 0: 179,056 of 273,067) | false N-line as an *Event*; the fade itself is needed (CORE F-CORE-01, WR F-WR-09 own the fix) |
 
@@ -660,8 +661,10 @@ two of the three seeds. Today every clause fails.
   large. (b) Give a cohort a collective aperture by a roster column (petition, migrate, work, tend,
   comply or refuse, riot) so that what a population does is what a population can do. Under (a) the
   realm's log is mostly the populace's paperwork; under (b) it is the named persons' acts against a
-  populace that moves in a few heavy ways. `[X6, the cut run that would price (b), had not finished
-  when this was written: §8.]`
+  populace that moves in a few heavy ways. Priced by X6 (seed 0, three seasons): removing cohort
+  deliberation entirely changes what the 46 individuals execute by 5 acts in 798 and changes no seat,
+  site or person, so (b) costs the present game nothing it can show; what it would forgo is the design
+  intent that a population is a person (S9.1).
 - **J-3 · arcs that end on a threshold.** Eight of fifty provided arcs close when a counter fires and
   nineteen are forced by one (`ENDINGS_CLASSIFIED.yaml`); the standing rule and the engine's L5 both
   forbid a crossing that produces an outcome. (a) The arcs are restated so each threshold raises a
@@ -683,10 +686,10 @@ All at `4995824`, `PYTHONHASHSEED=0`, outputs under `runs/PES_GAME/` in the scra
 | X2 | `x2_death.py 0 1 3` → `x2_death_s0.txt` | 0 · 1 + 3 | §2.1; control hash `abbde715aa0e` equals the shipped four-season realm |
 | X2b | `x2b_death_detail.py 0 1 4 p_npc_020` and `… p_npc_020,p_npc_031` | 0 · 1 + 4 | §2.1 links 3 to 8; both finished. King only: 16 hold an `exists` claim of his death in every one of the four seasons (17 by `x2_death.py`'s wider predicate match), `off_duke_valorsmark` and `off_heir` vacant at the end. King and heir: 15 know; `off_king`, `off_duke_valorsmark`, `off_heir` vacant in all four seasons |
 | X3 | `x3_famine.py 0 0 20 nullglobal` → `x3_nullglobal_s0.txt` | 0 · 20 | §2.4 links 2 to 4, 8 |
-| X3 local | `x3_famine.py 0 1 5 local` | 0 · 1 + 5 | `[not finished under load; §2.4 link 5 rests on X1, not on it]` |
+| X3 local | `x3_famine.py 0 1 5 local` | 0 · 1 + 5 | `[stopped unfinished under load, in its control arm; §2.4 link 5 rests on X1's body row, and "rest cures a CONTINUING famine in play" is therefore inferred from one hungry season per seed, not observed over several]` |
 | X4 | `x4_player.py 0 3` → `x4_s0.txt` | 0 · 3 | §2.5; reach |
 | X5 | `x5_extremes.py 0 3` → `x5_s0.txt` | 0 · 3 | §3.7 |
-| X6 | `x6_cohort_cut.py 0 3` → `x6_s0.txt` | 0 · 3 | the shipped arm finished (F-09's cohort figures; 513 executed answers, equal to X1's matrix total, the instrument's own agreement); the CUT arm (cohorts do not deliberate) `[not finished under load: J-2 is unpriced]` |
+| X6 | `x6_cohort_cut.py 0 3` → `x6_s0.txt` | 0 · 3 | the shipped arm finished (F-09's cohort figures; 513 executed answers, equal to X1's matrix total, the instrument's own agreement); the CUT arm (cohorts do not deliberate): individuals 798 → 793 executed acts, answers 513 → 289, propositions 269 → 156, skeleton unchanged. Seed 1 was stopped unfinished under load, so the cut is one seed |
 | census parse | `parse_census.py x1_s*_k3.txt` | — | §1.3 table; the dead-end sum 1,585 of 7,940 |
 | fixtures | `build_realm(0).fixtures.get(...)` | 0 | the four draw sites shipped off |
 | cited, not rerun | `runs/WR/probe_s{0,1,2}_k6.txt`, `runs/WR/storybar_drawseeds_s0_k2.txt`, `runs/SE/probe_noacts_s0_120.txt`, `runs/SE/probe_play_s0_4.txt`, `runs/CORE/register_requirements.txt`, `runs/CORE/m1_summary.txt`, `runs/ARCS/corpus_run.txt` | | as the lanes report |

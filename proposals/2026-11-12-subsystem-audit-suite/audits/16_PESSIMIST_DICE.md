@@ -17,6 +17,81 @@ All runs: `PYTHONHASHSEED=0`; scripts and outputs under
 
 (Sections below are appended as the work proceeds; §0 is written last and placed first.)
 
+## 1. NERS
+
+Method: `skills/ners/SKILL.md`; definitions `CLAUDE.md` §0.06. Instrument B
+(`skills/resolution-diagnostic/SKILL.md`) was run first and its five properties are §1.1; they are
+evidence, and the cut tests in §1.2 grade them. E is read last, in §1.3.
+
+### 1.1 The five properties of the draw, as evidence
+
+Each row is a finding with the call that reproduces it, or a named attack that failed.
+
+| property | what was attacked | outcome | reproduces |
+|---|---|---|---|
+| **P-i legible odds** | can the odds, the inputs and the advantage be read from the engine's own record | **fails**: the Event keeps the band alone (H-284, known); 76 of 208 realm failures missed by one and none says so; `odds_of` mode (a) has no loop caller; the named level never leaves `fixtures.effort_level` | E-P6 |
+| **P-ii uniform leverage** | does one named level buy the same on the dice actually dealt (not in the Normal closed form) at small pools | **attack failed**: at matched base chance `moderate` buys +17.5 to +19.3 points at pools 1 to 4, and +8.8 to +11.6 at each pool's own ceiling at pools 1 to 8. The Normal form misstates it at one die (it says +4.2 at pool 1 / Ob 2 where the dice give +11.6), which is F-DICE-05's subject, not a leverage defect | E-P1 B1 |
+| **P-ii, second shape** | an advantage that enters outside `levels_to_net_sigma` → `net_boost` | **fails at the field**: the per-battle friction draw multiplies the pool (`core/exchange.py:147`), is not sigma-scaled and is not soft-capped; 5th to 95th percentile 0.164 to 6.107, a 37-fold spread; in a mirror field the side with the higher draw won 275 of 287 decided (PES_MB's run, cited) | E-P3 S3 |
+| **P-iii bounded, monotonic** | every clamp: which terms it reaches, and what is flat past it | **fails three ways**: (a) the ceiling is a `min()`, so past it the chance is flat at exactly 10.00 % in the pool, the opposition and every hostile modifier; (b) below `OB_MIN` the sum is unfloored, and at Ob 0 a second die lowers the chance (90.0 → 89.0 %); (c) the 10 % floor is solved *"at no advantage"*, so a negative boost goes through it (pool 1 / Ob 2: 0 % at −1.5σ). (a) is live in the realm (7 of 284 rolls, all examinations of forged Records, all at 2.842); (b) and (c) need content that does not ship | E-P1 A1 to A3, B2, C1; E-P6 |
+| **P-iv graded, recoverable** | does a band other than pass/fail change anything; is an irreversible outcome a bare binary | **fails on grading**: 6 of 10 margin verbs are declared pass/fail, Overwhelming is distinct on two verbs that write nothing, and 282 of 284 realm rolls changed no state. **Recoverable holds**, to excess (H-111, known). Mass battle's `recall_check`, `feigned_retreat_recognized`, `feigned_retreat_check` and `discipline_check_cascade` (`orchestration.py:2093-2166`) are bare `net >= Ob` binaries on the roller, with the ladder one function away | E-P5; E-P6 |
+| **P-v right engine** | every draw that is not `dice_engine` + `sigma_leverage` | F-DICE-05 and -07 (cited). New: mass battle makes three kinds of draw outside any d10 (`gauss` friction, two skewed-uniform break points at `core/state.py:44` and `hierarchy/units.py:2290`), and its constants `MB_FRICTION`, `MB_FRICTION_SIGMA`, `FEIGNED_RECOGNIZE_OB`, `FEIGNED_RETREAT_OB` are read from **environment variables** (`config.py:242-244`, `:329-331`): the same seed gives a different field under a different shell | E-P4 |
+
+### 1.2 The cut tests
+
+For each object: the N-line its defender would give, the cut, what died. A **false N-line** is a cut that
+turned out free.
+
+| object | N-line claimed | the cut, run | what died | reading |
+|---|---|---|---|---|
+| mass battle's `roll_pool` | the module must stay free of `engine.*` (its docstring) | swap in `dice_engine.roll_pool` on one stream: 20,000 seeds, pools 1 to 12, **0 nets differ**, and the stream position after the roll is identical in 2,000 of 2,000 | nothing, at whole pools | **FALSE N-LINE.** The fractional die is the only thing the copy has that the owner lacks; F-DICE-07's proposal moves it. Confirmed by execution here; the first audit measured the ladder copy, not the roller |
+| the four-band ladder, top band, on the social path | *"3 or more is always overwhelming"* | count it: 0 of 284 realm rolls; impossible at the shipped pool; distinct from Success on `speak` and `interrogate`, which write nothing | nothing that ships | **FALSE N-LINE as shipped** (ruled; not proposed for removal). It becomes true only with pools of three or more **and** a row that keys a write on it |
+| the Partial band, on the social path | the near miss is its own outcome | compare Partial's and Success's declared rows and realm Events | on `arrest`, `lie`, `tell` and the three inquiries, nothing; on `argue` and `determine` the pursuit move | **NARROWED** to four verbs, of which `speak` and `interrogate` differ only in an Event kind nothing consumes by name |
+| S27.4 in the provider (`sigma.py:543`) | an impossible attempt is refused before dice are dealt | under the shipped ceiling it fires only for a held score of 0, and not when the subject also holds 0 | the refusal of a person holding a zero; an unauthored person (no key) rolls two dice | **NARROWED**: what it protects today is that holding 0 is worse than holding nothing |
+| `BandExtension`; `p_success`, `eff_ob`, `effective_ob`, `sigma_space_ob_shift` | the seam for a subsystem's de-saturation; the closed form | F-DICE-11, F-DICE-12 (cited): no caller the loop reaches | nothing in the season | **FALSE N-LINES**, both already found |
+| three of the four named levels | the player-facing ladder of advantage | the season's one source uses `moderate`; 0 of 284 rolls carried any level | nothing in computed play | **NARROWED**: N holds for the player's `effort` only, at one level |
+| the per-pool ceiling (H-213) | no matter becomes impossible | the uncapped arm (E-P1 A4): REFUSED cells at one die against scores of 5 and up, and chances of 0.0 to 1.0 % | the floor on the chance | **SURVIVES**, and is the cause of P-iii (a). The cut that is free is of its *form*: a saturating bound keeps the floor and loses the flat range (proposal) |
+| the fraction of a margin (`settle_margin`) | two obstacles a fraction apart differ | pool 2: Ob 2.0 / 2.5 / 3.0 read 26.0 / 16.5 / 7.0 % | the middle value, with whole dice alone | **SURVIVES** |
+| `band_odds` | the odds shown are the odds dealt | first audit, steelman 1; re-read here against 284 realm rolls: Failure 73.2 % against 74.0 exact at the pair 270 of them were thrown at | — | **SURVIVES** |
+| the friction multiplier | without it a large advantage in the field is certain (its config note) | PES_MB's friction-off arm (their file) | their finding, not re-run here | not graded here; §6 gives the two forms it could take |
+
+**Mechanisms that survive because nothing was tried against them.** (i) The H-210 sweep of
+`default_forgery_quality` over 0 / 1 / 3: for the shipped pool of two, 1 and 3 compose the same obstacle
+(2.842), so two of the sweep's three arms are one arm and the sweep cannot return a verdict that flips
+between them. (ii) The 10 % chance floor: measured *"at no advantage"* and never against a boost of the
+other sign, because no source of that sign exists; `10_DICE_advantage_sources_for_the_arcs.md` would add
+one. (iii) `10_DICE_one_score_two_roles.md` moves the realm's default pair from (2, 2.0) to (2, 1.0),
+which takes every unscored person-opposed roll off the ceiling's reach and onto the floor's: its gate
+does not include a row at Ob below 1.
+
+### 1.3 The reading, by criterion
+
+- **N.** From the bottom the substrate is necessary and single-owned: the face rule, the ladder, the
+  boost, the settle rule and the exact odds each have one owner and each cut above that removed one of
+  them lost something. From the top it is narrowed: the standing rule asks that state set the odds and
+  the draw the outcome, and in computed play state sets nothing (one pool, one obstacle, no leverage on
+  284 of 284), so the dice supply variance to a constant. Laterally the three scales do not share a
+  meaning for one score (F-DICE-15, -17, cited; E-P3 S1 extends it to unequal pairs). Vertically the
+  result does not reach state: 282 of 284 rolls. Diagonally (a roll's result read by another person at
+  another scale) only belief moves. Horizontally (roll after roll for one person) there is no carry:
+  no roll reads the last. N holds bottom-up and is narrowed in the other five directions.
+- **R.** The strategic half fails on legibility (P-i) and on the flat ranges (a player who forges a
+  better document, packs a more hostile bench or brings a better advocate against a strong opponent
+  buys nothing past the ceiling). The no-player half: the dice produce events without a player and the
+  events change belief and almost no state. Completeness fails at both extremes of the obstacle (P-iii)
+  and at one die (no Success at the default obstacle).
+- **S.** Two conventions for one operation, three times: the roll's two operands saturate differently
+  (sigma by `tanh` with *"no dead-zone"*, the obstacle by `min`); a fraction of a die has three rules
+  (F-DICE-08, cited); advantage enters the field by a pool multiplier and the other two scales by a mean
+  shift. *Pauses correctly*: not applicable to a pure function; the season's roll holds no state between
+  calls.
+- **E, last, as a ratio.** What N and R found the substrate to deliver in play is one distribution
+  (74 / 19 / 7 / 0). Against that the apparatus is two samplers, three rollers, four named levels, a
+  soft cap, a per-pool ceiling solved by enumeration, a refusal rule and an extension seam. The ratio is
+  poor today and is not a reason to cut: every part but those marked false above is what a varied input
+  would need. The legibility half of E (a player intuiting outcomes from choices) is the weaker half:
+  the rule a player can hold is *"two dice against two: one in four"*, and nothing he can do in the
+  season as computed changes either number.
+
 ## 2. Premise audit
 
 Method: `skills/premise-check/SKILL.md`, SLICE scope (the five sentences the work order names; boundary:

@@ -383,12 +383,11 @@ one tick older than the telling):
 (`es/queries/person_q.py:1057-1081`). The weighed reader has one caller, `epistemic.belief_contradicts`
 (`es/epistemic.py:133`: *may I form this act*). The plain reader is what a person **says**
 (`person_q.said_of`, `:1195`), what his **sheet shows** (`decision/sheet.py::chronicle`, `:199`),
-whether he thinks a goal's **stage is passed** (`world_q.py:2936`, whose own docstring marks the missing
-`weigh` `[ASSUMPTION … B3.1]`), and the pairing mate inside `record` itself (`options.py:1518`). So an
-eyewitness who is lied to a season later is not stopped from acting on the truth, and reports, displays
-and plans on the lie. FIRES: seed 1, season 3, `cohort_set_s_035` lied to `p_npc_052` about its grain
-(said 113, holds 40): afterwards the hearer's weighed belief is 40 and his plain belief 113
-(`realm_s1_k4.txt`, first run, section A).
+and whether he thinks a goal's **stage is passed** (`world_q.py:2936`, whose own docstring marks the
+missing `weigh` `[ASSUMPTION … B3.1]`). So an eyewitness who is lied to a season later is not stopped
+from acting on the truth, and reports, displays and plans on the lie. FIRES: seed 1, season 3,
+`cohort_set_s_035` lied to `p_npc_052` about its grain (said 113, holds 40): afterwards the hearer's
+weighed belief is 40 and his plain belief 113 (`realm_s1_k4.txt`, season 3, section A).
 
 | # | link | O | C (run) | verdict · cause |
 |---|---|---|---|---|
@@ -437,7 +436,7 @@ determined. Every person given the same two pursuits so that every person judges
 |---|---|---|---|---|
 | disposal edge | none | `oblige` party → judge's seat, term to tick 5 | `detain`, no term | `ban`, no term |
 | witnesses' new claims naming the **party** (4 persons, the convict included) | 0 | **0** | **0** | **0** |
-| witnesses' new claims naming the **judge** | 0 | `matter.determined`, `pursuit.moved`, `seen`: 3 each, told (the public channel) | the same | the same |
+| each witness's new claims naming the **judge** | 0 | three (`matter.determined`, `pursuit.moved`, `seen`), plus two on the edge's own id; all told (the public channel) | the same | the same |
 | regard for the party, each witness | 0.0 | **0.0 → 0.0** | 0.0 → 0.0 | 0.0 → 0.0 |
 | regard for the judge, each witness, **the convict included** | 0.0 | **0.0 → +0.18** | +0.18 | +0.18 |
 | the party's `move` | moved | moved | **blocked** | moved |

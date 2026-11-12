@@ -674,7 +674,7 @@ a province; a burned granary; a hoarder.
 | id | inconsistency or gap | resolution | step | where |
 |---|---|---|---|---|
 | R-PES-SE-01 | who eats when a rung cannot feed all who draw on it (id order today) | shares in proportion to want; the indivisible remainder by a keyed draw | 5 (and the standing rule for the remainder) | proposal A, edit 1 |
-| R-PES-SE-02 | a rung drained exactly reports no dearth | the eater who finds a rung this draw emptied is short *at that rung* | 3 (`matter.py:629`: the emission is the crossing) | proposal A, edit 2 |
+| R-PES-SE-02 | a rung drained exactly, this season or an earlier one, reports no dearth | the crossing is the cohort's: a cohort short for the first time is reported at the first rung on its ladder that has ever held the kind; a ladder that never held it stays silent, as ruled | 3 (`matter.py:629`: the emission is the crossing) | proposal A, edit 2 |
 | R-PES-SE-03 | a hunger death and a hunger fall cite no cause | `causes` cite the larder write, and the death cites the fall | 5 | proposal A, edit 3 |
 | R-PES-SE-04 | `tend` undoes hunger | a patient short at the last MATTER is not tended | 4 (the effect-body decline, `_eff_move`'s precedent) | proposal A, edit 4 (owed to PC) |
 | R-PES-SE-05 | `ore` has no reader | the martial fabrics cost ore: `works_cost` rows `garrison`, `barracks`, `archery_range`, `stable`, `siege_workshop` gain `ore: 10` beside timber `[ASSUMPTION; medium; Jordan to correct]`; arms as matter (`arms_kinds`, CP-T03-03) are its second reader when they are priced | 4 (`works_cost`'s own one-number precedent) | `rosters.yaml: works_cost` |
@@ -716,8 +716,9 @@ roll with a graded, recoverable result (the four-band ladder)") reads toward B.
 settlement registry, so `found` makes hearths and communities only, and nothing ends one. *Option A (the
 map is fixed):* 37 settlements forever; founding is of households within them; "a founder builds
 something that lasts or fails" is not a sentence of this game at the scale of a town, and the hearth
-needs a lapse rule (a founded rung with no resident and no Site when its works' last term matures ends,
-its stake returning to its parent) to have a second outcome. *Option B (the map grows and shrinks):*
+needs a lapse (a founded rung standing with no resident and no Site after its works' last term is put
+to a draw each season, its odds worsening the longer it stands empty; on a failure it ends and its stake
+returns to its parent) to have a second outcome. *Option B (the map grows and shrinks):*
 `settlement` gains a `works_cost` row and a `raze`-like natural end (abandonment at population 0 for N
 seasons). B is the colony game the addendum's precedents describe; A is the court game on a fixed board.
 
