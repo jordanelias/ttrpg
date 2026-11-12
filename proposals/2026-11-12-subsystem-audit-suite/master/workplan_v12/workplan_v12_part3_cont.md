@@ -1,0 +1,309 @@
+# Workplan v12 — part 3, continued: batch B02-tests from item B02.23
+
+## Status: PROPOSED (the continuation of a body part of workplan v12, split at an item boundary at the part cap; unratified input to `methodology-execute`'s 0.1 stop until Jordan adopts v12; resolves nothing at runtime, CLAUDE.md §0.05)
+
+Batch B02-tests's block head (INVOCATION, GATE, REQUIREMENT, BATCH GATE, C(k), SERIAL EDGES, the position table) and items B02.01 to B02.22 are in the file before this one; the head's index maps each handle to its file. Words and paths as that file states.
+
+### B02.23 — the fork test is named for the budget it runs · 01_CORE_tests_shipped_world_falsifiers row 3 · BUILD · HASH EQUAL
+- SOURCE: `proposals/01_CORE_tests_shipped_world_falsifiers.md` row 3; closes F-TEST-06.
+- ADVANCES: R-02 (its reading names the shipped-budget test, B02.22, in B02.38).
+- INSTRUCTION: "Rename `test_wd_a_fork_changes_a_later_decision_at_the_shipped_default` to `…_at_two_slots`" (it runs `scene_budget 2 × interactions_per_scene 1`; the shipped budget is 5 × 3): the new name is `test_wd_a_fork_changes_a_later_decision_at_two_slots`. The row's second half ("R-02's `measured:` reading names row 2 as the shipped-budget test") lands in B02.38 as R-02.a's conjunct: `measured:` left the file in B02.13.
+- WHERE: `engine/season/tests/test_season_shape.py` (the one test's name).
+- TESTS: the renamed test, unchanged in body.
+- FALSIFIER and CONTROL: a reference to the old name survives (`git grep -n "at_the_shipped_default"` → nothing). Control: the test passes before and after.
+- GATE: `python -m pytest engine/season/tests/test_season_shape.py -q -k at_two_slots` → one test passes; `git grep -n "fork_changes_a_later_decision_at_the_shipped_default" -- engine tools tests` → nothing.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.12 (`test_season_shape.py`, serial).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, medium.
+- LANDS IT: B02's producer; `Item: B02.23`, `[skip ci]`.
+
+### B02.24 — the invariant sweep sees a played realm · 01_CORE_tests_shipped_world_falsifiers row 4 · BUILD · HASH EQUAL
+- SOURCE: the same file, row 4 and "Falsifier" (row 4); closes F-TEST-07.
+- ADVANCES: none of the nine as a conjunct; the eight invariants checked against a world with offices in it (`m1_acceptance` row 4's family).
+- INSTRUCTION: "In `test_the_engine_is_clean_under_the_sweep`, add a second sweep over `populated.build_realm(s)` played one season, seeds 0–2, asserting `not r["violations"]` and `r["unexercised"] == []`. The `:55` assertion (`"offices" in r["unexercised"]`) stays as a statement about the headless world."
+- WHERE: `tests/valoria/test_season_invariant_sweep.py` (`test_the_engine_is_clean_under_the_sweep`).
+- TESTS: the added arm (readings at `main`, a comparison: 34 offices, 79 stance rows, 698 tenures built; 13,379 Events and 12,351 claims played; `unexercised == []`, 0 violations).
+- FALSIFIER and CONTROL: "plant `w.offices["x"]` held twice in the played realm; the sweep must report it." Control: the headless arm's `unexercised` still names `offices`.
+- GATE: `python -m pytest tests/valoria/test_season_invariant_sweep.py -q` → green with `unexercised == []` on the realm arm.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `tests/valoria/test_season_invariant_sweep.py::test_the_engine_is_clean_under_the_sweep`, `harness/populated.py::build_realm`.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.24`, `[skip ci]`.
+
+### B02.25 — three loops assert that they saw something · 01_CORE_tests_shipped_world_falsifiers row 5 · BUILD · HASH EQUAL
+- SOURCE: the same file, row 5 and "Falsifier" (row 5); closes F-TEST-11.
+- ADVANCES: none: test strength (§0.1 pt 2).
+- INSTRUCTION: "`test_march.py`: both casualty tests assert `len(attackers) == 2` and that the fold's kinds include `("field.lost", "Lost")`, the two lines the valoria sibling already has. `test_content_operands.py`: count candidates carrying `to` and `assert carried >= 1000` (a floor two orders below today's 194,714, the form `test_in62…` uses for `checked`)."
+- WHERE: `engine/season/tests/test_march.py` (`test_the_total_casualty_model_zeroes_the_losing_side`, `test_the_none_casualty_model_writes_stance_only`); `engine/season/tests/test_content_operands.py` (`test_no_writ_derived_operand_is_ever_a_raw_tuple`).
+- TESTS: the three edited tests.
+- FALSIFIER and CONTROL: "patch `world_q.mustered` to return `[]`; both `test_march` tests must now redden where today they are green." Control: both pass unpatched.
+- GATE: `python -m pytest engine/season/tests/test_march.py -q -k casualty` → green; `python -m pytest engine/season/tests/test_content_operands.py -q` → green.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE the three tests named.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.25`, `[skip ci]`.
+
+### B02.26 — a skip on an absent combat engine becomes a failure · 01_CORE_tests_shipped_world_falsifiers row 6, with U5a_tests_digest_additions §C · BUILD · HASH EQUAL
+- SOURCE: the same file, row 6 and "Falsifier" (row 6); `proposals/U5a_tests_digest_additions.md` §C (code SITE; `IS-B2-CORE-07`); closes F-TEST-12.
+- ADVANCES: none of the nine as a conjunct; the W-E family (a contested act's consequence differs by degree) cannot pass by skipping.
+- INSTRUCTION:
+  1. SITE (`IS-B2-CORE-07`): open each site and record what is found in the commit body.
+  2. Row 6: "Every `pytest.skip(f"personal_combat engine unavailable: …")` becomes `pytest.fail(…)` (13 sites)": nine sites in `test_season_shape.py` (ten tests, through `_k1_combatants`), and in `test_combat_band_edges.py`, `test_cp_t03_04_arms.py`, `test_cr85_faculty_replaces_history.py`, `test_h206_a_death_at_matter_is_witnessed.py`.
+  3. §C, copied: "T3 row 6's rule (a skip becomes `pytest.fail`) covers every skip conditioned on the combat engine's load, including the fixture forms it did not list: `test_combat_band_edges.py` (`engine_available`), `test_cp_t03_04_arms.py` (`_engine`), `test_cr85_faculty_replaces_history.py` (the autouse fixture), `test_h206_a_death_at_matter_is_witnessed.py:161-162`. Of the nine sites in `test_season_shape.py`, eight do not assert `load_error()` first; after the edit none needs to." (`tests/valoria/test_charge_momentum_impulse.py` is mass battle's: not edited here.)
+- WHERE: `engine/season/tests/test_season_shape.py`, `test_combat_band_edges.py`, `test_cp_t03_04_arms.py`, `test_cr85_faculty_replaces_history.py`, `test_h206_a_death_at_matter_is_witnessed.py`.
+- TESTS: the edited tests (no new names).
+- FALSIFIER and CONTROL: "make `combat.engine()` return `None` in process; the W-E tests must fail, not skip." Control: with the engine loading they pass.
+- GATE: `grep -n "engine unavailable" engine/season/tests/*.py` → no `pytest.skip` on those lines; `python -m pytest <each edited file> -q` → green, one file at a time.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.23 (`test_season_shape.py`, serial).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.26`, `[skip ci]`.
+
+### B02.27 — the interactions-log finding is read off the shipped season · 01_CORE_tests_shipped_world_falsifiers row 7 · BUILD · HASH EQUAL
+- SOURCE: the same file, row 7; closes F-TEST-07 (the revert half).
+- ADVANCES: none: test strength.
+- INSTRUCTION: "`test_interactions_log.py`: the finding fixture stops naming two persons and a reverted fight. `_assert_finding` selects the first audited row of the shipped season whose candidate was chosen and whose verb declares `contests:`, and asserts the same six fields against the world (`same_faction` equals `world_q`'s reading for that pair, the question's claim id is in the actor's ledger, the candidate is the act). The planted wrong-relation test keeps its shape on that row. `revert_cr87` leaves the file." (B02.01 kept `revert_cr87` for this file only; it is deleted here with its last caller.)
+- WHERE: `engine/season/tests/test_interactions_log.py` (`_assert_finding`, `test_the_log_names_the_cardinals_fight_on_the_inquisitor`, `test_a_planted_wrong_relation_reading_is_seen`); the `revert_cr87` helper wherever it is defined, if this was its last caller.
+- TESTS: the two edited tests; `assert checked >= 1` over the audited rows.
+- FALSIFIER and CONTROL: the planted wrong-relation reading is not seen on the selected row. Control: the shipped row's six fields read equal to the world's.
+- GATE: `python -m pytest engine/season/tests/test_interactions_log.py -q` → green; `git grep -n "revert_cr87" -- engine/season/tests` → no caller in this file.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.01 (left `revert_cr87` for this file).
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.27`, `[skip ci]`.
+
+### B02.28 — a self-plea and an accusation are two rows; R-06's test drops its revert · 01_CORE_tests_shipped_world_falsifiers row 8 · BUILD · HASH EQUAL
+- SOURCE: the same file, row 8 ("`[UNVERIFIED: not built]`" in the source; the test's own comment names this keying as what lifts the revert); closes F-TEST-07 (R-06's revert).
+- ADVANCES: R-06.d's instrument (`decision_spread`; the reading is B02.38's).
+- INSTRUCTION: "`harness/decision_spread.py::read_decisions` keys a candidate on `(verb, subject, subject == actor)`, so a self-plea and an accusation are two rows; `test_in62_under_the_null…` drops `revert_cp_t05_02`, keeps `seen_null <= {"draw", "tiebreak"}`, and replaces `any("pursuit" …)` with a comparison against the null arm: the shipped reading attributes more tops to `pursuit` than the null arm does (the null's count is 0), at seeds 0, 1, 2."
+- WHERE: `engine/season/harness/decision_spread.py` (`read_decisions`); `engine/season/tests/test_in62_decision_spread.py` (`test_in62_under_the_null_every_realm_top_is_draw_or_tiebreak_and_the_shipped_reading_is_not`).
+- TESTS: the edited test; red before the keying edit if the revert is dropped first (the source's "not built": the producer drops the revert, reads the test, then keys, and records both readings).
+- FALSIFIER and CONTROL: with the keying reverted the test without `revert_cp_t05_02` fails. Control: the null arm's `pursuit` count is 0 at each seed.
+- GATE: `python -m pytest engine/season/tests/test_in62_decision_spread.py -q` → green at seeds 0, 1, 2; `PYTHONHASHSEED=0 python -m engine.season.harness.decision_spread --decisions` → prints, with self-pleas and accusations on separate rows (an instrument table; no world moves).
+- HASH MOVERS: none (an instrument's table).
+- DEPENDS ON: V12 B02.26 (placed after it; no data edge); EXISTS-IN-TREE `harness/decision_spread.py::read_decisions`.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.28`, `[skip ci]`.
+
+### B02.29 — the different-seed test cannot pass on an empty season · 01_CORE_tests_shipped_world_falsifiers row 9 · BUILD · HASH EQUAL
+- SOURCE: the same file, row 9; closes F-TEST-12 (the escape hatch).
+- ADVANCES: none: test strength.
+- INSTRUCTION: "`test_a_different_seed_can_diverge…`: assert `fixed.events > 0` first, then the inequality with no `or`."
+- WHERE: `tests/valoria/test_m1_acceptance_probe.py` (`test_a_different_seed_can_diverge_from_the_probe_seed`).
+- TESTS: the edited test.
+- FALSIFIER and CONTROL: a season with no Events passes the test (it must fail). Control: the test passes on the shipped probe.
+- GATE: `python -m pytest tests/valoria/test_m1_acceptance_probe.py -q` → green.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE the test.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, medium.
+- LANDS IT: B02's producer; `Item: B02.29`, `[skip ci]`.
+
+### B02.30 — a fixture that reverted three shipped changes plays the shipped tree · U5a_tests_digest_additions §D1 · BUILD · HASH EQUAL
+- SOURCE: `proposals/U5a_tests_digest_additions.md` §D row D1 (code SITE; `IS-B2-CORE-07`). The source's "Lands in batch" line names §A–§C, §E, §F, §D2 for B02 and is silent on D1; placed here, with the row-7 and row-8 edits it extends ("Fixtures that revert shipped changes beyond T3 rows 7–8"), `UNDECIDED` in this part's receipt.
+- ADVANCES: none of the nine as a conjunct; the grid suspension observed at the shipped configuration.
+- INSTRUCTION:
+  1. SITE: open `engine/season/tests/test_rem31_grid_suspension.py` and record its autouse fixture in the commit body.
+  2. Copied: "drop the three reverts; build the fight as a hand-built `fight` act folded on the shipped `build_realm(0)`, the form `test_combat_module.py` uses. The suspension is then observed at the shipped configuration. If a hand-built fight cannot reach ENCOUNTER on the shipped tree, that is a finding for `11_GO_player_surface_contract_B.md` §8's host, and the file keeps one revert, named in the commit."
+- WHERE: `engine/season/tests/test_rem31_grid_suspension.py` (the autouse fixture reverting CR-87, CR-85 and CP-T03-04).
+- TESTS: the file's tests on the new fixture.
+- FALSIFIER and CONTROL: the hand-built fight does not reach ENCOUNTER (then the second branch applies). Control: the suspension tests pass with the reverts before the edit.
+- GATE: `python -m pytest engine/season/tests/test_rem31_grid_suspension.py -q` → green; `grep -n "revert_" engine/season/tests/test_rem31_grid_suspension.py` → nothing, or one revert named in the commit body (the second branch).
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.27 (placed after it); EXISTS-IN-TREE `engine/season/tests/test_combat_module.py` (the hand-built fight's form).
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.30`, `[skip ci]`.
+
+### B02.31 — each scale of play names its conjunct; the stale line about the scale words goes · IS-A-04 · BUILD · HASH EQUAL
+- SOURCE: `master/instructions/IS_A_NINE_part2.md` `IS-A-04`; `IS_A_NINE.md` §5 ("Not a conjunct, and why"); closes `U4_TRACEABILITY.md` G-2 as stale.
+- ADVANCES: R-04.c1 to c7.
+- INSTRUCTION (copied): "`engine/season/requirements.yaml`, `scales:` block (which `01_CORE_requirements_reading_record` leaves untouched): (1) each of the seven rows gains `conjunct: R-04.cN` and loses nothing; its `in_loop:` stays the tree's word until the conjunct reads; (2) the header comment's sentence *'the loop's `person`/`realm`/`settlement` vocabulary is not canon's five, and no mapping between them exists — that gap is R-04's real content'* is replaced by a pointer: the mapping is `rosters.yaml: scale_of_rung` (`SCALE_OF_RUNG`, `data/rosters.py`), and what is open is a game reader of it (`hole_register.yaml` H-89); (3) the first `scales:` row's note (*'`capability` is EMPTY on 429 of the 430 persons'*) is cut to the present fact, read by command at landing." The register's three lines that read `scales[].conjunct` landed in B02.13.
+- WHERE: `engine/season/requirements.yaml` (`scales:` block and its header comment).
+- TESTS: `test_check_requirements.py::test_a_scales_row_naming_no_r04_conjunct_is_refused` (B02.13) stays green.
+- FALSIFIER and CONTROL: "a `scales:` row naming `R-04.c9`: the register must exit non-zero" (the B02.13 test). Control: the seven `in_loop:` values unchanged (`git diff`).
+- GATE: `python -c "from engine.season.data.rosters import SCALE_OF_RUNG; print(len(SCALE_OF_RUNG))"` → 8 (the pointer's target exists; read 2026-11-12); the `register --requirements` exit-0 arm reads R-04's conjuncts, which B02.38 writes: moved there (§5.8). Step (3)'s present fact: `python -c` over `build_realm(0)` counting persons with a non-empty `capability` (after B01 every person holds `unauthored_attributes`; the note states what the command prints, with its tree).
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.13 (the register reads `scales[].conjunct`); EXISTS-IN-TREE `engine/season/data/rosters.py::SCALE_OF_RUNG`, `engine/season/tests/test_scale_of_rung.py`.
+- GLOSSARY: none (`capability` stays the tree's identifier in backticks, A-98).
+- COST and TIER: edit; `sonnet`, medium.
+- LANDS IT: B02's producer; `Item: B02.31`, `[skip ci]`.
+
+### B02.32 — R-08.c's test: some chosen acts were not the top candidate, and none at zero temperature · IS-A-05 part 1 · BUILD · HASH EQUAL
+- SOURCE: `master/instructions/IS_A_NINE_part2.md` `IS-A-05` part 1 (the one owner: `IS-B2-CORE-04` is a pointer to it); `U4_TRACEABILITY.md` G-4 row 11. Part 2 (R-07.d) lands in B10 after `02_CHAR_scar_cap_and_regard_unit`.
+- ADVANCES: R-08.c.
+- INSTRUCTION (copied): "in `engine/season/tests/test_realm_requirements.py`, NEW `test_r08_some_chosen_acts_were_not_the_top_candidate_and_none_at_zero_temperature`, seeds 0–2: play one season through `harness/decision_spread.py::play_season` (the chooser is watched, never steered) at `DEFAULT_FIXTURES` and at `.sweep("choice_temperature", 0.0)`; assert the shipped arm's count of deliberations in which the sampler's pick was not the leading candidate is above 0 and the zero arm's is 0. `print_season` gains one line, `not the top candidate: <k> of <deliberations with a strict top>`." `[UNVERIFIED: that play_season's split carries the outvoted count per played deliberation under one key — basis: the module docstring; the executing session opens play_season first]`: step 0 of this item is to open `play_season` and record in the commit body where the outvoted count is read.
+- WHERE: `engine/season/tests/test_realm_requirements.py` (NEW test); `engine/season/harness/decision_spread.py` (`print_season`).
+- TESTS: the new test, written red before `print_season`'s line where the count needs a new key, else read green at once with its falsifier run.
+- FALSIFIER and CONTROL: "pin `choice_temperature` to 0 in the shipped arm: the test must fail." Control: the zero arm reads 0.
+- GATE: `python -m pytest engine/season/tests/test_realm_requirements.py -q -k r08` → green; `PYTHONHASHSEED=0 python -m engine.season.harness.decision_spread --season --seed 0` → prints the `not the top candidate` line.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.22 (the file); V12 B02.28 (`decision_spread.py`, serial); EXISTS-IN-TREE `harness/decision_spread.py::play_season`, `::print_season`.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.32`, `[skip ci]`.
+
+### B02.33 — the sites of the digest additions are opened before each edit · IS-B2-CORE-07 · POINTER
+- SOURCE: `master/instructions/IS_B2_SC_FI_CORE_CHAR_part2.md` `IS-B2-CORE-07` (POINTER: "B02's first step for this member is to open each cited site and confirm the symbol and line before the edit; a site that does not match is dropped from the member with a line in the commit body, not repaired by guess").
+- No work of its own: closed by the first INSTRUCTION step of B02.09, B02.10, B02.11, B02.12, B02.26 and B02.30, which copy it. No commit.
+
+### B02.34 — R-05's `measure:` carries a command, no figure · the intake V9-27 · BUILD · HASH EQUAL
+- SOURCE: the intake `:108` (V9-27, carry-forward E3 Block 8 (i): "`requirements.yaml:997` (R-05's `measure:` comment) says the verb table has 44 rows; it has 56 | EDIT | CR-02 (h), at the next batch that touches R-05"); placed by `V12_STRUCTURE.md` §2.2's order (the entry's own text, "with `01_CORE_requirements_reading_record`", is met: that proposal's §1 landed as B02.13); closes V9-27.
+- ADVANCES: R-05 (its `measure:` line).
+- INSTRUCTION: the entry's gate, "no figure in the comment, a command instead": R-05's `measure:` (`engine/season/requirements.yaml`, row R-05) keeps one command and no count of rows. On this tree the comment carries the history "It was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed" and the definition of "built out" (read 2026-11-12; the "44 rows" text has moved, E3's `[UNVERIFIED]`): the figures are deleted (the file's git log keeps them); the definition is carried by R-05.b's conjunct `text` in B02.38, and the `measure:` becomes `python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line; n is len(VERB_TABLE) at measurement time`, naming the row's cheapest conjunct (B02.13's rule).
+- WHERE: `engine/season/requirements.yaml` (R-05, `measure:`).
+- TESTS: none new.
+- FALSIFIER and CONTROL: `grep -n "measure:" engine/season/requirements.yaml` on R-05's line shows a digit that is a row count. Control: R-05's `status:` unchanged.
+- GATE: `python -c "import yaml; r=[x for x in yaml.safe_load(open('engine/season/requirements.yaml'))['rows'] if x['id']=='R-05'][0]; import re; print(re.findall(r'\b\d+\b', r['measure']))"` → `[]` (no figure; the key path `rows` is checked against the file at the item's open).
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.13 (the row shape; `measure:` names the cheapest conjunct).
+- GLOSSARY: none.
+- COST and TIER: edit; `haiku` (the entry's tier) or the batch's `sonnet` producer in the same window.
+- LANDS IT: B02's producer; `Item: B02.34`, `[skip ci]`.
+
+### B02.35 — R-01's and R-02's narrative leaves `requirements.yaml` · the intake DEF-8 · POINTER
+- SOURCE: the intake `:109` (DEF-8, "IN · U3 B02 (decide there)"; carry-forward E4 `:4360`: "NERS X2 (move R-01/R-02 narrative out of `requirements.yaml`) … deferred until after RB-2's R-01/R-02 re-take"; E4 `:593`: "session `01_CORE_requirements_reading_record.md` (U3 B02) and `16_PESSIMIST_CORE_the_nine_gate…` rewrite requirements.yaml `measure:` strings; may satisfy [UNVERIFIED]").
+- Decided here, ladder step 1 (superseded): B02.13 deletes every row's `measured:` ("the file's history is its git log"), which is the narrative DEF-8 would move; B02.15 re-points the two `measure:` strings. No work of its own; DEF-8 is closed by B02.13, cited in B02.13's commit body. No commit.
+
+### B02.36 — R-03's stale opening text and the header's "one tick granularity" · the intake H-2 · BUILD · HASH EQUAL
+- SOURCE: the intake `:110` (H-2, carry-forward E5 Block D9, copying v11 part 15 §5 H-2: "Stale: the opening of `measured:` (… 'What is missing is a scene-granular TICK … flattened into one `acts` list'), which describes the pre-U2 loop, and the file header (… 'The loop implements one tick granularity and no zoom'). … checked by `python -m engine.season.harness.register --requirements`"); placed by §2.2's order; closes H-2.
+- ADVANCES: R-03 (its text).
+- INSTRUCTION: (1) R-03's stale `measured:` opening left the file with `measured:` in B02.13: checked, not edited (`git grep -n "scene-granular TICK" -- engine/season/requirements.yaml` → nothing). (2) The header comment's sentence "The loop implements one tick granularity and no zoom, so R-03's scene tick is the Hybrid mode's precondition, not a local nicety." is replaced by a sentence that states what runs: the loop ticks scene by scene (R-03's `met` rests on R-03.a and R-03.b, the conjuncts B02.38 writes), and the zoom between the modes is not built; no figure.
+- WHERE: `engine/season/requirements.yaml` (the header comment of `§1 THREE MODES`).
+- TESTS: none new.
+- FALSIFIER and CONTROL: the header still says "one tick granularity" (`grep -n "one tick granularity" engine/season/requirements.yaml` → nothing). Control: no row's `status:` changes.
+- GATE: the grep above → nothing; the `register --requirements` exit-0 arm at B02.38 (moved, §5.8).
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.13.
+- GLOSSARY: none (the season's pass is still `round` in the tree until B04; the sentence says "scene by scene").
+- COST and TIER: edit; `sonnet`, medium.
+- LANDS IT: B02's producer; `Item: B02.36`, `[skip ci]`.
+
+B02.37 (`IS-A-12`, READING: no code, no commit) is the close line of this batch's BATCH GATE, which every later batch's BATCH GATE repeats: "each batch close records, in its commit body and nowhere else (CLAUDE.md §1: no count in a pointer index): `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the named conjuncts' readings with their tree, and for a batch under `IS-A-08` the quoted `BUILT OUT` and `ENGINES` lines before (the previous batch's after-reading, `reading @<sha>`, not re-taken) and after. The batch's last `Item:` commit writes the readings into the conjuncts' `reading:` records; `status:` is not edited there." Its falsifier ("a close that edits `status:` outside a re-take item, or a conjunct at `yes` whose `reading.tree` is older than the last batch that named it") is read by each batch's critic. In B02 alone, B02.38 writes `holds` and the `status:` its own readings give, as `IS-A-02` orders (the conjuncts are new; no row is claimed by landing).
+
+### B02.38 — the nine's conjuncts, authored, and the readings this batch takes · IS-A-02 · BUILD · HASH EQUAL
+- SOURCE: `master/instructions/IS_A_NINE_part2.md` `IS-A-02`; `master/instructions/IS_A_NINE.md` §1.2, §2 to §10 (the conjunct tables, copied below whole); rulings A-9, A-24, A-30, A-35, A-81, C3-K5; `proposals/U5a_tests_digest_additions.md` §F2 (R-02's reading text); `proposals/01_CORE_tests_shipped_world_falsifiers.md` row 3 (R-02's reading names the shipped-budget test); the batch's last item (`V12_STRUCTURE.md` §2.2: "`IS-A-02` last").
+- ADVANCES: all nine; R-01.a, .b, .c; R-02.a, .b; R-03.a, .b; R-04.b; R-06.d, .e; R-07.a; R-08.b, .c; R-09.a read.
+- INSTRUCTION:
+  1. (`IS-A-02`, copied) "write each row's `conjuncts:` from the tables of `IS_A_NINE.md` §2 to §10: the conjuncts carried from `workplans/valoria_master_workplan_v11_part2.md` §2 to §10 verbatim in `text`, the changed ones with the ruling in `text` (A-9, A-24, A-30, A-35, A-81, C3-K5), each `[ASSUMPTION]` of §2, §4 and §10 copied into its conjunct's `text` with its revert. `holds` is `yes` only where this batch's own run of the `argv` reads it; every other conjunct is `unread` or `no` with the last recorded reading's tree. Readings to take in B02: R-01.a (`corpus_run`), R-01.b, R-02.a, R-01.c, R-02.b (B02 builds them), R-03.a, R-03.b, R-04.b, R-06.d, R-06.e, R-07.a, R-08.b, R-08.c, R-09.a."
+  2. The `argv` of each conjunct is the command of the table's "command and expected reading" column as a list (no shell string); `expects` is the expected reading; `text` is the conjunct column with its marks. Two corrections the earlier items of this batch force, each said in the commit body: (a) R-07.a's `argv` is B02.05's `-k` expression, because B02.04 deleted `test_choose_receives_no_world`, the first name of the table's expression, and B02.13's register refuses a `-k` name that is no test's; (b) R-02.a's `reading.does_not_show` carries §F2's sentence: "the played sequence parts when observation deposits are cut (T3 row 2); the fork-and-follow test shows divergence in both arms and attributes nothing to the deposit channel".
+  3. The two retired conjuncts (R-01's and R-02's reconvergence below 96 % at `2x3`) are not written; the commit body names them and keeps their last reading's tree (`2ca90dce7`), with the table's assumption and revert.
+  4. `status:` is written from the readings: a row at `met` only where every conjunct holds with a reading of this batch; `partial` where some do; else left. A held row (R-01, R-02, R-03) that fails to read is a STOP reported to Jordan, not an edit of the conjunct, and no golden is re-pinned to pass it.
+  5. The conjunct tables, copied whole from `IS_A_NINE.md` (columns as there; "holds" is the reading at `6e1ea91` or the row's last recorded tree, re-read here where step 1 names the conjunct):
+
+  **R-01 — "decisions must propagate"**
+
+  | id | conjunct | command and expected reading | source | holds | first read |
+  |---|---|---|---|---|---|
+  | R-01.a | the corpus cites cross-person causes | `python -m engine.season.harness.corpus_run`: `check R3: n of n pass` on both lanes, `not True: none`, control `R3 False -> True` | v11 part 2 §2, kept | yes at `2ca90dce7` | now |
+  | R-01.b | the played realm does too, on three seeds | `python -m pytest engine/season/tests/test_realm_requirements.py -q -k r01`: three seeds green; the witness-cut control reads 0 | `01_CORE_tests_shipped_world_falsifiers` rows 1 (B02) | unread (the file is MISSING, written in B02) | B02 |
+  | R-01.c | removing one person's choice changes other persons' acts | `python -m engine.season.harness.storybar --remove <person> --base-seed 0 --seasons 2`: replay line `0`; removed line above 0 | `16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading` edits 2–3 (B02); **the expected reading is added by `IS-A-03`** | unread | B02 |
+  | (retired) | reconvergence below 96 % at `2x3` | `wd_collect.py` after 36 chunk cells | v11 part 2 §2 | yes at `2ca90dce7` | — |
+
+  *The retired conjunct* (copied): "C3-K5 and C-U5a-01 decide one instrument per property and re-point `measure:` to the removal test; the sweep sits under `proposals/`, costs 75 minutes, and its own caveat stands on every reading (*'detected OVER THE BASELINE on ALL 4 plants: False'*). It leaves the `met` text at B02 with its last reading kept in the file's history. `[ASSUMPTION: retiring the conjunct, not only the measure: string, is what C3-K5 means — basis: a conjunct no session re-takes is not a reading. Revert: keep it as R-01.d and R-02.c, re-taken once at milestone M2's close.]`" (A-114: no re-take runs at M2; the revert, if taken, re-takes them in B99.)
+
+  **R-02 — "decisions affect subsequent decisions"**
+
+  | id | conjunct | command and expected reading | source | holds | first read |
+  |---|---|---|---|---|---|
+  | R-02.a | withholding what acts observe changes later acts at the shipped budget | `pytest engine/season/tests/test_realm_requirements.py -q -k r02`: seeds 0–2 differ after a common prefix; the same seed twice is one sequence | `01_CORE_tests_shipped_world_falsifiers` row 2 (B02) | unread | B02 |
+  | R-02.b | a removed choice changes acts in a *later* round or season | the R-01.c command: at least one differing act at a `(season, round)` after the removed one | `IS-A-03` | unread | B02 |
+  | (retired) | reconvergence below 96 % | as R-01 | v11 part 2 §3 | yes at `2ca90dce7` | — |
+
+  **R-03 — "seasons must tick scene-by-scene, so what occurs after one scene can impact the next scene"**
+
+  | id | conjunct | command and expected reading | source | holds | first read |
+  |---|---|---|---|---|---|
+  | R-03.a | a deposit in one round changes a later round's candidates | `python -m pytest engine/season/tests -q -k test_u2_`: all pass, the one-round control among them | v11 part 2 §4, kept | yes (last read `444a00e1`) | now |
+  | R-03.b | a real case runs its rounds | `python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0`: exits 0, prints `rounds=` per season | v11 part 2 §4, kept | yes | now |
+  | R-03.c | inside one scene, a step can hang on the band of the step before | `python -m pytest engine/season/tests/test_scene_sequence.py -q` (five tests); control `interactions_per_scene = 1` reproduces the pre-edit hash | A-9; `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order` edits 1–4 (B08) | unread (the file is written in B08) | B08 |
+
+  *Why R-03.c is added* (copied): "`[ASSUMPTION: the row needs the new conjunct to stay met after B08 — basis: R-03.a and .b read rounds, not the scene A-9 defines. Revert: drop R-03.c; the row is then unmoved by B08.]`" R-03.c's `argv` names a file B08 writes: until then the register's existence rule would refuse it, so R-03.c is written in B02 with `holds: unread` and its `argv` as given, and B02.13's path rule is read on a conjunct at `unread` only where its file exists `[ASSUMPTION: the register resolves argv only for a conjunct at yes or no — basis: a conjunct whose file is owed by a later batch cannot resolve before it; the alternative, writing R-03.c in B08, changes the met text twice; UNDECIDED in this part's receipt]`.
+
+  **R-04 — "strategic and management actions must be possible, ie decisions at differing scales"** (v11 part 2 §5; three, the third one per `scales:` row)
+
+  | id | conjunct | command and expected reading | holds | carried by (batch) |
+  |---|---|---|---|---|
+  | R-04.a | every seat-gated remit verb executes at least once with `Act.via` set: `requisition`, `issue`, `open_case`, `determine`, `convene`, `dispatch`, `confer`, `establish`, `revoke` | `python -m engine.season.harness.aperture 4 0`: for each, the `BUILT OUT` block's `via` column at least 1 (`IS-A-06`) | no: `confer`, `determine`, `requisition` and `revoke` are among the 34 verbs that execute in neither instrument at `4995824`; `via` is unread for all nine | `establish`: `14_VERBS_BINDING_A` (B21) · `confer`, `revoke`: `14_VERBS_BINDING_C` (B21) · `dispatch`: `14_VERBS_BINDING_D` (B21) · `requisition`: `14_VERBS_MATERIAL_B` (B12), `06_FA_levy_through_the_seat_B` (B21) · `issue`: `06_FA_decree_binds` (B21) · `open_case`: `14_VERBS_SOCIAL2_C` (B25) · `determine`, `convene`: `14_VERBS_BINDING_B` (B32) |
+  | R-04.b | no second driver; the faction view is tested | `engine/mc_v18.py` absent; `pytest engine/season/tests/test_faction_q.py -q` green | file state yes; test not run here | — |
+  | R-04.c1 | character creation, development, chronicling is in the loop | a seated person is picked and his sheet shown (`11_GO_fidelity_and_campaign_modes` edit 1, `test_creation_sheet_shows_holdings_for_a_seat_holder`); `train` built out (`BUILT OUT` block); `python -m engine.season.harness.chronicle --seed 0` tells (`09_WR_B_chronicle_that_tells`, `test_in37_chronicle.py`) | no (`in_loop: false`) | B34 · B22 · B36 |
+  | R-04.c2 | grand strategy politics | `governance_spine play 0 8 --world realm`: exit `closed True` at seeds 0–2 (`06_FA_shortest_loop_B`) | no | B21; land on a won march B23 |
+  | R-04.c3 | social contests and debates | `python -m engine.season.harness.headless --world hearing`: the same content hash twice (`05_SC_playable_hearing_B`) | no ("seam unbuilt") | B24 |
+  | R-04.c4 | mass battles and strategy warfare | `field.won + field.lost` above 0 in computed play at `aperture 1 s`, s = 0–2, printed beside `field.unopposed`; `test_field_scene.py` (`04_MB_playable_field_scenario`) | partly: `field.lost` 1 at seed 2, 0 at seed 0 | B19, B20, B22 |
+  | R-04.c5 | personal combat and grid combat with units | (i) a duel resolves in computed play at seeds 0–2 (`aperture 2 s`: `challenge` executed above 0, `03_PC_duel_chain_reach`); (ii) a fought field resolves on the cell battlefield (c4); (iii) commander-chosen orders (`27_MB_D`, `test_none_decider_equals_no_decider`); the grid of named persons (`04_MB_squad_grid_of_named_characters`, `test_squad_field.py`) | (i) in the realm at seed 2 only (before B01); (ii) seed 2 only; (iii) and the grid: no | B01 · B20 · B30 |
+  | R-04.c6 | settlement management, city building | `python -m engine.season.harness.valley` (`07_SE_valley_scenario`, `test_valley.py`); `found`, `build`, `work` built out at `aperture 4 0` | no | B12 |
+  | R-04.c7 | investigations | `test_shortest_case.py` and `test_playable_inquiry.py` (`08_FI_07`, `08_FI_03`) | no | B11; the hearing piece B24 |
+
+  *Changes against v11, each by a ruling* (copied into the conjuncts' `text`): "(1) **`revoke` reads in computed play.** … A-35 rules a head strips an officer by a resistible draw and `14_VERBS_BINDING_C_turnover` carries the `revoke` draw (B21): the revert's condition is met, so the hand-built reading ends. (2) **Commander-chosen orders join c5.** … A-1 makes the commanded and the automatic battle one resolver. Its own revert (*'commander-chosen orders restored as a third gate'*) is taken. (3) **Each `scales:` row gains a `command:` and a `reading:`** in the file (`IS-A-04`)." Every R-04 gate over two seasons is written at two (`aperture 4 0` → `aperture 2 0`, "(four seasons in the source; A-114)"); `governance_spine play 0 8` is kept as written `[ASSUMPTION: its 8 is not a season count — basis: not opened; the producer reads its `--help` and, if 8 is seasons, writes 2 with the A-114 note]`.
+
+  **R-05 — "all verbs must be built out, and doing so requires planning out all the different scales of play required in a season"**
+
+  | id | conjunct | command and expected reading | source |
+  |---|---|---|---|
+  | R-05.a | no verb row is without a predicate and effect, never attempted, or only refused | `python -m engine.season.harness.corpus_run`: `WHERE THE <n> GO: 0 have no predicate/effect · 0 foldable but never even attempted · 0 attempted and always refused`; **or** R-05.b for every verb in the last two classes | v11 part 2 §6, kept |
+  | R-05.b | every verb is built out in the realm | `python -m engine.season.harness.aperture 4 --seeds 0 1 2`: the `BUILT OUT` block reads `built out <n> of <n>`, n = `len(VERB_TABLE)` at measurement time (`IS-A-06`) | v11 part 2 §6 and REM-02's definition; the block is new |
+  | R-05.c | no built-out verb has a band that writes nothing | the same run: `NULL SCENES` reads 0 for every verb (`IS-A-07`) | **A-81** |
+
+  R-05.b's `text` carries the definition (copied): "*'Built out'*, as v11 defines it `[ASSUMPTION; medium; Jordan to correct]`, kept: at least one act formed by the chooser in a seeded run of a shipped builder is admitted, folds its band and emits the row's declared kinds; where the band declares writes, a minted receipt has before ≠ after; a hand-built execution never counts; the denominator is `len(VERB_TABLE)` and a row leaves the table only by a ruling. **One clause of it is superseded:** *'a verb whose bands write nothing (`speak`, `interrogate`) is built out on execution'*. A-81 rules that every scene writes a durable change whatever its outcome, so no verb's band may write nothing; R-05.c replaces the clause." R-05.b's and R-05.c's `argv` run at two seasons: `aperture 2 --seeds 0 1 2` "(four seasons in the source; A-114)".
+
+  **R-06 — "characters must be robustly built with goals, ambitions, convictions, moral values, etc"**
+
+  | id | conjunct | command and expected reading | holds | what moves it |
+  |---|---|---|---|---|
+  | R-06.a | every candidate offered carries a nonzero conviction term (no tie broken by the draw where a person has a reason) | `corpus_run`: the `RANKING DISCRIMINATION` line, with no verb under `RANKING EXCLUDES` | no | the cells of `02_CHAR_choice_alignment` and `16_PESSIMIST_CHAR_B` (B10 the mechanism; **BA1 the values**) |
+  | R-06.b | the cast tests pass | `pytest engine/season/tests -q -k 'ambitions or cast'` | recorded, and by v11's own note blind (it saturated at 5 of 5 seeds in all 46 cases): it does not count | — |
+  | R-06.c | convictions spread decisions | `python -m engine.season.harness.conviction_spread` passes | not run for the last paragraphs | `16_PESSIMIST_CHAR_B` adds `harness.conviction_spread` readings (B10) |
+  | R-06.d | pursuit decides more than the draw | `decision_spread --decisions`, seeds 0–2: the strict-top share above one half at the shipped τ, beside the control τ `[ASSUMPTION: one half, H-96]` | yes at the CR-17 reading | re-read at B10 |
+  | R-06.e | every acting person carries a pursuit vector | `decision_spread --persons`: n of n at the built realm | yes, 83 of 83 | re-read at B39 |
+
+  R-06.b is written with its note ("it does not count") and `holds: unread`, so it neither holds nor blocks `met` `[ASSUMPTION: the table keeps the row as a recorded, non-counting conjunct — basis: IS_A_NINE.md §7 "it does not count"; UNDECIDED in this part's receipt: drop it as retired, or keep it so]`. R-06.c's `argv` names `harness.conviction_spread`, which B10 adds: `unread` until then (as R-03.c).
+
+  **R-07 — "characters must have memories and feelings and attitudes and relationships, and they must only have imperfect knowledge"**
+
+  | id | conjunct | command and expected reading | holds | what moves it |
+  |---|---|---|---|---|
+  | R-07.a | the chooser is handed no world; two persons hold different things | `python -m pytest engine/season/tests -k '<B02.05's expression>'` (the table's `'choose_receives_no_world or a_view or r7_two_persons'`, corrected: step 2 (a)) | yes by the row; not run here | held: B09, B10, B11 |
+  | R-07.b | two hearers with different claims about one subject read different regard after two realm seasons | v11 names no committed command (met at B-E on a test) `[UNVERIFIED: the test's name was not opened]` | yes by the row | `02_CHAR_scar_cap_and_regard_unit` (B10) changes the unit: re-read there |
+  | R-07.c | a fought field writes the losers' stance | `aperture 1 s`, s = 0–2: `field.won + field.lost` above 0, quoted with `_eff_march`'s `Person.stance` receipt on the losing side, `field.unopposed` printed beside `[ASSUMPTION; medium; Jordan to correct]` | count: 0 / not read / 1 at seeds 0 / 1 / 2 (before B01); receipt unread | B01 (re-pins every realm), then B19, B20, B22; the read is `IS-A-06`'s block |
+  | R-07.d | a feeling, attitude or relationship changes a decision | `pytest engine/season/tests/test_realm_requirements.py -q -k r07`: a planted regard changes the top candidate at least once in seeds 0–2; the unplanted seed is equal | unread | **`IS-A-05`** (part 2), in B10 |
+
+  R-07.b's `argv`: `engine/season/tests/test_told_by_channel.py::test_r07_realm_regard_differs_between_hearers_by_claim_not_stance_alone` (opened by `U5a_tests_digest_additions` §F1, "a two-season realm reader"), which settles the table's `[UNVERIFIED]`; the commit body says so.
+
+  **R-08 — "decisions must not be omniscient and perfectly rational"**
+
+  | id | conjunct | command and expected reading | holds | what moves it |
+  |---|---|---|---|---|
+  | R-08.a | every tie among offered candidates is between candidates of equal, nonzero choice score | `corpus_run` (`RANKING DISCRIMINATION` and the tie ordering) and `decision_spread --decisions` | no | **BA1** (the cells) |
+  | R-08.b | the choice is sampling, and the argmax is its zero-temperature control | `pytest engine/season/tests -q -k test_u4_the_choice_is_sampling` | yes by the row | held: B06, B10 |
+  | R-08.c | in play, some chosen acts were not the top-ranked candidate | `python -m engine.season.harness.decision_spread --season --seed s`, s = 0–2: the share of resolved acts whose chosen candidate was not rank 1 is above 0 at the shipped setting and 0 at temperature 0; and `pytest engine/season/tests/test_realm_requirements.py -q -k r08` (B02.32) | unread | **`IS-A-05`**, in B02 |
+
+  **R-09 — "chains of events within a scene are probabilistic, not deterministic"**
+
+  | id | conjunct | command and expected reading | holds | what moves it |
+  |---|---|---|---|---|
+  | R-09.a | a verb that draws is graded | today `pytest -k test_we_only_a_verb_that_declares_contests_can_be_graded_today`; **from B07** `pytest engine/season/tests/test_task_draw.py -q` (six tests; `checked >= 10` verbs) | yes today | B07 retires the premise of the present test: `IS-A-10` re-points the conjunct in that batch |
+  | R-09.b | two persons resolve the same verb at different pools because they differ | `python -m engine.season.harness.aperture 4 0`: `POOLS ROLLED` prints *two actors at different pools: yes* on a non-combat verb, beside the control in which every person holds the default | no | B04, B05, **BA1** |
+  | R-09.c | a non-combat verb besides `tell` resolves at two bands whose writes differ | `corpus_run`: `DEGREES RESOLVED BY VERB` | no at the last reading | B05, B07 |
+  | R-09.d | outcomes that could go either way are drawn | `test_task_draw.py::test_converted_verb_resolves_in_at_least_two_bands` (seeds 0–2, two seasons): for every converted verb with ten or more resolved acts at least two bands occur and none is 100 % one band; success Events carrying a degree at least 90 % of non-bookkeeping success Events | no | **A-24**; `18_DETERMINISM_task_draw_for_uncontested_verbs` gate 1 (B07) |
+  | R-09.e | the draw is one owner's, keyed | `pytest engine/tests/test_draw.py -q`; same seed twice, same hash | no | A-30; `11_GO_one_draw_owner` (B06) |
+
+  R-09's assumption, copied into R-09.d's and R-09.e's `text`: "`[ASSUMPTION: R-09.d and .e are conjuncts of the row and not only gates of B06 and B07 — basis: the standing rule names R-09; v11's text would read met on one verb at two bands while nine in ten successes stay a fixed function of state. Revert: drop them; the row can then read met at B07 plus BA1.]`" R-09.a's `argv` today is `python -m pytest engine/season/tests/test_season_shape.py -q -k test_we_only_a_verb_that_declares_contests_can_be_graded_today`. R-09.b's `argv` at two seasons: `aperture 2 0` "(four seasons in the source; A-114)".
+
+  6. The readings of step 1 are taken on the tree after B02.36, `PYTHONHASHSEED=0`; the long ones (`corpus_run`; the removal test at seeds 0–2; `aperture 1` and `2` at seeds 0–2) launched in the background at this item's open, each sized first on one seed, and read here (`STAGES.md` practice 5). Each `reading:` record carries `tree`, `date`, `seed`, `seasons`, `line` (the printed line), `control`, `does_not_show`.
+- WHERE: `engine/season/requirements.yaml` only (every row's `conjuncts:`, `status:` as step 4 gives it, `measure:` of any row B02.13 left naming a deleted command).
+- TESTS: `test_check_requirements.py::test_shipped_file_exits_zero` (B02.13) turns green.
+- FALSIFIER and CONTROL: "a conjunct marked `yes` whose `reading.tree` is not an ancestor of the commit that wrote it (visible in one `git log -p`); control: the register's own refusals (`IS-A-01`)."
+- GATE: `python -m pytest engine/season/tests/test_register_reading.py engine/season/tests/test_check_requirements.py -q` → green (every test); `python -m engine.season.harness.register --requirements` → exit 0, "prints, on B02's closing tree, R-01, R-02, R-03 at `met` with every conjunct held, and the six others at the status their held counts give" in the form `R-0n  <status>  <held> of <m> conjuncts  tree <oldest reading.tree>` (B02.13's moved arm); `python tools/m1_acceptance.py --summary` → row 3 prints the held count (B02.13's moved arm). "A held row that fails to read is a STOP reported to Jordan, not an edit of the conjunct."
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.13 (`IS-A-01`), B02.19 (`IS-A-03`), B02.32 (`IS-A-05` part 1), B02.21 and B02.22 (rows 1–2), B02.18 (`BUILT OUT`), B02.20 (`NULL SCENES`), B02.05 (R-07's expression); EXISTS-IN-TREE `engine/season/tests/test_faction_q.py`, `harness/headless.py`, `harness/corpus_run.py`, `harness/decision_spread.py`; `engine/mc_v18.py` absent.
+- GLOSSARY: none beyond B02.13's rows.
+- COST and TIER: edit plus instrument time (`corpus_run` recorded at 2.5 and at 8 minutes by two lanes; not measured here); `sonnet`, high; `opus` reads each reading against its conjunct's text before `holds` and `status:` are written (the judgment node that gates a requirement, CLAUDE.md §10).
+- LANDS IT: B02's producer; `Item: B02.38`, the batch's last (no `[skip ci]`); it writes the conjuncts' `reading:` records (`IS-A-12`).
+
+| STOP. Batch B02-tests closes here |
