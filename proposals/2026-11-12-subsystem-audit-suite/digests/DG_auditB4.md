@@ -527,3 +527,52 @@ Scope: 73 files under `.audit/2026-07-22-mass-battle-stress-test/`, `.audit/2026
   - Deferred: PP-290 reach-scale reconciliation, P-DEC-3 density cap, DG-6 :97-103.
 - **Conflicts / stale:** its C2/C6 REPEL claim (attacker ~5%) is contradicted by honest_gauge_readout (57% raw) and adversarial_deep_audit §8.4 (43.8-100% span) one to two days later -- the 10/20 -> 6/20 numbers pre-date the density fix (ED-MB-0027) that revealed the real baseline 5/20.
 - **Open items:** none beyond deferred list.
+
+### .audit/2026-07-23-combat-combinatorial-audit/findings_v1.md
+- **What it is:** PC combinatorial/isolation audit and all-node state-graph interrogation (ED-PC-0025, 2026-07-23): every lever toggled alone and pairwise.
+- **Status:** "RATIFIED (audit conclusions + the two fixes below; ED-PC-0025, 2026-07-23)"; reading: historical, fixes landed (`core.logistic` exists at `modules/combat/core.py:36`, verified).
+- **Bears on:** PC, DICE, CHAR
+- **Content that matters:**
+  - Verdict "NO DEAD WIRES": WIRED-LIVE levers skill(bind) +33pp, agility +40pp, skill(dodge) +31pp, skill(parry) +25pp, strength +24pp; morphology levers (edge_read, spine_press, edge_grab, choke, facing_regime) are per-event situational, ~0 aggregate :18-24.
+  - Strong channels sub-additive toward the hard 95% ceiling (`UPSET_FLOOR=0.05`); one genuine synergy aggression x bind-skill (+30.6 vs +20.9 expected) :26-28.
+  - Pipeline node firing rates; separation reasons `collapse` and `beat_exhaustion` never fire (pre-existing dead-branch, HANDOFF_PC) :30-32.
+  - Fix: single-source overflow-safe `core.logistic()` (was open-coded 5 ways; out-of-contract attributes 50000 crashed 99/300 fights -> 0/300), clamp +-500, legal builds |arg| <= ~2.4 so byte-identical :43.
+  - Frequency-gating: morphology levers are gated by their enabling skill (`mode_sigma` wind branch adds `defender.skill('bind')`), default builds don't invest so ~0 aggregate :40.
+  - DEFERRED: mode-exposure `T_vuln` model (select_mode is exposure-blind), HEMA grounding corrections (`guardia`->facing_regime wrong, `atajo`->measure wrong, `zwerchhau`->edge_read wrong-leaning), no tradition gate on `equipped`, 9 pre-existing intentional-red failures :46-50.
+- **Conflicts / stale:** "ED-PC-0025 ratified" status but DEFERRED list was surfaced only; whether `T_vuln` or the equipped-tradition gate were built since is [UNVERIFIED].
+- **Open items:** all DEFERRED items (T_vuln, grounding corrections, build-legality gate, 9 red tests).
+
+### .audit/2026-07-23-combat-combinatorial-audit/harness.py
+- **What it is:** Isolation sweep script: each factor on-alone vs off, event-divergence (fires%) and win-share delta, classified DEAD / WIRED-SITUATIONAL / WIRED-LIVE.
+- **Status:** none; reading: historical script.
+- **Bears on:** PC
+- **Content that matters:**
+  - Factor table grouped by state-graph node (Exchange.read, Bind, Contact, Approach.facing, Riposte.counter, Exchange.commit/mode, Damage, Tempo) :53-78; class thresholds fires <3% and |dw|<2pp = DEAD; |dw|>=5pp LIVE :86-88.
+  - Control row "tradition=german ALONE (no ability, post-imposition-retire)" expected DEAD :77.
+  - Path hard-coded: `systems/combat/combat_engine_v1` plus its `workbench/trace.py` :5-10.
+- **Conflicts / stale:** live PC code is `modules/combat/` (files `fight.py`, `core.py`, `wrapper.py`); `systems/combat/combat_engine_v1` still exists on disk (verified `ls systems/combat`), so the script may or may not run [UNVERIFIED].
+- **Open items:** none.
+
+### .audit/2026-07-23-combat-combinatorial-audit/interaction.py
+- **What it is:** Pairwise interaction matrix per state-graph node: INDEPENDENT / MASKING / SYNERGY / ANTAGONISM / PARTIAL.
+- **Status:** none; reading: historical script.
+- **Bears on:** PC
+- **Content that matters:**
+  - Classification: |dxy - (dx+dy)| <= 2pp independent; super-additive SYNERGY flagged as "degeneracy risk" :1-4, :29-36.
+  - Nodes: Bind (katana vs arming), Contact (dagger vs arming), Exchange (arming mirror) with factor lists (shinogi L1/L3, skill_bind2, staerke, ringen, skill_grab2, strength, parry, agi6, disp_agg) :40-59.
+- **Conflicts / stale:** same hard-coded `systems/combat/combat_engine_v1` path.
+- **Open items:** none.
+
+### .audit/2026-07-23-combat-fiat-audit/fiat_audit_v1.md
+- **What it is:** PC fiat / broken-logic audit (ED-PC-0023, 2026-07-23): four passes incl. three blind read-only hunters plus author's `[FIAT]`/`[ASSERTED]` inventory (18 tagged sites).
+- **Status:** "RATIFIED (by merge of PR #226, 2026-07-23, ED-1094)"; reading: historical, mostly executed.
+- **Bears on:** PC, DICE
+- **Content that matters:**
+  - Grip-invariant thrust (`weapon_physics.phi_grip('point')==1.0`) interrogated and kept: axial force is grip-invariant; real costs of choking up already live in `choke_counterbalance -> CHOKE_ACCURACY_K` and reach/lunge/commit systems, a `phi_grip` force term would double-count :15-28.
+  - Fixed: `THRUST_LEVER_FLOOR` 0.30 -> 0.24 (was flat-topping 7 polearms; verified `modules/combat/core.py:408` shows 0.24); `GAP_EXPOSURE` reordered `{cloth:0.97, mail:0.95, plate:0.90}`; dead `Combatant.pool` removed; stale WIRING-STATUS prose struck :30-37.
+  - Deferred (evidenced): `MAX_TEMPO_PEN=0.8` flat-tops 38 of 53 weapons to one 0.80 ("single largest emergence-suppressor found"); fix = over-cap tail saturation but needs `tests/valoria/r3_identity_golden.json` regenerated and no generator exists; `PERC_EXP=0.30` low-mass compression; `PERC_TRANSMIT_FLOOR=0.35` flat-tops 11 Mordhau ratios :39-52. Still live: `MAX_TEMPO_PEN=0.8` at `modules/combat/config.py:21` and `PERC_TRANSMIT_FLOOR=0.35` at `core.py:302` (verified).
+  - Jordan ruling 2026-07-23: `impose_node` (tradition forces its preferred node) retired as fiat; build investment (bind-skill 1.0/2.0/3.0 -> 61.3/71.1/74.7%; parry 57.2/65.6%) carries differentiation :53-62; deleted under ED-PC-0035 (config comment confirms) :294.
+  - Design principle: "each combatant should have their own feel, emergent from their full stack ... every build should be available"; tradition gates ACCESS, investment drives EFFICACY; target = per-fight texture with outcome preservation, not aggregate win-rate parity :86-114.
+  - CLAUDE.md §5 "combat pool defined three ways" overstated: `max(5, History+6)` everywhere except stale `values_master.yaml` (since dissolved) :73-76.
+- **Conflicts / stale:** `values_master.yaml` is in the dissolved list (CLAUDE.md §3); `adef_cap` blunt-branch latent bug [UNVERIFIED fixed].
+- **Open items:** tempo-penalty saturation; PERC calibrations; graded investment levels for abilities ("levels of investment for techniques", scoped as next increment).

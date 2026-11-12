@@ -184,3 +184,54 @@ Working-tree facts checked while reading (used below): `systems/social_contest/s
 - **Conflicts / stale:** nothing here is citable as historical in ratified docs (file 03 §3.5).
 - **Open items:** primary-text reads (Hui Wu translation, Gentz 2014, Watson Han Feizi, Koziol chapters, Cotrugli 1458); re-run separation rule on N12-N20 (done in file 03: 20 -> 5).
 
+### .audit/2026-08-06-vector-audit/structure_audit/data/structure_metrics.json
+- **What it is:** machine-generated JSON snapshot (2026-08-06) of import-graph and module-contract structure: 271 nodes / 408 edges for code (`cli_entries`, `cut_vertices`, `cycles`, `orphans`, `stub_wired`) and a 27-node contract graph (`l2`: joined/none/undeclared contracts, locality, cycles); plus `findings` (dangling_emit, doc_null, phantom_producer).
+- **Status:** none (data file). Reading: historical snapshot; the tree it measured (engine/cross_scale, engine/substrate/keys, engine/mc_v18, systems/factions) no longer exists.
+- **Bears on:** CORE, PROCESS, SC, FA, MB.
+- **Content that matters:**
+  - Import cycles (`code.cycles`): `mass_battle.sim.massbattle <-> units`; the whole `social_contest.sim.contest` package (appraise, armature, dictionaries, faction, modes, resolver, rhetoric, wrapper) in one cycle; a mass_battle test-package cycle (:117-139).
+  - Cut vertices include `engine.cross_scale.echo_transport`, `engine.cross_scale.scene_dispatch`, `engine.mc_v18`, `engine.substrate.keys`, `systems.social_contest.sim.parliamentary_vote` (:94-116) - all of the engine ones now gone (checked: `engine/mc_v18.py`, `engine/cross_scale`, `engine/substrate/keys.py`, `systems/factions` absent; `systems/overview`, `systems/mass_battle/sim`, `systems/threadwork/sim` still present).
+  - `stub_wired` list (:209-234): tribunal, treaty, charter_liberties, fieldwork investigation etc. were wired to stubs; `l2.contract_code_join` says 13 of 27 contract modules join code and 13 have none (`audit, domain_actions, npc_behavior, npc_memory, settlement_economy, game_director...`) and `mass_battle` "undeclared" (:271-306).
+  - Contract-graph cycle `faction_state, npc_behavior, piety_track, social_contest` and cross-locality fraction 0.511 (:335-352).
+  - `findings.dangling_emit`: `peninsular_strain -> env.crisis` (non-notional) plus two notional (:236-253).
+- **Conflicts / stale:** wholly Key-substrate-era (the `module_contracts` "emits/consumes" model); `tools.build_key_graph`, `tools.export_key_types`, `tools.dead_primitive_census`, `tools.trace_execution_phases`, `tools.sim_harness` all absent now (checked). Not reproducible from the current tree.
+- **Open items:** none.
+
+### .audit/2026-08-08-world-churn-audit/01_plan.md
+- **What it is:** v2 interdependency plan (rewritten after adversarial review) from the world-churn audit, 2026-08-08, lane IN, ED-IN-0149; tiers T0 repairs/instruments, T1 high-leverage edges, T2 substrate maturation, T3 Jordan decisions J-A..J-I.
+- **Status:** "PROPOSED — nothing here is ratified by merging this audit PR. Tier 3 is HELD for Jordan." Reading: superseded/historical - its subject (Key substrate, `scene_dispatch`, `mc_v18`) is retired (ED-IN-0232) and the plan is not an active workplan.
+- **Bears on:** CORE, WR, FA, SE, MB, CHAR, SC.
+- **Content that matters:**
+  - Strategy (:11-25): "the machinery is built and disconnected, not missing and not scripted"; repair, connect highest-leverage single edges, instrument connectivity, force Jordan-owned decisions; behaviour changes flag-gated OFF with byte-exact goldens; no uncited constants.
+  - T1-2 Revolt -> `Territory.owner=None` (:133-152): `Territory.accord` continuous 0.5-7.0 with a mutator flooring at 0.5, so a naive `== 0` is inert forever; use `canon_buckets.canonical_accord` (<1.75); Step 4c.1 and garrison contest must be in scope. T1-1 battle -> Mil attrition BLOCKED (no canon maps size_pct -> Mil; J-I) (:154-171). T1-4 Council -> `Sta`: one echo block carries one stat, so shape not magnitude is the blocker (:178-186).
+  - T0-1 conviction gate: `apply_conviction_scar` returns magnitude 0 for unknown names while caller reports `conviction_scar=1`; fix breaks `engine/tests/test_knots_ed912.py:103-109` and forces a name choice (J-C) (:92-109). T0-3 `temperaments.py` reader cannot see `world.npc_drift_state`; `_CELL_OWNED` is MB-scoped so extending it would be a guard that passes because it cannot look (:77-90).
+  - Tier 3 list J-A (L0 identity fork), J-B insurgency L growth rule, J-C conviction vocabulary (4 axes vs 9 vs 8 vs claimed 13), J-D ED-1051 engine_clock open, J-E Strain/Turmoil/PI collapse, J-F council echo shape, J-G dead `spec/churn_amendments.md` cite, J-H arc-generator skill reads evacuated trees, J-I battle -> Mil (:206-218).
+  - Review changed 6 of 11 items (:244-250): wrong sequencing, vacuous guard, second parser (`build_execution_map`), unblocked-by-assertion item.
+- **Conflicts / stale:** `conviction.py` `CONVICTIONS` is now `= descriptors.PURSUITS` (grep) - J-C looks superseded in code; `apply_conviction_scar` still present in `systems/characters/sim/conviction.py` and `knots.py` and `engine/tests/test_knots_ed912.py` [UNVERIFIED whether still no-op on unknown]. `canonical_accord`, `process_treaty_expirations`, `npc_drift_state` greps: only `tests/valoria/test_import_cycle_game_state_npe.py` and `tools/export_game_constants.py` match the group - the Accord/treaty code appears gone. J-D/J-A/J-G refer to doc objects not rechecked [UNVERIFIED].
+- **Open items:** all of J-A..J-I as of 2026-08-08; most dissolved with the Key retirement and `engine/season/` rebuild (superseded by 5-way test in CLAUDE.md §0 rather than answered).
+
+### .audit/2026-08-08-world-churn-audit/02_adversarial_review.md
+- **What it is:** verdict record of two read-only critics against the churn findings and plan (2026-08-08, lane IN, ED-IN-0149).
+- **Status:** "RECORD". Reading: historical method exhibit.
+- **Bears on:** PROCESS, CORE, WR, FA.
+- **Content that matters:**
+  - Overturned: the findings credited NPE stance drift as live churn while its own D5 proved `world.npcs` stays empty (:18-24, call site vs concept pattern-match); "both live stat_deltas sites faction-facing" false (one settlement-facing); T1-1 blocked; T1-2 unimplementable; T0-3 guard vacuous (:16-51).
+  - Sharpened: "10 of 13 subscriptions have no producer" is 11/13, and 13/13 at default-flag runtime; `scene.combat_felled` has no Python emit site (:57-62).
+  - Softened: `da.public_governance` is a live log-only emitter; `restore_world` can create `owner=None` (:70-79).
+  - Method: independence structural (read-only tools, producer output only); the biggest value was a self-contradiction between two sections the producer itself wrote (:128-131); critics' weakest verdicts carried forward (:104-118).
+- **Conflicts / stale:** subject surfaces gone (see 01). **Open items:** the unaudited producer-only claims (§5 landing verdicts, §6 lens attribution, §7 canon-engine import, D12 contest-kernel purity).
+
+### .audit/2026-08-08-world-churn-audit/03_causal_model.md
+- **What it is:** causal-model and build-order document from seven Fable lenses + two critics, 2026-08-08, lane IN, ED-IN-0149.
+- **Status:** "PROPOSED (read-only audit; nothing executed, no head moved, no flag flipped)". Reading: historical; premise (Key graph with 46 nodes/139 edges, notional edges) retired with the Key substrate; economic/stability reasoning still useful as leads.
+- **Bears on:** WR, SE, FA, MB, CHAR, CORE.
+- **Content that matters:**
+  - Core finding: the causal model is "declared and unemitted" - of 94 module-to-module `emits_consumes` edges 43 are `notional`, only 7 carry a Key type with a live emitter; `wiring_map_check` reported `live: 2` of 27 modules; a 40-season traced run showed no npcs/characters/fieldwork/threadwork/combat calls at all (:12-28).
+  - Adjudicated build order (:32-83): fiscal edge first (`realized_income = Prosperity x stance x compliance`; without income every Wealth-denominated cost ends in a clamp no-op since `Faction.adjust` floors at 0.5), then conquest fork at settlement grain with Accord-write reconciliation (4 control/accord writers incl. Crown Initiative), declare `scene_outcome` at one producer, battle consumers after a roster reconciliation (registry vs key_graph.json disagree), derivation-crossing rule (edge-triggered with hysteresis).
+  - Stability (:85-107): casualty writeback before fiscal edge degenerates to first-mover extermination; conserved population tier flips the sign of misgovernance punishment (emigration to a better-run city raises T); loyalty-retarded migration over-damped unless loyalty decays.
+  - Double-counting (D.6) (:109-122): Mandate counted twice (mass_battle_v30:688 direct write vs derived aggregate in settlement_layer_v30:165); one conquest at three grains; casualties charged to two settlements; migrants twice.
+  - Keys verdict (:128-151): `stat_deltas` has no applier; derived values invisible to `causes[]` (derive-never-write vs causal legibility conflict); six of 55 key types carry registry defaults their own validator rejects; proposed ruling: store conviction on the canonical 13, derive the 4 axes (13->4 non-invertible).
+  - Recurring failure mode (:155-169): declaring a mechanic missing without checking where the corpus keeps it (e.g. `mc_v18` refusing NPC generation although `settlement_layer_v30.md:857` is the Local Actors rule; captive pool already owned by `faction_layer_v30.md` 6.3). Also: no Scar decay anywhere (needs a vindication mirror) (:193-196).
+- **Conflicts / stale:** all Key/`mc_v18`/`scene_dispatch` references retired; the "two battle engines" finding (canon 28-module engine never imported at runtime) pre-dates `modules/mass_battle/` and `engine/season/` [UNVERIFIED current state]. Stability claims are reasoned, not simulated (:202-207).
+- **Open items:** whether Accord can reach 0, whether `Sta<=2` is reached, conquest frequency - hypotheses never measured. Several leads (no Scar decay; fiscal edge; double-counted Mandate) are architecture-neutral and may still be live for SE/FA/CHAR.
+

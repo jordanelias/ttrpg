@@ -577,7 +577,7 @@ appointed seat revoked (permanent unless pardoned, which PES-FA-A makes possible
 
 | file | what | cost |
 |---|---|---|
-| `proposals/16_PESSIMIST_FA_A_dismissal_survives_the_king.md` | the Duchy of Valorsmark passes with the throne; the seven council seats come under their dukes; a dismissing seat can pardon | edit (data) |
+| `proposals/16_PESSIMIST_FA_A_dismissal_survives_the_king.md` | the Duchy of Valorsmark passes with the throne; six council seats come under their dukes (the Guild Comptroller cannot: its faction is the Guilds); a dismissing seat can pardon. Its three edits were applied in memory and their gates run (E-10): all three hold, and the run corrected the draft's seven to six | edit (data) |
 | `proposals/16_PESSIMIST_FA_B_who_may_sit_join_and_declare.md` | a seat is held by an individual; cross-ladder conferral priced, self-conferral across ladders refused; joining a faction needs an admission; a war has two parties and a declarer of one | edit; one small build |
 | `proposals/16_PESSIMIST_FA_C_under_the_seat.md` | one predicate for who is under a seat (ground, ladder, sworn), asked by `issue` and `dispatch` | small build |
 

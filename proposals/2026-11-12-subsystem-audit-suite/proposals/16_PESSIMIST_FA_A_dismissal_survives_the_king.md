@@ -55,7 +55,7 @@ No hash moves at build. Edits 1 and 2 are data; edit 3 is data. None adds a fiel
 | # | decision | ladder step |
 |---|---|---|
 | 1 | The Duchy of Valorsmark passes with the throne: `conferral: inheritance` (CP-T09-06's edit, corrected by the FA lane's R-18 to `null → inheritance`) **and** a `successions` row to the same title. CP-T09-06 as carded changes the basis and names no row; without the row `check_successions` refuses the load, and with it the docstring's "leaves both to one claim" becomes true | 3 (the effect's own docstring), 1 (CP-T09-06) |
-| 2 | The seven council seats are anchored one rung below their duchy, on the territory of the ducal seat, as the Crown's are on `terr_T1`. The ruled basis ("rung above of same faction", ED-IN-0256 (3)) is not touched; the data is brought under it | 4 (the Crown rows' precedent) |
+| 2 | Six of the seven council seats (all but the Guild Comptroller, whose faction is the Guilds) are anchored one rung below their duchy, on the territory of the ducal seat, as the Crown's are on `terr_T1`. The ruled basis ("rung above of same faction", ED-IN-0256 (3)) is not touched; the data is brought under it | 4 (the Crown rows' precedent) |
 | 3 | Each of the three ducal rows gains `determine`. A duke holds a bench in his duchy; the hand that dismissed can reinstate. The alternative, a second eligibility on `pardon` (`remit:revoke`), would need a second basis beside `bench` in the gate for one case, which is more apparatus for the same play | 4 (`off_king`'s row carries both), 5 |
 
 Not decided here, and named: the King as King still dismisses nobody (the realm is never the rung directly
@@ -91,8 +91,9 @@ exporter (`--check`), not by hand.
 Re-run `pf2_premise.py 0` and `pf2b_followup.py 0` (scratchpad `runs/PES_FA/`), or their equivalents in a
 test file that builds the realm:
 
-- **G1** `strippable(w)` at build is a superset of today's six and includes the seven council seats, each
-  through its duke's seat. Control: `off_king` strips none of the thirteen (the rule is unchanged).
+- **G1** `strippable(w)` at build is a superset of today's six and includes six council seats, each
+  through its duke's seat. Control: `off_king` strips none of the twelve (the rule is unchanged), and the
+  Guild Comptroller is still strippable by nobody.
 - **G2** after the King's death and the heir's one `succeed`: `off_king` and `off_duke_valorsmark` are
   both held by the heir; `strippable(w)` equals its value at build; the new King's `revoke` of the Marshal
   through `off_duke_valorsmark` closes the hold. Today: empty set, `revoke.refused`.
