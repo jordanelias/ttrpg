@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (a verb build-out audit; resolves nothing at runtime, CLAUDE.md §0.05)
 
+Authored in part by Fable; completed by Opus after the Fable usage limit (2026-11-12).
+
 ## Read at: 84d2a02 (working tree; implementation lane A's duel-chain edits not yet merged, see §0.2)
 
 Work order: `VERBS_BRIEF.md`, FAMILY = PHYSICAL. Verbs: `arrest`, `fight`, `capture`, `accept`, `march`,
