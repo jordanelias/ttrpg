@@ -445,6 +445,24 @@ Not in this batch: `SEQ` edit 5 (the Layer 1 text; APPLIED, `L1-A9`, `04:662`, "
 - COST and TIER: small build; `sonnet`, `high` (`RIVAL` "Tier").
 - LANDS IT: B08's producer; `Item: B08.05`, `[skip ci]`.
 
+### B08.06 — the lap stamp earns its test arm or the arm goes (H-172) · `U5a_tests_digest_additions` §G · BUILD · HASH EQUAL
+- Covered: C-01 (added by the coverage lane, `master/workplan_v12/COVERAGE.md` §C: the closure row `unified/U5_FINDINGS_CLOSURE_U5a.md:840` names `TDA §G` as a carrier, the proposal's head says "§G in B08 with `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md`", and no v12 item carried it).
+- SOURCE: `proposals/U5a_tests_digest_additions.md` §G ("H-172: the round stamp has no test that tells it apart"), its "**Lands in batch:**" line ("§G in B08 with `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md`"), §G's "Falsifier"; `engine/season/hole_register.yaml` row H-172; closes the closure row `U5a:840` (§3 R-03, DG4; its other carrier, `16_PESSIMIST_CORE_no_stored_plan.md`, is B03.16) and, by its step 2, H-172.
+- ADVANCES: R-03.a (the `test_u2_` arm pair the batch gate reads: it either observes order inside a season or is deleted as an arm that cannot differ).
+- INSTRUCTION (copied, §G): "Decided (ladder step 5): the pair earns its place or goes, in the commit that makes order inside a season matter.
+  1. In the landing of `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` (Jordan's answer A-9), add one arm to that test on a fixture where the claim lands at a later position than the read it would change: stamped with its round, the earlier read does not see it; stamped 0, it does.
+  2. If no such fixture can be built on the shipped predicates after that landing, delete the `late` / `unstamped` pair from the test (T2's rule: an arm that cannot differ asserts nothing) and close H-172 as irrelevant, citing the commit. No game code changes in either case." The test is `engine/season/tests/test_season_shape.py::test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_same_season` (its helper `_u2_bailiff_sets`, its `same_as_control` assertion: H-172's `site:`). Step 2's closure is an append to H-172's `cite:` (R0: append, never rewrite) naming this commit; step 1 leaves H-172 open and appends the new arm's name.
+- WHERE: `engine/season/tests/test_season_shape.py` (`test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_same_season`, `_u2_bailiff_sets`); `engine/season/hole_register.yaml` (H-172 `cite:`, step 2 only).
+- TESTS: the arm of step 1 is written in the existing test and read on B08.04's tree: green with the lap stamp, and red under the falsifier's mutation; under step 2 the test keeps R-03's general claim and loses only the `late`/`unstamped` pair.
+- FALSIFIER and CONTROL (copied): "After step 1, stamp every claim round 0 in process: the new arm must go red. If it stays green, step 2 applies." Control: R-03's general claim in the same test (a deposit in one lap changes a later lap's candidate set) stays green in both branches.
+- GATE: `python -m pytest engine/season/tests/test_season_shape.py -q -k u2_a_deposit` → pass; the mutation run of the falsifier quoted in the commit body (red, or green and step 2 taken); under step 2, `python -m engine.season.harness.register --check` → exit 0 after the H-172 append.
+- HASH MOVERS: none (a test edit; "No game code changes in either case").
+- DEPENDS ON: V12 B08.03 and B08.04 (the scene order, `SEQ` edits 1 and 4: "the commit that makes order inside a season matter"); EXISTS-IN-TREE `engine/season/tests/test_season_shape.py::test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_same_season`, `engine/season/hole_register.yaml` row H-172.
+- GLOSSARY: none.
+- NAMES: `Claim.round` → `Claim.lap` (B04.01, PCR-4); "round" for the season's pass → lap; the test's own name is read at the tree by symbol (B04.01 may have renamed it) `[ASSUMPTION: the producer finds the test by its body (`_u2_bailiff_sets`) if B04.01 renamed it — basis: B04.01 renames `Claim.round` and `scenes_per_round`]`.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B08's producer; `Item: B08.06`, `[skip ci]`; B08.99 re-pins nothing for it (hash EQUAL).
+
 ### B08.99 — re-pin and close readings · E-1 · BUILD · HASH MOVER (the re-pin)
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12; `SEQ` "Cost class" ("one re-pin at B08's close"); `RIVAL` ("one re-pin at B08's close, shared with the scene order"); CF-E8-2 (H-249's residue).
 - ADVANCES: R-03.c, re-read R-03.a, R-03.b, R-01.b (the `reading:` records).
