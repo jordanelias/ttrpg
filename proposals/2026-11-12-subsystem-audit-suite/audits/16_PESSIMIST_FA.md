@@ -40,23 +40,37 @@ anything).
 
 | | SHIPPED | DRAW2 (noise floor) | NO_SEATS | NO_FACTION |
 |---|---|---|---|---|
-| acts attempted | 1,703 | 1,750 | 1,666 | PENDING_NF_ATT |
-| executed | 919 | 1,023 | 962 | PENDING_NF_EXE |
-| resolved by a draw | 121 | 156 | 182 | PENDING_NF_DRAW |
-| executed answers to another person's act | 156 | 167 | 135 | PENDING_NF_CROSS |
-| … whose antecedent is an FA act | 54 | 30 | 13 | PENDING_NF_CROSSFA |
-| persons at end | 83 | 83 | 83 | PENDING_NF_PERS |
-| stores, realm total (grain / ore / salt / timber) | 2775 / 3663 / 2109 / 703 | the same | **the same** | PENDING_NF_STORES |
-| seat-gated verbs executed (`issue`, `dispatch`, `convene`, `march`, `open_case`, `establish`) | 19, 12, 12, 13, 7, 1 | 15, 7, 6, 4, 7, 0 | 0 (by construction) | PENDING_NF_SEATV |
-| `oblige` executed | 26 | **0** | 0 | PENDING_NF_OBL |
-| seat changes (`tenure.opened` / `succession.claimed`) | 0 / 0 | 0 / 0 | n/a | PENDING_NF_TEN |
+| acts attempted | 1,703 | 1,750 | 1,666 | 1,677 |
+| executed | 919 | 1,023 | 962 | 829 |
+| resolved by a draw | 121 | 156 | 182 | 122 |
+| executed answers to another person's act | 156 | 167 | 135 | 160 |
+| … whose antecedent is an FA act | 54 | 30 | 13 | 89 |
+| persons at end | 83 | 83 | 83 | 83 |
+| stores, realm total (grain / ore / salt / timber) | 2775 / 3663 / 2109 / 703 | the same | **the same** | **the same** |
+| seat-gated verbs executed (`issue`, `dispatch`, `convene`, `march`, `open_case`, `establish`) | 19, 12, 12, 13, 7, 1 | 15, 7, 6, 4, 7, 0 | 0 (by construction) | 18, 11, 6, 17, 6, 1 |
+| `oblige` executed | 26 | **0** | 0 | 55 |
+| seat changes (`tenure.opened` / `succession.claimed`) | 0 / 0 | 0 / 0 | n/a | **1** / 0 (a founded lordship conferred) |
+| executed-verb L1 distance from SHIPPED | 0 | **240** | 263 | **224** |
+| state components that differ from SHIPPED (of 19 read) | 0 | 10 (bodies 5, stores on 6 rungs, stance 1, pursuits 2, residence 8, an office, dates, records) | 10 (the 34 holds by construction; conviction 6, pursuits 2, residence 7, an office, docket 14 → 5, dates 12 → 0); **bodies, stores per rung, stance, sites equal** | 11 (one more seat held, bodies 1, stores on 4 rungs, pursuits 1, residence 8, Propositions 199 → 169, docket 14 → 10); stance, conviction, sites equal |
 
-PENDING_NF_READING
+`pf3_cmp.py` compares the arms' pickled projections; outputs `pf3_a_s0.txt`, `pf3_b_s0.txt`, `pf3_cmp_s0.txt`.
+
+**Reading of NO_FACTION.** With nobody a member of any faction for two seasons, the realm differs from
+the shipped realm by **less than the shipped realm differs from itself under other dice** (executed-verb
+distance 224 against a noise floor of 240; fewer persons' bodies, stance and stores moved than in the
+noise arm). Seats still issue, order, convene and march (17 marches against 13 and 4: a march needs no
+faction); the one seat change in any arm happened here. What dies with membership is two verbs' subject
+matter: `survey` (12 and 9 executed → 0: there is no faction to survey) and `forge` (31 and 30 → 0),
+plus the creed Propositions' committers (Propositions 199 → 169). **"Faction" is a false N-line in
+computed play: the cut is free but for one document kind and its forgeries.** Nothing a person decides in
+two seasons is conditioned on which faction he, or anyone, belongs to, beyond what the dice alone move.
 
 **Reading of NO_SEATS.** With every office in the realm empty for two seasons, the same 83 persons are
 alive, the realm's stores are equal to the unit, and the totals of activity sit inside the spread between
-two dice seeds of the shipped realm (executed 962 against 919 and 1,023; cross-person answers 135 against
-156 and 167). What the seats add is their own emissions: about a hundred acts in two seasons (`issue`,
+two dice seeds of the shipped realm for acts executed (962 against 919 and 1,023) and about a fifth below
+it for cross-person answers (135 against 156 and 167); its distance from the shipped realm in what
+persons do (263) is the distance between two dice seeds (240), and its bodies and per-rung stores are
+closer to the shipped realm's than the other dice seed's are. What the seats add is their own emissions: about a hundred acts in two seasons (`issue`,
 `dispatch`, `convene`, `march`, `open_case`, `oblige`) that the same persons otherwise spend on
 `create_record`, `utter`, `research` and `surveil`, and the 17 to 41 further answers other persons give to
 those emissions (54 and 30 FA-antecedent answers against 13). **More of the realm is decided by a draw

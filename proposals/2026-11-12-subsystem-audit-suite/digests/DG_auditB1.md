@@ -112,3 +112,129 @@ Scope: 29 files under `.audit/` (archived-not-canon, lesser weight). Verified-at
 - **Conflicts / stale:** Tree check (one grep each): `modules/mass_battle/config.py:342` `PER_CELL` now defaults `'1'` (ED-MB-0001, "yes, all options/modules must be turned on") - the PER_CELL finding is FIXED; `hierarchy/units.py:74-76` lists `_resolve_maneuver_goal -> _envelop_goal/_sweep_goal/_kite_goal` and `:279` a `route` of absolute waypoints with `_route_idx` (ED-MB-0067) - the waypoint primitive EXISTS; `orchestration.py:1953-1959` `reset_positions` docstring says node-path atoms are now explicitly SKIPPED (movement audit finding 1.1 / ED-1096), `units.py:1154` has a node-state re-key (check_drift fix). `config.py:599,623` still comments "Kite blocked on the kiting primitive (gap)" next to `Kite` role without a `unit_type` hit by grep (`unit_type` not in config.py ROLE_SPEC row) [UNVERIFIED that the ED-1093 data half is closed]. The "MB_NODE_COHESION" name replaced `PC_NODE_COHESION`.
 - **Open items:** Jordan rulings requested and (per tree) mostly answered by code: multi-turn re-arm semantics (do stance/orders reset each engagement turn?), where `unit_type='ranged'` lives, transit facing policy (WHEEL conflates steering and facing target; the lerp-normalize facing update stalls at exactly anti-parallel facing, untested for reachability), L1->L2 step normalisation (deferred "only on evidence"), the platform-dependent RNG desync in the 'cell' grid digest (`test_mass_battle_byte_exact.py:32-50`) [UNVERIFIED still open].
 
+### .audit/2026-07-02-morphology-rearch-phase0/phase0_report.md
+- **What it is:** 118-line harmonisation report on 53 weapon part-decompositions (1 canonical roster of 12 + 8 cluster batches) feeding a "morphology re-architecture" of the combat engine's weapon geometry; 2026-07-02.
+- **Status:** none. Reading: historical; its output (per-element `x_m / mass / extent_m / orient_deg / material` records) is what `modules/combat/weapons.py` now holds.
+- **Bears on:** PC (weapon physics, `weapon_physics.derive`), CHAR (equipment).
+- **Content that matters:**
+  - :10-20 per-cluster confidence table: strongest are bear_spear, bardiche, cinquedea, bec_de_corbin, lucerne_hammer (specimen-anchored); weakest-grounded weapon in the whole 53 is `hook_sword` (S3, single antique-dealer specimen scaled by length ratio, no treatise), then `voulge`, `goedendag`, `glaive`, `sparr_axe` (:44-57).
+  - :24-38 seven flags; the substantive ones: `hook_sword` crescent guard is listed in BOTH `head_elements` and `guards[]` with shared mass (:36), "the single item most likely to bite a downstream consumer that naively sums both lists"; `goedendag` club body is a zero-mass placeholder element with mass folded into the haft (:28); the five Japanese/Chinese long swords reported `residual_pct` with the wrong sign (corrected in the combined file).
+  - :61-101 mass-budget table: all 53 residuals within +/-10%; pulwar -9.47 and shamshir -9.41 nearest the ceiling; residuals were deliberately NOT squeezed (:101).
+  - :105-110 cross-cluster comparability claims (sabre family 0.85-1.3 kg / 0.78-0.87 m blades; poleaxe/bec_de_corbin/lucerne_hammer share a 1.8 m, 50/50 centre-grip haft).
+  - :116-117 FORMS: `longsword_halfsword` and `estoc_halfsword` are the same part-set with a shifted working-hand origin (`origin_shift_m=0.75` for estoc); ADORNMENTS: only 3 survive (ranseur tassel S3, guandao tassel S2, jian tassel S2), flagged non-combat.
+- **Conflicts / stale:** Tree check: `modules/combat/weapons.py:25` documents `PARTS elements=[{x_m, mass_kg, extent_m, orient_deg, material, [edge_undulation]}]`, `:59` says edge_undulation is used by exactly one weapon (flamberge), `:686` carries amplitude 15 / period 90, `:803` has `hook_sword`: the Phase-0 output is landed. The report calls the part-set "53 weapons"; the roster size at the tree [UNVERIFIED].
+- **Open items:** the hook_sword dual-record question (does the engine sum both lists?) [UNVERIFIED whether `weapon_physics._head_elements` (:148) guards it]; flamberge wave amplitude/period remain an S3 bracket.
+
+### .audit/2026-07-02-morphology-rearch-phase0/cluster_dagger_and_hook_A.json
+- **What it is:** Phase-0 part decomposition of 5 weapons (rondel, main_gauche, stiletto, misericorde, hook_sword): per element position, mass, extent, material, geom_notes, citations, confidence tier.
+- **Status:** none. Reading: historical input to the combined file.
+- **Bears on:** PC.
+- **Content that matters:**
+  - Each record is `{total_length_m, total_mass_kg, mass_grade, head_elements[], guards[], haft_or_grip, pommel_or_butt, adornments, mass_budget, provenance}`; all five close to 0.0% residual because the blade mass is the RESIDUAL (total minus guard/pommel/grip estimates), e.g. rondel :45-51, hook_sword :307-315. A closed budget therefore carries no evidential weight for the blade figure.
+  - main_gauche :63-134 guard complex 0.16 kg + ring 0.02 = 0.18 of 0.55 kg total; quillon `extent_m` is the half-span (0.14) "matching the catch surface's physical span" (:88).
+  - hook_sword :256-328 `crescent_hand_guard_striking_element` 0.14 kg listed in `head_elements` AND `guards`, counted once (:309-310); record-level `mass_grade` is "S2" (:259) while provenance `confidence_tier` is "S3" (:325): the two fields disagree for the same weapon.
+  - rondel/misericorde/stiletto engine blade lengths (0.24/0.30/0.27 m) sit at the short end of the cited specimen ranges (:15, :208, :147); chosen to match the engine's head_len, i.e. the engine value drove the record and the specimen is a typology anchor (stated :15).
+- **Conflicts / stale:** the hook_sword S2/S3 mismatch above. Cited `weapons.py` is the old `designs/scene/combat_engine_v1/` path.
+- **Open items:** crescent dual-record handling for Phase B.
+
+### .audit/2026-07-02-morphology-rearch-phase0/cluster_existing_roster.json
+- **What it is:** decomposition of the canonical 12 (rapier, arming, longsword, greatsword, sabre, dagger, paired_short, spear, staff, mace, poleaxe, longsword_halfsword); the schema used as the harmonisation target.
+- **Status:** none. Reading: historical.
+- **Bears on:** PC.
+- **Content that matters:**
+  - Uses an older field naming (`pommel{mass_kg_est,x_m}`, `butt{...}`, `mass_budget.sum_est_kg`) than the 8 later clusters (`pommel_or_butt`, `computed_total_kg`): the combined file had to reconcile two schemas (phase0 report :12).
+  - Residuals are non-zero here, unlike the residual-split clusters: rapier +5.23% (:55), dagger -8.67% (:374), poleaxe +3.32% (:699), greatsword +1.89%.
+  - :38-44 rapier pommel 0.348 kg and swept-hilt guard 0.30 kg are canon anchors from `weapons.py` ("already the calibrated canonical pommel mass"), against a specimen total of 1.01 kg; pommel at 27% of weapon mass is a calibration artefact, not a specimen fact.
+  - :503-553 staff haft diameter 0.040 m is "back-solved" from the staff's own mass, so using it to verify the staff mass is circular (stated :552).
+  - :711-775 longsword_halfsword: same 1.4 kg partitioned across a 0.42 m origin shift; blade split 0.435 fore / 0.435 aft; the "grip" is steel.
+- **Conflicts / stale:** sabre `curvature=0.42` is marked `[NO SPECIMEN DATA] LOW-CONF` by the engine itself (:270).
+- **Open items:** none beyond the flags in the report.
+
+### .audit/2026-07-02-morphology-rearch-phase0/cluster_polearm_choppers_A.json
+- **What it is:** 5 polearms (podao, fauchard, bardiche, sparr_axe, voulge) decomposed into blade/hook/langet elements plus full-length haft.
+- **Status:** none. Reading: historical.
+- **Bears on:** PC, MB (polearm troop equipment).
+- **Content that matters:**
+  - :37 a method defect found and fixed: using only the 0.33 m grip segment as shaft mass gave a -36.9% residual; the correct convention is `shaft_grip_estimate_kg` sized to the FULL `total_length_m` ("this cluster's hafted-tip weapons need the shaft sized to total_length_m, not grip_len_m alone" - a Phase-B modelling note).
+  - bardiche S1 (:107-164): one extended crescent element (1.75 kg, 1.476 m) modelled as ONE element with a 0.06 kg "lower_socket_langet" guard realising the two-point mount; 1.8 m total vs specimens of 1.38-2.3 m.
+  - voulge S3 (:212-276) and sparr_axe S3 (:166-211): no treatise/specimen; mass interpolated. voulge key is `voulege` in weapons.py (:273 display name corrected).
+  - fauchard back hook (:66-74) is attested only for the "composite glaive" variant.
+- **Conflicts / stale:** `mass_grade` is "S2" on voulge and sparr_axe records while `confidence_tier` is "S3" (:215/:275, :169/:209): same pattern as hook_sword.
+- **Open items:** none.
+
+### .audit/2026-07-02-morphology-rearch-phase0/cluster_polearm_hooks_hammers_A.json
+- **What it is:** 5 polearms (guisarme, ji, bec_de_corbin, lucerne_hammer, goedendag), 341 lines.
+- **Status:** none. Reading: historical.
+- **Bears on:** PC, MB.
+- **Content that matters:**
+  - bec_de_corbin and lucerne_hammer are poleaxe siblings (1.8 m, 3.0u/3.0u centre grip, 0.040 m haft); the handling research flags that rondel/langet protection is attested for bec_de_corbin but NOT lucerne_hammer (:257): "the one guard field where the two poleaxe siblings should NOT match".
+  - :274 Met Lucerne Hammer (accession 26670) length is internally inconsistent in the source: 94 1/8 in = 239.1 cm vs a 139.2 cm summary figure (and the grip note at :220 uses 1.392 m); the record keeps the engine's 1.80 m and downgrades length to S2. An unresolved unit conflict.
+  - goedendag (:284-337): the club body is a zero-mass placeholder element (mass folded into `shaft_estimate_kg` 1.336), 0.46 kg iron spike; `grip_choke_max=0.0` (not re-grippable, :315).
+  - ji (:59-126): spearhead + perpendicular crescent; crescent counted once (guards entry mass 0.0).
+- **Conflicts / stale:** bec_de_corbin Met specimen 3.40 kg / 202.9 cm vs engine 2.4 kg / 1.80 m (:131), kept as "typology variance".
+- **Open items:** re-verify the Lucerne Hammer length against the Met page.
+
+### .audit/2026-07-02-morphology-rearch-phase0/cluster_polearm_multi_and_blade_A.json
+- **What it is:** 5 polearms (spetum, partisan, naginata, glaive, guandao), 298 lines.
+- **Status:** none. Reading: historical.
+- **Bears on:** PC, MB.
+- **Content that matters:**
+  - Mass budgets are tuned "by adjusting shaft-length assumptions and head-element proportions within specimen-plausible bounds; no total_mass_kg was altered" (:297) - residuals spetum -5.3, partisan -1.2, naginata -3.6, glaive -3.2, guandao 0.0.
+  - glaive (:182-222) is explicitly "family analogy to the naginata (matched total length and head/grip split, discriminated by mass and curvature only)" - curvature 0.22 vs naginata 0.50.
+  - guandao (:223-295) 3.8 kg S1 anchored on a mid-19th-c. Royal Armouries piece (253 cm/99 cm blade); apocryphal 18-48 kg "Guan Yu" and 48-83 kg wuju lift implements are explicitly excluded as non-combat. Tassel adornment attested S2.
+  - spetum anchored on a folding ceremonial specimen (1.5 kg, 234.5 cm), mass raised to 1.9 kg (:58); partisan S1 on Saint Louis Art Museum 32556 (2.454 m, 2.8 kg) with engine 2.6 kg / 2.301 m.
+  - naginata is tanged, not socketed (:161) - a construction difference from the European heads.
+- **Conflicts / stale:** guard entries with `mass_kg_est:0.0` cross-reference head elements (partisan :104-114) - the same dual-listing pattern as hook_sword, but flagged only for hook_sword.
+- **Open items:** revisit glaive first if a specimen surfaces.
+
+### .audit/2026-07-02-morphology-rearch-phase0/cluster_polearm_spears_A.json
+- **What it is:** 5 spear-family records (yari, kama_yari, dangpa, bear_spear, ranseur), 371 lines.
+- **Status:** none. Reading: historical.
+- **Bears on:** PC, MB.
+- **Content that matters:**
+  - Method (:370): `shaft_mass = pi*(haft_d/2)^2 * total_length_m * 700` (RHO_WOOD), `head_residual = total - shaft`, split across elements; residuals <=0.15%. So the head mass is DERIVED from the engine's total, the sub-element split an S3 apportionment (no source weighs a jumonji-yari's side blades or dangpa's flank tines).
+  - bear_spear S1 (2.35 kg / 2.05 m) vs Royal Armouries 1.861 m / 2.27 kg; crossbar lug is both penetration-stop and a documented combative parry surface (Phoebus, Talhoffer, Mair).
+  - ranseur: wing-lugs are `guards` with mass 0.087 each, one S3 ceremonial tassel; Grokipedia's ~4 kg figure is rejected as an outlier vs the 1.4-2.3 kg band (:359).
+  - yari 1.23 kg (a su-yari, not the 2.49 m nagae-yari pike at 2.15 kg, :56); dangpa centre prong deliberately longer than flanking tines (Muyedobotongji).
+- **Conflicts / stale:** ranseur haft note (:329) contains a garbled sentence ("0.032->but ranseur listed 0.036"); a transcription slip, no number affected.
+- **Open items:** none.
+
+### .audit/2026-07-02-morphology-rearch-phase0/cluster_sword_curved_world_sabres_A.json
+- **What it is:** 5 swords (nandao, jian, scimitar, pulwar, shamshir), 332 lines.
+- **Status:** none. Reading: historical.
+- **Bears on:** PC.
+- **Content that matters:**
+  - Residuals all negative, -4.62 to -9.47%, attributed to unmodelled rivets/wire/fuller removal (:331); pulwar -9.47 and shamshir -9.41 are tightest.
+  - The curved-cutter ladder is preserved: curvature shamshir 0.70 > pulwar 0.60 > scimitar 0.55; edge_keenness shamshir 0.95 > pulwar/scimitar 0.90; centroid fraction scimitar 45% > nandao = jian 44% > pulwar 43% > shamshir 41% (:331). These are engine primitives, not specimen facts.
+  - scimitar 1.0 kg is "trimmed below the single cited specimen (1.21 kg kilij, 79.5 cm)" to seat the cross-cluster ladder (:194): the engine value overrode the specimen.
+  - pulwar hilt ergonomics (Hutton 1897/98) suppress thrust: a documented-ergonomics claim used for `haft_or_grip` notes (:233, :259).
+  - nandao is a 20th-c. IWUF sport invention graded S2/S3; the record uses the heavier 0.87 m / 1.3 kg combat-typology anchor rather than the 445-500 g competition prop (:60).
+- **Conflicts / stale:** none verified.
+- **Open items:** none.
+
+### .audit/2026-07-02-morphology-rearch-phase0/cluster_sword_japanese_chinese_long_A.json
+- **What it is:** 5 swords (katana, tachi, odachi, tsurugi, changdao), 321 lines.
+- **Status:** none. Reading: historical.
+- **Bears on:** PC.
+- **Content that matters:**
+  - `mass_budget.residual_pct` is reported POSITIVE (6.8, 7.9, 5.7, 6.9, 7.8; :54, :117, :181, :244, :307) although every part-sum is below total: the sign bug flagged in the report (:38 of report). Magnitudes are right, direction wrong.
+  - odachi 2.2 kg / 120 cm is interpolated; Atsuta Shrine (221.5 cm, 4.5 kg) and Norimitsu (14.5 kg) are excluded as votive outliers (:134, :186-187).
+  - tsurugi 0.65 kg is "rounded UP" from the 527 g Kofun specimen to represent a combat exemplar (:248); grip rescaled to 20 cm (specimen's 7.5 cm is a scabbard collar).
+  - changdao: grip 0.68 m (35% of 1.95 m) from Qi Jiguang (0.40 m handle + 0.33 m bronze extension), the strongest treatise-specified record.
+  - tsuba masses are the only S1 component data (Met 71-136 g, rounded to 100 g).
+- **Conflicts / stale:** the sign bug (corrected downstream per the report).
+- **Open items:** none.
+
+### .audit/2026-07-02-morphology-rearch-phase0/cluster_sword_straight_thrust_and_broad_A.json
+- **What it is:** 6 swords (szabla, cinquedea, flamberge, estoc, estoc_halfsword, falchion); no top-level grade field per weapon, a schema difference from the other clusters.
+- **Status:** none. Reading: historical.
+- **Bears on:** PC.
+- **Content that matters:**
+  - flamberge (:108-189) is three head elements plus Parierhaken guard: forte-to-mid wavy section (`edge_undulation` amplitude 15 mm, period 90 mm, S3 bracket of the 10-20 / 60-120 mm cluster instruction), plain distal tip, dulled ricasso; this is the only weapon with a nonzero `edge_undulation`.
+  - estoc_halfsword (:253-314): `origin_shift_m=0.75`, free tip 0.399 m, grip span 1.17 m, pommel at -1.17; "no new mass".
+  - cinquedea 0.8 kg (:56-105) but the pommel is 0.23 kg (29%) - the same residual-split artefact as the other small blades; Met specimens 740-907 g bracket the total.
+  - szabla pommel 0.21 kg of 0.95 (:36) likewise; cluster note says "All five records" for six weapons (:369).
+  - estoc 2.0 kg vs Met 27434 at 1.616 kg/106.9 cm; falchion 1.0 kg vs Thorpe ~0.9 kg.
+- **Conflicts / stale:** `modules/combat/weapons.py:686` carries the flamberge blade at 0.8859 kg / 15 / 90 (not 1.05 kg as here): the engine record re-partitioned the masses (a `dict(...)` per element) [UNVERIFIED which is authoritative; the code governs].
+- **Open items:** none.
+

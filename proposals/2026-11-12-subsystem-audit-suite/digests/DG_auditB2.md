@@ -61,3 +61,118 @@ Working-tree facts used throughout (verified this session): `designs/` does not 
 - **Conflicts / stale:** `designs/...` paths all dead. Verified live today: `references/glossary.md:53` carries an "IN FLUX" banner for the 7-vs-9 attribute conflict and `references/descriptor_registry.yaml:9` says the roster is now 10 and "IN FLUX until Jordan confirms"; `descriptor_registry.yaml:266` carries the ED-IN-0025 correction on resonance_style (retirement status left unchanged, NEEDS-JORDAN). So those two are TRACKED, not fixed. `roadmap_state.yaml` entries (`:63-72`, `:361-371`) are STALE: file no longer exists. `mechanics_index.yaml` now at `registers/` (`:15-61`). The workplan/decision_queue contradictions (`:75-96`) concern files outside the current trees [UNVERIFIED].
 - **Open items:** armour wearer-side cost; the recall cap; per-season Domain Echo cap; Mending Coherence value; phenomenology tier T-31..T-41 "Proposed" with no implementing head (`:237-247`).
 
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_architecture_spine.json
+- **What it is:** six-direction dossier on the Key/propagation "architecture spine" (substrate, registry, scale_transitions, propagation_spec); 8 findings; 220 lines.
+- **Status:** none. Reading: historical AND largely superseded: the whole object (Key substrate, key_type_registry, echo transport) is RETIRED (ED-IN-0232).
+- **Bears on:** CORE, PROCESS (retired architecture).
+- **Content that matters:**
+  - `:34-54` N/Q notes: 3 of 44 Key types used out-of-enum permanence/time_horizon values; termination proven, cross-tick convergence not; Domain Echo's 7-trigger Sufficient Scope list is "best-specified direction".
+  - `:76-111` edge table: 8 down-seams (domain_actions -> npc/piety/settlement) emitter-unpopulated; `scene.combat_resolved` declared-but-unconsumed; domain_actions `doc:null`.
+  - `:121-218` findings: cross-tick-convergence-unproven (P1, tracked), domain-actions-central-and-unspecified (P1), CASCADE_DEPTH_MAX / EMISSIONS_PER_TICK_MAX unbacked integers, three incompatible RNG contracts (substrate per-emission seed vs single global stream vs named-draw service), `causes[]` overload, scene.thread_operation payload [STUB].
+- **Conflicts / stale:** every finding is about Key plumbing that no longer exists; verified `battle_concluded` has zero hits in `engine/` or `modules/`. The one durable question carried forward is "does a declared consumer actually consume" (see `two-structural-death-points` in deferred_unverified.json), which now is a seam/registry question in `engine/season/seam/` and `write_matrix.yaml` [UNVERIFIED].
+- **Open items:** RNG-model collision was never reconciled in this file; check against current dice/seed owner in `engine/season/`.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_articulation_layer_pp_688_designs_articu.json
+- **What it is:** dossier on the Articulation layer (Tier 1 UI reframing, Tier 2 cut scenes on 10 triggers, Tier 3 annual chronicle); 6 findings; 181 lines.
+- **Status:** none. Reading: historical; the Key-stream subscription premise is retired.
+- **Bears on:** CORE, WR (narrative), GO (UI).
+- **Content that matters:**
+  - `:3` core loop: pure sink (`emits: []`); wildcard Key subscription; 10 trigger conditions then significance scoring; Tier 3 yearly top-N chronicle.
+  - `:110-131` findings: battle_concluded/investigation_resolved trigger gap (P2, confirmed in confirmed.json); `unarticulated_weight` only boosts an already-firing trigger so non-matching Bonded NPCs are permanently un-rendered (the §3.3 anti-starvation claim is unbacked).
+  - `:133-143` `articulation-thread-silence` P1: zero Thread/Coherence/Calamity/Gap/Dissolution hooks in the layer that renders emergence (P-14 smell).
+  - `:145-156` `articulation-victory-era-blind` P1 (tracked as ED-1006): era transitions (Post-Calamity, Phased Occupation, Anarchy) are unkeyed so the renderer is blind to them.
+  - `:42-44` Stage 10 sim A1-A6 6/6 pass incl. determinism hash match; file carries four disagreeing status markers (`:169-179`).
+- **Conflicts / stale:** `designs/articulation/` is dissolved; its design doc survives only as `.designs/systems/articulation/`. Whether any live season-loop module renders cut scenes/chronicle is unchecked here [UNVERIFIED]; the era-blindness point has an analogue in `engine/season/ENDINGS_CLASSIFIED.yaml` which would be the place to check.
+- **Open items:** whether chronicle/legend should feed back into NPC renown (`articulation-zero-mechanical-emission`, intent UNDETERMINED).
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_faction_political.json
+- **What it is:** dossier on faction layer/canon/behavior (Domain Actions, Parliament, Treaty, 4-component disposition engine, GD-1 victory); 8 findings; 241 lines.
+- **Status:** none. Reading: historical; the design docs read are now in `.designs/systems/factions/`.
+- **Bears on:** FA, WR (threadwork), CHAR.
+- **Content that matters:**
+  - `:3` loop: 7 turn priorities, 10-step Accounting, GD-1 victory check (11+ territories for 2 seasons), Mandate gates one signature action per faction.
+  - `:149-158` `gm-controls-npc-votes` P1: faction_layer_v30 §5.8 said "GM controls NPC faction votes (Guilds, Niflhel)" (Guilds reduced to 3 hard-coded if/then rules); contradicts no-GM. The sentence is STILL in `.designs/systems/factions/reference/faction_layer_v30.md` (grep) but that is an archived doc; the refuted status is recorded in refuted.json (see that entry).
+  - `:85-88` degenerate candidates: Institutional Consolidation passive recovery (Stability+1, Accord+1 for inaction); all 6 factions default single-root Cascade.
+  - `:184-193` thread-absent-from-faction-engine-math (alpha/beta/gamma/lambda take only env.* shocks): P-14 smell.
+  - `:217-227` Mass Seizure has 3 non-reconciled canon formulas (pending Pass 2f).
+- **Conflicts / stale:** `faction-politics-doc-null-mismatch` refers to `module_contracts.yaml` rows that may have changed [UNVERIFIED].
+- **Open items:** faction stat lineup (6- vs 7-stat) "re-litigated three times" with no typed engine surface (`:229-238`).
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_mass_battle.json
+- **What it is:** dossier on mass_battle_v30 (7-phase Battle Turn, aftermath scene, Levy vs Professional); 7 findings; 246 lines.
+- **Status:** none. Reading: historical; engine since moved (`modules/mass_battle/` is live).
+- **Bears on:** MB, PC (General Duel), WR (threadwork).
+- **Content that matters:**
+  - `:3` loop: Muster, March, 7-phase turn (Strategy Declaration, Volley, Manoeuvre, Offensive Thread, Engagement, Cascade, Reform), Part D aftermath scene, Part E consequences.
+  - `:53-58` §A.1 axiom "Command=7 vs Command=1 produces a near-certain outcome before a die is rolled" is DELIBERATE but strains Omega non-dominance (finding `generalship-dominance-axiom`, `:189-198`).
+  - `:177-187` the §A.8 splitting-doctrine evidence (+9% to +45%) may be contaminated by the invincibility-bug baseline of ED-MB-0002 RC-2 (frozen multi-subunit cohesion under PER_CELL=0).
+  - `:95-144` edges: Scene->Mass bonus §3.8 declared-only (no hook in the mass battle turn); General Duel §3.7 Thread-blind (ED-911); sim engine `config.py` is "leading canon" and geometry §A.3b is flagged superseded pending LC-8.
+  - `:30-34` strongest decision points: Part D aftermath (Tend/Survey/Address); Levy vs Professional under Campaign Supply.
+- **Conflicts / stale:** the doc is superseded by the code. DG-3/DG-4 and ED-MB-* referenced here are in `registers/editorial_ledger_mb.jsonl`. Whether Scene->Mass bonuses exist in `modules/mass_battle/` [UNVERIFIED].
+- **Open items:** motive/goal field for named generals (`legibility-motive-gap`, `:200-209`); HUD parity for per-sub-unit float morale (`:234-243`).
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_npc_behavior_designs_npcs_npc_behavior_v.json
+- **What it is:** dossier on npc_behavior_v30 + conviction_track_v1 (Conviction/Scar/Certainty/Resonant Style, 9 BG Priority Trees, Outreach/Demand, authored Arc maps); 8 findings; 248 lines.
+- **Status:** none. Reading: historical; the critic noted this lane "returned empty" once two findings were refuted.
+- **Bears on:** CHAR, SC, FA, WR.
+- **Content that matters:**
+  - `:3` loop: Conviction(s) + Resonant Style + Certainty; players target vulnerabilities by RS-matching; per-Conviction Scars gate Belief revision and fire authored Arc branches; BG Priority Trees (7 levels) per faction; Outreach/Demand surfaces up to 3 NPC-initiated scenes per season.
+  - `:97-100` degenerate: fully deterministic Priority Trees; fixed 1:1 Resonant Style + stacking Wrong-Style Penalty (§6.4.3) collapses contest tactics to lookup.
+  - `:82-91` only Varfell §8.5 and Wardens §8.10 trees have Thread-conditioned rows; the other six trees have none.
+  - `:170-179` `sim-conviction-taxonomy-stale` (claimed sim CONVICTIONS = legacy 9 vs ratified 13) - later REFUTED per the critic; today `engine/season/harness/conviction_spread.py:13` refers to "the thirteen CONVICTIONS", so the 13-set is the live reading.
+  - `:156-168` module_contracts' social_contest and npc_behavior blocks disagree on whether the 2-cycle damper is BOUNDED; the live line at `references/module_contracts.yaml:475` still says BOUNDED with "affect_axis clamp is NOT in canon".
+- **Conflicts / stale:** `sim/personal/conviction.py` is gone. `designs/npcs/` now `.designs/systems/npcs/`. `canon/mechanics_index.yaml` now `registers/mechanics_index.yaml`.
+- **Open items:** P-09 (memory must be messy/costly/detectable) has no mechanical surface for `npc_memory` (doc:null at the time).
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_personal_combat.json
+- **What it is:** dossier on personal combat (combat_engine_v1: wrapper.fight/engagement, continuous sigma-leverage engine, scene_combat_design_v1); 6 findings; 192 lines.
+- **Status:** none. Reading: historical; the engine now lives in `modules/combat/` (verified: `wrapper.py`, `config.py`, `combatant.py` exist there).
+- **Bears on:** PC, DICE, CHAR.
+- **Content that matters:**
+  - `:3` loop: Approach, AwaitTempo, Exchange (commit depth 2-5, mode select, sigma via `core.roll_net`/degree), Bind/Riposte/HitLanded, Felled/Separation; pool = max(5, History+6); bilateral-Ob wounds (ED-1041).
+  - `:123-133` `pc-no-player-input-hook` P1 (NEW): `engagement(A,B,first,cfg,rng)` has no player-decision parameter; commit depth, mode, grip-choke, retreat-vs-press are all engine/RNG-resolved, "build-time loadout plus autoresolve". Matches the PC design intent in AUDIT_BRIEF (player-held choice) and is the strongest PC finding in this folder.
+  - `:37-40` spear/polearm 84-96% dominance pre-R2; voulge/bardiche 81-88% retention flagged borderline (JD-1).
+  - `:57-72` combat_engine_v1 had zero threadwork integration (ED-911, P1); combat_v30 §10 Leap-in-combat text never migrated (regression, not original absence).
+  - `:147-157` `scene.combat_resolved` payload carries only scene_id/outcome/participants/casualties/wounds_inflicted.
+- **Conflicts / stale:** `scene.combat_strike`/`scene.combat_resolved` are retired Key types; whether current `modules/combat` exposes an agency hook is not answered here [UNVERIFIED]. 53-weapon roster and U0-U9 sequence: see weapon-morphology files below.
+- **Open items:** retreat-as-default (U6) PENDING; player-input surface and threadwork not slotted into U0-U9.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_recent_infra_sequence_lane_last_month_in.json
+- **What it is:** process/steering dossier: whether workplan v5, roadmap_state.yaml, decision_queue.md and CURRENT.md agree; 7 findings; 211 lines.
+- **Status:** none. Reading: historical/stale; the four-surface steering picture was replaced by CLAUDE.md §1 (CURRENT.md + HANDOFF.md as pointer indexes, one plan per lane).
+- **Bears on:** PROCESS (no game bearing), PC (R2/R3 context).
+- **Content that matters:**
+  - `:127-137` `roadmap_state.yaml` stale (updated 2026-06-28): file now DOES NOT EXIST in `references/` (verified), so FIXED by deletion.
+  - `:139-148` workplan v5 vs decision_queue item 18 vs CURRENT.md disagree on J-38 (propagation spec) status; CLAUDE.md §2 now mandates one active plan per lane, so superseded.
+  - `:173-183` R2 cut spear/polearm dominance 84-96% -> 78-93%; declared contested band 55-75% not met; R3 (PR#76) assigned the remainder.
+  - `:185-195` `sim-winshare-untouched` P1: sim/mc_v18 seeded win-share about 87%/0%/0%, "no regression oracle beyond a smoke test" (decision_queue item 8; CLAUDE.md §7 now says the campaign-level instrument has no live successor, so the gap is still open at the instrument level).
+  - `:162-171` propagation_spec and the holonic container doctrine contain zero threadwork/Coherence mentions.
+- **Conflicts / stale:** `sim/mc_v18` and `decision_queue.md` no longer exist in this form; `tools/observability/` is gone.
+- **Open items:** campaign-level balance instrument (CLAUDE.md §7 admits it is open).
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_registers_graphs_shape_lane_mechanics_in.json
+- **What it is:** "SHAPE" lane dossier on the registries (mechanics_index, canonical_sources, supersession_register, DECISIONS.md, coverage_matrix); 7 findings; 179 lines.
+- **Status:** none. Reading: partly fixed, partly still live.
+- **Bears on:** PROCESS, MB, SC.
+- **Content that matters:**
+  - `:100-111` `mechindex-massbattle-stale`: mechanics_index's mass_battle row `not_implemented, "<5% of v22 feature surface"` vs `tests/coverage_matrix.md` log of a mature engine. Verified at the working tree: `registers/mechanics_index.yaml:514` now carries a "STALE (ED-IN-0025 ... do not hand-flip it)" banner but `test_status: not_implemented` at line 499 is unchanged. TRACKED, not fixed.
+  - `:112-122` mass-battle ratifications (ED-1089..1096, ED-MB-0001/2) not back-propagated to canonical_sources pins or supersession_register.
+  - `:145-155` DECISIONS.md: 507/957 items P1 (53%), the P1 tag does not discriminate; `tools/observability/` no longer exists, so STALE.
+  - `:156-166` `tests/coverage_matrix.md` title ("Weapon System v2 (Active)") no longer describes its mass-battle content; file and `coverage_matrix_archive.md` both exist.
+  - `:167-177` mechanics_index and module_contracts: two overlapping registries, divergent schemas, no cross-reference.
+- **Conflicts / stale:** `canon/mechanics_index.yaml` moved to `registers/`. DECISIONS.md retired.
+- **Open items:** mechanics_index.yaml `test_status` for mass_battle and social_contest still need a re-survey (the banner says so).
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_settlement_territory.json
+- **What it is:** dossier on settlement_layer_v30 / territory (17 provinces, 37 settlements, governance verb, Mandate<->L/PS loop); 7 findings; 255 lines. Written to fill the critic's "unaudited" gap? No: it is dated alongside the critic and is the only settlement dossier.
+- **Status:** none. Reading: historical for the design docs; the thin-loop diagnosis is the best-evidenced SE content here.
+- **Bears on:** SE, FA, MB, WR.
+- **Content that matters:**
+  - `:3` loop: Province (17) contains Settlements (37, S-001..S-037); governor has one seasonal verb (Develop/Fortify/Pacify/Administer); Order -> province Accord (floor-mean); L/PS aggregate size-weighted into Mandate = 7T/(T+K), saturating, mean-reverting L/PS back +-1/season.
+  - `:28-34, :194-205` Thread Exploitation Sites (§4.9) = uncapped, uncontested Wealth+1/RS-0.5 faucet; no governance verb to respond to Thread (§3.2 vs §4.4/§4.9).
+  - `:36-40, :182-193` governance_play_redesign_v1 (8 AP verbs, Directive comply/bargain/defy, Petition/Friction/Crisis deck) is a PROPOSAL gated on an unbuilt settlement registry (G1), absent from CURRENT.md and HANDOFF_SE.
+  - `:218-229` settlement_adjacency_v30 worked examples cite pre-PP-726 IDs (S-015/S-023/S-026 vs live S-018/S-036/S-031).
+  - `:242-252` territory temperament alpha/beta has zero mechanical consumption in settlement layer or module_contracts. The working tree agrees in part: `modules/combat` greps hit "temperament" only for combat traditions; no settlement consumer was found by one grep over `modules engine` for settlement files (the grep returned only combat files) - consistent with the claim.
+- **Conflicts / stale:** `modules/settlements/` is a live implementation (fabric, fortification, housing, larder, produce, provision, subsist) - not the governance verb menu; the redesign's status in the live `engine/season/` is not answered here [UNVERIFIED].
+- **Open items:** the redesign's G1 prerequisite; Thread response verb for governors.
+
