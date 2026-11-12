@@ -549,27 +549,48 @@ Source: `master/mb_abstraction/MBA_DESIGN_part3.md` §7.0–§7.1 (MBA-01 to MBA
 | W0 | B00-ids |
 | W1 | B01-laneA |
 | W2 | B02-tests |
-| W3 | B03-hygiene, B04-capability-home, B08-scene-order |
-| W4 | B05-one-roll |
-| W5 | B06-keyed-draw, B14-pc-outcome |
-| W6 | B07-task-draw, B17-mb-scale |
-| W7 | B09-memory |
-| W8 | B10-character |
-| W9 | B11-fi-readers, B15-pc-calibration, B21-fa-governance |
-| W10 | B12-world-motion-and-ground, B16-pc-round, B24-sc-hearing |
-| W11 | B18-pc-content, B19a-mb-contact-instrument, B25-fi-questioning, B27-sc-proceedings, B29-pc-custody, B34-go-surface, B37-happenings |
-| W12 | B19-mb-field-calibration, B26-fi-inquiry, B28-social-verbs, B41-go-port-gate |
-| W13 | B20-mb-orders, B31-mb-loadout-economy |
-| W14 | B22-mb-armies, B30-mb-nested, B32-inst-kit |
-| W15 | B23-land, B33-inst-economy-hands, B35-wr-thread |
-| W16 | B36-wr-story-instruments |
-| W17 | B38-narrative-regimes |
-| W18 | B39-procgen-and-cases |
-| W19 | B40-inst-scenarios |
+| W3 | B03-hygiene, B08-scene-order |
+| W4 | B03c-boot, B03d-gate-observation |
+| W5 | B04-capability-home |
+| W6 | B05-one-roll |
+| W7 | B06-keyed-draw, B14-pc-outcome |
+| W8 | B07-task-draw, B17-mb-scale |
+| W9 | B09-memory |
+| W10 | B10-character |
+| W11 | B11-fi-readers, B15-pc-calibration, B21-fa-governance |
+| W12 | B12-world-motion-and-ground, B16-pc-round, B21b-fa-war, B24-sc-hearing |
+| W13 | B11F1-flow-se, B18-pc-content, B19a-mb-contact-instrument, B21c-fa-seats, B21d-fa-arc, B21s-strife-supply, B25-fi-questioning, B29-pc-custody, B34-go-surface, B37-happenings |
+| W14 | B11F2-flow-in, B19-mb-field-calibration, B24a-sc-outside-the-room, B26-fi-inquiry, B28-social-verbs, B37p-wr-kin-and-life, B41-go-port-gate |
+| W15 | B20-mb-orders, B27-sc-proceedings, B31-mb-loadout-economy |
+| W16 | B22-mb-armies, B30-mb-nested, B32-inst-kit |
+| W17 | B23-land, B33-inst-economy-hands, B35-wr-thread |
+| W18 | B36-wr-story-instruments |
+| W19 | B38-narrative-regimes |
+| W20 | B39-procgen-and-cases |
+| W21 | B40-inst-scenarios |
+
+*(Reconciled, A-104/A-97 follow-up: the table above is the §8 script's output over §2.1 as it now stands (52 batches,
+B03c and the nine intake batches in). Against the A-100 table it replaced: every batch from B04 on moves two waves
+later (B03c, A-102, sits between B03 and B04); B27 moves four (W11 → W15: it now follows B24a, which follows B21c and
+B21b); B03 and B08 stay. The A-100 note below is kept as the record of that pass.)*
 
 *(Reconciled, A-100: B19a is new at W11; B19 moves from W10 to W12 (it gains B16 and B19a); the cascade is B20 W11 → W13, B22 W12 → W14, B23 W13 → W15, B30 W12 → W14, B31 W12 → W13 as `MBA_DESIGN_part2.md` §5.3 lists it, **and also** B32 W12 → W14 (B32 follows B20), B33 W13 → W15, B35 W13 → W15, B36 W14 → W16, B38 W15 → W17, B39 W16 → W18, B40 W17 → W19, which that section does not list. Computed from the batch table's `after` column by script, which first reproduced the old waves and the old §2.3 schedule exactly.)*
 
-**Critical path (longest chain of batch dependencies, 20 batches; was 18):** B00-ids → B01-laneA → B02-tests → B04-capability-home → B05-one-roll → B06-keyed-draw → B07-task-draw → B09-memory → B10-character → B15-pc-calibration → B16-pc-round → B19a-mb-contact-instrument → B19-mb-field-calibration → B20-mb-orders → B32-inst-kit → B35-wr-thread → B36-wr-story-instruments → B38-narrative-regimes → B39-procgen-and-cases → B40-inst-scenarios. **A-100 adds two waves** (W17 → W19 at the last batch), not one: the longest chain used to run through B11, B24, B27 and now runs through the MB chain B15, B16, B19a, B19, B20, because B32 `after` B20 (§2.1 row 31). The old chain (…B10 → B11 → B24 → B27 → B32 …) is now two waves shorter than the new one at B32 (W12 against W14). **Not folded in here:** A-102's B03c (row 3c; its own note says its wave is not recomputed) adds an IN batch ahead of B04, which pushes every batch downstream of B04 later by two waves (B03c is W4, B04 W5); the same script run on both changes gives a last batch at W21, a critical path of 22 and 23 schedule steps. The tables above carry A-100 alone, on the table as it stood without B03c; the A-102 lane or v12's author owes the recomputation with both.
+**Critical path (recomputed 2026-11-12, A-104/A-97 follow-up, §8: 22 batches, was 20; three chains tie):** the shared
+head B00-ids → B01-laneA → B02-tests → B03-hygiene → B03c-boot → B04-capability-home → B05-one-roll → B06-keyed-draw →
+B07-task-draw → B09-memory → B10-character, then one of
+(a) → B15-pc-calibration → B16-pc-round → B19a-mb-contact-instrument → B19-mb-field-calibration → B20-mb-orders,
+(b) → B11-fi-readers → B21b-fa-war → B21c-fa-seats → B24a-sc-outside-the-room → B27-sc-proceedings,
+(c) → B21-fa-governance → B21b-fa-war → B21c-fa-seats → B24a-sc-outside-the-room → B27-sc-proceedings,
+and the shared tail → B32-inst-kit → B35-wr-thread → B36-wr-story-instruments → B38-narrative-regimes →
+B39-procgen-and-cases → B40-inst-scenarios. **What moved it:** B03c (A-102) puts B03 and B03c on the head (+2: B04 was
+W3, is W5); the intake's FA and SC batches (B21b → B21c → B24a, before B27 and B32) make a second and third chain into
+B32 exactly as long as the MB chain (a), so the MB chain is no longer the only one: shortening (a) alone no longer
+shortens the plan. The intake (`master/eval/V12_INTAKE.md` §3, "Cycle check") names chain (c) and the tie; this
+recompute confirms it and finds chain (b) as well. B11F1, B11F2, B21d, B21s and B37p are off the critical path (slack ≥ 1).
+STAGES.md efficiency rule 5 orders the critical path's batches first among ties (§2.3 does).
+
+*(Superseded by the paragraph above; kept as the A-100 pass's record.)* **Critical path (longest chain of batch dependencies, 20 batches; was 18):** B00-ids → B01-laneA → B02-tests → B04-capability-home → B05-one-roll → B06-keyed-draw → B07-task-draw → B09-memory → B10-character → B15-pc-calibration → B16-pc-round → B19a-mb-contact-instrument → B19-mb-field-calibration → B20-mb-orders → B32-inst-kit → B35-wr-thread → B36-wr-story-instruments → B38-narrative-regimes → B39-procgen-and-cases → B40-inst-scenarios. **A-100 adds two waves** (W17 → W19 at the last batch), not one: the longest chain used to run through B11, B24, B27 and now runs through the MB chain B15, B16, B19a, B19, B20, because B32 `after` B20 (§2.1 row 31). The old chain (…B10 → B11 → B24 → B27 → B32 …) is now two waves shorter than the new one at B32 (W12 against W14). **Not folded in here:** A-102's B03c (row 3c; its own note says its wave is not recomputed) adds an IN batch ahead of B04, which pushes every batch downstream of B04 later by two waves (B03c is W4, B04 W5); the same script run on both changes gives a last batch at W21, a critical path of 22 and 23 schedule steps. The tables above carry A-100 alone, on the table as it stood without B03c; the A-102 lane or v12's author owes the recomputation with both.
 
 
 ### 2.3 One schedule that obeys the lane rule (one open batch per lane), unit time per batch [estimate]
@@ -580,24 +601,33 @@ Source: `master/mb_abstraction/MBA_DESIGN_part3.md` §7.0–§7.1 (MBA-01 to MBA
 | S1 | B01-laneA (IN) |
 | S2 | B02-tests (IN) |
 | S3 | B03-hygiene (IN) |
-| S4 | B04-capability-home (IN) |
-| S5 | B05-one-roll (IN) |
-| S6 | B06-keyed-draw (IN), B14-pc-outcome (PC) |
-| S7 | B07-task-draw (IN), B17-mb-scale (MB) |
-| S8 | B08-scene-order (IN) |
+| S4 | B03c-boot (IN) |
+| S5 | B04-capability-home (IN) |
+| S6 | B05-one-roll (IN) |
+| S7 | B06-keyed-draw (IN), B14-pc-outcome (PC) |
+| S8 | B07-task-draw (IN), B17-mb-scale (MB) |
 | S9 | B09-memory (IN) |
 | S10 | B10-character (IN) |
-| S11 | B11-fi-readers (FI), B15-pc-calibration (PC), B21-fa-governance (FA) |
-| S12 | B12-world-motion-and-ground (SE+WR), B16-pc-round (PC), B24-sc-hearing (SC) |
-| S13 | B18-pc-content (PC), B19a-mb-contact-instrument (MB), B25-fi-questioning (FI), B27-sc-proceedings (SC), B34-go-surface (GO), B37-happenings (IN) |
-| S14 | B19-mb-field-calibration (MB), B26-fi-inquiry (FI), B28-social-verbs (SC), B29-pc-custody (PC), B41-go-port-gate (GO) |
-| S15 | B20-mb-orders (MB) |
-| S16 | B22-mb-armies (MB), B32-inst-kit (FA) |
-| S17 | B23-land (FA), B30-mb-nested (MB), B35-wr-thread (WR) |
-| S18 | B31-mb-loadout-economy (MB), B33-inst-economy-hands (FA), B36-wr-story-instruments (WR) |
-| S19 | B38-narrative-regimes (WR) |
-| S20 | B39-procgen-and-cases (WR) |
-| S21 | B40-inst-scenarios (FA) |
+| S11 | B03d-gate-observation (IN), B15-pc-calibration (PC), B21-fa-governance (FA) |
+| S12 | B08-scene-order (IN), B11-fi-readers (FI), B16-pc-round (PC) |
+| S13 | B12-world-motion-and-ground (SE+WR), B18-pc-content (PC), B19a-mb-contact-instrument (MB), B21b-fa-war (FA), B24-sc-hearing (SC) |
+| S14 | B11F1-flow-se (SE), B19-mb-field-calibration (MB), B21c-fa-seats (FA), B25-fi-questioning (FI), B29-pc-custody (PC), B34-go-surface (GO), B37-happenings (IN) |
+| S15 | B11F2-flow-in (IN), B20-mb-orders (MB), B21d-fa-arc (FA), B24a-sc-outside-the-room (SC), B26-fi-inquiry (FI), B37p-wr-kin-and-life (WR), B41-go-port-gate (GO) |
+| S16 | B21s-strife-supply (IN), B22-mb-armies (MB), B27-sc-proceedings (SC) |
+| S17 | B28-social-verbs (SC), B30-mb-nested (MB), B32-inst-kit (FA) |
+| S18 | B23-land (FA), B31-mb-loadout-economy (MB), B35-wr-thread (WR) |
+| S19 | B33-inst-economy-hands (FA), B36-wr-story-instruments (WR) |
+| S20 | B38-narrative-regimes (WR) |
+| S21 | B39-procgen-and-cases (WR) |
+| S22 | B40-inst-scenarios (FA) |
+
+*(Reconciled, A-104/A-97 follow-up: the table above is the §8 script's output: one open batch per lane (B12, SE+WR,
+holds both), a batch one step after its last `after` batch, and among ready batches **the critical path first** (least
+slack, then handle order), as STAGES.md efficiency rule 5 orders it. **Makespan: 23 steps for 52 batches** (was 22 for
+42). In handle order alone the same graph takes 24. 23 is the floor under the lane rule: the eleven IN batches of the
+critical path's head fill S0 to S10, and B03d (IN), which B11 follows, cannot also close by S10, so B11's chain or the IN
+head gives one step to the wave count of 22 [checked by hand on the §8 output]. The A-100 sentence below is kept as that
+pass's record; its "22 steps for 42 batches" is superseded.)*
 
 Makespan under this rule: 22 steps for 42 batches (was 20 for 41; B19a is new; a batch handle is one close; B13 is unused, merged into B12). *(Reconciled, A-100: recomputed by the script that reproduced the old table exactly: handle order, one open batch per lane, a batch one step after its last `after` batch.)* [ASSUMPTION: every batch costs one unit — basis: no batch has a measured runtime yet; v12 replaces the unit by each batch's estimate (`STAGES.md` step 6, efficiency rule 5).]
 
@@ -1018,9 +1048,17 @@ Categories: **SPLIT** the dependent part lands in the named later batch; **REV**
 
 Normalised from the read lanes' "files it edits" columns by file name; a name shared by two modules carries its module, and "?" marks a module inferred from the lane. Order inside a cell is landing order; a file listed in two or more batches is a **serial edge**: those batches never edit it concurrently, and each edits it once, in batch order.
 
+*(Reconciled, A-104/A-97 follow-up: eight rows gain the batch of a new instruction item whose WHERE line names the file
+(`rosters.yaml`, `rosters.py`, `choose.py`, `carriers.py`, `deliberate.py`: `IS-B3-GO-07`, B34; `hole_register.yaml`:
+`IS-B3-FA-07`, B21; `sigma.py`, `modules/combat/fight.py`: `IS-PC-05`, B15); every other file those items and
+`IS-B2-CHAR-07`, `IS-B3-SE-06`, `IS-B2-FI-07` name already lists their batch. "Batch order" stays handle order, the merge
+order of §1.1, not the time order of §2.3. **Not added:** the nine intake batches (§2.1 rows 3d to 36p), whose edit sets
+are in the evaluation lanes' carry-forward blocks and not in `V12_INTAKE.md` in a form this lane could read without
+guessing; v12's author owes their rows here.)*
+
 | file | proposals | batches (serial order) |
 |---|---|---|
-| `rosters.yaml` | 130 proposals (see §3.1) | B01 → B03 → B04 → B05 → B07 → B09 → B10 → B11 → B12 → B14 → B15 → B16 → B17 → B18 → B19 → B21 → B22 → B23 → B24 → B25 → B26 → B27 → B28 → B30 → B31 → B32 → B33 → B35 → B37 → B38 → B39 → B40 |
+| `rosters.yaml` | 130 proposals (see §3.1) | B01 → B03 → B04 → B05 → B07 → B09 → B10 → B11 → B12 → B14 → B15 → B16 → B17 → B18 → B19 → B21 → B22 → B23 → B24 → B25 → B26 → B27 → B28 → B30 → B31 → B32 → B33 → B34 → B35 → B37 → B38 → B39 → B40 (B34 added 2026-11-12: `IS-B3-GO-07`'s `management_orders`) |
 | `fixtures.py` | 91 proposals (see §3.1) | B04 → B05 → B07 → B08 → B09 → B10 → B11 → B12 → B15 → B16 → B17 → B19 → B21 → B22 → B23 → B24 → B26 → B27 → B28 → B32 → B33 → B34 → B35 → B37 → B38 → B39 |
 | `world_q.py` | 81 proposals (see §3.1) | B03 → B05 → B07 → B09 → B10 → B11 → B12 → B15 → B18 → B21 → B22 → B23 → B24 → B25 → B26 → B27 → B28 → B32 → B33 → B34 → B37 → B38 → B40 |
 | `verb_table.yaml` | 66 proposals (see §3.1) | B01 → B03 → B04 → B07 → B09 → B10 → B11 → B12 → B15 → B17 → B21 → B22 → B23 → B24 → B25 → B26 → B27 → B28 → B32 → B33 → B35 → B36 → B37 → B38 → B39 → B40 |
@@ -1029,19 +1067,19 @@ Normalised from the read lanes' "files it edits" columns by file name; a name sh
 | `options.py` | 31 proposals (see §3.1) | B01 → B04 → B09 → B10 → B11 → B12 → B15 → B21 → B22 → B24 → B25 → B26 → B28 → B33 → B37 → B38 → B39 |
 | `inputs.py` | 29 proposals (see §3.1); PCR-2, PCR-3 (A-101, B16: `DuelRoundOutcome` gains `ended_by`, `exchanges`, `attempts`; `CombatTurnView` → `CombatRoundView`) | B05 → B12 → B14 → B15 → B16 → B17 → B19 → B22 → B24 → B34 → B35 |
 | `populated.py` | 29 proposals (see §3.1); after B03c (A-102) the builder half is `boot/realm.py`, edited by these batches by symbol | B03c → B04 → B10 → B11 → B12 → B20 → B21 → B22 → B25 → B32 → B33 → B34 → B37 → B38 → B39 |
-| `sigma.py` | 29 proposals (see §3.1) | B04 → B05 → B06 → B07 → B12 → B21 → B22 → B23 → B24 → B25 → B26 → B28 → B32 → B33 |
+| `sigma.py` | 29 proposals (see §3.1) | B04 → B05 → B06 → B07 → B12 → B15 → B21 → B22 → B23 → B24 → B25 → B26 → B28 → B32 → B33 (B15 added 2026-11-12: `IS-PC-05` deletes `seam/wrappers/sigma.py::faculty`) |
 | `offices.yaml` | 24 proposals (see §3.1) | B04 → B21 → B32 → B33 → B40 |
 | `matter.py` | 23 proposals (see §3.1) | B03 → B09 → B12 → B22 → B27 → B28 → B32 → B33 → B37 → B39 |
-| `hole_register.yaml` | 22 proposals (see §3.1) | B03 → B05 → B10 → B11 → B14 → B17 → B19 → B34 → B37 → B38 |
-| `rosters.py` | 21 proposals (see §3.1) | B04 → B07 → B10 → B12 → B21 → B32 → B33 → B38 |
+| `hole_register.yaml` | 22 proposals (see §3.1) | B03 → B05 → B10 → B11 → B14 → B17 → B19 → B21 → B34 → B37 → B38 (B21 added 2026-11-12: `IS-B3-FA-07`'s `faction_power_step` row) |
+| `rosters.py` | 21 proposals (see §3.1) | B04 → B07 → B10 → B12 → B21 → B32 → B33 → B34 → B38 (B34 added 2026-11-12: `IS-B3-GO-07` loads `management_orders` in `data/rosters.py`) |
 | `verbs.py` | 21 proposals (see §3.1) | B04 → B07 → B09 → B10 → B11 → B12 → B20 → B21 → B22 → B23 → B25 → B26 → B28 → B32 → B38 |
 | `witness.py` | 20 proposals (see §3.1) | B05 → B11 → B21 → B24 → B25 → B26 → B28 → B32 → B35 → B38 |
 | `arrangements.yaml` | 17 proposals (see §3.1) | B05 → B24 → B27 → B28 → B32 → B33 → B40 |
-| `choose.py` | 17 proposals (see §3.1) | B04 → B08 → B09 → B10 → B16 → B28 → B38 |
+| `choose.py` | 17 proposals (see §3.1) | B04 → B08 → B09 → B10 → B16 → B28 → B34 → B38 (B34 added 2026-11-12: `IS-B3-GO-07`, `pack_scenes`) |
 | `effects_combat.py` | 15 proposals (see §3.1) | B04 → B12 → B14 → B16 → B17 → B19 → B20 → B22 → B23 → B31 |
 | `gate.py` | 15 proposals (see §3.1) | B21 → B23 → B27 → B28 → B32 → B33 |
 | `resolve.py` | 15 proposals (see §3.1) | B05 → B07 → B08 → B09 → B10 → B26 → B27 → B28 → B38 |
-| `carriers.py` | 14 proposals (see §3.1) | B03 → B05 → B08 → B09 → B10 → B11 → B21 → B32 → B38 |
+| `carriers.py` | 14 proposals (see §3.1) | B03 → B05 → B08 → B09 → B10 → B11 → B21 → B32 → B34 → B38 (B34 added 2026-11-12: `IS-B3-GO-07`, `Scene.cost`) |
 | `chronicle.py` | 16_PESSIMIST_GAME_consequence_reading; 05_SC_contest_record_on_event; 01_CORE_reason_trail_in_the_act_store; 16_PESSIMIST_PC_C_what_the_world_keeps_of_a_; 19_LACUNA_verdict_ladder_and_reversal; 28_CORE_scene_access_B_appointments; 09_WR_B_chronicle_that_tells; 09_WR_story_instruments_that_can_fail; 23_STORY_A_what_a_roll_leaves; 28_CORE_scene_access_C_the_petition_that_wai; 30_GO_F_the_plot_as_the_player_is_shown_it; 31_WR_C_what_the_stances_feed | B02 → B05 → B09 → B14 → B27 → B28 → B36 → B38 |
 | `module_contracts.yaml` | 11_GO_pointer_and_stale_text_resolutions; 17_CENSUS_REST_1_deletions; 17_CENSUS_REST_3_corrections; 10_DICE_capability_axiom_map; U5a_DICE_owed_edits; 16_PESSIMIST_WR_A_the_road_is_drawn; 03_PC_duel_round_and_approach; U5b_MB_rulings_in_the_field; 05_SC_evidence_and_rebuttal_B; 05_SC_playable_hearing_B; 05_SC_sc05_kernel_disposition_B; 09_WR_B_threadwork_session_and_practitioner; PCR-2 (A-101: the `combat.round` target is `fight_round`) | B03 → B04 → B05 → B12 → B16 → B19 → B24 → B35 |
 | `seam/wrappers/mass_battle.py` | 04_MB_headcount_grade_and_scale; 16_PESSIMIST_MB_one_stamina_ledger; 26_MASS_BATTLE_cell_scale_and_time; 27_MB_A_command_and_the_obedience_draw; U5b_MB_rulings_in_the_field; 04_MB_manager_battle_one_resolver; 04_MB_playable_field_scenario; 27_MB_D_the_commander_as_chooser; 27_MB_E_what_an_army_carries_back; 26_MASS_BATTLE_aggression_and_land; 04_MB_squad_grid_of_named_characters; 26_MASS_BATTLE_movement_and_fatigue_as_data | B17 → B19 → B20 → B22 → B23 → B30 → B31 |
@@ -1094,7 +1132,7 @@ Normalised from the read lanes' "files it edits" columns by file name; a name sh
 | `combat_kit.py` | 03_PC_weapon_records_in_the_export; 03_PC_loadout_and_carry; 03_PC_person_inputs_content | B14 → B18 |
 | `conviction.py` | 17_CENSUS_C1B_01_deletions; 17_CENSUS_C1B_03_corrections; 17_CENSUS_REST_1_deletions | B03 |
 | `core/exchange.py` | 04_MB_cr12_linear_law (steps 2–3 SUPERSEDED, A-100); 27_MB_C_dynamic_strength_and_the_residual_ch; 27_MB_B_unit_prowess_on_the_row (27B-1, 27B-2 SUPERSEDED, A-100, so no longer B31); MBA-04 (steps 3–4 delete the pool functions) | B19 |
-| `deliberate.py` | 16_PESSIMIST_CORE_no_stored_plan; 01_CORE_reason_trail_in_the_act_store; 28_CORE_scene_access_A_occupancy_and_precede | B03 → B09 → B28 |
+| `deliberate.py` | 16_PESSIMIST_CORE_no_stored_plan; 01_CORE_reason_trail_in_the_act_store; 28_CORE_scene_access_A_occupancy_and_precede | B03 → B09 → B28 → B34 (B34 added 2026-11-12: `IS-B3-GO-07`, the two `cost` call sites) |
 | `effects_founding.py` | 14_VERBS_MATERIAL_C_works; 14_VERBS_PHYSICAL_B_field_and_ruin; 23_STORY_C_a_founded_place_can_fail | B12 → B22 → B39 |
 | `evidence.py` | 05_SC_evidence_and_rebuttal_B; 19_LACUNA_admission_rides_the_citing_draw; 19_LACUNA_verdict_ladder_and_reversal | B24 → B27 |
 | `export_troops.py` | 04_MB_unit_loadout_and_weapon_in_hand_B; 04_MB_cell_hierarchy_as_data; 26_MASS_BATTLE_movement_and_fatigue_as_data; MBA-01, MBA-06 (A-100) | B17 → B19a → B19 → B31 |
@@ -1129,7 +1167,7 @@ Normalised from the read lanes' "files it edits" columns by file name; a name sh
 | `larder.py` | 07_SE_ground_and_granaries; 16_PESSIMIST_SE_A_the_granary_shares_and_the | B12 |
 | `mechanics_index.yaml` | 17_CENSUS_C1B_01_deletions; 17_CENSUS_C1B_03_corrections | B03 |
 | `modules/combat/config.py` | 16_PESSIMIST_PC_A_the_yield_is_a_draw; 16_PESSIMIST_PC_B_the_commit_window; PCR-1 (the `BURST_MAX` comment, B15), PCR-3 (the "per-TURN" comment, B16) (A-101) | B15 → B16 |
-| `modules/combat/fight.py` | 16_PESSIMIST_PC_C_what_the_world_keeps_of_a_; 03_PC_duel_round_and_approach; PCR-2, PCR-3 (A-101, B16: `fight_round`; docstrings) | B14 → B16 |
+| `modules/combat/fight.py` | 16_PESSIMIST_PC_C_what_the_world_keeps_of_a_; 03_PC_duel_round_and_approach; PCR-2, PCR-3 (A-101, B16: `fight_round`; docstrings); `IS-PC-05` (B15: its `faculty` readers) | B14 → B15 → B16 (B15 added 2026-11-12) |
 | `modules/combat/fight.py?` | 03_PC_typed_outcome_one_door; 16_PESSIMIST_PC_A_the_yield_is_a_draw | B14 → B15 |
 | `modules/mass_battle/contact.py?` | 27_MB_A_command_and_the_obedience_draw; 27_MB_D_the_commander_as_chooser | B19 → B20 |
 | `modules/mass_battle/table.py?` | 26_MASS_BATTLE_movement_and_fatigue_as_data; 27_MB_B_unit_prowess_on_the_row | B31 |
@@ -1323,3 +1361,210 @@ builds it: v12 must place it (from a v11 position that STAGES.md step 5 carries)
 - The unit-time schedule (§2.3) is an estimate; no batch runtime was measured.
 - §6.1 checks test-file names against `git ls-files` (and lane A's branch); a test named only by function, or a gate
   that names no file, is not listed there (the read lanes' §7 lists them as INCOMPLETE).
+
+## 8. Appendix: the recompute's edge list and script (A-104/A-97 follow-up, 2026-11-12)
+
+Reconciled: 2026-11-12, A-104/A-97 follow-up.
+
+**What the script reads.** §2.1's table (each row's handle, lane and `after` cell: every B-handle token in the `after`
+cell is an edge; the wave cell is read only to be compared) and the `edges` block below. It prints acyclicity (Kahn's
+sort), the waves (a batch's wave is one more than the highest wave among its `after` batches), every longest chain, the
+lane schedule, the `edges` rows missing from §2.1's `after` cells and the §2.1 wave cells that differ from the computed
+waves. **Runs, in order:** (1) on the file as it stood, with B03c excluded: 42 batches, W0–W19, one longest chain of 20,
+22 steps in handle order: **the old §2.2, critical path and §2.3 reproduced exactly**; (2) the same with B03c: W0–W21,
+one chain of 22, 23 steps (the figures the old critical-path note gave for A-102); (3) after this pass's edits: 52
+batches, 339 edges, acyclic, W0–W21, three chains of 22, 23 steps critical path first (24 in handle order), no `edges`
+row missing from §2.1, no wave cell differing. **Sensitivity (edges not taken, run with the script's third argument):**
+E2's unconfirmed after-list for B42 = B21d (B23, B36; `V12_INTAKE.md` §3) and the intake's `[ASSUMPTION]` that CR-49
+after CR-48 is a data edge (B21 → B12; `V12_INTAKE.md` §2): with all three, B21d moves to W19 and nothing else changes
+(W0–W21, 22-batch chains, 23 steps).
+
+**What is not an edge here.** The intake's 273 entries join U3's batches or the nine new ones; an entry's own
+dependencies are carried by its batch's `after` list as the intake reconciled it (`V12_INTAKE.md` §2–§3), not
+re-extracted per entry `[ASSUMPTION: the settle lane's §3 after/before columns hold every inter-batch edge its entries
+need; basis: §3's cycle check is over those columns]`. PCR-1/2/3 and the MBA items sit inside B15, B16, B19a, B19, B30,
+B31 (§1.5) and add no edge beyond the ones listed. `IS-B3-FA-07`, `IS-B3-SE-06` and `IS-B2-CHAR-07` name only
+predecessors already in their batch's `after` list (rows below marked "present"), or none (CHAR-07: CL-PERSON's design
+and a ledger row).
+
+```edges
+# FROM -> TO | source (every edge cites the line that states it; "present" = already in §2.1's `after` column before this pass)
+B03 -> B03c | U3 §1 item 4c and §2.1 row 3c ("After B03"); CI-07 (`master/CODEBASE_IMPROVEMENT_PROPOSAL_part2.md`) — present
+B03c -> B04 | U3 §1 item 4c ("before B04, the first batch that edits `populated.py`"); §2.1 row 4's after cell — present
+B14 -> B19a | U3 §1.5 "Batch edges added" (MBA-01 on B14's weapon records, `MBA_DESIGN_part3.md` §7.1) — present
+B15 -> B19a | U3 §1.5 (MBA-02 on PCR-1's rounds) — present
+B16 -> B19a | U3 §1.5 (MBA-02 on PCR-2's `fight_round`) — present
+B17 -> B19a | U3 §1.5 (MBA-01 on the troop loader, `04_MB_unit_loadout_and_weapon_in_hand_B` stages 1–2) — present
+B19a -> B19 | U3 §1.5 (MBA-04 on MBA-01, MBA-03) — present
+B16 -> B19 | U3 §1.5 — present
+B15 -> B16 | `master/pc_round/PC_ROUND_SPEC_part2.md` §6 (PCR-2 after PCR-1); U3 §1.5 row PCR-2 — present
+B03 -> B03d | `master/eval/V12_INTAKE.md` §3 row B03d-gate-observation, after: B03
+B03d -> B11 | V12_INTAKE §3 row B03d-gate-observation, before: B11
+B12 -> B11F1 | V12_INTAKE §3 row B11F1-flow-se, after: B12
+B11F1 -> B11F2 | V12_INTAKE §3 row B11F1-flow-se, before: B11F2; row B11F2-flow-in, after: B11F1
+B11F1 -> B38 | V12_INTAKE §3 row B11F1-flow-se, before: B38
+B11F1 -> B39 | V12_INTAKE §3 row B11F1-flow-se, before: B39
+B09 -> B11F2 | V12_INTAKE §3 row B11F2-flow-in, after: B09
+B10 -> B11F2 | V12_INTAKE §3 row B11F2-flow-in, after: B10
+B11F2 -> B38 | V12_INTAKE §3 row B11F2-flow-in, before: B38 (CR-98 "B11F2 before B38", §5)
+B21 -> B21b | V12_INTAKE §3 row B21b-fa-war, after: B21
+B11 -> B21b | V12_INTAKE §3 row B21b-fa-war, after: B11 (FA-01 "B21b after CR-29 (B11)", §5)
+B21b -> B21c | V12_INTAKE §3 row B21b-fa-war, before: B21c; row B21c-fa-seats, after: B21b
+B21b -> B22 | V12_INTAKE §3 row B21b-fa-war, before: B22 (CR-91's carrier before B22's `Field` formation)
+B21b -> B23 | V12_INTAKE §3 row B21b-fa-war, before: B23 (CP-T09-04 "B21b before B23", §5)
+B21b -> B32 | V12_INTAKE §3 row B21b-fa-war, before: B32
+B21b -> B40 | V12_INTAKE §3 row B21b-fa-war, before: B40
+B21c -> B24a | V12_INTAKE §3 row B21c-fa-seats, before: B24a; row B24a, after: B21c
+B21c -> B32 | V12_INTAKE §3 row B21c-fa-seats, before: B32 (CR-35, CR-36 "before B32", §5)
+B21c -> B40 | V12_INTAKE §3 row B21c-fa-seats, before: B40
+B21b -> B21d | V12_INTAKE §3 row B21d-fa-arc, after: B21b
+B11 -> B21d | V12_INTAKE §3 row B21d-fa-arc, after: B11 (CR-89 "after CR-91 and CR-29", §5)
+B12 -> B21s | V12_INTAKE §3 row B21s-strife-supply, after: B12
+B21 -> B21s | V12_INTAKE §3 row B21s-strife-supply, after: B21
+B24 -> B24a | V12_INTAKE §3 row B24a-sc-outside-the-room, after: B24 (IS-B2-SC-10 "a v12 batch after B24")
+B24a -> B27 | V12_INTAKE §3 row B24a, before: B27 (`05_SC_arrangement_rows_that_bind.md` edit 5 gates on its close)
+B24a -> B32 | V12_INTAKE §3 row B24a, before: B32
+B12 -> B37p | V12_INTAKE §3 row B37p-wr-kin-and-life, after: B12
+B37 -> B37p | V12_INTAKE §3 row B37p-wr-kin-and-life, after: B37
+B37p -> B39 | V12_INTAKE §3 row B37p-wr-kin-and-life, before: B39
+B21 -> B34 | `master/instructions/IS_B3_FA_SE_WR_GO_part2.md` IS-B3-GO-07 "Depends on: … `IS-B3-FA-05` (`dispatch`, B21)"; GO-07 lands in B34 (§7.1)
+B05 -> B11 | `master/instructions/IS_B2_SC_FI_CORE_CHAR.md` IS-B2-FI-07 "Depends on: … `29_DICE_one_opposed_rule_form_and_tuning.md`" (B05, U3 §2.1 row 5); FI-07 lands in B11 (transitively implied by B07)
+B11 -> B12 | `master/instructions/IS_B3_FA_SE_WR_GO.md` IS-B3-SE-06 "Depends on: `08_FI_01…`, `18_DETERMINISM_notice_is_a_draw.md`, `16_PESSIMIST_FI_C…` (PROPOSED, B11)"; SE-06 builds in B12 — present
+B05 -> B12 | IS-B3-SE-06 "Depends on: … `29_DICE…` (PROPOSED, B04/B05)" — present
+B05 -> B21 | `master/instructions/IS_B3_FA_SE_WR_GO.md` IS-B3-FA-07 "Depends on: … `U5c_SC_one_obstacle_form.md` (PROPOSED, B05)"; FA-07 lands in B21 — present
+B05 -> B15 | `master/instructions/IS_B1_PC_MB_DICE.md` IS-PC-05 "Depends on: B05 (`pool.py::score`, A-7)"; PC-05 joins B15 — present
+B15 -> B18 | IS-PC-05 "`03_PC_person_inputs_content.md` Part A (B18; PROPOSED; this item lands before it)" (transitively implied by B16)
+```
+
+**The script** (scratch, not committed as a tool; run as `python3 waves.py unified/U3_DEPENDENCY_ORDER.md`):
+
+```python
+"""Recompute U3_DEPENDENCY_ORDER.md's waves, lane schedule and critical path from the file itself.
+
+Reads: §2.1's batch table (handle, lane, `after` column) and the appendix edge list (a fenced block tagged
+`edges` with lines `FROM -> TO | source`) of the same file. Every B-handle token in an `after` cell is an edge.
+Prints: acyclicity, waves, every longest chain, the lane schedule (one open batch per lane; a batch opens one step
+after its last `after` batch closes; critical path first among ties, STAGES.md efficiency rule 5), whether every
+appendix edge is in §2.1's `after` column and whether §2.1's wave cells equal the computed waves.
+Usage: python3 waves.py U3_DEPENDENCY_ORDER.md [EXCLUDED,HANDLES] [EXTRA>EDGES,...]
+"""
+import re, sys
+from collections import defaultdict
+
+path = sys.argv[1]
+exclude = set(sys.argv[2].split(",")) if len(sys.argv) > 2 and sys.argv[2] else set()
+text = open(path, encoding="utf-8").read()
+sec = text.split("### 2.1 Batch table", 1)[1].split("### 2.2", 1)[0]
+HANDLE = re.compile(r"\bB\d{2}(?:[a-z]|F\d)?\b")
+rows = []
+for line in sec.splitlines():
+    if not line.startswith("| ") or line.startswith("| #") or line.startswith("|---"):
+        continue
+    cells = [c.strip() for c in line.strip().strip("|").split("|")]
+    num, handle, lane, wave, after = cells[:5]
+    h = HANDLE.match(handle).group(0)
+    if h in exclude:
+        continue
+    mw = re.match(r"W(\d+)", wave)
+    rows.append((h, handle.split(" ")[0], lane, set(HANDLE.findall(after)) - {h}, int(mw.group(1)) if mw else None))
+order = [r[0] for r in rows]
+lane_of = {r[0]: r[2] for r in rows}
+name_of = {r[0]: r[1] for r in rows}
+after = {r[0]: set(a for a in r[3] if a not in exclude) for r in rows}
+
+# appendix edges
+FENCE = "`" * 3
+m = re.search(FENCE + r"edges\n(.*?)" + FENCE, text, re.S)
+app = []
+if m:
+    for ln in m.group(1).splitlines():
+        ln = ln.strip()
+        if not ln or ln.startswith("#"):
+            continue
+        e, src = ln.split("|", 1)
+        a, b = [x.strip() for x in e.split("->")]
+        app.append((a, b, src.strip()))
+missing = [(a, b) for a, b, _ in app if b in after and a not in after[b]]
+unknown = [x for a, b, _ in app for x in (a, b) if x not in after]
+for a, b, _ in app:
+    if b in after and a in after:
+        after[b].add(a)
+for b in after:
+    bad = after[b] - set(after)
+    if bad:
+        print("UNKNOWN in after of", b, bad)
+        after[b] -= bad
+
+if len(sys.argv) > 3:
+    for pair in sys.argv[3].split(','):
+        a, b = pair.split('>'); after[b].add(a)
+
+# topological sort (Kahn) + acyclicity
+indeg = {h: len(after[h]) for h in order}
+succ = defaultdict(set)
+for b in order:
+    for a in after[b]:
+        succ[a].add(b)
+ready = [h for h in order if indeg[h] == 0]
+topo = []
+while ready:
+    h = ready.pop(0)
+    topo.append(h)
+    for s in sorted(succ[h], key=order.index):
+        indeg[s] -= 1
+        if indeg[s] == 0:
+            ready.append(s)
+acyclic = len(topo) == len(order)
+print(f"batches {len(order)}; edges {sum(len(v) for v in after.values())}; acyclic {acyclic}")
+if not acyclic:
+    print("CYCLE among", [h for h in order if indeg[h] > 0]); sys.exit(1)
+
+wave = {}
+for h in topo:
+    wave[h] = 1 + max((wave[a] for a in after[h]), default=-1)
+W = max(wave.values())
+print(f"waves W0..W{W} ({W+1} waves)")
+for w in range(W + 1):
+    print(f"| W{w} | " + ", ".join(name_of[h] for h in order if wave[h] == w) + " |")
+
+# every longest chain
+def chains(h):
+    preds = [a for a in after[h] if wave[a] == wave[h] - 1]
+    if not preds:
+        return [[h]]
+    return [c + [h] for a in sorted(preds, key=order.index) for c in chains(a)]
+ends = [h for h in order if wave[h] == W]
+allc = [c for e in ends for c in chains(e)]
+print(f"critical path: {W+1} batches; {len(allc)} longest chain(s)")
+for c in allc:
+    print("  " + " → ".join(name_of[h] for h in c))
+
+# lane schedule: one open batch per lane (a two-lane batch such as SE+WR holds both); a batch opens one step after
+# its last `after` batch; among ready batches the critical path goes first (STAGES.md efficiency rule 5: least
+# slack, then handle order); the handle-order makespan (the earlier rule) is printed beside it
+latest = {}
+for h in reversed(topo):
+    latest[h] = min((latest[s] - 1 for s in succ[h]), default=W)
+slack = {h: latest[h] - wave[h] for h in order}
+def lanes(h):
+    return set(lane_of[h].split(" ")[0].split("+"))
+def schedule(pri):
+    done_at, step, sched, left = {}, 0, [], list(pri)
+    while left:
+        used, opened = set(), []
+        for h in left:
+            if all(a in done_at and done_at[a] < step for a in after[h]) and not (lanes(h) & used):
+                opened.append(h); used |= lanes(h)
+        for h in opened:
+            done_at[h] = step; left.remove(h)
+        sched.append(sorted(opened, key=order.index)); step += 1
+    return sched
+by_handle = schedule(order)
+sched = schedule(sorted(order, key=lambda h: (slack[h], order.index(h))))
+print(f"schedule: {len(sched)} steps (critical path first); {len(by_handle)} steps in handle order")
+for i, s in enumerate(sched):
+    print(f"| S{i} | " + ", ".join(f"{name_of[h]} ({lane_of[h].split(' ')[0]})" for h in s) + " |")
+print("appendix edges not in §2.1 after-column:", missing or "none")
+print("§2.1 wave cells that differ from the computed wave:", [(name_of[r[0]], r[4], wave[r[0]]) for r in rows if r[4] != wave[r[0]]] or "none")
+print("appendix handles not in §2.1:", sorted(set(unknown)) or "none")
+```
