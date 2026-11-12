@@ -32,3 +32,32 @@ Lane scope: research files not read in full by earlier digest lanes (pre_firearm
 - **Conflicts / stale:** Not checked against `modules/mass_battle` cell geometry or `geometry.py` constants [UNVERIFIED]; a pairing with the 25x25 grid (brief) is a design question. Mixed units: "pace" varies by region; Part II notes pace conversions are source-variable. Internal slip: Cannae "~5-6 hours decisive combat" vs "2-3 hours first contact to encirclement" (:236, :253).
 - **Open items:** O-3 (compress real battle to 5-10 min player time) and O-7 (player-authored battle accounts) are design hooks nothing in this file resolves; file 13 corrects some of its claims (see next entry).
 
+### research/pre_firearms_formations/13_verification_corrections.md
+- **What it is:** Self-authored verification of file 12 against modern scholarship (Goldsworthy, Britannica, LacusCurtius, etc.), plus all-directions pass and limitations (research chunk 13; flagged `[SELF-AUTHORED - bias risk]` :5).
+- **Status:** none stated. Reading: historical research erratum for file 12; the corrections were never edited back into file 12 (file 12 still carries the wrong figures).
+- **Bears on:** MB (reference figures), PROCESS (self-review method).
+- **Content that matters:**
+  - Two P1 errors in file 12: Panipat sally gaps are ~150 riders wide at ~90-180 m intervals (not 30-50 m) (:133-144); Lodi's elephants ~1,000 per the Baburnama (not 100+) (:146-154).
+  - Four P2: Cannae Roman frontage ~1.95 km (360 m citizen cavalry + 1,050 m infantry + 540 m allied cavalry) and centre depth 24-70 ranks, not "1.5 km / 50+" (:18-28); Pharsalus fourth line 6 cohorts ~3,000 (possibly 8, ~4,000) not ~2,400 (:46-54); Agincourt funnel narrows toward the English end, French deploy ~1.2 km wide to ~800 m (:88-99); Marignano is ~12 h of combat across a 24 h window, not "24+ continuous" (:109-117).
+  - Manual primitives (Asclepiodotus 4/2/1 cubit orders; Vegetius 1 m x 2.1 m per legionary; Polybius 18.30 six-foot figure called stylised and rejected) are confirmed; synaspismos feasibility is debated (:166-182).
+  - Generic windows from file 12 Part IV (approach window, lethal density, gallop window, decisive-commit window) are "robust regardless" and "can be used as design constants"; specific battle reconstructions are "illustrative, not ground truth" (:286).
+  - Precedent-case shapes restated per direction: Cannae, Agincourt, Panipat as three distinct doctrine-substrate-opponent triangles (:224-229).
+  - Mentions a companion artifact `battle_visualizer.jsx` (Cannae, Agincourt, Panipat, six phases each, correction panels) (:292-304); not part of this assignment [UNVERIFIED that it exists on disk].
+- **Conflicts / stale:** Part III item 1 counts "6 European" but lists seven; Hastings and Adrianople were not web-checked (:314). File 12 is not corrected, so anyone citing file 12 numbers inherits the P1/P2 errors.
+- **Open items:** edits to file 12 are "recommended in any revision"; none made. Jordan ratification of corrections assumed, not given (:312).
+
+### research/pre_firearms_formations/14_methodology_audit.md
+- **What it is:** Self-audit of a proposed "bottom-up design (L0 soldier -> L1 unit -> L2 formation -> L3 army -> L4 battle), top-down verification by reproducing six canonical battles" methodology; adds T-30..T-43, M-9..M-13, G-1..G-13 (research chunk 14; `[SELF-AUTHORED - bias risk]` :7).
+- **Status:** none stated; proposals tagged `[PROPOSED]` until Jordan accepts (:262). Reading: historical research proposal; the L0..L4 stack and six-battle suite are not the shape of `modules/mass_battle` as built [UNVERIFIED against code].
+- **Bears on:** MB, PC, CORE (verification-as-regression-net), CHAR/FA (AI play silent), PROCESS.
+- **Content that matters:**
+  - Verification suite of six: Cannae double-envelopment, Pharsalus reserve ambush, Agincourt funnel, Panipat tulughma + firepower, Hastings slope rotation, Marignano interruption (:19, :131-138). Precedent games: none (historical battles only).
+  - Anti-pattern T-30/T-40/M-9: no "Cannae button"; a failing verification test traces to a primitive, never a special-case rule (:77, :97, :113). This is the same rule as CLAUDE.md "scripting drift".
+  - Primitives proposed: step-change lethal-density non-linearity (T-32), facing as first-class (T-33), cohesion->rout->pursuit kill pipeline (T-34), sub-tile vector positions (T-35), reserves as a held/committed unit state (T-38), terrain-formation lossy interaction (T-37) (:81-97).
+  - Calibration proposal: 5-minute turns, ~36-72 turns per battle, 50 m tile; decisive window is 1-6 turns (T-36, T-43) (:89, :103). T-42: a "soldier" may equal 1, 10 or 50 men.
+  - Gameplay opportunities G-1..G-13: named plays (Cannae, Pharsalus, Agincourt funnel, Panipat, Marignano, Hastings), counter-plays (G-7..G-9), doctrine selection as strategic commit, doctrinal-manual economy, historical battles as PvE scenarios, replay "battle accounts" (:131-154).
+  - NERS findings: R-06 counter-play discoverability (P2), S-03 simultaneous-resolution reveal window (P3), S-04 battle-level only (P2), E-04 sub-tile visualisation (P2), E-05 multi-objective calibration tractability (P2) (:208-218).
+  - Self-stated limits: silent on AI play, no mechanism for "calibrated divergence" from history, no effort estimate (:228-240).
+- **Conflicts / stale:** Proposes sub-tile vector positions; the brief's mass-battle intent is a cell grid (25x25) with per-cell resolution, so T-35 / N-05 conflicts with the cell-based direction unless cells are the "tile" [UNVERIFIED which the code does]. Says "Six tests: 5 European" but lists Cannae, Pharsalus, Agincourt, Hastings, Marignano (5) + Panipat (:236) -- consistent here, inconsistent with file 13's count.
+- **Open items:** command latency as an L2.5 primitive (:31-33); shared-primitive cross-test analysis (:48-50); AI-play problem (:238); file 15 is the resolution pass for these.
+

@@ -566,5 +566,89 @@ or the MB audit's, cited as such.
 | E-B8 | `awk` line-length census of the 28 faction design files and 18 cross-cutting ones | n/a | three lines over 1,900 characters in two faction files (longest 2,393: `faction_layer_v30:95`, `:211`, `factions_personal_v30:351`); none in the cross-cutting set. Each of the three was read to its end (their closing words are in the read) |
 | E-B9 | `levy_probe.py 0` (in-memory world only; hand-built acts through the real fold between seasons, the `army_presets` route) | 0 · build | Varfell: `p_npc_002` (no seat) mints `army_fac_varfell_0` and `recruit`s 60 levy from `cohort_set_s_026` (`army.recruited`); the same `recruit` by the Duke `p_npc_052` is `recruit.refused`. Guilds, Restoration Movement, Löwenritter: an unseated member mints the army; raisable cohorts 0 (`levy_probe_0.txt`) |
 
-`git status --short` at the end of the lane is recorded in §B8.
+`git status --short` at the end of the lane is recorded in §B8.3.
+
+## B8. `.audit/` and `research/`: what was read, what transfers, what is now false
+
+### B8.1 Reading account
+
+The work order asked for all of it in full. The faction design set and the governance and campaign
+cross-cutting documents were read in full (B1). The audit corpus and the research bodies were not: the
+reading budget went to the design set, the code and two probes first. What follows is exact.
+
+| body | read | not read |
+|---|---|---|
+| `.audit/2026-07-08-contest-settlement-faction-interface/interface_report_v1.md` | in full (515 lines) | — |
+| `.audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md` | in full (359 lines: seven reference tables, the judgment pass, the queue, the execution record) | — |
+| `.audit/2026-07-12-governance-compendium/` | `00_index`, `42_action_verb_catalogue`, `43_directive_types`, each in full | `40_roster_officer_system`, `41_proactive_scale_menus`, `44_standing_institutions`, `45_hidden_longfuse_stats`, `tier3_proposal_status_closure`, `tier4_discovered_open_work`, `_workings_joined`, `event_cards/`, `reeval/` |
+| `research/governance/` | `00_MANIFEST` in full; `conflicts_power_struggles` lines 1 to 138 (synthesis, hook table, the Ottoman and Roman sections); `political_hierarchy_standing` lines 1 to 48 and `governance_modes` lines 1 to 50 (framing, synthesis, hook table) | the per-civilization detail of six civilizations in the first file and of all eight in the other two (roughly four fifths of the three files) |
+| `research/by_lane/FA_faction_actions.md` | lines 181 to 420 and 498 to 630 in full (§3.3 to §8.5, §9.7 to §11), added to the first lane's §0, §1.2, §2.2, §2.3 | §1.1, §1.3, §2.1, §3.1, §3.2, §9.1 to §9.6 |
+| `research/fa_se_historical_precedent_research_v1.md` | STEP 2 in full (ten themes) and STEP 3's FA lane (FA-1 to FA-9) | STEP 1, the SE lane, the citation patches |
+| `research/game_precedent_suite/tables/` | `R6_mass_battle_campaign` in full; `R1_dynasty_realm` §1 (Crusader Kings III) | `R1` §2 to §4; `R9_policy_court_sims` |
+| `research/proactive_governance_scale_research_v1.md`, `research/rise_to_power_roster_system_research_v1.md` | — | both, entirely (their consolidations, compendium parts 41 and 40, were not read either) |
+| the other cross-cutting `.designs` | `auto_manual_resolution_duality_v1` is the first lane's | `cogload_moderate_target`, `companion_app_design_note`, `complete_systems_reference`, `conflict_architecture_proposal`, `early_game_ignition_analysis`, `engine_atlas_v1`, `integration_proposal_v30`, `throughlines_complete`, `videogame_mode_spec`, and their indices |
+| tests | two file heads and one test function (B1) | the 22 FA test files in full |
+
+Nothing in §B2 to §B6 rests on a body listed as not read.
+
+### B8.2 What the corpus changes, and which old findings no longer hold
+
+**Old findings re-verified.**
+
+- *The interface report's headline, "a contest resolves and touches nothing"* (its §1.2), was measured
+  on `sim/cross_scale/scene_dispatch.py`, `sim/personal/parliamentary_vote.py` and
+  `sim/cross_scale/domain_echo.py`. None is in the tree; `systems/social_contest/sim/contest/faction.py`
+  survives as an unwired oracle (`references/module_contracts.yaml:822`). **The finding is moot as
+  written and returns in the same shape in the season loop**: an answer to a writ writes nothing, and a
+  determination disposes of little (first audit F-FA-01, F-FA-06). Its second finding, that the
+  research behind the contest system was always about institutional bodies and the engineering of the
+  institutional interface is what lagged (§3.5), is confirmed by the full design set and is B3.3's
+  first bullet.
+- *The comparative research's twelve "authored" items* landed as text in documents that are now
+  quarantined; two were ratified (ED-FA-0020; ED-FA-0022 and -0023) and none has code (E-B7). Its own
+  premise correction (the Guild ladder exists) holds.
+- *The FA research lane (2026-10-16)* is stale in five places the tree has since moved: `at_war` "has
+  no reader" (it has `enemies_heard`); `covenant` "is not a row" (it is); the goals carrier "is
+  absent" (`goals.yaml` exists); `levy` (renamed `requisition`); "a faction cannot raise an army" (the
+  Record and six verbs exist, withheld). Its throughlines T-FA-5, -6 and -12 (a mechanism one step
+  short of play; readers before writers; representable acts no question raises) still describe the
+  subsystem exactly, and its K-FA-13 is F-FA-15's precedent.
+
+**What transfers, under the code's rule (a seat adds no modifier; no stored aggregate).**
+
+| referent | source | transfers as |
+|---|---|---|
+| Office and dignity as two things (Byzantine) | comparative research, BYZ-1 | already data: a seat with an empty remit is a dignity (`off_heir`, `off_princess`, E-B2). No engine change; CR-32's posts are the display |
+| Fixed, non-renewable terms for appointed governors, with an exit report and a roving audit (Venetian rectors, 16 to 36 months) | comparative research, Venice table | shape only: the precedent for terms on *appointed governors*, a post the realm does not yet seat. Supports the first lane's mechanism, not its elected-rows content (C-6) |
+| An intermediary who alters an order in transit (Ming Directorate of Ceremonial) | CHN-7 | the code already has the verb: `construe` (`terms.distorted`), formed and never executed |
+| A decree that can publicly fail; enforcement is a second act (the Imperial ban) | HRE-6; `governance_modes` synthesis | the premise of the first lane's `06_FA_decree_binds.md` |
+| Two-signal deposition: a material strain and an independent legitimating verdict, revocable if one withdraws | `conflicts_power_struggles` and `political_hierarchy_standing` syntheses (five civilizations, one research line) | the test CR-37's motive should meet; one source, so a shape to try, not a rule |
+| Bind the enforcing force to the office, not to a named holder (the Tetrarchy, the Go-Tairō, the Marian legions) | `conflicts_power_struggles` hook table | F-FA-15 is this failure in miniature; the levy proposal makes the seat the default and keeps the personal army possible (a commander who keeps the roll) |
+| A second, capital-loyal army raised to check the first (tagmata against themata) | comparative research, Byzantine table | the content question under F-FA-15: whose men the Löwenritter command |
+| Siege law: surrender on terms keeps the town, a storm forfeits it, a sack is cheap locally and ruinous everywhere; a new lord confirms privileges or imposes | `fa_se` T6, FA-6 | the referent for `surrender` (built) and for what follows `seize` (nothing). Named in B4.1; no proposal |
+| An occupier's garrison paid from the occupied region; arrears that become a mutiny (the Contribution System; the Spanish Fury) | compendium part 42 | R-31: both are a `transfer` from a held rung to men under arms. No new verb |
+| Billeting as an order to a settlement (Host), and Recall as an order to disband a grantee's force | compendium part 43 | R-27's term shapes; Recall's nearest built act is a `seize` of an army Record |
+| Upkeep and supply in every sourced campaign referent (Rome II: upkeep each turn, muster from the region's troop types, replenishment only on friendly ground; Crusader Kings III: levy and tax by a vassal contract at five levels, attrition after thirty days) | `R6` §1; `R1` §1 | B4.1's supply and upkeep rows. Shapes; the figures are leads under the sourcing floor |
+| Standing as a display over a currency that debases; a rank number is not ground truth | `political_hierarchy_standing` framing | supports refusing a stored Standing; CR-32 stays names and order |
+
+**Decorative, or tried and not transferred.** The eight-rank ladders' gates, halls, livery and mentor
+dice (thresholds producing outcomes); franchise without a parliament; treaty lapse at ninety per cent;
+the Church Influence clock and its vote weights (CR-89 owns the clock as a fold; the weights need a
+vote); the 109-entry verb catalogue as verbs (almost every entry is a method of an existing act, which
+is content on a row, not a new row).
+
+**Nulls.** No source read here says who may end a war other than those who made it: the proposal that
+answers it rests on Layer 1's own open gap and on the archived design, not on precedent. No surveyed
+title binds an army's loyalty to an office: the Tetrarchy lesson is historical only. The first audit's
+nulls (formal obedience without execution; treaty enforcement beyond reputation; a sole territorial
+victory) stand.
+
+### B8.3 Tree state
+
+`git status --short` at the end of the lane shows changes only under
+`proposals/2026-11-12-subsystem-audit-suite/`. This lane's are this file and four proposal files
+(`06_FA_war_lives_in_seats_B.md`, `06_FA_levy_through_the_seat_B.md`, `06_FA_seat_terms_by_body_B.md`,
+`06_FA_shortest_loop_B.md`); the others listed belong to sibling lanes working in the same tree. No
+code, registry, ledger, test or first-lane file was edited; nothing was committed by this lane; no
+pytest and no `aperture` was run.
 

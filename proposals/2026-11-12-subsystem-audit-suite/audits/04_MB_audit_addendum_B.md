@@ -486,3 +486,155 @@ has ranks for it to occupy.
   gains six optional fields. A player can predict that a deeper block holds longer and a wider one
   wraps, which no player can predict of one cell.
 
+## B4. The manager-style battle, as one cell resolver for the commanded and the delegated mode
+
+### B4.1 The five referents, sourced, against what a manager does
+
+`sourced` means read in a page body by the research suite (its V2 or V3 tags); `memory` means the suite
+itself marks it [M] or the tree has nothing. Shapes are the finding; no figure is relied on.
+
+| what the manager does | Football Manager | Unicorn Overlord | Ogre Battle | Total War | Bannerlord | in the code |
+|---|---|---|---|---|---|---|
+| **builds the side from individuals** | squad, roles, duties (sourced, `T16:28-30`) | up to five named characters a squad, a leader whose effect applies to the squad (sourced, `T19:106-115`); grid 2 x 3 (memory) | **memory, unsourced in the tree**: a unit of a few characters in front and rear rows, where a member's row decides what it does | units mustered to a general (sourced, `R6` F1) | troops recruited from notables, upgraded with experience, coin and a horse; companions in four roles (sourced, `R2` F1, A5) | the army Record over cohort headcounts: built, dark. Named persons: weight only (first audit F-MB-14) |
+| **sets instructions in advance** | two shapes, team instructions (sourced) | Tactics: a priority list per character, up to two conditions each; an unconditional entry placed first starves the rest (sourced, `T19:150`) | memory: one tactic a unit (whom to strike) | secret deployment, stances (sourced, `R6` F3) | formations by number key; "your troops do nothing until told" (sourced, `T02:18`) | role, stance, target, one fall-back fraction on the record; the engine's triggers, routes and signals have no carrier (F-MB-26) |
+| **sees a prediction** | — | an outcome prediction in the stage preview (sourced, `T19:96`) | — | projected result at contact (first audit) | — | `field_estimate`, the player's only (first audit §16) |
+| **lets it resolve** | match engine (sourced as a loop; that Instant Result is the same engine is **not established**, `T16:78`) | automatic exchange on contact (sourced) | memory | auto-resolve "compares the statistics of all the units": a second calculation (sourced, `R6` F5) | simulated battles (sourced, `R2` F5) | one engine, one call |
+| **intervenes during play** | shouts, substitutions, change of shape (sourced, `T16:33`) | swap, rest, a Valor skill, deploy another squad (sourced, `T19:99`) | memory: change the tactic, play a card, retreat | real-time orders, pause (pause is memory) | fights in person; orders by key; delegate to a sergeant (sourced, `R2` F4) | nothing (first audit F-MB-15) |
+| **reads why** | ratings, match review (sourced, `T16:34`) | — | — | — | a result screen: kills by unit, upgrades, dead, wounded, routed (sourced, `T02:19`) | a band and, on one arm, one name |
+| **keeps a campaign economy** | wages, contracts, training, familiarity with a tactic (sourced) | Honors buy squad count and size (sourced) | memory | upkeep each turn, replenishment on friendly ground (sourced, `R6` E6, M3) | daily food and wages, then morale loss, then desertion; speed falls with party size and carried weight (sourced, `T02:15-16`) | recruiting by site: built, dark. No wage, no upkeep, no experience, no load (§B5.2) |
+
+**A sixth precedent the brief does not name and the corpus rates highest:** Dominions, "the closest
+verified precedent to Valoria's shape (one automatic resolver)" (`D_T04` row 27): army setup, squad
+placement and scripted orders before the battle, the battle never played live. It is the existence proof
+that the delegated mode alone can be a game, provided the intent step is rich. Here that step is four
+fields.
+
+**Nulls.** No surveyed game shows a commanded battle and its delegated resolution agreeing exactly;
+Total War's own manual documents two calculations, and Football Manager's claim is unverified (first
+audit §7). Valoria's answer cannot be borrowed. It has to be built from the one-entry rule, and Layer 1
+says the same thing in stronger words (§B5.4).
+
+### B4.2 Understood or named, with the full design set
+
+The first audit's short judgment ("Total War is understood; Football Manager is named") is confirmed and
+sharpened by three documents it did not have.
+
+- The squad-engagement concept states the manager's surface as **keeps, arranges, plans, writes,
+  commands** (`concept-v5:39-45`), and the synthesis built the engine half of *plans* and *writes*
+  (routes, perception-limited conditions, signals) and none of the carrier.
+- `pc_formation_system.md` §2 gives the three levels a manager works at (army doctrine, unit shape,
+  subunit role with instructions) and §7 the cadence: "deploy → set doctrine → assign roles → ~5–20
+  intervention windows per battle (Command actions: rally / reinforce / execute stratagem / adapt
+  doctrine), not per-tick control". The archived design's turn has the same slot: one general's action in
+  the cascade phase (`mass_battle_v30.md` §A.7).
+- The measured levers (F-MB-21): composition decides, roles do not register, strategy backfires.
+
+So the precedent is **understood as vocabulary and as engine primitives, and not as a game**: the
+manager's decisions that exist are either unreachable (orders, routes, signals, arrangement) or wrong
+(strategy), and the ones that work (who is in the army) are the Total War half.
+
+### B4.3 Standing orders: the delegated battle's decisions, made in advance
+
+The engine already has the primitive (`hierarchy/units.py::Order`: a trigger and a behaviour dict,
+validated at construction, evaluated every tick by `core/contact.check_orders`). The record gains its
+carrier, and nothing else:
+
+```
+standing_orders: ((trigger, behaviour), ...)        # per unit row, in priority order, at most 4
+trigger   ∈ immediate | tick:N | enemy_range:D | ally_at:D | own_strength:F | signal:NAME
+            | flanked | volleys_spent                # the two added by the loadout proposal
+behaviour ⊂ { stance, target_condition, yielding, conceded, route, in_hand, fire_signal }
+            # a subset of hierarchy/units.py::_ORDER_SAFE_FIELDS, exported beside ORDER_ROLES
+```
+
+`armyrecord.order` validates both against the exported closed sets and refuses by name;
+`orderofbattle._spec_for` turns each row into an `Order`, as it turns `fall_back_at` into one today
+(`orderofbattle.py:167-168`); `fall_back_at` becomes the row `(own_strength:F, {stance: retreat})` and
+leaves the record. The cap of four keeps a unit's orders readable, the concern Unicorn Overlord's own
+example raises (an unconditional first entry starves the rest): `immediate` is legal only as the last row.
+
+This is Unicorn Overlord's Tactics and Football Manager's instructions in the engine's own terms, and it
+is what an unplayed commander's doctrine writes for him.
+
+### B4.4 The commanded battle: the same call, with a general's action at each window
+
+The first audit's step 4a is kept in structure (`resolve_field(inp, rng, *, decide=None)`, called where
+`phase_boundary` is called, the combat module's REM-31 shape) and changed in content.
+
+| | first audit, step 4a | here |
+|---|---|---|
+| what the decider returns | an army-wide approach, `advance`, `line` or `defend`, or a retreat | **one general's action**, or none |
+| the closed set | the strategy roster (F-MB-21: two traps) | `signal(NAME)`: release every order waiting on that go-code · `order(unit, behaviour)`: one behaviour from the standing-order set, to one unit · `rally(unit)`: the commander's hook (`rally_check`), a Command check restoring morale toward its start · `withdraw`: the retreat the engine already has · `none` |
+| why these | the names existed | each is an existing primitive (`Unit.fired_signals`, `_ORDER_SAFE_FIELDS`, the `rally_check` slot, `_retreat_orders`); none is a new number; `signal` is the cheap, prepared act and `order` the improvised one, which is the concept's own trade (`concept-v5:359`) |
+| windows | the two phase boundaries | the same two for an 18-tick engagement; the count is the troop file's (`pc_formation_system.md` asks for 5 to 20 over a battle of several engagements, which `Drawn` supplies) |
+| a side nobody plays | no decider | no decider is the default; an NPC commander **may** be given one through the same parameter, filled by the chooser over the same closed set. That is CHAR's to build; the interface does not distinguish them |
+
+**Three conditions make the two modes one slice and not two that agree on average** (they are the gates):
+
+1. One entry. No function under `modules/mass_battle/` is reached by one mode and not the other.
+2. A decider reads a frozen view of its own side, draws nothing and holds nothing. So `decide=None` and a
+   decider that always returns `none` give the same outcome **and the same draw count**.
+3. A commanded battle's actions are data: `((window, action), ...)`. Handed back as
+   `MassBattleInput.interventions` with no decider, the delegated call returns the **identical**
+   outcome. The played battle is then the delegated battle of a commander who happened to decide those
+   things, and a recorded battle can be replayed, summarised or shown at any depth.
+
+Condition 3 is what the genre lacks and what Layer 1 §C.4 asks for by name (§B5.4).
+
+### B4.5 The explanation afterwards
+
+The first audit's `FieldOutcome.report` (per phase, per part: share lost, broke or held, flanked) is kept.
+Three additions, each derived from what the engine already records:
+
+- **which standing order fired, and when** (one trace event at the point `check_orders` applies a
+  behaviour): "the reserve never moved: its trigger was the enemy within four, and the enemy broke at
+  six" is the sentence a manager needs and a casualty table cannot say;
+- **the interventions taken**, from condition 3's list;
+- **the day's fortune**, the two sides' friction draws as a ratio reported in three words (with us,
+  even, against us), by bands in the troop file's header. The draw is the largest single cause of most
+  results at the ruled magnitude (first audit F-MB-08); a report that omits it explains a result by its
+  smaller causes. Disclosing it changes no number and is the honest reading of a ruled item, not a
+  re-raising of it.
+
+Written to the band Event as Observations, as the first audit specifies.
+
+### B4.6 The squad of named characters on a formation grid
+
+The realm's actual fields are two to six named persons a side (first audit §15). That is the Ogre Battle
+and Unicorn Overlord scale, and Layer 1 already says where it lives: "one scale down, unchanged: a squad
+is the members of a faction present at a rung, resolved once, every combatant a `Person`"
+(`03_VERBS_AND_LOOPS.md:269-270`). It is not a mass-battle unit of anonymous cells and must not be built
+as one. The first audit's scale rule is adopted (a side with no cohort member and no army Record is a
+squad), and the missing design is supplied in `proposals/04_MB_squad_grid_of_named_characters.md`:
+
+- **the grid**: two rows (front, rear) of three files a side. The row decides who can be struck and who
+  can strike (a front member screens the file behind him; a missile or pole weapon strikes from the
+  rear). The 2 x 3 shape is memory-grade in the corpus and is proposed as a seed, not cited as fact;
+- **the resolver**: none of its own. An exchange is a set of pairings, each one call of the duel round
+  the PC lane proposes (`combat.round`); outnumbering is more rounds against one fighter's carried state;
+- **standing orders**: per member, rows of `(condition, approach or target)` over the turn view, as
+  `03_PC_duel_round_and_approach.md` §5.1 already specifies, evaluated host-side into the same decider a
+  player or the chooser supplies;
+- **the leader**: one member is the leader; what a leader adds is a capability read through the
+  capability surface, not a rule here;
+- **the outcome**: the same `FieldOutcome` a field returns, its parts the persons, so `_eff_march` writes
+  one way for both scales.
+
+So the commanded-or-delegated symmetry holds at both scales with one shape: standing orders in advance,
+a decider at windows, a report after; cells and troop rows above the line, persons and duel rounds below.
+
+### B4.7 NERS reading of the manager battle (E last)
+
+- **N.** From the player's direction: without orders that reach the field and an action during it, the
+  battle is a draw of lots he may only watch. From the world's: an unplayed commander's standing orders
+  are what make two commanders differ (R-06, R-08) and they cost no chooser call. From the architecture's:
+  the decider is the combat module's shape reused, and the interventions list is what lets fidelity be a
+  rendering. From the referents': all five have the intent step; three have the window.
+- **R.** Customisation by data (orders, posts, loadouts); a prepared plan against an improvised one;
+  completeness: a side with no orders and no decider is today's field exactly.
+- **S.** One call at any depth; it pauses at the engine's own boundaries; the same three-part shape at
+  squad scale; one vocabulary of triggers for a unit and, at squad scale, conditions for a person.
+- **E, against that.** One field on the record, one closed set of five actions, one list on the input,
+  three kinds of line in the report. What a player can intuit: "they will fall back when a third are
+  down" is a rule he wrote.
+
