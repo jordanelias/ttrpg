@@ -80,7 +80,11 @@ when it has become true.
 
 **Problem.** No instrument reads a reversal. `runs/PES_WR/p2_play.py` part (e) does, in forty lines: for
 every non-`contain` Tenure closed in the run, the act that opened it and the act that closed it, classed
-as closed by its own subject, by another person, or by a clock. TURN_NUMBERS
+as closed by its own subject, by another person, or by a clock. Three seasons, the shipped realm: at
+seed 0, 19 edges closed, all 19 by their own subject, against 1,138 left open; at seed 1, 14 and 14,
+against 1,160; **closed by another person's act: 0 at both seeds**; one death caused by an act (a
+`capture`, seed 1). `revoke` 0 of 6, `seize` 0 of 14. The reading sees closures and sees the killing, so
+the zero is observed and not unread.
 
 **Edit.** `storybar.py` gains `turns(w, act_of) -> dict` with exactly that classification
 (`{"by_subject": n, "by_another": n, "by_clock": n, "deaths_by_act": n}`), printed on the per-seed line

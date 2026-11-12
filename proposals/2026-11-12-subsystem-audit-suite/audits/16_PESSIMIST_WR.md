@@ -503,7 +503,7 @@ F-PES-WR-01. The `oblige` observation is listed for FA and for the churn lane.
 ### F-PES-WR-10 · hygiene · "pressure" never fires
 
 `_standing_crossings` (`matter.py:211-264`) emitted `standing.band_crossed` 0 times in three seasons in
-seven arms at two seeds. **Falsifier.** One such Event: none. The cause was not traced `[UNVERIFIED]`;
+six full-realm arms at two seeds. **Falsifier.** One such Event: none. The cause was not traced `[UNVERIFIED]`;
 listed for SC (SC-02 step 23 is its owner).
 
 ### F-PES-WR-09 · hygiene · a Date due in the past never fires
@@ -569,7 +569,7 @@ outcome a fixed function of state.
 | R-1 | CALENDAR is free to cut | keep; record the N-line as resting on `determine`; give the instrument a cut arm | 5 | proposal D edits 3, 5 |
 | R-2 | the lattice pulls toward any weaker Site, so anything starts the Calamity | pull only toward a broken Site | 5 | proposal B edit 1 |
 | R-3 | the Calamity has no break and no bound that is used | a drawn break; mending by the working only; the crossing carries its Site | 4, 5; the standing rule | proposal B edits 2 to 4 |
-| R-4 | `rosters.yaml:1903-1906` says `restore` executes on the realm; `verb_table.yaml`'s `restore` row says attempted 0/0/0; seven arms say 0 | the verb table is right; the roster sentence is corrected to "formed nowhere since REM-22" | 1 (REM-22 superseded it) | text for the orchestrator: strike the "CORRECTED (`24f`…)" sentence's claim of execution |
+| R-4 | `rosters.yaml:1903-1906` says `restore` executes on the realm; `verb_table.yaml`'s `restore` row says attempted 0/0/0; six full-realm arms and two small realms here say 0 | the verb table is right; the roster sentence is corrected to "formed nowhere since REM-22" | 1 (REM-22 superseded it) | text for the orchestrator: strike the "CORRECTED (`24f`…)" sentence's claim of execution |
 | R-5 | H-140: is a same-place move travel | declines (SE R-SE-09, cited); the road draw skips a journey of zero borders | 4 | SE's proposal; proposal A |
 | R-6 | CP-T10-02 (exposure) has no decided shape | one draw on the ladder at the leg's end, four graded arrivals | 4; the standing rule | proposal A |
 | R-7 | illness is a draw but not a graded one | a fall of the body by degree; death at zero | 4 | proposal C |
