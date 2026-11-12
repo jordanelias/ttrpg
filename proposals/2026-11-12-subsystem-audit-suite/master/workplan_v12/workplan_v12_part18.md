@@ -77,6 +77,7 @@ BACKGROUND RUN: the 5,000-fight census of B15.03 (`scale_census.py`) and the 1,0
 | B15.12 | the integrated reading | `IS-PC-03` | READING | — | B15.11 |
 | B15.13 | the combat armour-tier and ability sweeps | `ED-SC-0001` (the intake `:496`) | READING | — | B15.11 |
 | B15.14 | the survivor's grudge: measure, then cut or name the cause (Patched: P-27) | CP-T03-06 (the intake `:491`; moved from B14.14) | DESIGN-FIRST | EQUAL | B15.11; Batch B14 (B14.16), Batch B10 (`02_CHAR_scar_is_a_wound`) |
+| B15.15 | the slope bound joins the lever table; `READ_SCALE` is fitted; the two wound values stated side by side (Covered: C-03) | `U5b_PC_residue` §1 items 3, 5 (the fit) | BUILD (calibration) | MOVER(behaviour) only if the fitted `READ_SCALE` ≠ 1.0 | B15.11; Batch B14 (B14.17, B14.18) |
 | B15.99 | the one re-record and the close's readings | UPR §4 edit 3, §5 row 5; `29_DICE` row 9 | BUILD | MOVER (the re-pin) | B15.01 to B15.14 |
 
 Not in this batch, and where each is: UPR §1 (the nesting cap, `nested_entry`; B30); UPR §2 and §3 edits 1–4 (B05; this batch flips §3's fixture only); UPR §6 (the opener's edge; B37); `29_DICE` items 29-1, 29-2, 29-4 (B04, B05) and 29-5 (B30); PHY_A A0–A2 (B29) and A4 (B14); `HAP_A` edits 1, 2, 4, 5, 6 (B37); `03_PC_exits_withdrawal_recovery` Part B (superseded by `PC_A`, U3 §4.1 row 55); `03_PC_typed_outcome_one_door` R-PC-03's comment edit (superseded by `18_DET` edit 2); `IS-PC-B2` (the shipped `YIELD_OB` pick, Jordan's at the merge; B15.10 lands an admitted value).
@@ -323,6 +324,25 @@ Not in this batch, and where each is: UPR §1 (the nesting cap, `nested_entry`; 
 - GLOSSARY: none.
 - COST and TIER: reading then design; the measure `sonnet`; the design and the CUT call `opus` (E4: "tier: opus (design)").
 - LANDS IT: B15's producer; `Item: B15.14` (a commit only on the design side; on the CUT side the reading goes in B15.99's commit body), `[skip ci]`.
+
+### B15.15 — the slope bound joins the lever table; `READ_SCALE` is fitted; the two wound values stated side by side · `U5b_PC_residue` §1 items 3, 5 · BUILD (calibration) · HASH MOVER(behaviour) only if the fitted value ≠ 1.0
+- Covered: C-03 (added by the coverage lane, `master/workplan_v12/COVERAGE.md` §C). The source's head: "§1 items 1–2 in B14 and the fit (item 3) with B15"; B14.17 and B14.18 carry items 1–2, B18.02 item 4, and B14's DIALS line says `CFG['READ_SCALE']` is "set by B15", but no B15 item carried item 3 or the fit; the closure row `U5b:223` (F-PES-PC-08) names "the slope bound as the calibration rule" as part of its carrier.
+- SOURCE: `proposals/U5b_PC_residue.md` §1 items 3 and 5, "Gate", "Falsifier", "Movers" ("the fit rides the calibration batch (`U5b_PC_residue.md` §5 row 5)"); closes F-PES-PC-08's third clause (pessimist R-7) with B14.17 and B14.18, and R-PC-43's slope half (`U5b:208`) with B18.02.
+- ADVANCES: R-06 (one attribute no longer outweighs the levers a fighter's skills name), contributor.
+- INSTRUCTION (copied, §1):
+  1. Item 3: "The calibration rule gains one line, at its owner (`combat_balancing_methodology.md` is quarantined reference; the executable owner is `workbench/build_levers.py`'s lever table): **one point of any attribute or skill axis moves the season-default mirror no more than one point of skill score does** (about fifteen points near parity, `pD_skill.py`). A lever outside the bound is reported by the table, not gated."
+  2. The fit: with B14.17's isolation reading as the before-reading (`reading @<sha>`, not re-taken), sweep `CFG['READ_SCALE']` in `build_levers.py` and choose the value at which "Perception 5 against 3" no longer "exceeds four points of score" (the source's falsifier read as the target); write it to `modules/combat/config.py` and re-derive `engine/engine_params/combat_engine_v1.json` (`python tools/export_engine_params.py`, then `--check`). If 1.0 already meets the bound, nothing is written and the reading says so.
+  3. Item 5: "one quantity, two sites, one calibration: the in-fight wound σ (`CFG['WOUND_ATK_OB']`, `CFG['WOUND_DEF_OB']`, read by `combat_systems.wound_impairment`) stays the module's own rule, and the season's carried-wound level (`Fixtures.wound_step`, `U5b_PC_rulings_in_the_fight.md` §3) reads none of them; both are sized in the one combat calibration batch (B15 …), and the batch's commit states the two values side by side." This item's commit body states them as B15.11 left them.
+- WHERE: `systems/combat/combat_engine_v1/workbench/build_levers.py` (the lever table: the bound line beside each attribute and skill ladder); `modules/combat/config.py` (`CFG['READ_SCALE']`, step 2 only); `engine/engine_params/combat_engine_v1.json` (re-derived, step 2 only).
+- TESTS: none new (a workbench reading and a constant); the combat goldens and `export_engine_params.py --check` are the control.
+- FALSIFIER and CONTROL (copied): "A fitted `READ_SCALE` under which Perception 5 against 3 still exceeds four points of score." Control: "`READ_SCALE` at 1.0 is byte-identical" (B14.18's reading).
+- GATE (copied, "Gate"): "`build_levers.py` prints the attribute and skill ladders with the bound beside each"; `python tools/export_engine_params.py --check` → exit 0; the combat goldens green (re-recorded at B15.99 if the value moved); at a moved value, the realm hash at seed 0, one season, quoted.
+- HASH MOVERS: "None until a value is changed; the fit rides the calibration batch" (the source); declared: every fight with a Perception difference, if the fitted value ≠ 1.0; B15.99's re-record.
+- DEPENDS ON: V12 B14.17 (the isolation reading), B14.18 (`CFG['READ_SCALE']`), B15.11 (the carried-wound flip whose value item 5 states); EXISTS-IN-TREE `systems/combat/combat_engine_v1/workbench/build_levers.py`, `modules/combat/config.py::CFG`.
+- GLOSSARY: none (*attribute*, *skill*, *skill score* as A-98).
+- NAMES: "the read's logistic" in `combat_systems.py` is found by symbol (`core.logistic((read_d-read_a)/…)`), line numbers dropped.
+- COST and TIER: calibration; the sweep `haiku` (`valoria-measure`), the chosen value read by `opus` (a judgment node).
+- LANDS IT: B15's producer; `Item: B15.15`, `[skip ci]`; B15.99's re-record takes its movers.
 
 ## Readings (B15)
 
