@@ -9,7 +9,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## PC — personal combat
 
-**What is wrong.** The duel engine is a sound resolver and a clean registered module that computed play almost never reaches (`audits/03_PC_audit.md` §0): at seed 0 over two seasons, `fight` formed no candidate and `challenge`, `accept` and `capture` were refused 84, 27 and 12 times of as many (F-PC-01); all 83 persons are the same fighter (F-PC-02); a plain `fight` is binary for its loser (F-PC-04); the duel and the grid round are not one path (F-PC-13); inside a fight an NPC is not an agent (F-PC-14). The pessimist (`16_PESSIMIST_PC.md` §0): a two-blow lottery between identical men that the world remembers as one line; in 5,000 fights to the death the loser takes one blow worth half his health in 99.7 % (F-PES-PC-01); the world keeps a verdict, not a fight (F-PES-PC-05); a killing in self-defence has no killer (F-PES-PC-06).
+**What is wrong.** The duel engine is a sound resolver and a clean registered module that computed play almost never reaches (`audits/03_PC_audit.md` §0): at seed 0 over two seasons, `fight` formed no candidate and `challenge`, `accept` and `capture` were refused 84, 27 and 12 times of as many (F-PC-01); all 83 persons are the same fighter (F-PC-02); a plain `fight` is binary for its loser (F-PC-04); the duel and the grid round are not one path (F-PC-13); inside a fight an NPC is not an agent (F-PC-14). The pessimist (`16_PESSIMIST_PC.md` §0): a two-blow lottery between identical men that the world remembers as one line; in 5,000 fights to the death the loser takes one blow worth at least half his health in 99.7 % (F-PES-PC-01); the world keeps a verdict, not a fight (F-PES-PC-05); a killing in self-defence has no killer (F-PES-PC-06).
 
 **What was decided.** A fight is a sequence of rounds (A-101); a battle may call one duel round (A-72, A-4); fights run longer (A-31) under the one opposed rule (A-79); a wound is a level (A-8); a person may try to kill another of his own motive, rarely, and a failed attempt on a guarded target is always caught (A-16, A-96); combat reads skill scores through the skill table (A-112).
 
@@ -193,7 +193,11 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## MB — mass battle
 
-<!-- SYNTHESIS:MB -->
+**What is wrong.** A real, deterministic, well-instrumented battle simulator that never runs in natural play and, forced to run at the shipped scale, does not resolve a battle (`audits/04_MB_audit.md` §0): every realm force is under one 100-troop block, so both sides rout at the first tick and the attacker is graded the loser in every seed (F-MB-01, F-MB-02); nothing in natural play reaches the engine (F-MB-03); the standalone and the season battle are two code paths (F-MB-05); individuals' attributes do not reach the battle (F-MB-14); no intervention during it, no account after (F-MB-15); two of three army strategies lose to the third (F-MB-21). The pessimist (`16_PESSIMIST_MB.md` §0): a melee pair is winner-take-all on a pool proportional to headcount, so an army divided into units loses to the same men in one block, 0 of 60 against 36 (F-PES-MB-01); the field is decided by one draw made before it (F-PES-MB-02; `27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` §0: the higher draw wins 275 of 287 decided fields); a rout has no exit (F-PES-MB-03). The history (`26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` §0): the skeleton agrees with the sources and the results do not; the sources decide a battle by a shock to a body's will at small loss and do most of the killing afterwards.
+
+**What was decided.** One resolver, run automatically (A-1); a unit is a row (A-2); a field returns won, lost or drawn (A-3); mass battle is an abstraction of personal combat, with stated rows for shields, pikes, horse and missiles checked against history (A-100, A-113); command, unit prowess and dynamic strength, the multiplier at zero if its test passes (A-59, A-77); numbers through frontage, depth and endurance (A-60); a stand draw below the band (A-61); losses by kind (A-78); the lexicon (A-95, A-99).
+
+**What is built where.** B16L and B16M the words; B17 the scale and the troop file (55 RESOLVED-BY rows); B19a the contact instrument (MBA-01 to -03); **B19** the field calibration (MBA-04 to -06, -08; `26_MASS_BATTLE_*`, `27_MB_A`, `_C`); B20 the orders and the playable field (`27_MB_D`); B22 the armies and what they carry back (`27_MB_E`); B30 the nested grid; B31 the loadout and the stated rows (MBA-09). **What stays open:** the research gaps (`_part2` §5.3), the troop file's seeds and the stated rows' values (content).
 
 **Rows: 146** (RESOLVED-BY 104 · SUPERSEDED 39 · STALE/FP 3 · DISPUTED 0 · JORDAN 0).
 
@@ -350,7 +354,11 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## SC — social contest and proceedings
 
-<!-- SYNTHESIS:SC -->
+**What is wrong.** A sound resolution primitive (a 166-line roll under a correct seam) and not a game: a hearing almost never ends, cannot be lost by the bench, is not moved by what is said in it and offers nobody a choice (`audits/05_SC_audit.md` §0; F-SC-01, F-SC-05, F-SC-07); two owners of one subsystem, and the played one is not run (F-SC-02); every realm roll is two dice against obstacle 2 (F-SC-03); the deciding roll is not in the log (F-SC-04). The interrogation (`13_SC_contest_interrogation.md` §0): 284 rolled social acts over two seeds are all pool 2 and 270 roll the same obstacle; of the dimensions Jordan names only two reach the roll. The pessimist (`16_PESSIMIST_SC.md` §0): none of the five premise sentences holds; the verdict deals 105 / 33 / 12 over 150 acts in every cell of {hostile, neutral, friendly bench} × {no case, four proofs} (F-PES-SC-05); a hearing ends by exhaustion only (F-PES-SC-07).
+
+**What was decided.** Favourable circumstances raise the speaker, hostile ones the obstacle, with one obstacle composer (A-25); an equal opponent costs 0.4 a point, one rule with the fight (A-26, A-79); a verdict serves the petitioner (A-38); appeal on new grounds only (A-39); a construal reads the reader's own interest (A-27); the institutions' votes are draws on the voter (A-14).
+
+**What is built where.** B05 the one obstacle form and the roll's record (41 RESOLVED-BY rows); **B24** the hearing: its sitting, its moves, evidence and admission, the kernel's retirement (61 rows); B24a what happens outside the room (CR-58 to CR-64); B27 the proceedings (acquittal, arrangement rows that bind, verdict ladder); B28 the social verbs. **What stays open:** the hearing's moves are design-first items (PARTIAL in `U4_TRACEABILITY.md` §3); two DISPUTED rows (`_part2` §8).
 
 **Rows: 154** (RESOLVED-BY 135 · SUPERSEDED 14 · STALE/FP 3 · DISPUTED 2 · JORDAN 0).
 

@@ -238,4 +238,174 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand_B` 
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B31's producer; `Item: B31.09`, `[skip ci]`.
 
-<!-- A39 cont append point -->
+### B31.10 — veterancy and upkeep as columns; read where a unit is built · `04_MB_campaign_party_economy` steps (1)–(3) · BUILD · HASH EQUAL
+- SOURCE: `proposals/04_MB_campaign_party_economy.md` §1 (bullets one to three), §2 (`upkeep`, `arrears`), "Exact edits", "Implementation (test 9, W3-1)" order (1)–(3), "Gate" 1, 5; rulings A-2 (columns of the unit row), A-59 (`experience` is quality; `arrears` lowers steadiness), A-100 (quality is the troop `skill`, MBA-01, MBA §8.1: "experience as a skill step"); closes R-42 of `audits/04_MB_audit_addendum_B.md`.
+- ADVANCES: none of the nine; A-59 (2), the Bannerlord referent's "upkept".
+- INSTRUCTION (copied, with the corrections said):
+  1. "Troop file header: `veterancy: {arm: off | steps, power_per_step: 1, max_steps: 2}`; `off` is the control. The values are the archived design's, transcribed as seeds." Written `veterancy: {arm: off, skill_per_step: 1, max_steps: 2, ob: null}` (UNDECIDED (5): `power` is retired as a troop stat; `ob` is the draw's obstacle B31.11 reads, "`veterancy.ob` in the troop file's header", which no source gives a value: shipped `null`, and the loader refuses `arm: steps` while `ob` is `null`). "Troop row: `upkeep` (whole units of the treasury's coin per hundred troops per season; seed 0 for every row, so nothing is charged at landing)."
+  2. "Army Record, unit row: `experience: 0 | 1 | 2` (default 0)" and "an `arrears: int` on the unit row (seasons unpaid, written by the campaign side)": both optional and absent by default, read as 0 when absent (B22.02's precedent for `absent` and `last_field`, ladder step 4: so no Record's content moves at landing). `modules/mass_battle/armyrecord.py`: the unit row accepts both; `to_order_of_battle` carries both; `engine/season/rosters.yaml: record_kinds.values.army`: the unit row's key set gains them.
+  3. "**Read:** `armyrecord.to_order_of_battle` hands each unit's `experience` on; `orderofbattle._spec_for` adds `power_per_step * experience` to the troop row's `power` for that unit. One addition, at the one place a unit's stats are assembled." Corrected: `skill_per_step * experience` added to the troop row's `skill`. "read at `_spec_for` as `discipline -= min(arrears, discipline - 1)` for a row whose `upkeep` is above 0."
+- WHERE: `references/troops.yaml` (`veterancy`; `troops.*.upkeep`); `tools/export_troops.py`; `engine/engine_params/troops.json`; `modules/mass_battle/troop_types/table.py` (the header, the `steps`-without-`ob` refusal); `modules/mass_battle/armyrecord.py` (the unit row, `to_order_of_battle`); `modules/mass_battle/orderofbattle.py` (`UnitRow.experience`, `.arrears`; `_spec_for`); `engine/season/rosters.yaml` (`record_kinds.values.army`); `tests/valoria/test_mass_battle_order_of_battle.py`.
+- TESTS: `tests/valoria/test_mass_battle_order_of_battle.py::test_arrears_lower_discipline_only_with_upkeep` (named; gate 5: "A unit row with `upkeep` above 0 and `arrears` 2 is built at `discipline - 2` (floor 1); the same troop row at `upkeep` 0 is not"), and `::test_experience_adds_one_skill_step_per_step` `[ASSUMPTION: test name; E-3]`, written first, read red.
+- FALSIFIER and CONTROL: "arrears that lower a levy; any result that moves with the arm `off` and every `upkeep` 0". Control: gate 1, "`veterancy.arm: off`, every `upkeep` 0: `python3 tools/ci_golden_modes_check.py` digests equal; the season pins unchanged".
+- GATE: `python -m pytest tests/valoria/test_mass_battle_order_of_battle.py tests/valoria/test_mass_battle_army_record.py -q` → pass; `python tools/ci_golden_modes_check.py` → digests equal; the realm content hash at seed 0, one season → equal to B31.09's reading; `python tools/export_troops.py --check` → exit 0.
+- HASH MOVERS: none (keys absent by default; arm `off`; upkeep 0).
+- DEPENDS ON: V12 Batch B17 (the troop file; `04_MB_typed_outcome_and_one_path`'s per-unit parts); V12 Batch B19a, B19 (MBA-01's `skill`); V12 Batch B22 (B22.02's unit-row precedent; `27_MB_E`); EXISTS-IN-TREE `armyrecord.py::to_order_of_battle`, `orderofbattle.py::_spec_for`.
+- GLOSSARY: *experience* (new row, if absent): "how many fields a unit has stood through and learned from, up to two steps"; *arrears* (new row): "seasons a unit's troops went unpaid". *veterancy* (the header) uses the plain word.
+- NAMES: `Subformation` → `UnitRow` (B16L); the troop column `power` → `skill` (MBA-01); `power_per_step` → `skill_per_step` (this item).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B31's producer; `Item: B31.10`, `[skip ci]`.
+
+### B31.11 — a unit that stood may learn: the veterancy draw · `04_MB_campaign_party_economy` step (4); `U5b_MB_rulings_in_the_field` §5 · BUILD · HASH EQUAL
+- SOURCE: `proposals/04_MB_campaign_party_economy.md` §1 ("**Write:**", as reconciled by the standing rule), "Gate" 2, 3; `proposals/U5b_MB_rulings_in_the_field.md` §5 (items 1, 2, "Gate", "Falsifier", "Movers"), "Tests (W3-1)" §5; rulings A-30 (keyed), A-5 (the one sampler), A-69 (losses on the row); `audits/14_VERBS_MILITARY.md` §0.5 (the standing rule).
+- ADVANCES: none of the nine; a veteran unit is worth protecting.
+- INSTRUCTION (copied): `engine/season/loop/effects_combat.py::_eff_march`, "on a band that is not `Lost` for the unit's side, for each unit whose part in `FieldOutcome.parts` (a) lost troops and (b) did not rout": "one draw on the one sampler, keyed `H(seed, tick, unit, "veterancy")` (A-30): pool the pool rule on the unit officer's `command` score (the commander's where the unit has none; the untrained default where neither), obstacle `veterancy.ob` in the troop file's header plus one per step already held. Success or better: `experience += 1` to the cap. Partial or Failure: unchanged. A unit destroyed is reset" — "A unit whose part is destroyed (share 0) is reset to 0" — "through the army verbs' one write path (`armyrecord.apply`)". "Condition (a) is the Field of Glory rule … and keeps the write from being a clock." Only under `veterancy.arm: steps`; at `off` nothing is drawn and nothing written. Conditions (a), (b) and the reset read `assigned` after `27_MB_E`'s loss write (A-69, the economy's `Folded:` (2)).
+- WHERE: `engine/season/loop/effects_combat.py` (`_eff_march`); `modules/mass_battle/armyrecord.py` (the `apply` command that sets `experience`); `tests/valoria/test_mass_battle_army_record.py`.
+- TESTS: `tests/valoria/test_mass_battle_army_record.py::test_veterancy_draw_some_gain_some_do_not` (named by `U5b_MB_rulings_in_the_field`; "200 seeds, `assert checked >= 200`"), `::test_experience_rises_only_for_a_unit_that_lost_and_stood`, `::test_a_destroyed_unit_resets_experience` (named by the economy file), each with `arm: steps` and an `ob` set in the test; written first, read red.
+- FALSIFIER and CONTROL: "A gain in every eligible unit" (`U5b` §5); "Experience gained by a unit that took no losses, or kept by one that was destroyed". Control: arm `off` → digests and the realm hash unchanged.
+- GATE: §5's gate, copied: "The economy proposal's gate 2 with 200 seeds of one field: some eligible units gain and some do not; an untouched reserve never gains." `python -m pytest tests/valoria/test_mass_battle_army_record.py -q` → pass. The economy's gate 3 ("the same army with its line at `experience` 2 wins more than at 0, beyond the control's spread", n 200, a module reading) is read and quoted in the commit body.
+- HASH MOVERS: none at `off` ("Movers. None at `off`").
+- DEPENDS ON: V12 B31.10; V12 Batch B05 (the one sampler, the pool rule); V12 Batch B06 (the keyed draw); V12 Batch B19 (`27_MB_A`: the officer's and commander's `command`); V12 Batch B22 (B22.04's loss write); EXISTS-IN-TREE `loop/effects_combat.py::_eff_march`, `armyrecord.py::apply`.
+- GLOSSARY: none (*experience* from B31.10).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B31's producer; `Item: B31.11`, `[skip ci]`.
+
+### B31.12 — recruits dilute experience · `04_MB_campaign_party_economy` step (5) · BUILD · HASH EQUAL
+- SOURCE: the same file, §1 ("**Dilution, so that recruits matter:**"), "Gate" 4; the `Folded:` (2) (men returning from `absent` do not dilute).
+- ADVANCES: none of the nine.
+- INSTRUCTION (copied): "`assign_troops` into a unit with `experience > 0` lowers it by one step when the troops added exceed half the unit's strength after the assignment. One rule, in `armyrecord.assign`. (The archived design keeps the higher of two merged units; that makes experience free to launder, so the lower-on-majority rule is proposed instead and marked as a departure.)" "men returning from `absent` are the unit's own and do not dilute its `experience`" (`27_MB_E` §2, §3).
+- WHERE: `modules/mass_battle/armyrecord.py` (`assign`); `tests/valoria/test_mass_battle_army_record.py`.
+- TESTS: `tests/valoria/test_mass_battle_army_record.py::test_assigning_more_than_half_lowers_experience_one_step` (named), written first, read red.
+- FALSIFIER and CONTROL: gate 4: "`assign_troops` adding more than half a unit's strength lowers `experience` by one; adding less does not". Control: every unit at `experience` 0 → the realm hash unchanged.
+- GATE: `python -m pytest tests/valoria/test_mass_battle_army_record.py -q` → pass.
+- HASH MOVERS: none (no unit holds experience at landing).
+- DEPENDS ON: V12 B31.10; EXISTS-IN-TREE `armyrecord.py::assign`; V12 Batch B22 (B22.05's return from `absent`).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B31's producer; `Item: B31.12`, `[skip ci]`.
+
+### B31.13 — an unfed side starts one morale lower · `04_MB_campaign_party_economy` step (6) · BUILD · HASH EQUAL
+- SOURCE: the same file, §2 (the supply bullet), "Gate" 6, "Tests" gate 6; `field_provisioning` (`H-241`).
+- ADVANCES: none of the nine.
+- INSTRUCTION (copied): "Supply stays SE's: when `field_provisioning` is on and the stores bound a side's fielded troops, that side's morale-start drops by one (the stance row that already feeds it), so 'unfed' has its consequence without a second supply model. One line in `seam/wrappers/mass_battle.py::field_input`." `field_provisioning` ships off (`H-241`), so the line changes nothing at landing.
+- WHERE: `engine/season/seam/wrappers/mass_battle.py` (`field_input`); `engine/season/tests/test_march.py`.
+- TESTS: `engine/season/tests/test_march.py::test_unfed_side_starts_one_morale_lower` (named), with `field_provisioning` on in the test; written first, read red.
+- FALSIFIER and CONTROL: a bounded side whose morale-start is unchanged with provisioning on. Control: provisioning off → the realm hash unchanged.
+- GATE: gate 6, copied: "With `field_provisioning` on and stores bounding one side, that side's morale-start is one lower than in the same field with full stores." `python -m pytest engine/season/tests/test_march.py -q` → pass.
+- HASH MOVERS: none (the fixture ships off).
+- DEPENDS ON: EXISTS-IN-TREE `seam/wrappers/mass_battle.py::field_input`, `::_fed`, `::provision_input`; V12 B31.07.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B31's producer; `Item: B31.13`, `[skip ci]`.
+
+### B31.14 — the unmustered body is a troop row; no stat lent by the side · `27_MB_B` 27B-3 · BUILD · HASH EQUAL
+- SOURCE: `proposals/27_MB_B_unit_prowess_on_the_row.md` §3, "Exact edits", "Gate" 1, 3, the batch-item row 27B-3 (NARROWED by A-100: "the row carries `skill`, not `power`; the constructor edits and the five literals' deletion stand"), "Tests"; `unified/U4_DOCUMENT_STATUS.md` §3.4 (SITE); rulings A-59 (2), A-2; U3 §4.1 row 80.
+- ADVANCES: none of the nine; a unit's quality comes from its own row.
+- INSTRUCTION:
+  1. SITE (§5.7): open `modules/mass_battle/hierarchy/units.py` and `core/contact_draw.py` (B19) and record in the commit body which attribute of a unit the contact vector reads as its men's skill after MBA-04 (`power` kept as the attribute name, or `skill`); steps 2–4 write that one.
+  2. Copied: "The troop file gains the row `infantry`, 'an unmustered body', carrying today's literals transcribed (`power: 4`, `discipline: 5`; its morale still comes from the side's stance rows), and the constructor reads it." Written `skill: 4, discipline: 5` (MBA-01 step 2).
+  3. Copied: "The season's constructors (`orderofbattle.build_unit`, `massbattle._weighted_unit`, `_person_unit`) give every `Subunit` its own `power`, `discipline` and `morale` from its troop row. `Unit.power` and `Unit.discipline` are not set by the season, and `eff_power` / `eff_discipline` raise, on a season-built unit, where they would have inherited. The inheritance stays for the harness until that code leaves."
+  4. Delete `_SEASON_FORCE_POWER` (`massbattle.py`), `_UNIT_POWER`, `_UNIT_DISCIPLINE` (`orderofbattle.py`); `_UNIT_COMMAND` and `_MVP_UNIT_COMMAND` are `27_MB_A` §2's (B19): if still present, leave them.
+- WHERE: `references/troops.yaml` (`troops.infantry`); `tools/export_troops.py`; `engine/engine_params/troops.json`; `modules/mass_battle/massbattle.py` (`_weighted_unit`, `_person_unit`, `_SEASON_FORCE_POWER`); `modules/mass_battle/orderofbattle.py` (`build_unit`, `_UNIT_POWER`, `_UNIT_DISCIPLINE`); `modules/mass_battle/hierarchy/units.py` (`eff_power`, `eff_discipline`); `tests/valoria/test_mass_battle_order_of_battle.py`.
+- TESTS (copied): "`test_a_season_built_unit_takes_no_power_from_its_side` (gate 3: build through each of the three constructors and assert `sub.power is not None`)"; "Changed: the test in that file that pins `_UNIT_POWER`, `_UNIT_COMMAND`, `_UNIT_DISCIPLINE` equal to `massbattle`'s literals pins instead that both constructors read the `infantry` row." Mid-batch: that file and `tests/valoria/test_army_battle.py`. (`test_two_units_of_one_army_differ_by_their_rows`, gate 2, reads B31.10's `experience` and is written here with `experience` 2 set on one unit.)
+- FALSIFIER and CONTROL: "a constructor still passing `power=` to `Unit` (gate 3's test fails)"; "If any digest moves at 27B-1 to 27B-3, the move is a defect in the edit: stop." Control: "200 seeded headcount fields through `massbattle.resolve_field`: equal to the tree before, field for field."
+- GATE: `python tools/ci_golden_modes_check.py` → digests unchanged; the 200 headcount fields equal field for field (`assert checked >= 200`); `git grep -n "_SEASON_FORCE_POWER\|_UNIT_POWER\|_UNIT_DISCIPLINE" modules/ engine/` → nothing; `python -m pytest tests/valoria/test_mass_battle_order_of_battle.py tests/valoria/test_army_battle.py -q` → pass. Gate 2, copied: "An army of two heavy-infantry units, one at `experience` 2: over 200 fields with its same-run control, the experienced unit's share lost differs from its sibling's beyond the control's spread. Swapping which unit holds the experience swaps the reading."
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B31.10; V12 Batch B19 (MBA-04: the vector; `27_MB_A` §2); EXISTS-IN-TREE `massbattle.py::_weighted_unit`, `::_person_unit`, `::_SEASON_FORCE_POWER`, `orderofbattle.py::build_unit`, `::_UNIT_POWER`, `units.py::eff_power`, `::eff_discipline`.
+- GLOSSARY: *prowess* (row exists: a unit's quality only, D-U1-11p): unchanged; the troop row `infantry` is "the unmustered body", plain words.
+- NAMES: `Subunit` → `Unit`, `Unit` → `Army` (B16M); the troop column `power` → `skill` (MBA-01).
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B31's producer; `Item: B31.14`, `[skip ci]`.
+
+### B31.15 — a unit's readout · `27_MB_B` 27B-4 · BUILD · HASH EQUAL
+- SOURCE: the same file, §4 (NARROWED by A-100, MBA-01: "the readout shows the unit's felling chances against a reference opponent (from `mb_contact.json`), not quality dice; 'no function sums it over an army' stands"), batch-item row 27B-4, "Gate" 6 (narrowed).
+- ADVANCES: none of the nine; the designer and the player can be shown what a unit is.
+- INSTRUCTION: `modules/mass_battle/troop_types/table.py::readout(row) -> dict`, copied with A-100's narrowing: "steadiness, armour tier, reach class and support ranks of the arm in hand, pace, and the two carry factors, each computed by the function the resolver calls. It is a description of one unit. **No function sums it over an army**". In place of "quality dice": the unit's felling chances against a reference opponent, by `core/contact_table.py::felling_chance` (B19a) `[ASSUMPTION: the reference opponent — basis: none stated; taken as the `infantry` row (B31.14) at full stamina, an optional `against=` argument; UNDECIDED]`.
+- WHERE: `modules/mass_battle/troop_types/table.py` (NEW `readout`); `tests/valoria/test_mass_battle_order_of_battle.py`.
+- TESTS: `tests/valoria/test_mass_battle_order_of_battle.py::test_readout_felling_chance_equals_the_contact_table` `[ASSUMPTION: test name; E-3]` (gate 6, narrowed: the readout's felling chance equals `felling_chance` called on the same arguments, asserted by calling it; no caller of `readout` sums its values). Written first, read red.
+- FALSIFIER and CONTROL: "A function returning one number for an army's strength." Control: no resolution caller (`git grep -n "readout(" modules/mass_battle` → the definition and tests only).
+- GATE: `python -m pytest tests/valoria/test_mass_battle_order_of_battle.py -q` → pass; digests equal.
+- HASH MOVERS: none ("no caller in resolution").
+- DEPENDS ON: V12 B31.14, B31.03 (carry factors), B31.04 (pace); V12 Batch B19a (`core/contact_table.py::felling_chance`, `mb_contact.json`); V12 Batch B17 (`table.py`).
+- GLOSSARY: *felling chance* (row exists, MBA §8.3): unchanged.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B31's producer; `Item: B31.15`, `[skip ci]`.
+
+### B31.16 — pointer: personal combat's carry items for a unit · `IS-PC-P2` · POINTER
+- What the pointed items do: `IS-PC-P2` (`master/instructions/IS_B1_PC_MB_DICE.md` "Pointers") closes `03_PC_loadout_and_carry` items 4 and 6 ("design-first in MB") by naming `04_MB_unit_loadout_and_weapon_in_hand_B` stages 3–4: B31.02 (the weapon in hand and its switch) and B31.03 (the carry factors from `combat_kit.carry_demand_of`). Files: `hierarchy/units.py`, `percell.py`, `seam/wrappers/mass_battle.py`. Gate: B31.03's `test_the_factor_handed_in_equals_carry_demand_of`. No work of its own; no commit.
+
+### B31.17 — flip: ground slows horse · `26_MASS_BATTLE_movement_and_fatigue_as_data` §2 (the seeds) · BUILD · HASH MOVER(behaviour)
+- SOURCE: the same file, §2's table, "Hash movers" ("three flips, each its own commit"), "Gate" 2; D-19 (seeds landed, ratified at the merge, listed for Jordan).
+- ADVANCES: none of the nine; "horse loses most of its speed advantage in broken ground and uphill".
+- INSTRUCTION (copied): the terrain `pace` column's mounted cells: `forest_broken` **0.6** ("Kriegsspiel 1824: cavalry 250 of 400 paces in light forest (WG K1); Lost Battles: rough ground costs horse double (WG L4)"), `uphill` **0.25** ("Kriegsspiel: 100 of 400 paces up inclines (WG K1)"); every foot cell and `open_flat`, `narrow_pass`, `river_crossing`, `walls` stay 1.0 ("**not established**; no multiplier invented"). Each value carries `status: seed` and its source in a comment.
+- WHERE: `references/troops.yaml` (`terrain.forest_broken.pace`, `terrain.uphill.pace`, mounted); `engine/engine_params/troops.json` (re-derived).
+- TESTS: `tests/valoria/test_mass_battle_terrain.py::test_horse_pace_by_ground` (B31.05) now reads the shipped values, not the test's.
+- FALSIFIER and CONTROL: "horse at three times foot on `uphill`". Control: the revert (every cell 1.0) reproduces B31.16's digests.
+- GATE: `python -m pytest tests/valoria/test_mass_battle_terrain.py -q` → pass; `python tools/ci_golden_modes_check.py` → digests read and recorded (moved where a field is fought on those grounds); the realm content hash at seed 0, one season, read.
+- HASH MOVERS: every fought field with a mounted body on `forest_broken` or `uphill`. Declared; B31.99's re-pin.
+- DEPENDS ON: V12 B31.05.
+- GLOSSARY: none.
+- COST and TIER: edit (a value); `sonnet`, `high`.
+- LANDS IT: B31's producer; `Item: B31.17`, `[skip ci]`.
+
+### B31.18 — flip: moving fast tires · `26_MASS_BATTLE_movement_and_fatigue_as_data` §3 (`fast_move_drain`) · BUILD · HASH MOVER(behaviour)
+- SOURCE: the same file, §3 ("`fast_move_drain` is M-3's rule … The seed is a sixth of a clash, chosen so that an envelopment at double pace over a whole bout costs about as much as three clashes; it is Jordan's to set"), "Gate" 3; D-19.
+- ADVANCES: none of the nine.
+- INSTRUCTION: `references/troops.yaml: fatigue.fast_move_drain: 0` → `2` ("Seed for the flip: 2"), `status: seed`, its source in a comment.
+- WHERE: `references/troops.yaml`; `engine/engine_params/troops.json` (re-derived).
+- TESTS: `tests/valoria/test_mass_battle_maneuvers.py::test_fast_move_drain_tires_the_wing` (B31.06) reads the shipped value.
+- FALSIFIER and CONTROL: "stamina unchanged by a bout of double-pace movement at a non-zero drain". Control: the revert reproduces B31.17's digests.
+- GATE: gate 3, copied: "`fast_move_drain: 2`: an enveloping wing's columns read lower stamina at first contact than the same wing at the control, and the envelopment's win share against the same-run control is reported, not targeted" (quoted in the commit body); `python -m pytest tests/valoria/test_mass_battle_maneuvers.py -q` → pass.
+- HASH MOVERS: every fought field with a body moving above its pace. Declared; B31.99's re-pin.
+- DEPENDS ON: V12 B31.06, B31.17.
+- GLOSSARY: none.
+- COST and TIER: edit (a value); `sonnet`, `high`.
+- LANDS IT: B31's producer; `Item: B31.18`, `[skip ci]`.
+
+### B31.19 — flip: a hard march, a second field and a short ration tire a side · `26_MASS_BATTLE_movement_and_fatigue_as_data` §3 (`entry`) · BUILD · HASH MOVER(behaviour)
+- SOURCE: the same file, §3 (`entry`: `march_partial: 0.7`, `second_field: 0.7`, `unfed: 0.7`; "Every magnitude here but the three transcribed ones is a seed with no historical figure behind it"), its head's `Folded:` (1) (`second_field` is the fallback where a part has no record, A-69), "Gate" 4; D-19.
+- ADVANCES: none of the nine; A-69 (a march's result reaches the field).
+- INSTRUCTION: `references/troops.yaml: fatigue.entry`: `march_partial`, `second_field`, `unfed` → `0.7` each, `status: seed`; the product floored at 0.3 (B31.07).
+- WHERE: `references/troops.yaml`; `engine/engine_params/troops.json` (re-derived).
+- TESTS: `engine/season/tests/test_mass_battle_module.py::test_entry_stamina_lowers_the_tired_side` (B31.07) reads the shipped value.
+- FALSIFIER and CONTROL: a side entering after a `Partial` march at full stamina. Control: the revert (all 1.0) reproduces B31.18's realm hash.
+- GATE: gate 4, copied: "`entry.march_partial: 0.7`, mirror field, n 100, friction pinned off for the test: the tired side loses more often than at 1.0 by more than the sampling band" (`assert checked >= 100`); the realm content hash at seeds 0 to 2, one season, read and recorded.
+- HASH MOVERS: every world in which a field is fought after a `Partial` march, a second field in one lap or a short ration. Declared; B31.99's re-pin.
+- DEPENDS ON: V12 B31.07, B31.18.
+- GLOSSARY: none.
+- NAMES: "a second field in one season round" → in one lap (B04).
+- COST and TIER: edit (values); `sonnet`, `high`.
+- LANDS IT: B31's producer; `Item: B31.19`, `[skip ci]`.
+
+### B31.20 — the other 25 matchup rows, stated, checked against history and banded to the derived rows · MBA-09 · CONTENT · HASH MOVER(behaviour)
+- SOURCE: `master/mb_abstraction/MBA_DESIGN_part3.md` §7.1 "Item: MBA-09"; `MBA_DESIGN_part2.md` §3.2 (the classes, the situations, the row schema, the roster table, "How each row is derived"); rulings A-100, A-113 (Jordan: "stated rows checked against history and banded logically to derived results"); U3 §1 item 31 ("one re-pin in B31's last `Item:` commit"); UNDECIDED (8).
+- ADVANCES: A-100 for missiles and horse, completing what MBA-05 and MBA-06 ship as seeds; A-113.
+- INSTRUCTION (MBA-09's text, copied, with A-113's answer applied):
+  1. "(1) the 25 rows of §3.2 not marked ★ … read as MBA-08 reads": the rows, by §3.2's roster (copied): `horse_shock` × `foot_pike` `marching`; `horse_shock` × `foot_pole` `marching`; `horse_shock` × `foot_short` `marching`; `horse_shock` × `foot_missile` `charge_flank_or_rear`, `in_cover`; `horse_shock` × {`horse_shock`, `horse_light`, `horse_missile`} × {`charge_front_unbraced`, `charge_flank_or_rear`}; `horse_light` × {`foot_missile`, `horse_missile`} × {`charge_front_unbraced`, `pursuit`}; `horse_light` × {`foot_pike`, `foot_pole`} `charge_front_braced` ("**refused** (no charge)"); `horse_missile` × each foot class `skirmish` ("evades: the kite"); `foot_missile` × {`foot_pole`, `foot_pike`} `skirmish` ("evades"); `foot_pike` × {`foot_short`, `foot_pole`} `charge_front_unbraced` ("the push of pike"). Each row in §3.2's schema: `{a, d, situation, closes: closes | draw | evades | refused, close_ob, first_tick: {exposure_a, exposure_d, levels_a, levels_d}, stand, status}`, its "why (source)" cell copied into a comment.
+  2. "(2) … shields, pikes, horse with lance and missile weapons are NOT taught to personal combat now; their matchup and per-hit rows ship as **stated rows** at `status: stated` (printed so in the battle report, never presented as measured), each (a) **checked against history** … recorded as a named check with its citation; and (b) **banded logically to the derived results**: each stated row must lie inside the band its derived neighbours imply …, checked by a test over the table that reads the derived rows and fails when a stated row leaves its band (extend MBA-08's dominance reading to host it). A stated row moves to `status: derived` only if personal combat later learns the equipment (not scheduled)." The 25 rows and `contact.missile.felling_per_hit` ship `status: stated` (UNDECIDED (8)). The values are content (D-19): drafted by this item, each marked `[ASSUMPTION]` in a comment, listed in the PR body for Jordan.
+  3. `modules/mass_battle/troop_types/table.py`: the `status` closed set gains `stated` (MBA-01's loader refuses a status outside its set); the battle report prints `stated` beside such a row (the report `B20`'s `04_MB_playable_field_scenario` prints `[ASSUMPTION: the printer is `harness/field_scene.py`'s report — basis: B20 builds it; read at landing]`).
+- WHERE: `references/troops.yaml` (`matchups`: 25 rows; `contact.missile.felling_per_hit` status); `tools/export_troops.py`; `engine/engine_params/troops.json`; `engine/engine_params/mb_contact.json` (re-exported by `tools/export_mb_contact.py`); `modules/mass_battle/troop_types/table.py` (the `stated` status); `tests/sim/gauge_mb.py` (the dominance reading hosts the band check); `tests/valoria/test_mass_battle_matchups.py`. `tools/calibrate_mb_contact.py` and `references/mb_contact/duel_grid.json` are run and read, not edited (UNDECIDED (8)).
+- TESTS: in `tests/valoria/test_mass_battle_matchups.py`, written before step 1 and read red: `test_every_stated_row_lies_inside_its_derived_band` and `test_stated_rows_agree_with_history` `[ASSUMPTION: test names; E-3]` — the history checks, copied as named assertions: "a braced pike block stops a frontal charge more often than not; horse ridden into stakes and arrows fails; a pike block without a screen is weak to archers; arrows bounce off shields"; the ordering relations: "a shielded line is no worse than the same line unshielded; a braced pike no worse than an unbraced pike against a charge; heavier armour no worse against the same missile"; and `test_a_status_outside_the_closed_set_is_refused` (`stated` accepted). MBA-06's tests (`test_t6_charge_ordering`, `test_light_horse_does_not_charge_a_set_wall`, `test_no_troop_name_in_the_charge`) run on the new rows.
+- FALSIFIER and CONTROL: "as MBA-02 and MBA-06": "a braced pike block that a frontal horse charge beats more often than the horse beats unbraced levy (T-6 inverted)"; "a charge that reads a troop name"; a stated row printed as measured. Control: "the horse against itself".
+- GATE: `python tools/calibrate_mb_contact.py --trust` → seven `ok` lines; `--spot 20` → twenty `inside` lines; `python -m pytest tests/valoria/test_mass_battle_matchups.py -q` → pass (n per MBA-06's tests, `assert checked >= …` as written there); `python tests/sim/gauge_mb.py --results` → the dominance report printed in the commit body with each stated row's band; `python tools/export_troops.py --check`, `python tools/export_mb_contact.py --check` → exit 0.
+- HASH MOVERS: "fields with the rows; one re-pin in B31's last commit" (B31.99).
+- DEPENDS ON: V12 Batch B19a (MBA-01 to MBA-03: the table, its schema, `calibrate_mb_contact.py`); V12 Batch B19 (MBA-04 to MBA-06, MBA-08: the ★ rows, `gauge_mb.py`'s dominance reading); V12 B31.10 ("the economy's cost columns", to read dominance against cost); J-MBA-01: answered by A-113.
+- GLOSSARY: *matchup row* (row exists, MBA §8.3): its status set gains *stated*: "a row written from sources and logic, not measured, and printed as such".
+- COST and TIER: content and small build; drafting and the history checks `opus`, `high`; the test and loader `sonnet`; the `--trust` and `--spot` runs `haiku`-supervised; a `--trust` failure read by `opus`.
+- LANDS IT: B31's producer; `Item: B31.20`, `[skip ci]`.
+
+### B31.99 — re-pin and close readings · E-1 · BUILD · HASH MOVER (the re-pin)
+- SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12; U3 §1 item 31 ("one re-pin in B31's last `Item:` commit").
+- ADVANCES: none of the nine (B31 names no conjunct; no `reading:` record is written).
+- INSTRUCTION: (1) re-record, once: `tools/ci_golden_modes_check.py`'s digests, `tests/valoria/test_field_golden_pins.py`, every `engine/tests/` golden with a field, the realm pins in `engine/season/tests/_realm_goldens.py`, read against B30's close (`reading @<sha>`); the commit says "re-pin: B31.17 terrain pace, B31.18 fast-move drain, B31.19 entry shares, B31.20 stated matchup rows (and B31.08 where a body drifts); every other item at its control". (2) The commit body lists every seed value the batch landed (the arms' `mass_kg`, `strength`, the three flips, the 25 stated rows, the `infantry` row) for Jordan's correction (D-19), and the batch gate's readings and §5.12's record.
+- WHERE: the pin files named in (1).
+- TESTS: none new; the covering suites `tools/tests_for_diff.py --base <batch-start-sha>` names, once.
+- FALSIFIER and CONTROL: a pin that moves at B31.02 to B31.16's tree against B30's close (diff the digests recorded at B31.16 against B30's close: equal, or only B31.08's drifting bodies); control: each flip's revert reproducing the item before it.
+- GATE: the BATCH GATE above, read once.
+- HASH MOVERS: the re-pin itself.
+- DEPENDS ON: B31.01 to B31.20.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`; the close's terminal critique `opus`.
+- LANDS IT: B31's producer; `Item: B31.99`, the batch's last `Item:` commit, without `[skip ci]`.
+
+| STOP. Batch B31-mb-loadout-economy closes here |
