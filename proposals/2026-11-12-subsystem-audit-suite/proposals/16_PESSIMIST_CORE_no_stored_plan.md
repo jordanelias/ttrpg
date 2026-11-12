@@ -52,8 +52,12 @@ anyone wants it; nothing measured here argues for it.
      other use remains in the module).
    - keep `self._deliberated_at[p.id] = (w.tick, self.round)` (read by `_questions_at_barrier`).
 2. **`engine/season/loop/driver.py`** `:472-473` and `__init__`: drop `_queued` and `_inputs`.
-3. **Tests that assert reuse on a hand-built world** (the `test_u2_` family, where one plants equal
-   inputs): delete those cases with the branch; the commit names them.
+3. **The two tests of the fingerprint** go with it:
+   `engine/season/tests/test_season_shape.py:16717`
+   (`test_u2_the_inputs_fingerprint_is_complete_for_the_skip_it_licenses`, with its helper at
+   `:16671-16713`) and the fingerprint assertion in
+   `engine/season/tests/test_in53_vacancy_need.py:439-447`. Both test that the skip is *safe*; with no
+   skip there is nothing to keep safe. `[the bodies of the two tests were located by grep, not read]`
 
 ## Gate (an execution artifact, §0.2)
 

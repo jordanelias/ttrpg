@@ -326,8 +326,8 @@ tracker-true; mirror control at two seed sets 50.4% and 49.0%:
 | A felled | 79.0% | 65.9% | 50.4% | 34.8% | 23.3% | 12.7% | 7.1% | 1.4% | 0.2% (6) | 0 of 3,000 |
 
 **Verdict: holds, and is the best-shaped lever in the subsystem.** About fifteen points a step near
-parity, an honest tail (one upset in fourteen at four points' gap, one in seventy at six), certainty
-only beyond eight. Three qualifications, each measured.
+parity, an honest tail (one upset in fourteen at four points' gap, one in seventy at six), near
+certainty from eight. Three qualifications, each measured.
 
 - *Two masters fight the novices' fight.* Mirrors at faculty 0, 2, 5, 8, 12 and 20 (1,500 fights each)
   take 3.26, 3.18, 3.10, 3.08, 3.05 and 2.92 wounding blows and 3.2 to 5.0 turns: the same two or three
@@ -494,10 +494,10 @@ without a felling) and the 5.6% who die under `yield` terms.
 | Endurance 7, 10 mirror (Health 55, 70) | 4.4 and 5.4 blows; undecided 0.8%, 1.9% |
 | Endurance 1 against 4 | the weak man felled 80.9% (through the seam with `body` 1: 249 of 300, `pS_season.py` S6) |
 | every attribute 1, mirror (Health 10) | first-blow deaths 74.5%; undecided 1.2% |
-| every attribute 7 against a default man | 0 of 1,000 felled; 1.76 turns |
+| every attribute 7 against a default man | felled 0.0%; 1.76 turns |
 | Strength 20 against default | 1 of 1,000 felled |
 | Perception 0, mirror | runs; indistinguishable from the default mirror |
-| unarmoured dagger mirror | 4.1 blows, 4.4 turns: the longest ordinary fight in the roster of extremes |
+| unarmoured dagger mirror | 4.1 blows, 4.4 turns |
 | plate, arming mirror | 99.7% undecided (§2.3) |
 | a half-sword *form* as the starting kit (the export lists four as weapons, F-PC-15) | accepted; `estoc_halfsword` against arming fells 99.0% |
 | unknown weapon or armour key | `KeyError` at the Combatant (the seam's `kit_of` is the guard) |

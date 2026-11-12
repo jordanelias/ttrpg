@@ -208,3 +208,117 @@ line needs no order to face about, so "flanked" is a state that lasts two ticks
 largely gone (B wins 25 of 60 when flanked, 33 when not): the draw is larger than the manoeuvre. Finding
 F-PES-MB-02.
 
+**The control that shows the octagon itself works** (`p4_pike.py`, same harness, friction OFF): when the
+attacker is ONE body, a 600-horse charge on a braced 600-man block breaks it in 30 of 60 from the front,
+41 of 60 from the flank and 55 of 60 from the rear. Front < flank < rear, as the words say. A flank
+attack "breaks the line" when the whole army arrives on the flank and stops doing so when a part of the
+army does, which is the only way an army ever flanks.
+
+**Through the season's own entry, shipped configuration** (`p7_field.py`, `massbattle.resolve_field` with
+`orders_of_battle`, friction ON, open ground, n 100): attacker 1 x 900 against 1 x 900 wins 42; 3 x 300
+against 1 x 900 wins **14**, with 48% of its men left against the defender's 96%; **3 x 400, a third
+larger, wins 25; 6 x 300, twice the defender's size, wins 22** and never does better than `Partial` in
+the other 78. The control the other way (1 x 900 against 3 x 300) wins 66. An army that doubles its
+numbers and forms them into six units halves its chance.
+
+### 2.5 P3 — "a pike block holds against cavalry": a braced block holds half the time, and the pike has nothing to do with it
+
+**Verdict: does not hold as worded (EXECUTES, module scale). What holds is "heavy infantry told to
+brace"; the pike is a name on the same body.** The addendum showed pike and heavy infantry identical in
+one-rank season bodies (F-MB-22, 440 of 440). This lane gave the pike its best case: three ranks, so
+that its three support ranks exist (`registry.support_ranks_for`), and a cavalry charge
+(`role='Shock'`) at equal numbers.
+
+`p4_pike.py`, n 60 a row, 600 foot (defending) against 600 cavalry, 50 a cell; "holds" = not routed at
+the end of the field.
+
+| defender | friction OFF: holds | cavalry wins / foot wins | friction ON (shipped): holds | cavalry / foot |
+|---|---|---|---|---|
+| pike, no role | 11/60 | 46 / 10 | 36/60 | 24 / 33 |
+| heavy infantry, no role | 8/60 | 48 / 8 | 35/60 | 24 / 34 |
+| spearmen, no role | 0/60 | 60 / 0 | 30/60 | 30 / 25 |
+| light infantry | 0/60 | 60 / 0 | 26/60 | 32 / 17 |
+| levy | 0/60 | 60 / 0 | 8/60 | 52 / 0 |
+| archers | 0/60 | 60 / 0 | 21/60 | 39 / 12 |
+| **pike, ShieldWall** | **30/60** | 27 / 20 | 35/60 | 25 / 30 |
+| **heavy infantry, ShieldWall** | **30/60** (identical to pike in 60 of 60 fields) | 27 / 20 | 35/60 | 25 / 30 |
+| spearmen, ShieldWall | 4/60 | 56 / 0 | 30/60 | 30 / 22 |
+| pike ShieldWall, charged in flank | 19/60 | 39 / 6 | 35/60 | 25 / 29 |
+| pike ShieldWall, charged in rear | 5/60 | 55 / 4 | 31/60 | 29 / 26 |
+| pike ShieldWall, cavalry not charging (no role) | 41/60 | 17 / 30 | 40/60 | 20 / 32 |
+| control: cavalry Shock against cavalry in line | (the line holds 41/60) | 16 / 41 | 38/60 | 21 / 35 |
+
+| # | link | O predicted | C observed | verdict · cause |
+|---|---|---|---|---|
+| 2 | cavalry does markedly worse against pikes than against other foot | pike well above the rest | unbraced: pike 11, heavy infantry 8, the rest 0 (of 60). Braced: pike 30, heavy infantry 30 | DEPARTS: the difference is the brace and the stat line (power 4, discipline 4), which heavy infantry shares |
+| 3 | "holds", usually | well over half | braced, equal numbers: 30 of 60, and the pikes win 20 fields to the horse's 27 | DEPARTS (EDGE of a tuned value, reported as order only: a braced pike block is the underdog against an equal number of charging horse) |
+| 4 | frontal and conditional on order | flank and rear much worse | 30 / 19 / 5 | FOLLOWS |
+| 5 | pikes are not good at everything | ordinary against foot | heavy infantry against pike is the pike mirror in 60 of 60 fields; light infantry never beats pike (0 of 60) | pike is heavy infantry, so neither better nor worse than it |
+| 6 | the word is the weapon | take the pike away and it goes | pike ShieldWall = heavy infantry ShieldWall in 60 of 60 fields: winner, both losses, tick count | **INERT · WORD.** The reach of 0.3 and the third support rank change nothing a braced field can see; unbraced they change 45 of 60 fields and net three more holds, inside the noise |
+| E12 | no value changes nothing; no option always best | | under the shipped friction every row from pike to spearmen holds 30 to 36 of 60 and ShieldWall adds nothing (35 against 36): the role, the troop type and the direction of the charge are all inside one draw | DEPARTS |
+| E11 | neighbours differ | a charge is better than no charge | charging cavalry (Shock, Arrowhead) loses to the same cavalry standing in line, 16 to 41 (OFF) and 21 to 35 (ON): `H-361`'s "Shock moves the field the wrong way", now with its control | INVERTED · the Shock role |
+
+Finding F-PES-MB-05 (the pike), F-PES-MB-06 (Shock). The addendum's `04_MB_unit_loadout_and_weapon_in_hand_B.md`
+is the carrier that would make the weapon a datum the resolver reads; nothing here changes that
+proposal, and this table is its falsifier with depth added.
+
+### 2.6 P4 — "a tired unit fights worse": true of a number nobody is shown, false of the number that is
+
+**Verdict: holds inside one field on the column ledger (EXECUTES); INERT on the unit ledger, which is the
+one reported; ASSERTED as a state that arrives from a march, a siege or a kit.**
+
+There are two stamina ledgers for one quantity. The **unit ledger** (`Unit.stamina`, `Subunit.stamina`,
+0 to 100; drained by `STAMINA_DRAIN_PER_CONTACT_CELL` in `battle_loop.run_battle`; read by
+`core/exchange.py::_stamina_pool_penalty`, which takes one die off at exactly zero and nothing above it)
+and the **column ledger** (`percell._ColBlock.stamina`, 0 to 100; drained by `MB_STAMINA_DRAIN` 12 a
+clash in `percell.update_stamina`; read by `percell._fatigue_sigma`, up to `MB_STAM_SIGMA` 1.5).
+`run_battle` returns `a_stamina: unit_a.agg_stamina()`, the unit ledger.
+
+`p5_tired.py`, heavy infantry 600 v 600, friction OFF, n 100 a row; side A enters the field at stamina s.
+
+| A enters at | on the unit ledger: A / B / undecided | on the column ledger | on both |
+|---|---|---|---|
+| 100 (control) | 36 / 54 / 10 | 36 / 54 / 10 | 36 / 54 / 10 |
+| 50 | 36 / 54 / 10 (identical field for field) | **15 / 79 / 6** | 15 / 79 / 6 |
+| 10 | 37 / 54 / 9 | 10 / 86 / 4 | 8 / 86 / 6 |
+| 0 | **43 / 49 / 8** | 10 / 86 / 4 | 5 / 90 / 5 |
+
+At three ranks the column ledger reads 29 / 40 / 31 fresh and 2 / 87 / 11 at 50. Fresh against fresh,
+at the end of 18 ticks (n 40): the unit ledger stands at **99.5 and 100.0 of 100** and reached zero on
+0 of 80 sides; the column ledger stands at 35.
+
+| # | link | O predicted | C observed | verdict · cause |
+|---|---|---|---|---|
+| 1 | tiredness rises with fighting, marching, charging, kit; falls with rest | a state with several sources | the column ledger rises with fighting only; nothing writes either ledger before the field (`seam/wrappers/mass_battle.py` builds both sides new; no stamina field on `MassBattleInput`) | ASSERTED for march, charge, kit, supply |
+| 2-3 | monotone; shows in the outcome | more tired, more losses | column ledger: 36 → 15 → 10 wins of 100 | FOLLOWS (column) |
+| 2-3 | the same, on the stamina the engine reports | the same | unit ledger: no change at 50 or 10; at 0, with the die off, A wins **more** (43 against 36, inside sampling error of no effect) | INERT; "a number shown that is not the number used" (E12) |
+| 5 | persists and recovers on a readable clock | carried between fields | both ledgers are born at 100 in every field; `between_turn_recovery` and `stamina_check` are reached only from `run_multi_turn_battle`, which no season path calls | ASSERTED |
+| 7 | heavier troops tire faster | per type or per kit | `MB_STAMINA_DRAIN` is one constant for every troop type; no loadout term (first audit F-MB-19) | ASSERTED: the half of Jordan's carry rule that is a fatigue cost has no carrier |
+| S | one quantity, one ladder | | two ledgers, two drain rules, two penalties (a die at zero; a sigma that grows), one of them reported and inert | S defect (two ladders for one quantity) |
+
+Finding F-PES-MB-04.
+
+### 2.7 P5 — "a routed army can be rallied or destroyed in pursuit": neither
+
+**Verdict: does not hold at any depth. Rally is ASSERTED (an empty hook). Pursuit EXECUTES only when
+called by hand on a unit whose speed was set by hand, and is then one roll that removes most of what is
+left; it does not FORM and cannot FIRE.**
+
+`p6_rout.py`:
+
+| # | link | O predicted | C observed | verdict · cause |
+|---|---|---|---|---|
+| 1 | rout is not destruction | most of the routed are alive | mirror 600 v 600, n 200, 182 decided by rout: the loser has lost 37% at the end (16% to 88%), the winner 7% | FOLLOWS |
+| 2, 4 | it can be rallied | a commander's act, with a draw | `orchestration.rally_check` is `pass` ("Empty hook — rally lands in a future cycle (G-7)"). A routed side put through three further between-turn recoveries, phase boundaries and engagement turns came back in **0 of 60**. `between_turn_recovery` returns at once for a routed unit. `reset_morale_between_battles` clears every rout with no roll and no caller in `engine/` or `modules/` | ASSERTED; and the only code that un-routs anything is unconditional (the standing rule) |
+| 2, 3 | or run down in pursuit | the winner's act, best with fast troops | `orchestration.pursuit_damage` is called only by `run_multi_unit_battle`, which nothing in `engine/season/` or `modules/mass_battle/massbattle.py` calls (grep; `massbattle.py`'s own docstring says so) | INERT at EXECUTES from the season's entry |
+| 3 | fast troops pursue | cavalry | pursuit is gated on `pursuer.speed == "Fast"`. A side of cavalry, light cavalry or mounted archers built by the season constructors has `Unit.speed == 'Standard'`: speed is a `Unit` field no constructor derives from troop type. Standard pursuer: damage 0 in 115 of 115 | INERT a second way; and "only Fast may pursue" is an eligibility rule that no cavalry can meet |
+| 5-6 | pursued against not pursued differs largely | most of the dead fall in the pursuit | by hand (speed set to Fast): one call removes on average **73%** of the routed side's survivors (and up to four times their number); zero in 1 of 115 | EXECUTES by proxy; the size is right for the premise and the form is one roll with no defence, no recall in reach and no choice |
+| E11 | the role called Pursue pursues | | `ROLE_SPEC['Pursue']` carries the instruction `pursue`, which `hierarchy/units.py::ROLE_INSTRUCTION_PRIMITIVES` maps to `None` ("nothing to select") | WORD: a role on two troop types' menus that does nothing |
+| 7 | the beaten army is somewhere, weaker | on the map, to be met again | first audit F-MB-11: the loser stays where he stood and the winner stands beside him; the loser's `body` is scaled by the survivor ratio | DEPARTS (theirs) |
+| 8 | the record tells rout, rally and pursuit apart | three kinds | `field.won` / `field.lost`; no rout, rally or pursuit kind in `verb_table.yaml`'s `march` row | ASSERTED |
+
+Play-back of a won field, as the engine has it: *two lines met; after a third of one side had fallen the
+rest ran; the winners stood where they were; the losers stood where they were too, each man of them
+two-thirds the man he had been; next season nobody remembered which way anyone had run.* Finding
+F-PES-MB-03.
+
