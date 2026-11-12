@@ -238,3 +238,16 @@ Scope: 29 files under `.audit/` (archived-not-canon, lesser weight). Verified-at
 - **Conflicts / stale:** `modules/combat/weapons.py:686` carries the flamberge blade at 0.8859 kg / 15 / 90 (not 1.05 kg as here): the engine record re-partitioned the masses (a `dict(...)` per element) [UNVERIFIED which is authoritative; the code governs].
 - **Open items:** none.
 
+### .audit/2026-07-02-morphology-rearch-phase0/phase0_morphology_combined.json
+- **What it is:** 3,894-line concatenation of the nine cluster files into one `{weapons{53}, flags[7], harmonization_notes}` object; each weapon gains `_source_cluster` and a `notes` field that duplicates `provenance.note`; read in full.
+- **Status:** none. Reading: historical product of Phase 0; the engine's own `weapons.py` is the live descendant.
+- **Bears on:** PC.
+- **Content that matters:**
+  - Only mechanical changes versus the clusters: `pommel_or_butt` split into `pommel{}`/`butt{}` for the dagger and spear clusters (:3885-3894 harmonization notes), the Japanese/Chinese `residual_pct` signs corrected (katana -6.82, tachi -7.92, odachi -5.68, tsurugi -6.92, changdao -7.81; :2404, :2473, :2543, :2612, :2681), and `shaft_or_grip_est_kg` re-derived for the multi/blade polearms as sum minus parts (:3894).
+  - `mass_grade` is missing on the six `sword_straight_thrust_and_broad_A` weapons (szabla, cinquedea, flamberge, estoc, estoc_halfsword, falchion; e.g. :3052-3119) while all others carry it, so a reader keyed on `mass_grade` sees 47 of 53; `total_length_m` is absent on the 12 canonical records (:3-3).
+  - `hook_sword` still has `mass_grade:"S2"` (:3803) next to `confidence_tier:"S3"` (:3878); `rondel/main_gauche/stiletto/misericorde/hook_sword` gained an empty `double_count_guard_note` (:3566, :3645, :3716, :3786) populated only for hook_sword (:3868); no other dual-listed record (ji, partisan, kama_yari, dangpa, guandao) carries one.
+  - `flamberge` retains amplitude 15 / period 90 (:3202-3203) as the only nonzero `edge_undulation`.
+  - :3894 states the part-sets were NOT checked against `weapon_physics.derive()` sums; no 0-1 behavioural scalar was found in mass/x/extent fields.
+- **Conflicts / stale:** mojibake throughout (UTF-8 read as cp1252); `provenance.citations` cite `designs/scene/combat_engine_v1/weapons.py`, a deleted path. Counts of 53 not recounted [UNVERIFIED]. The engine's `weapons.py:686` flamberge blade 0.8859 kg differs from the 1.05 kg here.
+- **Open items:** hook_sword dual-record decision; whether the engine consumes `guards` or `head_elements` where both list one part.
+

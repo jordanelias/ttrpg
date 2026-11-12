@@ -347,9 +347,34 @@ Three arms on the same seeds (E-N07 to E-N09) and one the WR lane ran.
 
 ARMS_PLACEHOLDER
 
-### 4.4 Six seasons: what the lapses occasion
+### 4.4 What the lapses occasion (E-N10)
 
-LAPSE_PLACEHOLDER
+The shipped terms are four seasons, so a four-season run sees no lapse. Rather than wait on six, the
+terms were set to their own swept short values (`oblige_term` 1, `docket_lapse` 2) at seed 0 for three
+seasons; seasons 0 and 1 are event-for-event the shipped run's (13,379 and 24,267 Events).
+
+- **26 oaths lapsed unpaid, sworn by 26 different persons, all to one seat.** `term.renewed` 0. The
+  oath wave of S2 is aimed at a single seat, so even with every proposal of this lane built the
+  grievances would all fall at one door: the content of who swears to whom is itself degenerate
+  (`20_NARRATIVE_B` names this as its third falsifier).
+- **What the 26 lapses occasioned:** six acts formed on a claim of the closure, by persons who were
+  not the sworn man: `convene`, `create_record` and `commit` executed; `march`, `capture` and `sabotage`
+  refused. No `release`, no `petition`, no act toward the seat or its holder. One world-to-act edge
+  (`tenure.closed → create_record`).
+- **The designed two-step stories, counted as cross-person causal pairs between executed acts:**
+  `petition→issue` 0, `petition→determine` 0, `petition→carry` 0, `issue→comply` 0, `oblige→transfer` 0,
+  `oblige→release` 0, `march→march` 0, `march→petition` 0, `arrest→pardon` 0, `tell→commit` 0,
+  `argue→commit` 0, `determine→petition` 0, `requisition→march` 0. Non-zero: `commit→petition` 4,
+  `issue→petition` 3, `convene→petition` 3. Verbs that are ever a cross-person antecedent: `dispatch` 36,
+  `issue` 28, `create_record` 20, `reconstruct` 19, `utter` 13, `convene` 13, `commit` 11, then six verbs
+  at 5 or fewer. Verbs ever a consequent: `create_record` 59, `utter` 27, `reconstruct` 20, `issue` 14,
+  `petition` 14.
+- **The six changes of conviction, printed:** three members of the Crown's faction went from
+  `solmund_orthodoxy` 2 with `einhir_restoration` 1 to `einhir_restoration` 3, orthodoxy gone; a fourth
+  from orthodoxy 3 to Restoration 4; a Löwenritter from orthodoxy 2 and `thread_truth` 3 to Restoration
+  5; and the Duchess of Hafenmark (`p_npc_050`) from orthodoxy 2 to nothing. Five conversions into the
+  creed each stood *against* at intensity 1, in three seasons, by the fold rule, with no Event. Under
+  "stands for" (`20_NARRATIVE_A`) none of the five is a fold: a creed held at 1 is not held.
 
 ## 5. What makes a plot point arise today, and how a reader recovers why
 

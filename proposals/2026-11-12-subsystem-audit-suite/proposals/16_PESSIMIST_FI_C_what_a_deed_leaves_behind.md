@@ -31,12 +31,11 @@ against thirteen harm-shaped deed kinds.
 
 `p1_belief.py`, `p1c_exists.py`, `p1d_where.py` (the subject's ledger identical in each pair):
 
-| the World is edited, no Event, no WITNESS | candidates naming the King |
+| arm (against its control) | the subject's candidates |
 |---|---|
-| control | 38 |
-| the King deleted | 10 (−28) |
-| the King's containment moved to another realm | 10 (−28) |
-| the subject instead *believes* `(King, person.died, True)`, the King alive | 66 (+28) |
+| the King deleted on the World: no Event, no WITNESS | −28, every one about the King |
+| the King's containment moved to another realm, the same way | naming the King: 38 → 10 |
+| the subject instead *believes* `(King, person.died, True)`, the King alive | +28, every one about the King (`challenge`, `interview`, `tell`, …) |
 | the subject believes `(King, exists:Person, 0)`, the King alive | `challenge`, `interview`, `train` and the cell lies declined; `tell`, `move`, `speak`, `surveil`, `transfer`, `tie / knot` still formed |
 
 Owner of the leak: `queries/world_q.py::questions_for`, the claim loop: `c.subject in R` and
@@ -49,24 +48,24 @@ the channels, not as a world stamp); `08_FI_01` builds it for seats and vacancie
 
 One rule in three places: **what happened to a thing is knowable where it happened, in the words the
 requirements use, and nowhere else by default.** Ladder: step 1 for edit 4 (ED-IN-0292's last row);
-step 3 for edits 1 and 2 (B10-14's CP-T06-01 and -02 already schedule the trail's widening; this fixes
-its definition); step 4 for edit 3 (the observation deposit already writes `exists:<Kind>` readings into
-an actor's ledger: 800 such claims in the seed-0 realm after two seasons).
+step 3 for edits 1 and 2 (B10-14's CP-T06-01 and -02 already schedule the trail's widening; this
+completes its object list); step 4 for edit 3 (the observation deposit already writes `exists:<Kind>`
+readings into an actor's ledger: `p4_detective.py`'s `(paper, exists:Record, 1)` after a `research`,
+`p1c_exists.py`'s `(King, exists:Person, 0)` after a refused `challenge`).
 
 ## Edits, by owner
 
-1. **`engine/season/rosters.yaml: covert_kinds`** gains `person.died`, `body.changed`, `site.damaged`,
-   `rung.razed`. (Data. `trail_of` already keeps only Events a person did, so MATTER's `body.changed`
-   from hunger is no trail; `holds_trail` already excludes a finder who witnessed the deed.)
-2. **CP-T06-01's definition** (`workplans/valoria_master_workplan_v11_part3.md`, B10-14): from *"a
-   deed that writes a place or alias leaves a trail"* to *"a deed leaves a trail on what it wrote **and
-   at the place its actor stood**"*. In `engine/season/epistemic.py::trail_of`: for a Rung subject, a
-   third side beside `written=True` and `written=False`: the most recent Event of each covert kind
-   whose `world_q.event_place` was that Rung when it was emitted. The index is `World.last_emission_of`'s
-   own shape with one more key, filled at log time from the place the driver already computes for
-   WITNESS. `[Structure only: the index's exact home is CP-T06-01's to settle with `04` §A.3.]`
-   CP-T06-02 (`surveil` finds covert deeds at the place watched) then needs no rule of its own, and
-   `examine` reads the same side for its Site's rung once F-FI-12's operand repair lets it form.
+1. **`engine/season/rosters.yaml: covert_kinds`** gains the deeds done **to a person**:
+   `person.died`, `body.changed`, `person.captured`. (Data. `trail_of` already keeps only Events a
+   person did, so MATTER's `body.changed` from hunger is no trail; `holds_trail` already excludes a
+   finder who witnessed the deed.) B10-14 schedules the place and alias deeds (CP-T06-01: *"a deed
+   that writes a place or an alias leaves a trail"*, so `site.damaged`, `rung.razed`, `cover.assumed`)
+   and the place index (CP-T06-02: *"`surveil` finds the covert deeds done at the place it watches (the
+   latest per kind and place only)"*). Neither card reaches a killing: it writes a Person, not a place.
+2. **CP-T06-01's definition** (`workplans/valoria_master_workplan_v11_part3.md:119`) gains the third
+   object: *"a deed that writes a place, an alias **or a person** leaves a trail"*; and **CP-T06-02's
+   place side is read by `examine` as well as `surveil`** (for the Site's rung), once F-FI-12's operand
+   repair lets `examine` form. No index beyond CP-T06-02's own.
 3. **`engine/season/loop/witness.py::witness`**, at the event-kind deposit: for each change of the
    Event that ended an entity (the write-matrix field `<Kind>.exists`, set false), deposit
    `(entity, exists:<Kind>, 0)` to the same witness, same source and confidence. Keyed on the field
