@@ -100,6 +100,7 @@ this directory.
 | 10 | `ast` probes: areas and import edges (`W2`), line kinds (`W1`), never-referenced imports (H-09), construct counts (§8), `Fixtures` keywords (`W5`) | — | as tabulated |
 | 11 | importing each module entry in a fresh process and listing `sys.modules` | — | three `engine.season` modules, no `yaml`, 0.03 to 0.04 s each (§6 attack 1) |
 | 12 | greps quoted in the findings, each run as quoted | — | as stated at the finding |
+| 13 | `ast` and regex over the sweep tree, the tests and every importer of `loop/driver.py` (H-09) | — | 26 distinct `S.<name>` reads; 0 of the driver's 79 never-referenced imports obtained through the driver by any file |
 
 **Controls and their limits.** Replay: probes 3, 4 and 8 give one hash at seed 0 for one season; probe 7
 reproduces another lane's hash. The reach figures are from two seeds and at most four seasons, so
@@ -110,4 +111,4 @@ without it, probe 8). No number here is a balance claim.
 **What would change a verdict.** H-01: a seed-0 run of six or more seasons entering `modules/combat` would
 narrow *"not reached at seed 0"* to *"not reached in the first three seasons"* (it is written that way).
 H-04: a fixture name found in `sim_params.json`. H-05: a composition row targeting `roll:obstacle`.
-H-09: a sweep arm that reads one of the 79 names off the driver and from no owner.
+H-09: a file that obtains one of the 79 names through the driver by a route the two searches cannot see.

@@ -226,8 +226,10 @@ port's cost for this engine (§8): one construct fewer with no GDScript counterp
 used as a `Name` in the module; `__future__` excluded). Its docstring (`:18-28`) says the list is *"WIDER
 THAN THIS MODULE USES ... load-bearing"* so that `engine/reference/degree-sweep/sweep_core.py` keeps
 resolving `S.<name>`: that file builds `S` by `dir()` over sixteen modules ending with the driver
-(`sweep_core.py:58-66`). The same count: `loop/effects.py` 13 of 14, `modules/combat/tradition.py` 11 of
-11 (a re-export file). `engine/reference/` (33 functions) is entered by no run (`W4`); its arms are imported
+(`sweep_core.py:58-66`). The same count reads 13 of 14 for `loop/effects.py` and
+11 of 11 for `modules/combat/tradition.py`; both are registration and re-export files (`effects.py:85-102`
+imports the `effects_*` modules so their `@effect_for` bodies register), so their imports are what they are
+for and are no part of this finding. `engine/reference/` (33 functions) is entered by no run (`W4`); its arms are imported
 by two tests (`engine/season/tests/test_season_shape.py:14247`) and by the R-02 instrument under
 `proposals/2026-09-04-degree-sweep/` (`dossiers/00_NINE.md`, R-02 `measure:`).
 
@@ -242,8 +244,8 @@ list is load-bearing is **not borne out**: by these two searches all 79 are unus
 `getattr(driver, name)` or a star import would be missed; the item's gate runs the two tests that import
 the sweep arms.
 
-**Minimal fix.** **CI-08**: the aggregate names the owner modules it lacks; the driver's unused imports
-go; the docstring states what the driver does.
+**Minimal fix.** **CI-08**: the driver's unused imports go (the aggregate needs no change); the docstring
+states what the driver does.
 
 ### H-10 · Duplicated facts and dead code: mostly already carried — hygiene
 
