@@ -96,6 +96,9 @@
 | A-73 (J-U5b-03) | Who may raze | The taker may ruin what he took, while it is in his hand | A winner who seizes may raze; the occupier's licence in `raze` is rewritten to read the holder of the place. |
 | A-74 (J-U5b-04) | Marching without a war | Also on a claim or grievance against the holder | A march may be thought of on a claim or grievance, once the faction lane names the acts that count and gives them a reader; known enemy stays one occasion among two. |
 
+| A-75 (U5d item 1) | Named births in play | (a) On, behind a birth rate | Children are born in play as named persons behind `birth_rate`; marriage, birth, majority and minority regency become reachable (`23_STORY_B_a_house_continues.md`); the supporting cast stays capped (A-44); `majority_age` and ages need authoring with A-15. Seeded results move. |
+| A-76 (U5d item 2) | 'Parliament is functional' (A-68) before the Court Parliament exists | (B) Any working realm bench stands in now, built switchable | A functioning realm-level council or court counts as 'parliament functional' until the Court Parliament (hole H-90) is built and supplies its own working state, which then replaces the stand-in. |
+
 ### Closed by the five-step ladder, not by Jordan (CLAUDE.md §0; reversible on his word)
 
 Answered by prior ruling, precedent or architecture; recorded so the numbering is whole.
