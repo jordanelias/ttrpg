@@ -152,19 +152,29 @@ ranks as it ranks any candidate (proposal B). The precedence net is not an input
    typed cell holds a `relation` conjunct `with` of that operand); `OCCUPIED_CLAUSE = "occupied"` beside
    `COUNTERPARTY_CLAUSE` (`:452-457`), *derived like the other two: a keyed row keys it iff it occupies*;
    the loader's keyed-row rule (`:953-969`) adds it to the expected clauses.
-2. **`engine/season/verb_table.yaml`** — the seven occupying rows carry
-   `emits_on_refusal: {…, occupied: ["visitor.kept_waiting"]}`; a flat row among them becomes keyed with
-   its existing kind on each existing clause (the shape A-9's `sequence` clause takes). One kind, shared
-   by the seven rows, declared on each (so loader invariant 7 derives it; `04` PART D row 25).
+2. **`engine/season/verb_table.yaml`** — each of the seven occupying rows declares the one shared kind
+   `visitor.kept_waiting` beside its own refusal kind (so loader invariant 7 derives it; `04` PART D row
+   25). A keyed row (`tell`) gains the key `occupied: ["tell.refused", "visitor.kept_waiting"]`. A flat
+   row lists it second (`emits_on_refusal: ["argument.refused", "visitor.kept_waiting"]`) and the fold
+   keeps it only at the `occupied` clause: `dispatch`'s `person.demanded` is the precedent for a kind a
+   flat row declares and the act earns (`loop/resolve.py::_demand_earned`, `:323-340`; the loader's
+   flat-row exemption, `data/verbs.py:1017-1026`). No row is re-keyed.
 3. **`engine/season/loop/resolve.py`** —
    - `rival_key`: the `("round", person)` key (§4); the group re-order and the precedence net inside
      `_canonical_order`, shared with `loop/encounter.py` as today.
    - `resolve`: fills the driver's round-local `engaged`; the deferral of an engaged opener's scene
      (returned as `self._deferred`); `_admits` reads `engaged` and a `remaining(pid)` callable and asks
      the `occupied` clause after the counterparty clause (`:305-312`). `loop/encounter.py` reads the same
-     mapping and adds to it only for a sitting's attendees. The refusal Event names the counterparty as its
-     subject, so the claim it deposits is about him `[UNVERIFIED: whether `_act_events` takes a subject;
-     if not, it gains one, defaulting to today's]`.
+     mapping and adds to it only for a sitting's attendees. A sibling of `_demand_earned`,
+     `_waiting_earned(kinds, at_occupied)`, drops `visitor.kept_waiting` from a refusal at any other
+     clause.
+   - **The claim is about the host.** An `Event` has no subject (`state/carriers.py:246-262`; `04:402`);
+     WITNESS takes a deposit's subjects from the actor, the changes and `epistemic.py::act_refs(act)`,
+     which returns the act's `subject` operand only (`epistemic.py:137-149`; `loop/witness.py:675-677`).
+     For `tell` that is the topic. So `act_refs` gains a second argument, the Event, and for a kind in
+     `data/verbs.py::KEPT_WAITING_KINDS` (derived: the kinds declared at the `occupied` clause) it also
+     returns the operand the row's `counterparty:` names. The one call site passes the Event. Every other
+     kind's deposits are byte-identical.
 4. **`engine/season/loop/driver.py::season`** — `self._received` reset at `:472`, promoted in the pass at
    `:519-534`; deferred scenes re-queued at the head and their debit withdrawn before the bookkeeping
    that counts `n_acts`; `remaining` built from the same expression `ask_budget` uses (one helper on the

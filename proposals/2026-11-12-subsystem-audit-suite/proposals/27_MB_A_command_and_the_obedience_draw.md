@@ -286,3 +286,87 @@ then `obey` (with the orders batch, `U5b_MB_rulings_in_the_field.md` §6 row 5).
   one cell restores it. Decided by precedent (U1 §4), not escalated.
 - A-7's assignment (training the dice, talent the levels) is U1's and is listed for Jordan as
   decided-and-reversible in `unified/U5_CONFLICTS_U5a.md` §2; this file follows it.
+
+## Instructions to code it (standing charge, `AUDIT_BRIEF.md:545-547`; for workplan v12)
+
+Checked against the charge on 2026-11-12. **Complete for items 27A-1 to 27A-4; items 27A-5 and 27A-6 are
+INCOMPLETE on named dependencies; four symbols are INCOMPLETE because this lane did not open them** (listed
+last). Line numbers are at `faf0cea`.
+
+**Batch items, in edit order** (one item is one `valoria-author` build; an item's gate is read before the next).
+
+| item | file :: symbol (single owner) | edit | hash |
+|---|---|---|---|
+| 27A-1 | `engine/season/queries/inputs.py` :: new `CommandRecord`; `MassBattleInput` | the frozen record of §2; four new fields with defaults `commanders=(None, None)`, `pool_add=0`, `pool_floor=0`, `obey_task=0.0` | equal |
+| 27A-2 | `modules/mass_battle/config.py` :: new `COMMAND_DEFAULT = 4`, `ORDER_OBEY` (the §4 block as a dict, `arm: 'off'`), `command_span(score)`; `massbattle.py::_MVP_UNIT_COMMAND` and `orderofbattle.py::_UNIT_COMMAND` read `COMMAND_DEFAULT`; `tools/export_battle_orders.py::build` adds key `obey`; regenerate `engine/engine_params/battle_orders.json`; `engine/substrate/battle_orders.py` exposes it | equal |
+| 27A-3 | `modules/mass_battle/hierarchy/units.py` :: `Unit` gains `commander`, `commander_post`; `Subunit` gains `officer_record`, `_order_due`; `armies.py::build_army`, `orderofbattle.py::Subformation`, `OrderOfBattle`, `_spec_for` carry them; `armyrecord.py::KEYS`, `order`, `validate` accept `commander_post` and a unit row's `officer`; `engine/season/rosters.yaml: record_kinds.values.army` mirrors the key | equal (all absent) |
+| 27A-4 | `modules/mass_battle/core/contact.py` :: new `_obey_terms(order, roller, sub, unit, ctx)`, `obey(...)`, `_roller_for(unit, sub, source)`; `check_orders` (`:66`) calls `obey` before the `for k, v in order.behavior.items()` loop (`:130`) and applies on `obeyed`, sets `sub._order_due` on `late`, leaves the order pending on `not carried out`; the misread branch selects the unit's other pending `signal:` order | equal at `arm: off`; moves with `on` |
+| 27A-5 | `modules/mass_battle/orchestration.py` :: `recall_check` (`:2094`), `feigned_retreat_recognized` (`:2102`), the divisors at `:2342-2343` and `:1151`; `hierarchy/units.py:2867` (`h_per_size`); `battle_loop.py:408-413` | §6's four reads | equal with `commanders` `None` |
+| 27A-6 | `engine/season/seam/wrappers/mass_battle.py` :: new `command_record(w, person, via)`; `field_input` (`:225`), `resolve` (`:355`), `field_estimate` (`:463`) pass it; `references/descriptor_registry.yaml` the `command` row; `engine/season/rosters.yaml: tables.capability_uses` the three `field` rows | equal until a cast row holds `command` or an attribute |
+
+**Call sites.** `battle_loop.py:106-107` (the two `check_orders` calls; signature unchanged: the roller is
+found from `unit`). Direct test callers of `check_orders(u, t, [])` in `tests/valoria/test_mass_battle_signals.py`,
+`test_mass_battle_routes.py`, `test_mass_battle_yield.py`, `test_conditional_orders.py` stay valid because the
+arm defaults `off`. `orchestration.py:2256` (the recall inside `run_multi_unit_battle`) follows `recall_check`.
+The artifact's reader test is `engine/season/tests/test_cp_t04_02_marshal.py`; the Record key pin is in
+`tests/valoria/test_mass_battle_army_record.py` and `test_army_verbs.py`.
+
+**Tests to add** (named; each in the file that already covers the code).
+
+- `tests/valoria/test_conditional_orders.py`: `test_obey_off_applies_every_order_at_its_trigger` (control);
+  `test_with_the_draw_on_an_order_is_obeyed_late_or_not` (gate 2: all three counts above zero, `assert checked >= 400`);
+  `test_command_score_and_each_attribute_move_the_obeyed_share` (gate 3);
+  `test_distance_from_the_commanders_post_lowers_the_obeyed_share` (gate 4; with `distance: 0` equal field for field).
+- `tests/valoria/test_mass_battle_signals.py`: `test_a_unit_on_two_signals_can_misread_and_on_one_cannot`;
+  `test_more_units_on_one_signal_answer_together_less_often` (gate 5).
+- `tests/valoria/test_mass_battle_officers.py`: `test_a_standing_order_is_rolled_by_the_units_officer`;
+  `test_an_improvised_order_to_an_officered_unit_draws_twice` (gate 6, read from the draw trace).
+- `engine/season/tests/test_mass_battle_module.py`: `test_no_commander_reads_the_literal_four` (control);
+  `test_command_record_is_built_by_the_one_pool_reader`; `test_a_seat_addend_reaches_the_commander_only`
+  (gate 7; the addend planted with `pool.register_pool_addend` and removed in the test's teardown).
+- **Changed:** none at `arm: off`. `tests/valoria/test_mass_battle_order_of_battle.py`'s pin of the command
+  literal follows `COMMAND_DEFAULT`.
+
+**Gate, with the reading expected.** The section "Gate" above; each row states what must be seen. The two
+controls are hash-equality at `obey: off` with `commanders: (None, None)` (`python3 tools/ci_golden_modes_check.py`
+prints its three digests unchanged) and, per draw, the same field with the term zeroed.
+
+**Falsifier and its control.** As "Falsifier" above. Planted for the tests: `obey` returning `Success`
+always (gate 2 must fail); the two talent rows deleted (gate 3's attribute halves must fail); `_roller_for`
+returning the commander for every unit (the officer test must fail).
+
+**Hash movers.** None at the shipped arms. With `obey: on`: every field in which an order fires; with a
+commander record: every field with a commander among the side. No natural season fights an army field today.
+
+**Dependencies.** 27A-1 to 27A-4: none (they compile on today's tree; 27A-4's draw calls
+`engine.dice_engine.sigma_leverage.roll_net_continuous`, `net_boost` and `dice_engine.degree_from_net`, the
+leaf U5b §1 row 1 makes the module's first engine import). 27A-5: `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md`
+§1 for the per-unit stand draw. 27A-6: U5a's CAP Part B (`U5a_capability_home_and_two_inputs.md`) for the
+`capabilities:` block, the `capability_uses` table and `pool.py::score` / `talent`. Window and lull actions
+reach `obey` only when `04_MB_manager_battle_one_resolver.md` §4 and `26_MASS_BATTLE_cell_scale_and_time.md`
+§3 land.
+
+**What lands it; cost class; tier.** An IN-lane implementation session under `/methodology-execute`, MB lane
+review. 27A-1 to 27A-3: edit, `sonnet`. 27A-4: small build, `sonnet` build with the batch's one `opus`
+closing critique (it is the draw; a judgment node). 27A-5: edit, `sonnet`. 27A-6: small build, `sonnet`,
+in U5a's CAP batch. Seed sweeps of the `obey` block: `haiku` (`valoria-measure`), read by `opus`.
+
+**INCOMPLETE, with what is missing.**
+
+1. *27A-6 cannot be coded on today's tree*: `references/descriptor_registry.yaml` has no `capabilities:`
+   block, `rosters.yaml` has no `tables.capability_uses`, and `pool.py` has `faculty` but no `score` or
+   `talent`. Composing the record from `_capability` and `_held_attribute` directly would be a second pool
+   rule. Missing: CAP Part B landed.
+2. *`obey_task`'s value*: the even line of an unopposed task is being restated by ruling A-71's lane
+   (`proposals/29_DICE_one_opposed_rule_form_and_tuning.md`, not read). Missing: that rule's owner function,
+   which `field_input` calls. Until then the field carries 0.0 and the `step` values stand alone, which is
+   the pre-A-6 reading and is only meaningful at `arm: off`.
+3. *Symbols not opened by this lane*: where `Subunit._order_idx` is reset between engagements (the same
+   site must reset `_order_due`); how a `Subunit` is addressed by its unit row's name inside the module (for
+   `commander_post` and the misread lookup); the loop variable that holds the current phase for "at most
+   once a phase"; `engine/substrate/battle_orders.py`'s reader shape. Each is a read of one function, not a
+   design question.
+4. *The keyed draw* (A-30) is not landed. Until it is, `obey` draws from `rngsource.get()` in call order;
+   the replay gate holds by order, and the per-purpose key is added when A-30's owner lands.
+5. *No seat declares a modifier today* (`offices.yaml`; A-12's fact is FA's and the institutions kit's), so
+   gate 7 can only be run with a planted addend. Missing: the seat-side row.
