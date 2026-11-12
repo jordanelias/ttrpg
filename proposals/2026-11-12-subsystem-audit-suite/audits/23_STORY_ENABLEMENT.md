@@ -328,8 +328,10 @@ scaled by `DEGREE_STEP`. No band is added and `degree_from_net` is not touched (
 actor puts down, from a closed set; Partial pays one step of it while still achieving, which is the
 success that costs, and Failure pays `SHORTFALL_STEP` steps. (3) A contested row's outcome kinds name the counterparty as their patient, so a
 witness holds "X bested Y" and Y's regard for X moves by M5. (4) A person's failed attempts are read
-from the act store by `person_q.attempts_before`, never deposited (the `undeposited_kinds` decision
-stands), and weighs in `admission_weight`.
+from the act store and the log by the chronicle and the census (a harness read), so a later success can
+be told as "at the third attempt". Nothing is deposited (the `undeposited_kinds` decision stands) and
+nothing is weighed by the chooser: PES-DICE's F-PES-DICE-05 measured, with a control, that weighing a
+failed search changes nothing, and a *refusal* is what PES-CORE's `admission_weight` already weighs.
 
 **G2 · a house continues (`23_STORY_B`).** Owner: `instruments.yaml` (a `marriage` form), the bodies
 clock at MATTER, CENSUS's individuation. A marriage is a covenant between two persons, drawn like any
@@ -467,7 +469,7 @@ more than one way: a story with an empty last column would be a schedule and is 
 | S-68 | a failure that was worse than a failure, for a reason on the record | a drawn act with a `stake:` `[A → STORY-A edit 2]` → the settled margin kept `[A → `05_SC_contest_record_on_event`]` → the Failure write scaled by `SHORTFALL_STEP` `[A → STORY-A edit 1]` → the chronicle's word from the margin `[A → STORY-A edit 5]` | whatever the row's draw is; the margin is the same draw read further | a miss by a hair costs one step; most failures are plain; the disaster is rare where the task is fair |
 | S-69 | something achieved, and paid for | a row with a `stake:` at Partial: the write and one step of the stake `[A → STORY-A edit 2; per row MAT-C, MAT-A]` | the row's draw | clean success; success at a price; the price refused by choosing not to press (effort) |
 | S-70 | two parties, one of whom came off worse, and both know it | a contested row `[R: eleven]` → the outcome kinds name the counterparty as patient `[A → STORY-A edit 3]` → both and the witnesses hold it as a paired deed `[A → FI-06's pairing]` → the loser's regard for the winner moves (M5) | the row's draw, with the counterparty's score as the obstacle (`10_DICE_one_score_two_roles`) | a draw that is held (Partial) has no loser; a private contest has no audience |
-| S-71 | a person who failed, tried again and succeeded, and a record that shows what he is good at | his own attempts read from the act store `[A → STORY-A edit 4]` → the weight on trying again `[A → PES-CORE `admission_weight`]` → a later Success on the same aim → the chronicle's "at the third attempt" `[A → STORY-A edit 5]`; capability that differs (M15) makes the record a character | the row's draw each time | he gives up; he succeeds at once; he never does |
+| S-71 | a person who failed, tried again and succeeded, and a record that shows what he is good at | a failed attempt that witnesses hold `[R for the non-inquiry rows; a failed search is seen by nobody, by decision]` → he tries again (a slot spent each time) `[R: 49 of 151 failed aims retried]` → a later Success on the same aim `[N: 20 Successes in 284 rolls]` → the attempts counted from the act store and told as "at the third attempt" `[A → STORY-A edits 4, 5]`; capability that differs (M15) makes the record a character | the row's draw each time | he gives up; he succeeds at once; he never does |
 | S-72 | "how much", and "what changed in him" | receipts carry the value the gate read `[A → PES-CORE `the_record_holds_what_changed` edit 1]` → interior writes emit their declared kind `[A → edit 2]` | none | — (a record, not a story; it is what lets every other row be retold) |
 | S-73 | a player on one seat following one thread from its opening to its end | `Seen.why` filled by a draw `[A → PES-GO `a_witness_may_connect_what_he_holds`]` → the offer names what the seat holds `[A → PES-GO `the_offer_names_what_is_held`]` → the surface pinned `[A → PES-GO `surface_pins`]` → the census run from a seat's ledger `[A → STORY-D edit 4]` | the connection is a draw | he sees one end only; he connects wrongly (which is a story) |
 
@@ -548,7 +550,7 @@ E-4 eight, E-5 seven, E-6 three, E-7 fifteen, E-8 eight, E-9 five, E-10 eight, E
 | affiliation, venue and personality set the odds | ED-IN-0352: a flow, an era or a regime never sets odds | only a person's own edges and interior, and the counterparty's as a contest already reads them, enter a roll (NARR R-N3) |
 | natural death as the supply of successions | ED-IN-0317 (c): the values are deferred to Jordan | the shape lands dark; the gates read the `bodies` instrument arm until a rate is set |
 | the disaster | the degree ladder's single owner (ruling of 2026-08-14) | no fifth band; the shortfall is the kept margin read further (STORY-A) |
-| a failure its maker remembers | `rosters.yaml: undeposited_kinds` (ED-FI-0009: a failed inquiry deposits nothing) | the act store is read person-side for his own attempts; nothing is deposited (STORY-A edit 4) |
+| a failure its maker remembers | `rosters.yaml: undeposited_kinds` (ED-FI-0009: a failed inquiry deposits nothing) | the act store and the log are read by the chronicle and the census, in the harness; nothing is deposited and no person-side reader is added (STORY-A edit 4) |
 | playable alone, one code path | the standing requirement | *The Lean Year* runs the unmodified `SeasonDriver` with `play_surface.dispatching_chooser`; no standalone fork |
 
 ## 7. The first playable: *The Lean Year*
@@ -586,8 +588,7 @@ these (a stable continuation, reported as such).
 
 **Gate.** Seeds 0 to 19, 8 seasons, the shipped chooser in every seat, no played seat: at least 12
 distinct stories occur across the seeds; no story occurs at all 20 with one variant; at least four
-distinct endings occur; no two seeds have the same story set and the same ending unless at most three
-do; in the control arm (every batch fixture at control) the census reads only §2.10's set. Planted
+distinct endings occur; no more than three seeds share one story set and one ending; in the control arm (every batch fixture at control) the census reads only §2.10's set. Planted
 failure: every roll pinned to Success, and the seeds must then agree on the ending. One played run per
 seat at seed 0 shows a choice changing the ending against the unplayed seed 0 (the control is the same
 seed with the callback returning the chooser's own pick: equal hash).
