@@ -180,3 +180,160 @@ EST: this half's 23 positions: 0.4 h × 23 = 9.2 h; the batch is 0.4 h × (23 + 
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`, `medium`.
 - LANDS IT: B05's producer; `Item: B05.04`, `[skip ci]`.
+
+### B05.05 — a wound is a level, not an obstacle term · DOE §2 · POINTER
+- SOURCE: DOE §2 (A-8); U1 §4 R-27.
+- What the section does: it decides that "a wound is a named level against the wounded roller, through the signed advantage channel", with ADV Edit B bilateral (29_DICE 29-4 step 5), and that "the obstacle-term form of `audits/10_DICE_audit_addendum_B.md` §5.4 … is not built", so the obstacle roster carries no `wounds` member. No edit of its own.
+- Where it lands: the signed channel is B05.10 (ADV Edit A); the `wounds` source, its roster member and three fixtures are ADV Edits B to D, in the second half of this batch; the in-fight σ and the season's `wound_step` "are two sites of one rule, sized together in PC's calibration batch (B15; U1 §4 R-27)".
+- Gate: the second half's ADV item (`test_cp_t01_05_npc_effort.py::test_a_wounded_actor_rolls_with_a_level_against`, `::test_a_wounded_defender_gives_the_roller_a_level`); here, `git grep -n "wounds" engine/season/rosters.yaml` → no `obstacle_terms` member named `wounds` at B05.14's landing.
+
+### B05.06 — five dice-engine corrections the audits decided · DOE §3 rows 2, 3, 4, 5, 10 · BUILD · HASH EQUAL
+- SOURCE: DOE §3 (rows 2, 3, 4, 5, 10, "Gate"); closes F-DICE-11, F-DICE-13 and the audit's resolutions 11, 12, 13, 14, 20.
+- ADVANCES: none of the nine; the ladder refuses a malformed call, and the package's text says what it is.
+- INSTRUCTION (each row's "exact edit", copied):
+  1. Row 2. "`engine/dice_engine/dice_engine.py::degree_from_net` — context is validated on entry, before the band is decided; context with `extension=None` raises `TypeError`."
+  2. Row 3. "`engine/season/seam/contest.py:184` — the unread `extension` parameter and its word in the docstring are deleted."
+  3. Row 4. "`engine/dice_engine/sigma_leverage.py:114` — `OB_MIN`'s tag: *"the floor a favourable modifier may not push an obstacle below"*, not 'Ob minimum'."
+  4. Row 5. "F-DICE-13's lines: `dice_engine.py:6-8`; `engine/dice_engine/__init__.py:8`; `sigma_leverage.py:5-9`; `loop/resolve.py:887-888`; `requirements.yaml`'s social-contest scale note; `modules/mass_battle/resolution.py:43-46` — each corrected at its line to the present state (the package is the ruled owner, not a provisional stub; `verb_capability` names three inquiries; the provider is built and the kernel is not reached; the volley path delegates)." The line numbers are `aa31fd2`'s; each line is re-found by its text at the item's open. Two adjustments of the plan: `verb_capability` was deleted by B04.04, so the corrected sentence at `loop/resolve.py` names the verb row's `capability:` column; and the `requirements.yaml` scale note is RES §1 row 1's (B05.19), which rewrites the same note, so it is not edited here. `resolution.py`'s lines are corrected as B05.03 left them (if B05.03 deleted the lines with `roll_pool`, nothing is left to correct, and the body says so).
+  5. Row 10. "`engine/dice_engine/sigma_leverage.py::band_odds` docstring — the sentence that combat reads `p_success` is removed (under §1 the closed form is every provider's odds)."
+  Row 11 ("the gates of two DICE proposals") is not a code edit: its two gate rows are in B05.14's GATE (an opponent of rank 0, below `OB_MIN`) and the second half's ADV item (the largest stack of levels against, not under the per-pool floor).
+- WHERE: `engine/dice_engine/dice_engine.py` (`degree_from_net`; the module docstring); `engine/dice_engine/__init__.py` (docstring); `engine/dice_engine/sigma_leverage.py` (`OB_MIN`'s comment; the module docstring; `band_odds`'s docstring); `engine/season/seam/contest.py` (the `extension` parameter); `engine/season/loop/resolve.py` (the comment F-DICE-13 names); `modules/mass_battle/resolution.py` (the comment, if it survives B05.03).
+- TESTS: `tests/valoria/test_dice_engine_properties.py::test_degree_from_net_refuses_a_malformed_context` `[ASSUMPTION: name and file; the item creates it, E-3]`, written before row 2 and read red: the DICE audit's E-04 lower-band probe, `degree_from_net(2, 0, extension=E(), poool=8)`, raises.
+- FALSIFIER and CONTROL: the probe of the gate returning a band. Control: "headless hash EQUAL for rows 2–4".
+- GATE: `python -m pytest tests/valoria/test_dice_engine_properties.py engine/season/tests/test_sc01_provider.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.headless --seasons 2 --seed 0` → `CONTENT HASH` equal to B05.04's reading; `git grep -n "extension" engine/season/seam/contest.py` → nothing.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B05.02 (row 10's sentence is true only after the closed form); EXISTS-IN-TREE `dice_engine.py::degree_from_net`, `seam/contest.py` (the `extension` parameter, `:184` at `aa31fd2`), `sigma_leverage.py::OB_MIN`.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `medium`.
+- LANDS IT: B05's producer; `Item: B05.06`, `[skip ci]`.
+
+### B05.07 — seven register rows brought to the tree · DOE §3 rows 1, 6, 7, 8, 9 · BUILD · HASH EQUAL
+- SOURCE: DOE §3 (rows 1, 6, 7, 8, 9, "Gate"); closes F-DICE-10's register half, the addendum's §3 (H-152), resolutions 15 and 16.
+- ADVANCES: R-09's `blocks:` loses an id that no longer blocks it.
+- INSTRUCTION (copied):
+  1. Row 1. "`engine/season/hole_register.yaml` H-215 — `cite:` gains: *"the room moves the obstacle by a flat amount, so its leverage falls with the pool (1.25 z at one die to 0.44 at eight for one point of reception) where a named level's does not (0.48 z at every pool); accepted as an instance modifier under the 2026-08-14 ruling; the favourable half moves to leverage by Jordan's answer A-25"*." (The whole-dice z figures are the audit's; the sentence is copied as the source writes it.)
+  2. Row 6. "`hole_register.yaml` H-152 — head CLOSED, citing CP-T02-01 and the three-arm probe (`total`: 8 removed, 8 named by `person.died`; control 0 and 0; mutation 8 and 0); `owner:` `state/gate.py::death_subjects`."
+  3. Row 7. "`hole_register.yaml` H-31 — `grade: ruled`, citing the 2026-08-14 and 2026-08-15 rulings."
+  4. Row 8. "`hole_register.yaml` H-88 — closed: `seam/contest.py:245-283` dispatches by manifest row."
+  5. Row 9. "`hole_register.yaml` H-98, H-114, H-115; `requirements.yaml` R-09 `blocks:` — H-98 closed (combat's three bands are data and ruled off the scene; nothing keys a fourth) and removed from R-09's `blocks:`; H-114 and H-115 heads say CLOSED." At `aa31fd2` R-09's line is `blocks: [H-98]`; after the edit it is `blocks: []`.
+  Each row's cited line is opened at the item's open and the commit body quotes it (RES §1's falsifier rule: "a citation not opened is not a citation"); a cited line that no longer says what the row claims stops the row, and the body says which.
+- WHERE: `engine/season/hole_register.yaml` (H-215, H-152, H-31, H-88, H-98, H-114, H-115); `engine/season/requirements.yaml` (R-09 `blocks:`).
+- TESTS: none new.
+- FALSIFIER and CONTROL: a row whose cited symbol does not exist at the landing commit (`state/gate.py::death_subjects`; `seam/contest.py`'s manifest dispatch). Control: `register --check` exit 0 before and after.
+- GATE: `python -m engine.season.harness.register --check` → exit 0; `python -m engine.season.harness.register --requirements` → nine lines, exit 0; `grep -n "blocks:" engine/season/requirements.yaml` → R-09's reads `[]`.
+- HASH MOVERS: none (no program reads `cite:` or a head into a world).
+- DEPENDS ON: V12 B05.02 (row 9's "combat's three bands are data" and row 1's leverage clause are read after the sampler); EXISTS-IN-TREE the seven rows (ids quoted at `H-114` and `H-115`), `requirements.yaml` R-09 `blocks: [H-98]`.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `medium`.
+- LANDS IT: B05's producer; `Item: B05.07`, `[skip ci]`.
+
+### B05.08 — the base, the floor, the attribute's level and the opposition rate as settings at control · CAP B2, U1-B step 2, MAP §G edit 3 · BUILD · HASH EQUAL
+- SOURCE: CAP Part B row B2; U1 §11 U1-B step 2 (governs, E-4); `proposals/10_DICE_capability_axiom_map.md` §G edit 3; U1 §4 (the dice, governing attribute and opponent rows); rulings A-6, A-7, A-26, A-79.
+- ADVANCES: none of the nine at control; the four numbers the joint calibration sets have one home each.
+- INSTRUCTION:
+  1. `engine/season/data/fixtures.py` (CAP B2, copied): "`pool_add` (control 0; live 6), `pool_floor` (control 0; live 5), one pair for every site; `attribute_level` (control `None`; live `minor`); `opposition_rate` (control 0.5; live `MU_PER_DIE`, read from the owner); each `[ASSUMPTION; medium; Jordan to correct]` with a three-point sweep. MAP's `social_pool_*` and `combat_pool_*` are not created." Each ships at its control value here; B05.23 sets the live values for the social roll. `opposition_rate`'s live value is read from `engine/dice_engine/dice_engine.py::MU_PER_DIE`, never retyped. Each line carries its `[JUSTIFIED: engine/season/hole_register.yaml H-<n> -- …]` tag as the file's other settings do (`pool_default`'s, `obstacle_ceiling`'s).
+  2. `engine/season/hole_register.yaml` (U1-B step 2: "`hole_register.yaml` NUMBER rows"): four rows, `site: Fixtures pool_add`, `… pool_floor`, `… attribute_level`, `… opposition_rate`, graded `assumption`, each naming its control, its live value and its sweep; ids B05's H block slots 1 to 4. The sweep's three points are the control, the live value and one point between them `[ASSUMPTION: CAP B2 says "a three-point sweep" and names no third point — basis: none; the third point is written in the row and named in the commit body]`. `difficulty_ob`, which U1-B step 2 also lists, lands with its column in B05.14 (SC-B Edit A, T13 T1).
+- WHERE: `engine/season/data/fixtures.py` (`pool_add`, `pool_floor`, `attribute_level`, `opposition_rate`); `engine/season/hole_register.yaml` (four NUMBER rows).
+- TESTS: none new; `engine/season/tests/test_u1_two_inputs.py` (B05.09) reads them.
+- FALSIFIER and CONTROL: a setting with no register row (`python tools/ci_sim_fabrication_check.py` refuses). Control: "every fixture at its control arm reproduces Part A's hashes" (CAP gate (1)): nothing reads the four yet, so the seed-0 realm hash after one season equals B05.07's.
+- GATE: `python tools/ci_sim_fabrication_check.py` → exit 0; `python tools/export_sim_params.py --check` → exit 0 (after `--build` if the exporter reads `Fixtures`); `python -m engine.season.harness.register --check` → exit 0; the seed-0 realm hash after one season → equal to B05.07's reading.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `data/fixtures.py` (`pool_default`), `dice_engine.py::MU_PER_DIE`; V12 Batch B04-capability-home (the uses table that B05.10 points at these names).
+- GLOSSARY: *base (of the pool)* — owner `Fixtures.pool_add` (the row's owner already names it; its "(P)" mark becomes "(T)").
+- IDS: H block slots 1–4.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B05's producer; `Item: B05.08`, `[skip ci]`.
+
+### B05.09 — the skill score has no attribute in it; the pool is `pool_of`; a first rank is never a loss · TWO Edit A, CAP B1, CORE Edit 9, U1-B step 1 · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/10_DICE_one_score_two_roles.md` "The edits" A; CAP Part B row B1; `proposals/01_CORE_capability_authoring_surface.md` "Edit 9"; U1 §11 U1-B step 1, §4 ("Untrained, and acquiring a skill"); `unified/U3_CONFLICT_LEDGER.md` C3-A3 (1), C3-V1; `proposals/10_DICE_capability_axiom_map.md` §G edit 4 (combat's half); rulings A-6, A-7; closes F-DICE-03's score half.
+- ADVANCES: none of the nine at control; A-7's two inputs (the skill score gives dice).
+- INSTRUCTION:
+  1. `engine/season/seam/wrappers/pool.py` (TWO Edit A, copied; "starts from lane A's `pool.py::score` split (`c5bf18a`); `max(attr, have)` is removed (A-7; C3-A3)"):
+     ```python
+     def score(w, p, verb) -> int:
+         """(W3-1, A-7, 7b-6) What `p` is trained in for `verb`'s capability: the held rank, else the untrained
+         score `pool_default`. No attribute (the governing attribute enters as levels) and no addend. The base of his pool AND the
+         score an opponent's `opposed_ob` reads."""
+         have = _capability(p, verb)
+         return max(int(w.fixtures.get("pool_default")), int(have)) if have is not None else int(w.fixtures.get("pool_default"))
+
+     def faculty(w, p, verb) -> int:
+         addends = sum(int(add(w, p, verb)) for add in POOL_ADDENDS)
+         return pool_of(score(w, p, verb), addends, w.fixtures.get("pool_add"), w.fixtures.get("pool_floor"))
+     ```
+     `pool_of` is `engine/dice_engine/sigma_leverage.py::pool_of` (B04.24). "`governing_attribute(p, verb)`: the governing attribute as held, else `None` (read as the scale's mid-point)" (CAP B1; U1 §4: "`(descriptors.ATTRIBUTE_FLOOR + ATTRIBUTE_CEILING) / 2` (4 on 1–7) … derived, never stored"). "Delete `_authored_attribute`'s use in `faculty`" (U1-B step 1); `_authored_attribute` stays only if another caller reads it (`git grep -n "_authored_attribute" engine` at the item's open; `sigma.py` imports it at `aa31fd2`).
+  2. CORE Edit 9 (copied): "for a holder of the skill, `max(untrained score, rank)`; for a non-holder, the untrained score, which is `pool_default` under `untrained: default` and nothing under `untrained: none`. The attribute is never a fallback for the score … Then `raised_capability` may mint: a non-holder's `train` writes `{key: 1}` and his pool is unchanged until the rank passes the default, and the rank never passes the row's `scale` ceiling. `[ASSUMPTION; medium; Jordan to correct; revert: restore the never-minted rule]`." The mint is `engine/season/loop/effects_combat.py::raised_capability` (B04.15 made it read the ceiling; it still returns `None` for a key `p` does not hold). Under `untrained: none` the score is "nothing": `score` returns `None` for that row and `faculty` refuses the roll as it refuses a held 0 today `[ASSUMPTION: no shipped skill row says `untrained: none` (B04.02's four rows and B04.18's three say `default`) — basis: those rows; the branch is written and has no case in the realm]`.
+  3. MAP §G edit 4's combat half: "Combat keeps receiving `score + addends` and applies its own row's two operands … which is today's `max(5, faculty + 6)`." So `engine/season/seam/wrappers/combat.py::combat_input` fills `faculties` with `score(w, p, verb) + Σ addends`, not with `faculty` (which now applies the social pair), until the fight carries the pair raw (B05.13's pointer, the second half). At control (`pool_add` 0, `pool_floor` 0) the two are equal; the line keeps B05.23's live flip from reaching the fight twice.
+- WHERE: `engine/season/seam/wrappers/pool.py` (`score`, `faculty`, NEW `governing_attribute`; `_authored_attribute`); `engine/season/loop/effects_combat.py` (`raised_capability`); `engine/season/seam/wrappers/combat.py` (`combat_input`'s `faculties`); NEW `engine/season/tests/test_u1_two_inputs.py`; `engine/season/tests/test_odds_of.py`.
+- TESTS: in the new `engine/season/tests/test_u1_two_inputs.py`, written before step 1 and read red: `test_a_first_rank_never_lowers_a_pool` (CORE Edit 9's gate: "a person with no `argue` key trains it: `capability.raised` is emitted, his `argue` pool is not lower than before, and a second training raises it"); `engine/season/tests/test_odds_of.py::test_score_reads_no_attribute` (TWO "Tests and lands"). `test_cr85_faculty_replaces_history.py` and `test_cr20_attributes.py` read red until B05.99 (CAP Part B: "re-pinned, named in the commit").
+- FALSIFIER and CONTROL: "His pool after the first rank is below `pool_default`" (CORE); "A person's first skill score lowers his pool" (CAP). Control: at `pool_add` 0 and `pool_floor` 0, `faculty` returns `score + addends` for every person whose held attribute did not exceed his held rank (C3-V1: "removing `max(attr, have)` from lane A's `score` changes any pool where a held attribute exceeds the held rank"; lane A seats 2 on every unauthored key and `pool_default` is 2, so those pools are unchanged).
+- GATE: `python -m pytest engine/season/tests/test_u1_two_inputs.py engine/season/tests/test_odds_of.py -q` → pass (the two re-pinned files excepted, read at B05.99); `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 1 0` → its `POOLS ROLLED` line before (`reading @<B05.08 sha>`, lane A's `{2, 5}` from NPC-001's Reason) and after, quoted; the seed-0 realm hash after one season → moved, and the commit names the persons whose pool moved.
+- HASH MOVERS: every world in which a person with an authored attribute above his held rank rolls (C3-V1). Declared; B05.99.
+- EXPECTED RED UNTIL: B05.99 for `test_cr85_faculty_replaces_history.py`, `test_cr20_attributes.py` and the realm pins.
+- DEPENDS ON: V12 B05.08 (`pool_add`, `pool_floor`); V12 Batch B04-capability-home (B04.24 `sigma_leverage.pool_of`; B04.15 `raised_capability`'s ceiling; B04.02 `descriptors.capability(id).untrained`); V12 Batch B01-laneA (`pool.py::score`, `_authored_attribute`); EXISTS-IN-TREE `pool.py::_capability`, `::POOL_ADDENDS`, `descriptors.ATTRIBUTE_FLOOR`, `::ATTRIBUTE_CEILING`, `seam/wrappers/combat.py::combat_input`.
+- GLOSSARY: *skill score* — owner `pool.py::score` loses its "(P; B on lane A)" mark ("(T)"); *governing attribute* — owner gains `pool.py::governing_attribute`.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B05's producer; `Item: B05.09`, `[skip ci]`.
+
+### B05.10 — the governing attribute as levels; the leverage channel signed; the `capability` source · CAP B3, U1-B steps 3 and 4 (second half), ADV Edit A, MAP §G edits 4 and 6 · BUILD · HASH EQUAL
+- SOURCE: CAP Part B row B3 and gate (3); U1 §11 U1-B steps 3 and 4 (governs, E-4), §3 (amendments 1 to 3; the `social_roll` site row); ADV "The edits" A; `proposals/10_DICE_capability_axiom_map.md` §G edits 4 (the `dice` row's operands) and 6 (`ADVANTAGE_SOURCES["capability"]`), "The falsifier"; `proposals/05_SC_capability_surface.md` "Gate" (the odds arm B04 left to B05, `workplan_v12_part7.md`); rulings A-7, A-25.
+- ADVANCES: none of the nine at control; A-7's second input (the governing attribute gives levels); the leverage channel can count against the roller.
+- INSTRUCTION:
+  1. ADV Edit A, `engine/season/seam/wrappers/sigma.py` (copied): "the channel becomes signed":
+     ```python
+     # each source: fn(fixtures, operands) -> (levels_for, levels_against)
+     def advantage_sigma(fx, operands) -> float:
+         for_, against = [], []
+         for name in roster("advantage_sources", ordered=True):
+             f, a = ADVANTAGE_SOURCES[name](fx, operands)
+             for_.extend(f); against.extend(a)
+         return levels_to_net_sigma(for_, against)      # the owner's own signature, both lists
+     ```
+     "`_effort_levels` returns `(levels, [])`. The import-time roster/binding equality check is unchanged." ADV Edits B to D (`wounds`) are the second half's (UNDECIDED U-3).
+  2. `engine/season/rosters.yaml: advantage_sources.values` → `[effort, capability]` (MAP §G edit 1's member, left by B04.05 for "U1-B step 4"); `sigma.py::ADVANTAGE_SOURCES["capability"]`: "one function over the table's rows for the act's operands (the actor's and the subject's held skills, filled by `contest_input`; a believer's own are his to know, a subject's are `None` without a claim, the existing `CAPABILITY_CLAIM` rule)" (MAP §G edit 6), reading the `edge` rows of the act's site: `per: mid` is "signed steps of the held value from its scale's mid-point (above counts for the side named, below counts against)"; `against: true` counts "against the **roller**"; "an unauthored value reads as the mid-point (zero steps)"; a trait key reads `1` if held, else `0` (B04.07 step 5). `contest_input` and `believed_input` add the operands the rows read (the actor's and the subject's governing attributes through `pool.py::governing_attribute`, and the subject's `opposed_by` attribute where the skill row names one).
+  3. `rosters.yaml: tables.capability_uses` (CAP B3, U1-B step 3, for the `social_roll` site, UNDECIDED U-5): the `social_roll` `dice` row gains `add: pool_add, floor: pool_floor`; two rows are added: `{use: social_roll, role: edge, key: verb.base, side: actor, per: mid, level: attribute_level}` and `{use: social_roll, role: edge, key: verb.base, side: subject, per: mid, level: attribute_level, against: true}` ("the subject's row reads `opposed_by` where the skill names one"). The `fight` row's `add:`/`floor:` cells are the fight's (second half, with the pair carried raw).
+  4. MAP §G edit 4, social half: "`faculty` reads `add` and `floor` from the `social_roll` site's `dice` row" — `pool.py::faculty` reads the fixture names from the row (the names, then their values from `w.fixtures`), in place of B05.09's literal names; "at 0 and 0 that is today's `base + addends`, so a held 0 stays under one die and is refused by S27.4 as `engine/season/tests/test_odds_of.py` pins."
+  5. No `edge` row reads a seat (D-U1-01; U1 §3 item 6).
+- WHERE: `engine/season/seam/wrappers/sigma.py` (`advantage_sigma`, `_effort_levels`, `ADVANTAGE_SOURCES`, NEW `_capability_levels`, `contest_input`, `believed_input`); `engine/season/rosters.yaml` (`advantage_sources`, `tables.capability_uses`); `engine/season/seam/wrappers/pool.py` (`faculty`); `engine/season/tests/test_u1_two_inputs.py`; `engine/season/tests/test_sc01_provider.py`.
+- TESTS: written before steps 1–3 and read red: `test_u1_two_inputs.py::test_the_skill_score_gives_dice_and_the_attribute_gives_levels` (CAP gate (3), with `attribute_level` set to `minor` in the test's fixtures: "two hand-built persons, one rank 5 with attribute 2, one rank 2 with attribute 5, against one opponent, read different band shares, and swapping the two `capability_uses` rows of B3 swaps them with no code edit"); `test_sc01_provider.py::test_a_planted_edge_row_moves_odds_only_where_its_when_holds` (`05_SC_capability_surface` gate: "with one planted `capability_uses` row (`{use: social_roll, role: edge, key: <a planted trait id>, side: subject, against: true, when: {plea: impugn_motive}, level: moderate}`) and a subject holding the trait, `sigma.odds_of` for a `speak` carrying that plea differs from the same `speak` with another plea, and equals it when the row is removed") `[ASSUMPTION: name, E-3]`; `test_sc01_provider.py::test_a_level_against_lowers_odds` (ADV Edit A: a planted source returning `([], ["minor"])` gives `record_odds(pool, ob, -0.25)`) `[ASSUMPTION: name, E-3]`.
+- FALSIFIER and CONTROL: MAP's: "Re-point `argue`'s `base` to `attr.mind.perception`: `odds_of` for an `argue` follows the actor's Perception and ignores his Presence" (at `attribute_level` `minor` in the test); "if any … requires a Python edit to take effect, the surface is not the owner". Control: `attribute_level` `None` (shipped): no `edge` row returns a level, every source's second list is empty, and the seed-0 realm hash after one season equals B05.09's.
+- GATE: `python -m pytest engine/season/tests/test_u1_two_inputs.py engine/season/tests/test_sc01_provider.py engine/season/tests/test_u1_capability_surface.py -q` → pass; the seed-0 realm hash after one season → equal to B05.09's reading; `python -c "from engine.season.seam.wrappers import sigma"` → imports (the roster/binding equality check holds with `capability`).
+- HASH MOVERS: none at control.
+- DEPENDS ON: V12 B05.09 (`governing_attribute`, `faculty`), B05.08 (`attribute_level`, `pool_add`, `pool_floor`); V12 Batch B04-capability-home (B04.05 `tables.capability_uses` and its loader, B04.07 the trait rows and the `edge` acceptance, B04.17 the believed trait); EXISTS-IN-TREE `sigma_leverage.py::levels_to_net_sigma` (its `defender` parameter), `sigma.py::CAPABILITY_CLAIM`, `::_effort_levels`, `::ADVANTAGE_SOURCES`.
+- GLOSSARY: *leverage* — its owner adds `sigma.py::advantage_sigma` (signed: levels for and against); the rejected "edge" (for leverage) kept.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B05's producer; `Item: B05.10`, `[skip ci]`.
+
+### B05.11 — the opposition is the opponent's skill score · TWO Edit B, CAP B4, 29_DICE 29-4 step 1, U1-B step 4 (first half) · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/10_DICE_one_score_two_roles.md` "The edits" B, "The gate", "The falsifier", "Tests and lands"; CAP Part B row B4; `proposals/29_DICE_one_opposed_rule_form_and_tuning.md` "Item 29-4" step 1; U1 §11 U1-B step 4; DOE §3 row 11 (TWO's gate row); rulings A-7, A-26, A-79; closes F-DICE-03, F-DICE-04, H-312 (on the `interrogate` row).
+- ADVANCES: none of the nine at control; the inversion (an unauthored opponent harder to move than an authored one) ends.
+- INSTRUCTION: `engine/season/seam/wrappers/sigma.py::_opposition_of` (TWO Edit B, copied): "A person subject always has a score":
+  ```python
+  if subject and subject in w.persons:
+      return float(score(w, w.persons[subject], opposing_verb))   # the skill score (29 item 29-4 step 1);
+                                                                  # the skill the row's `opposed_by` names, else the verb's own
+  return None                                                     # nobody opposite: the module's stand-in,
+                                                                  # opposed_ob(pool_default, rate) (C-04)
+  ```
+  CAP B4: "`_opposition_of` returns the opponent's **skill score** (`pool.score` for the skill the verb's row names as opposed, else the verb's own): no base dice, no practice addend, no seat, no attribute." 29-4 step 1 against lane A's body: "the `held` list keeps `_capability(person, verb)` and drops `_opposing_attribute(person, verb)` (A-7: the attribute is a level, not a score)". Lane A's arm switch (`obstacle_model == "task"`, its `OBSTACLE_MODEL_TASK`) goes from this function: the score is returned on every arm. "No `opposition_fallback` fixture is added and none of its hole-register row." "`believed_input` is unchanged: a believer still needs a claim, or takes the ordinary prior."
+- WHERE: `engine/season/seam/wrappers/sigma.py` (`_opposition_of`); `engine/season/seam/wrappers/pool.py` (`_opposing_attribute`, deleted if it has no other caller); `engine/season/tests/test_odds_of.py`; `engine/season/tests/test_sc01_obstacle_ceiling.py`; `engine/season/tests/test_u1_two_inputs.py`.
+- TESTS: written before the edit and read red: `test_odds_of.py::test_an_unauthored_hearer_is_not_harder_than_a_held_one` (TWO's falsifier: "`odds_of` for a `tell` at an unauthored hearer must equal the odds at a hearer holding the skill at `pool_default` … a hearer holding it at a higher rank must give lower odds"); `test_u1_two_inputs.py::test_the_opposition_reads_the_skill_score_not_the_pool` (U1-B: "a subject with practice addends and a seat: his `opposition` equals his rank"). TWO gate 3: "`engine/season/tests/test_odds_of.py` and `test_sc01_obstacle_ceiling.py`, re-pinned where they pin the old stand-in for a person" — in this commit (each is this item's own pin).
+- FALSIFIER and CONTROL: TWO's: "For `interrogate`, raising the subject's `inquiry` score must lower Partial-or-better (H-312's probe, which today prints an unchanged tuple)." Control: "At the control arm (`opposition_rate` 0.5, `pool_add` 0)" lane A's `score / 2` and `opposed_ob(score, 0.5)` are equal, so a subject whose opposed attribute did not exceed his rank composes today's obstacle.
+- GATE: `python -m pytest engine/season/tests/test_odds_of.py engine/season/tests/test_sc01_obstacle_ceiling.py engine/season/tests/test_u1_two_inputs.py -q` → pass; TWO gate 2: "`python -m engine.season.harness.aperture 1 0`'s `DEGREES RESOLVED` line for `tell` is read before and after and reported", at seed 0 here (seeds 1, 2 at B05.99); `git grep -n "_opposing_attribute\|OBSTACLE_MODEL_TASK" engine/season/seam` → no reader in `_opposition_of`.
+- HASH MOVERS: "Every world hash that grades a person-opposed roll" where the opposed attribute exceeded the rank (TWO "What it changes"). Declared; B05.99.
+- DEPENDS ON: V12 B05.09 (`score` with no attribute); V12 Batch B01-laneA (`_opposition_of`'s task arm, `_opposing_attribute`); EXISTS-IN-TREE `sigma.py::_opposition_of`.
+- GLOSSARY: *opposition* — owner stays `sigma_leverage.opposed_ob` with its operand `pool.py::score`; "the subject's attribute" added to the refused senses (A-7: the attribute is a level).
+- COST and TIER: edit; `sonnet`, `high` (TWO: "Edit, with re-pins … `sonnet`").
+- LANDS IT: B05's producer; `Item: B05.11`, `[skip ci]`.
+
+### B05.12 — each rolled verb's skill on its row · TWO Edit C · POINTER
+- SOURCE: `proposals/10_DICE_one_score_two_roles.md` "The edits" C; OBS §4 step 0 ("the four `verb_capability` rows, with `lie: deception` and `determine: law` once `05_SC_hearing_capabilities.md`'s rows exist").
+- What it does: the verb row's `capability:` column carries `interrogate: inquiry`, `arrest: arms`, `lie: deception`, `determine: law`. It landed in B04: the column and the first two values at B04.03, `deception` and `law` at B04.19. Nothing is written here.
+- Gate: `python -c "import yaml; v=yaml.safe_load(open('engine/season/verb_table.yaml'))['verbs']; print({r['verb']: r.get('capability') for r in v if r['verb'] in ('interrogate','arrest','lie','determine')})"` → `interrogate: inquiry`, `arrest: arms`, `lie: deception`, `determine: law` (the file is `{verbs: [ {verb: …}, … ]}` at `aa31fd2`). "H-312 closes on the `interrogate` row": its head is closed in B05.11's commit, citing B05.11's falsifier test.
+
+### B05.13 — the fight carries the skill score and the pair raw · CAP B7, MAP §G edit 8, TWO Edit D, U1-B step 6 (combat half) · POINTER
+- SOURCE: CAP Part B row B7 ("PC's lane, U5b"); `proposals/10_DICE_capability_axiom_map.md` §G edit 8; TWO Edit D ("carried by `U5b_PC_rulings_in_the_fight.md` §2 … That is the PC lane's edit and its goldens; this proposal only supplies the reader"); U1 §11 U1-B step 6.
+- What it does: `modules/combat/core.py::resolution_pool` calls `sigma_leverage.pool_of`; `ob_from_defender(defender, cfg)` → `opposed_ob(defender.score, …)`; `PersonalCombatInput.faculties` is replaced by `scores: (int, int)` and `addends: (int, int)`, beside `pool_add`, `pool_floor`, `opposition_rate` carried raw; `combat_input` fills them; `BASE_POOL`, `POOL_FLOOR` become the workbench's defaults of the carried pair.
+- Where it lands: `U5b_PC_rulings_in_the_fight` §2–§3 in the second half of this batch (U3 §1 item 6: "→ `U5b_PC_rulings_in_the_fight` §2–§3 (UPR §5 row 4)"), with 29_DICE 29-2 and 29-3 (the fight's rate). Until then `combat_input` fills `faculties` with `score + addends` (B05.09 step 3), so the fight keeps its own literals behind B05.23's flip (UNDECIDED U-4).
+- Files: `modules/combat/core.py`, `engine/season/queries/inputs.py` (`PersonalCombatInput`), `engine/season/seam/wrappers/combat.py` (`combat_input`); NAMES there: flat combat imports → `from modules.combat import …` (B13).
+- Gate: the second half's UPR §2 item; here, `git grep -n "faculties" engine/season/seam/wrappers/combat.py` → still present at B05.23.

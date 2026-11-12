@@ -309,3 +309,106 @@ The source lists this edit "for SE, `modules/settlements/subsist`; the shape sta
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B12a's producer; `Item: B12a.12`, `[skip ci]`.
 
+### B12a.13 — an amount is a positive whole number · `07_SE_kernel_repairs` A · BUILD · HASH EQUAL
+- SOURCE: `proposals/07_SE_kernel_repairs.md` §2 "A · An amount is a positive whole number (H-306)"; ruling A-81 (the refusal at the fold is the backstop; formation excludes first); ladder step 5; closes H-306.
+- ADVANCES: none of the nine; the economy's ledger has no second source (F-SE-10).
+- INSTRUCTION (the source's text): "`loop/effects_shared.py`:
+  ```python
+  def whole_amount(amount) -> bool:
+      """A store move's amount: a whole number of units, at least one. `bool` is refused (YAML `yes`)."""
+      return isinstance(amount, int) and not isinstance(amount, bool) and amount >= 1
+  ```
+  `_eff_transfer`, `_eff_exchange` (both amounts), `_eff_requisition`, `_eff_found` and `_eff_build` (each price cell) return `NO_CHANGE` when it is false, before they build their `Change`, with one `TRACE.decision` line naming the amount; the fold then emits the row's own refusal. `_shift` and `_debit` themselves raise `InstrumentDefect` on a non-whole amount, so a new caller that skips the check fails loudly rather than moving matter. `_eff_requisition`'s docstring sentence that a requisition of 0 is declined becomes true."
+  "A-81 (no scene leaves the world unchanged): the refusal at the effect is the backstop, not the path. Formation is where a non-whole amount is excluded first (the chooser forms amounts from `amount_shares` and claims, `U5d_SE_owed_edits.md` §7, so a computed act never carries one); a hand-built or played act that reaches the effect with one is refused, and the refusal leaves the actor's own claim of it through the `a_refusal_is_remembered` carrier (`16_PESSIMIST_CORE_a_refusal_is_remembered.md`), a durable write." The formation half is `U5d_SE_owed_edits` §7's item (B12b); the refusal carrier is B09's.
+- WHERE: `S/loop/effects_shared.py` (NEW `whole_amount`; `_shift`, `_debit`); `S/loop/effects_economy.py` (`_eff_transfer`, `_eff_exchange`); `S/loop/effects_governance.py` (`_eff_requisition`); `S/loop/effects_founding.py` (`_eff_found`, `_eff_build`); `S/tests/test_in33_exchange.py`; `S/tests/test_demand_delivery.py`.
+- TESTS: "`engine/season/tests/test_in33_exchange.py` and `test_demand_delivery.py` gain the row's own sweep (−5, 0, 1, 2.5, `True`) through the real fold on `harness/scarce.build`: only 1 moves stock; every other value emits the refusal kind and leaves every rung's stores and the content hash equal to the no-act arm." Written before the edit and read red (−5 and 2.5 move stock today, as H-306 measured).
+- FALSIFIER and CONTROL: "any of the four leaves a `kind: 0` key or a changed store. **Control:** the shipped `scarce.main()` hashes (`d2730068…` named arm, `631b80ad…` unnamed, read at this commit) are unchanged." The before-reading is B12a.12's after-reading of `scarce.main()` (`reading @<sha>`; B12a.03 may have moved the source's two values, which are quoted only as the source's); the realm content hash at seed 0, one season, equal to B12a.12's ("EQUAL in computed play (no computed act carries one)").
+- GATE: `python -m pytest engine/season/tests/test_in33_exchange.py engine/season/tests/test_demand_delivery.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.scarce` → both hashes equal to B12a.12's reading.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `S/loop/effects_shared.py::_shift`, `::_debit`, `S/state/gate.py::NO_CHANGE`, `S/gaps.py::InstrumentDefect`, the five effects named, `S/harness/scarce.py::build`, `::main`; V12 Batch B09 (`16_PESSIMIST_CORE_a_refusal_is_remembered`; met before B10); V12 B12a.12.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high` (the source: "Edit (A, B, C, E) … Tier: `sonnet`").
+- LANDS IT: B12a's producer; `Item: B12a.13`, `[skip ci]`.
+
+### B12a.14 — a wear of zero is not a write · `07_SE_kernel_repairs` B · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/07_SE_kernel_repairs.md` §3 "B · A wear of zero is not a write (F-SE-08)"; ladder step 4 (the file's own claim-decay precedent).
+- ADVANCES: none of the nine; the witness layer stops depositing claims of a wear that did not happen.
+- INSTRUCTION: "Inside the Site loop, before the write:
+  ```python
+          wear = w.fixtures.wear(s.kind) + pull.get(s.id, 0)
+          if wear <= 0 or s.condition <= 0:
+              continue                      # nothing wears: no write, no `condition.worn` (the claim-decay rule, above)
+  ```
+  `rosters.yaml: wear_per_season`'s note (*"so every dwelling emits"*) and `harness/populated.py`'s comment are corrected in the same commit. The second clause stops a Site already at 0 re-emitting."
+  Added by this plan, against B12a.10's loop: the skip is the eligibility test before the draw ("A wear-0 kind draws nothing"); under `wear_draw: True`, a Site whose drawn wear is 0 (an Overwhelming band) is skipped the same way, after its keyed draw, so no `condition.worn` with `before == after` is written on either arm `[ASSUMPTION: the drawn-zero skip — basis: this edit's own falsifier ("a `condition.worn` whose receipt has `before == after`") and the claim-decay rule it cites; the keyed draw advances no ordinal, so skipping the write changes no other Site's draw]`. The two corrected texts: in `rosters.yaml: wear_per_season`'s note, the paragraph "⚠ ZERO IS NOT SILENT. `loop/matter.py`'s wear loop still WRITES every Site every season … so every dwelling emits one wear Event a season" becomes the statement that a Site whose wear is 0 is not written and emits nothing (B12a.14); in the `build_realm` comment (now `boot/realm.py`, B03c), the sentence "It still emits one `condition.worn` per dwelling per season, because MATTER writes every Site." becomes "It emits nothing: MATTER skips a Site whose wear is 0." Open both at the item's open (B03a's `CI-02` rewrote comments): edit what stands; where the sentence is already gone, record so in the commit body.
+- WHERE: `S/loop/matter.py` (the wear barrier's Site loop); `S/rosters.yaml` (`wear_per_season.note`); `S/boot/realm.py` (`build_realm`'s dwelling comment); `S/tests/test_works_founding.py`.
+- TESTS: "a new assertion in `test_works_founding.py`: a world of one dwelling and one harbour emits exactly one `condition.worn` per season" (written before the edit, read red: two today). "`test_season_weather.py`'s realm pins re-recorded, said plainly in the commit": those pins are B02's one owner's (`_realm_goldens.py`) and two items of this batch move them, so they are re-recorded at B12a.99 (E-1). EXPECTED RED UNTIL B12a.99: the realm pins `S/tests/_realm_goldens.py` holds, and every test reading them.
+- FALSIFIER and CONTROL: "a `condition.worn` whose receipt has `before == after`. **Control:** a kind at wear 10 emits as before; the lattice arm (`lattice_coupling` 500) still writes a wear-0 Site it pulls."
+- GATE: `python -m pytest engine/season/tests/test_works_founding.py engine/season/tests/test_in35_lattice_coupling.py -q` → pass; on the realm at seed 0, one season, the `condition.worn` count → B12a.13's reading less the dwelling and garrison Sites (the source measured 248 of 322 at its tree), quoted before and after; the realm content hash at seed 0 → moved, quoted.
+- HASH MOVERS: "248 fewer Events a season on the realm" (the source's reading): every realm hash. Declared; B12a.99.
+- DEPENDS ON: EXISTS-IN-TREE `S/loop/matter.py` (the wear loop, `pull`), `S/data/fixtures.py::Fixtures.wear`, `S/rosters.yaml: wear_per_season` (`dwelling: 0`, `garrison: 0`); V12 B12a.10 (the loop as drawn); V12 Batch B03c, B03a (the comment's file and text).
+- GLOSSARY: none.
+- NAMES: `harness/populated.py`'s comment → `boot/realm.py` (B03c).
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B12a's producer; `Item: B12a.14`, `[skip ci]`.
+
+### B12a.15 — a move to where the mover stands is not a move · `07_SE_kernel_repairs` C · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/07_SE_kernel_repairs.md` §4 "C · A move to where the mover stands is not a move (H-140)"; ruling A-81 (consequence 1); ladder step 4 (`_eff_migrate`'s decline, the self-transfer refusal); closes H-140.
+- ADVANCES: none of the nine; a scene is not spent on a journey to nowhere.
+- INSTRUCTION: "In `_eff_move`, after the ladder check:
+  ```python
+      if home_of(w).get(a.actor) == dest:
+          TRACE.decision(f"a move to where the mover already stands -> {a.actor} into {dest!r}", "H-140",
+                         chose="change nothing, so the fold emits the row's refusal",
+                         alternatives=["re-open the same leg under a new id (a digest move published as travel)"])
+          return NO_CHANGE
+  ```
+  `home_of` is imported from `queries/world_q` (already this file's source for `residence_of`). The row's refusal stays `travel.blocked`; the formation side (a `to` that is the mover's own rung should not form) is CR-49's shape applied to `move` (`U5d_SE_owed_edits.md` §2's `referent_class` narrowing), and it is the primary exclusion … That backstop refusal leaves the mover's own claim of it (A-81 consequence 1; `16_PESSIMIST_CORE_a_refusal_is_remembered.md`), so it is not a null scene." `world_q` re-exports `home_of` from `state/containment.py` at `aa31fd2` (`from ..state.containment import ancestry, home_map, home_of  # noqa: F401 -- re-exported`). "After the ladder check" is after `if not w.contain_ascends(a.actor, dest): …`. The formation half is `U5d_SE_owed_edits` §2's item (B12b).
+- WHERE: `S/loop/effects_migration.py` (`_eff_move`; the `world_q` import line); `S/tests/test_migrate_capacity.py`.
+- TESTS: "`test_migrate_capacity.py` gains the pair (same place refuses; one rung up moves)", written before the edit; the same-place arm read red.
+- FALSIFIER and CONTROL: "`aperture 2 0` still shows a `travel.moved` whose destination equals the mover's rung before the act. **Control:** a move between two rungs is byte-identical."
+- GATE: `python -m pytest engine/season/tests/test_migrate_capacity.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 0` → no `travel.moved` whose destination equals the mover's rung before the act; executed `move` count before (`reading @<B12a.14>`) and after, quoted (the source: "16 of 17 computed moves at seed 0 were this shape (H-329)"); the realm content hash at seed 0 → moved, quoted.
+- HASH MOVERS: every seeded world with a same-place `move`. Declared; B12a.99.
+- DEPENDS ON: EXISTS-IN-TREE `S/loop/effects_migration.py::_eff_move`, `S/queries/world_q.py::home_of` (re-exported), `S/state/gate.py::NO_CHANGE`; V12 Batch B09 (the refusal carrier; met before B10); V12 B12a.14.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B12a's producer; `Item: B12a.15`, `[skip ci]`.
+
+### B12a.16 — arriving teaches the traveller the place, behind `arrival_report` · `07_SE_kernel_repairs` D · BUILD · HASH EQUAL
+- SOURCE: `proposals/07_SE_kernel_repairs.md` §5 "D · Arriving teaches the traveller the place (H-327)"; grounded `audits/25_GROUNDING_ENGINE.md` G-18 (`held_by` is a cell stem a ledger answers); ladder step 4 (MATTER's shortfall and stock report precedent); narrows H-327.
+- ADVANCES: none of the nine; the no-player half gains one more way for knowledge to move.
+- INSTRUCTION (the source's text): "That write gains `observed=_arrival_report(w, pid, mode)`, where `mode` is a fixture `arrival_report` (`off`, shipped; `on`) and the report is at most two `Observation`s about the rung the traveller now stands in: `(rung, "stores:<default_store_kind>", units)` exactly as `_stock_report` builds it, and `(rung, "held_by", holder id or None)` read through `world_q.governing_hold`. WITNESS deposits them to the write's witnesses, the traveller among them. No new kind, no new channel." "That write" is MATTER's `travel.ended` write (`loop/matter.py`, the `w.write("travel_leg", …, emits="travel.ended", …)` call). The fixture carries a `[JUSTIFIED: … H-<block slot 3> …]` tag; that row is written from B12a's H block.
+- WHERE: `S/loop/matter.py` (the `travel.ended` write; NEW `_arrival_report`); `S/data/fixtures.py` (`arrival_report`); `S/hole_register.yaml` (one new row); NEW `S/tests/test_arrival_report.py`.
+- TESTS: in the new file, written before the edit: "A test on `probes.tiny_world`: a person who moves from the hearth to the settlement holds, the season after, a claim about the settlement's stores he did not hold before; with the fixture off he holds none and the hash is the base": `test_an_arrival_with_the_report_on_deposits_the_places_stores_to_the_traveller` (red before), `test_the_report_off_is_the_base_hash` (green before and after) `[ASSUMPTION: test names and file; E-3]`.
+- FALSIFIER and CONTROL: "the claim appears in a co-located resident's ledger only." Control: `arrival_report: off` → the realm content hash at seed 0, one season, equal to B12a.15's.
+- GATE: `python -m pytest engine/season/tests/test_arrival_report.py -q` → pass; the realm hash at control → equal to B12a.15's.
+- HASH MOVERS: none at `off` (shipped). "MOVER (declared), behind a fixture shipped off": its flip moves every world with an arrival (`Event.observed` is folded by `World.content_hash()`), and is B98's (DIALS AT CONTROL).
+- DEPENDS ON: EXISTS-IN-TREE `S/loop/matter.py::_stock_report`, the `travel.ended` write, `S/queries/world_q.py::governing_hold`, `S/data/fixtures.py` `default_store_kind`, `S/data/requires.py` (`held_by` in `REQUIRES_STEMS`, not in `WORLD_ONLY_STEMS`), `S/harness/probes.py::tiny_world`; V12 B12a.15 (a declined same-place move writes no arrival).
+- GLOSSARY: none.
+- IDS: H block slot 3.
+- COST and TIER: small build; `sonnet`, `high` (the source: "small build (D)").
+- LANDS IT: B12a's producer; `Item: B12a.16`, `[skip ci]`.
+
+### B12a.17 — four stale pointers corrected · `07_SE_kernel_repairs` E · BUILD · HASH EQUAL
+- SOURCE: `proposals/07_SE_kernel_repairs.md` §6 "E · Pointers that have gone stale" (its table, copied).
+- ADVANCES: none of the nine; hygiene.
+- INSTRUCTION: each row is a SITE (§5.7): open it at the item's open, record in the commit body what stands, and edit what is still stale; a row already corrected by an earlier batch is recorded and left.
+  | where | reads | should read |
+  |---|---|---|
+  | `systems/settlements/__init__.py` docstring | the geography file is *"read by `modules/mass_battle/terrain.py`"* (at `aa31fd2`: "`modules/mass_battle/terrain.py` and `engine/season/harness/populated.py`") | "read by `engine/season/data/geography.py` (the host), handed to the module on `MassBattleInput.geography`" (`data/geography.py`'s head; the module opens no file) |
+  | `registers/handoffs/HANDOFF_SE.md`, Open row 1 | *"the producer waits on ED-IN-0297"* | "ED-IN-0297 closed at M5 (B); works are authored `venues.yaml: planned_works` rows; the residue is that no computed act declares one" |
+  | `engine/season/requirements.yaml`, the settlement-management scale `note:` | *"in the realm only `restore` executes"*; *"`found`, `build` and `work` are formed and refused because no computed act declares a works"* | the reading B12a.15's gate takes (`aperture 2 0`, seed 0: which of `restore`, `work`, `found`, `build`, `migrate`, `transfer` are attempted and executed, quoted), in place of the source's three-season audit figures; B03's `IS-B3-SE-04` rewords the same note's `domain_actions` clause first, and this row edits only the two quoted sentences if they stand |
+  | the `build_realm` comment (`boot/realm.py` after B03c) | *"NOTHING READS A DWELLING YET"* | "`capacity` reads it (`world_q.capacity`), called by `has_room`" (the comment's own next sentence) |
+  `requirements.yaml`'s `note:` is neither a `reading:` record nor a `status:` (`V12_STRUCTURE_part3.md` §7.6), so it is edited here; a `HANDOFF_SE.md` row is a process surface (CLAUDE.md §0.05 cl. 4) and keeps to a pointer (CLAUDE.md §1).
+- WHERE: `systems/settlements/__init__.py` (docstring); `registers/handoffs/HANDOFF_SE.md` (Open row 1); `S/requirements.yaml` (`scales:` settlement note); `S/boot/realm.py` (`build_realm`'s dwelling comment).
+- TESTS: none new.
+- FALSIFIER and CONTROL: a pointer that still names a reader that does not read the file (`git grep -n "valoria_geography_v30" modules/mass_battle` → no open of the file). Control: the realm content hash at seed 0, one season, equal to B12a.16's (comments, a docstring and two process rows).
+- GATE: `python -m engine.season.harness.register --check` → exit 0 (it reads `requirements.yaml`); `python -m engine.season.harness.register --requirements` → nine lines, unchanged against B12a.16's; the realm hash → equal.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `systems/settlements/__init__.py`, `registers/handoffs/HANDOFF_SE.md` Open row 1 (ED-IN-0297's line), `S/requirements.yaml` the settlement scale's `note:`, `S/queries/world_q.py::capacity`, `::has_room`; V12 Batch B03 (`IS-B3-SE-04`, the same note; met before B04), V12 Batch B03c, B03a; V12 B12a.14 (the same comment), B12a.15 (the reading row 3 quotes).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `medium`.
+- LANDS IT: B12a's producer; `Item: B12a.17`, `[skip ci]`.
+
+The last item this part writes is `B12a.17`. The batch continues at `B12a.51` (lane A20), which writes the rest of the position table's rows, the second half's items, the `## Readings` block if any, `B12a.99` and the boundary row `| STOP. Batch B12a-world-motion-and-ground closes here |`.
+
