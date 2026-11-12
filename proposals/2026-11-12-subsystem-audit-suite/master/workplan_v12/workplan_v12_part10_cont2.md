@@ -90,7 +90,7 @@ Not in this batch, and where each is: `U5c_VERBS_residue` §3 (B09, U3 §4.1 row
 
 ### B07.03 — two shapes for a drawn act with nobody opposite · `U5c_VERBS_residue` §1 · POINTER
 - What the section does: fixes the two loadable shapes — "(a) route row … **flat** `writes:` and `emits:` …; the failed draw … the row's keyed `emits_on_refusal` clause `draw`"; "(b) contest row … `contests: "a task"`; `writes:` and `emits:` keyed by band"; and the inquiry (writes nothing, `emits:` by band, `finding.none`). Its edit 2 (one roster name) and edit 3 (one share table) are B07.01 and B07.02; edit 4 (the per-row test, "do two bands write different cells?") is applied by each verb's owner; its gate ("the loader accepts every converted row and refuses three planted ones") is B07.01's `test_loader_accepts_shapes_a_and_b_and_refuses_a_band_keyed_route_row`.
-- Not here: edit 1, the `"a task"` prize row in `contest_subsystems.prizes`, which "lands with that verb, not before" (UNDECIDED (6)): the first shape-(b) row is `move` (`14_VERBS_MILITARY_A`, B22, per `U5b_VERBS_military_physical_residue` §1's table); B22's author lands the row with it.
+- Not here: edit 1, the `"a task"` prize row in `contest_subsystems.prizes`, which "lands with that verb, not before" (UNDECIDED (6)): the first shape-(b) row is `move` (`14_VERBS_MILITARY_A`, B22, per `U5b_VERBS_military_physical_residue` §1's table); B22's author lands the row with it. (Patched: P-06: in v12's batch order the first shape-(b) row is `sabotage` in B12c (S15, before B22's S17); the row lands in B12c.08.)
 - GATE: B07.01's gate 6 test.
 
 ### B07.04 — one prize roster for the governance rows; one audience function · `U5c_VERBS_residue` §2 · BUILD · HASH EQUAL

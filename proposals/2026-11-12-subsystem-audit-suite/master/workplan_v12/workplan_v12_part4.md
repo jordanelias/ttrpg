@@ -16,7 +16,7 @@
 
 ---
 
-## Batch B03-hygiene · lane IN · wave W3 · step S3 · HASH MOVER(encoding), one re-pin
+## Batch B03-hygiene · lane IN · wave W3 · step S3 · HASH MOVER(encoding B03.28; behaviour B03.86), one re-pin
 INVOCATION: /methodology-execute Batch B03-hygiene
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
 GATE: Batch B00-ids
@@ -38,7 +38,7 @@ BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded c
   the glossary rows B03.18 names, read against the code it landed (`STAGES.md`, "The glossary always matches", rule 2): a mismatch fails the close;
   the close's commit body records `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before (`reading @<B02 closing sha>`) and after, and the batch's measured wall time; no conjunct is named, so no `reading:` record is written and `status:` is not edited (`IS-A-12`).
 THE REALM READING `R(s)` (the plan's own instrument for this batch, a one-line read of existing code; nothing is added to the tree): `PYTHONHASHSEED=0 python -c "import sys; from engine.season.harness.populated import build_realm, run; s=int(sys.argv[1]); w=build_realm(s); o=run(1, s, w=w); print(w.content_hash(), o['acts'], len(w.log))" <s>` → three fields: hash, acts, log length (the shape of B02.01's `CENSUS` pin, `dict(acts=…, log=…)`). Per item (E-2): the covering test files and, for a mover, `R(0)`; at B03.99, `R(0)`, `R(1)`, `R(2)`.
-RE-PIN: once, at B03.99 (the second half writes the position; `V12_STRUCTURE_part4.md` E-1): the realm pins in `engine/season/tests/_realm_goldens.py` (B02.01's one owner: `BUILD`, `SHIPPED`; `CENSUS` must not move) and the NPC-088 headless hash where it moved, read against B02's close (`reading @<B02 closing sha>`); the commit says "re-pin: encoding only (`Office.body_function` deleted in B03.28); tallies equal". A test that pins one item's own literal keeps it in that item's commit (E-1).
+RE-PIN: once, at B03.99 (the second half writes the position; `V12_STRUCTURE_part4.md` E-1): the realm pins in `engine/season/tests/_realm_goldens.py` (B02.01's one owner: `BUILD`, `SHIPPED`; `CENSUS` must not move) and the NPC-088 headless hash where it moved, read against B02's close (`reading @<B02 closing sha>`); the commit says "re-pin: encoding only (`Office.body_function` deleted in B03.28); tallies equal". (Patched: P-19: the second half's B03.86 (§H removes the office bonus, `budget_office_bonus`, C3-L8) is a declared behaviour mover, so the one re-pin records both and B03.99's commit text governs: "re-pin: B03.28 encoding (`Office.body_function` deleted from a class `World.content_hash()` encodes, D-04; tallies equal); B03.86 behaviour (`budget_office_bonus` removed, C3-L8, declared) — or 'B03.86 falsified and reverted'; every other item of B03 hash EQUAL". The tallies-equal control holds on B03.85's tree, before B03.86.) A test that pins one item's own literal keeps it in that item's commit (E-1).
 IDS: ED-IN 0; H 0 for B03.01–B03.28 (no item here writes a new ED or hole-register id: B03.23 prepends text to existing rows; the `FORK:` rows take no id). The second half's items declare theirs in their own `IDS:` lines; H2 sums the batch from the items.
 DIALS AT CONTROL: none in B03.01–B03.28 (no setting is added or shipped at a control value; B03.14 and B03.15 export existing values and change none).
 UNDECIDED (each with the reading taken, the one that changes less, `V12_STRUCTURE_part2.md` §5.1):
