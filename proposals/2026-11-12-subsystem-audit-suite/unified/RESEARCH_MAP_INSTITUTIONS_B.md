@@ -116,6 +116,19 @@ the file that now carries each.
 | `proposals/2026-10-03-verb-coverage-and-gap-fill.md` | LINES (the Venice lane read K-14 at `:1478`, `:2685-2693`, `:4495`) | debt and distraint deferred together | — |
 | `proposals/2026-11-08-flow-conditioning/`, `proposals/2026-10-07-settlements-computation-modules.md` | COUNT | nothing on these institutions (cohort and site content; computation modules) | — |
 
+**Named in the work order and not read beyond a count or a section map** (`[SKIPPED]`, with the
+reason; none is cited anywhere in this map or in the two audits' new sections):
+`research/cross_scale_action_catalogue_v1.md` (section map only: a catalogue of built actions at
+`f567c13`, its §9.3 points back at the files above); `research/personnel_muster_integration_master_v1.md`
+and `research/valoria_systems_integration_master_v1*.md` (COUNT: integration masters, their hits are
+restatements of `PGS`, `CGR` and `HCC` items); `research/game_precedent_suite/tables/R1`, `R2`, `R3a`,
+`R3b`, `R9` and the tutorials other than `T14` (reached only through `THROUGHLINES.md`'s rows, which
+cite them by line); `research/provenance/…/H1` to `H9` other than the three lines cited;
+`.audit/2026-07-12-governance-compendium/40`, `41`, `42`, `44`, `45`, `_workings_joined.md` (COUNT);
+`.designs/systems/_architecture/` (COUNT only; the governance ripple and the type registry were not
+opened); the digests `digests/DG_*` (not needed: the exact-term greps found the sources). A reader
+who needs a claim from one of these should open it; this map does not vouch for them.
+
 ### 1.2 By institution: where to look first
 
 | institution | first source | second | game precedent in the tree |
