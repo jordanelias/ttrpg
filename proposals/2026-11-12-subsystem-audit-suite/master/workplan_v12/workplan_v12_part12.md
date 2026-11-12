@@ -212,7 +212,7 @@ The second half continues this table from `B10.51` (its `B10.51` to `B10.53` lan
 
 ### B10.08 — the most scarred man is not the least changed · `U5a_CHAR_owed_amendments` §6 · BUILD · HASH EQUAL
 - SOURCE: `proposals/U5a_CHAR_owed_amendments.md` §6 (amends `02_CHAR_scar_is_a_wound.md`; "§6 with `02_CHAR_scar_is_a_wound.md`"); closes F-PES-CHAR-11.
-- ADVANCES: none of the nine at control (`scar_weight_shift` 0); it completes the dormant arm B98 may set (`U5a` §8 item 1, B10.32).
+- ADVANCES: none of the nine at control (`scar_weight_shift` 0); it completes the dormant arm B98 may set (`U5a` §8 item 1, B10.33).
 - INSTRUCTION: "Owner `engine/season/queries/person_q.py::crisis_weights`. When every held (primary) pursuit is at the threshold, the shift is taken from the most-scarred toward the least-scarred of them, by count, ties by name; it is not skipped. No fixture: it is the dormant arm's own missing case, reachable only at `scar_weight_shift` > 0." At the tree the skip is `crisis_weights`' `if not crisis or not heirs: return base` (the source cites `:883`; by symbol here); the new branch replaces the `not heirs` exit when `crisis` is non-empty: `heirs` becomes the least-scarred member(s) of the held set, and the shifted weight goes from the most-scarred, by count, ties by name. "Held" reads `_held` with the `scar_hold` fixture (B10.07), so at `primary` the set is the primaries.
 - WHERE: `engine/season/queries/person_q.py` (`crisis_weights`); `engine/season/tests/test_scar_stock.py`.
 - TESTS: `test_scar_stock.py::test_the_most_scarred_man_is_not_the_least_changed` (the section's named test), written before the edit and read red: "At 0.5, a hand-built person scarred to 5 on every pursuit but one at 3 ranks differently from his unscarred twin."
@@ -424,4 +424,4 @@ The second half continues this table from `B10.51` (its `B10.51` to `B10.53` lan
 - COST and TIER: small build behind an empty roster; `sonnet`, `high`.
 - LANDS IT: B10's producer; `Item: B10.19`, `[skip ci]`.
 
-The rest of this half (B10.20 to B10.32, then the half's SERIAL EDGES and FILE CENSUS lines) continues in the next file, by handle.
+The rest of this half (B10.20 to B10.33, then the half's SERIAL EDGES and FILE CENSUS lines) continues in the next file, by handle.

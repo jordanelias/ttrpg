@@ -39,7 +39,7 @@ UNDECIDED:
   (3) `unauthored_attributes`: whether BA1 changes the setting or only authors over it. Taken (changes less): the setting is not edited; authored rows override it for the persons they name (U1 §6: "the switch then gates only the authored `stats:`").
   (4) CHAR_B step 3 and CHAR_OWED §7's refusal ("The loader's refusal follows when the breaks read zero"): written here (BA1.07), conditional on the cells, since the cells are this batch's; if B10 already landed it behind a flag, BA1.07 is a POINTER and says so.
   (5) `IS-A-11`'s gate "`decision_spread --persons`: the cast's pools differ": `--persons` reads the projected pursuit vectors (its docstring at `aa31fd2`), not pools. Taken: the pools are read off `aperture`'s `POOLS ROLLED` (R-09.b); `--persons` is read for R-06.e. `[ASSUMPTION — basis: `engine/season/harness/decision_spread.py` docstring, `--persons`: "Pairwise cosine of the projected vectors"]`
-C(BA1-cast-content): this batch's entries; the plan's head parts; the draft (read whole: it is every value this batch lands); `unified/U1_GLOSSARY.md` rows *attribute*, *skill*, *skill score*, *difficulty level*, *alignment*, *pursuit signature*, *creed*, *relation ground*, *manner*, *goal*;
+C(BA1-cast-content): this batch's entries; the plan's head parts; the draft (read whole: it is every value this batch lands); `unified/U1_GLOSSARY.md` rows *attribute*, *skill*, *skill score*, *difficulty level*, *creed*, *ground*, and whatever rows B10 added for *manner* and the pursuit signatures;
   `references/npc_registry.yaml`; `engine/season/data/cast.py` (`attributes_of`, the `capabilities:` loader B04.09 lands, `manner_offset_of` (B10, `IS-B2-CHAR-07`), `relations_of` (B10, REL), `UNREAD_KEYS`); `engine/season/verb_table.yaml` and `engine/season/data/verbs.py` (the `difficulty:` column and its loader, B05; `align_choice`, B10); `engine/season/rosters.yaml` (`difficulty_levels`, `tables.alignment` with its `choices:` block, `pursuit_signatures`, `affiliation_signatures`, `tables.affiliation_engagement`, `relation_grounds`, `manner_offset_axes`); `engine/season/data/pursuits.py`; `engine/season/boot/realm.py` (`build_realm`, `cast_attributes`; B03c moved it from `harness/populated.py`);
   `engine/season/harness/aperture.py` (`pools_lines`), `corpus_run.py`, `decision_spread.py`, `conviction_spread.py`; `tools/export_npc_roster.py`; `tools/export_descriptors.py`; `engine/season/requirements.yaml` (R-06, R-08, R-09); `engine/season/tests/_realm_goldens.py`; the test files the BATCH GATE names;
   read only: `ALIGN` "The resolution, decided"; CHAR_B steps 2–3 and its Gate; REL "Exact edits" 2 and 6 and its gate; CHAR_OWED §7, §10; U1 §6, §11 U1-C;
@@ -92,7 +92,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - GATE: `python -m pytest engine/season/tests/test_manner_offsets.py -q` → pass; `python -m engine.season.harness.decision_spread --arms` → a decision moved between the authored and the zero-offset arm, quoted; `grep -rn "manner_offset" engine/season --include=*.py` → the carrier, the loader, the write-matrix row's reader and `projected_axes` only (B10's falsifier, re-read).
 - HASH MOVERS: "authoring the offsets (BA1) is a declared mover" (`IS-B2-CHAR-07`). Declared; BA1.99.
 - DEPENDS ON: V12 Batch B10-character (`IS-B2-CHAR-07` steps 1–4: `Person.manner_offset`, `cast.manner_offset_of`, `rosters.yaml: manner_offset_axes`, `fixtures.manner_offset_bound`, `person_q.projected_axes`); V12 BA1.01.
-- GLOSSARY: *manner* — the row's owner column points at `person_q.projected_axes` (pursuits' projection plus the person's own offset, A-108); unchanged if B10 already pointed it.
+- GLOSSARY: *manner* — no row exists at `aa31fd2`; if B10's `IS-B2-CHAR-07` item added one, it is read against the authored offsets; if not, it is added here: "manner: how a person goes about what he wants — what his pursuits project plus his own offset (A-108)", owner `person_q.projected_axes` `[ASSUMPTION: the row's text — basis: A-108 as `IS-B2-CHAR-07` states it]`.
 - COST and TIER: content; `sonnet`, `medium`.
 - LANDS IT: BA1's producer; `Item: BA1.02`, `[skip ci]`.
 
@@ -120,7 +120,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - GATE: `python -m pytest engine/season/tests/test_contest_decider.py -q` → pass; `python -m engine.season.harness.decision_spread --decisions` (seed 0) → the choice-sourced keys' readings quoted; the seed-0 hash recorded.
 - HASH MOVERS: every world in which a `choice_sourced` key with a cell is scored. Declared; BA1.99.
 - DEPENDS ON: V12 Batch B10-character (`ALIGN`: the `choices:` block, `data/verbs.py::align_choice`, the `score_terms` term; `IS-B2-CHAR-02`); EXISTS-IN-TREE `rosters.yaml: choice_sourced`, `tables.alignment`.
-- GLOSSARY: none new (*alignment* row read against the cells).
+- GLOSSARY: none.
 - COST and TIER: content; `sonnet`, `medium`.
 - LANDS IT: BA1's producer; `Item: BA1.04`, `[skip ci]`.
 
@@ -137,7 +137,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - STOPS IF: `--words` does not reach 0 with the draft's cells: the item lands the cells it has, records the remaining breaks in the commit body, and BA1.07 becomes a POINTER ("the refusal waits on the breaks"); the remaining cells are listed in the PR body for Jordan.
 - HASH MOVERS: every world (the alignment table scores every candidate of the celled verbs). Declared; BA1.99.
 - DEPENDS ON: V12 Batch B10-character (CHAR_B step 1: `pursuit_signatures`, `signature_breaks()`, `conviction_spread --words`; `test_pursuit_signatures.py`); V12 BA1.04; EXISTS-IN-TREE `engine/season/harness/decision_spread.py`, `conviction_spread.py`.
-- GLOSSARY: *pursuit signature* — owner `rosters.yaml: pursuit_signatures`, read against the cells (B10 created the row; no change unless it still reads "proposed").
+- GLOSSARY: none here (a *pursuit signature* row, if B10 added one with CHAR_B step 1, is read against the cells at the close).
 - COST and TIER: content and a small build (the mode); `sonnet`, `medium`; the `--signatures` reading `opus`.
 - LANDS IT: BA1's producer; `Item: BA1.05`, `[skip ci]`.
 
@@ -152,7 +152,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - STOPS IF: the creed breaks do not reach 0: as BA1.05's STOPS IF.
 - HASH MOVERS: every world with a person holding a creed. Declared; BA1.99.
 - DEPENDS ON: V12 Batch B10-character (CHAR_OWED §7's edit: the `affiliation_signatures` roster and its reader); V12 BA1.05.
-- GLOSSARY: *creed* row (or *affiliation*): owner column gains `rosters.yaml: affiliation_signatures` `[ASSUMPTION: the row's name in the glossary — basis: CHAR_OWED says "creed" for an `affiliation_roster` member]`.
+- GLOSSARY: *creed*: its owner column gains `rosters.yaml: affiliation_signatures` (what a creed's acts must mean).
 - COST and TIER: content; `sonnet`, `medium`.
 - LANDS IT: BA1's producer; `Item: BA1.06`, `[skip ci]`.
 
