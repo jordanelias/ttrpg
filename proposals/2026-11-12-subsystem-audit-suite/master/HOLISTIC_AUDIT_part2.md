@@ -32,7 +32,7 @@ for the whole army record.
 
 **Minimal fix at the owner.** The fixes are the verbs' own and are carried: the task draw (B07), the
 military verbs (B22), custody and force (B15, B29), founding and works (B12). What this audit adds is the
-reading that lets a batch show it moved an engine and not only a verb: **CI-12**, an `ENGINES` block on
+reading that lets a batch show it moved an engine and not only a verb: **CI-11**, an `ENGINES` block on
 the existing instrument `harness/aperture.py` (rows entered, per role, per season), read at each batch
 close beside `--requirements`.
 
@@ -137,8 +137,8 @@ scope and the fixtures are `ast.keyword` nodes of one call (read at `tools/expor
 
 **Minimal fix.** **CI-04**: extend the existing exporter (the neighbour, `valoria-simplify` ladder rung
 4) to read the keyword literals of `DEFAULT_FIXTURES` into the same artifact under their own module key;
-no new tool. **CI-05**: the seven `build_realm` arms become fixture rows read by the builder, so "what
-ships" has one list.
+no new tool. **CI-05**: the builder's seven arms are read into the same export, so "what ships"
+has one list a port can read.
 
 ### H-05 · One host site reaches a module attribute no composition row names; one row is looked up through two tables — degrades (modularity; holonic §43)
 
@@ -164,10 +164,12 @@ CI. It does: for `roll`. A renamed `obstacle` passes the exporter's check and fa
 obstacle composer is exactly the function several proposals rewrite (`proposals/U5c_SC_one_obstacle_form.md`),
 so the undeclared edge sits on a hot path of the plan.
 
-**Minimal fix.** **CI-03**: a row `social_contest.obstacle` (`entry: query`), called by role. **CI-08**:
-one function owns the lookup (the table first, the cooked row where no driver exists), and the nine sites
-call it. `MODULE_ENTRIES` itself is earned by ruling (A-25, ED-IN-0284, quoted in
-`manifest/registrar.py:15-22`) and stays.
+**Minimal fix.** **CI-03**: a row `social_contest.obstacle` (`entry: query`), called by role. The second
+observation needs no edit, and the attack on it failed: both routes return the one object
+`composition.require` caches (`engine/substrate/composition.py:60-69`; `manifest/registrar.py:115` stores
+that same result), so they cannot disagree, and routing the nine sites through the table would add an
+import edge from `queries/` to `manifest/` that `04` §A.2 does not give. `MODULE_ENTRIES` itself is earned
+by ruling (A-25, ED-IN-0284, quoted in `manifest/registrar.py:15-22`) and stays.
 
 ### H-06 · The contest seam returns an untyped mapping for two engines — degrades (carried)
 
@@ -195,9 +197,10 @@ and W13 have none; W11 has three (B20, B29, B34) and W12 one (B41).
 **Judgment.** Attacked as a case for splitting the files; the split does not earn itself yet (§6, attack 5).
 What does: most of each hub's bulk is prose, so H-03's fix cuts the reading and the merge surface of
 `rosters.yaml`, `verb_table.yaml` and `fixtures.py` by more than half without moving a key.
-**CI-01** and **CI-02** therefore land before B04, and **CI-13** gives `rosters.yaml` and
-`verb_table.yaml` a stable order rule (a new key or row goes at the end of its family's block) so two
-batches' additions do not collide in one hunk.
+**CI-01** and **CI-02** therefore land before B04, and §5 of the proposal asks v12's file census to
+carry one ordering rule for additions to the two registries (a new key or row goes at the end of its
+family's block), so two batches' additions do not meet in one hunk. That rule binds a reader and gets no
+mechanism.
 
 ### H-08 · Personal combat is a flat set of top-level modules behind a path insert — hygiene (modularity; the port)
 
@@ -214,7 +217,7 @@ set flat. Loaders of the flat set: 15 files under `systems/combat/`, 23 under `t
 **Falsifier.** `python -c "import modules.combat.wrapper"` succeeding without a path insert; not run
 (it would import `core` by bare name and fail or pick up another `core`). `[UNVERIFIED: not executed.]`
 
-**Minimal fix.** **CI-10**: make it a package; delete the path seam and its allow-list entry. Lowers the
+**Minimal fix.** **CI-09**: make it a package; delete the path seam and its allow-list entry. Lowers the
 port's cost for this engine (§8): one construct fewer with no GDScript counterpart to read.
 
 ### H-09 · The kernel's import surface is held open by a frozen instrument — hygiene (minimality; clarity)
@@ -228,11 +231,18 @@ resolving `S.<name>`: that file builds `S` by `dir()` over sixteen modules endin
 by two tests (`engine/season/tests/test_season_shape.py:14247`) and by the R-02 instrument under
 `proposals/2026-09-04-degree-sweep/` (`dossiers/00_NINE.md`, R-02 `measure:`).
 
-**Falsifier.** A name among the 79 that `S` could not obtain from its owner module: the owners missing from
-the sixteen are `loop/effects.py`, `loop/predicates.py`, `data/files.py` and the standard library names;
-not checked name by name. `[UNVERIFIED: which of the 79 the sweep arms read.]`
+**Falsifier, and its outcome.** A name among the 79 that something obtains through the driver. Measured two
+ways (§9, probe 13). (a) The sweep tree and the season tests read 26 distinct `S.<name>`; the only two that
+resolve through the driver's namespace alone are `SeasonDriver` and `resolvable_verbs`, which the driver
+defines; the 14 of the 79 that some file reads as `S.<name>` all resolve from their owner module among the
+other fifteen. (b) Across `engine/`, `modules/`, `tests/`, `tools/` and `proposals/2026-09-04-degree-sweep/`,
+no file imports one of the 79 `from ...loop.driver` or reads it as `driver.<name>` or `DRV.<name>`
+(`ast` over imports and attribute reads on an alias of the module). So the docstring's claim that the wide
+list is load-bearing is **not borne out**: by these two searches all 79 are unused. Blind spot: a dynamic
+`getattr(driver, name)` or a star import would be missed; the item's gate runs the two tests that import
+the sweep arms.
 
-**Minimal fix.** **CI-09**: the aggregate names the owner modules it lacks; the driver's unused imports
+**Minimal fix.** **CI-08**: the aggregate names the owner modules it lacks; the driver's unused imports
 go; the docstring states what the driver does.
 
 ### H-10 · Duplicated facts and dead code: mostly already carried — hygiene
@@ -253,7 +263,7 @@ Cited, not redone. Each has a carrier in the unified order:
 `tools/join_audit_workings.py` (253 lines) and `tools/verify_handoff_split.py` (662 lines) have no caller
 and their tests were dropped as process tests on 2026-11-04 (`references/restructure_ledger.md:3100`,
 `:3118`, ED-IN-0312); `engine/engine_params/value_pointer_links.json` (23 KB) is read by nothing but its
-generator `tools/link_values_pointers.py` and that tool's test (`W5` §2, `W6`). **CI-11** deletes them.
+generator `tools/link_values_pointers.py` and that tool's test (`W5` §2, `W6`). **CI-10** deletes them.
 
 ### H-11 · The authored data has three roots — hygiene
 
@@ -272,10 +282,10 @@ R-02's `measure:` is `python proposals/2026-09-04-degree-sweep/wd_collect.py` af
 mechanism for the acceptance surface, in a directory whose contents are *"surfaced BY LOCATION"* as
 unratified (CLAUDE.md §3). The CORE audit already reads the row as resting on one committed log
 (`audits/01_CORE_audit.md:174-175`), and `proposals/16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md`
-(B02) replaces the `measure:` of R-01 and R-02. Carried; when that lands, **CI-09** can retire the sweep's
+(B02) replaces the `measure:` of R-01 and R-02. Carried; when that lands, **CI-08** can retire the sweep's
 aggregate with it.
 
-### H-13 · `tools/` is half apparatus about the repository — hygiene (no item beyond CI-11)
+### H-13 · `tools/` is half apparatus about the repository — hygiene (no item beyond CI-10)
 
 `W6`: of 54 tools, 8 write an artifact the engine or the port opens (the exporters); `m1_acceptance.py` and
 `export_npc_roster.py` import and run the season package (`W2`); the rest, by their rows in

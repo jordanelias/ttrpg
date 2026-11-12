@@ -2,7 +2,7 @@
 
 ## Status: REFERENCE (stage 3 of `STAGES.md`; an audit; resolves nothing at runtime, CLAUDE.md §0.05; not canon)
 
-## Read at: `4dc8a7b` (working tree, 2026-11-12; `ff2f508` landed during the run and touches the suite directory only: `git diff --name-only 4dc8a7b ff2f508 -- engine modules tools references architecture` prints nothing). Producer: Fable, the holistic lane. Companions: `master/CODEBASE_IMPROVEMENT_PROPOSAL.md` (the edits, items `CI-01` to `CI-14`), `master/HOLISTIC_FOR_JORDAN.md` (what survives the ladder).
+## Read at: `4dc8a7b` (working tree, 2026-11-12; `ff2f508` landed during the run and touches the suite directory only: `git diff --name-only 4dc8a7b ff2f508 -- engine modules tools references architecture` prints nothing). Producer: Fable, the holistic lane. Companions: `master/CODEBASE_IMPROVEMENT_PROPOSAL.md` (the edits, items `CI-01` to `CI-11`), `master/HOLISTIC_FOR_JORDAN.md` (what survives the ladder).
 
 Parts: this file (§0 verdict, §1 method and limits, §2 the engines, §3 what the loop calls), `_part2`
 (§4 findings ranked, §5 the six directions, §6 attacks that failed), `_part3` (§7 the nine requirements,
@@ -42,9 +42,9 @@ What does not hold, worst first:
 Dead and inert code is the census lanes' subject and is cited, not repeated (§4, H-10): the code is not
 littered with dead records, it is starved at the verbs (`audits/17_CENSUS_REST.md` §0).
 
-The improvement proposal's answer is fourteen items in four small batches, eleven of them hash-EQUAL and
-placed before the calibrated landings so that every later batch reads less, plus one question for Jordan
-(where the game's entry lives). None is a guard.
+The improvement proposal's answer is eleven items, every one of them hash-EQUAL for the game's worlds,
+placed in two existing batches and two new ones before the calibrated landings so that every later batch
+reads less, plus one question for Jordan (where the game's entry lives). None is a guard.
 
 ## 1. Method, partition and limits
 
