@@ -20,7 +20,7 @@ Words, paths and short names are the first file's. The intake's B27 entries are 
 - FALSIFIER and CONTROL: a crossing that writes anything, opens a case, or names a judge. Control: `docket_crossing_floors = ()` → the realm content hash at seeds 0 to 2, one and two seasons, equal to B27.17's reading (or B27.16's where B27.17 is held).
 - GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_docket_crossing.py engine/season/tests/test_sc02_22b_standing_crossing.py -q` → pass; `python tools/ci_sim_fabrication_check.py` → exit 0; `python -m engine.season.harness.register --check` → exit 0; realm hash at seeds 0 to 2, one season → equal to the control reading.
 - HASH MOVERS: none at `()` (shipped). A non-empty floor is its own declared mover (B98).
-- DEPENDS ON: EXISTS-IN-TREE `loop/matter.py::_standing_crossings`, `world_q.landing_floor`, `world_q.standing_crossing_id`, `world_q.questions_for`, `world_q.endings_reached`, `data/fixtures.py` `standing_band_floors` (`H-223`); `goals.yaml` `deed_doers` goals `[ASSUMPTION: the key's name in the tree — basis: TL's text; the producer opens `goals.yaml` and records the key it found]`; V12 Batch B02-tests (`IS-A-06`, the pooled `aperture --seeds` reading, v11's CR-14); V12 B27.01 (a `determine` that can fail and dismiss, so a crossing's case has two endings).
+- DEPENDS ON: EXISTS-IN-TREE `loop/matter.py::_standing_crossings`, `world_q.landing_floor`, `world_q.standing_crossing_id`, `world_q.questions_for`, `world_q.endings_reached`, `data/fixtures.py` `standing_band_floors` (`H-223`); `goals.yaml` goals whose `object` is `{kind: deed_doers, …}` (opened: `goals.yaml`'s schema comment and e.g. `goal_riskbreakers_royal_safety`'s neighbour); V12 Batch B02-tests (`IS-A-06`, the pooled `aperture --seeds` reading, v11's CR-14); V12 B27.01 (a `determine` that can fail and dismiss, so a crossing's case has two endings).
 - GLOSSARY: *crossing* (step 4).
 - NAMES: `c.round` in the precedent's body → `c.lap` (B04, PCR-4).
 - COST and TIER: small build; `sonnet`, `high`; the Lens B read `opus`.
@@ -143,7 +143,7 @@ Words, paths and short names are the first file's. The intake's B27 entries are 
 - FALSIFIER and CONTROL: `determine` opens no disposal at some seed (the trigger read in the register as fired has not, on this tree: then the row stays latent and the commit says so). Control: the realm content hash unchanged by the test (it reads only).
 - GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_proceedings_residue.py -q -k h173 -s` → pass, the twelve counts printed and quoted.
 - HASH MOVERS: none ("hash EQUAL (measure)").
-- DEPENDS ON: V12 B27.01, B27.02 (the disposals as they now open); EXISTS-IN-TREE `loop/effects_economy.py::_renewals`, `queries/world_q.py::establishment_of`, `epistemic.py::_ch_post_remit`, `state/attribution.py::causing_act` `[ASSUMPTION: the symbol's place — basis: H-173's `unblocks:` text names it; not opened]`.
+- DEPENDS ON: V12 B27.01, B27.02 (the disposals as they now open); EXISTS-IN-TREE `loop/effects_economy.py::_renewals`, `queries/world_q.py::establishment_of`, `epistemic.py::_ch_post_remit`, `state/attribution.py::causing_act` (opened).
 - GLOSSARY: none.
 - COST and TIER: small build (a reading); `sonnet`, `high`.
 - LANDS IT: B27's producer; `Item: B27.26`, `[skip ci]`.

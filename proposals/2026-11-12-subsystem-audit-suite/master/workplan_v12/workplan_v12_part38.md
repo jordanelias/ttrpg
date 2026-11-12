@@ -466,3 +466,93 @@ Edit 6 adds nothing: "The head's demand is a `covenant` offer addressed to the K
 - GLOSSARY: none.
 - COST and TIER: content; `sonnet`, `medium`.
 - LANDS IT: B33's producer; `Item: B33.17`, `[skip ci]`.
+
+### B33.18 — two hearings: `audit` and `quo_warranto` · COL_C edit 1 · BUILD · HASH EQUAL
+- SOURCE: COL_C "Exact edits" 1 and its notes on the cells, "What it changes" 1 and 4, "Gate" first bullet; X-12 (the kit's one audit row); `SYN_A` §6 (the rows "each as its file wrote it as reconciled"); A-39 (appeal on new grounds); SC-P4 (`05_SC_arrangement_rows_that_bind`, a band-keyed `disposes:`).
+- ADVANCES: none of the nine; A-13 (`audit_at_exit` names this room).
+- INSTRUCTION:
+  0. Open `S/arrangements.yaml` and record whether B32 added `audit` or `quo_warranto`; write only the absent row(s), and record the reading.
+  1. "`engine/season/arrangements.yaml` — two rows, in the thirteen-key shape plus SC-B's `standard:` and SC-P4's mapped `disposes:`":
+     ```yaml
+       # ── audit — an officer answers, on the ground he governed, to those he governed ───────────────
+       - id:               audit
+         disposal:          bench
+         bench_basis:        determine
+         floor:              open            # the governed may speak
+         records_dissent:    true
+         venue_min_rank:     settlement
+         term_required:      true
+         appeal_basis:       determine       # admitted on new grounds only (A-39)
+         interposed:         [office, procedure, document]
+         order:              rank
+         proofs:             [testimony, record]
+         standard:           demanding
+         disposes:           {Overwhelming: ban, Success: oblige, Partial: Record}
+         disposal_reach:      body
+
+       # ── quo warranto — by what warrant do you hold? ───────────────────────────────────────────────
+       - id:               quo_warranto
+         disposal:          bench
+         bench_basis:        determine
+         floor:              open
+         records_dissent:    true
+         venue_min_rank:     duchy
+         term_required:      true
+         appeal_basis:       determine       # admitted on new grounds only (A-39)
+         interposed:         [person, procedure, document]
+         order:              rank
+         proofs:             [record, testimony, oath]
+         standard:           demanding
+         disposes:           {Overwhelming: ban, Success: ban, Partial: oblige}   # the fallback, taken
+         disposal_reach:      realm
+     ```
+     The cells' notes, each "`[ASSUMPTION; medium; this lane's; a data edit reverts it]`", are copied as the rows' comment block: `audit`'s Overwhelming `ban` "scoped to the banning seat's purview, FA-P3 change 3"; Success "an `oblige` of the officer to the opening seat, whose instrument is a `tribute`-shaped restitution (`15_INSTITUTIONS_COLONIAL_A_instruments.md`; the `due` is a `transfer.made` to the governed ground's rung)"; Partial "a `Record` (an admonition …) this cell waits on that site and is inert before it"; Failure "nothing is opened and `05_SC_acquittal.md`'s quittance is the officer's". `quo_warranto`'s Overwhelming and Success "a `ban` on the holder from that one seat …, **the file's own fallback, taken**"; "`release` is not a `disposes:` value … so the closing arm once requested of SC is withdrawn. Where the grantor's own seat holds a `revocation` basis over the conferred seat (T-o, `04` §C.2), the calling-in can also be his `revoke` …; the bench is the route when it does not"; Partial "the grant stands for a fee: an `oblige` whose `due` is one `transfer.made` to the grantor's rung"; Failure "the grant stands; the docket's closing Record is the holder's evidence in any later calling-in".
+  2. Create `S/tests/test_audit_and_charter.py` (U3 §6.1: MISSING; "write it … red against the control where the claim is a defect") with `test_both_rows_load` and `test_a_fourteenth_key_or_an_off_enum_band_cell_is_refused_naming_the_row` ("both rows load; a fourteenth key or a band cell off the enum is refused naming the row"), written before step 1 (the first red: no row).
+- WHERE: `S/arrangements.yaml` (`audit`, `quo_warranto`); NEW `S/tests/test_audit_and_charter.py`.
+- TESTS: the two above.
+- FALSIFIER and CONTROL: "A row with no docketed matter moves nothing: seeded hash EQUAL." Control: the realm hash at seed 0, one season, equal to B33.17's reading.
+- GATE: `python -m pytest engine/season/tests/test_audit_and_charter.py -q` → pass; `python -c "import engine.season.data.arrangements"` → loads (`_ARRANGEMENT_KEYS` and SC-P4's band-map check are the loader's refusals).
+- HASH MOVERS: none ("EQUAL until docketed", U3 §3.1's row).
+- DEPENDS ON: EXISTS-IN-TREE `S/data/arrangements.py::_ARRANGEMENT_KEYS`; V12 Batch B27 (`05_SC_arrangement_rows_that_bind`: the band-keyed `disposes:` loader; `05_SC_acquittal`); V12 Batch B05 (`standard:`); V12 Batch B32 (`COL_A`'s `tribute` form; `SYN_A` §6).
+- GLOSSARY: rows *audit* (owner `arrangements.yaml: audit`; "audit": a hearing in which an officer answers for his term, as a governor is audited at its end) and *quo warranto* (owner `arrangements.yaml: quo_warranto`; the plain words "by what warrant", a hearing that asks a grant-holder to show his title).
+- COST and TIER: edit (rows) and a test; `sonnet`, `high`.
+- LANDS IT: B33's producer; `Item: B33.18`, `[skip ci]`.
+
+### B33.19 — the audit's occasion, and the seats an audit follows · COL_C edit 2 · BUILD · HASH MOVER(behaviour)
+- SOURCE: COL_C "Exact edits" 2 (three bullets), "Gate" (the distance and appeal bullets); X-12; A-13, A-39; `SYN_A` §4 (`audits_due`: "for each closed `hold` on a row carrying `audit_at_exit` whose `tenure.closed` claim `p` holds and over whose seat `p` may open (VEN-C edit 4's set), the departed holder (`Party`) and the arrangement").
+- ADVANCES: none of the nine; A-13 (the exit audit), the *visita*.
+- INSTRUCTION:
+  0. Open the tree: `grep -n "def audits_due" engine/season/queries/world_q.py` and `grep -n "audit_at_exit" engine/season/offices.yaml engine/season/data/rosters.py`; record what B32 landed; write only what is absent.
+  1. "**Who may open, and where** — no new predicate; three facts already asked: `open_case` is `remit:determine` (`verb_table.yaml`). An `audit` is opened through a seat whose purview reaches the audited seat's rung; the bench is `judging_set`'s. **The opener's `distance` from the audited ground enters every `determine` and `speak` in the hearing** (… OBS member 20), so an audit held from the capital is a weaker instrument than one held on the spot" — carried by B33.15's host operand (the opener's place), nothing added here but the test.
+  2. "The occasion: `world_q.audits_due` (SYNTHESIS-A §4; X-12), `world_q.vacancies`' sibling. When a `hold` on a seat whose row carries `audit_at_exit: audit` closes (term matured, revoked, released, died), for a person who holds the `tenure.closed` claim and may open (VENICE-C §4's set), the departed officer and the arrangement ride his question as `Party` referents, read when read. He may open the audit, or not." Wired at the occasion site `vacancies` stamps (by symbol).
+  3. "`offices.yaml`: the seat-row key is `audit_at_exit: <arrangement id>` (A-13; X-12), not `audited:`. A form's `confers:` block carries `audit_at_exit: audit` into the established seat (SYNTHESIS-A §1), and it is proposed for `off_lord_treasurer` (BYZANTINE-GROUNDING item 1), `off_royal_marshal`, `off_military_commander_hm` `[ASSUMPTION; content; Jordan to correct]`." The three rows gain `audit_at_exit: audit` (`off_lord_treasurer`'s key is the grounding file's item 1 too, B40: whichever lands first writes it and the other records it present).
+  4. `test_audit_and_charter.py` gains the distance and appeal tests below, written before steps 2–3 and read red.
+- WHERE: `S/queries/world_q.py` (`audits_due`, beside `vacancies`); the occasion site (by symbol); `S/offices.yaml` (`off_lord_treasurer`, `off_royal_marshal`, `off_military_commander_hm`: `audit_at_exit: audit`); `S/tests/test_audit_and_charter.py`.
+- TESTS: `test_audits_due_names_the_departed_officer_to_one_who_holds_the_closing` (a hand-built hold on an audited seat closed by term; the holder of the `tenure.closed` claim who may open reads the officer and `audit`; a bystander with no claim reads nothing); `test_distance_weakens_the_audit` ("the same audit determined at `distance` 0 and at `distance` 3: shares differ in the direction of the term"); `test_appeal_needs_a_new_ground` ("an appeal of an `audit` verdict naming no new ground is refused; one naming an excluded testimony is admitted") `[ASSUMPTION: test names (E-3)]`.
+- FALSIFIER and CONTROL: an audit opened with no person's act (COL_C: "No automatic audit"); an occasion stamped for a person who holds no `tenure.closed` claim. Control: a seat without `audit_at_exit` closes and nothing is stamped.
+- GATE: `python -m pytest engine/season/tests/test_audit_and_charter.py -q` → pass; the realm at seeds 0–2, two seasons: `audits_due` stamps quoted (a count per seed, read and reported).
+- HASH MOVERS: every run in which a hold on one of the three seats closes (a new question referent). Declared; B33.99.
+- DEPENDS ON: V12 B33.18; V12 B33.15 (the opener's distance); V12 Batch B32 (`VEN_C` §4's set of who may open; `SYN_A` §1 `confers.audit_at_exit`, §3 the key's refusal); V12 Batch B24a (CR-59, CR-61: the appeal ground's carrier, reached through B27); EXISTS-IN-TREE `S/queries/world_q.py::vacancies`, `S/offices.yaml` rows `off_lord_treasurer`, `off_royal_marshal`, `off_military_commander_hm`.
+- GLOSSARY: none (*audit*, B33.18).
+- COST and TIER: small build and content; `sonnet`, `high`.
+- LANDS IT: B33's producer; `Item: B33.19`, `[skip ci]`.
+
+### B33.20 — a held grant pleads its age; a granted seat carries its term · COL_C edits 3–4 · BUILD · HASH EQUAL
+- SOURCE: COL_C "Exact edits" 3 and 4, "What it changes" 2 and 3, "Gate" (the verdict and age bullets), "Falsifier"; C3-C10 (a cited Record is a `proofs` level; `proof_step` deleted); A-5.
+- ADVANCES: none of the nine; prescription and the calling-in.
+- INSTRUCTION:
+  1. "`engine/season/data/fixtures.py: prescription_seasons = 8` (seasons per unit of item weight; sweep {4, 8, 16}; NUMBER row, graded `assumption`). Reader: where SC's evidence weight function weighs a cited Record (an item entering the roll as `proofs` levels, C3-C10) that is a `dispensation` whose form has `hardens: true`, its weight is `1 + min(3, held_seasons // prescription_seasons)`, `held_seasons` read from the citing party's own `hold` on the Record (`Tenure.since`). One clause at the single owner of evidence weight (`05_SC_evidence_and_rebuttal_B.md`'s weight function; until it lands, `world_q.proofs`). The cap is the `3` in that expression and is the same fixture row's second field (`prescription_cap`, sweep {1, 3, 5})." The item opens the tree and names in its commit body which owner it edited (`05_SC_evidence_and_rebuttal_B`'s function, B24, or `world_q.proofs`).
+  2. "**Terms.** `instruments.yaml` `confers:` blocks carry `term:` equal to the form's `term`; `_eff_confer` reads it by FA-P3's rule. Proposed content on existing seats …: none. This file adds terms **only** to seats a grant creates, so no seat in the built realm changes." Open `_eff_confer` (by symbol) and record whether B32's `COL_A` item already reads `confers.term`; write the read only where it is absent.
+  3. `test_audit_and_charter.py` gains the verdict and age tests below, written before step 1 and read red.
+- WHERE: `S/data/fixtures.py` (`prescription_seasons`, `prescription_cap`); the evidence weight function (by symbol, as step 1 records); `S/hole_register.yaml` (NUMBER row, block slot 2); `_eff_confer` only where step 2 finds the read absent; `S/tests/test_audit_and_charter.py`.
+- TESTS: `test_the_verdict_is_a_draw` ("On a hand-built hearing under `audit` (one officer, a bench of one, three residents each holding a firsthand `requisition.taken` claim of the officer's doing): 400 seeded `determine` rolls with the three testimonies cited and 400 with none. … Pass: the cited arm's Overwhelming + Success share is higher, **and each arm contains at least three bands**. Control: `proof_level: None` … equalises the arms within sampling"); `test_age_is_odds_not_outcome` ("Under `quo_warranto`, the same instrument held 0 seasons and 16 seasons: 400 rolls each; the older arm's Failure share (the grant stands) is higher; both arms contain a band in which the grant falls"); `test_the_seizer_cites_at_weight_one` (the falsifier's arm) `[ASSUMPTION: the last test's name (E-3)]`.
+- FALSIFIER and CONTROL: "Planted: read `held_seasons` from the Record's creation instead of the citing party's hold; a charter seized last season by a stranger then pleads its full age, and the hand-built 'the seizer cites it at weight 1' assertion reddens. Planted: force the band to Success; the 'three bands' assertions redden." Control: `proof_level: None`.
+- GATE: `python -m pytest engine/season/tests/test_audit_and_charter.py -q` → pass (`checked >= 400` per arm); `python tools/ci_sim_fabrication_check.py` → exit 0; "Realm reading (after CR-60/61 and FA-P3): seeds 0–4, six seasons, with one `farm` seeded (`…_E_scenario.md`): the report prints whether an audit was opened at the term's end and its band" — the scenario is `COL_E`'s (B40) and six seasons pass the cap: moved to B40 at two seasons (A-114). `opus` reads the 400-and-400 arms.
+- HASH MOVERS: none (no hardening form is cited in the built realm; no built seat gains a term).
+- DEPENDS ON: V12 B33.18; V12 Batch B24 (`05_SC_evidence_and_rebuttal_B`: the weight function), Batch B05 (`proof_level`, `U5c_SC_one_obstacle_form` §3), Batch B21 (FA-P3, `06_FA_seat_terms_and_turnover`: `term:` and `_eff_confer`), Batch B32 (`SYN_A`'s `hardens: true` rows; `COL_A`'s `confers:`); EXISTS-IN-TREE `S/queries/world_q.py::proofs`.
+- GLOSSARY: row *prescription* (new: "prescription": title that strengthens with long holding, as in law; owner `Fixtures prescription_seasons`).
+- IDS: H block slot 2 (`prescription_seasons` with `prescription_cap`).
+- COST and TIER: edit (a fixture and one clause) and tests; `sonnet`, `high`; `opus` reads the arms (COL_C's tier line).
+- LANDS IT: B33's producer; `Item: B33.20`, `[skip ci]`.
+
+*(This part continues in `workplan_v12_part38_cont.md`, from B33.21. The last item written here is B33.20.)*
