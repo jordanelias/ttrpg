@@ -192,3 +192,207 @@ Not in this batch, and where each is: `BYZ_A`, `BYZ_E`, `COL_A`, `PAP_A`, `PAP_B
 - GLOSSARY: row *rendered* — new, "rendered": a levy paid willingly in full, as a tax is rendered; owner `verb_table.yaml: requisition`'s Overwhelming cell; refused synonym "taken" for this sense.
 - COST and TIER: build (a row's shape and its effect's dispatch); `sonnet`, `high`; the band table read by `opus`.
 - LANDS IT: B33's producer; `Item: B33.04`, `[skip ci]`.
+
+### B33.05 — a stage that names a body or a seat is a hand · BYZ_C edit 4, with edit 3's `hand_term` · BUILD · HASH EQUAL
+- SOURCE: BYZ_C "Exact edits" 4 and the last sentence of 3, "What it changes" 1 and 4; `SYN_A` §2 (`office_bodies.<body>.term`), §3 (`passes_through`, `hand_term` refusals); rulings A-13, A-21; closes "`_declared_stages` … winds `record_stages_default` stages … They are clocks with no hand" (BYZ_C, the problem).
+- ADVANCES: none of the nine; A-13 (the clerks an order passes).
+- INSTRUCTION:
+  0. Open the tree: `grep -n "passes_through\|hand_term" engine/season/state/carriers.py engine/season/data/rosters.py` and `grep -n "term" engine/season/rosters.yaml` under `office_bodies`. Record which of `Office.passes_through`, `Office.hand_term` and the `office_bodies.<body>.term` reader B32's `SYN_A` item landed. Where one is absent, add it here in `SYN_A` §3's form ("folded into the hashed representation only when present"; loader refusals: `passes_through` "a member that is neither an `office_bodies` name nor `{seat: <row id>}`", `hand_term` "not a positive int"; `office_bodies.term` an optional map body → seasons).
+  1. "`loop/effects_information.py::_declared_stages` — when the act is exercised through a seat (`Act.via`) whose `Office` carries `passes_through`, and the act declares no stages: the stages are `[(due_i, "hand:<body or seat>", a.id)]`, with `due_i` the running sum of each hand's term from `w.tick`. Otherwise unchanged. The label prefix `hand:` is the one new convention; the tuple shape is unchanged, so `(Record, stages)`'s matrix row and `loop/matter.py`'s maturation read it as today."
+  2. A hand's term: for a body, `rosters.yaml: office_bodies.term[<body>]`, "absent reads `fixtures: record_stage_term` (shipped 1)"; "Where the hand is a seat and not a body, the same number is the optional key `hand_term:` on that seat's own row".
+  3. Create `S/tests/test_inst_byz_c.py` (the source's named test) with `test_a_writ_through_a_seat_with_hands_has_one_stage_per_hand` (a hand-built seat with `passes_through: ["Ministries", {seat: <id>}]`, `office_bodies.term` `{"Ministries": 2}` and the seat's `hand_term: 1`: the minted Record's stages are `[(tick + 2·T, "hand:Ministries", id), (tick + 3·T, "hand:<id>", id)]` with `T` the ticks of one term as `_declared_stages` already counts `record_stage_term`) and `test_no_hands_no_change` (a seat with no `passes_through` mints today's `stage1`, `stage2` labels), written before step 1 and read red on the first `[ASSUMPTION: test names (E-3)]`.
+- WHERE: `S/loop/effects_information.py` (`_declared_stages`); `S/state/carriers.py` (`Office.passes_through`, `Office.hand_term`) and `S/data/rosters.py` (`_load_offices`; the `office_bodies` reader) only where step 0 finds them absent; NEW `S/tests/test_inst_byz_c.py`.
+- TESTS: the two above, red then green.
+- FALSIFIER and CONTROL: a stage labelled `hand:` on a writ through a seat that declares no `passes_through`. Control (BYZ_C "What it changes" 4): "With `passes_through` absent on every row … no stage is a hand, `carry` is offered as today, and every hash is the base hash" — no shipped row carries the key until B33.08.
+- GATE: `python -m pytest engine/season/tests/test_inst_byz_c.py -q` → pass; the realm content hash at seed 0, one season → equal to B33.04's reading.
+- HASH MOVERS: none (no row declares `passes_through` yet; an absent key is not folded into the hash).
+- DEPENDS ON: EXISTS-IN-TREE `S/loop/effects_information.py::_declared_stages`, `S/data/fixtures.py` `record_stages_default`, `record_stage_term`; V12 Batch B32 (`SYN_A` §2, §3); V12 Batch B21 (`06_FA_decree_binds`: the writ's content deposit, A-21).
+- GLOSSARY: row *hand* — new or narrowed, "hand": a clerk or office an order's paper must pass before it is sealed, as a document passes through hands; owner `_declared_stages`'s `hand:` label and `Office.passes_through`.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B33's producer; `Item: B33.05`, `[skip ci]`.
+
+### B33.06 — the clerk is asked; an unentered stage reads as returned · BYZ_C edits 6–7 · BUILD · HASH EQUAL
+- SOURCE: BYZ_C "Exact edits" 6 and 7, "What it changes" 3; C3-C7; A-21; `SYN_A` §4 (`hands_open` from BYZ_C edit 7).
+- ADVANCES: none of the nine; A-13.
+- INSTRUCTION:
+  0. Open the tree: `grep -n "def hands_open\|def hand_returned" engine/season/queries/world_q.py`; record what B32 landed; write only what is absent.
+  1. Edit 7: "`queries/world_q.py` — `writs_held` (or FA's `writs_addressed`) is **not** narrowed (A-21: an addressee answers what he has learned was issued); a new occasion beside `vacancies` and `sittings_before`, `hands_open(w, p)`: the Records with an open stage naming a body or seat `p` holds, as `Record` referents of a `need` question. This is the reach half: without it a clerk is never asked. `[UNVERIFIED]` how the question slot ranks it (`question_aggregation_rule: first`; H-54 is CORE's)." Wire it at the occasion site `vacancies` and `sittings_before` stamp (by symbol); record in the commit body how the slot ranks it.
+  2. Edit 6: "An unentered `hand:` stage whose due has passed reads as **returned by the clock** when read (`world_q.hand_returned(w, record)`, beside `hands_open`; nothing stored); MATTER emits `term.matured` for the Record as today and writes `Record.stages` nowhere; WITNESS deposits the `term.matured` to the maker, from which he reads the return. Later hands' stages are read as void once an earlier one has returned. The maker's next `issue` is a new document." `loop/matter.py` is not edited (C3-C7).
+- WHERE: `S/queries/world_q.py` (`hands_open`, `hand_returned`, beside `vacancies`); the occasion site that stamps `vacancies` (by symbol); `S/tests/test_inst_byz_c.py`.
+- TESTS: `test_hands_open_lists_a_clerk_s_open_documents` (a holder of a `Ministries` seat reads the Record whose open stage names `Ministries`; a holder of no such seat reads `()`), `test_a_stage_past_due_reads_returned_and_later_hands_void`, `test_matter_writes_no_stage` (after the due tick passes through a season, `Record.stages` is byte-equal to the mint's), written before the edits and read red `[ASSUMPTION: test names (E-3)]`.
+- FALSIFIER and CONTROL: "Remove `hands_open`: the count of `carry` attempts on writs falls to zero, which shows the occasion, not the mechanism, is what reach depends on" (read at B33.08's realm reading). Control: no Record carries a `hand:` stage in the shipped world, so both readers return empty.
+- GATE: `python -m pytest engine/season/tests/test_inst_byz_c.py -q` → pass; `git diff <batch-start-sha> -- engine/season/loop/matter.py` → empty.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `S/queries/world_q.py::vacancies`, `::sittings_before`, `::writs_held`; V12 B33.05.
+- GLOSSARY: none (*hand*, B33.05).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B33's producer; `Item: B33.06`, `[skip ci]`.
+
+### B33.07 — `carry` at a hand, drawn · BYZ_C edit 5 · BUILD · HASH EQUAL
+- SOURCE: BYZ_C "Exact edits" 5 and its two tables, "Gate" 1, "Falsifier" first sentence; X-14, X-24, X-25 (its first `Reconciled:` line: "the hand is that row's second `requires_typed` alternative, with the same band shape"); C3-C10; A-21, A-30, A-81.
+- ADVANCES: none of the nine; A-13.
+- INSTRUCTION:
+  0. Open `S/verb_table.yaml: carry` as B28 (`14_VERBS_SOCIAL1_D`) left it and record its `requires_typed`, `contests:` and bands in the commit body.
+  1. "`requires_typed` gains a second alternative: `existence` of `subject` kind `Record` with an open `hand:` stage, and `basis` of `subject`, basis `hand` (new basis rule in `data/requires.py`: the actor holds a live seat that is the stage's named seat, or whose `body` is its named body, and the document was drawn up at a rung the issuing seat's purview reaches). The petition alternative stands." `hand` joins the closed basis vocabulary in `S/data/requires.py` (the tuple beside `"purview"`, `"bench"`).
+  2. "`counterparty:` absent; `contests: a matter`; the draw." Terms on that alternative, through the one composer:
+     | term | reads |
+     |---|---|
+     | pool | the row owner's (`14_VERBS_SOCIAL1_D`): the one pool rule on the clerk's skill score for `carry`'s skill |
+     | `difficulty` | by the rung kind of the issuing seat's rung (a realm instrument is harder to enter than a town's) |
+     | `backlog` (OBS member 23) | the open documents in the clerk's hands beyond his scene budget this season |
+     | `subject` (OBS member 4) | the document's `forgery_quality`, as an inquiry reads it (`seam/wrappers/sigma.py::contest_input`) |
+     | `regard` (OBS member 7) | the clerk's hostility to the maker (hostile half) |
+     | levels (leverage, C3-C10) | `favour` for the clerk's regard for the maker above zero; `obligation` where the maker and the clerk are sworn to one seat (read by B33.34's source once it lands) |
+  3. Bands on the hand alternative (the three kinds are asked of the row's owner for a document that is not a petition):
+     | degree | writes | emits |
+     |---|---|---|
+     | Overwhelming | the stage entered; the next hand's due tick brought forward by half its term | `document.entered` |
+     | Success | the stage entered | `document.entered` |
+     | Partial | the stage's due tick re-wound by one term of that hand, once per document per hand | `document.held` |
+     | Failure | the stage closed as `returned` (an ACTS write at RES, `(Record, stages)`, as `carry` already holds) | `document.returned` (the clerk its doer; WITNESS deposits `(record, document.returned, True)` to the maker) |
+     "On the entry that closes the last `hand:` stage the instrument is **entered**: from that tick it is sealed and citable … The addressees' answers (`comply`, `evade / defy`, `construe`) do **not** wait on it" (A-21). The draw key is `H(w.world_seed, w.tick, <record id>, "carry.hand")` (A-30).
+  4. "`write_matrix.yaml`: `(Record, stages)` already lists `carry` at RES; its `emits:` gains the three kinds. `[UNVERIFIED]` the row's present `emits:` list" — record it in the commit body before the edit.
+- WHERE: `S/verb_table.yaml` (`carry`: the second `requires_typed` alternative, its terms and bands); `S/data/requires.py` (the basis `hand`); `S/loop/effects_information.py` (`carry`'s effect at a hand, by symbol); `S/data/verbs.py` (the three kinds' verb); `S/write_matrix.yaml` (`(Record, stages)` `emits:`); `S/tests/test_inst_byz_c.py`.
+- TESTS: `test_carry_at_a_hand_draws_four_bands` (gate 1), `test_patronage_moves_the_entry_rate` (the falsifier), `test_a_petition_carry_is_unchanged`, written before step 1 and read red `[ASSUMPTION: test names (E-3)]`.
+- FALSIFIER and CONTROL: "Give the Clerk a `regard` of the maximum for one maker and the minimum for another, identical documents, 400 seeds each: the entry rates differ. If they do not, patronage is not in the odds." Control: a `carry` of a petition draws as B28 left it (same bands, same kinds).
+- GATE: "400 seeds, one hand-placed `carry` by the Clerk on a King's writ: all four bands occur; with the roll pinned to Success, every seed enters" → `python -m pytest engine/season/tests/test_inst_byz_c.py -q` → pass (`checked >= 400` asserted); `opus` reads the terms on the contested alternative.
+- HASH MOVERS: none (no Record carries a `hand:` stage until B33.08).
+- DEPENDS ON: V12 Batch B28 (`14_VERBS_SOCIAL1_D`: `carry`'s row and band shape; `14_VERBS_SOCIAL1_B`); V12 Batch B05 (the composer, members 4, 7, 23; `favour`); V12 Batch B07 (`13_SC_draw_for_unrolled_contests`); V12 B33.06; EXISTS-IN-TREE `S/data/requires.py` (the basis tuple), `S/seam/wrappers/sigma.py::contest_input`.
+- GLOSSARY: rows *entered* (new: "entered": a paper sealed into the record by the last clerk it must pass, as a deed is entered in a register; owner `document.entered`) and *held over* (new: "held": a paper kept back a term at a hand; owner `document.held`).
+- COST and TIER: build (a contested alternative); `sonnet`, `high`; the terms `opus` (BYZ_C's tier line).
+- LANDS IT: B33's producer; `Item: B33.07`, `[skip ci]`.
+
+### B33.08 — the King's and two dukes' papers pass their clerks · BYZ_C edits 1–3 · BUILD · HASH MOVER(behaviour)
+- SOURCE: BYZ_C "Exact edits" 1, 2, 3, "Gate" 2, 3, "Falsifier" second sentence; A-13, A-21.
+- ADVANCES: none of the nine; A-13; NPC-008, NPC-009, NPC-011's cases (BYZ_C, the problem).
+- INSTRUCTION:
+  1. "`offices.yaml: seats[].passes_through` — optional list; each member an `office_bodies` name or a seat id (`{seat: <id>}`). Order is the order of entry. Authored:"
+     | row | `passes_through` | basis |
+     |---|---|---|
+     | `off_king`, `off_duke_valorsmark` | `["Ministries"]` | `worldbuilding_v30.md` §6.1: the Ministries "execute government services" |
+     | `off_duchess_hafenmark` | `["Inner Council"]` | Hafenmark's "institutional order" (`geography_v30_infill.md:18`); her council holds the Legal Advisor `[ASSUMPTION; medium]` |
+     | `off_duke_varfell`, every Jarl seat | absent | "first among the Jarls, not a monarch" |
+     | Church seats | absent | the papacy lane's |
+     | `off_katepano` | absent | a frontier command acts on its own seal |
+  2. "`offices.yaml: off_lord_steward.body` — `null` → `"Ministries"` `[ASSUMPTION; medium; Jordan to correct; revert: null]`. Ground: `cases/NPC4.yaml` NPC-009 … With it the Ministries hold two seats, and the case's concentration is measurable as his share of entries."
+  3. "`rosters.yaml: office_bodies.term` — new optional map, body → seasons a document may wait for that body; absent reads `fixtures: record_stage_term` (shipped 1). Authored: `"Ministries": 2` `[ASSUMPTION; medium]`; sweep 1 / 2 / 4."
+- WHERE: `S/offices.yaml` (`off_king`, `off_duke_valorsmark`, `off_duchess_hafenmark`: `passes_through`; `off_lord_steward`: `body`); `S/rosters.yaml` (`office_bodies.term`); `S/tests/test_inst_byz_c.py`.
+- TESTS: `test_no_deadlock_when_the_clerks_are_vacant` (gate 3, below), written before the edit and read red (no row has a hand) `[ASSUMPTION: test name (E-3)]`.
+- FALSIFIER and CONTROL: the falsifier of B33.06 ("Remove `hands_open`: the count of `carry` attempts on writs falls to zero"), read here at seed 0, two seasons. Control: "`passes_through` deleted from every row reproduces FA's post-P2 hash", read as B33.07's realm hash (`reading @<sha>`).
+- GATE: gate 2 at two seasons (four in the source; A-114): realm, seeds 0 to 9, two seasons, `PYTHONHASHSEED=0`: "of the writs issued through `off_king`, the counts entered, held over, returned by a clerk, and returned by the clock (read), per seed; at least one writ is entered and at least one is not, across the seeds; an addressee's answer forms on an unentered writ (A-21); the Lord Steward's share of entries reported" — the counts quoted in the commit body, the two "at least one" clauses and the A-21 clause asserted with `checked >= 10` seeds. Gate 3: "The same run with both Ministries seats vacated at tick 0: the season completes, every King's writ returns by the clock, and `off_duke_varfell`'s writs are unaffected" → `python -m pytest engine/season/tests/test_inst_byz_c.py -q` → pass, every King's writ whose due has passed by the end of season 2 reading returned.
+- HASH MOVERS: "any run in which a seat with `passes_through` issues" (BYZ_C "Cost class"); the build hash, by the new key on three Offices and `off_lord_steward`'s body. Declared; B33.99.
+- DEPENDS ON: V12 B33.05, B33.06, B33.07; EXISTS-IN-TREE `S/offices.yaml` rows `off_king`, `off_duke_valorsmark`, `off_duchess_hafenmark`, `off_lord_steward`; `S/rosters.yaml: office_bodies` (`Ministries`, `Inner Council`).
+- GLOSSARY: none (*hand*, B33.05).
+- COST and TIER: content edit; `sonnet`, `medium`; the realm reading `sonnet`, `high`.
+- LANDS IT: B33's producer; `Item: B33.08`, `[skip ci]`.
+
+### B33.09 — the centre beyond the map: a place and a person · BYZ_D edits 1–2, COL_B §4 bullets 1 and 3 · CONTENT · HASH MOVER(encoding)
+- SOURCE: BYZ_D "Exact edits" 1, 2, "What it changes" 1; COL_B §4 (the `capital` bullet and the registry bullet); X-13; A-44 (authored content outside the generated cap), `ED-WR-0011`; `audits/12_ARCS_adjudication.md:368` (row 12, "generate a person").
+- ADVANCES: none of the nine; NPC-011's need 4, NPC-089's need 6, ARC-45 (BYZ_D, the problem).
+- INSTRUCTION:
+  1. "`references/npc_registry.yaml` — one row, `status: proposed`, the next free NPC id (allocated at landing from `references/id_reservations.yaml`'s `next_free`, CLAUDE.md §4, not here and not by max+1 …). Authored content outside A-44's generated cap (`ED-WR-0011`); U1 counts it: faction `Altonia`; role `[PLACEHOLDER] head of the imperial centre`; `cultural_label: altonian_imperial`; `affiliations: {solmund_orthodoxy: 1, einhir_restoration: 1, altonian_civics: 5}`; pursuits led by `stability` and `reputation` `[ASSUMPTION; medium; Jordan to author]`. No name is proposed." COL_B adds: "the fifteen pursuits and the three concern affiliations as `data/cast.py` requires, `status: proposed` `[ASSUMPTION; whole row]`". The id: the NPC block B00 gives this batch (UNDECIDED 3); if B00 gave none, read the registry's highest id on `main` at landing, take the next, and land that row on `main` before any other session cites it; record the reading in the commit body.
+  2. "`rosters.yaml: foreign_cast.by_faction."Altonia"` — add `centre: {code: "ALT-0"}`, a second settlement under `ALT`. `[UNVERIFIED]` which keys `build_realm(foreign=)` reads off this mapping (`data/rosters.py::FOREIGN_CAST`); the reader gains the key." With COL_B's distance declared on the same key (UNDECIDED 4): `centre: {code: "ALT-0", hops: 3}` (`hops` "[ASSUMPTION; the code and the 3; Jordan names the place; sweep {1, 3, 5}]"), read by B33.14. The builder (`S/boot/realm.py::build_realm`, B03c's home of `populated.py`'s builder) mints the settlement under the `ALT` root in the foreign arm only, and homes the new person there ("The holder **resides at `ALT-0`**", COL_B §4).
+  3. "`faction_leaders."Altonia"` moves from NPC-089 to the new person; `factions.head_seat` gains `"Altonia": off_altonian_court`" — the seat is B33.10's, so this key lands in B33.10's commit, not here; `faction_leaders` moves here.
+  4. Create `S/tests/test_inst_byz_d.py` (the source's named test) with `test_the_control_arm_has_no_empire` (gate 1: `build_realm(0, foreign=False)`'s content hash equals B33.08's reading) and `test_the_centre_is_a_settlement_under_alt_and_its_holder_lives_there` (foreign arm), written before step 2 and read red on the second `[ASSUMPTION: test names (E-3)]`.
+- WHERE: `references/npc_registry.yaml` (one row); `S/rosters.yaml` (`foreign_cast.by_faction."Altonia".centre`; `faction_leaders."Altonia"`); `S/data/rosters.py` (`FOREIGN_CAST`'s reader); `S/boot/realm.py` (`build_realm(foreign=True)`: the second settlement and the person's home); NEW `S/tests/test_inst_byz_d.py`.
+- TESTS: the two above.
+- FALSIFIER and CONTROL: the control arm's hash moves (the centre leaked into `foreign=False`). Control: gate 1, "`build_realm(0, foreign=False)`: `content_hash` unchanged".
+- GATE: `python -m pytest engine/season/tests/test_inst_byz_d.py -q` → pass; `python tools/validate_ed_citations.py` → exit 0 (the registry row cites nothing new); the foreign-arm build hash at seed 0 → moved, recorded for B33.99.
+- HASH MOVERS: "the foreign-arm build hash" (BYZ_D "Cost class"): one Person, one Rung. Declared; B33.99.
+- DEPENDS ON: EXISTS-IN-TREE `S/rosters.yaml: foreign_cast.by_faction."Altonia"` (`territory: {code: "ALT"}`, `settlement: {code: "ALT-1"}`), `faction_leaders`, `S/data/rosters.py::FOREIGN_CAST`, `references/npc_registry.yaml` (last row NPC-090); V12 Batch B03c (`boot/realm.py`); V12 B33.08.
+- GLOSSARY: none (`[PLACEHOLDER]` posts are not words; the place has a code and no name, as the `foreign_cast` note states).
+- NAMES: `harness/populated.py::build_realm` → `S/boot/realm.py::build_realm` (§5.10, B03c).
+- IDS: NPC 1 (UNDECIDED 3).
+- COST and TIER: content; `sonnet`, `medium`; the person's row is listed in the PR body for Jordan to author.
+- LANDS IT: B33's producer; `Item: B33.09`, `[skip ci]`.
+
+### B33.10 — the court's seat and the Doux's; the empire may recall its officers · BYZ_D edit 3, COL_B §4 bullet 2 · BUILD · HASH MOVER(encoding)
+- SOURCE: BYZ_D "Exact edits" 3, "What it changes" 1 and 3, "Gate" 4; COL_B §4's seat bullet (its comment: "one seat, shared with BYZANTINE-D (whose row text governs)"); X-13; A-22 (BYZ_D's U5d line); closes "`offices.yaml`: two Altonian seats, both `conferral: null`, `revocation: null`".
+- ADVANCES: none of the nine; A-22 (the far superior commands its sworn men and the holders of seats it may revoke).
+- INSTRUCTION:
+  1. `S/offices.yaml: foreign_seats`, two rows added (BYZ_D's text, which governs):
+     ```yaml
+       - id:         off_altonian_court        # X-13: the one far superior, shared with COLONIAL-B §4
+         post:       "[PLACEHOLDER] head of the imperial centre"
+         rung:       {territory: "ALT"}         # the parent rung of ALT-1; its holder resides at ALT-0 (hops: 3)
+         body:       null
+         faction:    "Altonia"
+         remit_acts: [issue, confer, revoke]
+         conferral:  null
+         revocation: null
+         passes_through: [{seat: off_doux}]
+         holder:     "<the new NPC id>"
+         obligees:   ["NPC-089", "NPC-090", "NPC-011"]
+         source:     "ARCS adjudication row 12; cases/exercises/NPC-011.yaml ('the Altonian imperial authority')"
+         note:       "[NEW]. No `dispatch`: the centre does not march; its governors do."
+
+       - id:         off_doux
+         post:       "Doux"
+         rung:       {settlement: "ALT-1"}
+         body:       null
+         faction:    "Altonia"
+         remit_acts: []
+         conferral:  appointed
+         revocation: rung_above_same_faction
+         holder:     "NPC-011"
+         obligees:   []
+         source:     "references/npc_registry.yaml NPC-011 (`title: Doux`; goals: 'Sandbag imperial directives')"
+         note:       "[NEW]. Seated at the staging post beside the Katepano [ASSUMPTION; medium; Jordan to place him: his province is off the map]. An empty remit: in this world his power is the hand."
+     ```
+     `<the new NPC id>` is B33.09's.
+  2. "On `off_katepano` and `off_kommerkiarios`: `conferral: null` → `appointed`; `revocation: null` → `rung_above_same_faction`. The court is anchored at `{territory: "ALT"}`, the parent rung of `ALT-1`, so `seated_on_the_rung_above` finds it from either seat's rung; a settlement anchor at `ALT-0` would have been a **sibling** and failed."
+  3. `S/rosters.yaml: factions.head_seat` gains `"Altonia": off_altonian_court` (BYZ_D edit 2's last clause; COL_B §4).
+  4. `test_inst_byz_d.py` gains `test_the_court_may_recall_the_katepano` (gate 4), written before step 2 and read red (`revocation: null` refuses).
+- WHERE: `S/offices.yaml` (`foreign_seats`: `off_altonian_court`, `off_doux` added; `off_katepano`, `off_kommerkiarios` edited); `S/rosters.yaml` (`factions.head_seat`); `S/tests/test_inst_byz_d.py`.
+- TESTS: the one above; `test_the_control_arm_has_no_empire` (B33.09) stays green.
+- FALSIFIER and CONTROL: "Delete `passes_through` from the court's row: every instrument is entered at issue and gate 2's lag is zero" (read at B33.11). Control: B33.09's control-arm test.
+- GATE: gate 4, "A hand-placed `revoke` of `off_katepano` through `off_altonian_court`: admitted at eligibility (it is refused today: `revocation: null`); its bands are proposal E's" → `python -m pytest engine/season/tests/test_inst_byz_d.py -q` → pass; `queries/faction_q.py::head` (or the reader `factions.head_seat` feeds) names the court's holder for Altonia.
+- HASH MOVERS: the foreign-arm build hash (two Offices, two edited rows, NPC-011 seated). Declared; B33.99.
+- DEPENDS ON: EXISTS-IN-TREE `S/offices.yaml` rows `off_katepano`, `off_kommerkiarios`, `S/state/gate.py::seated_on_the_rung_above`, `REVOCATION_RULES["rung_above_same_faction"]`, `S/rosters.yaml: factions.head_seat`; V12 B33.09; V12 B33.05 (`passes_through` on a seat hand); V12 Batch B32 (`BYZ_E`'s recall bands, "proposal E").
+- GLOSSARY: none.
+- COST and TIER: content and a small build; `sonnet`, `high` (BYZ_D's tier line).
+- LANDS IT: B33's producer; `Item: B33.10`, `[skip ci]`.
+
+### B33.11 — distance at a hand: the Doux's term and the trade gate's keeper · BYZ_D edits 4–5 · BUILD · HASH MOVER(behaviour)
+- SOURCE: BYZ_D "Exact edits" 4, 5, "What it changes" 2, "Gate" 2, 3; A-21.
+- ADVANCES: none of the nine; NPC-011 need 4; NPC-090's case (BYZ_D, the problem).
+- INSTRUCTION:
+  1. Edit 4: "`hand_term:` on the row that **is** the hand (`off_doux: hand_term: 2`), seasons a document may wait for that seat. Sweep 1 / 2 / 4. A writ of the court's is thus entered (sealed, citable) two or more seasons after it is written, or returned; its terms are known to whoever learns of its issue from the start (A-21)." (B33.05 reads the key.)
+  2. Edit 5: "`offices.yaml: off_kommerkiarios` gains `hand_term: 1`, and the realm's trade seat that faces him names him as a hand on its instruments across the gate: `off_guild_comptroller: passes_through: [{seat: off_kommerkiarios}]` `[ASSUMPTION; medium]` (NPC-007, 'Guilds Representative'; the registry's named counterparty, 'Solberg', has no seat and is content debt)." No new rule.
+  3. **STOPS IF** (UNDECIDED 10): with step 2's `off_guild_comptroller` key in, `build_realm(0, foreign=False)`'s content hash differs from B33.10's control reading, or the loader refuses a `{seat:}` member naming a seat the control arm does not build. Then the `off_guild_comptroller` key is not landed, the commit body says so, and the PR body lists it for Jordan (it is `[ASSUMPTION; medium]` in its source).
+  4. `test_inst_byz_d.py` gains `test_the_prince_s_regard_moves_his_hand` (gate 3, below) `[ASSUMPTION: test name (E-3)]`.
+- WHERE: `S/offices.yaml` (`off_doux.hand_term`; `off_kommerkiarios.hand_term`; `off_guild_comptroller.passes_through`); `S/tests/test_inst_byz_d.py`.
+- TESTS: the one above.
+- FALSIFIER and CONTROL: "Delete `passes_through` from the court's row: every instrument is entered at issue and gate 2's lag is zero. Set the Doux's `altonian_civics` to 5 and his stance toward everyone to zero: his entry rate rises toward the Katepano's own compliance rate; if it does not, the affiliation is not in the odds." Control: gate 3's "planted control with the stance row toward an unrelated person shows no difference".
+- GATE: gate 2 at two seasons (six in the source; A-114): "Foreign arm, seeds 0 to 19 …: the court's instruments issued; at the Doux's hand, the counts entered, held over, returned by him and returned by the clock (read when read, BYZANTINE-C edit 6); the lag in ticks from issue to entry for those entered. All of entered and not-entered occur across the seeds" — quoted, the last clause asserted (`checked >= 20`); at two seasons with `hand_term: 2` an issue in season 1 cannot be past due, so "returned by the clock" may read 0 and is reported, not asserted. Gate 3: "The same run in two arms differing only in the Doux's stance row toward NPC-030 (Elske): his entry rate differs between the arms … A planted control with the stance row toward an unrelated person shows no difference" → a hand-built 400-seed `carry` pair in `test_inst_byz_d.py` (the realm pair at two seasons is quoted beside it); `opus` reads gate 3 (BYZ_D's tier line).
+- HASH MOVERS: the foreign-arm runs in which the court issues; the realm runs in which `off_guild_comptroller` issues (if step 2 lands). Declared; B33.99.
+- DEPENDS ON: V12 B33.05, B33.07, B33.10; EXISTS-IN-TREE `S/offices.yaml` rows `off_kommerkiarios`, `off_guild_comptroller`.
+- GLOSSARY: none.
+- COST and TIER: small build (content keys); `sonnet`, `high`; gate 3 `opus`.
+- LANDS IT: B33's producer; `Item: B33.11`, `[skip ci]`.
+
+### B33.12 — an order defied scars a holder of `altonian_civics` · BYZ_D edit 7 · CONTENT · HASH MOVER(behaviour)
+- SOURCE: BYZ_D "Exact edits" 7, "What it changes" 4; NPC-090's case need (BYZ_D, the problem).
+- ADVANCES: none of the nine; NPC-090's anticipable strictness.
+- INSTRUCTION: "`rosters.yaml: tables.affiliation_engagement` — a column `altonian_civics`, sign cells:"
+  ```yaml
+        altonian_civics:
+          "evade / defy":  -1
+          destroy_record:  -1
+          forge:           -1
+          comply:           1
+          carry:            1
+  ```
+  "`[ASSUMPTION; medium; Jordan to correct]`. `[UNVERIFIED]` that none of these five verbs carries a cell in the shared column `sacred` (`data/affiliations.py::_load_engagement` refuses a verb with both); a verb that does is dropped from this column." The item's first step reads the `sacred` column and records which, if any, of the five it drops. "Its one reader today is the scar (`person_q.elements_violated_by`): a holder who sees an order defied takes a count on `altonian_civics`."
+- WHERE: `S/rosters.yaml` (`tables.affiliation_engagement`: the `altonian_civics` column); `S/tests/test_inst_byz_d.py`.
+- TESTS: `test_a_civics_holder_who_sees_defiance_is_scarred` (a hand-built observer at `altonian_civics: 4` witnessing an `evade / defy` takes a count; one at 0 does not) `[ASSUMPTION: test name (E-3)]`, red before the edit.
+- FALSIFIER and CONTROL: the loader accepts a verb carrying both a `sacred` and an `altonian_civics` cell. Control: an observer holding no `altonian_civics` is scarred as before.
+- GATE: `python -m pytest engine/season/tests/test_inst_byz_d.py -q` → pass; `python -c "from engine.season.data import affiliations"` → loads (the engagement loader's refusal is its check).
+- HASH MOVERS: every seeded run in which a holder of `altonian_civics` above 0 witnesses one of the five verbs. Declared; B33.99.
+- DEPENDS ON: EXISTS-IN-TREE `S/rosters.yaml: tables.affiliation_engagement`, `S/data/affiliations.py::_load_engagement`, `S/queries/person_q.py::elements_violated_by`; V12 B33.10.
+- GLOSSARY: none.
+- COST and TIER: content; `sonnet`, `medium`.
+- LANDS IT: B33's producer; `Item: B33.12`, `[skip ci]`.
+
+### B33.13 — the tutoring demand is a covenant held at the hand · BYZ_D edit 6 · POINTER
+Edit 6 adds nothing: "The head's demand is a `covenant` offer addressed to the King … Minted through `off_altonian_court`, it carries the Doux's hand like any instrument of that seat. A covenant stays in person (A-21 …), so while he holds it over or returns it, the King holds no claim of it. Nothing is added for the arc: the suppression is a person's act at a hand." What carries it: the hand (B33.05 to B33.07, B33.10, B33.11) and `covenant` as CP-T09-03 makes something read it (Batch B21b, the intake `:244`). A dispatched order from the court waits on `_eff_dispatch` (`IS-B3-FA-05`, B21, `V12_STRUCTURE_part2.md` §5.7), which BYZ_D says the court does not use ("No `dispatch`"). Gate: none of its own and no commit; B33.11's gate 2 counts every instrument the court mints at the Doux's hand, a `covenant` offer among them where one forms, and the close's commit body quotes how many offers did.

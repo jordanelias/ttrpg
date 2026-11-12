@@ -51,3 +51,80 @@ C(B25-fi-questioning): this batch's entries; the plan's head parts; `unified/U1_
   the closing SHAs of B00, B01, B02, B11, B12c, B24 (and B24a, B21 for the two STOPS IF reads); the permanent surface.
 COST: edits and small builds; producer `valoria-author` on `sonnet`, `high`; the contested rows (`utter`, `construe`, `oblige`, `interview`, `tie`) and §2/§3's draws read by `opus` (S2B, S2C tier lines); one `opus` read each of S2A's executions-not-lower table, S2C's ten-seed band tables and the `tie_gain` arms; the close's terminal critique `opus`.
 EST: 11 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this batch's 22 positions (0.4 h × 22 + 2.5 h); §2.2's 6 h counted the members, not the commits]
+SERIAL EDGES (written after the position table, E-11): within the batch: B25.01 first (EQUAL, independent; U-11). S2A's order ("FI-02 edit 5 (the reader) → edit 5 here → edits 1 and 2"): B25.02 → B25.03; S2A edit 2 last of the three, after S2B and S2C add their kinds (C3-Y10): B25.03 → … → B25.15. S2B's order ("§4 → §3 → §1 → §2 (after S2-A edit 2)"): B25.04 → B25.05 → B25.06; B25.15 → B25.16 (`construe`'s `Record.dispensation`) → B25.17 (the construal is citable). B25.06 → B25.07 (Reading R1 needs typed `utter`). S2C's order ("§1 (after CR-61) → §5 (reads §1's kind) → §2 → §4 → §3 (after FI-02 edit 5 and S2-A edit 5)"): B25.08 (POINTER, placed before S2C's first item, `_part2` §5.6) → B25.09 → B25.10 → B25.11 (the same predicate, U-10) → B25.12 (POINTER) → B25.13 → B25.14; B25.02 → B25.14 (the `interview` row's formation first). U3 §1.2's member order (S2A → S2B → S2C → S2A edit 2 with MC's pair → FI08 → S2D): B25.14 → B25.15 → B25.18 (FI08 §3's conditions read) → B25.19 → B25.20 → B25.21; B25.99 last.
+  With other batches, by file (U3 §5.1 rows, v12 landing order): `world_q.py`, `person_q.py`, `verb_table.yaml`, `rosters.yaml`, `fixtures.py`, `effects_information.py`, `options.py`, `sigma.py`, `data/verbs.py` (hot files): B24 → (B20 in S16) → B25 → B26 → B27 → B28; `loop/predicates.py` B04 → B09 → B21 → B25 → B32 (`_req_interrogate`: B21's A-23 clause, if B21 wrote one, lands first, then B25.10 and B25.11); `epistemic.py` B11 → B25 → B27 (FI08 §1 is the Thread lane's, B35; B25 edits no `epistemic.py` line); `loop/witness.py` (the told deposit, a serial instrument file's neighbour `_told_value`, C3-K1) B24 → B25 → B26 → B28; `knots.py` B03 → B25; `engine/season/hole_register.yaml` (permanent surface): rows edited in place, merged in §2.1's order.
+PARALLEL: S16 with B11F1-flow-se (SE), B20-mb-orders (MB), B27-sc-proceedings (SC), B37-happenings (IN). Shared files: with B20, `rosters.yaml`, `data/fixtures.py`, `data/verbs.py`, `seam/wrappers/sigma.py` (different keys and functions: B20's `window_responses`, `observation_terms`, `believed_field_samples`, `field_aftermath`, `CHOICE_RANGES`, `believed_chance`); with B27, the case file's stages and `speak`/`determine` rows (B27 edits `determine`'s and the arrangement rows; B25 edits `determine`'s `referent_class` only, B25.03: the coordinator checks the row by key at the step's open, `V12_STRUCTURE_part3.md` §7.3, and serialises the pair if both edit one row); with B37, `verb_table.yaml` and `options.py` by key. Merge order by §2.1: B11F1, B20, B25, B27, B37; B25 rebases on B20's merge, takes its after-reading as baseline, re-pins once in B25.99 (§7.4).
+
+| pos | item | source | state | hash | gates on |
+|---|---|---|---|---|---|
+| B25.01 | the oracle fails loudly | FI08 §2 | BUILD | EQUAL | — |
+| B25.02 | `interview` forms only on a person who is present | S2A edit 5 | BUILD | MOVER(behaviour) | Batch B11 (B11.08) |
+| B25.03 | a docket class: `speak` and `determine` form on a docketed matter | S2A edits 1, 3 | BUILD | MOVER(behaviour) | B25.02 |
+| B25.04 | a person knows the seats over his home; swearing to a seat is drawn | S2B §4 | BUILD | MOVER(behaviour) | Batch B11 (B11.08) |
+| B25.05 | a petition goes to a seat-holder | S2B §3 | BUILD | MOVER(behaviour) | B25.04 |
+| B25.06 | `utter` says what he holds, and whether he is believed is drawn | S2B §1 | BUILD | MOVER(behaviour) | B25.05 |
+| B25.07 | the moved B11.74 arm: a Proposition uttered after a winning `reconstruct` | `19_LACUNA_conclusion_is_a_committed_assertion` gate 1 | READING | — | B25.06; Batch B11 (B11.74) |
+| B25.08 | the person questioned answers by his own act | CP-T06-05 (intake `:476`) | POINTER | — | B25.14 |
+| B25.09 | the case file carries the charge | S2C §1 | BUILD | MOVER(behaviour) | B25.03; Batch B24 (B24.01) |
+| B25.10 | a confession on file, by degree | S2C §5 | BUILD | MOVER(behaviour) | B25.09 |
+| B25.11 | `interrogate` asks whose custody and whose duchy | H-313 (intake `:284`; CF-E8-3) | BUILD | EQUAL | B25.10 |
+| B25.12 | `speak`: evidence sets the odds, the band sets what enters | S2C §2 | POINTER | — | Batch B24 |
+| B25.13 | a telling's odds the hearer sets | S2C §4 | BUILD | EQUAL | B25.06 |
+| B25.14 | `interview`: a draw to engage, then the questioned answers | S2C §3 | BUILD | MOVER(behaviour) | B25.02, B25.13 |
+| B25.15 | a Record sub-kind class; `research` keeps its bare pair | S2A edit 2 with MC's `research` pair | BUILD | MOVER(behaviour) | B25.03 to B25.14; Batch B12c |
+| B25.16 | `construe`: a reading of an order, drawn | S2B §2 | BUILD | MOVER(behaviour) | B25.15 |
+| B25.17 | a construal is citable beside the terms | `IS-B2-SC-07` step (1) | BUILD | EQUAL | B25.16; Batch B24 |
+| B25.18 | the reader first, then the producer | FI08 §3 | POINTER | — | B25.19 |
+| B25.19 | `tie`: a chosen bond, drawn for; `knot` handed on | S2D edits 1–3, 6 | BUILD | MOVER(behaviour) | B25.14, B25.13 |
+| B25.20 | a tie weighs the teller, behind `tie_gain` at 0 | S2D edit 4 | BUILD | EQUAL | B25.19 |
+| B25.21 | the verb table's count | S2D edit 6 | READING | — | B25.19 |
+| B25.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | MOVER (the re-pin) | B25.01 to B25.21 |
+
+Not in this batch, and where each is: FI08 §1 and §4 (handed to the Thread lane, B35, A-28); S2D's `knot` half (B35); S2A edit 4 (`tell`'s formation is `08_FI_02` edit 5, landed in B11.08; "No second edit here"); S2C §2 (B24; U-2); IS-B2-SC-07 step (2) and its named test (B27; U-9); `19_LACUNA_questioning_has_an_approach_and_a_cost` (the `approach` source S2C §3 reads at `interview.pressed`: B26.01); `28_CORE_scene_access_A`–`C` (A-63/A-64's occupancy and precedence: B28, B38); `IS-B2-SC-05` (`covenant` opens a negotiation: B28); CR-61's rest (B24a; U-4); the `comply` / `evade / defy` reading of the construer's Proposition (S2B §2's last bullet: "Named for the owning lane", B28).
+
+### B25.01 — the oracle fails loudly · FI08 §2 · BUILD · HASH EQUAL
+- SOURCE: FI08 "Edits and decisions" 2 (copied), "Gate" §2, named test; closes R-50 of `audits/08_FI_audit_addendum_B.md` (the 2026-08-08 churn audit's D6 second layer).
+- ADVANCES: none of the nine; the oracle that FI's port validates against cannot hide a failed import (CLAUDE.md §7).
+- INSTRUCTION (copied): "Delete both `try/except` wrappers in `knots.py`. An oracle whose callee cannot be imported should raise; `engine/tests/test_knots_ed912.py` then observes the lateral calls it asserts on." The two wrappers are the `try:` / `except (ImportError, AttributeError): pass` pairs in `systems/fieldwork/sim/knots.py` (at `9700714`: `try:` at lines 348 and 374, `except` at 365 and 378; cited by symbol at the open, the enclosing functions named in the commit body).
+- WHERE: `systems/fieldwork/sim/knots.py`; NEW `engine/season/tests/test_knots_season_form.py`.
+- TESTS: `test_knots_season_form.py::test_the_oracle_raises_on_a_failed_lateral_import`, written first, red ("with the conviction module's name misspelt on purpose the same test errors where today it passes", monkeypatched in the test); `engine/tests/test_knots_ed912.py` green.
+- FALSIFIER and CONTROL: a misspelt lateral module that the oracle swallows. Control: `engine/tests/test_knots_ed912.py` green before and after; realm hashes unchanged (the oracle is unplugged from the season).
+- GATE: `python -m pytest engine/season/tests/test_knots_season_form.py engine/tests/test_knots_ed912.py -q` → pass.
+- HASH MOVERS: none ("§2 none").
+- DEPENDS ON: EXISTS-IN-TREE `systems/fieldwork/sim/knots.py` (the two wrappers), `engine/tests/test_knots_ed912.py`.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B25's `valoria-author` producer, `isolation: worktree`; `Item: B25.01`, `[skip ci]`.
+
+### B25.02 — `interview` forms only on a person who is present · S2A edit 5 · BUILD · HASH MOVER(behaviour)
+- SOURCE: S2A "Exact edits, by owner" 5 (copied), "Order of landing", "Gate", "Falsifier"; rulings A-63 (an `interview` is a visit), A-64; closes the `interview` half of `audits/14_VERBS_SOCIAL2.md` §7 (14 of 19 refused on a non-person; one self-interview).
+- ADVANCES: R-03 (fewer scenes spent on acts the fold refuses for a reason the actor could read); FI standalone.
+- INSTRUCTION (copied): "`verb_table.yaml` `interview`: `referent_class: Person`; `counterparty: subject` (the existing person-side self decline, `opening_set`); `requires_typed: {all: [{form: existence, of: subject, kind: Person}, {form: relation, of: subject, relation: with, conjunct: present}]}`; `emits_on_refusal: {present: [interview.refused], …}` (S2-C renames the kinds; until then `finding.none`)." "`decision/options.py::opening_set`: a row whose typed cell carries a `relation: with` conjunct on `subject` forms only on subjects in `person_q.present_persons(p.ledger, p.id)` under the `telling_hearers: seen_since_move` arm (FI-02's reader and fixture; at `known`, today's behaviour). Read off the row's cell, never the verb name." Standing (S2A): "An `interview` is a visit: it occupies its interviewee for the round [lap] (A-63)" — the occupancy itself is `28_CORE_scene_access_A`'s (B28); "round" corrected to "lap" (A-101).
+- WHERE: `engine/season/verb_table.yaml` (`interview`); `engine/season/decision/options.py` (`opening_set`); NEW `engine/season/tests/test_vm_s2_a_formation.py`.
+- TESTS: in the new file, written first: `test_interview_forms_only_on_a_present_person` `[ASSUMPTION: test name; the item creates it]` (hand-built: a seat-holder knowing a present person, an absent person, a rung and a Record: `interview` forms on the first only; no self-subject); and the gate's reading function `test_s2a_refusals_and_executions` (S2A Gate, written now and extended by B25.03 and B25.15: "per verb: attempted, executed, refused by deciding read … over `harness/aperture.py`'s per-verb counts (`verb_counts`)"; this item's arm: "`interview` on `exists:Person=0`, and self-subject 0", and "executions of … `interview` … not lower than the baseline" — the baseline re-read on the batch's base and quoted (C3-N27: the source's `4/5/5` was read before B01)).
+- FALSIFIER and CONTROL: an `interview` formed on a rung, a Record, a Proposition or an absent person. Control: `telling_hearers: known` reproduces the pre-item formations (`reading @<sha>`, the step's base).
+- GATE: `python -m pytest engine/season/tests/test_vm_s2_a_formation.py -q` → pass; executions of `interview` at seeds 0–2, one season, not lower than the base reading ("A fall is the stopping rule (CP-T05-04's AM-A-09 rule): revert that edit").
+- HASH MOVERS: "A declared hash mover in every world (the refusal Events and their WITNESS deposits stop)." B25.99.
+- DEPENDS ON: V12 B11.08 (`08_FI_02` edit 5: `person_q.present_persons`, the `telling_hearers` fixture; not in the tree at `9700714`); EXISTS-IN-TREE `decision/options.py::opening_set`.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `medium` (S2A's tier line).
+- LANDS IT: B25's producer; `Item: B25.02`, `[skip ci]`.
+
+### B25.03 — a docket class: `speak` and `determine` form on a docketed matter · S2A edits 1, 3 · BUILD · HASH MOVER(behaviour)
+- SOURCE: S2A "Exact edits, by owner" 1 and 3 (copied), "Gate", "Falsifier"; ladder step 4 (REM-24, CP-T05-04's `Person` class); closes the `speak`/`open_case` halves of `audits/14_VERBS_SOCIAL2.md` §3, §5 (`speak` 7 of 8 refused `exists:DocketItem=0`; `open_case` 3 of 11 on the `write` clause).
+- ADVANCES: R-03; R-04.a (`open_case`, `determine` form where they can execute).
+- INSTRUCTION (copied):
+  1. "`engine/season/rosters.yaml: referent_classes` gains `Matter`: *a matter on the docket the person saw docketed or was asked to sit on; stamped by `docket_question` and the sitting question; the referent's id is the party (a person), so `determine`'s `party` conjunct reads it unchanged.*" (appended at the end of the roster's values.)
+  2. "`engine/season/queries/world_q.py::docket_question` and the sitting-question loop in `questions_for`: carry the matters as `classes` `(m, "Matter")` **instead of** plain `referents` (the Question keeps `about`; `referents` is `()` for these two questions). The docstring's limits (2) and (3) are deleted as resolved; the REVERT line becomes: *restore plain referents and delete the two `referent_class: Matter` columns*."
+  3. "`engine/season/verb_table.yaml` `speak` and `determine`: `referent_class: Matter`, with a note citing this proposal and the measurement. `speak`'s `subject_may_be_self` is unchanged (the accused's own docket question carries himself as `Matter`)."
+  4. Edit 3, `open_case`: "No row edit: edit 1 removes its docketed formations" ("`own_referents_of_class` stamps a question's plain referents only … its body is `_of_stamped_class(w, q.referents, classes)`"; re-read at the open and the line quoted in the commit body).
+  5. Glossary: row *matter* (add or edit): "a matter: a case on the docket, as a matter before a court is"; owner `rosters.yaml: referent_classes` `Matter`.
+- WHERE: `engine/season/rosters.yaml` (`referent_classes`); `engine/season/queries/world_q.py` (`docket_question`, `questions_for`'s sitting loop); `engine/season/verb_table.yaml` (`speak`, `determine`); `engine/season/tests/test_vm_s2_a_formation.py`; `unified/U1_GLOSSARY.md` (*matter*).
+- TESTS: `test_vm_s2_a_formation.py::test_speak_and_open_case_partition_the_docket` (S2A Falsifier: "A hand-built world with one docketed party P and one undocketed person Q, both known to a seat-holder: `speak` forms on P and not on Q; `open_case` forms on Q and not on P"), written first, red; `test_s2a_refusals_and_executions` gains: "refusals 0 for: `speak` on `exists:DocketItem=0`; `open_case` on clause `write`", executions of `speak`, `open_case` not lower than the base reading.
+- FALSIFIER and CONTROL: "If any of these forms on the other, the partition is not carrying the class." Control: the base reading of `speak`, `open_case` executions (`reading @<sha>`).
+- GATE: `python -m pytest engine/season/tests/test_vm_s2_a_formation.py -q` → pass; `python -m engine.season.harness.aperture 1 s`, s = 0, 1, 2 → the two refusal counts 0, executions not lower ("A fall is the stopping rule … revert that edit").
+- HASH MOVERS: declared, every world (refusal Events stop). B25.99.
+- DEPENDS ON: EXISTS-IN-TREE `world_q.docket_question`, `::questions_for`, `::own_referents_of_class`, `state/carriers.py::Question` (`classes`, IN-53 D1); V12 B25.02.
+- GLOSSARY: *matter* (step 5).
+- COST and TIER: edit; `sonnet`, `medium`.
+- LANDS IT: B25's producer; `Item: B25.03`, `[skip ci]`.

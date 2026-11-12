@@ -93,9 +93,6 @@ Words, paths and the batch block's head lines are the part's own; nothing here r
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B12c's producer; `Item: B12c.22`, `[skip ci]`.
 
-| B12c.23 | READING — G-05's gate: a founding and a building by a computed actor | Readings block, reading 1 |
-| B12c.24 | READING — `17_CENSUS_C1A_02` W2's closing gate for `found`, `build` | Readings block, reading 2 |
-
 ### B12c.25 — `craft`: goods made from goods, withheld · CP-T08-04 (AM-E-15) · BUILD · HASH EQUAL
 - SOURCE: the intake `:319` (CP-T08-04; carry-forward E1 "### CP-T08-04" (`:1379-1404`); E4 `:1503-1506` "RESEQUENCE · AM-E-15" (released: "ED-IN-0297 is closed … works are authored as `venues.yaml` `planned_works:` rows … `smithy`/`mint` Sites are built by `build` on that row"); E5 C14 "after `14_VERBS_MATERIAL_C`"; `07_SE_capability_rate_B` §4 (b) ("`craft` (CP-T08-04) become[s a] task row under 18-A"); UNDECIDED (6); closes CP-T08-04.
 - ADVANCES: R-04.c6 (city building: goods made); none at the control.

@@ -137,3 +137,231 @@ Not in this batch, and where each is (each member's parts are dispositioned once
 - COST and TIER: small build (harness); `sonnet`, `high`.
 - LANDS IT: B40's `valoria-author` producer, `isolation: worktree`; `Item: B40.01`, `[skip ci]`.
 
+### B40.02 — one report for every institution · SYN-D §1, §3 with BYZ-F edits 3, 5 and COL-E's report · BUILD · HASH EQUAL
+- SOURCE: SYN-D "The resolution, decided" §1 ("The report is one module"), §3 "The report" (the table and `--bands N`); `proposals/15_INSTITUTIONS_BYZANTINE_F_playable_scenarios_and_reading.md` "Exact edits" 3 (the seven lines) and 5 (`--bands N`); `proposals/15_INSTITUTIONS_COLONIAL_E_scenario.md` "The report"; `proposals/15_INSTITUTIONS_VENICE_D_houses_charters_and_content.md` "Exact edits" 5 (its readings are rows of this report); C3-C12; closes VEN-D edit 5 (no `counting_house.py`).
+- ADVANCES: none of the nine; the legibility half of the standing requirement for the four institutions; A-80's instrument for the four scenarios.
+- INSTRUCTION:
+  1. NEW `engine/season/harness/institution.py` (SYN-D §1, copied): "`python -m engine.season.harness.institution <case> <seasons> <seed> [--bands N]`, output to a path the caller gives. Read-only; `harness/strife.py`'s kind; no assertion that a story occurs; not a guard and not a standing corpus." The path is `--out PATH`, required `[ASSUMPTION: flag name; the source says only "a path the caller gives"]`. No default for seed or seasons (the file sits inside `tools/ci_sim_fabrication_check.py`'s scope, B21.72's precedent). It builds and runs the case through B40.01's `situated` and the one loop (`scenarios.run`, or `play` if it owns its loop), the shipped chooser in every seat unless a policy is named.
+  2. The lines (SYN-D §3, copied): "One line per reading, each a fold over `w.log`, `w.tenures`, `w.records`, `Rung.stores` and, for the person-side readings, a named person's own ledger. A line whose subject does not exist in the world is omitted."
+
+     | line | read from | from which family reading |
+     |---|---|---|
+     | `treasury` — stores, the bill due this year, the shortfall, per paying seat | `Rung.stores`; `upkeep_owed`; termed `oblige` edges | BYZ-F |
+     | `sworn` — renewed, matured, live, per paying seat | `term.renewed`, `term.matured` | BYZ-F |
+     | `collected` — rendered, taken, partial, resisted, per place, each with its term list | `requisition.*` Events | BYZ-F; COL-E |
+     | `carried` — transfers between places by band and what arrived | `transfer.*` Events | COL-E |
+     | `dignities` — held, conferred, resisted, provisional | `tenure.opened` on dignity rows; `appointment.resisted` | BYZ-F |
+     | `hands` — entered, held over, returned by a clerk, returned by the clock, per body or seat; the busiest hand's share | `document.*` Events; "returned by the clock" read when read (an unentered `hand:` stage whose due has passed; BYZ-C as reconciled) | BYZ-F |
+     | `instruments` — per live instrument: form, parties, `dues` stamped, acts occasioned by one, `kept` as each party reads it | `dues`; `occasioned_by`; `person_q.kept` | COL-E |
+     | `bonds` — minted, reckoning by band, extended, lapsed, handed on; the largest share of a bench with a live edge to one person | `debt` Records; the lapse read from `world_q.owed` after the last stage's `term.matured` (VEN-B; no `debt.lapsed` kind); `record.given`; `owed_to` | VEN-D |
+     | `lists` — per list seat: enrolled, lapsed by term; `lot.seen`, `lot.empty`; council holders in order | `oblige` Tenures; `lot.*` | VEN-D |
+     | `seats` — per faction named: who holds which seat; each `confer`, `revoke`, `succeed` with its band, its `Act.via` and its term list | `tenure.*`; the contest Events | PAP-F; BYZ-F |
+     | `certificates` — Records carrying `recites`, by keeper; tellings of recited deeds by keeper; the mean chain term of `legitimacy` per founding seat | `w.records`; `tell` Events citing a held Record; `person_q.legitimacy` over the cast | SYN-B gate 4 |
+     | `sanctions` — sentences by band; writs published and their `force`; answers by band; releases by excused and unexcused men | `ban.opened`; `dispensation.issued` of form `avoidance` or `interdict`; `compliance.*`; `tenure.closed` on `oblige` | PAP-D |
+     | `hearings` — per arrangement row: opened, by whom, bench, proofs weighed, band | `case.opened`; `determine` Events | COL-E; PAP-F |
+     | `commensuration` — the roll routes used; bands seen per verb; term names seen; matter kinds moved; maturations on each of the two clocks | the Events' own records | audit §7.6 |
+     | `conflicts` — the readings of audit §6, each as a count and the chain that made it | the folds named there | audit §6 |
+
+     (SYN-D's first line reads `fisc`; it is `treasury`, the U4d rename, as BYZ-F edit 3's own example line is.) Added from BYZ-F edit 3, the one line SYN-D's table lacks: "`accession     claimed 0 · contested 0 · provisional 0 ;  recall  closed 0 · resisted 0`". The print form is BYZ-F's, e.g. "`treasury          <rung>: grain 2 · bill due this year 5 · shortfall 3     (default_store_kind)`", "`sworn         renewed 1 · matured 1 · live 3            (per paying seat)`".
+  3. Added from COL-E "The report" (lines the table above does not already carry): "the establishment of the conferred seat against the grantor's local establishment" (`world_q.establishment_of`); "petitions filed naming the seat or its holder; residence changes out of the ground" (`petition.filed`, `residence.changed`); "levies attempted through the conferred seat, each with its band and term list" (Events of `requisition.*` with `Act.via` the seat), as `collected`'s per-seat split.
+  4. `--bands N` (SYN-D §3 with BYZ-F edit 5): "runs the case at seeds `0..N-1` under the shipped chooser and prints, for each drawn verb, the frequency of each band beside the control (a task row under `task_draw_arm: off`; a contest row under the pinned roll). It asserts nothing." BYZ-F: "for each drawn verb (`confer`, `revoke`, `carry`, `requisition`, `succeed`)". "No test file is added for the report (CLAUDE.md §0.1 pt 5: its subject is the game's draws and its reader is a person deciding a tuning value)."
+  5. Three arms every family gate reads, each an option of the one report: `--pin-rolls BAND` (the planted failure of SYN-D gate 5 and COL-E gate 5: every roll at `BAND`, through `23_STORY_D` edit 3's wrapper, imported); `--hold BAND` (the A-80 arm, U15: the same wrapper on contested draws only, with a per-seed, per-season line "the count of acts whose question cites an Event of the case's named party or an instrument of the case", read off each executed act's question referents through the reason trail; "The count is the story census's instrument (`23_STORY_D`, the entrenched-world arm); this gate reads it, it does not define it"); `--control` (SYN-D gate 4: the case's `setup.instruments` emptied and the realm's `seeded:` rows absent, through SYN-A's own switch if B32 shipped one, else a scoped override restored in `try/finally`, B21.72's `SUCCESSIONS` precedent; every fixture at control).
+- WHERE: NEW `engine/season/harness/institution.py`; `references/ci_checks_registry.yaml` is not edited (an instrument, not a check).
+- TESTS: none new for the report (SYN-D's own sentence, quoted above); the accretion pass keeps the module: its caller is the plan's named invocation (every family gate in this batch) and `headless` in the player's seat.
+- FALSIFIER and CONTROL: "A report line that cannot name the `Act.via` of a conferral or the clause of a `due`" (SYN-D Falsifier). Control: running the report changes no hash: `content_hash` after `institution INST-01 2 0` equals the same case through `scenarios.run` (or `play`) with no report (a reader writes nothing).
+- GATE: `PYTHONHASHSEED=0 python -m engine.season.harness.institution INST-BYZ-ROGA 1 0 --out <scratch>` exits 0 once B40.04 lands (read there); here: `python -c "import engine.season.harness.institution as m; print(m.__doc__.splitlines()[0])"` → the module imports; on a planted spine world with no instrument, the `instruments`, `bonds`, `certificates` lines are omitted (`[ASSUMPTION: read by a one-line script in the commit body; no test file, per the source]`).
+- HASH MOVERS: none (harness).
+- DEPENDS ON: V12 B40.01; V12 Batch B36 (`--pin-rolls`); V12 Batch B07 (`task_draw_arm`); V12 Batches B32, B33 (`dues`, `kept`, `owed`, `debt`, `lot.*`, `document.*`, the `hand:` stage, `recites`); V12 Batch B09 (the reason trail, `ActStore.scene_of`); EXISTS-IN-TREE `harness/strife.py` (the kind), `queries/world_q.py::establishment_of`, `queries/person_q.py::legitimacy`, `data/fixtures.py` `default_store_kind`.
+- GLOSSARY: *treasury* (the line's name, the U4d loan-word row: "fisc" rejected).
+- COST and TIER: small build (harness); `sonnet`, `high`.
+- LANDS IT: B40's producer; `Item: B40.02`, `[skip ci]`.
+
+### B40.03 — "The King's Bill", the integrated scenario, and its eight endings · SYN-D §2, gates 1–8, with BYZ-F edit 4 · BUILD · HASH EQUAL
+- SOURCE: SYN-D §2 "The scenario: 'The King's Bill'" (the case, the shown, the chosen table, the seats, the three cuts), "Gate (execution artifacts)" 1–8, "Falsifier"; BYZ-F "Exact edits" 4 (`court_lapsed`, `court_kept`); rulings A-80 (gate 8), A-12, A-14; C3-C12.
+- ADVANCES: none of the nine; the integrated playable of the institutions (every crossing of audit §5.2 played, not designed).
+- INSTRUCTION:
+  1. NEW `engine/season/cases/exercises/INST-01.yaml`, SYN-D's case, copied (with `seats:` as U4 decides at B40.01):
+     ```yaml
+     id:    INST-01
+     base:  realm
+     setup:
+       seats:
+         - {id: off_house_case_lender, post: "Family Head", rung: {venue: "<the guildhall NPC-007 is homed in>"},
+            body: null, faction: "Guilds", remit_acts: [issue, confer], conferral: null, revocation: null,
+            holder: "NPC-007"}                                   # until batch I-8 authors it in offices.yaml
+       instruments: []                                           # the realm's own seeded rows (I-3): two `homage`, one `immunity`
+       stores:
+         r_valoria:        {grain: 4}                            # the treasury: less than the year's bill   [ASSUMPTION; sweep ×{0.5, 1, 2}]
+         duchy_hafenmark:  {grain: 12}
+         duchy_varfell:    {grain: 12}
+         terr_T9:          {grain: 10}                           # inside the immunity
+         set_s_012:        {grain: 12}                           # Stillhelm
+         <the lender's hearth>: {grain: 10, salt: 6}
+       prehistory:                                               # each through the fold, pinned
+         - {actor: <two cast persons with a deed the King holds a claim of>, verb: oblige, subject: off_king}
+         - {actor: NPC-020, verb: confer, subject: off_dignity_2a, to: <the first>,  cites: <his deed>}
+         - {actor: NPC-020, verb: confer, subject: off_dignity_3a, to: <the second>, cites: <his deed>}
+     seats_offered:  [off_king, off_duchess_hafenmark, off_house_case_lender, <a hearth head of set_s_013>, off_cardinal_justice]
+     ends:           [court_kept, court_lapsed, bond_met, bond_lapsed, audit_determined, sentenced, no_seat, season_count]
+     span_seasons:   8
+     ```
+     "Stores are in `default_store_kind` (audit X-30). Every number is `[ASSUMPTION]` content with a sweep; the only requirement on them is that the treasury is short of the bill and the other chests are not." The angle-bracket entries are resolved at the item's open from the B39 realm and named in the commit body: the guildhall NPC-007 is homed in; the two cast persons with a deed the King holds a claim of (read from the realm's ledgers after B39's prologue); the lender's hearth; a hearth head of `set_s_013`. If B33's VEN-D content already authored `off_house_case_lender` in `offices.yaml` ("until batch I-8 authors it"), the case's `seats:` row is dropped and the commit says so. `off_dignity_2a`, `off_dignity_3a` are BYZ-A's dignity seats (B32); if they bear other ids there, the case names them.
+  2. The eight endings, each in `CASE_ENDS` (B40.01, U7), a pure reader over `w.tenures`, `w.records` and `w.log` for the player's seat `seat`:
+     - `court_lapsed` (BYZ-F edit 4): "of the terms ever sworn to the player's seat, more than half have matured unpaid."
+     - `court_kept` (BYZ-F edit 4): "the season count is reached and none has."
+     - `bond_lapsed`, `bond_met`: a `debt` Record to which the seat's holder is a party has its last stage's `term.matured` with `world_q.owed` above 0 (lapsed) or at 0 (met) (the report's `bonds` line: "the lapse read from `world_q.owed` after the last stage's `term.matured` (VEN-B; no `debt.lapsed` kind)") `[ASSUMPTION: definition; SYN-D names the ending only]`.
+     - `audit_determined`: a `determine` Event under the `audit` arrangement row (COL-E's ending "an `audit` is determined") `[ASSUMPTION]`.
+     - `sentenced`: a `ban.opened` whose subject is the seat's holder (SYN-D's consequences row, "an excommunicated king") `[ASSUMPTION]`.
+     - `no_seat`: FA-P4's "the player holds no seat (`w.seat_holds(player)` empty)".
+     - `season_count`: the season count is reached.
+  3. The three cuts (SYN-D, copied): "| 1 | tax, borrow, leave unpaid, honour | I-1 to I-4 | · | 2 | the farm and its audit; writs through the Ministries' hand | I-5, I-7 | · | 3 | the levy in Himmelenger, the sentence, the answers; a suit before a Church bench | I-6 (the Church on its ground), I-7 |". In the suite's one order I-1 to I-8 are B32 and B33 (SYN-E's mapping), so all three cuts are live at B40's base: the gates below read cut 3.
+- WHERE: NEW `engine/season/cases/exercises/INST-01.yaml`; `engine/season/harness/governance_spine.py` (`CASE_ENDS`: eight readers).
+- TESTS: in `engine/season/tests/test_governance_spine_play.py`, first, red (no readers): `test_court_lapsed_reads_a_planted_majority_of_matured_unpaid_terms`, `test_court_kept_reads_none_matured_at_the_count`, `test_bond_lapsed_reads_owed_above_zero_after_the_last_stage` `[ASSUMPTION: test names; the item creates them]`, each on a planted log.
+- FALSIFIER and CONTROL (SYN-D, copied): "A scenario whose opening state the fold could not produce (a set-up act refused). An ending reached at the control arm with the same frequency and by the same chain as at the live arm: the instruments did nothing. A report line that cannot name the `Act.via` of a conferral or the clause of a `due`. The scenario needing any act the season loop cannot form." Control: gate 4 and gate 6 below.
+- GATE (SYN-D's, at `PYTHONHASHSEED=0`, seeds 0 to 9, **two seasons** ("eight seasons" in the source; A-114), the shipped chooser in every seat; each a run of `python -m engine.season.harness.institution INST-01 2 <seed> --out <path>` with the arm named):
+  1. "The bill is met in more than one way. Across the seeds at least three of the six ways in the table are attempted by the King's seat-holder, and at least two different `ends` are reached." At two seasons the ways attempted are asserted; the endings are reported against the source's eight-season span and not asserted (U13).
+  2. "A crossing occurs. In at least one seed-season an act by a person who is not the King is `occasioned_by` an Event of his: a duke's `petition` or `release`, the house's `give` of the bond, a hearth's `migrate`, a churchman's `open_case`."
+  3. "The two parties to one instrument disagree somewhere (`15_INSTITUTIONS_COLONIAL_E` gate 2): in at least one seed-season the two readings of `kept` on one instrument differ."
+  4. "Control. The same seeds with the realm's `seeded:` rows absent, the case's instruments absent and every fixture at control: no `dues` stamped, no `breaches` offered, and `content_hash` equal to the base realm's after the same stores delta." (`--control`.)
+  5. "Planted failure. Every roll pinned to Success: gates 1 to 3 must then give one ending and one chain at every seed. If they still vary, the variety came from somewhere other than the draws and the reading is void." (`--pin-rolls Success`.)
+  6. "One code path. `content_hash` of each all-NPC run equals `populated.run` on the same world after the same tick-0 acts."
+  7. "Playable by a person. At `harness/headless.py` in the King's seat, four policies (tax hard; borrow and pay; borrow and default; farm and neglect) reach different endings on some seed, and any two of them are told apart by their distribution of endings over twenty seeds each. Manual; the close's reading, not a test's." At two seasons; reported against the eight-season span (U13).
+  8. "Entrenchment moves the world (A-80; C3-C12). An arm in which every contest resolves at its control band, so every position holds … The report prints, per seed and season, the count of acts whose question cites an Event of the King's or an instrument of the case (a petition, a `tell`, a `migrate`, an `evade / defy`, a `release`). Expected reading: non-zero in every seed and rising while the bill stays unmet … Control: the same seeds with the case's instruments absent." (`--hold Failure`, U15; the control `--hold Failure --control`.)
+  Every gate over a draw states its share over the named seeds with `assert checked >= 10` in the reading script quoted in the commit.
+- HASH MOVERS: none (a case file and harness readers; the realm build is unchanged).
+- DEPENDS ON: V12 B40.01, B40.02; V12 Batches B32, B33 (the kit's forms, `dues`, `kept`, `breaches`, `owed`, the `homage` and `immunity` seeded rows, the `audit` row, BYZ-A's dignity seats, the `debt` Record, the Ministries' hand); V12 Batch B39 (the prologue, the realm's ledgers); V12 Batch B21b (IN-36's march cap, the `march` way of a duke's answer); V12 Batch B24a (CR-60, CR-61: a Church bench that judges, cut 3); EXISTS-IN-TREE `off_king`, `off_duchess_hafenmark`, `off_cardinal_justice` (`engine/season/offices.yaml`).
+- GLOSSARY: none new (*scenario*, B40.01).
+- COST and TIER: small build (a case file, eight readers); `sonnet`, `high`; one `opus` read of gates 1 to 3 and 8 (SYN-D's implementation block).
+- LANDS IT: B40's producer; `Item: B40.03`, `[skip ci]`.
+
+### B40.04 — `roga`: a court that cannot pay · BYZ-F edit 1, gates 1, 3, 4, 5 · BUILD · HASH EQUAL
+- SOURCE: `proposals/15_INSTITUTIONS_BYZANTINE_F_playable_scenarios_and_reading.md` "The resolution, decided", "Exact edits" 1 (`INST-BYZ-ROGA.yaml`), "Gate" 1, 3, 4, 5, "Falsifier"; rulings A-21, A-80; C3-C12; closes F-FA-07 for the court ("there is no FA scenario, digest or end condition").
+- ADVANCES: none of the nine; the Byzantine family's first standalone (the court, the treasury).
+- INSTRUCTION:
+  1. NEW `engine/season/cases/exercises/INST-BYZ-ROGA.yaml` (`base: spine`; "its set-up acts are `setup.prehistory`"). "On `build(seed)`'s thirteen seats, with the player at `lr_realm`'s seat", the set-up acts in order (BYZ-F, copied):
+
+     | set-up act (in order) | by | makes |
+     |---|---|---|
+     | `establish` × 4 at the realm rung, rows `dignity: 4, 3, 3, 2`, `upkeep: 3, 2, 2, 1`, `body: null`, faction `faction x` | the Sovereign's seat | four dignity seats |
+     | `transfer` of 1 unit of `default_store_kind` from his hearth to the realm rung, then `oblige` to the Sovereign's seat | each of the two Dukes | two real deeds (`transfer.made`) the Sovereign holds claims of; two termed oaths (`oblige_term`: mature in season 4) |
+     | `transfer` of 2 units of `default_store_kind` to the realm rung, and no oath | the Count of chain `a` | a larger deed that no dignity cites, by a man not sworn |
+     | `confer` of the grade-4 and one grade-3 seat, each citing that Duke's gift | the Sovereign's seat | two dignities held, two vacant |
+     | stores | the three gifts; the builder's endowment for the duchies | the realm rung holds 4 against a first-year bill of 5; each duchy rung holds 6 |
+
+  2. Site (BYZ-F's two `[UNVERIFIED]` lines, §5.7 SITE): open `loop/predicates.py::_req_establish` and record whether it accepts `dignity` and `upkeep` as founding operands. Branch (a), it does: the four rows are `establish` acts in `setup.prehistory`. Branch (b), it does not: "the four rows are authored … under the case's `setup.seats`, which is data and no branch". Open the spine persons' hearth stores: if a Duke's hearth holds nothing to give, "the case's `setup.stores` seeds them".
+  3. `ends: [court_lapsed, court_kept, no_seat, realm_ended, season_count]` (BYZ-F edit 4's two "beside FA-P4's three": the player holds no seat, `world_q.endings_reached` non-empty, the season count; `court_lapsed`, `court_kept` are B40.03's readers; `realm_ended` is `IS-B2-CORE-02`'s `season_ending` name for `endings_reached`, added to `CASE_ENDS` here as a reader over it); `seats_offered: [<lr_realm's seat>]`; `span_seasons: 8` (BYZ-F's gate 3).
+  4. "*What the player is shown each season* (FA-P4's `offered`, grouped by remit act, plus the digest): the bill and when it falls; the treasury; each sworn man, his grade, his term's maturity and his regard as the player's own ledger gives it; the persons whose deeds the player holds and who hold no dignity; the candidates `requisition` (per duchy, with the amount his shortfall claim names), `transfer` (per payee), `confer` (per vacant row and known deed)." No code: `offered` (B21.72, or `IS-B3-FA-02`'s replacement at B34) and B40.02's lines print it.
+- WHERE: NEW `engine/season/cases/exercises/INST-BYZ-ROGA.yaml`; `engine/season/harness/governance_spine.py` (`CASE_ENDS`: `realm_ended`); `engine/season/governance_spine.yaml` only in branch (b) of step 2 if the rows cannot be case data (BYZ-F names it as the fallback home).
+- TESTS: none new (BYZ-F: "Named test: none; the gates are runs of … `harness/institution` … quoted in the commit").
+- FALSIFIER and CONTROL (BYZ-F, copied): "Remove the stipend rows' `upkeep`: the `treasury` line's bill reads the default and `court_lapsed` is unreachable at the scripted non-payer if the default is 0; the scenario then has no stakes, which the gate reports as a failure. Plant a situation built by direct assignment (a `hold` appended without the gate): gate 3's hash comparison fails." ("fisc" → `treasury`, U4d.)
+- GATE (`PYTHONHASHSEED=0`; two seasons, A-114):
+  1. "A scripted callback that pays nobody ends `roga` on `court_lapsed`; one that taxes both duchies each season until paid ends it on `court_kept` at some seeds and not at others (collection is drawn), and the seeds are reported; the auto chooser prints a non-empty digest in every season." At two seasons no sworn term has matured (`oblige_term`: season 4), so the two endings are reported against the source's span, not asserted (U13); asserted: a non-empty digest in every season, and the `treasury` line's shortfall above 0 at the non-payer's second season.
+  3. "`content_hash` after eight seasons of `roga` under the auto chooser equals the same world run through `populated.run` with the same chooser" — after two seasons ("eight" in the source; A-114).
+  4. "`institution INST-BYZ-ROGA 8 0 --bands 200`: for `requisition` and `confer`, no band is empty and none exceeds 0.9 in the live arm; the control arm is a single band." Run as `institution INST-BYZ-ROGA 2 0 --bands 200` (A-114), sized and launched in the background (the block's BACKGROUND RUN); `assert checked >= 200` in the reading.
+  5. "Entrenchment (A-80; C3-C12). An arm of `roga` in which every contest resolves at its control band (positions hold: no levy beyond the control, no dignity resisted). The report prints, per seed and season, the count of acts whose question cites the bill, a matured oath or an unhonoured deed (petitions, `release`s, `tell`s). Expected reading: non-zero in every seed (an unpaid court is a referent others act on)." `--hold Failure` (U15), seeds 0 to 4.
+- HASH MOVERS: none (a case on the spine; the realm and the spine's own build are unchanged).
+- DEPENDS ON: V12 B40.01 to B40.03; V12 Batch B32 (BYZ-A: `dignity`, `dignity_grades`; the dignity `confer` draw, BIND_C, B21), V12 Batch B33 (BYZ-B: `upkeep`, `upkeep_owed`, `oblige_term` in use); EXISTS-IN-TREE `harness/governance_spine.py::build`, `governance_spine.yaml` (`lr_realm`), `data/fixtures.py` `default_store_kind`, `oblige_term`.
+- GLOSSARY: none.
+- COST and TIER: small build (a case file); `sonnet`, `high`; one `opus` read of gate 4's band table (BYZ-F's block).
+- LANDS IT: B40's producer; `Item: B40.04`, `[skip ci]`.
+
+### B40.05 — `chancery`: papers waiting in a hand · BYZ-F edit 2, gate 2 · BUILD · HASH EQUAL
+- SOURCE: BYZ-F "Exact edits" 2 (`INST-BYZ-CHANCERY.yaml`), "Gate" 2; rulings A-13, A-21; BYZ-C (B33: a seat as a hand, `passes_through`, `carry`).
+- ADVANCES: none of the nine; the Byzantine family's second standalone (the chancery).
+- INSTRUCTION:
+  1. NEW `engine/season/cases/exercises/INST-BYZ-CHANCERY.yaml` (`base: spine`), BYZ-F, copied: "The spine has no body. One `office_bodies` member is needed for a hand; `faction x`'s fixture cannot invent one (`governance_spine.yaml`'s own header: an invented body 'FORGES canon'). So the hand is a seat (proposal C, edit 1): the case's `setup.seats` gives the Sovereign's row `passes_through: [{seat: lo_territory_a}]`, and the player is the Lord of chain `a`. Set-up (`setup.prehistory`): the Sovereign `issue`s three writs at tick 0 (to the Count of `a`, the Count of `b`, and the Mayor of `a`); the Mayor of `a` files a `petition` addressed to the Sovereign. The writs' terms reach their addressees with the news of issue (A-21); what waits in the hand is the entered instrument." The Sovereign's row is an existing spine row: the case states its `passes_through` as a delta on that row (`setup.seats` / `offices:` per U4, keyed by the row's id).
+  2. "*Shown:* each paper in his hand, its maker, its addressee, its terms, its age and the season it returns; his scene budget. *Chosen:* which to `carry` (a draw each), which to leave." No code (B40.02's `hands` line; FA-P4's `offered`).
+  3. `ends: [no_seat, realm_ended, season_count]` (BYZ-F's table: "recalled, kept, FA's three": recalled is FA-B4's `recall` ending, the player holding no seat, B21.74; kept is the count reached) `[ASSUMPTION: the mapping of "recalled" and "kept" to these readers]`; `seats_offered: [lo_territory_a]` `[ASSUMPTION: the Lord of chain a's seat id is the `lr_territory_a` rung's seat, named at the item's open]`; `span_seasons: 8`.
+- WHERE: NEW `engine/season/cases/exercises/INST-BYZ-CHANCERY.yaml`.
+- TESTS: none new.
+- FALSIFIER and CONTROL: BYZ-F's planted failure for the hand (I-5's, SYN-E): "delete `passes_through` from the court's row (the lag is zero)" → no paper is held over in any seed. Control: `content_hash` of an all-NPC two-season run equals `populated.run` on the same world after the same tick-0 acts.
+- GATE (`PYTHONHASHSEED=0`, two seasons): 2. "A scripted callback that carries nothing ends `chancery` with every writ returned by the clock and, where the Sovereign's `revoke` then forms and draws Success, on FA-B4's recall; one that carries everything it can shows entered, held-over and returned papers across seeds." Seeds 0 to 4; the `hands` line quoted per seed; whether the recall occurs at two seasons is reported, not asserted (U13).
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B40.01, B40.02, B40.04; V12 Batch B33 (BYZ-C: `passes_through`, `hands_open`, `carry` at a hand, "returned by the clock"); V12 B21.74 (`recall`); EXISTS-IN-TREE `governance_spine.yaml` (`lr_territory_a`).
+- GLOSSARY: none.
+- COST and TIER: small build (a case file); `sonnet`, `high`.
+- LANDS IT: B40's producer; `Item: B40.05`, `[skip ci]`.
+
+### B40.06 — The Farm of the Southern Tolls · COL-E scenario 1, gates 1–6 · BUILD · HASH EQUAL
+- SOURCE: `proposals/15_INSTITUTIONS_COLONIAL_E_scenario.md` "Scenario 1 — The Farm of the Southern Tolls" (ground, setup delta, choices, legibility, stakes), "Gate" 1–6, "Falsifier for 'playable alone'"; its first `Reconciled:` line ("the farm's maker in the integrated playable is `off_king` … the conferred seat carries `audit_at_exit: audit`"); rulings A-80; C3-C10, C3-C12; D-U1-11k (`distance`).
+- ADVANCES: none of the nine; the colonial family's standalone, and the integrated playable's second cut.
+- INSTRUCTION:
+  1. NEW `engine/season/cases/exercises/INST-COLONIAL-01.yaml`, COL-E's delta, copied, in SYN-D's case shape (`base: realm`):
+     ```yaml
+     id: INST-COLONIAL-01
+     scale: territory
+     setup:
+       instruments:
+         - form: farm
+           maker_seat: off_lord_treasurer
+           grant_ground: terr_T6
+           to: <a cast case id resident in the capital>      # the farmer; [ASSUMPTION: content]
+           amounts: {advance: 6, rent: 3}                      # units of `default_store_kind`; [ASSUMPTION; sweep ×{0.5, 1, 2}]
+       stores:
+         set_s_012: {grain: 16}                                # until SE's `ground` endowment lands; `coin` has no producer
+         set_s_013: {grain: 7}
+     seats_offered: [the conferred Farmer seat, off_lord_treasurer, a hearth head of set_s_013]
+     ```
+     `base: realm` is added (SYN-D's shape); `scale: territory` is kept only if B39's closed set holds a `scale` key, else dropped and the commit says so. The conferred seat carries `audit_at_exit: audit` (the first `Reconciled:` line). The farmer and the hearth head are named at the item's open from the B39 realm.
+  2. `ends`, from COL-E's three: "the farm's term matures and an `audit` is determined (four bands)" → `farm_audited`; "the Farmer's hold closes before term (recall, release, death, a field)" → `farm_closed_early`; "six seasons elapse (MAX_SEASONS)" → `season_count`; `span_seasons: 6`. `farm_audited` and `farm_closed_early` are readers added to `CASE_ENDS` over the conferred seat's `hold` and the `audit` row's `determine` Event `[ASSUMPTION: the reader names; COL-E states the endings in prose]`.
+  3. The choices are the existing verbs' candidates (COL-E: "each is an existing verb's candidate, so an NPC in the seat chooses among the same"): the farmer's `move`, `requisition`, `survey`, `transfer` (pay his men; send the rent "rolled at `distance` 2"), remit, answer a petition; the grantor's grant, own levy, `dispatch`, open the `audit`, renew; a hearth head's `conceal`, `petition`, testimony, `migrate`, oath. No code.
+- WHERE: NEW `engine/season/cases/exercises/INST-COLONIAL-01.yaml`; `engine/season/harness/governance_spine.py` (`CASE_ENDS`: `farm_audited`, `farm_closed_early`).
+- TESTS: none new (COL-E: "Named test: none; the gates are runs of the report quoted in the commit").
+- FALSIFIER and CONTROL: "A human at `harness/headless.py` in the farmer's seat, offered the season's candidates, can reach each of the four audit endings on some seed by choosing differently (press hard and forge the accounts; press hard and be honest; remit; abscond). If two of those policies cannot be told apart by their outcome distributions over 20 seeds each, the choice is not a choice and the scenario fails. That reading is manual and is the close's, not a test's." Control: gate 4.
+- GATE (COL-E's, "Seeds 0–4, six seasons, `PYTHONHASHSEED=0`, the NPC chooser in every seat", run at **two seasons** (A-114); `institution INST-COLONIAL-01 2 <seed>`):
+  1. "Varied outcomes from one fixture: across the five seeds at least two different audit dispositions occur (counting 'not opened' as one), and at least one levy lands in each of three bands." The levy bands are asserted; the audit dispositions need the farm's term and are reported against the six-season span (U13).
+  2. "The two ledgers disagree somewhere: in at least one seed-season the grantor's and the grantee's `kept` differ in sign or size."
+  3. "Consequence is read downstream: at least one act by a person who is neither party is `occasioned_by` an Event of the farm (a petition, a migration, an oath)."
+  4. "Control: the same seeds with the instrument absent: no Farmer seat, no levy through it, and the realm hash equals the base realm's at each season." (`--control`.)
+  5. "Planted failure: every roll's band forced to Success. Conditions 1 and 2 must then fail; if they still pass, the variety was coming from somewhere other than the draws and the reading is void." (`--pin-rolls Success`.)
+  6. "Entrenchment moves the world (A-80; C3-C12): an arm in which every contest resolves at its control band (positions hold: no levy beyond its control band, no audit determined). The report prints, per seed and season, the count of acts by persons who are neither party whose question cites an Event of the farm (petitions, `conceal`, `migrate`, oaths elsewhere). Expected reading: non-zero in every seed … Control: the instrument absent." (`--hold Failure`, U15.)
+  "Five seeds are five trajectories. No rate, no balance claim, no tuning value is taken from them (CLAUDE.md §0.1 pt 4)."
+- HASH MOVERS: none (a case file; the realm build is unchanged).
+- DEPENDS ON: V12 B40.01 to B40.03; V12 Batch B32 (COL-A: the `farm` form, `dues`, `kept`, `breaches`), V12 Batch B33 (COL-B `distance`; COL-C the `audit` row, `audits_due`; SYN-B's ledger), V12 Batch B12c (`07_SE_valley_scenario`: SE's stores at seat rungs; `07_SE_treasury_granary_B`); EXISTS-IN-TREE `off_lord_treasurer` (`offices.yaml`).
+- GLOSSARY: none.
+- COST and TIER: small build (a case file, two readers); `sonnet`, `high`; one `opus` read of gates 1 to 3 and 6 (COL-E's block).
+- LANDS IT: B40's producer; `Item: B40.06`, `[skip ci]`.
+
+### B40.07 — The Katepano's Latitude · COL-E scenario 2 · BUILD · HASH EQUAL
+- SOURCE: COL-E "Scenario 2 — The Katepano's Latitude", "Landing order for the family" row 7 ("C-5 scenario 2 | E | 3; FA-B1; MB field; ED-IN-0317 | none"); COL-F edit 5's last seeded bullet ("This is what gives the second scenario its hold on the Katepano", B40.25); D-U1-11k.
+- ADVANCES: none of the nine; the colonial family's second standalone (distance and a far governor).
+- INSTRUCTION:
+  1. NEW `engine/season/cases/exercises/INST-COLONIAL-02.yaml` `[ASSUMPTION: case id; COL-E names the scenario, not the file]`, `base: realm` (`build_realm(S, foreign=True)`, the shipped default: `harness/populated.py:1015` `foreign: bool = True`), no `setup` delta beyond "the court seat (`…_B_distance.md` §4)" which COL-B lands in B33 (if B33 shipped it only under a case, the row is this case's `offices:` delta and the commit says so). COL-E, copied: "Seats offered: `off_katepano`, `off_altonian_court`, `off_king`. The court issues orders and hears only what somebody travels to tell it (orders are rolled at `distance` 3); the Katepano may `march` through T3, offer a `tribute` or a `wardship` by `covenant` to a Crown seat, or `construe` an order that arrived open to reading."
+  2. `ends`: "the roster's (`peninsular_sovereignty`, `theocracy`, `reabsorption`), her recall, six seasons" → `realm_ended` (B40.04's reader over `world_q.endings_reached`), `recalled` (her `hold` on `off_katepano` closed by `revoke`) `[ASSUMPTION: reader name]`, `season_count`; `span_seasons: 6`.
+- WHERE: NEW `engine/season/cases/exercises/INST-COLONIAL-02.yaml`; `engine/season/harness/governance_spine.py` (`CASE_ENDS`: `recalled`).
+- TESTS: none new.
+- FALSIFIER and CONTROL: COL-E states none of its own for scenario 2; SYN-D's "The scenario needing any act the season loop cannot form" applies. Control: `content_hash` of an all-NPC two-season run equals `populated.run` on the same world (SYN-D gate 6; scenario 2's delta adds no row of its own).
+- GATE (`PYTHONHASHSEED=0`, seeds 0 to 4, two seasons): `institution INST-COLONIAL-02 2 <seed>` exits 0 and prints the `hearings`, `carried` and `instruments` lines with the Katepano's acts; the control above equal; which of `march`, `covenant`, `construe` she forms is reported per seed, not asserted (`[ASSUMPTION: gate; COL-E's gate is the family's and reads scenario 1]`).
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B40.06; V12 Batch B11 (CR-29: the border), V12 Batch B21 (FA-B1, `06_FA_war_lives_in_seats_B`), V12 Batches B19, B20 (MB's field, closed before B40 through B22 → B38 → B39), V12 Batch B21b (IN-36: ED-IN-0317's march cap, the intake `:249`); V12 Batch B33 (COL-B §3–§5: reach rows, the court seat `off_altonian_court`, the ending row); EXISTS-IN-TREE `off_katepano`, `off_king` (`engine/season/offices.yaml`), `rosters.yaml` `peninsular_sovereignty`.
+- GLOSSARY: none.
+- COST and TIER: small build (a case file, one reader); `sonnet`, `high`.
+- LANDS IT: B40's producer; `Item: B40.07`, `[skip ci]`.
+
+### B40.08 — The Vacant Chair · PAP-F edits 1–3, gate · BUILD · HASH EQUAL
+- SOURCE: `proposals/15_INSTITUTIONS_PAPACY_F_playable_vacant_chair.md` "The resolution, decided" (situation, who the player may be, stakes, end, legibility), "Exact edits" 1–3, "Gate", "Falsifier", "What is missing today"; rulings A-5, A-14, A-15, A-36, A-80; C3-C12, C3-L9 (`patronage` is a table entry).
+- ADVANCES: none of the nine; the Church's standalone (its own people decide something that lasts).
+- INSTRUCTION (PAP-F "Exact edits", copied):
+  1. "`engine/season/cases/exercises/INST-PAPACY-01.yaml` (SYNTHESIS-D §1's case shape): `base: realm`; `setup.prehistory: [{actor: <the holder of off_cardinal_prudence>, verb: release, subject: off_cardinal_prudence}]`; `seats_offered: [off_confessor, <each seated or sworn Church person>, off_king]`; `ends: [chair_filled, chair_contested, long_vacancy]`; `span_seasons: 3`. The runner is FA-P4's `play(seed, seasons, situation=<case id>, player, world="realm")` (`world` is FA-B4's keyword, not this file's); no flag is added to `governance_spine.py`."
+  2. "No digest filter: the one report's `seats` line prints the Church of Solmund's seats (SYNTHESIS-D §3)."
+  3. "No edit under `loop/`, `state/`, `queries/`, `decision/`, `data/`."
+  4. The three endings in `CASE_ENDS` (PAP-F "End"): `chair_filled` — "the chair is held on a hold that is not provisional: *filled*, with by whom and through which seat"; `chair_contested` — "it is held provisionally at the last season"; `long_vacancy` — "three seasons pass with it empty".
+  5. CR-88 (U2): open `world_q` and `verb_table.yaml` at the item's open for CR-88's vacancy duty (B21d). If it landed, nothing more. If it did not, PAP-F's own fallback: "a planted question carrying the vacancy (the scenario may plant the *question*, never the outcome)", as one `setup.prehistory` entry that deposits the question and no tenure write; the commit says which.
+- WHERE: NEW `engine/season/cases/exercises/INST-PAPACY-01.yaml`; `engine/season/harness/governance_spine.py` (`CASE_ENDS`: the three).
+- TESTS: none new (PAP-F: "Named test: none; the gates are runs of the report quoted in the commit").
+- FALSIFIER and CONTROL (PAP-F, copied): "A run whose ending is fixed by the seat-holder's identity alone (the same holder in every seed whatever the draw). A digest line that cannot name the `Act.via` of a conferral. The scenario needing any act the season loop cannot form." Controls below.
+- GATE (PAP-F's, `PYTHONHASHSEED=0`, at **two seasons** (`span_seasons: 3` in the source; A-114)):
+  - "`python -m engine.season.harness.institution INST-PAPACY-01 3 s`, `s` in 0-4, all-NPC: each run ends in one of the three endings and prints which. Across the five seeds at least two different endings or two different holders occur" — run as `INST-PAPACY-01 2 s`; `long_vacancy` cannot be reached in two seasons and is reported, not asserted (U13).
+  - "With a player-proxy as the Confessor choosing a fixed conferee by policy: over 200 seeds the conferee is seated in some, seated provisionally in some and resisted in some (the draw), and the share seated is higher for a conferee the Cardinals regard well than for one they do not (two arms, exact odds printed)." Background run; `assert checked >= 200` per arm.
+  - "Control 1: the same seeds with no vacancy planted: no `tenure.opened` on the seat."
+  - "Control 2: `content_hash` of each all-NPC run equals `populated.run` on the same world after the same tick-0 act."
+  - "Control arm (patronage): the seat's `tables.patronage` entry removed: at some seed the Crown's seat fills the chair. With it: never." (U17.)
+  - "Entrenchment (A-80; C3-C12): an arm in which every contest resolves at its control band … The report prints, per seed and season, the count of acts whose question cites the vacancy, a refused candidacy or a rival's petition (petitions, `argue`, `tell`, `covenant` offers). Expected reading: non-zero in every seed". (`--hold Failure`, U15.)
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B40.01, B40.02; V12 Batch B21 (FA-P4's `play`, `14_VERBS_BINDING_C`'s `confer` draw, FA-B4's `world=`); V12 Batch B32 (PAP-A, PAP-B: `tables.patronage`, `may_fill`, the ballot tally with PAP-G item 1's floor); V12 Batch B21d (CR-88, not a gate edge: U2); V12 Batch B37 (A-15's natural death, the second opening; closes at S16); EXISTS-IN-TREE `off_cardinal_prudence`, `off_confessor`, `off_king` (`engine/season/offices.yaml`), `harness/play_surface.py::dispatching_chooser`, `state/gate.py::may_fill`.
+- GLOSSARY: none.
+- COST and TIER: small build (a case file, three readers); `sonnet`, `high`; one `opus` read of the 200-seed arms (PAP-F's block).
+- LANDS IT: B40's producer; `Item: B40.08`, `[skip ci]`.
+
+(B40.09 is a READING: no body and no commit of its own; its text is Readings R1, at the batch's end, read at B40.99.)
+

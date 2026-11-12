@@ -8,7 +8,7 @@
 
 **Words.** `unified/U1_GLOSSARY.md`. A person's numbers: attribute, skill, skill score, martial skill, derived score (A-98). Armies: army, unit, army formation, unit formation; no size word (A-99, the MB lexicon). A *lap* is one pass of the season's scene budget; a *round* is one engagement of a fight (A-101); the riposte keeps its code id `finalblow_riposte`. Source text that says "round" for the season's pass is copied with a `NAMES:` line (B04's `PCR-4`). The story bar's "crossing" (a person standing on two things at once) is an **overlap** (glossary *crossing*); the story census is the **story count** (`23_STORY_D` head).
 
-**Paths.** As `V12_STRUCTURE.md` states: a bare `proposals/…` path of a numbered proposal is under `proposals/2026-11-12-subsystem-audit-suite/`; `U3` is `unified/U3_DEPENDENCY_ORDER.md`; `the intake` is `master/eval/V12_INTAKE.md`; `MBA` is `master/mb_abstraction/MBA_DESIGN_part3.md` (and `MBA_DESIGN_part2.md` for §3); `IS-A` is `master/instructions/IS_A_NINE.md` and `_part2`. A path under `engine/`, `modules/`, `tools/`, `references/`, `tests/`, `registers/` is the repository's.
+**Paths.** As `V12_STRUCTURE.md` states: a bare `proposals/…` path of a numbered proposal is under `proposals/2026-11-12-subsystem-audit-suite/`; `U3` is `unified/U3_DEPENDENCY_ORDER.md`; `the intake` is `master/eval/V12_INTAKE.md`; `MBA` is `master/mb_abstraction/MBA_DESIGN_part3.md` (and `MBA_DESIGN_part2.md` for §3); `IS-A` is `master/instructions/IS_A_NINE.md` and `_part2`. A path under `engine/`, `modules/`, `tools/`, `references/`, `tests/`, `registers/`, `skills/` is the repository's, and so is `proposals/2026-10-13-narration-mechanisms.md` (NM-W5's home, outside the suite).
 
 ---
 
@@ -253,7 +253,7 @@ Not in this batch, and where each is: `30_WR_E`'s fork lift, the `entrenched`, `
 - WHERE: `engine/season/loop/calendar.py` (the due test); `engine/season/tests/test_sc01_fired_slot.py`.
 - TESTS: `engine/season/tests/test_sc01_fired_slot.py::test_due_date_in_the_past_fires_once` (named by the source): "P4's three planted Dates (the scratch `p4_small` plant, written in the test) all read `fired=True` after two barriers, each exactly one `date.fired`" — three Dates planted at tick 2 on a seated venue, due at ticks 1, 2 and 3. Written first, read red (the Date due at 1 never fires).
 - FALSIFIER and CONTROL: "A Date fired twice, or a base hash that moves." Control: every committed golden unmoved ("`report` / `delta HEAD`, `PROBE FLIPS 0`").
-- GATE: `python -m pytest engine/season/tests/test_sc01_fired_slot.py -q` → pass; the realm content hash at seed 0, one season → equal to B36.08's reading; `python -m engine.season.harness.report` delta against HEAD → `PROBE FLIPS 0` `[ASSUMPTION: the `report` delta form — basis: the source's own words; read at landing]`.
+- GATE: `python -m pytest engine/season/tests/test_sc01_fired_slot.py -q` → pass; the realm content hash at seed 0, one season → equal to B36.08's reading; `python -m engine.season.harness.report && python -m engine.season.harness.delta HEAD` → `PROBE FLIPS 0` (`harness/delta.py`'s docstring: run `report` first, or the comparison is vacuous).
 - HASH MOVERS: none expected (asserted); if a base hash moves, stop: the edit reached a committed world, and the item says which.
 - DEPENDS ON: EXISTS-IN-TREE `loop/calendar.py` (the `due_at` test), `engine/season/tests/test_sc01_fired_slot.py`.
 - GLOSSARY: none.
@@ -320,4 +320,136 @@ Not in this batch, and where each is: `30_WR_E`'s fork lift, the `entrenched`, `
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B36's producer; `Item: B36.13`, `[skip ci]`.
 
-<!-- A39 append point -->
+### B36.14 — the story count: shapes, the first table, the plants · `23_STORY_D` edits 1, 2, 5 · BUILD · HASH EQUAL
+- SOURCE: `proposals/23_STORY_D_story_census_and_gate.md` "Exact edits" 1, 2, 5, "The gate", "The falsifier"; rulings A-9, A-15, A-19, A-23, A-35, A-38, A-46, A-51 (the U5d fold: every reading after the five-year prologue), A-59, A-77, A-80, A-81; C3-K7; ED-IN-0225 (no carrier for a story).
+- ADVANCES: none of the nine; the story count every later enablement batch is read on (B38's `30_WR_E` extends it).
+- INSTRUCTION (copied, `engine/season/harness/storybar.py`):
+  1. Edit 1:
+     ```python
+     class Beat(NamedTuple):
+         kinds: tuple          # Event kinds, any of
+         role: str = "any"     # "any" | "other" (actor differs from the opening's) | "same" | "counterparty"
+                               # (the Event's subject is the opening's actor) | "world" (no act emitted it)
+         bands: tuple = ()     # degrees admitted; () is any
+
+     class Shape(NamedTuple):
+         id: str               # "S-32"
+         name: str
+         opening: Beat
+         turn: Beat
+         close: Beat
+         cost: tuple           # matrix fields a party must lose on: ("Person.body", "Rung.stores", …); () = none asked
+         window: int           # seasons from opening to close
+         variant: str          # what the close is read by: "kind" | "band" | "kind+band" | "party"
+
+     def stories(w, d, bounds, shapes=SHAPES, seat=None) -> dict:
+         """{shape id: [Instance(season, opening, turn, close, parties, variant)]} — pure, over the log,
+         `d.act_of`, the act store and the Tenures. A beat matches an Event of one of its kinds whose role
+         constraint holds. Beats are LINKED: the turn has the opening among its ancestors and the close has
+         the turn, through `causes[]`, an act and the Events it emitted being one node (`read`'s graph) and
+         a `claim.deposited` Event a pass-through (so 'the news reached him and he acted' is a link).
+         An instance is counted once, at its close. `cost` holds when a receipt with a non-None `delta` on
+         one of the named fields falls on a party between opening and close."""
+     ```
+     "A shape any of whose kinds no verb row and no MATTER pass emits prints `n/a (no emitter)`, computed from the loaded kind table (`data/verbs.py`), never from a hand list." "`cost` prints `n/a` until `16_PESSIMIST_CORE_the_record_holds_what_changed.md` edit 1 lands …, and the instance is then counted without it and marked `(cost unread)`" (it landed in B09: `cost` is read). "`SHAPES` is data in this module, as `ARMS` is."
+  2. Edit 2, `SHAPES` = the first table, copied row for row (C-a the petition that lapses; C-b the march that meets nobody; C-c a stale store corrected; S-32 a famine; S-04 a contested succession; S-02 a death reported; S-43 / S-44 a verdict, an acquittal; S-27 a duel; S-33 blame; S-68 the disaster), each row's opening, turn, close, cost and variant exactly as `23_STORY_D.md` "Exact edits" 2's table gives them. Kinds not declared at the tree (`succession.contested`, `matter.dismissed`, the challenge and acceptance kinds) make their row print `n/a (no emitter)`.
+  3. Edit 5, `engine/season/tests/test_storybar.py`: "Per shape, planted logs: the full plant reads 1; each single beat removed reads 0; the plant's causes re-drawn by `edge_null` read 0; a shape with an unemitted kind reads `n/a`. One test asserts that it asserted (`assert checked >= len(SHAPES)`, §0.1 pt 2)." Tests: `test_each_shape_full_plant_reads_one`, `test_removing_any_single_beat_reads_zero`, `test_edge_null_redrawn_causes_read_zero`, `test_unemitted_kind_prints_na_no_emitter`, `test_checked_covers_every_shape`, `test_control_shapes_read_above_zero_on_the_shipped_realm`, `test_stories_block_moves_no_hash`.
+- WHERE: `engine/season/harness/storybar.py` (NEW `Beat`, `Shape`, `SHAPES`, `stories`); `engine/season/tests/test_storybar.py`.
+- TESTS: step 3's seven, written with step 1 and read red before it (no `stories`).
+- FALSIFIER and CONTROL: "C0 failing: the story count cannot see a petition lapse"; "A shape above zero under `--null` as often as on the log: its link is coincidence"; "A shape above zero in the control arm at the on arm's rate"; "Any content hash moving: the block leaked into the loop." Control: `test_stories_block_moves_no_hash`.
+- GATE: `python -m pytest engine/season/tests/test_storybar.py -q` → pass.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B36.01 (`edge_null`), B36.13 (the test file's overlaps block); V12 Batch B09 (`16_PESSIMIST_CORE_the_record_holds_what_changed`, `16_PESSIMIST_GAME_standing_occasions_carry_their_cause`); EXISTS-IN-TREE `engine.season.data.verbs.EVENT_KINDS`, `harness/storybar.py::read`.
+- GLOSSARY: *story count* (row exists; "census" refused for it): owner column → `storybar.stories`; *shape* (new row): "the four beats and their links that make a kind of story, as a plot outline does".
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B36's producer; `Item: B36.14`, `[skip ci]`.
+
+### B36.15 — the story count's switches and the seat reading · `23_STORY_D` edits 3, 4 · BUILD · HASH EQUAL
+- SOURCE: the same file, "Exact edits" 3, 4, "The gate"; A-30 (the one `Draw` owner); `16_PESSIMIST_GO.md` §3.8 ("the story bar from a seat").
+- ADVANCES: none of the nine; S-73's reading (a story a seat can follow).
+- INSTRUCTION (copied): Edit 3: "`--stories` prints, per arm: per seed the count and variants of each shape; pooled, the seeds with one or more, the variant shares, and the instance rendered once per shape per seed by `chronicle.lines` (so a person can read whether it is that story …). Three switches, each composed from what exists: `--world realm|valley`: `valley` calls `harness/valley.py::build` (`07_SE_valley_scenario.md`); the default stays the realm; `--draw-seeds` (exists, REM-15) for clause C5; `--pin-rolls BAND`: a harness-only wrapper on the one `Draw` owner (`engine/dice_engine/draw.py`, B06; A-30), under which every graded draw returns `BAND`: the planted failure of clause C6. With `--null` the shapes are also counted over `edge_null(rows, seed)`." Edit 4: "`--seat PID` (the `seat` argument): the same shapes over one person's ledger: a beat counts only if that person holds a claim deposited from it."
+- WHERE: `engine/season/harness/storybar.py` (`main`'s `--stories`, `--world`, `--pin-rolls`, `--null`, `--seat`).
+- TESTS: `engine/season/tests/test_storybar.py::test_pin_rolls_returns_the_band_for_every_graded_draw` and `::test_seat_counts_only_beats_its_holder_holds` `[ASSUMPTION: test names; E-3]`, written first, read red.
+- FALSIFIER and CONTROL: as B36.14; plus a `--pin-rolls` run whose graded draws do not all read the pinned band. Control: `--arms off off --stories` reads `EQUAL`.
+- GATE: `python -m pytest engine/season/tests/test_storybar.py -q` → pass; `python -m engine.season.harness.storybar --base-seed 0 --n 3 --seasons 2 --arms off off --stories` → `EQUAL`, the three control shapes above 0 at every seed (C0), every other shape 0 or `n/a`; `… --seasons 2 --stories --world valley --arms off off --base-seed 0 --n 3` → exit 0 (the source's gate runs 20 seeds at eight seasons, five at six: past the cap; A-114, read at B99's re-take).
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B36.14; V12 Batch B12c (`harness/valley.py::build`); V12 Batch B06 (`engine/dice_engine/draw.py`, `Draw`); EXISTS-IN-TREE `harness/storybar.py::draw_seed_arm` (REM-15).
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B36's producer; `Item: B36.15`, `[skip ci]`.
+
+### B36.16 — the arc reader gets an entry · `17_CENSUS_C1B_02` W-1 · BUILD · HASH EQUAL
+- SOURCE: `proposals/17_CENSUS_C1B_02_wires.md` "W-1"; its `Reconciled:` line (W-1 after `09_WR_B_readings`, which also edits `arc.py`; `12_ARCS_case_on_the_realm`'s `match_beats` (B39) after W-1); closes census C1B §3.2's arc row.
+- ADVANCES: none of the nine; a reading a session can run and quote.
+- INSTRUCTION (copied): "Append to `arc.py`:"
+  ```python
+  def main(argv=None) -> int:
+      """`python -m engine.season.harness.arc --seed S --seasons N`: persons with an arc, by four readings."""
+      import argparse
+      from . import storybar as SB            # lazy, as `read_arcs` already imports it: storybar builds the realm
+      ap = argparse.ArgumentParser(description=main.__doc__)
+      ap.add_argument("--seed", type=int, required=True)
+      ap.add_argument("--seasons", type=int, required=True)
+      ap.add_argument("--arm", choices=SB.ARMS, default=SB.ARMS[0])
+      ap.add_argument("--cap", type=int, default=None)
+      args = ap.parse_args(argv)
+      w, d, _bounds = SB.drive(args.seed, args.seasons, args.arm, args.cap)
+      on = ambition_thrusts(w)
+      read = read_arcs(w, d, on)
+      print(f"arc seed={args.seed} seasons={args.seasons} arm={args.arm} cap={args.cap}")
+      print(f"  actors                       {len(read.persons)}")
+      print(f"  no predicate (control)       {read_arcs(w, d).count()}")          # must be 0
+      print(f"  on an ambition's thrust      {read.count()}")
+      print(f"  shuffled-causes null         {read_arcs(w, d, on, log=shuffled_causes(w.log, args.seed)).count()}")
+      print(f"  rosters ignored (upper bound) {read_arcs(w, d, on, unrestricted=True).count()}")
+      print(f"  on-thrust acts behind a death {sum(len(v) for v in read.deaths.values())}")
+      return 0
+
+
+  if __name__ == "__main__":
+      raise SystemExit(main())
+  ```
+  Correction at copy (UNDECIDED (4)): `default=SB.ARMS[0]` is written `default="off"` (B36.01 made `ARMS` a mapping). "Same argument names and the same `SB.drive` call as `harness/chronicle.py`" — the line citation is dropped (a file edited at B02).
+- WHERE: `engine/season/harness/arc.py` (NEW `main`, the `__main__` guard).
+- TESTS: `engine/season/tests/test_cl_thrust_b01_arc_reader.py::test_the_arc_entry_prints_a_zero_control` `[ASSUMPTION: test name; E-3]`, calling `main(["--seed", "0", "--seasons", "1"])` and asserting the control line reads 0; written first, read red (no `main`).
+- FALSIFIER and CONTROL: "`read_arcs(w, d)` with no predicate must read 0 for every seed; a non-zero control means the reader counts acts that are on no thrust. And the null: if the shuffled count is not well below the real one across seeds 0 to 4, the reading is not about causes."
+- GATE: `python -m engine.season.harness.arc --seed 0 --seasons 2` → exit 0, control 0 (the source measured, at its tree, actors 83, on a thrust 21, null 1, rosters ignored 53: quoted, re-read here and recorded); `python -m pytest engine/season/tests/test_cl_thrust_b01_arc_reader.py -q` → pass.
+- HASH MOVERS: none ("Content hash EQUAL by construction").
+- DEPENDS ON: EXISTS-IN-TREE `harness/arc.py::read_arcs`, `::ambition_thrusts`, `::shuffled_causes`; V12 B36.01, B36.04.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B36's producer; `Item: B36.16`, `[skip ci]`.
+
+### B36.17 — `foreign_kinds` is printed where `unrowed_acts` is · `17_CENSUS_C1B_02` W-2 · BUILD · HASH EQUAL
+- SOURCE: the same file, "W-2"; its `Reconciled:` line (W-2 lands in B36, against U3 §1 item 36's "not W-2": UNDECIDED (2)); U3 §5.1 `aperture.py` B36 → B37.
+- ADVANCES: none of the nine; census C4's question, executed.
+- INSTRUCTION (copied; the source's line numbers dropped, the symbols kept): "add `foreign_kinds` to the `from .corpus_run import …` line"; in the measured dict, beside `"unrowed"`, "`"foreign": {f"{v} -> {k}": n for (v, k), n in sorted(foreign_kinds(w).items())},`" ("string keys, because the dict is also pooled and reported"); in `report`, after the UNROWED line: "`out.append(f"  FOREIGN  Events of a kind the acting verb's row declares in neither column: {m['foreign'] or 'none'}")`"; "`pool_worlds` …: sum `foreign` across seeds as it sums `wrong_kind` (a Counter over the string keys)."
+- WHERE: `engine/season/harness/aperture.py` (the `corpus_run` import, `instrumented_season`'s measured dict, `report`, `pool_worlds`).
+- TESTS: `engine/season/tests/test_aperture.py::test_the_report_prints_a_foreign_line` `[ASSUMPTION: test name; E-3]`, written first, read red; `test_rem10_foreign_kinds_names_a_logged_kind_outside_both_of_the_rows_columns` stays green.
+- FALSIFIER and CONTROL: "`test_aperture.py` already plants `("speak", "transfer.made")` and reads 1, so the reading can see what it excludes. If the line ever prints a pair, a verb row's `emits` is short of what the effect writes, and the correction is the row in `engine/season/verb_table.yaml`, not the reader."
+- GATE: `python -m engine.season.harness.aperture 2 0` → prints the `FOREIGN` line (`none` at the source's tree, three seasons; A-114); `python -m pytest engine/season/tests/test_aperture.py -q` → pass.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `harness/corpus_run.py::foreign_kinds`, `::unrowed_acts`, `harness/aperture.py::pool_worlds`; V12 Batch B02 (`aperture.py`'s `CONTROL` line).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B36's producer; `Item: B36.17`, `[skip ci]`.
+
+## Readings (B36)
+
+**Reading 1 (B36.R1), the story bar at the close**, read on the closing tree after B36.17, quoted in B36.99's commit body. From `20_NARRATIVE_F` "The gate", copied: "It passes when all of these hold: 1. **A control.** Under `basis_off`, G1 to G4 and G6 read 0 at every seed … 2. **Non-degenerate.** Under `on` … 3. **Not one run.** … 4. **Not a fixed function of state.** … 5. **The modifiers are load-bearing.** Under `noconv`, G5's −1 and +1 counts and G6 fall to zero and G2 falls … 6. **Closures by persons.** Closing Events by act exceed closing Events by clock at two seeds or more … 7. **WR's bar.** `off all` prints DIFFER with more deaths in `all`; `off off` … prints EQUAL; the chain reading prints its edge null. 8. **The strife guard.** …" and "**Today** clause 1 holds and clauses 2, 5 and 6 fail … That is the bar failing on the shipped engine, which is what makes it a bar." From `23_STORY_D` "The gate": "the first prints EQUAL, the three control shapes above zero at every seed (clause C0), and every other shape 0 or `n/a` … The first run also reads C9's baseline (`null_scenes` on the shipped engine, expected above 0 there and 0 once A-81's writes land) and records it in the commit". At B36 the reading is taken at two seasons over seeds 0 to 2 (A-114): clauses 1, 6 and 7 and C0 are read and quoted; clauses 2, 3, 5 and 8 need the `on` arm (B38) and G1–G5's readers (B38) and are recorded as `n/a (no reader)`; C9's baseline is read where `--null-scenes` exists (B38's `30_WR_E`), else recorded as not yet runnable. The expected reading is the bar failing where the source says it fails; a clause that fails is a reading, not a failed gate.
+
+### B36.99 — re-pin and close readings · E-1 · BUILD · HASH MOVER (the re-pin)
+- SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12; `IS-A-12`.
+- ADVANCES: R-04 (the readings of M4, written to `requirements.yaml`'s `reading:` records).
+- INSTRUCTION: (1) re-record, once, the realm pins in `engine/season/tests/_realm_goldens.py` and every golden B36.10 moved, read against B35's close (`reading @<sha>`); the commit says "re-pin: `thread_read` forms only on a Site (B36.10); every other item of B36 is harness-only and read EQUAL". (2) Write R-04's conjuncts' `reading:` records in `engine/season/requirements.yaml` with this tree's SHA (R-04.c1: the chronicle line quoted; R-04.a, b, c2–c7: each re-read); no `status:` edited (A-114). (3) The commit body carries B36.R1's reading, the batch gate's readings, and the record of §5.12.
+- WHERE: `engine/season/tests/_realm_goldens.py`; the goldens B36.10 moved; `engine/season/requirements.yaml` (`reading:` records of R-04 only).
+- TESTS: none new; the covering suites `tools/tests_for_diff.py --base <batch-start-sha>` names, once.
+- FALSIFIER and CONTROL: a pin that moves at seeds 0 to 2 for any reason but `thread_read`'s class (diff the executed-verb tallies against B35's close: only `thread_read`'s formations and what follows from them differ); control: every harness item's EQUAL reading.
+- GATE: the BATCH GATE above, read once.
+- HASH MOVERS: the re-pin itself.
+- DEPENDS ON: B36.01 to B36.17, B36.R1.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`; the close's terminal critique `opus`.
+- LANDS IT: B36's producer; `Item: B36.99`, the batch's last `Item:` commit, without `[skip ci]`.
+
+| STOP. Batch B36-wr-story-instruments closes here |

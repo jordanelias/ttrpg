@@ -283,3 +283,205 @@ Not in this batch, and where each is: `SYN_B` edits 1, 3, 4 (B32); `COL_D` edit 
 - COST and TIER: edit; `sonnet`.
 - LANDS IT: B39's producer; `Item: B39.06`, `[skip ci]`.
 
+### B39.07 — what a lifepath's hook is and where it is written: the design · CR-85 hooks half (ED-IN-0331) · DESIGN-FIRST · HASH EQUAL
+- SOURCE: the intake `:504` (CR-85 · STILL-NEEDED · rows E1:249, E2:35; carry-forward E1 §Carry-forward `:4181`, E2 `:310-322` "BLOCK CR-85b (the hooks half; … only ED-IN-0331 remains)"); E2's row CR-85b: "WR · B39-procgen-and-cases (design-first, beside `21_PROCEDURAL_B`/`_C`; needs `lifepath_templates`) · gate: a design file naming the carrier (no new field without its reader) and its falsifier (a lifepath's hook reaches a person's `need` question or a told claim in a seeded run) · hash none for the design · opus"; the intake `:69` (A-112 answers the question that held CR-85's design; "CR-85's hooks half (ED-IN-0331) stays carried"); rulings ED-IN-0331, A-44, A-98, A-112. Placed by §5.6's second rule (its own text: "beside `21_PROCEDURAL_B`/`_C`"). Closes CR-85 (b) at the design's merge; its build is B39.35.
+- ADVANCES: none of the nine; ED-IN-0331 ("histories also grant narrative hooks").
+- INSTRUCTION: write ONE design file under `proposals/` (no code), `## Status: PROPOSED`, stating, each with its falsifier:
+  (1) **the carrier.** A hook is one of the writes `proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md` §2 already lists, made at world build onto a carrier that exists and has a reader in play, and no new noun: a skill key (now the skill table's row, B04; A-98), a goal row's commit (`seed_goals` through `cid_of`), a heritage value. State which of them a lifepath writes for an authored cast row (CR-33's `rosters.yaml: tables: lifepath_templates`, `data/cast.py::capability_of`) and which for a generated person (B39.03's `worldgen.yaml: lifepaths`, written in `generate_person`), and whether the two tables are one owner or two (if two, which one is retired and how; two lifepath tables for one fact is a §0.05 cl.3 defect). No new field on any carrier without its reader named.
+  (2) **the goal-commit column**: `lifepath_templates`' goal ids (refused at build where the world minted no Proposition for them), "built only with its first authored value" (the CR-85 design §2); which lifepath carries which obligation is content for Jordan.
+  (3) **its falsifier**, executed at two seasons: a lifepath's hook reaches a person's `need` question or a told claim in a seeded run; the CR-85 design §2's FALSIFIER (2) copied (a row whose template names goal `g` builds a person holding a live `commit` to `g`; his next deliberation's questions include `goal_referents(g)`; the row with its `lifepath:` key deleted builds without the commit; planted failure: the `seed_goals` branch skipped reddens; control: no template carrying a goal id reproduces the pre-commit hash).
+  (4) **what A-112 changed**: combat reads skill scores through the skill table and `faculty` is dropped; the design names no `faculty` input.
+  (5) **the build** it orders, as items in the form of `V12_STRUCTURE_part2.md` §5.3 (files, symbols, tests, movers), or "no build" with the reason.
+  What the design cannot settle by the five-step ladder (CLAUDE.md §0) ends the run `STOPPED` for Jordan (D-18).
+- WHERE: NEW `proposals/2026-11-12-subsystem-audit-suite/proposals/21_PROCEDURAL_F_lifepath_hooks.md` `[ASSUMPTION: file name and directory — basis: the suite's `21_PROCEDURAL_*` family is this batch's; CLAUDE.md §3 sends new design work to `proposals/`]`.
+- TESTS: none (a design).
+- FALSIFIER and CONTROL: the file omits any of (1) to (5), or names a new carrier field with no reader. Control: no code changes (`git diff --stat -- engine modules` empty in this commit).
+- GATE: the file exists and states (1) to (5), each with a falsifier; `git diff --stat <prev>..HEAD -- engine modules tools` → empty.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B39.03 (`worldgen.yaml: lifepaths`, `generate_person`); EXISTS-IN-TREE `engine/season/data/cast.py::capability_of`, `rosters.yaml: tables: lifepath_templates`, `harness/populated.py::seed_goals`; V12 Batch B04 (the skill table); V12 Batch B15 (A-112's skill scores in combat).
+- GLOSSARY: none in this commit (the design names no new word; if it does, its row goes with the build).
+- COST and TIER: design; `opus`, `high`; critic `ners` (D-18).
+- LANDS IT: B39's producer on `opus`; `Item: B39.07`, `[skip ci]`; the design is ratified at the batch's merge (ED-1094) unless the PR body holds it back.
+
+### B39.08 — names by grammar: the names file, the loader, its checks, the `--names` flag · `PROC_E` (a)–(d) · BUILD · HASH EQUAL
+- SOURCE: `PROC_E` §3 items 1–5, §4 (a)–(d), §5, §6; plan batch PG-8; closes the role-label naming of `PROC_B` (b).
+- ADVANCES: none of the nine; a generated person has a name a reader can hold.
+- INSTRUCTION ("the loader and checks one commit (inert while the lists are empty)"):
+  1. NEW `engine/season/worldgen_names.yaml` (shape copied; every list empty here; B39.09 fills them):
+     ```yaml
+     meta: {authority: "AUTHORED FOR PLAY. Not canon. Read by engine/season/data/worldgen.py::name_for."}
+     max_attempts: 6
+     form_weights:                      # which second element a name takes, per heritage
+       northern_einhir: {patronymic: 5, toponym: 2, byname: 1}
+       central_einhir:  {toponym: 4, byname: 3, patronymic: 1}
+       southern_einhir: {byname: 4, toponym: 3, patronymic: 1}
+       altonian:        {byname: 3, toponym: 3, patronymic: 2}
+       schoenlander:    {toponym: 4, byname: 2, patronymic: 2}
+     given: {northern_einhir: {}, central_einhir: {}, southern_einhir: {}, altonian: {}, schoenlander: {}}
+     patronymic_suffix: {northern_einhir: [], central_einhir: [], southern_einhir: [], altonian: [], schoenlander: []}
+     byname: {northern_einhir: {}, central_einhir: {}, southern_einhir: {}, altonian: {}, schoenlander: {}}
+     toponym: from_home                 # the person's home settlement's canon name, read from the geography file; never authored here
+     device: {}                         # {word: weight}: a house's thread symbol
+     templates:                         # Record kinds generation mints; each field is a key of the Record's subject_matter
+       pedigree:  ["{house}", "{ancestor}", "{deed_kind}", "{device}"]
+       debt:      ["{creditor}", "{debtor}", "{amount}", "{term_season}"]
+       local_charter: ["{post}", "{settlement}", "{conferred_by_post}"]
+     ```
+     "The heritage keys are exactly `HERITAGES`; the loader refuses a missing or an extra one. An empty `given` list for a heritage that the generator can draw is refused when `variable` is on."
+  2. `engine/season/data/worldgen.py`: `reserved_names() -> frozenset[str]` ("canon and cast: every `canonical`, `aliases` and `legacy` string of `references/names_index.yaml` and `references/proper_noun_registry.yaml` …, every `name` in npcs.yaml and `references/npc_registry.yaml`, every settlement and territory name in the geography file"); `name_for(seed, key, heritage, home_name, tables, taken: frozenset[str]) -> str`; `enumerate_names(tables, heritage) -> Iterator[str]`. "At import, with the lists non-empty: no fragment and no enumerable full name is in `reserved_names()`; refused naming the fragment. `legacy` strings are included in the reserved set so that a deprecated name cannot be produced by concatenation either. `name_for` draws the form, then the parts, each by `pick` keyed on the person's slot key; `taken` is the set of names already used in the same settlement." "A drawn name that collides is redrawn with the next attempt key; after `max_attempts` the role label is used and the sheet reports it."
+  3. `generate_person` (B39.03) calls `name_for`; "kin share the house's second element where the form is a byname or toponym, and take the parent's given name as the stem where it is a patronymic."
+  4. Records: "the generated pedigree, debt and local-charter Records … carry `subject_matter` as a mapping with exactly the template's keys. Rendering is the presentation layer's and the chronicle's; the engine stores the structure, never a sentence." Colour (physique, speech, blazon) is not stored: "re-derived from the person's key at display time (preferred)".
+  5. `engine/season/harness/worldgen.py` gains `--names N --seed S` (the source: "an edit to `harness/worldgen.py` (proposal A (d)'s instrument), in this commit").
+- WHERE: NEW `engine/season/worldgen_names.yaml`; `engine/season/data/worldgen.py` (`reserved_names`, `name_for`, `enumerate_names`; `generate_person`'s name); `engine/season/boot/realm.py` (the Records' `subject_matter`); `engine/season/harness/worldgen.py` (`--names`); NEW `engine/season/tests/test_worldgen_names.py`.
+- TESTS: the new file, written first: `test_no_enumerable_name_is_reserved`, `test_planted_reserved_fragment_is_refused_by_name`, `test_same_seed_same_names`, `test_missing_or_extra_heritage_key_is_refused`; red before (no module).
+- FALSIFIER and CONTROL: "A generated person named as a canon person: the reserved set is incomplete. … A rendered pedigree stating an ancestor's deed as fact: the template leaked tradition into record." Control: with empty lists, every generated person keeps `PROC_B`'s role label, and the `variable=True` seed-0 plan's names equal B39.03's.
+- GATE: `python -m pytest engine/season/tests/test_worldgen_names.py -q` → four pass (the lists empty: `test_no_enumerable_name_is_reserved` passes vacuously and says so with `assert checked >= 0`; B39.09 re-reads it non-vacuously); `python -m engine.season.harness.worldgen --names 10 --seed 0` → ten role labels, the fallback count printed.
+- HASH MOVERS: none ("Names enter the world hash (they are `Person.name`)" only for generated persons, off at ship).
+- DEPENDS ON: V12 B39.03; EXISTS-IN-TREE `engine/substrate/descriptors.py::HERITAGES`, `references/names_index.yaml`, `references/proper_noun_registry.yaml`, `references/npc_registry.yaml`.
+- GLOSSARY: *device* (new: "a house's emblem word, carried on its documents as a family badge is").
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B39's producer; `Item: B39.08`, `[skip ci]`.
+
+### B39.09 — the name lists and the house devices, drafted · `PROC_E` (a) INCOMPLETE (CONTENT) · CONTENT · HASH EQUAL
+- SOURCE: `PROC_E` §4 (a) "INCOMPLETE (the lists), blocked on content", §5 (the import-time and `--names 1000` gates, the perceptual check); `unified/U4_DOCUMENT_STATUS.md` §3.4 row PROCEDURAL `21_PROCEDURAL_E` (CONTENT: "the name lists (`given`, `patronymic_suffix`, `byname`, `device`)", owner "Jordan, or drafted for his correction"); D-19.
+- ADVANCES: none of the nine.
+- INSTRUCTION: draft the `given`, `patronymic_suffix`, `byname` and `device` lists for the five heritages in `engine/season/worldgen_names.yaml`, "names in the setting's languages", each list long enough that `--names 1000 --seed 0`'s duplicate rate within one world is printed against the size of the name space; every entry marked by a file-level comment `status: seed [ASSUMPTION; drafted for Jordan's correction]`; the PR body lists the file for Jordan. No fragment may be, or concatenate to, a reserved name; the deprecated name of the Solmund line is refused by the reserved set and by `tools/ci_naming_check.py`.
+- WHERE: `engine/season/worldgen_names.yaml` (`given`, `patronymic_suffix`, `byname`, `device`).
+- TESTS: `test_no_enumerable_name_is_reserved` now reads every heritage non-empty (`assert checked >= 5`).
+- FALSIFIER and CONTROL: "More than a stated share of role-label fallbacks in a world: the grammar is too small for the cast." The perceptual check, Jordan's to read: "the sheet prints twenty names per heritage side by side; if two heritages cannot be told apart, the lists are wrong." Control: shipped realm hash unchanged (no generated person at ship).
+- GATE: `python -m pytest engine/season/tests/test_worldgen_names.py -q` → pass; `python -m engine.season.harness.worldgen --names 1000 --seed 0` → "1,000 drawn names, 0 collisions with the reserved set, 0 hits from `tools/ci_naming_check.py` run over the printed list, and the duplicate rate within one world printed"; "Same seed twice: equal names."
+- HASH MOVERS: none at ship.
+- DEPENDS ON: V12 B39.08.
+- GLOSSARY: none.
+- COST and TIER: content; drafting `opus`, `high`; landing `sonnet`.
+- LANDS IT: B39's producer; `Item: B39.09`, `[skip ci]`; ratified at the batch's merge (ED-1094) unless Jordan corrects.
+
+### B39.10 — a past by simulation: the prologue, its cache and the history page · `PROC_C` PG-4 · BUILD · HASH EQUAL
+- SOURCE: `PROC_C` §3 items 1–2, 6, §4 "PG-4" (a)–(d), §5 PG-4, `test_prologue.py`'s PG-4 tests; `unified/U3_CONFLICT_LEDGER.md` C3-K11; D-U1-10; rulings A-51 ("the past is five years"), A-15; closes R-21-08.
+- ADVANCES: none of the nine; a world whose ledgers, stances, seats and records were made by its persons' acts.
+- INSTRUCTION:
+  1. `build_realm` "gains `prologue: int = 0`. When positive, after the build completes: construct `SeasonDriver(w)` and the standard chooser (`P.chooser(w, verbs=resolvable_verbs())`) and call `d.season(…)` `prologue` times, exactly as `run` does (extract those four lines into `_tick(w, seasons)` and call it from both, so there is one owner). Return `w`." `_tick` lives beside `run` in `harness/populated.py` or in `boot/realm.py`, whichever `build_realm` imports without a cycle; the commit body names which.
+  2. `worldgen.yaml`: `prologue_years: 5` (A-51) replaces the `prologue_seasons: 0` sketch line; "converted to seasons as `5 × len(SEASONS_OF_YEAR)` by the loader (the year's one owner, `20_NARRATIVE_E` edit 1; D-U1-10; 20 at four seasons); the parameter stays explicit so a test can pass 0." The shipped build passes `prologue=0` (DIALS AT CONTROL).
+  3. "A world is saved after its prologue … in the oracle the harness caches by `(seed, table hash, prologue)` under the scratch directory, never in the tree, and every PG-4/PG-5 gate run reads that cache."
+  4. `worldgen.possibility(w)` gains post-prologue counts: "`seats_filled` (local seats with a holder whose `tenure.opened` cites an act), `stance_moved` (persons whose stored stance differs from build), `chains` (cross-person consequence chains of depth 3 or more, the CR-69 reading in `harness/storybar.py`, called, not copied), `covert_deeds`, `reachable_deeds`" (the last two filled by B39.17).
+  5. Sheet: "`--sheet --prologue N` prints a *history page* per settlement: the Events of story-bearing kinds in order with their causes, who holds a claim of each, and which are tradition."
+- WHERE: `engine/season/boot/realm.py` (`build_realm`'s `prologue`); `engine/season/harness/populated.py` (`run` → `_tick`); `engine/season/worldgen.yaml` (`prologue_years`); `engine/season/data/worldgen.py` (`possibility`, the year conversion); `engine/season/harness/worldgen.py` (`--prologue`, the history page, the cache); NEW `engine/season/tests/test_prologue.py`.
+- TESTS: the new file, written first: `test_prologue_zero_reproduces_the_pinned_hash`, `test_prologue_runs_the_ordinary_loop` ("same hash as `populated.run(N, seed)` for the same N"), `test_tick_helper_is_the_one_owner`, `test_prologue_seasons_reads_the_year_roster` ("`5 × len(SEASONS_OF_YEAR)`"); red before (no parameter).
+- FALSIFIER and CONTROL: the prologue writes any Event a season would not (its hash after N must equal `run(N, seed)`'s). Control: `prologue=0` reproduces the pinned hash at seeds 0 to 2.
+- GATE: `python -m pytest engine/season/tests/test_prologue.py -q` → four pass; seeds 0–19 at `prologue=2` (twenty seasons in the source; A-114), from the cache: `python -m engine.season.harness.worldgen --range 20 --prologue 2` → "every world's story inventory (chain count and kinds histogram …) is non-empty; mean pairwise similarity of chain signatures between worlds is lower than between dice-only arms of one world; same seed twice gives an equal hash; at least one local seat is filled by an act in every world" (the last is B39.05's moved arm: "each filled seat's `tenure.opened` cites a `confer` or an election Event"); the same reading by hand at one seed: `python -m engine.season.harness.chronicle --seed 0 --seasons 2 --chains --min-depth 3`. The wall time of the twenty-seed run is measured and written in the commit body (the source's estimate, "about 4.7 minutes a world" at twenty seasons, is not quoted as a reading).
+- HASH MOVERS: none (`prologue=0` ships).
+- DEPENDS ON: V12 B39.05; V12 Batch B12a (B12a.02, `SEASONS_OF_YEAR`); V12 Batch B06 (`U5d_GO_owed_edits` §1, the save form); EXISTS-IN-TREE `harness/populated.py::run`, `harness/storybar.py::chains`, `harness/chronicle.py` (`--chains`, `--min-depth`); V12 Batch B03c (`boot/chooser.py`).
+- GLOSSARY: *prologue* (new or edited: "the seasons a world runs by its ordinary loop before play begins, as a play's prologue comes before its first act").
+- NAMES: `harness/probes.py::chooser` (`P.chooser`) → `boot/chooser.py::chooser`; `build_realm` as B39.01.
+- COST and TIER: small build; `sonnet`, `high`; the instrument run sized on two small runs and launched in the background (`STAGES.md` practice 5).
+- LANDS IT: B39's producer; `Item: B39.10`, `[skip ci]`.
+
+### B39.11 — a case builds its own world and states its beats · `CORE_case` edits 1–4 · BUILD · HASH EQUAL
+- SOURCE: `CORE_case` "Resolution (decided)", "Edits, by owner" 1–4, "Gate", "Falsifier" (its `Reconciled:` line: `who:` by registry case id; `knows:` struck; the beat matcher's `actor_of` read lawful for a harness observer); closes F-CORE-02, F-CORE-04, F-CORE-05 (`audits/01_CORE_audit.md`).
+- ADVANCES: none of the nine; R's no-player half becomes judgeable on a case ("Without it no arc can be shown simulated").
+- INSTRUCTION: two typed blocks in the existing overlay file `engine/season/cases/exercises/<CASE>.yaml`, the schema copied:
+  ```yaml
+  setup:
+    span_seasons: 6            # integer; `ongoing: true` beside it where the source says so
+    base: realm                # `realm` (cast cases) or `template` (12_ARCS_case_on_the_realm.md)
+    cast:                      # extends the existing `cast:` keys (corpus_run.CAST_KEYS); on `realm`, a delta only
+      - who: p_npc_088         # registry case id, never a name match
+        capability: {copying: 3}
+        pursuits: {stability: 0.9, community: 0.3}     # pursuit_axes keys; refused off-roster
+        office: {post: ..., conferral: ...}            # as today
+        holds: [rec_einhir]                            # ids declared under `records:`
+    prehistory: [{actor: p_npc_088, verb: ..., subject: ...}]   # folded through RESOLVE and WITNESS; no `knows:` key
+    records: [{id: rec_einhir, kind: ..., subject_matter: {...}}] # checked by Record.__post_init__
+    dates:   [{id: d_assize, venue: <rung>, due_at: 2, holder: <cast who>}]
+    player:  {who: <cast who>, policy: echo | first_offered | <named policy>}
+  beats:
+    - {id: b1, kind: record.created, actor: p_npc_088, subject: rec_einhir, after: null, caused_by: null, terminal: false, needs: [<need_sha>, ...]}
+  off_arm: {withhold: "cast[0].holds"}   # one setup element whose removal must remove b1
+  ```
+  1. `harness/corpus_run.py`: "`CAST_KEYS` gains `pursuits`, `holds` (not `knows`: struck); `build_case` dispatches on `base` (`12_ARCS_case_on_the_realm.md`); `build_at` builds from `setup:` when present and falls back to the template when absent (so the 135 un-authored cases run as today, hash EQUAL). `seasons_for` reads `setup.span_seasons`. Unknown keys are refused at load, as `_check_cast` does today."
+  2. `harness/arc.py`: "`match_beats(w, driver, beats) -> list[BeatResult]`, a pure read over `w.log` and `driver.act_of`: kind equality, actor through `state/attribution.py::actor_of` (a resolver-side read, lawful for a harness observer, said in the docstring), subject through the Event's changes, `after` by log order, `caused_by` by `_reach`. No new Event kinds, no writes."
+  3. `harness/corpus_run.py::run_case`: "runs the on-arm and, where `off_arm:` is stated, the off-arm; status vocabulary gains `BEATS n/m` and loses `RUNS-UNDECLARED` for authored cases. `R2` stops being `NOT-COMPUTABLE` for them."
+  4. Player proxy: "when `setup.player` is present the runner passes `play_surface.dispatching_chooser(auto, {pid: policy})`. A policy picks among the candidates the engine offers (through `decision/sheet.py`'s development space); it names no outcome. `echo` is the control and must leave the hash equal to the automated run."
+  "If a case's beats match in the off-arm too, the beat is not evidence of the setup and the case is reported `BEATS-UNCONTROLLED`, not passed."
+- WHERE: `engine/season/harness/corpus_run.py` (`CAST_KEYS`, `build_case`, `build_at`, `seasons_for`, `_check_cast`, `run_case`); `engine/season/harness/arc.py` (`match_beats`, `BeatResult`); NEW `engine/season/tests/test_case_setup_and_beats.py`.
+- TESTS: the new file, written first: `test_an_unauthored_case_hashes_as_before`, `test_beats_match_on_arm_and_not_off_arm`, `test_echo_policy_leaves_the_hash_equal`, `test_a_knows_key_is_refused_at_load`, `test_who_resolves_by_registry_id_only`; the second reads red until B39.13 authors NPC-088 (EXPECTED RED UNTIL B39.13, under `[skip ci]`); the rest red before the edit, green after.
+- FALSIFIER and CONTROL: "the beat matcher is given no ability to write and the policy no ability to name an Act the engine did not form"; "shuffle the cast's pursuits between persons; a beat keyed to an actor should fail to match more often than not, or the beat was never about that person." Control: unauthored cases hash as before.
+- GATE: `python -m pytest engine/season/tests/test_case_setup_and_beats.py -q` → four pass, one expected red; `python -m engine.season.harness.corpus_run` at seed 0 → the 135 unauthored cases' hashes equal B38's close reading (`reading @<sha>`).
+- HASH MOVERS: none ("No hash moves for un-authored cases"; the realm pins are not read).
+- DEPENDS ON: V12 B39.10 (`CORE_case` "Depends on: `21_PROCEDURAL_C`"); EXISTS-IN-TREE `harness/corpus_run.py::CAST_KEYS`, `::_check_cast`, `::build_at`, `::seasons_for`, `::run_case`, `harness/arc.py::_reach`, `::shuffled_causes`, `harness/play_surface.py::dispatching_chooser`, `state/attribution.py::actor_of`; V12 Batch B36 (`17_CENSUS_C1B_02` W-1, the arc reader's entry, which `match_beats` lands after: that file's `Reconciled:` line).
+- GLOSSARY: *beat* (new or edited: "one expected happening of a case, as a beat is one step of a story's plan"); *case* row kept.
+- COST and TIER: small build; `sonnet`, `high` (`CORE_case` "Lands it and tier").
+- LANDS IT: B39's producer (IN `valoria-author` per the source); `Item: B39.11`, `[skip ci]`.
+
+### B39.12 — a case is a delta on the realm, with prehistory and three controls · `ARCS_case` · BUILD · HASH EQUAL
+- SOURCE: `ARCS_case` "Resolution (decided)" 1–5, "Edits, by owner", "Gate", "Falsifier"; its head (A-44, A-50, A-51: "the delta is applied to the world **after** generation and before the prologue where it states a standing fact, and after the prologue where it states the opening situation"; the year is `rosters.yaml: seasons_of_year`, C3-K11); closes `audits/12_ARCS_adjudication.md` §2.2.
+- ADVANCES: none of the nine; "it tests the half of R with no player in it on the world the game actually builds".
+- INSTRUCTION:
+  1. `harness/corpus_run.py`: "`build_case(case, seed)` dispatches on `base`; `build_at` stays the template builder unchanged (hash EQUAL for unauthored cases); the realm arm calls `build_realm(seed)` then applies the delta with the constructors `build_at` already uses (`_seat_office`, `add_tenure`), validated at load as `_check_cast` validates a cast today." `who:` entries "resolve to the realm's person by registry case id (`p_npc_088`), never by name match"; `records:`, `dates:`, `offices:` as `CORE_case`; `span_seasons` an integer. "One builder per base; no third."
+  2. "`setup.prehistory:` is an ordered list of acts (`{actor, verb, subject}`) folded through the real RESOLVE and WITNESS before tick 0 with the case's seed; the claims that result are deposited by the engine. No `knows:` key. A prehistory act the fold refuses fails the build, naming the refusal." "The loader refuses any `setup` key outside the closed set and any prehistory act whose verb's row writes the field a beat names as its terminal." The fold is one function in `corpus_run.py` (B39.31 and B39.32 call it; no second fold).
+  3. Beats as `CORE_case`, "plus three forms the cases need: `absent: true` (the beat must not occur); `any_of: [...]` (one of several person-chosen branches); `window: {from, to}` in seasons."
+  4. "Three controls, all required for a pass. (a) off-arm: one setup element withheld, the beat absent; (b) cast shuffle: creeds permuted between seated persons, an actor-keyed beat fails in the majority of permutations; (c) null: the matcher run over `arc.shuffled_causes(log, seed)` finds no `caused_by` beat." Each read on a fixed generation seed.
+  5. `harness/arc.py::match_beats` (B39.11) reuses `_reach` for `caused_by`; its docstring states the `actor_of` read is a harness observer's (`04` §B.9).
+- WHERE: `engine/season/harness/corpus_run.py` (`build_case`, the realm arm, the prehistory fold, the closed `setup` key set); `engine/season/harness/arc.py` (the three beat forms, the null control); NEW `engine/season/tests/test_case_on_the_realm.py`.
+- TESTS: the new file, written first: `test_npc088_beats_match_on_the_realm`, `test_npc088_off_arm_matches_neither` (both EXPECTED RED UNTIL B39.13), `test_the_null_matches_no_caused_by_beat`, `test_unauthored_cases_hash_as_before`, `test_a_setup_key_outside_the_closed_set_is_refused`, `test_a_prehistory_act_that_writes_a_terminal_beat_is_refused`.
+- FALSIFIER and CONTROL: "A setup that contains an outcome. … If a beat matches in the off-arm the case reads `BEATS-UNCONTROLLED`." Control: unauthored cases hash as before.
+- GATE: `python -m pytest engine/season/tests/test_case_on_the_realm.py engine/season/tests/test_case_setup_and_beats.py -q` → pass but for the three expected reds of B39.11 and this item.
+- HASH MOVERS: "None for unauthored cases (control)."
+- DEPENDS ON: V12 B39.11 (base), V12 B39.10 (the prologue and its year); V12 Batch B12a (B12a.02); EXISTS-IN-TREE `corpus_run.py::_seat_office` (grep at the open), `World.add_tenure`.
+- GLOSSARY: *prehistory* (edited: "acts folded through the engine before tick 0, so a case's opening state is reachable by play").
+- NAMES: `build_realm` as B39.01.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B39's producer (WR/IN); `Item: B39.12`, `[skip ci]`.
+
+### B39.13 — NPC-088's setup and beats on the realm · `CORE_case` edit 5 (first case), `ARCS_case` (NPC-088 first) · CONTENT · HASH EQUAL
+- SOURCE: `CORE_case` edit 5 ("author `setup:`/`beats:` for NPC-088 first"); `ARCS_case` "Edits, by owner" ("`cases/exercises/NPC-088.yaml` first") and "Gate" ("NPC-088 on the realm, seeds 0, 1, 2: `record.created` by `p_npc_088` and `term.matured` matched; the off-arm (her copying skill and workshop Record withheld) matches neither"); D-19.
+- ADVANCES: none of the nine.
+- INSTRUCTION: in `engine/season/cases/exercises/NPC-088.yaml`, author `setup:` with `base: realm`, the delta NPC-088 needs that the realm lacks (her `copying` skill score and the workshop Record she holds, per the gate's off-arm), `span_seasons` (the case's own span; the gate reads two seasons, see GATE) and `beats:` `record.created` by `p_npc_088` and `term.matured`, with `off_arm: {withhold: …}` naming the skill and the Record. Values marked `status: seed [ASSUMPTION; drafted for Jordan's correction]` and listed in the PR body.
+- WHERE: `engine/season/cases/exercises/NPC-088.yaml` (`setup:`, `beats:`, `off_arm:`).
+- TESTS: the three EXPECTED RED tests of B39.11 and B39.12 turn green.
+- FALSIFIER and CONTROL: a beat that matches in the off-arm (`BEATS-UNCONTROLLED`); a beat keyed to her that still matches when creeds are shuffled in most permutations. Control: the null (shuffled causes) matches no causal beat.
+- GATE: `python -m pytest engine/season/tests/test_case_on_the_realm.py engine/season/tests/test_case_setup_and_beats.py -q` → all pass; `python -m engine.season.harness.corpus_run` at seeds 0, 1, 2 prints NPC-088 `BEATS 2/2` on-arm and 0 matched off-arm, at two seasons `[ASSUMPTION: corpus_run reads a case for `seasons_for(case)` seasons; NPC-088's authored `span_seasons` is ≤ 2 for this gate and a longer span is the case's own, read at B99 — basis: `corpus_run.py:460`'s `seasons_for`; D-17]`.
+- HASH MOVERS: none in the realm pins.
+- DEPENDS ON: V12 B39.12.
+- GLOSSARY: none.
+- COST and TIER: content; drafting `opus`; landing `sonnet`.
+- LANDS IT: B39's producer; `Item: B39.13`, `[skip ci]`.
+
+### B39.14 — the seven further cases' setups and beats, and integer spans · `CORE_case` edit 5 (the rest) · CONTENT · HASH EQUAL
+- SOURCE: `CORE_case` edit 5 ("then the seven other cases with overlay rows (NPC-002, -005, -010, -012, -075, -086, -087); other lanes author theirs from their §13 tables. Integer spans for the 86 prose rows are a data edit in the overlay, with `ongoing: true`"); `ARCS_case` "INCOMPLETE, not decidable here: the per-case `prehistory` lists and `beats` are content each lane authors"; `unified/U4_DOCUMENT_STATUS.md` §3.4 row ARCS (CONTENT, owner "case authors"); D-19.
+- ADVANCES: none of the nine.
+- INSTRUCTION: (1) for NPC-002, -005, -010, -012, -075, -086, -087, author `setup:` (base `realm`; delta only) and `beats:` with an `off_arm:` each, from `audits/01_CORE_audit.md` §13's table for each case; (2) for the 86 cases whose span is prose (`corpus_run.py`'s two-season default), write the integer `span_seasons` with `ongoing: true` where the source says the case is ongoing. Every value `status: seed [ASSUMPTION; drafted for Jordan's correction]`, listed by case in the PR body. A case whose beats match in its off-arm is left `BEATS-UNCONTROLLED` and named, not forced.
+- WHERE: `engine/season/cases/exercises/NPC-002.yaml`, `NPC-005.yaml`, `NPC-010.yaml`, `NPC-012.yaml`, `NPC-075.yaml`, `NPC-086.yaml`, `NPC-087.yaml` (created where absent); the overlays of the 86 prose-span cases (`span_seasons`).
+- TESTS: none new; `test_unauthored_cases_hash_as_before` re-reads the remaining unauthored set.
+- FALSIFIER and CONTROL: any authored case's beat matching in its off-arm; a `setup` key outside the closed set (refused at load). Control: the cases left unauthored hash as before.
+- GATE: `python -m engine.season.harness.corpus_run` at seeds 0, 1, 2 → per authored case its `BEATS n/m` and off-arm reading printed, two seasons; `python -m pytest engine/season/tests/test_case_on_the_realm.py -q` → pass.
+- HASH MOVERS: none in the realm pins (cases are harness worlds).
+- DEPENDS ON: V12 B39.13.
+- GLOSSARY: none.
+- COST and TIER: content; drafting `opus`, `high`; landing `sonnet`.
+- LANDS IT: B39's producer; `Item: B39.14`, `[skip ci]`.
+
+### B39.15 — one card schema, one loader, one draw; the variety instrument · `PROC_D` PG-6 · BUILD · HASH EQUAL
+- SOURCE: `PROC_D` §3 items 1–5, §4 "PG-6" (a)–(f), §6 PG-6 and "First step, the instrument", §7; rulings A-47, A-50, A-52; closes R-21-01, R-21-11; re-aims CL-EVENTS commits (3)–(4), CR-80's world-build seeds and CL-OPEN's set pieces at one receiver (`PROC_D` (e)).
+- ADVANCES: none of the nine; variety between worlds (A-50).
+- INSTRUCTION:
+  1. **First, the instrument.** NEW `engine/season/harness/variety.py` "as `02_P1_templates.md` §1 defines it: run N world seeds for S seasons, sign every cross-person chain of depth 3 or more as (verb sequence, actor role classes, subject kind) keyed by role, reusing `harness/storybar.py::chains`, and print the mean pairwise Jaccard between worlds and the stock share (signatures present in at least half the worlds)."
+  2. NEW `engine/season/world_cards.yaml` (ships with empty pools): `meta: {authority: "AUTHORED FOR PLAY. Not canon. Read once by build_realm (engine/season/data/world_cards.py)."}`, `draw: {tension: 1, setpiece: 3, strife: 2, case: 4}`, `cards: []`. A row is `id, family, source, weight, attach, eligible, roles, goal_rows, seed_claim, opens_with` (the source's example row `setpiece_uncatalogued_lock`, §4 (a), is the shape; it ships commented, not as a row); "`attach`: a QUERY, never a rung id or a name"; "`opens_with` … names an existing verb; refused at import if not in verb_table.yaml". "A card in the `scenario` sense … sets `scenario: true` and may then use `org: {faction: …}` or a named seat … Every other card is refused at import if any field resolves to a proper noun." No date, deadline, firing condition or outcome may be data.
+  3. `engine/season/rosters.yaml: card_clauses` (new closed set): `relation`, `toward`, `stance_at_most`, `holds_seat`, `holds_seat_with_remit`, `goal_toward_seat`, `doer_holds_any`, `doer_capability_at_least`, `shared`, `seat_post`, `settlement_type`, `building`, `faction_role`. "Each maps to one existing query; a clause outside the set is refused at import by name (the `_check_covert_kinds` idiom)."
+  4. NEW `engine/season/data/world_cards.py`: frozen `Card(id, family, weight, attach, eligible, roles, goal_rows, seed_claim, opens_with, scenario)`, `BoundCard(card, binding)`; `load(text=None) -> tuple[Card, ...]` ("schema, clause set, verb names, pursuit names; each refusal names the row"); `bindings(w, card)` ("every way the card's roles bind in this world, sorted"); `draw(w, cards, counts, attempt=0)`: "per family in sorted order: the eligible cards are those with at least one binding; pick weight = `card.weight × len(bindings)`; … each card gets a keyed score and the `k` best scores are taken, which is draw without replacement that does not depend on pool order and does not move when an unrelated card is added; then pick one binding per drawn card by `pick(seed, card.id, "card:binding")`." Pool sizing: "draw `k` per family from pools of at least `k²` eligible cards."
+  5. `build_realm` "gains `cards: bool = False`. When true, after the cast, seats and goals are seated and before the prologue: `world_cards.draw(…)`; each bound card's goal rows are expanded (roles replaced by the bound ids) and passed through the existing `seed_goals` path; the seed claim is appended to the named holder's ledger as a firsthand claim. The drawn and bound cards are recorded on the build report (`census`), never on a store a loop step reads."
+  6. (f): an authored arc enters as `setpiece` cards plus `goal_stages` rows; "the corpus's per-case `setup:` blocks (`01_CORE_case_setup_and_beats.md`, `12_ARCS_case_on_the_realm.md`) map onto `eligible` and `roles` one to one" — stated in `world_cards.py`'s docstring; no code beyond the schema.
+- WHERE: NEW `engine/season/harness/variety.py`; NEW `engine/season/world_cards.yaml`; `engine/season/rosters.yaml` (`card_clauses`); `engine/season/data/rosters.py` (its loader); NEW `engine/season/data/world_cards.py`; `engine/season/boot/realm.py` (`cards`); NEW `engine/season/tests/test_world_cards.py`.
+- TESTS: the new file, written first: `test_empty_pools_reproduce_base_hash`, `test_card_with_unbindable_role_is_not_drawn`, `test_adding_one_card_changes_draws_only_where_it_scores_into_top_k`, `test_clause_outside_card_clauses_is_refused_by_name`, `test_non_scenario_card_with_a_proper_noun_is_refused`, `test_variety_of_one_world_twice_is_one_and_stock_share_one`; red before.
+- FALSIFIER and CONTROL: "Similarity does not fall, or the stock share rises: the cards are a stock story, not variety. Most drawn cards are never opened … A card whose bound person acts on it in every world in which it is drawn, with the same result: it is a script." Control: empty pools, hash EQUAL at seeds 0, 1, 2.
+- GATE: `python -m pytest engine/season/tests/test_world_cards.py -q` → six pass; empty pools: the realm hash at seeds 0 to 2 equal to B39.10's. The source's pooled reading ("With the 27 Tensions rows and a drafted set-piece pool: over 20 seeds the variety instrument … shows mean similarity lower than the cards-off arm by more than the dice-only spread", and the share of drawn cards opened "within 4 seasons") needs content no item here authors (the 27 Tensions rows are `08_decks…` §1's; the set-piece pool is CL-OPEN's): it is read where those rows land, at two seasons (four in the source; A-114), and is the target named under DIALS for `cards`.
+- HASH MOVERS: none (`cards=False`, empty pools).
+- DEPENDS ON: V12 B39.12, B39.05 (realm cards bind to); V12 Batch B10 (B10.71, a goal's stages; `02_CHAR_goal_lean_on_its_own_question`); V12 Batch B32 (`14_VERBS_BINDING_B_sittings`, `convene`); EXISTS-IN-TREE `harness/storybar.py::chains`, `harness/populated.py::seed_goals`, `data/goals.py::parse`, `data/verbs.py::_check_covert_kinds` (the idiom).
+- GLOSSARY: *card* (edited: "a drawn bundle of roles, goals and at most one claim bound at build, as a dealt card"), *variety* (the instrument's reading; pointer to `harness/variety.py`).
+- NAMES: `build_realm` as B39.01.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B39's producer; `Item: B39.15`, `[skip ci]`.
+
+### B39.16 — arrivals take name and birth from the generator · `PROC_D` PG-7 (g) · POINTER
+`PROC_D` (g) is `PROC_B` (d) "as reconciled" and lands as B39.04 (`engine/season/loop/census.py::_individuate`: name and `born` from `generate_person` keyed by the demand; nothing of the interior written at CENSUS). Its test is `engine/season/tests/test_census_generated_arrival.py` ("proposal B's … covers (g)"); its gate is B39.04's (the `04` PART E row 9 case: a person individuated by a `dispatch` to a post nobody holds acts next season; the same demand under the same seed individuates the same person). (g′) is held with the docket (B39.18).
+
