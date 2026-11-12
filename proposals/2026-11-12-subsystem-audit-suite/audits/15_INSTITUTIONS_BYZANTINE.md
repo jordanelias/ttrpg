@@ -39,8 +39,9 @@ one; E-1); (d) the empire is two persons with no superior, so nothing can be san
 recalled. **The single largest obstacle is the one the FA lane measured: governance acts execute and
 bind nobody (`audits/06_FA_audit.md` F-FA-01, F-FA-02).** A court of precedence built on acts that bind
 nobody would be decoration, so this design lands after, and on, the FA lane's three mechanism
-proposals. It adds no verb, no carrier and no stored aggregate: three keys on seat rows, one record
-kind, one roster key, one arrangement row, three fixtures, and content.
+proposals. It adds no verb, no carrier, no tenure kind and no stored aggregate: four keys on seat rows
+(`dignity`, `upkeep`, `passes_through`, `hand_term`), one section of `offices.yaml` (`founding`), one
+record kind (`roll`), one roster map, one arrangement row, five fixtures, and content.
 
 **Nothing in it is decided by rank (the standing rule of `AUDIT_BRIEF.md`, Jordan 2026-11-12: "we do
 not do deterministic").** Every procedure the institution runs, an investiture, a recall, a document
@@ -413,9 +414,10 @@ Favour is one person's regard for another, computed when read (`person_q.regard`
    NPC-008's custody (a `core` need) has no object, "who certifies a deed" has no answer, and a house
    can be raised only by fiat. N holds bottom-up (a clerk's power), top-down (a parliament amends it),
    laterally (`research`, `forge`, `destroy_record` reach it with no new row).
-2. **Seat-row keys `dignity:`, `passes_through:`, `founding:`** (`offices.yaml`). *Cut `dignity`:*
-   stipends cannot differ by rank and the court is flat. *Cut `passes_through`:* every writ is in force
-   at issue, the clerk has no hand, and NPC-008, NPC-009 and NPC-011's delay all die. *Cut `founding`:*
+2. **Seat-row keys `dignity:`, `passes_through:` (with `hand_term:`), and the section `founding:`**
+   (`offices.yaml`; `upkeep:` is a key for a field `Office` already has). *Cut `dignity`:* stipends
+   cannot differ by rank and the court is flat. *Cut `passes_through`:* every writ is answerable at
+   issue, the clerk has no hand, and NPC-008, NPC-009 and NPC-011's delay all die. *Cut `founding`:*
    the two ducal houses read 0.000 (E-1) and the fixed point is prose.
 3. **Arrangement row `acclamation`.** *Cut:* no open-floor occasion exists at which a deed is told to
    a crowd; ceremony has no room and publicity is a constant.
@@ -686,17 +688,18 @@ season loop: one code path, no fork. Detail in proposal F.
 
 **`roga` (the first playable; needs A and B).** The player is the spine's Sovereign for eight
 seasons. At tick 0, by the game's own effects: four dignity seats under him, two held by sworn men
-whose terms mature in season 4, two vacant; two provinces with stores; a fisc that covers half the
-bill; one person on the spine with a field won that no dignity cites. *He sees:* the bill, the fisc,
-who is owed and when, whose deeds he has heard of. *He chooses:* whom to tax and how hard
-(`requisition`, drawn), whom to pay first (`transfer`), whether to honour the general and add to next
-year's bill (`confer`, drawn), whom to leave unpaid. *Consequences:* a term that matures frees a man
+whose terms mature in season 4, two vacant; two duchies with stores; a fisc that holds 4 against a
+bill of 5; one person who gave more to the fisc than either and holds no dignity and no oath. *He
+sees:* the bill, the fisc, who is owed and when, whose deeds he has heard of. *He chooses:* whom to
+tax and how hard (`requisition`, drawn), whom to pay first (`transfer`), whether to honour the giver
+and add to next year's bill (`confer`, drawn, and only if the man will swear), whom to leave unpaid. *Consequences:* a term that matures frees a man
 and his people from his purview; a collection that draws Failure is remembered where it was tried.
 *Ends:* FA's three (no seat; season count; `endings_reached`), plus **the court lapsed** (more than
 half the terms sworn to his seat matured unpaid) and **the court kept** (none did, at the count).
 *Control:* the same seed with the auto chooser in his seat.
 
-**`chancery` (needs C).** The player is the clerk whose body the Sovereign's writs pass through.
+**`chancery` (needs C).** The player holds the seat the Sovereign's writs pass through (on the spine
+a hand is a seat, since the fixture may invent no body).
 Each season: the documents in his hand, each with its maker, its age and its terms. He enters, holds
 over or returns (a draw each time he acts), on a budget that does not cover them all. *Ends:* recalled
 (the Sovereign's `revoke` draws Success or better); kept at the count; or the body empty.
@@ -791,8 +794,8 @@ not superseded; canon is silent on who staffs the Ministries.)
 - *S.* One degree ladder, one obstacle form, one treasury, one clock; the presumption is scored by
   `deed_term` and weighted as `reception` weighs. Pauses: a hearing on the Roll is SC's scene and
   returns a determination. Zoom: a hand is a person; a body is the persons in its seats.
-- *E, against that.* Three row keys, one record kind, one roster map, one arrangement row and three
-  fixtures buy the court, the fisc, the chancery and the empire's distance. A player can intuit the
+- *E, against that.* Four row keys, one section, one record kind, one roster map, one arrangement
+  row and five fixtures buy the court, the fisc, the chancery and the empire's distance. A player can intuit the
   outcomes from four sentences: honours cost money every year; unpaid men leave; paper needs hands;
   far orders arrive old.
 

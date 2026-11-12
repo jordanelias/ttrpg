@@ -11,13 +11,13 @@ starts with `engine/season/harness/`, `modules/`, `systems/`, `engine/dice_engin
 ## 0. Verdict
 
 **Four rows in five are false leads: 518 of 643 are reached by a route a name search cannot see, and
-only 26 rows are dead code this lane newly finds.** The census's largest single block, the 115 rows
+only 21 rows are dead code this lane newly finds.** The census's largest single block, the 115 rows
 of `harness/probes.py`, is one mechanism (a decorator registry) and every one of the 121 registered
 probes executes. The dead rows are dominated by one decision the suite has already made (the SC-05
 kernel, 75 rows). What the lane adds: two instruments that are tested and that no person can run
 (`harness/arc.py`'s arc reader, `corpus_run.foreign_kinds`), ten rows of threadwork oracle that
-nothing reaches and nothing carries, and eleven rows of `modules/mass_battle/` that are test-only or
-empty.
+nothing reaches and nothing carries, and eleven rows of `modules/mass_battle/` that are uncalled,
+test-only or empty (four of the eleven were already found by the MB audit).
 
 | | rows |
 |---|---|
@@ -44,7 +44,7 @@ empty.
 | **total** | **643** | **518** | **101** | **23** | **1** |
 
 Proposals: `proposals/17_CENSUS_C1B_01_deletions.md` (batches D1 to D3, ordered by risk, with the
-`FORK:` row text), `17_CENSUS_C1B_02_wires.md` (W-1, W-2, and the gap W-4 put to the WR proposal's
+`FORK:` row text), `17_CENSUS_C1B_02_wires.md` (W-1, W-2, and the gap W-3 put to the WR proposal's
 owner), `17_CENSUS_C1B_03_corrections.md` (C-1 to C-6). Every row is in Annex A.
 
 ## 1. Method (how each row was read)
@@ -71,8 +71,10 @@ search and a module import graph (scripts kept in the session scratchpad, not in
 
 Limits, stated once. (a) Reach from `__main__` shows a path exists, not that the path runs: every
 file with rows was imported as a script (§5, run 3), but no `main` was run except where §4 says so.
-(b) Cross-file edges are by name; a common name can supply a false edge. The 26 rows this lane calls
-dead or newly broken were each read at the call site and grepped by whole word.
+(b) Cross-file edges are by name; a common name can supply a false edge, which can only make a dead
+symbol look live. The 26 dead rows outside the SC kernel and the 5 harness rows called broken were
+each read at the call site and grepped by whole word; the 518 false positives rest on the AST chain
+in Annex A, spot-checked on the largest rows of each harness file and not row by row.
 
 ## 2. Why the false positives are false (518 rows, six mechanisms)
 
@@ -122,7 +124,7 @@ Ten false positives, in six groups, that needed a judgment and are not one of th
 | `harness/corpus_run.py::foreign_kinds` | "what an act's Events say that its row does not declare"; test-only, while its sibling `unrowed_acts` is printed by `aperture` | **W-2**: one key and one line in `aperture`. Needed: it is the executed form of census C4's question | run 5: realm seed 0, 3 seasons: empty over 2,630 acts and 74,510 events; `test_aperture.py:230` plants one and sees it, so the zero is a reading |
 | `harness/army_presets.py::_commander`, `plan_for` | reached through `install`, which tests alone call | carried: `proposals/04_MB_playable_field_scenario.md` (MB R-07: install presets at realm build behind one fixture) | `module_contracts.yaml:114`: "shipped off: nothing in the season loop calls it" |
 | `systems/threadwork/sim/operations.py` (8), `coherence.py` (4) | the oracle's operations; tests only | carried: `proposals/09_WR_threadwork_module.md` (entry `threadwork.work`) and `09_WR_B_threadwork_session_and_practitioner.md` | import graph: `TESTS` only |
-| `systems/threadwork/sim/collective.py` (3), `opposing.py` (3) | as above, and no verb | carried by the same move, **with a gap this lane names (W-4)**: neither WR proposal gives a collective or an opposed working an entry, a verb or a caller, so after the move they are still test-only, now inside `modules/` | `09_WR_threadwork_module.md:79-80` (signatures change; no row added); `…replug.md` §3.3 ("no verb") |
+| `systems/threadwork/sim/collective.py` (3), `opposing.py` (3) | as above, and no verb | carried by the same move, **with a gap this lane names (W-3)**: neither WR proposal gives a collective or an opposed working an entry, a verb or a caller, so after the move they are still test-only, now inside `modules/` | `09_WR_threadwork_module.md:79-80` (signatures change; no row added); `…replug.md` §3.3 ("no verb") |
 
 ### 3.3 Mislabelled: correct (1, and the corrections that ride on deletions)
 
@@ -151,7 +153,7 @@ corrections proposal: a comment that points at a deleted function, a package doc
 | 3 | `runpy.run_path(file, run_name="census_import_probe")` for every file with rows under `systems/`, `modules/`, `engine/dice_engine/`, `engine/substrate/`, `engine/reference/` | n/a | all import; the nine SC kernel files refuse as scripts because they are package-relative (expected) |
 | 4 | `storybar.drive(0, 2, "off", None)`; `arc.read_arcs(w, d, …)` four ways | seed 0, 2 seasons | 83 actors; default 0; `ambition_thrusts` 21; shuffled null 1; unrestricted 53; drive 24.6 s |
 | 5 | `populated.run(3, 0, w=build_realm(0))`; `corpus_run.foreign_kinds(w)`, `unrowed_acts(w)` | seed 0, 3 seasons | 2,630 acts, 74,510 events; `foreign_kinds` empty; `unrowed_acts` 0. One seed: a count, not a rate |
-| 6 | whole-word greps for each of the 26 new dead or broken rows over `engine modules systems tools tests skills` | n/a | as cited per row |
+| 6 | whole-word greps for each of the 26 non-kernel dead rows and the 5 broken harness rows over `engine modules systems tools tests skills` | n/a | as cited per row |
 | 7 | `git status --short` at the end | n/a | only this lane's four files under the suite directory are new; no tracked file changed by this lane |
 
 No `pytest` was run. Nothing was written outside the suite directory and the session scratchpad.
@@ -164,7 +166,7 @@ No `pytest` was run. Nothing was written outside the suite directory and the ses
   `architecture/meta/04_CODE_ARCHITECTURE.md` has no row naming the harness (a search of the file for
   "harness" returns nothing), so no row is graded; neither edit touches `state/`, `loop/`, a registry or
   a module.
-- **W-4** is a gap named in another lane's proposal, not an edit.
+- **W-3** is a gap named in another lane's proposal, not an edit.
 - No guard, no new apparatus, no new corpus. Nothing here needs Jordan: every decision was taken on
   ladder steps 1 to 5 and the step is named at the row.
 
@@ -797,9 +799,9 @@ Generated from the AST pass and the decisions of §3; one line per census row. C
 | `systems/threadwork/sim/coherence.py:166` | `CoherenceLogEntry` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` |
 | `systems/threadwork/sim/coherence.py:280` | `CoherenceFailureResult` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` |
 | `systems/threadwork/sim/coherence.py:411` | `check_coherence_failure_transition` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` |
-| `systems/threadwork/sim/collective.py:47` | `CollectiveResult` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` — ⚠ neither gives this file an entry or a verb (W-4) |
-| `systems/threadwork/sim/collective.py:62` | `_helper_contribution` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` — ⚠ neither gives this file an entry or a verb (W-4) |
-| `systems/threadwork/sim/collective.py:71` | `attempt_collective_operation` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` — ⚠ neither gives this file an entry or a verb (W-4) |
+| `systems/threadwork/sim/collective.py:47` | `CollectiveResult` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` — ⚠ neither gives this file an entry or a verb (W-3) |
+| `systems/threadwork/sim/collective.py:62` | `_helper_contribution` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` — ⚠ neither gives this file an entry or a verb (W-3) |
+| `systems/threadwork/sim/collective.py:71` | `attempt_collective_operation` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` — ⚠ neither gives this file an entry or a verb (W-3) |
 | `systems/threadwork/sim/operations.py:225` | `_compute_degree` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` |
 | `systems/threadwork/sim/operations.py:375` | `attempt_weaving` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` |
 | `systems/threadwork/sim/operations.py:388` | `attempt_pulling` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` |
@@ -808,9 +810,9 @@ Generated from the AST pass and the decisions of §3; one line per census row. C
 | `systems/threadwork/sim/operations.py:434` | `attempt_dissolution` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` |
 | `systems/threadwork/sim/operations.py:456` | `MendingPrice` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` |
 | `systems/threadwork/sim/operations.py:592` | `_mend_own_configuration` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` |
-| `systems/threadwork/sim/opposing.py:79` | `opposing_engagement_modifier` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` — ⚠ neither gives this file an entry or a verb (W-4) |
-| `systems/threadwork/sim/opposing.py:87` | `_degree_label` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` — ⚠ neither gives this file an entry or a verb (W-4) |
-| `systems/threadwork/sim/opposing.py:102` | `resolve_opposing_operations` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` — ⚠ neither gives this file an entry or a verb (W-4) |
+| `systems/threadwork/sim/opposing.py:79` | `opposing_engagement_modifier` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` — ⚠ neither gives this file an entry or a verb (W-3) |
+| `systems/threadwork/sim/opposing.py:87` | `_degree_label` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` — ⚠ neither gives this file an entry or a verb (W-3) |
+| `systems/threadwork/sim/opposing.py:102` | `resolve_opposing_operations` | broken: wire | the oracle has no season caller (module graph: reached by tests only); the wire is `proposals/09_WR_threadwork_module.md` (move to `modules/threadwork/`, entry `threadwork.work`) with `09_WR_B_threadwork_session_and_practitioner.md` — ⚠ neither gives this file an entry or a verb (W-3) |
 | `systems/threadwork/sim/threadcut.py:72` | `ThreadcutState` | dead: delete | file has no importer and no test (module graph: 0 importers); its module-level store is deleted by `proposals/09_WR_threadwork_module.md` edit 2 and nothing carries the state (`proposals/2026-10-07-unplugged-systems-replug.md` §3.3: "no carrier"); batch D3 |
 | `systems/threadwork/sim/threadcut.py:92` | `mark_threadcut` | dead: delete | file has no importer and no test (module graph: 0 importers); its module-level store is deleted by `proposals/09_WR_threadwork_module.md` edit 2 and nothing carries the state (`proposals/2026-10-07-unplugged-systems-replug.md` §3.3: "no carrier"); batch D3 |
 | `systems/threadwork/sim/threadcut.py:100` | `is_threadcut` | dead: delete | file has no importer and no test (module graph: 0 importers); its module-level store is deleted by `proposals/09_WR_threadwork_module.md` edit 2 and nothing carries the state (`proposals/2026-10-07-unplugged-systems-replug.md` §3.3: "no carrier"); batch D3 |

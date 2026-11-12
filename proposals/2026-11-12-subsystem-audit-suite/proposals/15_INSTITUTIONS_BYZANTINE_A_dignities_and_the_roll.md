@@ -79,16 +79,19 @@ Six rows, appended to `seats:` (posts are placeholders; canon names no court dig
 never supplies a canon name: `rosters.yaml`'s source-precedence ruling):
 
 ```yaml
-  - {id: off_dignity_1a, post: "[PLACEHOLDER] Dignity of the fifth grade",  rung: {realm: true}, body: "Imperial Court", faction: null, remit_acts: [], dignity: 5, conferral: appointed, revocation: null, holder: null, obligees: [], source: "INST-BYZ-A; Jordan names", note: "[NEW]. Vacant at build."}
-  - {id: off_dignity_2a, post: "[PLACEHOLDER] Dignity of the fourth grade", rung: {realm: true}, body: "Imperial Court", faction: null, remit_acts: [], dignity: 4, conferral: appointed, revocation: null, holder: null, obligees: [], source: "INST-BYZ-A", note: "[NEW]."}
-  - {id: off_dignity_2b, post: "[PLACEHOLDER] Dignity of the fourth grade", rung: {realm: true}, body: "Imperial Court", faction: null, remit_acts: [], dignity: 4, conferral: appointed, revocation: null, holder: null, obligees: [], source: "INST-BYZ-A", note: "[NEW]."}
-  - {id: off_dignity_3a, post: "[PLACEHOLDER] Dignity of the third grade",  rung: {realm: true}, body: "Imperial Court", faction: null, remit_acts: [], dignity: 3, conferral: appointed, revocation: null, holder: null, obligees: [], source: "INST-BYZ-A", note: "[NEW]."}
-  - {id: off_dignity_3b, post: "[PLACEHOLDER] Dignity of the third grade",  rung: {realm: true}, body: "Imperial Court", faction: null, remit_acts: [], dignity: 3, conferral: appointed, revocation: null, holder: null, obligees: [], source: "INST-BYZ-A", note: "[NEW]."}
-  - {id: off_dignity_4a, post: "[PLACEHOLDER] Dignity of the second grade", rung: {realm: true}, body: "Imperial Court", faction: null, remit_acts: [], dignity: 2, conferral: appointed, revocation: null, holder: null, obligees: [], source: "INST-BYZ-A", note: "[NEW]."}
+  - {id: off_dignity_1a, post: "[PLACEHOLDER] Dignity of the fifth grade",  rung: {territory: "T1"}, body: "Imperial Court", faction: null, remit_acts: [], dignity: 5, conferral: appointed, revocation: null, holder: null, obligees: [], source: "INST-BYZ-A; Jordan names", note: "[NEW]. Vacant at build."}
+  - {id: off_dignity_2a, post: "[PLACEHOLDER] Dignity of the fourth grade", rung: {territory: "T1"}, body: "Imperial Court", faction: null, remit_acts: [], dignity: 4, conferral: appointed, revocation: null, holder: null, obligees: [], source: "INST-BYZ-A", note: "[NEW]."}
+  - {id: off_dignity_2b, post: "[PLACEHOLDER] Dignity of the fourth grade", rung: {territory: "T1"}, body: "Imperial Court", faction: null, remit_acts: [], dignity: 4, conferral: appointed, revocation: null, holder: null, obligees: [], source: "INST-BYZ-A", note: "[NEW]."}
+  - {id: off_dignity_3a, post: "[PLACEHOLDER] Dignity of the third grade",  rung: {territory: "T1"}, body: "Imperial Court", faction: null, remit_acts: [], dignity: 3, conferral: appointed, revocation: null, holder: null, obligees: [], source: "INST-BYZ-A", note: "[NEW]."}
+  - {id: off_dignity_3b, post: "[PLACEHOLDER] Dignity of the third grade",  rung: {territory: "T1"}, body: "Imperial Court", faction: null, remit_acts: [], dignity: 3, conferral: appointed, revocation: null, holder: null, obligees: [], source: "INST-BYZ-A", note: "[NEW]."}
+  - {id: off_dignity_4a, post: "[PLACEHOLDER] Dignity of the second grade", rung: {territory: "T1"}, body: "Imperial Court", faction: null, remit_acts: [], dignity: 2, conferral: appointed, revocation: null, holder: null, obligees: [], source: "INST-BYZ-A", note: "[NEW]."}
 ```
 
-A closed number, deliberately: a place at the table is scarce, and it falls free only by a death or a
-`release`. `[UNVERIFIED]` that `harness/populated.py` mints a row whose `holder` is null as a vacant
+Anchored at `T1`, the capital, as the Inner Circle's appointed seats are: those are the rows a seat
+on the realm rung can fill today (`offices.yaml:58-60`, H-207: "at build only the six Crown T1 seats
+are satisfiable"); a dignity on the realm rung itself would sit beside the King's seat and not
+beneath it. A closed number, deliberately: a place at the table is scarce, and it falls free only by
+a death or a `release`. `[UNVERIFIED]` that `harness/populated.py` mints a row whose `holder` is null as a vacant
 seat (`establish` leaves one vacant today, FA audit E-5; the authored-row path was not traced). If it
 does not, the rows are minted by the build's own `establish` under `off_king`.
 
@@ -145,9 +148,11 @@ New emitted kind: `conferral.declined` (`write_matrix.yaml` needs no row: nothin
 
 ## Gate (execution artifacts)
 
-1. *Build.* The probe of audit E-1 re-run: persons' mean `legitimacy(p, holder, seat)` for the three
-   founding holders is ordered King > Hafenmark > Varfell at the shipped fixtures; at
-   `presumption_gain: 0` it reads 0.720, 0.000, 0.000 again (the control).
+1. *Build.* The probe of audit E-1, extended to read `legitimacy(p, holder, seat)`: its mean over
+   persons for the three founding holders is ordered King > Hafenmark > Varfell at the shipped
+   fixtures, and the two dukes' means are above zero; at `presumption_gain: 0` each mean equals the
+   value the unedited function returns on the same build (the control; E-1's comparable reading is
+   mean `regard` 0.720, 0.000, 0.000).
 2. *Draw.* 200 seeds, one hand-placed `confer` of `off_dignity_3a` by the King on a sworn person with
    one firsthand deed: all four bands occur; no band exceeds 0.9; with `procedure_draws: off` every
    seed opens the hold (the control).

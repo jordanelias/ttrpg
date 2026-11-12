@@ -172,3 +172,122 @@ either way: `forge` (a forgery is made, always, at the forger's fixed quality), 
 `seize`, `raze`, `requisition`, `migrate`, `exchange`, `recruit`, `found`, `build`, `restore`, `train`,
 `tend`, `oblige`, `covenant`, `comply`/`defy`, `succeed`, `confer`, `revoke`, `pardon`, `release`,
 `convene`, `issue`, `dispatch`. §5 ranks them with the world-clock cases.
+
+**The engine's own draw sites, all of them** (grep over `engine/season/` outside `tests/` and `harness/`
+for `.random()`, `.choice(`, `draw_factory(`, `roll_`): the chooser's sampled order
+(`decision/choose.py::_sample_order`, `choice_temperature` 0.05); intent disclosure
+(`choose.py::declare_intents`, `intent_disclosure` **0.0**); the bodies hazard (`loop/matter.py`,
+`illness_rate` **0.0**, `age_step` **0.0**); the two rolls of the fold (`loop/resolve.py`, the contest and
+the graded act, at `pool_default` 2 against `obstacle_default` 2 for everyone: DICE audit); confiding
+(`loop/witness.py`, `telling_privacy` **0.0**); the season factor (`queries/world_q.py`,
+`season_factor_draw` **()**, the control); the believed-odds estimate (`seam/wrappers/_estimate.py`).
+Seven sites; four ship switched off. Shipped, the season engine's chance is one shuffle of what a
+person tries and one two-dice roll on a tenth of what they try. (Read with `build_realm(0).fixtures.get`.)
+
+### 1.4 False N-lines and unexamined survivors, at game scale
+
+A false N-line is a claim that a thing is necessary which a cut shows to be free. Graded on what X1 and
+§1.2 observed, not on design text.
+
+| claimed necessary | the cut | what died (computed play, 3 seeds × 3 seasons) | verdict |
+|---|---|---|---|
+| the personal-combat seam in the season (`fight`, `accept`, `challenge`) | remove the three rows | nothing: 0 executed of 521 attempts; no Event of theirs is anyone's cause | **false N-line today**; true on paper (PC audit: "a module with almost no customers") |
+| the mass-battle seam (`march` → field) | remove `march` | 1, 1 and 3 `field.lost`, 14 `field.unopposed`, no territory changed hands, no Event answered | **false N-line today** |
+| `train` (character development) | remove the row | nothing: 324 refusals | false N-line today |
+| the settlement verbs (`build`, `found`, `raze`, `sabotage`, `exchange`, `work`, `restore`) | remove them | nothing but refusals; site condition and stores identical with and without persons | false N-line today |
+| compliance (`comply`, `evade / defy`) | remove both | nothing: `compliance.impossible` 137 of 137 + 21 of 21 | false N-line today (FA audit: decrees are emission-only) |
+| the named individuals (46 cast persons) | `build_realm(0, cap=0)`: 37 cohorts, no individual, no office (X5) | the loop runs; 1,049 acts in three seasons against 2,630 with the cast; sites, stores and bodies end the same | the cast is necessary to the *paper*, not to the *world* |
+| persons at all | the NULL arm | paper, promises, the docket, memory; no seat, site, rung or (bar one) life | the world does not need its people |
+| memory decay as logged Events | drop `claim.decayed` from the log | nothing reads it as a cause in any seam cell above; it is 65% of the log at six seasons (WR run, seed 0: 179,056 of 273,067) | false N-line as an *Event*; the fade itself is needed (CORE F-CORE-01, WR F-WR-09 own the fix) |
+
+**Survivors nobody attacked.** Mechanisms that stand because nothing has been tried against them, with
+the attack run here:
+
+- *"Seasons tick scene by scene so one scene can change the next"* (R-03, `met`). Holds for paper; the
+  attack "does a mid-season death, verdict or battle change a later scene the same season" cannot be run:
+  the antecedents do not occur. R-03 is met on a channel through which nothing consequential flows.
+- *"Decisions propagate"* (R-01, `met`). The player-king abstaining for three seasons (X4) changes the
+  executed verbs of 59 of 82 other persons and the state of none: one unheld office is not established,
+  42 duties are not taken, one person's stance row is not written. Propagation is real and is confined to
+  paper. R-01 as worded is met; R-01 as meant (consequence) is not shown.
+- *"Characters matter"*: reach (X4, seed 0, three seasons): of 83 persons, **48 have no executed act by
+  anyone else anywhere downstream of anything they did**; median reach 0; the 37 cohorts' mean reach 0.6;
+  seat-holders' 18.2; the maximum 80.
+
+### 1.5 E and S at game scale
+
+- **E, scored last, as a ratio.** What N and R found is one working loop (information → paper → docket)
+  and an honest kernel. Against it: 67 verb rows of which 23 to 30 ever execute in the realm; six
+  registered engines of which one is reached by other persons' acts; a combat module (~6,000 lines, PC
+  audit), a mass-battle module and a second social-contest kernel (~6,700 lines, SC audit) that computed
+  play does not enter or enters a handful of times. The overhead is not in the kernel (CORE: ~14,000
+  executable lines); it is that the player cannot *intuit complex outcomes from simple choices* because
+  nine in ten choices have a fixed outcome and half are refused. E fails on legibility, not on tidiness.
+- **S, the two tests the shorthand drops.** *Pauses correctly*: untestable at game scale in computed play
+  (no duel, no fought field of consequence, no hearing that ends: SC audit). *Calculations consistent in
+  methodology*: three rollers for one quantity (DICE audit); body on a person, a cohort and a unit by
+  three rules (MB audit: `hp / 100` handed to the season as a survivor ratio); and, new here, **two
+  rules for whether an outcome is a draw at all**: 11 verbs contest, 6 grade, 50 are certain, and which
+  is which follows the history of the build and no stated principle (`forge` certain, `lie` drawn;
+  `seize` certain, `capture` drawn; `succeed` certain, `argue` drawn).
+
+## 2. Premise audit — the game's own sentences
+
+Method (`skills/premise-check/SKILL.md`): the ordinary account (O) written first; the notes' account (N)
+taken from the lanes' audits and the rows they cite; the code's account (C) by a run with a control.
+Depths: EXECUTES (a hand-built act), FORMS (the chooser offers it), FIRES (it appears in a seeded season
+with no hand in it). Each premise below is run at FIRES in the shipped realm, with the missing antecedent
+planted as a labelled PROXY where the realm never produces it.
+
+### 2.1 "An officeholder dies and the others react" — holds to the death, then breaks at "the others"
+
+Run: `x2_death.py 0 1 3`, `x2b_death_detail.py 0 1 4 p_npc_020` and `… p_npc_020,p_npc_031`. One played
+season, then the King (Almud Almqvist, `off_king` and `off_duke_valorsmark`) dies at the next MATTER
+through the engine's own writer (`loop/matter.py::_die`). PROXY: his `born` is set so the bodies hazard
+is 1; `age_step` 1e-9 in both arms. CONTROL: same sweep, nobody dies; its hash equals the shipped
+four-season realm's (`abbde715aa0e`), so the sweep itself moved nothing.
+
+| # | link | O (ordinary) | C (observed) | verdict · cause |
+|---|---|---|---|---|
+| 1 | he can die | of age, illness, violence, accident | of nothing, shipped: both hazard rates are 0, `fight` never forms; nine seed-seasons give one death, the same cardinal at seeds 1 and 2 | **INERT at FIRES** · BEHAVIOUR (the control is the shipped value) |
+| 2 | the death is an event with a trace | one Event, his seats close | `person.died` (causes `[ROOT]`), `tenure.closed` naming both seats | FOLLOWS (PROXY) |
+| 3 | "the others": who learns | the court at once, the realm within a season | 16 of 82 the season he dies; **17 of 82 three seasons later** | **DEPARTS** · BEHAVIOUR: news does not travel (FI audit: almost nothing is told) |
+| 4 | the seat is filled | an heir claims; rivals may contest; an interregnum has a cost | the Prince's `succeed`, once, the season after: no rival, no roll, no refusal possible once admitted. `succession.claimed`'s `causes[]` is his own act alone: the log does not say he claimed *because* the King died | FOLLOWS for the throne · **fixed outcome** (standing rule) · E10 DEPARTS (reason unreadable) |
+| 5 | his other seats | pass by the same or another rule | `off_duke_valorsmark` vacant to the end of the run; the heir's own seat (`off_heir`) vacant to the end; 43 `confer` attempts refused in three seasons (the Confessor conferring the duchy and then the crown on cardinals; a duke conferring the crown on a settlement's cohort) | **DEPARTS** · BEHAVIOUR: no seat but the throne has a route to a new holder |
+| 6 | the others react | grief, opportunism, realignment, a challenge, a petition | 19 acts by 8 persons descend from the death by `causes[]` in three seasons; 8 executed: four records, a dispatch, a forgery, a transfer, a research. No stance row moved because of it; no faction changed head but the Crown | **DEPARTS** · COMPOSITION |
+| 7 | the world shows it | fewer decrees, a new King's acts | untraced aggregate: `dispensation.issued` 25 → 6, `duty.taken` 46 → 105, `march.declared` 34 → 58. Not traceable through `causes[]` to the death, so reported as difference, not effect | AMBIGUOUS |
+| 8 | no heir (King and Prince both die) | a succession crisis: claimants, a regency, a war | the throne, the duchy and the heir's seat stay vacant for all four seasons; 7, 5, 24 … `confer` attempts refused; nobody seizes, nobody is elected, the Queen's seat ("Widow Regent if Almud eliminated", by its post string) does nothing; the realm's other counts are unremarkable | **INERT** · the realm does not notice it has no King |
+
+Play-back, as a player would tell it: *the King died in his bed. A dozen people in the room knew. The
+Prince took the crown the next season without anyone saying a word; the duchy the King also held was
+left empty and a confessor spent a year trying to hand it to a cardinal. Three seasons on, four in five
+of his subjects had not heard.* Set beside the premise: the death is real, "the others" are sixteen
+people, and "react" is four records.
+
+Opposite-failure test (an outcome that should vary and does not): the succession. One claimant, one
+attempt, certain success, at every run in which the heir lives; with the heir dead, certain vacancy.
+Neither arm has a spread.
+
+### 2.2 "A decree binds" — does not hold (FA audit, cited; one game-level addition)
+
+FA measured it: 91 decrees issued over nine seed-seasons, none held, obeyed or defied by an addressee
+(`06_FA_audit.md` §0; proposal `06_FA_decree_binds.md`). X1 adds the game-level reading: `comply` and
+`evade / defy` are formed 137 and 21 times over three seeds and end in `compliance.impossible` every
+time; `dispensation.issued` is answered by 24 executed acts at seed 0, every one of them a record, an
+utterance or a reconstruction *about* the decree. A decree is a topic.
+
+⚠ **Standing rule, applied to this lane's own sentence and to the FA proposal's title:** "a decree
+binds" must not be repaired into a fixed effect. The repaired premise is "a decree is *answered*:
+each addressee's compliance is a draw whose odds the issuer's standing, the addressee's stance and the
+cost of obeying set; defiance is visible to the issuer". Listed for the FA lane in §7.
+
+### 2.3 "A rumour spreads and someone acts on it" — does not hold
+
+FI measured the first half: between 0 and 7 of 10,000 to 12,000 held claims arrived by a person telling
+another; no claim was retold (`08_FI_audit.md` §0). X1 adds the second half: `tell` and `lie` are
+refused 81 of 102 times at seed 0 (`tell.refused`), 12 tellings land (`news.told` 10), and **no
+`news.told` Event is among the causes of any other person's executed act at seeds 0 or 1** (10 and 9
+emitted). A told thing is held and nothing is done with it. Opposite failure: what *is* drawn here (the
+`tell` roll, three bands) has spread; what it gates has no consequence, so the spread is decoration.
+
+### 2.4 "A town starves and someone is blamed"

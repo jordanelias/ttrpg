@@ -67,7 +67,9 @@ case's concentration is measurable as his share of entries.
 
 **3. `rosters.yaml: office_bodies.term`** — new optional map, body → seasons a document may wait for
 that body; absent reads `fixtures: record_stage_term` (shipped 1). Authored: `"Ministries": 2`
-`[ASSUMPTION; medium]`; sweep 1 / 2 / 4.
+`[ASSUMPTION; medium]`; sweep 1 / 2 / 4. Where the hand is a seat and not a body, the same number
+is the optional key `hand_term:` on that seat's own row (used by proposal D and by the spine's
+`chancery` scenario, proposal F).
 
 **4. `loop/effects_information.py::_declared_stages`** — when the act is exercised through a seat
 (`Act.via`) whose `Office` carries `passes_through`, and the act declares no stages: the stages are
