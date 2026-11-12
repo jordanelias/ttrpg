@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit addendum; resolves nothing at runtime)
 
+Authored in part by Fable; completed by Opus after the Fable usage limit (2026-11-12).
+
 ## Read at: daa1fb1 (working tree; code, registers and workplans are as at `601e715`, the first audit's read point — the commits between touch only `proposals/2026-11-12-subsystem-audit-suite/`)
 
 This addendum continues `audits/05_SC_audit.md` (§0–§17; findings F-SC-01 to F-SC-14; resolutions
@@ -58,6 +60,7 @@ shipped ceiling arm, cited proofs change nothing against a strong opponent (§B2
 | `proposals/2026-11-08-sc02-reception-proofs-own-commit-design.md` | §0–§3a |
 | `proposals/2026-10-07-grid-mode-suspension.md` | head, §1, start of §2 |
 | `registers/editorial_ledger_in.jsonl` `ED-IN-0284`, `ED-IN-0285` | the rows in full |
+| completion pass (Opus): `05_SC_evidence_and_rebuttal.md` (SC-P8) and `05_SC_capability_surface.md` (SC-P7) in full; `08_FI_05_evidence-interface_B.md` in full; `10_DICE_capability_axiom_map.md` §A–§C and §G; `01_CORE_capability_authoring_surface.md` part two's edit 8; `02_CHAR_capability_definitions.md` head; `verb_table.yaml` rows of the ten social verbs (parsed); `sigma.py` 117–216; `person_q.py::stance_toward`; `options.py::_pair`; the seeded `negotiation` arrangement row and `data/arrangements.py`'s mutual-disposal report | in full for the ranges given |
 | this suite: `audits/08_FI_audit.md` F-FI-09, F-FI-10, §16; `08_FI_audit_addendum_B.md` (a stub at reading); `proposals/08_FI_05`, `12_ARCS_cited_evidence.md`, `02_CHAR_capability_uses_table.md`, `01_CORE_capability_authoring_surface.md` (part one), `10_DICE_advantage_sources_for_the_arcs.md`, `10_DICE_one_score_two_roles.md` (heads); `audits/02_CHAR_audit_addendum_B.md`, `10_DICE_audit_addendum_B.md` (heads) | as stated |
 | code opened for this addendum: `modules/social_contest/roll.py`, `es/queries/inputs.py`, `es/seam/wrappers/sigma.py` 100–555, `es/queries/world_q.py` 720–885, `es/loop/driver.py` 388–520, `es/decision/budget.py`, `es/decision/options.py` 1465–1524, the contested rows of `verb_table.yaml` (compact), `rosters.yaml` (capability and proceedings rosters) | in full for the ranges given |
 
@@ -149,7 +152,7 @@ weak or absent. The docstring states the clip (*"a room of +1.5 against a base o
 of 2 changes nothing"*); P4 §3.3 and its critic's finding 8 name it at design level; nobody had run
 it on the shipped function. Control: the same rows at pool 5 and pool 8 against 8, where the base
 sits under the cap, move as expected (0.802 → 0.620 and 0.561 → 0.386 Failure over four proofs).
-Fix: SC-B1.
+Fix: the bound order in `05_SC_obstacle_difficulty_and_modifiers_B.md` (SC-B1 folded there, G-68).
 
 **F-SC-17 · degrades narrative · Layer 1 says the argument layer resolves by named fault; the loop
 has no fault and no issue ladder.** `holonic_ARCHITECTURE.md` §2, T7: *"the argument layer resolves
@@ -425,12 +428,14 @@ points*. Still contradicted: *trained is at least as good as untrained* (CORE's 
 | — | `05_SC_sc05_kernel_disposition_B.md` | `05_SC_sc05_kernel_retirement.md` (SC-P2) |
 | — | `05_SC_playable_hearing_B.md` | `05_SC_playable_hearing.md` (SC-P3) |
 | — | `05_SC_evidence_and_rebuttal_B.md` | `05_SC_evidence_and_rebuttal.md` (SC-P8) |
-| SC-B1 | `05_SC_evidence_after_the_ceiling.md` | — |
+| — | `05_SC_obstacle_difficulty_and_modifiers_B.md` | `05_SC_opposed_obstacle_parity.md` (SC-P5, HELD BACK); carries SC-B1 |
+| SC-B1 | folded into `05_SC_obstacle_difficulty_and_modifiers_B.md` ("The bound"); no separate file (G-68) | — |
 | SC-B2 | `05_SC_negotiation_scene.md` | — |
-| SC-B3 | `05_SC_hearing_capabilities.md` | extends SC-P7 (one row changed) |
+| SC-B3 | `05_SC_hearing_capabilities.md` | extends SC-P7 (its edit 1 withdrawn) |
 
-SC-P1, SC-P4, SC-P5, SC-P6 and SC-P7 stand, with G-55 and G-53 below as amendments for the
-orchestrator to apply when it reconciles.
+SC-P1, SC-P4, SC-P6 and SC-P7 stand, with G-55 and G-53 below as amendments for the orchestrator to
+apply when it reconciles; SC-P1's `margin_endings` roster carries `terms` in place of `room` (G-61).
+SC-P5 is superseded.
 
 ### Resolutions decided (continuing the first audit's numbering)
 
@@ -441,7 +446,7 @@ orchestrator to apply when it reconciles.
 | G-38 | audit §11 item 2 / G-24: do the Gate ratifications lapse | superseded, item by item (C-2); not a survivor | 1 | `sc05_kernel_disposition_B` |
 | G-39 | SC-05: adopt the kernel, keep the roll, or retire | retire the code; implement its exchange game as the module's second entry, the roll as its closing draw | 1 + 3 + 5 | `sc05_kernel_disposition_B` |
 | G-40 | which choices are verb rows and which are in-room moves | around the room: verb rows (CR-63 and its neighbours); in the room: `hearing_moves` rows | 5 | `playable_hearing_B` |
-| G-41 | proofs clipped by the ceiling (F-SC-16) | the ceiling bounds the opposing score and a hostile room; what the speaker brought is subtracted after it | 3 (P4 §3.3) + 5 | SC-B1 |
+| G-41 | proofs clipped by the ceiling (F-SC-16) | the ceiling bounds the opposing score and a hostile room; what the speaker brought is subtracted after it | 3 (P4 §3.3) + 5 | `obstacle_difficulty_and_modifiers_B` (SC-B1 folded, G-68) |
 | G-42 | three lanes, three shapes for cited evidence (`proofs: [{kind, ref}]`, `cites: (ids)`, an automatic count) | `cites`, ids only; the kind is derived, never stored | 4 (FI owns the carriers) | `evidence_and_rebuttal_B` |
 | G-43 | the owner of "contradicts" | `_pair`'s rule (same subject and predicate, whole-value inequality), exposed once and applied by the host to filed items | 4 | `evidence_and_rebuttal_B` |
 | G-44 | F8 against a room that needs each party's hand | filing is each party's own act; the room reads the case file | 3 (`04` §B.2; the SC-02 design) | `evidence_and_rebuttal_B` |
@@ -457,9 +462,22 @@ orchestrator to apply when it reconciles.
 | G-54 | the Griftlands objection was never assessed against the proceedings design | assessed (§B4.6); the constant-decider sweep is in the gate | 5 | `playable_hearing_B` |
 | G-55 | SC-P6 dismisses on the first failed `determine`; P4 repair (e) holds the stage and closes it on the third | the Failure band writes a stage on the case file (SC-P6's mechanism); the count that dismisses is a row key, `ballots`, default 3; 1 reproduces SC-P6 | 3 (P4 is the batch's target specification) | amendment to SC-P6, for the orchestrator |
 | G-56 | the kernel's chronicle shapes have no reader of the loop | derive them from `HearingOutcome.exchanges` in the harness; no new carrier | 4 (SC-P1's record) | `sc05_kernel_disposition_B` |
+| G-57 | what the social obstacle is (flat 2 by default; the opponent's score alone where held) | the task's difficulty plus a closed, ordered roster of named modifiers, composed once in `roll.py::obstacle` | 1 (Jordan's clarification of 2026-11-12, relayed by the orchestrator; not yet ledgered) | `obstacle_difficulty_and_modifiers_B` |
+| G-58 | where an act's base difficulty lives | a `difficulty:` column on the verb row naming a `difficulty_levels` member; the size in the fixture table `difficulty_ob`; values chosen to reproduce today's 2 at the control arm | 4 (CORE's `capability:` column and its loader refusal) | same |
+| G-59 | the ruled `score/2`: kept, and where its divisor lives | kept whole as the `opposition` term; the divisor in `sigma_leverage.opposed_ob`, shared with combat; no social rate fixture | 1 (2026-08-14) + 4 (DICE §G edit 5) | same |
+| G-60 | a hearer's regard reaches no social roll (H-267) | `regard` = −`stance_toward(counterparty, actor)` × `regard_step` (0.04; control 0), only where no bench hears; `reception` where one does, never both | 4 (`person_q.stance_toward`, the one owner) | same |
+| G-61 | the reason for an obstacle is not kept | `Margin.terms`, summing exactly to `ob`, including the ceiling's clip and the floor's lift; SC-P1's roster carries it | 4 (SC-P1's Event carrier) | same |
+| G-62 | how an NPC-versus-NPC contest gets its obstacle | the same host builder with no branch; every operand is read from the persons, the row and the docket | 5 | same |
+| G-63 | SC-P5 (HELD BACK) and H-288 against the clarification | option B not adopted; "equal means even" and H-288 as a requirement moot; H-127 superseded; its exact-odds instrument kept | 1 | same |
+| G-64 | two proposals name a roster `obstacle_terms` with different members (DICE: `[capability]`) | one roster; DICE's `capability` circumstance sum is one member; the input field is `capability_terms` | 4 | same |
+| G-65 | FI's E-6 enters and strikes evidence only at the citing `speak`'s Success; the sitting's `present` and `answer` are draw-free | deterministic entering and standing in the room and out of it; the verdict stays a draw; FI's file to be reconciled by the orchestrator | 5 | `evidence_and_rebuttal_B` |
+| G-66 | the module cannot import the owner of "contradicts" | `decision/options.py::contradicts`, exposed once from `_pair`'s rule; the host hands each exhibit its `pairs` as data | 4 | `evidence_and_rebuttal_B` |
+| G-67 | CORE's edit 8 (`lie` → `copying`, `determine` → `argue`) against `deception` and `law` | sequenced: CORE's values ship first (no new rows); SC-B3 re-points one cell each when its four rows land | 5 | SC-B3 |
+| G-68 | SC-B1 would restate the bound the obstacle proposal must decide anyway | folded: one proposal owns the bound order | 5 | `obstacle_difficulty_and_modifiers_B` |
 
-Resolutions decided in this addendum: **21** (G-36 to G-56). None survives to Jordan. One first-audit
-survivor is withdrawn (G-24, by G-38); H-288 (SC-P5) remains the lane's only survivor.
+Resolutions decided in this addendum: **33** (G-36 to G-68). None survives to Jordan. One first-audit
+survivor is withdrawn (G-24, by G-38), and the other, H-288 (SC-P5), is answered by Jordan's
+clarification of the obstacle (G-63): **the lane has no survivor**.
 
 ### Provided arcs and characters — what changes in the first audit's §13
 
@@ -491,7 +509,68 @@ Scratchpad: `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379
 | 4 | shipped fixture values by reading `es/data/fixtures.py` at the lines found (`scene_budget` 5, `interactions_per_scene` 3, `extended_scene_cost` 2, `contest_max_depth` 2, `proof_step` 0.25, `reception_gain` 1.0, `obstacle_ceiling` 2, `ceiling_per_pool` True, `bench_quorum` 1, `docket_lapse` 4) | — | read, not run; a first attempt to read them through `Fixtures()` failed (`Ungraded`: an unregistered bare instance), caught from the output |
 | 5 | search of `registers/*.jsonl`, `registers/handoffs/*.md`, `workplans/*.md`, `references/*.md` for three phrases of R-32, R-33 and R-40 | — | no file |
 | 6 | `git status --short` | — | this lane's files are untracked additions under `proposals/2026-11-12-subsystem-audit-suite/`; other lanes' files in the same directory are modified by them; nothing outside it |
+| 7 | `difficulty_odds.txt`: exact `band_odds` for `Ob = difficulty + opposition/2`, no ceiling, floor `OB_MIN` 1, pools 2, 3, 5, 8, 12 × difficulty 0, 0.5, 1, 2, 3 × opposition none, equal, double; and one 0.5-step of favour at an equal pair with difficulty 1 | exact, no draw | pool 2, difficulty 1, opposition 2: Ob 2.0, Failure 0.74 (today's default pair reproduced); equal pairs at difficulty 1 fail 0.74, 0.71, 0.71, 0.72, 0.73 at pools 2, 3, 5, 8, 12; one obstacle unit of favour brings them to 0.42, 0.51, 0.56, 0.61 at 2, 5, 8, 12; unopposed at difficulty 0 hits the floor (pool 5 Failure 0.20) |
+| 8 | (completion pass) the ten social verb rows parsed from `verb_table.yaml` for `contests`, `counterparty`, `requires_typed`; `sigma.py::contest_input` read at `:199-212` | — | `speak` has no `counterparty:` and its subject is a `DocketItem`; `interrogate`, `determine`, `arrest` take `counterparty: subject` (a person); `tell`, `lie`, `argue` take `to`. So the obstacle proposal's first values (`speak` routine, `interrogate` demanding) would have moved every `speak` 2 → 1 and every `interrogate` 2 → 3 at the control arm; corrected in that file and recorded there |
+| 9 | (completion pass) `person_q.py::stance_toward` read at `:73-82` | — | Σ valence × weight, each row up to ±25; the first `regard_step` (0.2 per valence point) would have let one row move an obstacle by 5; corrected to 0.04 on `stance_toward`'s own scale |
+| 10 | (completion pass) `git status --short` | — | changes by this lane: the addendum and seven proposal files, all untracked additions under `proposals/2026-11-12-subsystem-audit-suite/`; nothing tracked edited by it |
 
 Not run: `pytest` (by instruction); `aperture`, `corpus_run` and the realm probes (the first audit's
 readings are used); the three-lens audit's `opponent_is_adjudicator` grep (taken from `3L/00` §1,
 not re-run).
+
+## B8. The social obstacle: the task's difficulty and its modifiers (decision-ready)
+
+Jordan's clarification, relayed by the orchestrator on 2026-11-12: *the social-contest obstacle is
+the difficulty of the task plus all associated modifiers; not a flat 2, and not the opponent's score
+alone.* This lane has not found it in a ledger; recording it is the orchestrator's. The full
+specification, with edits by owner, gate and falsifier, is
+`proposals/05_SC_obstacle_difficulty_and_modifiers_B.md`; this section is the decision an
+implementation lane needs, in one place.
+
+**The form.** `Ob = bound(difficulty + opposition + standard + subject + stakes + hostile halves)
+− favourable halves`, floored at `OB_MIN` (1). The bound is the existing ceiling rule (H-213); the
+favourable halves are subtracted after it so that what a speaker brings is never clipped (F-SC-16,
+G-41). One composer: `modules/social_contest/roll.py::obstacle`. Leverage (effort, wounds, traits)
+stays a μ-shift on the roll, not an obstacle term.
+
+**Base difficulty: which registry, which keys.** `engine/season/verb_table.yaml`, a `difficulty:`
+column on every contested or graded row (the loader refuses its absence, as CORE's `capability:`
+column); its value is a member of `rosters.yaml: difficulty_levels` (`plain`, `routine`, `demanding`,
+`hard`); the sizes (0, 1, 2, 3) are the fixture table `difficulty_ob`. Proposed values reproduce
+today's obstacle of 2 at the control arm: rows with a person counterparty (`tell`, `lie`, `argue`,
+`determine`, `arrest`, `interrogate`) `routine`, since a person without a score opposes at
+`opposed_ob(pool_default)` = 1; rows with none (`speak`, whose subject is a `DocketItem`; `research`,
+`examine`, `surveil`) `demanding`.
+
+**The named modifiers, with units** (closed, ordered roster `rosters.yaml: obstacle_terms`; every
+term in obstacle units, net successes):
+
+| term | value | applies to |
+|---|---|---|
+| `opposition` | the counterparty's score (DICE's `score()`) ÷ 2, by `sigma_leverage.opposed_ob` — the 2026-08-14 ruling, kept as one modifier | a person counterparty that is not the actor |
+| `standard` | the room's level (`difficulty_levels`) from a `standard:` key on the docketed arrangement row or rite; `plain` on every seeded row | bench-heard acts |
+| `subject` | the examined Record's `forgery_quality` (today's operand) | graded inquiries |
+| `stakes` | `stakes_ob[kind]` for the Tenure the act opens or closes (proposed `oblige` 0, `detain` 0.5, `ban` 1) | acts that restrain the counterparty |
+| `regard` | −`stance_toward(counterparty, actor)` × `regard_step` (0.04; control 0) | one person counterparty, no bench |
+| `reception` | the bench's reception × `reception_gain` (1.0), as SC-02 re-sources it | bench-heard acts, never with `regard` |
+| `capability` | DICE's `circumstance` rows of `capability_uses`, summed host-side | as each row's `when:` |
+| `evidence` | `proof_step` (0.25) × (standing items against the actor's side − standing items for it), by `05_SC_evidence_and_rebuttal_B.md`'s `standing` | acts whose row admits `cites` |
+| `plea` | CR-62's `plea_step` | `speak` |
+
+**How the reason is read.** `Margin` gains `terms: ((name, value), …)` in roster order, plus
+`("ceiling", −clip)` and `("floor", +lift)` where a bound acted, summing exactly to `ob`;
+`sigma.resolve` copies it; SC-P1's `margin_endings` carries it on the Event, so the log and a saved
+game say *Ob 3.5 = difficulty 1 + opposition 2.5 + stakes 0.5 − regard 0.4 − evidence 0.5*. Person-side,
+`believed_input` knows the public terms (`difficulty`, `standard`, `stakes`) and fills the rest from
+his claims or leaves them unknown (DICE's believed-odds prior).
+
+**NPC against NPC.** No branch: the same builder reads the row, the counterparty's score and stance,
+the docket, and the actor's filings. Where each side wants to move the other, each makes its own act
+with its own obstacle; there is no shared roll.
+
+**SC-P5 (HELD BACK).** Survives: H-127's inversion is removed (a person without a score is not the
+`obstacle_default` stand-in), and its exact-odds tables as the instrument. Moot: option B as a
+pending question (the divisor stays the ruled one, in its one owner), "equal parties should be even"
+as a target, and H-288 as a survivor for Jordan. Measured (run 7): with difficulty 1, equal pairs
+fail 0.71 to 0.74 at every pool from 2 to 12, so the rising disadvantage SC-P5 measured (0.42 to
+0.61) is flattened by the base; one unit of favour brings them to 0.42 to 0.61.

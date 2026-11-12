@@ -125,6 +125,9 @@ the corrections to the first audit, and carries the three findings that have no 
    practitioner his own Coherence, which R-25 refuses. R-25 therefore names the stem roster as the place
    the refusal is written: `coherence` is not added to `OWN_STATE_STEMS`; it is world-only for its owner
    and readable about *another* only through `thread_read`'s finding.
+10. **A correction to this addendum's own §6, made at completion.** H-107 was dispositioned open; the field
+    it names was deleted at G1b (`state/carriers.py:259-268`), so the row is closed and the chronicle's
+    "about" has two owners by line kind (R-28). §6's row and counts are corrected in place.
 
 ### 2.3 New findings without a section of their own
 
@@ -203,7 +206,7 @@ only that R-13 and CP-T10-04 not land without it.
 | R-25 | the design forbids a meter the owner reads; the first lane's scenario shows one; the own-state stem precedent would build one | `coherence` is world-only for its owner; not an `OWN_STATE_STEMS` member; `thread_read` does not form on the actor | 3, 4 (AX-7) | threadwork `_B` e3 |
 | R-26 | the Rupture is an ending by every design document and has no expression in `endings` | a `site_band` selector; the row ships absent | 3, 4 (#457 END-VICTORY) | weather `_B` e4 |
 | R-27 | the scheduled weather is memoryless, placeless and biased upward | a spell (coarser keyed draw on parent rung and coarser tick); arm members with mean one | 5 | weather `_B` e1, e2 |
-| R-28 | the chronicle's "about" could be taken from `Event.subject`, which is the actor for an act-emitted Event (H-107) | from `carriers.subject_of(act)`, the one read | 4 | `09_WR_B_chronicle_that_tells.md` |
+| R-28 | what a chronicle line is "about" has two owners by line kind (the deleted `Event.subject` carried both, H-107) | an act line: `carriers.subject_of(act)`; an Event line: `attribution.anchor_of(w, e)`; no third reading | 4 | `09_WR_B_chronicle_that_tells.md` |
 | R-29 | strand and storybar readings count `closed` without saying by what | a close is *by act* when the closing Event's causes include an executed act, *by clock* when its driver is MATTER's term or lapse | 5 | `09_WR_B_readings_of_closure_and_tension.md` e1 |
 | R-30 | wear Events counted as motion (F-WR-21) | a reading counts non-zero changes and crossings only | 5 | readings `_B` e2 |
 | R-31 | three hole rows measured on deaths that no longer occur (F-WR-22) | re-pointed at seed 2 or the illness arm, after the duel path | 1 (the tree changed) | pointer `_B` |
@@ -837,7 +840,7 @@ register line in the dossier and is dispositioned last.
 | H-95 two scale vocabularies | ruled | **closed in effect** (first audit E-15) | — | none |
 | H-102 propagation loop | measured | **open as a sign, measured as an edge**; the row's own caveat stands ("under this instrument's own fixtures it cannot amplify at all") | cross edges 286 to 366 over four arms (§9 EB-01) | none; the ablation of §3.5 is a second reading of the same edge |
 | H-103 claim decay as a bound | measured | **closed** | as the row says | none |
-| H-107 `Event.subject` | measured | open; **not WR's** (CORE). It bears on §3.3: the chronicle's `about` must come from `subject_of(act)` and never from `Event.subject`, which "IS THE ACTOR" for an act-emitted Event | row cite | noted in `09_WR_B_chronicle_that_tells.md` |
+| H-107 `Event.subject` | measured | **closed (corrected at completion; the Fable lane had it open)**: the field is deleted (G1b, plan position 4, 2026-09-26; `state/carriers.py:259-268`), its two senses now read through `state/attribution.py::actor_of` (`:73`) and `anchor_of` (`:105`). It bears on §3.3: an act line's `about` is `subject_of(act)`; an Event line's is `anchor_of(w, e)`; nothing reads a subject off an Event | `state/carriers.py` docstring; `:1667` cites "`H-107`'s own closure" | `09_WR_B_chronicle_that_tells.md` |
 | H-110 band crossing loses its Event | ruled | **closed, dissolved** | as the row says | none |
 | H-129 `last_emission_of` | measured | **closed** (both halves fixed, per the row) | as the row says | none |
 | H-130 a write can apply and still raise | measured | open; **not WR's** (CORE) | as the row says | none |
@@ -871,10 +874,11 @@ register line in the dossier and is dispositioned last.
 | H-356 docket lapse | assumption | **closed as an injected value, and observed**: ships 4; "a matter docketed in season t … lapses as t + 5 opens", which is the season-5 spike of F-WR-13 | first audit E-08 | none |
 | H-118 `content_hash` | measured | **closed** | hashes reproduce across this file's and the first lane's processes (§9 EB-01) | none |
 
-**Counts.** 49 rows: 18 closed (H-04, -05, -27, -34, -40, -51, -95, -103, -110, -118, -129, -172, -242,
--243, -245, -246, -247, -356); 6 open in this lane or bearing on it (H-102, -125, -135, -159, -164,
--208); 4 whose measurement or premise is stale at HEAD (H-168, -209, -225, -230); 21 another lane's, read
-and left.
+**Counts** (corrected at completion for H-107). 49 rows: 19 closed (H-04, -05, -27, -34, -40, -51, -95,
+-103, -107, -110, -118, -129, -172, -242, -243, -245, -246, -247, -356); 6 open in this lane or bearing on
+it (H-102, -125, -135, -159, -164, -208); 4 whose measurement or premise is stale at HEAD (H-168, -209,
+-225, -230); 20 another lane's, read and left. Whether H-107's register row itself still reads open was
+not checked past its head; if it does, its re-grade is text for the orchestrator.
 
 ## 7. Capability-authoring consequences
 
@@ -948,7 +952,8 @@ first lane's files; the `_B` infix marks a supersession or an addition.
 | EB-01 | `python wrb_ablate.py <seed> 2 shipped|flat` (`runs/WR_B/wrb_ablate.py`; outputs `ablate_s{0,1}_k2_{shipped,flat}.txt`) | 0, 1 · 2 | shipped seed 0 hash `bacd687f…`, 1,703 acts, 898 refused (the first audit's E-05 reproduced); flat seed 0 `1e202aff…`, 1,639 / 879; shipped seed 1 `8aae8412…`, 1,706 / 876; flat seed 1 `e48c989e…`, 1,655 / 829; readings as §3.5's table; cross edges 363, 286, 366, 333 |
 | EB-02 | read of the first lane's `runs/WR/probe_s{0,1,2}_k6.txt` by Event kind per season | 0, 1, 2 · 6 | §3.2's table; `person.died` absent at seed 0, `[0,0,1,0,0,0]` at seed 1, `[0,1,0,1,0,0]` at seed 2 |
 | EB-03 | `grep -rn -i tension --include=*.py engine/season` (tests excluded) | — | 17 lines: comments on AX-7 tensions, `extension` substrings and one `spy` signature; no computation of a set of open conflicts. Re-run at completion, same result |
-| EB-04 | read of `harness/chronicle.py:86-104`, `:128-162`, `:227-245` | — | as §3.3's table |
+| EB-04 | read of `harness/chronicle.py` (whole, at completion) | — | as §3.3's table; the walk-back tie is "the smallest act id" (`:18`, `:90`), and the module is inside `tools/ci_sim_fabrication_check.py`'s blocking scope (`:65`), so a new flag takes no default seed or season count |
+| EB-11 | read of `state/carriers.py:247-270` and `hole_register.yaml` H-107 | — | `Event.subject` deleted at G1b; H-107 closed (§6 corrected) |
 | EB-05 | `grep -n -i -E "approach.?training|conceal|visib|fatigue|overweav|over.?actual|mending.?fatigue" systems/threadwork/sim/*.py` | — | two lines: `co_movement.py:50` (a card, "Scar Memory … visible to non-Sensitives") and `threadcut.py:41` (a perception label). Re-run at completion, same |
 | EB-06 | `grep -rl` over `engine/`, `modules/`, `references/` (`*.py`, `*.yaml`) for `year_length`, `season_terms`, `route_pricing`, `leg_unit`, `exposure_body` | — | 0 files each (completion re-run) |
 | EB-07 | `python -c` over `build_realm(seed)`: Sites by kind and `fixtures.wear(kind)` (`runs/WR_B/eb07_wear.txt`) | 0, 1 · build | 322 Sites: dwelling 211, garrison 37, harbour 37, seam 37; wear 0, 0, 10, 10; 248 wear-0 at both seeds |
