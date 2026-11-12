@@ -365,3 +365,131 @@ Not in this batch, and where each is (each member's parts are dispositioned once
 
 (B40.09 is a READING: no body and no commit of its own; its text is Readings R1, at the batch's end, read at B40.99.)
 
+### B40.10 — five readings of the court in the report · BYZ-G item 3 · BUILD · HASH EQUAL
+- SOURCE: `proposals/15_INSTITUTIONS_BYZANTINE_grounding_mechanisms.md` "Item 3. Five readings added to the scenario report (no game code; with F)", its gate, "Exact edits, by file and owner" row 3; U5d closure Part 7.2 (§14 item 4 closed: no barred order).
+- ADVANCES: none of the nine; four court stories made visible or visibly absent.
+- INSTRUCTION: in `harness/institution.py` (B40.02), four lines, each "one line of the report … computed from the log, with what would show the story did not occur" (BYZ-G's table, copied; the fifth row is omitted, as the source says):
+
+  | reading | computed from | it fails when |
+  |---|---|---|
+  | **who stayed away** | for each sitting under `acclamation` (proposal E), the sworn of the conferring seat not present at the venue that tick | attendance is total in every seed (presence carries no choice) |
+  | **what the hand took** | `transfer` Events received by a holder of a `passes_through` seat from the makers of instruments then in that hand | no such transfer in any seed, or no difference in entry rate between papers with and without one |
+  | **the servant after the reign** | after a `succeed` on a seat, the `revoke`s by the new holder against seats on its `passes_through`, split by whether each old holder also holds a dignity | the split shows no difference over seeds |
+  | **what he kept** | stores at rungs a departed hand's holder moved goods to, before and after his `hold` closed | — (a count; reported, not gated) |
+  | **the lord who outgrew his minister** | — | "omitted: §14 item 4 is closed with no barred order (`U5_FINDINGS_CLOSURE_U5d.md` 7.2), so no chamberlain class exists to read" |
+
+- WHERE: `engine/season/harness/institution.py` (four lines).
+- TESTS: none new (BYZ-G: "items 1 and 3 are runs of `harness/institution.py` quoted in the commit").
+- FALSIFIER and CONTROL: each line's "it fails when" column. Control (BYZ-G): "the same lines on the base realm print zeros (no `passes_through`, no `acclamation`)".
+- GATE: "The report prints the first two on `chancery` and `roga` at seeds 0 to 19": `PYTHONHASHSEED=0 python -m engine.season.harness.institution INST-BYZ-CHANCERY 2 <s>` and `INST-BYZ-ROGA 2 <s>`, s = 0 to 19, two seasons (A-114) → the *who stayed away* and *what the hand took* lines present and quoted per seed; the control lines on the base realm (`--world realm`, B21.74) → zeros.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B40.02, B40.04, B40.05; V12 Batch B32 (BYZ-E: `acclamation`, its audiences), V12 Batch B33 (BYZ-C: `passes_through`, the hand); V12 Batch B21 (`succeed`, `revoke` draws).
+- GLOSSARY: none.
+- COST and TIER: small build (harness); `sonnet`, `high` (BYZ-G: "effort … `high` (items 3, 4)").
+- LANDS IT: B40's producer; `Item: B40.10`, `[skip ci]`.
+
+### B40.11 — an entered paper is a precedent file · BYZ-G item 4 · BUILD · HASH EQUAL
+- SOURCE: BYZ-G "Item 4. The register as a precedent file (a gate, no edit; with C and SC's cited evidence)", "Exact edits" row 4; C3-C10 (a held Record cited is a `proofs` level).
+- ADVANCES: none of the nine; shows that BYZ-C's "the entry is the proof" and SC's cited evidence compose.
+- INSTRUCTION: "Nothing is added. Proposal C makes an entered instrument a sealed Record a hand's holder holds; SC's cited evidence (`05_SC_evidence_and_rebuttal*.md`, the SC-P8 the audits cite) lets a held Record be filed as an item, which enters the roll as a `proofs` level (C3-C10). The plan is to show that the two compose." One test fixture: NEW `engine/season/tests/test_inst_byz_g.py` (the source's named file, "for the hand-built gates of items 2 and 4"), a planted hearing on the spine: "A planted hearing before the Sovereign's seat on a petition to amend the founding papers, two arms over 200 seeds: the clerk cites an entered instrument he holds; he cites nothing."
+- WHERE: NEW `engine/season/tests/test_inst_byz_g.py`.
+- TESTS: `test_a_cited_entered_instrument_moves_the_recorded_proofs_level` and `test_all_four_bands_occur_in_both_arms` `[ASSUMPTION: test names; the item creates them]`, each over dice seeds 0 to 199 with `assert checked >= 200`; read green (a composition of landed parts) and red with the citation dropped from the clerk's filing (the planted failure).
+- FALSIFIER and CONTROL: "Equal levels: an entry is not citable and proposal C's 'the entry is the proof' is prose." Control: the arm that cites nothing.
+- GATE: `python -m pytest engine/season/tests/test_inst_byz_g.py -q` → pass: "The recorded `proofs` levels differ between arms (no draw needed to see it) and all four bands occur in both."
+- HASH MOVERS: none (a test).
+- DEPENDS ON: V12 Batch B33 (BYZ-C: the entered instrument, a sealed Record a hand's holder holds); V12 Batch B24 (`05_SC_evidence_and_rebuttal_B`, `12_ARCS_cited_evidence`: a held Record filed as an item; `world_q.hearing`); V12 Batch B05 (OBS: the `proofs` level); EXISTS-IN-TREE `harness/governance_spine.py::build`.
+- GLOSSARY: none.
+- COST and TIER: small build (a test fixture); `sonnet`, `high`.
+- LANDS IT: B40's producer; `Item: B40.11`, `[skip ci]`.
+
+### B40.12 — an exit audit on the seats that hold money or a frontier · BYZ-G item 1 · BUILD · HASH MOVER(behaviour)
+- SOURCE: BYZ-G "Item 1. Audit at exit on the seats that hold money or a frontier (content; after B)", "Exact edits" row 1; rulings A-13 (D-13: "a seat may declare … an exit audit"); synthesis X-12, X-13; C3-C10.
+- ADVANCES: none of the nine; A-13 (a fiscal officer's departure has a reckoning).
+- INSTRUCTION: "Use the kit's one encoding (synthesis X-12: key `audit_at_exit: <arrangement id> | null`, row `audit`, occasion 'any close of a hold on such a row'). This proposal only names the Byzantine seats that declare it:"
+  ```yaml
+  # engine/season/offices.yaml — added to three existing rows, nothing else on them changes
+    - id: off_lord_treasurer      # NPC-037; the treasury of proposal B
+      audit_at_exit: audit
+    - id: off_katepano            # NPC-089; the frontier post of proposal D
+      audit_at_exit: audit
+    - id: off_kommerkiarios       # NPC-090; the treaty gate
+      audit_at_exit: audit
+  ```
+  "`[ASSUMPTION; medium; Jordan to correct — which seats. Revert: delete the three lines.]` The two foreign seats are audited by the far superior's seat (`off_altonian_court`, synthesis X-13), which is who 'may open' under X-12's rule; whether that seat's holder does is his own choice." "Nobody is made to open it: `audits_due` offers the referent and the chooser decides (VENICE-C §4)." Listed in the PR body as an authored value for Jordan (D-19).
+- WHERE: `engine/season/offices.yaml` (`off_lord_treasurer`, `off_katepano`, `off_kommerkiarios`: one key each).
+- TESTS: none new (BYZ-G: item 1's gate is a run of the report).
+- FALSIFIER and CONTROL (BYZ-G, copied): "If the referent appears in a seed where the hold did not close (the `revoke` drew Failure), the occasion is wrong. If a case opens in every seed in which the hold closed, the engine is docketing (a trigger, not a person). If the verdict distribution is the same with and without recorded collections, the hearing reads nothing and the item is decoration." Control: "the three lines absent, `content_hash` equal to" the same run without them.
+- GATE (`PYTHONHASHSEED=0`): on INST-01 (`base: realm`; the source names `roga`, whose spine base has no `off_lord_treasurer`: U10), "seeds 0 to 199: plant a `revoke` of the treasurer in season" 1 ("season 4" in the source; two seasons, A-114), read at season 2: "an `audits_due` referent naming her on the questions of those who may open, in every seed in which the `revoke` closes the hold; an `open_case` under `audit` in some seeds and not all (a person's choice); over the seeds where a case opened, verdict bands none empty and none above 0.9; in the arm where she collected nothing, her side's opponent files no `proofs` item of her collections." Background run; `assert checked >= 200`. The realm hash at seed 0, one season, recorded (moved only where a covered hold closes).
+- HASH MOVERS: every seeded run in which a hold on one of the three seats closes (an `audit` referent formed; a case opened). Declared; B40.99's one re-pin.
+- DEPENDS ON: V12 Batch B32 (VEN-C: the `audit_at_exit` key, a table row), V12 Batch B33 (COL-C: the `audit` row, `world_q.audits_due`; BYZ-B: a treasurer who has collected; COL-B: `off_altonian_court`); V12 B40.03 (the gate world); EXISTS-IN-TREE the three rows in `engine/season/offices.yaml`.
+- GLOSSARY: none.
+- COST and TIER: edit (content); `sonnet`, `medium` (BYZ-G); one `opus` read of the band table.
+- LANDS IT: B40's producer; `Item: B40.12`, `[skip ci]`.
+
+### B40.13 — the treaty gate breeds its own offence · BYZ-G item 2 · BLOCKED (v12: a carrier is owed: the place-filtered `deed_doers` form in `data/goals.py`)
+- SOURCE: BYZ-G "Item 2", "Exact edits" row 2; `proposals/15_INSTITUTIONS_PAPACY_C_consecration_and_deed_ledger.md` "Exact edits" 4 and its `[UNVERIFIED]` block (the place filter "is requested, not built here"); U4 §3.4 (BYZ_G: "INCOMPLETE: item 2 blocked").
+- What is missing: the row `goal_kommerkiarios_side_roads` "**ships off** until `data/goals.py` gains the place filter PAPACY-C requests for its own `deed_doers` row (deeds whose claim subject lies under a named rung); with the filter, the row's `under:` names the treaty ground." No item in v12 builds that form (`grep -l "place filter"` over this directory's parts and `master/instructions/` finds none at this read), and `goals.yaml` has no switch by which a row ships off (`grep -n "enabled\|active:" engine/season/goals.yaml` → none). Owner: `data/goals.py`'s owner (CHAR; `12_ARCS_arcs_as_staged_goals`).
+- What lands when the carrier exists (BYZ-G, copied): the row
+  ```yaml
+    - id: goal_kommerkiarios_side_roads
+      org: {seat: off_kommerkiarios}
+      text: the Kommerkiarios acts against whoever he knows to have traded past the treaty's gate
+      object: {kind: deed_doers, kinds: [<the breach kind of the treaty staple>]}
+      pursuits: {stability: 0.6, justice: 0.3, wealth: 0.1}
+      derives: {from: goal_kommerkiarios_treaty_order, kind: establishes}
+      source: >-
+        INST-BYZ-GROUNDING item 2. [ASSUMPTION; medium; Jordan to correct -- the weights and that the
+        strictness is a goal at all. Revert: delete the row.]
+  ```
+  with `kinds:` the success kind of the act the `staple` row's `forbears` clause names ("the loader refuses a kind outside `data/verbs.py::DEED_KINDS`"); gate: "Hand-built on the realm with `foreign=True`: one person holds a claim of a breach by a merchant; the Kommerkiarios is told it. Over 200 seeds his chooser forms `open_case` against the merchant in some seeds and not all … *Control:* the row absent: no such case forms in any seed"; falsifier: "The case forming in every seed (a trigger, not a person), or forming against persons he holds no claim about"; test file `engine/season/tests/test_inst_byz_g.py` (B40.11's).
+- LANDS IT: no commit in B40; the receipt and B40.99's commit body name the missing carrier.
+
+### B40.14 — paired officers, near and far · VEN-E edit 1 · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/15_INSTITUTIONS_VENICE_grounding_E_what_the_tree_adds.md` "Edit 1 — the paired officers, near and far (M-1, M-2)", "Exact edits, by owner" row 1, "Gate" 1, 2; rulings A-13 (the U5d line: "content on the three ruled seat facts"); C3-L9 (`cooling_off` is a table entry).
+- ADVANCES: none of the nine; a subject place has two voices to the centre.
+- INSTRUCTION (VEN-E, copied): "On every subject settlement where D authors a rector, **two** rows on the same anchor, both `conferral: appointed`, `revocation: rung_above_in_holdings`, `term: 8`, `audit_at_exit: audit`, and a `tables.cooling_off` entry of 8, each holding a `commission` (the kit's form):
+  ```yaml
+  - id: off_<place>_justice        # post label is Jordan's (names_index); functional here
+    remit_acts: [open_case, determine, issue]
+  - id: off_<place>_captain
+    remit_acts: [dispatch, convene, requisition]     # the garrison and the purse
+  ```
+  Remits are disjoint by construction (the loader already refuses nothing here; the convention is content). **Near and far** is a convention on the author, stated once in the file's header comment and enforced by nothing: a place whose conferring seat stands one territory hop away gets the pair; a place farther off (Schoenland's line seat, any seat beyond a border) gets one row holding both remits. No reader." The places are read at the item's open from VEN-D's rector rows (B33) and listed in the commit body; D's single rector row on a near place is replaced by the pair (the `commission` seeded rows follow the seat ids). "The combined seat is the stronger one and is what the colonial lane's 'over-mighty warden' reading watches." Each new seat's post label is a placeholder listed in the PR body for Jordan (names_index).
+- WHERE: `engine/season/offices.yaml` (the pair rows; the header comment); `engine/season/rosters.yaml` (`tables.cooling_off`: one entry per new seat); `engine/season/instruments.yaml` (`seeded:` `commission` rows re-pointed to the new seat ids, if B33 seeded one per rector).
+- TESTS: none new for the rows (content; VEN-E's test file is for gates 3, 4, 6).
+- FALSIFIER and CONTROL: "For 'the pair generates disagreement': gate 2 printing identical lines in both arms across the three seeds." Control (VEN-E gate 1): "with batch E's rows absent, `build_realm(0)` and a one-season run hash EQUAL to the post-D hash" (B39's close reading, `reading @<sha>`).
+- GATE (`PYTHONHASHSEED=0`): `python -m engine.season.harness.register --check` → exit 0 and the offices loader accepts the rows (`build_realm(0)` builds); VEN-E gate 2: "a spine fixture with one subject town, seeds 0 to 2, eight seasons, the chooser in both seats. Report per season the claims each officer `tell`s the conferring seat about the town and whether any pair has opposite content; report the centre's next act toward the town. Control: the same town with one combined officer. **A reading, not a pass mark;** it fails as an instrument if the two arms print the same lines." Run at two seasons (A-114) on the Counting-House case (`INST-VENICE-01`, VEN-E's block: "gates 2 and 5 are runs of `harness/institution.py` on the Counting-House case"), the pair placed on `lr_settlement_a` through the case's `offices:` delta, and the control arm a second case file `INST-VENICE-01-ONE.yaml` with one combined row `[ASSUMPTION: the arm's form and file name; the source names the arm only]`.
+- HASH MOVERS: the realm build hash (new seats and their seeded commissions on every place D authors a rector). Declared; B40.99.
+- DEPENDS ON: V12 Batch B33 (VEN-D: the rector rows, the `{venue:}` anchor, `INST-VENICE-01.yaml`); V12 Batch B32 (SYN-A: the `commission` form; VEN-C: `tables.cooling_off`, `audit_at_exit`); V12 B40.02 (the report).
+- GLOSSARY: none.
+- COST and TIER: edit (content); `sonnet`, `medium`; one `opus` read of gate 2 (VEN-E's block).
+- LANDS IT: B40's producer; `Item: B40.14`, `[skip ci]`.
+
+### B40.15 — the submission pact · VEN-E edit 2 · BUILD · HASH MOVER(behaviour)
+- SOURCE: VEN-E "Edit 2 — the submission pact (M-3)", "Exact edits" row 2.
+- ADVANCES: none of the nine; a conquered commune holds terms its superior can breach.
+- INSTRUCTION (VEN-E, copied): "No new form. The subject commune's head seat holds, at build, a seeded Record of the kit's existing form `capitulation` (terms on which a place was given up) made by the superior's seat, whose `forbears` clauses bind the grantor: `tenure.closed` by `revoke` and `tenure.opened` by `confer` over the commune's own seats, and `requisition.taken` over the place. The colonial lane's readers do the rest: a rector who levies inside the pact is rolled as any levy, is witnessed, and stands as a breach in the commune's members' `kept` … One row in `seeded:` per subject commune D authors; `grade: assumption`." The communes are read from VEN-D's rows at the item's open and listed in the commit body.
+- WHERE: `engine/season/instruments.yaml` (`seeded:`: one `capitulation` row per subject commune).
+- TESTS: none new.
+- FALSIFIER and CONTROL: a rector's levy inside the pact leaves the commune members' `kept` unchanged (the pact binds nothing). Control (VEN-E gate 1): the rows absent, the realm hash at seed 0, one season, equal to B39's close.
+- GATE: `python -m pytest engine/season/tests/test_instruments.py -q` → pass (the `seeded:` loader accepts the rows, SYN-A's refusals unchanged); `build_realm(0)` → the commune head seats each hold one live `capitulation` Record (a one-line script, quoted).
+- HASH MOVERS: the realm build hash (one seeded Record per subject commune). Declared; B40.99.
+- DEPENDS ON: V12 Batch B32 (COL-A, SYN-A: the `capitulation` form, `seeded:`, `kept`, `breaches`); V12 Batch B33 (VEN-D: the subject communes).
+- GLOSSARY: none.
+- COST and TIER: edit (content); `sonnet`, `medium`.
+- LANDS IT: B40's producer; `Item: B40.15`, `[skip ci]`.
+
+### B40.16 — the appointer answers: the audit's recital · VEN-E edit 3 · BUILD · HASH MOVER(behaviour)
+- SOURCE: VEN-E "Edit 3 — the appointer answers; the inspection is seen (M-4, M-5)", "Exact edits" row 3, "Gate" 3; its second `Reconciled:` line (the `[UNVERIFIED]` resolved at the tree); `04` §B.9.
+- ADVANCES: none of the nine; appointment costs the appointer something.
+- INSTRUCTION (VEN-E, copied): "**The recital.** The Record the `audit` row mints at Partial (the admonition), and the `ban`'s or `oblige`'s opening claim at Success and Overwhelming, carry in `recites` the id of the seat through which the audited hold was conferred, read from the hold's opening Event's causing act: `state/attribution.py::causing_act(w, e).via` (opened: `causing_act` returns the whole `Act` for exactly this question …; `Act.via` is `state/carriers.py` …; the mint is resolver-side, so the act-store read is lawful, `04` §B.9). One line where the row's disposal builds the Record's content (owner: the single document mint, `loop/effects_information.py::_mint_document`, as COL-C uses it). `recites` is the kit's existing content key (SYN-A edit 1); this is its fourth use." "**Who reads it.** Nobody by rule. A person who holds the Record holds a deed of the appointer's (he seated a man the bench condemned); `person_q.deeds_judged` values it as it values any deed." "**The inspection as theatre** is a reading, not an edit: COL-C's row already sits on the governed ground with `floor: open`. The gate below reports the governed cohort's regard for the conferring seat's holder before and after a sitting, against a control row with `floor: sealed`." (Line numbers into files edited at or before B03a dropped, §5.4.)
+- WHERE: `engine/season/loop/effects_information.py` (the `audit` disposal's content build in `_mint_document`'s caller: one line); NEW `engine/season/tests/test_inst_ven_e.py` (the source's named file, gates 3, 4, 6).
+- TESTS: in the new file, written first, red (no recital): `test_the_audit_record_recites_the_conferring_seat` and `test_deeds_judged_differs_for_a_holder_of_the_record` `[ASSUMPTION: test names; the item creates them]`.
+- FALSIFIER and CONTROL: "Planted failure: drop the recital and the two values are equal." Control: an audit sitting at Failure mints no recital (only Partial, Success, Overwhelming carry it).
+- GATE: `python -m pytest engine/season/tests/test_inst_ven_e.py -q -k recite` → pass: "a hand-built `audit` sitting forced to Partial; the minted Record's `recites` holds the conferring seat's id; `deeds_judged(p, conferrer)` for a person given the Record differs from the same person without it." The theatre reading: on `INST-COLONIAL-01` (B40.06) at seeds 0 to 4, two seasons, the governed cohort's regard for the conferrer before and after a sitting, and against a `floor: sealed` control row, quoted.
+- HASH MOVERS: every seeded run with an `audit` sitting at Partial or better (the Record's content). Declared; B40.99.
+- DEPENDS ON: EXISTS-IN-TREE `state/attribution.py::causing_act`, `state/carriers.py::Act.via`, `loop/effects_information.py::_mint_document`, `queries/person_q.py::deeds_judged`; V12 Batch B33 (COL-C: the `audit` row and its disposal); V12 Batch B32 (SYN-A edit 1: `recites`).
+- GLOSSARY: none.
+- COST and TIER: small build (one line at the mint and its test); `sonnet`, `high` (VEN-E: "`high` for edits 3 and 5").
+- LANDS IT: B40's producer; `Item: B40.16`, `[skip ci]`.
+
