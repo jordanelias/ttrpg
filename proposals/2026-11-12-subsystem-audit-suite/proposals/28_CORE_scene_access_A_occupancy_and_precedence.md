@@ -2,7 +2,9 @@
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.7 row 28A (CONFORMS to the drafted amendment; VIOLATES `04` PART D row 36 as ratified until Jordan applies it), §2, §6 row *J-U5a-05 baseline*, §7, §7b-T; `unified/U1_GLOSSARY.md` *occupy* (a visited person's being busy is **engaged**; "occupy" is an army's holding of ground, A-66), *level*; `unified/U3_CONFLICT_LEDGER.md` C3-K8, C3-N5, C3-C13; `OWED_TO_UNIFICATION.md` §A row (PART D row 36), §B lane 28 (gate rows out of order)). Changed: the vocabulary follows the glossary throughout this file (the fixture `engagement`, the clause and constant `engaged` / `ENGAGED_CLAUSE`, the row property `VerbRow.engages`, a visit **engages** its counterparty; the test file `test_scene_access_engagement.py`); the person key of `_canonical_order` **ships at its control** until Jordan applies the drafted PART D row 36 amendment (edit 8; C3-K8), and edits `_canonical_order` after B08; the problem section states the three denominators in one sentence and names its own reading as A-63's measurement (C3-N5); gate rows are renumbered in order (row 10, the DELIBERATE falsifier, now follows row 9); the scratch `ordp.py` strata-cut arm is promoted into `harness/access.py`; `precedence_level` and `appointment_level` keep their names (they are `LEVEL_SIGMA` levels, glossary *level*). For another lane: `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` (W3-5a) cites the `occupied` clause, now `engaged`.
 
-**Lands in batch:** B28. **Depends on:** B08 (`16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` edits 1–4; `18_DETERMINISM_rival_acts_in_one_fold.md`), B05 (`U5c_SC_one_obstacle_form.md`, levels and `rank_gap`), B11 (`14_VERBS_SOCIAL1_A_formation.md`), Jordan's PART D row 36 amendment for the person key to leave its control.
+**Lands in batch:** B28. **Depends on:** B08 (`16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` edits 1–4; `18_DETERMINISM_rival_acts_in_one_fold.md`), B05 (`U5c_SC_one_obstacle_form.md`, levels and `rank_gap`), B11 (`14_VERBS_SOCIAL1_A_formation.md`). The Layer 1 text for the person key, PART D row 36, is APPLIED (`L1-A64`, `04:1065`).
+
+Reconciled: 2026-11-12, A-97 (`unified/work/L1_APPLIED.md` §`L1-A64`, `unified/work/L1_PROPAGATION.md`): edit 8 (the row 36 and §27 text) is applied and dropped as an edit of this file; the "VIOLATES `04` PART D row 36 as ratified until Jordan applies it" and "ships at its control until Jordan applies" clauses of the W3-2 line above are superseded. The person key's control (`precedence_level` `None`) now rests on the per-commit hash-equal control and the commit-8 flip, not on Layer 1.
 
 ## Status: PROPOSED (a plan for future execution; nothing here is executed by the authoring lane)
 
@@ -206,14 +208,15 @@ ranks as it ranks any candidate (proposal B). The precedence net is not an input
    `precedence_level` and `appointment_level` (`LEVEL_SIGMA` names; first values `minor` and `major`;
    control `None`, at which the group is ordered by the bare draw); each with a `hole_register.yaml`
    row graded `assumption`, ids allocated at build from `references/id_reservations.yaml`.
-8. **Layer 1 (drafted here, applied only by Jordan's amendment).** `04` PART D row 36, after *"rank
-   never breaks a tie"*: *"Where several scenes claim one person's round, office rank is a declared
-   weight of a keyed precedence draw (Jordan, A-64) and never a sort key: a lower rank is sometimes seen
-   first."* #353 §27's order sentence (already owed under A-9) gains *"…and scenes that claim one
-   person's round are ordered among themselves by that draw."* **Until Jordan applies it, the person key of
-   `_canonical_order` ships at its control** (`precedence_level` `None`: the group is ordered by the bare
-   draw, rank weighs nothing), so the shipped tree honours PART D row 36 as ratified; this file edits
-   `_canonical_order` after B08 (C3-K8).
+8. **Layer 1: APPLIED, no longer an edit of this file** (2026-11-12, A-97, node `L1-A64`; the number is kept so
+   other files' references to "edit 8" still find a line). `04` PART D row 36 now reads *"Where several scenes
+   claim one person's round, office rank is a declared weight of a keyed precedence draw (Jordan, A-64) and never
+   a sort key: a lower rank is sometimes seen first"* (`04:1065`), F.26 `:1227` and `hol:974` §27.1, `:1166`
+   §33 are amended to match. The person key of `_canonical_order` (this file edits it after B08, C3-K8) may
+   therefore set `precedence_level`. It still ships at its control (`precedence_level` `None`: the group is ordered
+   by the bare draw, rank weighs nothing) in its first commit, for a reason of its own: every commit of the order
+   table ships with its fixture at the control so its hash is EQUAL, and the level flips to `minor` / `major` only
+   in commit 8, if gate rows 2, 3, 5 and 12 pass.
 
 ## Gate (execution artifacts, §0.2): what the measurement must show before this ships
 
@@ -318,8 +321,6 @@ falsifiers are the list under *Falsifier* above, each observable by a named test
   rest of commit 3 does not wait on it.
 - *Commit 8's two floors* (95%, 60%) and gate row 12's rate are seeds, not measured targets. Missing:
   the first reading on the tree where A-9 and `14_VERBS_SOCIAL1_A_formation.md` have landed.
-- *The Layer 1 amendment* (edit 8 above) is drafted text. Missing: Jordan's amendment; until then the person
-  key ships at its control (C3-K8).
 
 ## Cost class
 

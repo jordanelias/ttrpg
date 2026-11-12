@@ -1,6 +1,6 @@
 # 16 · PESSIMIST · CORE — a scene runs in its own order, and its second step may depend on its first
 
-Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §1) — **no longer held.** Jordan answered D-09 on 2026-11-12 (A-9): a scene is a short sequence (Option B). Edits 1–4 are the plan. Edit 5 (the Layer-1 text: #353 §27's order restated over scenes) is drafted by the unification stage and applied only by Jordan's amendment, never by an implementation lane. The rival-acts precedence draw (`18_DETERMINISM_rival_acts_in_one_fold.md`) re-orders scenes, not acts, once this lands.
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §1) — **no longer held.** Jordan answered D-09 on 2026-11-12 (A-9): a scene is a short sequence (Option B). Edits 1–4 are the plan. Edit 5 (the Layer-1 text: #353 §27's order restated over scenes) is APPLIED (2026-11-12, A-97, node `L1-A9`; `04:662`). The rival-acts precedence draw (`18_DETERMINISM_rival_acts_in_one_fold.md`) re-orders scenes, not acts, once this lands.
 
 Folded: 2026-11-12 by `audits/28_SCENE_ACCESS.md` (rulings A-63, A-64). Nothing here is deleted; the engagement half this file left without an edit is carried by `28_CORE_scene_access_A_occupancy_and_precedence.md`, at two of this file's sites. (1) **Edit 1's scene order gains a rivalry key**: the scenes that claim one person's round (his own, and each scene holding a face-to-face interaction that names him) are re-ordered among the positions they already hold by a precedence draw weighted by office rank and a kept appointment. (2) **Edit 3's fold gains a second new clause beside `sequence`, `engaged`**: a face-to-face interaction whose counterparty is already in another scene this round, or has no scene action left this season, is refused and emits `visitor.kept_waiting`, which WITNESS deposits as a claim about the person he came to see in both their ledgers (A-81: the refused call is not a still scene); a row whose prize is `the body` is never refused there (A-80: a closed door stops talk, not force); a person received before his own scene folds has that scene deferred to his next round, and the scene he was received in is subtracted by the budget Query (A-62: no stored number, no receipt). (3) **The figure in this file's source is restated**: 62 of 87 reproduces at `e1d6180` and counts every executed act whose payload names a person (`create_record` 46, `utter` 28, `reconstruct` 25); by the verb row's `counterparty:` it is 32 of 50, and by the rows whose cell requires the two in one place the realm executes 24, 42 and 31 meetings in two seasons at seeds 0, 1, 2 (audit §1). (4) This file's control arm is also engagement's: `engagement: off` must reproduce this file's hashes.
 
@@ -14,11 +14,13 @@ Corrected from R5 7b: the `sequence` kind is not one roster key in `verb_table.y
 it is a clause the loader already knows how to require, per row (`data/verbs.py:340-358`).
 Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_2_DONE.md` last row; `unified/U1_GLOSSARY.md` *occupy*): the folded lane-28 sentences say *engaged* (clause `engaged`, fixture `engagement: off`) where they said `occupied` / `occupancy: off`; the file name of the 28A head keeps "occupancy".
 
-## Status: PROPOSED (A-9 taken: Option B is the plan; edit 5 is Layer 1 text drafted by the unification stage, owed in `unified/OWED_TO_UNIFICATION.md` §A row 1, applied only by Jordan)
+Reconciled: 2026-11-12, A-97 (`unified/work/L1_APPLIED.md` §`L1-A9`, `unified/work/L1_PROPAGATION.md`): edit 5, the Layer 1 restatement, is APPLIED by Jordan's amendment (node `L1-A9`: `04` §C.4 `:662`, PART D rows 29 `:1056`, 36 `:1065`, 41a `:1071`, F.26 `:1227`; `hol:974` §27.1, `:1125`; `ARCHITECTURE_V2.md:753`) and is dropped from the plan; the waiting wording of the head and the Depends line is removed. `interactions_per_scene = 1` stays as the control arm of the gate (its own reason, the hash-equal control below), not as a form that avoids contradicting Layer 1, which now reads scenes ordered by stratum and hash with the chooser's order inside each.
 
-Lands in batch: **B08** (IN; one re-pin). Depends on: nothing unlanded for edits 1-4 (A-9 is the authority for the
-code; the Layer 1 restatement is the spec's catch-up and the code lands behind `interactions_per_scene = 1` as the
-control until it is applied). Serial edge on `loop/resolve.py::_canonical_order` (C3-K8): this file's edit 1 first,
+## Status: PROPOSED (A-9 taken: Option B is the plan; its Layer 1 text, formerly edit 5, is APPLIED, `L1-A9`, `04:662`)
+
+Lands in batch: **B08** (IN; one re-pin). Depends on: nothing unlanded (A-9 is the authority for the
+code; Layer 1 already reads over scenes, `04:662`, APPLIED; the code carries `interactions_per_scene = 1` as its
+control arm). Serial edge on `loop/resolve.py::_canonical_order` (C3-K8): this file's edit 1 first,
 then `18_DETERMINISM_rival_acts_in_one_fold.md` (B08), then `28_CORE_scene_access_A_occupancy_and_precedence.md`'s
 person key (B28).
 
@@ -104,10 +106,9 @@ edits what Layer 1 ratifies.
 4. **`engine/season/decision/choose.py::pack_scenes`** — when packing a contested interaction followed
    by one on the same subject, set `after` from the row's own `writes_by_degree` (the bands in which the
    first wrote anything). No verb is named; the rule reads the row.
-5. **`architecture/meta/`** (Layer 1; only on Jordan's amendment, A-9 having ruled the substance) — the §27
-   order restated as *strata and hash over scenes*; `04` §C.4 `:662`'s key `(stratum, actor-hash,
-   intra-person position)` read over scenes. Drafted by the unification stage (`OWED_TO_UNIFICATION.md` §A
-   row 1); no implementation lane edits `04`.
+5. ~~`architecture/meta/`~~ **APPLIED, dropped from the plan** (2026-11-12, A-97, node `L1-A9`): the §27 order
+   now reads *strata and hash over scenes*, the chooser's order inside each (`04` §C.4 `:662`; PART D rows
+   29, 36, 41a; `hol:974` §27.1). No implementation lane edits `04`.
 
 Order of edits: 2 (the field) → 3 (its reader, with the loader clause) → 1 (the scene key) → 4 (the
 chooser sets `after`), each its own commit; one re-pin at the batch close.

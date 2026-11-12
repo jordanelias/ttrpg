@@ -1,6 +1,6 @@
 # MB · a unit's own prowess: columns of its row, one function that composes its pool, and no baseline lent by its side
 
-Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AND_VOCABULARY.md` D-U1-11p (*prowess* is a unit's quality only: already so), D-U1-11o and `U1_GLOSSARY.md` *band* (§1's "subformation" row is the unit's **formation**, its cell arrangement, and `bands` is `layers`), `R1_READ.md` §1.2 (CONFORMS; "no function sums it over an army" stays the author's CONVENTION); `U3_DEPENDENCY_ORDER.md` (node B31; `Depends on:` / `Lands in batch:` added; INCOMPLETE item 1 closed by order, since the troop file lands in B17 before B31). **Order note:** U3's node table puts this file in B31, but 27B-1 and 27B-2 are `04_MB_cr12_linear_law.md` step 2 ("one function returns the pool's base term", that file's first `Folded:` item) and `U5b_MB_rulings_in_the_field.md`'s head item (3) places them in the field calibration batch; so 27B-1/27B-2 land in B19 with CR-12 step 2 and 27B-3/27B-4 in B31 (reported for U3/U4). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): MB unit "stance" → "posture" in prose (glossary *stance*, *posture*; the code field `stance` keeps its name).
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AND_VOCABULARY.md` D-U1-11p (*prowess* is a unit's quality only: already so), D-U1-11o and `U1_GLOSSARY.md` *band* (§1's "subformation" row is the unit's **formation**, its cell arrangement, and `bands` is `layers`), `R1_READ.md` §1.2 (CONFORMS; "no function sums it over an army" stays the author's CONVENTION); `U3_DEPENDENCY_ORDER.md` (node B31; `Depends on:` / `Lands in batch:` added; INCOMPLETE item 1 closed by order, since the troop file lands in B17 before B31). **Order note:** U3's node table puts this file in B31, but 27B-1 and 27B-2 are `04_MB_cr12_linear_law.md` step 2 ("one function returns the pool's base term", that file's first `Folded:` item) and `U5b_MB_rulings_in_the_field.md`'s head item (3) places them in the field calibration batch; so 27B-1/27B-2 land in B19 with CR-12 step 2 and 27B-3/27B-4 in B31 (reported for U3/U4). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): MB unit "stance" → "posture" in prose (glossary *stance*, *posture*; the code field `stance` keeps its name). MB lexicon lane (2026-11-12, `unified/MB_LEXICON.md` D-1, A-94): A-59's "subformation" is a group of units at one post (not the unit's cell arrangement, which is its **unit formation**); §1 row 4 split into unit formation and subformation, §2's bullet and gate 5 reworded to match.
 
 **Depends on:** 27B-1/27B-2 on nothing unlanded (they are CR-12 step 2); 27B-3/27B-4 on `04_MB_unit_loadout_and_weapon_in_hand_B.md` stage 1 (B17); gate 2 on `04_MB_campaign_party_economy.md` §1 (B31); gate 5 on `04_MB_cell_hierarchy_as_data.md` (B19).
 **Lands in batch:** 27B-1, 27B-2 in B19 (`B19-mb-field-calibration`, first, with CR-12 step 2); 27B-3, 27B-4 in B31 (`B31-mb-loadout-economy`, last; U3 §4.1 row 80).
@@ -59,7 +59,8 @@ it; that literal becomes a troop row with the same values, so nothing moves ther
 | equipment | the arm in hand: `primary` or `secondary`, with its `class` | troop row, unit row override of `secondary`; state `Subunit.in_hand` | reach, support ranks, melee or missile (`…_B.md` §2, §4) |
 | | `armour` tier | troop row | die-equivalents against the attacker's net (`16_PESSIMIST_MB_partition_and_the_pair_rule.md` edit 3); the rally step |
 | | the load | `strength` against the masses carried | `(fatigue_factor, step_factor)` on the column ledger's drain and rest and on the step (`…_B.md` §5; `26_MASS_BATTLE_movement_and_fatigue_as_data.md`) |
-| subformation (A-59's word; the unit's **formation**, its cell arrangement, D-U1-11o) | `ranks`, `files`, `shape`, `distribution`, `layers` (was `bands`) | unit row, defaults on the troop row (`04_MB_cell_hierarchy_as_data.md` §2, §4) | frontage, support depth, fatigue damping, shock absorbed, the wrap resisted |
+| unit formation (the unit's cell arrangement; `unified/MB_LEXICON.md` D-3) | `ranks`, `files`, `shape`, `distribution`, `layers` (was `bands`) | unit row, defaults on the troop row (`04_MB_cell_hierarchy_as_data.md` §2, §4) | frontage, support depth, fatigue damping, shock absorbed, the wrap resisted |
+| subformation (A-59's word: the units at one post of the army formation, `unified/MB_LEXICON.md` D-1) | `post` (and the units' shared `officer`) | unit rows, read together | where the unit stands relative to its neighbours and the enemy: which arcs are exposed, whether a reserve stands behind it (a stand-draw term), which doctrine row's standing orders it carries |
 | tactics | `role` and its instructions, `stance`, `standing_orders`, `post` | unit row | the posture term, brace, yield, targeting; applied through `obey` (`27_MB_A`) |
 
 Nothing in the table is new except the last column's statement of where it is read.
@@ -89,15 +90,17 @@ dealt    = K_LINEAR * frontage(pair) * PAY_PER_NET * max(0, net) * (1 + quality)
   file decides is that **`prowess` is the only place a unit's quality becomes dice**, that it takes the unit
   and reads its row, and that nothing multiplies it by a value belonging to the side.
 - **The commander is not in it.** Jordan's 2026-07-08 directive took the commander out of the pool
-  (`config.py:533-552`), and A-59 lists troops, equipment and subformation as prowess's sources. A person's
+  (`config.py:533-552`), and A-59 names troops and equipment as prowess's sources and the subformation with its tactics as what bears
+  on it. A person's
   two inputs reach obedience, steadiness and rally (`27_MB_A` §4, §6), never the dice of a pair. An officer
   changes what his unit does and whether it stands; he does not add to its dice.
 - **Numbers are not in it** (A-60). They are in `frontage(pair)`, in the depth that rests a column, and in how
   long the body lasts.
-- **Formation (A-59's "subformation") and tactics are not multipliers on prowess.** They decide which of the unit's cells are in
-  the pair, how many ranks support them, which arcs are exposed and which levels apply. That is the sense in
-  which prowess is "impacted by subformation with tactics": the same row fights differently four deep than
-  one deep, braced than advancing.
+- **The unit's formation, its subformation (A-59's word: the units at its post) and their tactics are not
+  multipliers on prowess.** They decide which of the unit's cells are in the pair, how many ranks support them,
+  which arcs are exposed and which levels apply. That is the sense in which prowess is "impacted by
+  subformation with tactics": the same row fights differently four deep than one deep, braced than advancing,
+  in a centre with a reserve behind it than alone on a wing.
 
 ### 3. No baseline lent by the side
 
@@ -145,7 +148,7 @@ which is the resolver sampled (`04_MB_manager_battle_one_resolver.md` §8).
 4. **Equipment reaches the dice.** The loadout proposal's stage 4 gates and the pair rule's armour row, read
    through `prowess`'s callers: raising a kind's `armour` one tier lowers the net its attacker rolls and
    leaves the kind's own `prowess` unchanged (asserted by calling both).
-5. **Subformation is not a multiplier.** The same row at `ranks: 2` and `ranks: 6` returns one `prowess`; the
+5. **Unit formation is not a multiplier.** The same row at `ranks: 2` and `ranks: 6` returns one `prowess`; the
    two bodies' results differ (`04_MB_cell_hierarchy_as_data.md` gate 4).
 6. `readout(row)['quality_dice']` equals `prowess` of a unit built from that row at Discipline 5, asserted by
    calling it; no caller of `readout` sums its values.
