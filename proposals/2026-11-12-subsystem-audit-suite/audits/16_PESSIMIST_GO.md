@@ -16,13 +16,35 @@ data the oracle exports, of the stories the engine produces. Prior work cited, n
 named. All runs: `PYTHONHASHSEED=0`; scripts and outputs in
 `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/PES_GO/`.
 
-**IN PROGRESS: this head was written before the reading finished; sections are appended in the order they
-are established and the verdict is rewritten last. If this line is still present, the lane was
-interrupted and what follows is partial.**
+Layout: §0 verdict; §1 NERS; §2 premise; §3 emergent narrative as legibility; §4 findings
+`F-PES-GO-nn`; §5 resolutions; §6 stories; §7 survivors for Jordan; §8 evidence log.
 
 ## 0. Verdict
 
-`[PENDING — rewritten after the probes]`
+**The port gate, as planned, would certify a game no player can read, and it cannot tell.** Three
+things are sound and were re-shown at full width: the played and automated seasons are one code path
+(all 83 persons seated on the player's sheet at once, two seasons, seeds 0–2, hash equal to the
+automated run); a View leaks nothing by type; and the short chains the world produces do reach
+witnesses (three in four are held whole, as claims, by someone who took no part). Everything a
+player would call presentation fails by execution. **Seeing:** about one offered row in a hundred,
+in one deliberation in eight, names a person the seat holds no claim about, because the Question is
+stamped from world truth and "follows a succession"; in the other direction three record kinds
+reach 82 of 82 persons in the tick they occur, while person-to-person telling carried 5 to 12
+claims of 22,000. **Reasons:** `why` is `None` on 24,822 of 24,822 witness claims, by construction.
+**Levers:** 42% of acts are refused, fifteen offered verbs were refused every time (1,085 acts),
+believed odds answer on 0.8% of the candidates they apply to, and one swapped pick changes 82 of 82
+ledgers with nothing saying it was his. **Scenes:** six fights in six realm-seasons, all one man's
+`capture`; the one steering choice is a certain, costless escape that deleted a death; a watcher
+learns that a body changed. **Story:** 79 of 84 chains are two links of paperwork, and no exported
+file holds a word for any Event kind or verb. **The single largest obstacle** is that the parity
+contract is blind to all of it: keeping only the rows a budget can pack (dropping 78.3% of 18,689
+offered rows) leaves the hash equal, so a port could show the player anything and pass. The second
+is a false N-line inside the gate: 99.73% of the oracle's generators yield one uniform from a key
+the port can already compute, so the draw recorder, its export and the replay (GO-16) are not
+needed, and removing them makes parity checkable at any seed. Four proposals carry the repairs;
+eleven resolutions are decided; one question (the draw, against a ratified Layer 1 row) returns to
+Jordan; two findings of the prior GO lane are corrected (F-GO-16's measure; addendum B's "absent,
+not greyed … built, by type").
 
 ## 1. NERS — cut tests on the port gate and the player surface, executed
 

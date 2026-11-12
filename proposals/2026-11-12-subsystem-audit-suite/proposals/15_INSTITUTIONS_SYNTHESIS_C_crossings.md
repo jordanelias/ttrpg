@@ -22,7 +22,7 @@ rule because half of it belonged to the other.
    answer.
 3. A suit for debt may be docketed before any bench that sits over the debtor. No code; stated because
    it is how a bond reaches a throne.
-4. Two certificates for one seat on opposite sides of a hearing answer each other.
+4. Two certificates for one seat on opposite sides of a hearing stand against each other, item by item.
 5. A grant that forbears a levy is `evidence` against that levy, when the levied know of it.
 6. A hand may belong to another faction than the seat whose paper it passes.
 
@@ -109,11 +109,14 @@ Church `ban` and may be published by an `avoidance`.
 
 ### 4. Rival certificates — a request to SC's evidence owner (not edited)
 
-`05_SC_evidence_and_rebuttal_B.md`'s weight function: a cited Record carrying `recites` for a seat (or
-person) is answered, deed for deed, by a Record cited on the other side that carries `recites` for the
-same seat for a different person. The side with more recited deeds left standing keeps the difference as
-`evidence`. A certificate does not outrank another by who made it: a bench's disposition to the body
-that made it is already in `reception`.
+`05_SC_evidence_and_rebuttal_B.md` already has the arithmetic: items filed `for` the docket are `proofs`,
+items filed `against` are `rebuttals`, and the `evidence` term is `proof_step × (rebuttals − proofs)`. A
+rival's deeds do not contradict the claimant's (they are different cells), so nothing is struck; they
+stand against. The one sentence asked of that file's owner: **a Record carrying `recites` for a seat is
+admissible on either side of any docketed matter whose petition names that seat**, each recited deed
+filed as one item (`15_INSTITUTIONS_SYNTHESIS_B` edit 4). A certificate does not outrank another by who
+made it: a bench's disposition to the body that made it is already in `reception`, and an impeachment
+that draws Overwhelming strikes every item of the forged paper's origin by that file's rule 1.
 
 ### 5. A grant against a levy — a request to the MATERIAL lane (not edited)
 

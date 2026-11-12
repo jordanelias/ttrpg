@@ -58,7 +58,7 @@ thing's own bookkeeping differs.
 
 | the thing | the N-line it is kept on | the cut, executed | what dies |
 |---|---|---|---|
-| **the unit stamina ledger** (`Unit.stamina`, `Subunit.stamina`, `STAMINA_DRAIN_PER_CONTACT_CELL`, `_stamina_pool_penalty`, `STAMINA_POOL_THRESHOLDS`, `stamina_check`, `BETWEEN_TURN_STAMINA_RECOVERY`, `run_battle`'s `a_stamina` / `b_stamina`) | "a tired unit fights worse" | entering at 50 or 10 instead of 100: identical in 100 of 100 fields; a fresh 18-tick field ends at 99.5 and 100.0 | nothing. Fatigue is carried by the column ledger (`percell._ColBlock.stamina`), which the cut leaves alone. **Free.** |
+| **the unit stamina ledger** (`Unit.stamina`, `Subunit.stamina`, `STAMINA_DRAIN_PER_CONTACT_CELL`, `_stamina_pool_penalty`, `STAMINA_POOL_THRESHOLDS`, `stamina_check`, `BETWEEN_TURN_STAMINA_RECOVERY`, `run_battle`'s `a_stamina` / `b_stamina`) | "a tired unit fights worse" | entering at 50 instead of 100: the same tally and the same mean losses to three places over 100 fields; at 10, one field differs; a fresh 18-tick field ends at 99.5 and 100.0 | nothing. Fatigue is carried by the column ledger (`percell._ColBlock.stamina`), which the cut leaves alone. **Free.** |
 | **the pike troop type** as distinct from heavy infantry | "reach 0.3 is the sole, isolated differentiator" (`registry.py`) | pike for heavy infantry, braced, three ranks, against a charge: identical in 60 of 60; one rank: 440 of 440 (addendum) | a name and a row. **Free today.** It stops being free only when a loadout the resolver reads exists (addendum proposal) |
 | **nine role rows** (cavalry `Pursue`, `Screen`, `Feint`; light cavalry `Pursue`, `Screen`; light infantry `Pursue`, `Screen`; archers `VolleyLine`; heavy infantry `Anvil` against foot) | "the FM position → role model" | the role named against no role: identical in 60 of 60, each | nothing. `ROLE_INSTRUCTION_PRIMITIVES` already says seven of its sixteen keywords drive nothing; the menu still offers them. **Free.** |
 | **an army's division into units**, as the resolver treats it | none stated; assumed harmless | merge the units into one body: the army goes from 0 wins of 60 to 30 (v an equal block), from 0 to 55 (v two-thirds its size) | nothing the resolver values; everything the design wants (mixed arms, squads, a flank, a reserve). **Better than free, which is the defect** (F-PES-MB-01) |
@@ -90,7 +90,8 @@ Phase 0, the draws in a field: (1) the friction factor, `math.exp(gauss(0, 1.1))
 draw outside the engine (P-v); (2) the melee pair, `roll_pool_fractional` plus `_sigma_net_boost` in
 `modules/mass_battle/resolution.py`, the declared second sigma path (DICE lane F-DICE-07, F-DICE-08;
 not re-filed); (3) volleys; (4) discipline checks, `roll_pool(discipline)` against Ob 1; (5) the
-stochastic rout point between 15% and 30% losses; (6) contention ties.
+stochastic rout (`MB_STOCHASTIC_ROUT`, onset 15% and cap 30% of losses in `config.py`; its draw site
+was not opened by this lane); (6) contention ties.
 
 | property | finding on the melee pair | reproduce |
 |---|---|---|
@@ -387,7 +388,7 @@ clash in `percell.update_stamina`; read by `percell._fatigue_sigma`, up to `MB_S
 | A enters at | on the unit ledger: A / B / undecided | on the column ledger | on both |
 |---|---|---|---|
 | 100 (control) | 36 / 54 / 10 | 36 / 54 / 10 | 36 / 54 / 10 |
-| 50 | 36 / 54 / 10 (identical field for field) | **15 / 79 / 6** | 15 / 79 / 6 |
+| 50 | 36 / 54 / 10 (and the same mean losses to three places) | **15 / 79 / 6** | 15 / 79 / 6 |
 | 10 | 37 / 54 / 9 | 10 / 86 / 4 | 8 / 86 / 6 |
 | 0 | **43 / 49 / 8** | 10 / 86 / 4 | 5 / 90 / 5 |
 

@@ -37,15 +37,17 @@ intent asks for has, measured, almost nothing to decide.** The pessimist reading
    counter, the displace-and-step-inside and the lunge in 0.91% of exchanges. The grapple fires 5,812
    times and changes poise only: 1,107 "disarms" disarm nobody. A defender who reads the attack never
    chooses to wind. The cut tests (§1.2) say which of the remaining mechanisms move any outcome at all.
-3. **The four premise sentences (§2).** *"A man strikes harder when he commits"*: weakly true (a blow
-   lands 5 points more often and is 7% heavier from the shallowest to the deepest commit), nobody chooses
-   it, and forced either way it loses to the middle. *"A wounded fighter yields"*: never under the terms
-   a `fight` is fought on, always and at exactly one fraction of Health under the others, for every
-   person alike: a threshold, not a decision. *"Armour turns a blade"*: false in its plain meaning: the
-   share of good rolls that draw no blood is 61 to 64% in plate and naked alike; armour multiplies every
-   blow by a constant (a Success from an arming sword is exactly 15, 13, 8 and 1 against the four tiers).
-   *"A skilled duelist beats a novice more often than not but not always"*: true, and the best-shaped
-   thing in the subsystem; no season person can be either.
+3. **The four premise sentences (§2).** *"A man strikes harder when he commits"*: weakly true (forced
+   from the shallowest to the deepest commit, a blow lands 8 points more often and is 11% heavier),
+   nobody chooses it, the depth at which it costs anything is drawn in 1% of exchanges, and inside the
+   range the engine does draw, deeper is simply better. *"A wounded fighter yields"*: never under the
+   terms a `fight` is fought on, always and at exactly one fraction of Health under the others, for
+   every person alike: a threshold, not a decision. *"Armour turns a blade"*: false in its plain
+   meaning: the share of Success rolls that draw no blood is 60 to 64% in plate and naked alike; armour
+   multiplies every blow by a constant (a Success from an arming sword is exactly 15, 13, 8 and 1
+   against the four tiers), and a swordsman cannot fell a man in plate (0 of 2,800). *"A skilled duelist
+   beats a novice more often than not but not always"*: true of skill, and the best-shaped lever in the
+   subsystem; no season person can be either, and two points of Perception outweigh four of skill.
 4. **The world keeps almost nothing (§3.3).** A fight of 8 turns, 14 exchanges, 5 wounds and 2 grapples
    (110 trace events) reaches the log as `fight.declared`, `person.died`, `body.changed`. The victor, on
    12 of 40 Health with three wounds, is recorded as `undecided`. No blow, reversal, bind or bout count is
@@ -822,7 +824,7 @@ marked.
 | `pC_armour.py` | per-blow damage by tier, 1,500 × 28 cells; tier matrix (stopped after the `light` row) | §2.3 |
 | `pC3.py` | skill and weapon against plate, 400 × 7 | §2.3 |
 | `pD_skill.py` | faculty 0 to 14 against 2, 3,000 a row; mirrors by level 1,500; skills and attributes 1,500 | §2.4 |
-| `pN_att.py` | Perception and Strength ladders 1,000 a cell (the Coordination row not completed); Perception against skill; the read at Perception 7 | §2.4 |
+| `pN_att.py` | Perception, Strength and Coordination ladders 1,000 a cell (Coordination 1 to 7: felled 72.2% to 24.6%); Perception against skill; the read at Perception 7 | §2.4 |
 | `pE_cuts.py` → `pE_cuts_base800.txt` | base and control rows of nine matchups at 800 (the cut loop stopped for load) | §1.2 (spear, base rates) |
 | `pE_cuts2.py` | 31 cuts × 6 matchups × 400 | §1.2 (b), §1.4 |
 | `pE3_default.py` | 31 cuts × the season mirror × 2,000, two controls | §1.2 (a), §1.4 |

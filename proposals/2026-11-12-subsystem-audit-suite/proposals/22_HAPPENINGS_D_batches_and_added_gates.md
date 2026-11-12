@@ -82,8 +82,10 @@ market, so the home appears to follow the institution and the realm's heads have
 `[UNVERIFIED: how the file's homes were produced; the file is the owner either way]`. F-PES-FA-03 reads
 18 of 34 seat-holders off their seat's ground. `16_PESSIMIST_FA_C_under_the_seat` makes governance stop
 depending on the home and says the homes themselves are *"WR's and CHAR's, cross-listed"*. Nobody holds
-them. It bears on the King's death directly: he is refused seventeen captures mostly because his captors
-are not where he sleeps, which is an accident of the housing and not a protection.
+them. It bears on the King's death: the PHYSICAL lane's census gives the captor's absence (the `with`
+clause) as the commonest refusal of a `capture`. If that holds for the seventeen refused at seed 2 (not
+read per act here), what protects the King is an accident of the housing: his Spymaster's row lives in a
+barracks in another town.
 
 **Decision** (ladder step 5; content, so each value is `[ASSUMPTION; medium; Jordan to correct]`):
 
