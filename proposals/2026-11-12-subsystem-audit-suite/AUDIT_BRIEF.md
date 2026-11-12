@@ -72,6 +72,8 @@ know" and mark the gap; do not fill it from memory. Exact figures you could not 
 
 ## Rulings given by Jordan in this session (2026-11-12; bind every later lane)
 
+**The live list of Jordan's rulings is `unified/DECISIONS_ANSWERED.md` (A-1 to A-56, plus the ladder-closed table). It supersedes anything below and any lane document that disagrees. Read it before you write. Held open: D-34 and D-35 (battle luck and numbers), pending `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`. A document that built on the other answer is rewritten or marked superseded by the unification stage.**
+
 1. **Auto-resolve is the same resolver, run automatically** (from standing orders or the chosen approach),
    not a separate quicker calculation. A played and an auto-resolved battle or duel round with the same
    choices agree. Layer 1 §27.2 and §C.4 stand unchanged. Applies to mass battle and to the grid duel round.
