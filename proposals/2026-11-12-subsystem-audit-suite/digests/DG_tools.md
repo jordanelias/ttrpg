@@ -141,3 +141,99 @@ Wiring facts used throughout (read once, from the sources, not from the tools' o
 - **Conflicts / stale:** `systems/npcs/` and `systems/world/` are quarantined paths; an NPC/world design now lives in `proposals/` or `.designs/` and escapes this gate.
 - **Open items:** none.
 
+### tools/ci_generation_consistency.py
+- **What it is:** "v40 generation currency" check: every canonical design doc exists, has a Status line, and is not in the supersession register.
+- **Status:** no Status line; report-only, always returns 0 (`:114-115`); in `validators-report`.
+- **Bears on:** PROCESS.
+- **Content that matters:**
+  - The doc set comes from regexing `canonical_sources.yaml` lines for keys `design_doc|index|infill|integration_plan_doc|spec|related` pointing at `designs/` or `systems/` `.md` (`:39-51`). `grep -cE` of those patterns over `references/canonical_sources.yaml` = 0 and `systems/` holds no `.md`, so it checks ZERO documents and prints OK.
+  - `RECOGNIZED` Status vocabulary: CANONICAL, CURRENT, CANON, WORKING, DESIGN, REFERENCE, PROVISIONAL (`:37`); non-recognised only INFO.
+  - Treats a `## Status:` line as the currency signal - the §0.05 non-mechanism.
+- **Conflicts / stale:** docstring cites `designs/audit/2026-06-28-deprecation-currency-sweep/v40_generation_plan.md` (dissolved tree). CLAUDE.md §1 still names "Generation v40" as the live surface.
+- **Open items:** its subject has been emptied; nothing to flip to blocking.
+
+### tools/ci_golden_modes_check.py
+- **What it is:** CI job `field-goldens` runner: executes `systems/mass_battle/sim/bat.py --check` in three pinned digest modes; blocking, CI-only (not in `valoria_local`, ~275 s).
+- **Status:** no Status line; live; the one validator here that RUNS GAME CODE.
+- **Bears on:** MB, DICE (byte-exact battle regression oracle). Load-bearing on the game.
+- **Content that matters:**
+  - `MODES`: `unit_field_mor0` (FIELD_MOVEMENT=1, PER_CELL=0), `cell_field_mor0` (PER_CELL=1), `cell_legacy_mor1` (FIELD_MOVEMENT=0, MB_CELL_MORALE=1) (`:127-137`); the two legacy grid modes are no longer pinned by anything (registry notes, ED-MB-0061).
+  - `FIELD_PINS` (`:56-116`) pins ~75 env toggles to their recorded values - the MB tuning surface as shipped (e.g. ROUT_CASCADE_FRAC 0.6, POOL_QUALITY_SCALE 0.8, K_LINEAR 12, K_SQUARE 0.25, LANCHESTER_ENABLED 1, MB_AMMO_ENABLED 1, MB_VOLLEYS_START 10, MB_SUPPORT_RANK_CAP 1, MB_CELL_EXCLUSION 1). These are game numbers hand-copied into a CI tool; drift guard is `tests/valoria/test_field_golden_pins.py` (asserts equality with `config.py` env defaults).
+  - Green means the digest equals `bat.py`'s `EXPECTED` golden, not that battle balance is right; the mode assertion `DIGEST {mode}` prevents a perturbed selector from matching another golden (`:174-179`). `--perturb NAME=VALUE` is the mutation check.
+  - Docstring says "TWO"/"both modes" in places while MODES holds three (`:3-10,:30`).
+- **Conflicts / stale:** wording only; the doc names `PYTHONPATH` fix after port to `systems/mass_battle/sim/` (2026-08-24).
+- **Open items:** whether the cell/field golden digests encode the intended weapon-carry/cell design (MB audit): the pins record what shipped, not what should.
+
+### tools/ci_module_shape_check.py
+- **What it is:** report-only hygiene lint: runtime code must not `sys.path` into a `tests/` tree or import `tests.*`; INFO-tier lists untagged module-scope numeric constants in the combat engine.
+- **Status:** no Status line; live, report-only (`validators-report`; exit 1 never propagates).
+- **Bears on:** PC, CORE.
+- **Content that matters:**
+  - `RUNTIME_ROOTS = ('sim','systems/combat/combat_engine_v1','engine', 'modules')` (`:49-54`); `sim/` is a dissolved dir (silently skipped by `isdir`).
+  - INFO tier scope: `systems/combat/combat_engine_v1/` and `modules/combat/` (via `MODULES_WITH_OWN_EXPORT`) except `config.py` (`:58-59,:107-113`).
+  - Cites `.designs/.../holonic_container_doctrine_v1.md §3` (archived prose) as its rule's authority, contrary to §0.05.
+  - Overlaps `tests/valoria/test_engine_does_not_import_systems.py` (the CLAUDE.md §3 named execution artifact for the engine seam); this tool is regex-based, that test is a subprocess import.
+- **Conflicts / stale:** `PROVENANCE_TAGS` list includes `'ed-'` (any comment containing "ed-" substring, e.g. "fixed-" passes).
+- **Open items:** none.
+
+### tools/ci_names_consistency.py
+- **What it is:** blocking gate: `descriptor_registry.yaml` and `proper_noun_registry.yaml` mirror fields must equal `names_index.yaml` canonicals, both directions (reverse direction added 2026-09-16).
+- **Status:** no Status line; live, blocking (`validators`).
+- **Bears on:** CHAR, FA, SE, WR (names of attributes `attr.*`, aggregates `agg.*`, faction stats `fac.*`, settlement stats `set.*`; proper nouns).
+- **Content that matters:**
+  - Mapping by key prefix `attr|agg|fac|set` -> `descriptor_registry.yaml` `name`; `category == proper_noun` -> `proper_noun_registry.yaml` `canonical` (`:92-104`).
+  - The reverse sweep exists because `fac.legitimacy` (ruled a base faction stat 2026-08-23) was in the descriptor registry but not the names index for three weeks, so `Legitimacy` resolved silently to `set.legitimacy` (`:107-115`).
+  - Imports `names` (tools/names.py) - the same reader as `ci_naming_check`.
+  - Reads `descriptor_registry.yaml` groups `body/mind/social/retired` attributes (`:59`): "retired: Bonds (CR-84)".
+- **Conflicts / stale:** message tells the user to run `tools/valoria_rename.py` which is retired (`:134`).
+- **Open items:** none.
+
+### tools/ci_naming_check.py
+- **What it is:** the naming-invariant gate: no ADDED line may introduce a `legacy` name of an `enforce: block` entry in `references/names_index.yaml` (canonical Solmund; its one deprecated name is never to appear); `--warn` runs the warn tier.
+- **Status:** no Status line; live. Block tier BLOCKING (`validators`); warn tier report-only by caller policy. Imported by `hook_naming_guard.py`.
+- **Bears on:** PROCESS, WR (the one proper noun enforced).
+- **Content that matters:**
+  - Diff-aware via `ci_common.get_added_lines(mode)`; deprecated names are NOT hard-coded: `names.all_legacy(enforce=tier)` (`:67-85`).
+  - Fail-safe: empty block tier returns 1 (index unreadable), empty warn tier returns 0 (`:250-256,:283-296`).
+  - A long `EXCLUDE` substring list (`:89-151`) with a rooted subset `EXCLUDE_ROOTED = ('.audit/',)`; several entries name retired trees (`tools/observability/lexicon`, `dashboard/data.json`, `deprecated/`); the stale ones are inert.
+  - Own test: `test_the_audit_exclusion_is_ROOTED_not_a_substring` (note in `:121-128`); `'tests/'` exclusion is a substring, so any path containing `tests/` is exempt.
+  - A rename in prose elsewhere is not caught unless the line is newly added; `.designs/` is NOT excluded, so a quarantined-doc edit adding the token fails.
+- **Conflicts / stale:** `names_index.yaml` header warns "NOTHING VALIDATES the `enforce` field" (`names_index.yaml:24`): an unknown tier value silently disables an entry.
+- **Open items:** none.
+
+### tools/ci_pp_frozen_check.py
+- **What it is:** blocking gate making PP (patch) ids frozen history: no cited `PP-NNN` above 726, and archive pointers in `registers/patch_register_active.yaml` must name fork ref `c451bcb` (Jordan ruling 2026-08-14, ED-IN-0190).
+- **Status:** no Status line; live, blocking (`validators`).
+- **Bears on:** PROCESS.
+- **Content that matters:**
+  - `PP_FROZEN_CEILING = 726`; scans `canon/ systems/ modules/ references/ registers/ workplans/ godot/ engine/ proposals/ tools/` for `.md .yaml .jsonl .py .json` (`:50-59`). Any new PP id above the ceiling in any scanned file reds CI, including in `proposals/`.
+  - Excludes only its own file, so a digest/proposal that quotes an example PP number above 726 reds the gate.
+  - Own-boundary regex `(?<![A-Za-z0-9])PP-(\d+)\b` instead of `ci_common.PP_ID_PAT` (bare) because of `OPP-03` collisions (`:25-31,:53`).
+  - It does not scan `.designs/`/`.audit/`/`skills/`/`tests/`/`CLAUDE.md`.
+- **Conflicts / stale:** `FORK_REF = 'c451bcb'` is hard-coded; elsewhere forks are `1e4c6f4`, `6f740d9`, `c9daad6`: PP evacuation ref is one of many.
+- **Open items:** none.
+
+### tools/ci_quantity_vocabulary_check.py
+- **What it is:** A17 stat-vocabulary closure: stat identifiers in `module_contracts.yaml` state/derivations and literal `stat_deltas={}`/`impact_vector={}` dict keys in sim code must resolve to the descriptor registry or names index (via `quantity_registry`).
+- **Status:** no Status line; report-only (`validators-report`), exits 1 on any unresolved.
+- **Bears on:** CORE, CHAR, all (vocabulary closure of module I/O).
+- **Content that matters:**
+  - Two scans: `scan_module_contracts` and `scan_sim_literals` (regex `(stat_deltas|impact_vector)\s*=\s*\{([^{}]*)\}`, `:71,:99-125`); roots from `ci_common.sim_reference_roots()` (engine, systems/*/sim, modules/* except combat).
+  - Bundled names "A / B / C" are split on `/` (`:75-78`); computed quantities with no registry identity "report as unresolved ... expected backlog" (`:38-41`).
+  - Docstring authority is the Key & Echo armature quantity extension (retired substrate); echo_transport named as the one live call site (retired).
+  - Prints `N unresolved / M scanned`; the backlog size is not recorded in the file.
+- **Conflicts / stale:** cites `designs/audit/2026-07-08-...` (dissolved tree); the Key substrate was retired (ED-IN-0232) so the `stat_deltas` call sites may no longer exist `[UNVERIFIED]`.
+- **Open items:** "flip to blocking at zero backlog" (own lifecycle, `:21-23`) has not happened.
+
+### tools/ci_register_size_check.py
+- **What it is:** blocking size-cap gate (tokens = chars//4) over ~35 governed files: canonical_sources, patch register, coverage_matrix, propagation_map, names_index, id_reservations, module_contracts, 9 lane editorial ledgers and their archives, audit_registry.
+- **Status:** no Status line; live, blocking (`validators`), WARN at 85% report-only.
+- **Bears on:** PROCESS.
+- **Content that matters:**
+  - Caps: `canonical_sources.yaml` 14,000; `module_contracts.yaml` single-sourced from `atomization_rules.yaml` (fallback 18,000; comment says policy raised to 24,000 by W4 OI-54); lane ledgers 120,000 (raised from 50,000, Jordan 2026-08-21 "merely fiat"), `_archive` 250,000 (`:56-183`).
+  - Uses repo-RELATIVE paths with `os.path.exists(path)` (`:207-210`) so it only works from the repo root, unlike siblings using `ci_common.REPO`.
+  - Reads `atomization_rules.yaml` with a hand-rolled line parser (`:13-34`); `compliance_check.py` is a second size gate over the same policy file (see its entry).
+  - Prints archive criteria (ED-IN-0245: pre-current-month OR terminal status leaves the live ledger).
+- **Conflicts / stale:** `tests/coverage_matrix.md` is capped here and also demanded by `ci_co_file_checker` Rule 3; `references/audit_registry.jsonl` cap persists (the file exists); `registers/patch_register_active.yaml` is the PP register that `ci_pp_frozen_check` freezes.
+- **Open items:** none.
+
