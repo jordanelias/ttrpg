@@ -405,15 +405,15 @@ between scenes; **(ix)** capability never forbids an attempt (one named exceptio
 | (iv) situation moves difficulty | room terms and forgery quality, three named fields (`roll.py:142-144`) | none on the obstacle (wounds go to sigma) | none on the obstacle; terrain and walls go to sigma and to damage |
 | (v) attribute sizes a resource | none | stamina, concentration, health, per scene (`combatant.py:172-183`) | per-column stamina from a constant 100, not from an attribute (`config.py:154`) |
 | (vi) kit cost | none | Strength demand of the wielded weapon and worn harness, paid in stamina and handling (`combat_systems.py:168-189`) | none (the loadout has one reader, reach; `04_MB_unit_loadout…` confirms by run) |
-| (vii) weighs a choice | believed odds multiply the term (`choose.py::odds_weight`) | believed shares by sampling (`combat.py:239-245`) | none (`believed_chance` is `None` for a field, first audit F-DICE-14) |
+| (vii) weighs a choice | believed odds multiply the term (`choose.py::odds_weight`) | none believed; true shares are sampled for a display no loop caller reaches (`fight_estimate`, `sigma.py:379-384`) | none believed; the same (`field_estimate`, `sigma.py:386-391`; first audit F-DICE-14) |
 | (viii) growth | `train` +1 on a held key; practice from the act log | a fight that drew blood raises `arms` on survivors (`rosters.yaml:1531`) | none |
 | (ix) never forbids | S27.4 refuses only the impossible (`ob > 2 × pool`) | none | none |
 | sampler | whole dice, exact odds | Normal, half a success harder (first audit F-DICE-05) | whole dice, own roller, stochastic fractional die |
 
-Reading across a row is the finding: of nine intended axioms the social roll executes five, combat seven,
-the field one, and no two resolvers execute (i), (ii) or (iii) the same way (F-DICE-15, F-DICE-17,
-F-DICE-21). Reading down a column, combat is the only resolver in which a character's whole sheet
-matters, and it is the one whose design is unratified (ED-IN-0351).
+Reading across a row is the finding: no two resolvers execute (i), (ii) or (iii) the same way
+(F-DICE-15, F-DICE-17, F-DICE-21), and (v) and (vi) exist in one resolver only. Reading down a column,
+the field takes nothing from a person on any row (F-DICE-18), and combat is the one resolver in which a
+character's whole sheet matters and the one whose design is unratified (ED-IN-0351).
 
 ### 4.3 Where the design and the code part, and which the game follows
 

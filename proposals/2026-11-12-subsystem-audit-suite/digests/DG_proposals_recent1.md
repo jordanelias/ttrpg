@@ -640,3 +640,125 @@ Reading-depth note: the assigned set is about 3.3 MB. Entries marked `[READ IN F
 - **Conflicts / stale:** `forge` ships (VT:330) so the world is already foolable by documents.
 - **Open items:** J-C-6; remaining 3.9 items not read.
 
+### proposals/2026-10-16-verbs/2026-10-16-verbs-12-lexicon-fieldwork-and-inquiry.md
+- **What it is:** Part VI.4 (FI lane): fieldwork and inquiry verbs lexicon, suites, 58-gap coverage, named mechanics, Jordan items (918 lines). [READ PARTLY: section 3.9 head only]
+- **Status:** "PROPOSED (2026-10-17). Reference, not canon" (same form as lexicon series). Reading: live proposal.
+- **Bears on:** FI (primary), SC, WR, CHAR.
+- **Content that matters:**
+  - J1 how a questioned person answers an `interview`: (a) Layer 1 carve-out where the fold reads the questioned person's ledger filtered by stance (widens F8, `verb_table.yaml:1163` "the ACTOR'S OWN ledger and no other"); (b) the reply as the questioned person's own act next season (keeps F8; testimony arrives a season late; refusal becomes deliberate) - lane default (b) (3.9; D-V16 in verbs-04).
+  - The inquiry yield is the shared dependency of seven verdicts (verbs-08 V.2.14).
+- **Conflicts / stale:** Interview baseline awaits the Dialogue Lattice (ED-FI-0004) per the 03 play-surface doc.
+- **Open items:** remaining 3.9 items not read.
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-13-lexicon-threadwork.md
+- **What it is:** Part VI.5 (TW lane): threadwork verbs, 42-gap coverage, mechanics, Jordan items (671 lines). [READ PARTLY: section 3.9 head only]
+- **Status:** "PROPOSED (2026-10-17). Reference, not canon". Reading: live proposal.
+- **Bears on:** WR (primary), FI, CHAR.
+- **Content that matters:**
+  - K-WR-8/TW-G29: how Coherence's elastic return enters the loop - a licensed clock on the being vs the effect of a rest a person chooses; blocked because `write_matrix.yaml:176` quotes Layer 1's three clocks as "exhaustive" (a bodies-clock precedent would overwrite ratified architecture).
+  - Are knots permanent? Canon: the practitioner "cannot voluntarily unmake" his knots (`06_operations.md:140-141`) vs Layer 1 `release`'s domain = `tenure_kinds \ {contain}` includes `knot` (`verb_table.yaml:851,:858`); Layer 1 is RATIFIED, threadwork section 6 PROPOSED.
+- **Conflicts / stale:** knots permanence vs `release`.
+- **Open items:** the two items (D-V19).
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-14-lexicon-settlements-and-governance.md
+- **What it is:** Part VI.6 (GV lane): settlements and governance verbs (20 in the roster), 45-gap coverage, mechanics, Jordan items (785 lines). [READ PARTLY: section 3.9 head only]
+- **Status:** "PROPOSED (2026-10-17). Reference, not canon". Reading: live proposal.
+- **Bears on:** SE, FA, CORE.
+- **Content that matters:**
+  - Answered: the `tax` carrier and MATTER reader and the `evade`/`defy` split by architecture; the `dispatch` -> `order` rename by precedent; `succeed` by IN-61; the steward by the IN-48 Layer 1 route.
+  - Two Jordan items: D-V1 ARC-40's replaced arm (may a living top-seat holder be removed against his will; `depose` cut vs a removal basis on `revoke`), and the draw policy under scarcity (`subsistence_draw` walks persons by sorted id; `ration` cannot be built before it is ruled) (3.9).
+- **Conflicts / stale:** the `evade/defy` split vs ED-IN-0210.
+- **Open items:** D-V1; D-V13.
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-15-lexicon-faction-actions.md
+- **What it is:** Part VI.7 (FA lane): faction-action verbs, 50-gap coverage, mechanics, Jordan items (671 lines). [READ PARTLY: section 3.9 head only]
+- **Status:** "PROPOSED (2026-10-17). Reference, not canon". Reading: live proposal.
+- **Bears on:** FA (primary), MB, GV.
+- **Content that matters:**
+  - Treaty binds signer or seat (edges are persons', so treaties lapse when a head dies unless a seat-carried edge is added; two defensible games, EU4/Total War vs tree precedent).
+  - `dispatch` vs `assign` as host name: ED-IN-0210 kept `dispatch`; renaming overwrites a ruling and the remit act name `remit:dispatch` (`RO:311`, `march` `VT:687`); lane recommends keep.
+  - Who may declare war: any holder of a `remit:dispatch` seat (every seated person under `remit_default`) vs the head seat only (needs a `requires` conjunct on `faction_q.head`, which is None today `faction_q.py:116-147`).
+- **Conflicts / stale:** faction acts are persons' acts (no faction actor) per the verb-coverage ruling.
+- **Open items:** D-V10, D-V11, D-V7.
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-16-lexicon-economy-trade-and-craft.md
+- **What it is:** Part VI.8 (EC lane): economy, trade and craft verbs (8 in the roster), 53-gap coverage, mechanics, Jordan items (705 lines). [READ PARTLY: section 3.9 head only]
+- **Status:** "PROPOSED (2026-10-17). Reference, not canon". Reading: live proposal.
+- **Bears on:** SE (primary), FA, CHAR.
+- **Content that matters:**
+  - Only Jordan item that survives: unpaid upkeep (EC-G22, H-159) - term lapses (shipped: MATTER matures an `oblige` term, `verb_table.yaml:860`) vs unpaid term becomes arrears, a `debt` Record (M9) with service continuing under a grievance; decides whether a broke seat loses its men at once or slides into a debt spiral (D-V18).
+  - Notes that PMM :397-402 vs :511 contradict (not opened by the lane); `debt` M9 is needed by S8 anyway.
+- **Conflicts / stale:** PMM documents contradict per the register.
+- **Open items:** D-V18.
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-17-lexicon-world-travel-and-survival.md
+- **What it is:** Part VI.9 (WT lane): world, travel and survival verbs (3 in the roster), 43-gap coverage, mechanics, Jordan items (538 lines). [READ PARTLY: section 3.9 head only]
+- **Status:** "PROPOSED (2026-10-17). Reference, not canon". Reading: live proposal.
+- **Bears on:** WR (primary), SE, CORE.
+- **Content that matters:**
+  - Does the road cost a named person anything but time? ED-IN-0255 settles subsistence ("a territorial issue"; named persons do not eat) but not weather/hazard; (a) only Calamity territory (Forgetting zone, radiation bands, canon PP-703, GEO :835) exposes a named traveller, (b) weather also wears named travellers (gives `camp` a person-scale purpose); XSC section 6.4 names Calamity only (D-V14).
+  - Second surviving item (D-V15): can a person or force be between places (amends Layer 1 `contain : Rung -> Rung`).
+- **Conflicts / stale:** none noted.
+- **Open items:** D-V14, D-V15.
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-18-lexicon-npc-life-and-persons.md
+- **What it is:** Part VI.10 (NP lane): NPC life and persons verbs (8 in the roster), 41-gap coverage, mechanics, Jordan items (721 lines). [READ PARTLY: section 3.9 head only]
+- **Status:** "PROPOSED (2026-10-17). Reference, not canon". Reading: live proposal.
+- **Bears on:** CHAR (NPC), FA, WR.
+- **Content that matters:**
+  - Only surviving item: births and the dynastic layer (ED-WR-0011, already `needs_jordan: true`) - closed title game vs game of generations; NP parks `rear` and a `child` kin content on it.
+  - D-V2 "is kin a tie kind?" (K-NPC-6) answered by precedent (convention floor): `marry` is kept; succession half superseded by RS-27/RS-29 (designated heir is a status, the heir still claims the throne).
+- **Conflicts / stale:** "closed title game" vs births unresolved.
+- **Open items:** births (ED-WR-0011).
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-19-gap-register-pc-and-np.md
+- **What it is:** Part VII verb gap register for PC (rows PC-G01..G40) and NP (NP-G01..G41), with sources, precedent documents, and the first-pass v2 disposition per row. [READ PARTLY: header, how-to-read, heading map; table rows not read]
+- **Status:** "PROPOSED (2026-10-17). Reference, not canon... Evidence, not verdicts: extraction and cross-reference by reader lanes, built 2026-10-16 from the working tree of main (`716c253`)" (:3). Reading: live evidence base; no NERS judgment.
+- **Bears on:** PC, CHAR (NPC).
+- **Content that matters:**
+  - Row `kind` ∈ MISSING-VERB, MISSING-READER (verb exists, nothing reads its effect), MISSING-CARRIER, NAME-DEFECT, COLLISION, SHORTFALL, OTHER; last column = first-pass v2 disposition, `NONE` = v2 never mentions it (the series' III.9 counts 189 of 488 NONE) (:14-21).
+  - Line drift noted: `fight` is `verb_table.yaml:492`, `challenge` `:596`, `accept` `:617`, `succeed` `:935`, `tie / knot` `:1235` at that HEAD (:17).
+  - Sections: "verbs a source says this subsystem needs", "sources saying a name is NOT a verb", "NOT INCLUDED", precedent documents consulted, method and limits (:119-200).
+- **Conflicts / stale:** lane research files cite older HEADs; line numbers drift.
+- **Open items:** n/a (evidence).
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-20-gap-register-mb-and-fa.md
+- **What it is:** Part VII gap register for MB (MB-G01..) and FA (FA-G01..), with a STATE DRIFT section (lane files older than main) and precedent list. [READ PARTLY: header, legend, heading map; rows not read]
+- **Status:** "PROPOSED (2026-10-17). Reference, not canon... Evidence, not verdicts" (:3). Reading: live evidence.
+- **Bears on:** MB, FA.
+- **Content that matters:**
+  - Abbreviations tie it to TS1/TS2 (troop-stock docs), AFS (attributes-from-scratch verb registry lines 265-346), the research lane files `MB_mass_battle.md`, `FA_faction_actions.md`, `00_COMPARATIVE_ANALYSIS.md`, `hole_register.yaml` (:13-30).
+  - Sections "Counts and cross-cuts" (:159), "STATE DRIFT" (:168), "NOT READ (so not cited as verified)" (:268).
+- **Conflicts / stale:** lane files older than main (store act renamed `levy` -> `requisition`, `seize` and arrival landed).
+- **Open items:** n/a.
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-21-gap-register-sc-and-gv.md
+- **What it is:** Part VII gap register for SC (speech, proceedings, testimony, negotiation) and GV (settlements and governance). [READ PARTLY: header, legend, heading map]
+- **Status:** "PROPOSED (2026-10-17). Reference, not canon..." (:3). Reading: live evidence.
+- **Bears on:** SC, SE, FA.
+- **Content that matters:**
+  - Line numbers for `hole_register.yaml` and `verb_table.yaml` are the then-current ones (lane files cite older HEADs `5445e34`/`8278b4e`) (:12-30).
+  - Precedent aliases: RHET (`research/rhetoric_oratory_contest/...`), COMP-1, XSC (`cross_scale_action_catalogue_v1.md`), FASE, HCC, PGS, PS/04 (`proposals/2026-09-05-proceedings-subsystem/04_VERBS.md`) and PS/10 gap register P-nn (:20-26).
+- **Conflicts / stale:** none noted.
+- **Open items:** n/a.
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-22-gap-register-fi-and-tw.md
+- **What it is:** Part VII gap register for FI and TW with read-me notes on freshness. [READ PARTLY: header, legend and read-me note 1, heading map]
+- **Status:** "PROPOSED (2026-10-17). Reference, not canon..." (:3). Reading: live evidence.
+- **Bears on:** FI, WR.
+- **Content that matters:**
+  - Freshness: `forge` is now typed and effected (`VT:330-348`, `_eff_forge`, IN-45) but `Record.forgery_quality` is NOT written (HR H-210); `survey` accepts a Rung subject (H-169); "restore as Mending" note at `RO:2320-2335` (:26-30).
+  - Sections: FI rows (:31), TW rows (:96), verbs a source says needed, precedent documents, "could not read / not opened", counts (:233).
+- **Conflicts / stale:** lane files written at HEAD `021fd96`/`5445e34`.
+- **Open items:** n/a.
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-23-gap-register-ec-and-wt.md
+- **What it is:** Part VII gap register for EC and WT with a staleness warning. [READ PARTLY: header, section 0, heading map]
+- **Status:** "PROPOSED (2026-10-17). Reference, not canon..." (:3). Reading: live evidence.
+- **Bears on:** SE, WR.
+- **Content that matters:**
+  - Staleness warning: lane files written at `5445e34`/`bd8105b`; since then store act renamed `levy` -> `requisition` (36b951c, #482), B-K "refused verbs and works: IN-10, IN-45, IN-49, IN-28" (45d1df5, #483), B-M "seize and the arrival" (8bb514b, #484): execution counts and "refused in computed play" statements may be off (:12-16).
+  - Sections 1 EC, 2 WT, 3 verbs sources say needed, 4 precedent documents, 5 what could not be read (:29-241).
+- **Conflicts / stale:** as above.
+- **Open items:** n/a.
+

@@ -141,3 +141,155 @@ addendum makes no claim about test strength); `registers/handoffs/` beyond a sea
 for person, chooser and attribute rows (one hit, the cohorts' decision surface, already in the first
 audit); the parts marked "not opened" or "Status lines only" above. Nothing below rests on an unread
 part; where a claim leans on a document read in part, the sentence says so.
+
+## B2. Corrections to the first audit, and new findings
+
+### B2.1 Corrections and confirmations
+
+| # | first audit | reading here | effect |
+|---|---|---|---|
+| C-1 | F-CHAR-07: `challenge` lacks the `individual` conjunct (inferred) | **Confirmed** at the row and by parsing every row's `requires_typed` (B1.1). `forge` and `create_record` carry no typed conjunct at all; `sabotage` and `train` carry two, neither `individual` | the finding stands; the row's two world-only conjuncts add a cause to F-CHAR-05 |
+| C-2 | §0A "prose only" lists the Stance Triangle, Belief revision, the Decision Fork, priority trees, arc maps, outreach, the relational graph's head, Duties, the Scene Slate, Stature | **Incomplete.** The design set also carries Self-Other orientation and its drift, cultural templates, the four personal axes (Thread Sensitivity, Coherence, Spirit, Truth), a named Behavioural-AI flaw with a mechanical consequence per supporting NPC, the structural compromise, typed edges with strain, capacity, inheritance and a defection cascade, roster tiers, the Companion, Inspiration, the lifepath skills, textural hooks, Renown, Legacy and Lineage | B3 restates the intent from the whole set |
+| C-3 | "thirteen Convictions over four axes (`npc_behavior_v30` §1.2)" | True of the taxonomy file. The per-NPC values in `npc_behavior_v30` §2 are in the older vocabulary (Order, Reason, Autonomy, Continuity), `conviction_track_v1` §1 lists nine, and `character_canon_v30` §11 D1 records the three-way conflict as unresolved | the first audit's conclusion (no design conviction name is a key code reads) is stronger than it said: the design never had one roster |
+| C-4 | the disagreement row *"one scar per season from witnessing"* against *"uncapped"*, resolved by a cap per (person, element) per season | The design's cap (`conviction_track_v1` §3) is *"Max 1 Scar per season from Thread witnessing per NPC"*: per person, not per element, and for one of two triggers; the other trigger is a Belief revised by a decisive contest won in the hearer's Resonant Style on that Belief (`npc_behavior_v30` §3.2, a triple gate). The proposed cap bounds the rate and not the stock (F-CHAR-17) | `02_CHAR_scar_cap_and_regard_unit.md` item 1 is necessary and not sufficient; amended by `02_CHAR_scar_is_a_wound.md` |
+| C-5 | §7 null: no file under `research/` surveys how a simulated person chooses | Stands for the chooser's functional form. It does not stand for the chooser's legibility: `emergent_narrative_literature` carries tests the first audit did not cite (T13.Q1, the Tale-Spin effect: a decision that *"looks like a random number"*; T13.Q4: every shown trait is a decision input and nothing else moves behaviour; E12.Q2: enabling conditions stored with the event, not *"a weighted sum with no single inspectable chain"*) | they are the precedent for the reason trail, and T13.Q4 is the test F-CHAR-16 applies |
+| C-6 | F-CHAR-13: the loader's counts are of keys, not values | **Confirmed** by parse (`stats` present 29, non-null 1; `ts` 32, 10; `goals` 30, 17; `lifepath` 5; `heritage` 4), and extended: six further keys are authored and read by nothing (F-CHAR-16) | — |
+| C-7 | §14 (d): *"backgrounds grant starting skills: implemented (lifepath templates), authored on 5 of 46"* | True and understated. The table's own note calls itself *"A CUT, NOT A TRANSCRIPTION. Every authored dice magnitude … is DROPPED"*; by parse, of its 34 rows 21 hold nothing, 7 hold `inquiry`, 6 hold `argue`. Of the five cast rows with a lifepath, three (`3-VA1`, `3-LO3` twice) grant nothing | F-CHAR-19; B4 |
+| C-8 | §11's one survivor (can a person be wrong about himself?) | Kept, and narrowed by a source the first audit had not read: `npc_roster_v30` §4 (Sæmund: *"does not know he is Thread Sensitive. He attributes his 'hunches' to investigative instinct"*) and Jordan's AR-49 (*"unaware of their impact on others (attunement)"*) both describe self-knowledge that can be wrong. The NPC research lane dropped the same item as permitted, not required (its §8.5 item 8). It remains Jordan's; this addendum adds the evidence and no new option | B6.3 |
+
+### B2.2 Returning findings (the surviving audit corpus, re-verified against the season engine)
+
+| earlier finding (retired engine) | now, in `engine/season/` | verdict |
+|---|---|---|
+| world-churn D5, 2026-08-08: *"zero person-scale state changes in a seeded campaign"*; every producer a stub; no Key reaches a person | Persons exist (83), deliberate, witness and hold ledgers; the producers are real. Stored stance moved for 0 of 83 and pursuits for 1 and 0 over two seasons (first audit, probe 2) | **Returned in a narrower form**: the edge exists and carries almost nothing. F-CHAR-03 is the same finding one engine later |
+| world-churn `03_causal_model` §6: *"there is no Scar decay anywhere … converges every long-lived NPC to permanent crisis"* | True of `Person.scar` today: a count only rises, and the crisis at 3 is the one live reader | **Returned.** Measured here: F-CHAR-17 |
+| world-churn D6: the scar gate silently no-ops on an unknown conviction name | Closed 2026-08-24 in the retained oracle (`characters_flow_skeleton_v1` §7 row 7); the season loop has its own writer and one roster | **False now** |
+| world-churn D11: the relational graph is DOC-ONLY; "BUILT" in `npc_relational_graph_v30` §7 means design-written | Still true: no typed edge exists. `tie` and `knot` are tenure kinds with no opener in play (`rosters.yaml:130-144`); `npcs.yaml`'s `tie:` records how a concern was chosen at build (`named`, `institution`, `roof`, `neighbour`), not a relation | **Returned.** F-CHAR-18 |
+| NERS audit 2026-07-04: NPC behaviour has *"best dramatic legibility in the corpus"* (priority trees and arc menus the player could read) | The trees and arcs were retired for a sampled score; nothing replaced their legibility (`Act.reads` empty, H-343) | **Reversed**: the most legible subsystem of the design is the least legible of the build |
+| churn design v2 R-AI: NPCs act on observable state, never on engine forecasts | Holds by construction: `decision/` has no `World`, and believed odds are the person's own | **Holds** |
+
+### B2.3 New findings
+
+Numbering continues the first audit's. Severity as there: **B** blocks a requirement, **D** degrades
+narrative, **H** hygiene.
+
+#### F-CHAR-16 · D · a character is authored in more dimensions than any process reads, and the surplus is the legible part
+
+- **Claim.** The cast registry carries six authored facts per person that no code reads, and they are
+  the ones the design uses to tell one person from another: how he can be moved, where his story
+  bends, what culture formed him.
+- **Evidence.** Parse of `references/npc_registry.yaml` (46 rows), non-null counts: `arc_trajectory`
+  36, `resonant_style` 18 (Evidence 7, Consequence 5, Solidarity 4, Authority 2), `cultural_label` 17,
+  `certainty` 8, `self_other_initial` 2, `coherence` 1. `grep` of `engine/`, `modules/`, `tools/` and
+  `systems/` (non-test `.py`) for each key: one hit, a comment (`data/cast.py:220`). The NPC research
+  lane found three of these and proposed deleting them (K-NPC-11).
+- **Falsifier.** T13.Q4 (`research/emergent_narrative_literature/02`): *"does every character trait
+  the audience is shown correspond to an input to the decision process?"* Run in reverse on the data:
+  a reader of any of the six would appear in the grep. None does.
+- **Touches.** R-06, R-07.
+- **Narrative consequence.** The facts an author wrote to make Himlensendt reachable only by evidence
+  and Vossen only by solidarity sit in a file beside persons who are all moved alike by any argument
+  (H-268).
+- **Minimal fix.** Read or delete, key by key (B6.2 rows 3 to 6): `resonant_style` gains its reader
+  (`02_CHAR_which_ground_moves_whom.md`); `arc_trajectory` stays prose and leaves the registry for
+  the case file, because an arc is an observer's reading (ED-IN-0225); `cultural_label` and
+  `self_other_initial` are superseded by the fifteen pursuits and are deleted; `certainty` and
+  `coherence` wait on threadwork and are marked unread at the loader.
+
+#### F-CHAR-17 · B · the scar's ladder cannot discriminate under any cap on its rate
+
+- **Claim.** With the first audit's proposed cap of one count per (person, element) per season, every
+  person in the realm reaches the terminal rung in season three, on a median of nine elements at once.
+  The defect is the breadth of the trigger and the absence of an outflow, not the rate.
+- **Evidence.** `probe_scar_stock.py`, `build_realm(0)`, shipped chooser, four seasons (hashes after
+  seasons 1 and 2, `5ab73af2` and `bacd687f`, equal the first audit's). Seasons in which a (person,
+  element) count rose, which is what the cap would leave: maximum per person 1, 2, 3, 4 after seasons
+  1 to 4 for 83 of 83 persons; persons with some element at 3 or more: 0, 0, 83, 83; median elements
+  at 3 or more per person: 9 after season 3, 11 after season 4; a median of 13 of 19 elements scarred
+  at all. Raw counts for comparison: median maximum 25, 41, 60, 82. The writer's predicate is a sign
+  test (`person_q.elements_violated_by`; H-128's cite calls it *"a CANDIDATE READING under review,
+  unswept"*): any witnessed act whose alignment opposes a held element's projection, at any size.
+- **Falsifier.** A ladder that discriminates leaves some persons below 3 after four seasons under the
+  cap. None is left. First-order limit, stated: the reading holds decisions fixed; a capped run would
+  differ where a crisis fires.
+- **Touches.** R-06, R-07; the first audit's §8 step 3 and its gate (*"median per-person maximum after
+  four seasons ≤ 4"* passes at exactly this reading while everyone is in crisis).
+- **Narrative consequence.** A scar is meant to be the rare wound that bends a life (the design gates
+  it three ways and caps it per person). As a tally of every disagreeable thing seen, it says nothing
+  about anyone, and arming its readers (H-187, H-146) would move everyone together.
+- **Minimal fix.** `02_CHAR_scar_is_a_wound.md`: a size floor on the violation, the cap per person,
+  and an outflow.
+
+#### F-CHAR-18 · D · the designed foils are not foils in the built realm, and no relation between two persons has a kind
+
+- **Claim.** The pairs the design sets against each other choose alike, the pairs it allies are no
+  closer than strangers, and almost none of them holds any stance toward another.
+- **Evidence.** `probe_foils.py`, `build_realm(0)` and `(1)` (identical output), ten named persons,
+  six common referents, temperature 0. Lenneth and Vaynard (design: *"Diagnosis Without Agreement on
+  Treatment"*, build-up against tear-down) are the most alike pair of the Ruler Diamond: cosine
+  +0.858, Kendall of score orders +0.819, the same top verb. Lenneth and Baralta (*"the campaign's
+  defining confrontation"*): cosine +0.811, and neither holds a stance row toward the other. Baralta
+  and Vaynard (*"Total Opposition"*): cosine +0.635. Of the 90 directed pairs among the ten, five hold
+  a stored stance (Ehrenwall to Almud +6, Himlensendt to Vossen −4, Baralta to Himlensendt −3, Torben
+  to Almud +2, Lenneth to Almud +1). Edeyja holds no stance row and no claim. Score-top verb over the
+  six referents: the King `create_record` six times, the Warden-Chief `create_record` six times, the
+  heir `forge` six times, the Queen and the Duke of Varfell `surveil` six times.
+- **Falsifier.** If the foils were expressed, designed-opposed pairs would rank below designed-allied
+  pairs on Kendall. The highest Kendall among the Diamond's six pairs belongs to an opposed pair.
+- **Why.** (a) The foil axes of `npc_foils_v30` are relations to specific things (the settlement, the
+  caste, the Church, the basis of authority); a pursuit vector holds general ends, and `score_terms`
+  reads the verb alone (F-CHAR-01), so *"reform it"* and *"destroy it"* have nowhere to differ. (b)
+  Each ruler's view of the other three (Part Two of that document) is a set of beliefs and attitudes
+  about persons; world-gen seeds one loyalty row per member and no claim about anyone. (c) There is no
+  typed relation: rivalry, kinship, patronage, oath and feud have no carrier.
+- **Touches.** R-06, R-07, R-02.
+- **Minimal fix.** Content first (the stances and the commits to opposed propositions that the foil
+  document already states), on a carrier that can say what a relation is:
+  `02_CHAR_relations_have_a_ground.md`. The first audit's goal lean is what lets a commit to
+  *"the settlement stands"* against *"the settlement falls"* change the act chosen.
+
+#### F-CHAR-19 · D · the design's skill is a conditional effect with a level; the build's is a key held at the default
+
+- **Claim.** About 150 named skills in `character_histories_v30`, each with a domain, a condition, an
+  effect and three levels, became three vocation keys, and the keys change no roll.
+- **Evidence.** `rosters.yaml:3600-3606`: *"Every authored dice magnitude (+1D, +2D, TS +3, Ob and
+  strain changes) is DROPPED … A key is held at `pool_default`, so the grant changes no pool."* By
+  parse: 34 templates, 21 hold nothing. `verb_capability` has nine rows over four values (`copying`,
+  `argue`, `inquiry`, `arms`). The combat module's ability primitives reach no person (first audit
+  §14 (b)).
+- **Touches.** R-06 (skills), R-09.
+- **Minimal fix.** B4 and `02_CHAR_capability_definitions.md`.
+
+#### F-CHAR-20 · D · nothing a person risks reaches his choice
+
+- **Claim.** The design gives every decider a self-preservation rule (faction Stability at or below 1
+  collapses any conviction to survival; a Companion at one wound from the limit goes to full guard; a
+  practitioner at Coherence 5 self-limits, at 3 stops, at 2 withdraws), and Jordan rules that persons
+  differ in risk appetite (ED-IN-0304) and that an opponent's emotional state colours what he does
+  (AR-38). The score has no term in which a candidate's danger to its actor appears.
+- **Evidence.** `decision/choose.py:193-221`: two terms, neither reads `Person.body` or the row's
+  exposure. `odds_weight` multiplies a contested candidate's value by the chance of its writing
+  bands, so a likely loss lowers the value of winning and never prices losing. First audit: `fight`
+  resolved 0 times in two seasons at seed 0 while `challenge` was refused 84 times, so the absence is
+  hidden today by formation, not supplied by judgement.
+- **Falsifier.** Two persons identical but for body band 1 and band 4 would rank `fight` on one
+  subject differently. By reading, they cannot: `body` enters `budget` alone (F-CHAR-14).
+- **Touches.** R-08, R-06; PC's per-phase approach and MB's retreat rule (an NPC has nothing to
+  choose them by).
+- **Minimal fix.** `02_CHAR_what_an_act_risks.md`, an input to CL-PERSON's M40.
+
+#### F-CHAR-21 · H · the player's development sheet shows less of his person than the creation sheet
+
+- **Evidence.** `dataclasses.fields`: `CreationRow` carries `attributes`; `DevelopmentSheet` carries
+  `capability`, `pursuits`, `stance`, `conviction`, `scar`, `body` and no `attributes`,
+  `thread_sensitivity`, `heritage` or tenures (seats, oaths, commits). `Chronicle` carries the ledger
+  and the scars.
+- **Fix.** Add the three own fields and the person's live tenures to `DevelopmentSheet`
+  (`02_CHAR_capability_definitions.md`, edit 5); a copy, as the others are.
+
+#### F-CHAR-22 · H · three files of the dossier's character set are not character documents
+
+- `conviction_track_v30.md`, its `_index` and `_infill` are the territory Piety Track and Church
+  victory redesign (PP-406 to PP-418). The three `*_flow_skeleton_v1.md` files trace `mc_v18`, which
+  is deleted. Neither is a source for a person. No edit: they are quarantined and stay; the dossier
+  generator's path rule is the cause.

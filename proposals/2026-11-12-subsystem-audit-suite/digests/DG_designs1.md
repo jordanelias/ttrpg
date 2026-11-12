@@ -1018,3 +1018,99 @@ Lane: archived design documents under `.designs/` (README, `_architecture`, arti
 - **Conflicts / stale:** three-mode structure discarded.
 - **Open items:** none.
 
+### .designs/systems/fieldwork/reference/fieldwork_socializing.md
+- **What it is:** fieldwork spec §5 Socializing: Disposition track, social actions, Sincerity Gate, information gates, Beliefs, Knot integration, Niflhel toolkit (PP-632, ED-912).
+- **Status:** "DESIGN — canonical subsystem file. PP-632 applied 2026-04-13" but the body already carries ED-912 amendments. Reading: live design intent for social fieldwork; mixes two Ob rules internally.
+- **Bears on:** FI, SC, CHAR, FA.
+- **Content that matters:**
+  - Disposition -5..+5 flat (NOT Bonds-capped, ED-912) with stepped Ob table: Hateful +5 ... Neutral 0 ... Warm -1, Friendly -1, Trusting -2, Devoted -2, Bonded -3; floor Ob 1; labels give information gate per level (:20-36). Starting Disposition from lifepath +/-0.5 increments, floor, clamp (:38-47). Asymmetric per NPC per PC; decay -1/season for Disposition > +2 without contact; <= -3 needs a significant narrative event (:48-52).
+  - Social actions: Read (Attunement, Ob 1/2/3 by depth), Converse (Charisma, Ob 2), Connect (Bonds, Ob 3, needs Disposition >= 0), Impress (Charisma, `floor(NPC Cognition/2)+1`, Disposition not subtracted), Rumour, Negotiate, Gift/Bribe (+1 Disposition, one per NPC per season) (:64-72). Degree effect: Failure -1 Disposition and Exposure +1, Partial 0, Success +1, OW +2 and NPC volunteers (:76-81).
+  - Line 62 still says "Effective Ob = max(1, base Ob - Disposition)", contradicting the stepped table at :22 (internal conflict, superseded rule not removed).
+  - Sincerity Gate: Spirit TN 7 Ob 1 when a character's stated Belief contradicts genuine engagement (:85-98). Information gates by Disposition +1..+4 for Settled/Hidden/Buried/Liminal depth (:102-108).
+  - Knots (ED-912): prerequisites Disposition +5, TS >= 30 for one party, PC Bonds >= 5, count < `floor(Bonds/2)+1`, no existing Knot; tiers Distant/Close; formation Spirit pool vs Ob 2 (OW forms Close, Success Distant); strain gauge -5..+5, rupture at +5, Tempered at -5; effects: no seasonal decay, +1D on social actions, shared Composure buffer (:120-145). Breaking: rupture sets Disposition -3 and 4 Composure damage; loss costs Coherence -1 and 4 Composure; simultaneous rupture cap `floor(Composure x 0.75)` min 4 (PP-633) (:147-155). Note editorial doc says rupture sets -4 and 5 Composure (stale).
+- **Conflicts / stale:** knots code `form_knot` constants (flow skeleton) vs these values; editorial doc still lists PP-632 values; Niflhel dissolved.
+- **Open items:** "NPC-Initiated Social Engagement (§5.9)" appears in the index but not in this part.
+
+### .designs/systems/fieldwork/reference/fieldwork_v30_index.md
+- **What it is:** generated heading/size index (2026-04-18) of the parent `fieldwork_v30.md` v1.1 (~16.8k tokens), whose parts are the sibling `fieldwork_*.md` files.
+- **Status:** indexed doc "DESIGN — approved for commit. Review corrections 2026-04-13 (v1.1), PP-628, PP-630" (:25). Reading: historical map of the fieldwork spec.
+- **Bears on:** FI, CHAR, WR.
+- **Content that matters:**
+  - Section map: Core Principle Intelligibility Gradient; §1 Depth axis; §2 Fieldwork Pool (3.6k tokens; §2.3 system transition rules, §2.4 threadwork during fieldwork, §2.5 Domain Echo from Investigation, §2.6 Knot-mediated remote investigation, §2.8 Threadcut being social fieldwork); §3 Exploration; §4 Investigation; §5 Socializing incl. §5.9 NPC-initiated social engagement (NEW); §6 Exposure; §7-§12 (:30-93).
+  - Sections §1, §2 and §5.9 are not in the sibling files read here, so the Depth axis, fieldwork pool, system transition rules and NPC-initiated engagement bodies are only listed in the index.
+  - Canon compliance claims P-01, P-03, P-05, P-07, P-08, P-14, P-15 (:27).
+- **Conflicts / stale:** the parent body is not present in this lane's file set; the `fieldwork_*` siblings are its atomized parts.
+- **Open items:** §12 editorial items (954 tokens of "new editorial items", simulation debt).
+
+### .designs/systems/fieldwork/reference/investigation_systems_v30_index.md
+- **What it is:** generated heading/size index (2026-04-18) of "Investigation Systems Proposal" (2026-04-15, ~9k tokens): NPC Population Engine, Investigation Interface, Dialogue Lattice, Response Resolution Matrix.
+- **Status:** indexed doc "CANONICAL — approved 2026-04-17 (editorial batch acceptance)" (:26). Reading: historical map of the design set behind the `investigation.py` stubs (`evaluate_dialogue_lattice`, `apply_response_matrix`, `resolve_npe_response`).
+- **Bears on:** FI, CHAR, SC, WR.
+- **Content that matters:**
+  - System 1 NPE: Territory Social Ecology, NPC Genome Record, two-tier generation, persistence, named NPC stance triangles (:30-37).
+  - System 2 Investigation Interface: Scene-as-Graph, Traversal Economy, Case Board (+ Thread layer ED-680), Temporal Dimension, Zoom In Triggers (:38-46).
+  - System 3 Dialogue Lattice: gate types (756 tokens), visibility rules, outcome types, Sincerity Gate integration (:47-52).
+  - System 4 Response Resolution Matrix: Five-Filter Chain (1,244 tokens), full chain example, bidirectionality/interdependency matrix (:53-57). Pending decisions and editorial decisions listed (:59-60).
+- **Conflicts / stale:** index only; bodies absent here. The Case Board / Scene-as-Graph / Dialogue Lattice are the proposed engine for detective-style play; code has only stubs.
+- **Open items:** "PENDING DECISIONS (mechanical gaps)" and "EDITORIAL DECISIONS REQUIRED" lists not visible.
+
+### .designs/systems/mass_battle/reference/mass_battle_flow_skeleton_v1.md
+- **What it is:** traced flow skeleton (at `dcf38ef`, anchors re-traced 2026-09-26) of mass battle after the 2026-08-24 engine swap: a 146-line strategic ADAPTER (`massbattle.py`) over the canon cell-scale engine in `systems/mass_battle/sim/`.
+- **Status:** "REFERENCE — traced structure only". Reading: partly live; states the post-swap structure and several still-open design questions (many MB code paths have since moved, e.g. `modules/mass_battle/armies.py`).
+- **Bears on:** MB, FA, CORE.
+- **Content that matters:**
+  - History: two disjoint trees (TREE A 1,905-line `massbattle.py`; TREE B 11,342-line cell engine under `tests/sim/mass_battle/` ruled canon J2 2026-08-03) merged by the swap (:21-37).
+  - Adapter flow: `resolve_mass_battle(faction_a, faction_b, terrain, world)` builds `Unit`s via `_faction_to_unit` (one Line/infantry subunit, tier 2, command 4, discipline 5, morale 5, `power=round(faction.Mil)`; defender None -> `_GarrisonStub` Mil 1.5), runs `run_battle(unit_a, unit_b, max_turns=18)` under `rngsource.using(rng)`, then grades degree by survivor-size ratio thresholds (`OVERWHELMING_ATTACKER_MIN`) (:79-89, :189-190). Terrain now derived from `terrain_row_for_territory(target, fort_level)` (A7/ED-MB-0074) (:60).
+  - Engine tick loop: volley_phase, contact halt, `check_orders`/`assign_targets`, `advance_cells`, `FIELD_MOVEMENT` time-of-impact, cross-side contention, `resolve_engagements_cascading`, simultaneous damage (`PER_CELL` column grid), rout checks, `phase_boundary` order stamina -> discipline -> morale -> rout -> rally -> reform -> threadwork every `TICKS_PER_PHASE` (:99-121).
+  - Multi-turn and multi-unit orchestration (reserve commit, pursuit, rout contagion, freed-attacker bonus) exist but the campaign never calls them (:122-136, :191).
+  - Gaps: what a faction's army IS at strategic scale is an unanswered design question (adapter uses pre-port defaults) (:189); adapter degree ladder is not the canonical margin-based `degree_from_net` (:190); `tactic_cards` pool modifiers empty; `invoke_altonian_reinforcements` raises `NotImplementedError`; `rally_check` and `threadwork_check` are empty hooks; `CASCADING_ENABLED` hard-coded True (:192-194); `module_contracts.yaml` mass_battle omits `sim_module` (:195).
+  - Engine imports nothing outside its folder; engine toggles read from `os.environ` at import time (dozens) (:67, :178).
+- **Conflicts / stale:** Key emission for `scene.battle_concluded` retired; the cell-based approach in the audit brief is realised by this engine (MB lane must verify vs `modules/mass_battle/`).
+- **Open items:** the strategic Unit mapping, the degree ladder reconciliation, Thread->Mass handoff.
+
+### .designs/systems/mass_battle/reference/mass_battle_v30_index.md
+- **What it is:** generated heading/size index (2026-07-29) of `mass_battle_v30.md` v4.10 (~19.5k tokens; body is a sibling file not in this lane).
+- **Status:** indexed doc "CANONICAL — approved 2026-04-17"; v4.10 addendum 2026-06-17 "provisional canon, Jordan-vetoable; byte-exact for single-sub-unit units" (:29-30). Reading: a map of the full mass-battle design; the body must be read from `mass_battle_v30.md`.
+- **Bears on:** MB.
+- **Content that matters:**
+  - v4.10 addendum canonises validated engine behaviour: per-sub-unit rout/Morale/Discipline (ED-1019), troop-type presets (ED-1018), per-sub-unit broken scope (ED-1020), Discipline from own loss (ED-1022), continuous Morale (ED-1024), campaign-boundary Morale reset (ED-1025), per-sub-unit formation Discipline (ED-1026), destruction/cascade/recovery closeout (ED-1027) (:30).
+  - Part A sections: A.3b Battlefield Geometry (913 tokens), A.4 Unit Stat Block (2,491), A.5 Command, A.6 Formation Types, A.7 Battle Turn Structure (6,324 tokens including Thread phase ED-050), A.12 Rout and Pursuit, A.14b Campaign Supply, A.14c Levy Restriction (:32-50).
+  - Part B board-game mass battle (BG unit stats, tactic cards 813 tokens, Hybrid Handoff); Part D Mass Combat World Bridge (post-battle consequence scenes, named unit officers, player morale effect); Part E Battle Consequences (ED-542, ED-743) with cumulative caps per season (:51-67).
+- **Conflicts / stale:** line numbers refer to a partly re-ordered body; Part B (board game) is formally discarded in the videogame mode.
+- **Open items:** none visible.
+
+### .designs/systems/mass_battle/reference/mass_battle_v30_infill.md
+- **What it is:** prose infill of `mass_battle_v30.md` v4.8 (two clarifications only; most sections are stubbed in this part).
+- **Status:** "CANONICAL — approved 2026-04-17" (:18). Reading: historical.
+- **Bears on:** MB.
+- **Content that matters:**
+  - Weight-of-numbers (PP-570, PROVISIONAL ED-316): when a unit's Size > 2 x opposing general's Command, the opposing unit must pass a Morale check Ob 1 at Phase 6 Step 2 or lose 1 Morale (:25).
+  - PP-MB-01: Effective Power computed at start of Phase 4 using Size at end of Phase 3; all Phase 4 damage applied simultaneously at Phase 5 Step 1 (:36).
+  - A Woven unit configuration that shatters (Size loss in one turn > current Discipline) fights at Line formation Discipline 1 for the rest of the battle; Shifting Object status registered post-battle (:45).
+  - Personal-combat ranged DR reference LP 0/2/3/5, HP 0/1/2/3, LBl 0/1/2/3, HBl 0/0/1/2 (:29).
+- **Conflicts / stale:** weight-of-numbers trigger and scale "PROVISIONAL"; pool terminology (Power, Size) vs the cell engine's Unit/Subunit model.
+- **Open items:** ED-316 trigger threshold and BG vs TTRPG scale.
+
+### .designs/systems/mass_battle/reference/military_layer_v30.md
+- **What it is:** Military Layer (v1.0, 2026-04-14): board-game unit bridge to mass battle, muster rules, BG battle resolution, and the CI competitive revision. Skeleton.
+- **Status:** "CANONICAL — approved 2026-04-17"; ED-MB-0047 repaired its status line. Reading: mixed; unit roster / muster rules are BG-mode history; the CI sections (§3) overlap ci_political_v30; BG battle pool is superseded by the cell-scale engine.
+- **Bears on:** MB, FA, SE.
+- **Content that matters:**
+  - Unit types table (Levy 1/1/7 ... Knights Templar 5/6/11) with BG Martial/Discipline/Health and TTRPG Power/Size TARGET (:62-72); Military stat sets max unit Power and starting Discipline ceiling (Mil 1 -> Power 1/Disc 2 ... Mil 7 -> 7/7) (:78-88).
+  - Doctrine notes: Crown standing army = Löwenritter (Crown Military 5 via Power 5/Disc 6 elite units); Hafenmark equipment-quality doctrine from T17 mines and T8 smithing, mechanism "pending simulation" (:92-94).
+  - Muster output Size 2, Power `floor(Mil/2)+1`, Prosperity size bonus; prerequisites per type (Heavy Infantry Prosperity >=5 + Wealth Ob 2; Cavalry Prosperity >=6; Artillery Wealth Ob 4 + 1 season); merge max Size 7 (:102-139); Experience Fresh/Seasoned/Veteran capped by Military ceiling (:143-155); Wealth Zero degrades Heavy Infantry and Cavalry Discipline -1/season (:159-166).
+  - BG battle pool `Sum(Martial of engaged tokens) + floor(Mil/2)`; margin outcomes; Fort adds dice to defender (:200-225); Siege Action pool `Mil + 3` vs `Ob 2 + Fort`, cap 5 seasons (:180-196).
+  - CI revision (§3): PP-402 unconditional passive REPEALED; conditional passive 0/+1/+2 by count of Prominent territories (0-1, 2-4, 5+); Piety Yield (PT 5 +1, PT 4 +0.5, PT 3 +0.5 per PP-667); Charity Advantage (Church Wealth >= controller + 2: +0.5 per territory, max +1); Templar Presence +1 per Templar in PT >=3 Prominent territory (max +2); Assert/Suppress; Baralta -1; cap +/-5; 8-step accounting sequence (:243-361, :418).
+  - Accord table: Accord 1 -> Martial -1 and only Levy musterable; Accord 0 -> no Muster (:366-379).
+- **Conflicts / stale:** CI Conviction Yield (PT 3 gives +0.5 here) vs `conviction_track_v30` (PT 3/2/1/0: +0); BG token model discarded; PP-667 unit resolutions in §5 table mismatch §1.4 (Prosperity tiers 1-3/4-5/6-7 vs "1-2 +0, 3-4 +1, 5 +2").
+- **Open items:** ED-NEW-CI-01 conditional passive thresholds and BALANCE-NEW-CI-01 CI reform pace deferred to "engine_v4 smoke-test" (:416, :419).
+
+### .designs/systems/mass_battle/reference/military_layer_v30_index.md
+- **What it is:** generated heading/size index (2026-07-29) of `military_layer_v30.md` (~6.8k tokens).
+- **Status:** "CANONICAL — approved 2026-04-17" (:25). Reading: historical map.
+- **Bears on:** MB, FA.
+- **Content that matters:**
+  - Sections: §1 unit representation (2.7k tokens), §2 BG battle resolution, §3 CI revision competitive formula (1.9k tokens, 11 subsections), §4 Accord and Prosperity military interaction, §5.1 Thread integration cross-references (F-02) (:26-57).
+- **Conflicts / stale:** none beyond body.
+- **Open items:** §5 open editorial items.
+

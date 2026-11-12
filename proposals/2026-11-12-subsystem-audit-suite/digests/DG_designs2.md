@@ -855,3 +855,38 @@ Lane `designs2`: archived design documents under `.designs/systems/{overview,set
   - ED-782: Theocracy Counter (TC) → Church Influence (CI) rename (:58).
 - **Conflicts / stale:** none beyond the above.
 - **Open items:** none.
+
+### .designs/systems/world/reference/worldbuilding_v30.md
+- **What it is:** "Worldbuilding Integration v3 — Lore-to-Mechanics (Final Trimmed)" (2026-04-03): Church four-cardinal structure, Löwenritter internal structure, Guilds, Court Parliament and Motion of No Confidence, historical context, RM leader proposal, territory mapping, and a catalogue of eight "Named Character Event" cards.
+- **Status:** "Authority: DESIGN (working document)." Reading: historical working draft; some resolved by later EDs (Magnus Vaynard canonical, ED-775/PP-699); much is board-game scope.
+- **Bears on:** FA, CHAR, WR, SC, ARCS
+- **Content that matters:**
+  - Four Cardinals as portfolios: Fortitude (military, Osten Jarnstal), Justice (Inquisitors, Arnlod Olafsson), Prudence (economic, Aldric Tormann), Temperance (knowledge, Magnus Klapp) (:45-50).
+  - State-fired "Named Character Event" cards replace passive stat bonuses: triggers are predicates on game state (Jarnstal Independence counter reaches 3; Olafsson exposure via Overwhelming Intel; Prudence Crisis at Church Wealth <= 2; Lions' Table Mutiny; Guild Schism at Stability <= 2; Constitutional Crisis at Crown Mandate <= 1; Ministry Collapse at Stability <= 2) — "players interact... by attacking the conditions" (:281-304; infill :75). Same pattern as the Goldenfurt deck, different scale.
+  - Jarnstal Drift 0-3 counter, increments each season he deploys Templars without Holy See authority; at 3 Church Military controlled by Jarnstal, Stability −2, CI +2 (:57).
+  - Motion of No Confidence requires BOTH a Parliamentary Vote AND Holy See concurrence; deposal sets Crown Mandate 1, Stability −3, succession Torben or IP +10 or interregnum; Church refusal CI +3 (:187-199).
+  - Riskbreakers hold a hidden Conviction "Valoria (nation as idea)"; when ordered against it a roll (Intel vs Ob 2) decides comply/refuse/sabotage (:125) — a hidden-conviction compliance check, the pattern the chooser's reason trail would carry.
+  - Levy system cut (already in starting Military stats) (:141); Journeymen Years campaign hook (:155); RM leader Elder Solvei Kaldring TS 22 (:239-254).
+- **Conflicts / stale:** §9 territory mapping uses stage7 numbering (Valorsplatz T12 etc.) which conflicts with the PP-199 numbering used by every later doc (:262-275); "Oastad vs Grauwald T4" naming open. Solmund rename section says "Haiku-tier cleanup. Run last." (infill :20). Hybrid/BG scope; GM roll phrasing.
+- **Open items:** ED-NEW-01, 03-10 (Solmund naming, Inge spelling, Holy See/Confessor, Cardinal of Prudence, Almaic Kyriakos IP interaction, timeline reconciliation, stage7-to-PP-199 reconciliation, Lions' Helm naval).
+
+### .designs/systems/world/reference/worldbuilding_v30_index.md
+- **What it is:** Auto-generated index (2026-04-20) of worldbuilding_v30 (4,117 tokens).
+- **Status:** none (generated). Reading: stale pointer (`designs/world/`).
+- **Bears on:** PROCESS
+- **Content that matters:** heading/size map; largest sections: Cardinal structure 1,002 tokens, Named Character Events catalogue 498, Court Parliament 474 (:80-108).
+- **Conflicts / stale:** index heading 7.1 reads "Three Indigenous Nations → Three Duchies" while the body was corrected to "Three Altonian Provinces → Three Duchies" (D-2, 2026-04-20) — index not regenerated.
+- **Open items:** none.
+
+### .designs/systems/world/reference/worldbuilding_v30_infill.md
+- **What it is:** Prose half of worldbuilding_v30: rationale for the event-card design, Church taxation rule, Altonian cultural imperialism, cognatic succession.
+- **Status:** "Authority: DESIGN (working document)". Reading: reference prose.
+- **Bears on:** WR, FA, ARCS
+- **Content that matters:**
+  - Cardinals "exist in the Named Character Events deck as targetable/triggerable event cards. Each Cardinal matters when something happens TO them" (:27).
+  - Church-controlled territories at Prosperity 4+: Crown +1 Wealth/season (taxation on Church lands) (:33).
+  - Altonia destroyed Valnese records and temples; this is political, NOT the source of the Forgetting, which is epistemological (P-08) (:65).
+  - All duchies follow cognatic senior succession (eldest child regardless of gender); Elske is a legitimate Crown candidate (:67).
+  - Design principle: event cards "fire from game state, not player initiative" and reward targeting the conditions that keep institutions stable, without stat bloat (:75).
+- **Conflicts / stale:** §7.1 heading "Three Indigenous Nations" (:63) contradicts the body's corrected Altonian-provinces framing.
+- **Open items:** none.
