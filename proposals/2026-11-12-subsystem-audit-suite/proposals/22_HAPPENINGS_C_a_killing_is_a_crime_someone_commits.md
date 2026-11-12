@@ -6,11 +6,13 @@ Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row kil
 
 Reconciled: 2026-11-12, U6 repair lane R-C (`unified/U6_VERDICT_AND_REPAIRS.md` findings 4, 5, 6): the access roll's obstacle is the one obstacle form's members 1 (`difficulty`, at `guard_ob`) and 22 (`watch`, its `guard` reading, `watch_step`), not a private "plus one level per step" (OBS §2); A-16's "caught and detained" against the guard's own later act is listed for Jordan (`unified/U6_FOR_JORDAN.md` J-U6-01, option B shipped until he answers); "fixture band" → "fixture threshold" and bare "levels" → "difficulty levels" (glossary *band*, *level*).
 
-Depends on: `14_VERBS_MATERIAL_A_mending.md` (B12, OBS member 22 `watch` and `watch_step`); `14_VERBS_PHYSICAL_A_custody_and_force.md` A1 (warrants, `arrest`), A3 (`context_terms`, the mortal-wound draw) (B15) and A1-A2 custody (B29) for the guard's own `capture`/`arrest`; `16_PESSIMIST_CHAR_C_the_stop_is_the_mans.md` (B10, the drawn scruple); `02_CHAR_relations_have_a_ground.md` (B10); `08_FI_06_testimony-names-a-hand.md`, `08_FI_07_shortest-playable-case.md`, `18_DETERMINISM_notice_is_a_draw.md` (B11); `22_HAPPENINGS_B_the_throne_is_never_stranded.md` edit 2 (B21, the rival-title test); `18_DETERMINISM_task_draw_for_uncontested_verbs.md` (B07, the task route the access roll takes).
-Lands in batch: B37 (lane PC with FI), after `22_HAPPENINGS_A`, with `U5b_PC_rulings_in_the_fight.md` §6 (the opener's first-exchange edge, D-41; §4.1 row 59). Ships at the control (`enmity_floor` unreachable).
-Tier: opus for the AX-1 reading (taken here); sonnet / high for the code and tests.
+Reconciled: 2026-11-12, A-96 (`unified/DECISIONS_ANSWERED.md` A-96; `unified/U6_FOR_JORDAN.md` J-U6-01 ANSWERED, Option A): a Failure of the access draw ALWAYS forms the guard's `capture` on the attacker in the same encounter, without consulting the guard's own choices (A-16's words as written). Supersedes the U6 repair lane's option B and the W3-5b option (A) above. Changed: (1) the Failure row and its paragraph; (2) edit 4 (the formed act), new edits 7 and 8 (the guard roster reader, the guard basis on `may_warrant`); (3) the gate: `test_failure_emits_fight_stopped_and_writes_no_custody` is replaced by `test_failure_forms_the_guards_capture_on_the_attacker`; (4) the Falsifier, the hash movers and the Layer 1 dependency (`L1-A96`). `fight.stopped` stays an Event. Three facts the tree forced, each marked `[ASSUMPTION]` where it is a choice: a guard is a cohort and the shipped guarded seats grant no `dispatch`; `capture` writes custody only on a yield; ENCOUNTER precedes WITNESS (all under "The resolution").
 
-## Status: PROPOSED (A-16 taken: a person may try to kill another of his own motive, rarely; the two readings of `audits/22_HAPPENINGS.md` §4 item 2 are closed)
+Depends on: `14_VERBS_MATERIAL_A_mending.md` (B12, OBS member 22 `watch` and `watch_step`); `14_VERBS_PHYSICAL_A_custody_and_force.md` A1 (warrants, `arrest`), A3 (`context_terms`, the mortal-wound draw) (B15) and A1-A2 custody (B29) for the `capture` the Failure forms (`loop/effects_combat.py::_eff_capture`); the Layer 1 amendment `L1-A96` (the engine-formed act on a named outcome, an exception to `04` PART D rows 1 and 41; the batch gate node in `unified/U3_LAYER1_AMENDMENTS.md` once it exists; until then, the amendment applied by the Layer 1 lane under A-97), which the Failure branch waits on and the control arm does not; `16_PESSIMIST_CHAR_C_the_stop_is_the_mans.md` (B10, the drawn scruple); `02_CHAR_relations_have_a_ground.md` (B10); `08_FI_06_testimony-names-a-hand.md`, `08_FI_07_shortest-playable-case.md`, `18_DETERMINISM_notice_is_a_draw.md` (B11); `22_HAPPENINGS_B_the_throne_is_never_stranded.md` edit 2 (B21, the rival-title test); `18_DETERMINISM_task_draw_for_uncontested_verbs.md` (B07, the task route the access roll takes).
+Lands in batch: B37 (lane PC with FI), after `22_HAPPENINGS_A`, with `U5b_PC_rulings_in_the_fight.md` §6 (the opener's first-exchange edge, D-41; §4.1 row 59) (B37 verified: `unified/U3_DEPENDENCY_ORDER.md` §1 item 37, §3.1 B37 line 4, §4.1 row 59). Ships at the control (`enmity_floor` unreachable); the Failure branch's engine-formed act is the arm that waits on `L1-A96`, and at the control it is unreachable.
+Tier: opus for the engine-formed act and its guard basis (edits 4, 7, 8 and the Layer 1 reading); sonnet / high for the rest of the code and the tests.
+
+## Status: PROPOSED (A-16 taken: a person may try to kill another of his own motive, rarely; the two readings of `audits/22_HAPPENINGS.md` §4 item 2 are closed; A-96 taken: a Failure of the access draw always forms the guard's `capture` on the attacker)
 
 Source: `audits/22_HAPPENINGS.md` §1.5 row 5, §2 rows H-03, H-21. Lane PC with FI (owners:
 `rosters.yaml: violence_contexts`, `decision/options.py::VIOLENCE_CONTEXT_READERS`). Reference only
@@ -25,7 +27,7 @@ seat), `02_CHAR_relations_have_a_ground.md`.
 
 `fight` gains one context, `enmity`: a person may form an attack on someone he has a recorded reason to
 want dead **and** is hostile to. The attempt must first get past whoever guards the target, by a draw
-that can end with the attacker stopped and seen, and then taken by a guard's own act. Nothing else changes: the scene, its terms, the mortal-wound draw
+that can end with the attacker stopped, seen, and taken into custody by the guard's `capture` (A-96). Nothing else changes: the scene, its terms, the mortal-wound draw
 and the notice draw are other proposals'. A declared mover wherever the context is met; at build it is
 met by nobody `[UNVERIFIED: no person at `build_realm(0)` holds both conjuncts; the gate's first reading
 says]`.
@@ -77,17 +79,54 @@ fixture for it); keyed `H(seed, tick, actor, "access:" + a.id)` (A-30).
 |---|---|---|
 | Overwhelming, Success | he reaches the target; the scene is fought | as `fight` |
 | Partial | he reaches him and is seen coming: the target fights at no disadvantage and the notice draw is taken as certain for those present | as `fight` |
-| Failure | he is stopped and seen: his act ends with the Event `fight.stopped` and no custody write. Those present (the guard among them) hold a claim of it through WITNESS; the guard, a person, then forms `capture` or `arrest` on him through his own chooser, so "caught and detained" (A-16) follows one act later, by the guard's act, not a seat's | `fight.stopped` (the durable write, A-81) |
+| Failure | he is stopped, seen and caught: his act ends with the Event `fight.stopped` (witnessed), and in the same encounter the engine forms the guard's `capture` on him, without consulting the guard's own choices (A-96). The attacker is detained, always | `fight.stopped` (the durable write, A-81); the `detain` edge and `person.captured` of the formed `capture` (`loop/effects_combat.py::_eff_capture`) |
 
-Why not a write by the guard's seat (R5 §1): a seat is not an agent. `04` PART D row 1 (`:1026`): an
-institution acts only through a person, `Act.actor : PersonId`, and a seat enters only through `Act.via`,
-the seat the **actor** exercises; the failed act is the attacker's own `fight`, whose `via` is not the
-guard's seat, and a Tenure write needs one of the nine bases of §C.2. The alternative (the engine forms
-the guard's `capture` on his behalf at ENCOUNTER) is a decision made outside `choose` (AX-2, PART D 41)
-and is built only on Jordan's word. That is a reading of A-16's "failure means caught and detained" (caught by
-the guard's own act, so usually and not always), not the ruling's letter; it is listed for Jordan with both
-options as `unified/U6_FOR_JORDAN.md` J-U6-01, and this file ships option B there until he answers. A detained
-doer then forms no act through any seat he holds (A-23).
+**The guard is read off the roster, not off a claim.** ENCOUNTER sits before WITNESS
+(`loop/encounter.py:2`, "between RESOLVE and WITNESS"), so when the draw is taken no claim of the attempt
+exists yet. The guard is the person the existing roster already counts: `world_q.guard_weight`
+(`queries/world_q.py:1543`) sums the persons present at the target's rung who owe a live, sworn, not
+imposed `oblige` to a seat held by a person also present there (`:1564-1570`). This file factors that
+person set into one reader, `world_q.guards_at(w, rung)`, which `guard_weight` sums, so the roster is read
+once (edit 7). The act's actor is the **first** of them in `w.tenures` order (`sworn_to`, `state/gate.py:473`,
+returns in that order; `harness/populated.py::seat_guards` takes the first holder by the same order, the
+precedent), and its `via` is the seat he is sworn to. After ENCOUNTER, WITNESS deposits the Event as it
+deposits any Event, so the guard (and anyone else present) holds a claim of the stopped attempt like any
+witness; the formed `capture` does not read it. No entity is named: any place with a guard is read the same way.
+
+**What the tree forces, and what is chosen.**
+
+1. A guard is a **cohort** (`Person.is_cohort`, `weight > 1`, `state/carriers.py:845`; the shipped rows
+   weigh 2 to 4, `cohorts.yaml:187-190`), and `capture` requires its actor `individual`
+   (`verb_table.yaml:886`) and `remit:dispatch` (`:868`); the three guarded seats (`off_king`,
+   `off_duchess_hafenmark`, `off_duke_varfell`, `offices.yaml:187-231`) grant no `dispatch`, and a guard
+   cohort holds no seat (`harness/populated.py:652`: "No `commit`, no `hold`, no pursuits"). So the act cannot
+   be admitted through `capture`'s ordinary cells, and `may_warrant` (`state/gate.py:980`) fails its first
+   conjunct (the actor sits in `via` and the grant carries `WARRANT_ACT`, `:289`). The formed act is therefore
+   **not admitted through `_admits`** (the Failure supplies its admission, as RESOLVE's declaration supplies
+   ENCOUNTER's, `loop/encounter.py:16-23`), and `may_warrant` gains one basis, the oath: the actor is in
+   `guards_at(w, home_of(prisoner))` and `via` is a seat he is sworn to (edit 8). `_eff_capture` stays the one
+   owner of the `detain` edge (`:373`, `:375`) `[ASSUMPTION; medium; Jordan to correct; revert: the Failure
+   writes `fight.stopped` alone, option B, the guard's chooser deciding]`.
+2. `capture` is a **fought scene** under `yield` terms (`rosters.yaml: duel_terms`), and `_eff_capture` writes
+   the edge only where the scene's `surrender` names the subject as the one who yielded
+   (`loop/effects_combat.py:345-346`, `:364`). A fought capture would leave the attacker free when he does not
+   yield, which is not "always". So the formed act fights no scene and deals no wound: the Failure is taken as
+   the attacker's yield, the `surrender` licence (1) reads, and `_eff_capture`'s other licences (the subject is
+   not the actor and not already in custody; the seat may take him; its live holder could close the custody,
+   `_may_close_custody`, `loop/effects_information.py:1133`) apply unchanged `[ASSUMPTION; medium; Jordan to
+   correct; revert: the formed capture is fought under `yield` and the edge follows only on his yield]`.
+3. **The case with no guard.** The access draw is taken only where `guard_weight(w, rung) > 0`, and
+   `Person.weight < 1` raises (`state/carriers.py:840-842`), so a positive sum is a non-empty roster: a Failure
+   cannot happen with no guard, and the roster read for the formed act is the one read for the draw (no write
+   falls between them, both being inside the act's one ENCOUNTER turn). Nothing about the draw is made
+   deterministic: it stays the keyed roll of the table above. By the ladder (`CLAUDE.md` §0, step 4: the
+   precedent is `_eff_capture`'s own refusal path, which falls back to `NO_CHANGE` and the verb's refused Event,
+   `loop/effects_combat.py:350-351`): where the formed `capture` is refused by its licences (the attacker is
+   already in custody, so he is already detained and nothing more is owed; or the seat's holder could not close
+   the custody, a data defect the gate's guarded arm shows on the shipped seats), the Failure still ends with
+   `fight.stopped` and the refused Event is the record. No fallback act is invented.
+
+A detained doer forms no act through any seat he holds (A-23).
 
 A place with no guard takes no draw. `build_realm`'s `guards` default is `False` today, so in the
 shipped realm every place is unguarded until that default flips (CP-T09-07); the gate's guarded arm
@@ -107,24 +146,38 @@ wounded king, a death with witnesses, a death with none.
 3. `engine/season/rosters.yaml: context_terms` (PHYSICAL_A A3): `enmity: death`.
 4. `engine/season/loop/encounter.py`, where a declared `fight` is fought: when the act's payload
    `context` is `enmity` and `guard_weight` of the subject's place is above 0, the access roll first;
-   a Failure ends the act with the Event `fight.stopped`, writes no custody, and WITNESS deposits it as it
-   deposits any Event; nothing here forms the guard's act.
+   a Failure ends the act with the Event `fight.stopped` (WITNESS deposits it as it deposits any Event) and, in
+   the same turn, forms the guard's `capture` on the attacker (A-96): actor the first of `guards_at` (edit 7),
+   `via` the seat he is sworn to, subject the attacker, folded at the `capture` row's effect with the Failure
+   as the attacker's yield, no scene fought and no wound dealt; the guard's chooser is not consulted. The
+   formed act's id derives from the attacker's act id `[ASSUMPTION; medium; Jordan to correct; revert: any
+   unique derivation]`; it draws nothing (no new key). Waits on `L1-A96`.
 5. `engine/season/data/fixtures.py`: `enmity_floor` (control: a value no stance reaches, so the context
    never holds and every base hash stands), `guard_ob` (a `difficulty_levels` member, `routine` at
    landing; sweep over the four difficulty levels). NUMBER rows in `hole_register.yaml` (ids from B00's
    block). `watch_step` is OBS member 22's fixture, landed in B12; it is read here, not created.
 6. `engine/season/verb_table.yaml`, row `fight`: `emits_on_refusal` gains the clause `access` keyed to
    `fight.stopped` (its `emits_note`: a lost access draw, not a refusal, as 18-A's `draw` clause);
-   `person.captured` is **not** added to `fight` (custody is the guard's `capture`/`arrest`);
-   `requires_typed_note` gains one sentence.
+   `person.captured` is **not** added to `fight` (custody is the formed `capture`'s, which earns it through
+   `_eff_capture`'s edge); `requires_typed_note` gains one sentence.
+7. `engine/season/queries/world_q.py`: `guards_at(w, rung_id) -> list[str]`, the person set `guard_weight`
+   builds at `:1564-1570`, in `sworn_to`'s order and each person once; `guard_weight` becomes the sum of
+   `w.persons[p].weight` over it (the value unchanged, so every existing hash stands). The roster has one
+   owner; edit 4 reads its first member.
+8. `engine/season/state/gate.py::may_warrant` (`:980`): one added basis beside the seat grant, the oath:
+   `actor` is in `guards_at(w, home_of(w).get(prisoner))` and `via` is a seat he is sworn to (`sworn_to`,
+   `:473`). The gate's `warrant` clause reads `may_warrant`, so the opened `detain` is admitted by the same
+   predicate (`effects_combat.py:349-350`). Every other caller sees no change: no `arrest`, `capture` or
+   `seize` act of an unsworn actor passes by this basis `[ASSUMPTION; medium; Jordan to correct; revert:
+   edit 4 forms no act and the Failure writes `fight.stopped` alone]`.
 
 ## Gate (execution artifacts)
 
 `engine/season/tests/test_cr87_violence_contexts.py` (exists; the file covering the contexts). Tests:
 `test_enmity_forms_only_with_both_conjuncts`, `test_rival_title_holder_with_hostile_stance_forms_it`,
 `test_access_roll_has_three_outcomes_at_200_attempts`,
-`test_failure_emits_fight_stopped_and_writes_no_custody` (and a guard holding the claim forms
-`capture`/`arrest` in a planted next season), `test_realm_band_between_zero_and_one_attempt_per_seed_season`
+`test_failure_forms_the_guards_capture_on_the_attacker`,
+`test_realm_band_between_zero_and_one_attempt_per_seed_season`
 (seeds 0-7, four seasons), `test_no_seat_holder_dies_in_season_zero`:
 
 - formation: a person with a dispute and a hostile stance forms `fight` on its subject; with either
@@ -132,6 +185,27 @@ wounded king, a death with witnesses, a death with none.
   forms it; the same man with a neutral stance does not.
 - the access roll, 200 seeded attempts on a guarded target: all three outcomes occur; with
   `guard_weight` 0 no roll is taken.
+- `test_failure_forms_the_guards_capture_on_the_attacker`, in `engine/season/tests/test_cr87_violence_contexts.py`.
+  **Planted world:** `populated.build_realm(0, guards=True)`; an individual attacker (weight 1) is placed at
+  the King's rung with both `enmity` conjuncts (a dispute and a stance at or below `enmity_floor`), the guard
+  cohort and the King present (the shipped `cohorts.yaml:187` row); `guard_ob` at its hardest
+  `difficulty_levels` member and the attacker's covert pool 0, so the keyed access draw lands Failure
+  `[ASSUMPTION: pool 0 against the hardest level fails at the test's seed; if not, the test scans seeds until
+  the draw is a Failure and asserts it found one (`checked >= 1`, CLAUDE.md §0.1 pt 2)]`; the guard cohort is
+  given no pursuit vector, as `seat_guards` leaves it (`populated.py:657`), so its own chooser forms nothing.
+  **Expected reading, after the encounter:** (a) the log holds `fight.stopped` for the attacker's act; (b)
+  `world_q.restrained(w, attacker, "detain")` (`queries/world_q.py:1766`) is true, the live `detain` edge runs
+  attacker -> the seat the first of `guards_at` is sworn to, and the log holds `person.captured` for him; (c)
+  the formed act's actor is `guards_at(...)[0]`; (d) no wound: the attacker's `body` is unchanged; (e) the
+  attacker's own `fight` wrote no `Person.exists` or `body` change; (f) after WITNESS, the guard holds a claim of
+  the `fight.stopped` Event. **Falsifier, Option B:** with edit 4's formed act removed (the Failure writes
+  `fight.stopped` alone, the guard's chooser deciding), assertion (b) fails, because the planted guard has no
+  vector and forms no `capture`: a guard who does not capture leaves the attacker free. The test also asserts
+  the contrary arm of the same pair: with the guard's `oblige` ended before the draw (`guard_weight` 0) no draw
+  is taken and no capture formed. **Control arm:** the same world with `guard_ob` at its easiest level and the
+  attacker's pool maximal, so the access draw succeeds (Success or Overwhelming): no `detain` edge, no
+  `person.captured`, no `fight.stopped`, and the scene is fought as `fight` (asserted, not assumed, by
+  `checked >= 1`).
 - realm, seeds 0 to 7, four seasons, the context on: the count of `fight` formed under `enmity` is read
   and reported. **Acceptance is a band, not a floor: fewer than one attempt per seed-season on average,
   and more than zero across the eight seeds.** Zero means the context is dead and the floor is wrong;
@@ -141,13 +215,28 @@ wounded king, a death with witnesses, a death with none.
 ## Falsifier
 
 Set `enmity_floor` to admit every stance: the realm gate's upper bound fails (the instrument can see
-the old regicide). Remove the access roll: the 200-attempt arm shows no `fight.stopped`.
+the old regicide). Remove the access roll: the 200-attempt arm shows no `fight.stopped`. Remove edit 4's
+formed `capture` (Option B's behaviour: the Failure writes `fight.stopped` and nothing else, the guard left to
+his own choices): `test_failure_forms_the_guards_capture_on_the_attacker` fails at assertion (b).
+
+## Hash movers
+
+At the control (`enmity_floor` unreachable) nothing moves: `enmity` never holds, no `fight` forms under it, the
+encounter branch is never entered, and `guards_at` leaves `guard_weight`'s value unchanged, so `BASE_BUILD` and
+`BASE_SEASON` (`test_cr87_violence_contexts.py`) stand. **Where the encounter occurs (the context on and a
+guarded target, the gate's realm arm and any seeded season that reaches it) this moves seeded results:** each
+Failure writes a `detain` Tenure and the Events of the formed `capture` (`person.captured`), so `World.content_hash()`
+changes from that tick, the detained attacker forms no act through any seat he holds (A-23), and every later
+draw that reads his place or his seat moves. The mover is declared: the realm arm re-pins at the landing of the
+context on, and says so. The access draw's own key `H(seed, tick, actor, "access:" + a.id)` (A-30) is unchanged;
+the formed act draws nothing.
 
 ## What it does not do
 
 It writes no plot (several persons acting together is `conspire`, unbuilt, and not proposed here), no
 poison, no accident and no hired hand. It does not name a ruler: a guard is whatever `guard_weight`
-reads for any place.
+reads for any place. It does not let a guard decline: a Failure is always a capture (A-96), so a bribed or
+loyal guard is not a way out of it; the draw is the only chance the attacker has.
 
 ## NERS reading
 
@@ -157,8 +246,8 @@ reads for any place.
   gets its other half.
 - **R.** Guards become worth posting and enmities worth mending: both are things a player can do about
   it. Unwatched, the world produces attempts, captures and a few deaths that differ by seed.
-- **S.** One more reader in a closed set; one roll on the task route; custody by the existing owner,
-  through a person's own act.
+- **S.** One more reader in a closed set; one roll on the task route; custody by the existing owner
+  (`_eff_capture`), through the one engine-formed act A-96 licenses, on the one roster `guards_at` reads.
 - **E, last.** One context, one roll, two fixtures.
 
 ## Cost class

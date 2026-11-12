@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (a decision register for the suite, in the form of `DECISIONS_FOR_JORDAN.md`; resolves nothing at runtime, CLAUDE.md §0.05; not canon)
 
+Reconciled: 2026-11-12, A-96: J-U6-01 is ANSWERED (Option A); no entry in this register remains open.
+
 ## Read at: the working tree of 2026-11-12. Lane: U6 repair lane R-C (finding 5 of `U6_VERDICT_AND_REPAIRS.md`, and its spot-check of rulings against their carrying proposals).
 
 **What this is.** A ruling in `DECISIONS_ANSWERED.md` whose carrying proposal does not do what the ruling's words
@@ -13,6 +15,14 @@ costs, a recommendation, and what the suite does if you say nothing. Everything 
 ---
 
 ### J-U6-01 · A failed attempt on a guarded target: is the attacker always caught and detained? · PC, FI
+
+**ANSWERED (2026-11-12): Option A, ruled as A-96 (`DECISIONS_ANSWERED.md`; Jordan: *"detain failed attacker"*).** A failure means the
+attacker is caught and detained, always: on a Failure of the access draw the engine forms the guard's `capture` on the
+attacker in the same encounter, without consulting the guard's own choices. Applied in
+`proposals/22_HAPPENINGS_C_a_killing_is_a_crime_someone_commits.md` (the Failure row, edits 4, 7, 8, the test
+`test_failure_forms_the_guards_capture_on_the_attacker`); the one Layer 1 amendment row is `L1-A96`, applied by the Layer 1
+lane under A-97. The text below is the question as it was put, kept as the record; the recommendation (B) and "if you do
+not answer" are superseded.
 
 **What you ruled (A-16).** *"gated by grievance plus hatred below a threshold, reaching a guarded target is a
 draw, failure means caught and detained"*.
