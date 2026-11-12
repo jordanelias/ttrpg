@@ -1,5 +1,7 @@
 # NARRATIVE-B — what he was owed: a due that lapses unmet is a grievance against the one he believes owed it
 
+Reconciled: 2026-11-12, U5d closure — folded **A-12**, **A-23** and the story lane's R-11. A due that lapses under an empty seat is laid at the door of the believed holder of a seat that may fill it (`U5d_STORY_owed_edits.md` §3). A holder in custody forms no act through his seat (A-23), so his dues can lapse while he is held; whom the wronged man then blames is read from his own claims as for any lapse, and this lane adds no rule for it. No step is removed.
+
 ## Status: PROPOSED
 
 Source: `audits/20_NARRATIVE_CHURN.md` F-NARR-02 (an omission has no author), F-NARR-03 (an office owes

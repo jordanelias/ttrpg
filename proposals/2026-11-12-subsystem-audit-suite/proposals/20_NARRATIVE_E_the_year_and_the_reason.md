@@ -1,5 +1,7 @@
 # NARRATIVE-E — the year and the reason: a calendar that exists, an occasion that keeps its ground, and a crisis of faith that is drawn and seen
 
+Reconciled: 2026-11-12, U5d closure — folded **A-24**, **A-51** and **A-54**. Edit 3 (held for Jordan; a crisis of conviction drawn and seen) is ruled (the ladder's D-27 under A-24) and is merged under `16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md`, the one emitter of `conviction.moved`: this file keeps the reason line a narrator reads and writes no second draw. Edit 1 (a roster owns the year; the weather reads it) becomes load-bearing: A-51's five-year prologue and every age in seasons (`majority_age`, `min_parent_age`, the authored ages) are counted on this roster's year, which must therefore be declared at ship and not left to a weather table that ships `()` (`queries/world_q.py::season_of_year`). The weather that reads the year draws on the four-band ladder (A-54).
+
 ## Status: PROPOSED (edit 3 is HELD for Jordan: it overwrites `ED-IN-0261`'s ruled "rolls nothing")
 
 Source: `audits/20_NARRATIVE_CHURN.md` F-NARR-06, F-NARR-08, §5 (the reason trail's three losses), §7.5.

@@ -1,5 +1,7 @@
 # 21 · PROCEDURAL B — the cast in three tiers through one person generator; local seats filled by acts
 
+Reconciled: 2026-11-12, U5d closure — folded **A-44**, **A-15**, **A-41 / A-42** and **A-19**. The hold on decision D-1 is lifted: about 94 generated persons plus kin, capped, with `cast_cap` the dial (it overwrites `ED-WR-0011` by Jordan's answer). `Person.born` is written for every generated person, and the 46 principals' ages are now owed content (A-15 turns natural death on only after they are authored); `22_HAPPENINGS_A` edit 1 is the one writer from authored ages and this file's generator writes through the same field. Heritage is generated per person, and the caste tiers that read it are data (`U5d_SE_cohort_heavy_moves_and_caste.md` edit 4; the territory weight of `U5d_FA_owed_edits.md` §4). Local seats are filled by `confer` in the prologue; an empty inherited seat is claimed in the deed race (A-19), so a generated kinsman is a possible claimant only through a listed title.
+
 ## Status: PROPOSED (2026-11-12; Fable design lane; ratifies nothing; reference under CLAUDE.md §0.05). HELD BACK on decision D-1 (it overwrites `ED-WR-0011`, RULED).
 
 Carries `audits/21_PROCEDURAL_GENERATION.md` §4.4, §4.5, §14, resolutions R-21-04, -09, -12; plan batches

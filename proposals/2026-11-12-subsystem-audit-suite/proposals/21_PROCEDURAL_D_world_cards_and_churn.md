@@ -1,5 +1,7 @@
 # 21 · PROCEDURAL D — one world-card schema for four families; churn from storms, openings and arrivals
 
+Reconciled: 2026-11-12, U5d closure — folded **A-52**, **A-50** and **A-47**. §5 (the docket; held on D-3) is ruled B behind its test: the docket is read inside a seat-holder's `convene` only after PG-6's reading shows that cards read at build run dry (openings per season falling to zero in a long game); until that reading exists the docket is not built, and when it is, plan lines B10-18:183 and B10-19:95 are amended by the ruling. World cards may draw bounded starting state (A-50). A card never decides an outcome: where it arms a threshold it opens a mandatory scene (A-47).
+
 ## Status: PROPOSED (2026-11-12; Fable design lane; ratifies nothing; reference under CLAUDE.md §0.05). §5 (the docket) is HELD BACK on decision D-3: it amends plan text B10-18:183 and B10-19:95.
 
 Carries `audits/21_PROCEDURAL_GENERATION.md` §4.8, §6 ("how an authored arc plugs in"), resolutions

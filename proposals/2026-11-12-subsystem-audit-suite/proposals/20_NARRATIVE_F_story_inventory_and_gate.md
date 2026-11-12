@@ -1,5 +1,7 @@
 # NARRATIVE-F — the story bar counts crossings: an inventory reading, its controls, and the gate the narrative basis must pass
 
+Reconciled: 2026-11-12, U5d closure — folded **A-45**, **A-46** and **A-15**: the gate's story families gain supply the rulings order (a succession by natural death; a split by leaving a creed or head seat; several strands that can each end), so the clauses that read 0 "by ruling" are re-read after those land. No step changes.
+
 ## Status: PROPOSED
 
 Source: `audits/20_NARRATIVE_CHURN.md` §4 (the story inventory), §7.2 (the five pulls), §11 (the probe

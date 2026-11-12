@@ -1,5 +1,7 @@
 # NARRATIVE-C — who holds what is something people know: the `held_by` claim, the holder behind a seat, and the oath that meets a new holder
 
+Reconciled: 2026-11-12, U5d closure — folded **A-32** and **A-33**. Who holds a seat is learned by the seat's reach (realm-wide shipped, with presence, jurisdiction and telling built as the test arm, A-32), so edit 1's build-time `held_by` deposit and the later Event agree with the shipped reach. A holder's death is learned apart, by presence, trail and telling (A-33): a `held_by` claim may be stale because its holder is dead and the believer does not know it; this file's "the claim can be stale" covers it, and no edit corrects the belief on the death. Blame under an empty seat reads the believed holder (`U5d_STORY_owed_edits.md` §3).
+
 ## Status: PROPOSED
 
 Source: `audits/20_NARRATIVE_CHURN.md` F-NARR-04 (nothing is aimed), F-NARR-05 (allegiance never moves),

@@ -1,5 +1,7 @@
 # STORY-A — what a roll leaves: the shortfall scales the loss, a stake is paid, the other party is named, an attempt can be counted
 
+Reconciled: 2026-11-12, U5d closure — folded **A-5**, **A-38** and **A-9**. The settled margin that `SHORTFALL_STEP` reads is the one sampler's (A-5: the bell curve everywhere), so its step edges are set at the calibration with the sampler, not on whole successes. Edit 3 (a contested row's outcome kinds name the counterparty as patient) composes with A-38: a verdict names the petitioner, or a seat he names, as the party it serves. With A-9 a scene's later step may hang on the band and shortfall of the one before, so "the success that costs" can be answered inside the scene. No step is removed.
+
 ## Status: PROPOSED
 
 Source: `audits/23_STORY_ENABLEMENT.md` §2 rows S-68 to S-71 and S-29, §4.2 G1; the four turns

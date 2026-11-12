@@ -1,5 +1,7 @@
 # HAPPENINGS-A — a death is rare, caused and drawn: ages, the bout, one mortal reader, and the census that shows it
 
+Reconciled: 2026-11-12, U5d closure — folded **A-15** (natural death on, after the 46 ages are authored). "Dark until you set a rate" is no longer the end state: the bout goes live behind edit 1 (the authored ages; a decision-ready table of the cast's ages is owed by a lane) and a rate, with one re-pin of every seeded result. Edit 1 is the one writer of `Person.born` from authored ages (`16_PESSIMIST_WR_C` edit 4 and `21_PROCEDURAL_B`'s generator write through it). A death's news travels apart from the vacancy it makes (A-33): edit 4's cause on the death Event is read by those who learn of the death, not by everyone who learns the seat is empty. The five-year prologue runs this rule (A-51), so its reading (about one to three natural deaths in twelve seasons) applies to the prologue's twenty seasons as well.
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-07, G-08) — `born` is hashed (verified by probe); `mortal_terms` cannot live in `queries/world_q.py` and import `party_end` or `body_band_penalty` (`world_q.py:16-17` forbids both imports), so edit 3's home is corrected in place.

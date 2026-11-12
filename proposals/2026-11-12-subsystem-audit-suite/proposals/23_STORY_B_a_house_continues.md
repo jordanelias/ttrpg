@@ -1,5 +1,7 @@
 # STORY-B — a house continues: a marriage as an instrument, a birth by a draw, a majority, and the minority that makes a regency
 
+Reconciled: 2026-11-12, U5d closure — folded **A-15**, **A-51**, **A-19** and **A-44**, and reconciled the two premises this lane assumed. (1) Natural death and `majority_age` go live: A-15 orders the cast's ages authored, which is the condition edit 4's loader refusal names (`majority_age > 0` only when the cast rows carry ages), so `majority_age` ships on with the ages and is no longer a control waiting on a decision; the regency rule of edit 4 is then reachable from the first natural death. `majority_age` is in seasons and "sixteen years" needs the year's owner (`20_NARRATIVE_E` edit 1). (2) The prologue is five years, not one (A-51): minors placed by the generator age five years before play; a marriage formed in the prologue may stand at tick 0; with `birth_rate` at its control no child is born in the prologue, and A-51 orders no births or ageing pass, so births stay behind `birth_rate` 0 and remain the one question of this file for Jordan (J-1), unchanged. Edit 4's "the nearest living title" reads the set of titles of the deed race (A-19): a minor's title is one of several and a regent's provisional hold yields to the race's winner at Partial. Generated kin (A-44) are who a marriage and a house are made of.
+
 ## Status: PROPOSED (one on-switch is Jordan's: `audits/23_STORY_ENABLEMENT.md` §8.2 J-1)
 
 Source: `audits/23_STORY_ENABLEMENT.md` §2 rows S-07 and S-05, §4.2 G2; `16_PESSIMIST_GAME.md` §6

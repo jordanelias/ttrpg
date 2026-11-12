@@ -1,5 +1,7 @@
 # HAPPENINGS-B — the throne is never stranded: the two royal dignities get a basis, and more than one title may claim
 
+Reconciled: 2026-11-12, U5d closure — folded **A-19** (the deed race), **A-33**, **A-23** and **A-57 / A-58**. The audit's §4 item 3 is answered with this file's list: the heir, the consort, the princess and the heads of both houses may each claim; the odds are what others believe of each claimant's deeds; the founding order is a head start and never a right, so edit 2's `[ASSUMPTION … revert: the single title]` on the set-of-titles shape reads as ruled. A claimant in custody forms no claim through a seat (A-23) but may still claim in his own person, since `succeed` is his own act. A claimant may not know the holder is dead (A-33): the vacancy forms the occasion, the death does not travel with it. A seat anchored on a territory or settlement can also pass by conquest (seats go with the land on a won march); `off_king` is anchored on the realm rung, which is no march target (`rosters.yaml: march_target_kinds`), so the throne itself never passes by a field and option (b) of the audit's item 3 ("a house takes the throne by conquest") stays untaken.
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-09) — `may_claim`'s body opened (`state/gate.py:770-786`); the edit table's row stands, and two further single-title readers of `SUCCESSIONS` are named beside it.

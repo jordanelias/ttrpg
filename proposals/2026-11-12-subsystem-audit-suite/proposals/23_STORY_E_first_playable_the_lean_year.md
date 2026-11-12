@@ -1,5 +1,7 @@
 # STORY-E — the first playable for stories: *The Lean Year*, a valley, a granary, an old lord, two claimants, a bench and a forged sheet
 
+Reconciled: 2026-11-12, U5d closure — folded **A-54**, **A-56**, **A-50** and **A-51**. The lean year's harvest is a draw on the four-band ladder with the steward's skill in the pool; the valley's cohorts answer want by the heavy moves (petition, migrate, work, tend, comply or refuse, riot); starting stores may be drawn within the fixture's bounds. As a scenario on the valley fixture it declares its own year and may run a prologue shorter than the realm's five years only as a named fixture choice, stated in its header; the realm's rule is five.
+
 ## Status: PROPOSED
 
 Source: `audits/23_STORY_ENABLEMENT.md` §7. Composes on, and does not restate:

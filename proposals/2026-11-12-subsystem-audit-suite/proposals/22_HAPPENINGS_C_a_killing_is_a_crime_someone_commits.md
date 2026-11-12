@@ -1,5 +1,7 @@
 # HAPPENINGS-C — a killing is a crime someone commits: the doer's side of the `crime` context, guarded against, noticed by a draw
 
+Reconciled: 2026-11-12, U5d closure — folded **A-16** (a person may try to kill another of his own motive, rarely), which lifts the ED-IN-0337 conflict for criminal contexts and the design-first hold on the ruled item. The form is the ruling's: gated by a grievance plus hatred below a threshold (eligibility); reaching a guarded target is a draw; a failure means the doer is caught and detained; the whole held under one attempt per seed-season by its gate. The first exchange of an unexpected attack carries the opener's edge (the ladder's D-41; `U5d_STORY_owed_edits.md` §4). The detained doer forms no act through any seat he holds (A-23). `enmity` no longer waits dark on a decision; it ships behind its control with the gate's count as the first reading.
+
 ## Status: PROPOSED (design-first; one ruled item touched, listed in `audits/22_HAPPENINGS.md` §4 with two readings)
 
 Source: `audits/22_HAPPENINGS.md` §1.5 row 5, §2 rows H-03, H-21. Lane PC with FI (owners:

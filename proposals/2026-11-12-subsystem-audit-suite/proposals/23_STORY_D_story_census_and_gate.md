@@ -1,5 +1,7 @@
 # STORY-D — the story census: a story named by its beats in the cause graph, its rate, its spread and its control; and the gate every enablement batch is read on
 
+Reconciled: 2026-11-12, U5d closure — folded the answers to the audit's §8.3 defaults. Batches re-read: E-2 completes S-67 (A-9: a scene is a short sequence); E-3's natural-death gates read the live rate, not the `bodies` instrument arm, once the ages are authored (A-15); E-5 reads the deed race (A-19), the head's strip (A-35) and custody (A-23), and its S-16 reads the Split as a strife move (A-46); E-7 gates on `enmity` behind its control (A-16) and a verdict that names the petitioner (A-38); E-8 gains "a place and its seats change hands by arms" by a won march (A-57, A-58); E-9's crisis and scruple are drawn (A-24). Every census reading is taken after the five-year prologue (A-51). The one default still standing is the form of fortune in a field (D-34, open).
+
 ## Status: PROPOSED
 
 Source: `audits/23_STORY_ENABLEMENT.md` §1 (what counts as a story), §2 (the 73), §6.1 (the seven

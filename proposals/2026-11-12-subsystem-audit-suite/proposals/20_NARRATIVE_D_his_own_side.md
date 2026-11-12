@@ -1,5 +1,7 @@
 # NARRATIVE-D — his own side: a creed that stands for something, and a member who is asked what he thinks of it
 
+Reconciled: 2026-11-12, U5d closure — folded **A-46**: edit 4 (held for Jordan) is ruled in its narrow form. `commitment.ended` joins a strand only when the released edge's object is a faction's creed Proposition or its `head_seat` (the Split is a move of the era); a routine release stays `never`. Step rewritten: the roster change is one content opener keyed on the released edge's object, not the move of `commitment.ended` from `never` to `joins`; the Status line's hold is discharged for that form and the wide form is not built. The strand it joins is one of several (A-45).
+
 ## Status: PROPOSED (edit 4, the strife kind list, is HELD for Jordan: it changes a ratified roster)
 
 Source: `audits/20_NARRATIVE_CHURN.md` F-NARR-05 (allegiance is fixed and no stand can cross it), §2

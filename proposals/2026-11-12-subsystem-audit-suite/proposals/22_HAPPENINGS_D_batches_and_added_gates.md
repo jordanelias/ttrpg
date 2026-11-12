@@ -1,5 +1,7 @@
 # HAPPENINGS-D — the landing batches, the gates added to proposals already on file, and one content repair
 
+Reconciled: 2026-11-12, U5d closure — folded **A-15**, **A-16**, **A-19** and **A-57 / A-58**. Batch 4 (seats pass) gains `U5d_FA_owed_edits.md` (custody, the head's strip) and no longer waits on the audit's §4 item 3; batch 5 (bodies and time) lands with natural death live once the ages are authored; batch 6 (crimes) lands `22_HAPPENINGS_C` behind its control, not dark on a decision; batch 8 gains `U5d_FA_land_and_seats_pass_on_a_won_march.md` (a won march passes land and its seats). No gate is removed.
+
 ## Status: PROPOSED
 
 Source: `audits/22_HAPPENINGS.md` §2, §3. Reference only (`CLAUDE.md` §0.05). This file redoes no

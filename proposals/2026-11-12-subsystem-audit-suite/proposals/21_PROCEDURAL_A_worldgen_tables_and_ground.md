@@ -1,5 +1,7 @@
 # 21 · PROCEDURAL A — the world-generation switch, tables and sheet; ground drawn inside canon's bands
 
+Reconciled: 2026-11-12, U5d closure — folded **A-50**, **A-53**, **A-54** and **A-55**. The variable layer (`variable=`, shipped `off`) is licensed to flip: some starting state is drawn, small and bounded (grudges, low granaries, illness), each table a declared mover at its flip. A world that fails its checks is replaced by the next seed by default; "play it anyway" sits behind a setting (A-53). The ground PG-1 draws is on the fixed map (A-55: no settlement node is added or removed) and feeds the harvest draw as pool ground (A-54). `prologue_seasons: 0` in the table sketch is PG-4's and is five years under A-51 (see `21_PROCEDURAL_C` as reconciled).
+
 ## Status: PROPOSED (2026-11-12; Fable design lane; ratifies nothing; reference under CLAUDE.md §0.05)
 
 Carries `audits/21_PROCEDURAL_GENERATION.md` §4.0–§4.3, §5, §6, resolutions R-21-02, -03, -13; plan
