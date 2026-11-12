@@ -43,7 +43,8 @@ UNDECIDED (this half; each reading taken is the one that changes less, `V12_STRU
 | B21.54 | what a writ orders: a Proposition, and the asker's ambitions | `14_VERBS_BINDING_D` commit D1 | BUILD | MOVER(behaviour) | B21.53 |
 | B21.55 | `issue` and `dispatch` form only on those the seat commands | `14_VERBS_BINDING_D` commit D2 | BUILD | MOVER(behaviour) | B21.54; the first half's `16_PESSIMIST_FA_C` items |
 | B21.56 | the draw on `issue`: a writ at every band, its `force` written | `14_VERBS_BINDING_D` commit D3 | BUILD | MOVER(behaviour) | B21.55; the first half's `06_FA_decree_binds` items; Batch B05 |
-| B21.57 | a `dispatch` that sends: the order deposited, the man's `comply` moves him | `IS-B3-FA-05` (closes D4; CP-T09-08; CP-T09-07 (b)'s gate clause) | BUILD | MOVER(behaviour) | B21.56 |
+| B21.79 | the seat's obligees present are its people: `seat_people_at`, and `sides_of` reads it (Patched: P-24) | CP-T09-07 (b)'s union, with AM-F-13 | BUILD | MOVER(behaviour) | B21.56 |
+| B21.57 | a `dispatch` that sends: the order deposited, the man's `comply` moves him | `IS-B3-FA-05` (closes D4; CP-T09-08; CP-T09-07 (b)'s gate clause) | BUILD | MOVER(behaviour) | B21.79 |
 | B21.58 | a war lives in the seats that wage it | `06_FA_war_lives_in_seats_B` edits 1–3 | BUILD | EQUAL | B21.57 (U3's order) |
 | B21.59 | men are levied through a seat | `06_FA_levy_through_the_seat_B` edits 1–6 | BUILD | EQUAL | B21.58 |
 | B21.60 | a seat is held by an individual | `16_PESSIMIST_FA_B` edit 1 | BUILD | EQUAL | B21.59 |
