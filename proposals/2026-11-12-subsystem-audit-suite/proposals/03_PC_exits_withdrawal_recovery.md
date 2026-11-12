@@ -1,5 +1,7 @@
 # PC — a priced withdrawal, the beaten fighter's exit, and recovery that takes more than one act
 
+Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-04, D-05 — Part B decided by the standing rule (a felling's death is a mortal-wound draw; terms follow context); Part C's `tend` becomes a graded draw.
+
 ## Status: PROPOSED
 
 Lane: PC (Part C touches `_eff_tend`, whose hole row H-304 is filed with SE). Source:
@@ -97,7 +99,40 @@ disposition the consequence (Griftlands' surrender and spare-or-kill; Jagged All
 capture; Wildermyth's mortal choice: `research/game_precedent_suite/dispositions/D_T03.md` rows 17, 27,
 33, 36). Research informs and does not settle (`research/00_INDEX.md` §1).
 
+### Part B, decided by the standing rule (Reconciled 2026-11-12, `audits/18_DETERMINISM_SWEEP.md` D-04)
+
+Jordan's ruling of 2026-11-12 (*"we do not do deterministic"*, `AUDIT_BRIEF.md`) is a later ruling
+that answers §11 item 1 (ladder step 1): a fight may not kill with certainty. Neither A nor B above
+is enough alone (B removes the death by default; A keeps it certain). Decided:
+
+- **A felling is not a death; the death is a draw.** When a fighter's band is `Felled` under any term
+  (`death` included), the seam rolls a **mortal-wound draw** once, through `core.resolve` (the combat
+  module's one roller, which already grades through `degree_from_net`): pool = the felled person's
+  Body capability (`resolution_pool(faculty)`), obstacle = `mortal_ob` (a fixture, proposed 2, NUMBER
+  row, swept 1/2/3) `+` the felling blow's excess damage in wound levels `+ 1` if the term is `death`
+  (the victor presses it), `− 1` if a tender is present in the scene. Bands: `Failure` dies
+  (`Person.exists` closes, today's write); `Partial` lives, `body_ceiling` lowered by one mark (the
+  existing `_marks` write) and `body` at 1; `Success` lives, `body` at 1; `Overwhelming` lives and the
+  victor's regard for him moves (a told `spared` deposit). Each band's write is a `writes_by_degree`
+  row on `fight` / `accept` / `capture` (the existing column); the draw's terms ride `Event.ending`.
+- **The term follows the context** (B's finer form, now built, not named): `rosters.yaml: duel_terms`
+  keyed on `violence_contexts` — `war` → `death`, `crime`/`defence` → `yield`; `fight` with no context
+  → `yield`. The mortal-wound draw then applies only to a fighter who is felled before yielding.
+- **Gate.** 200 seeded season fights at `death` terms: deaths strictly between 0 and 200 (the
+  `Failure` share at the felled fighter's pool, reported with the exact `band_odds` beside it); every
+  survivor's `Event.ending` names his band; control `mortal_ob = 99` (the draw cannot succeed) restores
+  200 of 200. Hash movers: every season in which a `fight`, `accept` or `capture` reaches `Felled`.
+
 ## Part C — recovery is a swept fraction (decided; ships at today's value)
+
+*(Reconciled 2026-11-12, D-05: under the standing rule a `tend` that heals with certainty is a
+deterministic outcome; it becomes a draw. Corrected rule below; the fraction stays as the
+`Success` band's size.)* `tend` rolls through the one task draw
+(`proposals/18_DETERMINISM_task_draw_for_uncontested_verbs.md`): pool = the tender's `healing`
+capability (or `pool_default`), obstacle = `tend_ob` (task difficulty, proposed 1) `+` the patient's
+wound marks below his ceiling. `Failure`: no change, `tend.failed` (a new band kind on the row);
+`Partial`: `ceil(tend_fraction/2 × headroom)`; `Success`: `ceil(tend_fraction × headroom)`;
+`Overwhelming`: to the ceiling.
 
 **Problem.** `loop/effects_combat.py:766-790`: one `tend` restores a body to its ceiling in one act.
 The function's own note calls that an assumption and names the revert: "a swept fixture fraction of

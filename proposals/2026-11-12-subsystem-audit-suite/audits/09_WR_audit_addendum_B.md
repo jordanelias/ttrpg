@@ -88,7 +88,7 @@ the corrections to the first audit, and carries the three findings that have no 
 | F-WR-21 | hygiene (measurement) | 248 of the 322 `condition.worn` Events a season are writes of zero | §2.3 |
 | F-WR-22 | hygiene | three hole rows rest on deaths that no longer occur at their seed | §2.3 |
 | F-WR-23 | hygiene, cross-listed | a believed wound is never cleared, so a mended body still draws `tend` each season | §2.3 |
-| F-WR-24 | degrades narrative (R-09) | the world's wear, the Calamity's strain, the hungry body, a matter's lapse, the realm's endings and a strand's conclusion are fixed functions of state, not draws | §2.6 |
+| F-WR-24 | degrades narrative (R-09) | the world's wear, the Calamity's strain, the hungry body, a matter's lapse, the realm's endings and a strand's conclusion are fixed functions of state, not draws | §2.5 |
 
 ### 2.2 Corrections to the first audit (`09_WR_audit.md`)
 
@@ -202,7 +202,40 @@ only that R-13 and CP-T10-04 not land without it.
 - **Did not transfer:** Anno 1800's fixed prices and royal taxes (Valoria has no price); The Sims' needs
   ticking per person (named persons do not eat, ED-IN-0255).
 
-### 2.5 Resolutions decided in this addendum
+### 2.5 Re-check against the standing rule "we do not do deterministic" (added at completion)
+
+The brief's Standing rule (Jordan, 2026-11-12, emphatic): every consequential outcome resolves by a draw
+with a graded, recoverable result; state sets the odds, the draw sets the outcome; seeded replay,
+bookkeeping and eligibility checks are permitted. Re-checked: this lane's five `_B` proposals, the first
+lane's five, and the code of WR's subject.
+
+**F-WR-24 · degrades narrative (R-09) · the world's motions and its endings are thresholds.** Site wear is
+exactly the kind's rate each season (`loop/matter.py:852-870`); the lattice strain is arithmetic; a hungry
+cohort's body falls by exactly `body_step` (H-125); a matter lapses at exactly `docket_lapse` (H-356); an
+ending is reached when a count crosses (`world_q.py:2675-2683`); a strand concludes on its move's kind
+(`flows_in`, `:5212-5213`). *Falsifier:* an outcome among these that differs between two seeds at the same
+state. None can, by construction (weather and illness, which do draw, are the exceptions and the
+precedent). *Consequence:* the closures F-WR-13 counts by clock are the predictable kind for this reason.
+*Fix:* `09_WR_B_draws_not_thresholds.md` (R-37 to R-39); SC's lapse, PC/CHAR's death by body, FA/MB's
+`seize` and B10-15's breach are listed there for their owners.
+
+| file | verdict under the rule | done |
+|---|---|---|
+| `09_WR_B_weather_with_memory_and_the_year.md` | weather drawn (complies); the leg's price is bookkeeping (complies); **the `site_band` ending was a threshold** | corrected in place: eligibility, then a keyed draw; exposure at a leg's end listed as a draw for B10-18 |
+| `09_WR_B_threadwork_session_and_practitioner.md` | **fatigue closed the window at a threshold; cost was independent of the draw; the breach was a band edge** | corrected in place (R-40): Focus cap as eligibility only, a strain draw for contact, cost by degree, breach drawn (listed for B10-15); the Warden's ends restated as drawn |
+| `09_WR_B_readings_of_closure_and_tension.md` | a reading, resolves nothing; complies | extended: `by_clock` split into `term` (bookkeeping) and `threshold` (what the rule forbids), so the instrument shows the repairs |
+| `09_WR_B_chronicle_that_tells.md` | a reading; complies | none |
+| `09_WR_B_pointer_text_for_the_orchestrator.md` | text; complies | none |
+| first lane's `09_WR_world_motion.md` | e1's crossing and e3's reaching rule are thresholds; e2 rests on `seize`, not checked for a roll; e4 (illness) already draws | superseded in part by `09_WR_B_draws_not_thresholds.md` e1, e3; e2 listed for FA/MB |
+| first lane's `09_WR_strand_conclusion.md` | "terminal" by kind is a threshold on a classification | superseded in part by draws `_B` e4: the kind is eligibility, the drawn degree concludes |
+| first lane's `09_WR_story_instruments_that_can_fail.md`, `09_WR_provided_arcs.md` | readings and adjudication; comply (the `weather` arm should take the mean-one values) | noted in draws `_B` |
+| this audit's §3 to §5 | §4.5's end conditions and §5.4's ending were stated as thresholds | corrected in place |
+
+What is **not** changed, and why: a declared term maturing (`oblige_term`) is a clock counted from an act's
+own declaration (bookkeeping); `ops_per_contact` and every `requires` cell are eligibility; the readings and
+the chronicle resolve nothing in the fiction.
+
+### 2.6 Resolutions decided in this addendum
 
 | id | inconsistency, gap or unclear passage | decided resolution | ladder step | carried by |
 |---|---|---|---|---|
@@ -211,7 +244,7 @@ only that R-13 and CP-T10-04 not land without it.
 | R-23 | CP-T10-01's "[GAP: unowned]" person-side price of a leg | a pure function of two settlement ids over loaded geography, handed to `decision/` beside `fx` | 4 (`budget(p, v, k, fx)`) | `09_WR_B_weather_with_memory_and_the_year.md` e3 |
 | R-24 | "banded scalar" capability kind | none; one `aptitude` row and one `at_least` use per edge | 5 | §7 (no file; CHAR's and CORE's proposals) |
 | R-25 | the design forbids a meter the owner reads; the first lane's scenario shows one; the own-state stem precedent would build one | `coherence` is world-only for its owner; not an `OWN_STATE_STEMS` member; `thread_read` does not form on the actor | 3, 4 (AX-7) | threadwork `_B` e3 |
-| R-26 | the Rupture is an ending by every design document and has no expression in `endings` | a `site_band` selector as eligibility, reached by a keyed draw (§2.6); the row ships absent | 3, 4 (#457 END-VICTORY); the standing rule | weather `_B` e4 |
+| R-26 | the Rupture is an ending by every design document and has no expression in `endings` | a `site_band` selector as eligibility, reached by a keyed draw (§2.5); the row ships absent | 3, 4 (#457 END-VICTORY); the standing rule | weather `_B` e4 |
 | R-27 | the scheduled weather is memoryless, placeless and biased upward | a spell (coarser keyed draw on parent rung and coarser tick); arm members with mean one | 5 | weather `_B` e1, e2 |
 | R-28 | what a chronicle line is "about" has two owners by line kind (the deleted `Event.subject` carried both, H-107) | an act line: `carriers.subject_of(act)`; an Event line: `attribution.anchor_of(w, e)`; no third reading | 4 | `09_WR_B_chronicle_that_tells.md` |
 | R-29 | strand and storybar readings count `closed` without saying by what | a close is *by act* when the closing Event's causes include an executed act, *by clock* when its driver is MATTER's term or lapse | 5 | `09_WR_B_readings_of_closure_and_tension.md` e1 |
@@ -223,7 +256,12 @@ only that R-13 and CP-T10-04 not land without it.
 | R-35 | Approach Training: a second gate the plan dropped | absent; if wanted, a `trait` row and one `at_least` use | 2 | §7 |
 | R-36 | the Rendering Crisis's four designed beats "resolved narratively" | the Event alone (CP-T07-08); the beats are the journal's to tell from the log, never a scripted sequence | 2, 5 | §4.5 |
 
-Sixteen resolutions; with §6's 49 rows dispositioned. None survives the ladder to §11's terms: the one
+| R-37 | wear and the Calamity's strain are exact per season (F-WR-24) | a keyed wear draw per Site, strain as obstacle; control is today's rate | standing rule; 4 (`season_factor_of`) | `09_WR_B_draws_not_thresholds.md` e1 |
+| R-38 | endings reached by a count crossing (victory, Rupture) | selector as eligibility, then a keyed draw per season; `near` on Partial | standing rule | draws `_B` e3; weather `_B` e4 |
+| R-39 | a strand concludes on its last move's kind | the first lane's rules as eligibility; concludes only on the move's drawn degree (Success, Overwhelming); an undrawn kind concludes nothing | standing rule | draws `_B` e4 |
+| R-40 | threadwork fatigue closing a contact, cost independent of the draw, the breach at a band edge | Focus cap as eligibility only; a strain draw for contact; cost modulated by degree (the oracle's own rule kept); breach drawn | standing rule; 4 (`operations.py:312-334`) | threadwork `_B` e1, e2 |
+
+Twenty resolutions (sixteen, then four under the standing rule); with §6's 49 rows dispositioned. None survives the ladder to §11's terms: the one
 design conflict (a visible band for the player's own person, §4.3) is answered at step 3 and named, not
 escalated.
 
@@ -637,7 +675,7 @@ The standing requirement, point by point. This replaces the first lane's edit 4.
 | **choices, inside a working** (the manual mode) | how many operations to make before leaving contact, each further one a step harder; whether to conceal first; when to stop | none | F-WR-17 (this proposal, edit 1) |
 | **stakes** | the Site's uses and the larder behind them; the practitioner's headroom (his resting point against the human band); exposure to the orthodox witness | Site bands; the oracle's two quantities; `deeds_judged`, `petition`, `arrest` | `Person.coherence` (CP-T07-02); the sign cells firing (CP-T07-09) |
 | **outcome legibility** | each working returns a degree and what it wrote; the practitioner's own state reaches him only through others (§4.3); the witness's claim is a Record a hearing can cite | degrees; WITNESS | the typed `observed` tuple on the outcome; a claim about a practitioner's state that a sensitive can `tell` (CP-T07-10's second finding) |
-| **end condition** | any of, each reached by a drawn outcome (§2.6): the Site restored by drawn workings and holding two seasons; the breach (CP-T07-08), drawn with odds from how far past his human band he has gone, a person ending; the Site's last use closed by drawn wear (ruin); his detention by a drawn `arrest` on the witness's petition | `endings_reached` has no person-scale row | a scenario's end is the overlay's to state; no new ending carrier is proposed |
+| **end condition** | any of, each reached by a drawn outcome (§2.5): the Site restored by drawn workings and holding two seasons; the breach (CP-T07-08), drawn with odds from how far past his human band he has gone, a person ending; the Site's last use closed by drawn wear (ruin); his detention by a drawn `arrest` on the witness's petition | `endings_reached` has no person-scale row | a scenario's end is the overlay's to state; no new ending carrier is proposed |
 | **instrument** | `aperture` on the fixture: a thread row offered and executed; the chronicle from the crossing backwards (§3.3) | `aperture` | — |
 
 **One code path.** The scenario is `SeasonDriver.season` over a small world with
@@ -793,7 +831,7 @@ does not remove the ending; it changes what the Query reads, from a number to th
 the `endings` grammar gains a third selector, `{site_band: <a band_floors band>, of: <site kind or all>}`,
 *eligible* when at least one selected Site under the realm reads at or below that band and **reached by
 a keyed draw** whose odds rise with how much of the fabric has fallen (corrected under the standing rule,
-§2.6: as first written, "reached when every selected Site reads at or below", it was a threshold); a row
+§2.5: as first written, "reached when every selected Site reads at or below", it was a threshold); a row
 using it carries `victory: false`. The roster's act-credit clause ("an act opened at least one edge the condition stands
 on") is stated for holds and is not applied to a Site selector: a ruin nobody caused is the case the
 ending exists to report (T-b forbids a crossing *producing* an outcome; a reported ending "emits no Event,

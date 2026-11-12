@@ -5,7 +5,7 @@
 Written under the brief's **Standing rule (Jordan, 2026-11-12, emphatic): "We do not do deterministic"**:
 every consequential outcome resolves by a draw with a graded, recoverable result; state sets the odds, the
 draw sets the outcome; seeded replay, arithmetic bookkeeping (a clock's tick, conservation, an id) and
-eligibility checks are not forbidden. Carries finding F-WR-24 of `audits/09_WR_audit_addendum_B.md` (§2.6).
+eligibility checks are not forbidden. Carries finding F-WR-24 of `audits/09_WR_audit_addendum_B.md` (§2.5).
 
 **Supersedes,** in the first lane's files (which this lane does not edit): `09_WR_world_motion.md` edit 1's
 *mechanism of the crossing* (the wound and its data row stand; the strain it sends is drawn, edit 1 below)
@@ -15,7 +15,7 @@ move concludes only on its drawn degree, edit 4 below). `09_WR_story_instruments
 `09_WR_provided_arcs.md` resolve no outcome (readings and adjudication only) and are compliant as written,
 except that the story-instrument `weather` arm should use the mean-one arm of
 `09_WR_B_weather_with_memory_and_the_year.md` edit 2. This lane's own `_B` proposals were corrected in
-place (§2.6 of the audit lists where).
+place (§2.5 of the audit lists where).
 
 ## What it changes in `engine/season/` at runtime
 
