@@ -1,5 +1,7 @@
 # STORY-E — the first playable for stories: *The Lean Year*, a valley, a granary, an old lord, two claimants, a bench and a forged sheet
 
+Folded: 2026-11-12 by `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md` (§9). Nothing here is deleted. The valley is also the first playable for an era that ends: the old lord's death is a change of RULE, the two claims are one strand whose subject is the seat, and the lean year is the condition `dearth` (`30_WR_A`). A seated player there is shown the marker, the vacancy as a mandatory question, the claims as one named story, news filed under its story and a recap at each season's turn (`30_GO_F_the_plot_as_the_player_is_shown_it.md`); its seat test (`--stories --seat`) is run on this fixture. Chains K-1 and K-2 of `30_WR_E` §1 are the two this scenario can complete.
+
 Reconciled: 2026-11-12, U5d closure — folded **A-54**, **A-56**, **A-50** and **A-51**. The lean year's harvest is a draw on the four-band ladder with the steward's skill in the pool; the valley's cohorts answer want by the heavy moves (petition, migrate, work, tend, comply or refuse, riot); starting stores may be drawn within the fixture's bounds. As a scenario on the valley fixture it declares its own year and may run a prologue shorter than the realm's five years only as a named fixture choice, stated in its header; the realm's rule is five.
 
 ## Status: PROPOSED

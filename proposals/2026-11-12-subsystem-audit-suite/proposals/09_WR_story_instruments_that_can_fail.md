@@ -1,5 +1,7 @@
 # WR · Story instruments that can fail
 
+Folded: 2026-11-12 by `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md` (F-30-08). Nothing here is deleted. This file's `edge_null` shows that a chain's links are not coincidence of count; it cannot show that the first act made the second likelier. `30_WR_E_cascade_chains_and_the_census.md` §2 adds the third control, the **fork lift**: one built world forked under several draw seeds before an event that is itself a draw, comparing what follows where it occurred and where it did not (`fork_lift`, on `storybar.fork` and `draw_seed_arm`). It also adds two arms to edit 1's roster (`entrenched`, and `custom_off` / `custom_on`) and the `--null-scenes` reading. Edit 3's shape line prints per strand its state and subject once `30_WR_C` commit 2 lands. Edit 5's `why` gains `era`, `story` and `left` (`30_GO_F`).
+
 ## Status: PROPOSED
 
 Carries findings F-WR-01 (edit 4), F-WR-03 (edits 1 to 3) and the reason-trail need of audit §5.5

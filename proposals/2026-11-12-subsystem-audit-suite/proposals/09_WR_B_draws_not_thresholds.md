@@ -1,5 +1,7 @@
 # WR · Draws, not thresholds: the world's motions, its endings and a strand's conclusion
 
+Folded: 2026-11-12 by `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md`. Nothing here is deleted. This file's shape (eligibility by state, then a keyed draw) is the form of every era ending in `30_WR_A_the_era_is_a_named_period.md`: an era ends on one logged Event that came from a draw, and the era reading is bookkeeping over those Events; no era-level draw is added and no count crossing ends an era. Edit 4 (a strand concludes on its closing move's drawn degree) is relied on by `30_WR_C` (a strand's states) and by the era's `troubled` condition, which closes when its strand concludes. A-47's mandatory scene is used for two era thresholds: a vacant head seat for those who may claim it, and a minor's majority for the regent and the heir.
+
 Reconciled: 2026-11-12, U5d closure — folded **A-54**, **A-47** and **A-57 / A-58**. A-54 confirms this file's one shape (eligibility by state, then a keyed draw on the shared ladder) for the world's motion; `16_PESSIMIST_GAME_the_world_draws.md`'s table form is withdrawn in its favour. A-47 agrees with edit 3 (an ending's selector is eligibility; the crossing decides nothing). The owed line for FA / MB ("`seize` on an occupation licence … must resolve by a draw against the place's resistance") stands as written: the taking is an act the victor forms after the field (A-66), and its draw is `seize`'s own row's (`14_VERBS_MATERIAL_D_paper.md` §6); the field's end state decides only who stands on the ground.
 
 ## Status: PROPOSED

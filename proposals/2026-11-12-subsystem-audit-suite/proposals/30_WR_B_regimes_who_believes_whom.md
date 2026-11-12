@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Extended: 2026-11-12, by `30_WR_G_regime_opinions_and_the_pull_of_ones_own.md` under Jordan's A-82 and A-83. A regime shares opinions "to some extent" on a set of questions and presses on how its people act. This file's **body** (persons of one creed set) is that file's **core**; that file adds the **fringe**, the graded `accord`, three opinion axes the roster lacks (caste, militarism, the kingdom's own order), and the pull of one's own circle on a person's choices. Where this file says "a regime answers one question", read: it answers whose word is taken, and `30_WR_G` adds what one is expected to do.
+
 Source: `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md` F-30-04, F-30-05. Reference only (`CLAUDE.md` §0.05). Lane WR; owner files IN's (`engine/season/queries/world_q.py`, `engine/season/harness/storybar.py`).
 
 Composes on, and restates none of: `20_NARRATIVE_A_stands_for.md` (the one reading of "held": stood for; its fixture `held_reading`), `20_NARRATIVE_D_his_own_side.md` (a faction's `creed:` row; the own-side occasion), `20_NARRATIVE_E` edit 3 with `16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` (the one emitter of `conviction.moved`), `20_NARRATIVE_F` (class G5), `08_FI_02_rumour-that-travels.md`, CR-79 (the credit term, landed), CR-104 (`influence_rung`).

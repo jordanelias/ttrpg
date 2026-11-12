@@ -1,5 +1,7 @@
 # WR · Readings of closure, open situations and idleness, and character ablation as a standing control
 
+Folded: 2026-11-12 by `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md` (A-80, A-81). Nothing here is deleted. (1) Beside edit 3's `idle` line, `storybar --null-scenes` (`30_WR_E_cascade_chains_and_the_census.md` instruction 1) counts acts that left no durable write: idleness is a person with no act; a null scene is an act with no trace. This lane's probe read 59 of 821 at seed 0, one season, all refused inquiry verbs. (2) Edit 1's `closes` (by act, by term, by threshold) is the reading clause C12 uses, and a strand's closure is printed with its state (`open`, `concluded`, `dormant`, `revived`; `30_WR_C` commit 2). (3) Edit 2's `situations` are what an entrenched world must keep producing: the entrenched arm (`30_WR_E` instruction 2) prints them beside the free arm. (4) Edit 4's `flat` control stays the control for character; the pressure-off arm `custom_off` (`30_WR_G`) is a different control and does not replace it.
+
 Reconciled: 2026-11-12, U5d closure — folded **A-45**. The readings count strands as several (the bounded link of `09_WR_strand_conclusion.md` edit 3 is the ruled form), so "closed by act / by clock" (edit 1) is reported per strand and the one-river reading is kept as the control column.
 
 ## Status: PROPOSED
