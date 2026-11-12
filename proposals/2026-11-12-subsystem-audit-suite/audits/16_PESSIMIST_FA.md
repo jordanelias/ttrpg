@@ -15,12 +15,47 @@ All runs `PYTHONHASHSEED=0`; scripts and outputs under
 `[UNVERIFIED]` marks what was not checked. Nothing here is the reason a behaviour is correct (`CLAUDE.md`
 §0.05).
 
-**§0 (verdict) is written last and placed first; if this file ends before §0 is filled, the lane was
-interrupted and the sections below are the partial record.**
-
 ## 0. Verdict
 
-*(placeholder: replaced when the runs of §1 to §3 are in; see the note above)*
+**FA's skeleton is honest and its polity is not there: the realm runs the same with every office empty,
+and the same with every faction dissolved, as it does shipped.** Cut all 34 seat-holds at build and play
+two seasons: the same 83 persons, the same bodies, the same stores on every rung; what persons do differs
+from the shipped realm by 263 on the executed-verb vector, where the shipped realm differs from itself
+under other dice by 240. Cut every faction membership instead: 224, inside the noise. What offices and
+factions add to computed play is their own paper (§1.1). The FA lane found that power neither binds nor
+changes hands; this lane looked at the rules that would govern it if it did, by forcing each act through
+the engine, and found the rules do not say what their words say:
+
+- **Filling.** Seven of 34 seats can never be refilled, the Duchess of Hafenmark's among them. The other
+  fillable seats are all fillable by the King and by the Queen consort, and the bodies concerned cannot
+  fill their own: the King names the insurgents' leader and the Confessor; the consort can seat herself as
+  Confessor; with the King and heir dead she can make herself King, or make a peasant cohort King; with
+  her dead too, nobody is ever King (§2 P2).
+- **Dismissal.** Six seats can be stripped, all through one seat, the King's second title, which is one of
+  the seven unfillable ones: after the first royal death no seat in the realm can dismiss anyone. The one
+  consequence of dismissal is a ban on every seat of every faction that `pardon` cannot lift through any
+  of the 33 seats (§2 P5).
+- **"Under the seat"** is where a person sleeps: 18 of 34 seat-holders live off their seat's ground, a duke
+  may address none of his own faction, and a territory officer's writ is known to all 83 persons within
+  the season while its addressee cannot hold it (§2 P1).
+- **Factions and war.** Joining a faction is a sentence the joiner speaks; the King can join the insurgents
+  and a duke's leaving moves his duchy's holdings into another faction's view. A peasant cohort can put two
+  duchies at war, a duchy can be at war with itself, and war licenses nothing (§2 P3, P4).
+- **The fixed point** (royalty by noble conquest; king, then Hafenmark, then Varfell; nobility by deed) is
+  represented by nothing: no war, no founder, no deed in the built world; the two ducal heads stand with
+  the realm exactly where a clerk stands (§2 P6).
+
+All five premise sentences of rule fail by execution, and the fixed point is absent. One thing was found
+at a seed nobody had pinned that the earlier lanes' zeros did not show: at seed 3 the King founds a
+lordship and gives it to his clerk, the first computed seat change in the suite; nothing follows from it
+and the record does not say why (§3). **The single largest obstacle, from this side: authority's rules were
+each built against a hand-built test of the case they admit, and never run against the cases they should
+refuse.** The steelman is owed and held where tried: standing through `Act.via` refused all five attacks
+(§2 P1.1), and the claim is a true N-line (§1.2).
+
+**On the standing rule:** none of FA's nine effects takes a draw (cited to the determinism sweep). This
+lane's three proposals add eligibility checks and data only, and price a cross-ladder appointment rather
+than forbid it; every outcome they touch stays with the sibling lanes' draws.
 
 ## 1. NERS — the cuts, executed and read
 

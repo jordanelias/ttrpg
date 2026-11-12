@@ -604,3 +604,60 @@ Scope: 73 files under `.audit/2026-07-22-mass-battle-stress-test/`, `.audit/2026
   - Known-open: ranseur covert plate-killer, 34/51 weapons decide zero plate fights, `PEN_DEFICIT_K` exported to a Godot contract whose port lacks a penetration knee, four-channel double-count of the armour-defeat deficit, medium-tier round trip (odachi 0.67 -> 0.26) :121-151.
 - **Conflicts / stale:** the claim-provenance checker (`tools/ci_claim_provenance_check.py`) is cited by CLAUDE.md §3 (QUARANTINE_MIRRORS) so it exists [UNVERIFIED current form]. `armour_participation.py` workbench location [UNVERIFIED].
 - **Open items:** Batch 6; the three-model reconciliation; F18 tune; F21-F24.
+
+### .audit/2026-07-24-combat-four-dimension-audit/combat_four_dimension_audit_infill.md
+- **What it is:** Prose companion (evidence, reasoning, per-batch record) to the four-dimension PC audit index, ED-PC-0034..0040, 2026-07-24.
+- **Status:** none (co-filed infill); reading: historical record, lasting value as method evidence.
+- **Bears on:** PC, PROCESS
+- **Content that matters:**
+  - F16/F17 reframe: the off-plate reach over-buff is NOT a tuning problem; `aggressor = max(actors, key=ready)` makes a +1.5% tempo edge a 2:1 action economy (mass 1.18 -> 1.20 kg steps win-rate 57.2% <-> 41.6%); `closed = gap <= 0.3` latch is a +9pp cliff across 2 cm (katana 28.7% vs tachi 62.5%, goedendag 80% vs mace 17.8%); 26 weapons with reach >= 6.5 sit at 92-97% (mean 94.3, sigma 1.2) :39-64.
+  - F19-F21: damage path and `adef_cap` path disagree (partisan/ranseur/guandao as decisive at plate as a poleaxe; spear/yari/guisarme stalemate); flat `ADEF_CUT = -0.90` cutter cliff makes a gambeson turn a falchion into an 8% weapon :66-84. `ADEF_CUT=-0.9` is still in `modules/combat/config.py:81` (verified) -> F21 appears unresolved.
+  - Batch 1 fixes: F1 `represent_measure_p` read stale `sel_head`/grip (fix: `select_mode(..., grip=0.0, room=1.0)` explicit pin, JD-9 idiom), F2 `overcommit_exposure` negative exposure suppressed riposte below base, F3 `grab_sigma` sign flip for skill > 1, F4 texture instrument under-powered (n 60 -> 200, floor 5%) :86-132.
+  - Batch 5.2 review: participation guard watched 1 weapon of 14; partition by best-grip `adef_cap` including half-sword form: 13 clear (0.59-0.99 decided), 1 marginal, 40 well under :138-167; medium-tier round trip table (odachi 0.67 -> 0.44 -> 0.26); ED-PC-0038's "spear/yari/estoc -> 0" ledger claim false (estoc settles 99% at plate) :183-218.
+  - F24: `select_mode` picks heads that cannot wound (falchion/glaive/sabre/podao `point` at plate mean 0.00; podao `curved_cut` works every time yet loses selection; every 2H sword flips to `blunt` at medium) :230-251.
+  - Two auditor claims downgraded: "Combat Pool three incompatible ways" (live sources agree; CLAUDE.md §5 overstated) and `GAP_EXPOSURE` fiat (it is `[SIM-CALIBRATE]`) :253-267; standing risk: heavy-tier classification sits at intersection of `thrust_authority`, `PEN_THR`, `percussion_stagger` stamina path; ~29 of 51 weapons decide <15% at heavy, game needs a presentation for "neither could hurt the other" :269-281.
+- **Conflicts / stale:** the infill still cites CLAUDE.md §5 about "Combat Pool defined three ways" which current CLAUDE.md no longer states; `values_master.yaml` dissolved.
+- **Open items:** F21, F22, F23, F24, F18 tune; stalemate presentation.
+
+### .audit/2026-07-26-combat-balance-customization-state/combat_balance_state.md
+- **What it is:** PC balance-state and player-customization surface report at `248f344` (post ED-PC-0040), 2026-07-26; measured, no engine change.
+- **Status:** "REPORT - measured state, no engine change."; reading: historical snapshot; numbers re-runnable via `systems/combat/combat_engine_v1/workbench/{balance,armour_participation,build_levers}.py` (all verified present).
+- **Bears on:** PC, CHAR, DICE, GO
+- **Content that matters:**
+  - Six balance facts: reach dominates (26 of 53 weapons at 91-97 vs arming); 1H cutting swords are the floor (sabre 22.5, shamshir 29.9, falchion 38.2 vs arming 49.7); plate is a wall (38 of 53 weapons settle zero plate fights; 13 clear 0.72 threshold); attribute value concentrated (cog +20.4pp, history +19.4pp per point, focus -0.7pp); traditions flat because inert (spread 3.8pp, `none` highest 52.2); armour a free win off-plate (heavy vs none 95.7%) :24-31.
+  - Customization surface C1-C9: weapon (51 startable), armour, 9 attributes, skills (6 axes consumed, uncapped; dodge +1 -> 66.0, all six +1 -> 80.5), disposition (monotone 39.1 -> 59.8 despite config.py "BOTH poles cost"), tradition (access gate only), techniques (8 abilities across 5 of 8 traditions; chinese/filipino/none no kit), cross-training, and C9 in-fight tactical choice DOES NOT EXIST (`wrapper.engagement()` has no player-decision parameter; ED-PC-0001 open) :108-124.
+  - Armour has no wearer-side cost: `c.armor` is read only as the target's protection; `WoundTracker` `equipment_health` never passed :176-178, :303-312.
+  - Composite archetypes (poleaxe armour-breaker 95.2, spear reach specialist 95.0, longsword binder 94.5, rapier duellist 93.0) collapse within 2.2pp; dagger grappler 24.3 :180-191, :457-474.
+  - Method: mirror control n=2000 at 9 cells straddles 50; an n=200 pilot read a mirror cell at 58.1 (seed noise) :266-285; noise floor +-4pp at n=600.
+  - Stale docs named: `combat_balancing_methodology.md` §7 baseline (2026-06-28), `ability_armature.md` §2c/§7 (`seize` dead; roster is 8), `CURRENT.md` PC row is a 4,000-char changelog :476-496.
+  - Reach 0.75 target "not reachable by lever": spear beats arming 0.92 even forced fully closed; four levers joint-swept all broke `guisarme@heavy`; recommendation accept ~0.94 or schedule a closed-phase-model session :324-330.
+- **Conflicts / stale:** C9 (no player decision in a fight) is in direct tension with the NPC/AI-chooser and "player makes in-fight choices" intents in the audit brief; `ED-PC-0001` status unverified.
+- **Open items:** D1-D8 design calls (armour cost, disposition shape, tradition substance, focus value, stalemate presentation, in-fight tactical input).
+
+### .audit/2026-07-26-combat-balance-customization-state/combat_completion_plan_v4.md
+- **What it is:** PC completion plan v4.1 (research-led, iteratively tuned) with an adversarial-pass revision record; written under Jordan's 2026-07-30 rulings (may use historical data/HEMA; "I do not need to make decisions on concepts that are factually available upon investigation").
+- **Status:** "RATIFIED plan-of-record (PR #273 merged 2026-07-30, `3005096`; ED-1094 ratify-on-merge)"; ratifies method, re-classification, ordering; NOT ratified: ⚖1b katana `CUT_REF_NATIVE` anchor, ⚖6 off-hand scope, every acceptance criterion, ED-PC-0049..0055 `needs_jordan`. Reading: live PC plan-of-record (dated after the other 07-26 files, which it supersedes in sequencing).
+- **Bears on:** PC, CHAR, DICE, PROCESS
+- **Content that matters:**
+  - Re-classification of ⚖ items: ⚖2 armour cost, ⚖3 disposition, ⚖4 plate participation, ⚖7 thrust lean are RESEARCHABLE; ⚖1b and ⚖6 plus J1 (lethality pacing 2-3 vs 8-12 exchanges), J2 (is the grid tactical layer this quarter's target), J3 (which traditions get curricula) remain Jordan's :41-60. Hazard noted: relabelling relocates the decision into an acceptance criterion the author writes :35-39.
+  - Plate figure measured 36/53 at `8a054d0` (34 at session start, corpus said 38); it rose because weapons lost marginal capability :61-74.
+  - Retraction: `CLOSE_ENGAGE_M` cannot derive from `L0` (4.0 reach-points = 1.89 m, not a body measure; `Combatant` has no anthropometry at all); `config.py:176` "L0 = the fighter's own arm" is quantitatively false :76-93.
+  - Rules: one physical fact one owner (new finding: `weapon_tempo` charges `I_g` twice, `wield_heft` at `combat_systems.py:101` and the `TEMPO_RECOVER_K*tanh(...)` term at :110 -> W8c); every scaling term ships a named mutation-verified safety property (antisymmetry, scale-invariance, saturation, or measured range); sweep once and report, Jordan rules the value :97-199.
+  - Work packages W0-W8 and order W0 -> W7a -> W1 -> W8d -> W4/N4 -> W2 -> W6 -> W5 -> [W3 when scoped] -> W7b -> W8a/b/c; W1 armour costs the wearer is the lead behavioural package; W3 companion arm blocked; W7b typed weapon record :203-337.
+  - W8d executed 2026-07-30: shifting draw count by one flips 40.2% of seeded outcomes (161/400); 57 draws at `armour='none'` vs 168 at `'heavy'` for one seed; `random.Random.gauss` parity latch; 34 `rng.*` calls pinned statically by AST; `tests/valoria/_draw_stream.py` + `test_combat_draw_stream.py`; implication: earlier aggregate-inert results (ED-PC-0052/0054) measured on an unaudited instrument are "unvalidated, not wrong" :296-321.
+  - Cross-lane routing: MB byte-exact digest is environment-unstable (CI fails `cell_mode`, local fails `unit_mode`), IN lane archive cap and midnight-rollover currency-stamp regression :341-351.
+- **Conflicts / stale:** `tests/valoria/test_combat_draw_stream.py` and `_draw_stream.py` existence [UNVERIFIED]; whether W0-W8 packages were executed since is unknown (this file is the last dated 2026-07-30 in the corpus slice read). "MB byte-exact gate does not mean what it says" is a cross-lane claim (the grid oracle may be gone, `test_mass_battle_byte_exact.py` is no longer in `tests/valoria`, verified by listing).
+- **Open items:** ⚖1b katana anchor, ⚖6 off-hand scope, J1-J3, W0 anthropometry decision, W8c tempo double-charge.
+
+### .audit/2026-07-26-combat-balance-customization-state/combat_remediation_plan.md
+- **What it is:** PC comprehensive remediation plan v2 (2026-07-26): 18 merged items M1-M18, defects vs design calls ⚖1-⚖8, batches R0-R9.
+- **Status:** "PLAN - PROPOSED. Nothing executed. Items marked ⚖ are HELD FOR JORDAN."; reading: superseded in SEQUENCING by `combat_completion_plan_v4.md` (v4 says so) but content stands.
+- **Bears on:** PC, DICE, GO
+- **Content that matters:**
+  - Traceability table M1-M18 (staff percussion derives exactly 0 for a centre-gripped haft; 19 `cut_thrust` weapons paid swing moment on thrust arm; poleaxe spike adef broken by PC-5; sign-blind multiplicative ability ratios make investment backfire when behind; native cut ungraded: 16 weapons couple identically; mode-selection pathologies; saturation flat-tops; unreachable authored content such as hook_sword; no off-hand/shield; weapon-data integrity; 279 vocabulary literals over 18 tokens; 127 inline numeric literals; untyped weapon dicts; `combat_systems.py` god-module 76 fn / 944 LOC) :32-53.
+  - M5 flagged "the single most urgent": ratio-multiplying a signed difference makes the investment system PUNISH investment, invisible only because `equipped=[]` by default :122-133.
+  - R0 AST vocabulary guard + dead-exported-key CI check (3rd recurrence of `CHOKE_GRIP_MIN`); `core.COVERAGE_GAP['partial']` is plumbed with no live caller -> cheap entry for shields :111-170.
+  - Out of scope: B8 off-plate reach 0.94 (not reachable by lever), B7 plate participation, `wrapper.py` ordering/RNG/latch — "largest known blind spot" :55-63, :245-247.
+  - All 226 params exported to Godot (201 `cfg` + 25 `core`) so every batch trips the round-trip gate which checks JSON-matches-config not that the port implements the constant :198-202.
+- **Conflicts / stale:** `modules/combat/config.py` is the live CFG home now (systems/combat/combat_engine_v1 still has workbench); batch status of R0-R3 unknown [UNVERIFIED].
+- **Open items:** ⚖1-⚖8 (superseded partly by v4 reclassification); `wrapper.py` audit (done as W8d only for RNG).

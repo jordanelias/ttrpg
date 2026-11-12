@@ -395,3 +395,165 @@ HEADS-ONLY lane (350 files, proposals dated before 2026-09-20). Method per file:
 ### proposals/2026-08-29-fable5-throughline-critique/05_independent_verification.md
 - one line: method rule (verify by reading, not pattern match) :10; "P0-7 is real, and it is four dead clocks" :42; "`Key.causes` — P0-11 states it backwards" :68. Four-dead-clocks claim worth re-checking against `engine/season/` clocks. Tags WR, CORE.
 
+### proposals/2026-08-29-greenfield-systems-suite-v2/00_INDEX.md
+- **What it is:** index, hierarchy and compliance contract of the v2 greenfield systems suite (18 files incl. parts), 2026-08-29, lane IN.
+- **Status:** "PROPOSED (2026-08-29) — held back from ratification-on-merge". Supersedes v1. Reading: superseded in turn by `2026-08-29-valoria-from-scratch/` and the 08-31 architecture suites; **cited by workplan v11 `_part4` and `_part6`** (check what those cite).
+- **Bears on:** CORE, CHAR, FA, SE, WR, MB, PC, SC, FI.
+- **Content that matters:**
+  - Elegance criterion (what E in NERS demands) :71; playing-surface budget as the constraint that decides v2's shape :97.
+  - The hierarchy :185; four primitives, a form bucket, seven changes :235; rulings the suite executes :281; design principles :347; uniform module contract :374; preconditions :482; registry landings :494; document map :560.
+  - Reads `engine/substrate/{descriptors,composition,keys}.py` - `keys` is retired.
+- **Conflicts / stale:** Key-based throughout (retired ED-IN-0232). Docs 08, 10 are versioned v3 internally.
+- **Open items:** none recorded in head.
+
+### proposals/2026-08-29-greenfield-systems-suite-v2/01_substrate_primitives.md
+- one line: four primitives, a form bucket, four write leaves, one herald shape; has an `## Overrides` block :21; `derive_ob` with a commensurability gate (part 2 summary). Key-era. Tags CORE, DICE.
+### proposals/2026-08-29-greenfield-systems-suite-v2/01_substrate_primitives_part2.md
+- one line: edges and the Knot :17 (prohibition and three rulings :19), disclosure, the herald, contracts and the audit (§§7-13). Key-era. Tags CORE, FI, CHAR.
+### proposals/2026-08-29-greenfield-systems-suite-v2/02_character_generation.md
+- one line: life paths, caste and heritage, beliefs and flaws; reads `systems/characters/character_generation*` and `conviction_taxonomy_v30.md`. Tags CHAR.
+### proposals/2026-08-29-greenfield-systems-suite-v2/02_character_generation_part2.md
+- one line: determinism and totality, "the two properties" :14, the surface, contracts and audit. Note: "determinism" here is a generation property; AUDIT_BRIEF's WE DO NOT DO DETERMINISTIC rule should be checked against it. Tags CHAR.
+### proposals/2026-08-29-greenfield-systems-suite-v2/03_world_population.md
+- one line: who exists, how many, at what stage; reads `settlement_layer_v30.md` and a world-churn audit. Tags CHAR, WR, SE.
+### proposals/2026-08-29-greenfield-systems-suite-v2/04_personnel_management.md
+- one line: assignment surface (vacancy, candidates, appointment) predecessor of v1 04. Tags CHAR, FA.
+### proposals/2026-08-29-greenfield-systems-suite-v2/05_faction_actions.md
+- one line: every tier, ethos in the choosing, influence without conquest; per-tier gate, per-post budget, `appeal`, `act.contest_influence`. Tags FA.
+### proposals/2026-08-29-greenfield-systems-suite-v2/05_faction_actions_part2.md
+- one line: the eight action rows, resolution, contracts and the audit; J-N and J-O junctions. Tags FA.
+### proposals/2026-08-29-greenfield-systems-suite-v2/06_faction_management.md
+- one line: ethos, divergence, blocs, and being at a tier. Tags FA.
+### proposals/2026-08-29-greenfield-systems-suite-v2/06_faction_management_part2.md
+- one line: six political compositions, promotion/demotion/rivalry/contested posts :20, "Posture - the one player verb on this page" :49, collapse. Tags FA.
+### proposals/2026-08-29-greenfield-systems-suite-v2/07_places_and_settlements.md
+- one line: Place identity/form split, growth/decay, presences, strata, terrain; reads mass battle and settlement layer docs. Tags SE, MB.
+### proposals/2026-08-29-greenfield-systems-suite-v2/08_settlement_management.md
+- one line: "the governor's one decision"; v3 notes: O-5 deletes `sm.act`/`sm.gate`, O-6 deletes the per-place draw, `credence` write-back. Tags SE.
+### proposals/2026-08-29-greenfield-systems-suite-v2/09_ambitions_and_arcs.md
+- one line: a project is a composition, an arc is a chain you can walk; arc grammar, derived progress, hook grammar, obstruction, tag chains. Reads `political_dynamics_keys_mig*`. Tags WR, CHAR, FA.
+### proposals/2026-08-29-greenfield-systems-suite-v2/09_ambitions_and_arcs_part2.md
+- one line: latency, player surface, J-N: "the substrate supplies NO cross-se[ale ...]" :18. Tags WR, CORE.
+### proposals/2026-08-29-greenfield-systems-suite-v2/10_the_slate_and_salience.md
+- one line: the Slate - candidates, truncation, headless resolution (v3: funnel re-derived after O-6 deleted the draw; `informational`; `imminence` producer). Tags WR, SC, SE, FA, CORE.
+### proposals/2026-08-29-greenfield-systems-suite-v2/10_the_slate_and_salience_part2.md
+- one line: inertia, contracts, property audit; memory fallback CUT, inertia bootstrap fix, stale `pressure` loop, dominance hand-off. Tags WR, CORE.
+### proposals/2026-08-29-greenfield-systems-suite-v2/11_world_events.md
+- one line: conditioned exogenous pressure, bounded, reachable both ways. Tags WR.
+### proposals/2026-08-29-greenfield-systems-suite-v2/12_adjacent_systems.md
+- one line: adjacent systems (combat bridge `engine/cross_scale/combat_bridge.py`, import-boundary test `test_engine_does_not_import_systems`). Tags CORE, PC, MB.
+### proposals/2026-08-29-greenfield-systems-suite-v2/13_handoff_build_order.md
+- one line: finding that reframes the handoff: the causal model is "declared and unemitted" - 46 nodes, 139 edges, 43 of 94 module edges `notional`, 7 of 94 carried by a live-emitter Key type, `wiring_map_check` live 2 of 27 modules, `trace_execution_phases --seed 42 --seasons 40` showing no npc/character/fieldwork/threadwork/combat calls :20-35. Principle "a phase is done when something executes" (§0.2). Dated and Key-era; counts superseded. Tags CORE, PROCESS.
+
+### proposals/2026-08-29-valoria-from-scratch/00_INDEX.md
+- **What it is:** master plan index of a from-scratch Valoria design (17 docs), 2026-08-29, lane IN; "all existing work was reference, never ruling".
+- **Status:** "PROPOSED (2026-08-29). HELD BACK FROM RATIFICATION-ON-MERGE, IN FULL." Reading: superseded by the 08-31 architecture suites and by `engine/season/`; not cited by CURRENT.md or workplan.
+- **Bears on:** CORE, CHAR, FA, SC, MB, SE, WR, FI, DICE, GO.
+- **Content that matters:**
+  - Built on the nine throughlines and Jordan's containment axiom; explicitly not a repair of the greenfield suite :10-16.
+  - States it does not run and no gain is measured :20.
+  - Reading order table with ownership: 01 substrate (binding spine, two structures, one actor, three signatures), 02 person, 03 knowledge/telling/investigation ... :25.
+- **Conflicts / stale:** three signatures `choose(person, view)->act`, `resolve(act, world)->event`, `witness(person, event)` are a candidate shape to compare with `engine/season/` verbs.
+- **Open items:** none.
+
+### proposals/2026-08-29-valoria-from-scratch/01_substrate.md
+- one line: single idea: one kind of actor (person) and two relations - containment (strict single-parent tree: where you stand and whose jurisdiction your voice falls into) and alignment (unconstrained set-system: who you threw in with); houses, guilds, Church, councils are views :7-11. Tags CORE, CHAR, FA.
+### proposals/2026-08-29-valoria-from-scratch/02_the_person.md
+- one line: lane PC; the person's six fields turned into marks (:19), capability, stance, ties and Knots, computed needs, cohorts; defers to doc 10 resolver, 07 argument, 04 Thread. Tags CHAR.
+### proposals/2026-08-29-valoria-from-scratch/03_knowledge_telling_investigation.md
+- one line: lane FI; claims, witnessing, lying, view assembly, corroboration, field investigation; predicate vocabulary CLOSED :48; "standing on a null": no surveyed game ships an NPC acting on knowingly false political information (N-9) nor an expression channel for interior state (N-2). Throughlines T3, T4, T9. Tags FI, CHAR.
+### proposals/2026-08-29-valoria-from-scratch/04_hearth_and_community.md
+- one line: the two rungs the substrate names but does not build, Hearth :23 and Community; larder §1.2, community roster and `contest` §7-8. Tags SE, CHAR.
+### proposals/2026-08-29-valoria-from-scratch/05_up_stroke.md
+- one line: petition, aggregation and revolt - everything between one person's unmet need and a duchy changing its terms (T5). Tags FA, SE, WR.
+### proposals/2026-08-29-valoria-from-scratch/06_down_stroke.md
+- one line: Dispensation object :21, publication as telling with distortion :52, openings (T6); guards against a prior failed opportunity mechanism; owns `PriceTerm`, `LevyTerm`, `BlockadeTerm`. Tags FA, SE.
+### proposals/2026-08-29-valoria-from-scratch/07_alignment.md
+- one line: a faction is a proposition plus a map from persons to degree of commitment; no tier, size class, scale field or verb; growth and collapse are one `commit(person, faction, delta)`. Answers whether offices+alignment suffice for the Church's four Dicasteries and guild grade ladders. Tags FA.
+### proposals/2026-08-29-valoria-from-scratch/08_argument.md
+- one line: argument, debate, negotiation; "where I am inventing" :9; what an argument is made of :32; treaty breach owned by doc 06. Tags SC.
+### proposals/2026-08-29-valoria-from-scratch/09_churning_world.md
+- one line: owns T8, the world tick :29, three fidelities, anti-leverage, the personal-strategic battle seam, latency, compute budget. Tags WR, CORE, MB.
+### proposals/2026-08-29-valoria-from-scratch/10_resolution_surface.md
+- one line: resolver from scratch: N d10, 1-6 nothing, 7-9 one success, 10 two successes; mean Pool/2; why a pool not DC+mod :13-23; why a resolver is needed (what a GM does unwritten) :9. Compare with `engine/dice_engine/dice_engine.py` (`degree_from_net`). Tags DICE.
+### proposals/2026-08-29-valoria-from-scratch/11_code_shape.md
+- one line: idealized code shape adjudicated without reading any code; Status "adjudication". Ancestor of the 08-31 code-shape docs. Tags CORE, GO.
+### proposals/2026-08-29-valoria-from-scratch/12_coercion_and_force.md
+- one line: no coercive apparatus, only armed persons and `will()` evaluated over sets; the Hold is a sum over persons :28; garrison, revolt, siege, war one function. Lane MB with FA/PC seams. Tags MB, FA, PC.
+### proposals/2026-08-29-valoria-from-scratch/13_material_life.md
+- one line: production, prices, stakes people fight over; composes on larder and `PriceTerm`/`LevyTerm`/`BlockadeTerm`. Tags SE.
+### proposals/2026-08-29-valoria-from-scratch/14_office_and_upper_rungs.md
+- one line: office as an object, the remit is what an office is :25-38; rungs above settlement; lane GO/IN. Tags FA, GO.
+### proposals/2026-08-29-valoria-from-scratch/15_adjudications.md
+- one line: challenge register; "A. Challenges that AMENDED the spine" :16 (three of the first seven went against the spine). Tags PROCESS, CORE.
+### proposals/2026-08-29-valoria-from-scratch/16_ners_audit.md
+- one line: Status FILED; four read-only critics, steelman-first, synthesis retracts two of the orchestrator's own rulings. Tags PROCESS.
+
+### proposals/2026-08-30-fixes/01_the_floor.md
+- **What it is:** fix to the from-scratch suite for gap-report D-1 ("the most important defect"), 2026-08-30; directory `2026-08-30-fixes` has 5 files.
+- **Status:** "PROPOSED (2026-08-30) — a fix to a design, not a new system." Historical (suite itself superseded).
+- **Bears on:** CHAR, CORE, FA.
+- **Content that matters:** defect is "not a missing feature"; the rank-3 gate is a second-class gate :17-22; composes on substrate §2-3, person §2.1-2.3, adjudications A-6/A-6b.
+- **Conflicts / stale:** targets documents that never ran.
+- **Open items:** none.
+### proposals/2026-08-30-fixes/02_the_act_economy.md
+- one line: reconciles two statements of the act budget (gap D-2, reached independently by three season lanes); three readings with their real arguments :29; coverage exercise already ran the experiment :60. Tags CORE, CHAR.
+### proposals/2026-08-30-fixes/03_the_missing_needs.md
+- one line: two missing need formulas (D-3, collision S15, with S5 and S20); composes on person §6 and hearth larder. Tags CHAR, SE.
+### proposals/2026-08-30-fixes/04_relational_at_settlement.md
+- one line: Relational EMPTY at two consecutive rungs (D-4) and a councillor has nowhere to stand (D-5); resolves collision S6, parameterises S18. Tags SE, SC, FA.
+### proposals/2026-08-30-fixes/05_the_blocked_cores.md
+- one line: Status DISPOSITION - a ruling on nineteen findings; "19 of 55 characters have a BLOCKED CORE; eleven are RICH". Tags CHAR, ARCS.
+
+### proposals/2026-08-30-play-space-coverage/00_PLAN.md
+- **What it is:** plan of an instrument that runs ~56 seasons as probes over the from-scratch suite using canon characters; 10 files in directory (plan, roster, machine, six season lanes, matrix, gap report).
+- **Status:** "PLAN (2026-08-30) — orchestration, not design." Historical; exercise method has precedent value.
+- **Bears on:** CHAR, ARCS, FA, SE, WR, PROCESS.
+- **Content that matters:** method seasons-as-probes :16; play-space axes :41; roster assigned by coverage :77.
+- **Conflicts / stale:** probes target a suite that did not run; no execution evidence.
+- **Open items:** none.
+### proposals/2026-08-30-play-space-coverage/01_ROSTER_AND_FINDINGS.md
+- one line: canon roster from `references/npc_registry.yaml` (90 ids); FINDING 1 the merged suite borrowed canon names and gave them incompatible lives :10; FINDING 2 the King of Valoria has no stated ... :32. Useful for ARCS lanes. Jordan rulings 2026-08-30: Niflhel is not a faction (loose collective of economic factions) per 06/07 headers. Tags ARCS, CHAR.
+### proposals/2026-08-30-play-space-coverage/01_the_machine.md
+- one line: Lane 6 skeleton: tick, rungs, degrees, remit; "the negative half is the design" :46; strata inside P5 :68; Table A :96. Tags CORE.
+### proposals/2026-08-30-play-space-coverage/02_seasons_crown.md
+- one line: Lane 1, THE CROWN HOUSEHOLD, highest status/top of ladder; King Almud Almqvist season :39. Tags ARCS, FA.
+### proposals/2026-08-30-play-space-coverage/03_seasons_church.md
+- one line: Lane 2, Church of Solmund seasons. Tags ARCS, FA.
+### proposals/2026-08-30-play-space-coverage/04_seasons_duchies.md
+- one line: Lane 3, the Duchies; "is a Duke's season genuinely ..." lane question :7. Tags ARCS, FA, SE.
+### proposals/2026-08-30-play-space-coverage/05_seasons_sword_and_shadow.md
+- one line: Lane 4, Grandmaster Lisbeth Ehrenwal full season :39 plus probes. Tags ARCS, MB, PC.
+### proposals/2026-08-30-play-space-coverage/06_seasons_without_office.md
+- one line: Lane 5 power without office, one full season (Vossen) and nine probes; binding rulings (Jordan 2026-08-30) on Niflhel. Tags ARCS, WR, FA.
+### proposals/2026-08-30-play-space-coverage/07_seasons_edges_and_ground.md
+- one line: Lane 6 edges and ground; Jordan 2026-08-30 "Niflhel is not a faction" :6; opening state six fields :40. Tags ARCS, SE, WR.
+### proposals/2026-08-30-play-space-coverage/08_coverage_matrix.md
+- one line: 56 probes, 64 cells, Tables A/B; aggregation only. Tags PROCESS.
+### proposals/2026-08-30-play-space-coverage/09_GAP_REPORT.md
+- one line: Status ADJUDICATION (Fable 5); headline: RICH 33 (60%), THIN 16, BLOCKED 4 (Jarnstal, Palaiologina, Mertha, Falkenrath), SPLIT 1 (Torsvald), SPECTATOR 1 (Torben); "the design gives people plenty to do and cannot give them what they want"; 19 of 55 characters have a blocked core :10-22; what correlates with bad play :39. A coverage-by-canon-character instrument worth reusing for ARCS lanes. Tags ARCS, CHAR.
+
+### proposals/2026-08-31-authoritative-architecture/00_INDEX.md
+- **What it is:** index of an eight-document "authoritative architecture" suite, 2026-08-31.
+- **Status:** "PROPOSED (2026-08-31). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE." Reading: superseded by `2026-08-31-ideal*`, `unified-code-shape`, `2026-09-01-holonic-architecture` and finally `architecture/` (Layer 1, ratified ED-IN-0204); not cited by CURRENT.md.
+- **Bears on:** CORE, GO, PROCESS.
+- **Content that matters:** self-declares reference not mechanism, "almost none of this runs" :3-5; why the suite exists :16; the eight documents :34; the architecture on one page :51.
+- **Conflicts / stale:** Key-substrate as Event mechanism (R-1) retired.
+- **Open items:** none.
+### proposals/2026-08-31-authoritative-architecture/01_THE_ARCHITECTURE.md
+- one line: primitive set: four carriers Person(id, weight, marks, capability, stance, ledger, ties), Rung, Office, Site; "a cohort IS a Person at weight > 1"; `Rung` chosen over Node/Container :33-48. Tags CORE, CHAR, SE, FA.
+### proposals/2026-08-31-authoritative-architecture/02_THE_LOOP.md
+- one line: "the season, nested in the tick that already runs"; three-phase tick runs and is pinned by tests, the six steps do not; CALENDAR barrier 1 :54, MATTER barrier 2 :63. Tags CORE.
+### proposals/2026-08-31-authoritative-architecture/03_CODE_SHAPE_GODOT_4_6.md
+- one line: targeting Godot 4.6, "the version, handled honestly" :9 with evidence for both sides :15. **CLAUDE.md now says the engine version is ruled by ED-GO-0002; this doc asserts none-binding.** Tags GO.
+### proposals/2026-08-31-authoritative-architecture/04_THE_REGISTER.md
+- one line: §1 describes the key substrate as it existed (code that executed then - now retired); key namespace :61, naming rule made mechanical :68, ED-IN-0200 discharged :86. Dead. Tags CORE.
+### proposals/2026-08-31-authoritative-architecture/05_COVERAGE_AND_SUPERSESSION.md
+- one line: measured coverage :8; supersession map of the design line #337 to #344 :44-63. Tags PROCESS.
+### proposals/2026-08-31-authoritative-architecture/06_ADJUDICATIONS.md
+- one line: twelve session rulings R-1..R-12 (not Jordan's): R-1 Key = Event mechanism, not Claim/witness/Query; R-2 six-step loop refines three-phase tick; R-3 `Site.condition` primary state; R-4 Faction row deleted, faction = Proposition + `commit` edges; R-8 fixed-point integers for condition/stores; R-10 degree ladder four bands not five; R-11 `mint`/`efface` kept; R-12 ED-IN-0200 discharged by spec :14-148. R-1 dead; R-10 compare with `degree_from_net`. Tags CORE, DICE, FA, SE.
+### proposals/2026-08-31-authoritative-architecture/07_EXECUTION_PATH.md
+- one line: "every step ends in something running"; where we are :9, Jordan's ruling that orders everything :30, the path :50. Tags PROCESS, CORE.
+### proposals/2026-08-31-authoritative-architecture/08_PROVENANCE.md
+- one line: Status reference; method, evidence base, findings by independent rediscovery :60, what the method could not see :77. Tags PROCESS.
+

@@ -48,7 +48,7 @@ Working-tree facts used throughout (verified this session): `designs/` does not 
 - **Open items:** none that any later artifact seems to answer; the audit was superseded by the 2026-10 ners audit (`references/ners_audit_2026-10-14.md` exists).
 
 ### .audit/2026-07-04-ners-qualitative-audit/01_workings/deferred_unverified.json
-- **What it is:** 28 findings that were neither confirmed nor refuted (deferred, unverified), each with subsystem, claim, cite, criterion, direction, severity, novelty; 397 lines.
+- **What it is:** 32 findings that were neither confirmed nor refuted (deferred, unverified), each with subsystem, claim, cite, criterion, direction, severity, novelty; 397 lines.
 - **Status:** none. Reading: historical candidate list; many are design-level claims about the then-current docs, some now overtaken.
 - **Bears on:** PC, SC, MB, FA, WR (threadwork), CHAR, CORE, PROCESS.
 - **Content that matters:**
@@ -371,4 +371,48 @@ Working-tree facts used throughout (verified this session): `designs/` does not 
   - `:125-135` no fieldwork/investigation lane in the 12-dossier set.
 - **Conflicts / stale:** `references/throughlines_complete.md` is gone; `references/throughlines_meta.md` (+ infill, appendix) exists. The fieldwork gap is addressed by a live `modules/fieldwork/` (only `find.py` per `ls`) [UNVERIFIED depth].
 - **Open items:** the orphan tier.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/p3.json
+- **What it is:** flat list of the 33 P3-severity candidate findings (id, claim, cite, criterion, source dossier/lens/hunt) that were set aside without refutation; 410 lines.
+- **Status:** none. Reading: historical bucket; every entry also appears in a dossier/lens/hunt entry above (no new claim).
+- **Bears on:** PC, MB, SC, FA, SE, WR, CHAR, PROCESS.
+- **Content that matters:**
+  - `:2-25` pc-tradition-vacuum-balance-tension (equal affinity budget narrows build differentiation; 6.8pp spread) and pc-elegance-drift (5-tuple mode-select, per-element percussion, grip-reach oscillator JD-9).
+  - `:26-61` MB: no motive/goal field for named generals; Scene->Mass bonus magnitude trivial; per-sub-unit float morale has no HUD surface.
+  - `:98-121` faction: single-root Cascade default for all 6 factions; Institutional Consolidation turtle.
+  - `:135-160` threadwork: orphan "ED-046"; pre-PP-622 Ob tables retained inline in threadwork_v30 §2.4.
+  - `:210-233` Political Stability vs Turmoil naming (GD-1 canon text); stale Varfell Path B citation (ED-311) in victory_v30 header.
+  - `:282-333` pairs with the mass-battle and faction hunt P3s (thread-scale cost contradiction, siege turtle, scene-bonus farm, Mandate saturation).
+- **Conflicts / stale:** `canon/02_canon_constraints.md:70` still says "Political Stability <= 6" (verified), so the naming drift is live; the Varfell header cite is in an archived doc.
+- **Open items:** none distinct from the entries above.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/refuted.json
+- **What it is:** 25 candidate findings, each carrying a full refutation record (verdict, intent, revised severity, long evidence text, duplicate_of); 496 lines. The densest single source of design-intent evidence in this folder, because each refutation cites the governing ED/GD/ratification.
+- **Status:** none. Reading: historical, but the refutations are the best digest of WHY the corpus is as it is; the cited docs live in `.designs/`.
+- **Bears on:** PC, SC, MB, FA, SE, WR, CHAR, CORE.
+- **Content that matters:**
+  - `:3-19` `pc-no-player-input-hook` REFUTED (DELIBERATE, P3): `wrapper.py:352` calls `fight()` "the multi-turn SIM harness ... the GAME calls one engagement per turn"; `module_contracts` `scene.combat_strike` from `[scene_slate, player_input]` (L803); player_agency_v30:15 "14 combat actions, 6 fieldwork actions, 7 Thread operations, 4 contest styles"; state_graph.py:59-99 lists pluggable decision nodes (exchange.commit/.read/.mode/.bind_entry/.counter, burst.continuation, contact.axis). Residual: map the 14 actions onto those nodes (combat slice ports 2 of 11 modules).
+  - `:80-98` `four-games-collapse-one-pattern` REFUTED to P2 (duplicate of workplan #39 / J-31-extended -> LA-19 and ED-297/ED-1060): attribute varies by venue (Expert Judge Cognition x2, Crowd Charisma x2, No Adjudicator Attunement x2); Church Tribunal opens Conjectural stasis; armature buys up to 0.50 sigma; HANDOFF_SC L60-88 Stage 4 "four games" next. Genuine residuals: no global bonus cap (L-A) and the +1D boost is a memorizable 7-row public lookup (L-B).
+  - `:141-159, :21-40` GM-vote findings REFUTED (see dossier_faction): deterministic Guilds rule at §5.8 L492; `videogame_mode_spec.md` §3 L171/§4 L185 states the corpus-wide "GM adjudication -> Engine handles all resolution" translation; ED-1061 precedent.
+  - `:239-257` `generalship-dominance-axiom` REFUTED: dominance means "context-independent"; Command is a derived scarce stat (Charisma+Cognition, clamp 1-7), parity decided by formations/terrain/composition/thread; ED-753, ED-1014 (Biddle 2004), ED-875 (Jordan resolve-all 2026-06-20) keep high leverage "as intended".
+  - `:399-416` `deterministic-priority-trees` REFUTED: GD-2 "deterministic threat response PRECEDES stochastic action selection" (canon/02:39, HR-9) and ED-874 set the faction resolver to deterministic+stochastic; ED-693 Church repetition intentional; non-dominance is about the PLAYER strategy space, not NPC randomness. Residual: npc_behavior §8 predates and does not cite GD-2.
+  - `:418-435` `resonant-style-lookup-collapse` REFUTED: NPCs have Primary AND Secondary RS; styles mutate (§5.1 triggers, arcs); §6.4 "Church Martyrdom Extension" scopes the penalty to Church NPCs and fires only on a loss; ED-519 SIM-validated the +3D stack "not degenerate".
+  - `:298-317, :338-358` settlement: governance-redesign-orphaned REFUTED (G1 settlement registry IS built: `sim/territory/registry.py`+`ledger.py`, 6 passing tests; `goldenfurt_slice/` 5 artifacts, stages S0-S1 landed); legibility-partial-settlement-tier REFUTED (partial duplicate of the playability lens; governor tenure risk is readable from Order/Defense, §4.3/§1.4.3/§5.1). Thread Exploitation Faucet REFUTED (`:318-337`): shared-RS commons externality, Warden interdiction, Wealth+1/RS-0.5 is the cost.
+  - `:219-238` scene-mass-bonus-unconsumed REFUTED (duplicate_of ED-151; the table lives in scale_transitions as the single home; ED-151 PROVISIONAL / P1-BLOCKER in `tests/sim/sim_h01_to_h07`); `:456-476` key-vocabulary-enum-fork REFUTED as dup of KC-1 (`open_decisions.md:18`: "structural->persistent, medium->near"; `compute_salience` would KeyError on "medium").
+- **Conflicts / stale:** `refute` notes cite scratch files under `designs/audit/...` (dead) and one writes the literal path `/home/user/ttrpg/undefined/` (a bug in the audit pipeline, three occurrences: `:116, :354, :414`). The tracked ED numbers are real ledger rows to check in `registers/editorial_ledger*.jsonl`; I did not verify them. Notably `mass-battle default flips` are not discussed.
+- **Open items:** the unbuilt 14-action mapping; the L362 "GM adjudicates" clause; the global-bonus cap; Scene->Mass "most relevant unit" adjudication for a no-GM engine.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/tracked.json
+- **What it is:** 62 findings labelled KNOWN-TRACKED (an existing ED, queue item or register row already covers them), each with its tracked_ref; 807 lines.
+- **Status:** none. Reading: historical index; no new claim beyond the dossier/lens entries, but the `tracked_ref` column is the map from finding to ED.
+- **Bears on:** all, mainly PC, WR, CORE, FA, PROCESS.
+- **Content that matters:**
+  - ED-911 (open, P1) is the recurring ref: combat_engine_v1 has zero threadwork integration (`:3-14, :29-40, :757-768, :783-794`, plus 6 other entries). The ED lives in `registers/editorial_ledger_pc.jsonl` or the main file [UNVERIFIED].
+  - ED-1006 (open): era transitions unkeyed + 3-way piety/conviction_track collision (`:237-248, :471-482, :484-495`); ED-1051: doc:null `[ASSUMPTION]` backlog; ED-1010/1011: per-op Coherence-cost contradictions (`:432-443`); ED-428/731/772: MS/RS (`:172-183, :575-586, :666-677`); ED-1060: Terminal Doubt (`:406-417`); ED-297: coalition dominance (`:419-430`); ED-MB-0002 invincibility baseline (`:42-53`); propagation_spec item 18 cross-tick convergence.
+  - `:588-599` `combat-resolved-double-bottleneck` (module_contracts L808/L823/L844 gap_note A4): payload scene_id/outcome/participants/casualties/wounds_inflicted, not consumed by the three declared consumers.
+  - `:680-690` only `combat_engine_v1.json` typed export; `:692-703` Combat Pool = max(5, History+6) reconciled.
+  - `:718-742` Gate-0 (Key v1->v2) unexecuted; engine_clock home "unlocated [GAP]".
+  - `:380-391` sim win-share about 87%/0%/0%, decision_queue item 8.
+- **Conflicts / stale:** All Key-substrate refs (`scene.*`, Gate-0 Key v2 migration, key_type_registry) are retired with ED-IN-0232. Whether ED-911 / ED-1006 are still open: [UNVERIFIED], one `grep ED-911 registers/*.jsonl` would tell.
+- **Open items:** the ED-911 combat-thread gap; the 87% win-share.
 

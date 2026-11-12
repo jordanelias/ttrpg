@@ -448,3 +448,199 @@ any of 12 seeds, so "0 of 12 differ" is not a reading. The FORMS rows above are.
 | P1.7 correction | truth arrives, holding and act change | by refusal: yes, for the cell that refused | FOLLOWS |
 | P1.8 holds nothing, does nothing | zero | a person with an empty ledger still has the world-stamped questions | DEPARTS (F-FI-01) |
 
+## 1. NERS: cut tests, executed
+
+Method: `skills/ners/SKILL.md`; definitions `CLAUDE.md` §0.06. Instrument A, with the cuts **run**:
+`fi_arms.py SEED SEASONS ARM` builds `populated.build_realm(seed)`, applies one cut, runs the shipped
+chooser, and writes the world's state projection (the GAME lane's `pes.proj`), the per-verb census
+and the ledgers. Instrument B (`resolution-diagnostic`'s questions) was put to the one draw this
+scope owns outright, `research`, in §2.2 (pool sweep, quality sweep, mirror at quality 0). All arms
+below: seed 0, three seasons, `PYTHONHASHSEED=0`. **Control for every cut: `draw1`**, the shipped
+world and fixtures with only the chooser's draw seed changed, which is what a cut must exceed to be a
+reading and not a butterfly.
+
+### 1.1 The arms
+
+| | `ship` | `draw1` (control) | `notell` | `noc4` | `presence` | `nofi` |
+|---|---|---|---|---|---|---|
+| the cut | none | none (draw seed 1) | `tell`, `lie` removed from the chooser | clause 4 off (`belief_contradicts` → False) | `fan_out_mode: presence_only` (four far channels off) | all fourteen information verbs removed from the chooser |
+| Events | 74,510 | 64,236 | 81,066 | 61,827 | 42,640 | 98,225 |
+| of them ledger bookkeeping | 93.9% | 92.8% | 94.2% | 93.0% | 89.4% | 96.4% |
+| claims held at the end | 35,351 | 29,710 | 39,375 | 29,532 | 19,710 | 45,902 |
+| `told_by` claims / with a teller | 14,272 / 20 | 8,641 / 9 | 16,631 / 0 | 9,127 / 10 | 15 / 15 | 28,741 / 0 |
+| acts attempted / carried out | 2,630 / 1,394 | 2,636 / 1,465 | 2,699 / 1,501 | 2,494 / 1,041 | 2,616 / 1,441 | 1,881 / 456 |
+| carried out, information verbs | 1,027 (73.7%) | 1,133 (77.3%) | 1,131 (75.3%) | 783 (75.2%) | 1,165 (80.8%) | 0 |
+| carried out, everything else | 367 | 332 | 370 | 258 | 276 | **456** |
+| `march` | 29 | 14 | 27 | 13 | **0** | **53** |
+| `move` carried out | 21 | 32 | 27 | 14 | 39 | **94** |
+| `migrate` attempted / carried out | 116 / 16 | 74 / 8 | 122 / 16 | 118 / 6 | **0 / 0** | 224 / 24 |
+| `issue` carried out | 29 | 17 | 37 | 19 | 32 | **65** |
+| `petition` | 28 | 26 | 34 | 26 | 27 | **53** |
+| `convene` | 17 | 11 | 16 | 11 | **3** | **34** |
+| `dispatch` | 14 | 7 | 17 | 10 | 14 | 29 |
+| `oblige` attempted / carried out | 111 / 42 | 92 / 39 | **0 / 0** | **0 / 0** | **0 / 0** | 9 / 9 |
+| `capture` carried out | 0 | 2 | 1 | 0 | 5 | 5 |
+| `determine` carried through | 0 | 0 | 0 | 0 | 0 | **3** |
+| `fight` | 0 | 0 | 0 | 0 | 0 | **1** |
+| `challenge` attempted (all refused but one) | 118 | 140 | 135 | **302** | 123 | 86 |
+| persons dead | 0 | 1 | 0 | 0 | 1 | **2** |
+| fields lost / unopposed | 1 / 3 | 0 / 5 | 0 / 4 | 0 / 2 | 0 / 0 | **3 / 9** |
+| seats changed against `ship` | — | 1 | 0 | 0 | 2 | 1 |
+| realm stores total | 4,070 grain | same | same | same | same | **3,960 grain** (and ore, salt, timber lower) |
+| site conditions | — | same | same | same | same | same |
+
+Seed 1, two seasons, `presence` against `ship`: `march` and `migrate` are attempted 0 times
+under the cut (the zeroes replicate); the `ship` figures at that seed are in §8, run 14.
+
+### 1.2 The N-lines, attacked
+
+**N-1 · `tell` and `lie` — "cut them and nothing a person knows can reach another by a person's
+act."** Walked: the cut `notell` removes all 20 chained claims. Everything else is inside the
+control's spread: acts carried out 1,501 (control 1,465, `ship` 1,394), no seat, no death, stores and
+sites the same, the same 52 forgeries. The one row outside it is `oblige` (111 attempted in `ship`, 92
+in the control, 0 here); it is also 0 under `noc4` and `presence`, 1 under `nochron`, and 0 in `ship`
+itself at seed 1, so it is one seed-0 chain that any perturbation breaks, not a reading on `tell`
+`[UNVERIFIED: the chain]`. **FALSE N-LINE as the game runs** (disqualifier 2, no producer: the possibility "a rumour
+reaches a third person" has no producer, §2.1; what the 20 claims carry is §2.1's table). N holds for
+the design object once `said_of` can pass content on; today the cut is free.
+
+**N-2 · the information verbs as the chooser forms them — "cut them and persons cannot learn, record,
+conclude, conceal or deceive."** Walked: under `nofi` nobody researches, records, utters, forges,
+conceals or tells. What the realm then does: 456 other acts carried out against 367 (control 332);
+marches 53 against 29 (control 14); moves 94 against 21 (32); writs 65 against 29 (17); petitions 53
+against 28 (26); sittings convened 34 against 17 (11); three `determine` carried through against none;
+the one `fight` any arm formed; two deaths; three fields lost; the realm's stores lower for the first
+time in any arm. Every one of those is outside the control. **FALSE N-LINE, and worse than free: the
+cut is a gain.** The possibilities the verbs were to provide (a finding acted on, a forgery believed,
+a record read by another) do not occur with them present (§3.2: 16 non-information acts in three
+seasons answer an information Event), and their formation takes three quarters of the scenes. What
+dies with the cut, honestly counted: the 16 answers; `commit` (95 → 0) and `argue` (68 attempted, 17
+carried out → 0), both of which need a proposition someone has uttered. That is the narrowed
+N-line: **`utter` is necessary to `commit` and `argue`; the other thirteen verbs, as formed, are
+not necessary to anything that happens.** `[One seed with a control; a second seed was not run under
+this cut: the machine was loaded. The direction is far outside the control on eleven rows.]`
+
+**N-3 · clause 4 (`belief_contradicts`) — "cut it and a person's own ledger can refuse him nothing."**
+Walked: `noc4`. Acts carried out fall from 1,394 to 1,041 (control 1,465); `challenge` attempts rise
+from 118 to 302, `accept` 45 to 83, `comply` 47 to 91, `construe` 10 to 29, every one refused. Seats,
+deaths, sites the same. **N HOLDS, NARROWED**: clause 4 does not make persons act wrongly on false
+beliefs (the first FI audit: the world agreed with the decline in 460 of 461); it stops them spending
+a quarter of their acts on what their own ledger already says is impossible. Restated: *cut it and
+persons are a quarter less effective*, an economy, not a source of story. (The cut also silenced the
+function's second caller, a witness's reading of another's act; `oblige`'s zero may belong there.)
+
+**N-4 · the four far channels — "cut them and knowledge stops at the room."** Walked: `presence`.
+Claims held fall by 44%; `told_by` from 14,272 to 15. `march` 29 → 0, `migrate` 116 → 0, `oblige`
+111 → 0, `convene` 17 → 3, at seed 0, and `march` and `migrate` 0 again at seed 1. Seats, sites and
+stores inside the control. **N HOLDS, NARROWED, and not in the direction its design claims.** What
+dies is not asymmetry of knowledge (the cut *increases* it); what dies is every act that forms at a
+distance. The far channels, in the realm, are the broadcast that makes a person far from a thing act
+on it. That is also a warning for a scheduled edit: B10-14's CR-29 deletes `chronicle` with a
+replacement `reach` channel, and the first FI audit's R-06 asks for it first; §1.3 reads that cut
+alone.
+
+**N-5 · the lossy copy and the liar's inflation, on non-quantities.** Walked in §2.1: nothing reads
+`exists:Person = 2`. **FALSE N-LINE** (disqualifier 2: no reader). On quantities: N holds (cut it and
+a rumoured store is always exact).
+
+**N-6 · forgery quality** (`default_forgery_quality`, CR-94's future Coordination read). Walked in
+§2.2: 0 → 1 moves the default examiner's failure from 68% to 91%; 1 → 3 moves nothing at pool 2 and
+17 points at pool 4. **N HOLDS, NARROWED**: above 1 the dial is dead for every examiner at the
+default pool, by the per-pool ceiling.
+
+**N-7 · the per-holder ledger and the witness barrier.** Attacked from the `presence` arm (do persons
+still hold different things when the broadcast is cut: yes, 19,710 claims, all firsthand but 15) and
+from §2.5's counterfactual pairs (does a belief change an act: yes, for a quantity, at 10 of 12
+seeds). **N HOLDS** in every direction tried. Residual: its content is read by clause 4 alone.
+
+### 1.3 The `chronicle` channel cut alone (CR-29's paired deletion, with no replacement)
+
+`nochron` arm: `epistemic.CHANNEL_PREDICATES["chronicle"]` forced `False`, everything else shipped;
+seed 0, three seasons.
+
+| | `ship` | `draw1` (control) | `nochron` | `presence` |
+|---|---|---|---|---|
+| Events | 74,510 | 64,236 | 44,301 | 42,640 |
+| claims held | 35,351 | 29,710 | 21,018 | 19,710 |
+| `told_by` claims | 14,272 | 8,641 | 36 | 15 |
+| `march` | 29 | 14 | **4** | 0 |
+| `migrate` attempted / carried out | 116 / 16 | 74 / 8 | **17** / 10 | 0 / 0 |
+| `oblige` attempted | 111 | 92 | 1 | 0 |
+| `convene` | 17 | 11 | 19 | 3 |
+| acts carried out | 1,394 | 1,465 | 1,509 | 1,441 |
+| seats, deaths, sites, stores total | — | 1 seat, 1 death | same as `ship` | 2 seats, 1 death |
+
+Reading. `chronicle` alone mints all but 36 of the realm's `told_by` claims (the channel's own
+docstring arm says the same of one season at an earlier tree; this is three seasons at HEAD), and with
+it gone the realm all but stops marching (4, against 29 and a control of 14) and stops trying to
+migrate (17 attempts against 116 and 74). `convene` is untouched, so its fall under `presence` belongs
+to `document_key` or `post_remit`. **For CR-29:** the replacement `reach` roster has to carry the
+kinds that `march` and `migrate` candidates form on, or the paired deletion removes the only army
+movement the realm has. The first FI audit's R-06 (CR-29 first) stands, with this as its gate: `march`
+and `migrate` attempts under the new channel inside the `draw1` spread of today's. And for the 40% of
+the log that goes with it: the broadcast is also the performance cost (F-FI-05, cited).
+
+### 1.4 R, S and E
+
+**R-COMPLETE** fails at four written branches that are empty: a `Partial` find (§2.2), a telling's
+second hop (§2.1), a doubted paper (§2.3), a deed with no witness (§2.4). **R-WORLD**: the seats this
+scope owns (the teller, the forger, the investigator, the concealer) resolve the same way every
+season and throw 16 hooks in three seasons that anyone outside the scope answers: dead seats, not
+portraits. **R-CHOICE** at the investigator's seat, intent *"learn whose hand"*: `research` again
+after a `Failure` (gain: another 1.3% chance; cost: a scene) against `research` after a `Partial`
+(gain: nothing, by rule; cost: a scene): the second row is dominated to extinction, and the player
+cannot see which row he is on unless he reads the roster. At the forger's seat, intent *"be taken
+for the head"*: `forge` then `give` (the only route) forms `give` 25 times and carries it out once.
+**R-VARIETY**: one inquiry skill, one forgery, one lie, one thing to tell.
+
+**S, calculations consistent in methodology.** Three defects, each two ways of saying one thing:
+(i) a death is `(X, person.died, True)` to a witness and `(X, exists:Person, 0)` to a requirement,
+and only the second is read (§2.5); (ii) how much of a deed a band shows is graded for a finder
+(`finding_terms`) and not for a hearer of the same deed at the same band (§2.1); (iii) `finding.made`
+means "found" from three rows and "was admitted" from three (H-318, cited). **S-DOWN** (an
+opportunity reaching a party with no post, published, distorted in transit, picked up by his own
+perception): the design's carrier is the telling, and it fails at the second mouth; what does reach
+the postless is `chronicle`, which is addressed to everyone, undistorted: a pass on "published", a
+fail on "distorts", and scheduled for deletion. **Pauses correctly**: untested; nothing in this scope
+is a multi-step scene.
+
+**E, last, as a ratio.** Against what N and R found (one story that runs: a stale store corrected by
+refusal; and acts at a distance formed from a broadcast), the overhead is 94% of the log, three
+quarters of the acts and fourteen verbs. E-LEGIBILITY: a player cannot intuit that examining a ruin
+teaches that it exists, that a better look forbids the answer, or that telling passes on the fact of
+telling. **The ratio is poor, and the repair is mostly deletion of formation, not of mechanism**:
+§5, item 1.
+
+```
+NERS PASS: FI (fieldwork, investigation, epistemics, information, witness)     INSTRUMENTS: A+B
+
+MUST BE STATED AS A LIMIT
+  - a rumour spreads                      — one hop by construction (§2.1)                    [C5, §3 dq 2]
+  - a forged paper is believed, then not  — never leaves the hand; doubt has no carrier (§2.3) [C1]
+  - a crime leaves traces                 — witnesses of the instant only (§2.4)               [C1, C2]
+  - non-omniscience holds                 — not for who exists or where (§2.5), nor for seats (F-FI-01) [C3]
+  - investigation is built out            — as formed, a cut that improves the game (§1.2 N-2) [§3]
+MAY BE CLAIMED, HAVING SURVIVED
+  - a person acts on a believed quantity and is corrected by refusal — attacked by the silent-edit
+    control and the refusal probe; holds (§2.5 reading 1)
+  - two persons hold different things      — attacked by the presence arm; holds
+  - skill orders an inquiry's result       — pool sweep monotone; mirror at quality 0 exact (§2.2)
+
+| axis / test | verdict | what would overturn it |
+|---|---|---|
+| N (six directions) | FINDINGS: N-1, N-2, N-5 false; N-3, N-4, N-6 narrowed; N-7 holds | a second seed in which `nofi` reads inside its control |
+| E-OVERHEAD | FINDINGS | the 16 answers of §3.2 shown to carry a story |
+| E-LEGIBILITY | FINDINGS | a player predicting §2.2's lockout or §2.1's second hop from the verbs' names |
+| R-COMPLETE | FINDINGS (four empty branches) | any of the four producing a claim |
+| R-VARIETY | FINDINGS | two persons with one ledger telling, forging or examining differently |
+| R-WORLD | FINDINGS (dead seats) | an information Event answered by a non-information act more than 16 times in three seasons |
+| R-CHOICE | FINDINGS at the investigator's seat (dominated to extinction); upper bound elsewhere | — |
+| S-UP | N-A (no docket at this scale; the petition route is SC's) | — |
+| S-DOWN | FAIL | a two-hop chain in a seeded run |
+| S coverage · pause · methodology | FINDINGS (three two-vocabulary defects) | — |
+| the design's own falsifier (§8 of the skill): "nothing reaches belief unmediated" (AX-7) | HITS, one family: the question loop's world reads (seats, vacancies, existence, place) | — |
+| self-audit (§9) | 9a: §2.2's correction of addendum B's C-3 was carried into §1.2 N-6 and proposal B's header; §2.5's CHOOSE reading was withdrawn where it had no power. 9b: proposals A, B, C add one derived set, one reader and four roster rows, no store, no guard | an independent reviewer would re-run `nofi` at seeds 1 and 2 |
+
+GRADE: runs — fourteen probe scripts and nine realm arms, §8
+```
+
