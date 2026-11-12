@@ -1,7 +1,7 @@
 # VB-B — the room: one sitting per seat, a judge asked only about the parties before him, mercy only for the restrained and only by a draw
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-11, C-25) — `determine` names the prize `a verdict` (the hearing's entry, with the ballot inside it; Jordan, A-14). Edit 12's audience is the `bench` cell the `a matter` row already carries. `pardon` stays on `a matter`, and it is the only way but the term that an imposed edge ends (A-37).
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — applied `unified/work/R4_READ.md` 7b.3 (BIND_B: the `Restrained` stamp reads seats that are the restraint's object; gate and falsifier added), §1.1 (the `determination` closure basis confirmed at `loop/effects_governance.py:376-380`: a `detain`/`ban` closes only through the seat that is the edge's object), `unified/U3_CONFLICT_LEDGER.md` C3-C13 (A-63/A-64: a sitting occupies its parties), C3-C11 (A-81: `pardon.denied` is a witnessed deed), U3 batch B32, R4 7b.0 block. No design change.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — applied `unified/work/R4_READ.md` 7b.3 (BIND_B: the `Restrained` stamp reads seats that are the restraint's object; gate and falsifier added), §1.1 (the `determination` closure basis confirmed at `loop/effects_governance.py:376-380`: a `detain`/`ban` closes only through the seat that is the edge's object), `unified/U3_CONFLICT_LEDGER.md` C3-C13 (A-63/A-64: a sitting occupies its parties), C3-C11 (A-81: `pardon.denied` is a witnessed deed), U3 batch B32, R4 7b.0 block. No design change. A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "trained score/rank" → skill score (1); "talent" → attribute or governing attribute (1).
 
 ## Status: PROPOSED
 

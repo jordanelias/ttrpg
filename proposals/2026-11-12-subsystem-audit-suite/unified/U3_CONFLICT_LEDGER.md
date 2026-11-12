@@ -4,7 +4,7 @@
 
 ## Read at: the working tree of branch `ccr-62958c70-0kjhsw`, HEAD `181548b`, 2026-11-12. Producer: Opus lane U3 (`UNIFICATION_BRIEF.md` lane U3; tests 5, 6, 9 and the closure rule). Companion: `unified/U3_DEPENDENCY_ORDER.md` (the one graph and landing order), `unified/U3_JORDAN_CALLS.md` (what survives the ladder).
 
-Reconciled: 2026-11-12, U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*); "knockout" → "removal test" (glossary *removal test*; file names keep their words).
+Reconciled: 2026-11-12, U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*); "knockout" → "removal test" (glossary *removal test*; file names keep their words). A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "capability" in prose → skill (4); "trained score/rank" → skill score (5); "talent" → attribute or governing attribute (1); rewordings by sense (3: retired kinds `aptitude`/`trait`, traits apart, Thread Sensitivity not a skill, line-wrapped "trained").
 
 **Method.** Each row names the documents, the claim in dispute, the decision, the step of CLAUDE.md §0's
 five-step ladder that decided it (1 superseded by a later ruling or head; 2 irrelevant, its subject retired;

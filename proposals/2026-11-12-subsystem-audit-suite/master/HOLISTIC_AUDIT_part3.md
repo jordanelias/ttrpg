@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (part 3 of `master/HOLISTIC_AUDIT.md`; resolves nothing at runtime)
 
+Reconciled: 2026-11-12, A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "capability" in prose → skill (2).
+
 ## 7. The nine requirements, read against the code as it stands
 
 **The instrument's reading**, run by this lane: `python -m engine.season.harness.register --requirements`

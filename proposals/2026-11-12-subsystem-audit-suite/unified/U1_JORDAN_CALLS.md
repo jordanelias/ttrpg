@@ -4,6 +4,8 @@
 
 ## Read at: the working tree of `main`, 2026-11-12. Lane: U1 (wave 2). Decisions cited are in `unified/U1_OWNERS_AND_VOCABULARY.md` (`D-U1-nn`).
 
+Reconciled: 2026-11-12, A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "capability" in prose → skill (1); "talent" → attribute or governing attribute (1).
+
 **No item survived the five-step ladder.** Every decision this lane made is answered by one of your rulings
 (A-1 to A-91), a ratified row, a precedent in the tree, or what is plainly right for the code. Nothing here
 overwrites ratified canon, a `(RULED)` item or a ratified Layer 1 row on this lane's own authority.

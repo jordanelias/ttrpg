@@ -2,6 +2,8 @@
 
 ## Status: WORK LIST (a register of items other lanes reported as owed; resolves nothing at runtime; each row is deleted when the unification stage closes it)
 
+Reconciled: 2026-11-12, A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "capability" in prose → skill (1); "trained score/rank" → skill score (2).
+
 Collected by the orchestrator from lane receipts, 2026-11-12. Each item names its source. The stage reads the sources; this list is an index, not evidence.
 
 ## A. Layer 1 and canon text owed (drafted by unification, applied only by Jordan's amendment; never by editing Layer 1 to match code)

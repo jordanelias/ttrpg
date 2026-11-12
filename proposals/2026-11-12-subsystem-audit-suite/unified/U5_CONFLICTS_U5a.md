@@ -4,6 +4,8 @@
 
 ## Read at: 601e715 (working tree), 2026-11-12. Closing lane: Fable unification-closure, family U5a.
 
+Reconciled: 2026-11-12, A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "capability" in prose → skill (8); "trained score/rank" → skill score (1); rewordings by sense (4: retired kinds `aptitude`/`trait`, traits apart, Thread Sensitivity not a skill, line-wrapped "trained").
+
 Companion to `unified/U5_FINDINGS_CLOSURE_U5a.md` (every finding's disposition) and
 `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` (the one capability architecture). This file holds only
 the places where two documents said different things. Each decided conflict names the documents, the

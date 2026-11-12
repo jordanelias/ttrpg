@@ -4,6 +4,8 @@
 
 ## Read at: the working tree of 2026-11-12. Lane: U5c, a Fable unification-closure lane (`UNIFICATION_BRIEF.md`, "Closure rule").
 
+Reconciled: 2026-11-12, A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "capability" in prose → skill (2).
+
 Each row is one contradiction between documents of this family, or between one of them and another
 family's, Layer 1, the standing rule (*we do not do deterministic*) or one of Jordan's answers in
 `unified/DECISIONS_ANSWERED.md` (cited `A-nn`; its ladder table cited `D-nn`). The decision is made by

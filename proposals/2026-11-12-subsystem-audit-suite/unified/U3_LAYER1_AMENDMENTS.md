@@ -4,6 +4,8 @@
 
 ## Read at: the working tree of branch `ccr-62958c70-0kjhsw`, 2026-11-12. Layer 1 opened at the lines cited: `architecture/meta/04_CODE_ARCHITECTURE.md` (`04`), `architecture/holonic_ARCHITECTURE.md` (`hol`). Rulings: `unified/DECISIONS_ANSWERED.md` A-1 to A-93. Gate nodes are placed in `unified/U3_DEPENDENCY_ORDER.md` §1.4.
 
+Reconciled: 2026-11-12, A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "trained score/rank" → skill score (1).
+
 **The rule this table applies.** A spec that binds code is not edited to match the code (CLAUDE.md §0.05). Where a
 ruling amends a Layer 1 sentence, the code that contradicts the sentence may land only in a form the sentence still
 permits (its control arm, a null column, a zero dial, a revert switch); the arm that contradicts the sentence waits on

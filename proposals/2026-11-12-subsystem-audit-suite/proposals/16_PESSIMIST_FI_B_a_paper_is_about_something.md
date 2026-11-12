@@ -2,8 +2,8 @@
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS), §7/§7b (edit 4 located, tests,
 tier); U3 B26, §6.2 (`p3b_knows.py`, `p3_forgery.py` are not in the repository); U1 D-U1-01 and architecture §4 (what is
-not the skill score reaches a roll as a named level, never a die: the "one more die" in "Not edited here" restated as a level).
-Changed: edit 4's location, the gate, one sentence of "Not edited here".
+not training reaches a roll as a named level, never a die: the "one more die" in "Not edited here" restated as a level).
+Changed: edit 4's location, the gate, one sentence of "Not edited here". A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "training" for the rank → skill score (1).
 
 ## Status: PROPOSED
 

@@ -3,12 +3,12 @@
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-25 confirms this file's reading: the U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*).
 "listed for Jordan" branch is CLOSED and the "if the clarification means favourable terms too" alternative is deleted;
 A-5: the odds tables are whole-dice history and the gate is restated as a property), §1 (CONFORMS), §7/§7b (tests in
-`test_sc02_reception.py`, tier); A-79 / D-U1-02 (the opposition term is `opposed_ob(skill score, opposition_rate)`,
+`test_sc02_reception.py`, tier); A-79 / D-U1-02 (the opposition term is `opposed_ob(trained score, opposition_rate)`,
 not `score/2`); A-6 (no pool in play is under `pool_floor`: the falsifier and R line read "every pool from the floor");
 U1 glossary *leverage*; U3 B05 (OBS §4 step 1b: lands after OBS step 1a), §4.1 rows 20-21 (LATER: `05_SC_evidence_and_rebuttal_B`
 and `19_LACUNA_admission_rides_the_citing_draw` re-source the proofs in B24), §6.2 (`n1_favour_two_ladders.py`,
 `p1_petitioner.py` are not in the repository). Changed: the resolution's obstacle bullet, its last paragraph, the gate,
-the falsifier, the R line.
+the falsifier, the R line. A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "trained score/rank" → skill score (-1).
 
 ## Status: PROPOSED (not ratified by being written; `CLAUDE.md` §2)
 

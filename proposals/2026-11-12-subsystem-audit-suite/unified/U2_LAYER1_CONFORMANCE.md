@@ -2,7 +2,7 @@
 
 ## Status: WORK LEDGER (unification lane U2 of `UNIFICATION_BRIEF.md`, test 7, written by repair lane R-B of `unified/U6_VERDICT_AND_REPAIRS.md` finding 3; reference, resolves nothing at runtime, CLAUDE.md §0.05; a spec that binds code is never edited to match the code, so nothing here edits Layer 1; deleted when workplan v12 is adopted)
 
-Reconciled: 2026-11-12, A-96: row 546 (`22_HAPPENINGS_C`, the Failure branch) follows Jordan's ruling of the engine-formed act; its Layer 1 exception is `L1-A96`.
+Reconciled: 2026-11-12, A-96: row 546 (`22_HAPPENINGS_C`, the Failure branch) follows Jordan's ruling of the engine-formed act; its Layer 1 exception is `L1-A96`. A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "capability" in prose → skill (17); "trained score/rank" → skill score (1); "training" for the rank → skill score (1); proposed names `talent_level` → `attribute_level`, `pool.py::talent` → `pool.py::governing_attribute` and test names (2); rewordings by sense (1: retired kinds `aptitude`/`trait`, traits apart, Thread Sensitivity not a skill, line-wrapped "trained").
 
 ## Read at: the working tree of branch `ccr-62958c70-0kjhsw`, 2026-11-12, after waves 1 to 3 and the U6 verdict. Extracted by a Bash script (scratch, not committed) from section 1 of `unified/work/R1_READ.md` to `R5_READ.md`, which this file replaces as the record before `unified/work/` is deleted.
 

@@ -4,7 +4,7 @@ Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-07, C-U
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-5, A-6, A-26: (a) restated as the U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*).
 form; the figures of (b)-(d), "What it changes" and the gate are dropped as whole-dice history; gate 2's property kept),
-§7/§7b (test file, tier); U1 D-U1-02 and architecture §4 (the opposing operand is the **skill score**, never the
+§7/§7b (test file, tier); U1 D-U1-02 and architecture §4 (the opposing operand is the **trained score**, never the
 pool, at `opposition_rate`; the stand-in is `opposed_ob(pool_default, opposition_rate)` with the composer's even line
 `even_line(pool_add)` as its own leading term), D-U1-04 (difficulty lives on the verb row, `difficulty_levels`,
 sized by `difficulty_ob`), D-U1-11j (`obstacle_default` deleted; `pool_default` is the one stand-in); U1 glossary
@@ -12,7 +12,7 @@ sized by `difficulty_ob`), D-U1-11j (`obstacle_default` deleted; `pool_default` 
 SC-B/T13 code part in B05), C3-N26. **The decision wins over the read lane:** R5 7b wrote the stand-in as "the
 ordinary person's pool times `opposition_rate`", and the U5a head line above says the same; both are superseded by
 D-U1-02 (A-79: "the six base dice never part of the opposition"). Changed: title word, (a), the three ordered
-amendments' wording, the gate.
+amendments' wording, the gate. A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "trained score/rank" → skill score (2).
 
 ## Status: PROPOSED
 

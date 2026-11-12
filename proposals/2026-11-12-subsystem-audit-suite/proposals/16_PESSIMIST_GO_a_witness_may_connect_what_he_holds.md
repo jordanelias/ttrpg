@@ -3,8 +3,8 @@
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS; the hazard taken: the primary
 path to the antecedent claim is the look-up through the `claim.deposited` Event whose `causes[0]` is `c.id`, and the
 minted-id formula is the fallback, so WITNESS is not coupled to id minting), §7/§7b (tests, tier); U3 B09, §6.2
-(`probe.py` is not in the repository); U1 D-U1-07 (a skill's verb binding is the verb row's `capability:` column,
-not `VERB_CAPABILITY`). Changed: §1's order of paths, §2's skill pointer, the gate's test names.
+(`probe.py` is not in the repository); U1 D-U1-07 (a capability's verb binding is the verb row's `capability:` column,
+not `VERB_CAPABILITY`). Changed: §1's order of paths, §2's capability pointer, the gate's test names. A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "capability" in prose → skill (2).
 
 ## Status: PROPOSED
 

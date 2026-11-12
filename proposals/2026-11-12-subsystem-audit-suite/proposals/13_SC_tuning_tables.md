@@ -8,7 +8,7 @@ Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.
 
 **Lands in batch:** B05 (commit 1 at OBS §4 step 3; commit 2 at step 5). **Depends on:** `U5c_SC_one_obstacle_form.md` (B05), `13_SC_calibration.md` (its test file first, B05), `02_CHAR_scar_cap_and_regard_unit.md` item 2 (the stance unit, B10; at control `regard_step` 0 the term reads nothing), U1 §11 U1-D (the seat row's `modifier:` column; T4's values ride commit 2).
 
-Reconciled: 2026-11-12, A-97 (`unified/work/L1_APPLIED.md` §`L1-A12`, `unified/work/L1_PROPAGATION.md`): the "`04` §B.7 amendment text is owed, not applied" sentence of the seat-`modifier` entry is rewritten to the applied state (`L1-A12`: `04:331`, `:351`, row 33 `:1062`). The bench die (`minor` on the bench seats) is no longer held back by Layer 1; its null control is the table's own control arm.
+Reconciled: 2026-11-12, A-97 (`unified/work/L1_APPLIED.md` §`L1-A12`, `unified/work/L1_PROPAGATION.md`): the "`04` §B.7 amendment text is owed, not applied" sentence of the seat-`modifier` entry is rewritten to the applied state (`L1-A12`: `04:331`, `:351`, row 33 `:1062`). The bench die (`minor` on the bench seats) is no longer held back by Layer 1; its null control is the table's own control arm. A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "capability" in prose → skill (2); "trained score/rank" → skill score (2); rewordings by sense (2: retired kinds `aptitude`/`trait`, traits apart, Thread Sensitivity not a skill, line-wrapped "trained").
 
 ## Status: PROPOSED
 

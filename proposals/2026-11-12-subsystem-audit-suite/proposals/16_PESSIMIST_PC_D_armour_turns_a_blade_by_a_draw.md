@@ -7,7 +7,7 @@ A-30), §7/§7b (tests extend an existing file, tier); U3 B15, §9 (the duel rou
 line calls the round's private stream is a keyed `Draw`, not a threaded generator), §6.2 (`pC_armour.py`, `pQ2_gap.py`,
 `pQ_knee.py` are not in the repository); U1 glossary *faculty* (retired as a suite word: "trained score" in the
 tables). Changed: the resolution's draw wording, the edits table's `strike` signature, the gate's test names, two table
-labels.
+labels. A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "trained score/rank" → skill score (3).
 
 ## Status: PROPOSED
 

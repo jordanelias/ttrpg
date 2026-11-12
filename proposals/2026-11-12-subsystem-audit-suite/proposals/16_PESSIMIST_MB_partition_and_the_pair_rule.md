@@ -11,7 +11,7 @@ melee pair is not an opposed roll, `U5b_MB_rulings_in_the_field.md` §1 row 2, s
 U1 D-U1-11c (`PAY_PER_NET` and `WALLS_DEFENDER_DEF_D` are scalar engine constants: literals in the module's config,
 exported by `tools/export_engine_params.py`); U3 B19, §6.2 (the eight probes are not in the repository), C3-L1 (the
 net is continuous; quantised only at the ladder, which the pair no longer reads). Changed: the head paragraph's
-friction sentence, "The form not taken", the gate's "today" marks and test names, the cost line.
+friction sentence, "The form not taken", the gate's "today" marks and test names, the cost line. A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "trained score/rank" → skill score (1).
 
 ## Status: PROPOSED
 

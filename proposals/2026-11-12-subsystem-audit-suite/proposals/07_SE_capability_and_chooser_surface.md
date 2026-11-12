@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-12**, **A-54** and **A-56**. §3 and §4 are superseded by `07_SE_capability_rate_B.md` (as the addendum says); §5 and §6 stand. NPC-083's "methods handing influence to internal factions" stays outside this file. A cohort's candidate surface is the heavy-move list (`U5d_SE_cohort_heavy_moves_and_caste.md`), so the chooser terms here bind named persons and the seven cohort moves only.
 
-Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 and C3-C2/D-U1-09: §3 and §4 deleted (a pointer section stands in their place), and §1 and §7, which described and checked the same superseded multiplier, reduced to pointers; §5 (d) and the §6 table row re-pointed; §5 (e)'s "never an `is_cohort` test" sentence replaced by a pointer to the heavy-moves roster (A-56; R3 §1: the row-declared alternative is a `scale:`-like key `04` §A.3 row 4 deletes); C3-N2 (the 708-of-1,529 figure named against the GAME pessimist's 43%); tier and batch (R3 7b-0; U3 B12). §2, §5 (a)–(c) and §6 stand as reference.
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 and C3-C2/D-U1-09: §3 and §4 deleted (a pointer section stands in their place), and §1 and §7, which described and checked the same superseded multiplier, reduced to pointers; §5 (d) and the §6 table row re-pointed; §5 (e)'s "never an `is_cohort` test" sentence replaced by a pointer to the heavy-moves roster (A-56; R3 §1: the row-declared alternative is a `scale:`-like key `04` §A.3 row 4 deletes); C3-N2 (the 708-of-1,529 figure named against the GAME pessimist's 43%); tier and batch (R3 7b-0; U3 B12). §2, §5 (a)–(c) and §6 stand as reference. A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "capability" in prose → skill (9).
 
 ## Status: PROPOSED
 

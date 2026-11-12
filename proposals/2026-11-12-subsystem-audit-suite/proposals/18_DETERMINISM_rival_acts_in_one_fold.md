@@ -10,7 +10,7 @@ Depends on: `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` edit 1 (B08, th
 Lands in batch: B08 (lane IN), after `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` edits 1-4; one re-pin at B08's close, shared with the scene order.
 Tier: sonnet / high; the PART D row 36 text for the person key is Layer 1's (APPLIED, `L1-A64`, `04:1065`).
 
-Reconciled: 2026-11-12, A-97 (`unified/work/L1_APPLIED.md` §`L1-A64`, `unified/work/L1_PROPAGATION.md`): the "stays Jordan's" and "applied only by Jordan" clauses of the Folded and W3-5b lines and the Tier line are rewritten to the applied state. Row 36 now reads, for several scenes claiming one person's round, that office rank is a declared weight of a keyed precedence draw and never a sort key (`04:1065`); F.26 (`04:1227`) is amended to match. The line-3 sentence "keeps D-36 (rank never breaks a tie)" stays true for this file's own keys (a seat, a Record, a larder).
+Reconciled: 2026-11-12, A-97 (`unified/work/L1_APPLIED.md` §`L1-A64`, `unified/work/L1_PROPAGATION.md`): the "stays Jordan's" and "applied only by Jordan" clauses of the Folded and W3-5b lines and the Tier line are rewritten to the applied state. Row 36 now reads, for several scenes claiming one person's round, that office rank is a declared weight of a keyed precedence draw and never a sort key (`04:1065`); F.26 (`04:1227`) is amended to match. The line-3 sentence "keeps D-36 (rank never breaks a tie)" stays true for this file's own keys (a seat, a Record, a larder). A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "capability" in prose → skill (1).
 
 ## Status: PROPOSED
 

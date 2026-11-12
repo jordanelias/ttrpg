@@ -2,6 +2,8 @@
 
 ## Status: WORK LEDGER (unification lane U4c, `UNIFICATION_BRIEF.md` lane U4 and test 9; reference, resolves nothing at runtime, CLAUDE.md §0.05; the table is generated, the census is read; deleted when v12 is adopted)
 
+Reconciled: 2026-11-12, A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "capability" in prose → skill (2).
+
 Read at: branch `ccr-62958c70-0kjhsw`, working-tree HEAD `8e88508`, 2026-11-12 (the tree is dirty: this lane's edits and the sibling U4 lanes' files are uncommitted). Producer: Sonnet lane U4c; sections 3.1 to 3.4 re-run by repair lane R-B (Sonnet), which also edited four proposals (3.3.1). Files on disk at generation: **496** (every file under `proposals/2026-11-12-subsystem-audit-suite/`, plus the 15 `research/` files the suite added). Rows 1 to 496 below are produced by a Bash script (scratch, not committed): it lists the directories, reads each file's first `## Status:` line, counts lines that begin `Reconciled:`, `Folded:` and `Grounded:` or `Re-grounded:`, takes the size, parses the batch handle from `unified/U3_DEPENDENCY_ORDER.md` §3.1 (node table) and §2.1 (split parts), and tallies closure dispositions from `unified/U5_FINDINGS_CLOSURE_*.md`.
 
 ## 0. What the unification stage reads in full, and what at heads

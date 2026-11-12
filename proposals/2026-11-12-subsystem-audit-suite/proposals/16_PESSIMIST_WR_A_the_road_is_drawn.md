@@ -9,7 +9,7 @@ same obstacle), §1 (CONFORMS; the module home decided), §7/§7b (test file and
 `H(seed, tick, pid, "road:<leg>")`); A-54 (the weather term reads the band of the season's draw, not "the lowest outcome
 of its table"); U3 B12, C3-D6, §6.1 (`test_travel.py` does not exist: written as the batch's first commit), §6.2
 (`p2_play.py` is not in the repository); STAGES.md (CP-T10-02 is a v11 card; the home is decided here for the v12 card).
-Changed: the obstacle bullet, edit 1's `road_base`, edit 3's home, the gate and the falsifier's form.
+Changed: the obstacle bullet, edit 1's `road_base`, edit 3's home, the gate and the falsifier's form. A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "capability" in prose → skill (1).
 
 ## Status: PROPOSED
 

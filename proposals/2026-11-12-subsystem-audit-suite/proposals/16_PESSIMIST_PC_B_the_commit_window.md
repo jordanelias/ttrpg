@@ -5,7 +5,7 @@ Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.5)
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS), §7/§7b (test file, gate U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fought scene" → "fight" (glossary *scene*); "the riposte" (`18_DETERMINISM_no_certain_matchup.md`) → "the riposte" (glossary *riposte*); the fencing riposte of §4's table is the combat module's own and keeps its name.
 commands, tier); U3 B15, §4.1 row 56 (REV: the calibration batch lands before the round, UPR §5's own order), §6.2
 (`pF_story.py`, `pP_window.py` are not in the repository); U1 glossary *faculty* (retired as a suite word: "trained
-score" in the prototype table). Changed: the gate's committed form, the cost line, one table label.
+score" in the prototype table). Changed: the gate's committed form, the cost line, one table label. A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "trained score/rank" → skill score (1).
 
 ## Status: PROPOSED
 

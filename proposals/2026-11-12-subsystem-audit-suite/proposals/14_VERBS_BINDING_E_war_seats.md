@@ -4,7 +4,7 @@ Reconciled: 2026-11-12, U5d closure — folded the land rulings (**A-57, A-58, A
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-25) — edit 9's audience is the `heard_by: residents` cell on the `a holding` prize row, with `toward: to`, read by the one audience function (`U5c_VERBS_residue_and_governance_owner.md` §2); `contest_input` names no verb.
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — applied `unified/U3_CONFLICT_LEDGER.md` C3-C5 (`unified/work/R4_READ.md` 7b.3: a matured Partial cession leaves the place unheld; nothing re-opens the surrenderer's hold), C3-L12 with C3-L7 (title and seats pass only by an act whose actor has a basis: the U5d head line's "seats in the same write" is superseded; see "The land" below), C3-C11 (A-81), A-30 keys, U3 batch B23 and its dependencies, R4 7b.0 block. The U5d head line above is kept as history; where it and this line disagree, this line follows the later decisions C3-L7 and C3-L12.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — applied `unified/U3_CONFLICT_LEDGER.md` C3-C5 (`unified/work/R4_READ.md` 7b.3: a matured Partial cession leaves the place unheld; nothing re-opens the surrenderer's hold), C3-L12 with C3-L7 (title and seats pass only by an act whose actor has a basis: the U5d head line's "seats in the same write" is superseded; see "The land" below), C3-C11 (A-81), A-30 keys, U3 batch B23 and its dependencies, R4 7b.0 block. The U5d head line above is kept as history; where it and this line disagree, this line follows the later decisions C3-L7 and C3-L12. A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "trained score/rank" → skill score (1); "talent" → attribute or governing attribute (1).
 
 ## Status: PROPOSED
 

@@ -2,7 +2,7 @@
 
 ## Status: REFERENCE (the terminal pass's verdict, recorded where its subject lives per CLAUDE.md §0; the pass is not repeated and its fixes are not re-audited)
 
-Reconciled: 2026-11-12, A-96: row 5's item for A-16 (J-U6-01) is answered by Jordan, Option A; the row notes it.
+Reconciled: 2026-11-12, A-96: row 5's item for A-16 (J-U6-01) is answered by Jordan, Option A; the row notes it. A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "capability" in prose → skill (1).
 
 **Verdict: yes, with listed repairs.** The suite can be the basis of the holistic audit, the instruction suite and workplan v12. Two summary claims were not bankable as written: "246 COMPLETE" (test 9) and "the order is acyclic and every dependency exists". About 70 tree citations were opened and all were correct but for those listed; no symbol was fabricated; the batch-level graph was recomputed by hand and has no cycle.
 

@@ -13,7 +13,7 @@ the army Record's loss ledger, recovered when read, `27_MB_E`); §7/§7b (test f
 takes no `engine.*` import), held equal to `degree_from_net` by `tests/valoria/test_degree_ladder_single_owner.py`, and
 `seam/ladder.py` is host-side, which a module may not import; so it is one ladder, guard-held, not a second, and the
 rally is graded on it. Changed: step 1's draw and grade wording, step 5 and the edits-table outcome row, the "depends on
-nothing" sentence, the gate's test file.
+nothing" sentence, the gate's test file. A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "trained score/rank" → skill score (1).
 
 ## Status: PROPOSED
 

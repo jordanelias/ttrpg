@@ -1,6 +1,6 @@
 # GO — disposition of the player-facing design references: what survives as a test, what is dead, and two owner edits
 
-Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §7 (COMPLETE but for lands-it and tier, added), `U3_CONFLICT_LEDGER.md` C3-L4 and `U1_OWNERS_AND_VOCABULARY.md` D-U1-11n (the surviving-rules table's two `receipt` / `ReceiptRow` references now read the person-side `account`: the outcome of a person's own act is a firsthand claim in his own ledger; no host-side walk); `Depends on:` / `Lands in batch:` from `U3_DEPENDENCY_ORDER.md`.
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §7 (COMPLETE but for lands-it and tier, added), `U3_CONFLICT_LEDGER.md` C3-L4 and `U1_OWNERS_AND_VOCABULARY.md` D-U1-11n (the surviving-rules table's two `receipt` / `ReceiptRow` references now read the person-side `account`: the outcome of a person's own act is a firsthand claim in his own ledger; no host-side walk); `Depends on:` / `Lands in batch:` from `U3_DEPENDENCY_ORDER.md`. A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "capability" in prose → skill (1).
 
 **Depends on:** `11_GO_pointer_and_stale_text_resolutions.md` (B03, its item 3, which this file extends).
 **Lands in batch:** B03 (`B03-hygiene`, IN), after `11_GO_pointer_and_stale_text_resolutions.md`'s hash-equal items.
