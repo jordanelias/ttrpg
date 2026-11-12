@@ -62,7 +62,7 @@ person's values by two orders; an unbounded stack makes that worse without limit
 | # | decided | ladder step |
 |---|---|---|
 | 1 | One scar per (person, element) per season, behind `scar_season_cap` | 3 (the design document gives the cap) and 4 (the oracle's `SCAR_SEASON_CAP_THREAD` is the precedent in the tree) |
-| 2 | Judged and told halves normalised onto the stance unit: `STANCE_MAX · clamp(sum / n, −1, 1)` with `n` the number of deeds summed, then the existing gain | 4 (`heritage_regard`, CR-31, is the precedent inside the same function) |
+| 2 | Judged and told halves counted in stance steps: each deed contributes the COSINE of the holder's projected pursuits against the deed kind's alignment row (in `[−1, +1]`; a paired deed's cosine times its `_bond`), so one deed is worth at most one valence step before the gain, and the sum is bounded by item 3's clamp | 4 for the unit (`heritage_regard`, CR-31, inside the same function, and `data/pursuits.py::pursuit_cosine_axes`, the one cosine); 3 for the size: `ED-IN-0335` rules that a major betrayal needs a series of events, so one deed must not outweigh a loyalty row and several must be able to |
 | 3 | `stance_term` reads `clamp(regard, −STANCE_MAX, STANCE_MAX)` | 5 (the row type's own bound, `data/cast.py::STANCE_MAX`; a sum past the type's bound is a type error, not a tuning) |
 
 The gains themselves (`judged_gain`, `told_valence_gain`, `stance_gain`, `hostile_stance_gain`) are
@@ -81,12 +81,13 @@ ships as a swept arm and its live flip is a declared mover read against the cont
    `[UNVERIFIED: the exact reset site; the ordinal is the precedent for a per-tick counter that is not
    world state]`. No new `Person` field, no `write_matrix.yaml` row: the count written is still
    `(Person, scar)`.
-3. **`engine/season/queries/person_q.py::deeds_judged`** — unchanged (it returns the raw sums; three
-   other readers use them). **`person_q.py::regard`** — at arm `stance`, replace
-   `jg * judged + tg * told` with `STANCE_MAX * (jg * _unit(judged, n_j) + tg * _unit(told, n_t))`,
-   `_unit(s, n) = max(-1, min(1, s / n)) if n else 0`. `deeds_judged` gains a sibling
-   `deeds_counted(p, referent) -> (n_judged, n_told)` over the same `attributed_deeds` walk, so the two
-   cannot disagree about which claims are counted.
+3. **`engine/season/queries/person_q.py`** — `deed_term` and `deeds_judged` are unchanged (three other
+   readers use the raw sums: `legitimacy`, `world_q.reception`, `holds_dispute`). A sibling
+   `deed_steps(p, axis_w, c) -> float` returns the same deed's worth as a cosine:
+   `pursuit_cosine_axes(axis_w, kind_row(c.predicate))` for an unpaired kind, that cosine times
+   `_bond(p, c.subject, lean)` for a paired one, `0.0` where either vector is zero. `regard`, at arm
+   `stance`, sums `deed_steps` over the same `attributed_deeds` walk `deeds_judged` takes (split by
+   `firsthand` exactly as there) and reads `jg * judged_steps + tg * told_steps`.
 4. **`engine/season/decision/choose.py::_stance_arm`** — at `stance_clamp`, clamp `r` (and the
    `legacy` arm's `stance_toward`) to `±STANCE_MAX` before the polarity sign.
 
@@ -98,7 +99,9 @@ ships as a swept arm and its live flip is a declared mover read against the cont
   does nothing and is not kept.
 - Regard: `engine/season/tests/test_told_by_channel.py::test_r07_realm_regard_differs_between_hearers_by_claim_not_stance_alone`
   already prints pairs differing beyond stance (3,270 of 11,449 at shipped gains). The new reading is
-  the size, not the count: the median computed half at arm `stance` is at least one valence step (1.0).
+  the size, not the count. Reading rule, stated before the run: at arm `stance`, after two seasons, the
+  median computed half among pairs that hold one is at least 0.5 (half a valence step) and no pair's
+  exceeds `STANCE_MAX`.
 - Clamp: H-339's hand-set rows read ±50 at most through `stance_term` (2 × 25 at `stance_gain` 1);
   `build_realm(0)`'s one-season hash is EQUAL with the clamp on, because no shipped row stacks past 25
   (if it moves, a shipped row stacks, and that is a finding).
@@ -107,7 +110,8 @@ ships as a swept arm and its live flip is a declared mover read against the cont
 
 A planted person who witnesses the same violating act five times in one season holds a count of 1 at
 cap 1 and 5 at cap `None`. Two holders with opposite pursuits who each saw one deed hold regards of
-opposite sign and of size `STANCE_MAX · judged_gain` at arm `stance` and of the raw size at `raw`.
+opposite sign, of size at most `judged_gain` (one step times the gain) at arm `stance` and of the raw
+size at `raw`; a holder who saw six such deeds holds a regard that outweighs a loyalty row of weight 2.
 
 ## NERS reading (§0.06)
 

@@ -83,3 +83,30 @@
 ## Research (research/) — 1
 
 - `research/game_precedent_suite/dispositions/D_T01.md` — 59 lines — D_T01: dispositions for T01 (resolution and dice; suite file 02) (class:keyword)
+
+## FULL DESIGN DESCRIPTIONS for this subsystem (quarantined `.designs/`; ARCHIVED-NOT-CANON: READ IN FULL for intent, vocabulary and history; never cite as the reason a behaviour is correct). `_index`/`_infill` files are parts of the document of the same stem — 4
+
+- `.designs/engine/mc_v18_walkthrough.md` — 11 KB — 
+- `.designs/engine/sigma_leverage_engine_armature.md` — 26 KB — 
+- `.designs/engine/sim_reference_CONVENTIONS.md` — 3 KB — Status: [PROVISIONAL — Pass 2l armature scaffold 2026-05-17]
+- `.designs/engine/sim_reference_README.md` — 6 KB — 
+
+## Cross-cutting design descriptions every lane reads (same status as above) — 17
+
+- `.designs/systems/_architecture/reference/auto_manual_resolution_duality_v1.md` — 9 KB — ## Status: Doctrine RULED 2026-07-08 (Jordan) — forks A/B/D resolved; fork C (calibration tolerance) the one residual, c
+- `.designs/systems/_architecture/reference/campaign_architecture_v30.md` — 19 KB — ## Status: CANONICAL — approved by Jordan 2026-04-17
+- `.designs/systems/_architecture/reference/campaign_architecture_v30_index.md` — 5 KB — 
+- `.designs/systems/_architecture/reference/campaign_modes_v30.md` — 10 KB — 
+- `.designs/systems/_architecture/reference/campaign_modes_v30_infill.md` — 6 KB — 
+- `.designs/systems/_architecture/reference/cogload_moderate_target.md` — 16 KB — 
+- `.designs/systems/_architecture/reference/cogload_moderate_target_index.md` — 5 KB — 
+- `.designs/systems/_architecture/reference/companion_app_design_note.md` — 2 KB — 
+- `.designs/systems/_architecture/reference/complete_systems_reference.md` — 16 KB — ## Status: PARTIALLY SUPERSEDED (combat sections) — banner added 2026-07-01 (ED-1084)
+- `.designs/systems/_architecture/reference/conflict_architecture_proposal.md` — 20 KB — ## Status: CANONICAL
+- `.designs/systems/_architecture/reference/early_game_ignition_analysis.md` — 36 KB — 
+- `.designs/systems/_architecture/reference/engine_atlas_v1.md` — 38 KB — ## Status: REFERENCE — consolidation only; authors and ratifies nothing
+- `.designs/systems/_architecture/reference/integration_proposal_v30.md` — 62 KB — 
+- `.designs/systems/_architecture/reference/integration_proposal_v30_index.md` — 6 KB — 
+- `.designs/systems/_architecture/reference/throughlines_complete.md` — 52 KB — 
+- `.designs/systems/_architecture/reference/videogame_mode_spec.md` — 17 KB — ## Status: CANONICAL — single-mode extraction reference for Godot implementation
+- `.designs/systems/_architecture/reference/videogame_mode_spec_index.md` — 3 KB — 

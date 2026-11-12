@@ -693,3 +693,204 @@ B10-17b cards; the part-4 entries for CR-09, CR-32, CR-35 to CR-37, CR-54, CR-88
 IN-48's head; `reasons-to-convene` §0 to §2); the FA research file's §3 to §6, §9; the three
 `research/governance/` bodies, `rise_to_power`, `proactive_governance`, the companion parts, `THROUGHLINES.md`
 and `00_COMPARATIVE_ANALYSIS.md` (searched, not read).
+
+## 13. Provided arcs and characters — adjudication
+
+**Scope and method.** The corpus is 143 cases and 972 needs, 69 of them marked UNCLEAR by their extractor
+(E-8). A need is adjudicated here when the mechanism it turns on is a seat, a faction, an order, a
+succession, a removal, an oath or a war. Needs that turn on a clock, a vote, a contest, a settlement's
+economy or a person's interior are cross-listed to the lane that owns them. "Represented" means *reached in
+a run*, not declared: the evidence column cites E-3 to E-7. In the corpus worlds themselves (E-7) no seat
+lifecycle verb is even attempted, and the instrument reports NPC RUNS and ARC ENDS as NOT-COMPUTABLE, so no
+case is simulated end to end today in any lane's sense; the table says what stands between each need and a
+run.
+
+| case | need (short) | hardness | represented today? | evidence | change required | owner | proposal | gate |
+|---|---|---|---|---|---|---|---|---|
+| NPC-083 | the authority above issues a seasonal order she may comply with, bargain down or defy; repeated defiance forces a reckoning | core | **no** | 91 writs, none held or answered (E-5); `comply` 0 of 33 (E-3) | terms reach the addressee; the triple forms; a defied writ is the issuer's occasion | FA (CORE for `witness.py`) | `06_FA_decree_binds.md` | spine, seeds 0-4, 4 seasons: ≥1 `compliance.given`, ≥1 `compliance.withheld`, then the defier's seat among the issuer's referents |
+| NPC-083 | a limited, renewing per-season budget across a menu of administrative acts | core | **yes** | `decision/budget.py`: base plus one per live `hold`, less wounds and travel; the menu is her seat's grant (E-3 PER HOLDER) | none | CHAR / FA | — | — |
+| NPC-083 | each administrative act resolvable by several methods that hand influence to different internal factions | core | no | no method operand on any governance row | a settlement-management design | SE | — | SE's |
+| NPC-008 | an office makes changing the governing body harder purely by being held | core | no, and **wrongly stated against the architecture** | `04` §B.7: a seat adds no verb and no modifier | restate: a reform needs a Record only he holds, or his seat's confirmation (CR-36's `resolution`) | SC / FA | — (CR-36) | CR-36's exit |
+| NPC-008 | removing him interrupts the function until the office is refilled | important | partly | a vacant seat grants nothing; nothing refills it (F-FA-02) | terms and the vacancy occasion | FA | `06_FA_seat_terms_and_turnover.md` | a `tenure.opened` after a `term.matured` on the same seat |
+| NPC-038 | members of his branch may act above a threshold only with his authorization | core | mechanism yes, play no | `arrest` needs a held warrant issued through another seat (`may_warrant`); `arrest` formed 1, attempted 0 (E-3) | none in FA; a warrant must reach its bearer (the same delivery question as R-01) | FA / SC | `06_FA_decree_binds.md` (the content route covers a warrant's addressee) | one computed `arrest.made` |
+| NPC-038, NPC-004, NPC-070 | exposure or failure removes the office-holder, with downstream damage | core | **no** | their seats' `revocation` is `null` (ruled) | a ruling | Jordan | — | §11 item 3 |
+| NPC-020 | acts taken in the leader's name diverge from his intent, and he learns afterward | core | weakly | an order writes nothing and the ordered person chooses freely; the King learns by claims (91 later acts cite an `order.given`, E-5) | `dispatch` that sends (CP-T09-08); delegation (IN-48) is held against Layer 1 | FA | — (plan) | CP-T09-08's exit |
+| NPC-020, NPC-070 | a standing army reassesses its loyalty in stages, up to ceasing to obey | core | carrier yes, behaviour no | the Grand Master's `oblige` to `off_king` (`offices.yaml:196`) extends the Crown's purview; no such oath was released in any run | duty and the betrayal reading | FA / CHAR | — (CR-88) | CR-88's exit; then a seeded `release` of that oath |
+| NPC-020, NPC-031 | a designated heir is a real status before succession; the throne passes by claim | important | **mechanism yes, unobserved** | `successions`, `_eff_succeed`; no throne vacated in 4 seasons at seed 0 (E-6) | a vacancy to exercise it | FA | `06_FA_playable_scenario.md` (the succession situation) | the scenario run: `succession.claimed` after the King's seat is released |
+| NPC-020, NPC-050, NPC-081 | a succession contested among parties with different bases of claim | core / important | no | the first valid claim wins; no `succession` arrangement row (H-217) | the election and contested-succession arm | FA / SC | — (CR-35) | CR-35's exit; computed reach is H-80's |
+| NPC-050 | a campaign toward a higher seat attemptable only when the seat is weak and the realm unstable; a failed attempt costs standing and cannot be repeated for a time | core | no | no claim on a held seat; no Turmoil | claims (CR-91), deposition (CR-37), the clocks (CR-89) | FA | — (plan) | CR-90's reading |
+| NPC-052 | his successor undetermined among qualified claimants; the domain may split | core | no | `off_duke_varfell` is `elected` and fills by plain `confer` (H-292) | CR-35 for the election; a split of a rung is unowned | FA; SE / WR for the split | — | CR-35's exit |
+| NPC-032 | a consort with standing and no action economy of her own | core | **contradicted** | `off_widow_regent` grants `[issue, determine, confer, revoke, convene]`; she reads `eligible 67 of 67` and executed `convene` and `dispatch` (E-3) | empty her remit while the King lives | FA | `06_FA_remit_grant_by_row.md` | `aperture 2 0`: her seat-gated row reads `-` throughout |
+| NPC-003, NPC-041 | a movement leader with influence before any seat; standing acquired by steps | core | partly, and against the case | she is seated at build (`off_restoration_leader`); no emergence | an emerged faction founded by a creed (IN-30, stopped) | FA / WR | — (IN-30, CR-39) | IN-30's exit |
+| NPC-036, NPC-072, NPC-082 | a command post materially affects what the faction can do | core | **not distinguishable** | 26 of 33 seats may `march`; the marchers were a treasurer, a legal advisor, a guild representative and a skald (E-3) | grants by row | FA | `06_FA_remit_grant_by_row.md` | every `march` attempt is by a seat whose row names `dispatch` |
+| NPC-037, NPC-013 | a treasury post moves the faction's material resources | core | partly | `requisition.taken` 0, 1 and 6 at seeds 0-2 (E-5); one purse per rung (H-352) | R-07 when reached | FA / SE | — | — |
+| NPC-034 | one person is the sole lawful conduit for a second institution's authority on the first's ground | core | **structure yes, content no** | purview is the seat's rung: his Church seat at `T1` is the only Church seat reaching Crown ground, and its remit is `[]` | name `issue` on his row so his seat can write the warrant | FA (content) | `06_FA_remit_grant_by_row.md` | a hand-built warrant issued through his seat admits an `arrest` at `T1`; through any other Church seat it is refused |
+| NPC-073, NPC-074, NPC-084 | a council seat casts a distinct position on faction policy | core | no | `determine` 0, 1, 0 executed (E-5); the vote conjunct is hand-built only (CR-34) | SC's hearing; H-80 | SC | sibling `05_SC_*` | SC's |
+| NPC-089 | a frontier governor chooses among probe, pressure and invasion | core | partly | she may `march` and `issue` (E-3: `issue` executed); no demand, no declaration | the trade demand (FA-01), `declare` (CP-T09-02) | FA | — (plan) | the cards' exits |
+| NPC-090 | a treaty constrains what trade officials may change | core | no | `covenant` 0 of 10 (E-3); nothing reads a covenant | CP-T09-03 | FA | — (plan) | its exit |
+| ARC-40 | a head of state forced to act, abdicate or be replaced | core | abdication yes, forcing no | `release` of his own `hold` is lawful (`_eff_release`); `release` 0 of 15 in the realm (E-3) | the forcing is CR-89's; replacement is CR-37's | FA | — (plan) | CR-90 |
+| ARC-R18 | a formal vote that neither coalition wins, with consequences | core | hand-built only | CR-34's `vote` conjunct refuses below quorum | SC's | SC | sibling | SC's |
+| ARC-17, ARC-04 | a superior's response to a subordinate's disloyalty; trust eroding from inaction | core | no | F-FA-05 | CR-88; the defied-writ occasion gives the superior something to respond to | FA / CHAR | `06_FA_decree_binds.md` | as row 1 |
+| ARC-01, ARC-03 | a quantity that moves purely from the *absence* of any act | core | no, and **wrongly stated against a ruling** | ED-IN-0345: a clock is an accumulation of world events; a clock that moves with no event stays cut (CR-89's WHAT) | restate on events that already mark inaction: a petition's or a seat's `term.matured` (542 at realm seed 0, E-5) | FA / CORE | — (CR-89) | CR-89 commit (1) |
+| ARC-45, NPC-012 | a diplomatic demand suppressed while an intermediary withholds signals | core | no | no demand exists | FA-01's clause after CR-29 | FA / CORE | — (plan) | FA-01's exit |
+
+**Needs wrongly stated** (three kinds). *Against the architecture*: NPC-008's passive office modifier.
+*Against a ruling*: ARC-01 and ARC-03's absence-driven drift. *Against the built content*: NPC-032 and
+NPC-003, where the realm seats a character the case says holds no powers or no seat. A fourth kind is the
+extractor's own: fourteen FA-bearing cases carry an UNCLEAR need that says no goal, remit or territory was
+authored (NPC-071, -034, -035, -036, -037, -039, -041, -072 to -074, -081, -082, -084, -085); those are
+content debts on `references/npc_registry.yaml` and `offices.yaml`, not engine gaps.
+
+**What FA can bring up soonest, in order.**
+
+1. **NPC-083, the governor under orders** (and the order half of NPC-020, ARC-17): after
+   `06_FA_decree_binds.md`. Artifact: the spine scenario with the player as a territory's lord and the
+   auto chooser above him; a season in which a writ addressed to him is answered either way and the issuer's
+   later question set names him. No other lane is needed but CORE's review of the witness edit.
+2. **NPC-036, -072, -082 and NPC-032, -034, the posts that mean something**: after
+   `06_FA_remit_grant_by_row.md`. Artifact: `aperture 2 0` PER HOLDER. No dependency.
+3. **NPC-031 and the succession half of NPC-020**: the mechanism is in the tree; it needs a vacancy.
+   Artifact: the scenario's succession situation (the King `release`s; the heir's `succeed` executes; a
+   control with the heir banned refuses). No dependency.
+4. **NPC-008's refill and every "who is next in the chain" need (NPC-070, NPC-006, NPC-009)**: after
+   `06_FA_seat_terms_and_turnover.md`. Depends on CORE's question slot (H-54) only for how often, not
+   whether.
+5. **NPC-052, NPC-081, NPC-050's contest**: after CR-35 (B10-17 close two). Depends on SC (the declared
+   disposal and the docket's arrangement, H-80).
+6. **NPC-070's Split, ARC-40, NPC-050's campaign**: after B10-17b. Depends on CHAR (CR-83, IN-70) and CORE
+   (CR-29).
+
+## 14. Capability authoring surface
+
+**(a) Where FA takes a character capability as input.**
+
+| point | what is read | from where | code |
+|---|---|---|---|
+| aperture: which seat-gated verbs a person may form | the grant on his `hold` (`Tenure.granted_acts`) | `offices.yaml: seats[].remit_acts`, snapshotted at seating | `World._grant_remit`; `decision/options.py::opening_set` |
+| authority: whether the act is admitted | the seat's rung, basis fields and oaths | `offices.yaml` (`rung`, `conferral`, `revocation`), `rosters.yaml` (`conferral_bases`, `revocation_bases`, `successions`) | `state/gate.py::may_fill`, `may_revoke`, `may_claim`, `purview_reaches` |
+| action economy | one more scene per live `hold`; fewer for wounds and travel | `Fixtures budget_office_bonus`, `band_floors`, `budget_leg_penalty` | `decision/budget.py` |
+| the pool of a contested governance act (`determine`, `arrest`, `interrogate`; `capture`; `march`'s field) | the actor's held capability key for the verb's vocation, else the vocation's attribute, else `pool_default` | `rosters.yaml: verb_capability` (verb → vocation), `vocation_attribute` (vocation → one of the ten `references/descriptor_registry.yaml: attributes`), `Person.capability`, `lifepath_templates` | `seam/wrappers/sigma.py::faculty` |
+| the score of a governance candidate | pursuits against the verb's alignment cells; held affiliations against the verb × affiliation table | `rosters.yaml` tables (`alignment`, `affiliation_engagement`, `incompatible`) | `decision/choose.py`; `data/affiliations.py::engagement` |
+| what a revocation costs | the seat's conferral basis | `state/gate.py::REVOCATION_DISPOSAL` | `_eff_revoke` |
+| whom to seat | nothing about the candidate: the conferee is any living person the conferrer knows, tied on score, lowest id first (H-207's cite) | — | `decision/options.py::operand_bags` |
+
+**(b) Data-driven, hard-coded or doubled.**
+
+- *Data-driven and single-owned:* the grant, the bases, the budget magnitudes, the alignment and affiliation
+  tables, the vocation chain.
+- *Data-driven and empty for FA:* `verb_capability` has rows for `tell`, `speak`, `argue`, the three
+  inquiries, `fight`, `accept` and `capture`, and **none for `determine`, `arrest`, `interrogate` or
+  `march`**. So no person's ability changes the outcome of any judgment, arrest or interrogation: each rolls
+  `pool_default` (2). In the realm run no governance verb reached a roll at all, and every pool the seam did
+  roll for other verbs was 2 with no two actors differing (E-3, POOLS ROLLED).
+- *Rule in code, by declared precedent:* `REVOCATION_RULES`, `REVOCATION_DISPOSAL`, `FILLED_BY`
+  (`gate.py:617`, `:653`, `:697`): the roster names the basis, Python holds the rule, an import check keeps
+  them total. Acceptable: these are rules, not capabilities.
+- *Content constants in code:* `FOUNDER_KEEPS`, `FOUNDED_CONFERRAL`, `FOUNDED_REVOCATION`
+  (`predicates.py:255-257`): what a founded office is granted. These are content and belong on
+  `offices.yaml` beside `titles:`.
+- *Possibly doubled:* which remit act licenses which gate basis is spelt in the verb row's `eligibility:`
+  and again as `WARRANT_ACT`, `SEIZURE_ACT`, `MUSTER_ACT`, `CESSION_ACT`, `BENCH_BASIS` in `gate.py:260-342`.
+  [UNVERIFIED: whether a load check ties each constant to its row.]
+
+**(c) Target shape, for FA.** FA needs no capability system of its own. The owner exists:
+`rosters.yaml: verb_capability` and `vocation_attribute`, over the attribute registry, read by `faculty`.
+What a capability definition must say for FA to use it, and where:
+
+1. *A verb says which vocation it draws on* (`verb_capability`, existing). FA needs rows for its contested
+   verbs. The chain is closed both ways, so each new vocation also needs its `vocation_attribute` row.
+2. *A seat says which vocation its post calls on* (new, one optional key `vocation:` on the `offices.yaml`
+   row, validated against `data/verbs.py::VOCATIONS`). It gates nothing. It is read in one place: ranking
+   the candidates for a `confer`, where today the choice is positional.
+3. *A capability says how it is gained from service* (existing owner: `train` and the `practice` addend).
+   FA asks only that exercising a seat's contested verb counts as practice of that verb's vocation, which
+   the practice rule already does for any verb with a `verb_capability` row once (1) is authored.
+
+**The interface FA states for the holistic merge:** `faculty(person, verb) -> pool` and its opposition twin
+stay the only readers of capability at a roll; `vocation_of(seat) -> vocation | None` is the one new read,
+and it feeds a candidate's score, never admission. FA reads no attribute by name anywhere.
+
+**(d) The axioms, in the tradition's vocabulary.**
+
+Implemented:
+
+- *Position is a permission, not a statistic.* An office grants a fixed list of actions (a class feature
+  list); skill plays no part in whether a decree, an appointment or a dismissal is lawful.
+- *Skill supplies dice and never access* (ruled: "capability supplies dice and gates nothing").
+- *Action economy scales with station and shrinks with wounds.*
+- *An item as a key:* a warrant licenses an arrest; a writ is what one obeys.
+- *A status condition:* `ban` and `detain` are conditions with a source and a remover (`pardon`).
+- *Bonds with upkeep:* an oath of service costs its seat per term and lapses unpaid.
+- *Opposed rolls* for the contested governance verbs.
+
+Lacking, where a designer would look for it:
+
+- No leadership, command, statecraft or judgment skill touches any governance outcome (b).
+- No advancement from holding office: a term as a judge teaches nothing.
+- No rank within a faction: `decision/options.py::rank` reads 0 for every pair (H-181); CR-32 owns ladders.
+- No qualification for a post, even as a preference: the conferee is positional.
+- No loyalty value that play reads (`data/cast.py`'s loyalty weights goal rows at build and nothing after).
+
+Contradicted, deliberately, and a designer should be told: there is no faction sheet of statistics. A faction
+has no attributes, no treasury of its own and no morale; every such figure is a Query over persons, and the
+`faction_sheet` Record is a frozen copy of that Query.
+
+**(e) Proposals, ordered.**
+
+1. `06_FA_office_capabilities.md`: the four `verb_capability` rows and their `vocation_attribute` rows; the
+   optional `vocation:` key on a seat and its one reader; `FOUNDER_KEEPS` and its two siblings moved to
+   `offices.yaml`. The vocation names and their attributes are Jordan's content and are proposed as
+   assumptions.
+2. Nothing further in FA. Rank is CR-32's; duty is CR-88's; the merged authoring file is the holistic
+   stage's.
+
+## 15. The NPC and chooser surface in FA
+
+The statement of the intent, reconciled from code and ruling, is the CHAR lane's
+(`audits/02_CHAR_audit.md`; its intent section was not yet written when this audit closed and is cited, not
+read). What follows is only what FA's own code shows.
+
+**(a) What FA needs of an NPC and of the chooser.** *Who decides:* always a person, never a faction; a
+governance act is the seat-holder's own, through `make_chooser`. *On what information:* his View and ledger,
+plus three standing occasions that stamp referents onto the question he answers: vacant seats he may fill
+(`world_q.vacancies`), writs he holds that name him (`writs_held`), matters before a sitting he sits on
+(`sittings_before`). *With what temperament:* the verb's alignment cells against his pursuits, and the
+verb × affiliation table against his held affiliations. *At what budget:* the scene base, plus one per seat
+held, less wounds and travel. *With what visible reasons:* a refusal Event keyed by clause for a typed row;
+nothing for the three predicate rows (H-252); the chooser's deciding term only through the `interactions`
+instrument. FA additionally needs, and does not have: a reason to fill a vacancy, a way to choose whom to
+seat, a reason to obey or defy, and a response to a rival's march (F-FA-02, F-FA-01, F-FA-04, F-FA-05).
+
+**(b) One interface for player and NPC.** Yes. `harness/play_surface.py::dispatching_chooser` hands a named
+person's deliberation to a callback with the arguments the chooser receives, and
+`decision/sheet.py::development_space` lets a player rank and select from the candidate set and refuses an
+index outside it, so through that space a player in a seat is offered exactly what an NPC in it is. FA has
+no second path. One asymmetry to keep closed: a hand-built act may carry payload keys no computed act can
+(`term` on a `confer`, `office` on a `revoke`, the overlay keys of an `establish`); a client that builds
+acts instead of picking candidates would have a wider aperture than any NPC. The two proposals that move
+those keys onto data and onto `subject` (R-17, R-03) close most of it.
+
+**(c) Rules FA hard-codes where the chooser should decide.** None branches on an entity. Four are
+tie-breaks or stamps that act as rules:
+
+- the conferee: every `confer(seat, to=*)` candidate ties on score, so the lowest-id known person is seated
+  and the conferrer himself is last (H-207's cite);
+- the founded post: where a rung kind has two titles the first in authored order is taken, so a computed
+  founding always mints the King, the Duke, the Count (`predicates.py:281-282`, `:304`);
+- a vacancy is stamped from a world fact with no ledger channel (`vacancies` reads whether a seat is held),
+  so an NPC knows a seat is empty without having heard it; the tree records the tension with AX-7 (H-207's
+  cite) and leaves it;
+- every binding decision is deposited on everyone alive (`_ch_chronicle`), so no NPC is ignorant of a
+  decree; CR-29 owns the replacement.
+
+**(d) What would make an officer characterful, and legible afterwards.** *Characterful:* the choice to obey
+or defy read from his regard for the issuer and the issuer's legitimacy (`person_q.legitimacy` exists;
+whether `comply` and `evade / defy` carry alignment cells was not checked [UNVERIFIED]); the choice of whom
+to seat read from his regard for each candidate and the seat's vocation; the weight of a vacancy or an
+unanswered order read from his office's goals (CR-88). *Legible:* the clause that refused a `confer` or an
+`establish` (R-14); the digest of §9; the occasion an act cites, which already exists and which the
+defied-writ occasion would make specific ("he revoked the reeve because the reeve defied the grain writ").
+
+**(e) Missing, as proposals.** `06_FA_decree_binds.md` (the obey-or-defy decision and the issuer's response);
+`06_FA_office_capabilities.md` (ranking the conferee); `06_FA_hygiene.md` R-14 (the refusing clause);
+`06_FA_playable_scenario.md` (reasons shown to a player). Duty is CR-88's and is not duplicated.

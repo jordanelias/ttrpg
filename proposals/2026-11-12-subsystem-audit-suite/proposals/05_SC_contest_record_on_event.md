@@ -46,8 +46,14 @@ field (`margin`) — a second carrier for one fact per provider (shape divergenc
    ```yaml
    margin_endings:
      source: "SC-P1 (H-284): what a margin provider's contest leaves on its Events"
-     values: ["pool", "ob", "net", "margin"]     # ordered; the tuple's keys
+     values: ["pool", "ob", "net", "margin", "room", "leverage"]     # ordered; the tuple's keys
    ```
+
+   `room` is `reception_gain·reception + proof_step·proofs` as the module composed it and
+   `leverage` the act's net sigma: the two terms a narrative needs to say WHY (the bench was against
+   him; he pressed). `sigma.resolve` adds `room` to its returned dict (it already returns
+   `leverage`); the module exposes the term by returning it beside the obstacle from one helper, so
+   the host does no arithmetic.
 
 2. `engine/season/loop/resolve.py::_fold` — after `_degree` is bound (`:406`), where
    `resolution is not None` and `resolution.result` carries a `net`/`ob` pair (the same test

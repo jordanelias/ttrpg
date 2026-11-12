@@ -64,10 +64,26 @@ are not season acts; a hearing's turns are — `speak`, `tell`, `give`, `determi
    speech_kinds` then supplies the closed set of plea ids and nothing else: its `reachable_bands`
    key is deleted in CR-62's commit unless CR-62's dominance test adopts the cap, and the roster is
    deleted whole if CR-62 lands without reading it (audit §6, G-06).
-3. **The consequence (CP-T05-02 (i), released on SC-02's design):** `queries/world_q.py::hearing(w,
-   matter, venue)` and the `hearing_step` room operand on `determine`'s record, as the plan words it.
-   This proposal adds nothing to it; it names it as the edge without which item 5's stakes do not
-   exist.
+   **The chooser forms the variants, as it forms `effort` (one interface for player and NPC).**
+   `decision/choose.py::settle_efforts` already turns a contested candidate into ordinary
+   Candidates that differ in one operand. The proofs subset and the plea are offered the same way
+   (owner: CHAR's file; SC's requirement is only that the variants are Candidates, so an NPC's
+   temperament picks among them by the same score a player's callback sees). A choice only a player
+   can make would be a second code path.
+3. **The consequence — speech is entered on the case file.** The plan's carrier is CP-T05-02 (i):
+   `queries/world_q.py::hearing(w, matter, venue)`, read from what the bench holds, re-specified on
+   SC-02's commit route so it does not breach F8. DECIDED here as the better carrier (ladder step 5),
+   and offered to that position rather than beside it: a `speak` that grades `Success` or better
+   appends one stage to the matter's case file (`Record.stages`: `(tick, <band's kind>, act id)`),
+   and `hearing` is a count over that Record's stages, signed by whose act it was. Three things
+   follow from the one write. (i) F8 is not in question: a Record is a World store, and the case file
+   is the proceeding's own record, not a judge's memory. (ii) `speak` now WRITES in two bands, so
+   `decision/choose.py::_writing_bands` holds for it and the chooser prices its believed chance and
+   offers `effort` on it with no edit to decision code — today both skip `speak` because it writes
+   nothing (`choose.py:154-162`; `corpus_run`: *"BANDS THAT DIFFER … speak False"*). (iii) The
+   hearing's record can be forged, burned or seized like any Record (CR-61's premise), which is a
+   story. Needs CR-61 (the docket item names its case file). CP-T05-02 (i)'s arithmetic (Failure and
+   Partial count 0; `DEGREE_STEP`) is kept unchanged; only its source moves.
 4. **The player seam (new function, existing file):** `engine/season/harness/headless.py` gains
    `--play <person id>` and `--world hearing`: it builds item 1's world, wraps the shipped chooser in
    `dispatching_chooser(auto, {pid: callback})`, and the callback prints the person's `View` (his

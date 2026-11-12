@@ -403,6 +403,47 @@
 
 - `research/by_lane/IN_infrastructure.md` — 1118 lines — IN — infrastructure and cross-cutting: historical research, game precedent and repository work, critically evaluated (class:lane file)
 
+## FULL DESIGN DESCRIPTIONS for this subsystem (quarantined `.designs/`; ARCHIVED-NOT-CANON: READ IN FULL for intent, vocabulary and history; never cite as the reason a behaviour is correct). `_index`/`_infill` files are parts of the document of the same stem — 18
+
+- `.designs/systems/_architecture/reference/canonical_registry.md` — 15 KB — ## Status: PARTIALLY SUPERSEDED (combat rows) — banner added 2026-07-01 (ED-1084)
+- `.designs/systems/_architecture/reference/holonic_container_doctrine_v1.md` — 10 KB — ## Status: CANONICAL — ratified 2026-07-02 (Jordan, PR #55 merge-approval; ED-1083, ED-1094)
+- `.designs/systems/_architecture/reference/hybrid_gaps_v30.md` — 7 KB — 
+- `.designs/systems/_architecture/reference/hybrid_gaps_v30_infill.md` — 8 KB — 
+- `.designs/systems/_architecture/reference/key_echo_armature_v1.md` — 37 KB — ## Status: RATIFIED (Jordan, 2026-07-07, "ratify all" consolidated ruling pass — ED-IN-0026; §5 is now
+- `.designs/systems/_architecture/reference/key_substrate_v30.md` — 30 KB — ## Status: CANONICAL
+- `.designs/systems/_architecture/reference/key_type_registry_v30.md` — 58 KB — ## Status: CANONICAL
+- `.designs/systems/_architecture/reference/ners_vsg_reconciliation_v1.md` — 26 KB — ## Status: ALL SIX ITEMS RULED (D1–D5: ED-IN-0046; D6+B1: ED-IN-0047; B2+B12: direct Jordan ruling 2026-07-13) — 2026-07
+- `.designs/systems/_architecture/reference/repo_state_armature_v1.md` — 13 KB — ## Status: RATIFIED — charter + Phases 0–2 plan-of-record (ED-IN-0077, PR #193 merged 2026-07-20). Phase 0/1 EXECUTED; t
+- `.designs/systems/_architecture/reference/repository_keep_set_v1.md` — 25 KB — ## Status: RULES RATIFIED (Jordan, in-session 2026-08-04, ED-IN-0125/0127). PER-DIRECTORY
+- `.designs/systems/_architecture/reference/session_a_spec_patches.md` — 9 KB — 
+- `.designs/systems/overview/reference/clock_registry_v30.md` — 9 KB — 
+- `.designs/systems/overview/reference/clock_registry_v30_infill.md` — 1 KB — 
+- `.designs/systems/overview/reference/ms_budget.md` — 9 KB — 
+- `.designs/systems/overview/reference/overview_flow_skeleton_v1.md` — 31 KB — ## Status: REFERENCE — traced structure only (no design content, no infill)
+- `.designs/systems/overview/reference/peninsular_strain_v30.md` — 51 KB — ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance). Integrated into victory_v30.md.
+- `.designs/systems/overview/reference/peninsular_strain_v30_index.md` — 7 KB — 
+- `.designs/systems/overview/reference/wc_survival_spine.md` — 11 KB — 
+
+## Cross-cutting design descriptions every lane reads (same status as above) — 17
+
+- `.designs/systems/_architecture/reference/auto_manual_resolution_duality_v1.md` — 9 KB — ## Status: Doctrine RULED 2026-07-08 (Jordan) — forks A/B/D resolved; fork C (calibration tolerance) the one residual, c
+- `.designs/systems/_architecture/reference/campaign_architecture_v30.md` — 19 KB — ## Status: CANONICAL — approved by Jordan 2026-04-17
+- `.designs/systems/_architecture/reference/campaign_architecture_v30_index.md` — 5 KB — 
+- `.designs/systems/_architecture/reference/campaign_modes_v30.md` — 10 KB — 
+- `.designs/systems/_architecture/reference/campaign_modes_v30_infill.md` — 6 KB — 
+- `.designs/systems/_architecture/reference/cogload_moderate_target.md` — 16 KB — 
+- `.designs/systems/_architecture/reference/cogload_moderate_target_index.md` — 5 KB — 
+- `.designs/systems/_architecture/reference/companion_app_design_note.md` — 2 KB — 
+- `.designs/systems/_architecture/reference/complete_systems_reference.md` — 16 KB — ## Status: PARTIALLY SUPERSEDED (combat sections) — banner added 2026-07-01 (ED-1084)
+- `.designs/systems/_architecture/reference/conflict_architecture_proposal.md` — 20 KB — ## Status: CANONICAL
+- `.designs/systems/_architecture/reference/early_game_ignition_analysis.md` — 36 KB — 
+- `.designs/systems/_architecture/reference/engine_atlas_v1.md` — 38 KB — ## Status: REFERENCE — consolidation only; authors and ratifies nothing
+- `.designs/systems/_architecture/reference/integration_proposal_v30.md` — 62 KB — 
+- `.designs/systems/_architecture/reference/integration_proposal_v30_index.md` — 6 KB — 
+- `.designs/systems/_architecture/reference/throughlines_complete.md` — 52 KB — 
+- `.designs/systems/_architecture/reference/videogame_mode_spec.md` — 17 KB — ## Status: CANONICAL — single-mode extraction reference for Godot implementation
+- `.designs/systems/_architecture/reference/videogame_mode_spec_index.md` — 3 KB — 
+
 ## Lane handoff — 1
 
 - `registers/handoffs/HANDOFF_IN.md` (Open + Standing orders tables; READ IN FULL) ; history `HANDOFF_IN_history.md`; closed `HANDOFF_IN_closed.md`

@@ -344,3 +344,66 @@
 - `articulation_layer_v30.md` — present on disk (reference / intent only, §0.05; `.designs/` is ARCHIVED-NOT-CANON)
 - `npc_behavior_v30.md` — present on disk (reference / intent only, §0.05; `.designs/` is ARCHIVED-NOT-CANON)
 - `decision_policy_v1.md` — present on disk (reference / intent only, §0.05; `.designs/` is ARCHIVED-NOT-CANON)
+
+## FULL DESIGN DESCRIPTIONS for this subsystem (quarantined `.designs/`; ARCHIVED-NOT-CANON: READ IN FULL for intent, vocabulary and history; never cite as the reason a behaviour is correct). `_index`/`_infill` files are parts of the document of the same stem — 40
+
+- `.designs/systems/_architecture/reference/decision_policy_v1.md` — 10 KB — ## Status: DRAFT FOR RULING — does NOT ratify on merge (ED-1094 exception) — ED-IN-0113 §A, 2026-07-31
+- `.designs/systems/_architecture/reference/derived_stats_v30.md` — 47 KB — ## Status: CANONICAL
+- `.designs/systems/_architecture/reference/derived_stats_v30_index.md` — 4 KB — 
+- `.designs/systems/_architecture/reference/generational_transition_v30.md` — 3 KB — 
+- `.designs/systems/_architecture/reference/player_agency_v30.md` — 55 KB — ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
+- `.designs/systems/_architecture/reference/player_agency_v30_index.md` — 6 KB — 
+- `.designs/systems/articulation/reference/articulation_flow_skeleton_v1.md` — 13 KB — ## Status: REFERENCE — traced structure only (no design content, no infill)
+- `.designs/systems/articulation/reference/articulation_layer_v30.md` — 22 KB — ## Status: CANONICAL
+- `.designs/systems/characters/reference/character_generation_questionnaire_v30.md` — 8 KB — ## Status: CANONICAL
+- `.designs/systems/characters/reference/character_histories_v30.md` — 39 KB — ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
+- `.designs/systems/characters/reference/character_histories_v30_index.md` — 6 KB — 
+- `.designs/systems/characters/reference/character_histories_v30_infill.md` — 16 KB — ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
+- `.designs/systems/characters/reference/characters_flow_skeleton_v1.md` — 22 KB — ## Status: REFERENCE — traced structure only (no design content, no infill)
+- `.designs/systems/characters/reference/conviction_axis_matrix_v30.md` — 12 KB — ## Status: CANONICAL
+- `.designs/systems/characters/reference/conviction_migration_roster_v30.md` — 10 KB — ## Status: CANONICAL
+- `.designs/systems/characters/reference/conviction_taxonomy_v30.md` — 16 KB — ## Status: CANONICAL
+- `.designs/systems/characters/reference/conviction_track_v1.md` — 10 KB — 
+- `.designs/systems/characters/reference/conviction_track_v1_pp718_vetting.md` — 39 KB — 
+- `.designs/systems/characters/reference/conviction_track_v30.md` — 34 KB — 
+- `.designs/systems/characters/reference/conviction_track_v30_index.md` — 5 KB — 
+- `.designs/systems/characters/reference/conviction_track_v30_infill.md` — 6 KB — 
+- `.designs/systems/npcs/reference/baralta_v30.md` — 4 KB — 
+- `.designs/systems/npcs/reference/character_canon_v30.md` — 33 KB — ## Status: PROVISIONAL — pending ratification.
+- `.designs/systems/npcs/reference/companion_specification_v30.md` — 11 KB — 
+- `.designs/systems/npcs/reference/edeyja_npc.md` — 10 KB — ## Status: Canonical Non-Player Character (working name — pending final name pass with territory naming audit)
+- `.designs/systems/npcs/reference/npc_behavior_system_v1.md` — 66 KB — ## Status: SUPERSEDED — canonical doc is designs/systems/npc_behavior_v30.md (editorial batch acceptance 2026-04-17). Re
+- `.designs/systems/npcs/reference/npc_behavior_system_v1_index.md` — 9 KB — 
+- `.designs/systems/npcs/reference/npc_behavior_v30.md` — 106 KB — ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
+- `.designs/systems/npcs/reference/npc_behavior_v30_index.md` — 13 KB — 
+- `.designs/systems/npcs/reference/npc_behavior_v30_infill.md` — 19 KB — ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
+- `.designs/systems/npcs/reference/npc_character_analyses_v30.md` — 21 KB — 
+- `.designs/systems/npcs/reference/npc_character_analyses_v30_index.md` — 5 KB — 
+- `.designs/systems/npcs/reference/npc_character_analyses_v30_infill.md` — 46 KB — 
+- `.designs/systems/npcs/reference/npc_foils_v30.md` — 5 KB — 
+- `.designs/systems/npcs/reference/npc_foils_v30_infill.md` — 32 KB — 
+- `.designs/systems/npcs/reference/npc_relational_graph_v30.md` — 60 KB — 
+- `.designs/systems/npcs/reference/npc_roster_v30.md` — 35 KB — 
+- `.designs/systems/npcs/reference/npc_roster_v30_index.md` — 5 KB — 
+- `.designs/systems/npcs/reference/npc_roster_v30_infill.md` — 33 KB — 
+- `.designs/systems/npcs/reference/npcs_flow_skeleton_v1.md` — 15 KB — ## Status: REFERENCE — traced structure only (no design content, no infill)
+
+## Cross-cutting design descriptions every lane reads (same status as above) — 17
+
+- `.designs/systems/_architecture/reference/auto_manual_resolution_duality_v1.md` — 9 KB — ## Status: Doctrine RULED 2026-07-08 (Jordan) — forks A/B/D resolved; fork C (calibration tolerance) the one residual, c
+- `.designs/systems/_architecture/reference/campaign_architecture_v30.md` — 19 KB — ## Status: CANONICAL — approved by Jordan 2026-04-17
+- `.designs/systems/_architecture/reference/campaign_architecture_v30_index.md` — 5 KB — 
+- `.designs/systems/_architecture/reference/campaign_modes_v30.md` — 10 KB — 
+- `.designs/systems/_architecture/reference/campaign_modes_v30_infill.md` — 6 KB — 
+- `.designs/systems/_architecture/reference/cogload_moderate_target.md` — 16 KB — 
+- `.designs/systems/_architecture/reference/cogload_moderate_target_index.md` — 5 KB — 
+- `.designs/systems/_architecture/reference/companion_app_design_note.md` — 2 KB — 
+- `.designs/systems/_architecture/reference/complete_systems_reference.md` — 16 KB — ## Status: PARTIALLY SUPERSEDED (combat sections) — banner added 2026-07-01 (ED-1084)
+- `.designs/systems/_architecture/reference/conflict_architecture_proposal.md` — 20 KB — ## Status: CANONICAL
+- `.designs/systems/_architecture/reference/early_game_ignition_analysis.md` — 36 KB — 
+- `.designs/systems/_architecture/reference/engine_atlas_v1.md` — 38 KB — ## Status: REFERENCE — consolidation only; authors and ratifies nothing
+- `.designs/systems/_architecture/reference/integration_proposal_v30.md` — 62 KB — 
+- `.designs/systems/_architecture/reference/integration_proposal_v30_index.md` — 6 KB — 
+- `.designs/systems/_architecture/reference/throughlines_complete.md` — 52 KB — 
+- `.designs/systems/_architecture/reference/videogame_mode_spec.md` — 17 KB — ## Status: CANONICAL — single-mode extraction reference for Godot implementation
+- `.designs/systems/_architecture/reference/videogame_mode_spec_index.md` — 3 KB — 

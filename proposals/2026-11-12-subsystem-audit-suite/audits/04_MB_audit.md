@@ -810,7 +810,7 @@ are under `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/s
 | inline: preset armies meeting | seeds 0 to 19, army path | levy 900 (`Reserve`) v levy 600: 6 `Success`, 14 `Partial`, survivors 0.98 and 0.96; levy 900 v a headcount side of weight 20: 3 wins of 20; spearmen 900 v 600: 10 of 20 |
 | `presets_probe.py 0 2 control` and `... presets` | `build_realm(0)`, 2 seasons | control: `field.unopposed` 3, hash `bacd687f`; presets: three levy armies (600, 900, 600), the same events, hash `0622a841` |
 | `seed2_field.py 2 1` | `build_realm(2)`, 1 season | one `field.lost`; bodies 1000 → 20 (two), → 30 (two), → 400, → 225 |
-| `python -m engine.season.harness.corpus_run` | corpus | **not completed** within this run (started, no output when the audit closed; the machine was shared with the other lanes). §13 does not rest on it |
+| `python -m engine.season.harness.corpus_run` | 143 cases, seed 0 | `march`, `marshal`, `surrender`, `recruit`, `form_unit`, `assign_troops`, `order_unit`, `disband_unit` and `discharge_troops` are all among the 30 rows "foldable but never even attempted"; no field of any band is resolved in the corpus (`DEGREES RESOLVED` lists no `Won`, `Lost` or `Unopposed`) (`corpus_run.txt`) |
 | `presets_probe.py 0 2 tpw30` | | **failed to run**: the probe could not replace a fixture value on a built world; not retried |
 
 **How the code was read.** Read in full, as written: `massbattle.py`, `armies.py`, `armyrecord.py`,
@@ -835,7 +835,9 @@ files was read only where a finding cites it.
 
 Cases were selected by reading every `season_requires` need in `engine/season/cases/` for one whose
 mechanism is a field, an army, a siege or a military command. "Represented" means reached in a run, not
-declared. Proposal numbers: 1 = `04_MB_headcount_grade_and_scale.md`, 2 =
+declared. The corpus instrument itself reaches none of it: `corpus_run` (143 cases, seed 0) attempts no
+`march` and no army verb in any case, so every "yes in mechanism" below rests on the module and realm
+probes of §12, and none on the corpus. Proposal numbers: 1 = `04_MB_headcount_grade_and_scale.md`, 2 =
 `04_MB_typed_outcome_and_one_path.md`, 3 = `04_MB_playable_field_scenario.md`.
 
 | case | need (short) | hardness | represented today? | evidence | change required | owner lane | proposal | gate |
@@ -960,3 +962,72 @@ part of `04_MB_typed_outcome_and_one_path.md` (the input record) and §8 step 8;
 decision of the capability's name. (2) The troop tables as one exported typed file: same proposal,
 R-08's sibling. (3) The module's `roll_pool` and `compute_degree` forward to the substrate's owners, a
 DICE-lane edit recorded here and not proposed. No private capability scheme is proposed.
+
+## 15. Duels in and around a mass engagement (Jordan's personal-combat intent, 2026-11-12)
+
+**Where a duel is embedded in or arises from a mass engagement today: nowhere.** There is no edge between
+the two modules (§10). The combat entry is `modules/combat/fight.py::fight(inp, rng, decide)`, reached
+through the `the body` prize; `decide` is the PLAYABLE per-turn decider and `None` is the automatic loop,
+so that module already has the two modes on one path at the granularity of a whole fight. The mass-battle
+provider accepts the same `host` keyword and ignores it (`seam/wrappers/mass_battle.py:361-363`). Nothing
+in `resolve_field` knows a person as a fighter: a named character is one unit of `weight`.
+
+**Where one should arise, by the code's own shapes.**
+
+1. **A field between individuals is not a mass battle.** The realm's actual fields are two to six named
+   persons a side at weight 1 (§1.3: the seed-2 field is two against three). `resolve_field` turns them
+   into two "troops" against three and the engine, calibrated for hundreds, returns a constant. This is
+   the Final Fantasy Tactics case exactly: a handful of characters on a grid. The resolver that knows what
+   a character can do is the duel round. So the scale decides the module: **a side with no cohort member
+   and no army Record is a squad, and a field between two squads belongs to personal combat's grid mode**;
+   mass battle begins where a side fields a block. R-01 (one weight to troops owner) makes the present
+   path coherent in the meantime; it does not make two men an army.
+2. **Between engagements.** With `Drawn` (R-03) a field can run to a second engagement; the round between
+   is where a `fight` on the enemy commander, a challenge, or a `capture` is an ordinary act through the
+   ordinary combat seam. Its result re-enters the battle through inputs that already exist or are proposed:
+   the commander's `body` as his subunit's fitness (`_order_of_battle` reads `body / condition_scale`
+   for cohorts today) and Command (§14). ARC-23 and SCN-14 are this shape.
+3. **At the end.** A routed side's commander is the person a pursuing victor could `capture`; the custody
+   edge exists and a field never writes it (§5.5). That is a `capture` act offered on `field.won`, not a
+   rule inside the battle.
+
+**Can mass battle's own resolution call the duel-round path instead of being a second resolver?** In two
+places yes, in one no.
+
+- *Squad scale: yes, and it should.* The host adapter, not the module, pairs the claimants and calls
+  `contest()` on `the body` for each pairing, through the registered combat provider. No module calls
+  another; the row decides. This removes the mis-scaled battle instead of re-tuning it.
+- *Persons at a mass battle: yes, by composition between engagements* (item 2), never by a call from inside
+  `run_battle`.
+- *The cell exchange: no.* A cell is 40 to 200 men; `resolve_engagements` resolves pooled strength over a
+  frontage with an attrition term. That is a different quantity from a duel and running four hundred duels
+  per contact would be a second, worse model of the same thing. What must be one is the *axiom*, not the
+  call: both scales should grade on the substrate's ladder and roll the substrate's die (§4.1 records that
+  mass battle re-implements both).
+
+**The approach lever is the same lever at both scales, with two vocabularies.** Personal combat's intended
+choice is aggressive, normal or defensive per phase. Mass battle already has it: stance `aggressive`,
+`balanced`, `hold` (`config.py:286`, a signed commitment on offence and defence, "intent as resolution"),
+army strategies `advance`, `line`, `defend` (`orderofbattle.py:53-57`), and a per-phase carrier
+(`Order('tick:N', {'stance': ...})`, three phases of six ticks). For the calculations to be "consistent in
+methodology" (NERS-S) the approach roster should have one owner read by both modules, as the order
+vocabulary is exported today; proposal 3's between-engagement choice is that roster's three values.
+
+**Shared geometry.** If personal combat's grid needs facing arcs, reach and contact, the owners exist in
+`modules/mass_battle/geometry.py` (`octagon_angle`, `reach_reaches`, `CellBody`). A second module may not
+grow its own copy; the primitives would move to `engine/substrate/` [UNVERIFIED: whether Layer 1 permits
+one registered module to import another; the tree shows no instance].
+
+**Conflicts with ruled items, named and not resolved.**
+
+- *"One engine at every fidelity"* (2026-07-08) against a dispatch by scale. The ruling is about the played
+  and the automatic resolution of the same battle; a squad fight and a battle are different contests.
+  Read that way there is no conflict; if the ruling is read as "every `march` goes to the mass engine", the
+  squad dispatch contradicts it.
+- *`04` §C.5.1, "units = PersonId[] at weight — one type"* against "a side of individuals fights
+  differently from a side with a cohort". `Person.is_cohort` already separates the two for duels
+  (CP-T03-01, cohorts never fight a duel), so the distinction is in the tree; using it to pick the module
+  is new.
+
+**What this lane owes the PC lane:** the scale rule (which fields are squads), `FieldOutcome` naming the
+losing commander, the round structure, and the approach roster's single owner. It owes no resolver.

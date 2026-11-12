@@ -65,8 +65,10 @@ today's cells. It is still two orders for one dot product, and the port sums in 
 Item 2 does **not** store an offset on a projected axis, so it does not meet the ruled sentence
 CL-PERSON is held on (`ED-IN-0261`: *"two people with identical pursuits ARE identically disposed and
 the variation comes from the candidates"*): two such people stay identically disposed in their scores
-and differ in how reliably they follow them. Whether that is within the sentence is listed in the
-audit's §11, because it is a reading of a ruling.
+and differ in how reliably they follow them. Whether that is within the sentence is already answered
+by a later ruling: CR-93's entry records that `ED-IN-0347` narrows the sentence and does not reverse it
+(*"ED-IN-0261's 'identically disposed' sentence is narrowed, not reversed"*), and names this term. So
+it is not escalated.
 
 ## The exact edits, by owner
 

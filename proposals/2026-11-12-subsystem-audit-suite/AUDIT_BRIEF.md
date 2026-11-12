@@ -130,6 +130,29 @@ the changes, ordered. Do not invent a second capability system: find the existin
 extends it. The holistic stage will merge the §14s into one authoring architecture, so state the
 interface your subsystem needs rather than a private scheme.
 
+## Full design descriptions (correction, 2026-11-12): read the subsystem's whole design set
+
+The first dossiers listed only the design documents `CURRENT.md` names, which understates what the tree
+holds. Each dossier now carries two further sections: **"FULL DESIGN DESCRIPTIONS for this subsystem"**
+(every design document of the subsystem under the quarantined `.designs/systems/<subsystem>/`, with size
+and Status line) and **"Cross-cutting design descriptions every lane reads"** (for example
+`auto_manual_resolution_duality_v1.md`, `videogame_mode_spec.md`, `complete_systems_reference.md`,
+`throughlines_complete.md`, `engine_atlas_v1.md`, `campaign_modes_v30.md`, `integration_proposal_v30.md`).
+**Read them in full** (a document with `_index` and `_infill` siblings is one document in parts). They are
+ARCHIVED-NOT-CANON: the source of intent, vocabulary and history, never the reason a behaviour is
+correct (§0.05); where they disagree with code, the code governs and you say what the disagreement costs.
+The design intent each Jordan statement below refers to is in those documents; do not audit against a
+one-line summary of it.
+
+For mass battle the design set is: `.designs/systems/mass_battle/reference/mass_battle_v30.md` (with
+`_index`, `_infill`), `mass_battle_integration_v30.md`, `military_layer_v30.md` (with `_index`),
+`mass_battle_flow_skeleton_v1.md`; with it `.designs/systems/combat/reference/scene_combat_design_v1.md`,
+`.designs/systems/_architecture/reference/auto_manual_resolution_duality_v1.md` and `videogame_mode_spec.md`;
+and the live material `proposals/2026-09-25-squad-engagement-*`, `2026-09-30-character-and-play-surface/08_mass_battle_units.md`,
+`2026-10-29-army-phase5-design.md`, `proposals/multiunit_envelopment_plan.md`,
+`proposals/mass_battle_fighting_withdrawal_v1.md`, `proposals/pc_formation_system.md`,
+`proposals/weapon_physics_and_concentration_model.md`, `research/pre_firearms_formations`.
+
 ## Design intent stated by Jordan, 2026-11-12: personal combat
 
 Personal combat is intended so that **each character can equip a weapon, armour and a suite of skills that
