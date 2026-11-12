@@ -493,3 +493,98 @@ Not in this batch, and where each is (each member's parts are dispositioned once
 - COST and TIER: small build (one line at the mint and its test); `sonnet`, `high` (VEN-E: "`high` for edits 3 and 5").
 - LANDS IT: B40's producer; `Item: B40.16`, `[skip ci]`.
 
+### B40.17 — the secretary order and the standing report · VEN-E edit 4 · BUILD · HASH MOVER(behaviour)
+- SOURCE: VEN-E "Edit 4 — the secretary order and the standing report (M-6, M-7)", "Exact edits" row 4; C3-L9 (`eligible_from` is a table), C3-C10 (a held report is a `proofs` level); U1 glossary *roll* (a membership is a **list**).
+- ADVANCES: none of the nine; a non-noble route up with a ceiling (the source's NERS: **narrowed**, "the first to drop if the batch must shrink").
+- INSTRUCTION (VEN-E, copied):
+  1. "One list seat `off_<republic>_citizen_roll` (`binds: members_by_warrant`, `remit_acts: [issue]`), distinct from the council's list. One body `"Chancery"` in `office_bodies`. Two secretary seats on it: `conferral: appointed` by the head seat, **no `term`**, `remit_acts: [issue]`, and a `tables.eligible_from` entry naming `off_<republic>_citizen_roll`; every council seat's `tables.eligible_from` entry stays the council's list, so a secretary can never be drawn for one. That is the ceiling, and it is one existing table (VENICE-C §2 as reconciled)."
+  2. "The college's written menu (audit §1.4) is `issue`d through a secretary's seat: the drafter is not the proposer. No mechanism: `Act.via` already names the seat."
+  3. "**The standing report.** The `commission` form's `due` (`record.given every 4, to: grantor_rung`, SYN-A) is the report. This edit states what the Record is and where it rests: a `survey` product of the place, `give`n to the Chancery's rung, where the secretary holds it with its predecessors. The successor may be `give`n it; a held report of a place is a `proofs` level on his graded acts there (leverage, C3-C10) … It fades as every claim fades (`01_CORE_claim_fade_as_read.md`); it can be seized, concealed, forged (FI's verbs)." No code for step 3: the `due` exists (SYN-A); the item writes the `commission` row's `source:` note naming the report.
+  `<republic>` is VEN-D's republic seat prefix, read at the item's open; post labels are placeholders for Jordan (PR body).
+- WHERE: `engine/season/offices.yaml` (the list seat, two secretary seats); `engine/season/rosters.yaml` (`office_bodies`: `"Chancery"`; `tables.eligible_from`: three entries); `engine/season/instruments.yaml` (`forms.commission`'s `source:` string).
+- TESTS: none new.
+- FALSIFIER and CONTROL: a secretary drawn for a council seat (the ceiling leaks). Control (VEN-E gate 1): the rows absent, the realm hash at seed 0, one season, equal to B39's close.
+- GATE (`PYTHONHASHSEED=0`): `build_realm(0)` builds; `python -c` over `may_seat` / the lot's eligibility (VEN-C, B32) for each secretary against each council seat → False for every pair, quoted; `python -m engine.season.harness.register --check` → exit 0.
+- HASH MOVERS: the realm build hash (three seats, one body). Declared; B40.99.
+- DEPENDS ON: V12 Batch B32 (VEN-C: `tables.eligible_from`, `selection: lot`; SYN-A: `commission` and its `due`); V12 Batch B33 (VEN-D: the republic's council and list seats); V12 B40.14 (the same file, its rows first).
+- GLOSSARY: none (*list* is the glossary's word for a membership roll).
+- COST and TIER: edit (content); `sonnet`, `medium`.
+- LANDS IT: B40's producer; `Item: B40.17`, `[skip ci]`.
+
+### B40.18 — the contract in phases; the yard's wage · VEN-E edits 5 and 5b · BUILD · HASH MOVER(behaviour)
+- SOURCE: VEN-E "Edit 5 — the contract in phases; arrears; the works' wage (M-8, M-9)", "Exact edits" rows 5, 5b, "Gate" 4.
+- ADVANCES: none of the nine; a hired captain's reserve season in which buying him is lawful.
+- INSTRUCTION:
+  1. Site (§5.7 SITE; U1): open `data/instruments.py`'s clause type and record whether it is a dataclass that `World.content_hash()` reaches (a `Record` field, `state/world.py::_object_head`). If it is, a new clause field is an encoding mover (D-04) and this item's HASH line reads MOVER(encoding) in its commit.
+  2. `engine/season/instruments.yaml: forms`, the form (VEN-E, copied):
+     ```yaml
+       - id: condotta                # a hired captain's contract with an employer's seat
+         made_by: covenant
+         grantor_act: dispatch       # the employer's seat must be one that can send men
+         term: 4                     # the bound stage, in seasons
+         renewal: grantor            # the employer's option opens the reserve stage
+         due:
+           - {by: grantor, kind: transfer.made, every: 1, to: grantee_rung}     # pay; half in the reserve stage
+         forbears:
+           - {by: grantee, kind: duty.taken,     over: named}        # bound stage only: no second employer
+           - {by: grantee, kind: march.declared, over: grant_ground} # for `term` seasons after lapse
+         lapse: stands
+         hardens: false
+         grade: assumption
+         source: "15_INSTITUTIONS_VENICE.md §17.2 item 8; CGR:110, :208"
+     ```
+  3. "**The one build:** a form's clause may carry `stage: <n>` (default: every stage), read by `world_q.clauses_binding` against the Record's current stage (`Record.stages`, matured at MATTER, exists). With it, the second `forbears` row binds after the last stage and the first does not bind in the reserve stage: an offer taken there is no breach." The loader (`data/instruments.py`) refuses an unknown stage (VEN-E "Cost class": "the loader's refusal of an unknown stage"). The two `forbears` rows above gain `stage:` values accordingly at the item's open, from `Record.stages`' labels. "If the key is refused, the fallback is two forms (`condotta`, `condotta_reserve`) and a `covenant` at the turn; the story survives, the single document does not."
+  4. "**Arrears** need no edit: the employer's missed `due` is a breach in the captain's `kept`; his `release` then costs him no regard …, and a released captain's men's next acts are the chooser's: `oblige` elsewhere, or `requisition` at the settlement he resides in." ("a released company's" in the source: the MB lexicon's no-size-word rule.)
+  5. Edit 5b: "**The works' wage**: the yard seat D authors carries `upkeep: 2` (twice the fixture default; sweep {1, 2, 3}; owner the row), so its establishment is the costliest standing charge on its chest." Listed for Jordan in the PR body (D-19).
+- WHERE: `engine/season/instruments.yaml` (`forms`: `condotta`); `engine/season/data/instruments.py` (the clause key `stage`, its refusal); `engine/season/queries/world_q.py` (`clauses_binding`: the stage branch); `engine/season/offices.yaml` (the yard seat's `upkeep`); `engine/season/tests/test_inst_ven_e.py`.
+- TESTS: in `test_inst_ven_e.py`, first, red (no `stage`): `test_a_rival_oblige_in_the_bound_stage_is_a_breach`, `test_the_same_oblige_in_the_reserve_stage_is_not`, `test_a_march_on_the_employers_ground_after_lapse_is_a_breach`, `test_an_unknown_stage_is_refused_at_load` `[ASSUMPTION: test names; the item creates them]`.
+- FALSIFIER and CONTROL: "For 'the reserve stage is a real window': gate 4's planted failure not reddening." Control (VEN-E gate 1): with the form unused, the realm hash at seed 0, one season, equal to the previous item's.
+- GATE: `python -m pytest engine/season/tests/test_inst_ven_e.py engine/season/tests/test_instruments.py -q` → pass. VEN-E gate 4: "a hand-built fold over three stages: in the bound stage a rival `oblige` deposits a breach in the employer's `kept`; in the reserve stage it does not; after lapse a `march.declared` on the employer's ground does. Planted failure: remove `stage` from the first `forbears` row and the reserve-stage case deposits a breach." (A fold over constructed ticks, no season run: U14.)
+- HASH MOVERS: the yard seat's `upkeep` moves every seeded run that charges its chest; `condotta` moves nothing until a `covenant` of that form is made. Declared; B40.99.
+- DEPENDS ON: V12 Batch B32 (COL-A, SYN-A: `forms:`, `dues`, `kept`, `world_q.clauses_binding`, the `covenant` mint); V12 Batch B33 (VEN-D: the yard seat; the captain's `oblige`, "as D §1 has it"); EXISTS-IN-TREE `state/carriers.py` `Record.stages`.
+- GLOSSARY: row *condotta* (if absent): "condotta: a hired captain's contract with an employer, in a bound stage then a reserve stage, as the Italian *condotta* was" (STAGES rule 3: a new word with its owner, `instruments.yaml: forms`).
+- COST and TIER: small build (one clause key, one reader branch, the loader's refusal) and content; `sonnet`, `high`; one `opus` read of gate 4.
+- LANDS IT: B40's producer; `Item: B40.18`, `[skip ci]`.
+
+### B40.19 — the pledge; the merchants' court · VEN-E edit 6 · BUILD · HASH MOVER(behaviour)
+- SOURCE: VEN-E "Edit 6 — the pledge; the merchants' court (M-10, M-11)", "Exact edits" row 6, "Gate" 5, 6; D-5 ("there is no lien and no creditor verb; possession is the security").
+- ADVANCES: none of the nine; credit with a security and a second forum.
+- INSTRUCTION (VEN-E, copied):
+  1. "**The pledge is composed and needs no edit.** At the making of a `debt` the debtor `give`s the creditor a bearer instrument he holds; at discharge the creditor `give`s it back … The chooser must be able to *form* the pair, which is `14_VERBS_SOCIAL2_A`'s formation rule (an act forms on what the actor holds and knows); this edit adds a gate that it does."
+  2. "**The merchants' court.** One row beside proposal B's `debt_suit`:
+     ```yaml
+     - id: guild_debt_suit           # the same matter before the guild's own bench, in its own hall
+       # every key as proposal B's `debt_suit` (opened at 15_INSTITUTIONS_VENICE_B edit 6), except:
+       venue_min_rank:  hearth       # sits in the guildhall, not the town's court
+       disposal_reach:  body         # the judgment is heard by the guild, not the settlement
+     ```
+     The thirteen keys have no key that names a bench by body; a bench is `bench_basis: determine` read at the venue. So the guild's bench is the `determine` seats that sit at the guildhall: the row needs one guild seat with `determine` in its remit anchored there (`rung: {venue: "<guildhall>"}`, D's anchor form), which this edit adds beside D's `off_house_*` rows." The row copies `debt_suit`'s keys from `arrangements.yaml` at the item's open (no key invented).
+  3. Site (VEN-E's `[UNVERIFIED]`, §5.7 SITE): open the judging set the hearing uses (`state/gate.py::judging_set` is not in the tree at `9c2c3ab`; read whatever B24 or B27 landed for "the judging set at a venue") and record whether a hearth venue's set leaves out the commune's `determine` seats "whose purview contains that hearth by containment". If it does not, "the two benches have the same members and this row is held until SC's venue work can tell them apart": the row is not added, the guild seat is, and the commit says so.
+- WHERE: `engine/season/arrangements.yaml` (`guild_debt_suit`); `engine/season/offices.yaml` (one guild seat with `determine`, `{venue:}` anchor); `engine/season/tests/test_inst_ven_e.py`.
+- TESTS: in `test_inst_ven_e.py`, first: `test_the_two_benches_band_shares_differ_with_spread` (gate 6) and `test_a_pledge_folds_given_discharged_returned_and_given_lapsed_kept` (gate 5's hand-built case) `[ASSUMPTION: test names; the item creates them]`.
+- FALSIFIER and CONTROL: "For 'the research's shape transfers at all': if, on the Counting-House fixture, no chooser in any seed ever takes a pledge, hires in reserve, sues in the guild's court or opens an audit, the mechanisms are expressible and unplayed, and the finding is about the chooser's candidates (CHAR's `02_CHAR_offer_what_can_be_done.md`), not about this batch." Control: `debt_suit` unchanged; the realm hash with the two rows absent equal to the previous item's.
+- GATE (`PYTHONHASHSEED=0`): `python -m pytest engine/season/tests/test_inst_ven_e.py -q` → pass: gate 6, "400 seeded `determine` draws of one hand-built suit before each bench; the band shares differ and both have spread" (`assert checked >= 400` per bench); gate 5, "on the Counting-House fixture, seeds 0 to 2, twelve seasons, count `debt` mintings in whose season the debtor `give`s the creditor a bearer instrument. The gate is that the count is reported and that at least one hand-built case folds (given, discharged, returned; given, lapsed, kept). If the seeded count is zero in all seeds, that is recorded as a formation gap for the SOCIAL verb lane, not hidden." — the seeded count at **two seasons** ("twelve" in the source; A-114), `institution INST-VENICE-01 2 s`, s = 0 to 2.
+- HASH MOVERS: the realm build hash (the guild seat); every seeded run with a guild suit. Declared; B40.99.
+- DEPENDS ON: V12 Batch B33 (VEN-B: `debt`, `debt_suit`, `world_q.owed`; VEN-D: the guildhall, `off_house_*`, the `{venue:}` anchor, `INST-VENICE-01`); V12 Batch B25 (`14_VERBS_SOCIAL2_A`: formation on what is held and known); V12 Batch B24 (the hearing's bench at a venue); V12 B40.14 (`offices.yaml`, its rows first).
+- GLOSSARY: none.
+- COST and TIER: edit (content) and a gate; `sonnet`, `medium`; one `opus` read of gate 6's two band tables.
+- LANDS IT: B40's producer; `Item: B40.19`, `[skip ci]`.
+
+### B40.20 — the outside assent; the brotherhood · VEN-E edit 7 · BUILD · HASH MOVER(behaviour)
+- SOURCE: VEN-E "Edit 7 — the outside assent; the body of the excluded (M-12, M-13)", "Exact edits" row 7; A-14 (a body's assent is a ballot of draws on its members).
+- ADVANCES: none of the nine; a guild statute binds the town only by a justice's answer; a release valve for the excluded (narrowed, VEN-E's NERS).
+- INSTRUCTION (VEN-E, copied):
+  1. "**The outside assent is composed, on one condition of anchoring.** A guild's statute is an `issue` through its head seat. Where that seat is anchored at the guildhall (a `hearth`, D's `{venue: …}` form), its purview is the hall and, one edge deep, its sworn members (`purview_reaches`): the statute addresses members only. To bind the town it must be `issue`d through a seat whose purview contains the town, so the guild's head `petition`s the commune's justice seat (edit 1) and that holder's answer (issue it, issue it altered, refuse) is the ratification: an ask, rolled, with `obligation` as a level and `regard` as a term. No row and no key. **The condition:** D anchors `off_guild_roll` at `{duchy: "Hafenmark"}`, whose purview by containment is every Hafenmark settlement; a statute issued through *that* seat needs no assent. This edit therefore asks one content decision of D's rows: the guild's **rule-making** remit (`issue`) sits on the hall's head seat, and the duchy-anchored roll seat keeps only the warrant. `[ASSUMPTION; Jordan or FA to correct: it narrows a remit D authored.]`" The edit: `off_guild_roll`'s `remit_acts` loses `issue`; the guildhall head seat's gains it. Listed in the PR body.
+  2. "A brotherhood: one `community`-rung body in `office_bodies` (`"Brotherhood"`, faction as its town's), a list seat by warrant, a head seat `conferral: elected`, `term: 4`, a `tables.eligible_from` entry naming its own list, `remit_acts: [issue, convene]`, an establishment and a chest as any house. Three rows. Nothing ties it to the council; that is the point." The town is VEN-D's republic town, read at the item's open.
+- WHERE: `engine/season/offices.yaml` (`off_guild_roll`'s remit; the hall head seat's remit; the brotherhood's list and head seats); `engine/season/rosters.yaml` (`office_bodies`: `"Brotherhood"`; `tables.eligible_from`: one entry).
+- TESTS: none new.
+- FALSIFIER and CONTROL: a statute issued through the hall seat addresses a non-member of the town (the anchoring condition failed). Control (VEN-E gate 1): the rows absent, the realm hash at seed 0, one season, equal to B39's close.
+- GATE (`PYTHONHASHSEED=0`): `build_realm(0)` builds; a one-line script over `purview_reaches` → the hall head seat reaches the hall and its sworn members and not the town's other residents; `off_guild_roll`'s remit no longer holds `issue`; `python -m engine.season.harness.register --check` → exit 0.
+- HASH MOVERS: the realm build hash (the brotherhood's seats; the moved remit changes which `issue` candidates form). Declared; B40.99.
+- DEPENDS ON: V12 Batch B33 (VEN-D: `off_guild_roll`, the guildhall's head seat, the `{venue:}` anchor); V12 Batch B32 (VEN-A: `obligation` as a level; VEN-C: `tables.eligible_from`, `conferral: elected`); EXISTS-IN-TREE `state/gate.py::purview_reaches`; V12 B40.14 (the commune's justice seat, edit 1).
+- GLOSSARY: none.
+- COST and TIER: edit (content); `sonnet`, `medium`.
+- LANDS IT: B40's producer; `Item: B40.20`, `[skip ci]`.
+
+The batch continues at B40.21 in this part's continuation file (`_cont`). Last item written in this file: B40.20.
+
