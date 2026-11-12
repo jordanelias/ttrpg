@@ -1,0 +1,441 @@
+# Dossier 01 · CORE — Season-loop core: driver, state, seam, manifest, verb table, registries, queries, harness/instruments
+
+> Built by script (`collate.py`, deterministic) from the working tree. **An index, not a verdict.** Classification is by path rule, lane tag, batch card or keyword and is marked `class:` where it is not a path; overrule it when the source says otherwise. Counts are readings at generation time (CLAUDE.md §1). Design documents are reference, not mechanism (§0.05).
+
+## Code inventory (path — lines — module docstring line) — 164
+
+- `engine/__init__.py` — 10 lines — engine/ — Valoria's executable model. THE ENGINE is the season loop, engine/season/ (ED-IN-0284):
+- `engine/reference/contest-groundup/engine.py` — 82 lines — engine.py — the shared stochastic core. This is the universal Valoria resolution engine
+- `engine/reference/contest-groundup/sim_verification_ledger.json` — 83 lines
+- `engine/reference/degree-sweep/__init__.py` — 20 lines — Frozen degree-sweep probes EXECUTED by the blocking engine/season/tests suite (the W-D
+- `engine/reference/degree-sweep/arm9_forking.py` — 560 lines — ARM 9 -- THE FORKING EXERCISE, AS SPECIFIED.
+- `engine/reference/degree-sweep/arm9_subj.py` — 560 lines — ARM 9 -- THE FORKING EXERCISE, AS SPECIFIED.
+- `engine/reference/degree-sweep/sweep_core.py` — 165 lines — THE DEGREE SWEEP — core: the ladders, the on-ramp, and the narrating log.
+- `engine/season/ENDINGS_CLASSIFIED.yaml` — 224 lines
+- `engine/season/__init__.py` — 40 lines — `engine.season` — the season loop, as a package. The adopted game code (ED-IN-0204, Jordan
+- `engine/season/gaps.py` — 118 lines — The gap taxonomy. Extracted from `shape.py` (step 1 of the shape.py decomposition,
+- `engine/season/hole_register.yaml` — 6593 lines
+- `engine/season/requirements.yaml` — 1668 lines
+- `engine/season/rosters.yaml` — 4547 lines
+- `engine/season/trace_log.py` — 116 lines — The tracing channel. Every decision made and every step performed is logged here.
+- `engine/season/verb_table.yaml` — 2111 lines
+- `engine/season/write_matrix.yaml` — 529 lines
+- `engine/season/manifest/__init__.py` — 40 lines — `season.manifest` -- **role -> provider rows, resolved at boot.** One of
+- `engine/season/manifest/providers.py` — 42 lines — `manifest/providers.py` -- the provider TABLE and its decorator, and nothing else.
+- `engine/season/manifest/registrar.py` — 163 lines — `manifest/registrar.py` -- THE REGISTRAR: every composition row that carries a module ENTRY,
+- `engine/season/manifest/registry.py` — 716 lines — `manifest/registry.py` -- the role -> provider rows and the checks over them: `check_rows()`, and
+- `engine/season/cases/ARC4.yaml` — 367 lines
+- `engine/season/cases/ARC5.yaml` — 675 lines
+- `engine/season/cases/ARC6.yaml` — 1709 lines
+- `engine/season/cases/NPC4.yaml` — 665 lines
+- `engine/season/cases/NPC5.yaml` — 353 lines
+- `engine/season/cases/exercises/ARC-03.yaml` — 8 lines
+- `engine/season/cases/exercises/ARC-04.yaml` — 7 lines
+- `engine/season/cases/exercises/ARC-05.yaml` — 11 lines
+- `engine/season/cases/exercises/ARC-06.yaml` — 10 lines
+- `engine/season/cases/exercises/ARC-07.yaml` — 10 lines
+- `engine/season/cases/exercises/ARC-08.yaml` — 10 lines
+- `engine/season/cases/exercises/ARC-15.yaml` — 10 lines
+- `engine/season/cases/exercises/ARC-16.yaml` — 10 lines
+- `engine/season/cases/exercises/ARC-17.yaml` — 10 lines
+- `engine/season/cases/exercises/ARC-22.yaml` — 11 lines
+- `engine/season/cases/exercises/ARC-27.yaml` — 11 lines
+- `engine/season/cases/exercises/ARC-32.yaml` — 10 lines
+- `engine/season/cases/exercises/ARC-35.yaml` — 9 lines
+- `engine/season/cases/exercises/ARC-36.yaml` — 11 lines
+- `engine/season/cases/exercises/ARC-37.yaml` — 10 lines
+- `engine/season/cases/exercises/ARC-39.yaml` — 9 lines
+- `engine/season/cases/exercises/ARC-41.yaml` — 10 lines
+- `engine/season/cases/exercises/ARC-43.yaml` — 11 lines
+- `engine/season/cases/exercises/ARC-46.yaml` — 10 lines
+- `engine/season/cases/exercises/ARC-47.yaml` — 10 lines
+- `engine/season/cases/exercises/ARC-48.yaml` — 10 lines
+- `engine/season/cases/exercises/ARC-49.yaml` — 10 lines
+- `engine/season/cases/exercises/ARC-50.yaml` — 10 lines
+- `engine/season/cases/exercises/ARC-54.yaml` — 10 lines
+- `engine/season/cases/exercises/ARC-55.yaml` — 11 lines
+- `engine/season/cases/exercises/ARC-META-COLLISION.yaml` — 11 lines
+- `engine/season/cases/exercises/ARC-R17.yaml` — 10 lines
+- `engine/season/cases/exercises/EMG-C3.yaml` — 10 lines
+- `engine/season/cases/exercises/EMG-X5.yaml` — 9 lines
+- `engine/season/cases/exercises/EMG-X6.yaml` — 9 lines
+- `engine/season/cases/exercises/EMG-X8.yaml` — 12 lines
+- `engine/season/cases/exercises/NPC-001.yaml` — 38 lines
+- `engine/season/cases/exercises/NPC-002.yaml` — 66 lines
+- `engine/season/cases/exercises/NPC-003.yaml` — 32 lines
+- `engine/season/cases/exercises/NPC-004.yaml` — 14 lines
+- `engine/season/cases/exercises/NPC-005.yaml` — 82 lines
+- `engine/season/cases/exercises/NPC-007.yaml` — 15 lines
+- `engine/season/cases/exercises/NPC-008.yaml` — 59 lines
+- `engine/season/cases/exercises/NPC-010.yaml` — 64 lines
+- `engine/season/cases/exercises/NPC-011.yaml` — 31 lines
+- `engine/season/cases/exercises/NPC-012.yaml` — 42 lines
+- `engine/season/cases/exercises/NPC-013.yaml` — 40 lines
+- `engine/season/cases/exercises/NPC-021.yaml` — 18 lines
+- `engine/season/cases/exercises/NPC-030.yaml` — 29 lines
+- `engine/season/cases/exercises/NPC-031.yaml` — 24 lines
+- `engine/season/cases/exercises/NPC-032.yaml` — 31 lines
+- `engine/season/cases/exercises/NPC-033.yaml` — 65 lines
+- `engine/season/cases/exercises/NPC-034.yaml` — 46 lines
+- `engine/season/cases/exercises/NPC-035.yaml` — 36 lines
+- `engine/season/cases/exercises/NPC-038.yaml` — 84 lines
+- `engine/season/cases/exercises/NPC-039.yaml` — 14 lines
+- `engine/season/cases/exercises/NPC-041.yaml` — 29 lines
+- `engine/season/cases/exercises/NPC-050.yaml` — 30 lines
+- `engine/season/cases/exercises/NPC-052.yaml` — 7 lines
+- `engine/season/cases/exercises/NPC-070.yaml` — 40 lines
+- `engine/season/cases/exercises/NPC-072.yaml` — 31 lines
+- `engine/season/cases/exercises/NPC-073.yaml` — 11 lines
+- `engine/season/cases/exercises/NPC-074.yaml` — 9 lines
+- `engine/season/cases/exercises/NPC-075.yaml` — 73 lines
+- `engine/season/cases/exercises/NPC-080.yaml` — 13 lines
+- `engine/season/cases/exercises/NPC-081.yaml` — 10 lines
+- `engine/season/cases/exercises/NPC-082.yaml` — 9 lines
+- `engine/season/cases/exercises/NPC-083.yaml` — 51 lines
+- `engine/season/cases/exercises/NPC-084.yaml` — 39 lines
+- `engine/season/cases/exercises/NPC-085.yaml` — 11 lines
+- `engine/season/cases/exercises/NPC-086.yaml` — 93 lines
+- `engine/season/cases/exercises/NPC-087.yaml` — 52 lines
+- `engine/season/cases/exercises/NPC-088.yaml` — 121 lines
+- `engine/season/cases/exercises/NPC-089.yaml` — 23 lines
+- `engine/season/cases/exercises/NPC-090.yaml` — 10 lines
+- `engine/season/cases/exercises/NSC-04.yaml` — 10 lines
+- `engine/season/cases/exercises/NSC-07.yaml` — 11 lines
+- `engine/season/cases/exercises/NSC-09.yaml` — 10 lines
+- `engine/season/cases/exercises/SCN-04.yaml` — 10 lines
+- `engine/season/cases/exercises/SCN-12.yaml` — 9 lines
+- `engine/season/cases/exercises/SCN-14.yaml` — 10 lines
+- `engine/season/cases/exercises/SCN-15.yaml` — 10 lines
+- `engine/season/cases/chain/ARC1.yaml` — 755 lines
+- `engine/season/cases/chain/ARC2.yaml` — 1086 lines
+- `engine/season/cases/chain/ARC3.yaml` — 210 lines
+- `engine/season/cases/chain/CASE_BRIEF.md` — 49 lines
+- `engine/season/cases/chain/NPC1.yaml` — 637 lines
+- `engine/season/cases/chain/NPC2.yaml` — 387 lines
+- `engine/season/cases/chain/NPC3.yaml` — 484 lines
+- `engine/season/harness/__init__.py` — 8 lines — `season.harness` — what RUNS the model: probes, the case runner, the corpus sweep, the register
+- `engine/season/harness/aperture.py` — 1123 lines — `harness.aperture` — THE APERTURE RE-MEASUREMENT, RUN ON THE POPULATED REALM (plan position `★`).
+- `engine/season/harness/arms.py` — 315 lines — arms.py — the n-seed two-arm CONTROLLED comparison, ported from `tools/balance_oracle.py`
+- `engine/season/harness/corpus_run.py` — 1252 lines — EVERY CASE, EXECUTED — not graded, and not merely attempted.
+- `engine/season/harness/delta.py` — 102 lines — BEFORE-AND-AFTER, AS A COMMAND. `PLAN.md` guardrail `G11`.
+- `engine/season/harness/exercises.py` — 327 lines — DECLARED ROUTING — `W10`. The `exercises:` overlay, and the only path from a case row to a
+- `engine/season/harness/headless.py` — 194 lines — ARTIFACT 2 — ONE NPC SEASON, END TO END. `PLAN.md` Part 6, work item `W9`.
+- `engine/season/harness/interactions.py` — 470 lines — `harness.interactions` -- AN INTERACTION AUDIT LOG: who did what to whom, on which question, from which
+- `engine/season/harness/invariants.py` — 344 lines — `harness.invariants` — the season's RUN-TIME invariants, as predicates over a finished World.
+- `engine/season/harness/loops.py` — 544 lines — `harness.loops` -- THE DERIVED CYCLE CHECK (`H-106`; `H-25` folded in): declared loops vs derived.
+- `engine/season/harness/play_surface.py` — 95 lines — THE PLAY SURFACE'S DISPATCH SEAM — a `choose` that hands named persons to a callback and everyone
+- `engine/season/harness/populated.py` — 2162 lines — `harness.populated` — ONE WORLD, THE WHOLE CAST, AND MORE THAN ONE PLACE TO STAND.
+- `engine/season/harness/probes.py` — 2955 lines — The probes. Each is a REAL EXECUTION against `shape.py` that either completes or raises a
+- `engine/season/harness/register.py` — 763 lines — THE HOLE REGISTER, AS AN OBJECT -- `W0` of `architecture/PLAN.md`.
+- `engine/season/harness/report.py` — 306 lines — The TRACING report. Every decision made and every step performed, per test.
+- `engine/season/harness/run_cases.py` — 531 lines — Route every case's `season_requires` rows onto probes, execute, and grade.
+- `engine/season/harness/scarce.py` — 266 lines — THE SCARCE WORLD: two settlements, one larder short, and a steward who can see it and feed it. Plan
+- `engine/season/harness/soak.py` — 639 lines — `harness.soak` — THE MULTI-SEASON RUN ON THE POPULATED REALM (Jordan's original ask).
+- `engine/season/seam/__init__.py` — 73 lines — `season.seam` -- THE CONTEST SEAM. **A PACKAGE, per `04_CODE_ARCHITECTURE.md` §A.2 (`04:135`):
+- `engine/season/seam/ladder.py` — 272 lines — `seam/ladder.py` -- `04_CODE_ARCHITECTURE.md` §A.2's `seam/ladder` row: *"nothing.
+- `engine/season/seam/wrappers/__init__.py` — 47 lines — `seam/wrappers/` -- `04_CODE_ARCHITECTURE.md` §A.2 (the line *"one wrapper per deferred subsystem"* was amended there), and
+- `engine/season/seam/wrappers/_entry.py` — 33 lines — `seam/wrappers/_entry.py` -- the module-entry lookup the four providers share.
+- `engine/season/seam/wrappers/_estimate.py` — 35 lines — `seam/wrappers/_estimate.py` -- THE SAMPLER A PROVIDER'S ODDS ESTIMATE SHARES (CP-T03-05, CP-T04-08).
+- `engine/season/seam/wrappers/combat.py` — 423 lines — THE IN-SIDE OF THE PERSONAL-COMBAT SEAM — the seam CALLS the engine that owns the prize.
+- `engine/season/seam/wrappers/fieldwork.py` — 80 lines — THE FIELDWORK SCENE'S PROVIDER -- the host adapter and the host INPUT BUILDER for the `fieldwork`
+- `engine/season/seam/wrappers/mass_battle.py` — 515 lines — THE MASS-BATTLE PROVIDER -- the host adapter and the host INPUT BUILDER for the `mass_battle` module's
+- `engine/season/seam/wrappers/pool.py` — 100 lines — `seam/wrappers/pool.py` -- THE ONE POOL READER (CP-T01-01, moved out of `sigma.py` at B10-11).
+- `engine/season/seam/wrappers/sigma.py` — 555 lines — THE SOCIAL CONTEST SCENE'S CONTEST PROVIDER — the host adapter and the host INPUT BUILDER for the
+- `engine/season/data/__init__.py` — 62 lines — `season.data` — where the package's inputs are resolved.
+- `engine/season/data/files.py` — 269 lines — THE ONE ANCHOR. Every path this package derives is named here, once.
+- `engine/season/data/fixtures.py` — 1169 lines — `season.data.fixtures` -- the harness fixtures and the matter-economy tables, extracted from
+- `engine/season/data/matrix.py` — 276 lines — `season.data.matrix` -- S23/S30's write matrix, extracted from `shape.py` (step 2 of the
+- `engine/season/data/requires.py` — 1119 lines — `season.data.requires` -- the `requires` grammar, extracted from `shape.py` (step 3 of the
+- `engine/season/data/rosters.py` — 1590 lines — `season.data.rosters` -- the roster/table layer, extracted from `shape.py` (step 2 of the
+- `engine/season/data/verbs.py` — 2186 lines — `season.data.verbs` -- the verb table and the alignment table, extracted from `shape.py`
+- `engine/season/loop/__init__.py` — 47 lines — `season.loop` — the driver, its seven steps, and the two verb-keyed tables they dispatch on.
+- `engine/season/loop/census.py` — 109 lines — `loop/census.py` -- CENSUS -- shares WITNESS's join. `04 §A.2`: owns `(Person, exists)` on individuation, `weight`, `envelope`; emits `person.individu
+- `engine/season/loop/deliberate.py` — 585 lines — `loop/deliberate.py` -- DELIBERATE -- a MAP, not a barrier. `04 §A.2`: owns **nothing**; calls `sense()`, builds a `View`, calls `choose` per person; 
+- `engine/season/loop/driver.py` — 620 lines — `season.loop.driver` -- `SeasonDriver` and `season()`.
+- `engine/season/loop/effects.py` — 102 lines — `season.loop.effects` — the resolver's BODY. One effect per verb that writes.
+- `engine/season/loop/effects_shared.py` — 169 lines — `season.loop.effects_shared` -- the primitives more than one domain file in the split needs.
+- `engine/season/loop/predicates.py` — 711 lines — `season.loop.predicates` — the seven `requires:` cells the grammar does not type (five until
+- `engine/season/loop/resolve.py` — 1298 lines — `loop/resolve.py` -- RESOLVE -- barrier 3, the only writing step for acts, and THE FOLD (`04` T-k's one resolver: the fold lives here, once). `04 §A.2
+- `engine/season/loop/sides.py` — 172 lines — `loop/sides.py` -- WHO CONTESTS, WHEN THE PRIZE BELONGS TO `mass_battle` RATHER THAN A
+- `engine/season/state/__init__.py` — 17 lines — `season.state` -- the world-state package: what the world is made of, and what holds it.
+- `engine/season/state/acts.py` — 122 lines — `season.state.acts` -- THE ACT STORE. Append-only, and the store `causes[]` resolves against.
+- `engine/season/state/attribution.py` — 277 lines — `season.state.attribution` -- WHO ACTED, and WHAT THE EVENT IS ABOUT, without `Event.subject`.
+- `engine/season/state/carriers.py` — 1253 lines — `season.state.carriers` -- THE PRIMITIVES. The sixteen things the model is made of.
+- `engine/season/state/containment.py` — 134 lines — `season.state.containment` -- THE CONTAINMENT TREE, READ: one edge up, and the subtree down.
+- `engine/season/state/ids.py` — 92 lines — S33 -- DETERMINISM. The mint (`H`) and its sentinel (`ROOT`), extracted from `shape.py`
+- `engine/season/state/ledgers.py` — 32 lines — `state/ledgers` -- the eviction comparator, and the one function that applies it.
+- `engine/season/state/log.py` — 140 lines — `season.state.log` -- THE EVENT LOG, and the two things it refuses.
+- `engine/season/state/world.py` — 1743 lines — `season.state.world` -- THE STORE, AND THE GATE ON IT.
+- `engine/season/queries/__init__.py` — 63 lines — `season.queries` — the ownerless functions. Nothing here owns state and nothing here writes.
+- `engine/season/queries/cache.py` — 130 lines — `queries/cache.py` -- `04_CODE_ARCHITECTURE.md` §A.2's `queries/cache` row.
+
+## Tests that exercise this subsystem (by filename rule; unclassified tests are in 99_cross_cutting.md) — 43
+
+- `engine/season/tests/test_aperture.py` — 752 lines
+- `engine/season/tests/test_content_operands.py` — 387 lines
+- `engine/season/tests/test_cr25_computed_establish.py` — 192 lines
+- `engine/season/tests/test_cr34_declared_disposal.py` — 238 lines
+- `engine/season/tests/test_cr82_ledger_retention.py` — 58 lines
+- `engine/season/tests/test_cr86_realm_structure.py` — 107 lines
+- `engine/season/tests/test_g1a_act_store_and_receipts.py` — 165 lines
+- `engine/season/tests/test_g1b_attribution.py` — 329 lines
+- `engine/season/tests/test_g2_token.py` — 414 lines
+- `engine/season/tests/test_g3_not_yours.py` — 602 lines
+- `engine/season/tests/test_g4_no_op_receipt.py` — 239 lines
+- `engine/season/tests/test_give.py` — 415 lines
+- `engine/season/tests/test_in09_dispensation_answer.py` — 328 lines
+- `engine/season/tests/test_in12_give_rung.py` — 132 lines
+- `engine/season/tests/test_in12_step9.py` — 489 lines
+- `engine/season/tests/test_in23_legitimacy_stability.py` — 199 lines
+- `engine/season/tests/test_in35_lattice_coupling.py` — 265 lines
+- `engine/season/tests/test_in36_foreign.py` — 424 lines
+- `engine/season/tests/test_in50_refusals_carry_the_occasion.py` — 347 lines
+- `engine/season/tests/test_in59_audience.py` — 206 lines
+- `engine/season/tests/test_in61_heir_hears_vacancy.py` — 149 lines
+- `engine/season/tests/test_interactions_log.py` — 103 lines
+- `engine/season/tests/test_loops_instrument.py` — 107 lines
+- `engine/season/tests/test_record_kind_fold.py` — 288 lines
+- `engine/season/tests/test_rem14_predicates_trace_clause.py` — 140 lines
+- `engine/season/tests/test_season_shape.py` — 17880 lines
+- `engine/season/tests/test_soak_grades.py` — 141 lines
+- `tests/valoria/test_axis_roster_single_owner.py` — 150 lines
+- `tests/valoria/test_claim_provenance_fields.py` — 145 lines
+- `tests/valoria/test_definitions_store.py` — 48 lines
+- `tests/valoria/test_descriptor_registry.py` — 147 lines
+- `tests/valoria/test_descriptor_registry_category_b.py` — 82 lines
+- `tests/valoria/test_descriptors_runtime.py` — 121 lines
+- `tests/valoria/test_generated_layer.py` — 65 lines
+- `tests/valoria/test_link_values_pointers.py` — 52 lines
+- `tests/valoria/test_m1_acceptance_probe.py` — 132 lines
+- `tests/valoria/test_module_registrar.py` — 596 lines
+- `tests/valoria/test_module_shape_check.py` — 77 lines
+- `tests/valoria/test_modules_reachable_closure.py` — 233 lines
+- `tests/valoria/test_names.py` — 216 lines
+- `tests/valoria/test_names_chain.py` — 260 lines
+- `tests/valoria/test_no_polling_triggers.py` — 171 lines
+- `tests/valoria/test_pathres.py` — 352 lines
+
+## Hole-register rows, primary (full row at the register line; `closed?`/`open?` is a keyword hint on the cite, NOT a verdict — verify) — 53
+
+- **H-01** (reg line 58) tier 0 · ruled · SCHEMA_ROW ×33 · open? · class:default — the `social:` value for every `(kind, field)` in Part II | owner: the design (a static column) | site:  | unblocks: **all 143**
+    - cite: CORRECTED 2026-10-26 (CR-02 (f); text only): the table is `engine/season/write_matrix.yaml`, 40 rows, each with a `social:` line (`data/matrix.py` indexes the row's `social` value, so a row without the column fails at load); the x33 in `kind:` is the count at filing.
+- **H-02** (reg line 70) tier 0 · ruled · PRODUCER · closed? · class:default — what each verb writes, requires and emits | owner: the resolver; writes owned per §22 | site:  | unblocks: **all 143**
+    - cite: CLOSED BY W3. V2 graded this row `ruled` for 24 verbs, `absent` for 2 and `assumption` for 3, and the register recorded the STRICTEST grade present — `absent` — under §42.2's polarity rule. The two absent portions were `determine`, blocked on `judging_set_rule`, and `construe` (then spelled `refract
+- **H-06** (reg line 118) tier 0 · assumption · NUMBER · open? · class:default — the condition scale | owner: params | site: Fixtures condition_scale — the fixed-point scale every band reads (Site.condition, Person. | unblocks: any Site
+    - cite: NAMED BY `W9` CHECK 3, WHICH IS WHY IT HAS A SITE AT ALL. #353 §48 makes condition an int on an EXPORTED scale and §22 assigns the scale to `params`; the in-chain params document proposes NO VALUES, so it is a fixture. The row existed with an EMPTY `site:` since `W0` — declared and unlocatable, whic
+- **H-07** (reg line 130) tier 0 · assumption · NUMBER ×kinds · open? · class:default — wear per site kind — **NO silent default; an unregistered kind RAISES** | owner: params | site: rosters.yaml `wear_per_season.rates` (`W8` moved it out of the instrument body), read thro | unblocks: any Site
+    - cite: NAMED BY `W9` CHECK 3. #353 §22 assigns `wear per site kind` to params and NO in-chain table exists, so every kind the instrument touches is declared in `DEFAULT_FIXTURES` and an unregistered one RAISES — which is §42.2.1's own worked example: "a wear table that returns 20 for an unregistered site k
+- **H-08** (reg line 142) tier 0 · assumption · NUMBER ×kinds · open? · class:default — band floors per site kind per verb | owner: params | site: rosters.yaml `tables.band_floors`, read by DEFAULT_FIXTURES and by SeasonDriver.matter's c | unblocks: L5, §12.1
+    - cite: `W8` GAVE THIS ROW A SITE AND A SWEEP; it had NEITHER and was one of PLAN.md §1.5's unowned residue -- an `assumption` grade with nothing to sweep, which is R2's violation and was counted in the standing 10. The floors are INVENTED: #353 §12.1 states that a band edge crossing EMITS and may produce n
+- **H-09** (reg line 154) tier 0 · assumption · NUMBER ×3 · open? · class:default — ledger cap `L` · View `K` · claim confidence | owner: params | site: Fixtures ledger_cap (L) · view_k (K) · confidence_default — three params read at WITNESS a | unblocks: WITNESS, DELIBERATE
+    - cite: NAMED BY `W9` CHECK 3. #353 §20 caps the ledger at `L` and §18 the View at `K`, and gives NO VALUE for either; `Claim.confidence` is typed and never defaulted. All three are params-owned and in-chain valueless, which is exactly a fixture — and the row carried an EMPTY `site:` from `W0` until artifac
+- **H-10** (reg line 166) tier 0 · assumption · NUMBER · open? · class:default — the **SCENE** budget as an **integer** of the ruled band `~5` *(⚠ **the unit was ruled 2026-09-02**: scenes, not acts — H-35)* | owner: params | site: Fixtures scene_budget — TWO READERS SINCE `U2`, AND THEY READ IT AS TWO DIFFERENT QUANTITI | unblocks: DELIBERATE
+    - cite: ⚠⚠ THE TWO READERS IMPOSE A CEILING THE DESIGN DOES NOT, AND IT IS LIVE (this clause read *LATENT RATHER THAN LIVE* until 2026-09-20; see the retraction below). Releasable scenes per person per season = rounds x `scenes_per_round` = `scene_budget` x `scenes_per_round`, 5 x 1 = 5 at the shipped fixtu
+- **H-11** (reg line 178) tier 0 · assumption · FORMULA · open? · class:default — the subsistence formula over an **open** `MatterKind` registry | owner: Rung (matter) + params | site: matter.subsistence -- rosters.yaml `subsistence_weight.weights`, read by DEFAULT_FIXTURES  | unblocks: `Sensation`
+    - cite: `W8`. ARCHITECTURE_V2.md gives the SHAPE -- *draw from the containing rung's stores, scaled by weight* -- and no weights, so this is an injected default with a registry row. ⚠ WHAT #353 ACTUALLY CONSTRAINS is the registry's openness, §10.4 VERBATIM: *It is a type parameter, not an enumeration. Grain
+- **H-12** (reg line 190) tier 0 · ruled · PRODUCER · open? · class:default — MATTER emits an Event per write so crossings have an antecedent | owner: the log | site: shape.World.write -- the gate is the emitter; the kind is Part D's `emits:` column, read p | unblocks: every crossing
+    - cite: EXECUTED BY W4, and the execution is the artifact rather than this sentence. `shape.World.write` is the emitter: a MATTER write on a row Part D gives an `emits:` must name one of the declared kinds, and a kind the row does not declare is refused -- which is D22 made mechanical in both directions. A 
+- **H-20** (reg line 202) tier 1 · assumption · RULING (roster) + SC · open? · class:default — L3 clause 1's **closed axis registry**, and the row admitting the increment | owner: the design owns the registry; **Person owns the counter** | site: registry: the axis roster | unblocks: **~28**
+    - cite: PLAN §3.2. SCHEMA_ROW-shaped by V2's own kinds, so the row is injectable and only the roster is open. ⚠ THE AXIS MUST NEVER BE SPELLED `exposure` BARE -- #353 :1907 names "The Exposure collision -- three senses of one word, including a need scalar and a per-person tally". Verified by hand 2026-09-02
+- **H-23** (reg line 238) tier 1 · ruled · RULING → FORMULA · open? · class:default — act cost beyond budget consumption | owner: params | site:  | unblocks: ~7
+    - cite: PLAN §3.1, test 3 (answered by a design document). #353 :929-930 VERBATIM: "No cost clause is required. A petition consumes budget like any act, and that is the whole of the pricing." The document RETRACTS an earlier standing-cost proposal in place. Closing this as a FORMULA would have overturned an
+- **H-24** (reg line 250) tier 1 · ruled · SCHEMA_ROW · open? · class:default — `(Person, exists)` | owner: the design | site:  | unblocks: every death
+    - cite: 
+- **H-25** (reg line 262) tier 1 · absent · RULING · closed? · class:default — a termination bound per self-feeding loop | owner: — | site:  | unblocks: ~4
+    - cite: THE INSTRUMENT WAS BUILT BY IN-24 (landed at B-C, 2026-10-08) AND ITS BOUND CHECK IS READ AT IN-10's BATCH (v9 plan, IN-10's EXIT): `harness/loops.py` part (c) prints each LOOP row's caller-supplied bound beside the largest value observed over caller-supplied seeded seasons and fails above it. No ro
+- **H-26** (reg line 274) tier 0 · assumption · SCHEMA_ROW · open? · class:default — `season_factor`'s distribution — **blocks `yield`** | owner: params | site: matter.season_factor -- DEFAULT_FIXTURES `season_factor` and `season_factor_draw`, read th | unblocks: 1
+    - cite: PLAN §3.2, AND IT MOVES TO TIER 0. NUMBER/FORMULA-shaped, so a default is injectable. Tier 0 because `yield` is the matter economy's ONLY source -- #353 :856 VERBATIM: "`yield` | **only here.** Blocked on `season_factor`'s distribution (§22.3)" -- and H-11 draws subsistence from stores, so EVERY MUL
+- **H-28** (reg line 298) tier 1 · ruled · RULING — **answered  · open? · class:default — `budget`'s placement | owner: **PERSON-side** *(corrected by W1's adversarial pass)* | site: decision.budget — (Person, View, base, params), no World | unblocks: every "wounded duke"
+    - cite: PLAN §3.3 re-graded this to `assumption` and THE ADVERSARIAL PASS OVERTURNED THE DIRECTION: the row is RULED, on a line neither the plan nor the re-grade cited. #353 `:877` VERBATIM: "budget : (Person, View) -> int -- a QUERY, never a field". NO `World` IN THE TYPE, so resolver-side is excluded BY T
+- **H-29** (reg line 310) tier 1 · assumption · FORMULA · closed? · class:default — `standing`'s formula | owner: Person | site: decision.standing_of / decision.agreement, called by sense() | unblocks: 2
+    - cite: DISCHARGED BY `W5`, AND V2 §F4'S OWN DEFAULT WAS NOT INJECTABLE. §F4 writes `agreement(claims ... where source == told_by, p's own convictions)` — the claim ledger against the CONVICTIONS — and #353 §9.3 exists to keep those apart: the ledger holds what is TRUE, convictions hold what is RIGHT, and "
+- **H-30** (reg line 322) tier 1 · assumption · RULING — **answered  · open? · class:default — person-order vs global canonical order | owner: the resolver | site:  | unblocks: 2
+    - cite: 
+- **H-35** (reg line 382) tier 1 · ruled · RULING · open? · class:default — **does a scene equal an act?** | owner: **Jordan** | site:  | unblocks: 1
+    - cite: 
+- **H-36** (reg line 394) tier 1 · ruled · RULING + FORMULA · closed? · class:default — refraction: emitter- or receiver-side, and by how much | owner: the design; params | site:  | unblocks: 2
+    - cite: ✅ RULED BY JORDAN, 2026-09-02, on the escalation this row raised, in two statements. FIRST, VERBATIM: 'Receiver side distortion, if I understand without much context, makes more sense as people's actions are objectively the case but the meaning of those actions are subject to interpretation - signif
+- **H-37** (reg line 406) tier 1 · ruled · SCHEMA_ROW · open? · class:default — the argument layer's named-fault roster | owner: the design | site:  | unblocks: 2
+    - cite: PLAN §3.1 called this test 2 (IRRELEVANT) AND THE LABEL IS CORRECTED to a declared DEFERRAL -- CLAUDE.md §0 test 2 is "its subject was retired or never built", and a narrowing to a deferred subsystem reachable at the seam (#353 :1403-1409) is none of those. #353 :1941-1943 VERBATIM: "The twelve name
+- **H-39** (reg line 430) tier 1 · assumption · SCHEMA_ROW · open? · class:default — the cohort's construal spread — the rule is stated, the representation is not | owner: Person | site: none built: no `cohort.construal_spread` symbol exists in the tree | unblocks: —
+    - cite: PLAN §3.2. A representation choice with one obvious shape; nothing in chain rules it, and nothing in chain forbids the obvious one. ⚠ SETTLED IN SHAPE BY JORDAN'S 2026-09-02 RULING ON H-36 -- 'our understanding of all other words and actions is subjective and SINGULAR'. A person holds ONE understand
+- **H-44** (reg line 498) tier 1 · absent · SCHEMA_ROW ×9 · open? · class:default — the NINE Dispensation term types. `comply` / `evade` / `defy` write 'per the term's own row' -- rows that do not exist, and the nine types are enumerated nowhere in the c | owner: the design (a static registry) | site:  | unblocks: unmeasured
+    - cite: KEPT AND RE-SCOPED AT v9 IN-09 (`workplans/valoria_master_workplan_v9_part5.md` IN-09; #453 `:502`, `:551-552`) [medium; Jordan to correct; revert: Jordan wants the nine types first, and they land as rows before the cells are typed]. Under #453's hook `comply` writes nothing itself and emits `compli
+- **H-47** (reg line 534) tier 1 · absent · SCHEMA_ROW · open? · class:default — `Coherence` -- a 54 fold-in with no Part D row | owner: unassigned | site:  | unblocks: unmeasured
+    - cite: 
+- **H-48** (reg line 546) tier 1 · absent · SCHEMA_ROW · open? · class:default — the `disclosure:` column -- a 54 fold-in with no Part D row | owner: the resolver (Part E) | site:  | unblocks: unmeasured
+    - cite: 
+- **H-49** (reg line 558) tier 0 · absent · SCHEMA_ROW · open? · class:default — `(Person, weight)` -- a 54 fold-in with no Part D row. H-11's subsistence default reads it ('scaled by weight'), so every season touches it | owner: Person | site:  | unblocks: unmeasured
+    - cite: DECLINED FOR CLOSURE BY IN-43 (batch B-C, 2026-10-08): the plan table closed this as `(Person, weight)` having a write-matrix row, a writer and readers. The row (`write_matrix.yaml:231-237`) and the readers (`loop/matter.py:290`, `loop/effects_migration.py:171`) exist, but nothing emits the row's `w
+- **H-50** (reg line 570) tier 1 · ruled · SCHEMA_ROW · closed? · class:default — `(Tenure, payload)` -- a 54 fold-in with no Part D row, which means P39's 'a relationship carries state' HAS NO WRITER | owner: Tenure | site:  | unblocks: unmeasured
+    - cite: CLOSED BY IN-43 (batch B-C, 2026-10-08), BY A PRODUCER: `Tenure.payload` has a write-matrix row, a writer and readers. Evidence: `write_matrix.yaml` carries the `(Tenure, payload)` row (step RES, emits `tenure.payload_set`); the writer is `World._grant_remit(t)`, called for every `hold` in `state/wo
+- **H-52** (reg line 594) tier 1 · assumption · RULING · closed? · class:default — `open_case`'s eligibility. V2 gates it on `remit:determine` and #353's CLOSED five remit acts do not include it. V2 invented an eligibility, and the alternative (`own`) i | owner: the design; the resolver (Part E) | site: `verb_table.yaml`'s `open_case` row, `eligibility:` -- read by the fold's `_eligible` and  | unblocks: unmeasured -- the populated realm's `open_case`/`l
+    - cite: CLOSED BY IN-43: assumption stands (CLAUDE.md §0's ladder, step 5; G-2) [medium; Jordan to correct]. `open_case`'s eligibility is the column the verb table records: `grade: assumption`, with the three-point sweep `eligibility_sweep_note` declares (`remit:determine`, `own`, `hold:<the matter's record
+- **H-53** (reg line 606) tier 0 · assumption · FORMULA · closed? · class:default — the View-building rule. #353: 'at most K ids ... BUILT, not filtered'. H-09 supplies `K = 12` and NOT WHICH K; the instrument takes the last k, which is an invention | owner: the barrier that builds the View | site: decision.view_ids, called by decision.assemble; rules from rosters.yaml view_builder_rules | unblocks: every View, so every decision that reads one
+    - cite: DISCHARGED BY `W5` AS A ROW, NOT AS AN ANSWER. #353 `:623` says a View is "at most K claim ids from the holder's OWN ledger -- built, not filtered", which says what a View is NOT; `H-09` supplies `K = 12` and nothing anywhere says WHICH twelve of a 200-claim ledger a person brings to a question. Eve
+- **H-56** (reg line 642) tier 1 · absent · RULING · closed? · class:default — 62/54 carry-over: 'no reaction inside a season' (34.1) vs the seam's nested DELIBERATE (40.2) -- defect `D16`, a COLLISION between two in-chain sentences, and the only on | owner: the seam | site:  | unblocks: unmeasured
+    - cite: HALF CLOSED BY IN-43 (batch B-C, 2026-10-08); the grade is unchanged because the other half is present and `absent` is the strictest grade present (the rule this file states for H-02 and H-20). CLOSED HALF, the within-season reaction: `requirements.yaml` R-03 (`status: met`) -- the season is `R = sc
+- **H-57** (reg line 654) tier 1 · ruled · RULING · closed? · class:default — 62/54 carry-over: may a social quantity SINK BY NEGLECT? | owner: unassigned | site:  | unblocks: unmeasured
+    - cite: CLOSED BY IN-43 (batch B-C, 2026-10-08), BY A RULING: a social quantity does NOT sink by neglect. #453's R-9 (a), adopted as intent by ED-IN-0288 (`registers/editorial_ledger_in.jsonl`, 2026-10-06: 'R-9(a) grudges end by `forgive`', adopted at the step it names): a grudge ends by an act, `forgive`. 
+- **H-59** (reg line 678) tier 1 · absent · RULING · open? · class:default — 62/54 carry-over: GRIEVANCE CLEARANCE | owner: unassigned | site:  | unblocks: unmeasured
+    - cite: 
+- **H-61** (reg line 702) tier 1 · ruled · SCHEMA_ROW · closed? · class:default — `A18` -- the CONTRACT DESCENT (41). The strings 'contract descent' and 'S41' appear nowhere in V2. T5 needs to know PER MODULE what it may RECEIVE and T6 what it may EMIT | owner: the design (a per-module contract) | site:  | unblocks: unmeasured
+    - cite: CLOSED BY IN-43 (batch B-C, 2026-10-08), SUPERSEDED BY A RULING: A-25 (ED-IN-0284, revised by ED-IN-0285; Jordan, 2026-10-03) states the module contract once -- a verb is a loop-side adapter that builds a typed INPUT record from a read-only projection of `World`, calls the module ENTRY and interpret
+- **H-63** (reg line 728) tier 0 · assumption · FORMULA ×per verb · open? · class:default — PART E's `writes:` COLUMN NAMES THE CELL AND NEVER THE VALUE. `transfer` writes `(Rung, stores)`; §E3 does not say by how much, or that the giver's store goes DOWN. A fol | owner: the resolver (Part E) | site: resolver.EFFECTS | unblocks: unmeasured
+    - cite: FOUND BY EXECUTION IN W3, not by reading: the fold checked `transfer`'s precondition, emitted, and changed nothing, so TWO claimants on a six-unit larder both succeeded and §27.1's scarcity did not happen. #353 states the PRECONDITION (§54 item 7, `stores(hearth(giver), kind) >= amount`) and its onl
+- **H-74** (reg line 833) tier 1 · assumption · COLLISION · open? · class:default — §F2 types `choose -> Act[]` and gives the person no way to MINT an Act id; §F2's body also reads a free `q` its own four-parameter signature does not bind | owner: the barrier (both halves) | site: decision.make_chooser (mint) and shape.View.question | unblocks: every NPC act
+    - cite: TWO DEFECTS IN `ARCHITECTURE_V2.md` §F2, both found by writing it. (1) §F1 returns `Candidate[]` and §F2 returns `Act[]`, and an `Act` needs an id that #353 §33 derives from the world seed and the tick — "unique per DRAW, not per operation" — which a person-side function cannot produce. (2) §F2's ow
+- **H-75** (reg line 845) tier 1 · absent · SCHEMA_ROW · open? · class:default — ⚠ PRESENT-TENSE CONSEQUENCE RECORDED 2026-09-03: `destroy_record`'s eligibility is [`hold:<record>`, `presence`] and BOTH alternatives decline -- the placeholder branch r | owner: Part E (the eligibility column) + the act's payload | site:  | unblocks: `transfer` and `destroy_record` (both now `own`-el
+    - cite: ⚠ THE HELD HALF IS TAKEN AT v9 IN-26 (B-Q): `destroy_record` is `own`-eligible FIRST and its holding is the typed cell's `relation` of `subject` `held_by` (with `existence` of `subject` kind `Record`), `give`'s shape, so the act binds WHICH Record and fires for its holder through the fold (`tests/te
+- **H-76** (reg line 863) tier 1 · assumption · FORMULA · open? · class:default — how many mechanical interactions one scene admits | owner: the scene (W17) | site: Fixtures interactions_per_scene, checked in SeasonDriver.deliberate | unblocks: every season after the 2026-09-02 ruling — it is w
+    - cite: ⚠ JORDAN RULED THE UNIT AND THE NUMBER AND DID NOT RULE THIS. `PLAN.md` §3.4 is explicit: "how many interactions a scene admits | **`assumption`, default 1-3** | ⚠ **NOT ruled.** Jordan did not say." The default's source is `player_agency_v30.md` §6.3 — "One scene action = one scene opportunity purs
+- **H-77** (reg line 875) tier 1 · assumption · FORMULA · open? · class:default — whether an extended scene costs more than one scene action, and how much | owner: the scene (W17) | site: Fixtures extended_scene_cost, read by Scene.cost in SeasonDriver.deliberate | unblocks: the triage S26.3 says the budget exists to create
+    - cite: ⚠ NOT RULED. `PLAN.md` §3.4: "whether an extended scene costs 2 | **`assumption`, default 2** | same source, same grading" — the source being `player_agency_v30.md` §6.3, pre-#337 and therefore reference. ⚠ THE SWEEP IS WIDENED FROM PLAN'S `1 · 2` TO `1 · 2 · 3`, AND THE REASON IS STATED RATHER THAN
+- **H-78** (reg line 887) tier 1 · assumption · FORMULA · open? · class:default — WHICH interactions share one scene. `H-76` registers how many a scene admits; nothing registered how they are grouped | owner: the scene (W17) | site: decision.make_chooser via decision.pack_scenes; rules from rosters.yaml scene_packing_rule | unblocks: what a scene IS, for every NPC season
+    - cite: FOUND BY THE `W17` ADVERSARIAL PASS, AND IT IS `H-53`'S DEFECT ONE LEVEL UP. `hole_register.yaml`'s own `H-53` row states the shape: 'H-09 supplies K = 12 and NOT WHICH K; the instrument takes the last k, which is an invention'. Here `H-76` supplies HOW MANY interactions a scene admits and nothing s
+- **H-124** (reg line 899) tier 1 · assumption · NUMBER · open? · class:default — how many scenes one person may take in ONE ROUND of the scene tick. `H-76` registers how many interactions a scene admits and `H-77` what an extended one costs; nothing r | owner: the scene tick (U2 / R-03) | site: Fixtures scenes_per_round, read by SeasonDriver.deliberate -- the driver releases at most  | unblocks: R-03 — *seasons must tick scene-by-scene, so what 
+    - cite: ⚠ JORDAN RULED THE BUDGET AND THE TICK AND DID NOT RULE THIS, which is the same shape as `H-76` beside it. What is ruled is the UNIT and the COUNT PER SEASON -- 2026-09-02, *"5 scenes for a character to play per season"*, carried at `engine/season/data/fixtures.py` -- and that the tick is scene-gran
+- **H-80** (reg line 988) tier 0 · assumption · SCHEMA_ROW · open? · class:default — a computed act cannot declare its OPERANDS. §F1's Candidate is `(verb, subject, why)`; #353 §13.1 says the act declares a Record's stages and their terms | owner: Part F (the Candidate) — the operand channel that does not exist | site: data/fixtures.py `Fixtures` record_stages_default / record_stage_term; loop/effects.py `_e | unblocks: `(Record, stages)`, term maturation, and with it t
+    - cite: FOUND BY RUNNING ARTIFACT 2. #353 `:491-492`: "MATTER matures terms; each maturation is a person's past act ripening, with `causes[]` pointing at the act that wound the clock", and `:477` gives the stages as "the creating act's own term ripening". So the ACT declares them — and §F1's Candidate carri
+- **H-81** (reg line 1000) tier 1 · ruled · FORMULA · open? · class:default — the obstacle-refusal multiple — #353 §27.4's `Ob > 2 x Pool` gate, read as a fixture with no row | owner: the resolver (§27.4) | site: Fixtures obstacle_refusal_multiple, read by the RESOLVE gate | unblocks: nothing — it is ruled; the row exists so the numbe
+    - cite: FOUND BY `W9` CHECK 3, AND IT IS THE ONE FIXTURE IN THE RUN THAT HAD NO ROW OF ANY KIND. Unlike the other seven it is not open: #353 §27.4 states the multiple, so this row is `ruled` and carries no sweep — sweeping a value the specification gives would be reporting a finding about a game #353 ruled 
+- **H-82** (reg line 1012) tier 0 · assumption · COLLISION · open? · class:default — #353 CONTRADICTS ITSELF ON `causes[]`. `:658` says the ids are "already in the log, or [ROOT]"; `:1377` says the Events carry "causes[] NAMING THE ACTS". An Act is never  | owner: §19 (the Event record) and §39.2 (the seam), which disagree | site: shape._fold's ev() call and SeasonDriver.resolve's contest branch; asserted by probe A28 | unblocks: every arc: it decides whether the narrative substr
+    - cite: FOUND BY THE `W9` ADVERSARIAL PASS, WHICH IS THE SECOND TIME THIS SESSION DECIDED IT AND THE FIRST TIME IT WAS WRITTEN DOWN. `W9` changed the fold from `[ROOT]` to `[a.id]` and argued it IN A CODE COMMENT — a decisive interpretive fill on a contradiction in the specification, with no row, while rows
+- **H-83** (reg line 1024) tier 1 · ruled · SCHEMA_ROW · open? · class:default — the verb table's `stratum` column reached no resolver. `VerbRow.stratum` is a NAME, `Act.stratum` is an INT with a default, and nothing mapped one onto the other | owner: the resolver (§27's five strata) | site: shape.stratum_of, read by SeasonDriver.resolve's sort key | unblocks: §27's ordered fold — which acts see which world
+    - cite: FOUND BY THE `W9` ADVERSARIAL PASS. `W3` loaded and VALIDATED a `stratum` per verb against the roster and no resolver ever read it: `Act.stratum` defaults to 4 (`social`), so EVERY COMPUTED ACT RESOLVED AT 4 whatever its verb, and §27's five-strata ordering was inert for the whole of artifact 2. `ro
+- **H-86** (reg line 1065) tier 1 · assumption · SCHEMA_COLUMN · open? · class:default — Part D's `emits:` column does not distinguish a kind emitted ON EVERY WRITE from one emitted only WHEN A CONDITION HOLDS. `(Site, condition)` carries both (`condition.wor | owner: the design (Part D's column schema) | site: rosters.yaml conditional_emission_rows -- read by shape.World.write at every MATTER write | unblocks: W4's per-write emission rule on every Part D row
+    - cite: FOUND BY W4, BY THE GATE FIRING. Six probes flipped PASS -> GAP the moment write() began requiring a declared emission, and five were genuine silent MATTER writes that are now fixed. The sixth, (Record, ttl), is not fixable that way: emitting record.expired on a non-terminal decrement asserts an exp
+- **H-89** (reg line 1103) tier 1 · absent · WIRING · open? · class:default — the verb table's `scale:` column reaches NO RESOLVER. It is validated at load against `rung_kinds` and read by nothing else -- not the fold's ordering, not `_eligible`, n | owner: the resolver (RESOLVE), and whatever else should read a scale | site:  | unblocks: unmeasured -- nothing currently depends on the col
+    - cite: HELD BY IN-43 (batch B-C, 2026-10-08), NOT CUT, grade unchanged: the `scale:` column answers Jordan's 2026-09-02 ask for a governance/management axis; what is missing is a READER (R-04). || PRIOR CITE, KEPT: FOUND BY THE GOVERNANCE-SLICE ADVERSARIAL PASS, AND IT IS THE THIRD INSTANCE OF THIS DEFECT 
+- **H-93** (reg line 1155) tier 1 · assumption · NUMBER ×kinds · open? · class:default — WHAT A PLACE PRODUCES. #353 §25 lists `yield` as written at MATTER and *only here*, and §22.3 names `season_factor`'s distribution as the blocker — but nothing anywhere s | owner: params | site: rosters.yaml `tables.site_yield`, read by SeasonDriver.matter's yield step | unblocks: `yield`, and with it the matter economy: `H-26` un
+    - cite: `W8`. ⚠ THE QUANTITIES ARE INVENTED AND THE ROW IS WHAT MAKES THAT LAWFUL; what is NOT invented is the SCALING. Production is the base times the site's `condition / condition_scale` times `season_factor`. Condition is the model (`H-38` closed with *`Site.condition` is the model*), `condition_scale` 
+- **H-109** (reg line 1593) tier 1 · measured · COLLISION · open? · class:default — THERE IS AN `is_title` BRANCH. `_req_revoke` computes `target_is_title = title_domain(post) is not None` and takes one of two rules on it. The meta-architecture states th | owner: loop/predicates.py -- `_req_revoke`; `rosters.yaml` -- the revocation basis | site:  | unblocks: nothing today -- but every future seat kind inheri
+    - cite: READ AT `_req_revoke`, WHERE THE BRANCH IS EXPLICIT AND COMMENTED AS A RULING: *two rules, and which one applies turns on whether the target is a title*. The two rules are real and Jordan ruled both -- an ordinary office is revocable on purview, a title needs purview plus holdings plus rank -- so th
+- **H-145** (reg line 1853) tier 1 · measured · WIRING · open? · class:default — G4 WAS NAMED, IN FOUR SEPARATE PLACES, AS WHERE A BARE (NON-`Receipt`) `StateChange` WOULD STOP BEING ADMITTED TO THE LOG -- AND IT DID NOT DO THIS, WITH NO NOTE IN ITS O | owner: state/log.py -- the append-time check that only inspects `Receipt`-typed changes; harness/ | site:  | unblocks: nothing in production -- grepped every `StateChang
+    - cite: FOUND BY A HOLISTIC ANTAGONIST PASS OVER THE ACCUMULATED PHASE ALPHA+BETA DIFF (2026-09-27), reading G4's own DONE note against the four other places in the tree that name G4 as this job's closer, and confirming directly that `test_g1a_act_store_and_receipts.py`'s own pinned falsifier ('when G4 clos
+- **H-153** (reg line 3549) tier 1 · assumption · RULING · open? · class:default — D-6 (`19_PLAN.md:952-955`), NOT JORDAN'S (`HANDOFF_SC.md`, `workplans/2026-09-28- the-plan-one-order-mc-v18-retired.md` §5.2). THE ONE CORPUS FAULT THAT DOES NOT RECONCIL | owner: swept fixture, answered as this position's own — §0's five-test ladder, test 5 | site: Fixtures speech_kind_terminal_fault (`data/fixtures.py`). NOTHING READS IT YET -- the spee | unblocks: the one `speech_kinds` row D-6 names, once the res
+    - cite: `proposals/2026-09-05-proceedings-subsystem/19_PLAN.md` PART H's D-6, verbatim: "The one corpus fault that does not reconcile with fail-forward. 'Whoever touches it is killed' is the single terminal fault with no corpus-supplied next move. Options: treat it as the one place the ladder's failure is n
+- **H-154** (reg line 3580) tier 1 · assumption · NUMBER · open? · class:default — D-7 (`19_PLAN.md:957-958`), NOT JORDAN'S. TWO CORPUS-VERSUS-EVIDENCE BRANCHES: (a) whether a detailed denial outperforms a brief one; (b) whether displayed anger extracts | owner: swept fixtures, answered as this position's own | site: Fixtures denial_detail_outperforms / displayed_anger_extracts_concessions (`data/fixtures. | unblocks: the two `speech_kinds` rows D-7 names, once the re
+    - cite: `proposals/2026-09-05-proceedings-subsystem/19_PLAN.md` PART H's D-7, verbatim: "Two corpus-versus-evidence branches. Whether a detailed denial outperforms a brief one; whether displayed anger extracts concessions — and the study marks the evidence for the second unverified itself. Data authoring, p
+- **H-220** (reg line 4733) tier 1 · absent · WIRING · open? · class:default — THE EVENT LOG ITSELF ACCEPTS ANY KIND (loader invariant 7's second half, `04 §B.13 #7`: *'the log accepts no other kind'*): the derived roster (`data/verbs.py::EVENT_KIND | owner: `state/log.py::EventLog.append` (the refusal point 04 names) and the probe/exercise corpus | site:  | unblocks: the log refusing a body-literal kind from ANY emit
+    - cite: MEASURED at v9 SC-02 `23` (B-P, 2026-10-17, base `b817aa3c`). A scan of every `Event(`/`Ev(`/`ev(` call under `engine/season` and `tests/valoria` for a kind literal outside the derived roster found these undeclared kinds: `theft.done`, `plague.struck`, `sitting.decided`, `thing.happened` (all `harne
+- **H-254** (reg line 5189) tier 1 · measured · WIRING · open? · class:default — WHICH POSITION OWNS `determine`'S `docket` CONJUNCT (CR-71, B11-S2). `determine` is refused on `clause:docket` (existence of a `DocketItem` on the subject: nobody put the | owner: none named: `verb_table.yaml` `determine`'s `requires` (conjunct `docket`); the reader is  | site: `engine/season/verb_table.yaml` (`determine`, conjunct `docket`); `engine/season/harness/a | unblocks: an owner for PU's `determine` leg in CR-71's lines
+    - cite: READ at CR-71 on `5d6aac5`, `PYTHONHASHSEED=0`, `python -m engine.season.harness.aperture 2 0` (REALM, seed 0, two seasons): `determine` attempted 2, executed 1 as `matter.undetermined`, refused 1 on `clause:docket`; `matter.determined` is never emitted (the executed act is the zero CR-55's RE-BASE 
+- **H-344** (reg line 6324) tier 1 · measured · MECHANISM · open? · class:default — `construe` SETS A FLAG AND DISTORTS NOTHING (premise-check, secrecy). It deposits `terms.distorted` on the construer and on every bystander; the writ's terms and every ot | owner: the `construe` row of `engine/season/verb_table.yaml` (emission only) | site:  | unblocks: a construal that changes what a holder takes the t
+    - cite: MEASURED by the agent (slice S5), not re-run by the author. Neighbours: H-36 (refraction), H-262 (the name), H-44.
+
+## Open batch cards (workplans/…part3.md §1) — 3
+
+- `B10-18b` · VERBS: THE R-05 CLOSE — `workplans/valoria_master_workplan_v11_part3.md:255` (entry gate, order, exit, hash rules are in the card)
+- `B11-F2` · FLOW CONDITIONING: INFLUENCE, MEASUREMENT AND THE FIELD — `workplans/valoria_master_workplan_v11_part3.md:318` (entry gate, order, exit, hash rules are in the card)
+- `B11-F3` · FLOW CONDITIONING: THE EVALUATION — `workplans/valoria_master_workplan_v11_part3.md:339` (entry gate, order, exit, hash rules are in the card)
+
+## Open positions (rows in part3 batch tables) — 36
+
+- **IN-32** [B10-15] (part3:150) H-182 ties: `tie / knot` gets an effect, a reader and a partner operand (= FI-05); the reader is `decision/options.py::operand_bags` (a fanned row ranges over `known_pers — *BUILD (narrowed: attempted `53ed995d`, falsified by its own stopping rule, reverted `7c6df* (class:handle/batch)
+- **IN-14** [B10-16] (part3:173) #457 BOUND-ATTENTION: `budget()` counts `granted_acts` — *BUILD (shape delegated-ruled 2026-10-12: MORE ROUNDS) — v9 CONFLICT: its state index says * (class:handle/batch)
+- **IN-52** [B10-16] (part3:176) the levy-to-field feed (now `requisition`): levied stores provision a season field — *the flip: BUILD (released from M17, on CR-23; it provisions fields from treasuries filled * (class:handle/batch)
+- **IN-30** [B10-17] (part3:192) H-186 GD-3's insurgency beyond its first condition; an emerged faction (= SE-05, FA-02): faction identity gets one owner that admits emergence, `queries/world_q.py::facti — *BUILD (with CP-T09-04 (d) as its acting caller) · STOPPED (at B-U, closed `156f3e5d`, unbu* (class:handle/batch)
+- **IN-48** [B10-17] (part3:207) H-108's delegation half: a seat exercised by someone who does not hold it — *DESIGN-FIRST again (Layer 1's route; v9 batch B-JR), then BUILD* (class:handle/batch)
+- **IN-36** [B10-17] (part3:208) FORCE-FOREIGN: an external empire and Schoenland as persons; the march frequency answered in kind (ED-IN-0317) — *`foreign` ON by default since ED-IN-0310 (Jordan, 2026-11-04); BUILD: the interim march ca* (class:handle/batch)
+- **CR-46** [B10-18b] (part3:268) The R-05 reading (`ex - both`, pooled, per seed) and its definition: the denominator counts the six army rows, and the menu-door clause — *BUILD (harness and text)* (class:handle/batch)
+- **CR-52** [B10-18b] (part3:269) The menu door: the preset order of battle (`recruit`, `form_unit`, `assign_troops`) through `dispatching_chooser`, with a test and an off control — *BUILD (harness and test)* (class:handle/batch)
+- **CR-50** [B10-18b] (part3:270) Referent classes for `raze` and `train` (H-232's stamps stay open) — *EDIT (data)* (class:handle/batch)
+- **CR-47** [B10-18b] (part3:271) Works and Sites reach the chooser's ranking (`build`, `found`, `work`, `restore`, `examine`; `sabotage`'s rank link) — *BUILD* (class:handle/batch)
+- **CR-48** [B10-18b] (part3:272) A writ reaches its addressee through `give` (`comply`, `construe`, `evade / defy`); no mint (ED-IN-0292 (1)) — *BUILD* (class:handle/batch)
+- **CR-49** [B10-18b] (part3:273) `exchange` names another rung (`referent_class: Rung`; a self-trade declines) — *BUILD* (class:handle/batch)
+- **CR-51** [B10-18b] (part3:274) A restraint exists: `arrest` on a held warrant, `pardon` closing it — *MEASURE then BUILD only the gap* (class:handle/batch)
+- **CR-53** [B10-18b] (part3:275) `destroy_record`: the sink arm switched on (`withheld_verbs=ARMY_VERBS`) — *BUILD (one value)* (class:handle/batch)
+- **CR-54** [B10-18b] (part3:276) `revoke`: the vacancy motive, a design for a general motive (H-207 (A)'s remaining path) — *DESIGN-FIRST, then BUILD* (class:handle/batch)
+- **CR-104** [B11-F2] (part3:331) Institutional reach: `faction_q.influence_rung(w, office_id)`, the lowest rung covering a head seat's institution (its seats, holdings and owned Sites, `owned_site_rungs` — *BUILD* (class:handle/batch)
+- **CR-97** [B11-F2] (part3:332) Measure plot points and office influence: columns (a) to (h) on `strife.py::strands_block` (turns, closure class, chains in strands, office influence per move, referent b — *MEASURE (harness)* (class:handle/batch)
+- **CR-98** [B11-F2] (part3:333) Declare the loops L1 to L5 as `kind: "LOOP"` rows with `sign:` and a bound (L6, L7 with CR-102, CR-105) — *EDIT (register rows)* (class:handle/batch)
+- **CR-99** [B11-F2] (part3:334) Give the strife guard a positive control: a function over arms returning PASS, FAIL or BLIND, with a planted concentrator — *BUILD (harness)* (class:handle/batch)
+- **CR-100** [B11-F2] (part3:335) The unaware's field: `world_q.flow_stakes_within` spliced into `questions_for` through the driver's barrier-2 projection, behind `Fixtures stamp_flow_within`, shipped off — *BUILD* (class:handle/batch)
+- **CR-101** [B11-F2] (part3:336) The field's order: a flow-salience bump inside `attention_key`'s tiers, `Fixtures flow_salience_gain`, shipped 0 — *BUILD* (class:handle/batch)
+- **CR-102** [B11-F2] (part3:337) Office influence on the within-stake: a salience term `flow_office_gain × r`, `r` from `influence_rung`'s kind; shipped 0 — *CONDITIONAL: BUILD only if its gate holds on CR-97's reading, else NOT BUILT* (class:handle/batch)
+- **CR-103** [B11-F3] (part3:352) Evaluate the field route: arms OFF, FIELD, FIELD+S on a salience grid, SHUFFLED and (if CR-102 is built) FIELD+S+O, three seasons, seeds 0, 1, 2, under a decision rule wi — *MEASURE (readings; the selected values shipped in its pin commit)* (class:handle/batch)
+- **CR-105** [B11-F3] (part3:353) A choice-score bias toward what is at stake: one term in `decision/choose.py::score_terms` on `Question.stakes`, `flow_choice_gain` shipped 0 — *CONDITIONAL and HELD (on CR-103 shipping OFF under "none lifts", and Jordan's AX-2 hunk, H* (class:handle/batch)
+- **NM-W4** [B10-19] (part3:393) a content-bearing record kind — *HELD · UNBUILT* (class:default)
+- **NM-W5** [B10-19] (part3:394) focalized journal on `person_q` (released from M12, taken (a) without the §A.2 row; the "Where" and "Co-edit" lines' §A.2 row struck) — *HELD on NM-W1 (slots by R8 after NM-W1 lands its instrument control) · UNBUILT* (class:default)
+- **NM-W6** [B10-19] (part3:395) fragment bake — *HELD · UNBUILT* (class:default)
+- **NM-W7** [B10-19] (part3:396) scale lines — *HELD · UNBUILT* (class:default)
+- **NM-W8** [B10-19] (part3:397) occasion ladder (replacing a per-season deck) — *HELD · UNBUILT* (class:default)
+- **NM-W9** [B10-19] (part3:398) conformance items (`Receipt.before/after` against 04 §B.9, and others) — *HELD · UNBUILT* (class:default)
+- **CL-MGMT** [B10-19] (part3:408) The management surface, weak reading (a batched front end over the seated person's own seat verbs; AX-1 unchanged); one owner of an order's cost, never a verb-row `manage — *DESIGN-FIRST · RATIFIED (Jordan, 2026-10-30, ED-IN-0305); build HELD on M31* (class:handle/batch)
+- **CR-95** [B10-19] (part3:411) Spirit against circumstance and influence (ED-IN-0347) — *DESIGN-FIRST* (class:default)
+- **IN-44** [B10-Z] (part3:432) Layer 0 and Layer 1 edits owed: LISTED, NOT MADE (SM-10, SM-12, A-24's wording); row 1 (the `CLAUDE.md` §0.2 `mc_v18` bullet) released by M15 (a), retired as a listed Lay — *HELD · LEAVE (rows 2-16, released from M11 by ED-IN-0300: unscheduled, slotted by R8; each* (class:handle/batch)
+- **IN-18** [B10-Z] (part3:437) G5, G8, the gated tail (telling workplan residue), narrowed at B10-02's close — *HELD · the MEASURE landed (`harness/obligee_report.py`, `165d355c`; survivors-only floor, * (class:handle/batch)
+- **CR-07** [B10-Z] (part3:438) Retire the stored `scale:` column: delete `scale:`/`scale_note` from the 13 rows of `verb_table.yaml` that carry them, `VerbRow.scale` and its `RUNG_KINDS` check, and the — *HELD (moved from B10-05 at its close: the pre-flight RAN and the cut waits, as the entry s* (class:default)
+- **IN-58** [B10-Z] (part3:440) RS-23, RS-24 grievance at read: its sworn-to half — *HELD (moved from B10-09 at its close two; not decided against): NARROWED, not built: the `* (class:handle/batch)
+
+## Plan entries and sections (parts 2, 4–17), by heading — 27
+
+- part4:363 CL-MGMT — The management surface: the seated person's own seat verbs, batched (IN) · BATCH B10-19 (DESIGN-FIRST) · STATE DESIGN-FIRST · RATIFIED (Jordan, 2026-10-30, ED-IN-0305) · build HELD on M31 ·  (class:handle)
+- part4:378 CR-46 — The R-05 reading and its definition (IN) · BATCH B10-18b (first) · STATE BUILD (harness and text; hash EQUAL) · R R-05 (class:batch)
+- part4:391 CR-47 — Works and Sites reach the chooser's ranking (IN) · BATCH B10-18b (after CR-50) · STATE BUILD (hash MOVER) · R R-05 (`build`, `found`, `work`, `restore`, `examine`; `sabotage`'s rank link) (class:batch)
+- part4:404 CR-48 — A writ reaches its addressee (IN) · BATCH B10-18b (after CR-47) · STATE BUILD (hash MOVER) · R R-05 (`comply`, `construe`, `evade / defy`) (class:batch)
+- part4:430 CR-50 — Referent classes for `raze` and `train` (IN) · BATCH B10-18b (first mover, after CR-46 and CR-52) · STATE EDIT (data: two classes) · R R-05 (contributor) (class:batch)
+- part4:469 CR-53 — `destroy_record`: the sink arm switched on (IN) · BATCH B10-18b (after CR-51) · STATE BUILD (one fixture value; hash MOVER) · R R-05 (`destroy_record`) (class:batch)
+- part4:649 IN-18 — G5, G8, the gated tail (telling workplan residue) (IN) · BATCH B10-Z (HELD; its MEASURE closed at B10-02) · STATE BLK:G5 trigger M0e (re-measured at B10-02: headline 0, the workplan's own defi (class:handle)
+- part4:662 IN-44 — Layer 0 and Layer 1 edits owed: LISTED, NOT MADE (SM-10, SM-12, A-24's wording) (IN) · BATCH B10-Z · STATE rows 2-16 released from M11 (ED-IN-0300), unscheduled in B10-Z; row 1 released by M15 (class:handle)
+- part4:676 IN-12 — #453 steps 5, 5a: their remainder (`interrogate`, the charge, RS-23 conjunct) (IN, SC) · LANDED in B10-09 close one (record `4faf04ed4` to `f9e4cef`, PR #549) (class:handle)
+- part4:680 IN-58 — RS-23, RS-24 grievance at read: its sworn-to half (IN, FA) · BATCH B10-Z (moved from B10-09 at its close two) · STATE HELD, NARROWED at B10-09 close two: the `oblige` edge is person-side, but  (class:handle)
+- part4:694 IN-61 — RS-27 succession: the heir is a title, the throne is the heir's own claim (IN, FA, SE) · LANDED in B10-09 close one (record `4faf04ed4` to `f9e4cef`, PR #549) (class:handle)
+- part4:710 IN-32 — H-182 ties: `tie / knot` gets an effect, a reader and a partner operand (= FI-05) (IN, FI) · BATCH B10-15 (last but WR-01, after CP-T07-11) · STATE BUILD (re-specified by the decision round on (class:handle)
+- part4:736 IN-14 — #457 BOUND-ATTENTION: `budget()` counts `granted_acts` (IN) · BATCH B10-16 · STATE BUILD (shape delegated-ruled 2026-10-12: MORE ROUNDS) — v9 CONFLICT: its state index says `ask-then` / B-Z ·  (class:handle)
+- part4:748 IN-52 — the levy-to-field feed (now `requisition`): levied stores provision a season field (IN; SE, MB) · BATCH B10-16 (the flip, last) · STATE BUILD (the flip, released from M17 through CR-23); its r (class:handle)
+- part5:125 IN-30 — H-186 GD-3's insurgency beyond its first condition; an emerged faction (= SE-05, FA-02) (IN; FA, SE) · BATCH B10-17 · STATE STOPPED (at B-U, closed `156f3e5d`, unbuilt: finding in H-186) · R — (class:handle)
+- part5:140 IN-36 — FORCE-FOREIGN: an external empire and Schoenland as persons (IN; FA, MB) · BATCH B10-17 · STATE LANDED-NARROWED (landed at B-V `7c59d74c`); BUILD the interim march cap (ED-IN-0317, a declared  (class:handle)
+- part5:154 IN-48 — H-108's delegation half: a seat exercised by someone who does not hold it (IN; FA, SE) · BATCH B10-17 · STATE BUILD (DESIGN FIRST AGAIN on Layer 1's route; v9 batch B-JR, unscheduled) · R R-04 (class:handle)
+- part13:309 IN-61 — RESEQUENCE (B10-09) · AM-B-08 (class:handle)
+- part15:182 CL-MGMT · the management surface, the legibility policy and the scene list (class:handle)
+- part16:202 CR-97 — Measure plot points and office influence (IN) · BATCH B11-F2 · STATE MEASURE (a harness reading and its test; hash EQUAL) · R — (class:batch)
+- part16:240 CR-98 — Declare the loops as rows (IN) · BATCH B11-F2 · STATE EDIT (register rows; hash EQUAL) · R — (class:batch)
+- part16:266 CR-99 — Give the strife guard a positive control (IN) · BATCH B11-F2 · STATE BUILD (harness and test; hash EQUAL) · R — (class:batch)
+- part16:284 CR-100 — The unaware's field: the within-stamp in `questions_for` (IN) · BATCH B11-F2 · STATE BUILD (a query term, one driver line, a fixture shipped off; hash EQUAL off, a declared mover on) · R — (class:batch)
+- part16:313 CR-101 — The field's order: flow salience in `attention_key` (IN) · BATCH B11-F2 · STATE BUILD (a sort-key term and a fixture shipped 0; hash EQUAL at 0) · R — (class:batch)
+- part16:332 CR-102 — Office influence on the within-stake (IN) · CONDITIONAL · BATCH B11-F2 (last item) · STATE BUILD if its gate holds, else recorded NOT BUILT (hash EQUAL at 0, a declared mover above 0) · R — (class:batch)
+- part16:351 CR-103 — Evaluate the field route (IN) · BATCH B11-F3 (after B10-18c; first item) · STATE MEASURE (readings; the selected values shipped in its pin commit) · R — (class:batch)
+- part16:370 CR-105 — A choice-score bias toward what is at stake (IN) · CONDITIONAL · BATCH B11-F3 (after CR-103) · STATE HELD until CR-103's verdict and Jordan's hunk, then BUILD (a score term and a fixture ship (class:batch)
+
+## Research (research/) — 1
+
+- `research/by_lane/IN_infrastructure.md` — 1118 lines — IN — infrastructure and cross-cutting: historical research, game precedent and repository work, critically evaluated (class:lane file)
+
+## Lane handoff — 1
+
+- `registers/handoffs/HANDOFF_IN.md` (Open + Standing orders tables; READ IN FULL) ; history `HANDOFF_IN_history.md`; closed `HANDOFF_IN_closed.md`
+
+## Editorial ledger — 1
+
+- ED ledger: `registers/editorial_ledger_in.jsonl` (exists)
+
+## Hole-register discharges — 26
+
+- `D1`: row:H-01
+- `D2`: row:H-04
+- `D3`: row:H-29
+- `D4`: row:H-28
+- `D5`: row:H-30
+- `D6`: row:H-20
+- `D7`: row:H-22
+- `D8`: row:H-24
+- `D9`: row:H-26
+- `D10`: row:H-27
+- `D11`: row:H-32
+- `D12`: row:H-34
+- `D13`: row:H-31
+- `D14`: row:H-33
+- `D15`: row:H-25
+- `D16`: row:H-56
+- `D17`: row:H-35
+- `D18`: row:H-36
+- `D19`: row:H-23
+- `D20`: row:H-02
+- `D21`: row:H-03
+- `D22`: row:H-12
+- `D23`: row:H-05
+- `D24`: row:H-37
+- `D25`: row:H-38
+- `D26`: row:H-21
