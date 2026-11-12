@@ -95,6 +95,41 @@ holistic and instruction stages build the cross-lane sequence from these tables,
 dependency edges. Do not read the case files' statements as proof the engine behaves that way (§0.05);
 they are the specification of what must be simulated.
 
+## Added charge (Jordan, 2026-11-12): organise so that character capabilities are easy to define and map to RPG axioms
+
+Jordan must be able to **define skills, abilities, aptitudes, traits and their kin, attach them to
+characters, and have them correspond to RPG axioms** (what a capability is, what it adds to a roll or a
+choice, how it is gained, lost, trained and opposed; the usual pool/threshold/advancement/tag
+conventions of tabletop design) **without touching engine code**. Each subsystem, and the game as a
+whole, should therefore be organised so that:
+
+- every point at which a character's capability changes an outcome (a pool, an obstacle, a threshold, a
+  ceiling, a candidate's score, an aperture, a cost) reads it from **one authoring surface** — a typed
+  file code reads (§0.05), with one owner per fact — and not from a constant inside a module;
+- a capability is defined **once** (its name, kind, scale, the axiom it implements, its inputs, its
+  growth rule) and referenced by every subsystem that uses it, so a new skill can be added as data, and
+  the verbs, contests, combats and choices that should respond to it do so by declaration;
+- the mapping **capability → axiom → resolver input** is legible end to end: for any roll or choice, you
+  can say which capabilities fed it, by which rule, and why.
+
+Starting points in the tree (read, do not assume current): `proposals/2026-10-16-attribute-derivation*.md`,
+`2026-10-16-attributes-from-scratch*.md`, `2026-10-16-character-template*.md`,
+`2026-11-05-verb-attribute-map*.md`, `2026-11-05-attribute-rulings-*.md`,
+`2026-10-24-character-layers-*.md`, `2026-10-07-character-sheet-spaces.md`, `engine/season/decision/sheet.py`,
+the CR-20 (attributes) and CR-21 (cells) tests and code, `engine/season/verb_table.yaml`,
+`write_matrix.yaml`, `rosters.yaml`, `modules/combat/` (attributes and thresholds, PC-14/15), and the
+dice engine's inputs.
+
+Append **§14. Capability authoring surface** to your audit: (a) every place your subsystem takes a
+character capability as input, what it reads, and from where (cite code); (b) which of those reads
+are data-driven today and which are hard-coded or doubled; (c) the target shape for your subsystem —
+what a capability definition must say for your subsystem to use it, and the single file that should
+carry it; (d) the RPG axioms your subsystem implements, named in the ordinary vocabulary of the
+tradition, and any axiom it contradicts or lacks that a designer would expect; (e) proposals (files) for
+the changes, ordered. Do not invent a second capability system: find the existing owner and say what
+extends it. The holistic stage will merge the §14s into one authoring architecture, so state the
+interface your subsystem needs rather than a private scheme.
+
 ## Ground rules (from `CLAUDE.md`; read it, these are the ones that bite here)
 
 1. **Code is the mechanism; prose is reference** (§0.05). A design document is never the reason a
