@@ -45,7 +45,7 @@ makes the change; new text only, no retrofit of frozen ids, CLAUDE.md §4).
 | **task** | an act with a draw and nobody opposite (a `graded_tasks` row); the path its draw takes in the fold is the **task route** (U4d) | `rosters.yaml: graded_tasks` (P) | "graded route" (→ task route), "uncontested"; "graded inquiry" as a name for the class (the three inquiry verbs on the roster may be called "graded inquiries", inquiry sense 2); "graded act" stays for its ordinary sense, any act the ladder grades, contested or not | MAT_A–E, PHY_B, PHY_D, MIL_A–D, COL_B |
 | **inquiry** | (1) the skill `inquiry`; (2) a verb that writes nothing and deposits to its actor (`research`, `examine`, `surveil`, `reconstruct`) | DR `capabilities` (P); C-22 | "graded inquiry" for a task | as above |
 | **switch** | an `on/off` (or named-value) fixture | `Fixtures` | "arm" for the value of a switch | every `14_VERBS_*` and `16_*` that writes "arm: off" |
-| **arm** | one setting of an experiment: the control arm and the test arm | — (plain English) | "arm" for a weapon (→ **weapon** / **arms** plural), for a service (`ARM_SHARES` → **branch**), for the capability (`arms`, kept as an id) | — (U4d: `04_MB_campaign_party_economy.md` was named here in error; its `veterancy: {arm: off}` is a switch setting, this row's own sense, as W3-1 reported) |
+| **arm** | one setting of an experiment: the control arm and the test arm | — (plain English) | "arm" for a weapon (→ **weapon** / **arms** plural), for a service (`ARM_SHARES` → **branch**), for the skill (`arms`, kept as an id) | — (U4d: `04_MB_campaign_party_economy.md` was named here in error; its `veterancy: {arm: off}` is a switch setting, this row's own sense, as W3-1 reported) |
 
 ## B. Capabilities
 

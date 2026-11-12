@@ -1,12 +1,14 @@
 # FA-B1 — a war lives in the seats that wage it: whose word continues it, whose word ends it, and what a seat is told when its army stands on another's land
 
-Reconciled: 2026-11-12, U5d closure — folded Jordan's answers. **A-20** rules option (B), the seats that wage it: the sentence "lands only on that ruling. Until then the code is unchanged" is discharged; edits 1–3 land as written and edit 4 (the Layer 1 text for `04:460` and D-48) is owed by the ruling, drafted, not applied by a suite lane. **A-57, A-58 and A-65 to A-70** (the land rulings) keep edit 6 as written and give it its meaning: a field writes presence, never title; an aggressor who wins on a march into land another holds stands there and chooses to seize (the title passes, and the seats that go with the land pass with it), to occupy without seizing (the holder's claim stands), or to withdraw; a rescuer on a third party's land chooses among the same three; an unopposed entry is read by a graded draw as a tolerated trespass (which occupies nothing and which the holder resents) or as aggression (A-68); on a draw both armies are back at their stations at once and the defender holds (A-67, A-68, A-70). Edit 6's widened occasion (the rungs his faction `occupies`, whatever their holder) is where the winner is offered the taking; "the taking is still `seize`'s … Nothing is written by the field" is the ruled form. Added by the rulings and carried in `U5d_FA_land_and_seats_pass_on_a_won_march.md`: `seize` carries the seats anchored on the place, and a faction standing there by the holder's leave does not occupy it. Edit 7 (a) stands (`at_war` enters no `requires`); a march into another's held land is a war act, so `fields_between` is the reader of it. R-22's "keep β" stands for the field's write.
+Reconciled: 2026-11-12, U5d closure — folded Jordan's answers. **A-20** rules option (B), the seats that wage it: the sentence "lands only on that ruling. Until then the code is unchanged" is discharged; edits 1–3 land as written and edit 4 (the Layer 1 text for `04:460` and D-48) is APPLIED (2026-11-12, A-97, node `L1-A20`). **A-57, A-58 and A-65 to A-70** (the land rulings) keep edit 6 as written and give it its meaning: a field writes presence, never title; an aggressor who wins on a march into land another holds stands there and chooses to seize (the title passes, and the seats that go with the land pass with it), to occupy without seizing (the holder's claim stands), or to withdraw; a rescuer on a third party's land chooses among the same three; an unopposed entry is read by a graded draw as a tolerated trespass (which occupies nothing and which the holder resents) or as aggression (A-68); on a draw both armies are back at their stations at once and the defender holds (A-67, A-68, A-70). Edit 6's widened occasion (the rungs his faction `occupies`, whatever their holder) is where the winner is offered the taking; "the taking is still `seize`'s … Nothing is written by the field" is the ruled form. Added by the rulings and carried in `U5d_FA_land_and_seats_pass_on_a_won_march.md`: `seize` carries the seats anchored on the place, and a faction standing there by the holder's leave does not occupy it. Edit 7 (a) stands (`at_war` enters no `requires`); a march into another's held land is a war act, so `fields_between` is the reader of it. R-22's "keep β" stands for the field's write.
 
 Reconciled: 2026-11-12, wave 3 (W3-3) — the body follows the head (R3 §2): "The resolution"'s last paragraph and edit 4 now read "ruled A-20; Layer 1 text owed, not applied" (`OWED_TO_UNIFICATION.md` §A row "war lives in the seats"); no suite batch edits `04`. Edit 6 is restricted per A-68/A-85 (R3 §2): the occasion is an arrival the entry draw reads as aggression (`U5d_FA_land_and_seats_pass_on_a_won_march.md` D6) or a field the aggressor won, and the taking is the aggressor's chosen `seize` act (C3-L12). Batch split per U3 C3-Y1 (edits 1–3 in B21; edit 6 in B23); tier (R3 7b-0).
 
 ## Status: PROPOSED
 
-Lands in batch: edits 1–3 in B21 (FA governance; before `06_FA_levy_through_the_seat_B.md`, C3-D5); edit 6 in B23 (land), first in that batch (C3-Y1). Edit 4 lands in no batch (Layer 1 text, Jordan's amendment); edits 5 and 7 are plan clauses and follow-ons.
+Reconciled: 2026-11-12, A-97 (`unified/work/L1_APPLIED.md` §`L1-A20`, `unified/work/L1_PROPAGATION.md`): edit 4 is APPLIED by Jordan's amendment and dropped from the plan: `04:460` (§B.10–§B.12) now reads "over live `commit`s to a WAR Proposition by a holder of a seat of either party that may muster (A-20)", PART D row 48 (`04:1078`) says the same of the `commit` edges and of who writes peace, and F.32 (`04:1233`) is marked ANSWERED. The "owed, drafted, not applied" wording of the heads, "The resolution"'s last paragraph and edit 4 is rewritten to the applied state. `10_FACTIONS_AND_DEPLOYMENT.md:73` is amended to match (L1_APPLIED).
+
+Lands in batch: edits 1–3 in B21 (FA governance; before `06_FA_levy_through_the_seat_B.md`, C3-D5); edit 6 in B23 (land), first in that batch (C3-Y1). Edit 4 is applied and lands in no batch (Layer 1, `04:460`); edits 5 and 7 are plan clauses and follow-ons.
 Depends on: edits 1–3 on nothing proposed; edit 6 on `U5d_FA_land_and_seats_pass_on_a_won_march.md` D6 (the entry draw, B23) and `14_VERBS_MATERIAL_D_paper.md` §6 (`seize`, landed in B23 per C3-L12).
 
 Source: `audits/06_FA_audit_addendum_B.md` F-FA-13, F-FA-14, §B4.2, §B6.1 R-22, R-23, R-32, §B6.2 item 1;
@@ -59,8 +61,7 @@ Senator action by a faction's leadership, a War Authorisation by the seated; `fa
 
 It narrows a ratified sentence (`04:460`: "over live `commit`s to a WAR Proposition"). Ruled A-20 (option
 B, the seats that wage it); edits 1–3 land as written. The Layer 1 text that records the narrowing (edit 4)
-is owed, drafted here and not applied: it is applied only by Jordan's amendment (`OWED_TO_UNIFICATION.md`
-§A).
+is APPLIED (2026-11-12, A-97, node `L1-A20`): `04:460` carries the narrowed sentence.
 
 ## Exact edits, by owner
 
@@ -86,11 +87,10 @@ instrument read `at_war` and need no edit.
 Its declarer is `world_q.members(w, "fac_valorsmark")[0]`; he must be chosen as a holder of a
 Valorsmark seat whose grant carries `dispatch`, and the test gains its control (below).
 
-**4. Layer 1 text, owed (A-20), not applied by any suite batch.** Drafted: `04:460`'s one-line contract
-and D-48's row gain "by a holder of a seat of either party that may muster"; F.32 is closed with a pointer
-to this rule. It is applied only by Jordan's amendment (`OWED_TO_UNIFICATION.md` §A). (A spec that binds
-code is changed with the code, by the ruling, never to match code that departed from it; `CLAUDE.md`
-§0.05.)
+**4. Layer 1 text (A-20): APPLIED 2026-11-12 (A-97, node `L1-A20`); no edit of any batch.** `04:460`'s
+one-line contract and PART D row 48 (`04:1078`, the D-48 row) now carry "by a holder of a seat of either party
+that may muster"; F.32 (`04:1233`) is answered by a pointer to this rule. (A spec that binds code is changed
+with the ruling, never to match code that departed from it; `CLAUDE.md` §0.05.)
 
 **5. CP-T09-02 (d), one clause (plan edit, owner the plan):** rallying stamps the war for every member
 as written; the entry states that a rallying commit is de facto and does not keep the war alive.
