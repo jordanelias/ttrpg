@@ -113,3 +113,192 @@ the round is dominated by the approach (stop-hits), and the engine already count
 (d) **The fights are short and one-sided where reach differs** (spear v arming: 1.1 rounds, 120 of 120 fights
 felled): that is F-PC-04 and A-31's calibration (B15), not a round defect; a duel of "lots of closing and
 separating" needs A-31's longer fight to be visible in the numbers. Every figure here is the pre-B15 engine.
+
+---
+
+## 2. The definition, decided
+
+Each clause gives the decision, then the ladder step that decides it (CLAUDE.md §0: 1 superseded, 2 irrelevant,
+3 design document, 4 precedent, 5 architecture). Jordan's own words are A-101's; nothing below overwrites them.
+
+### 2.1 Words (one meaning each; the glossary rows in part 2 §4.3 carry them)
+
+| word | meaning | code it names today |
+|---|---|---|
+| **fight** | the whole personal contest between two persons, from the first round to its ending | `wrapper.fight`; `modules/combat/fight.py::fight` |
+| **round** | one engagement: the two close, exchange attempts to attack, and separate (A-101) | one call of `wrapper.engagement` (code name kept: §3.4) |
+| **closing** | the part of a round in which the gap is closed: the approach while the measure is open, with the longer weapon's stop-hits; instant when the reaches are near equal or the closer is not held off (the closed latch and the re-presentation gate, `wrapper.py:98-124`) | the `if not closed:` block, `:221-262` |
+| **exchange** | one closed-measure attack attempt and the defence against it, resolved in one beat | one `outcome` event; `exchanges` (`:470`) |
+| **attack attempt** | any attack in a round: an exchange's attack, a stop-hit on the closing, a pursuit strike on a read withdrawal | `roll`, `stophit`, `disengage(pursued=True)` events |
+| **separation** | the end of a round with both standing: the fighters are apart | `_emit('separation', reason=…)` |
+| **beat** | one step of the round's loop, in which at most one attack is made; the engine's unit of cadence, never a unit of time a player sees | one iteration of `while beats < BEAT_BUDGET` (`:147`) |
+| **phase** | one of the round's three states a fighter can lean in: `measure`, `exchange`, `bind` (PB §3) | PB's `PHASES` (proposed) |
+
+"Turn" and "bout" are **not** words for any of these (part 2 §4: "turn" is A-9's scene sequence, "bout" is the
+battle's 18 field ticks); "engagement" stays only as the code function's name.
+
+### 2.2 The round: entry, the exchange, separation
+
+- **Entry.** A round opens with the fighters apart, at open measure: grip and lunge reset (`:89-90`), each
+  fighter's cadence phase drawn (`:140`), who presses first drawn (`wrapper.py:593`, moved inside the round by PB
+  step 1), initiative even (`:127`). It then **closes**: an approach with stop-hits if one weapon outreaches the
+  other beyond the latch band, or straight to closed measure if not. *Ladder 4 (the engine's own shape, Jordan
+  2026-06-03 in `wrapper.py:471`) and A-101 ("close").* A closer the point cannot hold off (the re-presentation
+  gate, ED-PC-0033, `:121-124`) re-closes at once: the fighters did separate at the end of the last round, and the
+  next round's closing is instant. This reads the gate as part of the closing, not as a continuation of the last
+  round, so it needs no change.
+- **The exchange.** At closed measure, each beat, the fighter whose readiness crosses the threshold attacks (the
+  higher readiness if both; a coin on an exact tie, `:266-269`); the other defends. **Both sides' attempts**, not
+  the aggressor's and a reply: who attacks next is decided again each beat, so a fighter may land a combination
+  (boxing) or the defender may take the next attack after a riposte opening. *Ladder 4 (as built) and A-101
+  ("exchange attempts to attack", plural, no side named).* Measured: both fighters attacked in 52–54% of rounds
+  in matched pairs (§1.1).
+- **How many exchanges: the cap is four, a constant, `BURST_MAX = 4` in `CFG`.** *Ladder 4 and 5, with A-101's
+  indicator.* (i) The band: Jordan's 4–10 seconds "is an indicator of how to cap exchanges roughly"; at an
+  estimated 1 to 2 seconds per exchange and 2 to 3 seconds of closing and separating `[ESTIMATE: no research in
+  the tree on duel tempo; the figures are the lane's reading of what a cut-and-parry or a thrust-and-void takes,
+  not a measurement]`, a round of one to four exchanges reads about 3 to 11 seconds, and the cap of four sits at
+  the top of the band. (ii) The engine: the cap exists, is exported with every `CFG` key, and binds in 5.6% (arming
+  mirror) to 13.2% (heavy pair) of rounds with a thin natural tail past it (3.7% of uncapped rounds hold five to
+  seven exchanges): it is a cap, not the common ending, which is what a rough cap should be. (iii) Not a function
+  of state: the round's other endings already read state (a clean defence, a stamina collapse, a met term), and a
+  cap computed from cadence would be a duration clock under another name, which A-101's amendment refuses. The
+  closed range is **1 to 4 exchanges** per round at closed measure; stop-hits on the closing are attack attempts
+  bounded by the closing itself (one per approach beat at most), not by the cap (measured attempts per round: max
+  6).
+- **What separates them (the disengagement triggers), as built and as changed.**
+
+  | trigger | today | under A-101 | basis |
+  |---|---|---|---|
+  | a **clean defence**: an attack met with no hit, no riposte and no bind (`:480`) | ends the round | unchanged: the fencing phrase that ends on a parry or a void | ladder 4; Jordan 2026-06-03 (`:471-477`) |
+  | a **hit landed**, a riposte opening, a bind | the pressing continues (`:480`) | unchanged: the boxing combination; the cap bounds it | ladder 4 (same comment): "a faster fighter can land SEVERAL hits in a single turn" |
+  | the **exchange cap** (`:479`) | ends the round | unchanged | above |
+  | **stamina collapse** (`:261`, `:478`) | ends the round; the fight goes on after the between-round recovery | unchanged: collapse ends the round, never the fight | ladder 4 |
+  | the **fighting withdrawal**, clean (`:206-210`) | the round continues into a new approach (`continue`) | **ends the round** (`separation`, reason `disengage`); the next round opens at open measure with `prev_closed = False` | ladder 1: A-101 (later) defines the disengagement as the round's end; the code's in-round `continue` predates it |
+  | the **created-moment reopen** by the longer weapon (`:186-191`) | the round continues into a new approach | **ends the round** (reason `reopen`), as above | ladder 1, as above |
+  | a **read withdrawal** (pursued, `:211-219`) | the pursuer strikes and takes the tempo; the round continues | unchanged: the withdrawal failed, so they did not separate | ladder 5: no distance was made |
+  | **poise loss** (a broken structure) | not a trigger; poise lowers defence and tempo (`config.py:245`) | not added | ladder 2/5: no ruling asks for it; adding a trigger moves every fight and would be a new mechanism; a calibration lane may test it as an arm |
+  | the **beat budget** `BEAT_BUDGET = 24` (`:147`, `:481`) | ends the round | unchanged; it is a loop guard, never reached in the probe (max 19 loop beats) | ladder 5 |
+  | the **duel's terms** met (`:153-154`) | ends the round; the fight then ends with the yield | unchanged | as built (RS-25) |
+  | a **felling** | ends the round and the fight | unchanged | as built |
+
+### 2.3 What ends a fight (between rounds or at a felling)
+
+A fight ends at: a **felling** (inside a round); a **yield** — declared at the start of a round (`Yield`,
+`:577-585`), by met terms at the end of a round (`:600-612`), or by the Spirit draw of
+`16_PESSIMIST_PC_A_the_yield_is_a_draw.md` at the end of a round in which a wound gate was crossed (B15); a
+**withdrawal** — the decider's `withdraw` at the start of a round (`:586-592`), priced by
+`03_PC_exits_withdrawal_recovery.md` Part A (B16); the **round budget** — twelve rounds (`max_bouts=12`, renamed
+`max_rounds`, §6), after which the fight is undecided (Jordan 2026-06-02, `:616-617`). **Stamina collapse is not a
+fight ending:** it ends the round, and the fight resumes after the between-round recovery. *Ladder 4 (as built);
+A-101's list.* The budget of twelve stands: the probe's fights take 1.1 to 4.0 rounds on average and twelve is
+reached rarely (2 of 300 fights in the arming mirror and the mace-against-longsword heavy pair, `probe.py`). A-31's longer fight (B15) will raise the rounds per fight; B15's gate
+reads the undecided share at twelve, which is where the budget is judged (PB's fold note: 0.1% undecided at the
+re-read).
+
+### 2.4 What is carried between rounds, and where it lives
+
+The carried set is what PB's probe found differing at a later `turn_start` (PB §2): **damage (wounds),
+stamina, concentration, poise and the weapon form**, plus the **measure the last round ended in**
+(`prev_closed`, for the re-presentation gate). It lives in `DuelState` (and `DuelRoundInput.prev_closed`), held
+**in the frame of the loop that calls the round** — the duel's `fight`, a skirmish's loop, a battle's loop — for
+one provider call, never on an adapter, a module attribute or `World` (A-4; Layer 1 row 22 as amended).
+
+| quantity | carried? | between rounds | code |
+|---|---|---|---|
+| wounds (cumulative damage) | yes | unchanged; a wound is A-8's level against the roll | `WoundTracker`; `DuelState.cumulative_damage` |
+| stamina | yes | recovers `RECOVERY_FRAC` of the shortfall, scaled by `stamina_max / STAMINA_REF` | `wrapper.py:614` |
+| concentration | yes | drains `CONC_DRAIN_BOUT`, recovers `CONC_RECOVER_FRAC` of the shortfall | `:615` |
+| poise | yes | not reset; regenerates per beat inside the next round | `:166`; `DuelState.poise` |
+| weapon form | yes until `03_PC_weapon_form_at_round_start.md` (B14) resets the grip form at round start; then the selected weapon (primary or secondary) | — | PB §2 `form` |
+| initiative | **no: even at every round start** | reset to 0 | `:127` |
+| grip, lunge, facing, swing room, selected mode | no | re-derived per beat | `:89-90`, `:161-172` |
+| approach (PB) | no | asked again at the round's start and at each phase entry | PB §4 |
+
+**Initiative does not carry.** A-101's record (`DECISIONS_ANSWERED.md:137`) lists initiative among the carried
+state; that list is the record's gloss, not Jordan's quoted words, which name no quantity. *Ladder 1:* Jordan's own
+cut of 2026-06-05 (`wrapper.py:125-127`: *"initiatives start even (0.0 …)"*, the pre-contact seizure verified
+inert) is the ruling on the point, and A-101's words do not address it. *Ladder 4:* in fencing the right of way is
+re-established at every halt, and a boxer's ring position resets at the break; separation is what resets the Vor.
+What a round's ending does leave behind is the poise and stamina it cost, which is how pressing carries over.
+Listed in `PCR_FOR_JORDAN.md` as information (the record's gloss differs), with no question.
+
+### 2.5 What a round returns (A-3's discipline: the state and how the round ended, not a winner)
+
+A round returns `DuelRoundOutcome` (PB §2: the two `DuelState`s after it, the lifted wounds, `felled`,
+`yielded`, `closed`, the round's trace) **plus three fields this lane adds**: `ended_by` (one member of
+`ROUND_ENDS`, below), `exchanges: int` (closed-measure exchanges in the round) and `attempts: Mapping[id, int]`
+(attack attempts by each party). No `winner`: a round has none. What it does to a unit, a skirmish or a duel is the
+caller's rule. `ROUND_ENDS = ('clean_defence', 'burst_ceiling', 'collapse', 'disengage', 'reopen', 'terms',
+'felled', 'beat_exhaustion')` — the trace's existing separation strings kept (renaming them moves the
+workbench's narrator for no reader's gain) and two added; owner `modules/combat/vocabulary.py`, the token alphabet
+(`wrapper.py:9`).
+
+### 2.6 Time: no clock; what the band feeds, and what it does not
+
+**Decided: a round's duration is not a stored number, not a draw and not a rule** (A-101's amendment). Nothing
+counts seconds. What the indicative band governs is the exchange cap (§2.2). Each place a duration could be
+thought to enter:
+
+| reader | decided | basis |
+|---|---|---|
+| **fatigue** | stamina is spent per attack act (`act_cost`, `wrapper.py:286`; `combat_systems.py:168-174`: base, heft, commit depth, armour short of Strength) and by percussion taken (`:250-251`, `:416-417`); recovered per separation (`:614`). Fatigue is therefore already derived from the exchanges made and the round boundaries, never from seconds. No per-second cost is added. | ladder 4 (as built); A-101's amendment |
+| **the season and scene clock** | a whole fight is one act inside one scene; rounds never advance the season's clock or a scene's budget. A played duel's rounds are paced by the player, not by time | ladder 3/5: the fight is one provider call (`fight.py:55`) |
+| **a duel round inside a battle** (A-4, A-72: depth 1) | the field calls one round per window per pair of named persons in contact (PB §4 table); the round returns at once and the field's tick count does not advance for it. As an indication only, one round is about one to two field ticks (a field tick is about four seconds, `MB_LEXICON_part2.md:15`), and a bout of 18 ticks (about seventy seconds, `:13`) with two windows (`MB_LEXICON.md:146`) holds at most two duel rounds per pair, a few tens of seconds of duelling in a bout — the flurries punctuated by stand-offs the lexicon's bout row cites (MV T1–T2) | A-4, A-72; ladder 5 (no second clock) |
+| **the mass-battle abstraction** (A-100) | consumes per-round results; part 2 §5 | A-100 |
+| **a narrator or the player surface** | may *say* "a few seconds" for a round from `exchanges` and `attempts` (an estimate of about 1 to 2 seconds per attempt plus closing), never a stored figure | the band is an indicator |
+
+---
+
+## 3. The mapping to the engine
+
+### 3.1 The structures
+
+| A-101 | engine structure | change |
+|---|---|---|
+| fight | `wrapper.fight`'s loop over rounds; after PB step 1, `modules/combat/fight.py::fight` as the loop over the one-round entry | PB step 1 |
+| round | one `wrapper.engagement(A, B, first, cfg, rng, prev_closed, terms)` call | the two in-round re-openings end it (item PCR-1) |
+| closing | the open-measure block (`:221-262`) and the latch/re-presentation at entry (`:98-124`) | none |
+| exchange | one closed-measure beat with an actor (`:264-470`) | none |
+| exchange cap | `CFG['BURST_MAX'] = 4` (`config.py:112`) | none to the value; comment and word (PCR-2) |
+| separation | `_emit('separation', reason)` and the `return None, closed` beside it | two new reasons; the reason returned, not only emitted (PCR-1) |
+| between rounds | `wrapper.py:613-615` (recovery) and `:127`, `:140`, `:593` (resets and draws at the next round's start) | `:593`'s coin moves inside the round (PB step 1) |
+| beat | one iteration of `while beats < BEAT_BUDGET` | none |
+
+### 3.2 The smallest addition so that rounds are a boundary the loop can observe
+
+The engine does have distance (`measure_gap`, `closed`, `er`, `:91-124`) and disengagement (`:186-219`), so no
+distance state is added. Two things are missing: (a) the in-round re-openings do not end the round; (b) the
+round's ending is emitted to a trace hook and not returned. The smallest change at the single owner
+(`modules/combat/wrapper.py::engagement`) is: at `:189-191` and `:208-210`, replace `continue` by
+`_emit('separation', reason='reopen' | 'disengage'); return None, False`, and make every `return` of
+`engagement` carry its reason as a third element, `(felled, ended_closed, ended_by)`, with `fight` (and PB's
+round entry) reading it. That is the boundary: one function call per round, one returned reason, the state
+between calls held by the caller.
+
+### 3.3 The one-round entry, and the fight as the loop over it
+
+PB step 1 is taken as written (`DuelState` with `form`, `DuelRoundInput`, `DuelRoundOutcome`, the coin moved
+inside, the recovery applied at the round's end), with four amendments from this lane: (1) the entry is named
+`fight_round`, not `round`, so `modules/combat/fight.py` does not shadow Python's builtin `round` (the engine's
+own files call the builtin dozens of times, e.g. `wrapper.py:146`); the composition role stays `combat.round`
+(target `modules.combat.fight:fight_round`); (2) `DuelRoundOutcome` gains `ended_by`, `exchanges`, `attempts`
+(§2.5); (3) the between-round recovery is applied **after a separation only** (as `fight` does now: a felled or
+yielded ending returns before it); (4) the loop's budget is `max_rounds` (12). The whole fight is then: for
+`r` in 1..12, consult the deciders (PB §4), call `fight_round` with the round's key, stop on `felled`,
+`yielded` or `withdraw`, else carry the states.
+
+### 3.4 Names in code (tree names that fail the word test: rename candidates, not done here)
+
+`engagement` stays as the function's name: renaming it to `round` would shadow the builtin in `wrapper.py`,
+which calls `round(...)` at every emit; its docstring is corrected to "one round". The other names are listed
+with their cost in part 2 §6 (item PCR-4).
+
+### 3.5 The keyed draw per round (A-30)
+
+Round `r` of a fight draws from `H(fight_key, 'round', r)` through `11_GO_one_draw_owner.md`'s `Draw.u`, each
+draw inside the round keyed `(r, phase, purpose)` as PB §2 states. This lane adds one requirement: the purpose
+must include the beat index (a round has up to 24 beats and a draw site may fire on several), so the in-round key
+is `(r, beat, site)` with `site` the draw's fixed name (`coin_first`, `ready_A`, `stophit`, `commit`, `read`,
+`roll`, …). Because PCR-1 ends some rounds earlier, the number of rounds a fight takes changes; with per-round keys
+no round's draws depend on how many rounds came before (A-30), which is exactly PB step 2's gate.
