@@ -271,6 +271,34 @@ Short names, words and paths are the first file's head. The B28 block's head, it
 - COST and TIER: reading and edit; `sonnet` runs, `opus` reads.
 - LANDS IT: B28's producer; `Item: B28.30`, `[skip ci]`.
 
+### B28.31 — does `covenant` (and `determine`) now execute in computed play · G-14 · READING · HASH —
+- SOURCE: the intake `:372` (G-14, STILL-NEEDED, rows E4:199; carry-forward `master/eval/E4.md` §Carry-forward, line 905: "B4.1 and B4.2 wait on that reading, taken by CR-14's pooled census, not on B10-17's close"; "gate: CR-14 pooled census reads both executing · hash: mover"); joined to B28's tail from B27 by `V12_STRUCTURE_part4.md` E-8's exception (the dependency, `covenant` executing in computed play, lands here: B28.09, B28.13), as A31's part for B27 records (its UNDECIDED (5)).
+- What it is: no code and no commit of its own (`V12_STRUCTURE_part2.md` §5.3, READING). G-14's own work ("The verbs: H-163, IN-61 and G-04's owners") is carried by those owners' items elsewhere; what G-14 owes this batch is the reading that releases B4.2 (B28.32): Reading 1 of this block's Readings, taken on B28.30's tree before B28.32 opens.
+- GATE: `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 --seeds 0 1 2` (the CR-14 pooled census: `harness/aperture.py`'s pooled mode, "`aperture <seasons> --seeds S [S ...]`") → `covenant` executed above 0 pooled, and `determine` executed above 0 pooled (B27's close, `reading @<sha>`); the two counts quoted.
+- DEPENDS ON: V12 B28.09, B28.13; V12 Batch B27 (`determine` executing; not in B28's `after` list but closed before it: B27 is at S16, B28 at S17 — H2 to confirm or add the edge, see UNDECIDED (U-8)).
+- COST and TIER: reading; `sonnet`.
+
+### B28.32 — a party to a covenant forms no attack on what it names until he releases his word · TL-B4.2 · BUILD · HASH MOVER(behaviour)
+- SOURCE: the intake `:374` (TL-B4.2, STILL-NEEDED, rows E4:225; carry-forward `master/eval/E4.md` line 947: "CL-THRUST, still HELD on its gate: the bound-peace reader. B4.2 needs `covenant` executing in computed play …"); `proposals/2026-10-25-thrust-layer/00_THRUST_LAYER_DESIGN.md` §4 row 4.2 and §8 row B4.2 (TL is PROPOSED; its B4.2 is a carried v11 piece, CL-THRUST, `master/eval/E1.md` CL-THRUST entry); joined here by E-8 as B28.31 states.
+- ADVANCES: R-04 contributor (a lawful closure form, the bound peace, binds in computed play).
+- INSTRUCTION (TL §4 row 4.2 and §8, copied):
+  1. Before building, route TL's Layer 1 question to `layer-conformance` Lens B: "B4.2 — a new `(verb, referent)` decline reader" ("Layer 1 question (shape divergence)", TL §4.2). Record Lens B's answer in the commit body. If Lens B finds the shape non-conforming, the item stops: `HELD (Layer 1: Lens B's finding)`, and the finding goes in the batch's PR body.
+  2. "**a NEW person-side reader** keyed on `(verb, referent)`: a person does not form `fight`/`challenge`/`accept` on a referent a covenant he is committed to names; breaking the peace takes a prior witnessed `release`. v1 said to compose on `held_document_declines`; that roster maps a verb to a record kind and declines the verb outright while the person holds such a document ABOUT HIMSELF …, so it cannot name a referent — composing on it declines `fight` against everyone, or needs the new shape this row now names." Refused (TL §4.2, last column): "a peace imposed by the engine; a peace that cannot be renounced; reading Record content at the FOLD (K-52, `arrest`'s note)". The reader is person-side (AX-2): it reads the person's own live `commit` Tenures on a covenant's `terms` and the referent the covenant names from his own content claim, never `World` at the fold; "committed" is the person's own `commit` on the terms (B28.09's in-force condition, read for himself) `[ASSUMPTION: the referent a covenant names is its other party (`to` or the maker) — basis: the `covenant` row's `counterparty: to`; TL names no other referent]`. Home: a roster beside `held_document_declines` keyed `verb: [fight, challenge, accept]` with its loader in `data/verbs.py`, read in `decision/options.py::opening_set` `[ASSUMPTION: home — basis: TL §4.2 "the new shape this row now names", next to the roster it says it cannot reuse]`.
+  3. **STOPS IF** B28.31's reading has `covenant` executed 0 pooled: the gate TL and G-14 name is unmet, the item is `HELD (G-14: covenant does not execute in computed play)`, and leaves for the held list at the expunge.
+- WHERE: `engine/season/rosters.yaml` (the new decline roster, at the end of the declines family); `engine/season/data/verbs.py` (its loader); `engine/season/decision/options.py` (`opening_set`: the `(verb, referent)` decline); NEW `engine/season/tests/test_tl_b42_bound_peace.py` `[ASSUMPTION: test file name; TL says "targeted test"]`.
+- TESTS (TL §8 row B4.2, written before the edit and read red): `test_a_committed_party_forms_no_fight_on_the_named_referent`; `test_after_a_witnessed_release_he_can`; `test_no_covenant_held_leaves_the_candidate_set_unchanged` (TL's control) `[ASSUMPTION: test names]`.
+- FALSIFIER and CONTROL: "a committed party forms no `fight` on the named referent; after a witnessed `release` he can" fails either half; a decline of `fight` against someone the covenant does not name. Control: "no covenant held → candidate set unchanged" (TL §8).
+- GATE: `python -m pytest engine/season/tests/test_tl_b42_bound_peace.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 --seeds 0 1 2` → `fight`, `challenge`, `accept` formed counts before (B28.31's run, `reading @<sha>`) and after, quoted.
+- HASH MOVERS: worlds where a party committed to a covenant would have formed `fight`, `challenge` or `accept` on its other party (G-14: "hash: mover"). Declared; B28's one re-pin.
+- DEPENDS ON: V12 B28.31 (the reading), B28.09 (`covenant_in_force`'s condition), B28.08 (the `commit` edge); EXISTS-IN-TREE `rosters.yaml: held_document_declines`, `decision/options.py::opening_set`, `loop/effects_governance.py::_eff_release` (the witnessed `release`).
+- GLOSSARY: NEW row *bound peace*: "a covenant whose parties may not take up arms against each other until one of them openly breaks his word"; owner the new decline roster (T).
+- COST and TIER: small build; `sonnet`, `high`; Lens B's question `opus` (the Layer 1 judgment node).
+- LANDS IT: B28's producer; `Item: B28.32`, `[skip ci]`.
+
+## Readings (B28)
+
+Reading 1 (B28.31, G-14): the pooled census's `covenant` and `determine` executed counts at seeds 0, 1, 2, two seasons, on B28.30's tree, with its SHA; written here by the producer at B28.31's turn, copied into B28.99's commit body, and deleted with the block at the expunge.
+
 ### B28.99 — re-pin and close readings · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH MOVER (the re-pin)
 - SOURCE: E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12; S1-B, S1-C, S1-D "Cost class" ("Declared re-record of the season pins"); 28A and 28B "Cost class" ("Golden re-record … say so plainly in the commit").
 - ADVANCES: the batch's REQUIREMENT line (the four `BUILT OUT` verbs; R-03.a; `IS-B2-SC-01` step 9).
@@ -280,7 +308,7 @@ Short names, words and paths are the first file's head. The B28 block's head, it
 - FALSIFIER and CONTROL: a pin moved that no item declared; a behaviour tally moved where every item said EQUAL (B28.01, B28.16 to B28.28). Control: B28.28's seed-0 hash equal to B28.27's (EQUAL items did not move it).
 - GATE: the BATCH GATE, read once on this commit's tree.
 - HASH MOVERS: the re-pin itself.
-- DEPENDS ON: B28.01 to B28.30.
+- DEPENDS ON: B28.01 to B28.32.
 - GLOSSARY: the close reads every glossary row the items named against the code (STAGES rule 2).
 - COST and TIER: reading; `sonnet` runs; the close's terminal critique `opus`.
 - LANDS IT: B28's producer; `Item: B28.99`, the batch's last `Item:` commit, without `[skip ci]` (CI's first run of the batch).

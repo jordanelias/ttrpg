@@ -308,3 +308,168 @@ Not in this batch, and where each is: FI08 §1 and §4 (handed to the Thread lan
 - GLOSSARY: *interview* (step 9).
 - COST and TIER: small build; `sonnet`, `high`; §3's draw `opus`; one `opus` read of the ten-seed band tables.
 - LANDS IT: B25's producer; `Item: B25.14`, `[skip ci]`.
+
+### B25.15 — a Record sub-kind class; `research` keeps its bare pair · S2A edit 2 with MC's `research` pair · BUILD · HASH MOVER(behaviour)
+- SOURCE: S2A "Exact edits, by owner" 2 (copied), its first Reconciled line (C-19, C-28: "`_stamped` carries both pairs, the bare `Record` and the qualified one, so `research` and `seize` still form"), "Order of landing" ("edit 2 is one commit across families"), "Gate", "Falsifier"; MC's Lands line and §4 step 1 ("SOCIAL2-A edit 2, with the correction `audits/14_VERBS_MATERIAL.md` §17.2 lists (both pairs stamped)"); U3 §4.1 row 46 (C-28: "the `_stamped` pair for `research` lands with `14_VERBS_SOCIAL2_A` edit 2 in B25"); C3-Y10 (after S2B and S2C add their kinds); closes `construe`'s, `comply`'s and `evade / defy`'s `record_subkind` refusals (`audits/14_VERBS_SOCIAL2.md` §4).
+- ADVANCES: R-03; `BUILT OUT` `construe` (its formation; B25.16 its effect).
+- INSTRUCTION (copied):
+  1. "`rosters.yaml: referent_classes`: the `Record` class is qualified: `Record.<kind>`, `<kind>` a `record_kinds` member. Authored on the row (data a designer reads), validated by `engine/season/data/verbs.py` at load: the qualifier must equal the kind the row's typed `existence(subject, <kind>)` cell names (a row without such a cell may not qualify)."
+  2. "`queries/world_q.py::_stamped` stamps a Record id as `Record.<its kind>` (the World answers the kind; `opening_set` still never asks, L2)" — and, by C-19/C-28, "carries both pairs, the bare `Record` and the qualified one": `(id, Record)` beside `(id, Record.<kind>)` (B26's part, its `14_VERBS_MATERIAL_E` item, relies on the bare pair: "`research` forms on bare `Record`").
+  3. "`verb_table.yaml`: `construe` `referent_class: Record.dispensation`. **The same edit, in the same commit, on every row that declares `Record` today** (`comply`, `evade / defy` → `Record.dispensation`; `accept` → `Record.challenge`; `carry` → `Record.petition`; `found`, `build` → `Record.works`), because once `_stamped` qualifies the class a row still declaring bare `Record` forms on nothing. Those rows belong to other families; this landing is one commit or none." `research` and `seize` keep bare `Record` (the pair). SITE: `git grep -n "referent_class: *Record\b" engine/season/verb_table.yaml` at the open; every row it lists is either in the list above, or keeps bare `Record` by the pair rule, and is named in the commit body.
+  4. MC's interim works stamp (B12c: "carried on the classed tuple as `Record` with the plan kind on the stamp") is replaced by `Record.works` in this commit ("`Record.works` replaces it when SOCIAL2-A edit 2 lands").
+  5. "`data/verbs.py::RECORD_REFERENT_KINDS` and `HOLDING_RECORD_KINDS` become readings of the qualifiers (one owner) rather than derivations from the typed cells."
+- WHERE: `engine/season/rosters.yaml` (`referent_classes`); `engine/season/queries/world_q.py` (`_stamped`; MC's works stamp in `questions_for`); `engine/season/verb_table.yaml` (`construe`, `comply`, `evade / defy`, `accept`, `carry`, `found`, `build`); `engine/season/data/verbs.py` (the qualifier check, `RECORD_REFERENT_KINDS`, `HOLDING_RECORD_KINDS`); `engine/season/tests/test_vm_s2_a_formation.py`.
+- TESTS: `test_vm_s2_a_formation.py::test_construe_forms_on_the_writ_alone` (S2A falsifier: "a writ and a faction sheet held by one person: `construe` forms on the writ alone"), `::test_research_and_seize_still_form_on_a_bare_record` (C-28), `::test_a_qualifier_unequal_to_the_existence_cell_is_refused` `[ASSUMPTION: test names; the item creates them]`; `test_s2a_refusals_and_executions` gains "refusals 0 for … `construe`, `comply`, `evade / defy` on `record_subkind`" and "executions of … `comply` not lower than the baseline". Written first, red.
+- FALSIFIER and CONTROL: a row still declaring bare `Record` (other than `research`, `seize`) that forms on nothing; executions of `found`, `build`, `research`, `seize` falling. Control: those four verbs' executions at seeds 0–2, one season, equal to or above B25.14's reading ("A fall is the stopping rule … revert that edit").
+- GATE: `python -m pytest engine/season/tests/test_vm_s2_a_formation.py engine/season/tests/test_works_founding.py -q` → pass; `python -m engine.season.harness.aperture 1 s`, s = 0, 1, 2 → the `record_subkind` refusals 0; one `opus` read of "the executions-not-lower table" (S2A tier).
+- HASH MOVERS: declared, every world (wrong-kind formations stop). B25.99.
+- DEPENDS ON: V12 B25.03 to B25.14 (S2B and S2C add their kinds first, C3-Y10); V12 Batch B12c (MC's works rows and interim stamp); EXISTS-IN-TREE `world_q._stamped`, `data/verbs.py::RECORD_REFERENT_KINDS`, `::HOLDING_RECORD_KINDS`.
+- GLOSSARY: none (*referent class* keeps its row; the qualifier is a form of it).
+- COST and TIER: small build (cross-family, one commit); `sonnet`, `high`; one `opus` read of the executions table.
+- LANDS IT: B25's producer; `Item: B25.15`, `[skip ci]`.
+
+### B25.16 — `construe`: a reading of an order, drawn · S2B §2 · BUILD · HASH MOVER(behaviour)
+- SOURCE: S2B §2 (copied), "Gate" §2, "Falsifiers" §2; OBS members 24, 25; rulings A-27 ("§2's construal toward his own interest"), A-30, A-81 ("`construal.failed` … [is a] witnessed deed"); closes H-36 (the row's falsifier, two holders and two readings).
+- ADVANCES: `BUILT OUT` `construe`; R-06 (a man reads an order his way).
+- INSTRUCTION (copied):
+  1. "`verb_table.yaml` `construe`: `contests: "a proposition"` (against the writ; the standing rule: whether a reading takes could go either way); `writes:` `Proposition.exists` at Ov / Su / Pa, `[]` at Fa; `emits:` Ov `[terms.construed, construal.credited]`, Su `[terms.construed]`, Pa `[terms.construed, terms.distorted]`, Fa `[construal.failed]`; `emits_on_refusal: [construal.impossible]` (requirement checks only); `writes_note` replaced: *the construer attempts a `HOLDS` reading of the terms' subject and predicate with his own held value; the draw decides whether it takes; the writ is unchanged*; `referent_class: Record.dispensation` [B25.15]. `terms.distorted` keeps its name and moves to Pa, where witnesses hold the reading as a twist." The row leaves its B07 class roster (U-6).
+  2. "`rosters.yaml: verb_capability`: `construe: "argue"`" → `capability: argue`. "Obstacle, through the one composer: `difficulty` + the stand-in (no person opposite: the writ) + `clarity` (OBS member 24 …; `clarity_step`) + `deference` (member 25 …; `deference_step`)." Both join `obstacle_terms` with steps at 0 (OBS §4 step 6+).
+  3. "`loop/effects_information.py`: new `_eff_construe(w, a, res) -> Change`, called by the fold at Ov / Su / Pa only: 1. read the writ `w.records[subject]`, its `terms` (a Proposition id via `ABOUT_KEYS["dispensation"]`); decline `NO_CHANGE` (→ `construal.impossible`) if no Proposition; 2. the construer's own value on `(terms.subject, terms.predicate)`: the newest such claim in his own ledger (`person_q` `LedgerReader`, the one comparator) — decline if none or equal to `terms.value`; 3. mint `Proposition(f"prop:{a.id}", "HOLDS", terms.subject, terms.predicate, his_value, w.tick)` and `_makers_hold` — … called through a shared `_mint_proposition(w, actor, prop)` helper [B25.06]." "Steps 1–2 are asked again in the row's predicate before the draw, so a refused act costs no draw (`_req_interrogate`'s placement)."
+  4. Draw key (A-30): `"construe.proposition"`.
+  5. Glossary: row *construal* (add or edit): "a construal: a person's reading of what an order means, which may be bent toward his own interest (A-27)".
+- WHERE: `engine/season/verb_table.yaml` (`construe`); `engine/season/rosters.yaml` (`obstacle_terms`: `clarity`, `deference`; the class roster); `engine/season/data/fixtures.py` (`clarity_step`, `deference_step`); `engine/season/seam/wrappers/sigma.py` (the two members' host functions); `engine/season/loop/effects_information.py` (`_eff_construe`); `engine/season/loop/predicates.py` (`construe`'s predicate, steps 1–2); `engine/season/hole_register.yaml` (H-36); `engine/season/tests/test_vm_s2_b_word.py`; `unified/U1_GLOSSARY.md` (*construal*).
+- TESTS (written first, red): `test_construe_two_holders_two_readings` (gate §2: "hand-built: issuer, writ with `HOLDS` terms, two holders, one believing otherwise: at a planted `Success` the two holders hold different readings (the row's falsifier, `H-36`); at a planted `Partial` witnesses hold `terms.distorted`; at a planted `Failure` no Proposition is minted; `construal.impossible` (no draw) for the holder who agrees. Over seeds 0–9 with the shipped odds, all four bands occur"); `test_a_construer_who_agrees_forms_none` (falsifier §2).
+- FALSIFIER and CONTROL: "a construer whose value equals the terms forms none." Control: the step's base hashes with `construe` unformed (B25.15's reading for a world with no writ).
+- GATE: `python -m pytest engine/season/tests/test_vm_s2_b_word.py -k construe -q` → pass; `python tools/ci_sim_fabrication_check.py` → exit 0.
+- HASH MOVERS: declared, every world in which `construe` folds. B25.99.
+- DEPENDS ON: V12 B25.15 ("§2 (after S2-A edit 2)"), B25.06 (`_mint_proposition`); EXISTS-IN-TREE `person_q.ABOUT_KEYS`, `loop/effects_information.py::_makers_hold`.
+- GLOSSARY: *construal* (step 5).
+- COST and TIER: small build; `sonnet`, `high`; the contested row `opus`.
+- LANDS IT: B25's producer; `Item: B25.16`, `[skip ci]`.
+
+### B25.17 — a construal is citable beside the terms · `IS-B2-SC-07` step (1) · BUILD · HASH EQUAL
+- SOURCE: IS-B2 §1.1 "Item: IS-B2-SC-07" (step (1) copied; step (2) is B27's; U-9); `unified/U4_TRACEABILITY.md` G-13 (the carry text); ruling A-27 ("a construal is testable by a court against the terms").
+- ADVANCES: A-27; FI and SC integrated.
+- INSTRUCTION (copied): "(1) B25: an edit 5 to `14_VERBS_SOCIAL2_B_a_word_with_content.md` §2: a construal's Proposition (`prop:{act id}`, minted by `_mint_proposition` …) is citable at a sitting as an exhibit beside the writ's `terms` Proposition." WHERE (IS-B2): "`engine/season/loop/effects_information.py` (the citing `speak`'s admitted kinds), `engine/season/rosters.yaml: proofs`" — the construal's Proposition joins the kinds the citing `speak` admits (B24.25's filing refusal reads `proof_kind`, B24.22), and `proofs` admits it under the arrangement rows that admit a `dispensation`'s terms `[ASSUMPTION: which `proofs:` rows admit it — basis: IS-B2-SC-07 names `rosters.yaml: proofs` and no row; the item writes it beside each row that admits the terms and names them in the body]`.
+- WHERE: `engine/season/loop/effects_information.py` (the `speak` effect's admitted kinds); `engine/season/rosters.yaml` (`proofs`); `engine/season/queries/person_q.py` (`proof_kind`, if a Proposition needs its kind there); `engine/season/tests/test_vm_s2_b_word.py`.
+- TESTS: `test_a_construal_proposition_is_citable_beside_the_terms` `[ASSUMPTION: test name; the item creates it]` (a hand-built sitting: a party holding a construal cites it; the filing `speak` files it at its band beside the terms); the named test `test_a_construal_contradicting_the_terms_loses_at_the_bench` is B27's (U-9).
+- FALSIFIER and CONTROL: a cited construal refused at filing while the terms are admitted. Control: "a construal equal to the terms forms no act (S2-B `:204`)"; realm hashes equal to B25.16's.
+- GATE: `python -m pytest engine/season/tests/test_vm_s2_b_word.py -k citable -q` → pass; realm hash at seed 0, one season → equal.
+- HASH MOVERS: "none until a bench convenes on a construal."
+- DEPENDS ON: V12 B25.16; V12 B24.22, B24.25.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`; the contested degree is B27's `opus` read.
+- LANDS IT: B25's producer; `Item: B25.17`, `[skip ci]`.
+
+### B25.18 — the reader first, then the producer · FI08 §3 · POINTER
+- What it points at: FI08 §3 ("`_eff_tie` is not re-designed; IN-32's commit is the build. It re-lands when both hold: (a) chained told claims exist in seeded play, which is `08_FI_02`'s gate (two-hop chains above 0) …; (b) the person-side decline … is in place … (`08_FI_02` edit 5's `present_persons` reader serves both)"), which S2D carries and "does not redo" (S2D: "Follows `08_FI_08_knots-season-form.md` §3 (the reader first, then the producer)"). Built as B25.19 (the row and the effect, written from the row, W3-4a: IN-32's attempt `53ed995d` is not reachable) and B25.20 (the `tied` term).
+- The two conditions are read at B25.19's open (its STOPS IF): (a) B11's close reading of FRES §2 row 3 ("two-hop chains above 0 at two of three seeds", B11.99); (b) `present_persons` (B11.08).
+- GATE: FI08 "§3: at re-land, `tied()` is called more than 0 times in a seeded realm and the `tie_gain` 0 and 0.5 arms hash differently" — read in B25.20's GATE (named test `test_knots_season_form.py::test_tied_is_called_and_tie_gain_arms_hash_differently`). FI08's falsifier: "if chained claims exist and `tied()` still reads 0 calls, the relation term is not reached for another reason; stop and report, as IN-32 did."
+
+### B25.19 — `tie`: a chosen bond, drawn for; `knot` handed on · S2D edits 1–3, 6 · BUILD · HASH MOVER(behaviour)
+- SOURCE: S2D "Exact edits, by owner" 1, 2, 3, 6 (copied), "Gate", "Falsifiers"; A-28 (the split); `04` §A.3 row 9 (directed edges); rulings A-30, A-81 ("`bond.refused` is witnessed by both parties"); U-7; closes H-182 (the `tie` half; `knot` stays declined, the Thread lane's).
+- ADVANCES: `BUILT OUT` `tie`; R-06 (networks of trust form with no player).
+- INSTRUCTION:
+  0. STOPS IF (FI08 §3, B25.18): B11's close reads two-hop told chains at 0 at two or more of three seeds, or `person_q.present_persons` is absent: the item stops (`STOPPED`) with the reading, and the row stays declined.
+  1. S2D edit 1, copied: "**`engine/season/verb_table.yaml`**: delete the `tie / knot` row; add, carrying its notes forward:"
+     ```yaml
+     - verb:        "tie"
+       stratum:     social
+       eligibility: [own]
+       beneficiary: actor
+       counterparty: to
+       requires:    "the partner is with him and known to him"
+       requires_typed: {all: [{form: relation, of: to, relation: with, conjunct: present},
+                              {form: own_ledger, of: to, conjunct: known}]}
+       contests:    "a standing"
+       writes:
+         Overwhelming: ["Tenure.since"]
+         Success:      ["Tenure.since"]
+         Partial:      ["Tenure.since"]
+         Failure:      []
+       emits:
+         Overwhelming: ["bond.formed"]
+         Success:      ["bond.formed"]
+         Partial:      ["bond.formed"]
+         Failure:      ["bond.refused"]
+       emits_on_refusal: {present: ["tie.refused"], known: ["tie.refused"]}
+       grade:       assumption
+     - verb:        "knot"
+       stratum:     thread
+       eligibility: [own]
+       requires:    "—"
+       writes:      ["Tenure.since"]
+       emits:       ["bond.formed"]
+       emits_on_refusal: []
+       grade:       ruled
+       effect_decline_note: "<the H-182 text for knot; owned by the 29f / Thread lane; FI-08 §1>"
+     ```
+     "`resolvable_verbs()` admits `tie` once its effect exists; `knot` stays out." `tie` is placed in no B07 class roster but `contests:` (a new row); `knot` (declined, no effect) is placed where the B07 loader puts a declined row `[ASSUMPTION: a declined row needs no class — basis: B07's refusal reads "a row that writes or emits a finding and is in none of the three"; `knot` writes `Tenure.since`, so the item reads the loader at the open and, if it refuses `knot`, lists it under `bookkeeping_verbs` with `why:` "declined; owned by the Thread lane (A-28)"]`.
+  2. S2D edit 2: "`verb_capability: tie: "copying"`" → `capability: copying` on the row (B04.04). "The obstacle, through the one composer: `difficulty` + `opposition` (the partner's skill score, A-79) + `regard` (OBS member 7 …) + `rank_gap` (member 6); the partner's favourable stance is a `favour` level for the actor (OBS §3), not a −1."
+  3. S2D edit 3, copied: "**`loop/effects_information.py`** (the module holding `_eff_commit`, beside it; the `"tie"` literal must sit in a file `_derive_openers_from_effects` walks)."
+     ```python
+     @effect_for("tie")
+     def _eff_tie(w, a, res=None) -> Change:
+         to = _operand(a, "to")
+         if res is None or to is None or to not in w.persons:
+             return NO_CHANGE
+         if any(t.kind == "tie" and t.subject == a.actor and t.object == to and t.live for t in w.tenures):
+             return NO_CHANGE                      # he already owns a live tie to `to`
+         edge = Tenure(H(w.world_seed, w.tick, a.actor, f"tie:{to}:{a.id}"), a.actor, to, "tie",
+                       since=w.tick, degree=res.degree)
+         return Change((Subject.edge(edge),), lambda: w.add_tenure(edge))
+     ```
+     "Typed in: `(World, Act, Resolution)`; out: `Change`. The edge is the actor's own (T-m); no edge is opened for the partner (directed, `04` §A.3 row 9)." Draw key (A-30): `"tie.standing"`.
+  4. S2D edit 6: "the split adds one verb row, so the count read by R-05's instrument moves; no code names the count, and the count is quoted as a reading at the batch that lands it (B25), never typed into prose (C3-N30 …)" — Reading R2.
+  5. `engine/season/hole_register.yaml` H-182: closed for `tie` (its `cite:` names this item); its `knot` half stays (the Thread lane's, B35).
+  6. Glossary: rows *tie* and *knot* (A-28): "a tie: a bond a person chooses to make to someone present, owned by him alone"; *knot* keeps "the Thread lane's bond; declined here".
+- WHERE: `engine/season/verb_table.yaml` (`tie / knot` → `tie`, `knot`); `engine/season/loop/effects_information.py` (`_eff_tie`); `engine/season/rosters.yaml` (the class roster, if `knot` needs one); `engine/season/hole_register.yaml` (H-182); NEW `engine/season/tests/test_vm_s2_d_tie.py`; `unified/U1_GLOSSARY.md` (*tie*, *knot*).
+- TESTS: in the new file (S2D's test file), written first, red: `test_tie_is_attempted_and_both_bands_occur` (gate: "`build_realm(s)`, s = 0, 1, 2, two seasons, `PYTHONHASHSEED=0`: `tie` attempted > 0, both `bond.formed` and `bond.refused` occur across seeds"); `test_a_tie_by_a_to_b_does_not_lower_bs_tellings_to_a` (falsifier 2: "directed: B owns no edge"); `test_knot_never_forms_while_declined` (falsifier 3).
+- FALSIFIER and CONTROL: as the three tests. Control: the step's base `aperture` reading of every other verb's executions (a `tie` that starves another verb is read there).
+- GATE: `python -m pytest engine/season/tests/test_vm_s2_d_tie.py engine/season/tests/test_task_draw.py -q` → pass; `python -m engine.season.harness.register --check` → exit 0.
+- HASH MOVERS: declared (U-7): every seeded world in which `tie` executes (a `Tenure` of kind `tie` per taken bond). B25.99.
+- DEPENDS ON: V12 B25.13, B25.14 (the composer's members on a person-to-person row); V12 B11.08 (`present_persons`); V12 Batch B05 (`regard`, `favour`); V12 B21 (`rank_gap`); EXISTS-IN-TREE `loop/effects_information.py::_eff_commit` (`@effect_for`, `_operand`, `Change`, `Subject.edge`), `state/carriers.py::Tenure` (`degree`).
+- GLOSSARY: *tie*, *knot* (step 6).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B25's producer; `Item: B25.19`, `[skip ci]`.
+
+### B25.20 — a tie weighs the teller, behind `tie_gain` at 0 · S2D edit 4 · BUILD · HASH EQUAL
+- SOURCE: S2D edit 4 (copied), edit 5 ("no edit"), "Gate", first "Falsifier"; FI08 §3's gate; U-7.
+- ADVANCES: R-07 (who believes whom follows who is bound to whom).
+- INSTRUCTION (copied): "**`decision/options.py::teller_weight`**: a `tied` term reading the hearer's own live `tie` to the teller and its `degree`, scaled by `rosters.yaml: task_fraction[degree]` (… Partial half), times fixture `tie_gain` (control 0; NUMBER row)." `tie_gain = 0` in `data/fixtures.py` with its tag. Edit 5: "The teller's own live `tie` to the hearer already enters a telling's odds as the `favour` source (OBS §3 …)" — no edit.
+- WHERE: `engine/season/decision/options.py` (`teller_weight`: `tied`); `engine/season/data/fixtures.py` (`tie_gain`); `engine/season/tests/test_knots_season_form.py`; `engine/season/tests/test_vm_s2_d_tie.py`.
+- TESTS: `test_knots_season_form.py::test_tied_is_called_and_tie_gain_arms_hash_differently` (FI08 §3: "`tied()` is called more than 0 times in a seeded realm and the `tie_gain` 0 and 0.5 arms hash differently"; two seasons, seeds 0–2, the 0.5 arm set inside the test); `test_vm_s2_d_tie.py::test_tie_gain_zero_hashes_as_the_control` ("`tie_gain` 0 must hash as the control; if not, a tie is read somewhere it should not be"). Written first, red.
+- FALSIFIER and CONTROL: "`tie_gain` 0 must hash as the control." Control: B25.19's after-reading (`tie_gain` 0).
+- GATE: `python -m pytest engine/season/tests/test_knots_season_form.py engine/season/tests/test_vm_s2_d_tie.py -q` → pass; `python tools/ci_sim_fabrication_check.py` → exit 0; realm hashes at seeds 0–2 → equal to B25.19's.
+- HASH MOVERS: none at `tie_gain` 0 ("the one declared mover is the later flip of `tie_gain` off 0 … re-pinned once in that flip's own commit": B98, DIALS AT CONTROL).
+- DEPENDS ON: V12 B25.19; EXISTS-IN-TREE `decision/options.py::teller_weight`, `rosters.yaml: task_fraction` (B07).
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`; one `opus` read of the `tie_gain` arms.
+- LANDS IT: B25's producer; `Item: B25.20`, `[skip ci]`.
+
+### B25.21 — the verb table's count · READING
+- In the position table only; its text is Reading R2 below.
+
+## Readings (B25)
+
+R1 (moved from B11.74 to this batch by B11's part, §5.8; the source `proposals/19_LACUNA_conclusion_is_a_committed_assertion.md` "Gate (execution artifacts)" first line, copied byte for byte): "On `inquiry_world(seed)` (`08_FI_03` §1), seeds 0-19, four seasons, `PYTHONHASHSEED=0`: - a Proposition is uttered after a winning `reconstruct` in more than zero runs (today `reconstruct` deposits nothing), every one carrying a non-empty `support` whose ids the utterer held at the act". Read here at **two seasons** (four seasons in the source; A-114), after B25.06 (typed `utter` forms from a held claim, S2B §1) and on B07's `reconstruct` as an inquiry (`form: inquiry`, B07's UNDECIDED (2)). Expected: above zero runs, every such Proposition's `support` non-empty and held. A zero is reported in the close with the run's `reconstruct` and `utter` counts, as a finding about the two-season horizon or the chain, not hidden.
+
+R2 (S2D edit 6; IS-A §12.2 row B25, "the table reads 68 by command"): `python -c "from engine.season.data.verbs import VERB_TABLE; print(len(VERB_TABLE))"` on the closing tree → 68, quoted with its SHA. The pin B02 kept for R-05's denominator ("a reading of `main` (67), re-read and re-recorded at B25 (A-28's `tie`/`knot` split, 68)", part 3's B02 item) is re-recorded in B25.99, said plainly.
+
+### B25.99 — re-pin and close readings · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH MOVER (the re-pin)
+- SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12; `IS-A-12`.
+- ADVANCES: R-04.a (`open_case`); `BUILT OUT` `construe`, `interrogate`, `tie`.
+- INSTRUCTION: (1) re-record the realm pins in `engine/season/tests/_realm_goldens.py` and every digest the movers reached (the batch's RE-PIN line), once, against the step's base (`reading @<sha>`: B24's close, or B20's merge if it precedes), act and Event tallies quoted beside each moved pin; the commit says "re-pin" and names the movers; (2) re-record the R-05 denominator pin (Reading R2: 68); (3) run the batch gate's seeded commands (two seasons at most) and the one full-suite run (CLAUDE.md §0.4); (4) write the `reading:` record of R-04.a for `open_case` in `engine/season/requirements.yaml` (no `status:` edit); (5) the commit body carries Readings R1, R2, the `BUILT OUT` lines and the close's record (§5.12).
+- WHERE: `engine/season/tests/_realm_goldens.py`; the R-05 denominator pin's file (B02's; read at the open); `engine/season/requirements.yaml` (`reading:` only); `engine/season/tests/test_go07_canonical_digest.py` (only if its vectors moved).
+- TESTS: none new; every test file in the batch gate.
+- FALSIFIER and CONTROL: a pin re-recorded whose tallies moved with no declared mover in the batch; `construe`, `interrogate` or `tie` not built out (`IS-A-08`: a failed gate). Control: each fixture at its control (`utter_content: off`, `petition_addressee: referent`, `oblige_admission: fiat`, `tie_gain` 0) reproduces the base hashes at seeds 0–2 (S2B, S2C "Control" lines), read once.
+- GATE: the BATCH GATE above.
+- HASH MOVERS: the re-pin itself.
+- DEPENDS ON: V12 B25.01 to B25.21.
+- GLOSSARY: none.
+- COST and TIER: edit and instrument time; `sonnet`; the close's terminal critique `opus`.
+- LANDS IT: B25's producer; `Item: B25.99`, the batch's last `Item:` commit (no `[skip ci]`).
+
+| STOP. Batch B25-fi-questioning closes here |
+
+The last item this file wrote: B25.99.
