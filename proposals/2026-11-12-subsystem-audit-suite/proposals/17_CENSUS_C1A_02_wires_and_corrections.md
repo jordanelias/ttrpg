@@ -3,6 +3,7 @@
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-16) — W4 and `02_CHAR_scar_cap_and_regard_unit.md`'s Addendum both edit `decision/choose.py::_stance_arm`, and are two facts about one term, not two terms: `regard_sign` is how the act treats its subject, `beneficiary:` is whom it is done for. At the arm `beneficiary` the term is `regard_sign(row) × regard(p, subject)` plus `regard(p, b)` where the row's beneficiary `b` is neither the subject nor the actor; the same clamp and `stance_scale` apply to the sum (`U5a_CHAR_owed_amendments.md` §2). W4 lands after the `regard_sign` column, so neither is counted twice.
 
 Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/U3_CONFLICT_LEDGER.md` C3-K3, C3-N7; `unified/U3_DEPENDENCY_ORDER.md` §3.1 and §4.1 rows 35-41; `unified/work/R5_READ.md` §2 row C1A_02:W4, §7 and 7b). Changed: (1) W4's three edits are carried by `02_CHAR_scar_cap_and_regard_unit.md`'s Addendum (B10), written once there (C-U5a-16, C3-K3); W4 keeps its problem, its gate and its NERS reading as the census row's closing reading, and makes no separate edit; (2) "68 rows" is 67 (C3-N7: 67 verb rows, the 68th `beneficiary:` match is the key `beneficiary_note:` at `verb_table.yaml:661`, re-verified by `grep`); (3) the dependency edges follow the batch order (D2 no longer waits for GO-B; W1 rides with GO-B in B34; each W2 verb's gate rides with that verb's batch); (4) tier named. Not changed: C1, W3 (complete, CONFORMS).
+Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_5b_DONE.md` "For another lane", W3-4a item): W2's carrier check made against the rewritten VERBS files; the `_siege` / `march` row has no carrier in `14_VERBS_MILITARY_A_movement.md` (it edits `move`, `migrate`) and is marked INCOMPLETE.
 
 Depends on: `02_CHAR_scar_cap_and_regard_unit.md` Addendum (B10, carries W4); `U5a_CHAR_owed_amendments.md` §2 (B10). W1 rides with `11_GO_player_surface_contract_B.md` (B34); W2's gates ride with `14_VERBS_MATERIAL_C_works.md` (B12), `14_VERBS_BINDING_A_formation.md` (B21), `14_VERBS_MILITARY_A_movement.md`, `_C_the_muster.md`, `_D_the_order_of_battle.md` (B22) (`U3_DEPENDENCY_ORDER.md` §4.1 rows 35-41, SPLIT).
 Lands in batch: B10 (C1, W3, and `17_CENSUS_C1A_01_deletion_batches.md` D1's `defects` row in W3's commit); W1's gate in B34; W2's gates in B12, B21, B22.
@@ -119,9 +120,20 @@ development, chronicling" scale would then have no surface at all and the file w
 The proposals were matched by the verb's name in their text; this lane did not read them through
 [UNVERIFIED that each makes its verb execute].
 
-**INCOMPLETE (W2), blocked outside this file:** whether each named VERBS file makes its verb execute is
-checked by the verbs rewrite lane (W3-4a) against those files; this file supplies only the closing gate
-below, which each verb's batch runs (B12, B21, B22).
+**Carrier check (wave-3 mop-up; `unified/work/W3_5b_DONE.md` "For another lane", W3-4a item).** Read against the
+VERBS files as rewritten: `14_VERBS_MATERIAL_C_works.md` rewrites `found` and `build` and quotes their
+attempted/executed counts; `14_VERBS_BINDING_A_formation.md` rewrites `establish` (executed 1 of 8 at seed 0 is its
+own reading); `14_VERBS_MILITARY_C_the_muster.md` and `14_VERBS_MILITARY_D_the_order_of_battle.md` carry
+`recruit`, `discharge_troops`, `form_unit`, `assign_troops`, `disband_unit` and `order_unit` between them, each
+under a gate that runs the verb. That each executes in the corpus is the closing gate's reading, not asserted here.
+**One row has no carrier:** `14_VERBS_MILITARY_A_movement.md` edits `move` and `migrate` and names `march` only
+twice, in passing; it does not touch `march` or its `Invested` band (`loop/effects_combat.py:686 _siege`,
+reached from `:520`), and `besiege` has no carrier anywhere in the suite (CP-T04-06; `U5d_STORY_owed_edits.md`
+§1). So the `_siege` row's closing gate cannot be met by MIL_A's batch (B22); it waits on a proposal that adds
+`besiege` to `march_postures`, which is not in the suite.
+
+**INCOMPLETE (W2), `_siege` only:** no carrier (above). The other rows' gates are run by the verbs' batches; this
+file supplies only the closing gate below (B12, B21, B22).
 
 **The gate these rows close on.** `python -m engine.season.harness.corpus_run`: each verb above appears
 under `VERBS THAT EXECUTED`. Today's line reads 23 of 67 executed, 13 only refused, 30 never attempted.
