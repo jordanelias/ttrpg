@@ -72,16 +72,16 @@ Also correct, in the same commit: `09_WR_B_threadwork_session_and_practitioner.m
 `09_WR_B_chronicle_that_tells.md:29-32` describe `PersonProjection` as a present reader; the unification
 lane should point them at `account`.
 
-Gate: `python -m pytest engine/season/tests/test_season_shape.py -q -k "queries or world_q"` (the
-package-shape tests that enumerate `world_q`) and a seeded one-season `content_hash` at seed 0 equal to
-the hash before the commit. Falsifier: `grep -rn "PersonProjection\|world_q\.projection\|world_q\.witnessed\|import.*\bprojection\b" engine modules tools --include=*.py`
+Gate: `python -c "import engine.season.queries.world_q"` exits 0 and a seeded one-season `content_hash`
+at seed 0 equals the hash before the commit. No shape test or registry enumerates the deleted names
+(`grep` over `tests/test_season_shape.py`, `tests/valoria/`, `write_matrix.yaml`, `rosters.yaml`: none). Falsifier: `grep -rn "PersonProjection\|world_q\.projection\|world_q\.witnessed\|import.*\bprojection\b" engine modules tools --include=*.py`
 finds a call.
 
 ### D3 · two test-only twins of a live pair (one test file re-pointed)
 
 | file | delete | re-point |
 |---|---|---|
-| `engine/season/queries/person_q.py` | `violated_pursuits` (`:637-654`), `violated_affiliations` (`:657-670`) | `engine/season/tests/test_h11_affiliation_scar.py` (8 uses): `violated_pursuits(p, v)` becomes `tuple(e for e in broken_by(p, elements_violated_by(v)) if e in p.pursuits)` and `violated_affiliations(p, v)` becomes the same filtered by `p.conviction`; or, where the test wants both, `broken_by(p, elements_violated_by(v))` whole |
+| `engine/season/queries/person_q.py` | `violated_pursuits` (`:637-654`), `violated_affiliations` (`:657-670`) | `engine/season/tests/test_h11_affiliation_scar.py` (8 uses): `violated_pursuits(p, v)` becomes `broken_by(p, (elements_violated_by(v)[0], frozenset()))` and `violated_affiliations(p, v)` becomes `broken_by(p, (frozenset(), elements_violated_by(v)[1]))` (each half of the live pair, exactly); where the test wants both, `broken_by(p, elements_violated_by(v))` whole |
 
 Keep `_pursuits_violated_by` (`:673`) and `_affiliations_violated_by` (`:746`): `elements_violated_by`
 (`:754`) calls them and `loop/resolve.py::_scar_witnesses` calls that. Move the two deleted docstrings'

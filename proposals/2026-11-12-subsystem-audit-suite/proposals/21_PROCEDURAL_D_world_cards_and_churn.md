@@ -189,8 +189,9 @@ that reading.
   one card to a pool changes which cards are drawn in at most the worlds where the new card scores into
   the top `k`.
 - **PG-7.** The `04` PART E row 9 acceptance case (a `dispatch` to a post nobody holds) individuates a
-  person with a lifepath and relations who acts next season; with `arrival_card` on, at least one arrival
-  in 20 seeds × 8 seasons binds a card, and the card's goal rows cite the demand in their provenance.
+  person with a lifepath and relations who acts next season; the same demand under the same seed
+  individuates the same person. (Held part: with `arrival_card` on, at least one arrival in 20 seeds × 8
+  seasons binds a card, and the card's goal rows cite the demand in their provenance.)
 - **Docket (if released).** Openings per season after season 8, docket on against off, same seeds: the off
   arm's curve and the on arm's are printed; the on arm does not fall to zero where the off arm does; the
   repeat rate of a card at one seat is under one in four.
