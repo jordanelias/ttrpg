@@ -352,6 +352,7 @@ EST: 5 h [estimate: §2.4's formula over 6 positions (0.4 h × 6 + 2.5 h); no cl
 | B08.03 | the fold orders scenes, then flattens | `SEQ` edit 1 | BUILD | MOVER(behaviour) | B08.02 |
 | B08.04 | the chooser sets `after` from the row | `SEQ` edit 4, with H-249's reading | BUILD | MOVER(behaviour) | B08.03, B08.01 |
 | B08.05 | rivals for one exclusive thing are ordered by a draw | `RIVAL` | BUILD | MOVER(behaviour) | B08.03; Batch B05, Batch B06 |
+| B08.06 | the lap stamp earns its test arm or the arm goes (H-172) | `U5a_tests_digest_additions` §G (Covered: C-01) | BUILD | EQUAL | B08.03, B08.04 |
 | B08.99 | re-pin and close readings | E-1 | BUILD | MOVER (the re-pin) | B08.01 to B08.05 |
 
 Not in this batch: `SEQ` edit 5 (the Layer 1 text; APPLIED, `L1-A9`, `04:662`, "dropped from the plan"); `SEQ`'s folded engagement half (the `engaged` clause, `visitor.kept_waiting`) and `RIVAL`'s person key (`("round", person)` in the sources, `("lap", person)` after PCR-4) (both `28_CORE_scene_access_A_occupancy_and_precedence.md`, B28); the strata-cut arm of `SEQ`'s table (`ordp.py`, lane scratch, U3 §6.2: "reported only if re-written as a committed reading"; not re-written here).
