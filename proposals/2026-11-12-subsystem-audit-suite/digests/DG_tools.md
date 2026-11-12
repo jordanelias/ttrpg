@@ -237,3 +237,51 @@ Wiring facts used throughout (read once, from the sources, not from the tools' o
 - **Conflicts / stale:** `tests/coverage_matrix.md` is capped here and also demanded by `ci_co_file_checker` Rule 3; `references/audit_registry.jsonl` cap persists (the file exists); `registers/patch_register_active.yaml` is the PP register that `ci_pp_frozen_check` freezes.
 - **Open items:** none.
 
+### tools/ci_sim_fabrication_check.py
+- **What it is:** blocking anti-fabrication gate: every numeric literal on a line ADDED to a "sim" `.py` must be exempt, ledger-cited, or carry `# [canonical|GROUNDED|JUSTIFIED|DECLARED-DIVERGENCE|CALIBRATED-DEBT|FORK: ...]` on the same/previous line.
+- **Status:** no Status line; live, blocking (`validators`); also in `valoria_local --staged`.
+- **Bears on:** CORE, all subsystem sims (it is the provenance rule for every game constant in `engine/`, `systems/*/sim/`, `modules/*` other than combat).
+- **Content that matters:**
+  - Scope `is_sim_file` = (`ci_common.sim_reference_prefixes()` OR basename containing "sim"/"simulation") minus `tools/`, `deprecated/`, `engine/tests/`, `engine/season/tests/`, `tests/valoria/`, `tests/contracts/` (`:138-219`). `modules/combat/` is OUTSIDE scope (KNOWN GAP, `:164-170`, filed ED-IN-0119; `MODULES_WITH_OWN_EXPORT` keeps combat out): the personal-combat oracle's constants are not provenance-gated by this tool.
+  - Exempt literals: 0, 1, 2, 10, 100 (+ `.0` forms) and 0.5 (`:130-131`); `range/len/enumerate/slice` idioms skipped.
+  - Only ADDED lines are gated (`added_only`, `:484-509`); pre-existing debt is counted and printed ("carried"). Measured at writing: 642 uncited constants across 47 live-oracle files (`:487-499`), i.e. most existing constants have no citation.
+  - Citations are accepted by marker presence only, never checked against content ("labelling a value honestly must never be harder than mislabelling", `:65-76`); FORK tag needs a sha with a digit or `refs/...` (`:111-113`). A ledger match is by `(sim_variable, value)` from `sim_verification_ledger.json` (co-located or at repo root) (`:342-373,:376-466`); `ls` of such ledgers not checked here.
+  - Removing a provenance tag forces a whole-file scan (`displaced_citation_paths`, `:469-481`).
+- **Conflicts / stale:** "the gate is intentionally noisy" printed on failure while the tool is changeset-scoped; mention of `tests/sim/` (frozen tree) as in scope, CLAUDE.md §3 says `tests/sim/` is unrelated to the retired `sim/`.
+- **Open items:** `modules/combat/` out of scope; markers are honour-system.
+
+### tools/ci_vacuous_assertion_check.py
+- **What it is:** report-only AST scan of `tests/valoria` and `engine/tests` for assertions that cannot fail (V1 truthy literal, V2 `len>=0`, V3 `name is not None` for in-module def/class/import, V4 `isinstance(x, object)`, V5 literal==literal, V6 `0*x==0`) plus heuristic S1/S2.
+- **Status:** no Status line; live, report-only (always returns 0, `:290`). Registry's only `subject: verification` row.
+- **Bears on:** PROCESS (guards the tests that guard the game).
+- **Content that matters:**
+  - Static, single-file, cannot resolve imports or types (own limits `:40-45`); does not see `pytest.approx` on exactness claims or loops that may assert zero times, though CLAUDE.md §0.1 pt 2 names both (the registry row claims it detects them: `ci_checks_registry.yaml:373`); code implements only the six rules. Registry role text over-claims relative to code.
+  - Default roots `('tests/valoria','engine/tests')` (`:68`); `engine/season/tests` and `modules/**` tests are not scanned.
+  - Origin: two vacuous assertions written in one session (ED-IN-0098); kept by Jordan's ruling 2026-08-21 as a literal encoding of §0.1 pt 2.
+- **Conflicts / stale:** registry role vs code (above).
+- **Open items:** "promoting PROVABLE to blocking is Jordan's call" (`:289`).
+
+### tools/ci_vetting_check.py
+- **What it is:** blocking gate: patch-register (`registers/patch_register_active.yaml`) entries PP-674 and above must carry a `vetting:` block (class A-E; A/B need class, necessity, omega, mu, m_ratings, q) or `class: C|D|E` / `pre-framework: true`.
+- **Status:** no Status line; live, blocking (`validators`).
+- **Bears on:** PROCESS (patch register; PP now frozen, so no new entries possible).
+- **Content that matters:**
+  - Regex parsing of YAML (PyYAML-free) with an indentation-aware block extractor (`:52-83`); entries `-\s+id:\s+PP-(\d+)` (`:110-113`).
+  - Uses repo-relative `REGISTER_PATH` (needs CWD = repo root, `:49,:176`).
+  - Cites `references/throughlines_meta.md §8` as the framework definition (prose authority for the vetting scheme: omega, mu, m_ratings, q).
+  - Since `ci_pp_frozen_check` forbids PP ids above the frozen ceiling, this gate can only ever re-check a closed set: its subject is frozen.
+- **Conflicts / stale:** none beyond the frozen subject.
+- **Open items:** none; candidate for retirement along with the PP register (process-only).
+
+### tools/compliance_check.py
+- **What it is:** CI job `compliance-check` (`--check-only --repo-state .`): walk the whole tree for `.md`/`.yaml`, match each to a policy in `references/atomization_rules.yaml` by `fnmatch`, and fail on a token-cap breach whose `on_exceed` is blocking.
+- **Status:** no Status line; live, blocking. NOT in `valoria_local` (CI-only), so local-green is not compliance-green (CLAUDE.md §8).
+- **Bears on:** PROCESS.
+- **Content that matters:**
+  - Closed `on_exceed` vocabulary: blocking `error`, `block_commit`; advisory `warn_only`, `flag_*`, `chunk_by_quarter`; `skip` = no violation; an unknown token raises `UnknownOnExceedToken` (`:93-128`). Falsifier: `tests/valoria/test_compliance_on_exceed_vocabulary.py`.
+  - The walk is `os.walk(repo_state)` with NO directory exclusions (`:182`): it reads `.designs/`, `.audit/`, `.claude/worktrees/**` and `proposals/**` as well, and the policy file decides which patterns bind. Reads files with default encoding and no `errors=` (`:191`), so a non-UTF-8 `.md` crashes it.
+  - Half the module is dead scaffolding: `Violation.fix_action`, `auto_fixable` and 'atomizer.atomize'/'doc_index_gen' references name retired tools (`:38-44`); the interactive mode exits 2 (`:229-237`).
+  - Second size gate beside `ci_register_size_check.py` (two token-cap enforcers over the same policy file; one is per-path, one is pattern-matched).
+- **Conflicts / stale:** CLAUDE.md §4 says "nothing enforces a length cap" and "several ARE blocking" per-file caps: consistent only for the explicit patterns.
+- **Open items:** whether the unexcluded walk over `.claude/worktrees/` can false-red CI (agent worktrees are untracked, so CI checkout would not contain them).
+

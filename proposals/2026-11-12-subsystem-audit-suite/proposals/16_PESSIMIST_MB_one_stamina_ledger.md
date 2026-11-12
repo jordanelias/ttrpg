@@ -46,7 +46,7 @@ column's own fights tire it; depth rests it).
 | `modules/mass_battle/core/exchange.py` | delete `_stamina_pool_penalty` and the `stam_pen` term in `subunit_combat_pool` and `command_base_pool` |
 | `modules/mass_battle/config.py` | delete `STAMINA_DRAIN_PER_CONTACT_CELL`, `STAMINA_RECOVERY_PER_RESERVE_RANK`, `STAMINA_POOL_THRESHOLDS`, `STAMINA_EXHAUSTED_POOL_PENALTY`; `STAMINA_MAX` stays (the column ledger's ceiling) |
 | `modules/mass_battle/hierarchy/units.py` | delete `Subunit.stamina`, `stamina_max`, `eff_stamina`, `eff_stamina_max`, `drain_stamina`, `recover_stamina`, `Unit.stamina`, `stamina_max`; `Unit.agg_stamina()` becomes the troop-weighted mean of the unit's column blocks (the expression `_fatigue_sigma` already forms) |
-| `modules/mass_battle/orchestration.py` | `stamina_check` and `between_turn_recovery`'s stamina line rest the column blocks (`MB_STAMINA_REST` per reserve rank; `BETWEEN_TURN_STAMINA_RECOVERY` to each block) instead of the deleted fields; `Unit.base_combat_pool` loses its `stam_pen` |
+| `modules/mass_battle/orchestration.py` | `stamina_check` is deleted from `phase_boundary` (the column ledger already rests every unengaged column each tick, `percell.update_stamina`); `between_turn_recovery`'s stamina line adds `BETWEEN_TURN_STAMINA_RECOVERY` to each column block instead of the deleted field; `Unit.base_combat_pool` loses its `stam_pen` |
 | `armies.build_army` | the per-subunit `stamina` / `stamina_max` spec keys are refused with a message naming `entry_stamina` |
 
 If any golden moves at step 1, the unit ledger was not inert on that path: stop, and record which.
