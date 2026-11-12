@@ -251,7 +251,7 @@ EST: this half's 23 positions: 0.4 h × 23 = 9.2 h; the batch is 0.4 h × (23 + 
   1. `engine/season/seam/wrappers/pool.py` (TWO Edit A, copied; "starts from lane A's `pool.py::score` split (`c5bf18a`); `max(attr, have)` is removed (A-7; C3-A3)"):
      ```python
      def score(w, p, verb) -> int:
-         """(W3-1, A-7, 7b-6) What `p` is trained in for `verb`'s capability: the held rank, else the untrained
+         """(W3-1, A-7, 7b-6) What `p` is trained in for `verb`'s skill: the held rank, else the untrained
          score `pool_default`. No attribute (the governing attribute enters as levels) and no addend. The base of his pool AND the
          score an opponent's `opposed_ob` reads."""
          have = _capability(p, verb)
