@@ -147,6 +147,29 @@ things do not make sense of the word "distorts", each observed in the same run:
    proxy chain garbles `exists:Person` `1` into `2`, then `1`, then `2`. `condition` (an ordinal)
    drifts by one each hop. `is_cell` and `_told_value` test only "is it a number".
 
+**What is actually said in computed play** (`told_dump.py 0 2`: the shipped realm, seed 0, two
+seasons, content hash `bacd687f…`, the same world as the first FI audit's two-season reading). The
+whole of the realm's person-to-person traffic is twelve claims held with a teller on them:
+
+| held by | claim | what was said | how it came to be false |
+|---|---|---|---|
+| 7 persons | `(p_npc_004, exists:Person, 2)` | `p_npc_040` told `(p_npc_004, exists:Person, 1)`, once to `p_npc_004` himself | a `Partial` telling drifted `1` to `2` |
+| 1 | `(p_npc_089, exists:Person, 3)` | `p_npc_090` **lied** to `p_npc_089`: `(p_npc_089, exists:Person, 2)` | the lie moved `1` up a band; the `Partial` copy moved it again |
+| 1 | `(p_npc_089, exists:Person, 1)` (the man lied to, about himself) | the same lie | the `Partial` copy drifted `2` back to `1` |
+| 1 | `(set_s_003, stores:grain, 86)`, true value 74 | a cohort lied: 60 | lie, then drift |
+| 1 | `(set_s_036, room:p_npc_013, False)`, true `True` | `p_npc_013` lied | the boolean negated |
+| 1 | `(set_s_021, stores.changed, True)` | a true telling | — |
+
+**The false beliefs the first FI audit counted as formed by telling (its §1a: "told 0 true / 7
+false"; F-FI-04: "all 7 told cell claims at seed 0 are false") are seven people holding that one man
+exists twice.** Of the seven tellings that landed in two seasons, three said that a person exists.
+What the 102 formed tellings chose to say, by `said_of`'s newest-claim rule: `exists:Person` 36 times,
+`tell.refused` (*"my last telling was refused"*) 9, `proposition.uttered` 3, `cover.assumed` 3,
+`record.created` 3, a bare sighting 3, `train.refused` 2, `stores:grain` 2, `issue.unauthorized` 1,
+`challenge.refused` 1. An existence reading is the acquaintance marker (`known_person_operands`): a
+hearer told it comes to know of the man, so the telling is an introduction and has a use. It is also
+a number, so the lossy copy garbles it and the liar inflates it.
+
 **Link table** (C = the run; N = the notes; scale: season loop; module scale n/a).
 
 | # | O predicted | N says | C observed | verdict · cause |
@@ -354,6 +377,22 @@ Three readings.
    requirement reads (`individual`, `with` are world-only stems), so a belief that a man is dead
    cannot decline `challenge` on him, and no verb is offered *because* he is dead. News is a pointer
    to a subject; its content steers only the dozen store, condition and containment cells.
+
+4. **Where another person is, is read from the truth too** (`p1d_where.py`). The King's containment
+   is edited on the World to a second realm, with no Event and no WITNESS; the subject's ledger is
+   identical before and after. Candidates naming the King: 38 → 10. The same claim loop: `place_of` is
+   where the King is *now*. A man's options about a person he has heard of change when that person
+   leaves the valley, though no one has told him.
+5. **The engine's own word for "gone" is a different claim from the one a witness of a death
+   receives** (`p1c_exists.py`). A requirement asks `kind: Person` of its subject and the ledger answers
+   it from `(X, exists:Person, v)`. Planting `(King, exists:Person, 0)` declines `challenge`,
+   `interview`, `train` and the cell lies about him (and leaves `tell`, `move`, `speak`, `surveil`,
+   `transfer`, `tie / knot` formed, whose cells ask nothing of his being a person). A witness of a
+   killing is given `(King, person.died, True)`, which declines nothing. Correction by refusal works
+   here as it does for stores: a hand-built `challenge` on a silently deleted King is refused, the
+   observation `(King, exists:Person, 0)` lands, and candidates naming him fall from 38 to 16; the same
+   refusal through `interview` teaches nothing, because `finding.none` is deposited to nobody
+   (CP-T06-04, scheduled, is that repair).
 
 At CHOOSE the death arms have no power in this fixture: the control chose no act naming the King at
 any of 12 seeds, so "0 of 12 differ" is not a reading. The FORMS rows above are.
