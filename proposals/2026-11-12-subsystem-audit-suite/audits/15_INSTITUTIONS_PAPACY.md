@@ -265,7 +265,7 @@ at `governance_modes.md:295`) `[RE-GROUNDED: the catalogue (ibid. :101) has the 
   leading candidate (*accessus*) `[M → TREE ibid. :101: the three modes are Lateran IV c. 24's; *accessus* ran "until the dean disallowed it in 1903". The same entry gives the crowns' exclusive, "from about 1600 … once per conclave", and :103 the canonists' *sanior et maior pars*, under which "the loser could claim to be the sounder part"]`.
 - **Capitulations**: from the mid-fourteenth century the electors swore, before voting, a pact binding
   whoever was chosen (share revenues with the college, call a council, limit creations). The elected pope
-  usually repudiated it `[M]`. A pact made by electors and broken by the winner is a standing grievance.
+  usually repudiated it `[M; stays memory-grade: no file treats electoral capitulations. The tree's sourced cousin is Venice's ducal promise, "re-drafted and *lengthened* at every single accession" by a standing magistracy and checked by a posthumous audit (research/governance/governance_modes.md:325-330)]`. A pact made by electors and broken by the winner is a standing grievance.
 - **Factions were made by appointment.** A pope created cardinals; his creatures voted as a bloc under his
   cardinal-nephew after his death. The college was the dead pope's patronage, facing the next one.
 - **The vacancy was dangerous.** The treasury was looted, offices lapsed, the city rioted, and outside
@@ -276,7 +276,7 @@ at `governance_modes.md:295`) `[RE-GROUNDED: the catalogue (ibid. :101) has the 
 
 ### 3.2 The curia: government by document
 
-The pope governed a continent he never saw by letters. The organs `[M]`:
+The pope governed a continent he never saw by letters. The organs `[M; RE-GROUNDED in part. TREE: the chancery's letter form and its entry into the papal chancery (research/rhetoric_oratory_contest/rhetoric_oratory_contest_research.md:242-253); petitions, where "who carried the petition (proctors, intercessors, well-placed patrons) shaped its success" and "royal petitions and papal/canon-law petitions ran in parallel systems" (:305-307); curial offices bought as toll-posts (research/rise_to_power_roster_system_research_v1.md:493-497); a prelate's appointment fees financed by a banker and repaid from an indulgence drive (:498-501); the curia's hand in a dynastic marriage (research/governance/political_hierarchy_standing.md:176-177). Stays memory-grade: the step-by-step chancery chain and priority by date; annates, common services and *spolia*; the Penitentiary; the Rota; the Consistory; judges-delegate]`:
 
 - **Chancery**: drafted and sealed. A petition (*supplicatio*) came in by a proctor, a professional agent
   resident at the curia; a referendary summarised it; it was signed (*fiat*); **the date of signing fixed
@@ -301,7 +301,7 @@ litigant who reached the curia first chose his own judges.
 
 ### 3.3 Canon law and its courts
 
-A written, taught, universal law (Gratian's collection and the decretal collections after it `[M]`) with a
+A written, taught, universal law (Gratian's collection and the decretal collections after it `[M; Gratian stays memory-grade. The written procedure below is TREE: Tancred's *Ordo iudiciarius*, c. 1216: *libellus*, *litis contestatio*, "two witnesses = full proof", confession, *positiones* (research/rhetoric_oratory_contest/rhetoric_oratory_contest_research.md:289), with the tree's own caution that the skeleton was not sourced to a primary text (research/social_contest_procedures/02_inquisition_heresy_procedure.md:15)]`) with a
 graded court system: archdeacon, the bishop's official, the metropolitan, Rome; appeal suspended the
 sentence. Jurisdiction ran by **person** (every cleric, in any matter: *benefit of clergy*) and by **matter**
 (marriage and legitimacy, wills, oaths and perjury, tithes, usury, sacrilege, heresy), on anyone's land.
@@ -309,22 +309,22 @@ Procedure was written: a libel, a formal joining of issue, articles put to witne
 publication, sentence. Proof was graded: two eyewitnesses or a confession made full proof; one witness,
 documents and common repute (*fama*) made half-proofs. Three ways to start a case: **accusation** (a named
 accuser who bore the penalty if he failed), **denunciation**, and **inquisition** (the judge proceeds on
-*fama* by his own office; general from 1215 `[M]`). An accused of good repute could clear himself by oath
+*fama* by his own office; general from 1215 `[M → TREE research/social_contest_procedures/02_inquisition_heresy_procedure.md:15: Lateran IV c. 8's three routes, the accuser's written charge, the accused's sight of "the charges, the witnesses' names and testimony", the notary's record (c. 38); compurgation at :65]`). An accused of good repute could clear himself by oath
 with oath-helpers. Kings fought the boundary case by case: criminous clerks (Clarendon 1164 and Becket),
 writs prohibiting church courts from lay matters, statutes against appeals and provisions from Rome
 (England, 1350s), and finally concordats in which the king named bishops and the pope instituted them
-(Bologna 1516; the Spanish crown's patronage) `[M]`.
+(Bologna 1516; the Spanish crown's patronage) `[M; RE-GROUNDED in part. TREE: Clarendon cc. 3, 7 and 8 (criminous clerks; no tenant-in-chief excommunicated and no land interdicted "unless the king or his justice is first asked"; appeals end with the king), benefit of clergy narrowed by statute, and *De heretico comburendo* (ibid. :64-67); the crown-named Spanish tribunal with appeal to Rome cut (:44); the Venetian lay assessors who hold the arrest and execution gates (research/social_contest_procedures/01_venice_procedure.md:129-131). Stays memory-grade: the writs of prohibition, the English statutes of the 1350s, Bologna, the Spanish patronage of sees]`.
 
 ### 3.4 Excommunication and interdict as political weapons
 
 - **Excommunication** was a sentence, in grades. The minor form barred the sacraments; the major form put
   a person outside the community: no one might eat, trade, pray or deal with him, he could not sue, testify,
-  hold office or a benefice; after a year unreconciled he was suspect of heresy `[M]`. It followed three
+  hold office or a benefice; after a year unreconciled he was suspect of heresy `[M; stays memory-grade as stated (the grades and the year). The tree has the adjacent facts: excommunicates barred as witnesses in ordinary canon law, and officials excommunicated if they did not carry out a relaxation within five days (research/social_contest_procedures/02_inquisition_heresy_procedure.md:26, :33)]`. It followed three
   warnings (*monitions*) or fell automatically on certain acts. Contumacy, failing to answer a citation,
   was itself ground for it, which is how absent parties were reached. From 1418 only a person **denounced
-  by name** had to be shunned `[M]`: the sanction bound third parties only once published.
+  by name** had to be shunned `[M; stays memory-grade: no file holds the 1418 rule. The sourced cousin is the imperial ban, with "a contagion clause punishing anyone who shelters the target" and teeth only "as strong as" its enforcement (.audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md:79, HRE-6 at :192)]`: the sanction bound third parties only once published.
 - **Its force was other people's compliance.** In England the bishop certified an obstinate excommunicate
-  to the royal chancery after forty days and the king's officers arrested him `[M]`: the secular arm.
+  to the royal chancery after forty days and the king's officers arrested him `[M; the forty-day certification stays memory-grade. The dependence on the secular arm is TREE: the 1401 statute under which "sheriffs and mayors must attend when the diocesan requires", so that "relaxation became a compulsory duty of royal officers at the bishop's call"; and its reverse, Philip IV ordering his seneschal "no longer to obey inquisitors' commands to arrest", after which arrests "which had been taking place every week" stopped (research/social_contest_procedures/02_inquisition_heresy_procedure.md:67, :71)]`: the secular arm.
   Against a king there was no secular arm, so the weapon was the next clause: **his subjects were released
   from their oaths** (Gregory VII against Henry IV, 1076; Innocent IV against Frederick II, 1245). That
   dissolved nothing by itself. It gave princes who already wanted to rebel a lawful reason, and it worked
@@ -335,7 +335,7 @@ writs prohibiting church courts from lay matters, statutes against appeals and p
   silent; baptism and the penance of the dying were kept. It punished subjects for a ruler's act in the
   hope they would press him. England 1208-14; Florence 1376, where the sentence also declared Florentine
   merchants abroad and their goods fair prize, an economic weapon; Venice 1606-07, where the Senate ordered
-  the clergy to go on officiating, expelled those who obeyed Rome, and won `[M]`. Mitigations multiplied
+  the clergy to go on officiating, expelled those who obeyed Rome, and won `[M → TREE research/social_contest_procedures/01_venice_procedure.md:155-170, corrected: not "won". The Republic's *protesto* of 6 May 1606 declared the censures null and ordered services kept; "most clergy and orders obeyed Venice; the Jesuits, Capuchins and Theatines resisted" and were expelled; **France mediated**; a French cardinal took custody of the two priests on 21 April 1607 and the interdict was lifted; "Venice keeps its laws"; the Jesuits stayed banned. The tree could not verify the settlement's terms beyond the handing over of the prisoners. England 1208-14 is TREE research/fa_se_historical_precedent_research_v1.md:148; the interdict after the hanging of the Archbishop of Pisa, 1478, is research/governance/conflicts_power_struggles.md:257; the merchant clause of Florence 1376 stays memory-grade]`. Mitigations multiplied
   until an interdict was an inconvenience. Overuse was the decay.
 - **Absolution** required satisfaction or security for it; great cases were reserved to the pope, which
   brought the penitent, or his proctor and his money, to the curia.
@@ -347,9 +347,9 @@ into a rival: when two and then three lines of popes each held a valid-looking e
 that could judge the head was a council, called by cardinals and princes (Pisa 1409, Constance 1414-18,
 `conflicts_power_struggles.md:272`). Constance voted **by nation**, not by head, to cancel the Italian
 majority, declared that a council holds its power directly and binds a pope, and ordered councils at fixed
-intervals `[M]`. Basel sat for eighteen years, deposed a pope and elected the last antipope. Popes answered
+intervals `[M; voting by nation and the two decrees stay memory-grade. TREE has Constance forcing "all three claimants to resign or be deposed" as "an extraordinary, one-off supra-conclave mechanism" (research/governance/conflicts_power_struggles.md:272), its trial of Hus under a broken safe-conduct and the Bohemian nobles' refusal of its summons (research/social_contest_procedures/02_inquisition_heresy_procedure.md:89), and a council deposing an emperor "with no immediate practical effect" (research/governance/political_hierarchy_standing.md:240)]`. Basel sat for eighteen years, deposed a pope and elected the last antipope. Popes answered
 by treating with kings directly (the concordats) and by forbidding appeal from a pope to a future council
-(1460 `[M]`). The appeal to a council remained every aggrieved king's threat.
+(1460 `[M; stays memory-grade, with Basel]`). The appeal to a council remained every aggrieved king's threat.
 
 ### 3.6 Investiture, patronage, benefices, simony
 
@@ -360,14 +360,14 @@ by treating with kings directly (the concordats) and by forbidding appeal from a
   symbols, the ruler the lands and rights; elections were held in the ruler's presence.
 - **Election, licence, assent.** A cathedral chapter elected its bishop, with the king's licence to elect
   and his assent after; the king held the lands of a vacant see and took their revenue (regalian right),
-  so a king profited by delay `[M]`.
+  so a king profited by delay `[M; the regalian right over a vacant see stays memory-grade. TREE: a prince-bishop "selected by cathedral chapter" (.audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md:81) and the capture of such a chapter before the vacancy, "College seats owed" that count "only if/when a vacancy fires" (HRE-2, :188; kept at the closure, tier3_proposal_status_closure.md:96)]`.
 - **Advowson.** The patron of a parish presented a clerk; the bishop instituted him. Presentation was
   property: inherited, sold, sued for in the king's court (the tree names it: FASE research). The office was
   the Church's, the gift of it a layman's.
 - **The benefice.** An office with an endowment (glebe, tithe, fees). With cure of souls it required
   residence; without, it was income. Pluralism (several at once), non-residence, the hired vicar on a
   fraction of the income, *commendam* (the revenues of an abbey given to an outsider), and appropriation
-  (a monastery as perpetual rector) turned benefices into a currency for paying officials and kin `[M]`.
+  (a monastery as perpetual rector) turned benefices into a currency for paying officials and kin `[M; RE-GROUNDED in part. TREE: the plural hold bought on credit (research/rise_to_power_roster_system_research_v1.md:498-501); benefices "calcifying into heritable property" (research/governance/political_hierarchy_standing.md:20, :180); and, inside Valoria, the unfilled benefice as a place with "no priest, so … no channel" (proposals/2026-08-30-play-space-coverage/03_seasons_church.md:314-321). *Commendam* and appropriation stay memory-grade]`.
 - **Provision and reservation.** From the thirteenth century the pope provided to benefices directly and
   reserved whole classes to himself; *expectatives* promised the next vacancy. The curia became the
   market for careers, competing provisions for one living were litigated in the Rota, and the local patron
@@ -379,22 +379,22 @@ by treating with kings directly (the concordats) and by forbidding appeal from a
 
 The tithe was a tenth of produce owed to the parish, divided in theory among bishop, clergy, fabric and
 poor, in practice largely captured by monasteries and lay impropriators; disputes over it filled the church
-courts `[M]`. Above it sat the papal levies of §3.2. Indulgences began as remission for crusaders, were
+courts `[M; the fourfold division and its capture stay memory-grade; that tithes were church-court business is TREE research/fa_se_historical_precedent_research_v1.md:147, and an order's branches paying a share upward (*responsions*) is research/proactive_governance_scale_research_v1.md:79]`. Above it sat the papal levies of §3.2. Indulgences began as remission for crusaders, were
 extended to those who paid for one, to jubilee pilgrims, to the dead; preaching them was farmed to
 licensed collectors, and the proceeds were often pledged in advance to a banker against a prelate's debt
-for his own appointment fees `[M]`. The system's revenue and its discredit came from the same act.
+for his own appointment fees `[M → TREE research/rise_to_power_roster_system_research_v1.md:498-501 (Albrecht of Brandenburg's purchase of Mainz, after MacCulloch): a financier "fronts the dispensation cost", the debtor's conduct bends "toward whichever move maximizes Treasury flow to the Financier", and the failure is contagion from "the Fuggers' exposure to the Habsburg/papal debt web". The earlier history of indulgences stays memory-grade]`. The system's revenue and its discredit came from the same act.
 
 ### 3.8 The orders and their autonomy
 
 - **Monastic**: each house self-governing under a rule and an elected abbot; reform came by federation:
   one mother-house whose abbot ruled dependent priories and which was **exempt from the local bishop and
   subject to the pope alone** (the Cluniac pattern), or a general chapter of all abbots with mutual
-  visitation (the Cistercian) `[M]`.
+  visitation (the Cistercian) `[M → TREE for the Cistercian form: the *Carta Caritatis*, an "annual General Chapter & Visitation" in which the inquiry is turned "inward" on "a *branch head*" (research/proactive_governance_scale_research_v1.md:72, a self-labelled sketch on Wikipedia); a unified monastic rule imposed by synod, 816-817 (research/governance/governance_modes.md:166). The Cluniac pattern stays memory-grade]`.
 - **Mendicant**: mobile preachers organised in provinces under an elected general, licensed by the pope to
   preach, confess and bury in any diocese, in competition with the parish clergy for souls and fees.
 - **Military**: knights under vows with their own priests, lands and banks, exempt from bishops and tithes,
   answerable to the pope. The Templars were destroyed in 1307-12 by a king who owed them money, using
-  the Church's own inquisitorial procedure and a compliant pope `[M]`: exemption protects an order from
+  the Church's own inquisitorial procedure and a compliant pope `[M → TREE research/social_contest_procedures/02_inquisition_heresy_procedure.md:50-56, corrected. The lever was "heresy, the one exception to the Order's immunity"; the Inquisitor of France was "Philip's confessor", "a church office held by a crown man"; the pope was not simply compliant: he "suspended the inquisitors (Feb 1308)", set a papal commission to hear the Order's defence, and was overtaken when a provincial council burned 54 defenders as relapsed ("Retraction made relapse, which silenced the defenders"); the Order ended in 1312 "by administrative act, not verdict", its goods going to the Hospitallers less 200,000 livres the king took as costs. Control: "Aragon and Portugal found no fault; Cyprus acquitted all 76 at first". The king's debt to the Order stays memory-grade]`: exemption protects an order from
   bishops, not from the power that protects it.
 
 Exemption was the papacy's standing army inside every diocese and every bishop's standing grievance.
@@ -402,7 +402,7 @@ Exemption was the papacy's standing army inside every diocese and every bishop's
 ### 3.9 Inquisition
 
 Papal inquisitors, mostly friars, commissioned from the 1230s to proceed by *inquisitio* against heresy
-`[M]`. Procedure: arrival and sermon; a **period of grace** in which voluntary confession earned light
+`[M → TREE ibid. :21-36 for this whole subsection, stage by stage: papal inquisitors "from 1231"; a month of grace; citation by the parish priest; names withheld, with the safeguard that the accused may name his mortal enemies and "if the accuser is among them the charge fails"; coercion from *Ad extirpanda* (1252) and its evasions, yet "no torture in d'Ablis's register, one case in Fournier's"; a *consilium* of thirty to eighty men consulted "on the abstract case without the name", "usually followed, and milder"; the public sermon; the sentences and their scale (leads); confiscation, on which "Sources conflict". What the tree adds is in §15.4 items 6 to 9]`. Procedure: arrival and sermon; a **period of grace** in which voluntary confession earned light
 penance and required naming others; denunciations; citation; interrogation under oath with the witnesses'
 names withheld; detention as pressure; torture permitted from mid-century within limits that were evaded;
 sentence at a public sermon: penances, crosses, prison, confiscation; the relapsed and the obstinate

@@ -1233,8 +1233,83 @@ disposer, already kept.
 | E-3 | not run: `pytest`; `aperture`; `corpus_run` (its readings are taken from `12_ARCS_adjudication.md` and `14_VERBS_BINDING.md` at the line and marked) | — |
 | E-4 | not opened and relied on only by title or by another lane's citation: `06_FA_decree_binds.md`, `06_FA_office_capabilities.md`, `06_FA_remit_grant_by_row.md`, `07_SE_treasury_granary_B.md`, `05_SC_evidence_and_rebuttal_B.md`, `08_FI_*`, CR-88's entry, `world_q.declared_votes`' body, `_renewals`' body, `data/fixtures.py` beyond `:613-634`; the digests `digests/DG_*` `[SKIPPED: the governance sources were read at their own files instead]`; `.audit/2026-07-09-comparative-governance-research` and `_workings_joined.md` `[SKIPPED: grep only; superseded in content by `research/governance/`, per its manifest]` | every claim resting on one of these is a design dependency, not a statement of code behaviour |
 | E-5 | `git status --short` before handback | recorded in the receipt |
+| E-6 | re-grounding pass, 2026-11-12, at `62dbc8b`: the work order's grep over `research proposals` (624 files) and `.designs .audit` (260), then exact-term greps for each `[M]` claim; files and depths in `unified/RESEARCH_MAP_INSTITUTIONS_B.md` §1.1 | **E-4's skip of `.audit/2026-07-09-comparative-governance-research` was wrong**: the manifest it relied on says the governance corpus "reorganizes and deepens" the earlier dockets (`research/governance/00_MANIFEST.md:5-10`), not that it contains them; the skipped file's `:87-117` is the tree's source for the Arsenal, the rectors' terms, the syndics, the *dedizione*, the citizen secretaries, the Venetian guilds, the podestà's audit, the *condotta* and the Mercanzia. No instrument was run; no file outside this suite was edited |
 
 *Revision of §0 on completion:* the verdict's five missing parts stand. Two things changed while
 writing: the term is FA's (proposed, not this lane's), so this lane's own additions are four parts and one
 obstacle term; and the standing rule moved the ballot from a count of commits to a count of drawn
 ballots, which makes part 3's ballot design-first rather than a data edit.
+
+---
+
+## 17. Re-grounding against the tree's research (2026-11-12)
+
+Jordan: *"Research should have been found in /research or /proposals."* This lane wrote most of §1.6 to
+§3 from memory and said so. The tree holds a source for much of it. The claim-by-claim table is
+`unified/RESEARCH_MAP_INSTITUTIONS_B.md` §2.1 (rows V-1 to V-50), not repeated here; this section records
+what changed in the design because of it. Everything cited is tier 3.
+
+### 17.1 Corrections (the tree's source differs from what this file said)
+
+| # | section | this file said | the tree says | effect on the design |
+|---|---|---|---|---|
+| 1 | §1.1 | the Faliero conspiracy of 1355 made the Ten permanent | permanent 1334 or 1335 by the verifier's note (`GM:310`); 1355 in the unpatched body (`GM:345`) | none: the ratchet is the mechanism, not the date. A caution on the source: the governance corpus's fixes are quoted at each section's head and were not applied to its body |
+| 2 | §1.3 | the 1297 act closed the Council to sitting members "and their descendants" | 1297 confirmed sitting members by a ballot of the Forty; descent came with later registration (`GM:311`, `:334`) | strengthens §5.2: closure by a body's ballot is the original act, and it is the form this design keeps |
+| 3 | §1.8 | "16,000 … a few thousand is safer" | a stable core of about 2,000 and a peak of about 16,000, both kept (`CGR:91`) | none (no number is taken); the works gains a standing wage liability (§17.2 item 9) |
+| 4 | §1.8 | the Arsenal men were "the only trusted armed body" | they were the Doge's accomplices in 1355 (`CPS:306`) | adds a story to §10: the guard is an establishment like any other and can be asked by its head |
+| 5 | §2.5 | sumptuary law placed under Florence | the tree's instance is Venice's magistracy, 1476 to 1562 (`PGS:121`) | none |
+| 6 | §2.7 | the Pazzi "had just taken the papal account" | the Pope was angered by Lorenzo's blocking of a Pazzi-financed land purchase (`CPS:257`) | sharpens §10: the quarrel began over **a loan refused passage**, which part 4 can express and an account cannot |
+| 7 | §2.8 | the fall ran through the interdict's threat to merchants and a hostile draw | two independent blows, both required: excommunication, then the failed ordeal (`CPS:277`; `RTP:539-542`) | §6.2's last row is confirmed as built: each link its own draw; nothing makes the second follow |
+| 8 | §1.7 | rectors served "about two years" | fixed terms of 16, 24 or 36 months (`CGR:99`) | §8's `term` sweep {4, 8} seasons brackets it; no change |
+| 9 | §3 | blockades of "Bruges 1358 and 1388; Norway 1284" | Bruges 1358 and 1451 to 1457 (`FASE:119`) | none |
+| 10 | §2.6 | the contract's second term is "at the employer's choice" | a reserve phase at reduced pay in which the captain may be poached, then a lapse with non-aggression (`CGR:110`, `:208`) | changes §6.2's row "a captain kept or lost": see §17.2 item 8 |
+
+### 17.2 Mechanisms the research describes that this design did not carry
+
+Each is stated as the brief asks (who acts, what verb, what is written, who reads it), on the five
+parts and the kit's registries; none adds a carrier, a verb or an obstacle term. Exact edits, gates and
+falsifiers: `proposals/15_INSTITUTIONS_VENICE_grounding_E_what_the_tree_adds.md`. Under the standing
+rule each outcome is a draw; where a row below says "reads", it is an odds term or evidence, never a
+result.
+
+| # | mechanism | source | in the engine's terms | what it generates with no player |
+|---|---|---|---|---|
+| 1 | **Two officers over one subject place** | `PMP:138-140`, `:513-516`; `PGS:148`; `CGR:99` | two appointed, termed seats on the subject settlement's rung with **disjoint `remit_acts`**: one holds `open_case` and `determine` (justice), the other `dispatch` and the purse (`transfer`, `requisition`). Each `tell`s the centre separately. Content rows in proposal D's shape; no key | two reports of one place that disagree; a governor who must court his colleague to act; the centre choosing whom to believe |
+| 2 | **Near split, far combined** | `CGR:102` | a content convention, not a rule: a seat row at a place one hop from its conferrer is one of a pair; a seat far off (the colonial lane's `remove`) holds both remits. The combined seat is the stronger and the more dangerous | the over-mighty officer arises where the centre could not afford to split him |
+| 3 | **The submission pact** | `CGR:94`; `PMP:508-511`; `GPC:195-199`; compendium `tier3:147` | the subject commune's head seat holds a `capitulation` or `charter` (the kit's forms) whose `forbears` name the rector's `revoke` and `confer` over the commune's own seats and his `requisition` above an agreed amount. A breach is a claim in the commune's ledgers (the colonial lane's `kept`) | the rector who levies past the pact; the commune that opens its gates to a rival because of it (`CPS:314`) |
+| 4 | **Appointer liability, and the inspection as theatre** | `CGR:109`, `:207`; `PMP:119`, `:465-469` | the `audit` row's Record (admonition or condemnation) **recites the seat that conferred the audited seat**; persons who hold it judge the appointer by it (`deeds_judged`), no rule. The open floor on the governed ground is witnessed by the cohort; the reading is the cohort's regard for the centre's seat before and after | the centre that stops sending its friends; the syndic sent to be seen |
+| 5 | **The standing report** | `PMP:150-152`, `:459-463`; `CGR:100` | at exit the outgoing holder's `survey` Record of the place is `give`n to his conferrer's rung, where it sits with its predecessors: a held, stealable, forgeable, fading document. A favourable term for the next holder's first acts there (as `evidence`); a proof in his own audit | an archive worth stealing; a successor misled by a predecessor's flattering report |
+| 6 | **The capped second order** | `PHS:362`, `:341-343`; `CGR:96` | a second roll (`members_by_warrant`) whose members are `eligible_from` for secretary seats **without a `term`** and for no council seat. The secretary holds the body's Records (he is the archive's keeper) and drafts: the college's menu of opinions (§1.4) is `issue`d through his seat | the man who has sat in every council for thirty years and can never preside; the rotating noble who signs what he is handed |
+| 7 | **The channel split** | `PMP:154`, `:471-475` | an envoy's or rector's `tell` may go to the secret bench's seat and not to the body that sent him. No mechanism: `tell` has an addressee. The story is which addressee he chose | the Senate learning that the Ten knew |
+| 8 | **The contract in phases** | `CGR:110`, `:208`; `tier3:103`; `HCC:67` | a form `condotta` in `instruments.yaml` (`made_by: covenant`): the captain's `oblige` to the employer's seat; `due` by the employer, `upkeep` each season; a second stage at half `upkeep` (the reserve), in which the `obligation` term toward the employer counts half (this file's `obligation_arrears` already says so) and **a rival's offer is no breach**; `forbears` by the captain for a term after lapse: `march` against the late employer. Arrears are the employer's missed `due`, which the captain reads as a breach | the captain bought in the reserve season; the unpaid company that takes its wages from the town it is lodged in |
+| 9 | **The works that must be paid whether used or not** | `CGR:91`, `:198` | the Arsenal as proposal D has it (a works site with a sworn establishment), with the `upkeep` of its establishment set above the default: a standing charge on the chest. Content only | the yard that eats the treasury in peace; the Doge who asks its men a favour |
+| 10 | **The pledge** | `HCC:161`; `CGR:190`; `tier3:95` | at the making of a `debt` the debtor `give`s the creditor a bearer instrument he holds (a `staple`, a `farm`, a `warrant`); the creditor hands it back at discharge. No clause, no lien, no creditor verb (D-5 holds): possession is the security, and a creditor who keeps a pledge after payment has breached | the house that ends up holding the mines; the prince who cannot pay and cannot get his toll back |
+| 11 | **The merchants' own court** | `CGR:117`; `GM:201-202` | `debt_suit` is given a second row whose bench is the guild's seats; a suit may be opened before either, and the two benches' `regard` and `obligation` terms differ. Forum is the suitor's choice | the debtor who is safe in the commune's court and ruined in the guild's |
+| 12 | **A guild's rule needs an outside assent** | `CGR:97`, `:129`, `:223` | the guild's arrangement row carries `interposed: [office]` naming one commune magistrate (the key exists, §4.1); a statute `issue`d by the guild binds outsiders only after that seat's act | the magistrate bought; the entry rule that hardens an exclusion into the town's law |
+| 13 | **The body of the excluded** | `CGR:98`; `PGS:81` | a `community`-rung brotherhood with an elected head, a chest and an establishment, whose roll is by warrant and whose head seat is `eligible_from` its own roll only. No tie to the council | the rich citizen's rise where the council's roll is closed to him; a rival establishment in the same town |
+
+**Not taken, with the reason:** a wealth-threshold rank ladder (Patrician IV): rank is by warrant and
+ballot (§5.3). A stored tag on a purchased house (`RTP:504`): Layer 1 refuses a stored social quantity; a
+purchaser's reception is each person's judgment of his deeds. Scope decay on the secret bench
+(`CPS:318`): a row's matter is already what its threshold ballot takes up (§6.2), and a count of
+"uncited security cases" would be a second owner of that. The lot for early entry (`PHS:346`): one more
+use of `lot`, with no story the roll's own ballot lacks.
+
+### 17.3 What stays memory-grade in this file
+
+Rows V-3, V-5 to V-9, V-14 (the revolt only), V-15, V-18 to V-20, V-22 (for Venice), V-27, V-28, V-31
+to V-35, V-38 (the muster), V-41, V-43, V-44, V-47, V-48 of the map, and the parts of V-4, V-10, V-21,
+V-29, V-30, V-42, V-46 its table names. In one sentence: the *commenda* and the sea loan, the merchant
+galleys, the Monte, the bill of exchange and the bank's legal form, the *catasto* and dowry fund, the
+Hanse's constitution, and a list of particulars (family bars, fines, sizes, the muster). The design takes
+no number from any of them. §5.2's choice of the fixed-amount debt over the profit-sharing contract was
+made on the engine's shape, not on the history, and stands with its source still unopened.
+
+### 17.4 What this does to the plan
+
+Nothing in batches A to D is withdrawn. A fifth batch, **E**, carries §17.2 (content for items 1 to 7,
+9, 12 and 13; one form row for item 8; one arrangement row for item 11; item 10 is composed and needs
+only a gate). It depends on D, on the colonial lane's `instruments.yaml` (C-1) for items 3, 8 and 10,
+and on its `audit` row (C-3) for item 4. The first playable scenario gains one choice and one ending
+from items 10 and 8: the head of the house may take a pledge with a loan, and may hire a captain in his
+reserve season.

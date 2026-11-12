@@ -35,14 +35,15 @@ violence with a cause and a mercy 6; the world that strains and ends 6; bodies a
 that draws 5 (§3, counted from §2 by `p2_count.py`). **Sixty-seven of the 73 have every absent link
 carried by a proposal already on file**; the chains in §5 cite it link by link.
 
-**Six stories had a link no proposal carried**, and they reduce to three mechanisms, written here as
+**Six stories had a link no proposal carried** (and two more, the regency and the made name, gain a
+variant), and they reduce to three mechanisms, written here as
 proposals: what a roll leaves behind (the disaster, the success that costs, the contest with a loser, the
 comeback remembered: `23_STORY_A`); a house that continues (a marriage, a birth, a coming of age, and so
 a minority and its regency: `23_STORY_B`); a founded place that can fail (`23_STORY_C`). Two more
 proposals carry what the plan itself needs: a **story census** on the one story instrument, which names a
 story by its beats in the cause graph and prints its rate, its spread of endings and its control
 (`23_STORY_D`), and a **first playable**, *The Lean Year*, a valley of three towns, one granary, one old
-lord, two claimants and one bench, which can produce 31 of the 73 in eight seasons from persons' acts
+lord, two claimants and one bench, which can produce 33 of the 73 in eight seasons from persons' acts
 (`23_STORY_E`).
 
 **The single largest obstacle is not a missing mechanism; it is that no gate in the suite is a story.**
@@ -58,7 +59,7 @@ ending, and does not occur with its mechanism at control.
 story list implied one (a counter that ends an arc; a town that dies when its number reaches zero; a
 disaster "at" a threshold), the link is restated as a draw whose odds are set by persons, seats, places,
 evidence and history, or as bookkeeping that follows a draw (§8 R-01 to R-04). **One item is Jordan's
-from this lane** (whether named persons are born in play, §8 J-1); eleven items other lanes already
+from this lane** (whether named persons are born in play, §8 J-1); twelve items other lanes already
 escalated bear on the plan and each has a default under which no batch waits (§8.3).
 
 The steelman holds and is the plan's premise: the kernel is honest (one clock, one gate, causes on every
@@ -326,7 +327,7 @@ scaled by `DEGREE_STEP`. No band is added and `degree_from_net` is not touched (
 "disaster" is a word the chronicle reads off the kept margin. (2) A row may declare `stake:`, what the
 actor puts down, from a closed set; Partial pays one step of it while still achieving, which is the
 success that costs, and Failure pays `SHORTFALL_STEP` steps. (3) A contested row's outcome kinds name the counterparty as their patient, so a
-witness holds "X bested Y" and Y's regard for X moves by M5. (4) A person's own failed attempt is read
+witness holds "X bested Y" and Y's regard for X moves by M5. (4) A person's failed attempts are read
 from the act store by `person_q.attempts_before`, never deposited (the `undeposited_kinds` decision
 stands), and weighs in `admission_weight`.
 
