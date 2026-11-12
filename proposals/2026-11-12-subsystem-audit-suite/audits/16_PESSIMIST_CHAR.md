@@ -348,7 +348,8 @@ falsifier run and its control; requirement touched; minimal fix at the owner.
   1, the same 6 in season two and a seventh in season three; each of the six ends on the same vector at
   both seeds. `x1_extremes.py`: 31 of 46 cast fold to the rival of their highest-held creed (every
   Einhir adherent at 5 becomes Solmund-orthodox at 5 and the reverse). `person_q.py:932-938` records
-  why. `resolve.py:706-708`: nothing emitted; `conviction.moved` is 0 in every log. Trigger: `forge`
+  why. `resolve.py:706-708`: nothing emitted; `conviction.moved` is 0 in every arm's log, the `tau0`
+  arm included, where six convictions were rewritten inside the two seasons. Trigger: `forge`
   117, `evade / defy` 8, `thread_read` 4 of 2,390 resolved acts at seed 1. Effect on choice: 2 to 5%
   (`c1_two_men.py` (a)).
 - **Falsifier and control.** Were it an outcome of play, the set of converts would differ between
@@ -514,6 +515,22 @@ content against the pursuits' names (-01); the crisis's direction (-03); the ref
 
 N-lines that held under the cut: the pursuit term (for the realm's mix), the stance term (as
 restraint), clause 4 (as foresight), the draw (as variety).
+
+## 5A. The premises that failed, and the stories that can and cannot happen
+
+**Premises** (§1.3): none of the six holds as worded. P1a, P2 and P4 are narrowed (a want is a
+standing question; character is the pursuit vector and not the conviction; error is a stale count);
+P1b fails in the moral sense and holds in the factual one; P3 and P5 fail; P6 is unreached.
+
+**Stories a person can have in computed play today** (§3.1): a silent, pre-set conversion; a move of
+house; a hungry population tended; a rare death in a capture that nobody answers; a slow drift in
+regard toward whoever he has watched act. **Stories that cannot happen**: being persuaded (0 of 19
+arguments succeeded); being changed by one's own judgement; learning a skill; gaining or losing a
+seat; achieving or abandoning an ambition; being tempted and giving way; forming a tie; ageing;
+being deceived to any effect; refusing on principle; avenging a wrong (the patient is not read).
+**With this lane's three proposals and the ones they amend**: holding or losing a faith by fortune,
+with witnesses; refusing what one holds wrong and being seen to pay for it; giving way; and characters
+whose sheets say what they will do. The rest wait on other lanes' closers (seats, skills, ties, deceit).
 
 ## 6. Resolutions decided, and what is left for Jordan
 

@@ -398,3 +398,39 @@ Lane `tests1`: 70 files under `engine/season/tests/` (test files and three helpe
   - Shipped season fights almost no field (unopposed 3/2, lost 1), so "THE FIELD IS HAND-BUILT" again (:5-8).
 - **Conflicts / stale:** `field_walls_dr` shipped as `None` (walls are flat WALLS rows regardless of condition) - the graded walls are not live in the shipped game.
 - **Open items:** none.
+
+### engine/season/tests/test_cp_t04_06_besiege.py
+- **What it is:** behaviour test, CP-T04-06 (B10-12; AM-C-11 REPAIR): `besiege`, a march that sits before the walls: `march` gains a `posture` payload key (`rosters.yaml: march_postures`, shipped `[storm]`); an opposed `besiege` fights no field, is graded `Invested` (`siege.pressed`), and `_eff_march` lowers each garrison Site in the target's subtree by `_fall(w, site)` directly through the gate.
+- **Status:** none; live but UNSHIPPED: the shipped roster is `[storm]`, so `besiege` is a posture no shipped season declares; it is swept in by a test copy (`swept` fixture) (:7-9, :93-98).
+- **Bears on:** MB (siege), SE (garrison condition), FA (war), WR.
+- **Content that matters:**
+  - Falsifier: after k besieging acts the garrison condition reads the `_fall` iterate (test holds its own integer copy: `c - c*1//n`, with `n` fixed at 3 by crowding two bystanders to the garrison's rung): `[667, 445, 297]` from `condition_scale` 1000 (:101-111); the besieger makes no journey (`travel_leg == []`, body 1000). Second half: a storm after a siege wins more often over 100 paired seeds than a storm at full walls (>= 7-point NOISE; measured 0.37 vs 0.52) (:161-167). The n=100 choice is justified in the docstring by the measured gap versus the standard error (:19-22).
+  - Write is DIRECT, never staged via `World.stage` (a monkeypatched `stage` that raises); at the realm's garrison `n=1` so one act zeroes the walls ("the entry's stated limit") (:114-119). A second besiege on dead walls: `march.refused` (nothing left to lose) (:122-127).
+  - Controls: a storm with the posture named equals the storm with none, hash-equal; an unopposed `besiege` resolves as the storm would; shipped roster refuses `besiege` (`Unspecified`); `operand_bags` fans no posture with `[storm]` and fans two with `[storm, besiege]` (distinct act ids) (:170-202). Planted failures: posture key repointed so the condition never moves; the same predicate reddens (:130-158).
+  - "`restore` is never attempted in a natural run" (:11-12): walls are worn only by acts built in the test; the field is hand-built.
+- **Conflicts / stale:** the `Invested` band and siege wear are drawless: `_fall` is an integer formula applied to garrison Sites (deterministic wear; the draw is in the later storm). The siege is not a thing an NPC does in the shipped game (roster `[storm]`).
+- **Open items:** none.
+
+### engine/season/tests/test_cp_t04_07_surrender.py
+- **What it is:** behaviour test, CP-T04-07 (B10-12; AM-C-12 REPAIR): `surrender`: a seat granting `dispatch` whose faction holds a settlement a `siege.pressed` named THIS SEASON gives the place to the person who pressed the siege (`_eff_surrender` through `_take_hold`, `state/gate.py::may_cede`, new `cession` write basis).
+- **Status:** none; live but WITHHELD: `"surrender" in w.fixtures.get("withheld_verbs")` (marshal's precedent) so no Candidate forms in the shipped game (:286-298).
+- **Bears on:** FA (war, cession, seats), MB (siege outcomes), SC (terms), CORE (gate bases).
+- **Content that matters:**
+  - Falsifier: a surrendered and a stormed town (same pair, 20 paired `world_seed`s) both end with the hold moved to the Crown, but only the stormed one writes body and stance rows; "the surrendered arm is a draw-free write, so it must hold in 20 of 20" (:19-27, :107-133). The stormed arm's hold move is `seize`, not the field (a won field moves presence, never title, #453 R-6). So a surrender is a DETERMINISTIC yield by seat-holder act, with no draw and no resolution roll (brief's no-deterministic rule: FA/SC lane check).
+  - Refusals: wrong-faction seat -> `surrender.refused` and no hold moves; no `dispatch` or no purview -> `surrender.unauthorized`; no siege this season (stale, or siege of another town) -> refused; a place cannot be yielded to one's own side (:173-214). Gate `cession` basis tests (:219-239) and `may_cede` (:242-248); three planted failures (threat reader blank; `may_cede` always true -> `NotYours` at the gate; gate clause removed) (:253-281).
+  - A seeded town is held through its territory (no direct `hold` on the town); surrender opens a direct `hold` to the receiver and closes the yielder's direct hold if any, in one write (:136-168).
+  - Hard-coded realm ids: `p_npc_020` King, `p_npc_038`/`013`/`034`/`040` Church cardinals/rep, `off_cardinal_*`, `p_npc_033`, `set_s_036`, `set_s_037`.
+- **Conflicts / stale:** `surrender` withheld = the strategic result "a place yields on terms" never occurs in a natural season; "A natural run emits no `siege.pressed`" (:14-15).
+- **Open items:** the CP-T04-04 `march` handover is "held" (unbuilt), noted at :148-149.
+
+### engine/season/tests/test_cp_t04_08_field_estimate.py
+- **What it is:** statistical + behaviour test, CP-T04-08 (B10-12): `field_estimate`, the field prize's input to the one odds reader: `seam/wrappers/mass_battle.py::field_estimate` runs `resolve_field` `estimate_samples` times on the private stream `(world_seed, tick, actor, "estimate")` (shared `_estimate.py` with `combat.fight_estimate`) and returns shares of `Won`, `Lost`, `Unopposed`; `sigma.odds_of` mode (a) returns them for a row contesting `a field`, found through the ESTIMATE provider role.
+- **Status:** none; live (a display; no loop calls it).
+- **Bears on:** MB (auto-resolve vs played: the estimate and the resolve share one module), GO (display), CHAR, DICE.
+- **Content that matters:**
+  - Falsifier 1: over held-out seeds the realised `Won` share (200 scenes per pair by the PROVIDER) lies in the 95% Wilson interval of the 50-sample estimate in at least 19 of 20 pairs (weights 3..16 x open/WALLS x {no order, Shock}); a `MAX_HALF_WIDTH` ceiling guards a later change to `SHOWN`; `len({shown}) >= 8` guards against too few distinct figures (:133-137, :111-128). THE TICK IS THE ONE CHOSEN PARAMETER and "was chosen on the figure": tick 9 is "the first that covers all 20"; ticks 5..24 cover 15-20 of 20 pairs, 375/400 (94%), tick 5 landed on 18 (:56-65). So the bar passes at a tick picked to pass it; the docstring says a miss at one tick is one draw of the 94%.
+  - Planted failures: sides swapped -> coverage < 19; estimate that drops the standing order -> order predicate reddens; an estimate that draws from the season -> falsifier 2 reddens (:140-196, :331-340).
+  - Falsifier 2: a one-season `build_realm(0)` run whose callback calls `field_estimate` before every act ends at the same `content_hash` and the same `w.draw` as the same run without (`calls >= 100`, `sampled >= 1`) (:324-328). The rng is keyed on exactly `(world_seed, tick, actor, "estimate")`; replayed stream equals the figure exactly (:214-229).
+  - A given `FieldOrder` replaces the attacker's held order, the defender's order stays (:163-196). Own-faction target -> `Unopposed` with samples 0; party gaps -> `PARTY-GAP`; bad `estimate_samples` -> `Forbidden` (:232-253). `odds_of` mode (b) (a believer's figure) is not built for a field (`AQ-X1`) (:260-273); `registry.check_estimate_providers()` refuses an unknown provider name and so does driver construction (:275-283).
+- **Conflicts / stale:** the estimator and the resolver are asserted consistent only at the display, not at the chooser's believed odds (None for fights and fields): an NPC cannot weigh a battle by believed odds. [ties to cp_t03_05]
+- **Open items:** AQ-X1 (mode (b) for fields).

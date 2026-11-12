@@ -959,3 +959,71 @@ HEADS-ONLY lane (350 files, proposals dated before 2026-09-20). Method per file:
 ### proposals/2026-09-04-degree-sweep/wd_subj.py
 - one line: sensitivity check that the decision fingerprint is wide enough (`arm9_forking.recorder` records verbs only).
 
+### proposals/2026-09-05-proceedings-subsystem/README.md
+- **What it is:** index of the proceedings subsystem design (negotiations, trials, tribunals, debates, hearings as "games" hosted by one game structure), 2026-09-05..09-07; 22 numbered docs + atoms/ + relay/ + source/ + stress/.
+- **Status:** "RATIFIED AS INTENT (v9) - ownership ED-SC-0033; PHASE 2-4 = SC-01/SC-02; 00-20 reference, superseded in part by 21. Nothing exists in `engine/season/` until SC-01 is built with its tests. (ED-SC-0039)". **Flag: Status RATIFIED (as intent) and CURRENT.md's Social contest row names this directory as the successor, SC-01 built, residue in workplan `_part4` (SC-02).** Reading: LIVE as intent; the one file family in this lane that still binds the SC build.
+- **Bears on:** SC, FA, CHAR, CORE, DICE.
+- **Content that matters:**
+  - One sentence: a proceeding is an occasion at which persons address persons who may dispose of a matter; games differ in the relation between three sets (parties, bench, floor), one declared key (who may dispose), and what stands between them :9-13.
+  - Framing ruled by Jordan 2026-09-05: the subsystem is a game structure hosting parameters, logic, roles, venues; negotiation, parliamentary debate, tribunal are "just defined parameters" :15-18.
+  - Cost count: zero new carriers, zero new edge kinds, zero new verb names; one contested new field = `Tenure.degree` (already carried with a writer and no reader); `speak` and `determine` gain a body, `convene` corrected, `release` landed, the six investigation acts split into five rows; three Queries (`judging_set` already registered `H-32`, on the critical path `W26`) :25-37.
+- **Conflicts / stale:** README says "Nothing here runs ... No CURRENT.md row moves" while CURRENT.md now has a row naming it; `engine/season/{arrangements.yaml,verb_table.yaml,rosters.yaml,data/rosters.py,state/gate.py}` cite it.
+- **Open items:** SC-02 and SC-04 residue per CURRENT.md.
+### proposals/2026-09-05-proceedings-subsystem/00_DERIVATION.md
+- one line: what a proceeding is, derived with the tree closed from six axioms and the study; one of two independent derivations; 18 headings. Status PROPOSED. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/01_THE_STUDY.md
+- one line: the REQUIREMENT SOURCE (not the design): the pincer :35, the fifteen steps requirement table :61. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/02_THE_SOCKET.md
+- one line: what the season loop exposes, measured at commit `1b1e382` (2026-09-05); the loop in the order it runs :24. Dated; re-measure. Tags SC, CORE.
+### proposals/2026-09-05-proceedings-subsystem/03_PARAMETERS.md
+- one line: every figure of the study mapped to what the game structure hosts; Jordan quote on game structure; latitude is DERIVED from what is interpreted :59, capacity map becomes almost nothing :84, genre derived from the bench's relation :110; header says fifteen not thirteen (deviation 1 in 21). Tags SC, DICE.
+### proposals/2026-09-05-proceedings-subsystem/04_VERBS.md
+- one line: Status RATIFIED AS INTENT (v9) (same line as README). Headline: zero new verbs; nineteen verbs reach into a proceeding, fourteen untouched; `speak` (writes [] , grade assumption) given a body and meaning :44; `determine` given its `requires` (blocked on `Query.judging_set`, grade absent); the six investigation acts split into five rows; `convene` `scale: settlement` corrected to an ordinal floor (Jordan 2026-09-05); `release` does not exist in the table and is landed; "one verb, many speech kinds" :222; aptness rather than weights :286; `elicit` nearly invented, duplicates `interview` (§B.3). Cited: `engine/season/verb_table.yaml`. Tags SC, CORE.
+### proposals/2026-09-05-proceedings-subsystem/05_PROCEDURE.md
+- one line: what is ordered, what is a map, what is neither; criterion §G.2.9 "a procedure is required wherever the ..."; what ends it :58. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/06_RESOLUTION.md
+- one line: person, pool, margin, where a title enters; Jordan's two directions; what the pool may NOT be :53; "the arrangement does no [rolling]" :62; what this buys :92. Tags SC, DICE.
+### proposals/2026-09-05-proceedings-subsystem/07_THE_GAME.md
+- one line: what a player does, how twelve games play differently; Jordan question on game structure; season-scale triage :36, inside the proceeding one turn :62, whether to be there :80. Tags SC, GO.
+### proposals/2026-09-05-proceedings-subsystem/08_SEAM.md
+- one line: contract signature (Part A), manifest row, two extensions; caller's ordering is a parameter :83, the margin must be produced :101, `write_matrix.yaml` rows :116. Tags SC, CORE.
+### proposals/2026-09-05-proceedings-subsystem/09_IMPOSSIBILITIES.md
+- one line: what is impossible by construction, grades honest: STRUCTURAL means the defect has no spelling. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/10_LOOPS_AND_GAPS.md
+- one line: `ID-16` loops signed; three blocking the build :46; inherited schema gaps :54; parameters least sure of :64. Tags SC, CORE.
+### proposals/2026-09-05-proceedings-subsystem/11_NERS.md
+- one line: self-authored NERS pass [bias risk flagged]. Tags SC, PROCESS.
+### proposals/2026-09-05-proceedings-subsystem/12_BUILD_ORDER.md
+- one line: build order and the execution artifact closing each step; what is buildable today :32. Superseded by 19/21. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/13_ADVERSARIAL.md
+- one line: two independent passes; the file was cited at five sites before it existed; fatal :37, major :47, coverage :57. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/14_THE_WORLD_IN_THE_ROOM.md
+- one line: what a matter is, how the world gets in, what a person brings; answers a Jordan question exposing that "the matter is a Proposition" was too thin. Tags SC, FI.
+### proposals/2026-09-05-proceedings-subsystem/15_WHY_IT_IS_A_GAME.md
+- one line: why it is a game not a flowchart (Jordan 2026-09-06): optimum stops being computable :72, elicitation becomes an information economy :78, the bench stops being a difficulty number :95. Bears on the "WE DO NOT DO DETERMINISTIC" standing rule. Tags SC, DICE.
+### proposals/2026-09-05-proceedings-subsystem/16_THE_FLATTENING.md
+- one line: 591 atoms of the 27 figures (evidence `atoms/FIGURE_ATOMS.md`, produced by a pass forbidden to read proposals/). Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/17_PLAYABILITY.md
+- one line: agonist-antagonist relay adjudicated; Thesis A "WOUNDED" (the warrant fails) :99; 31 headings; evidence in `relay/A-F,H`. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/18_FINDINGS.md
+- one line: gameplay audit, figure adjudication, what three independent passes agree on; the five inversions :147. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/19_PLAN.md
+- one line: Fable read-only plan (`relay/H_FABLE_PLAN.md`) written up; "this subsystem obviously owns all social ..." A.1 :24; 44 headings. Superseded in part by 21. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/20_STRESS_TESTS.md
+- one line: "CLOSED RECORD, NOT A WORK QUEUE. Read 21 first": 38 attempts to run a proceeding against the tracer `shape.py`, with `stress/stress_proceedings.py`; 61 headings. Not deleted (21 Deviation 2). Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/21_RECONCILIATION.md
+- one line: Status RATIFIED AS INTENT (v9). Fable 5.1 review of 20 ruled against meta-architecture and `references/design_rulings_2026-09-06.md` (R1-R8): `C-7` quorum ruling does NOT survive (`rosters.yaml` form `cardinality` takes [subject, from, to], not `amount`) :45; `F-32`, `F-34` withdrawn :81-103; C-1 verdict Tenure :158, C-2 ladder rung :194, C-3 fan-out off `total` :221, C-4 deposit content :246, C-5 clerk no verb :264, C-6 disposal reach :285, C-7 quorum :307, C-8 seam signature :327, C-9 investigation bands :345, C-10 `Tenure.term` vs `Record.ttl` :362, C-11 `convene` ordinal :379, C-12 bench-less games' term and cap :387; PHASE 0 EXECUTED 2026-09-07 :411; **`M-7` run: the deprivation floor FAILS - at the 1D pool floor p_success is 0.2266 at Ob 1, 0.0228 at Ob 2, 0.0006 at Ob 3, 0.0 at Ob 4+** :442. A DICE/SC finding that bears on the "sub-1D floor" concern. Tags SC, DICE, CORE.
+### proposals/2026-09-05-proceedings-subsystem/atoms/FIGURE_ATOMS.md
+- one line: 591-row atom table of 27 figures by kind; recurrence :61. Data, reference. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/relay/A_FABLE_INTERROGATION.md
+- one line: relay stage A, Fable read-only interrogation; binaries :105, respondent finding :130, tabletop/RPG precedent :158. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/relay/B_AGONIST_CONVERSIONS.md
+- one line: Opus agonist, two theses and positions 1..: aptness :68, finding strength :139, Partial band costs :213. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/relay/C_ANTAGONIST_LANE_A.md
+- one line: structurally read-only antagonist on positions 1-3 (items 2-4). Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/relay/D_ANTAGONIST_LANE_B.md
+- one line: antagonist on positions 8-11 (proof aptness, silence priced by the room :45, licence veto four terms :60, closed floor defers price :85). Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/relay/E_FABLE_OPPORTUNITY_AUDIT.md
+- one line: opportunity audit O-1 room remembers who spoke :40, O-2 obstacle reads hearers' ledger :48, O-3 unmet-want term in `score` :56, O-4 naming the fear :64 (24 headings). Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/relay/F_FABLE_FIGURE_BANDS.md
+- one line: Fable figure adjudication, Figure 1 three layers (28 atoms) :39, Figure 2 :57, Figure 3 standing/provenance/erosion :75 ... 33 headings. Tags SC.

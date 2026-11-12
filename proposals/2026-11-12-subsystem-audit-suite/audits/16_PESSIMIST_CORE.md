@@ -75,18 +75,21 @@ person, one to three interactions, the question it is about. `place` is *"delibe
    somebody else or nobody (`p_npc_013` is told a thing while he `reconstruct`s). Nothing bounds how
    many persons' scenes one person is the other half of. This is the S test *pauses correctly* failing
    at the smallest scale: the loop has no notion of two people being occupied with each other.
-4. **Nobody carries a plan.** The driver keeps a per-person queue so that a five-scene plan is spent
-   over five rounds and re-made only *"when the inputs change"* (`deliberate.py:199-263`). In three
-   seasons no scene was ever released from a queue made in an earlier round: the fingerprint differed
-   at every one of 1,172 calls, and 98% of the re-plans released a different scene from the one queued.
-   The chooser composes up to five scenes per call and four are thrown away, five times a season. What
-   the notes call triage (*"the PERSON chooses what to leave undone"*, the law text at
-   `deliberate.py:237`) is in effect one greedy pick per round. See F-PES-CORE-06 and the false N-line
-   in §2.
-5. **The record cannot say which scene.** *"NO EVENT CARRIES A ROUND"* (`driver.py:557`); the round is
-   a driver local and my figures above exist only because the probe wrapped the steps. A reader of the
-   log (a chronicle, a player's "what happened this season") cannot tell a ticked season from a flat
-   one, and cannot tell which acts shared a round. The notes defend this as the dead-carrier rule
+4. **Nobody carries a plan from one round to the next.** The driver keeps a per-person queue so that a
+   five-scene plan is spent over five rounds and re-made only *"when the inputs change"*
+   (`deliberate.py:199-263`). In three seasons no scene was ever released from a queue made in an
+   earlier round: the fingerprint differed at every one of 1,172 calls, and 98% of the re-plans
+   released a different scene from the one queued. The chooser composes a plan per call and all but
+   its head is thrown away, five times a season. **The control cuts the other way and is reported:**
+   telling the chooser it can afford one scene only (`qcut.py 0 2`) moves the run (812 and 799 acts
+   against 821 and 882; different hashes), so the *budget shown* shapes the scene chosen and only the
+   *stored tail* is dead. What the notes call triage (*"the PERSON chooses what to leave undone"*,
+   `deliberate.py:237`) is one pick per round made with the whole budget in view. F-PES-CORE-07.
+5. **The record does not say which scene.** *"NO EVENT CARRIES A ROUND"* (`driver.py:557`); the round
+   is a driver local, `Claim.round` is its one carrier, and `Scene` objects live in a driver dict
+   (`d.scenes`), not in the World. The figures above exist because the probe wrapped the steps. A
+   reader of the log can group acts into scenes by `Act.scene` and can infer round boundaries only
+   from where the blocks of `claim.deposited` fall. The notes defend this as the dead-carrier rule
    (nothing reads it); the premise sentence is the reader.
 
 **Verdict on the sentence.** Would a player who knows strategy and RPG games be surprised? Yes, on three
@@ -241,7 +244,8 @@ are read off the three-season dump.
 
 | structure | the cut | what died | verdict |
 |---|---|---|---|
-| **the per-person scene queue** (`_queued`, `_inputs_fingerprint`, the re-plan rule; `deliberate.py:199-308`) | choose one scene per round | nothing: **0 of 1,137** released scenes came from a queue an earlier round made | **FALSE N-LINE.** The N-line is the law text *"the PERSON chooses what to leave undone"*; in computed play the round count does the leaving |
+| **the stored tail of a plan** (`_queued`, `_inputs`, `_inputs_fingerprint`, the reuse branch; `deliberate.py:199-308`) | re-plan every round, keep nothing | nothing: **0 of 1,137** released scenes came from a queue an earlier round made (read off the run; reuse never fired, so the cut is the run) | **FALSE N-LINE.** The N-line is *"re-made only when the inputs change"*; the inputs always change |
+| the plan itself (the budget the chooser is shown) | show the chooser one scene's budget (`qcut.py`) | **not free**: 812/799 acts against 821/882, hashes differ | N holds. Reported because the row above would otherwise be read as wider than it is |
 | **the five strata** (`resolve._canonical_order`, `rosters.yaml: strata`) | hash order only (`stratum_of → 0`) | of 821 acts: **0** executed/refused flips, 0 differences in emitted kinds or degree in round 0; 820 of 821 act ids in common over the season; two persons' scar counts; one log entry | **FALSE N-LINE in computed play.** What the strata would decide (movement before a social act that needs presence) needs two acts in one round that touch one thing; see the next row for how often that is |
 | **fold order at all** | reverse the hash order inside each stratum | round 0: **1 of 175** acts flips (`speak`, executed → refused); season: 6 status flips among 774 common acts | **nearly free.** S27.1's *"each act sees the world its predecessors left"* decides under 1% of acts. This is the frequency `18_DETERMINISM_rival_acts_in_one_fold.md` left unmeasured: its draw would touch about one act in 175 |
 | **the retry licence** (`driver.py:508-518`: a refused act stays retryable *"because a later round's world may have made its precondition true"*) | filter refused opportunities for the season as realised ones are | 4 of 309 retries succeed (research excluded); 305 scenes are spent on a second refusal | **FALSE N-LINE, 99 parts in 100.** The possibility it protects is real and is 1.3% of its uses. Not the fix (a ban is a fixed outcome); see F-PES-CORE-01 |

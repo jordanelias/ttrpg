@@ -133,10 +133,11 @@ the candidate set is deciding, and the repair belongs to F-CHAR-01 and F-CHAR-08
 
 ## NERS reading (E last)
 
-- **N.** Cut the pursuit term (`d1_cuts.py`, arm `nopursuit`, audit §2): the realm keeps acting and, at
-  seed 0, more happens to persons, not less. A term that can be removed without loss is not yet doing
-  the work its fifteen names claim; the signatures are what would make the cut cost something a player
-  could name (*the loving stop giving*).
+- **N.** Cut the pursuit term (`d1_cuts.py`, arm `nopursuit`, audit §2): the realm's mix of acts moves
+  (total variation 0.37), a person's conduct moves 0.64 against 0.49 for merely re-rolling the dice, and
+  more happens to persons, not less (stance moved for 7 and body for 13, against 0 and 0 shipped). The
+  term is necessary to which verbs are taken and not yet to anything a player could name; the
+  signatures are what would make the cut cost something sayable (*the loving stop giving*).
 - **R.** Customisation is the stake: a designer who sets `love: 0.9` on a character must get a
   character who gives and tends. Today he gets a forger, and cannot find out why without reading two
   tables' product.

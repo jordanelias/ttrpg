@@ -40,9 +40,10 @@ All figures: `PYTHONHASHSEED=0`, `build_realm`, shipped chooser, no player.
 3. **Its trigger is not about faith.** The affiliation track is violated by three verbs for every creed
    alike (`destroy_record`, `evade / defy`, `forge`; `thread_read` for one creed more): `a0_words.py`. A
    believer converts because three forgeries or defiances happened where he could see them.
-4. **It is silent.** `loop/resolve.py:706-708`: *"Nothing is emitted"*. No Event kind in three seasons'
-   logs at either seed records a conviction changing, so no ledger holds it, nobody can tell of it, and
-   no later act can have it among its causes. The convert himself holds no claim that he converted.
+4. **It is silent.** `loop/resolve.py:706-708`: *"Nothing is emitted"*. Checked by run: in the cut
+   test's `tau0` arm six convictions were rewritten within two seasons and the log holds 0
+   `conviction.moved` Events (`d1_cuts.py`, `d1_read.py`). So no ledger holds it, nobody can tell of it,
+   and no later act can have it among its causes. The convert himself holds no claim that he converted.
 5. **It barely reaches a choice.** Replacing a person's whole `conviction` moves his score-top act in 6
    to 15 of 276 readings (`c1_two_men.py` (a)); redrawing the same person moves it in 61%.
 
@@ -125,9 +126,9 @@ with an inquisition case (ARC cases that turn on apostasy), not by loosening the
 
 ## NERS reading (E last)
 
-- **N.** Cut the crisis entirely (`d1_cuts.py` arm `noscar`, see the audit §2): what dies in computed
-  play today is 6 or 7 silent, pre-determined conversions with a 2 to 5% effect on choice. As built it is
-  close to a free cut. As proposed it is the one mechanism by which what a person lives through changes
+- **N.** Cut the scar and the crisis entirely (`d1_cuts.py` arm `noscar`, audit §2): at seed 0 not one
+  of 1,529 resolved acts differs in two seasons; from season three what dies is 6 or 7 silent,
+  pre-determined conversions with a 2 to 5% effect on choice. As built it is a free cut. As proposed it is the one mechanism by which what a person lives through changes
   what he is, and it holds from every direction: bottom-up (a scar count), top-down (a realm's
   confessional map can drift), lateral (a convert is an Event another person's regard and telling can
   read), and across scales (a cohort holds no creed today; when it does, the same roll serves it).
