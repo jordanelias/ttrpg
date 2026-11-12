@@ -278,10 +278,12 @@ and where each part comes from.
 | **in the room** (one sitting, at ENCOUNTER) | present a filed item, answer one, argue, impugn a source, concede the rung, rest; the bench rules or adjourns | the module's own state for the length of one call | a decider per attendee: the player's (`PlayHost`) or the host's NPC decider |
 | **after the room** | nothing new: the host writes the outcome to the case file and opens the disposal; WITNESS deposits what was said | Events, `Record.stages`, the disposal Tenure | — |
 
-The sitting is called by the act that closes the case file's current stage (the bearer's `speak` at
-a proof stage; the bench's `determine` at judgment), deferred to ENCOUNTER as `fight` is. With
-nothing filed and no effort it is today's single draw, bit for bit: that is the control arm and the
-reason there is one code path.
+The sitting is called by the bench's `determine`, deferred to ENCOUNTER as `fight` is; `speak` stays
+an undeferred single draw and is the filing act. With nothing filed and no effort the sitting is
+today's single draw, bit for bit: that is the control arm and the reason there is one code path.
+(P4 §3.5, a design and not a ruling, closes a proof stage by the draw of whoever bears it. Here the
+determiner always draws and `bears:` governs the silence fault. The difference is CR-62's to
+reconcile when it builds stages; it is named so it is not discovered.)
 
 ### B4.2 What the player chooses in the room
 

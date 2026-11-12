@@ -1,0 +1,19 @@
+# Digest researchB1
+
+## Status: REFERENCE (a coverage digest; resolves nothing at runtime)
+
+Lane: second research digest batch (by_lane evaluations, action catalogue, FA/SE historical precedent, tutorials T08-T12, two diagram scripts). All research is tier 3 (CLAUDE.md §0.05). Earlier digests DG_research1..4 and DG_research_rest1 already cover MB_mass_battle, the game_precedent_suite tables/dispositions and T01-T07, T13-T19; not repeated. "Precedent games" are named per entry.
+
+### research/by_lane/00_COMPARATIVE_ANALYSIS.md
+- **What it is:** cross-lane synthesis of the ten lane NERS evaluations, 2026-10-16, lane IN; read at HEAD `bd8105b` (code-equal `5445e34`); 683 lines, sections C0..C9.
+- **Status:** "FILED — reference, not canon … no recommendation here enters a plan or ledger until Jordan so rules" (:3); historical snapshot (pre-dates `.audit` and later proposals; v9 workplan state), unclear how much the tree has moved since.
+- **Bears on:** CORE, MB, SC, PC, SE, FA, CHAR, FI, WR, GO, DICE, PROCESS (all lanes). Precedent games: Total War auto-resolve (one resolver, several fidelities), Banished, Tropico, The Guild 2/3 (agent layer switched off; fabricated evidence), Proposal F "The Levy", via the *Twenty Games, One Frame* (20G) frame; Dwarf Fortress/RimWorld/Victoria/Frostpunk/Old World explicitly unexamined (:304).
+- **Content that matters:**
+  - C0 verdict (:26-29): the ten lanes see one absence: persons differ in wants but not in capacity, so every scale hand-off (fight, contest, inquiry, levy, field army, player view) is fed a default. Top interactions: troop chain (levy moves `Rung.stores`, not troops; IN-52 premise "levy moves stores, not troops" contradicts Jordan's statements, :33), per-person capacity empty on 429 of 430 persons (:34), acts carry no content (:35), no player surface/pause IN-46/IN-47 (:36), population only shrinks (:37).
+  - C2 root causes RC-1..RC-11 (:76-88): no capacity source; no troop stock; knowledge only by claim without deposit occasion; content-free acts; no surface/pause; no births; war/endings/top seat unproduced; offices not made/emptied by persons; one die ladder several roads (continuous Normal vs discrete dice); hash parity (`repr()`/floats/CPython `random.Random` vs Layer 1 integer-domain hash, L1-04:1119); inert-at-ship controls (18 knobs).
+  - C3 lists 26 dependencies D-1..D-26 and 19 collisions X-1..X-19 (:101-152), e.g. X-2 troop carrier three forms (rung stock coupled/uncoupled to population vs troops-as-people); X-3 felled actor vs `_eff_march` writes loser only (`loop/effects_combat.py:178-183`); X-12 petition closer vs Layer 1 row 14; X-14 capacity carrier decided toward 10 attributes by ED-IN-0185 Q7 (:214).
+  - C4 precedence rule (:187-195): Jordan statements > ratified Layer 1 > canon > v9 plan state > measured behaviour > proposals > research.
+  - C5.2 maps 20G's axes/asymmetries onto Valoria (:307-336): crossed epistemic asymmetries (belief with provenance, A9) but not demographic ones (conscription removing a cohort A3, lagged cohort, labour contested); 20G empty cells: labour contested, lagged allegiance, zone plus delegate.
+  - C6 consolidates 164 lane rows to 88 missing areas (:340-495); C7 lists 31 Jordan decisions J-C-1..31 (:517-556), C8 40 recommendations R-C-1..40 (:560-644); R-C-40 proposes `arms` sweep any knob over N seasons (:644).
+- **Conflicts / stale:** Explicitly flags `req:675` ("16/16" march) vs `req:1124` ("all 11 refused") unreconciled (:221). Written against v9 workplan (`p2..p8`); `Key`-based idioms in FA/IN lane evidence (FA "Key-idiom hooks", :56) postdate-retired Key substrate (ED-IN-0232) [UNVERIFIED which survive]. Counts (99/65/149/88/31/40) are snapshot values, not live.
+- **Open items:** C9 list: `march` realm record, audit's candidate-formation datum (G9 unrun), whether a cohort could ever `commit`, whether "own resource" means a non-person stock (J-C-2) (:681-683).

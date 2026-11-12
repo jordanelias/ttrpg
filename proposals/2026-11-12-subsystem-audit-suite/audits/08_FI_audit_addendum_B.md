@@ -246,9 +246,9 @@ Count: of 17 elements the code has none whole, 11 partly, 6 not at all. Every "p
 | Ace Attorney / Danganronpa | press a statement; present a held item against it; one correct pair | the primitive (two held items on one cell disagreeing) exists person-side (`options._pair`, `record`); no statement is on a record to press | the companion refuses the *puzzle* and keeps *inventory-as-argument*; §B4 follows that |
 | The Case of the Golden Idol | fill a typed sentence from collected nouns; the machine grades it | a conclusion as a typed Proposition is `08_FI_03` §3; nothing grades it, by ruling | understood; unbuilt |
 | Outer Wilds, Her Story | knowledge is the only persistent state and gates where one can go | true of an inquirer by construction (findings are claims; candidates form on what is held) | built |
-| Paradise Killer | the trial can be called at any time on whatever is held; the verdict follows the case made, not the truth | a petition can be filed on any held claim; the bench's roll reads none of it | the shape Valoria is one operand short of |
-| Blade Runner (1997) | the culprit set is randomised per run; clues are objects | a seeded realm is that; the culprit leaves one kind of trail | named only |
-| Frogwares' Sherlock Holmes | deduction board; a chosen conclusion and a moral choice, never corrected | as Golden Idol | unbuilt |
+| Paradise Killer | the trial can be called at any time on whatever is held; the verdict follows the case made, not the truth `[M: from memory; the tree's own lines on this game were not opened here]` | a petition can be filed on any held claim; the bench's roll reads none of it | the shape Valoria is one operand short of |
+| Blade Runner (1997) | the culprit set is randomised per run; clues are objects `[M; the first audit's reading]` | a seeded realm is that; the culprit leaves one kind of trail | named only |
+| Frogwares' Sherlock Holmes | deduction board; a chosen conclusion and a moral choice, never corrected `[M; the first audit's reading]` | as Golden Idol | unbuilt |
 | Heavy Rain | — | not named in the tree (C-7) | no claim |
 | Lacuna; The Guild 2 (named by the tree, not the brief) | submit a hypothesis that may be wrong and live with it; evidence with strength and expiry weighed before rhetoric | claims decay and carry provenance (has); no submission | the two the code is nearest to |
 
@@ -352,7 +352,14 @@ scene; the loop has the opposite, a free retry bounded only by budget); *spend a
 difficulty* (Inspiration; `effort` is the one advantage source and is the nearest); *wound penalties on
 physical inquiry* (DICE's advantage-channel proposal supplies the door).
 
-## B6. Resolutions added by this addendum
+## B6. Additional proposals, and the resolutions added by this addendum
+
+**Proposals written by this lane** (all `## Status: PROPOSED`; none edits a first-lane file):
+`08_FI_05_evidence-interface_B.md` (supersedes `08_FI_05_evidence-interface.md`);
+`08_FI_06_testimony-names-a-hand.md` (F-FI-11); `08_FI_07_shortest-playable-case.md` (§B3d, F-FI-12);
+`08_FI_08_knots-season-form.md` (C-1). Order across both lanes' FI proposals: CR-29 and `08_FI_02` (traffic),
+`08_FI_01`, `08_FI_07` Cut A, B10-14, `08_FI_06`, `08_FI_07` §2, `08_FI_03` §3, `08_FI_05_B` with SC-P3 and
+SC-P8, `08_FI_08` §3, then `08_FI_04` with R-39's amendment.
 
 Ladder step: 1 superseded · 2 irrelevant · 3 a design document or plan answers · 4 precedent · 5 what the
 architecture needs.
@@ -403,7 +410,7 @@ All `PYTHONHASHSEED=0`. Scripts and outputs: session scratchpad, `runs/FI_B/`. N
 | 4 | text search for each game the brief names over `research/`, `proposals/`, `.designs/`, `.audit/`, `engine/season/` | — | Heavy Rain: 2 files, both in this suite (the brief, the first audit); Unavowed: 0; Danganronpa: 11 files; the others as §B3c |
 | 5 | roster and kind probe (`python -c`, `data/rosters`, `data/verbs`) | — | `covert_kinds` `('record.forged',)`; `proofs` `('record', 'testimony', 'oath', 'confession')`; `graded_inquiries` `('research', 'examine', 'surveil')`; `said_slants` `('newest', 'valence')`; `KIND_VERB['confession.made'] == 'interrogate'` |
 | 6 | extraction of the 59 primary rows' `cite:` by id (`yaml.safe_load`, read-only) | — | 129,934 characters; H-22's `cite:` is empty |
-| 7 | `git status --short` at the end | — | this lane's changes are this file and its four proposal files (other lanes' files also show as modified or untracked) |
+| 7 | `git status --short` and `git diff --stat` at the end | — | no path outside `proposals/2026-11-12-subsystem-audit-suite/` is modified; the first lane's audit and its five proposals do not differ from HEAD; this lane wrote this file and four proposal files and ran no git write (some of them already show as tracked: something else commits the suite directory while lanes write) |
 
 A first run of script 3a failed on an import path in the scratch script (`actor_of` lives in
 `state/attribution.py`); the scratch file was corrected and re-run. No tracked file was written by any run.

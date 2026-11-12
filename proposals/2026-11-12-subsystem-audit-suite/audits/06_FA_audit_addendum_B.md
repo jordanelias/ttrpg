@@ -49,8 +49,8 @@ heading tables (`doc_index_gen.py`; `faction_layer_v30_index` was opened to conf
 content of their own) and were not read further.
 
 **Cross-cutting `.designs`, read in full:** `_architecture/reference/governance_consolidation_v1`,
-`governance_ripple_substrate_v1`, `governance_type_registry_v1`, `campaign_modes_v30`,
-`campaign_architecture_v30`; and, followed as referents because the campaign layer turns on them,
+`governance_ripple_substrate_v1`, `governance_type_registry_v1`, `campaign_modes_v30` and its
+`_infill`, `campaign_architecture_v30`; and, followed as referents because the campaign layer turns on them,
 `settlements/reference/march_layer_v30`, `scale_hierarchy_v1`, `valoria_political_hierarchy_v30`,
 `mass_battle/reference/military_layer_v30`, `mass_battle_integration_v30`.
 
@@ -426,6 +426,28 @@ reader, SE audit step 11). Tactic cards, unit experience and the Military-stat c
 MB's. A war-exhaustion or aggressive-expansion meter is refused as a stored track; if wanted it is a
 fold of the log on CR-89's pattern.
 
+### B4.4 The NPC and chooser surface of the campaign layer
+
+The CHAR lane owns the statement of chooser intent; this is only what the campaign code shows.
+
+- **Who decides.** To march: a person holding a seat with the muster act, through the shipped chooser.
+  To raise, form, order, discharge, post a standing order or yield a place: nobody but a player or a
+  harness. The six army verbs, `marshal` and `surrender` are withheld from every NPC's opening set
+  (C-2), and `army_presets` gives each unplayed faction one doctrine between seasons.
+- **One interface for player and NPC?** No, and this is the widest asymmetry in FA's reach. A player's
+  `military_menu.callback` returns hand-built army acts and "`auto`, the shipped policy, is ignored"
+  (`harness/military_menu.py:142-146`); an NPC in the same seat is offered none of them. The MB audit
+  records the same from its side (F-MB-16: "the non-player commander is a script, and the player is
+  shown what no NPC may see"). FA's part of the repair is that the acts be exercised through a seat
+  (F-FA-15), so that lifting the withholding offers them to exactly the persons who hold command.
+- **Hard-coded where the chooser should decide.** The preset doctrine (B3.4); the army's commander
+  (the Record's holder, never chosen); the target of a march (whatever rung the question names, with
+  no estimate: MB §16).
+- **What would make a commander characterful.** Whom he levies (his own ground or a sworn vassal's);
+  whether he answers a call to arms (CP-T09-07, -08); whether he keeps the roll when dismissed (the
+  residue named in `06_FA_levy_through_the_seat_B.md`); and the estimate he marches on, weighed by his
+  own regard for the enemy. None exists today.
+
 ## B5. Capability-authoring consequences
 
 The owner is not FA's and is not re-proposed: `rosters.yaml: verb_capability` and `vocation_attribute`
@@ -508,6 +530,22 @@ gives the caste system a strategic expression. Without a parliament it has no re
 leave it archived until something votes (the default taken here), or author it as a datum on territory
 rungs now so that `faction_q.weight` (R-29) weighs a member by where he sits. The games differ in
 whether caste is felt above the personal scale. Not decided here; it is content with a canon reach.
+
+### B6.3 Proposal files written by this addendum
+
+All PROPOSED; none edits a first-lane file. Paths under
+`proposals/2026-11-12-subsystem-audit-suite/proposals/`.
+
+| file | what it decides | relation to the first lane | cost |
+|---|---|---|---|
+| `06_FA_war_lives_in_seats_B.md` | `at_war` counts the commits of persons who hold a muster seat of either party (R-23); one clause each on CP-T09-02 (d) and CP-T09-04 (d) (R-22); two named follow-ons (R-32; the commander who lost) | new; amends two planned positions | edit, after a ruling |
+| `06_FA_levy_through_the_seat_B.md` | `recruit`, `discharge_troops` and the army's mint are exercised through a muster seat whose purview reaches the cohort (R-24) | new; cross-lane with MB's ED-IN-0306 rows | small build |
+| `06_FA_seat_terms_by_body_B.md` | which seats take a term (R-26); two heads added to `head_seat` (R-25) | supersedes, in content only, the first authoring in `06_FA_seat_terms_and_turnover.md` | edit (data) |
+| `06_FA_shortest_loop_B.md` | one scenario (`recall`), one world option, one `loop_closed` reader; the subsystem's exit as an instrument reading (B3.5) | extends `06_FA_playable_scenario.md` | small build (harness) |
+
+Order: the first lane's P2 (grants by row), P1, P3; then `…seat_terms_by_body_B` (data) and
+`…shortest_loop_B` (the exit reads P1 and P3); `…levy_through_the_seat_B` before MB's step 5 lifts the
+withholding; `…war_lives_in_seats_B` with CP-T09-02.
 
 ## B7. Evidence log
 

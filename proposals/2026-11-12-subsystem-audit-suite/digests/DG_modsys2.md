@@ -201,4 +201,71 @@ Lane: code under `modules/mass_battle/`, `systems/` and `engine/`-adjacent oracl
 - **Conflicts / stale:** the clock described (a scalar MS with yearly -1 decay) vs `matter.py` (stock/lattice model; `hole_register.yaml:4932` "THE LATTICE COUPLING"). Whether the MS ruling `60` still holds in the live model is not answerable from this file. Delete candidate per its own package docstring.
 - **Open items:** retirement `29a-ms` pending; which carrier replaced `world.clocks['MS']` ("`33` decides the carrier").
 
+### systems/combat/combat_engine_v1/capabilities.py
+- **What it is:** PC oracle/instrument code, 173 lines; the weapon-morphology affordance gates as one table (scene-combat WS-2 / req 5) plus a self-test that checks each predicate against the live engine.
+- **Status:** none (code). Oracle/dev tooling; not read by `engine/season`.
+- **Bears on:** PC (weapon/kit structures), DICE (armour-defeat).
+- **Content that matters:**
+  - `CAPABILITIES` (`:37-58`) has four gates only: `halfsword` (`name in HALFSWORD_FORM or HALFSWORD_BASE`, i.e. a hand-listed set in `combatant`), `gap_thrust` (`head in V.THRUST_FAMILY_HEADS` or derived `S.afforded_heads` contains a point), `percussive_blow` (`head == blunt`), `open_contact` (`head_len <= CFG['GRAB_SHORT_REACH_M']`). Each names the state-graph node it gates. Everything else (blade guard to bind quality, mass to heft, armour-defeat effectiveness) is declared CONTINUOUS, "not a gate" (`:10-12`, `:59-66`). So the weapon "capability" structure is a head-token plus a few lengths, not a per-weapon authored capability list.
+  - The roster is `combatant.WEAPONS` (pure data, imported at module scope; `:20`), excluding auto-switched FORMS (records carrying a `base`) (`:76`). The weapon record carries at least `head`, `head_len`, `base`, afforded heads, mode elements (`_affords_point` comment: poleaxe's spike). There is no off-hand, shield or second-weapon slot anywhere in this table (confirms F-PC-13 equipment half and F-PC-12 no unarmed record).
+  - Self-test (`__main__`, `:96-173`) is the only execution artifact: checks (a)-(f) compare each predicate with `halfsword_target`, `core.HEAD_MODE`, `contact.grab_available`, and a 4000-draw reachability of `contact.GRAB_OUTCOMES`. Check (f) greps `weapons.py` source text for `pull_capable`/`hook_affordance`/`clinch=` (a prose-grep guard standing in for a rule).
+  - Sets `sys.path` to `modules/combat` at import (`:15-17`), the F-PC-11 pattern; `import vocabulary as V` is a bare flat name.
+- **Reads / readers:** no `engine/season` reader. Tests: `tests/valoria/test_combat_capabilities.py`, `test_combat_invariants.py:26,458` (VOCAB_CONSUMERS list names it), `_draw_stream.py:63`. `markdown_table()` generates the capability x weapon annotation table; nothing loads it back.
+- **Conflicts / stale:** docstring says the engine gates "through its physics ... this module makes them EXPLICIT", i.e. the table is a second statement of rules code already enforces (a doubled owner by design, checked only when this file is executed as a script, not on each import). Header cites `06-13 consolidated-master` (a dissolved document).
+- **Open items:** none stated.
+
+### systems/combat/combat_engine_v1/state_graph.py
+- **What it is:** PC oracle/instrument code, 286 lines; the engagement/fight state graph as a data dict `STATES` (22 nodes) with `to`/`emits`/`site`, `TRACE_KINDS`, `SEPARATION_REASONS`, `INJECTION_POINTS`, and a coverage self-test (WS-1).
+- **Status:** none (code); header: "supersedes the 2026-06-09 flow-and-state-map prose as the source of truth". Dev tooling.
+- **Bears on:** PC, DICE (where levers read).
+- **Content that matters:**
+  - Node/edge structure (`:41-72`): FightInit -> EngagementInit | Yielded | Withdrawal; inner loop Approach / AwaitTempo / Exchange / Bind / Riposte / HitLanded / Contact; terminals Felled | Separation -> InterTurn; Decided -> UpsetCheck -> FinalResult; plus `Yielded` (declaration at Phase 1, ends at FinalResult with no UPSET_FLOOR draw) and `Withdrawal` (early UNRESOLVED exit). `site` strings are `wrapper.py` line numbers (`wrapper.engagement:66-85` etc.) that drift; the injection table drops line numbers on purpose (D12b, `:84`).
+  - `SEPARATION_REASONS = {collapse, burst_ceiling, clean_defence, beat_exhaustion, terms}` and a dead-branch note: `collapse` and `beat_exhaustion` were flagged "never fired" by an under-powered sweep, and measured at 164 and 1,135 firings over 5,184 fights, so "NOT dead; do not re-litigate" (ED-PC-0042, `:33-39`). A model of a negative claim withdrawn after a control.
+  - `INJECTION_POINTS` (`:88-128`): 12 named points saying where an invested ability's lever enters the graph (e.g. `exchange.roll`: measure lever, balance lever, tempo lever, `anti_overcommit`; `contact.axis`: `edge_grab`). States "a tradition does NOT bias a branch ... gates ACCESS to its kit (`ability_primitives._invested`)" (`:77-81`). This is the only place the lever -> graph map exists, as prose strings in code; no reader.
+  - The only in-fight choice surface the graph shows is the Phase-1 `yield` declaration and the decider's `withdraw`/`ENGAGE`; "the feint lives inside the Exchange read" (`:82`). Consistent with F-PC-05 (the one in-fight choice is free) and F-PC-13 (no approach / grid round).
+  - Self-test (e) sweeps 4 matchups x 30 seeds plus WIDE builds; `KNOWN_RARE = {'Felled'}`; the self-test and `trace.run_traced_fight` are the execution artifact.
+- **Reads / readers:** `tests/valoria/test_combat_invariants.py:26,515-518` (data module list), `_draw_stream.py:63-64`; no engine/season reader; `engine/season` reaches the fight via the seam wrapper to `modules/combat/fight.py`. The graph is a check on the engine, not an input to it.
+- **Conflicts / stale:** `site:` line refs (`wrapper.fight:282`, `wrapper.engagement:16-34`) can drift from `modules/combat/wrapper.py` `[UNVERIFIED; not opened]`. The check that every node is reachable passes on the graph the file declares, not on the wrapper's control flow (that is check (e), run only as a script).
+- **Open items:** none stated.
+
+### systems/combat/combat_engine_v1/workbench/armour_participation.py
+- **What it is:** PC dev tooling, 287 lines; the armour-interaction instrument (ED-PC-0040): `capability`, `participation`, `strike_profile`, `tier_table`, and a committed reference table with `drift()` / `--update`.
+- **Status:** none (code); "DEV TOOLING, not a gate"; `tests/valoria/test_combat_armour_reference.py` turns the reference into a gate.
+- **Bears on:** PC, DICE.
+- **Content that matters:**
+  - `capability(name)` = max over modes {blunt, point, edge} and over base AND `HALFSWORD_FORM` of `S.adef_cap(WEAPONS[f], cfg, m)` (`:58-68`): a weapon's armour-defeat capability is derived from its record, not authored; four armour tiers `none/light/medium/heavy` (`:170`, `:209`); `ADEF_THRESHOLD[armor]` from `CFG`. Bands `clears >= 0.9`, `marginal >= thr`, `under >= 0.45` are hard-coded here (`:105`).
+  - The committed `data/combat_armour_reference.json` (whole roster x 4 tiers, n=40, `generated_at_sha`) is a recorded golden for the whole PC balance picture; `drift(tolerance=0.15)` reports moved cells (`:184-236`). The file's own history: ED-PC-0038/0039 moved mail and the odachi by 41pp and 18pp unnoticed until a human read numbers (`:11-23`).
+  - Finds F24 "SELECTED-BUT-INERT": `select_mode` repeatedly picks a head that lands zero damage (`strike_profile`, `:117-161`, monkey-patching `core.strike`); the podao's `point` at 0.00 against `curved_cut` 2.40 is the demonstration.
+  - The reference opponent is always `'arming'` (`:48`); all measured armour is symmetric on both sides in `_duel` (`:71-86`).
+- **Reads / readers:** `tests/valoria/test_combat_armour_reference.py`, `test_combat_invariants.py::test_plate_participation_tracks_armour_defeat_capability`; no engine reader.
+- **Conflicts / stale:** the ED-PC-0038 claim "spear/yari/estoc -> 0 at plate" was false for the estoc per this file's header (a retracted claim; reference only). `sys.path` insert into `modules/combat` (F-PC-11).
+- **Open items:** none stated. The golden JSON is data this lane did not open.
+
+### systems/combat/combat_engine_v1/workbench/balance.py
+- **What it is:** PC dev tooling, 232 lines; the variable-balancing harness: weapon-matchup, attribute-parity, tradition-field, tradition-context and weapon-armour matrix sweeps, position-swapped, Wilson-CI'd.
+- **Status:** none (code). Dev tooling.
+- **Bears on:** PC, DICE.
+- **Content that matters:**
+  - A hand-listed `WEAPONS` roster (50 names, `:31-41`) separate from `combatant.WEAPONS` (the engine roster, 53 non-form + forms): a SECOND roster that can drift (the engine roster is derived elsewhere; this list excludes `*_halfsword` forms). Also `TRADITIONS = ["none","german","italian","spanish","japanese","chinese","filipino","english"]` (`:42`; 7 traditions + none, matching F-PC-09's seven) and `ATTRS = attributes.KEYS` (the engine owner, correctly sourced).
+  - `_mk(spec)` builds a Combatant from `attrs`, `weapon`, `armor`, `tradition` only (`:78-81`): the loadout structure the harness can express is exactly {nine attributes, one weapon, one armour tier, one tradition}. It cannot express skills, equipped abilities, cross-training, or asymmetric armour (stated in `build_levers.py` docstring).
+  - Imports `r8_parity_harness` from `tests/sim/v32-combat-balance` (a frozen validation station) for `FINAL_TRIALS`, `WILSON_Z`, `BAND_LO/HI` (`:28-29`), so this dev tool depends on a frozen test directory; `_wilson` is duplicated in `workbench/server.py:40` (PC audit §4 notes this).
+  - CLAUDE.md names this file as the combat-balance instrument (§9 task routing); the weapon-armour matrix and tradition context test (`:121-176`) are the C1 "does the leader flip across contexts" test.
+- **Reads / readers:** run as CLI (`python workbench/balance.py`); `server.py` and `catalogue.py` import helpers `[UNVERIFIED]`; no engine reader.
+- **Conflicts / stale:** comments cite `designs/scene/combat_engine_v1/weapons.py` (dissolved path, `:34`).
+- **Open items:** none stated.
+
+### systems/combat/combat_engine_v1/workbench/build_levers.py
+- **What it is:** PC dev tooling, 230 lines; "what a PLAYER can change about a fighter, and what each change is worth": sweeps over skills, abilities, disposition, armour, familiarity, archetypes, plus a `mirror()` fairness control.
+- **Status:** none (code). Dev tooling; modified most recently of the workbench files (file mtime 2026-11-12 vs Nov 7).
+- **Bears on:** PC, CHAR (build surface), DICE.
+- **Content that matters:**
+  - Names the engine's four player-build levers balance.py cannot measure: `c.skills` (six axes `bind, parry, dodge, balance, technique, grab`, `:33`), learned techniques with an invested level `c.equipped` (e.g. `{'shinogi': 4.0}`), cross-training `c.known_traditions` (set via `setattr` after construction, `_POST_INIT`, `:34`, `:53-61`), and asymmetric armour. These are the kit / approach structures a person could carry; the season supplies none of them (F-PC-02, F-PC-09).
+  - Armour has no wearer cost: "`c.armor` is consumed only as the TARGET's protection ... no mass, tempo, stamina or mobility cost" (`:157-162`). `c.skills` is "UNCAPPED at the engine layer ... bounding it is a character-gen/economy job that does not exist yet" (`:111-113`). Disposition `disp` runs 1-7 with 4 neutral (`:149`). Both are completeness gaps at an extreme (cf. F-PC-12).
+  - The file's own finding: "most of this file's abilities rows are inside the noise floor" (n=600 gives about +/-4pp), and the ED-PC-0023 review "established the ability layer's aggregate win-rate edge is ~0 and its real effect is per-fight texture" (`:15-18`, `:122-126`). Direct support for F-PC-09 (the layer is near-silent).
+  - Archetype rows build five composite builds (duellist, binder, armour-breaker, grappler, reach specialist) from weapon+armour+attributes+skills+equipped (`:186-208`): the only authored "build" objects, held in this dev script, not in a registry the engine reads.
+  - `familiarity()` documents the residual tradition effect: with the imposition gate retired (ED-PC-0023) an ability-less tradition differs only through `traditions.familiarity()` feeding `WARINESS_K`; values 0.85 (unfamiliar), 0.93 (adjacent), 1.0 hard-coded in row labels (`:178-183`).
+- **Reads / readers:** CLI only; no engine reader.
+- **Conflicts / stale:** `WILSON_Z = 1.96` re-declared at `:31` with the comment "same constant balance.py imports" (a third copy of the method constant, with balance.py's import and server.py's `_wilson`).
+- **Open items:** "bounding skills" (character-gen/economy job) is still unowned.
+
 <!-- ENTRIES-NEXT -->

@@ -38,7 +38,9 @@ bond it is two edges). §2 touches only the unplugged oracle. §3 and §4 change
 ## Edits and decisions
 
 **1. A person witnesses through a knot he owns (R-48).** `epistemic.py::_ch_witness_key`'s last line reads
-`(pid, anchor) in knots`. The code is the defect and Layer 1 is not edited to match it (`CLAUDE.md` §0.05).
+`(pid, anchor) in knots` (reading the index pair as owner first `[UNVERIFIED: the pair order of
+`cache.tenure_index(w).knots` was not opened; the rule is the prose, the line follows the order found]`).
+The code is the defect and Layer 1 is not edited to match it (`CLAUDE.md` §0.05).
 A mutual bond is two edges and reads exactly as before.
 
 **2. The oracle fails loudly (R-50).** Delete both `try/except` wrappers in `knots.py`. An oracle whose

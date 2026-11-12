@@ -159,3 +159,184 @@ Lane scope: code under `engine/` (outside `engine/season/`), `modules/`, and the
   - A long comment records a false premise caught by a critic: `arm7_flexibility.py` and `wd_acceptance.py` were claimed unimported but are imported (:104-118).
 - **Conflicts / stale:** `LADDER_D_WHY` cites `engine/season/verb_table.yaml`; `VERB_TABLE` now comes from `engine.season.data.verbs` (import :40). `[UNVERIFIED]` whether `verb_table.yaml` still exists at that path.
 - **Open items:** none.
+
+### engine/substrate/__init__.py
+- **What it is:** package docstring, no code; records the removal of the Key re-export (ED-IN-0232, 2026-09-16).
+- **Status:** `[live]`; live.
+- **Bears on:** CORE, PROCESS.
+- **Content that matters:**
+  - States the package imports nothing and re-exports nothing, deliberately (:15-17); lists `descriptors, names, composition, stubwire, pc_engine` as leaves (:4-6).
+- **Conflicts / stale:** the list omits `battle_orders.py` and `combat_kit.py`, which exist (ls) and are read by the season (`battle_orders` by `rosters.py` etc.; `combat_kit` by `rosters.py`/`test_cp_t03_03_kit.py`).
+- **Open items:** none.
+
+### engine/substrate/battle_orders.py
+- **What it is:** 24-line stdlib-only reader of `engine_params/battle_orders.json`.
+- **Status:** none in file; live.
+- **Bears on:** MB, CORE.
+- **Content that matters:**
+  - Exports `ROLES` (15 names, in `ROLE_SPEC` order) and `RETREAT_AT` (`none`, `0.5`, `0.25`) (:21-24); docstring says the season "reads these two tuples and spells no role" (:5-6).
+  - Importers by grep: `engine/season/data/rosters.py`, `loop/effects_information.py`, `queries/inputs.py`, `tools/export_battle_orders.py`; `modules/mass_battle/massbattle.py` appears in the grep too (likely naming the source, not importing the leaf `[UNVERIFIED]`).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### engine/substrate/composition.py
+- **What it is:** role -> callable resolver over `composition.json`; `require(role)` imports `module:attr` by string and caches (:43-69).
+- **Status:** `[live, 2026-08-20]`; live.
+- **Bears on:** CORE, PC, MB, SE, SC, FI.
+- **Content that matters:**
+  - Raises `KeyError` for an undeclared role, no default (:53-65); resolution happens once per role per process (cache `_CACHE`, :40).
+  - Docstring promises two `kind: value` roles `contest_side.a`/`.b` that "engine/cross_scale/scene_dispatch.py compares a contest verdict against" (:46-51); `composition.json` has none and `engine/cross_scale/` is not in the tree listing I saw `[UNVERIFIED]`.
+- **Conflicts / stale:** stale `contest_side` paragraph (see composition.json entry); the `WHY` paragraph cites the deleted old campaign driver and `systems.factions.sim.faction_action` (:5-8).
+- **Open items:** none.
+
+### engine/substrate/names.py
+- **What it is:** reader of `names.json`: `CANONICAL`, `ALIASES`, `LEGACY`, `BY_CLASS`, `AMBIGUOUS`, `FACTIONS`, `canonical_for()`, `of_class()` (:51-108).
+- **Status:** `[live, 2026-09-16]`; live (importers by grep: `harness/governance_spine.py`, `data/cast.py`, `data/files.py`, `data/rosters.py`).
+- **Bears on:** CORE, WR, FA.
+- **Content that matters:**
+  - `canonical_for` raises on ambiguous display strings, legacy tags, and unknown names rather than guess (:75-102).
+  - `FACTIONS` size "is not an invariant", RULED by Jordan 2026-09-19 (:68-72); includes fixture `faction x`.
+  - Notes that before 2026-09-16 no code under `systems/` read any naming register, so rulings never arrived (:6-12).
+- **Conflicts / stale:** the module docstring still describes the retired Key (:22-25) as history only.
+- **Open items:** none.
+
+### engine/substrate/stubwire.py
+- **What it is:** the single owner of "explicitly flagged not-built": `StubResult` dataclass, `stub_resolve()`, a process-cumulative `invocations` counter, `reset_invocations()`.
+- **Status:** none in file (ED-IN-0091); live. Only importer in my scope: `modules/social_contest/roll.py` (grep); the counter feeds `tools/m1_acceptance.py` row 1 (:15-19).
+- **Bears on:** CORE, PROCESS, SC.
+- **Content that matters:**
+  - `stub_resolve(module, io_contract, *, reason)` returns a frozen `StubResult` with `stub=True` (init=False) and bumps `invocations` (:64-77); the counter is meant to be read as a before/after delta around a seeded probe (:54-61).
+  - Two of its three original consumers are gone (`review_core` ratchet, a test surface); it survives for the M1 row (:12-19).
+- **Conflicts / stale:** `reset_invocations()` is "test-only" and the counter being a module global means any concurrent probe shares it.
+- **Open items:** none.
+
+### engine/tests/test_knots_ed912.py
+- **What it is:** regression test (ED-912, ruled 2026-06-28) on `systems/fieldwork/sim/knots.py`'s -5..+5 bond-strain gauge, plus two falsifier tests on the conviction (now pursuit) scar store.
+- **Status:** none; live as an oracle test (`engine/tests/` = CI job `sim-regression`).
+- **Bears on:** FI, CHAR, WR.
+- **Content that matters:**
+  - Pins: Distant strain -2..+5 start 0, Close -5..+5 start -2, break at +5, Tempered (-5, Close only) absorbs one rupture, break Disposition -3, Close break from positive strain -> scar +1 (:8-17, :51-125).
+  - States "knots/ is an island (no campaign callers)" (:17): this tests oracle-only code under `systems/fieldwork/sim`, not a running module. The running fieldwork module is `modules/fieldwork/find.py`.
+  - Falsifier tests assert on the scar STORE, not the announcement, and re-pin after IN-08 to the pursuit `honour` instead of `Honor`; legacy names `Reason`, `Autonomy`, `Continuity`, `Honor` must raise `ValueError` (:140-175).
+- **Conflicts / stale:** one assertion still carries `[UNVERIFIED post-ED-912]` on `coherence_delta == -1` (:124).
+- **Open items:** the Coherence value after ED-912 is unverified (:124).
+
+### engine/tests/test_settle_margin.py
+- **What it is:** CP-T01-04 test of `sigma_leverage.settle_margin` and `band_odds`: the fraction of a margin settled by the act's own draw.
+- **Status:** none; live.
+- **Bears on:** DICE, PC, SC, MB.
+- **Content that matters:**
+  - Rule: `m = raw_net + floor(q) + [u < frac(q)]` with `q = boost - ob`; the extra uniform is drawn ONLY when `frac(q) > 0` so whole-Ob rolls keep their stream (:8-11, :99-122).
+  - Claims asserted: mean settled margin is `0.4*pool + boost - ob` to 1e-12 over 8*13*13 cells; P(Partial or better) strictly monotone in boost and Ob (`steps > 500` asserted, :96); `band_odds` equals a brute-force walk and agrees with 100,000 seeded draws within 3 SE (:125-173).
+  - The ladder it reads through is `DE.degree_from_net(m, 0)` (:148, :167), the single degree owner.
+- **Conflicts / stale:** none found.
+- **Open items:** none.
+
+### engine/tests/test_sigma_leverage_parity.py
+- **What it is:** parity + property tests for `engine.dice_engine.sigma_leverage` against a committed golden table (`engine/tests/goldens/sigma_leverage_parity.json`, 1,758 rows).
+- **Status:** none; live.
+- **Bears on:** DICE, SC, PC.
+- **Content that matters:**
+  - Partitions the golden rows: 768 TN-6/8 rows are inverted into "must raise KeyError" (TN 7 only, ED-IN-0196) and the 255 `degree` rows are re-read as the pre-ruling ladder (47 moved, 208 kept; distribution by Ob `{1.0:9, 2.0:15, 3.0:23}`) (:63-107, :180-252). The table is deliberately not regenerated (:29-30).
+  - `CD.degree` is `systems.social_contest.sim.contest.degree_extension` (:52): `test_bands_are_the_owners` sweeps >=4000 cells to prove no local re-banding; the extension may only demote Overwhelming to Success (`OVERWHELM_SIGMA` bar, crossover pools `[6, 8, 10]` for Ob 1/2/3) (:453-553).
+  - Spec checkpoints for the soft cap `M_MAX * tanh(x/M_MAX)`: 0.5->0.48, 1.0->0.87, 2.0->1.31, 3.0->1.45 (:299-305). F1 uniformity: +0.7 sigma = +25.8 percentage points at any pool (:385-398).
+  - The `sigma_leverage` ladder demotion lives in a `systems/` oracle module, not in `engine/dice_engine`: a contest-only rule the engine's single degree owner does not carry.
+- **Conflicts / stale:** the docstring names oracle sources `tests/sim/v32-combat-balance/m1_dice_sigma_core.py` and `audit/2026-06-03-contest-groundup/engine.py` (:10-12), the latter now copied to `engine/reference/contest-groundup/engine.py`; the m1 oracle's location was not checked `[UNVERIFIED]`.
+- **Open items:** none.
+
+### engine/tests/test_thread_mending_ed871.py
+- **What it is:** ED-871 regression (ruled 2026-05-31): Mending costs 0 Coherence at every degree, on `systems/threadwork/sim/operations.py`.
+- **Status:** none; live as an oracle test.
+- **Bears on:** WR.
+- **Content that matters:**
+  - 300 seeds of `attempt_mending` must all give `coherence_delta == 0`, and Partial/Failure must occur (:39-49); Weaving at Relational scale keeps `-1`, or `-2` on Partial/Failure via the "blanket penalty" (:52-70).
+  - The C-TW-3 defect (the blanket penalty also hits Leap against its own docstring) is "intentionally NOT fixed" (:14-16).
+- **Conflicts / stale:** `game_constants.json` coherence divergence says the engine's Coherence is distance-from-equilibrium with no depleting track; this test's "Coherence cost" semantics belong to `systems/threadwork/sim` only. `[UNVERIFIED]` whether `systems/threadwork/sim` reaches `engine/season/`.
+- **Open items:** C-TW-3 Leap penalty (ED-WR-0005 Stratum-B tail) unresolved here.
+
+### modules/__init__.py
+- **What it is:** package docstring: modules are "reachable running code only, one directory per module" (ED-IN-0284, ED-IN-0285).
+- **Status:** none; live.
+- **Bears on:** CORE.
+- **Content that matters:**
+  - "A module is reached by a composition row ... engine/ never imports it. The root is `tools/ci_common.py`'s `MODULE_CODE_ROOTS`" (:1-4).
+- **Conflicts / stale:** `modules/combat/` is reached by a path seam (`engine/substrate/pc_engine.py`) in addition to the composition row, per CLAUDE.md §3 `PATH_SEAM_ALLOWED`, and `modules/combat/*.py` bare-import each other (see contact.py / tradition.py entries).
+- **Open items:** none.
+
+### modules/combat/contact.py
+- **What it is:** 77-line grapple/contact layer of personal combat (D8/D9, I7b): `grab_available`, `grab_sigma`, `GRAB_OUTCOMES`, `grab_outcome`.
+- **Status:** none; live; called by `modules/combat/wrapper.py` (docstring :11).
+- **Bears on:** PC.
+- **Content that matters:**
+  - Dialect: `sys.path.insert(0, os.path.dirname(__file__)); import combat_systems as S` (:13-15) - bare imports, the F-PC-11 pattern; contact reads `S.leverage`, `S.WP.grab_hazard`, `S.core.logistic`.
+  - `grab_available` is true for any weapon with `head_len <= cfg['GRAB_SHORT_REACH_M']` (0.375, `combat_engine_v1.json`) without an opening; otherwise needs `opening_created` set by the caller (:35-37). The dagger-class exemption is a measured threshold, not a name check (:18-25).
+  - Outcome menu `('disarm','throw','pin','control','foot_pin','escape')`: a flat escape chance `GRAB_ESCAPE_P` 0.25 first, then weights `0.15+0.25p, 0.15+0.20p, 0.15+0.15p, 0.35-0.25p, 0.10` with `p = logistic(gsig)` hard-coded in the function (:53-77), not in `cfg`. `[SIM-CALIBRATE]` per its own comment.
+  - `edge` term clamps skill mitigation at 0 (ED-PC-0034 fix) (:46).
+- **Conflicts / stale:** the grab weights are literals inside the function, outside `combat_engine_v1.json` (F-PC-10: constants outside the designated owner).
+- **Open items:** none.
+
+### modules/combat/geometry.py
+- **What it is:** pure weapon-geometry -> coefficient derivation (`gap_precision`, `thrust_factor`, `cut_factor`, `percussion_concentration`, `can_halfsword_thrust`, `bake`), build-time only (Jordan 2026-06-02).
+- **Status:** none; live; baked at import by `weapons.py` (:826-832).
+- **Bears on:** PC.
+- **Content that matters:**
+  - Input per weapon: five 0..1 primitives (`curvature, point_concentration, cross_section, edge_keenness, strike_concentration`); outputs `gap, thrust, cut, perc_conc, halfsword` (:70-96). Floors removed under ED-PC-0008/0009 so a mace reads ~0 thrust and a stiletto ~0 cut (:37-58).
+  - Half-sword eligibility: `curvature <= 0.35 and point_concentration >= 0.35` (:65-68).
+  - Same file name as `modules/mass_battle/geometry.py` (a different module, both bare-named `geometry`); `weapons.py` imports it as `import geometry as _geo` (:828), so `modules/combat/` must be on `sys.path`.
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### modules/combat/tradition.py
+- **What it is:** 19-line facade re-exporting `traditions.py` and `ability_primitives.py`.
+- **Status:** none; live as a facade (`import tradition as TR` call sites).
+- **Bears on:** PC, CHAR.
+- **Content that matters:**
+  - Re-exports `TRADITIONS, FAMILIARITY_*, ADJACENT, familiarity` and `ABILITIES, TRADITION_KIT, kit, ability_bonus, ability_factor, eff_cw` using bare imports `from traditions import` (:13-19).
+  - A tradition is "a cognitive mode ... NOT a separate rule-set"; differentiation is bottom-up (learned abilities + familiarity) (:7-9).
+- **Conflicts / stale:** the facade's docstring says "`TR.eff_cw(...)/TR.familiarity(...)`" call sites; `combat_systems.py` imports `TR` and calls them at many lines (grep :908-1192).
+- **Open items:** none.
+
+### modules/combat/traditions.py
+- **What it is:** the TRADITIONS dictionary: 8 tradition ids with `set`/`mode` labels, `FAMILIARITY_DEFAULT 0.85`, `FAMILIARITY_ADJACENT 0.93`, `ADJACENT` pairs, `familiarity()`.
+- **Status:** none; live.
+- **Bears on:** PC, CHAR.
+- **Content that matters:**
+  - Traditions: german, italian, spanish, japanese, chinese, filipino, english, none; `set` and `mode` are "flavour metadata ... not read at resolution" (:14-27). The 7-channel weight vector was removed 2026-06-29; `PREFERRED`/imposition gate removed ED-PC-0035 (:38-45).
+  - `familiarity(a, b)` = 1.0 if same or either 'none', 0.93 if a historically adjacent pair, else 0.85 (:47-55). Used in `combat_systems.py` (`TR.familiarity(aggressor.tradition, defender.tradition)`, grep :1064-1135).
+  - Whether a season Person ever carries a tradition other than `none`: grep of the season combat wrapper finds only a docstring line "tradition `none`" (`engine/season/seam/wrappers/combat.py:39`) and no `tradition` in `fight.py`; so the tradition layer is reachable only from `combatant.py`'s constructor argument (F-PC-09).
+- **Conflicts / stale:** `TRADITIONS` metadata (`set`, `mode`) read by nothing; dead data kept as labels.
+- **Open items:** none.
+
+### modules/combat/vocabulary.py
+- **What it is:** the combat engine's token alphabet, owned once (ED-PC-0042): heads, damage modes, armour tiers, materials, defence modes, hilt types, armour-defeat labels, `GUARDED_TOKENS`.
+- **Status:** none; live.
+- **Bears on:** PC.
+- **Content that matters:**
+  - Armour: `ARMOUR_TIERS {none, light, medium, heavy}`, `MATERIALS {none, cloth, mail, plate}`; `DEFENCE_MODES = ('parry','dodge','wind')` with order load-bearing for RNG (`modes[rng.randrange(3)]`) (:50-71).
+  - `GUARDED_TOKENS` is asserted to have 18 members at import (:98-105); enforced by `tests/valoria/test_combat_invariants.py::test_no_bare_vocabulary_literal_in_consumers` (:17-19).
+  - Homonyms named separately (`TIER_NONE`, `MAT_NONE`, `HILT_NONE`) (:24-27).
+- **Conflicts / stale:** `HEAD_CUT` is deliberately unguarded because `geo['cut']` shares the string (:92-97).
+- **Open items:** the `geo`/`w` field vocabulary routing "is FILED, not done" (:94-97).
+
+### modules/combat/weapons.py
+- **What it is:** the WEAPONS dictionary: one record per weapon as a bundle of physical primitives (mass, head_len, grip_len, hands, head, wclass, hilt, located elements/guards/haft/pommel in metres, geometry), plus import-time bakes (934 lines).
+- **Status:** none; live (data half of the weapon split; `weapon_physics.py` derives).
+- **Bears on:** PC, CHAR.
+- **Content that matters:**
+  - Record schema documented :10-70: `elements`, `guards` (with `dual_role_element`), `haft`, `pommel/butt`, `geometry`, optional `mode_elements` (fight modes with their own head + geometry + `element_ref`), `adornments`, `edge_undulation`, `grippable`, `base` (half-sword forms). Weapons with multiple modes: poleaxe, bec_de_corbin, lucerne_hammer, ji, goedendag, guisarme, kama_yari, voulge, guandao, fauchard, hook_sword (:43-56, :227+).
+  - `WEAPONS` has 54 keys (matches the 54 in `combat_engine_v1.json kit.weapons`, 4 are `*_halfsword` auto-switched forms with `base=` (:138-150, :233-245, :700-713, :728-741). Mix: bladed (rapier, arming, longsword, greatsword, sabre, dagger, katana, tachi, ...), hafted (spear, yari, glaive, guandao, bardiche, ...), blunt (mace, staff, goedendag, poleaxe). No unarmed record and no shield record exist (F-PC-12).
+  - Import-time bakes: `gap`/`geo` via `geometry.bake`; per-element `edges` from the `_EDGES` table with an assert that every non-base weapon has a row (:846-879); `mode_elements[*]['geo']`; `_derived` via `weapon_physics.derive`; `hand_guard`/`blade_guard` (:826-918). `GEOMETRY` back-compat dict, `HALFSWORD_FORM` mapping 4 base weapons to half-sword forms (:922-934).
+  - Weapon facts are Python literals, not a registry file an author edits; `combat_engine_v1.json kit.weapons` is only a name list exported from them.
+- **Conflicts / stale:** comments cite `designs/audit/2026-07-02-morphology-rearch-phase0/` and `audit/2026-07-04-weapon-morphology-granularity/` (dissolved/archived paths). `reach_adj` per-weapon residual is a hand constant (:14-16). Positional comments (e.g. `U1 PoB recalibration`) record re-balancing of masses to hit target balance bands.
+- **Open items:** `material` field "DELIBERATELY INERT in R1 (no live reader)" (:39-40); a half-sword switch re-measure is "never quoted here" (:931-933).
+
+### modules/fieldwork/find.py
+- **What it is:** the `fieldwork` module entry: `find(inp: FieldworkInput) -> Findings`, 34 lines (ED-FI-0002, v9 FI-02/FI-03).
+- **Status:** none; live; composition role `fieldwork.find`, entry `step_call`; called from `engine/season/seam/contest.py::find_trail` (composition.json:13-19).
+- **Bears on:** FI, CORE.
+- **Content that matters:**
+  - The whole rule: `shown = inp.terms.get(inp.band)`; if empty return nothing; otherwise every trail item `inp.items` is returned as `(event_id, shown)` sorted by `(emitted_at, event_id)` (:28-34). No RNG: the roll belongs to the inquiry (`social_contest.roll`) (:11-14).
+  - Self-described "THIN BY DESIGN" (:18-21): a band-to-terms table applied to a list; WHICH items exist is the host's projection (`epistemic.trail_of`).
+  - The only module in the set that imports from `engine.season.queries.inputs` (:25), i.e. the module depends on the host's record types.
+- **Conflicts / stale:** the 'modules take typed input and import nothing else' rule (CLAUDE.md §3) is satisfied only because the record types live in `engine/season/`; the module cannot be loaded without the season package.
+- **Open items:** the playable (non-automated) fieldwork mode is described as "the seam a PLAYABLE fieldwork mode attaches at" (:20-22); nothing here builds it.

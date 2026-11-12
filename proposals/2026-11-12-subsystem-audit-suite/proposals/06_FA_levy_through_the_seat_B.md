@@ -43,7 +43,16 @@ its least member.
 
 Raising and discharging troops is an exercise of office over a place; ordering the troops one has is
 the commander's. Ladder step 4: `requisition` and `may_muster` are the precedent, and ED-IN-0256 (4)
-is the rule ("authority is asked of the seat exercised"). The existing faction rule is kept, not
+is the rule ("authority is asked of the seat exercised"). It is also a returning recommendation: the
+FA research lane worded the act, before it was built, as "let a seat levy troops from a cohort in its
+purview into its faction's muster" (`research/by_lane/FA_faction_actions.md` K-FA-13, 2026-10-16), on
+Jordan's statements quoted there (`:347`): armies are "troops levied from settlements as their own
+resource … differ in quantity and quality based upon equipment and experience and their commanders",
+and "factions are supposed to be able to assemble armies". ED-IN-0306 built the Record and its content
+rules; the seat was the part left out. The comparative research gives the same caution from history
+(`research/governance/conflicts_power_struggles.md`, synthesis: a force bound to a named holder and
+not to the office reproduces the collapse the office was built to prevent; the Marian legions, the
+Tetrarchy), as shape only. The existing faction rule is kept, not
 replaced: a seat levies only people its faction governs or who are committed to it. The four
 organising verbs (`form_unit`, `assign_troops`, `order_unit`, `disband_unit`) stay `own` on `held_by`:
 the Record is still the order of battle and its holder still commands it, as Jordan ruled on

@@ -362,3 +362,127 @@ Dispositions in §B6 (R-37, R-38). None is a mechanism; each misleads the next r
 | the shipped default has no regression oracle | Fable S1.5 | `[UNVERIFIED]`: not opened | — |
 | two contradictory ranged DR tables | backlog C (ED-MB-0008) | `[UNVERIFIED]`: not opened | — |
 
+## B3. The cell-based hierarchy: army → unit → subformation → troops
+
+### B3.1 What the four words mean, from the sources
+
+| level (Jordan, 2026-11-12) | earlier statement that fixes it | the archived design | the code |
+|---|---|---|---|
+| **army**: "a deployment of all its units in a formation on that grid" | directive (a): Football Manager and Total War "inform the overall formation"; 2026-07-22: "subunits form an army in a formation with overall instructions" | several units on a battle map; the general's strategy declaration each turn; ED-909: an army formation is where the bodies are put and what they are told, never a shape of its own | `hierarchy/units.py::Unit`; `orderofbattle.OrderOfBattle`; deployment by `orderofbattle._place` |
+| **unit**: "has its own subformation and its own troop types" | directive (a): "subunit roles the way [FM] informs a player's role"; ED-1090: up to eleven | "a unit is composed of up to three sub-units", each with its own Morale, Discipline and rout (`mass_battle_v30.md` §A.4, ED-1019); one named officer a unit (§D.2); a unit token with Type, Size, Discipline and Experience (`military_layer_v30.md` §1.1) | `Subunit`; `orderofbattle.Subformation`; the Record's `subformations` row |
+| **subformation** | directive (a): "a subunit's shape is formation arrangement at a smaller scale"; 2026-07-22: "troops form subunits in a subformation with instructions" | "each cell within a formation holds a player-assigned troop count with min/max bounds. The player shapes the formation's distribution … at muster" (§A.3b); ED-907's adjustable allocation surface (`pc_formation_system.md` §2, L2) | `Subunit.shape`, `width`, `depth`, `distribution`, `concentration`; `geometry.footprint_for` |
+| **troops** | directive (b): "the number and quality of troops per cell"; 2026-07-08: "subunit power is the aggregate or derivation of cell power" | the cell as the primitive for morale, facing, damage and troops | a cell: `cell_troops`, `cell_morale`, `cell_facing_vec`, position; type and quality are the unit's, not the cell's (`core/exchange.py:100-109`) |
+
+The record names the second level "subformation" where Jordan says "unit" and uses no word for the third.
+That is a naming fork between `armyrecord.py` and the intent, and it is why the first audit counted a
+missing level. Resolved at R-30.
+
+### B3.2 Is each level real in the data model and in the resolver?
+
+| level | its own formation | its own orders | its own state | read by the resolver | verdict |
+|---|---|---|---|---|---|
+| army | **no datum.** One rule in code: melee in front, missile behind, horse alternating on the flanks, three rows from the enemy (`orderofbattle.py:180-226`, an ASSUMPTION "Jordan to correct"). Envelopment and refused flank are builders in `systems/mass_battle/sim/engine.py`, which a season cannot reach | `strategy` (three values, two of them traps, F-MB-21); go-code signals exist and nothing on the record fires one | friction draw; `fired_signals`; rout by share of bodies broken (`ROUT_CASCADE_FRAC` 0.6); Command, a literal | yes | **real in the resolver, flat in the data.** An army is a list |
+| unit | shape from its role; frontage and depth supported by the engine and **not carried** (F-MB-20) | role, stance, target, one fall-back fraction; the engine's orders, routes and signals **not carried** (F-MB-26) | morale, discipline, stamina, ammunition, routed, broken, yielding: all per unit, all live | yes: targeting, orders, rout, pools, volley are per unit | **real in both**, narrow in what the season may say |
+| subformation | it *is* the formation; four shapes | none of its own (it has none in any source) | per-cell offsets, facing, morale | yes above about ten cells; **at season scale it is one to four cells in one rank** | **real in the engine, absent in a season** |
+| troops | — | — | count, morale, facing, position per cell; **kind, quality, armour and weapon are the unit's** | count and facing: yes. Morale: yes when cells exist | **real for count, not for kind** |
+
+**Flattened at resolution time?** On the shipped path, yes, twice: the headcount constructors make one unit
+of one stand-in type (the first audit's F-MB-17), and on every path the subformation is flattened to the
+cap (F-MB-20). The resolver itself does not flatten: given a body with ranks it resolves per cell.
+
+### B3.3 The data model that makes it designer-editable (decided)
+
+One authored file, one exporter, one loader. The shape follows the tree's own precedent: the order
+vocabulary is already exported by `tools/export_battle_orders.py` to
+`engine/engine_params/battle_orders.json` behind a `--check`.
+
+- **Authored head:** `references/troops.yaml`. **Export:** `engine/engine_params/troops.json`
+  (`tools/export_troops.py`, `--check` round-trip). **Reader:** one loader in
+  `modules/mass_battle/troop_types/`, which refuses an unknown key by name; `TROOP_TYPE_STATS`,
+  `TROOP_TYPE_REACH`, `MOUNTED_TYPES`, `TROOP_TYPE_DENSITY_CAP`, `TROOP_TYPE_ROLES`, `TROOP_LOADOUT`,
+  `TRAINING_SITE`, `ARM_SHARES`, `ROLE_OF`, `ARSENAL`, `ARMOURY` and the four name tests of F-MB-23 become
+  reads of it. The module reads a data file and imports no `engine` code, as now.
+- **Four sections**, each a closed table:
+
+  | section | one row is | columns | replaces |
+  |---|---|---|---|
+  | `arms` | something a soldier carries to fight with | `class` (`non_pole`, `pole`, `pike`, `missile`: the ruled P-DEC-1 map gives reach 0.1, 0.2, 0.3 and the support depth 1, 2, 3); for a missile `range` and `volleys`; **mass**: read from personal combat's export when the key is in its roster, authored here (`mass_kg`) only when it is not, and refused if stated in both | `ARSENAL`, `TROOP_TYPE_REACH`, `support_ranks_for`, `VOLLEY_*` per type |
+  | `troops` | a kind of soldier | `power`, `discipline`, `morale`, `strength`; `mounted`, `charge`, `wheel`, `default_role`; `cell_cap`, `ranks`; `primary`, `secondary`, `armour`; `roles`; `training_site`, `min_site_condition` | seven tables and four name tests |
+  | `formations` | a way of deploying an army | for each post (`front`, `rear`, `left`, `right`, `reserve`): the line it stands in and its offset; `approach_rows`; which troop classes default to which post | the rule inside `orderofbattle._place`; the harness-only envelopment and refused-flank builders become rows |
+  | `doctrines` | what an unplayed commander raises | the share of each class and the order of preference | `presets.ARM_SHARES`, `ROLE_OF` (the first audit's step 5a) |
+
+- **The army Record's unit row** (`armyrecord.KEYS` is unchanged; the row gains fields, each optional
+  with today's behaviour as its default):
+
+  | field | meaning | default |
+  |---|---|---|
+  | `post` | where in the army's formation the unit stands | by its class, as `_place` does now |
+  | `ranks`, `files` | the subformation: depth, and frontage if the designer fixes it (else it follows from troops) | the troop row's `ranks` |
+  | `secondary` | overrides the troop row's second weapon for this unit | the troop row's |
+  | `standing_orders` | an ordered list of `(trigger, behaviour)` over the engine's closed sets (§B4.3) | `()` |
+  | `officer` | the person who leads it | none |
+  | `experience` | 0, 1 or 2 (§B5.2) | 0 |
+
+- **What a designer edits.** A new troop type: one `troops` row. A new weapon for troops: one `arms` row
+  (or nothing, if personal combat has it). Pikemen or archers with arming swords: one cell, `secondary:
+  arming`. A deeper pike block: `ranks`. A new way to deploy: one `formations` row. No Python.
+
+Full text, seeds and gates: `proposals/04_MB_unit_loadout_and_weapon_in_hand_B.md` (the troop file, arms,
+loadout, the weapon in hand) and `proposals/04_MB_cell_hierarchy_as_data.md` (arrangement, scale,
+formations, kinds within a unit).
+
+### B3.4 The scale question the 2026-07-22 investigation left for Jordan, answered by the ladder
+
+*"A minimum cells-per-subunit floor, or a UI that renders sub-cell formations at low counts?"* Neither.
+Step 3 (a design document): the archived design makes the troops in a block a function of the battle's
+**scale** (`mass_battle_v30.md` §A.3: ten soldiers a Size at skirmish scale, a hundred at company scale),
+not a constant. Step 4 (precedent): every calibration in the engine was made on the tier table's bodies,
+which hold about 16 troops a cell at 400. So: **the season lays a body out at the density the engine was
+calibrated at, by an explicit ranks-by-files grid (`footprint_for`'s `width`, `depth` arm, which already
+exists and bypasses the cap), with one number, troops a cell at deployment, in the troop file's header;
+the cap stays as the control arm.** A realm army of 600 is then some forty cells in bodies three to five
+ranks deep: the bodies the gauge fights. This is a declared mover for every army field (none occurs in
+natural play today) and it must land with the first audit's scale and grade proposal, not before it.
+
+### B3.5 The weapon-carry trade-off, point by point
+
+| Jordan's test | reading | where it goes |
+|---|---|---|
+| is the loadout a per-unit, per-troop-type datum | a troop type names one weapon and one armour in a Python dict; the resolver reads only whether the weapon is melee or missile (first audit F-MB-19, confirmed: armour never becomes `dr`, §B2.3) | `troops` row: `primary`, `secondary`, `armour`; unit row may override `secondary` |
+| is the weapon in hand a state the resolver reads and an order or trigger changes | no: `unit_type` is fixed at construction; reached archers keep shooting (first audit, by run) | `Subunit.in_hand`, an order-settable field; two new trigger kinds, `flanked` and `volleys_spent` (the second is the archer's historical switch: `research/pre_firearms_formations/05_late_med_renaissance_europe.md:194`, `:218`) |
+| are the penalties derived from the loadout by one rule, as data | no rule exists at either scale; fatigue and speed have no equipment term | one function, personal combat's `carry_demand` (`proposals/03_PC_loadout_and_carry.md`), evaluated by the host; the module is handed factors |
+| consistent with an individual's kit | cannot be today: two rosters, and personal combat's has no missile weapon, pike or lance at all (C-3) | one owner a fact: mass lives with whichever roster holds the weapon; the leaf takes masses (§B5.1) |
+| does the cost bite in play | **fatigue:** saturates in one engagement (first audit); **speed:** first contact differs only by Discipline and by horse; **pursuit:** season-unreachable; **forced march:** no march cost exists to slow `[UNVERIFIED beyond `_eff_march`]`; **supply:** one ration debit, shipped off | the drain and recovery factors (battle), the step factor (approach, kite, envelop), and, at campaign scale, the sourced Bannerlord shape, speed falling with carried weight, named for FA and SE in §B5.2 because no march clock exists to carry it |
+| one rule over any troop type, primary and secondary | — | yes: no branch on a type name; the pike's sword and the archer's sword are the same column and the same order |
+
+One thing the weapon-carry intent depends on that neither first-lane proposal names: **a second weapon
+can matter only where the first does** (F-MB-22). A pike unit that draws swords changes reach class from
+`pike` to `non_pole`; on a one-rank body that changes nothing, as pike against heavy infantry shows. The
+loadout therefore lands after the arrangement (§B3.4), or its gates cannot go green.
+
+### B3.6 More than one troop kind in a unit
+
+"Its own troop types" is plural. Two readings: a unit of one kind with two weapons (covered above), and a
+unit whose ranks are of different kinds (a pike block with shot behind it; veterans in front of levy).
+The second has a ruled direction (2026-07-08, quoted in §B3.1), a named seam (`subunit_combat_pool`'s
+closed form is "sum-over-cells(cell_power x cell_troops)" and `pair_pool_contribution` already walks
+cells) and a falsifier written by the synthesis ("a sub-unit whose cells differ in Q pools differently
+from its troop-weighted mean Q"). It is specified in `proposals/04_MB_cell_hierarchy_as_data.md` §4 as a
+`bands` list on the unit row, front to rear, and **staged last**: with eleven units an army, two bodies
+one behind the other already say most of it, and the NERS reading of a band is N-narrowed until a body
+has ranks for it to occupy.
+
+### B3.7 NERS reading of the hierarchy as designed (E last)
+
+- **N.** Army formation as data: holds from above (a commander's plan is the deployment), below (the
+  engine already places by post) and laterally (the same idea as the unit's shape, one grammar at two
+  scales). Subformation as data: holds from every direction once bodies have cells; from the season's
+  direction today it is unreachable, which is the finding, not a reason to cut it. Bands: narrowed (§B3.6).
+- **R.** Customisation of settlements' and factions' forces by row; strategic thought in post, depth and
+  loadout; completeness at the extremes fails today (a one-cell body) and is what §B3.4 repairs.
+- **S.** One methodology for a body's cells on both paths (today two generators); one roster for a
+  weapon's mass; the scale stated once.
+- **E, against that.** Twelve tables and four name tests become one file of four sections; the record
+  gains six optional fields. A player can predict that a deeper block holds longer and a wider one
+  wraps, which no player can predict of one cell.
+

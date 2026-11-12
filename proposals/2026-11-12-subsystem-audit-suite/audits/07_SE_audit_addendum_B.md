@@ -316,8 +316,9 @@ Severity as in the first audit: **B** blocks a requirement, **D** degrades narra
 
 **F-SE-17 · D (B for the campaign layer) · The proposed granary tier has no steward, and is not the rung
 the field or the pay chest reads.**
-Evidence: probe E-2: seats sit at `terr_T1` (ten Crown court seats), `terr_T9` (five Church seats),
-`terr_T15` (one, a territory with no settlement), the three duchy rungs (ten) and the realm (four). Of the
+Evidence: probes E-2 and E-7: seats sit at `terr_T1` (ten Crown court seats), `terr_T9` (six Church
+seats), `terr_T15` (one, a territory with no settlement), the three duchy rungs (five, one and four), the
+realm (four) and the foreign `set_alt_1` (two); one seat has no rung. Of the
 16 territories that hold a settlement, **14 have no seat at the territory rung**. `requisition` deposits at
 `seat.rung` and nowhere else (`effects_governance.py:538-549`: *"THE TREASURY IS THE SEAT'S RUNG AND
 NOTHING ELSE"*); the field's ration is read at `_seat_treasury` and `_defender_treasury`; upkeep is paid
@@ -599,6 +600,7 @@ no `aperture`; no timing was read.
 | E-4 | `grep -n controller_subordinate` over `engine modules systems tools` | none | one hit, the YAML line |
 | E-5 | regex over the eleven case files for `need:` lines | none | 46 cases with a keyword need; §2.4 |
 | E-6 | `git status --short` before return | none | see the receipt |
+| E-7 | seat count per rung on `build_realm(0)` (a `python -` probe) | 0 · 0 | `terr_T1` 10, `terr_T9` 6, `terr_T15` 1, `duchy_hafenmark` 5, `duchy_valorsmark` 1, `duchy_varfell` 4, `r_valoria` 4, `set_alt_1` 2, no rung 1; 18 territory rungs (`seat_probe.txt`). Run after the branch head had moved to `4832a6c`; `git diff --stat f83534e 4832a6c` over the code trees is empty |
 
 The two probe scripts are instruments of this addendum, a few dozen lines each, and write nothing.
 Not re-run: any reading of the first audit (its code is this HEAD's code).
