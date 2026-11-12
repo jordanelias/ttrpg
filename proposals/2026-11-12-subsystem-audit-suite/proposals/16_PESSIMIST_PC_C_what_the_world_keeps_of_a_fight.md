@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.5) — one consistency note; no edit changes. A-33 (news of a death travels by presence, trail and telling, apart from the seat's news): the `fell_to_hand` Observation rides the death's own Event, so the killer's name reaches exactly those the death reaches and no further; nothing here widens who learns of it. The scene's `shape` is also what a nested round returns to a field (`U5b_PC_rulings_in_the_fight.md` §1), so an officers' duel inside a battle is retold by the same five facts.
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (AMBIGUOUS against `04` §C.6: an U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fought scene" → "fight" (glossary *scene*); "typed record" → "dataclass" (glossary *record*).
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (AMBIGUOUS against `04` §C.6: an U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fought scene" → "fight" (glossary *scene*); "typed record" → "dataclass" (glossary *record*). A-101 round lane (2026-11-12, `master/pc_round/PC_ROUND_SPEC.md`): a fight is a sequence of rounds, so the proposed `SceneShape.turns` and Observation term `fight_turns` are `rounds` and `fight_rounds` (the "8 turns" of the S1 scene are 8 rounds); "exchanges" keeps its meaning (one attack attempt and its defence).
 Observation that names a doer reaches only channels that mint attribution) and §2 (A-33), U1 D-U1-06 (`observed` is the
 one channel; every predicate here is a member of the closed roster `rosters.yaml: observation_terms`, which resolves the
 `[name it at landing]`; `fell_to_hand` and `first_blood` are deposited only through channels whose
@@ -58,7 +58,7 @@ it already holds (a pure fold over `wound`, `turn_start`, `yield`; no new engine
 ```python
 @dataclass(frozen=True)
 class SceneShape:
-    turns: int                 # turn_start count (today's `bouts`)
+    rounds: int                # rounds fought: the `turn_start` count (today's `bouts`; A-101, was `turns`)
     blows: Mapping[str, int]   # wounding blows LANDED, by claimant id
     first_blood: Optional[str] # who landed the first wounding blow; None if none landed
     lead_changes: int          # times the party ahead on Health fraction changed
@@ -67,7 +67,7 @@ class SceneShape:
 
 `loop/effects_combat.py::_eff_kill` puts on the act's success Events, for each party `p`:
 `Observation(p, "blows_landed", shape.blows[p])`, and once per scene (subject the actor):
-`Observation(actor, "fight_turns", shape.turns)`, `Observation(shape.first_blood, "first_blood", True)`
+`Observation(actor, "fight_rounds", shape.rounds)`, `Observation(shape.first_blood, "first_blood", True)`
 when not `None`, and `Observation(actor, "lead_changes", shape.lead_changes)`. Five facts, each one a
 number or a name the scene already computed; a narrator, the chronicle and a played person's display
 read them off the log. The predicates are members of `rosters.yaml: observation_terms` (`:1273`, the closed
@@ -75,7 +75,7 @@ roster `fell_to` also joins, D-U1-06); the loader refuses a predicate on `observ
 **Who may hold the names.** `first_blood` and `fell_to_hand` name a person as a doer: WITNESS deposits them only
 through channels whose `observation_terms.supplied_by` includes `who` (`co_located`, `witness_key`), never through
 `document_key`, `post_remit` or `chronicle` (`04` §C.6: attribution per channel). The counts (`blows_landed`,
-`fight_turns`, `lead_changes`) name no doer and ride every channel the Event's other facts ride.
+`fight_rounds`, `lead_changes`) name no doer and ride every channel the Event's other facts ride.
 
 **2. The hand.** For a felled party who is the act's *actor*, `_eff_kill`'s Subject carries
 `Observation(felled, "fell_to_hand", prevailing_party)`. `queries/person_q.py::deed_doer` reads a
@@ -95,7 +95,7 @@ state outliving the call) and a new Event kind per beat (the fold's kinds are th
 | `engine/season/seam/wrappers/combat.py::resolve` | returns `shape=` beside `beat=` |
 | `engine/season/loop/effects_combat.py::_eff_kill` (and `_eff_capture` through its base) | the Observations above |
 | `engine/season/queries/person_q.py::deed_doer` | the `fell_to_hand` read, before the pairing; the `LIMIT, stated` note at `:266-268` restated as closed |
-| `engine/season/harness/chronicle.py::lines` | where an act's Events carry `fight_turns`, the line appends `(n turns, first blood X, k lead changes)`; a render change only |
+| `engine/season/harness/chronicle.py::lines` | where an act's Events carry `fight_rounds`, the line appends `(n rounds, first blood X, k lead changes)`; a render change only |
 
 ## Gate (execution artifacts)
 
@@ -105,7 +105,7 @@ The S1 and S7 probes were lane scratch (not in the repository). NEW `tests/valor
 (gate 4), `test_document_post_remit_and_chronicle_witnesses_hold_no_fell_to_hand` (gate 5). Command:
 `python -m pytest tests/valoria/test_combat_scene_shape.py -q -m combat`. Readings:
 
-1. The S1 reading (a fight at world seed 1003): the three Events of the seed-1003 fight carry `fight_turns 8`, `blows_landed`
+1. The S1 reading (a fight at world seed 1003): the three Events of the seed-1003 fight carry `fight_rounds 8`, `blows_landed`
    for both parties summing to 5, `first_blood` and `lead_changes`.
 2. The S7 probe re-run over 100 fights: in every scene where the actor is felled, `deed_doer` on the
    bystander's `person.died` claim returns the standing party; before the change it returns `None` or
@@ -129,7 +129,7 @@ self-defence after which no witness can name the killer.
   weigh anything. Cut it and every fight is retold as its verdict.
 - **R.** The half with no player: a chronicle line with a shape; the self-defence killer becomes
   knowable, so a grievance can form against him. Completeness: a scene with no blow carries
-  `fight_turns` and nothing else.
+  `fight_rounds` and nothing else.
 - **S.** One channel (`observed`), the precedent's; no second store; equal across the two modes.
 - **E, last.** One frozen record, five predicates, one read in `deed_doer`. High against what N and R
   found; it needs the dataclass first.

@@ -210,7 +210,7 @@ add, split or re-draw a row of `verb_table.yaml` carries in its gate, for each s
 line of `aperture <seasons> --seeds 0 1 2` on its closing tree, at the season count its own proposal names
 (two where it names none). The batches and their verbs are the verb map of `IS_A_NINE.md` §6, plus: B07
 (every converted verb, beside 18-A's throughput reading), B25 (`tie`, `knot`: the table reads 68), B38
-(`riot`, if `U5d_SE_cohort_heavy_moves_and_caste` lands its row: the table reads 69). A verb that reads not
+(`riot`, if `U5d_SE_cohort_heavy_moves_and_caste` lands its row: the table reads 69), and B35 (`weave`, `lock`, `mend`, `ward`: four rows `IS-B3-WR-01` adds if `STAGES.md` step 5 carries the thread card; `n` then rises by four more, and R-05's `built out n of n` is read at B35 with the new `n`). `[Sonnet check, 2026-11-12: lane IS-B3's four thread rows were not in this item's list.]` A verb that reads not
 built out at its batch's close is a failed gate of that batch: the batch does not close on a named residue.
 A row whose cells are owed content (`riot`) lands in the batch that has the content, not before.
 · **WHERE:** v12's batch entries (the GATE of B07, B12, B21, B22, B23, B25, B26, B28, B29, B32, B35, B38).
@@ -392,7 +392,7 @@ Only batches that name a conjunct. "re-read" is a held conjunct the batch's diff
 | B30 | MB | R-04.c5 (the grid) | `test_squad_field.py` green |
 | B32 | FA | R-04.a (`determine`, `convene`); `BUILT OUT`: `determine`, `pardon` | each `via` at least 1 |
 | B34 | GO | R-04.c1 (the sheet) | the creation-sheet test green |
-| B35 | WR | `BUILT OUT`: `knot`, `thread_read`; **R-05 re-take** | `built out n of n` |
+| B35 | WR | `BUILT OUT`: `knot`, `thread_read` (and `weave`, `lock`, `mend`, `ward` if `IS-B3-WR-01` lands them); **R-05 re-take** | `built out n of n` |
 | B36 | WR | R-04.c1 (the chronicle); **R-04 re-take** | the chronicle tells; nine of nine |
 | B38 | WR | re-read R-05 (`riot`); `NULL SCENES` asserted 0 (C9) | n of n at 69, if the row lands |
 | B39 | WR | re-read R-06.e, R-09.b on the generated cast | every acting person vectored; pools differ |

@@ -260,7 +260,7 @@ thought to enter:
 | round | one `wrapper.engagement(A, B, first, cfg, rng, prev_closed, terms)` call | the two in-round re-openings end it (item PCR-1) |
 | closing | the open-measure block (`:221-262`) and the latch/re-presentation at entry (`:98-124`) | none |
 | exchange | one closed-measure beat with an actor (`:264-470`) | none |
-| exchange cap | `CFG['BURST_MAX'] = 4` (`config.py:112`) | none to the value; comment and word (PCR-2) |
+| exchange cap | `CFG['BURST_MAX'] = 4` (`config.py:112`) | none to the value; its comment (PCR-1) |
 | separation | `_emit('separation', reason)` and the `return None, closed` beside it | two new reasons; the reason returned, not only emitted (PCR-1) |
 | between rounds | `wrapper.py:613-615` (recovery) and `:127`, `:140`, `:593` (resets and draws at the next round's start) | `:593`'s coin moves inside the round (PB step 1) |
 | beat | one iteration of `while beats < BEAT_BUDGET` | none |
@@ -292,7 +292,7 @@ yielded ending returns before it); (4) the loop's budget is `max_rounds` (12). T
 
 `engagement` stays as the function's name: renaming it to `round` would shadow the builtin in `wrapper.py`,
 which calls `round(...)` at every emit; its docstring is corrected to "one round". The other names are listed
-with their cost in part 2 §6 (item PCR-4).
+with their cost in part 2 §6 (item PCR-3; the season's `Claim.round` is PCR-4).
 
 ### 3.5 The keyed draw per round (A-30)
 
