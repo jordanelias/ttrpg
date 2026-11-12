@@ -157,14 +157,15 @@ founding test's own helpers); `pes_supply.py`. Each row names the run; the contr
 | 7 zero case | yes: the 26 lowland cohorts stay at 1000 | holds |
 | 8-10 is blamed, with consequence, fitted to cause | **nothing.** Famine arm: 0 shortfall Observations in six seasons; no person holds a claim; `person.died` carries `causes=[ROOT]`, `observed=()` (`matter.py::_die`). Play arm: 0 Observations, 0 persons holding a shortfall claim, in two seasons with eleven starving towns | **fails**: no link exists |
 | 11 visible before it starves | the band is computed and not delivered to any person | fails |
-| 12 somebody can act | `transfer` exists; in the play arm no `transfer`, `exchange` or `requisition` entered a starving town (0 of the 10 `transfer` and `exchange` attempts by highland residents executed) | fails in computed play |
+| 12 somebody can act | `transfer` exists; in the play arm no `transfer`, `exchange` or `requisition` entered a starving town (0 of the 10 `transfer` and `exchange` attempts by highland residents executed at seed 0, 0 of 13 at seed 1) | fails in computed play |
 | 13 hunger weakens the town's dues | no: yield reads no person (the eight emptied towns go on mining 49 ore a season each with population 0); levy reads weight, which did not fall until death | fails |
 | named residents | the eleven named persons living in the eleven starving towns hold body 1000 and all survive: only a cohort eats (ruled, ED-IN-0255) | by ruling; surprising to a genre player |
 
 Under computed play the sentence fails earlier still: each starving cohort spends an act on `tend` and
-restores itself to 1000 in the season it fell (`body.tended` 11 and 10 in the two seasons of the fail arm,
-0 and 1 in the fed arm), so a town with no food at all never weakens. Known as H-304; measured here against
-its control.
+restores itself to 1000 in the season it fell (cohort `tend` executed 21 and 20 times in the fail arms of
+seeds 0 and 1, 0 in the fed arms; 41 of 44 starving cohort-seasons end at body 1000), so a town with no
+food at all never weakens. Known as H-304; measured here against its control. In those four runs no
+shortfall Observation was emitted and no person held a shortfall claim.
 
 **P2 "A good harvest and a bad one differ."**
 
@@ -184,8 +185,8 @@ its control.
 | O link | running code | verdict |
 |---|---|---|
 | 1 failing is a state the game knows | hunger band only, and no person is told it | partial |
-| 2-3 they go somewhere that gains them | **nobody goes.** Play, seed 0, two seasons: starving-town cohorts attempted `migrate` 16 times (fail arm) against 12 (fed arm) and executed 0 in both; lowland cohorts attempted 36 and 35, executed 0. Every executed `move` in both arms names the mover's own rung | **fails** |
-| 4 rate proportionate to failing | attempts per cohort per two seasons: starving 1.45, the same towns fed 1.09, thriving lowland 1.35-1.38. One seed; the starving and the thriving are not separable | fails |
+| 2-3 they go somewhere that gains them | **nobody goes.** Play, seeds 0 and 1, two seasons each, both arms: 239 `migrate` attempts (155 by cohorts), 0 executed. Every executed `move` in all four runs (17, 17, 23, 26) names the mover's own rung | **fails** |
+| 4 rate proportionate to failing | `migrate` attempts by the eleven highland cohorts: starving 16 and 6 (seeds 0, 1), the same towns fed 12 and 12. Total 22 starving against 24 fed. Hunger does not raise the wish to leave | **fails** |
 | can they | yes by ladder and room: at build a cohort has 1,116 of 1,369 other-settlement pairs open (`room_s0.txt`). The refusals are of what the chooser names, not of the map | the block is the choice of destination |
 | 6 a thriving place attracts | no rule reads a destination's stores, hunger or safety | fails |
 | 7 consequences at both ends | none could occur: a cohort's leaving would move weight 2 and its whole draw; the origin's yield would not change (reads no person) | fails |
@@ -202,7 +203,7 @@ its control.
 | 4-5 open outcome; can fail | **cannot fail.** A founded hearth left alone for 40 MATTER barriers: still exists, stores `{grain: 10}`, 0 residents, 0 Events naming it. With a dwelling built: the dwelling stands at condition 0 for 40 seasons and the hearth's capacity reads 1. No rule ends a Rung but `raze`, which targets settlements | **fails**: every founding lasts, as an empty lot |
 | 6 lasting means it grows | no: nothing moves in unless a person chooses `migrate` there; nothing grows | fails |
 | 7 the founder is bound to it | a `hold` edge, opened at founding. No standing, no name, no consequence of his death on it | partial |
-| 8 both outcomes in computed play | neither: `found` 0 executed of 7 attempted and `build` 0 of 4 (first audit, seed 0, three seasons); here 0 of 2 and 0 of 1 per arm in season 0 | fails |
+| 8 both outcomes in computed play | neither: `found` 0 executed of 7 attempted and `build` 0 of 4 (first audit, seed 0, three seasons); here 0 of 25 `found` and 0 of 14 `build` attempts across the four play runs | fails |
 | the draw | none; certain on eligibility (determinism sweep C-15) | fails the standing rule |
 
 **P5 "Trade moves goods to where they are wanted."**
@@ -212,7 +213,7 @@ its control.
 | 2 wanted is a shortage or a price | no price exists; a shortage is known to the engine and, when never stocked, to no person | fails |
 | 3 a route | none: any rung to any rung, at no cost of distance (H-328) | fails |
 | 4-6 moves from surplus to shortage, relieves it | **nothing moved.** Fail arm, two seasons: the eleven hungry towns hold ore 1,639 and timber 319 and no food; the 26 others hold a growing food surplus; `exchange.made` 0, `transfer.made` into a hungry town 0, `requisition.taken` 0. Highland food at the end: 0 grain, 0 salt | **fails** |
-| direction of attempts | hungry-town cohorts attempted `exchange` 4 times against 10 by the same towns when fed, and `transfer` 4 against 12: **want lowers the attempt to trade**, because the fixture offers `grain` for `salt` and a town with neither has nothing the row can name | inverted |
+| direction of attempts | hungry-town cohorts attempted `exchange` 9 times against 26 by the same towns when fed, and `transfer` 6 against 31 (two seeds summed; the direction holds on each): **want lowers the attempt to trade**, because the fixture offers `grain` for `salt` and a town with neither has nothing the row can name | inverted |
 | 7 can be cut | nothing to cut | fails |
 | 8 somebody profits | `coin` is a registered kind that nothing yields, holds or reads | fails |
 | what is produced for trade | of 4,810 units a season, 222 are eaten; ore (1,850 a season, the largest yield) has no reader in any roster, cost or rule; timber's one use is `works_cost`, never paid in play | goods with no want |
@@ -279,9 +280,9 @@ one that would cost nothing even in the worlds built to exhibit it is a **false 
 | `larder_draw` + `subsist` | scarcity binds a body | remove the shortfall (the fed arm against the fail arm; `body_step` 0 itself was not run) | barrier-only: the eleven starving cohorts live instead of dying. Computed play: `body.changed` and `body.tended` vanish and no settlement reading moves (41 of 44 starving cohort-seasons end at body 1000 anyway) | true in principle; **false in computed play** (H-304) |
 | the shortfall Observation | a dearth reaches a person | drop `short_seen` | nothing in the realm in either arm, two seeds (0 Observations); one `transfer` of 8 salt in `scarce` | false today; true in one fixture |
 | `world_q.hunger` and its bands | a settlement's need is readable | delete | nothing: read by `census` and a probe label | **false N-line** |
-| `settlements.housing` (capacity) | the throttle that makes `found` and `build` matter | set the floor to 99 | `migrate` refusals for room stop (79 of 116 at seed 0); the acts they refused are courtiers re-homing; `found`/`build` do not execute either way | holds as a refusal, **false as a throttle** |
+| `settlements.housing` (capacity) | the throttle that makes `found` and `build` matter | lift the bound (not run; read off the first audit's refusal counts) | the 79 room refusals of 116 `migrate` attempts at seed 0 would admit; what they refuse is courtiers and cohorts naming occupied hearths; `found`/`build` do not execute either way | holds as a refusal, **false as a throttle** |
 | `settlements.fabric` (ceiling, share) | a works paces its fabric | return scale and 1/1 | nothing in computed play (`work`, `restore` 0 attempted; `sabotage` 0 executed) | false today |
-| `settlements.fortification` | walls are the garrison's condition | return 1.0 | nothing outside a siege: `wear_per_season.garrison` is 0, so every settlement reads 1.0 until `besiege` wears one (MB's) | narrowed to one consumer |
+| `settlements.fortification` | walls are the garrison's condition | return 1.0 | by reading, not by a run: `wear_per_season.garrison` is 0 and every settlement is built with one garrison at full scale, so each reads 1.0 until `besiege` wears one (MB's) | narrowed to one consumer |
 | `settlements.provision` | stores bound the troops fielded | ships off (identity) | nothing shipped; **on**, every side of every field is cut to nothing (§1.2 A-2) | false shipped, destructive on |
 | the season factor | weather | ships `()` | nothing shipped; on, a change in stores nobody draws on (§2.3 P2) | false today |
 | Site wear | a worn place produces less | zero the rates | yield stays 4,810 instead of falling 1% a season; first band crossing is at season 21 (first audit F-SE-05) | false inside any run length used |

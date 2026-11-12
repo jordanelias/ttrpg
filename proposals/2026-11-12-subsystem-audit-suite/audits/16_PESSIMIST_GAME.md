@@ -444,3 +444,248 @@ here: every instrument that walks `causes[]` is blind to the closing acts (F-PES
 compares against the null arm, so none can distinguish a realm that corresponds from a realm that
 changes. `harness/arc.py` reads 33 "persons with an arc" at seed 0 over six seasons (WR run); the first
 twelve it prints are cohorts ("the people of Kronmark: utter, commit") whose arcs are utterances.
+
+### 3.9 The provided arcs and characters, taken together
+
+The ARCS lane adjudicates the cases one by one (`12_ARCS_adjudication.md`); this is the reading of the
+corpus as a whole against the game's two standing rules.
+
+- **Against "no GM".** `corpus_run` (ARCS and CORE runs, cited): 16 of 143 cases name a player the engine
+  does not supply; the bar reads NOT-COMPUTABLE for all 46 NPC and all 97 ARC cases (103 RUNS-UNDECLARED,
+  40 SPAN-UNAUTHORED). `ENDINGS_CLASSIFIED.yaml` (an agent's blind classification of the arcs' own
+  `ends_when` prose; the file calls itself the weakest evidence in its suite): of 50 arcs, 10 are
+  `NEVER` (*"never, absent player action"*) and 3 `UNCLEAR`. A quarter of the provided arcs, as
+  specified, do not end unless a player ends them.
+- **Against "we do not do deterministic".** The same file: 8 arcs close on a `THRESHOLD` (*"a counter,
+  clock or tracked resource fires, nobody named as choosing"*) and 19 are `forced_by_threshold`; 9 close
+  on a `ROLL`. So as written, 8 to 19 of 50 arcs end by the mechanism the standing rule forbids (a
+  crossing that produces an outcome), and the engine's own law agrees with the rule against them
+  (`loop/matter.py`: *"L5: a crossing MAY NEVER PRODUCE AN OUTCOME"*). The cases are the specification
+  of what must be simulated (`AUDIT_BRIEF.md`), so this is a conflict between two things Jordan has
+  stated; it is listed for the ARCS lane and §7 J-3, and not resolved here.
+- **Against the running game.** Every arc that turns on a death, a succession, a verdict, a famine, a
+  war or a betrayal with consequence (the ARCS lane's `core` needs) meets §3.3: the closing verb is
+  refused or unformed in computed play. The corpus is one template world run 143 times (F-CORE-02); the
+  realm, where the arcs' characters all live at once, produces none of their endings in any run.
+
+## 4. Findings, worst first
+
+Severity: **B** blocks a requirement · **D** degrades narrative · **H** hygiene. Each: claim · falsifier
+run and its control · requirement · minimal fix at the owner.
+
+**F-PES-GAME-01 · B · the world's skeleton does not respond to its people.** Persons, seats, site
+conditions, rungs and stores after three played seasons equal the same world with nobody acting, at
+seeds 0, 1, 2 (one `capture` death excepted). *Falsifier:* `x1_world.py`; a difference in any skeleton
+component without a planted hazard. *Control:* the NULL arm's own wear, yield and hunger are seen; the
+planted death (X2) and the established office are seen. *Touches* R-01, R-02, R-04, R-05. *Fix:* no
+single owner; the ring in §7, read by `16_PESSIMIST_GAME_consequence_reading.md`.
+
+**F-PES-GAME-02 · B · no consequence crosses a seam.** Executed answers to another's Event land in the
+information verbs 83 to 85% of the time and in personal combat, mass battle, the settlement verbs and
+training never; `person.died`, `field.lost`, `news.told`, `body.changed` are answered by nobody.
+*Falsifier:* §1.2's matrix; any executed answer in the PC, MB, SE or CHAR column. *Control:* the verb
+census (nothing executed in those columns) agrees; the matrix does see the FA, SC and FI cells. *Touches*
+R-01, R-04. *Fix:* the occasions each lane names (`03_PC_duel_chain_reach.md`,
+`04_MB_headcount_grade_and_scale.md`, `07_SE_ground_and_granaries.md`, `06_FA_decree_binds.md`), in the
+order of §7.
+
+**F-PES-GAME-03 · D · the acts that close a story carry no cause.** An act on a standing occasion
+(a vacancy, a writ, a wounded person, a detainee; fifteen sources in `world_q.questions_for`) is folded
+with `causes == [the act]`. The Prince's succession does not cite the King's death. *Falsifier:*
+`x2b_death_detail.py 0 1 4 p_npc_020`, the `succession.claimed` line (`causes=['ACT']`). *Control:* a
+`create_record` answering the same death does cite it (the 19 descendants). *Touches* R-01, R-02; every
+reader of `causes[]`. *Fix:* `16_PESSIMIST_GAME_standing_occasions_carry_their_cause.md`.
+
+**F-PES-GAME-04 · D · in computed play the game is a fixed function of state** (standing rule; R-09).
+7.8%, 10.8% and 8.4% of attempted acts are drawn; four of the engine's seven draw sites ship off; the
+built world is identical at every seed and the played skeleton is identical at two seeds of three.
+*Falsifier:* §1.3's census; the BUILD and PLAY projection lines of `x1_s*_k3.txt`. *Control:* the drawn
+verbs do show spread (`research` three bands; `tell` three). *Fix:* the act side is
+`18_DETERMINISM_task_draw_for_uncontested_verbs.md` and its siblings; the clock side is
+`16_PESSIMIST_GAME_the_world_draws.md`, `09_WR_world_motion.md` edit 4 and B10-18's weather draw.
+
+**F-PES-GAME-05 · D · the world's own motion is fixed and synchronized.** A planted total famine kills
+all 37 cohorts in the same season, the seventeenth; every Site of a kind wears by one step; yield is
+one figure. *Falsifier:* `x3_famine.py 0 0 20 nullglobal` (trajectory 940 … 40, then 37 deaths).
+*Control:* the unstarved arm holds 940 for twenty seasons. *Touches* R-09. *Fix:*
+`16_PESSIMIST_GAME_the_world_draws.md`.
+
+**F-PES-GAME-06 · D · rest cures starvation.** `tend` restores a body whole, with no roll, no food and
+no cost; every cohort that hungers in season 0 is whole by its end, at every seed. A wound is the same.
+*Falsifier:* X1 PLAY vs NULL `body` row (PLAY 1000, NULL 940, all 37). *Control:* the NULL arm, where
+nobody tends, keeps the loss. *Touches* R-01 (consequence), R-09. *Fix (owned elsewhere, cross-listed):*
+`loop/effects_combat.py::_eff_tend` as a graded draw restoring part of the headroom (sweep D-05,
+`03_PC_exits_withdrawal_recovery.md` Part C, hole row H-304); **and one clause no lane has written:**
+`tend` restores nothing to a body whose last fall was hunger while its home's larder is still short
+(the predicate is `world_q.hunger`'s band for the subject's home; an eligibility conjunct on the `tend`
+row, so a refusal, not a second rule).
+
+**F-PES-GAME-07 · D · the largest news in the realm does not travel.** The King's death is held by 16
+of 82 the season it happens and 17 three seasons later; in the season after the heir has taken the
+throne a confessor is still trying to confer it (24 attempts). *Falsifier:* `x2b` know-of-a-death line
+per season. *Control:* the 16 who were present do hold it. *Touches* R-07 (imperfect knowledge is met;
+*spreading* knowledge is not). *Fix:* FI's `08_FI_02_rumour-that-travels.md`; add to its gate that a
+`person.died` of a seat-holder is held by more than those present within two seasons.
+
+**F-PES-GAME-08 · D · a vacant seat has one route, and it is the heir's.** The throne passes by one
+uncontested, undrawn claim; the dead King's duchy and the heir's old seat stay empty; with the heir
+dead too the throne stays empty and nothing else changes; 43 `confer` attempts in three seasons are
+refused, one of them a duke conferring the crown on a settlement's cohort. *Falsifier:* `x2_death.py`,
+`x2b` both arms. *Touches* R-04, R-09. *Fix (FA and sweep, cross-listed):* `06_FA_seat_terms_and_turnover.md`,
+`14_VERBS_BINDING_C_turnover.md`, `09_WR_world_motion.md` edit 2, sweep C-07 and C-11 (the claim is a
+draw; rival claims are opposed). **Owed to CHAR/FA:** `confer`'s `to` operand is formed over every
+person the conferrer knows, cohorts included; it should be formed over persons the seat's `binds`
+admits.
+
+**F-PES-GAME-09 · D · most persons are downstream of nobody and upstream of nobody.** Reach (executed
+acts by others descending from a person's acts), seed 0, three seasons: 48 of 83 at zero; median 0;
+cohorts' mean 0.6, seat-holders' 18.2. The 37 cohorts are 45% of the actors and make about two acts in
+five (1,049 with no cast against 2,630 with it). *Falsifier:* `x4_player.py 0 3` REACH lines; `x5`.
+*Touches* R-06. *Fix:* none proposed here; §7 J-2.
+
+**F-PES-GAME-10 · D · a player-king who does nothing loses nothing.** §2.5. *Touches* R-02 as meant.
+*Fix:* the ring; nothing specific to the play surface.
+
+**F-PES-GAME-11 · D · the provided arcs conflict with two standing rules as specified.** §3.9. *Fix:*
+ARCS lane; §7 J-3.
+
+**F-PES-GAME-12 · H · three `met` requirements are met on a channel that carries paper.** R-01, R-02
+and R-03 are true as worded and unshown as meant. *Fix:* `16_PESSIMIST_GAME_consequence_reading.md`.
+
+**F-PES-GAME-13 · H · offices exist only where the cast seats them.** `build_realm(0, cap=0)` has no
+office; a seat is minted with its first holder. A realm whose seats die out has no seats to fill.
+*Falsifier:* `x5_extremes.py 0 3`, the `offices=0` line. *Fix:* FA lane (seats from `offices.yaml`
+independent of the cast cap); cross-listed, no proposal here.
+
+## 5. Determinism register (the standing rule), ranked
+
+The act side is `audits/18_DETERMINISM_SWEEP.md` C-01 to C-15 and is not restated. What that sweep does
+not cover, ranked by what it decides:
+
+| id | where | what is fixed | measured | owner of the fix |
+|---|---|---|---|---|
+| W-1 | `queries/world_q.py::body_hazard`; `illness_rate`, `age_step` ship 0 | nobody can die of age or illness: a certain *non*-event | 0 natural deaths in every run of every lane | `09_WR_world_motion.md` edit 4 (Jordan's) |
+| W-2 | `world_q.season_factor`; `season_factor_draw` ships `()` | every harvest the same | `yield.taken` 111 and `stores.changed` 185 at every seed | B10-18 CL-EVENTS (2) |
+| W-3 | `modules/settlements/subsist.py` (`lost = body_step × units short`) | who suffers in a famine and how much | 37 of 37 cohorts in step; all die in season 17 | `16_PESSIMIST_GAME_the_world_draws.md` |
+| W-4 | `loop/matter.py`, the wear loop | every Site of a kind decays alike | site condition equal at seeds 0, 1, 2 | same proposal |
+| W-5 | `decision/choose.py::declare_intents`, `intent_disclosure` 0.0; `loop/witness.py`, `telling_privacy` 0.0 | nobody ever lets an intent slip; nothing is ever confided | both draws never taken | FI / CHAR `[UNVERIFIED: whether either lane's proposals turn them on]` |
+| G-1 | `harness/populated.py::build_realm` | the realm itself: persons, seats, stances, convictions identical at every seed | 22 of 22 projected components equal at seeds 0, 1, 2 | `21_PROCEDURAL_GENERATION.md`'s subject `[not opened]`; a Jordan call if it is not covered there |
+| G-2 | the realm's violence | one authored situation yields the one death, the same man, at two seeds | `p_npc_013` at seeds 1 and 2 | PC occasions (`03_PC_duel_chain_reach.md`) |
+| G-3 | `_eff_succeed`, the roster `successions` | the heir, always, at once, unopposed; with no heir, vacancy, always | X2, both arms | sweep C-07, C-11 |
+| G-4 | eighteen verbs refused at every attempt | a *certain no* is as fixed as a certain yes: 1,585 of 7,940 acts | §3.3 | each lane's formation proposals (`14_VERBS_*_A_formation.md`) |
+
+**The opposite failure (should vary, does not), tested per premise:** the succession (no spread); the
+famine's toll (no spread); the death's reach (16 then 17: no spread over time); the played skeleton
+across seeds (none). **Should not vary and does:** nothing found; seeded replay held wherever it was
+compared (the control arm of X2 reproduces the shipped four-season hash).
+
+**This lane's own text, checked against the rule.** "A decree binds" (given to this lane as a premise
+sentence) is restated in §2.2 as a drawn answer. No proposal of this lane makes an outcome a fixed
+function of state: the world-draws proposal adds draws; the standing-occasion proposal changes
+`causes[]` only; the consequence reading is an instrument.
+
+## 6. The stories that cannot happen, and the ones that can
+
+**Cannot, today, in the shipped realm (each with the run that shows it):** a duel (`challenge` 0 of
+393); a killing outside one arrest (`fight` unformed); a death in bed (hazards 0); a contested
+inheritance (one claimant; first claim wins); a regency or an interregnum with a cost (X2b: nothing
+changes); a usurpation (`seize` 0 of 27, `revoke` 0 of 6); a war, a conquest, a siege that ends
+(MB, FA); a famine (stores 21 times need; rest cures hunger); a founding, a great work, a ruin
+(`found`, `build`, `raze` 0 of 113); a trade (`exchange` 0 of 225); an apprenticeship (`train` 0 of
+324); obedience or defiance (`comply` 0 of 137); a rumour that moves someone (0 of 19 tellings
+answered); revenge (a death answered by nobody); a friendship or a feud forming (stance moved for 1 to
+7 of 83 persons); a birth, a marriage, a coming of age (no verb, no clock: persons never increase); a
+trial with a verdict that changes a life (`determine` 1 of 12); an ending.
+
+**Can, and do:** a record of what the granary held; a petition that lapses; a forgery nobody examines;
+a cover nobody penetrates; an oath that matures; a march that finds an empty field; a move to another
+town; the arrest of one cardinal.
+
+**Can, with the proxy planted, and then stop:** a King's death (the heir succeeds; nothing follows); a
+famine (the town rests and recovers).
+
+## 7. Proposals, the order of the ring, and what is Jordan's
+
+### 7.1 Proposals written by this lane
+
+| file | carries | cost |
+|---|---|---|
+| `proposals/16_PESSIMIST_GAME_standing_occasions_carry_their_cause.md` | F-03 | edit |
+| `proposals/16_PESSIMIST_GAME_the_world_draws.md` | F-05, W-3, W-4 | edit |
+| `proposals/16_PESSIMIST_GAME_consequence_reading.md` | F-01, F-02, F-12 (amends CORE 03 §2) | edit |
+
+### 7.2 The first ring — the shortest order in which one consequence crosses one seam
+
+Every step is another lane's proposal except where marked; this is the dependency order the game-level
+runs imply, for the holistic stage. A step is done when its own gate passes; the ring is done when the
+game gate below passes.
+
+1. **The world produces occasions.** Scarcity and difference (`07_SE_ground_and_granaries.md`); the
+   weather draw (B10-18); hunger and wear drawn (*this lane*); natural death on (`09_WR_world_motion.md`
+   edit 4, Jordan's).
+2. **Consequences stick.** `tend` graded and partial, and refused on a hungry body with a short larder
+   (sweep D-05; the clause in F-06).
+3. **Consequences are readable.** Standing occasions carry their cause (*this lane*).
+4. **Others learn.** `08_FI_02_rumour-that-travels.md`.
+5. **Seats change hands, by a draw.** `06_FA_seat_terms_and_turnover.md`, `14_VERBS_BINDING_C_turnover.md`,
+   sweep C-07 and C-11.
+6. **Orders are answered, by a draw.** `06_FA_decree_binds.md` as reconciled by the sweep.
+7. **Violence has occasions and more than one outcome.** `03_PC_duel_chain_reach.md`,
+   `14_VERBS_PHYSICAL_A_custody_and_force.md` A3, `04_MB_headcount_grade_and_scale.md`.
+8. **The reading.** `16_PESSIMIST_GAME_consequence_reading.md` (*this lane*).
+
+**The game gate** (one command, three seeds, three seasons, no planted state): the played arm differs
+from the null arm in persons and in seat holders at each seed; at least one executed answer stands in
+each of the PC, SE and non-emission FA columns; `person.died` and `tenure.closed`, where emitted, are
+each among the causes of another person's executed act; the played skeleton differs between at least
+two of the three seeds. Today every clause fails.
+
+### 7.3 Survivors for Jordan (each survives the five-step ladder; two options, two games)
+
+- **J-1 · a land with no people.** With every cohort of a settlement (or the realm) dead, the
+  individuals seated over it are untouched (only a cohort eats: RULED, ED-IN-0255, not re-raised).
+  (a) Leave it: depopulation is felt only through yield, levy and stability once those bind; a lord of
+  an empty land is a legitimate state. (b) A seat whose rung has no living cohort beneath it loses its
+  remit until one returns. Under (a) famine is an economic story; under (b) it is a political one, and
+  a blight can unseat a duke.
+- **J-2 · cohorts as full actors.** The 37 cohorts are persons (S9.1) and are offered the whole verb
+  table: they write records, utter propositions, commit, forge and argue, make two acts in five, and
+  are answered by almost nobody (reach 0.6). (a) Keep: the people are a chorus of individuals writ
+  large. (b) Give a cohort a collective aperture by a roster column (petition, migrate, work, tend,
+  comply or refuse, riot) so that what a population does is what a population can do. Under (a) the
+  realm's log is mostly the populace's paperwork; under (b) it is the named persons' acts against a
+  populace that moves in a few heavy ways. `[X6, the cut run that would price (b), had not finished
+  when this was written: §8.]`
+- **J-3 · arcs that end on a threshold.** Eight of fifty provided arcs close when a counter fires and
+  nineteen are forced by one (`ENDINGS_CLASSIFIED.yaml`); the standing rule and the engine's L5 both
+  forbid a crossing that produces an outcome. (a) The arcs are restated so each threshold raises a
+  *question* a person answers by a drawn act (the engine's present law). (b) The rule admits clocks
+  that force a moment (a crossing may open a mandatory scene, never decide it). They differ in whether
+  the world can corner a character.
+- **J-4 · the realm is one realm.** `build_realm` gives the same persons, seats and stances at every
+  seed (G-1). (a) Intended: Valoria is authored, and the seed moves only chance. (b) The seed also
+  draws some of the starting state (who holds a grudge, which granary is low, who is ill). Under (a)
+  replay variety must come entirely from play; today it does not come.
+
+## 8. Evidence log
+
+All at `4995824`, `PYTHONHASHSEED=0`, outputs under `runs/PES_GAME/` in the scratchpad.
+
+| run | command | seed · seasons | outcome |
+|---|---|---|---|
+| X1 | `x1_world.py S 3` → `x1_s{0,1,2}_k3.txt` | 0, 1, 2 · 3 | §1.1 to §1.3, §3.5; shipped hashes `52ff67bc…`, `26d2091b…`, `b9555289…` (seed 0's equals WR's season-2 hash) |
+| X2 | `x2_death.py 0 1 3` → `x2_death_s0.txt` | 0 · 1 + 3 | §2.1; control hash `abbde715aa0e` equals the shipped four-season realm |
+| X2b | `x2b_death_detail.py 0 1 4 p_npc_020` and `… p_npc_020,p_npc_031` | 0 · 1 + 4 | §2.1 links 3 to 8; both finished. King only: 16 hold an `exists` claim of his death in every one of the four seasons (17 by `x2_death.py`'s wider predicate match), `off_duke_valorsmark` and `off_heir` vacant at the end. King and heir: 15 know; `off_king`, `off_duke_valorsmark`, `off_heir` vacant in all four seasons |
+| X3 | `x3_famine.py 0 0 20 nullglobal` → `x3_nullglobal_s0.txt` | 0 · 20 | §2.4 links 2 to 4, 8 |
+| X3 local | `x3_famine.py 0 1 5 local` | 0 · 1 + 5 | `[not finished under load; §2.4 link 5 rests on X1, not on it]` |
+| X4 | `x4_player.py 0 3` → `x4_s0.txt` | 0 · 3 | §2.5; reach |
+| X5 | `x5_extremes.py 0 3` → `x5_s0.txt` | 0 · 3 | §3.7 |
+| X6 | `x6_cohort_cut.py {0,1} 3` | 0, 1 · 3 | `[not finished under load]` |
+| census parse | `parse_census.py x1_s*_k3.txt` | — | §1.3 table; the dead-end sum 1,585 of 7,940 |
+| fixtures | `build_realm(0).fixtures.get(...)` | 0 | the four draw sites shipped off |
+| cited, not rerun | `runs/WR/probe_s{0,1,2}_k6.txt`, `runs/WR/storybar_drawseeds_s0_k2.txt`, `runs/SE/probe_noacts_s0_120.txt`, `runs/SE/probe_play_s0_4.txt`, `runs/CORE/register_requirements.txt`, `runs/CORE/m1_summary.txt`, `runs/ARCS/corpus_run.txt` | | as the lanes report |
+
+Not read: the subsystem dossiers and `.designs/` sets (the subsystem lanes' reading is relied on);
+`audits/20_NARRATIVE_CHURN.md` and `21_PROCEDURAL_GENERATION.md` beyond their heads; the `16_PESSIMIST_*`
+siblings. No `pytest`, no `aperture`, no tracked file written; machine load passed 40 during the last
+third of the runs.
