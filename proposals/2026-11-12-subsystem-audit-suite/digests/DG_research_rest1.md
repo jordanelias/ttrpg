@@ -378,4 +378,58 @@ Lane scope: research files an earlier digest lane (`DG_research1.md`) could not 
   - Hooks: two-signal resonance (objective strain + independent legitimating signal must co-fire), suppression-backfire (a "solved" unrest becomes a non-decaying grievance re-arming at a lower threshold), relief-valve scapegoat, emergent-arc seed (silent accumulator not reset between crises), "gate army/enforcement loyalty to an impersonal charter, never a seat-holder" (:32-43). The last bears on MB army loyalty and the K-NPC-4 finding that members answer to a dead head.
 - **Conflicts / stale:** Mandate of Heaven excluded by ruling (:58-60 of manifest). **Open items:** none read.
 
+### research/cross_scale_action_catalogue_v1.md  (read lines 287-368, 391-432, 483-552; the rest by heading only)
+- **What it is:** IN-lane census (2026-08-27, read at `f567c13`) of every action at every scale, its build status, governing formula and opposed/unopposed shape; sections: kernel, faction/political, settlement, mass battle, personal combat, social contest, fieldwork.
+- **Status:** `FILED — reference, not canon (CLAUDE.md §0.05)`. Reading: historical (August 2026 code; the `systems/*/sim` modules it counts have since moved; treat counts as dated), and the season-loop verbs are not in it.
+- **Bears on:** MB, PC, SC, FA, SE, CORE.
+- **Content that matters:**
+  - Mass battle: 31 mechanics all `status: WIRED`; resolution is a tick loop (`check_orders -> assign_targets -> find_contacts -> volley_phase -> resolve_engagements -> attrition -> morale/rout -> recovery`); the commander "composes an army and queues conditional orders" (:289-299). Stances aggressive/balanced/hold/retreat (hold = -99 speed); formations Line, GappedLine, Arrowhead (Column declared but undefined) (:301-305).
+  - Troop type table (power/discipline/morale): levy 1/1/2, light_infantry 3/3/4, heavy_infantry 4/4/5, pike 4/4/5 (reach 0.3 the sole differentiator), cavalry 5/5/5, archers 3/3/3, crossbow 3/3/3, sling 2/2/3, mounted_archers (no stats), knights_templar 5/6/6; `TROOP_TYPE_ROLES` is "SCAFFOLD — data only; INERT"; only 7 of ~18 instruction tokens are consumed (`hold, envelop, sweep, brace, kite, reserve, shoot_move`) (:307-331).
+  - Conditional orders are the tactical language: triggers `immediate`, `tick:N`, `enemy_range:D`, `ally_at:D`, `own_strength:FRAC`; orders may set only `_ORDER_SAFE_FIELDS` (stance, instructions, unit_type, role, target_condition, ...), "geometry/troop-accounting fields are deliberately excluded"; prebuilt manoeuvres `build_envelopment` (Cannae) and `build_refused_flank` (Leuctra) (:333-353).
+  - Gaps: tactic cards a BLOCKED STUB; Column undefined; terrain=None hardcoded in `_try_conquest`; `TROOP_TYPE_STATS` omits `dr` and `stamina` so armour/endurance do not bridge (:355-364). No fatigue/weight cost for carrying multiple weapons appears in the catalogue.
+  - Personal combat: resolution is not an opposed roll but `core.resolve` against fixed `DECISIVE_OB = 3` with all opposition in `net_sigma` from differential terms; the player chooses weapon (51), armour tier, tradition, ability investment pre-fight, while commit depth (2-5) and defence mode are "engine-chosen; the injection point exists"; grapple branch BUILT, NOT ACTIVATED; only four capability gates (halfsword, gap_thrust, percussive_blow, open_contact) (:393-431). So no per-phase aggressive/normal/defensive approach choice existed as a player surface.
+  - Social contest (old kernel): 7 move kinds (advance, hard, shift, support, evidence, rebut, pass) with reserve costs; `evidence` presents the best unpresented relevant dossier item, `mag = min(weight x corroboration, EVIDENCE_CAP)`, readiness-independent, value hidden; `rebut` erases up to `REBUT_CAP` from the opponent's advantage where the venue allows and is "one of only two dynamically-opposed mechanisms in the tree"; stasis ladder fact -> definition -> quality -> jurisdiction -> consequence -> feasibility; an irrelevant move is `arthantara` (:491-545). Face has no general strain channel (monotonic up) (:528-530).
+- **Conflicts / stale:** pre-dates the season-loop `engine/season` verbs; three resolution models "under one name" noted for SC (:488); ED-SC-0015 "needs a Jordan ruling" (:489).
+- **Open items:** contest_rebuild stage 4 "four games" (:487).
+
+### research/personnel_muster_integration_master_v1.md  (read lines 349-448; the rest by heading only)
+- **What it is:** IN-lane phase-ordered integration plan (2026-08-27) folding a code audit, five design archaeology passes, five game-precedent passes and four muster-precedent passes; phases P0-P4+; section 6 is the muster problem.
+- **Status:** `FILED — reference, not canon … Supersedes nothing`. Reading: historical; the muster models it reconciles pre-date the season loop's Person-based force.
+- **Bears on:** MB, FA, SE, CHAR.
+- **Content that matters:**
+  - Three incompatible muster models: A (`_try_muster` code: pool = Mil + floor(W/2), Ob 1, raises the Military stat), B (`military_layer_v30 §1.3-1.5`, canonical: produces one unit token with Size/Power/Discipline/Type, Military is a ceiling), C (frozen `params_tables.yaml` Ob 2) (:368-382). Proposed M-2: adopt Model B as the single owner "the mass-battle engine can actually consume" (:416-429).
+  - Wealth-0 contradiction settled: `faction_layer §5.7` (Military -1 at Wealth 0) vs `military_layer §1.7` (Military does not degrade; heavy infantry/cavalry lose Discipline); verdict §1.7, on precedent (Rome II halts replenishment, Shogun 2 culls units, Medieval II needs manual disbanding, CK refuses, KOEI desertion, JA2 militia desert) and coherence; Wealth-0 degradation is implemented nowhere (:384-414).
+  - M-3: charge Accord (loyalty) per muster scaling with unit quality tier, from JA2 Kerberus (0.1 regular, 0.15 veteran, global) and RoTK VIII-R conscription dropping public order; M-4: hard Accord floor (below 50 conscription falls, below 25 unavailable) (:433-448). A faction action selector with four buckets (unique 0.30, conquest 0.35, muster 0.20, govern 0.15) and "8 of 16 faction-unique actions execute" (:355-366).
+  - Section 1.1 "The people already exist", 1.2 "Jordan already ruled that personnel is the faction primitive, and it is unexecuted" (headings :45, :61).
+- **Conflicts / stale:** "Medieval II auto-disbands" corrected inside the file (it is Shogun 2) (:401). The muster models refer to the retired campaign driver; the live feed is `muster`/`levy` over persons (see MB_mass_battle.md :280).
+- **Open items:** M-1..M-4 proposals "not bundled"; later sections (P4 settlement governance onward, 532+) not read.
+
+### research/historical_concerns_action_catalogue_v1.md  (headings only; 343 lines, body NOT read)
+- **What it is:** IN-lane research (2026-07-10) mining historical crises (succession wars, blockade, siege/sack/occupation, earthquake, flood/drought, famine, plague, climate shift, debasement/default, trade-monopoly) into an event-deck and action catalogue with ripple chains and a shortlist.
+- **Status:** `FILED — 2026-07-10 · Lane: IN`. Reading: historical-reference (event side of the governance corpus).
+- **Bears on:** WR (events), SE, FA, MB (siege/occupation, section 2.3).
+- **Content that matters (headings only):** "bidirectional thesis" (:17), ten crisis families 2.1-2.10 (:37-157), cross-domain ripple chains (:173), cross-reference against 44 proposals (:243), curated shortlist for a follow-up authoring pass (:284), gaps and honest limitations (:322).
+- **Conflicts / stale:** cross-references the retired "44 proposals" set. **Open items:** [SKIPPED: body — budget; headings only].
+
+### research/fa_se_historical_precedent_research_v1.md  (headings only; 323 lines, body NOT read)
+- **What it is:** FA/SE historical-precedent research (2026-07-08): code audit of `sim/provincial/faction_action.py` and `sim/territory/registry.py`, ten theme studies (fiscal sociology, tax farming, moral economy of subsistence, urban charters, principal-agent control of governors, conquest terms, church vs secular jurisdiction, frontier garrison settlement, succession interregna, legitimacy theory), then mechanical distillations.
+- **Status:** `FILED — 2026-07-08 · Lanes: FA, SE … Not itself canon`. Reading: historical (the audited `sim/` files were dissolved; step-3 proposals were docketed as ED-FA-0008.. and ED-SE-0007..).
+- **Bears on:** FA, SE.
+- **Content that matters (headings only):** T1-T10 theme list (:89-169); FA fiscal spine, action selection and conquest, SE L/PS derivation layer distillations (:184-242); "Anti-fabrication note" (:321).
+- **Conflicts / stale:** audits retired files. **Open items:** [SKIPPED: body — budget].
+
+### research/historical/precedents_analysis.md  (headings only; 397 lines)
+- **What it is:** 2026-04-17 historical precedent analysis for theocracy establishment, invasion during civil instability, movements -> governance, cultural revival; with a robustness/smoothness/elegance audit and a post-commit audit.
+- **Status:** `ANALYSIS — not a design doc; feeds design refinements`. Reading: historical (April 2026, Church/RM/Altonian faction design).
+- **Bears on:** WR, FA.
+- **Content that matters (headings only):** four precedent studies each with patterns, Valoria mapping and "what this changes" (:9-247); priority A/B/C summary of proposed additions (:317-340); self-audit of Church, RM and Altonian additions (:342-382); post-commit complexity-vs-narrative-value audit (:384).
+- **Conflicts / stale:** companion `research/historical_precedents_analysis.md` path named in precedents_warfare is not this path. **Open items:** [SKIPPED: body].
+
+### research/historical/precedents_warfare.md  (headings only; 326 lines)
+- **What it is:** 2026-04-17 historical precedents for mass battle, army composition, feudal mustering, siege warfare, territory seizure and governance legitimacy.
+- **Status:** `ANALYSIS — feeds design refinements`. Reading: historical; this is the "PW" source the MB lane says has no references (`MB_mass_battle.md :365`, "PW §1.3b has the 40-day levy and Edward III's indentures, unsourced").
+- **Bears on:** MB, FA, SE.
+- **Content that matters (headings only):** "Generalship Dominates" axiom (§1, :9-73); siege warfare §2 (:74-105); mustering and army composition §3 (:106-136); non-military territory seizure §4 (:137-172); Accord/Weberian legitimacy §5 (:173-212); audits, interaction with PP-675, post-commit cut list (:213-326).
+- **Conflicts / stale:** unsourced per MB lane. **Open items:** [SKIPPED: body].
+
 <!-- END -->

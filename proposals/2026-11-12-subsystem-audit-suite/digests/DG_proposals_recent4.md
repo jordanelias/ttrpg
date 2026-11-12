@@ -697,3 +697,18 @@ Lane: proposals dated 2026-09-20 or later, and undated ones. Note: the assignmen
 - **Conflicts / stale:** the Godot version question is now ruled by ED-GO-0002 (CLAUDE.md) so §1 is historical; the skeleton and `Key`/`KeyBus` references are retired. The 12-of-18 resolver-side Queries omitting `World` is a Layer-1 doc issue (:286-293).
 - **Open items:** `season_factor` distribution blocks `yield` fixed-point; int-overflow wrap in GDScript untested (:459-462).
 
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/adjudications/F4_loop_execution.md
+- **What it is:** Fable-5 adjudication of the season loop and execution path: rules between three competing loops, upholds the six-step loop as a refinement of the running three-phase tick, specifies four structural tests, the ED-IN-0201 personnel precondition and an execution path; 2026-08-31.
+- **Status:** none stated (adjudication; nothing executes). Reading: historical for the execution path (the season loop now exists in `engine/season/`); still the origin of the loop vocabulary, the structural-test list and the personnel gate.
+- **Bears on:** CORE, CHAR, FA, WR.
+- **Content that matters:**
+  - Ruling: three-phase tick (`engine_clock.py`: SEASON_TICK -> ACTION -> ACCOUNTING_BOUNDARY) is the AUTHORITATIVE MECHANISM; the six-step loop (CALENDAR, MATTER, DELIBERATE, RESOLVE, WITNESS, CENSUS; 4 barriers; 4 write classes) is the contract nested inside it (CALENDAR in SEASON_TICK; MATTER/DELIBERATE/RESOLVE in ACTION; WITNESS/CENSUS at the boundary); the seven-phase P0-P7 is retired (:97-150, :192-248). A write class is not a phase (:229-236).
+  - Write matrix reproduced (what each step may write) (:210-227). Ordering rule: CALENDAR -> MATTER (world freezes) -> DELIBERATE map -> RESOLVE (strata, hash tie-break, batch clamp) -> WITNESS -> CENSUS (:242-247).
+  - Order independence needs integer fixed-point (preferred) or canonical sort before summation; "floats, unsorted, approx-compare" refused (:269-287).
+  - Execution path of nine steps from a season-close emitter and a person loader (flag-gated, through `generate_npc`, never `world.rng`) to the gate, a real `choose`, WITNESS v0, RESOLVE batching, MATTER reorder and CENSUS v0 (:322-342).
+  - Four structural tests T1-T4 (choose sees no world; two witnesses disagree; officeless person acts/petitions; order independence incl. a poison triple 0.9 +0.3 -0.5 +0.3) each with a vacuity guard (:348-393).
+  - ED-IN-0201 personnel precondition quoted: "we do not allow the game to perform faction actions if there is no leader of that faction ..."; clause 2 must change the OPTION SET and POOL SOURCE, not a flat modifier; the "no commander, no battle" reading (a) gate vs (b) penalty is a genuine ambiguity (:402-420, :531-535). Also: 2 NPCs loaded moved the seed-42 winner purely by shifting the shared RNG phase (:311-315).
+  - Refusals table with mechanical/convention class (:464-488).
+- **Conflicts / stale:** M1 0/7, `stub_hits` 2 and `npcs == 0` pins are 2026-08-31 and now outdated (the season runs people). `engine_clock` `doc: null` claim and Key emission steps are retired. The "no commander, no battle" ambiguity is still carried (docket 11 M27 default AUTOMATED).
+- **Open items:** ESCALATE 1 commander gate vs penalty; verify D-2 act economy against `2026-08-30-fixes/02_the_act_economy.md`.
+

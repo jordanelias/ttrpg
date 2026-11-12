@@ -25,9 +25,14 @@ only what the character can perceive (Oath II, test 3), because the `View` is cl
 else. **The single largest obstacle** is therefore not a missing screen but a missing *reading
 vocabulary*: of the four things a player must be able to do in every subsystem (see a situation, be
 offered choices, see consequences, read reasons), the oracle types the second for the season and the
-duel, and types the other three for nothing. Until those readings exist as person-side functions,
-every UI document in the tree specifies pixels over data that is not there, and a port would have to
-invent the data, which is the second owner the first audit warned against.
+duel, holds the first in fragments no reading assembles, and types the third and fourth for nothing
+a client could read: at seed 0 a seated person's two failed inquiries left no trace in his own
+ledger. Meanwhile six lanes of this suite have each proposed a different shape for what their
+subsystem shows a player. Until one set of readings exists, every UI document in the tree specifies
+pixels over data that is not there, and a port would have to invent the data, which is the second
+owner the first audit warned against. Three proposals carry the repair (one supersedes the first
+lane's contract), thirty-one resolutions are decided, two of the first lane's are corrected, and one
+question (whether a campaign's end may show what the character never knew) is returned to Jordan.
 
 ## B1. What was read
 
@@ -84,7 +89,7 @@ v4 parts are *not* reconstructed. REF records the disposition.
 `valoria_ui_ux_v4_1_max_audit.md` (69 findings; 20 P1) found that v4.1 §9.8 displays a "CD" clock and
 §9.7/§11.3 a "Taint" track that the threadwork design had already deleted (its F-15, F-16, F-55, F-58),
 and `valoria_ui_ux_v4_2_workplan.md` sequenced thirteen stages to repair it. The tree shows stage 1
-executed (v4.1's Status line is the workplan's item 1.1 text, word for word) and stage 2 not: §9.8 "CD
+executed (v4.1's Status line is the workplan's item 1.1 text, with a pointer to the workplan added) and stage 2 not: §9.8 "CD
 accumulation display" is at `valoria_ui_ux_v4_1.md:868-877`, "Taint" at `:864-866`, `:1001`, `:926`. No
 `valoria_ui_ux_v4_2.md` exists. So the document the first audit's proposal quoted two rules from is, by
 its own audit, 65–70% of a reference, with sixteen blocking findings open and a known-false HUD.
@@ -438,4 +443,142 @@ player surface: rejection 3's "emit one per appended Event after the append, for
 consume" is correct for a developer's view and too broad for a player's, which is why SURF-B §7
 narrows the trigger to the seated person's two readings. That is a rule for `game/`, stated in a
 proposal; it does not edit §C.12.
+
+## B6. Proposals, resolutions, and what returns to Jordan
+
+### B6.1 The findings ranked, and the proposals that carry them
+
+| rank | finding | severity | proposal |
+|---|---|---|---|
+| 1 | F-GO-15 no shared surface vocabulary; six lane dialects | blocks the standing requirement | SURF-B |
+| 2 | F-GO-16 a person cannot read what his own act came to | degrades narrative (R-02 as met by a player) | SURF-B §3 |
+| 3 | F-GO-19 the offer is flat and three to five times the legible size | degrades narrative | SURF-B §2; MODES §3 |
+| 4 | F-GO-18 two kinds of play; two choice surfaces missed (**corrects** F-GO-08, R20) | correction | SURF-B §6 |
+| 5 | F-GO-21 two opposite answers to what the player knows | degrades narrative | REF; §B6.3 |
+| 6 | F-GO-17 `own_act` not computable (**corrects** SURF §3) | correction | SURF-B §4 |
+| 7 | F-GO-13 the UI set's content half is not in the tree | degrades narrative | REF |
+| 8 | F-GO-20 the stale Godot specification against §C.12 | hygiene | REF |
+| 9 | F-GO-14 dead tracks in the newest UI document; a repair plan that stopped | hygiene | REF |
+
+Three proposals written: `proposals/11_GO_player_surface_contract_B.md` (supersedes
+`11_GO_player_surface_contract.md`), `proposals/11_GO_fidelity_and_campaign_modes.md`,
+`proposals/11_GO_design_reference_disposition.md`. The first audit's §8 changes in one place: its
+step 8 ("the offer's terms, `aftermath`, `OFFER-CONTAINS`") becomes, in order, CHAR's `watch` hook
+and own-state decline → `Offer` and `Situation` → `receipt` and the transcript → `account` →
+`OFFER-CONTAINS`; `dossier` follows FI-05. None is a port-gate member and none waits on the freeze.
+
+### B6.2 Every inconsistency, gap and unclear passage found on this reading, decided
+
+Ladder steps as in the first audit: 1 superseded · 2 irrelevant · 3 answered by a design document
+or ruling · 4 precedent · 5 what makes sense for the architecture.
+
+| # | kind | what | resolution | step | carried by |
+|---|---|---|---|---|---|
+| R48 | gap | v4 Parts 10–19 and §20.1–§20.2, to which v4.1 defers, are in no file | not reconstructed; the oracle's readings are the specification | 2, 5 | REF |
+| R49 | unclear | the v4.2 workplan's standing (one stage of thirteen run) | a retired plan in quarantine; not a queue | 2 | REF |
+| R50 | inconsistency | six lane shapes for what the player sees | one protocol: five readings and one scene pair | 4, 5 | SURF-B |
+| R51 | gap | the outcome of a person's own act has no reading | `receipt`, host-side, own acts, depth one | 4, 5 | SURF-B §3 |
+| R52 | inconsistency | SURF's `own_act` reads act ids from fields that hold person ids | `account` uses what the fields say; pairing is `receipt`'s; no carrier field | 3 | SURF-B §4 |
+| R53 | inconsistency | "every scene through a typed decider" against SC's loop-played hearing | two kinds of play, named per subsystem | 3, 4 | SURF-B §6 |
+| R54 | gap | the military menu is an unlisted surface that reads `World` | stays as ruled; named the pattern for payload-carrying verbs | 3 | SURF-B §2 |
+| R55 | gap | nothing ties a candidate to the question it answers; declines are invisible | `OfferRow.occasion`; `Offer.withheld` for own-state conjuncts only | 4, 5 | SURF-B §2 |
+| R56 | unclear | where a display cap lives | the client's constant; never a fixture; never removes a row | 4 | MODES §3 |
+| R57 | inconsistency | CHAR's `DevelopmentSheet.terms` and SURF's two floats are one datum under two names | one field, `terms`, from the `watch` hook | 5 | SURF-B §2 |
+| R58 | inconsistency | T-30 and the "Reported layer" against Oath II test 3 and §C.11 | §C.11 governs in play | 3 | REF |
+| R59 | inconsistency | "every number the resolver uses is visible before commit" (contest walkthrough) against AX-2 | believed odds and his own operands; resolver-side operands only as held | 3 | REF |
+| R60 | inconsistency | three campaign modes with per-mode rules against one loop | superseded; no mode enumeration | 1 | MODES §1 |
+| R61 | unclear | ED-SC-0013 fork C, the calibration tolerance | no number: equal on matched decisions (a pin); no decider is the person's own policy | 3, 5 | MODES §2 |
+| R62 | gap | the "witnessed" fidelity (refines R46) | presence: firsthand `account` rows, and the scene's `trace` or report where a module returns one | 5 | MODES §2 |
+| R63 | unclear | difficulty as 5 / 4 / 3 actions; Core and Full complexity tiers | a `Fixtures` overlay on `scene_budget` at world build; tiers not built | 5, 2 | MODES §3 |
+| R64 | gap | creation shows nothing of a seat's place in the world | `CreationRow.holdings` | 5 | MODES §4 |
+| R65 | gap | how a campaign ends for a client | extinction (built) or the player concludes; the chronicle and account read then; no victory screen | 3 | MODES §4 |
+| R66 | inconsistency | the specification's single autoload | §C.12 rejection 1 | 3 | REF |
+| R67 | inconsistency | container signals and a 50-signal bus as the state channel | §C.12 rejection 3; signals after the append, at `game/` only | 3 | REF |
+| R68 | inconsistency | one seeded generator, "all rolls … from the same sequence" (v4 §24.11; spec Part 3) | keyed draws, threaded; a single sequence makes an outcome depend on call order | 3 | REF |
+| R69 | inconsistency | d10 pools and a board-game dice variant | the one degree ladder | 1 | REF |
+| R70 | inconsistency | a registry of stored faction and clock trackers | no stored aggregate; the write gate is the one choke point | 1 | REF |
+| R71 | unclear | the specification's Status line names the strategy as governing | the line names §C.12 | 3 | REF edit 1 |
+| R72 | gap | `finding.none` reaches no ledger, so a failed inquiry shows its maker nothing | the receipt shows it; whether "nothing found" is a belief is FI's | 5 | SURF-B §3 |
+| R73 | unclear | may an actor always learn the band of his own act | yes; a row that must hide it declares `receipt: none`; no row does today | 5 | SURF-B §3 |
+| R74 | inconsistency | lanes' scenario summaries read `World` and are offered as the player's view | instruments; every scenario prints through the transcript | 4 | SURF-B §8 |
+| R75 | gap | `engine_atlas_v1.md` anchors to a driver that no longer exists | no action; not cited | 2 | REF |
+| R76 | unclear | the UI's "locked by Conviction, override costs a scar" has no carrier | not a lock: an ordinary row with a negative stance term; the cost is the fold's | 3, 5 | SURF-B §2 |
+| R77 | gap | the Scene Slate has no generator in code | it is `View.questions` in attention order with the scene budget; no second generator | 1 | SURF-B §1 |
+| R78 | gap | what triggers a staged presentation | an `AccountRow` or `ReceiptRow` of the seated person, never a log Event | 3 | SURF-B §7 |
+
+Thirty-one resolutions (R48–R78). R52 and R53 correct the first lane's R17 and R20; R62 refines its
+R46.
+
+### B6.3 Survivors for Jordan
+
+One, and it is not the first audit's.
+
+**May the end of a campaign show the player what his person never knew?** In play the answer is
+ruled: no (§C.11). At the end it is open. The quarantined ending design asks for a "World Footprint
+(counterfactual impact)" and "The World They Leave"; T-30 makes the gap between the two views the
+point of the game; and the oracle already has the instrument (`harness/chronicle.py` renders the
+deepest causal chain "OUTSIDE the simulation"). Ladder: not superseded (the ending design was never
+built or struck); not irrelevant; §C.11 rests on "anything shown before they declare is shown inside
+a decision", and after a line is extinct or concluded nothing is declared, so the ruling is silent;
+no precedent in the tree; and the architecture serves either.
+
+- **E1, the truth is never shown.** The portrait is `chronicle` and `account`: what he believed,
+  false beliefs included. The world stays a place of permanent partial knowledge, and a second
+  campaign in the same world can still be surprised by it.
+- **E2, the truth is shown at the end.** After a line ends (and only when no continuation is taken,
+  or the truth would reach the next seat's decisions), the client may show the chain a developer
+  sees. The player learns which beliefs were false and whose hand was behind an unattributed fall.
+  That is the detective genre's closing reveal, and it makes each campaign a case that resolves.
+
+They differ as games in whether mystery is permanent or deferred. MODES §4 builds E1 because it
+needs nothing; E2 is one host-side reading at one moment and can be added without touching E1.
+
+## B7. Evidence log and reading record
+
+### B7.1 Commands and probes
+
+All seeded runs: `populated.build_realm(0)`, `PYTHONHASHSEED=0`, `PYTHONDONTWRITEBYTECODE=1`. Scripts
+and outputs: `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/GO_B/`.
+No `pytest`, no long `aperture` run.
+
+| id | command or probe | seed · seasons | outcome |
+|---|---|---|---|
+| E-B1 | `grep -n "^# PART" valoria_ui_ux_v4.md`; the v4 index's heading table | — | Parts 0–9 and 21–25; "§20.3 … continued" at `:1714`; the index (generated 2026-04-18) lists the same |
+| E-B2 | `grep -rIl` over `*.md`, hidden trees included, for "THE CUTSCENE SYSTEM", "PART 19 — ", "PART 15 — PARLIAMENT"; `ls` for a v4.2 document; `ls engine/mc_v18.py references/ENGINE_ATLAS.md`; `grep -rn render_protagonist_lens --include=*.py` | — | only this file matches; no `valoria_ui_ux_v4_2.md`; both atlas referents absent; no `render_protagonist_lens` |
+| E-B2c | `case_extract.py` through `harness/run_cases.load_cases` | — | 143 cases, 972 needs; 81 name a player (need or reason), 185 use seeing vocabulary, 243 either; 281 knowledge rows, 46 naming a player. A regex count of the legibility classes is in the script's output and is a floor; the table in §B3.8 is by hand |
+| E-B3 | `surface_probe.py 0 1 p_npc_001` (seated with `take_ranked`; `military_menu.menu` for all 83 at build) | 0 · 1 | hash `5ab73af282d0779646c38839fbab85d8` (equal to the first audit's plain run), 13,379 Events, 749 acts. Menu: 43 serve a faction, 43 may mint an army, 0 command one. Five sheets: sources `need`, `claim_landed` ×4; candidates 22/32/33/32/38; budgets 5/5/4/3/2; 33 distinct verbs of 66 resolvable; `View.odds` a function. 15 acts, 15 direct Events, 2 with degree, 10 with `observed`, 0 with `ending`. 119 claims deposited: 42 firsthand, 77 `told_by`, 40 with `doer`, 0 with a chain; 0 claim fields equal to an Event id |
+| E-B4 | `surface_probe2.py` (plain run; each of his acts against his ledger) | 0 · 1 | same hash. `finding.none` (Failure) ×2: 0 claims of that kind held. `sabotage.refused`: 1. By `(kind, act subject)`: 7 of 15 matched. 0 claim ids are act ids. `observed` example `Observation(subject='set_s_001', predicate='stores:grain', value=40)`. Claims by round: 28/19/26/27/19 |
+| E-B5 | `surface_probe3.py` (every act against every other ledger, by kind and subject, anchor or actor) | 0 · 1 | same hash. 318 of 749 acts matched in another person's ledger (42.5%); 60 of 83 persons with an act so matched; `p_npc_001` 0 of 15, `p_npc_033` 6 of 6; 1,215 `Seen.who` claims naming 35 persons. One seed, one matcher |
+| E-B6 | `grep -ln "ReceiptRow\|AccountRow\|AftermathRow" proposals/*.md` (the suite); `grep -rn valoria_ui_ux tools engine modules tests`; `grep -rn "Disposition table" engine modules --include=*.py`; `git ls-files \| grep parliamentary_vote` | — | GO's files only; 0; 0; nothing |
+| E-B7 | `git status --short` at the end | — | this lane's four files are the only additions of its own (other lanes' files were changing in the same tree throughout) |
+
+### B7.2 What was read, and what was not
+
+**Read in full.** The brief; `CLAUDE.md`; the first GO audit and its dossier; SURF, GATE and TEXT.
+The UI set: `valoria_ui_ux_v4_1.md`, `valoria_ui_ux_v4.md` (to its end; what the file holds),
+`valoria_ui_ux_v4_1_max_audit.md`, `valoria_ui_ux_v4_2_workplan.md`, the derived-settlement
+supplement. Cross-cutting: `auto_manual_resolution_duality_v1.md`, `cogload_moderate_target.md`,
+`campaign_modes_v30.md` and its infill, `campaign_architecture_v30.md`, `companion_app_design_note.md`,
+`complete_systems_reference.md`, `subsystem_flow_skeletons_v1.md`, `engine_atlas_v1.md`,
+`integration_proposal_v30.md`, `throughlines_complete.md`. `godot/godot_architecture_specification.md`.
+`04_CODE_ARCHITECTURE.md` `:845-1017` and `:1106-1146`. Code: `decision/sheet.py`,
+`harness/play_surface.py`, `harness/military_menu.py`, `queries/inputs.py`,
+`state/carriers.py:240-614`, `modules/combat/fight.py:55-117`. `.audit/`:
+`2026-07-01-contest-player-interaction/player_interaction_walkthrough_v1.md`,
+`2026-07-29-scenario-visualization/00_findings.md` (the remainder the first lane had not read),
+`2026-07-05-emergent-narrative-engine/narrative_engine_design_v1.md`. `chain/CASE_BRIEF.md`.
+
+**Read in part.**
+`[PARTIAL: the case bodies — 243 of 972 needs and 46 of 281 knowledge rows in full, chosen by the matcher in case_extract.py; the head of one file read raw; the narrative fields (one_line, temporal, ends_when, who_acts) were not read case by case]`.
+`[PARTIAL: the twelve sibling proposals that define a playable surface — headings and the interface sections of each, not the whole]`.
+`[PARTIAL: harness/interactions.py :1-94; the heads of storybar, report, chronicle, aperture, exercises, obligee_report, heir_hears, army_presets; modules/mass_battle/massbattle.py :440-520; modules/combat/wrapper.py :553-597]`.
+`[PARTIAL: the four UI index files and the campaign_architecture, cogload and integration_proposal index files — generated heading tables; the v4 index's table was read for F-GO-13, the others opened at their heads]`.
+
+**Not read.**
+`[SKIPPED: .audit/ beyond the three files above — about 7 MB in 32 other entries, among them the emergent-narrative-engine v2 and its 800 KB of workings, the NERS qualitative audit, the social-contest three-lens audit and the combat customization state; a directory listing and file sizes only. Nothing from them is cited]`.
+`[SKIPPED: the other .designs/systems/_architecture documents not named in the charge — player_agency_v30 (cited here only as quoted by the documents that were read), scale_transitions_v30, hybrid_gaps_v30, conflict_architecture_proposal, early_game_ignition_analysis, propagation_spec_v1, the key and governance registries, derived_stats_v30, decision_policy_v1, and the rest; about 700 KB]`.
+`[SKIPPED: the float-contract and one-draw-owner proposals — outside the player-facing charge; known from the first audit's §3 and §6]`.
+`[SKIPPED: jordanelias/valoria-game — another repository, not attached]`.
+The reason for each skip is the reading budget of one lane; the player-agency document is the one
+whose absence most limits §B3.1, and its rows there rest on quotation at second hand.
 

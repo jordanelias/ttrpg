@@ -281,7 +281,7 @@ Lane: proposals dated 2026-09-20 or later (and undated), third slice: 90 assigne
   - Command under `POOL_QUALITY_MODEL` (default on, `config.py:556`) does not enter the raw combat pool; derivation `round((2*CHA+COG)/3)` clamped 1-7 (`exchange.py:55-64`) (:77).
   - Odds policy settled: combat facts only; Proceedings none; the actor's own other rolled acts band odds (:75-76). Believed-odds mode (CP-T01-03 (b)) was released by M1 DECISION, not withdrawn (:78).
   - `valoria-game` pins Godot 4.3 vs ruled 4.7, hand-copied `game_constants.json` carries 7 retired-model keys (:80-85).
-- **Conflicts / stale:** CLAUDE.md §3's "systems/ retained for combat, social_contest, mass_battle" line vs ED-SC-0033 / ED-IN-0284; today's CLAUDE.md already says systems holds only sim/ oracle homes [UNVERIFIED].
+- **Conflicts / stale:** CLAUDE.md §3's "systems/ retained for combat, social_contest, mass_battle" line vs ED-SC-0033 / ED-IN-0284; the current CLAUDE.md §3 still says `systems/` is the design source of truth for combat, social_contest and mass_battle "retained by ED-IN-0204" while also describing `modules/` as the game code, so the wording question the adjudicator raised is not obviously closed.
 - **Open items:** the two Needs Jordan items.
 
 ### proposals/2026-10-28-content-architecture-suite/08_decks_and_template_in_engine_form.md
@@ -833,3 +833,116 @@ Lane: proposals dated 2026-09-20 or later (and undated), third slice: 90 assigne
 - **Content that matters:** no chosen horizon: seeds/seasons are outputs, bound by wall-clock `--budget-s`.
 - **Conflicts / stale:** none. **Open items:** none.
 
+### proposals/2026-11-04-content-parameters-docket/00_MASTER_DOCKET.md
+- **What it is:** [READ IN FULL: 190 lines] Master index of an 11-chapter docket (2026-11-04, lane IN) collating, per kind of game object, the content parameters Jordan must supply, what the tree holds and what it lacks; also names Excel workbooks (`workbooks/`) and content-entry sheets (`content_sheets/`).
+- **Status:** "PROPOSED (2026-11-04). A collation ... reference under CLAUDE.md §0.05, not a mechanism. Merging ratifies nothing and decides nothing" (:3). Reading: live reference, an inventory; authority order code > typed registries > active plan > `proposals/` (:10).
+- **Bears on:** CORE, CHAR, FA, SE, WR, PC, SC, FI, MB, PROCESS.
+- **Content that matters:**
+  - Chapter map (:14-26): 01 characters, 02 factions/settlements, 03 geography, 04 events/decks, 05 clocks/threadwork, 06 personal combat, 07 social/fieldwork, 08 mass battle, 09 verbs, 10 season loop choices, 11 workplan owed. Only 00, 01, 03, 04, 05, 06 are in this lane's assignment.
+  - Re-measured headline figures matched the tree: 63 verbs; 31 seats + 2 foreign; 37 settlements; 17 territories; 38 goals; 14 troop types; 46 named NPCs (35 canonical); 37 cohorts; 54 weapon records (:169).
+  - Inventory table of ~70 entity types with status (:44-147); statuses of note: attribute set PLACEHOLDER, capability PLACEHOLDER, heritage/lifepath EMPTY, kit/tradition ownership EMPTY, PC creation EMPTY, event deck/Tensions/Goldenfurt/scenarios EMPTY, narration fragments EMPTY, clocks EMPTY, personal-combat shield/kit EMPTY, PC formation EMPTY, mass-battle army/unit/troop stock EMPTY, logistics/supply EMPTY, commander/hierarchy EMPTY.
+  - Open points the chapters record (:179-186): 34 lifepaths have no member list; tenth attribute unnamed; non-null `ts` is 10 of 46 where `cast.py` docstring says 32; no kingdom/county/barony/march tier in code (tiers are realm, duchy, territory, settlement); no loader for event cards/Tensions/scenarios (`tensions.yaml`, `data/tensions.py`, `scenarios.yaml` do not exist); no authored clock/threshold/arc registry; `goal_stages:` in schema and in no goal row; no goal row carries `axis:`; `speech_kinds` read by a loader and tests only.
+- **Conflicts / stale:** mentions the earlier content-architecture suite as "held back in full and unverified ... used only as a map" (:190). Not-read-in-full list (:171-177) means some parameters may be missing.
+- **Open items:** all "Owed" rows across chapters; ch11 plan parts 2 and 14 swept by grep only.
+
+### proposals/2026-11-04-content-parameters-docket/01_characters.md
+- **What it is:** [READ PARTLY: headings, §6 attributes, §7 head, §11 creation, closed-sets table, roster appendix not opened] Chapter 01: parameters for named NPCs, cohorts, pursuit vectors, goals, affiliations, attributes, capability, heritage/lifepath, kit/tradition ownership, progression, player-character creation, named-NPC arc; with a complete roster appendix (46 named, 2 foreign-seat, 37 cohorts).
+- **Status:** PROPOSED (2026-11-04) (:3). Reading: live inventory.
+- **Bears on:** CHAR, CORE, PC, ARCS.
+- **Content that matters:**
+  - NPC: 46 rows in `references/npc_registry.yaml` (35 canonical, 11 proposed), 46 in `npcs.yaml`, 46 case files; identity/pursuits/affiliations/faction/role authored 46/46, every other layer thin or absent; carrier `Person` at `engine/season/state/carriers.py:693` (:15-17).
+  - Attributes: registry names 9 keys (attr.body.{strength,endurance,agility}, attr.mind.{focus,acuity,will}, attr.social.{attunement,charisma,bonds}; scale 1-7, default 1), 0 persons carry one; tenth unnamed; `Combatant` takes 8 integer attributes (`modules/combat/combatant.py:93`); cast `stats:` on 1/46 uses {cognition, focus, endurance, social}; held suite proposes six: "Four vocabularies exist" (:177-196).
+  - Capability: 1 capability key (`copying`, from verbs tell, speak); 1 of 46 cast persons carries it (NPC-088 `{copying: 3}`) (:198-200).
+  - Player-character creation: 0; no `Person` is constructed in the season loop (only `harness/corpus_run.py:510`, `populated.py`); cast entry shape closed `CAST_KEYS = (who, role, capability, office, ought)` (`corpus_run.py:313`); plan REM-30/CL-CHAR/CL-OPEN (:269-282).
+  - Closed sets (:297-318): 15 pursuits, 7 axes, 5 affiliations, 9(+1) attributes, 6 role templates, 1 capability key, 14 thrust axes, 5 goal object kinds, 5 person predicates, 7 faction leaders (Crown NPC-020, Church NPC-021, Hafenmark NPC-050, Varfell NPC-052, Restoration NPC-003, Löwenritter NPC-070, Altonia NPC-089); heritage (5) and lifepaths (34) are PLAN, not in tree.
+- **Conflicts / stale:** the four attribute vocabularies; a closing "KEY-FORMAT RE-CHECK" says no row has a Key-only source (:431).
+- **Open items:** the tenth attribute name; per-person attribute/capability values; vocation->attribute rows; 34 lifepath members.
+
+### proposals/2026-11-04-content-parameters-docket/03_geography_territory.md
+- **What it is:** [READ PARTLY: headings, ladder, settlement adjacency, cross-cutting sections opened] Chapter 03: rung ladder, 17 territories T1..T17, adjacency, 37 settlements S-001..S-037, routes, terrain, water/passes, POIs, foreign/off-map seats.
+- **Status:** PROPOSED (2026-11-04) (:3). Reading: live inventory; counts measured by loading `systems/settlements/valoria_geography_v30.yaml` and `engine/season/cohorts.yaml` (:11).
+- **Bears on:** SE, MB, FA, WR, CORE.
+- **Content that matters:**
+  - Rung kinds closed set of 8: `[person, hearth, community, settlement, territory, province, duchy, realm]` (`rosters.yaml:267-270`) (:13).
+  - 17 territories with 12 keys on every row (several UNREAD, e.g. `name`) (:31-36); 55 settlement adjacency edges (road 54, sea 1) marked AUTHORED, NO-READER; route pricing `route()` returns None through a mountain settlement, ships OFF (CP-T10-01) (:91-100). Terrain polygons read by `modules/mass_battle/terrain.py:185,247` via `MassBattleInput.geography` (:105).
+  - Cross-cutting: territory `fort_level` vs live fortification disagree for T2 (`terrain.py:134-137`); no `province` threshold stated (`world_q.py:2186`) (:162-163).
+- **Conflicts / stale:** the earlier suite said `adjacency:` unread; 07b of that suite and this chapter agree territory adjacency is read for lattice coupling but settlement adjacency is NO-READER.
+- **Open items:** CR-40 "11 of 17" unverified; foreign seat codes are the author's [ASSUMPTION].
+
+### proposals/2026-11-04-content-parameters-docket/04_events_decks.md
+- **What it is:** [READ PARTLY: header, event-deck, weather, travel, belongs-elsewhere sections opened; Tensions/Goldenfurt/scenarios/endings/arc cases/narration tables headings only] Chapter 04: event decks and cards, Tensions, Goldenfurt, scenarios, weather draw, endings, arc case files, narration fragments, travel/survival inputs.
+- **Status:** PROPOSED (2026-11-04) (:3). Reading: live inventory.
+- **Bears on:** WR, ARCS, CORE.
+- **Content that matters:**
+  - Measured: `engine/season/tensions.yaml`, `data/tensions.py`, `scenarios.yaml` do NOT exist; no `tension_effects` roster, no `territory_yield_scale` fixture; "name, type, effect" for an event card matches no field in code (:9, :28).
+  - Weather: `season_factor=1.0` (default; swept 0.5/1/2), `season_factor_draw=()` shipped off, raises `Unspecified` if a season has no outcomes (`world_q.py:1084`); owner at `world_q.py:1062` (not :945); `year_length` absent from engine (grep 0) (:72-83).
+  - Travel/survival: `body_step` 10, `age_step`/`illness_rate`/`age_at_build` 0.0/0.0/0 dark ("ALL ARE JORDAN'S TO SET", `fixtures.py:643,655-657`); route price by terrain, calamity exposure by BFS band from epicentre `terr_T15` are PLAN (CP-T10-01/02) (:129-135).
+  - Endings in `rosters.yaml: endings` read by `world_q.endings_reached` (`world_q.py:2366`); `ENDINGS_CLASSIFIED.yaml` is agent classification of prose (:84-103).
+- **Conflicts / stale:** grounded deck: A5 says 58 cards, file contains 10 distinct `EVT-` ids (:28); "weather constant 1.0 at world_q.py:945" stale.
+- **Open items:** multipliers per season and year length; narration fragments have no carrier (plan rows v10_part4.md:393-408).
+
+### proposals/2026-11-04-content-parameters-docket/05_clocks_threadwork.md
+- **What it is:** [READ PARTLY: §0, §5, §7 and Unresolved opened; §1-4, 6, 8, 9 headings only] Chapter 05: clocks/tracks, timers/dated items, thresholds, conditional arcs, thrust axes, conviction/truth tracks, thread sensitivity and threadwork, scale transitions, calendar.
+- **Status:** PROPOSED (2026-11-04) (:3). Reading: live inventory.
+- **Bears on:** WR, CHAR, CORE.
+- **Content that matters:**
+  - No authored clock/track registry (`grep clock_registry` 0 hits); the only clocks are three licensed self-motions in `loop/matter.py` (wear, Tenure `term`, claim decay) plus the bodies clock; `World.dates` starts `{}` (`state/world.py:368`), dates minted at runtime by `_eff_convene` (`loop/effects_governance.py:409-456`) (:12-18).
+  - Threadwork has a Python sim (`systems/threadwork/sim/`, 7 files) the loop reaches none of (`module_contracts.yaml:300-323` `wiring.build: unwired`); only loop carrier `Person.thread_sensitivity` (`carriers.py:756`), "NEVER WRITTEN IN PLAY" (:20, :199).
+  - Thrust axes: 14 members (10 user axes + 4 opposite poles), 6 `opposes:` pairs, 0 of 38 goal rows tagged `axis:`; `arc_effect_fields` roster is NOT in `rosters.yaml`; reader `harness/arc.py` built (:142-158).
+  - TS: `ts:` present on 32 of 46 registry rows, non-null on 10; `thread_sensitivity_gate` 30 (`fixtures.py:1000`); sim constants listed (`TN_STANDARD` 7, `DEPTH_OB`, `DEPTH_TS_MINIMUM`, Coherence track `RESTING_POINT_START` 0, `ELASTIC_RANGE` 6 ... all `[JUSTIFIED ... edge invented, ED-WR-0010]`) (:180-212).
+- **Conflicts / stale:** the retired Coherence (10=coherent) track vs T2 distance model (0 equilibrium); docket notes clock row 14 and scale-transition rows 2, 5 are RETIRED-KEY (master :186).
+- **Open items:** whether the `ts` 32/10 counts match what `data/cast.py` loads; plan parts 4/9-11/13 cards not read.
+
+### proposals/2026-11-04-content-parameters-docket/06_personal_combat.md
+- **What it is:** [READ PARTLY: header, §1 head, §7, §9, §15, §16 opened; §2-6, 8, 10-14 headings only] Chapter 06: personal-combat content parameters (abilities, attributes read, skills, levers, weapons, armour, kit, traditions, formations, combatant record, wound inputs) plus a complete actions-and-choices table of `modules/combat/`.
+- **Status:** PROPOSED (2026-11-04) (:3). Reading: live inventory of the PC module as built; most directly useful for the PC lane.
+- **Bears on:** PC, CHAR, MB, CORE.
+- **Content that matters:**
+  - Seam: the season passes the combat engine ONE field per party, `end` (from `body_band_penalty`); every other `Combatant` field is the class default; `PersonalCombatInput` = claimants, ends, wound_quantities (`seam/wrappers/combat.py:130-153`; `modules/combat/fight.py:49-50`; `queries/inputs.py:112-126`) (:9).
+  - Typed export `engine/engine_params/combat_engine_v1.json`: `cfg` 205 numeric tuning keys + `core` 25 keys; no `attributes` section (PC-14 unbuilt; `modules/combat/attributes.py` absent) (:11).
+  - Abilities: 9 authored (indes, staerke_schwaeche, mezzo_tempo, misura, true_times, atajo, shinogi, zwerchhau, ringen_am_schwert), each `{tradition, grade, lever, op, value}`; investment level 0-8; levers read at sites incl. visual, tempo, leverage, balance, tactile, measure (:16-30).
+  - Shield/kit: none in `modules/combat`; kit rows (`arms_kinds`, `arms_at_build`, `kits` on `PersonalCombatInput`) are PLAN (CP-T03-03) (:151-162). PC-scale formation: none; `pc_formation_system.md` "engine half is mass-battle" (:184-195).
+  - §15 actions/choices table: "0 player-selectable options in the module today. Every in-bout choice ... is made by the ENGINE"; 27 in-bout choice rows (initiative, grip, facing, use-mode, half-sword, approach, stop-hit, disengage, aggressor, commit depth, lunge, read contest, defence mode parry/dodge/wind, indes steal, attack roll pool = max(5, History+6) via `core.resolve`, overcommit, outcome, bind, grab/grapple) (:268-316). Externally supplied scene-level choices only: `terms` in {death, blood, yield}, declare Yield, `max_bouts`, weapon/armour/tradition/techniques/skills/attributes at build (:272-333).
+  - Owed: "player-selectable duel-mode intents at six open moments (measure, reopen, commit, mode, counter, contact)" - PROPOSED-ONLY `05_two_modes_of_one_bout.md` §2; engagement-cadence seam entry (M-2); no `feint` (dissolved into the attack) (:334).
+- **Conflicts / stale:** four attribute vocabularies (9 registry keys; `Combatant` 8 args; cast `stats:`; held six) (01 §6). Against Jordan's stated intent (aggressive/normal/defensive approach per phase, one path for duel and grid), the module offers no approach selector: bears directly on PC lane findings.
+- **Open items:** all PLAN rows; `wound_harm_models` internals unverified (master :177).
+
+---
+
+## Cross-subsystem leads
+
+- **CORE / SC / all multi-seed claims.** Seeds 0, 1 and 2 build the same realm (83 persons, n = 1 world) per the SC stress comparison (`2026-10-30-stress-test-comparison.md`, §2 and attribution C1). Any lane that reports "across three seeds" over `build_realm` should check whether the seeds differ in anything but dice. [UNVERIFIED against current `build_realm`.]
+- **CORE / PROCESS.** The RATIFIED build-all plan notes the pinned goldens pass under Python 3.13 and fail under CI's 3.11 on `main` (parked, `2026-11-02-social-contest-build-all-plan.md:120-123`). Every re-pin in any lane depends on it.
+- **SC <-> CHAR.** The SC lane's capability finding (every roll is pool 2; 0 of 83 persons hold capability; chooser has no risk/horizon term; `argue` never reads the Proposition) is the same fact the CHAR lane owns (CR-20 `Person.attributes`, CR-17 risk and horizon, ED-IN-0304). `def faculty` now exists at `engine/season/seam/wrappers/pool.py:78` (my grep), so lanes should re-check whether the "no faculty" claims in the 2026-10-28 suite and SC stress reports still hold.
+- **SC <-> FI.** The matters/standpoints companion names fact-finding (family 12) as feeding all other families and notes `finding.none` reaches nobody; the 2026-10-28 suite says failure in fieldwork teaches nothing. Evidence-as-typed-input for contests (Jordan's detective/noir charge) is only half-present: proofs and forgery quality enter the obstacle (`roll.py:63-100`), but P4's "citation" and "case file" Record kinds (CR-61) are unbuilt.
+- **SC <-> FA.** Parliament/council design (one council seat, members by `oblige`, vote = count of live `commit`s, licence by count on the owner's own act) is the FA lane's governance surface; CR-34/36/37/38 and RJ-consent rows live there; titles ladder (king/duke/count/lord/mayor) fixed by Jordan's 2026-09-02 verbatim ruling (`offices.yaml:153-166`).
+- **MB <-> SE <-> CHAR.** Army phase 5 (`2026-10-29-army-phase5-design.md`): `TROOPS_PER_WEIGHT=300` (verified `modules/mass_battle/troop_types/recruitment.py:44`), "an army is where its commander is", preset doctrines 45/25/20/rest; troop-stock-as-counted-roster (M3 in the content suite) is a separate, unresolved Layer-1 amendment. The docket (ch08, not in this lane) lists unit/hierarchy/commander/logistics as EMPTY. For Jordan's squads-of-named-characters intent, the army chain is cohort-derived, not named-character-derived.
+- **PC <-> GO <-> CORE.** The PC docket (§15) shows 0 player-selectable options and a single `end` field passed by the seam; the content suite's presentation proposals (fight window with callouts needs a new trace field, no forecast) and REM-31's six open moments are the only designed route to Jordan's duel/grid approach-choice intent.
+- **WR / ARCS.** Thrust-layer toy world is model-internal evidence only; the engine facts it leans on are in the thrust design (other digest). Arcs: 55-arc register is "never runtime data" (B10-19:93); 1 of 50 traced arcs plays (ARC-06); reachable arcs ~17 as planned.
+
+## Likely stale or superseded
+
+- `proposals/2026-10-29-parliament-and-debate/2026-10-29-parliament-and-debate.md`: partly superseded by `2026-10-29-resolution-design.md` (Speaker, `determine` on the council seat, `resolution` mint, evade/defy route, calls 1, 3, 5, PD-2/PD-3). Its §3, 5, 7, 8, 9 survive.
+- `proposals/2026-10-30-social-contest-unification-plan.md`: draft, overtaken by the proposals comparison and the RATIFIED CR-55..CR-67 positions.
+- `proposals/2026-10-28-content-architecture-suite/fragments_of_unrecovered_parts.md`: superseded by the recovered files (own statement).
+- Content suite claims already corrected inside the suite by 07a-07d and critic_lens3: "67% refuse"/77.8%/58.8%, "45 of 56 rows for an unseated person", "2 of 9 NEVER arcs numbered", "A4 UI v4 jumps Part 9 -> 21", K-MB-4 "decision taken", "matchup preview", "personal combat ENCOUNTER step BUILT" (it resolves at RESOLVE).
+- Content suite and SC proposal claims that "faculty is absent from engine/season" or "no capability producer": `faculty` is now defined at `engine/season/seam/wrappers/pool.py:78` (verified by grep; its reach into `Person.attributes` unverified).
+- `tensions.yaml`, `data/tensions.py`, `scenarios.yaml`, `engine/season/dossiers/` still do not exist (verified for tensions.yaml and dossiers); suite proposals that assume them are unbuilt, not stale.
+- The retired kernel `systems/social_contest/sim/contest/` still exists in the tree (verified `ls`); the SC stress/lopsided material describes a non-adopted candidate (SC-05 deletes it last, B10-Z).
+- Thrust-layer toy files (`regimes*.py`, `results_v*.json`, `suite*.py`): frozen model-internal evidence; duplicates by design (`regimes.py`==`regimes_v1.py`, `suite.py`==`suite_v1.py`); README records that world-file hashes do not match four freeze records.
+- Line numbers into `engine/season/*` in all 2026-10-28..2026-11-02 documents (drift ~25 lines already measured in 7 of 18 spot-checks).
+
+## Items that could change an audit finding
+
+- **PC lane (approach choice).** `06_personal_combat.md` §15: "0 player-selectable options in the module today"; every in-bout choice is engine-chosen; the only external choices are scene terms (death/blood/yield), a declared Yield, `max_bouts`, and build-time weapon/armour/tradition/techniques. Jordan's per-phase aggressive/normal/defensive intent therefore has no code surface; the designed route is `05_two_modes_of_one_bout.md` (six open moments), unbuilt. The season seam sends only `end` per party, so every season fighter is a default combatant (arming sword, light armour).
+- **PC / CHAR (kit).** No `Person.kit`, no shield/kit bundle, no `arms_kinds` roster (CP-T03-03 PLAN); content suite ruling 4 (who owns a sword) unresolved.
+- **MB lane (squad of named characters; weapon-carry trade-off).** Army phase 5 builds army Records from cohort weight (`TROOPS_PER_WEIGHT=300`), preset doctrines per cohort, and `disband_unit`/`discharge_troops`; docket ch08 (not in this lane) lists unit/formation/commander/logistics EMPTY. Nothing in this slice shows a per-unit loadout datum or a fatigue/speed penalty from carrying more weapons. M11 (casualties only on the losing side) is RULED and must not be reported as a defect.
+- **SC lane.** Computed play never reaches `determine` (0 executions across stress logs; `matter.determined` 0 at seeds 0/1); a computed `open_case` names no arrangement row (H-80); 12 of 13 arrangement keys have no runtime reader; `speak` writes nothing; `argue` ignores the Proposition; every roll is pool 2 vs Ob 2 (14% success at 2D vs 50% at 5D); `sigma.py:131` casts pool to int so sub-integer leverage is flat. If current code now differs (CR-55..CR-67 built, `faculty` present), these findings must be re-run before repeating. The RATIFIED plan lists observables that are zero today with control arms (build-all plan §4).
+- **SC lane (noir/evidence charge).** Proofs and forgery quality enter the obstacle (`roll.py:63-100`) but evidence is not a typed bindable input; speech cannot lie (J-C-6 open); case-file Record (CR-61) and citation-as-writ are unbuilt; a computed petition is addressed to its own subject (H-94).
+- **SC / FA (parliament).** A below-quorum `determine` retries forever and nothing lapses (CR-55); at shipped `bench_quorum=1` the quorum cannot refuse; docket grows without bound (5 -> 72 items over 13 seasons, 43 empty slots) and season wall time grew 11.7x in the stress run.
+- **CORE.** Seeds 0-2 build one realm (n = 1); pins pass under 3.13, fail under CI 3.11 (parked); `question_aggregation_rule=all` collapses sittings (3 vs 51 dates).
+- **CHAR / NPC-chooser lane.** Chooser score = `damp * sum(axis_w * align) + stance + urgency`, Plackett-Luce tau 0.1, no capability/odds/risk/horizon term; budget 5 + holds - body - legs, floor 1, at most 5 scene releases a season so the office bonus cannot be spent (`loop/deliberate.py:85-113`, H-92). Stale comments "thirteen", "four-axis", "13x4" at `decision/choose.py:440-441`, `decision/options.py:386-398`, `rosters.yaml:525` while code is 15x7. Cast data error: `npc_registry.yaml:981` Cardinal Justice is NPC-038 not NPC-004. Four attribute vocabularies coexist.
+- **WR / ARCS.** No authored clock/threshold/arc registry; `goal_stages` in schema, 0 rows; 0 of 38 goals tagged `axis:`; world forcing weather constant 1.0 with `season_factor_draw=()`; two ending rows unreachable (H-176 absent).
+- **FI.** Failure in fieldwork teaches nothing (`finding.none` reaches nobody); fieldwork has no case board; `inquiry` provider built.
+- **GO.** Content suite: `valoria-game` pins Godot 4.3 vs ruled 4.7 and carries 7 retired constants; a text client over `dispatching_chooser` is the proposed first playable; the parity test (scripted pick equal to chooser pick reproduces `content_hash`) is the standing falsifier.
+- **Process caution for all lanes.** Several figures in these files are unreproduced out-of-tree probes (`reasons-to-convene.md` instruments "unreproduced"); the content-architecture suite is a transcript reconstruction whose Edit-tool changes were not captured.
