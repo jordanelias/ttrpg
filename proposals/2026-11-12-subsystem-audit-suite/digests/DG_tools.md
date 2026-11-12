@@ -2,7 +2,7 @@
 
 ## Status: REFERENCE (a coverage digest; resolves nothing at runtime)
 
-Lane: everything under `tools/` (55 `.py` plus `README.md`; `ls tools | wc -l` = 56 entries). Read in full, to the end.
+Lane: everything under `tools/` (54 `.py` plus `README.md` = the 55 assigned files; `tools/__pycache__` ignored). Read in full, to the end. Entries follow assignment order except `valoria_local.py` and `validate_ed_citations.py`, which appear in the opposite order near the end. Nothing skipped. Nothing was run (no instruments); counts quoted from artifacts were read from the committed JSON/YAML with a one-line loader, and are marked as read where they are not in the tool's own text.
 
 Wiring facts used throughout (read once, from the sources, not from the tools' own claims):
 - `.github/workflows/valoria-ci.yml` job `validators` (BLOCKING, no fail-fast): ci_register_size_check, ci_co_file_checker, ci_editorial_checker, ci_pp_frozen_check, ci_naming_check, ci_design_prose_quarantine, ci_names_consistency, export_engine_params --check, export_game_constants --check, export_descriptors --check, export_composition --check, export_npc_roster --check, export_names --check, ci_sim_fabrication_check, ci_claim_provenance_check, ci_vetting_check, validate_ed_citations, broken_dependency_checker, freshness_gate (`valoria-ci.yml:119-188`).
@@ -284,4 +284,455 @@ Wiring facts used throughout (read once, from the sources, not from the tools' o
   - Second size gate beside `ci_register_size_check.py` (two token-cap enforcers over the same policy file; one is per-path, one is pattern-matched).
 - **Conflicts / stale:** CLAUDE.md §4 says "nothing enforces a length cap" and "several ARE blocking" per-file caps: consistent only for the explicit patterns.
 - **Open items:** whether the unexcluded walk over `.claude/worktrees/` can false-red CI (agent worktrees are untracked, so CI checkout would not contain them).
+
+### tools/currency_consistency_check.py
+- **What it is:** report-only "recency gate" (ED-1087): CURRENT.md stamp vs head commit dates, reconcile-chain structure, CURRENT.md paths exist, ED/lane id ceilings vs `id_reservations.yaml`, patch-register header, dead "maintained by" pointers, HANDOFF.md `## Next` heading.
+- **Status:** no Status line; live, report-only. Docstring warns it prints `[CURRENCY DRIFT: n]` but its `main` returns 1 (`:532`) while the docstring says it exits 0 (`:43-46`): code and docstring disagree (CI `w` wrapper swallows either).
+- **Bears on:** PROCESS (it reads CURRENT.md and HANDOFF.md, which CLAUDE.md §0.05 cl.4 says a program may legitimately read).
+- **Content that matters:**
+  - Eight checks listed at `:500-510`. The stamp check compares `git log -1 --format=%cs -- <path>` for each backticked path under canonical-head trees (`designs systems engine params references canon sim`) against `Last reconciled:` + 1 day (`:138,:228-264`); depth-1 clones skip it (stderr notice, `:203-225`).
+  - ID checks read `registers/editorial_ledger*.jsonl` by regex `"id": "ED-XX-NNNN"` and compare each lane's max to `id_reservations.yaml` `lane_ids.<LANE>.next_free` (`:167-200,:415-432`); archives included on purpose.
+  - Patch-register check reads "Next PP number: N" against body max (`:435-443`): the PP register is frozen (ci_pp_frozen_check), so this check watches a dead counter.
+  - `check_dead_maintainers` scans `references designs params canon` for "maintained by <skill>" naming a skill under `deprecated/skills/` (`:450-477`); CLAUDE.md §1 says there is no `deprecated/` tree, so `dep_skills` is empty and the check returns immediately (`:456-457`): dead.
+  - `summary_line()` and `--summary` exist for the retired SessionStart banner (`:513-520`).
+- **Conflicts / stale:** `CANONICAL_HEAD_TREES` names dissolved `designs`, `params`, `sim`; `_PATH_IN_BACKTICKS` includes dissolved roots. CURRENT.md "reconcile-stamp" chain format is policed structurally here (non-monotonic dates, duplicated bodies >= 400 chars).
+- **Open items:** none.
+
+### tools/definitions_store.py
+- **What it is:** builder/checker/query CLI for `references/definitions/definitions.yaml`, a generated merge of `names_index.yaml` + `descriptor_registry.yaml` (ED-IN-0077 Phase 2).
+- **Status:** no Status line; ORPHAN. `references/definitions/` holds only `vocab_source.yaml`; `definitions.yaml` does not exist, so `--check` fails with "missing" (`:133-134`). Not in CI, `valoria_local`, or the registry; referenced by `tests/valoria/test_definitions_store.py` and `test_engine_params_bridge.py` only.
+- **Bears on:** PROCESS, CHAR/FA/SE (descriptor keys).
+- **Content that matters:**
+  - `build()` unions names_index and descriptor entries: canonical, aliases, legacy, category, enforce, scale, compute, group, `in_registers`, and a `gap` flag for descriptor-only keys (`:83-109`).
+  - Descriptor sections read: attributes body/mind/social, aggregates (compute verb), practitioner_stats, territory_stats, faction_stats, settlement_stats (`:60-80`) - a useful list of the descriptor registry's categories.
+  - Comment says generated store is "an eventual inversion (registers generated FROM the store)" (`:12-15`), never done.
+  - `ci_register_size_check.py:93` still caps the nonexistent store at 8,000 tokens.
+- **Conflicts / stale:** second implementation of the name-parity check of `ci_names_consistency.py`. `engine/engine_params/names.json` and `descriptors.json` (exported) are the runtime copies, so this store carries no reader.
+- **Open items:** delete or regenerate; nothing reads it.
+
+### tools/descriptor_registry.py
+- **What it is:** loader/resolver library for `references/descriptor_registry.yaml` (W1.13; OPT-AV-7 live replacement of a retired module).
+- **Status:** no Status line; live as a library for tests and skills only (`skills/valoria-vector-audit/scripts/*`, `tools/quantity_registry.py`, tests). The engine reads descriptors via `engine/substrate/descriptors.py` + `descriptors.json`, not this.
+- **Bears on:** CHAR (attribute roster), PROCESS.
+- **Content that matters:**
+  - `load()` reads `references/descriptor_registry.yaml` relative to CWD only (`_PATHS`, `:16-29`).
+  - `all_attributes` flattens `attributes.body|mind|social` with `domain: actor`, `kind: attribute_scalar` (`:32-38`); `resolve()` by key/name/alias, retired attributes (e.g. Bonds) resolve with `deprecated` (`:41-59`).
+  - `aggregate_members` for placeholder `agg.body|mind|social`; `is_deprecated` against `deprecated:` list (`:62-83`).
+  - Third reader of the descriptor registry (with `export_descriptors.py`, `definitions_store._load_descriptors`, `ci_names_consistency.descriptor_names`): four loaders, four shapes of the same YAML.
+- **Conflicts / stale:** none.
+- **Open items:** consolidating the readers is outside any gate's remit.
+
+### tools/export_battle_orders.py
+- **What it is:** exporter: `modules/mass_battle/massbattle.py` `ORDER_ROLES` / `ORDER_RETREAT_AT` (checked equal to `config.ROLE_SPEC` names) -> `engine/engine_params/battle_orders.json` (CP-T04-02 "marshal"); `--check` round-trip.
+- **Status:** no Status line; live. Wired in `valoria_local.py:86` (blocking) and `engine/season/tests/test_cp_t04_02_marshal.py` only; NOT in `valoria-ci.yml` (the registry says the CI line is "Jordan's file" under CODEOWNERS and was left out). So CI does not run it directly (the season job's pytest does).
+- **Bears on:** MB, CORE (season reads order roles from the artifact via `engine/substrate/battle_orders.py`; `engine/season/rosters.yaml` `order_roles`/`order_retreat_at` use `from_battle_orders`).
+- **Content that matters:**
+  - Load-bearing on the game: it observes that the MB module's closed sets of standing-order roles and retreat triggers equal what the season's choosers read. A role added to `ROLE_SPEC` reaches the season only by re-running this (`:1-15`).
+  - Refuses empty or repeating sets and a role set different from `ROLE_SPEC` (`:36-40`).
+  - Output has only `roles` and `retreat_at` lists, `source`, `schema_version` (`:41-48`): none of the role parameters (`ROLE_SPEC` values) cross, only names.
+  - Imports `modules.mass_battle.massbattle` directly (a `sys.path` insert of the repo root): a tools-side import by name, which is fine for a build tool.
+- **Conflicts / stale:** registry row marks `subject: game` while the registry header says nothing is `game` (`ci_checks_registry.yaml:24-26,:314`).
+- **Open items:** the CI workflow line `v python3 tools/export_battle_orders.py --check` is owed (registry notes, `:318`).
+
+### tools/export_composition.py
+- **What it is:** exporter + validator: `references/module_contracts.yaml` `composition_roles:` -> `engine/engine_params/composition.json` (schema_version 3), which `engine/substrate/composition.py` reads; also `validate_wiring` over the `modules:` list. BLOCKING (`validators`).
+- **Status:** no Status line; live. The only blocking gate whose subject is `module_contracts.yaml`.
+- **Bears on:** CORE (the season/engine -> subsystem seam), all subsystems that expose a callable. LOAD-BEARING ON THE GAME: it IMPORTS every declared target at export time (`_resolve`, `:110-126`), so a moved/typo'd module fails CI instead of a campaign run.
+- **Content that matters:**
+  - Cooked artifact (read from the JSON, 16 roles): `combat.fight` (entry `verb_call`, verb `fight`), `mass_battle.resolve_field` (`verb_call`, `march`), `social_contest.roll` (`verb_call`, `tell`); `fieldwork.find` and `settlements.produce|subsist` (`step_call`); `mass_battle.army|army_options|army_order|army_preset` and `settlements.drawn_under|fabric|fortification|housing|larder_draw|provision` (`query`). NO role exists for factions, governance, diplomacy, threadwork, victory or characters: those subsystems are not reachable through the composition seam.
+  - Closed vocabularies `_KINDS = (callable, value)` and `_ENTRIES = (verb_call, step_call, query)` (`:70-83`); `entry:`/`verb:` consistency enforced (`_check_entry`, `:86-107`): a `verb_call` row names its verb, no other kind does.
+  - `validate_wiring`: every module row named, uniquely named, with `wiring:` block whose `build`/`godot` are in `wiring_vocabularies` (`:129-200`). It validates that facts exist, not that `build` status is true.
+  - Reads the YAML with `ci_common.load_yaml`; writes with bare `open()`, no encoding argument (`:255,:262`).
+  - The `mass_battle.army_*` and `settlements.*` query roles show the MB/SE modules as typed-input queries, not as verbs.
+- **Conflicts / stale:** docstring cites `keys.py` vs `key_types.json` (Key substrate, retired, ED-IN-0232) as the precedent; `needed_by` is cooked per role but its readers are not named here.
+- **Open items:** which of the 27 `module_contracts.yaml` modules have no composition role (roles = 16; module rows count is printed only at run time).
+
+### tools/export_descriptors.py
+- **What it is:** exporter: `references/descriptor_registry.yaml` -> `engine/engine_params/descriptors.json` read by `engine/substrate/descriptors.py` (sole runtime reader). BLOCKING (`validators`), `--check` round-trip.
+- **Status:** no Status line; live; LOAD-BEARING ON THE GAME (attribute roster and scale, pursuit/axis/affiliation/heritage rosters).
+- **Bears on:** CHAR (attributes), CORE, SE (settlement_stats), WR/FA (affiliations).
+- **Content that matters:**
+  - Attributes: scale floor/ceiling parsed once from `"lo-hi"` (`SCALE_RE`, `:67`); roster = body, mind, social keys. Cooked JSON now has 10: strength, endurance, agility, focus, acuity, will, perception, attunement, charisma, grace; a `pending_tenth` sentinel emitted only if the roster has fewer than 10 (`:256-260`; absent in the JSON).
+  - Rosters enumerated and validated by `_named_roster` (names exist, declared `count` equals length, no duplicates): `pursuit_roster` (15), `axis_roster` (7 bipolar ethical axes), `affiliation_roster` (5, intensity scale as closed integer `lo-hi`, `player_sees`, `concerns` mapping, no member under two concerns), `heritage_roster` (5, with `engages` cells naming an affiliation concern) (`:96-218`).
+  - `settlement_stats` (`set.legitimacy, popular_support, prosperity, defense, order, facility_tier`), `practitioner_stats` (`prac.thread_sensitivity`, `prac.tps`), `territory_stats` (`terr.fort_level`); the faction block (`fac.*`) is GONE since plan position 29b (`:40-41`): factions have no descriptor stats in the runtime artifact.
+  - `unimplemented: {}` (empty); the tool itself warns an empty block is "not evidence the register is complete" (`:30-33`).
+  - Attribute alias map `names` (every live name/alias/key lowercased -> key) refusing a spelling shared by two keys (`:188-197`).
+- **Conflicts / stale:** `fac.intel` (ruled bounds) is cited by CLAUDE.md §0.05 as an orphaned fact: it is no longer exported anywhere here; `ci_names_consistency` still expects `fac.*` mirror rows (`faction_stats`) in the descriptor registry although this exporter ignores them.
+- **Open items:** the faction stats' route to runtime (none via this artifact).
+
+### tools/export_engine_params.py
+- **What it is:** exporter: the personal-combat oracle (`modules/combat/config.py` `CFG` + `core.py` UPPERCASE constants + `attributes.SPEC` + weapons/armour-tier/Combatant-default kit) -> `engine/engine_params/combat_engine_v1.json` (schema_version 7); `--check` round-trip. BLOCKING (`validators`).
+- **Status:** no Status line; live; LOAD-BEARING ON THE GAME: observes that the typed JSON the port ingests equals what the Python oracle computes now.
+- **Bears on:** PC, DICE, GO (the Godot port's combat seed).
+- **Content that matters:**
+  - Read from the committed JSON: sections `cfg` (214 keys), `core` (26 auto-collected UPPERCASE JSON-typeable constants), `attributes` (8 entries: the combat-read attributes; `cog` removed at v7, `strength.neutral` null -> 4), `kit` (54 weapons, armour tiers, Combatant default weapon/armor).
+  - Auto-collection (`_module_constants`, `:81-95`) means a new constant in `core.py` is exported with no edit here, but also that any new UPPERCASE constant, however incidental, enters the port contract.
+  - The oracle's `attributes` use `registry_key` to point at descriptor keys; "Godot fields stay unbound (CLAUDE.md §5)" (`:98-107`).
+  - Observes only equality export-vs-oracle; it does not check the oracle against the design; "Class-C = calibrated against the harness, not canon prose" (`:139`).
+  - `sys.path.insert(0, ENGINE_DIR)` then bare `import config, core, combatant, vocabulary, weapons, attributes`: this is the `modules/combat` by-path load (CLAUDE.md §3 names it as the one `sys.path` seam).
+- **Conflicts / stale:** docstring refers to `systems/combat/combat_engine_v1/` "until plan position 31b" and to a retired `tools/ci_formula_prose_check.py` (A18 detector).
+- **Open items:** attributes: combat reads 8 of the 10 roster attributes.
+
+### tools/export_game_constants.py
+- **What it is:** exporter: composes `sim_params.json` + `combat_engine_v1.json` into `engine/engine_params/game_constants.json`, keyed by the Godot port's own constant names; the writer half of the ttrpg -> `valoria-game` constants bridge. BLOCKING `--check` (`validators`).
+- **Status:** no Status line; live. Reader half is `valoria-game/tools/check_constants_parity.py` (other repo, not visible here `[UNVERIFIED]`).
+- **Bears on:** GO, DICE, PC, WR (coherence), FI (knot formation), CORE.
+- **Content that matters:**
+  - Only FIVE oracle constants cross, hand-paired (`MAPPING`, `:54-89`; JSON: `TN_STANDARD` 7, `COMBAT_POOL_MINIMUM` 5 (= `combat.core.POOL_FLOOR`), `KNOT_FORMATION_TN` 7, `KNOT_FORMATION_OB` 2, `SEASONS_PER_YEAR` 4). The docstring says the port's `systems/util/Constants.gd` holds ~200 hand-transcribed constants and that, as of 2026-08-20, `valoria-game` read zero bytes of `engine_params` (`:5-16`). So the port is almost entirely hand-transcribed; the bridge covers about 5 of them.
+  - `COLLISIONS` (`:93-115`): port `POOL_FLOOR` = 1 (universal dice-pool floor, `RollContext.gd:26`) vs oracle `combat.core.POOL_FLOOR` = 5 (combat pool minimum): different quantities; port `MOMENTUM_MAX` 4 vs kernel `M_MAX` 1.5 (tanh ceiling); "Momentum 0-4 has no scalar owner in engine/ today".
+  - `DIVERGENCES` (real, need rulings, `:120-169`): (1) `accord_range`: oracle holds NO accord state (Accord clock has no season analogue, ED-WR-0011 option A); port keeps an integer accord clamped [0,3]; (2) `weapon_tn_modifiers`: oracle TN is always 7 (ED-IN-0196, Jordan 2026-08-25) while port TN varies 5-8 per weapon; (3) `coherence_bands`: oracle models Coherence as distance from the human equilibrium with resting point + elastic displacement (4 displacement bands + terminal "Coherence failure" when the resting point leaves `HUMAN_BAND_LIMIT`, no Severed band, `systems/threadwork/sim/coherence.py`) vs port's retired 10-0 depleting track with DISSONANT=6, FRAGMENTED=4, FRACTURED=2, SEVERED=0.
+  - Rows that LEFT the table because their Python owner was deleted: `OB_FLOOR`, `CI_START`, `VICTORY_SUSTAIN_SEASONS`, `COHERENCE_*`, `WEAPON_TN_BASE`, `OB_CAP` (`:63-88,:112-114`): the season loop "reports `endings` since v9 IN-27 (H-176 in engine/season/hole_register.yaml) and carries no sustain count".
+  - Ambiguity handling: a sim_params key defined at two sites with different values is withheld, e.g. `mass_battle.SEED_BASE` (bat.py 1,000,000 vs lanchester_signature.py 2,000,000) (`:172-202`).
+- **Conflicts / stale:** docstring says "five parameter files" and cites `export_key_types.py` (retired); `engine_params/` now holds eight JSON files.
+- **Open items:** the three divergences are explicit rulings owed (port alignment); no oracle value for accord, victory sustain, Faction OB floor or CI start.
+
+### tools/export_names.py
+- **What it is:** exporter: `references/names_index.yaml` -> `engine/engine_params/names.json`, read by `engine/substrate/names.py` (single runtime reader of canonical names, aliases, `token_class` rosters). BLOCKING (`validators`), `--check` round-trip; refuses non-idempotent shapes.
+- **Status:** no Status line; live; LOAD-BEARING ON THE GAME (`engine/season/data/cast.py` resolves NPC faction strings through it and `engine/season/rosters.yaml` derives its `factions` roster from it via `from_names:`).
+- **Bears on:** CORE, FA, CHAR, WR (names), PROCESS.
+- **Content that matters:**
+  - Refused with `SystemExit`: an alias mapping to two canonicals; an alias that is another row's canonical; a legacy tag that is also a live alias; a legacy tag that is another row's canonical (`:110-144`). Recorded not refused: two entries sharing one display string -> `ambiguous` block (`:92-104`).
+  - Cooked artifact (read): 122 canonical names, 62 aliases, 19 legacy tags, `by_class` rosters clock 6, clock_full 4, faction 10, mech 5, npc 10; `ambiguous` = `Order` (`conv.order` vs `set.order`) and `Reason` (`attr.mind.acuity` vs `conv.reason`).
+  - Legacy map includes the retired vocabulary: `Cohesion`->`Discipline`, `Combat Power`->`Power`, `Command Rating`->`Command`, `Contact Rounds`->`Thread Fatigue`, `Peninsular/Political/Public Instability`->`Turmoil`, `Theocracy Counter`->`Church Influence`, `Rendering Stability`->`Mending Stability`, `EventImpact`->`Key`, `convictions`/`conviction_axes`->`pursuits`/`pursuit_axes` (and one deprecated proper noun -> Solmund).
+  - Its output `engine/engine_params/names.json` is in `ci_naming_check.EXCLUDE` because it carries the deprecated name as data.
+  - The check message prints "4 idempotence checks passed" while the module lists five rules ((1),(2),(4),(5) refused and (3) recorded); count wording drifted (`:32-34,:177`).
+- **Conflicts / stale:** docstring/message say "four"/"five"; the CLAUDE.md names Solmund only.
+- **Open items:** `Reason` and `Order` display collisions are recorded, resolved by raising in the leaf.
+
+### tools/export_npc_roster.py
+- **What it is:** generator + checker for `engine/season/npcs.yaml` (46 NPC rows: case, name, institution, home, want, concerns, tie) derived from `engine/season/cases/NPC*.yaml` by running `populated.build_realm(0, from_roster=False)` (~10 s).
+- **Status:** no Status line; live. `--check` is BLOCKING in CI (`validators`, wired 2026-09-16) but fails ONLY on a row naming a nonexistent case, place or unseated person; differences from the derivation are REPORTED, not failed (`:196-211`). `--build` OVERWRITES hand edits.
+- **Bears on:** CHAR (NPC cast), CORE, WR (placement), SE (homes are venue rungs).
+- **Content that matters:**
+  - `npcs.yaml` read at runtime by `engine/season/harness/populated.py` (registry note); after `--build`, the regex matchers inside `populated.py` are a bootstrap, not a runtime dependency (`:26-29`): "a row a human corrected must not be silently re-derived".
+  - `tie` records which rule chose `concerns`: `named | institution | roof | neighbour` (`:84,:143`); `want` = first `core` row of the case's `season_requires` (`:73-75`).
+  - Imports the season harness (`engine.season.harness.populated`) from tools: this validator is a heavy game-code consumer (realm build per check). The earlier first cut was vacuous because `build_realm(0)` defaulted to reading the roster itself (`:93-98`), fixed by `from_roster=False`.
+  - Declares the world generator invents no NPC count (ED-WR-0011 OI-05): every NPC traces to a case id (`:71-76`).
+  - Registry row marks `subject: game` and quotes the roster as `references/npc_registry.yaml` (identity, convictions, role) vs `npcs.yaml` (placement, wants): two NPC data heads with disjoint fields.
+- **Conflicts / stale:** the docstring mentions `01_AXIOMS.md ID-13` (an archived prose axiom) as the rule against unread columns.
+- **Open items:** the only enforced property is referential integrity; a hand-edited home/tie that is semantically wrong passes.
+
+### tools/export_sim_params.py
+- **What it is:** AST extractor: every module-scope numeric/collection literal constant in the sim reference roots (`ci_common.sim_reference_roots()`: `engine/`, `systems/*/sim`, `modules/*` except combat) -> `engine/engine_params/sim_params.json` (schema_version 2) with file, trailing comment `note`, typed `citation` and `citation_grade`. `--build`, `--check`, `--search`.
+- **Status:** no Status line; live. NOT in CI workflow, `valoria_local` or the registry; the drift gate is `tests/valoria/test_export_sim_params.py` (inside pytest). Its output feeds `export_game_constants.py` (a blocking exporter) and `link_values_pointers.py`.
+- **Bears on:** CORE, MB, SC, FI, WR, all (the "migration backlog" count in CLAUDE.md §0.05 comes from `--build`).
+- **Content that matters:**
+  - Read from the committed JSON: 283 constants, 125 cited, 158 uncited, 8 assumption-grade; by module: `mass_battle` 164, `threadwork` 36, `social_contest` 31, `engine.season` 21, `fieldwork` 15, `engine.dice_engine` 6, `characters` 5, `overview` 5. NO rows for `settlements`, `factions`, `world`, or `combat` (combat has its own export, `MODULES_WITH_OWN_EXPORT`): FA and SE sim constants do not reach the typed layer at all.
+  - Anti-fabrication by construction: `ast.literal_eval` only (non-literals skipped) so computed constants, class attributes, and constants defined by expression never export (`:54-60,:225-233`).
+  - Citation detection is a regex over the trailing comment: `[canonical: ...]`, `PP-N`, `ED-...`, `J-N`, or a bracketed `§` section; "ASSUMPTION/FLAG/SEED/TODO" markers are excluded (`:153-211`). Counts "cited" by string shape, never verified (the same limit as the fabrication gate).
+  - Skips tests, `engine/reference/` (frozen parity oracles) and duplicates (`:124-150`).
+  - Key `<module>.<NAME>` is not unique (`mass_battle.SEED_BASE` has two values); `export_game_constants` withholds such keys.
+- **Conflicts / stale:** `_subsystem` still handles a dissolved `sim/` root (`:119-120`); docstring lists "systems/*/sim, engine, sim/*".
+- **Open items:** it exports constants as found, so which of 283 are in the live game path (versus oracle/bench scripts such as `bat.py`'s `SEED_BASE`) is not marked.
+
+### tools/fold_ledger_to_latest.py
+- **What it is:** CLI instrument (`--queue [--list]`, `--id`, `--stats`) that folds `registers/editorial_ledger*.jsonl` to the last row per id and counts `needs_jordan: true`.
+- **Status:** no Status line; live; manual-only, not in CI (registry: "DELIBERATELY NOT WIRED").
+- **Bears on:** PROCESS (the `needs_jordan` queue; CLAUDE.md §0 "needs_jordan is not a parking space").
+- **Content that matters:**
+  - Thin CLI over `ci_common.read_editorial_ledger_rows/fold_ledger_to_latest/editorial_ledger_paths` (`:43-45`): the logic lives in `ci_common`; this file only prints.
+  - Reports `needs_jordan: true` at ANY status plus the `status: open` subset, since several ruled/partial/resolved rows are still Jordan's (names ED-IN-0210, ED-IN-0261, ED-IN-0247 in docstring, `:49-63`).
+  - Does not scan the older `registers/archive/*.yaml` corpus (docstring `:14-18`): a flagged row sitting only there is invisible to `--queue`.
+  - Fourth-or-fifth reader of the editorial ledger: `triage_work_items.work_items` calls the same `ci_common` fold; `validate_ed_citations`, `broken_dependency_checker`, `currency_consistency_check` keep their own.
+- **Conflicts / stale:** none.
+- **Open items:** the archive-YAML blind spot above.
+
+### tools/freshness_gate.py
+- **What it is:** blocking gate: git-blob SHA of each canonical doc path in `references/canonical_sources.yaml` must equal its recorded `canonical_sha__...` pin; `--update` rewrites the pins from the working tree.
+- **Status:** no Status line; live, blocking (`validators`); also `valoria_local` report-only.
+- **Bears on:** PROCESS (pins on design docs).
+- **Content that matters:**
+  - `grep -c canonical_sha__ references/canonical_sources.yaml` = 7: the gate currently verifies about seven pins (the ED-IN-0077 review had counted 133 and the regex covers only paths under the listed prefixes `designs|params|compilation|canon|references|skills|tests|systems|engine|registers|arcs`, `:107-110`).
+  - Blob OID computed over LF-normalized bytes so CRLF checkouts agree with CI (`:49-73`).
+  - Exit 2 ("NO-SHA") when a path line has no pin right after it; any stale/missing path exits 1 (`:218-231`).
+  - Anything it pins is a design doc, so it detects document CHANGE, not that a doc matches code (§0.05: prose-hash currency, not a mechanism). `--update` is one command that silences it.
+  - Opens canonical docs by working-tree path, so quarantined paths (`systems/**/*.md`) that no longer exist would report MISSING (counted stale).
+- **Conflicts / stale:** `valoria_local.py:108` comment says "blocking in CI's integrity job" (job collapsed into `validators`).
+- **Open items:** none.
+
+### tools/gen_sigma_parity_goldens.py
+- **What it is:** generator of `engine/tests/goldens/sigma_leverage_parity.json`: frozen expected values from two historical reference oracles (`tests/sim/v32-combat-balance/m1_dice_sigma_core.py` numpy original; `engine/reference/contest-groundup/engine.py`), against which `engine/dice_engine/sigma_leverage.py` is tested by `engine/tests/test_sigma_leverage_parity.py`. `--check` mode.
+- **Status:** no Status line; live; NOT wired in CI/`valoria_local`/registry (only run by hand; the golden file is consumed by the engine test).
+- **Bears on:** DICE (sigma-leverage kernel, degree-of-success bands), PC, SC.
+- **Content that matters:**
+  - Row families: `sigma_n`, `soft_cap`, `sigma_space_ob_shift`, `net_boost`, `eff_ob`, `p_success`, `levels_to_net_sigma` from the numpy original; `level(minor|moderate|strong|major)` and `degree(net, ob, pool)` from the ground-up contest engine (`:114-149`). Grids: net sigma -50..50, pools 1/5/10/26, TN 6/7/8, base Ob 1-5, degree nets -3..20 (`:53-61`).
+  - Edge cases added because changing `OVERWHELM_SIGMA` 0.85 -> 0.86 left all 1,851 assertions green: `(pool, net)` = (22,12), (82,39), (98,46), (105,49), (112,52) sit on the pool-aware Overwhelming bar `mean + OVERWHELM_SIGMA*sd*sqrt(pool)` (`:62-68`).
+  - Parity is with a historical oracle (v32 combat numpy and the ground-up contest engine) not with canon; the `engine/reference/contest-groundup` copy was made 2026-09-16 (ED-IN-0231) so a blocking job doesn't reach into `.audit`.
+  - The `--check` regenerates by importing both oracles, so it needs `numpy` for the m1 oracle.
+- **Conflicts / stale:** docstring cites `audit/2026-06-03-contest-groundup/engine.py` (now `.audit/` and the copy under `engine/reference/`); `engine/reference/contest-groundup/engine.py:6` names this tool as its reader.
+- **Open items:** `--check` is unwired, so golden staleness is observed only if someone runs it.
+
+### tools/hook_md_sweep_guard.py
+- **What it is:** Claude Code PreToolUse hook on `Grep|Glob` (wired in `.claude/settings.json`): blocks (exit 2) a Glob/Grep that would sweep markdown broadly; Jordan 2026-08-24.
+- **Status:** no Status line; live; ADVISORY STEERING: a `Bash(grep *)` call bypasses it (CLAUDE.md §8). Escape: `VALORIA_ALLOW_MD_SWEEP=1`.
+- **Bears on:** PROCESS (agent behaviour; the audit suite itself runs under it).
+- **Content that matters:**
+  - Blocks: Glob whose pattern ends `*.md`/`**/*.md`; Grep with `glob`/`type` restricted to markdown; Grep with no `path`, `glob` or `type` (`:57,:95-102`). Allows any call that names a specific `.md` path or mentions a machine-read markdown file.
+  - The allowlist of machine-read `.md` is DERIVED by `triage_work_items.machine_read_inputs()` (`:60-68`), failing OPEN on any error; so this hook depends on `triage_work_items.py` importing cleanly.
+  - Block message tells the agent to `Read` a named doc instead and mentions "the Key-type registry" as a machine-read input (`:124`), a retired substrate.
+  - Hook-pattern consequence for the audit lanes: an unscoped `Grep` (no path) is blocked; give `path`.
+- **Conflicts / stale:** message cites `Read("systems/combat/combat_v30.md")` (no such file under `systems/`).
+- **Open items:** none.
+
+### tools/hook_naming_guard.py
+- **What it is:** PreToolUse hook on `Write|Edit|MultiEdit`: scans ADDED text of the edit with `ci_naming_check.scan_text` and blocks (exit 2) a use of the deprecated name for Solmund.
+- **Status:** no Status line; live, BLOCKING at edit time. Not seen by `Bash` edits (`sed`, heredocs).
+- **Bears on:** PROCESS, WR (the one enforced proper noun).
+- **Content that matters:**
+  - Reuses the CI core (no second copy of the rule); collects `content`, `new_string`, and `edits[].new_string` (`:32-42`); path exclusions inherited (`ci_naming_check.EXCLUDE`, so edits under `tests/`, `.audit/`, `CLAUDE.md`, `registers/editorial_ledger*` can contain the token).
+  - Fires on this very digest if the token is typed (it blocked one of this lane's edits), so the audit suite's own writing cannot quote the deprecated name outside excluded paths.
+  - Stderr message hard-codes the names in text (`:44`) although the rule is read from the index.
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### tools/join_audit_workings.py
+- **What it is:** utility that concatenates the nested working-paper `.md` files of one audit unit into `_workings_joined.md` with exact-string BEGIN/END delimiters, verifies a byte-exact round trip, and optionally purges the sources (`--list`, `--unit`, `--purge`, `--check`, `--include-top`).
+- **Status:** no Status line; live but a one-off migration utility for the audit corpus (Jordan 2026-08-04); not wired anywhere (`--check` "CI mode" is not in the workflow or the registry).
+- **Bears on:** PROCESS (only the `.audit/` archive).
+- **Content that matters:**
+  - Walks `.audit/` for already-joined units (`:167-172`) but its docstring and `--unit` examples use the old `audit/<session>` path (`:34-35,:177`), so `--unit audit/...` resolves to a path that no longer exists (`unit_root = REPO/unit`).
+  - Order is join, verify, then purge; refuses to purge when the round trip fails (`:229-245`).
+  - CLAUDE.md §3 says `.audit/` is retired as a category and "do not add to it", so this tool's remaining job is maintenance of joined archives.
+- **Conflicts / stale:** path spelling (above).
+- **Open items:** none; candidate for deletion (process-only, archive-only).
+
+### tools/link_values_pointers.py
+- **What it is:** generator of `engine/engine_params/value_pointer_links.json`: links each `sim_params.json` constant to "pointers" (definitions) by literal token match on constant name/dict keys (ED-IN-0079). `--build`, `--check`, `--pointer`.
+- **Status:** no Status line; BROKEN/ORPHAN: reads `references/definitions/definitions.yaml` (`:43,:55`), which does not exist (only `vocab_source.yaml` is there), so `--build` and `--check` raise FileNotFoundError; not wired in CI/local/registry.
+- **Bears on:** PROCESS (a derived index; nothing in the game reads `value_pointer_links.json`, to be verified by one grep `[UNVERIFIED]`).
+- **Content that matters:**
+  - Match method: alphabetic tokens of the constant name (not followed by a digit) and dict keys against a vocabulary built from definitions' canonical/aliases/legacy plus `name_collision_database.yaml` abbreviations (`:52-100`); excludes `pp, ed, sim, tn, ob, ev` and silos 16A/16B.
+  - A literal-token join with no semantic check: "every link records the matched token" (`:7-10`) - evidence, not a verdict.
+  - A stale committed output `engine/engine_params/value_pointer_links.json` remains in `engine_params/` beside seven live artifacts, so a reader of that directory sees a file no tool can regenerate.
+- **Conflicts / stale:** depends on the orphaned `definitions_store.py` output.
+- **Open items:** delete the generator and its JSON, or restore the store.
+
+### tools/m1_acceptance.py
+- **What it is:** the "M1 acceptance gate" (ED-IN-0112), CLAUDE.md §0.2's instrument: four rows, two of which RUN `engine/season/` headless.
+- **Status:** no Status line; live; report-only in CI (`validators-report`, `--summary`); `--check` exits 1 only on a measured failure. The docstring still says "five falsifiable rows" and a table listing `key_log_closure` and `m1_junctures` (`:9,:27-34`); `ROWS` holds FOUR (`:408-413`): `stub_invocations`, `determinism`, `nine_requirements`, `invariant_violations`. The CI comment and registry still say `m1_junctures` fails (`valoria-ci.yml:170`): that row no longer exists in code.
+- **Bears on:** CORE (the only execution instrument for the season loop), CHAR/WR (the populated 46-NPC world), all.
+- **Content that matters:**
+  - Row `stub_invocations`: delta of `engine.substrate.stubwire.invocations` across a 1-season headless run (`headless.run(seasons=1, seed=20260819)`) must be 0 (`:132-226`); the head calls `stubwire` nowhere, so the row can only fire if something resolved by string hits a stub; mutation-verified per its docstring.
+  - Row `determinism`: two runs of the same seed compare `World.content_hash()` (folds persons, sites, rungs, tenures, docket and the log; `H-118`) (`:229-275`).
+  - Row `nine_requirements`: counts `status: met` in `engine/season/requirements.yaml`; self-declared DOC-DERIVED, not execution (`:293-325`).
+  - Row `invariant_violations`: `invariants.sweep` over 24 headless seeds x 4 seasons plus the populated world (2 seeds x 1 season; the populated world is the only one carrying Offices and stance rows); passes only if zero violations and no predicate was unexercised (carrier count 0) (`:327-405`). 8 predicates; the first two writings over-fired (176 violations, 136 invented) (`:348-356`).
+  - Verdict logic: any measured failure -> NOT MET; any blocked -> NOT YET MEASURABLE; else MET (`:416-427`). The registry notes no CI signal can fail on regression (report-only, `ci_checks_registry.yaml:413-421`).
+  - Imports `engine.season.harness.{headless,invariants,populated}` defensively; a broken import turns rows 1-2 and 5 to `blocked` rather than failing.
+- **Conflicts / stale:** docstring/registry row count and `m1_junctures` (above); line-1 text "stub_invocations ... fail today" is stale (the head has no stubs); `--json` has no consumer.
+- **Open items:** when a row first passes, a blocking baseline form must be restored (registry text); `nine_requirements` can be greened by editing a YAML string.
+
+### tools/mechanics_index_gen.py
+- **What it is:** validator for `registers/mechanics_index.yaml` (90 mechanics): required keys, enum values for `scale` and `test_status`, `gd_applicable` references, path existence for `sim_module`/`canon_sources`, GD-1 victory-path singularity; `--strict` makes warnings errors; `--update` writes a `drift_report` back into the register.
+- **Status:** no Status line; live, report-only (`validators-report`).
+- **Bears on:** PROCESS; reads a prose-like status register of the mechanics (CORE, all subsystems).
+- **Content that matters:**
+  - The register is a hand-authored status ledger (`test_status`): of 90 mechanics, 82 `not_implemented`, 4 `contested`, 2 `provisional`, 1 `validated_pc`, 1 `validated_n1000_v12c` (read from the YAML); `scale` counts provincial 26, personal 13, thread 13, primitive 12, peninsular 8, service 6, territory 4, world 4, cross_scale 4. Not read by the engine (a grep for `mechanics_index` shows only skills, `engine/season/harness/register.py` and a comment); it is reference, not a mechanism (§0.05).
+  - Hard-codes a game fact: `categories.victory_paths == ['peninsular_sovereignty']` (GD-1, exactly one victory path) as an ERROR (`:280-303`). This contradicts the engine direction where the season loop reports `endings` (export_game_constants notes `H-176`) and "the retired oracle modelled no ending"; the validator enforces a single-victory design rule from a register nothing executes.
+  - `VALID_SCALES` use the old peninsular/provincial/thread vocabulary (`:96-106`).
+  - `find_repo_root` markers `canon` + `references` (`:423`); previously fataled on a retired `sim/` marker unnoticed because the CI job is report-only (`:412-422`).
+- **Conflicts / stale:** docstring "v2 scope" mentions `designs/`, `sim/`; sim_module paths in the register may point into `systems/` code that moved.
+- **Open items:** whether a report-only validator over an unread register should exist at all.
+
+### tools/methodology_drive.py
+- **What it is:** unattended driver: runs `/methodology-execute` once per fresh `claude -p` process, reading the status line `METHODOLOGY-EXECUTE: COMPLETE | NEXT <handle> | STOPPED <reason>` (exit 0/3/4/2).
+- **Status:** no Status line; live utility, run by a person; not CI, not a hook, not in the registry; self-declares "NOT A GUARD" (`:16-18`).
+- **Bears on:** PROCESS (agent orchestration).
+- **Content that matters:**
+  - Refuses `-c/--continue/-r/--resume/--bare`; requires `.claude/skills/methodology-execute/SKILL.md` to exist (`:59-61,:105-115`); sets `CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=0`.
+  - Spend caps `--max-total-usd` and per-batch `--attempts`; stops on a repeated `NEXT` handle (no progress).
+  - Constructs the CLAUDE.md §11-adjacent pattern (a loop that starts the next process after the previous exits); the file argues it is not self-scheduling because a person runs it.
+  - Imports `ci_common` as a bare name (`from ci_common import REPO`), so it only runs with `tools/` on `sys.path` (works because the script's own directory is `sys.path[0]` when executed as a script).
+- **Conflicts / stale:** `.claude/skills/methodology-execute/` path is the checked location; CLAUDE.md §9 routes `methodology-execute` to `skills/`: verify which root exists `[UNVERIFIED]`.
+- **Open items:** none.
+
+### tools/names.py
+- **What it is:** the tools-side single reader of `references/names_index.yaml` (`entries`, `canonical`, `aliases`, `legacy`, `all_legacy(enforce=)`, `key_for`, `context`, `by_category`, `by_token_class`); fault-tolerant (returns `{}` on any failure).
+- **Status:** no Status line; live; imported by `ci_naming_check`, `ci_names_consistency`, `hook_naming_guard` (transitively), the vector-audit skill.
+- **Bears on:** PROCESS, WR/FA/CHAR (vocabulary).
+- **Content that matters:**
+  - Default `enforce` tier when absent is `warn` (`:109`); an unknown tier silently matches nothing (the index header's "NOTHING VALIDATES this field").
+  - `by_token_class` masks `category` with `token_class` (`:151-163`); `context()` carries the disambiguation terms for display strings colliding with English words (Faith/Order/Reason).
+  - Two readers of the same index exist: this (YAML, tools/CI) and `engine/substrate/names.py` (JSON `names.json`, runtime). They share the exporter's rules only through `export_names.py`; this reader does NOT enforce the idempotence rules at load.
+  - Cache `_cache` is process-global; tests passing `path` bypass it.
+- **Conflicts / stale:** docstring cites `tools/valoria_rename.py` (retired).
+- **Open items:** none.
+
+### tools/pathres.py
+- **What it is:** library + CLI (`resolve`, `scan`, `pipeline`): the intended single owner of path-reference extraction and resolution through `references/restructure_ledger.md` (`LIVE | ALIASED | DEAD | FORKED`); also `py_joined_paths`, `py_path_io` AST I/O tracer.
+- **Status:** no Status line; live; imported by `broken_dependency_checker`, `ci_claim_provenance_check`, `build_identifier_census`, tests, skills. Not a gate itself. Self-admits it is NOT yet the sole parser (`:189-197`): `broken_dependency_checker` and two vector-audit scripts keep their own.
+- **Bears on:** PROCESS (path resolution for the retired/forked tree), no game bearing.
+- **Content that matters:**
+  - `resolve()` returns a `Resolution` object whose `__bool__` raises TypeError so a caller must say which question it asks (`:163-186`). Directory-prefix rows match any filename under a forked directory (CLAUDE.md §8 warning): `load_alias_map()` exact rows are the right question for "is this exact file retired".
+  - `fork_pointer(sentinel, path)` is the one answer to "what a FORK row resolves to": `FORK:<ref>:<path>` (`:116-160`); `test_forked_status.UNRESOLVABLE_CEILING` = 78 rows whose paths moved before the ref (`:145-152`).
+  - Later row wins for repeated keys (8 conflicting keys measured); 654 of 1,363 probes disagree with bdc's `_resolve_remap` because it folds the existence check in (`:247-258`).
+  - `TREES` roster includes dissolved `designs`, `sim`, `params`, `arcs` deliberately (`:92-96`).
+  - `pipeline` lists paths written-never-read and read-never-written across `tools engine systems tests`; admitted lower bound (`:621-633`).
+- **Conflicts / stale:** the docstring's counts of parsers (four, then three) are re-measured notes; `ci_claude_workflow_paths` is retired.
+- **Open items:** porting `broken_dependency_checker` and the vector-audit scripts onto this module (explicitly refused by D1).
+
+### tools/quantity_registry.py
+- **What it is:** reader library: merges `descriptor_registry.yaml` (via `descriptor_registry.load`) and `names_index.yaml` into one known-vocabulary map and resolves a raw stat identifier with normalisation (underscore->space, strip parenthetical, strip Track/Clock/Pool/Field suffix).
+- **Status:** no Status line; live as a library; sole production caller `ci_quantity_vocabulary_check.py` (report-only) plus `tools/registry.py`, vector-audit skill scripts and tests.
+- **Bears on:** PROCESS, CORE (vocabulary closure).
+- **Content that matters:**
+  - `load()` includes descriptor sections attributes, aggregates, faction_stats, practitioner_stats, territory_stats, settlement_stats, `category_b_scalars` (Wounds/Turmoil/Accord/Poise/Initiative/season counter), `by_reference`, and `not_descriptors` buckets `derived_values/tracks/clocks/pools` (`:127-164`); `faction_stats` is read though `export_descriptors` no longer cooks it.
+  - Resolution is "best effort" over prose-adjacent display strings (own admission `:28-31`); case-insensitive; no key returned for `not_descriptors` hits.
+  - Cache is process-global; fault-tolerant (returns empty on any failure).
+- **Conflicts / stale:** docstring mentions a "KeyLog stat_vocabulary hook" (retired substrate).
+- **Open items:** none.
+
+### tools/registry.py
+- **What it is:** read-side FACADE over `names`, `descriptor_registry`, `quantity_registry`: `resolve(term)` tries descriptor -> names -> quantity and discloses disagreements; also `resolves`, `all_known`, `collisions()`.
+- **Status:** no Status line; live as a library (tests, skills); no gate; "WS1 step one" of a "one registry, one reader" program whose end state (`references/registry/*.yaml`) is PROPOSED, not built.
+- **Bears on:** PROCESS, CHAR/FA/SE (vocabulary).
+- **Content that matters:**
+  - Fourth vocabulary reader on top of three (names / descriptor_registry / quantity_registry) plus the runtime leaves `engine/substrate/{names,descriptors}.py`: six readers of two YAML files.
+  - `collisions()` reports display strings bound to more than one descriptor key; its live remainder per the docstring is "legitimacy" -> `fac.legitimacy`, `set.legitimacy` (`:389-400`). `export_names.names.json` `ambiguous` records `Order` and `Reason` (not Legitimacy); so a third ambiguous string is known to one reader and not recorded in the cooked artifact, a possible runtime divergence `[UNVERIFIED]`.
+  - Alias `Influence` was removed from attr.social.charisma so `fac.influence` owns it (2026-09-16) (`:97-104`).
+  - Disclosed example: "Thread Fatigue": names -> `thread.thread_fatigue`, quantity -> keyless (`:80-85`).
+- **Conflicts / stale:** docstring says the attribute roster is "the 9-attribute" (`:48`); descriptors.json carries 10.
+- **Open items:** the WS1 end state.
+
+### tools/session_provision.py
+- **What it is:** silent provisioner: installs `pyyaml pytest numpy pytest-xdist` via pip if any import is missing; prints nothing.
+- **Status:** no Status line; live as a command. NOT installed as a hook: `.claude/settings.json` has `"SessionStart": []`, and a grep of `.claude/` for the name finds nothing; CLAUDE.md §8 lists it as a command a person/agent runs. Its docstring says "SessionStart hook" and CLAUDE.md §0.3 calls it "the allowed shape". Described as hook; wired as nothing.
+- **Bears on:** PROCESS.
+- **Content that matters:**
+  - Exits 0 always; errors swallowed; `REQUIRED` map import-name -> pip-name (`:26-31`) is the copy of CLAUDE.md §8's package list that must be kept in step by hand.
+  - `numpy` is installed because the combat surface needs it (CI comment `valoria-ci.yml:277-288`).
+- **Conflicts / stale:** hook claim vs `settings.json`.
+- **Open items:** whether to wire it (CLAUDE.md §0.3 permits a silent hook).
+
+### tools/tag_normalizer.py
+- **What it is:** import-only library for `[[id]]` / `[[id|display]]` canonical-identifier tags in prose: `find_tags`, `render`, `strip`, `unknown_tags`, `stray_open_brackets` (Reconciliation Program §3).
+- **Status:** no Status line; effectively DEAD in practice: `[[...]]` tags do not occur in the corpus (a grep for `[[<dotted id>]]` finds only `references/names_index_history.md`); callers are `tests/valoria/test_tag_normalizer.py` and `skills/valoria-vector-audit/scripts/workbench.py`.
+- **Bears on:** PROCESS (prose vocabulary).
+- **Content that matters:**
+  - Resolves ids through `names.canonical` (the tools-side reader); an unknown id stays raw (`'keep'`), so typos surface (`:70-99`).
+  - Designed as a "change once" mechanism for display names inside prose: a mechanism for prose that §0.05 demotes to reference.
+- **Conflicts / stale:** none.
+- **Open items:** delete (process-only; no tags in the corpus).
+
+### tools/tests_for_diff.py
+- **What it is:** inner-loop helper: lists changed files (since merge-base with `origin/main`, staged, unstaged, untracked) and prints the narrowest pytest command(s); `--run` executes them.
+- **Status:** no Status line; live; not CI. CLAUDE.md §0.4 names it at close.
+- **Bears on:** PROCESS; encodes the test-to-subsystem map for PC, MB, SC only.
+- **Content that matters:**
+  - Only three subsystems have pytest markers: `combat` (`modules/combat/`, `systems/combat/`), `mass_battle`, `social_contest` (`SOURCE_PREFIXES`, `:31-35`); the filename regexes live in root `conftest.py` `SUBSYSTEM_FILES` (single owner). Fieldwork, settlements, threadwork, world, characters, factions and the season loop have no marker: any edit there forces the full commands (`commands()`, `:81-86`).
+  - Admits the narrow answer misses realm-level effects: "a `modules/combat/` edit is reached by tests costing about three quarters of the season suite" (measured 2026-11-04) (`:14-18`).
+  - Trees run: `tests/valoria`, `engine/season/tests`, `engine/tests` (`:37`).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### tools/triage_work_items.py
+- **What it is:** classifier of editorial-ledger work items (effective status unresolved or `needs_jordan`) into CODE / PROPOSAL / DOC-DEFECT / REFERENCE-ONLY / UNCLASSIFIED, by regexes over their text fields (Jordan 2026-08-24: "If the work item doesn't concern code, then it isn't a work item"); `--list`, `--json`.
+- **Status:** no Status line; live utility. Not CI. Its `machine_read_inputs()` is imported by the live hook `hook_md_sweep_guard.py` (so this file is on the agent's Grep/Glob path).
+- **Bears on:** PROCESS (the `needs_jordan` queue; cull of doc-subject items).
+- **Content that matters:**
+  - Default is KEEP: unclassifiable rows are work; PROPOSAL (unbuilt mechanics: "AUTHORED (", "Grounding:", "OPT-", "SE-N", "FA-N", "needs Jordan") is tested before any doc test so the design backlog is not culled (`:59-88,:226-234`).
+  - `machine_read_inputs()` regex-scans `tools engine systems skills` for quoted `.yaml/.json/.jsonl/.md` names within 200 chars of a read-context token (`:149-168`): a heuristic that decides which `.md` count as "inputs".
+  - `code_identifiers()` reads `engine_params/key_types.json` (retired, guarded by existence) and `composition.json` role names plus `systems/` directory names; it deliberately refuses to parse `module_contracts.yaml` (a ratchet test, `test_no_new_parser_of_an_authored_surface`, `:120-124`).
+  - Records two mis-culls (ED-IN-0014, ED-IN-0004) that named Key types rather than filenames; the Key vocabulary that prevented them is gone (`:111-118`).
+  - Imports `validate_ed_citations` (`V._is_resolved`) for the "unresolved" predicate.
+- **Conflicts / stale:** it treats every `.md` that code "reads" as an input, which is the §0.05 cl.4 boundary; the sweep guard's allowlist inherits whatever this regex finds.
+- **Open items:** none.
+
+### tools/valoria_local.py
+- **What it is:** local orchestrator (`.githooks/pre-commit` runs `valoria_local.py --staged`): shells a fixed list of validators, blocking vs report-only; `--local` HEAD~1..HEAD; `--ci` retired.
+- **Status:** no Status line; live; local tier only. Registry says it has no subject (dispatch, no verdict aggregation).
+- **Bears on:** PROCESS.
+- **Content that matters:**
+  - Blocking locally (`:68-92`): ci_pp_frozen_check, ci_naming_check, ci_names_consistency, ci_design_prose_quarantine, ci_co_file_checker, ci_editorial_checker, ci_register_size_check, ci_vetting_check, ci_sim_fabrication_check, ci_claim_provenance_check, and `--check` of export_engine_params, export_game_constants, export_descriptors, export_composition, export_battle_orders, export_npc_roster. Report-only locally: ci_naming_check --warn, ci_generation_consistency, ci_module_shape_check, currency_consistency_check, freshness_gate, validate_ed_citations, broken_dependency_checker.
+  - ASYMMETRY (the pattern its own text says is the defect): `export_names.py --check` is BLOCKING IN CI (`valoria-ci.yml:157`) and ABSENT here; `export_battle_orders.py --check` is blocking HERE and ABSENT from CI. `ci_quantity_vocabulary_check`, `mechanics_index_gen`, `canon_coverage_check`, `ci_vacuous_assertion_check`, `m1_acceptance` (CI report-only) and `compliance_check`, `ci_golden_modes_check` (CI-only) are not local. The recurrence guard (`test_gate_coverage.py`) was retired, so nothing detects it.
+  - Does not run pytest and does not grade the changeset at CI scope: changeset-scoped gates grade ADDED lines against index/last commit locally but `origin/main...HEAD` in CI (PR #421 reddened twice, `:14-33`); recipe: `GITHUB_BASE_REF=main GITHUB_EVENT_NAME=pull_request python3 tools/ci_sim_fabrication_check.py`.
+  - Exit semantics: report-only failures print a qualified pass line, never fail (`:221-226`).
+  - Missing scripts are skipped silently (`if not os.path.exists(path): continue`, `:194-195`).
+- **Conflicts / stale:** comments at `:108` and `:160` say "blocking in CI's integrity job" (collapsed into `validators`); the `:88` comment "MIGRATION-WINDOW gate: retire with engine/params/" names a check no longer in the list.
+- **Open items:** the two-list asymmetry above (`export_names`, `export_battle_orders`).
+
+### tools/validate_ed_citations.py
+- **What it is:** blocking validator: every `ED-NNN` / `ED-<LANE>-NNNN` cited in scanned docs must resolve to a ledger entry (active ledgers + lane files + `_archive` JSONL siblings + `registers/archive/*.yaml`), and an OPEN ED must not be cited as a basis ("canonical", "ratif", "applied", "closes", "per ed" ...). `--info`, `--path`.
+- **Status:** no Status line; live, blocking (`validators`); report-only in `valoria_local`.
+- **Bears on:** PROCESS (citation provenance in canon/design/reference docs); the `ED` ledger universe (about 1,264 ids at the 2026-08-23 relocation).
+- **Content that matters:**
+  - Scan scope `SCAN_PREFIXES = ('canon/','designs/','.designs/','systems/','references/')` with suffixes `.md .yaml .yml` (`:130-131`); NOT scanned: `proposals/`, `engine/`, `modules/`, `architecture/`, `registers/` docs, `skills/`; working docs (`workplans/`, `*workplan*`) are excluded by mandate. So a new proposal citing a nonexistent ED is invisible to the gate.
+  - `.designs/` is deliberately scanned (quarantine must not hide prose from citation audits); a burn-down allowlist keeps four known open-as-basis pairs, ceiling `BURN_DOWN_MAX = 9`; two pairs are in `.designs/systems/_architecture/reference/key_type_registry_v30.md` (retired Key substrate) and two in `articulation_layer_v30.md` (`:162-171`).
+  - Statuses that count as resolved: resolved*, ratif*, landed, struck, applied, superseded, closed, confirmed, deprecated (`_is_resolved`, `:215-232`). `needs_jordan` is NOT considered.
+  - PP is parsed by the regex but `checked_prefixes=('ED',)` only (`:577`): PP citations are never validated here (CLAUDE.md §0 notes "PP provenance is unvalidated").
+  - Excludes generated sidecars (`_*` with the banner `GENERATED by tools/`) so the identifier census quotes are not double-counted (`:398-424`).
+  - YAML archive fragments that fail to parse are regex-salvaged and warned (`:351-366`).
+- **Conflicts / stale:** reads dissolved `designs/` prefix; `WORKING_PREFIXES` still includes `designs/audit/`; `.audit/` not in scope (consistent with its hidden status).
+- **Open items:** none.
+
+### tools/verify_handoff_split.py
+- **What it is:** one-shot FALSIFIER for the 2026-09-13 handoff split (ED-IN-0221): proves per lane (IN, MB, PC, SC) that every content line of the pre-split `HANDOFF_<LANE>.md` is still readable in the live / `_closed` / `_history` siblings; `--stress N SEED` measures its own sensitivity by deleting one real line at a time.
+- **Status:** no Status line; live but self-described as "NOT A GATE, MUST NOT BECOME ONE" and wired nowhere (`:55-63`); "Delete it once the split is old news".
+- **Bears on:** PROCESS only (handoff files).
+- **Content that matters:**
+  - Content comparison by normalized words with three bounds (still a line; glued to a neighbour; anchored cover for a one-line block) and a `MIN_RUN_CHARS` floor of 24, measured: first false alarm on the real split appears at 43 (`:279-294`).
+  - Reports exit 1 only for lost content or an unreadable pre-split ref; reparenting and exact-line deficit are report-only (`ED-IN-0239` edits made the exact column non-zero).
+  - Quoted-index-row coincidence is its residual blind spot, stated on the OK line (`:643-656`).
+  - `LANES = ('IN','MB','PC','SC')`: only four lanes, though nine handoffs exist.
+- **Conflicts / stale:** needs git history reaching the `HANDOFF_IN_closed.md` add commit; a shallow clone cannot resolve `_before_ref` (`:366-372`).
+- **Open items:** deletion is owed by its own text; 36 KB of process tooling for a closed event.
+
+### tools/vocab_store.py
+- **What it is:** generator + parity checker for the "vocabulary fold" (ED-IN-0078): `references/definitions/vocab_source.yaml` is the source; `alias_registry`, `deprecated_terms_registry`, `censured_vocabulary`, `synonym_registry` are GENERATED views; `name_collision_database` is a frozen mirror. `--seed`, `--build`, `--check`.
+- **Status:** no Status line; ORPHAN-ish. Not in CI, `valoria_local` or the registry; only `tests/valoria/test_vocab_store.py` runs it. Its stated sole consumer, `tools/observability/build_lexicon.py`, is retired (`tools/observability/` is gone). `vocab_source.yaml` exists (the only file in `references/definitions/`).
+- **Bears on:** PROCESS (vocabulary registers; no runtime reader).
+- **Content that matters:**
+  - Four registers are regenerated as YAML dumps with a `GENERATED` header; per-register hand-authored doc headers kept in `view_headers` (`:65-99`).
+  - The registers carry deprecated names as data, which is why `ci_naming_check.EXCLUDE` lists them.
+  - Runtime vocabulary reaches the engine through `export_names` -> `names.json` instead, not through these registers; the engine substrate leaves reference `alias_registry` only in a comment/docstring (`export_names.py:6-8`).
+- **Conflicts / stale:** consumer retired; `definitions_store.py` is the sibling "Phase 2" (also orphan).
+- **Open items:** delete or keep as a generated-view mechanism nothing reads.
+
+---
+
+## Cross-subsystem leads
+
+- **Which game facts actually have a typed route to the engine (CORE, all):** the CI-blocking exporters that cross into runtime are `export_descriptors` (10 attributes + scale, 15 pursuits, 7 ethical axes, 5 affiliations with `concerns`, 5 heritages; settlement stats `set.legitimacy|popular_support|prosperity|defense|order|facility_tier`; `prac.thread_sensitivity|tps`; `terr.fort_level`; NO faction stats since plan position 29b), `export_names` (122 canonical names, 19 legacy, `Order`/`Reason` recorded ambiguous), `export_composition` (16 roles: `combat.fight`/`mass_battle.resolve_field`/`social_contest.roll` as verb_call; `fieldwork.find`, `settlements.produce|subsist` as step_call; mass_battle.army*/settlements.* as query; no role for factions, governance, diplomacy, threadwork, victory, characters), `export_npc_roster` (46 NPC rows), `export_engine_params` (combat: 214 cfg + 26 core + 8 attributes + 54 weapons) and `export_battle_orders` (MB order roles/retreat triggers; CI-wired only through a season test, not the workflow). FA, SE economy, WR and FI constants reach `sim_params.json` only if they sit in `engine/`, `systems/*/sim` or `modules/*`; that artifact has 283 constants, 158 uncited, 164 of them `mass_battle`, and none from `settlements`, `factions`, `world` (tags FA, SE, WR, FI, MB).
+- **The Godot port is almost entirely hand-transcribed (GO, DICE, PC, WR):** `export_game_constants` pairs only five constants (`TN_STANDARD` 7, `COMBAT_POOL_MINIMUM` 5, `KNOT_FORMATION_TN` 7, `KNOT_FORMATION_OB` 2, `SEASONS_PER_YEAR` 4) against the port's ~200 hand-typed constants, and records three open model divergences that need rulings: accord (oracle holds none; port integer 0-3), weapon TN (oracle always 7, port 5-8 per weapon), coherence (oracle two-quantity distance model; port 10-0 depleting track with four bands). Port `POOL_FLOOR` (1) and `MOMENTUM_MAX` (4) are different quantities from the oracle's namesakes (5; `M_MAX` 1.5), and "Momentum 0-4 has no scalar owner in engine/ today".
+- **The only execution instrument for the game is `m1_acceptance` (CORE, all):** four rows, report-only in CI; two run `engine/season/` headless (stub delta, same-seed `World.content_hash()` equality, seed 20260819), one sweeps 8 invariants over 24 headless seeds x 4 seasons plus the 46-NPC populated world (2 seeds x 1 season), one is doc-derived (`status: met` in `engine/season/requirements.yaml`). No CI signal can fail on regression (registry's own admission). Its docstring/registry still describe five rows and an `m1_junctures` row that code no longer has.
+- **Test-to-subsystem map exists only for PC, MB and SC (all):** `tests_for_diff.py` + root `conftest.py` `SUBSYSTEM_FILES` give pytest markers `combat`, `mass_battle`, `social_contest`; fieldwork, settlements, threadwork, world, characters, factions have none, so any edit there runs the full gates.
+- **MB regression oracle (MB, DICE):** `ci_golden_modes_check` runs `systems/mass_battle/sim/bat.py --check` in 3 digest modes (`unit_field_mor0`, `cell_field_mor0`, `cell_legacy_mor1`) with ~75 pinned env toggles = the shipped MB tuning surface (e.g. `ROUT_CASCADE_FRAC` 0.6, `POOL_QUALITY_SCALE` 0.8, `K_LINEAR` 12, `K_SQUARE` 0.25, `MB_VOLLEYS_START` 10, `MB_AMMO_ENABLED` 1, `MB_SUPPORT_RANK_CAP` 1, `MB_CELL_EXCLUSION` 1); the two legacy grid modes are pinned by nothing. Green means "digest unchanged", not balanced.
+- **Fabrication gate does not cover personal combat's oracle (PC):** `ci_sim_fabrication_check` scope excludes `modules/combat/` (`MODULES_WITH_OWN_EXPORT = ('combat',)`; "KNOWN GAP" filed ED-IN-0119); combat's constants are covered only by the round-trip export, which proves equality to the oracle, not provenance. `ci_module_shape_check` INFO tier lists untagged module-scope constants there but never fails.
+- **Dice kernel parity is with historical oracles, not canon (DICE, SC, PC):** `gen_sigma_parity_goldens` freezes `engine/dice_engine/sigma_leverage.py` against `tests/sim/v32-combat-balance/m1_dice_sigma_core.py` and the ground-up contest engine copy under `engine/reference/contest-groundup/`, over net-sigma, pool 1/5/10/26, TN 6/7/8 grids plus five (pool, net) pairs on the pool-aware Overwhelming bar (`OVERWHELM_SIGMA`); its `--check` is unwired.
+- **Victory/endings (FA, WR, CORE):** `mechanics_index_gen` hard-fails any `victory_paths` other than the single `peninsular_sovereignty` (GD-1) in a register no code reads, while `export_game_constants` records that the season loop "reports `endings` since v9 IN-27 (H-176)" and carries no sustain count. The two disagree about whether the game has one ending.
+- **Retired vocabularies still wired into gate text (all):** Key substrate (ED-IN-0232) remains in `hook_md_sweep_guard` message, `build_identifier_census.built_names`, `triage_work_items.code_identifiers`, `ci_quantity_vocabulary_check` docstring, and the two `validate_ed_citations` BURN_DOWN pairs on `key_type_registry_v30.md`.
+
+## Likely stale or superseded
+
+Dead or empty subject (gate runs, observes nothing):
+- `tools/ci_generation_consistency.py`: reads `canonical_sources.yaml` for `.md` docs under `designs|systems`; `grep` count 0 and `systems/` holds no `.md`, so zero documents are checked.
+- `tools/canon_coverage_check.py`: walks `systems/` for `Status: CANONICAL` in `.md/.yaml/.svg`; no `.md` exists there (quarantine), so `registered_no_header` is the whole registry.
+- `tools/ci_co_file_checker.py` Rule 1 (`systems/.+_v30.md`) and `tools/ci_editorial_checker.py` prefixes `systems/npcs/`, `systems/world/` can never match a tracked `.md` (blocked by `ci_design_prose_quarantine`); only `canon/03_` is reachable.
+- `tools/currency_consistency_check.py` `check_dead_maintainers` (no `deprecated/skills/`), `check_patch_register_header` (frozen counter); `tools/ci_vetting_check.py` and `tools/ci_pp_frozen_check.py` guard the frozen PP register.
+- `tools/broken_dependency_checker.py` sub-check (b2) ("a registry row's `ci_job` is really invoked by that job") has been a no-op since `_gate_jobs()` returns `[]`; the registry header still claims the join is enforced "in both directions".
+- `tools/freshness_gate.py`: about seven `canonical_sha__` pins remain; detects document change, not code agreement.
+
+Orphans (no caller, or broken):
+- `tools/definitions_store.py` (store file absent), `tools/link_values_pointers.py` (reads the absent store; `value_pointer_links.json` stale in `engine_params/`), `tools/vocab_store.py` (consumer `build_lexicon` retired), `tools/tag_normalizer.py` (no `[[id]]` tags in corpus), `tools/join_audit_workings.py` (archive-only, stale `audit/` path), `tools/build_engine_atlas.py` (both execution inputs retired; outputs untracked; reads a `.designs/` roster table as input), `tools/build_identifier_census.py` (outputs untracked; reads prose; still reads the retired Key-registry md), `tools/verify_handoff_split.py` (one-shot falsifier, wired nowhere, "delete once old news"), `tools/gen_sigma_parity_goldens.py --check` and `tools/export_sim_params.py --check` (run only by pytest, not by the workflow or registry), `tools/session_provision.py` (documented as a SessionStart hook; `settings.json` has `SessionStart: []`).
+- `tools/README.md`: names `export_key_types.py`, CI job names that no longer exist, an `integrity` job collapsed in 2026-08, and omits ~15 live tools.
+
+Doubled:
+- Ledger parsers: `broken_dependency_checker`, `currency_consistency_check`, `validate_ed_citations`, `ci_claim_provenance_check._load` and `ci_common.read_editorial_ledger_rows` each read the editorial ledgers with their own globs; `restructure_ledger.md` has `pathres`, bdc's `_load_restructure_map` and two vector-audit parsers.
+- Vocabulary readers: `names.py`, `descriptor_registry.py`, `quantity_registry.py`, `registry.py`, `definitions_store.py`, plus runtime `engine/substrate/{names,descriptors}.py`.
+- Size caps: `ci_register_size_check.py` (per-path table) and `compliance_check.py` (pattern table from `atomization_rules.yaml`), each with its own policy parser.
+- Local vs CI lists disagree: `export_names --check` CI-only; `export_battle_orders --check` local-only; no guard (the recurrence test was retired).
+
+Registry/text drift: `ci_checks_registry.yaml` header says nothing is `subject: game` yet marks `export_battle_orders` and `export_npc_roster` as `game`; `ci_vacuous_assertion_check` role text claims detection of `pytest.approx` and zero-iteration loops that the code does not implement; `m1_acceptance` docstring/registry row count (five vs four).
+
+## Items that could change an audit finding
+
+(No `F-*` ids were cross-checked from `audits/*.md`; claims are described.)
+- **"The port validates against the oracle" (GO, DICE, PC, WR):** the typed bridge covers five constants; three oracle/port model disagreements are open (accord, weapon TN, coherence); the oracle holds no accord state and no victory-sustain model. Any GO finding that treats Godot constants as derived from the oracle is overstated.
+- **"Constants in the engine are provenance-gated" (PC, MB, CORE):** `ci_sim_fabrication_check` grades only ADDED lines in `engine/`, `systems/*/sim`, `modules/*` except `modules/combat/`; 158 of 283 exported sim constants carry no citation; cited means "a marker string is present". Nothing checks a marker against its source.
+- **"The season loop is gated" (CORE):** CI wires `m1_acceptance` report-only and by registry admission "NO GAME-FACING SIGNAL CAN NOW FAIL CI ON REGRESSION" (the season's own pytest job is a separate gate, not in this lane). Row 3 is doc-derived from a YAML `status:` string.
+- **"Descriptors/factions" (FA, CHAR):** `descriptors.json` carries no `fac.*` stats since 29b, yet `ci_names_consistency` and `names_index` still mirror `fac.*` rows, and `quantity_registry` still reads `faction_stats`; the faction stat vocabulary exists in registries but has no runtime artifact route.
+- **"Single victory path" (FA, WR):** a validator hard-codes GD-1 `peninsular_sovereignty` while the season loop reports `endings`; an audit claiming one ending, or many, can cite either side.
+- **"NPC cast is authored" (CHAR, WR):** `engine/season/npcs.yaml` is generated from `cases/NPC*.yaml` and hand-editable after; `--check` fails only on dangling references, not on drift; two NPC data heads (`references/npc_registry.yaml` identity/convictions/role vs `npcs.yaml` placement/wants).
+- **"Naming is enforced" (WR):** the naming gate enforces one block-tier deprecated proper noun; `names_index.yaml`'s `enforce` field is unvalidated (an unknown value silently disables a row); the edit-time hook misses `Bash` edits.
+- **"Mass-battle cell/weapon design is pinned" (MB):** three digest modes pin the shipped cell-based configuration; no instrument observes that the weapon-carry/cell design intent holds, and the legacy grid modes are unpinned.
+- **"Tests are scoped per subsystem" (all):** only PC, MB and SC have markers; the realm-level effect of a module edit is reached only by the full season suite (about three quarters of suite cost, measured 2026-11-04).
 

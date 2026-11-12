@@ -186,7 +186,9 @@ thin until it arrives.
 | `14_VERBS_MATERIAL_A_mending.md`, `_C_works.md`, `_E_knowledge.md` | feed I-7 and I-8 (the services an `interdict` withholds; `found` as a `land_grant`'s due deed) |
 | `14_VERBS_SOCIAL1_A_formation.md`, `14_VERBS_SOCIAL2_A_formation_on_what_is_known.md` | block I-1's `form` choice and every `covenant` and `petition` formation |
 | `14_VERBS_SOCIAL1_B_documents_and_obedience.md` | blocks I-4 (`covenant_in_force`; `give` of a bond), I-7 (`comply`, `evade / defy`; `OBEYED_WRIT`) |
-| `14_VERBS_SOCIAL1_C_persuasion_and_deceit.md`, `_D_grievance_and_settlement.md` | feed I-2 (the ask's row; `backlog`) and I-6 (canvassing) |
+| `14_VERBS_SOCIAL1_D_grievance_and_settlement.md` | blocks I-5 (`carry`'s row, its `petition_venue` and `backlog`; this lane and `13_SC` state the row differently, audit X-25) |
+| `14_VERBS_SOCIAL1_C_persuasion_and_deceit.md` | feeds I-2 (the ask's row) and I-6 (canvassing) |
+| `audits/14_VERBS_SOCIAL2.md` §9 (`oblige` as an admission draw; proposal `14_VERBS_SOCIAL2_B`) | feeds I-6 (joining a roll: the warrant is eligibility, the admission is that lane's draw if Jordan takes it) |
 | `14_VERBS_SOCIAL2_B_a_word_with_content.md` | blocks I-3 gate 4 (telling what a held certificate recites) |
 | `14_VERBS_SOCIAL2_C_case_question_confession.md` | feeds I-7 (the inquisitorial rite) |
 | `14_VERBS_SOCIAL2_D_tie.md` | blocks I-10's kin-bar |

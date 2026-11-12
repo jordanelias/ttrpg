@@ -152,7 +152,11 @@ decree (no form) asks `command`. `avoidance` is `purview`: a sentence is publish
 issuing seat's ground, and it orders nobody to do anything (its clauses are all forbearances). `interdict`
 and `tithe` stay `command`: they address the issuer's own seat-holders. If Jordan takes territorial
 authority for every writ (that decision's option A), the key reads `purview` on every row and is inert.
-One conjunct, one reader, no second predicate: both basis values are that proposal's.
+One conjunct, one reader, no second predicate: both basis values are that proposal's. A form whose
+`basis` is `purview` is a publication in the other sense too: its terms reach its addressees with the
+news of its issue (`06_FA_decree_binds.md` edit 2's deposit), whichever way Jordan rules on whether an
+*order* must be delivered by hand (`audits/06_FA_audit.md` §11 item 1; `audits/14_VERBS_SOCIAL1.md` §15
+D1). A sentence handed from parish to parish one paper at a time is not a sentence.
 
 Ladder step 5: the distinction is the instrument's, and `instruments.yaml` is where an instrument's facts
 live. `[UNVERIFIED]` that the `authority` conjunct can read a value sourced from the act's `form`

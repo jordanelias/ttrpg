@@ -22,7 +22,8 @@ All runs: `PYTHONHASHSEED=0`; scripts and outputs under
 tried from the side: a melee pair is winner-take-all on a pool proportional to each body's own
 headcount, so the engine rewards an army for being one undivided block and punishes every unit it is
 divided into.** Nine hundred heavy infantry in three companies lose sixty fields of sixty to the same
-nine hundred in one body, taking sixty percent losses to its one (friction off); through the season's
+nine hundred in one body, taking sixty percent losses to its one (friction off); on the very same six
+cells, three bodies win none of sixty where one body wins thirty-six; through the season's
 own entry with the shipped friction on, an attacker who **doubles** his army and forms it into six
 units wins 22 fields in 100 where an equal single block wins 42. That is the opposite of the structure
 Jordan asks for (army → unit → subformation → troops; squads; mixed arms), and it is why a flank attack
@@ -254,6 +255,31 @@ So nine hundred men in three companies lose sixty fields of sixty to the same ni
 losing sixty percent to its one, and lose every graded field to six hundred in one block. Under the
 shipped friction the same ordering survives the noise (33, 21, 16, 8 of 60).
 
+**Two effects are in that table, and they were separated** (`p15_shape.py`, `p13_same_cells.py`,
+`p14_gap.py`; friction OFF). The season's constructor gives each unit its own shallow line and sets the
+units side by side (`orderofbattle._place`), so an army of three units of 300 is six files in one rank,
+where one unit of 900 is a block three files by two ranks. Holding one thing fixed at a time, against
+the same block of 900:
+
+| A's 900 men | footprint | A wins / B wins / undecided (n 60) | loss A / B |
+|---|---|---|---|
+| one body | the block, 3 files x 2 ranks | 36 / 21 / 3 | 20% / 26% |
+| **three bodies, each one file of the same block** (the same six cells) | 3 files x 2 ranks | **0 / 60 / 0** | 37% / 3% |
+| one body | six files x one rank | 3 / 53 / 4 | 40% / 7% |
+| three bodies | six files x one rank (abutting; with the constructor's gaps it is 0 / 60 / 0) | 2 / 58 / 0 | 59% / 3% |
+
+and on a one-rank footprint of three cells (600 men, n 100): one body 36 / 54 / 10; three bodies on
+the same three cells 19 / 43 / 38; the swap, 48 / 28 / 24.
+
+- **The split, cells held fixed:** total at two ranks (36 wins to 0), a halving at one rank (36 to 19).
+  This is the partition defect proper, and it is the resolver's alone.
+- **The shape:** a one-rank line loses to a block almost always even as one body (3 of 60). The
+  addendum met this as "arrangement is a real lever that nobody can pull" (its §B3, F-MB-20). What is
+  new is that the lever is pulled for the player, the wrong way, by the act of forming units: every
+  unit added makes the army's line wider and thinner.
+
+Either alone is enough to lose the field; the season's army path applies both.
+
 **Why** (trace, `t2.py`, seed 3, season density, friction OFF). In `3 x 300 v 1 x 900` the first melee
 rows read `a_pool 9, b_pool 22` and `a_pool 4, b_pool 16`: each 300-man body brings its own pool
 (`eff_power x eff_size x POOL_QUALITY_SCALE`, so 9 for 300 men and 28 for 900,
@@ -269,9 +295,36 @@ every small body in reach at close to its whole pool at once. The same root give
 size table its cliff.
 
 `orchestration._convergence_scale` is the tree's own "[partition-invariance fix]": its docstring records
-that Jordan ruled the dependence of the result on how a force is split "a genuine defect (2026-07-08)".
-That fix caps the case in which splitting multiplies the splitter's dice. It does nothing for, and by
-shrinking each member's pool worsens, the case measured here.
+that Jordan ruled the dependence of the result on how a force is split "a genuine defect (2026-07-08)"
+(ledger: `ED-MB-0003`, ratified, "Intensive (per-troop, partition-invariant)" pool semantics;
+`ED-MB-0004`, "genuine defect -- fix it"). That fix caps the case in which splitting multiplies the
+splitter's dice. It does nothing for, and by shrinking each member's pool worsens, the case measured
+here.
+
+**Three proxies, to see which rule the collapse belongs to** (`p9_proxy.py`, `p12_proxy3.py`,
+`p15b_shape_proxy.py`; monkeypatches for the run, nothing written; friction OFF, n 60). PROXY 1 is
+CR-12's proposed step 3 (`04_MB_cr12_linear_law.md`: the pair pool a function of troop quality only).
+PROXY 3 adds the file's other damage law to it: each side is paid by its own net successes, as
+`pursuit_damage` pays, instead of by the degree of an opposed comparison.
+
+| A, against a block of 900 | shipped | PROXY 1 | PROXY 3 |
+|---|---|---|---|
+| one body, the block (control) | 36 / 21 / 3 | 30 / 20 / 10 | 20 / 23 / 17 |
+| three bodies, one file each, same cells | **0 / 60 / 0** | 2 / 31 / 27 | 0 / 51 / 9 |
+| one body, six files x one rank | 3 / 53 / 4 | 16 / 32 / 12 | 14 / 33 / 13 |
+| three bodies, six files x one rank | 2 / 58 / 0 | 33 / 19 / 8 | 35 / 10 / 15 |
+| size, one body each: 660 / 750 / 900 / 1,200 / 1,800 against 600, larger side's wins of 60 | 41 / 48 / 59 / 59 / 60 | 35 / 43 / 44 / 50 / 57 | 27 / 37 / 42 / 54 / 60 |
+| 600 + 300 on the flank against 600, three ranks: B routed of 60 (in the line; none: see §2.4) | 15 (0; 21) | 20 (3; 11) | 39 (17; 27) |
+
+Reading. Taking headcount out of the dice removes the shape collapse (3 → 14 to 16 of 60) and the
+size cliff (at 2:1 the smaller side wins 6 of 60, then 3, where it won none), and under PROXY 3 a
+flank attack by a detachment at last breaks the line more often than its absence (39 routs against
+27) and two wings on two flanks break it in 58 of 60. **Neither proxy closes the split on the same
+cells** (0 to 2 of 60), and both turn the one-rank split from a loss into an advantage (33 to 35 wins
+against the one-body 14 to 16). So the pool's dependence on headcount and the winner-take-all payout
+are two owners of the collapse and there is a third that the proxies do not touch; the candidate,
+unverified by run, is the trace's `22 + 16 > 28`: a cell in contact with several enemy bodies counts
+whole in each pair, in the pool share and in the frontage term alike.
 
 **What this does to the intent.** The structure Jordan asks for is army → unit → subformation → troops,
 with units of distinct troop types and, from Ogre Battle and Unicorn Overlord, many small squads. In the
@@ -282,8 +335,8 @@ F-PES-MB-01.
 
 ### 2.4 P1 — "a flanked line breaks": it breaks no sooner than an unflanked one, and the men who went round are worth less than men who stayed home
 
-**Verdict: does not hold (EXECUTES, module scale; not reachable at season density, where a body is one
-rank and has no flank, addendum F-MB-20).**
+**Verdict: does not hold (EXECUTES, module scale, on bodies of three ranks; at season density a body
+is one to six cells and has next to no flank, addendum F-MB-20).**
 
 `p2_flank.py`, n 60 a row, B = 600 heavy infantry in one body of three ranks; A's main body 600 in front
 of it; A's extra 300 placed in the line, on B's flank (same rows, five columns out), or behind B.
@@ -313,8 +366,9 @@ deals none. A commander who sends 300 of his 900 round the flank does worse at b
 one who leaves them in camp; one who sends 150 round each flank never breaks him at all. Three further
 facts under the table: (a) an 18-tick field ends before most flank attacks finish (39 and 35 of 60
 undecided), and the season fights exactly one such turn (`massbattle._run_and_grade`); (b) the flanked
-line needs no order to face about, so "flanked" is a state that lasts two ticks
-(`FACING_REACTION_TICKS`) unless the front is also pinned; (c) with friction ON the table's ordering is
+line needs no order to face about: it turns toward whichever enemy is nearer (rear arm, tick 1), so
+whether it is taken in flank depends on distances and not on anything either commander decided;
+(c) with friction ON the table's ordering is
 largely gone (B wins 25 of 60 when flanked, 33 when not): the draw is larger than the manoeuvre. Finding
 F-PES-MB-05.
 
@@ -550,26 +604,31 @@ Every falsifier below was run; its control is on the same line.
 
 ### F-PES-MB-01 · blocks the stated intent, inverts a premise · an army divided into units loses to the same men in one block
 
-- **Claim.** In `run_battle`, on the season's constructors, a force's result depends on how many
-  bodies it is in, by the whole of the result.
-- **Evidence.** §2.3 table; §2.4 last paragraph. `core/exchange.py::subunit_combat_pool` (pool
+- **Claim.** In `run_battle`, a force's result depends on how many bodies it is in, by the whole of
+  the result: on identical cells (three bodies on a block's six cells: 0 wins of 60 against the one
+  body's 36), and again by the shape the season's constructor gives a divided army (a one-rank line: 3
+  of 60 even as one body).
+- **Evidence.** §2.3, both tables; §2.4 last paragraph. `core/exchange.py::subunit_combat_pool` (pool
   proportional to the body's own troops), `::pair_pool_contribution` (a body's pair pools can sum to
   more than its pool; "known accepted residual"), `orchestration.py::resolve_engagements`
   (`compute_degree(a_net, max(1, b_net))`; `DAMAGE_BY_DEGREE` less `eff_dr`), `::_convergence_scale`.
   Ledger: `ED-MB-0003` (Jordan, 2026-07-05: pool semantics "Intensive (per-troop,
   partition-invariant)"), `ED-MB-0004` (Jordan, 2026-07-08: "genuine defect -- fix it"); the fix landed
   for the case in which splitting adds dice, and the case measured here was not tried.
-- **Falsifier and control.** 3 x 300 against 1 x 900 heavy infantry, friction off, season density: the
-  split side graded the winner in 0 of 60 (it should be near the mirror's 30 of 60). Controls: the
-  mirror 1 x 900 against 1 x 900 (30 / 24 / 6); the side swap (1 x 900 against 3 x 300: 59 to 1);
-  3 x 300 against 3 x 300 (25 / 26 / 9); shipped friction through `resolve_field` (42 → 14 of 100).
+- **Falsifier and control.** Three bodies on the same six cells as one body, against a block of 900,
+  friction off: 0 of 60 (it should be near the one body's 36). Controls: the one body on those cells
+  (36 / 21 / 3); the side swap (1 x 900 against 3 x 300: 59 to 1); both sides split (25 / 26 / 9); the
+  shape alone (one body in one rank: 3 of 60); gaps removed (2 of 60, so not the gaps); shipped
+  friction through `resolve_field` on the season's own deployment (42 → 14 of 100; twice the men in
+  six units, 22).
 - **Touches.** R-04 (a strategic choice that is punished), R-09 (a certain result), and the standing
   requirement's cell hierarchy.
 - **Emergent-narrative consequence.** Every story that needs more than one unit on a side (§3.4).
 - **Not closed by CR-12 as proposed.** With the pair pool made a function of troop quality only
-  (`04_MB_cr12_linear_law.md` step 3, run as a labelled proxy, `p9_proxy.py`): 600 + 300 against 900
-  wins 1 of 60 and loses 23% to 8%; 3 x 300 wins 12 to 29; **6 x 150 wins 51 to 3**. The collapse goes
-  and the dependence on the split stays, with its sign now depending on the split.
+  (`04_MB_cr12_linear_law.md` step 3, run as a labelled proxy): the shape collapse and the size cliff
+  go; the split on identical cells stays at 2 of 60; and on the season's deployment the sign of the
+  split now depends on the split (600 + 300 against 900 wins 1 of 60; 6 x 150 wins 51 to 3). §2.3's
+  proxy table.
 - **Minimal fix at the owner.** `proposals/16_PESSIMIST_MB_partition_and_the_pair_rule.md`.
 
 ### F-PES-MB-02 · blocks a requirement · the field is decided by one draw made before it, laid over a rule that is otherwise a cliff
@@ -617,8 +676,11 @@ Every falsifier below was run; its control is on the same line.
   `Unit.terrain_off_d` / `terrain_def_d`); walls alone are armour. `ED-MB-0045` already records that
   `DAMAGE_BY_DEGREE` "cites a nonexistent §A.4 while the nearest canon specifies a different linear
   law".
-- **Minimal fix.** In `proposals/16_PESSIMIST_MB_partition_and_the_pair_rule.md` (§3, the band table
-  and where armour and walls enter).
+- **A caution from the proxy.** Paying each side by its own net while keeping the subtraction makes
+  it worse: levy against levy is then bloodless in 60 of 60 (`p12_proxy3.py`). The subtraction is the
+  defect, not the table.
+- **Minimal fix.** In `proposals/16_PESSIMIST_MB_partition_and_the_pair_rule.md` (edit 3: armour and
+  walls shift the roll).
 
 ### F-PES-MB-05 · degrades narrative · a flanked line breaks no sooner, and an encircled one never
 
@@ -667,9 +729,9 @@ Decided by the five-step ladder (`CLAUDE.md` §0); the step is named.
 | # | inconsistency or gap | resolution | step | carried by |
 |---|---|---|---|---|
 | 1 | the result depends on the split; the tree's fix covers one direction | the requirement stands (ratified: `ED-MB-0003`, `ED-MB-0004`); the pair rule changes so that it is met in both directions; a partition row joins CR-12's exit | 1 (a ruling already decided it) | `16_PESSIMIST_MB_partition_and_the_pair_rule.md` |
-| 2 | the melee pair grades each net against the other's roll and pays the lower net nothing | each side's roll is graded against an obstacle set by the opponent's quality; both sides deal casualties | 4 (the tree's rule for an obstacle against a force; the code's own PP-233 citation, "both sides deal and receive") and 3 (`ED-MB-0045`: the damage table's citation does not exist) | same |
-| 3 | walls are armour where uphill and river are dice | walls become a dice row | 4 (the two sibling rows) | same |
-| 4 | a body's pair pools sum to more than its pool | removed with the pool's dependence on headcount (resolution 2); nothing left to sum | 5 | same |
+| 2 | the melee pair grades each net against the other's roll and pays the lower net nothing | each side is paid by its own net successes, the law `pursuit_damage` already uses in the same file; both sides deal casualties every tick | 4 (the sibling law in the file; the code's own PP-233 citations, "both sides deal and receive", "net successes x (1 + Power)") and 3 (`ED-MB-0045`: "two damage laws"; the table's citation does not exist). The other form, banding each net against an obstacle derived from the opponent's score, would decide the obstacle-derivation question that `dice_engine.degree_from_net`'s docstring records as suspended by Jordan (2026-08-21); it is named and not taken | same |
+| 3 | armour and walls are subtracted from damage, with reachable zeros; uphill and river are dice | armour and walls shift the attacker's roll, as the two sibling terrain rows do | 4 (the sibling rows; the engine's rule that advantage is a shift on the roll) | same |
+| 4 | a cell in contact with several enemy bodies counts whole in each pair | its engaged strength is divided among the pairs it is in; `_convergence_scale` goes | 5 | same |
 | 5 | rally hook empty; pursuit unreachable; `Unit.speed` never derived | rally and pursuit are two draws at the end of a field that ends in a rout; who may pursue is read from the troop registry | 3 (the design's own phase order and §A.12, as the code cites them) and 5 | `16_PESSIMIST_MB_rout_has_two_exits.md` |
 | 6 | two stamina ledgers | the unit ledger is deleted; the column ledger is the one, is returned, and takes an entry value | 5 (the cut is free, §1.1) | `16_PESSIMIST_MB_one_stamina_ledger.md` |
 | 7 | roles that do nothing are on the menu | off the menu until wired | 5 | F-PES-MB-08, an edit |
@@ -714,6 +776,10 @@ this file and the three proposals.
 | `p9_proxy.py` → `p9_proxy.txt` | three pair rules (shipped; CR-12 step 3 as proposed; quality pool with an obstacle from quality) on partition, size and flank rows, friction OFF | 60 | F-PES-MB-01; §5; the first proposal's evidence |
 | `p10_edges.py` → `p10_edges.txt` | damage-ladder zeros through `resolve_field` (levy; walls by troop type); sixteen role rows against no role | 60 | F-PES-MB-04; §3.3 |
 | `p11_extremes.py` → `p11_extremes.txt` | 0, 1, 79, 80, 99, 100, 101 v 99, 10,000, 20,000 a side through `resolve_field` | 20 (4 at the top) | §3.3 |
+| `p12_proxy3.py` → `p12_proxy3.txt` | PROXY 3 (quality pool; each side paid by its own net) on the partition, size and flank rows; levy mirror; size rows with friction ON | 60 | §2.3 proxy table; F-PES-MB-04's caution |
+| `p13_same_cells.py` → `p13_same_cells.txt` | 600 as one body and as three bodies on the same three cells; shipped and PROXY 3 | 100 | §2.3 |
+| `p14_gap.py` → `p14_gap.txt` | the season's placement of 3 x 300 with and without gaps; 3 x 400 against 1 x 1,200 | 60 | §2.3 (not the gaps) |
+| `p15_shape.py`, `p15b_shape_proxy.py` → `p15_shape.txt`, `p15b_shape_proxy.txt` | split against shape: one body and three bodies on the block's cells and on a one-rank line; shipped, PROXY 1, PROXY 3 | 60 | §2.3, the separating table |
 | `p8_season.py` → `p8_s2_k1.txt`, `p8_s{0,1,2}_k30.txt` | `build_realm`, three seasons, shipped chooser, no player; shipped scale at seed 2; proxy scale 30 at seeds 0, 1, 2 | 4 runs | §3.2. Hashes `b95552898d` (seed 2, shipped), `efba9c3b43`, `d30e77a305`, `59a2213e38` |
 
 Read by this lane: `PESSIMIST_BRIEF.md`, `AUDIT_BRIEF.md`, `skills/premise-check/SKILL.md`,
