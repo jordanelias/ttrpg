@@ -290,4 +290,157 @@ refused 81 of 102 times at seed 0 (`tell.refused`), 12 tellings land (`news.told
 emitted). A told thing is held and nothing is done with it. Opposite failure: what *is* drawn here (the
 `tell` roll, three bands) has spread; what it gates has no consequence, so the spread is decoration.
 
-### 2.4 "A town starves and someone is blamed"
+**A correction this lane owes its own instrument.** The 19 descendant acts in link 6 are counted through
+`causes[]`. The succession and the 43 `confer` attempts are *also* answers to the death and are not
+among them: an act formed on a standing occasion (a vacancy, a writ held, a wounded person, a detainee)
+is folded with no occasion id by design (`loop/resolve.py::_occasion_ids`, the Batch B-I close F1), so
+the log holds no edge from the death to the claim. The reaction is therefore larger than `causes[]`
+shows, and the log cannot show it: F-PES-GAME-03, proposal
+`16_PESSIMIST_GAME_standing_occasions_carry_their_cause.md`. The same blindness bounds §1.2: its blank
+columns are confirmed blank by the verb census (nothing executed there), not by the matrix alone.
+
+### 2.4 "A town starves and someone is blamed" — does not hold; "starves" itself is unreachable
+
+O (ordinary): a granary empties; the town goes hungry within the season; people sicken, leave or die at
+different rates; those responsible for it (the lord, the steward) hear of it; someone petitions,
+requisitions, flees, riots, or accuses; a town can die.
+
+| # | link | C (observed) | verdict · cause |
+|---|---|---|---|
+| 1 | a granary can empty | no: every settlement yields about 21 times what it eats, every season, and nothing spends stores (SE audit; X1: stores equal in PLAY and NULL to within a few units) | **INERT at FIRES** |
+| 2 | the town goes hungry | PROXY (stores emptied and producing Sites zeroed before each season, `x3_famine.py`). Every short cohort loses exactly 60 body a season | FOLLOWS (PROXY) · **fixed outcome** |
+| 3 | at different rates | no: 37 of 37 cohorts read 940, 880, … 40 in step | **DEPARTS** · EDGE |
+| 4 | a town can die | yes, in its seventeenth hungry season (four years and a quarter), and with nobody acting all 37 die in that one season | DEPARTS on pace (E6) · the standing rule |
+| 5 | the hungry do something about it | in play the cohort `tend`s itself: X1, every seed: the 37 cohorts that lost 60 in season 0 are all back at 1000 by the end of that season (`body.tended` 37). `tend` restores a body whole in one act, with no roll, no food and no cost (`loop/effects_combat.py::_eff_tend`) | **INVERTED** in effect: rest cures starvation · COMPOSITION (hole row H-304; sweep D-05) |
+| 6 | those above hear of it | `body.changed` is among the causes of no other person's executed act at any seed (37, 39, 41 emitted) | **INERT** |
+| 7 | someone is blamed | no verb names blame; no stance row moves on a shortfall; `person_q.stability` reads 0 for every settlement (hole register, the unrest row) | **ASSERTED** — no code owns it |
+| 8 | the extreme: every town dies | the 46 individuals remain, untouched, and the loop runs on: only a cohort eats (RULED, ED-IN-0255, not re-raised). A realm with no people keeps all its lords, seats and stores | EDGE — §7 item J-1 |
+
+Play-back: *the granary was empty. The town lost a sixteenth of itself, rested, and was whole again by
+autumn. This happened every season. Nobody above them heard.*
+
+### 2.5 "A player's choice changes what happens" — holds for paper, not for the world
+
+Run: `x4_player.py 0 3`, the player seated as the King through `harness/play_surface.py::dispatching_chooser`
+(the shipped single-player hook). Arms: AUTO (the shipped chooser decides for him; hash equals the plain
+run), ABSTAIN (he does nothing for three seasons), LAST (he plays only the last scene the chooser would
+have played).
+
+| | AUTO | ABSTAIN | LAST |
+|---|---|---|---|
+| the King's executed acts | 24 | 0 | fewer |
+| persons, seats, sites, rungs, stores | — | **same** | **same** |
+| offices | 35 | 34 (`off_lord_terr_T1` never established) | 34 |
+| `duty.taken` / `duty.refused` in the realm | 42 / 69 | **0 / 0** | 0 / 0 |
+| stance rows that differ | — | 1 person | 1 person |
+| other persons whose executed verbs differ | — | 59 of 82 | 62 of 82 |
+
+The most powerful person in the realm ceasing to act for most of a year costs the realm one unheld
+office and every sworn duty (all `oblige` traffic at seed 0 descends from him), and reshuffles what 59
+other people write. Nothing else. Genre test (would a strategy player be surprised): yes — a king who
+does nothing for three seasons loses nothing and nobody moves against him.
+
+### 2.6 The premises that failed, in one list
+
+| premise | first broken link | cause |
+|---|---|---|
+| an officeholder dies and the others react | "dies" is unreachable shipped; with the death planted, "the others" is 16 people and "react" is the heir alone | hazards ship at 0; news does not travel; one seat has a route |
+| a decree binds | "the addressee answers" (FA) | emission-only; `comply` impossible 137 of 137 |
+| a rumour spreads and someone acts on it | "spreads" (FI); "acts on it": 0 of 19 tellings answered | telling refused four in five; a told claim occasions nothing |
+| a town starves and someone is blamed | "starves" is unreachable; planted, rest cures it; nobody above hears | no scarcity; `tend` free and whole; no blame verb |
+| a player's choice changes what happens | "what happens" beyond paper | the skeleton does not respond to anyone |
+| a war is fought and land changes hands | (MB, FA) no two factions at war; no fought field of consequence; no rung changes holder | cited: `04_MB_audit.md`, `06_FA_audit.md` |
+| a trial reaches a verdict | (SC) 0 to 1 `matter.determined` per three seasons; 8 lapsed at season 5 (WR run) | cited: `05_SC_audit.md` |
+
+## 3. Emergent-narrative audit — no player, several seeds and seasons
+
+Sources: X1 (seeds 0, 1, 2 × 3 seasons, this lane); the WR lane's six-season runs at seeds 0, 1, 2
+(`runs/WR/probe_s*_k6.txt`, cited); X2 to X6 (this lane).
+
+### 3.1 What stories can this game produce at all (enumerated from the code that executes, not the docs)
+
+A story needs a closing Event that changes state. The closing kinds the verb table and MATTER can emit
+and that some run here or in a lane has seen executed: `person.died` (a `capture` felling; a cohort's
+seventeenth hungry season; never age or illness, shipped), `succession.claimed`, `tenure.closed` (a
+death; a `release`), `matter.determined` and `matter.lapsed`, `field.lost` / `field.unopposed`,
+`residence.changed`, `office.established`, `record.forged`, `cover.assumed`, `commitment.made`,
+`duty.taken`. No ending row of `world_q.endings_reached` has fired in any run of any lane.
+
+### 3.2 Which it does produce, in computed play (counts: seed 0, three seasons, unless said)
+
+| the story | beginning | escalation | reversal / cost | ending | n |
+|---|---|---|---|---|---|
+| **the clerk** — the granary fills and someone writes it down | a clock Event | another writes about the writing | none | none | `create_record` 350, `utter` 199; 230 answers to clock Events |
+| **the petition that lapses** | `petition.filed` 28 | `docket.formed` 17, `date.fired` 12 | `speak`: 4 turned, 1 held; `speech.unheard` 23 | `matter.lapsed` (8 at season 5, WR); `matter.determined` 1 in six seasons | 28 |
+| **the forger nobody catches** | `record.forged` 52 | none | none: one fixed quality, no exposure answered | none | 52 |
+| **the cover** | `cover.assumed` 34 | none | none | none | 34 |
+| **the march that meets nobody** | `march.declared` 29 | 25 refused; 3 `field.unopposed` | 1 `field.lost` | nothing changes hands | 29 |
+| **the oath** | `commitment.made` 95; `duty.taken` 42 | none | `duty.refused` 69 | terms mature (`term.matured` 542), answered by records | 137 |
+| **the arrested cardinal** (seeds 1 and 2 only) | a `capture` on the same man | wounded | felled; his seat closes | nobody fills it, nobody answers | 1 per seed |
+| **the move** | `residence.changed` 16 | none | none | none | 16 |
+
+Every row but the cardinal's lacks a reversal with a cost and an ending that is not a stop. The
+cardinal's is the realm's one complete story and it is the same story at both seeds that have it.
+
+### 3.3 Dead ends (a story that begins and cannot continue), by the verb that refuses it
+
+`challenge` 393 of 393 refused and `accept` 128 of 128 (no duel); `comply` 137 of 137 and `defy` 21 of
+21 impossible (no obedience, no defiance); `covenant` 47 of 47; `exchange` 225 of 225 (no trade);
+`train` 324 of 324 (no growth); `sabotage` 142 of 142, `raze` 73 of 73, `found` 25 of 25, `build` 15 of
+15 (no works, no ruin); `seize` 27 of 27, `revoke` 6 of 6, `pardon` 11 of 11, `determine` 11 of 12
+(no power changes hands by act). Three seeds, three seasons each. A fifth of everything attempted
+(1,585 of 7,940 acts) is one of these: persons spend their scenes trying the verbs that would make a
+story and being refused.
+
+### 3.4 What a player's choice changes in them — §2.5: paper.
+
+### 3.5 The shape of the tail — are all runs the same run
+
+- **The built world is one world.** `build_realm(0)`, `(1)` and `(2)` are equal in every one of the 22
+  projected components (persons, seats, sites, stores, stance, pursuits, convictions, tenures): the
+  seed moves draws and nothing else. There is no generated realm.
+- **The played skeleton is one skeleton.** After three seasons, site condition is equal at all three
+  seeds (and equal to the NULL arm); seats, persons, rungs, capability, pursuits and convictions are
+  **equal between seeds 1 and 2**, including the death; seed 0 differs from them by that one death.
+- **The census is one census.** Attempts 2,630 / 2,646 / 2,664; not refused 53% / 57% / 57%; the same ten
+  verbs certain, the same fifteen to eighteen always refused; `stores.changed` 185, `yield.taken` 111,
+  `condition.worn` 966 at every seed.
+- **Six seasons add nothing new** (WR runs): no ending, persons 83 throughout at seed 0, the same
+  kinds, with `claim.decayed` rising to 65% of the log.
+
+What varies by seed is which of two bands a `research` roll lands in, who writes which record, and
+whether the cardinal is caught this year. The tail has no shape because there is no distribution of
+outcomes to have a tail.
+
+### 3.6 Are the persons' reasons readable afterwards
+
+No, in three ways. (i) The closing acts carry no cause (F-PES-GAME-03). (ii) The chooser's deciding
+term is returned to nobody (CORE `01_CORE_reason_trail_in_the_act_store.md`; CHAR
+`02_CHAR_reason_trail_and_small_edits.md`). (iii) What the log does link is refusal-heavy: WR's deepest
+"chains" read `transfer > train > dispatch > issue > tend > exchange > move > tend > train > raze`, a
+sequence of unrelated refused attempts. A narrator given the seed-0 log can truthfully say who wrote
+what about which granary.
+
+### 3.7 Does the story survive the extremes
+
+| extreme | run | what happens |
+|---|---|---|
+| no named person (`cap=0`) | `x5_extremes.py 0 3` | the loop runs; 37 cohorts, **no office exists** (seats are minted with the cast); 1,049 acts, 9,252 of 11,815 Events are memory; sites, stores and bodies as the full realm |
+| one, two, five named persons | same | runs; 1,111 / 1,120 / 1,241 acts; the lone individual surveils and surveys |
+| nobody acts | X1 NULL, SE `probe_noacts` (120 seasons) | the clocks run for ever; nothing ends |
+| total famine, nobody acts | `x3_famine.py 0 0 20 nullglobal` | every cohort dies in season 17; the 46 individuals are untouched and the loop runs on |
+| the King and the heir dead | `x2b_death_detail.py … p_npc_020,p_npc_031` | three seats vacant for the whole run; no ending fires; nothing else changes |
+| a hundred factions | not run | no builder makes one `[SKIPPED: no generator; the realm is one authored world]` |
+
+Completeness (R): the engine does not break at its extremes, which is to its credit, and it does not
+*respond* at them either. A realm with no people, a realm with no King and a realm in which nobody acts
+are each indistinguishable, in what happens next, from the shipped realm.
+
+### 3.8 The instruments' verdicts, tested
+
+WR found the story bar cannot fail and its control is inverted (`09_WR_story_instruments_that_can_fail.md`);
+CORE found the corpus bar NOT-COMPUTABLE for 143 of 143 cases with four checks that pass 143 of 143. Added
+here: every instrument that walks `causes[]` is blind to the closing acts (F-PES-GAME-03), and none
+compares against the null arm, so none can distinguish a realm that corresponds from a realm that
+changes. `harness/arc.py` reads 33 "persons with an arc" at seed 0 over six seasons (WR run); the first
+twelve it prints are cohorts ("the people of Kronmark: utter, commit") whose arcs are utterances.

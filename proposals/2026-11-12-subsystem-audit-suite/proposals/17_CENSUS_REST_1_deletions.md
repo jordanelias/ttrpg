@@ -1,4 +1,4 @@
-# Census (REST) 1 — deletion batches: fields, a dead clock's dependants, a stub with no caller, two phantom contracts
+# Census (REST) 1 — deletion batches: fields, a dead clock's dependants, two phantom contracts (and one deletion withdrawn)
 
 ## Status: PROPOSED
 
@@ -10,7 +10,7 @@ Author: Fable census lane, PART=REST. Source: `audits/17_CENSUS_REST.md` §1, §
 **Nothing.** Every item is unread, unwritten or uncalled; D1, D2 and D4 move no `World.content_hash()`
 (the control for each batch is the same-seed hash before and after: `python tools/m1_acceptance.py
 --summary`'s hash row, or `harness/populated.run(3, 0)` → `52ff67bc45c5b956cd99215f6ba3097f` at this
-tree, `PYTHONHASHSEED=0`). D3 deletes a module the season never imports.
+tree, `PYTHONHASHSEED=0`). D3 is withdrawn.
 
 ## The problem
 
@@ -69,32 +69,19 @@ second row needs the exemption; then item 2's deletion fails that row's MATTER w
 of `harness/populated.run(1, 0)`. (Checked statically: `(Site, condition)` declares two kinds and its
 writer names one on every write, 966 times in the three-season run.)
 
-## D3 — `engine/substrate/stubwire.py` (contingent on `05_SC_sc05_kernel_disposition_B.md`)
+## D3 — WITHDRAWN: `engine/substrate/stubwire.py` stays
 
-`stub_resolve` has two callers, both in `systems/social_contest/sim/contest/` (`wrapper.py:227`,
-`dictionaries.py:48`); that directory is retired whole by SC disposition B. After it, the module has no
-caller.
-
-Delete, in the commit that deletes the kernel or the next:
-
-- `engine/substrate/stubwire.py`
-- `tests/valoria/test_stubwire.py`
-- the name in `engine/substrate/__init__.py:6`'s docstring list
-- `skills/valoria-vector-audit/scripts/structure_audit.py:199-201, 381-385, 851-855`: the `stub_wired`
-  report section, which lists importers of a module that no longer exists
-- `modules/social_contest/roll.py:34`: the parenthesis naming `engine/substrate/stubwire.py`
-
-`FORK:` rows (the ref is the parent of the deleting commit; `references/restructure_ledger.md`, exact
-file rows, CLAUDE.md §1):
-
-```
-| `engine/substrate/stubwire.py` | `FORK:<parent sha>` | FORKED (<date>, retired with its only caller, `systems/social_contest/sim/contest/` (ED-SC-0033 clause 2); ED-IN-0093's self-flagging stub has no stub left to flag) |
-| `tests/valoria/test_stubwire.py` | `FORK:<parent sha>` | FORKED (<date>, retired with `engine/substrate/stubwire.py`) |
-```
-
-**Gate:** `test_importing_every_engine_module_pulls_in_no_subsystem` green;
-`grep -rn stubwire engine modules systems tools skills tests` → the ledger rows only.
-**Falsifier:** a module added between now and then that returns a `StubResult`; the grep shows it.
+A first draft deleted `stubwire.py` and its test with the social-contest kernel, on the ground that
+`stub_resolve`'s only callers are in `systems/social_contest/sim/contest/` (`wrapper.py:227`,
+`dictionaries.py:48`). That is true of `stub_resolve` and false of the module:
+`tools/m1_acceptance.py:87-163` imports it and reads `stubwire.invocations` across its seeded season
+probe (the stub-hit row of the M1 instrument, CLAUDE.md §0.2), and that row's stated falsifier is a
+planted `stub_resolve` (`:188`). Deleting the module would break the instrument; keeping it costs 84
+lines. **Kept.** What does follow from the kernel's retirement is smaller and belongs to
+`05_SC_sc05_kernel_disposition_B.md`'s own commit: `modules/social_contest/roll.py:34`'s parenthesis
+counting `engine/substrate/stubwire.py` among the kernel's outside users, and the `stub_wired` section of
+`skills/valoria-vector-audit/scripts/structure_audit.py:851-855`, which will print its own
+"nothing to report" line.
 
 ## D4 — two phantom contract rows in `references/module_contracts.yaml`
 
@@ -128,8 +115,8 @@ N: each item fails the cut test in every direction tried (top-down: no requireme
 bottom-up: no reader; lateral: no sibling module; across scales: not on any typed input or outcome that
 is read). R: nothing a player or an NPC can do changes. S: D2 removes a second ladder for one question
 (when does a write expire: `stages`/`matured` is the one clock after it). E, last: six fields, one
-roster, one gate branch, one module, two contract rows; no behaviour lost.
+roster, one gate branch, two contract rows; no behaviour lost.
 
 ## Cost class
 
-Edit, all four batches. D1 and D4 can land today; D2 and D3 wait for the proposals named.
+Edit, all three batches. D1 and D4 can land today; D2 waits for `08_FI_04_small-edits.md`.

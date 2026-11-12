@@ -293,4 +293,216 @@ to the creed he stood against. Which six persons, and into what, the first runs 
 **Falsifier.** An Event of any kind whose changes name `Person.conviction`. `grep` of the KINDS lines:
 none in any run.
 **Touches.** R-06, R-07, R-09; the standing rule (a thing that could go either way for the person).
-**Fix.** `20_NARRATIVE_D` edit 3; it overwrites a ruled item and is listed in §10.
+**Fix.** `20_NARRATIVE_E_the_year_and_the_reason.md` edit 3; it overwrites a ruled item and is listed
+in §10.
+
+## 4. The story inventory: occurring, possible and starved, impossible
+
+A "story" here is a chain a narrator could tell with a cause in it: an opening, an answer by another
+person, and a change someone would mind. Counts are E-N04 (seeds 0 / 1 / 2, four seasons, no player).
+
+### 4.1 What occurs
+
+| # | shape | count | what it lacks |
+|---|---|---|---|
+| S1 | paperwork begets paperwork: a writ, a dispatch or a record is seen and answered by a record, a copy or an utterance | the commonest cross-person causal pairs at seed 0: `dispatch→create_record` 15, `issue→create_record` 12, `dispatch→utter` 11, `create_record→create_record` 9, `issue→reconstruct` 9, of 232 cross-person edges between executed acts; lift over independence 0.9 to 1.9 | any change a person would mind; WR F-WR-01 names it "linked civic paperwork" |
+| S2 | a wave of oaths: a person sees something at a seat and swears to it | 46 / 39 / 89 oaths; their occasion a sighting claim in at least 18, 22 and 57 of them (the probe prints the seven commonest occasions per seed) | a reason, a service, a payment (B2, B3) |
+| S3 | a petition filed and left | 35 / 44 / 44 filed, 5 / 3 / 5 carried, 0 / 2 / 0 determined | an answer (B6) |
+| S4 | a decree nobody answers | 40 / 23 / 47 writs; `comply` 0 of 193; `evade / defy` 0 of 26 | an addressee (FA F-FA-01) |
+| S5 | a march declared and turned back | `march` formed 40 / 15 / 25, executed 5 / 7 / 11; `field.unopposed` 4 / 5 / 8, `field.lost` 1 / 2 / 3, `field.won` 0 | an enemy (F-NARR-04), a consequence (FA F-FA-13) |
+| S6 | a cause heard and joined | `commit` to an uttered OUGHT Proposition 80 / 134 / 90; `commit→petition` 4 at seed 0 (lift 4.6), the one pair in the table that reads like a movement | anything the cause then does |
+| S7 | a creed breaks, unseen | 6 / 8 / 8 persons | a witness, a draw, a telling (F-NARR-08) |
+| S8 | a death | 0 / 1 / 2 (cause not read here; these are the seeds where `capture` executes, 3 and 6 times, and WR's three-season residue attributes two deaths to `capture`) | a successor: no seat fell vacant by it |
+| S9 | a determination | 0 / 2 / 0 | anything after it (SC F-SC-05) |
+
+Nine shapes; the first four are 90% of what happens; none has a second act. This agrees with WR
+F-WR-01 and adds the cross-system reading: **no occurring shape involves two of the eleven things
+pulling against each other.** S2 is office and obligation with no pull; S6 is allegiance with no cost.
+
+### 4.2 What is possible and starved, and what is impossible
+
+"Starved": a route exists and executed at most twice in the three runs. "Impossible": no route, with the
+line that blocks it.
+
+| story | status | blocked at |
+|---|---|---|
+| a lord blamed for unpaid men, an unheard petition, a hungry town | **impossible** | an omission has no author (F-NARR-02) |
+| a vassal who breaks with a new lord he despises | **impossible** | the seat has no person behind it (H-195); seats do not change hands (O3) |
+| a faction that splits on doctrine | **impossible** | `opinion_of` is never asked of one's own side and eight creeds engage no pole (A5); `commitment.ended` is `never` strife |
+| a war between two factions | **impossible** | no WAR Proposition is built; marches are unaimed (A4, O4; CR-91 and B10-17 schedule the first half) |
+| a succession crisis | **impossible** by ruling and by supply | natural death is deferred (ED-IN-0317); no seat emptied in 12 seed-seasons; `succeed` never formed; the study's `DR>IN` link is UNREACHABLE (E-N03) |
+| an excommunication | **impossible** | CH has no verb or kind (`strife_moves.yaml:90`; CR-74) |
+| a famine that drives a rising | **impossible** at shipped values | no year, no weather (W1; CR-73; WR F-WR-04, F-WR-19); hunger occurs in season 0 only (SE F-SE-03) |
+| a conversion that anyone hears of | **impossible** | the crisis emits nothing (F-NARR-08) |
+| a debt called in; a market cornered | **impossible** | no debt carrier (`15_INSTITUTIONS_VENICE_B`); `exchange` 1 of 269 |
+| a rumour that ruins a man | **starved** | told claims held at the end: 25 / 13 / 30 in ledgers of 83 persons (FI F-FI-02) |
+| a verdict that provokes | **starved** | 2 determinations in 12 seed-seasons |
+| an execution, a pardon | **starved** | `capture` 0 / 3 / 6; `pardon` 0 of 15 |
+| a seat conferred or stripped | **starved** | `confer` 0 of 8, `revoke` 0 of 11 |
+| an era that ends | **impossible** today | no strand concludes; the era is one open scope (W3, W10) |
+
+### 4.3 Controls
+
+Three arms on the same seeds (E-N07 to E-N09) and one the WR lane ran.
+
+ARMS_PLACEHOLDER
+
+### 4.4 Six seasons: what the lapses occasion
+
+LAPSE_PLACEHOLDER
+
+## 5. What makes a plot point arise today, and how a reader recovers why
+
+**What arises.** An act is formed when a referent reaches a person (a claim lands whose subject his
+reach covers, or a standing occasion is stamped) and a verb row admits that referent's class; it is
+chosen by `pursuit + stance` under a softmax (`choice_temperature` 0.05). So a "plot point" today is
+*a referent meeting a verb*. Read over the three runs:
+
+- 94% of executed acts answer a claim that landed, 6% an ambition (A1).
+- The claim is a bare sighting (`seen`: "someone did something here") in 507 / 615 / 621 executed acts
+  (32% / 35% / 35%): the commonest reason anyone does anything is having seen someone do something.
+- What occasions the verbs that should carry strife (formed acts, seed 0): `challenge` 152, top
+  occasions own `seen` 33, own `record.created` 16, `seen` 13, own `duty.refused` 11, `order.given` 10,
+  `yield.taken` 9; `oblige` 219: `seen` 121, own `duty.refused` 15, `stores.changed` 11; `raze` 29:
+  `train.refused` 4, `proposition.uttered` 3, `travel.blocked` 3; `seize` 14: `order.given` 6.
+  A man forms a challenge because the harvest came in.
+
+That is CHAR F-CHAR-01 ("the ranking does not read what an act would do") seen from the narrative
+side: the occasion and the verb are joined by the class of an id, never by a ground.
+
+**The reason trail, as it stands.** Mechanically it is complete while the driver lives: of 3,593 /
+3,612 / 3,606 acts, 0 had no recoverable occasion (`SeasonDriver.scenes[act.scene].occasion`), and the
+claim behind a claim-question was still in the actor's ledger for all but 0 / 17 / 59 (cause not read;
+seeds 1 and 2 are the seeds with deaths). Three losses:
+
+1. **It dies with the driver.** The Scene is not world state (CORE: `01_CORE_reason_trail_in_the_act_store.md`).
+2. **A stamped referent has lost its ground.** 262 / 290 / 298 executed acts (17%) took their subject
+   from a classed referent (Office 45 / 39 / 89, Person 39 / 52 / 71, Proposition 101 / 143 / 77,
+   Record 25 / 19 / 18, Rung 52 / 37 / 43). `Question.classes` holds `(id, class)`; which of the eleven
+   stamp terms put it there (a vacancy, a seat he was told of, a larder in his purview, a stake in a
+   flow) is not kept (`world_q.py:4260-4282`, `_stamped`). "He swore to the seat" is recoverable; "because
+   it was vacant" or "because it was at stake in the rising" is not.
+3. **The recoverable reason is not a reason.** For the 83% formed on a plain referent the trail ends at
+   a claim such as `(granary, stores.changed)`. It is true that this is why he acted. It explains nothing.
+
+So legibility has two halves and the engine has the first: the *chain* (who answered whom) is
+recorded and exceeds chance for executed acts (WR S1). The *ground* (what the act was for, to this
+person) does not exist to be recorded.
+
+## 6. The churn that should contribute and does not
+
+World Events emitted by no act, four seasons (seed 0): `condition.worn` 1,288, `term.matured` 1,059,
+`stores.changed` 259, `yield.taken` 148, `body.changed` 37, `travel.ended` 33, `docket.formed` 23,
+`date.fired` 17. World Events that occasioned an executed act: `stores.changed` 105 / 108 / 105,
+`term.matured` 86 / 113 / 124, `yield.taken` 69 / 56 / 47, others under 10. What those acts were (seed
+0): `create_record` 110, `utter` 67, `forge` 21, `reconstruct` 26. The world moves, and people file it.
+
+| churn | what exists | state | minimal faithful coupling, at its owner, as a draw | owner lane and proposal |
+|---|---|---|---|---|
+| **shocks** | `season_factor_draw` (a keyed draw per territory and season) | off; no year (W1) | weather on with a spell (a second keyed draw per year and region), mean one; the year itself declared apart from the weather arm | WR: `09_WR_B_weather_with_memory_and_the_year.md`; CR-73; here `20_NARRATIVE_E` edit 1 |
+| **scarcity** | larder draw, hunger bands, `shortfall` claims, `requisition`, `exchange` | hunger in season 0 only; `exchange` never | stores that differ and a granary a seat keeps; the shortfall reaches the holder first; the hungry man's own fallen body, laid on the holder he believes holds his town, is a third clause of `dues_unmet` | SE: `07_SE_treasury_granary_B.md`, `07_SE_ground_and_granaries.md`; CORE: `01_CORE_unmet_need_is_attended_first.md`; here `20_NARRATIVE_B` (clause owed) |
+| **succession** | `successions` roster, `succeed`, `vacancies`, the bodies clock (`body_hazard`, a draw) | no seat empties; rates 0 by ruling | terms on rotating seats; the vacancy and the new holder as claims people hold | FA: `06_FA_seat_terms_and_turnover.md`, `_by_body_B`; here `20_NARRATIVE_C` |
+| **rumour** | `tell`, `lie`, `said_of`, `_credit` | 25 / 13 / 30 told claims held; credit constant | tellings offered to those lately seen; an `unshared` slant; a notice draw; a regime that discriminates | FI: `08_FI_02_rumour-that-travels.md`; `18_DETERMINISM_notice_is_a_draw.md`; here `20_NARRATIVE_A` |
+| **institutional decay** | `oblige_term`, `docket_lapse`, wear | by clock, authorless (B4, B6) | the lapse stays the clock's; what it does to the people it failed is theirs (a grievance, then a sampled act and its draw) | here `20_NARRATIVE_B`; INST: `15_INSTITUTIONS_BYZANTINE_B` |
+| **the Church** | seven seats, `solmund_orthodoxy`, the `theocracy` ending | no sanction verb (CH); its faction's goals are the only ones that engage a pole | a Church seat's restraint (`ban`) by a drawn determination; patronage and conclave | INST: `15_INSTITUTIONS_PAPACY_A`, `_B`; CR-74; CR-89 (Church Influence) |
+| **the markets** | `exchange`, `transfer`, stores | `exchange` 1 of 269 | goods that differ by place; a debt instrument with a term (so a due can be owed to a banker) | SE: `07_SE_kernel_repairs.md`; INST: `15_INSTITUTIONS_VENICE_B_debt_instrument.md` |
+
+Every row's coupling is the same shape: **the world's motion is a draw, it reaches a person as a
+claim about something he holds or is owed, and what follows is his.** No row needs the world to act
+on a person's behalf, and none needs a threshold to fire (R1 of `strife-00`; T-c). The two rows this
+lane owns an edit in are decay and the year; the rest are other lanes', cited so the holistic stage
+can order them.
+
+## 7. The design: a coupled narrative basis
+
+### 7.1 The one thing missing
+
+Every stage a plot point needs is built except the first.
+
+| stage | exists as | state |
+|---|---|---|
+| 1. a **pull**: two things a person stands on that cannot both be kept | nothing | **missing** |
+| 2. an occasion: the matter reaches him | `questions_for`, the stamps | built |
+| 3. a choice among acts | `choose`, sampled | built (a draw) |
+| 4. a resolution | the contest and task rolls | built for 14 rows; 53 owed (`18_DETERMINISM_task_draw_for_uncontested_verbs.md`) |
+| 5. a consequence someone minds | writes to Tenures, stores, bodies | built |
+| 6. witnesses | WITNESS, claims | built |
+| 7. a telling with reasons | `chronicle` | partly (WR `_B`; CORE) |
+
+The basis proposed is therefore not a set of event generators. A generator that fires would be a
+trigger (refused: R1, T-b, T-c, ED-IN-0225). It is **five readings of a pull**, each person-side, each
+derived from state the person already holds, each entering the one place a person's interior already
+meets a candidate (`regard`, through the stance term) or the one place his attention is ordered. The
+engine then does what it already does. A pull sets odds and order; it decides nothing.
+
+### 7.2 The five pulls ("generators" in Jordan's sense: what makes a plot point arise)
+
+| | the pull | read from (person-side) | where it enters | answering acts (existing rows) | the draw that settles it | graded outcomes | proposal |
+|---|---|---|---|---|---|---|---|
+| **G1** | **a due unmet**: what I was owed and did not get, against the one I believe owed it (a demand unmet; a duty failed) | my own lapsed oath or petition; my `held_by` belief | `regard` (−), CR-88's `grievance_against` | `petition`, `speak`, `tell`, `challenge`, `release`, `oblige` to another | the petition's or hearing's roll (`13_SC_draw_for_unrolled_contests.md`); `challenge`/`accept` (PC) | Overwhelming: redress and the tie renewed · Success: redress · Partial: a promise (a new term) · Failure: refused, the count stands, and the refusal is itself a deed against him | `20_NARRATIVE_B` |
+| **G2** | **a stand against a side**: my conviction, or my pursuits, against the faction I am committed to | `opinion` of my own faction (pursuit cosine, the poles its creed engages, regard for its head) | the creed Proposition as a standing occasion when the opinion is below indifference | `argue` (move them), `release` (leave), `commit` (to another cause heard) | `argue`'s roll; `release` and `commit` as drawn acts (`14_VERBS_BINDING`) | he is reconciled · stays and resents · leaves quietly · leaves and is seen to (a defection others hold a claim of) | `20_NARRATIVE_D` |
+| **G3** | **a new holder against an old oath** (a change of ruler meeting an obligation) | a `held_by` claim landing on a seat I am sworn to | attention tier 1 (already); the stance term reads my regard for the believed holder | `oblige` (swear anew), `release`, `petition`, `covenant` | each verb's own | renewed · kept coldly · released · released and joined to a rival | `20_NARRATIVE_C` |
+| **G4** | **an enemy with a place**: someone I hold against holds something I can act on | `regard` for the believed holder of a seat or rung | the stance term on a contested row (negated: hostility raises it) | `march`, `seize`, `raze`, `arrest`, `petition` against | the field, the standing or the hearing roll; CR-91's ground as eligibility | the four bands of the field or contest, which already write | `20_NARRATIVE_C` |
+| **G5** | **a quarrel across a fault line**: what I am told by one who does not stand where I stand | my affiliations stood for, and the teller's | `_credit`, at the telling | every act formed on the told claim, later | none new: the credit sets how firmly it is believed; the notice and the telling are drawn (`18_DETERMINISM_notice_is_a_draw.md`, `tell`'s roll) | believed and acted on · half believed · disbelieved · believed by one camp and denied by the other | `20_NARRATIVE_A` |
+
+A sixth, **a creed broken by what one has seen** (G6), is not a pull but its aftermath, and exists
+(the scar and the crisis); it lacks a draw and a witness (`20_NARRATIVE_E` edit 3).
+
+### 7.3 Modifier and stake: what each of the six is in the basis
+
+| | as a modifier (what it moves; owner) | as a stake (what a graded outcome can cost or win) |
+|---|---|---|
+| faction allegiance | order of attention (tiers 0, 3: built); the creed's pull on a verb (`aim`, CHAR `02_CHAR_goal_lean_on_its_own_question.md`); duty's weight and the betrayal band (CR-88); opinion of one's own side (G2) | the `commit` edge; standing with the head; what the faction holds |
+| office duty | which acts are lawful (remit: eligibility, built); CR-88's `duty_weight`; how far a holder's deeds press on others' attention (CR-102, conditional); the pool of an office act (`06_FA_office_capabilities.md`) | the seat (term, recall, `revoke`); the household sworn to it; regard of those it failed (G1) |
+| obligation | the `obligation` obstacle term while the edge holds (`15_INSTITUTIONS_VENICE_A_obligation_and_the_ask.md`); the grievance once it lapses (G1) | the edge and its term; arrears; the tie's renewal |
+| demand | a matter's place on a docket and before a bench (built); the petition's roll (`13_SC`) | the thing asked; the petitioner's regard for the bench; the bench's for a petitioner who will not take no |
+| pursuit | the score's first term (built); what an argument costs the one argued with (`13_SC` terms' cost; CHAR `02_CHAR_which_ground_moves_whom.md`) | the weights themselves (`pursuit.moved`); a scar |
+| conviction | whom one credits (G5); opinion of a side (G2); the `doctrine` weight (built); regard by believed descent (built) | the vector (G6); a ban from a Church seat (`15_INSTITUTIONS_PAPACY_B`) |
+
+One line across the table: **a modifier is read from the acting person's own interior or own edges, or
+from the counterparty's as a contest already reads them; never from a flow, an era or a count of the
+world.** That is the line between this basis and `ED-IN-0352`'s FORBIDDEN list (§8, R-N3).
+
+### 7.4 How eras and regimes set the weather
+
+Three clocks of different grain, none of which fires anything:
+
+- **The year** (a roster; `20_NARRATIVE_E` edit 1): what season it is, so harvest and want have a
+  rhythm (WR's weather), terms are counted in years (FA `_by_body_B`), and a chronicle can say when.
+- **The regime** (`20_NARRATIVE_A`): who believes whom. With the reader corrected the realm holds three
+  or four regimes that follow its factions, so news, causes and grievances travel along them and stop at
+  their edges. This is the only weather that changes *what people hold true*.
+- **The era** (the plan's CR-97 to CR-103; WR's `09_WR_strand_conclusion.md`): what everyone is living
+  through, as referents at stake and their order of attention, by decision only (`ED-IN-0352`). This
+  lane adds no term to it and states two conditions for it to be weather and not climate: an era must be
+  able to end (today it cannot: W3, W10), and the strands under it must not be one strand (WR F-WR-02).
+  For the telling, the legible marker of an era in the ordinary sense is the **reign**: the believed
+  holder of the realm's head seat and the year (`20_NARRATIVE_F`, a chronicle reading, no state).
+
+### 7.5 The legibility trail a narrator reads
+
+For any act, in order, each from a record that exists or is proposed:
+
+1. *when*: year and season (E edit 1); the reign (F).
+2. *what reached him*: the Scene's question (`01_CORE_reason_trail_in_the_act_store.md`), and for a
+   stamped referent the ground that stamped it (E edit 2).
+3. *why it mattered to him*: the pull, recomputed from his ledger at that tick: `dues_unmet`,
+   `believed_holder`, `opinion` of his side, `commensurate` with the teller. Each is a pure person-side
+   function, so the chronicle can call it and print "because his oath to the Reeve's seat had lapsed
+   unpaid" without anything having been stored.
+4. *what he risked*: the odds as he believed them (`View.odds`; SC `05_SC_contest_record_on_event.md`).
+5. *how it fell*: the degree on the Event (built).
+6. *who saw*: the deposits (built); *who was told, and believed*: the chain and the credited confidence.
+7. *how it closed*: by act or by clock (`09_WR_B_readings_of_closure_and_tension.md`).
+
+Items 1, 3 and the stamped half of 2 are this lane's. The telling itself is WR's
+(`09_WR_B_chronicle_that_tells.md`).
+
+### 7.6 What this design refuses
+
+- No stored grievance, opinion, regime or era (T-a; ED-IN-0225). Every pull is recomputed.
+- No pull changes an obstacle, a pool or a draw, and none is read from a flow (`ED-IN-0352`).
+- No threshold that acts. Where a reading is compared with a number (opinion below indifference), the
+  only effect is that a referent is offered; the person samples.
+- No new verb, Event kind (bar one: G6's, held for Jordan), carrier or module.
+- No named person, seat or faction in any rule (the plan's rename falsifier applies to every edit).

@@ -9,19 +9,57 @@ census of `CENSUS_BRIEF.md` (verbs without predicate/effect or that never execut
 never read; closed rosters with no loader refusal; tests over uncalled code; documents describing code
 that does not exist). C1 is another lane's.
 
-**IN PROGRESS — sections are appended as they are verified. A section that is absent below has not been
-done; a row marked `[UNVERIFIED]` was not opened at the call site.**
-
 ## 0. Verdict and counts
 
-(written last; see the end of the file until this placeholder is replaced)
+**The game code is not littered with dead records; it is starved at the verbs, and the static census
+could not see that because two of its five tables measured nothing.** C4 was empty because its regex
+matches no emission the code makes; C5 was read against a stale worktree inside the repository; 46 of
+the 102 rows given are false positives of a name-based count. Verified at the call site and re-derived
+where the script was blind, the picture is: 34 of 67 verbs execute in neither the corpus nor a
+three-season realm; 39 kind-specific consumers (23 of them the strife instrument's) wait on Events those
+verbs would emit; nine Event kinds the write matrix declares have no emitter anywhere, two of them on
+cells written 885 times in the run (`scar.taken`, `conviction.moved`); and one accepted order trigger
+(`ally_at`) can never fire and dams its queue. The single largest obstacle is R-05 (`not_met`): the
+inert declarations found here are mostly its shadow.
+
+**Rows given (C2–C6): 102 examined.**
+
+| table | rows | dead | broken (wire) | mislabelled | false positive |
+|---|---|---|---|---|---|
+| C2 record fields | 72 | 34 | 12 | 0 | 26 |
+| C3 registry keys | 14 | 0 | 1 | 0 | 13 |
+| C4 event kinds | 0 | — | — | — | — |
+| C5 hole-register pointers | 16 | 0 | 0 | 9 | 7 |
+| C6 composition targets | 0 | — | — | — | — |
+| **total** | **102** | **34** | **13** | **9** | **46** |
+
+Of the 34 dead, 28 are deleted by `05_SC_sc05_kernel_disposition_B.md` and 6 by this lane's batch D1. Of
+the 13 broken, 2 are new edits here (W1, W3) and 11 are carried by named proposals.
+
+**Added where the script could not see.**
+
+| pass | examined | dead | broken (wire) | mislabelled | false positive | accepted, nothing written |
+|---|---|---|---|---|---|---|
+| C5 re-derived against the working tree | 837 pointers; 28 new leads | 0 | 0 | 17 | 11 | 0 |
+| C6: targets imported; `modules:` block read | 16 targets (0 bad); 26 rows | 2 | 0 | 2 new + 4 groups carried | 16 | 0 |
+| C4 re-derived from `EVENT_KINDS` and a run | 178 kinds | 1 | 44 (all carried) | 0 | 44 | 2; 52 follow their verbs; 35 live both ends |
+| verbs (corpus + realm) | 67 | 0 | 34 (all carried) | 0 | 33 execute | 0 |
+| write matrix, writers to readers | 42 rows | 1 (carried) | 3 (carried: W5, SE, WR) | 0 | 35 | 2; 1 unverified |
+| rosters and loaders | 127 | 0 | 2 (W2, W3) | 0 | 1 | 1; 4 not opened |
+| tests over uncalled code | 7 clusters | 1 | 3 (carried) | 0 | 3 | 0 |
+| documents describing absent code | 530 path strings in 140 files; 6 opened | 0 | 0 | 3 groups | 1 | 1; 1 reported |
+
+**What this lane authors:** deletions D1 (6 fields), D2 (four dependants of `Record.ttl`), D4 (2 contract
+rows), with D3 withdrawn; wiring W1 (`ally_at`), W2 (a loader refusal), W3 (`knowledge_kinds`), W5 (a
+fallback stated); 27 exact pointer substrings and three registry-text corrections.
 
 ## 1. C2 — record fields (72 rows, all opened at the write site and the read site)
 
 **Reading of the census itself.** The script counted `.field =` as the only store. It cannot see a
 positional constructor argument, a keyword it attributed to the declaration, `+=`, item assignment into a
-dict field, or `getattr(self, f"{a}_{b}")`. 25 of the 72 rows are that and nothing else (20 more are the
-same misreading inside the social-contest kernel, which dies anyway). 28 rows sit in
+dict field, or `getattr(self, f"{a}_{b}")`. 25 of the 72 rows are that and nothing else; a 26th
+(`io_contract`) is read only by its test; 20 more are the same misreading inside the social-contest
+kernel, which dies anyway. 28 rows sit in
 `systems/social_contest/sim/contest/`, which `05_SC_sc05_kernel_disposition_B.md` retires whole; 13 sit in
 `systems/threadwork/sim/`, which `09_WR_threadwork_module.md` moves to `modules/threadwork/`; the other 31
 are decided here on their own.
@@ -46,7 +84,7 @@ Decision codes: **FP** false positive · **DEAD** delete · **WIRE** broken, wir
 | `SubsistOutcome.short_by_person` `inputs.py:409` | written positionally `subsist.py:86`; read `matter.py:601` | **FP** | — |
 | `FabricInput.live_works` `inputs.py:503` | written `world_q.py:619` (keyword) and `:639` (positional); read `modules/settlements/fabric.py:32-33` | **FP** | — |
 | `Office.body_function` `carriers.py:1061` | written in `__post_init__` (`:1091-1092`) from `BODY_FUNCTION` (`data/rosters.py:1324`, `rosters.yaml: office_bodies.function`); **no reader of the field anywhere**, tests included. The comment eleven lines above states the criterion that deletes it ("an artifact nothing reads"). The roster map is a different object: Jordan asked for the type-of-office axis (`rosters.yaml:2188-2190`) and a test reads it (`test_season_shape.py:10017-10020`) | **DEAD** (batch D1): the stored field and its write only. `BODY_FUNCTION` and the `function:` map stay; a surface that shows what a body does reads `BODY_FUNCTION[office.body]` at the read, which is one owner instead of a copy per Office | `grep -rn "\.body_function"` → the write at `carriers.py:1092` and nothing else |
-| `StubResult.io_contract` `stubwire.py:49` | written by keyword `:77`; T-read (`tests/valoria/test_stubwire.py:55`). The only caller of `stub_resolve` is the SC kernel (`wrapper.py:227`, `dictionaries.py:48`) | **DEAD with its caller**: when the kernel goes (SC disposition B), `engine/substrate/stubwire.py` has no caller and goes in the same batch with `tests/valoria/test_stubwire.py` (batch D3). Until then FP | `grep -rn stub_resolve` |
+| `StubResult.io_contract` `stubwire.py:49` | written by keyword `:77`; T-read (`tests/valoria/test_stubwire.py:55`). The only callers of `stub_resolve` are in the SC kernel (`wrapper.py:227`, `dictionaries.py:48`), but the module has a second reader: `tools/m1_acceptance.py:87-163` reads `stubwire.invocations` for its stub-hit row | **FP**: a field of the stub receipt, read by its test; the module stays after the kernel goes because the M1 instrument reads its counter (§9 X-T4) | `grep -rn stubwire tools` |
 | `Order.waypoint_ref` `units.py:333` | **never written by anything**. `ally_at:D` is an accepted trigger kind (`units.py:309,336`), its payload is range-checked (`:349`), and `contact.py:106-110` evaluates it only `if order.waypoint_ref is not None`; so an `ally_at:` order is accepted, queued, never fires, and dams every order queued behind it (`contact.py:89-90`, the loop stops at the first unfired order) | **WIRE** (W1). `04_MB_manager_battle_one_resolver.md` §2 lists `ally_at:D` in the standing-order grammar it exports and validates, so the trigger is needed | probe P-1 |
 | `Subunit.merged_cells` `units.py:434` | reset at `:1121` and `:1149`; nothing ever adds a cell to it and nothing reads it | **DEAD** (batch D1) | `grep -rn merged_cells modules` → declaration, a docstring word, two resets |
 | `Subunit._order_idx` `units.py:516` | written by `+=` `contact.py:198` | **FP** | — |
@@ -106,9 +144,9 @@ result-record field whose only reader is a test, because the host adapter that w
 | `CollectiveResult.leap_results`, `.lattice_formed`, `.lattice_fractured`, `.operation_result` `collective.py:52-55` | written at three return sites; T-read through `test_threadwork_mending_parity.py:91-94` | **WIRE** ×4, same carrier (per-actor consequences are written by the host from `leap_results`) |
 | `OpposingResult.a_degree`, `.b_degree`, `.a_consequences`, `.b_consequences` `opposing.py:71-76` | written `:266-268`; T-read | **WIRE** ×4, same carrier. Rule for the landing commit: an outcome field the adapter does not read at landing is cut in that commit, not carried inert |
 
-**C2 totals (72):** FP 25 · DEAD 35 (28 with the kernel; 6 in batch D1: `pool_size`, `body_function`,
-`merged_cells`, `destabilised`, `any_crisis`, `card_id`; 1 in batch D3: `io_contract`) · WIRE 12 (1 new
-edit, W1; 11 carried by named proposals) · LABEL 0. Census misreadings inside the dead kernel are counted
+**C2 totals (72):** FP 26 · DEAD 34 (28 with the kernel; 6 in batch D1: `pool_size`, `body_function`,
+`merged_cells`, `destabilised`, `any_crisis`, `card_id`) · WIRE 12 (1 new edit, W1; 11 carried by named
+proposals) · LABEL 0. Census misreadings inside the dead kernel are counted
 DEAD, not FP.
 
 ## 2. C3 — registry keys no code names (14 rows)
@@ -264,8 +302,8 @@ therefore name a kind that cannot be emitted and import cleanly. None does today
 was written once without it. Decision: no new check (CLAUDE.md §0.1 pt 5: a roster of an instrument is
 process); the two rows are reported to the WR lane as readings (correction C-6).
 
-**C4 totals:** as given 0. Extended over 178 kinds: FP 43 (class A) + 2 · WIRE 39 (class B, carried) + 4
-(5a, carried) · DEAD 1 (`record.expired`) · accepted without edit 2 · class C's other 52 (27 refusal
+**C4 totals:** as given 0. Extended over 178 kinds: FP 43 (class A) + 1 (`record.staged`) · WIRE 39 (class B, carried) + 5
+(5a, carried; `condition.attached` through X-R1) · DEAD 1 (`record.expired`) · accepted without edit 2 · class C's other 52 (27 refusal
 kinds, 21 deed kinds, 4 fold and log kinds) follow their verbs (§6).
 
 ## 6. Extended — verbs with no predicate/effect, or that never execute
@@ -349,7 +387,7 @@ tests (sibling lane's import graph, `scratchpad/modlive.json`, re-checked here b
 | X-T1 | `engine/season/decision/sheet.py` (`creation_sheet`, `seat`, `development_space`, `take_ranked`, `chronicle`) | `test_rem30_character_sheet.py`, `test_g2_token.py`, `test_cr20_attributes.py` | the player's seat ships switched off (`person_id=None`); no harness or loop code calls any of the five. The tests are real (they run the season with the arm on and compare hashes) | **WIRE**, carried by `11_GO_player_surface_contract_B.md` and `01_CORE_one_scene_contract.md`; `chronicle()` in particular has no caller that is not a test |
 | X-T2 | `systems/threadwork/sim/{coherence,operations,collective,opposing}.py` | 6 files under `tests/valoria/`, 1 under `engine/tests/` | an oracle with tests and no host | **WIRE**, `09_WR_threadwork_module.md`. `co_movement.py` and `threadcut.py` have neither test nor caller; they move or die in that proposal's commit, and `CoMovementCard.card_id` dies either way (D1) |
 | X-T3 | `systems/social_contest/sim/contest/` (16 files) | `_kernel_tests.py` and the test importers that proposal lists | retired by ruling (ED-SC-0033 cl. 2) | **DEAD**, `05_SC_sc05_kernel_disposition_B.md` |
-| X-T4 | `engine/substrate/stubwire.py` | `tests/valoria/test_stubwire.py` | its only callers are in X-T3 | **DEAD** with X-T3 (batch D3) |
+| X-T4 | `engine/substrate/stubwire.py` | `tests/valoria/test_stubwire.py` | `stub_resolve`'s only callers are in X-T3. The module is not caller-less, though: `tools/m1_acceptance.py:87-163` reads `stubwire.invocations` across its season probe, and that row's falsifier is "plant a `stub_resolve` on the head's season path" (`:188`). After the kernel goes the counter can only move if someone plants a stub, which is what the row is for | **FP**: kept. A first draft of this census deleted it with the kernel; the M1 instrument's read was found on the cross-check against the C1B lane's audit and the deletion is withdrawn (`17_CENSUS_REST_1_deletions.md` D3) |
 | X-T5 | `systems/characters/sim/conviction.py`, `systems/fieldwork/sim/knots.py` | `engine/tests/test_knots_ed912.py`, `tests/valoria/test_knot_pool_formula.py`, `test_conviction_roster_single_owner.py` | retained oracles (ED-IN-0283; `02_CHAR_audit.md` §6 row 27; `08_FI_audit.md` R-14) | **FP**: kept on purpose, and each audit says so |
 | X-T6 | mass-battle order features: `signal:NAME` triggers and `Unit.fired_signals`; `build_army(officers=…)`; `ally_at:D` | `test_mass_battle_signals.py`, `test_mass_battle_officers.py`; `ally_at` has no test at all | production constructs none of the three (`units.py:2843`: "no … production code constructs a 'signal:' trigger"; `armies.py:115` default `officers=()`) | **WIRE**: `04_MB_manager_battle_one_resolver.md` §2 (the standing-order grammar and `fire_signal`) and §7 (officers); `ally_at` is W1 |
 | X-T7 | `modules/combat/*` shown as tests-only by the import graph | — | reached by path, not import: `engine/substrate/pc_engine.py` is the one `PATH_SEAM_ALLOWED` seam, and `combat.fight` is a registered entry | **FP** of the graph |
@@ -366,12 +404,62 @@ Opened at the line:
 
 | id | document | claim | reading | decision |
 |---|---|---|---|---|
-| X-D1 | `engine/season/write_matrix.yaml:4`, `:28-31` | "`engine/season/shape.py`'s `write()` gate reads it"; "`python engine/season/register.py --verify-write-matrix` re-extracts and fails on drift" | `shape.py` does not exist (the gate is `state/world.py::World.write`); `harness/register.py` has five flags (`--check`, `--counts`, `--verify-citations`, `--rule`, `--requirements`) and no `--verify-write-matrix`; the string occurs nowhere else in the tree. The header of a file the gate reads at runtime asserts a drift check that does not exist | **LABEL** (C-3) |
+| X-D1 | `engine/season/write_matrix.yaml:4`, `:29-30` | "`engine/season/shape.py`'s `write()` gate reads it"; "`python engine/season/register.py --verify-write-matrix` re-extracts and fails on drift" | `shape.py` does not exist (the gate is `state/world.py::World.write`); `harness/register.py` has five flags (`--check`, `--counts`, `--verify-citations`, `--rule`, `--requirements`) and no `--verify-write-matrix`; the string occurs nowhere else in the tree. The header of a file the gate reads at runtime asserts a drift check that does not exist | **LABEL** (C-3) |
 | X-D2 | `references/module_contracts.yaml` `combat`, `mass_battle` rows | §4 | **LABEL** (C-1, C-2) |
 | X-D3 | `engine/season/hole_register.yaml` `site:`/`owner:` | §3 | **LABEL** (26 pointers) |
 | X-D4 | `architecture/PLAN.md:564-717`, `00_ADOPTION_README.md:27`, `ARCHITECTURE_V2.md` | `engine/season/register.py`, `engine/season/shape.py` | Layer 1 names files that were split into `harness/register.py` and `state/`. Layer 1 is not edited to match code (CLAUDE.md §0.05); these are plan-history paths inside ratified documents | accepted, nothing written; `11_GO_pointer_and_stale_text_resolutions.md` is the suite's home for pointer text and already lists what the orchestrator may touch |
 | X-D5 | `references/what_valoria_is_and_what_runs.md` (11 dead paths: `systems/factions/sim/faction_action.py`, `crown_initiative.py`, …) | describes the retired campaign driver | `[UNVERIFIED: not opened past the path list]` | reported to the orchestrator: a document titled "what runs" naming eleven files that do not exist is a currency hazard; its disposition is not a census edit |
 | X-D6 | `engine/season/harness/arms.py`, `tests/valoria/test_balance_oracle_arms.py` (18 mentions of `tools/balance_oracle.py`) | name the retired instrument | they name it as retired (CLAUDE.md §7) | **FP** |
 
-<!-- APPEND -->
+## 11. Resolutions and where each edit lives
 
+| id | finding | resolution | ladder step | proposal |
+|---|---|---|---|---|
+| D1 | six fields with no reader in game code | delete | 2 (irrelevant: nothing reads them) | `17_CENSUS_REST_1_deletions.md` D1 |
+| D2 | `conditional_emission_rows`, the gate's exemption branch, a probe and an assertion exist only for `Record.ttl` | delete with the field | 1 (`08_FI_04` decides the field) | same, D2 |
+| D3 | `engine/substrate/stubwire.py` | **kept**: the M1 instrument reads its counter | 3 (`tools/m1_acceptance.py:87-163`) | same, D3 (withdrawn) |
+| D4 | two contract rows marked `godot: retire` | delete | 1 (their own notes; ED-SE-0005) | same, D4 |
+| W1 | `ally_at:D` accepted, unfireable, blocks its queue | the order names its ally; the builder resolves it; construction refuses the incomplete order | 5 (one clearly right option for the code) | `17_CENSUS_REST_2_wiring.md` W1 |
+| W2 | `speech_kinds` ids held to their roster by a test only | the loader refuses | 4 (precedent: the loader's four other refusals) | same, W2 |
+| W3 | `knowledge_kinds` read by nothing | classed by predicate; one pure reader; one gate at the told deposit | 3 (H-85's own default) | same, W3 |
+| W5 | `convening_attached` written 17 times, read by nothing | the Papacy lane's `quorum_share` is the condition; else delete the key | 3 | same, W5 |
+| C-A | 27 stale pointer substrings in the hole register | exact replacements | 5 | `17_CENSUS_REST_3_corrections.md` §A |
+| C-1, C-2 | `combat` `build: unwired`; `mass_battle` note and missing `sim_module` | row text | 5 | same, §B |
+| C-3 | `write_matrix.yaml`'s header claims `--verify-write-matrix` and `shape.py` | header text; the check is not built | 3 (§0.05 cl. 1: a registry is not re-derived from prose) | same, §C |
+| C-5 | `11_GO_player_surface_contract.md` §4 says the row "gains" kinds it already declares | wording | 5 | same, §D |
+| C-6 | `strife_kinds` names `tenure.opened` / `stance.moved`, each emitted by one verb | a reading for the WR lane; no check | 5 (§0.1 pt 5) | same, §D |
+| — | H-86 (the `emits:` column's ambiguity) | closes as irrelevant once D2 lands | 2 | D2 |
+| — | the census script (C2, C4, C5 defects) and the stale worktree | reported | — | `17_CENSUS_REST_3_corrections.md` §E |
+
+Inconsistencies found in other suite documents: C-5 (above); `12_ARCS_adjudication.md` row 19's
+unverified mark (resolved by W3). No finding of another lane is disputed.
+
+## 12. Survivors for Jordan
+
+None. Every row was answered at ladder steps 1–5. Two things are the orchestrator's, not Jordan's:
+removing the locked stale worktree `.claude/worktrees/agent-a737f996de1fa4752`, and the disposition of
+`references/what_valoria_is_and_what_runs.md` (eleven dead paths; not opened past the path list).
+
+## 13. Evidence log
+
+All seeded runs under `PYTHONHASHSEED=0`. Outputs are under
+`/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/census_rest/`.
+
+| id | command or probe | seed · seasons | outcome |
+|---|---|---|---|
+| P-0 | `python -m engine.season.harness.register --requirements` | — | exit 0; met 3 · partial 5 · not_met 1 (R-05) |
+| P-1 | `python -m engine.season.harness.corpus_run 0` → `corpus_run_seed0.txt` | 0 · per case | exit 0; 143 worlds; executed 23 of 67, only refused 13, never attempted 30, no predicate/effect 1 |
+| P-2 | `python -m engine.season.harness.aperture 3 0` → `aperture_3_0.txt` | 0 · 3 | exit 0, 2m44s; realm 83 persons, `content_hash EQUAL`; 2,630 attempts, 1,377 executed, 1,440 refused acts; 78 kinds in the log |
+| P-3 | `c2.py`: every C2 field grepped across `engine modules systems tests tools references` → `c2_out.txt` | — | 72 rows; write and read sites opened per row |
+| P-4 | `c5.py`: `site:`/`owner:` pointers resolved relative to `engine/season/` first | — | 837 pointers; 12 unresolved files, 4 absent symbols, 12 named-not-defined; each opened |
+| P-5 | import of every `target:` in `module_contracts.yaml`; `python tools/export_composition.py --check` | — | 16 targets, 0 failures; `OK — 16 role(s) … 26 module(s)` |
+| P-6 | `c4.py`: `EVENT_KINDS` × P-2's log × consumers by name and roster → `c4.json` | — | 178 kinds: 35 live both ends, 43 emitted without a layer 3–4 consumer, 39 consumed and not emitted, 61 neither |
+| P-7 | `writes_probe.py`: `World.write` wrapped over `harness/populated.run`'s loop → `writes_3_0.json` | 0 · 3 | hash `52ff67bc45c5b956cd99215f6ba3097f`; 30 of 42 matrix rows written; 0 unrowed writes; per-row counts in §5a, §7 |
+| P-8 | `rosters_probe.py`: 127 rosters by loader and membership use | — | 2 unloaded, 26 leads, 22 opened |
+| P-9 | path-string scan of 916 live tracked files | — | 530 unresolved in 140 files; 6 opened |
+
+Not run: `pytest` (CLAUDE.md §0.4; the brief). Not opened: C1 (another lane's);
+`14_VERBS_MATERIAL_E_knowledge.md` for W3's document rule; `references/what_valoria_is_and_what_runs.md`
+past its path list; four rosters named in §8; the `Rung.dates` writer. One draft decision was reversed
+on a cross-check (D3). `git status --short` at the end shows this lane's four files and other lanes'
+drafts; no tracked file outside the suite was edited.

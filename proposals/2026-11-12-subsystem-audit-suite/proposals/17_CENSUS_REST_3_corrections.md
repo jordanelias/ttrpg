@@ -13,9 +13,9 @@ Author: Fable census lane, PART=REST. Source: `audits/17_CENSUS_REST.md` §3, §
 The reason to make the edits is the next reader: a pointer that names the wrong file sends a session to
 code that is not the owner (CLAUDE.md §0.1 pt 3, "open `F` at `:L`").
 
-## A. `engine/season/hole_register.yaml` — 26 pointers, exact substrings
+## A. `engine/season/hole_register.yaml` — 27 exact substrings in 23 rows
 
-One cause covers fifteen of them: `loop/effects.py` was split into
+One cause covers thirteen of them: `loop/effects.py` was split into
 `loop/effects_{army,combat,economy,founding,governance,information,migration,shared}.py`; `effects.py`
 now holds the registry import and three re-exports (`_renewals`, `_oblige_term`, `_eff_kill`).
 
@@ -55,8 +55,9 @@ and reverted); H-357, H-358, H-361 ×3 (all exist; the census opened a stale wor
 to `proposals/2026-09-05-proceedings-subsystem/19_PLAN.md`).
 
 **Check after the edit:** `python -m engine.season.harness.register --check` and `--verify-citations`
-unchanged; `python scratchpad/census_rest/c5.py` (the corrected resolver; 837 pointers) reports the
-eight "Not edited" pointers and nothing else. That script is a one-off and is not to be kept (§0.1 pt 5).
+unchanged; `python scratchpad/census_rest/c5.py` (the corrected resolver; 837 pointers) reports only the
+pointers listed under "Not edited" and the bare-filename shorthands (a filename repeated after its full
+path was given once in the same field). That script is a one-off and is not to be kept (§0.1 pt 5).
 
 ## B. `references/module_contracts.yaml` — two rows a port decision would read
 
@@ -103,7 +104,7 @@ The file the gate reads at runtime opens with two statements about code that doe
 | line | old | new |
 |---|---|---|
 | `:3-4` | "`engine/season/shape.py`'s `write()` gate reads it" | "`engine/season/state/world.py::World.write` reads it through `data/matrix.py`" |
-| `:28-31` | "The 28 rows carried over are extracted mechanically from §D3's markdown table; `python engine/season/register.py --verify-write-matrix` re-extracts and fails on drift." | "The 28 rows carried over were extracted from §D3's markdown table once. This file is now the head (CLAUDE.md §0.05: prose is reference); nothing re-extracts it, and a difference from §D3 is decided here and recorded in the row." |
+| `:29-30` | "The 28 rows carried over are extracted mechanically from §D3's markdown table; `python engine/season/register.py --verify-write-matrix` re-extracts and fails on drift." | "The 28 rows carried over were extracted from §D3's markdown table once. This file is now the head (CLAUDE.md §0.05: prose is reference); nothing re-extracts it, and a difference from §D3 is decided here and recorded in the row." |
 
 `harness/register.py` has five flags (`--check`, `--counts`, `--verify-citations`, `--rule`,
 `--requirements`); `--verify-write-matrix` occurs nowhere in the tree but this comment. The correction

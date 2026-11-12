@@ -244,3 +244,161 @@ the notes do claim (hunger falls a body and may kill; a harvest varies; a works 
 the code does what the note says and the result is not what the sentence means, because the surrounding
 world erases it (`tend`), dwarfs it (a 21-fold surplus) or never reaches it (`exists:works=0`).
 
+## 1. NERS
+
+Method: `skills/ners/SKILL.md`, instrument A (the object ledger). Instrument B (`resolution-diagnostic`)
+has almost nothing to act on, and that is its finding: **the settlement layer contains no live draw.**
+`larder_draw`, `subsist`, `produce`, `housing`, `fabric`, `fortification` and `provision` each say "draws
+nothing, so it takes no rng" in their own docstrings; `work`, `restore`, `sabotage`, `transfer`,
+`exchange`, `move`, `migrate`, `found`, `build` and `raze` are uncontested and certain on eligibility
+(`18_DETERMINISM_SWEEP.md` C-09, C-15, C-08); the one draw the layer owns, the season factor, ships as the
+empty table. So who goes hungry, how much body is lost, who dies, what a site yields, whether a wall
+holds its value, whether a founding takes and whether a saboteur succeeds are each a fixed function of
+state. The one draw that exists when its arm is on is not the engine's: `season_factor_of` takes
+`draw.choice(outcomes)` over equally likely multipliers (`world_q.py:1203-1205`), a second way of being
+uncertain beside the pool, obstacle and four-band ladder (`degree_from_net`), which is an S defect in
+itself (calculations consistent in methodology). F-PES-SE-02.
+
+**A correction owed to another lane.** `18_DETERMINISM_SWEEP.md:110` lists `world_q.subsistence_draw`
+among the code that is "not a finding (checked) ... (drawn)". The word is a homonym: it is the *draw on
+the larder*, arithmetic over stores in sorted id order, with no rng in its signature (`larder.py:39`,
+`world_q.py:1361-1401`). Hunger is not drawn. Listed for the sweep's owner in §6.
+
+### 1.1 The object ledger: each object's N-line, the cut, and what died
+
+"Computed play" is the two-arm run of §2.3 and the first audit's `aperture 3 0`; "in principle" is the
+hand-built or barrier-only run. A cut that costs nothing in computed play is a **false N-line today**;
+one that would cost nothing even in the worlds built to exhibit it is a **false N-line**.
+
+| object | its N-line as the notes give it | the cut | what died (measured) | verdict |
+|---|---|---|---|---|
+| `settlements.produce` (grain, salt) | the economy's only source | zero the harbour table | the famine arm: eleven cohorts fall and die | **true**, the layer's one unconditional N-line |
+| `settlements.produce` (ore) | a seam yields | delete the `ore` cell | nothing, in any world: no rule, cost, weight or roster reads `ore` (grep: three hits, all the registry and the yield cell). 1,850 of 4,810 units a season | **false N-line** |
+| `settlements.produce` (timber) | pays for fabric | delete the cell | nothing in computed play (`build` 0 executed); hand-built `build` would refuse | false today |
+| `Rung.yield` | "last season's product" | delete the field and its write | nothing: written 37 times a season, read by no code outside `harness/` and tests (grep) | **false N-line** (a write-only field) |
+| `larder_draw` + `subsist` | scarcity binds a body | set `body_step` 0 | barrier-only: the eleven starving cohorts live. Computed play: `body.changed` and `body.tended` vanish and nothing else moves (the cohorts end each season at 1000 in both readings) | true in principle; **false in computed play** (H-304) |
+| the shortfall Observation | a dearth reaches a person | drop `short_seen` | nothing in the realm in either arm, two seeds (0 Observations); one `transfer` of 8 salt in `scarce` | false today; true in one fixture |
+| `world_q.hunger` and its bands | a settlement's need is readable | delete | nothing: read by `census` and a probe label | **false N-line** |
+| `settlements.housing` (capacity) | the throttle that makes `found` and `build` matter | set the floor to 99 | `migrate` refusals for room stop (79 of 116 at seed 0); the acts they refused are courtiers re-homing; `found`/`build` do not execute either way | holds as a refusal, **false as a throttle** |
+| `settlements.fabric` (ceiling, share) | a works paces its fabric | return scale and 1/1 | nothing in computed play (`work`, `restore` 0 attempted; `sabotage` 0 executed) | false today |
+| `settlements.fortification` | walls are the garrison's condition | return 1.0 | nothing outside a siege: `wear_per_season.garrison` is 0, so every settlement reads 1.0 until `besiege` wears one (MB's) | narrowed to one consumer |
+| `settlements.provision` | stores bound the troops fielded | ships off (identity) | nothing shipped; **on**, every side of every field is cut to nothing (§1.2 A-2) | false shipped, destructive on |
+| the season factor | weather | ships `()` | nothing shipped; on, a change in stores nobody draws on (§2.3 P2) | false today |
+| Site wear | a worn place produces less | zero the rates | yield stays 4,810 instead of falling 1% a season; first band crossing is at season 21 (first audit F-SE-05) | false inside any run length used |
+| `found`, `build`, `works_cost` | the world grows | delete | nothing: 0 executed in every realm run read (first audit; both arms here) | false today (cited from `16_PESSIMIST_GAME.md` §3) |
+| `raze` | a town ends | delete | nothing: 0 executed | false today |
+| `exchange`, `default_return_kind` | both sides' stores move | delete | nothing: 0 executed in any realm run | false today |
+| `transfer` | matter moves by an act | delete | per season, one unit of grain no longer moves from a town into its own cohort's person-rung, where no draw reaches it | false today |
+| `migrate` (cohort) | the people move | forbid cohorts | nothing: 0 of 67 cohort attempts executed across both arms and two seeds | **false N-line today** |
+| the geography file's adjacency, costs, budget | the map | delete the keys | nothing (first audit F-SE-06, grep) | false N-line |
+| `coin` | a matter kind | delete the row | nothing: no yield, no holder, no reader | **false N-line** |
+
+**Count.** Of twenty objects, one N-line is true without qualification (food production), two are true
+in principle and erased in computed play (the larder's bite; the shortfall report), one is narrowed
+(fortification), and sixteen are false today, of which five are false in every world (ore, `Rung.yield`,
+the hunger bands, the unread geography keys, `coin`). N tested from the six directions: every false line
+above is false top-down (no realm reading changes), bottom-up (no person's options change), vertically
+(nothing crosses a scale: the field's troops ignore the stores), laterally (no sibling subsystem reads
+it) and horizontally (no settlement differs); the one direction in which several hold is diagonal, by
+way of a hand-built fixture (`scarce`, `test_works_founding`), which is the narrowing the charter names.
+
+### 1.2 The other attack: what survives because nothing was tried against it
+
+**A-1. The granary feeds towns in id order, and the town that loses eats nothing and is not reported**
+(`kernel.py` K2). Two towns on one territory granary holding half of what both want: the first in sorted
+id takes its whole ration; the second takes nothing, its body falls by 60, and `shortfalls` is empty,
+because the first eater drained the rung *exactly*, so the second eater's walk finds no rung holding
+more than 0, records `source None`, and `subsist` marks nothing as drained (`larder.py:55-64`,
+`subsist.py:55-57`). So the one moment the notes say a dearth is reported (the crossing, `matter.py:629`)
+is missed whenever the last fed mouth empties the store to the unit. The control: give the granary one
+unit more and the second town's shortfall is reported. Under the first lane's granary proposals
+(`07_SE_ground_and_granaries.md`, `07_SE_treasury_granary_B.md`) every relief stock is a shared rung, so
+which town starves in a dearth would be decided by settlement number, every time, with no draw and no
+rationing. F-PES-SE-03.
+
+**A-2. Turning the shipped supply fixture on disarms the realm** (`pes_supply.py`). `provision` fields
+`min(weight, min_k stores[k] // ration[k])` from the marching seat's rung (attacker) or the nearest held
+rung (defender). After two seasons of yield the realm's 34 offices sit at 17 territory, 10 duchy, 4 realm
+and 2 foreign-settlement rungs and one sits nowhere; **none** of those rungs could ration one man, and
+the defender's treasury of all 37 settlements is a territory rung holding nothing, while 9,250 units lie
+at settlement rungs no army reads. So `field_provisioning=True` (a registered sweep arm, H-241) makes
+every side field 0, lifted to 1 by the crash floor (`massbattle.py:212`), or to one man per commanding
+person in the `person` arm (`:328`): army size stops mattering in every field. The edges of the entry
+itself: 100 men on 10,000 grain and no salt field 0; on 10,000 grain and 1 salt, 1; a side with no seat
+fields 0 whatever it holds. The first lane's F-SE-17 and F-SE-20 name the misplaced treasury; what is
+added is the reading that the arm is not merely unbalanced but inverts the field. F-PES-SE-05.
+
+**A-3. A second garrison never strengthens a town, and a new one halves it** (K4). `fortification` is the
+mean of garrison conditions: (1000) reads 1.0; (1000, 1000) reads 1.0; (1000, 0) reads 0.5. `build` mints
+a Site at condition 0 (`effects_founding.py:234`), so building a garrison in a walled town is an act of
+self-harm until it is restored, and at full repair it has bought nothing. F-PES-SE-08.
+
+**A-4. One hand, one act, the whole fabric** (`effects_economy.py:131-157`, read; never executed in
+play). Alone at a rung, one `restore` raises a Site from 0 to its ceiling and one `sabotage` takes a
+harbour from 1000 to 0, with no draw. The share is one over the *persons* present, so a cohort of any
+weight counts as one hand, and a bystander halves the worker's effect: a busy town mends more slowly per
+act than an empty one. Tagged `[ASSUMPTION; medium; Jordan to correct]` in the code; determinism is the
+sweep's C-15. Recorded here for its size: the day `sabotage` first executes in the realm, a town loses a
+harbour's whole yield to one act by anyone standing there.
+
+**A-5. A founding's stake is food nobody can eat, and a built dwelling is a zero that counts** (`found.txt`).
+The 10 grain staked into a founded hearth is drawn on only by a cohort residing at or under that hearth;
+none does, so it is inert, forever. A dwelling built and never restored sits at condition 0 for 40
+seasons, counts 1 toward capacity (H-307, known), and emits `condition.worn` every season for a wear of
+zero (F-SE-08, known). `build` also leaves a `timber: 0` key in the payer's stores, the digest pollution
+`provision.py`'s own docstring says it avoids.
+
+**A-6. Hunger's toll grows with the size of the town, not with how hungry it is** (K3; known as H-305 and
+resolved per head by `07_SE_population_census.md` R1; re-measured so the size is on record). At the same
+total shortfall a weight-2 cohort dies in 17 seasons, a weight-10 in 4, a weight-50 in one; a weight-400
+cohort dies in one season of a **10%** shortfall. Every shipped cohort is weight 2, so this is latent
+until any census writer lands; it must land with R1 or before it.
+
+### 1.3 R: the half with no player, and the extremes
+
+- **No player.** Barrier-only, the layer emits `yield.taken`, `stores.changed`, `condition.worn` and (in
+  a hungry world) `body.changed` and `person.died`, identically on every seed (the first audit's table:
+  seeds 0 and 1 agree to the unit). It throws no hook: no Event names a place as short, rich, emptied,
+  founded or cut off. R-WORLD fails for every settlement seat.
+- **Zero population** (famine arm, seasons 2-5). A town with no people reads `fed`, keeps capacity, keeps
+  yielding from its seam (about 49 ore a season each), keeps its named residents at full body, and is
+  marked by nothing. First audit F-SE-02 measured this at ×20 need; here it is measured in a world where
+  only some towns die, so the contrast is inside one realm.
+- **One person.** A settlement whose only resident is a named person has no eater and no hunger; all of
+  P1 is undefined for it.
+- **Large weights.** A-6.
+- **A hundred claimants on one granary.** A-1: the first by id eats.
+- **Negative, zero and fractional amounts.** First audit F-SE-10.
+
+### 1.4 S: pauses, and one methodology per quantity
+
+1. **One ration, two clocks.** `subsistence_weight` is what a cohort eats *per season* (`larder.py`) and
+   what a soldier eats *per field* (`provision.py`: "a field eats as the people it is made of eat"). An
+   army that fights twice in a season eats two seasons' food; one that marches all year and never meets a
+   field eats nothing from its treasury, and its cohort also eats at home (first audit F-SE-20). Two
+   ladders for one quantity.
+2. **One crowd, three sizes.** A cohort is `weight` mouths at the larder, `weight` places in housing
+   (so the people of a town occupy two dwellings, as much room as two courtiers), and one hand at a
+   fabric (`share`) and one person on the ladder.
+3. **Two ways of being uncertain** (above): the four-band ladder everywhere else, a uniform choice among
+   multipliers here.
+4. **"Fed" has two meanings.** A town of the well-fed and a town of the dead read the same band.
+5. **Pauses correctly.** The layer never pauses for another scale and never needs to: nothing in it asks
+   a person, a contest or a field for an answer. A dearth does not open a question a player is put (the
+   question forms only from a held claim, and no claim is deposited: §2.3 P1). That is smoothness by
+   absence.
+6. **Zooming.** The campaign scale reads the settlement scale at one point (the treasury) and reads the
+   wrong rung (A-2); the settlement scale reads the personal scale nowhere (yield reads no person's
+   labour); the personal scale reads the settlement scale through `tend` alone.
+
+### 1.5 E, last, against what N and R found
+
+Counted as overhead against what it buys: eight module entries, ten verbs, some twenty roster tables and
+fixtures, and the larger part of `loop/matter.py`, buying one unconditional possibility in computed play
+(food is produced) and three more in hand-built worlds (a dearth relieved once; a hearth founded; a
+fabric raised). The kernel is small and clear; the ratio is poor because the possibilities are missing,
+not because the code is large. E does not improve by cutting the kernel (the first audit's steelman 5
+holds: it is the architecture). It improves by deleting what is false in every world: the `ore` cell or
+else a reader for it, `Rung.yield`, `coin` until something mints it, the hunger bands until a person can
+be told one. And it worsens with each new table added before one of the six sentences executes.
+
