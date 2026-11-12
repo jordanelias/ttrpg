@@ -41,3 +41,25 @@ Jordan, 2026-11-12: *"Once we finish all lanes, the unification pass will update
 Every Fable proposal and recommendation must carry instructions to code it in the game (`AUDIT_BRIEF.md`, last section), so that v12 can take it as a batch item. Unification test 9 (`UNIFICATION_BRIEF.md`) checks it; v12 does not accept an item that lacks them.
 
 Read `AUDIT_BRIEF.md`'s standing rules and `unified/DECISIONS_ANSWERED.md` first. Nothing deterministic; ground every claim in the repository; do not guess. One round of review per deliverable, then stop (CLAUDE.md §0). No lane edits code, canon, a registry or a ruling; implementation lanes land the plan.
+
+## Model assignment per stage (Jordan, 2026-11-12: *"assign those to Opus fable or Sonnet accordingly"*)
+
+Assigned by `CLAUDE.md` §10: **Haiku** extracts and counts (no judgment); **Sonnet** does pattern recognition, bounded matrices, checks and the Sonnet write-up Jordan asked for; **Opus** makes the competing-considerations judgments, synthesizes, authors the edits that gate a result, and settles conflicts; **Fable** audits, plans, orchestrates and is the guardrail, and (by Jordan's direct direction of this session, a departure from §10's "not artifact authorship", recorded in the PR body) authors the design and instruction documents. Effort `high` unless stated. One review round per deliverable (CLAUDE.md §0); independence is spent on verdicts, not on reads (share the reading, fork the judgment).
+
+| stage | work | model and effort | why |
+|---|---|---|---|
+| 1 Unification U1 | fact-to-owner ledger, vocabulary and glossary extraction | Haiku (`valoria-measure`, batched) extracts; **Opus** decides owners and writes `U1_*` | extraction is mechanical; choosing an owner is judgment |
+| 1 Unification U1 | the single capability authoring architecture (reconcile CORE, DICE, CHAR, SC, FI, SE, WR, PC, MB) | **Opus**, high | competing designs; edits that gate others |
+| 1 Unification U2a/b/c | Layer 1 conformance matrix, one lane per family | **Sonnet**, high, three lanes; **Opus** rewrites the non-conforming proposals | grading rows against a spec is bounded pattern work; rewrites are judgment |
+| 1 Unification U3 | conflict ledger and the single dependency order | **Opus** (graph extraction by Sonnet) | contradictions and landing order are judgment |
+| 1 Unification U4 | index, intent-traceability, fact check, document status, implementation-ready check (test 9) | **Sonnet**, with Haiku counts | matrix and check work |
+| 1 Unification verdict | one read-only attack on the unified suite | **Fable**, read-only (`valoria-critic`), once | guardrail on a gating result; no second wave |
+| 2 Holistic audit + codebase improvement proposal | the game as a suite of engines: organization, centralization, efficiency, modularity | **Fable**, high | whole-subject audit and planner |
+| 3 Instruction suite | nine requirements and each subsystem standalone, as batch-shaped instructions | **Fable** authors, high; **Sonnet** checks every instruction against the coding-instruction charge | Jordan's direction; a Sonnet pattern check of completeness |
+| 4 Evaluation (penultimate) | workplan v11 parts 1 to 17 and the hole register, one disposition per position and row | **Haiku** transcribes positions and rows to tables; **Sonnet** dispositions each against the tree (done, superseded by a named session item, wrong, still needed, missing dependency); **Opus** settles `(RULED)` conflicts and disputed rows | bounded checks, then judgment only where needed |
+| 5 Master suite and workplan v12 | batch structure, dependency graph, serial-edge and file-census tables, requirement map, time-efficiency rules | **Fable** plans and orchestrates, high | planner |
+| 5 Master suite and workplan v12 | the v12 batch parts (sequential `_partN`), the master findings | **Opus** authors from Fable's structure; **Sonnet** checks each part against the `methodology-execute` forms and the coding-instruction charge | long authoring from a fixed frame; pattern check |
+| 5 v12 verdict | one read-only attack on v12 (can the skill follow it, is every gate an execution artifact, does it cover the nine) | **Fable**, read-only, once | guardrail |
+| 6 Write-up | agonist/antagonist write-up of the master suite and v12 | **Sonnet** (agonists), then one **Opus** antagonist cross-exam | as Jordan's original brief |
+
+Escalate a tier only at a phase boundary (a model switch invalidates the prompt cache); tier down where the work is extraction. The sizing rule stands: fewer lanes where one reader can hold the subject, and say why.
