@@ -38,7 +38,7 @@ Two vocabularies, never mixed.
 
 | directory | files | holds |
 |---|---|---|
-| `root` | 10 | the eight briefs and run plans |
+| `root` | 9 | the eight briefs and run plans |
 | `proposals` | 300 | 300 proposals (PROPOSED); 7 superseded; 47 INCOMPLETE-LIVE |
 | `audits` | 65 | the audits and addenda |
 | `census` | 6 | six leads lists C1 to C6 (unreferenced symbols, record fields, registry keys, event kinds, stale hole-register pointers, unresolved composition targets) |
