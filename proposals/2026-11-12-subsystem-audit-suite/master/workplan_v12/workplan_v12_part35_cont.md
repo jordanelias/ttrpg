@@ -295,6 +295,22 @@ Short names, words and paths are the first file's head. The B28 block's head, it
 - COST and TIER: small build; `sonnet`, `high`; Lens B's question `opus` (the Layer 1 judgment node).
 - LANDS IT: B28's producer; `Item: B28.32`, `[skip ci]`.
 
+### B28.33 — a citation is a dispensation to the party, served by `give`; unanswered, it lapses in sight · CR-61's citation clause · BUILD · HASH MOVER(behaviour) · Patched: P-28
+- SOURCE: the intake `:436` (CR-61); carry-forward `master/eval/E2.md` row `:85` ("the citation clause (a `dispensation` served by `give`) moves to B28-social-verbs after `14_VERBS_SOCIAL1_B` §1") and BLOCK CR-61 (`:708-727`); part 28_cont's UNDECIDED (2) ("B28's author must carry it (the item says so)") and B24a.05 ("CR-61 … less … the citation (B28)"); no part carried it before this patch (H2_NOTES, A28). Closes CR-61 (the citation).
+- ADVANCES: R-04 (contributor).
+- INSTRUCTION (CR-61's WHAT, the citation's clauses, copied): "the citation is a `dispensation` addressed to the party and served by CR-57's and CR-48's `give` (the writ-to-addressee mint stays refused). Defiance is a witnessed deed and a contempt ban needs no arm; an unserved warrant lapses visibly (CR-55's lapse)." CR-48's `give` is `14_VERBS_SOCIAL1_B` §1, landed at B28.02 (E2 row 85); CR-57's deliverable petition is SUPERSEDED into B27 (`master/V11_EVALUATION_part11.md:332`, as part 28_cont's UNDECIDED (1) reads it). So: at `open_case`'s or the hearing's summons of a party (the case file of kind `case`, B24a.05), mint a `dispensation` addressed to the party, and serve it through B28.02's `give` occasion, never by the writ-to-addressee mint. First step (SITE, `V12_STRUCTURE_part2.md` §5.7): open B24a.05's `case` kind and `_mint_document`, and B28.02's `give` occasion at this item's base, and record in the commit body where the summons is minted.
+  STOPS IF: B24a.05 is not on this item's base (B24a is not in B28's `GATE` lines; H2_DECISIONS proposes the edge B24a → B28): the item is `STOPPED` with the reading and moves to B28's tail on the next run.
+- WHERE: `engine/season/loop/effects_information.py` (the summons' mint, beside `_eff_open_case`); `engine/season/verb_table.yaml` (the `give` occasion's citation branch, B28.02's row); `engine/season/tests/test_case_file.py` `[ASSUMPTION: test file; the item creates it or extends B24a.05's, E-3]`.
+- TESTS: `test_a_citation_unanswered_emits_a_witnessed_lapse` `[ASSUMPTION: test name; E-3]` (the EXIT's citation arm, below), red before the edit; `test_a_citation_is_never_minted_to_the_addressee` (the "writ-to-addressee mint stays refused" clause) `[ASSUMPTION: test name; E-3]`.
+- FALSIFIER and CONTROL: CR-61's EXIT, its citation arm (moved here from B24a.05): "a citation unanswered emits a witnessed lapse". Control: worlds with no docketed case hash as at B28.32.
+- GATE: `python -m pytest engine/season/tests/test_case_file.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 s`, s = 0, 1, 2 → citations served and lapsed counted, quoted (a zero is reported, not asserted away).
+- HASH MOVERS: worlds with a docketed case whose party is summoned. Declared; B28's one re-pin.
+- DEPENDS ON: V12 B28.02 (`give`); V12 Batch B24a (B24a.05, the `case` kind); EXISTS-IN-TREE CR-55's lapse (landed `eb76f57f`), `loop/effects_information.py::_mint_document`, `::_eff_open_case`.
+- IDS: H-80, H-210, H-229 are CR-61's holes; B24a.05 closed them less the citation: this item records the citation's closure against the same rows (no new id).
+- GLOSSARY: none (*citation* in its ordinary legal sense, a summons to appear).
+- COST and TIER: small build; `sonnet`, `high`; CR-61's builder tier "third tier (judgment)" for the SITE reading, `opus`.
+- LANDS IT: B28's producer; `Item: B28.33`, `[skip ci]`.
+
 ## Readings (B28)
 
 Reading 1 (B28.31, G-14): the pooled census's `covenant` and `determine` executed counts at seeds 0, 1, 2, two seasons, on B28.30's tree, with its SHA; written here by the producer at B28.31's turn, copied into B28.99's commit body, and deleted with the block at the expunge.
@@ -308,7 +324,7 @@ Reading 1 (B28.31, G-14): the pooled census's `covenant` and `determine` execute
 - FALSIFIER and CONTROL: a pin moved that no item declared; a behaviour tally moved where every item said EQUAL (B28.01, B28.16 to B28.28, B28.31). Control: B28.28's seed-0 hash equal to B28.27's (EQUAL items did not move it).
 - GATE: the BATCH GATE, read once on this commit's tree.
 - HASH MOVERS: the re-pin itself.
-- DEPENDS ON: B28.01 to B28.32.
+- DEPENDS ON: B28.01 to B28.33 (B28.33 Patched: P-28).
 - GLOSSARY: the close reads every glossary row the items named against the code (STAGES rule 2).
 - COST and TIER: reading; `sonnet` runs; the close's terminal critique `opus`.
 - LANDS IT: B28's producer; `Item: B28.99`, the batch's last `Item:` commit, without `[skip ci]` (CI's first run of the batch).

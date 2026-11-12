@@ -63,7 +63,8 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 | BA1.09 | two cast rows gain goals | `IS-A-11` table (e); CHAR_OWED §10 | CONTENT | MOVER(behaviour) | BA1.08 |
 | BA1.10 | the switch | `IS-A-11` stage 2 step 2; U1-C ("the switch") | POINTER | — | BA1.01 |
 | BA1.11 | the three CHAR readings | `IS-B2-CHAR-06` | READING | — | BA1.10 |
-| BA1.99 | the re-pin and the readings that close M2 | `IS-A-11` (hash movers); `IS-A-12` | BUILD | MOVER (the re-pin) | BA1.01 to BA1.11 |
+| BA1.12 | two cast rows marked unaware of what they hold (Patched: P-30) | `U5a_CHAR_self_knowledge_is_a_belief` edit 2's marks (B10.64's DIALS line) | CONTENT | MOVER(behaviour) | BA1.09; Batch B10 (B10.64, B10.65) |
+| BA1.99 | the re-pin and the readings that close M2 | `IS-A-11` (hash movers); `IS-A-12` | BUILD | MOVER (the re-pin) | BA1.01 to BA1.12 |
 
 ### BA1.01 — the cast's attributes and skill scores · `IS-A-11` stage 2, table (a) · CONTENT · HASH MOVER(behaviour)
 - SOURCE: `master/instructions/IS_A_NINE_part2.md` "Item: IS-A-11" (`:263-307`), stage 2 step 1; `master/instructions/IS_B2_SC_FI_CORE_CHAR_part2.md` "Item: IS-B2-CHAR-03" (`:144-149`); U1 §6, §11 U1-C item 1; `V12_STRUCTURE.md` D-19; rulings A-6, A-7, A-98, ED-1094; closes G-3 ("as far as the nine need it").
@@ -199,6 +200,20 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - COST and TIER: content; `sonnet`, `medium`.
 - LANDS IT: BA1's producer; `Item: BA1.09`, `[skip ci]`.
 
+### BA1.12 — two cast rows marked unaware of what they hold · `U5a_CHAR_self_knowledge_is_a_belief` edit 2 (the marks) · CONTENT · HASH MOVER(behaviour) · Patched: P-30
+- SOURCE: `proposals/U5a_CHAR_self_knowledge_is_a_belief.md` "Exact edits" 2 (the marks), "Gate" 2 and 4; ruling A-34 (D-47: "built narrowly: first for the gifts and motives the cases name (NPC-004, NPC-012, NPC-021)"); B10.64 (part 13) ships the key and leaves the marks to "the content pass" `[ASSUMPTION there: BA1 takes NPC-004's and NPC-012's marks]`; BA1 did not list them before this patch (H2_NOTES, A13). Every value "`[ASSUMPTION; medium; Jordan to correct]` and reverts alone".
+- ADVANCES: R-08 (a person reads only what he holds, of himself too).
+- INSTRUCTION: in `references/npc_registry.yaml`, the two marks the source names, copied: "NPC-004 `unaware: [prac.thread_sensitivity]`; NPC-012 the pursuit his case names". NPC-012's pursuit is read off his case (`cases/exercises/NPC-012.yaml` or his §13 row in `audits/01_CORE_audit.md`) at the item's open and recorded in the commit body; it must be a `self_believed` member his row holds (`unaware_of` refuses otherwise). "NPC-021 … needs no `unaware:` row". Both values `status: seed`, listed in the PR body.
+- WHERE: `references/npc_registry.yaml` (`unaware:` on NPC-004's and NPC-012's rows).
+- TESTS: none new; B10.64's `test_an_unaware_holder_forms_no_thread_read_and_his_twin_does` and `test_an_unrecognised_pursuit_moves_no_score_and_leaves_the_sheet` (planted marks) stay green with the shipped marks.
+- FALSIFIER and CONTROL: gate 2 on the shipped row: NPC-004 forms a `thread_read` over a seeded realm season (the mark not read); gate 4: NPC-012's decisions differ with and without the mark (the score moved, which the source forbids). Control: B10.64's `test_no_row_marked_is_hash_equal_before_seeding`.
+- GATE: `python -m pytest engine/season/tests/test_self_knowledge.py -q` (B10.64's file) → pass; the realm hash at seed 0, one season → recorded (moved where NPC-004 would have formed a `thread_read`).
+- HASH MOVERS: the content is a build-hash mover. Declared; BA1.99.
+- DEPENDS ON: V12 Batch B10 (B10.64 the key, `unaware_of`, `self_believed`; B10.65 the arming); V12 BA1.09.
+- GLOSSARY: none (B10.64 wrote *self-knowledge*).
+- COST and TIER: content; `sonnet`, `medium`.
+- LANDS IT: BA1's producer; `Item: BA1.12`, `[skip ci]`.
+
 ### BA1.10 — the switch · `IS-A-11` stage 2 step 2 · POINTER
 - What the pointed step does: "`harness/populated.py::build_realm`'s `cast_attributes` default flips to on, in its own commit (U1-C's "the switch")" — after B03c the function is `engine/season/boot/realm.py::build_realm`. B01.02 (lane A's `c5bf18a` step 3) already ships the switch on, at value 2 on every key (B01's note "for the BA1 author": "`IS-A-11` stage 2 step 2 … then finds the switch on and lands only the values"); U1 §6: "With CAP Part B the seating of unauthored values stops …, so the switch then gates only the authored `stats:`".
 - Target: `engine/season/boot/realm.py::build_realm` (`cast_attributes`).
@@ -221,7 +236,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - FALSIFIER and CONTROL: a pin moved that no BA1 item declared (then the batch moved behaviour it did not declare: the re-pin stops and the batch is `STOPPED`); a conjunct `reading:` whose tree is not this one. Control: B10's close readings.
 - GATE: the BATCH GATE above, every line; `python -m engine.season.harness.register --requirements` → exit 0, nine lines.
 - HASH MOVERS: the batch's one re-pin, here and nowhere else.
-- DEPENDS ON: V12 BA1.01 to BA1.11; V12 Batch B02-tests (`_realm_goldens.py`; `IS-A-01`'s `reading:` record).
+- DEPENDS ON: V12 BA1.01 to BA1.12 (BA1.12 Patched: P-30); V12 Batch B02-tests (`_realm_goldens.py`; `IS-A-01`'s `reading:` record).
 - GLOSSARY: none.
 - COST and TIER: a re-pin and readings; `sonnet`, `high`; the readings read by `opus`.
 - LANDS IT: BA1's producer; `Item: BA1.99`, without `[skip ci]` (the batch's last `Item:` push, CI run 1 of the batch).

@@ -292,7 +292,7 @@ Each READING position's text, copied from its source; read once on the closing t
 - FALSIFIER and CONTROL: a hash that moves at a setting every item declared EQUAL (B39.01 to B39.03, B39.05 to B39.18, B39.24, B39.26, B39.27, B39.29 to B39.31 at control): the re-pin stops and the item that moved it is found before anything is re-recorded. Control: the shipped realm at `variable=False`, `prologue=0`, `cards=False`, `birth_rate` 0.0, `majority_age` as B39.28 left it, `abandonment_draw` `off`.
 - GATE: the BATCH GATE of the block's head.
 - HASH MOVERS: the re-pin (above).
-- DEPENDS ON: V12 B39.01 to B39.36.
+- DEPENDS ON: V12 B39.01 to B39.37 (B39.37 Patched: P-25).
 - GLOSSARY: the close reads every glossary row the batch's items named against the code (STAGES rule 2).
 - COST and TIER: edit and the close's readings; `sonnet`; the terminal critique `opus`.
 - LANDS IT: B39's producer; `Item: B39.99`; the batch's last `Item:` commit, without `[skip ci]` (CI's run at the end of the batch).

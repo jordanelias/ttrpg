@@ -76,7 +76,8 @@ BACKGROUND RUN: the 5,000-fight census of B15.03 (`scale_census.py`) and the 1,0
 | B15.11 | a wound carried into a fight is a level (the flip) | UPR §3's flip | BUILD | MOVER(behaviour) | B15.10; Batch B05 (UPR §3 edits 1–4) |
 | B15.12 | the integrated reading | `IS-PC-03` | READING | — | B15.11 |
 | B15.13 | the combat armour-tier and ability sweeps | `ED-SC-0001` (the intake `:496`) | READING | — | B15.11 |
-| B15.99 | the one re-record and the close's readings | UPR §4 edit 3, §5 row 5; `29_DICE` row 9 | BUILD | MOVER (the re-pin) | B15.01 to B15.13 |
+| B15.14 | the survivor's grudge: measure, then cut or name the cause (Patched: P-27) | CP-T03-06 (the intake `:491`; moved from B14.14) | DESIGN-FIRST | EQUAL | B15.11; Batch B14 (B14.16), Batch B10 (`02_CHAR_scar_is_a_wound`) |
+| B15.99 | the one re-record and the close's readings | UPR §4 edit 3, §5 row 5; `29_DICE` row 9 | BUILD | MOVER (the re-pin) | B15.01 to B15.14 |
 
 Not in this batch, and where each is: UPR §1 (the nesting cap, `nested_entry`; B30); UPR §2 and §3 edits 1–4 (B05; this batch flips §3's fixture only); UPR §6 (the opener's edge; B37); `29_DICE` items 29-1, 29-2, 29-4 (B04, B05) and 29-5 (B30); PHY_A A0–A2 (B29) and A4 (B14); `HAP_A` edits 1, 2, 4, 5, 6 (B37); `03_PC_exits_withdrawal_recovery` Part B (superseded by `PC_A`, U3 §4.1 row 55); `03_PC_typed_outcome_one_door` R-PC-03's comment edit (superseded by `18_DET` edit 2); `IS-PC-B2` (the shipped `YIELD_OB` pick, Jordan's at the merge; B15.10 lands an admitted value).
 
@@ -308,6 +309,20 @@ Not in this batch, and where each is: UPR §1 (the nesting cap, `nested_entry`; 
 - GLOSSARY: none (*carried wound* is read against the fixture's `level` value at the close).
 - COST and TIER: edit (one value) inside the calibration; `sonnet`, `high`; the reading `opus`.
 - LANDS IT: B15's producer; `Item: B15.11`, `[skip ci]`.
+
+### B15.14 — the survivor's grudge: measure, then cut or name the cause · CP-T03-06 · DESIGN-FIRST · HASH EQUAL · Patched: P-27
+- SOURCE: the intake `:491`; carry-forward `master/eval/E1.md` §Carry-forward CP-T03-06 (`:467-478`) and `master/eval/E4.md:1074`; part 10's B14.14 POINTER and UNDECIDED (4) ("Where it lands: B15-pc-calibration … B15's author writes the MEASURE item with the entry's gate"); no part carried it before this patch (H2_NOTES, A10).
+- ADVANCES: R-07 (a fight leaves what the world keeps of it), contributor.
+- INSTRUCTION (the entry's WHAT and EXIT, copied): "MEASURE first, then DESIGN-FIRST, then BUILD — or CUT": "at seeds 0-2, at the mid-batch horizon (`aperture 2 0`, two seasons), for each fight a person survived with a Wounded band, read the survivor's `regard` toward his opponent (`queries/person_q.py::regard`, whose `judged` term is IN-58's landed `deeds_judged`), whether it reaches a Candidate under `stance_polarity: declared`, and whether it is still held at its end"; "non-zero, reaching a Candidate and surviving, a stored `combat_grudge` row is a second ladder for one quantity (NERS S) and CP-T03-06 is CUT with the reading quoted in the commit; zero or fading, the design names which cause it repairs, no doer attributed or eviction, and builds only that". The earlier measure (`@eb34324f`: "0 of 4 survivors' regard reached a Candidate"; "no doer attributed … in 3 of 4") is the before-reading, quoted, not re-taken. On the zero-or-fading side, the item writes the design (which cause, and the one edit that repairs it, with its gate) as a design file under `proposals/` `[ASSUMPTION: path; the item names it]`, and the BUILD is HELD for a later batch on that design's merge; it is not built in B15.
+- WHERE: the reading in the commit body; on the design side, NEW one design file under `proposals/`.
+- TESTS: none (a measure and a design).
+- FALSIFIER and CONTROL: the entry's own: a non-zero regard that reaches a Candidate and survives (then a stored grudge row is a second ladder: CUT). Control: the realm hash at seed 0 equal to B15.11's (nothing in the engine is edited).
+- GATE: `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 s`, s = 0, 1, 2 → per seed: the Wounded-survivor fights, each survivor's `regard` toward his opponent, Candidate reached yes/no, still held yes/no, with `assert checked >= 1` over the three seeds (a zero count is reported as a thin sample, as the earlier measure was).
+- HASH MOVERS: none.
+- DEPENDS ON: V12 Batch B14 (B14.16 `fell_to_hand`, the "no doer" cause); V12 Batch B10 (`02_CHAR_scar_is_a_wound`, the regard half); EXISTS-IN-TREE `queries/person_q.py::regard`.
+- GLOSSARY: none.
+- COST and TIER: reading then design; the measure `sonnet`; the design and the CUT call `opus` (E4: "tier: opus (design)").
+- LANDS IT: B15's producer; `Item: B15.14` (a commit only on the design side; on the CUT side the reading goes in B15.99's commit body), `[skip ci]`.
 
 ## Readings (B15)
 
