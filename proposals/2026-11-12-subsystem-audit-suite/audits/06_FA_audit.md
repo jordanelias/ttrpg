@@ -82,8 +82,8 @@ a named basis. Six remit acts gate nineteen of the table's 67 rows (E-2):
   declared kinds never emitted.
 - The FA probe (E-4, E-5) over the spine (seeds 0 to 4, four seasons) and the realm (seeds 0, 1 and 2,
   three seasons) is the source of the verdict's figures and of F-FA-01, F-FA-02 and F-FA-04.
-- `heir_hears --seeds 0 --seasons 4`: the throne was not vacated; the heir was handed 20 question sets and
-  none named it; control clean (E-6).
+- `heir_hears --seeds 0 1 2 --seasons 4`: at seeds 0 and 1 the throne was not vacated; at seed 2 it was
+  vacated in season 4 and the living heir heard of it; control clean at every seed (E-6).
 
 ## 2. Steelman
 
@@ -114,8 +114,9 @@ Ranked by the weight each bears.
 5. **Succession is a claim, not a script.** The heir is a title; one `succeed` act opens every vacant seat
    the title passes and closes the title in the same write (`effects_governance.py:145-182`), and a death
    names the seats it vacates so witnesses hold claims about them (`gate.py:1819-1832`). *Attack:* does a
-   seeded season exercise it? No throne was vacated in four seasons at seed 0 (E-6). **Holds as mechanism;
-   unobserved in play.**
+   seeded season exercise it? In four seasons the throne was vacated at one seed of three (seed 2, in the
+   last season), and there the living heir was handed a question naming it (E-6). **Holds, and the hearing
+   link is observed once; the claim itself was not read, because the run ended with the vacancy.**
 6. **The plan already owns most of what is missing.** B10-17 and B10-17b schedule `declare`, alliance and
    peace, the election arm, nomination, deposition, the casus-belli gate, the clocks and duty of office.
    *Attack:* are those positions reachable in computed play once built? Several state themselves that they
@@ -713,7 +714,7 @@ shared with the other lanes (load average near 30), so long runs were kept few.
 | E-3 | `python -m engine.season.harness.aperture 2 0` | 0 · 2 | realm 83 persons, 33 seated, acts 1529 = 1529, control hash EQUAL; spine 13 persons, acts 186 = 186, EQUAL; per-holder and per-verb figures as quoted (`aperture_2_0.txt`) |
 | E-4 | `fa_probe.py spine 4 0 1 2 3 4` (read-only; in the scratchpad) | 0 to 4 · 4 | 19 writs, 0 held by an addressee, 0 compliance events; no office changed holder; no vacancy; `at_war` empty; hashes `1d424f49b174`, `993400462d45`, `882acd633a5b`, `c64f969d974c`, `07c0454d0507` (`probe_spine_4.txt`) |
 | E-5 | `fa_probe.py realm 3 0 1 2` | 0, 1, 2 · 3 | seed 0: 29 writs, 0 held by an addressee; deaths 0; `office.established` 1 (left vacant); faction tuples identical; `at_war` empty; hash `52ff67bc45c5`. Seed 1: 21 writs, 0 held; 1 death (the Cardinal of Prudence; his seat vacant at the end); `matter.determined` 1; `requisition.taken` 1; Church (7, 7, 1) → (6, 6, 1); hash `26d2091b144c`. Seed 2: 41 writs, 0 held; the same death and vacancy; `requisition.taken` 6; `commitment.ended` 1; hash `b95552898d9a` (`probe_realm_3.txt`) |
-| E-6 | `python -m engine.season.harness.heir_hears --seeds 0 1 2 --seasons 4` | 0 · 4 (seeds 1 and 2 had not printed when the audit closed) | seed 0: 20 heir question sets; throne vacated: none; control 0 (`heir_hears_4.txt`) |
+| E-6 | `python -m engine.season.harness.heir_hears --seeds 0 1 2 --seasons 4` | 0, 1, 2 · 4 | seeds 0 and 1: 20 heir question sets each; throne vacated: none. Seed 2: throne vacated in season 4 with the heir alive; heard by a living heir: yes; vacated but unheard: none. Control 0 at every seed; exit 0 (`heir_hears_4.txt`). The instrument does not read whether the heir then claimed |
 | E-7 | `python -m engine.season.harness.corpus_run`, **the CORE lane's run of the same command on the same tree**, read from its scratch output; not re-run here because nine lanes were running it at once | 0 · per case | 143 cases; 23 of 67 verbs executed; `confer`, `convene`, `dispatch`, `establish`, `march`, `oblige`, `open_case`, `pardon`, `requisition`, `revoke`, `seize`, `succeed` among 30 "foldable but never even attempted"; `comply`, `construe`, `covenant`, `determine`, `evade / defy`, `survey` only refused; NPC RUNS and ARC ENDS both NOT-COMPUTABLE |
 | E-8 | `run_cases.load_cases` over the corpus, filtered by need text | n/a | 143 cases, 972 needs, 69 marked UNCLEAR; the FA-bearing needs listed in `fa_cases.txt` and grouped in `fa_case_mech.txt` |
 | E-9 | `grep` for entity literals in non-harness Python; for `faction\|office\|duty` in `decision/choose.py`; for callers of the `faction_q` members and `at_war` | n/a | entity literals in comments only; `choose.py` reads `seat_of` twice; callers as stated in F-FA-10; `at_war` read at `world_q.py:3703` and `:5150` |
@@ -775,7 +776,7 @@ run.
 | NPC-038, NPC-004, NPC-070 | exposure or failure removes the office-holder, with downstream damage | core | **no** | their seats' `revocation` is `null` (ruled) | a ruling | Jordan | — | §11 item 3 |
 | NPC-020 | acts taken in the leader's name diverge from his intent, and he learns afterward | core | weakly | an order writes nothing and the ordered person chooses freely; the King learns by claims (91 later acts cite an `order.given`, E-5) | `dispatch` that sends (CP-T09-08); delegation (IN-48) is held against Layer 1 | FA | — (plan) | CP-T09-08's exit |
 | NPC-020, NPC-070 | a standing army reassesses its loyalty in stages, up to ceasing to obey | core | carrier yes, behaviour no | the Grand Master's `oblige` to `off_king` (`offices.yaml:196`) extends the Crown's purview; no such oath was released in any run | duty and the betrayal reading | FA / CHAR | — (CR-88) | CR-88's exit; then a seeded `release` of that oath |
-| NPC-020, NPC-031 | a designated heir is a real status before succession; the throne passes by claim | important | **mechanism yes, unobserved** | `successions`, `_eff_succeed`; no throne vacated in 4 seasons at seed 0 (E-6) | a vacancy to exercise it | FA | `06_FA_playable_scenario.md` (the succession situation) | the scenario run: `succession.claimed` after the King's seat is released |
+| NPC-020, NPC-031 | a designated heir is a real status before succession; the throne passes by claim | important | **mechanism yes; the claim unobserved** | `successions`, `_eff_succeed`; the throne vacated at one seed of three in 4 seasons, and the heir heard it (E-6); `succession.claimed` 0 in every probe run (E-5) | a vacancy early enough to watch the claim | FA | `06_FA_playable_scenario.md` (the succession situation) | the scenario run: `succession.claimed` after the King's seat is released |
 | NPC-020, NPC-050, NPC-081 | a succession contested among parties with different bases of claim | core / important | no | the first valid claim wins; no `succession` arrangement row (H-217) | the election and contested-succession arm | FA / SC | — (CR-35) | CR-35's exit; computed reach is H-80's |
 | NPC-050 | a campaign toward a higher seat attemptable only when the seat is weak and the realm unstable; a failed attempt costs standing and cannot be repeated for a time | core | no | no claim on a held seat; no Turmoil | claims (CR-91), deposition (CR-37), the clocks (CR-89) | FA | — (plan) | CR-90's reading |
 | NPC-052 | his successor undetermined among qualified claimants; the domain may split | core | no | `off_duke_varfell` is `elected` and fills by plain `confer` (H-292) | CR-35 for the election; a split of a rung is unowned | FA; SE / WR for the split | — | CR-35's exit |
