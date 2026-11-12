@@ -697,3 +697,49 @@ Lane `tests1`: 70 files under `engine/season/tests/` (test files and three helpe
   - Hash: with the block empty and every value at its revert, plus SEVEN more reverts (`revert_cr79, revert_cp_t03_02, revert_cr85, revert_cp_t03_04, _07, _08`), the build and one season equal `BASE_BUILD`/`BASE_SEASON` (:377-393) - F-TEST-02 pattern; `shipped build != BASE_BUILD` so the control is not vacuous.
 - **Conflicts / stale:** violence is by a formation decline, a deterministic gate on candidates (eligibility, defensible under the brief's rule), but it means in the shipped game "a fight" appears only with a context; CR-85/CP-T03-01 notes that seed-0 forms no fight in a season.
 - **Open items:** none.
+
+### engine/season/tests/test_cr96_opposed_by.py
+- **What it is:** loader + behaviour test, v10 CR-96 (AR-44): the OPTIONAL `opposed_by:` column per `vocation_attribute` row (`VOCATION_OPPOSED_BY`), which makes a party oppose with a different attribute than the one his own pool starts from.
+- **Status:** none; live code, UNUSED in the shipped roster: `VOCATION_OPPOSED_BY == {}` asserted (:51-60).
+- **Bears on:** CHAR (§14 capability axioms: attack/defend attribute pairing), SC (opposition), DICE.
+- **Content that matters:**
+  - With `opposed_by: attr.mind.will` a party holding Spirit 6 and the verb's own attribute 2 opposes at 6.0 (obstacle 3.0 when the roller's pool is 7 so the H-213 ceiling doesn't cap), without the column at 2.0 (Ob 1.0). The column REPLACES the own attribute (own 9 vs Spirit 6 reads 6.0, not the larger) and moves opposition only, not the pool; a held key still competes (larger of key and the opposing attribute) (:62-105).
+  - Shipped roster absent on every row so `_opposing_attribute == _authored_attribute` for every verb and person (`checked >= 10`) - the control for the hash; planted failure (column ignored reads 2.0) (:51-60, :89-96). Loader refuses an attribute outside the ten, a retired `attr.social.bonds`, empty, a non-vocation (:108-120).
+- **Conflicts / stale:** infrastructure exists for attack-skill vs defence-attribute pairing (a classic RPG axiom) but no shipped row uses it ("CR-95's, not this position's").
+- **Open items:** CR-95 (the shipped opposed_by rows).
+
+### engine/season/tests/test_cr_24_winner_casualties.py
+- **What it is:** behaviour test, CR-24 (`H-360`, M4 Ask B (b)): the winners of a fought field take their own engine casualties on `body` only; `field_winner_casualties: engine` SHIPPED, `off` the earlier behaviour.
+- **Status:** none; live.
+- **Bears on:** MB (casualties, field outcomes), PC (body), CHAR (commanding persons).
+- **Content that matters:**
+  - A real fold of a hand-built situation (RESOLVE then ENCOUNTER via `test_march._fold_one`): Crown marchers as cohorts weight 10, `field_troops_per_weight` 10, `field_subunits: person`. Seed 0: the attacker WINS, one marcher's subunit cut (survivor ratio 0.982), the other's not; each attacking claimant's body = `max(1, int(body * min(1, his own ratio)))`; no stance row on any winner; the defenders (losers) still take theirs (:86-103). Preconditions asserted.
+  - Why `person`: under `side` a winning headcount side's ratio reads >= 1.0, so the `side` arm writes a winner nothing (:13-15).
+  - Planted failure: winners written at the loser's ratio reddens the check (:106-120); control `off` writes no winner and `engine` differs in the one marcher's body alone (restore it and the hashes are equal) (:123-136); a winner who marches is one Subject (named whole) and no Subject names a winner's `stance` (:139-159).
+  - `field_casualty_model: total` ("any wound is lethal"): a winner who took a casualty is removed by the loser's rule and does not arrive (the ratio-0.982 marcher dies); `none` writes no winner (:162-179); an unknown arm refuses (:182-186).
+- **Conflicts / stale:** `total` casualties kill a winner with a 1.8% loss with certainty (deterministic lethality in a non-shipped arm; the shipped `scaled_by_degree` arm is non-lethal): relevant to the brief's no-deterministic rule (MB lane).
+- **Open items:** none.
+
+### engine/season/tests/test_demand_delivery.py
+- **What it is:** behaviour test, plan position `19d` (DEMAND-DELIVERY; `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` §3.2 row 11): `world_q.demanded`/`delivered`, `subsistence_draw` (host projection of the larder draw; arithmetic owner `settlements.larder_draw` in `modules/settlements/larder.py`), the shortfall Observation on MATTER's `stores.changed`, `_from_shortfall_claim` operands, `harness/scarce.py`.
+- **Status:** none; live. The workplan it cites is `retired` in its filename (:2): reference only.
+- **Bears on:** SE (subsistence, larder, shortfall), CHAR/FA (steward response), WR, CORE (witness).
+- **Content that matters:**
+  - `demanded` is the weighted headcount under a rung (`Person.weight` IS the headcount; a cohort of ten wants ten people's share); `delivered` is `min(want, stock)` per kind with the same keys; an individual steward is EXEMPT from the draw (`24f`, ED-IN-0255) so the granary demands nothing; an empty larder still demands (the rejected "walk ends at" reading) (:98-130). MATTER removes exactly what `delivered` said and leaves the rest short in `w._subsistence_shortfall` (:133-145).
+  - The shortfall rides on the drained larder's OWN `stores.changed` write as an `Observation` (predicate `SHORTFALL_PREDICATE:<kind>`), nothing else carries one; a never-stocked larder reports nothing but the person is still short ("the crossing, not the state") (:152-179). `tiny_world` and `headless.build_world(0)` have no eater at all (only cohorts draw), so no shipped small world records a shortfall (:182-198).
+  - Deposit: the holder who was elsewhere holds the shortfall `told_by` (document channel), the hungry hold it firsthand; without the `hold` edge the steward learns nothing; `observation_deposit_mode: none` deposits nothing; an act's reads still reach only its actor (:220-273).
+  - Operands: `kind`/`amount` read off a held shortfall claim ahead of fixtures (`SHORTFALL_SOURCED_OPERANDS == {"kind","amount"}`); a bad amount (0, -3, True, 2.5, "8", None) falls back to `default_transfer_amount`; a non-shortfall claim reads nothing (:290-336). The real chooser executes the claim-sourced `transfer` and matter is conserved against a no-act control; the next season's `delivered` at the hungry town rises against a no-`hold` control (0) (:381-418).
+  - The behaviour-equivalence of the extraction "cannot be re-proved by a test inside the tree"; claimed byte-identical hashes out-of-band for 4 worlds.
+- **Conflicts / stale:** the season's question is NAMED (the driver's probe override), "WHICH question a person answers is `H-54`'s open rule" (:383-384): the shortfall response needs the question handed to the steward.
+- **Open items:** `H-54` (which question a person answers) open.
+
+### engine/season/tests/test_fa06_org_goals.py
+- **What it is:** data + builder test, v9 FA-06: every other organization's goals (`goals.yaml`, `data/goals.py`, `harness/populated.py::seed_goals`) and the completeness refusal at seeding (`build_realm(goals_complete=)`).
+- **Status:** none; live.
+- **Bears on:** FA (organization goals, rivalry), CHAR (conviction/goals), ARCS, CORE (data-driven goals).
+- **Content that matters:**
+  - Shipped file complete: `goals_missing(shipped, goals.goals()) == []`; every faction with an authored head and every body with a seated member holds a row (`len(heads) >= 6`, `len(bodies) >= 10`); census `(goals, goal_orientation, goal_dropped) == (14, 24, 0)` (ED-IN-0310: two Altonian rows seated by default) - a COUNT PIN (:59-70). Deleting one row lists exactly that org (:73-83); `build_realm(0)` raises `Unspecified` naming the body/faction; control `goals_complete=False` builds; `goals=False` never asks (:90-120).
+  - Rival goals carry `stance -1` toward the rival head's seat (Hafenmark vs Confessor `off_confessor`; Church vs Restoration leader `off_restoration_leader`); members take a stance row against `p_npc_021` / `p_npc_003` (:127-139).
+  - `establishes`: Inquisitors (`p_npc_004`, `p_npc_038` exactly) hold the narrower heresy goal, the rest of the Church (incl. the Confessor `p_npc_021`) the Church's goal, and the two sets are disjoint (:146-151).
+- **Conflicts / stale:** the "Nine Political Axes as data" claim in the docstring ties to the rival-goals file; goals are a typed file read by the loader, satisfying the data-driven requirement.
+- **Open items:** none.

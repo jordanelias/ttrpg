@@ -166,9 +166,9 @@ other (the accused, the accuser, the bench, the record).
   harder twice beats four firsthand proofs (0.69 against 0.90).** `05_SC_obstacle_difficulty_and_modifiers_B.md`
   moves the favourable half after the ceiling (fixing the clip) and keeps it an Ob subtraction floored at
   `OB_MIN` (keeping the saturation, and the second ladder). Proposal A; §5 item 1.
-- **P-iv (graded, recoverable):** the four bands exist on every contested row; on five of seven they
-  select only the Event's name (`tell`, `lie`, `speak`, `interrogate` write `[]` in every band; `arrest`
-  never executes). Graded in form, binary or nil in effect.
+- **P-iv (graded, recoverable):** the four bands exist on every contested row; on four of seven they
+  select only the Event's name (`tell`, `lie`, `speak`, `interrogate` write `[]` in every band), and a
+  fifth, `arrest`, never executes. Graded in form, binary or nil in effect.
 - **P-i (legible odds):** holds. `sigma.odds_of` returns the dealt odds for the true input and matched
   the empirical bands in every cell run here.
 - **P-iii, P-v:** no finding beyond `13_SC_contest_interrogation.md` §4 (saturation at the cap, cited).
@@ -309,7 +309,7 @@ instrument sees a verdict move when something that reaches it moves.
 | P1.4 | a friendly bench | ordered | hostile 0.90, neutral 0.74, friendly 0.42 on `speak`: ordered. On the verdict: nothing | FOLLOWS for the speech; INERT for the verdict |
 | P1.5 | usually | 2×2 ordered, best cell well above one half | best cell: the *speech* fails 0.42; the *verdict* binds 0.26 in every cell | DEPARTS · BEHAVIOUR |
 | P1.6 | wins | what he asked for is granted | the party owes an `oblige` to **the judge's seat** (term 4 ticks) and joins its establishment; the petitioner's holdings are unchanged; the petition Record keeps its stages; the docket keeps a husk `{matter: None, petition: rec}` | DEPARTS · COMPOSITION |
-| P1.7 | bounds | no bench is visible; own bench refused | a petition naming the judge, addressed to the judge, is filed, carried and docketed; he cannot determine it; it lapses. A petition about a *place* is docketed, can be spoken to (`matter.held`), and `determine` refuses it on `exists:Person = 0` | DEPARTS · EDGE |
+| P1.7 | bounds | no bench is visible; own bench refused | a petition naming the judge, addressed to the judge, is filed, carried and docketed; he cannot determine it; it lapses. A petition about a *place* is docketed, can be spoken to (a `speak` rolls), and `determine` refuses it on `exists:Person = 0` | DEPARTS · EDGE |
 
 Play-back: *A clerk petitions the Duke against his neighbour, brings four things he saw the neighbour do,
 and speaks before a Duke who thinks well of him. None of that reaches the Duke's decision, which fails
@@ -577,7 +577,7 @@ Read as stories:
 - **Cost: none observed.** No accuser, speaker, arguer or liar lost anything he could point to. The one
   loss in the run is `p_npc_013`'s: he twice spoke to `p_npc_041`'s matter (seasons 2 and 3, both
   Failure) and in season 3 is the actor of a `tenure.closed` at degree `Felled` whose subject is
-  `p_npc_041` (the GAME audit §0 identifies this person's death in a `capture` at this seed); the log
+  `p_npc_041` (the GAME audit §1.1 identifies this person's death in a `capture` at this seed); the log
   does not link the hearing to the seizure `[UNVERIFIED causal link]`.
 - **Endings.** Two verdicts in four seasons, both Partial, both an `oblige` to the judge's seat. In
   both, a new case against the same party is opened in the same season (`p_npc_004` by the judge who
@@ -748,7 +748,8 @@ Each chosen by the five-step ladder (`CLAUDE.md` §0), in order; the step is nam
 (3) *the verdict is a draw that could go either way* — for a bench that persists it is a wait (§1.3);
 (4) *a hearing ends* — true of the docket's length only (§1.4);
 (5) *a record separates liars from honest tellers* — it measures the channel's noise (§2.2);
-(6) *the band of a contest is data* — on five of seven contested social rows it selects a name (§1.5).
+(6) *the band of a contest is data* — on four of seven contested social rows it selects only a name,
+and a fifth never executes (§1.5).
 
 **N-lines attacked that held:** the per-act draw (order, interleaving, replay); firsthand over hearsay
 in the weighed reader; `odds_of` against the fold; `argue` at Success (cut it and no person's pursuits
@@ -780,6 +781,7 @@ All under `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/s
 | 11 | `d_projection.py` → `.txt` | proposal D's rule projected with the shipped `argued_pursuits` (not the engine) | proposal D |
 | 12 | `realm_sc.py 1 4` → `realm_s1_k4.txt` | the populated realm, seed 1, four seasons (39, 93, 148, 233 s under load); content hash `25d23448…` | §3, FIRES rows |
 | 13 | `e1_reasons.py 1 1` → `e1_reasons_s1.txt` | one realm season: causes and holdings behind each proceedings act; petition terms; proposition shapes | §3.2, §1.2 |
+| 14 | `p2e_roll_check.py` → `.txt` | 400 seeded `lie` and `tell` acts per hearer through the fold, against the exact odds | §2.2 (the roll is one distribution) |
 
 Not run: a second realm seed in detail (machine load 27 to 44 throughout; the SC lane's six-season logs
 at seeds 0 and 1 are cited for the cross-seed shape); a realm before-and-after for any proposal (each
