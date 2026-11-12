@@ -68,9 +68,10 @@ CLAUDE.md §7).
    `16_PESSIMIST_GAME_consequence_reading` (a chronicle reading only) → `01_CORE_tests_shipped_world_falsifiers`
    (its R-09 row lands in B05). Gate: every pinned hash unchanged; each golden has one owner (`_realm_goldens.py`).
 4. **B03 hygiene (IN, hash EQUAL but two declared movers).** `17_CENSUS_C1A_01` D1–D3 → `17_CENSUS_C1B_01`
-   (its SC05-kernel item in B24) → `17_CENSUS_C1B_03` → `17_CENSUS_REST_1` (D2 in B11) → `17_CENSUS_REST_3` →
+   (its SC05-kernel item in B24) → `17_CENSUS_C1B_03` → `17_CENSUS_REST_1` (D2 in B11) →
    `16_PESSIMIST_CORE_no_stored_plan` → `09_WR_B_pointer_text_for_the_orchestrator` → `11_GO_pointer_and_stale_text_resolutions`
-   (item 5 in B06) → `11_GO_design_reference_disposition` → `06_FA_hygiene` (its rename: two declared movers) →
+   (item 5 in B06) → `11_GO_design_reference_disposition` → `17_CENSUS_REST_3` (after the pointer file, whose row 8 it
+   does not repeat; U6 R-A) → `06_FA_hygiene` (item 4 withdrawn: no mover; item 3 keeps `faction_q.holdings`, C3-R4) →
    `U5a_CORE_owed_edits` §A–C, E, F, I → `09_WR_threadwork_module` edit 3. Gate: content hash equal on every
    pinned world except `06_FA_hygiene`'s two; `tools/export_composition.py --check`; the deletions' greps.
 5. **B04 capability home (IN, hash EQUAL).** Precondition: U1's capability architecture
@@ -78,24 +79,30 @@ CLAUDE.md §7).
    Part A → `01_CORE_capability_authoring_surface` → `02_CHAR_capability_definitions` → `02_CHAR_capability_uses_table`
    → `10_DICE_capability_axiom_map` (part one) → `05_SC_capability_surface` → `05_SC_hearing_capabilities`
    (definition rows; `hearing_moves` in B24) → `06_FA_office_capabilities` (ships none) → `29_DICE` row 1
-   (`opposed_ob`) → `10_DICE_one_score_two_roles` edits A and C (OBS step 0). Gate: `tools/export_descriptors.py --check`;
+   (`opposed_ob`, a function with no caller). *(U6 R-A, C3-R2: `10_DICE_one_score_two_roles` moved whole to B05, a
+   declared mover in a hash-EQUAL batch.)* Gate: `tools/export_descriptors.py --check`;
    the NPC-088 headless hash equal to its post-B01 reading; `corpus_run` tallies unchanged.
 6. **B05 one roll (IN, with SC, PC and MB edits; the calibrated landing; every seeded result re-pinned once).**
    `U5a_DICE_owed_edits` §1 rows 1–9 (row 4 is the field's sampler, `U5b_MB_rulings_in_the_field` §1, C3-D2; the
    margin quantised, C3-L1) → §2 (the wound as a level) → §3 → `10_DICE_one_roller_one_fraction_rule` (Edit C as
    designed with MB) → `10_DICE_exported_face_rule_and_band_edges` (A, D) → CAP Part B (lane A's `c5bf18a`
-   folded, C3-A3) → OBS step 1a → `16_PESSIMIST_SC_A` (1b) → `05_SC_contest_record_on_event` (2) →
-   `13_SC_tuning_tables` commit 1 (3) → `13_SC_calibration` test, read red (4) → T13 commit 2, CAL green (5) →
-   `05_SC_opposed_obstacle_parity` (0.4) with `05_SC_obstacle_difficulty_and_modifiers_B` carried by OBS →
+   folded, C3-A3) with `10_DICE_one_score_two_roles` edits A–C (OBS step 0; Edit A is CAP row B1, Edit B is row B4;
+   C3-R2) → OBS step 1a carrying `05_SC_obstacle_difficulty_and_modifiers_B` → `16_PESSIMIST_SC_A` (1b) →
+   `05_SC_contest_record_on_event` (2, with `U5c_SC_proceedings_residue` §1) → `13_SC_tuning_tables` commit 1 (3) →
+   `13_SC_calibration` test, read red (4) → T13 commit 2, CAL green (5; the bench seats' `modifier:` held null until
+   `L1-A12`, §1.4) → `05_SC_opposed_obstacle_parity` (0.4) →
    `16_PESSIMIST_DICE_soft_ceiling` → `16_PESSIMIST_DICE_task_difficulty_and_throughput` (code part) → `29_DICE`
    rows 2–4 and 8 → `U5b_PC_rulings_in_the_fight` §2–§3 (UPR §5 row 4) → `10_DICE_advantage_sources_for_the_arcs`
    → `10_DICE_believed_odds_have_a_prior` → `01_CORE_tests_shipped_world_falsifiers` R-09 row. Gate:
    `U5a_DICE_owed_edits` §1 gates (1)–(5); OBS's six gates; `13_SC_calibration` C1–C8 green (C1 at rank 7, C3-N6);
    `29_DICE` gates 2–4; CAP Part B's gate (equal opponents meet `plain` at 0.50 ± 0.005); the R-09 conjunct.
-7. **B06 keyed draw (IN/GO; one re-pin).** `16_PESSIMIST_GO_keyed_draw_no_recorder` (the key function) →
-   `11_GO_one_draw_owner` (body rewritten: `u()` a function of key and ordinal; no recorder) → `11_GO_float_contract`
-   Parts A and C (Part B per C3-L3) → `U5d_GO_owed_edits` → `11_GO_pointer…` item 5. Gate: same seed twice, same
-   hash; no unseeded fallback (`grep`); `fmath` vectors at the stated tolerance; draw vectors exported.
+7. **B06 keyed draw (IN/GO; one re-pin).** `11_GO_float_contract` Part A (`fmath`, the leaf `draw.py` imports;
+   U6 R-A) → `11_GO_one_draw_owner` with `16_PESSIMIST_GO_keyed_draw_no_recorder` (one commit pair: `H2` and `Draw.u`
+   in `draw.py`, C3-R3 → `draw_factory` returns `seeded` → the two outside generators and the four fallbacks) →
+   `11_GO_float_contract` Part B as C3-L3 (vectors) and Part C's text (owed, `L1-A29`) → `U5d_GO_owed_edits` →
+   `11_GO_pointer…` item 5. Gate: same seed twice, same hash; `engine/tests/test_draw.py` (the scan with its three
+   named harness controls, the `(key, n) → u` and sampler vectors held in the test) and `engine/tests/test_fmath.py`;
+   the vectors' **export** round-trip moves to B41, which builds the exporter (§1.3).
 8. **B07 task draw (IN; one re-pin).** `18_DETERMINISM_task_draw_for_uncontested_verbs` (the two loader refusals
    edited first, `25` G-01; item 4's shapes) → `U5c_VERBS_residue_and_governance_owner` §1–§2 →
    `U5b_VERBS_military_physical_residue` §1 → `13_SC_draw_for_unrolled_contests` (surviving rows). Gate: 18-A's
@@ -107,54 +114,75 @@ CLAUDE.md §7).
 10. **B09 memory (IN).** `01_CORE_claim_fade_as_read` → `16_PESSIMIST_CORE_a_refusal_is_remembered` with
     `U5a_DICE_owed_edits` §4 and VRES §3 → `16_PESSIMIST_SC_B_one_reader_of_a_ledger` →
     `16_PESSIMIST_CORE_the_record_holds_what_changed` (`scar.taken` only) → `16_PESSIMIST_GAME_standing_occasions_carry_their_cause`
-    → `01_CORE_reason_trail_in_the_act_store` → `02_CHAR_reason_trail_and_small_edits` (B1 deleted, C3-L8) →
+    → `02_CHAR_reason_trail_and_small_edits` (Part A, the `watch` hook; B1 deleted, C3-L8) → `01_CORE_reason_trail_in_the_act_store`
+    (reads Part A; U6 R-A) →
     `16_PESSIMIST_GO_a_witness_may_connect_what_he_holds` → `01_CORE_predicates_name_their_clause`. Gate: each
     file's readings; `refusal_memory = 0.0` equal.
-11. **B10 character (IN).** `02_CHAR_scar_cap_and_regard_unit` with `02_CHAR_scar_is_a_wound` (one fixture) →
-    `U5a_CHAR_owed_amendments` → `16_PESSIMIST_CHAR_A` (signature C3-K2) → `_CHAR_B` → `_CHAR_C` →
+11. **B10 character (IN).** `U5a_CHAR_owed_amendments` §2 (`stance_scale`, which the scar cap reads; U6 R-A) and its
+    §4, §5, §7, §8 → `02_CHAR_scar_cap_and_regard_unit` with `02_CHAR_scar_is_a_wound` (one fixture) →
+    `16_PESSIMIST_CHAR_A` (signature C3-K2) → `_CHAR_B` → `_CHAR_C` →
     `02_CHAR_resolve_and_temper` → `02_CHAR_goal_lean_on_its_own_question` → `02_CHAR_what_an_act_risks` →
     `02_CHAR_voices_and_the_room` (C3-D7) → `02_CHAR_choice_alignment` → `02_CHAR_offer_what_can_be_done` →
     `02_CHAR_relations_have_a_ground` → `U5a_CHAR_self_knowledge_is_a_belief` → `17_CENSUS_C1A_02` W3, W4 →
-    `01_CORE_unmet_need_is_attended_first` → `12_ARCS_arcs_as_staged_goals`. Gate: each file's; `crisis_draw: off` equal.
+    `01_CORE_unmet_need_is_attended_first` → `12_ARCS_arcs_as_staged_goals` with `U5a_CHAR_owed_amendments` §3. Gate:
+    each file's; `crisis_draw: off` equal.
 12. **B11 FI readers (FI).** `U5c_FI_residue` → `08_FI_01` → `08_FI_02` (with VRES §6 and `audience_of`) → `08_FI_04`
     (with `17_CENSUS_REST_1` D2) → `08_FI_06` → `16_PESSIMIST_FI_A` → `16_PESSIMIST_SC_E` (C3-K1) →
     `16_PESSIMIST_FI_C` (`covert_kinds` members, C3-K6) → `18_DETERMINISM_notice_is_a_draw` → `14_VERBS_SOCIAL1_A`
     → `08_FI_03` → `08_FI_07` → `19_LACUNA_conclusion_is_a_committed_assertion`. Gate: each file's; planted worlds for notice.
-13. **B12 world motion and ground (SE and WR together, C3-D6).** `20_NARRATIVE_E` edit 1 (the year, C3-K11) →
-    `09_WR_B_draws_not_thresholds` edits 1–3 → `09_WR_world_motion` → `16_PESSIMIST_WR_B` edits 1–2 →
-    `16_PESSIMIST_GAME_the_world_draws` → `U5d_WR_owed_edits` §2 (a), §3, §4 → `16_PESSIMIST_WR_A_the_road_is_drawn`
-    → `09_WR_B_weather_with_memory_and_the_year` (year and spell) → `09_WR_provided_arcs` → `07_SE_kernel_repairs`
-    → `07_SE_ground_and_granaries` with `07_SE_treasury_granary_B` → `07_SE_arc_needs` → `16_PESSIMIST_SE_A` →
-    `16_PESSIMIST_SE_B` → `U5d_SE_owed_edits` → `07_SE_population_census` (thinning at MATTER, C3-C3) →
-    `07_SE_population_regrowth_B` → `14_VERBS_MATERIAL_A` (owner of `tend`) → `_MATERIAL_B` → `_MATERIAL_C` →
-    `07_SE_capability_rate_B` (C3-C2) → `07_SE_capability_and_chooser_surface` §5–§6 → `07_SE_valley_scenario`.
-    Gate: controls equal; each flip its own declared mover; the valley loader test.
+13. **B12 world motion and ground (SE and WR together, C3-D6; re-ordered by U6 R-A, C3-R5, edges in §1.2).**
+    `20_NARRATIVE_E` edit 1 (the year, C3-K11) → `09_WR_strand_conclusion` edits 1–3 (was missing from this list) →
+    `09_WR_world_motion` edits 1–3 (the wound row and switch, the unheld seizure, the settled selector) →
+    `09_WR_B_draws_not_thresholds` edits 1–3 (drawn wear and drawn endings on that row and selector) →
+    `07_SE_kernel_repairs` → `07_SE_ground_and_granaries` with `07_SE_treasury_granary_B` →
+    `16_PESSIMIST_GAME_the_world_draws` → `16_PESSIMIST_WR_B` edits 1–2 with `U5d_WR_owed_edits` §2 (a), §3, §4 →
+    `09_WR_world_motion` edit 1's `lattice_coupling` flip (its own commit) → `09_WR_B_weather_with_memory_and_the_year`
+    (year and spell) → `16_PESSIMIST_WR_A_the_road_is_drawn` → `09_WR_provided_arcs` → `07_SE_arc_needs` →
+    `16_PESSIMIST_SE_B` → `U5d_SE_owed_edits` → `07_SE_population_census` (thinning at MATTER, C3-C3) with
+    `07_SE_population_regrowth_B` → `16_PESSIMIST_SE_A` → `14_VERBS_MATERIAL_A` (owner of `tend`) → `_MATERIAL_B` →
+    `_MATERIAL_C` → `07_SE_capability_rate_B` (C3-C2) → `07_SE_capability_and_chooser_surface` §5–§6 →
+    `07_SE_valley_scenario`. Gate: controls equal; each flip its own declared mover; the valley loader test.
 14. **B14 PC outcome (PC).** `03_PC_typed_outcome_one_door` (C3-L5) → `03_PC_weapon_records_in_the_export` →
     `03_PC_weapon_form_at_round_start` → `16_PESSIMIST_PC_C` → `U5b_PC_residue` §7–§8 → `14_VERBS_PHYSICAL_A` A4.
     Gate: `tools/export_engine_params.py --check`; two declared movers (`standing`, `fell_to`).
 15. **B15 PC calibration (PC; one re-record of combat goldens, the armour reference and the export).** UPR §4 (the
-    scale) → `16_PESSIMIST_PC_B` → `16_PESSIMIST_PC_D` → `18_DETERMINISM_no_certain_matchup` → `16_PESSIMIST_PC_A`
-    → `14_VERBS_PHYSICAL_A` A3 (in `modules/combat/`, C3-C8; `22_HAPPENINGS_A` edit 3's `mortal_terms` lands here)
-    → UPR §3's flip; `29_DICE` rows 5–7, 9. Gate: `29_DICE` gates (a)–(c); each step's own gate read before the next.
+    scale) → `16_PESSIMIST_PC_B` → `16_PESSIMIST_PC_D` → `14_VERBS_PHYSICAL_A` A3 (in `modules/combat/`, C3-C8;
+    `22_HAPPENINGS_A` edit 3's `mortal_terms` lands here; moved ahead of the two files that depend on it, U6 R-A,
+    UPR §5 row 5 edited to match) → `18_DETERMINISM_no_certain_matchup` → `16_PESSIMIST_PC_A` → UPR §3's flip;
+    `29_DICE` rows 5–7, 9. Gate: `29_DICE` gates (a)–(c); each step's own gate read before the next.
 16. **B16 PC round (PC).** `03_PC_duel_round_and_approach_B` steps 1–2 (round keys, A-30) → 3a, 3b, 3e, 3c at 0 →
     step 4 with `03_PC_exits_withdrawal_recovery` Part A; `03_PC_duel_round_and_approach` marked superseded.
     Gate: PB's per-step gates and the added R-6 gate.
 17. **B17 MB scale (MB).** `04_MB_headcount_grade_and_scale` (the `Drawn` re-homing, A-67 to A-70) →
-    `04_MB_typed_outcome_and_one_path` with `U5b_MB_residue` §1 → `04_MB_unit_loadout_and_weapon_in_hand_B` stages
-    1–2 (`04_MB_unit_loadout_and_weapon_in_hand` superseded). Gate: the troop exporter's `--check`; seed 2's pin moved and re-recorded.
+    `04_MB_typed_outcome_and_one_path` §1, §2, §4 with `U5b_MB_residue` §1 → `04_MB_unit_loadout_and_weapon_in_hand_B`
+    stages 1–2 (creates `references/troops.yaml` and `tools/export_troops.py`; `04_MB_unit_loadout_and_weapon_in_hand`
+    superseded) → `04_MB_typed_outcome_and_one_path` §3 (moves table content into the troop file; it needs the file
+    and its exporter, U6 R-A). Gate: the troop exporter's `--check`; seed 2's pin moved and re-recorded.
 18. **B18 PC content (PC).** `U5b_PC_residue` §3 census → `03_PC_person_inputs_content` Parts B–D → `03_PC_loadout_and_carry`.
-19. **B19 MB field calibration (MB; one re-record).** `27_MB_A` → `27_MB_C` (the multiplier's test; zero if the
-    first arm passes, A-77; 27C-3 (h) edits the LINEAR band, C3-C6) → `16_PESSIMIST_MB_one_stamina_ledger` 1–2 →
+19. **B19 MB field calibration (MB; one re-record).** `26_MASS_BATTLE_calibration_targets`' T-rows written first as
+    the batch's tests (§6.1 rule; 27C reads its "results" block) → `27_MB_A` 27A-1 to 27A-4 with `27_MB_C` 27C-1 (the
+    named draws, UMR §6 row 4) → `16_PESSIMIST_MB_one_stamina_ledger` 1–2 →
     `04_MB_cr12_linear_law` 1–3 with `16_PESSIMIST_MB_partition_and_the_pair_rule` 2–4 → `04_MB_cell_hierarchy_as_data`
-    with `26_MASS_BATTLE_cell_scale_and_time` → `26_MASS_BATTLE_rout_pursuit_and_giving_ground` with
-    `16_PESSIMIST_MB_rout_has_two_exits` → `26_MASS_BATTLE_calibration_targets` read last; UMR §4–§6. Gate:
+    with `26_MASS_BATTLE_cell_scale_and_time` → `27_MB_A`'s window and lull actions (on cell-scale §3; U6 R-A) →
+    `26_MASS_BATTLE_rout_pursuit_and_giving_ground` with `16_PESSIMIST_MB_rout_has_two_exits` → UMR §4–§6 → 27C-2's
+    table and 27C-3 (the multiplier; zero if the first arm passes, A-77; 27C-3 (h) edits the LINEAR band, C3-C6) in
+    the one re-record → `26_MASS_BATTLE_calibration_targets` read last. Gate:
     `26_MASS_BATTLE_calibration_targets` T-rows; twice the men win; `lanchester_signature.py` as edited.
 20. **B20 MB orders (MB).** `04_MB_manager_battle_one_resolver` §2–§6 with `26_MASS_BATTLE_maneuver_orders` →
     `04_MB_playable_field_scenario` A, C, D → `27_MB_D` → `17_CENSUS_REST_2` W1.
-21. **B21 FA governance (FA).** The order of C3-D5.
-22. **B22 MB armies (MB).** `14_VERBS_MILITARY_A` → `_MILITARY_B` → `_MILITARY_C` (e6 per C3-L11) → `_MILITARY_D`
-    → `14_VERBS_PHYSICAL_B` → `27_MB_E` (C3-L11) → `07_SE_campaign_supply_and_muster` with `U5b_MB_residue`'s
-    realm item → `04_MB_playable_field_scenario` §E → RES-V §4 → `17_CENSUS_C1A_02` W2 rows for these verbs.
+21. **B21 FA governance (FA).** The order of C3-D5, with three moves by U6 R-A (edges in §1.2): `06_FA_seat_terms_and_turnover`
+    → `06_FA_remit_grant_by_row` → `06_FA_seat_terms_by_body_B` → `14_VERBS_BINDING_A` → `U5d_FA_owed_edits` §2
+    (custody) → `14_VERBS_BINDING_C` at control (its `revoke`/`succeed` draws, `rank_step` 0 until `L1-A12`) →
+    `22_HAPPENINGS_B` edits 1–2 (moved after BIND_C: it "binds on" BIND_C's `succeed` draw, `22_HAPPENINGS_B…:8`, `:19`)
+    → `06_FA_decree_binds` edits 1–2 → `16_PESSIMIST_FA_C` (the command predicate) → `06_FA_decree_binds` edit 3 (who
+    is bound reads the predicate, A-22) → `16_PESSIMIST_FA_A` (after HAP_B, C3-K9) → `14_VERBS_BINDING_D` →
+    `06_FA_war_lives_in_seats_B` edits 1–3 → `06_FA_levy_through_the_seat_B` → `16_PESSIMIST_FA_B` → the rest of
+    `U5d_FA_owed_edits` → `06_FA_playable_scenario` → `14_VERBS_BINDING_C`'s flip (moved after the scenario its
+    Depends line names) → `06_FA_shortest_loop_B`.
+22. **B22 MB armies (MB).** `27_MB_E` (C3-L11; the loss ledger MILITARY_A, _C and _D read, moved first by U6 R-A) →
+    `14_VERBS_MILITARY_A` → `_MILITARY_B` → `07_SE_campaign_supply_and_muster` with `U5b_MB_residue`'s realm item
+    (moved ahead of the muster that names it) → `_MILITARY_C` (e6 per C3-L11) → `_MILITARY_D` →
+    `14_VERBS_PHYSICAL_B` → `04_MB_playable_field_scenario` §E → RES-V §4 → `17_CENSUS_C1A_02` W2 rows for these verbs.
 23. **B23 land (FA).** `06_FA_war_lives_in_seats_B` edit 6 → `U5d_FA_land_and_seats_pass_on_a_won_march` (C3-L7,
     C3-L12) → `14_VERBS_MATERIAL_D` §6 (`seize`) → `26_MASS_BATTLE_aggression_and_land` → RES-V §2–§3 → UMR §2 →
     `14_VERBS_BINDING_E`. Gate: the land proposal's arms a–i; a won march followed by `seize` moves the land and
@@ -165,13 +193,16 @@ CLAUDE.md §7).
     item → `12_ARCS_cited_evidence` → `02_CHAR_which_ground_moves_whom` → VRES §2 hearing rows → `17_CENSUS_REST_2`
     W2; the three superseded SC/FI files marked. Gate: `build_hearing`; `sitting_exchanges` leaves 0.
 25. **B25 FI questioning (FI).** `14_VERBS_SOCIAL2_A` → `_B` → `_C` → `_A` edit 2 (and `14_VERBS_MATERIAL_C`'s
-    `research` pair) → `_D` (`tie`, the verb roster 67 → 68) → `08_FI_08_knots-season-form` §2–§3. Gate: the roster
+    `research` pair) → `08_FI_08_knots-season-form` §2–§3 → `_D` (`tie`, the verb roster 67 → 68; after FI_08 §3 as its
+    own Lands line says, U6 R-A). Gate: the roster
     count read by command, not typed.
 26. **B26 FI inquiry (FI).** `19_LACUNA_questioning_has_an_approach_and_a_cost` → `16_PESSIMIST_FI_B` →
     `16_PESSIMIST_FI_D` → `14_VERBS_MATERIAL_D` (not §6) → `_MATERIAL_E` → `14_VERBS_PHYSICAL_C`.
-27. **B27 SC proceedings (SC).** `05_SC_acquittal` → `05_SC_arrangement_rows_that_bind` → `U5c_SC_proceedings_residue`
-    → `16_PESSIMIST_SC_C` → `16_PESSIMIST_SC_D` → `19_LACUNA_verdict_ladder_and_reversal` (its chronicle line in B36).
-28. **B28 social verbs (SC).** `14_VERBS_SOCIAL1_B` → `_SOCIAL1_C` → `_SOCIAL1_D` (the challenge spent, C3-A4) →
+27. **B27 SC proceedings (SC).** `05_SC_acquittal` → `05_SC_arrangement_rows_that_bind` → `16_PESSIMIST_SC_C` →
+    `16_PESSIMIST_SC_D` → `U5c_SC_proceedings_residue`'s remaining sections (its own Depends line names SC_C and SC_D;
+    §1 landed in B05, §2 and §6 in B24; §3 and §8 part 2 stay design-first, unscheduled, per its Lands line; U6 R-A) → `19_LACUNA_verdict_ladder_and_reversal` (its chronicle line in B36).
+28. **B28 social verbs (SC).** `14_VERBS_SOCIAL1_B` → `_SOCIAL1_D` (the challenge spent, C3-A4) → `_SOCIAL1_C` (after
+    `_D`, as its own Lands line says; U6 R-A) →
     `28_CORE_scene_access_A` (the person key at control, C3-K8) → `28_CORE_scene_access_B`. Gate: 28A's twelve rows
     with their named tests (§6.1 lists them as owed).
 29. **B29 PC custody (PC).** `14_VERBS_PHYSICAL_A` A1–A2 (custody, capture, arrest).
@@ -190,7 +221,8 @@ CLAUDE.md §7).
     §2 `explain` kept live) → `11_GO_fidelity_and_campaign_modes` → `16_PESSIMIST_GO_the_offer_names_what_is_held` →
     `01_CORE_one_scene_contract` → `U5a_CORE_owed_edits`' GO-B §8 item → `17_CENSUS_C1A_02` W1.
 35. **B35 WR thread (WR).** `09_WR_B_threadwork_session_and_practitioner` → `14_VERBS_PHYSICAL_D` with
-    `17_CENSUS_REST_2` W3 → `08_FI_08` §1, §4 → `12_ARCS_substrate_as_ground` (C3-C14) → `U5d_WR_zero_coherence_unknowable`.
+    `17_CENSUS_REST_2` W3 → `08_FI_08` §1, §4 → `U5d_WR_zero_coherence_unknowable` → `12_ARCS_substrate_as_ground`
+    (C3-C14; it names the zero-coherence file among its Depends, U6 R-A).
 36. **B36 WR story instruments (WR).** `09_WR_story_instruments_that_can_fail` → `09_WR_B_readings_of_closure_and_tension`
     with `09_WR_B_chronicle_that_tells` (and the verdict ladder's chronicle line) → `16_PESSIMIST_WR_D` →
     `20_NARRATIVE_F` (its `stands_for` clause in B38) → `23_STORY_D` → `17_CENSUS_C1B_02` (not W-2). `harness/storybar.py` serially (C3-K7).
@@ -198,18 +230,25 @@ CLAUDE.md §7).
     `16_PESSIMIST_WR_C` reduced (C3-K4) and `U5d_WR_owed_edits` §2 (c) → `22_HAPPENINGS_C` with UPR §6 →
     `22_HAPPENINGS_D`.
 38. **B38 narrative and regimes (WR).** `20_NARRATIVE_A` (with `20_NARRATIVE_F`'s clause; flips CHAR_A's `reading`) →
-    `20_NARRATIVE_B` → `28_CORE_scene_access_C` (C3-D8) → `20_NARRATIVE_C` → `20_NARRATIVE_D` → `20_NARRATIVE_E`
-    (not edit 1) → `30_WR_B` → `30_WR_G` → `31_WR_A` → `31_WR_B` (C3-L6) → `31_WR_C` → `30_WR_A` (with
-    `09_WR_B_draws` edit 4 and the weather's era part) → `30_WR_C` → `23_STORY_A` (C3-L14) → `30_WR_D` → `30_WR_E`
-    → `30_GO_F` → `U5d_SE_cohort_heavy_moves_and_caste`.
-39. **B39 procedural generation and cases (WR).** `21_PROCEDURAL_A` → `_B` → `_E` → `12_ARCS_case_on_the_realm`
-    with `01_CORE_case_setup_and_beats` and `21_PROCEDURAL_C` → `_D` → `U5d_STORY_owed_edits` → `23_STORY_B` →
+    `20_NARRATIVE_C` (moved first of the three: NARR_B and 28C each say it "lands first"; U6 R-A) → `20_NARRATIVE_B`
+    (carrying `30_WR_D` commit 1) → `28_CORE_scene_access_C` (C3-D8) → `20_NARRATIVE_D` commit 1 → `20_NARRATIVE_E`
+    (not edit 1) → `30_WR_B` → `30_WR_G` → `31_WR_A` (its commit 4, the `creed:` values) → `20_NARRATIVE_D`'s later
+    commits → `31_WR_B` (C3-L6; `sway_gain` 0 until `L1-A92`) → `30_WR_A` (with `09_WR_B_draws` edit 4 and the
+    weather's era part) → `30_WR_C` → `23_STORY_A` (C3-L14) → `30_WR_D` → `30_WR_E` → `30_GO_F` → `31_WR_C` (moved
+    after `30_GO_F`, which its Depends names; U6 R-A) → `U5d_SE_cohort_heavy_moves_and_caste`.
+39. **B39 procedural generation and cases (WR).** `21_PROCEDURAL_A` → `_B` → `_E` → `21_PROCEDURAL_C` (the prologue and
+    its year) → `01_CORE_case_setup_and_beats` (the base `12_ARCS_case_on_the_realm.md:7` names) → `12_ARCS_case_on_the_realm`
+    (U6 R-A: the three were "with", now ordered by `12_ARCS`'s own Depends line) → `_D` → `U5d_STORY_owed_edits` → `23_STORY_B` →
     `23_STORY_C` → `23_STORY_E`; the split parts of `15_INSTITUTIONS_SYNTHESIS_B`, `_COLONIAL_D`,
     `17_CENSUS_C1B_02` W-2, `U5d_FA_owed_edits` and `30_WR_A` that need these.
 40. **B40 institutions scenarios (FA).** `15_INSTITUTIONS_SYNTHESIS_D` → `_BYZANTINE_F` → `_COLONIAL_E` →
-    `_PAPACY_F` (each with A-80's entrenched-world arm, C3-C12) → the four grounding files → `_SYNTHESIS_E`.
-41. **B41 GO port gate (GO).** `16_PESSIMIST_GO_surface_pins` → `11_GO_port_gate_order_and_coverage`. Gate: the
-    pins and vectors it names; no draw or float log (C3-L3).
+    `_PAPACY_F` (each with A-80's entrenched-world arm, C3-C12) → the four grounding files in the order
+    `_BYZANTINE_grounding` → `_VENICE_grounding_E` → `_COLONIAL_grounding_F` (which names VENICE_grounding_E edits 1
+    and 3 among its Depends; U6 R-A) → `_PAPACY_grounding` → `_SYNTHESIS_E`.
+41. **B41 GO port gate (GO; after `L1-A29` and `L1-A30`, §1.4).** `16_PESSIMIST_GO_surface_pins` (GO-08 builds
+    `tools/export_oracle_pins.py` and `harness/port_oracle.py`) → `11_GO_port_gate_order_and_coverage`. Gate: the
+    pins and vectors it names, **including the B06 `fmath` and `(key, n) → u` vectors' export round-trip moved here**
+    (`export_oracle_pins.py --check` reds on an edited vector; §1.3); no draw or float log (C3-L3).
 
 ### 1.1 Rules for running batches at once (STAGES.md "Parallel sessions", applied to this graph)
 

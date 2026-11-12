@@ -76,7 +76,7 @@ class Draw:
         return (word >> 11) / 9007199254740992.0        # 53 high bits / 2**53
     # random(), below(), die(), pick(), normal(), beta(): as 11_GO_one_draw_owner.md, each a function of u()
 
-def H2(key_hex: str, n: int) -> str     # state/ids.py, beside H: blake2b(f"v1d|{key_hex}|{n}", digest_size=8)
+def H2(key_hex: str, n: int) -> str     # draw.py (the leaf; ids.py imports it): blake2b(f"v1d|{key_hex}|{n}", digest_size=8)
 def seeded(key_hex: str) -> Draw        # the one constructor
 ```
 
@@ -100,28 +100,32 @@ that is no longer limited to them.
 
 | file | owner | edit |
 |---|---|---|
-| `engine/season/state/ids.py` | IN | `H2` beside `H`; `draw_factory` returns `seeded(...)` |
-| `engine/dice_engine/draw.py` | DICE | `Draw.u` as above (the rest as `11_GO_one_draw_owner.md`) |
+| `engine/season/state/ids.py` | IN | `draw_factory` returns `seeded(...)`, importing `seeded` (and, where it needs it, `H2`) from `engine/dice_engine/draw.py`; `H` stays here, the id mint |
+| `engine/dice_engine/draw.py` | DICE | `H2` (its one home: U6 R-A, `U3_CONFLICT_LEDGER.md` C3-R3) and `Draw.u` as above (the rest as `11_GO_one_draw_owner.md`) |
 | the v12 cards for B10-20, GO-16 and GO-08 (not the v11 lines `workplans/valoria_master_workplan_v11_part3.md` B10-20 and `…_part5.md` GO-16, GO-08, which this session's content supersedes) | GO | GO-16 is not carried into v12 (the order line and the freeze row's "the draw log's digest" with it); GO-08's text as above; exit line 4 drops `export_oracle_draws --check` (a plan edit for the v12 author) |
 | `architecture/meta/04_CODE_ARCHITECTURE.md` §C.12 | **Jordan** (A-30 ruled the substance; the text is owed, `OWED_TO_UNIFICATION.md` §A, applied only by his amendment; no lane edits `04`) | the RNG row: "the draw (built) · a function of its key, `H(seed, tick, subject, purpose)`; an index `n` within one key; no generator object, nothing global · see rejection 4"; rejection 4's last two sentences ("not yet load-bearing, because no roll exists yet") replaced by the measured count |
 | every seeded golden under `engine/season/tests/`, `engine/tests/` | IN | one re-record, said plainly in the commit (§7) |
 
 ## The gate (execution artifacts)
 
-`probe.py census` was lane scratch, not in the repository. Committed: NEW `engine/tests/test_draw_keyed.py` (CI job
-`sim-regression`, CLAUDE.md §3; `engine/dice_engine/` has no tests directory): `test_u_is_a_function_of_the_key`,
-`test_n_zero_is_the_key_itself`, `test_n_one_remixes_with_h2`, `test_no_random_Random_in_runtime_code` (the `rg -n
-"random\.Random\(" engine modules` scan outside tests returns nothing). Command:
-`python -m pytest engine/tests/test_draw_keyed.py -q`. Readings:
+`probe.py census` was lane scratch, not in the repository. Committed, in the one test file of the draw owner,
+`engine/tests/test_draw.py` (CI job `sim-regression`, CLAUDE.md §3; `engine/dice_engine/` has no tests directory; U6 R-A,
+C3-R3: one file, shared with `11_GO_one_draw_owner.md`'s gate, never a second): `test_u_is_a_function_of_the_key`,
+`test_n_zero_is_the_key_itself`, `test_n_one_remixes_with_h2`, `test_no_random_Random_in_runtime_code` (the scan as
+`11_GO_one_draw_owner.md` gate 2 defines it, with its three named harness controls). Command:
+`python -m pytest engine/tests/test_draw.py -q`. Readings:
 
 1. A census run as above on the new tree: zero `random.Random` instances constructed in a computed
-   season (`grep -rn "random\.Random(" engine modules` outside tests → none).
+   season (the scan of `11_GO_one_draw_owner.md` gate 2 prints nothing outside its three named harness controls).
 2. Same seed, same hash, twice, under `PYTHONHASHSEED` 0, 1, 2 (`m1_acceptance` row 2).
 3. A two-sample check that the re-pin is a stream change and not a balance change: over seeds 0–9,
    two seasons, the per-verb act counts and the degree histogram of the new tree against the old lie
    within the seed-to-seed spread of the old (the control is the old tree's own spread). This is the
    instrument a re-record owes (`CLAUDE.md` §7); it is run once, at the re-pin.
-4. `tools/export_oracle_pins.py --check` passes with the `draws` vectors and reds when one is edited.
+4. In B06: `engine/tests/test_draw.py::test_samplers_match_their_vectors` reproduces the `(key, n) → u` vectors held in
+   the test. The export round-trip (`tools/export_oracle_pins.py --check` passes with the `draws` vectors and reds when
+   one is edited) is read in B41, where GO-08 builds that exporter (U6 R-A: the instrument does not exist by B06;
+   `U3_DEPENDENCY_ORDER.md` §1.3).
 
 ## The falsifier
 

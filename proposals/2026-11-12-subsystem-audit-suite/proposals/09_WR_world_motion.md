@@ -6,8 +6,8 @@ Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 (A-15 rules natural death on, a
 
 ## Status: PROPOSED
 
-Lands in batch: B12 (world motion and ground) for edits 1–3, after `09_WR_B_draws_not_thresholds.md` edits 1–3 (U3 §1 item 13); edit 4's flip in B37 (happenings) after `22_HAPPENINGS_A` edit 1.
-Depends on: `09_WR_B_draws_not_thresholds.md` (B12); `16_PESSIMIST_WR_B_the_calamity_strains_and_breaks.md` edits 1–2 (B12) for edit 1's coupling flip; `22_HAPPENINGS_A` edit 1 (B37, the ages) for edit 4.
+Lands in batch: B12 (world motion and ground) for edits 1–3, **before** `09_WR_B_draws_not_thresholds.md` edits 1–3, which re-mechanise this file's edit 1 crossing and edit 3 reaching on top of the wound row and the settled selector (U6 R-A, `U3_DEPENDENCY_ORDER.md` §1.2); edit 1's `lattice_coupling` flip after `16_PESSIMIST_WR_B` edits 1–2 in the same batch; edit 4's flip in B37 (happenings) after `22_HAPPENINGS_A` edit 1.
+Depends on: nothing proposed for edits 1–3 (the draws file depends on this one, not the reverse); `16_PESSIMIST_WR_B_the_calamity_strains_and_breaks.md` edits 1–2 (B12) for edit 1's coupling flip; `22_HAPPENINGS_A` edit 1 (B37, the ages) for edit 4.
 
 Carries findings F-WR-04 and F-WR-06 of `audits/09_WR_audit.md`, and its §6 resolutions R-03, R-04, R-05
 and R-07. Evidence ids (E-nn) are that file's §12. Edit 4 (natural death) is ruled: A-15, on after the 46

@@ -92,7 +92,13 @@ becomes the seat row's value. T13 T4's `standing_dice` is not created as a fixtu
   invariant row *"a seat adds no verb and no modifier | STRUCTURAL"* becomes *"a seat adds no verb; its only
   modifier is `modifier?`, a level read off `Act.via` by the `office` leverage source, and a seat above the
   actor's stands against an act only as the obstacle term `rank_gap` | STRUCTURAL | one column; one reader;
-  `eligibility_kinds` has no `capability` member and the loader raises on one"*. `holonic_ARCHITECTURE.md` §9.2
+  `eligibility_kinds` has no `capability` member and the loader raises on one"*. **Its PART D twin, row 33
+  (`04:1062`, "eligibility by capability, or a seat with a modifier \| no bonus field; no modifier column; …"),
+  becomes** *"eligibility by capability, or a seat that gates or adds a bonus \| no bonus field; one modifier column,
+  `modifier?`, a named level read off `Act.via` by the `office` source (A-12): it helps a roll and gates nothing;
+  `capability` is not an eligibility kind and the loader raises on one \| STRUCTURAL at the type; MECHANICAL at load"*
+  (U6 repair lane R-A; the amendment's gate node and dormant form: `unified/U3_LAYER1_AMENDMENTS.md` `L1-A12`).
+  `holonic_ARCHITECTURE.md` §9.2
   ("`capability` supplies dice and gates nothing") is about a **capability's** rank and is **not** amended:
   the register's citation of it as the seat rule (D-12 text) conflates two ranks (see glossary *rank*).
 

@@ -2,7 +2,7 @@
 
 ## Status: WORK LEDGER (unification lane U4c, `UNIFICATION_BRIEF.md` lane U4 and test 9; reference, resolves nothing at runtime, CLAUDE.md §0.05; the table is generated, the census is read; deleted when v12 is adopted)
 
-Read at: branch `ccr-62958c70-0kjhsw`, working-tree HEAD `8e88508`, 2026-11-12 (the tree is dirty: this lane's edits and the sibling U4 lanes' files are uncommitted). Producer: Sonnet lane U4c. Files on disk at generation: **496** (every file under `proposals/2026-11-12-subsystem-audit-suite/`, plus the 15 `research/` files the suite added). Rows 1 to 496 below are produced by a Bash script (scratch, not committed): it lists the directories, reads each file's first `## Status:` line, counts lines that begin `Reconciled:`, `Folded:` and `Grounded:` or `Re-grounded:`, takes the size, parses the batch handle from `unified/U3_DEPENDENCY_ORDER.md` §3.1 (node table) and §2.1 (split parts), and tallies closure dispositions from `unified/U5_FINDINGS_CLOSURE_*.md`.
+Read at: branch `ccr-62958c70-0kjhsw`, working-tree HEAD `8e88508`, 2026-11-12 (the tree is dirty: this lane's edits and the sibling U4 lanes' files are uncommitted). Producer: Sonnet lane U4c; sections 3.1 to 3.4 re-run by repair lane R-B (Sonnet), which also edited four proposals (3.3.1). Files on disk at generation: **496** (every file under `proposals/2026-11-12-subsystem-audit-suite/`, plus the 15 `research/` files the suite added). Rows 1 to 496 below are produced by a Bash script (scratch, not committed): it lists the directories, reads each file's first `## Status:` line, counts lines that begin `Reconciled:`, `Folded:` and `Grounded:` or `Re-grounded:`, takes the size, parses the batch handle from `unified/U3_DEPENDENCY_ORDER.md` §3.1 (node table) and §2.1 (split parts), and tallies closure dispositions from `unified/U5_FINDINGS_CLOSURE_*.md`.
 
 ## 0. What the unification stage reads in full, and what at heads
 
@@ -33,7 +33,7 @@ Not a mechanism: every class here is prose about prose (CLAUDE.md §0.05). Nothi
 | directory | LIVE-PROPOSAL | INCOMPLETE-LIVE | SUPERSEDED | REFERENCE-AUDIT | DIGEST | WORK-ORDER | REFERENCE | total |
 |---|---|---|---|---|---|---|---|---|
 | suite root (briefs) | · | · | · | · | · | 8 | 1 | 9 |
-| proposals/ | 246 | 47 | 7 | · | · | · | · | 300 |
+| proposals/ | 211 | 82 | 7 | · | · | · | · | 300 |
 | audits/ | · | · | · | 65 | · | · | · | 65 |
 | census/ | · | · | · | 6 | · | · | · | 6 |
 | digests/ | · | · | · | · | 51 | · | · | 51 |
@@ -41,57 +41,94 @@ Not a mechanism: every class here is prose about prose (CLAUDE.md §0.05). Nothi
 | unified/ | · | · | · | 6 | · | 8 | 10 | 24 |
 | unified/work | · | · | · | · | · | 13 | · | 13 |
 | research (repo `research/`) | · | · | · | · | · | · | 15 | 15 |
-| **all** | **246** | **47** | **7** | **77** | **64** | **29** | **26** | **496** |
+| **all** | **211** | **82** | **7** | **77** | **64** | **29** | **26** | **496** |
 
 Directory `unified/work/` is counted apart from `unified/`. The two sibling-lane outputs `unified/U4_TRACEABILITY.md` and `unified/U4_FACT_CHECK.md` are counted if they existed on disk at generation and were not opened by this lane.
 
 ## 3. Test 9 census (implementation-ready, `UNIFICATION_BRIEF.md` item 9)
 
-### 3.1 Counts first
+Sections 3.1 to 3.4 were re-run and rewritten by repair lane R-B (`unified/U6_VERDICT_AND_REPAIRS.md` finding 1) after the Fable verdict found the first census (lane U4c: 246 COMPLETE, 47 INCOMPLETE) overstated. The earlier counts are superseded; the earlier lane's completions are kept in 3.3 as the record.
 
-**300 proposal files: 246 COMPLETE, 47 INCOMPLETE, 7 SUPERSEDED (no instruction to check).** Of the 246 COMPLETE, 50 carry 65 `[UNVERIFIED …]` marks that mostly state a fallback and a first step ("open the site at landing"); they are counted COMPLETE where both branches are written (this lane tested none of the 65 beyond those in section 3.3), and the number is shown per file in the table (`open checks`).
+### 3.1 The rule, and the counts
 
-| family | COMPLETE | INCOMPLETE | SUPERSEDED | total |
-|---|---|---|---|---|
-| PESSIMIST | 38 | 4 | 0 | 42 |
-| INSTITUTIONS | 30 | 0 | 0 | 30 |
-| VERBS | 21 | 7 | 0 | 28 |
-| MB | 16 | 6 | 1 | 23 |
-| WR | 19 | 3 | 0 | 22 |
-| SC | 13 | 3 | 3 | 19 |
-| CHAR | 12 | 3 | 0 | 15 |
-| CORE | 12 | 3 | 0 | 15 |
-| FA | 9 | 3 | 0 | 12 |
-| SE | 9 | 3 | 0 | 12 |
-| PC | 7 | 3 | 1 | 11 |
-| FI | 8 | 1 | 1 | 10 |
-| GO | 9 | 0 | 1 | 10 |
-| CENSUS | 7 | 1 | 0 | 8 |
-| DICE | 7 | 1 | 0 | 8 |
-| NARRATIVE | 6 | 0 | 0 | 6 |
-| STORY | 5 | 1 | 0 | 6 |
-| PROCEDURAL | 4 | 1 | 0 | 5 |
-| ARCS | 2 | 2 | 0 | 4 |
-| DETERMINISM | 4 | 0 | 0 | 4 |
-| HAPPENINGS | 3 | 1 | 0 | 4 |
-| LACUNA | 4 | 0 | 0 | 4 |
-| CAP | 1 | 0 | 0 | 1 |
-| TESTS | 0 | 1 | 0 | 1 |
-| **all** | **246** | **47** | **7** | **300** |
+**The rule (one rule, applied to every file).** A proposal is **INCOMPLETE** if any of its edits, or any arm of its gate:
 
-INCOMPLETE files by code (a file may carry two): DEP 19, CONTENT 15, DESIGN 15, SITE 6. CONTENT = values that are Jordan's or a content pass's to author; DEP = blocked on a dependency that has no carrier in the suite, or on a decision another file or lane owes; DESIGN = a part the file itself leaves undecided; SITE = a symbol or site the executing session must open first.
+(i) **waits on a v11 workplan position** (`workplans/valoria_master_workplan_v11*.md`: CR-nn, CP-Tnn-nn, B10-nn, ED-IN positions) that no suite proposal carries and that is not in the tree. The marks looked for are "MISSING until `STAGES.md` step 5", "waits on", "lands after", "`[PL]`", "v11" in the file's first 30 lines or in its gate section. Code **DEP-v11**.
+
+(ii) **depends on a symbol or carrier that `unified/U3_DEPENDENCY_ORDER.md` §6.3 lists as "no carrier"**, or that exists neither in the tree nor as another proposal's edit (`_eff_dispatch`, a writer of `Person.coherence`, a goal row carrying `axis:`, `besiege` in `march_postures`, the game reader of `write_matrix.yaml:375-381`). A dependency on a symbol that another proposal's own edit creates is **ordering**, which U3 owns, and is not incompleteness. Code **DEP-NOCARRIER**.
+
+(iii) **is marked design-first or leaves a design pass open** inside an edit or gate arm the file itself lands (a design-first part the file places outside its edits, as unscheduled, held, handed to another named file or "not built here", does not count; a decision another lane or U1 owes and the file cannot proceed without does). Code **DESIGN**.
+
+(iv) **lacks any of** files and symbols, order of edits, schema or data rows, call sites, named tests, a gate that is an execution artifact with its expected reading, falsifier and control, declared hash movers, dependencies, what lands it, cost class and tier, and the missing part is not decidable from the repository: **SITE** where the executing session must open or measure a site first, **CONTENT** where the missing part is values, names or rows that are Jordan's or a content pass's to author.
+
+Where the missing part was decidable from the repository it was completed in the proposal (3.3) and the file counts COMPLETE only after.
+
+**300 proposal files: 211 COMPLETE, 82 INCOMPLETE, 7 SUPERSEDED (no instruction to check).** The first census read 246 / 47 / 7. 36 files moved from COMPLETE to INCOMPLETE under the rule (17 INSTITUTIONS, 3 SC, 8 across FI, LACUNA, PESSIMIST and VERBS, 1 FA, 4 across SE and WR, and one each in CORE, ARCS and VERBS); one file (`26_MASS_BATTLE_rout_pursuit_and_giving_ground.md`) moved from INCOMPLETE to COMPLETE after its site was named from the tree. **211 is an upper bound, not a count**: 6 of the 13 files read in full had a defect the first census had marked COMPLETE (3.2), and 236 files were not read in full.
+
+| family | COMPLETE | INCOMPLETE | SUPERSEDED | total | INCOMPLETE under the first census |
+|---|---|---|---|---|---|
+| PESSIMIST | 36 | 6 | 0 | 42 | 4 |
+| INSTITUTIONS | 13 | 17 | 0 | 30 | 0 |
+| VERBS | 18 | 10 | 0 | 28 | 7 |
+| MB | 17 | 5 | 1 | 23 | 6 |
+| WR | 16 | 6 | 0 | 22 | 3 |
+| SC | 10 | 6 | 3 | 19 | 3 |
+| CHAR | 12 | 3 | 0 | 15 | 3 |
+| CORE | 11 | 4 | 0 | 15 | 3 |
+| FA | 8 | 4 | 0 | 12 | 3 |
+| SE | 8 | 4 | 0 | 12 | 3 |
+| PC | 7 | 3 | 1 | 11 | 3 |
+| FI | 6 | 3 | 1 | 10 | 1 |
+| GO | 9 | 0 | 1 | 10 | 0 |
+| CENSUS | 7 | 1 | 0 | 8 | 1 |
+| DICE | 7 | 1 | 0 | 8 | 1 |
+| NARRATIVE | 6 | 0 | 0 | 6 | 0 |
+| STORY | 5 | 1 | 0 | 6 | 1 |
+| PROCEDURAL | 4 | 1 | 0 | 5 | 1 |
+| ARCS | 1 | 3 | 0 | 4 | 2 |
+| DETERMINISM | 4 | 0 | 0 | 4 | 0 |
+| HAPPENINGS | 3 | 1 | 0 | 4 | 1 |
+| LACUNA | 2 | 2 | 0 | 4 | 0 |
+| CAP | 1 | 0 | 0 | 1 | 0 |
+| TESTS | 0 | 1 | 0 | 1 | 1 |
+| **all** | **211** | **82** | **7** | **300** | **47** |
+
+INCOMPLETE files by reason code (a file may carry several; 96 codes over 82 files): **DEP-v11 39, DESIGN 23, CONTENT 15, DEP-NOCARRIER 12, SITE 7**. The first census's "DEP" (19) is split: a wait on a v11 position is DEP-v11, a symbol nothing builds is DEP-NOCARRIER, a decision another lane owes (the OBS §2 membership U1 has not taken) is DESIGN, and a wait on another proposal's edit is ordering and is no longer a reason (three files with that as their only reason, `28_CORE_scene_access_C`, `29_DICE_one_opposed_rule_form_and_tuning` and `27_MB_C_dynamic_strength_and_the_residual_chance`, stay INCOMPLETE as SITE because each also states a part that cannot be named until the predecessor exists).
+
+The `[UNVERIFIED …]` marks counted by the first census (65 marks in 50 files that state a fallback and a first step) were not re-tested here; a file that states both branches counts COMPLETE on this point.
 
 ### 3.2 Method, and what it does not show
 
-The census is a reading of the 300 files **as they stand after waves 1 to 3**, not a copy of the read lanes' §7 verdicts (`unified/work/R1_READ.md` to `R5_READ.md`): those marked almost every proposal INCOMPLETE for want of a named test, a lands-it line and a tier, and the wave-3 rewrite lanes then added them (`unified/work/W3_*_DONE.md`), so the old verdicts are stale. This lane did four things, in this order.
-1. A script scanned every proposal for the eleven parts of item 9 (files and symbols, order, rows or schema, call sites, named tests, gate, falsifier, control, hash movers, dependencies, lands-it, cost class and tier): 296 of 300 carry a `Lands in batch` line, 294 name a model tier, 289 name a `test_` function or file, 298 have a gate heading, all 300 a falsifier. It flagged 36 non-superseded files with a marker gap (before this lane's edits). **This lane opened the relevant lines** (head, cost-class and gate sections) of the files whose gap was lands-it, dependency, hash movers or tests, except that `15_INSTITUTIONS_SYNTHESIS_C_crossings.md`, `21_PROCEDURAL_B_cast_and_seats.md` and `21_PROCEDURAL_E_names_and_texts.md` were judged on their cost-class line only; for the 13 files whose gap was the word "control" it read the falsifier lines of nine (each states a failing reading; none names a separate control arm in so many words, which is the one soft point of the census) and did not read the other four. Most gaps were wording (the file declares its hash movers in its gate, or names a command gate where no test file is needed); six were real (no dependency line) and were completed (section 3.3).
-2. It collected every `INCOMPLETE` token in the 300 files (71 files carry one) and opened each line: 47 are a mark that the file itself leaves something unfinished, the rest cite a read lane's old verdict that the rewrite lane closed. The 47 are the INCOMPLETE rows (section 3.4); every line number cited there is a line this lane opened.
-3. It collected every body-level `[UNVERIFIED …]` mark (81 lines in 61 files, not counting marks reported settled) and tested ten of them against the tree: seven were decidable by opening or grepping and were completed in five files (section 3.3); three (the value shape of a `matter.determined` deposit, which two files mark; the doer of a `field.won` Event) were not decidable by one grep and stay conditional. The other marks are conditional instructions with the fallback written and are counted in `open checks`; this lane did not test them.
-4. It drew 12 COMPLETE files at random (seed 7) and checked each of the eleven parts by line number: 11 passed; one lacked a dependency line (`08_FI_07_shortest-playable-case.md`, completed). That is a sample of 12 of 246, so the COMPLETE count carries the residual risk of a part that is present by wording but thin in substance; the sample found no such file, and it cannot rule one out.
+Run by script and by reading; nothing was run that executes the engine, and no gate was run.
 
-**Not examined:** this lane did not read the 246 COMPLETE files in full and did not run any gate. A file is COMPLETE here if the parts are present and the files and symbols it names were not contradicted by what this lane opened; it is not a statement that the edits are correct (that is the v12 batch's gate, CLAUDE.md §0.2). 44 files outside the INCOMPLETE rows contain the word "design-first" (a cost-class label, or a part that sits in another lane's file); they are counted COMPLETE where the file decides the shape and names the lane, and INCOMPLETE only where the file says it leaves the part open (section 3.4). This lane read the cost-class line of about twenty of them and did not read the rest. Names of the design-first labels: `grep -l 'design-first' proposals/*.md`.
+1. **Candidates by script (read-only).** For all 300 files: the first 30 lines and every section whose heading contains "gate" were searched for the marks of (i) to (iii) (waits on / lands after / blocked on, `v11`, plan position, `CP-Tnn-nn`, `CR-nn`, "MISSING", "no carrier", "design-first", "INCOMPLETE", "not decidable", "owed", `[ASSUMPTION`). About 136 files had a hit in one of those regions (or the word INCOMPLETE anywhere); 53 carry a strong mark ("MISSING until", "v11 plan position", "no carrier", `_eff_dispatch`) outside their `Reconciled:` lines. A second script listed every file lacking the words lands/depends/tier/test/gate/falsifier/control/hash/cost (about 35 non-superseded files lacked the word "control"; one lacked "gate" and one "test"), and a third checked each of the 71 scratch-probe gates in U3 §6.2 for at least one named test: all 71 name at least one test function.
 
-### 3.3 Completed by this lane (14 files; each gained one `Reconciled:` line, marked "unification lane U4c")
+2. **Every candidate with a strong mark was read at the marked lines** (the 53 printed with about 200 characters either side; the rest of the 136 as the scan's matched excerpts, not by opening the file), and the rule applied to the sentence: an edit or gate arm that *waits* is INCOMPLETE; a position merely cited ("binds on, does not redo", "feeds", a fallback written beside it such as `08_FI_01` edit 6's "until CR-29 lands the map is the seats of his own realm") is not.
+
+3. **Files read in full: 13** (every line): `19_LACUNA_verdict_ladder_and_reversal`, `15_INSTITUTIONS_SYNTHESIS_E_implementation_plan`, `U5d_WR_owed_edits`, `17_CENSUS_REST_3_corrections`, `12_ARCS_substrate_as_ground`, `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order`, `20_NARRATIVE_B_what_he_was_owed`, `23_STORY_A_what_a_roll_leaves`, `16_PESSIMIST_MB_partition_and_the_pair_rule`, `30_GO_F_the_plot_as_the_player_is_shown_it`, `21_PROCEDURAL_B_cast_and_seats`, `U5a_CORE_owed_edits`, `U5b_VERBS_military_physical_residue`. **Read in part (head, implementation block, edits, gate, cost class; not every line): about 30**, among them `15_INSTITUTIONS_BYZANTINE_C` (lines 1-126 of 174), `30_WR_A_the_era_is_a_named_period` (lines 1-37 and 80-154 of 154), `19_LACUNA_conclusion_is_a_committed_assertion` (lines 26-147 of 151), `08_FI_08_knots-season-form`, `17_CENSUS_REST_2_wiring`, and the lines each rewritten row cites. **Not read in full: 287 files.** The 46 INCOMPLETE rows retained from the first census were not re-adjudicated in full: this lane re-opened the cited lines of `28_CORE_scene_access_C`, `29_DICE_one_opposed_rule_form_and_tuning`, `27_MB_C_dynamic_strength_and_the_residual_chance`, `26_MASS_BATTLE_rout_pursuit_and_giving_ground`, `12_ARCS_arcs_as_staged_goals` and `U5b_PC_residue` (an AST scan for the ten all-conditional weapon loops returned none, so that SITE stands) and recoded the rest by the mapping in 3.1.
+
+4. **The size sample.** At least one file per family per five files, largest first (`ceil(n/5)` per family: 24 families, 69 files; list reproducible by size). Of the 69, **11 were read in full** (`12_ARCS_substrate_as_ground`, `U5a_CORE_owed_edits`, `30_GO_F`, `15_INSTITUTIONS_SYNTHESIS_E`, `19_LACUNA_verdict`, `20_NARRATIVE_B`, `16_PESSIMIST_MB_partition`, `16_PESSIMIST_CORE_a_scene`, `21_PROCEDURAL_B`, `23_STORY_A`, `U5b_VERBS_military_physical_residue`); about 30 more were read at their head, gate section and a presence count of tests, hash and control words; the rest are rows already INCOMPLETE or were checked by the presence scripts only. The sample is therefore **not complete as the lane's instruction asked**: it did not read all 69 in full (they are 1.5 MB), and the families PC, MB, SC, SE, FA, CHAR, FI, CENSUS, DICE, DETERMINISM, HAPPENINGS, CAP and TESTS have no sampled file read in full (they were read at gate and head, or are INCOMPLETE already; `30_WR_A` was read for all but its middle table).
+
+5. **What the full reads found.** Of the 13 read in full, 6 held a part the first census had counted COMPLETE and the rule does not: `19_LACUNA_verdict_ladder_and_reversal` (reversal design-first; completed), `U5d_WR_owed_edits` (two code edits without a named test; completed), `15_INSTITUTIONS_SYNTHESIS_E` (its edge table makes gates wait on v11 positions and `_eff_dispatch`), `12_ARCS_substrate_as_ground` (the operation row's amounts are "design content"), `U5a_CORE_owed_edits` (E row 3 waits on CR-07), `U5b_VERBS_military_physical_residue` (OBS membership "U1's, not yet decided"). The other 7 passed. That is 6 of 13 and it is not a random draw (the 13 were chosen for risk and size), but it says the 211 is not safe: expect more such files among the 236 unread COMPLETE ones.
+
+6. **A verdict example not borne out.** The Fable verdict and U3 §6.3 list `15_INSTITUTIONS_BYZANTINE_C` beside `_D` as needing `_eff_dispatch`. Opened (lines 1-126 and a grep of the whole file for `dispatch`, `distance`, `far`, `carrier`, `travel`): `_C` has no edit that sends by a person; its dependencies are `06_FA_decree_binds` and `14_VERBS_BINDING_D`'s content deposit and `force` (B21), all in-suite. It stays COMPLETE; the "abroad" wording in U3 §6.3 attaches to `_D` and `COLONIAL_grounding_F` (both INCOMPLETE, DEP-NOCARRIER). Reported to the U3 owner as a stale pointer, not edited here.
+
+**Not examined.** The 236 unread COMPLETE files were not read in full; the engine was not run; `[UNVERIFIED]` marks were not retested; a symbol a file names that is absent from the tree and absent from U3 §6.3 would not be seen by rule (ii) unless the file said so. "Control" was matched by synonym (baseline, base hash, arm off, pinned, byte-equal, EQUAL). Of the about 12 files with at most one such word, the falsifier and gate sections of four (`08_FI_08`, `26_MASS_BATTLE_aggression_and_land`, `14_VERBS_PHYSICAL_D`, `16_PESSIMIST_CHAR_B`) were read and each states a failing reading or a reproduced hash; the others were not opened for this point. No file is INCOMPLETE for want of a control alone, and that is the census's softest point.
+
+### 3.3 Completed in the proposals
+
+#### 3.3.1 By repair lane R-B (each gained one `Reconciled:` line naming this lane)
+
+| file | part that was missing | how it was decided (opened at the tree) |
+|---|---|---|
+| `19_LACUNA_verdict_ladder_and_reversal.md` | `D`: reversal left design-first (head :11, :84-86, :110-112) | edit 4 decided as a sibling row `reverse`, `eligibility: ["remit:determine"]` (`verb_table.yaml:33` names `remit:<act>`; `:173`, `:271` use it); appellate bench on a higher rung, one appeal per rung (ladder step 5; the first bullet already says "a bench whose rung is above") |
+| `U5d_WR_owed_edits.md` | `T`: two code edits (§1, §3) named no test | covering files read at the tree: `tests/test_strife_execution.py` (drives `harness/strife.py::readers_for(w).victim_held`, `:34-36`, `:175-180`) and `tests/test_season_shape.py` (five `wounded_with` mentions); `_eff_tend` at `loop/effects_combat.py:767`; function names proposed, files and sites read |
+| `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` | `S`: the season path's re-targeting site (was INCOMPLETE SITE) | `massbattle.py:473` `resolve_field` → `:373` `_run_and_grade` (its only caller; `:427` calls `run_battle`) → `battle_loop.py:108` `assign_targets(unit_a, unit_b)`, defined `core/contact.py:201`; no identifier `enemy_broken` exists in `modules/mass_battle/` |
+| `12_ARCS_arcs_as_staged_goals.md` | `S`: item 5's `org: {person}` (stays INCOMPLETE, CONTENT, for the per-case stage rows) | `data/goals.py:139-157` `_org` refuses any kind but faction, body, seat; `org_faction` (`:294-310`) names no faction for a person; item 5's own fallback is taken and the loader edit "accept `org.person`" removed |
+
+`19_LACUNA_verdict_ladder_and_reversal` was marked COMPLETE by the first census and is COMPLETE now only because of this repair; `26_MASS_BATTLE_rout_pursuit_and_giving_ground` moved from INCOMPLETE to COMPLETE. `U5d_WR_owed_edits` now has two function names that are proposals (the files and sites are read).
+
+#### 3.3.2 Earlier completions (unification lane U4c, 14 files; each gained one `Reconciled:` line marked "unification lane U4c"; kept as the record)
 
 | file | part that was missing | how it was decided (opened at the tree) |
 |---|---|---|
@@ -106,71 +143,109 @@ The census is a reading of the 300 files **as they stand after waves 1 to 3**, n
 | `12_ARCS_arcs_as_staged_goals.md` | `D`, `S`: dependency line; AM-B-09's reach | built rung-only (`rosters.yaml:2324-2330`); `person` is a listed goal-object kind (`:2321`); the open item narrows to one grep of `data/goals.py` (the file stays INCOMPLETE) |
 | `08_FI_07_shortest-playable-case.md`, `08_FI_06_testimony-names-a-hand.md`, `08_FI_04_small-edits.md`, `01_CORE_requirements_reading_record.md`, `U5a_tests_digest_additions.md` | `D`: no dependency line | from `unified/U3_DEPENDENCY_ORDER.md` §3.1 and §1 item 3, and each file's own Lands line |
 
+
 ### 3.4 The INCOMPLETE rows: what is missing, and who owns it
 
-Batch handle from U3 §3.1. "Lands" is the batch that lands the file once the part is supplied; it is not blocked as a whole unless the missing part is the file's only edit.
+Batch handle from U3 §3.1. "Lands" is the batch that lands the file once the part is supplied; it is not blocked as a whole unless the missing part is the file's only edit. Line numbers are lines opened in the file named. Codes as in 3.1; "[recoded (R-B) …]" marks a row retained from the first census with a changed code.
 
 | family | file | batch | code | missing part | owner / what supplies it |
 |---|---|---|---|---|---|
-| ARCS | `12_ARCS_arcs_as_staged_goals.md` | B10 | SITE, CONTENT | item 5 (`org: {person: ...}`): AM-B-09 is built rung-only (`rosters.yaml:2324-2330`, `tests/test_cp_t02_03_aim_state.py:1`; other kinds read `open`), whether the goal loader admits a `person` organization is a grep of `data/goals.py` at landing; stage rows are per-case content | landing session (grep); case authors |
+| ARCS | `12_ARCS_arcs_as_staged_goals.md` | B10 | CONTENT | item 5 (`org: {person: ...}`): AM-B-09 is built rung-only (`rosters.yaml:2324-2330`, `tests/test_cp_t02_03_aim_state.py:1`; other kinds read `open`), whether the goal loader admits a `person` organization is a grep of `data/goals.py` at landing; stage rows are per-case content [recoded (R-B): the `org: {person}` site is decided at the tree (`data/goals.py:139-157`); only the per-case stage rows remain] | landing session (grep); case authors |
 | ARCS | `12_ARCS_case_on_the_realm.md` | B39 | CONTENT | per-case `prehistory` lists and `beats` are content each case lane authors (line 71) | case authors |
-| CENSUS | `17_CENSUS_C1A_02_wires_and_corrections.md` | B10 | DEP | the `march`/`_siege` row has no carrier (`effects_combat.py:686`); `besiege` has none (CP-T04-06) (line 135) | v12 stage: write a carrier |
+| ARCS | `12_ARCS_substrate_as_ground.md` | B35 | DESIGN | the operation row's band amounts and difficulty are not written: cost class says "the operation row's amounts are design content" and orders an `opus` design read "for the row's band amounts" (lines 43-46, 95, 98) | WR lane design read (opus, with ners) |
+| CENSUS | `17_CENSUS_C1A_02_wires_and_corrections.md` | B10 | DEP-NOCARRIER | the `march`/`_siege` row has no carrier (`effects_combat.py:686`); `besiege` has none (CP-T04-06) (line 135) | v12 stage: write a carrier |
 | CHAR | `02_CHAR_choice_alignment.md` | B10 | CONTENT | the alignment cells are Jordan's (file line 122) | Jordan, or the CHAR content pass |
 | CHAR | `02_CHAR_relations_have_a_ground.md` | B10 | CONTENT | the six relation rows' numbers are placeholders [ASSUMPTION; low] (line 158); the `to:` id mapping was completed by U4c | Jordan |
 | CHAR | `U5a_CHAR_owed_amendments.md` | B10 | CONTENT | §7 signature rows and §10 goals are Jordan's or the CHAR content pass's (line 229) | Jordan, or the CHAR content pass |
 | CORE | `28_CORE_scene_access_A_occupancy_and_precedence.md` | B28 | DESIGN, CONTENT | commit 3's ENCOUNTER half needs `social_contest.hearing` and the host-side attendee shape; commit 8's floors (95%, 60%) and gate row 12 are seeds; the Layer 1 row amendment is Jordan's (line 314) | SC hearing batch; Jordan |
-| CORE | `28_CORE_scene_access_B_appointments.md` | B28 | DEP, DESIGN | commit 4 needs typed `utter` (`14_VERBS_SOCIAL2_B` §1); how the ask reaches the host as a `commit` referent is undecided (line 265) | B28 order; design pass |
-| CORE | `28_CORE_scene_access_C_the_petition_that_waits.md` | B38 | DEP | commit 3 needs `dues_unmet` and a held-seat reader; commit 4 needs the one composer and a declining `carry` band (line 312) | B38 order after NARR_B/C and SOCIAL1_D |
-| DICE | `29_DICE_one_opposed_rule_form_and_tuning.md` | B05 | DEP | item 29-5 hearing half: `HearingInput` and `Speaker` do not exist (line 370) | HEAR_B (B24) lands the records |
-| FA | `06_FA_office_capabilities.md` | B04 | DEP | the writer of a claim of another person's capability has no carrier in the suite; the term ships as `None` (line 95) | U1 capability architecture §8 / CAP lane |
+| CORE | `28_CORE_scene_access_B_appointments.md` | B28 | DESIGN | commit 4 needs typed `utter` (`14_VERBS_SOCIAL2_B` §1); how the ask reaches the host as a `commit` referent is undecided (line 265) | B28 order; design pass |
+| CORE | `28_CORE_scene_access_C_the_petition_that_waits.md` | B38 | SITE | commit 3 needs `dues_unmet` and a held-seat reader; commit 4 needs the one composer and a declining `carry` band (line 312) [recoded (R-B): the missing parts are in-suite predecessors (`20_NARRATIVE_B` edit 1, `20_NARRATIVE_C`, `U5c_SC_one_obstacle_form.md` §3, `14_VERBS_SOCIAL1_D`) that exist as other proposals' edits, so ordering, not a dependency without a carrier; what stays open is the first census reading of commit 3 (line 322)] | B38 order after NARR_B/C and SOCIAL1_D |
+| CORE | `U5a_CORE_owed_edits.md` | B03 | DEP-v11 | E row 3 is workplan CR-07's build and waits on CR-07's pre-flight (lines 137, order item 7) | v12 step 5 evaluation of CR-07 |
+| DICE | `29_DICE_one_opposed_rule_form_and_tuning.md` | B05 | SITE | item 29-5 hearing half: `HearingInput` and `Speaker` do not exist (line 370) [recoded (R-B): `HearingInput` and `Speaker` are created by `05_SC_playable_hearing_B.md` (U3 §6.3), so ordering; the files, line numbers and call sites of the hearing half cannot be named until they exist (line 386)] | HEAR_B (B24) lands the records |
+| FA | `06_FA_office_capabilities.md` | B04 | DEP-NOCARRIER | the writer of a claim of another person's capability has no carrier in the suite; the term ships as `None` (line 95) | U1 capability architecture §8 / CAP lane |
+| FA | `06_FA_war_lives_in_seats_B.md` | B23 | DEP-v11 | CP-T09-02: "to land with or after" it; gate line 131 reads the realm after CP-T09-02 lands (lines 14-15) | v12 step 5 evaluation of CP-T09-02 |
 | FA | `U5d_FA_land_and_seats_pass_on_a_won_march.md` | B23 | DESIGN | whether build (i) meets A-58 is U3's to re-check (line 94) | U3 re-check, then the v12 stage |
 | FA | `U5d_FA_owed_edits.md` | B21 | DESIGN | §9: no admitting basis for closing the previous holder's `hold` and opening the successor's; needs Layer 1 text (line 145) | Jordan (Layer 1 text) |
+| FI | `08_FI_02_rumour-that-travels.md` | B11 | DEP-v11 | CR-29 first: "B10-14 is re-ordered so CR-29 runs first"; neither this file nor `08_FI_01` can be measured without it (lines 7, 15, 44) | v12 step 5 evaluation of CR-29 |
 | FI | `08_FI_03_playable-inquiry.md` | B11 | DESIGN | §3 acting-on and §4: which row forms a petition from a held conclusion (line 162) | SC/FI design pass |
+| FI | `U5c_FI_residue.md` | B11 | DEP-v11 | CR-29 (the `reach` roster): row 2 of the order table and the depends line (lines 5, 48) | v12 step 5 evaluation of CR-29 |
 | HAPPENINGS | `22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md` | B37 | CONTENT | the 46 age values (line 88) | Jordan, or the prose lane (A-15) |
-| MB | `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` | B19 | SITE | the season path's re-targeting site is not named; `orchestration.py:2191` is the harness loop (line 145) | landing session greps the season path |
-| MB | `27_MB_A_command_and_the_obedience_draw.md` | B19 | DEP, SITE | 27A-6 cannot be coded until CAP Part B lands (no `capabilities:` block, no `pool.py::score`); four symbols unopened (lines 368-380) | CAP Part B (B05); landing session |
+| INSTITUTIONS | `15_INSTITUTIONS_BYZANTINE_D_the_empire_at_a_distance.md` | B33 | DEP-NOCARRIER, DEP-v11 | CP-T09-08 (`_eff_dispatch`, a `dispatch` that sends) has no carrier (U3 §6.3:1020) and CP-T09-03 (a covenant something reads) is a v11 position: edit 6's demand and any order the court sends by a person wait (line 13) | v12 stage: write a carrier or retire the edit |
+| INSTITUTIONS | `15_INSTITUTIONS_BYZANTINE_E_accession_recall_and_the_crowd.md` | B32 | DEP-v11 | CR-35, CR-37, CR-91 are "MISSING until STAGES.md step 5"; §2's widening of `may_claim` waits on CR-35 (line 15) | v12 step 5 evaluation of CR-35, CR-37, CR-91 |
+| INSTITUTIONS | `15_INSTITUTIONS_COLONIAL_B_distance.md` | B33 | DEP-v11 | CR-29 (the reach map): "§3 is inert until it lands" (line 13); gate line 166 "after CR-29" | v12 step 5 evaluation of CR-29 |
+| INSTITUTIONS | `15_INSTITUTIONS_COLONIAL_C_audit_and_charter.md` | B33 | DEP-v11 | CR-60, CR-61: "the realm reading waits on them" (line 13; gate line 161) | v12 step 5 evaluation of CR-60, CR-61 |
+| INSTITUTIONS | `15_INSTITUTIONS_COLONIAL_E_scenario.md` | B40 | DEP-v11 | scenario 2 waits on CR-29 and ED-IN-0317, "MISSING until STAGES.md step 5" (line 11) | v12 step 5 evaluation of CR-29, ED-IN-0317 |
+| INSTITUTIONS | `15_INSTITUTIONS_COLONIAL_grounding_F_what_the_tree_adds.md` | B40 | DEP-NOCARRIER | CP-T09-08 (`_eff_dispatch`, no carrier in the suite): edit 1's bearer waits on it (line 9) | v12 stage: write a carrier or retire the edit |
+| INSTITUTIONS | `15_INSTITUTIONS_PAPACY_A_ground.md` | B32 | DEP-v11 | edit 3 waits on CR-60 (`scope_rung:` row key) and edit 5 on CR-74; the gate's "After CR-60 and edit 3" and "CR-74's own exit" arms (lines 9, 97, 99); edits 1, 2 and 4 do not wait | v12 step 5 evaluation of CR-60, CR-74 |
+| INSTITUTIONS | `15_INSTITUTIONS_PAPACY_B_patronage_election_discipline.md` | B32 | DEP-v11 | CR-35 (the `election` gate arm): "the election arm of the gate waits on it" (line 13) | v12 step 5 evaluation of CR-35 |
+| INSTITUTIONS | `15_INSTITUTIONS_PAPACY_C_consecration_and_deed_ledger.md` | B33 | DEP-v11 | CR-36, the `resolution` disposal site: "the consecration row waits on it" (line 13) | v12 step 5 evaluation of CR-36 |
+| INSTITUTIONS | `15_INSTITUTIONS_PAPACY_D_sanction_and_absolution.md` | B33 | DEP-v11 | CR-60 (the absent party) and CR-88 (edit 8) are "MISSING until STAGES.md step 5" (line 13) | v12 step 5 evaluation of CR-60, CR-88 |
+| INSTITUTIONS | `15_INSTITUTIONS_PAPACY_E_sees_tithe_orders_legates_council.md` | B33 | DEP-v11 | CP-T08-07 (the standing levy): "the tithe gate waits on it" (line 13); gate line 175 needs CR-88's vacancy duty landed. Item 6 (schism) is design-first but held (I-10), not an edit of this batch | v12 step 5 evaluation of CP-T08-07, CR-88 |
+| INSTITUTIONS | `15_INSTITUTIONS_PAPACY_F_playable_vacant_chair.md` | B40 | DEP-v11 | CR-88 (the vacancy duty): until it lands the case plants the question, never the outcome (line 13; gate line 85) | v12 step 5 evaluation of CR-88 |
+| INSTITUTIONS | `15_INSTITUTIONS_PAPACY_grounding_mechanisms.md` | B40 | DEP-v11 | the "retraction as relapse" gate arm reads the first hearing's case file, CR-61 (line 193) | v12 step 5 evaluation of CR-61 |
+| INSTITUTIONS | `15_INSTITUTIONS_SYNTHESIS_B_the_deed_ledger.md` | B32 | DEP-v11 | CR-36 (`resolution` and its disposal site): edit 3 lands the roster row alone if CR-36 has not (line 9) | v12 step 5 evaluation of CR-36 |
+| INSTITUTIONS | `15_INSTITUTIONS_SYNTHESIS_C_crossings.md` | B33 | DEP-v11 | CR-60, CR-88: "gates 2 and 5 wait on them" (line 9; gate line 181) | v12 step 5 evaluation of CR-60, CR-88 |
+| INSTITUTIONS | `15_INSTITUTIONS_SYNTHESIS_E_implementation_plan.md` | B40 | DEP-v11, DEP-NOCARRIER | the edge table (lines 243-249) makes I-5 to I-8 wait on CR-29, CR-35, CR-36, CR-60, CR-61, CR-88 and CP-T08-07 (v11) and on CP-T09-03/CP-T09-08 (`_eff_dispatch`, no carrier, U3 §6.3:1020) | v12 step 5 evaluation; v12 stage writes the `dispatch` carrier |
+| INSTITUTIONS | `15_INSTITUTIONS_VENICE_C_roll_lot_ballot.md` | B32 | DEP-v11 | CR-35, CR-36: "the nomination-then-confirmation use waits on them; edits 1 to 7 do not" (line 13) | v12 step 5 evaluation of CR-35, CR-36 |
+| LACUNA | `19_LACUNA_admission_rides_the_citing_draw.md` | B24 | DEP-v11 | CR-61 (the case file) is a depends entry marked `[PL]`, not in the tree (line 7) | v12 step 5 evaluation of CR-61 |
+| LACUNA | `19_LACUNA_questioning_has_an_approach_and_a_cost.md` | B26 | DEP-v11 | CP-T06-05 (the questioned person answers by his own act): the whole file depends on it (lines 7, 9; gate line 80) | v12 step 5 evaluation of CP-T06-05 |
+| MB | `27_MB_A_command_and_the_obedience_draw.md` | B19 | SITE | 27A-6 cannot be coded until CAP Part B lands (no `capabilities:` block, no `pool.py::score`); four symbols unopened (lines 368-380) [recoded (R-B): CAP Part B is `U5a_capability_home_and_two_inputs.md` Part B (B05), an in-suite carrier; four symbols unopened stay] | CAP Part B (B05); landing session |
 | MB | `27_MB_B_unit_prowess_on_the_row.md` | B31 | DESIGN, SITE | the drill step (size, cap, host-side read in `_order_of_battle`) is design only; `Unit.base_combat_pool` read by grep only (lines 185, 235) | MB lane |
-| MB | `27_MB_C_dynamic_strength_and_the_residual_chance.md` | B19 | DEP | 27C-2 waits on 27A-4 to 27A-6, `26_..._rout_pursuit...` and `16_PESSIMIST_MB_rout_has_two_exits` (line 325) | MB lane, in B19 order |
+| MB | `27_MB_C_dynamic_strength_and_the_residual_chance.md` | B19 | SITE | 27C-2 waits on 27A-4 to 27A-6, `26_..._rout_pursuit...` and `16_PESSIMIST_MB_rout_has_two_exits` (line 325) [recoded (R-B): 27A-4 to 27A-6, the rout files and the pair rule are other proposals' edits; the arms cannot run on today's tree (line 328)] | MB lane, in B19 order |
 | MB | `27_MB_D_the_commander_as_chooser.md` | B20 | DESIGN | 27D-4, the unplayed commander's decider, is interface only: no cells, question, weighing or `reasons` wording (line 236) | CHAR |
-| MB | `27_MB_E_what_an_army_carries_back.md` | B22 | CONTENT, DEP | every share table and window (27E-3, 27E-4) has no value; the cohort-dead write is SE's (line 388) | Jordan or a source search; SE |
+| MB | `27_MB_E_what_an_army_carries_back.md` | B22 | CONTENT | every share table and window (27E-3, 27E-4) has no value; the cohort-dead write is SE's (line 388) [recoded (R-B): the cohort-dead write is SE's, an in-suite item] | Jordan or a source search; SE |
 | PC | `03_PC_duel_round_and_approach_B.md` | B16 | DESIGN | step 3d and step 5's MB side (what a contact is, what its result does to a unit) are design-first (cost class, line 398) | PC lane step 3d; MB lane for step 5 |
 | PC | `03_PC_loadout_and_carry.md` | B18 | DESIGN | items 4 and 6 are design-first in MB, carried by `04_MB_unit_loadout_and_weapon_in_hand_B.md` (cost class, line 160) | MB lane |
 | PC | `U5b_PC_residue.md` | B14 | SITE | §10: the ten loops are not named; `scan_tests.py` is not in the tree (line 218) | landing session |
 | PESSIMIST | `16_PESSIMIST_CHAR_B_a_pursuit_does_what_its_name_says.md` | B10 | CONTENT | the cell values are Jordan's or the CHAR pass's (line 114) | Jordan, or the CHAR content pass |
+| PESSIMIST | `16_PESSIMIST_FI_C_what_a_deed_leaves_behind.md` | B11 | DEP-v11 | CP-T06-04 "MISSING as code until v12 disposes it; only the gate's last row waits on it" (line 17) | v12 step 5 evaluation of CP-T06-04 |
+| PESSIMIST | `16_PESSIMIST_FI_D_withhold_what_has_no_product.md` | B26 | DEP-v11 | CP-T06-05 and B10-15 "MISSING as code until v12 disposes them" for `interview` and `thread_read` (lines 12-13) | v12 step 5 evaluation of CP-T06-05, B10-15 |
 | PESSIMIST | `16_PESSIMIST_GAME_the_world_draws.md` | B12 | DESIGN | the conversion of a body (0-1000) and a shortfall into a pool and an obstacle on the A-5 sampler; set at the joint calibration as two named fixtures (line 87) | calibration batch (B12) |
 | PESSIMIST | `16_PESSIMIST_GO_surface_pins.md` | B41 | CONTENT | about 150 display strings (line 101) | Jordan, or authored under his review |
 | PESSIMIST | `16_PESSIMIST_PC_A_the_yield_is_a_draw.md` | B15 | CONTENT | the shipped `YIELD_OB` values: the sweep's pick (line 172) | calibration step in B15 |
 | PROCEDURAL | `21_PROCEDURAL_E_names_and_texts.md` | B39 | CONTENT | the name lists (`given`, `patronymic_suffix`, `byname`, `device`) (line 90) | Jordan, or drafted for his correction |
-| SC | `05_SC_negotiation_scene.md` | B24 | DESIGN | edit 6's opening verb (`treat` or `petition` to a person) and the `exchange` operands (line 138); plan position CR-63, no carrier | SC design pass; v12 stage |
-| SC | `05_SC_playable_hearing_B.md` | B24 | DESIGN, DEP | edits 6 and 8: the rite's reading waits on plan positions CR-60/CR-61; the NPC decider is a design pass (line 198) | SC design pass; v12 stage (step 5 evaluation of CR-60/61) |
-| SC | `U5c_SC_proceedings_residue.md` | B27 | DEP | §3 waits on CR-61's case file naming its matters; §8 part 2 has no owner (line 226) | v12 stage (CR-61 evaluation) |
-| SE | `07_SE_capability_rate_B.md` | B12 | DESIGN | which verb row `labour` weights read, and the caller in `loop/` that computes them (line 113); CP-T08-01 | CP-T08-01 landing; v12 stage |
+| SC | `05_SC_acquittal.md` | B27 | DEP-v11 | CR-61 (the docket item names its case file): "this proposal lands after CR-61" (lines 7, 73-74, 99) | v12 step 5 evaluation of CR-61 |
+| SC | `05_SC_arrangement_rows_that_bind.md` | B27 | DEP-v11 | CR-60, CR-61 and B10-18c's close gate edit 5 (lines 7, 68) | v12 step 5 evaluation of CR-60, CR-61, B10-18c |
+| SC | `05_SC_evidence_and_rebuttal_B.md` | B24 | DEP-v11 | CR-61 (the case file) and SC-02 (the re-source): "small build, after" them (lines 9, 257) | v12 step 5 evaluation of CR-61, SC-02 |
+| SC | `05_SC_negotiation_scene.md` | B24 | DESIGN, DEP-v11, DEP-NOCARRIER | edit 6's opening verb (`treat` or `petition` to a person) and the `exchange` operands (line 138); plan position CR-63, no carrier [recoded (R-B): CR-63 is a v11 plan position (line 9); `exchange`'s operands are marked "no carrier in the suite" (lines 9, 139)] | SC design pass; v12 stage |
+| SC | `05_SC_playable_hearing_B.md` | B24 | DESIGN, DEP-v11 | edits 6 and 8: the rite's reading waits on plan positions CR-60/CR-61; the NPC decider is a design pass (line 198) [recoded (R-B): CR-60 and CR-61 are v11 plan positions "not in the tree" (line 15)] | SC design pass; v12 stage (step 5 evaluation of CR-60/61) |
+| SC | `U5c_SC_proceedings_residue.md` | B27 | DEP-v11, DESIGN | §3 waits on CR-61's case file naming its matters; §8 part 2 has no owner (line 226) [recoded (R-B): CR-61 is a v11 plan position; §8 part 2 has no owner (design)] | v12 stage (CR-61 evaluation) |
+| SE | `07_SE_campaign_supply_and_muster.md` | B22 | DEP-v11 | CP-T08-01 (`labour_mode`), for (c): "MISSING until STAGES.md step 5" (line 10) | v12 step 5 evaluation of CP-T08-01 |
+| SE | `07_SE_capability_rate_B.md` | B12 | DESIGN, DEP-v11 | which verb row `labour` weights read, and the caller in `loop/` that computes them (line 113); CP-T08-01 [recoded (R-B): CP-T08-01 is "MISSING until `STAGES.md` step 5" (line 12; gate :150)] | CP-T08-01 landing; v12 stage |
 | SE | `U5d_SE_cohort_heavy_moves_and_caste.md` | B38 | CONTENT | the caste rows' cells are Jordan's (line 132) | Jordan |
-| SE | `U5d_SE_owed_edits.md` | B12 | DEP | the game reader of `write_matrix.yaml:375-381` (`steps: [MAT, CEN]`) is owed (line 50) | v12 stage |
-| STORY | `U5d_STORY_owed_edits.md` | B39 | DEP | §1 depends on the commit that adds `besiege` to `march_postures` (CP-T04-06); no proposal carries it (head) | v12 stage |
+| SE | `U5d_SE_owed_edits.md` | B12 | DEP-NOCARRIER, DEP-v11 | the game reader of `write_matrix.yaml:375-381` (`steps: [MAT, CEN]`) is owed (line 50) [recoded (R-B): the game reader is owed with no carrier; CR-49 is "MISSING until STAGES.md step 5" (line 8)] | v12 stage |
+| STORY | `U5d_STORY_owed_edits.md` | B39 | DEP-v11, DEP-NOCARRIER | §1 depends on the commit that adds `besiege` to `march_postures` (CP-T04-06); no proposal carries it (head) [recoded (R-B): CP-T04-06 is "MISSING until STAGES.md step 5" (line 8) and no proposal adds `besiege` to `march_postures`] | v12 stage |
 | TESTS | `U5a_tests_digest_additions.md` | B02 | SITE | most sites are read from the digests and not opened (lines 20, 141) | the executing session opens each site first, as the file orders |
-| VERBS | `14_VERBS_BINDING_D_orders.md` | B21 | DEP | the `dispatch` effect and its destination operand (CP-T09-08) have no carrier (line 121; U3 §6.3) | v12 stage: write a carrier or retire the edit |
+| VERBS | `14_VERBS_BINDING_D_orders.md` | B21 | DEP-NOCARRIER | the `dispatch` effect and its destination operand (CP-T09-08) have no carrier (line 121; U3 §6.3) | v12 stage: write a carrier or retire the edit |
 | VERBS | `14_VERBS_MATERIAL_A_mending.md` | B12 | DESIGN | whether an Overwhelming/Success sabotage is unseen by persons at the Site: needs a formation conjunct with no stem in the typed grammar, or a masking rule `04` §C.6 lacks (line 152) | SE and FI owners |
-| VERBS | `14_VERBS_MILITARY_A_movement.md` | B22 | DEP | five modifier rows are not members of OBS §2's closed roster; U1 must name them (line 137; R4 7b.8) | U1 owners ledger |
-| VERBS | `14_VERBS_MILITARY_B_train.md` | B22 | DEP | the remaining modifiers are non-members of OBS §2 (line 81) | U1 owners ledger |
-| VERBS | `14_VERBS_MILITARY_C_the_muster.md` | B22 | DEP | the hostile obstacle terms are not OBS §2 members (line 166) | U1 owners ledger |
-| VERBS | `14_VERBS_MILITARY_D_the_order_of_battle.md` | B22 | DEP | none of the obstacle terms is an OBS §2 member (line 174) | U1 owners ledger |
-| VERBS | `14_VERBS_PHYSICAL_B_field_and_ruin.md` | B22 | DEP | the leverage source for the army's size against the town is unnamed (line 65) | U1 owners ledger |
-| WR | `09_WR_B_threadwork_session_and_practitioner.md` | B35 | CONTENT, DESIGN | [ASSUMPTION] values (overweave, fatigue scale, Focus cap) await CAP and the joint calibration; edit 4 design-first on B10-15's rows (lines 253-255) | calibration batch; Thread lane |
+| VERBS | `14_VERBS_MILITARY_A_movement.md` | B22 | DESIGN | five modifier rows are not members of OBS §2's closed roster; U1 must name them (line 137; R4 7b.8) [recoded (R-B): the OBS §2 membership of five modifier rows is a decision U1 has not taken (`U5b_VERBS_military_physical_residue.md` §1 rule 3, line 76-77)] | U1 owners ledger |
+| VERBS | `14_VERBS_MILITARY_B_train.md` | B22 | DESIGN | the remaining modifiers are non-members of OBS §2 (line 81) [recoded (R-B): as MIL_A] | U1 owners ledger |
+| VERBS | `14_VERBS_MILITARY_C_the_muster.md` | B22 | DESIGN | the hostile obstacle terms are not OBS §2 members (line 166) [recoded (R-B): as MIL_A] | U1 owners ledger |
+| VERBS | `14_VERBS_MILITARY_D_the_order_of_battle.md` | B22 | DESIGN | none of the obstacle terms is an OBS §2 member (line 174) [recoded (R-B): as MIL_A] | U1 owners ledger |
+| VERBS | `14_VERBS_PHYSICAL_B_field_and_ruin.md` | B22 | DESIGN, DEP-v11 | the leverage source for the army's size against the town is unnamed (line 65) [recoded (R-B): the leverage source is U1's undecided name; CR-91 is a v11 plan position (line 10)] | U1 owners ledger |
+| VERBS | `14_VERBS_PHYSICAL_D_thread_read.md` | B35 | DEP-NOCARRIER | stage 2 waits on a writer of `Person.coherence` (CP-T07-02, H-47): "no carrier in the suite" (line 9; U3 §6.3:1021). Note `12_ARCS_substrate_as_ground.md` item 3 proposes a writer row but is itself INCOMPLETE (DESIGN) | v12 stage: write a carrier, or finish `12_ARCS_substrate_as_ground` |
+| VERBS | `14_VERBS_SOCIAL2_C_case_question_confession.md` | B25 | DEP-v11 | CR-61: "§1 (after CR-61)" (lines 14, 157) | v12 step 5 evaluation of CR-61 |
+| VERBS | `U5b_VERBS_military_physical_residue.md` | B07 | DESIGN | which MILITARY and PHYSICAL terms are new OBS members and which fold into existing ones "is U1's, not yet decided" (lines 76-77) | U1 owners ledger |
+| WR | `09_WR_B_threadwork_session_and_practitioner.md` | B35 | CONTENT, DESIGN, DEP-v11 | [ASSUMPTION] values (overweave, fatigue scale, Focus cap) await CAP and the joint calibration; edit 4 design-first on B10-15's rows (lines 253-255) [recoded (R-B): B10-15's rows and CP-T07-02's host are "MISSING until STAGES.md step 5" (line 12)] | calibration batch; Thread lane |
+| WR | `09_WR_B_weather_with_memory_and_the_year.md` | B12 | DEP-v11 | CP-T10-01 (`route`, `route_pricing`), edit 3: "MISSING until STAGES.md step 5"; edit 3 does nothing until it flips (lines 12, 26) | v12 step 5 evaluation of CP-T10-01 |
 | WR | `09_WR_world_motion.md` | B12 | CONTENT | the wound's Site kind is Jordan's content (line 165) | Jordan |
-| WR | `U5d_WR_zero_coherence_unknowable.md` | B35 | DEP | `Person.coherence` has no writer and no carrier (CP-T07-02; U3 §6.3); the readers ship and read nothing | v12 stage |
+| WR | `30_WR_D_momentum_and_its_brakes.md` | B38 | DEP-v11 | commit 2 lands "after CR-98's rows" (lines 110, 132) | v12 step 5 evaluation of CR-98 |
+| WR | `31_WR_C_what_the_stances_feed.md` | B38 | DEP-NOCARRIER | the ballot step reads a goal row's `axis:`; no goal row carries one (U3 §6.3:1024, all 38 print `None`); the file ships at its control until the rows are authored | content pass (goal rows); v12 stage |
+| WR | `U5d_WR_zero_coherence_unknowable.md` | B35 | DEP-NOCARRIER | `Person.coherence` has no writer and no carrier (CP-T07-02; U3 §6.3); the readers ship and read nothing | v12 stage |
 
-### 3.5 What blocks the rest, by owner
+### 3.5 What blocks the rest, by primary reason
 
-| owner | INCOMPLETE files |
-|---|---|
-| the lane named in the row | 17 |
-| Jordan (values or Layer 1 text) | 12 |
-| v12 stage (write a carrier, retire the edit, or evaluate the v11 plan position named) | 10 |
-| U1 owners ledger (name OBS members, a leverage source) | 6 |
-| a content pass (CHAR, prose, case authors) | 2 |
+Each file counted once, under the first of DEP-v11, DEP-NOCARRIER, DESIGN, CONTENT, SITE that it carries.
 
-This lane found nothing in these rows that opening or grepping the tree could settle beyond what section 3.3 did: each missing part is a value, a Layer 1 text, a name U1 has not decided, a design the file leaves open, or a thing no proposal writes. The SITE rows are by design a landing session's first grep.
+| primary reason | files | what supplies it |
+|---|---|---|
+| DEP-v11 | 39 | the v12 stage's step 5: evaluate the v11 position named (`STAGES.md` step 5, `master/V11_EVALUATION.md`), carry it into v12 or retire the edit |
+| DEP-NOCARRIER | 7 | the v12 stage: write a carrier (`_eff_dispatch`, a writer of `Person.coherence`, `besiege`, the `write_matrix.yaml:375-381` reader, goal-row `axis:`) or retire the edit |
+| DESIGN | 17 | the lane named in the row; U1 for the OBS §2 membership of the MILITARY and PHYSICAL terms; Jordan where the row says Layer 1 text |
+| CONTENT | 13 | Jordan, or a content pass (CHAR, prose, case authors, goal rows) |
+| SITE | 6 | the landing session, which opens or measures the site first |
+
+This lane found nothing further in the DESIGN, CONTENT and SITE rows that opening or grepping the tree could settle beyond 3.3; the 39 files carrying DEP-v11 are a single dependency (workplan v11's unevaluated positions) and are cleared together by step 5, not one by one.
 
 ## 4. Every file
 
@@ -230,34 +305,34 @@ Columns: `R/F/G` is the number of head lines beginning `Reconciled:` / `Folded:`
 | 50 | `proposals/04_MB_typed_outcome_and_one_path.md` | LIVE-PROPOSAL | PROPOSED | 2/1/0 | 14.6 | MB | 1 RESOLVED-BY · 1 SUPERSEDED | B17 (B17-mb-scale) | COMPLETE |  |
 | 51 | `proposals/04_MB_unit_loadout_and_weapon_in_hand.md` | SUPERSEDED | SUPERSEDED by 04_MB_unit_loadout_and_weapon_in_hand_B.md (i… | 2/0/0 | 6.0 | MB | 1 SUPERSEDED | B17 (B17-mb-scale) | n/a | successor: 04_MB_unit_loadout_and_weapon_in_hand_B.md |
 | 52 | `proposals/04_MB_unit_loadout_and_weapon_in_hand_B.md` | LIVE-PROPOSAL | PROPOSED | 2/2/0 | 21.4 | MB | 1 RESOLVED-BY | B17 (B17-mb-scale) +part B31 | COMPLETE |  |
-| 53 | `proposals/05_SC_acquittal.md` | LIVE-PROPOSAL | PROPOSED | 2/0/1 | 9.2 | SC | 12 RESOLVED-BY | B27 (B27-sc-proceedings) | COMPLETE (open checks: 1) |  |
-| 54 | `proposals/05_SC_arrangement_rows_that_bind.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 8.6 | SC | 7 RESOLVED-BY · 1 SUPERSEDED | B27 (B27-sc-proceedings) | COMPLETE |  |
+| 53 | `proposals/05_SC_acquittal.md` | INCOMPLETE-LIVE | PROPOSED | 2/0/1 | 9.2 | SC | 12 RESOLVED-BY | B27 (B27-sc-proceedings) | INCOMPLETE (DEP-v11) |  |
+| 54 | `proposals/05_SC_arrangement_rows_that_bind.md` | INCOMPLETE-LIVE | PROPOSED | 2/0/0 | 8.6 | SC | 7 RESOLVED-BY · 1 SUPERSEDED | B27 (B27-sc-proceedings) | INCOMPLETE (DEP-v11) |  |
 | 55 | `proposals/05_SC_capability_surface.md` | LIVE-PROPOSAL | PROPOSED (edit 4 only; edits 1–3 superseded by U1) | 2/0/0 | 9.3 | SC | 5 RESOLVED-BY · 1 SUPERSEDED | B04 (B04-capability-home) | COMPLETE | partly superseded (see Status) |
 | 56 | `proposals/05_SC_contest_record_on_event.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 8.7 | SC | 5 RESOLVED-BY | B05 (B05-one-roll) | COMPLETE |  |
 | 57 | `proposals/05_SC_evidence_and_rebuttal.md` | SUPERSEDED | SUPERSEDED by 05_SC_evidence_and_rebuttal_B.md (kept for it… | 2/0/0 | 10.1 | SC | 1 RESOLVED-BY | B24 (B24-sc-hearing) | n/a | successor: 05_SC_evidence_and_rebuttal_B.md |
-| 58 | `proposals/05_SC_evidence_and_rebuttal_B.md` | LIVE-PROPOSAL | PROPOSED — supersedes 05_SC_evidence_and_rebuttal.md (SC-P8… | 3/0/0 | 21.7 | SC | 1 STALE/FALSE-POS | B24 (B24-sc-hearing) | COMPLETE |  |
+| 58 | `proposals/05_SC_evidence_and_rebuttal_B.md` | INCOMPLETE-LIVE | PROPOSED — supersedes 05_SC_evidence_and_rebuttal.md (SC-P8… | 3/0/0 | 21.7 | SC | 1 STALE/FALSE-POS | B24 (B24-sc-hearing) | INCOMPLETE (DEP-v11) |  |
 | 59 | `proposals/05_SC_hearing_capabilities.md` | LIVE-PROPOSAL | PROPOSED — extends SC-P7 (05_SC_capability_surface.md; one … | 2/0/0 | 12.2 | SC | — | B04 (B04-capability-home) +part B24 | COMPLETE |  |
-| 60 | `proposals/05_SC_negotiation_scene.md` | INCOMPLETE-LIVE | PROPOSED — design-first (depends on the exchange verb's ope… | 2/1/0 | 11.6 | SC | 1 RESOLVED-BY · 1 STALE/FALSE-POS | B24 (B24-sc-hearing) | INCOMPLETE (DESIGN) |  |
+| 60 | `proposals/05_SC_negotiation_scene.md` | INCOMPLETE-LIVE | PROPOSED — design-first (depends on the exchange verb's ope… | 2/1/0 | 11.6 | SC | 1 RESOLVED-BY · 1 STALE/FALSE-POS | B24 (B24-sc-hearing) | INCOMPLETE (DESIGN, DEP-v11, DEP-NOCARRIER) |  |
 | 61 | `proposals/05_SC_obstacle_difficulty_and_modifiers_B.md` | LIVE-PROPOSAL | PROPOSED (two edits: the difficulty: column and Margin.term… | 2/0/0 | 11.8 | SC | — | B05 (B05-one-roll) | COMPLETE | partly superseded (see Status) |
 | 62 | `proposals/05_SC_opposed_obstacle_parity.md` | LIVE-PROPOSAL | PROPOSED — un-held by Jordan's A-26 (2026-11-12: an equal o… | 2/1/0 | 9.4 | SC | 2 RESOLVED-BY · 1 SUPERSEDED | B05 (B05-one-roll) | COMPLETE |  |
 | 63 | `proposals/05_SC_playable_hearing.md` | SUPERSEDED | SUPERSEDED by 05_SC_playable_hearing_B.md (kept for its evi… | 2/0/0 | 10.5 | SC | 1 RESOLVED-BY | B24 (B24-sc-hearing) | n/a | successor: 05_SC_playable_hearing_B.md |
-| 64 | `proposals/05_SC_playable_hearing_B.md` | INCOMPLETE-LIVE | PROPOSED — supersedes 05_SC_playable_hearing.md (SC-P3). De… | 5/1/0 | 22.2 | SC | 4 RESOLVED-BY · 1 SUPERSEDED | B24 (B24-sc-hearing) | INCOMPLETE (DESIGN, DEP) |  |
+| 64 | `proposals/05_SC_playable_hearing_B.md` | INCOMPLETE-LIVE | PROPOSED — supersedes 05_SC_playable_hearing.md (SC-P3). De… | 5/1/0 | 22.2 | SC | 4 RESOLVED-BY · 1 SUPERSEDED | B24 (B24-sc-hearing) | INCOMPLETE (DESIGN, DEP-v11) |  |
 | 65 | `proposals/05_SC_sc05_kernel_disposition_B.md` | LIVE-PROPOSAL | PROPOSED — supersedes 05_SC_sc05_kernel_retirement.md (SC-P… | 2/0/0 | 13.8 | SC | 3 SUPERSEDED | B24 (B24-sc-hearing) | COMPLETE |  |
 | 66 | `proposals/05_SC_sc05_kernel_retirement.md` | SUPERSEDED | SUPERSEDED by 05_SC_sc05_kernel_disposition_B.md (kept for … | 2/0/0 | 8.9 | SC | 2 RESOLVED-BY · 1 SUPERSEDED | B24 (B24-sc-hearing) | n/a | successor: 05_SC_sc05_kernel_disposition_B.md |
 | 67 | `proposals/06_FA_decree_binds.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 17.5 | FA | 2 RESOLVED-BY · 1 SUPERSEDED | B21 (B21-fa-governance) | COMPLETE |  |
 | 68 | `proposals/06_FA_hygiene.md` | LIVE-PROPOSAL | PROPOSED | 1/0/0 | 7.8 | FA | 2 SUPERSEDED | B03 (B03-hygiene) | COMPLETE |  |
 | 69 | `proposals/06_FA_levy_through_the_seat_B.md` | LIVE-PROPOSAL | PROPOSED | 3/0/0 | 11.8 | FA | 3 RESOLVED-BY | B21 (B21-fa-governance) | COMPLETE |  |
-| 70 | `proposals/06_FA_office_capabilities.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/1 | 13.0 | FA | 1 RESOLVED-BY | B04 (B04-capability-home) | INCOMPLETE (DEP) |  |
+| 70 | `proposals/06_FA_office_capabilities.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/1 | 13.0 | FA | 1 RESOLVED-BY | B04 (B04-capability-home) | INCOMPLETE (DEP-NOCARRIER) |  |
 | 71 | `proposals/06_FA_playable_scenario.md` | LIVE-PROPOSAL | PROPOSED | 4/0/1 | 13.9 | FA | 1 RESOLVED-BY | B21 (B21-fa-governance) | COMPLETE |  |
 | 72 | `proposals/06_FA_remit_grant_by_row.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 9.7 | FA | — | B21 (B21-fa-governance) | COMPLETE |  |
 | 73 | `proposals/06_FA_seat_terms_and_turnover.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 10.6 | FA | 1 SUPERSEDED | B21 (B21-fa-governance) | COMPLETE |  |
 | 74 | `proposals/06_FA_seat_terms_by_body_B.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 9.8 | FA | — | B21 (B21-fa-governance) | COMPLETE |  |
 | 75 | `proposals/06_FA_shortest_loop_B.md` | LIVE-PROPOSAL | PROPOSED | 3/0/0 | 9.4 | FA | — | B21 (B21-fa-governance) | COMPLETE |  |
-| 76 | `proposals/06_FA_war_lives_in_seats_B.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 12.7 | FA | 1 RESOLVED-BY | B23 (B23-land) | COMPLETE (open checks: 1) |  |
+| 76 | `proposals/06_FA_war_lives_in_seats_B.md` | INCOMPLETE-LIVE | PROPOSED | 2/0/0 | 12.7 | FA | 1 RESOLVED-BY | B23 (B23-land) | INCOMPLETE (DEP-v11) |  |
 | 77 | `proposals/07_SE_arc_needs.md` | LIVE-PROPOSAL | PROPOSED | 2/0/1 | 10.3 | SE | — | B12 (B12-world-motion-and-ground) | COMPLETE (open checks: 1) |  |
-| 78 | `proposals/07_SE_campaign_supply_and_muster.md` | LIVE-PROPOSAL | PROPOSED | 2/0/1 | 16.3 | SE | 1 RESOLVED-BY | B22 (B22-mb-armies) | COMPLETE (open checks: 1) |  |
+| 78 | `proposals/07_SE_campaign_supply_and_muster.md` | INCOMPLETE-LIVE | PROPOSED | 2/0/1 | 16.3 | SE | 1 RESOLVED-BY | B22 (B22-mb-armies) | INCOMPLETE (DEP-v11) |  |
 | 79 | `proposals/07_SE_capability_and_chooser_surface.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 8.5 | SE | 1 SUPERSEDED | B12 (B12-world-motion-and-ground) | COMPLETE |  |
-| 80 | `proposals/07_SE_capability_rate_B.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/0 | 14.9 | SE | — | B12 (B12-world-motion-and-ground) | INCOMPLETE (DESIGN) |  |
+| 80 | `proposals/07_SE_capability_rate_B.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/0 | 14.9 | SE | — | B12 (B12-world-motion-and-ground) | INCOMPLETE (DESIGN, DEP-v11) |  |
 | 81 | `proposals/07_SE_ground_and_granaries.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 18.4 | SE | 2 RESOLVED-BY | B12 (B12-world-motion-and-ground) | COMPLETE |  |
 | 82 | `proposals/07_SE_kernel_repairs.md` | LIVE-PROPOSAL | PROPOSED | 1/0/1 | 11.7 | SE | 2 RESOLVED-BY | B12 (B12-world-motion-and-ground) | COMPLETE |  |
 | 83 | `proposals/07_SE_population_census.md` | LIVE-PROPOSAL | PROPOSED | 3/0/1 | 13.1 | SE | 2 RESOLVED-BY · 2 SUPERSEDED | B12 (B12-world-motion-and-ground) | COMPLETE |  |
@@ -265,7 +340,7 @@ Columns: `R/F/G` is the number of head lines beginning `Reconciled:` / `Folded:`
 | 85 | `proposals/07_SE_treasury_granary_B.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 11.6 | SE | 2 RESOLVED-BY | B12 (B12-world-motion-and-ground) | COMPLETE |  |
 | 86 | `proposals/07_SE_valley_scenario.md` | LIVE-PROPOSAL | PROPOSED | 3/0/0 | 11.9 | SE | — | B12 (B12-world-motion-and-ground) | COMPLETE |  |
 | 87 | `proposals/08_FI_01_claim-sourced-referents.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 9.1 | FI | — | B11 (B11-fi-readers) | COMPLETE |  |
-| 88 | `proposals/08_FI_02_rumour-that-travels.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 9.7 | FI | 1 RESOLVED-BY | B11 (B11-fi-readers) | COMPLETE |  |
+| 88 | `proposals/08_FI_02_rumour-that-travels.md` | INCOMPLETE-LIVE | PROPOSED | 2/0/0 | 9.7 | FI | 1 RESOLVED-BY | B11 (B11-fi-readers) | INCOMPLETE (DEP-v11) |  |
 | 89 | `proposals/08_FI_03_playable-inquiry.md` | INCOMPLETE-LIVE | PROPOSED (design-first: §3 and §4 need a design pass before… | 2/0/0 | 13.1 | FI | — | B11 (B11-fi-readers) | INCOMPLETE (DESIGN) |  |
 | 90 | `proposals/08_FI_04_small-edits.md` | LIVE-PROPOSAL | PROPOSED | 4/0/0 | 11.0 | FI | 2 RESOLVED-BY · 1 SUPERSEDED | B11 (B11-fi-readers) | COMPLETE |  |
 | 91 | `proposals/08_FI_05_evidence-interface.md` | SUPERSEDED | SUPERSEDED by 08_FI_05_evidence-interface_B.md (kept for it… | 2/0/0 | 8.1 | FI | — | B24 (B24-sc-hearing) | n/a | successor: 08_FI_05_evidence-interface_B.md |
@@ -277,8 +352,8 @@ Columns: `R/F/G` is the number of head lines beginning `Reconciled:` / `Folded:`
 | 97 | `proposals/09_WR_B_draws_not_thresholds.md` | LIVE-PROPOSAL | PROPOSED | 2/1/1 | 13.6 | WR | 3 RESOLVED-BY · 1 DISPUTED | B12 (B12-world-motion-and-ground) +part B38 | COMPLETE |  |
 | 98 | `proposals/09_WR_B_pointer_text_for_the_orchestrator.md` | LIVE-PROPOSAL | PROPOSED | 1/0/0 | 7.1 | WR | 1 SUPERSEDED | B03 (B03-hygiene) | COMPLETE |  |
 | 99 | `proposals/09_WR_B_readings_of_closure_and_tension.md` | LIVE-PROPOSAL | PROPOSED | 2/1/0 | 11.7 | WR | — | B36 (B36-wr-story-instruments) | COMPLETE |  |
-| 100 | `proposals/09_WR_B_threadwork_session_and_practitioner.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/0 | 20.4 | WR | 1 RESOLVED-BY · 1 SUPERSEDED | B35 (B35-wr-thread) | INCOMPLETE (CONTENT, DESIGN) |  |
-| 101 | `proposals/09_WR_B_weather_with_memory_and_the_year.md` | LIVE-PROPOSAL | PROPOSED | 2/1/0 | 18.6 | WR | 3 RESOLVED-BY | B12 (B12-world-motion-and-ground) +part B38 | COMPLETE (open checks: 1) |  |
+| 100 | `proposals/09_WR_B_threadwork_session_and_practitioner.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/0 | 20.4 | WR | 1 RESOLVED-BY · 1 SUPERSEDED | B35 (B35-wr-thread) | INCOMPLETE (CONTENT, DESIGN, DEP-v11) |  |
+| 101 | `proposals/09_WR_B_weather_with_memory_and_the_year.md` | INCOMPLETE-LIVE | PROPOSED | 2/1/0 | 18.6 | WR | 3 RESOLVED-BY | B12 (B12-world-motion-and-ground) +part B38 | INCOMPLETE (DEP-v11) |  |
 | 102 | `proposals/09_WR_provided_arcs.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 11.3 | WR | 1 SUPERSEDED | B12 (B12-world-motion-and-ground) | COMPLETE |  |
 | 103 | `proposals/09_WR_story_instruments_that_can_fail.md` | LIVE-PROPOSAL | PROPOSED | 1/1/0 | 12.3 | WR | — | B36 (B36-wr-story-instruments) | COMPLETE |  |
 | 104 | `proposals/09_WR_strand_conclusion.md` | LIVE-PROPOSAL | PROPOSED | 2/1/0 | 11.5 | WR | 1 SUPERSEDED | B12 (B12-world-motion-and-ground) | COMPLETE |  |
@@ -298,67 +373,67 @@ Columns: `R/F/G` is the number of head lines beginning `Reconciled:` / `Folded:`
 | 118 | `proposals/11_GO_player_surface_contract_B.md` | LIVE-PROPOSAL | PROPOSED | 2/1/0 | 25.8 | GO | 8 RESOLVED-BY · 2 SUPERSEDED | B34 (B34-go-surface) | COMPLETE |  |
 | 119 | `proposals/11_GO_pointer_and_stale_text_resolutions.md` | LIVE-PROPOSAL | PROPOSED | 1/0/0 | 9.9 | GO | 1 RESOLVED-BY · 1 SUPERSEDED | B03 (B03-hygiene) +part B06 | COMPLETE |  |
 | 120 | `proposals/11_GO_port_gate_order_and_coverage.md` | LIVE-PROPOSAL | PROPOSED | 3/0/0 | 18.1 | GO | — | B41 (B41-go-port-gate) | COMPLETE |  |
-| 121 | `proposals/12_ARCS_arcs_as_staged_goals.md` | INCOMPLETE-LIVE | PROPOSED | 3/2/0 | 9.0 | ARCS | 1 RESOLVED-BY · 1 SUPERSEDED | B10 (B10-character) | INCOMPLETE (SITE, CONTENT) |  |
+| 121 | `proposals/12_ARCS_arcs_as_staged_goals.md` | INCOMPLETE-LIVE | PROPOSED | 4/2/0 | 9.8 | ARCS | 1 RESOLVED-BY · 1 SUPERSEDED | B10 (B10-character) | INCOMPLETE (CONTENT) | edited by R-B (3.3.1) |
 | 122 | `proposals/12_ARCS_case_on_the_realm.md` | INCOMPLETE-LIVE | PROPOSED | 2/0/0 | 8.0 | ARCS | 1 RESOLVED-BY | B39 (B39-procgen-and-cases) | INCOMPLETE (CONTENT) |  |
 | 123 | `proposals/12_ARCS_cited_evidence.md` | LIVE-PROPOSAL | PROPOSED (item 4 only; items 1–3 superseded by 05_SC_eviden… | 2/0/0 | 7.9 | ARCS | — | B24 (B24-sc-hearing) | COMPLETE (open checks: 1) | partly superseded (see Status) |
-| 124 | `proposals/12_ARCS_substrate_as_ground.md` | LIVE-PROPOSAL | PROPOSED (A-40 rules Option A, ground; A-43 answers S-2; A-… | 2/0/0 | 9.2 | ARCS | — | B35 (B35-wr-thread) | COMPLETE |  |
+| 124 | `proposals/12_ARCS_substrate_as_ground.md` | INCOMPLETE-LIVE | PROPOSED (A-40 rules Option A, ground; A-43 answers S-2; A-… | 2/0/0 | 9.2 | ARCS | — | B35 (B35-wr-thread) | INCOMPLETE (DESIGN) |  |
 | 125 | `proposals/13_SC_calibration.md` | LIVE-PROPOSAL | PROPOSED | 2/1/0 | 12.4 | SC | — | B05 (B05-one-roll) | COMPLETE |  |
 | 126 | `proposals/13_SC_draw_for_unrolled_contests.md` | LIVE-PROPOSAL | PROPOSED — a pointer file: each of its five rolls is carrie… | 2/0/0 | 10.1 | SC | — | B07 (B07-task-draw) | COMPLETE |  |
 | 127 | `proposals/13_SC_tuning_tables.md` | LIVE-PROPOSAL | PROPOSED | 2/1/0 | 19.3 | SC | 1 SUPERSEDED | B05 (B05-one-roll) | COMPLETE |  |
 | 128 | `proposals/14_VERBS_BINDING_A_formation.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 16.0 | VERBS | — | B21 (B21-fa-governance) | COMPLETE (open checks: 1) |  |
 | 129 | `proposals/14_VERBS_BINDING_B_sittings.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 10.6 | VERBS | — | B32 (B32-inst-kit) | COMPLETE |  |
 | 130 | `proposals/14_VERBS_BINDING_C_turnover.md` | LIVE-PROPOSAL | PROPOSED | 3/0/0 | 16.6 | VERBS | — | B21 (B21-fa-governance) | COMPLETE |  |
-| 131 | `proposals/14_VERBS_BINDING_D_orders.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/0 | 12.8 | VERBS | — | B21 (B21-fa-governance) | INCOMPLETE (DEP) |  |
+| 131 | `proposals/14_VERBS_BINDING_D_orders.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/0 | 12.8 | VERBS | — | B21 (B21-fa-governance) | INCOMPLETE (DEP-NOCARRIER) |  |
 | 132 | `proposals/14_VERBS_BINDING_E_war_seats.md` | LIVE-PROPOSAL | PROPOSED | 3/0/0 | 10.5 | VERBS | — | B23 (B23-land) | COMPLETE |  |
 | 133 | `proposals/14_VERBS_MATERIAL_A_mending.md` | INCOMPLETE-LIVE | PROPOSED | 2/0/0 | 18.3 | VERBS | — | B12 (B12-world-motion-and-ground) | INCOMPLETE (DESIGN) |  |
 | 134 | `proposals/14_VERBS_MATERIAL_B_stores.md` | LIVE-PROPOSAL | PROPOSED | 3/0/1 | 16.0 | VERBS | — | B12 (B12-world-motion-and-ground) | COMPLETE |  |
 | 135 | `proposals/14_VERBS_MATERIAL_C_works.md` | LIVE-PROPOSAL | PROPOSED | 2/0/1 | 13.2 | VERBS | — | B12 (B12-world-motion-and-ground) +part B25 | COMPLETE |  |
 | 136 | `proposals/14_VERBS_MATERIAL_D_paper.md` | LIVE-PROPOSAL | PROPOSED | 2/0/1 | 20.5 | VERBS | — | B26 (B26-fi-inquiry) | COMPLETE (open checks: 1) |  |
 | 137 | `proposals/14_VERBS_MATERIAL_E_knowledge.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 13.0 | VERBS | — | B26 (B26-fi-inquiry) | COMPLETE (open checks: 1) |  |
-| 138 | `proposals/14_VERBS_MILITARY_A_movement.md` | INCOMPLETE-LIVE | PROPOSED | 2/2/0 | 19.7 | VERBS | — | B22 (B22-mb-armies) | INCOMPLETE (DEP) |  |
-| 139 | `proposals/14_VERBS_MILITARY_B_train.md` | INCOMPLETE-LIVE | PROPOSED | 2/0/0 | 13.2 | VERBS | — | B22 (B22-mb-armies) | INCOMPLETE (DEP) |  |
-| 140 | `proposals/14_VERBS_MILITARY_C_the_muster.md` | INCOMPLETE-LIVE | PROPOSED | 2/1/1 | 23.7 | VERBS | — | B22 (B22-mb-armies) | INCOMPLETE (DEP) |  |
-| 141 | `proposals/14_VERBS_MILITARY_D_the_order_of_battle.md` | INCOMPLETE-LIVE | PROPOSED | 2/2/1 | 21.2 | VERBS | — | B22 (B22-mb-armies) | INCOMPLETE (DEP) |  |
+| 138 | `proposals/14_VERBS_MILITARY_A_movement.md` | INCOMPLETE-LIVE | PROPOSED | 2/2/0 | 19.7 | VERBS | — | B22 (B22-mb-armies) | INCOMPLETE (DESIGN) |  |
+| 139 | `proposals/14_VERBS_MILITARY_B_train.md` | INCOMPLETE-LIVE | PROPOSED | 2/0/0 | 13.2 | VERBS | — | B22 (B22-mb-armies) | INCOMPLETE (DESIGN) |  |
+| 140 | `proposals/14_VERBS_MILITARY_C_the_muster.md` | INCOMPLETE-LIVE | PROPOSED | 2/1/1 | 23.7 | VERBS | — | B22 (B22-mb-armies) | INCOMPLETE (DESIGN) |  |
+| 141 | `proposals/14_VERBS_MILITARY_D_the_order_of_battle.md` | INCOMPLETE-LIVE | PROPOSED | 2/2/1 | 21.2 | VERBS | — | B22 (B22-mb-armies) | INCOMPLETE (DESIGN) |  |
 | 142 | `proposals/14_VERBS_PHYSICAL_A_custody_and_force.md` | LIVE-PROPOSAL | PROPOSED | 3/1/0 | 17.3 | VERBS | 1 RESOLVED-BY · 1 SUPERSEDED | B15 (B15-pc-calibration) +part B29 | COMPLETE (open checks: 1) |  |
-| 143 | `proposals/14_VERBS_PHYSICAL_B_field_and_ruin.md` | INCOMPLETE-LIVE | PROPOSED | 2/1/0 | 16.8 | VERBS | — | B22 (B22-mb-armies) +part B21 | INCOMPLETE (DEP) |  |
+| 143 | `proposals/14_VERBS_PHYSICAL_B_field_and_ruin.md` | INCOMPLETE-LIVE | PROPOSED | 2/1/0 | 16.8 | VERBS | — | B22 (B22-mb-armies) +part B21 | INCOMPLETE (DESIGN, DEP-v11) |  |
 | 144 | `proposals/14_VERBS_PHYSICAL_C_looking.md` | LIVE-PROPOSAL | PROPOSED | 2/0/1 | 9.2 | VERBS | — | B26 (B26-fi-inquiry) | COMPLETE |  |
-| 145 | `proposals/14_VERBS_PHYSICAL_D_thread_read.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 8.0 | VERBS | 1 SUPERSEDED | B35 (B35-wr-thread) | COMPLETE |  |
+| 145 | `proposals/14_VERBS_PHYSICAL_D_thread_read.md` | INCOMPLETE-LIVE | PROPOSED | 2/0/0 | 8.0 | VERBS | 1 SUPERSEDED | B35 (B35-wr-thread) | INCOMPLETE (DEP-NOCARRIER) |  |
 | 146 | `proposals/14_VERBS_SOCIAL1_A_formation.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 9.3 | VERBS | 1 SUPERSEDED | B11 (B11-fi-readers) | COMPLETE |  |
 | 147 | `proposals/14_VERBS_SOCIAL1_B_documents_and_obedience.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 17.4 | VERBS | 1 RESOLVED-BY | B28 (B28-social-verbs) | COMPLETE (open checks: 3) |  |
 | 148 | `proposals/14_VERBS_SOCIAL1_C_persuasion_and_deceit.md` | LIVE-PROPOSAL | PROPOSED | 3/0/0 | 12.6 | VERBS | — | B28 (B28-social-verbs) | COMPLETE (open checks: 2) |  |
 | 149 | `proposals/14_VERBS_SOCIAL1_D_grievance_and_settlement.md` | LIVE-PROPOSAL | PROPOSED | 2/1/0 | 18.1 | VERBS | — | B28 (B28-social-verbs) | COMPLETE (open checks: 1) |  |
 | 150 | `proposals/14_VERBS_SOCIAL2_A_formation_on_what_is_known.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 9.9 | VERBS | 1 SUPERSEDED | B25 (B25-fi-questioning) | COMPLETE |  |
 | 151 | `proposals/14_VERBS_SOCIAL2_B_a_word_with_content.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 16.9 | VERBS | — | B25 (B25-fi-questioning) | COMPLETE (open checks: 1) |  |
-| 152 | `proposals/14_VERBS_SOCIAL2_C_case_question_confession.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 16.6 | VERBS | — | B25 (B25-fi-questioning) | COMPLETE |  |
+| 152 | `proposals/14_VERBS_SOCIAL2_C_case_question_confession.md` | INCOMPLETE-LIVE | PROPOSED | 2/0/0 | 16.6 | VERBS | — | B25 (B25-fi-questioning) | INCOMPLETE (DEP-v11) |  |
 | 153 | `proposals/14_VERBS_SOCIAL2_D_tie.md` | LIVE-PROPOSAL | PROPOSED | 3/0/0 | 9.0 | VERBS | 1 RESOLVED-BY | B25 (B25-fi-questioning) | COMPLETE |  |
 | 154 | `proposals/15_INSTITUTIONS_BYZANTINE_A_dignities_and_the_roll.md` | LIVE-PROPOSAL | PROPOSED | 3/0/1 | 16.2 | INSTITUTIONS | — | B32 (B32-inst-kit) | COMPLETE |  |
 | 155 | `proposals/15_INSTITUTIONS_BYZANTINE_B_the_roga_and_the_fisc.md` | LIVE-PROPOSAL | PROPOSED | 3/0/1 | 14.2 | INSTITUTIONS | — | B33 (B33-inst-economy-hands) | COMPLETE (open checks: 1) |  |
 | 156 | `proposals/15_INSTITUTIONS_BYZANTINE_C_the_hands_of_the_chain.md` | LIVE-PROPOSAL | PROPOSED | 3/0/1 | 15.6 | INSTITUTIONS | — | B33 (B33-inst-economy-hands) | COMPLETE (open checks: 2) |  |
-| 157 | `proposals/15_INSTITUTIONS_BYZANTINE_D_the_empire_at_a_distance.md` | LIVE-PROPOSAL | PROPOSED | 3/0/1 | 15.3 | INSTITUTIONS | 1 RESOLVED-BY | B33 (B33-inst-economy-hands) | COMPLETE (open checks: 2) |  |
-| 158 | `proposals/15_INSTITUTIONS_BYZANTINE_E_accession_recall_and_the_crowd.md` | LIVE-PROPOSAL | PROPOSED | 4/0/1 | 17.9 | INSTITUTIONS | — | B32 (B32-inst-kit) | COMPLETE (open checks: 3) |  |
+| 157 | `proposals/15_INSTITUTIONS_BYZANTINE_D_the_empire_at_a_distance.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/1 | 15.3 | INSTITUTIONS | 1 RESOLVED-BY | B33 (B33-inst-economy-hands) | INCOMPLETE (DEP-NOCARRIER, DEP-v11) |  |
+| 158 | `proposals/15_INSTITUTIONS_BYZANTINE_E_accession_recall_and_the_crowd.md` | INCOMPLETE-LIVE | PROPOSED | 4/0/1 | 17.9 | INSTITUTIONS | — | B32 (B32-inst-kit) | INCOMPLETE (DEP-v11) |  |
 | 159 | `proposals/15_INSTITUTIONS_BYZANTINE_F_playable_scenarios_and_reading.md` | LIVE-PROPOSAL | PROPOSED | 2/0/1 | 12.8 | INSTITUTIONS | — | B40 (B40-inst-scenarios) | COMPLETE (open checks: 2) |  |
 | 160 | `proposals/15_INSTITUTIONS_BYZANTINE_grounding_mechanisms.md` | LIVE-PROPOSAL | PROPOSED (an executable plan for a later session; ratifies … | 1/0/0 | 18.5 | INSTITUTIONS | — | B40 (B40-inst-scenarios) | COMPLETE |  |
 | 161 | `proposals/15_INSTITUTIONS_COLONIAL_A_instruments.md` | LIVE-PROPOSAL | PROPOSED | 3/0/1 | 16.4 | INSTITUTIONS | — | B32 (B32-inst-kit) | COMPLETE (open checks: 2) |  |
-| 162 | `proposals/15_INSTITUTIONS_COLONIAL_B_distance.md` | LIVE-PROPOSAL | PROPOSED | 3/0/1 | 19.0 | INSTITUTIONS | 1 RESOLVED-BY | B33 (B33-inst-economy-hands) | COMPLETE (open checks: 1) |  |
-| 163 | `proposals/15_INSTITUTIONS_COLONIAL_C_audit_and_charter.md` | LIVE-PROPOSAL | PROPOSED | 3/0/1 | 16.3 | INSTITUTIONS | — | B33 (B33-inst-economy-hands) | COMPLETE |  |
+| 162 | `proposals/15_INSTITUTIONS_COLONIAL_B_distance.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/1 | 19.0 | INSTITUTIONS | 1 RESOLVED-BY | B33 (B33-inst-economy-hands) | INCOMPLETE (DEP-v11) |  |
+| 163 | `proposals/15_INSTITUTIONS_COLONIAL_C_audit_and_charter.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/1 | 16.3 | INSTITUTIONS | — | B33 (B33-inst-economy-hands) | INCOMPLETE (DEP-v11) |  |
 | 164 | `proposals/15_INSTITUTIONS_COLONIAL_D_accomplishment.md` | LIVE-PROPOSAL | PROPOSED (the part once held back is released by A-17/A-18;… | 3/0/1 | 13.1 | INSTITUTIONS | — | B33 (B33-inst-economy-hands) +part B39 | COMPLETE |  |
-| 165 | `proposals/15_INSTITUTIONS_COLONIAL_E_scenario.md` | LIVE-PROPOSAL | PROPOSED | 2/0/1 | 12.7 | INSTITUTIONS | — | B40 (B40-inst-scenarios) | COMPLETE |  |
-| 166 | `proposals/15_INSTITUTIONS_COLONIAL_grounding_F_what_the_tree_adds.md` | LIVE-PROPOSAL | PROPOSED (an executable plan for a later session; not ratif… | 2/0/0 | 25.0 | INSTITUTIONS | — | B40 (B40-inst-scenarios) | COMPLETE (open checks: 2) |  |
-| 167 | `proposals/15_INSTITUTIONS_PAPACY_A_ground.md` | LIVE-PROPOSAL | PROPOSED | 1/0/1 | 9.8 | INSTITUTIONS | — | B32 (B32-inst-kit) | COMPLETE |  |
-| 168 | `proposals/15_INSTITUTIONS_PAPACY_B_patronage_election_discipline.md` | LIVE-PROPOSAL | PROPOSED | 3/0/1 | 20.0 | INSTITUTIONS | 1 RESOLVED-BY · 2 SUPERSEDED | B32 (B32-inst-kit) | COMPLETE |  |
-| 169 | `proposals/15_INSTITUTIONS_PAPACY_C_consecration_and_deed_ledger.md` | LIVE-PROPOSAL | PROPOSED | 3/0/1 | 16.1 | INSTITUTIONS | — | B33 (B33-inst-economy-hands) | COMPLETE (open checks: 1) |  |
-| 170 | `proposals/15_INSTITUTIONS_PAPACY_D_sanction_and_absolution.md` | LIVE-PROPOSAL | PROPOSED | 3/0/1 | 18.9 | INSTITUTIONS | 1 RESOLVED-BY | B33 (B33-inst-economy-hands) | COMPLETE (open checks: 1) |  |
-| 171 | `proposals/15_INSTITUTIONS_PAPACY_E_sees_tithe_orders_legates_council.md` | LIVE-PROPOSAL | PROPOSED (items 1-4 are content and small edits; item 6 is … | 3/0/1 | 16.9 | INSTITUTIONS | — | B33 (B33-inst-economy-hands) | COMPLETE (open checks: 1) |  |
-| 172 | `proposals/15_INSTITUTIONS_PAPACY_F_playable_vacant_chair.md` | LIVE-PROPOSAL | PROPOSED | 3/0/1 | 11.1 | INSTITUTIONS | — | B40 (B40-inst-scenarios) | COMPLETE (open checks: 1) |  |
-| 173 | `proposals/15_INSTITUTIONS_PAPACY_grounding_mechanisms.md` | LIVE-PROPOSAL | PROPOSED (an executable plan for a later session; ratifies … | 1/0/0 | 23.6 | INSTITUTIONS | — | B40 (B40-inst-scenarios) | COMPLETE (open checks: 2) |  |
+| 165 | `proposals/15_INSTITUTIONS_COLONIAL_E_scenario.md` | INCOMPLETE-LIVE | PROPOSED | 2/0/1 | 12.7 | INSTITUTIONS | — | B40 (B40-inst-scenarios) | INCOMPLETE (DEP-v11) |  |
+| 166 | `proposals/15_INSTITUTIONS_COLONIAL_grounding_F_what_the_tree_adds.md` | INCOMPLETE-LIVE | PROPOSED (an executable plan for a later session; not ratif… | 2/0/0 | 25.0 | INSTITUTIONS | — | B40 (B40-inst-scenarios) | INCOMPLETE (DEP-NOCARRIER) |  |
+| 167 | `proposals/15_INSTITUTIONS_PAPACY_A_ground.md` | INCOMPLETE-LIVE | PROPOSED | 1/0/1 | 9.8 | INSTITUTIONS | — | B32 (B32-inst-kit) | INCOMPLETE (DEP-v11) |  |
+| 168 | `proposals/15_INSTITUTIONS_PAPACY_B_patronage_election_discipline.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/1 | 20.0 | INSTITUTIONS | 1 RESOLVED-BY · 2 SUPERSEDED | B32 (B32-inst-kit) | INCOMPLETE (DEP-v11) |  |
+| 169 | `proposals/15_INSTITUTIONS_PAPACY_C_consecration_and_deed_ledger.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/1 | 16.1 | INSTITUTIONS | — | B33 (B33-inst-economy-hands) | INCOMPLETE (DEP-v11) |  |
+| 170 | `proposals/15_INSTITUTIONS_PAPACY_D_sanction_and_absolution.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/1 | 18.9 | INSTITUTIONS | 1 RESOLVED-BY | B33 (B33-inst-economy-hands) | INCOMPLETE (DEP-v11) |  |
+| 171 | `proposals/15_INSTITUTIONS_PAPACY_E_sees_tithe_orders_legates_council.md` | INCOMPLETE-LIVE | PROPOSED (items 1-4 are content and small edits; item 6 is … | 3/0/1 | 16.9 | INSTITUTIONS | — | B33 (B33-inst-economy-hands) | INCOMPLETE (DEP-v11) |  |
+| 172 | `proposals/15_INSTITUTIONS_PAPACY_F_playable_vacant_chair.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/1 | 11.1 | INSTITUTIONS | — | B40 (B40-inst-scenarios) | INCOMPLETE (DEP-v11) |  |
+| 173 | `proposals/15_INSTITUTIONS_PAPACY_grounding_mechanisms.md` | INCOMPLETE-LIVE | PROPOSED (an executable plan for a later session; ratifies … | 1/0/0 | 23.6 | INSTITUTIONS | — | B40 (B40-inst-scenarios) | INCOMPLETE (DEP-v11) |  |
 | 174 | `proposals/15_INSTITUTIONS_SYNTHESIS_A_one_kit.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 28.0 | INSTITUTIONS | — | B32 (B32-inst-kit) | COMPLETE (open checks: 1) |  |
-| 175 | `proposals/15_INSTITUTIONS_SYNTHESIS_B_the_deed_ledger.md` | LIVE-PROPOSAL | PROPOSED — the canon amendment it drafts is NOT APPLIED and… | 2/0/0 | 23.1 | INSTITUTIONS | 1 RESOLVED-BY | B32 (B32-inst-kit) +part B39 | COMPLETE (open checks: 2) |  |
-| 176 | `proposals/15_INSTITUTIONS_SYNTHESIS_C_crossings.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 18.4 | INSTITUTIONS | — | B33 (B33-inst-economy-hands) | COMPLETE (open checks: 1) |  |
+| 175 | `proposals/15_INSTITUTIONS_SYNTHESIS_B_the_deed_ledger.md` | INCOMPLETE-LIVE | PROPOSED — the canon amendment it drafts is NOT APPLIED and… | 2/0/0 | 23.1 | INSTITUTIONS | 1 RESOLVED-BY | B32 (B32-inst-kit) +part B39 | INCOMPLETE (DEP-v11) |  |
+| 176 | `proposals/15_INSTITUTIONS_SYNTHESIS_C_crossings.md` | INCOMPLETE-LIVE | PROPOSED | 2/0/0 | 18.4 | INSTITUTIONS | — | B33 (B33-inst-economy-hands) | INCOMPLETE (DEP-v11) |  |
 | 177 | `proposals/15_INSTITUTIONS_SYNTHESIS_D_first_playable.md` | LIVE-PROPOSAL | PROPOSED | 3/0/0 | 18.6 | INSTITUTIONS | — | B40 (B40-inst-scenarios) | COMPLETE |  |
-| 178 | `proposals/15_INSTITUTIONS_SYNTHESIS_E_implementation_plan.md` | LIVE-PROPOSAL | PROPOSED (a plan; it schedules the twenty-one family propos… | 2/0/0 | 24.3 | INSTITUTIONS | — | B40 (B40-inst-scenarios) | COMPLETE |  |
+| 178 | `proposals/15_INSTITUTIONS_SYNTHESIS_E_implementation_plan.md` | INCOMPLETE-LIVE | PROPOSED (a plan; it schedules the twenty-one family propos… | 2/0/0 | 24.3 | INSTITUTIONS | — | B40 (B40-inst-scenarios) | INCOMPLETE (DEP-v11, DEP-NOCARRIER) |  |
 | 179 | `proposals/15_INSTITUTIONS_VENICE_A_obligation_and_the_ask.md` | LIVE-PROPOSAL | PROPOSED | 2/0/1 | 14.4 | INSTITUTIONS | — | B33 (B33-inst-economy-hands) | COMPLETE |  |
 | 180 | `proposals/15_INSTITUTIONS_VENICE_B_debt_instrument.md` | LIVE-PROPOSAL | PROPOSED | 2/0/1 | 17.9 | INSTITUTIONS | 1 RESOLVED-BY | B33 (B33-inst-economy-hands) | COMPLETE |  |
-| 181 | `proposals/15_INSTITUTIONS_VENICE_C_roll_lot_ballot.md` | LIVE-PROPOSAL | PROPOSED | 3/0/1 | 19.0 | INSTITUTIONS | 2 RESOLVED-BY | B32 (B32-inst-kit) | COMPLETE (open checks: 1) |  |
+| 181 | `proposals/15_INSTITUTIONS_VENICE_C_roll_lot_ballot.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/1 | 19.0 | INSTITUTIONS | 2 RESOLVED-BY | B32 (B32-inst-kit) | INCOMPLETE (DEP-v11) |  |
 | 182 | `proposals/15_INSTITUTIONS_VENICE_D_houses_charters_and_content.md` | LIVE-PROPOSAL | PROPOSED | 2/0/1 | 20.9 | INSTITUTIONS | — | B33 (B33-inst-economy-hands) | COMPLETE |  |
 | 183 | `proposals/15_INSTITUTIONS_VENICE_grounding_E_what_the_tree_adds.md` | LIVE-PROPOSAL | PROPOSED (an executable plan for a later session; not ratif… | 2/0/0 | 24.8 | INSTITUTIONS | — | B40 (B40-inst-scenarios) | COMPLETE (open checks: 1) |  |
 | 184 | `proposals/16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` | LIVE-PROPOSAL | PROPOSED | 3/0/0 | 18.4 | PESSIMIST | 3 RESOLVED-BY | B10 (B10-character) | COMPLETE |  |
@@ -376,8 +451,8 @@ Columns: `R/F/G` is the number of head lines beginning `Reconciled:` / `Folded:`
 | 196 | `proposals/16_PESSIMIST_FA_C_under_the_seat.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 11.5 | PESSIMIST | — | B21 (B21-fa-governance) | COMPLETE |  |
 | 197 | `proposals/16_PESSIMIST_FI_A_what_a_rumour_can_garble.md` | LIVE-PROPOSAL | PROPOSED | 1/0/0 | 10.6 | PESSIMIST | — | B11 (B11-fi-readers) | COMPLETE |  |
 | 198 | `proposals/16_PESSIMIST_FI_B_a_paper_is_about_something.md` | LIVE-PROPOSAL | PROPOSED | 1/0/0 | 8.5 | PESSIMIST | — | B26 (B26-fi-inquiry) | COMPLETE |  |
-| 199 | `proposals/16_PESSIMIST_FI_C_what_a_deed_leaves_behind.md` | LIVE-PROPOSAL | PROPOSED | 3/0/0 | 11.8 | PESSIMIST | — | B11 (B11-fi-readers) | COMPLETE |  |
-| 200 | `proposals/16_PESSIMIST_FI_D_withhold_what_has_no_product.md` | LIVE-PROPOSAL | PROPOSED | 1/0/0 | 8.3 | PESSIMIST | 1 RESOLVED-BY | B26 (B26-fi-inquiry) | COMPLETE (open checks: 1) |  |
+| 199 | `proposals/16_PESSIMIST_FI_C_what_a_deed_leaves_behind.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/0 | 11.8 | PESSIMIST | — | B11 (B11-fi-readers) | INCOMPLETE (DEP-v11) |  |
+| 200 | `proposals/16_PESSIMIST_FI_D_withhold_what_has_no_product.md` | INCOMPLETE-LIVE | PROPOSED | 1/0/0 | 8.3 | PESSIMIST | 1 RESOLVED-BY | B26 (B26-fi-inquiry) | INCOMPLETE (DEP-v11) |  |
 | 201 | `proposals/16_PESSIMIST_GAME_consequence_reading.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 8.0 | PESSIMIST | 2 RESOLVED-BY | B02 (B02-tests) | COMPLETE |  |
 | 202 | `proposals/16_PESSIMIST_GAME_standing_occasions_carry_their_cause.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 8.3 | PESSIMIST | 2 RESOLVED-BY · 1 SUPERSEDED | B09 (B09-memory) | COMPLETE |  |
 | 203 | `proposals/16_PESSIMIST_GAME_the_world_draws.md` | INCOMPLETE-LIVE | PROPOSED | 2/0/0 | 9.7 | PESSIMIST | — | B12 (B12-world-motion-and-ground) | INCOMPLETE (DESIGN) |  |
@@ -404,7 +479,7 @@ Columns: `R/F/G` is the number of head lines beginning `Reconciled:` / `Folded:`
 | 224 | `proposals/16_PESSIMIST_WR_C_illness_on_the_body_ladder.md` | LIVE-PROPOSAL | PROPOSED (reduced: carried by 22_HAPPENINGS_A edit 2, C3-K4) | 2/0/0 | 9.0 | PESSIMIST | — | B37 (B37-happenings) | COMPLETE |  |
 | 225 | `proposals/16_PESSIMIST_WR_D_small_clock_repairs_and_two_readings.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 10.2 | PESSIMIST | — | B36 (B36-wr-story-instruments) | COMPLETE |  |
 | 226 | `proposals/17_CENSUS_C1A_01_deletion_batches.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 10.8 | CENSUS | — | B03 (B03-hygiene) | COMPLETE |  |
-| 227 | `proposals/17_CENSUS_C1A_02_wires_and_corrections.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/0 | 16.2 | CENSUS | — | B10 (B10-character) +part B12,B21,B22,B24,B34 | INCOMPLETE (DEP) |  |
+| 227 | `proposals/17_CENSUS_C1A_02_wires_and_corrections.md` | INCOMPLETE-LIVE | PROPOSED | 3/0/0 | 16.2 | CENSUS | — | B10 (B10-character) +part B12,B21,B22,B24,B34 | INCOMPLETE (DEP-NOCARRIER) |  |
 | 228 | `proposals/17_CENSUS_C1B_01_deletions.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 12.5 | CENSUS | — | B03 (B03-hygiene) +part B24 | COMPLETE |  |
 | 229 | `proposals/17_CENSUS_C1B_02_wires.md` | LIVE-PROPOSAL | PROPOSED | 1/0/0 | 10.0 | CENSUS | — | B36 (B36-wr-story-instruments) +part B39 | COMPLETE |  |
 | 230 | `proposals/17_CENSUS_C1B_03_corrections.md` | LIVE-PROPOSAL | PROPOSED | 1/0/0 | 6.8 | CENSUS | — | B03 (B03-hygiene) | COMPLETE |  |
@@ -415,10 +490,10 @@ Columns: `R/F/G` is the number of head lines beginning `Reconciled:` / `Folded:`
 | 235 | `proposals/18_DETERMINISM_notice_is_a_draw.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 11.2 | DETERMINISM | 1 RESOLVED-BY | B11 (B11-fi-readers) | COMPLETE |  |
 | 236 | `proposals/18_DETERMINISM_rival_acts_in_one_fold.md` | LIVE-PROPOSAL | PROPOSED | 2/1/0 | 9.0 | DETERMINISM | 1 STALE/FALSE-POS | B08 (B08-scene-order) | COMPLETE |  |
 | 237 | `proposals/18_DETERMINISM_task_draw_for_uncontested_verbs.md` | LIVE-PROPOSAL | PROPOSED | 2/0/1 | 20.7 | DETERMINISM | 3 RESOLVED-BY | B07 (B07-task-draw) | COMPLETE |  |
-| 238 | `proposals/19_LACUNA_admission_rides_the_citing_draw.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 11.6 | LACUNA | 1 RESOLVED-BY | B24 (B24-sc-hearing) | COMPLETE |  |
+| 238 | `proposals/19_LACUNA_admission_rides_the_citing_draw.md` | INCOMPLETE-LIVE | PROPOSED | 2/0/0 | 11.6 | LACUNA | 1 RESOLVED-BY | B24 (B24-sc-hearing) | INCOMPLETE (DEP-v11) |  |
 | 239 | `proposals/19_LACUNA_conclusion_is_a_committed_assertion.md` | LIVE-PROPOSAL | PROPOSED (design-first in its value-space and record halves… | 2/0/0 | 12.0 | LACUNA | — | B11 (B11-fi-readers) | COMPLETE |  |
-| 240 | `proposals/19_LACUNA_questioning_has_an_approach_and_a_cost.md` | LIVE-PROPOSAL | PROPOSED (small; depends on CP-T06-05, the questioned perso… | 2/0/0 | 9.1 | LACUNA | — | B26 (B26-fi-inquiry) | COMPLETE (open checks: 1) |  |
-| 241 | `proposals/19_LACUNA_verdict_ladder_and_reversal.md` | LIVE-PROPOSAL | PROPOSED (results 1-4 are edits on existing owners; reversa… | 3/0/0 | 15.1 | LACUNA | — | B27 (B27-sc-proceedings) +part B36 | COMPLETE |  |
+| 240 | `proposals/19_LACUNA_questioning_has_an_approach_and_a_cost.md` | INCOMPLETE-LIVE | PROPOSED (small; depends on CP-T06-05, the questioned perso… | 2/0/0 | 9.1 | LACUNA | — | B26 (B26-fi-inquiry) | INCOMPLETE (DEP-v11) |  |
+| 241 | `proposals/19_LACUNA_verdict_ladder_and_reversal.md` | LIVE-PROPOSAL | PROPOSED (results 1-4 are edits on existing owners; reversa… | 4/0/0 | 16.4 | LACUNA | — | B27 (B27-sc-proceedings) +part B36 | COMPLETE | edited by R-B (3.3.1) |
 | 242 | `proposals/20_NARRATIVE_A_stands_for.md` | LIVE-PROPOSAL | PROPOSED | 1/2/0 | 19.8 | NARRATIVE | — | B38 (B38-narrative-regimes) | COMPLETE |  |
 | 243 | `proposals/20_NARRATIVE_B_what_he_was_owed.md` | LIVE-PROPOSAL | PROPOSED | 2/2/0 | 17.1 | NARRATIVE | — | B38 (B38-narrative-regimes) | COMPLETE (open checks: 1) |  |
 | 244 | `proposals/20_NARRATIVE_C_who_holds_what.md` | LIVE-PROPOSAL | PROPOSED | 2/1/0 | 16.0 | NARRATIVE | — | B38 (B38-narrative-regimes) | COMPLETE |  |
@@ -444,29 +519,29 @@ Columns: `R/F/G` is the number of head lines beginning `Reconciled:` / `Folded:`
 | 264 | `proposals/26_MASS_BATTLE_cell_scale_and_time.md` | LIVE-PROPOSAL | PROPOSED | 1/0/0 | 14.0 | MB | — | B19 (B19-mb-field-calibration) | COMPLETE |  |
 | 265 | `proposals/26_MASS_BATTLE_maneuver_orders.md` | LIVE-PROPOSAL | PROPOSED | 1/1/0 | 16.7 | MB | — | B20 (B20-mb-orders) | COMPLETE |  |
 | 266 | `proposals/26_MASS_BATTLE_movement_and_fatigue_as_data.md` | LIVE-PROPOSAL | PROPOSED | 1/1/0 | 13.5 | MB | — | B31 (B31-mb-loadout-economy) | COMPLETE |  |
-| 267 | `proposals/26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` | INCOMPLETE-LIVE | PROPOSED | 1/1/0 | 17.5 | MB | — | B19 (B19-mb-field-calibration) | INCOMPLETE (SITE) |  |
-| 268 | `proposals/27_MB_A_command_and_the_obedience_draw.md` | INCOMPLETE-LIVE | PROPOSED | 1/0/0 | 32.1 | MB | — | B19 (B19-mb-field-calibration) | INCOMPLETE (DEP, SITE) |  |
+| 267 | `proposals/26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` | LIVE-PROPOSAL | PROPOSED | 2/1/0 | 18.4 | MB | — | B19 (B19-mb-field-calibration) | COMPLETE | completed by R-B (3.3.1) |
+| 268 | `proposals/27_MB_A_command_and_the_obedience_draw.md` | INCOMPLETE-LIVE | PROPOSED | 1/0/0 | 32.1 | MB | — | B19 (B19-mb-field-calibration) | INCOMPLETE (SITE) |  |
 | 269 | `proposals/27_MB_B_unit_prowess_on_the_row.md` | INCOMPLETE-LIVE | PROPOSED | 1/0/0 | 19.7 | MB | — | B31 (B31-mb-loadout-economy) | INCOMPLETE (DESIGN, SITE) |  |
-| 270 | `proposals/27_MB_C_dynamic_strength_and_the_residual_chance.md` | INCOMPLETE-LIVE | PROPOSED | 1/1/0 | 29.2 | MB | — | B19 (B19-mb-field-calibration) | INCOMPLETE (DEP) |  |
+| 270 | `proposals/27_MB_C_dynamic_strength_and_the_residual_chance.md` | INCOMPLETE-LIVE | PROPOSED | 1/1/0 | 29.2 | MB | — | B19 (B19-mb-field-calibration) | INCOMPLETE (SITE) |  |
 | 271 | `proposals/27_MB_D_the_commander_as_chooser.md` | INCOMPLETE-LIVE | PROPOSED | 1/0/0 | 19.8 | MB | — | B20 (B20-mb-orders) | INCOMPLETE (DESIGN) |  |
-| 272 | `proposals/27_MB_E_what_an_army_carries_back.md` | INCOMPLETE-LIVE | PROPOSED | 1/1/0 | 35.2 | MB | — | B22 (B22-mb-armies) | INCOMPLETE (CONTENT, DEP) |  |
+| 272 | `proposals/27_MB_E_what_an_army_carries_back.md` | INCOMPLETE-LIVE | PROPOSED | 1/1/0 | 35.2 | MB | — | B22 (B22-mb-armies) | INCOMPLETE (CONTENT) |  |
 | 273 | `proposals/28_CORE_scene_access_A_occupancy_and_precedence.md` | INCOMPLETE-LIVE | PROPOSED (a plan for future execution; nothing here is exec… | 1/0/0 | 31.3 | CORE | — | B28 (B28-social-verbs) | INCOMPLETE (DESIGN, CONTENT) |  |
-| 274 | `proposals/28_CORE_scene_access_B_appointments.md` | INCOMPLETE-LIVE | PROPOSED (a plan for future execution; nothing here is exec… | 1/0/0 | 22.9 | CORE | — | B28 (B28-social-verbs) | INCOMPLETE (DEP, DESIGN) |  |
-| 275 | `proposals/28_CORE_scene_access_C_the_petition_that_waits.md` | INCOMPLETE-LIVE | PROPOSED (a plan for future execution; nothing here is exec… | 1/0/0 | 28.8 | CORE | — | B38 (B38-narrative-regimes) | INCOMPLETE (DEP) |  |
-| 276 | `proposals/29_DICE_one_opposed_rule_form_and_tuning.md` | INCOMPLETE-LIVE | PROPOSED (a decided plan for future execution; nothing here… | 1/0/0 | 39.0 | DICE | — | B05 (B05-one-roll) +part B15,B30 | INCOMPLETE (DEP) |  |
+| 274 | `proposals/28_CORE_scene_access_B_appointments.md` | INCOMPLETE-LIVE | PROPOSED (a plan for future execution; nothing here is exec… | 1/0/0 | 22.9 | CORE | — | B28 (B28-social-verbs) | INCOMPLETE (DESIGN) |  |
+| 275 | `proposals/28_CORE_scene_access_C_the_petition_that_waits.md` | INCOMPLETE-LIVE | PROPOSED (a plan for future execution; nothing here is exec… | 1/0/0 | 28.8 | CORE | — | B38 (B38-narrative-regimes) | INCOMPLETE (SITE) |  |
+| 276 | `proposals/29_DICE_one_opposed_rule_form_and_tuning.md` | INCOMPLETE-LIVE | PROPOSED (a decided plan for future execution; nothing here… | 1/0/0 | 39.0 | DICE | — | B05 (B05-one-roll) +part B15,B30 | INCOMPLETE (SITE) |  |
 | 277 | `proposals/30_GO_F_the_plot_as_the_player_is_shown_it.md` | LIVE-PROPOSAL | PROPOSED | 1/0/0 | 21.2 | GO | — | B38 (B38-narrative-regimes) | COMPLETE |  |
 | 278 | `proposals/30_WR_A_the_era_is_a_named_period.md` | LIVE-PROPOSAL | PROPOSED (ruled A-84: the era is a named period that always… | 1/0/0 | 29.1 | WR | — | B38 (B38-narrative-regimes) +part B39 | COMPLETE |  |
 | 279 | `proposals/30_WR_B_regimes_who_believes_whom.md` | LIVE-PROPOSAL | PROPOSED | 1/1/0 | 16.8 | WR | — | B38 (B38-narrative-regimes) | COMPLETE |  |
 | 280 | `proposals/30_WR_C_strands_open_grow_join_conclude.md` | LIVE-PROPOSAL | PROPOSED | 1/0/0 | 16.2 | WR | — | B38 (B38-narrative-regimes) | COMPLETE |  |
-| 281 | `proposals/30_WR_D_momentum_and_its_brakes.md` | LIVE-PROPOSAL | PROPOSED | 2/0/0 | 23.2 | WR | — | B38 (B38-narrative-regimes) | COMPLETE |  |
+| 281 | `proposals/30_WR_D_momentum_and_its_brakes.md` | INCOMPLETE-LIVE | PROPOSED | 2/0/0 | 23.2 | WR | — | B38 (B38-narrative-regimes) | INCOMPLETE (DEP-v11) |  |
 | 282 | `proposals/30_WR_E_cascade_chains_and_the_census.md` | LIVE-PROPOSAL | PROPOSED | 1/0/0 | 19.6 | WR | — | B38 (B38-narrative-regimes) | COMPLETE |  |
 | 283 | `proposals/30_WR_G_regime_opinions_and_the_pull_of_ones_own.md` | LIVE-PROPOSAL | PROPOSED (the roster rows are amended and the cast's values… | 2/1/0 | 21.5 | WR | — | B38 (B38-narrative-regimes) | COMPLETE |  |
 | 284 | `proposals/31_WR_A_house_cores_and_the_cast_on_the_opinion_axes.md` | LIVE-PROPOSAL | PROPOSED (Jordan's A-87 to A-91 are the cores and the four … | 2/0/0 | 39.5 | WR | — | B38 (B38-narrative-regimes) | COMPLETE (open checks: 1) |  |
 | 285 | `proposals/31_WR_B_the_revival_gathers.md` | LIVE-PROPOSAL | PROPOSED (the form is decided; its four numbers are [ASSUMP… | 1/0/0 | 18.9 | WR | — | B38 (B38-narrative-regimes) | COMPLETE |  |
-| 286 | `proposals/31_WR_C_what_the_stances_feed.md` | LIVE-PROPOSAL | PROPOSED (four small edits, each a request to the file that… | 2/0/0 | 15.6 | WR | — | B38 (B38-narrative-regimes) | COMPLETE (open checks: 1) |  |
+| 286 | `proposals/31_WR_C_what_the_stances_feed.md` | INCOMPLETE-LIVE | PROPOSED (four small edits, each a request to the file that… | 2/0/0 | 15.6 | WR | — | B38 (B38-narrative-regimes) | INCOMPLETE (DEP-NOCARRIER) |  |
 | 287 | `proposals/U5a_CHAR_owed_amendments.md` | INCOMPLETE-LIVE | PROPOSED (a plan for future execution; nothing here is exec… | 1/0/0 | 16.8 | CHAR | 15 RESOLVED-BY · 1 SUPERSEDED | B10 (B10-character) | INCOMPLETE (CONTENT) |  |
 | 288 | `proposals/U5a_CHAR_self_knowledge_is_a_belief.md` | LIVE-PROPOSAL | PROPOSED (a plan for future execution; nothing here is exec… | 1/0/0 | 10.1 | CHAR | 2 RESOLVED-BY | B10 (B10-character) | COMPLETE |  |
-| 289 | `proposals/U5a_CORE_owed_edits.md` | LIVE-PROPOSAL | PROPOSED (a plan for future execution; nothing here is exec… | 1/0/0 | 29.2 | CORE | 33 RESOLVED-BY · 1 JORDAN | B03 (B03-hygiene) +part B34 | COMPLETE (open checks: 1) |  |
+| 289 | `proposals/U5a_CORE_owed_edits.md` | INCOMPLETE-LIVE | PROPOSED (a plan for future execution; nothing here is exec… | 1/0/0 | 29.2 | CORE | 33 RESOLVED-BY · 1 JORDAN | B03 (B03-hygiene) +part B34 | INCOMPLETE (DEP-v11) |  |
 | 290 | `proposals/U5a_DICE_owed_edits.md` | LIVE-PROPOSAL | PROPOSED (a plan for future execution; nothing here is exec… | 1/0/0 | 15.2 | DICE | 1 RESOLVED-BY | B05 (B05-one-roll) +part B09 | COMPLETE |  |
 | 291 | `proposals/U5a_capability_home_and_two_inputs.md` | LIVE-PROPOSAL | PROPOSED (a plan for future execution; nothing here is exec… | 1/1/0 | 17.1 | CAP | 1 RESOLVED-BY | B04 (B04-capability-home) +part B05 | COMPLETE |  |
 | 292 | `proposals/U5a_tests_digest_additions.md` | INCOMPLETE-LIVE | PROPOSED (a plan for future execution; nothing here is exec… | 2/0/0 | 13.4 | TESTS | — | B02 (B02-tests) | INCOMPLETE (SITE) |  |
@@ -474,19 +549,19 @@ Columns: `R/F/G` is the number of head lines beginning `Reconciled:` / `Folded:`
 | 294 | `proposals/U5b_MB_rulings_in_the_field.md` | LIVE-PROPOSAL | PROPOSED (a plan for future execution; nothing here is exec… | 1/1/0 | 21.1 | MB | — | B19 (B19-mb-field-calibration) +part B23 | COMPLETE |  |
 | 295 | `proposals/U5b_PC_residue.md` | INCOMPLETE-LIVE | PROPOSED (a plan for future execution; nothing here is exec… | 1/0/0 | 17.7 | PC | — | B14 (B14-pc-outcome) | INCOMPLETE (SITE) |  |
 | 296 | `proposals/U5b_PC_rulings_in_the_fight.md` | LIVE-PROPOSAL | PROPOSED (a plan for future execution; nothing here is exec… | 1/1/0 | 26.5 | PC | — | B15 (B15-pc-calibration) +part B37 | COMPLETE |  |
-| 297 | `proposals/U5b_VERBS_military_physical_residue.md` | LIVE-PROPOSAL | PROPOSED (a plan for future execution; nothing here is exec… | 1/0/0 | 24.5 | VERBS | — | B07 (B07-task-draw) +part B23 | COMPLETE (open checks: 1) |  |
-| 298 | `proposals/U5c_FI_residue.md` | LIVE-PROPOSAL | PROPOSED (written by the U5c closure lane; a plan for a lat… | 1/0/0 | 16.4 | FI | 1 RESOLVED-BY | B11 (B11-fi-readers) | COMPLETE |  |
+| 297 | `proposals/U5b_VERBS_military_physical_residue.md` | INCOMPLETE-LIVE | PROPOSED (a plan for future execution; nothing here is exec… | 1/0/0 | 24.5 | VERBS | — | B07 (B07-task-draw) +part B23 | INCOMPLETE (DESIGN) |  |
+| 298 | `proposals/U5c_FI_residue.md` | INCOMPLETE-LIVE | PROPOSED (written by the U5c closure lane; a plan for a lat… | 1/0/0 | 16.4 | FI | 1 RESOLVED-BY | B11 (B11-fi-readers) | INCOMPLETE (DEP-v11) |  |
 | 299 | `proposals/U5c_SC_one_obstacle_form.md` | LIVE-PROPOSAL | PROPOSED (a reconciliation written by the U5c closure lane;… | 2/1/0 | 31.3 | SC | 1 RESOLVED-BY · 1 SUPERSEDED | B05 (B05-one-roll) | COMPLETE |  |
-| 300 | `proposals/U5c_SC_proceedings_residue.md` | INCOMPLETE-LIVE | PROPOSED (written by the U5c closure lane; a plan for a lat… | 1/0/0 | 19.9 | SC | — | B27 (B27-sc-proceedings) | INCOMPLETE (DEP) |  |
+| 300 | `proposals/U5c_SC_proceedings_residue.md` | INCOMPLETE-LIVE | PROPOSED (written by the U5c closure lane; a plan for a lat… | 1/0/0 | 19.9 | SC | — | B27 (B27-sc-proceedings) | INCOMPLETE (DEP-v11, DESIGN) |  |
 | 301 | `proposals/U5c_VERBS_residue_and_governance_owner.md` | LIVE-PROPOSAL | PROPOSED (written by the U5c closure lane; a plan for a lat… | 1/0/0 | 21.2 | VERBS | — | B07 (B07-task-draw) +part B09,B11,B24 | COMPLETE (open checks: 1) |  |
 | 302 | `proposals/U5d_FA_land_and_seats_pass_on_a_won_march.md` | INCOMPLETE-LIVE | PROPOSED (a plan for a later implementation lane; nothing h… | 2/0/0 | 21.6 | FA | 3 RESOLVED-BY · 2 SUPERSEDED | B23 (B23-land) | INCOMPLETE (DESIGN) |  |
 | 303 | `proposals/U5d_FA_owed_edits.md` | INCOMPLETE-LIVE | PROPOSED (a plan for a later implementation lane; nothing h… | 2/0/0 | 14.7 | FA | 1 RESOLVED-BY · 1 SUPERSEDED | B21 (B21-fa-governance) +part B32,B39 | INCOMPLETE (DESIGN) |  |
 | 304 | `proposals/U5d_GO_owed_edits.md` | LIVE-PROPOSAL | PROPOSED (a plan for a later implementation lane; nothing h… | 1/0/0 | 5.1 | GO | — | B06 (B06-keyed-draw) | COMPLETE |  |
 | 305 | `proposals/U5d_SE_cohort_heavy_moves_and_caste.md` | INCOMPLETE-LIVE | PROPOSED (a plan for a later implementation lane; nothing h… | 1/1/0 | 10.6 | SE | 2 RESOLVED-BY · 4 SUPERSEDED | B38 (B38-narrative-regimes) | INCOMPLETE (CONTENT) |  |
-| 306 | `proposals/U5d_SE_owed_edits.md` | INCOMPLETE-LIVE | PROPOSED (a plan for a later implementation lane; nothing h… | 1/0/0 | 8.9 | SE | 1 RESOLVED-BY · 1 DISPUTED | B12 (B12-world-motion-and-ground) | INCOMPLETE (DEP) |  |
-| 307 | `proposals/U5d_STORY_owed_edits.md` | INCOMPLETE-LIVE | PROPOSED (a plan for a later implementation lane; nothing h… | 1/0/0 | 7.4 | STORY | 5 RESOLVED-BY | B39 (B39-procgen-and-cases) | INCOMPLETE (DEP) |  |
-| 308 | `proposals/U5d_WR_owed_edits.md` | LIVE-PROPOSAL | PROPOSED (a plan for a later implementation lane; nothing h… | 1/0/0 | 4.4 | WR | — | B12 (B12-world-motion-and-ground) +part B37 | COMPLETE |  |
-| 309 | `proposals/U5d_WR_zero_coherence_unknowable.md` | INCOMPLETE-LIVE | PROPOSED, design-first (a plan for a later implementation l… | 2/0/0 | 7.7 | WR | 1 RESOLVED-BY · 1 SUPERSEDED | B35 (B35-wr-thread) | INCOMPLETE (DEP) |  |
+| 306 | `proposals/U5d_SE_owed_edits.md` | INCOMPLETE-LIVE | PROPOSED (a plan for a later implementation lane; nothing h… | 1/0/0 | 8.9 | SE | 1 RESOLVED-BY · 1 DISPUTED | B12 (B12-world-motion-and-ground) | INCOMPLETE (DEP-NOCARRIER, DEP-v11) |  |
+| 307 | `proposals/U5d_STORY_owed_edits.md` | INCOMPLETE-LIVE | PROPOSED (a plan for a later implementation lane; nothing h… | 1/0/0 | 7.4 | STORY | 5 RESOLVED-BY | B39 (B39-procgen-and-cases) | INCOMPLETE (DEP-v11, DEP-NOCARRIER) |  |
+| 308 | `proposals/U5d_WR_owed_edits.md` | LIVE-PROPOSAL | PROPOSED (a plan for a later implementation lane; nothing h… | 2/0/0 | 6.1 | WR | — | B12 (B12-world-motion-and-ground) +part B37 | COMPLETE | edited by R-B (3.3.1) |
+| 309 | `proposals/U5d_WR_zero_coherence_unknowable.md` | INCOMPLETE-LIVE | PROPOSED, design-first (a plan for a later implementation l… | 2/0/0 | 7.7 | WR | 1 RESOLVED-BY · 1 SUPERSEDED | B35 (B35-wr-thread) | INCOMPLETE (DEP-NOCARRIER) |  |
 | 310 | `audits/01_CORE_audit.md` | REFERENCE-AUDIT | REFERENCE (an audit; resolves nothing at runtime) | 0/0/1 | 54.3 | CORE | 40 RESOLVED-BY · 4 SUPERSEDED · 6 STALE/FALSE-POS | — | — |  |
 | 311 | `audits/01_CORE_audit_addendum_B.md` | REFERENCE-AUDIT | REFERENCE (an audit addendum; resolves nothing at runtime) | — | 78.8 | CORE | 44 RESOLVED-BY · 6 SUPERSEDED · 1 STALE/FALSE-POS · 3 JORDAN | — | — |  |
 | 312 | `audits/01_CORE_audit_addendum_C_tests.md` | REFERENCE-AUDIT | REFERENCE (an audit; resolves nothing at runtime) | — | 37.5 | CORE | 18 RESOLVED-BY · 2 SUPERSEDED · 1 STALE/FALSE-POS | — | — |  |
@@ -680,7 +755,7 @@ Columns: `R/F/G` is the number of head lines beginning `Reconciled:` / `Folded:`
 - **Audits are read at heads and closure tables, not in full** (section 0). The audit tallies in section 4 count table rows under the audit's heading in the four closure files by script; a row that closes several ids counts once, and a row under a heading shared by several audits (the four institutions family audits, Part 7.2 of U5d) counts against each.
 - **Audits 24 to 31 have no closure table** (`24_GROUNDING_GAMES`, `25_GROUNDING_ENGINE`, `26_MASS_BATTLE_HISTORICAL_ADJUDICATION`, `27_MB_COMMAND_AND_DYNAMIC_STRENGTH`, `28_SCENE_ACCESS`, `29_ONE_OPPOSED_RULE`, `30_ERAS_REGIMES_STRIFE_AND_MOMENTUM`, `31_HOUSE_STANCES_AND_CAST_VALUES`). U5b cites 24 to 27 by row only; 28 to 31 are not named in any `U5_*` file. Their resolutions live in their own proposals (`28_CORE_*`, `29_DICE_*`, `30_WR_*`, `30_GO_F`, `31_WR_*`) and in A-63 to A-93. Whether each of their findings has exactly one disposition (the closure rule) was not checked here.
 - **The `closure` column for a proposal undercounts** where a closure row names its carrier by an abbreviation (OBS, CAP, PB, UPR, UMR, RES-V, FA-P1 and the like) and not by file name; 165 of 300 proposals show no row for that reason or because they carry no finding.
-- **The census is a reading, not an execution** (CLAUDE.md §0.2). A COMPLETE proposal is one a batch can start from; whether its gate passes is the batch's. The sample in 3.2 is 12 of 246.
+- **The census is a reading, not an execution** (CLAUDE.md §0.2). A COMPLETE proposal is one a batch can start from; whether its gate passes is the batch's. The reading in 3.2 is 13 files in full of 300; the COMPLETE count is an upper bound.
 - **Two outputs of sibling lanes** (`unified/U4_TRACEABILITY.md`, `unified/U4_FACT_CHECK.md`) are listed by name and size and were not opened.
 - **Research files**: only the 15 that the suite added under `research/` (found by `git log d015c93^..HEAD --diff-filter=A -- research`) are rows; the pre-existing research tree is not part of the suite.
 - **The class REFERENCE is an addition** to the six classes the work order named; if the v12 stage wants six, fold REFERENCE into REFERENCE-AUDIT or DIGEST by file.

@@ -8,7 +8,7 @@ Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 (A-5, A-6, A-7): every pool and
 
 ## Status: PROPOSED
 
-Lands in batch: edits 1–3 in B12 (world motion and ground), right after `20_NARRATIVE_E` edit 1 (U3 §1 item 13); edit 4 in B38 with `30_WR_A_the_era_is_a_named_period.md`.
+Lands in batch: edits 1–3 in B12 (world motion and ground), after `20_NARRATIVE_E` edit 1, `09_WR_strand_conclusion.md` and `09_WR_world_motion.md` edits 1–3 (U6 R-A, `U3_DEPENDENCY_ORDER.md` §1.2: this file's edits 1 and 3 are stated on that file's wound row and settled selector); edit 4 in B38 with `30_WR_A_the_era_is_a_named_period.md`.
 Depends on: `18_DETERMINISM_task_draw_for_uncontested_verbs.md` item 4 (B07, the loader edit, for edit 4, C3-R1); `09_WR_strand_conclusion.md` (B12, edits 1–2 as eligibility, for edit 4); `09_WR_world_motion.md` (B12).
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-20) — `_seize_rung` takes no draw today (opened); the FA/MB item's premise is confirmed.

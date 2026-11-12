@@ -4,8 +4,8 @@ Reconciled: 2026-11-12, U5d closure — folded **A-29** (declared floats now). P
 
 Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U3_CONFLICT_LEDGER.md` C3-L3 (**no float recorder**: Part B's harness recorder, the `oracle_draws.json` stream of transcendental results and the port's replay of recorded bits are removed; parity is shown by `fmath` vectors at a stated tolerance, the same instrument that replaced the draw log; gate 2 and the build-file edit rewritten; Part A stands; the U5d head's "Parts A and B land as written" is superseded for Part B's recorder), `R1_READ.md` §2 row A-29 (Part C is the ruled reading C2: the "recommended C2 now, C1 later" discussion is removed; the Layer 1 step-13 text is owed, `OWED_TO_UNIFICATION.md` §A, not applied), A-30 (no recorder of any kind); test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`). R1's placement question (a non-dice `fmath` leaf under `engine/dice_engine/`) was not decided by U1 and is left as written.
 
-**Depends on:** nothing unlanded for Part A; `11_GO_one_draw_owner.md` (B06) for `Draw.normal`/`beta`'s use of `fmath`.
-**Lands in batch:** B06 (`B06-keyed-draw`, IN/GO), with `11_GO_one_draw_owner.md` and `U5d_GO_owed_edits.md`.
+**Depends on:** nothing unlanded for Part A. *(U6 R-A: the edge runs the other way — `11_GO_one_draw_owner.md`'s leaf `draw.py` imports `fmath` for `Draw.normal`/`beta`, so this file's Part A lands first in B06.)*
+**Lands in batch:** B06 (`B06-keyed-draw`, IN/GO), Part A first, then `11_GO_one_draw_owner.md` with `16_PESSIMIST_GO_keyed_draw_no_recorder.md`, then `U5d_GO_owed_edits.md` (`U3_DEPENDENCY_ORDER.md` §1.2). Gate 2's export round-trip is read in B41 (§1.3).
 
 ## Status: PROPOSED
 
@@ -100,9 +100,11 @@ consequence: a run is reproducible only where the math library agrees, so a save
 
 1. `PYTHONHASHSEED=0` realm hash at seeds 0–2, one season, under CPython 3.11 and 3.13: equal to each
    other and, on 3.11, equal to the value before the edit.
-2. *(W3-1, C3-L3:)* the exported `fmath` vectors round-trip (`tools/export_engine_params.py --check` or the
-   exporter that carries GO-08's `primitives` block), and a Python re-run of every vector through `fmath`
-   reproduces its expected output bit for bit; a planted change of one function's body fails it.
+2. *(W3-1, C3-L3:)* a Python re-run of every vector through `fmath` reproduces its expected output bit for bit
+   (`engine/tests/test_fmath.py::test_every_vector_reproduces_bit_for_bit`, the vectors held in the test); a planted
+   change of one function's body fails it. *(U6 R-A:)* the exported vectors' round-trip (the exporter that carries
+   GO-08's `primitives` block, `tools/export_oracle_pins.py --check`) is read in B41, which builds that exporter; no
+   exporter exists by B06 (`U3_DEPENDENCY_ORDER.md` §1.3).
 3. `grep -rnE "math\.(log|exp|tanh|erf|sin|cos|atan2|hypot)\(" engine/season engine/dice_engine modules`
    (tests and `fmath.py` excluded) prints nothing.
 
