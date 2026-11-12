@@ -4,6 +4,8 @@
 
 Reconciled: 2026-11-12, A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): "capability" in prose → skill (1); "trained score/rank" → skill score (2).
 
+Reconciled: 2026-11-12, A-104/A-97 follow-up (`unified/work/L1_A104_AND_WAVES.md`): §A gains `L1-A104`, `L1-A105`, `L1-A107`, `L1-A108` (APPLIED, `ED-IN-0360`) and one word collision for Jordan (the season's "round" in Layer 1).
+
 Collected by the orchestrator from lane receipts, 2026-11-12. Each item names its source. The stage reads the sources; this list is an index, not evidence.
 
 ## A. Layer 1 and canon text owed (drafted by unification, applied only by Jordan's amendment; never by editing Layer 1 to match code)
@@ -33,6 +35,10 @@ the arm allowed before it, in `unified/U3_LAYER1_AMENDMENTS.md`; that table is t
 | a ruling still stated as code text: `engine/dice_engine/dice_engine.py::degree_from_net`'s docstring records the 2026-08-14 opposed form "their corresponding score/2 plus whatever specific modifiers" (quoted in `IMPLEMENTATION_BRIEF_A.md`), which A-26 and A-79 replace (0.4 per point of the defender's skill score); the docstring is rewritten in batch B05, not left as a second statement of the rule | A-26, A-79 | appended by U3 (C3-A3) |
 | ~~`ED-IN-0261` "rolls nothing" superseded~~ APPLIED 2026-11-12 (`L1-A24`; superseding row ED-IN-0261; ED-IN-0358) | A-24 | `U3_LAYER1_AMENDMENTS.md`, `work/L1_APPLIED.md` |
 | the 2026-07-08 directive's words on numbers in the melee dice, narrowed by A-60 (numbers act through frontage, depth and endurance) | A-60 | appended by U3 [UNVERIFIED: the directive's file and line were not located by this lane; `04_MB_cr12_linear_law.md` is the carrier that cites it] |
+| ~~a management order costs no scene budget: §B.9's "length ≤ `budget`" and row 51's count~~ APPLIED 2026-11-12 (`L1-A104`; Layer 1; ED-IN-0360) | A-104 | `U3_LAYER1_AMENDMENTS.md`, `work/L1_A104_AND_WAVES.md` |
+| ~~a grant reduction is a revocation: §C.2's `conferral` line and row 10a~~ APPLIED 2026-11-12 (`L1-A105`; Layer 1; ED-IN-0360) | A-105 | `U3_LAYER1_AMENDMENTS.md`, `work/L1_FURTHER.md` |
+| ~~`Person.traits` and `Person.manner_offset?` in §B.2's tuple~~ APPLIED 2026-11-12 (`L1-A107`, `L1-A108`; Layer 1; ED-IN-0360) | A-107, A-108 | `U3_LAYER1_AMENDMENTS.md`, `work/L1_FURTHER.md` |
+| the season's "round" in Layer 1 (`04:1065` row 36, `hol:1166`) collides with A-101's fight round; the glossary's word is *lap* (PCR-4 is the identifiers' rename candidate). A word, not a rule: not applied; for Jordan or v12's rename batch | A-101 | `work/L1_FURTHER.md` |
 
 ## B. Documents owed an edit or a check
 
