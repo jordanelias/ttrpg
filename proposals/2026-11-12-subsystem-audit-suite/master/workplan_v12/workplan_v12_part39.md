@@ -240,4 +240,84 @@ Not in this batch, and where each is: `30_WR_E`'s fork lift, the `entrenched`, `
 - COST and TIER: small build; `sonnet`, `high` (the carry's "second tier"); step 1's Layer 1 reading `opus`.
 - LANDS IT: B36's producer; `Item: B36.08`, `[skip ci]`.
 
+### B36.09 — CALENDAR fires what is due, not only what is due today · `16_PESSIMIST_WR_D` edit 1 · BUILD · HASH EQUAL (asserted)
+- SOURCE: `proposals/16_PESSIMIST_WR_D_small_clock_repairs_and_two_readings.md` "Edit 1"; rulings A-47 (a clock's tick opens a question and decides nothing by itself); closes F-PES-WR-01.
+- ADVANCES: none of the nine; S (one methodology for the three clock comparisons: CR-55's `<=`, `matter.py`'s, CALENDAR's).
+- INSTRUCTION (copied): `engine/season/loop/calendar.py`, the due test. Old: `if d.get("due_at") != w.tick:` / `continue`. New:
+  ```python
+  due = d.get("due_at")
+  if d.get("fired") or due is None or due > w.tick:
+      continue
+  ```
+  "a Date whose `due_at` has passed unfired fires at the next CALENDAR barrier, once. No committed world holds such a Date, so every base hash is expected EQUAL (asserted, not assumed)."
+- WHERE: `engine/season/loop/calendar.py` (the due test); `engine/season/tests/test_sc01_fired_slot.py`.
+- TESTS: `engine/season/tests/test_sc01_fired_slot.py::test_due_date_in_the_past_fires_once` (named by the source): "P4's three planted Dates (the scratch `p4_small` plant, written in the test) all read `fired=True` after two barriers, each exactly one `date.fired`" — three Dates planted at tick 2 on a seated venue, due at ticks 1, 2 and 3. Written first, read red (the Date due at 1 never fires).
+- FALSIFIER and CONTROL: "A Date fired twice, or a base hash that moves." Control: every committed golden unmoved ("`report` / `delta HEAD`, `PROBE FLIPS 0`").
+- GATE: `python -m pytest engine/season/tests/test_sc01_fired_slot.py -q` → pass; the realm content hash at seed 0, one season → equal to B36.08's reading; `python -m engine.season.harness.report` delta against HEAD → `PROBE FLIPS 0` `[ASSUMPTION: the `report` delta form — basis: the source's own words; read at landing]`.
+- HASH MOVERS: none expected (asserted); if a base hash moves, stop: the edit reached a committed world, and the item says which.
+- DEPENDS ON: EXISTS-IN-TREE `loop/calendar.py` (the `due_at` test), `engine/season/tests/test_sc01_fired_slot.py`.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B36's producer; `Item: B36.09`, `[skip ci]`.
+
+### B36.10 — `thread_read` is aimed at a place · `16_PESSIMIST_WR_D` edit 2 · BUILD · HASH MOVER(behaviour)
+- SOURCE: the same file, "Edit 2", "Cost class" (the declared mover); rulings A-40 (one Site per territory); closes F-PES-WR-04.
+- ADVANCES: none of the nine; R-05's `thread_read` stays built out, on its premise's object.
+- INSTRUCTION (copied): "The row gains `referent_class: Site`, on `restore`'s precedent (REM-22, the same file, with the same declared consequence). With `16_PESSIMIST_WR_B_the_calamity_strains_and_breaks.md` edit 4 (a crossing a person stands beside carries the Site) the verb then forms where the fabric is strained, for the four people who clear the gate. What it *finds* there is the `threadwork.read` entry of `09_WR_B_threadwork_session_and_practitioner.md` (R-21), drawn; until that lands a formed reading still finds nothing, and that is said in the row's note rather than hidden." `engine/season/verb_table.yaml`, row `thread_read`: `referent_class: Site` and a `referent_class_note:` in the form of the row's neighbours (the source, the measured before and after of this commit's gate, `REVERT: delete this column`). Both named edits have landed (B12c, B35), so the note records what it finds.
+- WHERE: `engine/season/verb_table.yaml` (`thread_read`); `engine/season/tests/test_in12_step9.py`.
+- TESTS: `engine/season/tests/test_in12_step9.py::test_thread_read_forms_on_a_site_and_not_on_a_record` (named by the source): "a practitioner standing at a Site named by his question forms `thread_read` on it; a question naming a Record forms none". Written first, read red.
+- FALSIFIER and CONTROL: "A `thread_read` in any realm run whose subject is not a Site." Control: the other rows with a `referent_class` form as before (`test_in12_step9.py`'s existing tests green).
+- GATE: `python -m pytest engine/season/tests/test_in12_step9.py -q` → pass; `python -m engine.season.harness.aperture 2 --seeds 0 1 2`'s `BUILT OUT` line for `thread_read` → still built out (B35's close, `reading @<sha>`; a drop is this item's failure, `V12_STRUCTURE.md` §3's `IS-A-08` rule, and stops the batch); the realm content hash at seed 0, one season → moved, as declared, recorded for B36.99.
+- HASH MOVERS: "edit 2 moves any world in which `thread_read` formed on a Record or a person (sideways, declared)". B36's one re-pin, in B36.99.
+- DEPENDS ON: EXISTS-IN-TREE `engine/season/verb_table.yaml` row `thread_read`, `restore`'s `referent_class` (REM-22); V12 Batch B12c (`16_PESSIMIST_WR_B` edit 4: the Site referent); V12 Batch B35 (`09_WR_B_threadwork_session_and_practitioner`: `threadwork.read`).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B36's producer; `Item: B36.10`, `[skip ci]`.
+
+### B36.11 — the turn: who closed what another opened · `16_PESSIMIST_WR_D` edit 4 · BUILD · HASH EQUAL
+- SOURCE: the same file, "Edit 4"; C3-K7 (after `09_WR_B_readings`); closes F-PES-WR-05.
+- ADVANCES: none of the nine; whether anything turned is readable.
+- INSTRUCTION (copied): "`storybar.py` gains `turns(w, act_of) -> dict` with exactly that classification (`{"by_subject": n, "by_another": n, "by_clock": n, "deaths_by_act": n}`), printed on the per-seed line beside the executed summary. It reads the Tenure store, the log and `act_of`; it grades nothing and stores nothing, as the module's header requires. It is the third column of the `by_act` / `by_clock` split `09_WR_B_readings_of_closure_and_tension.md` edit 1 adds, and lands with it." The classification: "for every non-`contain` Tenure closed in the run, the act that opened it and the act that closed it, classed as closed by its own subject, by another person, or by a clock". `by_clock` is read through `arc.closes` (B36.04), not re-derived.
+- WHERE: `engine/season/harness/storybar.py` (NEW `turns`; the per-seed line).
+- TESTS: `engine/season/tests/test_storybar.py::test_turns_counts_a_revocation_by_another` (named): "a planted world in which A confers and B revokes reads `by_another == 1`; the same world with A revoking his own grant reads 0." Written first, read red.
+- FALSIFIER and CONTROL: a planted revocation by another reading 0; control: the self-revocation plant reads 0 and the content hash is unmoved by the call.
+- GATE: `python -m pytest engine/season/tests/test_storybar.py -q` → pass.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B36.04, B36.05; EXISTS-IN-TREE `w.tenures`, `SeasonDriver.act_of`.
+- GLOSSARY: *turn* (new row): "an ending one person brings on what another began".
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B36's producer; `Item: B36.11`, `[skip ci]`.
+
+### B36.12 — a cut arm and the noise floor; CALENDAR kept and marked unproven · `16_PESSIMIST_WR_D` edits 5, 3 · BUILD · HASH EQUAL
+- SOURCE: the same file, "Edit 5", "Edit 3"; closes F-PES-WR-09.
+- ADVANCES: none of the nine; an arm comparison can be told from noise.
+- INSTRUCTION (copied): Edit 5: "(a) `ARMS` gains `no_calendar` (the driver's CALENDAR step returns `[]`), composed as the forcing arms are. (b) `compare` prints, per pair of arms, the L1 distance of the executed-verb counts and, once per seed, the same distance between two draw seeds of the first arm. A reader then sees `no_calendar 38 · noise 316` and knows what it means." `no_calendar` is a mapping entry like B36.01's; the CALENDAR suppression is applied by `drive` from the arm, not by a fixture (no fixture exists for it) `[ASSUMPTION: the mechanism — basis: the source's "the driver's CALENDAR step returns `[]`"; a driver-side flag in the harness, the loop unedited]`. Edit 3 (no code edit): the commit body records, copied, "CALENDAR stays, and is marked unproven … Decided at ladder step 5: keep the barrier; its N-line is recorded as resting on `determine` executing (SC F-SC-01), and edit 5 gives the cheap reading that says when it has become true."
+- WHERE: `engine/season/harness/storybar.py` (`ARMS`, `drive`, `compare`).
+- TESTS: `engine/season/tests/test_storybar.py::test_no_calendar_arm_emits_no_date_fired` and `::test_compare_prints_a_nonzero_noise_line` "on `build_realm`" (named), written first, read red.
+- FALSIFIER and CONTROL: "The arm's distance exceeding the noise at two seeds once `determine` executes is the signal that edit 3's N-line has become true; that is a reading, not a blocking check." Control: `--arms off off` still EQUAL.
+- GATE: `python -m pytest engine/season/tests/test_storybar.py -q` → pass; `python -m engine.season.harness.storybar --base-seed 0 --n 3 --seasons 2 --arms off no_calendar` → a distance and a `noise` line printed and quoted.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B36.01 (`ARMS` a mapping), B36.11; EXISTS-IN-TREE `harness/storybar.py::compare`, `::draw_seed_arm`.
+- GLOSSARY: *noise floor* (new row): "how far two draws of the same world lie apart, the yardstick an arm's difference is read against".
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B36's producer; `Item: B36.12`, `[skip ci]`.
+
+### B36.13 — the overlaps block, its arms and its tests · `20_NARRATIVE_F` edits 1–4 · BUILD · HASH EQUAL
+- SOURCE: `proposals/20_NARRATIVE_F_story_inventory_and_gate.md` "Exact edits" 1–4, "The gate" (the bar), "The falsifier"; rulings A-45, A-46, A-15, A-80, A-83 (the arms they add land in B38); C3-K7, C3-K2; U3 §4.1 row 88 (the G5 split lands in B38).
+- ADVANCES: none of the nine; the measure the five `20_NARRATIVE` proposals of B38 gate on.
+- INSTRUCTION (copied, `engine/season/harness/storybar.py`):
+  1. "`overlaps(w, d, bounds, snaps) -> dict`, behind `--overlaps`. `snaps` is a per-season snapshot taken in `on_season` of the person-side readings (so a pull is read as it stood when the act was formed, never from the end state). Classes, each counted over **executed** acts (`corpus_run.attempts`, the one owner of made and refused)": G1 a due unmet, answered (reads `20_NARRATIVE_B`); G2 a stand against his own side (`20_NARRATIVE_D`); G3 a new holder meets an old oath (`20_NARRATIVE_C`); G4 an enemy with a place (`20_NARRATIVE_C`); G5 across a fault line (`20_NARRATIVE_A`); G6 a conviction broken and seen (`16_PESSIMIST_CHAR_A`'s `conviction.moved`, the one emitter); `closes` (B36.04's `arc.closes`, called). Each class's "counted when" is the source's table, copied into the function's docstring. "Until a proposal lands its class prints `n/a (no reader)`, never 0: an absent reading is not a zero" — "detected by import of the reader's symbol, never by a zero". At this batch G1 to G5 print `n/a`; G6 reads (B10 landed `16_PESSIMIST_CHAR_A`).
+  2. Three lines: "*occasion of the strife verbs*: for `march`, `challenge`, `seize`, `raze`, `arrest`, `petition`, `oblige`, `release`, the five commonest `(question source, claim predicate)` of formed and of executed acts; *world Event → executed act*, by world kind and verb; *the reign*: `(year, season of year, believed holder of the realm's head seat by plurality of ledgers)` per season, for the chronicle's date line … no state is stored, and 'by plurality of ledgers' is said in the line".
+  3. Arms: "`noconv` (every `Person.conviction` cleared at build: `decision_spread.apply_control`'s precedent for a build-time ablation) and `basis_off` (every fixture of `20_NARRATIVE_A` to `E` at its control)". No such fixture exists before B38, so `basis_off` ships as `{}` with the comment that B38's items add each fixture as it lands (UNDECIDED (6)); the `on` arm the source's gate names is not built here.
+  4. `engine/season/tests/test_storybar.py`: "`test_g1_planted_lapsed_oath_reads_one_and_zero_without_the_belief`, `test_g5_told_claim_across_an_incompatible_pair_reads_minus_one`, `test_class_with_no_reader_prints_na`, `test_overlaps_block_moves_no_hash`". G1's and G5's tests are written now and skip with the reason "reader lands in B38 (`20_NARRATIVE_B`, `20_NARRATIVE_A`)" until then `[ASSUMPTION: skip, not delete — basis: the readers are later batches'; a skipped test is listed in the close]`.
+- WHERE: `engine/season/harness/storybar.py` (NEW `overlaps`, `--overlaps`, the three lines, arms `noconv`, `basis_off`); `engine/season/tests/test_storybar.py`.
+- TESTS: step 4's four; `test_class_with_no_reader_prints_na` and `test_overlaps_block_moves_no_hash` read green at this close.
+- FALSIFIER and CONTROL: "Clause 2 passing under `basis_off`: the classes are too loose"; "Clause 4 failing with clause 2 passing: the overlaps are scripted by the build"; "A class above zero whose acts, read in the chronicle, do not read as that story to a person" (one rendered instance per class per seed is printed for this check). Control: `test_overlaps_block_moves_no_hash`.
+- GATE: `python -m pytest engine/season/tests/test_storybar.py -q` → pass (two skips named); `python -m engine.season.harness.storybar --base-seed 0 --n 3 --seasons 2 --arms off noconv --overlaps --executed-only` → G1–G5 `n/a (no reader)`, G6 a count, the three lines printed (six seasons and five seeds in the source; A-114; the bar's clauses are B36.R1).
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B36.04 (`closes`), B36.01 (the arms mapping), B36.12; V12 Batch B10 (`16_PESSIMIST_CHAR_A`: `conviction.moved`); EXISTS-IN-TREE `harness/decision_spread.py::apply_control`, `harness/corpus_run.py::attempts`; the readers of G1–G5: V12 Batch B38 (PROPOSED).
+- GLOSSARY: *overlap* (row exists: the story bar's sense of "crossing"): owner column → `storybar.overlaps`.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B36's producer; `Item: B36.13`, `[skip ci]`.
+
 <!-- A39 append point -->

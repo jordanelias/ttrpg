@@ -1,0 +1,210 @@
+# Workplan v12 — part 28, continued: B12c-material-verbs-and-valley from B12c.19; B24a-sc-outside-the-room
+
+## Status: PROPOSED (continuation of part 28 of workplan v12, author lane A28; the batch block's head, its position table and B12c.01 to B12c.18 are in the part this file continues; resolves nothing at runtime, CLAUDE.md §0.05; not canon)
+
+Words, paths and the batch block's head lines are the part's own; nothing here restates them.
+
+---
+
+### B12c.19 — `found` and `build` form only on their own works · `14_VERBS_MATERIAL_C` §3 (a)(i), (b), the class · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/14_VERBS_MATERIAL_C_works.md` head ("The `_stamped` pair for `research` (`14_VERBS_SOCIAL2_A` edit 2) lands in B25 … until then the works stamp of (a)(i) is carried on the classed tuple as `Record` with the plan kind on the stamp, and `Record.works` replaces it when SOCIAL2-A edit 2 lands"), §3 (a)(i), (b), §4 step 2 ("(a)(i), (b), and the class on both rows: formation only (declared mover; wrong-kind formations stop)"); U3 §4.1 row 46 (SPLIT); closes F-SE-12's formation half.
+- ADVANCES: R-05 (`found`, `build`), R-04.c6.
+- INSTRUCTION (copied):
+  1. "(a) `engine/season/queries/world_q.py`. `records_held_for_holding_rows` loses the works kind (its other kind, `petition`, stays for `carry`). New, beside it:"
+     ```python
+     def works_unmade(w: World, p: Person) -> tuple:
+         """((works id, plan kind), ...) for the works Records on `p`'s OWN live `hold` edges whose made thing
+         (`loop/effects_founding._made_by`'s id, moved here as `made_id(rec, plan)` so one owner names it) is not
+         yet in `w.rungs` / `w.sites`. His own paper and what his own works has made: the own-edge clause of
+         FI-01's R-03."""
+     ```
+     `loop/effects_founding.py::_made_by` is deleted and its callers call `world_q.made_id` (one owner).
+  2. "`questions_for`: (i) each such works is stamped `Record.works` (SOCIAL2-A's qualified class) on the question he answers" — in this batch as the interim class `Record`, with the plan kind carried on the stamp (the head's sentence above); B25's `14_VERBS_SOCIAL2_A` edit 2 replaces it.
+  3. "(b) `engine/season/rosters.yaml`. New roster, so the plan kind is read and never spelt:"
+     ```yaml
+       works_verbs:
+         source: "14_VERBS_MATERIAL_C: which verb makes which family of plan."
+         values: {found: rung_kinds, build: site_kinds}
+     ```
+     "`decision/options.py::opening_set`: a row named in `works_verbs` forms only on a `Record.works` referent whose `plan` (read from the person's own content claim on the works, `held_record_claims`; for an authored works with no claim, from `works_unmade`'s pair carried on the stamp) is a member of the roster that row maps to."
+  4. The class on both rows: `found` and `build` take `referent_class: Record` (interim; `Record.works` at B25) in this commit; their draw columns are B12c.21's.
+- WHERE: `engine/season/queries/world_q.py` (`records_held_for_holding_rows`, `works_unmade`, `made_id`, `questions_for`); `engine/season/loop/effects_founding.py` (`_made_by` removed; callers); `engine/season/rosters.yaml` (`works_verbs`); `engine/season/data/rosters.py` (`works_verbs`' loader: each value a roster that exists); `engine/season/decision/options.py` (`opening_set`); `engine/season/verb_table.yaml` (`found`, `build`: `referent_class`); NEW `engine/season/tests/test_vm_mat_c_works.py`.
+- TESTS: "`mat_probe.py` is a scratch probe not in the repository (U3 §6.2's rule): the batch first writes its reading as the first function of `engine/season/tests/test_vm_mat_c_works.py` (per seed, the subject-class counts of `found`/`build` Candidates and the executed kinds over four seasons [two, A-114]; expected reading below)" — `test_found_and_build_form_only_on_their_own_works` (the subject-class line reads `Record:works` alone, at seeds 0–2; `assert checked >= 3`); "Falsifiers. A `found` formed on a works that plans a Site kind" as `test_a_found_never_forms_on_a_site_plan` `[ASSUMPTION: test names]`; written first, red (today 819 formations a run on petitions, texts, covers and sheets).
+- FALSIFIER and CONTROL: the source's falsifier above. "Control. `planned_works: []` reproduces the no-works realm hash."
+- GATE: `python -m pytest engine/season/tests/test_vm_mat_c_works.py engine/season/tests/test_works_founding.py engine/season/tests/test_in45_planned_works.py -q` → pass; the seed-0 one-season hash recorded (moved: wrong-kind formations stop).
+- HASH MOVERS: every realm world (formation). Declared; B12c.99.
+- DEPENDS ON: V12 B12c.04; EXISTS-IN-TREE `world_q.py::records_held_for_holding_rows`, `::questions_for`, `effects_founding.py::_made_by`, `::_works_named`, `decision/options.py::opening_set`, `held_record_claims` `[grep at the open]`, `venues.yaml: planned_works`, `boot/realm.py::mint_planned_works` (was `harness/populated.py`); V12 Batch B11 (`08_FI_04`).
+- GLOSSARY: none.
+- NAMES: `harness/populated.py::mint_planned_works` → `boot/realm.py` (B03c).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B12c's producer; `Item: B12c.19`, `[skip ci]`.
+
+### B12c.20 — a master of an unmade works is asked about it · `14_VERBS_MATERIAL_C` §3 (a)(ii) · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/14_VERBS_MATERIAL_C_works.md` §3 (a)(ii), §4 step 3, §5 "Planted failure".
+- ADVANCES: R-05 (`found`, `build` attempted by their masters).
+- INSTRUCTION (copied): "(ii) one standing question per unmade works, `Question(f"q:works:{rid}", "claim_landed", (rid,), <the id of his own content claim on it>)`, the docket question's shape (a matter that waits until it is disposed of); a master with no content claim on his works (the authored ones, minted with no Event) gets the `need` form, `Question(f"q:need:{rid}", "need", (rid,), rid)`, as a person with a vacancy and no question does. No source is added. `[ASSUMPTION; medium; Jordan to correct; revert: drop (ii), and the works waits on a referent coincidence]`"
+- WHERE: `engine/season/queries/world_q.py` (`questions_for`); `engine/season/tests/test_vm_mat_c_works.py`.
+- TESTS: `test_a_master_of_an_unmade_works_holds_a_standing_question`, `test_an_authored_works_with_no_claim_gets_the_need_form` `[ASSUMPTION: test names]`, red first.
+- FALSIFIER and CONTROL: "Planted failure. Drop (a)(ii): if the gate still passes at every seed the question was not needed and is deleted; if `found` and `build` return to zero attempts, the reading is recorded and the lean is CHAR's and CORE's (`audits/14_VERBS_MATERIAL.md` §17.2)." — run once after B12c.21 lands (the gate it re-reads is that item's), its reading in B12c.21's commit body.
+- GATE: `python -m pytest engine/season/tests/test_vm_mat_c_works.py -k question -q` → pass; `aperture 2 0`: `found` and `build` attempted by `p_npc_020` and `p_npc_009` (the two authored masters) above 0, quoted.
+- HASH MOVERS: every realm world with an authored works. Declared; B12c.99.
+- DEPENDS ON: V12 B12c.19 (`works_unmade`).
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B12c's producer; `Item: B12c.20`, `[skip ci]`.
+
+### B12c.21 — the founding and the building are drawn · `14_VERBS_MATERIAL_C` §3 (c), (d), (e) · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/14_VERBS_MATERIAL_C_works.md` §3 (c), (d), (e), §4 step 4, §5; `audits/25_GROUNDING_ENGINE.md` G-05 (the keyed `stores` refusal refuted; "a contested row keys one refusal kind"); "Standing" (A-30: `"found.task"`, `"build.task"`; A-81); C3-R7.
+- ADVANCES: R-05 (`found`, `build` built out); R-09; R-04.c6 (housing is the bound on growth, ED-SE-0051).
+- INSTRUCTION (copied):
+  1. "(c) `engine/season/verb_table.yaml`": the two rows exactly as the source writes them — `found`: `referent_class: Record.works` [interim `Record`, B12c.19], `contests: "a task"`, `capability: none # `labour` when authored` (+ `capability_note:` as B12c.07), `difficulty: demanding`, `writes:` Overwhelming/Success/Partial `["Rung.exists", "Tenure.since", "Rung.stores"]`, Failure `["Rung.stores"]`; `emits:` the three winning bands `["rung.founded"]`, Failure `["found.failed"]`; `emits_on_refusal: ["found.refused"]`. `build`: the same shape with `capability: none # `craft` when authored`, winning `writes: ["Site.exists", "Rung.stores"]`, Failure `["Rung.stores"]`, winning `emits: ["site.built"]`, Failure `["build.failed"]`, `emits_on_refusal: ["build.refused"]`. "The scarcity case is still told apart: `_cost`'s shortfall declines under the `write` clause and the refusal Event's `observed` reads say which check failed."
+  2. "(d) `engine/season/data/fixtures.py`. One table, per-mille of the plan's `works_cost`:"
+     ```python
+         works_outlay={"found": {"Overwhelming": 0,   "Success": 350,  "Partial": 700,  "Failure": 350},
+                       "build": {"Overwhelming": 700, "Success": 1000, "Partial": 1350, "Failure": 500}},
+     ```
+     "For `found` it is the share of the stake consumed (the rest arrives in the new Rung, two-sided, as today); for `build` the share of the stake (the plan's `works_cost`) consumed (one-sided, as today …). The control is `found` all 0 and `build` all 1000 with Failure refused, which is today's arithmetic. `[ASSUMPTION; medium; Jordan to correct; swept]` … NUMBER row in `hole_register.yaml`."
+  3. "(e) `engine/season/loop/effects_founding.py`. `_cost(w, rec, plan, res)` returns the payer and, per kind, `(consumed, carried)` whole units from the table (`ceil`), declining when the payer cannot meet the band's total, except that a `Partial` the payer cannot meet is priced as `Failure` (the row's own text). `_eff_found`: at a winning band mint the Rung, its `contain`, the founder's `hold`; `_shift` the carried part into it and `_debit` the consumed part; at Failure only the `_debit`, naming the payer, earning `found.failed`. `_eff_build`: at a winning band mint the Site at condition 0 and `_debit` the outlay; at Failure only the `_debit`. Both keep every other decline. Neither row joins `graded_tasks`."
+- WHERE: `engine/season/verb_table.yaml` (`found`, `build`); `engine/season/data/fixtures.py` (`works_outlay`); `engine/season/loop/effects_founding.py` (`_cost`, `_eff_found`, `_eff_build`); `engine/season/hole_register.yaml` (block slot 10); `engine/season/tests/test_vm_mat_c_works.py`.
+- TESTS: §5's gate, as functions of the file: "`rung.founded` or `site.built` ≥ 1 at some seed, then `site.worked` on the built Site [B12c.22], then `world_q.capacity` of the court's rung above the control's. Across seeds 0 to 19 on a one-works fixture the stores left at the payer take three or more values" (`test_the_payers_stores_spread_over_seeds`, `assert checked >= 20`); falsifiers "A second `found` from one works executing. A fabric minted above condition 0. Stores of any kind created (the payer's debit must equal consumed plus carried at every band)" (`test_one_works_founds_once`, `test_a_built_site_starts_at_condition_zero`, `test_the_debit_is_consumed_plus_carried_at_every_band`) `[ASSUMPTION: test names]`, red first.
+- FALSIFIER and CONTROL: those above. Control: `works_outlay` at its control arm reproduces today's arithmetic on the one-works fixture.
+- GATE: `python -m pytest engine/season/tests/test_vm_mat_c_works.py engine/season/tests/test_works_founding.py -q` → pass; `aperture 2 --seeds 0 1 2`: `rung.founded` or `site.built` ≥ 1 at one seed or more (four seasons in the source; A-114), quoted; B12c.20's planted-failure reading in the commit body.
+- HASH MOVERS: every world in which a works is founded or built ("Declared mover"). B12c.99.
+- DEPENDS ON: V12 B12c.20; V12 Batch B07 (`U5c_VERBS_residue` §1: the `a task` prize; 18-A item 4); V12 Batch B05 (`difficulty:`); EXISTS-IN-TREE `effects_founding.py::_cost`, `::_eff_found`, `::_eff_build`, `effects_shared.py::_debit`, `::_shift`, `rosters.yaml: works_cost`.
+- GLOSSARY: *stake* row: its owner column gains `Fixtures.works_outlay` (what a founder or builder puts down and may lose).
+- IDS: H block slot 10 (`works_outlay`).
+- COST and TIER: small build; `sonnet`, `high`; the two contested rows and `works_outlay`'s bands `opus` (the source's tier).
+- LANDS IT: B12c's producer; `Item: B12c.21`, `[skip ci]`.
+
+### B12c.22 — `work` raises a works and a worn fabric, drawn · `14_VERBS_MATERIAL_A` §4 · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/14_VERBS_MATERIAL_A_mending.md` §4, §7 step 6 ("`work`, with batch M-C (it has nothing to raise before a `build`)"); `14_VERBS_MATERIAL_C` §4 step 5.
+- ADVANCES: R-05 (`work` built out); R-04.c6.
+- INSTRUCTION (copied):
+  1. "`queries/world_q.py::works_sites` stays and is stamped as `Unfinished` (a Site his works names), beside `fabric_known`'s `begun` pairs. `WorldReader.read`, the `floor` stem: a kind whose `band_floors` cell is empty reads the roster's own `default_cell` (0), in place of the typed `Unspecified`; the stem's comment block and `band_floors`' note (*'AN EMPTY CELL IS NOT A WORKABLE SITE'*) are rewritten to say so. `[ASSUMPTION; medium; Jordan to correct; revert: the raise, and a dwelling works cannot be worked]`"
+  2. The row: `verb: "work"`, `referent_class: Unfinished`, `capability: none # `labour` when authored` (+ `capability_note:` as B12c.07), `difficulty: routine`, `writes: ["Site.condition"] # shape (a)`, `emits: ["site.worked"]`, `emits_on_refusal: {draw: ["work.failed"], <each derived clause>: ["work.unavailable"]}`.
+  3. "`graded_tasks` gains `work`. `_eff_work`: the works branch reads `_rise(w, fabric, res)`; a hand-declared delta is scaled by `graded_amount` the same way. The `requires_typed` cell is unchanged (J-M1)."
+- WHERE: `engine/season/queries/world_q.py` (`works_sites`' stamp; `questions_for`); `engine/season/data/requires.py` or the module holding `WorldReader.read`'s `floor` stem (SITE: grep `class WorldReader` at the open and record it); `engine/season/rosters.yaml` (`band_floors`' note; `graded_tasks`); `engine/season/verb_table.yaml` (`work`); `engine/season/loop/effects_economy.py` (`_eff_work`); `engine/season/tests/test_vm_mat_a_mending.py`.
+- TESTS: `test_work_raises_a_built_site_on_a_spread` (MAT_C §5's "then `site.worked` on the built Site", seeds 0–19 on the one-works fixture), `test_an_empty_floor_cell_reads_default` (step 1), `test_a_failed_work_leaves_a_claim` (A-81) `[ASSUMPTION: test names]`, red first.
+- FALSIFIER and CONTROL: the batch's planted failure ("Pin `_grade` to `Success`: every spread above collapses"). Control: `task_fraction` at its control arm reproduces today's `work` magnitude on a planted `Success`.
+- GATE: `python -m pytest engine/season/tests/test_vm_mat_a_mending.py engine/season/tests/test_vm_mat_c_works.py -q` → pass; `aperture 2 0`: `work` executed quoted (before `reading @<sha>` of B12c.21's tree).
+- HASH MOVERS: every world with a works Site or a worn fabric at a worker's rung. Declared; B12c.99.
+- DEPENDS ON: V12 B12c.21; V12 B12c.07 (`fabric_known`'s `begun` pairs); EXISTS-IN-TREE `world_q.py::works_sites`, `effects_economy.py::_eff_work`, `rosters.yaml: band_floors` (`default_cell`).
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B12c's producer; `Item: B12c.22`, `[skip ci]`.
+
+| B12c.23 | READING — G-05's gate: a founding and a building by a computed actor | Readings block, reading 1 |
+| B12c.24 | READING — `17_CENSUS_C1A_02` W2's closing gate for `found`, `build` | Readings block, reading 2 |
+
+### B12c.25 — `craft`: goods made from goods, withheld · CP-T08-04 (AM-E-15) · BUILD · HASH EQUAL
+- SOURCE: the intake `:319` (CP-T08-04; carry-forward E1 "### CP-T08-04" (`:1379-1404`); E4 `:1503-1506` "RESEQUENCE · AM-E-15" (released: "ED-IN-0297 is closed … works are authored as `venues.yaml` `planned_works:` rows … `smithy`/`mint` Sites are built by `build` on that row"); E5 C14 "after `14_VERBS_MATERIAL_C`"; `07_SE_capability_rate_B` §4 (b) ("`craft` (CP-T08-04) become[s a] task row under 18-A"); UNDECIDED (6); closes CP-T08-04.
+- ADVANCES: R-04.c6 (city building: goods made); none at the control.
+- INSTRUCTION (the card, copied, with the task-row form):
+  1. "A verb row `craft` (EC Suite S2's NEW ROW, its name and shape): actor present at a workshop Site; operands `site`, `kind` (the product), `amount`. Typed precondition: present at `site`; the Site's kind admits the recipe; its condition is at or above the recipe's floor; the Site's rung holds `inputs × amount`. Writes `Rung.stores` at that one rung (inputs down, product up, one write). Emits `goods.made`; refusal `craft.refused` (the scarcity channel)." In this plan it is a shape-(a) task row (MAT_A §2 row 5): `graded_tasks` gains `craft`, `capability: none` (+ `capability_note:`), `difficulty: routine` `[ASSUMPTION: the difficulty level — basis: `restore`'s and `work`'s]`, `emits_on_refusal: {draw: ["craft.failed"], <each derived clause>: ["craft.refused"]}`, the product moved by `graded_amount(w, res, amount)` and the inputs debited for what is made.
+  2. "A roster `rosters.yaml: recipes` (product → `{inputs: {kind: n}, site_kind, floor}`), refused at load if a product or input is not a registered matter kind or the Site kind has no row."
+  3. "Two workshop Site kinds, `smithy` and `mint`, with `works_cost`, `wear_per_season` and `band_floors` rows and no `site_yield` (a workshop yields nothing by itself), raised by the shipped `build`. One new matter kind, `arms`. Recipes at adoption: `coin ← ore` at a mint; `arms ← ore + timber` at a smithy [ASSUMPTION; medium; Jordan to correct; quantities are JQ-6's family]." Before adding `arms`: `rosters.yaml: matter_kinds` is also edited by B18.04 (seven `arms_*`/`harness_*` kinds) in the same step; the two are different members, merged by hand in §2.1's order (B12c first). `[ASSUMPTION: CP-T08-04's `arms` and B18's `arms_*` kinds coexist as separate members — basis: neither source names the other; MB's `equip` is the reader `arms` would serve (the card's Joins)]`
+  4. `_eff_craft` in `loop/effects_economy.py`; the `alignment` cells or an `uncelled:` entry for the row (the card's owner artifacts).
+  5. "`craft` ships in `Fixtures withheld_verbs` (v9 IN-26's switch, read first by `decision/options.py::opening_set`), so nobody forms it and every hash is today's at seeds 0-2."
+- WHERE: `engine/season/verb_table.yaml` (`craft`); `engine/season/loop/effects_economy.py` (`_eff_craft`); `engine/season/rosters.yaml` (`recipes`, `site_kinds`, `matter_kinds`, `works_cost`, `wear_per_season`, `band_floors`, `graded_tasks`, the `alignment` cells); `engine/season/data/rosters.py` (`recipes`' loader refusals); `engine/season/data/fixtures.py` (`withheld_verbs` gains `craft`); NEW `engine/season/tests/test_craft.py`.
+- TESTS: red first, "on a hand-built world through the real fold": "a person at a mint whose rung holds ore 10 crafts coin by the recipe and the rung's ore falls by exactly the input; with ore short, `craft.refused` and no partial product (R-COMPLETE). Mutation: drop the input debit; the store-mass check (inputs out equal recipe × amount) reds", as `test_coin_is_crafted_from_ore_by_the_recipe`, `test_short_ore_refuses_with_no_partial_product`, `test_a_recipe_naming_an_unknown_kind_is_refused_at_load` `[ASSUMPTION: test names]` (with the act's degree planted `Success`).
+- FALSIFIER and CONTROL: the mutation above. Control: "`craft` ships in `Fixtures withheld_verbs` … every hash is today's at seeds 0-2. It is not equal 'by construction': a formable typed row whose presence clause reads UNKNOWN person-side forms on every referent and crowds scenes (H-156's measured shape), so the arm that drops it from `withheld_verbs` is a declared mover, read for scene crowding before it ships."
+- GATE: `python -m pytest engine/season/tests/test_craft.py -q` → pass; the seed-0 one-season hash → equal to B12c.22's reading (seeds 1, 2 at B12c.99).
+- HASH MOVERS: none while withheld ("Withheld: none. Formable: every seeded realm hash (new candidates), and every world where a workshop is built. Revert: withhold the verb; then delete the row, the rosters and the kinds").
+- DEPENDS ON: V12 B12c.21 (`build` raises a works); EXISTS-IN-TREE `data/fixtures.py::withheld_verbs`, `decision/options.py::opening_set`, `venues.yaml: planned_works`; V12 B12c.04 (shape (a)).
+- GLOSSARY: none (*craft* is the ordinary word).
+- COST and TIER: build (size M); `sonnet`, `high`.
+- LANDS IT: B12c's producer; `Item: B12c.25`, `[skip ci]`.
+
+### B12c.26 — a skill's rate on an untested magnitude · `07_SE_capability_rate_B` §4 (a), (c) · BUILD · HASH EQUAL
+- SOURCE: `proposals/07_SE_capability_rate_B.md` §3, §4 (a)–(f), §6; D-U1-09, C3-C2, D-U1-07; its U4c line (`about_mid(value, floor, ceiling, 0)` returns exactly `1.0`; its test lands in B04); closes F-SE-21, R-SE-32.
+- ADVANCES: none at the control (gain 0); one methodology for a skill factor (S).
+- INSTRUCTION (copied):
+  1. "(a) `engine/season/data/verbs.py` (the CORE proposal's Edit 3, amended). `VerbRow` gains `magnitude: str = ""` with the closed set `("", "rate")`; the refusal rule becomes: `capability:` is allowed when the row `contests`, is graded, or has `magnitude == "rate"`; and a row that is a task row (18-A's `graded_tasks`) **and** declares `magnitude: rate` is refused (D-U1-09)."
+  2. "(b) `engine/season/verb_table.yaml`. No row is edited by this proposal."
+  3. "(c) `engine/season/seam/wrappers/pool.py`, beside `faculty` (the one pool reader…)":
+     ```python
+     def rate(w, p, verb) -> Fraction:
+         """The factor a held capability gives an untested magnitude of `verb`. Fraction(1) where the row
+         declares no `magnitude: rate`, where `p` is None, and at `effect_rate_gain` 0."""
+         row = VERB_TABLE[verb]
+         if p is None or row.magnitude != "rate":
+             return Fraction(1)
+         lo, hi = descriptors.CAPABILITIES[row.capability]["scale"]
+         return about_mid(score(w, p, verb), lo, hi, w.fixtures.get("effect_rate_gain"))
+     ```
+     "`rate` stays in `pool.py` (not `queries/world_q.py`): `pool.py` imports `queries.world_q.practice`, so the reverse import would be a cycle." `about_mid` returns a float: "`rate` converts at this one site so integer arithmetic stays exact." `descriptors.CAPABILITIES[...]` is B04.02's `CapabilityRow`, read as `.floor`, `.ceiling` `[ASSUMPTION: attribute access — basis: B04.02 lands a frozen dataclass, not a mapping]`. `data/fixtures.py`: `effect_rate_gain` = 0 (its H-row, IDS line).
+  4. "(d) … `_rise` and `_fall` keep their arithmetic and read no `rate`." "(f) Nothing in `modules/settlements/`."
+  5. "(e) CP-T08-01's `labour(w, rung)` … each present person's hands are weighted by `rate`": **BLOCKED** inside this item, the source's own "INCOMPLETE, two blocking points: (1) which verb row the labour weight reads … (2) the caller: `labour` is planned in `queries/world_q.py`, which cannot import `pool.py`" (`IS-B3` §4.4: `[BLOCKED: DESIGN — CP-T08-01's landing … the weight needs a non-task carrier nobody has named]`, owner SE). B12c.02's `labour` ships unweighted.
+- WHERE: `engine/season/data/verbs.py` (`VerbRow.magnitude`; the refusal rule); `engine/season/seam/wrappers/pool.py` (`rate`); `engine/season/data/fixtures.py` (`effect_rate_gain`); `engine/season/hole_register.yaml` (block slot 11); `engine/season/tests/test_works_founding.py` (gains two tests).
+- TESTS (copied): "`test_rate_is_one_without_magnitude_rate_or_at_gain_zero` (a test-rebound verb table with a non-task row declaring `magnitude: rate`; two persons of unequal held score read unequal factors at `effect_rate_gain` non-zero and equal factors at 0, and the hash is the base); `test_a_task_row_declaring_magnitude_rate_is_refused_at_load` (D-U1-09)", red first.
+- FALSIFIER and CONTROL: "A row with no `magnitude: rate` reading anything but 1; the loader accepting `capability:` on an uncontested row that declares no magnitude, or `magnitude: rate` on a task row; `_rise` reading `rate` (a second ladder). Control. The shipped table and fixtures reproduce every pinned hash."
+- GATE: `python -m pytest engine/season/tests/test_works_founding.py -q` → pass; `git grep -n "rate(" engine/season/loop/effects_economy.py` → no call of `pool.rate` in `_rise`/`_fall`; the seed-0 one-season hash → equal.
+- HASH MOVERS: none ("Hash EQUAL while no row declares a rate").
+- DEPENDS ON: V12 Batch B04 (B04.02 `CAPABILITIES`; CAP's `about_mid` with `test_about_mid_is_exactly_one_at_gain_zero`; B04.03's loader rule this amends); V12 Batch B01 (`pool.py::score`, lane A's split of `faculty`, absent at `fe09cdd`); V12 B12c.02 (`labour`), B12c.22 (the Lands line "after `14_VERBS_MATERIAL_A`–`_C`").
+- GLOSSARY: none.
+- NAMES: `pool.py::faculty` is the source's "beside" anchor; if B05 or B15 has removed it (`IS-PC-05`), `rate` sits beside `score`.
+- IDS: H block slot 11 (`effect_rate_gain`).
+- COST and TIER: edit; `sonnet`, `high` (the ladder question was `opus`'s, decided in C3-C2/D-U1-09).
+- LANDS IT: B12c's producer; `Item: B12c.26`, `[skip ci]`.
+
+### B12c.27 — the NPC and chooser surface · `07_SE_capability_and_chooser_surface` §5–§6 · POINTER
+- WHAT IT POINTS AT: the source's §5–§6 are reference ("§5–§6 are a reading, not a design object"; "Cost class. Edit (text only)"; "Lands … text only"); its §3–§4 are superseded by `07_SE_capability_rate_B` (B12c.26), its §1 and §7 reduced to pointers. What it names lands elsewhere: the amount as a choice (`07_SE_arc_needs` §3 b, B12b); a destination chosen among known places (B12c.12, B12c.14); a skill on a settlement act (the task draw, B07; B12c.26); the cohort's heavy moves (`U5d_SE_cohort_heavy_moves_and_caste`, B38). No file is edited and no commit is made: the position is closed in B12c.99's commit body by this line. Gate: none of its own (the source: "None of this file's own").
+
+### B12c.28 — the valley: three towns, one granary, one seat · `07_SE_valley_scenario` · BUILD · HASH EQUAL
+- SOURCE: `proposals/07_SE_valley_scenario.md` §3, §4 (a)–(c), §5; A-54, A-50, A-56 (its head); U3 §1 item 13 ("`07_SE_valley_scenario`", last; "the valley loader test"); U3 §1.3 B12 row (`07_SE_valley_scenario` "creates `harness/valley.py`"); UNDECIDED (4); closes F-SE-13.
+- ADVANCES: R-04.c6 (`python -m engine.season.harness.valley`, `test_valley.py`).
+- INSTRUCTION (copied):
+  1. "(a) `engine/season/valley.yaml` (structure; every number is the scenario's, `[ASSUMPTION]`):" the source's YAML block whole — `meta: {authority: "A TEST FIXTURE, NOT CANON. Three places and one seat, sized to make the settlement layer bind."}`; `territory: {id: terr_valley}`; `settlements:` `set_field` (`sites: [field, field]`, `dwellings: 5`, `stores: {grain: 80, salt: 6}`), `set_harbour` (`[harbour]`, 4, `{grain: 10, salt: 30}`), `set_seam` (`[seam]`, 3, `{ore: 50, timber: 10}`); `granary: {rung: terr_valley, stores: {grain: 16, salt: 8}}`; `cohorts:` weights 4, 3, 2 at the three; `seats: [{id: off_steward, rung: terr_valley, remit: [issue], holder: p_steward, lives: set_field, obligees: 2}]`; `persons:` `p_reeve` (lives and holds `set_harbour`), `p_miller` (lives `set_field`); `planned_works: [{id: works_second_field, kind: works, plan: field, at: set_field, rung: set_field, master: p_miller, terms: 3}]`. `field` is a site kind from B12a.51 (CP-T08-02), so the source's fallback ("Until `field` is a site kind … uses `harbour`") is not needed: "the loader refuses a kind `rosters.yaml: site_kinds` does not hold".
+  2. "The loader holds a closed key set per section and refuses an unknown key by name. Beyond the keys shown above it admits the ones `23_STORY_E_first_playable_the_lean_year.md` needs: on a person `age_years` (read through `22_HAPPENINGS_A` edit 1's writer …; this loader writes no `born` itself), on a seat `conferral`, `sworn_to` … and `holders` …, and on a prehistory petition the `to:` of `12_ARCS_case_on_the_realm.md` §3 item 3's `setup.prehistory` rows." `age_years` is read through `22_HAPPENINGS_A` edit 1's writer, which lands in B37: until then a person's `age_years` is admitted and refused at build with a message naming B37 `[ASSUMPTION: the interim — basis: the source writes no `born`; B37 follows B12c; the reading that changes less]`.
+  3. "(b) `engine/season/harness/valley.py` (structure and interface):" `build(seed: int = 0, fixtures=DEFAULT_FIXTURES) -> World` ("reads valley.yaml through data/files.py's anchor and load_yaml; mints rungs, Sites, cohorts, the seat, the two residents and the works through the same constructors scarce.governed and populated.mint_planned_works use"); `sheet(w) -> dict` ("per settlement: hunger band and cover (world_q.hunger), stores, cohort weight and body, population/capacity; the granary's stores; the steward's live sworn terms; `ending`: None | 'lost' | 'held'"); `run(seasons: int = 12, seed: int = 0, play=None) -> dict` ("SeasonDriver(w); choose = dispatching_chooser(P.chooser(w, verbs=resolvable_verbs()), play or {}); one season at a time; appends sheet(w) and the season's acts by the steward, the reeve and the miller with each act's Event kinds and `observed`; stops at an ending. Returns the series and content_hash"); `main(argv=None) -> int` ("python -m engine.season.harness.valley [--seasons N] [--seed S] [--policy hoard|relieve|auto]"). "`--policy` is the headless player-proxy: two `Callback`s … `relieve` takes any candidate `transfer` or `requisition` whose `to` is the granary or a settlement in a band below `fed`; `hoard` refuses every such candidate. `auto` is the shipped chooser (the control)." The `held` ending's season count is the module constant `HELD_SEASONS = 12` (UNDECIDED (4)). `ending` reads "`lost` when any settlement reads `empty` (or, before the census proposal lands, when a cohort dies)" — `07_SE_population_census` is B12b's, so `empty` is the reading.
+  4. "(c) No other file. `data/files.py` gains the path constant `VALLEY_YAML`."
+- WHERE: NEW `engine/season/valley.yaml`; NEW `engine/season/harness/valley.py`; `engine/season/data/files.py` (`VALLEY_YAML`); NEW `engine/season/tests/test_valley.py`.
+- TESTS (copied, 7b-7): "`test_auto_twice_gives_one_hash`, `test_valley_yaml_refuses_a_site_kind_the_roster_lacks`, `test_valley_yaml_admits_the_story_keys_and_refuses_an_unknown_one` (a person with `age_years`, a seat with `conferral`/`sworn_to`/`holders` load; a key outside the set is refused by name; control: the same file without the keys loads unchanged), `test_hoard_and_relieve_end_differently_or_the_finding_is_reported` (asserts that it asserted over the three seeds; a same-hash result is reported, not failed, per the falsifier above)" — each run at two seasons (twelve in the source; A-114), with `HELD_SEASONS` planted at 2 in the last so a `held` ending is reachable; written before `valley.py`, red.
+- FALSIFIER and CONTROL: "If `hoard` and `relieve` produce one content hash, a player's choice changes nothing and the settlement layer does not play … That reading is the finding, and it is reported, not tuned away … Control. `--policy auto` twice at one seed gives one hash." The weather control arm is `lattice_coupling` at its control value (HELD for B98), passed as a settings overlay (`IS-B3-SE-01` (5), B12c.29).
+- GATE: `python -m pytest engine/season/tests/test_valley.py -q` → pass; `python -m engine.season.harness.valley --seasons 2 --seed S --policy X` for the three policies at S = 0–2 → nine content hashes, quoted, with "(i) `hoard` and `relieve` end differently at every seed … (ii) `auto` matches neither exactly at some seed; (iii) every season's sheet names, for each act the steward took, the Observation it was formed from" each read and quoted (a failed (i) is the reported finding); the realm hash at seed 0, one season → equal (nothing shipped reads the new files).
+- HASH MOVERS: none ("No hash moves: nothing shipped reads the new files").
+- DEPENDS ON: V12 B12c.27 (the order); V12 Batch B12a (`field`, B12a.51); V12 Batch B12b (`07_SE_population_census`: `empty`); EXISTS-IN-TREE `harness/scarce.py::governed`, `harness/play_surface.py::dispatching_chooser`, `harness/governance_spine.py` (the precedent), `data/files.py` (`GOVERNANCE_SPINE`'s anchor), `boot/realm.py::mint_planned_works` (B03c), `world_q.py::hunger`.
+- GLOSSARY: *scenario* row: the valley named as a member ("a small authored world that plays one subsystem alone"); no new word.
+- NAMES: `populated.mint_planned_works` → `boot/realm.py` (B03c); `round` none.
+- COST and TIER: small build; `sonnet`, `high` (R3 7b-0).
+- LANDS IT: B12c's producer; `Item: B12c.28`, `[skip ci]`.
+
+### B12c.29 — the valley is a row of the scenario registry · `IS-B3-SE-01` · BUILD · HASH EQUAL
+- SOURCE: `master/instructions/IS_B3_FA_SE_WR_GO.md` "Item: IS-B3-SE-01" (`:213-222`); part 2 §7.1 ("SE-01 last"), §7.3 (`harness/scenarios.py`: a row appended at the end of the mapping).
+- ADVANCES: SE standalone (S2, S4, S5, S6); R-04's settlement scale.
+- INSTRUCTION (copied): "(1) Register `valley` in `scenarios.SCENARIOS` (`IS-B2-CORE-01`): `build = valley.build`, `verbs = None`, `seat` the steward (`p_steward`), `ending = valley.ending`, `role = "settlements.subsist"` (the step call every season of it enters). (2) `valley.run` keeps its command line and calls `scenarios.run`; its loop is deleted. `--policy hoard|relieve|auto` stays: the two callbacks are the picks handed to `run`. (3) `valley.ending` returns `emptied` when any settlement reads `empty` (before `07_SE_population_census` lands: when a cohort has died), `held` at twelve seasons with none, and `None` otherwise; and `unseated` when the steward's `hold` on `off_steward` has closed … `kinds` (`IS-B3-GO-01`): `emptied` and `unseated` are `lost`, `held` is `won`. `sheet(w)["ending"]` reads the same function, so the proposal's `lost` and `held` strings have one owner. (4) `unreached`, declared from the per-role entry counts `run` returns at seeds 0, 1, 2 over twelve seasons [two, A-114], as in `IS-B3-FA-01`. Expected by construction and to be confirmed by the reading: `combat.fight` and the five `mass_battle.*` roles …, and `settlements.fortification` and `.provision` unless a march forms. (5) The weather is not stubbed: the harvest is the place's draw (A-54). The arm that isolates the steward's choices from the weather is the existing switch of `09_WR_world_motion.md` edit 1 at its control (`lattice_coupling` 0), passed to `valley.build` as a settings overlay; it is a control arm of the gate, not a second world." `held` reads `HELD_SEASONS` (B12c.28).
+- WHERE: `engine/season/harness/scenarios.py` (`SCENARIOS`: the `valley` row, appended); `engine/season/harness/valley.py` (`run`, `ending`, `sheet`); `engine/season/tests/test_valley.py`.
+- TESTS (copied): "`test_valley_runs_through_the_one_loop`, `test_each_valley_ending_kind_is_reached_by_a_planted_policy`, `test_valley_unreached_roles_match_the_entry_counts`" (two seasons; `HELD_SEASONS` planted at 2 for `held`; the `unseated` run plants the steward's release of his seat), red first.
+- FALSIFIER and CONTROL: "`valley.run(12, 0)` and `scenarios.run("valley", 0, 12)` have one hash" (read at two seasons: `valley.run(2, 0)` and `scenarios.run("valley", 0, 2)`). "`--policy auto` twice gives one hash … The `unseated` ending is reached by a planted run in which the steward releases his seat."
+- GATE: `python -m pytest engine/season/tests/test_valley.py engine/season/tests/test_scenarios_runner.py -q` → pass.
+- HASH MOVERS: none ("nothing shipped reads the valley").
+- DEPENDS ON: V12 B12c.28; V12 Batch B11 (`IS-B2-CORE-01`: `harness/scenarios.py`, `SCENARIOS`, `run`; `IS-B3-GO-01`: `kinds`, `unreached`); V12 Batch B02 (CI-11's per-role counts); V12 Batch B12a (`lattice_coupling`, `09_WR_world_motion` edit 1).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B12c's producer; `Item: B12c.29`, `[skip ci]`.
+
+### B12c.30 — `requisition` in computed play: the lift H-163 limit 3(a) · the intake `:326` (P14 MISSING-DEP, AM-E-21) · BLOCKED (SE design: which lift gives an issue-granting holder a settlement-larder claim; owner none)
+- SOURCE: the intake `:326` ("P14 B10-16 gates, IN-52, `requisition` · MISSING-DEP · … dep: a seat-channel stock report or residence-ladder reach (H-163 3(a)); owner none · whoever lands SE B12; design choice, not mine. Block C12"); E5 Block C12 (AM-E-21: "no position makes `requisition` execute in computed play … `larders_in_purview` returned `()` in 766 of 766 calls … which lift to build (a seat-channel level report, or residence-ladder reach) is a design choice with different information games"); B10.79 (BLOCKED, "Where its work lands when unblocked: the SE lane's batch that carries IN-52").
+- What is missing: the design that names the lift (a seat-channel stock report, or reach of the residence ladder) and its information game; until it exists, CP-T08-06's compliance reader, CP-T08-07's collection, CP-T08-08's refill (B12c.18) and IN-52's flip (B12b) are credited on hand-built worlds only and none counts toward R-04.a's `requisition`. The two options lead to different information games (who learns a larder's stock, and how), which is the ladder's escalation case; this item does not choose. Nothing is built here; B12c.13's gate quotes `requisition.taken`'s computed count as the standing reading.
+- GATE when unblocked: `aperture 2 s`, s = 0–2: `requisition.taken` > 0 from a computed act, with `Act.via` set (R-04.a).
+
+## Readings (E-10; copied byte for byte from their sources, read once on the closing tree)
+
+1. **B12c.23 — G-05** (the intake `:175`; carry-forward E4 `:887`, copying `workplans/valoria_master_workplan_v11_part11.md:26`): "IN-45's falsifier replaces it (`aperture 4 0`, seeds 0-2: `rung.founded` ≥ 1 and `site.built` ≥ 1 by a computed actor)". Read here as `python -m engine.season.harness.aperture 2 --seeds 0 1 2` (four seasons in the source; A-114): `rung.founded` ≥ 1 and `site.built` ≥ 1, each caused by a computed act, quoted per seed; the B12c.21 gate reads "at some seed", this reading asks both at one seed or more. A reading of 0 is recorded with the refusal that decided (`found.refused`/`build.refused` `observed`) and fails R-04.c6's `found`, `build` conjunct at this close; it is not tuned away.
+2. **B12c.24 — `17_CENSUS_C1A_02` W2** (its row `loop/effects_founding.py:26 _works_named`, `:45 _made_by` | `found`, `build` | only refused): "**The gate these rows close on.** `python -m engine.season.harness.corpus_run`: each verb above appears under `VERBS THAT EXECUTED`. … **Falsifier.** A verb leaves 'never attempted' by being injected into a case rather than formed by a person's chooser (scripting drift: the count moves and the game has not)." `_made_by` is `world_q.made_id` after B12c.19 (`NAMES`).
+3. **B12c.31 — `IS-B3-SE-03`'s closing arm** (`IS-B3` `:241`, taken at B12c's close by B12a's UNDECIDED (1)): "`python -m engine.season.harness.aperture 3 0` and `3 2` at B12's first commit (the opening reading) and at its close: stores moved between settlements above the opening reading at one seed or more; `settlements.drawn_under` and `settlements.fabric` above 0 in `ENGINES`. Readings, quoted; no threshold is asserted in a test." Read at `aperture 2 0` and `2 2` (A-114), against B12a.01's opening reading (`reading @<sha>`).
+
+### B12c.99 — re-pin and close readings · `_part4` E-1 · BUILD · HASH MOVER (the re-pin)
+- SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12; `IS-A-12`.
+- INSTRUCTION: (1) Re-record, once, the realm pins in `engine/season/tests/_realm_goldens.py` and every seeded result B12c.06, .07, .08, .12, .13, .14, .15, .16, .19, .20, .21, .22 moved (and B12c.09/.10 if `notice_arm` was on at the open), against B12b's close (`reading @<sha>`), with each pin file's own generator; the commit says "re-pin" and lists the handles. (2) Read seeds 0 to 2 at one season for the items that read seed 0 only (E-2). (3) Write R-04.c6's `reading:` record in `engine/season/requirements.yaml` (the valley's two-season readings and the `BUILT OUT` lines; `status:` not edited). (4) Close B12c.27 in the commit body ("`07_SE_capability_and_chooser_surface` §5–§6: reference, no edit"). (5) Name the unused H ids of the block in the expunge commit body.
+- WHERE: `engine/season/tests/_realm_goldens.py`; the pin files the movers reach (named by `python tools/tests_for_diff.py --base <batch-start-sha>`); `engine/season/requirements.yaml` (R-04.c6 `reading:`).
+- TESTS: the full suite once (CLAUDE.md §0.4) and the covering suites, here.
+- FALSIFIER and CONTROL: a pin moved by no declared item (an undeclared mover: stop and name it). Control: the hash-EQUAL items' readings (B12c.01–.05, .09–.11, .18, .25, .26, .28, .29) reproduce at seeds 0–2 against the tree before the first mover.
+- GATE: the BATCH GATE.
+- HASH MOVERS: the re-pin itself.
+- DEPENDS ON: V12 B12c.01 to B12c.31.
+- COST and TIER: calibration-reading; `sonnet`, `high`; the close's terminal critique `opus`.
+- LANDS IT: B12c's producer; `Item: B12c.99`, without `[skip ci]` (the batch's last `Item:` push).
+
+| STOP. Batch B12c-material-verbs-and-valley closes here |
+
