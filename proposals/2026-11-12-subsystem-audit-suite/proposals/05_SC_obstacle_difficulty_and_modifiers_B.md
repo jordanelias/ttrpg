@@ -11,12 +11,21 @@ F-SC-03, F-SC-04; hole rows H-127, H-213, H-267, H-288.
 ## What it changes in `engine/season/` at runtime
 
 Every contested social act and graded inquiry composes its obstacle as
-`difficulty + modifiers`, in one function, and returns the terms it summed. At the proposed values
-the composed obstacle equals today's (2) for every act in the shipped realm whose counterparty holds
-no score, and for every graded inquiry. It moves (declared) for: an act against a person who holds a
-score (two of 83 persons at seed 0, first audit §12 run 11); a self-plea (`speak` on one's own
-matter); and any act once regard, stakes or a standard is non-zero. Every Event of a rolled act
+`difficulty + modifiers`, in one function, and returns the terms it summed. At the control arm
+(`regard_step` 0, every `stakes_ob` entry 0, every `standard` `plain`) the composed obstacle equals
+today's (2) for every act in the shipped realm whose counterparty holds no score, for every `speak`
+(its subject is a `DocketItem`, so it has no opposition today or after) and for every graded
+inquiry. It moves (declared) for an act against a person who holds a score (two of 83 persons at
+seed 0, first audit §12 run 11) and, at the proposed arm, for any act whose counterparty holds a
+stance row toward the actor or whose disposal is `detain` or `ban`. Every Event of a rolled act
 gains the term list (with SC-P1).
+
+*Corrected on completion (Opus, 2026-11-12):* an earlier text of this paragraph listed the self-plea
+as moving and edit 2 gave `speak` `routine` and `interrogate` `demanding`. Checked against
+`verb_table.yaml` (`speak.requires_typed` is `kind: DocketItem`, no `counterparty:`;
+`interrogate.counterparty: subject`, a held person) and `sigma.py::contest_input:210`: those values
+would have moved every `speak` from 2 to 1 and every `interrogate` from 2 to 3 at the control arm.
+Edit 2 now carries the values that reproduce today's obstacle.
 
 ## The problem (evidence)
 
@@ -54,11 +63,12 @@ All terms are in obstacle units (net successes; one die nets `MU_PER_DIE` 0.4 on
 | term | what it is | read from (the single owner of the fact) | value | sign | applies to |
 |---|---|---|---|---|---|
 | `difficulty` | how hard the act is in itself | `verb_table.yaml`, a `difficulty:` column on every contested or graded row, naming a member of `rosters.yaml: difficulty_levels`; the level's size is the fixture table `difficulty_ob` | proposed `plain` 0, `routine` 1, `demanding` 2, `hard` 3 | + | every rolled act |
-| `opposition` | the person acted against | the counterparty's score for the verb's capability, through the one pool reader's base (`10_DICE_one_score_two_roles.md`'s `score()`: the larger of key and attribute, else `pool_default`; never practice), times the fixture `opposition_rate` | score × 0.5 (the ruled rate) | + | an act with a person counterparty; absent for a non-person subject and for a self-plea |
+| `opposition` | the person acted against | the counterparty's score for the verb's capability, through the one pool reader's base (`10_DICE_one_score_two_roles.md`'s `score()`: the larger of key and attribute, else `pool_default`; never practice), halved by the one owner of the ruled divisor, `sigma_leverage.opposed_ob` (`10_DICE_capability_axiom_map.md` §G edit 5, shared with combat's `core.ob_from_defender`) | score ÷ 2 (ruled) | + | an act with a person counterparty; absent for a non-person subject (a `DocketItem`, a Record, a site) and for a self-plea |
 | `standard` | what the room demands before it will be moved | the docketed arrangement row (or its rite), a `standard:` key naming a `difficulty_levels` member | the level's size; `plain` (0) on every seeded row until authored | + | an act heard by a bench (`heard_by: bench`) |
 | `subject` | what the thing examined puts in the way | `Record.forgery_quality` of an examined Record (today's operand, unchanged); a cover's quality when FI lands one | as stored | + | graded inquiries |
 | `stakes` | the weight of what the act would do to the other party | the fixture table `stakes_ob`, keyed by the Tenure kind the act opens or closes (for `determine`, the kind the row `disposes:` at Success; for `arrest`, `detain`) | proposed `oblige` 0, `detain` 0.5, `ban` 1 | + | acts that open or close a restraint on the counterparty |
-| `regard` | how the one acted upon is disposed to the actor | the counterparty's own stance toward the actor (`Person.stance`, his interior, the same kind of read as his score; no ledger), times the fixture `regard_step` | valence (−5…+5) × proposed 0.2; control 0 | − for favour, + for hostility | an act with one person counterparty and no bench (`tell`, `lie`, `argue`, `arrest`, `interrogate`) |
+| `regard` | how the one acted upon is disposed to the actor | the counterparty's own stance toward the actor, read by its one owner `queries/person_q.py::stance_toward(counterparty, actor)` (Σ valence × weight over his rows naming the actor; his interior, the same kind of read as his score; no ledger), times the fixture `regard_step`, sign reversed | `stance_toward` spans −25…+25 per row (valence −5…+5 × weight 0…5); proposed `regard_step` 0.04, so one full-weight conviction moves the obstacle by at most 1.0; control 0 | − for favour, + for hostility | an act with one person counterparty and no bench (`tell`, `lie`, `argue`, `arrest`, `interrogate`) |
+| `capability` | a capability the situation rewards or punishes (a venue that penalises want of Grace) | the `circumstance` rows of `tables.capability_uses` (`10_DICE_capability_axiom_map.md` §A, §C, §G edits 1 and 6), summed host-side and carried raw as one operand | as each row's gain fixture; none ship | − / + | as each row's `when:` |
 | `reception` | how the bench is disposed to the actor | `world_q.reception` as SC-02's design re-sources it (the actor's own ledger; the bench's public commits), times `reception_gain` | as today (gain 1.0) | − / + | an act heard by a bench; never together with `regard` |
 | `evidence` | what is held, cited and left standing | `proof_step` × (the actor's cited items' weight − the other side's standing answers), per `05_SC_evidence_and_rebuttal_B.md`; until that lands, today's `world_q.proofs` | 0.25 per unit weight | − / + | any act whose row admits `cites` |
 | `plea` | a concession's reward, an inapt speech's price | CR-62's `plea_step` operand | CR-62's | − / + | `speak` |
@@ -71,7 +81,7 @@ the **pool** itself (capability, practice, office weight).
 
 `bound(x) = min(x, ceiling)`, the existing `obstacle_ceiling` / `ceiling_per_pool` rule (H-213),
 applied to the hard part: difficulty, opposition, standard, subject, stakes and the hostile halves of
-regard, reception, evidence and plea. The favourable halves are subtracted **after** the bound, and
+regard, reception, capability, evidence and plea. The favourable halves are subtracted **after** the bound, and
 the result is floored at `OB_MIN`. The ceiling exists so that no matter becomes impossible; applied
 after the favourable terms, as today, it also erases what the actor brought (F-SC-16). This is P4
 §3.3's ordering (*"the ceiling bounds only the opposing score"*) taken at its critic's finding 8 as a
@@ -106,28 +116,36 @@ is no shared roll.
 
 | SC-P5 item | now |
 |---|---|
-| option B, price an opponent at `MU_PER_DIE × score` | **not adopted.** The score/2 form is kept as the `opposition` modifier. The rate becomes the fixture `opposition_rate` (shipped 0.5), so the alternative is a swept arm (`MU_PER_DIE`, read from the dice engine), never a shipped one without a ruling |
+| option B, price an opponent at `MU_PER_DIE × score` | **not adopted.** The score/2 form is kept as the `opposition` modifier. The divisor stays in its one owner, `sigma_leverage.opposed_ob`, which combat shares; a social-only rate fixture would be two ladders for one quantity (an S defect, §0.06), so none is added. The alternative remains a measurement arm of that function, never a shipped value without a ruling |
 | "equal parties should be even" as the target; the audit's §11 item 1 as a survivor for Jordan | **moot.** A contested act is an attempt at a task against resistance, and its difficulty is not the opponent's alone. H-288's swap test stops being a requirement; the row is regraded as answered |
 | the rising disadvantage of equal pairs (P(Failure) 0.420 at score 2 to 0.606 at score 12) | **largely removed by the base, measured.** With `difficulty` 1 and no other term, equal pairs fail 0.74, 0.71, 0.71, 0.72, 0.73 at scores 2, 3, 5, 8, 12 (`runs/SC_B/difficulty_odds.txt`): flat within 0.03, and high. The level is the modifiers' to move: one obstacle unit of favour brings the same pairs to 0.42, 0.51, 0.56, 0.61 at 2, 5, 8, 12 |
-| H-127's inversion, decided there as "no floor, no edit" | **superseded.** The stand-in `obstacle_default` no longer stands for a person: a person without a score opposes at `pool_default × opposition_rate` (DICE's proposal), and a non-person subject has no opposition term at all |
+| H-127's inversion, decided there as "no floor, no edit" | **superseded.** The stand-in `obstacle_default` no longer stands for a person: a person without a score opposes at `opposed_ob(pool_default)` (DICE's proposal), and a non-person subject has no opposition term at all |
 | its exact-odds tables | **kept** as the instrument; re-run under this form in the gate |
 
 ## Exact edits, by owner
 
 1. `engine/season/rosters.yaml`: rosters `difficulty_levels` (ordered names) and `obstacle_terms`
-   (ordered, closed). `engine/season/data/fixtures.py`: tables `difficulty_ob`, `stakes_ob`, and the
-   scalars `opposition_rate` (0.5), `regard_step` (0.2; control 0), each with a NUMBER row in
-   `hole_register.yaml` and a three-point sweep. `obstacle_default` is deleted with H-127's row.
+   (ordered, closed: `difficulty, opposition, standard, subject, stakes, regard, reception,
+   capability, evidence, plea`). DICE's map proposes a roster of the same name holding `[capability]`
+   (§G edit 1); it is this roster, with `capability` as one member, not a second one.
+   `engine/season/data/fixtures.py`: tables `difficulty_ob`, `stakes_ob`, and the scalar
+   `regard_step` (0.04; control 0), each with a NUMBER row in `hole_register.yaml` and a three-point
+   sweep. No rate fixture: the divisor is `opposed_ob`'s. `obstacle_default` is deleted with H-127's
+   row.
 2. `engine/season/verb_table.yaml` and `data/verbs.py`: a `difficulty:` column. The loader refuses a
    contested or graded row without one and a row that is neither with one (the refusal shape
    `01_CORE_capability_authoring_surface.md` edit 3 gives `capability:`). Proposed values, all
-   `grade: assumption`: `tell`, `argue`, `speak`, `determine`, `lie`, `arrest` → `routine`;
-   `interrogate`, `research`, `examine`, `surveil` → `demanding`.
+   `grade: assumption`, chosen so that today's obstacle is reproduced at the control arm: the rows
+   whose counterparty is a person (`tell`, `lie`, `argue`, `determine`, `arrest`, `interrogate`) →
+   `routine` (1, plus `opposed_ob(pool_default)` 1 = 2); the rows with no person counterparty
+   (`speak`, whose subject is a `DocketItem`; `research`, `examine`, `surveil`) → `demanding` (2).
+   A designer who judges a lie harder than a telling edits one cell.
 3. `engine/season/arrangements.yaml` / `data/arrangements.py`: a `standard:` key (default `plain`),
    read by the host builder; no seeded row changes.
-4. `engine/season/queries/inputs.py::SocialContestInput`: add `difficulty`, `opposition_rate`,
-   `standard`, `stakes`, `regard`, `regard_step`, `rebuttals`; remove `obstacle_default`. `Margin`
-   gains `terms`.
+4. `engine/season/queries/inputs.py::SocialContestInput`: add `difficulty`, `standard`, `stakes`,
+   `regard`, `regard_step`, `capability_terms` (DICE's `obstacle_terms` float, renamed so the field
+   and the roster do not share a name), `rebuttals`; remove `obstacle_default`. `Margin` gains
+   `terms`.
 5. `modules/social_contest/roll.py::obstacle`: the composition above, returning the obstacle and its
    terms from one helper; it refuses a term name outside the roster it is handed.
 6. `engine/season/seam/wrappers/sigma.py::contest_input` / `_frame`: fill the new operands (the row's
@@ -142,11 +160,12 @@ is no shared roll.
 - Exact odds (no draw): the table in `runs/SC_B/difficulty_odds.txt` reproduced from the module's own
   `obstacle` and `band_odds`; and F-SC-16's rows re-run: pool 2 against a score of 8, proofs 0 to 4,
   must now give four different obstacles.
-- `build_realm(0)`, one season: a printed count of rolled acts whose obstacle differs from the base
-  commit, each with its terms; expected only acts against the score-holders and self-pleas.
-- A hand-built fold with no player: two NPCs, one `argue`, the hearer's stance toward the arguer set
-  to +4 in one arm and −4 in the other; the two Events' `terms` differ in `regard` alone and by
-  `8 × regard_step`.
+- `build_realm(0)`, one season, at the control arm: a printed count of rolled acts whose obstacle
+  differs from the base commit, each with its terms; expected only acts against the score-holders.
+  At the proposed arm, the same count, every extra row showing a non-zero `regard` or `stakes` term.
+- A hand-built fold with no player: two NPCs, one `argue`, the hearer holding one stance row toward
+  the arguer, `(arguer, +4, 1)` in one arm and `(arguer, −4, 1)` in the other; the two Events' `terms`
+  differ in `regard` alone and by `8 × regard_step`.
 
 ## Falsifier
 
@@ -170,5 +189,5 @@ the same with and without four standing proofs.
 
 ## Cost class
 
-Small build. Lanes: SC (the module and its record), IN/CORE (the verb column), DICE (`score()`),
-FA (rows that author a `standard`).
+Small build. Lanes: SC (the module and its record), IN/CORE (the verb column), DICE (`score()`,
+`opposed_ob`, the `capability` circumstance rows), FA (rows that author a `standard`).

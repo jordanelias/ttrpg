@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit addendum; resolves nothing at runtime)
 
+Authored in part by Fable; completed by Opus after the Fable usage limit (2026-11-12).
+
 ## Read at: ad07a9a (working tree)
 
 This addendum does not replace `02_CHAR_audit.md`; it reads what that audit lists as NOT READ (its §12,
@@ -153,6 +155,17 @@ addendum makes no claim about test strength); `registers/handoffs/` beyond a sea
 for person, chooser and attribute rows (one hit, the cohorts' decision surface, already in the first
 audit); the parts marked "not opened" or "Status lines only" above. Nothing below rests on an unread
 part; where a claim leans on a document read in part, the sentence says so.
+
+**Completion (Opus, after the Fable lane stopped).** The Fable lane had written B0 to B7 and five of
+the six proposals; `02_CHAR_voices_and_the_room.md`, which B5 and B6.2 rows 19 and 20 cite, did not
+exist. The completion read, for it: `decision/choose.py:56-221` (`stance_term`, `deliberation_memo`,
+`odds_weight`, `score_terms`), `decision/options.py:529-565` (`project`), `data/pursuits.py:60-85`
+(`to_axes`), `queries/person_q.py:424-453` (`regard`) and `:620-634` (`opinion`), the callers of
+`opinion`, `legitimacy` and `stability` by search, `queries/world_q.py:4374-4396` (`witnessed`),
+`state/carriers.py:600-690` (`Scene`, `Act`), `decision/sheet.py:150-210`, the first audit's
+detective paragraph (§14 (c)) and `02_CHAR_reason_trail_and_small_edits.md`; and ran one probe (B7).
+It read nothing further from the list above, re-ran none of the Fable lane's probes, and found no
+earlier statement to correct. The rows still not read stay not read.
 
 ## B2. Corrections to the first audit, and new findings
 

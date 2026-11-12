@@ -153,10 +153,11 @@ readers assumed a constant) covers a rising weight with no further edit: every r
 ## 6. What this does not cross
 
 ED-WR-0011 (a closed authored cast, *"for now"*): no `Person` is created; the count of persons is
-asserted constant. ED-IN-0255 (only cohorts eat): untouched. L4 (no social quantity at MATTER): the
-write is at CENSUS, on a quantity Layer 1 gives CENSUS. The engine's refusal of unwound clocks
-(`05_COLLISIONS_AND_RESIDUE.md` rows 5 and 16) is honoured: the bodies clock is the one the same file
-licenses.
+asserted constant. ED-IN-0255 (only cohorts eat): untouched. L4 (no social quantity at MATTER): a
+cohort's weight is a body count, `social: false` on its matrix row, and births are named in MATTER's own
+table (§25). §29 (no clock at CENSUS): honoured, which is why the write is not there. The engine's refusal
+of unwound clocks (`05_COLLISIONS_AND_RESIDUE.md` rows 5 and 16) is honoured: the bodies clock is the one
+the same file licenses, and §25.1 lists it among the three that are exhaustive.
 
 ## 7. NERS reading (definitions: `CLAUDE.md` §0.06; E last)
 
@@ -168,12 +169,14 @@ licenses.
 - **R.** A lord's neglect becomes reparable at a price in seasons, so governing well is distinguishable
   from governing badly over time. With no player, settlements breathe. Completeness: the arm stops at
   capacity and at shortfall; it cannot run away because its bound is the ruled one.
-- **S.** One writer at the barrier Layer 1 names; the same capacity Query `migrate` reads; the same draw
-  record hunger reads. No second ladder.
-- **E, last.** One branch, two readers, one fixture. "Fed, housed and left in peace, they multiply" is a
+- **S.** One writer at the barrier Layer 1 names for births (MATTER), in the pass that already runs the
+  bodies clock; the same capacity Query `migrate` reads; the same shortfall hunger writes. No second
+  ladder.
+- **E, last.** One branch, one new reader, one fixture, one matrix cell. "Fed, housed and left in peace, they multiply" is a
   rule a player predicts without being told.
 
 ## 8. Cost class
 
-Small build, on top of the first proposal's writer. Hash EQUAL at the shipped arm; the flip a declared
+Small build, buildable before or after the first proposal's thinning (it shares no writer site with it
+unless (c′) is taken). Hash EQUAL at the shipped arm; the flip a declared
 mover.

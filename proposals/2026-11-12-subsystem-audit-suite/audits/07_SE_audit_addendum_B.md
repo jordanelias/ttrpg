@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
+Authored in part by Fable; completed by Opus after the Fable usage limit (2026-11-12).
+
 ## Read at: f83534e (working tree)
 
 Addendum to `audits/07_SE_audit.md` (read at `601e715`). `git diff --stat 601e715 f83534e -- engine
@@ -212,8 +214,8 @@ audit's and are not restated; the rest are this addendum's.
 3. **Stock where a holder sits**: world-gen seeds the relief stock at the nearest seat-bearing rung up
    each settlement's ladder, not at every territory rung (`07_SE_treasury_granary_B.md`). This single
    change gives relief, pay and the field's ration one stock and one answerable person.
-4. Population that moves both ways at CENSUS: thinning (1st) and regrowth
-   (`07_SE_population_regrowth_B.md`).
+4. Population that moves both ways: thinning (1st) and regrowth (`07_SE_population_regrowth_B.md`),
+   the rising arm on the bodies clock at MATTER (C-8; the first draft of this line put both at CENSUS).
 5. Labour, CP-T08-01 (1st, as planned), reading hands *net of those under arms* (§4).
 6. Amount and destination as choices (1st); with them, withholding and relief are both playable.
 7. The valley scenario (1st), with its granary moved to the steward's seat rung so that its two policies
@@ -329,6 +331,23 @@ ladder.** F-SE-21 below; §6.
 findings**, which return at this HEAD in the season engine. F-SE-18 below.
 
 **C-7 · The endowment table**: annotated, not replaced (§5).
+
+**C-8 · A cohort's weight moves on the bodies clock, and that clock's step is MATTER, not CENSUS.**
+(A correction to this addendum's own first draft of `07_SE_population_regrowth_B.md`, and a note on the
+first lane's `07_SE_population_census.md` R2.) Layer 1 §29 (`architecture/holonic_ARCHITECTURE.md:1023-1029`):
+CENSUS is *"DEMAND-DRIVEN ONLY. Nothing generates without a demand, and no clock generates anything."*
+A rise after `regrow_seasons` quiet seasons is a clock, so it may not be written there. §25's table
+(`:850-866`) puts *"bodies, ageing, natural death"* at MATTER as *"one of the three licensed clocks"* and
+*"envelope weight — births and deaths"* in the same table; §10.3 (`:401-405`) says births are written at
+MATTER and reconciled at CENSUS. The code agrees in shape: `loop/matter.py:713` on is already *"THE
+BODIES CLOCK"* pass (ageing and illness, v9 IN-34), after the hunger fall (`:690-711`), with this
+season's shortfall in hand (`:666`). At HEAD the `(Person, weight)` matrix row is `steps: [CEN]` only
+(`engine/season/write_matrix.yaml:300-306`), while its sibling `(Rung, envelope)` is `[MAT, CEN]` on DR-1
+(`:375-381`); the regrowth proposal now adds `MAT` to the person row and places its branch in
+`matter()`. The first lane's thinning (its R2, a death by hunger) reads on §25 the same way, but it is
+not a clock in §29's sense (it answers a fall, which is a demand) and the CODE-ARCHITECTURE row
+(`architecture/meta/04_CODE_ARCHITECTURE.md:179`) gives `loop/census` the `weight` write; so it is noted
+for that proposal's builder (`07_SE_population_regrowth_B.md` §4 (c′)), not superseded.
 
 ### 2.2 New findings
 
@@ -494,7 +513,7 @@ read for this addendum bears on it. S-SE-1 is closed.
 
 | id | what | resolution | step | carried by |
 |---|---|---|---|---|
-| R-SE-26 | may a population recover (S-SE-1) | yes: a fed cohort with room regains weight at CENSUS, bounded by matter and capacity as ruled | 1 (ED-SE-0051), 3 | `07_SE_population_regrowth_B.md` |
+| R-SE-26 | may a population recover (S-SE-1) | yes: a fed cohort with room regains weight at MATTER, on the bodies clock, bounded by matter and capacity as ruled (C-8) | 1 (ED-SE-0051), 3; Layer 1 §25, §29 for the step | `07_SE_population_regrowth_B.md` |
 | R-SE-27 | is flight a barrier write or an act | an act: a cohort's own `migrate`. Births and deaths are the licensed bodies clock; who leaves is a decision (L5). Partial flight waits on CR-107 (several cohorts a place) | 4 | same |
 | R-SE-28 | where the relief stock sits | at the nearest seat-bearing rung up the ladder | 4 (`_seat_treasury`, `_renewals`, IN-22's test) | `07_SE_treasury_granary_B.md` |
 | R-SE-29 | is relief an act or a rule | the rule (ruled, ED-IN-0255); withholding is the act | 1 | same |
@@ -621,6 +640,7 @@ no `aperture`; no timing was read.
 | E-4 | `grep -n controller_subordinate` over `engine modules systems tools` | none | one hit, the YAML line |
 | E-5 | regex over the eleven case files for `need:` lines | none | 46 cases with a keyword need; §2.4 |
 | E-6 | `git status --short` before return | none | see the receipt |
+| E-8 | read-only opens for C-8 (Opus completion): `holonic_ARCHITECTURE.md` §10.3, §25, §29, §30; `04_CODE_ARCHITECTURE.md:179`; `write_matrix.yaml` `(Person, weight)` and `(Rung, envelope)`; `loop/matter.py:640-730`; `loop/census.py` head; `state/carriers.py::is_cohort`; `world_q.py` reader line numbers | none | the citations in C-8 and the regrowth proposal's §4; nothing run |
 | E-7 | seat count per rung on `build_realm(0)` (a `python -` probe) | 0 · 0 | `terr_T1` 10, `terr_T9` 6, `terr_T15` 1, `duchy_hafenmark` 5, `duchy_valorsmark` 1, `duchy_varfell` 4, `r_valoria` 4, `set_alt_1` 2, no rung 1; 18 territory rungs (`seat_probe.txt`). Run after the branch head had moved to `4832a6c`; `git diff --stat f83534e 4832a6c` over the code trees is empty |
 
 The two probe scripts are instruments of this addendum, a few dozen lines each, and write nothing.

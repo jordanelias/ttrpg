@@ -2,7 +2,13 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
-## Read at: a3ee7e6 (working tree)
+Authored in part by Fable; completed by Opus after the Fable usage limit (2026-11-12).
+
+## Read at: a3ee7e6 (working tree); completed at 7289ef2
+
+`git diff --stat a3ee7e6 7289ef2 -- engine modules systems references architecture workplans registers
+research CURRENT.md` is empty (§9 EB-09): the commits between the two readings touch this suite's own files
+only, so every reading below is of one tree.
 
 The first WR audit (`09_WR_audit.md`) was read at `601e715`. `git diff --stat 601e715 a3ee7e6 -- engine modules
 systems references architecture workplans registers research CURRENT.md` is empty: no code, registry, plan or
@@ -26,7 +32,41 @@ Written as the reading proceeded; the list at the end of this section is the fin
 the 75-row apparatus); `.audit/2026-07-05-emergent-narrative-engine/narrative_engine_design_v1.md`,
 `narrative_engine_design_v2_churn.md`, `integration_with_ners_audit.md`.
 
-<!-- READ-LIST-CONTINUES -->
+**Read, block 2 (the Fable lane, evidenced by what §3 to §7 cite; the lane was cut off before it wrote
+this list, so it is reconstructed from its citations and claims no more than they show).**
+Threadwork's design set: `.designs/systems/threadwork/reference/threadwork_v30.md` with `_infill` and
+`_index`, `threadwork_applications.md` and `_part2`, `thread_horizontal_integration_spec.md`,
+`threadwork_flow_skeleton_v1.md` (§4.1's table; the philosophical reference and the v25 history to their
+heads only). The world's: `world/reference/calamity_radiation_v30.md` with its infill (whole);
+`geography_v30.md`, `insurgency_pipeline_v30.md`, `miraculous_event_v30.md`, `ms_trajectory_v1.md`,
+`southernmost_v30.md` (section structure and tables); `overview/reference/wc_survival_spine.md` (whole).
+Live successors: `proposals/2026-10-23-subsystem-completion/` T07 and T10 (§0, CP-T07-xx, CP-T10-01 to -03),
+`2026-10-07-unplugged-systems-replug.md` §3.3 (IN-06), the primitives-v2 proposal set (proposals 1 and 12),
+narration-mechanisms §2 to §3.4. `.audit/2026-08-08-world-churn-audit/06_master_synthesis.md` Part VII.0.
+Code: `systems/threadwork/sim/` (`operations.py`, `coherence.py`, `co_movement.py`, `threadcut.py`),
+`harness/chronicle.py`, `harness/decision_spread.py`, `queries/world_q.py::season_factor_of`,
+`decision/budget.py`, `modules/settlements/produce.py`, `references/module_contracts.yaml:43-50`,
+`rosters.yaml: endings`, `data/fixtures.py` (the terms and the forcings). The 49 hole rows of §6, each to
+470 to 640 characters of its cite. CORE's and CHAR's capability proposals (§7).
+
+**Read, block 3 (the Opus completion).** `AUDIT_BRIEF.md` (whole); this file (whole); the first lane's
+`09_WR_threadwork_module.md` and `09_WR_world_motion.md` (whole, because two `_B` proposals supersede parts
+of them); `research/game_precedent_suite/tables/R7_magic_sanity_travel.md` and `R8_npc_life_economy.md`
+(whole); `tutorials/T19_tactics_narrative.md` (head); `queries/world_q.py:3800-3836` (`wounded_with`'s
+tail) and `:4356-4700` (`witnessed`, `PersonProjection`, `projection`, `WorldReader.read`) in full;
+`loop/matter.py:845-885` (the wear write); `rosters.yaml:1905-1945`, `:3575-3590` (wear and floors);
+`CURRENT.md:28`, `:36`; `requirements.yaml:170-176`; `module_contracts.yaml:300-304`; the H-209, H-225,
+H-230 cites at their register lines, to the premise sentence. Re-verified at HEAD: EB-03, EB-05 to EB-08
+(§9), which the Fable lane cited and had not logged.
+
+**Not read, `[SKIPPED]`.** `research/cross_scale_action_catalogue_v1.md`,
+`historical_concerns_action_catalogue_v1.md` and `valoria_systems_integration_master_v1*.md` (2,093 lines):
+keyword passes only (weather, famine, travel, calamity, thread, plague, winter); one transfer is used in §2.
+T19 past its head. `.audit/2026-07-29-scenario-visualization/` (not opened by either completing reader).
+The world-churn audit beyond `06` Part VII.0. `.designs/systems/victory/**` and the scale-transition and
+propagation specs beyond what the first audit read. Hole-row cites past the length stated in §6. Test
+bodies. Why: the completion was sized to the sections the cut-off lane left empty (§1, §2, §8, §9 and the
+five proposals its text names), not to a second reading of the design set.
 
 ## 2. Corrections to the first audit, and new findings
 
