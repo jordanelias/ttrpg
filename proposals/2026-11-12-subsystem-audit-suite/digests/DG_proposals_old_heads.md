@@ -799,3 +799,74 @@ HEADS-ONLY lane (350 files, proposals dated before 2026-09-20). Method per file:
 ### proposals/2026-08-31-unified-code-shape/TRACE_REGISTER.md
 - one line: LIVE / BUILT-INERT status of pre-`engine/season` code (`engine/autoload/engine_clock.py`, `season_manager.py`, `systems/overview/sim/season.py`, accounting) at `f59fd0e`; all line numbers stale after the engine moves; historical. Tags CORE.
 
+### proposals/2026-09-01-holonic-architecture/03_DROPPED_IN_CHAIN.md
+- **What it is:** what the PR #337-#352 design chain dropped, corrected after four adversarial lanes (counts, one figure, one disposition, five citations moved; see §8), 2026-09-01; directory here has 2 files (this + README); other files are outside this lane.
+- **Status:** "PROPOSED (2026-09-01). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE. Nothing here runs." Reading: historical; directory cited by workplan `_part9` and `references/what_valoria_is_and_what_runs.md`.
+- **Bears on:** CORE, PROCESS.
+- **Content that matters:** scope PR #337 -> #352 only :7; corrections inline, §8 :3-4; 19 headings listing dropped items [not read beyond heads].
+- **Conflicts / stale:** `architecture/holonic_ARCHITECTURE.md` is the ratified successor.
+- **Open items:** none read.
+### proposals/2026-09-01-holonic-architecture/README.md
+- one line: banner "A SUCCESSOR EXISTS: `architecture/ARCHITECTURE_V2.md`"; this doc was tested by execution and no case ran end to end (46 NPCs and 97 arcs, four read-only passes, 56 findings); Parts I-VI right, 41 of 62 probe PASSes raised by a gate/type/law in the shape itself; "the season loop is already holonic" (R-1/R-2: a rung reads only its own state, aggregates on demand never pushed, upward = emitting an aggregate, downward = emitting a refraction); what is missing is the `Event` record :6-52. Tags CORE.
+
+### proposals/2026-09-01-season-loop-tests/README.md
+- **What it is:** index of season-loop tests of PR #353's idealized code shape against 46 NPCs and every unique arc; an INSTRUMENT and output, not an engine; directory has `evidence/`, `session/`.
+- **Status:** "IN PROGRESS (2026-09-01). PROPOSED. HELD BACK IN FULL." Reading: historical; the package it housed moved to `engine/season/` (files.py:37), 8 ledger hits and cited by `architecture/*.md`, `engine/season/data/files.py`, `engine/season/harness/run_cases.py`.
+- **Bears on:** CORE, CHAR, ARCS.
+- **Content that matters:** scope rule that decides what counts as evidence :6; the instrument's own honesty :31.
+- **Conflicts / stale:** `engine/season/data/files.py:84` `RESULTS_BEFORE_ADOPTION_REPO_REL = "proposals/2026-09-01-season-loop-tests/runs/results.json"` read as a fallback by `engine/season/harness/delta.py:49`; that path does not exist (`runs/` is absent) - a dead fallback.
+- **Open items:** none.
+### proposals/2026-09-01-season-loop-tests/evidence/README.md
+- one line: committed scratch evidence so claims are verifiable; `instrument_history/shape_rev1.py` :9 and `extraction_sources/` :26. Tags PROCESS.
+### proposals/2026-09-01-season-loop-tests/evidence/extraction_sources/build_arc6.py
+- one line: builds arc-6 need cases with helper `N(need, why, hardness)` (yaml). Dead data builder.
+### proposals/2026-09-01-season-loop-tests/evidence/extraction_sources/build_arc6_p2.py
+- one line: same builder, part 2 (json). Dead.
+### proposals/2026-09-01-season-loop-tests/evidence/extraction_sources/build_arc6_p3.py
+- one line: same, part 3. Dead.
+### proposals/2026-09-01-season-loop-tests/evidence/extraction_sources/build_arc6_p4.py
+- one line: same, part 4. Dead.
+### proposals/2026-09-01-season-loop-tests/evidence/extraction_sources/build_arc6_p5.py
+- one line: same, part 5. Dead.
+### proposals/2026-09-01-season-loop-tests/evidence/extraction_sources/emergent_scenarios.md
+- one line: archived "Emergent Scenario Map" (principal causal chains, feedback loops, multi-system collisions): scenario 1 practitioner enters combat :20, 2 thread operation consequences :57, 3 combat wound chain :111. Old canon-era (v30) material, source of SCN-01.. cases. Tags WR, PC, CORE.
+### proposals/2026-09-01-season-loop-tests/evidence/extraction_sources/emg_c.md
+- one line: archived emergent campaign arcs (Arc 1 coup, Arc 2 Vaynard revelation cascade ...) derived from Checkpoint 14 (2026-03-26); notes Arc 1 and Arc 3 (Niflhel) reference dissolved systems. Tags ARCS.
+### proposals/2026-09-01-season-loop-tests/evidence/extraction_sources/emg_x.md
+- one line: experimental-mechanics arcs (Arc 5 The Brittle Peace :11, Arc 6 The Tribunal and the Temporal Shimmer :50). Tags ARCS.
+### proposals/2026-09-01-season-loop-tests/evidence/extraction_sources/nsc.md
+- one line: Narrative Scenario Chains: NPC arcs, political crises, emergent consequences; glossary CI = Church Influence (ED-782) :3; discovery chain :33. Tags ARCS, WR.
+### proposals/2026-09-01-season-loop-tests/evidence/extraction_sources/original.md
+- one line: Emergent Campaign Arcs 46-55 (batches 07-08, critique applied 2026-04-13): Arc 46 The Quiet Seizure :16, Arc 47 Loyalty Split :74. Tags ARCS.
+### proposals/2026-09-01-season-loop-tests/evidence/extraction_sources/part1.json
+- one line: SCN-01 "A specialized practitioner enters combat" ... one-line json cases. Data (1 line each; part2 SCN-06 hazard-event drains the world; part3 SCN-10 entity whose existence is a sustained action; part4 SCN-13 practitioners act as one on a shared operation; part5 SCN-LOOP-A self-worsening spiral toward world-currency collapse). Tags ARCS, WR.
+### proposals/2026-09-01-season-loop-tests/evidence/extraction_sources/part2.json
+- one line: see part1.json (SCN-06 onward).
+### proposals/2026-09-01-season-loop-tests/evidence/extraction_sources/part3.json
+- one line: see part1.json (SCN-10 onward).
+### proposals/2026-09-01-season-loop-tests/evidence/extraction_sources/part4.json
+- one line: see part1.json (SCN-13 onward).
+### proposals/2026-09-01-season-loop-tests/evidence/extraction_sources/part5.json
+- one line: see part1.json (SCN-LOOP-A onward).
+### proposals/2026-09-01-season-loop-tests/evidence/extraction_sources/resolved.md
+- one line: Arcs 46-55 fully resolved (resolution log :10; Arc 47 rebuilt "The Counter She Keeps" :76). Tags ARCS.
+### proposals/2026-09-01-season-loop-tests/evidence/instrument_history/shape_rev1.py
+- one line: first revision of the instrument implementing PR #353 shape; admissible source only the design chain, "nothing under engine/". Superseded by `engine/season/`. Dead.
+### proposals/2026-09-01-season-loop-tests/session/00_FINDINGS_LEDGER.md
+- one line: four adversarial passes, 56 findings and what each fix broke; honesty marker on the artifact itself :3-17; head = `architecture/holonic_ARCHITECTURE.md` (#353). Tags PROCESS, CORE.
+
+### proposals/2026-09-01-shape-tracer-audit/00_AUDIT.md
+- **What it is:** read-only audit of PR #351 (the shape tracer), merge `32bd13e`, 26,090 insertions in 59 files, 2026-09-01.
+- **Status:** "PROPOSED (2026-09-01). HELD BACK IN FULL. Reference, never mechanism." Reading: live as a verdict on `2026-08-31-shape-tracer/`.
+- **Bears on:** CORE, CHAR, ARCS, PROCESS.
+- **Content that matters:**
+  - Probe layer is sound (65 probes deterministic, 80 acts, 117 events, 337 class-checked writes, 47 typed gap rows; `gaps.json` regenerates byte-identically) but the case layer is not a measurement: none of the 78 corpus cases executed; verdicts are keyword lookups into cached probe results; all 78 trace sections bare headers :10-22.
+  - Root defect: `load_cases()` globs `cases/*.yaml`, `per_case` keyed on bare `id`; `ENDINGS_CLASSIFIED.yaml` reuses `ARC-01..ARC-50`: 128 entries, 78 distinct ids, 50 colliding, last writer wins :24-40.
+  - Suite green at `1777 passed, 23 skipped, 15 xfailed` at that time :20.
+- **Conflicts / stale:** so the shape-tracer's "22 BLOCKED / 38 BLOCKED / 0 PLAYABLE" case verdicts (04_UNIFIED_SHAPE) are NOT measurements; only probe verdicts are hard.
+- **Open items:** none.
+### proposals/2026-09-01-shape-tracer-audit/01_FORWARD_DOCTRINE.md
+- one line: forward doctrine for resolution, configuration, testing; "this is not a plan and must not become one"; four kinds of artifact must not share a path :23; R1 an unlocatable ruling is a claim, not a ruling :40. Tags PROCESS.
+### proposals/2026-09-01-shape-tracer-audit/README.md
+- one line: index; audit of PR #351, an adversarial review of the audit, and the forward doctrine; method :16. Tags PROCESS.
+

@@ -267,17 +267,48 @@ neutralise coin (`NEUTRALIZE_PARRY` 0.55, `_DODGE` 0.62, `_WIND` 0.50, `wrapper.
 same naked and in plate. So "turned" and "armoured" are unrelated in this engine: what turns a blade is a
 coin the defender's mode owns, and armour is a divisor.
 
-(armour tier matrix and the skill-against-plate rows appended below: `pC_armour.py` C2, C3)
+Armour as a lever, arming swords both, equal skill (`pC_armour.py` C2, 1,500 fights a cell; `pC3.py`,
+400): the wearer of the better armour is felled
+
+| A wears / B wears | A felled | B felled | undecided |
+|---|---|---|---|
+| none / none | 51.1% | 48.6% | 0.3% |
+| none / light | 52.6% | 47.2% | 0.2% |
+| none / medium | 74.8% | 24.6% | 0.6% |
+| none / heavy | 97.1% | **0 of 1,500** | 2.9% |
+| light / medium | 73.9% | 25.8% | 0.3% |
+| light / heavy | 97.5% | **0 of 400** | 2.5% |
+| light, faculty 6 / heavy, faculty 2 | 59.5% | 2.5% | 38.0% |
+| light, faculty 10 / heavy, faculty 2 | 3.8% | 22.2% | 74.0% |
+| light with estoc / heavy | 25.0% | 75.0% | 0 |
+| light with mace / heavy | 78.8% | 20.8% | 0.5% |
+| light with longsword / heavy | 53.0% | 46.8% | 0.2% |
+
+The ladder has a dead step (light armour is worth 1.5 points, inside the interval), a strong step
+(medium: three to one) and a certain step (heavy). Skill does not buy it back: a master at faculty 10
+fells a plated novice one time in five and three fights in four end undecided. The weapon does: this is
+where the engine is at its best, and it is a choice made before the fight, not in it.
 
 **Verdict: fails on the meaning of the words, and its extreme is a fixed outcome.** The premise's
 ordinary sense (armour makes some blows fail) is not modelled; its engine sense (armour makes all blows
 smaller) drives an arming sword to 1 a blow against plate, at which a fight to the death between two
 armoured swordsmen is 99.8% undecided, under `yield` terms 90.1% undecided and under `blood` terms 39.5%
-undecided (`pB_yield.py`, 800 fights each). The engine's own answer is correct history (the half-sword,
-the mace, the estoc: plate mirrors with those resolve 96.5 to 100%), so the model is sound *for a world
-with an inventory*. With today's single sword it means the first person who owns plate cannot be killed
-and cannot kill another such, which the sweep's riposte proposal does not cure (nobody is felled, so no
-deciding blow exists to turn).
+undecided (`pB_yield.py`, 800 fights each); the same mirror resolves 54.5% at forty turns and 100% at
+two hundred (`pH_extremes.py` H6), so the twelve-turn cap is what decides it. The engine's own answer is
+correct history (the half-sword, the mace, the estoc: plate mirrors with those resolve 96.5 to 100%), so
+the model is sound *for a world with an inventory*. With today's single sword it means the first person
+who owns plate cannot be killed and cannot kill another such, which the sweep's riposte proposal
+(`18_DETERMINISM_no_certain_matchup.md`) does not reach: in the mirror nobody is felled, so there is no
+deciding blow to turn, and in the mismatch a turned blow against plate is still divided by plate.
+
+The cause is one line. `core._transmit` (`core.py:321-322`) computes `t·(1−g) + 1.0·g` under the comment
+"some blows reach a bare zone": the chance part of armour, averaged away. Drawn instead (15% of blows
+reach a bare zone and bite as against no armour; the rest meet the harness), prototyped in-process
+(`pQ2_gap.py`, 400 fights a cell): light against heavy, the plated man felled 0.0 → 5.0%; the plate
+mirror undecided 99.8 → 68.5%, and under `yield` terms 90.8 → 43.0% with 53.5% yields; the master
+against the plated novice 2.5 → 33.2%; the light mirror and the estoc unchanged. A first idea, the knee
+as a draw, was tested and fails (0.0 → 0.2%, `pQ_knee.py`). Proposal
+`16_PESSIMIST_PC_D_armour_turns_a_blade_by_a_draw.md`.
 
 ### 2.4 "A skilled duelist beats a novice more often than not but not always"
 

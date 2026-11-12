@@ -641,6 +641,160 @@ MAY BE CLAIMED, HAVING SURVIVED
 | the design's own falsifier (§8 of the skill): "nothing reaches belief unmediated" (AX-7) | HITS, one family: the question loop's world reads (seats, vacancies, existence, place) | — |
 | self-audit (§9) | 9a: §2.2's correction of addendum B's C-3 was carried into §1.2 N-6 and proposal B's header; §2.5's CHOOSE reading was withdrawn where it had no power. 9b: proposals A, B, C add one derived set, one reader and four roster rows, no store, no guard | an independent reviewer would re-run `nofi` at seeds 1 and 2 |
 
-GRADE: runs — fourteen probe scripts and nine realm arms, §8
+GRADE: runs — the probe scripts and realm arms of §8
 ```
+
+## 3. Emergent narrative: what stories this scope produces with nobody playing
+
+Instruments. The tree's story instruments (`harness/storybar.py`, `chronicle.py`, `arc.py`,
+`strife.py`, `aperture.py`) were not re-run here: the WR and GAME lanes own those readings
+(`audits/09_WR_audit.md`, `16_PESSIMIST_GAME.md` §1.2), and a story bar counts chains by depth, which
+for this scope is persons recording that a granary filled. The instrument used is this lane's
+extension of the GAME lane's ancestry reading (`pes.seam_edges`) restricted to information Events,
+plus the ledgers and the per-verb census of the §1 arms: it asks what an information Event *causes
+someone else to do*, and what the ledgers hold at the end.
+
+### 3.1 The stories this scope can produce, enumerated from the code, and what computed play did
+
+Columns: EXECUTES = a hand-built act produces the link (§2); FIRES = it occurred in the shipped realm
+(seed 0, three seasons; seed 1, two seasons; the `draw1` control where it adds a case).
+
+| # | story | EXECUTES | FIRES | verdict |
+|---|---|---|---|---|
+| 1 | *He went to the granary on what he believed and found it otherwise.* A stale or false quantity, acted on, refused, corrected. | yes (§2.5) | yes: 117 firsthand cells false at the end; `transfer` 70 attempted, 2 carried out, each refusal teaching the cell | **the one story that runs.** It is small, private and ends in one step |
+| 2 | *Word came that the seat was empty.* Realm-wide knowledge of a vacated seat. | yes | yes, by broadcast, at once, to everyone | runs, with no teller, no delay and no error |
+| 3 | *A man was introduced.* A telling that a person exists makes the hearer know of him. | yes | yes: 3 of the 7 tellings that landed in two seasons | runs; it is most of what is said |
+| 4 | *The report was wrong by the time it arrived.* A garbled quantity at second hand, acted on. | one hop | 1 told quantity in two seasons (grain 86 for 74, itself a lie); acted on: not observed | possible at one hop; not observed |
+| 5 | *The rumour ran ahead of the truth.* Two or more hops. | **no** (§2.1) | 0 chains over one hop in every arm (20, 9, 10, 15, 5, 13 chained claims, all one hop) | **cannot happen** |
+| 6 | *The liar was caught.* | privately (`record`, a number per hearer) | no Event, no claim, no act (F-FI-04, cited) | cannot be told as a story |
+| 7 | *The forged grant was believed.* | yes (§2.3) | 0 of 52, 53, 57, 40, 51, 34, 37 forgeries left their forger's hand | **does not happen** |
+| 8 | *The forgery was exposed.* | the find, yes; the disbelief, no (§2.3) | 0 found deposits (first FI audit, three seeds) | the first half cannot begin; the second has no carrier |
+| 9 | *Nobody saw it done, and it was found out.* An unwitnessed deed uncovered later. | **no** (§2.4) | — | **cannot happen** |
+| 10 | *They say the steward killed him.* A killing reported at second hand, with a name. | no (F-FI-11, cited) | six deaths across the arms; each held as a death by the six or seven persons present, by nobody else, and told to nobody | **cannot happen**; and in the runs no death is even reported without a name |
+| 11 | *He looked and found the hand.* | yes at `Success` (§2.2) | `research` 128 acts and `surveil` 80 at seed 0: nothing to find | does not happen |
+| 12 | *He kept looking and never could.* The `Partial` lockout. | yes (§2.2) | unreached (nothing to find) | would be the commonest ending of any inquiry: 85% at the default pool |
+| 13 | *He hid who he was.* `conceal`. | the cover is minted | 34 covers at seed 0; those present see the hand anyway (H-324); no inquiry can find a cover | an act with no consequence |
+| 14 | *He acted on a dead man's standing.* News not having reached him. | **inverted** (§2.5: the engine removes the dead from his options) | — | **cannot happen** |
+| 15 | *The wrong man was accused.* | no conclusion can be stated (F-FI-03, cited) | — | cannot happen |
+
+### 3.2 What an information Event causes another person to do
+
+`pes.seam_edges` over each arm's log: one edge per (answering act, antecedent Event) where the
+antecedent is an information Event (`finding.*`, `news.*`, `tell.*`, `record.*`, `cover.*`,
+`faction.surveyed`, `proposition.uttered`, `confession.*`) caused by another person's act and the
+answering act was not refused.
+
+| | `ship` s0, 3 seasons | `draw1` s0 | `ship` s1, 2 seasons |
+|---|---|---|---|
+| cross-person answers carried out, all antecedents | 513 | 472 | 309 |
+| of them, answering an information Event | 157 (attempted) | — | — |
+| **an information Event answered by a non-information act** | **16** | 23 | 13 |
+
+At seed 0 the sixteen are `finding.made → issue` 6, `tell.refused → issue` 3, `finding.made → move` 2,
+and one each of `→ petition` (three antecedents), `→ open_case` (two). The commonest answers to an
+information Event are more information: `finding.made → create_record` 9, `record.created →
+create_record` 7, `proposition.uttered → utter` 5, `record.created → utter` 5,
+`finding.made → reconstruct` 4. A finding leads to a record; a record leads to a record.
+
+### 3.3 The tail: are all runs the same run
+
+Yes, for this scope. Across `ship`, `draw1`, the three cuts that leave the information verbs in, and
+seed 1: forgeries 52, 53, 52, 40, 57, 34 and none travels; chained claims 20, 9, 0, 10, 15, 5, all one
+hop; rumours (distinct subject, predicate and origin) 7, 3, 0, 3, 3, 1, the widest held by 7 persons
+(the room); found deposits 0; `interview` and `reconstruct` "find" every time. The runs differ in
+which granary someone is wrong about.
+
+### 3.4 What a player's choice changes
+
+At EXECUTES, a player seated on a person can do four things the chooser does not: hand a forged paper
+on (`give`: the tree's own trail fixture), examine it repeatedly, sabotage a site that is a Site, and
+kill in private. Each leads into §2's broken links: the paper is believed and cannot be disbelieved;
+the look ends in the lockout 85 times in 100; the ruin and the body cannot be found by anyone. He
+cannot choose what to say (F-FI-10), state a conclusion (F-FI-03), accuse on evidence (F-FI-09), or
+learn anything by questioning (`interview`: 40 of 40 "found", nothing held).
+
+### 3.5 The extremes
+
+| extreme | observed |
+|---|---|
+| a rumour at six hops (proxy) | stored at confidence 100; a quantity of 40 arrives as anything from 10 to 122; a deed arrives exact |
+| a quantity of 0 | never garbled, and never produced by garbling |
+| the weakest examiner (pool 1) | `Success` 0 in 300 on a forged and on a genuine paper |
+| the strongest (pool 7) | locked out of the hand by a `Partial` in a third of cases |
+| forgery quality above 1 | no effect for an examiner at the default pool |
+| one person acting alone in a world (§2.5's seasons) | runs; his tellings are refused (nobody is where he thinks) |
+| the ledger over time | 12,351 → 22,958 → 35,351 claims over three seasons at seed 0; one `claim.decayed` Event per held claim per season (34,837 in three seasons, 46.8% of the log); the cap is 3,200 a person, so the log's bookkeeping share rises until then |
+| every information verb removed | the realm does more (§1.2 N-2) |
+| every far channel removed | the realm stops marching and migrating (§1.2 N-4) |
+
+## 4. Findings, ranked worst first
+
+Severity: *blocks* = blocks a requirement; *degrades* = degrades narrative; *hygiene*. Every falsifier
+names its control. Proposal files are under `proposals/2026-11-12-subsystem-audit-suite/proposals/`.
+
+| id | severity · requirement | finding | falsifier run · control | minimal fix at the owner |
+|---|---|---|---|---|
+| **F-PES-FI-01** | blocks R-05; degrades R-01, R-07 | **A deed leaves no trace but the memory of those present at that instant.** An unwitnessed killing or ruin is unknowable for ever; `examine` of a ruin teaches that the site exists; the realm learns a seat is empty and never that its holder died (§2.4) | `p5_crime.py` · the same killing with two bystanders (they hold it) | `16_PESSIMIST_FI_C` edits 1–3 (three roster rows; CP-T06-01's object list; the ending deposited as `exists:<Kind>` 0) |
+| **F-PES-FI-02** | degrades R-01, R-07 | **A rumour is one telling long, by construction; and what is said is mostly that someone exists.** The second teller says "there was a telling". The first FI audit's seven told-false cells are `(p_npc_004, exists:Person, 2)` (§2.1) | `p2_chain.py`, `told_dump.py 0 2` · the proxy chain in which content is passed on (it travels and drifts) | `08_FI_02` (cited) **amended by** `16_PESSIMIST_FI_A` edit 5: as written its slant would prefer the realm's 577 existence readings to every deed |
+| **F-PES-FI-03** | degrades R-05, R-08 | **A forged paper is believed by nobody in play (0 of 324 across seven arms left the forger's hand), and where one is put in a hand, knowing it false changes nothing.** A man who watched the forging is offered the same 19 acts off it; after a `Success` find the content stands at confidence 100 (§2.3) | `p3b_knows.py` · the same holder with the knowledge deleted (identical candidates); the surveyed sheet | `16_PESSIMIST_FI_B` edits 1–3 |
+| **F-PES-FI-04** | blocks R-07, R-08 (with F-FI-01) | **Who exists and where they are is read from the truth.** A silently deleted or relocated person leaves the subject's candidates (−28; 38 → 10) with his ledger unchanged; a man who believes the King dead is offered to challenge him (§2.5) | `p1_belief.py`, `p1d_where.py` · the silent-edit arm for a store (no leak) | `16_PESSIMIST_FI_C` edit 4 (the question loop reads `present_persons` and the holder's own `exists` cell); the decision is ED-IN-0292's |
+| **F-PES-FI-05** | degrades R-04, R-05 | **The information verbs, as the chooser forms them, crowd the game out.** They are 73.7% of acts carried out; with them cut the realm marches 53 times for 29, moves 94 for 21, determines 3 matters for 0, fights, and two die; with only `tell` and `lie` cut nothing changes (§1.2 N-1, N-2) | `fi_arms.py 0 3 nofi`, `notell` · `draw1` (the draw-seed control) | `16_PESSIMIST_FI_D`: the product-less inquiry rows join `withheld_verbs` until their products land; the rest is CHAR's (what a scene is spent on) |
+| **F-PES-FI-06** | degrades R-09 | **Distortion is a drift applied to anything stored as a number, and to nothing else.** Existence flags garble to 2 and 3; a deed never distorts; a `Success` copy is perfect at any depth; 0 is a fixed point; the mean drifts upward (40 → 49 in six hops) (§2.1) | `p2_proxy.py` · the all-`Success` arm (exact), the deed arm (exact) | `16_PESSIMIST_FI_A` edits 1–4; the drift's bias is `[OPEN — Jordan tuning]` |
+| **F-PES-FI-07** | degrades R-05, R-09 | **A better look is worse than a failed one.** At the default pool the hand of a forgery is found in 15% of unlimited retries and forbidden for ever in 85%; at pool 7, a third. Addendum B's C-3 (quality "inert", quality 3 "refused") is false at HEAD (§2.2) | `p4_detective.py` · the genuine sheet; quality 0 reproduces it exactly | CP-T06-03 (scheduled; unchanged). The correction to C-3 is in proposal B's header |
+| **F-PES-FI-08** | degrades R-06, R-08 | **A claim is a pointer: what it says is read by clause 4 alone.** Any claim about X raises the same candidates about X; `person.died` declines nothing while `exists:Person 0` does: two words for one fact (§2.5 readings 3 and 5) | `p1_belief.py` (`true` against `dead-false`: +28 each), `p1c_exists.py` · the false-empty store arm (content read) | `16_PESSIMIST_FI_C` edit 3 (one vocabulary for an ending). The general case (content shaping what is offered) is CHAR's question projection; named, not authored |
+| **F-PES-FI-09** | degrades R-01 | **News of a death does not travel.** Six deaths in the arms; each held as a death by the 6 or 7 persons present and by no one else at the end of the run (up to three seasons) (§3.1 row 10) | `fi_arms.py` (`draw1`, `presence`, `nofi`, seed 1 `presence`) · `tenure.closed` for the same men is held by everyone | F-FI-11's fix (`08_FI_06`) plus `08_FI_02`; and CR-29's `reach` row for `person.died` if seat news stays realm-wide (first FI audit §11 item 1) |
+| **F-PES-FI-10** | degrades R-01 (a warning on a scheduled edit) | **Cutting `chronicle` alone takes the realm's marches from 29 to 4 and its migration attempts from 116 to 17** (control 14 and 74) (§1.3) | `fi_arms.py 0 3 nochron` · `draw1` | CR-29's `reach` roster carries the kinds `march` and `migrate` form on; gate stated in §1.3 |
+| **F-PES-FI-11** | degrades R-09 (the standing rule) | **Fixed outcomes that could go either way:** `interview` and `reconstruct` 40 of 40; a `Partial` forbids the hand by rule; a `Success` telling is exact; the vacated seat is known to all at once; (and, owned by `18_DETERMINISM_SWEEP` C-02, C-05, C-15: notice, forgery quality, sabotage 900 → 0) | §2.2, §2.4, `p2_proxy.py` · the graded rows beside them | CP-T06-03; CP-T06-05 (the questioned person answers by his own draw); `16_PESSIMIST_FI_A` edit 4; `18_DETERMINISM_*` |
+| **F-PES-FI-12** | hygiene (performance) | **93.9% of the log is ledger bookkeeping**, half of it one decay Event per held claim per season, growing with the ledgers (§3.5) | `fi_arms.py` Event census · `presence` (89.4%) | none proposed: CR-29 removes the broadcast's share; whether decay needs an Event per claim is IN's (`04` §A.2's write rule) |
+| **F-PES-FI-13** | hygiene | Candidates formed with a Record's id where a person is meant (`interview … to <paper>`, 12 and 16 on a sheet with no head); `transfer` from a hearth to itself; a man told that he himself exists | `p3_forgery.py`, `p1b_belief.py`, `told_dump.py` | `16_PESSIMIST_FI_B` edit 4; the others named for CHAR's operand bags |
+
+**Corrections to cited lanes** (each re-run here): addendum B C-3 (forgery quality: §2.2); first FI
+audit R-04 (clause 2 "adds no referent": it removes them on world truth, §2.5); first FI audit F-FI-04
+and §1a (the told-false cells are existence readings, §2.1); `08_FI_02` edit 2 (its `cell` tier
+prefers existence readings, proposal A edit 5).
+
+## 5. Path, proposals and what is left for Jordan
+
+**Ordered** (each with its gate in the proposal):
+
+1. `16_PESSIMIST_FI_D_withhold_what_has_no_product.md`: three rows join `withheld_verbs`. A data
+   edit; it returns 157 scenes in three seasons at seed 0 to verbs that do something.
+2. `16_PESSIMIST_FI_A_what_a_rumour_can_garble.md` edits 1–3, then `08_FI_02` with A's edit 5.
+3. `16_PESSIMIST_FI_C_what_a_deed_leaves_behind.md` edits 1–3 with B10-14's CP-T06-01, -02, -03, -04.
+4. `16_PESSIMIST_FI_B_a_paper_is_about_something.md`.
+5. `16_PESSIMIST_FI_C` edit 4 with `08_FI_01` (one change to the question loop, not two).
+6. CR-29, gated by §1.3's reading.
+
+**For Jordan** (survivors of the five-step ladder; each with two options that make different games):
+
+- **S-PES-FI-1 · May a garbled deed name the wrong person?** Loss only (decided as the shipped arm) or
+  substitution. In proposal A.
+- **S-PES-FI-2 · How fast does a death travel compared with the seat it empties?** Today the seat is
+  known everywhere at once and the death nowhere. *Option A, together:* the `reach` row that carries
+  `tenure.closed` carries `person.died`; a realm that knows its King is dead the day he dies; fast,
+  legible succession; a killer is the only unknown. *Option B, apart:* the seat by `reach`, the death
+  by presence, trail and telling only; a realm that knows the throne is empty and argues for a season
+  about why; pretenders, false reports of death (proposal A's lie), and an investigation that matters.
+  The first FI audit's §11 item 1 asks the same of seats; this is its other half, and the two answers
+  need not match.
+
+Everything else in §4 is decided at ladder step 1, 3, 4 or 5 in the proposal that carries it.
+
+## 6. The premises, the false N-lines and the stories, in one place
+
+**Premises** (verdict by execution): P1 *holds for a quantity a requirement names; fails for who
+exists, where they are, and what a claim says*. P2 *does not hold: one hop; only numbers distort*.
+P3 *holds to "is believed" on a hand-built handover; inert in play; "until someone who knows better"
+has no carrier*. P4 *holds for one look; inverted at the second*. P5 *does not hold*.
+
+**False N-lines found:** `tell` and `lie` as the game runs (N-1); the information verbs as the
+chooser forms them (N-2, a cut that is a gain); the lossy copy on non-quantities (N-5). **Narrowed:**
+clause 4 (an economy, not a source of error); the far channels (they form acts at a distance; they do
+not make knowledge asymmetric); forgery quality above 1. **Holds:** the per-holder ledger and witness
+barrier; the quantity belief loop; skill ordering an inquiry.
+
+**Stories that can happen:** a stale store corrected by refusal; a seat known empty; an
+introduction; a wrong quantity at one remove. **Stories that cannot:** a rumour past one mouth; a
+believed forgery in play; a forgery disbelieved; an unwitnessed crime found out; a death reported; a
+liar exposed; acting on a dead man's standing; a wrong man accused.
 

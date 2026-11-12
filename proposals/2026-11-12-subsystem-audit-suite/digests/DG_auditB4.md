@@ -745,3 +745,27 @@ Scope: 73 files under `.audit/2026-07-22-mass-battle-stress-test/`, `.audit/2026
   - CFG notable values: `ADEF_THRESHOLD {none 0, light 0.3, medium 0.45, heavy 0.72}`, `ADEF_W`, `REACH_W`, `UPSET_FLOOR 0.05`, `MAX_TEMPO_PEN 0.8`, `CLOSE_GAP_REF 0.3`, `L0 4.0` :670-875.
 - **Conflicts / stale:** values predate ED-PC-0049..0055 (`CUT_REF_NATIVE`, `CLOSE_ENGAGE_M` etc.); `CHOKE_GRIP_MIN` appears in the 201-key table but `modules/combat/config.py:175` records it REMOVED (ED-PC-0042), so the table is stale there (and the "dead exported key" finding in the register/plans is closed). `capabilities.py` lives at `systems/combat/combat_engine_v1/capabilities.py` (verified listing) not in `modules/combat/`.
 - **Open items:** none; use `workbench/catalogue.py` for live numbers.
+
+### .audit/2026-07-26-mass-battle-fable-audit/02_remediation_plan.md
+- **What it is:** MB lane exhaustive remediation plan (ED-MB-0045), 2026-07-26, base `f4ab261`, input `01_findings_register.md` (six-dimension Fable-5 audit, NOT in this assignment) plus ED-MB-0043 and the A17 scorecard.
+- **Status:** none stated; reading: historical plan (execution tracked in `03_execution_plan.md`); intent still informative.
+- **Bears on:** MB, CORE, PROCESS
+- **Content that matters:**
+  - Jordan's steer: the plan must change the next battle and make the engine explain itself ("identifying what's happening and preventing conflicts"); G1 identify, G2 one owner + invariant failing loudly :8-37.
+  - Silent distortions verified: degree-boundary float compare with no epsilon (1-ulp error flips Success -> Partial, 3 damage -> 0 at `dr=1`); `MAX_SUB_PHASES` bare `break` drops engagement groups past the 5th silently; `check_drift` re-keys 1 of 10 cell maps (morale immortality + phantom breaks under cell morale); two engine trees (campaign resolves on the stale model); `hp` vs cell-troops dual ledger; three stamina stores with two live drain laws :20-27.
+  - Phases: A instrument trust (A1 field goldens in CI at `FIELD_MOVEMENT=1`; A2 epsilon-guard `compute_degree` in `resolution.py:64-68`; A3 loud truncation; A4 vacuous tests; A5 scalar-write sweep; A6 `lanchester_signature` report-only; A7 correct the record), B CellTable struct-of-arrays single owner (`.ids`, `.add/.remove/.rekey`, `.check()`), C collapse duplicate owners (combat pool x2, stamina x3, facing/arc x2, damage law x2, health x2, dead/unwired list incl. `reform_check` canon-required and permanently dark), D conflict prevention guards, E gauge integrity, F docs/params/contract, H observability (per-phase casualty attribution, decision log, mechanism attribution, invariant reporting, promote workbench), G Jordan forks :61-200.
+  - Sec 1 surface table: 28 files/10,503 LOC live engine, `systems/mass_battle/sim/` 5 files/2,375 LOC "stale twin wired to the campaign", 24 MB tests in `tests/valoria`, 23 stress probes :41-57.
+  - D3: three fabricated/unfindable citations (octagon section zero occurrences; `DAMAGE_BY_DEGREE` cites nonexistent `§A.4`; `K_LINEAR` cites a doc declining values) :132; F2 `engine/params/mass_combat.md` describes a 7-phase d10 game while engine runs continuous ticks :154; F4 delete `scene_outcome.battle_concluded` emit row (ED-MB-0010) :156.
+  - Decisions for Jordan (§9): two engine trees; two incompatible 2:1 validation targets (`lanchester_signature` demands >=65%, dg6 adopts ~70%); CEV naming (Dupuy's CEV is a persistent per-force residual, not an i.i.d. draw); `triplex acies`; emergence verdict ("the cell is not yet load-bearing; envelopment is builder-authored"); canon damage law; where fatigue lives; absent mechanisms (terrain, pursuit in measured mode, general as an entity, surrender/prisoners, ammunition, weather) :185-200.
+- **Conflicts / stale:** the "two engine trees; campaign resolves on stale model" point is contradicted by the working tree: `modules/mass_battle/massbattle.py` header says `resolve_mass_battle`/`_faction_to_unit` deleted 2026-10-01 and the season path is `resolve_field -> run_battle` (field engine). `01_findings_register.md` is not in this assignment (present? `ls` shows only 02, 03, probe in this directory) [see next listing].
+- **Open items:** nearly all of §9; E1 incompatible validation targets; absent mechanisms.
+
+### .audit/2026-07-26-mass-battle-fable-audit/subphase_truncation_probe.py
+- **What it is:** A3 measurement probe (ED-MB-0048): wraps `orchestration.resolve_engagements_cascading` and tallies `truncated_groups/pairs/troops` and `n_groups` over the `bat.py` battery and the honest gauge.
+- **Status:** none; reading: historical probe whose counters were added to the engine.
+- **Bears on:** MB
+- **Content that matters:**
+  - Reports `NOT INFORMATIVE` when max groups <= 1 (a zero says nothing about the bound), `CLEAN, WITH HEADROOM`, or `TRUNCATION OBSERVED` :52-69; read-only (no RNG, byte-identical) :1-19.
+  - Imports `mass_battle.bat`, `gauge_mb`, `mass_battle.config` from `tests/sim` (gone).
+- **Conflicts / stale:** dead import path.
+- **Open items:** result not recorded in this file.

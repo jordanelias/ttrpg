@@ -139,19 +139,40 @@ shipped arm reproduces `5ab73af2`, `bacd687f`, so the harness is the shipped eng
 | arm (what is cut) | acts | refused | TV realm | TV person | identified | interior moved (persons of 83) | reading |
 |---|---|---|---|---|---|---|---|
 | shipped | 1,529 | 656 | 0 | 0 | 83/83 | pursuits 1, stance 0, conviction 0, body 0, scar 83 | the base |
-| `drawseed` (noise floor) | PENDING | | | | | | |
+| `drawseed` (**noise floor**: the same world, another choice-draw seed) | 1,572 | 614 | 0.118 | 0.488 | 13/83 | pursuits 1, stance 1, body 5, scar 83 | re-rolling the dice changes half of what each person does |
+| `noscar` (the scar writer and the crisis off) | 1,529 | 656 | **0.000** | **0.000** | **83/83** | scar 0, otherwise as shipped | **free: not one act differs** |
 | `noodds` (believed-odds weighting CR-17 and NPC effort CP-T01-05 off) | 1,520 | 652 | **0.008** | **0.012** | **82/83** | as shipped | **free** |
-| `nopursuit` (every person's pursuits emptied) | 1,269 | 698 | 0.365 | 0.639 | 12/83 | stance 7, conviction 1, body 13, scar 29 | **not free; and more happens to persons without wants than with them** |
-| `noscar` (the scar writer and the crisis off) | PENDING | | | | | | |
-| `noconviction` (every `Person.conviction` emptied) | PENDING | | | | | | |
-| `nobelief` (clause 4, `belief_contradicts`, off) | PENDING | | | | | | |
-| `nostance` (the stance term zeroed) | PENDING | | | | | | |
-| `samemen` (the instrument's control: realm-mean pursuits and conviction, no goals) | PENDING | | | | | | |
-| `tau0` (no draw in the choice) | PENDING | | | | | | |
+| `noconviction` (every `Person.conviction` emptied) | 1,533 | 658 | **0.022** | **0.053** | **83/83** | as shipped | **free, nearly** |
+| `nostance` (the stance term zeroed) | 1,497 | 551 | 0.126 | 0.273 | 71/83 | pursuits 2, stance 6, body 12 | not free: what dies is restraint (persons harm those they were loyal to) |
+| `nobelief` (clause 4, `belief_contradicts`, off) | 1,434 | 762 | 0.155 | 0.290 | 60/83 | as shipped | not free: 106 more refusals, 95 fewer acts, findings 122 to 86 |
+| `tau0` (no draw in the choice) | 1,609 | 435 | 0.275 | 0.448 | 16/83 | conviction 6 (a season early) | not free: a monoculture (`create_record` 334, `utter` 206); and 221 fewer refusals |
+| `nopursuit` (every person's pursuits emptied) | 1,269 | 698 | 0.365 | 0.639 | 12/83 | stance 7, conviction 1, body 13, scar 29 | not free for the realm's mix; for a person, little past the floor; **more happens to persons without wants** |
+| `samemen` (the instrument's own control: realm-mean pursuits and conviction, no goals) | 1,524 | 686 | 0.342 | 0.653 | 12/83 | stance 8, body 7, **a seat changed hands**, one death | as `nopursuit`: a realm of identical men is livelier than the shipped one |
 
-### 2.1 False N-lines (cuts that turn out free, or nearly)
+Two cautions on reading the table. The cut arms share the shipped arm's draw seed, and the choice
+draw is keyed by candidate (`choose.py:462`), so an arm that barely moves the scores reproduces
+nearly the same acts: the small distances (`noscar`, `noodds`, `noconviction`) are exact statements
+that almost no act changed, not statements about noise. The floor uses different random numbers, so
+*identified 13/83 after a re-roll* and *identified 12/83 after deleting every want* are not strictly
+like for like; the like-for-like comparison (`samemen` against `samemen` re-rolled) was not run.
+Single seed (0), two seasons; the crisis first fires in season three at seed 0, so `noscar` and
+`noconviction` are free through two seasons and bounded after that by F-PES-CHAR-03's 2 to 5%.
 
-(Completed in §5 once the pending arms are read.)
+### 2.1 What the cuts say
+
+- **Three named parts of a person are free to cut in computed play**: the scar, the creed, and the
+  believed-odds weighting with NPC effort. §5 lists them with the parts that are free by construction.
+- **Three parts are necessary, and each for something other than what it is named for.** The stance
+  term is necessary as *restraint*; clause 4 is necessary as *not attempting what he believes cannot be
+  done* (the one sense in which P1's *"stopped by what he believes"* holds: it spares the realm 106
+  refusals in two seasons); the draw is necessary as *variety*, and its price is 221 refusals, because
+  it carries persons past their first choice into acts the fold refuses.
+- **The pursuit term is necessary to the realm's mix of acts and weakly to the person.** Deleting every
+  want moves a person's conduct by 0.64; re-rolling the dice moves it by 0.49; replacing every person
+  with the average man moves it by 0.65. And every arm that removes a determinant of the choice
+  (`nopursuit`, `samemen`, `nostance`) produces more change in persons' bodies and stances than the
+  shipped arm, which produces none in two seasons. The shipped combination is the quietest realm of the
+  ten (F-PES-CHAR-10).
 
 ### 2.2 The four criteria, read on the person as a whole
 
