@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-01, L-10) — step 2 gains the two loader refusals (`data/verbs.py:848-851`, `:872-876`) that today refuse a routed row that writes; step 3's pool reader is `seam/wrappers/pool.py::faculty`. The resolution is unchanged.
+
 Source: `audits/18_DETERMINISM_SWEEP.md` C-01, C-03, C-05, C-08, C-09, C-15 (and D-05, D-10). Standing
 rule: `AUDIT_BRIEF.md` (Jordan, 2026-11-12, *"we do not do deterministic"*). Reference only (CLAUDE.md
 §0.05); not ratified by being written.

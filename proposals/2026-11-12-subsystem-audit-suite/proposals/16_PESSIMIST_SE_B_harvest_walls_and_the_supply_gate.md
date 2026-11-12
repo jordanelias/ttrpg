@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-06) — `World.write` takes no `spec=` today (`state/world.py:1138-1148`); the receipt edit the proposal named as its fallback is required.
+
 Source: `audits/16_PESSIMIST_SE.md` F-PES-SE-05, -07, -08, -09; §1.2 A-2, A-3; resolutions R-PES-SE-06,
 -10, -11, -12. Read at `d161a61`. Reference only (`CLAUDE.md` §0.05). Lane SE; edit 3's consumer is MB.
 
@@ -90,8 +92,11 @@ At factor 1.0 the float expression is operand for operand today's, so no truncat
 
 The write passes the produced map as the receipt's `spec` (the Receipt already has the field:
 `Receipt(subject, mode, driver, field, delta, spec, serial)`), e.g. `spec=tuple(sorted(produced.items()))`
-`[UNVERIFIED: that `World.write` accepts a `spec=` for a MATTER write; if it does not, the one-line
-change is in `state/world.py::write`'s receipt construction]`.
+`[GROUNDED, 25 G-06: it does not. `World.write`'s parameters are `thing, token, apply, record_kind,
+fieldname, driver, caused_person_exists, emits, causes, subject, actor, via, change, matured_term,
+observed` (`state/world.py:1138-1148`); its two mint sites pass no `spec` (`:1442`, `:1494`), though
+`Gate.mint` takes one (`state/gate.py:1905-1906`) and `StateChange` has the field
+(`state/carriers.py:197-205`). The edit is a `spec` parameter on `write` passed through at `:1442`]`.
 
 ### 3 · `modules/settlements/fortification.py`
 

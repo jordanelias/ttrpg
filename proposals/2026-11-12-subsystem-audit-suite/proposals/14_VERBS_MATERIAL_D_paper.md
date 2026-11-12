@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-02, G-03) — two `[UNVERIFIED]` marks settled against the proposal's first reading: `data/requires.py` has no `any:` combinator and a verb row carries one `referent_class`. In both places the proposal's own stated fallback is now the edit.
+
 Batch M-D of `audits/14_VERBS_MATERIAL.md` §18 (its §1, §4, §11, §2, §10). Needs batch M-A §2 (the
 family's draw) and `08_FI_01_claim-sourced-referents.md` edit 1 (`holders_named`). Cites and does not
 redo `08_FI_05_evidence-interface_B.md` (what a cited paper is), `08_FI_02_rumour-that-travels.md` §4 (the
@@ -57,8 +59,10 @@ cohorts wrote 115 of 231.
 
 The cell binds a computed act. A hand-built act that declares a `kind` and no `said` (a works, an army,
 `mint_planned_works`' direct call) is admitted by a second alternative the loader already has a shape for:
-`[UNVERIFIED: whether an `any:` combinator exists in `data/requires.py`; if not, the declared-kind path
-keeps today's untyped admission by a row flag `declared_kind_admits: true`, read by `_admits`]`.
+`[GROUNDED, 25 G-02: there is no `any:` combinator. `data/requires.py:1021-1026` builds `all:` only
+(`AllOf`, `:558`), and a clause's `form` must be a `requires_forms` roster member (`:1027-1030`). So the
+declared-kind path keeps today's untyped admission by a row flag `declared_kind_admits: true`, read by
+`_admits`]`.
 
 ## 3. `forge`: a false copy of a held paper
 
@@ -172,7 +176,7 @@ they decline unconditionally (H-75) and the cell asks what they meant.
 
 ```yaml
   - verb:        "seize"
-    referent_class: Record        # and Occupied: a row may list two classes `[UNVERIFIED; if not, the Rung half is a second row, `occupy`, with this row's Rung columns]`
+    referent_class: Record        # and Occupied: a row may NOT list two classes `[GROUNDED, 25 G-03: `VerbRow.referent_class` is one string, `data/verbs.py:245`, loaded by `str(...)` at `:668` and checked as one roster member at `:693`; so the Rung half is a second row, `occupy`, with this row's Rung columns]`
     capability:  none
     difficulty:  routine          # + `opposition` (the holder's score halved) for a Record; + `watch` for a Rung
     writes:

@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-04) — a typed conjunct cannot be waived by a payload key (`data/requires.py:1027-1030`); the proposal's stated fallback for `room` is now the edit. `14_VERBS_MILITARY_D_the_order_of_battle.md:128` carries the same mark and takes the same answer.
+
 Batch M-C of `audits/14_VERBS_MILITARY.md` (§1 S3, §3.1, §3.2, §5.3). Source: F-VM-02, F-VM-03,
 F-VM-06; `audits/04_MB_audit.md` F-MB-03, F-MB-13, F-MB-16; `AUDIT_BRIEF.md` "Standing rule". It
 **adopts** `06_FA_levy_through_the_seat_B.md` (who may levy) and builds on it; it carries the mechanism
@@ -137,8 +139,9 @@ columns (`discharge_troops` is the same with the substitutions listed under it):
 
 **The `room` conjunct binds a doctrine step.** A spoken command (a payload naming cohort, kind and
 count) is bounded by the cap alone, in the effect, as now: a player may raise beyond his doctrine's
-shares. `[UNVERIFIED: whether a typed conjunct can be waived by a payload key without a new form; if
-not, `room` is asked at formation (`belief_contradicts`) and by the effect for a payload-less act,
+shares. `[GROUNDED, 25 G-04: it cannot. A typed clause is a `form` from the closed `requires_forms`
+roster with that form's fields and nothing else (`data/requires.py:1027-1030`; the classes at `:292-558`);
+no clause carries a waiver or a payload condition. So `room` is asked at formation (`belief_contradicts`) and by the effect for a payload-less act,
 and its refusal key is `write`. Proposal D states the same for its four rows.]`
 
 `discharge_troops`: the same row with `relation: surplus` for `muster_room`; emits

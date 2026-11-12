@@ -41,6 +41,11 @@
 | A-35 (D-50) | Head strips an officer | B: yes, by a resistible draw | Overwrites the 2026-10-11 `revocation: null` ruling for Church officers; Löwenritter stay unstrippable until they have a head seat. NPC-038/004/070 unblocked. |
 | A-36 (D-51) | Judging the Confessor | A: nobody (against the recommendation) | The Confessor leaves only by death or resignation; schism or violence answers a bad one; the papacy kit's council (item 5) is dropped and the Confrontation arc gets no lawful route. |
 
+| A-37 (D-54) | A convict's own release from service | B: no | An imposed service ends by the bench's pardon or its term; overwrites the 'one free release' ruling. |
+| A-38 (D-55) | Whom a verdict serves | B: the petitioner (or a seat he names) | The verdict-names-its-party proposal proceeds. |
+| A-39 (D-56) | Appeal | B: on new grounds only | Admitted with excluded evidence, a voided stage, or a new item from a distinct source; ties the court to the detective game. |
+| A-40 (D-57) | Does the world wear down (the Thread) | A: ground, a real condition of places | One site per territory; no new entity kind; unblocks the 25 Thread cases and Thread-bearing generation; D-58 can now be asked. |
+
 ### Closed by the five-step ladder, not by Jordan (CLAUDE.md §0; reversible on his word)
 
 Answered by prior ruling, precedent or architecture; recorded so the numbering is whole.

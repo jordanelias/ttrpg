@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (a verb build-out audit; resolves nothing at runtime, CLAUDE.md §0.05)
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-01, G-14, L-10) — S1's two `[UNVERIFIED]` marks settled at the line (the graded route folds by band but the loader refuses a routed row that writes; `check_orders` fires on state with no draw); the pool reader's path corrected. No finding changed.
+
 ## Read at: 84d2a02 (working tree)
 
 Work order: `VERBS_BRIEF.md`, FAMILY = MILITARY. Verbs: `train`, `recruit`, `form_unit`, `assign_troops`,
@@ -121,7 +123,7 @@ Listed for the owning lanes (their files are not edited here):
   whose outcome has one value; its `04_MB_headcount_grade_and_scale.md` repairs it and this family's
   field gate depends on it. `audits/04_MB_audit_addendum_B.md` R-42: `experience` rises "+1 Power a
   step" on a fixed rule, and §B4.3's standing orders fire and are obeyed with certainty once their
-  trigger is met `[UNVERIFIED: core/contact.check_orders was not opened by this lane]`.
+  trigger is met `[GROUNDED, 25 G-14: opened. `modules/mass_battle/core/contact.py:66-128`: each trigger sets a boolean `fired` from state (`tick`, range, own strength, a signal); no draw is taken on firing or on obedience]`.
 - **SE** `07_SE_campaign_supply_and_muster.md` R-SE-34: an unfed army is *bounded* at its next field by
   arithmetic. Whether hungry men stay is the thing that could go either way; §3 (`discharge_troops`)
   gives the draw this family owns and names the MATTER half for SE.
@@ -137,8 +139,12 @@ The roster keeps its key; its note gains "and graded acts" (a rename is CORE's a
 The obstacle is composed by the one function `proposals/05_SC_obstacle_difficulty_and_modifiers_B.md`
 adds (`difficulty + modifiers`, the terms returned and recorded on the Event), never by a second
 composer; this family supplies rows of data to it. Each effect reads `res.degree` and writes by band.
-`[UNVERIFIED: that the fold runs an effect per band for a graded-route row; the three rows on the route
-today write nothing. If it does not, that is the first edit of batch M-A and is CORE's seam.]`
+`[GROUNDED, 25 G-01: the fold does and the loader does not. `loop/resolve.py:897` (`_grade` hands its
+Resolution to `_fold`), `:450` (`row.writes_at(degree)`), `:967` (`eff(w, a, resolution)`). But
+`data/verbs.py:872-876` refuses a routed row with a non-empty `writes:` and `:848-851` refuses a
+degree-keyed `writes:` with no `contests:`, so no row of this family loads on the route until those two
+refusals are edited. That is the first edit of batch M-A; it is the loader's, not the seam's, and
+`18_DETERMINISM_task_draw_for_uncontested_verbs.md` step 2 now carries it.]`
 
 **S2. Two capability keys**, added to `rosters.yaml: verb_capability` (and to the capability table of
 `01_CORE_capability_authoring_surface.md` when it lands): `command` (the six army rows) and `wayfaring`

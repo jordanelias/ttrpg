@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-05) — a keyed refusal cannot name an effect-side clause other than `write` (`data/verbs.py:945-967`); the `stores` key needs a named typed conjunct or falls under `write`.
+
 Batch M-C of `audits/14_VERBS_MATERIAL.md` §18 (its §5, §6; `work` is §16 and its row is in
 `14_VERBS_MATERIAL_A_mending.md` §4). Needs batch M-A §2 and `14_VERBS_SOCIAL2_A_formation_on_what_is_known.md`
 edit 2 (`Record.<kind>`). Does not re-open ED-IN-0297 (closed at option (B): works are authored rows of
@@ -106,9 +108,11 @@ that row maps to. That is the person-side reading of `_eff_found`'s and `_eff_bu
 
 The refusals become keyed (invariant 4's per-clause half, `requisition`'s shape): `stores` is §27.1's
 scarcity channel (*the second builder on an emptied store gets a different Event*), now told apart from a
-malformed act. `[UNVERIFIED: whether a keyed refusal may name a clause, `stores`, that is the effect's
-decline and not a typed conjunct; `requisition`'s `write` key is the precedent for an effect-side key. If
-the loader refuses it, `_cost`'s shortfall is reported under `write` and one flat kind is kept.]`
+malformed act. `[GROUNDED, 25 G-05: the loader refuses it. A keyed row keys exactly its failable
+clauses, a derived set: `eligibility`, each NAMED top-level typed conjunct, `write`, `counterparty`
+(`data/verbs.py:945-967`); a key outside the set is refused as a kind nothing reads. So `stores` is
+keyable only as a named typed conjunct (the stem exists, `data/requires.py:852`); as the effect's decline
+`_cost`'s shortfall is reported under `write`.]`
 
 **(d) `engine/season/data/fixtures.py`.** One table, per-mille of the plan's `works_cost`:
 

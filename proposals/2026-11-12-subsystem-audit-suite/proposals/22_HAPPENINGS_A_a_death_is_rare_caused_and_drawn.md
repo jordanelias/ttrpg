@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-07, G-08) — `born` is hashed (verified by probe); `mortal_terms` cannot live in `queries/world_q.py` and import `party_end` or `body_band_penalty` (`world_q.py:16-17` forbids both imports), so edit 3's home is corrected in place.
+
 Source: `audits/22_HAPPENINGS.md` §1 (the King), rows H-01, H-02 of §2. Lane IN (owners: `loop/matter.py`,
 `queries/world_q.py`, `data/fixtures.py`, `npcs.yaml`). Reference only (`CLAUDE.md` §0.05).
 Binds on, and does not redo: `14_VERBS_PHYSICAL_A_custody_and_force.md` A3 (the mortal-wound draw),
@@ -18,7 +20,7 @@ it on is one fixture value and is item 1 of the audit's §4.
 ## What it changes in `engine/season/` at runtime
 
 At the shipped control: nothing but `Person.born` (edit 1, a declared mover of every world hash, since
-`born` is in the content hash `[UNVERIFIED: that `born` is hashed; if it is not, edit 1 moves nothing]`).
+`born` is in the content hash `[GROUNDED, 25 G-07: it is. Two `build_realm(0)` worlds differing only in one person's `born` have different `content_hash()` (`runs/GROUND_ENGINE/g3_small.out`); the field is `state/carriers.py:776`]`).
 
 With `illness_rate` or `age_step` above 0:
 
@@ -91,9 +93,13 @@ min(1, illness_rate × season_term × want_term  +  age_step × max(0, age_of(w,
 
 **3. `queries/world_q.py::mortal_terms(w, pid, cause) -> (pool, obstacle)` — new, the one owner of how
 hard a body is to kill.** `pool`: the body's endurance, `party_end(person, fixtures)` (the reader the
-fight uses: authored endurance less `body_band_penalty`, floored at 1) `[UNVERIFIED: whether `queries/`
-may import it from `seam/wrappers/combat.py`; if not, the function moves beside `body_band_penalty` in
-`decision/budget.py`, which it already composes on]`. `obstacle`: `Fixtures.mortal_ob[cause]` plus, for
+fight uses: authored endurance less `body_band_penalty`, floored at 1) `[GROUNDED, 25 G-08: `queries/`
+may import neither. `queries/world_q.py:16-17`: "nothing here imports `shape`, `decision`, `loop` or
+`seam`"; `party_end` is `seam/wrappers/combat.py:143` and composes `decision.body_band_penalty`
+(`combat.py:86`, `decision/budget.py:71`), and `seam/wrappers/pool.py:15` already imports `world_q`, so
+the import would also close a cycle. Neither home named here is open to a function in `queries/`:
+`mortal_terms` lives outside `queries/` (beside `party_end`, called by `loop/matter.py`), or it takes
+the endurance as an argument from its caller]`. `obstacle`: `Fixtures.mortal_ob[cause]` plus, for
 `cause == "bout"`, one step per `bout_age_every` seasons past `age_onset`. `cause` is a member of a
 closed roster `mortal_causes` (`rosters.yaml`): `bout`, and PHYSICAL_A A3's three terms `death`, `yield`,
 `blood`. **Request to PHYSICAL_A A3:** read its pool and obstacle from this function (its

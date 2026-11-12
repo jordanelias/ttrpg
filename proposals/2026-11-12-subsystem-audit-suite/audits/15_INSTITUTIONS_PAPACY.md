@@ -821,3 +821,238 @@ No pytest was run. No number above is a balance claim: E-1 is two seeds and is r
   admits an authored seat with no holder; `loop/effects_governance.py::_eff_release`'s witness of an ended
   `oblige`; CR-88's `grievance_against` (unbuilt). Each is named where the proposals rely on it.
 
+
+---
+
+## 15. Re-grounding against the tree's research (added 2026-11-12)
+
+Jordan, 2026-11-12: *"Research should have been found in /research or /proposals."* §3 was written from
+the governance corpus's four papal passages and from memory. The tree holds a good deal more, at
+procedure depth: the map is `unified/RESEARCH_MAP_INSTITUTIONS_A.md` §2, with each file's own caveats
+at §3 and the confirmed absences at §4. All of it is tier 3. The edits that follow from §15.4 are in
+`proposals/15_INSTITUTIONS_PAPACY_grounding_mechanisms.md`.
+
+### 15.1 What the tree holds that §3 did not use
+
+| subject | file | what is there |
+|---|---|---|
+| inquisitorial procedure and its checks | `research/social_contest_procedures/02_inquisition_heresy_procedure.md` | fourteen sourced stages; crown and national variants; five places where the Church was weak, with a verdict on what hostility changed; an engine table; its own gaps |
+| election procedures | `…/04_decision_procedure_catalog.md:101-105` | the conclave's rules and their repeal; the crowns' exclusive; *sanior et maior pars*; the Golden Bull's enclosure |
+| the crown over the church | `…/01_venice_procedure.md:125-189` | a mixed bench with lay gates; extradition by the crown's councils; the Interdict step by step |
+| the parish | `research/fa_se_historical_precedent_research_v1.md:142-150`, `:286-290` | advowson and its court, sanctuary, the local interdict and its backfire |
+| the orders | `research/proactive_governance_scale_research_v1.md:68-88` | general chapter and visitation, the ratified rule, *responsions*, exemption by petition |
+| the venal curia and its kin | `research/rise_to_power_roster_system_research_v1.md:63-66`, `:302-305`, `:493-501`, `:534-546` | the cardinal-nephew's horizon, the toll-post, the financed plural hold, the investiture gate and the antipope, the preacher with no office |
+| the Church of Solmund as earlier designed | `.designs/systems/factions/reference/faction_politics_v30.md:336-358`, `:963-978`; `proposals/2026-08-29-valoria-from-scratch/14_office_and_upper_rungs.md:129-136`; `proposals/2026-08-30-play-space-coverage/03_seasons_church.md:310-324`, `:596-668` | two different electorates; an off-stage Holy See; the appointment cycle; the unfilled benefice as a missing channel |
+| the electorate in force | `workplans/valoria_master_workplan_v11_part12.md:366` | two seats of the Justice arm elect the Confessor |
+
+### 15.2 Claim by claim
+
+"Stays" means memory-grade after a search of `research proposals .designs .audit canon` that found no
+file (terms in the map's §4).
+
+| § | claim as written | tree source, or "stays" | differs? |
+|---|---|---|---|
+| 3.1 | election by cardinals from 1059 | `04_decision_procedure_catalog.md:101` | "cardinal bishops" stays |
+| 3.1 | two-thirds from 1179; no appeal | same; Lateran IV c. 24 | the tree gives two dates for two-thirds (`political_hierarchy_standing.md:316` says 1274) |
+| 3.1 | enclosure and shrinking rations, 1274 | `governance_modes.md:295`; `04_decision…:101` | adds: "suspended in 1276 and reinstated in 1294" |
+| 3.1 | three modes; *accessus* | `04_decision…:101` | no |
+| 3.1 | capitulations | stays; cousin `governance_modes.md:325-330` | — |
+| 3.1 | factions made by appointment; the cardinal-nephew | `governance_modes.md:295-296`; `rise_to_power…:63-66`, `:302-305` | adds the horizon and the backlash: §15.4 item 12 |
+| 3.1 | 1378 under a mob; the electors void their own act | `conflicts_power_struggles.md:272` | no |
+| 3.1 | no removal; resignation; the heresy exception | stays (the exception); Constance deposing claimants `conflicts…:272` | — |
+| 3.2 | the chancery chain; priority by date | stays; letter form and proctors `rhetoric…:242-253`, `:305-307` | — |
+| 3.2 | every step an office with a fee | `rise_to_power…:493-497` | adds its failure mode |
+| 3.2 | the Camera's levies | stays; bankers and appointment fees `rise_to_power…:498-501` | — |
+| 3.2 | the Penitentiary and dynastic marriage | marriage `political_hierarchy_standing.md:176-177`; the office stays | — |
+| 3.2 | the Rota; the Consistory; judges-delegate | stays; the design handle is sourced: "the second authority … never rehears" (`02_inquisition…:125`) | — |
+| 3.3 | graded courts; written procedure; graded proof | `rhetoric…:289`; `02_inquisition…:15`, `:26` | the tree could not source the skeleton to a primary text |
+| 3.3 | three ways to open a case | `02_inquisition…:15` | no |
+| 3.3 | purgation by oath | `02_inquisition…:65` | no |
+| 3.3 | jurisdiction by person and matter | `fa_se…:147`; `02_inquisition…:65` | adds sanctuary |
+| 3.3 | Clarendon and Becket | `02_inquisition…:64`; `fa_se…:146-147` | adds c. 7: the king's leave before a tenant-in-chief is excommunicated |
+| 3.3 | statutes of the 1350s; Bologna; Spanish patronage | stays; cousins `02_inquisition…:44`; `01_venice…:129-131` | — |
+| 3.4 | minor and major; the year | stays | — |
+| 3.4 | denunciation by name, 1418 | stays; cousin `.audit/…:79` | — |
+| 3.4 | the secular arm; forty days | forty days stays; the dependence `02_inquisition…:67`, `:71`, `:100` | — |
+| 3.4 | release from oaths, 1076; Canossa | `governance_modes.md:211-212` | no |
+| 3.4 | Frederick II, 1245 | `political_hierarchy_standing.md:240` | adds: "no immediate practical effect" |
+| 3.4 | interdict: England; Florence 1376; Venice | `fa_se…:148`; `conflicts…:247`, `:257`; `01_venice…:155-170` | Venice did not simply "win": §15.3 C-2; the Florentine merchant clause stays |
+| 3.5 | Pisa, Constance | `conflicts…:272` | by-nation voting and the decrees stay |
+| 3.5 | Basel; 1460 | stays | — |
+| 3.6 | the proprietary church | stays by name; the royal use of bishops is `conflicts…:198`; `governance_modes.md:166` | — |
+| 3.6 | 1075-1122 ended in partition | `governance_modes.md:208-215` | no |
+| 3.6 | chapter election; regalian right | election `.audit/…:81`; regalian right stays | adds chapter capture |
+| 3.6 | advowson | `fa_se…:146`, `:286-290` | adds the pulpit as the settlement's medium |
+| 3.6 | the benefice; pluralism | `political_hierarchy_standing.md:172-173`; `rise_to_power…:498-501` | *commendam* stays |
+| 3.6 | provisions and expectatives | stays; cousin HRE-2 | — |
+| 3.6 | simony changes form | `rise_to_power…:493-497`; `fa_se…:101` | no |
+| 3.7 | the tithe | stays (division); `fa_se…:147`; `proactive_governance…:79` | — |
+| 3.7 | indulgences pledged to a banker | `rise_to_power…:498-501` | no |
+| 3.8 | Cluny; Cîteaux | Cîteaux `proactive_governance…:72`; Cluny stays | — |
+| 3.8 | mendicants | as inquisitors `02_inquisition…:21`, `:80` | their licence to preach and bury stays |
+| 3.8 | military orders, exempt | `proactive_governance…:69-80` (O2, O8, O9, O14); `faction_politics_v30.md:387` | no |
+| 3.8 | the Templars' end | `02_inquisition…:50-56` | corrected: §15.3 C-3 |
+| 3.9 | the inquisition's procedure and register | `02_inquisition…:21-36` | adds four things: §15.4 items 6 to 9 |
+| 3.9 | resistance: murder, burned records, appeals | `02_inquisition…:79-94` | adds the net finding: hostility changed who, where and how fast, never the rules |
+| 3.10 | the Papal States; vicars; the Roman families | `governance_modes.md:295`; `political_hierarchy_standing.md:316-318`; `historical/precedents_analysis.md:13` | the forged donation stays |
+| 3.11 | legates *a latere* | `.audit/…:113`, `:211` | procurations stay |
+| 3.12 | antipopes; 1378; obediences | `governance_modes.md:212`; `conflicts…:272`; `rise_to_power…:536` | 1130, 1159, subtraction stay |
+| 3.13 | two powers; Anagni | stays; `governance_modes.md:210`, `:190` | adds the consecration dispensed with |
+| 3.13 | the Frankish anointing | `governance_modes.md:142`; `rise_to_power…:325-328` | no |
+| 3.14 | over-issue as decay | `fa_se…:148` ("genuinely two-edged"); `proposals/2026-09-05-proceedings-subsystem/01_THE_STUDY.md:204-210` | adds the called bluff |
+
+### 15.3 Corrections
+
+| # | this file said | the tree says | effect |
+|---|---|---|---|
+| C-1 | "The four Cardinals are also the heads of the four arms, so an election is a contest among the Church's own departments" (§4.1); "the four arms each prefer their own" (§9 item 1); proposal B's gate seats four electors | under the rule in force **two seats elect: the Cardinal of Justice and the Senior Inquisitor**, both of one arm (`workplans/valoria_master_workplan_v11_part12.md:366`; confirmed at the default, `proposals/2026-11-04-content-parameters-docket/11_workplan_owed.md:53`; re-read from the built realm, map §5 E-M1). The tree's two archived designs name two other electorates: the four Cardinals, "three of four" (`14_office_and_upper_rungs.md:239`), and a College of Prelates of five (`faction_politics_v30.md:338-340`) | the design's election is real only with an authored electors list, which the plan already records as Jordan's content. §13 gains no new question: this one exists. Proposal B's gate must hand-build the electorate it tests, and §9 item 1 as written is conditional on it. The same holds for P-13: a `general_council` of "each Church seat granting `determine`" is, at build, the Confessor, the Cardinal of Justice and the Senior Inquisitor |
+| C-2 | Venice "won" (§3.4) | a third crown mediated; the priests were handed to it; Venice kept its laws; the Jesuits stayed out; the terms beyond that are unverified (`01_venice_procedure.md:164-170`) | the story is not "the interdict that fails" alone but "the interdict settled by a third authority": §15.4 item 4 |
+| C-3 | the Templars fell to a king "using the Church's own inquisitorial procedure and a compliant pope" (§3.8) | heresy was the one hole in the exemption; the inquisitor was the king's confessor; the pope suspended the inquisitors and was overtaken; retraction was treated as relapse; other crowns' benches acquitted (`02_inquisition…:50-56`) | exemption fails at one named matter, and the seat that holds the inquisitor's chair decides which crown a Church bench serves: §15.4 item 10 |
+| C-4 | two-thirds "1179" (§3.1), with the tree cited only for 1274 | the tree has both dates in two files; the catalogue's is the sourced one | citation fixed; the inconsistency is the research's, named here |
+| C-5 | "This lane translates the *procedures*" of the archived design (§1.3), listing its cards and counters | the archived design also fixes an **electorate** (a College of Prelates of five, electing Cardinals by two-thirds with the Confessor's endorsement), a **territory-scale rung** (the Bishop's Delegate, who "may conduct ecclesiastical trials in own territory"), and an **off-stage Holy See** whose concurrence a consecration needs (`faction_politics_v30.md:336-358`); the earlier decomposition has "Holy See = elected from among the Bishopry" (`annex-a-decomposition.md:1183`). The coverage probe reports "Two incompatible conferral rules for the same office, one in each corpus … Reported, not resolved" (`03_seasons_church.md:603-608`) | the code governs: `Holy See` is a body of the Church and the Confessor has no superior. The referents are recorded because proposal E's sees are the archive's Bishop's Delegates under another name, and because §13 item 2 (can anyone judge the Confessor) is the same hole the archive filled with an off-stage power |
+| C-6 | the enclosure of 1274 presented as the settled rule (§3.1) | "suspended in 1276 and reinstated in 1294" (`04_decision…:101`) | the electors' rule over themselves is itself contestable: §15.4 item 2 |
+
+### 15.4 Mechanisms the research describes that this design lacked
+
+Each is stated as persons, seats and draws (the standing rule: none is a fixed function of state), on
+the primitives of §5. P-numbers continue §6's.
+
+1. **The cycle with no root (P-14).** *Source:* "the Confessor confers the Cardinals, and the Cardinals
+   in conclave confer the Confessor … If the Confessorate empties, the Church has no lawful way to fill
+   it, and no lawful way to fill the seats that would make the conclave lawful"; a vacancy at the root
+   "has no clock and no convener" (`03_seasons_church.md:596-603`, `:658-668`). This file's E-1 saw the
+   small case: a dead Cardinal not replaced. *Added:* the share of ballots cast survives a shrinking
+   bench but not an empty one, and with C-1 the bench is two. The design states who convenes when
+   nobody may (the senior surviving elector's `convene`, by the row's `order: rank`) and what happens
+   at zero electors: nothing lawful, which is the opening for a crown, a council or a rival seat. That
+   is a story to read, not a rule to add. *Lands:* grounding proposal item 1.
+2. **The electors lift their own enclosure (P-15).** *Source:* C-6; the Golden Bull's thirty days,
+   then "bread and water" (`04_decision…:105`). *Added:* the cost of a long vacancy is the vacancy
+   (§4.1), and the pressure to end it is whoever suffers by it. The row carries no ration counter;
+   a venue-holder's refusal to keep feeding a sitting is his own `evade / defy`. *Lands:* a reading
+   (seasons vacant; who acted against the sitting).
+3. **The crown's exclusion (P-16).** *Source:* the exclusive, "once per conclave" from about 1600
+   (`04_decision…:101`); the tree's own proposal, BYZ-9 refined to "a **Crown-alone** Override hung on
+   the Father Gustav Linder Crown-liaison channel" at a legitimacy cost (`.audit/2026-07-12-governance-compendium/tier3_proposal_status_closure.md:120`). §14 called
+   the secular veto decorative; the tree had kept a form of it. *Added:* no override. The Crown's
+   seat may `commit` against a candidate through the Archbishop's Representative's seat; that
+   commitment is a term in each elector's ballot odds, weighed by his regard for the Crown, and it is
+   told. *Lands:* grounding proposal item 3; cross-listed to the Byzantine lane (its §18.4 item 10).
+4. **A sanction settled by a third authority (P-17).** *Source:* C-2; and across every sourced case
+   "`appeal_basis` is a different authority than the bench … it never rehears" (`02_inquisition…:125`).
+   *Added:* an excluded ruler's route is not only penance or defiance: a third seat that both parties
+   regard may `covenant` terms under which the sentencing seat pardons. *Lands:* proposal D's
+   absolution, as a second route with the same pardon.
+5. **The interdict cuts both ways (P-18).** *Source:* "prolonged use bred resentment against the
+   clergy itself and confiscations flowed the other way" (`fa_se…:148`); the per-season backfire in
+   SE-8 (`:288`); the legacy sim's failed excommunication, "Church `L −1`, target `L +1` (sympathy)"
+   (`research/cross_scale_action_catalogue_v1.md:123`). *Added:* each season a withholding stands, the
+   people of the place hold the withholding as a deed of the seat that ordered it, judged by their own
+   pursuits; and the lord's `seize` of the Church's stores there is the confiscation. Both are
+   existing acts. *Lands:* proposal D (alignment cells for the withholding as a deed).
+6. **The mortal-enemies list (P-19).** *Source:* "The accused may name persons of 'mortal hatred'; if
+   the accuser is among them the charge fails and a false accuser faces life prison"
+   (`02_inquisition…:28`). *Added:* under the inquisitorial rite the accuser is concealed (§4.1). The
+   accused's reply is to name his enemies; a named person who is the concealed accuser lowers the
+   `evidence` term of that testimony, and a determination that the accusation was false is a deed of
+   the accuser. A draw decides the hearing, as always. *Lands:* proposal D; composes on SC's evidence
+   proposals.
+7. **The council that does not see the name (P-20).** *Source:* the *consilium* of thirty to eighty,
+   "usually on the abstract case without the name. Advisory but usually followed, and milder"
+   (`02_inquisition…:31`). *Added:* the declared row's seated members are that council; nothing new
+   is built. What the source adds is a tuning fact: a larger room is a milder room. *Lands:* SC's
+   tuning tables, as a note for `excommunication_deliberation`.
+8. **Retraction counts as relapse (P-21).** *Source:* the Templars' defenders burned for withdrawing
+   confessions; Joan, "abjuration 24 May … relapse 28 May" (`02_inquisition…:54`, `:60`). *Added:* a
+   penitent who has sworn the termed `oblige` of P-8 and then `release`s it is open to a second
+   sentence whose `evidence` includes the first. *Lands:* proposal D.
+9. **What hostility can and cannot change (P-22).** *Source:* the table at `02_inquisition…:98-107`:
+   denying the secular arm paused arrests; expelling officers bought months; carrying it to another
+   authority got a suspension; refusing the summons ended in negotiation; "hostility changed
+   **whether, where, by whom and how fast** … the bench's internal rules moved only when a crown or
+   pope wrote a new one"; and a control, the bailiff of Montaillou, whose hostility "not joined by
+   another authority did not bend the proceeding". *Added:* five ways a place resists a Church bench,
+   each an existing act by an existing seat: a lord's officers decline to `arrest` or `detain` for
+   it; its officers are driven out (`ban` or violence); a party `petition`s another seat; a
+   summoned person stays away; and the propertied fear `seize`. None changes the bench's odds
+   inside the room. *Lands:* §9 as stories with readings; proposal D for the first.
+10. **Whose man holds the Church's chair (P-23).** *Source:* "a church office held by a crown man"
+    (`02_inquisition…:52`); Venice's right to have an inquisitor replaced, and its three lay assessors
+    without whom proceedings were void (`01_venice…:129-132`); the Spanish bench named by the crown
+    (`02_inquisition…:44`). *Added:* `patronage: [purview, own_faction]` on a see (proposal B) already
+    lets a lord fill a Church seat on his ground. The research says what that buys: the bench then
+    judges as his man judges. A reading, and the reason §13 item 3 matters. *Lands:* no edit.
+11. **The consecration dispensed with (P-24).** *Source:* the style "Elected Roman Emperor" taken
+    "without a Rome coronation … a deliberate rupture that decoupled imperial legitimacy from papal
+    ratification for good" (`governance_modes.md:190`); and the reverse danger, "her condemnation
+    implied a coronation by a heretic" (`02_inquisition…:60`). *Added:* two limits on §0's claim that
+    the Church's leverage "is that it can decline to". (a) A claimant refused consecration who takes
+    and keeps the seat is a deed every observer holds; each such reign lowers what a certificate is
+    worth to the next observer, through his own reading of deeds, with no counter. (b) A `ban` on a
+    person whose deeds a certificate recites taints the certificate for those who know of both, so a
+    crown has its own reason to seek that person's pardon. *Lands:* proposal C, as two readings and
+    one `evidence` statement.
+12. **The appointer's horizon (P-25).** *Source:* the kin-gatekeeper whose "short known horizon
+    biases" him toward extraction; "the extraction, not the office, survives"; a reform backlash on
+    all such seats at once; and the naming caution, do not call it "cardinal-nephew" because
+    "Cardinal" is a Church title here (`rise_to_power…:63-66`, `:302-305`). *Added:* a Confessor's
+    conferrals are deeds (§14, "who conferred whom"); a successor's first `revoke`s of his
+    predecessor's men, and the stores those men moved to their own rungs, are the readings.
+    *Lands:* proposal B's discipline (held item), as a reading.
+13. **The preacher with no chair (P-26).** *Source:* Savonarola: "purely charismatic/theocratic
+    (prophetic sermons, no office)", undone only when a sanction and a failed public proof both
+    landed (`governance_modes.md:273-274`; `conflicts…:277-278`; `rise_to_power…:538-542`).
+    *Added:* a person with no seat whose regard among a place's people is high is a rival to the
+    see there. The Church's sentence against him is P-4; whether it bites is P-6, each hearer's draw,
+    and it bites less while his own deeds are well thought of. *Lands:* §9 as story 13; content
+    (a roster row) is Jordan's.
+14. **Visitation, the rule ratified, exemption owed (P-27).** *Source:* the general chapter and the
+    inward inquiry at "a *branch head*"; an order that drafts its own rule which a faction then
+    ratifies; exemption got by petition, for which "the org owes ongoing **Debt** to the granting
+    faction (relitigable if Standing lapses)" while "Local authority loses jurisdiction/revenue"
+    (`proactive_governance…:72-80`). *Added:* P-9's discipline needs a way to know: the head's or a
+    Cardinal's `interview` and `research` at a see is the visitation, on existing verbs; an exempt
+    house's `oblige` to the head seat (proposal E) is termed, so exemption lapses unless renewed.
+    *Lands:* proposal E items 3 and 4.
+
+Also recorded, and not added: sanctuary (`fa_se…:147`) needs a venue term on `arrest` that the MATERIAL
+and BINDING verb lanes own; chapter capture before a vacancy (HRE-2) is the general case of canvassing
+and needs no Church rule; the franchise gated by church membership (`rise_to_power…:574-577`) is
+expressible today through the `church_standing` predicate (`research/by_lane/NPC_npc_cast.md:78`) and is
+content.
+
+### 15.5 Nulls, closed and standing
+
+- **Closed by search.** `research/game_precedent_suite/` and the eight companion files were searched
+  for `excommun`, `pope`, `papal`, `head of faith`, `piety`, `holy order`, `investiture`. The suite's
+  religion rows are: piety as a scalar stock in Crusader Kings (`tables/R1_dynasty_realm.md:43`),
+  "piety to the head of faith" for a claim (`tutorials/T01_realm.md:36`), and a religion layer named
+  for Knights of Honor II with no mechanism row (`tutorials/T13_koei.md:281`). **No shipped game in
+  the tree models a religious sanction as other people's compliance.** The tree's own retired sim
+  modelled it as one roll with a sympathy swing on failure (`cross_scale_action_catalogue_v1.md:123`)
+  and held "three rival formulas" for it (`valoria_systems_integration_master_v1.md:211`).
+- **Standing, the research's own.** The two-signal reading of sanctions has one source and no game
+  (`research/by_lane/FA_faction_actions.md:283`). No primary inquisitorial manual was read
+  (`02_inquisition…:131`). Who received confiscated goods is unresolved (`:133`). The Venetian
+  settlement's terms are unverified (`01_venice…:170`). Conclave procedure as negotiation practice is
+  "UNEXAMINED" (`proposals/2026-10-29-parliament-and-debate/2026-10-29-debate-corpus-by-theme_part2.md:469`).
+  The verifier's corrections to the governance corpus are cut off mid-sentence (map §3 item 4), so the
+  Papal States passage (`governance_modes.md:293-296`) stands unverified against them.
+
+### 15.6 What remains memory-grade
+
+The narrowing to cardinal bishops and the name of the 1179 decree; electoral capitulations; the
+chancery's chain and priority by date; annates, common services and *spolia*; the Penitentiary, the
+Rota, the Consistory, judges-delegate; Gratian; the writs of prohibition, the statutes of the 1350s,
+Bologna and the Spanish patronage; the grades of excommunication and the year; the 1418 rule; the
+forty-day certification; the merchant clause of 1376; voting by nation, the Constance decrees, Basel,
+1460; the regalian right; *commendam* and appropriation; provisions and expectatives; the division of
+the tithe; the early history of indulgences; Cluny; the mendicants' licence; the Crown's debt to the
+Templars; the forged donation; procurations; the antipopes of 1130 and 1159; subtraction of
+obedience; Anagni. None carries a quantity in this design.
+
+### 15.7 Evidence for this section
+
+Searches and the one read-only probe (E-M1: which Church seats carry `determine` at
+`build_realm(0)`) are logged at `unified/RESEARCH_MAP_INSTITUTIONS_A.md` §5. No season was run, no
+pytest, no tracked file outside the suite directory was changed.
