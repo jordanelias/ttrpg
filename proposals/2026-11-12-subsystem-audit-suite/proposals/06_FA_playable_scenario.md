@@ -4,6 +4,8 @@ Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-08 — the heir's `
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-28) — all three readers of `SUCCESSIONS` hold the one dict by `from`-import; an in-place change reaches them and a rebinding does not.
+
 Source: `audits/06_FA_audit.md` F-FA-07, §9, §6.2 R-19, §13 (NPC-020, NPC-031, NPC-083), §15 (b), (d).
 
 ## What it changes in `engine/season/` at runtime
@@ -91,9 +93,11 @@ conferral_bases` and `revocation_bases`. The spine's `content_hash` moves at bui
 The `succession` situation needs a title that passes a seat. `rosters.yaml: successions` is keyed on
 `offices.yaml` row ids, which the spine does not use; `play` therefore passes the gate a scenario-local
 mapping through the same indirection the tests use (`monkeypatch` of `SUCCESSIONS` in
-`test_in61_succession.py`), scoped to the run. [UNVERIFIED: that every reader of `SUCCESSIONS` asks it in
-place; `gate.py` says its two dicts are read in place and does not say so of this one. If one reader holds a
-`from`-import, the edit is to that reader and is named in the build.]
+`test_in61_succession.py`), scoped to the run. [GROUNDED, 25 G-28: all three readers hold a
+`from`-import of the one dict object and read it at call time: `state/gate.py:54` (`:743`, `:782`),
+`decision/options.py:34` (`:240`), `loop/effects_governance.py:16` (`:164`). An in-place change reaches all
+three, which is what the test does (`monkeypatch.setitem(SUCCESSIONS, …)`, `test_in61_succession.py:161`);
+rebinding `data.rosters.SUCCESSIONS` would reach none. The scenario must mutate in place; no reader is edited.]
 
 ## Gate (execution artifact)
 

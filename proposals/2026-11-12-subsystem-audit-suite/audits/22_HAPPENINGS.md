@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime; proposals in `proposals/22_HAPPENINGS_*.md`)
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (L-18 to L-22) — §1.1's seed-2 run re-run and reproduced to the hash (`b4bae063…`: the King dies in the fourth season in the Spymaster's `capture`); `capture` ungated verified at `rosters.yaml:2772-2773`; §0 item 2 corrected: CR-87's roster gates `fight` alone, and `accept`'s gate is PC-10b's held challenge.
+
 Jordan, 2026-11-12, on a digest line reading "the King dies at tick 0 in every seed, which empties seven
 seats that can never be refilled": *"why would the King always die?? Anyway, I expect Fable to assess
 whether these happenings actually make sense and seem reasonable, and then fix."*

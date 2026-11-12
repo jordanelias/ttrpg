@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-26) — the grammar file opened: the stems are `held_by` and `dispute`, and there is no `capability` stem (capability is never a requirement), so an own-state reader has no `capability` conjunct to answer.
+
 Written by the CHAR audit lane (`audits/02_CHAR_audit.md`, findings F-CHAR-05, F-CHAR-07, F-CHAR-11).
 Ratifies nothing. Reference under `CLAUDE.md` §0.05.
 
@@ -72,8 +74,11 @@ and `challenge`, `forge`, `sabotage`, `train` and `create_record` do not carry i
    items 2 and 4, each answered from `self._p` alone and only when the subject is `self._p.id`; `UNKNOWN`
    otherwise. `data/requires.py::OWN_STATE_STEMS` grows by the same names, and the import-time check
    below the class (which refuses a stem with no branch) keeps the two in step.
-   `[UNVERIFIED: the exact stem names of the `hold`, `capability` and `dispute` conjuncts in
-   `data/requires.py`; the audit read their readers, not the grammar file.]`
+   `[GROUNDED, 25 G-26: opened. The stems are `held_by` and `dispute` (`REQUIRES_STEMS`,
+   `data/requires.py:851-855`); `dispute` is WORLD-ONLY (`:888-889`). There is **no `capability` stem**:
+   capability is never a requirement (`verb_table.yaml:34`, "NEVER `capability`"), and `train`'s decline
+   on it is its effect's (`loop/effects_combat.py:812-814`). `OWN_STATE_STEMS` today is
+   `{thread_sensitivity, thread_sensitivity.gate}` (`:809`).]`
 2. **`engine/season/decision/options.py::opening_set`** — the K-3 branch moves from before the
    referent loop (where it binds `{}`) to after `operand_bags`, evaluating with the candidate's own
    binding: `evaluate(row.requires_typed, OwnStateReader(p, fx), binding_of(p.id, ops)).value is False`

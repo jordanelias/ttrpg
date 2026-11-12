@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
+Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-07; GC-3) — §7's "Football Manager's three fidelities of one match engine" is not established in the tree or on the web; the clause now says so. The transfer it supports (one sampler for both fidelities) rests on ED-SC-0013 and is unchanged.
+
 ## Read at: 601e715 (working tree)
 
 Subject: the resolution substrate — `engine/dice_engine/` (`dice_engine.py`, `sigma_leverage.py`),
@@ -585,6 +587,10 @@ them (`00_INDEX.md` §3, the "Resolution kernel" row), and none bore on a findin
   channel fed a constant pool and a zero leverage (F-DICE-01). What it changes: the next build in this
   subsystem is an input, not a mechanism.
 - *The auto/manual duality (ED-SC-0013; Football Manager's three fidelities of one match engine).*
+  `[CORRECTED 2026-11-12, audits/24_GROUNDING_GAMES.md GC-3: the Football Manager half is not established.
+  The tree's own check marks it CONTRADICTS (research/game_precedent_suite/dispositions/D_T04.md row 58;
+  tutorials/T16:79), and a second attempt found no Sports Interactive statement
+  (grounding/football_manager_instant_result.md). The duality stands on the ruling ED-SC-0013 alone.]`
   Transfer: the calibration constraint is met by construction only if both fidelities of an event draw
   from one sampler. That is why F-DICE-05 is filed above hygiene: a played social scene built on the
   Normal sampler beside an automated one on whole dice would be mode-shopping by 7 to 12 points.

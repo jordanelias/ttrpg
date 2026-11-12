@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-35, L-10) — §15 (d): `comply` and `evade / defy` carry alignment cells (settled by parse); §14's pool-reader path corrected to `seam/wrappers/pool.py::faculty`. No finding changed.
+
 ## Read at: 601e715 (working tree)
 
 Subsystem: factions, governance, offices, war and diplomacy (dossier `06_FA.md`): lane FA, and the IN
@@ -946,7 +948,7 @@ tie-breaks or stamps that act as rules:
 
 **(d) What would make an officer characterful, and legible afterwards.** *Characterful:* the choice to obey
 or defy read from his regard for the issuer and the issuer's legitimacy (`person_q.legitimacy` exists;
-whether `comply` and `evade / defy` carry alignment cells was not checked [UNVERIFIED]); the choice of whom
+`comply` and `evade / defy` do carry alignment cells, one on each of the seven axes of `rosters.yaml: tables: alignment: cells`, and none in `pursuit_projection` [GROUNDED, 25 G-35, by parse]); the choice of whom
 to seat read from his regard for each candidate and the seat's vocation; the weight of a vacancy or an
 unanswered order read from his office's goals (CR-88). *Legible:* the clause that refused a `confer` or an
 `establish` (R-14); the digest of §9; the occasion an act cites, which already exists and which the

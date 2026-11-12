@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-22) — the lasting mark (`effects_combat.py:394-424`) opened: it is a certainty at the gate, shipped live. One `[UNVERIFIED]` mark settled; the row's finding is confirmed.
+
 ## Read at: 2eba83c (working tree)
 
 Scope: `modules/combat/`, `systems/combat/`, `engine/season/seam/wrappers/combat.py`,
@@ -738,7 +740,7 @@ kit (F-PC-15). None reaches a season today. Fix: R-10.
 | a Success deals one fixed number | `core.damage` | arithmetic once the blow lands; D adds the one chance it lacked |
 | an NPC engages every turn, never withdraws | `wrapper.py:586-592`, `decide=None` | F-PC-14; the PC lane's proposal B §4-§5 (a chooser act, sampled, D-06) |
 | the defender's mode on a won read is the best of three, always | `combat_systems.py:1149` | a fighter's judgment, not an outcome; left |
-| the lasting mark falls at the deepest gate crossed | `effects_combat.py:394-424` | `[UNVERIFIED: not opened at the line here]`; owed to the sweep if it is a certainty |
+| the lasting mark falls at the deepest gate crossed | `effects_combat.py:394-424` | `[GROUNDED, 25 G-22: opened, and it is a certainty. `_marks`, `loop/effects_combat.py:394-424`: every survivor whose tracker reads `wounds >= max_wounds` (`:418`) has his `body_ceiling` lowered by `marked_ceiling` (`:421-423`); no draw. Shipped live, `body_mark_model="deepest_gate"`, `data/fixtures.py:723`]`; owed to the sweep |
 | a yielded captive is detained | `_eff_capture` | `14_VERBS_PHYSICAL_A` A1/A2 |
 | one point of `arms` per fight where the key is held | `effects_combat.py:271-296` | the sweep's C-15 |
 

@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-04, X-22, X-30, X-32) — a scenario is a case file (a delta on a base, its set-up acts in `setup.prehistory` folded under the pinned roll), played by FA's runner and read by one report (`15_INSTITUTIONS_SYNTHESIS_D_first_playable.md` §1): `roga` and `chancery` are case files with `base: spine`, not situations written in `governance_spine.py`; this file's seven digest lines and `bands=N` are lines and an option of `harness/institution.py`; the `roll` line reads `certificates`; stores are in `default_store_kind`; the control arms are `task_draw_arm` and the pinned roll, not `procedure_draws`. The two scenarios, their endings and their gates stand, and `roga` on the realm is the first cut of the integrated playable. Every finding below stands.
 
+Re-grounded: 2026-11-12 (audit §18) — the scenarios do not change; the report gains five readings, each with the condition under which it fails (`15_INSTITUTIONS_BYZANTINE_grounding_mechanisms.md` item 3): who stayed away, what the hand took, the servant after the reign, what he kept, the lord who outgrew his minister. Two nulls are recorded for this file's premise: of the four policy and court sims the tree verified, none rolls a governance act to fail except partly one (`research/game_precedent_suite/tables/R9_policy_court_sims.md:8-18`), so the drawn court has no shipped precedent; the stipend by title does (`tutorials/T13_koei.md:78`).
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_BYZANTINE.md` §10, §13; the standing requirement of `AUDIT_BRIEF.md`

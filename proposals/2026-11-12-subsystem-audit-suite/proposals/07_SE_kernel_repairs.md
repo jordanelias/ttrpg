@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-18) — `held_by` is a cell stem a ledger answers (`data/requires.py:851-901`); the arrival report's holder line needs no wait.
+
 Carries findings F-SE-08, F-SE-10, F-SE-11 and resolutions R-SE-07 to R-SE-10 and R-SE-12 to R-SE-15 of
 `audits/07_SE_audit.md`. Each item is an edit at one owner. None needs a ruling; each closes or narrows a
 hole-register row by the five-step ladder, and the step is named.
@@ -118,8 +120,10 @@ the shortfall (`matter.py:647-649`) and the stock report (`_stock_report`). The 
 traveller now stands in: `(rung, "stores:<default_store_kind>", units)` exactly as `_stock_report`
 builds it, and `(rung, "held_by", holder id or None)` read through `world_q.governing_hold`. WITNESS
 deposits them to the write's witnesses, the traveller among them. No new kind, no new channel.
-[UNVERIFIED: that `held_by` is a predicate `LedgerReader` already reads; if it is not, the report ships
-the stores line only and the holder line waits on H-195's `holder` operand.]
+[GROUNDED, 25 G-18: `held_by` is a grammar stem a ledger may answer. It is in `REQUIRES_STEMS`
+(`data/requires.py:851-855`) and not in `WORLD_ONLY_STEMS` (`:888-889`), so it is a cell stem
+(`CELL_STEMS`, `:901`) that WITNESS deposits and the person-side reader reads. The holder line ships with
+the stores line.]
 
 **Gate.** A test on `probes.tiny_world`: a person who moves from the hearth to the settlement holds, the
 season after, a claim about the settlement's stores he did not hold before; with the fixture off he

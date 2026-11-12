@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-01 to GM-03; GC-8, GC-9) — Ogre Battle is now sourced as a battle referent (`research/game_precedent_suite/grounding/ogre_battle.md`). Two notes added in place: the stated reason for not adopting "a member's row decides what it does" no longer holds, and "who can be reached" is not established as what the referents share. No edit of the proposal was changed; the choice between the two row rules is the MB lane's.
+
 Lanes MB (the scale rule, the squad sheet, the host), PC (the round entry it calls), CHAR (the leader's
 capability, the chooser's decider), IN (the seam). Carries R-41 of
 `audits/04_MB_audit_addendum_B.md` §B6 and its §B4.6. Builds on `03_PC_duel_round_and_approach.md` §2 and
@@ -30,6 +32,10 @@ and for nothing else. Until the PC round entry exists it changes nothing.
   five members, a leader whose effect applies to the squad, per-character Tactics as a priority list with
   up to two conditions, an outcome prediction, an automatic exchange). **Ogre Battle is not sourced as a
   battle referent anywhere in the tree**; what is said of it here is memory-grade and is marked.
+  `[superseded 2026-11-12, audits/24_GROUNDING_GAMES.md GM-01 to GM-03: sourced since, in
+  research/game_precedent_suite/grounding/ogre_battle.md (pages read in body): squads of five or fewer; the
+  player picks one of four tactics per unit and does not control the fighters; a character's row, front or
+  rear, decides which action he takes; a unit needs a living leader to take orders.]`
 - Ratified Layer 1 already places this scale: "One scale down, unchanged: a squad is the members of a
   faction present at a rung, resolved once, every combatant a `Person`"
   (`architecture/meta/03_VERBS_AND_LOOPS.md:269-270`; `04_CODE_ARCHITECTURE.md:811`). A squad built as a
@@ -99,6 +105,17 @@ or at the exchange cap
 - The row rule is the whole of what "formation" means at this scale, and it is the one thing the
   referents share that a duel lacks: who can be reached. `[memory-grade: in Ogre Battle a member's row
   also decides what it does; not adopted, because nothing in the tree sources it]`
+  `[Grounded 2026-11-12, audits/24_GROUNDING_GAMES.md GC-9. Two facts, no decision taken here (the choice is
+  the MB lane's). (a) The reason given for not adopting it no longer holds: that a member's row decides his
+  action is now sourced (grounding/ogre_battle.md row 5, a review read in body: "one they do when they are
+  in the front row, and one for the rear row"). (b) "Who can be reached" is **not** established as what the
+  referents share. In Ogre Battle, as sourced, whom a unit strikes is set by its tactic (Best, Strong, Weak,
+  Leader), and a fan strategy page has spellcasters under the Leader tactic striking a leader who "usually"
+  stands in the back row (grounding/ogre_battle.md rows 3, 4, 12; whether melee reaches the rear is not
+  established). For Unicorn Overlord,
+  "position influenc[es] their abilities and combat efficiency" is page-read; that the back row can be hit
+  only by ranged or column attacks is one search snippet (grounding/unicorn_overlord.md). The reach rule
+  above is therefore this proposal's own design, with snippet-grade precedent from one game.]`
 - **The leader.** A leader adds nothing by rule. What he adds is a capability read through the capability
   surface the CHAR lane owns (a command capability, the first audit's §14), applied as the PC proposal
   applies any lever: a prior on gates the duel already rolls for his squad's members. Until that

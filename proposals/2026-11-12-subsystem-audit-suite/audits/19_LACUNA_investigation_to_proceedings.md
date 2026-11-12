@@ -2,6 +2,10 @@
 
 ## Status: REFERENCE (a precedent-and-design lane; resolves nothing at runtime; its edits are proposals `proposals/19_LACUNA_*.md`)
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-21) — §2's second-hand cite of `epistemic.py:379` opened: the rule is `:376-377`, and `:379-383` says the trail is reachable only through a plant. The row's "partly" is unchanged and is now narrower.
+
+Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-20) — §1's developer-devlog rows (`[P GD]`, `[P GWO]`) rested on web pages no repository file held. Both devlogs were re-read in body and every quotation found; they are filed at `research/game_precedent_suite/grounding/lacuna.md` (rows 1-17), which §1 may now cite. Rows tagged `[T19 ...]`, `[V ...]` and `[S ...]` keep their own tier. No claim changed.
+
 ## Read at: 61fee8d (working tree)
 
 Direction (Jordan, 2026-11-12): *"consider how LACUNA handles investigations/solving cases and how that
@@ -162,7 +166,7 @@ possible investigator, accused and judge.
 | Wrong answer cascades into the parent case | **yes, systemic** | A wrongly disposed accused leaves the true doer free to act again; the convicted man's kin and he hold the determination as a deed; the parent matter (a faction's grievance, a strand) reads the outcome. No authored cascade: the free doer's next deed is the cascade. |
 | Soft redirect toward truth | **no (null, kept)** | Valoria lets a wrong conclusion stand. What can correct it is another person's firsthand contradiction reaching the concluder (FI_03 §4, the caught-liar question) — a draw-driven, not authored, redirect, and it may never come. |
 | Colleague comments on the mistake | **yes** | A colleague who holds a contradicting firsthand cell and `tell`s it; `record` re-grades the concluder in that hearer (§4.4). |
-| Single-play dialogue, clues lost by order | **partly** | Order already matters (`engine/season/epistemic.py:379` `[as cited by D_T06; not opened]`, witnessing a forging closes its trail; `D_T06.md:55`). Single-play becomes a cost, not a lock: questioning someone tells him he is being asked about (proposal 4). |
+| Single-play dialogue, clues lost by order | **partly** | Order already matters (`engine/season/epistemic.py:376-377` `[GROUNDED, 25 G-21: opened. The rule is at `:376-377`, an Event is kept only if "`pid` does not already hold it (`holds_trail`)"; `:379-383`, the line D_T06 cites, is its caveat: "REACHABLE ONLY THROUGH A PLANT", the seed-0 realm reaches no trail by `research`. So order matters in a planted world and not yet in computed play]`, witnessing a forging closes its trail; `D_T06.md:55`). Single-play becomes a cost, not a lock: questioning someone tells him he is being asked about (proposal 4). |
 | Tone (agreeable / aggressive) | **yes, as odds** | An `approach` payload key on `interview` and `interrogate` that moves the obstacle and the subject's `regard` (VCD row 9; proposal 4). |
 | Standing with the institution at the end | **yes, systemic** | A bench's or investigator's later `reception` and `record` move by what the room and the realm come to hold. |
 | Authored truth and endings | **no** | The truth is the Event log; no ending table (ERRATA G17, `D_T06.md:61`). |

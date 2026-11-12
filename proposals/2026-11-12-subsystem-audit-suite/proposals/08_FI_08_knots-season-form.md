@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED (§1 and §2 are edits; §3 is sequencing; §4 is design-first)
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-29) — the knot index's pair order opened (`queries/cache.py:95`, owner first); §1's line stands as written.
+
 Carries `audits/08_FI_audit_addendum_B.md` correction C-1 and resolutions R-34, R-48, R-50. It corrects the
 first FI audit's disposition of H-182 (*"waits on `_eff_tie`, plan position `14`, CHAR's"*): the effect was
 built at v9 IN-32 and reverted as falsified, for want of a reader.
@@ -38,8 +40,8 @@ bond it is two edges). §2 touches only the unplugged oracle. §3 and §4 change
 ## Edits and decisions
 
 **1. A person witnesses through a knot he owns (R-48).** `epistemic.py::_ch_witness_key`'s last line reads
-`(pid, anchor) in knots` (reading the index pair as owner first `[UNVERIFIED: the pair order of
-`cache.tenure_index(w).knots` was not opened; the rule is the prose, the line follows the order found]`).
+`(pid, anchor) in knots` (reading the index pair as owner first `[GROUNDED, 25 G-29: opened. The pair is
+`(t.subject, t.object)`, `queries/cache.py:95`: owner first, so `(pid, anchor)` is the line]`).
 The code is the defect and Layer 1 is not edited to match it (`CLAUDE.md` §0.05).
 A mutual bond is two edges and reads exactly as before.
 

@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-09; GC-4) — the precedent paragraph's "Bannerlord's wages are memory-grade" corrected: they are page-read at `research/game_precedent_suite/tutorials/T02_warband.md:17`. No edit of the proposal changed.
+
 Carries findings F-SE-19 and F-SE-20 and resolutions R-SE-33 to R-SE-36 of
 `audits/07_SE_audit_addendum_B.md` (its §4). It answers Jordan's mass-battle intent (2026-11-12: *"a
 campaign layer that feeds the battle and receives its result"*; Bannerlord's *"troops recruited, trained,
@@ -45,7 +47,11 @@ No verb is added. The registered modules gain nothing but one read-only query on
   body): units muster to a general standing in a region *from that region's troop types only*; upkeep
   leaves the treasury every turn; replenishment only on friendly ground; a siege starves. Songs of Syx
   (`tables/R3a`, developer patch notes read in body): rations mandatory, supply anywhere in one's own
-  territory. Bannerlord's wages are memory-grade in `tables/R2` and are not relied on. The tree's own
+  territory. Bannerlord's wages are memory-grade in `tables/R2` and are not relied on `[CORRECTED
+  2026-11-12, audits/24_GROUNDING_GAMES.md GC-4: they are page-read in the tree at
+  research/game_precedent_suite/tutorials/T02_warband.md:17 [V3 B2] (daily wages; the unpaid lose morale,
+  then desert), a guide page and so good for the shape only. The proposal did not rely on them and still
+  does not need to]`. The tree's own
   historical pass kept one flat rule (*"Campaign Supply … for any units in hostile territory"*) and cut
   per-unit costs and service timers as bookkeeping (`research/historical/precedents_warfare.md` §8).
 

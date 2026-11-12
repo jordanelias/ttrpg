@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
+Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-07; GC-3) — §B3.4's "Football Manager (three renderings of one match engine)" is sourced only as a viewing ladder; that a skipped and a played match are one simulation is not established. The section's rule (one decider, the person's own policy) is unchanged.
+
 ## Read at: 13a82e4 (working tree; the first GO lane read at ad07a9a; `git diff --stat 13a82e4 2d909d9` outside this suite's directory is empty)
 
 Continues `audits/11_GO_audit.md` (§0–§14, F-GO-01..12, R1–R47). Nothing there is repeated; where this
@@ -284,7 +286,11 @@ and re-implemented or rendered by the port; never a rule in `game/`.
 
 The ruled doctrine (ED-SC-0013) is one engine at two ends and a thin middle; its referents are
 Football Manager (three renderings of one match engine) and Total War (per battle, fight or
-resolve). The code has the doctrine's shape and none of its presentation. It also has something the
+resolve). `[CORRECTED 2026-11-12, audits/24_GROUNDING_GAMES.md GC-3: what is sourced for Football Manager is a
+ladder of ways to watch one match (research/game_precedent_suite/dispositions/D_T04.md row 57); that its
+instant result runs the same simulation is not established (D_T04 row 58;
+grounding/football_manager_instant_result.md). Total War's own auto-resolve is a second calculation
+(tables/R6 F5), so neither referent demonstrates one engine at two ends; the doctrine is a ruling.]` The code has the doctrine's shape and none of its presentation. It also has something the
 doctrine did not anticipate: **fidelity is epistemic already.** A party decides (if hosted), a
 bystander receives firsthand `seen` deposits, an absent person receives a telling at some remove or
 nothing. So "witnessed" needs no mechanism and the played/auto pair needs one rule the first audit

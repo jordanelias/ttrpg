@@ -2,6 +2,10 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-10, G-11) — two ledger marks settled: ED-FI-0002 is in the FI archive ledger (verified); ED-IN-0298's last row is not `needs_jordan` (R-18's "flagged for Jordan" corrected in place; the resolution itself is unchanged).
+
+Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-12 to GM-19) — §16 names eight detective games the precedent tables do not cover and gives them no source. Each now has a note under `research/game_precedent_suite/grounding/`: `detective_set.md` (Golden Idol, Outer Wilds, Her Story, Danganronpa, Blade Runner 1997, Heavy Rain), `paradise_killer.md`, `sherlock_holmes_crimes_and_punishments.md`. Two limits on §16's table: what Blade Runner randomises is which characters are replicants; Sherlock Holmes: Crimes & Punishments offers an optional reveal of whether the conclusion was right. No finding changed.
+
 ## Read at: 601e715 (working tree)
 
 Subsystem: fieldwork, investigation, epistemics, information, witness. Lane tag `FI` (with the `IN`
@@ -335,7 +339,7 @@ row means "the act was admitted" (H-318). `argument.won` at `Partial` changes no
 H-42, H-43, H-45, H-84 are closed in code and carry open-looking heads; H-116's head still describes the
 severed feedback edge that W-A/W-B closed (clause 4 fired 461 times in one season here). `HANDOFF_FI.md`
 points ED-FI-0002 at the live ledger; the research file (`research/by_lane/FI_fieldwork_investigation.md`
-§0 item 11) records that it lives in the archive ledger [UNVERIFIED by this audit]. Resolutions in §6.
+§0 item 11) records that it lives in the archive ledger [GROUNDED, 25 G-10: it does. `registers/editorial_ledger_fi_archive.jsonl` holds the `ED-FI-0002` rows; the last is dated 2026-10-26, `status: closed`, `needs_jordan: false`]. Resolutions in §6.
 
 ### F-FI-09 · degrades narrative (R-05, R-06) · Evidence is not a typed input to any contest; three of four detective borrowings are named in the code, not built
 
@@ -590,7 +594,7 @@ architecture needs. Proposal files are under `proposals/2026-11-12-subsystem-aud
 | R-15 | a claim at confidence 0 still closes a trail | wiring | `holds_trail` requires `confidence > 0`; `deeds_judged` unchanged (ED-IN-0320: the opinion stays) | 5, 1 | `08_FI_04` |
 | R-16 | H-116's head states a severed edge that is closed | stale row | head rewritten to "closed by W-A/W-B", with this audit's count | 1 | `08_FI_04` |
 | R-17 | `module_contracts.yaml`'s `fieldwork` module row describes the knots oracle; `HANDOFF_FI.md` names two ledger rows as unwritten | pointer | split the contract row's description (entry `find`; oracle `knots.py` unplugged); write the two ED-FI rows | 5 | `08_FI_04` |
-| R-18 | H-234: how news of unrest travels (needs_jordan on ED-IN-0298 [last row UNVERIFIED]) | flagged for Jordan | a row in CR-29's `reach` roster for the unrest kinds, by rung kind; not a sixth channel | 3 | `08_FI_02` |
+| R-18 | H-234: how news of unrest travels (needs_jordan on ED-IN-0298 [GROUNDED, 25 G-11: REFUTED. The last `ED-IN-0298` row, `registers/editorial_ledger_in.jsonl`, 2026-10-26, is `status: partial`, `needs_jordan: false`; its ask was answered by ED-IN-0300, "Confirm all"]) | ~~flagged for Jordan~~ not flagged: answered by ED-IN-0300; what is open is the build | a row in CR-29's `reach` roster for the unrest kinds, by rung kind; not a sixth channel | 3 | `08_FI_02` |
 | R-19 | H-351: should a faction's members learn of its acts at a distance | unclear | no: every channel is place-bound or edge-bound by precedent; members learn by being told (R-05) | 4 | none |
 | R-20 | H-323 / H-345: bystanders hear; a garbled copy carries no flag | flagged as rulings | both ruled already; closed | 1 | none |
 | R-21 | H-222: `standing` is the same constant for everyone | gap | irrelevant while no deposit mints a `person_predicates` claim and no chooser term reads `standing` (REM-44) | 2 | none |

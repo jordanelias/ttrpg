@@ -4,6 +4,8 @@ Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-01, D-02, D-03 — 
 
 ## Status: REFERENCE (an audit addendum; resolves nothing at runtime)
 
+Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-17, GM-26 to GM-28) — §B4's precedent table (the row beginning "Burning Wheel, Duel of Wits") carries its sources' marks correctly. Added behind it: `research/game_precedent_suite/grounding/burning_wheel_and_griftlands.md` (the Duel of Wits compromise scaled to what the winner lost, read at forum grade; Griftlands' dice-rolled speech checks replaced by cards, page-read) and `grounding/detective_set.md` §4 (Danganronpa). Still unverified, as marked there: the Point-and-Dismiss collapse, the Klei "less fun than fighting" quotation, Victoria 3's counter-mobilisation. No claim changed.
+
 Authored in part by Fable; completed by Opus after the Fable usage limit (2026-11-12).
 
 ## Read at: daa1fb1 (working tree; code, registers and workplans are as at `601e715`, the first audit's read point — the commits between touch only `proposals/2026-11-12-subsystem-audit-suite/`)

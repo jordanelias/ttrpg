@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
+Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-29; GC-5) — §7's "Triangle Strategy's hidden conviction axes ... unsourced" corrected: the tree sources them at `research/game_precedent_suite/tutorials/T19_tactics_narrative.md:13-23`. The entry's conclusion is unchanged. No finding changed.
+
 ## Read at: 601e715 (working tree)
 
 Scope: `engine/season/decision/` (`budget`, `choose`, `options`, `questions`, `sheet`),
@@ -580,7 +582,11 @@ and entry E17 of `04`. Not read: the companion parts, `game_precedent_suite/`, `
 **Tried and did not transfer.**
 
 - **Triangle Strategy's hidden conviction axes.** Named once in the companion, unsourced, and its
-  roster is fixed and authored; it says nothing about a sampled chooser.
+  roster is fixed and authored; it says nothing about a sampled chooser. `[CORRECTED 2026-11-12,
+  audits/24_GROUNDING_GAMES.md GC-5: sourced in the tree, research/game_precedent_suite/tutorials/
+  T19_tactics_narrative.md:13, :17, :20, :23 [V3]: three convictions (Morality, Liberty, Utility), hidden on
+  a first run and shown on New Game Plus, moved by dialogue answers and battle preparation. The conclusion,
+  that it did not transfer, is untouched.]`
 - **Kremlin and John Company, holder against controller** (X1). Over-claimed convergence by the lane
   file's own grading, and the mechanism is FA's.
 - **Crusader Kings council-seat denial as a grudge tag.** The tree computes regard at read and stores

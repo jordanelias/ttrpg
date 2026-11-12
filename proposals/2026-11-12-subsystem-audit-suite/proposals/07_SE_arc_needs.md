@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-27) — a `CHOICE_RANGES` range is a closed roster's members and needs a carrier the row writes; the share range is a three-member roster, not an integer list.
+
 Carries §13 of `audits/07_SE_audit.md`. Most SE-mechanism needs in the case corpus are met by positions
 the plan already holds (CP-T08-05, -06, -07; CR-49; CR-67; IN-52) or by this suite's other SE proposals;
 the table in §13 names which. Three changes are owned here because no position carries them.
@@ -85,8 +87,11 @@ its source; `LedgerReader` reads it) and falls back to today's derivation when h
 `[250, 500, 1000]` is the flip and a declared mover. Which share a person takes is then the chooser's
 ordinary ranking: the candidate's pursuit cells differ by share only if `tables.pursuit_projection` is
 given a cell for it, which is the CHAR lane's content (cross-listed in §14 of the audit).
-[UNVERIFIED: that `CHOICE_RANGES` accepts a numeric range; `marshal`'s are names. If it does not, the
-range is three named members, `tithe`, `half`, `all`, mapped to per-mille in one table.]
+[GROUNDED, 25 G-27: a range is the member tuple of a closed roster (`data/verbs.py:1698-1699`), and a
+key also needs a `CHOICE_CARRIER` the row writes (`:1700`, `:1708`). The one number-valued range today is
+spelt as strings: `ORDER_RETREAT_AT = ('none', '0.5', '0.25')`, `modules/mass_battle/massbattle.py:226`.
+So the range is a roster of three members, by that precedent `'250'`, `'500'`, `'1000'` or the three
+names; a bare integer list is not a shape the tree has.]
 
 **(c) `harness/populated.py` — `FOREIGN_CAST` rows may carry `stores:`.** One optional key on the
 settlement entry of a `FOREIGN_CAST` place, written as a builder's stores seed at the foreign settlement

@@ -4,6 +4,8 @@ Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-10 — the "governi
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
+Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-09; GC-4) — §4's "Bannerlord's wages are memory-grade" overlooked `research/game_precedent_suite/tutorials/T02_warband.md:17`, where they are page-read. One clause corrected in place. No finding changed.
+
 Authored in part by Fable; completed by Opus after the Fable usage limit (2026-11-12).
 
 ## Read at: f83534e (working tree)
@@ -235,7 +237,9 @@ Cited, not redone: `audits/04_MB_audit.md` §1.2 (the seam: `fortification_of`, 
 provisioning and siege built and off; no training site exists in the built realm"*), §17 (Total War's
 supply: *"named at campaign scale"*; campaign to battle and back: *"understood, dark"*), §18.1 (the
 referents' sourcing: Bannerlord's wages are memory-grade there; recruitment at settlements and upgrade are
-sourced); `audits/06_FA_audit.md` F-FA-03 (who may march is an unruled placeholder), F-FA-04 (no war, no
+sourced) `[CORRECTED 2026-11-12, audits/24_GROUNDING_GAMES.md GC-4: Bannerlord's wages are page-read in the
+tree, research/game_precedent_suite/tutorials/T02_warband.md:17 [V3 B2]: wages are paid each day and
+"unpaid or unfed troops lose morale, then desert". Only the tables/R2 cell E6 is memory-grade.]`; `audits/06_FA_audit.md` F-FA-03 (who may march is an unruled placeholder), F-FA-04 (no war, no
 response), §10 (the SE row: `requisition.taken` 0, 1 and 6 at seeds 0, 1 and 2). The MB and FA addenda B
 were being written while this file was; their heads were read (`04_MB_audit_addendum_B.md` B1.1 lists
 `military_layer_v30.md`: *"muster output and prerequisites by territory Prosperity, Wealth and a named

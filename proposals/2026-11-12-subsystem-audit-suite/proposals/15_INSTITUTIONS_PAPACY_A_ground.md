@@ -1,5 +1,7 @@
 # PAPACY-A — the Church stands on its own ground: the Confessor at Himmelenger, the Templars' command by row, the realm benches, and CR-74's carrier named
 
+Re-grounded: 2026-11-12 (audit §15) — no edit of this file changes. One fact bears on it: at `build_realm(0)` the Church seats that carry `determine` are `off_confessor`, `off_cardinal_justice` and `off_senior_inquisitor` (map `unified/RESEARCH_MAP_INSTITUTIONS_A.md` §5, E-M1). Those are this file's three realm benches, and under the rule in force (`workplans/valoria_master_workplan_v11_part12.md:366`) the last two are also the whole electorate of the Confessor: audit §15.3 C-1.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_PAPACY.md` F-PAP-01, F-PAP-04, F-PAP-08, F-PAP-10; §12 R-1, R-4, R-5,

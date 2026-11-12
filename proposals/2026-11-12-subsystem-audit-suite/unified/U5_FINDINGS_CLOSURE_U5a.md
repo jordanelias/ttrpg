@@ -516,3 +516,117 @@ C = `…_C_the_stop_is_the_mans.md`.
 | §5 false N-lines: `Person.conviction` nearly free; the creed's triggers are not about faith | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §7 (creed signatures on B's mechanism) | — |
 | §5 false N-lines: believed-odds weighting; attributes; capability | RESOLVED-BY | U1 architecture §6 (content and the attribute switch); `02_CHAR_offer_what_can_be_done.md` (priced candidates form) | — |
 | §5A stories that cannot happen | RESOLVED-BY / SUPERSEDED | persuaded: SC (U5c); learns a skill: U1 architecture §4; seat: FA (U5d); ambition ends: §3 above; tempted: C; forms a tie: `02_CHAR_relations_have_a_ground.md` (authored; an opener in play is the tie verb's, D-33); ages: D-15; deceived: U5c | — |
+
+---
+
+# PART 3 · DICE
+
+**Read first.** Three of Jordan's answers decide what most of this part's proposals assumed the other way:
+A-5 (the bell curve everywhere), A-6 (score plus a base, floor five, one rule for combat and everything
+else), A-7 (talent and training are two inputs). The carriers below are therefore the DICE proposals **as
+reconciled** (each carries a `Reconciled:` line), `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md`, and two
+plans this lane wrote: `proposals/U5a_capability_home_and_two_inputs.md` (**CAP**) and
+`proposals/U5a_DICE_owed_edits.md` (**DOE**). MAP = `10_DICE_capability_axiom_map.md`.
+
+## 3.1 `audits/10_DICE_audit.md` — findings F-DICE-01 … F-DICE-14
+
+| id | claim (one line) | disposition | carrier (file · section) | evidence |
+|---|---|---|---|---|
+| F-DICE-01 | the engine is fed a constant: every social roll is two dice, no leverage | RESOLVED-BY | U1 architecture §4–§6; CAP Part B (the roll's two inputs) and Part C (cast content, the attribute switch); `10_DICE_advantage_sources_for_the_arcs.md` Edit A (the signed channel) | 568 graded rolls: 564 at pool 2, leverage 0.0 on all |
+| F-DICE-02 | the default outcome is nothing and the top band cannot occur | SUPERSEDED | by A-6 (score plus a base, floor five): the pair (2 dice, Ob 2) no longer exists. The audit's own remedy (person-opposed rolls to Ob 1.0) stands as `10_DICE_one_score_two_roles.md` | `band_odds(2, 2) == (0.74, 0.19, 0.07, 0.0)` at the built regime |
+| F-DICE-03 | holding a score makes a person easier to oppose | RESOLVED-BY | `10_DICE_one_score_two_roles.md` Edits A–B, as reconciled to A-7 (the score is the trained rank; the attribute is the second input, never folded by `max`) | E-07: 26.00 / 58.00 / 73.50 % |
+| F-DICE-04 | four rolled verbs name no capability | RESOLVED-BY | U1 architecture §5 (one value per verb row, decided across CORE, DICE, SC and FA: C-U5a-11) | E-09 |
+| F-DICE-05 | two samplers half a success apart | SUPERSEDED | by A-5: one sampler. `10_DICE_exported_face_rule_and_band_edges.md` Edit B's claim-correction and Edit C's three-name vocabulary are withdrawn (Reconciled); DOE §1 carries the move | E-06: Failure 38.59 against 46.42 % at pool 8, Ob 3 |
+| F-DICE-06 | the advantage channel has one member, one sign, and sums to zero | RESOLVED-BY | `10_DICE_advantage_sources_for_the_arcs.md` Edit A (signed); the `edge` rows of the uses table (U1 architecture §3); the wound: 3.2 below, F-DICE-16 | leverage 0.0 on 568 of 568 |
+| F-DICE-07 | a second roller, and a ladder in two classes | RESOLVED-BY | `10_DICE_one_roller_one_fraction_rule.md` Edits A, C, D as reconciled (mass battle composes on the owner; under A-5 the owner's roll is the bell-curve sampler, so the "byte-equal goldens" gate is replaced by one declared re-pin); DOE §1 | 6 of 10,000 tenth-step cells differ; the pessimist's swap test: 0 of 20,000 nets differ at whole pools |
+| F-DICE-08 | three rules for a fraction of a die | SUPERSEDED | by A-5: the bell-curve sampler takes a fractional pool as it is; the rounding and the stochastic die are deleted with the whole-dice roll (same proposal's Edit B withdrawn) | E-05 |
+| F-DICE-09 | the typed layer omits the facts every draw depends on | RESOLVED-BY | `10_DICE_exported_face_rule_and_band_edges.md` Edits A (band floors; the per-die pair asserted against the faces) and D (`LEVEL_SIGMA` exported), as reconciled: `FACE_NET` stays the derivation of the pair, exported as provenance only; DOE §1 names what the port reads | E-11: six scalars exported |
+| F-DICE-10 | the room is a flat obstacle shift | RESOLVED-BY · no build (accepted in the audit, resolution 9) | the favourable half is D-29 (SC's: U5c); the sentence for H-215's `cite:` is DOE §3 row 1 | E-08 |
+| F-DICE-11 | the extension seam is unreached by the loop and half open | RESOLVED-BY | DOE §3 rows 2–3 (context validated on entry; the dead `extension` parameter deleted) | E-04 |
+| F-DICE-12 | half the advantage module's surface has no game caller | RESOLVED-BY | DOE §1 (under A-5 the Normal closed form becomes the odds function: `p_success` is no longer dead; `eff_ob`, `effective_ob`, `sigma_space_ob_shift` go with the kernel, SC-P2) | E-17 |
+| F-DICE-13 | stale passages at the owner | RESOLVED-BY | DOE §3 row 5 | lines cited in the finding |
+| F-DICE-14 | the chooser's odds answer for one verb, and "cannot say" reads as certain | RESOLVED-BY | `10_DICE_believed_odds_have_a_prior.md` Edits A–B; the fight's and field's believed estimate (Edit C) is PC's and MB's (U5b); the roll's record (Edit D) is merged into MAP's `fed_by` and SC-B's `Margin.terms` (U5c) | E-19: 102 figures of 4,929 queries |
+
+## 3.2 `audits/10_DICE_audit_addendum_B.md` — corrections C-1 … C-8, findings F-DICE-15 … F-DICE-23, H-152
+
+| id | claim (one line) | disposition | carrier | evidence |
+|---|---|---|---|---|
+| C-1, F-DICE-15 | three obstacle axioms for one ruling; the field is an opposed roll | RESOLVED-BY | MAP §A ("the contest form", `static` or `opposed_roll`) and §G edit 9; the floor reads `OB_MIN` (addendum §5.1 item 2, in DOE §1) | `orchestration.py:1308-1309` |
+| C-2 | the first audit's research skip was a false absence | RESOLVED-BY · no edit | the three leads are used in F-DICE-16, -17, -18 | — |
+| C-3, F-DICE-16 | the wound's penalty was ruled (+0.15 Ob per wound); the first proposal departed from it | RESOLVED-BY | addendum §5.4 as carried by DOE §2 (an obstacle term, `obstacle_terms: [wounds]`); `10_DICE_advantage_sources_for_the_arcs.md` Edits B–D withdrawn (Reconciled, C-U5a-12). The other channel (a level against) is D-08; the ruled form is taken unless Jordan answers otherwise | ED-PC-0005, ED-PC-0006 |
+| C-4 | the roller proposal's `grep` falsifier cannot read one line | RESOLVED-BY | `10_DICE_one_roller_one_fraction_rule.md` falsifier restated (Reconciled) | E-B02 |
+| C-5, F-DICE-17 | one score, three pools | SUPERSEDED | by A-6: one pool rule, `max(pool_floor, score + addends + pool_add)`, at every site (U1 architecture §4; MAP §C's four per-site fixtures become two, Reconciled) | E-B03: equals succeed 28 % in the social roll, 63–68 % in the other two |
+| C-6, H-152 | closed by a run (CP-T02-01) | RESOLVED-BY | DOE §3 row 6 (the register row's head and owner) | `probe_h152.py`, three arms with a mutation |
+| C-7, F-DICE-18 | a field battle reads no person | RESOLVED-BY | MAP §D (the `field` site declared with no rows); the first rows are MB's (U5b); the form of fortune in a field is D-34 | E-B04: `MassBattleInput` byte-equal |
+| C-8, F-DICE-21 | the field speaks sigma in die-equivalents and tires twice | SUPERSEDED | MB's closure (U5b); addendum §5.1 item 5 states the target | `config.py:306` |
+| F-DICE-19 | below one die the sigma boost is a full die's | RESOLVED-BY | DOE §1 (under the one sampler a sub-one-die aggregate's spread and boost both scale with the root of the pool; the floor at one die is removed for aggregates) | E-B05 |
+| F-DICE-20 | derived resources exist for one scene of one subsystem | RESOLVED-BY | MAP §A (`resource` is a declared role with its one instance). No formula is carried: Health's form is Jordan's own open ruling (AR-58, ED-IN-0347) and is not re-raised | `combatant.py:172-183` |
+| F-DICE-22 | two unread tests are prose guards | RESOLVED-BY | `01_CORE_tests_delete_what_cannot_fail.md` row 1 (`test_knot_pool_formula.py`); `tests/valoria/test_fractional_pool.py` is deleted with its subject (DOE §1); this also closes addendum C's `[not adjudicated]` row on that file | — |
+| F-DICE-23 | a skill's rank has no ceiling | RESOLVED-BY | U1 architecture §2 (`scale` on the definition row, read by `raised_capability`); CAP Part A | `effects_combat.py:262-268` |
+| §5.1 items 1–6 | the shared roller meets mass battle's resolver | RESOLVED-BY | DOE §1 (items 1–5 restated for the one sampler); item 6's order against `11_GO_one_draw_owner.md` stands (one roller first, then GO's) and D-38 holds the keyed-draw question | — |
+| §5.2 | the duel round from the dice side | SUPERSEDED | PC's closure (U5b): an approach is an `edge` row, never a pool rule | — |
+| §5.3 | the weapon-carry cost is the `threshold` role, one leaf function | SUPERSEDED | PC's and MB's closures (U5b); the role is MAP §A's | — |
+| §5.5 | order of landing | RESOLVED-BY | restated for the answers in CAP "Order" and DOE "Order" | — |
+| §5.6 item 1 | the wound's channel | JORDAN | D-08 (default: as ruled) | — |
+| §5.6 item 2 | what a score is worth outside a fight | SUPERSEDED | answered: A-6 | — |
+
+## 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1–25, §11 survivor, §13 arcs
+
+| item | disposition | carrier / reason |
+|---|---|---|
+| H-31 (regrade `ruled`), H-88 (close), H-98 (close; off R-09's `blocks:`), H-114, H-115 (heads say CLOSED) | RESOLVED-BY | DOE §3 rows 7–9 |
+| H-152 | RESOLVED-BY | DOE §3 row 6 |
+| H-244 | STALE-FALSE-POSITIVE (kept as a number; unexercised until a believed opposition exists) | `10_DICE_believed_odds_have_a_prior.md` is what exercises it |
+| H-310 | SUPERSEDED | FI / SC (U5c) |
+| H-312 | RESOLVED-BY | U1 architecture §5 (`interrogate: inquiry`) |
+| H-126, H-127, H-213 | RESOLVED-BY | `10_DICE_one_score_two_roles.md` (H-127's scope); `16_PESSIMIST_DICE_soft_ceiling.md` (H-213); H-126's magnitude is re-read at the A-5/A-6 calibration (CAP Part B gate) |
+| H-332, H-349, H-361; CP-T01-01 … -06; CR-17 | STALE-FALSE-POSITIVE (closed or not adjudicated here) | — |
+| res. 1, 2 | RESOLVED-BY | `10_DICE_one_roller_one_fraction_rule.md` Edits A, C, D (Reconciled) |
+| res. 3, 4 | SUPERSEDED | A-5 (no whole-dice fraction rule) |
+| res. 5 | SUPERSEDED | A-5 (the audit decided "leave the offset, narrow ED-833"; Jordan answered the other way) |
+| res. 6, 7 | RESOLVED-BY | `10_DICE_exported_face_rule_and_band_edges.md` Edits A, D; one resolver name for all three providers (DOE §1) |
+| res. 8, 10 | RESOLVED-BY | `10_DICE_one_score_two_roles.md` Edits A–B (Reconciled); the verb values: U1 architecture §5 |
+| res. 9 | RESOLVED-BY | DOE §3 row 1 |
+| res. 11, 12, 13, 14, 15, 16, 20 | RESOLVED-BY | DOE §3 rows 2–5, 7–10 |
+| res. 17 | RESOLVED-BY | `10_DICE_advantage_sources_for_the_arcs.md` Edit A |
+| res. 18 | SUPERSEDED | by C-3 / F-DICE-16 (a wound is an obstacle term) |
+| res. 19 (SCN-05 restated: a spend buys named levels) | RESOLVED-BY | same file, "The resolution" |
+| res. 21 (`CLAUDE.md` §7) | RESOLVED-BY | `U5a_CORE_owed_edits.md` §G (the same sentence as T-22; merged) |
+| res. 22 (mass battle's survivor-ratio labels use the ladder's four names) | SUPERSEDED | MB's closure (U5b); A-3 fixes the field's returned vocabulary (won, lost, drawn) |
+| res. 23 | RESOLVED-BY | `10_DICE_believed_odds_have_a_prior.md` Edits A–B |
+| res. 24 | SUPERSEDED | PC's and MB's closures (the `believed_estimate` role) |
+| res. 25 | RESOLVED-BY | MAP §D (`fed_by`) with SC-B's `Margin.terms` (U5c): one record of a roll, proposed once |
+| §11 survivor (which sampler non-combat rolls use) | SUPERSEDED | answered: A-5 (the audit's Option B). Every edit the audit wrote "for A" is reconciled |
+| §9 "one roll as a decision"; §8 step 7 (a surface that prints odds) | RESOLVED-BY | `11_GO_player_surface_contract_B.md` (`Offer` rows carry odds; U5d) |
+| §13 ARC-22, NSC-04, NSC-07, SCN-01, ARC-10 (four graded outcomes) | RESOLVED-BY | A-6 and U1 architecture §4 (the top band becomes reachable); band-distinct writes on `lie`, `speak`, `tell`, `interrogate` are SC's and FI's (U5c; = F-PES-DICE-01) |
+| §13 ARC-18, ARC-17 | STALE-FALSE-POSITIVE (represented) | — |
+| §13 ARC-06 (an implementation can fail on its own roll) | RESOLVED-BY | `18_DETERMINISM_task_draw_for_uncontested_verbs.md` (PART 6) |
+| §13 SCN-04 (difficulty from a stored disposition) | SUPERSEDED | SC's obstacle proposal (U5c) |
+| §13 ARC-53 (a wound persists; a faction's stat adds to its leader's roll) | RESOLVED-BY | DOE §2 (the wound term); the faction half is an `addend` over `Act.via` (FA's, U5d; D-12 holds whether office may add to a roll) |
+| §13 NPC-085, SCN-12, SCN-04/07/LOOP-C, SCN-13 | RESOLVED-BY | `10_DICE_advantage_sources_for_the_arcs.md` Edit E (each a named door waiting on another lane's state; not built ahead of its reader) |
+| §13 SCN-05, SCN-02, ARC-23 | RESOLVED-BY / JORDAN | SCN-05: resolution 19. SCN-02 conflicts with ED-SC-0038 (named, SC's). ARC-23 (a skill required to attempt) is D-11 |
+| §13 EMG-C2, NSC-05, SCN-08, NPC-052; EMG-X5, EMG-X7, SCN-07 (rate and table draws) | SUPERSEDED | WR's and CORE-side happenings closures (U5d); the mechanism (a keyed rate draw) exists |
+| §13 NPC-001, NPC-004, NPC-075, ARC-22 (competence decides how she fares) | RESOLVED-BY | U1 architecture §6 (cast content) |
+| §13 EMG-X6 | SUPERSEDED | SC (U5c) |
+| §14, §15 | RESOLVED-BY | U1 architecture; `10_DICE_believed_odds_have_a_prior.md` |
+
+## 3.4 `audits/16_PESSIMIST_DICE.md` — findings, lists, survivor
+
+SOFT = `16_PESSIMIST_DICE_soft_ceiling.md`; TASK = `16_PESSIMIST_DICE_task_difficulty_and_throughput.md`.
+
+| id | claim (one line) | disposition | carrier | evidence |
+|---|---|---|---|---|
+| F-PES-DICE-01 | the degree changes no state (282 of 284 rolls) | SUPERSEDED | the verb lanes' closures (seven rows that write nothing in any band: SC, FI, verbs SOCIAL; U5c); the shape is `18_DETERMINISM_task_draw…` item 4 as reconciled | E-P6 |
+| F-PES-DICE-02 | at the shipped pair "everything draws" means "little happens" | RESOLVED-BY | TASK (the unopposed stand-in, `plain`, the throughput reading and refusal to ship); applied to `18_DETERMINISM_task_draw…` item 3 and gate by this lane (Reconciled). The pool regime behind it is answered (A-6) | 16.5 % of today's effect at (2, 2.0) |
+| F-PES-DICE-03 | the ceiling is a wall; every shipped forgery stands on it | RESOLVED-BY | SOFT (the cap's closed form follows the one sampler: DOE §1) | pools 1–12 read 10.00 % at their cap |
+| F-PES-DICE-04 | a field is decided by a draw the dice engine never sees | JORDAN | D-34 (luck in battle: a hidden multiplier, or a named level) | friction's 5th–95th percentile 0.164–6.107 |
+| F-PES-DICE-05 | a failed search is forgotten and retried; remembering alone changes nothing | RESOLVED-BY | DOE §4 (the actor-only deposit of `finding.none`, read by `refused_before` of `16_PESSIMIST_CORE_a_refusal_is_remembered.md`: the reader the control showed was missing). D-46 holds the neighbouring question for a missing person | 157 of 157 `finding.none` Events have no descendant; deposit alone: 19 of 42 against 20 of 47 |
+| F-PES-DICE-06 | one die cannot succeed, and a zero cannot try | SUPERSEDED | A-6 (no person rolls under five dice); TASK for the unopposed rows | `band_odds(1, 2.0)` |
+| F-PES-DICE-07 | the record of a roll is its band | RESOLVED-BY | MAP §D `fed_by` with SC-B's `Margin.terms` (U5c); the margin itself is on the record (under A-5 it is the continuous margin, not a settled integer) | 208 failures: by 1 ×76, 2 ×94, 3 ×33, 4 ×5 |
+| F-PES-DICE-08 | the obstacle's floor reaches one term and not the sum | SUPERSEDED | `13_SC_tuning_tables.md` T1 (U5c) |  E-P1 |
+| F-PES-DICE-09 | the field's four stat checks are bare binaries | SUPERSEDED | MB's closure (U5b) | `orchestration.py:2093-2166` |
+| F-PES-DICE-10 | words: `argument.won` at Partial; a contest with one roller | SUPERSEDED | the verb table's owner lane (SC, U5c) | H-269 |
+| §1.2 false N-lines | RESOLVED-BY | mass battle's roller: the one-roller proposal; `BandExtension` and the unused functions: DOE §1, §3; the top band and the three unused levels: A-6 and content | — |
+| §1.2 "mechanisms that survive because nothing was tried": H-210's sweep arms are one arm; the 10 % floor is solved at no advantage; the two-roles gate has no row below Ob 1 | RESOLVED-BY | SOFT gate 3 (ordered words give ordered odds); DOE §3 row 11 (the floor is re-solved against the signed channel; the two-roles gate gains a row at an obstacle below 1) | — |
+| §6 survivor (the form of fortune in a field) | JORDAN | D-34 | — |
+| §7 corrections owed elsewhere | RESOLVED-BY / SUPERSEDED | 18-A: applied here (Reconciled). 13, SC-B: U5c (listed in `unified/U5_CONFLICTS_U5a.md` §3). The two `10_DICE_*` notes: DOE §3 row 11 | — |

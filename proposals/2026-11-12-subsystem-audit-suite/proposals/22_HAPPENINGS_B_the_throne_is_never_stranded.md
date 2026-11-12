@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-09) — `may_claim`'s body opened (`state/gate.py:770-786`); the edit table's row stands, and two further single-title readers of `SUCCESSIONS` are named beside it.
+
 Source: `audits/22_HAPPENINGS.md` §1.5 rows 9 and 10; F-PES-FA-01, F-PES-FA-11 (`audits/16_PESSIMIST_FA.md`);
 F-PES-GAME-08. Lane FA (owners: `offices.yaml`, `rosters.yaml: successions`, `state/gate.py`).
 Reference only (`CLAUDE.md` §0.05).
@@ -76,7 +78,7 @@ order (HAPPENINGS-B)"*. `[ASSUMPTION; medium; Jordan to correct; revert: the sin
 | `data/rosters.py:882` | `{str: str}` | `{str: tuple[str, …]}`; a bare string is read as a one-tuple, so the present row loads unchanged |
 | `state/gate.py:743` (`has_filler`) | key present | unchanged |
 | `state/gate.py:752-758` (`check_successions`) | value is a row id | every member is a row id; an empty list refuses |
-| `state/gate.py:782` (`may_claim`) | the claimant holds *the* title | the claimant holds a title in the tuple `[UNVERIFIED: the body was read by grep, not opened]` |
+| `state/gate.py:782` (`may_claim`) | the claimant holds *the* title | the claimant holds a title in the tuple `[GROUNDED, 25 G-09: opened. `may_claim` is `state/gate.py:770-786`; `:782` is `title = SUCCESSIONS.get(off.id)`, one title per seat, and `:783` refuses when `title not in titles`. The other two readers of `SUCCESSIONS` take one title too: `decision/options.py:240`, `loop/effects_governance.py:164`]` |
 | `state/gate.py:794` (`claimable_seats`) | seats whose title is his | seats one of whose titles is his |
 | `decision/options.py:240` (`own_title_declines`) | `SUCCESSIONS.get(r) in held` | `any(t in held for t in SUCCESSIONS.get(r, ()))` |
 | `loop/effects_governance.py:164` (`_eff_succeed`) | closes *the* title | closes the title the claimant claimed through, and only if it is a title that exists to pass a seat (`conferral: appointed`, empty remit). A duke who takes the throne keeps his duchy |

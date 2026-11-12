@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-25) — edit 4's `[UNVERIFIED]` settled: the `(Record, stages)` matrix row names no verb, so no matrix edit is owed; the verb row's band list is where the pair is declared.
+
 Source: `audits/05_SC_audit.md` F-SC-05; `engine/season/hole_register.yaml` H-162 clause (c), whose
 stated revert this takes; `proposals/2026-10-03-verb-coverage-and-gap-fill.md` §9.6 (ratified as
 intent, ED-IN-0288), which reads a failed determination as an acquittal (`DocketItem.matter`,
@@ -60,8 +62,11 @@ reopenable.
    rest decline (`NO_CHANGE` → `determine.refused` on the write clause), which the gate test pins.
 4. `engine/season/write_matrix.yaml` — no new row: `(DocketItem, matter)` and `(Record, stages)` are
    `[RES]` ACTS cells already (`determine` writes the first today, `carry` the second).
-   `[UNVERIFIED]`: that `write_matrix.yaml` admits `determine` on `(Record, stages)` without a row
-   edit; the loader's refusal at import is the check.
+   `[GROUNDED, 25 G-25]`: the matrix needs no edit, the verb row does. The `(Record, stages)` row is
+   `steps: [RES]`, `class: ACTS` and names no verb (its keys are `kind, field, steps, class, social, by,
+   emits`), so it admits any RESOLVE act whose row lists the pair; `determine`'s `writes:` today lists
+   `Tenure.since`, `DocketItem.matter`, `Tenure.degree`, `Person.pursuits` by band and not
+   `Record.stages`, so the band that writes the dismissal gains it in `verb_table.yaml` (edit 1's row).
 
 ## Gate (execution artifact)
 

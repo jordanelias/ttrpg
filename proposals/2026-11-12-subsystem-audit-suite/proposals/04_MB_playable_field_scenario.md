@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-08; GC-8) — the Bannerlord contact menu, memory-grade here, is now read at forum grade as Attack or Send Troops (`research/game_precedent_suite/grounding/bannerlord_encounter_menu.md`). No edit of the proposal changed.
+
 Lane MB, with named dependencies on CORE, CHAR, SE and PC. Carries R-07, R-11, R-17, R-20, R-22 of
 `audits/04_MB_audit.md` §6.2 and its §8 steps 4, 4a, 4b, 5, 5a, 5b, 6. Assumes
 `04_MB_headcount_grade_and_scale.md` and the outcome record of `04_MB_typed_outcome_and_one_path.md`.
@@ -27,7 +29,10 @@ The stated referents describe the missing parts (sourced in the audit's §18): s
 advance and a predicted outcome shown before the fight (Unicorn Overlord, `tutorials/T19`); instructions
 before the match, shouts and changes during it, a review after (Football Manager 26, `tutorials/T16`);
 fight, delegate or withdraw at contact (Total War, `tutorials/T07`); command, send troops or
-auto-resolve (Bannerlord, `tables/R2`, memory-grade for the three-way menu). The archived design had the
+auto-resolve (Bannerlord, `tables/R2`, memory-grade for the three-way menu) `[grounded 2026-11-12,
+audits/24_GROUNDING_GAMES.md GM-08: read at forum grade as a two-way choice, Attack or Send Troops, where
+Send Troops is the simulated battle (research/game_precedent_suite/grounding/bannerlord_encounter_menu.md);
+a separate third option was not found]`. The archived design had the
 same shape: three legal points at which a battle may be entered, a general's action each turn, an
 aftermath scene with choices.
 

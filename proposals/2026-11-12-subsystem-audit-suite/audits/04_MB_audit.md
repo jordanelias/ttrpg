@@ -4,6 +4,8 @@
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (L-10) — §14 (c): the pool reader's owner is `seam/wrappers/pool.py::faculty` (`:78`), which `sigma.py:105` re-exports; one citation corrected. No finding changed.
 
+Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-01 to GM-05, GM-08 to GM-10; GC-4, GC-8) — §18.1's sourcing floor: Ogre Battle is now sourced as a battle referent (`research/game_precedent_suite/grounding/ogre_battle.md`); Bannerlord's wages were already page-read at `tutorials/T02_warband.md:17`; the contact menu is read at forum grade as Attack or Send Troops. A dated note follows the paragraph. No finding changed.
+
 ## Read at: 601e715 (working tree)
 
 Scope: `modules/mass_battle/` (29 files, 11,624 lines, 4,634 executable statements), `systems/mass_battle/sim/`,
@@ -1353,6 +1355,18 @@ fight / send troops / auto-resolve menu and in-battle rout are memory-grade ther
 sourced as a battle referent.** The corpus names it only for its character-creation questionnaire
 (`research/by_lane/NPC_npc_cast.md:130`, `PC_personal_combat.md:90`); what it is "known for" in the
 brief's sense rests on the brief, and is read here through Unicorn Overlord, its sourced descendant.
+
+`[Grounded 2026-11-12, audits/24_GROUNDING_GAMES.md GM-01 to GM-05, GM-08 to GM-10; GC-4, GC-8. Three
+statements above are superseded. (1) **Ogre Battle is now sourced as a battle referent**:
+research/game_precedent_suite/grounding/ogre_battle.md (pages read in body): squads of five or fewer; the
+player does not control the fighters and picks one of four tactics per unit; a character's row, front or
+rear, decides which action he takes; one round an exchange, the side that dealt more damage wins and the
+loser is pushed back; a unit needs a living leader to take orders. (2) **Bannerlord's party wages are
+page-read in the tree**, at tutorials/T02_warband.md:17 [V3 B2]; only the tables/R2 cell E6 is memory-grade.
+(3) **The contact menu**: Attack or Send Troops, where Send Troops is the simulated battle, is read at forum
+grade (grounding/bannerlord_encounter_menu.md); a separate third option was not found. In-battle rout stays
+memory-grade. Unicorn Overlord's 2 x 3 grid in the table below is snippet-grade
+(grounding/unicorn_overlord.md); "a grid" with front and back rows is page-read.]`
 
 | what the referents share | where it is in the code | understood or named |
 |---|---|---|

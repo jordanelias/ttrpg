@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-19) — one `[UNVERIFIED]` mark settled at the line: `release` admits a person's own `commit` (`data/rosters.py:538`). No finding changed.
+
 ## Read at: d161a61 (working tree)
 
 Scope: `engine/season/decision/`, `engine/season/queries/person_q.py`, goals, convictions, scars,
@@ -433,7 +435,7 @@ established last; by rank it sits between -03 and -04.
   not raised while the holder's OWN ledger reads the committed proposition's content as true, and the
   fold closes the tenure with a `commitment.kept` Event when his own act made it so; a want he believes
   met and that is not is then P4 at work. Abandonment is `release` on his own commitment, an ordinary
-  candidate. `[UNVERIFIED: that `release` admits one's own commit today]`.
+  candidate. `[GROUNDED, 25 G-19: it does. `RELEASABLE_KINDS = TENURE_KINDS − {contain, reside} − RESTRAINT_KINDS`, `data/rosters.py:538`, which keeps `commit`; the row is `own` and asks "a live tenure of a releasable kind, owned by the actor, toward the subject", `loop/predicates.py:431-447`]`.
 
 ### F-PES-CHAR-08 · D · what is done to a man does not decide what he thinks of who did it
 

@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-17) — §14's `_eff_train` mark settled at the line (`loop/effects_combat.py:794-816`). No finding changed.
+
 ## Read at: 601e715 (working tree; code, registers and workplans read at this commit — the commits after it on this branch touch only `proposals/2026-11-12-subsystem-audit-suite/`)
 
 Short names: `es/` = `engine/season/`; `K/` = `systems/social_contest/sim/contest/` (the kernel);
@@ -813,7 +815,7 @@ hearers, docketed matters; the scene clock); SC ← FA (CR-35/36/37; seats and b
 | advantage | `effort` × `effort_level` | `rosters.yaml: advantage_sources`; `Fixtures.effort_level`; `sigma_leverage.LEVEL_SIGMA` | `sigma.py::advantage_sigma` |
 | the room | each judge's pursuits against the speaker's deeds; proofs held | ledgers; `Fixtures.reception_gain`, `proof_step` | `world_q.reception`, `proofs` |
 | what he believes of another's skill | a claim `capability:<key>` in his own ledger | nothing deposits one | `sigma.py::believed_input` |
-| growth | `train` raises a key a person already holds | the `train` row | `_eff_train` (not opened `[UNVERIFIED]`) |
+| growth | `train` raises a key a person already holds | the `train` row | `_eff_train` (`[GROUNDED, 25 G-17: opened, `loop/effects_combat.py:794-816`: raises by one a `verb_capability` key the SUBJECT already holds; a key is never minted; anything else is `train.refused`]`) |
 | the kernel (retiring) | `faculty` → `Pool.size = max(5, 2·faculty + 3)`; adjudicator → primary attribute | literals | `K/primitives.py:208-211`; `K/modes.py:426-431` |
 
 **(b) Data-driven or not.** Data-driven: which key a verb draws on, which attribute a key starts

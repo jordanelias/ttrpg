@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-30) — the test at `test_season_shape.py:4729-4731` is named.
+
 Author: Fable census lane, PART=REST. Source: `audits/17_CENSUS_REST.md` §1, §4, §5a, §7, §9. Read at
 `4995824` (working tree). Ordered by risk, lowest first. Each batch lands alone with its own test edits.
 
@@ -64,7 +66,7 @@ H-86 (the column's ambiguity) closes as **irrelevant** (ladder step 2: its only 
 the hole-register row's `cite:` gains the deleting commit.
 
 **Gate:** `engine/season/tests/test_season_shape.py` green; a MATTER write on a declared row with
-`emits=None` still raises `Forbidden("… D22")` (`test_season_shape.py:4729-4731` describes the run that refusal stopped; `[UNVERIFIED: the exact test name was not opened]`). **Falsifier:** a
+`emits=None` still raises `Forbidden("… D22")` (`test_season_shape.py:4729-4731` describes the run that refusal stopped; `[GROUNDED, 25 G-30: `test_w6_h33s_declared_sweep_runs_and_the_deposit_count_falls`, `engine/season/tests/test_season_shape.py:4724`]`). **Falsifier:** a
 second row needs the exemption; then item 2's deletion fails that row's MATTER write at the first season
 of `harness/populated.run(1, 0)`. (Checked statically: `(Site, condition)` declares two kinds and its
 writer names one on every write, 966 times in the three-season run.)

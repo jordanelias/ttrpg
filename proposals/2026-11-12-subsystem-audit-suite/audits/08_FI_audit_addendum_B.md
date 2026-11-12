@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit addendum; resolves nothing at runtime)
 
+Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-12 to GM-18; GC-1, GC-7) — §B3's Paradise Killer, Blade Runner and Sherlock Holmes rows were memory-grade; each now cites a note under `research/game_precedent_suite/grounding/`. One statement corrected: Sherlock Holmes: Crimes & Punishments is not "never corrected" (it offers an optional reveal). Golden Idol, Outer Wilds, Her Story and Danganronpa (rows of the same table) are sourced in `grounding/detective_set.md`. No finding changed.
+
 ## Read at: ad07a9a (working tree)
 
 Addendum to `audits/08_FI_audit.md` (§0–§17, findings F-FI-01 to F-FI-10, resolutions R-01 to R-33). It does
@@ -246,9 +248,9 @@ Count: of 17 elements the code has none whole, 11 partly, 6 not at all. Every "p
 | Ace Attorney / Danganronpa | press a statement; present a held item against it; one correct pair | the primitive (two held items on one cell disagreeing) exists person-side (`options._pair`, `record`); no statement is on a record to press | the companion refuses the *puzzle* and keeps *inventory-as-argument*; §B4 follows that |
 | The Case of the Golden Idol | fill a typed sentence from collected nouns; the machine grades it | a conclusion as a typed Proposition is `08_FI_03` §3; nothing grades it, by ruling | understood; unbuilt |
 | Outer Wilds, Her Story | knowledge is the only persistent state and gates where one can go | true of an inquirer by construction (findings are claims; candidates form on what is held) | built |
-| Paradise Killer | the trial can be called at any time on whatever is held; the verdict follows the case made, not the truth `[M: from memory; the tree's own lines on this game were not opened here]` | a petition can be filed on any held claim; the bench's roll reads none of it | the shape Valoria is one operand short of |
-| Blade Runner (1997) | the culprit set is randomised per run; clues are objects `[M; the first audit's reading]` | a seeded realm is that; the culprit leaves one kind of trail | named only |
-| Frogwares' Sherlock Holmes | deduction board; a chosen conclusion and a moral choice, never corrected `[M; the first audit's reading]` | as Golden Idol | unbuilt |
+| Paradise Killer | the trial can be called at any time on whatever is held; the verdict follows the case made, not the truth `[M: from memory; the tree's own lines on this game were not opened here]` `[grounded 2026-11-12: research/game_precedent_suite/grounding/paradise_killer.md rows 1, 2, 4, pages read in body: the trial may be called at any time and "the game never tells the player that they got it wrong" (the studio); how the court decides a charge is not established]` | a petition can be filed on any held claim; the bench's roll reads none of it | the shape Valoria is one operand short of |
+| Blade Runner (1997) | the culprit set is randomised per run; clues are objects `[M; the first audit's reading]` `[grounded 2026-11-12: research/game_precedent_suite/grounding/detective_set.md §5, page read: what is randomised each new game is which characters are replicants, over an authored cast; how clues follow that is not established]` | a seeded realm is that; the culprit leaves one kind of trail | named only |
+| Frogwares' Sherlock Holmes | deduction board; a chosen conclusion and a moral choice, never corrected `[M; the first audit's reading]` `[CORRECTED 2026-11-12: research/game_precedent_suite/grounding/sherlock_holmes_crimes_and_punishments.md rows 4-6, two reviews read in body: the game accepts a wrong conclusion and goes on, and it offers an optional reveal of whether the conclusion was right, with a replay of the case's last part. "Never corrected" holds only if the player declines the reveal]` | as Golden Idol | unbuilt |
 | Heavy Rain | — | not named in the tree (C-7) | no claim |
 | Lacuna; The Guild 2 (named by the tree, not the brief) | submit a hypothesis that may be wrong and live with it; evidence with strength and expiry weighed before rhetoric | claims decay and carry provenance (has); no submission | the two the code is nearest to |
 

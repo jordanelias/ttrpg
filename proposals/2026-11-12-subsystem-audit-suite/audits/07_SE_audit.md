@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
+Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-07; GC-3) — §7's row "Football Manager's one engine at three fidelities" cites the archived doctrine, not a source about the game; the game claim is not established and the row now says so. §9's one-code-path test is unchanged.
+
 ## Read at: 601e715 (working tree)
 
 Subsystem SE: settlements, territory, economy, migration, founding, hunger. Dossier
@@ -534,7 +536,7 @@ renamed `requisition`; `exchange` restored; `body_step` live at 10; the weather 
 | A settlement dies of lost labour, not of resources (Banished, by way of the teardown) | by-lane T-SE-3 and §2.2 Banished row (one author's program; the teardown is a folk-model source) | supports CP-T08-01's order before the `ground` flip, and the thinning in `07_SE_population_census.md`: a thinner cohort is the carrier of lost labour |
 | Plot capacity gates immigration (Manor Lords), vacancy gates births (Banished) | by-lane §2.2, §2.3 item 2 | the code built the Manor Lords half (`has_room` on `migrate`); the Banished half is S-SE-1 |
 | Problem cards with deadlines that worsen if no advisor takes them (Kingmaker) | `D_T08.md` row 10 | the shortfall claim is the one analogue and fires only in `scarce`; the valley scenario's falsifier is this precedent's test |
-| Football Manager's one engine at three fidelities | `.designs/systems/_architecture/reference/auto_manual_resolution_duality_v1.md` §3-§4 (doctrine RULED 2026-07-08) | §9's one-code-path test: a played and an automated steward through `dispatching_chooser` |
+| Football Manager's one engine at three fidelities `[CORRECTED 2026-11-12, audits/24_GROUNDING_GAMES.md GC-3: not established as a fact about the game (research/game_precedent_suite/dispositions/D_T04.md row 58; grounding/football_manager_instant_result.md); the doctrine is the source, the game is not]` | `.designs/systems/_architecture/reference/auto_manual_resolution_duality_v1.md` §3-§4 (doctrine RULED 2026-07-08) | §9's one-code-path test: a played and an automated steward through `dispatching_chooser` |
 
 **Tried, did not transfer.**
 

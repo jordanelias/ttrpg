@@ -2,15 +2,27 @@
 
 Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 — where this file's names, homes or shapes differ from that ledger, the ledger governs: `instruments.yaml` is the kit's one registry and gains a `seeded:` section and six more forms (X-01, X-02, X-09, X-11); `recognition` is not a form: a certificate is the content key `recites` (X-03); `person_q.accomplishment` is not added: its recursion is the chain term of `person_q.legitimacy` (X-06); the four graded rows of §3.2 are their verb lanes' rows with `remove` added, and `oath_step` is the term `obligation` (X-20, X-24, X-26 to X-28); the audit key is `audit_at_exit` (X-12); a company's share is a `debt` (X-09); the far superior is one seat shared with the Byzantine lane (X-13). Of §11: item 1 is the synthesis's §10 item 1; item 3 is its item 4; item 2 is closed there. Every finding below stands.
 
+Re-grounded: 2026-11-12 against the tree's own research (Jordan: *"Research should have been found in /research or /proposals"*), map and claim table in `unified/RESEARCH_MAP_INSTITUTIONS_B.md` (rows C-1 to C-23). What changed in this file: **§2's opening claim that the tree holds no research on the chartered companies, the Indies, settler colonies or the Mongol system is withdrawn as wrong** (E-2 grepped `research/` alone and misread its hits; the tree holds full entries on the VOC at Banda, Plassey and the Diwani, the East India Company under the Regulating Act, the Casa de Contratación, colonial venality priced by distance, the Mongol *ortoq* and appanage, the Quartering Acts, the Norse Greenland colonies, and a section on post-colonial governance); of the sixteen claims marked `[MEMORY]`, eleven now cite a tree source at path:line in whole or part and five stay wholly memory-grade (§16.3); **three statements are corrected** (§16.1: the labour draft, which the tree's source has as reciprocal; the scope of the tree's research; the claim that the tree has nothing bearing on distance) and the first value of `prescription_seasons` is shown to reproduce an archived design's; **the tree's own statement of this lane's central mechanism is cited** (a decree lands "with a compliance roll, not an effect", against "distance, and the presence of an enforcing agent"); **eleven mechanisms the research describes and this design lacked are added** (§16.2), with exact edits in `proposals/15_INSTITUTIONS_COLONIAL_grounding_F_what_the_tree_adds.md`; §11 items 2 and 3 gain what the research says about each option; the null in §15 is now checked. No finding of this lane or of the synthesis is deleted; the ten forms, `remove`, the two procedures and the three survivors stand.
+
 ## Status: REFERENCE (a design and plan in proposal form; resolves nothing at runtime, CLAUDE.md §0.05)
 
-## Read at: bb6dfc3 (working tree)
+## Read at: bb6dfc3 (working tree); re-grounded at 62dbc8b
 
 Lane: institutions, FAMILY=COLONIAL (`INSTITUTIONS_BRIEF.md`). Sourcing marks used throughout:
 `[TREE]` = stated in the tree's research at the cited path (itself tier 3, secondary); `[MEMORY]` =
 memory-grade, from general reading, not checked against a source this session; `[UNVERIFIED]` = a
 specific figure or date not checked. **Shapes are the durable finding; every figure is a lead.**
 `[CHECKED]` on a code or canon claim means the file was opened at that place this session.
+`[TREE+: file:line]` = added by the re-grounding pass of 2026-11-12: the tree's research, opened at that
+line, supporting or correcting a claim first written from memory; short names as in the map (`GM`,
+`PHS`, `CPS` the three files of `research/governance/`; `CGR`
+`.audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md`; `PMP`
+`.audit/2026-08-06-social-contest-three-lens-audit/sources/01_political_mechanics_primitives.md`; `FASE`
+`research/fa_se_historical_precedent_research_v1.md`; `PGS` `research/proactive_governance_scale_research_v1.md`;
+`HCC` `research/historical_concerns_action_catalogue_v1.md`; `RTP`
+`research/rise_to_power_roster_system_research_v1.md`; `PA` `research/historical/precedents_analysis.md`).
+Where `[MEMORY]` still stands beside a `[TREE+]`, the source covers part of the passage and §16.3 says
+which part is still memory.
 
 ---
 
@@ -207,6 +219,25 @@ colonies, indirect rule in Africa and India, or the Mongol system (a grep of `re
 returns passing mentions only, §15 E-2). Their **shapes** are well attested and are what the design uses;
 every date and figure in a `[MEMORY]` paragraph is `[UNVERIFIED]` and nothing in the design depends on one.
 
+**Withdrawn on re-grounding (2026-11-12).** The sentence above is wrong, and E-2 is why: it grepped
+`research/` alone and reported its hits as a "one-line crisis list". The hits are full entries. The
+tree holds, for this family: the **VOC's conquest of Banda** and the Company governor it installed
+(`HCC:163`); **Plassey, the bankers who financed it and the Diwani of Bengal** (`HCC:166`); the **East
+India Company's councils subordinated by class of decision** under the Regulating Act of 1773
+(`PGS:147`); the **Casa de Contratación and the Consulado de Sevilla** as a chartered monopoly in two
+bodies (`CGR:134`); **the sale of offices in Spain** (`CGR:132`) and **of colonial offices, cheaper with
+distance** (`RTP:518-521`); the **corregidor** laid over a town's own council (`CGR:123`) and the
+***juros*** (`CGR:130`); the **Mongol *ortoq*** and the pass that went with it (`HCC:165`), the
+**appanage and the rival assembly** (`HCC:46`), the **marriage alliance as tribute** (`RTP:185-188`) and
+the **keshig** as hostage and school (`RTP:360-363`); the **Ottoman capitulations** (`HCC:169`);
+**tribute withheld, then the sack** (`HCC:167`); the **pass system at sea** (`HCC:54`); the **Quartering
+Acts** (`HCC:71`); the **Norse Greenland colonies** (`HCC:138`); **Venetian Crete's colonist charter**
+(`CGR:103`); the **town founded under one shared charter** and the **order that founds its own
+settlement** (`PGS:107`, `:85`); and a whole section on **post-colonial and post-occupation
+governance** (`PA:172-246`), with **invasion by invitation** beside it (`PA:64-98`). What it does not
+hold is listed in §16.3. The paragraphs below keep their `[MEMORY]` marks where the memory is still the
+only source and gain `[TREE+]` where it is not.
+
 ### 2.1 The problem every such institution solves, and the three answers
 
 A ruler wants revenue, soldiers and obedience from people he cannot see. His agent is far away, knows
@@ -226,14 +257,38 @@ a mixture:
    governance_modes.md Ottoman §7]`. *Cost:* salaries, and the watcher must himself be watched. *Decay:*
    **venality**: the French *paulette* made office heritable property for a fee, after which the crown
    "could no longer rotate, audit, or dismiss what it had sold" `[TREE: T2, T5]`; the Han inspector who
-   becomes a regional ruler (`governance_modes.md` Han §1.7) `[TREE]`.
+   becomes a regional ruler (`governance_modes.md` Han §1.7) `[TREE]`. `[TREE+]` The same answer with
+   more of its working parts: Rome prosecuted **returning** governors for extortion, and the case
+   against Verres was "an itemized ledger of demanded vs. delivered" tribute (`PHS:139`); the buyer of
+   an office starts in debt for its price, pays it down out of the office, and is caught or not
+   according to how much **a rival invests in prosecuting him** (`RTP:483-486`); Spain sold **colonial**
+   offices more cheaply the farther they lay from the capital, **the same distance weakened the audit**,
+   and a buyer could seat an ally on the bench that would review him, an arrangement that was itself
+   discoverable (`RTP:518-521`); a town's own council could be left standing with a crown magistrate
+   **laid over it** for a term (`CGR:123`, `:217`); Venice split the near governor in two and combined
+   the far one (`CGR:99`, `:102`); the three itinerant audits the tree compares all enforce outsider
+   status, a temporary commission, power above rank, and a report that is the thing of value
+   (`PMP:118-122`); and **an inspection is theatre as well as audit**: its effect on the governed's
+   regard is separate from what it finds (`PMP:465-469`).
 2. **Sell or grant the right and take a share** (the farm, the fief, the charter). Roman **publicani**,
    Ottoman **iltizam** and its life-term mutation **malikâne**, the French **Ferme Générale**: "cash now
    plus collection outsourced equals over-extraction by the farmer, odium accruing partly to the state,
    and the farmer becoming a political actor in his own right" `[TREE: T2]`. The **fief** is the same
    trade in soldiers: land and jurisdiction for service, by homage and fealty, with relief paid at
    succession, aid and counsel owed, forfeiture for breach, and the rule that the vassal of my vassal is
-   not my vassal `[MEMORY]` (the engine has already taken this last rule, `state/gate.py:432-439`). The
+   not my vassal `[MEMORY]` (the engine has already taken this last rule, `state/gate.py:432-439`).
+   `[TREE+]` The tree has the contract, in another country's words, and with a clause this paragraph
+   lacks. Kamakura's bond was "favour and service": the lord's favour took two legal forms,
+   **confirmation of what the vassal already held** ("pure legitimation/insurance, no new wealth") and
+   **a new grant**, and service earned the second (`PHS:457-458`). When the Mongol invasions were beaten
+   off, the victory "left no enemy land to confiscate and redistribute": the lord owed a reward he could
+   not pay, cancelled his vassals' debts to moneylenders instead, and the bond decayed from his side
+   (`PHS:461`). **The lord owes reward, not only forbearance**, and a defensive war cannot pay its
+   victors. The Frankish general oath, sworn by every free man and listing duties (`GM:170`), the
+   concession of heritable office at Quierzy (`GM:154`), confirmation of privileges at accession for a
+   fee (`FASE:138`) and the levy's fixed term of service (`research/historical/precedents_warfare.md:47`)
+   are the tree's other pieces. Relief and aid by those names, and the rule about a vassal's vassal,
+   stay memory-grade. The
    **marcher lord** is the fief at the frontier: quasi-palatine liberties (own courts, castles, private
    war) *because* he holds the border, "and precisely for that reason the crown's most chronic
    over-mighty-subject problem" `[TREE: T8]`. The **chartered company** is the same trade again, in
@@ -245,7 +300,25 @@ a mixture:
    renewal and each renewal is a political fight in the metropole; its interlopers are seized; and when
    it acquires territorial revenue it stops being a merchant and becomes a government that its own
    sovereign must then regulate and at last absorb `[MEMORY: the English and Dutch East India companies;
-   dates UNVERIFIED]`. *Decay:* the grantee outlives the grant: privilege **hardens by age into right**
+   dates UNVERIFIED]`. `[TREE+]` Six parts of that sentence are in the tree, each with a mechanism.
+   **Two bodies, not one**: at Seville the crown's licensing bureau (1503) and the merchants'
+   self-governing, self-taxing corporation holding the monopoly (chartered 1543) were separate
+   (`CGR:134`). **The compact that licenses the conquest**: the Dutch company held an exclusive compact
+   with a single-crop island; when the islanders kept selling to others, the repudiated compact was
+   the company's lawful ground for conquest, which "installs a Company governor over the native elite"
+   (`HCC:163`; the quoted words are the catalogue's own summary of the entry at `:277`). **The company takes the revenue**: at Plassey a banking house with claims on the ruler
+   backed a disaffected officer and an outside company; the company won the grant to collect the
+   province's revenue, and then **demoted the bankers who had financed it** (`HCC:166`). **The
+   sovereign regulates**: the Act of 1773 subordinated the company's councils one to another by class
+   of decision (war, treaty, revenue), so that a far council could not drag the whole into a war
+   (`PGS:147`). **The privilege is portable**: a chartered body's threat to carry its staple to a rival
+   host is its leverage on the present one (`PGS:84`). **The interloper**: traffic without the
+   company's pass is seized or made to buy one (`HCC:54`). And one game in the tree's survey is built
+   on it: in John Company offices are held by different players, their powers "complementary rather
+   than sufficient", "and the Company can fail while you win"
+   (`research/valoria_game_precedent_companion_v1_part6.md:165-175`; `_part7.md:41`). The court of
+   directors, the shareholders, the factory as a compound, servants' private trade and the renewal
+   fights stay memory-grade. *Decay:* the grantee outlives the grant: privilege **hardens by age into right**
    (prescription); revoking it is "never an administrative act; it is a regime-legitimacy event" (Edward
    I's *quo warranto*; London's charter, 1683) `[TREE: T4]`.
 3. **Leave the local ruler in place and rule him** (indirect rule, tribute, clientage). Roman client
@@ -258,7 +331,22 @@ a mixture:
    the subsidiary treaty (the prince pays for the garrison that controls him), and the rule that a line
    without an heir lapses to the paramount power `[MEMORY]`. **Hostage-kin** make it hold: the
    Tokugawa **sankin-kōtai** (`governance_modes.md` Shogunate §1.9) `[TREE]`; sons raised at the
-   overlord's court `[MEMORY]`. *Cost:* almost nothing. *Decay:* the client changes patron; or the
+   overlord's court `[MEMORY]`. `[TREE+]` Client kings and their heirs raised at Rome are `PHS:125`,
+   `:144` (the heir's standing "entirely at Rome's disposal": the lever falls on the parent, not on the
+   one held). The Mongol system the tree holds is not the patent: it is the **appanage** whose prince,
+   keeping his own forces, can lose the succession and convene a rival assembly rather than accept it,
+   and the **recall** that was never used against him (`HCC:46`); the ***ortoq***, the ruler's capital
+   placed with merchants under a portable pass (`HCC:165`); **a wife from each subject house** as the
+   standing tribute that buys partial autonomy (`RTP:185-188`); and the **keshig**: subject lords send
+   an heir into the ruler's household, where his standing is his rank of service and not his birth, and
+   from which he is posted home the ruler's man; left unrenewed it hardens into the hereditary interest
+   it was built to prevent (`RTP:360-363`). On the hostage the tree is emphatic that **"the *cost* is
+   the mechanism, not the threat"**: two establishments and the processions between them, a deliberate
+   drain (`PMP:502-506`; `PMP:132`); and that heirs kept at court are weaker claimants than heirs left
+   as governors, which is why they are kept (`HCC:43`). Tribute's two poles gain two cases: with no
+   defence banked the payer can only comply (`HCC:56`); tribute withheld brings the sack, and trade
+   moves to the next port (`HCC:167`). The patent, the census, the resident overseer, the subsidiary
+   treaty and lapse stay memory-grade. *Cost:* almost nothing. *Decay:* the client changes patron; or the
    contained institution uses its protected space to grow, which is the tree's own canon for the Church
    (§1.1).
 
@@ -274,6 +362,18 @@ Forced labour drafts and tribute in kind by rotation among subject communities (
 *encomienda* granted a settler the labour or tribute of a named community in return for its protection
 and instruction, and the crown spent a century trying to stop it becoming heritable `[MEMORY]`.
 
+**Corrected in framing `[TREE+: PGS:95]`.** The tree's entry on the Andean draft says the opposite of
+"the same extraction paid in hands": the labour was pooled by rotation into a **shared reserve** of
+storehouses along the road, and because "mit'a was reciprocal" the entry writes it as **a debt owed
+back** to the communities ("future draw priority"), "*not* flat Grudge". The draft is a two-sided
+instrument, and what made the colonial versions hated is that the return was dropped. That bears on
+§11 item 3 and is stated there. The tree also holds the levy of persons into a corps loyal to the
+centre (`PGS:127`), collective liability by cells of households (`CGR:234`), and **revenue without
+governance**: a named community's dues assigned to a holder who does not rule it, for service
+(`CGR:160`; `PGS:101`), with the reclaim race that follows when such a grant is held for life: taken
+back early it is administration, late it is a revolt (`RTP:523-526`). *Encomienda* and *repartimiento*
+by name are not in the tree; the last two entries are their shape.
+
 ### 2.3 Settlement, the garrison and the frontier
 
 `[TREE: T8]` Soldier-settlers hold land for service: Byzantine *themata*, the Habsburg **Militärgrenze**
@@ -284,6 +384,24 @@ governed themselves in assemblies under a charter or a proprietor, were left alo
 revolted when the metropole, after a costly war fought partly on their behalf, began to tax, garrison and
 restrict them without their assent `[MEMORY]`. **The settler–metropole conflict is a charter dispute**:
 each side reads the same founding grant differently.
+
+`[TREE+]` The tree has five pieces of this and one the paragraph lacks. **Billeting ratchets**
+(`HCC:71`; compendium `43_directive_types.md:47-55`): from 1765 to 1774 lodging troops by force cost the
+governor regard each season, and each ignored petition made consent "politically *unavailable* going
+forward": "a ratchet narrowing the governor's own future menu toward more Force". **The colony let
+go** (`HCC:138`): a far settlement that keeps the metropole's ways declines; one that adopts local
+practice is read at home "as drift/heterodoxy"; a metropole that stops sending ships ends in
+"implicit abandonment rather than one dramatic Crisis": "a two-sided disinvestment spiral". **Colonists
+by charter under a rotating governor** (`CGR:103`): a rooted, landholding militia and a separate
+governor who comes and goes. **One charter for every town founded under it** (`PGS:107`): "revoking on
+one damages Standing across all". **The body that founds for itself** (`PGS:85`): an order plants and
+rules its own settlement on its own ladder, over a displaced population that does not forget.
+**Franchise by membership of another body** (`RTP:574-577`). **And what the paragraph lacks, the
+former colony's own choice** (`PA:195`, `:222-230`): a new government may *inherit* the occupier's
+machinery (efficient, compromised), *replace* it (authentic, untested) or *transform* it over time;
+"most choose inheritance with modification". Valoria made that choice at independence and canon
+records which way (§1.1: the Church's containment, kept). Grant by head brought over and the colonial
+assemblies stay memory-grade.
 
 ### 2.4 Conquest terms and the entry
 
@@ -300,7 +418,11 @@ resentful base."
 frontier `[MEMORY]`: royal patronage over the colonial church (the crown names bishops in return for
 funding the mission); the mission as a frontier institution that gathers, instructs and administers a
 people ahead of or instead of the garrison; orders that become the natives' protectors against the
-settlers and are expelled for it. In Valoria the direction is reversed and is canon: the **contained**
+settlers and are expelled for it. (Still `[MEMORY]` after re-grounding: the tree has no entry on the
+mission or on royal patronage over a colonial church. Its nearest are a universally recognised moral
+authority dividing new lands between two crowns, the arbitration holding because both recognised it
+`[TREE+: research/historical/precedents_warfare.md:143]`, and the banking of chapter seats ahead of a
+vacancy `[TREE+: CGR:188]`.) In Valoria the direction is reversed and is canon: the **contained**
 church administers for the empire, grows, and at independence charges the new crown for consecration
 (§1.1).
 
@@ -312,7 +434,12 @@ another power may withhold); **immediacy** (holding directly of the emperor) as 
 traded away by others (**mediatization**); the **ministeriales**, unfree administrators used because they
 had no standing of their own, who rose into the nobility by service; a peace decreed and never funded
 (the Common Penny). The Mongol and Ottoman successions `[MEMORY; fratricide and kafes TREE: T9]`: the
-empire as family property, divided among heirs or fought for among them.
+empire as family property, divided among heirs or fought for among them. `[TREE+: HCC:42, :46, :44]`:
+granting heirs real governorships "is what makes the next leader-loss near-certainly contested";
+sparing the losers seeds the next claim and killing them "trades escalation paths"; a loser who keeps
+an appanage can refuse the verdict, and four successor states follow; where each heir already holds
+ground and troops there is no political first stage at all, and the exhausted winner is the outside
+power's opening.
 
 ### 2.7 Distance
 
@@ -324,6 +451,23 @@ do not execute" pending appeal; whoever controls the correspondence controls the
 province. `[TREE: T5]` records the agent's information advantage as the root of the governor problem; the
 tree has nothing on transit times, and the design below needs none: it needs only that news and orders
 travel by persons and papers and can fail to arrive.
+
+**Corrected on re-grounding `[TREE+]`.** "The tree has nothing on transit times" is true; "the tree has
+nothing bearing on distance" would not be, and §3 was written as if it were. Four things are there.
+(1) **This lane's mechanism, stated before it** (`PMP:491-494`, primitive P33, and `PMP:640`): a decree
+is promulgated to N localities and "each locality rolls compliance against its own disposition,
+distance, and the presence of an enforcing agent"; "each decree lands in each locality with a
+compliance roll, not an effect"; the instant global decree is "the single most common error in
+governance games". Its ground is the Frankish record itself: later capitularies "repeatedly
+re-prohibit the same abuses", "documentary evidence that promulgation did not equal enforcement"
+(`PMP:136`). §3.2's graded `issue` is that primitive; **the tree's third term, the enforcing agent
+present, is one §3.2 lacks** (§16.2 item 1). (2) **The envoy's latitude** (`PMP:661`): "the gap between
+the envoy's discretion and his instructions is the component's central tension": "an envoy who exceeds
+his mandate and is repudiated, or who refers home and loses the moment". (3) **Relay, post and
+beacon** as things a ruler builds between places (`PGS:94`, `:96`, `:99`), with the tree's own doubt
+that the engine has the latency they would gate (`PGS:294`), which is §3.3's refusal reached
+independently. (4) **Distance sets the governor's shape** (`CGR:102`) **and the audit's strength**
+(`RTP:518-521`). Transit times and the formula "I obey but do not execute" stay memory-grade.
 
 ---
 
@@ -497,6 +641,14 @@ chooses to do.
 | `tribute` | covenant | payment for peace or protection | — | grantee: `transfer.made` each year. grantor (the `protected` variant): a `march.declared` against whoever marches on the grantee | grantor: `march` on the grantee | Ragusa, the Danegeld `[TREE T10, FA-8]` |
 | `wardship` | covenant | a person of one house kept at another's court | — | grantee: the named person's `residence.changed` to the grantor's settlement, once | grantee: the person's return while it runs | hostage-kin `[TREE Shogunate §1.9]`; the tutoring demand (canon :141) |
 | `capitulation` | covenant | terms on which a place is given up | — | grantee: `place.surrendered`, once | grantor: `rung.razed`, `requisition` over the place for the first term | honours of war, the entry `[TREE T6]` |
+
+*Marks on this table after re-grounding:* `staple`'s `[MEMORY]` is now `[TREE+: PGS:123 (a staple right
+granted once by the superior and administered by the town), PGS:84 (the privilege as portable)]`;
+`land_grant`'s is `[TREE+: CGR:103 (colonists by charter, land in two grades for two kinds of service),
+PGS:107]`, headright alone staying memory; `wardship` gains `[TREE+: PMP:502-506, RTP:360-363, HCC:43]`;
+`homage` gains `[TREE+: PHS:457-461]`; `tribute` gains `[TREE+: HCC:56, :167; RTP:185-188]`; `farm` gains
+`[TREE+: HCC:148 (a future yield pledged to a financier), RTP:523-526 (the life farm)]`; `charter` and
+`immunity` gain the archived design of the same mechanism (§6.2's note).
 
 A **company** is not a form and not a faction kind. It is a body (`office_bodies` row) holding a `staple`
 or a `charter`; its servants are persons with an `oblige` to its seats, paid by the seat's `transfer`

@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-20) — `_seize_rung` takes no draw today (opened); the FA/MB item's premise is confirmed.
+
 Written under the brief's **Standing rule (Jordan, 2026-11-12, emphatic): "We do not do deterministic"**:
 every consequential outcome resolves by a draw with a graded, recoverable result; state sets the odds, the
 draw sets the outcome; seeded replay, arithmetic bookkeeping (a clock's tick, conservation, an id) and
@@ -101,7 +103,7 @@ roll (the standing rule), not be read as a conclusion. `Move.terminal` becomes
 - **PC / CHAR:** death by body (`Person.exists` written when the body passes its last floor) through a
   drawn crossing; `F-PC-04`'s certain kill is the same class.
 - **FA / MB:** `seize` on an occupation licence (the first lane's world-motion edit 2) must resolve by a
-  draw against the place's resistance; whether `_seize_rung` rolls today was not checked (`[UNVERIFIED]`).
+  draw against the place's resistance; `_seize_rung` does not roll today (grounded, 25 G-20: `loop/effects_information.py:1038-1075` takes no draw and reads no degree, and `seize` is not among the 11 contested rows or the 3 graded ones, so it takes the uncontested fold).
 - **B10-15:** CP-T07-08's breach as a draw (`09_WR_B_threadwork_session_and_practitioner.md`).
 - **B10-18:** CP-T10-02's exposure at a leg's end as a draw.
 

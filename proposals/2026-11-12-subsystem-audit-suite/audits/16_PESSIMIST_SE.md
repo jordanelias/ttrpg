@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-23) — §3's `tend` mark settled by probe: 37 of 37 `body.tended` Events at seed 0 cite their own act alone. The finding is confirmed.
+
 Scope: `modules/settlements/`, the season loop's economy, migration, founding and hunger effects
 (`engine/season/loop/effects_economy.py`, `effects_migration.py`, `effects_founding.py`), geography, the
 campaign supply layer that feeds mass battle, and six premise sentences of a place. The first audit
@@ -519,7 +521,7 @@ of 84 `migrate` attempts executed, all by named persons. The cause of the differ
   same *kinds* of non-event on both seeds (self-moves, one self-transfer). There is no tail.
 - **Are persons' reasons readable afterwards?** There are no reasons to read: the cohorts did not act on
   hunger, and the one act they took (`tend`) is not caused, in the log, by the fall it answers
-  `[UNVERIFIED: the `tend` act's `causes` were not opened]`.
+  `[GROUNDED, 25 G-23: verified by probe. Seed 0, one season: 37 `body.tended` Events, all 37 by a person on himself, and each one's `causes` is its own act and nothing else (`runs/GROUND_ENGINE/g4_behaviour.out`)]`.
 - **Does the story survive the extremes?** Zero population: the place goes on as an unlabelled mine
   (§1.3). One person: no hunger exists. A hundred towns on one granary: the lowest ids eat (A-1).
 

@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-15, G-16) — two `[UNVERIFIED]` marks settled at the line (why `claim.decayed` is never deposited; which rows carry a `hold:<kind>` placeholder). No finding changed.
+
 ## Read at: 601e715 (working tree)
 
 Scope: the season loop's spine — `engine/season/loop/{driver,calendar,census,deliberate,encounter,effects,effects_shared,matter,predicates,resolve,sides}.py`,
@@ -325,7 +327,7 @@ MATTER's crossings append literal kinds directly (`matter.py:126-129,256-258`) �
     nesting is built. E, last: overhead with no outcome to intuit.
   - *Per-claim decay Events.* N: the fade itself is necessary (R-07: memory); the *Event per fade* is
     removable without worsening play, since `claim.decayed` deposits nothing a person acts on
-    `[UNVERIFIED: `undeposited_kinds` not opened]`. S: fails "zooms out well across scales" — its cost
+    `[GROUNDED, 25 G-15: true, by another route than the one named. `rosters.yaml: undeposited_kinds` holds `finding.none` alone; `claim.decayed` is dropped by `epistemic.py:756-766` (`changes_only_held_claims`: an Event that changes only held Claims with no act behind it has no observers)]`. S: fails "zooms out well across scales" — its cost
     scales with ledger size times seasons. The cut loses a causal antecedent for each fade, which no
     arc in the corpus asks for.
   - *The round tick.* Survives: R (strategic sequencing within a season), S (pauses correctly: ENCOUNTER
@@ -366,7 +368,7 @@ in the row and not re-derived. Full rows were read to a bounded length (§12).
 | H-56 | absent (half closed) | closed half verified by the one-round arm; held half **irrelevant until nesting exists** | `contest.py:182-300` never recurses | regrade; see R-11 below |
 | H-59 | absent, empty cite | **superseded** | H-57: a grudge ends by `forgive` | close, citing H-57 |
 | H-63 | assumption | closed for the registry | `effects_shared.py:42-49`; `resolve.py:452-461` | `speak`'s values: SC lane |
-| H-75 | absent | open | `resolve.py:139-141` declines a `hold:<kind>` placeholder | none (no row needs it today `[UNVERIFIED]`) |
+| H-75 | absent | open | `resolve.py:139-141` declines a `hold:<kind>` placeholder | none (no row needs it today `[GROUNDED, 25 G-16: three rows carry the placeholder and none depends on it: `destroy_record` `verb_table.yaml:340`, `give` `:659`, `transfer` `:2062`; each also lists `own`]`) |
 | H-76, -77, -78, -124 | assumption | open by design | `deliberate.py:243-259,287` | none |
 | H-81, H-83 | ruled | closed | `resolve.py:1046-1047`; `resolve.py:1287-1298` | none |
 | H-82 | assumption | **closed in code** | `log.py:84-87` (log ∪ act store); m1: 0 violations over 49,735 events | regrade `measured` |

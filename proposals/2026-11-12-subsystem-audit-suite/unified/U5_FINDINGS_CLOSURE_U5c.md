@@ -27,7 +27,7 @@ Short names follow the audits: `es/` = `engine/season/`; `K/` = `systems/social_
 | `U5c_SC_one_obstacle_form.md` | the one obstacle form: one `obstacle_terms` roster, one composer, the leverage channel for everything a party brings; the merged member list across SC-B, DICE, 13, the pessimists and the verb lanes; landing order and gate (C-01 to C-06) |
 | `U5c_SC_proceedings_residue.md` | SC items with no carrier: register and pointer edits, the BAR re-pin, the bundle, one asking per sitting, the re-opening rule, `open_case` on oneself, petition formation, the `ballots` key, the ballot's one owner, `covenant` as a hearing (C-07 to C-12) |
 | `U5c_FI_residue.md` | FI items with no carrier (listed in the FI section) |
-| `U5c_VERBS_residue_and_governance_owner.md` | verb verdicts with no carrier, and the one prize, roll and obstacle owner for the contested governance rows (C-13 onward) |
+| `U5c_VERBS_residue_and_governance_owner.md` | verb verdicts with no carrier, and the one prize, roll and obstacle owner for the contested governance rows; the task prize Layer 1 requires; `release` of an imposed edge (C-19 to C-32) |
 
 Abbreviations for carriers: **OBS** = `U5c_SC_one_obstacle_form.md`; **RES** = `U5c_SC_proceedings_residue.md`;
 **SC-B** = `05_SC_obstacle_difficulty_and_modifiers_B.md`; **HEAR** = `05_SC_playable_hearing_B.md`;
@@ -374,10 +374,147 @@ CR-94, CP-T06-01 to -09.
 | R-19-03 | `Proposition.support` | RESOLVED-BY | CONC edit 1. Layer 1: `04` §B.6 keeps a Proposition immutable with no setter; `support` is set at construction and is read by `record` and the board (a reader named, ID-13); conforms | `04` §B.6 |
 | R-19-05 | the concluder is priced through `record` | RESOLVED-BY | CONC edit 4 (b), behind `record_concluders` | `options.py:1727-1767` |
 | R-19-06 | conviction, partial, acquittal | RESOLVED-BY | VERD; `05_SC_acquittal.md` (C-08) | — |
-| R-19-08 | reversal: an appeal heard above | RESOLVED-BY for the shape (VERD; DRAW13's appeal row points to it, C-07). Layer 1: the closing write on the disposal is `pardon`'s basis exercised through `Act.via` on the appellate seat (T-o), so no new gate basis is needed; the sibling row `reverse` is the reading taken | `04` §C.2 |
+| R-19-08 | reversal: an appeal heard above | RESOLVED-BY | VERD as reconciled (C-17); DRAW13's appeal row points to it (C-07). Layer 1: the gate's `determination` basis closes a `detain` or `ban` only through the seat that is the edge's object (`loop/effects_governance.py:377-380`), so a higher bench cannot close a lower seat's disposal under any listed basis (`04` §C.2). The conformant form: the appellate `determine` writes the `reversed` stage on the original case file and the finding is told; the disposing seat's bench then closes the edge by its own `pardon` (a draw). Direct closure from above needs a gate basis Layer 1 does not list and is not built | `04` §C.2; `_eff_pardon` docstring |
 | R-19-09 | the case thread | RESOLVED-BY | VERD edit 6 (harness) | `09_WR_B_chronicle_that_tells.md` |
 | R-19-10 | approach in questioning | RESOLVED-BY | QUES, as corrected by this lane (C-18): `press` adds an obstacle term to a lie and gives the questioner's side a named level against stalling; it subtracts from no obstacle | OBS §3 |
 | R-19-11 | the questioned learn they were asked | RESOLVED-BY | QUES edit 4 | — |
 | S-19-1 | is a reversal a second draw on the same case, or only on new grounds? | JORDAN | A: appeal as of right, once per rung, re-weighing the same file (forum and patronage decide). B: appeal on grounds only (an excluded item, a voided stage, or a new item from a distinct origin), which sends play back to the field. RES §4's re-opening rule already takes B's test for a *re-opened* matter at the same bench; the appellate case is not decided by it | VERD "Open for the design pass" |
 | §5 standing-rule table | eleven points classed draw / choice / eligibility / bookkeeping | RESOLVED-BY | as classed, with "whether an offered item is entered" a draw (ADM) | sweep §3 row for 19 |
 | §6 scenario; §7 stories | the joined `inquiry_world` / `build_hearing` case | RESOLVED-BY | FI-07, FI-03 §1, HEAR edit 9; order in FRES §2 | — |
+
+---
+
+# Part 4 — the verb families (`audits/14_VERBS_SOCIAL1.md`, `_SOCIAL2.md`, `_BINDING.md`, `_MATERIAL.md`)
+
+Abbreviations: **S1-A…D**, **S2-A…D**, **VB-A…E**, **M-A…E** = the proposals `14_VERBS_SOCIAL1_*`,
+`14_VERBS_SOCIAL2_*`, `14_VERBS_BINDING_*`, `14_VERBS_MATERIAL_*`; **VRES** =
+`U5c_VERBS_residue_and_governance_owner.md`. Every row below is read with five reconciliations that apply
+to the whole part and are decided once, in `unified/U5_CONFLICTS_U5c.md`:
+
+- **C-22 (Layer 1).** A row whose `writes:` is keyed by band declares `contests:` (`04` §B.13 invariant 12
+  and §C.4; `engine/season/data/verbs.py:848-851`, `:870-874` refuse the other shape at load, MECHANICAL).
+  The graded route (`graded_inquiries`) keys `emits:` only and writes nothing. So no verb proposal's
+  `graded_acts` row may write by band: such a row names the prize `a task` (VRES §1).
+- **C-25.** One prize roster, one roll, one obstacle composer (VRES §1–§2); `rank_gap` is the one name for
+  rank standing against an act (`standing` is refused as a term name); the band an instrument was drawn up
+  at is the content key `force`.
+- **C-01, C-21.** A favourable modifier is a named level on the leverage channel, never an obstacle
+  subtraction; per-verb obstacle tables are members of the one roster (OBS §1, §3).
+- **C-19, C-20.** One reader of "who I believe is with me" (`person_q.present_persons`) and one of "who
+  holds that seat as I know it" (`person_q.holders_named`).
+- **C-23.** One default table for the share of a scalar effect a band delivers.
+
+## 4.1 SOCIAL1 — verdicts, shared rules, survivors
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| `carry` | executes; the docket item names no room; admission is certain | RESOLVED-BY | S1-D §1 (venue, appeal, the draw: capability `law`, C-25); DRAW13's docketing row yields to it (C-07) | `[2s]` 17 / 4 / 13 |
+| `argue` | three in four refused on an absent hearer; Partial claims a win | RESOLVED-BY | S1-A §1–2 (through `present_persons`, C-19); S1-C §1 (`commitment`); the Partial band is PES-D's (`argument.held`, nobody moves) — S1-C's Partial write is withdrawn (C-15) | `[2s]` 41 / 10 / 31; `p5_argue.py` |
+| `commit` | works; every admitted act opens the edge | RESOLVED-BY | S1-D §4 (a draw for how firmly; the band is `Tenure.degree`, which `faction_q.py:146` already reads). Prize `a task` (C-22) | `[2s]` 65 / 65 / 0; `04` F.4 |
+| `comply` | forms but is refused; writes nothing when admitted | RESOLVED-BY | S1-B §2 (prize `a task`; `violated`, `distance`, `stakes`); delivery S1-B §1 | `[2s]` 33 / 0 / 33 |
+| `conceal` | executes; chosen at random; a cover has no quality | RESOLVED-BY | S1-C §3 (prize `a task`; the term is `watch`, read from presence, C-26) | `[2s]` 23 / 23 / 0 |
+| `covenant` | forms but is refused; in-force reading unbuilt | RESOLVED-BY | S1-A §3 (class); S1-B §3 (drafting draw, `covenant_in_force`, breach; key `force`); acceptance is the counterparty's own `commit` (C-07) | `[2s]` 10 / 0 / 10 |
+| `evade / defy` | forms but is refused | RESOLVED-BY | S1-B §2 (two modes, each drawn; `purview`, `watch`) | `[2s]` 5 / 0 / 5 |
+| `lie` | three in four refused; the bands are three alike; Failure has none | RESOLVED-BY | S1-A; S1-C §2 as reconciled (C-26: capability `deception`; no `contradiction` term; `deceit.exposed` at Failure kept); PES-E | corpus 138 graded, 110 Failure |
+| `forgive` | formed almost never; would not end the grievance that drives challenges | RESOLVED-BY | S1-D §2 (the mark; the widened decline; a draw on his own act, prize `a task`) | formed 2, attempted 0 |
+| `give` | almost unreachable; three chains die behind it | RESOLVED-BY | S1-A; S1-B §1 (the addressed-document occasion; a draw against the receiver; `unwelcome` reads his pursuits and the Record, never his ledger) | `[2s]` 19 / 1 / 18 |
+| `challenge` | forms but is refused; stakes `None`; no answer by a time | RESOLVED-BY | lane A (`03_PC_duel_chain_reach.md`, U5b's); S1-D §3 as reconciled (C-27: the due tick emits `challenge.declined`; the challenger's satisfaction is his own later `forgive`, never a MATTER write) | `[2s]` 84 / 0 / 84 |
+| R-WITH | believed co-location, read by conjunct | RESOLVED-BY | S1-A as reconciled (C-19: the reader is `present_persons`; the fixture is `telling_hearers`) | — |
+| R-KIND | the Record sub-kind at formation | RESOLVED-BY | S2-A edit 2 (one commit across families, with both pairs stamped, C-28) on lane A's rule | `record_subkind` refusals |
+| §0.6 | every verb resolves by a draw | RESOLVED-BY | the rows above, each with a registered prize (C-22, C-25) | — |
+| D1 | should a writ be minted into its addressee's hand? | SUPERSEDED | not re-raised: `ED-IN-0292` (1) is ruled NO "for now" and every proposal here builds under it (delivery by `give`). The trigger to bring it back is a measurement, not a question: `record.given` of a writ to its addressee after S1-B lands (VRES §5) | `world_q.writs_held` |
+| D2 | should a person learn from his own refused act that the other was not there? | SUPERSEDED | closed by the ladder at step 4: correction by refusal is the tree's existing pattern (the refused read is deposited to the actor; plan CP-T06-04 widens it; PES-FI §2.5 reading 1). `present_persons` drops a person about whom the holder's newest firsthand claim is a refusal on the `with` conjunct (VRES §3) | `p1b_belief.py` (7 → 0 candidates after one refusal) |
+| not escalated (4) | the mark's shape; `comply`'s `oblige` skipped by the oath clause; `lie`'s Failure deed; stakes by grievance | RESOLVED-BY | S1-D §2; S1-B §2; S1-C §2; S1-D §3 | — |
+
+## 4.2 SOCIAL2 — verdicts and survivors
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| `utter` | executes and asserts nothing | RESOLVED-BY | S2-B §1 (content from `said`; mood by source; the room's uptake a draw; the `dissent` term from the speaker's own ledger) | 73 / 69 / 68 Propositions, all `OUGHT` / `''` / `None` |
+| `petition` | executes; addressed to the person it is about | RESOLVED-BY | S2-B §3 as reconciled (C-20: `to` fans over `holders_named` of the seats his ledger names over his home). This is also PES-SC res. 5's carrier | `to == subject` 12/12, 14/14, 13/13 |
+| `open_case` | works in part; the case file is empty | RESOLVED-BY | S2-A §1, §3; S2-C §1 (the `case` kind and the charge). Not drawn: opening on one's own bench is a remit act (LACUNA §5; `convene`'s class), so DRAW13's row is withdrawn (C-07). Declines `subject == actor`: RES §5 | opened 6 / 8 / 5 |
+| `construe` | forms on the wrong document; never executes | RESOLVED-BY | S2-A §2; S2-B §2 (the draw; `clarity`, `deference` as roster members, C-21) | 4 of 4 on a non-dispensation |
+| `speak` | forms on what is not docketed; moves nothing | RESOLVED-BY | S2-A §1 (class `Matter`); the bands are ADM's (entry) and EVID's (answer), which S2-C §2 now cites (C-29) | `speech.unheard` 7 / 9 / 13 |
+| `tell` | forms on absent hearers; fails two times in three | RESOLVED-BY | S2-A §4 (FI-02 edit 5); S2-C §4 folded into the one obstacle form (C-21: no `tell_obstacle` table; `copying.opposed_by: none`, `dissent`, `rank_gap`; a tie is a level) | `tell.refused` 20 / 43 / 4 |
+| `interview` | forms on non-persons; executes and finds nothing | RESOLVED-BY | S2-A §5; S2-C §3 owns the row (C-12); QUES supplies `approach`; PFI-D withholds the row until it lands | 14 of 19 on a non-person |
+| `interrogate` | unreachable (no custody) | RESOLVED-BY | S2-C §5; custody is PHYSICAL's (`14_VERBS_PHYSICAL_A_custody_and_force.md`, U5b's) | live `detain` 0 |
+| `oblige` | unreachable (nobody is told of a seat) | RESOLVED-BY | S2-B §4 as reconciled (C-20: one build step, `seed_seat_news`; C-30: a draw on the joiner's own act with no person opposite) | `seats_named` non-empty for 0 persons |
+| `tie / knot` | stub by ruling | RESOLVED-BY | S2-D (after FI-08 §3's two conditions; the `tie_obstacle` table folded, C-21) | H-182 |
+| §11.4 item 1 | `oblige` admission as a draw against the seat's holder, over the ruled `members_by_admission` | DISPUTED | the ruled basis says the joiner's own act admits him; the standing rule asks for a draw, not for the holder as its opponent. Both are met by a draw on the joiner's own act (C-30). The fixture `oblige_admission: fiat` stays the control. Not a question for Jordan | `rosters.yaml: binds_bases`; `04` F.17 |
+| §11.4 item 2 | what the construer attempts to read | SUPERSEDED | closed by the ladder at step 3 (K-37: nothing wrong is minted by a roll): his own held value (S2-B §2) | H-36 |
+| §11.4 item 3 | split `tie / knot` | SUPERSEDED | closed at step 5: the two rows differ in stratum, eligibility and reader, which is what a row declares; the game is the same under either spelling, so it is not Jordan's. The verb count the R-05 instrument reads moves 67 → 68, said in the commit | S2-D edit 6 |
+
+## 4.3 BINDING — verdicts and survivors
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| `confer` | formed, never chosen | RESOLVED-BY | VB-C §1 (the draw, prize `a seat`); selection is CR-88's (plan B10-17b) | `tenure.opened` 0 at seeds 0–2 |
+| `convene` | executes; consequence thin; a seat collision | RESOLVED-BY | VB-B §1 (the salt); the room is HEAR's. Uncontested (a date) | `binding_probe_2_1.txt` |
+| `determine` | forms but is mostly refused | RESOLVED-BY | VB-B §2 (class `Party`); bands by `05_SC_acquittal.md` (C-08) and `05_SC_arrangement_rows_that_bind.md`; prize `a verdict` (C-25) | refused on `docket` 2 of 2 |
+| `dispatch` | executes but writes nothing; addresses anyone | RESOLVED-BY | VB-D §2 on plan CP-T09-07 (b), CP-T09-08; the draw is against the man ordered (prize `a standing`) | 4 of 6 orders to the King |
+| `establish` | forms, mostly refused | RESOLVED-BY | VB-A §2 (class `Holding`; the draw, prize `a seat`) | 7 of 8 refused |
+| `issue` | executes; binds nobody; orders a person | RESOLVED-BY | VB-D §1 (class `Proposition`; the draw; `force` on the Record); `06_FA_decree_binds.md` (U5d's) for the answers | 0 writs held by an addressee |
+| `marshal` | unreachable (withheld) | RESOLVED-BY | VB-E §1, §3 (after PHYSICAL P-B). Uncontested (a standing order on paper) | formed 0 |
+| `surrender` | unreachable twice over | RESOLVED-BY | VB-E §2, §3 (prize `a holding`) | `siege.pressed` never emitted |
+| `pardon` | formed on no restraint | RESOLVED-BY | VB-B §3–§4 (class `Restrained`; the draw, prize `a matter`) | refused after admission |
+| `release` | forms on referents it could have read | RESOLVED-BY | VB-A §1 (`own_edge_declines`). Uncontested for an edge the actor opened; an **imposed** edge is drawn (C-10, VRES §4) | 15 of 15 refused |
+| `revoke` | formed, unexecutable | RESOLVED-BY | VB-C §2 (reads `subject`; the draw) | refused at clause 1 by construction |
+| `succeed` | works when its occasion exists; the law has one row | RESOLVED-BY | VB-C §3 as reconciled (C-31: a Partial opens termed seats under the existing claim basis and lays the title down; keeping the title needs a gate basis Layer 1 does not list and is not built) | `04` §C.2 |
+| §0.2 | eleven of twelve rows deterministic; nine made contested | RESOLVED-BY | VB-A…E; VRES §1–§2 (the one prize, roll and obstacle owner) | sweep C-07 |
+| §13.4 decision 1 | does an order run up the chain? | JORDAN | A: territorial authority (ruled, `ED-IN-0256` (4)): a seat orders whoever stands in its land; the King's officers can order the King. B: command authority (VB-D commit D2, behind its revert): a seat orders its sworn men, the holders of seats it may revoke, and the unseated in its purview; a writ to a superior is a petition. B narrows a ruled basis for `issue` and `dispatch` | probe: one writ and four orders addressed to the King |
+| §13.4 item 2 | carried FA items (proclaimed or delivered; seats nobody can strip; whose word ends a war) | SUPERSEDED | not this family's to close: U5d's (FA audit §11 items 1, 3; addendum §B6.2 item 1) | — |
+
+## 4.4 MATERIAL — verdicts, shared decisions, survivors
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| `create_record` | executes; writes an empty paper | RESOLVED-BY | M-D §2 (the `account`; prize `a task`) | 238 of 238 `text` Records empty |
+| `destroy_record` | withheld by a switch | RESOLVED-BY | M-D §5 (class `Damning`; `watch`) | formed 0 |
+| `exchange` | forms but is refused; no price | RESOLVED-BY | M-B §3 on plan CR-49 | 0 executed |
+| `forge` | executes; one lie for everybody; no draw | RESOLVED-BY | M-D §3 (a false copy of a held paper; quality by band; whom it names is a fanned choice). Closes F-FI-10's forgery clause | 31 / 34 / 40 executed |
+| `found`, `build` | form on the wrong paper; never on their works | RESOLVED-BY | M-C | `exists:works=0` on every attempt |
+| `requisition` | executes rarely, one unit at a time | RESOLVED-BY | M-B §4 (`regard` reads the residing cohort's stance rows) | 0 / 1 / 5 executed |
+| `restore`, `work` | unreachable (the dead end) | RESOLVED-BY | M-A §3, §4, after `07_SE_kernel_repairs.md` §3 (U5d's) | formed for 1 person, attempted 0 |
+| `sabotage` | forms but is refused | RESOLVED-BY | M-A §5 (`watch`; `site.damaged` covert) | `exists:Site=0` ×38 |
+| `seize` | forms but is refused, by construction | RESOLVED-BY | M-D §6 | `clause:write` ×9 |
+| `survey` | works; exact with certainty | RESOLVED-BY | M-D §4 | 12 / 13 / 14 executed |
+| `tend` | executes, whole, on a world-gen artefact | RESOLVED-BY | M-A §6 owns the row (the sweep's D-05 text in `03_PC_exits_withdrawal_recovery.md` Part C defers to it; the capability id is content; C-32) | 37 / 39 / 42 executed |
+| `research` | draws; a find teaches nothing | RESOLVED-BY | M-E §2 as reconciled (C-24: `observes:` is a flat list; which reads a band deposits is `finding_terms`'; the row stays on the graded route and writes nothing) | 20 / 19 / 19 finds |
+| `reconstruct` | executes most often and concludes nothing | RESOLVED-BY | CONC as reconciled (C-22: a graded inquiry that writes nothing and deposits the conclusion to its maker; the committed assertion is his `utter` with `cites`). M-E §3 and FI-03 §3 point to it | 82 / 89 / 110 executed |
+| `transfer` | forms but is refused; where it executes it is a sink | RESOLVED-BY | M-B §2 (`carriage`) | 2 / 1 / 2 executed |
+| D-1 | every material act is drawn through `graded_acts` | DISPUTED in its form | the draw stands; the route does not (C-22). The roster keeps its name and its three inquiry rows; a material row that writes by band declares `contests: "a task"` | `data/verbs.py:848-851` |
+| D-2, D-3, D-5, D-6, D-7 | pool; obstacle; a failure is not a refusal; formation on what is known; populations | RESOLVED-BY | M-A §2; OBS; `02_CHAR_offer_what_can_be_done.md` (cross-family) | — |
+| D-4 | effects by degree on one ladder (`effect_share` 1000 / 700 / 350 / 0) | RESOLVED-BY | M-A §2 row 2, with the first shipped values reconciled (C-23: 1000 / 1000 / 500 / 0, the same table `18_DETERMINISM_task_draw_for_uncontested_verbs.md` calls `task_fraction`; 1000 / 700 / 350 / 0 is a sweep arm) | 13 §4 cell 7 (Overwhelming 0 of 284 at pool 2) |
+| §17.2 correction | S2-A's list of bare-`Record` rows omits `research` | RESOLVED-BY | S2-A as reconciled (C-28) | M audit §17.2 |
+| J-M1 | is production labour an act? | SUPERSEDED | closed by the ladder at step 3: the plan answers it (CP-T08-01: yield reads the hands present; `work` is labour on a works), and M-A §4 builds that reading. Option B is recorded in the audit as the alternative game | plan position `24e`, CP-T08-01 |
+| J-M2 | what a failed reconstruction leaves | SUPERSEDED | closed at step 3 (K-37, ratified as intent, ED-IN-0288): a lost draw states nothing; a wrong conclusion has an author in the world. One decision with S-PES-FI-1 | CONC R-19-04 |
+| named (2) | who may declare a works; the four capability ids | RESOLVED-BY | no edit owed (ED-IN-0297 closed at (B); ids are content) | — |
+
+---
+
+# Jordan — what survives in this family (five items, each with two options, stated in its row)
+
+1. **Who is a verdict for?** (PES-SC Jordan 3; Part 1.5.)
+2. **Seat news and death news: realm-wide or by presence and telling?** (FI §11 item 1 merged with S-PES-FI-2; Part 2.2.)
+3. **Appeal as of right, or on grounds only?** (S-19-1; Part 3.)
+4. **Does an order run up the chain?** (BINDING §13.4 decision 1; Part 4.3.)
+5. Nothing else. Twelve other items the audits listed for Jordan are closed by the ladder in their rows
+   (SC §11 items 1–2; PES-SC Jordan 1–2; FI §11 item 2; S-PES-FI-1; SOCIAL1 D1, D2; SOCIAL2 §11.4 items 1–3;
+   MATERIAL J-M1, J-M2).
+
+# Coverage (what this lane read, and how)
+
+Read in full with the reader: `UNIFICATION_BRIEF.md`, `AUDIT_BRIEF.md`, `CLAUDE.md`,
+`architecture/meta/04_CODE_ARCHITECTURE.md`, `skills/layer-conformance/SKILL.md`; the twelve audits of this
+family; every `05_SC_*`, `13_SC_*`, `16_PESSIMIST_SC_*`, `16_PESSIMIST_FI_*`, `19_LACUNA_*`,
+`14_VERBS_SOCIAL1_*`, `14_VERBS_SOCIAL2_*` proposal; `08_FI_01` to `08_FI_08` and `08_FI_05_…_B`;
+`14_VERBS_BINDING_C`, `_D`; `14_VERBS_MATERIAL_A`; `10_DICE_one_score_two_roles.md`;
+`audits/18_DETERMINISM_SWEEP.md`. Read with long lines cut at 260 to 900 characters: `14_VERBS_MATERIAL_B`
+to `_E`. Read by section (the runtime statement and the exact edits): `14_VERBS_BINDING_A`, `_B`, `_E`.
+Head only: `08_FI_05_evidence-interface.md` (superseded). Other families' proposals named in a row were
+opened only where the row says so (`16_PESSIMIST_DICE_task_difficulty_and_throughput.md` in full;
+`10_DICE_capability_axiom_map.md` §D and §G; `18_DETERMINISM_task_draw_for_uncontested_verbs.md` by search).
+Code opened to check a citation: `modules/social_contest/roll.py:130-160`; `queries/person_q.py`
+(`stance_toward`, `regard`, `heritage_regard`, `deeds_judged`); `data/verbs.py:826-880`;
+`rosters.yaml` (`advantage_sources`, `graded_inquiries`, `inquiry_modules`); `loop/effects_governance.py`
+(`_eff_pardon`); ledger rows `ED-884`, `ED-934`, `ED-1037`. Nothing was run; no pytest.

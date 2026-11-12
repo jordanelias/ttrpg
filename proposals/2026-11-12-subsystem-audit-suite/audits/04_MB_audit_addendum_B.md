@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit addendum; resolves nothing at runtime)
 
+Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-01 to GM-05, GM-08, GM-11; GC-6, GC-8) — §B1.3 and §B4.1: Ogre Battle is now sourced as a battle referent (`research/game_precedent_suite/grounding/ogre_battle.md`) and the table's three memory-grade Ogre Battle statements are confirmed; Total War's pause was already page-read in the tree; Unicorn Overlord's 2 x 3 grid is snippet-grade; Bannerlord's contact menu is forum-grade. A dated note follows the table. No finding or resolution changed.
+
 ## Read at: 6eff039 (working tree)
 
 Addendum to `audits/04_MB_audit.md` (§0 to §18, read at `601e715`), written by a second lane with a fresh
@@ -79,7 +81,7 @@ went, so the order is the order of reading.
 | `dispositions/D_T04.md` | G (rows 27, 30, 40 to 49, 57, 58, 65, 66 opened) | the dispositions of the above against the code; row 27 names **Dominions** as "the closest verified precedent to Valoria's shape (one automatic resolver)", whose missing half here is the pre-battle intent step |
 | `research/by_lane/MB_mass_battle.md` | not re-read | relied on as the first lane reported it |
 | `research/pre_firearms_formations/` (17 files, about 590 KB) | G only, for carried secondary weapons | `05_late_med_renaissance_europe.md:194`, `:218` and `12_moment_by_moment_dynamic_spacing.md:545` (archers out of arrows draw mallets, swords and daggers and take the flank of a packed column); `01_ancient.md:78` (the hoplite's short sword "as backup"); `05…:537` (sword-and-buckler men working through pike lines) |
-| **Ogre Battle** | searched (`grep -ril` over `research proposals .designs .audit`) | **not sourced as a battle referent anywhere in the tree.** Every hit is its character-creation questionnaire (`.designs/systems/characters/reference/character_generation_questionnaire_v30.md:20`; `research/by_lane/NPC_npc_cast.md:130`, `PC_personal_combat.md:90`). §B4 uses it only at memory grade, marked |
+| **Ogre Battle** | searched (`grep -ril` over `research proposals .designs .audit`) | **not sourced as a battle referent anywhere in the tree.** Every hit is its character-creation questionnaire (`.designs/systems/characters/reference/character_generation_questionnaire_v30.md:20`; `research/by_lane/NPC_npc_cast.md:130`, `PC_personal_combat.md:90`). §B4 uses it only at memory grade, marked `[superseded 2026-11-12: sourced since, in research/game_precedent_suite/grounding/ogre_battle.md; see the note under §B4.1's table]` |
 
 ### B1.4 The earlier audits (`.audit/`)
 
@@ -503,6 +505,19 @@ itself marks it [M] or the tree has nothing. Shapes are the finding; no figure i
 | **intervenes during play** | shouts, substitutions, change of shape (sourced, `T16:24`) | swap, rest, a Valor skill, deploy another squad (sourced, `T19:94`) | memory: change the tactic, play a card, retreat | real-time orders, pause (pause is memory) | fights in person; orders by key; delegate to a sergeant (sourced, `R2` F4) | nothing (first audit F-MB-15) |
 | **reads why** | ratings, match review (sourced, `T16:25`) | — | — | — | a result screen: kills by unit, upgrades, dead, wounded, routed (sourced, `T02:20`) | a band and, on one arm, one name |
 | **keeps a campaign economy** | wages, contracts, training, familiarity with a tactic (sourced) | Honors buy squad count and size (sourced) | memory | upkeep each turn, replenishment on friendly ground (sourced, `R6` E6, M3) | daily food and wages, then morale loss, then desertion; speed falls with party size and carried weight (sourced, `T02:16-17`) | recruiting by site: built, dark. No wage, no upkeep, no experience, no load (§B5.2) |
+
+`[Grounded 2026-11-12, audits/24_GROUNDING_GAMES.md GM-01 to GM-05, GM-08, GM-11; GC-6, GC-8. The table's
+"memory" cells, regraded. **Ogre Battle column: every cell is now sourced**
+(research/game_precedent_suite/grounding/ogre_battle.md, pages read in body): squads of five or fewer, front
+and rear rows, and "Each character has two types of actions ... one they do when they are in the front row,
+and one for the rear row" (builds); one of four tactics per unit, which sets whom the characters strike
+(instructions); "a player does not directly control their unit", one round, the side that dealt more damage
+wins (resolves); change the tactic, play a tarot card, retreat (intervenes); a cost to deploy a squad, paid
+again each day, and income from liberated towns (economy, at stage scale). No prediction and no after-action
+record were found. **Unicorn Overlord's 2 x 3 grid** is snippet-grade, two agreeing snippets
+(grounding/unicorn_overlord.md); that units sit on a grid with front and back rows is page-read. **Total War's
+pause** is page-read in the tree (tutorials/T07_mass_battle.md:25). **Bannerlord's contact menu** is Attack
+or Send Troops at forum grade (grounding/bannerlord_encounter_menu.md). The table's judgments are unchanged.]`
 
 **A sixth precedent the brief does not name and the corpus rates highest:** Dominions, "the closest
 verified precedent to Valoria's shape (one automatic resolver)" (`D_T04` row 27): army setup, squad

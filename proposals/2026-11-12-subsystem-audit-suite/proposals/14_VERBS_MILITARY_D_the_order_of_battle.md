@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-04) — a typed conjunct cannot be waived by a payload key; the proposal's stated fallback is now the edit.
+
 Batch M-D of `audits/14_VERBS_MILITARY.md` (§4, §5.3, §6). Source: F-VM-03; `audits/04_MB_audit.md`
 F-MB-03, F-MB-13, F-MB-16; `audits/04_MB_audit_addendum_B.md` §B3.3, §B4.3, §B5.4;
 `AUDIT_BRIEF.md` "Standing rule" and the mass-battle intent (army, unit, subformation, troops; orders
@@ -125,8 +127,9 @@ and changes as follows.
 
 **The `need` conjunct binds a doctrine step only.** A command with a payload is the commander
 saying what he wants whether or not the doctrine calls for it (a player re-roling a body the
-doctrine is content with). `[UNVERIFIED: whether a typed conjunct can be waived by a payload key
-without a new form. If it cannot, the conjunct is asked only at formation (`belief_contradicts`)
+doctrine is content with). `[GROUNDED, 25 G-04: a typed conjunct cannot be waived by a payload key
+without a new form (`data/requires.py:1027-1030`: a clause is one `form` of the closed
+`requires_forms` roster and nothing else). So the conjunct is asked only at formation (`belief_contradicts`)
 and in the effect for a payload-less act, `surrender`'s precedent of a faction test asked by the
 effect and not the cell; the refusal key is then `write`.]`
 

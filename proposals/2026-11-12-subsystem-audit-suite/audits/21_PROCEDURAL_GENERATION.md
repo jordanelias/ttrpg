@@ -1,6 +1,8 @@
 # PROCEDURAL GENERATION — precedent study, design of the generation kit, and implementation plan
 
 ## Status: REFERENCE (a design audit and plan; resolves nothing at runtime, CLAUDE.md §0.05)
+Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-18, GM-20 to GM-25; GC-2, GC-7) — §1.1's three page-read Shadows of Doubt quotations (DevBlogs #15, #28, #30) are now filed in `research/game_precedent_suite/grounding/shadows_of_doubt_generation.md`; its order-of-generation and killer-selection rows stay snippet-grade leads. §1.2: Spelunky corrected (a path laid by construction, not "reject or repair"); Hades and Blade Runner regraded from memory to page-read with limits; the Lacuna row now has `grounding/lacuna.md`. CK3's generator detail and the Mount & Blade judgment stay `[M]`. No design decision changed.
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (L-01 to L-06) — §2's build facts re-read by probe and verified (83 persons, 0 with attributes, the site signature); one qualification added: the world holds a 38th settlement rung, `set_alt_1`, with no Site.
 ## Read at: d5d9ede (working tree)
 
 Requested by Jordan, 2026-11-12: *"investigate how procedural generation is to be used to fill in content and
@@ -108,8 +110,8 @@ grep) and are given from memory only, as marked.
 | **Kenshi; Mount & Blade** | World states that change "whether or not you act"; parties, lords and wars churning on a fixed map | Faction-level state machines; a fixed map with moving holders | The player arrives in a world already in motion | World states are hand-keyed flags (Kenshi); lords are thin characters (M&B) | `[T R2:205 V2]`, `[T R2]`, detail `[M]` |
 | **Prom Week / Versu / Façade** | Social moves selected from rule sets over character state; Façade: about 27 beats, about 15 per run, at most 25% of content per run, about three person-years | Authored social rules and beats; a drama manager sequences (Façade) | Character-specific responses to the same situation | Authoring cost per minute of play is very high; a drama manager is a non-person actor | `[T 00_README cross-check; 02_interactive_drama P]` |
 | **Lacuna** (contrast: authored) | Nothing. Cases are authored with a hidden answer key | "Many channels out, few channels back in": one committed, unverified Case Sheet | The wrong answer cascades into later authored cases | One railroad per wrong answer, all authored | `[T 19_LACUNA audit, page read by that lane]` |
-| **Blade Runner (1997)** | The culprit set is randomised per playthrough over an authored cast | Evidence must therefore be generative, not scripted | Replays differ in who is guilty | A closed authored suspect set | `[T FWP §2.3, self-graded HIGH]` |
-| **Hades / Spelunky** | Rooms assembled from authored chunks under hard constraints (a guaranteed path; reward and encounter budgets); Hades hangs authored dialogue on run state by priority | Constraint-checked assembly: reject or repair a level with no path | Hades: authored lines selected by state make repetition read as progress | Spatial generation only; no social causality | `[M]` — not in the tree |
+| **Blade Runner (1997)** | The culprit set is randomised per playthrough over an authored cast | Evidence must therefore be generative, not scripted | Replays differ in who is guilty | A closed authored suspect set | `[T FWP §2.3, self-graded HIGH]` `[grounded 2026-11-12: research/game_precedent_suite/grounding/detective_set.md §5, page read: "Which characters are replicants is randomized each time a new game is started"; other characters pursue their own goals unscripted. "Evidence must therefore be generative" is not in the source read and stays the survey's inference]` |
+| **Hades / Spelunky** | Rooms assembled from authored chunks under hard constraints (a guaranteed path; reward and encounter budgets); Hades hangs authored dialogue on run state by priority | Constraint-checked assembly: reject or repair a level with no path | Hades: authored lines selected by state make repetition read as progress | Spatial generation only; no social causality | `[M]` — not in the tree `[CORRECTED 2026-11-12: research/game_precedent_suite/grounding/hades_spelunky.md, pages read. Spelunky does not reject or repair: it lays a guaranteed solution path first, from room types with guaranteed exits, then fills the other rooms with no guarantee (Kazemi). Hades: rooms come from a pool of fixed layouts in random order; narrative events are picked by the run's situation and by weight. "By priority" and "reward and encounter budgets" are not established]` |
 
 ### 1.3 What the literature in the tree adds
 
@@ -146,7 +148,9 @@ grep) and are given from memory only, as marked.
    culprit), storylets (prerequisites). An authored shape binds by query, never by name.
 3. *A small, named, remembered cast beats a large one.* RimWorld (12 against 200), Wildermyth, CK3's kin
    labels. Depth of simulation the player cannot perceive is waste (Sylvester; Adams' "one layer below").
-4. *Constraints plus rejection keep a generated world coherent.* Compton, Togelius, Hades/Spelunky `[M]`,
+4. *Constraints plus rejection keep a generated world coherent.* Compton, Togelius, Hades/Spelunky `[M]`
+   `[CORRECTED 2026-11-12, grounding/hades_spelunky.md: Spelunky is constraint by construction (the path is
+   laid first), not rejection; it leaves this list and supports the FW Q6 form instead]`,
    the tree's own FW Q6 ruling (a solvability precondition at generation, never maintained against the sim).
 5. *Pacing is selection over state.* RimWorld, Left 4 Dead, Wildermyth's suppression, Sunless Sea's gate.
 
@@ -186,7 +190,8 @@ Probe P1 (§12): `build_realm(0)`, `(1)`, `(2)` give equal rungs, persons, names
 sites and conditions, stores and offices. The only differences are the stored `world_seed` and the ids of
 two `hold` tenures (minted by a seed-keyed hash). 83 persons; 0 hold an attribute in the shipped arm
 (`cast_attributes=False`); 37 of 37 settlements carry the site signature `(garrison, harbour, seam)` with
-empty stores. **The seed is an input to the dice and to nothing in the world.**
+empty stores (grounded, 25 L-04: the 37 are the realm's; the world holds a 38th settlement rung,
+`set_alt_1` under `terr_ALT`, the foreign faction's place, with no Site at all). **The seed is an input to the dice and to nothing in the world.**
 
 ### 2.2 Differentiation that canon already authors and the build does not read
 

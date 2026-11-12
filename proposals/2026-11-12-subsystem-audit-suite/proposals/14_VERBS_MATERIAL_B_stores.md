@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-13) — the roster the unrest kinds live in is `rosters.yaml: standing_routes: kinds: dominance` (`UNREST_KINDS` is its alias in `queries/person_q.py:517`); the name is corrected in place and the wider reach of the edit is stated.
+
 Batch M-B of `audits/14_VERBS_MATERIAL.md` §18 (its §15, §3, §7). Needs batch M-A §2 (the family's draw).
 Cites and does not redo: plan position CR-49 (`workplans/valoria_master_workplan_v11_part4.md:417`),
 `07_SE_arc_needs.md` §3 b (the amount as a choice), `07_SE_treasury_granary_B.md` (where a treasury sits),
@@ -131,7 +133,7 @@ computed requisitions were `requisition.unauthorized`, each formed for a seat gr
 the collectors bring in). `Fixtures stakes_ob` (SC-B's table) gains `requisition: 0.5`. The `regard`
 operand is the stance toward the actor of the one cohort whose `reside` edge is the requisitioned rung
 (`stance_toward`, its one owner); absent where no cohort or several reside there. `rosters.yaml:
-unrest_kinds` `[UNVERIFIED: the roster's exact name; the SE audit cites `UNREST_KINDS`]` gains
+standing_routes: kinds: dominance` `[GROUNDED, 25 G-13: there is no roster `unrest_kinds`. `UNREST_KINDS` is an alias, `queries/person_q.py:517` `UNREST_KINDS = DOMINANCE_KINDS`, and `DOMINANCE_KINDS` is `roster_map("standing_routes", "kinds")["dominance"]`, `data/rosters.py:1001`. Adding a kind there adds it to every reader of dominance, not to `stability` alone]` gains
 `requisition.resisted`, so a place that refused its lord is a deed `stability` counts as a taking is.
 `graded_acts` gains `requisition`.
 

@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-12) — ED-SC-0013's ledger row opened: it records the auto/manual duality doctrine as PROPOSED, not RULED. No edit of the proposal depends on the difference (Jordan's ruling 1 of 2026-11-12 governs auto-resolve).
+
 Lane: PC, with CORE (the suspension), MB (a duel inside a field) and CHAR (the NPC's temperament).
 Source: Jordan's design intent of 2026-11-12 (`AUDIT_BRIEF.md`, "Design intent … personal combat" and
 "… mass battle"); `audits/03_PC_audit.md` F-PC-13, F-PC-14, §9, §10, §14. Read at `601e715`. Reference
@@ -204,8 +206,11 @@ answered for the played case by the intent and left open for the unwatched one.
 
 **Design intent this composes on (quarantined documents, read for intent only, CLAUDE.md §0.05).**
 
-- `auto_manual_resolution_duality_v1.md` (headed "Doctrine RULED 2026-07-08", ED-SC-0013 `[UNVERIFIED:
-  the ledger row was not opened]`): one engine at three fidelities (played, witnessed, auto), with the
+- `auto_manual_resolution_duality_v1.md` (headed "Doctrine RULED 2026-07-08", ED-SC-0013 `[GROUNDED, 25 G-12:
+  the ledger row does not say RULED. `registers/editorial_ledger_sc_archive.jsonl`, one row, 2026-07-08,
+  `status: resolved`: "Auto/Manual Resolution Duality doctrine (PROPOSED) — drafted 2026-07-08 at
+  Jordan's request"; it closes three open questions and carries one, the calibration tolerance, as
+  `needs_jordan`. The document's heading and its ledger row disagree; the row is the ledger]`): one engine at three fidelities (played, witnessed, auto), with the
   calibration constraint that the expected outcome of an event be the same at each fidelity on matched
   inputs, so that choosing a fidelity is never a strategic advantage. The round entry is that one
   engine; §7's step 4 gate is the constraint's test for combat; and the free withdrawal measured in

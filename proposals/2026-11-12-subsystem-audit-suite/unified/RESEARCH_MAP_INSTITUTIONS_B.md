@@ -271,7 +271,7 @@ Each is written as an executable edit in the grounding proposal named. None adds
 | M-9 | **Arrears turn on the host**: unpaid men take their wages from the place that lodges them, and every place that hears of it trusts garrisons less | `HCC:67`; `HCC` §4 `:264`, `:300` | both | VENICE grounding edit 5 (a reading) |
 | M-10 | **The pledge**: a loan secured on a named right; the lender holds the right's instrument until paid | `HCC:161`; `CGR:190`; tier3 `:95` | Venice | VENICE grounding edit 6 |
 | M-11 | **The merchants' own court**: a bench of the guild beside the commune's, so that a suit has a forum to choose | `CGR:117`; `GM:201-202` (two courts, one question) | Venice | VENICE grounding edit 6 |
-| M-12 | **Statutes need a magistrate's assent**: a guild rules itself, and no rule of its own takes force outside it until one outside office passes it | `CGR:97`, `:129`, `:223` | Venice | VENICE grounding edit 7 (`interposed:` on a guild row) |
+| M-12 | **Statutes need a magistrate's assent**: a guild rules itself, and no rule of its own takes force outside it until one outside office passes it | `CGR:97`, `:129`, `:223` | Venice | VENICE grounding edit 7 (composed: the guild's `petition` to a commune seat) |
 | M-13 | **The body of the excluded**: a brotherhood with its own ladder for those the roll shuts out | `CGR:98`; `PGS:81` | Venice | VENICE grounding edit 7 (content) |
 | M-14 | **Portability as leverage**: a privileged body's threat to carry its privilege to a rival host | `PGS:84` | both | COLONIAL grounding edit 5 |
 | M-15 | **The decree's bearer**: an order's odds improve with an enforcing agent of the issuer present at the addressee's place | `PMP:491-494` | Colonial | COLONIAL grounding edit 1 |

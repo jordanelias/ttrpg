@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-24) — the `(Person, weight)` matrix row already holds `CEN` (`write_matrix.yaml:300-306`); no matrix edit is owed by this proposal.
+
 Carries finding F-SE-02 and resolutions R-SE-04, -05, -06 of `audits/07_SE_audit.md`. It specifies an
 open position (CR-08, `workplans/valoria_master_workplan_v11_part4.md:35`) and corrects one query. The
 growth half is not decided here: it is survivor S-SE-1 in the audit's §11.
@@ -102,7 +104,7 @@ halves every loss, so `body_step` is re-read at CR-22 under it (CR-22 already re
 
 Fixture `famine_loss=0` in `data/fixtures.py` (swept `0 / 250 / 500`), with its hole-register row
 (H-49 gains the arm). The matrix row `(Person, weight)` gains `CEN` in `steps:` if it does not hold it
-[UNVERIFIED: the row's `steps:` cell was not opened; Layer 1 §A.2:179 gives CENSUS `weight`].
+[GROUNDED, 25 G-24: it holds it. `engine/season/write_matrix.yaml:300-306`: `steps: [CEN]`, `class: MATTER`, emits `weight.changed`; no edit is needed for a CENSUS write. Layer 1 `04:179` gives CENSUS `weight`, opened].
 
 **(c) `engine/season/loop/matter.py:709-711`.**
 

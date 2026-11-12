@@ -4,6 +4,8 @@
 
 Authored in part by Fable; completed by Opus after the Fable usage limit (2026-11-12).
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-31 to G-34, L-10) — four `[UNVERIFIED]` marks settled at the line: `enemies_heard` has no cohort test; `mustered` does **not** read `restrained` today (the capture section's sentence corrected); `challenge.issued`'s changed subject is the Record; `_fall` is a fixed fraction. The pool reader's path corrected. No finding withdrawn.
+
 ## Read at: 84d2a02 (working tree; implementation lane A's duel-chain edits not yet merged, see §0.2)
 
 Work order: `VERBS_BRIEF.md`, FAMILY = PHYSICAL. Verbs: `arrest`, `fight`, `capture`, `accept`, `march`,
@@ -305,8 +307,10 @@ people who care about him know.
    precedent). The `exists:Person=0` refusals stop. Cohort persons (`individual=False`, 2 of 12) remain
    `Person` referents, because `individual` is a WORLD-ONLY stem (`data/requires.py: WORLD_ONLY_STEMS`).
    The war and crime contexts below should remove most of them: a cohort is never named by a warrant
-   `[UNVERIFIED: whether `enemies_heard` stamps cohort persons as `Enemy` was not read past `:3707`; the
-   gate counts the residue]`. Any residue is reported, not hidden. Making cohort-ness person-side is CORE's question, not this row's.
+   `[GROUNDED, 25 G-31: `enemies_heard` has no cohort test: it returns every other person who coheres
+   under an enemy faction (`queries/world_q.py:3711`). At `build_realm(0)` no cohort coheres under any
+   faction (`faction_holding` is `None` for 37 of 37; 43 of 46 cast have one), so none is stamped today;
+   a cohort that commits to a faction would be. The gate counts the residue]`. Any residue is reported, not hidden. Making cohort-ness person-side is CORE's question, not this row's.
 2. **`violence_contexts: capture: [war, crime]`.** The ruled exceptionality applied to the second violent
    row, with the readers that exist (`options.py::VIOLENCE_CONTEXT_READERS`). No `duel` (a duel is
    `accept`'s) and no `defence` (a man defending himself fights; he does not take prisoners under yield
@@ -334,8 +338,10 @@ people who care about him know.
 
 Person scale inside every other scale. In a field, a captured commander is SCN-14's "a personal action
 inside a mass battle changes the NPC's mass-scale status": the captive's `detain` edge is read by
-`world_q.mustered` through `restrained` (a detained person musters nowhere) `[UNVERIFIED: mustered's body
-was not opened; the proposal's gate asserts it]`. A player chooses the target and, through the PC duel
+`world_q.mustered` through `restrained` (a detained person musters nowhere) `[GROUNDED, 25 G-32: not today. `world_q.mustered`
+(`queries/world_q.py:2132-2149`) returns the faction's `members` (a live `commit`, `:2027-2038`) holding
+a live `contain` in the rung's subtree; it never calls `restrained`, so a detained member still musters.
+The read is an edit to `mustered`, its one owner, and the proposal's gate fails until it lands]`. A player chooses the target and, through the PC duel
 round (`03_PC_duel_round_and_approach_B.md` §3), the approach per phase. The engine resolves the scene.
 NPCs choose through the one chooser.
 
@@ -552,8 +558,11 @@ and the dispute is settled or worse.
    (`person_q.ledger_names`). `questions_for` stamps them as `Record` for `kind = challenge`. One reader
    serves §1's warrants as well (`kind = dispensation`, then mapped to the persons they name). A
    challenge is issued with the challenged present (`challenge` requires `with`), so he witnesses
-   `challenge.issued`. Whether that witness claim names the Record id is `[UNVERIFIED: _eff_challenge's
-   Event subject was not opened; the gate asserts it, and if it names the challenger instead, the reader
+   `challenge.issued`. Whether that witness claim names the Record id is `[GROUNDED in part, 25 G-33: the Event's
+   changed subject IS the Record: `_eff_challenge` (`loop/effects_information.py:308-334`) mints through
+   `_mint_document`, whose `Change` names `Subject.entity("records", rid)`, `rid = "rec:<act id>"`
+   (`:222`, `:231`). Which subject WITNESS gives the witness's claim was not opened and stays unverified;
+   the gate asserts it, and if it names the challenger instead, the reader
    asks the claim's `content:challenge` value through `ABOUT_KEYS`]`.
 2. **No change to the cell, bands, writes or terms.** They execute (the PC-10b tests on a hand-built
    world).
@@ -692,7 +701,9 @@ scale with the people in it; (e) casualties per side, a rout or a draw, an arriv
    smaller's"). The size ratio sets the odds, and the engine's seeded draw sets the outcome. A
    `besiege` (Invested) wears the garrison by `sabotage`'s `_fall`. P-B adds a requirement there:
    `_fall` must be a draw, and if it is a fixed fraction it is a finding for SE/MB
-   `[UNVERIFIED: `_fall`'s body was not opened]`.
+   `[GROUNDED, 25 G-34: it is a fixed fraction. `_fall` (`loop/effects_economy.py:141-158`) returns
+   `condition × share`, with `f(degree)` the identity on an uncontested row; one saboteur alone takes a
+   fabric to 0 in one act (its own `[ASSUMPTION]`). The finding stands for SE/MB]`.
 
 ### 5.4 Scales and play surface
 
