@@ -1,16 +1,21 @@
-# U5b · MB — the rulings that land inside the field: one sampler, the commander's two inputs, the end state and the land, the nested duel, the squad as a module entry, and the one landing order
+# U5b · MB — the rulings that land inside the field: one sampler, the end state and the land, the nested duel, the squad as a module entry, veterancy as a draw, and the one landing order
 
 ## Status: PROPOSED (a plan for future execution; nothing here is executed by the closing lane)
 
 Author: U5b closure lane (Fable), 2026-11-12. Read at `6910680`. Carries Jordan's answers A-1, A-2, A-3,
-A-4, A-5, A-6, A-7, A-57 and A-58 (`unified/DECISIONS_ANSWERED.md`) into `modules/mass_battle/` and its
+A-4, A-5, A-57 and A-58 (`unified/DECISIONS_ANSWERED.md`) into `modules/mass_battle/` and its
 seam where no single file carried them, and composes the family's fifteen MB proposals into one order.
-Handed across and specified here: `U5a_DICE_owed_edits.md` §1 row 4 (the module's sampler);
-`unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §5 and §9 (the first rows of the `field` site).
-**Held and not decided here:** battle luck (D-34) and numbers in the melee dice (D-35). They are
-adjudicated by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (R-8 agrees with
-`04_MB_cr12_linear_law.md`; its §7 item 2 puts the friction multiplier to Jordan with two options) and
-stay held in the decision record until he confirms. The land ruling's two owners are
+Handed across and specified here: `U5a_DICE_owed_edits.md` §1 row 4 (the module's sampler). The first
+rows of the `field` site (`unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §5, §9) are lane 27's.
+**Answered since, and not carried here:** battle luck (D-34) is A-59 (the day's luck lowered once order
+friction exists; order friction from command; a unit's own prowess as data; no static side-wide
+value), whose carriers are another lane's `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` and
+`proposals/27_MB_*` (cited by title; not duplicated: an earlier draft of §1 specified the commander's
+two inputs and is withdrawn in their favour); numbers in the melee dice (D-35) is A-60 (frontage, depth
+and endurance, not the dice), carried by `04_MB_cr12_linear_law.md`; the rout floor is A-61 (a stand draw
+beside the 15% band), carried by `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` §1. The history lane's
+adjudication (`audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`) and its six proposals are folded into
+the order of §6. The land ruling's two owners are
 `U5d_FA_land_and_seats_pass_on_a_won_march.md` (the title write) and
 `26_MASS_BATTLE_aggression_and_land.md` (which end state is the aggressor's win); neither is restated.
 Reference only (CLAUDE.md §0.05). No number below is a balance claim.
@@ -22,31 +27,24 @@ whole batch of §6. §2: nothing of its own (it names which proposal's line each
 field between two sides of named persons only is resolved by a registered squad entry, a declared mover
 for those fields. §4: nothing. §5: behind a fixture whose control is no veterancy.
 
-## §1 · One sampler in the field, and a commander's two inputs (A-5, A-6, A-7)
+## §1 · One sampler in the field (A-5)
 
 **Problem.** `modules/mass_battle/resolution.py` owns a second die (`roll_pool`, `roll_pool_fractional`),
 a second ladder (`compute_degree`) and a second sigma path (`_sigma_softcap`, `_sigma_net_boost`)
 (`audits/04_MB_audit.md` §4.1; addendum C-5; `audits/10_DICE_audit.md` F-DICE-07, -08, by title). A-5
-rules the bell curve everywhere and names *"the battle's whole-dice sampler"*. Command is the literal 4
-(`massbattle.py:184-188`), and no person's capability reaches a field (F-MB-14).
+rules the bell curve everywhere and names *"the battle's whole-dice sampler"*.
 
 | # | owner | exact edit |
 |---|---|---|
 | 1 | `modules/mass_battle/resolution.py` | `roll_pool`, `roll_pool_fractional` → `dice_engine.roll_net_continuous`; `compute_degree` → the owner's `degree_from_net` / `degree_label`; `_sigma_softcap`, `_sigma_net_boost` → `sigma_leverage.soft_cap`, `net_boost` (DOE §1 row 4, as written). The module's first `engine` import is this leaf, as the other two registered modules already import it (`modules/combat/core.py:20-21`, `modules/social_contest/roll.py:60`) |
 | 2 | **the composition with the pair rule** (what DOE left to this lane) | DOE row 4 says the opposed roll "stays and is named". For the **melee pair** it does not stay: `16_PESSIMIST_MB_partition_and_the_pair_rule.md` edit 2 pays each side by its own net, on the ruled partition requirement (ED-MB-0003, ED-MB-0004) and a measured defect (0 wins of 60 for three bodies on one body's cells). So the contract row's `obstacle: opposed_roll` name is not created for the pair; a pair's casualties are `K_LINEAR × frontage × PAY_PER_NET × max(0, net) × (1 + power)` with `net` the continuous net. The discipline, rally and recall checks keep a stated obstacle |
-| 3 | `engine/season/queries/inputs.py::MassBattleInput` (replaces the `command: tuple = (4, 4)` of `04_MB_typed_outcome_and_one_path.md` §4) | `commanders: tuple` of two records, each `(score, talent_levels)` or `None`: the commanding person's **trained score** in the `command` capability and his talent levels on its governing attribute, read host-side by `pool.py::score` and `advantage_sigma` (U1 §4). The commander is the army Record's holder, or on a headcount side the acting person |
-| 4 | `references/descriptor_registry.yaml` (U1 §2), `rosters.yaml: tables.capability_uses`, site `field` (U1 §9) | one definition row, `command` (the name is content; `14_VERBS_MILITARY` S2 uses the same key for the six army rows, so it is one capability, not two); use rows: `{role: dice, site: field}` for the module's Command draws (rally, recall, an order's obedience, `26_MASS_BATTLE_maneuver_orders.md`), `{role: edge, key: verb.base, site: field, per: mid}` for his talent. `march` itself stays `none` on the uses table (U1 §5): a commander does not roll the field |
-| 5 | `modules/mass_battle/` | a Command draw's pool is the one pool rule on the carried score (`max(pool_floor, score + pool_add)`, carried raw as the fight carries them). `Unit.command` (span of control, the cascade and whole-side rout reads, an integer 1 to 7) is derived from the score by one table in `references/troops.yaml`'s header (`command_span`; seed: the score clamped to 1..7; `None` → 4, today's literal). `derive_command`, `CMD_CHA_WEIGHT`, `CMD_COG_WEIGHT` go with the harness code |
-| 6 | the pool of a pair is **not** a person's | unchanged by this section: the 2026-07-08 directive took the commander out of the melee pool, and nothing here puts him back. His two inputs reach cohesion, obedience and rally, never the dice of a pair |
+| 3 | **the commander's inputs, the obedience draw and a unit's own prowess: not here** | A-59 rules them (command from a learned skill and social and mental attributes; each unit's prowess from its troops, equipment and subformation; no static side-wide value). Their carriers are `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` and `proposals/27_MB_*` (another lane's). Every Command draw those files define is drawn on this section's sampler; `04_MB_typed_outcome_and_one_path.md` §4's `command: tuple = (4, 4)` yields to their typed input |
 
-**Gate.** (1) `grep -rn "randint(1, 10)" modules/mass_battle` prints nothing. (2) With `commanders =
-(None, None)`: the field equals the field before edits 3 to 5 at the same seeds (control). (3) Equal
-armies under commanders of score 5 and score 0, n 400 with the same-run control: the rally share, or the
-share of orders obeyed at once, differs beyond sampling error; the casualties of a single pair's tick at
-equal state do not. (4) The mirror control of `audits/04_MB_audit_addendum_B.md` (`mirror_probe`, n 300)
+**Gate.** (1) `grep -rn "randint(1, 10)" modules/mass_battle` prints nothing. (2) The owner's ladder and the module's agree at every cell
+(the 6 of 10,000 tenth-step cells of F-DICE-07 are gone, because there is one function). (3) The mirror control of `audits/04_MB_audit_addendum_B.md` (`mirror_probe`, n 300)
 stays side-fair within 1.5 standard deviations.
-**Falsifier.** A commander's score changing a pair's pool; a field whose result moves with `commanders`
-at `None`; a d10 face dealt anywhere under `modules/mass_battle`.
+**Falsifier.** A d10 face dealt anywhere under `modules/mass_battle`; a degree graded by a function
+other than the owner's.
 **Hash movers.** Every fought field; `tools/ci_golden_modes_check.py`'s three digests and every
 `engine/tests/` golden with a field, re-recorded once with §6's batch.
 
@@ -130,16 +128,17 @@ not; an untouched reserve never gains. **Falsifier.** A gain in every eligible u
 | 1 | scale, grade, the drawn band | `04_MB_headcount_grade_and_scale.md` (with `verdict` read host-side, §2) | none | fought fields (seed 2's pin) |
 | 2 | the typed outcome, one path, no hidden inputs | `04_MB_typed_outcome_and_one_path.md`; `U5b_MB_residue.md` §1 (the one role list) | 1 | hash EQUAL but per-cohort shares |
 | 3 | the troop file as data, no behaviour change | `04_MB_unit_loadout_and_weapon_in_hand_B.md` stages 1–2 | 2 | none |
-| 4 | **the field calibration batch: one re-record** | §1 (the sampler) → `16_PESSIMIST_MB_one_stamina_ledger.md` steps 1–2 → `04_MB_cr12_linear_law.md` steps 1–3 with `16_PESSIMIST_MB_partition_and_the_pair_rule.md` edits 2–4 as its step 3 → `04_MB_cell_hierarchy_as_data.md` (`arm: grid`) with `26_MASS_BATTLE_cell_scale_and_time.md` → `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` with `16_PESSIMIST_MB_rout_has_two_exits.md` → `26_MASS_BATTLE_calibration_targets.md` read last | 1–3. Each step's gate is read before the next lands; goldens and digests are re-recorded once at the end. The partition row is read **before** the grid arm (the grid multiplies bodies; on the present pair rule it multiplies the defect) | every fought field |
+| 4 | **the field calibration batch: one re-record** | §1 (the sampler) → the side-wide multiplier's three-arm test and the obedience draw (`proposals/27_MB_*`, A-59; with `26_MASS_BATTLE_maneuver_orders.md` §1) → `16_PESSIMIST_MB_one_stamina_ledger.md` steps 1–2 → `04_MB_cr12_linear_law.md` steps 1–3 with `16_PESSIMIST_MB_partition_and_the_pair_rule.md` edits 2–4 as its step 3 → `04_MB_cell_hierarchy_as_data.md` (`arm: grid`) with `26_MASS_BATTLE_cell_scale_and_time.md` → `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` with `16_PESSIMIST_MB_rout_has_two_exits.md` → `26_MASS_BATTLE_calibration_targets.md` read last | 1–3. Each step's gate is read before the next lands; goldens and digests are re-recorded once at the end. The partition row is read **before** the grid arm (the grid multiplies bodies; on the present pair rule it multiplies the defect) | every fought field |
 | 5 | orders and the commanded battle | `04_MB_manager_battle_one_resolver.md` §2–§6 with `26_MASS_BATTLE_maneuver_orders.md`; `04_MB_playable_field_scenario.md` A, C, D | 4 (a decider is not built on levers the pair rule inverts) | none with no orders |
 | 6 | armies in the realm | `14_VERBS_MILITARY_C`, `_D`; `04_MB_playable_field_scenario.md` §E as reconciled; `14_VERBS_PHYSICAL_B` B1 | FA's levy and remit; 1–4 | declared flips |
 | 7 | the land | `U5d_FA_land_and_seats_pass_on_a_won_march.md` with `26_MASS_BATTLE_aggression_and_land.md` | 1 (the `Drawn` band) | every `Won` on held land |
 | 8 | the nested duel and the squad | §3; `03_PC_duel_round_and_approach_B.md` steps 1–2 and 5 | PC's round entry; 5 (the window) | squad fields; officer contacts |
 | 9 | the second weapon, movement and fatigue as data | `04_MB_unit_loadout_and_weapon_in_hand_B.md` stages 3–4; `26_MASS_BATTLE_movement_and_fatigue_as_data.md`; `16_PESSIMIST_MB_one_stamina_ledger.md` step 3 | 4; `03_PC_loadout_and_carry.md` | rows with a secondary |
-| 10 | veterancy, upkeep, the commander's inputs | `04_MB_campaign_party_economy.md` with §5; §1 edits 3–5 | 2; U5a's CAP Part B | none at the control arms |
+| 10 | veterancy, upkeep, command and a unit's prowess as data | `04_MB_campaign_party_economy.md` with §5; `proposals/27_MB_*` (A-59) | 2; U5a's CAP Part B | none at the control arms |
 
-D-34 (the friction multiplier) is read against the batch of row 4 and decided by Jordan on
-`audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` §7 item 2; no row here edits its magnitude.
+The friction multiplier's residual size is set by calibration against
+`26_MASS_BATTLE_calibration_targets.md` (A-59's marked assumption), inside row 4, by lane 27's test; no
+row here edits its magnitude. Numbers leave the melee dice (A-60) in row 4's CR-12 step.
 
 ## Who lands it, and dependencies
 
@@ -149,16 +148,14 @@ edited: the nesting text owed is drafted in `U5b_PC_rulings_in_the_fight.md` §1
 
 ## NERS reading (E last)
 
-- **N.** One die and one ladder for a fight, a debate and a field; a commander who is a person with two
-  numbers; one line each for the ruled end state and the ruled land; a squad that is a module entry and
+- **N.** One die and one ladder for a fight, a debate and a field; one line each for the ruled end state and the ruled land; a squad that is a module entry and
   not a second kind of wrapper.
-- **R.** Two commanders differ in what their armies do when ordered and when broken; a unit may or may
-  not learn from a field. Complete at the extremes: no commander is today's 4; the cap returns a typed
+- **R.** A unit may or may not learn from a field. Complete at the extremes: the cap returns a typed
   result.
 - **S.** The field stops being the one module with its own dice; the played, delegated and nested calls
   are one slice each.
-- **E, against that.** One record field, two use rows, one header table, one new entry and one composition
-  row; a die, a ladder, a sigma path, a literal, a proposed wrapper and a proposed fixture retire.
+- **E, against that.** One new entry and one composition row; a die, a ladder, a sigma path, a proposed
+  wrapper and a proposed fixture retire.
 
 ## Cost class
 
