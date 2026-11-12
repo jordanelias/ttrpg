@@ -1,5 +1,7 @@
 # COLONIAL-D — rank as a ledger of accomplishment: the Secession War as three seeded deeds, presumption that passes down the seat, homage as an instrument, and conquest as the way an `annex` seat is filled
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-03, X-05, X-06, X-07, X-08) — this file's design (three founders as persons, their deeds as Events, standing down the seat at `presumption_gain` per holder) is the kit's and is carried by `15_INSTITUTIONS_SYNTHESIS_B_the_deed_ledger.md`, with three changes: no second function `person_q.accomplishment` is added, the recursion is one term of the existing `person_q.legitimacy` (edit 1 replaced), cut at a holder believed to have taken the seat by force; the two `homage` instruments are rows of `instruments.yaml: seeded`, recite their founders' deeds and are kept by the Chief Parliamentary Clerk, so `obligees:` keeps bare ids and edit 3's mapping form is not added; `recognition` is not a form (a certificate is the `recites` key). `presumption_gain` ships 0 with sweep {0, 0.5, 0.75, 1.0}. Edits 2, 4 and 5 stand. Every finding below stands.
+
 ## Status: PROPOSED — one part HELD BACK for Jordan (the counts in edit 2 depend on `audits/15_INSTITUTIONS_COLONIAL.md` §11 item 1)
 
 Source: Jordan, 2026-11-12, as `INSTITUTIONS_BRIEF.md` records it: *"current kingdom royalty is because

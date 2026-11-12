@@ -32,6 +32,11 @@ A demand unmet, a duty failed and an oath not kept are the absence of an act. Th
   `transfer` executed 2 / 3 / 7 of 98 / 129 / 108; petitions filed 35 / 44 / 44, determined 0 / 2 / 0;
   writs 40 / 23 / 47, complied 0. At season five the oaths lapse together (`tenure.closed` 27 and 27 at
   seeds 0 and 1, WR addendum §3.2). Nobody is blamed for any of it, by construction.
+- With the terms shortened to their own swept values so lapses fall inside a short run (audit E-N10,
+  seed 0, three seasons, `oblige_term` 1): 26 oaths lapsed unpaid, sworn by 26 persons, **all to one
+  seat**. What the lapses occasioned: six acts formed on a claim of the closure, none by the sworn man
+  and none toward the seat or its holder (`convene`, `create_record`, `commit` executed; `march`,
+  `capture`, `sabotage` refused). `oblige→transfer` 0, `oblige→release` 0.
 - The plan's own owner of grievance, CR-88's `person_q.grievance_against(p, q)` (design-first, B10-17b),
   counts "the deeds by `q` … that `p`'s `deeds_judged` scores against" him: acts only.
 

@@ -750,3 +750,35 @@ Lane `tests6`: 77 files under `tests/valoria/` (alphabetical `test_combat_invari
 - **Conflicts / stale:** none.
 - **Open items:** none.
 
+### tests/valoria/test_reach_weapon_class.py
+- **What it is:** pytest file, spatial-model v2 Stage E / ED-MB-0014 (Jordan P-DEC-1): per-troop-type front-face reach (non-pole melee 0.1, pole/spear 0.2, pike 0.3, lance 0.2, ranged = projectile band + a 0.1 melee sidearm) and the authored `pike` troop type.
+- **Status:** none stated; reading: live; helper functions (`_standing`, `_charge_vs_brace`, `field_path`) are imported by other test files.
+- **Bears on:** MB (reach as a weapon-class datum on the troop type, charge/brace, pike), PC (reach as a weapon property), CHAR (none).
+- **Content that matters:**
+  - `reach_for(t)`: levy and light infantry 0.1, heavy infantry 0.2, pike 0.3 (strictly longest), cavalry and knights 0.2, archers and crossbow 0.1, bare `infantry`, unknown and `None` 0.1 (:58-72). Pike stats mirror heavy_infantry so reach is the sole differentiator; its `loadout_for` weapon has `reach == 'melee'` and keyword `pole`; allowed roles include `ShieldWall` and `Anvil` (:75-84). `loadout_for(troop_type)` returns ONE (weapon, armour) pair per troop type.
+  - Reach advantage emerges through the charge-recoil gate (`MB_RECOIL_CHARGER_GATE`: a braced defender whose reach >= the charger's repels the charge): pike and heavy infantry out-retain levy by more than 0.02 over 16 seeds, and pike equals heavy to 1e-6 ("cap OFF fact"); the test pins the uncapped support stack with an `uncapped` fixture because with the cap ON they differ (`test_mass_battle_support_rank_cap.py`) (:119-145, `@pytest.mark.slow`).
+  - Disclosed finding: standing melee is UNCHANGED by reach (exchange is mutual once contact fires; reach shifts only contact timing): `_standing('pike','levy') == _standing('levy','levy')` exact equality of 4-dp-rounded means, uncapped (:147-155). Reach is a charge/brace lever, not a standing-melee lever.
+  - Facing: a cell facing away gets zero reach, in front the full base (`_hu._effective_reach`, exact `==`); archers' volley range `VOLLEY_MAX_RANGE` exceeds and is independent of their 0.1 melee sidearm reach (:160-178). Conservation with a pike unit (seeds 3, 19, 44) via `assert_troop_conservation`, `checked >= 2`; of four conservation sites this is the only matchup that routs (8 routed units over 60 seeds); determinism (:183-213).
+- **Conflicts / stale:** none. The 0.1 "melee sidearm" for archers is a reach datum only; there is no sidearm weapon state, switch or cost in the tested code.
+- **Open items:** none.
+
+### tests/valoria/test_references_yaml_parse.py
+- **What it is:** pytest file (ED-IN-0121): every machine-read YAML register under `references/` and `registers/` must parse with `yaml.safe_load`.
+- **Status:** none stated; reading: live; cheap and general (process data hygiene).
+- **Bears on:** PROCESS, CORE.
+- **Content that matters:**
+  - One parametrised case per file from the globs `references/**/*.yaml|yml`, `registers/*.yaml|yml`; floor `len(files) > 20` (:36-47). Origin: `references/npc_registry.yaml` had an unquoted colon (`faction: Church (dual-loyalty: ...)`) and was unparseable for its whole history with zero Python loaders (:3-12).
+  - Deliberately no schema or content check (:19-21). The module uses `pytest.importorskip('yaml')`, so a missing PyYAML skips the whole file silently (CLAUDE.md §8 says a fresh container has pyyaml only).
+- **Conflicts / stale:** `references/npc_registry.yaml` is named as having "zero Python loaders" at that time; whether that is still so [UNVERIFIED].
+- **Open items:** none.
+
+### tests/valoria/test_reserve_commit.py
+- **What it is:** pytest file, PP-MB-04 / PP-499 / mass_battle_v30 §A.6 / ED-MB-0023: a unit in Reserve cannot engage turn 1 and commits at Phase 3 of the next battle-turn (`RESERVE_COMMIT_TURN = 2`).
+- **Status:** none stated; reading: live; the docstring's "default OFF" is stale.
+- **Bears on:** MB (reserves, multi-unit battle turns), CHAR/FA (a commander's reserve instruction).
+- **Content that matters:**
+  - `unit_in_reserve(unit)` is true for `instructions=('reserve',)` and false for `('hold',)` (:46-53). With the gate ON a reserve pair has no engagement on turn 1, no `reserve_commits` key; turn 2 records the commitment (`pair` 0) and engages; OFF the pair engages from turn 1; a battle with no reserve unit engages turn 1 either way (:56-86). Each case builds a one-pair `run_multi_unit_battle` with `max_battle_turns=6` and seed 77.
+  - Gate toggling reloads five modules (`config, resolution, units, engine, orchestration`) via env `MB_RESERVE_COMMIT`, and `teardown_module` reloads with the flag OFF (:19-31, :89-91).
+- **Conflicts / stale:** `test_field_golden_pins.py:283` lists `MB_RESERVE_COMMIT` among the flags Jordan's flags-ON ruling turned ON, so this docstring's "GATED (default OFF)" is stale and `teardown_module` leaves the process at OFF [UNVERIFIED current config default]. The docstring itself says `run_multi_unit_battle` is not in the bat.py golden battery. The first test line `_, _, O = _reload(on=True), None, None` is a no-op expression.
+- **Open items:** none.
+

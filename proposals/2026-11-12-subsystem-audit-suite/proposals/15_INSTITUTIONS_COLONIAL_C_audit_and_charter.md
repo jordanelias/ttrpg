@@ -1,5 +1,7 @@
 # COLONIAL-C — the audit at the end of a term and the calling-in of a grant: two arrangement rows, one fixture, and terms on the seats a grant confers
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-12) — the seat-row key is `audit_at_exit: <arrangement id>` (the Venetian lane's, which names its room), not `audited: true`; a form's `confers:` block carries `audit_at_exit: audit`; the occasion is `world_q.audits_due` (this file's: any close of the hold, to a person who holds the `tenure.closed` claim; widened to the Venetian lane's set of who may open). This file's `audit` row is the kit's one audit row. `quo_warranto`, `prescription_seasons` and the closing cell requested of SC stand. Every finding below stands.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_COLONIAL.md` §2.1, §6.2, §8, §12 batch C-3. Depends on and does not redo:

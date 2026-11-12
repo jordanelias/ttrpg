@@ -6,7 +6,7 @@ Lane tests5: 56 test files (engine/season/tests, engine/tests, tests/valoria hel
 
 ### engine/season/tests/test_season_weather.py
 - **What it is:** pytest file for v9 IN-21 FORCE-WEATHER (keyed seasonal draw on MATTER's yield term, `H-26`), 927 lines, of which about 530 are a hash re-pin log (comments `:33-546`, `:573-662`, `:775-837`).
-- **Status:** no Status line (test file). Reading: live; it is the file F-TEST-02 names as holding 22 declared-mover re-pins (it holds far more than 22 `RE-PINNED` blocks by my count, roughly 60 across the three pins).
+- **Status:** no Status line (test file). Reading: live; it is the file F-TEST-02 names as holding 22 declared-mover re-pins (`grep -c 'RE-PINNED\|RE-RECORDED'` finds 204 lines in this file (19 carry 'A GOLDEN RE-RECORDED'), far more than 22 distinct re-pins).
 - **Bears on:** CORE, SE (weather/yield), WR (clock), DICE (draw keying).
 - **Content that matters:**
   - Pins `BASE_HASHES = {0: 600d8b27…, 1: 25660615…, 2: 27d8e869…}` (build, one season, two seasons of `build_realm(0)`), `BASE_EVENTS = {1: (13379, 0572125c…), 2: (37646, 4f192564…)}`, `STEP_OFF_ONE_SEASON` (acquaintances=False) and `THREAD_READ_WITHHELD_EVENTS_1 = (13366, b7632953…)` `:547-571,662-663,838`. These are the same `600d8b27…`/`25660615…` literals F-TEST-02 finds in six files each.
@@ -708,7 +708,7 @@ Lane tests5: 56 test files (engine/season/tests, engine/tests, tests/valoria hel
 - `engine/tests/test_sigma_leverage_parity.py`: 768 TN 6/8 rows and 255 pre-ruling degree rows are historical (F-TEST-08 / T-11); header cites retired oracle paths `tests/sim/v32-combat-balance/m1_dice_sigma_core.py`, `audit/2026-06-03-contest-groundup/engine.py`.
 - `tests/valoria/test_balance_oracle_arms.py:133-146` `test_the_retired_pair_definitions_still_import` (F-TEST-10 / T-04); the module docstring's `tools/balance_oracle.py` references are to a retired instrument.
 - `tests/valoria/test_close_ranks.py:45`: `test_default_gated_off` asserts the flag is ON (stale name).
-- `engine/season/tests/test_season_weather.py` module docstring `:1-17` (says the control is the pre-change hash at build/one/two seasons; the pins have moved ~60 times and the first test runs under `revert_cr79`).
+- `engine/season/tests/test_season_weather.py` module docstring `:1-17` (says the control is the pre-change hash at build/one/two seasons; the pins have been re-recorded on the order of a hundred times (204 matching lines) and the first test runs under `revert_cr79`).
 - `engine/season/tests/test_strife_credit.py:5`: "`regime_gain` is the control 0 at commit (1) and ships 0.5 at commit (2)" -- commit (2) is long landed.
 - `engine/season/tests/test_term_upkeep.py:1-12`: cites `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` (a retired plan by name); `test_works_founding.py:1-3` cites `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` and `proposals/2026-09-17-governance-and-holdings-r2/04_MATTER_AND_WORKS.md`.
 - `tests/valoria/test_combat_heft_percussion_snapshot.py`, `test_combat_audit_pins.py`, `test_combat_edges.py`: cite dissolved `designs/audit/` and `audit/2026-07-24-combat-four-dimension-audit/` paths.
@@ -716,7 +716,7 @@ Lane tests5: 56 test files (engine/season/tests, engine/tests, tests/valoria hel
 
 ## Items that could change an audit finding
 
-- **F-TEST-02 (goldens):** `test_season_weather.py` holds the re-pin log in full (about 60 `RE-PINNED` blocks across `BASE_HASHES`, `STEP_OFF_ONE_SEASON`, `BASE_EVENTS`, `THREAD_READ_WITHHELD_EVENTS_1`), not 22; its first test and the `give`-withheld test run under `revert_cr79` (so the shipped-realm world is not read); `test_strife_flows.py:856-857` and `test_strife_credit.py` re-use the same literals (`600d8b27…`, `25660615…`); `test_strife_credit.py:41` is the one shipped-realm pin. Confirms and extends F-TEST-02 (6 files for the trajectory).
+- **F-TEST-02 (goldens):** `test_season_weather.py` holds the re-pin log in full (204 grep-matched RE-PINNED/RE-RECORDED lines across `BASE_HASHES`, `STEP_OFF_ONE_SEASON`, `BASE_EVENTS`, `THREAD_READ_WITHHELD_EVENTS_1`), not 22 entries; its first test and the `give`-withheld test run under `revert_cr79` (so the shipped-realm world is not read); `test_strife_flows.py:856-857` and `test_strife_credit.py` re-use the same literals (`600d8b27…`, `25660615…`); `test_strife_credit.py:41` is the one shipped-realm pin. Confirms and extends F-TEST-02 (6 files for the trajectory).
 - **F-TEST-03:** `test_season_weather.py:541` records the B10-13 pin commit "none isolated per item" (confirms the `133 -> 137` exception); `test_told_by_channel.py:234-300` re-pins its SEED eight times because the realm stops minting chained told claims after any act-mix move (same trajectory fragility, separate file).
 - **F-TEST-07:** `test_strife_kinds.py:126-127` is a does-not-raise test with no assertion (confirmed); no vacuous loop found in the files read here beyond `test_stress_proceedings_rehost.py:94`.
 - **F-TEST-08:** `test_sigma_leverage_parity.py` confirms 768 + 255 rows, `by_ob == {1.0: 9, 2.0: 15, 3.0: 23}`, 47/208, floor `m1 >= 731`, `groundup >= 4`.

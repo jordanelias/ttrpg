@@ -372,7 +372,8 @@ Nine shapes; two occur.
   on in season 0 by `p_npc_007` and in season 2 by `p_npc_037`; both are recorded beaten. Its three
   defenders (`p_npc_011`, `p_npc_089`, `p_npc_090`) are written on by every field they are in, including
   the two they won, and in season 2 one of them marches out and is beaten in his turn. At the end the
-  three stand at `body` **1 of 1000**, their attackers at 10, 14, 18 and 20 of 1000. Nobody died
+  three stand at `body` **1 of 1000**, four others caught in the same fields at 10, 14, 18 and 20 of
+  1000. Nobody died
   (`person.died` 0). The cause is F-MB-02's ratio (first audit); what is new is what it does over three
   seasons: the only people the subsystem touches are ground to a thousandth and go on acting.
 - **Nothing answers a field.** `field.lost` stands among the causes of no other person's executed act
@@ -382,7 +383,7 @@ Nine shapes; two occur.
 - **A dead-end loop.** Seed 0, proxy arm, season 2: `p_npc_071` forms the same refused march 15 times
   in one season (`march.declared` 16, `march.refused` 15).
 - **Control.** The proxy arm moves the marchers' later choices (seed 2: 9 marches in season 2 against
-  6) and the size of the wounds (attackers at 246, 300 and 600 of 1000 instead of 10 to 20), so the
+  6) and the size of the wounds (246 to 600 of 1000 instead of 1 to 20), so the
   instrument sees a difference where there is one. It does not move the shape: walk-ins, and attackers
   beaten off.
 
