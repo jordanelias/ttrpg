@@ -157,7 +157,7 @@ founding test's own helpers); `pes_supply.py`. Each row names the run; the contr
 | 7 zero case | yes: the 26 lowland cohorts stay at 1000 | holds |
 | 8-10 is blamed, with consequence, fitted to cause | **nothing.** Famine arm: 0 shortfall Observations in six seasons; no person holds a claim; `person.died` carries `causes=[ROOT]`, `observed=()` (`matter.py::_die`). Play arm: 0 Observations, 0 persons holding a shortfall claim, in two seasons with eleven starving towns | **fails**: no link exists |
 | 11 visible before it starves | the band is computed and not delivered to any person | fails |
-| 12 somebody can act | `transfer` exists; in the play arm no `transfer`, `exchange` or `requisition` entered a starving town (0 of 8 highland attempts executed, and none of them named a food source) | fails in computed play |
+| 12 somebody can act | `transfer` exists; in the play arm no `transfer`, `exchange` or `requisition` entered a starving town (0 of the 10 `transfer` and `exchange` attempts by highland residents executed) | fails in computed play |
 | 13 hunger weakens the town's dues | no: yield reads no person (the eight emptied towns go on mining 49 ore a season each with population 0); levy reads weight, which did not fall until death | fails |
 | named residents | the eleven named persons living in the eleven starving towns hold body 1000 and all survive: only a cohort eats (ruled, ED-IN-0255) | by ruling; surprising to a genre player |
 
