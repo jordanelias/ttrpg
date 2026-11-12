@@ -183,7 +183,7 @@ Numbering continues from the first audit's F-DICE-14.
 
   Combat as built reproduces the designed social roll to within a point at a score of 3 and within
   three at 4. The season's social roll is a different game: between equals, Success-or-better is 28 %
-  where the other two give 65 to 68 %. What one point buys (Success-or-better): an actor going from 3 to
+  where the other two give 63 to 68 %. What one point buys (Success-or-better): an actor going from 3 to
   4 against a 3 gains 11.0 points in the social roll and 4.6 in a fight; a subject going from 3 to 4
   costs the actor 11.4 and 7.8.
 - **Touches.** R-06, R-09; NERS-S (*calculations consistent in methodology*; two ladders for one

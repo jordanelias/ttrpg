@@ -539,3 +539,171 @@ Line references are to the file in the entry. `[UNVERIFIED]` marks anything not 
 - **Conflicts / stale:** header (:26-29) says the Solmund-intent refusal "is unresolved" inconsistency. Entry D-4 ("not taken") superseded by R-2 (:191-193). Banner at :657-670 warns the "no accumulation / never falls" note was wrong: read all of Batch 8 and 9 before coding a Coherence track. R-3 (constitutive cost) and §6.8's operational channel not reconciled (:975-986). "The draw" noun survived at ~5 sites until R-20; confirm gone.
 - **Open items:** the late-flagged vocabulary ruling on "the draw" is resolved by R-20; what is owed to a being outside the register; whether Solmund understood; whether R-19 "withdrawing" is compatible with §1.5 (if §1.5 needs a note, it needs a ruling) (:1449-1452); "as-structure" row in lineage.
 
+### canon/philosophy/_review/A_verdict.md
+- **What it is:** section A of the Fable 5.1 read-only review of the five source canon documents: one-paragraph verdict; 22 lines.
+- **Status:** none (review artefact); superseded by the rulings it provoked. Reading: historical.
+- **Bears on:** PROCESS, WR.
+- **Content that matters:** "philosophically serious but not yet philosophically rigorous"; one load-bearing invention (three-layer model) and one good analysis (§4.3 finitude pivot); four places of borrowed apparatus presented as fidelity (Heidegger's ontological difference, Kant/Husserl apperception, Husserl constituting time, the epoché); two incompatible Calamity accounts, two tendency locations, no one-or-many answer (:7-20).
+- **Conflicts / stale:** all findings answered in RULINGS; text is a record. 
+- **Open items:** none.
+
+### canon/philosophy/_review/B_structural_faults.md
+- **What it is:** section B: twelve structural faults SF-1..SF-12 with quote evidence and proposed repairs; 258 lines.
+- **Status:** none; historical (each SF is resolved or ruled in RULINGS).
+- **Bears on:** WR, PROCESS.
+- **Content that matters:** SF-1 two Calamity mechanisms (tensile vs inversion) (:7-37); SF-2 tendency in rendering vs substrate; Locked Zone case breaks the spooling-tendency account (:39-72); SF-3 3-5 causal accounts of Coherence loss, TD vs Coherence temporal facet collision (:74-109); SF-4 one rendering or many (:111-136); SF-5 ontological register treated ontically (:138-150); SF-6 layer 2 is threadwork -> universal TD (:152-172); SF-7 threadcut categorical vs layer profile; Solmund's dissolution has no cause (:174-194); SF-8 cup argument vs development; SF-9 passive stratum posited four times; SF-10 Leap's target stated four ways; SF-11 origin of mode-3 organization; SF-12 "Providence" names two things (:196-256).
+- **Conflicts / stale:** all repaired per 00_standing §0.4 / RULINGS; repeated verbatim inside `FABLE_REVIEW.md`.
+- **Open items:** none.
+
+### canon/philosophy/_review/C_lens_findings.md
+- **What it is:** section C: lens findings under Heidegger (H-1..H-5), Husserl (U-1..U-5), Derrida (D-1..D-5), Lurianic Kabbalah (Q-1..Q-5); 140 lines.
+- **Status:** none; historical.
+- **Bears on:** PROCESS, WR.
+- **Content that matters:** substrate treated as hidden layer of entities (H-1); rendering is Husserlian constitution in Heidegger's vocabulary (H-2); "apperception" is Kant (U-2); "primitive system" is passive synthesis (U-4); "always-already" in three senses (D-1); Derrida's trace, supplement, différance in "radically are without becoming" (D-2..D-4); Ein Sof "adopts correctly" overclaims (Q-1); tsimtsum has no contractor (Q-2); Church's God vs Ein Sof (Q-3); Lurianic figures to name or not (Q-4; opening of Q-4 lost in delivery, marked at :125-128); spooling as shefa (Q-5).
+- **Conflicts / stale:** Q-3's "same referent" recommendation was overruled by D-10 (Church worships Solmund). H-3's "two uncannies are one" was struck by the author (B-17).
+- **Open items:** none.
+
+### canon/philosophy/_review/D_cross_document_inconsistencies.md
+- **What it is:** section D: 21-row table X-1..X-21 of cross-document inconsistencies among the five sources; 31 lines.
+- **Status:** none; historical. 
+- **Bears on:** PROCESS, WR.
+- **Content that matters:** X-1 Calamity vs Catastrophe; X-2 tendency location; X-3 Leap risk vs zero-cost Mending; X-6 Leap target; X-7 threadcut categorical; X-9 "threadcut beings came through the tear" (A14); X-10 Locked Zone epistemic vs substrate; X-11 Providence; X-19 precedence undefined (rule: head > Doc 3 > Doc 2 for absorbed content) (:7-29).
+- **Conflicts / stale:** all resolved by the suite.
+- **Open items:** none.
+
+### canon/philosophy/_review/E_citation_defects.md
+- **What it is:** section E: 15 citation/reference defects and the lists of undefined terms and unspecified scales; 29 lines.
+- **Status:** none; historical, but the undefined-terms list is still true of the world vocabulary.
+- **Bears on:** PROCESS, WR, CHAR, DICE.
+- **Content that matters:** dangling paths (`designs/threadwork/threadwork_v30.md`, `params/factions.md`, `valoria_hooks.py`, etc.) (E-9); "retention roll" collides with Husserlian retention (E-15); Undefined terms: Weaving, Pulling, Past-Pull, Locking, Dissolution, Mending, Gap margins, contact window, Focus capacity, Contact Duration, Version C, CD, History Resonance, MS, Ob, Diagnosis ... (:25). Unspecified scales: TS 30/50/70/90 bands, 0-29 never specified; Coherence 10-0; operation scales never laddered (:27).
+- **Conflicts / stale:** the world-vocabulary terms (Weaving, Pulling, Locking, Dissolution, Mending, Edeyja, Wardens) have no live definition in `canon/philosophy/`; SUPPLEMENT §6.1 says they belong in a glossary the suite does not own; whether `references/names_index.yaml` carries them [UNVERIFIED].
+- **Open items:** the TS ladder below 30.
+
+### canon/philosophy/_review/FABLE_REVIEW.md
+- **What it is:** the full Fable 5.1 review as one document (sections A-I concatenated), with a delivery note; 562 lines.
+- **Status:** none; historical. 
+- **Bears on:** PROCESS, WR.
+- **Content that matters:** same content as files A-I (not repeated). Delivery note: the opening of Q-4 was lost in delivery and marked missing; the reviewer declined to retrofit a derivation audit it had not run (:11-19). Section I's twelve flags map 1:1 onto D-1..D-12 (:549-562). Section G's recommended order is the order of the suite (:505-531). Section H lists what is genuinely good: the finitude pivot, three-layer model, §2.2+P-07, the self-judgment asymmetry, inert knowledge, emergence-not-design, permanent unretrievable knots, orphaned configurations, betrayal-as-epistemology (:534-545).
+- **Conflicts / stale:** duplicates A-I; keep one.
+- **Open items:** none.
+
+### canon/philosophy/_review/F_gaps.md
+- **What it is:** section F: twelve ranked gaps; 20 lines.
+- **Status:** none; historical (most closed by rulings or by suite sections).
+- **Bears on:** PROCESS, WR.
+- **Content that matters:** gaps: what "operation" denotes; one or many renderings; where the tendency lives; origin of mode-3 organization; who contracts; whether the substrate is real independent of rendering; what dissolved Solmund; whether TD affects Coherence; the Church's God vs Ein Sof; the TS ladder below 30 and non-sensitive confrontation; whether the trauma signature diminishes with TS; whether Coherence exists for non-practitioners (:7-18).
+- **Conflicts / stale:** all but #10 (TS ladder below 30) answered in the suite.
+- **Open items:** #10.
+
+### canon/philosophy/_review/G_proposed_organization.md
+- **What it is:** section G: the proposed order of the rewritten suite and seven contestable ordering calls; 32 lines.
+- **Status:** none; historical (implemented as the suite).
+- **Bears on:** PROCESS.
+- **Content that matters:** order Standing -> Limit -> Threads -> Rendering -> Being-persistence -> Confrontation -> Operations -> Drift -> History -> Terminology -> Constraints; GD-1..GD-3 to move out; A-rule file to retire (:9-21); contestable calls (a)-(g) (:23-30).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### canon/philosophy/_review/H_what_is_good.md
+- **What it is:** section H: what is genuinely good in the sources; 18 lines.
+- **Status:** none; reference.
+- **Bears on:** PROCESS, WR.
+- **Content that matters:** nine items to protect: §4.3 finitude pivot; the three-layer model; §2.2 + P-07; self-judgment asymmetry; inert knowledge and religious poetry; emergence-not-design and the Solmund refusal; permanent knots; orphaned configurations; the betrayal (:7-16).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### canon/philosophy/_review/I_author_rulings.md
+- **What it is:** section I: twelve rulings flagged for the author with option labels; 18 lines.
+- **Status:** none; historical (ruled 2026-09-07, see `RULINGS.md`).
+- **Bears on:** PROCESS, WR.
+- **Content that matters:** the twelve flags (Calamity mechanism, tendency location, Leap risk, one/many renderings, ontological register, layer 2 as operation, threadcut deterioration/Solmund, Church's God vs Ein Sof, tsimtsum, what TS is, Derrida, Providence) (:7-18).
+- **Conflicts / stale:** recommendations here were rejected or replaced in several cases (tendency location, one/many, Church's God).
+- **Open items:** none.
+
+### canon/philosophy/_review/J_derivation_audit_part1.md
+- **What it is:** derivation audit part 1: premise register F1-F13/L1-L3 and claims 1-5 (three-layer model, Leap threshold, operation-type taxonomy on each tendency location, why cost falls on the practitioner, Mending at scale); 135 lines.
+- **Status:** none (review artefact). Reading: historical; several derived consequences were later STRUCK by the author (see RULINGS: others' rendering as a persistence factor; "rendering actualizes"; "witnesses organize the surfeit").
+- **Bears on:** PROCESS, WR, CHAR, DICE.
+- **Content that matters:**
+  - Classification scheme per claim: ENTAILED / UNDERDETERMINED / STIPULATED / UNDERIVABLE; claim 1 the three-layer model is ENTAILED by a chain via §1.2+§1.1 (not §3.2 as cited) (:32-49). The derivation "most worth making" is Δ1 (rendering is threadwork) (K/L final section).
+  - The missing layer-profile row "2 without 1" (a human in a Locked Zone) is derived (:56).
+  - "Taxonomy UNDERIVABLE on substrate-tendency, ENTAILED on rendering-tendency" - the single sentence in source §16.1 where "rendering's stabilising tendency" slides to "substrate's own spooling would resume" (:84-99).
+  - Cost falls on the practitioner because the held shape lives where the holding is; a target-side Coherence cost is also derived but never stated in the sources (:116-118) - later adopted at 06 §6.7 (target bears Coherence cost too).
+- **Conflicts / stale:** Δ1's consequence "rendering actualises what it renders" was corrected by the author to "what is taken-as is thereby determinate" (RULINGS D-0 note).
+- **Open items:** none.
+
+### canon/philosophy/_review/K_derivation_audit_part2.md
+- **What it is:** derivation audit part 2: claims 6-10 (retention roll failure mode, reality-strain, Doc 3 Am 6's dice-facing consequences, baseline Temporal Disjunction, the outward facing); 95 lines.
+- **Status:** none; historical.
+- **Bears on:** PROCESS, WR, CHAR, DICE.
+- **Content that matters:**
+  - Δ-roll: reconstitution fails when layer 2 cannot re-hold against [drift during suspension = environment x duration] + [knot feedback = type x scale]; roll probability is STIPULATED (:9-23).
+  - Doc 3 Am 6's four kinds are ENTAILED, but the magnitudes (Ob 1-2, MS -1/-2) and format-bound wording are not foundations material; keep kinds, move numbers to the mechanics document (:47-58).
+  - Baseline TD: self-rendering is a thread operation so TD is constitutive of ordinary experience (proposed thesis "adopt", :62-75) - REJECTED later: operations are deliberate acts only (D-6).
+  - Outward facing = disposition plus occurrent holding; hermits drift faster; knots are distance-independent (:79-91) - adopted in 04 §4.3 and 07 §7.3.
+- **Conflicts / stale:** the baseline-TD thesis (:73) contradicts the ruled D-6 (no baseline).
+- **Open items:** none.
+
+### canon/philosophy/_review/L_derivation_audit_part3.md
+- **What it is:** derivation audit part 3: claims 11-12, shorter checks, tally, the seam, the single derivation most worth making; 113 lines.
+- **Status:** none; historical.
+- **Bears on:** PROCESS, WR.
+- **Content that matters:**
+  - "It was not constituted" is UNDERIVABLE as worded; restated as passive registration; finitude pivot strengthened into a theorem about a two-stratum rendering (:8-31).
+  - Δ3 proposed that witnesses' rendering gives the surfeit its form (rendered-side origin of mode 3, Solmund as the rendered form) (:45-55) - STRUCK by the author (RULINGS B-19).
+  - Tally of 38 claims: 24% entailed as written, 34% entailed by an unwritten chain, 16% underdetermined, 10% stipulated, 16% underivable; ~71% entailed after repairs (:73-91).
+  - The seam: one sentence in source §16.1; kind vs magnitude; amendment vs head (:95-101). Remaining genuinely authorial rulings after Δ1: I-1, I-5, I-7, I-8, I-9, I-10, I-11 (:111).
+- **Conflicts / stale:** Δ3 and "persistence partly a function of being rendered" (:41) are struck; these appear in text here and must not be cited as current.
+- **Open items:** none.
+
+### canon/philosophy/_review/round2/00_REWRITE_PLAN.md
+- **What it is:** round-2 plan from four parallel read-only reviews (coherence, ruling-fidelity, derivation soundness, philosophical rigour) of the live suite, ranked by independent rediscovery; 207 lines.
+- **Status:** none (review artefact), round 2. Reading: mostly historical; Tiers 1-2 (struck proposals stated as canon, stale "open", false "Ruled" attribution) were fixed in the live suite per my read of 04/08/09 (e.g. 09_terminology no longer carries the threads/surfeit split; 08 §8.2 no longer says witnesses give the shape); Tier 0 / Tier 4 items remain partly open.
+- **Bears on:** PROCESS, WR.
+- **Content that matters:**
+  - Nine convergent defects (found by 3-4 readers) all sit in hand-written restatements (glossary, diagrams, band list, summary), never in the owning sections; `00_standing.md:52` already forbids restatements (:35-51).
+  - Tier 4 foundational gaps: "configuring is located nowhere" (ground forbidden to organize, rendering forbidden to configure, spooling is the ground's supply) with a composing fix "configuring is passage through the limit"; "the draw" as a dynamics vs a configuration-space property (:104-130). The draw was later retired as a word (RULINGS R-20) and relocated to threads (R-12).
+  - Tier 6 (keep): the vessel account "sensitivity does not reduce cost, it spreads it to the people you love" (:164-182) - void after C-3 retraction.
+  - DO NOT TOUCH list: §5.3 finitude, §6.1+§6.2 operation criterion, §6.6 knife-edge, §8.7-8.8 Church derived from Solmund, §1.3 regulative inference, §7.1 amoral strictly, §5.1, §2.6 (:186-207).
+- **Conflicts / stale:** Tier 6 is void post-R-14. 
+- **Open items:** Tier 0 items D-A..D-D (see next file).
+
+### canon/philosophy/_review/round2/01_AUTHOR_DECISIONS.md
+- **What it is:** four decisions only the author can make, from round 2; 131 lines.
+- **Status:** none; reading: D-A is STILL OPEN at HEAD (07_drift.md still carries both "no longer where that configuration tends" at :129-130 and "draws nowhere" at :261-263 and :378-379 as I read them); D-B partly answered by R-2; D-C and D-D partially (header corrected in RULINGS).
+- **Bears on:** CHAR, WR, DICE (crossing semantics for any Coherence-0 mechanism), PROCESS.
+- **Content that matters:**
+  - D-A: past the crossing does a configuration tend anywhere? (a) elsewhere - own basin; (b) nowhere - only holding, irreversibility from the Locked-Zone-of-one reading; (c) reach-gated like §7.6. Under (b) restoring a crossed being toward human is restorative, inverting §7.1 (:13-68). Found by 3 of 4 reviews.
+  - D-B: is the substrate the condition of the ontological register? (a) own the reification, (b) withdraw "condition of possibility" (:72-94). Answered by RULINGS R-2 ("both").
+  - D-C: the knife-edge is the editor's elaboration of one author sentence ("possible but self defeating UNLESS it's mending and trying to restore equilibrium"), called "ruled" in RULINGS:797 and DIAGRAM:201 (:98-110).
+  - D-D: the register promises the author's own words but ~16 entries have none (:114-130); RULINGS header now corrects the count (24 of 47).
+- **Conflicts / stale:** D-A conflict is live inside `07_drift.md`.
+- **Open items:** D-A; D-C ratify or demote the knife-edge.
+
+### canon/philosophy/_review/round2/02_CONFLICT_REGISTER.md
+- **What it is:** register of 61 conflicts (15 equivocations, 46 contradictions) found in round 2, each verified against the tree at commit `9d4980d`; 473 lines.
+- **Status:** none; mostly historical; B-1 (crossed-configuration tendency) and H-2 (can a taking-as resist a force; §6.8 cost model needs layer 2 to resist environmental force) are structural and not editorial.
+- **Bears on:** PROCESS, WR, CHAR, DICE.
+- **Content that matters:**
+  - A-block (ruling made, opposite stands): witnesses constitute modes; threads/surfeit split in glossary; others' rendering "holds" you; the retracted ratchet; tendency location; baseline TD in §4.2 (:14-78). Most fixed since (checked against 04/08/09/07 above).
+  - B-block (two live documents disagree): B-1 crossed config; B-2 depth ("accumulated holding (§3.4)" vs only spooling yields depth); B-3 last band reads displacement vs floor; B-4 environment deforms only during an operation vs "operates on anyone present"; B-5 Locked Zone layer row; B-7 can a being with no layer 2 perform an operation; B-9 "retention" misused as recollection (:84-179). Of these, 07_drift §7.4 now carries the "except the last" fix for B-3; 04 §4.4 table shows the Locked Zone row as "1 + 2, becoming precluded" (fixed); B-1 persists.
+  - H-block equivocations: determination vs move, takes-as vs holds-against-force, operation wide vs narrow, becoming (accumulation vs movement), hold/bear, overwhelmed, event, return/draw, remembered state/band, as something/as world, how sensitivity develops (:338-417).
+  - Further: B-11 toughness term vs "elastic range is a constant of the being" (:419-431); C-5 "does not rewind time" vs past-pull on a threadcut leaving a Gap (:433-440) (re-derivable per 00 plan tier 3).
+- **Conflicts / stale:** line numbers are as of `9d4980d`; many cited sites were rewritten.
+- **Open items:** B-1, H-1, H-2, C-5, B-11 are the structural residue [UNVERIFIED which still stand at HEAD beyond B-1].
+
+### canon/philosophy/_review/round2/03_THE_SUBSTANCE.md
+- **What it is:** the 29 "substance" conflicts reorganized by decision type (structural, two rulings in tension, one word two jobs, internal inconsistencies, sources, scorecard); 160 lines.
+- **Status:** none; mixed historical / still-open.
+- **Bears on:** PROCESS, WR, CHAR.
+- **Content that matters:** S-1 crossed configuration tendency (same as D-A); S-2 can a taking-as resist a force (probably dissolved by the unrecorded constitutive-cost ruling R-3); S-3 determination vs movement; S-4 substrate as condition of ontological register; S-5 toughness term vs elastic-range constant; S-6 temporal pull and rewind; eleven word-choice items S-7..S-17 (operation, becoming, hold/bear, overwhelmed, event, return/draw, remembered state/band, unfixed/indeterminate, as something/as world, how sensitivity develops, always-already/dimension); S-18..S-21 internal; S-22..S-27 lineage (as-structure is Heidegger's; Lacan's Real is not "lack"; empirico-transcendental doublet is Foucault's; Freud vs Jentsch; "pre-predicative" misnames the passive stratum; Derrida decoration); S-28/S-29 derivation scorecard (:13-150).
+- **Conflicts / stale:** S-24 ("empirico-transcendental doublet is Foucault's") acknowledged in RULINGS R-2 note (suite holds the doublet deliberately against his diagnosis, "§0.3 should record it").
+- **Open items:** the eleven word-sense switches (S-7..S-17), S-5, S-6.
+
+### canon/philosophy/_review/round2/04_MY_UNDERSTANDING.md
+- **What it is:** the editor's coded model of the system (U-01..U-82) with provenance marks [R]/[M]/[?], mermaid views; 315 lines.
+- **Status:** "SUPERSEDED 2026-09-09, later the same day. Do not read this as current" (:3-22). Reading: superseded and partly void (U-42, U-47, U-48 void after C-3 retraction); roughly a third of the 82 codes moved in an afternoon.
+- **Bears on:** PROCESS.
+- **Content that matters:** 55 [R], 24 [M], 3 [?] (:314); the only [?] items are the three crossed-configuration options U-65..U-67 (:179-194). View 4 Coherence model is the accepted shape (resting point, present displacement, permanent set) (:143-177).
+- **Conflicts / stale:** uses "the draw" (retired R-20), "magnitude is imbrication" (void).
+- **Open items:** U-65..U-67 same as D-A.
+

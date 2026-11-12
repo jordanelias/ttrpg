@@ -578,3 +578,218 @@ Lane `designs2`: archived design documents under `.designs/systems/{overview,set
   - Part 22 accessibility, input, resolution scaling; Part 23 precedent attribution (:128-136).
 - **Conflicts / stale:** Part numbering jumps from 9 to §20.3 (missing Parts 10-20 in the index) — the v4 body had a numbering defect or the index mis-parsed. The 16×10 mass battle grid conflicts with the 25×25 cell grid in mass_battle_v30 §A.3b (AUDIT_BRIEF) — UI and design disagree [UNVERIFIED which is current].
 - **Open items:** none.
+
+### .designs/systems/victory/reference/victory_flow_skeleton_v1.md
+- **What it is:** Traced flow skeleton of the OLD victory code (`engine/autoload/victory.py` plus the inline fallback in `engine/mc_v18.py`) at commit 6545067.
+- **Status:** "REFERENCE — traced structure only". Reading: historical; the traced files are gone (`engine/mc_v18.py` absent). The finding patterns are still instructive for engine/season's ending logic.
+- **Bears on:** CORE, FA, WR
+- **Content that matters:**
+  - GD-1 gate = held count (of ALL_PLAYABLE_15) vs VICTORY_THRESHOLD 15, every held accord >= ACCORD_MIN, Turmoil <= PS_MAX, sustained SUSTAIN_SEASONS; module-level `_qualifying_streak` tracker (:70-81).
+  - Dead param: `DEFAULT_PARAMS['VICTORY_THRESHOLD']` = 11 never read, live gate is victory.py's 15; pinned by a test that sweeping it moves no outcome (:128).
+  - `world.clocks['Turmoil']` initialised to 0.0 and never written, so `ps_ok` is unconditionally True; tracked ED-WR-0004 (open, RULED: wire Turmoil writes via peninsular_strain) (:129).
+  - Four world-state era gates (MS=0 Post-Calamity, sustained MS<=5 Second Calamity, MS recovery, all-dissolved Anarchy) declared in module_contracts but absent from code; no Key type exists for them (:130).
+  - Fallback winner-by-territory-count formula (held, Faction.L, len(territories)) lives inline in the orchestrator, undocumented in the contract (:132).
+  - 3 of 5 `VictoryResult` fields never read (:131); contract declares 8 state reads, code reads 3 (:134).
+- **Conflicts / stale:** The engine/season analogue (`engine/season/rosters.yaml:3450-3466`) records the same absences differently: GD-1 clauses for Accord, Stability, sustain "not carried", victory "UNREACHABLE IN COMPUTED PLAY" and nothing halts on it. So the modern code also has no Turmoil carrier (grep empty).
+- **Open items:** ED-WR-0004 (wire Turmoil/Strain) — now moot or open depending on whether Strain should exist in engine/season [UNVERIFIED].
+
+### .designs/systems/victory/reference/victory_v30.md
+- **What it is:** The v30 Victory Architecture skeleton (VALORIA BG): universal Peninsular Sovereignty (§0), territory/PV and Piety Track tables, faction strategies (§3), co-victories (§4), world-state transitions (§5), CI generation and Church Seizure (§7), RM Founding (§8), hybrid integration (§9), patch register.
+- **Status:** "Status: CANONICAL"; also "Date: 2026-04-06 | Status: DESIGN — sections §0.1, §3.1-§3.6, §4, §8 SUPERSEDED-BY GD-1 (2026-05-17 — peninsula-only victory); §0 Universal Peninsular Sovereignty remains canonical and is the sole victory path". Reading: §0 live as intent, most of the rest superseded; also VTM and Cultural Reformation STRUCK.
+- **Bears on:** FA, WR, SE, CORE
+- **Content that matters:**
+  - §0: all 15 playable territories (T1-T14, T17), Accord >= 2 on directly-controlled, Turmoil <= 6, held 2 consecutive Accountings; hegemony via Treaty-bound/Submitted/Mandate-dominated rivals (:47-55).
+  - Accord table (3 Aligned ... 0 Revolt); PV counts only at Accord >= 2; conquest = Accord 1 (:86-94); battle consequences MS −1 (−2 Campaign/War) with Strain/IP battle triggers STRUCK by ED-743 (:100-102).
+  - PV table total 33 (starting Crown 14, Hafenmark 7, Varfell 7, Church 5) here vs TCV 31 in peninsular_strain (:144-169); Starting PT table (:119-139).
+  - Church Mass Seizure one-shot at CI >= 60 with declaration probability ((CI−60)/40)^3.3 per season (1% at CI 70, 10% at 80, 39% at 90, 100% at 100); Pool Influence + floor(CI/15); Ob 10 − PT − infrastructure (floor 1); infrastructure modifiers capped −4 per settlement (:229-313).
+  - Seasonal CI: +1 passive, Piety Yield by PT 5/4, Assert, Suppress, Hafenmark structural −1 (:680-685).
+  - RM Cultural Revolution two-phase win (Phase 1 PT<=1 in >=4 territories; Phase 2 Uprising of T9 with Weaver pool vs Ob CI÷10) and Presence-marker mechanics; Founding mechanic requires Disposition +3 with Yrsa Vossen and either 2 territories PT<=2 or 4 settlements Order<=1 (:407-470, :695-710).
+  - Löwenritter Regency (post-coup succession candidates Torben, Elske, player Deed-Claim; 8 Löwenritter seasons then Military Consolidation) and Elske Loyalty Track (:469-537).
+  - World-state transitions: MS=0 Post-Calamity (acquisition suspended 3 seasons, true terminal = 10 seasons at MS <= 5); IP=100 Phased Occupation (3 corridors with IP thresholds, repulsion routes); all factions dissolved = Anarchy Era; Rupture Scene with "the Last Declaration" (:567-646).
+  - Warden Cooperation 0-3 (WC 3 = "singular endgame survival path") and Warden Recognition WR 0-4 for Varfell Path B (:657-669).
+- **Conflicts / stale:** Internal conflict: WC 3 "singular survival path" vs wc_survival_spine's three-path reframing (ED-741). PV vs TCV naming and totals differ across docs (33 vs 31; "PV" was renamed to TCV). Section numbering duplicated (§5 appears twice: World-State and Total Domination). §3.x faction-specific wins are all superseded by GD-1 (:194, :226, :342, :370, :403, :470, :542, :692, :824). Mentions "Sim/hybrid/board game" scope. Total Domination (§5 second copy) PV >= 28 conflicts with the GD-1 sole-victory ruling.
+- **Open items:** ED-311 CLOSED; simulation of win probabilities never completed (SIM-DEBT in infill :66).
+
+### .designs/systems/victory/reference/victory_v30_index.md
+- **What it is:** Auto-generated index (2026-04-19) of victory_v30 (13,845 tokens, 65 headings).
+- **Status:** none (generated); indexed doc says "Status: DESIGN — pending Varfell Path B user decision (ED-311)" (:26) — stale vs. the body.
+- **Bears on:** PROCESS, FA
+- **Content that matters:** Heading map (§0 universal condition at :32; §3 Faction Strategies; §5.1 still labelled "RS=0 → Post-Calamity Era" vs body "MS=0") (:65-67). Canonical path `designs/provincial/` (dissolved).
+- **Conflicts / stale:** RS/MS naming drift; line numbers shifted.
+- **Open items:** none.
+
+### .designs/systems/victory/reference/victory_v30_infill.md
+- **What it is:** Prose/rationale extracted from victory_v30 — mostly headings with a few notes.
+- **Status:** "Status: DESIGN — pending Varfell Path B user decision (ED-311)" (stale; body says ED-311 CLOSED). Reading: fragment of the same document.
+- **Bears on:** FA, WR
+- **Content that matters:**
+  - Core frame: "Victory = Territory Held + Faction-Specific Political Conditions, sustained for 2 consecutive Accounting steps" (:20) — the pre-GD-1 frame.
+  - RM has no faction stats; operates through Presence markers and Community Weaving; cannot hold territory or raise armies; vulnerable only to PT reversal and Inquisitor disruption (:43).
+  - Victory checks fire at Accounting Step 12 regardless of Zoom In; autonomous TCV changes from uninvestigated Domain Echoes count toward victory (:61, :64).
+  - Partition (Church + Hafenmark) is bilateral and terminal; non-winners score nothing (ED-339) (:34-35).
+  - SIM-DEBT P1: full faction-AI simulation needed to validate non-military acquisition paths (:66).
+- **Conflicts / stale:** the Core Frame (:20) is contradicted by GD-1 (peninsula-only).
+- **Open items:** ED-326 Church Prominence tracker; SIM-DEBT P1 (:66, :71).
+
+### .designs/systems/world/reference/calamity_radiation_v30.md
+- **What it is:** Calamity Radiation Framework (approved 2026-04-06, ED-302): MS-band × node-distance-from-Askeheim matrix of instability effects, settlement-type radiation modifier, Southernmost Surge, threadcut classification, BG lookup.
+- **Status:** "CANONICAL — approved 2026-04-06". Reading: design intent for geographic pressure; the world clock MS has no carrier in the season architecture (rendering.py header: no rendering/mending clock among the three licensed clocks).
+- **Bears on:** WR, SE, FI, MB, FA
+- **Content that matters:**
+  - Node distance map: 0 T15; 1 T6, T13; 2 T5, T12; 3 T1, T14, T4, T11; 4 T2, T16, T9, T7, T10; 5 T3, T8, T17 (:45-52).
+  - Matrix by MS band (Stable 100-80, Strained 79-60, Fragile 59-40, Fractured 39-20, Critical 19-1, Rupture 0): effects reach further out as MS falls; e.g. at Fractured distance 1 gets Shifting Objects and Gaps on 1d10 1-2; Critical distance 1 gets Gaps on 1-4 and +1 Ob on all orders (:60-103). Cumulative downward.
+  - Settlement-type modifier: Outposts near Askeheim one band earlier; Fortress/City/Seat one band later; Cathedral preserves Truth one band later (:32-37).
+  - Southernmost Surge once per campaign at MS <= 10 (:110-112); threadcut classification Micro/Standard/Catastrophic by Gap severity and TS 20-40 / 50-70 / 80+ (:121-125).
+  - Forgetting is permanent at Askeheim, conditioned on unhealed Gaps not MS; cessation requires full territorial Mending (:161-166).
+  - Radiation-caused Thread failures do not generate Domain Echoes (PP-532) (:172).
+  - Proximity Rating (0-5) printed on territory cards; fieldwork Survey Ob = (5 − Proximity) + 1, min 1 (:134, :159).
+- **Conflicts / stale:** ED-303 MS naming ("Mending Stability" vs "Substrate Integrity") still deferred (:177) while skeleton file uses MS and infill uses RS. References `designs/setting/`, `compilation/v0.14` paths (dissolved).
+- **Open items:** ED-303 MS naming; Forgetting prose sections are empty in this skeleton (headings only at :161-166).
+
+### .designs/systems/world/reference/calamity_radiation_v30_infill.md
+- **What it is:** Prose half of the radiation framework: design principle, Surge, threadcut emergence conditions, Forgetting.
+- **Status:** "CANONICAL — approved 2026-04-06" (infill, uses older RS naming). Reading: same document in parts.
+- **Bears on:** WR, FI
+- **Content that matters:**
+  - RS thresholds radiate outward from the wound; southern factions face existential threat before northern ones notice (:17).
+  - Surge: for one season, territories within node distance 2 get effects one band worse; Askeheim produces a catastrophic Gap emergent being (TS 80+) persisting until Mended or De-Actualised (:28).
+  - Threadcut emergence: Ein Sof's excess flooding through a Gap achieves sufficient configurational complexity; "not every Gap produces a being"; the Einhir Catastrophe's Gaps produced Solmund (:32).
+  - Forgetting cessation requires all Gaps in Askeheim mended; "likely requiring WC >= 3 and RS recovery above the Strained band. No faction has accomplished this in 245 years" (:42-43).
+- **Conflicts / stale:** RS vs MS naming; "Game Master determines" language elsewhere.
+- **Open items:** none.
+
+### .designs/systems/world/reference/geography_v30.md
+- **What it is:** Geography & Territory Design (approved 2026-04-05): physical geography, 17-territory table with Fort and adjacency, starting control, POI catalog per territory, Altonian invasion routes.
+- **Status:** "CANONICAL — approved 2026-04-05". Reading: the territory-level (province-tier) canon; settlement-level graph is in settlement_adjacency_v30 and the geography YAML (systems/settlements/valoria_geography_v30.yaml exists).
+- **Bears on:** WR, SE, MB, FA, FI
+- **Content that matters:**
+  - 17 territories with Fort, subtype and adjacency (T1 Valorsplatz Fort 2 adj T2,T5,T14,T16 ... T14 Ehrenfeld Fort 3 with 5 connections, T9 Himmelenger 5) (:68-86); starting control Crown 6, Varfell 4, Hafenmark 4, Church 1, Uncontrolled 1 (Askeheim), Schoenland 1 (:88-98).
+  - Two Altonian passes: Lowenskyst (NE, primary) and Spartfell (NW, secondary); naval route at IP 75+ through Schoenland (:26, :143-149).
+  - Starting POI per territory (Resource/Secret/Remnant/Anomaly), POI availability by RS band (:100-133).
+  - Open balance items: BALANCE-002 Varfell chain fragility, 003 Himmelenger kingmaker, 004 Askeheim needs a scoring mechanic, 005 Hafenmark food dependency (:166-170).
+- **Conflicts / stale:** Territory 'Askeheim "Two gates"' and the infill; march_layer counts 26 territory edges; this table lists adjacency from which 26 can be derived [UNVERIFIED]. Many sections empty headings (Continental Context, Church Geography ...) with prose in infill.
+- **Open items:** ED-054, ED-055 (maritime Forgetting), ED-058 (NW pass IP delay), ED-061 naming, BALANCE-001..005 (:158-170).
+
+### .designs/systems/world/reference/geography_v30_infill.md
+- **What it is:** Prose half of geography_v30: terrain regions with cultural analogues (Hafenmark Swiss, Varfell Norwegian, Crown Italian), Church and RM geography, maritime Forgetting, adjacency notes.
+- **Status:** "CANONICAL — approved 2026-04-05". Reading: setting intent.
+- **Bears on:** WR, ARCS, SE
+- **Content that matters:**
+  - Hafenmark squeezed between Altonian-controlled mountains and Altonian-controlled Valoria produced "procedural compliance and constitutional governance" culture (:18); Varfell commercially isolated (no sea route east-west; Forgetting blocks southern tip) (:19); Crown at river-sea junction (:20).
+  - Church power is a consequence of Altonian containment decision (Himmelenger on the ridge) (:29); RM strongest southwest, weakest in Hafenmark (:31).
+  - The rational explanation for the blocked sea route is "literally unrememberable without TS", so Varfell perceives a Crown/Schoenland trade conspiracy (:33) — a designed misperception usable by NPC beliefs.
+  - Lake Eidursjø is a natural barrier between western Varfell and eastern Crown farmland (:42); Askeheim has two gates, Oastad (Varfell) and Stillhelm (Crown) (:45).
+- **Conflicts / stale:** "Eidursjø" lake also appears as a renamed territory in old victory docs (PP-493 note). none else.
+- **Open items:** none.
+
+### .designs/systems/world/reference/insurgency_pipeline_v30.md
+- **What it is:** Insurgency Pipeline (Pass 2i, 2026-05-17; dissolution paths ratified ED-881 2026-05-29): 4-stage model from world-level RM PT decay to Latent RM to Insurgency to Promoted Faction, with suppression/dissolution, GD-1/2/3 bindings.
+- **Status:** "CANONICAL — Pass 2i authoring 2026-05-17"; seven derivation items PROVISIONAL, two resolved. Reading: design intent; the retired oracle `sim/world/insurgency_pipeline.py` is gone, and engine/season/hole_register.yaml:4300 records that GD-3's insurgency trigger "has no season form beyond its first condition" (partial: `queries/world_q.py` has an `uncontrolled` report, no acting caller).
+- **Bears on:** WR, FA, SE, CORE
+- **Content that matters:**
+  - Stage 1: per arc, effective chance = min(0.8, 0.35 × (1 + (arc−1))) of PT −1 in each eligible territory (not Church-owned, no Church Inquisitor); Varfell Einhir-gate co-option bonus 0.1 × rm_strength, cap 0.9 (:46-65).
+  - Stage 2 Latent RM trigger: WA <= −2 AND >= 3 territories PT <= 1 AND MS <= 50; stats Mandate = count of PT<=1 territories (2-5), Influence 4, Wealth 1, Military 0, Stability 3; influences but does not control; +1 Ob to Church actions there (:75-107).
+  - Stage 3 Insurgency: 2+ contiguous Uncontrolled territories sustained 2 consecutive seasons; baseline Legitimacy 1.0, low I/Sta, non-parliamentary; CAN hold territory, invade any faction including its parent, be excommunicated; CANNOT cast Parliamentary Votes, initiate Transfer, sign Crown Treaties, invoke Stay (:117-158).
+  - Stage 4 Promotion: L >= 3, 2+ territories, Accord averaged >= 4, sustained 2 consecutive seasons; average PT < 3 gives RM-variant extra-parliamentary, >= 3 a generic parliamentary candidate; status flag persistent (:164-221).
+  - Dissolution ladder (RATIFIED, RAND-validated): military defeat, sponsor withdrawal (strongest historical predictor), amnesty/negotiated, persist; Promoted Factions use the same four paths and never demote (:241-264).
+  - GD-1: Promoted Factions can win via Peninsular Sovereignty "once they hold 11+ territories" (:282, :286) — conflicts with the 15-territory rule.
+- **Conflicts / stale:** Stage 2 trigger uses the WA-based emergence that victory_v30 PP-478 struck (RM now emerges only via the Founding mechanic) (victory_v30 :840-844). "11+ territories" vs 15 (peninsular_strain :429) and the old DEFAULT_PARAMS 11 (victory skeleton :128). "Thread Tension ÷ 20" in Community Weaving (:101) is the pre-MS name. Cites `sim/*` modules (dissolved).
+- **Open items:** forward-flags INSURGENCY-STATS-001, STATUS-MUTABILITY-001, CONVICTION-DERIVATION-001, DEMOTE-DIRECTION-001, LATENT-RM-vs-INSURGENCY-RM-001 (:333-343).
+
+### .designs/systems/world/reference/miraculous_event_v30.md
+- **What it is:** Miraculous Event mechanism (Stage 4 Solmund split, 2026-04-25): Mending at Ob >= 6 near Askeheim triggers a regional "miracle"; faction response pathways, triple interpretation, SA-gated actions, witness Conviction mechanic.
+- **Status:** "## Status: CANONICAL" (a stale PROVISIONAL line struck 2026-07-07, ED-IN-0023). Reading: world-event design intent; `systems/world/sim/miraculous_event.py` named in flow skeleton as a doc-only dependency.
+- **Bears on:** WR, FA, CHAR, SE
+- **Content that matters:**
+  - Trigger: Mending at Ob >= 6 succeeding in a territory at Proximity <= 2 of T15; radius by Ob (6 local, 7 +Proximity 1, 8+ +Proximity 2) (:31-39). Effects: SA (Southernmost Awareness) +1 for present factions, local Proximity −1 for RS-band lookup until next Accounting, +1 Accord next Accounting (:43-53).
+  - Church "Miracle Investigation" Consul Outward action with Assert/Accommodate decision (neither safe) (:61-82); Hafenmark/Baralta interprets via divine right; triple interpretation table, each internally consistent and each suppressing one piece of evidence (:84-112).
+  - SA-gated actions: SA 1 discuss in Parliament, 2 Consul Outward toward Proximity <= 2, 3 fund Expedition, 4 sponsor Mending, 5 faction-directed Repair strategy (:116-124).
+  - Witness mechanic: Cognition vs Ob = current Truth; Failure Truth −2; once per character per event (:128-134).
+  - Connection table lists "Tensions Deck" cards and "NPC priority trees need Decision Event branches" (:148-151).
+- **Conflicts / stale:** Uses RS terminology; ends with a dangling "PART EIGHT: THROUGHLINES AND IMPLEMENTATION" heading (:157). Baralta's position routed to baralta_v30 (`designs/npcs/`). "Turmoil: Miraculous Event does not decrement Strain" (:152) — Strain has no carrier.
+- **Open items:** new Decision Event branches for four NPCs (:148) [no evidence built].
+
+### .designs/systems/world/reference/ms_trajectory_v1.md
+- **What it is:** Mending Stability trajectory from the Einhir Catastrophe (−12 AG) to game start (245 AG): three forces, anchor points, band crossings, hysteresis and warning signal (ED-882), cultural geography.
+- **Status:** "CANONICAL (with two provisional elements flagged in §8)", 2026-04-20. Reading: authoritative-in-prose for historical MS values; the hysteresis rule (§5.1) is a mechanism spec with no season-architecture carrier.
+- **Bears on:** WR, ARCS, FA, SE
+- **Content that matters:**
+  - Three forces: baseline continuity (always positive, decelerating), Warden Mending (positive, front-loaded as Warden numbers decline), rendered-world disruption (small, recoverable); no post-Catastrophe substrate-level operations at scale (:28-36).
+  - Anchors: MS 5 at Catastrophe (−12 AG); 30 at Solmund dissolution (0 AG); 50 at ~50 AG; 68 at 195 AG; 72 at game start 245 AG (Strained); decomposition of 67-point climb: Solmund ~25, Wardens ~26, continuity ~13, dips −8 to −10 (:54-71).
+  - Band crossings drive cultural geography: d1 (T6, T13) remain at Folklore at game start; d5 never felt Calamity (:90-95, :121-135).
+  - Hysteresis: falling edges 20/40/60, rising edges 28/48/68 (+8 gap); warning window 12 MS before a collapse edge; extended to the approach to MS 0 (PST-1) (:97-115).
+  - P-07: the substrate "does not respond, heal, or repair"; prose must say continuity resumes at the wound margin (:24).
+- **Conflicts / stale:** Cross-reference to threadwork v30 "§31 Mending Coherence Asymmetry" (:32) points at a section number that does not exist in the v30 body (Mending Coherence Asymmetry is within §2.4) [UNVERIFIED]. D-4 conquest year (~18 vs ~50 AG) unresolved. Uses AG dating (245 AG game start) — the v25 "AG→AS calendar" rename list (threadwork_v30 :998) says AG calendar is replaced by AS [UNVERIFIED].
+- **Open items:** colonial revolt specification, Himmelenger R-7 interpretation, D-4 integration (:151-157).
+
+### .designs/systems/world/reference/narrative_voice_canon_v30.md
+- **What it is:** Single-source Narrative Voice Canon (ratified 2026-06-19, ED-1030): omniscient chronicle voice, lexical register, grammar latitude (twelve source authors), and a long "what the voice does NOT do" list.
+- **Status:** "CANONICAL (ratified by Jordan 2026-06-19, ED-1030; content verbatim-unchanged)". Reading: live style intent for any prose the engine renders (the "articulation" chronicle); not a mechanism.
+- **Bears on:** WR, ARCS, GO, CHAR
+- **Content that matters:**
+  - Chronicle voice speaks of all factions, territories and named NPCs from outside any single perspective; "steady, periodically lyrical, factual about what happened, sparing in editorial" (:20-22).
+  - Grammar deviation licensed only if it matches a documented mode of one of the twelve authors AND improves impact (Tolkien, Ishiguro, Mistry, Tartt, Márquez, Lispector, Borges, Ocampo named) (:44-57).
+  - Prohibitions include: system/mechanical terminology when focalized in-world; naming emotions directly; "AI sheen"; performing secrets ("accumulated discrepancy across scenes, never because a single passage pointed at it"); NPCs as functional placeholders (load-bearing NPCs need at least one anchored dimension: ethic, conviction, goal, inspiration, faction) (:62-77).
+  - Coherence-0 NPCs rendered as "competent monstrous", observed around not through; do not conflate subject and object axes at high TS (:78-79).
+- **Conflicts / stale:** `designs/articulation/articulation_layer_v30.md` §4.2 is the extracted source (dissolved); `skills/prose-writer/SKILL.md` retains the procedure. Relation to the NPC "characterful" requirement: the line "load-bearing NPCs need one anchored dimension" (:77) is a content rule a chooser/sheet could enforce [UNVERIFIED].
+- **Open items:** none.
+
+### .designs/systems/world/reference/solmund_artifacts_v30.md
+- **What it is:** Taxonomy of in-world texts and artifacts (orthodox canon, heterodox/marginal, folk/vernacular), each keyed to a literary register.
+- **Status:** "PROVISIONAL — pending Jordan editorial review" (Stage 4 Solmund split, 2026-04-25). Reading: worldbuilding vocabulary; unratified.
+- **Bears on:** WR, ARCS, FI
+- **Content that matters:**
+  - Orthodox: Scripture (Hopkins register), Liturgy "Hours of the Loom", Hymns, Cathedral Inscriptions, Doctrinal Treatises, Graduation Texts, Hagiography (:22-30).
+  - Heterodox: Practitioner Journals, Notation, Einhir Fragments, Restoration Counter-Theology, Niflhel Pamphlets, Restoration Memorial (lists of names), Post-Forgetting Fragment, Church Council Deliberation, the rare Halt Text (:36-46).
+  - Folk: Harvest Songs, Threshold Prayers, Sailors' Invocations (acknowledge Maritime Forgetting without understanding it), Funerary Rites (thread returns to the loom) (:52-57).
+- **Conflicts / stale:** ends with an orphan heading "PART SIX" (:61).
+- **Open items:** none.
+
+### .designs/systems/world/reference/solmund_philosophy_v30.md
+- **What it is:** Philosophical frameworks (Derrida aporia, Kierkegaard leap, Augustine memory/time, Wittgenstein halt, Levinas face) mapped to where they live in the setting and the prose pattern each licenses.
+- **Status:** "PROVISIONAL — pending Jordan editorial review" (2026-04-25). Reading: voice/worldbuilding vocabulary.
+- **Bears on:** WR, ARCS, SC
+- **Content that matters:**
+  - Aporia lives at every Structural-scale thread operation and in the Church's claim of authority over thread knowledge it cannot possess (P-08) (:24).
+  - The Leap = Kierkegaardian leap; the Church's terror is that direct thread relation reveals doctrine as rendering (:34).
+  - Wittgenstein Halt = P-08 ("Tractatus 7"): thread knowledge cannot be propositionalized (:56).
+  - Levinas: the Einhir dead have faces; RM's deepest claim is ethical, not theological (:68-72).
+- **Conflicts / stale:** ends with orphan "PART FOUR" heading (:78).
+- **Open items:** none.
+
+### .designs/systems/world/reference/solmund_v30.md
+- **What it is:** Solmund's nature and the Two Witness Traditions (miracle witness vs practitioner witness), plus the Seam Text device.
+- **Status:** "PROVISIONAL — pending Jordan editorial review" (2026-04-25); §11 explicitly "[PROPOSED — extrapolation... not established canon]". Reading: worldbuilding intent.
+- **Bears on:** WR, ARCS, FI, GO
+- **Content that matters:**
+  - Solmund is a threadcut being of the third mode who emerged through the Gaps; chose to render himself perceivable; why is "genuinely unknowable" (:22-24). Whether arrival was volitional or structural is left open (:34).
+  - Two witness traditions: non-practitioner witnesses produced scripture (wrong mechanism, honest); practitioner witnesses produced accounts classified as heresy; accuracy "reveals the mechanism" (:56-64).
+  - Seam Text = a comprehension gate, not a perception gate; implemented as an added annotation layer ("character-internal recognition response") when TS >= 30, "NOT hidden text revealed at a TS threshold" (:68-80). A discoverable Remnant POI in Church territories.
+- **Conflicts / stale:** ends with orphan "PART FIVE" heading (:84). "five years" ministry vs ms_trajectory 7-year perceivable ministry (+5 coalescing) (:62) [D-1 ruling].
+- **Open items:** Solmund's motivation by design unresolved.
+
+### .designs/systems/world/reference/solmund_voice_v30.md
+- **What it is:** Solmund Voice & Register guide: five theological-poet registers, five Renaissance theologians, Kabbalistic sources (Gabirol and Abulafia rejected by Jordan 2026-04-25), vocabulary constraints, structural writing patterns, tonal calibration by Truth.
+- **Status:** "PROVISIONAL — pending Jordan editorial review" (Stage 4 split, 2026-04-25). Reading: authoring vocabulary for rendering in-world text; not mechanism.
+- **Bears on:** WR, ARCS, CHAR, GO
+- **Content that matters:**
+  - Tonal calibration table keyed to a character's Truth stat: Truth 1-2 Böhme/Niflhel plain speech; 3 Thomas/early Levertov; 4 Di Cicco/folk; 5 Hopkins/Ficino/Eliot; 6+ with TS 30+ John of the Cross/Teresa ("paradoxically closest to heresy") (:210-218). A data-keyed voice register: capability data selects prose style.
+  - Vocabulary constraints in three tiers: Orthodox (The Weaving, The Loom, The Wound, Solmund's Hand), Suppressed/Heterodox (The Ground, Spooling, The Waterline, The Leap), Forbidden with heresy-investigation risk (Ein Sof, Einhir as theological term, Ungrund) (:182-188). The "forbidden word" set is the kind of closed term-set a registry would own.
+  - Seven structural patterns (Cusan Triad, Ficinian Cascade, Di Cicco inhabitation, Thomas absence, John of the Cross paradox, Böhmean eruption, Pican address) with example lines (:192-206).
+  - Teresian frame (TS as grades of holiness) is part of the Church's perceptual prophylaxis; Böhme's Ungrund maps onto Ein Sof (maximum heresy) (:124, :130-132).
+  - Luria's tsimtsum mapping is RM theology, not canon's mechanism (P-07) (:154).
+- **Conflicts / stale:** Ends with orphan "PART SEVEN: SOUTHERNMOST ENGAGEMENT DESIGN" heading (:222). Dating of Kabbalistic sources inline.
+- **Open items:** Ficinian "Four Cardinals as emanative orders" [PROPOSED] needs editorial decision (:108).
+
+### .designs/systems/world/reference/solmund_master_document.md
+- **What it is:** The unsplit "Solmund — Master Cultural Guide" (draft, provisional): voice registers, artifact taxonomy, philosophical frameworks, Solmund's nature, Southernmost engagement design (Miraculous Event), five throughlines, implementation priorities, audit appendix. Parent of solmund_voice/philosophy/v30/artifacts and miraculous_event.
+- **Status:** "DRAFT — all content PROVISIONAL pending Jordan editorial approval" (the Stage-4 split files later partly became CANONICAL, e.g. miraculous_event). Reading: duplicate/superseded in structure; unique content is Parts 7-8 and the appendices.
+- **Bears on:** WR, ARCS, FA, CHAR
+- **Content that matters:**
+  - Duplicates (verbatim) §1-18 now in solmund_voice_v30, solmund_philosophy_v30, solmund_v30, solmund_artifacts_v30 and §19-26 now in miraculous_event_v30; only Gabirol §4.1 and Abulafia §4.3 remain here though rejected 2026-04-25 (:130-146).
+  - Baralta's theology: accepts the Church's content (Solmund real) but rejects its monopoly on mediation (direct communion, prosperity-gospel, deed-monarchy); partially cracks the perceptual prophylaxis but effect is generational, beyond the game's ~5 year span; "Restoration Movement's pure adversary" (:403-427). Flagged: NPC analysis §6 needs updating (:417).
+  - Five throughlines: T-A prophylaxis as literary engine, T-B Seam Texts as mechanical objects, T-C double-consciousness spiral (three faction frames), T-D Baralta as accidental prophylaxis cracker, T-E the Solmund repetition (Church reliving its founding error; recursion stops only when the prophylaxis cracks) (:519-529).
+  - Implementation priorities: 10-15 Seam Texts as POI content objects (T2, T9, T14), 5-8 loadscreen aphorisms, 3-5 folk songs, settlement flavour text keyed to controlling faction's Truth baseline (Church 5, Varfell 3-4, Crown 4, Hafenmark 4) (:533-537).
+  - Nine open editorial items (Baralta communion, two witness traditions, Ficinian emanation, Miraculous Event trigger/action/accord/proximity/conviction) (:576-592).
+- **Conflicts / stale:** "~5 year span" game duration vs settlement_layer's 10-30 year games; Truth baseline per faction is a data fact never seen in a registry [UNVERIFIED].
+- **Open items:** nine editorial items at :576-592; the miraculous_event portion was later promoted (status CANONICAL) without the others being recorded here.

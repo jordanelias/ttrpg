@@ -331,3 +331,187 @@ Reading-depth note: the assigned set is about 3.3 MB. Entries marked `[READ IN F
 - **Conflicts / stale:** Contradicts the IN-31 design's `delegate` branch (conditional there). Whole body superseded by section 9.
 - **Open items:** whether the `establish`/`confer` route fails on a named measurement; then one `needs_jordan` row with both options.
 
+### proposals/2026-10-16-attribute-derivation.md
+- **What it is:** IN-lane head of a six-part attribute-derivation study (2026-10-16): interrogates every practice, verb and subsystem for what it demands of a person, flattens to 46 demands, and recommends a set of primaries (Jordan's choice). [READ PARTLY: header, words intro, heading map; sections 1.1-1.7 evidence tables not read in full]
+- **Status:** "PROPOSED (2026-10-16). Not ratified. Merging it ratifies nothing unless Jordan so rules. It recommends a set of primaries and two alternatives; the choice is Jordan's." (:3). Reading: live proposal, undecided (the later attributes-from-scratch series continues the question).
+- **Bears on:** CHAR (primary), PC, MB, SC, FI, WR, SE, FA.
+- **Content that matters:**
+  - Jordan's directive: interrogate each "PRA" and each verb/subsystem for required skills/aptitudes, flatten and collate "to see what should be an attribute"; "ignore all prior rulings for this exercise" (:8-13, aptitudes :11-12).
+  - Evidence tree: ingredients the sources use (1.1), source formulas F01-F40 (1.2), learned skills (1.3), sourced uses of one ingredient alone (1.4), the 46 demands by kind (1.5), what the sources hang on each ingredient (1.6), and a reproduction command (1.7) (headings :139-488).
+  - Parts: head (words, section 1), `_part2` (sections 2-5), `_part3` (sections 6-13: principles, candidate pool, selection, coverage), `_aptitudes`, `_equivalences`, `_divergence` (:6).
+- **Conflicts / stale:** Reads the working tree of 2026-10-16 with possible uncommitted sibling edits (:5). Conflicts with ruled "ten attributes, tenth unnamed" (ED-IN-0193) by design ("ignore prior rulings").
+- **Open items:** Jordan to choose the primaries.
+
+### proposals/2026-10-16-attribute-derivation_aptitudes.md
+- **What it is:** Extract of the recommended set: eleven primaries, two alternatives, and the 46 demands mapped to them. [READ IN FULL]
+- **Status:** "PROPOSED (2026-10-16). An extract, for showing on its own... The choice is Jordan's." (:3). Reading: live proposal, undecided.
+- **Bears on:** CHAR (primary), PC, MB, SC, FI, WR.
+- **Content that matters:**
+  - Recommended eleven: STR, AGI, END, FOC, ACU (Acuity/Cognition), WIL (Will/Spirit), ATT (Attunement), CHA, BON (Bonds), REC (Recall), TS (Thread Sensitivity); coverage 34 of 36 non-practice demands and 36 of 38 formulas; uncovered `self-coherence` (F34) and `boldness` (F17) (:25-30).
+  - Totals: 46 demands (CAPACITY 19, COMPUTED QUANTITY 14, PRACTICE 9, LIMIT 2, TEMPERAMENT 2); 355 draw entries over 19 domains, 34 graded verbs, 16 subsystems (:13-24).
+  - Per-primary cut test: REC "false today: no code reads it"; BON narrowed (knot gate also needs Disposition); CHA narrowed at T2 (Command runs on ACU alone; Face moves nothing) (:32-45).
+  - Alternatives: smaller eight (drops FOC, BON, REC; 9 uncovered demands / 13 formulas) and larger thirteen (adds RES and TMP; 0 uncovered); today's nine leave 8 demands / 9 formulas uncovered (:53-59).
+  - Temperament (boldness, patience) carried as `disp` beside attributes; eight practice demands sit on primaries through History (:47-52).
+- **Conflicts / stale:** Contradicts the divergence test on ATT and CHA (see below); Recall is a dark ingredient.
+- **Open items:** Jordan's selection; `self-coherence` re-expression on Will.
+
+### proposals/2026-10-16-attribute-derivation_divergence.md
+- **What it is:** Executed divergence test of attribute pairs against the code's resolvers (probes of personal combat, mass battle Command, contest kernel/season sigma, threadwork, knots). [READ PARTLY: header, headings, sections 6-8 (summary, verdict on the eleven, LIMITS); probe tables 3.1-3.6 and 4-5 not read]
+- **Status:** "PROPOSED (2026-10-16). Not ratified... it edits no code, registry or ledger" (:3). Reading: live evidence for the attribute choice.
+- **Bears on:** CHAR, PC, MB, SC, WR, FI.
+- **Content that matters:**
+  - No pair inside the eleven is IDENTICAL-BY-CODE across every resolver; ATT has no code evidence as a separate primary (about half a Cognition wherever read); CHA has no outcome-moving reader at T2 (contest Charisma byte-identical inert; in field battle Charisma is two-thirds of a Command that moves nothing in 9 of 10 battery rows; the season fixes Command at 4) (:452-466).
+  - The smaller set's FOC -> WIL merge loses something the code measures (A01), supporting FOC; WIL has no combat channel of its own; TMP is monotone in the matchup tested (:468-470).
+  - Per-group verdicts: STR keep; AGI/END/FOC keep; ATT merge into ACU on code evidence alone; REC untested (no code reader); History splits from every attribute in combat (own pool, largest lever) (:433-449).
+  - LIMITS: one matchup per resolver; arms use values the game does not allow; many resolvers are design-only (Recall F25/F37-F40, Spirit checks, Sincerity, Inspiration, Thread Fatigue, Focus defence, Composure); `RESILIENCE_GAIN = 0`; single producer (:471-500).
+  - T1 (season) is "almost empty": the loop sets one combat field (`end` from BODY), one practice key (`capability`), and field-battle weights (:489-491).
+- **Conflicts / stale:** Cites `modules/mass_battle/config.py:556` `POOL_QUALITY_MODEL` keeps Command out of the mass-battle pool - bears on `derive_command` (08 doc) and F-MB findings. [UNVERIFIED]
+- **Open items:** the three results bearing on the set, each Jordan's to weigh.
+
+### proposals/2026-10-16-attribute-derivation_equivalences.md
+- **What it is:** Word study (etymology, synonym, faculty family) of the 46 demands and the relations inside each group. [READ PARTLY: header, method note, headings; tables not read]
+- **Status:** "PROPOSED (2026-10-16)... Secondary to the head and `_part3`" (:3). Reading: reference; etymologies from memory with confidence tags (:4).
+- **Bears on:** CHAR.
+- **Content that matters:**
+  - Faculty families P/C/Pc/V/S and kinds replace an earlier type column (:8-15); sections: the 46 one row each (:17), relations inside each group (:72), what the study does and does not show (:127), limits (:144).
+  - The grouping is the derivation's `_part3` section 8.1, not this file's (:4).
+- **Conflicts / stale:** none noted; unchecked etymology.
+- **Open items:** none stated.
+
+### proposals/2026-10-16-attribute-derivation_part2.md
+- **What it is:** The interrogation: every practice domain (section 2), what each domain requires (3), what each of the template's 65 master-table verbs requires (4), what each of 16 subsystems requires (5). [READ PARTLY: header, section 4 and 5 method preambles, headings; the per-domain, per-verb and per-subsystem tables NOT read]
+- **Status:** "PROPOSED (2026-10-16). Not ratified." (:3). Reading: live evidence, undecided.
+- **Bears on:** CHAR, PC, MB, SC, FI, WR, SE, FA.
+- **Content that matters:**
+  - Draw notation: a draw is `term (roles, [key] basis: locator)`; roles are odds, difficulty/cost, eligibility, effect size, resists another; basis NAMED Tn / overridden / INFERRED; "no cell here calls anything derived" (:6-22).
+  - Each verb is classified graded / choice / book; choice-verbs' quality is the chooser's own choice, counted once at S10 (:182-195).
+  - Sixteen subsystems (first pass did ten; critic named six more: espionage/intelligence, medicine, diplomacy/treaties, religion and Truth track, information/perception gates, progression/advancement) (:295-300).
+- **Conflicts / stale:** "All 65 rows of the template's master verb table" - the template (character-template doc) counts 65 verbs while `verb_table.yaml` has 44; the two verb sets differ.
+- **Open items:** none stated beyond the head.
+
+### proposals/2026-10-16-attribute-derivation_part3.md
+- **What it is:** Selection principles P1-P7 + COVERAGE, the candidate pool, the recommended eleven, two alternatives, the one grouping, meta-rule, NERS, limits and two critic reconciliations. [READ PARTLY: header, section 6 principles, section 9, section 11 limits; 7.x selection detail, 8 cross-tabs and 12-13 reconciliations not read]
+- **Status:** "PROPOSED (2026-10-16). Not ratified... the choice is Jordan's." (:3). Reading: live proposal, undecided.
+- **Bears on:** CHAR (primary), PC, MB, SC, WR.
+- **Content that matters:**
+  - Principles: P1 READ (strong if T1/T2 code reads it), P2 INDEPENDENT, P3 ABSORBS, P4 STABLE TO CARRY, P5 MONOTONE, P6 DOMAIN-GENERAL, P7 LEGIBLE; main test COVERAGE, measured against today's ingredient vocabulary (which biases toward today's set) (:20-43).
+  - Net effect vs registry: adds Recall and Thread Sensitivity as primaries, removes none; resilience re-expressed on Will if ever lit; temperament `disp` sits beside attributes; question raised whether `train` should read an attribute (V-2 said no) (:294-309).
+  - Limits: no subagent spawned (one producer); independent Opus critic read passes 1-2 only; coverage is relative to today's ingredients (:352-380).
+  - Disagrees with the character template: "Charisma thinnest" true of T2 readers but BON is narrower by T4 uses; template's "TS not an attribute" follows today's rulings which this exercise sets aside; FOC not combat-only (feeds F31, F20) (:383-391).
+- **Conflicts / stale:** Conflicts with ruled ten-attribute count (ED-IN-0193) by design.
+- **Open items:** Jordan selection; falsifiers named (command output diff; coverage ingredient audit; a smaller covering set would beat K01).
+
+### proposals/2026-10-16-attributes-from-scratch.md
+- **What it is:** Part 1 of a five-part blind, bottom-up derivation of attributes from verbs (Phase A: reading record, method/vocabulary, 179-verb inventory); cross-cutting (character). [READ PARTLY: header, parts table, counts; section 2.3 inventory table and method detail not read]
+- **Status:** "PROPOSED" (:3). Reading: live proposal, undecided; "a design exercise and reference; nothing reads it".
+- **Bears on:** CHAR (primary), all gameplay subsystems as sources.
+- **Content that matters:**
+  - Jordan's prompt: derive attributes "WITHOUT reference to the base attributes proposed... from scratch", ignoring prior rulings (:8-14).
+  - 179 verbs total: 45 from code, 18 plan, 7 plan-refused/cut, 23 lane recommendations, 86 designed by the author; subsystem touch counts PC 31, MB 43, SC 40, FI 32, TW 14, GV 51, FA 31, EC 33, WT 18, NP 36 (:166-189).
+  - Phase A was saved to disk before any file on the brief's forbidden list was opened; Phase B (sections 7-10) after (:24-26).
+- **Conflicts / stale:** 86 of 179 verbs are the author's additions, not sources; verb ids V001..V179 differ from `verb_table.yaml`'s 44.
+- **Open items:** none beyond the series.
+
+### proposals/2026-10-16-attributes-from-scratch_part2.md
+- **What it is:** How each of ten subsystems (PC, MB, SC, FI, TW, GV, FA, EC, WT, NP) could work if fully designed, plus per-verb demand statements. [READ PARTLY: header and heading map only; bodies not read]
+- **Status:** "PROPOSED" (:3). Reading: live exercise.
+- **Bears on:** CHAR, PC, MB, SC, FI, WR, SE, FA.
+- **Content that matters:**
+  - Section 3 designs a hypothetical full subsystem per lane (3.1 PC ... 3.10 NP); threadwork "[INFERRED] throughout" (:17-274).
+  - Section 4 gives per-verb demand statements (536 statements, one author, per part5 limits) (:302).
+- **Conflicts / stale:** these designed-here subsystems are speculative, not canon.
+- **Open items:** none.
+
+### proposals/2026-10-16-attributes-from-scratch_part3.md
+- **What it is:** Flatten and collate: totals, merge log, atomic demands, 27 clusters (K01..K27), root-sense families, whether the result stands on code verbs alone. [READ PARTLY: header and heading map only]
+- **Status:** "PROPOSED" (:3). Reading: live exercise.
+- **Bears on:** CHAR.
+- **Content that matters:**
+  - Sections 5.1-5.7: totals, flattening/merge log, atomic demands, clusters, etymology families, "does the result stand on the code's verbs alone" (5.6), "do the verbs tell the clusters apart" (5.7) (:11-315).
+  - Per part5 limits: on the 45 code rows alone, body and stealth clusters nearly vanish (force ranks 18th, quickness 24th) (part5 :203-205).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/2026-10-16-attributes-from-scratch_part4.md
+- **What it is:** The from-scratch attribute set: selection principles, the recommended fourteen, definitions, what is left to other layers, smaller/larger alternatives. [READ PARTLY: sections 6.2 and 6.4 only]
+- **Status:** "PROPOSED" (:3). Reading: live proposal, undecided.
+- **Bears on:** CHAR (primary), all subsystems.
+- **Content that matters:**
+  - Recommended fourteen: Bodily force, Quickness, Fine hand, Toughness, Watchfulness, Reading people, Reasoning, Forethought, Nerve, Constancy, Composure, Presence, Warmth, Thread perception (:32-36).
+  - Layers left off the attribute row: skills (weapon craft, letters, law, doctrine, trades...), values (mercy vs ruthlessness, conviction), holdings (rank, office, remit, means, arms, a following), computed (credibility, command of many, load, who acts first), tracks (harm, fatigue, stores, self-integrity, reputation), situation (:173-185).
+  - Standing and means are NOT primaries (they fail P6 and P9: positional, pass to a successor); skills not primaries because no single skill reaches P1 (:187-189 region).
+- **Conflicts / stale:** differs from the eleven in `_aptitudes` (see part5 D-1..D-8).
+- **Open items:** none.
+
+### proposals/2026-10-16-attributes-from-scratch_part5.md
+- **What it is:** Phase B: mapping the fourteen to the registry nine and the recommended eleven, agreement/disagreement, precedent cross-check, limits. [READ PARTLY: section 8 and 10 in full; 7 and 9 not read]
+- **Status:** "PROPOSED" (:3). Reading: live evidence, undecided.
+- **Bears on:** CHAR (primary).
+- **Content that matters:**
+  - Agreement: body is three (force/quickness/toughness = STR/AGI/END); reading people/presence/warmth = ATT/CHA/BON; thread perception = TS; constancy = WIL (:94-108).
+  - Disagreements D-1..D-8: Forethought as a primary (25 verbs) vs scattered; Nerve as primary vs `disp` lean; Composure as primary; Fine hand splits from AGI; FOC has no blind counterpart; Noticing separate from reasoning; REC's learning has no blind home; ATT/CHA broad by verbs but ATT = half an ACU and CHA inert by code. Each "decided by a resolver that reads the candidate plus a divergence test" (:110-131).
+  - Meta-finding: eleven count what formulas and code read; the blind set counts what acts ask for; neither alone settles it (:127-131).
+  - Limits: 86 of 179 verbs are author additions; 536 judgement statements, one author, no critic; etymologies from memory; threadwork inferred; possible priming by the brief's eleven (:201-234).
+- **Conflicts / stale:** none.
+- **Open items:** D-1..D-8 each need a resolver; nothing executed against the engine.
+
+### proposals/2026-10-16-character-template.md
+- **What it is:** IN-lane head of the character-template proposal: what an authored person carries (21 fields), the personal-input block written two ways (Option A derived / Option B stored), corrected three times against independent critics. [READ PARTLY: header, section 0 verdict, section 3.7 and decision table (via part3), heading map; sections 1-3.6 body not read in full]
+- **Status:** "PROPOSED (2026-10-16). Corrected three times the same day against three independent critics' reports... Not ratified" (:3). Reading: live proposal; the J-T decisions are open.
+- **Bears on:** CHAR (primary), CORE, PC, SC, MB, FI, WR, GO.
+- **Content that matters:**
+  - Creation is "no act; a cast entry the world-gen builder seats" (IN-47); persons differ in who they are not what they can do: `capability` empty on 83 of 83 realm persons, 429 of 430 corpus persons; `born` 0 and `body` 1000 on all (:62-72).
+  - Template = 21 fields: 8 authored, 1 derived at build, 3 defaulted, 2 null on an existing carrier, 7 not carried (:74-75).
+  - Two Jordan rulings conflict on a broad reading: "it will be 10 attributes" (2026-08-14, ED-IN-0185 Q7, "agenda closed") vs J-13 "a derived score used for the subsystem... not a character attribute" (2026-09-06); on a narrow reading Option B satisfies both (:77-92).
+  - Master verb table: 65 rows (45 shipped [37 resolvable], 12 planned, 7 stubbed, 1 design-only); in four realm seasons 25 verbs executed and 35 attempted; in the running loop exactly ONE verb (`tell`) reads a personal input (`capability` key) (:93-100).
+  - "Ignore their use of attributes" (2026-09-05) strikes only one source table's pool column (`04_VERBS.md:462-467`); Recall has no reader above T4 (:101-112).
+  - Adds: one typed artifact `engine/season/characters.yaml`, one loader `cast.template_of`, one seating step, `Person.thread_sensitivity` (and `attributes` under B) (:114-120).
+- **Conflicts / stale:** cites troop-stock design by J-number because a sibling was rewriting it; "being rewritten by a sibling session" (:5). 65-verb table vs `verb_table.yaml` 44.
+- **Open items:** J-T1 (source of personal inputs: A / B / A-1 / J-13(ii)), J-T2 (tenth attribute), J-T3 blood kinship, J-T4 do attributes change after tick 0, J-T5 kit carrier, J-T7 PC vs NPC template, J-T8 commanders/troops, J-T9 AX-7 competence at deposit.
+
+### proposals/2026-10-16-character-template_part2.md
+- **What it is:** Section 3A: the idealized master verb table (65 verbs) and the verb x personal-input matrix. [READ PARTLY: header and heading map only]
+- **Status:** "PROPOSED (2026-10-16)... Not ratified" (:3). Reading: live evidence.
+- **Bears on:** CHAR, all subsystems.
+- **Content that matters:**
+  - Definition: a personal input is a quantity a resolver reads off a person (nine attributes, practice, TS, temperament, resilience, Recall, kit); BODY, OFF (office) and person-held quantities (ledger claim, held Record, `weight`, stance, values) are named but never counted (:11-18).
+  - A.2 table: SHIPPED 45 (37 resolvable, 8 not), PLANNED v9 12, STUBBED outside loop 7, DESIGN-ONLY 1; A.3 matrix; A.4 multi-input verbs and how inputs combine (:104-373).
+- **Conflicts / stale:** counts may be pre-v9 additions to `verb_table.yaml`.
+- **Open items:** none beyond head.
+
+### proposals/2026-10-16-character-template_part3.md
+- **What it is:** Sections 4-10: loader (`characters.yaml`, `cast.template_of`), sourcing discipline, adds/cuts, NERS, Jordan decisions, interactions, limits, three critic reconciliations. [READ PARTLY: section 8 decision table, third critic reconciliation excerpts; 4-7, 9-10 not read in full]
+- **Status:** "PROPOSED (2026-10-16)... Not ratified" (:3). Reading: live proposal.
+- **Bears on:** CHAR, CORE, GO, MB.
+- **Content that matters:**
+  - Decisions J-T1..J-T9 (:367-381): J-T1 (A derived / B stored ten + practice via `faculty(domain)` with V-2a / A-1 eight / J-13(ii) rank scale); J-T1a TS carrier answered by K-3 ratification; J-T5 kit carrier (K-5 `hold` tenures vs troop design's "kit is the town's") deferred; J-T7 one class (`carriers.py:644`), creation row is IN-47 arm C1; J-T8 commanders from the template, troops under the troop design's J-1.
+  - What waits on J-T1: R-09's by-person conjunct, K-1/K-6 (U-4), troop design's commander source, K-GO-8 creation screen, `attributes:` block; what does not wait: every other field, practice block, loader and refusals (`template` part1 :610-626).
+  - Critic findings applied include: "ignore their use of attributes" governs the six inquiry acts; V-2/V-3 cited and obeyed (B reads an attribute only through `faculty(domain)` on rows declaring `contests:`; `fight`, `accept`, `march` qualify); terms renamed "personal input", CD/PD/LR to avoid tree collisions (:565-658).
+- **Conflicts / stale:** troop-stock J-1 default "A, a troop stock" supersedes a company-`Person` reading.
+- **Open items:** J-T1..J-T9 (above).
+
+### proposals/2026-10-16-troop-stock-design.md
+- **What it is:** MB/SE/FA/IN design (part 1 of 2) of a settlement recruit pool, levies raised from it, and the season's order of battle; corrected three times and re-based on a same-day Jordan ruling. [READ PARTLY: header, section 0 verdict in full, heading map; sections 1-3 body not read]
+- **Status:** "PROPOSED (2026-10-16). Corrected three times... Not ratified; merge ratifies nothing unless Jordan so rules." Default troop body: A, a troop stock (:3). Reading: live proposal, J-1 open; supersedes the settlements-module feed LF-1..LF-3 as forms.
+- **Bears on:** MB (primary), SE, FA, CORE, CHAR.
+- **Content that matters:**
+  - Recruit pool: new matter kind `recruits` in the settlement rung's `Rung.stores` (via the `(Rung, stores)` write-matrix row), only rungs in new roster `pool_rung_kinds: [settlement]`; ceiling = cohort resident weight x share; starts empty, regrows at MATTER (:42-55).
+  - Candidate A (default): a raised troop is a count (a troop stock per experience grade in the same rung's stores), eats after every person, fights for whoever holds the rung; it cannot desert, witness or carry a grudge (:56-72). Cost: amends two Layer 1 sentences ("units = persons at weight, no unit class", "one scale down... every combatant a Person"), strains three clauses, widens `march` writes, amends `24f` "only a cohort eats" (:61-72).
+  - Defence composes on the garrison Site's `condition` (Jordan's garrison ruling, `world_q.py:1275-1278`); the pool does not defend; an attacker fielding no men is refused (:84-95).
+  - Quality has three axes: equipment is matter in stores (`kind_for_kit` reads inert `TROOP_LOADOUT`; no computed producer of arms so `transfer` kind falls back to `grain`), experience is the grade (no computed act moves men up until J-5(c)/J-13), commander reached (Command is 4 for every season commander until R-C-1) (:96-118).
+  - Defects: `build_army` discards each troop type's morale preset (`engine.py:427-428` vs `units.py:726`; a probe printed levy morale 6 where the preset says 2); harness `SUBSIST` counts every store kind as food, so men would be sensed as food (:128-148).
+  - `build_army` moves from `systems/mass_battle/sim/engine.py:213-452` into `modules/mass_battle/`; the one-Line `massbattle.py:170-230` construction is deleted (:120-127).
+- **Conflicts / stale:** Supersedes IN-52's feed (LF-1..LF-3) and re-frames IN-49 - contradicts the settlements-computation doc's feed unless that is dropped. The doc says it was "re-based after the `levy` -> `requisition` rename of the store act" and names the troop verb `levy`.
+- **Open items:** J-1 (troop body A/P/P'), J-5 (what a field writes beyond casualties; recommended (b)+(c)), eight tuning values.
+
+### proposals/2026-10-16-troop-stock-design_part2.md
+- **What it is:** Part 2: army assembly and the seam, cuts, data, build order TS-1..TS-12, NERS pass, Jordan decisions, limits, three critic reconciliations. [READ PARTLY: heading map and section 9 decisions; sections 4-8 and 10 and reconciliations not read]
+- **Status:** "PROPOSED (2026-10-16), corrected three times and re-based on R-POOL. Default troop body: A" (:3). Reading: live proposal.
+- **Bears on:** MB, SE, FA, CORE.
+- **Content that matters:**
+  - Build order: TS-1 move `build_army` to `modules/mass_battle/army.py`; TS-2 honour troop-type morale preset (independent); TS-3 pool, regrowth claim, placement, subsistence formula; TS-L levy follow-through; TS-4 `levy` row/effect; TS-11 a levy eats after the people; TS-5 order of battle at the seam behind `field_army` (shipped `single_line`); TS-12 formation clauses WALLS/NARROW_PASS for subunit armies; TS-6 write-back; TS-7 computed `levy`; TS-8 flip `field_army` to `order_of_battle`; TS-9 delete the stub; TS-10 experience, BLOCKED on J-5 or J-13 (:350-580).
+  - Decisions: J-1 troop body (every option overwrites ratified canon or a ruling) and J-5 (:700-720); answered: J-2 (R-POOL: raising never writes the cohort), J-3 (`levy`), J-4, J-6, J-7; the "political cost of raising" is answered-not-adopted (cohort stance is the lawful carrier) (:695-712).
+  - Tuning values (`recruit_share`, `recruit_regrowth`, `men_per_weight`, `garrison_men`, `troop_grades`, equipment kinds...) are [OPEN — Jordan tuning] with sweeps (:722-725).
+- **Conflicts / stale:** J-1/J-5 vs ED-IN-0279 (losing side only) and settlements doc.
+- **Open items:** J-1, J-5.
+

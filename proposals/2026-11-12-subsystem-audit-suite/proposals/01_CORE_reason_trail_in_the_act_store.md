@@ -16,7 +16,10 @@ a declared mover if it is folded in.
 `04` §B.9 types `Scene := (id, person, occasion : Question, place, interactions)` and makes it *what the
 budget counts*. The code builds it and keeps it in `SeasonDriver.scenes`, a dict on the driver
 (`loop/driver.py:322`), written at release (`loop/deliberate.py:303`), read once
-(`loop/resolve.py:171`, for `causes[]`), never cleared and in no `World` collection.
+(`loop/resolve.py:171`, for `causes[]`), cumulative by design (`driver.py:317-321`: the fold's record
+must cross seasons) and in no `World` collection. This proposal keeps the lifetime and moves the home.
+`resolved` and `act_of`, the two cumulative attributes beside it, are not moved here: each is derivable
+from the act store and the log (`state/attribution.py`), and `scenes` is the one that is not.
 
 `probe_reason.py` (headless world, seed 0, three seasons): the driver held 8, 18 and 28 Scenes after
 each season; every one of 58 stored acts resolves its `scene` id only through that dict; 4 act-caused

@@ -44,6 +44,9 @@ Read in full, with comments and docstrings (line counts from `wc -l`):
 | `loop/deliberate.py:56-330` | — | the map, the budget query, the release |
 | `audits/01_CORE_audit.md`, `audits/02_CHAR_audit.md` (part one), the brief, `dossiers/01_CORE.md` | — | |
 
+| `harness/run_cases.py`, `arms.py`, `loops.py`, `interactions.py`, `report.py`, `scarce.py` | 531, 315, 544, 470, 306, 266 | in full |
+| `queries/world_q.py:3857-3990` | — | `attention_key`, for F-CORE-20 |
+
 <!-- APPEND-READ -->
 
 ## 2. New adversarial findings (worst first)
@@ -54,8 +57,9 @@ Read in full, with comments and docstrings (line counts from `wc -l`):
   why this act and not another — have three different fates, and none is in `World`. (a) The `Question`
   an act answered is held by `Scene.occasion`, and Scenes are kept in `SeasonDriver.scenes`, a dict on
   the driver set once in `__init__` (`loop/driver.py:322`) and written at release
-  (`loop/deliberate.py:303`); it is not among the five season-local dicts the season resets
-  (`driver.py:471-473`), is no `World` collection and is not hashed. (b) An act that answers a standing
+  (`loop/deliberate.py:303`). It is cumulative on purpose (the comment at `driver.py:317-321` says the
+  fold's record must cross seasons), as are `resolved` and `act_of` beside it; but it is the driver's,
+  not the world's: no `World` collection holds it and it is not hashed. (b) An act that answers a standing
   occasion (a creed, a vacancy, a held writ) is given no antecedent at all: `_occasion_of` returns `[]`
   for it (`loop/resolve.py:181-184`), so its Event cites the act and nothing else. (c) Which term of the
   score decided (pursuit, stance, the draw) is computed in `decision/choose.py` and kept by nothing;
@@ -296,7 +300,7 @@ text lists six steps and omits ENCOUNTER (`:76-81`); its header counts *"46 uniq
 
 | # | first audit | what this reading shows |
 |---|---|---|
-| C1 | §1.1 step 1: *"season-local driver state cleared (`driver.py:468-473`)"* | True of `round`, `_queued`, `_spent`, `_deliberated_at`, `_inputs`, `_realised`. `self.scenes` is not cleared and grows for the driver's life (8 / 18 / 28 after three headless seasons). See F-CORE-12 |
+| C1 | §1.1 step 1: *"season-local driver state cleared (`driver.py:468-473`)"* | True of `round`, `_queued`, `_spent`, `_deliberated_at`, `_inputs`, `_realised`. Four more driver attributes are cumulative by design and never reset: `resolved`, `_resolved_ids`, `scenes`, `act_of` (`driver.py:307-324`: *"NOT season-local … R3 depends on that, and do not 'fix' it into one"*). The lifetime is deliberate; what F-CORE-12 questions is the home. `harness/soak.py:260-263` keeps one driver alive across batches for exactly this reason, and every other harness builds a fresh one |
 | C2 | §9 choice surface: `DevelopmentSheet` *"per its docstring; body `[UNVERIFIED]`"* | Verified (`decision/sheet.py:115-163`). It shows the ranked candidate set, the budget remainder and copies of `capability`, `pursuits`, `stance`, `conviction`, `scar`, `body`; it does not show `attributes`, a pool or a believed chance per candidate; an index out of range or repeated raises `Forbidden`. Nothing but three tests calls it |
 | C3 | §4 seam fidelity: personal combat returns a dict *"`[04 row not opened]`"* | Opened. `04` §C.5 says a provider returns a `Margin` and *"a subsystem returning a winner has not met the contract"* (D-24); §C.4 (ruled 2026-09-03) says a contested verb's degree is *"READ OFF THE SUBSYSTEM"*. Combat's `wound_state` is the ruled case. Mass battle returns `attacker_wins` and `winner=` (`mass_battle.py:457-459`), graded by a third ladder branch (`ED-IN-0279` (a)). Two rows of `04` decide the provider's return differently; the code follows the later ruling. Named in §4.3 |
 | C4 | F-CORE-04: the pool default is everywhere because `build_at` seats no capability | Three further causes. Five contested verbs name no capability key (F-CORE-15). The realm's attribute switch ships off (`populated.py:1016`, `cast_attributes=False`) and one of 46 cast rows authors `stats:`. Lifepath templates grant only `argue` and `inquiry`, on 13 of 34 lifepaths, to 5 of 46 cast rows |
@@ -693,6 +697,13 @@ Ladder steps: 1 superseded · 2 irrelevant · 3 answered by a design document ·
 | 21 | the design's Domain Echo tables | closed as superseded by Layer 1 (no stored aggregate) | 1 | none |
 | 22 | an end a player can read | the play loop stops on `endings_reached`, on the player's own conclusion (the design's portrait rule), or on an extinct line (`carry_on`) | 3 | first audit §8 step 4 |
 
+| 23 | a need at a place a person holds is ordered behind routine news by a hash | inside attention tier 1, order by recorded unmet need; the ranking's half is CHAR's | 4 (tier 2's `-|valence|`) | proposal `unmet_need` |
+| 24 | the loop check cannot sign a verb's write or see the chooser's reads | declare the chooser and the fold's interior writers as processes; LOOP rows for scar and practice; print the signed share | 5 | CR-98 (edits to `harness/loops.py` and the register) |
+| 25 | `arms` prints no count of fought fields, so a null and a fake control read alike; its general form has no command line | print the count, refuse a z at zero, add `--fixture NAME=A,B` | 5 | edit: `harness/arms.py` |
+| 26 | six corpus files need a repair routine to load; one case's head is lost | normalise the files to plain YAML; note the loss in `ARC3.yaml`; delete `_tolerant_yaml`'s recovery; the lost case is closed | 2 (the case's subject is unrecoverable) and 5 | edit: `cases/chain/*.yaml`, `harness/run_cases.py` |
+| 27 | `report.emit` depends on a name bound only under `__main__`; its step text omits ENCOUNTER | import `TRACE` at module scope; derive the step list from `data/matrix.py::Step` | 5 | edit: `harness/report.py` |
+| 28 | `run_cases` calls a case `PLAYABLE` when its declared tokens resolve | rename the verdict `DECLARED-PRESENT`; "playable" is reserved for a played run | 5 (`CLAUDE.md` §4: a word used as it is used outside the repository) | edit: `harness/run_cases.py`, `harness/report.py` |
+
 <!-- APPEND-RESOLUTIONS -->
 
 ## 9. Survivors for Jordan
@@ -728,5 +739,11 @@ All at tree `785bc62`, `PYTHONHASHSEED=0`, no `pytest`. Outputs under
 | `probe_refusal_receipts.py` (`04` D-51's falsifier) | 0 · 3 | 27 refusal Events, 0 with `changes[]`; hash `383206baa7e7807e28cd609d2bb5f080` (`probe_refusal_receipts.txt`) |
 | inline YAML census of `rosters.yaml`, `verb_table.yaml`, `write_matrix.yaml`, `npc_registry.yaml`, `descriptor_registry.yaml`, `module_contracts.yaml` | — | 67 verbs, 11 contested, 9 with a capability row; four vocations; 34 lifepaths, 13 holding a key; 46 cast rows (`stats` 1, `ts` 10, `lifepath` 5, `heritage` 4); 16 composition rows; 15 `scale:` rows |
 | `grep -c` of `raise` in non-test `engine/season` | — | 586 (`Unspecified` 220, `Forbidden` 123, `SystemExit` 121, `ValueError` 54) |
+
+| `python -m engine.season.harness.loops` (parts (a), (b); no seeds) | — | exit 0; 5 LOOP rows; 73 processes; 39,482 cycles (+4, −2, ?39,476); "derived == declared" (`loops.txt`) |
+| `python -m engine.season.harness.scarce` | 0 · 4, both arms | named: one transfer of 8 salt, hash `d2730068e19527208b8b32b06bb36ba3`; unassisted: no delivery, hash `631b80ad65728c9787d41e85f8037392` (`scarce.txt`) |
+| `probe_unanswered_first.py` (experiment against the shipped rule) | 0 · 4 | hash equal to control; positions answered 0 ×37, 1 ×2: a null (`probe_unanswered_first.txt`) |
+| `probe_shortfall_salience.py` (experiment against the shipped key) | 0, 1, 2 · 4 | hash moves at all three; relief at seed 2 only (1 and 15 grain) (`probe_shortfall_salience.txt`) |
+| `run_cases.load_cases` and `CORPUS_DEFECTS` (inline) | — | 46 NPC, 97 ARC cases; 8 load defects (six fenced files; `ARC3.yaml` truncated, 0 rows recovered) |
 
 <!-- APPEND-EVIDENCE -->

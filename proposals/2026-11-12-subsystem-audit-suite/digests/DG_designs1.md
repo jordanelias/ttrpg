@@ -730,3 +730,118 @@ Lane: archived design documents under `.designs/` (README, `_architecture`, arti
 - **Conflicts / stale:** line numbers predate FSS-1 amendment so section lengths are stale.
 - **Open items:** none.
 
+### .designs/systems/factions/reference/faction_systems_overview_v30.md
+- **What it is:** single-pane catalog (2026-05-17, Pass 2 follow-up) of every faction-related system, mechanic, action and GD constraint; points at canon rather than duplicating.
+- **Status:** "REFERENCE — Pass 2 follow-up 2026-05-17"; self-declares same-chat authorship bias (:310). Reading: historical map of FA surface area and a roster of what was BLOCKED/placeholder.
+- **Bears on:** FA, CORE, WR, SC, CHAR.
+- **Content that matters:**
+  - Six layers L1 primitives, L2 identity, L3 faction action, L4 inter-faction resolution, L5 faction-emergent, L6 peninsular accounting (:25-45).
+  - Parliamentary status flag: Parliamentary / Extra-parliamentary / Non-parliamentary (insurgency) (:57-65).
+  - GD-1 sole victory = Peninsular Sovereignty (11+ territories sustained 2 seasons, treaties counting); GD-2 mandatory threat response when Accord below threshold; GD-3 insurgency/promoted-faction status gates (:247-249). Promoted factions eligible to win (:210).
+  - Action rosters: universal 4 (govern, muster, military_conquest, parliamentary_transfer), Crown 4, Church 6, Hafenmark 3, Varfell 2 (both placeholder-named, e.g. `varfell_mandate_action` "mechanism broken ... double-cost asymmetry") (:89-134).
+  - Parliamentary Transfer: 4 modes (Adversarial/Consensual/Punishment/Appeasement) x 8 CB sources (Adjacent Instability, Treaty Violation, Excommunication-current, Building Desecration, Crown Diktat, Combined-Standing, Scar Accumulation, RM pressure) (:158, :185-193).
+  - Treaty expiration 90-95%/arc lapse; "13-step cascade" at accounting with 9 faction-relevant steps listed (:173, :229-239).
+  - Mass Seizure has 3-source drift (conviction_track PP-411 / ci_political 7.6 / victory 3.2) (:116, :177). ~25 of 31 Pass 2 forward flags on faction surface (:287).
+- **Conflicts / stale:** `sim/autoload/npc_ai.py`, `sim/world/restoration_movement.py` paths dissolved; the audit-pending items ("Conviction values contamination") unresolved. ~35 READY / ~8 placeholder / ~7 blocked count is a doc-derived snapshot.
+- **Open items:** Pass 2d/e/f canon authoring for Church infrastructure reclamation, home sanctuary T9, Hafenmark equipment, Varfell mandate action; NPC AI priority stack audit.
+
+### .designs/systems/factions/reference/factions_flow_skeleton_v1.md
+- **What it is:** traced flow skeleton (at commit `6545067`) of `systems/factions/sim/` (16 modules): `faction_take_action` dispatch, parliamentary scene bridge, territory transfer.
+- **Status:** "REFERENCE — traced structure only". Reading: historical; useful as a census of FA dead/stub code and doc-vs-code divergences as of Sep 2026 (module paths may have moved to `modules/`/`engine/season/`) [UNVERIFIED].
+- **Bears on:** FA, CORE, SC, MB.
+- **Content that matters:**
+  - `faction_take_action`: RNG-free signals (conquest targets/mil-advantage, undergoverned share, threat) re-weight four base weights BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN, then ONE `rng.random()` draw against cumulative thresholds; the three `if roll < cum_X` blocks are independent, so a sentinel `_NOOP` falls through to an unconditional `_try_govern` (:72-91, :192).
+  - The claimed "GD-2 mandatory threat response before stochastic selection" is false in code: no unconditional mandatory pass (:184). `CONQUEST_MIN_MIL` gate deleted 2026-08-14 by Jordan ruling (:59, :84).
+  - Faction-unique actions: only Crown (`crown_initiative.select_initiative_mode`, 3 modes) and Church (priority chain Excommunication -> Council -> Absolution); Varfell and Hafenmark have none and fall to Parliamentary Censure (:79-80, :185).
+  - 6 of 16 modules are `stubwire` stubs (`charter_liberties`, `hafenmark_equipment`, `home_sanctuary`, `infrastructure_reclamation`, `varfell_mandate_action`, `varfell_territorial_acquisition`); `mass_seizure.py` (full implementation) and `treaty.process_treaty_expirations`/`register_treaty` have zero production callers; `propose_treaty` is a silent no-op contrary to its docstring (:31-42, :186-187).
+  - `world.casus_belli` has zero production writers so every non-Crown CB source in `parliamentary_transfer` is unreachable in a fresh campaign (:191); `Territory.entry_terms_l_seed` is a write-only dynamic attribute (:190); `faction_state` resolver half (`cascade_resolution`/`mission_shift`) unimplemented (:183).
+  - Parliament scene: proposer = lowest-Stability eligible faction, establishment = highest-Mandate; vote -> Domain Echo degree; independent CB-gated Territory Transfer motion with sequential gates (mode, GD-3 non-parliamentary, unheld target, self-transfer, last-territory floor, per-arc frequency) and Failure effects by mode (:99-117).
+  - Conquest resolves through `resolve_mass_battle` with a permanent placeholder terrain (:85, :197); `faction_action` is the subsystem's sole cut-vertex (:194); `faction_take_action` return string discarded by caller (:189).
+- **Conflicts / stale:** the retired Key emission (`scene.battle_concluded`, `da.public_governance`) is log-only and has no subscriber (:188). Whether `engine/season/` supersedes `faction_action` entirely is the FA lane's question.
+- **Open items:** `coronation_renewal_prereq` docstring promises a check the body does not implement (:196).
+
+### .designs/systems/factions/reference/factions_personal_v30_index.md
+- **What it is:** generated heading/size index (2026-04-20) of "PART EIGHT: FACTIONS" of `factions_personal_v30.md` (~7.1k tokens, body absent here).
+- **Status:** none stated. Reading: historical index.
+- **Bears on:** FA, CHAR.
+- **Content that matters:**
+  - Faction roster: 8 factions listed (Crown, Church, Hafenmark, Varfell, Guilds, Niflhel DISSOLVED, People's Revolution/Restoration Movement, Löwenritter) plus Ministry of the Peninsula (Throughline T4) and Schoenland spoiler (:31-41).
+  - Faction stats 6-stat 1-7 scale with Starting Values, Domain Actions, Ethical Framework Modifiers, Nine Political Axes (:25-30).
+  - 8.11 Parliamentary Vote and 8.12 Seasonal Accounting - Faction Phase (:42-43).
+- **Conflicts / stale:** "6-stat" (includes Intel) vs the struck Intel stat in canonical_registry; Niflhel entry already DISSOLVED here.
+- **Open items:** none.
+
+### .designs/systems/factions/reference/fail_forward_pp177.md
+- **What it is:** working design (2026-04-02, PP-177) of Fail Forward for board-game Domain Actions: Partial = goal + complication, Failure = no goal + complication.
+- **Status:** "WORKING DESIGN — not yet committed". Reading: historical/unclear; pre-resolver degree vocabulary; whether the engine applies complications is [UNVERIFIED].
+- **Bears on:** FA, CORE, DICE.
+- **Content that matters:**
+  - Complication must be immediate, legible without GM, state-changing, proportionate (:29); tiers Minor (Standing -1 or Public Instability +1, acting faction's choice, for Partial), Moderate (mandatory per action type, for Failure), Severe (Moderate + Stability -1, Failure on Ob >= 4 only) (:39-43).
+  - Per-action complication table for Govern, Trade, Muster, Diplomacy (Failure: target gains Casus Belli), Decree, Parliamentary Manoeuvre, Investigate, Spy, Thread Operation (Thread Debt token + MS -2), Community Organising, Fortify, Parliamentary Vote (:51-65).
+  - Parliamentary Manoeuvre degrees: OW delays one pending DA 1 season + opponent Stability -1; Failure Mandate -1 + opponent Standing +1 (:80-85).
+  - Canon compliance claims P-07, P-08 (no null-outcome loops), P-11, P-01, P-12 (:101-107); cognitive load +0.5/10 (:120).
+- **Conflicts / stale:** "Standing -1" and "Public Instability" terminology (Public Instability struck per canonical_registry); only the Partial choice exists for player-acting factions; NPC factions' choice rule unspecified.
+- **Open items:** none stated; "GM notes one datum as unreliable" (:59) has no engine analogue.
+
+### .designs/systems/factions/reference/fractional_province_ownership_v30.md
+- **What it is:** split-province mechanic (PP-666, 2026-04-19): province becomes fractional when a non-Seat settlement is held by another faction; PV share, Greater/Lesser naming, consolidation, fragmentation check, secession.
+- **Status:** both "## Status: CANONICAL" and "PROVISIONAL — approved mechanical design 2026-04-19" (:11-13, ED-711 smoke-test pending). Reading: superseded on its core premise by the ruled settlement->territory->province hierarchy (province forms only while territories share a faction holder; `scale_hierarchy_v1.md` overrules PP-726 fracturing).
+- **Bears on:** SE, FA, MB.
+- **Content that matters:**
+  - Trigger: >=1 settlement held by a non-nominal faction AND the Seat not held by that faction (:31-37). Settlement PV share = `(settlement Prosperity / sum province Prosperities) x province base PV`; zero-denominator guard FRAC-01 equal split, Accord forced 0 (:44-50).
+  - Consolidation: faction holding >=75% of PV share can declare; cost Influence pool vs `Ob = remaining non-faction PV x 2` (round up); targets Submit (Order -2) or Resist (siege next season; default Resist) (:70-83).
+  - Fragmentation Check each Accounting: pool Seat-holder Influence vs `Ob = 2 + non-Seat settlements`; Overwhelming holds 4 seasons, Partial drops a non-Seat settlement's Order -1, Failure allows Secession (candidates limited to national-faction-held settlements; subnational/Uncontrolled excluded) (:101-114).
+  - Effects: Domain Actions by Seat holder at province level only; armies move along settlement adjacency graph; Casus Belli at settlement scope (:89-97, :159).
+- **Conflicts / stale:** province-fracturing rule PP-726 overruled; PV-share rounding 2-decimal vs integer open (:157); "5d10 vs Ob 3" example is pre-resolver.
+- **Open items:** PV rounding; Casus Belli scope; "Multiple non-Seat controllers" RESOLVED additive (FRAC-03) (:158).
+
+### .designs/systems/factions/reference/fractional_province_ownership_v30_index.md
+- **What it is:** generated heading/size index (2026-04-19) of the fractional province doc (~2.2k tokens).
+- **Status:** none stated. Reading: historical index.
+- **Bears on:** SE, FA.
+- **Content that matters:**
+  - Section map identical to body: §2 (1,380 tokens) holds six subsections trigger, PV, naming, consolidation, effects, fragmentation (:42-48).
+- **Conflicts / stale:** none beyond body.
+- **Open items:** none.
+
+### .designs/systems/factions/reference/franchise_v30.md
+- **What it is:** design (2026-05-04) of Franchise, a per-territory parliamentary weight 0-5, with Territory Influence and a Franchise-weighted National Influence replacing the scalar Influence stat.
+- **Status:** "DRAFT — awaiting Jordan review". Reading: unclear/proposed; code relevance unknown [UNVERIFIED whether `franchise` exists in engine/season state].
+- **Bears on:** FA, SE, CHAR, WR.
+- **Content that matters:**
+  - Franchise starting values per territory (Valorsplatz/Kronmark/Himmelenger 5, Gransol/Ehrenfeld/Lowenskyst 4, ... Halvardshelm/Oastad 1, Askeheim/Schoenland 0); sum 47: Crown 23 (49%), Hafenmark 13, Varfell 6, Church 5 (:40-60).
+  - `territory_influence = controller(+2) + infrastructure_count (0-3) + npc_presence (+1) + governor_bonus (+1)`, clamp 7; Church parish exception counts as infrastructure everywhere (:70-80).
+  - `national_influence = clamp(round(Sum(TI x franchise)/Sum(franchise)), 1, 7)`, recomputed at Accounting; used wherever Influence is a roll pool (:102-115).
+  - Design consequence: Church reach without proportional political power (~3-4 vs old I=6); Varfell structurally muted (caste expression at strategic layer) (:117-125, :150-162).
+  - Shift triggers +/-1 (4+ stable seasons, Accord 0, Seizure, Löwenritter coup, PI <= 2 freezes all, caste reform hook); floor 1 for represented territories (:133-146).
+  - Godot sketch: `TerritoryData.franchise`, `compute_national_influence` (:166-201).
+- **Conflicts / stale:** Church stat discrepancy BLOCKING (stats_1_7_scale L=5/PS=5/W=5 vs VDL L=4/PS=4/W=3) (:213); "caste reform event (TBD — hooks system)" unspecified (:211).
+- **Open items:** NPC location data for the starting TI table, per-territory Church parish data, non-playable factions TI, caste reform hook (:207-213).
+
+### .designs/systems/factions/reference/parliamentary_transfer_v30.md
+- **What it is:** canonical spec (Pass 2h, 2026-05-17) of Parliamentary Territory Transfer: pool, Ob, four modes, eight CB sources, vote-contest wrapping, balance validation.
+- **Status:** "CANONICAL — Pass 2h authoring 2026-05-17" with PROVISIONAL derivation choices; code module `systems/factions/sim/parliamentary_transfer.py` exists (see factions flow skeleton). Reading: live design intent behind code; the closest doc-to-code pair in the set.
+- **Bears on:** FA, SC, SE.
+- **Content that matters:**
+  - Frequency 1 per arc per faction; Pool = proposer Influence; `Ob = holder Legitimacy + PARL_MAJORITY_OB_BONUS` (default 2); needs a Casus Belli; CB consumed on use (:34-40).
+  - Outcome: OW holder L -1 + territory transfers with Accord 1; Success transfer; Partial no transfer, proposer gains CB; Failure proposer Stability -1, holder L +1 (:44-49).
+  - Protections: last-territory block, GD-3 extra-parliamentary block, self-transfer block (:52-54).
+  - Four modes Adversarial/Consensual/Punishment (no holder L+1 but holder Standing -1)/Appeasement (+2 Accord); CB sources: Crown restoration (Crown territories < 6), adjacent instability (Accord <= 1), Einhir Revival Partial, prior-Transfer Partial, Military Conquest, treaty-violation, excommunication-related, Scar accumulation (>=3) (:62-86).
+  - Resolution wrapped in a Parliamentary Vote contest: majority bloc favouring proposer +1D, favouring holder -1D (:100-103); Parliamentary Stay (ED-631) may suspend (:106).
+  - v12c N=1000 validation: Crown 24.7 / Church 28.6 / Hafenmark 24.2 / Varfell 22.5; fires ~2-4 times per campaign; Crown initiates ~60%; modes 75/15/5/5; PARL_MAJORITY_OB_BONUS sensitivity (:116-131).
+- **Conflicts / stale:** "sim/provincial/parliamentary_transfer.py is a Pass 2l armature stub" (:139) vs the flow skeleton showing a real implementation; `world.casus_belli` has no production writer so most CB sources are unreachable in code (flow skeleton :191); pool-dice terminology vs d+sigma resolver.
+- **Open items:** PARL-MODE-DRIFT-001, PARL-VOTE-MODIFIER-001, PARL-PROTECTION-001 awaiting Jordan (:171-173).
+
+### .designs/systems/factions/reference/political_dynamics_keys_migration_v30.md
+- **What it is:** PP-687 Phase B Stage 1 spec (2026-05-01): per-procedure deltas to migrate the NPC "doc 12" political-dynamics procedures (B Concern generation/resolution, DA Proposal Phase, C Project advancement, D Opinion Drift, E Off-Screen Interactions) onto the Key substrate. Anchored to line numbers of an audit doc `12_development_specification.md` (not in this tree).
+- **Status:** header "PROVISIONAL" and body "## Status: CANONICAL". Reading: retired with the Key substrate; its value is the NPC-dynamics procedure list (the origin of NPC memory/opinion/concern logic).
+- **Bears on:** CHAR (NPC decision layer), FA, WR, CORE.
+- **Content that matters:**
+  - Per-NPC data model: Concerns, Projects, Opinions, Memories, Knowledge, armature position; Real-Time Mood; 10-memory cap becomes 10 MemoryReferences (:41-81).
+  - Procedure B generation reads Memory Query with axis-relevance cosine >= 0.3 over `armature_position_personal`; concern regeneration cooldown (PATCH 3.1) (:89-121); resolution emits `state.concern_resolved`; strong contradiction emits `state.belief_revised` and generates a scar (:148-165).
+  - Procedure C: stall >= 8 seasons fails a project; progress >= 10 completes; supporters/obstructors get +/-0.5 affect relationship-tagged memory at salience 4 (:211-267). Procedure D: opinion revision emitted when |affect_axis change| >= 0.5 or confidence changes, causes[] wired (:291-312); scene_outcome drift (victor respect/fear) unspecified magnitude, STUB (:325-336).
+  - Procedure E: ambient inner-circle interaction, base_prob, Distant Contact 10% cross-faction, gossip when cumulative_drift > 0.5 (:346-433).
+  - Accounting sequence B -> DA Proposal Phase -> C -> D -> E; NPC.id ascending tiebreak (:536-576). Estimated 1.5-2 sessions for Godot (:625).
+- **Conflicts / stale:** all emission/Key apparatus retired; "Knowledge" kept outside Keys; unspecified drift magnitudes; the engine-facing equivalent of Procedures B-E in `engine/season/` (NPC decision layer) should be compared in the CHAR audit [UNVERIFIED].
+- **Open items:** drift magnitude/curve for scene outcomes (ED-936); Articulation Tier 2 calibration of the new Class B types.
+

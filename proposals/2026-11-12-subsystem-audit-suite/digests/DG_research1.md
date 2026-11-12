@@ -495,3 +495,201 @@ Lane: game precedent and historical research (`research/`, tier 3). Entries are 
   - C7 Jordan decisions: J-C-1 name of the store act; J-C-2 troops: a stock coupled to population vs uncoupled vs troops as people; J-C-3 capacity source (ten attributes, ED-IN-0185 Q7); J-C-4 standing winner's wounds; J-C-6 do persons lie (deception, G7/H-198/H-191); J-C-7 how a petition closes; J-C-8 failed/refused inquiry (error vs ignorance); J-C-12 what the player sees (AX-7 "no state hidden" vs §C.11 arithmetic the character holds); J-C-13 ending; J-C-15 war gate (`march` requires `at_war`); J-C-18 one substrate and the field's margin (`degree_from_net`); J-C-19 death in battle; J-C-20 commander's fate (duel at ENCOUNTER vs side fraction); J-C-21 experience on a stock; J-C-31 played fidelity (duel decision set J-15; player commanding a field) (:517-558).
 - **Conflicts / stale:** Oct-16 snapshot; some J-C items were answered later (e.g. births ED-WR-0011 is ruled per D_T10_also row 3; D_T04 shows a realm field can fold once).
 - **Open items:** all C7 items unless later ruled; R-C-* IDs index the C8 recommendations.
+
+### research/by_lane/FA_faction_actions.md
+- **What it is:** 2026-10-16 NERS-style critical evaluation of the faction-actions lane (630 lines), HEAD `021fd96`, lane FA. Read ONLY by extraction: §0 problem headings and §2.2 game list; §1, §3-§9 NOT read in full.
+- **Status:** "FILED — reference, not canon ... resolves nothing at runtime"; Oct-2026 snapshot.
+- **Bears on:** FA (primary), SC, SE, MB, CHAR.
+- **Content that matters:**
+  - Verdict items: governance research (`GOV`, `RTP`, `PGS`) verification unauditable; all hooks phrased in the RETIRED Key/Directive/Need idiom so none adoptable as written; archived FA corpus self-contradictory (79 + 67 contradictions across 33 governance documents, 22 in one board-game capture; victory, seizure, treaty lapse, Coup Counter, Standing range each have 2-6 versions); no v9 FA position cites any research; strategic layer `partial` (`faction_q.head()` returns None in every built world; no computed act declares war or treaty; `levy` refused in corpus); `HANDOFF_FA.md` row 3 orders authoring into a quarantined file.
+  - Games treated (shape each contributes): Victoria 3 (interest groups, clout, law enactment), CK3 (crown authority, vassal contracts Scutage/March/Palatinate, vassal play), Old World (ambitions), Kremlin, John Company, EU4 estates, Imperator (launch loyalty), Republic of Rome, Diplomacy, Pax Pamir 2e/Pax Renaissance (currency-as-score, dual scoring), Total War governors, RoTK Officer Mode (VIII enemy schemes), Skyrim guild ladders, CK2 casus belli/truce, Empires in Arms political phase, Bannerlord influence votes, GK2 Politics command budget, Suzerain fixed term, Oriental Empires/KoH I sole-conquest, KoH II hard-capped court, Band of Blades.
+  - H-100 ("kinship-derived seats get containment") quotes a research generalisation with one counter-case in tension with its own source.
+- **Conflicts / stale:** `AP` re-score ("nothing acts as a faction") predates FA-01 (stale); precedents dropped [UNVERIFIED] marks.
+- **Open items:** per the file's §8 (not read).
+
+### research/by_lane/NPC_npc_cast.md
+- **What it is:** 2026-10-16 NERS-style critical evaluation of people and cast (roster, behaviour trees, relational graph, convictions and decision layer, succession, loyalty, `npcs.yaml`, `npc_registry.yaml`), 785 lines, HEAD `021fd96`. Read ONLY by extraction: §0 and §2.2 game list; rest NOT read.
+- **Status:** "FILED — reference, not canon ... resolves nothing at runtime"; Oct-2026 snapshot.
+- **Bears on:** CHAR (primary), FA, WR, IN.
+- **Content that matters:**
+  - Succession, defection, standing, recruitment and bonds have no carrier; `succeed` and `tie/knot` are declined effects, revoke executes 0, heredity null (:item1). Loyalty is a static cosine of authored values against a role template computed once and written as a stance row (`cast.py:256-332`, `populated.py:787,854-856`). Authored cast thinner than loader claims: `cast.py` says 29 rows carry `stats`, 32 `ts`, 30 `goals` but non-null are 1, 10, 17; no code reads `ts`. Leaders mis-housed (five of six have `institution: null`; King at `b_s_002_cottage`, not Seat S-001; `npcs.yaml:183-237`).
+  - Conviction half of the decision layer inert on `main`: 0 of 46 registry rows carry `affiliations:`, so confliction and H-188 read nothing (`cast.py:222-225`, `hole_register.yaml:4207`, IN-64 batch B-X). "Conviction" means pursuits in one field and religious affiliation in another inside `npc_registry.yaml`, against four older rosters of 7, 8, 9, 13.
+  - Games: Old World ambitions, Kremlin/John Company holder != controller, CK council-seat denial (-40), CK3 landless/DF demotion/Shogun 2 bands, Imperator loyalty bleed, Shadow of War War Chests, CK3 population (6-7 parentless 16-year-olds/month, 24,000-char saves), Radiata Stories (175 NPCs on static schedules), JA2/JA3, Triangle Strategy hidden conviction axes (fixed roster), RoTK officer mode and oath bonds, Skyrim guild ladders, DF/Nemesis/Wildermyth (Tale-Spin effect), RimWorld mood = sum of decaying thoughts, Disco/Ogre Battle/Darklands, Pendragon Glory, Darklands ageing.
+  - Grievance IN-58: stance-only half landed at hash EQUAL under shipped polarity, sworn-to half BLK; exit "hash MOVED" NOT MET.
+- **Conflicts / stale:** design corpus contradicts itself on every person-level fact (TS 15 vs 12, Standing 0-5/0-7/0-10, five succession designs).
+- **Open items:** per §8 (not read).
+
+### research/by_lane/SE_settlements_territory_economy.md
+- **What it is:** 2026-10-16 NERS-style critical evaluation of settlements/territory/economy, 562 lines, lane SE, HEAD `021fd96`. Read ONLY by extraction: §0 and §2.2 games; rest NOT read.
+- **Status:** "FILED — reference, not canon"; Oct-2026 snapshot.
+- **Bears on:** SE (primary), FA, MB, WR.
+- **Content that matters:**
+  - The research's target (`sim/provincial`, `sim/territory`, `governance_play_redesign_v1`) no longer exists (FASE scope dissolved). Settlement management is not in the loop (`requirements.yaml:154-167` `in_loop: false`; `domain_actions` and `settlement_economy` contracts `doc: null`). Built SE consequences are inert at shipped control values (`body_step`, `age_step`, `illness_rate` 0; `season_factor_draw` `()`; `fixtures.py:405`).
+  - SFP's city-builder borrowings (Banished, Dawn of Man, Manor Lords, Tropico) and ED-SE-0051 rest on one uncommitted artifact "an uploaded nine-game systems teardown". Every settlement is given a harbour and seam regardless of type (`populated.py:576-584`, H-07 assumption); the geography holds 14 Villages and no Port, Mine, Outpost (§0 item 6).
+  - Games: Total War governors/occupy-sack-raze, RoTK VIII domestic table (order<25 blocks conscription), CK levies vs men-at-arms, Shogun 2 ashigaru, JA2 militia, Brigandine/Unicorn Overlord garrisons, CK3 vassal contract roles, EU4 estates, Imperator governor loyalty, CK3 de jure drift, Victoria 3 incorporation, Banished, Dawn of Man, Manor Lords, Tropico, Caves of Qud, HoMM, Shadow Empire strain, Frostpunk laws, board games (Terra Mystica, Root, A Feast for Odin, Here I Stand, TI4).
+  - COMP-3 `:107` vs COMP-5 `:110` contradict on conquest; PMM `:397-402` vs `:511` on non-payment.
+- **Conflicts / stale:** REPO_MENTIONS records `by_lane/SE:107` as the Manor Lords immigration-not-births correction of ED-SE-0051.
+- **Open items:** per §8 (not read).
+
+### research/by_lane/WR_world.md
+- **What it is:** 2026-10-16 NERS-style critical evaluation of the world lane (canon, threadwork/Mending, Calamity, events, churn and emergence, narrative engines and arcs, world schema), 579 lines, HEAD `021fd96`. Read ONLY by extraction: §0 and §2.2; rest NOT read.
+- **Status:** "FILED — reference, not canon"; Oct-2026 snapshot.
+- **Bears on:** WR (primary), ARCS, CHAR, CORE.
+- **Content that matters:**
+  - `CURRENT.md`'s Narrative-engine row names `narrative_engine_design_v2_churn.md` (ED-IN-0011) which sits in `.audit/` and is "Key-native"; Threadwork row self-declared reference and contradicts ED-WR-0010 (Part 3, 10->0 Coherence, SUPERSEDED). Threadwork has no game precedent (`research/00_INDEX.md:173,253`). Metaphysics' numbers STIPULATED (Ob 1-2, MS -1/-2, TS 30/50/70/90, Coherence 10-0); 23 of 47 RULINGS entries are "Editor's wording".
+  - The historical-concerns catalogue (HCC) reaches no code, registry or plan row (`git grep` finds only `tools/evacuation_plan.py:121`). `canon/03` stale against later rulings on the Calamity ("tensile ... inverted mid-execution is not canon", `canon/philosophy/08_history.md:15-17`). IN-35 "Mending as persons' acts" vs live roster declining to price conviction scars on generic `restore` (`[ASSUMPTION; Jordan to correct]`). GD-1 "Political Stability <= 6" loses scale when stored stability is cut.
+  - Emergent-narrative precedent: strong on what fails (tracking is not expressing; certifying generated content is null N-5); ratified narrative engine's anti-oatmeal gate is UNBUILT ERA, forecast numbers not reproducible.
+  - Games: DF, Nemesis, Caves of Qud/URR/WFC, CK2/CK3, RimWorld, KoDP/Six Ages, Talk of the Town, Shadow of War War Chests, Compton (oatmeal), Smith & Whitehead (ERA), Ryan/Mateas/Wardrip-Fruin expression null, Skyrim guilds, M&B, Pathologic 2, Disco, Manor Lords, Pentiment, Total War/FM.
+- **Conflicts / stale:** arc/fulfilment session documents self-authored with disagreeing arithmetic.
+- **Open items:** per §8 (not read).
+
+### research/by_lane/IN_infrastructure.md
+- **What it is:** 2026-10-16 NERS-style critical evaluation of the infrastructure/cross-cutting lane, 1118 lines, HEAD `021fd96`, lane IN. Read ONLY by extraction: §0 and §2.2 games; rest NOT read.
+- **Status:** "FILED — reference, not canon"; Oct-2026 snapshot.
+- **Bears on:** CORE (primary), CHAR, GO, FA, PROCESS.
+- **Content that matters:**
+  - IN's repository work is grounded in Layer 1, Jordan's rulings and its own measurements, not in research; Layer 1 excludes research by stated rule. Kernel season-loop inputs are defaults with no stated source (`leverage=0.0` `sigma.py:147`; `Person.capability` empty). Cast loyalty a static cosine where every precedent loyalty is a moving quantity. The one research-to-design path (H-100 -> IN-31) rests on a reverted carrier. 17 of 45 verbs fire in the 143-case corpus run; `march`'s realm record conflicts with itself. Relaxed exit (RULED 2026-10-13) decouples a position's BUILT from realm execution. `CURRENT.md` IN-adjacent rows name quarantined documents in a "Head" column.
+  - Games: FM vs Total War fidelity, Fire Emblem ("Jordan's words"), EU4 estates ("a mechanism engineered not to fire is indistinguishable from one that does not exist"), Old World, Kremlin/CK contracts/Ming piaoni/Byzantine Office (X1 holder != controller), Talk of the Town/DF rumour/CK hooks, Nemesis/DF/Wildermyth, Blades in the Dark (P(fail) 50%->1.6% for N=1..6), PbtA middle band, CK3 population, seven detective games (Pentiment, Disco, Esoteric Ebb, Lacuna, L.A. Noire ...), RoTK 107 acts, Republic of Rome agenda control, RimWorld/Guild 3/Bannerlord/Skyrim radiant grudge loop.
+- **Conflicts / stale:** contested verbs 3 vs 4, VERB_TABLE pinned 46 vs 45 (plan/data drift).
+- **Open items:** per §8-§10 (not read).
+
+### research/cross_scale_action_catalogue_v1.md
+- **What it is:** 2026-08-27 census of every action at every scale with build status, governing formula and opposed/unopposed status; lane IN, written at `f567c13`; 919 lines. Read lines 1-60 only; rest NOT read.
+- **Status:** "FILED — reference, not canon"; historical (August 2026 baseline, before the season loop's current form; `CORRECTIONS.md` notes its lines 263-267 restate a pre-ruling list).
+- **Bears on:** CORE, DICE, PC, MB, SC, FI, FA, SE, WR.
+- **Content that matters:**
+  - One kernel: d10, TN 7 always (`dice_engine._require_tn7` refuses any other, ED-IN-0196), mu 0.40 / sigma 0.800 per die, continuous `Normal(mu*N, sigma*sqrt(N))` with fractional pools legal, `margin = net - Ob`, ladder `>=3` Overwhelming / `>=1` Success / `[0,1)` Partial / `<0` Failure, modifiers are d+sigma mu-shifts soft-capped at `M_MAX = 1.5 sigma` (:15-27).
+  - Pool = `(Primary Attribute x 2) + History bonus` identical in combat, contest and fieldwork; threadwork `(Spirit x 2) + History + TPS`; personal combat instead `resolution_pool(history) = max(5, History+6)`, ED-901 (:29-33).
+  - Eight of nine degree ladders migrated to the single owner; ONE held: `combat_engine_v1/core.py:degree` (pre-2026-08-14 bands, `DECISIVE_OB = 3`) so "personal combat grades on a different ladder from every other scale" (:35-42) — superseded in part by ED-PC-0058 (Ob = `history/2`) per `by_lane/PC` but ladder status [UNVERIFIED].
+  - Jordan 2026-08-14: "an obstacle rolled against a character or faction is their corresponding score/2 plus whatever specific modifiers"; implemented at exactly one site (`crown_initiative.coronation_renewal_ob`); `tribunal.py:116-122` matches half the time; `parliamentary_transfer.py:257` contradicts (:46-58).
+- **Conflicts / stale:** `engine/autoload/dice_engine.py` path (Godot-era) vs current `engine/dice_engine/dice_engine.py` named in CLAUDE.md §5 [UNVERIFIED]; the sites cited (crown_initiative, tribunal, parliamentary_transfer) belong to the old `sim/` code (dissolved).
+- **Open items:** per-scale action rows (not read).
+
+### research/personnel_muster_integration_master_v1.md
+- **What it is:** 2026-08-27 phase-ordered plan folding one code audit, five design-corpus archaeology passes, five game-precedent passes and four muster-precedent passes (KOEI, CK2/3, Total War, JA, Brigandine, Unicorn Overlord) into personnel/governance/muster proposals; lane IN; 864 lines. Read lines 1-70; rest NOT read.
+- **Status:** "FILED — reference, not canon ... proposes, ratifies nothing"; historical.
+- **Bears on:** MB (muster), CHAR, FA, SE.
+- **Content that matters:**
+  - Impact taxonomy DOC / INERT / MOVES / RULING (MOVES requires golden re-pin + `tools/balance_oracle.py` control; that tool is now RETIRED per CLAUDE.md §7) (:17-25).
+  - Sourcing caveat: fan wikis bot-walled; numbers are leads, convergences are durable (:27-36).
+  - Finding: `references/npc_registry.yaml` holds 46 characters (35 canonical, 11 proposed) with `convictions`/`role`/`faction`/`source` on 46/46, `goals` 17/46, `territory` 7/46, `stats` 1/46: "identities and offices, not capabilities"; zero runtime loaders at the time (:47-59).
+  - Jordan ratified 2026-07-13 (`scale_hierarchy_v1.md` §5.1): "Factions do not necessarily need to hold territory — they need to hold PEOPLE" (:63-68).
+  - Its non-payment null "every franchise resolves non-payment as permanent desertion" contradicts its own list (per by_lane/MB, REPO_MENTIONS).
+- **Conflicts / stale:** `balance_oracle` retired; `npc_registry` loaders now exist (`engine/season/data/cast.py`) [UNVERIFIED current coverage].
+- **Open items:** §9 rulings list (not read).
+
+### research/historical_concerns_action_catalogue_v1.md
+- **What it is:** 2026-07-10 catalogue of historical geopolitical/geographical/climatic/economic concerns (succession crises, embargo, siege/sack, earthquake, flood, famine, ...) distilled to event-deck concerns; 31-agent workflow; lane IN; 343 lines. Read headings and header only.
+- **Status:** "FILED — 2026-07-10"; historical; per `by_lane/WR` it "reaches no code, registry or plan row".
+- **Bears on:** WR (event decks), FA, SE, MB.
+- **Content that matters:**
+  - 10 concern categories across four domains (Geopolitical x3, Geographical x2, Climatic x3, Economic x2) with find -> adversarial fact-check -> "bidirectional mechanical distillation against the actual game" (:3-17); sections 2.1 succession/civil war collapses, 2.2 blockade/embargo/chokepoint, 2.3 siege/sack/occupation/billeting, 2.4 earthquake/eruption, 2.5 flood/drought/siltation, 2.6 famine (:37-104).
+- **Conflicts / stale:** vocabulary of the dissolved `sim/`-era design; `by_lane/WR` item 3: only referenced by `tools/evacuation_plan.py:121` and VCD.
+- **Open items:** not read in full.
+
+### research/proactive_governance_scale_research_v1.md
+- **What it is:** 2026-07-11 research on what projects/policies leaders undertook for settlements and territories; defines four scales (Organization, Settlement, Territory, Faction); 31-agent workflow; 305 lines. Read headings and header only.
+- **Status:** "FILED — 2026-07-11"; historical.
+- **Bears on:** SE, FA, CORE (scale model).
+- **Content that matters:**
+  - Four-scale definitions from evidence: Organization = bounded membership with an internal ladder; Settlement = single populated place with stat homeostats; Territory = cluster held as an aggregate; Faction = the whole polity's rules, criteria and legitimacy (:17-33).
+  - Catalogue sections 2A Settlement, 2B Organization, ... by scale (:45-66).
+- **Conflicts / stale:** "homeostat" vocabulary is the older design layer; `by_lane/IN` cites it as `PGS`.
+- **Open items:** not read in full.
+
+### research/fa_se_historical_precedent_research_v1.md
+- **What it is:** 2026-07-08 FA/SE historical precedent research with step-3 proposals docketed as ED-FA-0008.. / ED-SE-0007..; code audits of `sim/provincial/faction_action.py` and `sim/territory/registry.py`; 323 lines. Read headings and header only.
+- **Status:** "FILED — 2026-07-08 ... not itself canon — a research/synthesis artifact the docket items cite as provenance".
+- **Bears on:** FA, SE.
+- **Content that matters:** Step 1 audits dissolved modules (`sim/provincial`, `sim/territory`) and under-grounded design sections (:14-61); per `by_lane/SE` item 1 its scope "no longer exists" (FASE).
+- **Conflicts / stale:** scope modules dissolved (`sim/` is a dissolved tree, CLAUDE.md §3).
+- **Open items:** not read in full.
+
+### research/emergent_narrative_literature/07_apparatus.md
+- **What it is:** 2026-10-28 gate-based test apparatus (Gates A-L) derived from the read literature (entries 01-06) for judging whether a design's narrative claim is true; lane IN. Read lines 9-128 (Gates A-H start); Gates H-L remainder NOT read.
+- **Status:** "FILED — reference, not canon ... tier 3"; live as method reference (a measuring stick, not code).
+- **Bears on:** WR, CHAR, FI, SC, PROCESS (the brief's "dynamic emergent narrative game" measuring stick).
+- **Content that matters:**
+  - Test ids `T04.Q1` = source id + question; evidence classes `doc, trace, rater, player, ablation, analysis, tool`; "a verdict on a rater, player or ablation row cannot be reached on paper" (:9-11).
+  - Gate map: stories emerge from simulation -> A,B,C,D; engine tells what happened -> D,E,L; no GM -> F,H; choices matter -> G,J; endless variety -> I,J; engaging -> K,L (:15-22).
+  - Gate B: B2 derived outcomes vs invented causes; B3 convergence from goal/feedback loop; B4 same situation through different causal histories across seeds. Gate C: C1-C10 story supply (conflicting drives, recognisable story rate, reachability, shared entity properties, few persistent entities). Gate D: D2 designer can ask the event record a new question without new code; D4 surfacing rule better than random in blind comparison; D5 name the finite set of prior conditions enabling a major outcome as a stored record; D7 a reader who did not build it can find and write a tellable account in a time budget. Gate E: Tale-Spin effect (capability the audience cannot see), Eliza effect, E7 ablation. Gate F: names GM functions (pacing target with decay and thresholds, content-starvation alarm, steering without a GM). Gate G: agency as formal reasons matched to material affordances; G4 share of actions with specific response (:24-120).
+- **Conflicts / stale:** none; gate rows cite entries 01-06 by test id.
+- **Open items:** Gates H (memory/persistence) to L not read here.
+
+### research/emergent_narrative_literature/01_foundations_narrative_vs_play.md
+- **What it is:** 2026-10-28 reading entries (full wording of Passes/Fails/Detects clauses) for Juul 2002 (emergence vs progression), Juul 2001, Ryan 2001, Jenkins 2004, Aylett 1999, Mateas 2001; 198 lines. NOT read in full (headings only).
+- **Status:** "FILED — reference, not canon ... tier 3"; live reference.
+- **Bears on:** WR, ARCS, CHAR.
+- **Content that matters:** entries T04_juul2002 (games of emergence vs progression), T06_juul2001, T07_ryan2001, T05_jenkins2004 (game design as narrative architecture: evoke/enact/embed/emerge), T01_aylett1999 (emergent narrative), T02_mateas2001 (poetics of interactive drama) (:11-103).
+- **Conflicts / stale:** none noted.
+- **Open items:** none read.
+
+### research/emergent_narrative_literature/02_interactive_drama_and_agency.md
+- **What it is:** reading entries for Aylett 2000, Louchart & Aylett 2003 (narrative paradox, lessons from RPGs), Mateas & Stern 2003/2005 (Facade), Wardrip-Fruin et al. 2009 (Agency Reconsidered), Mawhorter et al. 2014 (choice poetics), Riedl & Bulitko 2013, Wardrip-Fruin 2008 (surface/data/interaction); 257 lines. Headings only.
+- **Status:** "FILED — reference, not canon ... tier 3".
+- **Bears on:** WR, SC (choice poetics), CHAR, GO.
+- **Content that matters:** the agency account used by Gate G ("formal reasons matched to material affordances"); GM-function analysis from RPGs (T12) used by Gate F; Facade beat/pacing structure (T03a/b) (:11-107).
+- **Conflicts / stale:** none noted. **Open items:** none read.
+
+### research/emergent_narrative_literature/03_retelling_and_the_concordia_cluster.md
+- **What it is:** reading entries for Eladhari 2018 (Re-Tellings), Sych 2020, Kreminski et al. 2019 (evaluating AI-based games), Lessard & Pare-Chouinard 2022 (dramatic situations), Kybartas et al. 2020 (tension space), Kreminski & Mateas 2021 (coauthorship history); 199 lines. Headings only.
+- **Status:** "FILED — reference, not canon ... tier 3".
+- **Bears on:** WR, FI (retelling/legibility), SC.
+- **Content that matters:** the "fourth layer" retelling concept and the target-situation test (E04) feeding Gates C-D (:11-110).
+- **Conflicts / stale:** none noted. **Open items:** none read.
+
+### research/emergent_narrative_literature/04_sifting_curation_and_simulation.md
+- **What it is:** reading entries for Felt (story sifter), Winnow, Select the Unexpected, Qud mythic biographies (Grinblat & Bucklew 2017), Adams on Dwarf Fortress simulation principles, Short on Ryan 2018, RimWorld via Rock Paper Shotgun and Game Developer; 270 lines. Headings only.
+- **Status:** "FILED — reference, not canon ... tier 3".
+- **Bears on:** WR, FI (sifting event logs as the investigation analogue), CORE (harness `storybar.py` sifter).
+- **Content that matters:** story sifting = querying the event log for patterns (Felt/Winnow) — the shape of Valoria's `harness/storybar.py` (D_T02 row E5e); Qud "effect causes the cause" generate-then-rationalise (:11-110).
+- **Conflicts / stale:** Sylvester talks only via secondary pieces. **Open items:** none read.
+
+### research/emergent_narrative_literature/05_procedural_generation_and_choice_structure.md
+- **What it is:** reading entries for Compton 2016, Smith & Whitehead 2010 (expressive range), Togelius et al. 2011, Smith 2014, Short 2016 (quality/salience/waypoint structures) and 2019 (storylets), Ashwell 2015 (choice patterns); 235 lines. Headings only.
+- **Status:** "FILED — reference, not canon ... tier 3".
+- **Bears on:** WR, SC (choice structure), CORE (storylet-shaped verb rows).
+- **Content that matters:** storylets/salience selection vocabulary that D_T02 rows E5a-E5c map to Valoria verb rows (:11-108).
+- **Conflicts / stale:** none noted. **Open items:** none read.
+
+### research/emergent_narrative_literature/06_engagement_space_and_craft.md
+- **What it is:** reading entries for SDT (Ryan, Rigby, Przybylski 2006), MDA, Fernandez-Vara indexical storytelling, Carson environmental storytelling, Hocking ludonarrative dissonance, Booth Left 4 Dead AI director, Koster "Narrative is not a game mechanic"; 217 lines. Headings only.
+- **Status:** "FILED — reference, not canon ... tier 3".
+- **Bears on:** WR, GO, CHAR.
+- **Content that matters:** pacing-director (L4D) and engagement sources feeding Gates F and K-L (:11-101).
+- **Conflicts / stale:** none noted. **Open items:** none read.
+
+### research/game_precedent_suite/tables/R3a_colony_sims_1.md
+- **What it is:** verified capability table: Dwarf Fortress, RimWorld (Royalty/Ideology/Biotech/Anomaly), Songs of Syx; 187 lines. Headings only (sections 1-3, "Mechanics worth knowing", "Still unknown").
+- **Status:** "(v2, verified)"; reference tier 3.
+- **Bears on:** SE, CHAR, WR.
+- **Content that matters:** DF noble/office mandates and migrant danger score (per ATTACHMENTS_CROSSCHECK: danger score from deaths+executions+insanities over five years; PUNISH_CAPITAL deters immigration), RimWorld work priorities 1-4/zones/Ideology roles, mood break thresholds 35/20/5 with MTB 4/0.8/0.5 days, threat points 35-10,000 by wealth (:71,124,167); Syx offices boost limited numbers of workers since V68.
+- **Conflicts / stale:** none. **Open items:** "Still unknown" at :176.
+
+### research/game_precedent_suite/tables/R3b_colony_sims_2.md
+- **What it is:** verified capability table: Manor Lords, Frostpunk 1 and 2, Banished; 200 lines. Headings only.
+- **Status:** "(v2, verified)"; reference tier 3.
+- **Bears on:** SE, FA (Frostpunk 2 council votes), WR.
+- **Content that matters:** Manor Lords settlement level counts families at each tier since Update 6 (0.8.065) and Major Update #8 (27 Aug 2026); Frostpunk 2 Council of 100, majority 51, two-thirds for Rule laws, 10-week cooldown, promises as negotiation currency (per ATTACHMENTS_CROSSCHECK); Banished 5 ticks per year, labourers at 10 (:80,136,180).
+- **Conflicts / stale:** Manor Lords table relied on Update 7 as latest; Update #8 exists (ATTACHMENTS_CROSSCHECK B). **Open items:** :185.
+
+### research/game_precedent_suite/tables/R7_magic_sanity_travel.md
+- **What it is:** verified capability table: Darkest Dungeon II, Sunless Sea, Eternal Darkness, Don't Starve, Pathologic 2, Vampire Bloodlines; 145 lines. Headings only.
+- **Status:** "(v2, verified)"; reference tier 3.
+- **Bears on:** WR (threadwork cost analogues), CHAR, SE (survival).
+- **Content that matters:** per D_T07/D_T10: "no sampled game shows an ungated, unlimited-rate free mend"; ED per-character sanity size; Don't Starve per-character max Sanity (Willow 120 to Wickerbottom 250); DD2 Stress 10 Meltdown/Resolute fork (:31,69,121-125).
+- **Conflicts / stale:** none. **Open items:** :125.
+
+### research/game_precedent_suite/tables/R8_npc_life_economy.md
+- **What it is:** verified capability table: The Sims 4, Anno 1800, Patrician IV, Wildermyth; 174 lines. Headings only.
+- **Status:** "(v2, verified)"; reference tier 3.
+- **Bears on:** CHAR, SE.
+- **Content that matters:** Wildermyth: Mortal Choice at 0 health (die for a boon, or be maimed and withdraw), legacy characters, themes persist (per D_T03 rows 33-34); Sims 4 Free Will; Anno/Patrician trade (:9-111).
+- **Conflicts / stale:** none. **Open items:** :143.
+
+### research/game_precedent_suite/tables/R9_policy_court_sims.md
+- **What it is:** verified capability table: Tropico 6, Suzerain, Dragon Age: Inquisition (war table), Democracy 4; 197 lines. Headings only.
+- **Status:** "(v2, verified)"; reference tier 3.
+- **Bears on:** FA, SC, SE.
+- **Content that matters:** Tropico 6 has 10 era-gated factions (ATTACHMENTS_CROSSCHECK); Suzerain ~450k words launch figure, base 1M+; DAI war table with advisor-dependent odds 75/50/25 (per D_T09); Democracy 4 as signed weighted delayed graph (REPO_MENTIONS) (:21-151).
+- **Conflicts / stale:** Suzerain word count contested. **Open items:** :185.
