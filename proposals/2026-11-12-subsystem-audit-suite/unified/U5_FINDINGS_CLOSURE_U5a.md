@@ -642,3 +642,52 @@ SOFT = `16_PESSIMIST_DICE_soft_ceiling.md`; TASK = `16_PESSIMIST_DICE_task_diffi
 | §1.2 "mechanisms that survive because nothing was tried": H-210's sweep arms are one arm; the 10 % floor is solved at no advantage; the two-roles gate has no row below Ob 1 | RESOLVED-BY | SOFT gate 3 (ordered words give ordered odds); DOE §3 row 11 (the floor is re-solved against the signed channel; the two-roles gate gains a row at an obstacle below 1) | — |
 | §6 survivor (the form of fortune in a field) | JORDAN | D-34 | — |
 | §7 corrections owed elsewhere | RESOLVED-BY / SUPERSEDED | 18-A: applied here (Reconciled). 13, SC-B: U5c (listed in `unified/U5_CONFLICTS_U5a.md` §3). The two `10_DICE_*` notes: DOE §3 row 11 | — |
+
+---
+
+# PART 6 · The determinism sweep (`audits/18_DETERMINISM_SWEEP.md`)
+
+(Placed before PARTS 4 and 5 in writing order; numbered by the brief's list.) 18-A =
+`18_DETERMINISM_task_draw_for_uncontested_verbs.md`; 18-B = `…_notice_is_a_draw.md`; 18-C =
+`…_rival_acts_in_one_fold.md`; 18-D = `…_no_certain_matchup.md`. All four carry a `Reconciled:` line from
+this lane (the one sampler, A-5; and, per file, the items below).
+
+## 6.1 Documents corrected by the sweep (D-01 … D-11)
+
+| id | claim (one line) | disposition | carrier | evidence |
+|---|---|---|---|---|
+| D-01, D-02, D-03 | evidence entered and struck by weight; `answer` with no draw; `silence` concedes the rung | RESOLVED-BY | corrected in place by the sweep in SC's and FI's files (each carries its `Reconciled:` line); the standing design is U5c's to close | the files' heads |
+| D-04 | a plain `fight` is to the death | RESOLVED-BY | `03_PC_exits_withdrawal_recovery.md` Part B (adopts `14_VERBS_PHYSICAL_A` A3's mortal-wound draw); U5b | F-PC-04: 200 of 200 |
+| D-05 | `tend` restores a fraction, certain | RESOLVED-BY | same file Part C, through 18-A's task route; the wound it mends is a level (A-8) | 118 certain mendings |
+| D-06 | an NPC decider "draws nothing" | RESOLVED-BY | `05_SC_playable_hearing_B.md`, `05_SC_negotiation_scene.md` (the decider samples through `_sample_order`); the same rule binds every module's decider (`01_CORE_one_scene_contract.md` as reconciled, C-U5a-03) | — |
+| D-07, D-08, D-09 | a levy raises as asked; succession and set-up acts certain; inheritance by rule | RESOLVED-BY | FA's files as corrected (U5d); A-19 (the deed race) and A-14 (a vote is a draw on the voter) now fix the forms | — |
+| D-10 | "governing acts do not roll" | RESOLVED-BY | overruled in `07_SE_audit_addendum_B.md`; the route is 18-A | — |
+| D-11 | the upset flip stays on an integer the fold does not read | RESOLVED-BY | 18-D | 0 deaths of the heavy fighter in 1,000 |
+
+## 6.2 Code sites (C-01 … C-15)
+
+| id | claim (one line) | disposition | carrier | evidence |
+|---|---|---|---|---|
+| C-01 | 53 of 67 verb rows fold on eligibility alone | RESOLVED-BY | 18-A as reconciled: (i) the roll is the one sampler (A-5); (ii) item 3 and the gate follow `16_PESSIMIST_DICE_task_difficulty_and_throughput.md` (a task nobody has ranked is `plain`; never ships on `obstacle_default`; the throughput reading and the refusal to ship); (iii) item 4 is rewritten to `04` §B.13 invariant 12 (C-U5a-10): a `task` row keeps flat `writes:` and `emits:`, its magnitude is scaled by `task_fraction`, its failed draw is the row's keyed `emits_on_refusal` clause `draw` (the graded inquiries' own form), and a verb whose bands write different cells declares `contests:` | 1,995 of 2,159 success events carry no degree |
+| C-02 | whether a bystander notices a deed is certain | RESOLVED-BY | 18-B as reconciled: the roll is the one sampler; the witness's pool is read from a per-holder projection built at the barrier (D-74, taken B: `loop/witness` imports nothing from the decision layer or the seam's readers), not by calling `sigma.faculty` from WITNESS | 84,443 deposits, none drawn |
+| C-03, C-05, C-08, C-09, C-10, C-15 | findings always made; forgeries of one quality; stores and towns taken; journeys arrive; matters docketed; training, works and levies certain | RESOLVED-BY | 18-A (the route, the class of every row, the default fraction); each verb's own band row is its verb lane's (U5b, U5c, U5d) and supersedes the default | per-verb counts in the sweep §2 |
+| C-04 | `_eff_tend` restores to the ceiling | RESOLVED-BY | as D-05 | 118 |
+| C-06 | a defended field is lost by the attacker 60 of 60 | SUPERSEDED | MB's closure (U5b): `04_MB_headcount_grade_and_scale.md`; A-3 (the field returns won, lost or drawn) | F-MB-01 |
+| C-07 | the binding acts take effect with certainty | SUPERSEDED | the binding verbs' closures (`14_VERBS_BINDING_*`; U5c, U5d) | `issue` 49, `release` 4 |
+| C-11 | fold order decides which of two rival acts wins | RESOLVED-BY | 18-C as reconciled. Its first gate (the count of rivalry groups) has a first reading from the CORE pessimist: reversing the hash order flips 1 of 175 round-0 acts (F-PES-CORE-09). Under A-9 the order is over scenes; the precedence draw re-orders rival *scenes* among the positions the group holds. Layer 1: it fills `04` F.26 (*"a hash decides who eats … the design has no better answer"*) and keeps D-36 (rank never breaks a tie: the draw's odds are the rivals' pools) | `_eff_requisition`'s and `_eff_succeed`'s docstrings |
+| C-12 | a felling is a death | SUPERSEDED | PC's closure (U5b): `14_VERBS_PHYSICAL_A` A3 | 200 of 200 |
+| C-13 | at season scale a heavy fighter never loses to a light one | RESOLVED-BY | 18-D (the riposte, tracked); the form is closed by the decision register's "not yours" table (the upset happens inside the fight, at the deciding blow) | E5: 0 of 1,000 |
+| C-14 | a verdict by count of commits | SUPERSEDED | answered: A-14 (each ballot is a draw on the voter, inside the presiding person's act); SC's ballot row carries it (U5c) | `world_q.py:737` |
+
+## 6.3 Owed to running lanes (sweep §3)
+
+| item | disposition | carrier |
+|---|---|---|
+| `covenant` acceptance: a contest roll in one file, a sampled choice in another | SUPERSEDED | U5c decides one (the sweep's reading: consent is the sampled choice; the roll is the persuasion) |
+| the ballot replaces the `vote` conjunct | SUPERSEDED | A-14; U5c |
+| every verb's band map lands on the route C-01 makes mandatory | RESOLVED-BY | 18-A as reconciled (flat columns and the fraction for a `task` row; `contests:` where the cells differ by band); listed for U5b–U5d in `unified/U5_CONFLICTS_U5a.md` §3 |
+| one `tend` rule | SUPERSEDED | U5b / U5c (D-05 is the standing text until the MATERIAL verbs adopt or supersede it) |
+| `petition` filing is a fiat; the answer is the drawn act | STALE-FALSE-POSITIVE (conformant as written) | — |
+| admission to the case file | SUPERSEDED | `19_LACUNA_admission_rides_the_citing_draw.md` (U5c) |
+| WR's thresholds become draws | SUPERSEDED | `09_WR_B_draws_not_thresholds.md` (U5d) |
+| institutions' list of deterministic text; the GAME pessimist's count | SUPERSEDED | U5d (one definition of a draw: an Event that carries a degree) |

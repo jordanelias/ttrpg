@@ -196,6 +196,15 @@ must contain when it is designed, so that it is designed once.
 
 No edit to `verb_table.yaml`, `rosters.yaml`, `arrangements.yaml`, `state/` or `loop/`.
 
+## Rulings of 2026-11-12 that bear on this plan (`unified/DECISIONS_ANSWERED.md`)
+
+| ruling | what it settles here |
+|---|---|
+| D-13 (A-13): a seat may declare the clerks an order passes, paper-hands and an exit audit | item 1's key and item 3's `passes_through` readings stand on a ruled shape; a seat declaring none behaves as today |
+| D-22 (A-21): a decree is proclaimed | a paper's terms travel with the news of it; item 4's gate is about citing an entered instrument as evidence, which that ruling does not touch |
+| D-12 (A-12): a seat carries a modifier | audit §9's "office: never a bonus" is superseded for the standing term; nothing in this plan adds or removes a modifier |
+| D-17, D-18 (A-17, A-18): the south fought and ranked third; the deed is realm-wide at the third confidence | audit §14 item 2 is answered; no item here depends on it |
+
 ## Order and dependencies
 
 After A, B, C (their own order). Item 3's first two readings with F. Item 1 after B and after

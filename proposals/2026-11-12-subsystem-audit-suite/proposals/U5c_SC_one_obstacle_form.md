@@ -140,7 +140,7 @@ the obstacle). The values in `terms` sum exactly to `ob`.
 
 `rosters.yaml: advantage_sources`, in order: `effort` (existing), `capability` (the DICE map's `edge` rows,
 which absorb `05_SC_capability_surface.md`'s `trait_advantages` once the capability surface names their
-home), `proofs`, `favour`, `approach`, `custody`. Each source returns two lists of `LEVEL_SIGMA` names,
+home), `proofs`, `favour`, `approach`, `custody`, `lean`. Each source returns two lists of `LEVEL_SIGMA` names,
 the actor's and the other side's; `levels_to_net_sigma(aggressor, defender)` nets them; `net_boost` applies
 the soft cap. Bounded, monotone and uniform at every pool.
 
@@ -150,6 +150,7 @@ the soft cap. Bounded, monotone and uniform at every pool.
 | `favour` | one `favour_level` per whole unit of: the audience's favourable `reception × reception_gain`; the counterparty's favourable stance (`clamp(stance_toward / STANCE_MAX) × regard_step`); a live `tie` of the actor to the counterparty; a favourable plea | — | `favour_level` (first value `major`; control `None`) |
 | `approach` | `press` on `interview` or `interrogate`: one `press_level` for the questioner in the engagement draw | one against the questioned person's answering `lie` | `press_level` (first value `minor`; control `None`) |
 | `custody` | one level per season the prisoner has been held, capped by the soft cap | — | `custody_level` |
+| `lean` | a bench member's own ballot: one `lean_level` per live public commit of his for the motion | one per commit of his against it | `lean_level` (`U5c_SC_proceedings_residue.md` §6) |
 
 Units round half up. A source with nothing to say returns two empty lists. `believed_input` fills the
 believer's own sources and leaves the other side's `None` without a claim.

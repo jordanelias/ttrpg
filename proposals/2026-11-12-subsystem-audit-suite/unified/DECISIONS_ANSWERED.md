@@ -56,6 +56,11 @@
 | A-47 (D-61) | Arcs that end when a counter fires | B: a threshold may open a mandatory scene, never decide it (against the recommendation) | The world can corner a character; the scene's outcome is a drawn act; the 27 threshold-closed or -forced arcs are restated as 'threshold opens a scene'. Standing rule intact: the crossing itself decides nothing. |
 | A-48 (D-62) | The scene slate | B: a list of questions for the player; NPCs take the first | Triage is player gameplay; the player surface contract carries the list. |
 
+| A-49 (D-49) | Reveal at the end of a campaign | B: reveal after the line ends, on top of never-reveal in play | Shown only after the line ends and no continuation is taken. |
+| A-50 (D-64) | Does the seed change the starting realm | B: some starting state drawn, small and bounded | World cards draw bounded starting state (grudges, low granaries, illness). |
+| A-51 (D-65) | Depth of the past | Neither offered option. Jordan: *"five years"* | The prologue simulates five years before play (not one; not a generational pass). Everything older stays tradition and hearsay. The prologue's cost is five years of the loop, measured on the loop's own year length (read from the code, not assumed); no births or ageing pass is ordered by this ruling. |
+| A-52 (D-66) | New business in a long game | B: a docket read inside convening, after a test shows cards-at-build runs dry | Amends two plan lines; held behind the test. |
+
 ### Closed by the five-step ladder, not by Jordan (CLAUDE.md §0; reversible on his word)
 
 Answered by prior ruling, precedent or architecture; recorded so the numbering is whole.

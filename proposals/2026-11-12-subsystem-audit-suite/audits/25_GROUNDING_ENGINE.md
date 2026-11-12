@@ -78,3 +78,96 @@ recorded for that world (`5ab73af2…`); `g2` reproduced `b4bae063…`.
 | L-23 | THE NINE: met 3, partial 5, not met 1 (R-05) | `17_CENSUS_REST.md:312` | VERIFIED | `python -m engine.season.harness.register --requirements`, run by this lane: `met 3 · not_met 1 · partial 5`; R-05 `not_met`. (The row is doc-derived by its own statement, CLAUDE.md §0.2) |
 | L-24 | 586 `raise` statements in non-test `engine/season` | `01_CORE_audit_addendum_B.md:365` | VERIFIED | `grep -rE '^\s*raise ' engine/season --include=*.py`, less `/tests/`: 586. `04:986-987` records 167 on 2026-09-05, by `grep -c '^\s*raise ' engine/season/*.py` "and siblings". Whether those two file sets are the same cannot be read here (the shallow clone does not reach the tree of 2026-09-05), so the "about 3.5-fold" growth is UNRESOLVABLE as a ratio; the count 586 stands |
 
+
+## 2. The Layer 1 passages the suite quotes
+
+Each row was opened at the line. `holonic` is `architecture/holonic_ARCHITECTURE.md`; `04` is
+`architecture/meta/04_CODE_ARCHITECTURE.md`; `03` is `architecture/meta/03_VERBS_AND_LOOPS.md`.
+
+| # | passage, as the suite quotes it | where in the suite | status | opened |
+|---|---|---|---|---|
+| A-01 | §27.2: *"No second resolver. No auto-resolve formula. No fast path."* and *"THIS IS THE REFUSAL WITH NEITHER A MECHANISM NOR A CHEAP TEST. It is enforced by a person noticing."* | `04_MB_audit_addendum_B.md:112`, `:699`; `03_PC_audit_addendum_B.md:235`; `unified/DECISIONS_FOR_JORDAN.md:178` | VERIFIED | `holonic:984` (heading), `:986`, `:988-990`. "No second resolver" is also among the seam's four leaks at `holonic:1392` |
+| A-02 | §29: CENSUS is *"DEMAND-DRIVEN ONLY. Nothing generates without a demand, and no clock generates anything."* | `07_SE_audit_addendum_B.md:339-340` | VERIFIED | `holonic:1023` (heading), `:1028` |
+| A-03 | §25's table: *"bodies, ageing, natural death"* is *"one of the three licensed clocks"*; *"envelope weight — births and deaths"*; §10.3: written at MATTER, reconciled at CENSUS | `07_SE_audit_addendum_B.md:341-343` | VERIFIED | `holonic:850` (heading), `:860`, `:866`; `holonic:401-405` (*"The envelope is written at MATTER and reconciled at CENSUS"*) |
+| A-04 | §39.3: the depth cap has no default; *"a nested instance is an instance"* is *"not a bound"*; exceeding it is a typed error | `03_PC_audit_addendum_B.md:274`; `unified/DECISIONS_FOR_JORDAN.md:256` | VERIFIED | `holonic:1396-1402` |
+| A-05 | §44.3: a wrapper never holds state, decides, resolves or drives a clock; *"a wrapper that computes an outcome **is** the second resolver"* | `03_PC_audit_addendum_B.md:127`, `:237`, `:327`; `05_SC_audit_addendum_B.md:213` | VERIFIED | `holonic:1679-1686`; the quoted sentence is `:1685` |
+| A-06 | `04` §A.2: MATTER reads *"Sites, bodies, larders, ttl/term"* (`:174`); CENSUS owns `weight` and `envelope` (`:179`); the provider adapters own *"nothing, ever"* and return a `Margin` | `07_SE_audit.md:393-394`, `:622`; `01_CORE_audit_addendum_B.md:357`; `17_CENSUS_REST.md:293` | VERIFIED | `04:127` (heading), `:174`, `:179`, `:182`. `04:122` is T-k, *"one resolver, one ladder"* (`03_PC_audit_addendum_B.md:51` cites `:116-122`) |
+| A-07 | `04` §C.4 (ruled 2026-09-03): *"The degree is READ OFF THE SUBSYSTEM, never mapped onto it by the table"* | `01_CORE_audit_addendum_B.md:337`, `:379-381` | VERIFIED | `04:659` (heading), `:712-713`; the "no second resolver" row, graded CONVENTION, is `04:761` |
+| A-08 | `04` §C.5: *"the subsystem returns a `Margin`; a subsystem returning a winner has not met the contract"*; D-24; §C.5.1: *"units = PersonId[] at weight — one type. There is NO unit class, at any scale"* | `01_CORE_audit_addendum_B.md:337`, `:357`, `:379`; `04_MB_audit_addendum_B.md:113`, `:741`; `04_MB_audit.md:625`, `:1248` | VERIFIED | `04:771` (heading), `:786`; D-24 is row 24 at `04:1050`; `04:793` (§C.5.1), `:802`; the grid-squad row `03_PC_audit_addendum_B.md:396` cites is `04:811` |
+| A-09 | *"`04:237` forbids social aggregates on a Rung"* | `13_SC_contest_interrogation.md:331`; `14_VERBS_PHYSICAL.md` (three places); `proposals/14_VERBS_PHYSICAL_C_looking.md:44` | VERIFIED-CORRECTED (three files edited) | the rule is `04:260`, in §B.3 `Rung` (`04:255`): *"NEVER: any social aggregate — no norms, unrest, legitimacy, reputation, discipline"*. `04:237` is a line of §B.2's `Person` block. The stale number is the tree's own: `engine/season/verb_table.yaml:1747` cites `04:237`, and the suite copied it. The tree was not edited |
+| A-10 | `04` §C.12: ratified; the RNG row, *"a seeded `RandomNumberGenerator` threaded like `World`"*; rejection 5's Result shape is *"PROPOSED, not ruled"*; 167 raises measured 2026-09-05 | `11_GO_audit.md:48`, `:425`; `16_PESSIMIST_GO.md:93`, `:645`; `01_CORE_audit_addendum_B.md:365` | VERIFIED | `04:906` (heading; the section runs to `:1017`), `:927`, `:986-987`, `:1004` |
+| A-11 | "§C.4": fidelity, *"They agree exactly, because they are the same slice"* | `04_MB_audit_addendum_B.md:700`; `03_PC_audit_addendum_B.md:239`; `AUDIT_BRIEF.md:77`; `unified/DECISIONS_ANSWERED.md:7` | VERIFIED, with a note for the unification lane | `03:146` (heading, *"Fidelity — the same slice, rendered at different depths"*), `:153`. **Two documents have a §C.4.** The fidelity rule Jordan's ruling 1 leaves unchanged is `03` §C.4; `04` §C.4 is the one fold (A-07). The brief and the decisions record write "§C.4" without the document; the audits that quote it give the path. Not edited (the brief records rulings); a reader who opens `04` §C.4 looking for the fidelity rule will not find it |
+| A-12 | *"Rank supplies dice and gates nothing"*, `03 §A.2` | `03_PC_audit.md:673` | VERIFIED as the code's citation | `seam/wrappers/pool.py:79-80` quotes it and names `03 §A.2`; `03` itself was not opened at that section |
+
+## 3. Marks settled at the line
+
+`G-nn` is the tag written into the suite text at the mark (`[GROUNDED, 25 G-nn: …]`). "Fallback" means
+the proposal had already said what it would do if its first reading was wrong; where that reading was
+wrong the mark now says so and the fallback is the edit.
+
+| # | the claim, as marked | where | status | evidence |
+|---|---|---|---|---|
+| G-01 | a graded-route row can carry writes keyed by degree ("each converted row gains `writes_by_degree`", "the existing columns"; "the fold runs an effect per band for a graded-route row") | `proposals/18_DETERMINISM_task_draw_for_uncontested_verbs.md` steps 2, 4; `14_VERBS_MILITARY.md` S1; relied on by every VERBS band map | **REFUTED at the loader, VERIFIED at the fold** | `engine/season/data/verbs.py:848-851`: a degree-keyed `writes:` with no `contests:` is refused at import; `:872-876`: a routed row with a non-empty `writes:` is refused (*"A graded verb keys its emissions by Degree and writes nothing"*). The fold itself is ready: `loop/resolve.py:897`, `:450`, `:967`. No converted row loads until those two refusals are edited; the determinism proposal now carries the edit |
+| G-02 | "whether an `any:` combinator exists in `data/requires.py`" | `proposals/14_VERBS_MATERIAL_D_paper.md` | REFUTED (fallback) | `data/requires.py:1021-1030`; requirement classes `:292-558` (`Existence`, `ScalarThreshold`, `ContainPath`, `Relation`, `OwnLedger`, `Basis`, `AllOf`) |
+| G-03 | "a row may list two [referent] classes" | same, the `seize` row | REFUTED (fallback) | `data/verbs.py:245`, `:668`, `:693` |
+| G-04 | "whether a typed conjunct can be waived by a payload key without a new form" | `proposals/14_VERBS_MILITARY_C_the_muster.md`, `…_D_the_order_of_battle.md` | REFUTED (fallback) | `data/requires.py:1027-1030` |
+| G-05 | "whether a keyed refusal may name a clause, `stores`, that is the effect's decline" | `proposals/14_VERBS_MATERIAL_C_works.md` | REFUTED (fallback) | `data/verbs.py:945-967` |
+| G-06 | "that `World.write` accepts a `spec=` for a MATTER write" | `proposals/16_PESSIMIST_SE_B_…md` | REFUTED (fallback) | `state/world.py:1138-1148`, `:1442`, `:1494`; `state/gate.py:1905-1906`; `state/carriers.py:197-205` |
+| G-07 | "that `born` is hashed" | `proposals/22_HAPPENINGS_A_…md` | VERIFIED | probe `g3_small.py`: two `build_realm(0)` worlds differing in one `born` differ in `content_hash()` |
+| G-08 | `mortal_terms` in `queries/world_q.py` may import `party_end` from `seam/wrappers/combat.py`, else sit beside `body_band_penalty` in `decision/budget.py` | same | **REFUTED, both homes** | `queries/world_q.py:16-17`; `seam/wrappers/combat.py:86`, `:92`, `:143`; `seam/wrappers/pool.py:15`; `decision/budget.py:71` |
+| G-09 | `state/gate.py:782` (`may_claim`): "the claimant holds *the* title" | `proposals/22_HAPPENINGS_B_…md` | VERIFIED | `state/gate.py:770-786` |
+| G-10 | ED-FI-0002 "lives in the archive ledger" | `08_FI_audit.md` §5; `proposals/08_FI_04_small-edits.md:78` | VERIFIED | `registers/editorial_ledger_fi_archive.jsonl` |
+| G-11 | H-234 is "flagged for Jordan" by `needs_jordan` on ED-IN-0298 | `08_FI_audit.md` R-18 | REFUTED | the last `ED-IN-0298` row, `registers/editorial_ledger_in.jsonl`, 2026-10-26: `status: partial`, `needs_jordan: false`, answered by ED-IN-0300 |
+| G-12 | `auto_manual_resolution_duality_v1.md` is "Doctrine RULED 2026-07-08", ED-SC-0013 | `proposals/03_PC_duel_round_and_approach.md` | VERIFIED-CORRECTED | `registers/editorial_ledger_sc_archive.jsonl`: one row, `status: resolved`, describing the doctrine as "(PROPOSED) — drafted 2026-07-08 at Jordan's request" |
+| G-13 | "`rosters.yaml: unrest_kinds`" | `proposals/14_VERBS_MATERIAL_B_stores.md` | REFUTED (name corrected) | `queries/person_q.py:517`; `data/rosters.py:1001` |
+| G-14 | standing orders "fire and are obeyed with certainty once their trigger is met" | `14_VERBS_MILITARY.md` §0 | VERIFIED | `modules/mass_battle/core/contact.py:66-128` |
+| G-15 | "`claim.decayed` deposits nothing a person acts on" (`undeposited_kinds` not opened) | `01_CORE_audit.md` §5 | VERIFIED-CORRECTED (the route) | `rosters.yaml: undeposited_kinds` = `[finding.none]`; `epistemic.py:756-766` |
+| G-16 | "no row needs [`hold:<kind>`] today" | `01_CORE_audit.md` H-75 | VERIFIED-CORRECTED | `verb_table.yaml:340`, `:659`, `:2062`; `loop/resolve.py:139-141` |
+| G-17 | "`train` raises a key a person already holds" | `05_SC_audit.md` §14 | VERIFIED | `loop/effects_combat.py:794-816` |
+| G-18 | "that `held_by` is a predicate `LedgerReader` already reads" | `proposals/07_SE_kernel_repairs.md` | VERIFIED | `data/requires.py:851-855`, `:888-889`, `:901`; `queries/person_q.py:1002-1016` |
+| G-19 | "that `release` admits one's own commit today" | `16_PESSIMIST_CHAR.md` | VERIFIED | `data/rosters.py:526`, `:538`; `loop/predicates.py:431-447` |
+| G-20 | "whether `_seize_rung` rolls today" | `proposals/09_WR_B_draws_not_thresholds.md` | VERIFIED (it does not) | `loop/effects_information.py:1038-1075`; L-12 |
+| G-21 | `epistemic.py:379`, "witnessing a forging closes its trail" (cited second-hand) | `19_LACUNA_investigation_to_proceedings.md` §2 | VERIFIED-CORRECTED | `epistemic.py:376-377` (the rule), `:379-383` (reachable only through a plant) |
+| G-22 | "the lasting mark falls at the deepest gate crossed" (`effects_combat.py:394-424`, not opened) | `16_PESSIMIST_PC.md` | VERIFIED | `loop/effects_combat.py:394-424` (`:418`, `:421-423`); `data/fixtures.py:723` |
+| G-23 | a cohort's `tend` "is not caused, in the log, by the fall it answers" | `16_PESSIMIST_SE.md` §3 | VERIFIED | probe `g4_behaviour.py`, seed 0, one season: 37 `body.tended`, 37 self-tending, each with `causes` = its own act |
+| G-24 | the `(Person, weight)` matrix row's `steps:` | `proposals/07_SE_population_census.md` | VERIFIED | `write_matrix.yaml:300-306` (`steps: [CEN]`); the regrowth proposal's cite of the same lines is right |
+| G-25 | "`write_matrix.yaml` admits `determine` on `(Record, stages)` without a row edit" | `proposals/05_SC_acquittal.md` | VERIFIED | the matrix row parsed (`steps: [RES]`, `class: ACTS`, no verb column); `determine`'s row parsed |
+| G-26 | "the exact stem names of the `hold`, `capability` and `dispute` conjuncts" | `proposals/02_CHAR_offer_what_can_be_done.md` | VERIFIED-CORRECTED | `data/requires.py:809`, `:851-855`, `:888-889`; `verb_table.yaml:34`; `loop/effects_combat.py:812-814` |
+| G-27 | "that `CHOICE_RANGES` accepts a numeric range" | `proposals/07_SE_arc_needs.md` | VERIFIED-CORRECTED | `data/verbs.py:1698-1700`, `:1708`; `modules/mass_battle/massbattle.py:226` |
+| G-28 | "that every reader of `SUCCESSIONS` asks it in place" | `proposals/06_FA_playable_scenario.md` | VERIFIED, with its condition | `state/gate.py:54`, `:743`, `:782`; `decision/options.py:34`, `:240`; `loop/effects_governance.py:16`, `:164`; `engine/season/tests/test_in61_succession.py:161` |
+| G-29 | "the pair order of `cache.tenure_index(w).knots`" | `proposals/08_FI_08_knots-season-form.md` | VERIFIED | `queries/cache.py:95` |
+| G-30 | the test at `test_season_shape.py:4729-4731` | `proposals/17_CENSUS_REST_1_deletions.md` | VERIFIED | `engine/season/tests/test_season_shape.py:4724` |
+| G-31 | "whether `enemies_heard` stamps cohort persons as `Enemy`" | `14_VERBS_PHYSICAL.md` §2 | VERIFIED (no cohort test; none stamped at build) | `queries/world_q.py:3677-3711`; probe `g4`: `faction_holding` is `None` for 37 of 37 cohorts and set for 43 of 46 cast, which also verifies `16_PESSIMIST_FA.md:339` |
+| G-32 | "the captive's `detain` edge is read by `world_q.mustered` through `restrained`" | `14_VERBS_PHYSICAL.md` §2 | **REFUTED** as a description of today | `queries/world_q.py:2132-2149`, `:2027-2038`, `:1766` |
+| G-33 | "whether [the `challenge.issued`] witness claim names the Record id" | `14_VERBS_PHYSICAL.md` §5 | VERIFIED in part; the rest left marked | `loop/effects_information.py:205-231`, `:308-334` |
+| G-34 | "`_fall` must be a draw, and if it is a fixed fraction it is a finding" | `14_VERBS_PHYSICAL.md` §6 | VERIFIED (a fixed fraction) | `loop/effects_economy.py:141-158` |
+| G-35 | "whether `comply` and `evade / defy` carry alignment cells" | `06_FA_audit.md` §15 (d) | VERIFIED (they do) | `rosters.yaml: tables: alignment: cells`, parsed: both verbs under each of 7 axes; neither under `pursuit_projection` |
+
+## 4. Line citations opened and found as cited (no text changed)
+
+`engine/season/` is the root unless a path says otherwise.
+
+| # | the suite's citation | where | opened |
+|---|---|---|---|
+| V-01 | mass battle "returns `attacker_wins` and `winner=`" (`mass_battle.py:457-459`) | `01_CORE_audit_addendum_B.md:337` | `seam/wrappers/mass_battle.py:457-459` |
+| V-02 | personal combat's entry returns a dict (`combat.py:398-401`) | `01_CORE_audit.md:301` | `seam/wrappers/combat.py:398-401` (`got["result"]`, `got["trace"]`, `got["wound_state"]`) |
+| V-03 | `Rung.envelope` is "the ratified-but-unwritten field" (`world_q.py:1803-1807`); the matrix row | `17_CENSUS_REST.md:293` | `queries/world_q.py:1803-1807`; `write_matrix.yaml` `(Rung, envelope)`: `steps: [MAT, CEN]`, emits `envelope.changed` |
+| V-04 | `body_hazard` at `world_q.py:1248` | `22_HAPPENINGS.md:144` | `queries/world_q.py:1248` |
+| V-05 | a commander who left the faction cannot command (`effects_army.py:40-42`) | `04_MB_audit.md:1065` | `loop/effects_army.py:40-42` |
+| V-06 | "THE BODIES CLOCK" at `loop/matter.py:713` | `07_SE_audit_addendum_B.md:343` | `loop/matter.py:713` |
+| V-07 | a matured term closes its edge, emitting `tenure.closed` (`matter.py:428-435`) | `09_WR_audit.md:733` | `loop/matter.py:428-435`. It closes **every** live Tenure whose term matured, of any kind; that the 27 season-5 closures are `oblige` terms is still U-03 |
+| V-08 | `choose` cannot reach world state through its `View`, by type (`carriers.py:504-509`) | `01_CORE_audit.md:178` | `state/carriers.py:504-509` |
+| V-09 | `DevelopmentSheet` (`decision/sheet.py:115-163`) | `01_CORE_audit_addendum_B.md:336` | `decision/sheet.py:115` (the class and its docstring; the body was not read to `:163`) |
+| V-10 | who may strip a seat: the rung directly above (`gate.py:485`, `:604-606`) | `16_PESSIMIST_FA.md:353` | `state/gate.py:485-486`, `:604-606` |
+| V-11 | the silent default at `manifest/registry.py:180` | `11_GO_audit.md:396` | `manifest/registry.py:178-180` |
+| V-12 | a kit is one weapon and one armour (`world_q.py:3484-3509`) | `03_PC_audit.md:582` | `queries/world_q.py:3484-3487` |
+| V-13 | `violence_contexts` read at `decision/options.py:216-224` | `22_HAPPENINGS.md:97` | `decision/options.py:216-224`; the closed reader set `VIOLENCE_CONTEXT_READERS` is in the same file (`:434-509`), which settles `proposals/03_PC_duel_chain_reach.md:62`'s mark on its location |
+| V-14 | ED-IN-0337's record lists "the Spymaster against the King" among 13 fights | `22_HAPPENINGS.md:95-96` | `registers/editorial_ledger_in.jsonl`, row `ED-IN-0337` (2026-11-05, ratified) |
+| V-15 | ED-FA-0001 is one archived row, 2026-07-05, ratified | `06_FA_audit_addendum_B.md:88` | `registers/editorial_ledger_fa_archive.jsonl` |
+| V-16 | the two degree ladders differ "at 6 of 10,000 tenth-step cells"; the guard sweeps only exactly representable values (`test_degree_ladder_single_owner.py:302-309`) | `10_DICE_audit.md:121`, `:279`; `04_MB_audit_addendum_B.md:145` | reproduced (`g5_ladders.out`): `dice_engine.degree_label` against `modules/mass_battle/resolution.py:104` `compute_degree`, 6 of 10,000 with `i*0.1`; **18 of 10,000 with `i/10`**. The count depends on how the tenth is formed; that the two disagree does not. `tests/valoria/test_degree_ladder_single_owner.py:302-309` |
+| V-17 | `knowledge_kinds` is a roster nothing reads (`rosters.yaml:1763-1777`) | `17_CENSUS_REST.md:158`; `12_ARCS_adjudication.md:375` | `rosters.yaml:1763`; values `[mundane, thread_substrate]`. "Nothing reads it" is the census lane's grep, not repeated |
+| V-18 | `rung_kinds` (not opened) | `proposals/03_PC_person_inputs_content.md:67` | `rosters.yaml: rung_kinds` = `person, hearth, community, settlement, territory, province, duchy, realm` |
+| V-19 | `(Tenure, term)` for a `comply` writer; `utter`'s pair for a Proposition | `proposals/14_VERBS_SOCIAL1_B_…md:95`; `proposals/14_VERBS_MATERIAL_E_knowledge.md:124` | `write_matrix.yaml`: `(Tenure, term)` `steps: [RES]`, emits `term.renewed` (the pair exists; `comply`'s row writes `[]` today and must list it); `(Proposition, exists)` `steps: [RES]`, emits `proposition.uttered`, and `utter` writes `Proposition.exists` |
+| V-20 | `present_at` is a requirement stem | `proposals/14_VERBS_MATERIAL_E_knowledge.md:61` | `data/requires.py:852` (a member of `REQUIRES_STEMS`; the rest of that mark was not read) |
+| V-21 | `harness/chronicle.py` has a `--chains` reading | `proposals/01_CORE_requirements_reading_record.md:56-57` | `harness/chronicle.py:50-64`; whether it exposes the count that proposal wants was not checked |
+

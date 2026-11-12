@@ -905,11 +905,11 @@ file (terms in the map's §4).
 
 | # | this file said | the tree says | effect |
 |---|---|---|---|
-| C-1 | "The four Cardinals are also the heads of the four arms, so an election is a contest among the Church's own departments" (§4.1); "the four arms each prefer their own" (§9 item 1); proposal B's gate seats four electors | under the rule in force **two seats elect: the Cardinal of Justice and the Senior Inquisitor**, both of one arm (`workplans/valoria_master_workplan_v11_part12.md:366`; confirmed at the default, `proposals/2026-11-04-content-parameters-docket/11_workplan_owed.md:53`; re-read from the built realm, map §5 E-M1). The tree's two archived designs name two other electorates: the four Cardinals, "three of four" (`14_office_and_upper_rungs.md:239`), and a College of Prelates of five (`faction_politics_v30.md:338-340`) | the design's election is real only with an authored electors list, which the plan already records as Jordan's content. §13 gains no new question: this one exists. Proposal B's gate must hand-build the electorate it tests, and §9 item 1 as written is conditional on it. The same holds for P-13: a `general_council` of "each Church seat granting `determine`" is, at build, the Confessor, the Cardinal of Justice and the Senior Inquisitor |
+| C-1 | "The four Cardinals are also the heads of the four arms, so an election is a contest among the Church's own departments" (§4.1); "the four arms each prefer their own" (§9 item 1); proposal B's gate seats four electors | under the rule in force **two seats elect: the Cardinal of Justice and the Senior Inquisitor**, both of one arm (`workplans/valoria_master_workplan_v11_part12.md:366`; confirmed at the default, `proposals/2026-11-04-content-parameters-docket/11_workplan_owed.md:53`; re-read from the built realm, map §5 E-M1). The tree's two archived designs name two other electorates: the four Cardinals, "three of four" (`14_office_and_upper_rungs.md:239`), and a College of Prelates of five (`faction_politics_v30.md:338-340`) | the design's election is real only with an authored electors list, which the plan already records as Jordan's content. §13 gains no new question: this one exists. Proposal B's gate must hand-build the electorate it tests, and §9 item 1 as written is conditional on it. The same held for P-13: a `general_council` of "each Church seat granting `determine`" is, at build, the Confessor, the Cardinal of Justice and the Senior Inquisitor; the council is since dropped (D-51, `unified/DECISIONS_ANSWERED.md` A-36) |
 | C-2 | Venice "won" (§3.4) | a third crown mediated; the priests were handed to it; Venice kept its laws; the Jesuits stayed out; the terms beyond that are unverified (`01_venice_procedure.md:164-170`) | the story is not "the interdict that fails" alone but "the interdict settled by a third authority": §15.4 item 4 |
 | C-3 | the Templars fell to a king "using the Church's own inquisitorial procedure and a compliant pope" (§3.8) | heresy was the one hole in the exemption; the inquisitor was the king's confessor; the pope suspended the inquisitors and was overtaken; retraction was treated as relapse; other crowns' benches acquitted (`02_inquisition…:50-56`) | exemption fails at one named matter, and the seat that holds the inquisitor's chair decides which crown a Church bench serves: §15.4 item 10 |
 | C-4 | two-thirds "1179" (§3.1), with the tree cited only for 1274 | the tree has both dates in two files; the catalogue's is the sourced one | citation fixed; the inconsistency is the research's, named here |
-| C-5 | "This lane translates the *procedures*" of the archived design (§1.3), listing its cards and counters | the archived design also fixes an **electorate** (a College of Prelates of five, electing Cardinals by two-thirds with the Confessor's endorsement), a **territory-scale rung** (the Bishop's Delegate, who "may conduct ecclesiastical trials in own territory"), and an **off-stage Holy See** whose concurrence a consecration needs (`faction_politics_v30.md:336-358`); the earlier decomposition has "Holy See = elected from among the Bishopry" (`annex-a-decomposition.md:1183`). The coverage probe reports "Two incompatible conferral rules for the same office, one in each corpus … Reported, not resolved" (`03_seasons_church.md:603-608`) | the code governs: `Holy See` is a body of the Church and the Confessor has no superior. The referents are recorded because proposal E's sees are the archive's Bishop's Delegates under another name, and because §13 item 2 (can anyone judge the Confessor) is the same hole the archive filled with an off-stage power |
+| C-5 | "This lane translates the *procedures*" of the archived design (§1.3), listing its cards and counters | the archived design also fixes an **electorate** (a College of Prelates of five, electing Cardinals by two-thirds with the Confessor's endorsement), a **territory-scale rung** (the Bishop's Delegate, who "may conduct ecclesiastical trials in own territory"), and an **off-stage Holy See** whose concurrence a consecration needs (`faction_politics_v30.md:336-358`); the earlier decomposition has "Holy See = elected from among the Bishopry" (`annex-a-decomposition.md:1183`). The coverage probe reports "Two incompatible conferral rules for the same office, one in each corpus … Reported, not resolved" (`03_seasons_church.md:603-608`) | the code governs: `Holy See` is a body of the Church and the Confessor has no superior. The referents are recorded because proposal E's sees are the archive's Bishop's Delegates under another name, and because §13 item 2 (can anyone judge the Confessor) is the same hole the archive filled with an off-stage power. That item is answered: nobody (D-51, 2026-11-12) |
 | C-6 | the enclosure of 1274 presented as the settled rule (§3.1) | "suspended in 1276 and reinstated in 1294" (`04_decision…:101`) | the electors' rule over themselves is itself contestable: §15.4 item 2 |
 
 ### 15.4 Mechanisms the research describes that this design lacked
@@ -924,7 +924,9 @@ the primitives of §5. P-numbers continue §6's.
    small case: a dead Cardinal not replaced. *Added:* the share of ballots cast survives a shrinking
    bench but not an empty one, and with C-1 the bench is two. The design states who convenes when
    nobody may (the senior surviving elector's `convene`, by the row's `order: rank`) and what happens
-   at zero electors: nothing lawful, which is the opening for a crown, a council or a rival seat. That
+   at zero electors: nothing lawful, which is the opening for a crown or a rival seat (a council is
+   ruled out: Jordan, 2026-11-12, D-51, `unified/DECISIONS_ANSWERED.md` A-36: nobody judges the
+   Confessor, and "schism or violence answers a bad one"). That
    is a story to read, not a rule to add. *Lands:* grounding proposal item 1.
 2. **The electors lift their own enclosure (P-15).** *Source:* C-6; the Golden Bull's thirty days,
    then "bread and water" (`04_decision…:105`). *Added:* the cost of a long vacancy is the vacancy
@@ -964,7 +966,9 @@ the primitives of §5. P-numbers continue §6's.
    tuning tables, as a note for `excommunication_deliberation`.
 8. **Retraction counts as relapse (P-21).** *Source:* the Templars' defenders burned for withdrawing
    confessions; Joan, "abjuration 24 May … relapse 28 May" (`02_inquisition…:54`, `:60`). *Added:* a
-   penitent who has sworn the termed `oblige` of P-8 and then `release`s it is open to a second
+   penitent who has sworn the termed `oblige` of P-8 and then breaks it (by `release` where the
+   penance was his own oath; by not keeping its terms where it was imposed, since a convict may not
+   release an imposed service himself: D-54, `unified/DECISIONS_ANSWERED.md` A-37) is open to a second
    sentence whose `evidence` includes the first. *Lands:* proposal D.
 9. **What hostility can and cannot change (P-22).** *Source:* the table at `02_inquisition…:98-107`:
    denying the secular arm paused arrests; expelling officers bought months; carrying it to another
@@ -998,7 +1002,8 @@ the primitives of §5. P-numbers continue §6's.
     "Cardinal" is a Church title here (`rise_to_power…:63-66`, `:302-305`). *Added:* a Confessor's
     conferrals are deeds (§14, "who conferred whom"); a successor's first `revoke`s of his
     predecessor's men, and the stores those men moved to their own rungs, are the readings.
-    *Lands:* proposal B's discipline (held item), as a reading.
+    *Lands:* proposal B's discipline (its held item 4, ruled yes on 2026-11-12: D-50,
+    `unified/DECISIONS_ANSWERED.md` A-35), as a reading.
 13. **The preacher with no chair (P-26).** *Source:* Savonarola: "purely charismatic/theocratic
     (prophetic sermons, no office)", undone only when a sanction and a failed public proof both
     landed (`governance_modes.md:273-274`; `conflicts…:277-278`; `rise_to_power…:538-542`).

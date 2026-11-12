@@ -79,7 +79,8 @@ the cycle (problem 3); the plan (problem 1).
    needs both electors; the Cardinal of Justice as candidate can gather one ballot and so cannot be
    carried while the floor is two; with either elector's seat vacant no election is lawful, and only
    a Confessor can fill it. That is the cycle of problem 3 reached by persons' deaths, and it is the
-   opening the audit's §13 item 2 and §9 item 12 describe (a council, a crown, a rival seat). No
+   opening the audit's §9 item 12 describes (a crown's pressure, or a rival seat; not a council:
+   D-51 rules that nobody judges the Confessor and drops the council). No
    rule is added to break it. Who may call a sitting is already data: `convene` is on
    `off_cardinal_justice` and `off_cardinal_fortitude`.
 6. **PAPACY-B's gate is restated.** Its "four electors" are hand-built: the test plants `determine`
@@ -185,7 +186,7 @@ P-9 attempts preceded by such an inquiry against those that were not.
 
 | gate | what it shows | source |
 |---|---|---|
-| **retraction as relapse** | a penitent who `release`s the termed `oblige` of P-8 and is tried again: the second hearing's `evidence` includes the first case file (CR-61), and its odds differ from a first hearing's | "Retraction made relapse, which silenced the defenders" (`02_inquisition…:54`) |
+| **retraction as relapse** | a penitent who breaks the termed `oblige` of P-8 (his own `release` where the penance was his own oath; a failure to keep its terms where it was imposed, since D-54 bars a convict's own release) and is tried again: the second hearing's `evidence` includes the first case file (CR-61), and its odds differ from a first hearing's | "Retraction made relapse, which silenced the defenders" (`02_inquisition…:54`) |
 | **the mortal-enemies reply** | under the inquisitorial rite, testimony from a concealed accuser toward whom the accused holds a hostile stance weighs less once the accused has named him; a dismissal on that ground is a deed of the accuser | "if the accuser is among them the charge fails and a false accuser faces life prison" (`02_inquisition…:28`). Depends on SC's evidence proposals reading the witness's relation to the party; if they do not, this is listed for the SC lane and not built here |
 | **a larger room is a milder room** | the same case before `inquisition_hearing` (one determiner) and before `excommunication_deliberation` (the declared row): the share of sentences is lower in the second | the *consilium*, "usually followed, and milder" (`02_inquisition…:31`) |
 
@@ -199,7 +200,7 @@ P-9 attempts preceded by such an inquiry against those that were not.
 | **the summons refused** | parties cited by a Church bench who were elsewhere at the sitting | Bohemia: "proceeding cannot reach them; ends in negotiation" (`:103`) | — (a count) |
 | **a reign without the rite** | holders of a consecrable seat with no certificate, by seasons held; `legitimacy` readings toward them over time against consecrated holders | "a deliberate rupture that decoupled imperial legitimacy from papal ratification for good" (`research/governance/governance_modes.md:190`) | consecrated and unconsecrated holders read the same in every seed (the certificate is decoration) |
 | **the tainted rite** | certificates whose determiner, or a doer of a deed they recite, later fell under a `ban`; holders' `legitimacy` before and after among persons holding both claims | "her condemnation implied a coronation by a heretic" (`02_inquisition…:60`) | — (a count; needs D) |
-| **the appointer's men** | after a new Confessor, `revoke`s against seats the last one filled; stores those holders moved to their own rungs | "the extraction, not the office, survives" (`research/rise_to_power_roster_system_research_v1.md:304`) | only once PAPACY-B's held item is ruled |
+| **the appointer's men** | after a new Confessor, `revoke`s against seats the last one filled; stores those holders moved to their own rungs | "the extraction, not the office, survives" (`research/rise_to_power_roster_system_research_v1.md:304`) | no `revoke` by a new Confessor in any seed (PAPACY-B's item 4 is ruled yes: D-50) |
 
 ### Item 7. Design-first: the Crown's objection (cross-lane; nothing to build now)
 
@@ -227,11 +228,27 @@ ignores it. The open design question is which existing act carries the objection
 - **Where a see is vacant there is no channel.** "Where a benefice is unfilled … there is no priest,
   so there is no channel" (`03_seasons_church.md:314-316`). PAPACY-D's publication and PAPACY-E's
   tithe both reach a place through the seat-holder there; the scenario for E should include one
-  vacant see so that the difference shows.
+  vacant see so that the difference shows. Under D-22 ("proclaimed": whoever learns a decree was
+  issued knows its terms) the difference is in who learns of it and who is there to withhold or
+  collect, not in who holds paper.
 - **The preacher with no chair** (audit §15.4 item 13) is a roster row, Jordan's content.
 - **The archived Holy See.** The archive made consecration wait on an off-stage Holy See
   (`faction_politics_v30.md:354`). The code has no such power and this plan adds none; audit §13
-  item 2 is where that hole is asked.
+  item 2 asked about that hole and is answered: nobody (D-51).
+
+## Rulings of 2026-11-12 that bear on this plan (`unified/DECISIONS_ANSWERED.md`)
+
+| ruling | what it settles here |
+|---|---|
+| D-14 (A-14): a vote is "a draw on the voter, inside the presiding person's act" | item 1 is written on that shape: the tally is arithmetic over drawn ballots inside one act; the floor and the self-ballot clause are eligibility and arithmetic, not outcome rules |
+| D-50 (A-35): the head strips an officer, by a resistible draw | PAPACY-B's item 4 is no longer held; item 6's "the appointer's men" reading is live |
+| D-51 (A-36): nobody judges the Confessor; the council is dropped | PAPACY-E's item 5 and P-13 go; the appointment cycle of problem 3 therefore has no lawful exit, which raises the stakes of item 1's floor: `[ASSUMPTION; Jordan to correct]` stands on it |
+| D-54 (A-37): a convict may not release an imposed service | item 5's retraction gate is worded for both a sworn and an imposed penance |
+| D-22 (A-21): a decree is proclaimed | item 8's vacant-see note |
+| D-13 (A-13): a seat may declare clerks, paper-hands and an exit audit | the Byzantine grounding plan's `audit_at_exit` content; nothing here |
+
+The Cardinal electorate is not among them: it was confirmed at the default earlier (ED-IN-0301) and
+is not re-raised.
 
 ## Order and dependencies
 

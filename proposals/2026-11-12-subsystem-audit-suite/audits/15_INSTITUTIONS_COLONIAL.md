@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 — where this file's names, homes or shapes differ from that ledger, the ledger governs: `instruments.yaml` is the kit's one registry and gains a `seeded:` section and six more forms (X-01, X-02, X-09, X-11); `recognition` is not a form: a certificate is the content key `recites` (X-03); `person_q.accomplishment` is not added: its recursion is the chain term of `person_q.legitimacy` (X-06); the four graded rows of §3.2 are their verb lanes' rows with `remove` added, and `oath_step` is the term `obligation` (X-20, X-24, X-26 to X-28); the audit key is `audit_at_exit` (X-12); a company's share is a `debt` (X-09); the far superior is one seat shared with the Byzantine lane (X-13). Of §11: item 1 is the synthesis's §10 item 1; item 3 is its item 4; item 2 is closed there. Every finding below stands.
 
-Re-grounded: 2026-11-12 against the tree's own research (Jordan: *"Research should have been found in /research or /proposals"*), map and claim table in `unified/RESEARCH_MAP_INSTITUTIONS_B.md` (rows C-1 to C-23). What changed in this file: **§2's opening claim that the tree holds no research on the chartered companies, the Indies, settler colonies or the Mongol system is withdrawn as wrong** (E-2 grepped `research/` alone and misread its hits; the tree holds full entries on the VOC at Banda, Plassey and the Diwani, the East India Company under the Regulating Act, the Casa de Contratación, colonial venality priced by distance, the Mongol *ortoq* and appanage, the Quartering Acts, the Norse Greenland colonies, and a section on post-colonial governance); of the sixteen claims marked `[MEMORY]`, eleven now cite a tree source at path:line in whole or part and five stay wholly memory-grade (§16.3); **three statements are corrected** (§16.1: the labour draft, which the tree's source has as reciprocal; the scope of the tree's research; the claim that the tree has nothing bearing on distance) and the first value of `prescription_seasons` is shown to reproduce an archived design's; **the tree's own statement of this lane's central mechanism is cited** (a decree lands "with a compliance roll, not an effect", against "distance, and the presence of an enforcing agent"); **eleven mechanisms the research describes and this design lacked are added** (§16.2), with exact edits in `proposals/15_INSTITUTIONS_COLONIAL_grounding_F_what_the_tree_adds.md`; §11 items 2 and 3 gain what the research says about each option; the null in §15 is now checked. No finding of this lane or of the synthesis is deleted; the ten forms, `remove`, the two procedures and the three survivors stand.
+Re-grounded: 2026-11-12 against the tree's own research (Jordan: *"Research should have been found in /research or /proposals"*), map and claim table in `unified/RESEARCH_MAP_INSTITUTIONS_B.md` (rows C-1 to C-23). What changed in this file: **§2's opening claim that the tree holds no research on the chartered companies, the Indies, settler colonies or the Mongol system is withdrawn as wrong** (E-2 grepped `research/` alone and misread its hits; the tree holds full entries on the VOC at Banda, Plassey and the Diwani, the East India Company under the Regulating Act, the Casa de Contratación, colonial venality priced by distance, the Mongol *ortoq* and appanage, the Quartering Acts, the Norse Greenland colonies, and a section on post-colonial governance); of the fourteen claims marked `[MEMORY]` in whole or part, ten now cite a tree source at path:line for the whole or for part and four stay wholly memory-grade (§16.3); **three statements are corrected** (§16.1: the labour draft, which the tree's source has as reciprocal; the scope of the tree's research; the claim that the tree has nothing bearing on distance) and the first value of `prescription_seasons` is shown to reproduce an archived design's; **the tree's own statement of this lane's central mechanism is cited** (a decree lands "with a compliance roll, not an effect", against "distance, and the presence of an enforcing agent"); **thirteen mechanisms the research describes and this design lacked are added** (§16.2: four by an edit to a form row or a clause, two by edits the Venice lane's grounding proposal carries, six composed from parts this file already had and given a reading, one a sweep), with exact edits in `proposals/15_INSTITUTIONS_COLONIAL_grounding_F_what_the_tree_adds.md`, and a fourteenth shapes §11 item 3; §11 items 2 and 3 gain what the research says about each option; the null in §15 is now checked. No finding of this lane or of the synthesis is deleted; the ten forms, `remove`, the two procedures and the three survivors stand.
 
 ## Status: REFERENCE (a design and plan in proposal form; resolves nothing at runtime, CLAUDE.md §0.05)
 
@@ -983,8 +983,10 @@ precedent or the architecture and is recorded where it was decided.
    design's `remove` would produce that with no further rule, since §6.2's audit already weakens with
    the opener's distance. Venice sold entry to its roll only under a declared emergency, never as a
    standing option (`PHS:369-372`; `RTP:503-506`): a narrower A, "purchase opens only in a treasury
-   crisis", is a third shape. The earlier judgment pass kept office-selling as a mechanic and flagged
-   it for Jordan each time (`CGR:132`; `FASE:130`). None of this decides between A and B.
+   crisis", is a third shape. The earlier passes recorded the trade without settling it: "the ruler can
+   sell an appointed-governor post for immediate treasury gain" at the price of control (`CGR:132`);
+   the crown "could no longer rotate, audit, or dismiss what it had sold" (`FASE:130`). None of this
+   decides between A and B.
 3. **Forced labour keyed on caste.** The historical family includes labour drafts on a subject people
    (§2.2). In Valoria the subject people exists and is canon (the southern Einhir). *Option A:* a form
    `corvee` (a levy of hands: a cohort's seasons of `site.worked` owed to a grantee's site) may be issued
@@ -993,6 +995,16 @@ precedent or the architecture and is recorded where it was decided.
    it, "informal", with no instrument: it acts only through `regard` (`heritage_regard`), and nobody in
    the world can grant or abolish it by an act. This is a tone decision about canon and is not this
    lane's to take.
+   *What the tree's research adds (re-grounding):* its one entry on a labour draft has it **reciprocal**:
+   pooled into a shared reserve the contributing communities could draw on, written as a debt owed back
+   to them and "*not* flat Grudge" (`PGS:95`). So if A is taken, the form's shape is not open: `corvee`
+   carries a grantor's `due` (stores back to the levied ground from the works it built or the reserve
+   it filled), and the grievance the form generates is that clause **unkept**, readable by the levied
+   cohort through `kept` like any other breach. A draft with no return clause would be this lane
+   inventing the abusive form and calling it the institution. The tree's other entries near this are
+   an earlier pass's "Status Freeze", a caste-mobility lock held for Jordan as a "tone call inside a
+   caste system the corpus authors as critique" (`CGR:265`, `:322`), and the levy of persons into a
+   corps (`PGS:127`). The choice between A and B is still Jordan's.
 
 Decided here and **not** escalated, with the ladder step: the foreign superior as one seated person
 (step 4, Altonia's two seats and ARCS §6 row 12); a non-victory ending `reabsorption` (`holds: {post:
@@ -1014,6 +1026,7 @@ runs once at the close (CLAUDE.md §0.4). Dependencies on other lanes are named,
 | **C-3 audit and calling-in** (proposal C) | arrangement rows `audit`, `quo_warranto`; `prescription_seasons`; governor and farmer `term:` content | `arrangements.yaml`, `data/fixtures.py`, `offices.yaml` | edit | SC-P4 (band-keyed `disposes:`), SC's hearing reach (H-254, `05_SC_playable_hearing_B.md`), FA-P3 (`term:`), `05_SC_acquittal.md` | on a hand-built hearing, 400 seeded `determine` draws with and without three sworn complaints held by the bench show different band shares, both with spread; an instrument aged 0 and aged 16 seasons likewise |
 | **C-4 the ledger of accomplishment** (proposal D) | `person_q.accomplishment`; `presumption_gain`; three seeded founders and deeds; `homage` on the three built oaths; `off_duchess_hafenmark` to `inheritance`; `FILLED_BY["annex"]` | `queries/person_q.py`, `data/fixtures.py`, `harness/populated.py` (seeding, through the gate), `offices.yaml`, `rosters.yaml: successions`, `state/gate.py` | small build; seeding is a declared mover | C-1; ARCS' prehistory route (`12_ARCS_case_on_the_realm.md`); CR-35 for the hearing route; §11 item 1 for the counts | at `build_realm(0)`, for a majority of the cast `accomplishment(p, king) > accomplishment(p, duchess) > accomplishment(p, duke_varfell)`, and with `presumption_gain: 0` all three read their own deeds only; planted: reverse two seeded counts and the order reverses |
 | **C-5 the scenario** (proposal E) | the `farm` fixture on `terr_T6`; the report; the second scenario's fixture | `engine/season/cases/exercises/` (one case), `harness/` (one report, `strife.py`'s kind) | small build | C-1 to C-3; FA's and SC's playable scenarios; CHAR's regard movement for the dearth story | §9's execution artifact, its control and its planted failure |
+| **C-6 what the tree adds** (`proposals/15_INSTITUTIONS_COLONIAL_grounding_F_what_the_tree_adds.md`; added on re-grounding, §16) | a clause key `after:` and the lord's reward on `homage`; the ward's keep on `wardship`; `farm: hardens: true`; an `over: any` value and two `forbears` on `commission`; a gate that an order goes by a bearer; three readings and one sweep in the report | `engine/season/instruments.yaml` (four rows), `data/instruments.py` (one clause key, one enum value), `queries/world_q.py::dues` (the `after:` branch), `harness/institution` (readings) | small build ×1 (`after:`); the rest edit | C-1 to C-3; C-5 for the readings; the Venice lane's batch E for the paired officers and the audit's recital | a hand-built fold: a sworn house's men in a won field, no grant in the reward term, `kept` falls by one on the house's side and not on the lord's; the same with a grant, unchanged; control: the `after:` clause absent → the two folds read the same; and on the Farm fixture, seeds 0–4, the report's bearer line (orders sent by `issue` at `remove` against orders carried by a `dispatch`ed man) with both arms' band shares printed |
 
 **What each batch unblocks among the nine requirements** (`dossiers/00_NINE.md`, read by name only):
 C-1 consequence and propagation through governance (a treaty that is kept or broken is read by a later
@@ -1078,6 +1091,25 @@ governed, and none that makes a charter's age evidence; this lane found none in
 `research/game_precedent_suite/` by grep and did not read that suite in full `[UNVERIFIED]`.
 **Memory-grade and unused for any number:** everything marked `[MEMORY]` in §2.
 
+**Restated on re-grounding (2026-11-12).** *The null is now checked and holds:* the suite's throughlines
+and the companion were opened; no shipped game there models an audit at the end of a governor's term on
+the testimony of the governed, or a charter's age as evidence, and the companion says of its own
+territorial verdicts that they are "carried almost entirely by Venice rather than by any game"
+(`research/valoria_game_precedent_companion_v1_part5.md:240-244`). **One game was missed:** John Company
+(`…_part6.md:165-175`; `…_part7.md:41`, `:154`), whose company is run through offices held by rivals
+with complementary powers and which "can fail while you win". It transfers one thing: the company is
+contested, not owned, which is §4.3's body of seats and not a faction kind. *"Tried and did not
+transfer" gains a precedent:* an earlier proposal in the tree reached the same refusals from Layer 1
+and re-expressed the same research tags on the same primitives: a debt or a compact as an `oblige` with
+a declared term; a precedent as a Record at a rung, which "survives succession because the Rung holds
+it"; suspicion as the issuer's own decaying ledger; a clerk's skimming as a `transfer` to his own hearth
+that "the governor holds no claim" of "unless one reached him"; and the assessment as a Record whose
+figure a levy would read, with the one grammar gap that needs
+(`proposals/2026-09-10-settlements-factions-populations/05_COLLISIONS_AND_RESIDUE.md:20-33`; PROPOSED,
+held back in full). *"The Hansa embargo (the republics lane's)":* its mechanism in the tree is an order
+addressed to third parties about a named other (`.audit/2026-07-12-governance-compendium/43_directive_types.md:17-25`),
+which is the kit's `avoidance` form. *Transferred, newly:* §16.2.
+
 **Evidence log** (`PYTHONHASHSEED=0`; outputs under `scratchpad/runs/INST_COLONIAL/`):
 - E-1 `probe_build.py` → `probe_build.txt`: `build_realm(0)`, no season; hash
   `600d8b27147478e158553552cc1409a5`; the counts, oaths, purview readings, foreign rungs, site kinds and
@@ -1094,3 +1126,77 @@ governed, and none that makes a charter's age evidence; this lane found none in
   the case files, `audits/02_CHAR_audit.md` beyond its section list, the SE and MB audits, the digests
   (`digests/DG_*`; this lane read the research and the registries they digest directly), `.audit/`.
   Claims that rest on those are quoted from the file that made them and marked.
+- E-4 (re-grounding pass, 2026-11-12, at `62dbc8b`): the work order's grep over `research proposals`
+  (624 files) and `.designs .audit` (260), then exact-term greps for each `[MEMORY]` claim; files and
+  depths in `unified/RESEARCH_MAP_INSTITUTIONS_B.md` §1.1. **E-2 was wrong twice:** it searched
+  `research/` alone, where `.audit/` holds the Spanish and Venetian tables, and it read
+  `research/historical_concerns_action_catalogue_v1.md`'s entries as one-line mentions when each is a
+  worked case. No instrument was run; no file outside this suite was edited.
+
+---
+
+## 16. Re-grounding against the tree's research (2026-11-12)
+
+Jordan: *"Research should have been found in /research or /proposals."* The claim-by-claim table is
+`unified/RESEARCH_MAP_INSTITUTIONS_B.md` §2.2 (rows C-1 to C-23), not repeated here; this section
+records what changed in the design because of it. Everything cited is tier 3: it says what institutions
+did, never why a behaviour of this engine is right.
+
+### 16.1 Corrections
+
+| # | section | this file said | the tree says | effect on the design |
+|---|---|---|---|---|
+| 1 | §2 head; §15 E-2 | the tree holds no research on the chartered companies, the Indies beyond the residencia, settlers, or the Mongol system | it holds a worked entry on each of: the VOC at Banda, Plassey and the Diwani, the Regulating Act, the Casa de Contratación, colonial venality, the *ortoq*, the appanage, the keshig, the Quartering Acts, Greenland, Crete; and a section on post-colonial governance (§2's withdrawal lists the lines) | the `[MEMORY]` paragraphs of §2 are now mostly sourced; eleven mechanisms come with them (§16.2) |
+| 2 | §2.2 | forced labour drafts "are the same extraction paid in hands" | the tree's draft is reciprocal: a shared reserve and a debt owed back (`PGS:95`) | §11 item 3: under option A the `corvee` form must carry the grantor's return |
+| 3 | §2.7; §3 | the tree records only the agent's information advantage; "has nothing on transit times, and the design needs none" | true of transit times; but the tree states the compliance roll against distance and an enforcing agent (`PMP:491-494`), the envoy's latitude (`PMP:661`), relay and post (`PGS:94-99`) with its own doubt about latency (`PGS:294`), distance in the audit and in the price of office (`RTP:518-521`), and the near-split, far-combined governor (`CGR:102`) | §3.2's `issue` is confirmed as the tree's own primitive and gains the bearer (§16.2 item 1); §3.3's refusal of a transit clock is confirmed by `PGS:294` |
+| 4 | §6.2 | `prescription_seasons` 8 offered as this lane's first value | an archived design has the same slope and the same sixteen-season threshold (`settlement_layer_v30:621-625`) | none on the number (it is still swept); the lane's value is shown not to be new |
+
+### 16.2 Mechanisms the research describes that this design did not carry
+
+Stated on this file's own parts (the ten forms, `remove`, the two procedures, the readers `dues`, `kept`
+and `breaches`); none adds a carrier, a verb or an obstacle term. Exact edits, gates and falsifiers:
+`proposals/15_INSTITUTIONS_COLONIAL_grounding_F_what_the_tree_adds.md`. Under the standing rule each
+outcome is a draw; a clause is never a gate.
+
+| # | mechanism | source | in the engine's terms | what it generates with no player |
+|---|---|---|---|---|
+| 1 | **The order's bearer** | `PMP:491-494` | composed, no term: the issuer `give`s the writ to a sworn man and `dispatch`es him; arrived, the bearer `tell`s its terms to the addressee in the room (`tell` is already a draw, at `remove` 0, on the bearer's capability) and stays as a witness to the answer. Against it, a bare `issue` rolled at `remove`. The cost is a man's seasons and what he chooses to say | the envoy who softens the order; the governor who can no longer say he never received it |
+| 2 | **The lord's duty to reward** | `PHS:457-461` | `homage` gains a second grantor `due`: after a `field.won` in which the grantee or his sworn men fought under the grantor's summons, a `dispensation.issued` or `transfer.made` to the grantee within the reward term. One clause key, `after:` | the unpaid bond: a defensive war against the metropole wins no ground, and the houses that fought it read their lord's side of the oath as broken |
+| 3 | **The hostage's keep, and the hostage as pupil** | `PMP:502-506`; `RTP:360-363`; `HCC:43` | `wardship` gains a `due` on the sender: `transfer.made` each season to the host's rung (the ward's household). The schooling is composed: the ward may `oblige` to a seat of the host's and so stand on the host's roll (`eligible_from`), and comes home eligible there | the house drained by its hostage; the heir who returns the empire's man; the host who stops renewing the school and finds it a faction |
+| 4 | **The farm that hardens** | `RTP:523-526`; `FASE:101` | `farm: hardens: true`. A farm renewed to one holder accrues `held_seasons`; taken back early it is the grantor's non-renewal (D-5's lapse, an act of administration), late it is a `quo_warranto` against an aged instrument | the farmer whose family cannot be removed without a hearing the crown may lose |
+| 5 | **The commission that forbears war and treaty; the company under a superior** | `PGS:147`; `PMP:661`; `HCC:46` | the kit's `commission` form gains two `forbears` on the grantee, `march.declared` and `covenant.offered`, `over: any` (one enum value). A far officer who makes war or treaty on his own reading has breached, and the conferring seat's holder is stamped with it by `breaches` when the news reaches him | the man on the spot recalled for exceeding his commission; or not recalled, because the war went well |
+| 6 | **Revenue without governance** | `CGR:160`; `PGS:101` | composed from two existing instruments: the superior `issue`s a `tithe` (the kit's form: addressees render each season to a named rung) over a named community, naming the holder's rung; the holder's side is his own `oblige` to the superior's seat. He collects and does not rule. No form | the pensioner who starts to act as lord; the community that pays one man and is judged by another |
+| 7 | **Portability as leverage** | `PGS:84` | composed: a `staple`'s holder `petition`s a rival host for the same right and lets the old one lapse. Nothing new | the staple carried off; the host that grants more to keep it |
+| 8 | **Two officers; near split, far combined** | `PMP:513-516`; `CGR:99`, `:102` | the Venice lane's grounding proposal, edit 1 (shared rows in `offices.yaml`). For this lane: `march` already confers the combined remit, which is right for a frontier; a `farm`'s farmer beside a separate justice seat is the split form | the over-mighty officer arises where the centre could not split him |
+| 9 | **The appointer answers; the inspection is seen** | `CGR:207`; `PMP:465-469` | the Venice lane's grounding proposal, edit 3: this lane's `audit` row's Record recites the conferring seat. The open floor on the governed ground is the theatre | the grantor who is judged by his farmer |
+| 10 | **Detection against severity** | `PMP:142-144`, `:496-500` | no rule: a sweep in C-3's gate over the two dials this design already has, how often an audit can come (the conferred seat's `term`, {2, 8}) and how hard it bites (the row's band map, mild or as written) | a reading of which regime leaves the governed's regard higher; no balance claim |
+| 11 | **Invited entry** | `PA:64-98`; `GM:290-291` | composed: §8's new row. A holder losing at home offers the outside power a `tribute` or a `wardship`; the border rule decides who learns of it | the collaborator; the commune that gives itself to a foreign lord to end its own quarrel |
+| 12 | **Billeting ratchets** | `HCC:71`, `:67` | composed: §8's new row. Upkeep that does not arrive is made up by `requisition` where the men are lodged; each levy lowers the cohort's regard and the next levy's odds | the garrison that ate the town |
+| 13 | **The post let go** | `HCC:138` | composed: §8's new row. An unrenewed oath at the far end is a detachment by lapse, with no revolt | the place nobody decided to abandon |
+| 14 | **The labour draft owes a return** | `PGS:95` | not built: it shapes §11 item 3's option A | — |
+
+**Not taken, with the reason:** a relay or beacon tier that shortens `remove` (`PGS:94`, `:99`): the
+tree's own caveat (`PGS:294`), and it would be SE's site kind, not this lane's; a reach cap that forces
+a partition (`PGS:149`): a threshold producing an outcome; a stored entrenchment counter on a family
+(`RTP:523`): the instrument's own age already is that count; a price for an office (`RTP:518`): only
+under §11 item 2's option A; a billeting order as a kind of its own (compendium `43:47`): `requisition`
+at the men's own place is the act.
+
+### 16.3 What stays memory-grade in this file
+
+Wholly: the rule that a vassal's vassal is not the lord's (C-3); the Mongol patent, census and resident
+overseer (C-7); the resident, the subsidiary treaty and lapse (C-9); the mission, royal patronage over a
+colonial church and the protecting orders (C-16). In part: relief and aid by name (C-2); the companies'
+directors, shareholders, factories, private trade and renewal fights (C-5); *encomienda* and
+*repartimiento* by name (C-12); headright and the colonial assemblies (C-13, C-20); transit times and "I
+obey but do not execute" (C-18). The design takes no number from any of them, and each named shape it
+uses now has a sourced neighbour in §2.
+
+### 16.4 What this does to the plan
+
+Nothing in C-1 to C-5 is withdrawn. C-6 (§12) carries §16.2: one small build (the `after:` clause), four
+row edits, one enum value, and readings in the report. The first scenario gains the bearer as a choice
+the farmer and the Lord Treasurer already had the verbs for (`dispatch`, `tell`), now with a reading that
+shows whether it changes anything. The second scenario, "The Katepano's Latitude", gains its breach: a
+commission that forbears war and treaty is what makes "obey or construe the court" a thing the court can
+hold her to.
