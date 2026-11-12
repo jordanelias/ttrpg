@@ -69,7 +69,7 @@ UNDECIDED:
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
-| B10.01 | the design of attributes in a person's own choice | CR-93 (the intake `:146`; E1 carry-forward) | DESIGN-FIRST | EQUAL | Batch B05, Batch B09 |
+| B10.01 | the design of attributes in a person's own choice: `B10.51`'s | CR-93 (the intake `:146`) | POINTER | — | `B10.51` (lands at the batch's open) |
 | B10.02 | H-60 closed on its row | `U5a_CHAR_owed_amendments` §9 | BUILD | EQUAL | Batch B09 |
 | B10.03 | two cast rows gain goals: BA1's | `U5a_CHAR_owed_amendments` §10 | POINTER | — | — |
 | B10.04 | regard read as a share of the stance bound, times `stance_scale` | `U5a_CHAR_owed_amendments` §2 | BUILD | EQUAL | Batch B09 |
