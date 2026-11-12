@@ -17,8 +17,8 @@ Tags as in `../README.md`.
 | key | source | read |
 |---|---|---|
 | WP-SH | `https://en.wikipedia.org/wiki/Sherlock_Holmes:_Crimes_%26_Punishments` (raw wikitext, rev 1384346349 of 2026-11-07), Gameplay | body, 2026-11-12 |
-| PCG | Andy Kelly, *Sherlock Holmes: Crimes and Punishments review*, PC Gamer, `https://www.pcgamer.com/sherlock-holmes-crimes-and-punishments-review/` (2014; the date was not read from the page) | body, 2026-11-12 |
-| GB | *Sherlock Holmes: Crimes and Punishments Review*, GamingBolt, `https://gamingbolt.com/sherlock-holmes-crimes-and-punishments-review` (2014; the date and byline were not read from the page) | body, 2026-11-12 |
+| PCG | Andy Kelly, *Sherlock Holmes: Crimes and Punishments review*, PC Gamer, 2014-11-06, `https://www.pcgamer.com/sherlock-holmes-crimes-and-punishments-review/` | body, 2026-11-12 |
+| GB | Will Borger, *Sherlock Holmes: Crimes and Punishments Review*, GamingBolt, 2014-10-22, `https://gamingbolt.com/sherlock-holmes-crimes-and-punishments-review` | body, 2026-11-12 |
 
 ## What is established
 

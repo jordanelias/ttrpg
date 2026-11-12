@@ -815,6 +815,22 @@ calling-in. Every other holder of the same form hears of it at the reach of the 
 `disposal_reach`, and judges the mover by it (`deeds_judged`): London, 1683 `[TREE: T4]`, as persons'
 reactions and not as a realm-wide modifier.
 
+*Re-grounding note on the number.* This lane proposed `prescription_seasons` 8 with a sweep {4, 8, 16}
+as its own first value. An archived design had already written the same mechanism with the same two
+figures: revocation harder by `floor(charter_age_seasons / 8)`, and a public contest in place of a quiet
+act once a charter is "older than ~16 seasons", with every other holder of that kind shaken when one
+falls (`.designs/systems/settlements/reference/settlement_layer_v30.md:621-631`; ED-SE-0010, PROPOSED).
+That file calls its own magnitudes "shape proposals … not sim-calibrated" (`:642-644`) and is
+ARCHIVED-NOT-CANON, so it is vocabulary and intent, never the reason 8 is right; the sweep stands as
+the only way to set it. The same file carries one mechanism this row lacks, **the privilege that
+stands only while its patron does** (`:646-669`, RATIFIED there as ED-SE-0021): a grant with a named
+backer fails when the backer's standing does, so that "breaking a guild monopoly can mean targeting
+the *patron's* standing rather than the guild's charter". In this design that is not an automatic
+lapse (the standing rule forbids one) and needs no new key: a `charter`'s fee falls due "at each
+succession of the grantor's seat" (§4.3), so every change of hand at the granting seat reopens the
+grant, and whoever unseats the granting holder puts it in a new hand's gift. The attack the research
+names is already open; §8 gains its reading.
+
 ### 6.3 The contests, each with its roll
 
 | contest | who rolls | venue | modifiers that matter most (SC's dimension table, `audits/13_SC_contest_interrogation.md` §2) |
@@ -862,6 +878,12 @@ that would show it happened **and could fail to**. None is an event; each is per
 | **The contained institution outgrows the grant** | an `immunity` holder's establishment and stores grow behind the grantor's forbearance | the immunity holder's seat count and treasury against the grantor's over seasons; the first `breaches` occasion on either side | the grantor breaches early and wins the field |
 | **The metropole's man on the spot** | the Katepano, at `border_hops` from her superior, marches or treats on her own reading; the court hears a season later what an envoy told it | an Altonian `march.declared` or `covenant.offered` with no prior `dispensation.issued` from the court seat naming it; then the court's answer | the court's orders always arrive (remove 0 arm) |
 | **The ward who stayed** | a `wardship` runs; the ward's regard for the host's house rises (CHAR's regard) | the ward's `stance_toward` host and home over seasons; at term, a `residence.changed` home, or none | CHAR's regard does not move (F-CHAR-03 today) |
+| **The unpaid bond** (added on re-grounding, §16.2 item 2; `PHS:461`) | a sworn house answers the muster, the field is won, and the lord has no taken ground to grant | a `field.won` with a sworn house's men in it, followed within the reward term by no `dispensation.issued` or `transfer.made` from the lord's seat to that house; then that house's `kept` on its `homage`, and its next answer to a summons | the lord rewards from his own stores; the war takes ground |
+| **Invited in** (§16.2 item 11; `PA:64-98`; `GM:290-291`) | a seat-holder losing an internal contest `covenant`s a `tribute` (protected) or a `wardship` with a seat beyond the border | a `covenant.offered` to a foreign seat by a holder whose faction is `at_war` inside the realm or who holds a breach against his own lord; then the foreign seat's `march.declared` across the border on that holder's side | nobody is losing badly enough; the border rule keeps the offer from being known in time |
+| **The garrison that ate the town** (§16.2 item 12; `HCC:71`, `:67`) | a far garrison's upkeep does not arrive (a `transfer` at `remove` rolls short) and its captain levies where he is lodged | `requisition.taken` by an obligee of a far seat at his own place of residence, repeated; the cohort's `regard` for his seat falling; `petition.filed` to the far seat; then `requisition.refused` | the convoy arrives; the captain forbears |
+| **The post let go** (§16.2 item 13; `HCC:138`) | a far seat's holder's `oblige` to the centre matures unrenewed because nothing was sent, and he swears locally or to no one | `tenure.closed` (term) on a far officer with no `transfer.made` from the conferring seat's rung in the term; `purview_reaches(centre, place)` turning False; no `march.declared` by the centre after it | the centre pays; the centre marches |
+| **The privilege carried off** (§16.2 item 7; `PGS:84`) | a `staple`'s holder is pressed by its host and a rival host offers the same right | a `dispensation.issued` of form `staple` to a body already holding one elsewhere, then the old one unrenewed, then `exchange.made` falling at the old place and rising at the new | no rival host is within reach |
+| **The grant with a fallen patron** (§6.2's note; `settlement_layer_v30:646-669`) | the holder of the seat that granted a `charter` or `staple` is unseated | a `quo_warranto` or a refused confirmation within four seasons of a `tenure.closed` on the granting seat's `hold` | the successor confirms for the fee |
 
 ## 9. Playable standalone and integrated
 
@@ -953,6 +975,16 @@ precedent or the architecture and is recorded where it was decided.
    office-owning families appears who are nobles by purchase, **directly against nobility by deed**.
    *Option B:* no such form: every seat stays answerable, and money buys only farms and staples. A makes
    "deed against purse" a standing conflict of the setting; B keeps the deed-order unmixed.
+   *What the tree's research adds to this choice (re-grounding):* five more sources on the sold office
+   and each describes a consequence, not a preference. Purchased rank has "no loyalty reserve": it
+   "evaporates the instant a rival offers what money can't buy" (`RTP:34`). The buyer begins in debt
+   for the price and works it off out of the office, exposed to whoever will pay to prosecute him
+   (`RTP:483-486`). Far offices sold cheaper and were audited worse (`RTP:518-521`): under A this
+   design's `remove` would produce that with no further rule, since §6.2's audit already weakens with
+   the opener's distance. Venice sold entry to its roll only under a declared emergency, never as a
+   standing option (`PHS:369-372`; `RTP:503-506`): a narrower A, "purchase opens only in a treasury
+   crisis", is a third shape. The earlier judgment pass kept office-selling as a mechanic and flagged
+   it for Jordan each time (`CGR:132`; `FASE:130`). None of this decides between A and B.
 3. **Forced labour keyed on caste.** The historical family includes labour drafts on a subject people
    (§2.2). In Valoria the subject people exists and is canon (the southern Einhir). *Option A:* a form
    `corvee` (a levy of hands: a cohort's seasons of `site.worked` owed to a grantee's site) may be issued

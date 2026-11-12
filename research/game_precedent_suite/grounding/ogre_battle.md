@@ -39,6 +39,7 @@ Not reached: the instruction manual; `strategywiki.org` (403); a GameFAQs mirror
 | 9 | Up to 10 units deployed at once a side. | [V3 RPGF] |
 | 10 | A campaign economy exists at stage scale: "Deploying a squad costs a small amount of money, which must be paid again as maintenance every time a day passes"; liberated towns pay income each day. | [V3 WP-OB] |
 | 11 | Ogre Battle 64: a battalion of up to 50, sectioned into units of at most five including a leader; "automatic combat between two outfits". | [V3 WP-OB64] |
+| 12 | **Whom a unit strikes is set by its tactic, not by row.** An enemy leader is "usually in the back row", and "Set your tactics in battle to Leader. This makes your spellcasters focus on the leader when casting their spells. If they kill him, the unit will leave for home even if declared victor." | [V3 RPGC], a fan strategy page; consistent with rows 3 and 4. Whether a melee attacker in the front row can reach a rear-row enemy is `?` (the page speaks of spellcasters) |
 
 ## What this note does NOT establish
 
@@ -49,6 +50,8 @@ Not reached: the instruction manual; `strategywiki.org` (403); a GameFAQs mirror
   unit needs a living leader to take orders (row 8).
 - Anything from the instruction manual; none of the above is first-party.
 - Any outcome prediction before an exchange. `?` (not found in the sources read).
+- **A rule that the rear row cannot be reached while the front stands.** Not found. What is sourced is that a
+  row sets the member's own action (row 5) and that targeting follows the unit's tactic (rows 3, 4, 12).
 
 ## Bearing on the suite (a judgment about existing text, not a work item)
 

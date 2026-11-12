@@ -814,7 +814,7 @@ remembers who did it.
 5. **Consequences by deed, not by meter.** The razing is witnessed (`rung.razed`, `site.razed`), every
    observer whose state moved takes a scar (`loop/resolve.py::_scar_witnesses`, as built), and a
    former resident's regard for the razer's faction moves through CHAR's reader of witnessed deeds
-   (`02_CHAR_which_ground_moves_whom.md`). No social aggregate lands on a Rung (`04:237`).
+   (`02_CHAR_which_ground_moves_whom.md`). No social aggregate lands on a Rung (`04:260`).
 6. **Graded, by a draw (standing rule; corrects this file's first writing, which left it ungraded).**
    #453 §9.2's `contests: none` stands: there is no second side and no prize. Whether a town is
    destroyed, however, goes by a draw. A town burns unevenly, its people fight the fire and hide their
@@ -1000,7 +1000,7 @@ people there know someone was watching.
 - **Row** `verb_table.yaml:1828-1852`. Eligibility `own`, `presence:<rung>`. No `referent_class`. Cell:
   `existence` of `subject` kind `Rung`, `present_at`. Graded, writes nothing, `finding.made` /
   `finding.none`. The row itself names two absences: the person case (a covert observation of a person)
-  and canon's *+2 Exposure* (which has no carrier, since `04:237` forbids social aggregates on a Rung).
+  and canon's *+2 Exposure* (which has no carrier, since `04:260` forbids social aggregates on a Rung).
 - **Reading** (`aperture 2 0`): formed 83, attempted 44, **executed 6** (`finding.made`). 38 refused
   or lost: graded loss 16, `present_at=False` 15, `exists:Rung=0` 7. Pools rolled `[2]` for every actor,
   so nobody differs. Corpus: 236 graded, Failure 173 of 236.
@@ -1030,7 +1030,7 @@ people there know someone was watching.
 3. **Failure exposes him.** The Failure band emits `finding.none` **and** a new kind `watcher.seen`,
    which is not in `undeposited_kinds`. It is witnessed by the persons present at the place through
    the ordinary co-location channel, as a deed anchored on the surveiller. This is the Exposure half of
-   canon carried as claims, which `04:237` permits. A watched faction's officers can then act on it
+   canon carried as claims, which `04:260` permits. A watched faction's officers can then act on it
    (`arrest` under a warrant, CHAR regard).
 4. **Pool differences** are CHAR and DICE's (`02_CHAR_capability_uses_table.md`;
    `10_DICE_advantage_sources_for_the_arcs.md`). The row's capability key is `inquiry` (`verb_capability`).

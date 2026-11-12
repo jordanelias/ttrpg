@@ -51,6 +51,11 @@
 | A-43 (D-58) | What zero coherence does to a practitioner | Neither offered option. Jordan: *"zero coherence means that the person is no longer able to be understood within the bounds of human rationality. they may still hold their seats and offices and stuff, but they become radically unknowable as their being of being has changed fundamentally"* | Continuity is kept (seats, offices, goals; ARC-28/29/30 stand). The change is in how others (and the player) can **know** him: his choices, motives and speech stop being legible by the ordinary readers (the chooser's reasons, belief modelling, regard, telling). He is not dead, not dissolved and not merely lossy in speech. Implementation shape to be planned by a lane: the person's reasons and sheet become unreadable to others, and their predictions of him fall to no better than a draw; coherence is the dial. Interacts with A-34 (self-knowledge) and the Thread (A-40). |
 | A-44 (D-63) | The cast | B: about 94 generated persons plus kin, capped | The cap is the dial; the cast-and-seats proposal proceeds; per-season cost roughly doubles. |
 
+| A-45 (D-59) | One strife river or several | B: several strands that can each end | A doer's later deed joins a strand he opened, or joins by its subject; strand conclusion proceeds. |
+| A-46 (D-60) | Leaving a side as a strife move | B, narrow: only leaving a faction's creed or head seat | The Split becomes a move of the era; routine releases do not count. |
+| A-47 (D-61) | Arcs that end when a counter fires | B: a threshold may open a mandatory scene, never decide it (against the recommendation) | The world can corner a character; the scene's outcome is a drawn act; the 27 threshold-closed or -forced arcs are restated as 'threshold opens a scene'. Standing rule intact: the crossing itself decides nothing. |
+| A-48 (D-62) | The scene slate | B: a list of questions for the player; NPCs take the first | Triage is player gameplay; the player surface contract carries the list. |
+
 ### Closed by the five-step ladder, not by Jordan (CLAUDE.md §0; reversible on his word)
 
 Answered by prior ruling, precedent or architecture; recorded so the numbering is whole.

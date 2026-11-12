@@ -2,7 +2,7 @@
 
 ## Status: REFERENCE (a grounding pass over documents that already exist; resolves nothing at runtime, CLAUDE.md §0.05; queues nothing)
 
-## Read at: `c68d697` (working tree, 2026-11-12). Sibling lanes were inserting `Grounded:` lines at file heads while this was written, so a suite line number below may sit one or two lines off.
+## Read at: `c68d697` (working tree, 2026-11-12). Suite line numbers below are as read before this lane's own edits. Each file this lane edited gained a two-line `Grounded:` head (sibling lanes were adding their own at the same time), and `04_MB_audit.md` (after §18.1's first paragraph) and `04_MB_audit_addendum_B.md` (after §B4.1's table) each gained a dated note of about a dozen lines, so later lines in those two sit that much lower.
 
 Jordan, 2026-11-12: *"All ungrounded information should have info available on repository."* *"Do not
 guess."* (`AUDIT_BRIEF.md:61-71`.) This file takes every place the suite (`audits/`, `proposals/`, `unified/`,
@@ -30,7 +30,7 @@ snippet only; **M** memory; **?** not established. External requests carried gam
 | partly sourced: the shape is filed, a named part is still open (§3, status PART) | **7** |
 | still unsourced: to be marked or dropped (§3 status OPEN; §5 lists them by topic) | **5** |
 | no claim made (Heavy Rain) | **1** |
-| corrections: a suite statement a source contradicts, or a wrong sourcing grade (§4), applied in place | **8**, in 12 files; 3 more files gained a pointer line only |
+| corrections: a suite statement a source contradicts, or a wrong sourcing grade (§4), applied in place | **9**, in 12 files; 3 more files gained a pointer line only |
 
 Eleven research notes were filed (§6). No suite finding, resolution or proposal changes: the corrections alter
 what a precedent may be cited for, and in two cases remove a precedent from the support of a claim that
@@ -40,8 +40,10 @@ stands on its other sources.
 
 1. **Ogre Battle is now sourced** (`grounding/ogre_battle.md`). The mass-battle addendum's three memory-grade
    statements are confirmed: squads of at most five; the player picks one tactic per unit and does not control
-   the fighters; a member's row decides which action he takes. The squad-grid proposal declined the row rule
-   "because nothing in the tree sources it"; that reason no longer holds (the decision is the MB lane's).
+   the fighters; a member's row decides which action he takes. The squad-grid proposal declined that rule
+   "because nothing in the tree sources it"; the reason no longer holds. The rule it adopted instead (a row
+   decides who can be *reached*) is not established as what the referents share: in Ogre Battle, as sourced,
+   targeting follows the unit's tactic (GC-9). Which row rule to build is the MB lane's decision.
 2. **"Football Manager is one engine at three fidelities" is still not established**, after a second attempt
    (`grounding/football_manager_instant_result.md`). Three suite files stated it as fact; they now carry the
    qualifier. The one-resolver rule does not need it: it stands on Jordan's ruling 1 of 2026-11-12.
@@ -172,6 +174,8 @@ Each is applied in place as a bracketed correction after the original words; eac
 | GC-6 | Total War: "pause is memory" | Page-read in the tree: `T07:25` `[V3]` | `audits/04_MB_audit_addendum_B.md` |
 | GC-7 | Blade Runner (1997): "the culprit set is randomised"; "evidence must therefore be generative" | What is randomised is **which characters are replicants**, over an authored cast; how clues follow is not stated in the source read (`detective_set.md` §5) | `audits/08_FI_audit_addendum_B.md`, `audits/21_PROCEDURAL_GENERATION.md` |
 | GC-8 | Ogre Battle "not sourced as a battle referent anywhere in the tree"; its cells "memory"; the row rule "not adopted, because nothing in the tree sources it"; Paradise Killer `[M]`; Unicorn Overlord's grid "memory"; Bannerlord's menu "memory-grade" | Now sourced or regraded: GM-01 to GM-05, GM-08, GM-12 | `audits/04_MB_audit.md`, `audits/04_MB_audit_addendum_B.md`, `proposals/04_MB_squad_grid_of_named_characters.md`, `proposals/04_MB_playable_field_scenario.md`, `audits/08_FI_audit_addendum_B.md` |
+
+| GC-9 | The squad-grid proposal: "who can be reached" is "the one thing the referents share"; a member's row deciding his action was "not adopted, because nothing in the tree sources it" | Ogre Battle, as sourced: a row sets the member's **own action**; whom a unit strikes is set by its **tactic** (Best, Strong, Weak, Leader), and a fan strategy page has the Leader tactic reaching a leader who usually stands in the rear (`ogre_battle.md` rows 3-5, 12). Unicorn Overlord: position influences "abilities and combat efficiency" (page-read); back-row targeting limits are one snippet. So reach-by-row is the proposal's own design with snippet-grade precedent from one game, and the declined rule is the page-read one. Recorded in place; **no decision taken** | `proposals/04_MB_squad_grid_of_named_characters.md` |
 
 Pointer lines only (no claim changed; the head line names the repository note that now backs the web reading):
 `audits/19_LACUNA_investigation_to_proceedings.md`, `audits/08_FI_audit.md`, `audits/05_SC_audit_addendum_B.md`.

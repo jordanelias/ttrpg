@@ -207,7 +207,7 @@ Rows the addendum read as *conforms* need no closure. The departures:
 | §5 (d) skill atrophy | STALE-FALSE-POSITIVE (the audit: "none worth building now") | no action |
 | §5 (d) opposed roll | STALE-FALSE-POSITIVE (ruled 2026-08-14: static opposition) | accepted |
 | §5 (d) help, teamwork, tools | RESOLVED-BY | `10_DICE_advantage_sources_for_the_arcs.md` (the roster's second members) |
-| §5 (d) a capability gates an action | JORDAN | J-U5a-01 |
+| §5 (d) a capability gates an action | SUPERSEDED | answered: A-11 (no; capability supplies dice and never gates, Thread Sensitivity excepted) |
 | §5 (d) derived statistics | SUPERSEDED | CHAR's closure (PART 2) |
 | §6 (c) four narrowings of the chooser's field (`withheld_verbs`, the once-per-season filter, `question_aggregation_rule: first`, `scenes_per_round: 1`) | RESOLVED-BY | `withheld_verbs`: workplan B10-18b CR-52/CR-53; the aggregation: `01_CORE_one_scene_contract.md` Edit 5 (the player is shown all his questions); the other two are declared swept fixtures and carry no finding |
 | §7.1 the slate (design) against the per-person question (code) | RESOLVED-BY | resolution 20, same Edit 5 |
@@ -252,7 +252,7 @@ Rows the addendum read as *conforms* need no closure. The departures:
 | 27 | `report.emit`'s `TRACE` import and step list | RESOLVED-BY | §B row 15 |
 | 28 | `PLAYABLE` renamed `DECLARED-PRESENT` | RESOLVED-BY | §B row 16 |
 | 29 | S27.4's fold arm and `Act.obstacle`/`Act.pool` deleted | RESOLVED-BY | §B row 12; corroborated unexercised by `16_PESSIMIST_CORE.md` §2 |
-| §9 | may a capability gate an act? | JORDAN | J-U5a-01 |
+| §9 | may a capability gate an act? | SUPERSEDED | answered: A-11 (no). `01_CORE_capability_authoring_surface.md` Part three is withdrawn (Reconciled) |
 
 ## 1.11 `audits/01_CORE_audit_addendum_C_tests.md` — findings and resolutions T-01 … T-22
 
@@ -294,12 +294,12 @@ plant controls, and its `measure:` (`-k test_u2_`) still selects them, so no R-r
 
 | id | claim (one line) | disposition | carrier | evidence |
 |---|---|---|---|---|
-| F-PES-CORE-01 | a refusal does not teach: 41 % retried, 96 % of retries refused | RESOLVED-BY | `16_PESSIMIST_CORE_a_refusal_is_remembered.md` (reads present confidence through `01_CORE_claim_fade_as_read.md`'s one function once that lands; dependency noted at both heads) | `run_dump.py 0 3`; `p34.py 0 2`: 8 % retry where the failing read is deposited, 57 % where not |
+| F-PES-CORE-01 | a refusal does not teach: 41 % retried, 96 % of retries refused | RESOLVED-BY | `16_PESSIMIST_CORE_a_refusal_is_remembered.md` (reads present confidence through `01_CORE_claim_fade_as_read.md`'s one function once that lands). D-46, taken B, adds the private belief of absence for the `with` stem (the verbs lane's carrier, U5c); the two compose: clause 4 declines what he then believes false, and the weight covers the refusals no read explains | `run_dump.py 0 3`; `p34.py 0 2`: 8 % retry where the failing read is deposited, 57 % where not |
 | F-PES-CORE-02 | no receipt carries a value | RESOLVED-BY | `16_PESSIMIST_CORE_the_record_holds_what_changed.md` Edit 1 | 36,586 of 36,586 `delta=None` |
-| F-PES-CORE-03 | the interior (scar, conviction crisis) is not in the log | RESOLVED-BY | same file Edit 2; consistent with `11_GO_player_surface_contract_B.md` §7 (presentation is triggered by the seated person's rows, never by a log Event such as `scar.taken`) | 3,914 of 40,494 receipts on no Event, all `Person.scar` |
+| F-PES-CORE-03 | the interior (scar, conviction crisis) is not in the log | RESOLVED-BY | same file Edit 2; as reconciled (C-U5a-09): this edit emits `scar.taken` only, logged and fanned out to nobody; `conviction.moved` is emitted, witnessed, by `16_PESSIMIST_CHAR_A…` item 4. Consistent with `11_GO_player_surface_contract_B.md` §7 (presentation is triggered by the seated person's rows, never by a log Event such as `scar.taken`) | 3,914 of 40,494 receipts on no Event, all `Person.scar` |
 | F-PES-CORE-04 | the nine's gate accepts `met 9` on a module that does not exist | RESOLVED-BY | `16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md` Edit 1 | `req_forge.py`: arms B, C, D exit 0 |
 | F-PES-CORE-05 | propagation is real, saturates, and mostly leaves no edge | RESOLVED-BY | same file Edits 2–3 (the reading); the unrecorded influence: F-CORE-12's carriers | knockout arms 0 / 0 / 236 / 309 / 634 / 625 |
-| F-PES-CORE-06 | a scene has no internal order and one occupant | JORDAN | J-U5a-02; `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` (held; Option B's edits) | 120 of 525 scenes fold in order; 62 of 87 counterparties busy |
+| F-PES-CORE-06 | a scene has no internal order and one occupant | RESOLVED-BY | `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` Option B's edits 1–4, un-held by Jordan's answer A-9; its edit 5 (the Layer-1 text for #353 §27 re-keyed) is owed by the unification stage, not applied. The occupancy half (the person spoken to is busy elsewhere) has no edit there: `unified/U5_CONFLICTS_U5a.md` §2, J-U5a-05 | 120 of 525 scenes fold in order; 62 of 87 counterparties busy |
 | F-PES-CORE-07 | the stored plan tail is never used | RESOLVED-BY | `16_PESSIMIST_CORE_no_stored_plan.md` | 0 of 1,137 releases from a stored queue; cut reproduces four hashes |
 | F-PES-CORE-08 | an old Event's place is wherever its actor is now | RESOLVED-BY | `U5a_CORE_owed_edits.md` §B row 17 (`event_place_at`), read first by the reason trail's chronicle line; `08_FI_04_small-edits.md` touches the same function for another case (U5c; ordered, not conflicting) | 39 of 831 season-0 act Events answer a different place a season later |
 | F-PES-CORE-09 | the five strata and fold order decide almost nothing | STALE-FALSE-POSITIVE (as a defect: the audit takes no fix; the strata are ruled) | the figure (1 act in 175) is the input `18_DETERMINISM_rival_acts_in_one_fold.md` asked for; PART 6 | `ordp.py 0 1` |
@@ -307,7 +307,7 @@ plant controls, and its `measure:` (`-k test_u2_`) still selects them, so no R-r
 | res. 1–6 | (as F-PES-CORE-01 … -05, -07) | RESOLVED-BY | the five proposals | — |
 | res. 7 | an old Event's place read at `e.emitted_at` | RESOLVED-BY | §B row 17 | — |
 | res. 8 | `scene_budget < 1` refused | RESOLVED-BY | §B row 18 | — |
-| survivor | is a scene a budget unit (A) or a short sequence (B)? | JORDAN | J-U5a-02 | — |
+| survivor | is a scene a budget unit (A) or a short sequence (B)? | SUPERSEDED | answered: A-9 (B, a short sequence) | — |
 | §2 false N-lines: stored plan tail; `Receipt.delta/.spec/.mode` | RESOLVED-BY | `…no_stored_plan.md`; `…the_record_holds_what_changed.md` (fill, not amputate) | — |
 | §2 false N-line: the retry licence (pays 4 times in 309) | RESOLVED-BY | `…a_refusal_is_remembered.md` (a weight, not a ban; the licence stays) | — |
 | §2 false N-lines: the five strata; fold order | STALE-FALSE-POSITIVE (ruled structure, one sort key) | as F-PES-CORE-09 | — |
@@ -317,7 +317,7 @@ plant controls, and its `measure:` (`-k test_u2_`) still selects them, so no R-r
 | §2 R at extremes: 40 rounds emit `travel.blocked` 108 times | RESOLVED-BY | same (the retry weight) | — |
 | §3 readings of R-01 … R-09 | RESOLVED-BY | the readings enter each row's `reading:` record (`01_CORE_requirements_reading_record.md` §1); statuses are not moved by this suite | — |
 | §4.3 dead ends: 19 verbs never attempted; 100 of 178 Event kinds never emitted | SUPERSEDED | R-05 `not_met` is the standing record; the verbs lanes' closures (U5b, U5c, U5d) carry each verb | — |
-| §6 stories it cannot tell: an errand; a conditional scene; a retold magnitude; an inner change; two people occupied; a person entering; an ending | RESOLVED-BY / JORDAN | magnitude and inner change: `…the_record_holds_what_changed.md`; conditional scene and occupancy: J-U5a-02; errand: `…a_refusal_is_remembered.md` frees the scenes, the errand itself (go and find him) is CHAR's `02_CHAR_offer_what_can_be_done.md`; entering: the population proposals; ending: §F and FA's endings (U5d) | — |
+| §6 stories it cannot tell: an errand; a conditional scene; a retold magnitude; an inner change; two people occupied; a person entering; an ending | RESOLVED-BY / JORDAN | magnitude and inner change: `…the_record_holds_what_changed.md`; conditional scene: A-9 and its proposal; occupancy: J-U5a-05; errand: `…a_refusal_is_remembered.md` frees the scenes, the errand itself (go and find him) is CHAR's `02_CHAR_offer_what_can_be_done.md`; entering: the population proposals; ending: §F and FA's endings (U5d) | — |
 
 ---
 
@@ -327,19 +327,31 @@ While this lane was reading, two files appeared in `unified/`: `DECISIONS_FOR_JO
 register of questions for Jordan, ids `D-nn`) and `DECISIONS_ANSWERED.md` (Jordan's answers of 2026-11-12,
 ids `A-n`). They bind this closure:
 
-- A row whose disposition is **JORDAN** cites its `D-nn` entry; this lane keeps no second numbering for a
-  question the register already holds. Items the register does not yet hold are in
-  `unified/U5_CONFLICTS_U5a.md` §2 as `J-U5a-nn`, each with two options, for the register lane to take up.
-  The provisional ids used in PART 1 map as: **J-U5a-01 = D-11** (may a capability gate an act),
-  **J-U5a-02 = D-09** (a scene: a budget slot or a short sequence), **J-U5a-03** = new (`04` D-51's debit
-  receipt), kept under that id.
-- **A-4 (D-03): a duel inside a battle is a nested contest.** F-CORE-07's "nothing recurses" stops being true
-  when that lands; `U5a_CORE_owed_edits.md` §A row 1 is worded so the depth sweep returns with it.
-- **A-5 (D-05): the bell curve everywhere. A-6 (D-06): score plus a base, floor five. A-7 (D-07): talent and
-  training are two numbers.** All three were answered *against* what the DICE, CORE and CHAR proposals
-  assumed (whole dice; the score is the pool; the larger of attribute and skill). PART 3 and
-  `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` are written to the answers, and every proposal of this
-  family that assumed otherwise carries a `Reconciled:` line (`unified/U5_CONFLICTS_U5a.md` §1).
+- A row whose disposition is **JORDAN** cites its open `D-nn` entry; this lane keeps no second numbering
+  for a question the register already holds. A question Jordan has answered is closed by the answer
+  (`A-n`), and the row reads RESOLVED-BY or SUPERSEDED accordingly. Items the register does not yet hold
+  are in `unified/U5_CONFLICTS_U5a.md` §2 as `J-U5a-nn`, each with two options, for the register lane.
+  The provisional ids used in PART 1 map as: **J-U5a-01 = D-11, answered A-11** (a capability never gates
+  an act); **J-U5a-02 = D-09, answered A-9** (a scene is a short sequence); **J-U5a-03** = new (`04`
+  D-51's debit receipt), kept under that id and still open.
+- **A-4 (D-03): a duel inside a battle is a nested contest.** F-CORE-07's "nothing recurses" stops being
+  true when that lands; `U5a_CORE_owed_edits.md` §A row 1 is worded so the depth sweep returns with it.
+- **A-5 (D-05): the bell curve everywhere. A-6 (D-06): score plus a base, floor five. A-7 (D-07): talent
+  and training are two numbers. A-8 (D-08): a wound is a level against the roll. A-26 (D-30): an equal
+  opponent costs 0.4 per point.** The first three and the last were answered *against* what the DICE, CORE
+  and CHAR proposals assumed. PART 3 and `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` are written to
+  the answers, and every proposal of this family that assumed otherwise carries a `Reconciled:` line
+  (`unified/U5_CONFLICTS_U5a.md` §1).
+- **A-9 (D-09): a scene is a short sequence.** `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` is no
+  longer held. **A-11 (D-11): training never gates an act.** Part three of the CORE capability proposal is
+  withdrawn. **A-12 (D-12): a seat may carry a modifier** (U1 architecture §3 item 6).
+- **A-24 (D-26): the standing rule overrides earlier rulings that fixed an outcome by rule**, which
+  answers D-27 (a crisis of faith is drawn and seen) and D-28 (a scruple is a drawn tendency).
+  **A-34 (D-47): self-knowledge is a belief, built narrowly.** This lane wrote its carrier,
+  `proposals/U5a_CHAR_self_knowledge_is_a_belief.md`.
+- Closed by the register's own ladder (reversible on Jordan's word): **D-46** taken B (a refusal teaches
+  its actor, privately), **D-48** taken A (forgetting is computed when read), **D-74** taken B (the witness
+  code is brought back to Layer 1's list).
 
 ---
 
@@ -428,7 +440,7 @@ ids `A-n`). They bind this closure:
 | 29 | NPC-034 / NPC-071 "no goal authored" | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §10 (a content row: `goals:` on the two cast rows; an authoring gap, not an engine need) |
 | §8 step 10 | arm `scar_weight_shift`, then `refusal_axis` | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §8 |
 | §8 step 12 | means and ends | RESOLVED-BY | workplan CL-THRUST B2.2 (design-first); not re-opened |
-| §11 | can a person be wrong about himself? | JORDAN | D-47 |
+| §11 | can a person be wrong about himself? | RESOLVED-BY | answered: A-34 (a belief, built narrowly); `U5a_CHAR_self_knowledge_is_a_belief.md` |
 
 ## 2.5 `audits/02_CHAR_audit.md` §13 — provided characters
 
@@ -440,7 +452,7 @@ ids `A-n`). They bind this closure:
 | NPC-020, NPC-070 an armed institution reassesses loyalty in stages | SUPERSEDED | FA's closure (CR-88); edge: regard in steps first |
 | NPC-021 faith challenged by facts | RESOLVED-BY | need restated as argument (the audit's reading); the hearer's side `02_CHAR_which_ground_moves_whom.md`; H-268 is SC's |
 | NPC-002 range of action narrows to withdrawal | RESOLVED-BY | restated against #353 §9.2 as the budget (the audit's reading); withdrawal at the floor: `02_CHAR_what_an_act_risks.md` |
-| NPC-004 a capacity he does not know he has | JORDAN | D-47 |
+| NPC-004 a capacity he does not know he has | RESOLVED-BY | `U5a_CHAR_self_knowledge_is_a_belief.md` (A-34) |
 | NPC-089 one governor among graduated postures | RESOLVED-BY | `02_CHAR_choice_alignment.md`; more than one posture is MB content (U5b) |
 | NPC-090 two officials shape one relationship | RESOLVED-BY | `02_CHAR_goal_lean_on_its_own_question.md` |
 | NPC-031 the heir's relation to the regent | SUPERSEDED | FA's closure (IN-61; D-19) |
@@ -459,7 +471,7 @@ ids `A-n`). They bind this closure:
 | F-CHAR-20 | nothing a person risks reaches his choice | RESOLVED-BY | `02_CHAR_what_an_act_risks.md` | `score_terms` has no term reading `body` |
 | F-CHAR-21 | the development sheet shows less than the creation sheet | RESOLVED-BY | `02_CHAR_capability_definitions.md` Edit 5 (with `01_CORE_capability_authoring_surface.md` Edit 6: one change to one dataclass) | `dataclasses.fields` |
 | F-CHAR-22 | three dossier files are not character documents | RESOLVED-BY · no edit (decided in the audit, step 2) | B6.2 row 23 | — |
-| C-1 … C-8 | corrections and confirmations to the first audit | RESOLVED-BY | C-1: `…offer_what_can_be_done.md`; C-2, C-3, C-5: reference, no edit; C-4: `…scar_is_a_wound.md`; C-6: `…capability_definitions.md` Edit 4; C-7: same, Edit 3; C-8: D-47 | — |
+| C-1 … C-8 | corrections and confirmations to the first audit | RESOLVED-BY | C-1: `…offer_what_can_be_done.md`; C-2, C-3, C-5: reference, no edit; C-4: `…scar_is_a_wound.md`; C-6: `…capability_definitions.md` Edit 4; C-7: same, Edit 3; C-8: A-34 and `U5a_CHAR_self_knowledge_is_a_belief.md` | — |
 | B2.2 returning findings (six rows) | — | RESOLVED-BY | "zero person-scale change" = F-CHAR-03; "no scar decay" = F-CHAR-17 (the outflow, `scar_vindication`); the D6 scar gate is false now (STALE); the relational graph is doc-only = F-CHAR-18; legibility reversed = the reason trail; R-AI holds |
 | B3.2 P1 … P10 (ten things asked of a chooser) | — | RESOLVED-BY | P1 goal lean + CR-88; P2 temper + pessimist B; P3 wound + pessimist A; P4 risk; P5 ground; P6 relations + `regard_sign`; P9 reason trail + voices; P7, P8, P10 built |
 | B4 the character's side of the capability surface | — | RESOLVED-BY | U1 architecture (which adopts §B4 (c)'s field table); `02_CHAR_capability_definitions.md` |
@@ -481,13 +493,13 @@ ids `A-n`). They bind this closure:
 | rows 3, 7 | RESOLVED-BY | `02_CHAR_which_ground_moves_whom.md` |
 | rows 4, 5, 6, 13, 14, 18, 22, 24 | RESOLVED-BY | `02_CHAR_capability_definitions.md` Edits 1–6 |
 | rows 8, 10 | RESOLVED-BY | `02_CHAR_relations_have_a_ground.md` |
-| row 9 (is kin a ground the heir title reads?) | JORDAN | D-19 (who may claim the crown) holds the dynastic question; `kin` ships as a ground no rule reads |
+| row 9 (is kin a ground the heir title reads?) | SUPERSEDED | answered: A-19 (the deed race: heir, consort, princess and both houses' heads may claim; founding order is a head start, not a right). `kin` ships as a ground no eligibility reads |
 | rows 11, 12 | RESOLVED-BY | `02_CHAR_what_an_act_risks.md` |
 | rows 15, 16, 23 | RESOLVED-BY · no edit (decided in the audit) | a capability is never lost; an ability is not a fifth kind; a misfiled document stays |
 | row 17 (combat abilities cannot be authored as data) | SUPERSEDED | PC's `03_PC_person_inputs_content.md` (U5b; by title) |
 | rows 19, 20 | RESOLVED-BY | `02_CHAR_voices_and_the_room.md` |
 | row 21 (the file for the capability definition: registry or rosters) | RESOLVED-BY | U1 architecture §1 (decided: C-U5a-08) |
-| B6.3 | JORDAN | D-47 |
+| B6.3 | RESOLVED-BY | A-34; `U5a_CHAR_self_knowledge_is_a_belief.md` |
 
 ## 2.8 `audits/16_PESSIMIST_CHAR.md` — findings, resolutions, the two items for Jordan, lists
 
@@ -497,8 +509,8 @@ C = `…_C_the_stop_is_the_mans.md`.
 | id | claim (one line) | disposition | carrier | evidence |
 |---|---|---|---|---|
 | F-PES-CHAR-01 | the names on a character do not predict his acts | RESOLVED-BY | B (signatures, then cells, then the loader's refusal) | a man of `love` alone tops `forge` in 266 of 276 readings |
-| F-PES-CHAR-02 | nothing stops a man; armed, the gate stops everyone from walking | RESOLVED-BY | C items 1–3, 5; item 4 (the draw) decided on the standing rule and listed (D-28, D-26) | unarmed 0 of 46; armed 46 of 46 |
-| F-PES-CHAR-03 | the only interior event is a fixed, inverted, silent conversion | RESOLVED-BY | A items 1–4; the roll decided on the standing rule and listed (D-27, D-26); who holds the claim reconciled (C-U5a-09) | the same six converts at both seeds |
+| F-PES-CHAR-02 | nothing stops a man; armed, the gate stops everyone from walking | RESOLVED-BY | C items 1–5; item 4 (the draw) is un-held by Jordan's answer A-24 (D-28) | unarmed 0 of 46; armed 46 of 46 |
+| F-PES-CHAR-03 | the only interior event is a fixed, inverted, silent conversion | RESOLVED-BY | A items 1–4; the roll is confirmed by Jordan's answer A-24 (D-27: drawn and seen); which proposal emits `conviction.moved` is reconciled (C-U5a-09) | the same six converts at both seeds |
 | F-PES-CHAR-04 | between a certainty and a coin there is little room for a character | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §1 (test-retest gate on `02_CHAR_resolve_and_temper.md`) and §2 (`stance_scale` on `02_CHAR_scar_cap_and_regard_unit.md`) | test-retest 60.7 %; class gap 800 temperatures |
 | F-PES-CHAR-05 | nobody is skilled, everybody fails, an opponent's skill is not in the roll | RESOLVED-BY | U1 architecture §4–§6 as rewritten to A-6 (score plus a base, floor five) and A-7 (two inputs, the opponent's among them); cast content `02_CHAR_capability_definitions.md`; calibration is SC's (U5c) | pool 2 for 46 of 46; 77 % Failure in play |
 | F-PES-CHAR-06 | a man is wrong about the granary and about nothing else | SUPERSEDED | the telling lane and `10_DICE_believed_odds_have_a_prior.md` (PART 3); no CHAR edit | 296 of 312 false beliefs are store counts |
@@ -510,8 +522,8 @@ C = `…_C_the_stop_is_the_mans.md`.
 | F-PES-CHAR-12 | one man's paperwork scars the whole realm | RESOLVED-BY | B with `02_CHAR_scar_is_a_wound.md` | `x2_alone.py`: 83 of 83 scarred by one actor |
 | res. 1–8 | (as F-PES-CHAR-01, -02, -03) | RESOLVED-BY | A, B, C | — |
 | res. 9–12 | the four amendments | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §2, §3, §4, §6 | the audit named each amendment and left the amended file unedited; this lane wrote them |
-| For Jordan 1 | the crisis rolls or it does not | RESOLVED-BY, listed | A (the roll), on the standing rule (ladder step 1: the later, general ruling); listed as D-27 under D-26 because it overwrites ED-IN-0261's G-Q6 | — |
-| For Jordan 2 | the scruple is a line or a tendency | RESOLVED-BY, listed | C item 4, same ground; D-28 under D-26. The gate itself stays unarmed until armed by its own flip | — |
+| For Jordan 1 | the crisis rolls or it does not | SUPERSEDED | answered: A-24 (D-26, D-27): it rolls. ED-IN-0261's G-Q6 wording is superseded by that ruling | — |
+| For Jordan 2 | the scruple is a line or a tendency | SUPERSEDED | answered: A-24 (D-28): a drawn tendency. The gate itself stays unarmed until armed by its own flip (`U5a_CHAR_owed_amendments.md` §8) | — |
 | §0 a pool of one die at the default obstacle has P(Success) exactly 0 | RESOLVED-BY | U1 architecture §4 (A-6's floor of five dice removes the case) | — |
 | §5 false N-lines: `Person.conviction` nearly free; the creed's triggers are not about faith | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §7 (creed signatures on B's mechanism) | — |
 | §5 false N-lines: believed-odds weighting; attributes; capability | RESOLVED-BY | U1 architecture §6 (content and the attribute switch); `02_CHAR_offer_what_can_be_done.md` (priced candidates form) | — |
@@ -541,7 +553,7 @@ plans this lane wrote: `proposals/U5a_capability_home_and_two_inputs.md` (**CAP*
 | F-DICE-07 | a second roller, and a ladder in two classes | RESOLVED-BY | `10_DICE_one_roller_one_fraction_rule.md` Edits A, C, D as reconciled (mass battle composes on the owner; under A-5 the owner's roll is the bell-curve sampler, so the "byte-equal goldens" gate is replaced by one declared re-pin); DOE §1 | 6 of 10,000 tenth-step cells differ; the pessimist's swap test: 0 of 20,000 nets differ at whole pools |
 | F-DICE-08 | three rules for a fraction of a die | SUPERSEDED | by A-5: the bell-curve sampler takes a fractional pool as it is; the rounding and the stochastic die are deleted with the whole-dice roll (same proposal's Edit B withdrawn) | E-05 |
 | F-DICE-09 | the typed layer omits the facts every draw depends on | RESOLVED-BY | `10_DICE_exported_face_rule_and_band_edges.md` Edits A (band floors; the per-die pair asserted against the faces) and D (`LEVEL_SIGMA` exported), as reconciled: `FACE_NET` stays the derivation of the pair, exported as provenance only; DOE §1 names what the port reads | E-11: six scalars exported |
-| F-DICE-10 | the room is a flat obstacle shift | RESOLVED-BY · no build (accepted in the audit, resolution 9) | the favourable half is D-29 (SC's: U5c); the sentence for H-215's `cite:` is DOE §3 row 1 | E-08 |
+| F-DICE-10 | the room is a flat obstacle shift | RESOLVED-BY · no build (accepted in the audit, resolution 9) | the favourable half moves to leverage by Jordan's answer A-25 (SC's composer: U5c); the sentence for H-215's `cite:` is DOE §3 row 1 | E-08 |
 | F-DICE-11 | the extension seam is unreached by the loop and half open | RESOLVED-BY | DOE §3 rows 2–3 (context validated on entry; the dead `extension` parameter deleted) | E-04 |
 | F-DICE-12 | half the advantage module's surface has no game caller | RESOLVED-BY | DOE §1 (under A-5 the Normal closed form becomes the odds function: `p_success` is no longer dead; `eff_ob`, `effective_ob`, `sigma_space_ob_shift` go with the kernel, SC-P2) | E-17 |
 | F-DICE-13 | stale passages at the owner | RESOLVED-BY | DOE §3 row 5 | lines cited in the finding |
@@ -553,7 +565,7 @@ plans this lane wrote: `proposals/U5a_capability_home_and_two_inputs.md` (**CAP*
 |---|---|---|---|---|
 | C-1, F-DICE-15 | three obstacle axioms for one ruling; the field is an opposed roll | RESOLVED-BY | MAP §A ("the contest form", `static` or `opposed_roll`) and §G edit 9; the floor reads `OB_MIN` (addendum §5.1 item 2, in DOE §1) | `orchestration.py:1308-1309` |
 | C-2 | the first audit's research skip was a false absence | RESOLVED-BY · no edit | the three leads are used in F-DICE-16, -17, -18 | — |
-| C-3, F-DICE-16 | the wound's penalty was ruled (+0.15 Ob per wound); the first proposal departed from it | RESOLVED-BY | addendum §5.4 as carried by DOE §2 (an obstacle term, `obstacle_terms: [wounds]`); `10_DICE_advantage_sources_for_the_arcs.md` Edits B–D withdrawn (Reconciled, C-U5a-12). The other channel (a level against) is D-08; the ruled form is taken unless Jordan answers otherwise | ED-PC-0005, ED-PC-0006 |
+| C-3, F-DICE-16 | the wound's penalty was ruled (+0.15 Ob per wound); the first proposal departed from it | SUPERSEDED | by Jordan's answer A-8 (D-08): a wound is a level against the roll, as combat spends it; the fixed 0.15-per-wound obstacle (ED-PC-0005/0006) is replaced. `10_DICE_advantage_sources_for_the_arcs.md` Edits B–D stand as written; the addendum's §5.4 (an obstacle term) is not built (DOE §2) | E-B03: the two forms differ two- to four-fold |
 | C-4 | the roller proposal's `grep` falsifier cannot read one line | RESOLVED-BY | `10_DICE_one_roller_one_fraction_rule.md` falsifier restated (Reconciled) | E-B02 |
 | C-5, F-DICE-17 | one score, three pools | SUPERSEDED | by A-6: one pool rule, `max(pool_floor, score + addends + pool_add)`, at every site (U1 architecture §4; MAP §C's four per-site fixtures become two, Reconciled) | E-B03: equals succeed 28 % in the social roll, 63–68 % in the other two |
 | C-6, H-152 | closed by a run (CP-T02-01) | RESOLVED-BY | DOE §3 row 6 (the register row's head and owner) | `probe_h152.py`, three arms with a mutation |
@@ -567,7 +579,7 @@ plans this lane wrote: `proposals/U5a_capability_home_and_two_inputs.md` (**CAP*
 | §5.2 | the duel round from the dice side | SUPERSEDED | PC's closure (U5b): an approach is an `edge` row, never a pool rule | — |
 | §5.3 | the weapon-carry cost is the `threshold` role, one leaf function | SUPERSEDED | PC's and MB's closures (U5b); the role is MAP §A's | — |
 | §5.5 | order of landing | RESOLVED-BY | restated for the answers in CAP "Order" and DOE "Order" | — |
-| §5.6 item 1 | the wound's channel | JORDAN | D-08 (default: as ruled) | — |
+| §5.6 item 1 | the wound's channel | SUPERSEDED | answered: A-8 (a level against) | — |
 | §5.6 item 2 | what a score is worth outside a fight | SUPERSEDED | answered: A-6 | — |
 
 ## 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1–25, §11 survivor, §13 arcs
@@ -589,7 +601,7 @@ plans this lane wrote: `proposals/U5a_capability_home_and_two_inputs.md` (**CAP*
 | res. 9 | RESOLVED-BY | DOE §3 row 1 |
 | res. 11, 12, 13, 14, 15, 16, 20 | RESOLVED-BY | DOE §3 rows 2–5, 7–10 |
 | res. 17 | RESOLVED-BY | `10_DICE_advantage_sources_for_the_arcs.md` Edit A |
-| res. 18 | SUPERSEDED | by C-3 / F-DICE-16 (a wound is an obstacle term) |
+| res. 18 | RESOLVED-BY | `10_DICE_advantage_sources_for_the_arcs.md` Edits B–D (`wounds` as the second advantage source; confirmed by A-8) |
 | res. 19 (SCN-05 restated: a spend buys named levels) | RESOLVED-BY | same file, "The resolution" |
 | res. 21 (`CLAUDE.md` §7) | RESOLVED-BY | `U5a_CORE_owed_edits.md` §G (the same sentence as T-22; merged) |
 | res. 22 (mass battle's survivor-ratio labels use the ladder's four names) | SUPERSEDED | MB's closure (U5b); A-3 fixes the field's returned vocabulary (won, lost, drawn) |
@@ -602,9 +614,9 @@ plans this lane wrote: `proposals/U5a_capability_home_and_two_inputs.md` (**CAP*
 | §13 ARC-18, ARC-17 | STALE-FALSE-POSITIVE (represented) | — |
 | §13 ARC-06 (an implementation can fail on its own roll) | RESOLVED-BY | `18_DETERMINISM_task_draw_for_uncontested_verbs.md` (PART 6) |
 | §13 SCN-04 (difficulty from a stored disposition) | SUPERSEDED | SC's obstacle proposal (U5c) |
-| §13 ARC-53 (a wound persists; a faction's stat adds to its leader's roll) | RESOLVED-BY | DOE §2 (the wound term); the faction half is an `addend` over `Act.via` (FA's, U5d; D-12 holds whether office may add to a roll) |
+| §13 ARC-53 (a wound persists; a faction's stat adds to its leader's roll) | RESOLVED-BY | DOE §2 (the wound term); the faction half is an `addend` over `Act.via` (FA's, U5d; Jordan's answer A-12 admits a seat's modifier: U1 architecture §3 item 6) |
 | §13 NPC-085, SCN-12, SCN-04/07/LOOP-C, SCN-13 | RESOLVED-BY | `10_DICE_advantage_sources_for_the_arcs.md` Edit E (each a named door waiting on another lane's state; not built ahead of its reader) |
-| §13 SCN-05, SCN-02, ARC-23 | RESOLVED-BY / JORDAN | SCN-05: resolution 19. SCN-02 conflicts with ED-SC-0038 (named, SC's). ARC-23 (a skill required to attempt) is D-11 |
+| §13 SCN-05, SCN-02, ARC-23 | RESOLVED-BY | SCN-05: resolution 19. SCN-02 conflicts with ED-SC-0038 (named, SC's). ARC-23 (a skill required to attempt) is refused by Jordan's answer A-11; the need is restated as odds, not access |
 | §13 EMG-C2, NSC-05, SCN-08, NPC-052; EMG-X5, EMG-X7, SCN-07 (rate and table draws) | SUPERSEDED | WR's and CORE-side happenings closures (U5d); the mechanism (a keyed rate draw) exists |
 | §13 NPC-001, NPC-004, NPC-075, ARC-22 (competence decides how she fares) | RESOLVED-BY | U1 architecture §6 (cast content) |
 | §13 EMG-X6 | SUPERSEDED | SC (U5c) |
@@ -620,7 +632,7 @@ SOFT = `16_PESSIMIST_DICE_soft_ceiling.md`; TASK = `16_PESSIMIST_DICE_task_diffi
 | F-PES-DICE-02 | at the shipped pair "everything draws" means "little happens" | RESOLVED-BY | TASK (the unopposed stand-in, `plain`, the throughput reading and refusal to ship); applied to `18_DETERMINISM_task_draw…` item 3 and gate by this lane (Reconciled). The pool regime behind it is answered (A-6) | 16.5 % of today's effect at (2, 2.0) |
 | F-PES-DICE-03 | the ceiling is a wall; every shipped forgery stands on it | RESOLVED-BY | SOFT (the cap's closed form follows the one sampler: DOE §1) | pools 1–12 read 10.00 % at their cap |
 | F-PES-DICE-04 | a field is decided by a draw the dice engine never sees | JORDAN | D-34 (luck in battle: a hidden multiplier, or a named level) | friction's 5th–95th percentile 0.164–6.107 |
-| F-PES-DICE-05 | a failed search is forgotten and retried; remembering alone changes nothing | RESOLVED-BY | DOE §4 (the actor-only deposit of `finding.none`, read by `refused_before` of `16_PESSIMIST_CORE_a_refusal_is_remembered.md`: the reader the control showed was missing). D-46 holds the neighbouring question for a missing person | 157 of 157 `finding.none` Events have no descendant; deposit alone: 19 of 42 against 20 of 47 |
+| F-PES-DICE-05 | a failed search is forgotten and retried; remembering alone changes nothing | RESOLVED-BY | DOE §4 (the actor-only deposit of `finding.none`, read by `refused_before` of `16_PESSIMIST_CORE_a_refusal_is_remembered.md`: the reader the control showed was missing). D-46 (taken B) is the neighbouring case of a missing person | 157 of 157 `finding.none` Events have no descendant; deposit alone: 19 of 42 against 20 of 47 |
 | F-PES-DICE-06 | one die cannot succeed, and a zero cannot try | SUPERSEDED | A-6 (no person rolls under five dice); TASK for the unopposed rows | `band_odds(1, 2.0)` |
 | F-PES-DICE-07 | the record of a roll is its band | RESOLVED-BY | MAP §D `fed_by` with SC-B's `Margin.terms` (U5c); the margin itself is on the record (under A-5 it is the continuous margin, not a settled integer) | 208 failures: by 1 ×76, 2 ×94, 3 ×33, 4 ×5 |
 | F-PES-DICE-08 | the obstacle's floor reaches one term and not the sum | SUPERSEDED | `13_SC_tuning_tables.md` T1 (U5c) |  E-P1 |

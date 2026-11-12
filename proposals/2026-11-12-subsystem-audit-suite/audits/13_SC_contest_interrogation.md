@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (A-09) — one Layer 1 line corrected: the "no social aggregate on a Rung" rule is `04:260` (§B.3), not `:237`; the tree's own note at `verb_table.yaml:1747` carries the stale number. The shipped fixtures and `roll.py:141` this file cites are verified (L-11). No finding changed.
+
 Authored in part by Fable; completed by Opus after the Fable usage limit (2026-11-12).
 
 ## Read at: d7bd4ab (working tree; `engine/`, `modules/` and `systems/` unchanged since `601e715`, checked by `git diff --stat`)
@@ -328,7 +330,7 @@ opposition 1.5 + standard 0.5`), so the outcome is legible to the player and the
 | R-3 | is "venue" the building, the bench or the row? | the row (standard, admission) and the bench (reception); the building kind gets no term — a moot hall and an inn differ by who sits there and what is docketed, which the engine already knows | 5 | §2; T2 |
 | R-4 | affiliation as its own modifier, or through regard? | through regard only (`heritage_regard`, CR-31, already reads creed and caste) | 4 (precedent: CR-31) | T3 |
 | R-5 | publicity (`floor:`) as a term? | authored into the row's `standard` value; no formula over `floor:` | 5 (one table, not two) | T2 |
-| R-6 | season and territory conditions as a modifier? | none; they reach the roll through persons' regard and reception | 5 (no global modifier is scripting by aggregate; `04:237` forbids social aggregates on a Rung) | §2 |
+| R-6 | season and territory conditions as a modifier? | none; they reach the roll through persons' regard and reception | 5 (no global modifier is scripting by aggregate; `04:260` forbids social aggregates on a Rung) | §2 |
 | R-7 | `interview` resolves with no roll | **superseded by the standing rule** (Jordan, 2026-11-12, *"we do not do deterministic"*): `interview` draws on `inquiry` against `plain` + the witness's score/2 − regard; the band grades what he gives (Overwhelming/Success a finding, Partial a partial finding, Failure nothing). `interrogate` stays the bench's harder questioning (`demanding`) | 1 (superseded) | `13_SC_draw_for_unrolled_contests.md` |
 | R-8 | negotiation has no roll | **superseded by the standing rule**: an offer (`covenant`) is a draw, graded into accepted / countered / refused; the counterparty's pursuits against the terms set its odds | 1 (superseded) | `13_SC_draw_for_unrolled_contests.md`; §7 |
 | R-9 | temperament: an obstacle term or an advantage? | advantage, through CHAR's susceptibility rows; the obstacle reads only what stands against the act, not the match of approach to hearer | 4 (precedent: `advantage_sources`, CP-T01-05) | T-note in `13_SC_tuning_tables.md` |

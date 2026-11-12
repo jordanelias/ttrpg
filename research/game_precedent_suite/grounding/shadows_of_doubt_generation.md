@@ -17,7 +17,7 @@ established.
 
 | key | source | read |
 |---|---|---|
-| DB15 | Cole Jefferies, *Shadows of Doubt DevBlog #15: Moving in the Citizens*, 2019-04-24, `https://colepowered.itch.io/shadows/devlog/78044/shadows-of-doubt-devblog-15-moving-in-the-citizens` | body, 2026-11-12 |
+| DB15 | ColePowered (the developer; the post is signed `@colejefferies`), *Shadows of Doubt DevBlog #15: Moving in the Citizens*, 2019-04-24, `https://colepowered.itch.io/shadows/devlog/78044/shadows-of-doubt-devblog-15-moving-in-the-citizens` | body, 2026-11-12 |
 | DB28 | *Shadows of Doubt DevBlog #28: Building the World Through Writing*, 2021-10-01, `https://colepowered.itch.io/shadows/devlog/299526/shadows-of-doubt-devblog-28-building-the-world-through-writing` (written by the game's writer; "Cole and I") | body, 2026-11-12 |
 | DB30 | *Shadows of Doubt DevBlog #30: The Top Shadows of Doubt Development Challenges Part I*, 2022-03-04, `https://colepowered.itch.io/shadows/devlog/354045/shadows-of-doubt-devblog-30-the-top-shadows-of-doubt-development-challenges-part-i` | body, 2026-11-12 |
 | WP-SoD | `https://en.wikipedia.org/wiki/Shadows_of_Doubt` (raw wikitext, rev 1381496745 of 2026-10-22), Gameplay and Reception | body, 2026-11-12 |
