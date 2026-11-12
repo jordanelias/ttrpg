@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 — where this file's names, homes or shapes differ from that ledger, the ledger governs: world-gen instruments live in `engine/season/instruments.yaml: seeded`, and the writ forms `avoid`, `withhold`, `render` are the forms `avoidance`, `interdict`, `tithe` of that file's `forms:` (X-01, X-02); a certificate carries `recites`, not `attests: n`; the archive holds the containment charter and the first king's consecration, and the two ducal papers are `homage` instruments in the chancery (X-03, X-05, X-08); §2.2's stated limit (a dead founder's deeds are nobody's) is answered by the chain term of `legitimacy` down the seat's holders (X-06; R-17 closed); the election's middle outcome is the one tally's `matter.undetermined` (X-15); the believer's decline and the lift of duty are read through `forborne` and `excused` (X-29, X-31). Of §13: items 1 and 2 are the synthesis's §10 items 2 and 3; item 3 is closed there; item 4 is its §10 item 1 and §4.6. Every finding below stands.
 
+Re-grounded: 2026-11-12 against the tree's own research (Jordan: *"Research should have been found in /research or /proposals"*). What changed: (1) of the twenty-five `[M]` marks in §3, sixteen now carry a tree source at `path:line` in whole or in part and nine carry the words "stays memory-grade" with the search that found nothing (§15.2; map: `unified/RESEARCH_MAP_INSTITUTIONS_A.md` §2, §4); (2) six statements are corrected where the tree differs (§15.3): **who elects the Confessor under the rule in force** (two seats of one arm, not four Cardinals), the Venetian Interdict's ending, the Templars' suppression, the date of the two-thirds rule inside the tree, the archived design's College of Prelates and off-stage Holy See, and the conclave's enclosure having been suspended; (3) fourteen mechanisms the research describes and this design lacked are added in §15.4, with the executable plan in `proposals/15_INSTITUTIONS_PAPACY_grounding_mechanisms.md`; (4) the §14 null on the game-precedent suite is closed by a search (§15.5); (5) what remains memory-grade is §15.6. No finding of this file is deleted; marks are amended in place and the additions are §15.
+
 ## Status: REFERENCE (a design and plan in proposal form; resolves nothing at runtime, CLAUDE.md §0.05)
 
 ## Read at: 84d2a02 (working tree)
@@ -252,15 +254,15 @@ literature, written from memory and marked `[M]`. No figure below is offered as 
 
 The bishop of Rome was chosen, in the early centuries, by clergy and people, which in practice meant by
 whichever Roman family or emperor held the city. The reform papacy took the choice away from both: the
-decree of 1059 gave it to the cardinal bishops `[M]`; 1179 (*Licet de vitanda*) fixed **two-thirds of the
-cardinals** and admitted no appeal, because there was no superior to appeal to `[M]`; 1274 (*Ubi periculum*),
+decree of 1059 gave it to the cardinal bishops `[M → TREE research/social_contest_procedures/04_decision_procedure_catalog.md:101: "cardinals only since *In nomine Domini* (1059)"; the narrowing to cardinal *bishops* stays memory-grade]`; 1179 (*Licet de vitanda*) fixed **two-thirds of the
+cardinals** and admitted no appeal, because there was no superior to appeal to `[M → TREE ibid.: "two-thirds required since Lateran III (1179)"; "absolutely no appeal" is Lateran IV c. 24. The decree's name stays memory-grade. The tree disagrees with itself on the date: research/governance/political_hierarchy_standing.md:316 puts two-thirds "under *Ubi periculum*, 1274"; the catalogue's 1179 is the sourced one]`; 1274 (*Ubi periculum*),
 after a vacancy of nearly three years, added enclosure: the electors shut in one room, their food reduced
 after three days and again after eight, their revenues suspended while the see was vacant (the tree has this
-at `governance_modes.md:295`). The intricacies that matter for play:
+at `governance_modes.md:295`) `[RE-GROUNDED: the catalogue (ibid. :101) has the rations "cut on the fourth and ninth days" and adds what this paragraph lacked: the rule was "suspended in 1276 and reinstated in 1294". The electors lifted their own enclosure within two years. The suspension of revenues stays memory-grade]`. The intricacies that matter for play:
 
 - **Three lawful modes**: scrutiny (a ballot), compromise (the body delegates the choice to a few of its
   number when it cannot agree), and acclamation. After a scrutiny an elector could switch his vote to a
-  leading candidate (*accessus*) `[M]`.
+  leading candidate (*accessus*) `[M → TREE ibid. :101: the three modes are Lateran IV c. 24's; *accessus* ran "until the dean disallowed it in 1903". The same entry gives the crowns' exclusive, "from about 1600 … once per conclave", and :103 the canonists' *sanior et maior pars*, under which "the loser could claim to be the sounder part"]`.
 - **Capitulations**: from the mid-fourteenth century the electors swore, before voting, a pact binding
   whoever was chosen (share revenues with the college, call a council, limit creations). The elected pope
   usually repudiated it `[M]`. A pact made by electors and broken by the winner is a standing grievance.

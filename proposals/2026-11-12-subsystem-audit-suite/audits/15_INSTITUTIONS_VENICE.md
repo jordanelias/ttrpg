@@ -555,7 +555,11 @@ The muster inspection and the advance stay memory-grade.
 
 - **The parties**: a rival banking house (the Pazzi, who had just taken the papal account); the Pope's
   nephew, who wanted a state; an archbishop kept out of his see by the regime; a hired captain's troops
-  waiting on the border.
+  waiting on the border. **Corrected `[T+: CPS:257]`:** the tree gives the Pope's motive as fury "over
+  Lorenzo's blocking of a Pazzi-financed papal land purchase at Imola": a rival house's **loan to a
+  third power, refused passage by the man who ruled from behind**. The papal account's transfer is
+  memory-grade. The tree's reading of the sequel is this section's: reprisals "ferocious and
+  extra-legal", then the Seventy under "the crisis's political cover".
 - **Why assassination**: a man who holds no office cannot be voted out, impeached or left out of the next
   draw. The tree's heading is exact: *"informal power has no institutional recourse, so rivals go outside
   the system entirely."*
@@ -585,6 +589,13 @@ The muster inspection and the advance stay memory-grade.
 - **The shape**: charismatic standing with no office is high leverage and has no floor; it is stripped by
   the one authority it never held (the sacramental one) acting through the interest it never served (the
   merchants' goods abroad).
+- **Corrected in mechanism `[T+: CPS:277; RTP:539-542]`:** the tree's account has **two independent
+  blows, and both were needed**: the excommunication of May 1497, which struck the one pillar he could
+  not route round, and the collapsed ordeal of 7 April 1498, which destroyed his standing with the crowd
+  "in a single afternoon"; only then did a Signoria "he had never formally controlled" arrest him. The
+  interdict's threat to merchants' goods and the hostile draw are this lane's memory and stay marked.
+  For the design the tree's version is the better one: two draws by two different actors, neither
+  sufficient alone, and no rule that the second follows the first.
 
 ### 2.9 The wider city-state pattern
 
@@ -594,7 +605,12 @@ The muster inspection and the advance stay memory-grade.
 - **Genoa**: a neutral head with no force of his own among armed clan-federations (*alberghi*); chronic
   deposition; **repeated voluntary submission to a foreign lord** as a way out; and the **Casa di San
   Giorgio**, a corporation of the state's creditors that took over revenues and then territories in
-  satisfaction of the debt `[T: governance_modes.md §Genoa; M for San Giorgio]`.
+  satisfaction of the debt `[T: governance_modes.md §Genoa; M for San Giorgio]` `[T+: the submissions
+  are GM:290-291 and CPS:267-268 (to Milan 1421 to 1435, to France 1396 to 1409 and 1458 to 1461), read
+  there as "a legitimate … de-escalation move available to a collapsing Territory"; the fixed roll of 28
+  *alberghi* of 1528 is PHS:310. San Giorgio survives in the tree only as a trace: the verifier's note
+  at GM:248 begins "(4) Casa di San Giorgio — REMOVE Chios from its administered colonie[s]", and the
+  corrected body does not mention it. A lead, not a source.]`
 - **1494**: none of it survives the arrival of a consolidated kingdom `[T: governance_modes.md §5]`.
 
 ---
@@ -603,6 +619,32 @@ The muster inspection and the advance stay memory-grade.
 
 `[M]` (Dollinger; Greif, Milgrom and Weingast 1994; Ogilvie for the sceptical reading); the tree's
 treatment is the Kontor as an organisation proposal `[T: research/proactive_governance_scale_research_v1.md O7]`.
+`[T+]`: the tree's treatment is wider than that one row. **The Kontor** `PGS:78`: a self-governing
+enclave inside a host settlement with "own treasury/law/seal", its alderman elected (liked locally,
+weakly controlled) or appointed (the reverse), and **the host's governor "literally loses Hold Court
+jurisdiction" over its members**; `PGS:23` frames the whole kind: a body of members with branches
+"physically sitting inside settlements the organization has no sovereignty over", whose standing
+problems are branch drift, a factor who skims, and friction with the host. **Withdrawal** `FASE:119`,
+`:236-240`: "a merchant corporation with no army coerced territorial princes routinely"; the dates the
+tree gives for Bruges are **1358 and 1451 to 1457** (the 1388 and the Norwegian 1284 in the bullet below
+are this lane's memory and stay leads); the act is private, "no vote, no Mandate minimum, which is
+exactly its historical character". **How it ended** `HCC:55` (Novgorod closed the Kontor in 1494, once
+the Hanse's hinterland had weakened of itself), `HCC:160` (the Steelyard's privileges revoked in 1598 on
+a rival domestic guild's petition, there being no reciprocal privilege abroad). **Rule without conquest**
+`research/historical/precedents_warfare.md:147`: cities that wanted the network accepted its commercial
+law. **The staple** `PGS:123` (Lübeck: granted once by the superior, administered by the town) and
+**portability** `PGS:84` (the Merchant Adventurers: threatening to carry the privilege to a rival host
+is the leverage). **The local guild** `CGR:97` (Venetian guilds elect a steward, a treasurer, assessors,
+syndics and a scribe, and rule apprenticeship, quality and discipline, but **no guild statute takes
+force without one outside magistracy's assent**); `CGR:116` (the wool guild held import, allocation to
+some 300 workshops, prices and wages for a workforce that had no place in it); `CGR:117` (**the
+Mercanzia: the guilds jointly paid for their own merchant court with its own enforcement**); `PGS:77`
+(consuls drawn by lot for four months, which throttles any one leader and makes his precedents easy to
+reverse); `CGR:129` (Spanish guilds write their rules, the town or crown sanctions them); and the
+archived Guild ladder to Comptroller with entry by guarantors and mastership by purchase
+(`.designs/systems/factions/reference/faction_politics_v30.md:566-585`, intent only). The diet, the
+thirds, bound envoys, the war levy, Stralsund, the expulsion of a member town and the
+commitment-device argument are not in the tree and stay memory-grade.
 
 - **A league with no state.** No seal of its own, no standing treasury, no fleet, no permanent officers.
   A **diet** (*Hansetag*) met irregularly, usually at Lübeck; towns sent envoys **bound by instructions**;
@@ -1156,6 +1198,29 @@ action; none that models capture at a roll rather than at a vote. Crusader Kings
 and is the lever D-5 refuses (#453 rows 40, 48). These are unproven designs, not adaptations.
 `research/game_precedent_suite/tables/R9_policy_court_sims.md` was not opened this session `[SKIPPED: not
 needed for a decision made]`.
+
+**Nulls restated on re-grounding (2026-11-12; the suite's throughlines and the two relevant tables now
+opened).** The three nulls hold, more narrowly, and one sentence above was wrong to be stated unchecked.
+(1) *A debt as the debtor's own undertaking*: the suite's own row for the obligation token
+(`research/game_precedent_suite/THROUGHLINES.md:30`, `:79`) lists Crusader Kings III's hooks, Frostpunk
+2's and Suzerain's promises and Jagged Alliance 2's term contracts, and grades the engine PARTIAL on
+`oblige` alone; none is a transferable bond with no creditor verb. The null stands. (2) *Capture at a
+roll*: none found; the companion says outright that its territorial model "is carried almost entirely
+by Venice rather than by any game" (`research/valoria_game_precedent_companion_v1_part5.md:240-244`).
+The null stands. (3) *Patronage as odds on an ask that a sealed ballot switches off*: none found. The
+null stands. **What was missed:** three shipped games do model this family's ladder, and the audit named
+none. **Patrician IV** (`research/game_precedent_suite/tables/R8_npc_life_economy.md:81-110`): a Hanse
+trader's rank is a threshold on wealth, ships, counting houses and workers; rank opens the council
+(propose, then run for mayor, then for alderman); the mayor sets the head tax and guarantees prices from
+the town chest; loans are had at the tavern; hoarding a scarce good costs standing in that town. **The
+Guild 2 and 3** (`research/game_precedent_suite/tutorials/T14_squad_settlement.md:228`, `:281-313`):
+titles bought in sequence, offices elected. **John Company**
+(`research/valoria_game_precedent_companion_v1_part6.md:165-175`; `_part7.md:41`): offices held by
+different players whose powers are "complementary rather than sufficient", so a venture needs several
+to cooperate, "and the Company can fail while you win". The transfer from these is one line each and is
+decorative for the five parts: a ladder by accumulated stock is the thing §5.3 refuses (rank by warrant
+and ballot, not by a wealth threshold); John Company's complementary offices are §1.4's proposer and
+disposer, already kept.
 
 ---
 

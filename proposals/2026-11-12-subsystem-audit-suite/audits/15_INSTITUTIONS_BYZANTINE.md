@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 — where this file's names, homes or shapes differ from that ledger, the ledger governs: no Record kind `roll` and no `offices.yaml: founding:` section (X-01, X-03, X-04: the founding papers are seeded instruments, and "the Roll" is the Settlement in the clerk's keeping); the founding order is three founders' seeded deeds, and the presumption of §6.2 is the chain term of `legitimacy`, discounted per holder (X-05, X-06); the five draws of §7.0 are their verb lanes' rows, with this file's odds sources as named terms (X-19, X-23 to X-27); the far superior is one seat shared with the colonial lane (X-13); the stipend is billed in `default_store_kind` (X-30); the scenarios are case files (X-32). Of §14: item 2 is the synthesis's §10 item 1; items 1, 3 and 4 are closed there with their ladder steps. Every finding below stands.
 
-Re-grounded: 2026-11-12 against the tree's own research (Jordan: *"Research should have been found in /research or /proposals"*). What changed: (1) the §15 null "the tree has no Byzantine research of its own depth" is corrected in §18.1: the three-file governance corpus omits Byzantium by its own manifest, and nine other files treat it (map: `unified/RESEARCH_MAP_INSTITUTIONS_A.md` §1); (2) every `[MEMORY]` mark in §2 now carries either its tree source at `path:line` or the words "stays memory-grade" with the search that found nothing (§18.2); (3) five statements are corrected where the tree's source differs (§18.3: the later verdicts on BYZ-1, BYZ-7, BYZ-8, BYZ-9; Basil Lekapenos' fall; the Liudprand date; the Laskaris archetype; X1's over-claim); (4) eleven mechanisms the research describes and this design lacked are added in §18.4, with the executable plan in `proposals/15_INSTITUTIONS_BYZANTINE_grounding_mechanisms.md`; (5) what remains memory-grade is listed in §18.5. No finding of this file is deleted; marks are amended in place and the additions are §18.
+Re-grounded: 2026-11-12 against the tree's own research (Jordan: *"Research should have been found in /research or /proposals"*). What changed: (1) the §15 null "the tree has no Byzantine research of its own depth" is corrected in §18.1: the three-file governance corpus omits Byzantium by its own manifest, and nine other files treat it (map: `unified/RESEARCH_MAP_INSTITUTIONS_A.md` §1); (2) every `[MEMORY]` mark in §2 now carries either its tree source at `path:line` or the words "stays memory-grade" with the search that found nothing (§18.2); (3) eight statements are corrected where the tree's source differs (§18.3: the later verdicts on BYZ-1, BYZ-8, BYZ-9; Basil Lekapenos' fall; the Liudprand date; the Laskaris and Almstedt archetypes; X1's over-claim); (4) eleven mechanisms the research describes and this design lacked are added in §18.4, with the executable plan in `proposals/15_INSTITUTIONS_BYZANTINE_grounding_mechanisms.md`; (5) what remains memory-grade is listed in §18.5. No finding of this file is deleted; marks are amended in place and the additions are §18.
 
 ## Status: REFERENCE (a design and plan in proposal form under `INSTITUTIONS_BRIEF.md`; resolves nothing at runtime)
 
@@ -860,3 +860,184 @@ Found deterministic in the code or in another lane's text, for the owning lane:
 | `rosters.yaml: successions` read as outcome (`off_king: off_heir`) | an heir by fixed order | FA (the row is right as eligibility and as odds; §7.0) |
 | `06_FA_decree_binds.md` by its title and §11 item 1 (A) "binds" | obedience | FA (its answers are the addressee's acts; this file asks only that each be drawn) |
 | `gate.py::REVOCATION_DISPOSAL` (an appointed seat revoked costs a ban, always) | the cost of a fall | FA; ruled 2026-10-21, so named and not changed: §7.0 keeps the ban in every band in which the hold closes |
+
+## 18. Re-grounding against the tree's research (added 2026-11-12)
+
+Jordan, 2026-11-12: *"Research should have been found in /research or /proposals."* This section
+records what the tree holds for this family, where this file's history agrees with it, where it
+differs, what the research describes that §3 to §13 lacked, and what stays memory-grade. The map of
+files, depths and each file's own caveats is `unified/RESEARCH_MAP_INSTITUTIONS_A.md` §1, §3, §4. All
+of it is tier 3: it informs, it settles nothing, and it supplies no canon name. Edits to build from
+§18.4 are in `proposals/15_INSTITUTIONS_BYZANTINE_grounding_mechanisms.md`.
+
+### 18.1 The claim corrected
+
+§15 said the tree "has no Byzantine research of its own depth". The true statement has two halves.
+`research/governance/` omits Byzantium and says so (`00_MANIFEST.md:28-29`: "its research agent was
+interrupted"). The tree nonetheless holds: the comparative research's eleven rows and nine judged
+proposals; the compendium's later verdicts on those nine; the acclamation as a staged procedure with
+its failure mode; the court's rhetoric and diplomatic protocol, regrounded on peer-reviewed sources;
+a reception dossier on Liudprand's two embassies; the army's organisation and its doctrine of avoiding
+battle; theme-splitting and the frontier commands; four entries on the throne-barred chamberlain and
+his cousins; and the archived design's own use of the *sekreton* for the Church's four arms. This file
+used the first of these and three lines of the rest (§16, "SKIPPED … Reason: reading budget").
+
+### 18.2 Claim by claim
+
+"Stays" means memory-grade after a search of `research proposals .designs .audit canon` that found no
+file (terms in the map's §4). A cousin is a different polity's instance of the same mechanism, sourced
+in the tree; it supports the shape and not the Byzantine particular.
+
+| § | claim as written | tree source, or "stays" | differs? |
+|---|---|---|---|
+| 2.1 | two tracks, dignity by insignia and office by word | `.audit/…comparative_governance_research_v1.md:27` | no |
+| 2.1 | eighteen grades, sixty posts | stays (the tree's cell is abridged) | — |
+| 2.1 | precedence is enacted by seating and order of address | `proposals/2026-09-05-proceedings-subsystem/source/06-part-V-dossiers.md:39`; `research/by_lane/SC_social_contest.md:59` (sound); `:282` (T-SC-3, two independent sources) | adds: the lever is `attend / not attend` |
+| 2.1 | promotion by ceremony with set acclamations | `research/rhetoric_oratory_contest/…:123`, `:502` | adds: nothing is at issue in the ceremonial genre |
+| 2.2 | the stipend paid in person, by rank, in Holy Week (Liudprand) | stays; the tree's Liudprand is the receptions of 949 and 968 | date: the tree fixes the embassy at 949 |
+| 2.2 | a dignity bought as an annuity; Ktenas | `.audit/… :28` (60 *litrai*, about sixty years' stipend: a lead) | "two years" stays |
+| 2.2 | debasement, then non-payment, unbound the court | stays; cousins `research/governance/political_hierarchy_standing.md:20`, `:457`; game precedent `T13_koei.md:78` | — |
+| 2.3 | the roster of bureaux | `.audit/… :29` for the *genikon*, the *dromos*, the coordinator; the rest stays | — |
+| 2.3 | no bureau shares staff; division as a check | history `.audit/… :29`; mechanic CUT `:158`, keep-cut at the closure `:151` | the file cited the cut as support |
+| 2.4 | the chrysobull's hands, red ink, registration, fees | stays; cousins: Ming (`.audit/… :50`, `:53`), Ottoman seal (`governance_modes.md:68-69`), papal chancery and proctors (`rhetoric…:242-253`, `:305`), the toll-post (`rise_to_power…:493-497`) | — |
+| 2.5 | assessors against collectors; joint liability; reversion | stays; cousins `.audit/… :30`, `:64`; `41_proactive_scale_menus.md:157` | — |
+| 2.5 | tax farming strips the district within the term | `research/fa_se_historical_precedent_research_v1.md:99-103`, `:204-208` | no |
+| 2.5 | Novel 8 on bought governorships | `.audit/… :37` | no |
+| 2.5 | *pronoia*: revocable revenue for service, hardening into property | `.audit/… :31`; `rise_to_power…:524-526` (the reclaim window) | the mechanic is MERGE, one table row (closure `:122`) |
+| 2.6 | themes; settled soldiers | `fa_se…:154`; `pre_firearms_formations/03_early_medieval.md:22` | no |
+| 2.6 | the governor's fiscal and muster officers answer to the capital; short tenure | stays (as marked) | — |
+| 2.6 | large themes split after revolt | `proactive_governance…:142` (Treadgold; Haldon) | no |
+| 2.6 | *doux* / *katepano*: stronger and more dangerous | `.audit/… :32`; `proactive_governance…:263` | adds: the tree pairs it with a forced split (S-1, `.audit/… :280`) |
+| 2.6 | *kleisourai* at no cost to the treasury | `proactive_governance…:104` ("Wikipedia") | adds: the garrison "can refuse/defect" |
+| 2.6 | *tagmata* as a second army | `.audit/… :34`; `03_early_medieval.md:24` | no |
+| 2.7 | the bedchamber ladder; safe because barred | `.audit/… :33`; `rise_to_power…:256-258`, `:406-408` | "removed in a day" is not the tree's reading: §18.3 |
+| 2.7 | the Ottoman and Ming cousins | `rise_to_power…:292-294`, `:391-394`, `:442-446` | adds two distinct falls: §18.4 item 4 |
+| 2.8 | the patriarch chosen from three names | `.audit/… :36` (Novel 6) | the tree's mechanic for it is BYZ-9: §18.3 |
+| 2.8 | Polyeuktos, Nicholas Mystikos, the Arsenites | stays; cousins `04_decision_procedure_catalog.md:71`; `governance_modes.md:142-147` | — |
+| 2.9 | no law of succession; acclamation; coronation | `04_decision_procedure_catalog.md:71` | adds the failure mode and a stated unknown (the Senate) |
+| 2.9 | usurpers marry in; 1042 | stays | — |
+| 2.9 | blinding and tonsure as disqualification | stays for Byzantium; Carolingian sources `political_hierarchy_standing.md:191-192`; `governance_modes.md:142` | adds: the disqualifier paid for it (public penance, 822) |
+| 2.9 | usurpation needs two triggers | `00_MANIFEST.md:59`; `conflicts_power_struggles.md:14` | one source; graded unreached |
+| 2.9 | civil war as the invader's opening | `research/historical/precedents_analysis.md:66` | no |
+| 2.10 | the demes | stays | — |
+| 2.11 | the Varangians from 988 | date `03_early_medieval.md:24`; loyalty to the seat stays | — |
+| 2.11 | civil officials against military houses; the *sebastos* ladder | `.audit/… :35` | no |
+| 2.12 | clients by title and stipend; staged audiences | `rhetoric…:127`; `06-part-V-dossiers.md:39` | adds the precedent file |
+| 2.12 | heirs educated at court | stays; cousin `.audit/… :63` | — |
+| 2.12 | trade through named gates | `.audit/… :30` (the Eparch); mechanic CUT except its smuggling fragment (`:157`; closure `:149`, `:319`) | adds: §18.4 item 9 |
+| 2.12 | the 1082 privilege; 1204 | 1082 stays; 1204 `fa_se…:45` | — |
+| 2.13 | Abbasid row | stays; cousins `fa_se…:127-128`; `governance_modes.md:329` | — |
+| 2.13 | Ottoman row | `governance_modes.md:63-89`; `rise_to_power…:524`; `fa_se…:129` | adds the millet: §18.4 item 11 |
+| 2.13 | Chinese row | `.audit/… :43-53` | no |
+| 2.14 | Ostrogothic, Norman Sicilian, Balkan cases | stays; cousins `governance_modes.md:233-235`, `:150`; `conflicts…:208-209`; `.audit/… :96` | adds: the service class becomes a nobility |
+
+### 18.3 Corrections
+
+| # | this file said | the tree says | effect on the design |
+|---|---|---|---|
+| C-1 | BYZ-1 "judged KEEP" (§15) | KEEP on 2026-07-09 (`.audit/… :154`), **DISTILL** on 2026-07-12: "supplies no missing rung"; keep only "the decoupled-prestige kernel" (closure `:115`) | none on the rows: §5 already refuses a second ladder. The citation is corrected |
+| C-2 | BYZ-8 "`needs_jordan` … not superseded" (§14 item 4) | the form was ruled MERGE into the succession-oath unification; the barred-office half "closer to CUT" (closure `:123`) | §14 item 4 stands as a question of content (does the Crown keep such an order); its option (B) is the ruled form |
+| C-3 | the patriarch's short list is "an interface to the papacy lane", unbuilt (§3) | the tree's proposal for the Crown's hand in a Church election is BYZ-9, refined to "a **Crown-alone** Override hung on the Father Gustav Linder Crown-liaison channel", with the "sees/Cathedral eligibility clause" struck because "the Four Cardinals are arm-heads at Himmelenger" (closure `:120`) | named as the interface in §18.4 item 10; still not built here |
+| C-4 | Basil Lekapenos "removed in a day" (§2.7) | a non-violent, exile-grade fall when "the regency need lapsed"; the trigger is the ruler's own maturing (`rise_to_power…:256-258`, `:406-408`) | the chamberlain's fall is a `revoke` the ruler comes to want, not a coup: §18.4 item 4 |
+| C-5 | Liudprand watched the stipend paid "in 950" (§2.2) | the tree dates his embassy 949 and describes only the reception (`03-part-II-scenario.md:73`) | none; the scene stays memory-grade |
+| C-6 | the Doux's archetype is "Manuel II Palaiologos" (§1.1, from `references/npc_registry.yaml:499`) | the archived roster and analysis give **Demetrios Palaiologos**, last Despot of Morea, and name his ethic *oikonomia*: "loyal to Altonia's *interests* while quietly subverting Altonia's *policies*" (`.designs/systems/npcs/reference/npc_roster_v30_infill.md:67-69`) | two tree surfaces disagree; the registry is the one tools read, the archive is intent. Named, not resolved here. *Oikonomia* is the stated reason behind "the sandbagging prince" (§10) |
+| C-7 | office against dignity cited as a clean transfer | the tree grades the convergence it rests on (X1) "OVER-CLAIMED": "three of the five rows are historical and two run in opposite directions"; and IN-48, a delegation without a hold, was "built and **reverted** for contradicting ratified Layer 1" (`research/by_lane/IN_infrastructure.md:97`, `:142`; `NPC_npc_cast.md:386`) | this design is on the safe side of that line (a dignity is a `hold` on a seat row, not a control relation over a holder); the caution is recorded so that batch G does not drift into a "controller" edge |
+| C-8 | "The archetypes the registry names" omitted Almstedt | his archived archetype is the *logothetes* who "outlived every dynasty … because removing the bureaucracy would collapse the state's administrative capacity" (`npc_character_analyses_v30_infill.md:50`) | it is the tree's own statement of §10's "purge of the residue" |
+
+### 18.4 Mechanisms the research describes that this design lacked
+
+Each is stated as persons, seats and draws (the standing rule: none is a fixed function of state), on
+primitives §5 already lists. Sources first; then what is added; then where it lands.
+
+1. **Staying away is the move.** *Source:* "ceremony absorbs contests over standing, not substance …
+   `attend / not attend` as the lever" (`research/by_lane/SC_social_contest.md:59`); the 968 seating
+   (`06-part-V-dossiers.md:39`). *Added:* at an `acclamation` or any row with `interposed: ceremony`,
+   a person's presence is itself read: attending a rite at which another is honoured is a claim he
+   lets stand, and absence is a deed others hold of him. No new verb: presence is where he is that
+   tick. *Lands:* proposal E's `acclamation` row (a digest line for who was absent) and §9's venue
+   dimension.
+2. **Counsel by praise.** *Source:* the imperial oration "excludes anything ambiguous or disputed";
+   advice reaches "a sovereign who cannot be openly debated" as a mirror of princes; "the political
+   regime determines which genre is load-bearing" (`rhetoric…:502`). *Added:* a venue under one
+   person's disposal is not a debate. At it, what moves the ruler is which deeds are told to him and
+   by whom (`tell`), not an argument won. *Lands:* §9 (venue), as a statement about which `proofs:` a
+   one-person venue's row should admit; no code. `[UNVERIFIED: the present `proofs:` list of
+   `council_of_state` was not opened.]`
+3. **The register as a precedent file.** *Source:* "the excerpts on embassies constitute a precedent
+   file, which is a negotiating advantage before either party speaks" (`06-part-V-dossiers.md:39`).
+   *Added:* what a body has entered is evidence its seat-holders may cite later, in a hearing or a
+   treaty: the `evidence` term reads a held entered instrument. *Lands:* proposal C (a hand's entries
+   are Records its holder holds) and D (the treaty hand).
+4. **Two ways a barred servant falls, and what survives him.** *Sources:* the ruler's own maturing
+   ends him without violence (`rise_to_power…:256-258`, `:406-408`); a succession ends him at once
+   "UNLESS they *also* hold independently-earned transferable Standing", with "dormant" grievances
+   brought out "en masse as the demotion's justification" (`:391-394`); an endowment gained through
+   access "is NOT auto-stripped" (`:292-294`). *Added:* three readings, no rule: (a) a `revoke` of
+   the chamberlain's seat by the ruler he served, opposed by nobody (his oath bars the reply);
+   (b) on `succeed`, the new holder's first acts toward the old holder's hands, set against whether
+   those persons hold any dignity of their own; (c) stores he moved to a rung of his own stay there
+   after the `hold` closes. *Lands:* batch G with §14 item 4; a digest line now.
+5. **The hand that charges, and its abolition.** *Source:* the purchased toll-post: "Every other
+   actor's action through that pathway pays a toll … maximally vulnerable to legislative removal once
+   visible" (`rise_to_power…:493-497`). *Added:* a gift to a hand's holder is already this design's
+   fee (§3). What was missing is the end of the story: the givers hold `transfer.made` claims, a
+   petition against the hand can be docketed, and a determination may close the seat. *Lands:*
+   proposal C, as a story and a reading ("gifts received by a hand's holder from makers of papers in
+   his hand").
+6. **Audit at exit.** *Sources:* the Venetian review of a dead doge with fines on the estate
+   (`governance_modes.md:329`); the residencia, where "the outgoing official stayed put while a judge
+   collected sworn complaints" (`fa_se…:127`); the Ming ledger in triplicate (`.audit/… :53`).
+   *Added:* a fiscal or provincial seat may declare the synthesis's `audit_at_exit: <arrangement id>`
+   (X-12): when its `hold` closes, a hearing on the holder's requisitions and transfers is docketed
+   and drawn. *Lands:* proposal B (the treasury seat), D (the frontier post). No new key.
+7. **Consolidation has a brake.** *Source:* "BYZ-6 (accelerator) + IT-5 (brake) … decide and author
+   them together, never one alone" (`.audit/… :280`); theme-splitting (`proactive_governance…:142`).
+   *Added:* the centre's counter to a row that names both `dispatch` and `issue` is to `establish` a
+   sibling seat over part of the ground and `confer` it elsewhere. The holder may resist (the draw
+   of `revoke` on the part taken) and holds it as a deed against the centre ("a reactive split reads
+   as accusation"). *Lands:* batch G, with the consolidation itself.
+8. **The garrison's refusal.** *Source:* settler-soldiers hold a frontier at no pay, "Disposition-
+   contingent — if akritai Disposition collapses … the garrison can refuse/defect"
+   (`proactive_governance…:104`); Manzikert as non-execution by a rival in command
+   (`04_high_medieval.md:156`). *Added:* a `dispatch` to men whose obligation is land and not
+   stipend is answered by their own regard for the holder: `evade / defy` of a muster is the
+   political act. *Lands:* an interface to the MB and FA lanes (the answer to a `dispatch` is the
+   addressee's draw); nothing built here.
+9. **The gate breeds smuggling.** *Source:* the one fragment of BYZ-4 the tree kept: "foreign-merchant
+   channeling → smuggling" (`.audit/… :157`, `:328`). *Added:* where trade is lawful only through the
+   Kommerkiarios' gate, a `transfer` that avoids it is a deed against the treaty that he may learn of
+   and open a case on. *Lands:* proposal D (the treaty hand), as a goal row for NPC-090 and a reading.
+10. **The Crown's hand in a Church election.** *Source:* §18.3 C-3. *Added:* the interface is named:
+    the Crown's seat acts on a Church election through the Archbishop's Representative's seat, and what
+    it does is a commitment that sets ballot odds (the papacy lane's drawn ballot), never an override.
+    *Lands:* `proposals/15_INSTITUTIONS_PAPACY_grounding_mechanisms.md` item 3; cross-listed.
+11. **Containment by recognition.** *Source:* the conqueror recognises a confessional community under
+    its own head, who is "simultaneously religious authorities and state-recognized civil
+    administrators", so that a faction can "hold people not territory"; the verifier adds that the tidy
+    system is a nineteenth-century retrojection and classical arrangements were "ad hoc"
+    (`governance_modes.md:76-77`, `:59`). *Added:* this is what canon says Altonia did at Himmelenger
+    (`canon/03_canonical_timeline.md:54-68`). The containment charter is therefore an Altonian
+    instrument with one Church-side liaison, and the empire's standing claim on the Church is that
+    paper. *Lands:* proposal D's `altonian_civics` cells and the synthesis's founding papers (X-08:
+    "the Church's archive holds the containment charter"); content, no code.
+
+Also recorded, and not added: the *Strategikon*'s doctrine of avoiding battle and paying enemies off
+(`03_early_medieval.md:70-76`) is the Altonian faction's temperament, a goal weight in `goals.yaml`,
+and belongs to the lane that authors Altonia's goals; the service class that becomes a nobility in
+two centuries (`governance_modes.md:234`) is outside a campaign's span.
+
+### 18.5 What remains memory-grade
+
+The stipend's payment ceremony; the grades and counts of the order of precedence; the chrysobull's
+chain, its registration and the customary fees; the fiscal vocabulary and the separation of assessor
+from collector; the theme's fiscal and muster officers reporting to the capital; the emperor-and-
+patriarch confrontations; usurpers marrying into the old house and the rising of 1042; Byzantine
+blinding and tonsure; the hippodrome factions as organised bodies; the guard's oath to the seat; the
+1082 privilege; the Abbasid cousin; the Ostrogothic, Norman and Balkan conquest orders. For each, a
+sourced cousin is named in §18.2 except the hippodrome factions, which have none in the tree. No
+quantity in §4 rests on any of them.
+
+### 18.6 Evidence for this section
+
+Searches and one read-only probe are logged at `unified/RESEARCH_MAP_INSTITUTIONS_A.md` §5. No season
+was run, no pytest, no tracked file outside the suite directory was changed.

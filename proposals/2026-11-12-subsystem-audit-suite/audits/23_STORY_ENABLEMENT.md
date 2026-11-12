@@ -470,3 +470,209 @@ more than one way: a story with an empty last column would be a schedule and is 
 | S-72 | "how much", and "what changed in him" | receipts carry the value the gate read `[A → PES-CORE `the_record_holds_what_changed` edit 1]` → interior writes emit their declared kind `[A → edit 2]` | none | — (a record, not a story; it is what lets every other row be retold) |
 | S-73 | a player on one seat following one thread from its opening to its end | `Seen.why` filled by a draw `[A → PES-GO `a_witness_may_connect_what_he_holds`]` → the offer names what the seat holds `[A → PES-GO `the_offer_names_what_is_held`]` → the surface pinned `[A → PES-GO `surface_pins`]` → the census run from a seat's ledger `[A → STORY-D edit 4]` | the connection is a draw | he sees one end only; he connects wrongly (which is a story) |
 
+## 6. The enablement plan
+
+### 6.1 The gate every batch uses
+
+One instrument (`23_STORY_D_story_census_and_gate.md`: a `--stories` block on `harness/storybar.py`, the
+owner of "does the engine produce stories"; it composes on `09_WR_story_instruments_that_can_fail.md`'s
+arms and `edge_null`, on `20_NARRATIVE_F_story_inventory_and_gate.md`'s crossings block and on
+`16_PESSIMIST_GAME_consequence_reading.md`). A story is named by its **shape**: an opening, a turn, a
+close and a cost, each a set of Event kinds with role constraints, linked through `causes[]` ancestry,
+with a **variant** key read off the close (its kind, its band, who it fell on). The census mints no
+carrier, field, kind or register row (ED-IN-0225 stands): it is a pure read of the log, the act store and
+the Tenures, and it grades nothing. The closing session reads seven clauses off what it prints:
+
+| clause | reads | fails when |
+|---|---|---|
+| **C0** the instrument sees | the control set of §2.10 on the shipped engine | a story that does occur today reads 0 (the census is blind) |
+| **C1** it occurs | story *s*, from no planted state, over *n* seeds | *s* occurs at fewer than 2 seeds |
+| **C2** it can fail to occur | the same | *s* occurs at every seed with the same count (a schedule); a common story passes on a spread of counts, a rare one on being absent at 2 seeds or more |
+| **C3** more than one way | variants of *s* across seeds | one variant holds every occurrence |
+| **C4** the mechanism causes it | the control arm: the batch's fixtures at control | *s* occurs in the control arm at the on arm's rate, within the on arm's seed spread |
+| **C5** not written into the build | one built world, four draw seeds (`--draw-seeds`) | the occurrence-and-variant vector is equal at all four |
+| **C6** the draws carry it | every roll pinned to Success (the planted failure of SYN-D's gate); and `edge_null` | the variants survive pinning, or the shape reads as often on the edge null as on the log |
+
+Sizes, proposed `[ASSUMPTION; Jordan to correct]`: the valley scenario (§7) at *n* = 20 seeds and 8
+seasons; the realm at *n* = 5 and 6 seasons, the size `20_NARRATIVE_F` already uses (a realm season is
+the expensive thing). Eight seasons needs `01_CORE_claim_fade_as_read.md` (ARCS M-SPAN); until it lands
+the valley gate is read at 6. Every count is printed with its seeds; none is a balance claim (§0.1 pt 4:
+the control is C4, and three seeds are three trajectories).
+
+**The story bar that can fail, per batch.** Each batch adds, to `engine/season/tests/test_storybar.py`
+(the file `20_NARRATIVE_F` edit 4 opens), one planted log per story it claims: the shape reads 1 on the
+plant; 0 with any one beat removed; 0 with the plant's causes re-drawn by `edge_null`
+(`09_WR_story_instruments_that_can_fail.md` edit 2); and a shape whose reader does not exist prints
+`n/a`, never 0. That test is what makes "the story occurred" an assertion that can observe the failure it
+excludes (§0.1 pt 2). It is the one file a batch's mid-session run covers (§0.4).
+
+### 6.2 The batches
+
+Order follows supply (§3's last paragraph): E-0 → E-1 → E-2 → {E-3, E-4} → {E-5, E-6, E-7, E-9} →
+{E-8, E-10} → E-11. Braces mark batches with no edge between them; they may be built in separate
+worktrees and are closed one at a time (§0.4). "Completes" lists the stories whose every needed
+mechanism has landed once the batch closes. Cost classes as the suite's (edit · small build ·
+design-first).
+
+| batch | lands (proposals) | completes | gate, beyond §6.1's clauses for the listed stories | hash | cost | edges |
+|---|---|---|---|---|---|---|
+| **E-0 the instrument** | STORY-D; `09_WR_story_instruments_that_can_fail`; `20_NARRATIVE_F`; `16_PESSIMIST_GAME_consequence_reading`; `09_WR_B_readings_of_closure_and_tension`; `12_ARCS_case_on_the_realm`; `07_SE_valley_scenario` (the fixture world) | none | C0 holds; every one of the 73 shapes that has a reader prints 0 on the shipped realm at seeds 0 to 2, and each planted log reads 1: the bar failing on today's engine | EQUAL (harness and one fixture world) | small build | WR, NARR, GAME, ARCS, SE |
+| **E-1 the offer makes sense** | `02_CHAR_offer_what_can_be_done`; VB-A; SOC1-A; SOC2-A; PES-CORE (`a_refusal_is_remembered`, `no_stored_plan`); PES-FI-D; PES-CHAR-B; `01_CORE_unmet_need_is_attended_first`; `01_CORE_predicates_name_their_clause` | none alone | refusals fall below one act in ten at seeds 0 to 2 with no verb's executed count falling to 0 (HAPP batch 2's reading); the retry rate after a refusal falls against the `refusal_memory` 0 arm | movers: every realm golden (formation) | edit + small build | CHAR, CORE, the verb lanes; HAPP-D §2 |
+| **E-2 drawn, written, kept** | DET-A, DET-C; `13_SC_draw_for_unrolled_contests`; `05_SC_obstacle_difficulty_and_modifiers_B`; `05_SC_contest_record_on_event`; PES-DICE (both); `10_DICE_one_score_two_roles`; `10_DICE_capability_axiom_map`; `02_CHAR_capability_definitions`; `03_PC_person_inputs_content`; MIL-B; PES-GAME (`standing_occasions_carry_their_cause`); PES-CORE (`the_record_holds_what_changed`); `01_CORE_reason_trail_in_the_act_store`; **STORY-A**; (Jordan's choice) PES-CORE (`a_scene_runs_in_its_own_order`) | S-60, 68, 69, 71, 72; S-67 on Jordan's option B | the share of acts drawn rises from under 11% to over half (GAME §0's census); every one of the four bands occurs on at least five verbs across seeds; `SHORTFALL_STEP` 3 occurs on under one failure in five at the calibrated pair (`13_SC_calibration`); with `stake` rows at control, S-68 and S-69 read 0 | movers: every realm and case golden | small build ×3 | DICE, SC, CHAR, CORE; `13_SC_tuning_tables` |
+| **E-3 bodies, time and places** | HAPP-A; PES-WR-C; `09_WR_B_weather_with_memory_and_the_year`; NARR-E edit 1; PES-GAME (`the_world_draws`); `07_SE_ground_and_granaries`; `07_SE_treasury_granary_B`; PES-SE-A, -B; `07_SE_population_census`; `07_SE_population_regrowth_B`; `07_SE_kernel_repairs`; MAT-A (`tend`), MAT-B; MIL-A; PES-WR-A; `03_PC_exits_withdrawal_recovery` Part C; PROC-A, PROC-B (ages) | S-01, 31, 32, 34, 35, 36, 40, 66 | the played arm differs from the no-act arm in stores and in cohort weight at each seed (GAME's game gate, first clause); site condition and yield differ between seeds; S-32's variants include relieved, unrelieved and recovered; under the `bodies` arm natural deaths number one to three in twelve seasons, nearly all after a season of illness (HAPP-A's own gate) | movers: `Person.born` (every world); the weather, hunger and wear draws; endowment | small build ×4; natural death's on-switch is Jordan's | SE, WR, GAME, HAPP, PROC; B10-18 CL-EVENTS |
+| **E-4 news and regard** | FI-01, FI-02, FI-06; PES-FI-A; DET-B; PES-SC-B, -E; SOC2-B; CR-29; `02_CHAR_relations_have_a_ground` (with PES-CHAR resolution 11); `02_CHAR_scar_is_a_wound`; `02_CHAR_scar_cap_and_regard_unit`; `02_CHAR_which_ground_moves_whom`; NARR-A, -B, -C; PES-SC-C; PES-PC-C; PES-GO (`a_witness_may_connect_what_he_holds`, `the_offer_names_what_is_held`) | S-02, 29, 33, 37, 52, 57, 70, 73 | told chains of two hops or more above 0 at three seeds of five (FI-02's gate); `20_NARRATIVE_F` clauses 2 and 5 for G1, G3, G5; a death is held by more persons each season after it and by fewer than all (S-02); S-33's blamed holders number three or more at two seeds, none above 60% (NARR-B's gate) | movers: the telling and notice draws; `basis_off` reproduces today | small build ×3 | FI, CHAR, NARR, SC, GO |
+| **E-5 seats pass, orders bind, houses continue** | VB-C, VB-D; BYZ-E; HAPP-B; `06_FA_seat_terms_and_turnover`; `06_FA_seat_terms_by_body_B`; `06_FA_remit_grant_by_row`; PES-FA-A, -B, -C; `06_FA_decree_binds`; SOC1-B; NARR-D; SYN's batch I-1 (the registry, EQUAL) ; **STORY-B** | S-04, 05, 06, 07, 10, 15, 16 | seat holders differ between the played and no-act arms and between at least two seeds (GAME's gate, second and fourth clauses); over 40 seeds with King and heir dead the throne is held, fully or provisionally, at the end of four seasons (HAPP-B G2) and by more than one title across seeds; `comply` executes at each of its four bands; with `provisional_term` at control S-05 reads 0 | movers: runs with a death, a writ or a marriage; I-1 EQUAL | small build ×3; STORY-B's births behind a control, on-switch Jordan's (§8 J-1) | FA, institutions (I-1, I-6), HAPP, NARR |
+| **E-6 violence with a cause and a mercy** | PHY-A (A0 to A4); `03_PC_duel_chain_reach`; SOC1-D; PES-PC-A, -B, -D; DET-D; `03_PC_duel_round_and_approach_B`; `03_PC_typed_outcome_one_door` | S-08, 27, 28 | HAPP-D §2's four-season reading at seed 2 (no ruler seized to death by his own officer); duels fought at two seeds of five or more with at least three of the scene's endings occurring; a `person.died` or a wounding is among the causes of another person's executed act (GAME's gate, third clause) | movers: every log with a fought scene | small build ×2; the duel round is design-first with PC | PC, HAPP batch 1, CHAR (`02_CHAR_what_an_act_risks`) |
+| **E-7 crime, inquiry, hearing** | HAPP-C; PES-FI-B, -C; FI-03, FI-07; `08_FI_05_evidence-interface_B`; MAT-D, MAT-E; PHY-C; LAC-1 to LAC-4; `05_SC_evidence_and_rebuttal_B`; `05_SC_acquittal`; `05_SC_arrangement_rows_that_bind`; VB-B; SOC2-C; `05_SC_playable_hearing_B`; PES-SC-A; PROC-C (case seeds) | S-03, 09, 12, 30, 43 to 47, 49, 51, 53 to 56 | LACUNA §6's standalone case, shipped chooser in every seat, 20 seeds: all five verdict results occur across seeds except reversal, which occurs at one or more; a conclusion is held and wrong at one seed or more (S-51) and right at one or more; closing Events by act exceed closing Events by clock (`20_NARRATIVE_F` clause 6); with the trail rows at control S-55 reads 0 | movers: every log with a hearing or an inquiry; `enmity` dark at control | small build ×4; HAPP-C design-first | FI, SC, LACUNA; the forced order of LACUNA §6 |
+| **E-8 the field and the war** | `04_MB_headcount_grade_and_scale`; `04_MB_typed_outcome_and_one_path`; PES-MB; `04_MB_manager_battle_one_resolver`; `04_MB_playable_field_scenario`; `04_MB_unit_loadout_and_weapon_in_hand_B`; `06_FA_war_lives_in_seats_B`; PES-FA-B edit 4; `06_FA_levy_through_the_seat_B`; PHY-B; VB-E; MIL-C, MIL-D; `07_SE_campaign_supply_and_muster`; COL-D (`annex`); CR-91 | S-14, 20 to 26 | `field.won` above 0 and below the count of fought fields at three seeds of five; a place changes hands by arms at one seed or more and a seat with it; a war ends by an instrument at one seed or more and by a declarer's fall or a successor at another; with `field_troops_per_weight` at today's value S-21 reads 0 (the control is the shipped scale) | movers: every fought field | small build ×4; the form of fortune is Jordan's | MB, FA, SE, institutions |
+| **E-9 the interior** | PES-CHAR-A, -C; PES-SC-D; SOC1-C; NARR-E edit 3; `12_ARCS_arcs_as_staged_goals`; `02_CHAR_goal_lean_on_its_own_question`; `02_CHAR_resolve_and_temper` | S-59, 61, 63, 64, 65 | the converts differ between seeds (today the same six at every seed); a scruple is held at some seeds and overridden at others for one person; an argument moves the hearer at one seed and the arguer at another; `20_NARRATIVE_F` clause 5 (`noconv` falls outside the seed spread) | movers; the crisis and scruple dark at control | small build ×2; two of Jordan's (ED-IN-0261) | CHAR, SC, NARR, ARCS |
+| **E-10 instruments and institutions** | SYN-E's batches I-2 to I-9 as that file orders them (VEN-A to -D; COL-A to -E; PAP-A to -F; BYZ-A to -F; SYN-A to -D); SOC2-D; FI-08; `05_SC_negotiation_scene` | S-11, 13, 17, 18, 19, 48, 50, 62 | SYN-D's gate for *The King's Bill* (three of six ways of meeting the bill attempted; two endings; an act by a person who is not the King occasioned by his) plus the census: an instrument formed, kept at one seed and breached at another | movers per row; keys EQUAL | SYN-E's own | the whole of `15_INSTITUTIONS_SYNTHESIS_E_implementation_plan` |
+| **E-11 the world strains and ends; what is built can fall** | PES-WR-B; `09_WR_world_motion`; `09_WR_strand_conclusion`; `09_WR_B_draws_not_thresholds`; MAT-A (`restore`, `work`, `sabotage`), MAT-C; `09_WR_B_threadwork_session_and_practitioner`; PHY-D; **STORY-C** | S-38, 39, 41, 42 | an ending Event at one seed or more and none at one or more within the horizon; the calamity's front stops where it was mended at one seed (PES-WR-B's gate); a founded hearth stands at the end at some seeds and is closed at others, and with `founded_lapse` at control none closes | movers: every world with a source or a founding | small build ×2; threadwork design-first | WR, MAT, SE (PES-SE J-3 for a town-scale founding) |
+
+Seventy-two of the 73 complete by E-11; S-58 is decided out (§8 R-10). By batch: E-2 six, E-3 eight,
+E-4 eight, E-5 seven, E-6 three, E-7 fifteen, E-8 eight, E-9 five, E-10 eight, E-11 four.
+
+### 6.3 Where Jordan's intent meets Layer 1 (named at the site; none resolved by editing Layer 1)
+
+| the intent | the Layer 1 or ruled item it meets | how the plan holds both |
+|---|---|---|
+| *we do not do deterministic*; arcs that end when a counter fires | `loop/matter.py` L5: *a crossing MAY NEVER PRODUCE AN OUTCOME* | they agree against the arcs' text. Every ending in §5 is a person's drawn act or a drawn break (PES-WR-B, `09_WR_B_draws_not_thresholds`); GAME's J-3 stays Jordan's for the arcs as written |
+| blame, loyalty that erodes, a side resented | no social quantity moves at MATTER (`state/world.py:64-107`, as ARCS §4 reads it); no stored grievance (ED-IN-0225) | every pull is recomputed person-side from the person's own ledger and edges (NARR §7.6); nothing here stores one |
+| "a story occurred" as a gate | ED-IN-0225: no carrier, field, kind or row for an arc, story or thread | the census is a pure read in the harness (STORY-D); a shape is a reading, like `strands_block` |
+| the margin a narrator can read | `04` §A.2 and `holonic_ARCHITECTURE.md` §43, §45: a module takes typed input, returns typed outcome, keeps no state | the margin travels in the typed result and lands on the Event (`05_SC_contest_record_on_event`); STORY-A reads it there and nowhere else |
+| births in play | Layer 1 §25 (births and deaths of envelope weight at MATTER; bodies a licensed clock) and §29 (CENSUS runs no clock), as `07_SE_population_regrowth_B` cites them | the draw is on the bodies clock at MATTER; the Person is individuated at CENSUS, PG-7's precedent (STORY-B; `[ASSUMPTION]` that a named birth is §29-conformant, named for the Layer 1 reader) |
+| a founder's town that fails | SE-9(a): the settlement registry gains no node | STORY-C ends hearths and communities, the only things `found` makes; a town-scale founding is PES-SE J-3 |
+| chains inside a scene (R-09) | the ratified fold order (#353 §27) | PES-CORE's survivor; S-67 waits on it and S-66 tells the same story across rounds meanwhile |
+| a famine that reaches a lord | ED-IN-0255: only a cohort eats | it reaches him through blame (NARR-B), his seat and his chance of sickness (HAPP-A), never his own larder |
+| affiliation, venue and personality set the odds | ED-IN-0352: a flow, an era or a regime never sets odds | only a person's own edges and interior, and the counterparty's as a contest already reads them, enter a roll (NARR R-N3) |
+| natural death as the supply of successions | ED-IN-0317 (c): the values are deferred to Jordan | the shape lands dark; the gates read the `bodies` instrument arm until a rate is set |
+| the disaster | the degree ladder's single owner (ruling of 2026-08-14) | no fifth band; the shortfall is the kept margin read further (STORY-A) |
+| a failure its maker remembers | `rosters.yaml: undeposited_kinds` (ED-FI-0009: a failed inquiry deposits nothing) | the act store is read person-side for his own attempts; nothing is deposited (STORY-A edit 4) |
+| playable alone, one code path | the standing requirement | *The Lean Year* runs the unmodified `SeasonDriver` with `play_surface.dispatching_chooser`; no standalone fork |
+
+## 7. The first playable: *The Lean Year*
+
+Exact edits: `proposals/23_STORY_E_first_playable_the_lean_year.md`. One scenario on the valley fixture
+(`07_SE_valley_scenario.md`: three towns unlike in endowment, one granary, one seat), extended by rows:
+no second world, no third case base (`12_ARCS_case_on_the_realm.md` allows two and this is a scenario
+beside `harness/scarce.py`, not a case). Roles, no canon names; nothing is authored but the starting
+persons, seats, stores, one works and a prehistory of acts folded through the real RESOLVE and WITNESS
+(ARCS's prehistory rule: a setup may not contain an outcome).
+
+**The situation at tick 0.** An old lord holds the valley's seat and its granary. His heir of the body
+is a grandchild under age with a mother; his nephew is of age and has a following in the harbour town.
+A steward keeps the granary and has, in the prehistory, forged a sheet that moves a field from the
+seam village to himself. The seam village mines and grows nothing. A bench of three sits in the field
+town. A road joins the three towns and one of its legs is long. The year is about to turn.
+
+**What can happen, and by what** (33 of the 73, by cut):
+
+| cut | after batch | stories it can produce |
+|---|---|---|
+| 1 · the year | E-3 | the harvest falls short or does not (S-35); the seam village goes short and the granary shares (S-32); the steward relieves it or does not, by a real amount; the villagers move toward the harbour (S-34) or trade ore for bread (S-36); the old lord sickens, is tended, recovers or dies (S-01, S-31); a messenger sent to the nephew finds him gone and goes after him (S-66, S-40); an act that fails by a wide margin costs its maker more (S-68), a relief that only just arrives costs the granary (S-69), a second attempt succeeds (S-71) |
+| 2 · the seat | E-5 | the news of the death reaches the harbour late (S-02) and grows in the telling (S-52); the nephew and the child's mother each claim (S-04); a regency or a provisional lord (S-05); the lord's sworn men are told to obey and each answers (S-15); a household is raised or put out (S-10); the hungry blame whoever they believe held the granary (S-33, S-37); the village under-reports its stores to a levy (S-57); the loser of the claim is known as its loser (S-70) |
+| 3 · the wrong | E-7 | the dispossessed villager's grievance; a challenge to the steward, heard and answered (S-27, S-28); or a killing by night, guarded against and perhaps seen (S-09); an inquiry that finds the forged sheet or the trail at the place (S-53, S-54, S-55); a conclusion that names the steward, or the wrong man (S-51); a hearing with the sheet cited and answered (S-46), a verdict, an acquittal or an appeal to the realm's bench above (S-43, S-44, S-45); revenge by the dead man's kin (S-08) |
+
+**Choices for a played seat** (any of: the lord, the nephew, the mother, the steward, the village
+head, a judge, the investigator): what to do with the granary; whom to tell and what; whether to
+claim, swear, obey or leave; whether to accuse, on what, before which bench; whether to fight. Each is
+the same Candidate an NPC is offered, with its believed odds and its `stake` shown.
+
+**Endings** (each a Query over Tenures and the log, none a counter): the seat held in full by one
+claimant; a regency confirmed or lapsed; the valley's population at or under half its weight; the
+steward convicted, acquitted or dead; the seam village closed or grown; eight seasons with none of
+these (a stable continuation, reported as such).
+
+**Gate.** Seeds 0 to 19, 8 seasons, the shipped chooser in every seat, no played seat: at least 12
+distinct stories occur across the seeds; no story occurs at all 20 with one variant; at least four
+distinct endings occur; no two seeds have the same story set and the same ending unless at most three
+do; in the control arm (every batch fixture at control) the census reads only §2.10's set. Planted
+failure: every roll pinned to Success, and the seeds must then agree on the ending. One played run per
+seat at seed 0 shows a choice changing the ending against the unplayed seed 0 (the control is the same
+seed with the callback returning the chooser's own pick: equal hash).
+
+**One code path.** `harness/valley.py::run(seasons, seed, play=None)` as `07_SE_valley_scenario`
+proposes it; the played seat is `play_surface.dispatching_chooser`; the hearing is ENCOUNTER's deferred
+sitting (`05_SC_playable_hearing_B`) and the field is RESOLVE's graded routes, as in LACUNA §6. The
+realm's first playable remains SYN's *The King's Bill*; the two do not merge: this one is small enough
+for a reader to hold entire and is what the census is first read on.
+
+## 8. Decisions
+
+### 8.1 Decided by the five-step ladder (twenty)
+
+Steps: 1 superseded · 2 irrelevant · 3 a design document or ruling · 4 precedent · 5 architecture.
+
+| id | question | decided | step | carried by |
+|---|---|---|---|---|
+| R-01 | lanes' story lists include endings that fire on a count (an arc's counter, an era's clock) | every ending in this plan is a person's drawn act or a drawn break; L5 stands; the arcs' text is GAME's J-3 and is not re-raised here | 3 (`loop/matter.py` L5; the standing rule) | §5; PES-WR-B; `09_WR_B_draws_not_thresholds` |
+| R-02 | "a town dies when its body reaches zero" | a population thins by a drawn fall and a census; its removal at the weight floor is bookkeeping that follows draws | 3 (CR-08's text, as `07_SE_population_census` cites it) | `07_SE_population_census`; PES-GAME (`the_world_draws`) |
+| R-03 | is the disaster a fifth band | no: the ladder is single-owned and ruled; the shortfall is the kept margin read further, mirrored on the ladder's own "3 or more" | 3 | STORY-A edit 1 |
+| R-04 | a founded place "ends at zero": is that a threshold deciding an outcome | no: the wear and each mending are drawn; closing a rung whose last Site stands at zero with nobody residing is bookkeeping after them, as `_die` at body zero is | 4 (`_die`; `raze`'s tail) | STORY-C |
+| R-05 | the deposition of a crowned or anointed head (`revocation: null`, ruled) | no new row and no change to the ruled null: such a head falls by conquest (COL-D), by a sentence his sworn men each answer (PAP-D), by a College after a crisis (CR-37, `06_FA_seat_terms_by_body_B`), or by his own `release` | 3, 4 | §5 S-11; no file |
+| R-06 | what a regency is | the consort's or guardian's claim landing at Partial (HAPP-B), and any hold by a person under `majority_age`, which is always provisional | 4 (VB-C's Partial) | STORY-B edit 4 |
+| R-07 | a besieged town's larder | while a `besiege` posture stands on a rung, the larder ladder's walk for cohorts under it stops at that rung (which rungs may feed whom is eligibility); the field ration of the besieger is the season's ration (PES-SE R-14) | 5 | a constraint on `07_SE_campaign_supply_and_muster`; listed for SE and MB |
+| R-08 | a burned granary | `sabotage`'s referent class gains a rung's store of a kind beside a Site; the loss is drawn and graded as MAT-A draws the Site case, and leaves a trail (PES-FI-C) | 4 (MAT-A's own row) | listed for the MATERIAL lane; no file |
+| R-09 | a hoarder, a profiteer, a cornered market | no price mechanism is planned: `coin` has no source (PES-SE R-08) and a price would be a second economy. The story is told as relief withheld (S-33) and a debt on terms (VEN-B) | 2, 5 | §5 S-37 |
+| R-10 | a planted clue that misleads | out of this plan: K-37 (ratified as intent) refuses a false finding, no shipped game solves it, and its near form is already Jordan's (PES-FI S-PES-FI-1) | 3 | — |
+| R-11 | who is blamed for a due that lapses under an empty seat | the believed holder of the seat that may fill it (`may_fill`), else nobody: a vacancy costs the one who left it open | 5 | an amendment to `20_NARRATIVE_B`'s `dues_unmet`; listed for that lane |
+| R-12 | an ambush: the opener's edge | one `context_terms` entry, `unready`, on the `enmity` and `war` contexts: a named level for the attacker in the first exchange when the victim's notice draw (DET-B) failed; no surprise input on the module | 4 (`context_terms`, PHY-A A3) | listed for PHY-A and HAPP-C; no file |
+| R-13 | may a story be counted | yes, as a reading: the census mints nothing (ED-IN-0225) | 3 | STORY-D |
+| R-14 | where the gates are read | the valley at 20 seeds, the realm at 5; one process per seed and arm | 5 (cost; `20_NARRATIVE_F`'s size) | §6.1 |
+| R-15 | batch order by count or by supply | by supply: bodies, places, news and violence before the seats, hearings and regard that consume them | 5 | §6.2 |
+| R-16 | where capability lands | with E-2: a draw whose pools do not differ gives one distribution for everyone (PES-DICE §3.3), so every later gate's spread depends on it | 5 | §6.2 |
+| R-17 | the errand | no new mechanism and no stored plan (PES-CORE's deletion stands): a remembered refusal, a believed place, a journey, the act again | 1 (carried by MIL-A, PES-CORE, SOC1-A) | §5 S-66 |
+| R-18 | refugees need a population that can move | `02_CHAR_offer_what_can_be_done`'s declared aperture for a population is the default; it is GAME's J-2 option (b) in shape and that item stays Jordan's | 4 | §5 S-34 |
+| R-19 | *The Lean Year*: a case or a scenario | a scenario on the valley fixture; it borrows ARCS's prehistory fold and adds no case base | 3 (`12_ARCS_case_on_the_realm`: two bases, no third) | STORY-E |
+| R-20 | where the success that costs sits | at Partial, on rows that declare a `stake:`: the obstacle met and not exceeded | 4 (Partial's own definition in `degree_from_net`) | STORY-A edit 2 |
+
+### 8.2 For Jordan from this lane (one)
+
+**J-1 · Are named persons born in play?** It survives the ladder: no ruling covers a named birth, PG-7's
+arrivals are held by `21_PROCEDURAL_D` for Jordan, and the two options are different games.
+- **(a) Births on**, in STORY-B's shape, behind `birth_rate` (control 0): a couple under a `marriage`
+  may have children; a house can continue or fail; a regency has a child at its centre; over a long
+  campaign the cast grows and the port carries a roster with no fixed size.
+- **(b) No births**: the cast is what the build made. Minors exist only where the build or the
+  generator placed them, come of age (STORY-B edit 4 stands either way), and a house ends when its
+  living members do. Succession is a game of the people already on the board.
+Recommended: (a), dark at control, since under (b) every line in the realm is finite and the succession
+family runs out of claimants in a long campaign. STORY-B's marriage and majority land under either.
+
+### 8.3 Already Jordan's, with the default under which no batch waits (twelve)
+
+| item (owner lane) | bears on | the plan's default |
+|---|---|---|
+| natural death on or off (HAPP §4 item 1; ED-IN-0317) | S-01, S-04, S-05 | the shape lands dark; gates read the `bodies` instrument arm |
+| may a person commit a killing (HAPP §4 item 2) | S-09, S-55 | `enmity` dark at control; E-7 gates on PROC-C's case seeds meanwhile |
+| who may claim when the line fails (HAPP §4 item 3) | S-06 | HAPP-B's list (its recommendation) |
+| a crisis of faith: by rule or drawn (PES-CHAR §6 item 1; NARR §10 item 1) | S-64 | drawn, behind the control arm |
+| a scruple: a line or a tendency (PES-CHAR §6 item 2) | S-61 | a draw, behind the control arm |
+| a scene: a budget unit or a short sequence (PES-CORE §6) | S-67 | option A as built; S-66 tells it across rounds |
+| is leaving a side a strife move (NARR §10 item 2) | S-16 | `never` stands; the defection is still a deed others hold |
+| the form of fortune in a field (PES-DICE §6) | S-24 | option A, owned and written on the result |
+| may a place begin and end (PES-SE J-3) | S-38 | option A: hearths only, with STORY-C's ending |
+| who is a verdict for (PES-SC §5 item 3) | S-49 | option A as ruled; a remedy to the petitioner waits |
+| how fast a death travels beside the seat it empties (PES-FI S-PES-FI-2) | S-02, S-03 | option B (apart): the plan's S-02 and S-03 need the delay |
+| does a chronic dearth speak (PES-SE J-1) | S-32, S-33 | option A: once, at the first short season, then memory and rumour |
+
+## 9. Evidence log
+
+Scratchpad: `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/STORY/`.
+`PYTHONHASHSEED=0` for both probes. **No season was run by this lane**: every realm and module reading
+in §2 and §5 is the cited lane's, and a mark of `[R]` or `[N]` rests on that lane's run.
+
+| id | probe | reading |
+|---|---|---|
+| E-1 | `p1_rows.py` → `p1_rows.txt`: a static read of `engine/season/verb_table.yaml` (no engine import) | 67 rows, 11 with `contests:`. Of the 11: Failure `writes` is empty or absent on 11 (seven margin rows write `[]`; the four scene rows key by ending, not band); Partial writes on 2 (`arrest`, `determine`); Overwhelming equals Success in both `writes` and `emits` on 9. Control: the reader does see band-keyed writes where they exist (`argue` Success `Person.pursuits`) |
+| E-2 | `p2_count.py` → `p2_count.txt`: counts from this file's own §2 tables | 73 stories; today X 56, N 15, H 2; 42 named by more than one lane; the per-mechanism counts of §3 |
+| E-3 | `ls audits/`, re-checked before finishing | the twelve `16_PESSIMIST_*` audits are present; `16_PESSIMIST_PC.md` and `16_PESSIMIST_GO.md` were still being appended when read (PC §4 marked "appended below"), so a finding those lanes add after this read is not in §2 |
+| E-4 | code opened at the line for a fact a design here rests on | `engine/dice_engine/dice_engine.py:236-248` (the ladder: margin ≥ 3, ≥ 1, ≥ 0, < 0); `engine/season/data/rosters.py:1111` (`DEGREE_STEP`); `engine/season/rosters.yaml:1458` (`undeposited_kinds: ["finding.none"]`); `engine/season/state/acts.py:1-40` (the act store holds refused acts too); `engine/season/data/fixtures.py:690-692` (`age_step`, `illness_rate`, `age_at_build` at 0); `engine/season/harness/storybar.py:1-60` (grades nothing; ED-IN-0225) |
+
+Not read, and what rests on it: the bodies of most of the suite's proposals were read at their heads
+only (title, status, runtime paragraph), so §4.1's key names are those files' and are cited, not
+verified at the line `[UNVERIFIED beyond the head]` except where §5 or §9 E-4 quotes a line;
+`audits/09_WR_audit*.md`, `15_INSTITUTIONS_{BYZANTINE,COLONIAL,PAPACY,VENICE}.md`, `21_PROCEDURAL_GENERATION.md`
+and `12_ARCS_adjudication.md` §3 were read through their synthesis sections and through the pessimist
+lanes that cite them.
+
