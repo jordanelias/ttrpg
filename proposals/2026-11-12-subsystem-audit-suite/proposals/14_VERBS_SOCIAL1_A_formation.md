@@ -14,6 +14,10 @@ conjunct `tell`, `fight`, `accept`, `capture`). (2) `covenant` stops forming on 
 Propositions. No effect, band, write or draw changes. The fold's `with` stays WORLD-ONLY. A declared hash
 mover wherever those Candidates formed.
 
+**Standing rule (`AUDIT_BRIEF.md`, *"we do not do deterministic"*):** this batch decides only whether an
+act may be *attempted* — formation, the rule's own carve-out. It resolves no outcome. Every outcome of
+these verbs is drawn, in batches S1-B..D (`audits/14_VERBS_SOCIAL1.md` §0.6).
+
 ## The problem, with evidence
 
 `aperture 2 0` (`scratchpad/runs/VERBS_PHYSICAL/aperture_2_0.txt`, realm, two seasons, `PYTHONHASHSEED=0`):

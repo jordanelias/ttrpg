@@ -70,7 +70,17 @@ def closes(log, act_of: dict, bounds: list) -> list[dict]:
 ```
 
 `storybar.main` prints, under the existing per-season block, one line per season:
-`closes season=<s> by_act=<n> by_clock=<n> | <kind=n, …>`. `strife.py`'s strand-shape line (the first lane's
+`closes season=<s> by_act=<n> by_clock=<n> (term=<n> threshold=<n>) | <kind=n, …>`.
+
+**The clock half is split by the brief's standing rule ("we do not do deterministic").** A close *by term*
+is a Tenure whose `until` was set by a declared `Term` (the declaring act chose the length; MATTER only
+counts seasons): bookkeeping, which the rule permits. Every other MATTER close is *by threshold*: a matter
+lapsing at a fixed age (`docket_lapse`, H-356), a body falling to its last floor, a band crossing that ends
+a use. Each is a consequential outcome fixed by state, which the rule forbids; the reading names them so
+the owners' repairs can be seen (the line should read `threshold=0` once lapse, death by body and wear are
+drawn: SC for the docket, PC/CHAR for the body, WR for wear,
+`09_WR_B_draws_not_thresholds.md`). The split is structural: a closing Event whose causes include a
+`Term`'s declaring act through `Tenure.term` is `term`; any other non-act close is `threshold`. `strife.py`'s strand-shape line (the first lane's
 edit) splits its `closed` count into the same two, by calling `arc.closes` and not by re-deriving it.
 
 ### Edit 2 · open situations and the wear rule (`engine/season/harness/storybar.py`)
@@ -110,8 +120,8 @@ PYTHONHASHSEED=0 python -m engine.season.harness.storybar --base-seed 0 --n 3 --
 python -m pytest engine/season/tests/test_storybar*.py engine/season/tests/test_in37_chronicle.py -q   # covering files, at the close
 ```
 
-Passes when: (1) at seeds 0 to 2, six seasons, `by_clock` in season 5 reads at least the `matter.lapsed`
-counts of EB-02 (8, 8, 7) and `by_act` the `matter.determined` ones; (2) a planted world with one
+Passes when: (1) at seeds 0 to 2, six seasons, `threshold` in season 5 reads at least the `matter.lapsed`
+counts of EB-02 (8, 8, 7), `term` the matured `oblige` terms, and `by_act` the `matter.determined` ones; (2) a planted world with one
 `determine` executed and one matter left to lapse reads `by_act=1 by_clock=1`; (3) a planted world with two
 persons stamped on one vacant seat reads `open seat=1`, and one person alone reads 0; (4) `motion=` reads 74
 Site writes a season at seed 0 where `condition.worn` reads 322; (5) the flat control reproduces EB-01's

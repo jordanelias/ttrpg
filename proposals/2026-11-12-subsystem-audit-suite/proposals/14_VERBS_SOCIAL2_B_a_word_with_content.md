@@ -10,7 +10,8 @@ Carries `audits/14_VERBS_SOCIAL2.md` §1 (`utter`), §2 (`petition`), §4 (`cons
 Every computed `utter` mints a Proposition with a subject, a predicate, a value and a mood taken from the
 utterer's own ledger or want, where today all are `OUGHT` / `''` / `None`. Every person starts knowing the
 seats over his home and who holds them, so `oblige` forms and `petition` is addressed to a seat-holder
-instead of to the person it is about. `construe` mints the construer's reading. Each behind a fixture
+instead of to the person it is about. `construe` mints the construer's reading. Three outcomes become
+draws: an utterance's uptake by the room, a construal's taking, a seat's admission of an obligee. Each behind a fixture
 whose control reproduces today; declared hash movers at the shipped arm in every world.
 
 ## The problem (evidence)
@@ -29,7 +30,9 @@ whose control reproduces today; declared hash movers at the shipped arm in every
 
 ## The resolution, decided
 
-**A person says what he holds, reads an order as what he believes, and knows who rules his home.** Every
+**A person says what he holds, tries to read an order as what he believes, and knows who rules his
+home; whether he is believed, whether his reading takes, and whether a seat admits him are draws**
+(`AUDIT_BRIEF.md` standing rule: state sets the odds, the draw sets a graded, recoverable outcome). Every
 content operand is derived from the actor's own ledger by machinery that exists (`said` on a named
 own-ledger conjunct, T4; CR-81's build-time acquaintance deposit), so the chooser and a player pick from
 the same Candidates and no free value is invented. Ladder: step 4 (T4's `said`; CR-81's
@@ -47,13 +50,29 @@ the same Candidates and no free value is invented. Ladder: step 4 (T4's `said`; 
     beneficiary: none
     requires:    "the speaker holds a claim on what he speaks of"
     requires_typed: {form: own_ledger, of: subject, conjunct: holds}
-    writes:      ["Proposition.exists"]
-    emits:       ["proposition.uttered"]
+    contests:    "a standing"          # against the room: whether he is believed (standing rule)
+    writes:
+      Overwhelming: ["Proposition.exists"]
+      Success:      ["Proposition.exists"]
+      Partial:      ["Proposition.exists"]
+      Failure:      ["Proposition.exists"]
+    emits:
+      Overwhelming: ["proposition.uttered", "proposition.believed"]
+      Success:      ["proposition.uttered", "proposition.believed"]
+      Partial:      ["proposition.uttered"]
+      Failure:      ["proposition.uttered"]
     emits_on_refusal: {holds: ["utterance.empty"]}
     grade:       assumption
   ```
   (notes carried forward; `writes_note` gains: *the cell is the `said` the named `holds` conjunct
-  carries; the mood is `rosters.yaml: utter_mood_by_source`'s for the question's source*).
+  carries; the mood is `rosters.yaml: utter_mood_by_source`'s for the question's source; that he said
+  it is not in doubt, so every band mints; whether the room believes it is the draw, and only
+  `proposition.believed` triggers the told deposit*). The standing rule (`AUDIT_BRIEF.md`, Jordan
+  2026-11-12) is why the row is contested: a statement being believed could go either way.
+- `rosters.yaml: contest_subsystems.prizes`: `a standing` already routes to the `social_contest`
+  provider (`tell`'s); the opponent is the room — `obstacle_default` plus one step per hearer present
+  whom the speaker's own ledger holds as believing the contrary (`sigma.py::contest_input`, the speaker's
+  own-ledger read, F8) plus the venue modifier. `verb_capability: utter → copying` (new row).
 - `engine/season/rosters.yaml`: new closed table `utter_mood_by_source` (keys: `question_sources`
   members, validated at load): `claim_landed: HOLDS`, `need: OUGHT`. A source with no row forms no
   `utter`.
@@ -63,18 +82,28 @@ the same Candidates and no free value is invented. Ladder: step 4 (T4's `said`; 
   subject, predicate, value) and `payload["mood"]`; the existing defaults kept only for a hand-built act
   with neither (fixture `utter_content: off` is the control: ignore both, today's behaviour).
   Typed in: `Act` with `said: Said | None`, `mood: str | None`. Out: `Change` naming the Proposition.
-- `engine/season/loop/witness.py`, the told deposit: the trigger "the act carries `said`" already covers
-  it; an `utter` Event therefore deposits the told copy on those present with the utterer on its chain
-  (FI-05B E-3's channel). `[UNVERIFIED: confirm the trigger keys on the payload, not on the verb; if on
-  the verb, widen it to rows whose cell names a `holds` conjunct.]`
+- `engine/season/loop/witness.py`, the told deposit: fires for an `utter` Event only when its kind
+  includes `proposition.believed` (Ov / Su), depositing the told copy on those present with the utterer
+  on its chain (FI-05B E-3's channel); at Pa / Fa the ordinary deposit of `proposition.uttered` about the
+  speaker is all that lands. `[UNVERIFIED: whether the trigger keys on the payload's `said` or on the
+  verb; either way it gains the band-kind condition for this row.]`
 - Fixture `utter_content: on | off` in `engine/season/data/fixtures.py`.
 
 ### §2 `construe` (after S2-A edit 2)
 
-- `verb_table.yaml` `construe`: `writes: ["Proposition.exists"]`; `writes_note` replaced: *the
-  construer's reading is a `HOLDS` Proposition on the terms' subject and predicate with his own held
-  value, minted with his hold; the writ is unchanged*; `referent_class: Record.dispensation`.
-- `loop/effects_information.py`: new `_eff_construe(w, a, res=None) -> Change`:
+- `verb_table.yaml` `construe`: `contests: "a proposition"` (against the writ; the standing rule:
+  whether a reading takes could go either way); `writes:` `Proposition.exists` at Ov / Su / Pa, `[]` at
+  Fa; `emits:` Ov `[terms.construed, construal.credited]`, Su `[terms.construed]`, Pa
+  `[terms.construed, terms.distorted]`, Fa `[construal.failed]`; `emits_on_refusal:
+  [construal.impossible]` (requirement checks only); `writes_note` replaced: *the construer attempts a
+  `HOLDS` reading of the terms' subject and predicate with his own held value; the draw decides whether
+  it takes; the writ is unchanged*; `referent_class: Record.dispensation`. `terms.distorted` keeps its
+  name and moves to Pa, where witnesses hold the reading as a twist.
+- `rosters.yaml: verb_capability`: `construe: "argue"`. Obstacle: `obstacle_default` plus
+  `rosters.yaml: construe_obstacle` (new, two keys: `clear_terms` (a terms Proposition with predicate and
+  value) +1, `issuer_standing` +1 where the construer holds the issuer above him by `regard`).
+- `loop/effects_information.py`: new `_eff_construe(w, a, res) -> Change`, called by the fold at Ov /
+  Su / Pa only:
   1. read the writ `w.records[subject]`, its `terms` (a Proposition id via `ABOUT_KEYS["dispensation"]`);
      decline `NO_CHANGE` (→ `construal.impossible`) if no Proposition;
   2. the construer's own value on `(terms.subject, terms.predicate)`: the newest such claim in his own
@@ -83,7 +112,8 @@ the same Candidates and no free value is invented. Ladder: step 4 (T4's `said`; 
      `_makers_hold` — the same two lines `_eff_utter` performs, called through a shared
      `_mint_proposition(w, actor, prop)` helper (safe to share: it opens a `hold`, whose literal stays in
      the helper, `_mint_document`'s precedent; `_derive_openers_from_effects` reads `hold` there).
-  Emits `terms.distorted`; the receipt names the Proposition.
+  The receipt names the Proposition, earning the band's kinds. Steps 1–2 are asked again in the
+  row's predicate before the draw, so a refused act costs no draw (`_req_interrogate`'s placement).
 - `comply` / `evade / defy` (other family): their `own_ledger(subject)` conjunct already reads the
   actor's own claims; no edit is needed for them to see the reading, but their effect's test of
   compliance must read the construer's Proposition where he holds one. Named for the owning lane.
@@ -120,7 +150,18 @@ the same Candidates and no free value is invented. Ladder: step 4 (T4's `said`; 
   predicate; if it is the event kind, `seat_holders_known` reads that kind instead and no deposit
   changes]`.
 - Fixture `seats_known_at_build: home_purview | none` (control `none`).
-- `oblige`: no row edit. `seats_named` now returns the home's seats; `_req_oblige`'s five clauses decide.
+- `oblige`: `seats_named` now returns the home's seats; `_req_oblige`'s five clauses stay as eligibility.
+  **Admission becomes a draw** (the standing rule names *any "binds" effect with no resolution roll*):
+  `verb_table.yaml` `oblige` gains `contests: "a standing"` with the seat's live holder as opponent
+  (`counterparty: subject` resolves to the seat; `sigma.py::_opposition_of` takes the seat's holder, else
+  `obstacle_default` for a vacant seat), obstacle modifiers `rosters.yaml: oblige_obstacle` (new: rank
+  gap per rung, the holder's `regard` of the joiner, establishment size per 5 obligees); `writes:`
+  `Tenure.since`, `Tenure.term` at Ov / Su / Pa, `[]` at Fa; `emits:` `duty.taken` at Ov / Su,
+  `duty.probation` at Pa, `duty.refused` at Fa. `_eff_oblige` opens the edge with `degree=res.degree`
+  and, at Pa, half `oblige_term` (the term's one owner, `H-159`, read and halved, no second constant).
+  ⚠ Conflict with the ruled `binds_bases: members_by_admission` (*the joiner's own act admits him*):
+  named, listed for Jordan (`audits/14_VERBS_SOCIAL2.md` §11.4 item 1); the fiat arm is kept as fixture
+  `oblige_admission: fiat` for the ruling's sake.
 
 ## Order of landing
 
@@ -132,11 +173,17 @@ the same Candidates and no free value is invented. Ladder: step 4 (T4's `said`; 
 - §1: ≥ 90% of computed Propositions carry a non-empty predicate; every `HOLDS` cell equals a claim its
   utterer held at the act tick; ≥ 1 judge vote (`world_q.py:759`) or ≥ 1 `decision.agreement`
   disagreement between two utterances read at one seed.
-- §4: `oblige` formed > 0 at every seed, executed ≥ 1 at one seed; the obligee in `establishment_of`.
+- §1, the draw: across the three seeds `proposition.believed` is emitted for some utterances and not
+  for others (a fraction strictly between 0 and 1); a planted `Failure` mints the Proposition and
+  deposits no told copy.
+- §4: `oblige` formed > 0 at every seed, attempted ≥ 1; across seeds at least one `duty.taken` or
+  `duty.probation` and the obligee in `establishment_of`; a planted `Failure` opens no edge.
 - §3: `to == subject` 0; every `to` holds a seat reaching the petition's `from`.
-- §2 (hand-built: issuer, writ with `HOLDS` terms, two holders, one believing otherwise): one
-  `construe` executes; the two holders hold different readings; `construal.impossible` for the holder
-  who agrees.
+- §2 (hand-built: issuer, writ with `HOLDS` terms, two holders, one believing otherwise): at a planted
+  `Success` the two holders hold different readings (the row's falsifier, `H-36`); at a planted
+  `Partial` witnesses hold `terms.distorted`; at a planted `Failure` no Proposition is minted;
+  `construal.impossible` (no draw) for the holder who agrees. Over seeds 0–9 with the shipped odds, all
+  four bands occur.
 - Controls: each fixture at its control reproduces the pre-edit hash at the three seeds.
 
 ## Falsifiers

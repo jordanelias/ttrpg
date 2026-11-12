@@ -1,5 +1,7 @@
 # Evidence filed, presented and answered: the case file as the board, one standing rule, one evidence term
 
+Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-01 — striking by weight replaced by the answering act's graded draw (FI E-6 adopted, banded); filing stays draw-free bookkeeping.
+
 ## Status: PROPOSED — supersedes `05_SC_evidence_and_rebuttal.md` (SC-P8). Consumes `08_FI_05_evidence-interface_B.md` (FI's E-1 to E-8) and differs from it at one point, named below.
 
 Source: `audits/05_SC_audit_addendum_B.md` §B3 (the kernel's `Dossier`, `rebut`, `EVIDENCE_CAP`
@@ -49,16 +51,19 @@ the carriers.
 
 ### Where this differs from FI's E-6, and why
 
-FI's E-6 (carried from SC-P8 edit 3) enters an item only when the citing `speak` grades Success or
-better, and strikes an answered item only when the answering `speak` does. **Here entering and
-striking are deterministic; the draw decides the matter, not the paperwork.** Grounds: the division
-the three-lens audit recovered (`3L/05` §4.2: an orator cannot make a contract more probative, only
-choose when to produce it); F-SC-16 (evidence must be able to do work); the sitting's `present` and
-`answer` are draw-free (`05_SC_playable_hearing_B.md`), and the out-of-room path must be the same
-rule or there are two. What E-6 protects survives: no item decides a case, because the verdict is
-still a draw whose obstacle the items move. Ladder step 5. **For the orchestrator:** FI's E-6 and this
-section should be reconciled in one place when the two lanes are merged; this lane does not edit FI's
-file.
+*(Reconciled by `audits/18_DETERMINISM_SWEEP.md` D-01: the earlier text of this section made entering
+and striking deterministic; that breaks the standing rule. The section now agrees with FI's E-6, graded.)*
+
+**Filing is bookkeeping; whether an item stands against an answer is a draw.** Putting a held item on
+the case file is an act the citer may attempt (an eligibility: he holds it, the row admits its kind) and
+is recorded without a roll; whether a presented item survives a contradiction or an impeachment could go
+either way for the people in the room, so it goes by a draw, at the answering act (FI's E-6). The
+division the three-lens audit recovered (`3L/05` §4.2: an orator cannot make a contract more probative)
+is kept by putting the items' **weights into the obstacle**, not the orator into the weights: the
+answerer's pool is his own (`speak`'s pool through the one roller), the obstacle is the answer's task
+difficulty plus the weight difference, so a heavy answer to a light item is likely and never certain.
+What E-6 protects survives: no item decides a case, the verdict is still a draw, and one rule serves the
+room and the out-of-room path (`present` stays draw-free as filing; `answer` is rolled in both).
 
 ### The three operations, one owner each
 
@@ -78,13 +83,27 @@ claim says, else the Record itself.
 
 ### `standing`: the rules, in order
 
-1. **Forgery.** A presented `(record, record.forged, True)` claim (E-5 item 2) strikes the Record's
-   item and every item of the same origin; the `forgery_found` fault is recorded against that side.
+Rules 1 and 2 no longer decide from weight; they apply the **band of the answering act's draw**, which
+the host rolled once through `engine/dice_engine` (`degree_from_net`) and hands to `standing` as data
+(`Exhibit.answered_band`). `standing` stays pure and World-free and rolls nothing. The answer's odds:
+pool = the answerer's `speak` pool (the one pool builder); obstacle = `answer_ob` (a fixture, proposed 2,
+NUMBER row) `+ proof_step × (w_answered − w_answer)` for a contradiction, `− forged_claim.confidence` for
+an impeachment, plus the room's existing modifiers (reception, venue). Each term is written to
+`Margin.terms` (the reason trail).
+
+1. **Forgery.** On an impeaching answer (a presented `(record, record.forged, True)` claim, E-5 item 2):
+   `Failure` the Record stands and the impeacher bears `failed_impeachment` (a told deposit, so his
+   `reception` falls by the existing path); `Partial` the Record's weight is halved; `Success` the
+   Record's item is struck; `Overwhelming` it and every item of the same origin are struck and the
+   `forgery_found` fault is recorded against that side.
 2. **Contradiction** (the answer). Two presented items of opposing sides on the same
    `(subject, predicate)` with different values, by `_pair`'s rule exposed once as
-   `decision/options.py::contradicts(a, b) -> bool` (no second copy): the heavier stands and the
-   lighter is struck; equal weights, both are halved. Same side: the `self_contradiction` fault; the
-   lighter is struck.
+   `decision/options.py::contradicts(a, b) -> bool` (no second copy): `Failure` the answered item
+   stands; `Partial` both are halved; `Success` the answered item is struck; `Overwhelming` it is struck
+   and its citer bears the `self_contradiction` fault only if he cited it knowingly (a held contrary
+   claim), else `discredited_source` against its origin. An item presented with no answering act is
+   never struck. Same side, opposing values: the `self_contradiction` fault, no draw (bookkeeping: the
+   citer's own file disagrees with itself), and the lighter is withdrawn.
 3. **Agreement** (the mirror made public). The same cell, same value, presented by both sides: it
    counts for neither. This is SC-02's commit mirror with "held" replaced by "put before the room"; an
    item merely held by the opponent no longer zeroes anything (problem 2).
@@ -150,11 +169,15 @@ On `build_hearing(seed)` (`05_SC_playable_hearing_B.md` edit 9), `PYTHONHASHSEED
 1. The accuser files two firsthand deed claims and a Record: three `filed` stages; each judge holds
    the told copies with the accuser on the chain; at close, `proofs` = 3.0 and the determiner's
    obstacle is lower by `3 × proof_step` than with nothing filed (both read off `Margin.terms`).
-2. The accused files a claim on one of the accuser's cells with a different value and weight 1:
-   equal weights, both halved; `proofs` 2.5, `rebuttals` 0.5.
-3. The examiner, holding `(record, record.forged, True)` from a `Partial` find, files it: the Record's
-   item is struck with every item of its origin; the next `speak` by the accuser shows a lower
-   `reception` term than in step 1.
+2. The accused answers one of the accuser's cells with a different value and weight 1, over 200
+   seeds: all four bands occur; the answered item stands at `Failure`, both halve at `Partial`, the
+   item is struck at `Success`/`Overwhelming`; the struck share rises when the answer's weight rises
+   (control: answer weight 0.5 against 1.0 strikes less often than 1.0 against 0.5, and neither share
+   is 0 or 1).
+3. The examiner, holding `(record, record.forged, True)` from a `Partial` find, answers with it over
+   200 seeds: the Record is struck in a share strictly between 0 and 1, and every origin-wide strike is
+   an `Overwhelming`; on a strike the next `speak` by the accuser shows a lower `reception` term than
+   in step 1.
 4. Two items of the same cell and value from distinct origins, weights 0.5 and 0.5: one item of 0.75.
    From one origin: 0.5.
 5. Control: `cites` empty throughout reproduces the base commit's content hash.

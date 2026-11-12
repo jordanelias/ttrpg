@@ -110,6 +110,44 @@ The per-verb sections follow, in the order of the work order. Each has the nine 
   `referent_class: Record` row whose cell has `existence … kind: K` forms only on a Record of kind K. This
   family does not redo it; it names the rows it repairs here (`comply`, `evade / defy`, `carry`).
 
+### 0.6 Every verb resolves by a draw (Standing rule, `AUDIT_BRIEF.md`: *"we do not do deterministic"*)
+
+Re-checked after Jordan's ruling of 2026-11-12. The first draft of this file gave seven of the eleven
+(`carry`, `commit`, `comply`, `conceal`'s quality, `covenant`, `forgive`, `give`) and `challenge`'s issue a
+fixed effect of state; each is corrected below and in its section. **State sets the odds; the draw sets
+the outcome.** Every row below rolls through the one social roll (`modules/social_contest/roll.py`, via
+`seam/wrappers/sigma.py`), composes its obstacle by SC-OB's one function (`difficulty` + the named
+modifiers, bounded, favourable terms after the bound), records its `terms` on the Event, and resolves on
+the four-band ladder (`dice_engine.degree_from_net`). What is NOT drawn, per the rule's own carve-out:
+formation and requirement checks (R-WITH, R-KIND, `held_by`, `own_ledger`), the chooser's choice of an
+act or a payload (`stakes`, `mode`), and bookkeeping (the hold moving once a hand-over succeeds, an id, a
+tick). Every Failure below is recoverable: the act may be tried again, or another route taken, and the
+Failure itself writes or deposits something (no band is a silent nothing).
+
+| verb | pool (capability key, `verb_capability`) | obstacle: `difficulty` + modifiers (SC-OB terms; new ones marked †) | Overwhelming | Success | Partial | Failure |
+|---|---|---|---|---|---|---|
+| `carry` | `procedure` † row | `plain` + venue `standard` + `reception` (the bench's disposition to him) + `backlog` † (items already on that docket × `backlog_step`) | docketed at the next sitting, ahead of the queue | docketed | docketed, a sitting later (date pushed one sitting) | not docketed this season; the petition stays in hand; the refusal names the venue; may carry again next season or to another venue |
+| `argue` | `argue` (exists) | `routine` + `opposition` + `regard` / `reception` + `evidence` + `commitment` † | pursuits × 2 | × 1 | × 0.5 (now written) | unmoved; hearer holds the arguer's position as a claim |
+| `commit` | `resolve` † row (CHAR's `02_CHAR_resolve_and_temper.md` owns the key) | `plain` + `cross_pressure` † (live commits to contrary Propositions × `cross_pressure_step`) + `violated` † (the Proposition's lean against his own pursuits) | commit Tenure, `degree` Overwhelming (firm: doubles in `argue`'s `commitment` term; `release` of it reads as a grave breach) | `degree` Success | `degree` Partial (wavering: half weight in every reader) | no Tenure; `commitment.refused` with reason "could not bring himself"; may try again next season |
+| `comply` | the capability the writ's terms call for (the terms' verb, when the Proposition names one), else `pool_default` | `routine` + `stakes` (the `oblige` kind's `stakes_ob`) + `violated` † (writ's terms against his pursuits) + `distance` † (writ's `at` not his place) | performed; `oblige` opened for the full term; issuer's deed claim leans strongly with | performed; `oblige` opened | performed late or in part; `oblige` opened with half the term; the issuer's claim is neutral | tried and failed: no `oblige`; he keeps the writ (may comply again or defy); the issuer receives `compliance.failed` † (an honest failure, not a defiance) |
+| `evade / defy` (`mode: evade`) | `tradecraft` † | `routine` + `purview` † (the issuing seat's reach over his place) + `witnesses` † (persons present × `witness_step`) | never noticed: no `compliance.withheld` is ever emitted | noticed only at the due tick, unattributed | noticed at the due tick, attributed | noticed now, attributed, and a warrant ground for `arrest` |
+| `evade / defy` (`mode: defy`) | `argue` (exists) | `routine` + `opposition` (the issuer's, if present, else his seat's holder's score) + `regard` (witnesses' mean regard of the issuer, sign reversed) | defiance stands and witnesses' regard of the defier rises; strife opens with him as its first actor | defiance stands; strife opens | defiance stands; his own stance toward the issuer falls by 2 not 1 (it cost him) | he backs down at the last: no `compliance.withheld`; his hold is kept; witnesses' regard of him falls |
+| `conceal` | `tradecraft` † | `routine` + `notoriety` † (persons holding firsthand claims of him at his place × `notoriety_step`) | cover of quality 3 | quality 2 | quality 1 | no cover; `cover.failed` † deposited to those present (they saw him try) |
+| `covenant` | `brokerage` † | `routine` + `divergence` † (the maker's own belief of how far the terms lean against the counterparty's pursuits, from his claims) + `regard` (his believed regard) | instrument `standing` 3 (the counterparty's `commit` to it ranks higher; a breach weighs triple) | `standing` 2 | `standing` 1 | not drawn up this season (`covenant.refused`, reason "terms would not hold"); may re-draft with other terms |
+| `lie` | `deceit` † | `routine` + `opposition` (hearer's `perception`, via `opposed_by:`) + `regard` + `contradiction` † | believed at the liar's confidence | −1 | −2, floor 1 | not believed; `deceit.exposed` † deed to the hearer |
+| `forgive` | `resolve` † | `routine` + `grievance` † (|`deeds_judged`| sum × `grievance_step`) + `scar` (CHAR's scar shift against the referent) | grievance ended (mark factor 0); `stance.moved` told to the forgiven | ended (factor 0) | eased: mark factor 0.5 (deeds before it weigh half) | cannot let it go: no mark; `forgive.refused` with reason; the next attempt's `grievance` term reads the same, so only time or a new kindness moves it |
+| `give` | `pool_default` (no key: a hand-over is no skill) | `plain` + `regard` (the receiver's of the giver) + `unwelcome` † (an addressed writ or challenge whose terms the receiver's pursuits judge against him) | handed over and taken gladly (receiver's regard of giver +) | handed over | handed over, taken under protest (a deed claim of reluctance in witnesses' ledgers) | refused: the giver keeps it; the receiver still holds a firsthand claim of the tender, so an addressed document counts as **served** (its answer window starts) |
+| `challenge` | `argue` (exists; a challenge is a public speech act) | `plain` + `rank_gap` † (the challenged's seat depth above the challenger's × `rank_step`) + `regard` (witnesses' mean regard of the challenger, favourable) | challenge Record `standing` 3 (a decline costs the challenged triple) | `standing` 2 | `standing` 1 | laughed off: no Record; witnesses' regard of the challenger falls; the dispute stands; he may challenge again later |
+
+New obstacle terms (†) join SC-OB's closed `obstacle_terms` roster; each reads a fact that already exists
+(tenures, ledgers, seats, presence at formation) and carries a fixture step with a control of 0. New
+capability keys (†) join `rosters.yaml: verb_capability` through DICE's map; until a person holds one,
+`pool_default` applies (`verb_capability`'s own note: a missing key is not an error). Proposed difficulty
+levels are SC-OB's (`plain` 0, `routine` 1). Every band's write is in the verb's row as a Degree-keyed
+`writes:` / `emits:` (the shape `argue` and `lie` already use), so `resolvable_verbs()` and the seam route
+them as contested rows; the rows without a counterparty roll against `difficulty` + modifiers alone,
+which is what SC-OB's form gives a non-person subject.
+
 ---
 
 ## 1. `carry` — put a held petition before the room
@@ -141,9 +179,14 @@ the docket and stops there.**
   arrangement admits petitions (`arrangements.yaml`, an `admits_petition: true` key, default true on
   courts). One reader, `world_q.petition_venue(w, actor, matter)`. This closes the `None` arrangement
   [ASSUMPTION] in `_eff_carry`; `05_SC_arrangement_rows_that_bind.md` owns the arrangement row itself.
-- *Roll:* none. Filing is a right of anyone holding a petition; the contest happens at `speak`/`determine`.
-  A refusal is never a dead end: the petition stays held and can be given to someone with standing.
-- *Effects:* unchanged writes, plus the arrangement on the item; emits `petition.carried`.
+- *Roll (§0.6):* whether the room takes the matter could go either way, so it is drawn: pool `procedure`;
+  obstacle `plain` + the venue's `standard` + `reception` + `backlog`. The merits are still contested
+  later at `speak`/`determine`; this draw is admission to the docket.
+- *Effects by degree:* Overwhelming docketed at the next sitting ahead of the queue; Success docketed;
+  Partial docketed a sitting later; Failure not docketed this season, the petition stays in hand (it can be
+  carried again, to another venue, or given to someone the bench receives better). Writes as today plus
+  the arrangement on the item at the three admitting bands; emits `petition.carried` at those bands and
+  `carry.refused` (reason: the room declined it) at Failure.
 - *Appeal (the reopenable file, ARCS e5):* a petition whose matter has been determined may be carried to
   the **next venue up** (`petition_venue` walking past the venue that determined it). One rule: the
   reader skips venues whose docket already determined this matter.
@@ -247,15 +290,23 @@ person-side (`rosters.yaml: held_edge_declines`). Readers: `faction_q` (membersh
 `world_q` (adherents, opinion), `predicates.py:176`, `release` (closes it). Reading: 1s 37 / 37 / 0;
 `[2s]` 65 / 65 / 0. **Verdict: works.**
 
-**3. Build-out, decided.** No change to formation, roll (none: a commitment is one's own) or effect. Two
-consequences to wire, owned elsewhere and named here: `covenant` is in force when both parties hold a
+**3. Build-out, decided.** Formation unchanged. **Corrected under the Standing rule (§0.6):** today the
+effect is a fixed function of state (every `commit` that reaches the effect opens the edge). Whether a man
+can truly bind himself to a cause could go either way, so it is drawn: pool `resolve`; obstacle `plain` +
+`cross_pressure` + `violated`. The band is written on the Tenure's existing `degree` field (as `_disposal`
+writes it for `determine`): Overwhelming firm, Success held, Partial wavering (half weight in every
+reader: `faction_q` membership weight, `argue`'s `commitment` term, `covenant_in_force`), Failure no edge
+and `commitment.refused` (the row's existing, never-emitted refusal kind finally earned), recoverable next
+season. Two consequences to wire, owned elsewhere and named here: `covenant` is in force when both parties hold a
 `commit` to its terms (proposal B §3); `argue`'s `commitment` term reads it (proposal C). Costs: a scene;
 forecloses nothing but is read by contrary arguments.
 
 **4. Scales.** Person; aggregated to faction by `faction_q`. **5. Tuning.** Affiliation (which
-Propositions are offered: those he utters or hears; `terms_sourced` for held documents). **6. Exact
-edits.** None. **7. Gate.** The existing reading stands; regression: `commitment.made` count non-zero at
-`aperture 1 0` after batches S1-A..D. **8. Cases.** CHAR §7 "loyalty to a cause" (Kreutz, Ehrenwall,
+Propositions are offered: those he utters or hears; `terms_sourced` for held documents); personality
+(`resolve`), cross-pressure (his other commits). **6. Exact edits.** Proposal D §4 (the draw, the
+Degree-keyed row). **7. Gate.** `aperture 2 s`: `commitment.made` and `commitment.refused` both > 0 and the
+`commit` Tenures carry more than one `degree`; a hand-built two-arm fold (actor with and without a live
+contrary commit) differs in `cross_pressure` alone. Falsifier: every commit Tenure at one degree. **8. Cases.** CHAR §7 "loyalty to a cause" (Kreutz, Ehrenwall,
 Torberg). **9. NERS.** Works; E high. **Cut test:** removing it removes faction membership by choice.
 
 ---
@@ -277,9 +328,14 @@ admitted.**
 
 **3. Build-out, decided.**
 - *Formation:* R-KIND (dispensation only, lane A). The occasion: `writs_held` (unchanged).
-- *Roll:* none. Obedience is the person's choice; whether he *can* perform the order is the order's own
-  verb (a writ to `march` is obeyed by marching).
-- *Effects (ungraded, but never a dead end):* `comply` **opens an `oblige` Tenure** from the complier to
+- *Roll (§0.6; the brief names "any obeyed effect with no resolution roll" as a known case):* choosing
+  to obey is the person's; whether the obedience is carried off could go either way, so it is drawn: pool
+  the capability the writ's terms call for, else `pool_default`; obstacle `routine` + `stakes` +
+  `violated` + `distance`. Bands: Overwhelming full term, issuer's claim leans strongly with; Success
+  the edge below; Partial half the term, issuer's claim neutral; Failure no edge, he keeps the writ
+  (recoverable: comply again, or defy) and the issuer receives `compliance.failed` (new kind: an honest
+  failure, judged far more lightly than a defiance).
+- *Effects at Overwhelming / Success / Partial:* `comply` **opens an `oblige` Tenure** from the complier to
   the issuing seat (`world_q.issuing_seat(w, rid)`: the `via` of the act that minted the Record, read
   through `state/attribution.py::causing_act` on its minting Event; `None` for a seatless mint, and then
   the `oblige` is not opened and only the hold closes — `[UNVERIFIED]` that every minting Event resolves
@@ -342,8 +398,10 @@ cannot be seen through by degree.**
   deliberation (a deed he expects others to judge against him). A celled axis is not invented; the score
   term is `choose`'s, read off his own candidates (person-side). Zero when he forms nothing judgeable, so
   he does not mask idly.
-- *Roll:* an uncontested quality draw at mint: `quality` = the actor's `conceal` capability score
-  (new `verb_capability` row `conceal: tradecraft`; ARCS §8 names tradecraft as an authored skill).
+- *Roll (§0.6; corrected — the first draft set quality equal to the capability score, a fixed function
+  of state):* pool `tradecraft` (new `verb_capability` row `conceal: tradecraft`; ARCS §8 names tradecraft
+  as an authored skill); obstacle `routine` + `notoriety`. Quality by band: 3 / 2 / 1; Failure mints no
+  cover and deposits `cover.failed` to those present (recoverable: try elsewhere, where fewer know him).
 - *Effects:* the cover Record gains a `quality` content key (`rosters.yaml: record_kinds.cover`), read by
   the inquiries as SC-OB's `subject` term (`surveil`, `examine`, `research` on a deed claim anchored on a
   cover). A Success by an inquirer **unmasks**: the cover's stages close (`Record.stages` matured now) and
@@ -388,9 +446,15 @@ links (e)–(g) unbuilt.**
 - *Formation:* `referent_class: Proposition` (`argue`'s and `commit`'s class; the rung-4 repair of
   `03_PC_duel_chain_reach.md`), and R-WITH is **not** applied (an instrument can be drawn up in absence;
   it travels by `give`).
-- *Roll:* none to draw up. (Agreement is the counterparty's `commit`, his own choice.)
-- *Effects:* as today; plus the in-force reader `world_q.covenant_in_force(w, rid) -> bool`: the
-  Record's maker and its `to` each hold a live `commit` to its `terms`. One owner; readers: tribute
+- *Roll (§0.6; corrected):* whether the maker can draw up terms that will hold could go either way, so it
+  is drawn: pool `brokerage`; obstacle `routine` + `divergence` + `regard` (both the maker's beliefs, from
+  his claims). The band is written as the instrument's `standing` content key (3 / 2 / 1); Failure drafts
+  nothing this season (`covenant.refused`, recoverable with other terms). Acceptance stays the
+  counterparty's `commit`, which is itself drawn (`commit`, §3) and whose `degree` the in-force reader takes.
+- *Effects:* as today at the three drafting bands; plus the in-force reader `world_q.covenant_in_force(w, rid) -> bool`: the
+  Record's maker and its `to` each hold a live `commit` to its `terms`; it returns the instrument's
+  strength, `standing` × the weaker of the two commits' degree weights, `0` when not in force. A breach
+  is judged by the other party in proportion to that strength. One owner; readers: tribute
   (`_renewals`) and allied sides (`mustered`), both named deferred in the effect docstring and both
   owned by FA/MB — this proposal builds the reader and names them as consumers, and adds one reader of its
   own that needs no other lane: **`legitimacy`'s deed judgement** — a party who `release`s his commit to
@@ -440,13 +504,21 @@ and may enforce.* Links: (a)–(b) as `comply`; (c) he refuses; (d) the refusal 
 - *Formation:* R-KIND (lane A).
 - *Two faces, one row (the slash is kept):* the payload's `mode` ∈ `rosters.yaml: defiance_modes`
   `[evade, defy]` (choice-sourced, `choice_sourced` roster; `marshal`'s `role` shape). **defy**: the
-  refusal is announced — `compliance.withheld` is witnessed by those present and **told** to the issuer
-  (it opens strife). **evade**: an uncontested quiet non-performance — no Event names the defier until the
-  writ's term matures, when MATTER emits `compliance.withheld` naming him (the writ's stages carry a
-  `due` label `answer`). Evasion buys time and risks discovery; defiance is immediate and honest.
-- *Effects:* both close his `hold` on the writ (the occasion is answered, as `comply`'s). `defy` writes
-  his own `Person.stance` toward the issuing seat's holder (−1 valence, weight 1: he has set himself
-  against him), so `forgive` and `regard` see it.
+  refusal is announced. **evade**: a quiet non-performance. **Both are drawn (§0.6; corrected — the first
+  draft made evasion's discovery a fixed function of the due tick):** `evade` rolls `tradecraft` against
+  `routine` + `purview` + `witnesses` — Overwhelming never noticed; Success noticed at the writ's due tick
+  (a `due` label `answer` on its stages, which MATTER matures) but unattributed; Partial noticed at the due
+  tick and attributed; Failure noticed now, attributed, and a warrant ground. `defy` rolls `argue` against
+  `routine` + `opposition` + the witnesses' regard of the issuer — Overwhelming the defiance stands and
+  witnesses' regard of him rises (he leads the strife strand it opens); Success stands and opens strife;
+  Partial stands at a higher personal cost; Failure he backs down at the last (no withheld Event, the
+  writ kept, witnesses' regard of him falls) and may defy or comply later. Evasion buys time and risks
+  discovery; defiance is immediate and honest.
+- *Effects at the bands where the refusal stands:* his `hold` on the writ closes (the occasion is
+  answered, as `comply`'s); `defy` writes his own `Person.stance` toward the issuing seat's holder (−1,
+  weight 1; −2 at Partial), so `forgive` and `regard` see it. `[UNVERIFIED]` that MATTER's stage
+  maturation can emit a row-declared kind for a stage label; if it cannot, the due-tick notice is a MATTER
+  step owned by `loop/matter.py`, named in proposal B.
 - *Consequences:* the issuer's ledger gains a deed claim (`compliance.withheld`) his pursuits score
   against the defier → `holds_dispute` (grounds for `challenge`), and is the occasion for `arrest` (PHYSICAL
   lane: a defiance claim is a warrant ground, `warrant_sourced`) and `revoke` (BINDING lane). Strife reads
@@ -562,11 +634,17 @@ touches; stance rows are written only by `march` (a lost field) and seeded, and 
 - *Formation:* the person forms `forgive` on a referent when **either** `held_against` is non-empty **or**
   `holds_dispute` is True (the `own_stance_declines` reader widened to the one grievance owner; through
   CHAR-OFFER's one decline).
-- *Roll:* none. Forgiveness is the forgiver's own act.
-- *Effects:* removes the `held_against` rows (as today) **and writes a forgiveness mark**: a stance row
-  `(referent, 0, 0, since=tick)` — zero valence and weight, so `stance_toward` and `held_against` are
-  unchanged by it — which `attributed_deeds` reads to **skip the holder's deed claims about the referent
-  whose `when` is at or before `since`**. One reader (`person_q.forgiven_since(p, referent)`), read by
+- *Roll (§0.6; corrected):* choosing to forgive is his; whether he can let it go could go either way, so
+  it is drawn: pool `resolve`; obstacle `routine` + `grievance` (the size of what he holds) + `scar`.
+  Overwhelming and Success end the grievance (mark factor 0; at Overwhelming `stance.moved` is told to the
+  forgiven); Partial eases it (factor 0.5: earlier deeds weigh half); Failure writes nothing,
+  `forgive.refused` ("could not let it go"), recoverable — the obstacle falls as the deeds age out of
+  CR-88's window or a kindness offsets them.
+- *Effects at Overwhelming / Success / Partial:* removes the `held_against` rows (Partial halves their
+  valence instead) **and writes a forgiveness mark**: a stance row `(referent, 0, 0, since=tick,
+  factor)` — zero valence and weight, so `stance_toward` and `held_against` are
+  unchanged by it — which `attributed_deeds` reads to **weigh the holder's deed claims about the referent
+  whose `when` is at or before `since` by `factor`** (0 skips them). One reader (`person_q.forgiven_since(p, referent)`), read by
   `attributed_deeds`, so `deeds_judged`, `holds_dispute`, `regard` and `world_q.reception` all see the
   same forgiveness. A new wrong (a deed after `since`) starts a new grievance. [ASSUMPTION: a fourth
   element on a stance row; K-49 says a row carries no KIND, and this carries a tick, not a kind; revert:
@@ -633,9 +711,14 @@ acceptance are unreachable behind it.**
   the maker (he wrote it to be delivered: the issuing act's own score carries over through a
   `delivery_weight` fixture, proposed 1.0, control 0); a non-maker holder scores it by his pursuits as any
   give.
-- *Roll:* none. A gift needs no contest; a refused hand-over is the receiver's (out of scope: acceptance
-  of a gift is not modelled; the receiver can `give` it back or destroy it).
-- *Effects:* unchanged. *Emits:* unchanged.
+- *Roll (§0.6; corrected — the first draft made a hand-over certain):* whether the receiver takes it could
+  go either way (a writ or a challenge is unwelcome), so it is drawn: pool `pool_default`; obstacle `plain`
+  + `regard` + `unwelcome`. Overwhelming / Success / Partial the hold moves (Partial: taken under protest,
+  a reluctance deed in witnesses' ledgers; Overwhelming: the receiver's regard of the giver rises); Failure
+  the receiver refuses, the giver keeps it, and the receiver holds a firsthand claim of the tender, so an
+  **addressed document counts as served** (its answer window starts) — the Failure is not a dead end.
+- *Effects:* the existing two-hold write at the three taking bands. *Emits:* `record.given` / `rung.ceded`
+  there; `give.refused` (reason: the receiver would not take it) at Failure.
 - *Consequences (readers named):* `writs_held` (→ `comply`, `evade / defy`, `accept`), `held_record_claims`
   (→ `carry` of a given petition, `commit` via `terms_sourced`), `hold_force` (title), strife (`record.given`
   and `rung.ceded` join strands).
@@ -683,6 +766,11 @@ a time.**
 **3. Build-out, decided (on lane A, not redesigning it).**
 - *Formation:* lane A's; plus R-WITH on `subject` (the `with` conjunct) — the remainder of the 13
   `with=False`.
+- *Roll (§0.6; corrected — the first draft minted the Record with certainty):* whether a challenge lands
+  as a challenge could go either way, so it is drawn: pool `argue`; obstacle `plain` + `rank_gap` +
+  witnesses' `regard` of the challenger (favourable). The band is the Record's `standing` (3 / 2 / 1),
+  which scales what a decline costs the challenged; Failure mints nothing, the challenge is laughed off
+  (witnesses' regard of the challenger falls; his dispute stands; he may try again).
 - *Stakes:* `stakes` becomes choice-sourced (`rosters.yaml: choice_sourced`, ranged over
   `challenge_terms`, `marshal`'s shape) and ranked by the grievance's magnitude: the challenger's
   `deeds_judged` sum against the challenged, banded by a fixture table `stakes_by_grievance` (proposed: a
@@ -695,9 +783,11 @@ a time.**
   (fixture, proposed one round-set within the season). At MATTER, an unanswered, unaccepted challenge
   whose due matures emits **`challenge.declined`** (new kind) naming the challenged as doer — a deed that
   every witness of the challenge judges by their pursuits (honour-leaning pursuits judge it against him),
-  so a refusal to fight costs regard without a fight. The challenger's dispute then reads as **settled**:
-  `holds_dispute` skips deeds before the decline (the same `forgiven_since`-shaped mark, written by the
-  MATTER step on the challenger, so one mark reader serves both `forgive` and a settled challenge).
+  scaled by the Record's `standing`, so a refusal to fight costs regard without a fight. Whether the
+  challenger then holds himself satisfied could go either way, so the MATTER step draws it (pool
+  `resolve`, obstacle `routine` + `grievance` − `standing`): Overwhelming / Success settled (mark factor
+  0), Partial eased (0.5), Failure unsatisfied (no mark; he may challenge again). The mark is the same
+  `forgiven_since`-shaped mark, so one reader serves both `forgive` and a settled challenge.
 - *After the duel:* PHYSICAL's `accept` resolves the fight (`duel.yielded`, wounds, death); the outcome
   likewise writes the settled mark on both parties (the dispute is settled by the duel, ED-IN-0337:
   "a duel settles a dispute"). Owner of the write: the `accept` effect (PHYSICAL lane); named here.
@@ -717,8 +807,10 @@ settled mark).
 **7. Gate and falsifier.** Lane A's planted-dispute run extended: the challenge carries a non-`None`
 `stakes` chosen by grievance size; delivered by `give`; in one arm accepted (PHYSICAL), in the other left
 unanswered → `challenge.declined` at the due tick, witnesses' `regard` of the challenged falls, and
-`holds_dispute(challenger, challenged)` is False after both arms. Planted failure: remove the answer stage
-and the unanswered challenge never resolves (the pre-change dead end).
+over N seeds of the same planted world `holds_dispute(challenger, challenged)` is False after the
+settling bands and True after Failure, at a rate that moves with `standing` (a distribution, not one
+outcome: the Standing rule's gate). Planted failure: remove the answer stage and the unanswered challenge
+never resolves (the pre-change dead end); fix the draw to one band and the rate goes to 0 or 1.
 
 **8. Cases.** ARC-21 N3 ("a failed formal challenge"), CHAR §7 (feud, rivalry), the PC audit's duel
 cases (`03_PC_audit.md` F-PC-01).
@@ -776,7 +868,10 @@ The forgiveness mark must land with or before the challenge settlement, which re
 | **S1-D** | `14_VERBS_SOCIAL1_D_grievance_and_settlement.md` | `forgiven_since` mark and widened decline; `challenge` stakes, answer window, `challenge.declined`, settled mark; `carry`'s `petition_venue` and appeal | S1-B (delivery), lane A step 2, PHYSICAL `accept` | planted-dispute run: forgive ends the dispute; an unanswered challenge declines at its due tick and settles; a carried petition names a venue and reaches a `determine` attempt |
 
 Each batch is a declared hash mover for the shipped realm; its re-record is named in its commit body
-(CLAUDE.md §7).
+(CLAUDE.md §7). **Every gate also carries the Standing rule's check:** for each verb the batch makes drawn,
+a planted world run over N ≥ 20 seeds shows at least three of the four bands, and the band distribution
+moves when one named obstacle term moves (the state sets the odds). Where a per-verb gate above reads as a
+single outcome ("False after", "forms `comply`"), it means at the bands that write it, at a rate.
 
 ## 15. Decisions that survive to Jordan
 

@@ -14,9 +14,9 @@ build-out, and the family's order.
 
 ### 0.1 Verdict
 
-**Two of the nine work (`move`, `migrate`), one forms for everybody and has never executed (`train`), and
-six are sound commands that no person in the world can give (`recruit`, `form_unit`, `assign_troops`,
-`disband_unit`, `discharge_troops`, `order_unit`).** The six are not stubs: each has a row, an effect, a
+**One of the nine works (`migrate`); one executes and goes nowhere (`move`); one forms for everybody and
+has never executed (`train`); and six are sound commands that no person in the world can give (`recruit`,
+`form_unit`, `assign_troops`, `disband_unit`, `discharge_troops`, `order_unit`).** The six are not stubs: each has a row, an effect, a
 pure rule in `modules/mass_battle/armyrecord.py`, a refusal, and a headless menu that lists exactly what
 the fold would accept. What is missing is the person. The command rides the act's payload, the operand
 vocabulary is closed, so `Fixtures withheld_verbs` holds all six out of formation for everybody
@@ -32,7 +32,21 @@ discharging has no motive.
 `train` fails differently: it forms 83 of 83 and executed 0 of 85 attempts, because its subject is the
 question's referent (a non-person 39 times, an absent person 33 times) and, when the pupil is present,
 he holds no key in the vocation (13 of 13 post-admission refusals): the J-13 (iii) interim forbids
-minting a key and no realm person holds one. It is a verb whose every refusal the actor could have read.
+minting a key, and at `build_realm(0)` two of 83 persons hold any key (both `inquiry`; probe, §12). It is
+a verb whose every refusal the actor could have read.
+
+`move` emits `travel.moved` 15 times in the reading, and the hole register's own classifier
+(`hole_register.yaml` H-329, same seed and span, an earlier HEAD; not re-run here) found 16 of 17 such
+moves went to the rung the mover already stood on. Its 40 refusals are 33 journeys *into a person or a
+Record* (the question's referent, which the ladder will not seat him in) and 7 unknown audiences. Nobody
+in the realm travels to do anything, which is why `with=False` is the commonest refusal of five other
+verbs (`train` 33, `give` 17, `surveil` 15, `capture` 7 in the same reading).
+
+Two defects of state were found on the way and are carried in the muster proposal: **a dead commander's
+troops stay counted against their cohorts for ever** (probe: after the Duke of Varfell's death
+`army_of` reads `None` and the cohort's 40 levy still count against a successor's army,
+`world_q.other_army_records` has no holder test), and **nothing lowers an army when the cohort it was
+drawn from shrinks or leaves the faction's ground** (the cap is asked only at `recruit`).
 
 ### 0.2 What this is read against
 
@@ -59,7 +73,7 @@ minting a key and no realm person holds one. It is a verb whose every refusal th
 | `discharge_troops` | 33 / 50 | 0 | 0 | 0 | 0 | — (withheld) | **unreachable in computed play**; no caller at all outside tests and the menu |
 | `order_unit` | 33 / 50 | 0 | 0 | 0 | 0 | — (withheld) | **unreachable in computed play**; no caller at all outside tests and the menu |
 | `migrate` | 33 / 50 | 83 | 84 | 10 | 74 | `room` 60 · `path` 13 · `write` 1 | **works** (throttled by capacity, which is the design); its refusals teach the migrant |
-| `move` | 33 / 50 | 83 | 55 | 15 | 40 | post-admission 33 (the effect's ladder decline) · `audience=UNKNOWN` 7 | **works, and 33 of its 40 refusals are a dead end the actor could have read** |
+| `move` | 33 / 50 | 83 | 55 | 15 | 40 | post-admission 33 (the effect's ladder decline: the destination is a person or a Record) · `audience=UNKNOWN` 7 | **executes and goes nowhere** (H-329: 16 of 17 to the mover's own rung); 33 of 40 refusals are a dead end the actor could have read |
 
 Never emitted in this run, of the family's declared kinds: `army.recruited`, `army.formed`,
 `army.assigned`, `army.disbanded`, `army.discharged`, `army.ordered`, `capability.raised`, and the six

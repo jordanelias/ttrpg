@@ -28,8 +28,9 @@ to the person it is about; `interview` executes and, being ungraded, finds nothi
 form on hearers and matters the actor could have known were not there. **The single largest obstacle is
 that no act in this family can carry content**: a computed act binds one referent (`H-94`, cited in the
 `petition` row's `requires_typed_note`), so a word has a topic and no assertion, a petition a subject and
-no addressee, an interview a person and no question. The evidence interface FI-05B and SC-P8 decided
-(cited items, the case file, contradiction) is sound and buildable, and it has nothing to consume until
+no addressee, an interview a person and no question. The evidence carriers FI-05B and SC-P8 decided
+(cited items, the case file, contradiction) are sound and buildable, provided their fixed entry and
+strike rules are read as odds on a draw (the standing rule, §0.5); they have nothing to consume until
 the family's acts carry what was said.
 
 ### 0.2 What this is read against
@@ -76,6 +77,30 @@ actor (no `copying` key held by anyone; `aperture` POOLS ROLLED).
 | `proposals/14_VERBS_SOCIAL2_C_case_question_confession.md` | `open_case` (the charge), `speak` (bands), `interview` (the prompt), `interrogate`, `tell` (bands) | S2-C |
 | `proposals/14_VERBS_SOCIAL2_D_tie.md` | `tie / knot` | S2-D |
 
+### 0.5 The standing rule applied: every consequential outcome is a draw
+
+`AUDIT_BRIEF.md` "Standing rule" (Jordan, 2026-11-12: *"we do not do deterministic"*). Each verb below is
+designed to it: state sets the odds, the draw sets a graded, recoverable outcome. What stays a fixed
+function is only what the rule exempts: eligibility and requirement checks (whether an act may be
+attempted), bookkeeping (an id, a mint, a stage appended after a band decided it), and the fact that a
+person did say or file something. Where a section below was first drafted otherwise, it has been
+corrected in place; the corrections are listed here so the reader sees what changed.
+
+| verb | the draw | odds from (pool · obstacle = difficulty + modifiers) | graded result | correction to the first draft |
+|---|---|---|---|---|
+| `utter` | the room's uptake (`a standing`, against the room) | `copying` · `obstacle_default` + hearers' contrary held claims (the speaker's view of them) + venue | Ov/Su: hearers hold the cell as a told belief; Pa: they hold only that he said it; Fa: noise, only `proposition.uttered` | was: the told copy deposited on every hearer as a rule |
+| `petition` | none at filing (the filing happened); the answer is the addressee's own contested act (`carry`, deny) | — | — | unchanged: no consequential outcome at filing |
+| `open_case` | none at opening (a remit act; eligibility); the case is decided by `determine`'s draw | — | — | unchanged |
+| `construe` | whether the reading takes (`a proposition`, against the writ's clarity) | `argue` · `obstacle_default` + clarity of the terms + the issuer's standing | Ov: reading minted, witnesses hold it as his credible reading; Su: minted; Pa: minted and witnesses hold `terms.distorted` against him; Fa: no reading, he holds the terms as written | was: a fixed rule (*reads it as he already believes*) |
+| `speak` | the contest, already (`a matter`) | `copying` · opponent / `obstacle_default` + **evidence as modifiers** (each cited item shifts the obstacle by its kind and remove) + venue + `reception` | each band enters the cited items at a graded weight (Ov full, Su full, Pa half, Fa none entered, disclosure kept) | was: items entered at Success by rule and struck by a fixed contradiction rule (SC-P8 edit 3; corrected by another lane) |
+| answering an item | the answering `speak`'s own draw | as `speak`, with the held contradicting item as a modifier against the entered one | Ov: struck; Su: struck; Pa: its weight halved; Fa: it stands and the answer is entered as failed | was: *a contradiction strikes* |
+| `tell` | always a draw (`a standing`) | `copying` · a low base obstacle for an unopposed telling, raised by the hearer's contrary belief as the teller holds it, by distance of relation, lowered by a tie | Ov/Su: told copy; Pa: lossy copy (withheld hand); Fa: `news.untold` | was: *an unopposed telling does not roll* — withdrawn |
+| `interview` | whether the subject engages (`a standing`, against the subject) | `inquiry` · `obstacle_default` + relation, rank gap, the subject's own leans | Ov: prompt raised and the answer's obstacle lowered (he is pressed); Su: prompt raised; Pa: prompt raised and the subject learns what is asked and why; Fa: he declines, nothing raised | was: an ungraded prompt |
+| the interviewee's answer | his own `tell` or `lie`, each a draw | as `tell` / `lie` | as those rows | — |
+| `interrogate` | the contest, already (`a proposition`) | `inquiry` · the prisoner + evidence on file + custody length | four confession bands | unchanged; the confession's entry is graded by band |
+| `oblige` | admission to service (`a standing`, against the seat's holder or `obstacle_default` if vacant) | joiner's pool · seat's difficulty + regard + rank gap + ban | Ov/Su: service opened (edge `degree` = band); Pa: opened on probation (degree `Partial`, shorter term); Fa: `duty.refused`, may try again | was: the joiner's fiat (`members_by_admission`); conflict with that ruled basis listed in §11.4 |
+| `tie` | whether the bond takes (`a standing`, against the partner) | `copying` · `obstacle_default` + regard, relation | Ov/Su/Pa: edge opened with `degree` = band; Fa: `bond.refused` | was: an uncontested opener |
+
 ## 1. `utter`
 
 **1 Premise.** *A person says something in so many words, and what he said is now a fixed statement others
@@ -105,12 +130,17 @@ answers, by one rule: *a person says what he holds.*
   `need` → `OUGHT` (he voices a demand). `WILL` has no question source and is not formed (named).
 - **Requirement.** That `holds` conjunct: he holds a claim on what he speaks of, so a word about nothing
   he knows is not formed; refusal `utterance.empty` for a hand-built act only.
-- **Roll.** None. An utterance is a fiat of the speaker (it may be false; nothing verifies, FI-05B §7).
-- **Effects.** As today plus content. Not graded: there is no degree to saying something.
+- **Roll.** That he said it is not in doubt (the Proposition is minted at every band; nothing verifies
+  its truth, FI-05B §7). **Whether the room believes it is a draw** (§0.5): the row is contested `a
+  standing` against the room, pool `copying`, obstacle `obstacle_default` plus a modifier per hearer the
+  speaker believes holds a contrary claim (his own ledger, F8) and the venue's modifier.
+- **Effects by degree.** Ov / Su: those present hold the cell as a told belief, utterer on the chain
+  (FI-05B E-3's channel, gated by the band); Pa: they hold only that he said it (`proposition.uttered`
+  about him), not the cell; Fa: the same, and the speaker's `reception` takes nothing. Every band mints the
+  Proposition, so a failed word can still be committed to, cited, or said again (recoverable).
 - **Writes / emits.** `Proposition.exists` (unchanged), the maker's `hold` (unchanged);
-  `proposition.uttered`. WITNESS deposits on those present a told-shaped claim of the Proposition's cell
-  with the utterer on its chain, through FI-05B E-3's deposit (an utterance is a telling to the room;
-  `loop/witness.py`'s told-deposit trigger gains "the act mints a `HOLDS` Proposition").
+  `proposition.uttered` at every band, plus `proposition.believed` at Ov / Su (the told deposit's
+  trigger reads the band's kind, not the verb).
 - **Cost.** A held `hold` (budget, `H-92`), and exposure: an uttered `HOLDS` is a citeable item against its
   utterer (FI-05B E-1's `oath` kind applies only once he `commit`s; the bare word is cited as the
   witnesses' told claim).
@@ -289,18 +319,24 @@ would deposit only that a distortion happened.**
   whose typed `existence` names a Record kind forms on that kind alone). And only where the reading can
   differ: the construer holds, in his own ledger, a claim on the terms' cell `(subject, predicate)` with
   a value other than the terms' (a person-side read once `utter` carries content, S2-B §1).
-- **Effect (new `_eff_construe`).** Mints the construer's reading as a `HOLDS` Proposition: the terms'
-  subject and predicate with **his own held value** (*a person reads an order as meaning what he already
-  believes*), with his maker's `hold`; and writes nothing on the writ. Writes `Proposition.exists`.
-  Emits `terms.distorted`; WITNESS deposits it with the reading's id, so whoever is present holds that he
-  read it so. Declines (`construal.impossible`) where the writ's `terms` is no Proposition or he holds no
-  differing value (a hand-built act).
+- **The draw (§0.5).** Contested `a proposition` against the writ itself: pool `argue`, obstacle
+  `obstacle_default` plus the clarity of the terms (a terms Proposition with a predicate and value is
+  harder to bend than an empty one) and the issuer's standing in the construer's eyes. The reading he
+  attempts is the terms' subject and predicate with **his own held value** (what he would like it to
+  mean); whether it takes is the draw.
+- **Effect by degree (new `_eff_construe`).** Ov: the reading is minted as a `HOLDS` Proposition with his
+  `hold`, and those present hold it as his credible reading; Su: minted; Pa: minted, and those present
+  hold `terms.distorted` about him (a reading others see as a twist, which a bench can later weigh);
+  Fa: no reading, `construal.failed`, he holds the terms as written — he may comply, defy, or try again.
+  Writes `Proposition.exists` at Ov / Su / Pa; `[]` at Fa. Writes nothing on the writ. Declines
+  (`construal.impossible`) before the draw where the writ's `terms` is no Proposition or he holds no
+  differing value (a requirement check, not an outcome).
 - **Downstream.** `comply` / `evade / defy` (another family's rows) judge the act against the actor's
   reading where he holds one (his own ledger, as their `own_ledger` conjunct already reads); the issuer's
-  terms and the construer's reading are two held items on one cell with different values, so SC-P8's
-  contradiction rule makes the construal answerable before a bench (*"he twisted my order"*).
-- **Cost.** His reading is on record; citing it against him is a contradiction a judge weighs.
-- **No roll.** A reading is a fiat of the reader; the contest is the later hearing.
+  terms and the construer's reading are two held items on one cell with different values, so the
+  construal is answerable before a bench (*"he twisted my order"*) — as a modifier on the answering
+  `speak`'s draw (§5), never a fixed strike.
+- **Cost.** His reading is on record; citing it against him is an item a bench weighs in its own draw.
 
 **4 Scales.** Person (the reader) against settlement / faction / realm (the issuing seat). Player: choose
 to construe a writ he holds. NPC: the chooser; a person whose pursuits oppose the terms is likelier
@@ -341,12 +377,24 @@ every speaker. Bands are witnessed and nothing reads them but the hearers' ledge
 what is not docketed; when it executes it moves nothing a later act reads.**
 
 **3 Build-out, decided.** Formation is this family's (S2-A §1): `referent_class: Matter`, the docket
-question's matters. Everything inside the room is SC's and is cited, not redone: `cites` operand (FI-05B
-E-1), case-file stages per cited item at `Success`+ (E-2, SC-P8 edit 2), citation as telling (E-3),
-answering by contradiction and impeachment (E-5, SC-P8 edit 3), counting through `world_q.hearing` (SC-P8
-edit 4), and the hearing as the module's scene (SC-P3B). The band writes this audit decides, so the row is
-not empty: `Overwhelming` / `Success` / `Partial` append a band stage to the case file (`Record.stages`,
-SC-P3B's "band stage"; the carrier the gate can receipt, which `H-63` lacked); `Failure` writes `[]`.
+question's matters. The room's carriers are SC's and FI's and are cited, not redone: the `cites`
+operand (FI-05B E-1), the case file as the record of what entered (E-2), citation as telling (E-3), the
+hearing as the module's scene (SC-P3B). **What those documents state as fixed rules is taken as odds,
+under the standing rule (§0.5)**, and SC-P8's deterministic entry and strike are being corrected by
+another lane; this row is designed to the draw:
+- **Evidence sets odds.** Each cited item is a modifier on the obstacle (`rosters.yaml: proofs` kind ×
+  FI-05B's weight by remove), admitted by the arrangement row; the speaker's pool (`copying`) and the
+  room's `reception` are the rest. A strong case is likelier to carry, never certain.
+- **Entry is graded by the band.** Ov / Su: every cited item is entered on the case file at its weight;
+  Pa: entered at half weight (the room heard it and doubts it); Fa: nothing entered, but the items were
+  disclosed (E-3's told copies follow the band as `utter`'s do: Ov / Su belief, Pa that he said it).
+- **Answering is a draw, not a rule.** An answering `speak` cites a held item contradicting an entered
+  one; the contradiction is a modifier in the answerer's favour on his own draw. Ov / Su: the entered
+  item is struck (a `struck` stage); Pa: its weight is halved; Fa: it stands, and the failed answer is
+  itself entered against the answerer. A false item can strike a true one, and a true answer can fail.
+- **Band writes** (so the row is not empty, `H-63`): Ov / Su / Pa append the band stage and the entered
+  items to the case file (`Record.stages`, the carrier the gate can receipt); Fa appends the disclosure
+  stage only.
 The `Person.stance` write `H-63` names stays unbuilt (no value source). The venue half (*at the actor's
 venue*) is a `with`/`present_at` conjunct once a docket item carries its date's venue (SC lane); named,
 not built here.
@@ -390,15 +438,15 @@ times in three; chains do not grow.**
 `person_q.present_persons` (FI-02 edit 5; the refusal moved into formation), the `unshared` slant
 (edits 2–4), and the pairing that travels (FI-06). This family decides the one thing left open by FI-02
 edit 6 (*whether an ordinary telling between two people who are together should fail two times in
-three*): **an uncontested telling to a hearer who holds no opposing standing does not roll.** The row
-contests `a standing` only where the hearer holds a claim on the same cell with a different value (he
-must be persuaded); otherwise it resolves at `Success` without a draw. The test cannot read the hearer's
-ledger (F8 admits a resolver-side read of the actor's own ledger only), so it is made on the TELLER's own
-ledger: whether he holds a claim that the hearer believes otherwise on that cell (a told or seen claim
-whose holder-of-record is the hearer). The teller's belief decides whether he expects to argue; a wrong
-expectation is a roll he did not need, or a persuasion he did not attempt and whose told copy the hearer
-then holds beside his own contrary claim (the contradiction is the hearer's to weigh, through
-`decision/options.py::record`). `confidence.broken` stays (the band kinds are the ruling's).
+three*), under the standing rule (§0.5): **every telling is a draw, and the odds, not the existence of
+the roll, answer FI-02's question.** The obstacle is the task's difficulty plus modifiers, from a new
+`rosters.yaml: tell_obstacle` table: a low base for an unopposed telling (`unopposed: 1`); raised to
+`obstacle_default` where the teller believes the hearer holds the contrary (read on the TELLER's own
+ledger — F8 admits no resolver-side read of the hearer's); lowered by a `tie` to the hearer (§10) and
+raised by rank gap and by a venue that discourages talk. A friend told news in private is very likely
+to take it; a rival told what he disbelieves is not. The band kinds are unchanged (Ov / Su / Pa
+`news.told` + `confidence.broken`, Pa the lossy copy; Fa `news.untold`, recoverable by telling again).
+A first draft of this section exempted the unopposed telling from the roll; that is withdrawn.
 
 **4 Scales.** Person to person; composes to settlement and faction through chains (FI-02's gate: two-hop
 chains above 0). Player: whom to tell what. NPC: the chooser with FI-02's slant.
@@ -443,16 +491,23 @@ own `tell` or `lie`*. Built as a prompt through the one chooser, not a scripted 
   not formed.
 - **Topic.** The operand `on`: the subject of the claim that raised the investigator's question
   (`Question.about`), else the interviewee himself (what he did: FI-06's widened `said_of` pool).
-- **Effect.** No `_eff_interview`: a Question is not world state, so there is nothing to write. The
-  row stays ungraded and write-free; WITNESS deposits on the
-  interviewee a claim `(asker, interview.asked, on)` (`interview.asked` replaces `finding.made` as the
-  row's emitted kind, so the inquiry roster's `finding.made` no longer claims an ungraded verb), and
+- **The draw (§0.5).** Whether the subject engages is a draw: the row is contested `a standing` against
+  the subject (`counterparty: subject`), pool `inquiry`, obstacle `obstacle_default` plus relation, rank
+  gap and the subject's own leans. Ov: the prompt is raised and the subject's answering `tell` / `lie`
+  draws at a lowered obstacle (he is pressed); Su: the prompt is raised; Pa: raised, and the subject also
+  holds what the asker is after and why (disclosure); Fa: `interview.declined`, nothing raised — the
+  asker may try again or another way.
+- **Effect.** No `_eff_interview`: a Question is not world state, so there is nothing to write; every
+  band writes `[]` and the product is a deposit. At Ov / Su / Pa WITNESS deposits on the interviewee a
+  claim `(asker, interview.asked, on)` (`interview.asked` replaces `finding.made` as the row's emitted
+  kind, so the inquiry roster's `finding.made` no longer claims a verb with no finding), and
   `world_q.questions_for` gains a source `asked` (`rosters.yaml: question_sources`) raising, for a person
   holding such a claim from this tick, a Question whose referents are `(on,)` and whose `about` is the
   claim; `tell`'s and `lie`'s `to` fan includes the asker (present by the `with` conjunct). His chooser
   then answers by `tell`, `lie`, or by nothing (silence is the null choice). The investigator's product
   is the told claim, with the interviewee on its chain.
-- **Refusals.** `finding.none` renamed `interview.refused`, for a hand-built act whose subject is absent.
+- **Refusals.** `finding.none` renamed `interview.refused`, for a hand-built act whose subject is absent
+  (a requirement check, before the draw).
 - **Cost.** A scene of each; the interviewee learns what the investigator is asking about (disclosure,
   FI-05B E-7's logic).
 
@@ -498,8 +553,11 @@ and of a `detain` disposal (`determine` under a `detain` arrangement, SC-03a).
   through `ABOUT_KEYS` (S2-C §1's `case` kind), so an `open_case`d matter is a charge, not only a carried
   petition.
 - **Roll.** As today; the prisoner opposes (`counterparty: subject`); pool `inquiry` or `pool_default`.
-- **Effects.** `Overwhelming` / `Success` / `Partial` write one case-file stage `proof:confession`
-  (SC-P8 edit 2's carrier; FI-05B E-1's `confession` kind) and the bands' kinds are deposited at WITNESS
+- **Odds.** Evidence already on the case file against the prisoner is a modifier in the interrogator's
+  favour; custody length and the prisoner's own resolve are modifiers against.
+- **Effects.** `Overwhelming` / `Success` write one case-file stage `proof:confession` at full weight,
+  `Partial` at half weight (a partial confession, the hand withheld) (SC-P8 edit 2's carrier; FI-05B
+  E-1's `confession` kind; the weight then enters `determine`'s odds, never its outcome) and the bands' kinds are deposited at WITNESS
   as today; `Failure` writes `[]` and emits `confession.withheld`. So `_eff_interrogate` exists for the
   three winning bands (the case file is the receipted subject), closing `H-226` by route (b) for this row.
 - **Cost.** The prisoner's regard of the interrogator falls through the witnessed deed (existing
@@ -546,8 +604,13 @@ build-time deposit on CR-81's precedent (`harness/populated.py::seed_acquaintanc
 one firsthand claim `(seat, seat.held, holder)` per seat whose purview reaches his home rung. Then
 `seats_named` is non-empty for every person under a seat, `oblige` forms on those seats, and `petition`'s
 addressee fan (§2) reads the same claims. In play, the same claim is deposited by WITNESS of a
-`tenure.opened` (already the case). The five clauses stay; why someone obliges is the chooser's (pursuit
-leans; a want for protection or office). No roll.
+`tenure.opened` (already the case). The five clauses stay as eligibility; why someone obliges is the
+chooser's (pursuit leans; a want for protection or office). **Admission is a draw (§0.5):** contested
+`a standing` against the seat's holder (`obstacle_default` where vacant), the joiner's pool against the
+seat's difficulty plus regard, rank gap and the seat's establishment size. Ov / Su: the service edge
+opens with `degree` = band and `oblige_term`; Pa: opens on probation (`degree: Partial`, half term);
+Fa: `duty.refused`, the joiner may ask again next season. This overrides the ruled
+`members_by_admission` basis (*the joiner's own act admits him*): listed in §11.4.
 
 **4 Scales.** Person → seat (settlement to realm). Player: whom to serve. NPC: the chooser.
 
@@ -584,8 +647,10 @@ operand and names two kinds for one opener. **Verdict: stub by ruling.**
 IN-32's effect re-lands. This family decides the row's shape: **split it into `tie` and `knot`** — two
 kinds, two meanings, two readers; one opener writing either kind would need an operand to pick the kind,
 a scale-local dialect. `tie` (social, this family): `counterparty: to`, typed `relation(to, with)` and
-`own_ledger(to)`, fanned over `present_persons`; writes `Tenure.since` (kind `tie`, owned by the actor);
-emits `bond.formed`, refusal `bond.refused`; readers `teller_weight`'s relation term (IN-32's `tied`
+`own_ledger(to)`, fanned over `present_persons`; **contested `a standing` against the partner (§0.5)**, pool `copying`,
+obstacle `obstacle_default` plus regard and relation; Ov / Su / Pa write `Tenure.since` (kind `tie`,
+owned by the actor, `degree` = band, which `teller_weight`'s term reads), Fa writes `[]`; emits
+`bond.formed` at Ov / Su / Pa and `bond.refused` at Fa (recoverable: ask again); readers `teller_weight`'s relation term (IN-32's `tied`
 term), `regard` (a tie raises regard of the partner, the existing reader one term over), and `release`.
 `knot` stays declined and moves to the Thread lane (FI-08 §1, `29f`), its row text kept with
 `stratum: thread` and its decline note.
@@ -650,18 +715,21 @@ S2-D tie (after FI-02's chain gate)
 
 ### 11.4 Decisions that survive to Jordan
 
-1. **`tell` rolls only when the teller expects opposition** (§6). Options: (a) as decided — an unopposed
-   telling resolves without a draw, so information flows and the contest is reserved for persuasion;
-   (b) every telling rolls `copying` (today) — telling is a skill, information is scarce and a silver
-   tongue matters even among friends. Materially different games: (a) is a world that talks, (b) a world
-   that mostly fails to. Not answered by ladder steps 1–5: FI-02 edit 6 left it open and no ruling or
-   precedent decides it.
-2. **`construe` reads the writ as the construer already believes** (§4). Options: (a) as decided — a
-   reading is motivated by held belief, which makes every construal a contradiction a bench can try;
-   (b) construal as the issuer-side distortion of the content claim per holder (`H-36`'s magnitude half,
-   the row's own falsifier), a random or pursuit-weighted drift with no held counterpart. (a) makes
-   construal argued; (b) makes it noise. Jordan's refraction ruling (*signified vs signifier*) is
-   compatible with both.
+1. **`oblige` admission becomes a draw, over the ruled `members_by_admission` basis** (§9). The standing
+   rule (*"we do not do deterministic"*, which names *any "binds" effect with no resolution roll*)
+   supersedes the fiat on ladder step 1, but the basis is a ruled roster value, so it is listed: (a) as
+   decided — the seat's holder (or the seat's difficulty) is drawn against, graded, Pa on probation;
+   (b) the joiner's fiat as ruled — anyone may swear to any seat that admits him, and only service's
+   later upkeep is uncertain. (a) makes service something a seat grants; (b) something a person takes.
+2. **What the construer attempts to read** (§4). The draw decides whether a reading takes; what reading
+   he attempts is still a choice of design: (a) as decided — his own held value on the terms' cell, so a
+   construal is a motivated reading a bench can try against the terms; (b) issuer-side drift of the
+   content claim per holder (`H-36`'s magnitude half), a pursuit-weighted distortion with no held
+   counterpart. (a) makes construal argued; (b) makes it noise. Jordan's refraction ruling (*signified vs
+   signifier*) is compatible with both.
+
+Withdrawn from this list after the standing rule: *"`tell` rolls only when the teller expects
+opposition"* — the rule answers it (every telling draws; §6 sets the odds).
 3. **Split `tie / knot`** (§10). Options: (a) split, `knot` to the Thread lane; (b) one row with a `kind`
    operand. Ladder step 5 favours (a) (no operand dialect), but a row split changes the verb count the
    R-05 instrument reads (67 → 68), which is Jordan's roster.

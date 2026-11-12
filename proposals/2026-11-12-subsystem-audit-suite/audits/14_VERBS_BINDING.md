@@ -82,6 +82,58 @@ The common shape: **the verbs form on referents the actor could have known were 
 execute bind nobody. Both are the brief's dead ends: a refusal the chooser could have read belongs in
 formation.
 
+### 0.2 The standing rule: no governance outcome is a fixed function of state
+
+`AUDIT_BRIEF.md`'s "Standing rule" (Jordan, 2026-11-12: *"we do not do deterministic!!!!!"*): every
+consequential outcome resolves by a draw with a graded, recoverable result; state sets the odds, the
+draw sets the outcome. **Today eleven of the twelve rows are deterministic** in the sense the rule
+forbids: once admitted, `confer` seats, `revoke` unseats, `succeed` crowns, `pardon` frees, `establish`
+founds, `surrender` cedes, `dispatch` (rebuilt by CP-T09-08) moves a man and `issue` binds, each with
+certainty. Only `determine` is contested. That is a finding against the code (severity: degrades
+narrative; touches R-09), and the first draft of this file repeated it (its `confer` and `issue`
+sections said "uncontested by design"); those sentences are corrected below.
+
+**Decided: every binding act whose effect could go either way for the people in the fiction is a
+contested row**, rolled through the one roll owner (`social_contest.roll`, the σ-leverage d10, the
+composition role `contests:` already routes `determine` to), with the obstacle composed by its one owner
+(`modules/social_contest/roll.py::obstacle`, as `05_SC_obstacle_difficulty_and_modifiers_B.md` defines it:
+the task's `difficulty` plus named modifiers). Admission (eligibility, the typed `requires`) stays a
+check: a man cannot exercise a seat he does not hold. The pool is the actor's, through the one pool
+reader (capability via the governance vocations of FA-P6 `06_FA_office_capabilities.md`, practice,
+office weight). **One shape across the family**: a seat-opening act's `Partial` opens a **provisional**
+hold (a `Tenure.term` of `provisional_term` seasons, matured at MATTER under `T-n`, so it lapses unless
+confirmed by a later act), and every `Failure` writes nothing on the target and emits a kind of its own,
+leaving the act re-attemptable (recoverable, never a dead end).
+
+| verb | prize (new rows marked +) | counterparty (opposition) | obstacle terms beyond `difficulty` | O / S | P | F |
+|---|---|---|---|---|---|---|
+| `confer` | + `a seat` | the incumbent, when displacing | `reception` (the seat's body toward the conferee), `standing` +, `stakes` (`hold`) | seated (row's term) | seated, provisional term | not seated; `appointment.resisted` |
+| `revoke` | `a seat` | the holder | `regard`, `standing`, `stakes` (`hold`), `reception` (the seat's body) | unseated + disposal | unseated, no disposal | holds; `revocation.resisted` |
+| `succeed` | `a seat` | none (rival claims fight by other verbs) | `reception` (the seat's body/realm toward the claimant), `standing` | seats taken, title laid down | seats taken provisionally, title kept | claim fails this season; `succession.contested` |
+| `pardon` | `a matter` | none | `stakes` (the restraint kind), `standard` (the disposing arrangement), `reception` (the bench) | every restraint on the seat ends | `detain` ends, `ban` stands (commutation) | stands; `pardon.denied` |
+| `establish` | `a seat` | none | `reception` (the holding's seated persons), `standing` | founded, full derived remit | founded, remit = first half of the derived acts in authored order | nothing; `office.unrecognised` |
+| `surrender` | + `a holding` | none | `reception` (the place's residents toward the receiver's faction) | ceded | ceded provisionally (receiver's hold termed) | the place will not yield; `surrender.rejected` |
+| `issue` | + `an order` | `to` | `regard`, `standing` | writ minted, `force` = band | writ minted, `force` Partial | writ minted, `force` Failure (a dead letter: no answer forms) |
+| `dispatch` | `an order` | `to` | `regard`, `standing` | relocated | relocated, `order.grudged` | stays; `order.refused` |
+| `determine` | `a proposition` (today) | the party | SC's | unchanged | unchanged | SC-P6's acquittal |
+
+`standing` is the one term this family adds to SC's closed roster `obstacle_terms`: the counterparty's
+(or, for an act on the actor's own behalf, the audience's) rank against the exercised seat, read off
+`rosters.yaml: rung_kinds`' order through the gate's rank reader, times a fixture `standing_step`
+(control 0). It is listed in `14_VERBS_BINDING_C_turnover.md` as a cross-lane request to the SC
+obstacle's owner, not edited there. `reception` gains an *audience* operand (the bench today; the seat's
+body, a holding's seated persons or a place's residents here), the same reader with a different set of
+persons. **The answers to a writ** (`comply`, `evade / defy`, `construe`) are the addressee's choices
+and their rows are FA's; this family only writes the writ's `force` band onto the Record so that their
+odds can read it (a cross-lane item, named in `14_VERBS_BINDING_D_orders.md`).
+
+**Three rows stay uncontested, each for a reason the rule itself admits**: `convene` writes a date (a
+clock; whether the room then decides is `determine`'s draw and SC's hearing); `release` closes the
+actor's own edge (a man's renunciation of his own tie cannot fail in the fiction; what others make of it
+is the witnesses' regard); `marshal` writes a standing order on paper (whether the troops follow it is
+the field's draw, MB's). If the orchestrator judges any of the three to be an outcome that could go
+either way, it takes the same shape as the table above.
+
 ---
 
 ## 1. `confer`
@@ -112,9 +164,13 @@ other candidates because nothing in `decision/` reads a vacancy beneath his seat
   the purview of a seat granting `confer` raises the conferrer's score for `confer` on it above his
   median candidate**, read through the one chooser (`decision/choose.py`), never a per-verb branch. Until
   CR-88 lands, the vacancy stays a classed referent only, as today.
-- *Requirements, roll, effects*: unchanged. `confer` is uncontested by design: a conferral is an act of
-  authority, not a contest; contest belongs to the elected seat's bench (CR-35) and to the displaced
-  holder's later acts. No degree.
+- *Roll and effects by degree* (§0.2): `confer` becomes contested (prize `a seat`), so an appointment
+  can fail to take. Pool: the conferrer's (office weight, the governance vocation). Obstacle:
+  `difficulty` `routine`, `reception` of the seat's body toward the conferee, `standing` (a low man
+  raised high is harder), `stakes` `hold`, and `opposition` the incumbent when the act displaces him.
+  Overwhelming/Success seat him (with the row's term, FA-P3); Partial seats him provisionally
+  (`provisional_term`); Failure seats nobody and emits `appointment.resisted`, re-attemptable. The
+  elected seat's bench (CR-35) is a different act and stays so.
 - *Refusals*: `confer.refused` on a banned conferee is a refusal the conferrer could read only if he knew
   the ban; bans are `binding_decision`-chronicled (`revoke`'s disposal, `determine`'s), so a conferrer who
   heard it can decline it person-side. Decided: **a person-side decline on a conferee his own ledger holds
@@ -281,6 +337,10 @@ This lane adds two things CP-T09-08 leaves open:
   `world_q`), not over every person he knows; a man not sworn to the seat is not offered. That moves
   CP-T09-08's `dispatch.refused` for a non-obligee into formation. Self-dispatch is refused by the
   counterparty clause as for `issue`.
+- *Roll* (§0.2): an order obeyed is a draw, not an effect. Contested, prize `an order`, opponent `to`
+  (his score, `regard` toward the lord, `standing`). Overwhelming/Success: relocated; Partial: relocated
+  and `order.grudged` (witnesses read a grudging obedience); Failure: he stays, `order.refused`, his
+  `oblige` intact, the lord's next act his to choose (revoke, case, release him).
 - *What it costs and unlocks*: the journey's leg is charged to the man (`_relocate`); his own next
   season's options are those of the place (presence is the whole binding, L1). Desertion is his `move`
   back; defiance is `evade / defy` once REM-2B's form reaches orders (FA-P1's answer formation reads
@@ -339,6 +399,11 @@ still offered (the derived id lives in `loop/`, which `queries/` does not import
 - *What follows*: the founded seat is vacant; it enters `vacancies` for the founder (who keeps `confer`,
   `FOUNDER_KEEPS`), so `establish` → `confer` is the chain. A founding is the lord's investment in
   structure; its cost is the grant he delegates (the new seat's remit is drawn from his).
+- *Roll* (§0.2): contested, prize `a seat`, no person opponent; obstacle `difficulty` `demanding`,
+  `reception` of the holding's seated persons, `standing`. Overwhelming/Success: founded with the full
+  derived remit; Partial: founded with the first half of the derived remit acts in authored order (a
+  later `establish` on the existing id re-remits it, clause 4's arm) `[ASSUMPTION; medium; revert: Partial
+  founds in full]`; Failure: `office.unrecognised`, nothing written.
 - *Refusals left*: `establish.refused` on a constructor refusal (title in a body) — a fact of the seat's
   body the founder holds, so it too moves into the stamp's filter (`founds_over` already reads the seat).
 - *Consequences*: new seat in `offices`, `vacancies`, `faction_q` seats, `endings_reached` if filled.
@@ -407,8 +472,12 @@ subordinate can address the King. **Verdict: executes; binds nobody; orders noth
 - *Formation*: the fan over `to` filters by the same predicate person-side where it can (his own seats'
   obligees and the persons his ledger seats beneath him); what he cannot read stays the
   `issue.unauthorized` refusal.
-- *Degree*: none. An order is authority, not a contest; the contest is the answer (`construe`) and the
-  issuer's response (`open_case` → `determine`).
+- *Degree* (§0.2): `issue` becomes contested (prize `an order`, opponent `to`), because whether a
+  decree takes hold could go either way. The paper is minted at every band (bookkeeping); the band is
+  written onto it as its `force`. Failure is a dead letter (the addressee hears of it, no answer forms);
+  Partial binds loosely; Success and Overwhelming bind. The answers' odds read `force` (FA's rows; a
+  cross-lane item). The issuer's response to defiance (`revoke`, `open_case` → `determine`) is itself
+  drawn.
 - *Consequences*: answers (FA-P1), recall (`revoke`), cases (`open_case`), `comply`'s performing acts
   (`terms_sourced`), chronicle.
 
@@ -504,6 +573,10 @@ over: withheld, and its occasion is never produced.**
   formation.
 - *Terms*: the row cedes the place outright. A surrender on terms (garrison leaves, stores kept) is the
   covenant route (`covenant` + `give`), not this row; recorded, not built.
+- *Roll* (§0.2): contested, prize `a holding` (new), no person opponent; obstacle `difficulty`,
+  `reception` of the place's residents toward the receiver's faction. Overwhelming/Success: ceded;
+  Partial: ceded provisionally (the receiver's hold termed); Failure: `surrender.rejected`, the town
+  will not yield and the field goes ahead.
 - *Unwithhold*: a declared mover after P-B.
 - *Consequences*: `holder_faction_of`; pending marches resolve `Unopposed`; chronicle; FA-B1 (a yielded
   town is a war cost the waging seats read).
@@ -548,6 +621,10 @@ question names.
 - *Occasion and choice*: mercy is the bench's; the chooser weighs it by regard and pursuits (the
   alignment cells for `pardon`). Nothing is written for the pardoner; the chronicled act's regard is its
   cost and its gain.
+- *Roll* (§0.2): contested, prize `a matter`; obstacle `difficulty`, `stakes` (the restraint's kind),
+  `standard` (the disposing arrangement), `reception` (the bench). Overwhelming/Success: every restraint
+  on the seat ends; Partial: commutation (the `detain` ends, a `ban` stands); Failure: `pardon.denied`,
+  the restraint stands, re-attemptable.
 - *Consequences*: a lifted ban re-opens `confer` and `oblige` to the man; `interrogate` loses its
   referent; `capture`/`arrest` may recur.
 
@@ -638,7 +715,10 @@ appointee is barred from the revoking seat) → the realm hears it → the seat 
   is a refusal the actor could read from the same stamp. Decided: **`revoke` forms only on a seat his own
   ledger says is held** (the newest claim naming the seat is a `tenure.opened` or `succession.claimed`),
   a person-side filter on the stamp, `own_title_declines`' route.
-- *Effects*: unchanged (IN-31's disposal by basis).
+- *Roll and effects by degree* (§0.2): contested, prize `a seat`, opponent the holder (his score,
+  `regard`, `standing`, `stakes` `hold`, `reception` of the seat's body). Overwhelming/Success: the hold
+  closes and IN-31's disposal applies; Partial: the hold closes with no disposal; Failure: he keeps the
+  seat, `revocation.resisted`, and the revoker may try again or go to a bench.
 - *Consequences*: vacancy → `confer`/`succeed`; ban → `confer`'s decline, `pardon`; chronicle; the
   revoked man's grudge (stance rows).
 
@@ -684,7 +764,11 @@ claims → he holds the seat(s) and lays down the title → the realm hears it.
   Valorsmark) is content.
 - *Contest*: SCN-12 and NPC-081 need a contested succession. For elected seats that is CR-35; for
   hereditary seats a rival claim is fought by the verbs around it (`argue` before a bench, `march`).
-  "The first valid claim wins" stays; no second claim rule.
+  No second claim rule; but no claim wins by order either (§0.2): the claim is contested (prize `a
+  seat`, no person opponent; `reception` of the seat's body or the realm's seated persons toward the
+  claimant, `standing`). Overwhelming/Success: the seats open and the title is laid down; Partial: the
+  seats open provisionally (`provisional_term`) and the title is kept, so a failed confirmation leaves
+  him heir; Failure: `succession.contested`, nothing written, and a rival's act may come first.
 - *Formation*: the title narrowing re-forms the claim while the King sits (the row's own note). Decided:
   **the claim forms only while his newest claim about the seat is a `tenure.closed`** (he believes it
   vacant), the same ledger read as `revoke`'s filter, inverted.

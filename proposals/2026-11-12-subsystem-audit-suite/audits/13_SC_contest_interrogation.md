@@ -14,7 +14,9 @@ below). This file measures what the roll does today, finds the cells where tunin
 designs the tuning surface and its calibration that sit on SC-B. It does not repeat SC's audit and
 addendum, DICE's one-score proposal, FI's evidence interface or CHAR's NPC reconciliation; it cites them.
 
-Proposals written by this lane: `proposals/13_SC_tuning_tables.md`, `proposals/13_SC_calibration.md`.
+Proposals written by this lane: `proposals/13_SC_tuning_tables.md`, `proposals/13_SC_calibration.md`,
+`proposals/13_SC_draw_for_unrolled_contests.md` (the last under the standing rule *"we do not do
+deterministic"*, added to `AUDIT_BRIEF.md` while this lane ran).
 
 ---
 
@@ -69,8 +71,8 @@ the loop never runs (SC audit §1(b)).
 | sparring / trial by combat | `challenge` → `accept` → `fight` | combat module (out of this lane) | — | body, tenure | PC lane (`IMPLEMENTATION_BRIEF_A` step 1–2) |
 
 Read across: **four contest types roll** (hearing via `speak`/`determine`, debate/persuasion/argument
-via `argue`, lie, interrogation), **six resolve with no roll at all** (petition, accusation, appeal,
-vote, negotiation, the arrangement rows themselves), and the arrangement row, which is the only place a
+via `argue`, lie, interrogation), **five resolve with no roll at all** (petition, accusation, appeal,
+vote, negotiation) — each a degenerate cell under the standing rule (§4 cell 9) — and the arrangement row, which is the only place a
 venue's character is written, never reaches a roll because no computed docket item names one.
 
 ### 1.2 Verbs that resolve through a social, informational or political roll
@@ -103,9 +105,12 @@ run): social `carry`, `challenge`, `commit`, `comply`, `conceal`, `construe`, `c
 `revoke`, `succeed`, `surrender`; informational `forge`, `thread_read`. Three of these are contests in
 all but code and are named in §4: **`interview`** questions a witness and returns `finding.made` with no
 resistance from the witness; **`covenant`** is the negotiation's offer and cannot be refused by a roll;
-**`conceal`** assumes a cover whose quality nothing grades. (Deciding which of the twenty-nine should
-roll is the verb lanes' — `audits/14_VERBS_*` — not this one's; this file supplies the difficulty
-column they would fill.)
+**`conceal`** assumes a cover whose quality nothing grades. Under the standing rule (*"we do not do
+deterministic"*), every one of the twenty-nine whose outcome could go either way for the people in it is
+a degenerate cell (§4 cells 8–9); `13_SC_draw_for_unrolled_contests.md` gives the social and political
+ones a draw on the same roll and the same difficulty column. The remainder (`utter`, `commit`, `give`,
+`tie / knot`, `forge`'s minting, `thread_read`) are bookkeeping or an act on one's own state, and the
+material and military ones are the verb lanes' (`audits/14_VERBS_*`).
 
 ## 2. Dimensions
 
@@ -234,7 +239,30 @@ Worst first. Each has its control.
    fix for this lane; recorded for the verb lanes, whose band maps should not hang anything on
    Overwhelming at pool 2.
 8. **`interview` questions a witness with no roll.** A witness cannot resist questioning, so testimony
-   is free. Control: `interrogate`, the bench's questioning, is a roll. Decision in §6 R-7.
+   is free. Control: `interrogate`, the bench's questioning, is a roll. Under the standing rule (*"we do
+   not do deterministic"*, `AUDIT_BRIEF.md`) this is a degenerate cell: it gets a draw (§8 R-7,
+   `13_SC_draw_for_unrolled_contests.md`).
+9. **Contests that resolve as a fixed function of state** (the standing rule's test: *a thing that
+   could go either way for the people in the fiction goes by a draw*). Of the 29 unrolled verbs in §1.2,
+   the ones whose outcome could go either way and today cannot: `covenant` (an offer is made; nothing
+   decides acceptance but the counterparty's later act), `comply` / `evade / defy` / `construe` (obedience
+   to a dispensation is a choice with no resistance and no risk of being caught out), `conceal` (a cover
+   is assumed perfectly), `petition` / `open_case` / `carry` (a matter is docketed with certainty), the
+   binding acts `issue`, `confer`, `revoke`, `pardon`, `release`, `surrender` (*"a decree binds"* — the
+   case the rule names), and the vote (`world_q.declared_votes` counts commits: a verdict by count).
+   Eligibility (may he attempt it?) stays a check; the outcome gets a draw. Control: `tell`/`lie`, which
+   already draw for the same kind of social effect. Proposal for the contest types this lane owns
+   (negotiation, questioning, docketing, the ballot, the appeal): `13_SC_draw_for_unrolled_contests.md`.
+   The binding acts are listed for `14_VERBS_BINDING` / the institutions lane, and `comply`, `evade /
+   defy`, `construe`, `conceal` for the SOCIAL verb lanes.
+10. **A verdict that is a default roll with no spread.** `determine` rolls pool 2 against Ob 2.0 for
+   every bench, matter and party (§3.2–3.3, control moves nothing): it is a draw, but every hearing has
+   the same odds, which the rule names as a repair case. Fix: T1–T5 (the tables give it spread); its
+   capability row (SC-P7).
+11. **Deterministic evidence entry and strike in SC's played-hearing design** (`audits/05_SC_audit_addendum_B.md`
+   B4.2: *present* and *answer* resolve with "no draw: the heavier stands"; `05_SC_evidence_and_rebuttal.md`'s
+   strike). Not this lane's file; listed for the SC lane. This lane's tables carry evidence only as an
+   obstacle term on a draw (T5), so a cited item shifts the odds and never fixes the outcome.
 
 ## 5. Tuning surface
 
@@ -284,7 +312,8 @@ automatic round is the season loop's act, and the player's choice is a Candidate
 | hearing / plea / trial (`speak` + `determine`) | which matter; the items to file; concede a rung (a plea); effort; for a self-plea, no opponent | `speak`: one draw against `routine` + standard(row) + opponent's score/2 + reception − evidence; `determine`: the bench's draw against `routine` + standard + stakes(disposal kind) − the filed board | the opposing party files and answers by the same `speak`; the bench's `determine` is its own act (SC addendum B4.4's decider for the sitting, when the sitting is built) |
 | interrogation (`interrogate`) | the questions as cited items (what he holds against the detainee); effort | one draw against `demanding` + the detainee's score/2 (SC-P7's row) + regard (the detainee's hostility) − evidence | the detainee resists by his score and his stance; a confession band deposits claims (FI) |
 | debate (`argue` in a `parliamentary_debate` / `council_of_state` sitting) | as persuasion, before a bench | as persuasion, with `standard(row)` and reception in place of regard | each member's vote is his own `declared` commit; no averaging (SC addendum F-SC-20) |
-| negotiation (`covenant`) | the terms (an uttered Proposition), the concession offered | **no roll by decision** (§8 R-8): acceptance is the counterparty's choice, scored by the chooser | the counterparty accepts or refuses as a Candidate scored by his pursuits against the terms |
+| negotiation (`covenant`) | the terms (an uttered Proposition), the concession offered, effort | one draw (§8 R-8): pool (argue) against `routine` + the counterparty's score/2 + the terms' cost to him (his pursuits against the terms) − regard; the band grades the bargain (Overwhelming: accepted as offered; Success: accepted; Partial: a counter-offer at the concession's half; Failure: refused) | the counterparty chooses whether to bargain at all (to make the offer or answer with his own `covenant`); the outcome of an offer is the draw, not his fixed choice |
+| hearing vote (`declared` rows) | as hearing | each seated member's ballot is its own draw, his commits and regard setting its odds | each member's prior commits are his odds, not his vote |
 | inquiry (`research`, `examine`, `surveil`) | which record, site or place; effort | one draw against the verb's difficulty + the subject's forgery/cover | none: the subject resists only through what it is |
 
 What the round reports back, in every row: the band, and SC-B's term list (`Ob 2.5 = routine 0.5 +
@@ -300,8 +329,8 @@ opposition 1.5 + standard 0.5`), so the outcome is legible to the player and the
 | R-4 | affiliation as its own modifier, or through regard? | through regard only (`heritage_regard`, CR-31, already reads creed and caste) | 4 (precedent: CR-31) | T3 |
 | R-5 | publicity (`floor:`) as a term? | authored into the row's `standard` value; no formula over `floor:` | 5 (one table, not two) | T2 |
 | R-6 | season and territory conditions as a modifier? | none; they reach the roll through persons' regard and reception | 5 (no global modifier is scripting by aggregate; `04:237` forbids social aggregates on a Rung) | §2 |
-| R-7 | `interview` resolves with no roll | it stays unrolled as the **cooperative** questioning (a witness who wants to talk); resistance is `interrogate`'s (bench) and, outside a bench, `argue` to make him speak. Recorded for the verb lanes, not edited here | 4 (precedent: `interview` is `own`, `interrogate` is `remit:determine`, the row's own eligibility note) | — |
-| R-8 | negotiation has no roll | correct as built: acceptance is a choice of the counterparty, not a draw; the tuning is the chooser's scoring of terms | 5 | §7 |
+| R-7 | `interview` resolves with no roll | **superseded by the standing rule** (Jordan, 2026-11-12, *"we do not do deterministic"*): `interview` draws on `inquiry` against `plain` + the witness's score/2 − regard; the band grades what he gives (Overwhelming/Success a finding, Partial a partial finding, Failure nothing). `interrogate` stays the bench's harder questioning (`demanding`) | 1 (superseded) | `13_SC_draw_for_unrolled_contests.md` |
+| R-8 | negotiation has no roll | **superseded by the standing rule**: an offer (`covenant`) is a draw, graded into accepted / countered / refused; the counterparty's pursuits against the terms set its odds | 1 (superseded) | `13_SC_draw_for_unrolled_contests.md`; §7 |
 | R-9 | temperament: an obstacle term or an advantage? | advantage, through CHAR's susceptibility rows; the obstacle reads only what stands against the act, not the match of approach to hearer | 4 (precedent: `advantage_sources`, CP-T01-05) | T-note in `13_SC_tuning_tables.md` |
 | R-10 | office and standing: dice or obstacle? | dice (*"Rank supplies dice and gates nothing"*, `verb_capability`'s source line); one die for a seat-holder of the body whose bench hears | 3–4 | T4 |
 | R-11 | `05_SC_negotiation_scene.md` and `05_SC_evidence_and_rebuttal_B.md` are cited by SC's addendum and SC-B but do not exist in `proposals/` | cite the existing `05_SC_evidence_and_rebuttal.md`; the negotiation row is §7 here | 1 (the unsuffixed file is the live one) | this file |
@@ -323,7 +352,10 @@ a swept arm, not a question.
   `evidence` term) whose weight is set by what is cited and left standing (SC-P8,
   `05_SC_evidence_and_rebuttal.md`) and filtered by what the room admits (`proofs:`), which is the L.A.
   Noire / Ace Attorney shape (a held item, a room's rules of admission) and nothing more. Argument
-  (skill against a person) and evidence (deterministic weight) stay separate terms on the one roll.
+  (skill against a person) and evidence (the weight of what is cited and standing) stay separate terms
+  on the one draw: a strong case shifts the odds and can still lose, as the standing rule requires.
+  Where SC's played-hearing design enters or strikes an item with no draw (addendum B4.2), it conflicts
+  with that rule; listed for the SC lane (degenerate cell 11).
 
 ## 10. Capability authoring (§14 of the brief, for this lane's interface)
 

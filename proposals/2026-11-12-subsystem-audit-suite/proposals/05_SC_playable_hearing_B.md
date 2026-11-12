@@ -1,5 +1,7 @@
 # The hearing as the social-contest module's scene: a sitting of exchanges whose closing draw is today's roll
 
+Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-02, D-03 — `answer` is now a rolled move with graded board effects; `silence` adds levels to the closing draw instead of conceding the rung; `forgery_found` only on an Overwhelming answer.
+
 ## Status: PROPOSED — supersedes `05_SC_playable_hearing.md` (SC-P3). Design-first for edits 6 and 8; the rest are small builds.
 
 Source: `audits/05_SC_audit_addendum_B.md` §B2 (F-SC-15, F-SC-17, F-SC-20), §B3, §B4;
@@ -101,7 +103,7 @@ own in-run draws by calling the one ladder owner (`degree_from_net`) and returns
 | move | needs | draw | board effect by outcome |
 |---|---|---|---|
 | `present` | an unplayed exhibit of his side, of an admitted kind | none | stands on the tried rung at `weight`; on another rung, at half (the `irrelevance` fault counts it) |
-| `answer` | an exhibit whose `cell` contradicts a standing one, or a filed finding that the target is forged | none | the lighter of the pair is struck; equal weight, both halved |
+| `answer` | an exhibit whose `cell` contradicts a standing one, or a filed finding that the target is forged | one `roll`: the mover's `speak` pool against `answer_ob + proof_step × (w_target − w_answer)` (impeachment: `− finding confidence`), plus the room's modifiers | per `05_SC_evidence_and_rebuttal_B.md` `standing` rules 1–2: Failure the target stands; Partial both halved; Success the target struck; Overwhelming struck, and on a forgery every exhibit of its origin with `forgery_found` |
 | `argue` | — | one `roll`, his `capability` for the rung against the other side's `score` | Overwhelming or Success: an argument stands (`argument_step`); Partial: half, and a subsidiary matter is named for the docket; Failure: nothing |
 | `impugn` | a filed deed-claim about the person an opposing exhibit originates from | one `roll` | Success or better: every exhibit of that origin halved; Failure: a level against the mover for the sitting |
 | `concede` | — | none | the rung descends one step; the mover's exhibits on the conceded rung leave the board |
@@ -113,8 +115,10 @@ A bench member's moves are `rule` (close now) and `adjourn` (hold the stage to t
 
 `self_contradiction` (two standing exhibits of one side disagree: the lighter is struck, one level
 against that side); `silence` (the bearing side rests with nothing standing on the rung, or the other
-side rests under an unanswered standing exhibit: the rung is conceded); `forgery_found` (every
-exhibit of the forged Record's origin is struck); `irrelevance` (the rite may set a strike count
+side rests under an unanswered standing exhibit: two levels against that side on the closing draw,
+never an automatic concession — the bench may still find for a silent party, at long odds);
+`forgery_found` (recorded only by an `answer` graded Overwhelming: every exhibit of the forged Record's
+origin is struck); `irrelevance` (the rite may set a strike count
 after which further off-rung items do not enter). Each is a condition on the typed board. None names
 a winner.
 

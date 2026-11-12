@@ -89,6 +89,27 @@ for someone and not find him there. That is a miss, and it is witnessed. It is n
 
 ---
 
+### 0.6 Checked against the standing rule: "we do not do deterministic" (`AUDIT_BRIEF.md`, 2026-11-12)
+
+Every consequential outcome resolves by a draw with a graded, recoverable result. State sets the odds,
+and the draw sets the outcome. Each of the nine, as designed below:
+
+| verb | the draw | finding in code or text, and its repair |
+|---|---|---|
+| `arrest` | `a standing` contest (`sigma_leverage`), four bands | conforms. Failure is a real branch (§1.3). |
+| `capture` | the scene under `yield` terms. Whether anyone yields is drawn in the scene. | conforms. Custody opens on a drawn yield. |
+| `fight` | the scene | **FINDING (code): a plain `fight` kills its loser in 200 of 200 (F-PC-04, H-263). Under `death` terms 99.8% end in a felling, and a felling is death with certainty.** Repaired in §3.3 items 6-7: the term follows the context, and a felled party's death is itself a draw (the mortal-wound draw in the seam). PC's Part B (`03_PC_exits_withdrawal_recovery.md`), filed as Jordan's choice, is answered by this rule (ladder step 1: superseded by a later ruling). |
+| `accept` | the scene under `blood` or the challenge's stakes, plus the same mortal-wound draw | conforms after §3.3 item 7 (a `death`-stakes duel no longer kills with certainty). |
+| `march` | the field | **FINDING (code, recorded at the row's own REM-27 note): "at `troops=weight` a realm force routs on contact whoever is stronger" (`modules/mass_battle/massbattle.py::_weighted_unit`), i.e. decided by the larger number.** MB's `04_MB_headcount_grade_and_scale.md` gate 2 requires "the verdict varies by seed". §5.3 item 9 makes that a precondition of P-B, and §5.7's gate asserts it on the season path. |
+| `raze` | **was ungraded in this file's first writing (§6.3 item 6, "a town is razed or it is not"). That was deterministic, and it is corrected.** | §6.3 item 6 now grades it: a drawn razing whose Partial burns without ending the town and whose Failure ends nothing. |
+| `examine` | the `graded_inquiries` roll | conforms. The trail shown is masked by the drawn band. |
+| `surveil` | the `graded_inquiries` roll, and each sighting through the new channel admitted by its own draw at the band's rate | §8.3 item 2 corrected so that a success is not omniscience. |
+| `thread_read` | **ungraded today (a flat `finding.made`: deterministic success for anyone past the gate)** | §9.3 item 2 grades it. Stage 2's Coherence cost is drawn with the working. |
+
+What stays arithmetic, as the rule allows: eligibility and the formation stamps (who may attempt), the
+custody edge once a drawn result opens it, the stores moved by a drawn sack (conservation), and the
+seeded RNG.
+
 ## 1. `arrest`
 
 ### 1.1 Premise
@@ -415,6 +436,26 @@ dead man's seats empty, the wounded carry the mark, and the feud or the law foll
 5. **Approach, equipment and withdrawal** are PC's (`03_PC_duel_round_and_approach_B.md` §3-§5,
    `03_PC_loadout_and_carry.md`, `03_PC_exits_withdrawal_recovery.md` Part A). They land inside the scene
    and change no column of this row.
+6. **The terms follow the context (standing rule; PC Part B's finer form, taken).** `fight` is the one
+   violent row fought under `death` terms, which end in a felling 99.8% of the time (F-PC-04). A new
+   roster, `rosters.yaml: context_terms` (`violence_contexts`' names to `duel_terms` values), sets
+   `war: death`, `crime: yield` and `defence: yield`. `seam/wrappers/combat.py::combat_input` reads the
+   context the Candidate formed under (`violence_context_of`, recorded on the act's payload as
+   `context`, `confer`'s `term` precedent) and falls back to `duel_terms`. A beaten man in a brawl or
+   an arrest yields far more often than he dies (PC's table: `yield` fells 3.0%). His victor's next act
+   is a choice (`capture`, `fight` again under a context, or nothing).
+7. **A felling is not a death: the mortal-wound draw.** Even under `death` terms, whether a felled
+   fighter dies goes by a draw. In `seam/wrappers/combat.py`, after the scene and before the result is
+   typed, each felled party makes one roll through the one roller
+   (`10_DICE_one_roller_one_fraction_rule.md`). The pool is his body band before the felling floor
+   (`Person.body_ceiling`'s band, `band_floors`). The obstacle is the term's lethality plus named
+   modifiers: a swept fixture `mortal_wound_ob` keyed by term (`death` high, `yield` and `blood` low),
+   plus a tending modifier when a co-located ally holds the `tend` key `[named; SE's `_eff_tend`]`.
+   Failure: he dies (the `Felled` band's writes, as today). Partial: he lives, left for dead, `Wounded`
+   band writes with `wounds = max_wounds` (the lasting mark, CP-T03-07). Success and better: he lives,
+   `Wounded`, the mark only if his wounds reach it. The draw lives in the seam, so `party_degree`
+   still reads one typed per-party result and no band, cell or effect forks. The dead man's `Felled` is
+   now a drawn outcome, not a function of the scene's last exchange.
 
 ### 3.4 Scales and play surface
 
@@ -442,6 +483,14 @@ After `03_PC_duel_chain_reach.md` and §4: a world with one issued challenge. Th
 holds **no** `fight` on the challenged, and the challenged's holds `accept`. **Control:** the
 pre-change roster forms `fight` for the challenger. **Planted failure:** restore `duel` to the line, and
 the test fails on the challenger's opening set.
+
+**Standing-rule gate (the draw).** The audit's 200-fight season probe (H-263, F-PC-04 E3), re-run after
+items 6-7: under `crime` and `defence` contexts, deaths fall well below 200 and yields appear. Under
+`war` (`death` terms), felled fighters survive at a nonzero rate that varies with body band, and the
+survival rate rises with a higher pool. The assertions are `0 < deaths < 200` and survival with
+ceiling band high greater than with it low, over seeds 0-199. **Control:** with `mortal_wound_ob` at a
+value no pool can meet, the pre-change 200 of 200 returns. That shows the draw is the only thing that
+changed. **Planted failure:** bypass the mortal roll, and deaths return to equal fellings.
 
 ### 3.8 Cases
 
@@ -636,6 +685,14 @@ scale with the people in it; (e) casualties per side, a rout or a draw, an arriv
    commander stands: a world fact the chooser cannot read, MB's army presets and MILITARY's
    `recruit`/`form_unit` are the remedy), and a band that moved nobody. A wrong kind, a friendly place or
    no war can no longer reach the fold. The `Field` class makes them unformable.
+9. **The field is a draw (standing rule).** The row's own REM-27 note records that at `troops=weight`
+   "a realm force routs on contact whoever is stronger". That is a field decided by the larger number,
+   which the rule names as forbidden. P-B does not land until MB's `04_MB_headcount_grade_and_scale.md`
+   holds its gate 2 ("the verdict varies by seed, and the larger side's `won` share exceeds the
+   smaller's"). The size ratio sets the odds, and the engine's seeded draw sets the outcome. A
+   `besiege` (Invested) wears the garrison by `sabotage`'s `_fall`. P-B adds a requirement there:
+   `_fall` must be a draw, and if it is a fixed fraction it is a finding for SE/MB
+   `[UNVERIFIED: `_fall`'s body was not opened]`.
 
 ### 5.4 Scales and play surface
 
@@ -668,7 +725,9 @@ real fold (an `utter` and a `commit` by two seats granting `dispatch`, one per f
 one season through `SeasonDriver.season`. Pass: a seated holder of `dispatch` of one faction forms
 `march` only on settlements and territories the other faction holds and that his ledger names; at least
 one is attempted, and its Event is a field band (`field.won`, `field.lost`, `siege.pressed` or
-`Drawn`), not `march.refused` on kind. **Control:** the same world without the war forms no `march`.
+`Drawn`), not `march.refused` on kind. **Draw assertion:** the same planted pair, seeds 0-29, produces
+both `field.won` and `field.lost` (or `Drawn`) for the larger side. If one outcome holds in all 30, the
+field is still deterministic and P-B is not done. **Control:** the same world without the war forms no `march`.
 **Planted failure:** restore `referent_class: Rung`. Formations on hearths and own places return, and the
 test fails on the formed set. Separately, `aperture 2 0` before and after: `march` formed falls from 26
 to 0 in the war-less realm, and every remaining refusal reason is named.
@@ -728,11 +787,11 @@ remembers who did it.
    Rung for which some seat of `p` granting `dispatch` has `occupying_faction(...)` not `None` and
    `mustered` true, under `Occupied`. `raze` declares `referent_class: Occupied`. `_eff_raze` calls the
    same pair. One owner for both.
-2. **Sack before ruin.** Before the deletion, the town's `Rung.stores` move to the treasury of the
+2. **Sack before ruin** (the share is set by the drawn band, item 6). Before the deletion, the town's `Rung.stores` move to the treasury of the
    exercised seat's rung (`requisition`'s two-sided `Rung.stores` shape, the same `_shift` primitive).
    This gives the act a gain to weigh against its costs. The row declares `Rung.stores` twice (both
    check-only beside the effect's first pair), as `march` does.
-3. **The Sites end with the town.** Every Site whose `rung` field is the razed Rung is ended
+3. **The Sites end with the town** (on Success and better, item 6). Every Site whose `rung` field is the razed Rung is ended
    (`Site.exists`, a matrix row: `write_matrix.yaml:48`). This is #453 §9.2's Site half, and H-228 names
    it open. It is a write of the act, declared in the row, not a cascade, so Layer 1 §B.8's "nothing
    else" for the cascade is not touched. `site.razed` (#453's kind) is emitted once per ended Site.
@@ -745,9 +804,25 @@ remembers who did it.
    observer whose state moved takes a scar (`loop/resolve.py::_scar_witnesses`, as built), and a
    former resident's regard for the razer's faction moves through CHAR's reader of witnessed deeds
    (`02_CHAR_which_ground_moves_whom.md`). No social aggregate lands on a Rung (`04:237`).
-6. **Ungraded, deliberately.** #453 §9.2 rules `contests: none`: the fight for the town was the field.
-   A town is razed or it is not. Partial ruin is `sabotage`'s (`Site.condition`). The choice is graded at
-   the level of the war: raze, seize, or leave.
+6. **Graded, by a draw (standing rule; corrects this file's first writing, which left it ungraded).**
+   #453 §9.2's `contests: none` stands: there is no second side and no prize. Whether a town is
+   destroyed, however, goes by a draw. A town burns unevenly, its people fight the fire and hide their
+   stores. The row joins the graded route (`rosters.yaml: graded_inquiries`, the route that is "not a
+   prize", renamed `graded_routes` with its existing rows unchanged, since a razing is no inquiry: one
+   key renamed, one loader). The pool is the occupying army (`mustered` headcount through
+   `seam/wrappers/sigma.py::faculty`'s fallback). The obstacle is the town's size and fabric: the
+   Rung's Site count and their `condition`, plus named modifiers (resident cohorts' resistance
+   `[named; SE]`).
+   - **Overwhelming:** the Rung ends, every Site in it ends, all stores are carried off.
+   - **Success:** the Rung ends and its Sites end. Half the stores are carried off, and the rest burn
+     (`raze_sack_share`, swept).
+   - **Partial:** the town is burnt but stands. Each Site's `condition` falls by `sabotage`'s `_fall`
+     (one formula), a share of the stores is carried off, and the Rung is not deleted. Recoverable by
+     `restore`.
+   - **Failure:** the townsfolk save it. Nothing is written. The act is witnessed as `raze.resisted`, a
+     deed the town remembers.
+
+   Partial and Failure are real outcomes for the people of the town. That is why a draw decides them.
 7. **Recoverable.** The ground remains (the parent territory). `found` can found a settlement there
    again.
 8. **Refusals.** `raze.refused` remains only for world changes between formation and the fold (the army
@@ -774,8 +849,11 @@ razing (CHAR); offices granting `dispatch` (FA-P2).
 
 **Gate.** `test_v14_raze_after_occupation.py`: §5.7's war world with the march forced to `Won` by a
 fixture-planted army imbalance (MB presets). In the next season the victor's opening set holds `raze` on
-the occupied town **only**. If attempted: `w.rungs` shrinks by one, every Site naming it is gone, and
-the seat's treasury `stores` rose by the town's prior `stores`. **Control:** with no occupation, the
+the occupied town **only**. If attempted at Success (fixture pool): `w.rungs` shrinks by one, every
+Site naming it is gone, and the seat's treasury `stores` rose by `raze_sack_share` of the town's prior
+`stores`. At Partial: the Rung stands and every Site's `condition` fell. At Failure: nothing moved, and
+`raze.resisted` is witnessed. **Draw assertion:** at the shipped pool, seeds 0-29 produce at least two
+different bands for the same occupation. **Control:** with no occupation, the
 opening set holds no `raze`. **Planted failure:** drop `referent_class: Occupied`. `raze` forms on
 unoccupied places again, and the test fails on the formed set. H-228's existing pin
 (`test_in12_raze.py`) reddens on the Site half, as it was written to, and is re-pinned.
@@ -797,4 +875,379 @@ of every faction's warfare anywhere): a razed town is that consequence in its mo
 - **E.** One moved function, one class, two declared writes. High.
 
 ---
+
+## 7. `examine`
+
+### 7.1 Premise
+
+*An investigator goes to a place and studies what is there (damage, objects, traces) and learns what
+happened to it and, if he is good, whose hand did it.* The links: (a) he is at the site; (b) there is
+something to find there; (c) a roll against how well it was hidden; (d) by degree: nothing, *that* it was
+done, or *that and who*; (e) what he learns is his own firsthand knowledge, which he can tell, cite in a
+hearing (FI-05-B), or act on.
+
+### 7.2 State today
+
+- **Row** `verb_table.yaml:1728-1756`. Eligibility `own`, `presence:<site>` (the second declined by the
+  fold, H-33). `referent_class: Site` (REM-22). Cell: `existence` of `site` kind `Site`, `present_at`.
+  Writes nothing. Graded through `graded_inquiries` (the social-contest module's roll, the obstacle
+  `obstacle_default`). Emits `finding.made` on Partial and better and `finding.none` on Failure.
+  Refusal `finding.none`.
+- **The finding machinery exists.** `loop/resolve.py:1131-1143` sends every produced `finding.made`
+  through `seam.find_trail` (`rosters.yaml: inquiry_modules`), and `loop/witness.py::_found_claims`
+  deposits the trail Events masked by `rosters.yaml: finding_terms` (Partial: *that* it was done; Success
+  and better: *and who*). The trail is `epistemic.trail_of` over `rosters.yaml: covert_kinds`, which has
+  **one member, `record.forged`**. A Site is never the subject of a forgery, so an `examine` that
+  executes can find nothing.
+- **Reading** (`aperture 2 0`): eligible 83, **formed 1, attempted 0**. In the second world of the same
+  run, 1 attempted and lost (graded Failure). Corpus: never attempted. REM-22's own measurement: no
+  question the realm delivers carries a Site among its referents.
+- **Verdict: unreachable**, and empty when reached.
+
+### 7.3 The build-out, decided
+
+1. **Sites where he stands reach his question.** A stamp term `sites_here(w, p)`: the Sites whose `rung`
+   is `place_of(w, p)`, stamped under the existing `Site` class. `present_at` then holds for every
+   formation. The term is a world read of his own place, `places_named`' shape. The Site class is
+   shared, so `restore`, `sabotage` and any other Site-classed row also form on the Sites where he
+   stands. That is correct for each (you mend or wreck what is in front of you). It is H-163's
+   shared-class cost, declared and measured by the gate.
+2. **There is something to find: deeds done to a Site are findable.** `rosters.yaml: covert_kinds` gains
+   `site.damaged` (`sabotage`'s kind). `trail_of` already walks "the most recent Event of that kind that
+   WROTE `subject`", so an `examine` of a sabotaged Site uncovers the sabotage and, at Success, the
+   saboteur. This is one data line, and `_check_covert_kinds` refuses a kind the table does not emit.
+   It is the detective precedent of `AUDIT_BRIEF.md` (evidence that names a hand;
+   `08_FI_06_testimony-names-a-hand.md`).
+3. **The non-gating product.** FI-03's `observes:` column (`08_FI_03_playable-inquiry.md` §2) for
+   `examine`: the Site's `condition` and the `stores` of its rung, deposited firsthand on Partial and
+   better. This family adopts FI-03's row and does not redesign it.
+4. **The obstacle is the difficulty of the task plus named modifiers** (`AUDIT_BRIEF.md`; SC's
+   `05_SC_obstacle_difficulty_and_modifiers_B.md`): the base is `obstacle_default`, and the modifier is
+   the concealer's skill where the trail's actor holds the `conceal` capability key. Named, and carried
+   by SC's modifier list. Not built here.
+5. **Graded and recoverable.** Failure deposits nothing and costs a scene act. He may examine again next
+   round (no foreclosure), and the trail stays until a newer deed of the same kind overwrites the index
+   (`last_emission_of`'s bound).
+6. **Refusals.** `finding.none` at admission remains only for a hand-built act (the stamp guarantees
+   presence).
+
+### 7.4 Scales and play surface
+
+Person scale. Feeds settlement scale (a sabotaged granary's culprit), faction scale (an enemy's
+saboteur exposed) and SC (evidence cited in a hearing). A player chooses which Site. NPC investigators
+choose through the one chooser. Their pursuits carry `examine`'s alignment cells.
+
+### 7.5 Tuning hooks
+
+`covert_kinds` (what leaves a trail); `finding_terms` (what each band shows); `obstacle_default` and
+SC's modifiers; `verb_capability` (`inquiry` key); `observation_deposit_mode` (who receives observations).
+
+### 7.6 Exact edits
+
+`proposals/14_VERBS_PHYSICAL_C_looking.md` §C1.
+
+### 7.7 Gate and falsifier
+
+**Gate.** `test_v14_examine_finds_the_saboteur.py`: `build_realm(0)`; a person sabotages a Site through
+the real fold, unseen (`sabotage` executed with no co-present witness); an investigator stands at the
+same place. One season. Pass: the investigator forms `examine` on that Site; an executed `examine` at
+Success deposits a claim anchored on the saboteur with the `site.damaged` kind; at Partial it deposits
+the kind without the hand. **Control:** with `covert_kinds` at its shipped value, the same Success
+deposits no trail claim. **Planted failure:** remove `sites_here` from `_stamped`, and `examine`
+formations return to 0.
+
+### 7.8 Cases
+
+ARC-54 (`chain/ARC4.yaml`: one investigative action resolved against a fixed difficulty that on success
+reveals one hidden fact; a failed attempt that can expose the investigator, §8). ARC-07 (a military
+condition invisible until someone investigates). NPC-004 (a plausible-but-wrong conclusion: FI-03 §3,
+dependent on this product existing). NPC-086 (field data as a persistent evidence object). The
+M-INFO rank of `12_ARCS_adjudication.md` (33 cases).
+
+### 7.9 NERS reading
+
+- **N.** The only inquiry into the physical world. Cut test: merging it with `surveil` loses the
+  difference between studying a thing's past and watching a place's present. The trail and the witness
+  channel are different reads.
+- **R.** Covert acts become findable, so concealment becomes a strategy with a counter.
+- **S.** The existing trail machinery and FI-03's column. Nothing new.
+- **E.** One roster value and one stamp term. Very high.
+
+---
+
+## 8. `surveil`
+
+### 8.1 Premise
+
+*A person watches a place (who comes and goes, what is done there) over a stretch of time, and risks
+being noticed.* The links: (a) he is at the place; (b) he spends the time; (c) a roll; (d) by degree he
+sees some or all of what is done there afterwards this season; (e) on failure he is noticed, and the
+people there know someone was watching.
+
+### 8.2 State today
+
+- **Row** `verb_table.yaml:1828-1852`. Eligibility `own`, `presence:<rung>`. No `referent_class`. Cell:
+  `existence` of `subject` kind `Rung`, `present_at`. Graded, writes nothing, `finding.made` /
+  `finding.none`. The row itself names two absences: the person case (a covert observation of a person)
+  and canon's *+2 Exposure* (which has no carrier, since `04:237` forbids social aggregates on a Rung).
+- **Reading** (`aperture 2 0`): formed 83, attempted 44, **executed 6** (`finding.made`). 38 refused
+  or lost: graded loss 16, `present_at=False` 15, `exists:Rung=0` 7. Pools rolled `[2]` for every actor,
+  so nobody differs. Corpus: 236 graded, Failure 173 of 236.
+- **What a success yields.** `find_trail` walks `covert_kinds` for deeds that wrote the Rung. None do
+  (`record.forged` writes a Record). The 6 findings taught nobody anything (the instrument's
+  `finding.made` deposits "a finding was made").
+- **Verdict: executes and finds nothing.**
+
+### 8.3 The build-out, decided
+
+1. **Form only where he stands.** `surveil` declares `referent_class: Rung`. A stamp term `place_here(w,
+   p)` stamps `place_of(w, p)` under `Rung`. A person-side decline `own_presence_declines: [surveil]`
+   (the `own_hold_declines` shape, `options.py:231-236`) keeps only a Rung that is the object of one of
+   his own live `contain` tenures. That is his own state, no World. The `present_at` and `exists:Rung`
+   refusals (22 of 44) stop.
+2. **A success makes him a witness of the place for the rest of the season.** A new observer channel,
+   `surveil`, in `loop/witness.py::observers_for`. For an Event whose place is, or lies under, the
+   subject Rung of an executed `surveil` by `q` earlier in the same season (the act store's own
+   `finding.made` Events of verb `surveil`, read through `causing_act`, so no new state), `q` is an
+   observer at a gain fixed by the surveil's band: Partial sees the deed and not the hand
+   (`finding_terms`' Partial mask, the same masking), and Success and better see the hand. The channel
+   is DATA: `rosters.yaml: witness_channels` gains `surveil` with its band-to-terms reference to
+   `finding_terms`. This is canon's "observe… over extended time" without a meter, a watch edge or any
+   held state.
+3. **Failure exposes him.** The Failure band emits `finding.none` **and** a new kind `watcher.seen`,
+   which is not in `undeposited_kinds`. It is witnessed by the persons present at the place through
+   the ordinary co-location channel, as a deed anchored on the surveiller. This is the Exposure half of
+   canon carried as claims, which `04:237` permits. A watched faction's officers can then act on it
+   (`arrest` under a warrant, CHAR regard).
+4. **Pool differences** are CHAR and DICE's (`02_CHAR_capability_uses_table.md`;
+   `10_DICE_advantage_sources_for_the_arcs.md`). The row's capability key is `inquiry` (`verb_capability`).
+5. **The person case stays absent.** `trail_of`'s anchor walk (deeds BY a person) is the shape a
+   person-subject inquiry would use. A disjunction is not in the grammar, and inventing one for one row
+   is refused (`G4`). An institutional track on a person (ARC-32, ARC-33) is composed from repeated place
+   surveillance plus `tell` within an institution. Named, not built.
+
+### 8.4 Scales and play surface
+
+Person scale. Feeds faction intelligence (a spymaster's officers watching a town) and SC (what was
+seen is evidence). A player chooses the place by standing in it. NPCs choose through the one chooser.
+
+### 8.5 Tuning hooks
+
+`witness_channels` (the channel's gain); `finding_terms` (what each band shows); `obstacle_default` and
+SC's modifiers (a crowded market hides a watcher, a closed hall does not: `venues.yaml` `[named]`);
+`verb_capability` (`inquiry`); alignment cells (`rosters.yaml` tables, existing).
+
+### 8.6 Exact edits
+
+`proposals/14_VERBS_PHYSICAL_C_looking.md` §C2.
+
+### 8.7 Gate and falsifier
+
+**Gate.** `test_v14_surveil_witnesses_the_place.py`: `build_realm(0)`; a watcher and a third person at
+one settlement. The watcher's `surveil` is forced to Success (fixture pool) in round 1. The third person
+performs `give` at the same place in round 2, with no co-location channel admitting the watcher
+`[the test plants the watcher in a quarter under the settlement so the ordinary channel does not
+admit him]`. Pass: the watcher holds a claim of the `give` anchored on the giver. At Partial, the claim
+holds no hand. At Failure, the third person holds a `watcher.seen` claim anchored on the watcher.
+**Control:** without the surveil, the watcher holds no claim of the `give`. **Planted failure:** remove
+the `surveil` channel from `witness_channels`, and the Success case deposits nothing.
+
+### 8.8 Cases
+
+ARC-32 and ARC-33 (`chain/ARC2.yaml:584`, `:624`: an institutional surveillance track accumulating
+toward a threshold; the accumulation is CHAR's goal stages reading the claims surveil deposits).
+ARC-54's third need (a failed investigative action that exposes the investigator: `watcher.seen`).
+NPC-033 (a spymaster surfacing a hidden actor through sustained effort against concealment). NPC-034's
+unresolved purpose (surveillance of Crown policy).
+
+### 8.9 NERS reading
+
+- **N.** The only act that turns presence into knowledge of other people's acts. Cut test: without it,
+  witnessing is accidental co-location only.
+- **R.** A real risk and reward: knowledge against exposure. The world produces spies without a player.
+- **S.** One masking table for findings and watching. One witness function, one more channel.
+- **E.** One stamp, one decline line, one channel and one kind. High.
+
+---
+
+## 9. `thread_read`
+
+### 9.1 Premise
+
+*A person sensitive to the Thread looks into a person or a place with that sense and learns what the
+Thread there shows: the knots and ties binding it, a practitioner's sensitivity and how frayed his
+Coherence is. It costs him something of his own Coherence, and the Church condemns it.* The links:
+(a) he has the sensitivity (a gate); (b) the subject is in front of him; (c) a working roll against the
+difficulty of the read (depth, breadth, distance); (d) by degree: nothing, the surface, or the depth;
+(e) a Coherence cost; (f) if anyone sees it, the deed is witnessed threadwork.
+
+### 9.2 State today
+
+- **Row** `verb_table.yaml:1853-1870`. Eligibility `own`, `presence:<site>`. Gate: `scalar_threshold`
+  of `actor` over `thread_sensitivity` against the `thread_sensitivity.gate` fixture (K-3, H-85).
+  Ungraded. Writes nothing. Emits `finding.made` (flat). The row says itself that what the act reads, the
+  Depth and the Coherence cost are not expressed.
+- **Reading** (`aperture 2 0`): eligible 83, formed 4 (the persons whose authored `ts:` passes the gate),
+  attempted 3, executed 3, each depositing only "a finding was made" (ungraded: `find_trail` keys
+  nothing for a finding with no degree; FI-03's evidence `thread_read` 2/1/0 in `build_realm(0..2)`).
+  Corpus: never attempted. The corpus run lists it under *EMITS AND WRITES NOTHING… untagged*.
+- **Verdict: executes and finds nothing.** The gate is the only built part.
+
+### 9.3 The build-out, decided (two stages)
+
+**Stage 1, now, on what exists.**
+
+1. **Subject: a person present.** `referent_class: Person` and a cell conjunct `relation` of `subject`,
+   `with` (world-only, `give`'s and `fight`'s carrier). The Site half waits on the Thread world substrate
+   (`12_ARCS_substrate_as_ground.md`, M-SUB), which has no carrier.
+2. **Graded.** `rosters.yaml: graded_inquiries` gains `thread_read` (the same route as the other
+   inquiries). Its `emits:` becomes degree-keyed (`finding.made` on Partial and better, `finding.none`
+   on Failure), as `examine`'s is.
+3. **Product.** FI-03's `observes:` for `thread_read`: the subject's `thread_sensitivity` against the
+   same gate, as a firsthand claim "sensitive / not" (NPC-004's latent sensitivity, NPC-005's secret
+   one). Success and better add the band of the subject's sensitivity (the `band_floors` reading, no new
+   number).
+4. **It is witnessed threadwork.** The executed act's Event is already witnessed. The orthodoxy cell
+   (`rosters.yaml:3767`, `thread_read: -1` on the Church's axis) already scores it for observers' regard.
+   No edit.
+
+**Stage 2, after the threadwork module and CP-T07-02 (WR).**
+
+5. **The obstacle is the working's.** `09_WR_threadwork_module.md` makes `modules/threadwork/` a
+   registered module with a `read` operation (`thread_operations`). The `graded_inquiries` row for
+   `thread_read` re-points from the social-contest module to that module's entry, whose obstacle is the
+   Three-Axis Ob. The edit is one data row, and the manifest check refuses an unregistered pair.
+6. **The cost.** The working's outcome returns the practitioner's displacement, and the effect writes
+   `Person.coherence` (matrix row exists, no writer: H-47) through CP-T07-02's carrier. The row
+   declares `Person.coherence` on every band, including Failure (a failed read still frays).
+7. **The depth.** `observes:` gains the subject's live `knot`/`tie` edges and Coherence band (T07,
+   named in FI-03 §2 and not designed there or here).
+
+### 9.4 Scales and play surface
+
+Person scale. Feeds the Church's institutional hostility (NPC-034) and the threadwork arc lane
+(M-PERC: 26 cases, 48 core needs). A player with sensitivity chooses whom to read. NPCs with
+sensitivity choose through the one chooser. The orthodoxy cell makes a devout practitioner reluctant.
+
+### 9.5 Tuning hooks
+
+`thread_sensitivity_gate` fixture; `band_floors` (sensitivity bands); the threadwork module's
+Three-Axis Ob tables (WR); `rosters.yaml` alignment cells (orthodoxy); `observation_deposit_mode`.
+
+### 9.6 Exact edits
+
+`proposals/14_VERBS_PHYSICAL_D_thread_read.md` (stage 1 as edits, stage 2 as the edits it waits on).
+
+### 9.7 Gate and falsifier
+
+**Stage 1 gate.** `test_v14_thread_read_diagnoses.py`: `build_realm(0)`; a practitioner with authored
+`ts:` above the gate co-located with a person whose `ts:` is above it and with one whose `ts:` is below
+it. Reads forced to Success. Pass: the practitioner holds firsthand claims "sensitive" of the first and
+"not" of the second, through WITNESS's observation deposit. **Control:** at Failure, neither claim.
+**Planted failure:** drop the `observes:` cell, and the Success deposits only `finding.made`.
+**Stage 2 gate:** WR's own falsifier (`09_WR_threadwork_module.md`, "The gate that shows it worked"),
+plus: an executed `thread_read` lowers the actor's `Person.coherence` resting point by the module's
+returned displacement, and a Failure lowers it too.
+
+### 9.8 Cases
+
+NPC-004 (`chain/NPC2.yaml`: a second person with the capability runs a targeted check on Saemund and
+learns his latent sensitivity: stage 1). NPC-005 (a secret sensitivity that must be true and
+discoverable: stage 1). NPC-002 (a Thread operation in ordinary intelligence work costs the
+practitioner: stage 2). NPC-075 (access gated by demonstrated Thread competence: CHAR goal stages
+reading a `thread_read` deed claim). NPC-080 (`NPC5.yaml`: a person with a hard-zero capacity shown
+evidence by someone who has it: stage 1's claim, told).
+
+### 9.9 NERS reading
+
+- **N.** The only verb of the threadwork arcs that exists in the loop. Cut test: without it, M-PERC's 26
+  cases have no act at all.
+- **R.** Stage 1 gives a hidden fact a discoverer. Stage 2 gives it a price.
+- **S.** The same graded route and the same observation deposit as every inquiry. Stage 2 adds the
+  threadwork module's obstacle through the same route row.
+- **E.** Stage 1 is four data edits. Stage 2 is one route re-point and one write, on WR's module.
+
+---
+
+## 10. The family: order, dependencies, decisions
+
+### 10.1 Dependency graph within the family
+
+```
+arrest (P-A1: warrants addressed and heard)
+   └─> capture (P-A2: crime context reads the resisted warrant; custody to the warrant's court)
+         └─> fight (P-A3: crime context reachable; duel context dropped)
+accept (P-A4: challenges heard)  ──requires──> lane A's 03_PC_duel_chain_reach (challenges issue)
+   └─> fight (P-A3's drop of `duel` must land WITH or AFTER P-A4, or no duel route exists between them)
+march (P-B1: Field class)  ──requires──> CR-91 war + FA-B1
+   └─> raze (P-B2: Occupied class; occupation only follows a won or unopposed march)
+   └─> capture/fight (war context, already read by `enemies_heard`)
+examine (P-C1)   surveil (P-C2)   — independent of each other and of P-A/P-B
+thread_read (P-D1 now; P-D2 after WR's module and CP-T07-02)
+```
+
+`addressed_records` (P-A1) is the one new primitive shared by `arrest` and `accept`.
+`march_defender` (P-B1) and `occupying_faction` moved to `world_q` (P-B2) are the shared primitives of
+the field batch. `sites_here` and `place_here` (P-C) are the shared primitives of looking.
+
+### 10.2 Cross-family dependencies
+
+| this family needs | from | for |
+|---|---|---|
+| who holds `dispatch` by row | FA-P2 `06_FA_remit_grant_by_row.md` | `arrest`, `capture`, `march`, `raze` eligibility |
+| a reason to issue a warrant (`determine`, `open_case`, `issue`) | BINDING (`14_VERBS_BINDING.md`), SC | `arrest` upstream |
+| challenges issued on a dispute | lane A, `03_PC_duel_chain_reach.md` (CORE, PC) | `accept` |
+| a WAR Proposition and its live reading | CR-91; FA-B1 `06_FA_war_lives_in_seats_B.md` | `march`, `raze`, `fight`/`capture` war context |
+| armies that exist; `besiege` un-withheld; `Drawn` | MB `04_MB_playable_field_scenario.md`, `04_MB_headcount_grade_and_scale.md`; MILITARY (`recruit`, `form_unit`, `order_unit`) | `march` |
+| standing orders, surrender | BINDING (`marshal`, `surrender`) | `march`'s aftermath |
+| `migrate` for the placeless | MATERIAL | `raze`'s displaced |
+| `observes:` column | FI `08_FI_03_playable-inquiry.md` §2 | `examine`, `surveil`, `thread_read` |
+| obstacle modifiers | SC `05_SC_obstacle_difficulty_and_modifiers_B.md` | all graded rows |
+| the threadwork module; Coherence carrier | WR `09_WR_threadwork_module.md`; CP-T07-02 | `thread_read` stage 2 |
+| approach, loadout, withdrawal, duel round | PC `03_PC_duel_round_and_approach_B.md`, `03_PC_loadout_and_carry.md`, `03_PC_exits_withdrawal_recovery.md` | inside `fight`, `capture`, `accept` |
+| regard moved by witnessed deeds | CHAR `02_CHAR_which_ground_moves_whom.md` | consequences of all nine |
+
+### 10.3 Landing order, in batches
+
+| batch | proposal | lands after | gate |
+|---|---|---|---|
+| P-C | `14_VERBS_PHYSICAL_C_looking.md` | nothing in this family (FI-03 §2's `observes:` for the product half; the stamp and trail halves stand alone) | §7.7, §8.7, plus `aperture 2 0` and `2 1`: `examine` and `surveil` refusals on `present_at`/`exists` = 0 |
+| P-D1 | `14_VERBS_PHYSICAL_D_thread_read.md` stage 1 | FI-03 §2 (`observes:`) | §9.7 stage 1 |
+| P-A | `14_VERBS_PHYSICAL_A_custody_and_force.md` | lane A; FA-P2 | §1.7, §2.7, §3.7, §4.7; `aperture 2 0` and `2 1` before/after |
+| P-B | `14_VERBS_PHYSICAL_B_field_and_ruin.md` | CR-91, FA-B1, MB presets | §5.7, §6.7 |
+| P-D2 | `14_VERBS_PHYSICAL_D_thread_read.md` stage 2 | WR module, CP-T07-02 | §9.7 stage 2 |
+
+P-C goes first because it depends on nothing unbuilt and turns two executing-but-empty verbs into
+products. P-B formation (the `Field` class) may land before CR-91: it takes `march` from 26 doomed
+formations to an honest 0 with a named owner, and it is declared as such.
+
+### 10.4 Decisions that survive to Jordan
+
+Each was run through the five-step ladder (CLAUDE.md §0). Everything else in this file was decided at a
+named step.
+
+- **D-1. Does an arrest need the officer beside the prisoner?** (a) No: the seat's purview stands for
+  its constables, and an officer arrests anywhere his court reaches (as built, and as this file
+  proceeds). (b) Yes: `arrest` gains `with`, so arrests happen only where the officer stands, and a
+  capital court's reach shrinks to the capital unless officers travel. These lead to materially
+  different games (a realm-wide police against a local one), and no ruling, precedent or document
+  decides it. `may_warrant`'s purview reads (a). `fight`'s IN-59 ruling reads (b) for violence, not
+  for warrants.
+- **D-2. Does a won field transfer title?** (a) No: presence only, and title passes by `seize`
+  (#453 R-6 β, as built). (b) Yes: Layer 1's roster contract (`10` §3, "`holdings` and `seats`, for
+  what a defeat costs"). The two documents contradict each other. FA-B1 already carries this to Jordan;
+  it is restated here because `march` and `raze` both depend on it.
+
+Not surviving, with the step that answered each: arrest's contest of standing or of the body
+(step 5: composition, §1.3); march without war (step 3: ED-IN-0337); the duel context on `fight`
+(step 5, §3.3); raze re-homing (step 3: Layer 1 §B.8 and H-228's own ladder); surveil's Exposure
+(step 5: claims, not a meter, §8.3).
+
+### 10.5 Instrument note
+
+Every figure in §0.3 and in each "State today" comes from the earlier lane's `aperture 2 0` and
+`corpus_run` outputs (`scratchpad/runs/VERBS_PHYSICAL/`, timings in the `.time` files), read at the
+line, or from the hole register and lane audits as cited. The completing lane ran no new instrument
+(the brief forbids a long `aperture` run, and the two existing readings covered every verb). One seed
+is a trajectory, not a rate.
 

@@ -65,8 +65,11 @@ holds, so the design's survival terminal (the Rupture: "all factions lose", `wc_
   open stays a World read at the fold, and a priced journey refused there is `travel.blocked`, which is how
   a person learns the road is shut. No person-side World read is introduced.
 - **R-26 · an ending over the condition of Sites.** The grammar gains `{site_band: <band>, of: <site kind
-  or all>}`, reached when every selected Site under the realm reads at or below that band of its kind's
-  `band_floors`. A row using it carries `victory: false` and no `under:`. #457's END-VICTORY handle rules
+  or all>}`. **It is reached by a draw, not by a count crossing** (the brief's standing rule, "we do not do
+  deterministic"): the row is *eligible* in a season when at least one selected Site reads at or below the
+  band (an eligibility check, which the rule permits), and then a keyed draw on the shared ladder decides
+  whether the fabric gives way this season, with odds set by state (below). A row using it carries
+  `victory: false` and no `under:`. #457's END-VICTORY handle rules
   the form ("a Query over holds and seats that the season reports, never an actor"); the cut that removed
   the stored stability scalar (#457 §5) changes what the Query reads, not whether the ending exists. The
   roster's act-credit clause is not applied: a ruin nobody caused is what the row reports. **The row itself
@@ -114,15 +117,31 @@ pure function in `data/geography.py`. The driver hands `geo` to `choose` beside 
 when it is off (today). No `World` crosses: `test_w5_sense_is_still_the_only_world_taking_non_decision_function`
 stays green. The flip of `route_pricing` then waits only on its own paired arm.
 
+The price is bookkeeping (what a choice costs from the scene budget), which the standing rule permits. What
+the journey *does* to the traveller is not: CP-T10-02's exposure at the leg's end is listed for its owner
+(B10-18) as a draw, with odds from the `radiation_bands` distance and the leg's terrain and a graded result
+on the body, never a fixed charge per band.
+
 ### Edit 4 · the `site_band` selector (`data/rosters.py`, `queries/world_q.py::_ending_edges`)
 
 `ENDING_SELECTORS = ("post", "rung_kind", "site_band")`. The loader admits `site_band` with a required
 `of:` (a `site_kinds` member with non-empty `band_floors`, or `all`, meaning every kind that has floors) and
 refuses `under:` beside it, refuses `victory: true` with it, and refuses a band name not in the kind's
 floors. `_ending_edges` gains the third branch: the Sites under the realm of the selected kinds, each
-compared with the floor of the named band; the edges returned are the Site ids, and `endings_reached`'s
-antecedents are the `condition.band_crossed` Events that took each Site there. The roster's prose head
-gains one sentence naming the selector. **No member row is added.**
+compared with the floor of the named band. **Eligible** when at least one is at or below it. Then the
+draw: `draw_factory(w.world_seed, lambda: w.tick)("realm", f"ending:{row.name}")`, resolved through
+`dice_engine.degree_from_net` (the one ladder owner), with **pool** the number of selected Sites still above
+the band (what holds the world together) scaled by a parameter row, never below the dice engine's own
+floor (a world with every Site fallen still rolls, so its loss is likely and not certain), and **obstacle** the number at or below
+it plus one for each band below the named one. Failure: the ending is reached this season, and the edges
+returned are the fallen Sites; Partial: not reached, and the season's report carries the row as `near`
+(a reading, writing nothing); Success or Overwhelming: nothing. Recoverable: a restored Site moves from the
+obstacle to the pool, so restoration lowers the odds the next season. The draw is keyed by
+`(seed, tick, row)`, so `endings_reached` returns the same answer at every call in a season (`T-a`: a read,
+recomputed, storing nothing) and advances no draw ordinal (`season_factor_of`'s precedent: a keyed draw
+inside a Query). `endings_reached`'s antecedents are the `condition.band_crossed` Events that took each
+fallen Site there. The roster's prose head gains one sentence naming the selector and the draw. **No
+member row is added**; the pool scale is one fixture row, `[ASSUMPTION; medium; Jordan to correct]`.
 
 ## The gate that shows it worked
 
@@ -138,17 +157,20 @@ season of a year and may differ the next year, and two under different parents m
 season; (3) the spell is a function of `(seed, year, region)` only (same inputs, same spell, from two
 processes); (4) under the live arm with spells, at three seeds over eight seasons, at least one territory
 reads `shortfall` in two consecutive seasons, using CR-73's reading (`[UNVERIFIED]` until run; the
-falsifier below says what failing looks like); (5) a planted world whose every harbour sits below its
-lowest floor reports a planted `site_band` row, and reports nothing with one harbour above it; (6) the
-loader refuses `site_band` beside `under:` and beside `victory: true`.
+falsifier below says what failing looks like); (5) a planted `site_band` row over a planted world reads
+never reached when no harbour is below the band (ineligible); over 200 seeds with every harbour below it,
+reached at most seeds and **not** at all of them; with one harbour in three below, reached at fewer seeds
+than that and at more than zero; (6) two calls in one season return the same answer and leave the draw
+ordinal unchanged; (7) the loader refuses `site_band` beside `under:` and beside `victory: true`.
 
 ## The falsifier
 
 For edit 1: the spell differs between two territories of one region in one season (the key leaked the
 territory), or is the same for every year (the year is not in the key). For edit 2: the realm's stores at
 season 8 under the live arm exceed the control's by more than the control's own seed-to-seed spread. For
-edit 3: any `World` reaching `decision/`. For edit 4: a `site_band` row reached while any selected Site
-stands above its band.
+edit 3: any `World` reaching `decision/`. For edit 4: a `site_band` row reached while no selected Site is
+at or below its band (eligibility leaked); or a state at which the row is reached at every seed or at none
+across 200 seeds while eligible (the draw has collapsed into a threshold).
 
 ## NERS reading
 

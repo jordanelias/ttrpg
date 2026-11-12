@@ -19,16 +19,26 @@ former metropole on its border, and every colonial mechanism the brief names has
 it stands, built out of the primitives the engine already carries (seat, rung, `oblige`, `covenant`,
 `dispensation`, `transfer`, `requisition`, `seize`, `march`, `ban`, `petition`, `determine`).** The single
 largest obstacle is not a missing primitive but a missing *distance*: the engine has no cost for governing
-far from where you sit (no information delay on an order, no drift of an appointed agent toward the people
-he governs, no audit at the end of a term), so a governor at the end of a road behaves exactly as a clerk
-in the next room, and the whole family of stories the institution exists to produce (the over-mighty
-marcher lord, the tax farmer who becomes a power, the charter that hardens into a right, the settler
-community that outgrows its founder, the client elite that changes patron) cannot arise. Three small
-builds supply it — **reach** (an order or a report crosses rungs at a cost in seasons, on the existing
-`tell`/`dispatch`/`issue` path), **tenure drift** (an appointed holder's local ties, read from Tenures the
-world already holds), and **the audit** (an end-of-term hearing, a row in `arrangements.yaml`) — and the
-rest is content: rows in `offices.yaml`, `arrangements.yaml`, `rosters.yaml`, `goals.yaml` and
-`npcs.yaml`.
+far from where you sit. Every binding decision is known to every living person at once
+(`epistemic.py::_ch_chronicle`, §3.1); a levy taken three territories away is taken as surely as one taken
+in the next room (`requisition` and `transfer` are unrolled, §3.2); no appointed agent drifts toward the
+people he governs; no term ends in an audit. So a governor at the end of a road behaves exactly as a clerk
+beside the throne, and the stories the institution exists to produce (the over-mighty marcher lord, the tax
+farmer who becomes a power, the charter that hardens into a right, the settler community that outgrows its
+founder, the client elite that changes patron) cannot arise.
+
+**Nothing in this design is decided by a fixed rule (Jordan's standing rule, 2026-11-12: *"We do not do
+deterministic"*).** Every consequential colonial outcome is a draw on the engine's one roll form (pool
+against an obstacle that is the task's difficulty plus named modifiers, four graded bands), with the odds
+set by persons, seats, distance and venue: **what a levy yields**, **whether an order carries its force to
+a far addressee**, **whether tribute arrives**, **whether a charter is upheld when it is called in**,
+**whether an audit finds what the governed swear to**, **whether a revolt's field is won**. State sets the
+odds; a well-placed governor still loses a convoy sometimes and a hated one still collects sometimes.
+What stays arithmetic is only bookkeeping (stores conserved, a term's clock, who holds a seat). The one
+new obstacle term this lane asks for is **`remove`** (how far the exercised seat sits from what it acts
+on, §3.2); the one new registry is **`instruments.yaml`** (the closed set of grant and treaty forms, §4);
+the rest is content: rows in `offices.yaml`, `arrangements.yaml`, `rosters.yaml`, `goals.yaml` and the
+cast.
 
 The four sites, in the world's own terms (canon citations in §1):
 
@@ -41,23 +51,25 @@ The four sites, in the world's own terms (canon citations in §1):
 
 What this lane decides, in one line each (the body gives evidence and the exact edits):
 
-1. **No new primitive is admitted but one field and one derived reading.** Charter, monopoly, land grant,
-   tribute, hostage, tax farm, capitulation and protectorate are all `dispensation` or `covenant` Records
-   plus `oblige` Tenures with declared terms. The cut test fails for a `Charter` type, a `Colony` rung
-   kind and a `Company` faction kind (§4).
-2. **Distance is a property of the path, not of the institution** (§3.1): one rule, read off the same
-   adjacency and `contain` path the loop already walks, applied to every order and report.
+1. **No new carrier type is admitted.** Charter, monopoly, land grant, tribute, wardship, tax farm,
+   capitulation and protectorate are `dispensation` Records (minted by `issue` downward, `covenant`
+   across) whose terms are read from a row of one new closed registry, plus seats and `oblige` Tenures
+   the engine already has. The cut test fails for a `Charter` type, a `Colony` rung kind and a `Company`
+   faction kind (§4.4).
+2. **Distance is a property of the path, not of the institution** (§3): one obstacle term, `remove`,
+   read off the `contain` chain and the geography file's adjacency, entering every roll made through a
+   seat on something far from it; and news crosses a border only in a person or a paper.
 3. **Rank is a ranked ledger of accomplishment** and the Secession War is its first three entries
-   (§5). The tree disagrees with Jordan's statement in two places; both are named in §5.2, neither is
-   resolved by this lane.
-4. **Seven verbs gain behaviour, none is added** (§6). `covenant`, `oblige`, `issue`, `seize`,
-   `requisition`, `release`, `found`; `establish` and `confer` carry the appointment side. A proposed
-   eighth, `audit`, fails its cut test: it is `open_case` under a new arrangement row.
+   (§5). The tree disagrees with Jordan's statement in two places; both are named in §5.2. One is
+   reconciled by reading; one is canon text and is listed in §11.
+4. **Nine existing verbs gain behaviour, none is added** (§6): `covenant`, `issue`, `requisition`,
+   `transfer`, `oblige`, `release`, `seize`, `open_case`/`determine` (two new arrangement rows), and
+   `found`. A proposed tenth, `audit`, fails its cut test: it is `open_case` under a new arrangement row.
 5. **The first playable scenario is "The Farm of the Southern Tolls"** (§9): a Crown seat farms the
-   revenue of a southern territory to a holder for a term; the holder over-extracts or remits in a lean
-   season; the governed petition; the term ends in an audit hearing; the outcome moves the holder's
-   standing and the territory's willingness to be levied. Playable from the farmer's seat, the
-   governor's seat or the petitioner's hearth, with no code the season loop does not run.
+   revenue of Stillhelm to a holder for a term; each season the farmer chooses how hard to press and
+   rolls for what the place yields; the governed petition or leave; the term ends in an audit hearing
+   whose verdict is a draw weighted by what was sworn and held. Playable from the farmer's seat, the
+   grantor's seat or a petitioner's hearth, on the code the season loop runs.
 
 Sections follow the brief's order. §11 lists what survives to Jordan (three items).
 
