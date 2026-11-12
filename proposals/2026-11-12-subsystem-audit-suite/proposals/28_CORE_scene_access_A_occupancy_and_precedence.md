@@ -56,6 +56,15 @@ conferral and an oath to a seat occupy nobody. `covenant` joins the day its lane
 The counterparty must be an individual (`Person.is_cohort`, the owner the `individual` stem already
 reads, `queries/world_q.py:4599-4606`): a crowd is not occupied by one speaker.
 
+**Force is not kept waiting (A-80).** A row whose prize is `the body` (`contests: "the body"`: today
+`accept`, `capture`; `fight` names no counterparty) asks for no one's attention. Such a row **intrudes**:
+it is never refused at `occupied`, whatever the target is doing, and when it is admitted the target is
+engaged in it if he was free, so those who call on him later that round are turned away. Read off the
+row's `contests:` cell, no verb named. So the rows that can be refused at `occupied` are the five that
+want a hearing (`argue`, `challenge`, `give`, `lie`, `tell`), and a closed door stops talk, never a
+seizure: entrenchment in access leaves force as an option, at force's own price and draw. (The baseline
+tables of the audit count all seven rows; `capture` executes 0, 2 and 4 times in them and `accept` 0.)
+
 ### 2. One scene per person per round: a fold-local read
 
 The driver holds a round-local mapping `engaged: person id -> scene id`, emptied before each round's
@@ -149,7 +158,9 @@ ranks as it ranks any candidate (proposal B). The precedence net is not an input
 ## Exact edits, by owner (in landing order; all after A-9's edits 1 to 4)
 
 1. **`engine/season/data/verbs.py`** — `VerbRow.occupies` (a derived property: `counterparty` set and the
-   typed cell holds a `relation` conjunct `with` of that operand); `OCCUPIED_CLAUSE = "occupied"` beside
+   typed cell holds a `relation` conjunct `with` of that operand) and `VerbRow.intrudes` (`occupies` and
+   the row's `contests` is the prize `the body`: seats the target, never refused at `occupied`);
+   `OCCUPIED_CLAUSE = "occupied"` beside
    `COUNTERPARTY_CLAUSE` (`:452-457`), *derived like the other two: a keyed row keys it iff it occupies*;
    the loader's keyed-row rule (`:953-969`) adds it to the expected clauses.
 2. **`engine/season/verb_table.yaml`** — each of the seven occupying rows declares the one shared kind

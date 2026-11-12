@@ -549,3 +549,7 @@ believe needs the orchestrator's attention. Not the audit itself.
 ## Standing requirement: entrenchment still moves the world (Jordan, 2026-11-12)
 
 *"Remember that we want to generate gameplay opportunities and worldly churn, so we need to ensure entrenchment still moves the world."* A held position, a hard-to-move argument, an incumbent, a fortified town: each must generate pressure, options and consequences for others, not stillness. Every design that makes something harder to change (the opposed rule's centres, the fight's defence, durable seats, wards) names what that produces in the world and carries an entrenched-world control in the story census. Recorded as A-80 in `unified/DECISIONS_ANSWERED.md`.
+
+## Standing requirement: no scene is still (Jordan, 2026-11-12)
+
+*"Scenes NEVER generate stillness. Scenes ALWAYS move the game world somehow."* Every scene writes at least one durable, readable change whatever its outcome (success, partial, failure, refusal, missed appointment, unanswered petition); the budget debit does not count. Every verb band, refusal and waiting state carries its write. A no-null-scene reading (expected 0, with a control) joins the story census and the harness gates. Recorded as A-81 in `unified/DECISIONS_ANSWERED.md`. Every later lane, closure and the v12 plan treats it as a requirement.

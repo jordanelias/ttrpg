@@ -166,3 +166,74 @@ score changing a pair's pool.
 ## Cost class
 
 Edit (§2, §3; hash equal). `readout`: edit, after the troop file's loader.
+
+## Instructions to code it (standing charge, `AUDIT_BRIEF.md:545-547`; for workplan v12)
+
+Checked against the charge on 2026-11-12. **27B-1 and 27B-2 are complete and codable on today's tree; 27B-3
+and 27B-4 are INCOMPLETE on a named dependency** (the troop file). Line numbers at `faf0cea`.
+
+**Batch items, in edit order.**
+
+| item | file :: symbol (single owner) | edit | hash |
+|---|---|---|---|
+| 27B-1 | `modules/mass_battle/core/exchange.py` :: new `prowess(atom) -> float` | the body of today's `POOL_QUALITY_MODEL` branch (`:101-124`: `pen`, `stam_pen`, `eff_power * eff_size * POOL_QUALITY_SCALE`), moved verbatim; `subunit_combat_pool` (`:77`) calls it and keeps the routed, broken, yield (`:139-140`) and floor (`:148`) lines; the two legacy branches (`:125-128`) stay in `subunit_combat_pool` until the harness leaves. Add `'prowess'` to `__all__` | equal |
+| 27B-2 | `modules/mass_battle/hierarchy/units.py` :: `Unit.base_combat_pool` (`:3004-3023`) | its `POOL_QUALITY_MODEL` arm calls the same `prowess` arithmetic (CR-12 step 2: "calling the same function"); no other change. **INCOMPLETE in one respect:** this lane read that method by grep only; if its unit-level arm is not the single-subunit case of `prowess`, the builder adds a `prowess_of(power, size, discipline, stamina)` core that both call | equal |
+| 27B-3 | `references/troops.yaml: troops.infantry`; `modules/mass_battle/massbattle.py` :: `_weighted_unit` (`:279-282`), `_person_unit` (`:332`), `orderofbattle.py::build_unit` (`:243`) | the row `{power: 4, discipline: 5}`; the constructors set `power`, `discipline` on each `Subunit` from its troop row and stop passing them to `Unit`; delete `_SEASON_FORCE_POWER` (`massbattle.py:198`), `_UNIT_POWER`, `_UNIT_DISCIPLINE` (`orderofbattle.py:75`) | equal |
+| 27B-4 | `modules/mass_battle/troop_types/table.py` :: new `readout(row) -> dict` | §4 | none (no caller in resolution) |
+
+When `04_MB_cr12_linear_law.md` step 3 lands, its one-line change (`eff_size` becomes `REFERENCE_SIZE`) is
+made **inside `prowess`** and nowhere else; when `16_PESSIMIST_MB_one_stamina_ledger.md` step 1 lands, the
+`stam_pen` term is deleted there. That is the reason 27B-1 goes first in the calibration batch.
+
+**Data rows.** One: `troops.infantry` (27B-3), and the header cell `power_per_step` (owned by
+`04_MB_campaign_party_economy.md` §1; named here, not authored).
+
+**Call sites.** `subunit_combat_pool` is called at `orchestration.py:518`, `:769`, `:770` and by
+`systems/mass_battle/sim/test_persubunit_stress.py` (`:66`, `:83`, `:123-131`); its signature and return are
+unchanged, so none is edited. `Unit.base_combat_pool` is called at `orchestration.py:2016`, `:2070`, `:2076`,
+`:2180`, `:2182`; unchanged. `eff_power` / `eff_discipline` (`units.py:654-657`) keep their fallback for the
+harness; the season constructors simply never reach it after 27B-3.
+
+**Tests.**
+
+- Added, in `tests/valoria/test_mass_battle_order_of_battle.py`:
+  `test_prowess_equals_the_pool_base_for_every_troop_kind` (27B-1: `prowess(atom)` equals the value
+  `subunit_combat_pool` returned before the edit, for every key of `TROOP_TYPE_STATS`, at full strength and at
+  half); `test_two_units_of_one_army_differ_by_their_rows` (gate 2);
+  `test_ranks_change_the_result_and_not_the_prowess` (gate 5, after `04_MB_cell_hierarchy_as_data.md`);
+  `test_a_season_built_unit_takes_no_power_from_its_side` (gate 3: build through each of the three
+  constructors and assert `sub.power is not None`).
+- Changed: the test in that file that pins `_UNIT_POWER`, `_UNIT_COMMAND`, `_UNIT_DISCIPLINE` equal to
+  `massbattle`'s literals pins instead that both constructors read the `infantry` row.
+- Run mid-session: that file, and `tests/valoria/test_army_battle.py`.
+
+**Gate, with the reading expected.** `python3 tools/ci_golden_modes_check.py`: three digests unchanged after
+each of 27B-1, 27B-2 and 27B-3. 200 seeded headcount fields through `massbattle.resolve_field`: equal to the
+tree before, field for field. `git grep -n "_SEASON_FORCE_POWER\|_UNIT_POWER\|_UNIT_DISCIPLINE" modules/ engine/`
+prints nothing after 27B-3. The rest as "Gate" above.
+
+**Falsifier and its control.** As "Falsifier" above. Planted: `prowess` multiplied by 1.01 (the equality
+test and the digests must both fail); a constructor still passing `power=` to `Unit` (gate 3's test fails).
+Control: the digests before the edit.
+
+**Hash movers.** None. If any digest moves at 27B-1 to 27B-3, the move is a defect in the edit: stop.
+
+**Dependencies.** 27B-1, 27B-2: none. 27B-3, 27B-4: `04_MB_unit_loadout_and_weapon_in_hand_B.md` stage 1
+(the troop file, its exporter and `table.py`). Gate 2 needs `04_MB_campaign_party_economy.md` §1
+(`experience`); gate 5 needs the arrangement change.
+
+**What lands it; cost class; tier.** An IN-lane session under `/methodology-execute`, as the first step of
+the field calibration batch (`U5b_MB_rulings_in_the_field.md` §6 row 4) for 27B-1 and 27B-2, and with row 3
+for 27B-3 and 27B-4. All four: edit, `sonnet`; no judgment node, so no `opus` stage beyond the batch's one
+closing critique.
+
+**INCOMPLETE, with what is missing.**
+
+1. *27B-3 and 27B-4*: `references/troops.yaml`, `tools/export_troops.py` and `troop_types/table.py` do not
+   exist. Missing: loadout B stage 1. Until then the `infantry` row can be carried as one more entry of
+   `TROOP_TYPE_STATS` (`troop_types/registry.py:44`), which makes 27B-3 codable today at the cost of a second
+   move later; the builder chooses and says which.
+2. *The drill step* (a cohort's `arms` rank as a step on `power`): no read is specified by any proposal
+   (`14_VERBS_MILITARY_B_train.md` §1 item 3 hands it to MB; the first MB audit's step 8). It is a design
+   only. Missing: the size of the step, its cap, and the host-side read in `_order_of_battle`. Not built by
+   this proposal; §1's table marks it absent.
