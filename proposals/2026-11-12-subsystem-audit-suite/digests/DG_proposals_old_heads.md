@@ -900,3 +900,62 @@ HEADS-ONLY lane (350 files, proposals dated before 2026-09-20). Method per file:
 - **Conflicts / stale:** none noted.
 - **Open items:** which of the 26 were adopted into `architecture/meta/` [UNVERIFIED].
 
+### proposals/2026-09-04-degree-sweep/EXECUTION_PLAN.md
+- **What it is:** Fable-tier work order "from a generator to a system with feedback", follow-on to the sweep README, 2026-09-04, 118 lines.
+- **Status:** "PROPOSED. HELD BACK IN FULL." Reading: superseded by workplan v11 `_part2` §`11` (which runs the W-D items).
+- **Bears on:** CORE, DICE.
+- **Content that matters:** planner wrote no code; items with falsifiers and two prompts each for the relay; W-D row asks for `DEFAULT_FIXTURES` and `interactions_per_scene=1`.
+- **Conflicts / stale:** its premise rests on the README headline, since retracted (below).
+- **Open items:** none.
+
+### proposals/2026-09-04-degree-sweep/README.md
+- **What it is:** report of a 143-case (ARC + NPC corpus) degree-of-success sweep with 12 arms, 2026-09-04, 706 lines.
+- **Status:** "INSTRUMENT HOME - the `wd_*` scripts are R-01 and R-02's `measure:` (`engine/season/requirements.yaml`); the documents are reference." Reading: partially live (instrument path is named in code), headline retracted.
+- **Bears on:** CORE, DICE, SC, CHAR.
+- **Content that matters:**
+  - Headline: 3,204 forks across 89 cases, 801 excluded, 2,403 scored; every fork changed the act and the events; none changed any of the next three decisions; reconvergence 100% - "no decision in the corpus influences any later decision" :11-25.
+  - Retracted: `engine/season/governance_spine.yaml:51` says the ~4% later-decision divergence premise was retracted at plan position `11` (2026-10-01); the shipped `actor` arm reads ~30.59% on the 143-case corpus.
+  - Correction by a Fable-tier review: "one type mismatch" claim wrong; operand-gap refusals, `pack_scenes` (`shape.py:2739`) puts only `subject` on the payload so `_req_transfer` and `_req_move` return False :59-82.
+  - Degree road built with no on-ramp (ARM 2a) :293; interpersonal surface degreeless :315; four bands live on one wired game :344; depth-3 four-band persuasion contest :369; forced onto the degree road the code does not accept the result :417.
+  - Takeaway order :47; 143 cases ask for (ARM 10) :103; per-case lane split (ARM 11) :126.
+- **Conflicts / stale:** `engine/season/requirements.yaml:721` names `python proposals/2026-09-04-degree-sweep/wd_collect.py` as a live `measure:` command, so a `proposals/` script is load-bearing on a requirements row; its `runs/` outputs are git-ignored (requirements.yaml:441). Hole-register rows (`engine/season/hole_register.yaml:2083+`) cite `arm3_tree.py::fold_one` and `arm2_onramp.py::run_2c` in `proposals/` as sites.
+- **Open items:** whether the proposals-resident arm scripts should move beside `engine/reference/degree-sweep/` (which already holds `arm9_forking.py`, `sweep_core.py`).
+### proposals/2026-09-04-degree-sweep/arm0_census.py
+- one line: reachability census - which decision sites the 143 cases reach (does `S39` ever fire); standalone instrument. Cited by hole_register? [UNVERIFIED].
+### proposals/2026-09-04-degree-sweep/arm10_throughlines.py
+- one line: what the 143 cases ask for, ranked, versus what the engine supplies (Jordan 2026-09-04 throughlines question).
+### proposals/2026-09-04-degree-sweep/arm11_per_case.py
+- one line: per-case throughlines inside each arc/NPC and what blocks them.
+### proposals/2026-09-04-degree-sweep/arm1_admissibility.py
+- one line: hands every ladder token to the only degree-keyed verb and records what the shape does.
+### proposals/2026-09-04-degree-sweep/arm2_onramp.py
+- one line: can a season loop reach a degree at all (`run_2c` is a hole-register site, `engine/season/hole_register.yaml:2233`).
+### proposals/2026-09-04-degree-sweep/arm3_tree.py
+- one line: depth-3 four-degree tree at each decision point; supplies the degree without a second resolver; `fold_one` is a hole-register site (`hole_register.yaml:2148, 2186`).
+### proposals/2026-09-04-degree-sweep/arm4_margin.py
+- one line: what `content_hash` observes and what the subsystem returns that calling code must accept.
+### proposals/2026-09-04-degree-sweep/arm5_social.py
+- one line: degrees in person-to-person interaction (Jordan redirected the sweep here 2026-09-04). Tags SC.
+### proposals/2026-09-04-degree-sweep/arm6_imports.py
+- one line: were the v2 systems marked for import actually imported (Jordan: discovery system possibly not).
+### proposals/2026-09-04-degree-sweep/arm7_flexibility.py
+- one line: alternative outcomes within each arc/NPC season to depth 3 (Jordan: "most interested in mechanical explorations").
+### proposals/2026-09-04-degree-sweep/arm8_v30_benchmark.py
+- one line: v30 counterfactual corpus (`tests/stress` at tag `v30-snapshot-2026-06-28`) as benchmark.
+### proposals/2026-09-04-degree-sweep/sweep.py
+- one line: corpus-wide runner emitting artifacts under `runs/`; `python sweep.py [seed]`.
+### proposals/2026-09-04-degree-sweep/wd_acceptance.py
+- one line: W-D acceptance run: imports `arm9_forking.py` unmodified, adds controls and forensics; asks whether W-B changed the forking result. Live as requirements `measure:` tooling.
+### proposals/2026-09-04-degree-sweep/wd_cells.py
+- one line: which cells of the declared sweep cross the forking question can be asked at (exists because W-D shipped a false forcing argument).
+### proposals/2026-09-04-degree-sweep/wd_chunk.py
+- one line: scheduling split of `wd_acceptance.sweep_arm` so no process is reaped; invoked x4 per arm per requirements.yaml:496.
+### proposals/2026-09-04-degree-sweep/wd_collect.py
+- one line: collects chunks, runs controls and forensics, emits the artifact; the `measure:` command at `engine/season/requirements.yaml:721`.
+### proposals/2026-09-04-degree-sweep/wd_extra.py
+- one line: supplement: at `total` is any carrying belief cross-person, etc. (three questions the 24-sample forensics could not close).
+### proposals/2026-09-04-degree-sweep/wd_ipc1.py
+- one line: the plan's fixture point (`DEFAULT_FIXTURES`, `interactions_per_scene=1`) run and reported.
+### proposals/2026-09-04-degree-sweep/wd_subj.py
+- one line: sensitivity check that the decision fingerprint is wide enough (`arm9_forking.recorder` records verbs only).
+

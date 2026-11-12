@@ -32,13 +32,14 @@ both seeds, by a rule with no draw, emits no Event, and converts an orthodox man
 a higher intensity than he held his own (31 of 46 cast would have their strongest creed replaced by
 its rival); the ruled refusal that should stop a man is off, and switched on it stops all 46 cast from
 moving house, handing something over and trading; all 46 cast roll two dice at every skill there is,
-and over three seasons 77% of everything rolled failed and nothing reached the top band; of 21,312
+and over three seasons at seed 1, 77% of everything rolled failed and nothing reached the top band; the
+scar can be deleted without changing one act of 1,529 in two seasons; of 21,312
 beliefs held after three seasons 312 are false and 296 of those are the grain count of a store; and
 `Act.reads` is empty on every one of 4,757 resolved acts. The steelman holds where it was tried: the
 layer is honest about itself (every dormant arm is declared, every assumption marked), it does not
 crash at any extreme this lane fed it, the hashes replay, and pursuits do decide which verbs a person
 takes (cutting them moves a person's conduct by 0.64 in total variation, against 0.01 for cutting the
-believed-odds weighting). The pessimist reading is that the product of two invented tables was never
+believed-odds weighting; though re-rolling the dice alone moves it by 0.49). The pessimist reading is that the product of two invented tables was never
 read against the names on its rows, and that every mechanism which would make a person change, refuse,
 excel or be mistaken ships at its control. The single largest obstacle is therefore content with a
 target, not structure: say in data what each name must mean in acts (proposal B), and let the three
@@ -144,7 +145,7 @@ shipped arm reproduces `5ab73af2`, `bacd687f`, so the harness is the shipped eng
 | `noodds` (believed-odds weighting CR-17 and NPC effort CP-T01-05 off) | 1,520 | 652 | **0.008** | **0.012** | **82/83** | as shipped | **free** |
 | `noconviction` (every `Person.conviction` emptied) | 1,533 | 658 | **0.022** | **0.053** | **83/83** | as shipped | **free, nearly** |
 | `nostance` (the stance term zeroed) | 1,497 | 551 | 0.126 | 0.273 | 71/83 | pursuits 2, stance 6, body 12 | not free: what dies is restraint (persons harm those they were loyal to) |
-| `nobelief` (clause 4, `belief_contradicts`, off) | 1,434 | 762 | 0.155 | 0.290 | 60/83 | as shipped | not free: 106 more refusals, 95 fewer acts, findings 122 to 86 |
+| `nobelief` (clause 4, `belief_contradicts`, off) | 1,434 | 762 | 0.155 | 0.290 | 60/83 | as shipped | not free: 106 more refusals, 95 fewer acts, findings 120 to 86 |
 | `tau0` (no draw in the choice) | 1,609 | 435 | 0.275 | 0.448 | 16/83 | conviction 6 (a season early) | not free: a monoculture (`create_record` 334, `utter` 206); and 221 fewer refusals |
 | `nopursuit` (every person's pursuits emptied) | 1,269 | 698 | 0.365 | 0.639 | 12/83 | stance 7, conviction 1, body 13, scar 29 | not free for the realm's mix; for a person, little past the floor; **more happens to persons without wants** |
 | `samemen` (the instrument's own control: realm-mean pursuits and conviction, no goals) | 1,524 | 686 | 0.342 | 0.653 | 12/83 | stance 8, body 7, **a seat changed hands**, one death | as `nopursuit`: a realm of identical men is livelier than the shipped one |
@@ -461,8 +462,9 @@ falsifier run and its control; requirement touched; minimal fix at the owner.
 ### F-PES-CHAR-10 · D · a realm of persons without wants is livelier than the shipped one
 
 - **Evidence.** `d1_cuts.py`, arm `nopursuit`, seed 0, two seasons: stored stance moved for 7 persons
-  (shipped 0), body for 13 (shipped 0), conviction for 1 (shipped 0); `march` rises into the ten
-  commonest verbs; `commitment.made` falls 65 to 7 and `finding.made` 122 to 55.
+  (shipped 0), body for 13 (shipped 0), conviction for 1 (shipped 0); `march` rises from 13 acts
+  (28th of the verbs) to 58 (5th); `commitment.made` falls 65 to 7 and `finding.made` 120 to 55. The
+  `samemen` and `nostance` arms show the same direction (§2).
 - **Reading.** The pursuit term steers persons toward records, utterances and commitments (the acts
   that always succeed) and away from the acts that touch another person's body or standing. Character,
   as tabled, is a pacifier. This is the person-level cause of `16_PESSIMIST_GAME.md`'s *correspondence
