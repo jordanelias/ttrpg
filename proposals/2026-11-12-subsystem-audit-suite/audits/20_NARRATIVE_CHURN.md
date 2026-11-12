@@ -184,6 +184,11 @@ old oath, a rising against a fault) is missing or reads a constant. The systems 
 Each: severity · claim · evidence · falsifier and its outcome · requirement touched · consequence ·
 minimal fix at the owner. Steelman first where one exists.
 
+**Rank, worst first, by how many of the five crossings each blocks** (the ids are in order of
+discovery): F-NARR-02 (three of five) · F-NARR-04 (two, and aims nothing) · F-NARR-01 (the regime as
+weather; the fault line) · F-NARR-05 (allegiance against conviction) · F-NARR-08 (the interior's one
+event) · F-NARR-03 (follows from 02) · F-NARR-07 (a measure, not a cause) · F-NARR-06 (legibility).
+
 ### F-NARR-01 · degrades narrative · the regime is one value
 
 **Steelman.** CR-79 is ruled, built behind a guard, has a control arm and a test that the realm reaches
@@ -282,9 +287,10 @@ links (`DA>WA`, `WN>DA`) print UNREACHABLE (E-N03). The Crown's own seat row cal
 probe did not resolve `[UNVERIFIED]`, and `faction_of` moved for nobody.
 **Falsifier.** A person whose `faction_of` differs at the end. None at three seeds, four seasons.
 **Touches.** R-02, R-06; strife category D and F.
-**Fix.** Two halves, two owners. The fault line becomes readable under `20_NARRATIVE_A`. The occasion
-to leave is `20_NARRATIVE_C` edit 3 (a change of holder is put to the sworn). Whether a defection is a
-strife move is the kind list's (ratified `strife-01` §6 ruling; §10 item 2 below).
+**Fix.** Three parts, three owners. The fault line becomes readable under `20_NARRATIVE_A`. A member
+who thinks ill of his own side finds its creed among his occasions under `20_NARRATIVE_D`, and a sworn
+man learns of a new holder under `20_NARRATIVE_C` (edit 5). Whether a defection is a strife move is the
+kind list's (ratified `strife-01` §6 ruling; §10 item 2 below).
 
 ### F-NARR-06 · degrades legibility · the calendar has no year and the era has no reader
 
@@ -295,7 +301,7 @@ scope no step reads and no run concludes.
 chronicle (`harness/chronicle.py`) prints a season index and nothing else (WR F-WR-14).
 **Falsifier.** `season_of_year(w)` not `None` at shipped fixtures. `None` in every run (CALENDAR line).
 **Touches.** R-03 (legibility of the tick); NERS-S (zooms across scales of time).
-**Fix.** `20_NARRATIVE_D_the_year_and_the_reason.md` edit 1. The era's reading is WR's and the plan's
+**Fix.** `20_NARRATIVE_E_the_year_and_the_reason.md` edit 1. The era's reading is WR's and the plan's
 (CR-97 to CR-103); what this lane adds is that those positions will read a constant regime and a
 one-strand realm unless `20_NARRATIVE_A` and `09_WR_strand_conclusion.md` land first (§9).
 

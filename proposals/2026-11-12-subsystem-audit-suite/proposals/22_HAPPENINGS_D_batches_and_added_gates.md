@@ -102,8 +102,8 @@ buildings are named at landing from `build_realm(0)`'s settlements (the largest 
 territory that PES-FA-A edit 2 names as each duchy's seat) `[UNVERIFIED: the ids; not read here]`.
 Nothing in code changes. A declared mover of every world hash and of every seeded pin: co-location
 decides who witnesses whom, so this is a large mover for five lines. **It lands after batch 1, never
-before:** today the King's distance from his officers is what refuses most of their captures, and
-housing him among them first would kill him sooner.
+before:** if distance is what refuses most captures today, moving the cast about first changes who
+reaches whom before `capture` has a cause.
 
 **Gate.** `python -m engine.season.harness.populated` builds; a probe prints, for every seat-hold,
 whether the holder's home lies under the seat's rung (`state/gate.py::purview_reaches` over

@@ -1,6 +1,6 @@
 # 22 · Happenings: do the things that happen in computed play make sense, and what repairs the ones that do not
 
-## Status: AUDIT (a terminal pass; proposals in `proposals/22_HAPPENINGS_*.md`; not canon; resolves nothing at runtime, CLAUDE.md §0.05)
+## Status: REFERENCE (an audit; resolves nothing at runtime; proposals in `proposals/22_HAPPENINGS_*.md`)
 
 Jordan, 2026-11-12, on a digest line reading "the King dies at tick 0 in every seed, which empties seven
 seats that can never be refilled": *"why would the King always die?? Anyway, I expect Fable to assess
@@ -28,10 +28,10 @@ die, for the same reason as before, by the one verb the repair missed.**
    and needs a context) and v11 CR-87 gated `fight` and `accept`.
 3. *Why he dies now* (§1.3, new in this lane): CR-87 left `capture` ungated. At seed 2 the King is the
    target of **19 `capture` attempts in four seasons**: seven by his own Spymaster, ten by the Duke of
-   Varfell, two by the Duchess of Hafenmark. Seventeen are refused because the captor is elsewhere. In
-   the third season the Spymaster reaches him and wounds him; in the fourth the Spymaster tries again and
-   **the King is felled and dies**, his two seats close, and the run ends with no King. The occasion both
-   times is an order the Grand Master of the Löwenritter sent the King, which the Spymaster saw. The same
+   Varfell, two by the Duchess of Hafenmark. Seventeen are refused in the fold. In the third season the
+   Spymaster's attempt is fought and wounds him; in the fourth the Spymaster tries again and **the King
+   is felled and dies**, his two seats close, and the run ends with no King. Both fought attempts cite,
+   in their `causes[]`, an order the Grand Master of the Löwenritter had issued naming the King. The same
    verb kills the Cardinal of Prudence at seeds 1 and 2, as the captor. Across the nine `capture` scenes
    fought at seeds 1 and 2, **nobody is ever taken prisoner and three people die**.
 4. *Otherwise nobody named can die at all* (§1.4): age and illness ship at 0 and everyone is zero seasons
@@ -102,7 +102,7 @@ The sequence, from the log:
 
 | season | Event | what happened |
 |---|---|---|
-| 0 to 3 | 17 × `capture.refused` naming the King | the Spymaster (through `off_spymaster`) five times, the Duke of Varfell ten, the Duchess of Hafenmark two; refused in the fold, the captor not being where the King is |
+| 0 to 3 | 17 × `capture.refused` naming the King | the Spymaster (through `off_spymaster`) five times, the Duke of Varfell ten, the Duchess of Hafenmark two; refused in the fold. The deciding clause was not read per act; the PHYSICAL lane's census gives `with` (the captor is not where his target is) as the commonest. The King's row lives in a cottage in one town and the Spymaster's in a barracks in another (H-25) |
 | 2 | `order.given` | the Grand Master of the Löwenritter `dispatch`es an order whose subject is the King |
 | 2 | `capture.declared`, then `body.changed` (`Wounded`) | the Spymaster's sixth attempt is fought. The King is wounded. Its `causes[]` are the act and the Grand Master's order |
 | 2 | `body.tended` | somebody restores the King's body whole |
@@ -114,15 +114,18 @@ Why it can happen, at the owner:
    coercion rows *"keep their"* own gates, and `capture`'s gate is that the actor hold a seat granting
    `dispatch` (`verb_table.yaml`, row `capture`, `refusal_note`). Any such officer forms it on any person
    a question names. `aperture 2 0` (PHYSICAL lane): formed 26, attempted 12.
-2. **The occasion is having seen something.** The Spymaster saw an order naming the King, so the King is
-   a referent of his next question, and `capture` is on the list. The narrative lane measured the general
-   case: *"a third of all acts are occasioned by having seen someone do something"*.
+2. **The occasion is having seen something.** Both fought attempts carry the Grand Master's
+   `order.given` in `causes[]`: an Event naming the King made the King a referent of the Spymaster's
+   question, and `capture` is on the list of things to do about a referent. The narrative lane measured
+   the general case: *"a third of all acts are occasioned by having seen someone do something"*.
 3. **A capture is a fight, and this fight kills.** It is fought to the yield (`rosters.yaml: duel_terms`,
-   `capture: yield`), and a blow is a median 25 of 40 Health (`audits/16_PESSIMIST_PC.md` §0). At seeds 1
-   and 2: nine scenes fought (`capture.declared` 3 and 6), **`person.captured` 0**, `person.died` 3.
+   `capture: yield`); the modal blow is Overwhelming and is a median 25 of 40 Health
+   (`audits/16_PESSIMIST_PC.md` §0). At seeds 1 and 2: nine scenes fought (`capture.declared` 3 and 6),
+   **`person.captured` 0**, `person.died` 3.
 4. **Nothing follows the first attempt.** Between the wounding and the killing the Spymaster keeps his
-   seat and his freedom: the King cannot dismiss as King (F-PES-FA-02), holds no grievance that changes
-   his choices (F-PES-CHAR-08), and his guard is not mustered (the `guards` default is off, CP-T09-07).
+   seat and his freedom. The King does not dismiss him (he could only through his second title,
+   F-PES-FA-02, and `revoke` is never attempted in computed play), holds no grievance that changes his
+   choices (F-PES-CHAR-08), and has no guard (`build_realm`'s `guards` default is `False`).
 
 The cardinal: at seed 1 the Cardinal of Prudence dies trying to capture `p_npc_041`; at seed 2 he dies
 trying to capture the Senior Inquisitor. Each time he is the one felled.
@@ -226,7 +229,7 @@ lane writes; every other fix is another suite proposal's and is not redone.
 | H-22 | News does not travel: a king's death is known to 16 of 82, and to 17 three seasons on | F-PES-GAME-07; FI §2.1 (no rumour passes a second mouth) | **No.** | the second teller says only that he was told | a rumour that travels and garbles | `08_FI_02_rumour-that-travels.md`; `16_PESSIMIST_FI_A_what_a_rumour_can_garble.md` |
 | H-23 | The King cannot dismiss anyone as King; a dismissal is permanent and unpardonable | F-PES-FA-02: 6 of 34 seats strippable, all through one seat; `pardon` refused through 33 of 33 | **No.** | the rung-directly-above rule over anchors placed two rungs apart | the anchors brought under the rule | `16_PESSIMIST_FA_A_dismissal_survives_the_king.md` |
 | H-24 | The throne can be stranded for ever; a consort can seat herself as Confessor; a cohort can be King | F-PES-FA-01; premise 2.1 link 8 | **No.** | `successions` one title deep; `may_fill` unnarrowed | a set of claimants; a seat is held by an individual | **NEW** B; `16_PESSIMIST_FA_B` edits 1, 2 |
-| H-25 | The King lives in a cottage; the Duchess of Hafenmark at the royal court; the Duke of Varfell at an inn in the capital; the Confessor in a market | mine (`king_0.out`: `b_s_002_cottage`; `npcs.yaml:186`); F-PES-FA-03: 18 of 34 seat-holders live off their seat's ground | **No** for the King. A duchess at court is defensible; a duke at an inn is not | `npcs.yaml: home:`, authored against no rule | governance no longer reads the home; the homes are content | `16_PESSIMIST_FA_C_under_the_seat.md`; the homes: **NEW**, D §3 |
+| H-25 | The King lives in a cottage in one town, the Queen at an inn in another, their children at court in a third; the Duke of Varfell at an inn; the Confessor in a market | mine (`npcs.yaml` rows NPC-020, -032, -031, -030, -052, -021; `king_0.out`); F-PES-FA-03: 18 of 34 seat-holders live off their seat's ground | **No.** A duchess at court is defensible; a king in a cottage apart from his queen is not | `npcs.yaml: home:`; the four heads with `institution: null` are the four so housed | governance no longer reads the home; the homes are content | `16_PESSIMIST_FA_C_under_the_seat.md`; the homes: **NEW**, D §3 |
 | H-26 | The world never ends and never ends differently | WR audit: no ending in six seasons at seeds 0 to 2; `endings == []` every season | **No.** | `peninsular_sovereignty` unreachable; nothing concludes a strand | strand conclusion; readings of closure | `09_WR_strand_conclusion.md`; `09_WR_B_readings_of_closure_and_tension.md` |
 | H-27 | A player-king who does nothing loses nothing | F-PES-GAME-10 | **No.** | no duty, no neglect, no cost of a vacancy | what he was owed; the ring | `20_NARRATIVE_B_what_he_was_owed.md`; `16_PESSIMIST_GAME_consequence_reading.md` |
 
@@ -237,7 +240,7 @@ lane writes; every other fix is another suite proposal's and is not redone.
 | H-28 | A refused act is tried again at once: 4 of 309 retries succeed | CORE pessimist §2; F-PES-DICE-05 | **No.** | the retry licence, `driver.py:508-518` | a refusal is remembered | `16_PESSIMIST_CORE_a_refusal_is_remembered.md` |
 | H-29 | A death by hunger is recorded as a death by nothing | F-PES-SE-04 | **No.** | `_die` cites only an earlier death | the death cites its fall | PES-SE-A edit 3 |
 | H-30 | A shared granary feeds towns in id order and the unfed town is not reported | F-PES-SE-03 | **No.** | `kernel.py` K2 | the granary shares | PES-SE-A |
-| H-31 | Armour does not turn a blade; a second garrison adds nothing and a new one halves the walls | PES-PC §0; F-PES-SE-08 | **No.** | armour is a constant multiplier; `fortification` averages | — | `03_PC_weapon_records_in_the_export.md`; `16_PESSIMIST_SE_B` edit 3 |
+| H-31 | Armour does not turn a blade; a second garrison adds nothing and a new one halves the walls | PES-PC §0; F-PES-SE-08 | **No.** | armour is a constant multiplier; `fortification` averages | — | armour: the PC lane's order of fixes (`audits/16_PESSIMIST_PC.md` §6), no proposal identified here; walls: `16_PESSIMIST_SE_B` edit 3 |
 | H-32 | Acts fire and write nothing: a challenge, an order, an argument; the degree of a roll changes no state in 282 of 284 | F-PES-DICE-01; PES-SC (five of seven contested rows write `[]`) | **No.** | band-keyed writes are empty | bands that write | `14_VERBS_BINDING_D_orders.md`; `14_VERBS_SOCIAL1_B`; `13_SC_draw_for_unrolled_contests.md` |
 | H-33 | The record cannot retell: a fight of 110 trace events is three log lines; a succession does not cite the death | PES-PC §0; F-PES-GAME-03 | **No.** | standing occasions fold with `causes == [the act]` | occasions carry their cause; the record holds what changed | `16_PESSIMIST_GAME_standing_occasions_carry_their_cause.md`; `16_PESSIMIST_CORE_the_record_holds_what_changed.md` |
 | H-34 | A ruler's first reaction to being attacked is nothing | §1.3 (mine): between the wounding and the killing the Spymaster keeps his seat and tries again | **No.** | `defence` forms no act he chooses; regard does not move with the deed (F-PES-CHAR-08) | what is done to a man moves his regard | `02_CHAR_relations_have_a_ground.md`; `02_CHAR_which_ground_moves_whom.md` |

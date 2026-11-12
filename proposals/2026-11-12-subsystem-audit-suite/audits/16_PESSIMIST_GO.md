@@ -26,9 +26,9 @@ things are sound and were re-shown at full width: the played and automated seaso
 (all 83 persons seated on the player's sheet at once, two seasons, seeds 0–2, hash equal to the
 automated run); a View leaks nothing by type; and the short chains the world produces do reach
 witnesses (three in four are held whole, as claims, by someone who took no part). Everything a
-player would call presentation fails by execution. **Seeing:** about one offered row in a hundred,
-in one deliberation in eight, names a person the seat holds no claim about, because the Question is
-stamped from world truth and "follows a succession"; in the other direction three record kinds
+player would call presentation fails by execution. **Seeing:** 160 to 194 times in a two-season run
+the offer names a person the seat holds no claim about, has no tie to and does not live beside,
+because the Question is stamped from world truth and "follows a succession"; in the other direction three record kinds
 reach 82 of 82 persons in the tick they occur, while person-to-person telling carried 5 to 12
 claims of 22,000. **Reasons:** `why` is `None` on 24,822 of 24,822 witness claims, by construction.
 **Levers:** 42% of acts are refused, fifteen offered verbs were refused every time (1,085 acts),

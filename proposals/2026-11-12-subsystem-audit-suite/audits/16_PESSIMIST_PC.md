@@ -29,8 +29,8 @@ intent asks for has, measured, almost nothing to decide.** The pessimist reading
    loser and 27.4% three; four wound sequences (`AA`, `BB`, `ABA`, `BAB`) are 52% of all fights; 41% of
    turns draw no blood. Under `blood` terms (every `accept`) 92.6% of duels are one blow, and the man hit
    first yields in 94.8%. The cause is arithmetic, not chance: the exchange roll is centred 2.2 above its
-   obstacle for any two equal fighters, so **Overwhelming is the modal band at every faculty from 0 to
-   12** (§1.1), and an Overwhelming blow is a median 25 of 40 Health.
+   obstacle for any two equal fighters, so **Overwhelming is the modal band at every faculty from 1 to
+   12** and within half a point of it at 0 (§1.1), and an Overwhelming blow is a median 25 of 40 Health.
 2. **Most of the engine does not run in that fight (§1.3).** 100.0% of 17,021 engagements open closed:
    no approach phase, no stop-hit, no arrest, no fighting withdrawal, no pursuit, no re-presentation, in
    5,000 fights. Commit depth reaches the "deep" tier that gates the Indes steal, the single-time
@@ -129,13 +129,15 @@ runs at disjoint seeds: 3.30 and 3.37 turns; 6.22 and 6.31 exchanges; 3.14 and 3
 | lunge; the deep-commit tier gated off; single-time counter | 3.38; 3.38; 3.37 | 6.38; 6.37; 6.36 | 3.18; 3.17; 3.17 | 34.5; 34.5; 34.5% | 23.2; 23.3; 23.0% | inside |
 | grapple (contact axis); bind cannot wound | 3.43; 3.41 | 6.43; 6.44 | 3.19; 3.11 | 34.8; 33.9% | 23.4; 22.1% | inside |
 | guard terms; legibility; footwork; morphology levers (eight constants) | 3.40; 3.43; 3.47; 3.39 | 6.42; 6.42; 6.46; 6.37 | 3.18; 3.20; 3.19; 3.17 | 34.0; 34.1; 34.2; 34.4% | 22.5; 23.1; 22.8; 23.8% | inside |
-| stop-hits; the whole approach phase; reopen and disengage; reach σ; half-sword switch; contact-moment terms | 3.37 | 6.37 | 3.17 | 34.3% | 22.9% | **identical to the uncut run in every figure: the code does not execute** |
+| stop-hits; the whole approach phase; reopen and disengage; reach σ; half-sword switch; contact-moment terms | 3.37 | 6.37 | 3.17 | 34.3% | 22.9% | **identical to the uncut run in every figure: the mechanism contributes exactly nothing** |
 
 In the one fight the season can have, two mechanisms beyond the roll and the damage change anything a
 reader of outcomes could detect: wounds impairing the wounded (which makes the fight *less* reversible:
 without it a lead changes hands in 49% of fights and the first man hurt wins 31%) and the riposte (which
-shortens it). Six are provably never executed. The other twenty-one are inside a band of about a tenth
-of a turn and two points. Limits: 2,000 fights resolve about 0.1 turn and 3 points; every fighter here
+shortens it). Six contribute exactly nothing: the approach phase, its stop-hits and the re-opening never
+run (every engagement opens closed); the half-sword switch has no form to switch to; reach σ and the
+contact-moment terms are differences that vanish between equal weapons. The rest are inside or at the
+edge of a band of about a tenth of a turn and two points. Limits: 2,000 fights resolve about 0.1 turn and 3 points; every fighter here
 has default attributes, so terms centred on the default (footwork on Coordination 4, handling on
 Strength 4, Focus 3) are zero by construction and are "inert for every season person", not "inert".
 
@@ -700,8 +702,8 @@ season through authored attributes (PC-06 K-1); no cast member carries one today
 
 **F-PES-PC-09 · NERS N · Eight false or narrowed N-lines** (§1.4): the Vor substrate; "both poles cost";
 the fighting withdrawal; the eight morphology levers; the grapple; the decisive stagger; the read's mode
-choice; the bind as a wound source. In the season's fight, 2 of 31 cuts move the shape, 6 never
-execute. Fix: none by itself; it is the evidence for the build order (R-6) and for what the Godot port
+choice; the bind as a wound source. In the season's fight, 2 of 31 cuts move the shape and 6 contribute
+exactly nothing. Fix: none by itself; it is the evidence for the build order (R-6) and for what the Godot port
 should not carry yet (R-8).
 
 **F-PES-PC-10 · premise (the words) · Names that promise events the engine does not have.** `disarm`
@@ -836,7 +838,7 @@ marked.
 | `pL_misc.py` | armour and the roll 800 × 4; first-mover 6,000 | §2.3, §2.5 |
 | `pM_yield_draw.py` | prototype of proposal A, 1,500 × 3 terms, two controls, Spirit and modifier sweeps 1,000 | proposal A |
 | `pP_window.py` | prototype of proposal B, 1,500 mirror, 1,000 a matchup | proposal B, §2.6 |
-| `pQ_knee.py` | the knee as a draw, 500 (stopped after three cells: it fails) | proposal D |
+| `pQ_knee.py` | the knee as a draw, 500 (stopped after two cells: it fails) | proposal D |
 | `pQ2_gap.py` | prototype of proposal D, 400 × 8 cells | proposal D, §2.3 |
 | `pS_season.py`, `pS2.py` | `tiny_world` through the real driver: one fight's Events and ledgers; 300 seeds per verb through the seam; self-fight; the estimate; `body`-lowered actor; death-claim census over 100 fights | §2.5, §3.3, §3.6 |
 

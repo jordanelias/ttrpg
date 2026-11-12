@@ -30,6 +30,8 @@ declared mover of any run that contains one.
   line calls it *"one of the two Royal Family succession seats"*; no succession reads it.
 - `rosters.yaml: successions` is `{off_king: off_heir}`; its note: *"one title deep (the heir's own title,
   closed by his claim, passes to nobody)"*.
+- This lane's run (`runs/HAPPEN/king_2.json`): at seed 2 the King dies in the fourth season by his
+  Spymaster's `capture`; `off_king` and `off_duke_valorsmark` close. The duchy is then fillable by nothing.
 - F-PES-GAME-08, premise 2.1 link 8 (run `x2b_death_detail.py 0 1 4 p_npc_020,p_npc_031`): with the King
   and the Prince dead *"the throne, the duchy and the heir's seat stay vacant for all four seasons …
   the realm does not notice it has no King"*.
@@ -67,7 +69,7 @@ and, when PES-FA-A edit 1 and SYN-B edit 6 land, their rows in the same shape
 *"one title per seat"* becomes *"the titles whose holders may claim it; a list is eligibility, never an
 order (HAPPENINGS-B)"*. `[ASSUMPTION; medium; Jordan to correct; revert: the single title]`.
 
-**3. The seven readers of `SUCCESSIONS`, one meaning each** (sites by grep at HEAD):
+**3. The loader and the seven readers of `SUCCESSIONS`, one meaning each** (eight sites, by grep at HEAD):
 
 | site | today | becomes |
 |---|---|---|
@@ -113,7 +115,7 @@ left with FA.
 ## NERS reading
 
 - **N.** Cut it and one death in the right place ends governance for the rest of the run. Top-down it is
-  the fixed point's houses made claimants; bottom-up it is one roster value read by seven sites;
+  the fixed point's houses made claimants; bottom-up it is one roster value and its seven readers;
   laterally it is the Church's and Varfell's elections' sibling (a set of electors there, a set of
   claimants here).
 - **R.** A succession with several possible winners is a strategy problem for a player in any of five

@@ -183,10 +183,15 @@ seeded:
   Overwhelming and Success and the first half of them, in cited order, at Partial
   (`15_INSTITUTIONS_PAPACY_C` §2's bands, with a list in place of `attests: n`); `issue` and `covenant`
   of a reciting form write the deed claims the act cites.
-- **Request to SC's evidence owner** (`05_SC_evidence_and_rebuttal_B.md`; not edited): a cited Record
-  carrying `recites` weighs as the number of its recited deeds not answered; it is a proof for the side
-  whose petition names the same seat or person; a forged one is answered through `subject` as any forgery
-  is. PAP-C's requests ("a cited `resolution`'s weight is its `terms.attests`") are replaced by this.
+- **Request to SC's evidence owner** (`05_SC_evidence_and_rebuttal_B.md`; not edited), in that file's
+  own terms: citing a Record that carries `recites` files **one item per recited deed**, each the cell
+  `(doer, kind, True)` at a Record's weight (1) and with the certifying act's seat as its origin, in place
+  of the citer's own told claim of that deed at its hop-discounted weight. That is all a certificate is in
+  a hearing: it lets old deeds be put before a room at full weight. Each item is answerable as any item
+  is; an impeachment of the paper (a held `record.forged` claim) that draws Overwhelming strikes every
+  item of its origin, which is the whole certificate. It is admissible for the side whose petition names
+  the same seat or person. PAP-C's requests ("a cited `resolution`'s weight is its `terms.attests`") are
+  replaced by this.
 - **Commemoration needs no code.** A seat-holder who holds a certificate holds its content claims and may
   `tell` them (`14_VERBS_SOCIAL2_B`); hearers receive told deed claims with the founder as doer, weighed
   by their regard for the teller; those claims are what the chain reads. The keeper chooses, through the

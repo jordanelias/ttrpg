@@ -27,7 +27,10 @@ says]`.
   only: the subject is named by a warrant addressed to the actor, or is his detainee. The criminal's own
   act has no reader. So in the shipped realm nobody can commit the crime that a warrant would name.
 - `fight` formed 0 at three seeds (`hole_register.yaml` row at `:5321`, cited by PHYSICAL_A); resolved 0
-  in this lane's seed-0 season (`runs/HAPPEN/king_0.out`).
+  in this lane's nine seed-seasons (`runs/HAPPEN/king_*.out`).
+- The violence that does occur is the kind with no reason: `capture`, ungated, kills the King at seed 2
+  and a Cardinal at seeds 1 and 2 (audit §1.3). PHYSICAL_A A2 closes that. Once it does, no named person
+  can be killed by another for a reason of his own, at all.
 - The world's own history holds the event the engine cannot produce: the first king's death in a
   hunting accident, *"perpetrator undefined"* (`audits/15_INSTITUTIONS_PAPACY.md:157`).
 - FI's intent is the detective game (`AUDIT_BRIEF.md`, the noir section). FI's pessimist premise *"a
@@ -61,7 +64,9 @@ weight in steps.
 | Partial | he reaches him and is seen coming: the target fights at no disadvantage and the notice draw is taken as certain for those present | as `fight` |
 | Failure | he is stopped. The guard's seat opens a `detain` on him (`capture`'s custody write, the same owner) | `person.captured` |
 
-A place with no guard takes no draw. Terms: `context_terms` gains `enmity: death` (PHYSICAL_A A3's
+A place with no guard takes no draw. `build_realm`'s `guards` default is `False` today, so in the
+shipped realm every place is unguarded until that default flips (CP-T09-07); the gate's guarded arm
+builds with `guards=True`. Terms: `context_terms` gains `enmity: death` (PHYSICAL_A A3's
 roster). So a ruler dies by a hand only when a rival or an injured man hates him enough, chooses it over
 everything else he could do, passes his own scruple (CHAR-C), gets past the guard, wins the scene, and
 the wound proves mortal (A3). Each step is a draw, and each failure is a story: a taken assassin, a

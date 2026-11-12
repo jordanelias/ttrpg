@@ -405,8 +405,210 @@ act that closes or opens an allegiance or a duty.
 
 ## 4. Findings, ranked worst first
 
-FINDINGS_PENDING
+Severity words are the suite's. "Touches" names the nine requirements (`dossiers/00_NINE.md`). Each
+falsifier is a run that would have shown the claim wrong, with its outcome and its control.
+
+### F-PES-WR-01 · blocks a requirement · no story in computed play has a turn
+
+**Claim.** Nothing one person opens is ever closed by another person's act; the only reversal the realm
+performs is a killing.
+**Evidence.** §2.4's table: 33 closures at two seeds, 33 by the edge's own subject, 0 by another, against
+2,298 edges left open; `revoke` 0 of 6, `seize` 0 of 14, `release` 2 of 17 (both the releaser's own).
+**Falsifier run and control.** An edge closed by an act whose actor is not its subject, in any arm:
+none in `p2_s0_k3_shipped_b`, `p2_s1_k3_shipped_b`, `p2_s0_k3_stock0`. Control: the reading does see
+closures (the 33) and does see an act-caused death (seed 1), so the zero is observed, not unread.
+**Touches.** R-02 (consequence), R-06, R-05; NERS-R's no-player half.
+**Consequence.** A chain of answers with no reversal is a correspondence, which is what the chronicle
+prints. Escalation and ending are the WR lane's F-WR-01; this is the middle, and it was unmeasured.
+**Minimal fix at the owner.** The closing verbs are other lanes' (FA `revoke`, `seize`; SC `pardon`,
+`determine`; PC the duel). What WR owns is the reading, so the gap is a number:
+`16_PESSIMIST_WR_D_small_clock_repairs_and_two_readings.md` edit 4.
+
+### F-PES-WR-02 · degrades narrative · the Calamity has no source, no break and no answer, and the scheduled flip starts an exponential nobody stops
+
+**Claim.** §2.2. At shipped values there is no calamity; switched on it is a uniform ramp; with a source
+it builds as documented and never breaks; the played realm decays exactly as the unplayed one.
+**Evidence.** `p1_s0_k60_lattice.txt`, `p3_s0_k14_c250.txt`, `p2_s0_k3_calamity.txt`; `matter.py:139-201`.
+**Falsifier run and control.** A played season in which a ring mean differs from the unplayed arm's, or
+a `restore` is attempted: none in three seasons (ring means equal to the unit; `restore` 0, `work` 0).
+Control: the played arm does differ from the shipped realm in 13 state components, `sites` among them,
+so the comparison can see a difference when there is one.
+**Touches.** R-01, R-02, R-09 (the pull is exact; WR F-WR-24); NERS-R completeness (no end state).
+**Consequence.** `09_WR_world_motion.md` edit 1's second commit (weight 0 → 250 with a wound) would take
+the realm's yield from 4,810 to 719 in fourteen seasons at every seed with no Event to mark it.
+**Minimal fix.** `16_PESSIMIST_WR_B_the_calamity_strains_and_breaks.md`.
+
+### F-PES-WR-11 · degrades narrative · the band-crossing channel is dead from end to end
+
+**Claim.** A band crossing is emitted "so somebody's later act can be its consequence" (L5,
+`matter.py:103-104`), and no act can be.
+**Evidence.** The calamity arm is the first run in the suite in which crossings occur inside a played
+horizon: 24 `condition.band_crossed`, witnessed, and `restore` 0 attempted, `work` 0 attempted. The
+`restore` row's own note gives the cause ("no question the realm delivers carries a Site among its
+referents"); `rosters.yaml:1903-1906` says the opposite ("`restore` now executes on the populated
+realm's SETTLEMENT fabrics"). The run agrees with the verb table; the roster note is stale.
+**Falsifier.** A `restore` or `work` attempt in the calamity arm. None.
+**Touches.** R-01 (propagation), R-02.
+**Minimal fix.** Proposal B edit 4 (the occasion), at CORE's owner; the stale roster sentence is §9 R-4.
+
+### F-PES-WR-03 · degrades narrative · the world's own change is one ramp in 37 places (cross-listed)
+
+§2.1. SE F-SE-01 and GAME F-PES-GAME-05 own the defect and its fixes (`07_SE_ground_and_granaries.md`,
+`16_PESSIMIST_GAME_the_world_draws.md`); this lane adds the premise verdict and nothing to build.
+**Falsifier.** Two settlements differing in any MATTER-written quantity after 41 unplayed seasons. None.
+**Touches.** R-01, R-09.
+
+### F-PES-WR-05 · degrades narrative · the Thread is read off letters, finds nothing and costs nothing
+
+**Claim.** §2.5. **Evidence.** Four arms: 17 executed `thread_read`, subjects 9 Records, 7 persons, 1
+other, 0 places; every finding ungraded with the reader's own gate as its only observation; body
+unchanged; `rosters.yaml:3295-3296`. **Falsifier.** A `thread_read` whose finding observes anything but
+the gate, or whose subject is a Site: none. Control: an `examine` finding in the same world was looked
+for and none executed in these arms (`examine` attempted 0), so the comparison with a sibling inquiry is
+by the roster's statement, not by run `[UNVERIFIED by run]`.
+**Touches.** R-05; the setting's premise. **Minimal fix.** Proposal D edit 2; the build is the WR lane's
+two threadwork proposals.
+
+### F-PES-WR-06 · degrades narrative · a journey is free, instant and certain
+
+**Claim.** §2.3. **Falsifier.** A traveller harmed, or arriving later than the round he set out: none of
+33 individuals at three arms. Control: non-travellers (105 person-arms) are unharmed too, bar one
+killing. **Touches.** R-09, R-05. **Minimal fix.** `16_PESSIMIST_WR_A_the_road_is_drawn.md` (the shape
+of CP-T10-02).
+
+### F-PES-WR-07 · degrades narrative (R-09) · the bodies clock is a coin, the same coin for everyone
+
+**Claim.** The one draw the world owns for persons is binary, irrecoverable, off the ladder, and no
+state sets its odds; every individual is the same age.
+**Evidence.** `matter.py:726-731`; `world_q.py:1262-1270`; `build_realm(0)`: all 46 individuals
+`born == 0` (`fixtures.py:692`). **Falsifier.** Two individuals with different hazards at one tick:
+none can exist (one formula, one age). **Correction owed to a sibling:**
+`09_WR_B_draws_not_thresholds.md` lists illness as complying with the standing rule; it meets "a draw"
+and misses "graded", "recoverable" and "state sets the odds". Listed for that lane.
+**Touches.** R-09, R-06. **Minimal fix.** `16_PESSIMIST_WR_C_illness_on_the_body_ladder.md` (ships dark).
+
+### F-PES-WR-04 · degrades narrative · CALENDAR can be removed and no reading notices
+
+§1.1. **Falsifier.** A cut arm further from shipped than the noise: 38 against 316. Control: the cut
+does remove its own Events (12 and 17 to 0), so the arm is the arm. **Touches.** R-03, R-04.
+**Minimal fix.** None to the barrier; proposal D edits 3 and 5.
+
+### F-PES-WR-08 · degrades narrative · every run is the same run, and one layer comes and goes with the draw
+
+§3.3. **Falsifier.** Two draws of one realm differing in a death, a seat, a determination or a Site:
+none. **Control.** They do differ (316 acts), in paper. **Touches.** R-09 in its honest sense (variety
+of outcome, not of bookkeeping); R-02. **Minimal fix.** None here: it is the sum of F-WR-01 and
+F-PES-WR-01. The `oblige` observation is listed for FA and for the churn lane.
+
+### F-PES-WR-10 · hygiene · "pressure" never fires
+
+`_standing_crossings` (`matter.py:211-264`) emitted `standing.band_crossed` 0 times in three seasons in
+seven arms at two seeds. **Falsifier.** One such Event: none. The cause was not traced `[UNVERIFIED]`;
+listed for SC (SC-02 step 23 is its owner).
+
+### F-PES-WR-09 · hygiene · a Date due in the past never fires
+
+§3.5; P4. `calendar.py:48` uses the `==` MATTER replaced with `<=` twice. Not reached by computed play
+(`convene` always schedules the next tick). **Minimal fix.** Proposal D edit 1.
+
+## 5. False N-lines found
+
+1. **CALENDAR** (§1.1): free to cut at shipped values; true only once `determine` executes.
+2. **Site wear**, inside any played horizon (§1.2).
+3. **The travel-leg budget penalty** as a price (§1.2; by reading and §2.3, the `leg0` arm not run).
+4. **`thread_read`** (§2.5).
+5. **The standing-gap crossing** (F-PES-WR-10).
+6. **The flow stamp, the era, endings** (cited: H-274, NARR, WR F-WR-06).
+
+And one N-line found **true where the aggregate said false**: the stock report (migration depends on
+it). And one found true for a bad reason: term maturation is necessary because it is the only thing
+that closes anything.
+
+## 6. Premises, summary
+
+| premise | verdict | first link that fails | finding |
+|---|---|---|---|
+| the world changes whether or not anyone acts | does not hold at shipped values | 1 (there is no year) | F-PES-WR-03 |
+| a calamity builds and breaks | does not hold; "builds" holds only from a planted source | 1 (no beginning); 4 (never breaks) | F-PES-WR-02, -11 |
+| a journey is dangerous | does not hold | 2 (takes no time) | F-PES-WR-06 |
+| a story has a beginning, a turn and an end | holds to link 1, then breaks | 3 (no turn) | F-PES-WR-01 |
+| the Thread can be read and mended at a cost | holds to link 2 (the gate), then breaks | 3 (read off letters) | F-PES-WR-05 |
+
+## 7. Stories that can happen, and that cannot
+
+**Can, and do, in computed play:** a term runs out by itself (in the runs where the obligation layer
+forms); a sitting is convened and sits empty; a person changes address; a practitioner reads a letter;
+a matter is petitioned and waits; one person in six seed-seasons is killed in a capture; a chain of five
+or six people write, speak and record in answer to one another.
+
+**Can, but only from a hand-set state:** the Calamity's front (a planted source); a natural death and
+the vacancy after it (a test arm's rate); a hungry town after season 0 (a planted famine, GAME X3).
+
+**Cannot, as built:** a place decays and is repaired; a bad year; a journey that goes wrong; a reading
+of the Thread that tells anything; a mending that costs; a calamity that breaks; an illness that is
+survived; a grant, a pledge or a custody reversed by someone other than its holder; a realm that ends.
+
+## 8. The standing rule, checked against this lane's text and its subject
+
+*Subject.* MATTER takes no draw at shipped fixtures; CALENDAR and ENCOUNTER decide nothing of their own.
+The two draws the world owns ship off, and one of them is not the kind the rule describes
+(F-PES-WR-07). The lattice pull, the wear, the leg's end, the lapse and the maturing of terms are exact
+(WR F-WR-24, cited; a term maturing is bookkeeping and is not a finding).
+*This lane's proposals.* A: the road resolves on the ladder; the price is bookkeeping. B: the break is
+drawn; the pull's source rule is eligibility (what can pull), not an outcome; `restore`'s decline at a
+broken Site is eligibility. C: graded on the ladder; exposure is a keyed chance, as now. D: edit 1 is a
+clock's tick; edit 2 is eligibility; the rest are readings. No proposal here makes a consequential
+outcome a fixed function of state.
+*Listed for other lanes.* `09_WR_B_draws_not_thresholds.md` (illness is not yet "graded, recoverable");
+`09_WR_world_motion.md` edit 1 (the flip is a fixed-function collapse until proposal B's edits 1 and 2).
+
+## 9. Resolutions decided, proposals, and what is left for Jordan
+
+| id | inconsistency, gap or unclear passage | decided resolution | ladder step | carried by |
+|---|---|---|---|---|
+| R-1 | CALENDAR is free to cut | keep; record the N-line as resting on `determine`; give the instrument a cut arm | 5 | proposal D edits 3, 5 |
+| R-2 | the lattice pulls toward any weaker Site, so anything starts the Calamity | pull only toward a broken Site | 5 | proposal B edit 1 |
+| R-3 | the Calamity has no break and no bound that is used | a drawn break; mending by the working only; the crossing carries its Site | 4, 5; the standing rule | proposal B edits 2 to 4 |
+| R-4 | `rosters.yaml:1903-1906` says `restore` executes on the realm; `verb_table.yaml`'s `restore` row says attempted 0/0/0; seven arms say 0 | the verb table is right; the roster sentence is corrected to "formed nowhere since REM-22" | 1 (REM-22 superseded it) | text for the orchestrator: strike the "CORRECTED (`24f`…)" sentence's claim of execution |
+| R-5 | H-140: is a same-place move travel | declines (SE R-SE-09, cited); the road draw skips a journey of zero borders | 4 | SE's proposal; proposal A |
+| R-6 | CP-T10-02 (exposure) has no decided shape | one draw on the ladder at the leg's end, four graded arrivals | 4; the standing rule | proposal A |
+| R-7 | illness is a draw but not a graded one | a fall of the body by degree; death at zero | 4 | proposal C |
+| R-8 | `age_at_build` 0 for everyone | authored per cast row where an age exists; the default stays | 5 | proposal C edit 4 |
+| R-9 | CALENDAR's `==` against MATTER's two `<=` | `<=`, once | 4 (CR-55) | proposal D edit 1 |
+| R-10 | `thread_read` forms on Records and persons | `referent_class: Site` | 4 (REM-22) | proposal D edit 2 |
+| R-11 | no instrument reads a reversal | `storybar.turns` | 5 | proposal D edit 4 |
+| R-12 | an arm comparison cannot be told from noise | print the draw-seed distance beside it | 5 | proposal D edit 5 |
+
+Twelve resolutions. **Nothing survives the ladder to Jordan from this lane.** Two items touch rulings
+and are stated so they are not mistaken for re-raising them: natural death stays deferred (ED-IN-0317;
+proposal C changes a dark mechanism's shape and switches nothing on); the same-doer strand link stays
+the WR audit's §11 item 1.
+
+Proposals written (four): `proposals/16_PESSIMIST_WR_A_the_road_is_drawn.md`,
+`16_PESSIMIST_WR_B_the_calamity_strains_and_breaks.md`, `16_PESSIMIST_WR_C_illness_on_the_body_ladder.md`,
+`16_PESSIMIST_WR_D_small_clock_repairs_and_two_readings.md`.
 
 ## 12. Evidence log
 
-EVIDENCE_PENDING
+All under `runs/PES_WR/` in the scratchpad; `PYTHONHASHSEED=0`; three seasons unless stated; the full
+realm is `build_realm(seed)`, 83 persons.
+
+| id | command | seed · seasons | outcome |
+|---|---|---|---|
+| P1-a | `p1_null_long.py 0 125 0 shipped` (stopped at season 41) | 0 · 41 | §2.1's table; first crossing season 20 (37), second season 30 (37); 9,905 Events a season at steady state |
+| P1-b | `p1_null_long.py 0 60 0 lattice` (stopped at 26) | 0 · 26 | wear-0 kinds follow 40 behind; yield and stores equal P1-a |
+| P1-c | `p1_null_long.py 3 8 0 shipped`; `… 0 40 0 weather` | — | **not run** (load; the second was killed with its launcher) |
+| P3 | `p3_calamity.py 0 14 250` | 0 · 14 | §2.2(c); 112 crossings; no death |
+| P2-a | `p2_play.py 0 3 shipped` (twice) | 0 · 3 | hash `52ff67bc…` both times; 2,630 acts, 1,190 executed; reproduces WR E-07 |
+| P2-b | `p2_play.py 0 3 drawseed` | 0 · 3 | 1,346 executed; L1 316; `oblige` 0 attempted |
+| P2-c | `p2_play.py 0 3 calendar` | 0 · 3 | L1 38; `date.fired` 0, `docket.formed` 0 |
+| P2-d | `p2_play.py 0 3 calamity` | 0 · 3 | L1 24; rings equal P3; `restore` 0; 24 crossings |
+| P2-e | `p2_play.py 0 3 stock0` | 0 · 3 | L1 161; `migrate` 0 of 101; one death (`capture`) |
+| P2-f | `p2_play.py 1 3 shipped` (twice) | 1 · 3 | hash `26d2091b…`; 2,646 acts, 1,290 executed; one death; one `matter.determined` |
+| P2-g | `p2_play.py 0 3 shipped 0` and `… 1` | 0 · 3 | cohort-only and one-person realms: cross share 0.0%, depth 1, 0 strands |
+| P2-h | arms `decay0`, `wear0`, `leg0`, `stamp0` | — | **not run** (load); §1.2 says so at each row |
+| P4 | `p4_small.py` | 0 · 4 | both endings not held at build; King under `fac_valorsmark`; 16 of 18 territories held, five factions; the past-due Date never fires |
+| P5 | inline: `born`, `thread_sensitivity` at build | 0 · 0 | 46 individuals `born == 0`; sensitivities 0, 0, 0, 15, 25, 28, 35, 50, 60, 75; gate 30 |
+
+`git status --short` at the end: this lane's files are the audit and the four proposals named in §9.
+No tracked file was written; no `pytest` was run.
