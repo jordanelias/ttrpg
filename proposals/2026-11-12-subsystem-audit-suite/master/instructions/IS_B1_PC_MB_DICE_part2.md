@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED (part 2 of `master/instructions/IS_B1_PC_MB_DICE.md`; nothing here is applied; resolves nothing at runtime)
 
+Checked: 2026-11-12, Sonnet check (`master/instructions/IS_CHECK.md`; the edits are listed at the head of part 1): `IS-MB-01`, `IS-MB-04` register scenario rows; `IS-MB-02` records `_fall`'s fixed form; `IS-MB-03` uses `make_decider` and the lexicon's post `centre`; census gains the `scenarios.py` row.
+
 Read part 1 first: its §0 gives the item form, the words (A-98; `unified/MB_LEXICON.md` for the army and the battle) and the four probes P-1 to P-4 this part cites. Short names used in both parts: **PB** is `proposals/03_PC_duel_round_and_approach_B.md`; **GO-B** is `proposals/11_GO_player_surface_contract_B.md`; **the manager proposal** is `proposals/04_MB_manager_battle_one_resolver.md`; **the scenario proposal** is `proposals/04_MB_playable_field_scenario.md`.
 
 ---
@@ -122,7 +124,7 @@ Read part 1 first: its §0 gives the item form, the words (A-98; `unified/MB_LEX
 **Item: IS-MB-06 · unit prowess is one arithmetic with two callers** (settles `27_MB_B` item 27B-2 at the tree; `U4_DOCUMENT_STATUS.md` §3.4 code SITE)
 
 - **Advances:** A-59 (2) (each unit's own prowess as data on its row). The proposal read `Unit.base_combat_pool` by grep and left a fallback; the site is opened here.
-- **INSTRUCTION:** `modules/mass_battle/core/exchange.py`: add `prowess_of(power, size, pen, stam_pen) -> float`, returning `power * size * POOL_QUALITY_SCALE + pen + stam_pen`. `prowess(atom)` (27B-1) calls it with `atom.eff_power`, `atom.eff_size` and the subunit's clamped discipline penalty; `Unit.base_combat_pool`'s `POOL_QUALITY_MODEL` arm (`modules/mass_battle/hierarchy/units.py:3013`) calls it with `self.power`, `self.effective_size` and `self.discipline_penalty()`. The fallback is taken, not the direct call: the two share the arithmetic and not the penalty's source (the unit's comes from `discipline_penalty()` with its broken-unit-formation sentinel (the tree's comment says "broken-formation"), `units.py:2994-2998`; the subunit's from the clamp on `atom.eff_discipline`, `exchange.py`, in `subunit_combat_pool`), so the unit arm is not `prowess(atom)` for a lone subunit.
+- **INSTRUCTION:** `modules/mass_battle/core/exchange.py`: add `prowess_of(power, size, pen, stam_pen) -> float`, returning `power * size * POOL_QUALITY_SCALE + pen + stam_pen`. `prowess(atom)` (27B-1) calls it with `atom.eff_power`, `atom.eff_size` and the subunit's clamped discipline penalty; `Unit.base_combat_pool`'s `POOL_QUALITY_MODEL` arm (`modules/mass_battle/hierarchy/units.py:3013`) calls it with `self.power`, `self.effective_size` and `self.discipline_penalty()`. The fallback is taken, not the direct call: the two share the arithmetic and not the penalty's source (the unit's comes from `discipline_penalty()` with its broken-unit-formation sentinel (the tree's comment says "broken-formation"), `units.py:3000-3001`; the subunit's from the clamp on `atom.eff_discipline`, `exchange.py`, in `subunit_combat_pool`), so the unit arm is not `prowess(atom)` for a lone subunit.
 - **WHERE:** `modules/mass_battle/core/exchange.py`; `modules/mass_battle/hierarchy/units.py`.
 - **FALSIFIER and control:** any mass-battle golden moving. Control: the three digests of `tools/ci_golden_modes_check.py` equal before and after.
 - **GATE:** `python tools/ci_golden_modes_check.py`; the covering file `tests/valoria/test_army_battle.py`.
