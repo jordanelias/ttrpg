@@ -35,7 +35,7 @@ C(B14-pc-outcome): this batch's entries; the plan's head parts; `unified/U1_GLOS
   `tools/export_engine_params.py`; `engine/engine_params/combat_engine_v1.json`; `systems/combat/combat_engine_v1/workbench/` (`server.py`, `trace.py` → `fight_trace.py`, `balance.py`, `probabilities.py`, `catalogue.py`, `armour_participation.py`, `build_levers.py`, `commentary.py`, `narrate.py`, `structure_scan.py`, `data/combat_armour_reference.json`); `systems/combat/combat_engine_v1/state_graph.py`; `proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md` (Status line); `registers/handoffs/HANDOFF_PC.md`;
   the tests named in the items; instruments: the realm hash reading, `aperture`, `register`, `tools/m1_acceptance.py`, `tools/tests_for_diff.py`, `tools/export_engine_params.py`; the closing SHAs of B00, B01, B02, B13, B05; the permanent surface.
 COST: small builds and edits, six declared movers; producer `valoria-author` on `sonnet`, `high`; the R-PC-17 golden judgment and the PC-21 design `opus`; A4's gate read by `opus` (`14_VERBS_PHYSICAL_A`, "one `opus` read of each gate"); PC review, GO review of the export.
-EST: 14.1 h [estimate: `V12_STRUCTURE.md` §2.4's formula over 29 positions less the two POINTERs and the READING (0.4 h × 29 + 2.5 h, rounded on all 29); §2.2 gave 6 h by members]
+EST: 14.1 h [estimate: `V12_STRUCTURE.md` §2.4's formula over this batch's 29 positions (0.4 h × 29 + 2.5 h), E-15; §2.2 gave 6 h by members]
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
