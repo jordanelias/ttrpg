@@ -23,6 +23,11 @@ are now at D-01 to D-03, rewritten in the plain readings you asked for. The shor
 every lane's recommendation keeps Layer 1 as it stands, and gives you the experience you described anyway.
 You only need to amend Layer 1 if you want the *other* reading.
 
+**Already answered (2026-11-12, recorded in `DECISIONS_ANSWERED.md`, which governs where they differ):**
+D-01 (A, the same resolver run automatically), D-02 (A, a row), D-03 (A, nested), D-04 (A, won/lost/drawn),
+D-05 (**B**, the bell curve everywhere), D-06 (B, score plus a base), D-07 (**B**, two numbers). Their
+entries stay below for the record, each marked. D-08 is re-recommended in the light of D-05.
+
 **Not yours** (answered by the five checks — superseded, irrelevant, settled by a design document, by
 precedent, or by what the architecture clearly needs — and listed so you can see they were not dropped):
 
@@ -46,14 +51,14 @@ are kept because the answer overwrites text you ruled, and D-26 asks you once fo
 
 | id | decision | area | recommendation | blocks |
 |---|---|---|---|---|
-| D-01 | Auto-resolve: the same battle run for you, or a quicker sum | MB, CORE | A — the same battle, run on your standing orders | every unwatched battle; the managed-battle surface; the order-of-battle verbs |
-| D-02 | A unit: a line on the army's sheet, or a thing in the world | MB | A — a line on the sheet | the army hierarchy, loadouts, the four order-of-battle verbs, ARC-07 |
-| D-03 | A duel inside a battle: called from inside, or played as separate acts | PC, MB | A — called from inside, counted as a nested contest | the duel round's last step; grid squad combat; duels in a field |
-| D-04 | What a battle reports: won/lost/drawn, or how decisively | MB | A — won, lost or drawn | the battle's typed result and everything that reads it |
-| D-05 | Which dice the non-combat rolls use | DICE | A — whole dice, as built | the exported dice rules; every non-combat roll; the port |
-| D-06 | What a skill score is worth outside a fight | DICE, SC | B — score plus a base, as combat does | every non-combat band in the game |
-| D-07 | Talent and training: one number or two | PC, CHAR | A — one number, as built | the combat pool and obstacle; character sheets |
-| D-08 | What a wound costs a roll | DICE, PC | A — as ruled, a small fixed cost | the wound rows of the dice map |
+| D-01 | Auto-resolve: the same battle run for you, or a quicker sum | MB, CORE | ANSWERED A (A-1) — the same battle, run on your standing orders | every unwatched battle; the managed-battle surface; the order-of-battle verbs |
+| D-02 | A unit: a line on the army's sheet, or a thing in the world | MB | ANSWERED A (A-2) — a line on the sheet | the army hierarchy, loadouts, the four order-of-battle verbs, ARC-07 |
+| D-03 | A duel inside a battle: called from inside, or played as separate acts | PC, MB | ANSWERED A (A-4) — called from inside, counted as a nested contest | the duel round's last step; grid squad combat; duels in a field |
+| D-04 | What a battle reports: won/lost/drawn, or how decisively | MB | ANSWERED A (A-3) — won, lost or drawn | the battle's typed result and everything that reads it |
+| D-05 | Which dice the non-combat rolls use | DICE | ANSWERED B (A-5) — the bell curve everywhere | the exported dice rules; every non-combat roll; the port |
+| D-06 | What a skill score is worth outside a fight | DICE, SC | ANSWERED B (A-6) — score plus a base, as combat does | every non-combat band in the game |
+| D-07 | Talent and training: one number or two | PC, CHAR | ANSWERED B (A-7) — two numbers | the combat pool and obstacle; character sheets |
+| D-08 | What a wound costs a roll | DICE, PC | B — a level against, now that D-05 put every roll on the bell curve | the wound rows of the dice map |
 | D-09 | A turn: a round of simultaneous choices, or short chains of acts | CORE | B — short chains | the season fold order; R-09; scene play |
 | D-10 | Governance: the season loop's own verbs, or a separate module | FA | A — the loop's own verbs | how the faction game stands alone |
 | D-11 | May training gate an act (only a surgeon may operate)? | CORE, CHAR | A — training changes odds, never access | the capability authoring surface |
@@ -145,6 +150,8 @@ way, and you should choose knowingly.
 
 ### D-01 · Auto-resolve: the same battle run for you, or a quicker sum · MB, CORE
 
+> **ANSWERED 2026-11-12: A** (`DECISIONS_ANSWERED.md` A-1).
+
 **The situation.** Today a battle the player does not watch runs the same cell-by-cell battle engine as a
 watched one; an estimate before battle is that engine sampled a few hundred times. Total War, by contrast,
 "auto-resolves" a battle by comparing the two armies' statistics in one quick sum, which is why its
@@ -183,6 +190,8 @@ item 2; `audits/11_GO_audit.md` §5.2; `architecture/holonic_ARCHITECTURE.md` §
 
 ### D-02 · A unit: a line on the army's sheet, or a thing in the world · MB
 
+> **ANSWERED 2026-11-12: A** (`DECISIONS_ANSWERED.md` A-2).
+
 **The situation.** Your hierarchy is army, unit, subformation, troops. Today a unit is a row on the army's
 record that names the persons it draws on and how many; inside a battle, the engine builds temporary unit
 values and throws them away at the end. ARC-07 asks for "a condition on a unit" (a regiment that is
@@ -218,6 +227,8 @@ item 1; `architecture/meta/04_CODE_ARCHITECTURE.md` :802, :813 (ED-IN-0306);
 `proposals/04_MB_cell_hierarchy_as_data.md`; `proposals/04_MB_unit_loadout_and_weapon_in_hand_B.md`.
 
 ### D-03 · A duel inside a battle: called from inside, or played as separate acts · PC, MB
+
+> **ANSWERED 2026-11-12: A** (`DECISIONS_ANSWERED.md` A-4).
 
 **The situation.** Your personal-combat intent asks for duels and grid skirmishes that can happen inside a
 mass engagement, played or automatic. The duel round proposal keeps one resolver: the automatic duel, the
@@ -258,6 +269,8 @@ one pause per call and not a consult inside a round (the same answer settles tha
 `architecture/holonic_ARCHITECTURE.md` §39.3 (:1397-1402), §44.3 (:1679-1686).
 
 ### D-04 · What a battle reports: won/lost/drawn, or how decisively · MB
+
+> **ANSWERED 2026-11-12: A** (`DECISIONS_ANSWERED.md` A-3).
 
 **The situation.** Every other contest in the game reports a margin graded on one four-step ladder
 (overwhelming, success, partial, failure). The battle engine returns only a winner, and the season makes
@@ -1579,3 +1592,370 @@ distinct source. A game of evidence after the verdict that sends play back to th
 `proposals/19_LACUNA_verdict_ladder_and_reversal.md`.
 
 ---
+
+## Group 15 · The world's story: the Thread, strife, arcs and world generation
+
+**The common context.** Forty-nine of the 143 provided cases turn on the Thread; the code has no carrier for
+the world's own condition. The realm's strife is read as strands of linked moves; generation decides how
+many people exist and how much the seed changes. D-57 must come before D-58 and before the generation
+question on Thread content; D-63 to D-67 are world generation's five and are best answered together.
+
+### D-57 · Does the world itself wear down (the Thread)? · WR, canon
+
+**The situation.** Twenty-five cases depend on a world quantity (the Thread wearing), twenty-six on how
+persons perceive it. Nothing in code carries the world side.
+
+**The question.** Is the Thread's decay a real condition of places, or only a matter of perception and belief?
+
+**Option A — ground.** One site per territory whose condition wears with the season, is damaged by three
+verbs' failures and repaired by one, and whose state sets those verbs' floors. No new kind of entity. The
+world can run down; survival and sovereignty compete for the same scenes.
+**Option B — not built.** The world is misunderstood, not dying; the twenty-five cases are recorded as
+outside the game.
+
+**Recommendation.** A (arcs lane, taken as the working answer for sequencing only). This lane agrees.
+
+**If you do not answer.** A for sequencing; no Thread content is generated.
+
+**Blocks.** Twenty-five Thread cases; Thread-bearing generation (the generation lane recommends waiting on
+this); the threadwork module.
+
+**Sources.** `audits/12_ARCS_adjudication.md` §11 S-1; `proposals/12_ARCS_substrate_as_ground.md`;
+`audits/21_PROCEDURAL_GENERATION.md` §11 D-4; `proposals/09_WR_threadwork_module.md`.
+
+### D-58 · What happens to a practitioner at zero coherence · WR, canon
+
+**The situation.** The last adopted design says a practitioner at zero returns to the common mass (loss of
+self). ARC-28, ARC-29 and ARC-30 retract that in favour of expansion: full continuity, with a lossy way of
+speaking. Code follows neither.
+
+**The question.** Is the end of a practitioner's road loss of self, or transformation?
+
+**Option A — loss.** The career ends in de-individuation; three arcs become other stories.
+**Option B — expansion.** The person keeps his seat and goals, and what he can tell to whom changes; needs a
+per-listener telling the engine does not have.
+
+**Recommendation.** None; canon. This lane notes that B costs a new mechanism and A costs three arcs.
+
+**If you do not answer.** Neither is built.
+
+**Blocks.** ARC-28 to ARC-30.
+
+**Sources.** `audits/12_ARCS_adjudication.md` §11 S-2; `proposals/12_ARCS_substrate_as_ground.md` (second
+decision).
+
+### D-59 · One river of strife, or several stories · WR
+
+**The situation.** By the ratified strife rule, any two deeds of one doer link into one strand. At six
+seasons one strand holds all 234 moves and 55 doers.
+
+**The question.** Should the realm's strife be one continuous "troubles", or several named stories that can
+each end?
+
+**Option A — keep.** One river, legible as mood, with no sub-plots.
+**Option B — bound the link.** A doer's later deed joins a strand he opened, or joins by its subject: several
+strands beneath the era, each able to conclude.
+
+**Recommendation.** The world lane could not choose between two sentences of one ruling. This lane recommends
+B: the ruling's own second half asks for "narrative chains within it at lower levels".
+
+**If you do not answer.** A.
+
+**Blocks.** The chronicle; strand conclusion.
+
+**Sources.** `audits/09_WR_audit.md` §11 item 1; `proposals/09_WR_strand_conclusion.md` edit 3.
+
+### D-60 · Is leaving a side a move in the realm's strife? · WR
+
+**The situation.** The ratified strife roster lists ending a commitment as "never" a strife move. So a
+rising cannot be read as having split a faction.
+
+**The question.** Should leaving a side count?
+
+**Option A — never (as ratified).** Defection is everyday life.
+**Option B — joins.** A defection attaches to its strand and can conclude nothing; the Split becomes a move
+of the era. Risk: every routine release joins strands; the narrow form (only leaving a faction's creed or
+head seat) needs its own wording.
+
+**Recommendation.** B in its narrow form (narrative lane). This lane agrees.
+
+**If you do not answer.** A; the edit is held.
+
+**Blocks.** The Split; the narrative "his own side" proposal.
+
+**Sources.** `audits/20_NARRATIVE_CHURN.md` §10 item 2; `proposals/20_NARRATIVE_D_his_own_side.md` edit 4.
+
+### D-61 · Arcs that end when a counter fires · WR, CORE
+
+**The situation.** Eight of the fifty provided arcs close when a counter crosses a threshold, and nineteen
+are forced by one. The standing rule and the engine's own law forbid a crossing that decides an outcome.
+
+**The question.** May a threshold force a moment?
+
+**Option A — a threshold raises a question** that a person answers by a drawn act; the arcs are restated.
+**Option B — a threshold may open a mandatory scene,** never decide it. The world can corner a character.
+
+**Recommendation.** No lane chose. This lane recommends A: it is the engine's present law and your standing
+rule; B is a reasonable later addition.
+
+**If you do not answer.** A (the engine's law); the arcs stay unrestated.
+
+**Blocks.** The endings of the eight threshold-closed arcs and the nineteen threshold-forced ones.
+
+**Sources.** `audits/16_PESSIMIST_GAME.md` §7.3 J-3.
+
+### D-62 · One question at a time, or a list to choose from · GO, CHAR
+
+**The situation.** A person is offered one question per scene, the engine's pick, for player and NPC
+alike. Your ruling ED-SC-0013 says "choosing what to attend is the gameplay".
+
+**The question.** Should the player see the sorted list of questions and choose?
+
+**Option A — one question.** A game of answering what arrives.
+**Option B — a list for the player,** the first item to NPCs. A game of triage; player and NPC are no longer
+served identically.
+
+**Recommendation.** No lane chose. This lane recommends B, by your ruling.
+
+**If you do not answer.** A.
+
+**Blocks.** The scene slate; the player surface.
+
+**Sources.** `audits/09_WR_audit.md` §11 item 3; `proposals/11_GO_player_surface_contract_B.md` §1.
+
+### D-63 · The cast: 46, or 46 plus a generated supporting cast · WR, canon
+
+**The situation.** The cast is a closed authored 46 (ED-WR-0011: "for now … we will return much later").
+
+**The question.** Should the game generate a capped supporting cast?
+
+**Option A — 46 only.** A small, fully authored drama; every culprit is a principal; kin and rivals must be
+authored or absent.
+**Option B — about 94 generated persons plus kin, capped.** A village has a reeve and a debtor; doubles a
+season's cost; the player cannot know every face.
+
+**Recommendation.** B with the cap as the dial (generation lane). This lane agrees.
+
+**If you do not answer.** A; the cast-and-seats proposal is held.
+
+**Blocks.** Cases, succession and local seats needing people; the cast proposal.
+
+**Sources.** `audits/21_PROCEDURAL_GENERATION.md` §11 D-1; `proposals/21_PROCEDURAL_B_cast_and_seats.md`.
+
+### D-64 · Does the seed change the starting realm? · WR
+
+**The situation.** Every seed builds the same persons, seats and attitudes; the seed moves only chance.
+
+**The question.** Should the seed also draw some starting state (who holds a grudge, which granary is low,
+who is ill)?
+
+**Option A — no.** Valoria is authored; replay variety must come from play (today it does not).
+**Option B — yes.** Variety from the first season.
+
+**Recommendation.** No lane chose. This lane recommends B, small and bounded, since replay variety does not
+come from play today.
+
+**If you do not answer.** A.
+
+**Blocks.** Replay variety; world cards.
+
+**Sources.** `audits/16_PESSIMIST_GAME.md` §7.3 J-4; `proposals/21_PROCEDURAL_D_world_cards_and_churn.md`.
+
+### D-65 · How deep the past goes · WR
+
+**The question.** One simulated year before play (everything older as tradition and hearsay), or a
+generational pass (births, ageing, deaths, successions)?
+
+**Option A — one year.** Cheap; contestable pedigrees. **Option B — generations.** Legends; needs ageing and
+birth built and a second cadence.
+
+**Recommendation.** A now (generation lane). This lane agrees.
+
+**If you do not answer.** A.
+
+**Blocks.** The prologue.
+
+**Sources.** `audits/21_PROCEDURAL_GENERATION.md` §11 D-2; `proposals/21_PROCEDURAL_C_prologue_and_case_seeds.md`.
+
+### D-66 · New business in a long game · WR, FA
+
+**The situation.** World cards are read at build only (plan text). After they are spent, new business comes
+from storms, arrivals and succession; a long game may run dry.
+
+**The question.** May a seat-holder's convening draw new business from a docket in play?
+
+**Option A — cards at build only.** **Option B — a docket read inside convening,** with repeats suppressed;
+institutions keep producing business. Amends two plan lines.
+
+**Recommendation.** B, after a test shows A runs dry (generation lane). This lane agrees.
+
+**If you do not answer.** A; the docket section is held.
+
+**Blocks.** Late-game churn.
+
+**Sources.** `audits/21_PROCEDURAL_GENERATION.md` §11 D-3; `proposals/21_PROCEDURAL_D_world_cards_and_churn.md` §5.
+
+### D-67 · What happens to a world that fails its checks · WR, GO
+
+**The question.** If a generated world fails its quality bars after the retries, does the player get the
+next seed, or play it with a sheet saying what it lacks?
+
+**Option A — next seed** (a curated game). **Option B — play it** (quiet worlds admitted).
+
+**Recommendation.** A by default, B behind a setting (generation lane). This lane agrees.
+
+**If you do not answer.** A.
+
+**Blocks.** World generation's acceptance step.
+
+**Sources.** `audits/21_PROCEDURAL_GENERATION.md` §11 D-5.
+
+---
+
+## Group 16 · Land and people
+
+### D-68 · Is farm work an act someone chooses? · SE
+
+**The situation.** A site's yield reads the hands present at the place; "work" is a construction verb. A
+people feeds itself without choosing to.
+
+**The question.** Is production labour presence, or an act that puts hands on a producing site?
+
+**Option A — presence (built).** Sturdy with a weak chooser; allocation is not play; a steward's levers are
+stock and buildings.
+**Option B — an act.** A cohort that riots, flees or mends walls is not working the harbour, and yield falls
+for a reason with an author. Puts the realm's food on the chooser; the colony-sim precedents converge on it.
+
+**Recommendation.** The material verbs lane built A. This lane recommends B, but only after D-73 (cohorts
+with a few heavy moves), since "work" is one of those moves.
+
+**If you do not answer.** A.
+
+**Blocks.** Yield; the steward's game; work versus restore.
+
+**Sources.** `audits/14_VERBS_MATERIAL.md` §19 J-M1.
+
+### D-69 · Does a lasting famine keep speaking? · SE
+
+**The situation.** By a ruling (2026-10-12), a place reports its fall into dearth once and is then silent.
+In one test, eleven towns starved and nobody learned of it, because they were never stocked and so never
+"fell".
+
+**The question.** Reported once, or every season it lasts?
+
+**Option A — once, with the edge repaired.** A never-stocked place reports at its first short season;
+then silence; famine depends on memory and rumour.
+**Option B — every season.** Famines stay in view; belief volume rises.
+
+**Recommendation.** A (settlements pessimist; consistent with the ruling). This lane agrees.
+
+**If you do not answer.** Neither; only the missed exact-drain report is repaired.
+
+**Blocks.** Famine as news.
+
+**Sources.** `audits/16_PESSIMIST_SE.md` §6.2 J-1.
+
+### D-70 · How the world's own motion draws · SE, WR
+
+**The question.** Do weather, harvest and wear draw from simple multiplier tables, or on the one four-band
+ladder (a place's endurance as the pool, the season's hardship as the obstacle, so a harvest is
+"overwhelming" or "a failure" and a steward's skill can bear on it)?
+
+**Option A — tables.** Three numbers; consistent with the weather draw. **Option B — the ladder.** The
+settlement layer joins the one resolution system; costs a pool and an obstacle per clock.
+
+**Recommendation.** No lane chose; the standing rule's wording ("a graded, recoverable result (the
+four-band ladder)") reads toward B. This lane recommends B.
+
+**If you do not answer.** A (the world-draws proposal).
+
+**Blocks.** Weather, hunger, wear; the world-draws proposal.
+
+**Sources.** `audits/16_PESSIMIST_SE.md` §6.2 J-2; `proposals/16_PESSIMIST_GAME_the_world_draws.md`.
+
+### D-71 · May a town be founded or die? · SE
+
+**The situation.** A settlement-map ruling holds "never adding nodes": founding makes households and
+communities inside the 37 settlements, and nothing ends one.
+
+**The question.** Is the map fixed, or can towns be founded and abandoned?
+
+**Option A — fixed.** 37 settlements forever; a founded household that stands empty is put to a draw each
+season and may lapse. The court game on a fixed board.
+**Option B — grows and shrinks.** Settlements can be built and abandoned at zero population. The colony game.
+
+**Recommendation.** No lane chose. This lane recommends A, which keeps the ruling and gives founding a
+second outcome.
+
+**If you do not answer.** A without the lapse.
+
+**Blocks.** Founding.
+
+**Sources.** `audits/16_PESSIMIST_SE.md` §6.2 J-3.
+
+### D-72 · A lord over an empty land · SE, FA
+
+**The situation.** With every commoner of a place dead, the persons seated over it are untouched.
+
+**The question.** Does a seat with no living people beneath it lose its powers?
+
+**Option A — leave it.** Depopulation is felt through yield, levy and stability. Famine is an economic
+story.
+**Option B — loses its remit until people return.** A blight can unseat a duke; famine is political.
+
+**Recommendation.** No lane chose. This lane recommends A until yield, levy and stability bind.
+
+**If you do not answer.** A.
+
+**Blocks.** Little.
+
+**Sources.** `audits/16_PESSIMIST_GAME.md` §7.3 J-1.
+
+### D-73 · The common people: full actors or a few heavy moves · CHAR, SE
+
+**The situation.** The 37 commoner groups are persons offered the whole verb table: they make 43% of all
+acts (including 34 forgeries to the named persons' 18) and almost nobody answers them. Removing their
+deliberation entirely changes 5 of 798 named persons' acts and no seat, site or person.
+
+**The question.** Should a population have the full verb table, or a short list (petition, migrate, work,
+tend, comply or refuse, riot)?
+
+**Option A — full.** The realm's log is mostly the populace's paperwork.
+**Option B — a few heavy moves.** The named persons act against a populace that moves in a few heavy ways.
+Costs the present game nothing it can show.
+
+**Recommendation.** No lane chose. This lane recommends B.
+
+**If you do not answer.** A.
+
+**Blocks.** Cohort deliberation; D-68.
+
+**Sources.** `audits/16_PESSIMIST_GAME.md` §7.3 J-2.
+
+---
+
+## Layer 1 housekeeping
+
+### D-74 · The witness step reads more than Layer 1 lists · CORE, FI
+
+**The situation.** Layer 1 lists four things the witness step may read; the code reads nine, five declared
+as exceptions in the file.
+
+**The question.** Amend Layer 1 to list them, or bring the code back to the list?
+
+**Option A — amend the row** to name all of them.
+**Option B — restore the row:** move the refraction and credit arithmetic behind a per-holder projection
+built at the barrier, so the step imports nothing from the decision layer; amend only for the two reads no
+refactor removes.
+
+*The game is identical either way.*
+
+**Recommendation.** B (fieldwork lane, by "a spec edited to match its implementation checks nothing"). This
+lane considers it answered by that rule; listed because the row is ratified.
+
+**If you do not answer.** B.
+
+**Blocks.** One Layer 1 row; the fieldwork small-edits proposal §6.
+
+**Sources.** `audits/08_FI_audit.md` §11 item 2; `proposals/08_FI_04_small-edits.md` §6;
+`architecture/meta/04_CODE_ARCHITECTURE.md` §A.2 (`loop/witness` row).

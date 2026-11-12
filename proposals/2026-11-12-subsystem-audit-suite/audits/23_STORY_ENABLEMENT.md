@@ -319,11 +319,13 @@ table is a map to those files and restates none of their edits. The three gaps a
 
 **G1 · what a roll leaves (`23_STORY_A`).** Owner: `data/rosters.py` beside `DEGREE_STEP`; the fold.
 (1) `SHORTFALL_STEP`, the mirror of `DEGREE_STEP` below the bar: a Failure's settled margin, already
-kept on the Event by `05_SC_contest_record_on_event`, gives a step of 1, 2 or 3 (`[-1, 0)`, `[-2, -1)`,
-`≤ -2`), and a row's Failure write is scaled by it exactly as its Success write is scaled by
-`DEGREE_STEP`. No band is added and `degree_from_net` is not touched (the ladder is ruled). (2) A row may
-declare `stake:`, what the actor puts down; Partial pays one step of it while holding, which is the
-success that costs. (3) A contested row's outcome kinds name the counterparty as their patient, so a
+kept on the Event by `05_SC_contest_record_on_event`, gives a step of 1, 2 or 3 (short by less than
+one whole success; by one to less than three; by three or more, the mirror of *"3 or more is always
+overwhelming"*), and a Failure write that has a magnitude is scaled by it exactly as a Success write is
+scaled by `DEGREE_STEP`. No band is added and `degree_from_net` is not touched (the ladder is ruled);
+"disaster" is a word the chronicle reads off the kept margin. (2) A row may declare `stake:`, what the
+actor puts down, from a closed set; Partial pays one step of it while still achieving, which is the
+success that costs, and Failure pays `SHORTFALL_STEP` steps. (3) A contested row's outcome kinds name the counterparty as their patient, so a
 witness holds "X bested Y" and Y's regard for X moves by M5. (4) A person's own failed attempt is read
 from the act store by `person_q.attempts_before`, never deposited (the `undeposited_kinds` decision
 stands), and weighs in `admission_weight`.

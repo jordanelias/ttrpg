@@ -45,15 +45,26 @@ settles; a figure in it is a lead (the sourcing floor).
 2. **Colonial lane, §2 head: "the tree holds no research file on the chartered companies, the Spanish
    Indies beyond the residencia, settler colonies, indirect rule in Africa and India, or the Mongol system
    (a grep of `research/` for those terms returns passing mentions only, §15 E-2)"**, and E-2 itself. The
-   grep was over `research/` alone. True as far as it goes for the East India companies, for settler
-   colonies of the Atlantic kind, for indirect rule in Africa and India, and for the Mongol patent system:
-   §3 below records each as still memory-grade, with the lines that come nearest. False for four things
-   the lane called `[MEMORY]`: the chartered monopoly company (the Casa de Contratación and the Consulado
-   de Sevilla, `comparative_governance_research_v1.md:134`; the Merchant Adventurers, the Hanseatic Kontor
-   and the Fugger house as branch organisations, `research/proactive_governance_scale_research_v1.md`
-   O5, O7, O13); venality in the Spanish monarchy (`comparative_governance_research_v1.md:132`); the
-   military-colonist charter (Venetian Crete's *Carta Concessionis*, `:103`); and public debt with
-   scripted default (the *juros* and the Habsburg suspensions, `:130`).
+   grep was over `research/` alone, and E-2 reports its hits as *"the historical action catalogue's
+   one-line crisis list"*. They are not one line. `research/historical_concerns_action_catalogue_v1.md`
+   gives each of these a full entry (trigger, three answers, follow-on, the act it adds, the loop): the
+   **VOC's conquest of Banda** and a Company-run governor (`:163`); **Plassey, the Jagat Seth bankers and
+   the Diwani of Bengal** (`:166`); the **Mongol *ortoq*** partnership and the *paiza* (`:165`); the
+   **Toluid civil war** and the appanage (`:46`); the **Ottoman capitulations** (`:169`); **Kilwa's
+   withheld tribute** (`:167`); the **Portuguese *cartaz*** (`:54`); the **Barbary tribute** (`:56`); the
+   **Quartering Acts** (`:71`); the **Norse Greenland colonies** (`:138`); the **Fugger loan for the
+   imperial election** (`:161`); **Edward III's default on the Bardi and Peruzzi** (`:148`). The **East
+   India Company under the Regulating Act of 1773** is `research/proactive_governance_scale_research_v1.md:147`
+   (X7), named there *"the exemplar of Organization-scale management"*. The **Casa de Contratación and
+   the Consulado de Sevilla**, **Spanish venality**, **Venetian Crete's military-colonist charter** and the
+   ***juros*** are `comparative_governance_research_v1.md:134`, `:132`, `:103`, `:130`. **The sale of
+   colonial offices priced by distance** is `research/rise_to_power_roster_system_research_v1.md:518`
+   (I9). **Post-colonial governance** as such has its own section, `research/historical/precedents_analysis.md:172-246`.
+   What the tree does not hold, and §3 records as still memory-grade: the English and Dutch companies'
+   internal constitution (directors, shareholders, factories, private trade, renewal fights); the
+   *encomienda* and the *repartimiento*; the Atlantic settler colonies beyond the Quartering Acts; indirect
+   rule in Africa and India (the resident, the subsidiary treaty, lapse); the Mongol patent, census and
+   resident overseer; transit times; and the formula "I obey but do not execute".
 3. **Both lanes: "the digests were not opened; the research was read directly."** The digests were not
    needed; the `.audit/` compendium and the 2026-10-29 debate corpus were, and neither lane opened them.
 

@@ -221,3 +221,163 @@ Abbreviations for carriers: **OBS** = `U5c_SC_one_obstacle_form.md`; **RES** = `
 | Jordan 3 | who is a verdict for? | JORDAN | A: the disposal stays on the seat exercised (as ruled, C-1); the petitioner's satisfaction is not modelled. B: where the docket item names a petition, an arrangement row may declare `disposes_to: petitioner`, so a won case is something a person can want. B changes what C-1 ruled about the edge's object. RES §8 states B as an additive row key so either answer is executable | PES-SC §2.1 P1.6 |
 | false N-lines 1–6 | the room; the Proposition; the verdict as a wait; "a hearing ends"; the record; the band as data | RESOLVED-BY | 1: HEAR/EVID; 2: PES-D's named residue; 3–4: C-08, RES §4; 5: PES-E; 6: the band maps above | PES-SC §6 |
 | standing-rule list | five things that do not draw in this scope | RESOLVED-BY | C-10 (the four) and DRAW13 (docketing) | PES-SC §0 |
+
+---
+
+# Part 2 — FI
+
+Abbreviations: **FI-01…08** = `08_FI_0n_*.md` (`FI-05B` = `08_FI_05_evidence-interface_B.md`, which supersedes
+`08_FI_05_evidence-interface.md`); **PFI-A…D** = `16_PESSIMIST_FI_A…D_*.md`; **FRES** = `U5c_FI_residue.md`.
+"B10-14" is the plan batch (`workplans/valoria_master_workplan_v11_part3.md:104-125`) with its cards CR-29,
+CR-94, CP-T06-01 to -09.
+
+## 2.1 `audits/08_FI_audit.md` — findings
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| F-FI-01 | a person's candidates move on a fact he has not witnessed or been told | RESOLVED-BY | FI-01 (seats, vacancies, aims, matters); PFI-C edit 4 (who exists and where: the same claim loop); FRES §1 lands them as one change to `questions_for` | `r08_probe.py` P1, P2 with two controls; `p1_belief.py` `dead-silent` −28; ED-IN-0292 last row |
+| F-FI-02 | nothing a person knows reaches another by a person's act | RESOLVED-BY | FI-02 as reconciled (C-14: arms `unshared`, `unshared_first`; tiers `[told, inferred, deed, quantity, other]`); FI-06 §5; PFI-A edit 5 | `dynamics.py` (7 / 0 / 0 chained); `p2_chain.py` (the second teller says "a telling happened") |
+| F-FI-03 | investigation resolves and does not play | RESOLVED-BY | FI-07 (Cut A, then §2); FI-03 as reconciled (§2's band gate dropped, §3 by CONC); PFI-D (the three product-less rows withheld until each product lands); PFI-C (something to find) | `find.py:28-34`; found deposits 0 / 0 / 0 |
+| F-FI-04 | a lie deceives only those it changes nothing for | RESOLVED-BY | FI-03 §2 and §4; PES-E (the record separates a liar from a garbled truth); PFI-A edit 3 (a lie clause 4 reads); the liar's price is plan CR-83 (design-first) | `options.py:1727`; 1 decline in 461 |
+| F-FI-05 | the largest source of what people hold is a channel that reads no person | RESOLVED-BY | plan CR-29, taken first (FI-02 edit 1), with the gate FRES §2 adds (F-PES-FI-10: `march` and `migrate` attempts inside the draw-seed control) | 6,033 of 12,351 claims; `fi_arms.py 0 3 nochron` |
+| F-FI-06 | nothing said can be private; nothing hidden can be found | RESOLVED-BY | deeds: B10-14 (CP-T06-09, -01, -02, -07) with PFI-C edits 1–2; speech: FI-02 §4 edit 8 (confiding is the teller's operand); private whispers stay unbuilt by ruling | H-323, H-324; `_circle_of` |
+| F-FI-07 | `knots.py` holds state, draws unseeded, cites a dead path | RESOLVED-BY | FI-04 §5; FI-08 §2 (the swallowed imports), §3 (the order for `_eff_tie`) | `knots.py:156-157, :219-221, :347-378` |
+| F-FI-08 | Event kinds and register rows that say something else | RESOLVED-BY | FI-04 §1 (`inquiry.refused`), §5 (H-116); `argument.held` is carried once, by PES-D (C-15 merges the duplicate); FRES §3 (H-42/-43/-45/-84 heads; the ED-FI pointer) | H-318, H-269 |
+| F-FI-09 | evidence is not a typed input to any contest | RESOLVED-BY | FI-05B with EVID and ADM | H-285, H-301 |
+| F-FI-10 | what to say, whether to confide, what to forge are engine rules | RESOLVED-BY | FI-02 §4 (`said`, `in_confidence` as choice-sourced operands); PES-E edit 2 (a lie's direction is the liar's sampled choice); what a forgery says: Part 4 (`forge`, MATERIAL D) | `person_q.py:1165`; `witness.py:113-138` |
+
+## 2.2 `audits/08_FI_audit.md` — resolutions R-01 to R-33, survivors, tables
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| R-01 | referents about others come from the ledger; R-07/R-08 text corrected | RESOLVED-BY | FI-01 edits 2–5, 7 | ED-IN-0292 |
+| R-02 | `goal_referents`' docstring reads the ruling backwards | RESOLVED-BY | FI-01 edit 2 | `world_q.py:2836` |
+| R-03 | own-edge stamps stay; others' state is ledger-gated | RESOLVED-BY | FI-01 "The rule" | `docket_question` precedent |
+| R-04 | Q2 clause 2 stays (adds no referent) | DISPUTED | this lane's evidence is the pessimist's: the clause removes referents on world truth (a silently deleted person: −28; a relocated one: 38 → 10). Carried by PFI-C edit 4; FRES §1 | `p1_belief.py`, `p1d_where.py` |
+| R-05 | a third `said_slants` arm | RESOLVED-BY | FI-02 as reconciled (C-14) | H-272 |
+| R-06 | CR-29 first | RESOLVED-BY | FI-02 edit 1; FRES §2 (the gate) | F-PES-FI-10 |
+| R-07 | a scenario and a conclusion | RESOLVED-BY | FI-07; FI-03 §1, §3, §5; CONC | — |
+| R-08 | checking a telling is investigating; a caught teller is a question | RESOLVED-BY | FI-03 §2 (as amended by FI-07 §2 (b)), §4 | H-271 |
+| R-09 | H-111 and H-314 are answered by the plan | RESOLVED-BY | plan CP-T06-04, CP-T06-03 | B10-14 |
+| R-10 | `inquiry.refused` | RESOLVED-BY | FI-04 §1 | CP-T05-03 precedent |
+| R-11 | `argument.held` at Partial | RESOLVED-BY | PES-D edit 1 (one carrier; FI-04 §1's row points to it, C-15) | `speak`'s `matter.held` |
+| R-12 | `research` needs presence | RESOLVED-BY | FI-04 §2 | H-319 |
+| R-13 | a repeated ungraded finding mints the same claim | RESOLVED-BY | FI-04 §2 (moot per row once PFI-D withholds it and its product lands) | H-320 |
+| R-14 | `knots.py` hygiene | RESOLVED-BY | FI-04 §5 | — |
+| R-15 | a claim at confidence 0 still closes a trail | RESOLVED-BY | FI-04 §2 | H-341 |
+| R-16 | H-116's head is stale | RESOLVED-BY | FI-04 §5 | 461 declines |
+| R-17 | the `fieldwork` contract row describes the oracle; two ED-FI rows unwritten | RESOLVED-BY | FI-04 §5 | `module_contracts.yaml:329-362` |
+| R-18 | H-234: unrest news is a `reach` row | RESOLVED-BY | FI-02 edit 1 (inside CR-29's roster) | — |
+| R-19 | no faction channel | RESOLVED-BY | no edit owed (ladder step 4: every channel is place-bound or edge-bound); members learn by telling (FI-02) | H-351 |
+| R-20 | bystanders hear; a garbled copy carries no flag | SUPERSEDED | by the rulings the audit cites (H-323, H-345); FI-02 §4 edit 8 is the one change inside them | `_circle_of` docstring |
+| R-21 | `standing` is one constant for everyone | STALE / FALSE-POSITIVE | irrelevant at HEAD: no deposit mints a `person_predicates` claim and no chooser term reads `standing` (REM-44) | `04` §B.10 note on `Sensation` |
+| R-22 | `budget` counts Office holds only | SUPERSEDED | by R-39: measured and declined at IN-14; lands only after FI-02's traffic arm, with `test_n3`'s `attempt_cases` read before and after. FI-04 §4 amended by this lane (Reconciled line) | H-92 `cite:` |
+| R-23 | a razing is witnessed where it happened; custody receipts name the prisoner | RESOLVED-BY | FI-04 §3 first bullet; the second bullet is carried once, by PES-C edit 1 (wider: an imposed `oblige` too, with the `patient_kinds` consequence; C-15) | H-231 |
+| R-24 | `Record.ttl` has no reader; a writ never lapses | RESOLVED-BY | FI-04 §4 first bullet; the in-force reading is `14_VERBS_SOCIAL1_B_documents_and_obedience.md`'s (Part 4) | H-259 |
+| R-25 | a hearer's regard rides `reception` | SUPERSEDED | by G-60 / OBS §2–§3 (`regard` is its own term where no bench hears) | H-267 |
+| R-26 | `loop/witness` exceeds `04:178` five times; amend the row | DISPUTED as resolved | Layer 1 is not edited to match the code (`CLAUDE.md` §0.05; UNIFICATION test 7; `layer-conformance` B4, first disposition). FI-04 §6 is rewritten by this lane: all five reads are restored by code (C-16). Grade: CONVENTION (no test or scan sees the may-read column; no guard is proposed) | `04` §A.2 row `loop/witness`; `witness.py` head |
+| R-27 | `reconstruct`'s value space and product | RESOLVED-BY | CONC (R-19-03, R-19-04) on FI-03 §3 | K-37 |
+| R-28 | the confidence break path | RESOLVED-BY | FI-02 (gate at `telling_privacy` 1.0) | H-204 |
+| R-29 | the evidence interface | RESOLVED-BY | FI-05B | — |
+| R-30 | `said` and confiding as operands | RESOLVED-BY | FI-02 §4 | H-94 |
+| R-31 | one vocation for three inquiries | RESOLVED-BY | no engine edit owed: authoring (two data rows on the capability surface U1 decides) | `verb_capability` |
+| R-32 | seven archived reliability tags | RESOLVED-BY | FI-05B E-1 (kind and weight derived, never stored) | — |
+| R-33 | the archived Evidence Track | RESOLVED-BY | CONC (support over distinct origins, bound on the Proposition) | ED-IN-0319 |
+| §11 item 1 | is who holds a public seat common knowledge? | JORDAN | merged with S-PES-FI-2 as one decision with two cells of one roster (`reach`): the seat change, and the death that caused it. A: realm-wide (the shipped row; what the realm does today, now mediated). B: by presence, purview and telling only (the swept control). The two cells need not match. ED-IN-0292's last row records this as Jordan-deferred. FI-01 edit 6 and FRES §2 build both arms | `fi_arms.py nochron`: marches 29 → 4 without a replacement |
+| §11 item 2 | the `loop/witness` may-read cell: amend or restore | SUPERSEDED | by C-16: not a choice. The rule decides (change the code); FI-04 §6 as rewritten | `CLAUDE.md` §0.05 |
+| §6a hole rows | 59 primary rows verified | RESOLVED-BY | closed and stale heads: FRES §3; wrongly filed rows (H-62, H-92, H-106, H-138, H-182, H-217, H-219, H-279…H-302, H-325, H-335/6): FRES §3 lists the re-filing per row; the rest by the R-rows above | audit §6a |
+| §6b workplan | B10-14 cards kept; CR-29 first; CP-T06-05 preconditioned | RESOLVED-BY | FI-02 edit 1; FRES §2 (the order across both lanes and the pessimist) | audit §6b |
+| §13 classes A–J | arc needs by information class | RESOLVED-BY | A: CR-29, FI-02 §4 · B: CONC, FI-02, PFI-A · C: B10-14, FI-03 §4, CR-83 · D: FI-07, FI-05B, PFI-B · E: B10-14, FI-07, CONC, FI-06 · F: FI-02, FI-06 · G: CP-T06-05, QUES, FI-05B, FI-06 · H: CP-T06-02 · I: CP-T06-07, -09 · J: SE's (H-325) | audit §13 |
+| §13 wrongly stated | Evidence Track; a hidden truth flag; self-ignorance of sensitivity; stored exposure; a faction AI | RESOLVED-BY | the audit's restatements stand; the first two by CONC; no stored track (`04` §B.3) | — |
+| §14, §15 | capability reads; hard-coded NPC rules | RESOLVED-BY | the `credit` role and `opposes` rows on U1's surface (cross-family); FI-02 §4; FI-01 | `options.py:1627` |
+
+## 2.3 `audits/08_FI_audit_addendum_B.md`
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| C-1 | the knot waits on rumour traffic, not on `_eff_tie` | RESOLVED-BY | FI-08 §3 | H-182 `cite:` |
+| C-2 | R-22 was measured and declined | RESOLVED-BY | R-39; FI-04 §4 as amended | H-92 `cite:` |
+| C-3 | forgery quality is inert at the shipped fixtures, refused at quality 3 | STALE / FALSE-POSITIVE | false at HEAD: quality 0 → 1 moves Failure 68.3% → 91.0% at pool 2; nothing is refused (the per-pool ceiling landed after the row C-3 quotes) | `p4_detective.py 300` (PES-FI §2.2) |
+| C-4 | `observes:` must not be band-gated | RESOLVED-BY | FI-07 §2 (b); FI-03 carries a Reconciled line | H-218 |
+| C-5 | the narrow slant ships as its own arm | RESOLVED-BY | FI-06 §5 | H-197 |
+| C-6 | F-FI-01 is older than the requirement text | RESOLVED-BY | no edit owed; FI-01 edit 7 corrects the text | H-122 |
+| C-7 | Heavy Rain is named nowhere in the tree | RESOLVED-BY | R-49 (dropped as a referent; no file cites it for a design) | addendum §B7 run 4 |
+| C-8 | the companion refuses contradiction-matching and steals the band ceiling | RESOLVED-BY | FI-05B E-6, E-9 | companion Part 2 §6 |
+| C-9 | three old findings are now false; the swallowed imports remain | RESOLVED-BY | FI-08 §2 for the imports; the three are recorded as stale | addendum §B7 runs 1–3 |
+| C-10 | the three-season runs | RESOLVED-BY | no edit owed (readings) | addendum §B7 run 3 |
+| F-FI-11 | the hand that did a killing cannot be passed on | RESOLVED-BY | FI-06 | `hearsay_doer_probe.py` |
+| F-FI-12 | `examine` cannot form on a place | RESOLVED-BY | FI-07 §2 (a) | `options.py:1213-1214` |
+| F-FI-13 | the archived design set is forked against itself | RESOLVED-BY | no edit to the quarantine; FRES §3 states R-47's reading rule | addendum §B2b |
+| E-1 | one operand, ids only | RESOLVED-BY | FI-05B; EVID | — |
+| E-2 | the case file holds what was said; entered at Success+ | SUPERSEDED in its second half | by ADM (C-05): entry is keyed by the citing `speak`'s band, four results; FI-05B's text edited by this lane | LACUNA C-1 |
+| E-3 | a citation is a telling | RESOLVED-BY | FI-05B edit 2, with ADM's sentence (the deposit fires whether or not the item is entered) | — |
+| E-4 | two carriers, one fact each | RESOLVED-BY | FI-05B | — |
+| E-5 | three ways to answer | RESOLVED-BY | FI-05B edit 1; EVID rules 1–2; the owner of "contradicts" is `decision/options.py::contradicts` (EVID edit 2; FI-05B's citation of `decision.agreement` corrected by this lane) | SC addendum C-4 |
+| E-6 | an answer is a rolled act | RESOLVED-BY | EVID rules 1–2 (one rule in both files, sweep D-01) | — |
+| E-7 | bluster is the control; citing costs disclosure | RESOLVED-BY | FI-05B; EVID | — |
+| E-8 | a killing is citable only once its hand travels | RESOLVED-BY | FI-06 | F-FI-11 |
+| E-9 | the band ceiling is not taken now | RESOLVED-BY | no edit owed; it becomes live when `Tenure.degree` has a reader (`05_SC_arrangement_rows_that_bind.md`), recorded in FRES §4 | H-301 |
+| E-10 | left to SC: precedent, the opponent's commit, a judge evidence moves | RESOLVED-BY | FRES §4: precedent is an admitted `record` (the `resolution` Record, after CR-36/37); the opponent's commit is cited as `testimony` of `commitment.made`; the judge is `05_SC_capability_surface.md` edits 3–4. No fifth proof kind | EVID "rung" paragraph |
+| R-34 | strain is a reading, not a field | RESOLVED-BY | FI-08 §4 | `04` §A.3 row 9 |
+| R-35 | `observes:` at every band | RESOLVED-BY | FI-07 §2 (b) | — |
+| R-36 | two slant arms | RESOLVED-BY | FI-06 §5; C-14 | — |
+| R-37 | `examine`'s `site` operand | RESOLVED-BY | FI-07 §2 (a) | — |
+| R-38 | the pairing travels | RESOLVED-BY | FI-06 | — |
+| R-39 | R-22 re-sequenced | RESOLVED-BY | FI-04 §4 as amended | — |
+| R-40 | forgery quality under the per-pool arm | STALE / FALSE-POSITIVE | the arm ships and bites (C-3's row above); the term is OBS's `subject` | PES-FI §2.2 |
+| R-41, R-42, R-43 | `cites`; the `Said` on the stage; the found deposit is the impeaching item | RESOLVED-BY | FI-05B E-1, E-2, E-5 | — |
+| R-44 | the case is a `deed_doers` goal | RESOLVED-BY | FI-07 §1 | IN-67 |
+| R-45 | Disposition is `regard` | RESOLVED-BY | no edit owed (the code governs) | ruling R7 |
+| R-46 | no Exposure meter | RESOLVED-BY | FI-07 §4 | — |
+| R-47 | forks inside the archive | RESOLVED-BY | FRES §3 | — |
+| R-48 | a person witnesses through a knot he owns | RESOLVED-BY | FI-08 §1 | `04:388` |
+| R-49 | Heavy Rain dropped | RESOLVED-BY | no edit owed | — |
+| R-50 | delete the `try/except` wrappers | RESOLVED-BY | FI-08 §2 | `knots.py:347-378` |
+| survivors | none added | — | — | — |
+
+## 2.4 `audits/16_PESSIMIST_FI.md`
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| F-PES-FI-01 | a deed leaves no trace but the memory of those present | RESOLVED-BY | PFI-C edits 1–3 with CP-T06-01, -02 | `p5_crime.py` |
+| F-PES-FI-02 | a rumour is one telling long; what is said is mostly that someone exists | RESOLVED-BY | FI-02 as reconciled (C-14); PFI-A edits 1–3, 5 | `p2_chain.py`, `told_dump.py 0 2` |
+| F-PES-FI-03 | a forged paper is believed by nobody in play; knowing it false changes nothing | RESOLVED-BY | PFI-B edits 1–3; that a forgery travels at all is FI-07's scenario and the chooser's `give` (Part 4, MATERIAL D) | `p3b_knows.py` |
+| F-PES-FI-04 | who exists and where is read from the truth | RESOLVED-BY | PFI-C edit 4 with FI-01; FRES §1 | `p1_belief.py`, `p1d_where.py` |
+| F-PES-FI-05 | the information verbs crowd the game out | RESOLVED-BY for the three product-less rows (PFI-D). The sink (`create_record`, `utter`) is the chooser's scoring: named for U5a's family (`02_CHAR_offer_what_can_be_done.md`, `16_PESSIMIST_CHAR_B_*`, `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` name the verb; not opened here beyond a search). FRES §5 states the acceptance reading any such fix must show | `fi_arms.py 0 3 nofi`, `nod3` against `draw1` |
+| F-PES-FI-06 | distortion drifts anything stored as a number | RESOLVED-BY | PFI-A edits 1–4 | `p2_proxy.py` |
+| F-PES-FI-07 | a better look is worse than a failed one | RESOLVED-BY | plan CP-T06-03 | `p4_detective.py` (0.15 at pool 2) |
+| F-PES-FI-08 | a claim is a pointer; a death is said two ways | RESOLVED-BY | PFI-C edit 3 (one vocabulary for an ending); the general case is CHAR's question projection (cross-family) | `p1c_exists.py` |
+| F-PES-FI-09 | news of a death does not travel | RESOLVED-BY | FI-06; FI-02; the `reach` cell for `person.died` is the JORDAN row above | `fi_arms.py` arms |
+| F-PES-FI-10 | cutting `chronicle` alone stops the marches | RESOLVED-BY | FRES §2 (CR-29's gate) | `nochron` arm |
+| F-PES-FI-11 | fixed outcomes that could go either way | RESOLVED-BY | CP-T06-03 (the lockout); C-12 (`interview`: the answer is the questioned person's draw); CONC (`reconstruct` graded); PFI-A edit 4 (a telling at a band shows what a finding at that band shows); notice, forgery quality and `sabotage` are the sweep's C-02, C-05, C-15 (Part 4 for the band maps) | PES-FI §0 |
+| F-PES-FI-12 | 93.9% of the log is ledger bookkeeping | RESOLVED-BY | CR-29 removes the broadcast's share; one decay Event per claim per season is IN's (`01_CORE_claim_fade_as_read.md`, cross-family; cited by name only) | Event census |
+| F-PES-FI-13 | a Record's id where a person is meant; a hearth to itself; a man told he exists | RESOLVED-BY | PFI-B edit 4; PFI-A edits 2–3 (existence is not garbled); the self-`transfer` is `02_CHAR_offer_what_can_be_done.md`'s operand bags (cross-family) | `p3_forgery.py` |
+| corrections | addendum C-3; first audit R-04; the told-false cells; FI-02 edit 2's `cell` tier | RESOLVED-BY | the rows above (C-3 stale; R-04 disputed; PFI-A; C-14) | — |
+| S-PES-FI-1 | may a garbled deed name the wrong person? | SUPERSEDED | closed by the ladder at step 3: K-37 (ratified as intent, ED-IN-0288) admits no wrong value from a roll; a wrong name comes from a wrong ledger, a liar (FI-06's named residue) or the chooser's sampled pick (CONC). Loss only ships (PFI-A edit 4); substitution is not built | PFI-A "For Jordan" |
+| S-PES-FI-2 | how fast does a death travel compared with the seat it empties? | JORDAN | merged with FI §11 item 1 (one decision, two roster cells; options there) | — |
+| N-lines | N-1, N-2, N-5 false; N-3, N-4, N-6 narrowed; N-7 holds | RESOLVED-BY | N-1: FI-02, FI-06; N-2: PFI-D and the cross-family sink; N-5: PFI-A; N-4: FRES §2's gate; N-6: OBS (`subject` under the per-pool cap, stated) | PES-FI §1.2 |
+
+---
+
+# Part 3 — LACUNA (`audits/19_LACUNA_investigation_to_proceedings.md`)
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| C-1 / R-19-02 | entering evidence: FI E-2 against SC's draw-free filing | RESOLVED-BY | ADM; its text edits to EVID and FI-05B are applied by this lane (C-05) | the standing rule's test |
+| C-2 | the room hears an excluded item | RESOLVED-BY | ADM edit 2 (applied to FI-05B E-3) | — |
+| C-3 / R-19-04 | `reconstruct`'s bands and the choice among doers | RESOLVED-BY | CONC; FI-03 §3 text edited by this lane | K-37 |
+| C-4 | `matter.undetermined` against dismissal | RESOLVED-BY | `05_SC_acquittal.md` as reconciled (C-08: the row key `ballots`, default 1, so VERD's "acquittal at Failure" holds at the default) | H-162 (c) |
+| C-5 / R-19-07 | mistrial has no carrier | RESOLVED-BY | VERD edits 2–3, with this lane's correction (C-17): the `voided` stage is written by the next `convene` reading the refused Event, never on the refusal path (`04` §C.4: a refusal emits; PART D row 7) | `04` §C.4 |
+| C-6 / R-19-12 | "Lacuna-style spatial attention" is a misattribution | RESOLVED-BY | no edit owed (the quarantined file is not edited) | T19:298 |
+| C-7 | the request's citation of the studio | RESOLVED-BY | no edit owed (recorded in the audit) | T19:229 |
+| R-19-01 | a field investigation is a goal, not a case object | RESOLVED-BY | FI-07 §1 | — |
+| R-19-03 | `Proposition.support` | RESOLVED-BY | CONC edit 1. Layer 1: `04` §B.6 keeps a Proposition immutable with no setter; `support` is set at construction and is read by `record` and the board (a reader named, ID-13); conforms | `04` §B.6 |
+| R-19-05 | the concluder is priced through `record` | RESOLVED-BY | CONC edit 4 (b), behind `record_concluders` | `options.py:1727-1767` |
+| R-19-06 | conviction, partial, acquittal | RESOLVED-BY | VERD; `05_SC_acquittal.md` (C-08) | — |
+| R-19-08 | reversal: an appeal heard above | RESOLVED-BY for the shape (VERD; DRAW13's appeal row points to it, C-07). Layer 1: the closing write on the disposal is `pardon`'s basis exercised through `Act.via` on the appellate seat (T-o), so no new gate basis is needed; the sibling row `reverse` is the reading taken | `04` §C.2 |
+| R-19-09 | the case thread | RESOLVED-BY | VERD edit 6 (harness) | `09_WR_B_chronicle_that_tells.md` |
+| R-19-10 | approach in questioning | RESOLVED-BY | QUES, as corrected by this lane (C-18): `press` adds an obstacle term to a lie and gives the questioner's side a named level against stalling; it subtracts from no obstacle | OBS §3 |
+| R-19-11 | the questioned learn they were asked | RESOLVED-BY | QUES edit 4 | — |
+| S-19-1 | is a reversal a second draw on the same case, or only on new grounds? | JORDAN | A: appeal as of right, once per rung, re-weighing the same file (forum and patronage decide). B: appeal on grounds only (an excluded item, a voided stage, or a new item from a distinct origin), which sends play back to the field. RES §4's re-opening rule already takes B's test for a *re-opened* matter at the same bench; the appellate case is not decided by it | VERD "Open for the design pass" |
+| §5 standing-rule table | eleven points classed draw / choice / eligibility / bookkeeping | RESOLVED-BY | as classed, with "whether an offered item is entered" a draw (ADM) | sweep §3 row for 19 |
+| §6 scenario; §7 stories | the joined `inquiry_world` / `build_hearing` case | RESOLVED-BY | FI-07, FI-03 §1, HEAR edit 9; order in FRES §2 | — |
