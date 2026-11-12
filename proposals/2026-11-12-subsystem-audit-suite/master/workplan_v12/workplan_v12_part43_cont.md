@@ -86,7 +86,7 @@ The batch block's head, its position table and items B40.01 to B40.20 are in par
 - LANDS IT: B40's producer; `Item: B40.24`, `[skip ci]`.
 
 ### B40.25 — the commission forbears war and treaty · COL-F edit 5 · BUILD · HASH MOVER(behaviour)
-- SOURCE: COL-F "Edit 5 — the commission forbears war and treaty; the company (M-23, M-14, M-21)", "Exact edits" row 5, "Gate" 5; the land rulings ("a commission's forbearance clause is what makes a seizure a breach", its first `Reconciled:` line); synthesis X-13; COL-B §3 (the border rule).
+- SOURCE: COL-F "Edit 5 — the commission forbears war and treaty; …" (M-23, M-14, M-21; its heading's last word is the chartered body's), "Exact edits" row 5, "Gate" 5; the land rulings ("a commission's forbearance clause is what makes a seizure a breach", its first `Reconciled:` line); synthesis X-13; COL-B §3 (the border rule).
 - ADVANCES: none of the nine; a far officer's own war is a breach, not only news; the Katepano's hold in B40.07's scenario.
 - INSTRUCTION (COL-F, copied; "company" → *chartered body*, U4d and the MB lexicon):
   1. "**`over: any`.** The clause enum `over` (`grant_ground | grantee | named`) gains `any`: the forborne deed is forborne whatever its target. Loader: one value."
