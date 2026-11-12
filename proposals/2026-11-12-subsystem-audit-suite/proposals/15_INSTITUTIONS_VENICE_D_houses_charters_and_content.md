@@ -1,5 +1,7 @@
 # INST-VENICE-D — houses, rectors, charters; the content rows; and the playable scenario "The Counting-House"
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-10, X-11, X-12, X-15, X-32) — what §3 calls a charter (a trade privilege at a named market) is the form `staple` of `engine/season/instruments.yaml`; `charter` in the kit is a body's self-rule; no obstacle term `charter` is asked of the MATERIAL lane: a held live `staple` cited on an `exchange` is an `evidence` item; a rector's commission is the form `commission`; the row `exit_audit` is not added and every `audit_at_exit: exit_audit` below reads `audit`; `enrolment_ballot` and `security_bench` are tallied by the one rule for `declared` rows; the scenario is a case file with `base: spine` read by the one report (`15_INSTITUTIONS_SYNTHESIS_D_first_playable.md` §1), so `counting_house.py` is not written, and its first cut (one loan, one harvest, one reckoning) is the first cut of the integrated playable. The `{venue:}` anchor, the house, the branch, the content rows and the scenario's seats and endings stand. Every finding below stands.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_VENICE.md` §1.7–§1.9, §2.3–§2.6, §3, §4.3, §6.1 part 5, §10, §11, §13,

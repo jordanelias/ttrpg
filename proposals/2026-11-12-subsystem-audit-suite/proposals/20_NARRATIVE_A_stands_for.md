@@ -66,7 +66,9 @@ What that costs in play (E-N04, four seasons, seeds 0 to 2): told claims held at
 between two persons who both hold convictions read −1 in 20 / 8 / 14 cases and +1 in 0 / 0 / 7 (the
 seven all inside the four pairs of the realm that read +1); a 0 occurs only where one side is a cohort
 with no conviction (5 / 5 / 9). Mean confidence: 28.9 / 34.5 / 42.9 at −1 against 78.6 / 94.0 / 82.6 at
-0. `regime_gain` 0.5 is therefore one flat discount on hearsay inside the cast, the
+0. The control arm (`regime_gain 0`, seed 0, four seasons, audit E-N08) is the shipped run act for
+act (3,593 acts, 1,569 executed, the same Events in every season); only those 20 claims' mean confidence
+differs (65.2 against 28.9). `regime_gain` 0.5 is therefore one flat discount on hearsay inside the cast, the
 strife design's L4 ("in-regime tellers credited more", `strife-00` §6) has no in-regime teller to
 credit, and `incompatible_span` prints `True` for every strand with two convinced parties, which is the
 base rate and not a reading. `tests/test_strife_credit.py:216-241` asserts that `commensurate` is

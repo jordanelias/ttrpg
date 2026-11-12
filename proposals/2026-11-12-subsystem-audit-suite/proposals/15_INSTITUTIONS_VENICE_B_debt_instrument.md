@@ -1,5 +1,7 @@
 # INST-VENICE-B — the debt: a bond the creditor holds for an undertaking the debtor owns
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-09) — `debt` stays a Record kind as written here and is also a row of `engine/season/instruments.yaml: forms` (`record_kind: debt`, `made_by: covenant`, `bearer: true`, one `due`), so the kit's one set of instrument readers serves it: `debts_owed` and `debts_held` (edit 3) are not added, their occasions are `world_q.dues` and `world_q.breaches`; `debt_state`'s arithmetic is `world_q.owed(w, record, clause)`, the one amount reader for every clause that names an amount. A company's share is this instrument (the colonial lane's "`tribute`-shaped" share is withdrawn). A suit's forum, and a `ban` for debt before a Church bench, are `15_INSTITUTIONS_SYNTHESIS_C_crossings.md` edit 3. The kind, the mint, the discharge, the reckoning, `debt.lapsed`, `debt_suit` and the distraint stand. Every finding below stands.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_VENICE.md` §0 (the largest obstacle), §1.6, §1.11, §2.4, §6.1 part 4,

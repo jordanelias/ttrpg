@@ -1,5 +1,7 @@
 # INST-BYZ-D — the empire at a distance: a centre that is one person, a prince who is a hand, a gate with a keeper, and what `altonian_civics` condemns
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-13, X-14) — the far superior is one seat, shared with `15_INSTITUTIONS_COLONIAL_B_distance.md` §4: id `off_altonian_court`, anchored `{territory: "ALT"}` (this file's own fallback), its holder resident at `ALT-0` at `hops: 3`, with this file's `passes_through: [{seat: off_doux}]`, `off_doux`, the three `obligees` and `factions.head_seat`; `off_altonian_head` is not a second seat. Distance is both the Doux's hand (a person) and `remove` on the court's `issue` (space). Edits 4 to 7 stand. Every finding below stands.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_BYZANTINE.md` §1.1, §2.6, §2.12, §7.1, §10, §11, §14 item 3;

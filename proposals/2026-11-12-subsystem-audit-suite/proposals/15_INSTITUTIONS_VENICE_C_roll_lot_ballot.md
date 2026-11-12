@@ -1,5 +1,7 @@
 # INST-VENICE-C — the roll, the lot and the ballot; a cooling-off and an audit at exit
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-04, X-11, X-12, X-15) — "roll" keeps this file's meaning for the whole kit (a membership carried by `oblige` Tenures under `members_by_warrant`; no Record kind `roll` exists); the warrant is the form `warrant` of `engine/season/instruments.yaml`; `audit_at_exit` names the arrangement row `audit` (the colonial lane's band-keyed row; `exit_audit` is not added), and its occasion is any close of the hold, stamped by `world_q.audits_due` on a person who holds the `tenure.closed` claim and may open; **edit 5 is withdrawn into `13_SC_draw_for_unrolled_contests.md`'s ballot** (each member rolls his own ballot; `obligation`, `regard`, `evidence` and his commits are terms of that draw, scaled under a sealed room; a commit's size is `proof_step`, so `pledge_step` is not added; `quorum` keeps the code's meaning, the fors needed, or the row carries `quorum_share`; a dismissed matter may be brought again). Edits 1 to 4 and 6, 7 stand and are the kit's. Every finding below stands.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_VENICE.md` §1.3, §1.4, §2.1, §2.2, §5.3, §6.1 parts 2 and 3, §6.2, §14.

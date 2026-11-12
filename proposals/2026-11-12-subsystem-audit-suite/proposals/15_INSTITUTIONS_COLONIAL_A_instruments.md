@@ -1,5 +1,7 @@
 # COLONIAL-A — an instrument is defined parameters: the closed set of grant and treaty forms, and the three readers `covenant` has waited for
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-01, X-02, X-03, X-09, X-11, X-29, X-31) — this file's registry is the kit's one home and gains what the other three lanes need (`15_INSTITUTIONS_SYNTHESIS_A_one_kit.md` edit 1): the top-level key is `forms:` and a second section `seeded:` holds the Records a world begins with; a form row gains `record_kind`, `bearer` and `recites`; a clause's `by:` may be `addressee`, its `over:` may be `named`, its `to:` may be `named_rung`; six rows are added (`warrant`, `commission`, `avoidance`, `interdict`, `tithe`, `debt`); `recognition` is not a form (a certificate is the `recites` key); "live" for a covenant-made form is `14_VERBS_SOCIAL1_B_documents_and_obedience.md`'s `covenant_in_force`; `dues` stamps a clause while `world_q.owed` is above zero; a breach also excuses the wronged party (`person_q.excused`). The schema, the loader, the ten rows, `dues`, `kept` and `breaches` stand. Every finding below stands.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_COLONIAL.md` §4, §6.1, §10, §12 batch C-1. Cross-lane: the `covenant`

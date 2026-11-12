@@ -509,3 +509,244 @@ Lane `tests6`: 77 files under `tests/valoria/` (alphabetical `test_combat_invari
 - **Conflicts / stale:** cites `designs/audit/2026-07-04-mass-battle-cannae-gauge-audit/README.md` and `tests/coverage_matrix.md` (archived paths). The "live default" claim (node path) is unverified in this file beyond the history.
 - **Open items:** the speed-floor edge case for low-base-speed bodies is flagged "for a future movement-tier pass"; the H3-H6 overshoot question is "explicitly not decided".
 
+### tests/valoria/test_mass_battle_officers.py
+- **What it is:** pytest file, A3 + C5 (ED-MB-0067 Parts A and C, ED-MB-0073): subordinate officers and a span-of-control ladder in `build_army`.
+- **Status:** none stated; reading: live; behaviour tests of the constructor, no resolution.
+- **Bears on:** MB (command hierarchy, army -> officer -> subunit), CHAR (officers as characters with charisma/cognition), FA (none).
+- **Content that matters:**
+  - `Officer(name, command | charisma, cognition)` derives Command the same way a general's is (`derive_command`, ED-899), defaults to 4 (the tier-3 baseline), clamps to 1..7 (:28-46).
+  - The ladder (Jordan, ruled 2026-09-25, "one ladder... max commanded = Command... at every echelon, including the new officer post"): each officer's subunit count must not exceed that officer's own Command, and the general's direct reports (distinct officers plus un-officered subunits) must not exceed the general's Command; ValueErrors with specific messages (`commands 5 subunits, exceeding their own Command 3`, `general commands 5 direct reports`, unknown officer, duplicate name) (:77-114).
+  - The "done when": a general of Command 3 fields 12 subunits (above the flat `SUBUNIT_CAP = 11`) through three Command-4 officers (:60-74). With `officers=()` the flat cap is unchanged ("exceeds the videogame cap") (:49-57).
+  - Everything asserted is at construction; whether an officer's Command affects resolution (orders delivery, morale, pool) is not tested here.
+- **Conflicts / stale:** `SUBUNIT_CAP` is imported from `systems.mass_battle.sim.engine` while `Officer` is in `modules.mass_battle.hierarchy.units`: constant owned by the sim wrapper.
+- **Open items:** officers carry only a name and Command; the brief's "named, distinct characters" intent is not reached by this record.
+
+### tests/valoria/test_mass_battle_order_of_battle.py
+- **What it is:** pytest file, ED-IN-0306 phase 1: a faction's `OrderOfBattle` (named `Subformation`s with troop type, size, role, stance, target, `fall_back_at`, plus a strategy) reaches the mass-battle engine through `massbattle.resolve_field`.
+- **Status:** none stated; reading: live; the file states a control and a falsifier up front (:1-12).
+- **Bears on:** MB (order of battle, formations, troop-type roster, loadout), SE/FA (the army the season fields), CORE (`MassBattleInput.orders_of_battle`).
+- **Content that matters:**
+  - Control: no orders of battle equals `(None, None)` bit for bit, and `_weighted_unit` still builds a single infantry subunit (:46-51). Falsifier: 1,000 heavy infantry vs 1,000 levy fight differently over 12 seeds, heavy wins more and keeps more, with a vacuity assertion that both took casualties (:65-72).
+  - Ten boundary refusals through `validate` and `build_unit` (empty, unknown strategy, duplicate name, unknown type "no stat preset", non-positive size, role outside the menu, bad stance/target, `fall_back_at=1.0`, more than 11 subformations "cap", :83-99).
+  - Deployment: melee front, ranged behind (opposite the advance), horse on the flanks, no overlapping cells (`len(seen) > 10`), sides on opposite rows (:109-139). Stance precedence is subformation, then role, then strategy (`STRATEGIES['advance']['melee'] != ['defend']['melee']`; `ShieldWall` under the neutral strategy holds, an explicit stance wins; :143-150, :228-236). `fall_back_at` 0.4 becomes an Order `own_strength:0.4 -> stance retreat` on the subunit (:153-157). A `mounted_archers` body with no role defaults to role `Kite` with instructions; another type has none (:160-168).
+  - Roster: `spearmen`, `skirmishers`, `light_cavalry` each have stats, a role menu entry and a `loadout_for(t) = (weapon, armour)` pair: the loadout is ONE weapon and one armour per troop type; reach (spearmen 0.2 vs light infantry 0.1), support ranks, mounted set `{cavalry, mounted_archers, light_cavalry}` (:178-190). Every stat preset has a loadout and a reach (:193-199).
+  - `ob._UNIT_POWER == massbattle._SEASON_FORCE_POWER` and command/discipline baselines equal `_MVP_UNIT_COMMAND` (:202-206): constants kept equal by a test across two modules. Survivor shares never exceed 1.0 (falsifier `by_troops=False` in `resolve_field`, 12 seeds, :209-220). A barracks's capacity is shared between its types (:239-248).
+- **Conflicts / stale:** none found; `SEEDS` comment says losses are one-sided per seed so a type's effect shows in the aggregate.
+- **Open items:** no per-subformation secondary weapon, no weapon-in-hand state, no loadout weight/fatigue/speed cost appears anywhere in this file or the roster tests (relevant to the mixed-weapons-per-unit intent).
+
+### tests/valoria/test_mass_battle_perception.py
+- **What it is:** pytest file, A2 / ED-MB-0067 Part A: `enemy_range:` order conditions see only what the unit's facing cone shows (`core/contact._visible_enemy_cells`, `FOV_HALF_DEG = 105`).
+- **Status:** none stated; reading: live; includes its own live-flag control.
+- **Bears on:** MB (perception, orders, facing), FI/CHAR (what a unit knows), SC (none).
+- **Content that matters:**
+  - Cone: a cell dead ahead of facing (1, 0) is visible; one dead behind (180 degrees, past 105) is not (:35-44); with `_node_facing` unset it falls back to `(advance_dir, 0)` (:47-55).
+  - `enemy_range:10` fires for an enemy at distance 5 ahead and not for one at distance 5 behind; an enemy inside the cone but beyond D=5 does not fire (the distance axis is separate, :58-88).
+  - Composition: the filter is a no-op when `MB_FACING_MODEL` is off, and when only `MB_FACING_FOV_GATE` is off (an AND of both flags, :93-125); control: both flags default ON at shipped values (:128-136). The facing model is pinned OFF in every golden-battery mode (`test_field_golden_pins.py`), so no golden observes this filter.
+  - The unit's knowledge is its own facing cone: no fog beyond that, no distance-limited sight (`MB_SIGHT_RANGE` was removed as provably dead).
+- **Conflicts / stale:** none.
+- **Open items:** the oblique-row digest control for `build_refused_flank` "is run separately (see the session report)": a claim with no artifact here.
+
+### tests/valoria/test_mass_battle_role_instructions.py
+- **What it is:** pytest file, MB-04 (A5 role instincts, #445 U-3): a role's instruction keywords drive engine primitives; `hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES` is the single owner of the keyword-to-primitive map.
+- **Status:** none stated; reading: live; falsifier and OFF-arm control present.
+- **Bears on:** MB (roles, instructions, stance precedence, feigned retreat), CHAR (none), PC (none).
+- **Content that matters:**
+  - Before MB-04 a `ShieldWall` and a `Push` fought identically to the last float; with `MB_ROLE_INSTRUCTIONS` ON they differ in advance (ShieldWall 0.0, Push positive) and in density over seeds 11-13 (`checked == len(_SEEDS)`, :55-66); OFF arm reproduces equality (:69-73).
+  - Stance precedence for roles: an explicit non-balanced stance beats the role default; an Order or spec that writes `balanced` is remembered as written and beats the role keyword (ShieldWall released at `tick:3`, :76-107); `VolleyLine` no longer carries `hold` (which stops archers via `STANCE_SPEED_MOD['hold'] = -99`, :110-114).
+  - `Feint` (lure) declares the Feigned Retreat at the pursuit site: `resolve_feigned_retreat(pursuer, lure)` is non-None for a Feint unit and None for a Shock unit, and inert OFF; the keyword is read at the site, not written onto the Unit (:117-134).
+  - Completeness: every keyword `ROLE_SPEC` hands out (at least 10) has a row in the mapping, a primitive or None with the reason (:137-143).
+  - It imports the `field_path` fixture from another test file (`from .test_reach_weapon_class import field_path`, :23), a cross-file fixture dependency.
+- **Conflicts / stale:** `MB_ROLE_INSTRUCTIONS` is in `_KNOWN_INERT` for the golden battery (`test_field_golden_pins.py:90`): no golden observes roles.
+- **Open items:** none.
+
+### tests/valoria/test_mass_battle_routes.py
+- **What it is:** pytest file, A1 / ED-MB-0067 Part A (squad-engagement synthesis): waypoint routes on a Subunit (`route`, `_route_idx`, `_resolve_route_goal`, `check_orders` path-length clamp), with two integration fixes.
+- **Status:** none stated; reading: live; strong (controls and trace events asserted, waypoints built from the live anchor after a review found fabricated distances).
+- **Bears on:** MB (orders, pathing, standing instructions), CHAR/FA (a commander's route is an Order with trigger `immediate`/`tick:N`).
+- **Content that matters:**
+  - Route is an order-safe field; budget formula `0.5 * speed * ROUTE_BUDGET_TICKS` = 9.0 for infantry (`TICKS_PER_PHASE == 6` asserted as the premise, `ROUTE_BUDGET_TICKS = 3 * 6 = 18`), cavalry gets `MB_CAVALRY_SPEED_MULT` (3.0x) (:79-86, :170-177); a too-long route is clamped to the waypoints inside the budget (not rejected), and a trace event `route_clamped` with `dropped`/`kept` is emitted, none when nothing is dropped (:88-95, :180-200).
+  - B is passed before C is reached (anchor-distance record, `tick_at_b < tick_at_c`); with the enemy not in sight and `target_condition='in_range:1'` the route-holder still moves in `run_battle` because `moving_a/moving_b` were widened (:97-141).
+  - Abandonment (REVERSED at round 2 on Jordan's correction): an emergent yield, or `stance == 'retreat'`, clears the route and it does NOT resume (trace `route_abandoned` with reason) (:221-263). A waypoint that stalls past the route budget in ticks is force-dropped and the route continues (`route_waypoint_stalled`, :268-289). Re-issuing a route resets the cursor; a resume index is honoured and measured only over the legs ahead; a bare coordinate pair or non-numeric waypoint fails at Order construction (:203-218, :323-355).
+  - Legacy-lattice arm (`MB_NODE_COHESION=False`) is documented as "not a way the game can be played, kept only as the byte-exact grid regression oracle"; a route order there must not crash and a route-only atom is excluded from movement (:146-167, :292-320).
+- **Conflicts / stale:** none. Confirms the node path is the shipped path and the grid path an oracle.
+- **Open items:** `byte-exactness for the untouched default is covered separately by bat.py --check (no BATTERY row sets a route)`: routes are in no golden.
+
+### tests/valoria/test_mass_battle_signals.py
+- **What it is:** pytest file, A4 / ED-MB-0067 Part A: go-codes only: an `Order` trigger `signal:NAME` fires once NAME is in the issuing Unit's `fired_signals`, and an order's `fire_signal: NAME` behaviour adds NAME.
+- **Status:** none stated; reading: live; messenger latency explicitly out of scope.
+- **Bears on:** MB (command and communication between subunits of one unit, order triggers), CHAR/FA (none).
+- **Content that matters:**
+  - Trigger validation: `signal:advance` accepted; `signl:advance` and `signal:` (empty) raise; `fire_signal` must be a non-empty STRING (int and list raise at Order construction, :43-48, :86-89, :142-151).
+  - Behaviour: a `signal:advance` order does not fire before the signal, fires on the next check after `u.fired_signals.add('advance')`, ignores an unrelated signal (:56-81); `fire_signal` adds the name when its own trigger fires and never leaks onto the Subunit (:92-102).
+  - Propagation is order-dependent and disclosed: a watcher listed after the signaler sees the signal in the same `check_orders` call; listed before it, one call later (:105-126). `fired_signals` is cleared by `reset_morale_between_battles` (:129-137).
+  - Signals are per-Unit transient state: the only "communication" is a shared set, no range, no delay, no loss.
+- **Conflicts / stale:** none.
+- **Open items:** messenger latency "explicitly out of scope for this item".
+
+### tests/valoria/test_mass_battle_support_rank_cap.py
+- **What it is:** pytest file, MB-07 / J-18 (A): cap the depth support stack at the number of ranks a troop type's weapon reaches (`registry.support_weight` is the single owner; `MB_SUPPORT_RANK_CAP` ships ON since MB-07r).
+- **Status:** none stated; reading: live; mixes strong structural tests with measured-value pins.
+- **Bears on:** MB (formation depth, weapon-reach-derived supporting ranks, troop types), PC (the reach/class idea).
+- **Content that matters:**
+  - Weapon class to ranks: reach 0.1 gives 1 rank (infantry, non-pole), 0.2 gives 2 (heavy infantry, cavalry, spearmen), 0.3 gives 3 (pike); unmapped = 1; derived from `TROOP_TYPE_REACH` (15 types, `len == 15` pinned), so a reach edit moves its rank (:145-154). A rank past the cap weighs 0 (`support_weight(cap+1, tt) == 0.0`).
+  - OFF control reproduces the uncapped stack exactly, with measured float literals as pins: `_UNCAPPED_FULL = {'Line': 560.0000000000002, 'Column': 468.5714285714283}` and eight `_UNCAPPED_BEYOND` values to the last digit, `checked == 8` (:32-40, :86-97): numeric pins taken from a pre-MB-07 commit on Python 3.11.17.
+  - Falsifier: a tier-4 Line (7 files x 5 ranks) and Column (5 x 7) with equal troops differ only in depth; uncapped, three of four types differ beyond the cap (infantry ties up to float rounding, asserted `differ == 3`); capped, ranks beyond the cap added to the pool are exactly 0.0 with `removed > 0` anti-vacuity (:102-133).
+  - Two `@pytest.mark.slow` tests pin sampled retention values: capped pike 0.9604 > heavy 0.9508 > levy 0.8895 at `abs=1e-4` (and uncapped pike == heavy == 0.9514); standing melee tuples `((0.9588, 0.9151), (0.8851, 0.9697), (0.9415, 0.9527))` by exact tuple equality (:159-196). The docstrings list five re-recordings (POOL_QUALITY_SCALE 0.5 to 0.8 at MB-07r, MB-04 role keywords, ED-MB-0079 cell body becoming a circle one pitch across, 2026-11-01). These are tripwires on one trajectory, not property tests.
+  - `resolve_field` at weight 3000 engages 2,700 troops uncapped and 2,000 capped (3 ranks of infantry) (:222-233).
+  - `test_shipped_default_is_on` skips if the env var is set ambiently (:80-83).
+- **Conflicts / stale:** imports fixtures and helpers (`_charge_vs_brace`, `_standing`, `field_path`) from `test_reach_weapon_class` (:27): cross-file test coupling. The cap is ON by default but the golden battery is pinned to a different configuration (see `test_field_golden_pins.py`).
+- **Open items:** none stated.
+
+### tests/valoria/test_mass_battle_yield.py
+- **What it is:** pytest file, DG-2 / ED-MB-0005 (proposals/mass_battle_fighting_withdrawal_v1.md, Jordan "build it now" 2026-07-08): the commanded-entry fighting-withdrawal (`yielding`) state, goal, pool malus and facing.
+- **Status:** none stated; reading: live; the docstring's scope disclaimer is stale.
+- **Bears on:** MB (yield / fighting withdrawal, discipline gate, facing), PC (the duel-level yield is a separate mechanism, `test_combat_yield.py`).
+- **Content that matters:**
+  - `yielding` defaults False; `yield_active` requires discipline >= `D_YIELD` and a melee `unit_type` (ranged have `kite`) (:42-64). `_yield_goal` is the reflection of the nearest enemy through the anchor (flee vector), only reachable through the node path's `_resolve_maneuver_goal` (:67-88, :119-136).
+  - A yielding, sufficiently disciplined subunit fights at `YIELD_POOL_MULT` of its pool, reduced but at least 1; below `D_YIELD` the order is a no-op (:91-109). `yielding` is an order-safe field set by `Order('immediate', {'yielding': True})` (:112-116).
+  - Acceptance (§6.b): a yielding subunit's facing stays toward its engaged enemy as it moves away (dot product >= 0 for every cell, :139-171). Two assertions are weak: `assert atk._moved_this_turn or atk.cell_offsets` (:156) is satisfied by any non-empty `cell_offsets` dict, so "never moved" cannot fail [UNVERIFIED that `cell_offsets` is always non-empty]; the per-cell facing loop has no population floor.
+- **Conflicts / stale:** the docstring says emergent auto-entry, rally and pocket are NOT built and "should be treated as still-open" (:3-10); `test_dg2_yield_residuals.py` builds and tests all three, and `config.py` ships them ON. Cites `proposals/mass_battle_fighting_withdrawal_v1.md` (live design material per the brief).
+- **Open items:** none beyond the stale scope note.
+
+### tests/valoria/test_mass_battle_terrain.py
+- **What it is:** pytest file, A7 / ED-MB-0067 Part A / ED-780 / ED-MB-0074 and MB-05 / MB-05r: battle-wide terrain found from the strategic map (province anchor point-in-polygon against the geography file), the six A.9 terrain rows, river-crossing derived from the march origin, and the effects `_run_and_grade` applies.
+- **Status:** none stated; reading: live; mixes strong falsifier tests with pins of hardcoded geography ids and with tests of effects nothing reads.
+- **Bears on:** MB (terrain), SE (geography, territory ids, fortification), CORE (the host reads geography and passes it in).
+- **Content that matters:**
+  - Terrain is ONE row for the whole battle (`terrain_row_for_territory(tid, fort_level, river_crossing, geography)`), not per cell: precedence WALLS (fort_level > 0) > RIVER_CROSSING (caller signal) > polygon type via `_TYPE_TO_ROW` > OPEN_FLAT fallback; an unknown territory returns OPEN_FLAT (:89-123). A closed-set test (every province resolves to one of six rows; `len(seen) >= 2`) and a type-coverage test (every geography terrain `type` has a `_TYPE_TO_ROW` entry, since the `.get(..., OPEN_FLAT)` fallback hides a gap, :61-86).
+  - Pins of actual data: T4 and T9 UPHILL, T7 and T6 FOREST_BROKEN (marsh maps to forest), T1 OPEN_FLAT; river-crossing for 11 origin/target pairs (e.g. T9 to T3 True, T3 to T5 True through a run-along, T1's anchor ON a vertex: touching is not crossing); a count of bank changes not strict segment crossings; 17 x 17 province pairs with and without `bridges:` give identical answers (MB-05r bridge ruling, `[ASSUMPTION; medium; Jordan to correct]`, `checked == 17*17 and crossings >= 1`, :141-210, :218-227). `NARROW_PASS` is pinned only through a synthetic province at a pass polygon's centroid because the real mountain-pass provinces' anchors lie outside their pass polygons (:230-253).
+  - Effects wired in `massbattle._run_and_grade`: UPHILL gives attacker -1D off and defender +1D def; RIVER_CROSSING -1D off on the crosser; WALLS adds `WALLS_DEFENDER_DR` to the defender only (and `walls_dr` int overrides it on a WALLS field only; inert elsewhere); each lands once on the right side (:316-356, :376-391). Falsifier (MB-05): with the row's A.9 dice zeroed the fight equals OPEN_FLAT on all 16 seeds, with canon's dice at least one differs and the defender never has fewer survivors (:406-437). The `resolve_field` test derives the crossing from `origin` over `build_realm(0)` sides (T9 to T3 vs no origin) over 16 seeds, `differs >= 1` (:440-474).
+  - Inert effects, stated in the tests: the FOREST_BROKEN "cavalry to Standard" speed write and the RIVER_CROSSING speed step are written but `run_battle` never reads `.speed`, so they change nothing; NARROW_PASS is identified and not applied; the tests pin the writes "the day a reader exists" (:297-313, :393-403). `_run_and_grade` mutates the passed units' `dr` and `speed`.
+- **Conflicts / stale:** the docstring says canon's citation `designs/territory/...::terrain_polygons` is stale in path and key; the geography YAML is `systems/settlements/valoria_geography_v30.yaml` [UNVERIFIED current path]. Unfortified ground is "dominant polygon" by anchor point-test, not by area (disclosed).
+- **Open items:** forest/river speed effects and the narrow pass have no consumer; battle-wide terrain means no cell-level terrain exists in this path (relevant to the "terrain-bearing battlefield" intent).
+
+### tests/valoria/test_module_registrar.py
+- **What it is:** pytest file, 597 lines (plan position `30`, A-25, ED-IN-0284/0285; extended at `31a`, `31b`, `31c`, IN-41, v9 IN-07): one planted violation per refusal, each in a FRESH SUBPROCESS, against `SeasonDriver(World(0))` construction.
+- **Status:** none stated; reading: live; strong (a falsifier per refusal, derived-not-named subjects, `checked` counts).
+- **Bears on:** CORE (registrar, composition rows, prize rows, verb table, effects, preconditions), PC/MB/SC (the three prize-named entry rows), SE (role-less settlement entries), PROCESS.
+- **Content that matters:**
+  - Why subprocess: `MODULE_ENTRIES` (`engine/season/manifest/registrar.py`), `PROVIDERS`, `EFFECTS` are process globals other tests can fill; each case runs `python -c` with a 600 s timeout and `eval`s its own repr (:89-94), which is about 30 interpreter spawns in the file.
+  - Registrar: a row with `entry:` is registered by string at driver construction (not at import), idempotently (:134-158); deleting a registered row under a live process refuses naming it (within-process form, :161-174); deleting a production row in a fresh process refuses via the prize row's `module_entry:` (`manifest/registry.py::check_contest_prizes`), once per prize-named role, floor `len(named) >= 3` (the rows are `social_contest.roll`, `combat.fight`, `mass_battle.resolve_field`, :185-211). Host-declared role-less needs (`world_q.QUERY_ENTRIES` + `matter.STEP_CALLS`, floor `>= 8`, e.g. `settlements.larder_draw`, `.subsist`, `.produce`, `.housing`, `.fabric`, `.fortification`) are refused if deleted, stripped of `entry:` or re-kinded, `checked == 3 * len(needs)` (:222-259).
+  - Agreement refusals: composition target in a module other than the prize row's `module:` ; verb bound to a prize that does not name the entry (rows swap verbs to dodge the one-entry-per-verb refusal first); `verb_call` naming no verb; one entry registered twice (two rows one target, two rows one verb with `[ASSUMPTION, SM-5]`, a second writer showing both entries whole) (:262-348).
+  - Verb-row refusals: a prize row with its provider cleared; a verb contesting a prize no row claims; a writing row whose effect is cleared (names `effect_decline_note`); `effect_decline_note` on a row that has an effect or that writes nothing; an untyped precondition nothing evaluates; a stale `requires_decline_note` (:351-501). Subjects are chosen from the tables, never named (no entity special-cased).
+  - Sweep honesty: since v10 REM-2B no shipped row is dropped on its precondition, so `test_every_shipped_row_dropped_on_its_precondition_says_why` is vacuous on the shipped tree and is kept able to observe by planting a dropped row with and without a note (:504-535). The populated-realm test wraps the five check functions and asserts each RAN and the registrar registered every production `entry:` row (:538-565). `tools/export_composition.py --check` round-trip returns 0; the exporter refuses 8 malformed `entry:` shapes (:568-596).
+- **Conflicts / stale:** the docstring cites positions that "left the plan at B-B's close, `4a2e4494`" and `ID-13` history; `refusal` kind is asserted to be `"Unspecified"` (:99), an exception class name.
+- **Open items:** `SM-5` (a grid or map variant as its own module) could change the two-rows-one-verb rule.
+
+### tests/valoria/test_module_shape_check.py
+- **What it is:** pytest file for `tools/ci_module_shape_check.py` (ED-1085), the module-shape hygiene guard: synthetic trees in `tmp_path` exercise its rules (no `sys.path` reach-in to `tests/`, no `import tests...` in runtime code; `workbench` and `tests` excluded).
+- **Status:** none stated; reading: live; process only, over a checker whose subject is repository hygiene.
+- **Bears on:** PROCESS.
+- **Content that matters:**
+  - Five synthetic cases (clean passes; `sys.path.insert` into `tests/sim/v32-combat-balance` flagged as a reach-in; `from tests.sim import thing` flagged; `workbench/` and `tests/` excluded; a non-`tests` path insert allowed) (:26-77). The checker is pointed at the temp tree by swapping `shape.REPO_ROOT` (:18-23).
+  - The tmp layouts use roots `sim/autoload`, `sim/personal`, `systems/combat/combat_engine_v1/...`; the checker's `RUNTIME_ROOTS` still lists `'sim'` and `systems/combat/combat_engine_v1` (verified in `tools/ci_module_shape_check.py:49-54`), though `sim/` is a dissolved tree (CLAUDE.md §3).
+- **Conflicts / stale:** the `sim/` root and the frozen `tests/sim/v32-combat-balance` station are named in the checker as patrolled/forbidden; the former no longer exists.
+- **Open items:** none.
+
+### tests/valoria/test_modules_reachable_closure.py
+- **What it is:** pytest file, SM-7 at plan position `31c` (IN-05): `modules/**` equals the reachable import closure of the composition entry rows, in both directions.
+- **Status:** none stated; reading: live; load-bearing on the port (GO-05's manifest lists `modules/**`); has a planted falsifier.
+- **Bears on:** CORE (composition rows, A-25 modules), GO (the port's input set), PC (flat module set), MB, SC, FI, SE (every module directory).
+- **Content that matters:**
+  - Roots are composition rows with `entry:` targeting a package under `modules/`; the walk follows every import (module-scope and function-local) to repository `.py` files, stops at `engine/` (the host is not module code). Direction 1: every `.py` under a module directory is reached; direction 2: nothing reached lies under `systems/` (:94-114, :146-154).
+  - Two shapes told apart by whether an `__init__.py` exists: packages (`social_contest`, `mass_battle`) and the FLAT script set `modules/combat/`, whose roots are the entry plus the names `engine.substrate.pc_engine.PCEngine._fields` declares; a flat directory with no declaring seam fails; a bare name resolving nowhere and not stdlib/installed is reported (:139-143, :174-199).
+  - Also asserted: no entry row targets outside `modules/`; no directory or loose file under `modules/` that no entry row names (so `modules/` holds the entries' closures only); non-vacuity: `modules/mass_battle` is in the package list and `modules/combat` in the flat list (:157-199). `modules/` currently holds `combat, fieldwork, mass_battle, settlements, social_contest`.
+  - Planted-tree falsifier proves it sees an orphan file, a lazy import into `systems/`, a flat-set unresolved bare name and an unreached flat file (:202-229).
+  - Not checked (stated): DATA read by path; the geography read moved to the host (`engine/season/data/geography.py`) and `engine/season/tests/test_mass_battle_module.py` is cited as the observer that the module opens no file.
+- **Conflicts / stale:** `fieldwork` and `settlements` appear under `modules/` but the file names only the three modules in non-vacuity asserts.
+- **Open items:** none.
+
+### tests/valoria/test_morale_write_sweep.py
+- **What it is:** pytest file, ED-MB-0042 sweep: every absolute morale write in mass battle must reach the cells (`set_morale`, `erode_morale`, `pull_morale`), plus a field-parameterised guard failing on a NEW bare `.morale =` assignment on the engine path.
+- **Status:** none stated; reading: live; the template §0.1 pt 1 cites; one of the KEPT guards.
+- **Bears on:** MB (cell-owned state: `eff_morale` reads cells, `cell_morale`), CORE (read/write asymmetry hazard).
+- **Content that matters:**
+  - The failure: `eff_morale` reads CELLS once seeded and never falls back to the scalar, so every bare `.morale =` became a silent no-op under `MB_CELL_MORALE` (which confounded the flag's first measurement and the flip was retracted). Behaviour tests, each parametrised over an `own`-morale and an `inheriting` subunit (each param asserts which branch it is on): battle reset restores a damaged body; between-turn recovery is a bounded increment and must not re-inflate (a defect the author introduced mid-sweep); a body-wide hit moves cells by exactly its amount; `Unit.set_morale(0.0)` reaches an inheriting body (Command=0 instant rout depends on it); `set_morale(3.0)` sets every cell (:85-134).
+  - The sweep: `_CELL_OWNED = {'morale': {'owners': ..., 'allowed': {...}}}` with a line-anchored regex over eight engine files, `_ENGINE_FILES` (orchestration, battle_loop, core/state, core/exchange, hierarchy/units, percell, resolution, and the harness `lanchester_signature.py`); allowed bare writes are annotated by reason (:139-255). The regex was repaired to see a compound statement (`a = f(); a.morale = x`) after mutation testing; `test_the_guard_itself_can_fail` plants a plain and a compound line and requires both to match and not be allowed (:258-278). `morale_start` is out of scope by construction (the pattern is name-bounded), and two whitelist entries written for it were removed after mutation showed they exempted nothing.
+  - Comments record that phase 3 will move stamina, discipline, quality, and phase 4 hp and armour onto the cell (not done: only `morale` has a `_CELL_OWNED` key), i.e. today only morale is per-cell state in the guard's registry.
+- **Conflicts / stale:** `test_persubunit_stress.py` holds one bare morale write and is deliberately out of scope ("it gates the eventual default FLIP"; plan-v2 A5b); it lives in `systems/mass_battle/sim/` (seen in that directory). A text guard over eight hardcoded paths.
+- **Open items:** "It stays on the re-flip checklist in HANDOFF_MB" (A5b).
+
+### tests/valoria/test_names.py
+- **What it is:** pytest file: `tools/names.py` loader/resolver and `tools/ci_naming_check.py` (the Solmund-vs-deprecated-name gate): block tier vs warn tier, fail-safes, exclusions.
+- **Status:** none stated; reading: live; process (naming gate), with several behaviour-based falsifiers.
+- **Bears on:** PROCESS (naming), CORE (names index).
+- **Content that matters:**
+  - Loader on a synthetic `names_index.yaml` (canonical/aliases/legacy/enforce; `key_for` resolves canonical or alias; missing file returns `{}` not raise, :44-70). The live gate loads the block tier from the real index and the deprecated proper noun is among the block-tier legacy names (:75-90).
+  - Tier separation: neither tier's names are caught by the other tier, with both tiers asserted non-empty first (`test_the_two_tiers_do_not_bleed_into_each_other`, :116-131). An empty BLOCK tier means `main([])` returns 1; an empty WARN tier is the legitimate end state (returns 0) unless the index is unreadable (then 1); rewritten from a source-text assertion to a behaviour test after an adversarial pass (:134-171).
+  - The block scan returns strings (the edit-time hook slices `h[:120]`) and ONE hit per line even with two block names (a second name is planted, :174-198). The audit-corpus exclusion is rooted: `.audit/...` and `tests/` and `engine/tests/` excluded, `skills/valoria-vector-audit/scripts/...` not (:201-216).
+- **Conflicts / stale:** the test strings use the deprecated name by design (the index exempts itself). Uses `designs/x.md` as a notional path.
+- **Open items:** none.
+
+### tests/valoria/test_names_chain.py
+- **What it is:** pytest file: the naming chain `references/names_index.yaml` -> `tools/export_names.py` -> `names.json` -> `engine/substrate/names.py` leaf: refusals planted and asserted.
+- **Status:** none stated; reading: live; load-bearing on the engine (artifact read at import).
+- **Bears on:** CORE, CHAR (attribute names and aliases), FA (faction roster derivation), PROCESS.
+- **Content that matters:**
+  - Leaf refusals: `canonical_for` raises ValueError on an ambiguous display string; `N.AMBIGUOUS` is pinned as `{"Order", "Reason"}` (a conviction/settlement-stat pair and the attribute `attr.mind.acuity`/`conv.reason` pair, joined at CR-84) and the error must name both claimants (:30-49). Legacy tag raises and names its replacement (`N.LEGACY` non-empty precondition); an unknown name raises and names `names_index.yaml` (:118-135).
+  - Alias preservation: 17 pre-CR-84 names resolve to the same key through `_names_lost()`, with a planted control (drop `Dexterity`) naming it; `Perception` is its own canonical; the `Reason` group is held by the attribute row, not `conv.reason` (:52-115).
+  - Faction roster: `rosters.yaml: factions` carries `from_names: faction` and no `values:`, so `set(N.FACTIONS) == set(rosters.FACTIONS)`; the roster size is deliberately NOT asserted (Jordan 2026-09-19: "faction count should not be pinned"); named members `Schoenland, Church of Solmund, Valorsmark, Guilds` must be present; `Crown` is Valorsmark's alias (CR-86) (:145-167).
+  - Exporter refusals each planted in a temp copy of the index and run in a subprocess: alias resolving to two canonicals ("resolves to BOTH"), alias shadowing a canonical, legacy tag also a live alias, legacy tag shadowing a canonical (:191-235). `tools/export_names.py --check` returns 0 (:238-244).
+  - Retired: the Key-type flow-list tests were deleted with the Key substrate (:252-260).
+- **Conflicts / stale:** the precedent "faction count should not be pinned" (here) vs `test_conviction_roster_single_owner.py:64` which pins `len(PURSUITS) == 15`, `test_descriptor_registry.py` which pins ten attributes, and `test_descriptor_registry_category_b.py` which pins eight entries: pins on rosters are treated inconsistently.
+- **Open items:** none.
+
+### tests/valoria/test_no_polling_triggers.py
+- **What it is:** pytest file (ED-IN-0084, CLAUDE.md §11): `.claude/settings.json` `permissions.deny` covers every self-scheduling primitive, MCP server-name spellings, hooks survive; CLAUDE.md carries the rule.
+- **Status:** none stated; reading: live; guards an AGENT-instruction (Layer 0) artifact, no game bearing.
+- **Bears on:** PROCESS.
+- **Content that matters:**
+  - `REQUIRED_DENY` (the sole owner of the roster): `send_later, create_trigger, ScheduleWakeup, CronCreate, update_trigger, fire_trigger, Skill(loop), watch_url, subscribe_pr_activity`; each must appear in the deny blob (substring over `str(d)`, :101-106); five tools must be denied under all three spellings of the `claude-code-remote` MCP server (:109-121). `Monitor` and `create_session` are deliberately not denied, with reasons (:68-78).
+  - `Skill(loop)`'s runtime spelling cannot be executed by the test (stated blind spot, :80-85); no test can observe a hosted session calling the tool (:24-30).
+  - Hooks: the PreToolUse naming guard is wired and its `tools/...` target exists; `SessionStart` and `Stop` are pinned EMPTY (no banner, CLAUDE.md §0.3) (:124-164); CLAUDE.md contains `does not self-schedule` and `ED-IN-0084` (:167-171).
+  - Cost anecdote in the docstring: 116 `send_later` firings, floor ~2.7M tokens; CLAUDE.md measured 19,228 tokens before a cut.
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### tests/valoria/test_octagon_damage.py
+- **What it is:** pytest file, ED-MB-0018 (Jordan 2026-07-22), isolation fixed by ED-MB-0063: the octagon facing arc is a DAMAGE-RECEIVED multiplier (front GREEN 1.0x, flank YELLOW 1.5x, rear RED 2.0x), not a dice-pool penalty; reaction delay; multi-side shock.
+- **Status:** none stated; reading: live; honest about two of its tests (one admits it does not observe the window it names).
+- **Bears on:** MB (facing, flanking, du Picq flank/rear lethality, Cannae, per-cell perimeter faces), PC (none).
+- **Content that matters:**
+  - Requirements asserted: (1) a pure rear strike deals exactly 2.0x the identical frontal strike for the same seed (`rear == approx(2*front)`, `checked >= 3`; measured 7 of 12); (2) a cell hit outside its front arc keeps its exposed facing until `FACING_REACTION_TICKS` and a rear (blind-arc) strike is never perceived; (3) a subunit engaged from two or more distinct FACES (front/rear/left/right nearest-perimeter-face) takes an extra `(1 + MULTI_SIDE_SHOCK)` factor, while two co-front bodies are one face (:1-16, :344-380).
+  - Isolation (ED-MB-0063): earlier tests flipped `advance_dir` so the two arms contacted different ranks (rank 0 vs rank 2 of a 3-rank body); the pool is support-depth weighted (`SUPPORT_WEIGHTS {1:1.0, 2:0.7, 3:0.5}`, contact rank 0 = 3.6 of 4 vs contact rank 2 = 1.333), so the "rear does less than front" failure was a test-premise defect; the helper `_arc_pair` now holds the body fixed and rotates only `cell_facing_vec`. The docstring concedes that with the body fixed `rear == 2*front` is arithmetically forced wherever `front > 0`; the real falsifier is `test_arc_ratio_is_invariant_to_the_fractional_pool_flag`, parametrised over `MB_FRACTIONAL_POOL` 0/1 (:128-244).
+  - `test_rear_penalty_persists_across_reaction_window` states it DOES NOT observe the window it names: `_arc_pair` builds a fresh Subunit per call so the consecutive-tick counter never exceeds 1 while `FACING_REACTION_TICKS` is 2 (critic finding A, pre-existing, "not fixed here", :273-305). `test_visible_flank_refuses_after_delay` ticks a persistent subunit and asserts the counter in `_react_since` reaches the threshold (:308-328). The reaction clock is cleared by `reset_morale_between_battles` (:383-396).
+  - Front never exceeds rear/2 (conditional on `rear > 0`, `checked >= 6`, measured 9) so wing cells stay GREEN (local attacker centroid) (:246-270). Multi-side shock seed re-picked at MB-07r because at seed 13 both arms read 0.0; mutation recorded (:352-357).
+  - Fixture hygiene: `_mb_modules` reloads `config`, `units`, `orchestration`, `contact` under an env flag set and rebuilds from the restored environment afterwards; measured on `main`: the pair `test_stochastic_rout.py` alone fails one test, the pair with this file fails a different one, so verdicts depended on order and `-n auto` worker mix (0-2 unstable failures, :52-71). The test sets `U.FIELD_MOVEMENT = False` (discrete lattice contact) for determinism.
+- **Conflicts / stale:** cites `audit/2026-07-30-mb-session-retrospective/00_lessons.md` (archived). The legacy `-2 dice` path (`MB_OCTAGON_DMG=0`) is "asserted byte-unchanged by the existing bat.py digest" (outside this file). Fixture forces the grid/lattice arm, so the facing multiplier is tested where the shipped path is node (see `test_face_aggressors.py`) [UNVERIFIED that the multiplier code is shared].
+- **Open items:** the persistent-subunit form of the blind-arc test is "a separate change with its own expected-delta".
+
+### tests/valoria/test_pathres.py
+- **What it is:** pytest file: canary corpus for `tools/pathres.py`, the path-resolution owner (ED-IN-0128, ED-IN-0133, D1): extraction anchors, constructed-path reconstruction, ledger alias/fork resolution, I/O tracing.
+- **Status:** none stated; reading: live; process only (no game bearing). It carries its own disclaimers ("THIS GUARD PROVES LESS THAN IT DID", :43-49).
+- **Bears on:** PROCESS.
+- **Content that matters:**
+  - Each fixture binds one branch of `pathres` to one historical defect (table at :6-14): a `.audit/` token must not be extracted from `vector-audit/scripts` (now impossible by spelling since the `audit/` -> `.audit/` rename; the anchor still protects future roots); a joined `os.path.join(..., '.audit', ...)` is reconstructed and a variable segment is skipped, not guessed; a glob is captured whole.
+  - Resolution: `params/core.md` resolves to FORKED (the tree evacuated), `references/params_core.md` is a two-hop chain, `max_hops=1` yields DEAD (the dependency checker's single-hop behaviour), a mapped prefix with an absent target is DEAD, a live path needs no alias, a glob is LIVE via `resolve_glob` (:94-141). A `Resolution` is not a string and has no truth value (`bool()` raises TypeError), `same_file` compares resolved targets (:148-167).
+  - I/O tracing classifies read/write/scan/delete, ignores a comment mention, follows a module constant, and is non-vacuous on `tools/export_descriptors.py`; a dynamic `open(os.path.join(REPO, rel))` returns nothing and that "blind spot" is pinned so the "lower bound" caveat stays honest (:174-245).
+  - Map size floors: `len(exact) > 100`, `len(prefix) >= 10` (:252-256). D1: `broken_dependency_checker._resolve_remap` and `pathres.resolve(max_hops=1)` agree on every FORK row (floor `len(probes) >= 300`, `agreed >= len(probes) - 5`, disagreement allowed only where the path still exists on disk); a repeated ledger key resolves to the LATER row (`designs/arcs/`); `fork_pointer` is idempotent (:268-352).
+- **Conflicts / stale:** the corpus is built on dissolved paths (`designs/`, `params/core.md`, `.audit/2026-06-03-contest-groundup/engine.py`) as intended test data; one example cites the retired `engine/substrate/keys.py`. This is a test of a process tool that reads `restructure_ledger.md` (permitted by §0.05 cl. 4).
+- **Open items:** CLAUDE.md §8 records that `pathres.resolve()` matches directory prefixes; this file's docstring (:122-128) uses that behaviour as a feature.
+
+### tests/valoria/test_per_die_one_owner.py
+- **What it is:** pytest file, REM-42: within `engine/dice_engine/` the per-die mean and sigma are defined once in `dice_engine.py` and `sigma_leverage.py` reads them.
+- **Status:** none stated; reading: live; small and strong (a mutation test in a fresh interpreter).
+- **Bears on:** DICE, SC (`sigma_leverage` is the social-contest surface), MB (the exception).
+- **Content that matters:**
+  - `sl.PER_DIE[7] == (de.MU_PER_DIE, de.SIGMA_PER_DIE)` and the two module aliases equal the owner (:25-33). The mutation: in a subprocess set `de.MU_PER_DIE = 0.55`, `de.SIGMA_PER_DIE = 0.91`, then import `sigma_leverage` and require `(0.55, 0.91) 0.55 0.91`, which a copy would not follow (:36-48).
+  - It states `modules/mass_battle/` "keeps values of its own and is not asserted" (:2): verified, `modules/mass_battle/config.py:302` defines `PER_DIE_NET_EV = 0.4` (tagged `canonical: params/core.md`) beside `dice_engine.MU_PER_DIE = 0.40` (`engine/dice_engine/dice_engine.py:181`): a second owner of the same constant, equal by value.
+  - `SIGMA_N_COEFF` (0.8) is a different quantity, not asserted here; `PER_DIE` keyed by TN is pinned in `test_tn7_always.py`.
+- **Conflicts / stale:** the MB per-die constant is not routed through the dice owner and is held equal by nothing in this file.
+- **Open items:** none.
+
+### tests/valoria/test_perimeter_geometry.py
+- **What it is:** pytest file: Jordan's 2026-07-23 perimeter target-point / face-normal geometry primitive (`modules/mass_battle/perimeter.py`) validated against real formation footprints (`CELL_PATTERN_FN`).
+- **Status:** none stated; reading: live; pure geometry, no RNG, no goldens.
+- **Bears on:** MB (formation shape as a polygon of cells; attack-face choice; approach alignment; sharp tips of wedge formations).
+- **Content that matters:**
+  - A `Line` footprint is a 4-face rectangle with 4 major (face-mid) and 4 minor (corner) target points, unit normals pointing outward, no sharp tips (corners at 90 degrees); face normals cover the four cardinal directions (:25-48). An `Arrowhead` (depth 5) has a 3-face hull with at least one sharp vertex (<= `SHARP_TIP_DEG`, 60 degrees) (:51-60).
+  - `nearest_target` picks the face an attacker approaches (north attacker gets the north face, normal toward the attacker, :63-75); `approach_alignment` is +1 square-on, 0 grazing, -1 from behind (`approx(abs=1e-6)` on trigonometric results, :78-90); a degenerate footprint (under 3 cells) returns no face and one major target; the primitive is order-independent (:93-105).
+  - Only `Line` and `Arrowhead` are tested; `GappedLine` and `Column` shapes (which `test_deployment_primitives.py` builds) have no perimeter test.
+- **Conflicts / stale:** none.
+- **Open items:** none.
+

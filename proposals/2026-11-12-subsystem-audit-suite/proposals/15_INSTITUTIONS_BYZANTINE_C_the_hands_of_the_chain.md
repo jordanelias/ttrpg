@@ -1,5 +1,7 @@
 # INST-BYZ-C — the hands of the chain: a document is answerable when the named bodies have entered it, and each entry is a clerk's act and a draw
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-14, X-19, X-22, X-24, X-25) — `carry`'s row is `13_SC_draw_for_unrolled_contests.md`'s; the hand is that row's second `requires_typed` alternative and its three band kinds (`document.entered`, `document.held`, `document.returned`) serve a docketed petition too; the terms are named members of the one roster (`backlog` for the clerk's open documents, `regard`, `obligation`, `subject`), and the `altonian_civics` step is leverage or the chooser's, not an obstacle term; the deposit at the last entry composes with `14_VERBS_BINDING_D_orders.md`'s `force` (a dead letter is entered and still binds nobody); a hand is a person and `remove` is space, and both apply; `procedure_draws` is not added. `passes_through`, `hand_term`, `office_bodies.term`, `hands_open` and the return at maturity stand. Every finding below stands.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_BYZANTINE.md` §2.3, §2.4, §3, §7.0, §7.1, §10, §14 item 1. Batch C.

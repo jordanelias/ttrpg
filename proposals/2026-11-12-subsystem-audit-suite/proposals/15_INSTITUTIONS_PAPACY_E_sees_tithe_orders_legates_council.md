@@ -1,5 +1,7 @@
 # PAPACY-E — the Church at a distance: sees, the tithe, exempt houses, legates, and (design-first) the council and the schism
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-02, X-11) — the `render` terms form is the form `tithe` of `engine/season/instruments.yaml` (one `due` clause `by: addressee`, `every: 1`, `to: named_rung`; the share is the instrument's `amounts`), so edit 2 adds no roster member; a legate's leave is the form `commission`. The sees, the exempt house, the legate, and the held council and schism stand. Every finding below stands.
+
 ## Status: PROPOSED (items 1-4 are content and small edits; items 5 and 6 are DESIGN-FIRST and item 5 waits on Jordan)
 
 Source: `audits/15_INSTITUTIONS_PAPACY.md` F-PAP-01, F-PAP-07; §3.6 to §3.12; §4.1; §6 rows P-11 to P-13;

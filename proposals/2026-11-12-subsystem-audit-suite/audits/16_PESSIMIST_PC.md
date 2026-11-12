@@ -97,11 +97,67 @@ armour is 13 (one value; Wound Interval 9, so 1.4 intervals, where `core.py:168`
 WI"), and its Overwhelming is 20 to 33, median 25: 62% of a default man's 40 Health. So about a third of
 all exchanges are a blow that takes most of a man, and a fight is two of them.
 
-Evidence that this, and not the defence layer, sets the fight's length: `pK_scale.py` (§1.5 and §6).
+Evidence that this, and not the defence layer, sets the fight's length: `pK_scale2.py` (§6, J-1) and the
+cut tests (§1.2), where removing the read, the riposte or the whole tempo layer moves the count of blows
+by less than a third of a blow.
 
 ### 1.2 Cut tests, executed
 
-(table appended below when the run completes: `pE_cuts.py`, 31 cuts × 9 matchups × 800 fights)
+Thirty-one cuts, each made by the mechanism's own ablation value in `CFG` or by replacing one function
+for the run (`pE_cuts2.py`, `pE3_default.py`; nothing tracked is touched). Two readings.
+
+**(a) The fight the season runs** (arming, light, faculty 2, both sides), 2,000 fights per cut. The cuts
+are symmetric, so the win share cannot move; what can move is the fight's shape. Uncut: 3.37 turns, 6.37
+exchanges, 3.17 wounding blows, a lead change in 34.3%, the first man wounded wins 22.9%. Two control
+runs at disjoint seeds: 3.30 and 3.37 turns; 6.22 and 6.31 exchanges; 3.14 and 3.19 blows; 32.6 and
+35.2%; 21.4 and 23.5%.
+
+| cut | turns | exchanges | blows | lead change | first wounded wins | reading |
+|---|---|---|---|---|---|---|
+| wound impairment (`WOUND_ATK_OB`, `WOUND_DEF_OB`) | 3.76 | 7.15 | 3.48 | **48.9%** | **31.5%** | **moves the shape** |
+| riposte (`RIPOSTE_*`) | **4.07** | 6.57 | 3.23 | 36.8% | 24.8% | **moves the length** |
+| armour-defeat σ | 3.65 | 6.77 | 3.23 | 34.2% | 23.0% | moves the length a little |
+| the read (defender always guesses his mode) | 3.16 | 6.20 | 3.12 | 33.8% | 22.2% | at the band's edge |
+| concentration drain; mental and Focus terms | 3.21; 3.21 | 6.09; 6.08 | 3.13; 3.13 | 35.8; 36.0% | 23.7; 23.5% | at the band's edge |
+| Vor σ and tempo; Vor gains and steals (one cut by two routes: identical rows) | 3.40 | 6.43 | 3.22 | 36.5% | 24.4% | inside or a point outside |
+| cadence anticipation (`tempo_pressure`) | 3.43 | 6.47 | 3.21 | 36.0% | 24.0% | inside or a point outside |
+| poise (every break) | 3.44 | 6.45 | 3.20 | 35.0% | 23.3% | inside |
+| percussion stagger; stamina costs; handling | 3.42; 3.38; 3.37 | 6.43; 6.36; 6.33 | 3.20; 3.19; 3.17 | 35.0; 34.1; 33.9% | 23.5; 23.1; 22.3% | inside |
+| commit σ; over-commit exposure; recovery tempo of a commit | 3.42; 3.36; 3.37 | 6.41; 6.34; 6.35 | 3.18; 3.17; 3.17 | 34.2; 34.4; 34.0% | 22.3; 23.2; 22.7% | inside |
+| lunge; the deep-commit tier gated off; single-time counter | 3.38; 3.38; 3.37 | 6.38; 6.37; 6.36 | 3.18; 3.17; 3.17 | 34.5; 34.5; 34.5% | 23.2; 23.3; 23.0% | inside |
+| grapple (contact axis); bind cannot wound | 3.43; 3.41 | 6.43; 6.44 | 3.19; 3.11 | 34.8; 33.9% | 23.4; 22.1% | inside |
+| guard terms; legibility; footwork; morphology levers (eight constants) | 3.40; 3.43; 3.47; 3.39 | 6.42; 6.42; 6.46; 6.37 | 3.18; 3.20; 3.19; 3.17 | 34.0; 34.1; 34.2; 34.4% | 22.5; 23.1; 22.8; 23.8% | inside |
+| stop-hits; the whole approach phase; reopen and disengage; reach σ; half-sword switch; contact-moment terms | 3.37 | 6.37 | 3.17 | 34.3% | 22.9% | **identical to the uncut run in every figure: the code does not execute** |
+
+In the one fight the season can have, two mechanisms beyond the roll and the damage change anything a
+reader of outcomes could detect: wounds impairing the wounded (which makes the fight *less* reversible:
+without it a lead changes hands in 49% of fights and the first man hurt wins 31%) and the riposte (which
+shortens it). Six are provably never executed. The other twenty-one are inside a band of about a tenth
+of a turn and two points. Limits: 2,000 fights resolve about 0.1 turn and 3 points; every fighter here
+has default attributes, so terms centred on the default (footwork on Coordination 4, handling on
+Strength 4, Focus 3) are zero by construction and are "inert for every season person", not "inert".
+
+**(b) Six matchups** (the mirror; faculty 3 against 2; longsword, and spear, against arming; rapier
+against longsword unarmoured; mace against arming, both in plate), 400 fights a cell. The base and
+control runs differ by up to 5.8 points on a win share at this size, so only large effects are visible.
+
+| cut | largest change in any outcome share | what moved |
+|---|---|---|
+| stop-hits; the whole approach phase | **80.5; 77.0 points** | spear against arming: the spearman felled 0.2% → 80.2%; longsword against arming 20.0% → 34.0% |
+| reach as a standing σ | 12.3 | longsword against arming 20.0% → 32.2% |
+| riposte | 9.3 | plate: the fight resolves less (undecided 12.5% → 21.8%) |
+| wound impairment | 8.8 | lead changes up 12 to 19 points in three cells; plate resolves less |
+| armour-defeat σ | 6.2 | plate: lead changes 40.9% → 54.5% |
+| the read | 7.0 | nothing beyond the interval |
+| concentration; mental; contact-moment | 6.5; 6.0; 6.2 | nothing beyond the interval |
+| stamina; grapple; guard; handling; percussion stagger; legibility | 4.0; 3.8; 3.8; 3.7; 3.5; 3.0 | nothing |
+| lunge; morphology levers; poise | 2.3; 2.3; 2.0 | nothing |
+| Vor σ and tempo; Vor gains and steals; cadence anticipation; bind cannot wound | 1.5; 1.5; 1.5; 1.5 | nothing |
+| recovery tempo; footwork; over-commit exposure; counter; commit σ; the deep tier; reopen and disengage | 1.3; 1.0; 1.0; 0.8; 0.5; 0.5; 0.3 | nothing |
+| half-sword switch | 0.0 | not exercised: no cell pairs a half-sword weapon with plate (the PC addendum's F-PC-16 measures it) |
+
+The spear row is the engine's largest single effect and also a fixed outcome: a spear against an arming
+sword in light armour fells him 99.2 to 99.8% (four runs) in 1.1 turns, all of it the stop-hit.
 
 ### 1.3 Coverage: what the season's one fight exercises
 
@@ -138,8 +194,11 @@ Reading, by mechanism:
   whose upper end is contracted by swing room at closed measure (`combat_systems.py:1126`); at
   `DEEP_COMMIT = 4.0` sit the Indes steal, `counter_select`, the displace-and-step-inside, the
   over-commit reopen and (at `LUNGE_COMMIT`, also 4.0) the lunge (`wrapper.py:284`, `:325-329`, `:387`,
-  `:401`). They are consulted in 0.91% of season exchanges and 1.97% across the roster. (Per-weapon and
-  per-disposition depths: §1.2's appendix rows from `pF_story.py` F3/F4.)
+  `:401`). They are consulted in 0.91% of season exchanges and 1.97% across the roster. The cause is a
+  collision, not a rarity (F-PES-PC-04): at closed measure, the only measure an exchange is fought at,
+  the window is [2, 4.03], and the largest commit drawn in 300 mirror fights is 4.03 for each of ten
+  weapons (`pF_story.py` F3). Disposition moves the share (disposition 1: 0.08%; 4: 0.92%; 7: 13.8%,
+  F4) and nothing else does.
 - **The grapple is frequent and cosmetic.** `contact.grab_outcome` resolves on more than one fight in
   one (5,812 in 5,000) and its six outcomes write poise and initiative only (`wrapper.py:460-468`):
   `disarm` 1,107 times and both men still hold their swords; `throw` 959 and `pin` 948 and nobody is on
@@ -153,11 +212,62 @@ Reading, by mechanism:
 
 ### 1.4 False N-lines
 
-(completed with §1.2's table)
+A false N-line is a statement of necessity that a cut shows to be free. Each is quoted from the code.
+
+| # | the line | where | the cut | verdict |
+|---|---|---|---|---|
+| 1 | "The ongoing initiative system (initiative_sigma + hit-gains/steals/decay) is retained and load-bearing"; "Both are required by the NERS audit for this positive-feedback state" | `combat_systems.py:1078-1079`; `config.py:233-240` | the Vor cut by its outputs and, separately, by its inputs: identical rows; 1.5 points at most on six matchups; a point of lead-change in the mirror | **false at neutral disposition.** At least twelve constants and six functions, a per-beat decay and a clamp. Its one outcome-visible effect in the tree is the disposition drift, which the PC addendum's F-PC-17 shows to be an unpriced advantage. As coded the Vor is load-bearing only for the defect |
+| 2 | "aggression risks overcommit (its deep commits raise existing exposure) … BOTH poles cost" | `config.py:280-285` | over-commit exposure zeroed; the deep tier gated off; the counter removed: nothing moves; forced depth is monotone-better | **false, because the tier is unreachable** (window [2, 4.03], threshold 4.0). The cut is free for the wrong reason; proposal B restores it and the line becomes true (52.0 / 47.6 / 51.5) |
+| 3 | "the closed-phase lever for the reach-weapon-loses-the-bind residual: cycling approach↔bind, the long weapon wins on accumulated stop-hits" | `wrapper.py:193-201`, ED-PC-0030 | reopen and disengage removed: 0.3 points, 0.08 turns, spear and longsword cells included | **false on this panel**: the spear wins by the first approach and never needs to re-open. 280 withdrawals in 6,000 roster fights. Narrowed, not refuted: a reach weapon that loses the bind was not in the panel `[UNVERIFIED for that case]` |
+| 4 | "ACTIVATED … each lever is now routed through … ability_factor … a school that specializes in a lever amplifies it into a SITUATIONALLY-DECISIVE edge" (eight morphology constants) | `config.py:42-68`, ED-PC-0022 | all eight zeroed: 2.3 points at most | **rests on a layer nothing can reach**: the note itself concedes the flat terms are below the noise floor and defers to tradition abilities, which no season record carries (F-PC-09) and which the addendum measured at 48.6 to 54.3 alone |
+| 5 | "a bind IS a contact opening (Ringen am Schwert)"; the grapple's six branches | `wrapper.py:421`, `contact.py:60-77` | the grapple removed: 3.8 points at most, nothing in the mirror | **decorative**: 5,812 resolutions in 5,000 fights, each a poise or initiative nudge; the poise cut is itself free (2.0 points) |
+| 6 | "a stagger is decisive" (poise deepened, ED-PC-0031) | `config.py:245` | every poise break zeroed: 2.0 points, plate-and-mace cell included | **not shown** at this size; if it is decisive it is so in a matchup this panel lacks |
+| 7 | the defender's read "picks the BEST mode" | `combat_systems.py:1130-1150` | the defender always guesses: 7.0 points at most, inside the interval; a fifth of a turn shorter in the mirror | **nearly free between equals**: the read's weight is carried by Perception *differences* (§2.4), where it is a certainty, not by the choice of mode |
+| 8 | the bind as a place wounds happen | `wrapper.py:431-443` | `BIND_HIT_P = 0`: 1.5 points | **free**: 3.4% of season wounds |
+
+True N-lines, for symmetry (the cut costs something): the stop-hit and the approach phase (they are why
+weapons differ at all); reach σ; wound impairment; the riposte; armour-defeat σ in plate; the roll; the
+damage model. Seven mechanisms carry the outcomes; the engine holds some thirty.
+
+Attack from the other side (mechanisms that survive because nothing was tried against them): the
+`UPSET_FLOOR` flip survives as "the 95% cap" and changes nothing the season reads (F-PC-06; the sweep
+replaces it); `YIELD_HEALTH_FRAC` survived as an `[ASSUMPTION]` because every instrument reported the
+yield *share* and none asked whether anyone ever declined (§2.2); the twelve-turn cap survived because
+the calibration matchups resolve inside it and the plate mirror with one sword was not among them.
 
 ### 1.5 E, last, as a ratio
 
-(completed with §1.2's table)
+Against what N and R found: about 6,000 lines, 214 `CFG` keys and 64 further constants (F-PC-15)
+deliver, in the fight the season runs, a result reproducible to within the control band by the roll,
+the damage arithmetic, wound impairment and the riposte. E is not "too much code" (the weapon-and-armour
+half earns its size the moment an inventory exists: §2.3's estoc row, §1.2's spear row). E is low on the
+*tempo, commitment and contact* half, where the player is promised that simple choices have complex
+outcomes and the cut tests show the complex machinery has no outcomes. "Allows the player to intuit
+complex outcomes from simple choices" fails on both ends today: there is no choice, and the outcome is
+simple.
+
+N from all six directions, on the object "the closed exchange's tempo-commitment-contact layer":
+top-down (the intent needs an approach to lean on it): narrowed, it has no cost to lean against;
+bottom-up (does a primitive need it): the roll and damage do not; vertical (does the season read it):
+no, the fold reads trackers; diagonal (does another scale reuse it): nothing under `modules/mass_battle/`
+names the combat engine (grep); lateral (do sibling modules have the analogue):
+`modules/social_contest/roll.py` has no commit, tempo or initiative term (grep); horizontal (do the
+verbs differ by it): `fight`, `accept` and `capture`
+differ by terms only. It holds in one direction (the design documents' doctrine), which is a narrowed
+N-line.
+
+### 1.6 S: the two tests the shorthand drops
+
+*Pauses correctly.* The grid suspension (REM-31) pauses at the turn head for a played party and nowhere
+else; with three turns to a fight the pause occurs about three times, and 41% of those turns draw no
+blood, so a played duel is three prompts of which one or two show nothing. The between-beats terms stop
+reads standing state, which is right only while a yield is certain (proposal A changes it).
+
+*Calculations consistent in methodology.* (i) One ladder centred at two different places (§1.1). (ii)
+Armour is an average where every other chance in the exchange is a draw (§2.3). (iii) The yield is a
+threshold where the engine's every other decision point is a roll (§2.2). (iv) "Deep" is an absolute on
+a quantity whose range is relative (proposal B). (v) Two verbs for taking a man, one of words and one of
+the body (§2.5).
 
 ## 2. Premise
 

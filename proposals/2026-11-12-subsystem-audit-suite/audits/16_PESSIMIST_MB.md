@@ -322,3 +322,95 @@ rest ran; the winners stood where they were; the losers stood where they were to
 two-thirds the man he had been; next season nobody remembered which way anyone had run.* Finding
 F-PES-MB-03.
 
+### 2.8 The premises that failed, in one place
+
+| premise | verdict | first broken link | depth reached |
+|---|---|---|---|
+| a larger army usually wins but not always | holds for two single blocks; **inverted** for an army in units; the "not always" is one unseen draw | "larger" | EXECUTES (module); INERT at FIRES (first audit) |
+| a flanked line breaks | does not hold | "breaks": no sooner than unflanked; an encircled line never | EXECUTES (module, three ranks only) |
+| a pike block holds against cavalry | does not hold as worded | "pike": the brace holds, half the time; the pike is inert | EXECUTES |
+| a tired unit fights worse | holds on an unreported ledger inside one field; inert on the reported one; no carrier from march or kit | "tired" as a state that arrives | EXECUTES |
+| a routed army can be rallied or destroyed in pursuit | does not hold | "rallied" (empty hook); "pursuit" (unreachable; no unit is ever Fast) | none; pursuit EXECUTES by hand only |
+
+## 3. Emergent narrative
+
+Method: enumerate from the code what stories the subject can produce; count them in computed play with
+no player, with a control; follow each to what answers it. The story instruments' verdicts are not used
+as evidence here; the Event log and `causes[]` are (`p8_season.py`, which reuses the GAME lane's
+`pes.py` driver and edge reader; `build_realm(seed)`, the shipped chooser, three seasons).
+
+### 3.1 What mass battle can tell at all (from `verb_table.yaml`'s `march` row and the army verbs)
+
+| # | story shape | owner | can it happen in shipped play? |
+|---|---|---|---|
+| 1 | walked in: nobody defended, the marchers arrive | `Unopposed` → `field.unopposed`, `army.arrived` | yes |
+| 2 | took the field: the defenders lose men, hold a grudge, lose heart; the marchers arrive | `Won` → `field.won`, `army.arrived` | reachable; **never observed** |
+| 3 | beaten off | `Lost` → `field.lost` | yes |
+| 4 | sat down before the walls | `Invested` → `siege.pressed` | no: `march_postures` ships `[storm]` (first audit) |
+| 5 | the place gave itself up | `surrender` → `place.surrendered` | no: withheld verb |
+| 6 | a commander set his line and his retreat | `marshal` → `order.marshaled` | no: withheld |
+| 7 | an army was raised, formed, ordered, disbanded | the six army verbs | no: withheld |
+| 8 | a named man fell in the field | `person.died` on `Won` / `Lost` | reachable; never observed |
+| 9 | the beaten rallied; the beaten were run down; a feint drew the pursuit; a reserve was committed late; a general was taken | `rally_check` (empty), `pursuit_damage`, `resolve_feigned_retreat`, `MB_RESERVE_COMMIT`, `command <= 0` | **no path from a season to any of them** (§2.7; first audit F-MB-10) |
+
+Nine shapes; two occur.
+
+### 3.2 What it tells in computed play (counted)
+
+| | seed 0 | seed 1 | seed 2 |
+|---|---|---|---|
+| shipped scale (`field_troops_per_weight` 1), three seasons: `field.unopposed` / `field.lost` / `field.won` | 3 / 1 / 0 (GAME lane) | 5 / 1 / 0 (GAME lane) | 6 / **3** / 0 (this lane, and theirs) |
+| PROXY scale 30 (a labelled proxy: the scale at which a field is a battle; `fixtures.sweep`): the same | 3 / 1 / 0 | 5 / 1 / 0 | 8 / 2 / 0 |
+| persons who ever marched, of 82 or 83 | 8 (proxy) | 7 (proxy) | 8 shipped, 7 proxy |
+
+- **No attacker has won a field.** Nine fought fields in eighteen seed-seasons across the two arms, nine
+  `field.lost`. At the shipped scale that is F-MB-01's certainty. At the proxy scale the field is a
+  real contest and the four fields are four separate small-n losses, so this is "0 of 4, not
+  observed", not a rate; but shape 2, the only one in which a place changes hands by force, has not
+  occurred in any run of this suite.
+- **The one recurring story, read off the log (seed 2, shipped):** the settlement `set_alt_1` is marched
+  on in season 0 by `p_npc_007` and in season 2 by `p_npc_037`; both are recorded beaten. Its three
+  defenders (`p_npc_011`, `p_npc_089`, `p_npc_090`) are written on by every field they are in, including
+  the two they won, and in season 2 one of them marches out and is beaten in his turn. At the end the
+  three stand at `body` **1 of 1000**, their attackers at 10, 14, 18 and 20 of 1000. Nobody died
+  (`person.died` 0). The cause is F-MB-02's ratio (first audit); what is new is what it does over three
+  seasons: the only people the subsystem touches are ground to a thousandth and go on acting.
+- **Nothing answers a field.** `field.lost` stands among the causes of no other person's executed act
+  in any of the four runs made here (GAME lane: four information acts at seed 2, none at seeds 0 and 1).
+  What is answered is the announcement: `march.declared` draws a record, a rumour, a lie and a refused
+  challenge from bystanders; `field.unopposed` draws the marcher's own paperwork.
+- **A dead-end loop.** Seed 0, proxy arm, season 2: `p_npc_071` forms the same refused march 15 times
+  in one season (`march.declared` 16, `march.refused` 15).
+- **Control.** The proxy arm moves the marchers' later choices (seed 2: 9 marches in season 2 against
+  6) and the size of the wounds (attackers at 246, 300 and 600 of 1000 instead of 10 to 20), so the
+  instrument sees a difference where there is one. It does not move the shape: walk-ins, and attackers
+  beaten off.
+
+### 3.3 The questions the work order asks
+
+- **What does a player's choice change?** At module scale, by measurement: how many units he forms (the
+  fewer the better, §2.3); whether he braces heavy foot against horse (30 holds of 60 against 8);
+  nothing else that survives the friction draw. The role menu, tested row by row against no role
+  (`p10_edges.py`, friction OFF, n 60, identical = same winner, both strengths to six places, same tick
+  count): cavalry `Pursue`, `Screen` and `Feint`, light cavalry `Pursue` and `Screen`, light infantry
+  `Pursue` and `Screen`, archers `VolleyLine`, heavy infantry `Anvil` are **identical to no role in 60 of
+  60**; cavalry `Flanker` takes the cavalry from 42 wins to 13; light infantry `Skirmish` from 8 to 5;
+  heavy infantry `Hold` and `ShieldWall` from 23 to 36; cavalry `Shock` from 42 to 47 against foot and
+  from parity to 16 against 41 against horse. Light cavalry's menu of four is three that do nothing and
+  one that loses.
+- **The shape of the tail: are all runs the same run?** Yes at the season scale (walk in, or be beaten
+  off). At the module scale the tail is the friction draw's: a field's result is known, 96 times in
+  100, from two numbers drawn before it.
+- **Are the reasons readable afterwards?** No. The field's return is a boolean, a band and two shares.
+  The draw that decided it, the arc a body was struck from, who broke first (dark: `field_subunits`
+  ships `side`), the stamina that mattered, are not in it. The addendum's proposal for a report
+  (`04_MB_manager_battle_one_resolver.md` §5) lists "the day's fortune" among its fields; on this
+  evidence that field is the report.
+- **Does the story survive the extremes?** (`p11_extremes.py`, `resolve_field`, headcount path.)
+  Nobody against nobody: the attacker loses, 20 of 20 (the crash floor of one man a side). One man
+  against one: the same. 79, 80 and 99 a side: the attacker loses 20 of 20 (F-MB-01). 101 against 99:
+  the attacker's "survivor share" is 1.01 (F-MB-02). 10,000 a side, the stated ceiling
+  (`MAX_TROOPS_PER_UNIT`): resolves, a quarter of a second a field. 20,000 a side: past the ceiling,
+  not refused, resolves. Six units against one: §2.3. 2,400 against 12,000: a third of fields undecided
+  at the cap. Integer armour against integer power: §4, F-PES-MB-07.
+

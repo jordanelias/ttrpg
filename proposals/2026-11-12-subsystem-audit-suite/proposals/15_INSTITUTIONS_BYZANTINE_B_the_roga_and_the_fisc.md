@@ -1,5 +1,7 @@
 # INST-BYZ-B — the yearly stipend and the fisc: what a seat owes its sworn, the bill as a shortfall, and a collection that is drawn
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-19, X-22, X-26, X-27, X-30) — `requisition`'s row is `14_VERBS_MATERIAL_B_stores.md` §4's (graded, no capability row, `stakes` by the share asked, the cohort's `regard`); edit 5 survives as terms on that row (`remove`; `evidence` for a held assessment; `obligation` where the levied are sworn to the seat) and as two requests to that lane (Overwhelming emits `requisition.rendered`, outside the dominance kinds; Partial deposits a shortfall claim for the rest); the hunger band as `stakes`, the `copying` capability row and the `altonian_civics` step are withdrawn; the payment of a stipend is that lane's drawn `transfer`, not arithmetic; the bill's shortfall claim names `default_store_kind`, not `coin`, until `coin` has a producer; `procedure_draws` is not added (the task row's control is `task_draw_arm`). Edits 1 to 4 otherwise stand. Every finding below stands.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_BYZANTINE.md` §2.2, §2.5, §4, §6.3 item 4, §7.0, §10. Batch B. Depends

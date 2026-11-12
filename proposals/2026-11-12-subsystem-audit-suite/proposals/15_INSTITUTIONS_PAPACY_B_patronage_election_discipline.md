@@ -1,5 +1,7 @@
 # PAPACY-B — who fills a Church seat, how the Confessor is chosen, and who may strip a Cardinal
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-15) — the three outcomes this file gives a hold-disposing declared row are the one tally of every `declared` row (carried at the pass mark; undetermined and still docketed when fors exceed againsts short of it; otherwise dismissed and re-petitionable), and the kind emitted by the middle outcome is `matter.undetermined` (`election.inconclusive` is not added). Each member's ballot also carries `obligation`, `regard` and `evidence` as terms, scaled under a sealed room, per `15_INSTITUTIONS_VENICE_A_obligation_and_the_ask.md`. `patronage:`, `patronage_bases`, `conclave` and `quorum_share` stand as written and are the kit's. Every finding below stands.
+
 ## Status: PROPOSED (item 4, `head_of_faction`, is held for Jordan: it overwrites a ruling of 2026-10-11)
 
 Source: `audits/15_INSTITUTIONS_PAPACY.md` F-PAP-02, F-PAP-03, F-PAP-09; §6 rows P-1, P-2, P-9; §12 R-2,

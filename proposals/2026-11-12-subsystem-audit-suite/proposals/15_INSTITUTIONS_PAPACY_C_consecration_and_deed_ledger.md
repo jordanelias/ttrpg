@@ -1,5 +1,7 @@
 # PAPACY-C — the ledger of deeds and its keeper: founding instruments at world-gen, and consecration as a hearing that mints a certificate
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-01, X-03, X-05, X-06, X-08) — world-gen Records are rows of `engine/season/instruments.yaml: seeded` (this file's row schema), not a section of `offices.yaml`; a certificate carries `recites` (a list of the deeds it attests, for a seat), not `attests: n`, and its weight is the recited deeds left standing; the order of accomplishment is carried once, as the three founders' seeded deeds (3, 2, 1), so the weights 5, 3, 2 are withdrawn; the Church's archive holds two of the founding papers (the containment charter, form `immunity`, and the first king's consecration), and the two ducal papers are `homage` instruments reciting their founders' deeds in the Chief Parliamentary Clerk's keeping; `person_q.legitimacy` does gain one term, the chain down the seat's holders (`15_INSTITUTIONS_SYNTHESIS_B_the_deed_ledger.md`), which answers this file's stated limit and its request for a house carrier (R-17). The `consecration` row, its bands, the goal row, the rule that no house holds its own paper and commemoration as `tell` stand. Every finding below stands.
+
 ## Status: PROPOSED
 
 Source: Jordan's fixed points of 2026-11-12 (`INSTITUTIONS_BRIEF.md`: nobility by deed; *"royalty by noble

@@ -56,7 +56,8 @@ own party); the calendar has no year; a person's opinion of his own side is comp
 and convictions do change, by a fixed rule and in silence (six persons at seed 0 in the three-season
 arm that printed them, five converted to the creed they stood against and the Duchess of Hafenmark left
 with none, with no Event; the shipped runs count 6, 8 and 8). Clearing every conviction at build moved
-no story reading (§4.3 states on how many seeds). The remedy is
+no story reading by more than two seeds differ (three seeds), and switching the regime off left the
+run identical act for act (one seed). The remedy is
 not event generators, which would be triggers; it is five person-side readings of a pull, each entering
 `regard`, attention or credit behind a control, in six proposals, and a bar that fails on the shipped
 engine today.
@@ -303,9 +304,12 @@ one-strand realm unless `20_NARRATIVE_A` and `09_WR_strand_conclusion.md` land f
 **Steelman.** Conviction is ruled, authored for all 46 cast members and read in four places (the
 `doctrine` weight, opinion, regard by descent, credit); H-188's damp has a declared control.
 **Attack:** clear every `Person.conviction` at build and run the same seeds.
-**Claim.** With no person holding any conviction, what the realm does is what it does with them.
-**Evidence.** §4.3: no closing kind, strand count, era, ending or death differs, and the executed-verb
-profile moves by less than two shipped seeds differ from each other on every verb but one. Agrees with
+**Claim.** With no person holding any conviction, the realm does what it does with them, to within
+the difference between two seeds.
+**Evidence.** §4.3, three seeds: deaths equal at every seed; no era, ending, seat or faction reading
+differs; every other reading compared differs by less than two shipped seeds differ from each other,
+bar `research` and one seed's `commit`, and none moves the same way at all three seeds. And with the
+regime alone switched off (seed 0) the run is identical act for act. Agrees with
 WR `_B` F-WR-16 (pursuits and convictions flattened to the realm mean: no story reading falls, two
 seeds). The reason is in §2.5: the routes are small (P3, P5), the largest (credit) is a constant
 (F-NARR-01), and the one that moves anyone's interior is silent (F-NARR-08).
@@ -382,9 +386,51 @@ line that blocks it.
 
 ### 4.3 Controls
 
-Three arms on the same seeds (E-N07 to E-N09) and one the WR lane ran.
+Two arms on the same seeds (E-N07, E-N08), and one the WR lane ran.
 
-ARMS_PLACEHOLDER
+**The regime off (`regime_gain 0`, seed 0, four seasons).** The run is the shipped run act for act:
+3,593 acts, 1,569 executed, every verb's attempted and executed counts equal, 13,379 / 24,267 / 36,864 /
+50,727 Events per season in both, the same four strands. One thing differs: the 20 told claims held
+between convinced persons have a mean confidence of 65.2 in place of 28.9. So at this seed, over four
+seasons, the regime changes how firmly twenty claims are held and changes nothing anyone does. (A clean
+null, since nothing else was perturbed. It agrees with CR-97's own note that the strife guard passed
+CR-79 "for want of movement".)
+
+**Conviction cleared (`noconv`: every `Person.conviction` emptied at build; seeds 0, 1, 2).**
+
+| reading, four seasons | shipped 0 / 1 / 2 | `noconv` 0 / 1 / 2 | shipped seed range |
+|---|---|---|---|
+| acts executed | 1,569 / 1,734 / 1,799 | 1,577 / 1,722 / 1,756 | 230 |
+| deaths | 0 / 1 / 2 | 0 / 1 / 2 | 2 |
+| `matter.determined` | 0 / 2 / 0 | 0 / 0 / 0 | 2 |
+| `field.lost` | 1 / 2 / 3 | 0 / 2 / 1 | 2 |
+| `march` executed | 5 / 7 / 11 | 3 / 8 / 6 | 6 |
+| `petition` executed | 35 / 44 / 44 | 40 / 36 / 39 | 9 |
+| `oblige` executed | 46 / 39 / 89 | 44 / 43 / 74 | 50 |
+| `commit` executed | 117 / 157 / 113 | 107 / 104 / 113 | 44 |
+| `research` executed | 53 / 50 / 56 | 64 / 65 / 47 | 6 |
+| persons who changed faction | 0 / 0 / 0 | 0 / 0 / 0 | 0 |
+| seats that changed hands | 0 / 0 / 0 | 0 / 0 / 0 | 0 |
+| eras; concluded | 1; 0 at each | 1; 0 at each | 0 |
+| endings reached | none | none | n/a |
+| persons whose conviction changed | 6 / 8 / 8 | 0 / 0 / 0 | n/a |
+
+Per seed, the difference between the arms is inside what two shipped seeds differ by for every reading
+but `research` (11, 15 and 9 against a range of 6) and `commit` at seed 1 (53 against 44), and the signs
+disagree across seeds for marches, petitions and research. Pooled, closures are fewer without conviction
+(determinations 2 → 0, fields lost 6 → 3, marches executed 23 → 17); with counts this small and three
+seeds that is neither shown to be an effect nor excluded. **What can be said:** removing every conviction
+from the realm changes no reading by more than the seeds differ from each other, changes no reading in a
+direction that holds at all three seeds, and leaves every structural zero (factions, seats, eras,
+endings) where it was. A matched perturbation control (the same world with only the chooser's draw seed
+changed) was not run; `storybar --draw-seeds` is that arm and `20_NARRATIVE_F` clause 4 asks for it.
+
+**Persons flattened to the realm mean (WR `_B` F-WR-16, two seeds, two seasons).** No story reading
+fell. Cited, not re-run.
+
+**Forcing on** (weather draw, illness 0.05, lattice 250) was not run here (E-N09); WR E-11 and E-12 are
+the readings: deaths 0 → 8 and 1 → 4, `tenure.closed` 2 → 10 and 6 → 8, one `confer` at seed 0. So the
+one arm known to empty seats is the arm deferred by ruling.
 
 ### 4.4 What the lapses occasion (E-N10)
 

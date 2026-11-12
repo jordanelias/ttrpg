@@ -36,7 +36,7 @@ With no `avoidance` complied with, no instrument breached and no certificate cit
   `15_INSTITUTIONS_COLONIAL_A` §4.2 gives a breached party a third: `release` of his own oath "which a
   known breach makes cost him no regard". Three statements of one idea (a man is excused from what he
   owes someone who is under sentence, or who broke faith first), keyed three ways, in three files.
-- `06_FA_seat_terms_and_turnover.md` change 6 scopes a `ban` to the banning seat's purview. A Church
+- `06_FA_seat_terms_and_turnover.md` edit 6 scopes a `ban` to the banning seat's purview. A Church
   bench with a realm `scope` (CR-60) still acts only where its `rung` reaches (`15_INSTITUTIONS_PAPACY_A`
   edit 3: "judging reach, not acting reach"). So after both land, a man excommunicated at Himmelenger may
   be seated in any crown seat: the sentence bars him from Church seats and from nothing else, and no

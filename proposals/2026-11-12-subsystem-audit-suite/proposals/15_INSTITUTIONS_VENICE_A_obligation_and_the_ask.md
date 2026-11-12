@@ -1,5 +1,7 @@
 # INST-VENICE-A — a tie changes the odds: the `obligation` obstacle term, and the ask as one roll form
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-20, X-29, X-31) — the term's "lifted by" row is replaced: an edge counts 0 when the one asked is `excused` from its holder (`person_q.excused`, `15_INSTITUTIONS_SYNTHESIS_C_crossings.md` edit 1: he has himself complied with an `avoidance` naming him, or holds a breach against him), not on the bare existence of a ban; an `oblige` counts only if `gate.py::sworn_to` counts it, so an obedience carrying `OBEYED_WRIT` is not an oath for the odds; `oath_step` in the colonial lane is this term. The term, its three fixtures, `owed_to` and the ask stand and are the kit's. Every finding below stands.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_VENICE.md` §0 (gap 6), §6.1 part 1, §6.2, §8, §12. Batch A of that

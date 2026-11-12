@@ -1,5 +1,7 @@
 # PAPACY-F — the first playable Church scenario: *The Vacant Chair*
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-32) — the scenario is a case file with `base: realm` whose one set-up act is the holder's `release` (`15_INSTITUTIONS_SYNTHESIS_D_first_playable.md` §1); the `--world` keyword is `06_FA_shortest_loop_B.md`'s, and the digest filter by faction is the `seats` line of the one report. The scenario, its seats, endings and gates stand; it remains the Church's standalone game and is not merged into the integrated playable. Every finding below stands.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_PAPACY.md` §11 (batch 3), §9 items 1 and 2, §10 (NPC-039, NPC-040,

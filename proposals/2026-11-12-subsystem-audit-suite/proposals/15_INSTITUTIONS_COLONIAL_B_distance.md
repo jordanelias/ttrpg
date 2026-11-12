@@ -1,5 +1,7 @@
 # COLONIAL-B — distance: one obstacle term, four acts that become draws, a border news does not cross, and the superior beyond the map
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-13, X-14, X-20, X-24, X-26 to X-28) — the four rows of §2 belong to their verb lanes and this file supplies `remove` to each: `requisition` and `transfer` are `14_VERBS_MATERIAL_B_stores.md`'s (so `levy_ob`, the `stewardship` rows, the half-amount Partial and the reuse of `requisition.refused` for a failed levy are withdrawn; the Failure kind is `requisition.resisted`; every `transfer` is drawn, at the floor obstacle in the room); `seize` is `14_VERBS_MATERIAL_D_paper.md`'s; `issue` is `14_VERBS_BINDING_D_orders.md`'s one roll, whose `force` band this file's four delivery outcomes read; `oath_step` is the term `obligation`. `carriage` (the MATERIAL lane) and `distance` (the SOCIAL1 lane) are the same quantity as `remove` and are listed for those lanes. The far superior is one seat shared with `15_INSTITUTIONS_BYZANTINE_D`: `off_altonian_court` as written here, with a placeholder post (not "Logothete"), the Doux as its hand, and `factions.head_seat.Altonia`. `remove`, `world_q.remove`, its two fixtures, the reach rows, the border rule and the ending row stand. Every finding below stands.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_COLONIAL.md` §3, §8, §12 batch C-2, §13 (M-ABROAD:

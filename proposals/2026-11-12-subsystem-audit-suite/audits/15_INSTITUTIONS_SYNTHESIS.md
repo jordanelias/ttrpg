@@ -25,7 +25,7 @@ primitive that none of them asked for: every institution in them is persons in s
 acting through documents, judged in hearings, on one roll.** What stops them functioning together today
 is not a disagreement of mechanism but (a) the same four upstream absences each lane found alone (an
 order that reaches nobody and is answered by nobody; an obstacle with no named terms; empty stores; six
-institutional verbs that execute with no draw), and (b) twenty-eight collisions among the lanes themselves and with the
+institutional verbs that execute with no draw), and (b) thirty collisions among the lanes themselves and with the
 verb lanes, every one of them a collision of **name, home or shape**, none of method: three encodings of
 the founding order of the Secession War, three carriers for a certified deed, two things called a roll,
 two things called a charter, two things called `instruments`, two functions for standing, two encodings
@@ -161,7 +161,14 @@ and asks for band content.** Detail and the row-by-row outcome are in §3.5.
 | X-28 | `seize`: `[COL B]` and `14_VERBS_MATERIAL_D_paper.md` §6 | the MATERIAL lane's row, plus `remove` | COL B |
 | X-29 | the answer to a writ: `14_VERBS_SOCIAL1_B` (the row; `comply` opens an `oblige` carrying `OBEYED_WRIT`), `[PAP D]` (the believer's answer; the complier's decline), `[VEN A]` (`obligation` on the answer), `[COL A]` (a covenant's keeping) | SOCIAL1-B's rows. `[PAP D]` edit 7's decline reads the complier's own live `oblige` carrying `OBEYED_WRIT` (his Tenure, person-side), in place of a search for his newest answer claim. `obligation` counts only edges `gate.py::sworn_to` counts, so an obedience is not an oath for the odds either. A covenant-made instrument is in force by SOCIAL1-B's `world_q.covenant_in_force`, which `dues` and `breaches` ask | PAP D, VEN A, COL A |
 
-**Thirty rows; twenty-eight collisions decided, two shown not to be collisions (X-16, X-17).** Outside
+### 2.5 Two more, found while writing the crossings and the playable
+
+| # | collision | decision | step | reconciled in |
+|---|---|---|---|---|
+| X-31 | **One idea keyed three ways: a man is excused from what he owes.** `[VEN A]`: `obligation` counts 0 under "a live `ban` on the actor whose seat's faction is the counterparty's". `[PAP D]` §3: after his own `comply`, CR-88's duty decline does not bar his `release`. `[COL A]` §4.2: a known breach makes `release` cost no regard | one person-side predicate, `person_q.excused(p, holder)`: `p` shuns him (his own obedience to an `avoidance` naming him) or holds a breach against him (`kept < 0`). Two readers: `owed_to` and CR-88's decline (`15_INSTITUTIONS_SYNTHESIS_C` edit 1) | 5 | VEN A, PAP D, COL A |
+| X-32 | **Four scenario styles.** `[BYZ F]` set-up acts in Python in `governance_spine.py` and seven digest lines; `[PAP F]` command-line flags; `[VEN D]` rows added to the spine fixture and a reading script `counting_house.py`; `[COL E]` a case file and a report `harness/institution` | a scenario is a case file (ARCS-01's delta on a base), played by FA's one runner, read by one report (`15_INSTITUTIONS_SYNTHESIS_D` §1). `[COL E]`'s shape, the others re-stated in it | 4 (`12_ARCS_case_on_the_realm.md`; `06_FA_playable_scenario.md`) | BYZ F, PAP F, VEN D |
+
+**Thirty-two rows; thirty collisions decided, two shown not to be collisions (X-16, X-17).** Outside
 the four families and therefore listed, not edited: three names for distance (X-27); `rank_gap`
 (`14_VERBS_SOCIAL1_D`) against `standing` (`14_VERBS_BINDING_C`), one quantity; a `dispensation` content
 key `standing` (`14_VERBS_SOCIAL1_B` §3) against the obstacle term `standing`; three names for the graded
@@ -973,17 +980,18 @@ after I-6; I-8 as its rows' needs land; I-9 cut by cut. A batch closes with the 
 and the suite once (CLAUDE.md §0.4); every gate on a draw reports band frequencies over seeds with a
 control, never a single run (§0.1 pt 4).
 
-### 9.3 The first playable: "The Treasurer's Year"
+### 9.3 The first playable: "The King's Bill"
 
 One scenario that cannot be played without crossing institutions. Exact edits and gates:
 `proposals/15_INSTITUTIONS_SYNTHESIS_D_first_playable.md`.
 
-**Situation.** The realm as built, eight seasons. The player-proxy holds the Lord Treasurer's seat
-(NPC-037's: the one seat the Byzantine, Venetian and colonial lanes each gave a part to). At tick 0, by
-the game's own acts under the pinned roll: dignity-holders sworn to the crown whose terms fall due within
-the year; a fisc that holds less than the bill; two duchies with stores, each under a seeded `homage`
-whose `forbears` clause the Treasurer can breach; a house with a stocked chest; the tolls of Stillhelm
-unlet; Himmelenger's stores inside a seeded `immunity`.
+**Situation.** The realm as built, eight seasons. The player-proxy holds `off_king` (the seat that
+confers the dignities, takes the oaths and is the grantor of both `homage` instruments, so every way of
+meeting the bill is his to try). At tick 0, by the game's own acts under the pinned roll:
+dignity-holders sworn to the crown whose terms fall due within the year; a fisc that holds less than the
+bill; two duchies with stores, each under a seeded `homage` whose `forbears` clause he can breach; a
+house with a stocked chest; the tolls of Stillhelm unlet; Himmelenger's stores inside a seeded
+`immunity`.
 
 **The choice, each season.** How to meet the bill:
 - **tax a duchy** (`requisition` at `remove`, against the cohort's `regard`): a breach of the `homage`
@@ -993,21 +1001,22 @@ unlet; Himmelenger's stores inside a seeded `immunity`.
 - **farm the southern tolls** (`covenant`, form `farm`): an advance now, a rent later, a farmer over an
   uneasy people, and an `audit` when his hold closes;
 - **levy in Himmelenger**: a breach of the `immunity`, which the Church's goals act against; a sentence
-  and its `avoidance` writ are then drawn against the Treasurer himself;
-- **leave men unpaid**: their terms mature and the crown's purview no longer reaches them.
+  and its `avoidance` writ are then drawn against the King himself, addressed to his own sworn men;
+- **leave men unpaid**: their terms mature and the crown's purview no longer reaches them;
+- **honour instead of pay** (`confer` a dignity on a creditor or a duke's man): a larger bill next year.
 
 **What is shown.** The bill, the fisc and who is owed; each instrument he is party to and `kept` as he
 reads it; each roll's term list.
 
-**Endings.** The court kept or lapsed; the bond met, extended or lapsed; the audit's band; the Treasurer
-recalled, banned or still seated at eight seasons. Each is a Query over Tenures and the log.
+**Endings.** The court kept or lapsed; the bond met or lapsed; the audit determined; the King sentenced,
+unseated, or still seated at eight seasons. Each is a Query over Tenures and the log.
 
-**Seats to play.** The Treasurer; a Duchess under a breached homage; the house head (lend, refuse, hand
-the bond on); a Stillhelm hearth head; in the third cut a Church bench member.
+**Seats to play.** The King; a Duchess under a breached homage; the house head (lend, refuse, hand the
+bond on); a Stillhelm hearth head; in the third cut a Church bench member.
 
-**Three cuts.** Cut 1 (after I-4): tax, borrow, or leave unpaid. Cut 2 (after I-5 and I-7): the farm and
-its audit, and writs that pass the Ministries' hand. Cut 3 (after I-7): the immunity, the sentence and the
-answers.
+**Three cuts.** Cut 1 (after I-4): tax, borrow, honour or leave unpaid. Cut 2 (after I-5 and I-7): the
+farm and its audit, and writs that pass the Ministries' hand. Cut 3 (after I-6 and I-7): the immunity,
+the sentence, the answers, and a creditor's suit before a Church bench.
 
 **What it merges.** `[BYZ F]`'s `roga` (the bill, the fisc, whom to pay) on the realm instead of the
 spine; `[VEN D]`'s first cut of The Counting-House (one loan, one harvest, one reckoning), from the
@@ -1017,14 +1026,21 @@ cut; `[PAP]`'s third scenario (The Sentence) as its third. `[PAP F]`'s Vacant Ch
 that exercises it alone (the standing requirement), and this one exercises them together.
 
 **One code path.** `harness/governance_spine.py::play(..., world="realm")` (FA-B4), `play_surface.py`,
-the season loop. The scenario adds seeded rows, tick-0 acts and a reader.
+the season loop. The scenario is a case file (a delta on the realm), tick-0 acts through the fold, and
+one report.
 
-**Gate.** Seeds 0 to 9, eight seasons, the shipped chooser in every seat: at least three of the five ways
+**One scenario style for every institution (X-32).** A scenario is a case file in
+`12_ARCS_case_on_the_realm.md`'s delta shape, played by FA's one runner and read by one report
+(`harness/institution.py`). The four families' standalones are re-stated in it: `roga`, `chancery` and
+The Counting-House as case files on the spine; The Vacant Chair and The Farm of the Southern Tolls on the
+realm.
+
+**Gate.** Seeds 0 to 9, eight seasons, the shipped chooser in every seat: at least three of the six ways
 of meeting the bill are attempted across the seeds; at least two different endings occur; in at least one
-seed-season an act by a person who is not the Treasurer is occasioned by an Event of his (a duke's
-`petition` or `release`, a house's `give` of the bond, a hearth's `migrate`). Control: the same seeds
-with `seeded:` empty and the fixtures at control. Planted failure: every roll pinned to Success; the
-seeds must then agree on the ending, or the variety was not the draws'.
+seed-season an act by a person who is not the King is occasioned by an Event of his (a duke's `petition`
+or `release`, a house's `give` of the bond, a hearth's `migrate`, a churchman's `open_case`). Control: the
+same seeds with `seeded:` empty and the fixtures at control. Planted failure: every roll pinned to
+Success; the seeds must then agree on the ending, or the variety was not the draws'.
 
 ---
 

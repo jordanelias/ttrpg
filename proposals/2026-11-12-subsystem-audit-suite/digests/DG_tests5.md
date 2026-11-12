@@ -14,7 +14,7 @@ Lane tests5: 56 test files (engine/season/tests, engine/tests, tests/valoria hel
   - `test_the_give_withheld_arm_reproduces_the_one_season_pin` `:742` withholds `give` and requires the result to equal the pin on both `acquaintances` arms (also under `revert_cr79`); docstring records that between CR-81 and CR-82 the shipped arm DIFFERED, then CR-17 (tau 0.1 -> 0.05) made `give` stop forming in season one, so the control is now a coincidence of formation, not a design property `:750-757,769-772`.
   - Real behaviour tests on a one-town world (`_town`, `:696`): table of 1.0 reads the same hash as no table `:857`; DROUGHT table (0.5) leaves grain 20 vs 40 and emits `shortfall:grain` 10 in season 2, with `checked == 4` and control `c_short == [[],[]]` `:865-883` (a real falsifier with a control, and asserts it asserted); same seed twice one hash, draw on moves it `:886`; `season_factor_of` is keyed on seed and `tick % len(table)`, asserts FULL support `{0.5,1.0,2.0}` so a `% (n-1)` modulus would redden `:896-927`.
   - Test-fixture constants are explicitly tagged `[JUSTIFIED: a test-fixture size, not a game value]` `:690,692`; the fixture is "test data, not a claim about Valoria's economy" `:686`.
-  - Re-pin log ends 94-times-style with "A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM" (e.g. `:392,397,402,407`) -- confirms F-TEST section 5 that the discipline held; each entry names a control (a stub/sweep that reads the old value). Two entries are weaker: B10-13 pin commit "none isolated per item" `:541` (confirms the F-TEST-03 `133 -> 137` exception); CP-T02-05 was added then reverted `:417-418` so the pins are "the reading with the stamp reverted".
+  - The re-pin log repeats "A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM" (e.g. `:392,397,402,407`) -- confirms F-TEST section 5 that the discipline held; each entry names a control (a stub/sweep that reads the old value). Two entries are weaker: B10-13 pin commit "none isolated per item" `:541` (confirms the F-TEST-03 `133 -> 137` exception); CP-T02-05 was added then reverted `:417-418` so the pins are "the reading with the stamp reverted".
 - **Conflicts / stale:** `test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season` `:841` asserts the arm differs from `BASE_EVENTS[1]` but its own constant's comment says the K-3-time control "can no longer be read on one tree" `:779` -- it is a change detector, not the original control. F-TEST-02 counts 22 entries for this file; the log has more (many are one-line "RE-RECORDED with BASE_HASHES" lines for `BASE_EVENTS`). The module docstring `:1-17` says the control is the pre-change hash at build/1/2 seasons; that is no longer true (the pins have moved 60+ times and the first test is under a revert).
 - **Open items:** none stated. The pins fold `content_hash` so any hash-folded schema change re-pins them; there is no single-owner for the realm hash (F-TEST-02 T1).
 
@@ -383,3 +383,348 @@ Lane tests5: 56 test files (engine/season/tests, engine/tests, tests/valoria hel
   - The Leap defect C-TW-3 (same blanket penalty hits Leap against its own docstring) is "intentionally NOT fixed" (ED-WR-0005 Stratum-B tail) `:17-19`.
 - **Conflicts / stale:** Coherence is the pre-v40 sim currency; "sim/thread was a total island" `:9`.
 - **Open items:** C-TW-3 Leap Coherence defect.
+
+### tests/valoria/_conservation.py
+- **What it is:** helper module (not a test file): ED-MB-0045 A4/S6, the single owner of the mass-battle I1 troop-conservation check `Sum(cell_troops) == hp`.
+- **Status:** no Status line. Reading: live helper for four+ MB acceptance suites.
+- **Bears on:** MB (cells vs hp ledgers, conservation), PROCESS.
+- **Content that matters:**
+  - `assert_troop_conservation(*units, context='')` checks EVERY unit including routed/broken (the old uncounted `continue` skip was removed) and RETURNS the count so each call site can assert it checked; the docstring is candid that a call-site `checked >= 2` "cannot fail today, and that is its declared purpose" (a forward guard) `:83-90`. It first asserts `modules.mass_battle.config.PER_CELL` is on, since at PER_CELL=0 hp falls and cells never move so the invariant is false of correct behaviour `:59-62,91-94`.
+  - TOLERANCE `REL_TOL = 1e-6`, `ABS_TOL = 1e-3` via `math.isclose` `:69-70,99`, justified as float slop with a measured worst case of `4.5e-13` `:47`. This is an `isclose` on a conservation (exactness) claim with an abs tolerance 9 orders above the measured slop (F-TEST flags `_conservation.py:99` `[not adjudicated: MB]`; here adjudicated: defensible as slop but loose enough to hide a sub-0.001-troop-per-exchange leak).
+  - KNOWN UNTESTED DIVERGENCE (recorded, not fixed): `distribute_casualties` DISCARDS `_apply_with_spill`'s returned applied amount (`percell.py:179`) and spills only across the engaged front (`:162-172`), so `Sum(cells) > hp` whenever dmg exceeds the engaged front's live troops; no unit in 560 measured came near it because rout ends battles first `:49-57`. Sibling: `tests/valoria/test_hp_cell_ledger.py`.
+  - Measured at shipped defaults 2026-07-29 (`MB_STOCHASTIC_ROUT=1`, `MB_CELL_MORALE=0`): Line-vs-Line routs 0 of 120 units in 60 seeds, pike-vs-cavalry 8 of 120 `:19-26`; flagged AGENT-MEASURED, orchestrator-unreplicated `:43-47`.
+- **Conflicts / stale:** line references to `orchestration.py:1966-1967`, `:2504`, `:2566`, `:1695`, `:1968`, `percell.py:108-129` are 2026-07 line numbers [UNVERIFIED current].
+- **Open items:** the engaged-front spill shortfall (`percell.py:179`) remains a real, untested divergence class.
+
+### tests/valoria/_draw_stream.py
+- **What it is:** helper module: W8d single owner of the personal-combat RNG DRAW-STREAM instrument (`static_draw_sites()`, `RecordingRandom`, `engine_draw_sites`, `underlying_random_calls`), the measuring device behind paired-seed comparisons in `combat_completion_plan_v4.md` §4.
+- **Status:** no Status line. Reading: live helper for PC tests.
+- **Bears on:** PC (combat RNG stream, paired-seed control), DICE.
+- **Content that matters:**
+  - Two measured facts it exists to keep true `:32-42`: (1) draw count is input-conditional: one seed, longsword vs arming: 57 underlying `random()` draws at `armour='none'` and 168 at `'heavy'` (2.9x), so "same seed" across armour contexts is not the same experiment; (2) `random.Random.gauss` caches the second Box-Muller variate so k calls consume `2*ceil(k/2)` underlying draws, shifting the bare-`random()` sub-stream by 0 or 2 depending on prior resolutions (`core.resolve -> sigma_leverage.roll_net_continuous -> dice_engine` calls `gauss` on the object the engine draws `random()` from).
+  - `static_draw_sites()` is an AST inventory of every `rng.<method>(...)` call (`random, randrange, uniform, betavariate, gauss`) across `modules/combat`, `systems/combat/combat_engine_v1` and `engine/dice_engine/dice_engine.py`, reachability-independent so a new draw on a cold branch cannot be missed `:53-105`.
+  - `RecordingRandom` subclasses `random.Random`; `trace` = engine-level (module, line, method), `underlying` = every `random()` including nested; frame offset 2 "is exact, not tuned" after an earlier off-by-one attributed 6,470 draws to one line `:148-159`.
+- **Conflicts / stale:** `static_draw_sites` silently `continue`s on a missing path or `SyntaxError` `:92-97` (a dropped tree reads as fewer sites, so only a pinned shape test can see it).
+- **Open items:** none.
+
+### tests/valoria/_structure_audit.py
+- **What it is:** helper module (ED-IN-0123): single owner of the loader for `skills/valoria-vector-audit/scripts/structure_audit.py` (a script, loaded by path via importlib, cached).
+- **Status:** no Status line. Reading: live helper; process-only.
+- **Bears on:** PROCESS.
+- **Content that matters:**
+  - Exists because three test files each re-implemented the loader (`test_structure_audit.py::_load`, `test_import_cycle_game_state_npe.py`, `test_oi12_orphan_census.py::_load_structure_audit`); the third's docstring falsely claimed reuse `:3-9`; the duplicated-helper ratchet in `tools/build_test_register.py` surfaced it `:10-11`.
+  - `load()` caches the module in a global `_cached` `:22-33`.
+- **Conflicts / stale:** subject (`valoria-vector-audit` structure audit) is a process tool with no game bearing; per CLAUDE.md §0.1 pt 5 a guard on process-only artifacts "can be wrong without cost".
+- **Open items:** none.
+
+### tests/valoria/conftest.py
+- **What it is:** pytest configuration for `tests/valoria`: the KNOWN-RED register (W1, ED-MB-0061) and the session-scoped GENERATED LAYER fixture (`generated_layer`, `generated_layer_paths`).
+- **Status:** no Status line. Reading: live; process-critical.
+- **Bears on:** MB (known-red set), PROCESS (gate hygiene), CORE (generated artifacts).
+- **Content that matters:**
+  - `KNOWN_RED` holds THREE strict-xfail ids today `:34-44`: `test_conditional_orders.py::test_own_strength_fires_when_attrited` ("own_strength order never advances `_order_idx`" flags-ON residual, ED-MB-0061 Track F), `test_dg2_yield_residuals.py::test_rally_keeps_pressured_yielding_subunit` (rally clears yielding below the rally fraction, DG2 residual), `test_stochastic_rout.py::test_per_cell_break_subsumes_the_body_level_one` (per-cell and body-level break points separated again). These are applied as `xfail(strict=True)` at collection `:47-53`. F-TEST-10 mentions only the non-strict xfail in `test_mass_battle_maneuvers.py`; these three strict known-reds (all MB) are additional standing reds the addendum did not list. A fourth (`test_conditional_withdraw_fires_when_enemy_closes`) left the set at B10-12 (MB-07r) after recalibration `:35-37`.
+  - The reverse guard `test_known_red_register.py` (asserting each id is collected) was DROPPED 2026-11-04 (ED-IN-0312), so a renamed or deleted test leaves a stale entry that "excuses nothing" `:22-25`.
+  - Generated layer built on demand, never committed (culling wave 5, ED-IN-0194): `_GENERATED_LAYER = (build_engine_atlas.py -> engine_atlas.json/ENGINE_ATLAS.md, build_identifier_census.py -> identifier_census.json, definitions_store.py --build -> references/definitions/definitions.yaml)`; a retired builder is silently skipped (`continue`) `:101-125`. Exactly ONE xdist worker builds via an `O_CREAT|O_EXCL` lock and a `.done` marker; others block up to 900 s `:148-181` (known cost stated: a dying builder looks like a ~15-minute hang).
+  - Comment history: `keys`-based builders and the execution-map cluster were retired (ED-IN-0232; `FORK:6f740d9`) `:85-100`.
+- **Conflicts / stale:** the stated count ("FOUR edges/builders lost", "TWO MORE ROWS LEFT") are hand-maintained comment prose. `references/definitions/definitions.yaml` is a generated game-term store [UNVERIFIED reader].
+- **Open items:** stale KNOWN_RED entries are unguarded since ED-IN-0312.
+
+### tests/valoria/test_army_battle.py
+- **What it is:** pytest file, ED-IN-0306 phase 3: an army Record fights as its order of battle (`seam/wrappers/mass_battle.py::field_input`, `mass_battle.army_order` composition row), on the realm with planted weight-12 cohorts.
+- **Status:** no Status line. Reading: live (mass-battle/season seam, army chain).
+- **Bears on:** MB (armies, order of battle, casualty loop), SE (cohorts as troops), FA (faction armies), CORE (seam).
+- **Content that matters:**
+  - A field with no army Record is the field it always was (`orders_of_battle is None`); each side with an army Record fights as that Record's OOB; the faction's `strategy`/`stance`/`fall_back_at` orders reach the battle; a cohort not mustered at the origin leaves the side `None`; troops on the field = cohort's body fraction of its assignment (120 at full, 60 at half, none at body 0) `:73-130`.
+  - A headcount side meeting an OOB is scaled to `under_arms_cap(12)` (> 12) so households are not counted against troops; an empty side keeps the crash floor (>= 1) `:132-139`.
+  - Provider end to end: `resolve(..., rng=Random(11))` finds both factions' armies (120/120) `:147-164`. CASUALTY LOOP: no write of the army Record, yet the loser's next army is smaller by its cohort's body fraction `abs(troops - 120*body/scale) < 1e-6`; exactly one side bleeds; bystanders mustered beside the cohorts are unhurt `:177-203`.
+  - Comment: "two plain lines: a held shield wall against a balanced line can end with nobody having closed (no casualties)" `:180` -- a fixture chosen so a fight produces casualties.
+- **Conflicts / stale:** `proposals/2026-10-29-army-phase5-design.md` is the design referent (see next entry). Uses `test_levy_feed.py`'s realm [UNVERIFIED].
+- **Open items:** none.
+
+### tests/valoria/test_army_menu_presets.py
+- **What it is:** pytest file, ED-IN-0306 phases 5b/5c: the headless military menu (`harness/military_menu.py`) and preset orders of battle (`harness/army_presets.py`, `modules/mass_battle/troop_types/presets.py`).
+- **Status:** no Status line. Reading: live.
+- **Bears on:** MB (army raising, doctrine presets, advisories), GO (menu surface for a client), FA (faction without a player), CORE (play surface / R-04).
+- **Content that matters:**
+  - Falsifier of "the menu adds no rule": every (cohort, troop type, room) the options list is accepted by `A.apply` at `room` and refused at `room + 1`; a type with no Site (archers w/o range) is absent and refused `:62-81`; the same through the real fold: sample rows `[::9]`, `room` accepted and `room+1` `recruit.refused`, `checked >= 6` `:128-140`.
+  - Menu follows the army: mint, then commands; `describe(m)`; the menu-driven chain recruit -> form -> assign -> order -> disband -> discharge is reversible ("what makes a wrong choice recoverable") `:107-118,143-168`. `callback` hands the menu to a client via `dispatching_chooser`; a return over the budget raises in DELIBERATE `:183-198`.
+  - Presets: `plan` is pure and order-independent; recruit -> form -> assign; cavalry `Flanker`, levy `Reserve`; levy alone without Sites; an empty plan under 4 weights ("90 troops clear a subformation's floor but not a unit's block: it would rout at once"); a group that would rout is dropped and given to the levy; other armies' claims counted `:210-256`. `install` through the real fold yields 900 troops (`15 * under_arms_cap(2)`), deterministic, idempotent, leaves other factions alone `:265-293`.
+  - NAMED LIMIT: "The shipped realm seats no barracks, range or stable, so its preset army is levy alone: 900 troops, one subformation" `:296-303`.
+  - Preset army with sites beats a town's levy: `with_sites >= 5` of 8 seeds and `with_sites > levy_only` `:306-322` -- a small seeded-sample claim (8 draws, deterministic).
+  - `test_the_presets_are_off_by_construction`: a source scan (`checked > 60`) that nothing under `engine/season` outside the two files imports `army_presets`/`install` (source-text regex test, with a probe line proving the pattern matches) `:325-341`.
+- **Conflicts / stale:** the "off by construction" test is a source-text scan guarding an UNWIRED feature: army presets exist and no season code reaches them (no AI faction raises an army in play). Source-text test of the kind F-TEST-09 criticises, but with a population floor and a control.
+- **Open items:** `proposals/2026-10-29-army-phase5-design.md` M1..M10 referenced; training Sites are planted where the shipped realm seats none.
+
+### tests/valoria/test_army_phase5.py
+- **What it is:** pytest file, ED-IN-0306 phase 5: M1..M8 missed behaviours of phases 1-4 asked of the SHIPPED realm `build_realm(0)` (the realm as fixture "on purpose").
+- **Status:** no Status line. Reading: live. Header explains phases 1-4 passed on hand-planted weight-12 cohorts "the realm never ships, and that is how a chain that could not field an army went unseen" `:4-6`.
+- **Bears on:** MB (armies, mustering, casualties), SE (cohorts as population), FA (Crown/Church/Hafenmark), CORE (R-04 strategic acts).
+- **Content that matters:**
+  - The shipped realm's facts: Crown governs 15 cohorts of weight 2 (`under_arms_cap(2) < 100`: one cohort cannot field a unit; 15 cohorts = 900), the Church's `set_s_036` is defended by six individuals, `terr_T7` is Hafenmark's and empty `:7-9,79-97`. Seeded battery: `seen = [fn(inp, Random(s)) for s in range(1,9)]` requires `attacker_wins >= 5` of 8 and `min(attacker_size_pct) > 0.5` `:95-97`.
+  - An army is where its commander is (hold passes to a member away from the origin -> no OOB) `:100-110`; a faction raises only the people it governs (Crown cannot recruit a Hafenmark cohort) `:113-121`; a cohort cannot be raised to its cap into two armies `:125-141`; a `move` cannot seat a person at a territory (`travel.blocked`) but `march` parks an army there (`army.arrived`) and it can march on `:145-162`; a territory field is not a walled assault (`fort_level == 0.0` at a territory, > 0 at the settlement) `:165-170`; an army is provisioned by the cohorts it drew from (`seen[0] == sum of the cohorts' weights == 30`) with `field_provisioning` swept True `:174-186`.
+  - Lost army costs the cohorts at home their bodies: only the side's cohorts bleed (`hurt == side`) `:190-220`.
+- **Conflicts / stale:** `proposals/2026-10-29-army-phase5-design.md` (a proposals-tree design doc) is the source of M1..M10. `field_provisioning` is a fixture that must be swept ON (default off [UNVERIFIED]).
+- **Open items:** none.
+
+### tests/valoria/test_army_verbs.py
+- **What it is:** pytest file, ED-IN-0306 phase 2: the army Record (kind `army`, minted by `create_record`) and the four verbs that change it (`recruit`, `form_unit`, `assign_troops`, `order_unit`; `loop/effects_army.py`) through the real fold and gate, with the module `modules/mass_battle/armyrecord.py` tested without a world elsewhere.
+- **Status:** no Status line. Reading: live.
+- **Bears on:** MB, FA (faction armies, holder = commander), SE (cohort weight), CORE (gate write `(Record, subject_matter)`).
+- **Content that matters:**
+  - Army minted whole, one per faction, held by its maker; a second army for a faction, an unknown faction, and a malformed record (strategy `rout`) are `act.refused` `:71-84`. Recruit up to `under_arms_cap(12)`; one over is `recruit.refused` and the record unchanged `:88-100`; archers need an `archery_range` Site, levy none `:103-113`; non-cohort (weight 1), nonexistent person, and a cohort not committed to the faction are refused `:116-124`.
+  - Only the holder commands and only an army is commanded; form/assign/order conserve every trooper; 10 menu refusals each leave the record as it was; missing/mistyped payload fields are refusals not crashes (including unhashable and non-string names) `:127-178,208-229`.
+  - `ARMY_VERBS` (6 verbs) are WITHHELD from formation by `Fixtures withheld_verbs`: "The command is the act's payload, which no Candidate carries: a computed act could not bind it" `:181-186`. So no NPC/AI ever forms an army verb -- armies exist only by player/menu/preset install.
+  - An army minted empty so the recruiting rule cannot be skipped; non-faction Proposition has no army; a holder who is gone frees the faction's slot; only a faction member may mint or command `:190-261`.
+- **Conflicts / stale:** the AI-side gap (no army verb is formable) is the inverse of the standing requirement that armies be built by the engine without a GM [CORE/MB/FA]. `ARMY_VERBS` withheld count `== 6` pinned `:185`.
+- **Open items:** none.
+
+### tests/valoria/test_axis_roster_single_owner.py
+- **What it is:** pytest guard (ED-IN-0230 / ED-IN-0261): the ethical-axis set has one owner (`references/descriptor_registry.yaml: axis_roster` -> `tools/export_descriptors.py` -> `engine.substrate.descriptors.AXES`); an AST sweep fails on a second axis roster.
+- **Status:** no Status line. Reading: live; one of the guards CLAUDE.md §0.1 pt 5 accepts (the artifact is game code: `engine/season/decision/choose.py` sums over it).
+- **Bears on:** CHAR (pursuit axes, ethical axes), CORE (single-owner registries).
+- **Content that matters:**
+  - `rosters.PURSUIT_AXES` set equals `descriptors.AXES`, and `len(descriptors.AXES) == 7` (ED-IN-0261, Jordan 2026-09-20: seven bipolar axes; re-pinned 4 -> 7 at IN-08) `:65-89`.
+  - The `pursuit_axes` roster row must carry `from_descriptor: axis_roster` and no `values:` list, plus `forbidden: [exposure]` (the Exposure three-senses collision) `:92-106`.
+  - AST sweep over `engine/` and `ci_common.MODULE_CODE_DIRS`: any literal (tuple/list/set/dict half) holding 2+ canonical axis names is an offender; floors `len(walked) >= 100` and a named non-engine witness file `systems/characters/sim/conviction.py` must be walked `:109-150`.
+- **Conflicts / stale:** the second reader `engine/substrate/keys.py::AXES` is retired with the Key substrate (ED-IN-0232), so the original two-literal drift is gone "by subtraction rather than by this guard" `:68-74`. Seven-axis count pinned with its citation.
+- **Open items:** none.
+
+### tests/valoria/test_balance_oracle_arms.py
+- **What it is:** pytest file, plan position `28-i`: the season-side arms instrument `engine/season/harness/arms.py` (the n-seed two-arm comparison that replaced `tools/balance_oracle.py`) still constructs, and its live pair still differs.
+- **Status:** no Status line. Reading: live for the instrument tests; contains one test of a RETIRED symbol (F-TEST-10).
+- **Bears on:** CORE (instrument, §7 balance claims), MB/FA (`field_casualty_model`), PROCESS.
+- **Content that matters:**
+  - Live pair is `field_casualty_model`: `total` (pre-M4: "losing costs everything") vs `scaled_by_degree` (ruled default: `Person.body` scaled by the engine's survivor ratio, floored at 1); both read by one call site `loop/effects.py::_eff_march` on a LOST field `:28-31`. Exactly two arms, two distinct registered `FIELD_CASUALTY_MODELS` members `:60-69`.
+  - THE FALSIFIER `:72-111`: a real `march` (p_npc_033 from `set_s_014` vs `set_s_036`, a 2-v-6 mismatch) folded through the real driver on `build_realm(0)`: under `total` every attacker's body is 0 or removed; under `scaled_by_degree` every attacker survives with body > 0; the two differ. Confirms `total` is a certain kill (the control arm) and the default is not.
+  - `two_proportion_z` generalises the equal-n case (`abs(z_new - z_expected) < 1e-9`) and is degenerate-safe (zero acts return 0.0) `:114-130`. `_resolve_arm` accepts a string or `{fixtures, build}` halves, refuses unknown build kwargs/third halves, and an unregistered fixture name raises `Ungraded` instead of running a null arm `:149-191`.
+  - `test_the_retired_pair_definitions_still_import` `:133-146` asserts `_ARMS_POOL` still imports and both setups run; and `not hasattr(oracle, '_ARMS_CONTEST_LADDER')`. Confirms F-TEST-10 (T-04: delete, symbol-level ledger note). The private/owner ladder pair was retired because it is not season-reachable (`seam/ladder.py::degree_of` never calls `systems.social_contest.sim.contest.resolver`) `:15-22`.
+- **Conflicts / stale:** instrument is deliberately not a CI gate (a realm build is about a second, a season tens of seconds) `:5-14`; docstring says `_ARMS_FLOOR`/`_ARMS_BOUNDS` were deleted at `29b` with the faction layer.
+- **Open items:** the full comparison is run by nothing automatically (`:9-11`); CLAUDE.md §7 says `arms.py` is not a campaign-level instrument.
+
+### tests/valoria/test_band_extension_seam.py
+- **What it is:** pytest guard (ED-SC-0032): the ladder's `BandExtension` seam in `engine/dice_engine/dice_engine.py` probed with deliberately hostile extensions.
+- **Status:** no Status line. Reading: live; one of the guards CLAUDE.md §0.1 pt 5 admits (the ladder decides resolution in six subsystems; the seam executes a Jordan ruling).
+- **Bears on:** DICE (the four-band ladder), SC (contest extension), CORE.
+- **Content that matters:**
+  - Four hostile/neutral extensions (always-veto, never-veto base, truthy non-bool, unstable-truthiness) over a domain of `(n/4, o/2)` for `n -12..60`, `o 0..12` (>800 cells): the ONLY band transition the seam can express is Overwhelming -> Success; `moved > 0` asserted for the two that fire `:87-103`.
+  - A raising extension is never consulted below the top band (Failure/Partial/Success calls return) `:116-127`; an undeclared context key (`poool=20`) raises `TypeError` ("does not declare context key") and a declare-nothing extension accepts nothing `:130-145`; no extension means the unmodified ladder `:148-150`.
+  - HONEST LIMIT: `test_the_seam_is_not_a_sandbox` `:155-183` shows a hostile extension can mutate `DE.DEGREE_ORDINAL` from inside `may_overwhelm` and the test documents that, restoring the table in `finally`. So the "structural" demote-only guarantee is true of an extension confined to its contract only.
+- **Conflicts / stale:** imports `systems.social_contest.sim.contest.degree_extension.CONTEST_DEGREE_EXTENSION` (the same off-loop module F-TEST-08 notes is imported by nothing under `engine/season` or `modules/`) `:133`.
+- **Open items:** none.
+
+### tests/valoria/test_body_contact_toi.py
+- **What it is:** pytest acceptance file (MB spatial-model v2 stage C, R1 probe): contact fires on the reach body; the collision step stops on the BODY circle; field vs grid path.
+- **Status:** no Status line. Reading: live (MB field-movement path).
+- **Bears on:** MB (cell bodies, contact, charge, cavalry).
+- **Content that matters:**
+  - Design stance: contact fires on reach-grown body; the collision step stops at BODY-vs-BODY touch (reach 0): "Bodies collide; weapons reach across the closing gap"; stopping on the reach surface parked cells at a boundary where the strict predicate is False -> a permanent zero-casualty standoff `:1-10`.
+  - (a) head-on contact fires at `2*CELL_RADIUS + reach_for('infantry')` minus/plus 0.02 and not at +0.4 (reach-derived so it follows weapon-class reach) `:118-139`; (b)(c) head-on and cavalry-charge battles: bodies never interpenetrate after any committed tick (`_CommitProbe` wraps `separate_all_bodies`, tolerance `1e-6`), `probe.commits > 0`, and casualties exchanged (no stall) `:144-174`; (d) the FIELD_MOVEMENT=0 grid path never calls body code (primitives poisoned) `:179-198`; (e) troop conservation via `assert_troop_conservation(a, b)` with `checked >= 2` `:203-217`; same seed twice gives same outcome `:222-233`.
+  - Seeds via `random.seed(...)` of the global generator; process-global movement toggles saved/restored in `finally`.
+- **Conflicts / stale:** the test setup (a, b built with `build_unit('Line', 3, ...)`) runs two-unit toy battles, not the season-path MB seam. `(c)` asserts only `(a.hp < hp_a0) or (b.hp < hp_b0)` -- a weak "someone lost something" check.
+- **Open items:** none.
+
+### tests/valoria/test_body_no_interpenetration.py
+- **What it is:** pytest file (Jordan, 2026-11-01: "troops have geometry. they cannot overlap."): no two bodies interpenetrate at battle scale, measured on the harness's own stress scenarios (>= 5,000 troops a side).
+- **Status:** no Status line. Reading: live.
+- **Bears on:** MB (geometry, stress battles).
+- **Content that matters:**
+  - Four scenarios x 2 seeds at `CAP = 40`: `S01_mirror_lines`, `S03_cannae_double_envelopment`, `S06_missile_against_foot`, `S07_season_path_mirror` from `systems/mass_battle/sim/stress_scenarios.json`; asserts `max(depth) <= 2 * 10**-round_digits`, contact reached, casualties taken, idle subunit ticks <= 25 % of live (freezing would also leave no overlap, ED-MB-0059), `battles == 8` and `ticks >= 4*battles` `:31-72`.
+  - Mutation control: with `_separate_bodies` reduced to bare caps and the end-of-tick `separate_all_bodies` replaced by a no-op, the same instrument reads `worst > 10*tolerance` -- so the test above is not vacuous `:75-90`.
+- **Conflicts / stale:** none; includes a season-path scenario (S07).
+- **Open items:** none.
+
+### tests/valoria/test_body_primitive.py
+- **What it is:** pytest file for `modules/mass_battle/geometry.py`'s cell body: a circle of radius `CELL_RADIUS` (0.5), one lattice pitch across; `body_overlap`, `body_depth`, `reach_reaches`.
+- **Status:** no Status line. Reading: live, pure geometry.
+- **Bears on:** MB.
+- **Content that matters:**
+  - `CELL_RADIUS == 0.5`, `PITCH == 1.0` `:35-36`; overlap is strict and symmetric (400 random seeded pairs, `checked == 400`); tangent bodies do not overlap at ANY rotation (72 headings x 4 neighbours, `checked == 288`) -- "the property that replaced the unit square, which overlapped its own neighbour by 0.079 at 10 degrees and 0.207 at 45" `:61-74`; translation-invariant; reach is directional (front only, from the reaching body only); zero reach collapses to plain overlap; heading normalised with zero/near-zero/NaN guards defaulting to `(-1.0, 0.0)` ("up-field") `:128-141`.
+  - Uses `math.isclose(..., abs_tol=1e-12)` for derived geometry (e.g. `0.25` depth) and `==` for symmetric comparisons.
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### tests/valoria/test_casualty_attribution.py
+- **What it is:** pytest file, ED-MB-0052 / plan v2 §5 C1: every MB casualty is attributed to a source (`melee`, `volley`, `pursuit`, `freed_attacker`) and a tick, and the parts sum to the whole.
+- **Status:** no Status line. Reading: live; a model test for exactness claims.
+- **Bears on:** MB (casualty accounting, tracing), PROCESS.
+- **Content that matters:**
+  - THE GATE `:60-80`: over 20 seeds `attributed[side] == measured[side]` with `==` not `approx` ("`pytest.approx` on an exactness claim is not a weak test, it is an absent one (§0.1 #2)"), `checked >= 20` non-vacuity. Loss is attributed from the CLAMPED movement (`before - after`) not nominal damage (they differ on the killing blow) and melee/volley split is proportional to nominal share `:17-22`.
+  - Every event carries source and tick (`t` int >= 1 for melee/volley, `delta > 0`) `:83-91`; a ranged-vs-melee matchup produces `volley` rows (12 seeds) `:94-111`; attribution is inert with tracing off (buffer from a closed `tracing()` block empty) `:114-129`.
+  - MUTATION in suite: `attribute_hp_loss` silenced for `melee` and conservation then FAILS (`any(attributed != measured ...)`) `:132-154`.
+  - Diagnostic motive: the engine kills the loser THEN breaks him, where history breaks him then kills him ("inverted causal shape"); 23 bespoke probes preceded this `:3-11`.
+- **Conflicts / stale:** `from systems.mass_battle.sim.engine import build_unit, run_battle` -- sim oracle path, plus `modules.mass_battle.resolution.tracing`.
+- **Open items:** the inverted-causal-shape question the instrument exists to answer is not asserted here.
+
+### tests/valoria/test_cell_exclusion_no_deadlock.py
+- **What it is:** pytest guard, ED-MB-0059 / 0061: the same-side cell-exclusion pass (`hierarchy/units.py::resolve_toi_and_commit`, `MB_CELL_EXCLUSION`) must never freeze a formation.
+- **Status:** no Status line. Reading: live.
+- **Bears on:** MB (movement, performance, golden modes).
+- **Content that matters:**
+  - Measured cost of the original bug: 1,213,199 extra body-box solves of which 568,785 (46.9 %) returned exactly 0.0 against 9.84 % on cross-side; halted cells fell 20,356 -> 3,300, `resolve_toi_and_commit` calls rose 1,482 -> 11,934 (8.05x tick inflation: every battle ran to the turn cap) `:13-19`.
+  - Invariant: a rigid formation translating in free space is BIT-IDENTICAL with the pass on or off (`on == off` over cell positions rounded to 12 places) `:106-117`; anti-vacuity: the free formation actually moves between tick 1 and tick 6 `:119-130`; `MB_CELL_EXCLUSION` is pinned `'1'` in `tools/ci_golden_modes_check.py FIELD_PINS` `:132-143`.
+  - POSITIVE guard added after a read-only critic showed the first two were one edit from vacuous: two same-side cells closing head-on are capped at body touch with the pass ON and co-located with it OFF (`off == approx(0.0, abs=1e-9)`, `on > off + 0.5`); an early-touch case (start gap 1.5, step 1.0: first touch s = 0.25) kills the `s <= 0.5` mutant (`on == approx(1.0, abs=1e-6)`) `:146-226`. Mutants are named in the comment.
+- **Conflicts / stale:** `approx` with tight absolute tolerance on geometric touch values; defensible as float geometry.
+- **Open items:** none.
+
+### tests/valoria/test_charge_momentum_impulse.py
+- **What it is:** pytest file, ED-MB-0041 Tier-2: a body ordered to HOLD must stop reading as a charger (`cell_last_speed` -> `_momentum_speed` feeds puncture, du Picq charge-shock, braced-wall recoil).
+- **Status:** no Status line. Reading: live; F-TEST-11 / evidence row 15 read it (2 skips not taken).
+- **Bears on:** MB (charge, cavalry, momentum), PC (analogue).
+- **Content that matters:**
+  - Control: a closing body records `_momentum_speed > 0`; hold zeroes it on the live node path and on the legacy grid path `:43-72`. Two `pytest.skip` branches: node path not active, legacy path recorded no motion `:54-55,67-68` (F-TEST: not taken today; the first is a real skip if `_node_pos` is absent).
+  - Scope note (a design admission): "the wider momentum-at-halt question is deliberately NOT settled": a cell halted by contact keeps a frozen speed; recording 0 collapses the pike-vs-cavalry retention margin from > 0.02 to 0.0035; recording the current intended step sends gauge row C1 (cavalry vs steady unbraced line) from 48.3 % to 85.0 % against a 35-55 band; "the engine has no charge/recoil/re-charge cycle", recorded as a Tier-3 design call `:9-17`.
+- **Conflicts / stale:** none; F-TEST's evidence row says the file ran with `test_mass_battle_maneuvers.py` (6 passed, 1 xfailed).
+- **Open items:** Tier-3 design call: a charge/recoil/re-charge cycle does not exist in the MB engine (the cavalry-charge question the brief's weapon-carry/cell-based approach section touches).
+
+### tests/valoria/test_claim_provenance_fields.py
+- **What it is:** pytest guard (ED-IN-0122, ED-IN-0194) for `tools/ci_claim_provenance_check.py`: the gate must read every field a claim or its instrument can live in, and must not accept an invented path under a forked directory.
+- **Status:** no Status line. Reading: live; process-only (a gate guarding a gate); CLAUDE.md §8 cites its `test_a_fabricated_path_under_a_forked_directory_still_violates` as the falsifier.
+- **Bears on:** PROCESS.
+- **Content that matters:**
+  - Reads the gate's scanned field tuple FROM SOURCE (string slicing of `ci_claim_provenance_check.py` after `blob = `, `for k in (`) rather than re-declaring it `:43-53`; requires `description`, `provenance`, `measured_by` `:40`.
+  - Two planted fixtures (claim in `measured_by` with no marker must register; instrument in `measured_by` satisfies the gate and exists on disk) `:66-89`; `cpc.check() == 0` (live ledgers pass) `:92-102`.
+  - FALSIFIER for the prefix-swallow: four fabricated paths under forked directories (`tools/observability/never_existed.py` etc.) must NOT resolve through `_resolves_through_restructure_ledger`; three real retired instruments recorded by exact row must `:105-145`. The ledger carries "162 directory-prefix FORK: rows" `:111`.
+- **Conflicts / stale:** `pytest.importorskip('ci_claim_provenance_check')` at import `:34` -- an absent module would skip the whole file silently (a skip hazard of the F-TEST-11 kind, for a process gate). Source-slicing of another file's text is brittle to a reformat of `for k in (`.
+- **Open items:** none. Subject is process-only (CLAUDE.md §0.1 pt 5: a guard whose subject is a gate); retained by CLAUDE.md §8.
+
+### tests/valoria/test_close_ranks.py
+- **What it is:** pytest file, ED-MB-0028: `Subunit.close_ranks()` (Jordan directive 2026-07-23): as cells lose troops, unengaged troops from other cells fill them to keep engaged cells at prescribed density.
+- **Status:** no Status line. Reading: live.
+- **Bears on:** MB (cells, density, depth vs frontage).
+- **Content that matters:**
+  - `HU.MB_CLOSE_RANKS is True` by default: "Jordan ruled 2026-07-29 that every built mechanic defaults ON (ED-MB-0061)... a test asserting a flag defaults OFF protects the oracle, not the engine" `:45-49` (the function is still named `test_default_gated_off`).
+  - Inert when forced off (snapshot equal); conservation `abs(before-after) < 1e-6`; front rank refilled to 100 (`pytest.approx(100.0)`) from the rear; depth spent before frontage (3 live cells front, rear thins); a 1-deep line cannot sustain (front average `approx(50.0)`); full depletion does not divide by zero `:52-119`.
+- **Conflicts / stale:** `test_default_gated_off` name contradicts its assertion (stale name); `pytest.approx` here is on float troop counts where the arithmetic is a redistribution (exactness arguably expected; `abs <1e-6` on conservation).
+- **Open items:** none.
+
+### tests/valoria/test_coherence_elastic_plastic.py
+- **What it is:** pytest file, position 27 (WR-SCOPE): threadwork Coherence as a distance held as two quantities, elastic then plastic (`systems/threadwork/sim/coherence.py`), plus Mending Stability scale term (ED-WR-0008) and Mending's restorative feedback (C-1, §6.8) and own-configuration Mending (WR-02).
+- **Status:** no Status line. Reading: live as the oracle of an off-loop subsystem (threadwork sim is an island; F-TEST section 4).
+- **Bears on:** WR (Thread Sensitivity, Coherence/drift, Mending), CHAR.
+- **Content that matters:**
+  - Model: elastic range `ELASTIC_RANGE` (6 per `:77`), permanent set `resting_point = stack - range`; stretch stacks across events; recovery is elastic only and never reaches the resting point; elastic range constant after set (no work hardening/brittleness, E-3); environment gates recovery; crossing past `HUMAN_BAND_LIMIT` is reported once and irreversible (`mend_resting_point` then raises "manipulation") `:55-188`. Each ruling has a test that fails under the rival reading (docstring list) `:7-14`.
+  - "The magnitudes in coherence.py are invented (its own header says so); what is NOT invented is the set of orderings §7.1 fixes" `:15-17` (cites `canon/philosophy/07_drift.md` §7.1, §7.4, RULINGS.md Batch 8 E-1..E-4, Batch 9 C-1, C-2).
+  - Mending: `COHERENCE_COST_BY_SCALE` keyed; Partial = the scale's cost, Failure = Partial - 1; Success/Overwhelming 0; Relational reproduces the retired -1/-2; binding ops (locking) keep flat -1 `:246-271`. Mending calls `recover()` with `mending = -COHERENCE_COST_BY_SCALE[scale]`, `seasons = 0`, term > 0 at every scale x degree except Failure (no call) `:305-324`; gated by the mender's environment (default False) `:326-339`; unpriced scale falls back to Relational for Ob and term alike `:354-358`.
+  - WR-02: own-configuration Mending (`configuration_of` = `"self"` or own id) moves the RESTING POINT by `RESTING_POINT_MEND_BY_DEGREE` (Overwhelming/Success > 0; Partial/Failure 0) with no elastic term and no stress; another's aim keeps the elastic path; past the crossing it is refused with a note `"not mended ... human band"` not raised `:383-461`.
+  - Rolled tests assert both branches executed (`took >= 1 and failed >= 1`; `moved >= 1 and still >= 1`) over 300 seeds `:361-380,464-477`.
+- **Conflicts / stale:** `_ms_by_degree` writes to a module-level fallback store `coh.reset_all()` first `:238`. Coherence vocabulary vs v40 characters [UNVERIFIED]. Sim is off-loop (no loop caller; F-TEST evidence row 16).
+- **Open items:** none.
+
+### tests/valoria/test_combat_armour_reference.py
+- **What it is:** pytest drift gate (ED-PC-0040): `tests/valoria/data/combat_armour_reference.json` records the full weapon roster across four armour tiers (deterministic seeds); the test recomputes and fails on any cell moved beyond `TOLERANCE = 0.15`.
+- **Status:** no Status line. Reading: live; a golden for PC balance, marked `@pytest.mark.slow` on the drift test.
+- **Bears on:** PC (armour tiers: none/light/medium/heavy; weapon roster), PROCESS.
+- **Content that matters:**
+  - Motivation: ED-PC-0038 aimed at plate and moved MAIL (odachi -23pp, naginata -25pp, staff -12pp); ED-PC-0039 moved odachi a further -18pp; neither caught by a test `:3-8`. The gate "is not a balance freeze"; regeneration via `python workbench/armour_participation.py --update` makes the diff the disclosure `:12-21`. Tolerance 0.15 "absorbing legitimate small shifts in the RNG trajectory from unrelated changes, not sampling noise" `:30-34`.
+  - Missing reference file or a roster change without regeneration is `pytest.fail`, not skip `:46-56`; coverage test requires every `WEAPONS` key, `ref['n'] >= 40`, all four tiers `:72-89`.
+- **Conflicts / stale:** a tolerance of 15 percentage points is wide; the reference is regenerated by hand (the very failure the file warns of). Workbench lives at `systems/combat/combat_engine_v1/workbench/` (path in `_instrument`).
+- **Open items:** none.
+
+### tests/valoria/test_combat_audit_pins.py
+- **What it is:** pytest regression pins for defects found by the 2026-07-24 four-dimension read-only combat audit (EDs ED-PC-0034, 0035, 0036, 0037): state-carryover, a negative overcommit exposure, grab hazard sign flip, dead morphology levers, cut/thrust label vs arm paid.
+- **Status:** no Status line. Reading: live; each pin names a bug that SHIPPED and was found by an auditor.
+- **Bears on:** PC (personal combat engine `modules/combat`: represent gate, select_mode, coupling, morphology levers).
+- **Content that matters:**
+  - `represent_measure_p` must be a pure function of (weapon, opponent armour, opening gap, stats): corrupting every circumstance field the wrapper writes (`sel_head`, `grip_position`, ...) leaves it equal for 12 weapons x 2 armours; the first version used `pytest.approx(abs=1e-12)` and was tightened to `==` after byte-equal verification across 26 cells `:37-60` (a worked instance of CLAUDE.md §0.1 pt 2). Measured pre-fix path dependence: katana 0.000 -> 0.274, hook_sword 0.000 -> 0.425 `:41-45`.
+  - Guisarme presents its POINT at the realistic opening room (range_utilization ~0.48) and `represent_measure_p > 0.5` `:63-79`; `overcommit_exposure >= 0.0` over 6 traditions x 5 commits x agi 2-5 x str 2/4/6 (measured -0.37 before) `:82-94`; `grab_sigma` monotone non-decreasing in skill then FLAT (`vals[5:] == [vals[4]]*3`, `==` not approx) `:97-112`.
+  - Each of five morphology levers (`LEGIB_EDGELINE_K`, `BIND_SPINE_K`, `GRAB_EDGE_K`, `CHOKE_ACCURACY_K`, `FACING_REGIME_K`) is individually live at the MECHANISM level: zeroing the constant changes the quantity it feeds (`on_v != approx(off_v, abs=1e-12)`); the union metric had passed while 4 of 5 were dead (BIND_SPINE_K alone 0.5 %, CHOKE 0 %, FACING 0-0.5 %, GRAB 2-2.5 %) `:115-152`.
+  - cut_thrust: label (`select_mode` damage mode) equals the arm `core.cut_thrust_arm` actually pays, parametrised over `_versatile_cells()` (cells selecting the versatile head; the old runtime `skip` removed), floor `checked >= 51` of 72 cells (re-measured after `partisan` deleted, ED-PC-0058) `:155-216`; modes across the roster are exactly `{'shear','puncture'}` and at least one weapon changes arm with armour tier (spetum, naginata, tsurugi, changdao, jian, szabla) `:219-242`; `coupling('cut_thrust', ..., eff)` respects weapon quality, each arm reads its own magnitude (keen edge != keen point) `:245-258`.
+- **Conflicts / stale:** `audit/2026-07-24-combat-four-dimension-audit/` is an archived path. Floor `51` and weapon-name lists are count/name pins that move with the roster.
+- **Open items:** none.
+
+### tests/valoria/test_combat_cut_grading.py
+- **What it is:** pytest file, A7a channel 1 (M6, ED-PC-0051): native edge quality (`curved_cut`, `straight_cut` heads; 16 weapons, 31 % of the roster) must be consumed by `core.coupling`.
+- **Status:** no Status line. Reading: live.
+- **Bears on:** PC (weapon edge quality, armour material gating, civilian-carry balance).
+- **Content that matters:**
+  - Defect: only the bare `'cut'` token was scaled by edge quality; native cut-eff population 0.710 (hook_sword) to 1.330 (shamshir) sits entirely above `CUT_AUTH_REF = 0.70`, so `min(1.0, eff/CUT_AUTH_REF)` is identically 1.000 -- the defect register's own proposed fix was provably a NO-OP `:1-18`.
+  - Measured consequence against the civilian sidearm field ("settlement-legal 1H non-blunt roster, per Jordan's carry ruling of 2026-07-29"): shamshir 41.5 %, pulwar 35.5 % (last), sabre 38.2 %, scimitar 47.9 % against rapier 80.6 % -- the keenest edges were among the worst performers `:14-18`.
+  - Jordan constraints (2026-07-29): "cutters need to be excellent in contexts where they can CUT ie unarmoured and light armour"; "the curve extends the amount of cutting edge" (already derived: `geometry.cut_factor = edge_keenness * (1 + 0.45*tanh(2*curvature))`) `:20-26`. Four guards: premise pin (`len(effs) >= 15`, `min(effs) > CUT_AUTH_REF`), native edge changes coupling, monotone across the real population (`checked >= 10`), keen-edge advantage shrinks none > light > medium > heavy with the plate bound derived from `core._shear_yield('plate')` x 1.5 slack (a first draft's invented `< 1.02` threshold was recorded as wrong), a poor edge is poor everywhere (material-ungated penalty), and the bare `cut` token untouched `:65-163`. Mutations named in the docstring.
+  - Scope: channels (2) curved blade recovers faster and (3) curved thrust also cuts are specified and NOT built; `thrust_factor` for shamshir reads 0.03 "correctly collapse toward 0" `:34-40`.
+- **Conflicts / stale:** the civilian-carry ruling (2026-07-29) bears on the brief's weapon-carry trade-off [MB/PC/SE]; consumed here only as the balance context.
+- **Open items:** channels (2) and (3).
+
+### tests/valoria/test_combat_duel_terms.py
+- **What it is:** pytest file, PC-10a (RS-25): duel TERMS on `wrapper.fight` -- `yield`, `blood`, `death` (default) -- so "a duel need not be lethal" (Jordan, 2026-10-14).
+- **Status:** no Status line. Reading: live; strong, with a kept-executable mutation control. Bears directly on F-PC-04 (lethality) as the non-lethal route.
+- **Bears on:** PC (duels, surrender, lethality terms), CORE (`seam/wrappers/combat.surrender_of`; `PersonalCombatInput.terms`), SC.
+- **Content that matters:**
+  - Falsifiers: (1) under default `death` the fight is byte-identical to a no-`terms` call: trace, result and every engine-level draw (`RecordingRandom`) equal over 3 pairs x 40 seeds, `checked == 120` `:77-86`; (2) a seeded `blood` fight stops at the first wound with exactly one accepted `yield` by the first-wounded fighter, in that turn, with no felling, no `UPSET_FLOOR` draw after, `combat_degree` reading `'Wounded'`, `surrender_of(trace) == dict(by=..., turn=..., accepted=True)`; cases are FOUND rather than assumed (`len(cases) >= 6`), both sides yield somewhere in the sample `:99-153`; (3) `yield` stops at `YIELD_HEALTH_FRAC` of Health, `checked >= 20`; `yield` stops in a later turn than `blood` on some seed (`later >= 1`) `:198-241`; (4) `death` leaves Felled reachable (`felled >= 10` of 20 seeds, band `'Felled'`) `:246-260`.
+  - (5) kept as an executable control: with `_terms_met` forced False, the same assertions raise on every case (`red == len(cases)`) `:155-165`. The module entry `modules.combat.fight.fight` reads `inp.terms` from a typed-input subclass; the field is "the season's to declare (PC-10b)" `:168-193`.
+  - PC-11: both fighters cross `blood` on the same beat with equal Health left: nobody yields, fight ends UNRESOLVED (result 0, `winner=None`, one turn); unequal damage yields the worse-off one `:263-294`. Terms outside the closed set `('yield','blood','death')` raise `ValueError` by name (`'first_blood'`, `''`, `None`, `'Death'`) `:89-94`.
+- **Conflicts / stale:** the default term remains `death` (lethal); F-PC-04 ("plain `fight` kills 200 of 200") is the season-loop default unless `terms` is declared; `PersonalCombatInput.terms` is not yet declared by the season in this file's reading (see PC-10b) [UNVERIFIED current].
+- **Open items:** none inside the file.
+
+### tests/valoria/test_combat_edges.py
+- **What it is:** pytest file, U3 / ED-PC-0018 (+U10/ED-PC-0022, ED-PC-0023, ED-PC-0026, ED-PC-0058): the edge-count primitive `edges={sides∈{0,1,2}, false_edge_frac}` and its three readers (`edge_lines` -> legibility, `spine` -> `bind_sigma`, `grab_hazard` -> `grab_sigma`).
+- **Status:** no Status line. Reading: live.
+- **Bears on:** PC (blade morphology data, legibility, bind, grab).
+- **Content that matters:**
+  - Reader formulae (`edge_lines`: double 1.0, clipped = false frac, plain single 0, edgeless 0; `spine`: single = 1 - false; `grab_hazard`: (sides + single*false)/2 so edgeless 0, single 0.5, clipped 0.6, double 1.0); MAX over elements; `pytest.approx(0.2/0.8/0.6)` on these derived fractions `:31-55`.
+  - The three constants `LEGIB_EDGELINE_K`, `BIND_SPINE_K`, `GRAB_EDGE_K` are > 0 (activated at U10); the lever is live from geometry alone (double-edged `arming` reads harder; edgeless `estoc` unaffected); shinogi amplifies a katana's spine bind `:58-95`. A known honest gap: after ED-PC-0026 re-homed the German zwerchhau ability, "no grounded edge_read amplifier" exists `:70-73`.
+  - Authored-data invariants (sides==0 => keenness <= 0.1; false_edge_frac>0 => sides==1) with counted floors `checked >= 65`, `ek_fired >= 4`, `fef_fired >= 9` -- the docstring records that this loop was green on an empty roster before the floors were added (2026-07-29 vetting) `:97-138`.
+  - Grounded ordering: arming/longsword edge_lines 1.0, spine 0, grab 1.0; katana/sabre/falchion spine > 0, grab in [0.5, 0.65]; estoc all zero `:141-157`.
+- **Conflicts / stale:** `consolidation_v1.md` §2.1-2.3 and `edges_data_v1.md` cited (archived design docs); roster-count floors move with the weapon roster (65 after `partisan` deletion).
+- **Open items:** none.
+
+### tests/valoria/test_combat_halfsword_affordance.py
+- **What it is:** pytest file, ED-PC-0014/0016: half-sword capability derived from physical facts (a `grippable` element AND `geo['halfsword']`) rather than a name whitelist; the form switch is byte-identical to the retired gate.
+- **Status:** no Status line. Reading: live.
+- **Bears on:** PC (weapons, half-swording against rigid armour).
+- **Content that matters:**
+  - The emergent affordance set is exactly `{longsword, estoc, greatsword, flamberge}` (a set pin) `:19-25`; greatsword and flamberge switch to their `*_halfsword` forms when closed against `medium`/`heavy` armour, base otherwise; every afforder has a form so the name table cannot re-acquire a gating role `:28-47`.
+  - `grippable` is the gate, not geometry alone: > 5 weapons pass the geometry gate but only those with a grippable element afford it `:50-59`; `halfsword_target` equals the retired name-gated logic over every weapon x closed x 4 armours `:70-82`.
+  - `test_dead_coefficient_now_consumed` `:62-67` asserts `'halfsword' in inspect.getsource(S.affords_halfsword)` and `'grippable' in src` -- a source-text-substring test (F-TEST-09 class) that can pass if the names appear anywhere in the function (incl. a comment).
+- **Conflicts / stale:** the "retired gate" is reimplemented in the test as the reference (a second copy of the retired rule, by design). Source-text test with no control.
+- **Open items:** none.
+
+### tests/valoria/test_combat_heft_percussion_snapshot.py
+- **What it is:** pytest golden snapshot (D12c, I8, 2026-07-03): per-weapon `core.heft_resp(grip=0)` and `weapon_physics.percussion_authority(grip=0, room=1)` against `tests/valoria/golden_heft_percussion_snapshot.json`.
+- **Status:** no Status line. Reading: live; a PC golden regression (Layer-2 pin on weapon physics).
+- **Bears on:** PC (weapon mass/heft/percussion model).
+- **Content that matters:**
+  - Fixture must cover exactly the startable weapons (`'base' not in rec`): `set(golden) == set(NAMES)` (a roster-drift guard) `:38-43`; drift at `TOL = 1e-6` abs per weapon on both quantities, reported as a `drift` dict `:46-63`.
+  - Lifecycle: a deliberate re-anchor (`REC_I_REF`, `REC_S_REF`, `SWING_FLOOR`, a new mass model) is expected to move these; regenerate the fixture and record the reason; "never patch a single weapon's row to make a failure go away" `:9-14`. Cites `designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md` (dissolved path).
+- **Conflicts / stale:** a hand-regenerated golden at `1e-6` over the full roster; no declared-mover discipline beyond the docstring. Tests for `heft_resp` `test_combat_heft.py`/`test_combat_capabilities.py`/`test_combat_element_parity.py` named as siblings.
+- **Open items:** none.
+
+## Cross-subsystem leads
+
+- **R-07 knowledge/attitude coverage [CORE, FI, CHAR]:** `engine/season/tests/test_told_by_channel.py` holds an R-07 realm reader and a G1 judged-regard family (`:1964-1987`, `:1838-1939`) that `audits/01_CORE_audit_addendum_C_tests.md` §3 says does not exist ("Feeling, attitude, relationship: no test"). Several telling mechanisms ship OFF or neutral: `intent_disclosure` 0 (T7), `telling_privacy` 0 (G6), `said_slant` `newest` (G3); their live arms are tested only on `tiny_world`. A documented limit (`:2261-2284`) says the confidence-break path is not reached by the production `said` pick. FI/CHAR lanes should reconcile.
+- **Armies are unreachable by AI [MB, FA, CORE]:** `test_army_verbs.py:181-186` pins that all six `ARMY_VERBS` are in `withheld_verbs`, and `test_army_menu_presets.py:325-341` pins that nothing in `engine/season` reaches `army_presets.install`. So an army exists only by player menu or preset install; the shipped realm seats no barracks/range/stable, so a preset army is levy alone (`:296-303`) and levy "never closes". MB/FA/CORE should treat armies as built-but-unplayed and the standing "no GM" requirement as open for army raising.
+- **Hunger is built, shipped on, and erased in play [SE, CORE]:** `test_territorial_subsistence.py:326-343,391-451`: `body_step` ships 10 (REM-52), cohorts fall to 940 in season 0 at seed 0, but with CP-T03-08 `tend` live "37 of 37 tended, fell 0" so the fall is erased within the season; the shipped-arm test needs `revert_cp_t03_08`. SE/PC lanes: the subsistence consequence is not observable in the shipped game.
+- **Strife/war readings are mostly dark on the realm [WR, FA, CORE]:** `test_strife_flows.py:817-849` asserts every person's strife flow reading is `()` after one season at seed 0; `at_war` is False "for every pair the tree can build" (`:121-123`); the `flow_stakes` stamp ships ON (CR-78) with nothing to stamp. `test_strife_instrument.py`'s link list has four UNREACHABLE links (`DA>WA, DR>IN, WN>DA, WN>FA`, `test_strife_flows.py:526-528`). `test_strife_execution.py:32-43` discloses that `victim_held` never names a victim of a real death (reads field `exists`, deaths carry `body`) so XE can never be observed on a real run.
+- **Works, found, build, raze have no computed producer [SE, FA]:** `test_works_founding.py:551-554,765` says a computed `create_record` declaring a works does not exist (ED-IN-0297); `found`/`build` only form after a hand-built works. `raze` (closer) not built.
+- **Two arrangements cannot dispose [SC, FA]:** `test_stress_proceedings_rehost.py:259-260`: `council_of_state` and `parliamentary_debate` dispose a `Record` and `open_case` refuses them (`case.refused`); no writer.
+- **Determinism audit [PC, SC, FA, CORE]:** `test_strife_execution.py:20-21` measured a plain `fight` ran to a death at every one of 60 act ids (consistent with F-PC-04); `test_balance_oracle_arms.py:72-111` shows the `total` casualty arm is a certain kill (control arm, default is `scaled_by_degree`); `test_combat_duel_terms.py` is the non-lethal term route (`blood`, `yield`) whose `terms` field the season has yet to declare (PC-10b). In FA: `requisition`, `issue`, `open_case` execute deterministically once admitted (`test_u7_remit.py`), and `oblige` term lapse/renewal is arithmetic (`test_term_upkeep.py`). `determine` is already a draw (SC-03b).
+- **Cast authoring [ARCS, CHAR]:** `test_u8_cast_fields.py` makes `knows:` (initial Claims) refused by name at load (AX-7), so provided characters' starting beliefs have no authoring route in the corpus runner; `office:`, `ought:`, `capability:` do (13+ cast overlays, NPC-088 Carin Vedel `copying: 3`).
+- **MB known-reds [MB, PROCESS]:** `tests/valoria/conftest.py:34-44` holds THREE strict known-red MB tests (ED-MB-0061), more than F-TEST-10's single non-strict xfail; and the reverse guard was dropped (ED-IN-0312). `_conservation.py:49-57` records an untested real divergence class (`percell.py:179` discards the applied amount; engaged-front spill shortfall).
+- **Engine/season weather ships OFF [SE, WR]:** `season_factor_draw = ()` is the shipped arm (`test_season_weather.py:736`); per-territory keying is built and tested, but no realm reading with weather on exists.
+- **Off-loop oracles retained [FI, WR, SC]:** `engine/tests/test_knots_ed912.py`, `test_thread_mending_ed871.py`, `tests/valoria/test_coherence_elastic_plastic.py`, `engine/tests/test_contest_kernel.py` test code the loop never calls (F-TEST section 4, evidence row 16). The knots sim still carries `BREAK_COMPOSURE_DAMAGE = 4` ("4 Composure") though Composure is retired in the kernel (`systems/fieldwork/sim/knots.py:85`, grep-verified).
+
+## Likely stale or superseded
+
+- `engine/tests/test_contest_kernel.py`: docstring says "Total 303" and "151-check" against `_KERNEL_EXPECTED = 389`; the giant count-history comment `:93-107` cites dissolved paths (`designs/audit/...`, `params/contest.md`, `RATIFIED_2026-06-01.md`). Retires with SC-P2 (T-12).
+- `engine/tests/test_sigma_leverage_parity.py`: 768 TN 6/8 rows and 255 pre-ruling degree rows are historical (F-TEST-08 / T-11); header cites retired oracle paths `tests/sim/v32-combat-balance/m1_dice_sigma_core.py`, `audit/2026-06-03-contest-groundup/engine.py`.
+- `tests/valoria/test_balance_oracle_arms.py:133-146` `test_the_retired_pair_definitions_still_import` (F-TEST-10 / T-04); the module docstring's `tools/balance_oracle.py` references are to a retired instrument.
+- `tests/valoria/test_close_ranks.py:45`: `test_default_gated_off` asserts the flag is ON (stale name).
+- `engine/season/tests/test_season_weather.py` module docstring `:1-17` (says the control is the pre-change hash at build/one/two seasons; the pins have moved ~60 times and the first test runs under `revert_cr79`).
+- `engine/season/tests/test_strife_credit.py:5`: "`regime_gain` is the control 0 at commit (1) and ships 0.5 at commit (2)" -- commit (2) is long landed.
+- `engine/season/tests/test_term_upkeep.py:1-12`: cites `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` (a retired plan by name); `test_works_founding.py:1-3` cites `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` and `proposals/2026-09-17-governance-and-holdings-r2/04_MATTER_AND_WORKS.md`.
+- `tests/valoria/test_combat_heft_percussion_snapshot.py`, `test_combat_audit_pins.py`, `test_combat_edges.py`: cite dissolved `designs/audit/` and `audit/2026-07-24-combat-four-dimension-audit/` paths.
+- `engine/season/tests/test_stress_proceedings_rehost.py`: re-host of a `proposals/2026-09-05-proceedings-subsystem/stress/stress_proceedings.py` script; 28 of 38 cases explicitly not ported; `:94` `... or True` tautology.
+
+## Items that could change an audit finding
+
+- **F-TEST-02 (goldens):** `test_season_weather.py` holds the re-pin log in full (about 60 `RE-PINNED` blocks across `BASE_HASHES`, `STEP_OFF_ONE_SEASON`, `BASE_EVENTS`, `THREAD_READ_WITHHELD_EVENTS_1`), not 22; its first test and the `give`-withheld test run under `revert_cr79` (so the shipped-realm world is not read); `test_strife_flows.py:856-857` and `test_strife_credit.py` re-use the same literals (`600d8b27…`, `25660615…`); `test_strife_credit.py:41` is the one shipped-realm pin. Confirms and extends F-TEST-02 (6 files for the trajectory).
+- **F-TEST-03:** `test_season_weather.py:541` records the B10-13 pin commit "none isolated per item" (confirms the `133 -> 137` exception); `test_told_by_channel.py:234-300` re-pins its SEED eight times because the realm stops minting chained told claims after any act-mix move (same trajectory fragility, separate file).
+- **F-TEST-07:** `test_strife_kinds.py:126-127` is a does-not-raise test with no assertion (confirmed); no vacuous loop found in the files read here beyond `test_stress_proceedings_rehost.py:94`.
+- **F-TEST-08:** `test_sigma_leverage_parity.py` confirms 768 + 255 rows, `by_ob == {1.0: 9, 2.0: 15, 3.0: 23}`, 47/208, floor `m1 >= 731`, `groundup >= 4`.
+- **F-TEST-09 (source-text tests):** additional instances beyond `test_season_shape.py`: `test_combat_halfsword_affordance.py:62-67` (`inspect.getsource` substrings), `test_army_menu_presets.py:325-341` (regex scan with a probe line; has a population floor and a control), `test_claim_provenance_fields.py:43-53` (slices another file's text to read a field tuple), `test_stress_proceedings_rehost.py:94`.
+- **F-TEST-10:** `test_balance_oracle_arms.py:133` confirmed. `tests/valoria/conftest.py:34-44` adds three strict KNOWN_RED MB entries that F-TEST-10 does not list (and notes `test_known_red_register.py` was dropped, ED-IN-0312).
+- **F-TEST-11 / skips:** `test_charge_momentum_impulse.py:54-55,67-68` (two conditional skips); `test_claim_provenance_fields.py:34` `pytest.importorskip` of a tool; neither listed in F-TEST-11's thirteen engine-absent skips.
+- **R-07 row in §3 of the addendum:** see Cross-subsystem leads (R-07 realm reader exists in `test_told_by_channel.py`).
+- **R-04 (strategic and management acts) / R-05 (all verbs built out):** army verbs are withheld from the chooser (`test_army_verbs.py:181-186`); `destroy_record` is held by `withheld_verbs` (`test_u7_own.py:187-205`); `tie / knot` is a declined row (`test_u7_own.py:61`); `found`/`build`/`work` need a hand-built works (`test_works_founding.py:551-554`). These bear on the never-attempted/ refused sets.
+- **R-09:** the `determine` family (`test_u7_remit.py:1180-1244`) is a model of a graded, recoverable draw (all four bands, re-hearing after Failure); `test_settle_margin*.py` and `test_band_odds.py` give the dice-level exactness; `test_total_arm_...` shows one certain-kill arm (control).
+- **F-PC-04 (fight lethality):** `test_strife_execution.py:20-21` records 60/60 deaths; `test_combat_duel_terms.py` shows the `blood`/`yield` terms exist (PC-10a) but `terms` is declared by the season only via PC-10b [UNVERIFIED].
+- **F-TEST-06:** `test_territorial_subsistence.py` and `test_strife_flows.py:817-849` run real-realm sweeps; nothing in the files here changes the "invariant sweep on a world with no office" finding.

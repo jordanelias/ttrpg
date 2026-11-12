@@ -1,5 +1,7 @@
 # INST-BYZ-A — dignities and the Roll: the founding order where persons can read it, and an honour that cites a deed
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-01, X-03 to X-08, X-19, X-21 to X-23) — the founding order is carried once, as three founders' seeded deeds (3, 2, 1) in a prehistory block, not as `offices.yaml: founding:` with `order` and `founding_confidence` (edits 1, 4's second fixture and 5 are withdrawn); no Record kind `roll` is added (edit 2 withdrawn): a certificate is any Record carrying `recites`, and what this file calls the Roll is the Settlement, two seeded `homage` instruments in the Chief Parliamentary Clerk's keeping (`instruments.yaml: seeded`); the presumption is the chain term of `person_q.legitimacy` in `15_INSTITUTIONS_SYNTHESIS_B_the_deed_ledger.md`, discounted per holder and read from the predecessors' deeds, not from claims whose subject is a seat (edit 6 is replaced), and `presumption_gain` ships 0; `confer`'s row, bands and Failure kind (`appointment.resisted`) are `14_VERBS_BINDING_C_turnover.md`'s, as is `provisional_term`; the "favourable" steps are the named terms `evidence`, `regard` and `reception`, and the dignity step is dropped; `procedure_draws` is not added (a contest row's control is the pinned roll). Edits 3 and 7's two conjuncts on a dignity row, the telling of the cited deed, and `dignity_grades` stand. Every finding below stands.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_BYZANTINE.md` §1.3 (D-2, D-5, D-6), §5, §6, §7.0; Jordan's fixed point

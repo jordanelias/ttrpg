@@ -1,5 +1,7 @@
 # INST-BYZ-E — accession, recall and the crowd: a throne is claimed before people and may be refused; a recall may be defied; one open-floor occasion
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-06, X-19, X-21 to X-23) — `succeed`'s and `revoke`'s rows, bands, `provisional_term` and Failure kinds (`succession.contested`, `revocation.resisted`) are `14_VERBS_BINDING_C_turnover.md`'s; this file's "opposition" over three sets is that row's `reception` with those three audiences, each member reading `person_q.legitimacy(q, claimant, seat)` (the chain of `15_INSTITUTIONS_SYNTHESIS_B_the_deed_ledger.md`); a rival is `opposition` only when he has docketed a claim; the dignity steps are dropped; `procedure_draws` is not added. This file's Partial for `revoke` (the hold closes at the season's end and the ruled disposal with it) is the form the synthesis assumes and is listed for the BINDING lane, whose Partial drops the disposal ruled on 2026-10-21. The `acclamation` row and edits 2, 5 and 6 stand. Every finding below stands.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_BYZANTINE.md` §2.8 to §2.11, §3, §7.0, §17; the standing rule of

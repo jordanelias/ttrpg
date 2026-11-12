@@ -2,7 +2,7 @@
 
 ## Status: PROPOSED
 
-Source: `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (the collision ledger, X-01 to X-29) and §3; the
+Source: `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (the collision ledger, X-01 to X-32) and §3; the
 twenty-one family proposals `15_INSTITUTIONS_{BYZANTINE,PAPACY,VENICE,COLONIAL}_*`. This file states the
 **reconciled set** and the edits that differ from what a family file wrote. Where a family file's edit
 stands unchanged it is cited, not repeated. Each family file that lost a collision carries a
