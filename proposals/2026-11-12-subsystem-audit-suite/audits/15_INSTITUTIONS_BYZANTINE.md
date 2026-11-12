@@ -40,7 +40,18 @@ recalled. **The single largest obstacle is the one the FA lane measured: governa
 bind nobody (`audits/06_FA_audit.md` F-FA-01, F-FA-02).** A court of precedence built on acts that bind
 nobody would be decoration, so this design lands after, and on, the FA lane's three mechanism
 proposals. It adds no verb, no carrier and no stored aggregate: three keys on seat rows, one record
-kind, one roster key, one arrangement row, one fixture, one widened verb row, and content.
+kind, one roster key, one arrangement row, three fixtures, and content.
+
+**Nothing in it is decided by rank (the standing rule of `AUDIT_BRIEF.md`, Jordan 2026-11-12: "we do
+not do deterministic").** Every procedure the institution runs, an investiture, a recall, a document
+passing a hand, a tax collected, an accession, is a draw on the four-band ladder through the one
+contest seam, with a recoverable result in every band. Five existing rows that are certain today are
+given a draw: `confer`, `revoke`, `carry`, `requisition`, `succeed` (§7.0). The order of precedence
+and the founding order are read in exactly two ways: as the amount a seat owes its sworn (arithmetic,
+a ledger) and as terms in a draw's odds. Neither is ever a gate, a tie-break or a result. A man of
+the first dignity is refused sometimes, and a clerk's protégé is sometimes passed over. What is
+arithmetic stays arithmetic: stores are conserved, a term's clock ticks, an eligibility check admits
+or refuses the attempt.
 
 ## 1. What the tree says these holdings are
 

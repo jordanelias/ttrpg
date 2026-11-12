@@ -201,7 +201,7 @@ to a binding decision. NPC chooses through the one chooser on held petitions (`h
 petitioner's standing enters at `speak`/`determine` as `reception`, not here); season (sittings,
 `convene`'s dates).
 
-**6. Exact edits.** Proposal D §1 (venue and appeal); proposal A §2 (R-KIND names `carry`).
+**6. Exact edits.** Proposal D §1 (venue and appeal); proposal A, resolution item 4 (R-KIND names `carry`).
 
 **7. Gate and falsifier.** `aperture 2 s` (s = 0, 1): `carry` refusals `exists:petition=0` = 0; every
 `petition.carried` docket item names a non-`None` arrangement; at least one carried matter reaches a
@@ -865,7 +865,7 @@ The forgiveness mark must land with or before the challenge settlement, which re
 | **S1-A** | `14_VERBS_SOCIAL1_A_formation.md` | R-WITH (`believed_with`, fixture, decline by conjunct); `covenant` `referent_class: Proposition`; naming `comply`/`evade / defy`/`carry` under R-KIND | lane A step 1 merged | `aperture 2 s`, s = 0, 1: `with=False`/`clause:hearer` refusals on `argue`, `lie`, `give`, `challenge` each down by ≥ half; `covenant` `exists:Proposition=0` = 0; `comply`/`evade / defy` `exists:dispensation=0` = 0; control: `with_belief_window` unbounded reproduces today's hash |
 | **S1-B** | `14_VERBS_SOCIAL1_B_documents_and_obedience.md` | `give`'s addressed-document occasion and `delivery_weight`; the obedience effect for `comply` and `evade / defy` (`defiance_modes`); `covenant_in_force` and breach | S1-A | planted-delivery run: `record.given` of a writ → `compliance.given` with an `oblige` naming the writ (arm 1) / `compliance.withheld` and a strife strand (arm 2); a covenant in force then breached → `holds_dispute` True; realm `aperture 2 s`: `record.given` > 0 |
 | **S1-C** | `14_VERBS_SOCIAL1_C_persuasion_and_deceit.md` | `argue` Partial writes and `commitment` term; `lie` capability, `opposed_by:`, `contradiction` term, confidence by band, `deceit.exposed`; `conceal` ranking, quality, capability | SC-OB, lane A steps 3–4 | corpus run: "bands that differ" True for `lie`; two-arm hand-built folds differ in one named term each; `conceal` attempts follow a judgeable act |
-| **S1-D** | `14_VERBS_SOCIAL1_D_grievance_and_settlement.md` | `forgiven_since` mark and widened decline; `challenge` stakes, answer window, `challenge.declined`, settled mark; `carry`'s `petition_venue` and appeal | S1-B (delivery), lane A step 2, PHYSICAL `accept` | planted-dispute run: forgive ends the dispute; an unanswered challenge declines at its due tick and settles; a carried petition names a venue and reaches a `determine` attempt |
+| **S1-D** | `14_VERBS_SOCIAL1_D_grievance_and_settlement.md` | `forgiven_since` mark and widened decline; `challenge` stakes, answer window, `challenge.declined`, settled mark; `carry`'s `petition_venue` and appeal; every one of these, and `commit`, made drawn (§0.6) | S1-B (delivery), lane A step 2, PHYSICAL `accept` | planted-dispute run: forgive ends the dispute; an unanswered challenge declines at its due tick and settles; a carried petition names a venue and reaches a `determine` attempt |
 
 Each batch is a declared hash mover for the shipped realm; its re-record is named in its commit body
 (CLAUDE.md §7). **Every gate also carries the Standing rule's check:** for each verb the batch makes drawn,

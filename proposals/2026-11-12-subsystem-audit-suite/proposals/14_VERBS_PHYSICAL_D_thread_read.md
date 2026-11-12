@@ -1,0 +1,66 @@
+# VERBS · PHYSICAL · D — `thread_read`: a graded diagnosis now, a priced working later
+
+## Status: PROPOSED
+
+Batches P-D1 and P-D2 of `audits/14_VERBS_PHYSICAL.md` §10.3. Carries that file's §9 and §0.6. Stage 1
+lands after FI-03 §2's `observes:` column. Stage 2 lands after `09_WR_threadwork_module.md` and
+CP-T07-02 (the Coherence carrier, H-47). Reference only (CLAUDE.md §0.05). Authored by Opus completing
+a Fable lane cut off by the usage limit (2026-11-12).
+
+## What it changes in `engine/season/` at runtime
+
+- **Stage 1.** `thread_read` forms on a person and resolves by a draw (it is ungraded today: a
+  deterministic success for anyone past the sensitivity gate). A success deposits whether the subject
+  is Thread-sensitive and, on the better bands, how much.
+- **Stage 2.** The draw's obstacle is the working's Three-Axis Ob, and every read, failed or not, costs
+  the reader Coherence.
+
+Declared movers: the realm pins in which the 4 sensitive persons formed `thread_read`.
+
+## The problem (evidence)
+
+`aperture 2 0`: formed 4, attempted 3, executed 3, each depositing only "a finding was made" (ungraded,
+so `find_trail` keys nothing). Corpus: never attempted, listed as *EMITS AND WRITES NOTHING*. The row's
+own note names its missing read, depth and cost.
+
+## Exact edits, by owner
+
+### Stage 1
+
+| file (owner) | edit |
+|---|---|
+| `engine/season/verb_table.yaml`, row `thread_read` | add `referent_class: Person`. `requires_typed` becomes `all:` of today's `scalar_threshold` and `{form: relation, of: subject, relation: with}` (world-only). Add `counterparty: subject`, so the fold refuses a self-read (the reading of one's own sensitivity is already one's own state). `emits:` becomes degree-keyed `{Overwhelming: [finding.made], Success: [finding.made], Partial: [finding.made], Failure: [finding.none]}`. `observes:` (FI-03 §2's column): Partial and better: `{form: scalar_threshold, of: subject, scalar: thread_sensitivity, threshold_predicate: "thread_sensitivity.gate", comparator: ">="}` as a non-gating read, deposited firsthand as "sensitive / not". Success and better add the subject's sensitivity band (`band_floors`' reading of the same scalar). Update `requires_typed_note` and `writes_note` to cite this file. |
+| `engine/season/rosters.yaml: graded_inquiries` (renamed `graded_routes` by P-B; whichever lands first does the rename) | add `thread_read` on the same provider and role as `examine`. |
+| `engine/season/data/requires.py` | none, if the `observes:` loader accepts `of: subject` on `scalar_threshold`. Otherwise `OWN_STATE_STEMS`' `thread_sensitivity` must be admitted as a world read of another person on the observation path only `[verify at landing; if a new stem is needed it is a declared grammar change and is named in the commit]`. |
+
+### Stage 2 (waits on WR)
+
+| file | edit |
+|---|---|
+| `rosters.yaml: graded_routes` | `thread_read`'s row re-points to the threadwork module's `read` entry (`09_WR_threadwork_module.md` edits 1-3; `thread_operations` gains `read` if WR has not named it). `check_graded_routes` refuses an unregistered pair. |
+| `verb_table.yaml`, row `thread_read` | `writes:` `{Overwhelming: [Person.coherence], Success: [Person.coherence], Partial: [Person.coherence], Failure: [Person.coherence]}` (a failed read still frays). Emits gain `coherence.changed` (an existing never-emitted kind) on every band. `observes:` gains the subject's live `knot`/`tie` edges and his Coherence band (T07's definition). |
+| `engine/season/loop/effects_*` (WR's choice of module) | `_eff_thread_read` writes the displacement the module's outcome returned, through CP-T07-02's carrier. The size is the module's draw, not a constant. |
+
+## Gate (execution artifacts)
+
+Stage 1: the audit's §9.7 test, plus a draw assertion: at the shipped pool, seeds 0-29 produce both
+Success and Failure for one reader-subject pair. Stage 2: WR's gate, plus an executed read that lowers
+the reader's resting point by the module's returned displacement at every band.
+
+## Falsifier
+
+Drop the `observes:` cell (a Success deposits only `finding.made`). Leave the row out of the graded
+route (every attempt deposits the same flat finding, so the draw is absent). Stage 2: a read that
+leaves `Person.coherence` unmoved at Failure.
+
+## NERS reading
+
+- **N.** It is the only loop verb of the threadwork arcs (M-PERC: 26 cases). Audit §9.9.
+- **R.** A hidden capacity becomes discoverable, and later a priced and condemned act.
+- **S.** The same graded route and observation deposit as every inquiry. Stage 2 swaps the obstacle
+  through the same route row.
+- **E (last).** Stage 1 is data edits only. Stage 2 is one route re-point and one write.
+
+## Cost class
+
+Stage 1: edit. Stage 2: a small build on WR's module.
