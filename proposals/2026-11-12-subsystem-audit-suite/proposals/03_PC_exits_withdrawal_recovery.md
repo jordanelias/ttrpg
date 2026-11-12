@@ -1,6 +1,6 @@
 # PC — a priced withdrawal, the beaten fighter's exit, and recovery that takes more than one act
 
-Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-04, D-05 — Part B decided by the standing rule (a felling's death is a mortal-wound draw; terms follow context); Part C's `tend` becomes a graded draw.
+Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-04, D-05 — Part B decided by the standing rule (a felling's death is `14_VERBS_PHYSICAL_A` A3's mortal-wound draw, adopted, not restated; terms follow context); Part C's `tend` becomes a graded draw.
 
 ## Status: PROPOSED
 
@@ -105,23 +105,16 @@ Jordan's ruling of 2026-11-12 (*"we do not do deterministic"*, `AUDIT_BRIEF.md`)
 that answers §11 item 1 (ladder step 1): a fight may not kill with certainty. Neither A nor B above
 is enough alone (B removes the death by default; A keeps it certain). Decided:
 
-- **A felling is not a death; the death is a draw.** When a fighter's band is `Felled` under any term
-  (`death` included), the seam rolls a **mortal-wound draw** once, through `core.resolve` (the combat
-  module's one roller, which already grades through `degree_from_net`): pool = the felled person's
-  Body capability (`resolution_pool(faculty)`), obstacle = `mortal_ob` (a fixture, proposed 2, NUMBER
-  row, swept 1/2/3) `+` the felling blow's excess damage in wound levels `+ 1` if the term is `death`
-  (the victor presses it), `− 1` if a tender is present in the scene. Bands: `Failure` dies
-  (`Person.exists` closes, today's write); `Partial` lives, `body_ceiling` lowered by one mark (the
-  existing `_marks` write) and `body` at 1; `Success` lives, `body` at 1; `Overwhelming` lives and the
-  victor's regard for him moves (a told `spared` deposit). Each band's write is a `writes_by_degree`
-  row on `fight` / `accept` / `capture` (the existing column); the draw's terms ride `Event.ending`.
-- **The term follows the context** (B's finer form, now built, not named): `rosters.yaml: duel_terms`
-  keyed on `violence_contexts` — `war` → `death`, `crime`/`defence` → `yield`; `fight` with no context
-  → `yield`. The mortal-wound draw then applies only to a fighter who is felled before yielding.
-- **Gate.** 200 seeded season fights at `death` terms: deaths strictly between 0 and 200 (the
-  `Failure` share at the felled fighter's pool, reported with the exact `band_odds` beside it); every
-  survivor's `Event.ending` names his band; control `mortal_ob = 99` (the draw cannot succeed) restores
-  200 of 200. Hash movers: every season in which a `fight`, `accept` or `capture` reaches `Felled`.
+- **A felling is not a death; the death is a draw.** The draw is specified ONCE, at
+  `14_VERBS_PHYSICAL_A_custody_and_force.md` A3 (the mortal-wound draw in `seam/wrappers/combat.py`
+  after the scene: pool from the felled man's body band, obstacle `Fixtures.mortal_wound_ob[terms]`
+  plus named modifiers, one roller; Failure dies, Partial left for dead with the lasting mark, Success
+  and better lives). This part adopts it and adds nothing to it, so there is one rule, not two.
+- **The term follows the context** (B's finer form): A3's `context_terms` roster, keyed on
+  `violence_contexts`' names, is that form; this part adopts it.
+- **Gate** (A3's, restated as this part's acceptance): the F-PC-04 probe's deaths fall strictly below
+  200 of 200 and above 0; the control `mortal_wound_ob` at an unreachable value reproduces 200 of 200.
+  Hash movers: every season in which a `fight`, `accept` or `capture` reaches `Felled`.
 
 ## Part C — recovery is a swept fraction (decided; ships at today's value)
 

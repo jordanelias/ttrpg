@@ -131,3 +131,151 @@ Primary sources read:
 | "Lacuna-style spatial attention", "temporal drift" | `.designs/systems/fieldwork/reference/investigation_systems_v30.md:209` | **NOT SUPPORTED** (T19:298; `D_T06.md:60`; nothing in the devlogs). The design document's Lacuna label is a misattribution; the nearest real thing is the dialogue timer. |
 | "approach choice, calm or aggressive" | VCD:776 | **PARTLY**: tracked as a counter; its effect on play is not established. |
 | "irreversibility" | VCD:791 | **CONFIRMED** [P]: no takebacks is the studio's stated first principle. |
+
+---
+
+## 2. What transfers, and what does not
+
+Steelman first (the case for Lacuna as a model), then the attack, then what survives.
+
+**Steelman.** Lacuna solved the detective genre's central problem (a puzzle blocks the story) by making
+the conclusion a single-shot commitment the story absorbs either way, and made that commitment matter by
+letting wrong answers cascade. That is exactly Valoria's need: a no-GM engine cannot block on a puzzle, a
+wrong conclusion must be playable, and the consequence must arrive later from the world.
+
+**Attack.** (a) Lacuna's correctness is an answer key; Valoria has ruled no verifier (2026-08-18 Q5, kept by
+`08_FI_05_B` §7 and `05_SC_evidence_and_rebuttal_B`). (b) Lacuna's redirect is authored railroading
+toward the truth; Valoria has no author and must not script (CLAUDE.md §0, scripting drift). (c) Lacuna's
+gathering is certain; Valoria's inquiries are graded draws (`graded_inquiries`, `rosters.yaml:1407`).
+(d) Lacuna has no court. (e) Lacuna has one investigator; Valoria's one-chooser rule makes every person a
+possible investigator, accused and judge.
+
+**What survives (the transferable structure):**
+
+| Lacuna element | survives? | Valoria form |
+|---|---|---|
+| Many channels out, few back in | **yes, as structure** | Wide: WITNESS's deposits, six inquiry rows, the told channel, the found deposit. Narrow: one committed conclusion per case question (§3, stage 4). |
+| The Sheet: a cloze of cells, answer without reasoning | **yes, changed** | A conclusion is an uttered `Proposition` (a cell) the investigator `commit`s to. Valoria **adds** what Lacuna omits: the support is bound to it (`cites`), because in Valoria the support is what a bench will weigh. |
+| Single-shot, irreversible submission | **yes** | `Proposition` is immutable (`loop/effects_information.py::_eff_utter` docstring, §14); a `commit` can be `release`d, but the release is itself an Event others witness (`commitment.ended`), so a retraction is a deed with a cost, not an undo. |
+| Not told whether right | **yes, already true** | Nothing person-side reads the Event log as truth; `record` pairs held items only (`decision/options.py:1727-1767`). |
+| Wide answer space against guessing | **yes, already true** | The value space is the persons the ledger names (`person_q.deed_doers`, `:302`), which can be empty, one, several, or wrong. |
+| Wrong answer cascades into the parent case | **yes, systemic** | A wrongly disposed accused leaves the true doer free to act again; the convicted man's kin and he hold the determination as a deed; the parent matter (a faction's grievance, a strand) reads the outcome. No authored cascade: the free doer's next deed is the cascade. |
+| Soft redirect toward truth | **no (null, kept)** | Valoria lets a wrong conclusion stand. What can correct it is another person's firsthand contradiction reaching the concluder (FI_03 §4, the caught-liar question) — a draw-driven, not authored, redirect, and it may never come. |
+| Colleague comments on the mistake | **yes** | A colleague who holds a contradicting firsthand cell and `tell`s it; `record` re-grades the concluder in that hearer (§4.4). |
+| Single-play dialogue, clues lost by order | **partly** | Order already matters (`engine/season/epistemic.py:379` `[as cited by D_T06; not opened]`, witnessing a forging closes its trail; `D_T06.md:55`). Single-play becomes a cost, not a lock: questioning someone tells him he is being asked about (proposal 4). |
+| Tone (agreeable / aggressive) | **yes, as odds** | An `approach` payload key on `interview` and `interrogate` that moves the obstacle and the subject's `regard` (VCD row 9; proposal 4). |
+| Standing with the institution at the end | **yes, systemic** | A bench's or investigator's later `reception` and `record` move by what the room and the realm come to hold. |
+| Authored truth and endings | **no** | The truth is the Event log; no ending table (ERRATA G17, `D_T06.md:61`). |
+| Certain gathering | **no** | Every inquiry is a graded draw. |
+
+**Null, honestly marked.** No shipped detective game read here (Lacuna, and the T06/T19 set: Obra Dinn,
+Shadows of Doubt, L.A. Noire, Ace Attorney, Pentiment) lets a non-player investigate, conclude wrongly,
+accuse and be judged by the same surface the player uses, and none resolves a verdict by a draw from the
+case. Ace Attorney's court is authored and scored per present (T19:171-190); Pentiment's accusation has no
+canonical culprit but is authored (R5:52, per THROUGHLINES P26). Valoria's pipeline below has no
+precedent as a whole; its parts each have one.
+
+---
+
+## 3. The pipeline, one path from crime to chronicle
+
+Six stages. Every person runs it through the same Candidates and the same fold; a player differs only in
+who chooses (`harness/play_surface.py::dispatching_chooser`). Draws are named with their pool and obstacle
+owners; "choice" means a chooser's decision (sampled for an NPC; the determinism sweep classes that as
+drawn, `audits/18_DETERMINISM_SWEEP.md:8-9`); "eligibility" is the brief's carve-out; "bookkeeping" is
+arithmetic by definition.
+
+| # | stage | verbs (rows) | typed objects in / out | what is drawn | writes and who learns | state today |
+|---|---|---|---|---|---|---|
+| 1 | **open** — a crime, a claim or a petition becomes a case | in the field: none (the case is the goal `{deed_doers: …}`, `08_FI_07` §1); before a bench: `open_case` (seat with `remit:determine`, purview), `petition` + `carry` (anyone) | in: a held deed claim or a held petition; out: the goal (field), a case-file `Record` + `DocketItem` (proceedings) | nothing: opening is an eligibility-gated act (`open_case` has no contest; `petition` none) | `_eff_open_case` mints the case file and dockets the matter (`effects_information.py:367-446`); WITNESS tells those present | **built** (both rows run); the field case as a goal is `08_FI_07` §1 |
+| 2 | **investigate** — evidence and testimony as typed objects held by persons | `examine`, `surveil`, `research`, `interview` (questioned person answers by his own `tell`/`lie`, CP-T06-05), `interrogate` (seat, detainee), `thread_read` | in: a Site / Rung / Record / Person; out: `Claim`s in the actor's ledger (firsthand, found, told), `Record`s on his `hold` | each inquiry is a graded draw (`graded_inquiries`); the answer to `interview` is the subject's own `tell`/`lie` draw; `interrogate` is a contest (`contests: a proposition`) | WITNESS deposits; `finding_terms` decides what of a covert trail a band shows; the subject learns he was questioned (proposal 4) | rows exist; products are `08_FI_03` §2 / `08_FI_07` §2; `examine` never forms (F-FI-12) |
+| 3 | **theorise** — the board | none (a read) | in: the ledger; out: groups by cell, support over distinct origins, contradictions held, the suspects line | nothing (a rendering) | nothing | `08_FI_07` §3 (`play_surface.board`), harness only |
+| 4 | **conclude** — commit to an assertion, support bound | `reconstruct` (product: an uttered `Proposition` HOLDS naming the doer), then `commit` to it | in: the goal's `deed_doers` value space, the held claims chosen as support; out: `Proposition` (immutable) + `hold` + `commit` edge; `Proposition.support` = the cited ids (proposal 2) | `reconstruct`'s graded draw sets what the conclusion can say (Failure: nothing; Partial: the deed without a hand; Success: the hand; Overwhelming: the hand and full confidence); **which** suspect, when the ledger names several, is the chooser's choice | `proposition.uttered`, `commitment.made` witnessed by those present; the conclusion is now a deed others can hold | `reconstruct.writes: []` today; `utter`/`commit` rows exist and run |
+| 5 | **proceed** — the conclusion enters a hearing | `petition` (terms name the accused, from the held Proposition via `terms_sourced`) → `carry`, or `open_case`; `speak` with `cites` (party, accused, advocates); the answering `speak`; `determine` | in: the docketed matter, the case file, each side's held items; out: `filed`/`excluded` stages, `struck` stages, the disposal Tenure with its `degree` | **admission**: rides the citing `speak`'s own band (proposal 1); **answer**: the answering act's draw (`05_SC_evidence_and_rebuttal_B` rules 1-2); **verdict**: `determine`'s draw, obstacle moved by the standing items, the venue and the persons (`05_SC_obstacle_difficulty_and_modifiers_B`) | the case file's stages; every hearer holds the told copies (FI E-3); `matter.*` Events | `speak` writes `[]` at every band; `determine` runs (a draw at pool 2 vs ob 2: 0.74 / 0.19 / 0.07 / 0.00 Failure / Partial / Success / Overwhelming, as measured in `05_SC_acquittal.md`) |
+| 6 | **carry forward** — reputation, grudges, precedent, record | none new: `record`, `reception`, `consequence_pursuits`, `deeds_judged`, the chronicle | in: the determination Event, the case file; out: claims of it in every witness; pursuit moves; a disposal edge | none at this stage: what follows is ordinary acts with their own draws (the freed doer's next deed; the convicted man's kin's `petition` or `challenge`; an appeal) | witnesses hold `matter.determined`/`matter.dismissed` as a deed; the case file persists, can be cited, forged, seized | partly built; the concluder is not yet paired by `record` (proposal 2); the chronicle cannot say what a case was about (`09_WR_B_chronicle_that_tells`) |
+
+**The verdict ladder** (proposal 3), one draw, five results:
+
+| result | how it arises | write | reversible by |
+|---|---|---|---|
+| **conviction** | `determine` at `Success` / `Overwhelming` | the disposal the arrangement names (`oblige` / `detain` / `ban`), `degree` = the band | appeal; `pardon` (detain, ban); `release` (oblige, by the obligee, C-1's ruled price) |
+| **partial** | `determine` at `Partial` | the disposal at `degree: Partial` (the lesser sentence, which a degree reader scales) | as conviction |
+| **acquittal** | `determine` at `Failure` | `matter.dismissed`, the docket cleared, a `dismissed` stage on the case file (SC-P6) | a new `open_case` on new evidence (the case file is reopenable) |
+| **mistrial** | the sitting reaches no closing draw: a `bench` or `quorum` conjunct of `determine` refuses (eligibility), or every `for` item is struck origin-wide on an `Overwhelming` impeachment (`forgery_found`) before the close | a `voided` stage on the case file; the matter stays docketed | a new sitting (the standing court re-hears it) |
+| **reversal** | an appeal: a petition whose `terms` name the disposal edge, carried to a bench at a higher rung, `determine` there at `Success`+ | closes the disposal (`Tenure.until`) and writes a `reversed` stage on the original case file | not reversible below the appellate rung |
+
+---
+
+## 4. The intersection, stage by stage: same, different, invented
+
+### 4.1 Open
+
+**Same as Lacuna:** a case is issued and may be closed at any time; the investigator cannot know when he
+holds enough. **Different:** nobody issues it. In the field the case is a goal whose object is a
+`deed_doers` question (`08_FI_07` §1; the form exists in `rosters.yaml: goal_object_kinds`); before a
+bench it is a `DocketItem` with a case file. **Invented:** nothing. The decided rule (R-19-01, §6): a field
+case and a docketed case are linked by the case file only when an `open_case` or `carry` docket it; a field
+case needs no document.
+
+### 4.2 Investigate
+
+**Same:** many channels (place, paper, person, news-by-telling); redundant routes (three inquiry rows reach
+one fact, `08_FI_07` steps 2-3); order can close a route. **Different:** each look is a draw; a `Failure`
+teaches the reads but not the trail (`08_FI_07` §2(b)); the person questioned answers by his own act and
+may lie. **Invented here (proposal 4):** questioning costs disclosure: the subject holds a `seen` claim that
+he was questioned, by whom, about whom, so a guilty subject may flee, forge, or lie better, and an innocent
+one tells others. This is the systemic counterpart of Lacuna's single-play dialogue (a lock in Lacuna, a
+risk in Valoria), plus the tone choice as an `approach` key.
+
+### 4.3 Theorise
+
+**Same:** the reasoning is the player's; no machine grades it. **Different:** Valoria shows a board
+(`08_FI_07` §3), because a non-player's reasoning must be legible afterwards (the brief's NPC charge (d)),
+and because the board shows what clause 4 actually weighs. A connection is two claims on one subject, not a
+stored link. **Invented:** nothing.
+
+### 4.4 Conclude
+
+**Same:** a narrow commitment; irreversible; not graded at submission; may be wrong. **Different:**
+(a) the support is bound to the conclusion, because a bench will weigh it and a reader must see why
+(Lacuna's cloze omits reasoning by design; Valoria's chronicle needs it); (b) the commitment is drawn twice
+over: `reconstruct`'s band sets how much the conclusion can say, and the chooser picks among the suspects
+the ledger names; (c) the world answers through `record`: a person who holds the concluder's Proposition
+and later holds a firsthand cell that contradicts it re-grades the concluder exactly as he re-grades a teller.
+**Invented (proposal 2):** `Proposition.support` (a tuple of claim and Record ids, cited at commit,
+refused if unheld); `reconstruct`'s product; the concluder as a teller in `record` (CR-83's designated home).
+
+### 4.5 Proceed
+
+**Same as nothing in Lacuna** (no court). Ace Attorney's present-against-statement is the nearest (T19
+§AA), and its shape — a held item set against a testimony and found inconsistent — is the SC lane's rule 2
+(contradiction), with the decisive difference that the result is a draw, not a lock. **Different:** a
+verdict is a draw with odds; the bench's members hear and keep the evidence (FI E-3). **Decided here
+(proposal 1):** whether an offered item is entered on the record is a draw, read off the citing act's own
+band. **Invented (proposal 3):** mistrial and reversal as named results.
+
+### 4.6 Carry forward
+
+**Same:** consequences arrive late, through what others say (Lacuna's news and Gary). **Different:** no
+endings table; the cascade is the free doer's next deed, the convicted man's grudge, the bench's reputation,
+the case file that can be cited, forged or burned. **Invented:** a case thread in the chronicle (proposal 3,
+harness only): from the determination back through the case file's stages to the first deed claim, using
+`09_WR_B_chronicle_that_tells`'s owners (`subject_of`, `anchor_of`).
+
+---
+
+## 5. The standing rule, applied to this pipeline
+
+| point | could it go either way in the fiction? | decided |
+|---|---|---|
+| opening a case | no: an eligibility (the seat, the purview, a held petition) | bookkeeping + eligibility, no draw |
+| an inquiry's yield | yes | graded draw (built) |
+| a questioned person's answer | yes | his own `tell`/`lie` draw (CP-T06-05) |
+| what a conclusion can say | yes | `reconstruct`'s graded draw |
+| which suspect | yes, a judgment | the chooser's sampled choice; an NPC can pick the weaker-supported name |
+| **whether an offered item is entered** | **yes: benches refuse exhibits** | **the citing `speak`'s band (proposal 1)**; this overturns the SC file's "filing is bookkeeping" |
+| whether an item survives an answer | yes | the answering act's draw (SC `_B` rules 1-2, already reconciled) |
+| the verdict | yes | `determine`'s draw; obstacle from the standing items, venue and persons |
+| mistrial on a refused quorum | no: whether a sitting may decide at all | eligibility |
+| an item's weight after corroboration | no: arithmetic over held items | bookkeeping (noisy-OR, ED-IN-0322) |
+| whether a later contradiction re-grades the concluder | no: a reading over two held claims | bookkeeping (`record`); what anyone does about it is a later draw |
