@@ -9,8 +9,7 @@ mechanism (`CLAUDE.md` §0.05).
 
 ## What it changes in `engine/season/` at runtime
 
-Nothing. It adds one read-only instrument beside the engine's existing ones and states what its readings
-are compared with.
+Nothing. It adds a block of readings to the engine's existing gauge and states what they are compared with.
 
 ## The problem
 
@@ -52,10 +51,14 @@ without claiming the two measure the same men.
 
 ### 2. The instrument
 
-`systems/mass_battle/sim/results_readout.py` (the oracle scripts' home, `CLAUDE.md` §3), read-only, one
-function per row of the table, each building its scenario through the season's own constructors
-(`orderofbattle`, `massbattle.resolve_field`) so that what is read is what a season fights. It prints the
-table with the reading, the band, n, and the same-run control for each row. It writes nothing tracked.
+No new file. The ten rows join the tree's one matchup instrument, `tests/sim/gauge_mb.py` (the gauge the
+grounding note drives), as a second block, "results", beside its win-share block. Each row builds its
+scenario through the season's own constructors (`orderofbattle`, `massbattle.resolve_field`) so that what is
+read is what a season fights; the win-share block's own constructors are left as they are and are re-read
+after the arrangement flip, as `04_MB_cell_hierarchy_as_data.md` gate 6 already says. The block prints the
+table with the reading, the band, n, and the same-run control for each row, and writes nothing tracked.
+`[UNVERIFIED: `gauge_mb.py` was not opened by this lane; if its shape cannot carry a ratio row, the block
+goes beside `lanchester_signature.py` under `systems/mass_battle/sim/` and the gauge is left alone.]`
 
 Scenarios, each with its control beside it:
 
@@ -112,11 +115,11 @@ loss.
 - **R.** Completeness: it reads the extremes (0 and 1; a tired side; no horse).
 - **S.** One instrument on the season's constructors; every row with its control; the same methodology as
   the gauge's decisive split where it reads win shares.
-- **E, against that.** One read-only file and a table of ten bands.
+- **E, against that.** One block in an instrument that exists and a table of ten bands.
 
 ## Cost class
 
-Small build (one instrument). It is not a guard and gates nothing (`CLAUDE.md` §0.1 pt 5): it is load-bearing
+Small build (one block). It is not a guard and gates nothing (`CLAUDE.md` §0.1 pt 5): it is load-bearing
 on the game's exported parameters at a calibration pass, and is run then.
 
 ## What it does not establish
