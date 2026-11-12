@@ -1,5 +1,7 @@
 # INST-SYN-E — one implementation plan for the institutions: ten batches, their edges to every other lane, their gates, cost classes
 
+Reconciled: 2026-11-12, U5d closure — folded **A-36**, **A-35**, **A-41 / A-42**, **A-13** and **A-12**. From the deferred list: the council that judges the Confessor (`15_INSTITUTIONS_PAPACY_E` item 5) is dropped, not deferred (A-36); schism (item 6) stays design-first and is now the only lawful answer to a bad Confessor besides his death or resignation; the `corvee` form is not built (A-41). Un-held and scheduled in its family's batch: `15_INSTITUTIONS_PAPACY_B` item 4 (`head_of_faction`, A-35). Added to the batch that lands the councils and elections: the territory and caste vote weight (`U5d_FA_owed_edits.md` §4), whose first reader they are (A-42). Batches that add seat keys (`passes_through`, paper-hands, `audit_at_exit`) proceed on a ruled shape (A-13). A seat modifier may be scheduled as content after the one obstacle form lands (A-12).
+
 ## Status: PROPOSED (a plan; it schedules the twenty-one family proposals and this lane's A to D, and builds nothing itself)
 
 Source: `audits/15_INSTITUTIONS_SYNTHESIS.md` §9; the four family audits' own plans

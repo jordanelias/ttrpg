@@ -1,5 +1,7 @@
 # COLONIAL-F (grounding) — what the tree's own research adds to empire at a distance: the bearer, the lord's reward, the hostage's keep, the farm that hardens, the commission that forbears, and six stories with their readings
 
+Reconciled: 2026-11-12, U5d closure — folded **A-41**, **A-22**, **A-17** and the land rulings (this file was written before the answers were recorded and cites none). Edit 7 ("the survivors, reshaped by the research") is closed by the answers: the south's part is A-17 (fought, ranked third); forced labour keyed on caste took neither option (A-41: no instrument; regard, vote blocks, tiered practice); the sale of office was closed by the synthesis (composed, no form). The order's bearer (edit 1) carries an order that binds only those its issuer commands (A-22). The commission that forbears war and treaty (edit 5) is read against the land rulings: a commissioned officer who wins a field still chooses to seize, occupy or withdraw, and a commission's forbearance clause is what makes a seizure a breach.
+
 ## Status: PROPOSED (an executable plan for a later session; not ratified by being written, CLAUDE.md §2)
 
 Source: `audits/15_INSTITUTIONS_COLONIAL.md` §16 (the re-grounding of 2026-11-12) and

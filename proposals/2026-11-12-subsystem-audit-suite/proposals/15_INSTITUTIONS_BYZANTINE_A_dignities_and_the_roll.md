@@ -4,6 +4,8 @@ Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-01, X-03 
 
 Re-grounded: 2026-11-12 (audit §18) — no edit of this file changes. Its history now has tree sources: the two tenures (`.audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md:27`), with the correction that BYZ-1 was regraded from KEEP to DISTILL (`.audit/2026-07-12-governance-compendium/tier3_proposal_status_closure.md:115`: keep "the decoupled-prestige kernel" only), which this file's remit-less seat row already is; a shipped precedent for rank by deed and a stipend by title (`research/game_precedent_suite/tutorials/T13_koei.md:29`, `:78`); and a caution for later batches: the tree grades the "holder is not controller" convergence over-claimed and records a reverted build (`research/by_lane/IN_infrastructure.md:142`), so a dignity stays a `hold` on a seat row and never a control relation. The grades and counts of the historical order stay memory-grade (§18.5).
 
+Reconciled: 2026-11-12, U5d closure — folded **A-12** and **A-17 / A-18**. A dignity's "precedence" step, withdrawn by X-19 because a seat could add no modifier, is lawful again as a seat's modifier (A-12); it is not re-added here and may return as a named term through the one obstacle composer. The founders' seeded deeds follow the ruled order (Varfell third, realm-wide at the third confidence).
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_BYZANTINE.md` §1.3 (D-2, D-5, D-6), §5, §6, §7.0; Jordan's fixed point

@@ -1,5 +1,7 @@
 # INST-SYN-B — the deed ledger: founders who did things, paper that recites them, keepers who can tell or withhold, and standing that passes down the seat
 
+Reconciled: 2026-11-12, U5d closure — folded **A-17 / A-18**, **A-19** and the land rulings. The Status line's "canon amendment … Jordan's" is answered: the south fought, ranked third and was relegated despite it (A-17), so the seeding ships on option A (Varfell's founding deed held realm-wide at the third confidence, A-18) and the drafted wording A1 to A4 (audit §4.6) is the canon text owed; a canon sentence changes only by that ruling, and no suite lane applies it. The seeded counts keep their `[ASSUMPTION; Jordan to correct]` (only the order is ruled). When the royal line fails the crown goes by the deed race (A-19): this ledger is what sets each claimant's odds, with the founding order a head start. `took_by_force` gains a live producer: a victor who seizes a place takes its seats with it (A-58, A-66; `U5d_FA_land_and_seats_pass_on_a_won_march.md`), and the `rung.seized` deed that names those seats is the dominance deed this helper reads, so a conqueror's standing in the seat starts from his own deeds and nothing before him passes. An occupier who does not seize holds no seat and enters no chain.
+
 ## Status: PROPOSED — the canon amendment it drafts is NOT APPLIED and is Jordan's; the seeded counts are `[ASSUMPTION; Jordan to correct]`
 
 Source: Jordan, 2026-11-12, as `INSTITUTIONS_BRIEF.md` records it: *"current kingdom royalty is because of

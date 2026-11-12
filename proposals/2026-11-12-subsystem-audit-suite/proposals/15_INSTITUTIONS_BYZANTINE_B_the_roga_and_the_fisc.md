@@ -4,6 +4,8 @@ Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-19, X-22,
 
 Re-grounded: 2026-11-12 (audit §18) — one addition: the treasurer's seat declares the kit's `audit_at_exit` (`15_INSTITUTIONS_BYZANTINE_grounding_mechanisms.md` item 1; sources `research/governance/governance_modes.md:329`, `research/fa_se_historical_precedent_research_v1.md:127`). The stipend's payment ceremony stays memory-grade (the tree's Liudprand is the receptions of 949 and 968 only); "an unpaid court is an unbound court" has sourced cousins (`research/governance/political_hierarchy_standing.md:20`, `:457`) and one shipped precedent (`research/game_precedent_suite/tutorials/T13_koei.md:78`); tax farming and its term are `research/fa_se_historical_precedent_research_v1.md:99-103`, `:204-208`. The fiscal vocabulary (assessor against collector, joint liability, reversion) stays memory-grade.
 
+Reconciled: 2026-11-12, U5d closure — folded **A-13**: the exit audit on seats that hold money is one of the three ruled seat facts (the key is `audit_at_exit`, X-12). No step changes.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_BYZANTINE.md` §2.2, §2.5, §4, §6.3 item 4, §7.0, §10. Batch B. Depends

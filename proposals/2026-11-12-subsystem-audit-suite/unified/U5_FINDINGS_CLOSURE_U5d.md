@@ -47,7 +47,7 @@ Carriers: **DECREE** = `06_FA_decree_binds.md`; **REMIT** = `06_FA_remit_grant_b
 `14_VERBS_BINDING_C_turnover.md`, `_D_orders.md`, `_E_war_seats.md` (U5c closes the verb verdicts; cited
 here as the owner of a band row); **OWED-FA** = `U5d_FA_owed_edits.md` (written by this lane: the FA
 rows decided "in this table" with no file, and the edits Jordan's answers A-19, A-22, A-23, A-35 and A-36
-now order); **LAND** = `U5d_FA_land_and_seats_pass_on_a_won_march.md` (written by this lane on A-57 and A-58).
+now order); **LAND** = `U5d_FA_land_and_seats_pass_on_a_won_march.md` (written by this lane on the land rulings A-57, A-58 and A-65 to A-70).
 
 ## 1.1 `audits/06_FA_audit.md` — findings
 
@@ -152,7 +152,7 @@ now order); **LAND** = `U5d_FA_land_and_seats_pass_on_a_won_march.md` (written b
 | C-4, C-5, C-8 | corrections of reading | RESOLVED-BY | corrected in the addendum; no edit owed | E-B1, E-B6, E-B7 |
 | C-7 | nothing a battle decides is read back by a governance verb (a Layer 1 shortfall) | RESOLVED-BY | LAND (as F-FA-13) | `10_FACTIONS_AND_DEPLOYMENT.md:90` |
 | C-6 | eight `elected` rows at `term: 8` do not fit the design | RESOLVED-BY | TERMS-B (three rows; life seats `null`), which supersedes TERMS's first authoring in content | E-B2 |
-| F-FA-13 | a defeat costs bodies and never a holding or a seat | RESOLVED-BY | **LAND** (`U5d_FA_land_and_seats_pass_on_a_won_march.md`, written by this lane on A-57, A-58, A-65, A-66, A-67: the field writes presence; a victor standing on another's land chooses to seize, occupy or withdraw; a seizure carries the seats anchored on the place; a drawn aggressor is back at his station); WAR-B edit 6 as reconciled (the occasion on which the taking is offered) | `architecture/meta/10_FACTIONS_AND_DEPLOYMENT.md:90`; `loop/effects_combat.py::_eff_march` ("PRESENCE, NOT TITLE", opened) |
+| F-FA-13 | a defeat costs bodies and never a holding or a seat | RESOLVED-BY | **LAND** (`U5d_FA_land_and_seats_pass_on_a_won_march.md`, written by this lane on A-57, A-58 and A-65 to A-70: the field writes presence; a victor standing on another's land chooses to seize, occupy or withdraw; a seizure carries the seats anchored on the place; on a draw both armies are back at their stations; an unopposed entry is read by a draw as trespass or aggression); WAR-B edit 6 as reconciled (the occasion on which the taking is offered) | `architecture/meta/10_FACTIONS_AND_DEPLOYMENT.md:90`; `loop/effects_combat.py::_eff_march` ("PRESENCE, NOT TITLE", opened) |
 | F-FA-14 | under the planned `at_war`, one committer keeps two factions at war | RESOLVED-BY | WAR-B edits 1–4 as reconciled: A-20 rules (B), so the "lands only on that ruling" hold is lifted | `04:460` |
 | F-FA-15 | men are levied by whoever minted a paper | RESOLVED-BY | LEVY-B as reconciled (A-22: the cohort is "the unseated in its land") | E-B3 |
 | F-FA-16 | five of ten factions have no head; one has no members | RESOLVED-BY | TERMS-B edit 4 (two heads); the Guilds headless by design; R-34 (`faction x` excluded by name) | E-B2 |

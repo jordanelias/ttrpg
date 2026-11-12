@@ -1,5 +1,7 @@
 # INST-VENICE-E (grounding) — what the tree's own research adds to the merchant-republic kit: thirteen mechanisms on existing owners
 
+Reconciled: 2026-11-12, U5d closure — folded **A-13**, **A-12** and **A-14** (this file was written before the answers were recorded and cites none): the paired officers, the secretary order and the inspection are content on the three ruled seat facts; an appointer who "answers" for his man does so by a drawn hearing, and a body's assent (edit 7) is a ballot of draws on its members. A seat's modifier, if the kit authors one, enters through the one obstacle composer. No edit is withdrawn.
+
 ## Status: PROPOSED (an executable plan for a later session; not ratified by being written, CLAUDE.md §2)
 
 Source: `audits/15_INSTITUTIONS_VENICE.md` §17 (the re-grounding of 2026-11-12) and

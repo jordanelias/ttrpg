@@ -4,6 +4,8 @@ Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-14, X-19,
 
 Re-grounded: 2026-11-12 (audit §18) — no edit of this file changes; two things are added beside it (`15_INSTITUTIONS_BYZANTINE_grounding_mechanisms.md` items 3 and 4): a reading of what a hand's holder was given by the makers of papers in his hand (the purchased toll-post and its abolition, `research/rise_to_power_roster_system_research_v1.md:493-497`), and a gate that an entered instrument is citable evidence (the register as "a precedent file", `proposals/2026-09-05-proceedings-subsystem/source/06-part-V-dossiers.md:39`). The Byzantine chancery's own chain stays memory-grade; the sourced chains are cousins (Ming, Ottoman, papal: audit §18.2). The archived design had already used the *sekreton* for the Church's four arms (`.designs/systems/factions/reference/faction_politics_v30.md:965`), so `passes_through` may name a Church body as well as a Crown one.
 
+Reconciled: 2026-11-12, U5d closure — folded **A-13** and **A-21**. The clerks an order passes (`passes_through`) are one of the three ruled seat facts; a seat declaring none has no hands. Under A-21 the terms of a decree travel with the news that it was issued, so a hand cannot keep an addressee ignorant of an order's terms; what a hand still does is hold, delay or alter the **entered instrument** (the paper that is cited, sealed and audited), which is where this file's draws apply.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_BYZANTINE.md` §2.3, §2.4, §3, §7.0, §7.1, §10, §14 item 1. Batch C.

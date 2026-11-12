@@ -1,5 +1,7 @@
 # INST-SYN-C — the crossings: what one institution's instrument does inside another institution's draw
 
+Reconciled: 2026-11-12, U5d closure — folded **A-36**, **A-35** and **A-23**. The closing sentence ("It does not decide who may judge the Confessor") is answered: nobody; he leaves by death or resignation, so no crossing in this file may route a sentence, an audit or a recall to `off_confessor`, and a dispute between the two keepers of certificates has no room above it (it ends in a draw at the seat, in schism or in a field). Every other Church officer may be stripped by the head by a resistible draw (A-35). A party in custody forms no act through his seat (A-23), which is one more way a bench's process reaches an officer without unseating him.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_SYNTHESIS.md` §5 (the interlock map; the chains of §5.2) and §6; Jordan,

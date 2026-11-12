@@ -1,5 +1,7 @@
 # INST-SYN-D — the first playable of the institutions together: "The King's Bill"; one scenario style; one report
 
+Reconciled: 2026-11-12, U5d closure — folded **A-12**, **A-14** and **A-10**: the first playable is a scenario on the season loop (no module); its ballots are draws on each voter inside the presiding act; a seat in it may carry a modifier once the kit authors one. No step changes.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_SYNTHESIS.md` §6, §7.6, §9.3; the standing requirement of

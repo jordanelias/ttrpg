@@ -4,6 +4,8 @@ Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-32) — t
 
 Re-grounded: 2026-11-12 (audit §15.3 C-1) — this scenario is unaffected by the electorate correction: the vacant chair is a Cardinal's, filled by `confer`. A second case file of the same shape, the Confessor's own chair, is specified as a gate in `15_INSTITUTIONS_PAPACY_grounding_mechanisms.md` item 1; on the built realm it is an election by two men, and with either of their seats also vacant it has no lawful outcome (the appointment cycle, `proposals/2026-08-30-play-space-coverage/03_seasons_church.md:600-603`). The report gains the reading "seasons vacant, and who acted against the sitting" (item 6).
 
+Reconciled: 2026-11-12, U5d closure — folded **A-14**, **A-36**, **A-15** and **A-5**. The chair falls vacant only by its holder's death or resignation (A-36): the scenario's one set-up act, the holder's `release`, is the resignation, and with natural death on (A-15) a second opening exists that needs no set-up. The election is one presiding act whose ballots are draws on each elector (A-14) on the one sampler (A-5).
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_PAPACY.md` §11 (batch 3), §9 items 1 and 2, §10 (NPC-039, NPC-040,
