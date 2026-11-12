@@ -400,7 +400,8 @@ Contradicted or lacking, where a designer would expect otherwise:
 |---|---|---|
 | a first rank in a skill is better than none | **contradicted**: untrained default 2 exceeds rank 1, so the code refuses to mint a key | nobody acquires a skill in play; `train` is refused for every non-holder (the CHAR audit counts it among the leading refusals) |
 | every contested roll names what it tests | 5 of 11 do not | a judge, a liar, an arresting officer and an interrogator are equally able by construction |
-| attribute **plus** skill, or attribute **caps** skill | neither; it is the larger of the two | a high attribute makes the skill irrelevant until the skill passes it. This is a ruling (CR-20) and is accepted; it is stated so the block's `untrained:` and `base:` are read correctly |
+| attribute **plus** skill, or attribute **caps** skill | neither; it is the larger of the two | a high attribute makes the skill irrelevant until the skill passes it. This is a ruling (CR-20) and is accepted; it is stated so the block's `untrained:` and `base:` are read correctly. The archived design's pool was additive (`attribute × 2 + History + 3`, `derived_stats_v30` §14.4); a reader moving between the two should not expect the design's pool sizes |
+| a **derived resource** from an attribute (hit points from Endurance, composure from a social attribute) | none on the season side; the combat module has its own (`modules/combat/`) | a wound is a band on one 0–1000 scale for every person; an enduring man is no harder to wear down in a season. PC and CHAR lanes |
 | traits, talents, flaws as named tags with declared effects | no carrier but `heritage` and Thread Sensitivity, each a dedicated field | the block's `kind: trait` has no reader until one is designed; the proposal does not invent one |
 | skill atrophy | only practice's window | none worth building now |
 | opposed roll (both sides roll) | static opposition only, by ruling (2026-08-14) | accepted |
@@ -509,6 +510,9 @@ per-subsystem consolidation describes the retired `mc_v18` driver and was read a
 | **Mandatory and world-state triggers**; **"Where were you?"** retrospective scenes for events the player missed | a person learns of an event only by a witness channel; the chronicle space shows his ledger | the design's answer to legibility for an absent player is unbuilt. Its mechanism (a free scene next season built from the player's ties) is reachable from what exists: a `claim_landed` question already carries a told claim; nothing marks it as news of a major event |
 | **Progressive revelation**; dark / perceived / named values; witnessed and reported layers (`integration_proposal` Parts 4, 7) | `04` §C.11's explanation contract (`explain(p, v) -> Derivation`, person-side) is specified and has no code | the player's sheet shows raw dicts (C2). GO and CHAR lanes; the core's part is that the contract needs the occasion F-CORE-12 does not keep |
 | **End of a life**: portrait retirement after two of three convictions resolve; lineage by mentorship, succession or thread legacy (`campaign_architecture` Part 7) | `carry_on` rebinds the player to a continuation on death (succession); `endings_reached` is computed and shown to no one | an end condition a player can read exists in design and half in code; the first audit's play loop (its §8 step 4) should stop on it |
+| **The slate's presentation and size** (`player_agency_v30` §4.2b, §4.3, §6): each entry shows who, where, a sentence, *the tag saying which conviction, duty or condition generated it*, and its priority; more entries than actions (Normal: 5–7 against 4); budget +1/+2 by standing, +1 for a knot nearby, −1 exhausted, −1 wounded | the `View` carries each question's `source` and `about`, which is the tag; the sheet does not show it. Budget 5, +1 per live hold, −1 per body band, −1 per travel leg | the generating tag is the cheapest legibility the design asks for and the data is already on the View (resolution 20). The budget's shape agrees with the design; its office term is the one Layer 1 refuses (§4.1) |
+| **What is not attended resolves without the player, by its own rule** (§4.5: a table of what each unpursued entry does) | everything unattended is simply other persons' acts in the same fold | agrees in substance, and more generally than the table |
+| **The pool** (`derived_stats_v30` §14.4): argue and fieldwork pools are `(primary attribute × 2) + History + 3`, 5–17 dice; one attribute per derived resource (`attribute × multiplier`) | `faculty`: the larger of the attribute and the held key, else 2, plus practice; 2–7 dice. No derived resources on the season side (`body` is a condition scale, not a function of Endurance) | a different axiom by ruling (CR-20), stated in §5 (d) so the two are not confused. "History" in the design is the capability key in code |
 | **RNG-1**: no resolver may default to an unseeded generator (`propagation_spec` O.5) | two do (C5) | first audit resolution 19 |
 | **Termination**: per-tick bounded; cross-season convergence not proven (`propagation_spec` §4.3) | the season loop has the same property by construction (one fold per round, no re-entry) and the same open question across seasons (H-25, CR-98: loops undeclared) | unchanged; the design's honest scope marker matches the register's |
 
@@ -516,7 +520,47 @@ Vocabulary the code still carries from these documents, for a reader who meets i
 (the budgeted unit), *zoom* (ENCOUNTER's call-out), *sufficient scope* (no code), *Domain Echo* (no
 code), *accounting* (MATTER and CENSUS between them), *slate* (no code).
 
+Also read in this tree: `holonic_container_doctrine_v1.md` (§0–§2). Its two guardrails are the ones
+`CLAUDE.md` §10 binds on every lane, and its statement of the target — *one uniform canonical shape at
+every scale … compliant and convertible* — is the standard §4.4 and the one-scene proposal are written
+to. Its cross-map names the Key substrate as the wrapper; that substrate is retired (`ED-IN-0232`), and
+the seam's typed input/outcome is what replaced it.
+
+### 7.2 The earlier audit corpus (`.audit/`; lesser weight; each old finding re-verified)
+
+Read: `2026-08-11-code-leanness/00_code_leanness.md` (every heading; §1.13, §8, §9 in full),
+`2026-08-11-world-schema-gap-audit/02_verdict_and_residuals.md` (§1–§2) and the headings of its second
+adversarial pass, `2026-08-06-vector-audit/structure_audit/data/structure_metrics.json` (its keys and
+counts), `2026-07-04-ners-qualitative-audit/strategic_judgments.md` (J-1 to J-7 and the list of J-8 to
+J-15).
+
+| old finding (audit, date) | re-verified against the tree at `785bc62` | status |
+|---|---|---|
+| a forked copy of the resolution core lives in the audit archive, *"values match live today; nothing would report it if they stopped"* (code leanness §1.13) | copied to `engine/reference/contest-groundup/engine.py` by ruling (`ED-IN-0231`), read by `tools/gen_sigma_parity_goldens.py`, and a parity golden (`engine/tests/goldens/sigma_leverage_parity.json`) is asserted by the `sim-regression` job | **now false**: a drift would be reported |
+| sixteen copies of the "no rng supplied" fallback, disagreeing (code leanness §8.1) | two remain outside tests and the workbench: `seam/wrappers/sigma.py:533`, `modules/combat/wrapper.py:565` | mostly fixed; the residue is C5 |
+| the degree ladder has sixteen producers and four meanings of `net` (§7.3, §8.1) | one owner of the four-band ladder (`engine/dice_engine/dice_engine.py::DEGREE_LABEL`, bound once in `data/rosters.py:1100-1103`); three seam ladders by ruling | fixed in the season engine; the three ladders are ruled, not drift |
+| *"The masters already exist. The code does not read them"*; the test of a centralisation is *delete the master and see whether anything fails* (§9.2, §9.4) | in the season engine the rosters, the verb table, the write matrix, the offices, goals, cast and geography files are each read by a loader that refuses on absence (`data/*.py`); `params_tables.yaml` is retired. The capability facts fail the test in one place: `DEFAULT_FIXTURES` is a Python literal, so its "master" is the code | the finding does not return for rosters. Its falsifier is adopted as the gate of the capability proposal (delete `capabilities:` and the load must refuse) |
+| Jordan's centralisation directive, 2026-08-11 (*"define once … centralize through injectable code, dictionaries, glossaries, masters"*, §8) | a ruling recorded in an archived audit; the same rule is `CLAUDE.md` §0.05 and §8 | referent for §5's single authoring surface; not cited as authority |
+| *"a world of near-identical instances plus a handful of hardcoded singletons … a second campaign would differ from the first essentially by RNG seed"*; faction-unique behaviour dispatched by `faction.name` equality (world schema gap §1) | the engine that finding describes (`mc_v18`, four static factions) is retired; factions are a roster and a Query. **The finding returns in two new places**: the corpus builder builds one template world 143 times (first audit F-CORE-02), and persons differ in wants and not in what they can do (§5, the CHAR audit's F-CHAR-03) | **returning finding**, relocated from the faction to the case and the person |
+| that audit's own instrument reported a `rediscovery` of 1 for every finding because its grouping key never matched (§2) | a method referent: a column that is always the same value is an absent measurement. The same shape is the CHAR audit's F-CHAR-06 (83 of 83 under every arm) and the first audit's depth-cap arms | lesson applied; nothing to fix here |
+| J-1 (ratified 2026-07-05): *the milestone is one playable season, played from the screen, passing the dramatic-legibility questions at each juncture* (NERS strategic judgments) | no client plays a season (first audit F-CORE-05); no module but combat has a played mode (F-CORE-13) | **unanswered** after four months; the milestone's instrument (`tools/m1_acceptance.py`) measures execution and determinism, not play |
+| J-5: *player decision surfaces are the biggest North-Star debt; resolvers were built before choice surfaces* | still the shape of the tree: four providers, one decider | unanswered; F-CORE-13's proposal is the core's share |
+| J-7: *emergence is real but must be made visible to be believed* | the log is causal and the chronicle prints chains; the reason is not kept (F-CORE-12) and fade records crowd the log (first audit F-CORE-01) | partly answered |
+| the vector audit's import-graph metrics (271 nodes, 408 edges, cycles, cut vertices, orphans) | a snapshot of the pre-season tree; its instrument survives as `tests/valoria/test_import_cycle_game_state_npe.py`, which `seam/wrappers/__init__.py:12-25` cites for the cycle it removed | history; no claim rests on it |
+
 <!-- APPEND-CONTEXT -->
+
+Read in part: `player_agency_v30.md` (§4.1, §4.2b–§4.5, §6, and every heading) and
+`derived_stats_v30.md` (§1–§3, §14.4–§14.5, and every heading).
+
+**Not read in these two trees** (declared, not sampled as if read): the rest of
+`.designs/systems/_architecture/reference/` — the remainder of those two, `throughlines_complete.md`, `complete_systems_reference.md`, `conflict_architecture_proposal.md`,
+`campaign_modes_v30.md`, `cogload_moderate_target.md`, `early_game_ignition_analysis.md`,
+`hybrid_gaps_v30.md`, `ners_vsg_reconciliation_v1.md`, the governance and Key-substrate documents, the
+flow skeletons and the index/infill siblings; `.designs/systems/overview/`; and in `.audit/` the
+world-schema-gap register (four parts), its discussion and propagation map, the code-leanness plan, and
+the NERS audit's main document and workings. Reason: context budget, after the files this addendum was
+commissioned to read.
 
 ## 8. Resolutions decided in this addendum
 

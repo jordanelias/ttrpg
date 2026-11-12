@@ -479,6 +479,17 @@ Ownership of proceedings is ruled (ED-SC-0033..0039) and is not touched; `12_ARC
 states the arcs' requirements at the owner and is to be reconciled with the SC lane's hearing proposals,
 which I did not open.
 
+### Proposals written by this lane
+
+| file (under `proposals/2026-11-12-subsystem-audit-suite/proposals/`) | mechanism | decided | gate |
+|---|---|---|---|
+| `12_ARCS_case_on_the_realm.md` | M-CASE | a case is a delta on the realm; knowledge seeded as prehistory through the fold; three controls | NPC-088's beats on-arm, absent off-arm, absent on the shuffled-causes log, seeds 0–2 |
+| `12_ARCS_arcs_as_staged_goals.md` | M-LATENT, M-AIM (data) | a counter becomes stages of the holder's goal, each armed by a claim in his own ledger; a stage names no act and no outcome | ARC-47: the demand is issued with three claims, not with two, and also with a planted third |
+| `12_ARCS_substrate_as_ground.md` | M-SUB, M-PERC | **held back**: two options (§11) | ARC-48's loop measured against a pinned-ground control |
+| `12_ARCS_cited_evidence.md` | M-REC, the e-needs | a held Record is a proof; the arrangement admits; a contradiction strikes; possession can be found | NPC-086's obstacle with the Record, without it, and against a contradicting finding |
+
+Decided resolutions in §6: 20 rows, of which row 6 is escalated (S-2) and row 18 is conditional on S-1.
+
 ## 11. Survivors for Jordan
 
 Two. Each is written as a proposal and listed here because it would add to or overwrite ratified design.
@@ -536,6 +547,10 @@ was not re-verified).
 
 `[SKIPPED: the rest of the CHAR design set in `dossiers/02_CHAR.md` (about 700 KB: `npc_behavior_v30` body and infill, `npc_roster_v30_infill`, `npc_character_analyses_v30` and infill, `npc_foils_v30_infill`, `character_histories`, `conviction_*`, `derived_stats`, `player_agency`, `companion_specification`, `edeyja_npc`, `baralta_v30`) — context budget; the directive to read them arrived after the case reading had been done]`
 `[SKIPPED: `.audit/` beyond the one head named — same reason]`
+`[SKIPPED: the brief's "Context and referents" section and `dossiers/99_cross_cutting.md` — acted on from the coordinator's summary of them, not opened]`
+Notes: HEAD moved to f83534e during the pass (the suite's own files); the code trees were not re-read
+after it. §3's table was inserted into this file by `arcs_work/table.py` through a script, not through
+the editor; the naming gate was checked afterwards by grep (0 hits).
 `[SKIPPED: the other lanes' proposals named in §4 — cited by filename as owners, not opened]`
 `[SKIPPED: `research/` — not opened; §10's precedent mapping rests on the brief's wording]`
 `[SKIPPED: `harness/populated.py` body, `loop/predicates.py`, `loop/witness.py`, `venues.yaml`, `arrangements.yaml`, `offices.yaml`, `npcs.yaml` beyond a sample — statements about them rest on the probe, greps and the audits cited]`
