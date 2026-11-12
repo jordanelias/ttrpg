@@ -279,8 +279,9 @@ answered by canon (ladder step 3), not escalated. What varies between worlds is 
   stores, garrison condition; per territory, where its points of interest lie (canon gives the counts) and
   its climate profile (base rates the MATTER draws of §4.8 read).
 - **Inputs:** canon `stats: [P, D, O]`, `starting_pros`, `fort_level`, the terrain row, `water`,
-  `poi_catalog`; table `worldgen.yaml: endowment` (site kinds by settlement type and terrain, with
-  weights; bands by `P` for stores and by `D` for garrison condition; a `spread` per band).
+  `poi_catalog`; the SE lane's table `rosters.yaml: site_endowment` (its one owner of which producing
+  kinds a territory's ground gives), extended with an `optional:` map of kinds with weights and a
+  `spread`; bands by `P` for stores and by `D` for garrison condition in `worldgen.yaml: ground`.
 - **Constraints:** a site kind only where its ground allows (a harbour needs water adjacency; a seam needs
   a resource point or mountainous terrain); the canon triplet fixes the band, the draw fixes the value
   inside it; conservation (stores are non-negative integers in existing kinds).
@@ -288,12 +289,14 @@ answered by canon (ladder step 3), not escalated. What varies between worlds is 
 - **Validation:** V1 every settlement has at least one food-yielding site or a neighbour with surplus;
   V2 the *scarcity bar*: at least `bars.deficit_settlements` settlements whose expected yield is under their
   cohort's draw and that border a surplus settlement (trade and want are both possible).
-- **Data:** `engine/season/worldgen.yaml` (new, typed, read by `engine/season/data/worldgen.py`); canon
-  geography unchanged.
-- **Depends on:** `proposals/07_SE_ground_and_granaries.md` (`endowment_mode: ground`, CP-T08-02), which
-  reads canon into sites and stores with no draw. This kit adds the spread and the placement on top;
-  `spread: 0` is exactly that proposal's arm.
-- **Tuning:** the endowment table and its spreads; the scarcity bar.
+- **Data:** `rosters.yaml: site_endowment` (the SE lane's table; no second endowment table) and
+  `engine/season/worldgen.yaml: ground, climate, bars` (new, typed, read by
+  `engine/season/data/worldgen.py`); canon geography unchanged.
+- **Depends on:** `proposals/07_SE_ground_and_granaries.md` (`endowment_mode: uniform | ground`,
+  CP-T08-02), which authors the endowment per territory with no draw. This kit adds a third mode,
+  `drawn`: the same rows, plus a keyed draw over each row's `optional:` kinds and a spread on stores and
+  condition. With no `optional:` and `spread: 0`, `drawn` equals `ground`.
+- **Tuning:** `site_endowment`'s optional kinds and weights; the bands and spreads; the scarcity bar.
 
 ### 4.3 G3 — population
 
@@ -534,7 +537,7 @@ says a story is good; the bar counts whether the conditions and the chains exist
 
 | file | what it changes | example edit |
 |---|---|---|
-| `engine/season/worldgen.yaml` · `endowment`, `climate` | how rich, how uneven, how harsh | widen `spread` on the stores band: more famine years, more trade |
+| `rosters.yaml: site_endowment` (the SE lane's) · `engine/season/worldgen.yaml: ground, climate` | how rich, how uneven, how harsh | widen `spread` on the stores band: more famine years, more trade |
 | `… · cast_quota`, `cast_cap`, `relations_per_person`, `deviation` | how crowded, how entangled, how many misfits | deviation 1 in 3 → 1 in 2: more hidden sympathisers |
 | `… · lifepaths` | what kinds of people there are | add `formation: scriptorium novice` with its attribute rows |
 | `… · local_seats` | which small offices exist | add a toll-keeper at every river Town |

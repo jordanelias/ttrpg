@@ -40,8 +40,10 @@ believers who are not its officers. The engine has a primitive for each (a seat 
 `commit` to the faction's Proposition and `Person.conviction`). None is connected for the Church. The
 design below connects them and adds **no verb, no stored quantity, no carrier and no tenure kind**. It
 adds one seat-row key (`patronage:`), one arrangement key (`quorum_share:`), three arrangement rows, one
-`offices.yaml` section of world-gen instruments, goal rows, seat rows and one typed `terms` form for a
-writ of avoidance. Every outcome named is a draw on the one ladder (§6).
+`offices.yaml` section of world-gen instruments, goal rows, seat rows, three emitted Event kinds on
+existing verb rows (`ban.opened`, `detention.opened`, `election.inconclusive`), one fixture
+(`penance_weight`) and one typed `terms` roster for a writ (avoid, withhold, render). Every outcome named
+is a draw on the one ladder (§6).
 
 **On Jordan's fixed point** the tree already agrees and the engine already has the instrument: canon says
 the crown is a *deed-monarchy, Church-consecrated* (`canon/03_canonical_timeline.md:78-92`, `:104`), and
