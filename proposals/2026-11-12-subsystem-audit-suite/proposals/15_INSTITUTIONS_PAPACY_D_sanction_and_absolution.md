@@ -53,8 +53,9 @@ No verb, tenure kind or stored quantity is added. No sentence is automatic.
 - Partial: the party is bound to the bench by an `oblige` (a monition and penance: he owes the seat; no
   exclusion). The gate already admits a bench opening an `oblige` on itself (`may_determine`).
 - Failure: acquittal (SC-P6). The attempt is itself an Event others hear of.
-- Odds: the SC obstacle; this lane's rows carry `standard` (T2: demanding; hard) and `stakes` (`ban`),
-  and under the declared row the vote share is `reception` (PAPACY-B edit 7).
+- Odds: the SC obstacle; this lane's rows carry `standard` (T2: demanding; hard) and `stakes` (`ban`).
+  Under the declared row the sentence passes by the SC lane's ballot draw at `quorum_share: [2, 3]`
+  (PAPACY-B edit 8), and the band of the disposal is the determiner's own roll.
 - The absent party: with CR-60's realm `scope:` on three benches (PAPACY-A edit 3) the bench sits over him
   wherever he stands in the realm. He is cited by a writ (below) or a carried `petition`; if he does not
   come he cannot `speak` or cite in answer, so the accuser's evidence stands unanswered. Contumacy is not

@@ -130,8 +130,9 @@ Ten false positives, in six groups, that needed a judgment and are not one of th
 
 `systems/combat/combat_engine_v1/capabilities.py:23` (`_affords_point`): the docstring names `systems.py`;
 the module is `combat_systems.py` (C-1). Five further corrections follow from §3.1 and are in the
-corrections proposal: a comment that points at a deleted function, a package docstring, two
-`mechanics_index.yaml` rows, a field, and a composition row's `needed_by` text.
+corrections proposal: a comment that points at a deleted function (C-2), a module docstring paragraph
+about a module that does not exist (C-3), a package docstring (C-4), two `mechanics_index.yaml` rows
+(C-5), and one sentence of another lane's proposal (C-6).
 
 ## 4. Where the census script cannot see (the brief's last paragraph, within this lane's files)
 
@@ -140,7 +141,8 @@ corrections proposal: a comment that points at a deleted function, a package doc
 | **X-1. Tests that exercise code nothing calls.** Beyond §3: `harness/arc.py::read_arcs` (not a census row: a test names it), `army_presets.install`, the whole threadwork oracle, `conviction.py`, `knots.py`, the SC kernel | the import graph tags each `TESTS` only | each has its decision above; none is left without one |
 | **X-2. A `__main__` demo inside a registered module** is the only caller of two functions | `equipment/armour.py:59-63`, `equipment/weapons.py:67-72` | deleted with their functions (already decided, §3.1) |
 | **X-3. An empty body that runs.** `rally_check`, `threadwork_check` | AST: body is `pass`; 2 of the 3 no-ops F-MB-10 lists (the third, `Subunit.halt_before_enemy`, is a method and not a census row) | already decided |
-| **X-4. Text that describes code which does not exist** | `conviction.py:269` (`beliefs.revise_belief`); `capabilities.py:24` (`systems.py`); `registers/mechanics_index.yaml:466`, `:484` (`canon_sources: systems/threadwork/threadwork_v30.md`, a path under a tree that holds no `.md`; `test_status: not_implemented` beside a `sim_module` that exists) | C-1 to C-4 |
+| **X-4. Text that describes code which does not exist** | `conviction.py:22`, `:269` (`beliefs.revise_belief`); `capabilities.py:24` (`systems.py`, `systems.afforded_heads`, `systems.select_mode`: the module is `combat_systems`) | C-1, C-3 |
+| **X-4b. `registers/mechanics_index.yaml` `canon_sources:` name retired paths file-wide** (13 rows cite `systems/threadwork/threadwork_v30.md`, 11 `engine/params/core.md`; `systems/` holds no `.md` and `engine/params/` is dissolved) | `grep -n canon_sources registers/mechanics_index.yaml`, tallied | **not corrected, no sweep**: a process register whose generator only warns on a missing path (`tools/mechanics_index_gen.py:12`); the two rows D3 touches get `sim_module: null` and nothing else |
 | **X-5. `[canonical: params/*.md]` and `designs/…` provenance tags** in code comments (about 250 lines in 40 files of this lane; for example `sigma_leverage.py:295`, `orchestration.py:2173`) name retired paths | grep, run 6 | **not corrected, and no sweep.** The paths resolve through `references/restructure_ledger.md` by the tree's own convention, and a comment is not a mechanism (§0.05). A pattern in a process-only artifact earns no guard (§0.1 pt 5) |
 | **X-6. All 121 probes execute** | run 1 | none needed; recorded because "does every registered probe still run" is what the 115 rows were really asking |
 

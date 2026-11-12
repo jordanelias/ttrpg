@@ -14,10 +14,11 @@ obstacle (`05_SC_obstacle_difficulty_and_modifiers_B.md`). Batch 2.
    refused at `may_fill`, and the Confessor's is admitted wherever the seat stands. A declared mover for
    `confer` formation on those seats (`world_q.vacancies` stops offering them to seats that may not fill).
 2. A `conclave` arrangement row. Hand-built until a computed docket names a row (CR-35's own REACH note).
-3. Under a `declared` row the vote stops being a pass mark. The check becomes *can the body sit*; the
-   share of the bench voting for and against becomes the content of the `reception` term of the
-   determination's roll. A declared mover wherever a declared determination executes (in the realm today:
-   none; in `test_cr34_declared_disposal.py`: its refusal arms are re-read as odds arms).
+3. A declared row may state its pass mark as a share of the ballots cast (`quorum_share`) instead of a
+   head count (`quorum`), and a hold-disposing declared row grades the count into three outcomes. The
+   ballot itself (each seated member's vote a draw, his commits its odds) is the SC lane's
+   (`13_SC_draw_for_unrolled_contests.md`, row "the ballot"; determinism sweep C-14) and is not redone
+   here. A declared mover wherever a declared determination executes (in the realm today: none).
 4. Held: a third `revocation_bases` member.
 
 ## The problem (evidence)
@@ -80,22 +81,29 @@ CR-35's `election` row specialised by data (a second row, not a second mechanism
 `[ASSUMPTION; medium; Jordan to correct; revert: the Confessor is elected under CR-35's generic
 `election` row.]`
 
-### 3. The vote sets the odds; the body's presence is the check
+### 3. The ballot is drawn (SC's); the pass mark is a share; the count is graded
 
-- **Check (eligibility):** a declared row may carry `quorum: <int>` (today) **or** `quorum_share: [n, d]`.
-  The sitting can be held when the number of bench members holding a live vote *for or against any
-  disposal of this matter* is at least `n/d` of the bench present (`judging_set` at the venue, counted as
-  distinct persons). It asks whether the body has engaged, not which way.
-- **Odds:** for a determination under a declared row, `reception` reads
-  `(for − against) / bench`, in `[-1, +1]`, times `reception_gain`: `for` is CR-34's tally (live commits to
-  the OUGHT whose subject is the party and whose predicate names the disposal, or, for a `hold`-disposing
-  row, the seat); `against` is the live commits to a Proposition the `incompatible` roster pairs with it
-  or, for a `hold`-disposing row, to the same OUGHT about another candidate. This is the *"bench's public
-  commits"* the SC lane's term already names as its source; it replaces the deed-sum only on declared
-  rows. No obstacle term is added.
-- **Bands** (the verb lane's one shape; SC-P4's band-keyed `disposes:`): Overwhelming and Success open the
-  `hold`; Partial opens it with `provisional_term` (a contested election, lapsing unless a later sitting
-  confirms it); Failure dismisses that candidacy (SC-P6), the seat stays vacant, other petitions stand.
+- **The ballot** is `13_SC_draw_for_unrolled_contests.md`'s: on a declared row each seated member's ballot
+  is his own draw (his `determine` pool against `plain` plus the room's `standard`, his live commits on
+  the matter as favour or hostility); Success or better is a vote for, Failure against, Partial an
+  abstention. A committed elector usually votes as he committed and sometimes does not. This proposal
+  adds nothing to it.
+- **The pass mark as a share.** A declared row carries `quorum: <int>` (today) **or** `quorum_share:
+  [n, d]`: the fors must be at least `n/d` of the ballots cast for or against (abstentions are not cast).
+  A share survives a bench that shrinks through death or grows through new sees; a head count does not.
+  The count is arithmetic on draws.
+- **Three outcomes on a hold-disposing declared row** (an election), so that a narrow result is neither a
+  win nor a dead end:
+
+  | the count | outcome |
+  |---|---|
+  | fors ≥ `n/d` of ballots cast | the candidate holds the seat (CR-35's `hold` disposal); the division is recorded where `records_dissent` |
+  | fors a simple majority, short of `n/d` | no election; the candidacy **stays on the docket** for the next sitting (the scrutiny was inconclusive); emits `election.inconclusive` |
+  | fors not a majority | the candidacy is dismissed (SC-P6's `matter.dismissed`); he may petition again; other petitions stand |
+
+- **Who is on the bench** is CR-35's (the live seats of the vacant seat's faction whose grant carries
+  `determine`). `[ASSUMPTION; Jordan to correct: only electors present at the sitting's venue cast a
+  ballot, so staying away is a way to withhold a vote; revert: every elector casts wherever he is.]`
 - **What the vacancy costs** is not a counter: while the head seat is empty nobody exercises its `confer`,
   `revoke` or its bench, so the Church's own vacancies stay open and its sentences cannot be absolved.
 
@@ -124,9 +132,10 @@ stays `null` (audit §13 item 2).
 6. `engine/season/arrangements.yaml`: the `conclave` row; `data/arrangements.py`: `quorum_share` added to
    `_ARRANGEMENT_KEYS` (the key-count test is re-recorded and says why), validated as two positive ints
    `n <= d`, lawful only on `disposal: declared`, exclusive with `quorum`.
-7. `engine/season/queries/world_q.py`: `declared_votes` returns `(for, against, bench)`; the `vote`
-   conjunct of `determine` reads the row's `quorum` or `quorum_share` against `for + against`;
-   `reception` (or SC-02's re-sourced reader) takes the declared branch above.
+7. `engine/season/loop/effects_information.py` (the ballot loop `13_SC_draw_for_unrolled_contests.md`
+   edit 3 adds): the pass test reads the row's `quorum` (fors ≥ the integer) or `quorum_share`
+   (`fors * d >= n * (fors + againsts)`); for a row whose `disposes:` is `hold` it applies the
+   three-outcome table. `verb_table.yaml: determine` gains the emitted kind `election.inconclusive`.
 8. `engine/season/arrangements.yaml: excommunication_deliberation`: `quorum: 2` → `quorum_share: [2, 3]`
    `[ASSUMPTION; revert: quorum: 2]`.
 9. (HELD) the `head_of_faction` roster member, rule and seven row values.
@@ -137,27 +146,31 @@ Hand-built, real fold, `PYTHONHASHSEED=0`:
 
 - `patronage`: the King's `confer` on a vacated `off_cardinal_prudence` → refused at `may_fill`; the
   Confessor's → admitted and rolled. With the key deleted from the row the King's is admitted (control).
-- Election: four electors, the Confessor's seat vacated, one candidate's petition docketed under
-  `conclave`. Arm A: one elector voting for, one against, two silent → the sitting cannot be held (2 of 4
-  engaged is under two-thirds). Arm B: three for, none against. Arm C: two for, two against. B and C each
-  run over 200 seeds: both show all four bands; P(seat opened) is higher in B than in C; the exact odds
-  are printed from the module's own distribution (no sampling claim rests on the 200).
+- Election (after the SC ballot lands): four electors, the Confessor's seat vacated, one candidate's
+  petition docketed under `conclave`. Arm B: three electors committed for, none against. Arm C: two for,
+  two against. Each over 200 seeds: all three outcomes of the table occur in at least one arm; P(seat
+  opened) is higher in B than in C; neither is 0 or 1. The exact probability of each outcome is printed
+  from the per-ballot odds (no sampling claim rests on the 200).
+- Share against head count: the same bench with one elector removed: under `quorum_share: [2, 3]` the
+  pass mark moves with the bench; under `quorum: 3` it does not (control).
 - Realm control: `build_realm(0)` one and two seasons, base hash, with no row declaring `patronage` and
   the `conclave` row absent.
 
 ## Falsifier
 
-Arms B and C giving the same band distribution (the vote would still be a pass mark). A seat declaring
-`[own_faction]` filled through a seat of another faction. A provisional hold that never lapses.
+Arms B and C giving the same outcome distribution (the commits would not be setting the odds). An
+election decided the same way in every seed for a given set of commits. A seat declaring `[own_faction]`
+filled through a seat of another faction. An inconclusive candidacy that leaves the docket.
 
 ## NERS reading
 
 N: cut `patronage` and the Church is a royal department (today) or, with a blanket same-faction rule, no
-lord can ever invest a bishop; cut the vote-as-odds and a conclave is a threshold. R: a player who is an
-elector chooses whom to commit to and when to move the election; a candidate canvasses commits by
-`argue`; a faction with a third of the bench can keep the chair empty and pays for it. With no player the
-arms each back their own. S: one `may_fill`, one tally owner, the SC obstacle unchanged; `quorum_share`
-and `quorum` are one check in two units. E (last): one seat key, one arrangement key, one row, against
+lord can ever invest a bishop; cut the share and a conclave's pass mark is wrong the day a Cardinal dies;
+cut the middle outcome and a near-miss is the same as a rout. R: a player who is an elector chooses whom
+to commit to and when to move the election; a candidate canvasses commits by `argue`; a faction with more
+than a third of the bench can keep the chair empty and pays for it. With no player the arms each back
+their own. S: one `may_fill`, the SC lane's one ballot, the SC obstacle unchanged; `quorum_share` and
+`quorum` are one pass test in two units. E (last): one seat key, one arrangement key, one row, against
 the investiture contest, the long vacancy and the contested election they buy.
 
 ## Cost class

@@ -83,9 +83,10 @@ Delete `systems/threadwork/sim/threadcut.py` (200 lines) and `systems/threadwork
 |---|---|
 | `git rm` the two files | — |
 | drop the two lines naming them | `systems/threadwork/sim/__init__.py:11`, `:13` |
-| `co_movement` and `threadcut_beings`: `sim_module: null` (the file's own form for "no module", `tools/mechanics_index_gen.py:233`), and `canon_sources` as C-3 corrects it | `registers/mechanics_index.yaml:467`, `:485` |
+| `co_movement` and `threadcut_beings`: `sim_module: null` (the file's own form for "no module", `tools/mechanics_index_gen.py:233`); nothing else in the rows changes | `registers/mechanics_index.yaml:467`, `:485` |
 | drop `'systems/threadwork/sim/co_movement.py'` from the live-file list and the pair `('systems/threadwork/sim/co_movement.py', 'apply_ms_delta')` | `tests/valoria/test_flow_skeletons.py:351`, `:427` |
 | re-derive, never hand-edit: `python tools/export_sim_params.py --build` (both files' constants are in `engine/engine_params/sim_params.json`, 6 lines, and `value_pointer_links.json`, 5) | exporter output |
+| reword the two remaining pointers to `co_movement.py` (text in `17_CENSUS_C1B_03_corrections.md` C-5) | `engine/season/hole_register.yaml:6110` (H-326), `systems/threadwork/sim/operations.py:212` |
 | two `FORK:` rows (below) | `references/restructure_ledger.md` |
 
 `FORK:` row text (the sha is the last commit that holds the files; `b8039982` holds them unchanged

@@ -151,8 +151,9 @@ throne's body>]}`). Not built until ruled.
 
 ### 6. (DESIGN-FIRST) Schism
 
-A schism is two live head seats of one creed. The route from existing parts: a `conclave` ends Partial (a
-provisional hold) and is not confirmed; the dissenting electors `establish` a second seat of post
+A schism is two live head seats of one creed. The route from existing parts: a `conclave` stays
+inconclusive for seasons, or elects by a margin the losers will not accept; the dissenting electors
+`establish` a second seat of post
 `Confessor`; persons `release` their `commit` to the Church's Proposition and `commit` to a second
 faction Proposition whose head seat it is. What is missing is the second Proposition: a faction is a
 Proposition plus its commits, and no verb mints a faction Proposition in play (GD-3's pipeline and the
