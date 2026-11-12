@@ -1,5 +1,7 @@
 # Census C1A · 02 — wires and text corrections for the season loop's core packages
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-16) — W4 and `02_CHAR_scar_cap_and_regard_unit.md`'s Addendum both edit `decision/choose.py::_stance_arm`, and are two facts about one term, not two terms: `regard_sign` is how the act treats its subject, `beneficiary:` is whom it is done for. At the arm `beneficiary` the term is `regard_sign(row) × regard(p, subject)` plus `regard(p, b)` where the row's beneficiary `b` is neither the subject nor the actor; the same clamp and `stance_scale` apply to the sum (`U5a_CHAR_owed_amendments.md` §2). W4 lands after the `regard_sign` column, so neither is counted twice.
+
 ## Status: PROPOSED
 
 Author: census lane C1A. Audit: `audits/17_CENSUS_C1A.md` (F-C1A-02 to F-C1A-07). Read at b805fad.

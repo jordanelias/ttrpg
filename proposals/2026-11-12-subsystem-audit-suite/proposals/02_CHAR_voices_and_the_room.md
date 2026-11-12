@@ -1,5 +1,7 @@
 # CHAR — voices and the room: a person's own choice read back as the parts that argued over it, and the regard of those who saw it
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-15) — Edit 5's `present_at(w, event_id)` carries its rule itself; the clause *"`witnessed` is rewritten to call it"* is dropped, because `world_q.witnessed` is deleted with the person projection (`17_CENSUS_C1A_01_deletion_batches.md` D2). `the_room` is a host-side reading for the surface and is not a per-person client read. The term tuple this file attributes grows with `aim` and `risk` and, where a seat's row declares one, the beneficiary arm (`17_CENSUS_C1A_02_wires_and_corrections.md` W4).
+
 ## Status: PROPOSED
 
 Written by the CHAR audit lane, addendum B (`audits/02_CHAR_audit_addendum_B.md`, §B5, B6.2 rows 19

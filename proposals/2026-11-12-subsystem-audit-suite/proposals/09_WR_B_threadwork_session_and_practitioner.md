@@ -1,5 +1,7 @@
 # WR · Threadwork: the session on the input, three registered entries, a cost rule by direction, a practitioner who cannot read himself, and the Warden's season
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-15) — where this file names `PersonProjection` as a present reader (the practitioner who cannot read himself), read `account` (`11_GO_player_surface_contract_B.md` §4): the projection is deleted by `17_CENSUS_C1A_01_deletion_batches.md` D2. The property claimed (no Coherence value reachable by the person) is unchanged and is stated of `account`.
+
 ## Status: PROPOSED
 
 Carries findings F-WR-17 and F-WR-18 of `audits/09_WR_audit_addendum_B.md` (§4.2, §4.3), its resolutions

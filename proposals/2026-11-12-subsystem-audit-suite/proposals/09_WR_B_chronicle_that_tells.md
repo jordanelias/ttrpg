@@ -1,5 +1,7 @@
 # WR · A chronicle that says what each act was about, starts from what closed, and breaks ties by rarity
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-15) — `world_q.projection` / `witnessed` / `PersonProjection` are deleted by `17_CENSUS_C1A_01_deletion_batches.md` D2: the one typed per-person reading is `account` (the person's own ledger) and the host-side `receipt` of `11_GO_player_surface_contract_B.md` §3–§4. The focalized telling (R-32) is therefore a selection over `account`'s rows, marked `saw` or `inferred` from each row's own source, and never over `w.log`; nothing else in this proposal changes.
+
 ## Status: PROPOSED
 
 Carries finding F-WR-14 of `audits/09_WR_audit_addendum_B.md` (§3.3), its resolutions R-28 and R-32, its

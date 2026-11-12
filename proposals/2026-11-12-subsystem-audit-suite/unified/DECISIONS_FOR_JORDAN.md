@@ -23,7 +23,9 @@ are now at D-01 to D-03, rewritten in the plain readings you asked for. The shor
 every lane's recommendation keeps Layer 1 as it stands, and gives you the experience you described anyway.
 You only need to amend Layer 1 if you want the *other* reading.
 
-**Already answered (2026-11-12, recorded in `DECISIONS_ANSWERED.md`, which governs where they differ):**
+**STATUS 2026-11-12 (later): every decision except D-34 and D-35 is now answered or ladder-closed. Each entry below begins with its status line; `DECISIONS_ANSWERED.md` governs where they differ from the entry's text, including the recommendations and 'if you do not answer' lines, which are now historical.**
+
+**Answered at first drafting (2026-11-12, recorded in `DECISIONS_ANSWERED.md`, which governs where they differ):**
 D-01 (A, the same resolver run automatically), D-02 (A, a row), D-03 (A, nested), D-04 (A, won/lost/drawn),
 D-05 (**B**, the bell curve everywhere), D-06 (B, score plus a base), D-07 (**B**, two numbers). Their
 entries stay below for the record, each marked. D-08 is re-recommended in the light of D-05.
@@ -149,6 +151,8 @@ first two with Layer 1 as written. The options below exist because the *referent
 way, and you should choose knowingly.
 
 ### D-01 · Auto-resolve: the same battle run for you, or a quicker sum · MB, CORE
+**ANSWERED** (A-1): The same resolver, run automatically
+
 
 > **ANSWERED 2026-11-12: A** (`DECISIONS_ANSWERED.md` A-1).
 
@@ -189,6 +193,8 @@ item 2; `audits/11_GO_audit.md` §5.2; `architecture/holonic_ARCHITECTURE.md` §
 :761, :788.
 
 ### D-02 · A unit: a line on the army's sheet, or a thing in the world · MB
+**ANSWERED** (A-2): A row of data
+
 
 > **ANSWERED 2026-11-12: A** (`DECISIONS_ANSWERED.md` A-2).
 
@@ -227,6 +233,8 @@ item 1; `architecture/meta/04_CODE_ARCHITECTURE.md` :802, :813 (ED-IN-0306);
 `proposals/04_MB_cell_hierarchy_as_data.md`; `proposals/04_MB_unit_loadout_and_weapon_in_hand_B.md`.
 
 ### D-03 · A duel inside a battle: called from inside, or played as separate acts · PC, MB
+**ANSWERED** (A-4): Called from inside the battle, as a nested contest
+
 
 > **ANSWERED 2026-11-12: A** (`DECISIONS_ANSWERED.md` A-4).
 
@@ -269,6 +277,8 @@ one pause per call and not a consult inside a round (the same answer settles tha
 `architecture/holonic_ARCHITECTURE.md` §39.3 (:1397-1402), §44.3 (:1679-1686).
 
 ### D-04 · What a battle reports: won/lost/drawn, or how decisively · MB
+**ANSWERED** (A-3): An end state: won, lost or drawn
+
 
 > **ANSWERED 2026-11-12: A** (`DECISIONS_ANSWERED.md` A-3).
 
@@ -311,6 +321,8 @@ contest. These four questions decide what every non-combat roll in the game feel
 D-06 together.
 
 ### D-05 · Which dice the non-combat rolls use · DICE
+**ANSWERED** (A-5): The bell curve everywhere (against the register's recommendation)
+
 
 > **ANSWERED 2026-11-12: B, the bell curve everywhere** (`DECISIONS_ANSWERED.md` A-5), against the
 > recommendation below. D-06's answer is the re-centring.
@@ -341,6 +353,8 @@ with exact, countable odds. At the shipped settings the whole dice fail 74% of t
 `proposals/10_DICE_one_roller_one_fraction_rule.md`.
 
 ### D-06 · What a skill score is worth outside a fight · DICE, SC
+**ANSWERED** (A-6): Score plus a base, floor five
+
 
 > **ANSWERED 2026-11-12: B** (`DECISIONS_ANSWERED.md` A-6), calibrated together with D-05.
 
@@ -372,6 +386,8 @@ intended effect at today's small pools, 49–70% at five dice).
 paragraph); ED-IN-0351.
 
 ### D-07 · Talent and training: one number or two · PC, CHAR
+**ANSWERED** (A-7): Two numbers (against the register's interim recommendation)
+
 
 > **ANSWERED 2026-11-12: B, two numbers** (`DECISIONS_ANSWERED.md` A-7), against the interim
 > recommendation below.
@@ -400,6 +416,8 @@ D-06 is answered, since B multiplies the work D-06 already moves.
 **Sources.** `audits/03_PC_audit.md` §11 item 2; ED-IN-0351.
 
 ### D-08 · What a wound costs a roll · DICE, PC
+**ANSWERED** (A-8): B: a level against the roll, as combat spends it (register's recommendation)
+
 
 **The situation.** As ruled (ED-PC-0005, ED-PC-0006), a wound adds a small fixed fraction to the obstacle
 (0.15 per wound). That bites most on a middling roll and fades for an expert (2.4 points at eight dice).
@@ -431,6 +449,8 @@ standing rule) against a ratified Layer 1 row. Layer 1 is never edited to match 
 when you choose the reading that needs it.
 
 ### D-09 · A turn: a round of simultaneous choices, or short chains of acts · CORE
+**ANSWERED** (A-9): A short sequence (register's recommendation)
+
 
 **The situation.** One of the nine requirements says "chains of events within a scene are probabilistic".
 Today a season round collects everyone's choices and then applies them in one fixed global order (Layer 1
@@ -463,6 +483,8 @@ approach per phase, the hearing's moves).
 `engine/season/requirements.yaml` R-09.
 
 ### D-10 · Governance: the season loop's own verbs, or a separate module · FA
+**ANSWERED** (A-10): The loop's own verbs
+
 
 **The situation.** Your standing requirement says every subsystem should be a registered module (typed
 input, typed outcome, no held state, reached by a composition row). Layer 1 says an institution never acts
@@ -489,6 +511,8 @@ live once today.
 **Sources.** `audits/06_FA_audit.md` §11 item 2; `audits/15_INSTITUTIONS_SYNTHESIS.md` §8.2 L-5.
 
 ### D-11 · May training gate an act (only a surgeon may operate)? · CORE, CHAR
+**ANSWERED** (A-11): No, as ruled
+
 
 **The situation.** Layer 1 rules that a capability supplies dice and gates nothing; the one exception is
 Thread Sensitivity. So anyone may try anything; skill changes the odds. An unlettered man may try to forge
@@ -514,6 +538,8 @@ advocate may plead *in that court*).
 Part three.
 
 ### D-12 · May rank or office add to a roll? · institutions, SC
+**ANSWERED** (A-12): YES: a seat carries a modifier (against the register's recommendation)
+
 
 **The situation.** The institutions brief asks every institutional act to state "what roll and what
 modifiers (personality, affiliation, office, evidence, publicity)". Layer 1 §B.7 says a seat adds no verb
@@ -539,6 +565,8 @@ reconciled.
 `proposals/13_SC_tuning_tables.md` T4.
 
 ### D-13 · Three new facts on a seat · institutions
+**ANSWERED** (A-13): YES (register's recommendation)
+
 
 **The situation.** Layer 1 lists what a seat is (post, body, scope, remit, conferral, revocation, upkeep).
 The institutions kit needs three things the list does not hold: whose clerks an order must pass through
@@ -560,6 +588,8 @@ already used it to close another question (whether an order binds at issue or at
 **Sources.** `audits/15_INSTITUTIONS_SYNTHESIS.md` §8.2 L-2, §10 table row 1.
 
 ### D-14 · A vote: a draw on the voter, or the voter's own act · institutions, SC
+**ANSWERED** (A-14): A: a draw on the voter, inside the presiding person's act
+
 
 **The situation.** Your standing rule forbids a vote that is a fixed count of commitments. The ballot now
 draws each member's vote inside the presiding person's act. Layer 1 says only a person acts, by his own
@@ -590,6 +620,8 @@ ruling ED-IN-0317, which leaves the values to you; ED-IN-0337 makes violence exc
 "criminal contexts" without building one. Answer these two together.
 
 ### D-15 · Natural death: on or off · WR
+**ANSWERED** (A-15): A: on, after the 46 ages are authored
+
 
 **The situation.** The illness and ageing mechanisms exist and are switched off; every person's age is
 zero.
@@ -619,6 +651,8 @@ being reachable at all; the narrative churn's succession family.
 `proposals/22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md`.
 
 ### D-16 · May a person commit murder? · PC, FI
+**ANSWERED** (A-16): A: yes, rarely
+
 
 **The situation.** Violence today is war, duel, arrest and self-defence. Two provided cases (NPC-088,
 ARC-31) ask for a killing with no institutional context. The detective game currently investigates only
@@ -656,6 +690,8 @@ D-17 must be answered before D-18; D-19 depends on how D-17 and D-15 land; D-20 
 can change.
 
 ### D-17 · Canon's line on the south in the Secession War · canon, institutions
+**ANSWERED** (A-17): A: fought, ranked third, relegated despite it
+
 
 **The situation.** If the first Duke of Varfell won the war's third-greatest deed, the south was not simply
 excluded from it. The suite has drafted (not applied) the canon wording for each reading.
@@ -693,6 +729,8 @@ offered as 5, 3, 2 with only the order yours); D-18; D-19's odds; every southern
 stored counter Layer 1 refuses; the synthesis offers replacement wording (A4).
 
 ### D-18 · Who holds the first Duke of Varfell's deed as true · canon, institutions
+**ANSWERED** (A-18): Follows D-17 A: realm-wide, at the third confidence
+
 
 **The situation.** The founding deeds are seeded as beliefs people hold at some confidence.
 
@@ -713,6 +751,8 @@ grounds in it.
 **Sources.** `audits/15_INSTITUTIONS_BYZANTINE.md` §14 item 2.
 
 ### D-19 · When the royal line fails, who may claim the crown · FA, canon
+**ANSWERED** (A-19): B: the deed race
+
 
 **The situation.** Today one row says the heir succeeds the King. The built realm reaches a failed line in
 two deaths, and nothing says what happens next.
@@ -741,6 +781,8 @@ draws.
 `proposals/22_HAPPENINGS_B_the_throne_is_never_stranded.md`.
 
 ### D-20 · Does winning a battle take the land? · MB, FA
+**CLOSED BY THE FIVE-STEP LADDER, not by Jordan; reversible on his word** (ladder table): A: a won battle gives presence only; title passes by a separate act of seizure
+
 
 **The situation.** As built (and per #453), winning a field gives presence; title passes only when someone
 seizes it afterwards. Layer 1's faction contract says a defeat can cost "holdings and seats". The two
@@ -763,6 +805,8 @@ recommends A: it keeps one owner of title (seizure) and makes occupation a story
 **Sources.** `audits/14_VERBS_PHYSICAL.md` §10.4 D-2; `architecture/10_FACTIONS_AND_DEPLOYMENT.md` §3.
 
 ### D-21 · Whose word ends a war · FA
+**ANSWERED** (A-20): B: the seats that wage it
+
 
 **The situation.** Layer 1 says a realm is at war while anyone still holds a live commitment to the war.
 With rallying built, most wars would never end: one zealot keeps it alive.
@@ -796,6 +840,8 @@ decide who can be ordered, how the order arrives, and what removing a ruler does
 together.
 
 ### D-22 · Is a decree public, or paper that must be carried? · FA, SC
+**ANSWERED** (A-21): A: proclaimed
+
 
 **The situation.** A ruler issues a decree; today nobody can answer it.
 
@@ -829,6 +875,8 @@ the Byzantine chancery (D-13).
 `proposals/06_FA_decree_binds.md`; `proposals/14_VERBS_SOCIAL1_B_documents_and_obedience.md`.
 
 ### D-23 · Do orders run down the chain only? · FA, verbs
+**ANSWERED** (A-22): B: command
+
 
 **The situation.** By your ruling ED-IN-0256 (4), a seat may order whoever stands in its land. Read
 literally, any official whose district contains the King's residence may order the King.
@@ -850,6 +898,8 @@ for two verbs only.
 **Sources.** `audits/14_VERBS_BINDING.md` §13.4 item 1; `proposals/14_VERBS_BINDING_D_orders.md`.
 
 ### D-24 · Does prison silence a ruler's office? · SE, FA
+**ANSWERED** (A-23): B: custody suspends acts through the seat
+
 
 **The situation.** A detained duke cannot travel but can still issue decrees, convene and dispatch through
 his seat, since acts through a seat need no presence.
@@ -871,6 +921,8 @@ check where acts through a seat are formed.
 **Sources.** `audits/07_SE_audit.md` §11 S-SE-2; `audits/07_SE_audit_addendum_B.md` §5 (last paragraph).
 
 ### D-25 · Must an officer be present to arrest? · FI, verbs
+**CLOSED BY THE FIVE-STEP LADDER, not by Jordan; reversible on his word** (ladder table): A: an arrest needs no officer beside the prisoner (the court's reach suffices)
+
 
 **The situation.** An officer may arrest anywhere his court's reach extends; the seat stands in for its
 constables.
@@ -900,6 +952,8 @@ settlement verb, succession, inheritance). Three earlier rulings of yours fix an
 lanes would not overwrite them without asking. D-26 asks once for all three.
 
 ### D-26 · Does the standing rule override earlier rulings that fixed an outcome by rule? · CORE
+**ANSWERED** (A-24): A: yes, everywhere
+
 
 **The question.** Where an earlier ruling of yours makes an outcome a fixed rule (a crisis of faith that
 "rolls nothing", a scruple as a threshold, swearing to a seat as the joiner's right), does "we do not do
@@ -919,6 +973,8 @@ exceptions would itself be the inconsistency.
 **Sources.** `AUDIT_BRIEF.md` (standing rule); `audits/18_DETERMINISM_SWEEP.md` §1.
 
 ### D-27 · A crisis of faith: by rule or by draw · CHAR
+**CLOSED BY THE FIVE-STEP LADDER, not by Jordan; reversible on his word** (ladder table): B / B / A (a drawn and seen crisis of faith; a drawn scruple; swearing to a seat a draw against the seat)
+
 
 **The situation.** By ED-IN-0261 the engine chooses who suffers a crisis of conviction "by a rule over state
 … and rolls nothing". Everyone who sees the same deeds breaks alike, at the same count, into the creed the
@@ -942,6 +998,8 @@ break, weak ones the reverse; a breaking is an event its owner, and sometimes a 
 `proposals/16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md`; `proposals/20_NARRATIVE_E_the_year_and_the_reason.md` edit 3.
 
 ### D-28 · A scruple: a line or a tendency · CHAR
+**CLOSED BY THE FIVE-STEP LADDER, not by Jordan; reversible on his word** (ladder table): B / B / A (a drawn and seen crisis of faith; a drawn scruple; swearing to a seat a draw against the seat)
+
 
 **The situation.** ED-IN-0261 words a person's moral refusal as "a threshold for certain actions": a man's
 line is exact and his refusals are predictable from his sheet.
@@ -961,6 +1019,8 @@ of temptation.
 **Sources.** `audits/16_PESSIMIST_CHAR.md` §6 item 2; `proposals/16_PESSIMIST_CHAR_C_the_stop_is_the_mans.md` (For Jordan).
 
 ### D-29 · Do favourable circumstances lower the obstacle or raise the speaker? · SC, DICE
+**ANSWERED** (A-25): B: they raise the speaker; hostile ones raise the obstacle
+
 
 **The situation.** Your clarification of 2026-11-12 (relayed, not yet in a ledger): *the social obstacle is
 the task's difficulty plus all associated modifiers*. Your earlier rulings ED-884 and ED-934 say advantage
@@ -986,6 +1046,8 @@ statements. Please also confirm the clarification itself, so it can be recorded 
 `proposals/16_PESSIMIST_SC_A_what_the_speaker_brings_is_leverage.md`.
 
 ### D-30 · What an equal opponent costs in argument · SC
+**ANSWERED** (A-26): B: 0.4 per point (against the register's recommendation)
+
 
 **The situation.** Ruled (2026-08-14): the opponent's obstacle is half his score. That makes a defence worth
 more than an equal attack, increasingly with skill; the status quo holds.
@@ -1016,6 +1078,8 @@ answered unless you want to reopen it.
 and Thread knots.
 
 ### D-31 · Swearing to a seat: a draw, or the joiner's right · verbs, FA
+**CLOSED BY THE FIVE-STEP LADDER, not by Jordan; reversible on his word** (ladder table): B / B / A (a drawn and seen crisis of faith; a drawn scruple; swearing to a seat a draw against the seat)
+
 
 **The situation.** By a ruled roster value, anyone may swear to any seat that admits him; only his later
 service is uncertain.
@@ -1035,6 +1099,8 @@ probation. Service is something a seat grants.
 **Sources.** `audits/14_VERBS_SOCIAL2.md` §11.4 item 1; `proposals/14_VERBS_SOCIAL2_A_formation_on_what_is_known.md`.
 
 ### D-32 · What a man reading a contract tries to read into it · verbs, SC
+**ANSWERED** (A-27): A: his own interest
+
 
 **The situation.** A draw decides whether a reading of a contract's terms takes. What he *attempts* is
 still a design choice.
@@ -1055,6 +1121,8 @@ noise.
 **Sources.** `audits/14_VERBS_SOCIAL2.md` §11.4 item 2.
 
 ### D-33 · Split the tie verb into tie and knot · verbs, WR
+**ANSWERED** (A-28): A: split
+
 
 **The situation.** One verb row covers a personal bond and a Thread knot.
 
@@ -1079,6 +1147,8 @@ agrees.
 ## Group 9 · Battle balance: luck, numbers and organisation
 
 ### D-34 · Luck in battle: decides it, or tips it · MB, DICE
+**OPEN** — held for the mass-battle history adjudication (`audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`)
+
 
 **The situation.** Each army's dice in a battle are multiplied by one hidden random factor drawn before
 contact (the ruled "friction", spread 1.1, fitted to the historical win-rate curve). Measured: the result
@@ -1111,6 +1181,8 @@ standing orders and composition (D-01, D-02) decide much.
 `audits/16_PESSIMIST_DICE.md` §6.
 
 ### D-35 · Do troop numbers stay in the melee dice? · MB
+**OPEN** — held for the mass-battle history adjudication (`audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`)
+
 
 **The situation.** Your directive of 2026-07-08 says battle pools come "solely from the subunit troop type,
 quality and numbers". The engine puts numbers in the melee dice with a steep exponent, so a bigger army
@@ -1132,6 +1204,8 @@ agrees; it is listed because it narrows your directive's plain words.
 **Sources.** `audits/04_MB_audit.md` §11 item 1; `proposals/04_MB_cr12_linear_law.md`; `audits/16_PESSIMIST_MB.md` §5 rows 1, 8.
 
 ### D-36 · Three verbs for organising an army, or one · MB, verbs
+**CLOSED BY THE FIVE-STEP LADDER, not by Jordan; reversible on his word** (ladder table): A: three organising verbs
+
 
 **The situation.** The military verbs lane built form unit, assign troops and disband unit as three verbs,
 each with its own draw (drill, obedience, the body's pride).
@@ -1162,6 +1236,8 @@ recorded draws; the Python oracle actually draws one value per named key and fol
 season into its hash. Answer together.
 
 ### D-37 · Integer state, or declared floats · GO
+**ANSWERED** (A-29): B: declared floats now
+
 
 **The question.** Do the floating-point parts of the state become fixed-point integers, so a run is exactly
 reproducible everywhere?
@@ -1180,6 +1256,8 @@ moves; a save is a state snapshot and a seed is not a shareable artefact across 
 **Sources.** `audits/11_GO_audit.md` §11; `proposals/11_GO_float_contract.md`.
 
 ### D-38 · One random generator, or one draw per key · GO
+**ANSWERED** (A-30): A: one draw per key
+
 
 **The question.** Does the port draw each random value as a function of its key (as the oracle does), or
 keep one threaded generator and test parity by replaying recorded draws?
@@ -1204,6 +1282,8 @@ oracle and on the port diverges at the first draw.
 ## Group 11 · What a personal fight feels like
 
 ### D-39 · How long a fight lasts · PC
+**ANSWERED** (A-31): B: longer
+
 
 **The situation.** As coded, fights are fast and lethal: about three turns and three blows; the first solid
 blow usually decides. Your 2026-11-12 intent (an approach per phase of a duel) presupposes a fight long
@@ -1228,6 +1308,8 @@ is ruled.
 **Sources.** `audits/16_PESSIMIST_PC.md` §6.3 J-1, §6.1 R-6.
 
 ### D-40 · Fighting style: a lean only, or also a trade of attack for defence · PC
+**CLOSED BY THE FIVE-STEP LADDER, not by Jordan; reversible on his word** (ladder table): A now; B behind a dial at zero, set after D-39
+
 
 **The situation.** The proposed approach (aggressive, normal, defensive) leans on the engine's own draws:
 commit depth, counter choice, breaking a bind. Measured, it is a small edge whose sign depends on the
@@ -1251,6 +1333,8 @@ dial after D-39.
 **Sources.** `audits/03_PC_audit_addendum_B.md` §B10 item 4; `proposals/03_PC_duel_round_and_approach_B.md` §7 step 3c.
 
 ### D-41 · Does striking first give an edge? · PC
+**CLOSED BY THE FIVE-STEP LADDER, not by Jordan; reversible on his word** (ladder table): B (first-exchange edge on an unexpected opener)
+
 
 **The situation.** An assault is a fair duel: who acts first is worth nothing (50.7% against 50.1%).
 
@@ -1280,6 +1364,8 @@ themselves may create an error, and whether a person can be wrong about himself.
 halves of one question; D-44 and D-45 share one principle (does every error have an author in the world?).
 
 ### D-42 · Who learns of a change of office, and how fast · FI
+**ANSWERED** (A-32): A: realm-wide shipped; B built as the test arm
+
 
 **The situation.** Today every seat change is known everywhere at once. Your ledger already ruled that a
 vacancy reaches a person as a belief through channels, and left open "offices as common knowledge" as a
@@ -1302,6 +1388,8 @@ be judged until tellings travel well. This lane agrees.
 **Sources.** `audits/08_FI_audit.md` §11 item 1; `proposals/08_FI_01_claim-sourced-referents.md`.
 
 ### D-43 · Does news of a death travel with news of the empty seat? · FI
+**ANSWERED** (A-33): B: apart from the seat's news
+
 
 **The situation.** Today the seat is known everywhere at once and the death nowhere.
 
@@ -1322,6 +1410,8 @@ and it does not have to match D-42.
 **Sources.** `audits/16_PESSIMIST_FI.md` §5 S-PES-FI-2.
 
 ### D-44 · May a rumour name the wrong person? · FI
+**CLOSED BY THE FIVE-STEP LADDER, not by Jordan; reversible on his word** (ladder table): A: a rumour may lose the doer, not replace him
+
 
 **The situation.** A retold deed loses detail at a partial telling: quantities drift, the fact of the deed
 does not, and the doer's name can be dropped ("someone killed him").
@@ -1342,6 +1432,8 @@ D-45.
 **Sources.** `audits/16_PESSIMIST_FI.md` §5 S-PES-FI-1; `proposals/16_PESSIMIST_FI_A_what_a_rumour_can_garble.md` (For Jordan).
 
 ### D-45 · May an honest investigator reach a wrong conclusion? · FI, verbs
+**CLOSED BY THE FIVE-STEP LADDER, not by Jordan; reversible on his word** (ladder table): A: no engine-authored wrong conclusions
+
 
 **The situation.** A failed reconstruction of a deed produces nothing; a wrong conclusion arises only from
 wrong evidence (a lie, a forgery, a drifted report).
@@ -1363,6 +1455,8 @@ people cause errors), and wrong conclusions remain plentiful through lies and fo
 **Sources.** `audits/14_VERBS_MATERIAL.md` §19 J-M2.
 
 ### D-46 · Does a man learn from failing to find someone? · verbs
+**CLOSED BY THE FIVE-STEP LADDER, not by Jordan; reversible on his word** (ladder table): B: his refusal teaches him, privately
+
 
 **The situation.** If a man seeks someone who is not there, his act is refused and he learns nothing, so
 he may repeat it.
@@ -1383,6 +1477,8 @@ belief.
 **Sources.** `audits/14_VERBS_SOCIAL1.md` §15 D2.
 
 ### D-47 · Can a person be wrong about himself? · CHAR
+**ANSWERED** (A-34): B: a belief, built narrowly
+
 
 **The situation.** A person's own state is known to him by construction. NPC-004's core need is a man with a
 perceptual gift he does not know he has and misattributes; NPC-012 has a motive he does not recognise; a
@@ -1405,6 +1501,8 @@ provided cases name, not for every own-state read.
 **Sources.** `audits/02_CHAR_audit.md` §11; `audits/02_CHAR_audit_addendum_B.md` §B6.3.
 
 ### D-48 · Forgetting: computed, or recorded each season · CORE
+**CLOSED BY THE FIVE-STEP LADDER, not by Jordan; reversible on his word** (ladder table): A: forgetting computed when read
+
 
 **The situation.** A belief's confidence fades with time.
 
@@ -1425,6 +1523,8 @@ This lane considers it answerable without you.
 **Sources.** `audits/01_CORE_audit.md` §11; `proposals/01_CORE_claim_fade_as_read.md`.
 
 ### D-49 · May a campaign's end reveal what the person never knew? · GO
+**ANSWERED** (A-49): B: reveal after the line ends, on top of never-reveal in play
+
 
 **The situation.** In play, the player sees only what his person believes (ruled). The end of a campaign is
 not covered. The archived ending design asks for "the world they leave" and a counterfactual footprint; the
@@ -1457,6 +1557,8 @@ The caste against the southern Einhir is "informal" in canon. D-50 and D-51 are 
 Church, inside and out).
 
 ### D-50 · May the Church's head strip a Church officer? · institutions, FA
+**ANSWERED** (A-35): B: yes, by a resistible draw
+
 
 **The situation.** Cardinals leave only by death or resignation. NPC-038 (the Cardinal of Justice removed on
 exposure), NPC-004 and NPC-070 need those seats removable.
@@ -1479,6 +1581,8 @@ existing data; the Löwenritter stay unstrippable until they have a head seat.
 `audits/15_INSTITUTIONS_SYNTHESIS.md` §10 item 2; `proposals/15_INSTITUTIONS_PAPACY_B_patronage_election_discipline.md` item 4.
 
 ### D-51 · Can anyone judge the Confessor? · institutions
+**ANSWERED** (A-36): A: nobody (against the recommendation)
+
 
 **The situation.** The head of the Church leaves only by death or resignation. The throne, by contrast, can
 be stripped by a motion with the Holy See's concurrence.
@@ -1501,6 +1605,8 @@ choice if you want Himlensendt untouchable.
 `proposals/15_INSTITUTIONS_PAPACY_E_sees_tithe_orders_legates_council.md` item 5.
 
 ### D-52 · Forced labour keyed on caste · canon, institutions
+**ANSWERED** (A-41): Neither offered option. Jordan: "express caste not only in regard, but also vote blocks and informally tiered rights/privileges/wealth"
+
 
 **The situation.** The historical colonial family includes labour drafts on a subject people; Valoria's
 subject people (the southern Einhir) is canon, and their caste is informal, acting only through regard.
@@ -1523,6 +1629,8 @@ recommendation.
 **Sources.** `audits/15_INSTITUTIONS_COLONIAL.md` §11 item 3; `audits/15_INSTITUTIONS_SYNTHESIS.md` §10 item 4.
 
 ### D-53 · Franchise: a territory's political weight · FA, canon
+**ANSWERED** (A-42): Taken as B (author it) from A-41's 'vote blocks' (his own words, ladder step 1); confirm when convenient
+
 
 **The situation.** An archived draft (never ruled) gives each territory a political weight, lowered for the
 southern Einhir and movable by good rule and caste reform: the only place the design gives caste a
@@ -1545,6 +1653,8 @@ strategic expression. Nothing votes yet.
 ## Group 14 · Courts and verdicts
 
 ### D-54 · May a convict walk away from a sentence of service? · SC
+**ANSWERED** (A-37): B: no
+
 
 **The situation.** As ruled, a sentence of service is a penance the convict may discharge himself: one free
 release, the same season. Detention and banishment are not self-releasable.
@@ -1564,6 +1674,8 @@ season is not a sentence.
 **Sources.** `audits/16_PESSIMIST_SC.md` §5 For Jordan item 2.
 
 ### D-55 · Who a verdict is for · SC
+**ANSWERED** (A-38): B: the petitioner (or a seat he names)
+
 
 **The situation.** A verdict creates an obligation from the convicted party to the judge's seat. The
 petitioner who brought the case gets nothing.
@@ -1582,6 +1694,8 @@ petitioner who brought the case gets nothing.
 **Sources.** `audits/16_PESSIMIST_SC.md` §5 For Jordan item 3; `proposals/16_PESSIMIST_SC_C_a_verdict_names_its_party.md`.
 
 ### D-56 · Appeal: as of right, or on new grounds · SC, FI
+**ANSWERED** (A-39): B: on new grounds only
+
 
 **The situation.** An appeal row exists with a placeholder ("appeal to a higher authority").
 
@@ -1611,6 +1725,8 @@ many people exist and how much the seed changes. D-57 must come before D-58 and 
 question on Thread content; D-63 to D-67 are world generation's five and are best answered together.
 
 ### D-57 · Does the world itself wear down (the Thread)? · WR, canon
+**ANSWERED** (A-40): A: ground, a real condition of places
+
 
 **The situation.** Twenty-five cases depend on a world quantity (the Thread wearing), twenty-six on how
 persons perceive it. Nothing in code carries the world side.
@@ -1634,6 +1750,8 @@ this); the threadwork module.
 `audits/21_PROCEDURAL_GENERATION.md` §11 D-4; `proposals/09_WR_threadwork_module.md`.
 
 ### D-58 · What happens to a practitioner at zero coherence · WR, canon
+**ANSWERED** (A-43): Neither offered option. Jordan: "zero coherence means that the person is no longer able to be understood within the bounds of human rationality. they may still hold…
+
 
 **The situation.** The last adopted design says a practitioner at zero returns to the common mass (loss of
 self). ARC-28, ARC-29 and ARC-30 retract that in favour of expansion: full continuity, with a lossy way of
@@ -1655,6 +1773,8 @@ per-listener telling the engine does not have.
 decision).
 
 ### D-59 · One river of strife, or several stories · WR
+**ANSWERED** (A-45): B: several strands that can each end
+
 
 **The situation.** By the ratified strife rule, any two deeds of one doer link into one strand. At six
 seasons one strand holds all 234 moves and 55 doers.
@@ -1676,6 +1796,8 @@ B: the ruling's own second half asks for "narrative chains within it at lower le
 **Sources.** `audits/09_WR_audit.md` §11 item 1; `proposals/09_WR_strand_conclusion.md` edit 3.
 
 ### D-60 · Is leaving a side a move in the realm's strife? · WR
+**ANSWERED** (A-46): B, narrow: only leaving a faction's creed or head seat
+
 
 **The situation.** The ratified strife roster lists ending a commitment as "never" a strife move. So a
 rising cannot be read as having split a faction.
@@ -1696,6 +1818,8 @@ head seat) needs its own wording.
 **Sources.** `audits/20_NARRATIVE_CHURN.md` §10 item 2; `proposals/20_NARRATIVE_D_his_own_side.md` edit 4.
 
 ### D-61 · Arcs that end when a counter fires · WR, CORE
+**ANSWERED** (A-47): B: a threshold may open a mandatory scene, never decide it (against the recommendation)
+
 
 **The situation.** Eight of the fifty provided arcs close when a counter crosses a threshold, and nineteen
 are forced by one. The standing rule and the engine's own law forbid a crossing that decides an outcome.
@@ -1715,6 +1839,8 @@ rule; B is a reasonable later addition.
 **Sources.** `audits/16_PESSIMIST_GAME.md` §7.3 J-3.
 
 ### D-62 · One question at a time, or a list to choose from · GO, CHAR
+**ANSWERED** (A-48): B: a list of questions for the player; NPCs take the first
+
 
 **The situation.** A person is offered one question per scene, the engine's pick, for player and NPC
 alike. Your ruling ED-SC-0013 says "choosing what to attend is the gameplay".
@@ -1734,6 +1860,8 @@ served identically.
 **Sources.** `audits/09_WR_audit.md` §11 item 3; `proposals/11_GO_player_surface_contract_B.md` §1.
 
 ### D-63 · The cast: 46, or 46 plus a generated supporting cast · WR, canon
+**ANSWERED** (A-44): B: about 94 generated persons plus kin, capped
+
 
 **The situation.** The cast is a closed authored 46 (ED-WR-0011: "for now … we will return much later").
 
@@ -1753,6 +1881,8 @@ season's cost; the player cannot know every face.
 **Sources.** `audits/21_PROCEDURAL_GENERATION.md` §11 D-1; `proposals/21_PROCEDURAL_B_cast_and_seats.md`.
 
 ### D-64 · Does the seed change the starting realm? · WR
+**ANSWERED** (A-50): B: some starting state drawn, small and bounded
+
 
 **The situation.** Every seed builds the same persons, seats and attitudes; the seed moves only chance.
 
@@ -1772,6 +1902,8 @@ come from play today.
 **Sources.** `audits/16_PESSIMIST_GAME.md` §7.3 J-4; `proposals/21_PROCEDURAL_D_world_cards_and_churn.md`.
 
 ### D-65 · How deep the past goes · WR
+**ANSWERED** (A-51): Neither offered option. Jordan: "five years"
+
 
 **The question.** One simulated year before play (everything older as tradition and hearsay), or a
 generational pass (births, ageing, deaths, successions)?
@@ -1788,6 +1920,8 @@ birth built and a second cadence.
 **Sources.** `audits/21_PROCEDURAL_GENERATION.md` §11 D-2; `proposals/21_PROCEDURAL_C_prologue_and_case_seeds.md`.
 
 ### D-66 · New business in a long game · WR, FA
+**ANSWERED** (A-52): B: a docket read inside convening, after a test shows cards-at-build runs dry
+
 
 **The situation.** World cards are read at build only (plan text). After they are spent, new business comes
 from storms, arrivals and succession; a long game may run dry.
@@ -1806,6 +1940,8 @@ institutions keep producing business. Amends two plan lines.
 **Sources.** `audits/21_PROCEDURAL_GENERATION.md` §11 D-3; `proposals/21_PROCEDURAL_D_world_cards_and_churn.md` §5.
 
 ### D-67 · What happens to a world that fails its checks · WR, GO
+**ANSWERED** (A-53): A: next seed by default; play-it behind a setting
+
 
 **The question.** If a generated world fails its quality bars after the retries, does the player get the
 next seed, or play it with a sheet saying what it lacks?
@@ -1825,6 +1961,8 @@ next seed, or play it with a sheet saying what it lacks?
 ## Group 16 · Land and people
 
 ### D-68 · Is farm work an act someone chooses? · SE
+**CLOSED BY THE FIVE-STEP LADDER, not by Jordan; reversible on his word** (ladder table): B: farm work an act, sequenced after the cohorts' heavy moves land
+
 
 **The situation.** A site's yield reads the hands present at the place; "work" is a construction verb. A
 people feeds itself without choosing to.
@@ -1846,6 +1984,8 @@ with a few heavy moves), since "work" is one of those moves.
 **Sources.** `audits/14_VERBS_MATERIAL.md` §19 J-M1.
 
 ### D-69 · Does a lasting famine keep speaking? · SE
+**CLOSED BY THE FIVE-STEP LADDER, not by Jordan; reversible on his word** (ladder table): A: famine reports once, never-stocked edge repaired
+
 
 **The situation.** By a ruling (2026-10-12), a place reports its fall into dearth once and is then silent.
 In one test, eleven towns starved and nobody learned of it, because they were never stocked and so never
@@ -1866,6 +2006,8 @@ then silence; famine depends on memory and rumour.
 **Sources.** `audits/16_PESSIMIST_SE.md` §6.2 J-1.
 
 ### D-70 · How the world's own motion draws · SE, WR
+**ANSWERED** (A-54): B: the one four-band ladder
+
 
 **The question.** Do weather, harvest and wear draw from simple multiplier tables, or on the one four-band
 ladder (a place's endurance as the pool, the season's hardship as the obstacle, so a harvest is
@@ -1884,6 +2026,8 @@ four-band ladder)") reads toward B. This lane recommends B.
 **Sources.** `audits/16_PESSIMIST_SE.md` §6.2 J-2; `proposals/16_PESSIMIST_GAME_the_world_draws.md`.
 
 ### D-71 · May a town be founded or die? · SE
+**ANSWERED** (A-55): A: fixed map; an empty founded household may lapse
+
 
 **The situation.** A settlement-map ruling holds "never adding nodes": founding makes households and
 communities inside the 37 settlements, and nothing ends one.
@@ -1904,6 +2048,8 @@ second outcome.
 **Sources.** `audits/16_PESSIMIST_SE.md` §6.2 J-3.
 
 ### D-72 · A lord over an empty land · SE, FA
+**CLOSED BY THE FIVE-STEP LADDER, not by Jordan; reversible on his word** (ladder table): A: leave a lord over an empty land
+
 
 **The situation.** With every commoner of a place dead, the persons seated over it are untouched.
 
@@ -1922,6 +2068,8 @@ story.
 **Sources.** `audits/16_PESSIMIST_GAME.md` §7.3 J-1.
 
 ### D-73 · The common people: full actors or a few heavy moves · CHAR, SE
+**ANSWERED** (A-56): B: a few heavy moves (petition, migrate, work, tend, comply or refuse, riot)
+
 
 **The situation.** The 37 commoner groups are persons offered the whole verb table: they make 43% of all
 acts (including 34 forgeries to the named persons' 18) and almost nobody answers them. Removing their
@@ -1947,6 +2095,8 @@ Costs the present game nothing it can show.
 ## Layer 1 housekeeping
 
 ### D-74 · The witness step reads more than Layer 1 lists · CORE, FI
+**CLOSED BY THE FIVE-STEP LADDER, not by Jordan; reversible on his word** (ladder table): B: fix the witness code, not Layer 1
+
 
 **The situation.** Layer 1 lists four things the witness step may read; the code reads nine, five declared
 as exceptions in the file.

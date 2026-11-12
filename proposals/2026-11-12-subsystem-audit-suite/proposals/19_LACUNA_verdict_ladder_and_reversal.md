@@ -1,5 +1,7 @@
 # 19 · LACUNA · 3 — Five results from one draw: conviction, partial, acquittal, mistrial, reversal; and the case thread the chronicle can retell
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-15) — a telling *from a viewpoint* reads `account` (`11_GO_player_surface_contract_B.md` §4), not `world_q.projection`, which `17_CENSUS_C1A_01_deletion_batches.md` D2 deletes.
+
 ## Status: PROPOSED (results 1-4 are edits on existing owners; reversal is design-first; the case thread is harness only)
 
 Carries `audits/19_LACUNA_investigation_to_proceedings.md` §3 ("The verdict ladder"), §4.6 and resolutions

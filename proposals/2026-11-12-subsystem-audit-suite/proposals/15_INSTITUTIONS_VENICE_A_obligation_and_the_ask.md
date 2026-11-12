@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-20, X-29, X-31) — the term's "lifted by" row is replaced: an edge counts 0 when the one asked is `excused` from its holder (`person_q.excused`, `15_INSTITUTIONS_SYNTHESIS_C_crossings.md` edit 1: he has himself complied with an `avoidance` naming him, or holds a breach against him), not on the bare existence of a ban; an `oblige` counts only if `gate.py::sworn_to` counts it, so an obedience carrying `OBEYED_WRIT` is not an oath for the odds; `oath_step` in the colonial lane is this term. The term, its three fixtures, `owed_to` and the ask stand and are the kit's. Every finding below stands.
 
+Re-grounded: 2026-11-12 against the tree's research (`unified/RESEARCH_MAP_INSTITUTIONS_B.md`; audit §17). No edit of this file's is changed. What changed: the "Historical ground" bullet now cites the tree at path:line where it cited the audit's memory; the tree's game survey is cited for the nearest shipped precedents of an obligation token, which it grades PARTIAL against the engine's `oblige` alone; and one use of `obligation_arrears` is named that the research supplies (the hired captain's reserve stage, `15_INSTITUTIONS_VENICE_grounding_E_what_the_tree_adds.md` edit 5).
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_VENICE.md` §0 (gap 6), §6.1 part 1, §6.2, §8, §12. Batch A of that
@@ -31,7 +33,18 @@ moves the odds and decides nothing.
   he is asked. Today it has none.
 - Historical ground (audit §2.2–§2.3, §3): the Medici ruled by favours called in as votes; the Hanse by
   members' compliance with a withdrawal; Venice sealed its ballots precisely so that such ties could not
-  be collected in the room.
+  be collected in the room. In the tree (tier 3; provenance, not a reason): the bank "financed allies'
+  dowries, debts, and tax (*catasto*) burdens, buying loyalty without any formal office"
+  (`research/governance/governance_modes.md:269`); the method is "capture the gate, not the seat", and
+  what undoes it is one public exposure that ties the scattered edges together
+  (`research/rise_to_power_roster_system_research_v1.md:68-71`); the Hanse coerced princes by "collective
+  withdrawal of trade", privately, with no vote (`research/fa_se_historical_precedent_research_v1.md:119`,
+  `:238`); a hired captain in the reserve stage of his contract is open to another's offer
+  (`.audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md:110`, `:208`),
+  which is `obligation_arrears`' case. Nearest shipped precedents for a recorded obligation that is
+  "spent, kept or broken at a cost": Crusader Kings III's hooks, Suzerain's broken promise, Jagged
+  Alliance 2's term contract (`research/game_precedent_suite/THROUGHLINES.md:30`, `:79`); none is an odds
+  term on an ask.
 
 ## The resolution, decided
 

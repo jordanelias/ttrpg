@@ -1,5 +1,7 @@
 # Census C1A · 01 — deletion batches for the season loop's core packages
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-15) — D2 stands. Its premise that no proposal names the projection is corrected: `09_WR_B_chronicle_that_tells.md` (R-32), `09_WR_B_threadwork_session_and_practitioner.md`, `19_LACUNA_verdict_ladder_and_reversal.md` and `02_CHAR_voices_and_the_room.md` did; each now carries a `Reconciled:` line re-pointing it at `account` or at its own helper, so the deletion still leaves no reader behind. Order unchanged: after `11_GO_player_surface_contract_B.md`.
+
 ## Status: PROPOSED
 
 Author: census lane C1A. Audit: `audits/17_CENSUS_C1A.md` (findings F-C1A-01, F-C1A-06; rows in its §3
