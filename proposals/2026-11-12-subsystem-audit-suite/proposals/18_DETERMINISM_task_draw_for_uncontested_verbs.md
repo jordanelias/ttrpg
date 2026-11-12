@@ -55,7 +55,15 @@ roller, one loader refusal; no second resolver).
    refusals. Every `task` row is `{provider: "social_contest", module_entry: "social_contest.roll"}`,
    the pair a prize row already binds, so **no roll and no resolver is added** (the provider's name is
    historical; the roll is the generic pool-against-obstacle draw, `engine/dice_engine` underneath).
-3. **Odds, from state; outcome, from the draw.** Pool = `seam/wrappers/sigma.py::faculty` (the verb's
+   **Two loader refusals must be edited in the same commit, or no converted row loads** (grounded,
+   `audits/25_GROUNDING_ENGINE.md` G-01): `data/verbs.py:848-851` refuses a degree-keyed `writes:` on
+   a row with no `contests:` (*"Nothing resolves a degree for it"*), and `:872-876` refuses a routed
+   row with a non-empty `writes:` (*"A graded verb keys its emissions by Degree and writes
+   nothing"*). Both conditions become "no `contests:` **and no route**" and "a routed row's `writes:`
+   is degree-keyed, never flat" respectively. The fold needs no edit: `_grade` hands its
+   `Resolution` to `_fold` (`loop/resolve.py:897`), which selects `row.writes_at(degree)` (`:450`)
+   and calls each effect with it (`:967`).
+3. **Odds, from state; outcome, from the draw.** Pool = `seam/wrappers/pool.py::faculty` (`:78`; the verb's
    `verb_capability` key, else `pool_default`). Obstacle = `roll.py::obstacle` — the task's difficulty
    (the `difficulty` column `13_SC_tuning_tables.md` T1 puts on the verb row; until it lands,
    `obstacle_default`) plus the named modifiers that already exist (a person subject's opposition, the

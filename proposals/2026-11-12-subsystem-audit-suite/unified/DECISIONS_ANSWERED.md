@@ -36,3 +36,22 @@
 | A-30 (D-38) | Port randomness | A: one draw per key | No recorder; the port implements the same keyed hash as the oracle; one re-pin of every seeded result; a Layer 1 row is rewritten (text owed). |
 | A-31 (D-39) | Fight length | B: longer | Damage scale lowered so a success is one wound interval; combat recalibration owed; obstacle left alone. Unblocks the duel approach steps 3a-3e. D-40 sets its dial after this. |
 | A-32 (D-42) | News of a change of office | A: realm-wide shipped; B built as the test arm | One reach row for seat changes; B (presence, jurisdiction, telling) is the tested alternative. |
+| A-33 (D-43) | News of a death | B: apart from the seat's news | The seat by its reach; the death only by presence, trail and telling. False reports of death, succession disputes and royal-death investigations become reachable. |
+| A-34 (D-47) | Self-knowledge | B: a belief, built narrowly | First for the gifts and motives the cases name (NPC-004, NPC-012, NPC-021). |
+| A-35 (D-50) | Head strips an officer | B: yes, by a resistible draw | Overwrites the 2026-10-11 `revocation: null` ruling for Church officers; Löwenritter stay unstrippable until they have a head seat. NPC-038/004/070 unblocked. |
+| A-36 (D-51) | Judging the Confessor | A: nobody (against the recommendation) | The Confessor leaves only by death or resignation; schism or violence answers a bad one; the papacy kit's council (item 5) is dropped and the Confrontation arc gets no lawful route. |
+
+### Closed by the five-step ladder, not by Jordan (CLAUDE.md §0; reversible on his word)
+
+Answered by prior ruling, precedent or architecture; recorded so the numbering is whole.
+
+| id | taken | basis |
+|---|---|---|
+| D-36 | A: three organising verbs | the requirement asks the rows built; each survives the cut test by one band (step 3, design doc) |
+| D-40 | A now; B behind a dial at zero, set after D-39 | the formations principle (an instruction modulates, adds no flat number); step 4 |
+| D-41 | B (first-exchange edge on an unexpected opener) | follows A-16 (murder needs ambush to mean anything); step 5 |
+| D-44 | A: a rumour may lose the doer, not replace him | only people cause errors (with D-45); step 3 |
+| D-45 | A: no engine-authored wrong conclusions | same principle; wrong conclusions remain through lies and forgeries; step 3 |
+| D-46 | B: his refusal teaches him, privately | Jordan's 'we never want dead ends'; step 5 |
+| D-48 | A: forgetting computed when read | precedent (a crossing is recorded, a level is not); step 4 |
+| D-74 | B: fix the witness code, not Layer 1 | CLAUDE.md §0.05 (a spec edited to match its code checks nothing); step 3 |
