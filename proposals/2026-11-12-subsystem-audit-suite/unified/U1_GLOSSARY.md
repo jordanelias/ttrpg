@@ -289,6 +289,28 @@ ordinary; `IMPLEMENTATION_BRIEF_A.md` (one "fought scene" in a brief, not a prop
 outside OWNERS and U3 (`DECISIONS_FOR_JORDAN.md`, `U4_*`, `U5_CONFLICTS_*`, `work/`); every `14_VERBS_*` body
 for "stance" in the person sense was read only at the hit lines.
 
+**The A-98 pass (2026-11-12; ledger `work/A98_SWEEP.md`).** Jordan's A-98 (aptitude = attribute; learned rank =
+skill; martial skill; one kind, skill; derived scores) superseded the rows *talent*, *aptitude*, *training*,
+*prowess* (of a person) and D-U1-11p/q. **Rows rewritten:** §A *pool*, *score* (now *skill score*), *training*,
+*talent* (retired), *untrained score*, *base*, *opposition*, *ceiling*, *inquiry*, *arm*; §B whole (heading,
+*attribute*, *aptitude* (retired), *skill*, *capability* (the tree's second name for skill), *trait* (a roster of
+its own `[ASSUMPTION]`), *ability*, *role*, *site*, *gate*, *judgement*, *law*, *deception*, *insight*, *command*,
+*faculty*, *rank*, *prowess*); §C *resolve*, *voice*; §H *key*, *choice score*, Tenure *edge*, `VOCATIONS`.
+**Rows added:** *skill score*, *governing attribute* (§A); *martial skill*, *derived score* and five derived-score
+families (*health and wounds*, *reserves*, *the body over time*, *the interior*, *Thread Pool Score*) (§B); §H
+`capability` (rename candidate: 106 tree files hold the word, 31 code files read `.capability`) and the combat
+attribute `faculty` (a skill score held as an attribute). **Derived scores found in the tree:** 18 a person's
+(`work/A98_DERIVED_SCORES.md`), six mislabels named there. **Swept:** 115 files (101 proposals, 13 `unified/`,
+1 `master/`): *capability* in prose → skill 371 (scripted) plus this file, OWNERS and the architecture; *trained
+score/rank* → skill score 137; *talent* → attribute or governing attribute 75 (plus 15 in OWNERS and the
+architecture); *training* (the rank) → skill score 24; *aptitude* 10 by hand; *prowess* of a person 1 (no other live
+use); proposed identifiers 35 (`talent_level` → `attribute_level`, `pool.py::talent` → `governing_attribute`, three
+test names); 8 places where *capability* had meant a trait or Thread Sensitivity reworded. **Left:** quotations,
+`Reconciled:` history, the closure and question records, document and batch names, identifiers, ordinary senses
+(training as the act, troops trained, a unit's prowess) (`work/A98_SWEEP.md` §Left). **Layer 1:** no retired word
+but *capability*, mostly as the identifier; listed in `work/A98_LAYER1_WORDS.md`, not edited. **Not checked** (one
+round): bare "score" outside the phrases swept; the suite-root briefs.
+
 ## J. Mass battle lexicon (A-95; `unified/MB_LEXICON.md`, `_part2`, `_part3`)
 
 The army vocabulary is settled in the lexicon; each row here is a pointer. Where a §E row and the lexicon

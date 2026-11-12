@@ -55,7 +55,7 @@ of the `field` site are this lane's, U1 §9 and `U5b_MB_rulings_in_the_field.md`
 command:
   kind: skill
   gloss: "Gets a body of armed men to do what was ordered, when it was ordered."
-  base: attr.social.charisma          # Presence: the governing attribute (the governing attribute input of U1 §4)
+  base: attr.social.charisma          # Presence: the governing attribute (the attribute input of U1 §4)
   opposed_by: none                    # nobody's rating opposes an order; the task's difficulty does
   scale: [0, 7]
   untrained: default

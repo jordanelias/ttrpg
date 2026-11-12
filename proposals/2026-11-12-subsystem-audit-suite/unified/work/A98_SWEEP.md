@@ -165,3 +165,47 @@ trained, talent, training (scripted), identifiers (scripted), rewordings by hand
 | `unified/U5_CONFLICTS_U5a.md` | 8 | 1 | 0 | 0 | 0 | 4 |
 | `unified/U5_CONFLICTS_U5c.md` | 2 | 0 | 0 | 0 | 0 | 0 |
 | `unified/U6_VERDICT_AND_REPAIRS.md` | 1 | 0 | 0 | 0 | 0 | 0 |
+
+## Left as they are, and why
+
+- **Quotations and rulings.** A-71's *"someone's aptitude/prowess"* (`29_DICE` head and wherever quoted); A-7's
+  question title "Talent and training" where a document quotes it as the question asked; Layer 1 text quoted in
+  `U2_LAYER1_CONFORMANCE.md`, `U3_LAYER1_AMENDMENTS.md` and `U1_OWNERS_AND_VOCABULARY.md` ("eligibility by
+  capability …", "`capability` supplies dice and gates nothing"); CR-92/CR-93 quotations (*"skills/aptitudes …"*);
+  `02_CHAR_capability_uses_table.md`'s quoted question "which capability feeds which choice".
+- **History.** Every `Reconciled:` and `Folded:` paragraph (six swept continuation lines were restored to their
+  recorded wording: `16_PESSIMIST_DICE_task_difficulty…`, `_FI_B`, `_GO_a_witness…` (2), `_PC_A`, `_SC_A`); the
+  glossary's §I record of the U4d pass.
+- **Whole files, by the brief.** `DECISIONS_ANSWERED.md`, `U4D_FOR_JORDAN.md`, `work/U4D_RENAMES.md`,
+  `work/R*_READ.md`; and, judged historical or closure records: `DECISIONS_FOR_JORDAN.md` and
+  `DECISIONS_QUICKSHEET.md` (the questions as they were put, D-07 "Talent and training"), `U4_TRACEABILITY.md` and
+  `U5_FINDINGS_CLOSURE_U5a–d.md` (closure and trace tables), `work/W3_*_DONE.md`, `work/L1_*.md`,
+  `master/work/W1–W6` (working records). The suite-root briefs and `README.md`/`STAGES.md` (their *capability*
+  uses name the architecture document or quote Jordan's 2026-11-12 charge, *"character capabilities"*).
+- **Document and batch names.** "the capability (authoring) architecture" (this lane's `U1_CAPABILITY_AUTHORING_ARCHITECTURE.md`),
+  "capability authoring surface", "capability axiom map", "capability home"/B04-capability-home, "the capability
+  batch", "CAP's capability Part B"; file names (`05_SC_capability_surface.md`, `27_MB_B_unit_prowess_on_the_row.md`).
+- **Identifiers** (A-98: the tree's second name for skill; rename is a v12 candidate, glossary §H): `Person.capability`,
+  DR `capabilities`, `capability_uses`, `capability_roles`, `capability_use_sites`, `capability_factor`,
+  `capability_admits`, the verb-row column `capability:`, `VERB_CAPABILITY`, `CAPABILITY_CLAIM`; code docstrings in
+  fenced blocks (`10_DICE_one_score_two_roles.md` "is trained in for `verb`'s capability").
+- **Ordinary senses.** *training* as the act: `train`, `grows_by: train`, "training Site(s)", "training march",
+  "Self-training", "a second training raises", `training.practised`/`training.fruitless`; *trained* of troops or
+  cohorts ("troops recruited, trained", "a cohort trained in `command`", "Trained troops in no unit", "trained
+  nowhere"), "a trained eye", "the trained tender" (a person who has trained); *prowess* of a unit (A-59) everywhere it
+  occurs (`27_MB_B`, `27_MB_C`, `04_MB_*`, `14_VERBS_MILITARY_D`, `U5b_MB_*`, `29_DICE` "Orders and prowess in the
+  field (A-59)"); *untrained score* (the glossary keeps it: "untrained" names not having done the act).
+- **`master/instructions/`** (other lanes, written this session): re-checked, not edited. They already apply A-98;
+  their remaining *capability* uses are meta ("the one capability kind") or a quotation. One quotation is now stale:
+  `IS_FOR_JORDAN.md:173` quotes the architecture's *"A capability is never lost"*, which now reads "A skill is never
+  lost" (for that lane).
+
+## Owed by the mass-battle lexicon lane (`unified/MB_LEXICON*.md`, not edited here)
+
+1. `MB_LEXICON.md:130` (*rank* row, rejected senses): "rank" for a capability → "rank" for a skill (glossary *rank*:
+   "skill rank" and "seat rank").
+2. `MB_LEXICON.md:136` (*role* row): "a capability role" → "a skill role" (glossary *role* (skill)).
+3. `MB_LEXICON_part3.md:14`: the glossary's precedent is now "skill role", "composition role", "unit role".
+4. `MB_LEXICON.md:111` names `27_MB_A` §1–§2's "talent as levels" and "trained rank" as owed to this lane: done
+   (`27_MB_A` now reads "the governing attribute as levels" and "skill score"; the fixture is `attribute_level`).
+   The lexicon's *prowess* rows (`:149`, part3 D-19) already follow A-98 (3).
