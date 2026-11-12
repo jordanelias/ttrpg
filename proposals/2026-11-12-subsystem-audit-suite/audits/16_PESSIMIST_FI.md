@@ -520,6 +520,28 @@ N-line: **`utter` is necessary to `commit` and `argue`; the other thirteen verbs
 not necessary to anything that happens.** `[One seed with a control; a second seed was not run under
 this cut: the machine was loaded. The direction is far outside the control on eleven rows.]`
 
+*N-2 decomposed* (two narrower cuts, same seed and seasons; run 15). Which verbs hold the scenes:
+
+| acts carried out | `ship` | `draw1` | `nod3`: `interview`, `reconstruct`, `thread_read` cut | `noinq`: all six inquiry rows cut | `nofi` |
+|---|---|---|---|---|---|
+| all | 1,394 | 1,465 | 1,410 | 1,228 | 456 |
+| `create_record` + `utter` | 549 | 613 | 625 | 625 | 0 |
+| `commit` (a promise to an uttered proposition) | 95 | 95 | 135 | 180 | 0 |
+| the six inquiry rows | 365 | 397 | 247 | 0 | 0 |
+| everything else but `commit` | 272 | 237 | 285 | 300 | **456** |
+| `march` | 29 | 14 | 39 | 43 | 53 |
+| resolved by a draw | 209 | 247 | 255 | **56** | 33 |
+| an information Event answered by a non-information act | 16 | 23 | 14 | 10 | 0 |
+
+Two readings. (i) Cutting the three inquiry rows that have no product (`nod3`) loses nothing
+measurable (14 answers against 16, every state component inside the control) and frees nothing
+either: the 157 scenes go to more records, utterances and research. A free cut. (ii) The scenes are
+held by **`create_record` and `utter`**: about 550 to 625 acts in every arm that has them, persons
+writing down what they have just seen and stating propositions, with `commit` following. The gain
+under `nofi` appears only when those go. And the inquiry rows are where the realm's dice are: with
+them cut, acts resolved by a draw fall from 209 to 56 (the GAME lane's census read the same from the
+other side: most draws are `research`, which finds nothing).
+
 **N-3 · clause 4 (`belief_contradicts`) — "cut it and a person's own ledger can refuse him nothing."**
 Walked: `noc4`. Acts carried out fall from 1,394 to 1,041 (control 1,465); `challenge` attempts rise
 from 118 to 302, `accept` 45 to 83, `comply` 47 to 91, `construe` 10 to 29, every one refused. Seats,
@@ -738,7 +760,7 @@ names its control. Proposal files are under `proposals/2026-11-12-subsystem-audi
 | **F-PES-FI-02** | degrades R-01, R-07 | **A rumour is one telling long, by construction; and what is said is mostly that someone exists.** The second teller says "there was a telling". The first FI audit's seven told-false cells are `(p_npc_004, exists:Person, 2)` (§2.1) | `p2_chain.py`, `told_dump.py 0 2` · the proxy chain in which content is passed on (it travels and drifts) | `08_FI_02` (cited) **amended by** `16_PESSIMIST_FI_A` edit 5: as written its slant would prefer the realm's 577 existence readings to every deed |
 | **F-PES-FI-03** | degrades R-05, R-08 | **A forged paper is believed by nobody in play (0 of 376 across eight arms left the forger's hand), and where one is put in a hand, knowing it false changes nothing.** A man who watched the forging is offered the same 19 acts off it; after a `Success` find the content stands at confidence 100 (§2.3) | `p3b_knows.py` · the same holder with the knowledge deleted (identical candidates); the surveyed sheet | `16_PESSIMIST_FI_B` edits 1–3 |
 | **F-PES-FI-04** | blocks R-07, R-08 (with F-FI-01) | **Who exists and where they are is read from the truth.** A silently deleted or relocated person leaves the subject's candidates (−28; 38 → 10) with his ledger unchanged; a man who believes the King dead is offered to challenge him (§2.5) | `p1_belief.py`, `p1d_where.py` · the silent-edit arm for a store (no leak) | `16_PESSIMIST_FI_C` edit 4 (the question loop reads `present_persons` and the holder's own `exists` cell); the decision is ED-IN-0292's |
-| **F-PES-FI-05** | degrades R-04, R-05 | **The information verbs, as the chooser forms them, crowd the game out.** They are 73.7% of acts carried out; with them cut the realm marches 53 times for 29, moves 94 for 21, determines 3 matters for 0, fights, and two die; with only `tell` and `lie` cut nothing changes (§1.2 N-1, N-2) | `fi_arms.py 0 3 nofi`, `notell` · `draw1` (the draw-seed control) | `16_PESSIMIST_FI_D`: the product-less inquiry rows join `withheld_verbs` until their products land; the rest is CHAR's (what a scene is spent on) |
+| **F-PES-FI-05** | degrades R-04, R-05 | **The information verbs, as the chooser forms them, crowd the game out.** They are 73.7% of acts carried out; with them cut the realm marches 53 times for 29, moves 94 for 21, determines 3 matters for 0, fights, and two die; with only `tell` and `lie` cut nothing changes (§1.2 N-1, N-2) | `fi_arms.py 0 3 nofi`, `notell`, `nod3`, `noinq` · `draw1` (the draw-seed control) | `16_PESSIMIST_FI_D`: the three product-less inquiry rows join `withheld_verbs` until their products land (a free cut, measured). The sink itself is `create_record` and `utter` (about 600 acts in three seasons): what a scene is spent on is the chooser's scoring, CHAR's and CORE's; named for the orchestrator, not authored here |
 | **F-PES-FI-06** | degrades R-09 | **Distortion is a drift applied to anything stored as a number, and to nothing else.** Existence flags garble to 2 and 3; a deed never distorts; a `Success` copy is perfect at any depth; 0 is a fixed point; the mean drifts upward (40 → 49 in six hops) (§2.1) | `p2_proxy.py` · the all-`Success` arm (exact), the deed arm (exact) | `16_PESSIMIST_FI_A` edits 1–4; the drift's bias is `[OPEN — Jordan tuning]` |
 | **F-PES-FI-07** | degrades R-05, R-09 | **A better look is worse than a failed one.** At the default pool the hand of a forgery is found in 15% of unlimited retries and forbidden for ever in 85%; at pool 7, a third. Addendum B's C-3 (quality "inert", quality 3 "refused") is false at HEAD (§2.2) | `p4_detective.py` · the genuine sheet; quality 0 reproduces it exactly | CP-T06-03 (scheduled; unchanged). The correction to C-3 is in proposal B's header |
 | **F-PES-FI-08** | degrades R-06, R-08 | **A claim is a pointer: what it says is read by clause 4 alone.** Any claim about X raises the same candidates about X; `person.died` declines nothing while `exists:Person 0` does: two words for one fact (§2.5 readings 3 and 5) | `p1_belief.py` (`true` against `dead-false`: +28 each), `p1c_exists.py` · the false-empty store arm (content read) | `16_PESSIMIST_FI_C` edit 3 (one vocabulary for an ending). The general case (content shaping what is offered) is CHAR's question projection; named, not authored |
@@ -758,7 +780,9 @@ prefers existence readings, proposal A edit 5).
 **Ordered** (each with its gate in the proposal):
 
 1. `16_PESSIMIST_FI_D_withhold_what_has_no_product.md`: three rows join `withheld_verbs`. A data
-   edit; it returns 157 scenes in three seasons at seed 0 to verbs that do something.
+   edit and a free cut (157 acts in three seasons at seed 0 that teach nobody anything and "find" with
+   certainty). It does not by itself release the world: the scenes go to records and utterances
+   (§1.2, N-2 decomposed), and that sink is the chooser's.
 2. `16_PESSIMIST_FI_A_what_a_rumour_can_garble.md` edits 1–3, then `08_FI_02` with A's edit 5.
 3. `16_PESSIMIST_FI_C_what_a_deed_leaves_behind.md` edits 1–3 with B10-14's CP-T06-01, -02, -03, -04.
 4. `16_PESSIMIST_FI_B_a_paper_is_about_something.md`.
