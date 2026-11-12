@@ -42,6 +42,14 @@ Every Fable proposal and recommendation must carry instructions to code it in th
 
 Read `AUDIT_BRIEF.md`'s standing rules and `unified/DECISIONS_ANSWERED.md` first. Nothing deterministic; ground every claim in the repository; do not guess. One round of review per deliverable, then stop (CLAUDE.md §0). No lane edits code, canon, a registry or a ruling; implementation lanes land the plan.
 
+## The glossary always matches (Jordan, 2026-11-12: *"ensure glossary always matches"*)
+
+`unified/U1_GLOSSARY.md` is the suite's vocabulary until the code carries the words; from then the tree's own owners (`references/descriptor_registry.yaml`, `references/names_index.yaml`, the Layer 1 vocabulary, and the type and key names in code) are. Three rules keep the two in agreement; they bind a reader (CLAUDE.md §0.1 pt 5: a guard whose subject is a process artifact is forbidden, so none is built).
+
+1. **Now.** After the unification lanes, a glossary reconciliation lane (U4d) sweeps every live document for each row's rejected words and refused senses and for each row's "files to change", edits the stragglers, and adds a row for any term the reconciled proposals use that has none. Its record is in the glossary itself.
+2. **Every v12 batch.** A batch that introduces, renames or retires a term (a roster key, a verb, a field, a band, a skill, an event kind) edits the glossary row in the same commit as the code, and its content-owner entry says so in its INSTRUCTION. The batch close reads the glossary row against the code it landed; a mismatch is a failed close. A batch that makes a glossary row's owner the tree (because the code now defines the word) replaces the row's definition with a pointer to that owner and keeps the rejected-synonym column.
+3. **Every document edited after this.** A proposal edited for any reason keeps to the glossary's words; a new word that no row covers is added to the glossary in the same edit, with its owner or "coined by the suite, plain word is X" (CLAUDE.md §4).
+
 ## Parallel sessions in v12 (Jordan, 2026-11-12: *"can we set up plan so that it can run parallel sessions"*)
 
 Yes, with rules; v12 is structured for it. What the repository already gives: batches in different lanes have separate in-flight rows (`registers/handoffs/HANDOFF_<LANE>.md`), the ED ledger is lane-split, parallel write lanes use `isolation: worktree` (CLAUDE.md §10), and `create_session` and `send_message` are deliberately not denied (CLAUDE.md §11). What forbids it: `methodology-execute` allows ONE open batch per lane's in-flight row and `STOPPED`s an invocation that does not match it, so **parallelism is across lanes, never inside one**. v12 therefore carries:
