@@ -22,7 +22,8 @@ U1 to the `D-U1-nn` that decided it or says it is open. No row here picks a name
 
 **Ids.** `C3-A` lane A against the suite; `C3-L` Layer 1 questions; `C3-K` same-site collisions; `C3-C`
 content conflicts between proposals; `C3-D` order conflicts; `C3-N` count and measurement conflicts; `C3-R`
-claims `audits/25_GROUNDING_ENGINE.md` refutes; `C3-Y` cycles; `C3-S` stale bodies against their heads.
+claims `audits/25_GROUNDING_ENGINE.md` refutes; `C3-Y` cycles; `C3-S` stale bodies against their heads; `C3-V`
+repairs from the unification verdict (§13, lane R-A).
 
 ---
 
@@ -289,4 +290,20 @@ an item U1 did not decide stays open for U1's rewrite pass.
   wrong if `reading="any"` is not hash-equal to today's selector; NARR_A's own control row says it is
   (`R5_READ.md:558`), and B10's gate re-reads it. C3-A1 is wrong if the hole register allocates by a reserved
   block this lane did not find; `grep -n "H-" references/id_reservations.yaml` showed none.
+
+---
+
+## §13 Repairs from the unification verdict, lane R-A (`unified/U6_VERDICT_AND_REPAIRS.md` findings 2, 3, 4)
+
+Ids `C3-V` (verdict repairs; the prefix is new, `C3-R` is taken by §7). Same columns as §2.
+
+| id | documents | question | decision | ladder | edits |
+|---|---|---|---|---|---|
+| C3-V1 | `10_DICE_one_score_two_roles.md` (`:12` said edits A and C in B04), `U3_DEPENDENCY_ORDER.md` §1 item 5 against the same file's `:83` ("B05 starts from it"), `U5c_SC_one_obstacle_form.md:8` (steps 0–5 in B05), `U5a_capability_home_and_two_inputs.md` row B1 (Part B, B05), C3-A3 | in which batch `pool.py::score` (Edit A) lands | **B05, all three edits**: A and C as OBS step 0 with CAP Part B (Edit A is CAP row B1, Edit B row B4). B04's gate is hash-EQUAL and the file declares itself a mover (`:22`, `:144`); removing `max(attr, have)` from lane A's `score` changes any pool where a held attribute exceeds the held rank | 1 (CAP row B1 and C3-A3, the later reconciliations, put the edit in Part B, B05) and 5 (a mover does not ride a hash-EQUAL batch) | the file's `Lands in batch` line; U3 §1 items 5 and 6; §1.2 B05 |
+| C3-V2 | `16_PESSIMIST_GO_keyed_draw_no_recorder.md` (`H2` in `state/ids.py`, tests in `engine/tests/test_draw_keyed.py`) against `11_GO_one_draw_owner.md` (`H2` in `draw.py`; tests in `engine/tests/test_draw.py` and `tests/valoria/test_one_draw_owner.py`) | `H2`'s one home; one test file | **`H2` in `engine/dice_engine/draw.py`; `ids.py` imports it; every test in `engine/tests/test_draw.py`.** The tree's owner of the keyed draw, `engine/season/state/ids.py`, does not speak for it: its docstring scopes its one-owner claim to "the id MINT, not hashing generally" (`ids.py:1-9`); `engine/dice_engine/` imports nothing from `engine/season/` (grep: no hit) while `engine/season` already imports `engine.dice_engine` (ten files), so the leaf holds the mix | 4 (the leaf's import direction, as built) and 5 | both proposals' code blocks, edit tables and gates |
+| C3-V3 | `06_FA_hygiene.md` item 3 (delete the standalone `faction_q.holdings`) against `04:318` ("`holdings(faction)` is a **named Query**") and `17_CENSUS_C1A_01_deletion_batches.md:113-115` (uncalled queries Layer 1 names are kept) | delete or keep `holdings` | **Keep it; delete `superiors` only** (named by no Layer 1 row, `faction_q.py:19-23`) | 3 (`04` §B.6.1 names the function) and 4 (C1A_01's keep rule) | `06_FA_hygiene.md` head, runtime line, item 3; `17_CENSUS_C1A_01…:112-113` |
+| C3-V4 | `09_WR_world_motion.md` (`:9` "after the draws file") against `09_WR_B_draws_not_thresholds.md` (its edits 1 and 3 re-mechanise world_motion's edit 1 crossing and edit 3 reaching, `:21-24`) | which lands first in B12 | **`09_WR_world_motion` edits 1–3 first**: they build the wound row and switch and the settled selector; the draws file then draws on them. Edit 1's `lattice_coupling` flip lands after `16_PESSIMIST_WR_B` edits 1–2. `09_WR_strand_conclusion` (absent from U3 §1 item 13) lands before both | 5 (build the object before the rule that reads it) | both files' `Lands in batch` lines; U3 §1 item 13; §3.1 world_motion row |
+| C3-V5 | `11_GO_one_draw_owner.md` gate 2 and `16_PESSIMIST_GO_keyed_draw_no_recorder.md` gate (no `random.Random(` in runtime code) against `engine/season/harness/strife.py:257`, `:301` and `harness/arc.py:219` (in neither edit list) | route the three through `Draw`, or scope the scan | **Scope the scan by name**: the three are shuffled-order controls of harness readings (`strife.py::pair_profile`, `::link_profile`, `arc.py::shuffled_causes`), imported by no season module (grep), and `Draw` deliberately has no `shuffle`; the test excludes those three functions by name, never `harness/` by directory, so a new site anywhere fails | 5 | `11_GO_one_draw_owner.md` gate 2 (the one statement); the keyed-draw file points to it |
+| C3-V6 | B06's gates (`16_PESSIMIST_GO_keyed_draw_no_recorder.md` reading 4; `11_GO_float_contract.md` gate 2) on `tools/export_oracle_pins.py --check`, which B41 creates (§6.3) | move the instrument earlier or the gate later | **The gate later**: B06 reproduces the vectors from its own tests; the export round-trip is read in B41. Building the exporter in B06 would pull GO-08's `surface` block, which needs B34 | 5 | both files' gates; U3 §1 items 7 and 41; §1.3; §6.3 |
+| C3-V7 | `04` PART D twins missing from the owed drafts (A-12 → row 33, `04:1062`; A-92 → row 18, `04:1044`; and A-3 → row 24, A-4 → row 22, A-9 → rows 36 and 41a, A-20 → row 48, A-30 → row 35, A-62 → row 51, A-72 → row 19) | both halves | **Every owed amendment drafted with both halves**, with its gate node and dormant form: `unified/U3_LAYER1_AMENDMENTS.md`; nodes placed at U3 §1.4 | 1 (each ruling) and CLAUDE.md §0.05 (a spec is not edited to match code) | `U1_OWNERS_AND_VOCABULARY.md` D-U1-01; `OWED_TO_UNIFICATION.md` §A rows A-12 and A-92 |
 

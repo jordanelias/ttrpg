@@ -101,7 +101,7 @@ that is no longer limited to them.
 | file | owner | edit |
 |---|---|---|
 | `engine/season/state/ids.py` | IN | `draw_factory` returns `seeded(...)`, importing `seeded` (and, where it needs it, `H2`) from `engine/dice_engine/draw.py`; `H` stays here, the id mint |
-| `engine/dice_engine/draw.py` | DICE | `H2` (its one home: U6 R-A, `U3_CONFLICT_LEDGER.md` C3-R3) and `Draw.u` as above (the rest as `11_GO_one_draw_owner.md`) |
+| `engine/dice_engine/draw.py` | DICE | `H2` (its one home: U6 R-A, `U3_CONFLICT_LEDGER.md` C3-V2) and `Draw.u` as above (the rest as `11_GO_one_draw_owner.md`) |
 | the v12 cards for B10-20, GO-16 and GO-08 (not the v11 lines `workplans/valoria_master_workplan_v11_part3.md` B10-20 and `…_part5.md` GO-16, GO-08, which this session's content supersedes) | GO | GO-16 is not carried into v12 (the order line and the freeze row's "the draw log's digest" with it); GO-08's text as above; exit line 4 drops `export_oracle_draws --check` (a plan edit for the v12 author) |
 | `architecture/meta/04_CODE_ARCHITECTURE.md` §C.12 | **Jordan** (A-30 ruled the substance; the text is owed, `OWED_TO_UNIFICATION.md` §A, applied only by his amendment; no lane edits `04`) | the RNG row: "the draw (built) · a function of its key, `H(seed, tick, subject, purpose)`; an index `n` within one key; no generator object, nothing global · see rejection 4"; rejection 4's last two sentences ("not yet load-bearing, because no roll exists yet") replaced by the measured count |
 | every seeded golden under `engine/season/tests/`, `engine/tests/` | IN | one re-record, said plainly in the commit (§7) |
@@ -110,7 +110,7 @@ that is no longer limited to them.
 
 `probe.py census` was lane scratch, not in the repository. Committed, in the one test file of the draw owner,
 `engine/tests/test_draw.py` (CI job `sim-regression`, CLAUDE.md §3; `engine/dice_engine/` has no tests directory; U6 R-A,
-C3-R3: one file, shared with `11_GO_one_draw_owner.md`'s gate, never a second): `test_u_is_a_function_of_the_key`,
+C3-V2: one file, shared with `11_GO_one_draw_owner.md`'s gate, never a second): `test_u_is_a_function_of_the_key`,
 `test_n_zero_is_the_key_itself`, `test_n_one_remixes_with_h2`, `test_no_random_Random_in_runtime_code` (the scan as
 `11_GO_one_draw_owner.md` gate 2 defines it, with its three named harness controls). Command:
 `python -m pytest engine/tests/test_draw.py -q`. Readings:

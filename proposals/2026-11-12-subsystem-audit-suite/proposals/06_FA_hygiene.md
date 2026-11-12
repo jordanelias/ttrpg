@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, wave 3 (W3-3) — item 4 WITHDRAWN: the kind rename `dispensation` → `writ` by D-U1-11h (the roster key stays `dispensation`, the cited key of `read_to_addressee`, D-U1-05; prose says "writ", and "decree" for one proclaimed, A-21; a rename would move every hash for a word), and the verb rename `oblige` → `swear` by R3 §1's Option B (the verb and its Tenure kind keep one name, `04` §B.7 "`oblige : Person -> Seat`"; the glossary's *sworn* row reads off a live `oblige`). Item 3 gains the sentence R3 §1 asks for (Option A: `Faction.holdings` is the surviving named access, `04` §B.6.1). With item 4 gone the proposal declares no hash mover. Batch, dependencies and tier added (U3 B03; R3 7b-0).
 
-Reconciled: 2026-11-12, U6 repair lane R-A (`unified/U6_VERDICT_AND_REPAIRS.md` finding 3; `U3_CONFLICT_LEDGER.md` C3-R4): item 3 now **keeps** the standalone `faction_q.holdings` and deletes `faction_q.superiors` only. Ladder step 3: `04` §B.6.1 names it as a function, "`holdings(faction)` is a **named Query**" (`04:318`; again `04:1244`), and the function was built for that row (`engine/season/queries/faction_q.py:159-163`, its docstring); step 4: `17_CENSUS_C1A_01_deletion_batches.md` keeps uncalled queries Layer 1 names (`:113-115`). `superiors` is named by no Layer 1 row (only by the governance plan's list, `faction_q.py:19-23`), so its deletion stands. The earlier "Option A" sentence (the `Faction` field is the surviving access) is withdrawn.
+Reconciled: 2026-11-12, U6 repair lane R-A (`unified/U6_VERDICT_AND_REPAIRS.md` finding 3; `U3_CONFLICT_LEDGER.md` C3-V3): item 3 now **keeps** the standalone `faction_q.holdings` and deletes `faction_q.superiors` only. Ladder step 3: `04` §B.6.1 names it as a function, "`holdings(faction)` is a **named Query**" (`04:318`; again `04:1244`), and the function was built for that row (`engine/season/queries/faction_q.py:159-163`, its docstring); step 4: `17_CENSUS_C1A_01_deletion_batches.md` keeps uncalled queries Layer 1 names (`:113-115`). `superiors` is named by no Layer 1 row (only by the governance plan's list, `faction_q.py:19-23`), so its deletion stands. The earlier "Option A" sentence (the `Faction` field is the surviving access) is withdrawn.
 
 ## Status: PROPOSED
 
@@ -43,7 +43,7 @@ reads the trace row for a predicate row. Ladder step 4.
 --include=*.py` outside tests returns nothing; `purview` and `subordinates` are read only by
 `harness/interactions.py:123-127`.
 *Edit:* delete `faction_q.superiors` with its tests (`engine/season/tests/test_faction_q.py:141`'s case, and the
-`superiors` assertion of `:123`'s case, whose `subordinates` half stays; `:94`'s `holdings` case stays). *(U6 R-A, C3-R4:)*
+`superiors` assertion of `:123`'s case, whose `subordinates` half stays; `:94`'s `holdings` case stays). *(U6 R-A, C3-V3:)*
 **keep the standalone `faction_q.holdings`**: `04` §B.6.1 names "`holdings(faction)`" as a named Query (`04:318`), it
 already reads `resolve(w, prop).holdings` rather than re-deriving the walk (`faction_q.py:159-163`), and an uncalled
 Query Layer 1 names is kept (`17_CENSUS_C1A_01_deletion_batches.md:113-115`'s rule). Keep `purview` and

@@ -110,7 +110,7 @@ counts differ before and after (they cannot: `resolve.py` never called the delet
 ### Not in these batches
 
 - `faction_q.superiors`: `06_FA_hygiene.md` item 3 deletes it. The standalone `faction_q.holdings` is **kept** by the
-  rule below (`04:318` names `holdings(faction)` as a named Query; U6 R-A, `U3_CONFLICT_LEDGER.md` C3-R4).
+  rule below (`04:318` names `holdings(faction)` as a named Query; U6 R-A, `U3_CONFLICT_LEDGER.md` C3-V3).
 - `world_q.footprint`, `density`, `sovereign_fraction`, `provinces_of`: no caller, and **not deleted**,
   because `architecture/holonic_ARCHITECTURE.md:597-598` names three of them and the fourth implements a
   ratified ruling. See the audit's §6.

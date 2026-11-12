@@ -6,7 +6,7 @@ Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — the body is brought to its 
 
 Reconciled: 2026-11-12, U6 repair lane R-C (`unified/U6_VERDICT_AND_REPAIRS.md` finding 5, A-30): the `Draw` docstring states once, at the owner, that the index `n` is part of the key, so "one draw per key" holds and a keyed draw is a function of its key alone; `16_PESSIMIST_GO_keyed_draw_no_recorder.md` points here. `H2`'s home is R-A's and is not touched.
 
-Reconciled: 2026-11-12, U6 repair lane R-A (`U3_CONFLICT_LEDGER.md` C3-R3): `H2`'s home is `draw.py` (the placement note above stands, its `[ASSUMPTION]` now decided: `state/ids.py`'s docstring scopes its single-owner claim to the id MINT, "not hashing generally", so it does not speak for a draw mix, and `engine/dice_engine/` imports nothing from `engine/season/`, verified by grep); the three test files collapse to `engine/tests/test_draw.py`; gate 2 names the three harness shuffle controls it excludes; the vectors' export is read in B41.
+Reconciled: 2026-11-12, U6 repair lane R-A (`U3_CONFLICT_LEDGER.md` C3-V2): `H2`'s home is `draw.py` (the placement note above stands, its `[ASSUMPTION]` now decided: `state/ids.py`'s docstring scopes its single-owner claim to the id MINT, "not hashing generally", so it does not speak for a draw mix, and `engine/dice_engine/` imports nothing from `engine/season/`, verified by grep); the three test files collapse to `engine/tests/test_draw.py`; gate 2 names the three harness shuffle controls it excludes; the vectors' export is read in B41.
 
 **Depends on:** `U5a_DICE_owed_edits.md` §1 (B05: the one sampler); `11_GO_float_contract.md` Part A (`fmath`, B06); `16_PESSIMIST_GO_keyed_draw_no_recorder.md` (B06, co-land).
 **Lands in batch:** B06 (`B06-keyed-draw`, IN/GO), with `11_GO_float_contract.md`, `16_PESSIMIST_GO_keyed_draw_no_recorder.md`, `U5d_GO_owed_edits.md` and `11_GO_pointer_and_stale_text_resolutions.md` item 5; before B07's task draw (C3-D3).
@@ -109,7 +109,7 @@ generator item and widens it.
    (tests excluded) prints nothing **but the three shuffled-order controls of harness instruments, named by function
    and excluded by name, never by directory**: `harness/strife.py::pair_profile` (`:257`), `::link_profile` (`:301`)
    and `harness/arc.py::shuffled_causes` (`:219`); each permutes a reading's own inputs to build its null, no season
-   module imports either file, and `Draw` deliberately exposes no `shuffle` (U6 R-A, C3-R3; ladder step 5). Any other
+   module imports either file, and `Draw` deliberately exposes no `shuffle` (U6 R-A, C3-V5; ladder step 5). Any other
    hit fails, including a new one under `harness/`. Written first as the test
    `engine/tests/test_draw.py::test_no_random_Random_in_runtime_code` (the scratch `go_probe.py` counting shim is not
    needed and is not written).
@@ -117,7 +117,7 @@ generator item and widens it.
    alone, fed the same keys, reproduces the GO-08 vectors bit for bit (`engine/tests/test_draw.py::test_n_zero_is_the_key_itself`,
    `::test_n_one_remixes_with_h2`, `::test_samplers_match_their_vectors`; the vectors are held in the test in B06, and
    their export round-trip is read in B41, where `tools/export_oracle_pins.py` is built). **One test file:** every test
-   of this file and of `16_PESSIMIST_GO_keyed_draw_no_recorder.md` lives in `engine/tests/test_draw.py` (U6 R-A, C3-R3).
+   of this file and of `16_PESSIMIST_GO_keyed_draw_no_recorder.md` lives in `engine/tests/test_draw.py` (U6 R-A, C3-V2).
 
 ## The falsifier
 

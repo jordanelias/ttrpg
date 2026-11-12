@@ -9,7 +9,7 @@ Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — the body is brought to its 
 Reconciled: 2026-11-12, U6 repair lane R-C (`unified/U6_VERDICT_AND_REPAIRS.md` findings 4, 6): "The resolution" no longer says `obstacle_default` "keeps the job H-127 gives it"; it is deleted (C-04, the head above), and the E line follows; the remaining "key" for a capability (What it changes, problems 1 to 4, the falsifier) → "capability" or "capability rank"; "fallback" for the untrained score → "untrained score" (glossary *stand-in*, *untrained score*).
 
 **Depends on:** `U5a_capability_home_and_two_inputs.md` Part A (B04); `29_DICE_one_opposed_rule_form_and_tuning.md` item 29-1 (`opposed_ob`, B04); `U5c_SC_one_obstacle_form.md` (B05); implementation lane A's branch rebased (B01, C3-A2).
-**Lands in batch:** Edits A, B and C in B05 (`B05-one-roll`): A and C as OBS step 0 with CAP Part B (Edit A is CAP row B1, Edit B is CAP row B4), before OBS step 1a. *(U6 repair lane R-A, `U3_CONFLICT_LEDGER.md` C3-R2: this file is a declared mover and B04 is gated hash-EQUAL; this file's own line 83, CAP row B1, OBS's head and C3-A3 already said B05.)*
+**Lands in batch:** Edits A, B and C in B05 (`B05-one-roll`): A and C as OBS step 0 with CAP Part B (Edit A is CAP row B1, Edit B is CAP row B4), before OBS step 1a. *(U6 repair lane R-A, `U3_CONFLICT_LEDGER.md` C3-V1: this file is a declared mover and B04 is gated hash-EQUAL; this file's own line 83, CAP row B1, OBS's head and C3-A3 already said B05.)*
 
 ## Status: PROPOSED
 
