@@ -438,10 +438,15 @@ The shipped terms are four seasons, so a four-season run sees no lapse. Rather t
 terms were set to their own swept short values (`oblige_term` 1, `docket_lapse` 2) at seed 0 for three
 seasons; seasons 0 and 1 are event-for-event the shipped run's (13,379 and 24,267 Events).
 
-- **26 oaths lapsed unpaid, sworn by 26 different persons, all to one seat.** `term.renewed` 0. The
-  oath wave of S2 is aimed at a single seat, so even with every proposal of this lane built the
-  grievances would all fall at one door: the content of who swears to whom is itself degenerate
-  (`20_NARRATIVE_B` names this as its third falsifier).
+- **26 oaths lapsed unpaid, sworn by 26 different persons, all to one seat, and the seat is empty.**
+  E-N14 (seed 0, two seasons, shipped): every oath sworn in play is to `off_lord_terr_T1`, a `Lord` seat
+  that one executed `establish` founded in season 0 and that nobody holds. `world_q.seats_named` names
+  that one seat for 83 of 83 persons (the founding reached every ledger), so `oblige` forms on it for
+  everyone, and 26 take it. That is the whole of S2: *a lordship is proclaimed, no lord is made,
+  twenty-six people swear to the empty chair, and their service lapses unpaid.* `term.renewed` 0, since
+  there is nobody to pay. The engine tells this story at seed 0 without knowing it is one. It also
+  means that with every proposal of this lane built the grievances would at first fall at one door, or
+  at none (`20_NARRATIVE_B`'s third falsifier).
 - **What the 26 lapses occasioned:** six acts formed on a claim of the closure, by persons who were
   not the sworn man: `convene`, `create_record` and `commit` executed; `march`, `capture` and `sabotage`
   refused. No `release`, no `petition`, no act toward the seat or its holder. One world-to-act edge
@@ -749,6 +754,8 @@ load average rose from 3 to 42 during the session; that bounded what completed.
 | E-N11 | smoke runs `narr_probe.py 0 1 shipped` (hash `5ab73af2…`, the one-season hash the DET and FI lanes report), `0 2 shipped` | seed 0; 1, 2 | the probe reads what the other lanes' probes read at the same seed |
 | E-N12 | `grep -rn held_by engine/season` (non-test) | n/a | the stem appears in `verb_table.yaml` typed cells, `harness/` and the hole register; no depositor in `loop/` or `epistemic.py` |
 | E-N13 | inline `python`: `opinion_of(w, p, own faction)` and of every other faction; `engaged_poles`; claims with a `held_by` predicate; ledger sizes | seed 0, no season | 43 members; opinion of own side below 0: 4; rate another faction higher: 27; poles engaged: the Church's only; `held_by` claims 0; 42 of 83 persons hold any claim at build |
+
+| E-N14 | inline `python`: `build_realm(0)`, two seasons through `storybar.drive`; `oblige` edges opened in play by object; `vacancies` and `seats_named` for the sworn | seed 0; 2 | 26 oaths, 1 seat: `off_lord_terr_T1` (post `Lord`, rung `terr_T1`, faction Valorsmark, holder none); a vacancy for 1 of the 26, a seat named in the ledger for 26 of 26; `seats_named` non-empty for 83 of 83 persons and names only that seat |
 
 Probe defect, stated: the FACTION lines of `narr_probe.py` print `head None` for every faction because
 the probe looked the head up by the wrong key. Nothing in this file uses that column; faction heads are

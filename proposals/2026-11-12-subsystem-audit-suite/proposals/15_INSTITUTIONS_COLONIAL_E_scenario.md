@@ -1,5 +1,7 @@
 # COLONIAL-E — two playable scenarios and the report that shows them: "The Farm of the Southern Tolls" and "The Katepano's Latitude"
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-12, X-32) — this file's case-and-report shape is the one scenario style for every institution, and its report `harness/institution` is the one report, widened with the other three lanes' readings (`15_INSTITUTIONS_SYNTHESIS_D_first_playable.md` §1, §3); the farm's maker in the integrated playable is `off_king`, and The Farm of the Southern Tolls is that playable's second cut as well as this family's standalone; the conferred seat carries `audit_at_exit: audit`. Both scenarios, the report's lines and the gate stand. Every finding below stands.
+
 ## Status: PROPOSED
 
 Source: `audits/15_INSTITUTIONS_COLONIAL.md` §8, §9, §12 batch C-5. The standing requirement

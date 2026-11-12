@@ -1,5 +1,7 @@
 # INSTITUTIONS · PAPACY — the Church of Solmund as persons in seats under procedure
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 — where this file's names, homes or shapes differ from that ledger, the ledger governs: world-gen instruments live in `engine/season/instruments.yaml: seeded`, and the writ forms `avoid`, `withhold`, `render` are the forms `avoidance`, `interdict`, `tithe` of that file's `forms:` (X-01, X-02); a certificate carries `recites`, not `attests: n`; the archive holds the containment charter and the first king's consecration, and the two ducal papers are `homage` instruments in the chancery (X-03, X-05, X-08); §2.2's stated limit (a dead founder's deeds are nobody's) is answered by the chain term of `legitimacy` down the seat's holders (X-06; R-17 closed); the election's middle outcome is the one tally's `matter.undetermined` (X-15); the believer's decline and the lift of duty are read through `forborne` and `excused` (X-29, X-31). Of §13: items 1 and 2 are the synthesis's §10 items 2 and 3; item 3 is closed there; item 4 is its §10 item 1 and §4.6. Every finding below stands.
+
 ## Status: REFERENCE (a design and plan in proposal form; resolves nothing at runtime, CLAUDE.md §0.05)
 
 ## Read at: 84d2a02 (working tree)

@@ -1,5 +1,7 @@
 # INSTITUTIONS · BYZANTINE — the court of precedence, the bureaux and the provincial chain, adapted to a conquest-founded order
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 — where this file's names, homes or shapes differ from that ledger, the ledger governs: no Record kind `roll` and no `offices.yaml: founding:` section (X-01, X-03, X-04: the founding papers are seeded instruments, and "the Roll" is the Settlement in the clerk's keeping); the founding order is three founders' seeded deeds, and the presumption of §6.2 is the chain term of `legitimacy`, discounted per holder (X-05, X-06); the five draws of §7.0 are their verb lanes' rows, with this file's odds sources as named terms (X-19, X-23 to X-27); the far superior is one seat shared with the colonial lane (X-13); the stipend is billed in `default_store_kind` (X-30); the scenarios are case files (X-32). Of §14: item 2 is the synthesis's §10 item 1; items 1, 3 and 4 are closed there with their ladder steps. Every finding below stands.
+
 ## Status: REFERENCE (a design and plan in proposal form under `INSTITUTIONS_BRIEF.md`; resolves nothing at runtime)
 
 ## Read at: 84d2a02 (working tree)

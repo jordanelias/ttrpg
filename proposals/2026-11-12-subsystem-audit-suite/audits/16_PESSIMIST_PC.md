@@ -638,12 +638,210 @@ and not at all at the armoured end.
 
 ## 4. Findings
 
-(appended below, ranked, when the runs complete)
+Ranked worst first. Each: severity · claim · falsifier run and its control · requirement · minimal fix
+at the owner.
+
+**F-PES-PC-01 · blocks the stated intent; degrades narrative (R-09, R-04) · A fight is two blows.** The
+exchange roll is centred 2.2 above its obstacle for equals at every level, Overwhelming is the modal
+band, and one Overwhelming blow is 62% of a man (§1.1). Falsifier: a blows-to-fell distribution with
+real mass beyond three; outcome 2.6% (5,000 fights), and the same shape at two disjoint seed sets and at
+faculty 0 to 20 (3.26 to 2.92 blows). Control for the cause: with the damage scale lowered the count
+rises (4.6 blows at `DMG_SCALE` 1.07, 6.5 at 0.75) while re-centring the obstacle leaves it at 3.5
+(§6 J-1), so it is the blow's size, not the roll's centre, that fixes the length. Consequence: no
+escalation, a reversal one time in four, a duel to first blood that is one blow in 92.6%, and three
+decisions for any per-phase chooser. Fix: J-1 (Jordan's; evidence in §6).
+
+**F-PES-PC-02 · design (NERS N, E) · The per-phase approach has nothing to decide.** In the window the
+engine draws, deeper is monotone better (45.3 / 49.0 / 54.4% felled at depths 3.9 / 3.0 / 2.3; as drawn
+49.9, control 52.1); seven state-reading policies all read at or below "never lean" (§2.6). Falsifier:
+any policy that beats always-normal by more than the interval; none of seven. Control: with the deep
+tier restored the three depths read flat (52.0 / 47.6 / 51.5), so the monotonicity is the window, not
+the instrument. Requirement: the 2026-11-12 intent. Fix: proposal B, then J-1, then the PC lane's
+`03_PC_duel_round_and_approach_B.md` step 3; not before (R-6).
+
+**F-PES-PC-03 · standing rule (R-09) · Whether a wounded man gives up is a threshold.** 0 of 3,000 across
+the line who did not yield; 0 yields above it; identical for Spirit, disposition and Focus 1 to 7; never
+under `death` terms; always accepted (§2.2). Control: sweeping the constant moves every person together.
+Fix: proposal A (prototype: the yielder's Health at yield spreads from 0.12 to 0.68, 11.9% had fought on
+past an earlier check, Spirit 1 against 7 takes 55.8% against 32.9% of the yields).
+
+**F-PES-PC-04 · calibration, a pattern defect · The commit window is [2, 4.03] and the deep tier sits at
+4.0.** The largest commit drawn is 4.03 for ten weapons; 0.91% of season exchanges reach the tier; the
+lunge, the Indes steal, the counter, the displace and the over-commit reopen are gated there, and
+cutting each is free (§1.2, §1.3). Falsifier: a commit above 4.14 in any closed exchange; none in
+300 fights × 10 weapons. Control: at `range_avail` 1.0 the factor is 1.0 and the window is [2, 5] by the
+function's own branch (`combat_systems.py:458-459`). The broken thing was right when written (§0.1 pt
+5). Fix: proposal B.
+
+**F-PES-PC-05 · degrades narrative (R-01, R-07) · The world keeps a verdict, not a fight.** 110 trace
+events become three Events with no length, blow or reversal; the trace is returned and dropped (§3.3).
+Falsifier: any of seven beat words in the fold's Events; 0 of 7. Fix: proposal C (after the typed
+record).
+
+**F-PES-PC-06 · degrades narrative (R-07, R-08) · A killing in self-defence has no killer.** Where the
+actor is felled (148 of 300) no claim names the man who killed him; 106 of 306 `person.died` claims name
+a living person, separable only by the `seen.who` pairing (§3.3). A stated limit
+(`person_q.py:266-268`), measured here at one killing in two. Fix: proposal C part 2.
+
+**F-PES-PC-07 · standing rule; completeness · Armour is an average, and its top step is a certainty.**
+A Success has one damage value per tier; the plated man is felled 0 of 1,500 (unarmoured opponent) and 0
+of 1,300 over three runs (light opponent); the plate mirror is 99.7 to 99.8% undecided; a master at
+faculty 10 fells a plated novice 22.2% (§2.3). Control: the same mirror with a mace, an estoc or a
+longsword resolves 96.5 to 100%, so it is the sword against plate, not plate. Latent today (one kit in
+the world). Fix: proposal D (prototype: 0.0 → 5.0%; mirror undecided 99.8 → 68.5%; the master 2.5 →
+33.2% at faculty 6).
+
+**F-PES-PC-08 · robustness (customisation), latent · One attribute outweighs the levers the intent
+names.** Perception 4 against 3 is 77 to 23; 5 against 3 is 94 to 6 and equals four points of skill;
+Strength 1 is felled 96.6% (§2.4). Control: the mirror at two seed sets, 50.4 and 49.0%. Reaches the
+season through authored attributes (PC-06 K-1); no cast member carries one today. Fix: R-7.
+
+**F-PES-PC-09 · NERS N · Eight false or narrowed N-lines** (§1.4): the Vor substrate; "both poles cost";
+the fighting withdrawal; the eight morphology levers; the grapple; the decisive stagger; the read's mode
+choice; the bind as a wound source. In the season's fight, 2 of 31 cuts move the shape, 6 never
+execute. Fix: none by itself; it is the evidence for the build order (R-6) and for what the Godot port
+should not carry yet (R-8).
+
+**F-PES-PC-10 · premise (the words) · Names that promise events the engine does not have.** `disarm`
+(1,107 in 5,000 fights), `throw`, `pin`: poise only. `undecided` for the victor (the typed-outcome
+proposal's `standing` fixes this one). `blood` terms stop at the first *wound gate*, which the first
+landed blow nearly always crosses. Fix: R-8; cite `03_PC_typed_outcome_one_door.md`.
+
+**F-PES-PC-11 · premise (genre) · The man who opens a fight has no edge, and neither does the watch.**
+Actor felled 148 of 300; acting first on turn 1 is worth nothing (A felled 50.7% when first, 50.1% when
+second, 6,000 fights); landing the first wounding blow is worth 77%. `capture`: the captor yields 148
+of 300. Control: by construction (`wrapper.py:593`). Fix: J-2 (Jordan's).
+
+**F-PES-PC-12 · standing rule, weapon level · A spear against a sword is 99.2 to 99.8%, in 1.1 turns.**
+One mechanism (the stop-hit) and one constant chain; with it cut the spearman is felled 80.2%. Not the
+sweep's C-13 case (armour) and not reached by the riposte in any useful measure `[UNVERIFIED: not
+prototyped]`. The roster-wide count of such cells was not taken (machine load). Fix: R-9 (a census
+before `arms_kinds` is populated).
+
+**F-PES-PC-13 · hygiene · Extremes.** `seam/wrappers/combat.py::resolve` does not refuse one id as both
+claimants (`fight_estimate` does, `:257`); `resolution_pool`'s `int(round(·))` gives pools 8, 10, 10 at
+faculty 2.5, 3.5, 4.5; a negative faculty yields a negative obstacle; a half-sword form is accepted as a
+kit (F-PC-15). None reaches a season today. Fix: R-10.
+
+## 5. The standing rule, read against the subject
+
+| fixed function of state in personal combat | where | status |
+|---|---|---|
+| a felling is a death | `effects_combat.py::_eff_kill` | the sweep's D-04 / `14_VERBS_PHYSICAL_A` A3 (the mortal-wound draw); not restated |
+| the larger man always wins at the season's scale (the flip is not read) | `wrapper.py:618-624` | the sweep's C-13 (the riposte); does not reach the armour cases (F-PES-PC-07) or the spear (F-PES-PC-12) |
+| a man across the term's line yields; the yield is accepted | `wrapper.py:600-612` | **new: proposal A** |
+| armour divides every blow; plate against a sword cannot be felled | `core.py:321-322`, `:637-644` | **new: proposal D** |
+| a Success deals one fixed number | `core.damage` | arithmetic once the blow lands; D adds the one chance it lacked |
+| an NPC engages every turn, never withdraws | `wrapper.py:586-592`, `decide=None` | F-PC-14; the PC lane's proposal B §4-§5 (a chooser act, sampled, D-06) |
+| the defender's mode on a won read is the best of three, always | `combat_systems.py:1149` | a fighter's judgment, not an outcome; left |
+| the lasting mark falls at the deepest gate crossed | `effects_combat.py:394-424` | `[UNVERIFIED: not opened at the line here]`; owed to the sweep if it is a certainty |
+| a yielded captive is detained | `_eff_capture` | `14_VERBS_PHYSICAL_A` A1/A2 |
+| one point of `arms` per fight where the key is held | `effects_combat.py:271-296` | the sweep's C-15 |
+
+This lane's own text was checked against the rule: proposal A's draw decides the yield and leaves the
+victor's response a sampled choice; proposal D makes the gap a draw and leaves ranking an expectation;
+proposals B and C decide no outcome.
+
+## 6. Resolutions, proposals, and what is Jordan's
+
+### 6.1 Decided (the five-step ladder)
+
+| # | inconsistency, gap or unclear passage | decided | step | carried by |
+|---|---|---|---|---|
+| R-1 | the yield is a threshold; `YIELD_HEALTH_FRAC` is an `[ASSUMPTION]` awaiting Jordan | the yield is a draw on Spirit against the term and the wounds; the constant becomes the burst-breaker only | 1 (the standing rule) | proposal A |
+| R-2 | `03_PC_exits_withdrawal_recovery.md` lists NPC concession as Jordan's | superseded: a concession is a draw, for every party, under every term | 1 | proposal A |
+| R-3 | commit "over [2, 5]" in the notes, [2, 4.03] in the run; thresholds absolute | the tier follows the window; the notes state the window drawn | 5 | proposal B |
+| R-4 | "some blows reach a bare zone" computed as an average | drawn per blow at `core.strike`; ranking keeps the average | 1 | proposal D |
+| R-5 | the scene's shape is computed and dropped; the self-defence killer is unnamed | five Observations and `fell_to_hand`, on the `broke_observed` precedent | 4 | proposal C |
+| R-6 | the PC lane's build order puts the approach (its step 3) before the fight has length or a reachable deep tier | the approach is built after proposal B lands and J-1 is ruled; its gate adds "a state-reading policy beats never-lean by more than the interval" | 5 (do not build a menu) | recorded here for the PC lane; its file is not edited |
+| R-7 | no bound on a lever's slope; Perception outweighs skill two to one | the calibration rule gains a slope bound (one point of any attribute moves the mirror no more than one point of faculty does); first act is to isolate the term, then lift the read's literal scale (`combat_systems.py:1145`, `/1.0`) into `CFG` and fit it | 5 | an edit in the PC lane; no proposal file (the value needs the workbench sweep) |
+| R-8 | grapple outcomes named for events that do not occur | the six stay as poise and initiative shifts; `contact.py`'s `GRAB_OUTCOMES` note says so; the names are not shown to a player and the axis is not ported until an outcome has an effect a fold or a grid reads | 5 | an edit; GO lane to note |
+| R-9 | weapon mismatches can be certainties (spear against sword) | before `arms_kinds` is populated, a tracker-true census of the roster's matrix names every cell beyond 95%, and the inventory proposal (`03_PC_person_inputs_content.md`) admits a weapon only with its answer | 5 | recorded for the PC lane |
+| R-10 | `resolve` lacks the same-id refusal; fractional and negative faculty | `resolve` takes `fight_estimate`'s `PARTY-GAP` line; `resolution_pool` is F-PC-08 (d)'s (fractional pools), not re-raised | 4 (`combat.py:257`) | an edit |
+| R-11 | the twelve-turn cap makes the plate mirror undecided | kept (ruled: an undecided fight is a legitimate outcome); proposal D makes it rarer | 3 | none |
+
+Eleven resolutions decided.
+
+### 6.2 Proposals written by this lane
+
+| file | what | cost |
+|---|---|---|
+| `proposals/16_PESSIMIST_PC_A_the_yield_is_a_draw.md` | the yield as a graded draw; prototyped | small build |
+| `proposals/16_PESSIMIST_PC_B_the_commit_window.md` | the deep tier follows the window; prototyped | small build, calibration re-record |
+| `proposals/16_PESSIMIST_PC_C_what_the_world_keeps_of_a_fight.md` | the scene's shape and the killer's name on the Event | edit, after the typed record |
+| `proposals/16_PESSIMIST_PC_D_armour_turns_a_blade_by_a_draw.md` | the coverage gap as a draw; prototyped (and a failed alternative recorded) | small build |
+
+### 6.3 For Jordan (what survives the ladder)
+
+**J-1. How long is a fight?** Not answered by a ruling, a design document or precedent; the two answers
+are different games, and the 2026-11-12 intent presupposes one of them.
+
+- *Option A, as coded: fast and lethal.* Two or three blows, the first solid one usually decides. Then
+  the choice that matters is made before the fight (the kit, and whether to fight at all), the grid's
+  single selection is the natural surface, and a per-phase approach in the duel is three prompts with
+  nothing behind them (F-PES-PC-02). The honest build under A drops "per phase" for "per fight".
+- *Option B: long enough to have a position.* Evidence, season-default mirror, 1,500 fights
+  (`pK_scale2.py`; shipped: 3.36 turns, 3.18 blows, a lead change in 34.1%, first-wounded wins 23.3%,
+  undecided 0.2%; control 3.30, 3.17, 31.8%, 21.9%):
+
+  | change (in-process only) | turns | blows | lead change | first wounded wins | undecided |
+  |---|---|---|---|---|---|
+  | `DMG_SCALE` 1.55 → 1.07 (a Success becomes one Wound Interval, as `core.py:168` says it is) | 4.60 | 4.58 | 43.9% | 28.1% | 0.5% |
+  | `DMG_SCALE` → 0.75 | 6.24 | 6.45 | 50.4% | 31.2% | 3.1% |
+  | `OW_MAX` 2.5 → 1.5 (the Overwhelming ceiling alone) | 3.62 | 3.43 | 32.8% | 25.6% | 0.3% |
+  | obstacle = 0.4 × the defender's pool − 1 (an even exchange centred on the Success floor; bands Fail 34.7, Partial 16.8, Success 30.0, Overwhelming 18.5) | 5.65 | 3.48 | 31.8% | 23.8% | 5.3% |
+
+  The damage scale buys blows and reversals; re-centring the roll buys misses (more turns, the same
+  blows, more undecided fights) and would re-open the ruled obstacle (Jordan, 2026-08-15). If B, the
+  scale is the lever and the obstacle is left alone.
+
+**J-2. Does opening a fight give an edge?** As coded, never: an assault is a fair duel. Option A keeps
+that (violence is symmetric; ambush belongs to the field and to fieldwork). Option B gives the opener of
+a fight the other did not expect an edge on the first turn. Evidence for B's form: who acts first is
+worth nothing (50.7% against 50.1%), so "the opener goes first" would be a no-op; the edge would have to
+be σ on the first exchange or an exchange the defender cannot answer, and whether the other "expected
+it" is a host fact (`with`, a held challenge, a hidden intention) that no reader supplies today. A and B
+differ as games by whether murder and ambush exist at personal scale.
+
+Not escalated: the two verbs for taking a man (`arrest` by standing, `capture` by the body) are in
+`14_VERBS_PHYSICAL_A`'s A1 and A2 and are left to that lane.
 
 ## 7. Evidence log
 
 Scratchpad: `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/PES_PC/`
-(scripts `lib.py`, `p*.py`; outputs `p*.txt`).
+(shared helpers `lib.py`; each script's output is the `.txt` of the same name). All
+`PYTHONHASHSEED=0`; seeds are `0..N-1` unless a control offset is named. The machine was loaded (load
+average 30 to 45 on 4 cores) for the whole run, so several probes were cut down or stopped; each is
+marked.
 
-**IN PROGRESS: sections marked "appended below" are being filled as the runs finish. If this line is
-still present, the lane was interrupted; the outputs named above hold whatever completed.**
+| probe | what, size | outcome used in |
+|---|---|---|
+| `p0.py` | timing (2.6 ms a fight unloaded) and trace shape | — |
+| `pA_commit.py` | commit depth, observational (4,000 fights × 3 matchups, shuffled-label control) and forced (default mirror complete; the longsword and mace arms stopped for load) | §2.1 |
+| `pB_yield.py` | terms census 3,000 × 3; person sweeps 1,500 × 6; threshold sweep; plate under each term 800 | §2.2, §2.3 |
+| `pC_armour.py` | per-blow damage by tier, 1,500 × 28 cells; tier matrix (stopped after the `light` row) | §2.3 |
+| `pC3.py` | skill and weapon against plate, 400 × 7 | §2.3 |
+| `pD_skill.py` | faculty 0 to 14 against 2, 3,000 a row; mirrors by level 1,500; skills and attributes 1,500 | §2.4 |
+| `pN_att.py` | Perception and Strength ladders 1,000 a cell (the Coordination row not completed); Perception against skill; the read at Perception 7 | §2.4 |
+| `pE_cuts.py` → `pE_cuts_base800.txt` | base and control rows of nine matchups at 800 (the cut loop stopped for load) | §1.2 (spear, base rates) |
+| `pE_cuts2.py` | 31 cuts × 6 matchups × 400 | §1.2 (b), §1.4 |
+| `pE3_default.py` | 31 cuts × the season mirror × 2,000, two controls | §1.2 (a), §1.4 |
+| `pF_story.py` | story census 5,000 (death), 2,000 (blood), 2,000 (yield); roster coverage 50 weapons × 120 × 3 armours; commit depth by weapon and disposition | §1.3, §3.2 |
+| `pH_extremes.py` | extremes, 1,000 a row; cap sweep 200 | §3.6, §2.3 |
+| `pI_approach.py`, `pI_approach2.py` | state-reading approach policies, 1,500 (seven of ten policies; the 3×3 and the terms arms not run) | §2.6 |
+| `pJ_roll.py` | the roll's centre, 40,000 draws a row | §1.1 |
+| `pK_scale.py`, `pK_scale2.py` | damage scale, Overwhelming ceiling and one obstacle variant, 1,500 (the second obstacle variant, the skill curve under it and the terms arms not run) | §6 J-1 |
+| `pL_misc.py` | armour and the roll 800 × 4; first-mover 6,000 | §2.3, §2.5 |
+| `pM_yield_draw.py` | prototype of proposal A, 1,500 × 3 terms, two controls, Spirit and modifier sweeps 1,000 | proposal A |
+| `pP_window.py` | prototype of proposal B, 1,500 mirror, 1,000 a matchup | proposal B, §2.6 |
+| `pQ_knee.py` | the knee as a draw, 500 (stopped after three cells: it fails) | proposal D |
+| `pQ2_gap.py` | prototype of proposal D, 400 × 8 cells | proposal D, §2.3 |
+| `pS_season.py`, `pS2.py` | `tiny_world` through the real driver: one fight's Events and ledgers; 300 seeds per verb through the seam; self-fight; the estimate; `body`-lowered actor; death-claim census over 100 fights | §2.5, §3.3, §3.6 |
+
+Not run: a realm-scale season (the game lane's X1 and X2 took 95 to 107 s a season arm on this machine;
+their readings are cited); `pytest`; any `aperture` run. Not read: the workbench files and the
+`.designs/` combat set (the PC addendum's §B1 read them; cited through it); `combat_systems.py` outside
+`:436-470` and `:1044-1175`; `weapon_physics.py`; `weapons.py`.
+
+`git diff --stat 2eba83c HEAD` over `modules/`, `engine/`, `systems/`, `tools/`, `references/` and
+`architecture/` was empty at the last check (HEAD `7b532b2`), so every code reading holds at both.

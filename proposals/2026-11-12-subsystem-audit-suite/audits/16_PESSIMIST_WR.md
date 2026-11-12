@@ -41,6 +41,9 @@ reproduces a sibling's reading before it is trusted.
 | shipped | 1,190 | 0 | 0 | 0 | 23.4% · 14.4% | 5: `utter, conceal, create_record ×3` | 5 · 0 |
 | `drawseed` (noise) | 1,346 | **316** | 706 | 15 | 19.0% · 10.0% | 5: `commit, utter ×3, tell` | 7 · 2 |
 | `calendar` (barrier 1 removed: no Date ever fires, no slot ever forms) | 1,198 | **38** | 145 | 9 | 23.3% · 13.5% | 5: the same five acts as shipped | 5 · 0 |
+| `stock0` (MATTER's stock report off, CR-23) | 1,191 | **161** | 438 | 20 | 21.8% · 11.8% | 5: `dispatch, issue, dispatch ×2, reconstruct` | 2 · 0 |
+| `calamity` (weight 250, a source planted; §2.2) | 1,196 | **24** | 96 | 13 | 23.0% · 14.0% | 5: the same five acts as shipped | 6 · 1 |
+| shipped, run a second time (replay control) | 1,190 | 0 | 0 | 0 (hash equal) | equal | equal | equal |
 
 What the CALENDAR cut removed: 12 `date.fired`, 17 `docket.formed`, the 7 empty slots standing on the
 docket at the end. What it did not move: `convene` executes 17 times in both arms (in the cut arm it
@@ -59,11 +62,20 @@ resolution is not to cut it; it is that **the barrier is unproven until a determ
 fired date**, and that a cut arm is the cheap way to know when that becomes true (§4 F-PES-WR-04; §9).
 Horizon caveat: three seasons; the lapse at `docket_lapse` 4 is outside it. One seed.
 
+**The stock report's N-line is true, narrowly.** With the report off the realm is 161 from shipped, half
+the noise, and the story bar sits inside the spread the two draws span (cross share 19.0 to 23.4%). The
+acts that answer a clock do not fall (story-bar class `world`: 368 against 365), so the GAME lane's
+reading that persons mostly answer the granary is not the stock report's doing. One thing dies outright:
+**`migrate` executes 0 of 101 against 16 of 116** (13 in the noise arm), so the report is what a migration
+is admitted on. The cause was not traced `[UNVERIFIED]`. A cut that looks free on every aggregate and
+kills one verb is the case for reading a cut by component, never by headline.
+
 ### 1.2 The cut table
 
 | mechanism (owner) | the cut | what dies | evidence | verdict |
 |---|---|---|---|---|
 | CALENDAR (`loop/calendar.py`) | remove the barrier | its own Events and seven empty slots | §1.1 | **false N-line** today |
+| the stock report (`matter.py::_stock_report`, CR-23) | `stock_report = off` | every executed migration (16 → 0); nothing else outside the noise | §1.1 | **true N-line, one verb wide** |
 | site wear (`matter.py:852-870`) | wear 0 | 74 integers falling 10 a season; first visible Event at season 20 | P1 (§2.1); GAME X1 (site condition equal in the played and the unplayed realm at three seeds); SE F-SE-01 | free inside any played horizon (arm not run; inferred from those three) |
 | lattice coupling (`_lattice_strain`) | ships cut | nothing | fixture 0 | not in the game; switched on it is §2.2 |
 | weather draw (`season_factor_of`) | ships cut | nothing | fixture `()` | not in the game; switched on it cannot bite: the worst declared outcome halves 1,443 grain against 148 eaten (arithmetic on P1; the weather null arm was not run) |
@@ -80,8 +92,8 @@ Horizon caveat: three seasons; the lapse at `docket_lapse` 4 is outside it. One 
 | `thread_read` | cut | 2 to 8 `finding.made` a run that find nothing (§2.5) | P2 | free |
 | ENCOUNTER (`loop/encounter.py`) | fold the fight back into RESOLVE | the one step a playable host may suspend at (REM-31) | not attacked by a run | holds from one direction (S, *pauses correctly*): **narrowed, not established** |
 
-Sixteen mechanisms: two true N-lines (both clocks that close things), one narrowed, one untested, and
-twelve that are free, cut already, or inert at shipped values.
+Seventeen mechanisms: three true N-lines (two clocks that close things, and a report one verb depends
+on), one narrowed, one untested, and twelve that are free, cut already, or inert at shipped values.
 
 ### 1.3 The other way: mechanisms that survive because nothing was tried against them
 
@@ -253,13 +265,29 @@ and who closed it. A turn in the plain sense is an edge one person's act opened 
 act closed (a grant revoked, a prisoner freed, a pledge released by the one it was made to, a seat
 taken).
 
-TURN_PENDING
+| three seasons, shipped | seed 0 | seed 1 |
+|---|---|---|
+| non-`contain` edges open at the end | 1,138 (`hold` 766, `commit` 243, `reside` 83, `oblige` 46) | 1,160 (819, 226, 82, 33) |
+| edges that closed | 19 | 14 |
+| … closed by their own subject | 19: 16 `reside` (a migrant's own), 2 `release`, 1 `give` | 14: 5 `reside`, 5 `release`, 4 `give` |
+| … closed by a clock | 0 (the first `oblige` term matures at season 4) | 0 |
+| … **closed by another person's act** | **0** | **0** |
+| deaths caused by an act | 0 | 1 (`capture`) |
+| interior movement logged (`pursuit.moved`) | 2 | 0 |
+
+The stock-report arm reads the same (4 closed, all by their own subject; one killing). So in three
+seasons, at two seeds and three arms, **nothing one person opened was closed by anyone else**: no grant revoked (`revoke` 0 of 6), no prisoner freed, no pledge released by the one it
+was made to, no seat taken (`seize` 0 of 14, `confer` 0). The single way one person ends something of
+another's is to kill him, once in six seed-seasons. Limits of the reading, stated: it reads Tenures only
+(a rebutted claim or a destroyed Record is not a Tenure); a dead man's edges are removed with him and are
+counted under his death; `reside` closures carry no receipt of their own, so their closer is read from
+the verb that executes them (`migrate`, the migrant's own).
 
 | # | link | O | C observed | verdict |
 |---|---|---|---|---|
 | 1 | a beginning | a want or a wrong | plentiful: 616 acts with another person's Event among their causes (seed 0); the deepest executed chain is five acts | FOLLOWS |
 | 2 | escalation | a second party raises it | WR F-WR-01: `challenge` 0 of 118, `covenant` 0 of 18 | cited |
-| 3 | a turn | reversal by another | TURN_LINK_PENDING | TURN_VERDICT_PENDING |
+| 3 | a turn | reversal by another | 0 of 33 closures in two seeds; one killing | **INERT** |
 | 4 | an end | recognisable | `matter.determined` 0, `person.died` 0 at seed 0; closures are terms maturing (WR F-WR-13) | DEPARTS (cited) |
 | 5 | the end is an event | a moment | an ending is a predicate recomputed each season (`endings_reached`), emits nothing, halts nothing, and stops holding when an edge closes; both rows read not-held at build (P4) and `[]` in every run | INERT |
 | 6 | it can be retold | by a narrator | WR F-WR-14 (who and when, never what) | cited |

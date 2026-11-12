@@ -1,5 +1,7 @@
 # INSTITUTIONS — COLONIAL: empire at distance and empire-maintenance, adapted to Valoria
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 — where this file's names, homes or shapes differ from that ledger, the ledger governs: `instruments.yaml` is the kit's one registry and gains a `seeded:` section and six more forms (X-01, X-02, X-09, X-11); `recognition` is not a form: a certificate is the content key `recites` (X-03); `person_q.accomplishment` is not added: its recursion is the chain term of `person_q.legitimacy` (X-06); the four graded rows of §3.2 are their verb lanes' rows with `remove` added, and `oath_step` is the term `obligation` (X-20, X-24, X-26 to X-28); the audit key is `audit_at_exit` (X-12); a company's share is a `debt` (X-09); the far superior is one seat shared with the Byzantine lane (X-13). Of §11: item 1 is the synthesis's §10 item 1; item 3 is its item 4; item 2 is closed there. Every finding below stands.
+
 ## Status: REFERENCE (a design and plan in proposal form; resolves nothing at runtime, CLAUDE.md §0.05)
 
 ## Read at: bb6dfc3 (working tree)

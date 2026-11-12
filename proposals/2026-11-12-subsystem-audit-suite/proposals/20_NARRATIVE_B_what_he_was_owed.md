@@ -130,7 +130,15 @@ Seeds 0, 1, 2, six seasons (the shipped terms are four), `PYTHONHASHSEED=0`, wit
   (`challenge` 0 of 152 / 180 / 174, audit E-N04; PC and SC own them), and this term then ships at 0
   until one executes.
 - Gate 2 with every grievance on one holder at every seed: the oaths of the built realm all point at one
-  seat, and the content (who is sworn to whom) is what is degenerate.
+  seat, and the content (who is sworn to whom) is what is degenerate. **This is the expected first
+  reading, and worse:** at seed 0 all 26 oaths sworn in play are to `off_lord_terr_T1`, a seat founded
+  in season 0 that **nobody holds** (audit E-N14); `world_q.seats_named` names it for 83 of 83 persons,
+  so `oblige` forms on it for everyone. A sworn man with no belief about a holder blames no one
+  (`dues_unmet` reads 0), so on today's content this term is silent, correctly: there is no lord to
+  resent. The repair is not here: an oath to a seat with no holder should be declined person-side
+  where he believes it vacant (`20_NARRATIVE_C`'s claim makes that readable), and a founded seat
+  should be filled (FA: `06_FA_seat_terms_and_turnover.md`, the vacancy occasion). Listed for FA and
+  CHAR.
 
 ## NERS reading
 

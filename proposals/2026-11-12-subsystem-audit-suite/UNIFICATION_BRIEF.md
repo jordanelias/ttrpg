@@ -57,6 +57,8 @@ decision. It is still proposal form for code, registries and canon (no lane edit
 a ruling; implementation lanes land proposals); a resolution that would overwrite ratified canon, a `(RULED)`
 item or a ratified Layer 1 rule is written as a proposal AND listed with its two options for Jordan.
 
+**Resolve is a plan, not an edit (Jordan, 2026-11-12: *"permission means planning resolution with instructions for future execution"*).** Each resolution is written as an ordered, executable set of instructions for a later lane or session: the exact edits at the single owner, the order, the gate (an execution artifact), the falsifier, the declared hash movers, the dependencies on other resolutions, and who or what lands it. No lane executes a resolution against code, canon or registries.
+
 **Closure.** Every finding in every audit and addendum (`F-*`, `G-*`, `R-*`/resolution rows, census rows,
 pessimist findings, happenings, determinism items, survivors) ends with exactly one disposition, recorded in
 `unified/U5_FINDINGS_CLOSURE_<FAMILY>.md` (a table: finding id, one-line claim, disposition, carrying

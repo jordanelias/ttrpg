@@ -782,3 +782,103 @@ Lane `tests6`: 77 files under `tests/valoria/` (alphabetical `test_combat_invari
 - **Conflicts / stale:** `test_field_golden_pins.py:283` lists `MB_RESERVE_COMMIT` among the flags Jordan's flags-ON ruling turned ON, so this docstring's "GATED (default OFF)" is stale and `teardown_module` leaves the process at OFF [UNVERIFIED current config default]. The docstring itself says `run_multi_unit_battle` is not in the bat.py golden battery. The first test line `_, _, O = _reload(on=True), None, None` is a no-op expression.
 - **Open items:** none.
 
+### tests/valoria/test_registry.py
+- **What it is:** pytest file for `tools/registry.py`, the facade over `tools/names.py`, `tools/descriptor_registry.py` and `tools/quantity_registry.py`: reuse by identity, `resolve()` pinned on verified terms, disagreement disclosure.
+- **Status:** none stated; reading: live; tooling over name/descriptor registries (not engine).
+- **Bears on:** PROCESS, CORE (name/descriptor vocabulary), CHAR (attribute resolution).
+- **Content that matters:**
+  - Reuse by identity: `registry.names is real_names` etc. (:51-69). `resolve('Strength')` is `kind=descriptor`, key `attr.body.strength`, `via=descriptor_registry`; `Dexterity` alias to agility; `Solmund` is `kind=name`, `registry_key world.solmund`; `Thread Sensitivity` resolves to `prac.thread_sensitivity` (section `practitioner_stats`) and `Fort` to `terr.fort_level` (`territory_stats`) via the descriptor registry's non-attribute index (:74-162).
+  - Standing live disagreement pinned green: `Thread Fatigue` is `thread.thread_fatigue` in names but a keyless hit in `quantity_registry`, and the facade discloses both (:185-196); other disagreement arms use monkeypatched resolvers (:253-301). `collisions()` entries are lowercase, sorted, and have at least two distinct keys, a loop with no population floor (:173-182).
+  - Retired subject: the `Influence` and `legitimacy` collisions went with `fac.*` rows at plan position 29b (:166-171).
+- **Conflicts / stale:** three overlapping resolvers (names, descriptor registry, quantity registry) plus this facade, each with a different scope: the facade is a fourth layer disclosing disagreements between the three rather than removing them. [`Legitimacy`: see `test_names_chain.py`'s ambiguity set `{Order, Reason}`.]
+- **Open items:** none.
+
+### tests/valoria/test_season_invariant_sweep.py
+- **What it is:** pytest file, M1 row 5 ("N seeds, zero invariant violations"): `engine/season/harness/invariants.py` sweep plus one planted mutation per predicate.
+- **Status:** none stated; reading: live; the mutation half is the best-built in the tree per the addendum (F-TEST-06).
+- **Bears on:** CORE (invariants over a played season), CHAR/FA/WR (tenures, offices, claims, bodies, stance rows).
+- **Content that matters:**
+  - Eight invariants: `tenure_interval, tenure_referent, log_ids_unique, log_not_from_the_future, claim_not_from_the_future, body_in_range, stance_row_shape, office_singly_held`; each has a mutation that must make exactly its own predicate fire with a message attributed to it; `test_every_invariant_has_a_mutation` asserts the mapping is total in both directions (:141-205).
+  - Anti-vacuity: `sweep` reports `examined` rows per carrier and `unexercised` carriers; on the headless world it asserts `"offices" in unexercised and "stance_rows" in unexercised` and `examined['events'] > 0 and ['tenures'] > 0` (:37-58): the test PINS that the headless world has no Office and no stance row (F-TEST-06); an empty `World` names every carrier unexercised with no violations (:60-70). An earlier entity set missing `w.records` produced 176 invented violations across 24 seeds; the set is pinned against `World._STATE_COLLECTIONS` and the old `petitions`/`dispensations` stores are asserted gone (:103-136).
+  - `test_the_engine_is_clean_under_the_sweep`: 12 seeds x one headless season, no violations and none declared; `DECLARED` is empty and each future entry must cite `ED-` or `F...` (:73-100). A broken world reaches the sweep's violation list (3 broken worlds give at least 3 violations, :208-217).
+- **Conflicts / stale:** the instrument runs the headless world (about 0.13 s/season) not the realm; per the addendum a realm season (34 offices, 79 stance rows) is clean in 0.7 s but no test asserts it.
+- **Open items:** the sweep's coverage of Offices and stance rows on a played world is the F-TEST-06 fix (T3 row 4).
+
+### tests/valoria/test_season_providers_are_registered.py
+- **What it is:** pytest file: importing `engine.season.seam` alone must register every wrapper provider (contest/personal_combat, contest/social_contest, contest/mass_battle, inquiry/...), and emptying the table must refuse driver construction; FI-02/FI-03 `inquiry` role refusals.
+- **Status:** none stated; reading: live; load-bearing on the game (an unregistered provider used to remove a verb silently).
+- **Bears on:** CORE (manifest, providers, seam), PC/SC/MB (contest providers), FI (the `inquiry` role).
+- **Content that matters:**
+  - The defect was real: on 2026-09-11 cutting an import cycle left `PROVIDERS` empty, `resolvable_verbs()` returned 17 not 18 and `tell` executed 0 times in `tiny_world` vs 32 over ten seasons, with no error. Test 1 (fresh subprocess, `import engine.season.seam` only) asserts `contest/personal_combat` and `contest/social_contest` registered, `contest/mass_battle` and an `inquiry/` entry named by the prize rows, and every named provider registered (:52-75).
+  - Test 2 clears `PROVIDERS` and `MODULE_ENTRIES` after a driver was constructed: construction must refuse naming the prize ("nobody registered"), and `resolvable_verbs()` must not move (the old silent path is gone) (:99-123).
+  - `inquiry` role (v9 FI-02 / FI-03): `check_rows()` yields one pair per row of the role's roster; deleting a row's composition entry refuses naming it; a misspelled module refuses naming roster, key and spelling; four `check_inquiry_modules` plants run in ONE fresh process and read by four tests: row with no `module_entry`, unregistered provider, provider without the `module_entry` keyword, row keyed on a covert kind no graded inquiry emits, row keyed on an `undeposited_kinds` kind (WITNESS drops it before the found deposit) (:151-315). Each carries a "RED WHEN PLANTED (run 2026-10-17)" note in prose, not re-run by the test.
+  - Imports `_run` from `test_module_registrar` (cross-file helper).
+- **Conflicts / stale:** `04 PART E step 10` and the plan positions are prose referents. The `Unspecified` exception class name is asserted as a string.
+- **Open items:** none.
+
+### tests/valoria/test_stochastic_rout.py
+- **What it is:** pytest file, ED-MB-0031 / ED-MB-0041 (Jordan historical research 2026-07-23: "routs would occur as early as 15% losses with 30% the upper hand"): a stochastic per-subunit rout breakpoint drawn in a 15-30% casualty band, discipline-skewed.
+- **Status:** none stated; reading: live; its two long docstrings about `MB_CELL_MORALE`'s default are STALE (and the second states a conclusion that the current config reverses).
+- **Bears on:** MB (morale, rout, casualty band), SC (none).
+- **Content that matters:**
+  - `MB_STOCHASTIC_ROUT is True` (ratified ON at ED-MB-0041 after a casualty scoreboard showed the loser at 61-87% against the band's 15-30%; flip dropped win-share count 10/20 to 7/20); `ROUT_ONSET_FRAC` 0.15 and `ROUT_CAP_FRAC` 0.30 pinned; the draw lies in the band for discipline 2..5; resilience rises with discipline; mean breakpoint at discipline 5 exceeds discipline 2 by more than 0.01 over 200 draws; a pinned breakpoint 0.20 breaks at 25% not at 10% (:36-89).
+  - `test_loser_breaks_near_historical_band`: loser mean casualties over 16 seeds greater than 60% with the gate OFF and under 45% ON (difference over 30), PINNED to `MB_CELL_MORALE=False` (:92-138). `test_per_cell_break_subsumes_the_body_level_one`: with cells ON the two arms differ by under 10 points and cells alone hold the loser under 45% (:141-169). Both swap module globals `S.MB_STOCHASTIC_ROUT` and `U.MB_CELL_MORALE` and restore them.
+  - The docstrings (corrected 2026-07-29) say per-cell morale is default OFF ("`config.py:100` reads ... '0' RETRACTED") and conclude `MB_STOCHASTIC_ROUT` is "the single mechanism keeping shipped battles out of the ~90% grind". Verified in source: `modules/mass_battle/config.py:106` now reads `MB_CELL_MORALE ... '1'` (default ON, "back ON once E..."), `MB_STOCHASTIC_ROUT` default '1' (:181). So in the shipped configuration cells carry morale, the per-cell break fires first, and by this file's own measurement the body-level flag then does nothing (off vs on within 10 points): the "retirement candidate" reading the docstring called "false and inverted" is, on the current default, the live one. The headline test pins the unshipped arm (`cells=False`).
+- **Conflicts / stale:** as above; `_SIM` path points to `tests/sim` (unused). The pair `test_octagon_damage.py` + this file was order-dependent through module reloads (see that entry).
+- **Open items:** whether `MB_STOCHASTIC_ROUT` still has a live role under the shipped `MB_CELL_MORALE` default; no test measures the shipped-arm effect (cells ON) beyond the subsumption assertion.
+
+### tests/valoria/test_stubwire.py
+- **What it is:** pytest file (ED-IN-0091, P1): falsifier tests for `engine/substrate/stubwire.py`, the stub-wire primitive (`stub_resolve`, a frozen `StubResult`, an `invocations` counter) and for `structure_audit.py`'s `stub_wired` node attribute.
+- **Status:** none stated; reading: live as a test; the primitive it tests has no consumer in the head (see below).
+- **Bears on:** CORE, PROCESS.
+- **Content that matters:**
+  - `StubResult` is frozen with `stub` always True (init=False); `stub_resolve` returns a typed no-op, never raises; `invocations` counts calls and `reset_invocations()` zeroes it (:51-79).
+  - Mutation check on a synthetic repo root: a fixture module `engine/fixture_consumer.py` in two variants (with the `stubwire` import and call; without both): the WITH variant bumps `invocations` by 1 and is seen by `structure_audit.stub_wired_modules`, the WITHOUT variant does neither (:84-177). The test copies the real `structure_audit.py` and `tools/ci_common.py` into the temp root.
+  - `test_m1_acceptance_probe.py` records that the head (`engine/season/`) calls `stubwire` nowhere (stub count 0); so the primitive, its counter and the `stub_wired` attribute are measured by an acceptance row and used by no game code.
+- **Conflicts / stale:** references a `review_core.py` signal retired in culling wave 2 and `audit/2026-07-29-code-shape-open-items/...` (archived). The docstring says "the two whose subject is the executable model", but the head does not call the primitive [per `test_m1_acceptance_probe.py:23-26`].
+- **Open items:** none.
+
+### tests/valoria/test_subphase_truncation_counter.py
+- **What it is:** pytest file, ED-MB-0048 / plan-v2 A3: `resolve_engagements_cascading` counts engagements dropped when depth groups exceed `MAX_SUB_PHASES` instead of a silent `break`.
+- **Status:** none stated; reading: live; strong (forced-truncation control plus non-vacuity).
+- **Bears on:** MB (cascading sub-phase resolution of depth groups).
+- **Content that matters:**
+  - Test 1 lowers `MAX_SUB_PHASES` to 2 on a 4-group staircase (attackers 4 rows apart, each with its own defender) and asserts `n_groups == 4`, `truncated_groups == 2`, `truncated_pairs == 2`, `truncated_troops > 0.0` (the weight, not a fire-count, because truncation drops the DEEPEST-sorted groups so it biases systematically against deep formations, :106-126). Test 2: with bound 9 nothing is reported dropped (:129-137). Test 3: at the shipped bound, staircases of 2, 3, 4 groups truncate nothing, `multi_group_calls >= 3` and `max_groups < MAX_SUB_PHASES` (:140-169).
+  - Recorded measurement (orchestrator, 2026-07-29): 64,273 resolver calls over all four bat.py modes plus the gauge, 0 truncations, max depth-group count 3 against a bound of 5 (table in docstring); the agent's larger-N figure (102,260) is stated as not replicated.
+  - Mutation record: restoring the bare `break` fails `truncated_groups == 0`; dropping only the `truncated_troops` accumulation fails the weight assertion.
+- **Conflicts / stale:** `MAX_SUB_PHASES` is `[CALIBRATED-DEBT]` and "moving it moves goldens" (:166-168).
+- **Open items:** none.
+
+### tests/valoria/test_tag_normalizer.py
+- **What it is:** pytest file for `tools/tag_normalizer.py`: resolve/strip/render `[[id]]` tags through the names reader (Reconciliation Program §3).
+- **Status:** none stated; reading: live; prose-tooling only.
+- **Bears on:** PROCESS.
+- **Content that matters:**
+  - `resolve_id('attr.body.strength')` goes through `tools/names.py` (identity check) and gives `Strength`; `find_tags` parses bare and `[[id|override]]` forms; `render` resolves known ids and honours three unknown policies (`keep`, `humanize`, `raw`); `strip` resolves known and leaves unknown raw; `unknown_tags` is sorted; `stray_open_brackets` detects a raw `[[` as the migration collision lint (:25-74).
+  - Pinned to an existing names entry so it does not depend on `conv.*` seeds.
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### tests/valoria/test_threadwork_mending_parity.py
+- **What it is:** pytest file, WR-03: Mending is priced by ONE owner (`operations.mending_priced_scale`, `price_mending`, `apply_mending_feedback`) at the three sites that resolve it (single, collective, opposed), plus an R-14 resilience routing arm.
+- **Status:** none stated; reading: live as a test of an off-loop oracle (`systems/threadwork/sim/`): the addendum records that no import of `threadwork.sim` exists under `engine/season/` or `modules/`, retained by ED-IN-0283.
+- **Bears on:** WR (threadwork: Coherence, Mending, Weaving, Pulling, Locking, Dissolution, POP), DICE (degree labels), CORE.
+- **Content that matters:**
+  - Hash pins: 10 sha256 digests over 84 records each (7 scales x 12 seeds) for collective and opposing x {Weaving, Pulling, Locking, Dissolution, POP}, plus `BASE_MENDING_DIGEST` over 288 records, all captured at commit `dd91783a` (WR-02) with `RESILIENCE_GAIN = 0`; "1128 pinned"; the SHA will not survive a squash merge so the re-derive recipe (check out the four sim files from before `price_mending`) is the provenance (:134-162, :175-184). Mending in collective/opposing is excluded: it is the declared mover. These are control pins on a frozen commit, not live game hashes; failure prints the first recomputed record.
+  - Control non-vacuity: the grid reaches all four degrees (collective) and all nine (A, B) pairs of the three-degree opposed table (:165-172); mending records include `coherence_restored > 0` and `resting_point_mended > 0` (:179-182).
+  - Parity: for every (scale, degree, environment) cell the three sites return the same Ob (single vs collective), the same Coherence cost, MS delta and restorative term, with the dice and Leap forced by monkeypatching module names; cost is 0 at every degree (ED-871); `restored_cells == len(scales) * 3` non-vacuity (:245-270). Collective and opposed Mending refuse an own-configuration aim (`configuration_of` self/prac/other) with ValueError, a non-Mending working ignores it; the owner refuses an unpriced scale and an unknown degree (:273-302). With unforced dice over 60 seeds Mending never costs Coherence at any degree (the test notes a Leap's blanket Partial/Failure -1 "C-TW-3, a known separate defect in `_resolve_operation`", :305-332).
+  - R-14: collective and opposing hand every cost to `operations.resist_coherence_cost` per practitioner; at gain 0 no difference, at gain > 0 the resilient takes less (`d_steady == -min(0, -d_plain + gain)`) over `RESILIENCE_GAIN_SWEEP` (:345-376).
+- **Conflicts / stale:** C-TW-3 is a disclosed open defect in the oracle's `_resolve_operation`. Docstring references "NERS S, calculations consistent in methodology" as the reason for the one-owner rule.
+- **Open items:** the oracle is not reached from the season loop; the hash pins protect a tool surface.
+
+### tests/valoria/test_threadwork_resilience.py
+- **What it is:** pytest file, WR-01 / R-14: a practitioner-side Resilience term on a working's Coherence cost (`operations.RESILIENCE_GAIN`, swept arms `RESILIENCE_GAIN_SWEEP`); shipped gain 0 is the control.
+- **Status:** none stated; reading: live; the arithmetic is "unruled" and ships as a swept fixture at an inert default.
+- **Bears on:** WR (threadwork, Coherence), CHAR (a `resilience` attribute on a practitioner), DICE.
+- **Content that matters:**
+  - Shipped gain is 0 and `RESILIENCE_GAIN_SWEEP[0]` equals it (:66-69): resilience changes nothing in the shipped configuration (`test_at_the_shipped_gain_resilience_changes_nothing`, :71-75). For each gain > 0 a resilient practitioner takes strictly less on a planted pair (same stats, same seed, same working, the roll untouched) and `delta == min(0, plain + gain * resilience)` (:77-89). Falsifier named: with the application line in `_resolve_operation` disabled the planted-pair test fails at every gain above 0.
+  - A huge resilience floors the cost at 0, never positive, over five operations x all gains x 20 seeds (:92-105); the owner leaves zero cost alone and refuses negative, float, bool or None resilience (:108-117); at gain 0 the owner is an identity for any odd resilience value (None, -1, 1.5, True, inf, nan) and returns an int (:120-129). Mending is unaffected (the mender is pre-stressed so the restorative path runs) (:132-147).
+  - The control is observed across three files: `engine/tests/test_thread_mending_ed871.py`, `test_threadwork_mending_parity.py` digests, and this one.
+- **Conflicts / stale:** cites `canon/philosophy/06_operations.md` (ruled 2026-09-09): "What determines their ability to prevent that cost is how resilient their spirit is."
+- **Open items:** the arithmetic of the Resilience gain is unruled; nothing in the shipped game exercises it (gain 0, oracle off-loop).
+

@@ -16,7 +16,114 @@ are cited, not redone. Everything measured here is new work unless a finding id 
 All runs: `PYTHONHASHSEED=0`; scripts and outputs under
 `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/PES_MB/`.
 
-(Sections below are appended as the work proceeds; §0 is written last and placed first.)
+## 0. Verdict
+
+**Mass battle does not do what its five plain sentences say, and the reason is one rule nobody had
+tried from the side: a melee pair is winner-take-all on a pool proportional to each body's own
+headcount, so the engine rewards an army for being one undivided block and punishes every unit it is
+divided into.** Nine hundred heavy infantry in three companies lose sixty fields of sixty to the same
+nine hundred in one body, taking sixty percent losses to its one (friction off); through the season's
+own entry with the shipped friction on, an attacker who **doubles** his army and forms it into six
+units wins 22 fields in 100 where an equal single block wins 42. That is the opposite of the structure
+Jordan asks for (army → unit → subformation → troops; squads; mixed arms), and it is why a flank attack
+by a detachment breaks a line no sooner than leaving the detachment in camp, why two wings on two flanks
+never break it at all, and why the first two lanes' lever tables kept reading "worse than doing
+nothing". Over that rule sits the ruled friction draw, which this lane measured rather than re-raised:
+in an even field the winner is the side with the higher of two numbers drawn before the first tick in
+275 of 287 decided fields, and in 199 of 199 where the two differ by more than a factor of two; with
+the draw removed the rule under it is a cliff (ten percent more men is a 70% field, fifty percent a
+certainty). So the field offends the standing rule in both directions at once: a near-fixed function of
+state, with one unseen multiplier laid over it that then decides alone. The other three sentences fail
+separately: the pike is heavy infantry in every braced field at three ranks as at one, and what holds
+against horse is the brace, half the time; fatigue works, but on a ledger that is never reported and
+never carried, while the reported ledger never leaves 100 and changes nothing; and a rout has no exit
+at all (rally is an empty hook; pursuit is called by nothing, and no cavalry the season can build is
+ever "Fast"). Integer armour against integer power makes whole match-ups certain: three thousand
+spearmen, light infantry or archers do no harm whatever to three hundred levies behind a wall, sixty
+fields of sixty. In computed play the subsystem tells two of its nine possible stories, no attacker has
+won a field in eighteen seed-seasons at the shipped scale or the proxy one, and the people it touches
+are ground to a thousandth of a body and go on acting. **The steelman holds where it was tried:** two
+single blocks give a sound, mirror-fair, monotone size curve under the shipped friction; the octagon
+orders front, flank and rear correctly for a whole force; the brace and the column fatigue do what
+their words say. The engine is a good duel between two blobs. It is not yet a battle between armies.
+
+## 1. NERS — cut tests, executed
+
+Definitions `CLAUDE.md` §0.06; method `skills/ners/SKILL.md`; the draw's properties by
+`skills/resolution-diagnostic/SKILL.md` (§1.3). A cut is executed here by building the same field with
+and without the thing and comparing results field for field (same seeds). "Free" means nothing but the
+thing's own bookkeeping differs.
+
+### 1.1 False N-lines found (cuts that turn out free, or better than free)
+
+| the thing | the N-line it is kept on | the cut, executed | what dies |
+|---|---|---|---|
+| **the unit stamina ledger** (`Unit.stamina`, `Subunit.stamina`, `STAMINA_DRAIN_PER_CONTACT_CELL`, `_stamina_pool_penalty`, `STAMINA_POOL_THRESHOLDS`, `stamina_check`, `BETWEEN_TURN_STAMINA_RECOVERY`, `run_battle`'s `a_stamina` / `b_stamina`) | "a tired unit fights worse" | entering at 50 or 10 instead of 100: identical in 100 of 100 fields; a fresh 18-tick field ends at 99.5 and 100.0 | nothing. Fatigue is carried by the column ledger (`percell._ColBlock.stamina`), which the cut leaves alone. **Free.** |
+| **the pike troop type** as distinct from heavy infantry | "reach 0.3 is the sole, isolated differentiator" (`registry.py`) | pike for heavy infantry, braced, three ranks, against a charge: identical in 60 of 60; one rank: 440 of 440 (addendum) | a name and a row. **Free today.** It stops being free only when a loadout the resolver reads exists (addendum proposal) |
+| **nine role rows** (cavalry `Pursue`, `Screen`, `Feint`; light cavalry `Pursue`, `Screen`; light infantry `Pursue`, `Screen`; archers `VolleyLine`; heavy infantry `Anvil` against foot) | "the FM position → role model" | the role named against no role: identical in 60 of 60, each | nothing. `ROLE_INSTRUCTION_PRIMITIVES` already says seven of its sixteen keywords drive nothing; the menu still offers them. **Free.** |
+| **an army's division into units**, as the resolver treats it | none stated; assumed harmless | merge the units into one body: the army goes from 0 wins of 60 to 30 (v an equal block), from 0 to 55 (v two-thirds its size) | nothing the resolver values; everything the design wants (mixed arms, squads, a flank, a reserve). **Better than free, which is the defect** (F-PES-MB-01) |
+| **`_convergence_scale`**, "the partition-invariance fix" | the result does not depend on how a force is split | measured: it does, by 60 fields in 60 | its line is false as built; the requirement it names is right |
+| **`rally_check`, `threadwork_check`** | hooks in the canonical phase order | bodies are `pass` | nothing; cut, or build (§2.7) |
+| **the `Flanker` role on a single cavalry body** | envelopment | cut it (no role): the cavalry's wins go from 13 to 42 of 60 | a manoeuvre that costs 29 fields in 60. **Better than free** |
+
+### 1.2 N-lines that survive, and what they survive as
+
+- **Friction** (ruled, `ED-MB-0016`; not cut; first audit F-MB-08 and §11). N from all directions.
+  Top-down: holds, it produces the banded win-share curve (§2.3). Bottom-up: fails, it arises from
+  nothing in the units. Lateral: fails, no sibling contest multiplies a pool by a per-contest
+  LogNormal; personal combat and the social contest set odds by named sigma levels through
+  `sigma_leverage`, soft-capped at 1.5 (S: calculations not consistent in methodology with siblings).
+  Diagonal (a commander's choice crossing into the result): fails, §2.4 to §2.6 show each choice inside
+  the draw. Vertical (season to field and back): fails, the draw is not returned, so nothing above can
+  tell a lucky field from a good plan. **Narrowed: it holds in one direction, as a patch over the rule
+  under it.** The cut is not free today, and the reason is new: with the draw removed the pair rule is
+  a cliff. Its N-line depends on the cliff staying.
+- **The brace** (`ShieldWall`, `Hold`): survives. Cut it and a heavy block goes from 30 holds of 60 to 8.
+- **The octagon** (arc multipliers, multi-side shock): survives for a whole force (30 / 41 / 55 routs of
+  60 from front, flank, rear) and is defeated in composition by the pair rule (§2.4).
+- **The column fatigue ledger**: survives (36 → 15 → 10 wins of 100).
+- **The size curve of two blocks under shipped friction**: survives, mirror-fair to sampling error.
+
+### 1.3 The draw, by the resolution diagnostic (evidence for the above, not a verdict)
+
+Phase 0, the draws in a field: (1) the friction factor, `math.exp(gauss(0, 1.1))` per side, a bespoke
+draw outside the engine (P-v); (2) the melee pair, `roll_pool_fractional` plus `_sigma_net_boost` in
+`modules/mass_battle/resolution.py`, the declared second sigma path (DICE lane F-DICE-07, F-DICE-08;
+not re-filed); (3) volleys; (4) discipline checks, `roll_pool(discipline)` against Ob 1; (5) the
+stochastic rout point between 15% and 30% losses; (6) contention ties.
+
+| property | finding on the melee pair | reproduce |
+|---|---|---|
+| **P-iv graded, recoverable** | `a_deg = compute_degree(a_net, max(1, b_net))` and the mirror (`orchestration.resolve_engagements`): each side's net is graded against the **other side's roll** as its obstacle, so at most one side reaches Success. Casualties are `K_LINEAR x lin x max(0, DAMAGE_BY_DEGREE[deg](power) - dr)` with `Failure 0, Partial 1, Success p, Overwhelming 1 + p` and a default `dr` of 1: **Failure and Partial both deal nothing.** A four-band ladder with two live bands, on the irreversible outcome | `t2.py`: degree pairs over one field (A Failure, B Overwhelming) 14, (Failure, Success) 1, (Failure, Partial) 1; A's casualties dealt: 0 |
+| **P-iii bounded, monotonic** | the integer subtraction has reachable zeros: power 1 (levy) deals nothing on a Success; any power up to 3 deals nothing in any band against `dr` 4 (walls). A discrete boundary jumping a continuous input, to certainty | `p10_edges.py`: 3,000 light infantry, spearmen or archers against 300 levy behind walls, the defender loses nobody in 60 of 60, each; levy 600 v levy 600 on open ground, the defender loses nobody in 48 of 60 |
+| **P-ii uniform leverage** | the pool is `eff_power x (troops / 100) x 0.8`: from 1 die (under 60 men) to 320 (10,000). A sigma modifier moves the net by `softcap x 0.8 x sqrt(pool)`, a headcount edge by `0.4 x pool difference`: the worth of morale, fatigue, stance and shock against numbers falls as `1 / sqrt(pool)`. CR-12's design names this as the fourth route (first audit §5.3) | by construction, algebra shown |
+| **P-i legible odds** | no caller can state a field's odds: `field_estimate` exists (first audit §1.1) and cannot see the friction draw, which decides | §2.3 link 4 |
+| Phase 4, loops | casualties → smaller pool → lower net → the other side's degree rises and one's own falls to Failure → more casualties, none dealt. Undamped; bounded only by the rout point. This loop is the cliff of §2.3's OFF column and the collapse of §2.3's partition table | `p1_size.py` OFF rows |
+| Phase 5, intent | the pair rule's one-sidedness is not a documented intent: the code's own citation for the damage rule reads "Damage is simultaneous. Both sides deal and receive damage" (PP-233, at `battle_loop.py`'s simultaneous-HP block). `[INTENT UNDETERMINED]` for the opposed-degree gate | |
+
+Landing on NERS: P-iv and P-iii on R-COMPLETE; P-ii and the bespoke friction draw on S (a second
+convention for one quantity); P-i on E-LEGIBILITY.
+
+### 1.4 R, S, and E last
+
+- **R.** Strategic thought: the dominant order of battle is one body (§2.3). Customisation: fourteen
+  troop names, at most nine behaviours (addendum), and a role menu half of which is inert (§3.3).
+  Variety in approach: flank, envelop, reserve and pursuit are each worth less than nothing or
+  unreachable. The half with no player: two stories of nine (§3). Completeness at the extremes: §3.3,
+  and certainty at the integer edges (§1.3). **Fails on every clause but one** (a player can feel
+  important in a duel of two blocks).
+- **S.** Pauses correctly: a field that is undecided at the one engagement turn a season fights is
+  given a winner by arithmetic (first audit F-MB-04); the share undecided is 4% for two season-density
+  blocks, 28% at three ranks, 58 to 65% in the flank arms, 33% at 2,400 against 12,000. Consistent in
+  methodology: two stamina ladders; walls as armour where the other two terrain rows are dice
+  (`terrain.py`: UPHILL and RIVER_CROSSING go onto `terrain_off_d` / `terrain_def_d`, WALLS onto `dr`);
+  the opposed-roll obstacle where the tree's rule for an obstacle is the opponent's score halved plus
+  modifiers; a LogNormal multiplier where siblings use capped sigma levels.
+- **E, as a ratio against the above.** 11,600 lines buy one sound contest between two blocks and a
+  hidden draw. The parts that carry the design's ambition (cells, facing, envelopment, reach, roles,
+  orders, routes, feints, reserves) are either defeated by the pair rule, inside the friction, or
+  unreached. E's second test (the player intuits complex outcomes from simple choices) fails at the
+  simplest choice there is: more units should not be worse.
 
 ## 2. Premise audit
 

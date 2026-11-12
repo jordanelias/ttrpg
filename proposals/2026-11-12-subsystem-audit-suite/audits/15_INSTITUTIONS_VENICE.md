@@ -1,5 +1,7 @@
 # INSTITUTIONS / VENICE — the merchant republic, the banking house and the league: design and implementation plan
 
+Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 — where this file's names, homes or shapes differ from that ledger, the ledger governs: "roll" keeps this file's meaning for the whole kit (X-04); `debt` is a Record kind and also a form, read by the kit's one set of instrument readers (X-09); the trade charter of §6.1 part 5 is the form `staple` and no `charter` obstacle term is added (X-10); warrant and commission are forms (X-11); the exit audit is the row `audit` under the key `audit_at_exit` (X-12); part 3's ballot is SC's ballot with `obligation` among its terms, and `pledge_step` is not added (X-15); `obligation` is lifted by `excused`, not by a bare ban (X-31); the scenario is a case file (X-32). The four disagreements of §4.4 are each decided in the synthesis's §4.5, with canon amendment text drafted in its §4.6. Of §14.2: all three are closed in the synthesis's §10 with their ladder steps. Every finding below stands.
+
 ## Status: REFERENCE (a design and plan in proposal form; resolves nothing at runtime, CLAUDE.md §0.05)
 
 ## Read at: bb6dfc3 (working tree)
