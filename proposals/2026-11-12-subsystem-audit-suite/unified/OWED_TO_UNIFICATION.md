@@ -34,6 +34,8 @@ Collected by the orchestrator from lane receipts, 2026-11-12. Each item names it
 - Stale pointers in the tree itself (`verb_table.yaml:1747`, `rosters.yaml:1417`) were not edited by any lane (engine-grounding lane).
 - Calibration to be done jointly: A-5, A-6, A-7, A-26 (now A-71/A-79's rule), A-31 (U5c receipt).
 
+- Lane 27's coding instructions (third pass): INCOMPLETE items 27A-6 (needs U5a's capability Part B: no capability block or `pool.py::score` exists), 27C-2 (the six-arm test needs the named draws, a per-purpose RNG stream per A-30 and proposal 26's instrument block), 27D-4 (the unplayed commander's decider: design only, returned to CHAR), 27E-3 and 27E-4 (no magnitude established; the motion step (WR) and cohort deaths (SE) were not opened), the 27B drill step (design only); four symbols in 27A and two in 27E were not opened. New finding: `lanchester_signature.py`'s LINEAR band (74 to 83) is both the multiplier's calibration target and CR-12's gate; removing the multiplier breaks that gate unless the row is edited once (27C-3 (h)): carry it in the v12 batch that ships the multiplier at zero.
+
 ## C. Unchecked or partly read (the stage reads these, or marks them unverified)
 
 - Test digests: only the closing sections and open-items lines were read, not about 305 per-entry bodies; most sites in `U5a_tests_digest_additions.md` are cited from the digests, unopened (U5a receipt).

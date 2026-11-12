@@ -234,7 +234,8 @@ than `None` in a world with a rivalry group. No other fixture moves.
 
 ## Falsifier
 
-A visitor of the higher rank first at every seed (a sort, not a draw). A received person who also folds a
+A visitor of the higher rank first at every seed (a sort, not a draw). A `capture` refused at `occupied`.
+A refusal at `occupied` that no `claim.deposited` Event cites (a still scene, A-81). A received person who also folds a
 scene of his own in that round. A deferred scene that is neither released later nor still queued. A
 refusal at `occupied` whose counterparty was free. A precedence net that changes when a stance row
 changes. Gate 3 at or below the crude arm.
@@ -256,6 +257,57 @@ changes. Gate 3 at or below the crude arm.
   key; its levels are the one leverage form's.
 - **E.** One derived row property, one local mapping, one set on the driver, one key in an existing
   re-order, against what N and R found.
+
+## No scene is still (A-81) and entrenchment moves the world (A-80)
+
+| outcome this file adds | the durable change it leaves (the budget debit not counted) | who can read it afterwards |
+|---|---|---|
+| a call refused at `occupied` | WITNESS deposits a `visitor.kept_waiting` claim in the visitor's ledger (he is the act's own actor, always a witness) and one about the host in the host's (he is present: `with` was read true before `occupied` is asked), and in the ledger of anyone else there | the visitor (`person_q.kept_waiting`, proposal C; `refused_before`); the host (a claim landed about him raises a question); the chronicle (the Event and its deposits) |
+| a host received before his own scene | the visit's own bands write as they do today; the host's scene is not a resolution, it is postponed and resolves in his next round | as today |
+| the host's own scene deferred and never released before the season ends | nothing, and it is not a scene: no act of it was folded or entered the act store. Gate row 5 counts these | the gate |
+| a call admitted | the row's own band writes; this file changes none of them. A band of those rows that writes nothing today (`argue` at Partial and Failure, `tell` at every band, `verb_table.yaml`) is the verb lanes' to close under A-81, named here, not edited | — |
+
+The no-null-scene reading for this file: over a run, the count of scenes holding an act refused at
+`occupied` for which **no** `claim.deposited` Event cites the refusal. Expected 0. Its control is a unit
+arm with `act_refs`' new branch removed: the host-about claim is absent and the assertion goes red.
+
+A-80: this file makes a person harder to reach. What that yields is carried by proposal C (the ways
+round a closed door) and by two rules here: force is never kept waiting (§1), and the host is himself a
+claimant who can lose his round to rank. Gate row 12 is the entrenched-world arm.
+
+## Instructions to code it (a batch item for workplan v12)
+
+**Lands by:** the IN lane (cross-cutting, season-loop core), one `methodology-execute` batch,
+`valoria-author` at `sonnet` for each commit, `methodology-close` with its terminal `opus` critique once
+for the batch. **Cost class:** small build. **Batch id and register rows:** allocated by the v12 plan from
+`references/id_reservations.yaml`, not here.
+
+**Order (one commit each; every commit ships with the fixture at its control, so its hash is EQUAL
+until the last line of the commit that flips it).**
+
+| # | files and symbols (single owner) | call sites changed | data rows | named tests (`engine/season/tests/test_scene_access_occupancy.py` unless said) |
+|---|---|---|---|---|
+| 0 | prerequisite, not this batch: A-9's edits 1 to 4; `resolve.py::rival_key` (`18_DETERMINISM_rival_acts_in_one_fold.md`) | — | — | theirs |
+| 1 | `data/verbs.py`: `VerbRow.occupies`, `VerbRow.intrudes`, `OCCUPIED_CLAUSE`, `KEPT_WAITING_KINDS`; loader: the flat-row exemption list gains the kind; a keyed occupying row must key `occupied` | none | `verb_table.yaml`: the flat lists of `argue`, `challenge`, `give` gain `"visitor.kept_waiting"`; the keyed rows `tell` and `lie` gain `occupied: ["tell.refused", "visitor.kept_waiting"]`; `accept`, `capture` unchanged (they intrude) | `test_occupies_is_read_off_the_cell_and_names_no_verb` (the set equals the rows whose cell asks `with` of the counterparty; a planted row with the conjunct joins it); `test_a_body_prize_row_intrudes_and_is_not_in_the_refusable_set` |
+| 2 | `data/fixtures.py`: `occupancy` (`off` / `seat` / `seat_and_debit`, shipped `off`); `loop/driver.py::SeasonDriver`: `_engaged`, `_deferred`, `_received` (season/round locals, reset at `:472` and at the top of the round loop `:486`), helper `_remaining(pid)` | `loop/deliberate.py:175-176` (`ask_budget` calls `_remaining`) | — | `test_occupancy_off_reproduces_the_base_hash` (seeds 0, 1, 2; realm, two seasons: `bacd687f…`, `8aae8412…`, `89109213…` at this tree, re-read after A-9's re-pin) |
+| 3 | `loop/resolve.py`: `_admits` (the `occupied` clause after `:305-312`), `_waiting_earned`, the scene-level deferral in `resolve` (before `w.acts.append`, `:1033`), seating on admit | `loop/driver.py::season` after `self.resolve(...)` (`:498`): re-queue `_deferred` at the head of `_queued[actor]`, withdraw the release debit, drop its acts from the round's `acts` before `:519`; `loop/encounter.py`: read `_engaged` | — | `test_a_second_caller_is_refused_at_occupied_and_the_first_is_not`; `test_a_person_received_does_not_fold_his_own_scene_that_round_and_folds_it_the_next`; `test_a_capture_is_never_refused_at_occupied` (gate row 11); `test_a_cohort_is_never_engaged` |
+| 4 | `epistemic.py::act_refs(a, e=None)` | `loop/witness.py:675-677` passes the Event | — | `test_the_kept_waiting_claim_is_about_the_host_and_lands_in_two_ledgers` (the no-null reading; mutation arm: the branch removed, red); `test_every_other_kind_deposits_as_before` (hash EQUAL at `occupancy: off`) |
+| 5 | `loop/driver.py::season` (`:519-534`): promote admitted occupying and intruding acts' scene ids into `_received[counterparty]`; `_remaining` subtracts `Scene.PLAIN_COST * len(...)` at `seat_and_debit` | — | — | `test_the_budget_query_falls_by_one_per_scene_received_and_no_event_carries_it` (gate row 6); `test_a_person_with_no_scene_action_left_receives_no_one` |
+| 6 | `queries/world_q.py::office_rank`; `loop/resolve.py::rival_key` (the `("round", person)` key), the precedence net in `_canonical_order` (`engine/dice_engine/sigma_leverage.py::roll_net`, `levels_to_net_sigma`, `net_boost`; `state/ids.py::draw_factory`) | `loop/encounter.py:72` inherits through `_canonical_order` | `data/fixtures.py`: `precedence_level`, `appointment_level` (names of `sigma_leverage.py::LEVEL_SIGMA`; shipped `None`) | `test_scene_access_precedence.py`: `test_the_higher_office_is_usually_first_and_never_always` (gate row 7, 400 seeds); `test_the_host_is_a_claimant_on_his_own_round`; `test_precedence_changes_no_input_of_the_visits_own_roll`; `test_a_stance_sweep_leaves_every_precedence_net_unchanged` (gate row 8); `test_no_scene_outside_a_group_moves` |
+| 7 | `harness/access.py` (new instrument; `python -m engine.season.harness.access SEED SEASONS [--null-scenes]`): prints the readings of audit §1.3 and gate rows 2 to 5, 9 and 12 from a run. It promotes this lane's scratch probes (`occ.py`, `face.py`); it adds no rule | none | — | `test_the_access_instrument_counts_a_planted_kept_waiting` (one planted world; `assert checked >= 1`) |
+| 8 | the measurement: run rows 2, 3, 5, 9, 10, 12 of the gate on seeds 0 to 4; flip `occupancy` to `seat_and_debit` and the two levels to `minor` / `major` only if rows 2, 3, 5 and 12 pass; one declared re-pin | the pinned goldens' one owner (`01_CORE_tests_one_golden_owner.md`) | — | the re-pin, said plainly in the commit |
+
+**Control and falsifier per commit:** the control is the fixture at `off` / `None` (hash EQUAL); the
+falsifiers are the list under *Falsifier* above, each observable by a named test.
+
+**INCOMPLETE, with what is missing.**
+
+- *Commit 3's ENCOUNTER half for a sitting.* It cannot be coded until `social_contest.hearing` exists
+  (`05_SC_playable_hearing_B.md`). Missing: the host-side shape that lists a sitting's attendees. The
+  rest of commit 3 does not wait on it.
+- *Commit 8's two floors* (95%, 60%) and gate row 12's rate are seeds, not measured targets. Missing:
+  the first reading on the tree where A-9 and `14_VERBS_SOCIAL1_A_formation.md` have landed.
+- *The Layer 1 amendment* (edit 8 above) is drafted text. Missing: Jordan's amendment.
 
 ## Cost class
 

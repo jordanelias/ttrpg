@@ -353,3 +353,34 @@ Read in part (head, and the sections cited): `26_MASS_BATTLE_movement_and_fatigu
 `.designs/`. A claim above that rests on one of these says which file it is from.
 
 `git status --short` at the close: only files under this suite directory.
+
+## 13. Coding instructions: the five proposals against the standing charge (`AUDIT_BRIEF.md:545-547`)
+
+Each `proposals/27_MB_*.md` now ends with a section "Instructions to code it": batch items in edit order
+with file and symbol, data rows, call sites, named tests, the gate's expected reading, falsifier and
+control, hash movers, dependencies, what lands it, cost class and model tier. For that section this lane
+opened the call sites and the covering test files it names (`battle_loop.py:106-107`, `:461`;
+`orchestration.py:518`, `:769-770`, `:2016-2182`; `tests/valoria/test_friction.py`,
+`test_field_golden_pins.py`; `tools/ci_golden_modes_check.py:93-96`; `tests/sim/gauge_mb.py`;
+`systems/mass_battle/sim/lanchester_signature.py:38-43`). This audit itself recommends no edit outside them.
+
+| item | what | status |
+|---|---|---|
+| 27A-1 to 27A-4 | the record, the constants and export, the row's columns, `obey` | complete; codable on today's tree, hash-equal at `arm: off` |
+| 27A-5 | the four other Command reads | INCOMPLETE on the stand draw (proposal 26) |
+| 27A-6 | the host builder and the capability rows | INCOMPLETE: U5a's CAP Part B is not landed (no `capabilities:` block, no `capability_uses`, no `pool.py::score`) |
+| 27A (symbols) | the reset site of `_order_idx`; a unit's name inside the module; the phase variable; the artifact's leaf reader | INCOMPLETE: not opened; four single-function reads |
+| 27B-1, 27B-2 | `prowess`; `base_combat_pool` | complete; 27B-2 read by grep only, with a fallback stated |
+| 27B-3, 27B-4 | the `infantry` row; `readout` | INCOMPLETE on the troop file (loadout B stage 1); an interim carrier is named |
+| 27B (drill step) | a cohort's `arms` rank as a step on quality | INCOMPLETE: a design only; no size, cap or host read exists in any proposal |
+| 27C-1 | `report.draws` | complete once the typed outcome and the manager proposal's trace land |
+| 27C-2 | the six-arm test | INCOMPLETE: the named draws, a per-purpose stream (A-30) and the instrument's "results" block do not exist |
+| 27C-3 | the deletion, thirteen sites listed | complete as an edit list; licensed by A-77 when the first arm passes |
+| 27D-1 to 27D-3 | `obey_odds`, the view, the menu | INCOMPLETE on `27_MB_A` and the manager proposal |
+| 27D-4 | the unplayed commander's decider | INCOMPLETE: a design only; returned to CHAR |
+| 27E-1, 27E-2 | the row's ops; carried stamina | complete; 27E-2 after the typed outcome |
+| 27E-3, 27E-4 | the write by kind; the return draws | INCOMPLETE: no magnitude is established; the motion step's symbols (WR), the cohort's dead (SE) and the prisoners' carrier (SE) are other lanes' |
+
+One finding from writing them: `lanchester_signature.py`'s LINEAR band (74 to 83) is the multiplier's own
+calibration target and is also CR-12's gate. Removing the multiplier and landing CR-12 touch that one row;
+the edit is listed once (`27_MB_C` item 27C-3 (h)) and named in both.
