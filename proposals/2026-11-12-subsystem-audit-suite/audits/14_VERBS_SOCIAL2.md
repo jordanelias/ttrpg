@@ -393,14 +393,13 @@ times in three; chains do not grow.**
 edit 6 (*whether an ordinary telling between two people who are together should fail two times in
 three*): **an uncontested telling to a hearer who holds no opposing standing does not roll.** The row
 contests `a standing` only where the hearer holds a claim on the same cell with a different value (he
-must be persuaded); otherwise it resolves at `Success` without a draw. Mechanism: the existing contest
-route already reads `subject_is_opponent`; the change is a provider-side `obstacle` of 0 dice when
-`sigma.py::_opposition_of` finds no opposing claim, read from the hearer's own ledger resolver-side (F8
-admits the counterparty's ledger read? — **no**: F8 admits the actor's own ledger only; so the test is
-made on the TELLER's own ledger: whether he holds a claim that the hearer believes otherwise, `said_of`'s
-counterpart). Decided: the teller's belief decides whether he expects to argue; a wrong expectation is a
-roll he did not need or a persuasion he failed to attempt. `confidence.broken` stays (the band kinds are
-the ruling's).
+must be persuaded); otherwise it resolves at `Success` without a draw. The test cannot read the hearer's
+ledger (F8 admits a resolver-side read of the actor's own ledger only), so it is made on the TELLER's own
+ledger: whether he holds a claim that the hearer believes otherwise on that cell (a told or seen claim
+whose holder-of-record is the hearer). The teller's belief decides whether he expects to argue; a wrong
+expectation is a roll he did not need, or a persuasion he did not attempt and whose told copy the hearer
+then holds beside his own contrary claim (the contradiction is the hearer's to weigh, through
+`decision/options.py::record`). `confidence.broken` stays (the band kinds are the ruling's).
 
 **4 Scales.** Person to person; composes to settlement and faction through chains (FI-02's gate: two-hop
 chains above 0). Player: whom to tell what. NPC: the chooser with FI-02's slant.
@@ -445,8 +444,8 @@ own `tell` or `lie`*. Built as a prompt through the one chooser, not a scripted 
   not formed.
 - **Topic.** The operand `on`: the subject of the claim that raised the investigator's question
   (`Question.about`), else the interviewee himself (what he did: FI-06's widened `said_of` pool).
-- **Effect (new `_eff_interview`; the row gains `writes: [Question.asked]`?** — no: a Question is not
-  world state). Decided instead: the row stays ungraded and write-free; WITNESS deposits on the
+- **Effect.** No `_eff_interview`: a Question is not world state, so there is nothing to write. The
+  row stays ungraded and write-free; WITNESS deposits on the
   interviewee a claim `(asker, interview.asked, on)` (`interview.asked` replaces `finding.made` as the
   row's emitted kind, so the inquiry roster's `finding.made` no longer claims an ungraded verb), and
   `world_q.questions_for` gains a source `asked` (`rosters.yaml: question_sources`) raising, for a person

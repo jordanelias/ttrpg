@@ -602,3 +602,128 @@ duel, or every dispute ends in blood or never).
 with nobody watching. S: one grievance owner read by challenge and forgive alike. E, last: one widened
 decline and one mark. **Cut test:** merging into `pardon` conflates a legal restraint with a private
 wrong; keep.
+
+---
+
+## 10. `give` — hand something one holds to someone
+
+**1. Premise.** *A person hands a thing he holds (a document, a title) to someone present, who then holds
+it.* Links: (a) he holds it; (b) the receiver is present; (c) he chooses to hand it over (a reason: it is
+addressed to the receiver, it pays a debt, it cedes a title); (d) the hold moves; (e) whatever reads the
+receiver's holdings now sees it (a writ he must answer, a challenge he must accept, a petition he can
+carry, a rung he rules).
+
+**2. State today.** Row `:657`: `own`, `hold:<record>`; cell `held_by` of `subject` ∧ `with` of `to`;
+`counterparty: to`; writes `Tenure.until`/`Tenure.since` (`_eff_give` `:887`, a two-hold `handover`);
+emits `record.given` or `rung.ceded`; refusal `give.refused`; formation fans `to` over every known person
+(`known_persons`), declined person-side where he holds nothing (`own_hold_declines`). **It is the only
+link by which a writ, a challenge or a covenant reaches its addressee** (`world_q.writs_held`:
+`ED-IN-0292` (1) "just say no for now"; H-229). Reading: 1s formed 21, attempted 0; `[2s]` 19 / 1 / 18
+(`with=False` 17). **Verdict: almost unreachable; so `comply`, `evade / defy`, `accept` and a covenant's
+acceptance are unreachable behind it.**
+
+**3. Build-out, decided.**
+- *Formation:* R-WITH on `to`. And **the addressed-document occasion**: for a held Record whose content
+  names an addressee other than the holder (`person_q.addressed_to`'s keys, the one owner), the Candidate
+  binds `to` = that addressee (`rosters.yaml: record_sourced_operands`, `to` from the addressee key, the
+  existing route (1) of `decision/options.py`) — formed once per such document, not fanned over every
+  known person. A document addressed to someone absent waits in hand (R-WITH declines it) until a sighting
+  says the addressee is near; no refusal is spent meanwhile.
+- *Ranking:* `choose` scores delivering an addressed document by the **maker's** purpose when the holder is
+  the maker (he wrote it to be delivered: the issuing act's own score carries over through a
+  `delivery_weight` fixture, proposed 1.0, control 0); a non-maker holder scores it by his pursuits as any
+  give.
+- *Roll:* none. A gift needs no contest; a refused hand-over is the receiver's (out of scope: acceptance
+  of a gift is not modelled; the receiver can `give` it back or destroy it).
+- *Effects:* unchanged. *Emits:* unchanged.
+- *Consequences (readers named):* `writs_held` (→ `comply`, `evade / defy`, `accept`), `held_record_claims`
+  (→ `carry` of a given petition, `commit` via `terms_sourced`), `hold_force` (title), strife (`record.given`
+  and `rung.ceded` join strands).
+
+**4. Scales.** Person → person (documents); person → person with seat consequences (`rung.ceded`: title
+moves, the settlement's ruler changes). A faction's cession is its head's give of the rung.
+
+**5. Tuning.** Relationship (`regard` raises gift value), office (a seated maker's documents carry the
+seat's purpose), season (none).
+
+**6. Exact edits.** Proposal A §1 (R-WITH); proposal B §1 (delivery occasion, ranking weight).
+
+**7. Gate and falsifier.** `aperture 2 s`: `give` refusals `with=False` fall by at least half; at least
+one `record.given` of a `dispensation` or `challenge` to its addressee over seeds 0..2 (four seasons, not a
+long run: `aperture 4 s` is not required, one planted run suffices if the realm has no co-located
+addressee); in the planted run the addressee then forms `comply`/`evade / defy` (or `accept`). Planted
+failure: drop the addressed-document occasion and the given count returns to baseline.
+
+**8. Cases.** ARCS M-REC (ARCS §4 row 9: "possession that has consequences; a founding text in one man's
+custody"); H-229 (the duel chain's second link); covenant cases.
+
+**9. NERS.** N: the delivery link of three chains. R: documents move, titles cede, with nobody watching.
+S: one hand-over basis for Records and Rungs. E, last: one occasion and one weight against three dead
+chains. **Cut test:** none; removing it kills writs, challenges and covenants at delivery.
+
+---
+
+## 11. `challenge` — call someone out
+
+**1. Premise.** *A person who holds a grievance against someone challenges him formally; the challenged
+must answer (accept and fight, or decline and bear the shame); either way the dispute is settled in the
+eyes of those who see it.* Links: (a) a grievance; (b) the challenged is present; (c) a challenge with
+stated terms; (d) it reaches the challenged; (e) he accepts (→ duel, PHYSICAL's `accept`) or does not by a
+time; (f) the outcome settles the dispute and is seen.
+
+**2. State today.** Row `:923`: `own`; **no `referent_class`**; cell `existence Person` ∧ `with` ∧
+`dispute` (all of `subject`); `counterparty: subject`; writes a `challenge` Record (`_eff_challenge`
+`:307`: `terms`, `to`, `stakes` from payload else `None`, `challenger`); emits `challenge.issued`; refusal
+`challenge.refused`. Reading: 1s 48 / 0 / 48 (`exists:Person=0` 43, `with=False` 4, `dispute=False` 1);
+`[2s]` 84 / 0 / 84. Lane A owns formation (`challenge` classed Person, dispute declined person-side,
+`accept` on challenge Records) and "the duel actually fires" (step 2). **Verdict: forms but is refused;
+links (c)–(f) beyond lane A unbuilt: computed stakes always `None`, delivery by `give` only, no answer by
+a time.**
+
+**3. Build-out, decided (on lane A, not redesigning it).**
+- *Formation:* lane A's; plus R-WITH on `subject` (the `with` conjunct) — the remainder of the 13
+  `with=False`.
+- *Stakes:* `stakes` becomes choice-sourced (`rosters.yaml: choice_sourced`, ranged over
+  `challenge_terms`, `marshal`'s shape) and ranked by the grievance's magnitude: the challenger's
+  `deeds_judged` sum against the challenged, banded by a fixture table `stakes_by_grievance` (proposed: a
+  small grievance → `yield`, a larger → `blood`, the largest → `death`, in `challenge_terms`' own order
+  `[yield, blood, death]`; control: all `None`, today's, fought under `duel_terms`' `accept` line). The term the duel is fought under is then a person's choice with a reason.
+- *Delivery:* the Record's `to` is the challenged; proposal B's addressed-document occasion carries it by
+  `give` (the challenger holds it and the challenged is, by formation, present). **No new mint route**
+  (`ED-IN-0292` stands; §D).
+- *Answer by a time:* the challenge Record's stages carry a due label `answer` at `challenge_answer_ticks`
+  (fixture, proposed one round-set within the season). At MATTER, an unanswered, unaccepted challenge
+  whose due matures emits **`challenge.declined`** (new kind) naming the challenged as doer — a deed that
+  every witness of the challenge judges by their pursuits (honour-leaning pursuits judge it against him),
+  so a refusal to fight costs regard without a fight. The challenger's dispute then reads as **settled**:
+  `holds_dispute` skips deeds before the decline (the same `forgiven_since`-shaped mark, written by the
+  MATTER step on the challenger, so one mark reader serves both `forgive` and a settled challenge).
+- *After the duel:* PHYSICAL's `accept` resolves the fight (`duel.yielded`, wounds, death); the outcome
+  likewise writes the settled mark on both parties (the dispute is settled by the duel, ED-IN-0337:
+  "a duel settles a dispute"). Owner of the write: the `accept` effect (PHYSICAL lane); named here.
+- *Costs:* a scene; a challenge is public (witnessed). *Forecloses:* a second challenge on the same
+  dispute while one is live (person-side: he holds a live challenge naming the same `to`).
+
+**4. Scales.** Person to person; a faction's champion is a seated person's challenge; the mass-battle
+analogue is `march`. NPC: one chooser.
+
+**5. Tuning.** Personality (honour/violence pursuits rank it; grievance magnitude sets stakes),
+relationship (`regard`), office (a seated challenger's challenge is witnessed by his court), season (the
+answer window).
+
+**6. Exact edits.** Proposal A §1 (R-WITH, on lane A); proposal D §3 (stakes, answer window, decline,
+settled mark).
+
+**7. Gate and falsifier.** Lane A's planted-dispute run extended: the challenge carries a non-`None`
+`stakes` chosen by grievance size; delivered by `give`; in one arm accepted (PHYSICAL), in the other left
+unanswered → `challenge.declined` at the due tick, witnesses' `regard` of the challenged falls, and
+`holds_dispute(challenger, challenged)` is False after both arms. Planted failure: remove the answer stage
+and the unanswered challenge never resolves (the pre-change dead end).
+
+**8. Cases.** ARC-21 N3 ("a failed formal challenge"), CHAR §7 (feud, rivalry), the PC audit's duel
+cases (`03_PC_audit.md` F-PC-01).
+
+**9. NERS.** N: the head of the only route from grievance to personal combat. R: feuds escalate and settle
+without a player; a refusal to fight has a price. S: stakes a choice like `marshal`'s role; the answer
+window rides MATTER's existing stages. E, last: one choice-sourced key, one stage, one kind. **Cut test:**
+none; removing it removes duels.
