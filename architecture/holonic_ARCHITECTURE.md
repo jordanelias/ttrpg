@@ -1,6 +1,6 @@
 # THE SEASON LOOP — A HOLONIC ARCHITECTURE, AND THE GUIDE TO BUILDING IT IN GODOT
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`. ⚠ AMENDED 2026-11-12 (Jordan-directed, A-97, ED-IN-0358): the rulings' owed amendments, appended in place so no line moves — L1-A92 (§2 T2, §9.3) · L1-A12 (§11.1) · L1-A9 (§27.1, §32 item 3) · L1-A64 (§27.1, §33) · L1-A96 (§34.1) · L1-A72 (§39.3) · L1-A3 (§39.4) · L1-A4 (§44.3). ⚠ AMENDED 2026-11-12 (Jordan, A-102; A-97, ED-IN-0359): L1-A102 (§45, a pointer to `04` §A.2's tenth module, `boot/`; §47, the `World` is constructed by `boot/`). ⚠ AMENDED 2026-11-12 (Jordan, A-104; A-97, ED-IN-0360): L1-A104 (§26, `choose`'s bound; §26.3, "like any act": a scene of management orders costs 0, `04` §B.9).**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`. ⚠ AMENDED 2026-11-12 (Jordan-directed, A-97, ED-IN-0358): the rulings' owed amendments, appended in place so no line moves — L1-A92 (§2 T2, §9.3) · L1-A12 (§11.1) · L1-A9 (§27.1, §32 item 3) · L1-A64 (§27.1, §33) · L1-A96 (§34.1) · L1-A72 (§39.3) · L1-A3 (§39.4) · L1-A4 (§44.3). ⚠ AMENDED 2026-11-12 (Jordan, A-102; A-97, ED-IN-0359): L1-A102 (§45, a pointer to `04` §A.2's tenth module, `boot/`; §47, the `World` is constructed by `boot/`). ⚠ AMENDED 2026-11-12 (Jordan, A-104; A-97, ED-IN-0360): L1-A104 (§26, `choose`'s bound; §26.3, "like any act": a scene of management orders costs 0, `04` §B.9). ⚠ AMENDED 2026-11-12 (Jordan, A-115; A-97, ED-IN-0361): L1-A115 (§8, §10, §10.2, §10.3, §22, §23, §25, §29, §30, §46: `Rung.envelope` and the `Envelope` value type are deleted, `04` §B.3; population is each person's `weight`).**
 ## Under `CLAUDE.md` §0.05 this document is **REFERENCE, never mechanism.** Under §0.2 **nothing in it
 ## runs.** Part X says what would make each claim done and which steps cannot be satisfied by writing.
 
@@ -311,7 +311,7 @@ THE ONE STATE CHANGE        StateChange(subject, mode in create|alter|destroy, d
 THE QUERY CATEGORY          Query -- never stored, always recomputed
 SEASON-LOCAL               Act · Event · Claim · View · Sensation · Candidate
 PERSISTENT NON-CARRIERS    Date · DocketItem · Petition · Dispensation · Venue · ConveningCondition
-VALUE TYPES                MatterKind · Envelope · Stores
+VALUE TYPES                MatterKind · Envelope · Stores   (⚠ A-115, L1-A115: Envelope deleted, `04` §B.3)
 ```
 
 **Eight kinds of thing. Nothing else exists.** A faction is not on this list because a faction *is* a
@@ -364,12 +364,12 @@ deleted on purpose.
 ## §10 · `Rung` — the holon
 
 ```
-Rung := (id, kind, stake[], judging_set_rule, dates[], matter, envelope)
+Rung := (id, kind, stake[], judging_set_rule, dates[], matter, envelope)   -- ⚠ AMENDED 2026-11-12 (Jordan, A-115; A-97, node L1-A115): `envelope` is deleted (`04` §B.3); population is each person's `weight`
 Rung.matter := ( stores : map MatterKind -> int      -- whole units, no fractional matter
                , sites  : list of Site ids
                , records: list of Record ids
                , transmission: Tenure id | null )    -- the succeed pointer for a hearth
-Envelope    := packed per-band counts
+Envelope    := packed per-band counts   -- ⚠ AMENDED 2026-11-12 (A-115, node L1-A115): no such type; deleted with the field
 ```
 
 ```
@@ -390,7 +390,7 @@ Query. **This is the row the whole ownership table exists to protect.**
 > **The `Rung` of kind `person` is the ADDRESS SLOT, and the `Person` is who stands in it.**
 
 **Generalise that sentence to all eight kinds and you have the rung rule:** a rung is *where* a
-decision happens; a person is *who* makes it. A rung owns `matter`, `dates[]`, `stake[]`, `envelope`,
+decision happens; a person is *who* makes it. A rung owns `matter`, `dates[]`, `stake[]`, `envelope`, (⚠ AMENDED 2026-11-12 (A-115, node L1-A115): `envelope` is deleted, `04` §B.3)
 `judging_set_rule` — **arrangements, not choices.**
 
 ⚠ **One caveat, stated because building on it would be building on a hole:** `judging_set_rule` is
@@ -398,7 +398,7 @@ decision happens; a person is *who* makes it. A rung owns `matter`, `dates[]`, `
 rung and the sentence above needs a third term. Do not cite it as evidence that rungs own only
 arrangements until it is specified.
 
-### §10.3 `envelope` is matter and does not act
+### §10.3 `envelope` is matter and does not act   ⚠ AMENDED 2026-11-12 (Jordan, A-115; A-97, node L1-A115): the field is deleted (`04` §B.3). A place's population is the `weight` of the persons there; births and deaths move `weight`, the one owner. What this section says of the cohort (it acts; demography does not choose) still holds
 
 Births add weight at the youngest band; deaths remove it. **Birth is envelope weight, not a `create`.**
 The envelope is written at MATTER and reconciled at CENSUS. It has **no ledger, no stance and no act.**
@@ -728,7 +728,7 @@ incomplete.**
 | owner | owns | never owns |
 |---|---|---|
 | **Person** | everything interior — `marks`, `capability`, `stance`, **`convictions` and `beliefs`**, the claim ledger; **every Tenure whose subject they are**; the Propositions they utter | anything about another person; **any aggregate** |
-| **Rung** | `matter` (`stores`, its Sites, its Records, the transmission pointer), `dates[]`, `envelope`, `stake[]`, `judging_set_rule` | **any social aggregate** |
+| **Rung** | `matter` (`stores`, its Sites, its Records, the transmission pointer), `dates[]`, `envelope`, `stake[]`, `judging_set_rule` (⚠ AMENDED 2026-11-12, A-115, node L1-A115: `envelope` deleted, `04` §B.3) | **any social aggregate** |
 | **Office** | `post`, `remit`, `conferral`, `revocation`, `establishment[]`, `dates[]`, `upkeep` | **who holds it** — that is a `hold` Tenure owned by the holder |
 | **Site** | `condition`, `drawers[]`, `kind` | anything social |
 | **the log** | itself, append-only | nothing else. Written by RESOLVE and MATTER, read by everyone |
@@ -804,7 +804,7 @@ open.**
   │        global fan-out, ONE pass · then per-person deposit into OWN ledger
   │
   └── CENSUS ──────────── shares WITNESS's join
-           reads the post-eviction ledger set ONCE · individuation · envelope
+           reads the post-eviction ledger set ONCE · individuation · envelope   (⚠ A-115, L1-A115: envelope deleted)
 ```
 
 **Six steps, four barriers, and the counts differ for two structural reasons:** DELIBERATE is a map,
@@ -863,7 +863,7 @@ shape.
 | `condition(site)` | **`wear` ONLY.** Act deltas are RESOLVE's |
 | `Tenure.until` on death | **the only Tenure write in the MATTER class**, bounded by §15.3's causation rule |
 | carrier existence | death |
-| envelope weight | births and deaths |
+| envelope weight ⚠ AMENDED 2026-11-12 (A-115, node L1-A115): deleted, `04` §B.3; births and deaths move `Person.weight` | births and deaths |
 
 ### §25.1 The three licensed clocks are exhaustive
 
@@ -1023,7 +1023,7 @@ made its parallelism claim *unsound rather than merely unproven*. **Do not shard
 ## §29 · CENSUS — shares WITNESS's join
 
 Reads the post-eviction ledger set **once**. Demand-driven individuation and de-individuation;
-envelope reconciliation.
+envelope reconciliation. ⚠ AMENDED 2026-11-12 (Jordan, A-115; A-97, node L1-A115): there is no envelope to reconcile (`04` §B.3, §A.2's `loop/census` row); CENSUS writes `(Person, exists)` and `weight`.
 
 > **DEMAND-DRIVEN ONLY. Nothing generates without a demand, and no clock generates anything.**
 
@@ -1043,7 +1043,7 @@ may be written in two steps.
 | bodies, ageing, death | no | **yes** | no | **yes** (killing, wounding — **an act**) | no | no |
 | travel legs | no | **yes** | no | **yes** (movement) | no | no |
 | `yield` | no | **yes, only here** | no | no | no | no |
-| envelope weight | no | **yes** | no | no | no | **yes** |
+| envelope weight ⚠ AMENDED 2026-11-12 (A-115, node L1-A115): row deleted with the field, `04` §B.3 | no | **yes** | no | no | no | **yes** |
 | `condition(site)` | no | **yes — `wear` ONLY** | no | **yes — act deltas, only here** | no | no |
 | `Tenure` | no | **yes** (`until` on death) | no | **yes** (`confer`/`revoke`/`create`/`destroy`) | no | no |
 | carrier existence | no | **yes** (death) | no | **yes** (`create`/`destroy`) | no | **yes** (individuation) |
@@ -1765,7 +1765,7 @@ record in a store with no per-instance object.
 | **View** | **`PackedInt64Array` of ids** | **a view must hold ids, never references** (§18.1) | — |
 | **Sensation** | **`Vector2`** | §46.1 | `.x`/`.y` instead of field names |
 | **Stores** | **value** — MatterKind id → int | §48 | typed `Dictionary` (≥4.4); fallback packed pair |
-| **Envelope** | **value** — `PackedInt32Array` per band | matter does not act | — |
+| **Envelope** | **value** — `PackedInt32Array` per band | matter does not act | — ⚠ AMENDED 2026-11-12 (A-115, node L1-A115): no such type; deleted with `Rung.envelope`, `04` §B.3 |
 | **Venue · door · MatterKind** | **Res + generated `.tres`** | authored world data | ⚠ **[engine] `load()` returns the CACHED instance — never use `Resource` for a carrier** |
 | **Query** | **`static func` on `class_name Query`** | it is not a type | flat namespace — one holder class |
 | **World** | **RC, owned by the driver, NEVER an autoload** | §47 | every resolver-side call threads `w` |

@@ -1,6 +1,6 @@
 # THE META-ARCHITECTURE — STAGE 1 · AXIOMS, IDIOMS, SCHEMA
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`. ⚠ AMENDED 2026-11-12 (Jordan-directed, A-97, ED-IN-0358): pointers appended in place to the amended `04` rows — L1-A96 (AX-1) · L1-A92 (AX-3) · L1-A12 (§D.6, the summary table).**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`. ⚠ AMENDED 2026-11-12 (Jordan-directed, A-97, ED-IN-0358): pointers appended in place to the amended `04` rows — L1-A96 (AX-1) · L1-A92 (AX-3) · L1-A12 (§D.6, the summary table). ⚠ AMENDED 2026-11-12 (Jordan, A-115; A-97, ED-IN-0361): pointers appended in place — L1-A115 (AX-5's fourth candidate; §D.2 OWNS: `Rung.envelope` is deleted, `04` §B.3).**
 ## Scope: Jordan-directed, 2026-09-03. A **top-down** exercise to determine the ideal *logical
 ## shape* for future work. **Nothing here is built and nothing here is meant to run.**
 
@@ -176,7 +176,7 @@ would be a different game.
 one part that is a genuine design choice inside the part that is a consequence.
 
 ⚠ **AND THE LIST MAY BE INCOMPLETE — THERE IS A FOURTH CANDIDATE THIS DOCUMENT NEVER NAMED.** The
-loop has **two** world-writing steps, not one: CENSUS reconciles the envelope and performs
+loop has **two** world-writing steps, not one: CENSUS reconciles the envelope and performs (⚠ AMENDED 2026-11-12 (A-115, node L1-A115): there is no envelope, `04` §B.3; CENSUS performs individuation and writes `weight`, and the argument below stands on individuation alone)
 **individuation**, admitting `(Person, exists)` and emitting `person.individuated`. **That is the
 world creating the only kind of thing `AX-1` lets act** — and the easy defence is foreclosed by the
 chain itself, which rules that *birth is envelope weight, not a `create`*, so individuation is not
@@ -899,7 +899,7 @@ chain. **A schema claim about what code reads must ship the way to re-run it.**
 > `person` kind is the address slot and the `Person` is who stands in it — and that sentence
 > generalises to all eight kinds, which is the rung rule.
 >
-> **OWNS.** Matter (stores, its Sites, its Records, the transmission pointer), dates, envelope, and
+> **OWNS.** Matter (stores, its Sites, its Records, the transmission pointer), dates, envelope, and (⚠ AMENDED 2026-11-12 (Jordan, A-115; A-97, node L1-A115): `envelope` is deleted, `04` §B.3; population is each person's `weight`)
 > ⚠ `stake` — **which the chain RETIRED as a dead row**, along with `Site.drawers`, `Person.marks`
 > and `Person.capability`, because their declared `emits:` name kinds no verb produces. Listing it
 > here re-admitted it silently. **It is named as retired, and the reader clause §D.1 carries should
