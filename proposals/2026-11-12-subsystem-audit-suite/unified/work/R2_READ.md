@@ -379,3 +379,241 @@ Marks: **EX** exists in the tree (`main`, opened or grepped by me, or verified b
 Dependencies that exist neither in the tree nor in a proposal of this lane (listed MISSING for U3): the workplan positions CR-29, CR-36/37, CR-55, CR-59 to CR-64, CR-83, CR-88, CR-92, CR-93, CR-98, IN-14, IN-44, NM-W9, SC-02, CP-T05-01/02, CP-T06-04/05, CP-T06-09 are **PL** (plan items in `workplans/valoria_master_workplan_v11_part*.md`; I did not open them: [ASSUMPTION: they are real plan positions as the proposals cite them — basis: every cite is by id and consistent across files]); AM-B-09 (cited by `12_ARCS_arcs_as_staged_goals.md`, `[UNVERIFIED]`). `world_q.projection`/`witnessed`/`PersonProjection` are deleted by `17_CENSUS_C1A_01_deletion_batches.md` D2 (R5); `02_CHAR_voices_and_the_room.md` edit 5 and `19_LACUNA_verdict…` R-19-09 rely on `witnessed`/`projection` and are re-pointed by their heads to `account`/`receipt` (`11_GO_player_surface_contract_B.md` §3–§4, R1): the dependency is on GO-B being accepted ("held if GO-B is rejected", `U5_CONFLICTS_U5a.md` C-U5a-15).
 
 **Cycles found.** (1) `05_SC_evidence_and_rebuttal_B.md` edit 4 needs `05_SC_playable_hearing_B.md` (`Exhibit`); HEAR_B's `Exhibit` points back at EVID_B: the two define the same record in two places (`Exhibit` is typed in HEAR_B and re-described in EVID_B edit 3): not a cycle of landing order but a double definition. (2) `28_CORE_scene_access_C` needs `20_NARRATIVE_B` (`dues_unmet`) and `20_NARRATIVE_B` edit 5 says it is completed by 28C: a request/answer pair, not a cycle, if NARRATIVE_B lands first. (3) `02_CHAR_voices_and_the_room.md` `ATTRIBUTED_TERMS` fails the day `aim` or `risk` lands unless voices lands after them or names them: order `aim` and `risk`, then voices (or voices names four). No true cycle in this lane.
+
+---
+
+## 6. Claims for the fact check (test 6)
+
+Counts, measurements and findings stated more than once in this lane, or here and elsewhere. "Conflicts with" lists a different value or a different definition under one name.
+
+| claim | `file:section` | value | conflicts with (`file:section`, value) |
+|---|---|---|---|
+| realm build is 83 persons: 46 cast, 37 cohorts; 34 seats; 414 rungs | `01_CORE_tests_one_golden_owner.md` §1.3; `12_ARCS_case_on_the_realm.md` problem; `25 L-01..L-03` | 83 / 46 / 37 / 34 / 414 | none (VERIFIED by `25`; ARCS also says 83 persons, 34 offices, hash `600d8b27…`) |
+| one season at seed 0 in the shipped realm | CORE tests T1 problem 3; `02_CHAR_what_an_act_risks.md` gate; `U5a_CORE_owed_edits.md` C gate | 749 acts, 13,379 Events, hash `5ab73af282d0779646c38839fbab85d8` | `25 L-18/L-16`: 821 acts attempted, 13,379 Events; the 749 is the folded set. Same world, two definitions of "acts" |
+| refusal rate | `02_CHAR_offer_what_can_be_done.md`: 656 of 1,529 (seed 0), 620 of 1,519 (seed 1) ".refused events over resolved acts" | 42.9 % and 40.8 % | `25 L-16`: four definitions in use (40.3 %, 42.0 %, 45.9 %, 54.8 % at three seasons); `13_SC_draw…` and `02_CHAR_audit` say "four in ten" |
+| the headless hash for NPC-088, two seasons, seed 0 | CORE capability Part one gate; CORE predicates; CORE one scene; CHAR definitions; CHAR uses table; `U5a_CORE_owed_edits.md` B; CAP Part A | `5405522c36b0399247f83fd9f6d29494` | none among themselves; **all differ on lane A's unmerged branch** (OWED §E re-recorded the pins) |
+| realm two seasons, seeds 0, 1, 2 | `02_CHAR_offer…`, `02_CHAR_scar_cap…`; `28A` gate | `bacd687f`, `8aae8412`, `89109213` | `28A` states `89109213` at "this tree, re-read after A-9's re-pin"; the CHAR files give two of the three. Consistent |
+| the `regime_gain = 0` control vs shipped (one season) | `01_CORE_tests_one_golden_owner.md` problem 1 vs 3 | control seed 0 `25660615…`; shipped seed 0 `5ab73af2…`; seeds 1, 2 equal at both | internal: item 1 says six tests pin the control hash; item 3 says one pins the shipped. Not a contradiction; state which arm each pin is |
+| decider attribution of the realm's top choices | `02_CHAR_reason_trail…` Part A gate; `U5a_CHAR_owed_amendments.md` §5; `01_CORE_tests_shipped_world_falsifiers.md` row 8 | 265 pursuit, 223 draw, 10 stance of 498 at seed 0 | consistent across three |
+| a sampled top differs from the score's top | `02_CHAR_resolve_and_temper.md` | 127 of 276 (46 %), 117 of 276 (42 %) | `U5a_CHAR_owed_amendments.md` §1: same-man redraw agreement 39.3 %, between-men 17.0 % — a different measure, not a conflict |
+| the scar runaway | `02_CHAR_scar_cap…`: median of each person's largest count 41, max 61 in two seasons; 83 of 83 at or over 3 | `02_CHAR_scar_is_a_wound.md`: after season 3, 83 of 83 (seed 0) and 82 of 82 (seed 1) with some element at 3+, under the one-per-element cap | the gate of `02_CHAR_scar_cap…` (median ≤ 4) passes while everyone is in crisis; replaced (C-U5a-06) |
+| conviction rewritten by crisis in two seasons | `02_CHAR_scar_cap…` | 0 of 46 (seed 0), 6 of 46 (seed 1) | `U5a_CHAR_owed_amendments.md`/`16_PESSIMIST_CHAR_A`: the crisis is now drawn (A-24): the reading is the pre-ruling threshold behaviour |
+| `resonant_style` | `02_CHAR_which_ground_moves_whom.md`; `02_CHAR_capability_definitions.md` Edit 4 | 18 of 46 rows (Evidence 7, Consequence 5, Solidarity 4, Authority 2) | none |
+| cast rows authoring `stats:`, `ts:`, `lifepath`, `heritage`, `goals` | `02_CHAR_capability_definitions.md`; `02_CHAR_reason_trail…` Part C; `25 L-07` | `stats` 1, `ts` 10, `lifepath` 5, `heritage` 4, `goals` 17 | `data/cast.py` docstring says "31 a territory, 30 goals, 29 stats, 32 ts" (stale; Part C corrects it) |
+| the five lifepath cast rows | `02_CHAR_capability_definitions.md` problem 3 | "five cast rows carry a lifepath; three of those grant nothing" | `25 L-07`: "two of the five gain a key (NPC-004, NPC-088)": consistent (5 − 2 = 3) |
+| acts in a played realm season occasioned by another person's act (R-01 on the realm) | `01_CORE_tests_shipped_world_falsifiers.md` | 134 of 749, 141 of 731, 162 of 751 acts occasioned by another person's act (seeds 0–2); witness-cut control 0 of 388 | none |
+| uncontested verbs draw | `U5a_CORE_owed_edits.md`; `25 L-15` | 92 % of success events with no draw (1,995 of 2,159; this lane's seed 0: 92.7 %) | `25 L-15`: the pooled figure differs by 45 events (a definition the sweep's script did not save) |
+| verbs that execute | `U5a_CORE_owed_edits.md` B row 9; `08_FI_03` problem | corpus seed 0: 23 of 67 execute, 13 only refused, 30 never attempted; realm three seasons: 30 of 48 attempted execute | `25 L-14`: one season at seed 0 gives 26 of 42; the corpus run was not repeated by `25`. Consistent given horizons |
+| THE NINE | `01_CORE_requirements_reading_record.md`; `25 L-23` | met 3, partial 5, not met 1 | `requirements.yaml` R-05 last recorded "20 of 56"; instrument now "23 of 67" (the record's own problem 1) |
+| J-U5a-05 baseline | `U5_CONFLICTS_U5a.md` §2; A-63 | "62 of 87 scenes with a named counterparty have that person in another scene the same round" | `28A` problem: 16 of 22, 24 of 37, 16 of 25 rounds (seeds 0–2, two seasons); `OWED_TO_UNIFICATION.md` §B: the 62-of-87 counts acts *about* a person while real meetings are 24 / 42 / 31 per two seasons. Three different denominators (acts about a person; face-to-face rounds; meetings). `28A`'s "22, 37 and 25 such rounds" vs `OWED` "24 / 42 / 31" differ by 2, 5, 6 — not reconciled by any file |
+| petitions | `28C` problem: 20 filed, 4 carried, 0 determined (two seasons, seed 0) | `20_NARRATIVE_B_what_he_was_owed.md`: 35 / 44 / 44 filed, 0 / 2 / 0 determined (four seasons, three seeds) | different horizons; not a conflict, cite both |
+| determinations | `05_SC_acquittal.md`: matter.undetermined 2 and 2, determined 1 and 2, lapsed 8 and 8 (six seasons, seeds 0, 1); `05_SC_playable_hearing.md`: 27 opened, 3 determined, 4 undetermined, 16 lapsed | sums agree (1+2, 2+2, 8+8) | none |
+| interviews and reconstructs | `08_FI_03` problem; `19_LACUNA_questioning…`; `19_LACUNA_conclusion…` | `interview` 19 / 8 / 19; `reconstruct` 47 / 45 / 54; found deposits 0 / 0 / 0 (`build_realm(0..2)`, one season) | none |
+| `examine` never forms | `08_FI_07_shortest-playable-case.md`; `08_FI_03` | 0 folded acts over one to three seasons | none |
+| equals at `routine` | CAL head; CAP head; `13_SC_tuning_tables.md` head | fails 56.9 to 60.1 %; Success-or-better 22.2 to 30.1 % | CAL's own C1 ceiling is 0.30: the head says C1 "holds … a tenth of a point over C1's edge at rank 7". A claim that a criterion holds while a reading exceeds it |
+| better-arguer curve | `05_SC_opposed_obstacle_parity.md` head; CAL head | 66 / 78 / 92 % at one, two, four ranks; target windows 60–70, 72–82, 88–95 | consistent |
+| opposition of equals | `05_SC_opposed_obstacle_parity.md` (whole-dice): P(Failure) 0.420 at score 2 to 0.606 at score 12 under `score/2` | after A-26 + A-6: equal ranks meet `plain` 50.0 % at every rank | the whole-dice table is history; the file's body still prints it as the problem |
+| roster counts | `U5_CONFLICTS_U5c.md` C-02: "28 ordered members"; OBS §2 table 28 rows; OBS head adds `even` first | 28 vs 29 | the count was typed by hand (`04` §G.3.3 forbids it): derive with `len(rosters.yaml: obstacle_terms.values)` when it lands |
+| `hearing_moves` | HEAR_B "six moves"; negotiation adds two; bench `rule`, `adjourn` | 6 + 2 + 2 | a single roster would hold 10 rows; no document states the total |
+| Layer 1 `Scene` record | `04` §B.9 `Scene := (id, person, occasion, place, interactions)`; `28A` problem: "`Scene` is `(id, actor, acts, occasion)`" (`state/carriers.py:602-632`) | `person` vs `actor`, `interactions` vs `acts`, `place` absent | code vs Layer 1 names differ; `01_CORE_reason_trail…` quotes the Layer 1 form |
+| `Event` record | `04` §B.9: `degree?` only; code carries `degree`, `observed`, `ending` (`05_SC_contest_record_on_event.md`, `08_FI_03`) | — | named at §1.4; `04` PART D row 9 forbids actor/target/subject only |
+| 586 raises in non-test `engine/season` | `U5a_CORE_owed_edits.md`; `25 L-24` | 586; `04:986-987` records 167 in 2026-09-05 | the "about 3.5-fold growth" is UNRESOLVABLE (shallow clone), `25 U-09`; `01_CORE_audit_addendum_B.md:365` states it |
+| `Said` in Layer 1 | `08_FI_06_testimony-names-a-hand.md` "[UNVERIFIED: whether `04` lists `Said`'s members]" | `grep -n Said 04_CODE_ARCHITECTURE.md` finds nothing (this lane) | closes the mark |
+| `ED-IN-0246` ledgers the office bonus | `U5a_CORE_owed_edits.md` E "Not carried": "ledgered (`ED-IN-0246`), IN-14" | the id exists, in `registers/editorial_ledger_in_archive.jsonl:163`, status resolved; its first 1,800 characters concern the `hold` domain and `provinces_of`, not the bonus | the claim that it ledgers the budget bonus is unchecked by me beyond the id |
+| year length | `12_ARCS_case_on_the_realm.md` head | no year declared at shipped fixtures; `season_factor_draw=()` (verified `fixtures.py:535`) | A-51's "five years" needs a declared year (`21_PROCEDURAL_C…`, R5) |
+
+---
+
+## 7. Test 9: implementation-ready? (per proposal)
+
+Checked against `UNIFICATION_BRIEF.md` test 9: files and symbols, order, schema or rows, call sites, named tests, gate as an execution artifact with its expected reading, falsifier and control, hash movers, dependencies, lands-it, cost and tier. **LT** = lands-it and model tier missing (every file except `28_*` and, partly, CAP/OBS); **7b-T** below completes LT for all of them from `CLAUDE.md` §10 and the files' own cost classes. **COMPLETE†** = complete except LT (so complete once 7b-T is applied). A probe named in a gate that is a scratch script (`probe_*.py`, `r08_probe.py`, `dynamics.py`, `p1_belief.py`, `fi_arms.py`, `c1_two_men.py`) is **not in the tree**: the gate is then an unreproducible artifact and the file is INCOMPLETE until the script is promoted to a named test or a `harness/` reading.
+
+| proposal | verdict | missing, or what blocks it |
+|---|---|---|
+| `01_CORE_capability_authoring_surface.md` | INCOMPLETE | body not rewritten to U1 (schema names, values, Edit 9, Part three); no named tests (falsifiers are manual deletions: "delete `capability:` from `argue`'s row"); LT |
+| `01_CORE_case_setup_and_beats.md` | INCOMPLETE | `harness/arc.py` "body not opened, UNVERIFIED that its shape fits"; no named tests (printed `BEATS n/m`); contradicts `12_ARCS_case_on_the_realm.md` on `knows:` and `who:`; LT |
+| `01_CORE_claim_fade_as_read.md` | INCOMPLETE | reader list unverified (`witness.py`, `options.py`); `claim.forgotten` has no declared emission column (§1.1); `causes` for a claim with no deposit Event undefined; gate is `probe_growth.py` (scratch); LT |
+| `01_CORE_one_scene_contract.md` | INCOMPLETE | `_entry.py` new, edit 3 "each module lane's"; fixture "duel" for `harness.scene` unspecified; no named tests; `apply=False` bypasses `seam.contest` (§1.1); LT |
+| `01_CORE_predicates_name_their_clause.md` | INCOMPLETE | clause names given for `establish` only (21 branches in four predicates); gate `probe_predicates.py` is scratch; no named test; LT |
+| `01_CORE_reason_trail_in_the_act_store.md` | INCOMPLETE | violates §A.2 as written (§1.1); gate `probe_reason.py` scratch; LT |
+| `01_CORE_requirements_reading_record.md` | COMPLETE† | (§2 withdrawn; keep marked) |
+| `01_CORE_tests_delete_what_cannot_fail.md` | COMPLETE† | row 6 is the MB lane's file; falsifier "`[UNVERIFIED: read, not run]`" for row 3 |
+| `01_CORE_tests_one_golden_owner.md` | INCOMPLETE | item E's expected readings (735 rows, TN 7) false under A-5; literals are `main`'s and re-pin three times (A-5, A-9, A-30) |
+| `01_CORE_tests_shipped_world_falsifiers.md` | COMPLETE† | row 8 "`[UNVERIFIED: not built]`" is part of the edit; ~80 s of test time declared |
+| `01_CORE_unmet_need_is_attended_first.md` | INCOMPLETE | no named test (gate is `scarce` harness arms); no hash values; the relief link belongs to `02_CHAR_goal_lean…`; LT |
+| `02_CHAR_capability_definitions.md` | INCOMPLETE | gate (b), (c), (d) have no named test; Edit 4 deletes cast keys (content edit to a file code reads): one hash re-check; LT |
+| `02_CHAR_capability_uses_table.md` | INCOMPLETE | `test_k3_thread_sensitivity.py` name `[UNVERIFIED]`; body schema stale vs U1; LT |
+| `02_CHAR_choice_alignment.md` | INCOMPLETE | no named test; `marshal` formation once released is `[UNVERIFIED]`; "per phase" paragraph stale (A-9); cells are Jordan's content; LT |
+| `02_CHAR_goal_lean_on_its_own_question.md` | INCOMPLETE | no named test; depends on CR-88's design file (PL); LT |
+| `02_CHAR_offer_what_can_be_done.md` | INCOMPLETE | item 2's `capability` stem (A-11); the "candidate sets equal" check has no script; no named tests; LT |
+| `02_CHAR_reason_trail_and_small_edits.md` | INCOMPLETE | B1 duplicates `08_FI_04` §4 and IN-14 and meets `04` §A.3 row 15; no named tests; LT |
+| `02_CHAR_relations_have_a_ground.md` | INCOMPLETE | gate uses `probe_foils.py` (scratch); content table placeholders `[ASSUMPTION; low]`; cast id form `NPC-050` vs `p_npc_050`: the loader mapping not stated; LT |
+| `02_CHAR_resolve_and_temper.md` | INCOMPLETE | edit 2 hard-wires Focus (§1.2); `resolve` name collides with `faction_q.resolve`; `test_in62_decision_spread.py` exists and is extended by one assertion (named); LT |
+| `02_CHAR_scar_cap_and_regard_unit.md` | INCOMPLETE | per-tick reset site `[UNVERIFIED]`; one named test (`test_told_by_channel.py::test_r07_…`); `regard_sign` column pick to name; LT |
+| `02_CHAR_scar_is_a_wound.md` | INCOMPLETE | whether `(Person, scar)` admits a decrement `[UNVERIFIED]`; gate by a scratch probe `probe_scar_stock.py`; LT |
+| `02_CHAR_voices_and_the_room.md` | INCOMPLETE | `the_room` violates AX-2 (§1.2); the `ATTRIBUTED_TERMS` test has no file name; LT |
+| `02_CHAR_what_an_act_risks.md` | INCOMPLETE | `View.odds` answers `None` for bodily prizes today (stated), so the term runs on `risk_unknown_chance` until a module serves an estimate (MB/PC); no named tests; LT |
+| `02_CHAR_which_ground_moves_whom.md` | INCOMPLETE | three `when` keys violate §B.2; body polarity stale; `cites` waits on SC-P8/EVID_B; no named tests; LT |
+| `U5a_CHAR_owed_amendments.md` | INCOMPLETE | §3 (b) violates `04` §C.4; scratch probes `c1_two_men.py`, `x1_extremes.py`, `b2_done_to_him.py`; no named tests; LT |
+| `U5a_CHAR_self_knowledge_is_a_belief.md` | INCOMPLETE | edit 6 (b) reads `fed_by`, which is not on the Event until OBS §5 lands; NPC-021 has no edit; tests unnamed; LT |
+| `U5a_CORE_owed_edits.md` | INCOMPLETE | E1's attribute list `[UNVERIFIED]` (derive by `ast`); I's placement (§1.3); F rule 1 vs A-49; sections A–D, E2–E3, G, H are complete; LT |
+| `U5a_capability_home_and_two_inputs.md` | INCOMPLETE | Part B gates 2 and 3 are readings with no test names; gate 4's line "two actors at different pools: yes" is `[UNVERIFIED]` in `aperture`; B7 "named for U5b, not specified"; head's one-word amendment vs U1 §4 (OWED §B); tier unnamed |
+| `U5a_tests_digest_additions.md` | INCOMPLETE | most sites "read from the digest, site not opened"; the executing session opens each; LT |
+| `05_SC_acquittal.md` | COMPLETE† | depends on CR-61 (PL); body must take `ballots` default 1 |
+| `05_SC_arrangement_rows_that_bind.md` | COMPLETE† | key deletion at B10-18c's close is a later step |
+| `05_SC_capability_surface.md` | INCOMPLETE | edits 1–3 superseded; edit 4 stands but its claim prefix `trait:` needs a roster row |
+| `05_SC_contest_record_on_event.md` | INCOMPLETE | body `room` vs head `terms`, `levels`; falsifier (b) `[UNVERIFIED]` |
+| `05_SC_evidence_and_rebuttal.md` | SUPERSEDED | by `_B`; status only |
+| `05_SC_evidence_and_rebuttal_B.md` | INCOMPLETE | module placement and ladder (§1.4); the unit of the weight difference once `proof_step` is deleted; gate readings only, no test names; LT |
+| `05_SC_hearing_capabilities.md` | INCOMPLETE | `bench_reading` rewrite (§1.4); `rhetoric` not in U1; no named tests; LT |
+| `05_SC_negotiation_scene.md` | INCOMPLETE | design-first: the opening verb (`treat`), `exchange` operands; host-formed acts (§1.4) |
+| `05_SC_obstacle_difficulty_and_modifiers_B.md` | SUPERSEDED in part | by `U5c_SC_one_obstacle_form.md`; keep `Margin.terms`, the `difficulty:` column |
+| `05_SC_opposed_obstacle_parity.md` | COMPLETE† | Status line; lands only at the joint calibration step |
+| `05_SC_playable_hearing.md` | SUPERSEDED | by `_B` |
+| `05_SC_playable_hearing_B.md` | INCOMPLETE | design-first for edits 6 and 8; the attendee-list shape `[UNVERIFIED]`; tests are readings (5 gates) with no file names; LT |
+| `05_SC_sc05_kernel_disposition_B.md` | INCOMPLETE | the ten checks named only by glob `test_sc_hearing_*.py`; the ledger row is the orchestrator's |
+| `05_SC_sc05_kernel_retirement.md` | SUPERSEDED | by the `_B` file |
+| `13_SC_calibration.md` | COMPLETE† | one named test file, targets C1–C8, gates, falsifier |
+| `13_SC_draw_for_unrolled_contests.md` | INCOMPLETE | body overtaken (§1.4); the surviving `interview`/appeal rows live in `14_VERBS_SOCIAL2_C` and `19_LACUNA_verdict…` |
+| `13_SC_tuning_tables.md` | INCOMPLETE | numbers whole-dice history; T4's reader choice; gate reads the audit's `calibrate.py` (scratch) |
+| `U5c_SC_one_obstacle_form.md` | INCOMPLETE | seat-modifier conflict with U1; roster count 28 vs 29; gate 1's "sibling in `test_sc02_reception.py`" is a name, others are readings |
+| `U5c_SC_proceedings_residue.md` | INCOMPLETE | §4 items 5–6 (§1.4); gates use `p3_hearing_ends.py`, `realm_sc.py`, `p5_argue.py` (scratch); `test_sc01_the_bar.py` is named |
+| `U5c_FI_residue.md` | INCOMPLETE | gates use `r08_probe.py`, `p1_belief.py`, `p1d_where.py`, `fi_arms.py` (scratch); no named tests |
+| `08_FI_01_claim-sourced-referents.md` | INCOMPLETE | the one test is unnamed ("in `test_season_shape.py` beside the `r7` group"); CR-29 is PL |
+| `08_FI_02_rumour-that-travels.md` | INCOMPLETE | `dynamics.py` scratch; edit 1 edits a plan file |
+| `08_FI_03_playable-inquiry.md` | INCOMPLETE | design-first §3, §4; body §3 stale; `Proposition` mood unnamed |
+| `08_FI_04_small-edits.md` | INCOMPLETE | each row independent and gated; §6 refactor is "small build" with no symbols; §4 duplicates CHAR B1 |
+| `08_FI_05_evidence-interface.md` | SUPERSEDED | by `_B` |
+| `08_FI_05_evidence-interface_B.md` | INCOMPLETE | the consumer is SC's; E-5 item 1 owner stale; gate runs on `build_hearing` (PR) |
+| `08_FI_06_testimony-names-a-hand.md` | INCOMPLETE | gate "the `g6` tests' method" names no file; falsifier planted failures described, not named |
+| `08_FI_07_shortest-playable-case.md` | INCOMPLETE | tests unnamed; the `board` function's output shape (a `list[dict]`) given; scenario seeds 0–19 gate is a harness run |
+| `08_FI_08_knots-season-form.md` | INCOMPLETE | §4 design-first; A-28 hands the knot half to WR |
+| `12_ARCS_arcs_as_staged_goals.md` | INCOMPLETE | `org.person` `[UNVERIFIED]`; the stage rows are per-case content; no named test |
+| `12_ARCS_case_on_the_realm.md` | INCOMPLETE | per-case prehistory lists; tests unnamed; `21_PROCEDURAL_C…` (R5) must declare the year |
+| `12_ARCS_cited_evidence.md` | INCOMPLETE | reduce to edit 4 (site `[UNVERIFIED]`: the fieldwork provider's deposit) |
+| `12_ARCS_substrate_as_ground.md` | INCOMPLETE | design-first; wear table and `band_floors` homes `[UNVERIFIED]`; the third gate site (§1.6); Status stale |
+| `19_LACUNA_admission_rides_the_citing_draw.md` | INCOMPLETE | text edits to two files; code follows SC's build; gate readings only, no test file names |
+| `19_LACUNA_conclusion_is_a_committed_assertion.md` | INCOMPLETE | body edits 2–3 replaced by FRES §7; `Proposition` constructions to grep `[UNVERIFIED]` |
+| `19_LACUNA_questioning_has_an_approach_and_a_cost.md` | INCOMPLETE | body stale (A-25); waits on CP-T06-05 (PL); absence-by-grep for the interview deposit |
+| `19_LACUNA_verdict_ladder_and_reversal.md` | INCOMPLETE | reversal design-first and the body contradicts the head (§1.6) |
+| `28_CORE_scene_access_A_occupancy_and_precedence.md` | INCOMPLETE | self-declared: commit 3's ENCOUNTER half (needs the hearing module), commit 8's two floors (95 %, 60 %) and gate row 12's rate are seeds not targets, the Layer 1 row 36 amendment is drafted text; gate rows numbered 9, 11, 12, 10 (OWED §B). Otherwise complete: files, symbols, call sites, named tests, gate, falsifier, hash movers, dependencies, lands-it, cost, tier |
+| `28_CORE_scene_access_B_appointments.md` | INCOMPLETE | self-declared: commit 4 waits on typed `utter` (`14_VERBS_SOCIAL2_B` §1); how the ask reaches the host as a `commit` referent; the Failure deposit to the asker |
+| `28_CORE_scene_access_C_the_petition_that_waits.md` | INCOMPLETE | self-declared: `dues_unmet` and a held-seat reader are unbuilt; the composer is unbuilt; `carry` has no declining band; `now` is `None` for terms that name no quantity; plus `now` is world truth for a person (§1.7) |
+
+---
+
+## 7b. Completing text (decidable from the repository; ready for the rewrite lane)
+
+### 7b-T. Lands-it and tier, for every file marked LT
+
+By cost class, from `CLAUDE.md` §10 (set the model per task; Opus for judgment, Sonnet for bounded routine) and from how `28_*` and CAP word it:
+
+| cost class in the file | lands by | tier of the author | tier of the close |
+|---|---|---|---|
+| edit (text, rows, tests, a one-site code change) | an IN or lane `valoria-author` session in the batch for the files it shares | `sonnet` | the batch's `methodology-close`, once per batch |
+| small build (a new function, a column, a fixture, a new harness file) | a `methodology-execute` batch per shared file group, one commit per row of the file's own order | `sonnet` | `methodology-close` with its terminal `opus` critique once |
+| design-first | a design pass first (Opus, with `ners`), then a small build | `opus` | `opus` |
+| hash mover | the commit that flips the fixture out of its control, said plainly as a re-record (`CLAUDE.md` §7) | the build's tier | as above |
+
+Lane groups (the shared-file rule of `CLAUDE.md` §9, one batch per shared file): **CORE tests** (`01_CORE_tests_*`, `U5a_tests_digest_additions.md`): one batch, first among the movers (`01_CORE_tests_one_golden_owner.md` before every hash mover); **CAPABILITY** (`01_CORE_capability_authoring_surface.md`, `02_CHAR_capability_*`, `U5a_capability_home_and_two_inputs.md`, `05_SC_capability_surface.md`, `05_SC_hearing_capabilities.md`): CAP Part A, then Part B with `U5a_DICE_owed_edits.md` §1 and the SC obstacle landing, then Part C; **CHOOSER** (`02_CHAR_goal_lean…`, `risk`, `choice_alignment`, `resolve_and_temper`, `scar_*`, `reason_trail`, `voices`, `U5a_CHAR_owed_amendments.md`): `choose.py::score_terms` is the shared file, so the order is reason trail (`watch`) first, then `aim`, then `risk`, then `voices` (which names four terms), then the scar and regard fixtures; **SC**: the OBS steps 0 to 6, then T13 commit 2 with CAL red-to-green, then the hearing, then evidence and admission, then the kernel retirement; **FI**: `U5c_FI_residue.md` §2's thirteen-step order; **ACCESS**: 28A, then 28B, then 28C, each its own batch.
+
+### 7b-1. `01_CORE_reason_trail_in_the_act_store.md`, replace Edit 2
+
+Old: "`self.scenes[sc.id] = sc` becomes `w.acts.add_scene(sc)` at `loop/deliberate.py:303`". New: `loop/deliberate.py` keeps returning its `Scene` map exactly as `04` §C.1 draws it and stores nothing. `loop/resolve.py::resolve`, which holds the ACTS token and the act store, calls `w.acts.add_scene(sc)` for each Scene of the `scenes` argument immediately before it appends that Scene's acts (`resolve.py:1033`, `w.acts.append`). `SeasonDriver.scenes` is deleted; `_occasion_of` and `epistemic._term_why` read `w.acts.scene_of(act_id)`. Gate unchanged; add: `engine/season/tests/test_season_shape.py::test_deliberate_stores_nothing` (the existing G2 spy `test_g2_deliberate_mutates_no_store_by_any_route` already asserts it: cite that test as the falsifier, a store write inside DELIBERATE turns it red).
+
+### 7b-2. `01_CORE_claim_fade_as_read.md`, replace Edit 3 and the gate's last sentence
+
+Old: MATTER emits `claim.forgotten` per claim reaching zero. New: delete the Event. `matter.py:471-501` stops walking ledgers; nothing replaces it. A reader that wants the moment a claim fell to zero calls `present_confidence(confidence, when, tick, decay)` at two ticks. If an Event is later wanted, add `claim.forgotten` as a `(Claim, exists)` matrix row `on_write` written at WITNESS/CENSUS when eviction removes the claim, so invariant 7 derives the kind. Edit 4 becomes: `write_matrix.yaml (Claim, confidence)` loses `MAT` and `claim.decayed`; no new kind. Named test: `engine/season/tests/test_claim_fade_as_read.py::test_present_confidence_matches_the_schedule_of_the_old_write` (compare against the old write's value at ticks 0 to 7 on a hand-built ledger) and `::test_no_claim_decayed_in_an_eight_season_log`. Add `[UNVERIFIED]` closure: open `loop/witness.py` and `decision/options.py` for readers of `Claim.confidence` before the edit (`rg -n "\.confidence" engine/season`).
+
+### 7b-3. `01_CORE_one_scene_contract.md`
+
+Edit 3, replace "With `decide=None` the entry asks the decider the host built for that person" by: "the wrapper (`seam/wrappers/<m>.py`) resolves the person's decider (`played_by(host, role, parties)` else the sampled decider the host builds from `decision/`) and passes it as `decide=`; with neither, the entry runs its named interim policy". Edit 4, `apply=False`: "calls `seam.contest(proj, place, prize, claimants, depth=0, max_depth=fixture)`", not the provider. Seeds: `random.Random(seed)` at the combat call is replaced, in the same edit, by the stream `draw_factory(seed, tick)(person, f"{role}:{act_id}")` (A-30). Head: "Edit 5 lands (A-48 B)". Add: `deciders` for a role invoked from another role's decider refuses at depth 1 (A-72), tested by `test_a_duel_round_called_from_a_battle_may_not_call_a_third_scene`.
+
+### 7b-4. `02_CHAR_resolve_and_temper.md`, replace Edit 2
+
+Old: `temper(p, fx)` resolves `attribute_key("Focus")` at import. New: `temper(p, fx)` is `capability_factor(p, "choice_temper", fx)` (U1 §8; the row `{use: choice_temper, role: judgement, key: attr.mind.focus, gain: temper_gain}` is in `02_CHAR_capability_uses_table.md`), 1.0 where no row or gain 0; `choose.py` names no attribute. Rename the proposed `person_q.resolve` to `person_q.decisiveness(p: PersonInterior, shift=0.0)`: `faction_q.resolve` is ratified (`04` §B.6.1) and a second dotted `resolve` is a collision.
+
+### 7b-5. `02_CHAR_voices_and_the_room.md`, replace edit 5 and edit 6's "room"
+
+```python
+# queries/person_q.py  (person-side; asker first; no World)
+def room_as_held(p: PersonInterior, event_id: str, fx) -> tuple[tuple[str, dict], ...]:
+    """For each person p's own ledger names as present at `event_id` (a claim deposited with that Event
+    among its causes, held by p), p's reading of that person's regard for p's act: {"told", "seen", "bond"}
+    from p's own claims (bond:<ground>, told regards, what p saw). Nothing about anyone else's ledger."""
+```
+`world_q.present_at(w, event_id)` stays (it names who witnessed, a resolver-side fact for the chronicle); the surface calls only `room_as_held` for a person, and the chronicle (a harness observer, outside the simulation) may call `the_room` for the true readings. Gate (a) and (b) unchanged; add (e): `room_as_held` on a world in which a witness holds a hostile regard the actor holds no claim of returns no entry for him (the Pentiment flag cannot tell the actor what he does not know). Reason: `04` §C.11 and A-83.
+
+### 7b-6. `02_CHAR_which_ground_moves_whom.md`, replace the four `when` keys
+
+| key | holds when | reads (the actor's own ledger and fields the pool reader already reads) |
+|---|---|---|
+| `cites: <proofs member>` | the act's payload cites an item of that kind | the act payload (SC-P8 `cites`) |
+| `consequence_held: true` | the **arguer's** own ledger holds a deed claim about the argued Proposition's subject that the **hearer's** `Person.pursuits` score negative | `person_q.deeds_judged` over the arguer's ledger with the hearer's projected pursuits (a field, as the pool reads the subject's training) |
+| `regard_at_least: <n>` | `stance_toward(hearer, arguer)` ≥ n stance steps | `person_q.stance_toward`, clamped (C-03) |
+| (removed) `speaker_over_subject` | — | the `moved_by_authority` row is not an `edge` row: it is the gain of the `rank_gap` obstacle term for a hearer who holds the trait, or is dropped until U1/U3 settle the seat-modifier channel (§6, §2 below) |
+
+Rows 1–4 of `capability_uses`: `side: subject, against: false`.
+
+### 7b-7. `02_CHAR_offer_what_can_be_done.md`, Edit/Resolution item 2
+
+Strike "his own `capability`". Replace the item's stem list by: "the existing `OWN_STATE_STEMS`, his own live Tenures (`hold`, `commit`, `oblige`), and his own judgement of a dispute (`person_q.holds_dispute`)". `train`'s decline on a held key stays the effect's (`loop/effects_combat.py:812-814`).
+
+### 7b-8. `U5a_CHAR_owed_amendments.md` §3 (b), replace
+
+Old: `release`'s row keys its emission `commitment.kept` / `commitment.ended` by the ledger reading. New: `release` keeps its one emission; "kept" is `world_q.commitment_kept(w, tenure)`: the closed `commit` Tenure's Proposition content read true in the releaser's own ledger at the closing Event's tick (computed where read, the D-48 precedent). Gate: realm seeds 0–2, three seasons, `commitment.ended` Events above zero and `commitment_kept` true for at least one and false for at least one; falsifier: a `commit` whose releaser's ledger did not hold the content true is read kept.
+
+### 7b-9. `05_SC_evidence_and_rebuttal_B.md`
+
+1. Edit 3 and 5: `evidence.py::standing` is called by `roll.py` and `hearing.py` inside `modules/social_contest/`; `SocialContestInput` and `HearingInput` gain `exhibits` (the case file's `filed` stages as `Exhibit`s with `pairs`) and the host passes them in; the host reads `proofs` and `rebuttals` back from `Margin.terms`. Edit 7 (`module_contracts.yaml`) is then true: `social_contest.evidence` is not a composition role because nothing outside the module calls it.
+2. `Exhibit.answered_band`: replace "the band the host rolled once through `engine/dice_engine`" by "the `Event.degree` of the answering `speak` act, which `seam/ladder.py::degree_of` set" (one ladder, `04` PART D row 30). The answering act is a `speak` that declares `contests:` and carries `answers: [stage index, …]`.
+3. Rule 2's "same side, opposing values": make it an **eligibility refusal** at the `speak` cell (`self_contradiction` refusal kind on the filing act) so no outcome is fixed by state; delete "the lighter is withdrawn".
+4. The weight-difference unit: after OBS deletes `proof_step`, name `answer_step` (a fixture, first value the former `proof_step` 0.25, control 0) as the obstacle unit for `w_answered − w_answer`. [ASSUMPTION: a new fixture rather than reviving `proof_step`; basis: OBS §3 deletes `proof_step` from the leverage channel only for items that stand, and the answer's obstacle is a hostile term.]
+
+### 7b-10. `05_SC_hearing_capabilities.md`, replace "Insight is a use, not a roll"
+
+`insight` is a `judgement`-role capability (`about_mid`, U1 §3): its factor scales the **confidence** of the claim that WITNESS deposits in a viewer's ledger about each seat's lean. At the turn view (`sigma.py::hearing_input`) every seat's public commits are shown; each seat's lean sign enters the viewer's ledger as a claim `(seat, leans, ±1)` deposited with a keyed draw `H(seed, tick, viewer, f"bench_read:{seat}")` whose probability of showing the true sign rises with `capability_factor(viewer, "bench_reading")`. A wrong sign is possible at every insight. Fixture `insight_bench_threshold` is deleted; `bench_reading` stays a site. Gate 2 becomes: at insight 2 and 5, over 400 seeds, the share of seats shown with the true sign is strictly between 0.5 and 1 and higher at 5. Add `rhetoric` to U1 §10's list or remove it from this file (decision for U1/U3; I recommend removal: `argue` already carries the one-to-one persuasion with the same base).
+
+### 7b-11. `U5c_SC_proceedings_residue.md` §4 items 5 and 6, replace
+
+Item 6: the lapse pass in `loop/matter.py` keeps its own `DocketItem` write and appends nothing to a `Record`. "The newest stage is `lapsed`" is read from the item: `world_q.lapsed_at(w, item_or_file)` returns the tick of the `matter.lapsed` Event that cites the item (the log is the record). Item 5: `fresh` splits in two. (a) A typed existence conjunct on `open_case` and `carry`: the file's newest `dismissed` stage or the `matter.lapsed` Event of its item is not within `docket_lapse` seasons of now. (b) "something new" is an Act schema constraint, refused at construction as `issue`'s and `open_case`'s other schema cells are (`04` §F.24a): an `open_case` or `carry` re-opening a matter carries `new_items: (ids)` that are not among the file's `filed` or `excluded` stages. `28C`'s "as the lapse already appends `lapsed`" becomes "as the lapse is read from its Event". Named test: `engine/season/tests/test_proceedings_residue.py::test_a_matter_is_not_reopened_without_something_new`.
+
+### 7b-12. `19_LACUNA_*`
+
+- Conclusion: delete edits 2–3 (the `reconstruct` row writes nothing; `_eff_reconstruct` is not written); edits 1 and 4 stand; the row's emissions are `U5c_FI_residue.md` §7's; the Proposition is uttered by `utter` carrying `cites`.
+- Questioning, R-19-10: replace "the answer's obstacle for a truthful answer falls by `press_ob` and for a `lie` rises by `press_ob`" by "`press` gives the questioner one `press_level` in the engagement draw and the questioned person's answering `lie` one level against it (`U5c_SC_one_obstacle_form.md` §3, source `approach`)"; fixture `press_level` (first `minor`, control `None`); drop `press_ob`.
+- Verdict, R-19-08 and edit 4: the appellate `determine` writes the original case file's `reversed` stage (an ACTS write by the determining judge under the `determination` basis) and emits `matter.reversed`; the disposing seat's bench closes the edge by its own `pardon` (drawn). The gate's reversal row: "the `reversed` stage occurs in a share strictly between 0 and 1, and the edge closes only after the disposing bench's `pardon`". `voided` is written by the next `convene` (head 1).
+- Problem 3: strike "`release` (oblige, by its owner, C-1's ruled price)" (A-37).
+
+### 7b-13. `12_ARCS_substrate_as_ground.md`
+
+Status: PROPOSED (A-40 ground, A-43, A-54). Option A's edit 4 (perception): add the site `observe_ground` to `capability_use_sites` and to U1 §3 amendment 5's closed gate sites (Thread Sensitivity at `own_state_gate`, `told_retain`, `observe_ground`), or recast it without a gate: WITNESS deposits the crossing to every observer with confidence drawn by `thread_sensitivity` (a `judgement` factor), so a non-sensitive observer sometimes perceives. I recommend the second (no third gate; A-11's spirit; the standing rule). Wear: replace "baseline wear per season in the existing wear table" by "a drawn result on the four-band ladder: pool = place endurance, obstacle = season hardship" (A-54).
+
+### 7b-14. `28_CORE_scene_access_C_the_petition_that_waits.md`, `petition_state`
+
+Add: `petition_state(w, rid)` returns `now` for the chronicle and the harness only. The person-facing form is `petition_state_held(p: PersonInterior, rid) -> dict` with `now` read from `p`'s own ledger claim about `terms.subject`/`predicate` (else `None`); the bench reads its own. `regard`'s `waiting_valence` term is expressed in stance steps (`clamp(kept_waiting / confidence_default, 0, 1) × waiting_valence × STANCE_MAX` ... [ASSUMPTION: scale so one fully-remembered rebuff is `waiting_valence` stance steps]) so `regard` keeps one unit.
+
+### 7b-15. `U5a_CORE_owed_edits.md` section I, placement
+
+`faction_q.standing(w, prop, rung)` in `queries/faction_q.py`, composing `faction_q.resolve(w, prop).holdings` as the footprint and calling `world_q.density`, `world_q.sovereign_fraction`, `world_q.provinces_of` for the rest; `FactionStanding` is a frozen return record dropped with the view (PART D row 47). Same gate. F rule 1: "stop on an ending only when the seated person has no continuation (rule 2's test); print the ending then".
+
+### 7b-16. `U5a_CHAR_self_knowledge_is_a_belief.md`, edit 6 (b)
+
+Add the dependency line: "reads `fed_by` from `Event.ending`'s `levels` (`05_SC_contest_record_on_event.md` as reconciled); until that lands, (b) is not built and (a) alone carries coming to know". NPC-021: seed `self:` for his creed's doubt through the crisis-of-faith claim `16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` already deposits; mark NPC-021 carried there or add `unaware: [<creed doubt key>]`.
+
+### 7b-17. Named tests for the files that name none (convention: `engine/season/tests/test_<slug>.py::test_<claim>`)
+
+| file | tests |
+|---|---|
+| `02_CHAR_goal_lean_on_its_own_question.md` | `test_goal_lean.py::test_aim_is_zero_at_gain_zero`, `::test_two_goals_with_opposite_leans_rank_one_verb_differently_on_their_own_question`, `::test_a_claim_landed_question_ranks_alike_at_every_gain` |
+| `02_CHAR_what_an_act_risks.md` | `test_risk_term.py::test_a_wounded_person_ranks_fight_lower`, `::test_an_uncontested_candidate_is_unchanged_at_any_gain`, `::test_spirit_moves_exposed_acts_through_the_uses_row` |
+| `02_CHAR_choice_alignment.md` | `test_choice_alignment.py::test_opposite_temperaments_rank_two_retreat_at_values_in_opposite_order`, `::test_no_cell_authored_is_hash_equal` |
+| `02_CHAR_which_ground_moves_whom.md` | `test_susceptibility.py::test_a_solidarity_hearer_is_moved_more_often_only_when_the_condition_holds` |
+| `02_CHAR_voices_and_the_room.md` | `test_voices.py::test_voices_sum_to_the_score`, `::test_attributed_terms_equals_score_terms_length`, `::test_room_as_held_names_only_what_the_actor_holds` |
+| `02_CHAR_relations_have_a_ground.md` | `test_relations.py::test_no_relations_key_is_hash_equal`, `::test_a_rival_ranks_hostile_acts_higher_than_a_stranger` |
+| `01_CORE_unmet_need_is_attended_first.md` | `test_attention_key.py::test_a_shortfall_claim_sorts_first_larger_first_in_tier_one` |
+| `01_CORE_predicates_name_their_clause.md` | `test_predicates_clause.py::test_every_refusing_branch_names_a_clause`, `::test_a_list_operand_is_refused_not_raised` |
+| `08_FI_01_claim-sourced-referents.md` | `test_season_shape.py::test_r7_a_silent_seat_change_moves_no_candidate` (the file's own "one test") |
+| `08_FI_06_testimony-names-a-hand.md` | `test_told_pairing.py::test_a_telling_carries_the_hand`, `::test_a_partial_telling_withholds_it`, `::test_a_hearers_own_sighting_is_never_the_told_ones` |
+| `U5c_SC_one_obstacle_form.md` | `test_obstacle_form.py::test_terms_sum_to_ob`, `::test_a_negative_term_raises`, `::test_every_roster_member_has_a_host_function` |
+| `28_*` | already named in their own tables |

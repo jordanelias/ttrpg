@@ -6,7 +6,7 @@ Lane R4 of `unified/UNIFICATION_RUN.md`. Read-only on everything except this fil
 
 ## Lane scope and coverage
 
-Files in the lane: 26 `14_VERBS_*` + 31 `15_INSTITUTIONS_*` + 2 residue files = 59 (glob check: `14_*` 26, `15_*` 31, `U5b_VERBS_*` 1, `U5c_VERBS_*` 1; every file matches exactly one lane glob; no file of the lane is in two lanes' globs, and no `proposals/` file matching `14_*`/`15_*`/`U5b_VERBS_*`/`U5c_VERBS_*` is missing from the lane table).
+Files in the lane: 26 `14_VERBS_*` + 30 `15_INSTITUTIONS_*` + 2 residue files = 58, **all read in full** (`ls` count: `14_*` 26, `15_*` 30, `U5b_VERBS_*` 1, `U5c_VERBS_*` 1; `proposals/` holds 300 files; the four globs match 58). None of the 58 matches another lane's glob (checked against the run's lane table, not against the other lanes' receipts), and no file matching these four globs falls outside the lane table. Whether the other 242 files are each in exactly one lane is those lanes' to say.
 
 Read-first set read in full or by named part: `CLAUDE.md`; `UNIFICATION_BRIEF.md`; `UNIFICATION_RUN.md`; `DECISIONS_ANSWERED.md` (A-1 to A-91); `OWED_TO_UNIFICATION.md`; `04` (all 1,658 lines); `holonic` §43, §44, §45 to §47; `skills/layer-conformance/SKILL.md`; `audits/25_GROUNDING_ENGINE.md` lines 1 to 200 (§0 to §5; §6 to §8 inventory and falsifiers not read); `unified/U5_FINDINGS_CLOSURE_U5b.md` (Parts 1 to 3 head, lines 1 to 339 and Parts 3 to 5, lines 455 to 622; Parts 1 to 2 read at table level); `unified/U5_FINDINGS_CLOSURE_U5c.md` lines 389 to 548; `unified/U5_CONFLICTS_U5c.md` in full.
 
@@ -302,5 +302,221 @@ Format: `file:section` | ruling | the correct reading | the edit. "Head line" = 
 | BIND_C:§2 (`revoke`) | A-35 (head strips an officer by a resistible draw) | carried (head); BYZ_E `revoke` Partial differs (closes at season's end, disposal then) | BIND_C governs (F-R4-11) |
 | BYZ_B:e5, MAT_B | A-25 (favourable terms are levels) | BYZ_B's `favourable` list becomes leverage sources; MAT_B's `evidence` clause stays leverage | body stale |
 | S2_C:§4 | C-21 | `tell_obstacle` table folded into the roster; `tie` is a `favour` level | body stale |
+
+## 3. Fact extract (test 2): facts a proposal proposes or relies on
+
+`| fact | value | proposed owner (file + key) | other proposal that also states or owns it | agree / conflict |`. "(P)" = the owner file does not exist in the tree yet (proposed); "(T)" = exists in the tree at `main`. Values marked [A] are the proposal's `[ASSUMPTION]`.
+
+### 3.1 Fixtures (`engine/season/data/fixtures.py`, each with a NUMBER row in `hole_register.yaml`)
+
+| fact | value | owner | also stated by | verdict |
+|---|---|---|---|---|
+| `provisional_term` | 2 seasons [A]; sweep {1, 2, 4}; control Partial = Success | `fixtures.py` (P), BIND_C e1 | BYZ_A e4: shipped 4, sweep {2, 4, 8}; BYZ_E; BIND_E (`_provisional_term`) | **conflict** (2 vs 4; F-R4-10); SYN_A: "`provisional_term` is VB-C's" |
+| rank step | 0.25 [A] sweep {0, 0.25, 0.5}; control 0; named `standing_step` | `fixtures.py` (P), BIND_C e1 | OBS §2 member 6: `rank_step`; S1_D: `rank_step` | **conflict** of name; value 0.25 agrees |
+| distance step | 0.5 per `contain` edge [A], sweep {0, 0.5, 1}; named `carriage_step` | MAT_B | S1_B `distance_ob` (control 0); COL_B `remove_step` 0.25 sweep {0, .25, .5}; OBS `distance_step` | **conflict** of name and of value (0.5 / 0.25 / unspecified) |
+| border hops | 2 [A] sweep {1, 2, 3} | COL_B `border_hops` | COL_B §4: `capital: {code: ALT-0, hops: 3}` | agree (two different quantities) |
+| watch step | 0.5 [A] sweep {0, 0.5, 1} | MAT_A e2 `watch_step` | MAT_D (`destroy_record`), S1_B `witness_step`, S1_C `notoriety_step`; OBS `watch_step` | one member, four names; OBS decides |
+| effect share by band | {O 1000, S 700, P 350, F 0} per-mille | MAT_A `effect_share` | `task_fraction` {1, 1, 0.5, 0} (18-A; VRES §1); S2_C `band_entry` {O 1.0, S 1.0, P 0.5, F 0.0} | **conflict** (C-23 decided `task_fraction`; MAT_A's values are a sweep arm; `band_entry` is the same table renamed) |
+| delivery share | {O 1000, S 1000, P 700, F 0} | MAT_B `delivery_share` | `task_fraction` | conflict in kind: whole-unit delivery vs magnitude; U1 decides if it is a content table |
+| exchange terms | {O 1500, S 1000, P 500} per-mille of `return_amount` | MAT_B `exchange_terms` | | single owner; no conflict |
+| works outlay | found {O 0, S 350, P 700, F 350}; build {O 700, S 1000, P 1350, F 500} per-mille of `works_cost` | MAT_C `works_outlay` | `works_cost` (T, `planned_works`) | single owner |
+| forgery quality step | 1; O = default + step, S = default, P = max(1, default - step) | MAT_D | `default_forgery_quality` (T) | agrees |
+| `forge_names` | 3 | MAT_D | | single |
+| army footing share | peace 0.25, war 1.0 [A] | MIL_C `armyrecord.FOOTING_SHARE` | | single |
+| `raw_discipline_step` | 1, floor 1 | MIL_D (`config.py` until the troop table) | `27_MB_B_*` (R1) reads `raw` as `unsteady` | agree |
+| `leaderless_dispersal` | swept | MIL_C | | single; see F-R4-02 |
+| `armies_at_build` | off (shipped) / empty / mustered | MIL_C e7 | `04_MB_playable_field_scenario.md` `army_presets` (yields) | agree |
+| `mortal_wound_ob` | {death, yield, blood}, swept | PHY_A A3 | | single |
+| `raze_sack_share` | {O 1.0, S 0.5, P 0.25} | PHY_B | | single |
+| `surveil_watch_rate` | swept (no value given) | PHY_C | | single; no value |
+| `with_belief_window` / `telling_hearers` | season length / `seen_since_move` | S1_A (withdrawn) / `08_FI_02` edit 5 (R2) | S2_A e5 | S1_A yields (C-19) |
+| `delivery_weight`, `unwelcome_step`, `distance_ob`, `witness_step` | 1.0 / ? / ? / ? control 0 | S1_B | | `delivery_weight` violates F-R4-03; the others are OBS members' steps |
+| `argue_shift_by_band`, `commitment_ob`, `contradiction_ob`, `lie_confidence_by_band`, `notoriety_step`, `cover_quality_by_band`, `conceal_rank_step` | O 2, S 1, P 0.5 / 1.0 / 1.0 / O 0, S -1, P -2 / ? / 3, 2, 1 / ? | S1_C | | `argue_shift_by_band`, `contradiction_ob`, `conceal_rank_step` withdrawn (C-15, C-26, F-R4-03) |
+| `backlog_step`, `grievance_step`, `rank_step`, `cross_pressure_step`, `forgive_factor_by_band` (O 0, S 0, P 0.5), `stakes_by_grievance`, `challenge_answer_ticks`, `degree_weight` (O 1.5, S 1.0, P 0.5) | | S1_D | OBS members' `<member>_step` | single owners |
+| `band_entry`, `proof_obstacle_step`, `tell_obstacle`, `interrogate_obstacle.custody_per_season`, `tie_gain` | | S2_C, S2_D | OBS | `band_entry` and the two tables conflict with C-21/C-23 |
+| `presumption_gain` | ships 0; proposed 0.5; sweep {0, 0.5, 0.75, 1.0} | SYN_B | BYZ_A e4: shipped **0.5**, sweep {0, 0.5, 1.0}; COL_D: ships 0 | **conflict**: BYZ_A ships 0.5 (SYN_B head: ships 0) |
+| `dignity_grades` | 5 (sweep 3 / 5 / 7) | BYZ_A | | single |
+| `upkeep` per dignity grade | 5, 3, 2, 1, 1 [A]; `off_king` 1 | BYZ_B e1 | `default_upkeep` (T) | single |
+| `office_bodies.term` | Ministries 2 [A], sweep {1, 2, 4}; `hand_term: 2` on `off_doux`, 1 on `off_kommerkiarios` | BYZ_C e3, BYZ_D e4 | `record_stage_term` (T, shipped 1) | agree |
+| `obligation_step` / `obligation_arrears` / `sealed_obligation` | 0.0 ship, 0.5 proposed / 1.0 (sweep, proposed 0.5) / 1.0 (proposed 0) | VEN_A | COL_B `oath_step` 0.5 (withdrawn: it is this term) | agree after the merge |
+| `credit_terms` | proposed {O 1.1, S 1.25, P 1.5}, shipped flat 1.0 | VEN_B | | single |
+| `penance_weight` | ships 0; first value 2; sweep {0, 1, 2, 4} | PAP_D | | single |
+| `prescription_seasons` / `prescription_cap` | 8 (sweep {4, 8, 16}) / 3 (sweep {1, 3, 5}) | COL_C | `.designs/.../settlement_layer_v30.md` (archived, intent only) | single |
+| `remove_step`, `border_hops`, `levy_ob` | 0.25, 2, {quarter 0, half 0.5, more 1.0} | COL_B | `stakes_ob` (SC-B) | `levy_ob` withdrawn (head) |
+| `pledge_step` | proposed 0.5 | VEN_C e8 | `proof_step` (SC) | withdrawn (head) |
+
+### 3.2 Rosters, closed sets, schemas (`engine/season/rosters.yaml` unless named)
+
+| fact | value | owner | also stated by | verdict |
+|---|---|---|---|---|
+| route roster name | `graded_tasks` | 18-A item 2 (R5's); VRES §1 | `graded_acts` (MAT_A to MAT_E), `graded_routes` (PHY_B, PHY_D), `graded_inquiries` (T, MIL_A..D, COL_B) | **conflict** (four names; C-22/C-23 decide) |
+| prize roster (`contest_subsystems.prizes`) | `a standing`, `a matter`, `a proposition` (T); `a verdict`, `a seat`, `a holding`, `a task` (P; VRES §2) | `rosters.yaml` | BIND_D `an order`; S1_C `a cover` | `an order`, `a cover` not added (C-25); body stale |
+| `HEARD_BY_ROOMS` | `{BENCH}` (T `manifest/registry.py:276`) -> `{BENCH, SEAT_BODY, RESIDENTS}` | VRES §2 e1 | | agree |
+| prize `heard_by` / `toward` | `a seat`: `seat_body`; `a holding`: `residents`, `toward: to` | VRES §2 | BIND_A e14, BIND_B e12, BIND_C e3, BIND_E e9 (restate by verb) | VRES decides |
+| referent classes added | `Holding` (BIND_A), `Party` (BIND_B), `Restrained` (BIND_B), `Front`, `Besieged` (BIND_E), `Worn`, `Unfinished`, `Resented`, `Wounded` (MAT_A), `Needy` (MAT_B), `Market` (MAT_B), `Larder` (MAT_B), `Damning` (MAT_D), `Occupied` (PHY_B/MAT_D), `Field` (PHY_B), `Matter` (S2_A), `Record.<kind>` qualified (S2_A) | `referent_classes` | | single owners; 17 new classes, each "occasion-only, non-collection" |
+| `own_edge_declines` | `[release]` | BIND_A | `own_hold_declines`, `own_title_declines` (T) | agree |
+| `seat_belief_declines` | revoke: held, succeed: vacant | BIND_C | | single |
+| `own_faction_declines` | `[survey]` | MAT_D | `own_stance_declines` | single |
+| `own_presence_declines` | `[surveil]` | PHY_C | | single |
+| `works_verbs` | found: rung_kinds, build: site_kinds | MAT_C | | single |
+| `fabric_news` | lowers [condition.worn, condition.band_crossed, site.damaged]; raises [site.restored, site.worked]; begun [site.built] | MAT_A | | single |
+| `forgeable_kinds`, `forged_key` | [dispensation, petition, faction_sheet, account]; {faction_sheet: head, dispensation: terms, petition: terms, account: terms} | MAT_D | `_FORGED_SHEET_KEY` (T) | agree |
+| `record_kinds` additions | `account: [terms, said]` (MAT_D), `debt: [terms, to, kind, amount, at]` (VEN_B/SYN_A), `case: [terms, charge, arrangement]` (S2_C), `resolution` (CR-36, R2), **no `roll`** (X-04); `dispensation` keys `form`, `amounts`, `recites`, `standing`->`force` | `record_kinds` | BYZ_A `roll` (withdrawn); S1_B `standing` key (renamed `force` by VRES) | S1_B body stale on `standing` key |
+| `obstacle_terms` | 28 ordered members (OBS §2) incl. `rank_gap`, `distance`, `watch`, `ruin`, `wound` | OBS (R2's/U5c) | institutions add `obligation`, `remove` (refused as members; `remove` = `distance`) | see F-R4-07/08 |
+| `instruments.yaml: forms` | 16 forms: COL_A's ten (`homage`, `land_grant`, `march`, `farm`, `charter`, `staple`, `immunity`, `tribute`, `wardship`, `capitulation`) + six (`warrant`, `commission`, `avoidance`, `interdict`, `tithe`, `debt`); VEN_E adds `condotta` (17) | `engine/season/instruments.yaml` (P) | COL_A "ten", SYN_A "sixteen", gate 2 "the sixteen forms load"; `PAP_E` `render` = `tithe` | **count conflict**: 17 after VEN_E; SYN_A/SYN_E say "sixteen" |
+| form row keys | `made_by`, `grantor_act`, `term`, `renewal`, `confers`, `due`, `forbears`, `lapse`, `hardens` (COL_A) + `record_kind`, `bearer`, `recites`, `basis` (SYN_A) + clause keys `by`, `kind`, `every`, `to`, `over`, `stage` (VEN_E), `after`, `within` (COL_F) + `over: any` (COL_F) | `instruments.yaml`, `data/instruments.py` | | single |
+| `basis` value set | `{command, purview}` | SYN_A/SYN_C | BIND_D (`command` basis value) | agree |
+| seat-row keys | `dignity` (1..`dignity_grades`), `upkeep`, `passes_through`, `hand_term`, `patronage`, `eligible_from`, `cooling_off`, `audit_at_exit`, `audited` (withdrawn), `scope` (judging, CR-60), `passes_through` members = body name or `{seat: id}` | `offices.yaml`, `Office` | | see F-R4-04 |
+| `patronage_bases` | `[purview, own_faction]` | PAP_B | | single |
+| `conferral_bases` | `[appointed, elected, annex, inheritance]` (T) + `lot` | VEN_C | | F-R4-04 |
+| `binds_bases` | `[members_by_admission]` (T) + `members_by_warrant` | VEN_C | | single; draw against the seat |
+| `successions` | `{off_king: off_heir}` (T) + `off_duchess_hafenmark: off_heir_hafenmark` | COL_D e4 / SYN_B §6 | | agree |
+| arrangement rows added | `acclamation` (BYZ_E), `conclave` (PAP_B), `consecration` (PAP_C), `debt_suit` (VEN_B), `security_bench`, `enrolment_ballot` (VEN_D), `audit`, `quo_warranto` (COL_C), `guild_debt_suit` (VEN_E), `exit_audit` (VEN_D, **not added**; = `audit`) | `arrangements.yaml` | SYN_A §6 lists nine rows | VEN_E's tenth row is not in SYN_A's list |
+| arrangement keys | `quorum_share` `[n, d]` (PAP_B); combinable with `quorum` (PAP_G) vs "exclusive" (PAP_B e6, SYN_A §6) | `data/arrangements.py` `_ARRANGEMENT_KEYS` | | **conflict**; PAP_G decides |
+| `quorum` of Church rows | `excommunication_deliberation`: 2 (T) -> `quorum_share [2,3]` (PAP_B e8) | `arrangements.yaml` | PAP_G: stays `quorum: 2` beside the share | conflict resolved by PAP_G |
+| `ban.opened`, `detention.opened` kinds | emitted by `determine` and `revoke` | PAP_D | | single |
+| band-kind names (Failure/refusal) | see F-R4-11 | | | conflicts |
+| `violence_contexts` | `fight: [war, crime, defence]` (drop `duel`); `capture: [war, crime]` | PHY_A | `rosters.yaml:2772` (T) `fight: [war, crime, duel, defence]` | agree (edit) |
+| `context_terms` | `war: death`, `crime: yield`, `defence: yield` | PHY_A | `duel_terms` (T) | single |
+| `withheld_verbs` | drop `marshal`, `surrender` (BIND_E); `recruit`, `discharge_troops` (MIL_C); the other four army verbs (MIL_D); `destroy_record` (MAT_D) | `data/fixtures.py:1157` | | single; each a mover |
+| `marshal`/`surrender`/army verbs' units | "unit" = a subformation row of an army Record | MIL_D, `armyrecord.py` | `04_MB_cell_hierarchy_as_data.md` (R1) | agree |
+| `armyrecord.KEYS` | `('faction','strategy','trained','subformations')` (T) -> + `'doctrine'`, `'footing'` | MIL_C e1 | | single |
+| `Concluded` | `(deed, doer, roots)` | MAT_E `person_q.concluded_of` | `19_LACUNA_conclusion_is_a_committed_assertion.md` (R2) | conflict in kind: MAT_E mints a Proposition; C-22 says inquiry writes nothing |
+| `OBEYED_WRIT` / `DETERMINED_BY` | payload keys on `oblige` | S1_B / (T) | SYN_A `forborne`, SYN_C `excused` | agree |
+| audit key | `audit_at_exit: <arrangement id>` (X-12) | SYN_A | COL_C `audited` (withdrawn), VEN_C | agree after X-12 |
+| Church electorate | `off_cardinal_justice`, `off_senior_inquisitor` (2 seats) | `workplans/valoria_master_workplan_v11_part12.md:366` (plan row) | PAP_B gate: four electors (hand-built) | PAP_G decides |
+| founders' counts | 3, 2, 1 `field.won` (only the order is ruled) | SYN_B `prehistory` | BYZ_A: `order` 1/2/3 with confidence [1.0, 0.8, 0.6] (withdrawn); PAP_C attests 5/3/2 (withdrawn) | three encodings; SYN_B decides |
+| realm facts relied on | 83 persons = 46 cast + 37 cohorts; 34 seats (18 appointed / 8 elected / 1 inheritance / 7 none); 414 rungs; 698 tenures at build; 2 Records (both `works`); 4 live `oblige`; 70 Propositions | `build_realm(0)` (T) | `audits/25_GROUNDING_ENGINE.md` L-01 to L-05 | agree (VERIFIED) |
+
+## 4. Term extract (test 1)
+
+`| term | meaning in this lane's proposals | tree owner (descriptor_registry, names_index, VOCABULARY.md) or "none" | same word other meaning / other word same meaning, with files |`. Owner column: R4 did not open `references/descriptor_registry.yaml`, `names_index.yaml` or `architecture/VOCABULARY.md`; where it names one it is from a proposal's own pointer, marked [from the file]; otherwise "none found in the files read".
+
+| term | meaning here | tree owner | collisions |
+|---|---|---|---|
+| seat | an `Office` row; `Seat` in `04` §B.7 | `04` §B.7; `state/carriers.py::Office` | "office" (code), "post" (a seat's label), "title" (a seat that is a title: `04` §B.7 "There is no `Title` type"); "dignity" (a seat with no remit, BYZ_A) is a fourth word for a seat-kind |
+| dignity | a vacant seat row with `dignity: n`, no remit, no revocation | BYZ_A | "title" (`off_heir`), "honour"; not a type |
+| standing | (a) prize `a standing`; (b) a Sensation field; (c) T13 `standing_dice`; (d) rank against an act (BIND_C, S1_D, T13 T4); (e) content key on a covenant/challenge Record (3/2/1, S1_B, S1_D); (f) SC evidence's "standing items" | OBS refuses (d) | five senses; OBS decides `rank_gap` (d) and VRES `force` (e) |
+| rank_gap | how far the person acted on stands above the actor's exercised seat | OBS §2 member 6 | `standing` (BIND_C body), `standing_step`; `rank_gap_per_rung` (S2_C, S2_D tables, folded) |
+| `force` | a writ's drawn band written on its Record (BIND_D, VRES §2); the band an instrument was drawn up at | VRES §2 | military "force"; `viol` contexts; same word in `04_MB_*` (R1); the S1_B body's `standing` key |
+| distance / `carriage` / `remove` | hops between two rungs | OBS member 20 `distance` | `carriage` (MAT_B), `remove` (COL_B, SYN_A, VEN_*); and "distance" as a *person* (the Doux as a hand, BYZ_D: "Distance is both the Doux's hand (a person) and `remove`") |
+| watch | who is there to see or stop it | OBS member 22 | `witnesses` (S1_B), `notoriety` (S1_C), `guard` |
+| reception / regard | `reception` = audience hostility (needs a prize `heard_by`); `regard` = the one counterparty's hostility (`stance_toward`) | OBS members 8, 7 | BIND_C `revoke` read both (fixed by VRES §2: "never both") |
+| evidence | a leverage source (`proofs`), never an obstacle subtraction | OBS §3 | `evidence` as obstacle "less" (MAT_E `reconstruct`, BYZ_*) |
+| obligation | what the one acted on owes by an edge he owns (VEN_A) | none (OBS: institutions' to place) | `oath_step` (COL_B), `pledge_step` (VEN_C), `obligation_arrears`; `duty.taken` (the event) |
+| excused | a person-side predicate: shuns, or holds a breach (SYN_C) | none | "absolved" (PAP_D `pardon`), "released" |
+| graded route / graded task / graded inquiry / graded act | a verb row resolved by a draw with no prize | 18-A `graded_tasks` | four names (F-R4 section 3.2); "inquiry" also names the three diagnostic rows (research, examine, surveil) |
+| task row / contest row / route row / inquiry | RES-V §1 shape (a), shape (b), the pre-C-22 phrase, a diagnostic row | VRES §1 | "route row" vs "task row" are the same thing (shape (a)); "route" also names `manifest` role resolution |
+| prize | a `contest_subsystems.prizes` row | `rosters.yaml` | "stakes" (a field, MB; also an obstacle member `stakes`), "prize" in `04` §C.4 (the subsystem a verb contests) |
+| `Holding` | referent class: a rung the person holds and may found an office over | BIND_A | `holding` (Faction.holdings, `04` §B.6.1); prize `a holding` (BIND_E); `holdings` verbs; "holding" in `Occupied`/`Held` |
+| `Party` | referent class: a person on the docket of a fired sitting | BIND_B | `party` conjunct of `determine`; "party" to an instrument (COL_A); "party" = side of a battle |
+| `Front` | a place where the asker's side may fight | BIND_E | "frontage" (MB, `04_MB_cell_hierarchy_as_data.md`, R1); "front" |
+| `Field` | a Rung a seat may march on | PHY_B | "field" = a fought battle (`field.won`); `Field` class and `field_defender` |
+| `Market` | referent class for `exchange` | MAT_B | the rung `b_s_003_market`; "market" as an arrangement |
+| `Larder`, `Worn`, `Unfinished`, `Resented`, `Wounded`, `Needy`, `Damning`, `Restrained`, `Besieged`, `Occupied` | occasion-only referent classes | each file | `Detainee`'s family; 17 classes now (section 3.2) |
+| unit | a subformation row of an army Record | `armyrecord`, A-2 | `form_unit`/`disband_unit`/`order_unit` name "unit" for "subformation"; HIER §1 (R1) reconciles |
+| `raw` | a unit column: a body formed Partial, one Discipline lower | MIL_D | `raw_i` in the obstacle composer (OBS: a term's raw count before `step`); "raw troops" |
+| command | (a) the capability a commander rolls (`command`: 27_MB_A); (b) a basis value `command` (A-22: whom a seat commands); (c) the typed conjunct `conjunct: command` on army rows ("the actor holds the army Record") | (a) 27_MB_A (R1); (b) SYN_C/BIND_D; (c) MIL_C/D | **three meanings in MIL_C/D**: `held_by ... conjunct: command` (c), `verb_capability recruit: command` (a), A-22's (b) |
+| hand | a seat or body whose entry a document needs (`passes_through`), and a person | BYZ_C | "hand" as a person (the Doux), "paper-hands" (A-13), `hand_term`; "hand" in `give` ("into his hand") |
+| hold | the `hold` Tenure kind; "holds held" | `04` §B.8 | "hold" as a draw outcome ("a position holds", A-79), "hold over" (a hand holds a paper: `document.held`) |
+| roll | (a) a dice roll; (b) a membership list kept by warrant (VEN_C: "roll keeps this file's meaning for the whole kit"); (c) the Roll (BYZ_A, withdrawn: a Record kind) | SYN_A X-04 | three senses; `Roll` capital in BYZ_A body |
+| `roga` | a court's yearly stipend; a scenario name | BYZ_B/F | Greek loan word; SYN_D "the `roga` scenario"; plain word "stipend" is used beside it (CLAUDE.md §4: coin nothing a plain word covers) |
+| `fisc`, `Kontor`, `rector`, `sekreton`, `catasto`, `veduto/seduto`, `residencia`, `visita`, `missus`, `dedizione`, `sindacato`, `commenda`, `capitulations` | historical terms used as labels in design prose and sometimes as ids | none | CLAUDE.md §4 word choice; the registry ids use plain words (`warrant`, `commission`, `tithe`); prose coinage should stay in the sources |
+| `instrument` / `form` / `dispensation` / `writ` / `paper` / `document` / `decree` / `order` | a `dispensation` Record naming a `form` (COL_A); `writ` = a dispensation as issued by `issue`; `decree` = the proclaimed kind; `order` = a writ the issuing seat commands | `rosters.yaml: record_kinds` | five words for the same Record kind across BIND_D, COL_A, PAP_D, BYZ_C; "order" also = order of battle, `order_unit`, `order:` (arrangement key) |
+| `basis` | (a) `basis` with value `command` or `purview` on a form/conjunct; (b) `bench_basis` (arrangement); (c) `conferral basis`, `revocation basis`, `binds_bases`, `patronage_bases` | `04` §C.2 | one word, four rosters |
+| `scope` | (a) `Seat.scope?` (purview, `04` §B.7); (b) CR-60 judging `scope:`/`scope_rung`; (c) "scale" | `04` §B.7 | PAP_A uses (b) with (a)'s name |
+| `establishment` | (a) a Query over `oblige` giving a seat's members (`04` §B.7 call 2; `world_q.establishment_of`); (b) OBS member 26 "a full household"; (c) COL_E "establishment of the conferred seat" | `04` §B.7 | (b) is a size of (a); not a conflict |
+| `wound` | (a) the **patient's** injury as an obstacle member for `tend` (MAT_A/OBS 28); (b) the actor's wound as a **level** on every roll (A-8) | OBS 28; A-8 | one word, two quantities |
+| `practice` | `world_q.practice(w, p, verb)`: counted good results; "practise" credit | `queries/world_q.py:4703` | `training.practised` kind (MIL_B) |
+| `trail`, `covert`, `kept`, `dues`, `breaches` | `epistemic.trail_of`; `covert_kinds`; `person_q.kept` (+/- per period); `world_q.dues` (clauses owed); `world_q.breaches` | COL_A | `breaches` vs `dues_unmet` (SYN lane note: two halves) |
+| `legitimacy` / `presumption` / `accomplishment` / `standing` (rank) | `person_q.legitimacy` with the chain term; `presumption_gain` the discount | SYN_B | `accomplishment` (COL_D, replaced), "the Roll" (BYZ_A) |
+| `conclave`, `election`, `consecration`, `acclamation`, `lot` | arrangement rows / a conferral basis | arrangements, `conferral_bases` | "election" also `conferral: elected` |
+| `Imperial Court`, `Ministries`, `Chancery`, `Inner Council` | `office_bodies` names | `rosters.yaml: office_bodies` | `Chancery` (VEN_E: citizen secretaries) vs "chancery" (BYZ_F scenario: a hand), `Ministries` (BYZ_C) |
+| `scene` | in BYZ_F/SYN_D "scenario" for a playable situation; in `04` §B.9 a unit of choice | `04` §B.9; `holonic` §0.4 (ED-IN-0302: Godot's word) | the institution files use "scenario" and "situation"; Layer 1's *scene* is a module's playable form |
+| `situation` / `case` / `case file` / `scenario` | FA-P4's `situation` function; ARCS-01 `case` delta; SYN_D "a scenario is a case file" | `12_ARCS_case_on_the_realm.md` (R2) | three words; SYN_D fixes: scenario = case file |
+
+## 5. Edges (test 5)
+
+`E` = EXISTS-IN-TREE (checked in `engine/season/` at `main`, or the file cites the opened line), `P` = PROPOSED (a proposal file, any lane), `M` = MISSING (neither in the tree nor in a proposal file; or only a v11 workplan position, `W`). "Hash" = movers the file declares. **Lane tag** is assigned by R4 (`[R4]`) where the file states none; the files state a lane tag only in cost-class lines ("Lanes: ..."). **Gate**: Y = an execution artifact with an expected reading is named. **Cost class / tier**: every file names a cost class (edit, small build, medium); **no file names a model tier** (CLAUDE.md §10). Dependency tokens: `SC-B` = `05_SC_obstacle_difficulty_and_modifiers_B.md` (R2), `OBS` = `U5c_SC_one_obstacle_form.md` (R2), `18-A` = `18_DETERMINISM_task_draw_for_uncontested_verbs.md` (R5), `FI-nn` = `08_FI_nn_*` (R2), `FA-Pn/Bn` = `06_FA_*` (R3).
+
+### 5.1 Residue and BINDING
+
+| id (file) | depends on | files it edits | hash | lane [R4] | gate | cost / tier |
+|---|---|---|---|---|---|---|
+| VRES | P: 18-A items 1-2, OBS §4 steps 0-2, SC-B, `05_SC_playable_hearing_B`, FI-01 e6 / FI-02 e5, `16_PESSIMIST_CORE_a_refusal_is_remembered`; E: `check_contest_prizes`, `data/verbs.py:848-851` (the refusals), `sigma.py`; W: CP-T06-04 (B10-14) | `rosters.yaml` (prizes), `manifest/registry.py` (`HEARD_BY_ROOMS` E = `{BENCH}`), `seam/wrappers/sigma.py::audience_of`, `person_q.present_persons` (M: FI-02), BIND_A | §3, §4 declared | IN [R4] | Y | edit / small; no tier |
+| RES-V | P: 18-A, `U5d_FA_land_and_seats_pass_on_a_won_march` (title write), `26_MASS_BATTLE_aggression_and_land` (R1), `27_MB_*` (R1), VRES; E: `world_q.mustered`, `effects_shared.occupying_faction`, `loop/sides.py::sides_of`; M: `world_q.passage_granted` (U5d decision 5, P) | `world_q.py` (`field_defender`, `may_ruin`, `mustered`), `verb_table.yaml` `march`, 8 verb files | none by shape; formation | MB [R4] | Y | edit / small; no tier |
+| BIND_A | P: SC-B edits 1-6 (A3), VRES §1-§2, OBS; E: `holdings_to_found` (`world_q.py:3524`), `founded_office_id` (`loop/predicates.py:260`), `own_hold_declines`; | `rosters.yaml`, `data/verbs.py`, `decision/options.py`, `verb_table.yaml`, `world_q.py`, `loop/predicates.py`, `loop/effects_governance.py`, `sigma.py` | 3 commits, each declared | FA | Y (`aperture 2 0/2 1`) | small; no tier |
+| BIND_B | P: SC-B (B4), `05_SC_acquittal`, `05_SC_arrangement_rows_that_bind`, `05_SC_playable_hearing_B`; E: `sittings_before` (`world_q.py:308`), `restrained` (`:1766`), `_eff_convene` | `effects_governance.py`, `data/verbs.py`, `rosters.yaml`, `world_q.py`, `verb_table.yaml`, `sigma.py` | B1..B4 each | FA | Y | small; no tier |
+| BIND_C | P: SC-B, VB-A e11, FA-P1..P4/B3/B4, CR-35/36/88 (W), `06_FA_seat_terms_*`; E: `_req_revoke`, `_eff_confer/_revoke/_succeed`, `successions` (1 row) | `fixtures.py`, `effects_shared.py`, `verb_table.yaml`, `rosters.yaml`, `data/rosters.py`, `state/gate.py` (struck, C-31) | C2..C4 movers | FA | Y | medium; no tier |
+| BIND_D | P: SC-B, FA-P1 (`06_FA_decree_binds`), `06_FA_remit_grant_by_row`; **M: CP-T09-08 (`dispatch` that sends; no `_eff_dispatch` in the tree)**, CP-T09-07 (W); E: `purview_reaches` (`gate.py:386`), `may_revoke` (`gate.py:830`) | `verb_table.yaml`, `world_q.py`, `state/gate.py` (`commands`, M), `data/requires.py`, `decision/options.py`, `rosters.yaml`, `effects_information.py` | D1..D4 | FA | Y | medium; no tier |
+| BIND_E | P: PHY_B (P-B), `06_FA_remit_grant_by_row`, `06_FA_levy_through_the_seat_B`, `04_MB_playable_field_scenario`, `U5d_FA_land_and_seats_pass_on_a_won_march`; E: `_eff_surrender` (`effects_information.py:1092`), `withheld_verbs` (`fixtures.py:1157`) | `data/verbs.py`, `world_q.py`, `rosters.yaml`, `verb_table.yaml`, `effects_information.py`, `sigma.py`, `fixtures.py` | E2, E3 each | FA | Y | small; no tier |
+
+### 5.2 MATERIAL, MILITARY, PHYSICAL
+
+| id (file) | depends on | files it edits | hash | lane [R4] | gate | cost / tier |
+|---|---|---|---|---|---|---|
+| MAT_A | P: SC-B / OBS, 18-A, VRES §1, `07_SE_kernel_repairs` §3, FI-01 e1 (`holders_named`, M in tree); E: `_rise/_fall` (`effects_economy.py`), `wounded_with` (`world_q.py:3792`) | `rosters.yaml`, `fixtures.py`, `effects_shared.py`, `effects_economy.py`, `effects_combat.py`, `world_q.py`, `sigma.py`, `verb_table.yaml` | 4 commits | SE | Y | small; no tier |
+| MAT_B | P: MAT_A §2, SC-B, `07_SE_arc_needs`, `07_SE_treasury_granary_B`, `07_SE_kernel_repairs` §2, CR-49 (W); E: `larders_in_purview` (`world_q.py:3402`), `_shift`, `_renewals` | `rosters.yaml`, `world_q.py`, `decision/options.py`, `fixtures.py`, `effects_*` | 3 | SE | Y | small; no tier |
+| MAT_C | P: MAT_A §2, S2_A e2, FI-04; E: `_eff_found/_eff_build` (`effects_founding.py`), `planned_works` (ED-IN-0297 closed) | `world_q.py`, `rosters.yaml`, `decision/options.py`, `verb_table.yaml`, `fixtures.py`, `effects_founding.py` | declared | SE | Y | small; no tier |
+| MAT_D | P: MAT_A §2, FI-01 e1, `08_FI_05_evidence-interface_B`, FI-02 §4, `02_CHAR_offer_what_can_be_done` item 5; E: `_eff_forge`, `_eff_survey`, `_eff_seize` | `rosters.yaml`, `world_q.py`, `person_q.py`, `effects_information.py`, `witness.py`, `fixtures.py`, `verb_table.yaml` | 5 | FI | Y | small, 5 movers; no tier |
+| MAT_E | P: MAT_D, MAT_A §2, FI-03, FI-04 §1-2, FI-06, CONC (`19_LACUNA_conclusion_is_a_committed_assertion`); E: `present_at` stem (`requires.py:852`), `_eff_utter` | `verb_table.yaml`, `data/verbs.py`, `loop/resolve.py::_fold`, `witness.py`, `person_q.py`, `world_q.py` | declared | FI | Y | small; no tier |
+| MIL_A | P: SC-B composer, 18-A, VRES §1, `27_MB_E_what_an_army_carries_back` (R1), `26_MASS_BATTLE_movement_and_fatigue_as_data` (R1), `16_PESSIMIST_MB_one_stamina_ledger` (R1), U1 (`wayfaring`); E: `_relocate` (`effects_migration.py`), `places_named` (`world_q.py:3318`) | `verb_table.yaml`, `world_q.py`, `effects_migration.py`, `effects_combat.py`, `rosters.yaml`, `requires.py` | 6 | MB | Y | small; no tier |
+| MIL_B | P: `01_CORE_capability_authoring_surface` Edit 9 (R2), MIL_A e6, SC-B, U1 (`trained_at`); E: `_eff_train` (`effects_combat.py:794`), `raised_capability` (`:262`), `practice` (`world_q.py:4703`) | `verb_table.yaml`, `rosters.yaml`, `sigma.py`, `effects_combat.py`, `world_q.py` | formation + execution | MB | Y | small; no tier |
+| MIL_C | P: `06_FA_levy_through_the_seat_B` (R3), MIL_A e6, `27_MB_A/E` (R1), `07_SE_campaign_supply_and_muster` (R3); **M: `state/gate.py::may_levy`, `may_wage`** (E: `world_q.raisable_by`, `world_q.py:2186`); E: `armyrecord.py`, `other_army_records`, `army_of` | `modules/mass_battle/armyrecord.py`, `world_q.py`, `requires.py`, `decision/options.py`, `verb_table.yaml`, `effects_army.py`, `effects_information.py`, **`loop/matter.py` (e6; F-R4-02)**, `fixtures.py` | 1 mover at shipped fixtures | MB | Y | small, 3 owners; no tier |
+| MIL_D | P: MIL_C (all), `04_MB_headcount_grade_and_scale` (R1), `27_MB_A/B/E`, `26_MASS_BATTLE_maneuver_orders` (R1) | `armyrecord.py`, `orderofbattle.py`, `requires.py`, `verb_table.yaml`, `rosters.yaml`, `effects_army.py`, `fixtures.py` | none at shipped | MB | Y | small; no tier |
+| PHY_A | P: lane A (`03_PC_duel_chain_reach`, R1), `06_FA_remit_grant_by_row`, `03_PC_duel_round_and_approach_B` (private stream), `03_PC_exits_withdrawal_recovery` Part B (R1); E: `_held_warrants` (`effects_information.py:948`), `violence_context_of` (`options.py:217`), `combat_input` | `world_q.py`, `effects_information.py`, `decision/options.py`, `verb_table.yaml`, `rosters.yaml`, `seam/wrappers/combat.py` (**F-R4-05**), `fixtures.py`, tests | declared re-records | PC | Y (four test files, unnamed) | build; no tier |
+| PHY_B | P: CR-91 (W), FA-B1 (`06_FA_war_lives_in_seats_B`), FA-P2, `04_MB_headcount_grade_and_scale` gate 2, RES-V; E: `sides_of` (`loop/sides.py:55`), `occupying_faction` (`effects_shared.py:149`) | `world_q.py`, `rosters.yaml`, `data/verbs.py`, `verb_table.yaml`, `loop/sides.py`, `effects_founding.py`, `fixtures.py` | all realm pins with `march`/`raze` | MB | Y | build; no tier |
+| PHY_C | P: FI-03 §2 (`observes:` column), FI-04; E: `covert_kinds`, `observers_for` (`witness.py`); M: the witness-channel roster (the file: "[name the roster at landing]") | `world_q.py`, `rosters.yaml`, `verb_table.yaml`, `witness.py`, `fixtures.py` | declared re-records | FI | Y | edit + small build; no tier |
+| PHY_D | P: FI-03 §2; stage 2: `09_WR_threadwork_module` (R3), CP-T07-02 (W, Coherence carrier H-47); **M: `_eff_thread_read`** (no body in tree) | `verb_table.yaml`, `rosters.yaml`, `requires.py` (maybe) | realm pins (4 sensitive persons) | WR | Y | edit / small build; no tier |
+
+### 5.3 SOCIAL1 and SOCIAL2
+
+| id (file) | depends on | files it edits | hash | lane [R4] | gate | cost / tier |
+|---|---|---|---|---|---|---|
+| S1_A | P: FI-02 e5 (`present_persons`, M in tree), `02_CHAR_offer_what_can_be_done` (R2) | `fixtures.py`, `person_q.py`, `decision/options.py`, `verb_table.yaml`, `hole_register.yaml` | declared | SC | Y | edit; no tier |
+| S1_B | P: S1_A, lane A step 1, FA-P1, VRES; E: `issuing_seat` (`world_q.py:1573`, **exists**), `purview_reaches`; W: CR-88 | `rosters.yaml`, `fixtures.py`, `verb_table.yaml`, `world_q.py`, `state/gate.py`, `effects_governance.py`, `effects_information.py`, `sigma.py`, `decision/options.py`, `choose.py` (F-R4-03) | declared | SC | Y | small; no tier |
+| S1_C | P: SC-B, lane A steps 3-4, S1_D (degree weight) | `rosters.yaml`, `fixtures.py`, `data/verbs.py`, `verb_table.yaml`, `person_q.py`, `sigma.py`, `witness.py`, `effects_information.py`, `choose.py` (F-R4-03) | declared | SC | Y | small | 
+| S1_D | P: S1_B (`served`), lane A step 2, PHY_A `accept`, CHAR `resolve`; `28_CORE_scene_access_*` (R2); E: `holds_dispute`, `held_against`, `deeds_judged` | `arrangements.yaml`, `data/arrangements.py`, `rosters.yaml`, `fixtures.py`, `verb_table.yaml`, `person_q.py`, `world_q.py`, effects (4), **`loop/matter.py`** | declared | SC | Y | small-medium; no tier |
+| S2_A | P: FI-02 e5, S2_B/C for kinds; E: `docket_question` (`world_q.py`), `Question.classes` | `rosters.yaml`, `world_q.py`, `verb_table.yaml`, `data/verbs.py` | declared (every world) | FI | Y | edit + small; no tier |
+| S2_B | P: S2_A e2, FI-01 e1/e6, `08_FI_05_evidence-interface_B` E-3; E: `_eff_utter`, `seed_acquaintances` (CR-81 precedent, `harness/populated.py`) | `verb_table.yaml`, `rosters.yaml`, `decision/options.py`, `effects_information.py`, `witness.py`, `person_q.py`, `populated.py` | declared at the shipped arm | SC | Y | small; no tier |
+| S2_C | P: S2_A, CR-61 (W), FI-02 e5, FI-06, SC-P3B hearing (R2), `05_SC_evidence_and_rebuttal_B` | `rosters.yaml`, `verb_table.yaml`, `effects_information.py`, `sigma.py`, `world_q.py`, `predicates.py`, `decision/options.py` | declared | SC | Y | small each | 
+| S2_D | P: FI-08 §3 (two conditions), FI-02 gate; M: IN-32 body (`53ed995d`, not in the shallow clone) | `verb_table.yaml`, `rosters.yaml`, `effects_information.py`, `decision/options.py`, `data/verbs.py` | verb count 67 -> 68 | FI | Y | small; no tier |
+
+### 5.4 INSTITUTIONS
+
+| id (file) | depends on | files it edits | hash | lane [R4] | gate | cost / tier |
+|---|---|---|---|---|---|---|
+| SYN_A | P: COL_A, SC-B / OBS, BIND_D e3-5, SYN_B, CR-36 (W) | `instruments.yaml` (M, new), `data/instruments.py` (M, new), `rosters.yaml`, `offices.yaml`, `data/rosters.py`, `state/carriers.py::Office`, `populated.py`, `fixtures.py`, `arrangements.yaml`, `world_q.py`, `person_q.py`, `state/gate.py` | EQUAL until used | FA | Y | edit + small; no tier |
+| SYN_B | P: SYN_A, CR-36 (W), `12_ARCS_case_on_the_realm` (prehistory), BIND_C e9, S2_B, `05_SC_evidence_and_rebuttal_B`; E: `person_q.legitimacy` (`:537`), `attributed_deeds` (`:158`) | `person_q.py`, `rosters.yaml` (`prehistory`), `npc_registry.yaml`, `populated.py`, `instruments.yaml`, `offices.yaml` | declared build mover | FA | Y | small; no tier |
+| SYN_C | P: SYN_A, VEN_A, PAP_D, COL_A, VEN_B, CR-60/88 (W) | `person_q.py::excused`, `instruments.yaml`, `data/rosters.py`, `arrangements.yaml` header | none until used | FA | Y | small | 
+| SYN_D | P: FA-P4/B4 (R3), `12_ARCS_case_on_the_realm`, all batches I-1..I-8 | `cases/exercises/*`, `harness/governance_spine.py`, `harness/institution.py` | none (harness) | FA | Y | small; no tier |
+| SYN_E | P: all 21 family files; the other-lane table (30+ edges) | none (plan) | — | IN | Y (SYN_D) | none; no tier |
+| BYZ_A | P: `06_FA_remit_grant_by_row`, BIND_C, `06_FA_office_capabilities` | `offices.yaml`, `rosters.yaml`, `fixtures.py`, `populated.py`, `person_q.py`, `predicates.py`, `effects_governance.py` | build | FA | Y | small | 
+| BYZ_B | P: BYZ_A, `07_SE_treasury_granary_B`, MAT_B; E: `upkeep_of` (`world_q.py:2748`), `_renewals`, `Office.upkeep` | `offices.yaml`, `world_q.py`, `effects_economy.py`, `loop/matter.py` (F-R4-02), `verb_table.yaml` | any `requisition` | FA | Y | small |
+| BYZ_C | P: `06_FA_decree_binds`, BIND_D, S1_D (`carry`), `13_SC_draw_for_unrolled_contests`; E: `_declared_stages` (`effects_information.py:177`) | `offices.yaml`, `rosters.yaml`, `effects_information.py`, `verb_table.yaml`, `data/requires.py`, `loop/matter.py`, `world_q.py` | any seat with `passes_through` | FA | Y | small |
+| BYZ_D | P: BYZ_C, CP-T09-03 / CP-T09-08 (W); E: `foreign_seats`, `foreign_cast` | `npc_registry.yaml`, `rosters.yaml`, `offices.yaml`, `populated.py` | foreign-arm build | FA | Y | edit + small |
+| BYZ_E | P: BYZ_A, BIND_C, `05_SC_arrangement_rows_that_bind`, CR-35/37 (W); E: `may_claim` (`gate.py:770`, not opened) | `arrangements.yaml` + (rows are BIND_C's) | any `succeed`/`revoke` | FA | Y | small |
+| BYZ_F | P: BYZ_A/B/C, FA-P4/B4 | `harness/governance_spine.py` (superseded by SYN_D) | none | FA | Y | small |
+| BYZ_G | P: BYZ_A..F, X-12 key (VEN_C/COL_C), COL_A `staple` form | `offices.yaml`, `goals.yaml`, report | EQUAL with rows absent | FA | Y | edit |
+| COL_A | P: S1/S2 formation, BIND_*, FA-P1 | `instruments.yaml` (M), `data/instruments.py` (M), `data/files.py`, `data/__init__.py`, `rosters.yaml`, `world_q.py`, `person_q.py` | EQUAL empty | FA | Y (`test_instruments.py`) | small |
+| COL_B | P: SC-B / OBS, CR-29 (W), FA-P6, MAT_B/MAT_D/BIND_D; E: `adjacent_territories` (`geography.py:43`); **M: `world_q.root_of`** | `world_q.py`, `rosters.yaml`, `fixtures.py`, `offices.yaml`, `npc_registry.yaml`, `goals.yaml`, `epistemic.py` | declared | FA | Y (`test_remove.py`) | small |
+| COL_C | P: SC-P4, `05_SC_acquittal`, SC-B, FA-P3, CR-60/61 (W) | `arrangements.yaml`, `fixtures.py`, `offices.yaml`, `effects_information.py::_disposal` | EQUAL until docketed | FA | Y (`test_audit_and_charter.py`) | edit + small |
+| COL_D | P: SYN_B, COL_A, `12_ARCS_case_on_the_realm`; E: `deeds_judged` | `person_q.py`, `populated.py`, `offices.yaml`, `rosters.yaml` (`successions`), `state/gate.py` | build mover | FA | Y (`test_accomplishment.py`, stale) | small |
+| COL_E | P: COL_A..D, FA-P4, `07_SE_valley_scenario`; M: CR-29 (W), ED-IN-0317 | `cases/exercises/INST-COLONIAL-01.yaml`, `harness/institution.py` | none | FA | Y | small |
+| COL_F | P: COL_A..E, VEN_E; W: CP-T09-08 | `instruments.yaml`, `data/instruments.py`, `world_q.py::dues`, `person_q.py::kept`, report | EQUAL absent | FA | Y | small |
+| PAP_A | P: CR-60, CR-74 (W), FA-P2; E: `ROLE_TEMPLATE_OF` (`data/rosters.py`) | `npcs.yaml` (**F-R4-14**), `offices.yaml`, `arrangements.yaml` comment, `harness/strife_moves.yaml`, `harness/strife.py` | build (one person) | FA | Y | edit |
+| PAP_B | P: CR-35 (W), SC ballot (`13_SC_draw_for_unrolled_contests`), BIND_C; E: `may_fill` (`gate.py:845`), `FILLED_BY` (`gate.py:697`) | `rosters.yaml`, `state/carriers.py`, `state/gate.py`, `populated.py`, `offices.yaml`, `arrangements.yaml`, `data/arrangements.py`, `effects_information.py` | declared | FA | Y | small |
+| PAP_C | P: CR-36 (W), SC-P8 / `12_ARCS_cited_evidence`, S2_B | `offices.yaml` (replaced by `instruments.yaml`), `populated.py`, `arrangements.yaml`, `goals.yaml` | build | FA | Y | small |
+| PAP_D | P: FA-P1, SC-P4, SC-P6, CR-60, CR-88 (W), BIND_B/D | `verb_table.yaml`, `effects_information.py`, `effects_governance.py`, `rosters.yaml`, `arrangements.yaml`, `decision/options.py`, `fixtures.py`, `sigma.py`, `harness/strife_moves.yaml` | declared | FA | Y | small |
+| PAP_E | P: PAP_B, FA-P1..P3, BIND_A, CP-T08-07 (W) | `offices.yaml`, `rosters.yaml`, `goals.yaml` | build (three Offices) | FA | Y | edit |
+| PAP_F | P: FA-P4, PAP_A/B, BIND_C, CR-88 (W) | `harness/governance_spine.py` | none | FA | Y | small |
+| PAP_G | P: PAP_B, PAP_D, PAP_E; W: `workplans/valoria_master_workplan_v11_part12.md:366` | `data/arrangements.py`, `effects_information.py`, `arrangements.yaml`, `verb_table.yaml`, `rosters.yaml` | EQUAL absent | FA | Y | small |
+| VEN_A | P: SC-B / OBS (roster), SC-P1 (`05_SC_contest_record_on_event`) | `rosters.yaml`, `fixtures.py`, `person_q.py`, `sigma.py`, `modules/social_contest/roll.py` | EQUAL at ship | FA | Y | small |
+| VEN_B | P: VEN_A, SC-P4, SC-P6, `07_SE_treasury_granary_B`; E: `_eff_covenant`, `_eff_transfer`, `_eff_requisition` | `rosters.yaml`, `effects_information.py`, `world_q.py`, `effects_economy.py`, `loop/matter.py` (F-R4-02), `arrangements.yaml`, `fixtures.py` | EQUAL when no act names `kind` and `amount` | FA | Y | small |
+| VEN_C | P: FA-P3, FA-B3, CR-35/36 (W), SC ballot, BIND_B | `rosters.yaml`, `offices.yaml`, `data/rosters.py`, `state/carriers.py`, `state/gate.py`, `predicates.py`, `effects_governance.py`, `matter.py`, `world_q.py` | EQUAL with keys null | FA | Y | small + design-first (e8) |
+| VEN_D | P: VEN_A/B/C, FA-P2, `06_FA_office_capabilities`, MAT_B rate roll (held), `09_WR` place for Schoenland | `populated.py::resolve_anchor`, `offices.yaml`, `rosters.yaml`, `arrangements.yaml`, `governance_spine.yaml` | each row | FA | Y | edit + small |
+| VEN_E | P: COL_A, COL_C, SYN_A, FA-P2/P3, VEN_B/D | `offices.yaml`, `instruments.yaml`, `arrangements.yaml`, `world_q.py::clauses_binding` | EQUAL absent | FA | Y | edit + small |
+
+Cycle check (this lane's edges only): no cycle among the 59. The edges that **close** a loop with another lane are listed in section 6/7b for U3: VRES §2 <-> OBS (`rank_gap` vs `standing`); BYZ_B e5 <-> MAT_B (`requisition.rendered`); BIND_E <-> PHY_B <-> U5d land proposal (title in the fold vs A-66's act); BIND_C e7 (gate clause) <-> C-31 (resolved, struck).
 
 <!-- R4-END -->
