@@ -47,6 +47,28 @@ and it edits the suite's own documents to make them agree. It changes no code an
    authoring, verbs working) is traced through the suite to the proposals that carry it, and gaps are
    named.
 
+
+## Closure rule and the extended authority (Jordan, 2026-11-12: *"Fable permission to resolve all issues/gaps/findings as required while ensuring commensurate"*)
+
+Fable lanes may now **resolve every issue, gap and finding in the suite** as required, and must do so
+**commensurately** (the eight tests above). Resolve means: decide it (five-step ladder), write or amend the
+proposal that carries the exact edit at the single owner, and edit the suite documents that contradict the
+decision. It is still proposal form for code, registries and canon (no lane edits code, canon, a registry or
+a ruling; implementation lanes land proposals); a resolution that would overwrite ratified canon, a `(RULED)`
+item or a ratified Layer 1 rule is written as a proposal AND listed with its two options for Jordan.
+
+**Closure.** Every finding in every audit and addendum (`F-*`, `G-*`, `R-*`/resolution rows, census rows,
+pessimist findings, happenings, determinism items, survivors) ends with exactly one disposition, recorded in
+`unified/U5_FINDINGS_CLOSURE_<FAMILY>.md` (a table: finding id, one-line claim, disposition, carrying
+proposal file and section, evidence): **RESOLVED-BY** (a proposal that carries the exact edit and gate),
+**SUPERSEDED** (by a later finding or decision; cite), **STALE / FALSE-POSITIVE** (evidence at HEAD),
+**DISPUTED** (your evidence; the finding stays, marked), or **JORDAN** (two options; survives the ladder).
+A finding with no carrying proposal gets one written by the closing lane, so that nothing is left open
+without a reason. Duplicates across lanes are merged under one decision and cross-referenced. Closure
+families: U5a CORE, CHAR, DICE, tests, census; U5b PC, MB, verbs MILITARY/PHYSICAL; U5c SC, FI, LACUNA,
+verbs SOCIAL/BINDING/MATERIAL; U5d FA, SE, WR, GO, institutions, ARCS, narrative, procedural, happenings,
+determinism, pessimist (all scopes), story enablement.
+
 ## The unification lanes (each edits only the suite directory, never code or canon)
 
 - **U1 Owners, vocabulary and the authoring surface.** The fact-to-owner ledger for every proposal; the
