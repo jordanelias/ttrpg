@@ -234,7 +234,7 @@ SERIAL EDGES (written after the position table, E-11): B24a.01 → B24a.02 (CR-6
   With other batches, by file: `verb_table.yaml` (`requisition`) B12c.13 → B24a.01 (the same step: B12c merges first; B24a adds a conjunct and a refusal clause to the row B12c rewrote); `arrangements.yaml`, `data/arrangements.py` B24 (B24.09's `rites: default`) → B24a.04 → B27; `loop/effects_information.py` B24 → B24a → B25 → B27 → B28; `state/gate.py` B21 → B21c → B24a → B27; `offices.yaml` B04 → B21 → B21c → B24a; `rosters.yaml: record_kinds` B24a → B28.
 PARALLEL: S15 with B12c (SE+WR), B18 (PC), B19 (MB), B21d (FA), B41 (GO). Shared: `verb_table.yaml` and `rosters.yaml` with B12c (`requisition`, `obstacle_terms` appends) and B18 (`rosters.yaml` keys `arms_kinds`, `lifepath_templates`); `state/gate.py` with B21d if its CR-88/CR-89 items edit it (the coordinator checks at the step's open). Movers merge in §2.1's order: B12c, B18, B19, B21d, B24a, B41; B24a rebases on B21d's merge (the last mover before it) and re-pins once.
 COST: builds; producer `valoria-author` on `sonnet`, `high`; every carried entry's BUILDER is "third tier (judgment)": `opus` reads each item's resolution and gate (CR-58's discriminator, CR-60's authority conjunct, CR-62's dominance sweep, CR-63's rows); CR-67's design `opus` with a `ners` critic; the close's terminal critique `opus`.
-EST: 6.5 h [estimate: §2.4's formula over this block's 10 positions, 0.4 h × 10 + 2.5 h]
+EST: 6 h [estimate: §2.4's formula over this block's 9 positions, 0.4 h × 9 + 2.5 h]
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|

@@ -1,0 +1,391 @@
+# The master findings — part 3: the findings by subsystem (CORE, CHAR)
+
+## Status: REFERENCE (part 3 of `master/MASTER_FINDINGS.md`; the row tables are generated from the closure tables `unified/U5_FINDINGS_CLOSURE_U5a.md`..`_U5d.md` by the lane's scratch extract, the syntheses written by lane MF; resolves nothing at runtime; dies with the suite)
+
+Columns and order are the head part's §0. **evidence**: the closure row (`U5a:66` = `unified/U5_FINDINGS_CLOSURE_U5a.md` line 66), then the audit line that defines the finding where the extract found it (`audits/` implied), then the closure row's own evidence, cut to one line. **sev**: B blocks a requirement · D degrades narrative · C code matter · M design matter · H hygiene · — ungraded. **carrier**: the closure row's carrier cell, cut to one line (its short names are the closure table's, defined at the head of that table's section). **batch**: v12's handle; `→` before it on a SUPERSEDED row (the successor's batch); `— (stale)`, `— (disputed)`, `— (answered …)` where no fix is owed. Claims are the closure tables' one-liners, cut at about a hundred characters.
+
+
+---
+
+## CORE — the season kernel, its instruments and tests
+
+<!-- SYNTHESIS:CORE -->
+
+**Rows: 238** (RESOLVED-BY 169 · SUPERSEDED 39 · STALE/FP 26 · DISPUTED 0 · JORDAN 4).
+
+| # | id | claim | sev | R | evidence | disposition | carrier | batch | owner |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | F-CORE-03 | THE NINE's statuses are strings; R-01/R-02 `met` lack a control | B | R-01, R-02 | `U5a:64` · `01_CORE_audit.md:167` · `register.py:631-701` executes nothing; the pessimist's knockout arms read 0 /… | RESOLVED-BY | record shape: `01_CORE_requirements_reading_record.md` §1. R-01/R-02 measure: `16_PESSIMIST_CO… | B02 | IN |
+| 2 | F-TEST-01 | no test asserts a requirement on a played world at the shipped configuration | B |  | `U5a:266` · `01_CORE_audit_addendum_C_tests.md:78` · realm probe seeds 0–2: 134 / 141 / 162 against 0 with WITNESS cut | RESOLVED-BY | T3 rows 1–3, 8; the red-today falsifiers named there are gates of other proposals (R-04: FA's;… | B10, B02 | IN |
+| 3 | F-PES-CORE-04 | the nine's gate accepts `met 9` on a module that does not exist | B |  | `U5a:302` · `16_PESSIMIST_CORE.md:475` · `req_forge.py`: arms B, C, D exit 0 | RESOLVED-BY | `16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md` Edit 1 | B02 | IN |
+| 4 | F-TEST-01 confirmed (DG1–DG5); its stru… | nearly every file says no test asserts a verb executed in the seed-0 realm | B |  | `U5a:825` · `01_CORE_audit_addendum_C_tests.md:78` · DG2 leads, first row | RESOLVED-BY | T3 rows 1–3. No conflict with the ruling: it relaxed a plan position's exit; T3 asserts two re… | B02 | IN |
+| 5 | F-TEST-01 qualified (DG2) | three played tests exist that addendum §3 does not list (`test_in50…:209-224`, `test_in57…:427-444`, `te… | B |  | `U5a:826` · `01_CORE_audit_addendum_C_tests.md:78` | STALE/FP | — the addendum's sentence is too strong by three tests on played corpus or realm worlds; none… | — (stale) | IN |
+| 6 | F-CORE-05 | the play surface is a seam with no client | B |  | `U5a:66` · `01_CORE_audit.md:206` · no `input(` under `engine/season`; `dispatching_chooser` has test callers only | RESOLVED-BY | `11_GO_player_surface_contract_B.md` §8 (the transcript runner in `harness/play_surface.py`);… | B34, B03 | GO |
+| 7 | F-CORE-21 | the loop check passes on six cycles of 39,482 and cannot see the loops that run away | B |  | `U5a:166` · `01_CORE_audit_addendum_B.md:257` · `harness.loops`: +4, −2, ?39,476 | RESOLVED-BY | workplan CR-98 (B11-F2) with the input in `U5a_CORE_owed_edits.md` §D | B03, B11, B11F2 | IN |
+| 8 | F-CORE-13 | one module is a playable scene, three are calls | B |  | `U5a:158` · `01_CORE_audit_addendum_B.md:114` · `seam/wrappers/combat.py:394-395`; `mass_battle.py:361-363` | RESOLVED-BY | `01_CORE_one_scene_contract.md` Edits 1–4, reconciled with `11_GO_player_surface_contract_B.md… | B34, B24 | GO |
+| 9 | F-CORE-02 | the corpus runs one template 143 times and checks no case need | B |  | `U5a:63` · `01_CORE_audit.md:149` · `corpus_run` seed 0: `RUNS-UNDECLARED 103 · SPAN-UNAUTHORED 40`; `exercises`: 3… | RESOLVED-BY | `01_CORE_case_setup_and_beats.md` · Resolution, Edits 1–5 | B39 | WR |
+| 10 | F-PES-CORE-02 | no receipt carries a value | D | R-01, R-02 | `U5a:300` · `16_PESSIMIST_CORE.md:463` · 36,586 of 36,586 `delta=None` | RESOLVED-BY | `16_PESSIMIST_CORE_the_record_holds_what_changed.md` Edit 1 | B09 | IN |
+| 11 | F-CORE-20 | a need propagates to the one who could meet it and is not met | D | R-01, R-04 | `U5a:165` · `01_CORE_audit_addendum_B.md:229` · `harness.scarce`, seed 0, four seasons: no relief unassisted; ordering experime… | RESOLVED-BY | `01_CORE_unmet_need_is_attended_first.md` (attention order) with `02_CHAR_goal_lean_on_its_own… | B10 | IN |
+| 12 | F-PES-CORE-01 | a refusal does not teach: 41 % retried, 96 % of retries refused | D | R-06, R-07, R-08 | `U5a:299` · `16_PESSIMIST_CORE.md:455` · `run_dump.py 0 3`; `p34.py 0 2`: 8 % retry where the failing read is deposited,… | RESOLVED-BY | `16_PESSIMIST_CORE_a_refusal_is_remembered.md` (reads present confidence through `01_CORE_clai… | B09 | IN |
+| 13 | F-PES-CORE-03 | the interior (scar, conviction crisis) is not in the log | D | R-07 | `U5a:301` · `16_PESSIMIST_CORE.md:469` · 3,914 of 40,494 receipts on no Event, all `Person.scar` | RESOLVED-BY | same file Edit 2; as reconciled (C-U5a-09): this edit emits `scar.taken` only, logged and fann… | B34 | GO |
+| 14 | F-CORE-06 | the round count caps a budget the design varies by office | D |  | `U5a:67` · `01_CORE_audit.md:219` · `driver.py:479`, `deliberate.py:287`. Layer-1 note: the office term departs fro… | RESOLVED-BY | workplan IN-14 (B10-16, delegated-ruled); suite input `U5a_CORE_owed_edits.md` §H | B03 | IN |
+| 15 | F-CORE-04 | in computed play 72 % of graded acts fail and almost nothing is told | D |  | `U5a:65` · `01_CORE_audit.md:194` · corpus seed 0: Failure 1,552 of 2,152; `told_by` 64 of 93,760; addendum B C4 ad… | RESOLVED-BY | core's share: `01_CORE_case_setup_and_beats.md` (cast capability in `setup:`); the capability… | B04, B39 | IN |
+| 16 | F-CORE-01 | the log is mostly memory-fade bookkeeping; cost grows with history | D |  | `U5a:62` · `01_CORE_audit.md:128` · growth probe, seed 0, 8 seasons: `claim.decayed` 938 of 1,164 new entries in se… | RESOLVED-BY | `01_CORE_claim_fade_as_read.md` · Edits 1–5, Gate | B09 | IN |
+| 17 | F-CORE-12 | the reason for an act (occasion, on whose behalf, deciding term) is not in the world | D |  | `U5a:157` · `01_CORE_audit_addendum_B.md:81` · `probe_reason.py`: driver holds 8/18/28 Scenes; 4 act Events cite the act alone… | RESOLVED-BY | `01_CORE_reason_trail_in_the_act_store.md` Edits 1–5 (occasion, stored with the Scene); the de… | B09 | IN |
+| 18 | F-CORE-14 | a governance refusal cannot say which clause refused; four predicates crash on a list operand | D |  | `U5a:159` · `01_CORE_audit_addendum_B.md:132` · `probe_predicates.py`: four `TypeError`; 21 bare `return False` | RESOLVED-BY | `01_CORE_predicates_name_their_clause.md` Steps one and two | B09 | IN |
+| 19 | F-CORE-08 | size: the mechanism is proportionate, the prose is not | C |  | `U5a:69` · `01_CORE_audit.md:235` · `sloc.py`: 13,982 executable game lines; four stale claims cited at their lines | RESOLVED-BY | `U5a_CORE_owed_edits.md` §B rows 1–3 (the four stale comments). The rest is accepted with no a… | B03 | IN |
+| 20 | F-CORE-09 | per-access scans on the hot path; `TRACE` grows unbounded | C |  | `U5a:70` · `01_CORE_audit.md:266` · `world.py:455-471`; pessimist E-04 was OOM-killed holding `TRACE.rows` (corrobo… | RESOLVED-BY | `U5a_CORE_owed_edits.md` §C | B03 | IN |
+| 21 | F-PES-CORE-07 | the stored plan tail is never used | C |  | `U5a:305` · `16_PESSIMIST_CORE.md:488` · 0 of 1,137 releases from a stored queue; cut reproduces four hashes | RESOLVED-BY | `16_PESSIMIST_CORE_no_stored_plan.md` | B03 | IN |
+| 22 | F-CORE-15 | the capability a roll reads has one reader and six authors | C |  | `U5a:160` · `01_CORE_audit_addendum_B.md:155` · inline census: 11 contested verbs, 9 with a capability row; Endurance default 1… | RESOLVED-BY | `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` (the decided home and schema); `01_CORE_capa… | B04 | IN |
+| 23 | F-CORE-18 | a verb's facts live in its row and in fourteen rosters keyed by verb | M |  | `U5a:163` · `01_CORE_audit_addendum_B.md:193` · `data/verbs.py:1191-1895`; fourteen loaders for twenty-seven facts | RESOLVED-BY | the capability roster: U1 architecture §3 (a `capability:` column on the verb row); the declin… | B10 | IN |
+| 24 | F-CORE-22 | `arms` cannot tell a null from a fake control | H |  | `U5a:167` · `01_CORE_audit_addendum_B.md:282` · `arms.py:288-310` prints no count of fought fields | RESOLVED-BY | `U5a_CORE_owed_edits.md` §B row 13; the dead pair leaves by `01_CORE_tests_delete_what_cannot_… | B02, B03 | IN |
+| 25 | F-TEST-12 | tests kept green by reverting a shipped change; one escape hatch | H |  | `U5a:277` · `01_CORE_audit_addendum_C_tests.md:216` · `revert_cr87`, `revert_cp_t05_02`, `… or fixed.events == 0` | RESOLVED-BY | T3 rows 7–9 | B02 | IN |
+| 26 | F-TEST-12 confirmed; `test_rem31_grid_s… | a further file kept green by reverting three shipped changes | H |  | `U5a:838` · `01_CORE_audit_addendum_C_tests.md:216` | RESOLVED-BY | T3 rows 7–9; TDA §D row D1 | B02 | IN |
+| 27 | F-CORE-07 | the contest depth cap decides nothing | H |  | `U5a:68` · `01_CORE_audit.md:226` · hash identical at depth 1, 2, 3, 7 (seed 0, 2 seasons) | RESOLVED-BY | `U5a_CORE_owed_edits.md` §A row 1 (strike H-87's sweep as a fake control; keep the signature,… | B03 | IN |
+| 28 | F-CORE-11 | two gate conformance gaps (H-145 closure-write receipt; H-220 no kind check at append) | H |  | `U5a:72` · `01_CORE_audit.md:284` · `world.py:1394-1395,1494`; `log.py:64-101` | RESOLVED-BY | H-220: `U5a_CORE_owed_edits.md` §E row 2. H-145: workplan NM-W9 (B10-19, HELD), which `16_PESS… | B09, B03 | IN |
+| 29 | F-CORE-19 | stale counts and claims at the owners; S27.4's second site | H |  | `U5a:164` · `01_CORE_audit_addendum_B.md:207` · lines cited in the finding | RESOLVED-BY | `U5a_CORE_owed_edits.md` §B rows 7–12 | B03 | IN |
+| 30 | F-PES-CORE-08 | an old Event's place is wherever its actor is now | H |  | `U5a:306` · `16_PESSIMIST_CORE.md:493` · 39 of 831 season-0 act Events answer a different place a season later | RESOLVED-BY | `U5a_CORE_owed_edits.md` §B row 17 (`event_place_at`), read first by the reason trail's chroni… | B11, B03 | FI |
+| 31 | F-PES-CORE-10 | at `scene_budget = 0` MATTER's Events are witnessed by nobody | H |  | `U5a:308` · `16_PESSIMIST_CORE.md:503` · `extremes.py` | RESOLVED-BY | `U5a_CORE_owed_edits.md` §B row 18 (the fixture refuses `< 1` where it is read) | B03 | IN |
+| 32 | F-CORE-10 | the seam reads provider results by key presence; combat seeds its own generator | H |  | `U5a:71` · `01_CORE_audit.md:276` · `seam/ladder.py:247-264`; `seam/wrappers/combat.py:388-397` | RESOLVED-BY | typed outcomes: `03_PC_typed_outcome_one_door.md`, `04_MB_typed_outcome_and_one_path.md` (U5b'… | B17, B14, B06 | MB |
+| 33 | F-PES-CORE-09 | the five strata and fold order decide almost nothing | H |  | `U5a:307` · `16_PESSIMIST_CORE.md:498` · `ordp.py 0 1` | STALE/FP | the figure (1 act in 175) is the input `18_DETERMINISM_rival_acts_in_one_fold.md` asked for; P… | — (stale) | IN |
+| 34 | 6 | R-01/R-02 re-pointed to a reading with a planted control | — | R-01, R-02 | `U5a:107` | SUPERSEDED | by the knockout reading (`16_PESSIMIST_CORE_the_nine_gate…` edits 2–3) and the realm tests (`0… | → B02 | IN |
+| 35 | 7 | R-05's figure follows the tree | — | R-05 | `U5a:108` | RESOLVED-BY | `01_CORE_requirements_reading_record.md` §1 (the example row) | B02 | IN |
+| 36 | F-TEST-05 | R-07's measure begins with a substring test | — | R-07 | `U5a:270` · reachability probe: `World` reachable from `v` and `ask_budget` | RESOLVED-BY | T2 rows 3–4 | B02 | IN |
+| 37 | T-01 … T-07 | deletions and the R-07 measure | — | R-07 | `U5a:278` | RESOLVED-BY | T2 rows 1–7 | B02 | IN |
+| 38 | F-CORE-16 | the verb table's `scale:` column is refused by Layer 1 in terms | — | R-07 | `U5a:161` · `04` §A.3 row 4, §B.13 #10; 15 rows carry the key at this tree (the workplan en… | RESOLVED-BY | workplan CR-07 (B10-Z, HELD); precondition and order in `U5a_CORE_owed_edits.md` §E row 3 | B03, B10 | IN |
+| 39 | 5 | one typed `reading:` per row | — |  | `U5a:106` | RESOLVED-BY | `01_CORE_requirements_reading_record.md` §1 | B02 | IN |
+| 40 | F-TEST-02 | one trajectory pinned in six files; 20 of 28 hash tests read a world nobody plays | — |  | `U5a:267` · `probe_hash_pins.py` | RESOLVED-BY | T1 A–C | B02 | IN |
+| 41 | F-TEST-03 | corpus count pins cannot separate a re-roll from a regression | — |  | `U5a:268` · the re-pin log at `test_season_shape.py:9199` | RESOLVED-BY | T1 D | B02 | IN |
+| 42 | F-TEST-04 | two test files whose subject is archived prose | — |  | `U5a:269` · `test_knot_pool_formula.py` green on a formula the code deleted | RESOLVED-BY | T2 rows 1–2 | B02 | IN |
+| 43 | F-TEST-06 | the invariant sweep runs on a world with no office | — |  | `U5a:271` · headless: 0 offices; realm: 34 | RESOLVED-BY | T3 row 4 | B02 | IN |
+| 44 | F-TEST-07 | three loops assert on whatever they are handed | — |  | `U5a:272` · `probe_vacuity.py`: `mustered -> []` green | RESOLVED-BY | T3 row 5 | B02 | IN |
+| 45 | F-TEST-08 | the dice golden is 58 % rows the engine refuses or contradicts | — |  | `U5a:273` · 1,758 rows, 735 live | RESOLVED-BY | T1 E (ordered after SC-P2's kernel retirement for `TestPoolAwareDegree`) | B02 | IN |
+| 46 | F-TEST-09 | eight tests assert a substring of source text | — |  | `U5a:274` · §7 table | RESOLVED-BY | T2 row 3 | B02 | IN |
+| 47 | F-TEST-10 | a test keeps a retired symbol importable; a standing non-strict `xfail` | — |  | `U5a:275` · run: `XFAIL` | RESOLVED-BY | T2 rows 5–6 (row 6 is MB's file; U5b lands it) | B02 | IN |
+| 48 | F-TEST-11 | thirteen skips on an absent combat engine | — |  | `U5a:276` · nine sites in `test_season_shape.py`, four other files | RESOLVED-BY | T3 row 6 | B02 | IN |
+| 49 | T-08 … T-11 | one golden owner; revert stacks deleted; count pins deleted; dead golden rows deleted | — |  | `U5a:279` | RESOLVED-BY | T1 A–E | B02 | IN |
+| 50 | T-13 … T-21 | shipped-world falsifiers; strengthened loops; skips to fails; reverted fixtures replaced | — |  | `U5a:281` | RESOLVED-BY | T3 rows 1–9 | B02 | IN |
+| 51 | §3 R-04 / R-07 (feeling, attitude) / R-… | — | — |  | `U5a:283` | RESOLVED-BY | T3's "Not written here" list names each as the gate of its owning proposal; see F-TEST-01 | B02 | IN |
+| 52 | F-TEST-02 confirmed and widened (DG1, D… | the same literals in more files; revert stacks up to 8 deep; 204 re-pin lines in one file | — |  | `U5a:827` | RESOLVED-BY | T1 A–C; TDA §D row D2 | B02 | IN |
+| 53 | F-TEST-02 qualifier (DG3) | two more literals pin the shipped realm (arm off) | — |  | `U5a:828` · the digest's own `[UNVERIFIED by run]` | RESOLVED-BY | TDA §F (evidence corrected; T1 unchanged) | B02 | IN |
+| 54 | F-TEST-03 widened (DG2, DG4, DG5) | some thirty further count pins with re-pin logs | — |  | `U5a:829` | RESOLVED-BY | T1 D; TDA §E (the rule per pin) | B02 | IN |
+| 55 | F-TEST-04 confirmed (DG6) | two test files of archived prose; about 60 exemption strings | — |  | `U5a:830` | RESOLVED-BY | T2 rows 1–2 | B02 | IN |
+| 56 | F-TEST-05 / F-TEST-09 extended (DG1–DG5) | about twenty further source-text assertions | — |  | `U5a:831` | RESOLVED-BY | T2 row 3; TDA §B (mutate, then delete only what a behaviour test covers) | B02 | IN |
+| 57 | F-TEST-06 confirmed (DG6) | the sweep runs on a world with no office | — |  | `U5a:832` · `test_season_invariant_sweep.py:55` | RESOLVED-BY | T3 row 4 | B02 | IN |
+| 58 | F-TEST-07 extended (DG1, DG2, DG4, DG5,… | further loops and assertions that cannot fail | — |  | `U5a:833` | RESOLVED-BY | T3 row 5; TDA §A rows A1–A7. `test_strife_kinds.py:126-127` is sound (opened: the control of t… | B02, B03 | IN |
+| 59 | F-TEST-08 confirmed (DG5) | 768 + 255 dead golden rows | — |  | `U5a:835` | RESOLVED-BY | T1 E as reconciled (C-U5a-13: the golden is regenerated under A-5) | B02 | IN |
+| 60 | F-TEST-10 confirmed; three strict known… | `conftest.py:34-44`; the reverse guard was dropped (ED-IN-0312) | — |  | `U5a:836` | RESOLVED-BY | T2 rows 5–6; the three entries are MB's (U5b; ED-MB-0061). No guard over the known-red list is… | B02 | IN |
+| 61 | F-TEST-11 extended (DG1, DG2, DG4, DG5) | skip sites in fixture form | — |  | `U5a:837` | RESOLVED-BY | T3 row 6; TDA §C | B02 | IN |
+| 62 | §3 R-02 "yes, narrowly" (DG4) | the fork test's no-deposit arm diverges as often as the shipped arm | — |  | `U5a:839` · 10 of 33 against 10 of 36; 0 of 733 | RESOLVED-BY | TDA §F row F2 (the reading record says what each test attributes); T3 row 2 is the test that v… | B02 | IN |
+| 63 | §3 R-03 (DG4) | the round stamp has no discriminating arm (H-172); the fingerprint skip is falsified for one term of six | — |  | `U5a:840` · register row opened | RESOLVED-BY | TDA §G; `16_PESSIMIST_CORE_no_stored_plan.md` (the skip and its test go) | B03, B02 | IN |
+| 64 | §3 R-07 "no test" (DG2, DG3, DG5) | tests of stance, regard, opinion and reception exist at the mechanism | — |  | `U5a:842` · `test_told_by_channel.py:1964`, opened | STALE/FP | TDA §F row F1 (R-07's `measure:` gains the realm reader); the absent half is the gate of `02_C… | — (stale) | IN |
+| 65 | R-04 evidence (DG1, DG2, DG4, DG5) | every governance verb is folded from hand-built acts | — |  | `U5a:843` | SUPERSEDED | FA's gate (T3 "Not written here"; U5d) | → B02 | IN |
+| 66 | the ladder's pool-aware "declared exten… | 5.2 Cross-subsystem leads | — |  | `U5a:870` | RESOLVED-BY | `U5a_DICE_owed_edits.md` §3 (the `extension` parameter is deleted); T1 E | B05, B02 | IN |
+| 67 | hunger is erased inside the season; wea… | 5.2 Cross-subsystem leads | — |  | `U5a:875` | SUPERSEDED | SE's and WR's closures; the `tend` half is sweep D-05 (TDA §D row D3) | → B02 | IN |
+| 68 | H-24, H-30, H-47, H-48, H-56, H-59, H-82 | 1.2 `audits/01_CORE_audit.md` §6.1 — hole-register and work… | — |  | `U5a:86` | RESOLVED-BY | `U5a_CORE_owed_edits.md` §A rows 2–8 | B03 | IN |
+| 69 | H-25 | 1.2 `audits/01_CORE_audit.md` §6.1 — hole-register and work… | — |  | `U5a:87` | RESOLVED-BY | workplan CR-98 (B11-F2) with F-CORE-21's input, `U5a_CORE_owed_edits.md` §D | B03, B11, B11F2 | IN |
+| 70 | H-89, CR-07 | 1.2 `audits/01_CORE_audit.md` §6.1 — hole-register and work… | — |  | `U5a:92` | RESOLVED-BY | workplan CR-07 (B10-Z, HELD on its pre-flight) with the precondition and Layer-1 ground in `U5… | B03, B10 | IN |
+| 71 | B10-18b (CR-46…CR-54) | 1.2 `audits/01_CORE_audit.md` §6.1 — hole-register and work… | — |  | `U5a:94` | RESOLVED-BY | the card's own order (CR-46 re-reads first); the audit's figure (23 of 67 executed, seed 0) is… | B03 | IN |
+| 72 | 8 | depth cap: keep the refusal, strike H-87's sweep | — |  | `U5a:109` | RESOLVED-BY | `U5a_CORE_owed_edits.md` §A row 1 | B03 | IN |
+| 73 | 9 | H-30 regraded `measured` | — |  | `U5a:110` | RESOLVED-BY | `U5a_CORE_owed_edits.md` §A row 2. Note: the pessimist measured that this order decides about… | B03 | IN |
+| 74 | 10 | H-47 refiled: row present, producer absent | — |  | `U5a:111` | RESOLVED-BY | §A row 3 | B03 | IN |
+| 75 | 11 | H-48 closed as never built | — |  | `U5a:112` | RESOLVED-BY | §A row 4 | B03 | IN |
+| 76 | 12 | H-59 closed, superseded by H-57 | — |  | `U5a:113` | RESOLVED-BY | §A row 5 | B03 | IN |
+| 77 | 14 | H-56's held half closed as irrelevant until nesting exists | — |  | `U5a:115` | RESOLVED-BY | §A row 6 | B03 | IN |
+| 78 | 15 | H-82 regraded `measured` | — |  | `U5a:116` | RESOLVED-BY | §A row 7 | B03 | IN |
+| 79 | 16 | H-24's cite filled | — |  | `U5a:117` | RESOLVED-BY | §A row 8 | B03 | IN |
+| 80 | 17 | four stale comments corrected | — |  | `U5a:118` | RESOLVED-BY | §B rows 1–3 | B03 | IN |
+| 81 | 18 | `World._subsistence_shortfall` initialised and described truly | — |  | `U5a:119` | RESOLVED-BY | §B row 5 | B03 | IN |
+| 82 | 19 | `sigma.resolve` refuses when handed no `rng` | — |  | `U5a:120` | RESOLVED-BY | §B row 6 (with addendum B C5's second site, `modules/combat/wrapper.py:565`, named for the PC… | B03 | IN |
+| 83 | 20 | `_contest` emits the refusal on `ContestError` | — |  | `U5a:121` | RESOLVED-BY | §B row 4 | B03 | IN |
+| 84 | 21 | retire the `scale:` column | — |  | `U5a:122` | RESOLVED-BY | workplan CR-07; `U5a_CORE_owed_edits.md` §E row 3 | B03 | IN |
+| 85 | 22 | a headless play loop | — |  | `U5a:123` | RESOLVED-BY | `11_GO_player_surface_contract_B.md` §8; `U5a_CORE_owed_edits.md` §F | B34, B03 | GO |
+| 86 | F-CORE-17 | a refusal is priced and the price leaves no receipt (`04` D-51's falsifier fails) | — |  | `U5a:162` · `probe_refusal_receipts.py`: 27 refusal Events, 0 with `changes[]`. Two Layer-1… | JORDAN | J-U5a-03 (`unified/U5_CONFLICTS_U5a.md`); the register refile is `U5a_CORE_owed_edits.md` §A r… | — (answered A-62) | IN |
+| 87 | F-CORE-23 | the provided corpus is loaded through a repair routine and one case is gone | — |  | `U5a:168` · `load_cases`: 8 defects; `ARC3.yaml` recovered 0 rows | RESOLVED-BY | `U5a_CORE_owed_edits.md` §B rows 14–15 | B03 | IN |
+| 88 | (corroboration) | `interactions.py` works around F-CORE-12/14; `run_cases.grade` says `PLAYABLE` for "declared tokens reso… | — |  | `U5a:169` · `interactions.py:250-251`; `run_cases.py::grade` | RESOLVED-BY | F-CORE-12 and F-CORE-14's carriers; the rename: `U5a_CORE_owed_edits.md` §B row 16 | B03 | IN |
+| 89 | C3 | provider return: two rows of `04` disagree; code follows the later ruling | — |  | `U5a:177` | SUPERSEDED | by the 2026-09-03 ruling and `ED-IN-0279` (ladder step 1); `04`'s marker is workplan IN-44's (… | → B10, B03 | IN |
+| 90 | C5 | a second unseeded-generator fallback at `modules/combat/wrapper.py:565` | — |  | `U5a:179` | RESOLVED-BY | `U5a_CORE_owed_edits.md` §B row 6 (season side) ; the module line is PC's (U5b), named there | B03 | IN |
+| 91 | C7 | an end a player can read exists in design, half in code | — |  | `U5a:181` | RESOLVED-BY | `U5a_CORE_owed_edits.md` §F | B03 | IN |
+| 92 | C8 | `choose` receives the live `Person`, not a frozen `PersonInterior` | — |  | `U5a:182` | RESOLVED-BY | `U5a_CORE_owed_edits.md` §E row 1 (with F-CHAR-12, PART 2) | B03 | IN |
+| 93 | §B.2 row 2, §C.3 frozen `PersonInterior` | departs | — |  | `U5a:190` | RESOLVED-BY | `U5a_CORE_owed_edits.md` §E row 1 (change the code; B4 default) | B03 | IN |
+| 94 | §A.3 row 15 no office bonus | departs, ledgered | — |  | `U5a:191` | SUPERSEDED | `ED-IN-0246` and HANDOFF_IN's "Build-order item 4 REVERTED"; IN-14 is delegated-ruled. Not re-… | → B03 | IN |
+| 95 | §B.13 #7, D-25 the log accepts no kind… | departs at `EventLog.append` (H-220) | — |  | `U5a:193` | RESOLVED-BY | `U5a_CORE_owed_edits.md` §E row 2 | B03 | IN |
+| 96 | §B.13 #10, §A.3 row 4 `scale:` | departs | — |  | `U5a:194` | RESOLVED-BY | workplan CR-07; §E row 3 | B03 | IN |
+| 97 | §7.1 end of a life | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:218` | RESOLVED-BY | `U5a_CORE_owed_edits.md` §F | B03 | IN |
+| 98 | §7.1 RNG-1 | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:219` | RESOLVED-BY | §B row 6 | B03 | IN |
+| 99 | §7.2 sixteen "no rng" fallbacks | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:222` | RESOLVED-BY | §B row 6 (two remain) | B03 | IN |
+| 100 | 6 | frozen `PersonInterior` | — |  | `U5a:237` | RESOLVED-BY | `U5a_CORE_owed_edits.md` §E row 1 | B03 | IN |
+| 101 | 7 | `scale:` | — |  | `U5a:238` | RESOLVED-BY | workplan CR-07; §E row 3 | B03 | IN |
+| 102 | 8 | provider return ambiguity | — |  | `U5a:239` | SUPERSEDED | by ruling; IN-44 | → B03 | IN |
+| 103 | 18 | stale counts and dead declaration | — |  | `U5a:245` | RESOLVED-BY | `U5a_CORE_owed_edits.md` §B rows 7–11 | B03 | IN |
+| 104 | 25 | `arms` prints fought fields, refuses a z at zero, gains `--fixture` | — |  | `U5a:252` | RESOLVED-BY | §B row 13 | B03 | IN |
+| 105 | 26 | six corpus files normalised; repair path deleted | — |  | `U5a:253` | RESOLVED-BY | §B row 14 | B03 | IN |
+| 106 | 27 | `report.emit`'s `TRACE` import and step list | — |  | `U5a:254` | RESOLVED-BY | §B row 15 | B03 | IN |
+| 107 | 28 | `PLAYABLE` renamed `DECLARED-PRESENT` | — |  | `U5a:255` | RESOLVED-BY | §B row 16 | B03 | IN |
+| 108 | 29 | S27.4's fold arm and `Act.obstacle`/`Act.pool` deleted | — |  | `U5a:256` | RESOLVED-BY | §B row 12; corroborated unexercised by `16_PESSIMIST_CORE.md` §2 | B03 | IN |
+| 109 | T-22 | `CLAUDE.md` §7's sentence on `engine/tests/` goldens is stale | — |  | `U5a:282` · `engine/tests/goldens/` holds one pure-function table | RESOLVED-BY | `U5a_CORE_owed_edits.md` §G (a Layer 0 edit, the orchestrator's; the exact sentence is given) | B03 | IN |
+| 110 | res. 7 | an old Event's place read at `e.emitted_at` | — |  | `U5a:310` | RESOLVED-BY | §B row 17 | B03 | IN |
+| 111 | res. 8 | `scene_budget < 1` refused | — |  | `U5a:311` | RESOLVED-BY | §B row 18 | B03 | IN |
+| 112 | C2 | `DevelopmentSheet` body verified; shows no attributes or odds | — |  | `U5a:176` | RESOLVED-BY | `01_CORE_capability_authoring_surface.md` Edit 6 (attributes); odds and terms: `11_GO_player_s… | B04, B34 | IN |
+| 113 | C4 | three further causes of the default pool | — |  | `U5a:178` | RESOLVED-BY | U1 architecture §5–§6 (undeclared rows; cast rows); `02_CHAR_capability_definitions.md` for th… | B04 | IN |
+| 114 | §5 (d) a first rank in a skill is worse… | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:204` | RESOLVED-BY | U1 architecture §4 (`untrained:`); `01_CORE_capability_authoring_surface.md` Edit 9 | B04 | IN |
+| 115 | 12–15 | capability block; verb-row column; five rows declared; acquisition rule | — |  | `U5a:242` | RESOLVED-BY | U1 architecture; `01_CORE_capability_authoring_surface.md` | B04 | IN |
+| 116 | 17 | the told-claim attribute and the Thread-Sensitivity stems are uses | — |  | `U5a:244` | RESOLVED-BY | `02_CHAR_capability_uses_table.md` | B04 | IN |
+| 117 | §9 | may a capability gate an act? | — |  | `U5a:257` | SUPERSEDED | answered: A-11 (no). `01_CORE_capability_authoring_surface.md` Part three is withdrawn (Reconc… | → B04 | IN |
+| 118 | R-09 evidence (DG3, DG5) | three bands at the shipped judge; a model graded draw in `determine` | — |  | `U5a:844` · pool 2 against 2 | RESOLVED-BY | `U5a_capability_home_and_two_inputs.md` Part B gate 2 (the even contest is even) and gate 4 (t… | B04 | IN |
+| 119 | capability data is nearly empty in the… | 5.2 Cross-subsystem leads | — |  | `U5a:859` | RESOLVED-BY | `U5a_capability_home_and_two_inputs.md` Part C (content and the `cast_attributes` switch), Par… | B04 | IN |
+| 120 | two receivers of different competence h… | 5.2 Cross-subsystem leads | — |  | `U5a:867` | RESOLVED-BY | `02_CHAR_capability_uses_table.md` | B04 | IN |
+| 121 | §5 (d) help, teamwork, tools | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:211` | RESOLVED-BY | `10_DICE_advantage_sources_for_the_arcs.md` (the roster's second members) | B05 | IN |
+| 122 | mass battle keeps its own roller, ladde… | 5.2 Cross-subsystem leads | — |  | `U5a:869` | RESOLVED-BY | `U5a_DICE_owed_edits.md` §1 row 4; `10_DICE_one_roller_one_fraction_rule.md` Edit C as reconci… | B05 | IN |
+| 123 | fixed results on admission (DG1, DG2, D… | `pardon`, `seize`, `raze`, `forgive`, `sabotage`, `revoke`, `confer`, `surrender`, `requisition`, `issue… | — |  | `U5a:848` | RESOLVED-BY | `18_DETERMINISM_task_draw_for_uncontested_verbs.md` as reconciled (sweep C-01, C-07); `tend`:… | B07 | IN |
+| 124 | H-12 | 1.2 `audits/01_CORE_audit.md` §6.1 — hole-register and work… | — |  | `U5a:85` | RESOLVED-BY | `01_CORE_claim_fade_as_read.md` (the ruling is kept: the write is removed, not the emission ru… | B09 | IN |
+| 125 | 1 | fading becomes a read | — |  | `U5a:102` | RESOLVED-BY | `01_CORE_claim_fade_as_read.md` | B09 | IN |
+| 126 | the fading of memory: a logged write pe… | 1.4 `audits/01_CORE_audit.md` §11 — survivor | — |  | `U5a:129` · Does not survive the ladder. Step 4: the tree's own precedent (a crossing emits… | RESOLVED-BY | `01_CORE_claim_fade_as_read.md` (Option A) | B09 | IN |
+| 127 | ARC-44, EMG-C4, EMG-C3, EMG-X8, ARC-20… | 1.5 `audits/01_CORE_audit.md` §13 — provided arcs and chara… | — |  | `U5a:140` | RESOLVED-BY | `01_CORE_claim_fade_as_read.md` Edit 5 (lift `MAX_SEASONS`) | B09 | IN |
+| 128 | 52 cases · `ends_when: never` | 1.5 `audits/01_CORE_audit.md` §13 — provided arcs and chara… | — |  | `U5a:144` | RESOLVED-BY | `01_CORE_claim_fade_as_read.md` (affordability) | B09 | IN |
+| 129 | memory across seasons | 1.5 `audits/01_CORE_audit.md` §13 — provided arcs and chara… | — |  | `U5a:148` | RESOLVED-BY | `01_CORE_claim_fade_as_read.md` | B09 | IN |
+| 130 | C1 | four driver attributes are cumulative by design | — |  | `U5a:175` | RESOLVED-BY | `01_CORE_reason_trail_in_the_act_store.md` (moves `scenes`; `resolved`, `act_of` stay, derivab… | B09 | IN |
+| 131 | 1, 2 | Scenes stored in the act store; a standing-occasion act's occasion is the Scene's | — |  | `U5a:234` | RESOLVED-BY | `01_CORE_reason_trail_in_the_act_store.md` Edits 1–3 | B09 | IN |
+| 132 | 3 | the deciding term: CHAR's `watch` hook | — |  | `U5a:235` | RESOLVED-BY | `02_CHAR_reason_trail_and_small_edits.md` Part A | B09 | IN |
+| 133 | 4, 5 | one referent read; every refusing branch names its clause; the clause may key the refusal | — |  | `U5a:236` | RESOLVED-BY | `01_CORE_predicates_name_their_clause.md` | B09 | IN |
+| 134 | memory decay is inert; `claim_decay_per… | 5.2 Cross-subsystem leads | — |  | `U5a:862` | RESOLVED-BY | `01_CORE_claim_fade_as_read.md` (the register's D-48, taken A) | B09 | IN |
+| 135 | §5 (d) no derived resource from an attr… | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:207` | SUPERSEDED | PC's and CHAR's closures (`02_CHAR_scar_is_a_wound.md` for the body; U5b for the module) | → B10 | IN |
+| 136 | 23 | unmet need ordered first inside tier 1 | — |  | `U5a:250` | RESOLVED-BY | `01_CORE_unmet_need_is_attended_first.md` | B10 | IN |
+| 137 | a provided character's starting beliefs… | 5.2 Cross-subsystem leads | — |  | `U5a:863` | RESOLVED-BY | `01_CORE_case_setup_and_beats.md`; `12_ARCS_case_on_the_realm.md` (beliefs come from prehistor… | B10, B39 | IN |
+| 138 | legitimacy and stability have no choose… | 5.2 Cross-subsystem leads | — |  | `U5a:864` | RESOLVED-BY | `02_CHAR_voices_and_the_room.md` Edit 5 (H-224, §2.7) | B10, B11 | IN |
+| 139 | an ambition keeps forming a need after… | 5.2 Cross-subsystem leads | — |  | `U5a:865` | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §3 | B10 | IN |
+| 140 | the affiliation scar table is dormant (… | 5.2 Cross-subsystem leads | — |  | `U5a:866` | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §7, §8 | B10 | IN |
+| 141 | succession: "first valid claim wins" (D… | a fixed-order heir | — |  | `U5a:849` | SUPERSEDED | answered: A-19 (a deed race for the crown); `06_FA_seat_terms_and_turnover.md` (U5d) | → B21 | FA |
+| 142 | T-12 | kernel tests in `engine/tests` follow SC-P2 | — |  | `U5a:280` | SUPERSEDED | `05_SC_sc05_kernel_retirement.md` / its `_B` (U5c decides which stands) | → B24 | SC |
+| 143 | F-PES-CORE-06 | a scene has no internal order and one occupant | — |  | `U5a:304` · 120 of 525 scenes fold in order; 62 of 87 counterparties busy | RESOLVED-BY | `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` Option B's edits 1–4, un-held by Jordan's… | B08 | IN |
+| 144 | §4.4 no standalone entry | gap | — |  | `U5a:198` | RESOLVED-BY | `01_CORE_one_scene_contract.md` Edit 4 | B34 | GO |
+| 145 | §6 (c) four narrowings of the chooser's… | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:214` | RESOLVED-BY | `withheld_verbs`: workplan B10-18b CR-52/CR-53; the aggregation: `01_CORE_one_scene_contract.m… | B34 | GO |
+| 146 | §7.1 "Where were you?" retrospective sc… | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:217` | SUPERSEDED | `11_GO_player_surface_contract_B.md` (`account`, `receipt`) is the carrier (U5d); the core's s… | → B34 | GO |
+| 147 | 10, 11 | one scene contract; a standalone scene runner | — |  | `U5a:241` | RESOLVED-BY | `01_CORE_one_scene_contract.md` | B34 | GO |
+| 148 | 19 | the play loop's caller contract | — |  | `U5a:246` | RESOLVED-BY | `11_GO_player_surface_contract_B.md` §8 (it seats `take_ranked`, which cannot exceed budget);… | B34 | GO |
+| 149 | 20 | the player is shown all his questions | — |  | `U5a:247` | RESOLVED-BY | `01_CORE_one_scene_contract.md` Edit 5 | B34 | GO |
+| 150 | `test_engine_params_bridge.py`: `module… | 5.3 Per-entry open items (120 lines across the six digests,… | — |  | `U5a:891` | SUPERSEDED | GO's port-gate proposal (`11_GO_port_gate_order_and_coverage.md`) | → B41 | GO |
+| 151 | §7.1 termination across seasons | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:220` | RESOLVED-BY | CR-98, §D | B11F2 | IN |
+| 152 | 24 | the loop check declares the chooser and the interior writers | — |  | `U5a:251` | RESOLVED-BY | CR-98; §D | B11F2 | IN |
+| 153 | 2 | typed `setup:` / `beats:` per case | — |  | `U5a:103` | RESOLVED-BY | `01_CORE_case_setup_and_beats.md` | B39 | WR |
+| 154 | all 143 · the case's own cast, seats, r… | 1.5 `audits/01_CORE_audit.md` §13 — provided arcs and chara… | — |  | `U5a:135` | RESOLVED-BY | `01_CORE_case_setup_and_beats.md` (`setup:`) | B39 | WR |
+| 155 | 86 cases · prose spans | 1.5 `audits/01_CORE_audit.md` §13 — provided arcs and chara… | — |  | `U5a:141` | RESOLVED-BY | `01_CORE_case_setup_and_beats.md` Edit 5 | B39 | WR |
+| 156 | 16 cases naming a player | 1.5 `audits/01_CORE_audit.md` §13 — provided arcs and chara… | — |  | `U5a:145` | RESOLVED-BY | `01_CORE_case_setup_and_beats.md` Edit 4 | B39 | WR |
+| 157 | NPC-088 · possession has consequences `… | 1.5 `audits/01_CORE_audit.md` §13 — provided arcs and chara… | — |  | `U5a:147` | RESOLVED-BY | `01_CORE_case_setup_and_beats.md` Edit 5 (NPC-088 is the first case given `beats:`; the need i… | B39 | WR |
+| 158 | all · persons differ in what they can do | 1.5 `audits/01_CORE_audit.md` §13 — provided arcs and chara… | — |  | `U5a:150` | RESOLVED-BY | `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` (cast rows) with `01_CORE_case_setup_and_bea… | B39 | WR |
+| 159 | H-01, H-02, H-50, H-81, H-83, H-86 | 1.2 `audits/01_CORE_audit.md` §6.1 — hole-register and work… | — |  | `U5a:81` | STALE/FP | evidence at the cited lines; no action | — (stale) | IN |
+| 160 | H-06, -07, -08, -09, -11, -26, -93, H-2… | 1.2 `audits/01_CORE_audit.md` §6.1 — hole-register and work… | — |  | `U5a:82` | STALE/FP | carried unchanged; each row's own `site:`/`sweep:` is its record | — (stale) | IN |
+| 161 | H-23, -28, -35, -36, -37 | 1.2 `audits/01_CORE_audit.md` §6.1 — hole-register and work… | — |  | `U5a:83` | STALE/FP | AUDIT_BRIEF ground rule 6 | — (stale) | IN |
+| 162 | H-10 | 1.2 `audits/01_CORE_audit.md` §6.1 — hole-register and work… | — |  | `U5a:84` | RESOLVED-BY | F-CORE-06's carrier (IN-14) | — | IN |
+| 163 | H-44, H-109, H-254, H-344, H-153, H-154… | 1.2 `audits/01_CORE_audit.md` §6.1 — hole-register and work… | — |  | `U5a:88` | SUPERSEDED | by the owning lane's closure (FA: U5d; SC: U5c); cross-listed only | — | IN |
+| 164 | H-49 | 1.2 `audits/01_CORE_audit.md` §6.1 — hole-register and work… | — |  | `U5a:89` | SUPERSEDED | by workplan CR-08 (B10-18, STATE BUILD: the CENSUS writer). The audit's resolution 13 (mark th… | — | IN |
+| 165 | H-52, H-57, H-61 | 1.2 `audits/01_CORE_audit.md` §6.1 — hole-register and work… | — |  | `U5a:90` | STALE/FP | carried | — (stale) | IN |
+| 166 | H-75 | 1.2 `audits/01_CORE_audit.md` §6.1 — hole-register and work… | — |  | `U5a:91` | STALE/FP | returns with the first row that needs it | — (stale) | IN |
+| 167 | H-145, H-220 | 1.2 `audits/01_CORE_audit.md` §6.1 — hole-register and work… | — |  | `U5a:93` | RESOLVED-BY | as F-CORE-11 | — | IN |
+| 168 | IN-14, CR-98, CR-99, NM-W9 | 1.2 `audits/01_CORE_audit.md` §6.1 — hole-register and work… | — |  | `U5a:95` | RESOLVED-BY | their workplan positions; inputs as above | — | IN |
+| 169 | IN-18, IN-44, IN-58, IN-30, IN-32, IN-3… | 1.2 `audits/01_CORE_audit.md` §6.1 — hole-register and work… | — |  | `U5a:96` | STALE/FP | the audit made no claim about them | — (stale) | IN |
+| 170 | 3 | integer `span_seasons` plus `ongoing:` | — |  | `U5a:104` | RESOLVED-BY | same · Edit 5 | — | IN |
+| 171 | 4 | the runner seats a declared policy proxy | — |  | `U5a:105` | RESOLVED-BY | same · Edit 4 | — | IN |
+| 172 | 13 | H-49: mark the matrix row `unproduced` | — |  | `U5a:114` | SUPERSEDED | by workplan CR-08 (the CENSUS writer is the decided build); C-U5a-02 | — | IN |
+| 173 | all 143 · each `season_requires` need i… | 1.5 `audits/01_CORE_audit.md` §13 — provided arcs and chara… | — |  | `U5a:136` | RESOLVED-BY | same (`beats:` with an off-arm) | — | IN |
+| 174 | all · one person's act is cited by anot… | 1.5 `audits/01_CORE_audit.md` §13 — provided arcs and chara… | — |  | `U5a:137` | STALE/FP | corpus R3 143/143; the realm reading 134 / 141 / 162 against 0 (addendum C §3) | — (stale) | IN |
+| 175 | all · persons hold different things | 1.5 `audits/01_CORE_audit.md` §13 — provided arcs and chara… | — |  | `U5a:138` | STALE/FP | `carriers.py:504-509` | — (stale) | IN |
+| 176 | cases turning on being *told* | 1.5 `audits/01_CORE_audit.md` §13 — provided arcs and chara… | — |  | `U5a:139` | SUPERSEDED | by SC's and CHAR's closures (U5c; PART 2 here for the chooser's share) | — | IN |
+| 177 | 26 cases · `needs_deadline` | 1.5 `audits/01_CORE_audit.md` §13 — provided arcs and chara… | — |  | `U5a:142` | RESOLVED-BY | same (`setup.dates`) | — | IN |
+| 178 | 91 cases · `ends_when` | 1.5 `audits/01_CORE_audit.md` §13 — provided arcs and chara… | — |  | `U5a:143` | RESOLVED-BY | same (a terminal beat); endings that are binding decisions are FA's (U5d) | — | IN |
+| 179 | NPC-088 · labour ripening over seasons | 1.5 `audits/01_CORE_audit.md` §13 — provided arcs and chara… | — |  | `U5a:146` | STALE/FP | headless run: `record.created` 4, `term.matured` 5 | — (stale) | IN |
+| 180 | arcs ending in a ruling, a battle or a… | 1.5 `audits/01_CORE_audit.md` §13 — provided arcs and chara… | — |  | `U5a:149` | SUPERSEDED | by FA, MB, PC closures (U5d, U5b) | — | IN |
+| 181 | needs wrongly stated: prose spans; `UNC… | 1.5 `audits/01_CORE_audit.md` §13 — provided arcs and chara… | — |  | `U5a:151` | RESOLVED-BY | spans: as above; `UNCLEAR:` rows are the source's own admission and stay unrouted (no claim to… | — | IN |
+| 182 | C6 | retiring `scale:` is a conformance edit | — |  | `U5a:180` | RESOLVED-BY | as F-CORE-16 | — | IN |
+| 183 | D-51 a refusal Event carries the debit'… | behaviour holds, construction does not | — |  | `U5a:192` | JORDAN | J-U5a-03 | — (answered A-62) | IN |
+| 184 | §C.5, D-24 against §C.4 (provider retur… | two spec rows | — |  | `U5a:195` | SUPERSEDED | as C3 | — | IN |
+| 185 | §C.12 rejection 5 (refusal as a returne… | 586 `raise` in non-test `engine/season` | — |  | `U5a:196` | STALE/FP | the count is carried to the GO lane's port-cost reading (U5d); no edit here | — (stale) | IN |
+| 186 | §4.4 typed outcome on two of four provi… | departs | — |  | `U5a:197` | RESOLVED-BY | as F-CORE-10 | — | IN |
+| 187 | §5 (d) five of eleven contested rolls n… | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:205` | RESOLVED-BY | U1 architecture §5; same file Edit 8 | — | IN |
+| 188 | §5 (d) attribute plus skill / attribute… | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:206` | STALE/FP | accepted | — (stale) | IN |
+| 189 | §5 (d) traits, talents, flaws have no c… | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:208` | RESOLVED-BY | U1 architecture §2 (`kind: trait` is a closed-set member with no reader until a use row names… | — | IN |
+| 190 | §5 (d) skill atrophy | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:209` | STALE/FP | no action | — (stale) | IN |
+| 191 | §5 (d) opposed roll | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:210` | STALE/FP | accepted | — (stale) | IN |
+| 192 | §5 (d) a capability gates an action | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:212` | SUPERSEDED | answered: A-11 (no; capability supplies dice and never gates, Thread Sensitivity excepted) | — | IN |
+| 193 | §5 (d) derived statistics | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:213` | SUPERSEDED | CHAR's closure (PART 2) | — | IN |
+| 194 | §7.1 the slate (design) against the per… | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:215` | RESOLVED-BY | resolution 20, same Edit 5 | — | IN |
+| 195 | §7.1 Domain Echo tables | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:216` | SUPERSEDED | by Layer 1 §B.6.1 (no stored aggregate); resolution 21 | — | IN |
+| 196 | §7.2 forked resolution core unguarded | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:221` | STALE/FP | the parity golden is asserted by `sim-regression` (addendum §7.2 row 1) | — (stale) | IN |
+| 197 | §7.2 sixteen ladder producers | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:223` | STALE/FP | one owner at HEAD; three seam ladders ruled | — (stale) | IN |
+| 198 | §7.2 "the masters exist, the code does… | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:224` | RESOLVED-BY | does not return for rosters; its falsifier is the capability gate (U1 architecture §8: delete… | — | IN |
+| 199 | §7.2 near-identical instances (returnin… | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:225` | RESOLVED-BY | F-CORE-02's and F-CORE-15's carriers | — | IN |
+| 200 | §7.2 J-1, J-5 (a playable season; choic… | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:226` | RESOLVED-BY | F-CORE-05's and F-CORE-13's carriers | — | IN |
+| 201 | §7.2 J-7 emergence made visible | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:227` | RESOLVED-BY | F-CORE-12's, F-CORE-01's carriers | — | IN |
+| 202 | §1 reading: `institution_of` runs for c… | 1.9 `audits/01_CORE_audit_addendum_B.md` §5 (d), §6 (c), §7… | — |  | `U5a:228` | STALE/FP | no action | — (stale) | IN |
+| 203 | 9 | D-51 refiled in the register; build nothing | — |  | `U5a:240` | JORDAN | J-U5a-03 (the refile itself: §A row 10) | — (answered A-62) | IN |
+| 204 | 16 | Endurance default written three times | — |  | `U5a:243` | RESOLVED-BY | same file, Edit 7; U1 architecture §7 | — | IN |
+| 205 | 21 | Domain Echo closed | — |  | `U5a:248` | SUPERSEDED | by Layer 1 | — | IN |
+| 206 | 22 | an end a player can read | — |  | `U5a:249` | RESOLVED-BY | §F | — | IN |
+| 207 | §4 `[not adjudicated]` `tests/valoria/t… | — | — |  | `U5a:284` | RESOLVED-BY | PART 3 (DICE), row "test strength" | — | IN |
+| 208 | §4 `[not adjudicated]` MB `approx` on c… | — | — |  | `U5a:285` | SUPERSEDED | U5b's closure (MB, PC test strength); listed in `unified/U5_CONFLICTS_U5a.md` §3 as handed acr… | — | IN |
+| 209 | §1 reading shortfall: about 120 season… | — | — |  | `U5a:286` | STALE/FP | the digests `DG_tests1..6` are the second reading; PART 5 | — (stale) | IN |
+| 210 | F-PES-CORE-05 | propagation is real, saturates, and mostly leaves no edge | — |  | `U5a:303` · knockout arms 0 / 0 / 236 / 309 / 634 / 625 | RESOLVED-BY | same file Edits 2–3 (the reading); the unrecorded influence: F-CORE-12's carriers | — | IN |
+| 211 | res. 1–6 | (as F-PES-CORE-01 … -05, -07) | — |  | `U5a:309` | RESOLVED-BY | the five proposals | — | IN |
+| 212 | survivor | is a scene a budget unit (A) or a short sequence (B)? | — |  | `U5a:312` | SUPERSEDED | answered: A-9 (B, a short sequence) | — | IN |
+| 213 | F-TEST-07, harness probe loops (DG4) | no floor on `P.PROBES` | — |  | `U5a:834` | RESOLVED-BY | accepted (§0.1 pt 5: the harness is not read by the loop) | — | IN |
+| 214 | §3 R-05 (DG4, DG5) | 23 + 13 + 30 of 67 from three pins; army verbs, `destroy_record` withheld | — |  | `U5a:841` | SUPERSEDED | `17_CENSUS_REST.md` §6 measured it; the verb build-outs carry it (§4.3) | — | IN |
+| 215 | MB and PC test strength (DG6) | `approx` on "byte identical"; an unasserted flag; an `or` that cannot fail; reload order dependence; ten… | — |  | `U5a:845` | SUPERSEDED | U5b (RES-PC §10 for combat; MB's closure for the field) | — | IN |
+| 216 | addendum §4, PC's "ten all-conditional… | no combat loop can pass on nothing | — |  | `U5a:846` · DG6 item (b) | STALE/FP | — | — (stale) | IN |
+| 217 | `Partial` told-drift "is deterministic"… | a fixed function of state and event id | — |  | `U5a:847` · `loop/witness.py:201-203` | STALE/FP | — opened: the selection is a hash of `(world_seed, tick, hearer, event)` taken only inside the… | — (stale) | IN |
+| 218 | `oblige` lapse and renewal are arithmet… | — | — |  | `U5a:850` | STALE/FP | — a clock decides no contested outcome | — (stale) | IN |
+| 219 | the order in which a person takes his q… | attention tiers | — |  | `U5a:851` | JORDAN | the register's open D-62 (one question or a list); H-54 is its register row | — (answered A-48) | IN |
+| 220 | a certain kill in the `total` casualty… | — | — |  | `U5a:852` | STALE/FP | — a control arm, not shipped | — (stale) | IN |
+| 221 | a certain mark at the deepest gate (DG1) | `body_ceiling` | — |  | `U5a:853` | SUPERSEDED | U5b (RES-PC §7, the lasting mark) | — | IN |
+| 222 | three "copies" of `RUNG_KINDS` (DG3) | 5.2 Cross-subsystem leads | — |  | `U5a:860` | STALE/FP | opened: one definition (`data/rosters.py:771`, from `rosters.yaml`); `state/carriers.py:35` an… | — (stale) | IN |
+| 223 | harness tests guard process artifacts (… | 5.2 Cross-subsystem leads | — |  | `U5a:861` | RESOLVED-BY | accepted (§0.1 pt 5) | — | IN |
+| 224 | the sheet's creation arm is off; pins a… | 5.2 Cross-subsystem leads | — |  | `U5a:868` | SUPERSEDED | GO-B (U5d) | — | IN |
+| 225 | `speak` writes nothing at any band; a f… | 5.2 Cross-subsystem leads | — |  | `U5a:871` | SUPERSEDED | SC's closure (U5c); listed in `unified/U5_CONFLICTS_U5a.md` §3 | — | IN |
+| 226 | evidence and the trail never run in pla… | 5.2 Cross-subsystem leads | — |  | `U5a:872` | SUPERSEDED | FI's closure (U5c) | — | IN |
+| 227 | fights fell exactly one party; no appro… | 5.2 Cross-subsystem leads | — |  | `U5a:873` | SUPERSEDED | PC's closure (U5b); sweep C-12 | — | IN |
+| 228 | fields rout at tick 1 at the shipped sc… | 5.2 Cross-subsystem leads | — |  | `U5a:874` | SUPERSEDED | MB's closure (U5b) | — | IN |
+| 229 | strife readings are dark on the realm;… | 5.2 Cross-subsystem leads | — |  | `U5a:876` | SUPERSEDED | WR's closure (U5d) | — | IN |
+| 230 | governance acts are hand-built; success… | 5.2 Cross-subsystem leads | — |  | `U5a:877` | SUPERSEDED | FA's closure (U5d) | — | IN |
+| 231 | ladders unauthored; arc beats depend on… | 5.2 Cross-subsystem leads | — |  | `U5a:878` | SUPERSEDED | ARCS (U5d) | — | IN |
+| 232 | an item that restates a tracked row or… | 5.3 Per-entry open items (120 lines across the six digests,… | — |  | `U5a:884` | SUPERSEDED | tracked at its register row or plan position; a digest's restatement files nothing new. The CO… | — | IN |
+| 233 | "not asserted in a played realm" notes… | 5.3 Per-entry open items (120 lines across the six digests,… | — |  | `U5a:885` | RESOLVED-BY | as F-TEST-01 | — | IN |
+| 234 | shipped-dark or unreached mechanisms na… | 5.3 Per-entry open items (120 lines across the six digests,… | — |  | `U5a:886` | SUPERSEDED | the owning lane's closure, as §5.2 | — | IN |
+| 235 | `[ASSUMPTION; Jordan to correct]` tags… | 5.3 Per-entry open items (120 lines across the six digests,… | — |  | `U5a:887` | STALE/FP | — a graded assumption on its fixture is the tree's form for exactly this | — (stale) | IN |
+| 236 | `test_scale_of_rung.py`: the Object sca… | 5.3 Per-entry open items (120 lines across the six digests,… | — |  | `U5a:888` | SUPERSEDED | PC's and MB's closures (one item, one wound as a scale) | — | IN |
+| 237 | `test_content_operands.py`: multi-addre… | 5.3 Per-entry open items (120 lines across the six digests,… | — |  | `U5a:889` | SUPERSEDED | SC's and FA's closures (the writ's addressees); not a CORE row | — | IN |
+| 238 | `test_descriptors_runtime.py`: nothing… | 5.3 Per-entry open items (120 lines across the six digests,… | — |  | `U5a:890` | RESOLVED-BY | accepted (§0.1 pt 5: a process artifact) | — | IN |
+
+---
+
+## CHAR — persons, choice and the interior
+
+<!-- SYNTHESIS:CHAR -->
+
+**Rows: 125** (RESOLVED-BY 104 · SUPERSEDED 15 · STALE/FP 6 · DISPUTED 0 · JORDAN 0).
+
+| # | id | claim | sev | R | evidence | disposition | carrier | batch | owner |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | F-CHAR-01 | the ranking reads the verb and nothing about what the act would do | B | R-01 | `U5a:366` · `02_CHAR_audit.md:220` · probe 3: 36 of 46 cast hold one top verb across six referents | RESOLVED-BY | `02_CHAR_goal_lean_on_its_own_question.md` (the goal's lean on its own question); the names be… | B10 | IN |
+| 2 | F-PES-CHAR-01 | the names on a character do not predict his acts | B | R-01 | `U5a:513` · `16_PESSIMIST_CHAR.md:309` · a man of `love` alone tops `forge` in 266 of 276 readings | RESOLVED-BY | B (signatures, then cells, then the loader's refusal) | B10 | IN |
+| 3 | F-CHAR-02 | the departure from the optimum is the realm's, not the person's | B | R-02 | `U5a:367` · `02_CHAR_audit.md:243` · probe 1: identical persons disagree in 70–74 % of readings; test-retest 60.7 %… | RESOLVED-BY | `02_CHAR_resolve_and_temper.md`, with the test-retest gate added by `U5a_CHAR_owed_amendments.… | B10 | IN |
+| 4 | F-PES-CHAR-02 | nothing stops a man; armed, the gate stops everyone from walking | B | R-02 | `U5a:514` · `16_PESSIMIST_CHAR.md:333` · unarmed 0 of 46; armed 46 of 46 | RESOLVED-BY | C items 1–5; item 4 (the draw) is un-held by Jordan's answer A-24 (D-28) | B10 | IN |
+| 5 | F-CHAR-03 | the interior does not move | B | R-03 | `U5a:368` · `02_CHAR_audit.md:261` · probe 2: stance moved for 0 of 83 at two seeds; computed half median 0.051 | RESOLVED-BY | `02_CHAR_scar_cap_and_regard_unit.md` item 2 (regard in stance steps); relations: `02_CHAR_rel… | B10 | IN |
+| 6 | F-PES-CHAR-03 | the only interior event is a fixed, inverted, silent conversion | B | R-03 | `U5a:515` · `16_PESSIMIST_CHAR.md:346` · the same six converts at both seeds | RESOLVED-BY | A items 1–4; the roll is confirmed by Jordan's answer A-24 (D-27: drawn and seen); which propo… | B10 | IN |
+| 7 | F-CHAR-17 | the scar's ladder cannot discriminate under any cap on its rate | B |  | `U5a:470` · `02_CHAR_audit_addendum_B.md:226` · 83 of 83 at the terminal rung by season three under the cap | RESOLVED-BY | `02_CHAR_scar_is_a_wound.md`; the fully scarred person: `U5a_CHAR_owed_amendments.md` §6 | B10 | IN |
+| 8 | F-CHAR-04 | the scar runs away and its live reader fires on noise | D | R-04 | `U5a:369` · `02_CHAR_audit.md:280` · median per-person maximum 41 in two seasons | RESOLVED-BY | `02_CHAR_scar_is_a_wound.md` (which amends item 1 of `02_CHAR_scar_cap_and_regard_unit.md`: C-… | B10 | IN |
+| 9 | F-PES-CHAR-04 | between a certainty and a coin there is little room for a character | D | R-04 | `U5a:516` · `16_PESSIMIST_CHAR.md:364` · test-retest 60.7 %; class gap 800 temperatures | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §1 (test-retest gate on `02_CHAR_resolve_and_temper.md`) and §2… | B10 | IN |
+| 10 | F-PES-CHAR-05 | nobody is skilled, everybody fails, an opponent's skill is not in the roll | D | R-05 | `U5a:517` · `16_PESSIMIST_CHAR.md:385` · pool 2 for 46 of 46; 77 % Failure in play | RESOLVED-BY | U1 architecture §4–§6 as rewritten to A-6 (score plus a base, floor five) and A-7 (two inputs,… | B04 | IN |
+| 11 | F-CHAR-05 | four in ten resolved acts are refusals the actor could have foreseen | D | R-05 | `U5a:370` · `02_CHAR_audit.md:297` · 656 refusals of 1,529 resolved acts (seed 0); 62 % of refusals fail on a read t… | RESOLVED-BY | `02_CHAR_offer_what_can_be_done.md` (what his own state answers) and `16_PESSIMIST_CORE_a_refu… | B09, B10 | IN |
+| 12 | F-PES-CHAR-06 | a man is wrong about the granary and about nothing else | D | R-06 | `U5a:518` · `16_PESSIMIST_CHAR.md:406` · 296 of 312 false beliefs are store counts | SUPERSEDED | the telling lane and `10_DICE_believed_odds_have_a_prior.md` (PART 3); no CHAR edit | → B05 | IN |
+| 13 | F-CHAR-06 | `decision_spread`'s headline cannot fail | D | R-06 | `U5a:371` · `02_CHAR_audit.md:311` · 83 of 83 under shipped, control and null | RESOLVED-BY | `02_CHAR_resolve_and_temper.md` edit 4 | B10 | IN |
+| 14 | F-CHAR-07 | a population takes an individual's acts | D | R-07 | `U5a:372` · `02_CHAR_audit.md:321` · cohorts: `challenge` 60, `forge` 47 in two seasons; addendum B C-1 confirms the… | RESOLVED-BY | `02_CHAR_offer_what_can_be_done.md` items 4–5; the wider question (a short verb list for popul… | B10 | IN |
+| 15 | F-PES-CHAR-07 | a want never ends | D | R-07 | `U5a:519` · `16_PESSIMIST_CHAR.md:424` · 0 of 243 commitments ended | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §3 (the exact edit, addressed to `12_ARCS_arcs_as_staged_goals.m… | B10 | IN |
+| 16 | F-CHAR-08 | two scales in one sum; the stance term unbounded and signed by the wrong column | D | R-08 | `U5a:373` · `02_CHAR_audit.md:330` · term variance 1.88 against 0.008; a class gap of 800 temperatures | RESOLVED-BY | `02_CHAR_scar_cap_and_regard_unit.md` item 3 and Addendum (`regard_sign`), with the `stance_sc… | B10 | IN |
+| 17 | F-PES-CHAR-08 | what is done to a man does not decide what he thinks of who did it | D | R-08 | `U5a:520` · `16_PESSIMIST_CHAR.md:440` · `give` and `tend` sit below `sabotage` and `lie` | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §4 (amends `02_CHAR_relations_have_a_ground.md`) | B10 | IN |
+| 18 | F-PES-CHAR-09 | no reason survives, and for half of what persons do there was none | D | R-09 | `U5a:521` · `16_PESSIMIST_CHAR.md:462` · `Act.reads` empty on 4,757 of 4,757 acts | RESOLVED-BY | the two reason-trail proposals; the stored deciding term, the draw included: `U5a_CHAR_owed_am… | B10 | IN |
+| 19 | F-CHAR-09 | knowledge is partial and almost never second-hand | D | R-09 | `U5a:374` · `02_CHAR_audit.md:340` · 12 chained claims of 22,958 | SUPERSEDED | owner is the telling lane (FI / verbs SOCIAL): U5c's closure; no CHAR edit (the weighting is b… | — | IN |
+| 20 | F-CHAR-16 | six authored cast-row facts are read by nothing | D |  | `U5a:469` · `02_CHAR_audit_addendum_B.md:201` · parse: `resonant_style` 18, `arc_trajectory` 36, `cultural_label` 43 | RESOLVED-BY | `02_CHAR_capability_definitions.md` Edit 4 (read, remove or mark, key by key); `resonant_style… | B24, B04 | SC |
+| 21 | F-CHAR-19 | the design's skill is a conditional effect with a level; the build's is a key at the default | D |  | `U5a:472` · `02_CHAR_audit_addendum_B.md:280` · 34 lifepath templates, 21 hold nothing | RESOLVED-BY | U1 architecture §2–§4; `02_CHAR_capability_definitions.md` Edits 1–3 | B04 | IN |
+| 22 | F-CHAR-18 | the designed foils are not foils; no relation has a kind | D |  | `U5a:471` · `02_CHAR_audit_addendum_B.md:252` · `probe_foils.py`: the most alike pair of the Diamond is an opposed pair | RESOLVED-BY | `02_CHAR_relations_have_a_ground.md`; the patient of a deed: `U5a_CHAR_owed_amendments.md` §4 | B10 | IN |
+| 23 | F-CHAR-20 | nothing a person risks reaches his choice | D |  | `U5a:473` · `02_CHAR_audit_addendum_B.md:292` · `score_terms` has no term reading `body` | RESOLVED-BY | `02_CHAR_what_an_act_risks.md` | B10 | IN |
+| 24 | F-PES-CHAR-10 | a realm of persons without wants is livelier than the shipped one | D |  | `U5a:522` · `16_PESSIMIST_CHAR.md:468` · `nopursuit` arm | RESOLVED-BY | B (signatures name the verbs of harm and mercy) | B10 | IN |
+| 25 | F-PES-CHAR-12 | one man's paperwork scars the whole realm | D |  | `U5a:524` · `16_PESSIMIST_CHAR.md:487` · `x2_alone.py`: 83 of 83 scarred by one actor | RESOLVED-BY | B with `02_CHAR_scar_is_a_wound.md` | B10 | IN |
+| 26 | F-CHAR-15 | stale text at the owners | H |  | `U5a:380` · `02_CHAR_audit.md:390` · lines cited in the finding | RESOLVED-BY | `02_CHAR_reason_trail_and_small_edits.md` Part C; its two `requirements.yaml` `measured:` rewr… | B09, B02 | IN |
+| 27 | F-CHAR-12 | Layer 1's frozen `PersonInterior` is not built | H |  | `U5a:377` · `02_CHAR_audit.md:367` · `04` §B.2 row 2 against `deliberate.py:202` | RESOLVED-BY | `U5a_CORE_owed_edits.md` §E row 1 | B03 | IN |
+| 28 | F-CHAR-21 | the development sheet shows less than the creation sheet | H |  | `U5a:474` · `02_CHAR_audit_addendum_B.md:313` · `dataclasses.fields` | RESOLVED-BY | `02_CHAR_capability_definitions.md` Edit 5 (with `01_CORE_capability_authoring_surface.md` Edi… | B04 | IN |
+| 29 | F-CHAR-13 | the cast loader's docstring counts keys, not values | H |  | `U5a:378` · `02_CHAR_audit.md:375` · parse: `stats` 1, `ts` 10, `goals` 17 | RESOLVED-BY | `02_CHAR_reason_trail_and_small_edits.md` Part C | B09 | IN |
+| 30 | F-CHAR-14 | condition reaches a choice only as a scene count; any `hold` earns the office bonus | H |  | `U5a:379` · `02_CHAR_audit.md:382` · H-330; `budget.py` | RESOLVED-BY | the hold count: workplan IN-14, whose own override already narrows `offices` to holds with non… | B09, B10 | IN |
+| 31 | F-CHAR-10 | the score's dot product sums in set order | H |  | `U5a:375` · `02_CHAR_audit.md:352` · H-362 | RESOLVED-BY | `02_CHAR_resolve_and_temper.md` edit 3 | B10 | IN |
+| 32 | F-CHAR-11 | nine person-side declines keyed by verb | H |  | `U5a:376` · `02_CHAR_audit.md:359` · `options.py:136-267` | RESOLVED-BY | `02_CHAR_offer_what_can_be_done.md` items 1–3 (= F-CORE-18's decision half) | B10 | IN |
+| 33 | F-PES-CHAR-11 | the most scarred man is the least changed | H |  | `U5a:523` · `16_PESSIMIST_CHAR.md:481` · `person_q.py:883` | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §6 (amends `02_CHAR_scar_is_a_wound.md`) | B10 | IN |
+| 34 | F-CHAR-22 | three dossier files are not character documents | H |  | `U5a:475` · `02_CHAR_audit_addendum_B.md:322` | RESOLVED-BY | B6.2 row 23 | — | IN |
+| 35 | res. 1–8 | (as F-PES-CHAR-01, -02, -03) | — | R-01 | `U5a:525` | RESOLVED-BY | A, B, C | B10 | IN |
+| 36 | §9 a playable character entry point | 2.2 `audits/02_CHAR_audit.md` §0A, §4, §5 — tables with no… | — |  | `U5a:396` | RESOLVED-BY | `11_GO_player_surface_contract_B.md` §8; `U5a_CORE_owed_edits.md` §F | B34, B03 | GO |
+| 37 | 26 | frozen `PersonInterior` | — |  | `U5a:440` | RESOLVED-BY | `U5a_CORE_owed_edits.md` §E row 1 | B03 | IN |
+| 38 | §0A attributes in a choice and on other… | 2.2 `audits/02_CHAR_audit.md` §0A, §4, §5 — tables with no… | — |  | `U5a:390` | RESOLVED-BY | `02_CHAR_capability_uses_table.md`; the switch and the cast content: U1 architecture §6 and `U… | B04 | IN |
+| 39 | H-200, H-239 | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:412` | RESOLVED-BY | `02_CHAR_capability_uses_table.md` | B04 | IN |
+| 40 | 14 | attribute names as literals under `decision/` | — |  | `U5a:434` | RESOLVED-BY | `02_CHAR_capability_uses_table.md` (the uses table, as U1 architecture §3 adopts it) | B04 | IN |
+| 41 | B4 the character's side of the capabili… | — | — |  | `U5a:479` | RESOLVED-BY | U1 architecture (which adopts §B4 (c)'s field table); `02_CHAR_capability_definitions.md` | B04 | IN |
+| 42 | H-46, H-148, H-170 (stale text) | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:486` | RESOLVED-BY | `02_CHAR_capability_definitions.md` Edit 6 | B04 | IN |
+| 43 | rows 4, 5, 6, 13, 14, 18, 22, 24 | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:496` | RESOLVED-BY | `02_CHAR_capability_definitions.md` Edits 1–6 | B04 | IN |
+| 44 | H-189, H-237 | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:410` | RESOLVED-BY | `02_CHAR_reason_trail_and_small_edits.md` Part C | B09 | IN |
+| 45 | 16 | an observer hook on the chooser; terms on the sheet | — |  | `U5a:436` | RESOLVED-BY | `02_CHAR_reason_trail_and_small_edits.md` Part A; the stored deciding term: `U5a_CHAR_owed_ame… | B09, B10 | IN |
+| 46 | 18 | `by_subject` ordering | — |  | `U5a:438` | RESOLVED-BY | `02_CHAR_reason_trail_and_small_edits.md` B2 | B09 | IN |
+| 47 | H-136, H-270, H-322, H-300, H-329 (acts… | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:489` | RESOLVED-BY | `02_CHAR_offer_what_can_be_done.md`; `16_PESSIMIST_CORE_a_refusal_is_remembered.md` | B09, B10 | IN |
+| 48 | §0A "ruled, not yet built": deontology… | 2.2 `audits/02_CHAR_audit.md` §0A, §4, §5 — tables with no… | — |  | `U5a:386` | RESOLVED-BY | `16_PESSIMIST_CHAR_C_the_stop_is_the_mans.md` | B10 | IN |
+| 49 | §0A scar weight shift at threshold 2 (b… | 2.2 `audits/02_CHAR_audit.md` §0A, §4, §5 — tables with no… | — |  | `U5a:387` | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §8 (the ordered flips, after the wound proposal's gate) | B10 | IN |
+| 50 | §0A risk appetite and horizon (ED-IN-03… | 2.2 `audits/02_CHAR_audit.md` §0A, §4, §5 — tables with no… | — |  | `U5a:388` | RESOLVED-BY | the term it scales: `02_CHAR_what_an_act_risks.md`; the carrier is CL-PERSON's open ask M40 (w… | B10 | IN |
+| 51 | §0A duty of office (CR-88) | 2.2 `audits/02_CHAR_audit.md` §0A, §4, §5 — tables with no… | — |  | `U5a:389` | RESOLVED-BY | input `02_CHAR_goal_lean_on_its_own_question.md`; the position is workplan CR-88 (B10-17b) | B10, B21d | IN |
+| 52 | §0A limit (2): an NPC has no decider in… | 2.2 `audits/02_CHAR_audit.md` §0A, §4, §5 — tables with no… | — |  | `U5a:392` | RESOLVED-BY | `01_CORE_one_scene_contract.md` as reconciled (C-U5a-03): `decide=None` asks the person's own… | B34, B10 | GO |
+| 53 | §4 dead or unreached readers (`rank`, `… | 2.2 `audits/02_CHAR_audit.md` §0A, §4, §5 — tables with no… | — |  | `U5a:394` | RESOLVED-BY | `legitimacy` / `stability` / `opinion` gain their reader in `02_CHAR_voices_and_the_room.md` E… | B10 | IN |
+| 54 | §10 what the mass-battle intent needs f… | 2.2 `audits/02_CHAR_audit.md` §0A, §4, §5 — tables with no… | — |  | `U5a:397` | RESOLVED-BY | `02_CHAR_choice_alignment.md`; U1 architecture §9 (the officer's keys named on the mass-battle… | B10 | IN |
+| 55 | H-60 | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:405` | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §9 (mark closed on the row) | B10 | IN |
+| 56 | H-96 | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:407` | RESOLVED-BY | `02_CHAR_resolve_and_temper.md` edit 5 | B10 | IN |
+| 57 | H-146 | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:408` | RESOLVED-BY | `16_PESSIMIST_CHAR_C_the_stop_is_the_mans.md` | B10 | IN |
+| 58 | H-187 | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:409` | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §8 | B10 | IN |
+| 59 | H-192, H-193 | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:411` | RESOLVED-BY | `02_CHAR_scar_cap_and_regard_unit.md` item 2 | B10 | IN |
+| 60 | H-283 | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:416` | RESOLVED-BY | `02_CHAR_goal_lean_on_its_own_question.md` | B10 | IN |
+| 61 | H-334, H-337, H-339 | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:418` | RESOLVED-BY | `02_CHAR_scar_cap_and_regard_unit.md` item 3 and Addendum | B10 | IN |
+| 62 | H-346 | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:419` | RESOLVED-BY | `02_CHAR_offer_what_can_be_done.md` | B10 | IN |
+| 63 | H-362 | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:421` | RESOLVED-BY | `02_CHAR_resolve_and_temper.md` edit 3 | B10 | IN |
+| 64 | 1 | scar: one count per (person, element) per season | — |  | `U5a:429` | SUPERSEDED | by addendum B's F-CHAR-17 (the cap bounds the rate, not the stock): `02_CHAR_scar_is_a_wound.m… | → B10 | IN |
+| 65 | 2, 3, 4 | regard in stance steps; clamp at `STANCE_MAX`; `regard_sign` column | — |  | `U5a:430` | RESOLVED-BY | `02_CHAR_scar_cap_and_regard_unit.md` items 2, 3, Addendum | B10 | IN |
+| 66 | 5, 6, 7, 8 | `resolve` named; `temper` hook; a temperature-0 column; `_AXES` order | — |  | `U5a:431` | RESOLVED-BY | `02_CHAR_resolve_and_temper.md` | B10 | IN |
+| 67 | 9, 10, 11 | one decline; decline what own state answers False; the cohort conjunct | — |  | `U5a:432` | RESOLVED-BY | `02_CHAR_offer_what_can_be_done.md` | B10 | IN |
+| 68 | 12, 13 | the goal term applies on the goal's own question | — |  | `U5a:433` | RESOLVED-BY | `02_CHAR_goal_lean_on_its_own_question.md` | B10 | IN |
+| 69 | 15 | alignment cells on choice values | — |  | `U5a:435` | RESOLVED-BY | `02_CHAR_choice_alignment.md` | B10 | IN |
+| 70 | 29 | NPC-034 / NPC-071 "no goal authored" | — |  | `U5a:442` | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §10 (a content row: `goals:` on the two cast rows; an authoring… | B10 | IN |
+| 71 | §8 step 10 | arm `scar_weight_shift`, then `refusal_axis` | — |  | `U5a:443` | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §8 | B10 | IN |
+| 72 | §11 | can a person be wrong about himself? | — |  | `U5a:445` | RESOLVED-BY | answered: A-34 (a belief, built narrowly); `U5a_CHAR_self_knowledge_is_a_belief.md` | B10 | IN |
+| 73 | NPC-012 employer's evaluation; NPC-082… | 2.5 `audits/02_CHAR_audit.md` §13 — provided characters | — |  | `U5a:452` | RESOLVED-BY | `02_CHAR_scar_cap_and_regard_unit.md` item 2; then workplan CR-88 (FA) | B10, B21d | IN |
+| 74 | NPC-020 a private doubt; NPC-075 unrewa… | 2.5 `audits/02_CHAR_audit.md` §13 — provided characters | — |  | `U5a:453` | RESOLVED-BY | `02_CHAR_scar_is_a_wound.md`; `16_PESSIMIST_CHAR_A…`; the flips in `U5a_CHAR_owed_amendments.m… | B10 | IN |
+| 75 | NPC-002 range of action narrows to with… | 2.5 `audits/02_CHAR_audit.md` §13 — provided characters | — |  | `U5a:456` | RESOLVED-BY | restated against #353 §9.2 as the budget (the audit's reading); withdrawal at the floor: `02_C… | B10 | IN |
+| 76 | NPC-004 a capacity he does not know he… | 2.5 `audits/02_CHAR_audit.md` §13 — provided characters | — |  | `U5a:457` | RESOLVED-BY | `U5a_CHAR_self_knowledge_is_a_belief.md` (A-34) | B10 | IN |
+| 77 | NPC-089 one governor among graduated po… | 2.5 `audits/02_CHAR_audit.md` §13 — provided characters | — |  | `U5a:458` | RESOLVED-BY | `02_CHAR_choice_alignment.md`; more than one posture is MB content (U5b) | B10 | IN |
+| 78 | NPC-090 two officials shape one relatio… | 2.5 `audits/02_CHAR_audit.md` §13 — provided characters | — |  | `U5a:459` | RESOLVED-BY | `02_CHAR_goal_lean_on_its_own_question.md` | B10 | IN |
+| 79 | NPC-034, NPC-071 | 2.5 `audits/02_CHAR_audit.md` §13 — provided characters | — |  | `U5a:461` | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §10 | B10 | IN |
+| 80 | C-1 … C-8 | corrections and confirmations to the first audit | — |  | `U5a:476` | RESOLVED-BY | C-1: `…offer_what_can_be_done.md`; C-2, C-3, C-5: reference, no edit; C-4: `…scar_is_a_wound.m… | B10 | IN |
+| 81 | B5 internal voices and a community's op… | — | — |  | `U5a:480` | RESOLVED-BY | `02_CHAR_voices_and_the_room.md`; a faculty's voice and a voice that was wrong are FI's (U5c) | B10 | IN |
+| 82 | H-128 | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:488` | RESOLVED-BY | `02_CHAR_scar_is_a_wound.md` (the actor is scarred by his own act, at the floor; the arm stays… | B10 | IN |
+| 83 | H-224 | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:490` | RESOLVED-BY | `02_CHAR_voices_and_the_room.md` Edit 5 | B10 | IN |
+| 84 | B6.2 rows 1, 2 | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:494` | RESOLVED-BY | `02_CHAR_scar_is_a_wound.md` | B10 | IN |
+| 85 | rows 8, 10 | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:497` | RESOLVED-BY | `02_CHAR_relations_have_a_ground.md` | B10 | IN |
+| 86 | rows 11, 12 | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:499` | RESOLVED-BY | `02_CHAR_what_an_act_risks.md` | B10 | IN |
+| 87 | rows 19, 20 | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:502` | RESOLVED-BY | `02_CHAR_voices_and_the_room.md` | B10 | IN |
+| 88 | B6.3 | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:504` | RESOLVED-BY | A-34; `U5a_CHAR_self_knowledge_is_a_belief.md` | B10 | IN |
+| 89 | res. 9–12 | the four amendments | — |  | `U5a:526` · the audit named each amendment and left the amended file unedited; this lane wr… | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §2, §3, §4, §6 | B10 | IN |
+| 90 | For Jordan 2 | the scruple is a line or a tendency | — |  | `U5a:528` | SUPERSEDED | answered: A-24 (D-28): a drawn tendency. The gate itself stays unarmed until armed by its own… | → B10 | IN |
+| 91 | H-268, H-272 | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:415` | SUPERSEDED | SC's and FI's closures (U5c); the hearer's side of H-268 is `02_CHAR_which_ground_moves_whom.m… | → B24 | SC |
+| 92 | NPC-021 faith challenged by facts | 2.5 `audits/02_CHAR_audit.md` §13 — provided characters | — |  | `U5a:455` | RESOLVED-BY | need restated as argument (the audit's reading); the hearer's side `02_CHAR_which_ground_moves… | B24 | SC |
+| 93 | rows 3, 7 | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:495` | RESOLVED-BY | `02_CHAR_which_ground_moves_whom.md` | B24 | SC |
+| 94 | 16 cases wait on a player | 2.5 `audits/02_CHAR_audit.md` §13 — provided characters | — |  | `U5a:463` | RESOLVED-BY | `01_CORE_case_setup_and_beats.md` Edit 4; the seated runner `11_GO_player_surface_contract_B.m… | B34, B39 | GO |
+| 95 | NPC-020, NPC-070 an armed institution r… | 2.5 `audits/02_CHAR_audit.md` §13 — provided characters | — |  | `U5a:454` | SUPERSEDED | FA's closure (CR-88); edge: regard in steps first | → B21d | FA |
+| 96 | B3.2 P1 … P10 (ten things asked of a ch… | — | — |  | `U5a:478` | RESOLVED-BY | P1 goal lean + CR-88; P2 temper + pessimist B; P3 wound + pessimist A; P4 risk; P5 ground; P6… | B21d | FA |
+| 97 | row 17 (combat abilities cannot be auth… | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:501` | SUPERSEDED | PC's `03_PC_person_inputs_content.md` (U5b; by title) | → B18 | PC |
+| 98 | NPC-088 a season of tracked state; NPC-… | 2.5 `audits/02_CHAR_audit.md` §13 — provided characters | — |  | `U5a:451` | STALE/FP | the runs and reads the audit cites; each still needs `beats:` to be checked (`01_CORE_case_set… | — (stale) | WR |
+| 99 | §0A "where the sources disagree" (ten r… | 2.2 `audits/02_CHAR_audit.md` §0A, §4, §5 — tables with no… | — |  | `U5a:391` | STALE/FP | the two with a consequence are F-CHAR-04 (scar cap) and F-CHAR-20 (survival); carried there | — (stale) | IN |
+| 100 | §4 a second scar model in `systems/char… | 2.2 `audits/02_CHAR_audit.md` §0A, §4, §5 — tables with no… | — |  | `U5a:393` | STALE/FP | resolution 27; no edit | — (stale) | IN |
+| 101 | §5 NERS cuts (scar count; the realm-wid… | 2.2 `audits/02_CHAR_audit.md` §0A, §4, §5 — tables with no… | — |  | `U5a:395` | RESOLVED-BY | each by the finding it restates (F-CHAR-04, -02, -09, -01; F-CORE-05) | — | IN |
+| 102 | H-03, H-71, H-94, H-134, H-194, H-202,… | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:403` | STALE/FP | verified in code by the audit; no action | — (stale) | IN |
+| 103 | H-54, H-66, H-177/178/179/183, H-180, H… | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:404` | STALE/FP | carried; H-66's and H-347's cells are now given a target by `16_PESSIMIST_CHAR_B…` | — (stale) | IN |
+| 104 | H-73 | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:406` | SUPERSEDED | by REM-44 (the row's own last sentence); resolution 28 | — | IN |
+| 105 | H-253, H-289 | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:413` | SUPERSEDED | FA's closure (U5d); CHAR's share is the goal lean | — | IN |
+| 106 | H-264 | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:414` | SUPERSEDED | PC's closure (U5b) | — | IN |
+| 107 | H-330 | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:417` | RESOLVED-BY | workplan IN-14 (see F-CHAR-14) | — | IN |
+| 108 | H-347 | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:420` | RESOLVED-BY | `16_PESSIMIST_CHAR_B…` (four pursuits put `forge` first) | — | IN |
+| 109 | the 38 rows read at the dossier excerpt… | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:422` | RESOLVED-BY | addendum B §B6.1 read each in full; closed at §2.7 below | — | IN |
+| 110 | CR-88, CR-89–91, CR-93, CR-92, CL-PERSO… | 2.3 `audits/02_CHAR_audit.md` §6.1 — hole-register and work… | — |  | `U5a:423` | RESOLVED-BY | their workplan positions; inputs named in the proposals above | — | IN |
+| 111 | 17 | `budget` counts seats | — |  | `U5a:437` | RESOLVED-BY | workplan IN-14 (merged duplicate) | — | IN |
+| 112 | 19–25 | stale text; the worksheet outliving its landing | — |  | `U5a:439` | RESOLVED-BY | same file, Part C (22 and 23 through the `reading:` record, C-U5a-05) | — | IN |
+| 113 | 27, 28, 30 | second scar model kept; H-73 closed; `decision_policy_v1.md` is not a chooser source | — |  | `U5a:441` | RESOLVED-BY | — | — | IN |
+| 114 | §8 step 12 | means and ends | — |  | `U5a:444` | RESOLVED-BY | workplan CL-THRUST B2.2 (design-first); not re-opened | — | IN |
+| 115 | NPC-031 the heir's relation to the rege… | 2.5 `audits/02_CHAR_audit.md` §13 — provided characters | — |  | `U5a:460` | SUPERSEDED | FA's closure (IN-61; D-19) | — | IN |
+| 116 | NPC-086 evidence shown to an audience s… | 2.5 `audits/02_CHAR_audit.md` §13 — provided characters | — |  | `U5a:462` | SUPERSEDED | FI's closure (H-272) | — | IN |
+| 117 | B2.2 returning findings (six rows) | — | — |  | `U5a:477` | RESOLVED-BY | "zero person-scale change" = F-CHAR-03; "no scar decay" = F-CHAR-17 (the outflow, `scar_vindic… | — | IN |
+| 118 | H-201, H-205, H-240 (closed), H-117 (su… | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:487` | STALE/FP | read in full by the addendum | — (stale) | IN |
+| 119 | H-233, H-343 | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:491` | RESOLVED-BY | goal lean; reason trail | — | IN |
+| 120 | H-273, H-282 | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:492` | RESOLVED-BY | `16_PESSIMIST_CHAR_B…` (the cells); `regard_sign` | — | IN |
+| 121 | H-58, H-85, H-121, H-160, H-165, H-171,… | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:493` | SUPERSEDED | by the owning lanes' closures (SE, FA, FI, SC, MB, WR: U5b, U5c, U5d); cross-listed by the add… | — | IN |
+| 122 | row 9 (is kin a ground the heir title r… | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:498` | SUPERSEDED | answered: A-19 (the deed race: heir, consort, princess and both houses' heads may claim; found… | — | IN |
+| 123 | rows 15, 16, 23 | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:500` | RESOLVED-BY | a capability is never lost; an ability is not a fifth kind; a misfiled document stays | — | IN |
+| 124 | row 21 (the file for the capability def… | 2.7 `audits/02_CHAR_audit_addendum_B.md` §B6.1 (38 register… | — |  | `U5a:503` | RESOLVED-BY | U1 architecture §1 (decided: C-U5a-08) | — | IN |
+| 125 | For Jordan 1 | the crisis rolls or it does not | — |  | `U5a:527` | SUPERSEDED | answered: A-24 (D-26, D-27): it rolls. ED-IN-0261's G-Q6 wording is superseded by that ruling | — | IN |
