@@ -33,6 +33,35 @@ are one requirement, not three. As an audit standard:
 
 Where the standing requirement and a ruled item conflict, name the conflict and do not resolve it.
 
+## Authority granted (Jordan, 2026-11-12): author, design and resolve — in the form of proposals
+
+Fable lanes may **author and design improvements, and resolve every inconsistency, gap and unclear
+passage they find**, not only report them. (This lifts, for this suite, `CLAUDE.md` §10's limit that Fable
+is audit/planner only; it lifts nothing else.) The form is a **proposal**, because a lane edits no code,
+registry or canon:
+
+- **Write proposals** to `proposals/2026-11-12-subsystem-audit-suite/proposals/NN_<SUB>_<slug>.md`
+  (status line `## Status: PROPOSED`; `NN_<SUB>` as your dossier). Each: the problem (with evidence);
+  the resolution, decided; the exact edits, by file and owner (the single owner of each fact, §0.05;
+  quote the old and new text or give the structure of the new code and its typed interface); the
+  gate that shows it worked (an execution artifact, §0.2); the falsifier; a NERS reading (§0.06, E last);
+  cost class; and what it changes in `engine/season/` at runtime (answer this first; a proposal that
+  changes nothing at runtime says so).
+- **Resolve, do not park.** For every inconsistency (two readings of one fact, doc against code, two
+  owners), gap (a hole, an orphan, a row nothing reads) and unclear passage (a rule that two careful
+  readers would apply differently) in your subsystem, write the resolution in §6 of your audit, chosen by
+  the five-step ladder in order, with the reasoning. Where the code and a design document disagree, the
+  resolution follows the code unless the code is the defect; say which. Where a vague rule needs a number
+  or a closed set, propose the value and name the owner artifact that would carry it (a typed file code
+  reads, not prose).
+- **Limits that remain.** Edit nothing outside your own audit and proposal files; do not commit; a
+  resolution that would overwrite ratified canon or a `(RULED)` item is written as a proposal AND listed
+  in §11 with the two defensible options. Proposals are not ratified by being written (CLAUDE.md §2:
+  ratification happens on Jordan's merge, and only if the PR body says so). No guard, no standing
+  corpus, no new top-level tree.
+- **Count them in your receipt:** proposals written (paths) and resolutions decided (a number, from your
+  §6 table).
+
 ## Ground rules (from `CLAUDE.md`; read it, these are the ones that bite here)
 
 1. **Code is the mechanism; prose is reference** (§0.05). A design document is never the reason a
@@ -150,9 +179,11 @@ then `## Read at: <git short SHA of HEAD> (working tree)`.
 5. **Design matters** — where intent, ruling and code agree and disagree; ruled items you accept as
    binding; design objects that fail a NERS cut (name what dies), or that survive one (name what the
    cut would lose); design that exists only as prose and is therefore not yet game.
-6. **Hole-register and workplan disposition** — a table: item id · listed status · verified status
-   (closed / open / superseded / irrelevant / wrongly filed) · evidence · action. Apply the five-step
-   ladder to anything flagged for Jordan.
+6. **Hole-register and workplan disposition, and resolutions** — a table: item id · listed status ·
+   verified status (closed / open / superseded / irrelevant / wrongly filed) · evidence · action; then a
+   second table of every inconsistency, gap and unclear passage found, each with its **decided
+   resolution**, the ladder step that decided it, and the proposal file that carries the edit. Apply the
+   five-step ladder to anything flagged for Jordan.
 7. **Research transfer** — which precedent or historical finding changes what to build, and which is
    decorative; nulls count (CLAUDE.md research index §1 pt 4).
 8. **Best path forward** — an ordered list of builds/edits/deletions that move this subsystem toward a
