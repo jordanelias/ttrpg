@@ -4,6 +4,10 @@
 
 ## Read at: `4dc8a7b` (working tree, 2026-11-12; the code tree is unchanged through `ff2f508`). Producer: Fable, the holistic lane. Findings: `master/HOLISTIC_AUDIT.md` and its parts 2 and 3 (`H-01` to `H-13`). For Jordan: `master/HOLISTIC_FOR_JORDAN.md`.
 
+**Words** (`unified/U1_GLOSSARY.md` §H): a *setting* is a `Fixtures` field; the *act-count instrument* is
+`harness/aperture.py`; a *dataclass* is a typed input or outcome class of `queries/inputs.py`; a *hot file*
+is one of the files `U3` §1.1 lists. Code identifiers stay as the tree has them.
+
 Parts: this file (§0 what changes at runtime, §1 the standard and the cut test, §2 the batches and where
 they slot, §3 the tables v12 takes, items `CI-01` to `CI-05`), `_part2` (items `CI-06` to `CI-11`, §4 the
 deletion list, §5 notes for v12's author, §6 what this proposal does not carry).
@@ -12,7 +16,8 @@ deletion list, §5 notes for v12's author, §6 what this proposal does not carry
 
 **Nothing a seeded world can show.** Every item is hash-EQUAL for `World.content_hash()` on every pinned
 world, and says how that is observed. Three items regenerate a tracked artifact through its own exporter
-(`composition.json`, `sim_params.json`); one adds lines to an instrument's printout (`aperture`); one
+(`composition.json`, `sim_params.json`); one adds lines to an instrument's printout (the act-count
+instrument, `harness/aperture.py`); one
 deletes three files nothing reads. No draw, outcome, band, odds or order of resolution changes, so nothing
 here bears on the standing rule (*we do not do deterministic*): the rule concerns outcomes, and these items
 touch none.
@@ -60,18 +65,18 @@ overwrites a `(RULED)` item (the one Layer 1 question is in `HOLISTIC_FOR_JORDAN
 
 | item | what | finding | joins | why there |
 |---|---|---|---|---|
-| **CI-11** | an `ENGINES` reading on `harness/aperture.py` | H-01 | **B02-tests** (IN, W2, hash EQUAL), after `16_PESSIMIST_GAME_consequence_reading` | B02 holds the instrument readings later gates name; it edits no file another B02 member edits (`harness/aperture.py`, `engine/season/tests/test_aperture.py`) |
+| **CI-11** | an `ENGINES` reading on the act-count instrument (`harness/aperture.py`) | H-01 | **B02-tests** (IN, W2, hash EQUAL), after `16_PESSIMIST_GAME_consequence_reading` | B02 holds the instrument readings later gates name; it edits no file another B02 member edits (`harness/aperture.py`, `engine/season/tests/test_aperture.py`) |
 | **CI-10** | three deletions with their `FORK:` rows | H-10 | **B03-hygiene** (IN, W3, hash EQUAL), first, with `17_CENSUS_C1A_01` D1 | deletions of what nothing reads go first (STAGES practice 4) |
 | **CI-08** | the driver's 79 never-referenced imports | H-09 | **B03**, after the census deletions | same batch owns dead-name removal; `loop/driver.py` is edited by no other B03 member |
 | **CI-03** | the `social_contest.obstacle` composition row | H-05 | **B03**, after `17_CENSUS_REST_1` D4 (it edits `references/module_contracts.yaml` first) | one regeneration of `composition.json` for the batch; B03's gate already runs `export_composition.py --check` |
-| **CI-04**, **CI-05** | the season's fixtures and the realm's arms in the typed export | H-04 | **B03**, after `17_CENSUS_C1B_01` D3 (it rebuilds `sim_params.json` first) | one rebuild of the artifact for the batch |
+| **CI-04**, **CI-05** | the season's settings (`Fixtures`) and the realm's arms in the typed export | H-04 | **B03**, after `17_CENSUS_C1B_01` D3 (it rebuilds `sim_params.json` first) | one rebuild of the artifact for the batch |
 | **CI-06** | one owner of the chooser's composition | H-02 | **B03**, after `U5a_CORE_owed_edits` (it edits `harness/probes.py`) | lands before B06, which changes what `draw_factory` returns: B06 then edits one composition, not four |
 | **CI-01**, **CI-02** | annotations out of the two registries; history out of the source | H-03, H-07 | **new batch `B03a-prose`** (IN, hash EQUAL), after B03, before B04 | below |
 | **CI-09** | personal combat as a package | H-08 | **new batch `B13-pc-package`** (PC, hash EQUAL; the handle U3 left unused), after B03a, before B05 and B14 | below |
-| **CI-07** | the realm builder's home; one way to seat a person | H-02 | **held** on `J-H-01`; when ruled, **new batch `B03c-boot`** (IN, hash EQUAL) at the next IN-lane boundary | a pure move; lands at any boundary once its home is ruled |
+| **CI-07** | the realm builder's home; one way to place a person | H-02 | **held** on `J-H-01`; when ruled, **new batch `B03c-boot`** (IN, hash EQUAL) at the next IN-lane boundary | a pure move; lands at any boundary once its home is ruled |
 
 **`B03a-prose`** (IN; after B00, B01, B02, B03; before B04, B05, B08). Members: CI-01, CI-02. One close.
-*Why its own batch and not part of B03:* its diff touches almost every non-test file of the kernel and the
+*Why its own batch and not part of B03:* its diff touches almost every non-test file of the season package's game code and the
 modules and is comment-only by construction; its gate (an AST-equality reading over every edited file,
 CI-02) would be broken by any code edit in the same batch, and B03 is all code edits. Merged, the batch
 would save one close and lose the only gate that makes a 30,000-line diff reviewable. *Why before B04:*
@@ -108,8 +113,8 @@ own batches (H-08); the B03 items serve R-05's delivery indirectly (H-01's readi
 | CI-01 | no | none (the two registries are the edit) | no |
 | CI-02 | no | none | no |
 | CI-03 | no | `engine/engine_params/composition.json` (`tools/export_composition.py`): 16 → 17 roles | no |
-| CI-04 | no | `engine/engine_params/sim_params.json` (`tools/export_sim_params.py --build`): gains the fixture records | no |
-| CI-05 | no | the same file, same rebuild: gains the realm-arm records | no |
+| CI-04 | no | `engine/engine_params/sim_params.json` (`tools/export_sim_params.py --build`): gains the setting rows | no |
+| CI-05 | no | the same file, same rebuild: gains the realm-arm rows | no |
 | CI-06 | no | none | no |
 | CI-07 | no | none | no |
 | CI-08 | no | none | no |
@@ -176,7 +181,7 @@ are skipped by rule (`data/rosters.py:1402`, `:1462`; `data/verbs.py:616-627`): 
    only history is cut to its one-line definition; it is never deleted if it is one of the four
    presence-checked columns on a row that carries it.
 3. Leave `source:`, `cite:`, `ground:`, `row:` and every other key untouched. Leave the other season YAML
-   files alone: their prose is small (`W5` §1) and they are not hubs.
+   files alone: their prose is small (`W5` §1) and they are not hot files.
 4. The commit body names the parent SHA as where the annotations as they stood can be read. No `FORK:` row:
    no file is deleted.
 5. `unified/U1_GLOSSARY.md`: no row changes (no term is introduced, renamed or retired).
@@ -357,10 +362,10 @@ B03). **Lands in:** B03. **Lands it:** one `valoria-author` lane, `sonnet`, `med
 
 ---
 
-## CI-04 · The season's 101 tuning values are in the typed export
+## CI-04 · The season's 101 settings are in the typed export
 
-**Finding.** H-04. `DEFAULT_FIXTURES = Fixtures(...)` (`engine/season/data/fixtures.py:213`) passes 101
-keyword arguments; `tools/export_sim_params.py` reads module-scope assignments only, so none is exported.
+**Finding.** H-04. The settings are the 101 keyword arguments of `DEFAULT_FIXTURES = Fixtures(...)`
+(`engine/season/data/fixtures.py:213`); `tools/export_sim_params.py` reads module-scope assignments only, so none is exported.
 
 **What dies.** Nothing. **What is added** is the smallest thing that closes the chain: one more reader in
 the existing exporter (`valoria-simplify` ladder rung 4, *extend the neighbour*; a new exporter would be a
@@ -371,30 +376,30 @@ blocking round-trip. The artifact exists and is checked by `tests/valoria/test_e
 
 **Exact edits, in order.**
 
-1. `tools/export_sim_params.py`: a function `_fixture_records() -> list` that parses
+1. `tools/export_sim_params.py`: a function `_setting_rows() -> list` that parses
    `engine/season/data/fixtures.py`, finds the module-scope assignment whose target is `DEFAULT_FIXTURES`
    and whose value is a call to `Fixtures`, and for each `keyword` whose value `_literal()` accepts (the
-   file's own anti-fabrication reader, `:54-60`) emits the exporter's record shape
-   `{key, name, value, kind, module, file, note}` with `module: "engine.season.fixtures"`,
-   `key: "engine.season.fixtures.<name>"`, `file: "engine/season/data/fixtures.py"` and `note` the
+   file's own anti-fabrication reader, `:54-60`) emits a row of the exporter's own shape
+   `{key, name, value, kind, module, file, note}` with `module: "engine.season.settings"`,
+   `key: "engine.season.settings.<name>"`, `file: "engine/season/data/fixtures.py"` and `note` the
    trailing comment of that line where one exists. A keyword whose value is not a literal (the five table
-   names) is skipped and counted. The build appends these records; `by_module` gains the key.
-2. The record count the build prints states how many fixtures it read and how many it skipped, and the
+   names) is skipped and counted. The build appends these rows; `by_module` gains the key.
+2. The count the build prints states how many settings it read and how many it skipped, and the
    build **raises** if it read none (an assertion that it asserted, CLAUDE.md §0.1 pt 2: a renamed
    `DEFAULT_FIXTURES` must not produce a smaller artifact that still checks green).
 3. `python tools/export_sim_params.py --build`; commit the artifact with the tool.
 4. `python tools/export_game_constants.py --check` (it composes from `sim_params.json`): expected current,
    because no mapped constant's key changes. If it is not, the new keys collided with a mapped name: give
-   the fixture records the distinct module key above and rebuild.
+   the setting rows the distinct module key above and rebuild.
 
 **Tests.** Add to `tests/valoria/test_export_sim_params.py`:
-`test_the_season_fixtures_are_exported_and_a_rename_cannot_empty_them`: the artifact holds a record
-`engine.season.fixtures.pool_default` whose value equals `DEFAULT_FIXTURES.get("pool_default")`; the count
-of fixture records is at least 90; and pointing `_fixture_records` at a source with no `DEFAULT_FIXTURES`
+`test_the_season_settings_are_exported_and_a_rename_cannot_empty_them`: the artifact holds a row
+`engine.season.settings.pool_default` whose value equals `DEFAULT_FIXTURES.get("pool_default")`; the count
+of setting rows is at least 90; and pointing `_setting_rows` at a source with no `DEFAULT_FIXTURES`
 raises.
 
 **Gate.** `python tools/export_sim_params.py --check` → `[SIM-PARAMS] current`;
-`python tools/export_sim_params.py --search pool_default` prints the record; the new test green; hashes
+`python tools/export_sim_params.py --search pool_default` prints the row; the new test green; hashes
 equal (nothing at runtime reads the artifact, `W5` §2).
 
 **Falsifier and control.** In a scratch worktree: change `pool_default=2` to `3` in `fixtures.py` without
@@ -402,7 +407,7 @@ rebuilding → `--check` must exit 1. Revert → `current`.
 
 **Declared hash movers.** None; `sim_params.json` is regenerated. **Depends on:** `17_CENSUS_C1B_01` D3
 (rebuilds the same artifact, earlier in B03); CI-10 first (it deletes `value_pointer_links.json`, which
-would otherwise need rebuilding against the new records). **Lands in:** B03. **Lands it:** one lane,
+would otherwise need rebuilding against the new rows). **Lands in:** B03. **Lands it:** one lane,
 `sonnet`, `medium`. **Cost class:** edit.
 
 ---
@@ -415,16 +420,16 @@ world ships, and their defaults are in no artifact.
 
 **What dies.** Nothing. **Preserved:** the defaults and every call that overrides one.
 
-**Why not make them fixture rows.** Considered and rejected: every fixture must be named by a
+**Why not make them settings.** Considered and rejected: every setting must be named by a
 hole-register row's `site:` (`engine/season/data/fixtures.py`, the comment in `claim_decay`: *"unless the
-fixture is named in a register row's `site:`"*), so seven new fixtures are seven new register rows and a
-changed `runs/results.json` (`harness/report.py:292` iterates the fixtures), for a list the port only
+fixture is named in a register row's `site:`"*), so seven new settings are seven new register rows and a
+changed `runs/results.json` (`harness/report.py:292` iterates them), for a list the port only
 needs to *read*. Reading the defaults into the export costs one function.
 
 **Exact edits, in order.**
 
 1. `tools/export_sim_params.py`: `_realm_arm_records()` parses `engine/season/harness/populated.py`, finds
-   `def build_realm`, and for each parameter with a literal default emits a record with
+   `def build_realm`, and for each parameter with a literal default emits a row with
    `module: "engine.season.realm"`, `key: "engine.season.realm.<param>"`. It raises if `build_realm` is not
    found. (If CI-07 has moved the builder, the path constant is the one line that changes; it is read from
    `engine/season/data/files.py` if CI-07 added one there.)

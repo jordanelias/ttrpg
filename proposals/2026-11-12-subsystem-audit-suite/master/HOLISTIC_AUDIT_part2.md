@@ -56,7 +56,7 @@ instrument package, and what "a world" is has six builders.
 - Six harness files build worlds by assigning the stores directly, 71 sites
   (`grep -rnE "\b(w|world|self)\.(persons|rungs|sites|offices|records|propositions)\[[^]]+\] *=[^=]" engine/season modules`,
   tests excluded): `probes.py` 24, `populated.py` 22, `scarce.py` 9, `governance_spine.py` 6, `headless.py`
-  5, `corpus_run.py` 5. The four-line act of seating a person (a `Person`, a person `Rung`, a `contain`
+  5, `corpus_run.py` 5. The four-line act of placing a person (a `Person`, a person `Rung`, a `contain`
   Tenure, a `reside` Tenure) is written out at `populated.py:515-518` and again at `:693-696`.
 - `tools/m1_acceptance.py` and `tools/export_npc_roster.py` import `engine.season.harness` (`W2`); 29
   proposals edit `populated.py` (`unified/U3_DEPENDENCY_ORDER.md` §5.1).
@@ -64,18 +64,18 @@ instrument package, and what "a world" is has six builders.
 **Falsifier, and its outcome.** A non-harness file that builds the realm or composes the chooser:
 `grep -rn "build_realm\|def chooser" engine/season --include=*.py` outside `harness/` and `tests/` prints
 only `decision/choose.py::make_chooser` (the primitive, not the composition). Attack on the other side:
-does the kernel depend on the harness? No: `W2` shows no import edge from any non-harness season file into
-`harness/`. The harness is a leaf above the kernel; the defect is what lives in it, not a cycle.
+does the season core depend on the harness? No: `W2` shows no import edge from any non-harness season file into
+`harness/`. The harness sits above the core and nothing in the core imports it; the defect is what lives in it, not a cycle.
 
 **Consequence.** The port has no file to port for "new game": it would transcribe an instrument. Every
 world-shaped proposal (worldgen, cast, prologue, the playable scenarios) edits a 2,163-line harness file.
 A builder that drifts from the others produces worlds that differ in ways no gate compares.
 
 **Minimal fix at the owner.** Two parts. **CI-06** (hash-EQUAL, no ruling needed): one owner for the
-chooser's composition and for the run loop, with `soak`, `interactions` and `storybar` routed through it,
-and one owner for seating a person, used by the six builders. **Where the realm builder itself lives** is
-a Layer 1 question (a tenth module, or a row of an existing one) and is listed for Jordan as `J-H-01`
-with two options; **CI-07** is written for both.
+chooser's composition, with `soak` and `storybar` routed through it (`interactions` reads the parts and
+keeps them). **Where the realm builder itself lives** is a Layer 1 question (a tenth module, or a row of an
+existing one) and is listed for Jordan as `J-H-01` with two options; **CI-07** is written for both and
+carries the one function that places a person, used by the builders.
 
 ### H-03 · More than half the source is prose, and the largest registries are mostly annotation — degrades (cost of every later batch; clarity; the port)
 
@@ -114,7 +114,7 @@ lines are an account of a stale docstring and a load-bearing unused import list.
 kept), **CI-02** (source: each docstring states what the unit does, its inputs and its governing row;
 dated narrative leaves; the four reader classes are preserved). Both hash-EQUAL; both early.
 
-### H-04 · The season's tuning values have no typed export — degrades (CLAUDE.md §5; the port)
+### H-04 · The season's settings have no typed export — degrades (CLAUDE.md §5; the port)
 
 **Claim.** The rule is that a value the engine or the port uses lives in a typed artifact behind an
 exporter, or in a single Python owner. The season's values have the Python owner and no artifact, so the
@@ -125,14 +125,14 @@ port can only transcribe them by hand.
 `sim_params.json`'s `engine.season` block holds 21 constants and none of the 101.
 `engine/engine_params/game_constants.json`, the file the port's parity checker reads (its `_generated`
 line), holds 5 constants, 2 collisions and 3 divergences. Arms that select behaviour are spread over three
-places: 20 string selectors and 7 booleans in `Fixtures`, 7 boolean parameters of `build_realm`, and 91
+places: 20 string selectors and 7 booleans among the settings (`Fixtures`), 7 boolean parameters of `build_realm`, and 91
 `os.environ` reads in `modules/mass_battle` (66 in `config.py`); the last is already carried
 (`proposals/11_GO_port_gate_order_and_coverage.md` §5 and gate 1).
 
 **Falsifier, and its outcome.** `python tools/export_sim_params.py --search pool_default` would list the
 constant if it were exported. Not run as a search; settled instead from the artifact: no key under
-`by_module["engine.season"]` can be a fixture, because the exporter's reader takes `ast.Assign` at module
-scope and the fixtures are `ast.keyword` nodes of one call (read at `tools/export_sim_params.py:1-60`).
+`by_module["engine.season"]` can be one of them, because the exporter's reader takes `ast.Assign` at module
+scope and these settings are `ast.keyword` nodes of one call (read at `tools/export_sim_params.py:1-60`).
 `[UNVERIFIED: the 21 names were not listed one by one.]`
 
 **Minimal fix.** **CI-04**: extend the existing exporter (the neighbour, `valoria-simplify` ladder rung
@@ -140,7 +140,7 @@ scope and the fixtures are `ast.keyword` nodes of one call (read at `tools/expor
 no new tool. **CI-05**: the builder's seven arms are read into the same export, so "what ships"
 has one list a port can read.
 
-### H-05 · One host site reaches a module attribute no composition row names; one row is looked up through two tables — degrades (modularity; holonic §43)
+### H-05 · One host site reaches a module attribute no composition row names — degrades (modularity; holonic §43)
 
 **Claim.** A registered module is attached by a registry row, never an import (`layer-conformance` B0,
 citing `architecture/holonic_ARCHITECTURE.md` §43). One site obtains a row's callable and then uses it to
@@ -173,14 +173,15 @@ by ruling (A-25, ED-IN-0284, quoted in `manifest/registrar.py:15-22`) and stays.
 
 ### H-06 · The contest seam returns an untyped mapping for two engines — degrades (carried)
 
-`04` §C.5 says the subsystem returns a `Margin`. `queries/inputs.py:17-24` records that the social roll
+`04` §C.5 says the subsystem returns a `Margin` (for the field an end state, as amended 2026-11-12 under A-3
+and A-97). `queries/inputs.py:17-24` says that the social roll
 returns one and that *"the SEAM keeps one return shape"*, a `dict`, because combat returns a scene and
 mass battle a field. `audits/25_GROUNDING_ENGINE.md` V-01 and V-02 opened both. Carried by
 `proposals/03_PC_typed_outcome_one_door.md` (B14) and `proposals/04_MB_typed_outcome_and_one_path.md`
 (B17), as narrowed by A-3 (the field returns an end state). Nothing added here; listed because it is the
 widest untyped seam in §2.1.
 
-### H-07 · Sixteen files carry the plan, and the first five are the largest files in the tree — degrades (delivery)
+### H-07 · Sixteen files carry the plan, and the two most edited are the two largest registries — degrades (delivery)
 
 **Claim.** The plan's parallel waves rest on hand merges of the same few files.
 
@@ -195,7 +196,7 @@ B16, B19, B24). Sizes: 4,548 lines, 1,170, 5,557, and (`W5`) 354 KB.
 and W13 have none; W11 has three (B20, B29, B34) and W12 one (B41).
 
 **Judgment.** Attacked as a case for splitting the files; the split does not earn itself yet (§6, attack 5).
-What does: most of each hub's bulk is prose, so H-03's fix cuts the reading and the merge surface of
+What does: most of each hot file's bulk is prose, so H-03's fix cuts the reading and the merge surface of
 `rosters.yaml`, `verb_table.yaml` and `fixtures.py` by more than half without moving a key.
 **CI-01** and **CI-02** therefore land before B04, and §5 of the proposal asks v12's file census to
 carry one ordering rule for additions to the two registries (a new key or row goes at the end of its
@@ -220,7 +221,7 @@ set flat. Loaders of the flat set: 15 files under `systems/combat/`, 23 under `t
 **Minimal fix.** **CI-09**: make it a package; delete the path seam and its allow-list entry. Lowers the
 port's cost for this engine (§8): one construct fewer with no GDScript counterpart to read.
 
-### H-09 · The kernel's import surface is held open by a frozen instrument — hygiene (minimality; clarity)
+### H-09 · The driver's import list is defended by a frozen instrument that does not need it — hygiene (minimality; clarity)
 
 **Evidence.** `loop/driver.py` imports 112 names and references 33 (an `ast` count of imported names never
 used as a `Name` in the module; `__future__` excluded). Its docstring (`:18-28`) says the list is *"WIDER
@@ -302,9 +303,9 @@ Per `valoria-simplify` SURVEY. A direction ends in SURVEYED, PARTLY or NOT SURVE
 | direction | what was run | reading | verdict |
 |---|---|---|---|
 | **top-down** (is each stated goal realised) | M6: `register --requirements`; `m1_acceptance --summary`; the 16 composition rows against three runs | nine rows each name a measure; three read `met`, one `not_met`; six rows of sixteen unentered (H-01); R-02's instrument sits in `proposals/` (H-12) | **PARTLY**: the `measure:` commands were not re-run (limits, §1); goals nobody wrote down are INCONCLUSIVE |
-| **bottom-up** (what justifies each artifact) | M1, M4 over every non-test function; M2 over 119 rosters by name | kernel reach 84 to 97 % of function lines; 2 of 119 roster keys named by no non-test file, one of them confirmed unread by another lane (`knowledge_kinds`, `audits/25` V-17); `sim_params.json` and `value_pointer_links.json` have no runtime reader | **SURVEYED** for code reach on two seeds; **PARTLY** for data (name matching; its blind spot sampled on one key only) |
+| **bottom-up** (what justifies each artifact) | M1, M4 over every non-test function; M2 over 119 rosters by name | reach of the season core and its neighbours 84 to 97 % of function lines; 2 of 119 roster keys named by no non-test file, one of them confirmed unread by another lane (`knowledge_kinds`, `audits/25` V-17); `sim_params.json` and `value_pointer_links.json` have no runtime reader | **SURVEYED** for code reach on two seeds; **PARTLY** for data (name matching; its blind spot sampled on one key only) |
 | **vertical** (do levels keep their order) | M1 by area | 0 import edges from `engine/` to `modules/`; modules import one host file, the leaf `queries/inputs.py`; `seam/` imports `loop/sides.py` twice and `loop/` imports `seam/` four times (a declared pair); four area pairs import each other, all through the three top-level files `epistemic.py`, `gaps.py`, `trace_log.py` | **SURVEYED** for declared edges; string seams read apart in `W3` |
-| **lateral** (do peers share what no contract names) | M2; the role constants | the composition role names (`ARMY`, `PROVISION`, `HOUSING`…) are constants of `queries/world_q.py:1335-1350` imported by `seam/`, `loop/` and `harness/`: a reader module owns the seam's vocabulary; `Fixtures` is read at 218 sites over 99 names; `sigma.py` reaches `roll.obstacle` (H-05) | **PARTLY** |
+| **lateral** (do peers share what no contract names) | M2; the role constants | the composition role names (`ARMY`, `PROVISION`, `HOUSING`…) are constants of `queries/world_q.py:1335-1350` imported by `seam/`, `loop/` and `harness/`: a reader module owns the seam's vocabulary; the settings (`Fixtures`) are read at 218 sites over 99 names; `sigma.py` reaches `roll.obstacle` (H-05) | **PARTLY** |
 | **over time** (order, replay, carried cost) | I1 as replay: same seed, same hash, three readings (§9) | replay holds; build plus the first season costs about 8 s, the fourth season 65 s at seed 2 (`W4` marks: 7.4, 23.4, 55.5, 120.0 s cumulative), so cost per season grows with the log | **PARTLY**: one machine, two seeds; history NOT SURVEYED (shallow clone) |
 | **diagonal** (coupling no structure declares) | I3, I4 without I5 | the driver's imports and a frozen sweep (H-09); behaviour arms in three places (H-04); the realm in the harness (H-02) | **PARTLY**: without history only the structural instruments ran |
 
@@ -314,12 +315,12 @@ Per `valoria-simplify` SURVEY. A direction ends in SURVEYED, PARTLY or NOT SURVE
    loads three `engine.season` modules (`engine.season`, `.queries`, `.queries.inputs`), no YAML, in 0.03 s;
    the same for `modules.settlements.housing`, `modules.fieldwork.find`, `modules.combat.fight`.
    `queries/inputs.py:11-15` states the leaf rule and names the test that observes it. Holds. (It does
-   differ from `holonic` §45, which puts the records inside the module; the file says so at `:7-10`.)
+   differ from `holonic` §45, which puts the dataclasses inside the module; the file says so at `:7-10`.)
 2. **"The engine imports a module somewhere."** `W2`: no edge. Holds.
 3. **"`MODULE_ENTRIES` is a second table and unearned."** Earned by ruling (E1): A-25 and ED-IN-0284, as
    `manifest/registrar.py:15-22` quotes them. The second route is the nine direct sites (H-05), not the table.
-4. **"The harness leaks into the kernel."** `W2`: no non-harness season file imports it. Holds.
-5. **"`world_q.py`, `rosters.yaml` and `verb_table.yaml` should be split into families."** Attacked as hubs
+4. **"The harness leaks into the season core."** `W2`: no non-harness season file imports it. Holds.
+5. **"`world_q.py`, `rosters.yaml` and `verb_table.yaml` should be split into families."** Attacked as hot files
    (H-07). A split is relocation (`valoria-simplify` DISPOSE: the number of places a reader opens does not
    fall); `04` §A.2 names `world_q` as a member of `queries/`; 81 proposals cite `world_q.py` by function and
    130 cite `rosters.yaml` by key, and every one would need re-pointing mid-plan. The reading cost that made

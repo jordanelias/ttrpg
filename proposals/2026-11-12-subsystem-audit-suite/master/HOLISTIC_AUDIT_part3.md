@@ -20,16 +20,16 @@ re-run, and where that matters the row says so. A verdict is this lane's, on wha
 | **R-01** | decisions propagate | met | seed 0, one season: 749 resolved acts leave 13,379 Events, 12,115 of them `claim.deposited`; ledgers grow from 236 to 12,351 claims, 6,040 of them `told_by` and 297 `inferred` (`runs/HOLISTIC/nine_probe.json`). `loop/witness.py` 9 of 12 functions entered (`W4`) | **executes.** The row's own criterion is a degree-sweep reading on one committed log (`audits/01_CORE_audit.md:174`), not re-run here | the measure replaced by one a batch can re-run: `proposals/16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md` (B02) |
 | **R-02** | decisions affect later decisions | met | not observed by this lane: the measure is `proposals/2026-09-04-degree-sweep/wd_collect.py` after 36 chunk cells, about 75 minutes (`dossiers/00_NINE.md`; `audits/01_CORE_audit.md:175`) | **INCONCLUSIVE here**; the register's `met` rests on a committed log. Placement defect H-12 | the same proposal (B02) |
 | **R-03** | seasons tick scene by scene | met | `headless --case NPC-088 --seasons 2 --seed 0`: `rounds=5 acts=16 events=17` then `rounds=5 acts=17 events=92`, hash `5405522c36b0399247f83fd9f6d29494` | **executes** as rounds within a season. A-9 changes a turn to a short sequence, so the row's meaning moves | `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order` (B08) |
-| **R-04** | strategic and management actions at differing scales | partial | settlements' `produce` and `subsist` run once a season from MATTER; a field is fought at seed 0 in season 3 and at seed 2 in season 1; the army record's four rows and `effects_army.py` are entered by no run; founding 1 of 9 functions (`W3`, `W4`) | **partial, and narrower than the register's sentence**: two of the management engines (the army, founding and works) have code and rows and no computed act reaches them (H-01) | B12 (ground, works), B21 (governance), B22 (armies); CI-11 gives the reading |
+| **R-04** | strategic and management actions at differing scales | partial | settlements' `produce` and `subsist` run once a season from MATTER; the field resolver is entered at seed 0 in the third season and at seed 2 in the first; the army record's four rows and `effects_army.py` are entered by no run; founding 1 of 9 functions (`W3`, `W4`) | **partial, and narrower than the register's sentence**: two of the management engines (the army, founding and works) have code and rows and no computed act reaches them (H-01) | B12 (ground, works), B21 (governance), B22 (armies); CI-11 gives the reading |
 | **R-05** | all verbs built out | not_met | one season at seed 0: 42 verbs are attempted, 26 execute and 16 are only refused (`audits/25_GROUNDING_ENGINE.md` L-14; this lane's run of the same world counts 39 verbs in the fold set); 34 of 67 execute in neither the corpus nor three seasons (`audits/17_CENSUS_REST.md` §0) | **not met**, and it is the largest obstacle: H-01 is this row seen from the engines | B07 (the task draw), then the verb families' batches |
-| **R-06** | characters robustly built (goals, convictions, values) | partial | at `build_realm(0)`: all 83 persons carry `pursuits`; 35 carry `stance`; 2 carry `capability` (`{inquiry: 2}` each); 0 carry `attributes` (`nine_probe.json`; `audits/25` L-06, L-08: `cast_attributes=False` ships) | **partial**: people differ in what they pursue and hold, not in what they can do. Any two persons roll the same pool on a verb unless they are the two with a key | B04 (the capability home), B10 (character) |
+| **R-06** | characters robustly built (goals, convictions, values) | partial | at `build_realm(0)`: all 83 persons carry `pursuits`; 35 carry `stance`; 2 carry `capability` (`{inquiry: 2}` each); 0 carry `attributes` (`nine_probe.json`; `audits/25` L-06, L-08: `cast_attributes=False` ships) | **partial**: people differ in what they pursue and hold, not in what they can do. Any two persons roll the same pool on a verb unless one of them is one of the two who hold a capability | B04 (the capability home), B10 (character) |
 | **R-07** | memory, feelings, attitudes, relationships; imperfect knowledge | partial | ledgers fill by channel (above); the chooser's module imports no `World`: `decision/` has five import edges into `state/`, all to `carriers.py` (`W2`). The row's measure is three tests, not run (no `pytest`) | **partial; the knowledge half executes and is separated by module path**; feelings and relationships were not observed by this lane | B09 (memory), B10 |
 | **R-08** | decisions not omniscient, not perfectly rational | partial | the chooser takes a draw (`harness/probes.py:288-289`, `draw_factory`) at `choice_temperature = 0.05` (`nine_probe.json`); its measure (`corpus_run`, the ranking line) was not re-run | **partial; mechanism present, effect not measured here** | B10 (`02_CHAR_choice_alignment`, `02_CHAR_resolve_and_temper`) |
 | **R-09** | chains of events within a scene are probabilistic | partial | seed 0, one season: 61 of 13,379 Events carry a degree; 48 rolls and 62 graded findings account for them (`W3`); 92.7 % of success Events carry none (`audits/25` L-15) | **partial, and by execution closer to not met in the shipped realm**: most outcomes are a fixed function of state, against the standing rule (A-24) | B05 (the one roll), B06 (the keyed draw), B07 (the task draw) |
 
-**Across the nine.** The three rows the register reads `met` are the three the kernel serves (E1 to E3):
+**Across the nine.** The three rows the register reads `met` are the three the season core, the chooser and the readers serve (E1 to E3):
 propagation, consequence, ticking. The six that are not met are served by the resolver engines and the
-character data (E5 to E9, and the cast), which is where H-01, H-04 and the capability lanes sit. The kernel
+character data (E5 to E9, and the cast), which is where H-01, H-04 and the capability lanes sit. The core
 is ahead of the engines it hosts.
 
 ## 8. The cost of porting each engine to Godot
@@ -47,7 +47,7 @@ Construct counts per engine (`ast`, non-test; `runs/HOLISTIC/` and §9):
 
 | engine | code lines | `def` | `raise` | `try` | comprehensions | lambdas | reflection calls | import by string | decorated `def` |
 |---|---|---|---|---|---|---|---|---|---|
-| season kernel (`loop`, `state`) | 4,871 | 395 | 86 | 9 | 206 | 42 | 139 | 0 | 79 |
+| season core (`loop`, `state`) | 4,871 | 395 | 86 | 9 | 206 | 42 | 139 | 0 | 79 |
 | chooser and readers (`decision`, `queries`, `epistemic`) | 4,057 | 397 | 67 | 2 | 364 | 30 | 74 | 0 | 9 |
 | data channel (`data`, `manifest`, `substrate`) | 4,279 | 284 | 267 | 8 | 186 | 7 | 151 | 4 | 2 |
 | seam | 835 | 71 | 20 | 1 | 25 | 4 | 18 | 1 | 6 |
@@ -62,19 +62,19 @@ statements in non-test `engine/season`, `audits/25` L-24; the table's rows sum t
 
 | engine | what must be ported | the Python constructs that carry the cost | what lowers it | class |
 |---|---|---|---|---|
-| **dice engine** | all of it; it is the oracle's roller | arbitrary-precision `int` and float arithmetic in the leverage sums (`04` §C.8–§C.10: *"Fixed point for `condition`, `stores`, `margin`"*); a seeded generator | A-30 (one draw per key, the same keyed hash on both sides: B06) and A-29 (declared floats: `11_GO_float_contract`) settle both | **small** |
-| **the small modules** | all; 196 code lines, typed records in and out | frozen dataclasses | nothing needed | **small** |
+| **dice engine** | all of it; it is the oracle's roller | arbitrary-precision `int` and float arithmetic in the leverage sums (`04` §C.8–§C.10: *"Fixed point for `condition`, `stores`, `margin`"*); the draw, which `04` §C.12 as amended on 2026-11-12 (A-30) makes a function of its key | A-30 (one draw per key, the same keyed hash on both sides: B06) and A-29 (declared floats: `11_GO_float_contract`) settle both | **small** |
+| **the small modules** | all; 196 code lines, dataclasses in and out | frozen dataclasses | nothing needed | **small** |
 | **the contest seam** | all | one import by string (`sigma.py:246`, H-05); the adapters' `dict` return (H-06); `raise` for refusals (20) | CI-03 removes the reflective edge; the typed-outcome proposals (B14, B17) remove the `dict` | **small, after those** |
-| **the data channel** | the loader and its invariants; the registries as `Resource` or JSON (`04:924`) | 267 `raise` sites are the loader's refusals: each becomes a boot failure with the row named (`04` §C.12 row *"a failed invariant must abort the boot"*); 713 KB of the two largest registries is mostly text the port does not need (H-03); the 101 fixtures are not in any export (H-04) | CI-01 shrinks what is shipped; CI-04 and CI-05 put every value in one artifact with a round-trip check | **medium** |
+| **the data channel** | the loader and its invariants; the registries as `Resource` or JSON (`04:924`) | 267 `raise` sites are the loader's refusals: each becomes a boot failure with the row named (`04` §C.12 row *"a failed invariant must abort the boot"*); 713 KB of the two largest registries is mostly text the port does not need (H-03); the 101 settings are not in any export (H-04) | CI-01 shrinks what is shipped; CI-04 and CI-05 put every value in one artifact with a round-trip check | **medium** |
 | **the chooser and readers** | all; this is the people | 364 comprehensions over stores (density, and order: dict iteration and `sorted` at 95 sites decide ties); 39 dataclasses; `world_q` as 191 free functions over `World` | a keyed draw for every tie (B06); nothing structural | **medium to large**: the largest body of logic with the least apparatus |
-| **the season kernel** | all | unforgeable tokens (`04` §A.3 row 3) need a private constructor; `04` §C.8 already grades that MECHANICAL by scan in GDScript; 79 decorated functions (`@effect_for`, the registries filled at import): import-time registration has to become an explicit table; 86 `raise` | CI-08 (the driver's imports); the effects' registration is one table either way | **large** |
+| **the season core** | all | unforgeable tokens (`04` §A.3 row 3) need a private constructor; `04` §C.8 already grades that MECHANICAL by scan in GDScript; 79 decorated functions (`@effect_for`, the registries filled at import): import-time registration has to become an explicit table; 86 `raise` | CI-08 (the driver's imports); the effects' registration is one table either way | **large** |
 | **personal combat** | all; `04` and CLAUDE.md §6 make it the first slice | the flat module set and its path insert (H-08); a `dict` outcome (H-06); 59 reflection calls | CI-09 (a package: one import form); `03_PC_typed_outcome_one_door` (B14) | **medium**; the only engine with an export chain the port already validates against (`combat_engine_v1.json`) |
 | **mass battle** | the resolver's reached part first: 141 of 339 functions are entered by a fought field (`W4`) | 91 environment reads select behaviour (H-10, carried); 264 comprehensions; the largest files in `modules/` (`hierarchy/units.py` 1,486 code lines, `orchestration.py` 1,119) | the census deletions (B03) and the environment-read removal (B41) come first: porting before them ports dead arms | **large** |
 | **the instruments** | **not ported.** The port is validated against pinned readings of the oracle (`proposals/11_GO_port_gate_order_and_coverage.md`, `tools/export_oracle_pins.py`, B41) | — | H-02: the realm builder is in this package today, so "not ported" is false for 982 lines of it until CI-07 lands | none, **after CI-07** |
 | **the apparatus** (`tools/`) | not ported; the exporters run in this repository and the port reads their artifacts | — | — | none |
 
 **Order the port would want** (a reading, not a plan: porting beyond the combat slice waits on the port
-gate, CLAUDE.md §6): dice engine, small modules, seam, combat, then the data channel with the kernel, the
+gate, CLAUDE.md §6): dice engine, small modules, seam, combat, then the data channel with the season core, the
 chooser, and mass battle last. Every "lowers" entry above is hash-EQUAL work in the improvement proposal
 or a batch the unified order already carries; none shapes Python toward a Godot idiom (`valoria-simplify`
 port rule (c)).
@@ -83,8 +83,9 @@ port rule (c)).
 
 Every command was run from the repository root with `PYTHONHASHSEED=0` where it runs the engine. Probe
 scripts and outputs are in the session scratchpad under `runs/HOLISTIC/` (not committed); extracts are in
-`master/work/`. No tracked file outside `master/` was written: `git status --short` at the end shows only
-this directory.
+`master/work/`. This lane wrote only under `master/`. `git status --short` at the end also shows files other
+lanes were editing during the run (`architecture/`, `references/id_reservations.yaml`, two ED ledgers);
+this lane did not touch them.
 
 | # | command or probe | seed, seasons | outcome |
 |---|---|---|---|
@@ -110,5 +111,5 @@ without it, probe 8). No number here is a balance claim.
 
 **What would change a verdict.** H-01: a seed-0 run of six or more seasons entering `modules/combat` would
 narrow *"not reached at seed 0"* to *"not reached in the first three seasons"* (it is written that way).
-H-04: a fixture name found in `sim_params.json`. H-05: a composition row targeting `roll:obstacle`.
+H-04: a setting's name found in `sim_params.json`. H-05: a composition row targeting `roll:obstacle`.
 H-09: a file that obtains one of the 79 names through the driver by a route the two searches cannot see.
