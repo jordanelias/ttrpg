@@ -19,6 +19,18 @@ already says (`canon/`, the faction design set, `engine/season/offices.yaml`, th
 machinery: `deeds_judged`, claims, the `Claim` ledger, succession `succeed`/`confer`) and extend it; do not
 invent a parallel nobility system.
 
+*Jordan, later the same day:* **"Royalty by noble conquest, i.e. the first king had the greatest
+accomplishment in the secession war, followed by the first Duke of Hafenmark and the first Duke of
+Varfell."** Treat as a world fact: the crown and the two ducal houses were won by conquest and
+accomplishment in the secession war, in that order of accomplishment (king, then the first Duke of
+Hafenmark, then the first Duke of Varfell). Locate it in the tree (`canon/` timeline, the faction and
+holding documents, `engine/season/offices.yaml`, `npcs.yaml`, the Baralta crown-claim and Varfell
+documents in `.designs/systems/factions/`, the secession-war material), reconcile any disagreement in the
+tree with this statement by naming it (Jordan's word governs the world; the code governs the engine), and
+design legitimacy accordingly: rank as a ranked ledger of accomplishment, how the first holders' standing
+is inherited, renewed or contested by their heirs and by new deeds, what a conquest-founded house owes
+and is owed, and how a new accomplishment could in play raise a house or unseat one.
+
 ## What is asked
 
 For each institution family assigned to you, from the historical research in the tree and any further
