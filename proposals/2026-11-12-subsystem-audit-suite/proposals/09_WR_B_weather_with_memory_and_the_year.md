@@ -50,8 +50,8 @@ holds, so the design's survival terminal (the Rupture: "all factions lose", `wc_
 ## The resolution, decided
 
 - **R-27 · a spell.** Weather gains a second keyed draw on a coarser clock and a coarser place: the
-  **year** (`tick // len(season_factor_draw)`) and the territory's **parent rung** (the first rung above it
-  in `world_q.ancestry`). The spell is a multiplier drawn once per (seed, year, region), shared by every
+  **year** (`tick // len(season_factor_draw)`) and the territory's **parent rung** (`state/containment.py::parent_of`, the
+  one owner `state/gate.py` already imports). The spell is a multiplier drawn once per (seed, year, region), shared by every
   territory under that region for the whole year; the season's own draw stays per territory and per
   season. Factor = `season_factor × spell × choice(season entry)`. Duration and neighbourhood come from the
   key, and no state is stored: the spell a territory is in is a function of `(world_seed, year, rung)`, as
@@ -90,7 +90,8 @@ holds, so the design's survival terminal (the Rupture: "all factions lose", `wc_
     spell = 1.0
     if spells:
         year = w.tick // len(w.fixtures.get("season_factor_draw"))
-        region = _region_of(w, territory)          # first rung above the territory in `ancestry`; "world" if none
+        region = parent_of(w, territory) if territory else None   # `state/containment.py`; "world" if none
+        region = region or "world"
         spell = draw_factory(w.world_seed, lambda: year)(region, "season_spell").choice(spells)
     return base * spell * draw.choice(outcomes)
 ```

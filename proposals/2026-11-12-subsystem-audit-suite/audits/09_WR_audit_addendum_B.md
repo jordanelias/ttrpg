@@ -128,6 +128,12 @@ the corrections to the first audit, and carries the three findings that have no 
 10. **A correction to this addendum's own §6, made at completion.** H-107 was dispositioned open; the field
     it names was deleted at G1b (`state/carriers.py:259-268`), so the row is closed and the chronicle's
     "about" has two owners by line kind (R-28). §6's row and counts are corrected in place.
+11. **A correction to this addendum's own §5.1 and §5.2, made at completion.** "The year: unbuilt" is half
+    right. The calendar exists: `queries/world_q.py:1169-1175`, `season_of_year(w) = w.tick %
+    len(season_factor_draw)`, so a declared weather table *is* the year, and it is off only because the
+    table ships `()`. What is unbuilt is everything a season of the year should change besides yield
+    (CP-T10-03's `season_terms`: want, illness; EB-06). `09_WR_B_weather_with_memory_and_the_year.md` keys
+    its spell on that same year.
 
 ### 2.3 New findings without a section of their own
 

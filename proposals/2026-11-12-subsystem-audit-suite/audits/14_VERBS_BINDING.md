@@ -364,3 +364,406 @@ repeat refusals return.
 **9. NERS.** N: the only producer of new structure. R: a lord shapes his administration. S: one office
 derivation, one owner. E: one act. Cut: fold into `found` (a settlement)? No: different carrier (Office
 vs Rung).
+
+---
+
+## 6. `issue`
+
+**1. Premise.** *A seat issues a written order to men under it, who must obey, evade or answer for it.*
+Links: the issuer holds a seat → he names what is ordered (a proposition: "X ought to be done") and whom
+it binds (executors under him) → the writ exists and is proclaimed → each addressee learns its terms →
+each answers by his own act (`comply`, `evade / defy`, `construe`) → the issuer learns the answers →
+defiance is his occasion (recall, case, arrest).
+
+**2. State today.** Row `remit:issue`, typed three conjuncts (`executors`: `to` a Person; `authority`:
+the seat's purview reaches `to`; `terms`: `own_ledger` of `subject`), `counterparty: to` fanned over
+known persons, writes `Record.exists` (a `dispensation` minted into the maker's hand), emits
+`dispensation.issued`. Seed 0: attempted 26, executed 19, refused 7 on `authority` `[FA]`; seed 1:
+15/14/1. 29, 21, 41 writs over three seasons at seeds 0–2; 0 held by an addressee; 0 answers (FA F-FA-01).
+The probe adds: `terms` is a **person id** in most writs (the King's five name the King), and a
+subordinate can address the King. **Verdict: executes; binds nobody; orders nothing.**
+
+**3. Build-out, decided.**
+- *Reach and answer*: FA-P1 (`06_FA_decree_binds.md`) is adopted whole: the terms of a proclaimed writ
+  reach its addressees as a content claim; `comply`/`evade / defy`/`construe` form on a writ the
+  addressee's own ledger names him addressee of; the issuer's folded suspicion carries a defiant
+  subordinate's seats as the recall referent. The proclaimed-or-delivered choice stays the FA audit's §11
+  item 1 for Jordan.
+- *What a writ orders*: `issue` declares `referent_class: Proposition`, so `subject` (the terms) is
+  always a Proposition; the `terms` conjunct stays `own_ledger`. The stamp today (`propositions_heard`)
+  carries only Propositions he heard from *another* (`Claim.doer != p.id`), which would leave out the
+  most natural writ: the OUGHT he himself committed to. So the Proposition stamp gains his ambitions
+  (`world_q.ambitions`, the one owner of the live-`commit`-to-an-OUGHT rule), a declared widening for
+  every row declaring the class (`argue` gains them; `commit` does not, `held_edge_declines`). This is the
+  smallest edit that stops a writ ordering a person. Which Propositions are orders (a stores demand, an
+  installation, a cession) is F-FA-18 / R-27's design-first item and stays there: a writ's terms are what
+  the issuer holds ought to be, and the answer verbs read them.
+- *Whom it binds*: `authority` reads purview over the executor's place today, which admits an order up
+  the chain. Decided, as `dispatch`'s: **an executor is a person sworn to, or seated beneath, the issuing
+  seat** — a new basis value `command` in `state/gate.py` (one predicate: `to` holds a live `oblige` to
+  `via`, or holds a seat whose revocation `may_revoke` grants to `via`, or lives within `via`'s purview
+  and holds no seat). `[ASSUMPTION; medium; Jordan to correct; revert: basis `purview`]`. It is §13
+  decision 1.
+- *Formation*: the fan over `to` filters by the same predicate person-side where it can (his own seats'
+  obligees and the persons his ledger seats beneath him); what he cannot read stays the
+  `issue.unauthorized` refusal.
+- *Degree*: none. An order is authority, not a contest; the contest is the answer (`construe`) and the
+  issuer's response (`open_case` → `determine`).
+- *Consequences*: answers (FA-P1), recall (`revoke`), cases (`open_case`), `comply`'s performing acts
+  (`terms_sourced`), chronicle.
+
+**4. Scales.** The issuing seat's rung (province by the retired key). Player: chooses terms (a
+Proposition he holds) and addressees among his men; is offered answers when addressed. NPC: chooser.
+
+**5. Tuning hooks.** FA-P1's suspicion threshold (its home); the `command` basis (`state/gate.py`,
+reading `offices.yaml` revocation bases); `terms_sourced` (rosters).
+
+**6. Exact edits.** `proposals/14_VERBS_BINDING_D_orders.md` §1.
+
+**7. Gate and falsifier.** FA-P1's gate (an addressee's answer executes; the issuer's later act cites
+it), plus: seeds 0 and 1, realm, two seasons, **0 writs whose `terms` is not a Proposition** and **0
+writs addressed to a person the issuing seat does not command**. Control: class and basis reverted (the
+probe's figures: 5+ person-terms, 1 writ to the King). Planted failure: revert the class; person-terms
+return.
+
+**8. Cases.** NPC-083 (a governor's limited orders), NPC-038, ARC-17 (FA-P1's citations); NPC-008 N1
+(a bureaucrat acting through his post); M-ABROAD (ARC-38 N2, NPC-089 N6: a superior who recalls).
+
+**9. NERS.** N: the act of authority over men; without it there is no command loop (FA-B4's first link).
+R: obedience, evasion, construal and recall are four games, and the realm runs them unwatched. S:
+answers read the same Record; one mint. E: one act (what, to whom); the answers carry the drama. Cut:
+merge `covenant` into `issue`? No: the covenant row keeps its terms private by design.
+
+---
+
+## 7. `marshal`
+
+**1. Premise.** *A commander sets his army's order of battle for the field at a place: what role it
+takes and when it falls back.* Links: a seat that may muster → a place where his side will fight → he
+issues a standing order → the field reads the newest order when it is fought.
+
+**2. State today.** Row `remit:dispatch`, `referent_class: Rung`, typed `authority` (purview), writes
+`Record.exists` (`order_of_battle`), emits `order.marshaled`; `role`/`retreat_at` ranged by
+`choice_sourced`. **Withheld** (`data/fixtures.py:1157`, `withheld_verbs`), so eligible 26, formed 0.
+`field_input` reads the order; fields fought: 0 at seed 0 (PHYSICAL §0.3: `march` executes only
+unopposed). **Verdict: unreachable (withheld), and its reader has no field to read it at.**
+
+**3. Build-out, decided.**
+- *Precondition of use*: a field is fought. That is PHYSICAL batch P-B
+  (`14_VERBS_PHYSICAL_B_field_and_ruin.md`, `march` meeting a defender) and MB's field scenario;
+  `marshal` cannot be judged before it.
+- *Who may*: FA-P2 (remit by row: only seats whose row names `dispatch`) and FA-B2 (levy through the
+  seat) bound eligibility to commanding seats. Cited.
+- *Formation*: the shared Rung class offers every known place. Decided: **`marshal` forms only on a
+  place where his side may fight** — a named class `Front`, stamped by `questions_for` from his own
+  ledger: a place his faction holds that a `march.declared` claim names as a target, or a place a
+  `march.declared` claim names as his faction's target (person-side, AX-2). An order for a place no field
+  will be fought at is a Record nobody reads.
+- *Effect*: unchanged (one Record per order; the newest wins at `field_input`).
+- *Unwithhold*: a separate declared mover, after P-B, with the gate below.
+- *Consequences*: `field_input` (MB), the field's degree, `field.won`/`field.lost`, casualties.
+
+**4. Scales.** Settlement where the field is; the seat's faction. Player: picks role and retreat
+threshold (closed sets). NPC: chooser over `choice_sourced`.
+
+**5. Tuning hooks.** `order_roles`, `order_retreat_at` (rosters), MB's `ROLE_SPEC` (module).
+
+**6. Exact edits.** `proposals/14_VERBS_BINDING_E_war_seats.md` §1.
+
+**7. Gate and falsifier.** After P-B and the unwithhold: a seeded realm run where a field is fought and
+`field_input` reads an `order_of_battle` for at least one side; the same seed with that order's `role`
+flipped (planted) changes the field's degree or casualties. Control: `marshal` withheld (today).
+
+**8. Cases.** NPC-036 N4, NPC-072 N3 (named command posts); MB's field scenario
+(`04_MB_playable_field_scenario.md`).
+
+**9. NERS.** N: without it a commander has no decision at the field scale beyond whether to march. R:
+role and retreat give a field tactics a person chose. S: the order is a Record the field reads; no second
+parameter channel. E: two closed choices. Cut: fold into `march` as payload? Defensible, at the cost that
+the defender (who does not march) could set no order; kept separate.
+
+---
+
+## 8. `surrender`
+
+**1. Premise.** *A lord whose town is besieged yields it to the besieger rather than fight.* Links: an
+enemy presses a siege on a place his faction holds → he learns of it → he chooses to yield → the place
+passes without a field → the realm hears it.
+
+**2. State today.** Row `remit:dispatch`, `referent_class: Rung`, typed `authority`, effect
+`_eff_surrender` (a held settlement, `siege.pressed` this season, a receiver of another faction,
+`may_cede`), writes `Tenure.since`/`until`, emits `place.surrendered`. **Withheld**. `siege.pressed` is
+never emitted (PHYSICAL §0.3; `raze` refused 14 of 14 after admission). **Verdict: unreachable twice
+over: withheld, and its occasion is never produced.**
+
+**3. Build-out, decided.**
+- *Occasion*: `siege.pressed` is PHYSICAL P-B's. Cited.
+- *Formation*: decided, **a named class `Besieged`**, stamped from his own ledger: a `siege.pressed`
+  claim of this season naming a place within his seat's purview (person-side). The faction-match test
+  stays the effect's `may_cede`, the cost the row's note already states. The no-siege refusal leaves
+  formation.
+- *Terms*: the row cedes the place outright. A surrender on terms (garrison leaves, stores kept) is the
+  covenant route (`covenant` + `give`), not this row; recorded, not built.
+- *Unwithhold*: a declared mover after P-B.
+- *Consequences*: `holder_faction_of`; pending marches resolve `Unopposed`; chronicle; FA-B1 (a yielded
+  town is a war cost the waging seats read).
+
+**4. Scales.** Settlement; faction. Player: yield or not, when a siege presses his town. NPC: chooser
+(alignment cells; no special term).
+
+**5. Tuning hooks.** The chooser's alignment cells for `surrender` (`rosters.yaml: alignment`); nothing
+new.
+
+**6. Exact edits.** `proposals/14_VERBS_BINDING_E_war_seats.md` §2.
+
+**7. Gate and falsifier.** After P-B: a seeded run in which a `siege.pressed` is followed in the same or
+the next season by a `place.surrendered` or a fought field at that place, and `holder_faction_of` reads
+the receiver after a surrender. Planted failure: stamp every known Rung as `Besieged`; refusals return.
+
+**8. Cases.** ARC-13 N1 (a faction's default defensive behaviour), ARC-24 N2; EMG-X5 (a brittle peace).
+
+**9. NERS.** N: the only bloodless transfer under arms; without it every siege is a battle or a ruin. R:
+a lord weighs honour against lives. S: `may_cede` on the one gate. E: one yes/no. Cut: fold into `give`
++ Rung? No: `give` is unthreatened and consensual; a surrender reads a threat.
+
+---
+
+## 9. `pardon`
+
+**1. Premise.** *A bench frees a man it holds in custody, or lifts a ban it laid.* Links: a man is
+restrained on a seat → a judge of that seat's bench is moved to mercy → the restraint ends → the man and
+the realm learn it.
+
+**2. State today.** Row `remit:determine`, typed (`existence` Person, `basis` bench), effect closes every
+live `detain`/`ban` the subject owns on `Act.via`, emits `detention.ended`/`ban.ended`. Seed 0: formed
+8, attempted 0 `[FA]`; seed 1 realm: 1 attempted, refused after admission (the probe: a man restrained
+nowhere); spine seed 1: 5 refused. **Verdict: formed on no restraint.** It forms on every person a
+question names.
+
+**3. Build-out, decided.**
+- *Formation*: `pardon` declares `referent_class: Restrained`, a named class stamped by a sibling of
+  `detainees_held`, `restrained_on_seats(w, p)`: every living person with a live `detain` **or** `ban`
+  whose object is a seat `p` holds granting `determine`. `Detainee` stays `detain`-only for
+  `interrogate`. `world_q.restrained` stays the one owner of what a restraint is; the new term composes it.
+- *Occasion and choice*: mercy is the bench's; the chooser weighs it by regard and pursuits (the
+  alignment cells for `pardon`). Nothing is written for the pardoner; the chronicled act's regard is its
+  cost and its gain.
+- *Consequences*: a lifted ban re-opens `confer` and `oblige` to the man; `interrogate` loses its
+  referent; `capture`/`arrest` may recur.
+
+**4. Scales.** Settlement up (the seat's rung). Player: offered "pardon X" for each prisoner or exile of
+his bench. NPC: chooser.
+
+**5. Tuning hooks.** Alignment cells (`rosters.yaml`); regard (`person_q`).
+
+**6. Exact edits.** `proposals/14_VERBS_BINDING_B_sittings.md` §3.
+
+**7. Gate and falsifier.** Seeds 0 and 1 realm: `pardon` formed → 0 persons and `pardon.refused` → 0
+while the stamp is empty; with a hand-planted `detain` (the `interrogate` tests' fixture) a computed
+`pardon` forms and, chosen, emits `detention.ended`. Planted failure: widen the stamp to every person;
+refusals return.
+
+**8. Cases.** ARC-10 (fully reversing a punishment, SC-P4's citation); NPC-041 N2.
+
+**9. NERS.** N: the only end of a restraint short of death. R: mercy is a political act. S: the gate's
+`determination` basis, shared with `determine`. E: one act. Cut: fold into `release`? No: a prisoner may
+not end his own custody (`RELEASABLE_KINDS`); a pardon is another's closure.
+
+---
+
+## 10. `release`
+
+**1. Premise.** *A man lets go of what binds him: resigns his seat, renounces a vow, ends a service,
+lays down a thing he holds.* Links: he holds a live tie → news about it makes it a burden → he ends it →
+those who watch learn it; a broken vow costs regard.
+
+**2. State today.** Row `own`, untyped (`_req_release`: a live releasable edge he owns toward the
+subject), `domain: [hold, commit, oblige, succeed, tie, knot]`, writes `Tenure.until`, emits
+`tenure.closed`/`commitment.ended`. Seed 0: formed 83, attempted 15, executed 0 `[FA]`; seed 1: 18/3/15.
+The probe: every refusal is a referent he holds no releasable edge toward (the King; his own
+settlement). **Verdict: forms on referents it could have read; executes only by accident.**
+
+**3. Build-out, decided.**
+- *Formation*: a new person-side decline, `own_edge_declines` (`own_hold_declines`' shape, one carrier
+  over): a listed verb forms only on a referent that is the object of one of his own live Tenures whose
+  kind is in **the row's own `domain:`**. Reading the row's column keeps one owner of what `release`
+  closes; the loader refuses a member with no `domain:` or not `own`-eligible.
+- *No widening*: it narrows the plain referents. The occasion of a release is a question about the thing
+  he is tied to (news about his cause, his seat, his lord): he reconsiders a tie when something about it
+  reaches him, which is the plain meaning.
+- *Effects*: unchanged; the vow-break's price is `release`'s alignment cells (the hole register's own
+  record of it).
+- *Consequences*: resignation vacates a seat (`vacancies` → `confer`, `succeed`); a broken `commit`
+  changes the de facto share of a war (FA-B1); an ended `oblige` shrinks `establishment_of`.
+
+**4. Scales.** Person; the tie's object may sit at any scale. Player: offered "renounce / resign /
+leave X" for each tie the question touches. NPC: chooser.
+
+**5. Tuning hooks.** Alignment cells (rosters); `oblige_term` (fixtures).
+
+**6. Exact edits.** `proposals/14_VERBS_BINDING_A_formation.md` §1.
+
+**7. Gate and falsifier.** Seeds 0 and 1 realm, two seasons: `release.refused` 15/15 → 0 (every refusal
+today is a formation miss); executions not below today's (0/3). Planted failure: add `reside` to the
+domain the decline reads; the cohorts' refusals on their home return.
+
+**8. Cases.** NPC-031 N3 (an heir's alignment locks in or breaks), EMG-X5 N2 (an agreement's hidden
+fragility), FA-B1's peace by release of the war commitment.
+
+**9. NERS.** N: the one closer of a person's own ties; without it no resignation, apostasy or
+desertion of a cause. R: the realm's commitments decay by choice. S: one closer for six kinds. E: one
+act. Cut: none.
+
+---
+
+## 11. `revoke`
+
+**1. Premise.** *A superior strips a man of his seat.* Links: a seat above holds revocation authority →
+the holder has failed, defied or become a threat → the superior revokes → the seat falls vacant (an
+appointee is barred from the revoking seat) → the realm hears it → the seat is refilled.
+
+**2. State today.** Row `remit:revoke`, `referent_class: Office`, untyped (`_req_revoke`: payload
+`office` names a seat with a disposal, `may_revoke`, a live hold), effect closes the hold and, for an
+`appointed` seat, opens `ban : him → via`. Seed 0: formed 5, attempted 0 `[FA]`; seed 1: formed 0.
+**Predicate and effect read `payload["office"]`, which a computed act never carries** (it binds
+`subject`; `loop/effects_governance.py:333-334`, `loop/predicates.py`'s `_req_revoke`), so a computed
+`revoke` is refused at clause 1 by construction (FA-P1 change 4). **Verdict: formed, unexecutable.**
+
+**3. Build-out, decided.**
+- *Read the seat from `subject`*: `_req_revoke` and `_eff_revoke` read it through `office_named_by(a)`,
+  `confer`'s reader. FA-P1 change 4, adopted.
+- *Occasion*: FA-P1 change 3 (the recall referent from folded defiance) and CR-35/CR-36's removal for
+  elected seats. The seven seats nobody can strip (`revocation: null`) are the FA audit's §11 item 3.
+- *Formation*: the Office stamp today offers vacant seats too (`vacancies`); a revoke of a vacant seat
+  is a refusal the actor could read from the same stamp. Decided: **`revoke` forms only on a seat his own
+  ledger says is held** (the newest claim naming the seat is a `tenure.opened` or `succession.claimed`),
+  a person-side filter on the stamp, `own_title_declines`' route.
+- *Effects*: unchanged (IN-31's disposal by basis).
+- *Consequences*: vacancy → `confer`/`succeed`; ban → `confer`'s decline, `pardon`; chronicle; the
+  revoked man's grudge (stance rows).
+
+**4. Scales.** Settlement up. Player: offered "strip X of Y" for subordinate seats he knows are held.
+NPC: chooser, with FA-P1's recall referent as the occasion.
+
+**5. Tuning hooks.** `REVOCATION_DISPOSAL` (`state/gate.py`, Jordan-ruled); revocation bases
+(`offices.yaml`); FA-P1's suspicion threshold.
+
+**6. Exact edits.** `proposals/14_VERBS_BINDING_C_turnover.md` §2.
+
+**7. Gate and falsifier.** FA-B4's `recall` scenario: the Count withholds; the Duke's computed `revoke`
+executes; `tenure.closed` on the Count's seat; the Count's later options are an unseated man's. Planted
+failure: revert the `subject` read; `revoke` is refused at clause 1 again.
+
+**8. Cases.** NPC-038 N1 (removal on exposure), ARC-29 N1–N2 (a head of state removed), NPC-070,
+NPC-004 (FA §11 item 3's).
+
+**9. NERS.** N: the only removal short of death; the defiance loop needs it. R: purges and disgrace. S:
+`confer`'s mirror on one gate. E: one act. Cut: none.
+
+---
+
+## 12. `succeed`
+
+**1. Premise.** *When the throne falls vacant, the heir claims it by his title.* Links: a seat with a
+succession falls vacant (death, abdication, revocation) → the holder of its title learns of it → he
+claims → he holds the seat(s) and lays down the title → the realm hears it.
+
+**2. State today.** Row `own`, `referent_class: Office` narrowed by `own_title_declines`, untyped
+(`_req_succeed` → `may_claim`), effect opens every seat the title claims and closes the title, emits
+`succession.claimed`/`tenure.closed`. `successions` has **one row** (`off_king → off_heir`). Seeds 0 and
+1: formed 0 (the King lives); 0 in 9 heir-seasons (CHAR F-CHAR-01, H-289; `12_ARCS` M-SEAT row).
+`engine/season/tests/test_in61_heir_hears_vacancy.py` executes the chain on a hand-built death.
+**Verdict: works when its occasion exists; unreachable at the realm horizon; the law has one row.**
+
+**3. Build-out, decided.**
+- *Occasion*: vacancies of succession seats come from death, `release` (abdication, §10) and `revoke`
+  (§11). No new producer.
+- *Law*: `successions` is content. Decided: **every seat whose `conferral` is `inheritance` must have a
+  `successions` row, checked at load** (the roster's own check gains a totality clause), so a hereditary
+  seat without an heir title cannot ship. Authoring further rows (the ducal heirs; CP-T09-06's
+  Valorsmark) is content.
+- *Contest*: SCN-12 and NPC-081 need a contested succession. For elected seats that is CR-35; for
+  hereditary seats a rival claim is fought by the verbs around it (`argue` before a bench, `march`).
+  "The first valid claim wins" stays; no second claim rule.
+- *Formation*: the title narrowing re-forms the claim while the King sits (the row's own note). Decided:
+  **the claim forms only while his newest claim about the seat is a `tenure.closed`** (he believes it
+  vacant), the same ledger read as `revoke`'s filter, inverted.
+- *Consequences*: the new holder's grant; `endings_reached`; FA-B1 (the war passes to his decision).
+
+**4. Scales.** A person taking a realm or duchy seat. Player: as heir, offered "claim the throne" when
+he believes it vacant. NPC: chooser.
+
+**5. Tuning hooks.** `successions` (rosters); conferral bases (offices).
+
+**6. Exact edits.** `proposals/14_VERBS_BINDING_C_turnover.md` §3.
+
+**7. Gate and falsifier.** FA-P4's `succession` situation on the spine (the Sovereign dies at tick 0):
+`succession.claimed` within two seasons; control: the heir title unheld (no claim). The load clause:
+plant an `inheritance` seat with no row; the load fails.
+
+**8. Cases.** SCN-12 N1, NPC-081 N1–N2, NPC-031, ARC-29.
+
+**9. NERS.** N: the only hereditary transfer. R: a death becomes a story. S: the claim basis on the one
+gate. E: one act. Cut: fold into `confer` (self-conferral)? No, and measured (the row's note: a second
+emitter of `tenure.opened` re-weighs every such claim).
+
+---
+
+## 13. The family's order
+
+### 13.1 Dependency graph (within the family)
+
+```
+release ─────────────► succeed (abdication is a vacancy)      [A]
+establish ───────────► confer (a founded seat is vacant)      [A → C]
+convene ─► determine ─► pardon (a bench's restraint)          [B]
+issue (FA-P1 answers) ─► revoke (recall) ─► confer / succeed   [D → C]
+dispatch (CP-T09-08)                                           [D]
+marshal, surrender (after PHYSICAL P-B)                        [E]
+```
+
+### 13.2 Cross-family and cross-lane dependencies
+
+- **CORE**: H-54 (the question slot) and CR-88 (duty in the chooser) decide whether `confer`,
+  `convene`, `revoke` are *chosen*; this family makes them *formable and executable*.
+- **SC**: SC-P4 (band-keyed disposal), SC-P6 (acquittal), hearing B (the room) for `determine`;
+  `05_SC_obstacle_difficulty_and_modifiers_B.md` for its obstacle.
+- **FA**: FA-P1 (decree), FA-P2 (remit by row), FA-P3/FA-B3 (terms), FA-B1 (war in seats), FA-B2
+  (levy), FA-B4 (the recall scenario, the gate for C and D), FA-P4 (the scenarios), FA-P6 (founding
+  content as data), CP-T09-06, -07 (b), -08, CR-35, CR-36.
+- **PHYSICAL**: P-B (fields fought, `siege.pressed`) before batch E.
+- **MB**: `field_input` reads `marshal`'s Record.
+
+### 13.3 Landing order, in batches
+
+| batch | verbs | proposal | depends on | gate |
+|---|---|---|---|---|
+| A | `release`, `establish` | `14_VERBS_BINDING_A_formation.md` | nothing | seeds 0, 1, realm, two seasons: both rows' refusals → ≤1, executions not lower; hash a declared mover |
+| B | `convene`, `determine`, `pardon` | `14_VERBS_BINDING_B_sittings.md` | SC-P6, SC-P4 (for `determine`'s bands; the formation edits do not wait) | `convene.refused` collision gone; `determine` refusals at `party`/`docket` → 0; `pardon` formed only on a restraint |
+| D | `issue`, `dispatch` | `14_VERBS_BINDING_D_orders.md` | FA-P1; CP-T09-07 (b), CP-T09-08 for `dispatch`'s relocation | 0 person-terms, 0 orders up the chain; FA-P1's answer gate |
+| C | `confer`, `revoke`, `succeed` | `14_VERBS_BINDING_C_turnover.md` | D (the recall), FA-P3, CR-88 for selection | FA-B4 `recall` and FA-P4 `succession` scenarios close their links |
+| E | `marshal`, `surrender` | `14_VERBS_BINDING_E_war_seats.md` | PHYSICAL P-B, FA-P2, FA-B2 | a fought field reads an order; a siege is followed by a surrender or a field |
+
+### 13.4 Decisions that survive to Jordan
+
+Each was put through `CLAUDE.md` §0's five steps; the ones answered there are decided in the sections
+above and listed in the proposals with their reverts.
+
+1. **Does an order run up the chain?** `issue`'s and `dispatch`'s authority is purview over the
+   addressee's *place* (ruled, ED-IN-0256 (4)); read literally, any seat whose rung contains the King's
+   residence may order the King.
+   - *(A) Territorial authority (today).* A seat orders whoever stands in its land. Officers of the
+     realm seat can order the King; an order's force comes from where it is given. Cheap, legible, and
+     the King's officers command him in his own city.
+   - *(B) Command authority (proposed).* A seat orders its sworn men (`oblige`) and the holders of the
+     seats it may revoke, and the unseated within its purview. Orders run down the chain; a writ to a
+     superior is a petition, not a command.
+   The proposals take (B) behind its revert; it narrows a ruled basis for these two verbs only, so it is
+   Jordan's.
+2. Carried, not re-decided: the FA audit's §11 items 1 (proclaimed or delivered decree), 3 (seats nobody
+   can strip) and addendum §B6.2 item 1 (whose word ends a war); each binds batch D, C or E.
+
+### 13.5 Fan-out
+
+This completion was written by one agent; no subagent was spawned. The judgment nodes (decision 1, the
+named classes) are listed for the orchestrator's critic.

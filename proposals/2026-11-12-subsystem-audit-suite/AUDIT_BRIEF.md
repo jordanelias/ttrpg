@@ -33,6 +33,31 @@ are one requirement, not three. As an audit standard:
 
 Where the standing requirement and a ruled item conflict, name the conflict and do not resolve it.
 
+## Standing rule (Jordan, 2026-11-12, emphatic): WE DO NOT DO DETERMINISTIC
+
+*"We do not do deterministic!!!!!"* Every consequential outcome in the game resolves by a **draw**: a
+probabilistic roll with a graded, recoverable result (the four-band ladder; R-09: chains of events within a
+scene are probabilistic, not deterministic). No proposal, design, verb, institution procedure or code path
+may make a consequential outcome a fixed function of state: not "evidence enters when presented", not "the
+senior office always wins", not "a decree binds", not "the bench rules by score", not "a fight is decided by the
+larger number". State sets the **odds** (pool, obstacle as the task's difficulty plus all modifiers, leverage,
+modifiers from personality, venue, affiliation, evidence); the draw sets the outcome; a good position still
+loses sometimes and a bad one still wins sometimes, within the engine's own bounds.
+
+What this does **not** forbid: seeded replayability (same seed, same world: the RNG is seeded and the draw
+is reproducible, which is what lets the engine be tested and ported), bookkeeping that is arithmetic by
+definition (conservation of stores, a clock's tick, an id), and eligibility/requirement checks that decide
+whether an act may be attempted at all (a person cannot sit a seat he does not hold). The line: *a thing
+that could go either way for the people in the fiction goes by a draw.* When in doubt, draw.
+
+For every lane: check your own text and your subject's code against this rule. A deterministic resolution you
+find in the code is a finding (severity: degrades narrative; touches R-09); one you find in a document
+(yours or another lane's) is corrected at once in your own files and listed for the owning lane if it is not
+yours. The known cases to repair: the SC lane's deterministic evidence entry and strike (`05_SC_evidence_and_rebuttal_B.md`,
+G-65); any fight that kills with certainty (`F-PC-04`: plain `fight` kills 200 of 200); any verdict that is a
+default roll with no spread; any "binds"/"obeyed" effect with no resolution roll; the ruled-in `succession`
+rules wherever the tree resolves an heir by a fixed order.
+
 ## Authority granted (Jordan, 2026-11-12): author, design and resolve — in the form of proposals
 
 Fable lanes may **author and design improvements, and resolve every inconsistency, gap and unclear

@@ -727,3 +727,80 @@ cases (`03_PC_audit.md` F-PC-01).
 without a player; a refusal to fight has a price. S: stakes a choice like `marshal`'s role; the answer
 window rides MATTER's existing stages. E, last: one choice-sourced key, one stage, one kind. **Cut test:**
 none; removing it removes duels.
+
+---
+
+## 12. Dependency graph (within the family)
+
+```
+R-KIND (lane A) ──► comply, evade/defy, carry(kind)
+R-WITH ──────────► argue, lie, give, challenge(with)          [and tell, fight, accept, capture: by conjunct]
+covenant class ──► covenant.offered
+give (delivery) ─► comply ──┐
+                 ├► evade/defy ─► (issuer's deed claim) ─► holds_dispute ─► challenge
+                 ├► covenant ─► commit (acceptance) ─► covenant_in_force ─► (breach) ─► holds_dispute
+                 └► challenge's Record to the challenged ─► accept (PHYSICAL)
+forgive mark (person_q.forgiven_since) ◄── shared by forgive and the challenge settlement
+commit ──► argue's `commitment` term, covenant_in_force
+lie Failure ─► deceit.exposed ─► holds_dispute
+conceal ─► cover quality ─► FI inquiries (subject term)
+carry ─► petition_venue ─► determine (BINDING)
+```
+
+`give`'s delivery occasion must land before `comply`, `evade / defy`, the covenant reader and the
+challenge's answer window can be gated in the realm (each can be gated earlier on a planted `give`).
+The forgiveness mark must land with or before the challenge settlement, which reuses it.
+
+## 13. Cross-family dependencies
+
+| this family needs | from | what |
+|---|---|---|
+| Record-kind formation; `challenge` Person class and person-side dispute; `accept` on a challenge | implementation lane A (`03_PC_duel_chain_reach.md`) | merged before S1-A's gate is read |
+| persons hold scores; one score, two roles | lane A steps 3–4; `10_DICE_one_score_two_roles.md` | before S1-C's obstacle gate can show variation |
+| the obstacle composition and its `terms` | SC-OB (`05_SC_obstacle_difficulty_and_modifiers_B.md`) | S1-C adds two members (`commitment`, `contradiction`) to its `obstacle_terms` roster and a `difficulty:` on `lie`/`argue` that SC-OB already lists |
+| one person-side decline read off the row | CHAR-OFFER (`02_CHAR_offer_what_can_be_done.md`) | R-WITH and `forgive`'s widened decline are readings inside it, not a tenth roster; if CHAR-OFFER has not landed, they land as one roster each in `opening_set` and fold into it later |
+| hearer susceptibility; seeded stance from relations | `02_CHAR_which_ground_moves_whom.md`, `02_CHAR_relations_have_a_ground.md` | `argue`'s pursuit move; `forgive` forming on seeded grudges |
+| the duel's outcome writes the settled mark; a defiance is a warrant ground | PHYSICAL (`proposals/14_VERBS_PHYSICAL_A_custody_and_force.md`, `accept`, `arrest`) | S1-D names the write, PHYSICAL owns the effect |
+| `issue` addresses executors; `revoke`; `pardon` stays distinct from `forgive`; `determine` consumes `carry`'s docket | BINDING (`audits/14_VERBS_BINDING.md`) | `issue`'s `to` fan should prefer persons R-WITH places with the issuer, so a writ is deliverable; BINDING's call |
+| inquiries read a cover's quality and unmask | FI (`audits/08_FI_audit.md` lane; PHYSICAL's `examine`/`surveil`) | the `subject` term's second source |
+| covenant readers (tribute `_renewals`, allied `mustered`) | FA, MB | consumers of `covenant_in_force` |
+| `tell` gets R-WITH by its `hearer` conjunct | SOCIAL2 | SOCIAL2 must not author a second co-location rule |
+
+## 14. Landing order, in batches, with the gate for each
+
+| batch | proposal | content | needs | gate (execution artifact) |
+|---|---|---|---|---|
+| **S1-A** | `14_VERBS_SOCIAL1_A_formation.md` | R-WITH (`believed_with`, fixture, decline by conjunct); `covenant` `referent_class: Proposition`; naming `comply`/`evade / defy`/`carry` under R-KIND | lane A step 1 merged | `aperture 2 s`, s = 0, 1: `with=False`/`clause:hearer` refusals on `argue`, `lie`, `give`, `challenge` each down by ≥ half; `covenant` `exists:Proposition=0` = 0; `comply`/`evade / defy` `exists:dispensation=0` = 0; control: `with_belief_window` unbounded reproduces today's hash |
+| **S1-B** | `14_VERBS_SOCIAL1_B_documents_and_obedience.md` | `give`'s addressed-document occasion and `delivery_weight`; the obedience effect for `comply` and `evade / defy` (`defiance_modes`); `covenant_in_force` and breach | S1-A | planted-delivery run: `record.given` of a writ → `compliance.given` with an `oblige` naming the writ (arm 1) / `compliance.withheld` and a strife strand (arm 2); a covenant in force then breached → `holds_dispute` True; realm `aperture 2 s`: `record.given` > 0 |
+| **S1-C** | `14_VERBS_SOCIAL1_C_persuasion_and_deceit.md` | `argue` Partial writes and `commitment` term; `lie` capability, `opposed_by:`, `contradiction` term, confidence by band, `deceit.exposed`; `conceal` ranking, quality, capability | SC-OB, lane A steps 3–4 | corpus run: "bands that differ" True for `lie`; two-arm hand-built folds differ in one named term each; `conceal` attempts follow a judgeable act |
+| **S1-D** | `14_VERBS_SOCIAL1_D_grievance_and_settlement.md` | `forgiven_since` mark and widened decline; `challenge` stakes, answer window, `challenge.declined`, settled mark; `carry`'s `petition_venue` and appeal | S1-B (delivery), lane A step 2, PHYSICAL `accept` | planted-dispute run: forgive ends the dispute; an unanswered challenge declines at its due tick and settles; a carried petition names a venue and reaches a `determine` attempt |
+
+Each batch is a declared hash mover for the shipped realm; its re-record is named in its commit body
+(CLAUDE.md §7).
+
+## 15. Decisions that survive to Jordan
+
+Each was put through the five-step order of CLAUDE.md §0 first; these are the two that survive.
+
+**D1. Should an issued writ (and only a writ) be minted into its addressee's hand?** `ED-IN-0292` (1) is
+RULED NO "for now". This audit's build-out works under it (delivery by `give` in person, proposal B), but
+under it the realm's obedience depends on an issuer and an executor meeting.
+- **(A) Keep the ruling.** Orders travel by hand. Obedience and defiance are rare and local; a distant
+  executor never hears; the gap is a place for messengers (a later `dispatch` carrying a document).
+- **(B) Reopen it for writs from a seat whose purview reaches the addressee.** Process is served by office:
+  the writ is minted into the addressee's hand (the issuer keeps nothing), and `comply`/`evade / defy` form
+  the next round. Obedience becomes a realm-wide mechanic. Challenges and covenants stay in-person.
+
+**D2. Should a person learn, from his own refused act, that the one he sought was not there?**
+`known_persons`' docstring records that he does not (the `with` read is never deposited). R-WITH removes
+most dead ends, but within the window a man who is wrong repeats the act.
+- **(A) No (today).** Belief is updated only by new sightings; R-WITH's window bounds the waste.
+- **(B) Yes, to the actor alone.** His own refusal deposits a firsthand `absent` reading of the other, at
+  the actor's place and tick, which `believed_with` treats as newer evidence; witnesses learn nothing. A
+  person then stops seeking someone where he has already failed to find him.
+
+Not escalated, decided here with the reason recorded at the site: the forgiveness mark's shape (§9; a
+tick on a stance row, revert named); `comply`'s `oblige` skipped by `purview_reaches`' oath clause
+(proposal B §2: an obedience is not an oath, `_disposal`'s `DETERMINED_BY` precedent); `lie`'s Failure
+deed (§8: design intent, M-INFO); `challenge`'s stakes by grievance size (§11: the existing closed roster,
+ranked).

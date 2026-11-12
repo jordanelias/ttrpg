@@ -97,15 +97,14 @@ b, e broken; d holds structurally; c holds by WITNESS).
 
 **3 Build-out, decided.** The act carries its content, derived person-side from the question the person
 answers, by one rule: *a person says what he holds.*
-- **Formation.** On the question's referent as today; the operands `mood`, `predicate`, `value` are
-  derived (never chosen freely) by `decision/options.py::_derive_operand` from the actor's own ledger:
-  the question's `about` claim (`Question.about`) gives `(subject, predicate, value)` and mood `HOLDS`
-  (an assertion); a question whose source is a want or a goal (`decision_spread.goal_class`'s own want /
-  creed / org goal) gives the goal Proposition's `(subject, predicate, value)` and mood `OUGHT`; a
-  question about the actor's own next act (his live `commit`'s object) gives `WILL`. The table
-  `rosters.yaml: utter_mood_by_source` (new, closed, three rows) is the one owner of source → mood.
-- **Requirement.** A typed `own_ledger` of `subject` (he holds a claim on what he speaks of), so a word
-  about nothing he knows is not formed; refusal `utterance.empty` for a hand-built act only.
+- **Formation.** On the question's referent as today. The cell is derived, never chosen freely: the row
+  gains a NAMED own-ledger conjunct (`holds`), so the Candidate carries `said` — the `Said` (subject,
+  predicate, value) `person_q.said_of` picks from the actor's own ledger, exactly as `tell`'s does (T4).
+  The mood is derived from the question's source by a new closed table, `rosters.yaml:
+  utter_mood_by_source`, the one owner of source → mood: `claim_landed` → `HOLDS` (he voices a belief),
+  `need` → `OUGHT` (he voices a demand). `WILL` has no question source and is not formed (named).
+- **Requirement.** That `holds` conjunct: he holds a claim on what he speaks of, so a word about nothing
+  he knows is not formed; refusal `utterance.empty` for a hand-built act only.
 - **Roll.** None. An utterance is a fiat of the speaker (it may be false; nothing verifies, FI-05B §7).
 - **Effects.** As today plus content. Not graded: there is no degree to saying something.
 - **Writes / emits.** `Proposition.exists` (unchanged), the maker's `hold` (unchanged);
@@ -192,9 +191,9 @@ every act, (d)–(f) are absent.**
 **4 Scales.** Person → settlement (the addressee's seat). Composes upward through `carry` onto a
 docket and `determine`. Player: choose matter and addressee from the fanned Candidates. NPC: the chooser.
 
-**5 Tuning hooks.** Who counts as an addressee: `rosters.yaml: petition_addressees` (new: the seat posts
-whose holders may receive a petition; default every post whose purview reaches the home). Personality: the
-`petition` pursuit leans. Season: `H-80` stage default.
+**5 Tuning hooks.** Who counts as an addressee: the seats known over the home (S2-B §4; no second
+addressee roster, one owner). Which arm: fixture `petition_addressee` (`data/fixtures.py`). Personality:
+the `petition` pursuit leans. Season: `H-80` stage default.
 
 **6 Exact edits.** Proposal S2-B §3.
 
@@ -552,7 +551,7 @@ leans; a want for protection or office). No roll.
 
 **4 Scales.** Person → seat (settlement to realm). Player: whom to serve. NPC: the chooser.
 
-**5 Tuning hooks.** `rosters.yaml: seats_known_at_build` (new fixture key: `home_purview` / `none`
+**5 Tuning hooks.** Fixture `seats_known_at_build` (`data/fixtures.py`: `home_purview` / `none`
 (control)); upkeep and term (`oblige_term`, `H-159`); `binds_bases`.
 
 **6 Exact edits.** S2-B §4.

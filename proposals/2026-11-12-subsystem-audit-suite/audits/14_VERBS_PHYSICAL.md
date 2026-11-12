@@ -558,3 +558,243 @@ dispute arcs ride on `challenge`'s dispute conjunct (CHAR's `deeds_judged`, CR-8
 
 ---
 
+## 5. `march`
+
+### 5.1 Premise
+
+*A commander leads his faction's army against a place held by an enemy, to take it or to besiege it.* The
+links: (a) a war, known to the commander, between his seat's faction and the place's holder; (b) an army:
+persons and cohorts committed to his faction, mustered where he stands; (c) a target of a kind armies
+take (a settlement or a territory); (d) a field (storm) or an investment (besiege), resolved at army
+scale with the people in it; (e) casualties per side, a rout or a draw, an arrival or none, rations eaten;
+(f) what follows: occupation (`seize`, `raze`), surrender, relief, another march, or peace.
+
+### 5.2 State today
+
+- **Row** `verb_table.yaml:1047-1084` (ruled). Eligibility `remit:dispatch`. `referent_class: Rung`
+  (REM-27). `requires_typed`: `existence` of `subject` kind `Rung`. `contests: "a field"` (the
+  mass-battle provider). Bands Declared, Won, Lost, Unopposed and Invested (`besiege`). Writes
+  casualties, stance, the arrival (`move`'s three pairs), rations and siege wear. Emits `field.won`,
+  `field.lost`, `field.unopposed`, `army.arrived`, `siege.pressed`, `person.died` and `tenure.closed`.
+  Refusal `march.refused`.
+- **Formation.** On any Rung the commander's ledger names (`places_named`) or a stocked larder in his
+  seat's purview (`larders_in_purview`). No war, kind or holder test.
+- **Fold.** `loop/sides.py::sides_of` musters the army at the actor's nearest settlement under `a.via`'s
+  faction. It refuses a target outside `march_target_kinds` by mustering an empty army (H-149, an inline
+  kind check its own comment discloses as misplaced, `sides.py:99-115`). A target held by nobody or by
+  his own faction resolves `Unopposed` and arrives.
+- **Reading** (`aperture 2 0`): eligible 26, formed 26, attempted 13. Of those, **3 unopposed arrivals,
+  10 refused at ENCOUNTER on the target's kind, 0 fields fought**. Corpus: never attempted. MB audit
+  F-MB-03 (`audits/04_MB_audit.md`): no field in natural play at seed 0, with or without preset armies.
+  FA-P2 (`06_FA_remit_grant_by_row.md`): the 13 marches were made by the Guilds' representative, the
+  Lord Treasurer, the Legal Advisor and the Skald-Chief, seats whose rows name no `dispatch`.
+- **Verdict: executes only unopposed.** The resolver (field, siege, casualties, arrival, rations) is
+  built. What fails is who may march, on what, and why.
+
+### 5.3 The build-out, decided
+
+1. **Who.** A seat whose row names `dispatch` (FA-P2; a dependency, not redone here).
+2. **On what, and why: the `Field` occasion-only class.** A new reader,
+   `world_q.march_defender(w, via, rung) -> Optional[str]`, is **the one owner of "is this a field for
+   this seat, and against whom"**. It returns the defending faction id when `rung` is a
+   `march_target_kinds` kind, its holder faction (`holder_faction_of`) is at war with `via`'s faction
+   (`at_war`), and the war is one the commander knows of (`enemies_heard`'s knowledge rule, shared). It
+   returns the ENEMY faction mustered there when the place is held by `via`'s own faction and an
+   enemy faction occupies it (relief). Otherwise it returns `None`. A stamp term
+   `fields_in_reach(w, p)` stamps every Rung his ledger names (`places_named`'s knowledge rule) for which
+   some seat of his granting `dispatch` gets a non-`None` answer, under the new class `Field`.
+   `march` declares `referent_class: Field`, replacing `Rung`. `sides_of` calls `march_defender` for
+   `subject`, in place of its inline kind check and holder read. Its disclosed debt ("a target-kind
+   constraint carried as data… left for a future session") closes by moving the rule to the one owner,
+   which reads the roster.
+   REM-27 measured a `fields_named` term *unearned* because `places_named` stamped the same Rungs under
+   `Rung`. With an occasion-only class, `places_named` no longer reaches `march` at all, so the term earns
+   its place by construction. The proposal's gate re-measures it.
+3. **No war, no march.** ED-IN-0337 (RULED: fighting belongs to civil war, crime and duels) answers this
+   (ladder step 3). Moving an army inside one's own lands is `order_unit` (MILITARY family), not `march`.
+   The 3 unopposed arrivals of today's reading (into own-held or unheld places) stop. That is intended,
+   and it is declared as a mover. An unheld place (H-166: who holds an unheld place is unruled) is not a
+   field.
+4. **War must exist.** A WAR Proposition arrives with CR-91 (`declare`, `remit:dispatch`), and FA-B1
+   decides whose commitment keeps it live (`06_FA_war_lives_in_seats_B.md`). Until CR-91 lands,
+   `fields_in_reach` returns `()` in every built world and `march` forms nowhere. That is an honest
+   zero with a named owner, where today's number counts formations that cannot succeed.
+5. **Posture is a choice.** `march_postures` (`storm`, `besiege`). The player chooses it as a payload.
+   For an NPC, one Candidate is formed per posture, on `vocation_sourced`'s shape
+   (`rosters.yaml: vocation_sourced`, `options.py:244-253`), so the chooser scores storm against siege
+   and no branch picks for him. `besiege` is shipped withheld (MB). Un-withholding it is MB's
+   (`04_MB_playable_field_scenario.md` A and C).
+6. **Graded outcomes.** Won, Lost, Unopposed and Invested as built, plus `Drawn` from
+   `04_MB_headcount_grade_and_scale.md` (an indecisive field leaves both armies standing, and the next
+   act is the commander's). No band is a dead end: Lost leaves the army at its origin, Invested threatens
+   (`siege.pressed`, which `surrender` answers), and Won arrives and licenses `seize` and `raze`.
+7. **Title.** A won field writes presence, never title (#453 R-6 β, as ruled). The title passes by
+   `seize` after occupation. Layer 1's roster contract (`10` §3, "`holdings` and `seats`, for what a
+   defeat costs") reads the other way. FA-B1 carries that conflict (§10.4 D-2), and this family does not
+   decide it.
+8. **Refusals.** `march.refused` remains for: an empty army (no committed member mustered where the
+   commander stands: a world fact the chooser cannot read, MB's army presets and MILITARY's
+   `recruit`/`form_unit` are the remedy), and a band that moved nobody. A wrong kind, a friendly place or
+   no war can no longer reach the fold. The `Field` class makes them unformable.
+
+### 5.4 Scales and play surface
+
+Faction scale (the war), settlement and territory scale (the target), army scale (the field), and
+person scale (the commander's body, a duel inside the field, SCN-14). A player chooses the target among
+his `Field` referents, the posture, the standing orders (`marshal`, BINDING), and in the field the
+per-phase orders of `04_MB_playable_field_scenario.md` B. The engine resolves the field. NPCs choose
+through the one chooser with the per-posture Candidates.
+
+### 5.5 Tuning hooks
+
+| dimension | owner |
+|---|---|
+| which kinds are fields | `rosters.yaml: march_target_kinds` |
+| postures | `rosters.yaml: march_postures` |
+| war (de jure / de facto) | FA-B1 (`at_war`), CR-91 |
+| army size and quality | MB presets, MILITARY verbs, SE training Sites (`07_SE_campaign_supply_and_muster.md`) |
+| supply | `field_provisioning` fixture, `Rung.stores` (SE) |
+| casualties | `field_casualty_model`, `field_winner_casualties` fixtures |
+| personality | pursuits (`npcs.yaml`) via `choose.py` |
+
+### 5.6 Exact edits
+
+`proposals/14_VERBS_PHYSICAL_B_field_and_ruin.md` §B1.
+
+### 5.7 Gate and falsifier
+
+**Gate.** `test_v14_march_on_a_field.py`: `build_realm(0)` with one WAR Proposition planted through the
+real fold (an `utter` and a `commit` by two seats granting `dispatch`, one per faction, each told of it),
+one season through `SeasonDriver.season`. Pass: a seated holder of `dispatch` of one faction forms
+`march` only on settlements and territories the other faction holds and that his ledger names; at least
+one is attempted, and its Event is a field band (`field.won`, `field.lost`, `siege.pressed` or
+`Drawn`), not `march.refused` on kind. **Control:** the same world without the war forms no `march`.
+**Planted failure:** restore `referent_class: Rung`. Formations on hearths and own places return, and the
+test fails on the formed set. Separately, `aperture 2 0` before and after: `march` formed falls from 26
+to 0 in the war-less realm, and every remaining refusal reason is named.
+
+### 5.8 Cases
+
+NPC-089 (`NPC5.yaml:284`): a foreign power's posture toward a neighbouring territory, graduated from probe
+to pressure to invasion. Pressure and invasion are `march` under `besiege` and `storm`, and the probe is
+FA's. ARC2's invasion arc (`chain/ARC2.yaml:180`: "a failed invasion is more useful to her than a
+successful defence") needs a field that can be lost. M-FIELD (10 cases, `12_ARCS_adjudication.md`) needs
+fields fought at all.
+
+### 5.9 NERS reading
+
+- **N.** It is the only route by which force changes the map. Cut test: without it, `seize` and `raze`
+  have no occupation to read, and war is words.
+- **R.** Strategic choice among targets and postures, and wars that the world fights without a player.
+  Complete at extremes (empty army, a draw, unopposed).
+- **S.** One owner of "is this a field" for formation and fold. Removes `sides_of`'s inline verb rule.
+- **E.** One reader, one stamp, one class. It replaces a check the code itself disclosed as misplaced.
+  High.
+
+---
+
+## 6. `raze`
+
+### 6.1 Premise
+
+*An army that holds an enemy town destroys it.* The links: (a) a won field or an unopposed arrival has
+put his faction's army in a town another faction holds (occupation); (b) the commander chooses ruin over
+seizure; (c) the town ends: buildings, title and every tie to it; (d) its stores are carried off or
+burned; (e) the people who lived there are homeless; (f) every witness and every former resident
+remembers who did it.
+
+### 6.2 State today
+
+- **Row** `verb_table.yaml:1416-1438`. Eligibility `remit:dispatch`. `requires_typed`: `existence` of
+  `subject` kind `Rung`. No `contests:`. Writes `Rung.exists`. Emits `rung.razed`. Refusal
+  `raze.refused` (flat).
+- **Formation.** No `referent_class`: it forms on every plain referent.
+- **Effect.** `loop/effects_founding.py::_eff_raze` (`:247`): declines unless the Rung is a
+  `raze_target_kinds` kind, `occupying_faction(w, a.via, rid)` names the seat's faction
+  (`loop/effects_shared.py:149`, the licence `seize`'s Rung half shares), and that faction is mustered
+  there. Otherwise the Rung is deleted and Layer 1's cascade closes every live edge naming it. Sites keep
+  naming the gone id, and nothing is re-homed (H-228).
+- **Reading** (`aperture 2 0`): eligible 26, formed 26, attempted 14, **refused 14 of 14, every one
+  post-admission** (the effect: no occupation). H-228's own measurement, a hand-built march then raze on
+  `build_realm(0)`, shows the effect works.
+- **Verdict: forms but is refused.** It forms where occupation is impossible because `march` never takes
+  a town (§5).
+
+### 6.3 The build-out, decided
+
+1. **The `Occupied` occasion-only class.** `occupying_faction` moves from `loop/effects_shared.py` to
+   `queries/world_q.py`, because it is a pure world read and the stamp must call it. `effects_shared`
+   re-exports it for `_seize_rung`. A stamp term `towns_occupied(w, p)` stamps every `raze_target_kinds`
+   Rung for which some seat of `p` granting `dispatch` has `occupying_faction(...)` not `None` and
+   `mustered` true, under `Occupied`. `raze` declares `referent_class: Occupied`. `_eff_raze` calls the
+   same pair. One owner for both.
+2. **Sack before ruin.** Before the deletion, the town's `Rung.stores` move to the treasury of the
+   exercised seat's rung (`requisition`'s two-sided `Rung.stores` shape, the same `_shift` primitive).
+   This gives the act a gain to weigh against its costs. The row declares `Rung.stores` twice (both
+   check-only beside the effect's first pair), as `march` does.
+3. **The Sites end with the town.** Every Site whose `rung` field is the razed Rung is ended
+   (`Site.exists`, a matrix row: `write_matrix.yaml:48`). This is #453 §9.2's Site half, and H-228 names
+   it open. It is a write of the act, declared in the row, not a cascade, so Layer 1 §B.8's "nothing
+   else" for the cascade is not touched. `site.razed` (#453's kind) is emitted once per ended Site.
+4. **Re-homing stays out.** H-228's own ladder found that Layer 1 §B.8 decides it, and that re-homing is
+   a Layer 1 amendment no batch may make. The displaced are therefore placeless. Their recovery is
+   `migrate` (MATERIAL family): a person with no live `reside` should form `migrate` toward a place he
+   knows `[UNVERIFIED: whether `migrate` forms for a placeless person was not read; the gate asserts
+   it, and if it does not, the dependency goes to the MATERIAL lane, not into `raze`]`.
+5. **Consequences by deed, not by meter.** The razing is witnessed (`rung.razed`, `site.razed`), every
+   observer whose state moved takes a scar (`loop/resolve.py::_scar_witnesses`, as built), and a
+   former resident's regard for the razer's faction moves through CHAR's reader of witnessed deeds
+   (`02_CHAR_which_ground_moves_whom.md`). No social aggregate lands on a Rung (`04:237`).
+6. **Ungraded, deliberately.** #453 §9.2 rules `contests: none`: the fight for the town was the field.
+   A town is razed or it is not. Partial ruin is `sabotage`'s (`Site.condition`). The choice is graded at
+   the level of the war: raze, seize, or leave.
+7. **Recoverable.** The ground remains (the parent territory). `found` can found a settlement there
+   again.
+8. **Refusals.** `raze.refused` remains only for world changes between formation and the fold (the army
+   left, the town changed hands). Both are named in the reason trail.
+
+### 6.4 Scales and play surface
+
+Settlement scale, decided at faction scale, felt at person scale (the displaced, the witnesses). The
+player sees occupied towns on his question and chooses raze, `seize` or nothing. NPCs choose through
+the one chooser. A commander whose pursuits weigh order against wealth scores the sack against the
+loss.
+
+### 6.5 Tuning hooks
+
+`rosters.yaml: raze_target_kinds`; the sack fraction (all stores today; a swept fixture
+`raze_sack_share` in `data/fixtures.py` if SE wants less than all `[named]`); the regard weight of a
+razing (CHAR); offices granting `dispatch` (FA-P2).
+
+### 6.6 Exact edits
+
+`proposals/14_VERBS_PHYSICAL_B_field_and_ruin.md` §B2.
+
+### 6.7 Gate and falsifier
+
+**Gate.** `test_v14_raze_after_occupation.py`: §5.7's war world with the march forced to `Won` by a
+fixture-planted army imbalance (MB presets). In the next season the victor's opening set holds `raze` on
+the occupied town **only**. If attempted: `w.rungs` shrinks by one, every Site naming it is gone, and
+the seat's treasury `stores` rose by the town's prior `stores`. **Control:** with no occupation, the
+opening set holds no `raze`. **Planted failure:** drop `referent_class: Occupied`. `raze` forms on
+unoccupied places again, and the test fails on the formed set. H-228's existing pin
+(`test_in12_raze.py`) reddens on the Site half, as it was written to, and is re-pinned.
+
+### 6.8 Cases
+
+`07_SE_arc_needs.md` (raze rows); ARC2 invasion; NPC-075 (`chain/NPC1.yaml`: the cumulative consequence
+of every faction's warfare anywhere): a razed town is that consequence in its most visible form.
+`[No case names razing directly; the corpus search for raze, sack and siege found none.]`
+
+### 6.9 NERS reading
+
+- **N.** The only act that shrinks the map (H-166's "grain tomb"). Cut test: merge into `seize` with an
+  option, and title and ruin would share one licence while their consequences are opposites. Keep it,
+  with one owner of the licence for both.
+- **R.** A real strategic choice: loot and deny against regard and production. The world can burn
+  without a player.
+- **S.** One licence owner for `seize` and `raze`, and for formation and fold.
+- **E.** One moved function, one class, two declared writes. High.
+
+---
+
