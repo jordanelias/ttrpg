@@ -235,7 +235,7 @@ Not items, and where each is: `05_SC_playable_hearing.md`, `05_SC_evidence_and_r
 - WHERE: `engine/season/verb_table.yaml` (`determine`: `contests`, `Declared` cells).
 - TESTS: none new; `engine/season/tests/test_arrangements.py` and the verb loader's tests green.
 - FALSIFIER and CONTROL: the loader refuses the row (a prize no roster row claims). Control: the four band rows byte-equal before and after (`git diff` shows only `contests:` and the `Declared` cells).
-- GATE: `python -m engine.season.harness.register --check` → exit 0; `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_arrangements.py -q` → pass. EXPECTED RED UNTIL B24.10: `test_realm_hash_equal_at_sitting_exchanges_zero` (written at B24.10).
+- GATE: `python -m engine.season.harness.register --check` → exit 0; `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_arrangements.py -q` → pass. The realm hash is not read between B24.08 and B24.10 (a `determine` is deferred with no ENCOUNTER caller until B24.10, all under `[skip ci]`); B24.10's gate 1 reads it.
 - HASH MOVERS: none declared here; the realm hash is read equal at B24.10 (gate 1).
 - DEPENDS ON: V12 B24.03 (the `a verdict` row).
 - GLOSSARY: none.

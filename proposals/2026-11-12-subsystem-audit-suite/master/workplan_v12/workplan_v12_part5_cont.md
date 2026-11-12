@@ -105,7 +105,7 @@ Read at B03.99 (no code, no commit of its own): Reading 1 of this batch's `## Re
 - WHERE: `modules/mass_battle/core/state.py` (two comments); `modules/mass_battle/core/exchange.py` (one docstring line, one comment).
 - TESTS: none; covering: `python -m pytest tests/valoria -q -m mass_battle` is not run here (a comment edit; the close's `tools/tests_for_diff.py` names what it names).
 - FALSIFIER and CONTROL: a cite still naming the bare forked path, or a value changed. Control: `python tools/export_sim_params.py --check` → exit 0 (these are not module-level constants; the capture is unchanged); `python tools/ci_golden_modes_check.py` → every digest equal.
-- GATE: `git grep -n "params/factions/stats_1_7_scale.md" modules/` → every hit is prefixed `FORK:c451bcb:engine/`; `python tools/export_sim_params.py --check` → exit 0; `python tools/ci_golden_modes_check.py` → digests equal to the batch-start reading.
+- GATE: `git grep -n "params/factions/stats_1_7_scale.md" modules/` → every hit is prefixed `FORK:c451bcb:engine/`; `python tools/export_sim_params.py --check` → exit 0; `python tools/ci_golden_modes_check.py` → digests equal to the batch-start reading (mass-battle goldens: no B03 item moves them).
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE `references/restructure_ledger.md` (the two rows), `tools/pathres.py::resolve`.
 - GLOSSARY: none.
