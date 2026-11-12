@@ -57,7 +57,7 @@ EST: 22 h [estimate: `V12_STRUCTURE.md` §2.4's formula over this batch's 43 pos
 | B12b.03 | the season's harvest is a keyed draw; the spell is a shared obstacle term for the year | `09_WR_B_weather` edit 1 | BUILD | EQUAL (see STOPS IF) | B12b.01 |
 | B12b.04 | the leg's price reaches the chooser | `09_WR_B_weather` edit 3 | BUILD | EQUAL | B12b.02 |
 | B12b.05 | an ending over the condition of Sites, reached by a draw | `09_WR_B_weather` edit 4 | BUILD | EQUAL | Batch B12a |
-| B12b.06 | the band factors' mean-one reading | `09_WR_B_weather` edit 2 | READING | — | B12b.03 |
+| B12b.06 | the band factors' mean-one reading | `09_WR_B_weather` edit 2 | POINTER (taken and shipped in B12b.43; record R1) | — | — |
 | B12b.07 | CP-T10-02's shape is the road's draw | CP-T10-02 (intake `:357`) | POINTER | — | — |
 | B12b.08 | the road's fixtures, typed pair and pure entry | `16_PESSIMIST_WR_A` edits 1–3 | BUILD | EQUAL | B12b.04 |
 | B12b.09 | who is on the road, and their odds | `16_PESSIMIST_WR_A` edit 4 | BUILD | EQUAL | B12b.08 |

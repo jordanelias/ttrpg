@@ -333,7 +333,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand` (S
 - GATE: "`tools/export_troops.py --check` passes; `python3 tools/ci_golden_modes_check.py` digests equal; an unknown arm key is refused by name; a mass stated twice is refused" → `python tools/export_troops.py --check` → exit 0; `python tools/ci_golden_modes_check.py` → `[BYTE-EXACT OK]`, equal; `python -m pytest tests/valoria/test_export_troops.py tests/valoria/test_field_golden_pins.py -q` → pass; the realm hash at seed 0, one season → equal to B17.08's.
 - HASH MOVERS: none ("none at stages 1–3 with every `secondary` null").
 - DEPENDS ON: V12 B17.07 (the `roles` column is the cut list), B17.08 (`MIN_DISCIPLINE` read before the header moves); EXISTS-IN-TREE `tools/export_battle_orders.py` (the pattern), `engine/engine_params/combat_engine_v1.json` `weapons`, the twelve tables; V12 Batch B13 (`combat_engine_v1.json` byte-identical after the package move), Batch B14 (`03_PC_weapon_records_in_the_export`: the export's weapon records).
-- GLOSSARY: *kit*, *troops, troop type, levy* (step 6). "troop file": `references/troops.yaml`, the one authored table of troop types and arms, as a regiment's books are its file.
+- GLOSSARY: *kit*, *troops, troop type, levy* (step 6). "troop file": `references/troops.yaml`, the one authored file of troop types and arms, a file in the ordinary sense of a kept record.
 - COST and TIER: edit (mechanical, hash EQUAL); `sonnet`, `high`; "`haiku` for the transcription check" (the source).
 - LANDS IT: B17's producer; `Item: B17.10`, `[skip ci]`.
 
