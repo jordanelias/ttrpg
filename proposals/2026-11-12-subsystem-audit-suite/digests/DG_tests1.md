@@ -743,3 +743,110 @@ Lane `tests1`: 70 files under `engine/season/tests/` (test files and three helpe
   - `establishes`: Inquisitors (`p_npc_004`, `p_npc_038` exactly) hold the narrower heresy goal, the rest of the Church (incl. the Confessor `p_npc_021`) the Church's goal, and the two sets are disjoint (:146-151).
 - **Conflicts / stale:** the "Nine Political Axes as data" claim in the docstring ties to the rival-goals file; goals are a typed file read by the loader, satisfying the data-driven requirement.
 - **Open items:** none.
+
+### engine/season/tests/test_faction_q.py
+- **What it is:** unit test for `queries/faction_q.py`: `resolve, holdings, purview, superiors, subordinates, at_war, head`.
+- **Status:** none; live.
+- **Bears on:** FA (factions, war, headship, subordination), SE (holdings), CORE.
+- **Content that matters:**
+  - `faction_q.members is world_q.members` (identity, not equality - "every rule lives once"); `holdings`/`seats` match a set re-derived from `w.tenures` directly (not via `world_q.members`), vary across factions (not a stub), and `holdings(w,p)` is `resolve(w,p).holdings` (:53-97). `purview(w, seat)` is the sorted set `{rung} | descendants(rung)` and agrees with `gate.purview_reaches` for every rung of the world; rungless/unknown seat -> `[]` (:100-120).
+  - `superiors`/`subordinates` read a hand-built `oblige` edge both ways (subordinates equal `sorted(world_q.establishment_of(...))`) (:123-143).
+  - `head`: control that no live `commit` in `build_realm(0)` carries a `Tenure.degree` (scan, not `head`'s own return); two factions with no `head_seat` (`fac_schoenland`, `fac_guilds`) read None; Valorsmark's head is `p_npc_020` (CR-86); hand-graded live commit picked up; last write wins; a closed edge (`t.live`) is dropped (:150-211). `head` is an old "degree on a commit tenure" reader, vacuous in the realm; the real head is `head_seat`.
+  - `at_war` through the real fold: `utter` (mood WAR, subject A, value B) then `commit` to `prop:<act id>` -> war True both directions (unordered pair); `release` -> `["tenure.closed", "commitment.ended"]` (the maker's hold closes too) -> False (:224-261). So war/peace is declared by one person's utter+commit and ended by one release: no contest or draw.
+- **Conflicts / stale:** `head` docstring reasoning ("vacuous") is stale once `head_seat` exists; the file keeps both. War declaration with no resolution roll (FA lead): a single actor's `utter`+`commit` makes `at_war` true.
+- **Open items:** none.
+
+### engine/season/tests/test_fi01_graded_inquiries.py
+- **What it is:** behaviour test, v9 FI-01 (`ED-FI-0009`; J-22 answered option (A)): a degree producer for the inquiries; the deposit half built as the SKIP arm (RS-21 item 1, H-111 ANSWERED [medium; Jordan to correct]). Imported by `test_aperture.py`.
+- **Status:** none; live.
+- **Bears on:** FI (inquiry grading, evidence deposits), SC (the shared roll owner), CHAR (what is written to ledgers), R-02/R-07.
+- **Content that matters:**
+  - `graded_inquiries` routing roster: `research`, `examine`, `surveil` (place case) graded; `interview` is a prompt (K-36); `reconstruct`/`thread_read` wait (K-37/H-85) (flat `emits:`) (:45-51, :83-94). Graded rows emit by degree `{Overwhelming, Success, Partial, Failure}`, `Failure` -> `finding.none`.
+  - Skip arm: a `Failure` research (act ids swept up to 60 until one draws `Failure` and one a finding band) emits `finding.none` and deposits NO claim (ledgers equal before/after WITNESS); `finding.made` deposits; a REFUSED research (no such Record) emits `finding.none` with degree None and deposits nothing; control: a refused `tell` (`tell.refused`) still deposits (the arm keys on the kind `finding.none`, `UNDEPOSITED_KINDS`) (:97-156). So a failed investigation leaves no trace in anyone's knowledge (no "I looked and found nothing" belief).
+  - The route is not a prize: no graded verb declares `contests:`; route keys are exactly `{provider, module_entry}`; loader refusals (routed row that also contests; flat `emits:`; a `module:` key; a misspelled skip kind `finding.nnoe`), and a route to a roll no prize row binds refuses at driver construction (:159-220). Examine at a present Site is graded (sweep 60) (:223-239).
+  - ONE roll owner: replacing the `social_contest.roll` module entry with fixed `Margin`s moves the inquiry's band band-for-band (net 5/3/2/0 vs ob 2 -> Overwhelming/Success/Partial/Failure); the inquiry is handed no opposition and `pool_default` (:242-262). An inquiry admits before it rolls (:265-277). Realm: one season of `build_realm(0)` has a `finding.*` Event with a degree and `(kind == finding.none) == (degree == Failure)` (:280-291) - an existence claim, no count.
+- **Conflicts / stale:** an inquiry's pool is `pool_default` (no investigator skill; the verb's vocation `inquiry` is held by 2 persons only) and obstacle default 2 (no clue/evidence quality input): fieldwork success is not a function of evidence held (brief's detective-game intent, FI lead).
+- **Open items:** `interview` as a prompt (K-36); `reconstruct`/`thread_read` wait on K-37.
+
+### engine/season/tests/test_g1a_act_store_and_receipts.py
+- **What it is:** unit test, G1a: the act store (`state/acts.py::ActStore`), the receipt mint (`state/gate.py::Gate.mint/issued`) and the two things the log (`state/log.py::EventLog`) refuses.
+- **Status:** none; live. (Part of the gate family addendum C names strongest, F-TEST strongest list.)
+- **Bears on:** CORE (AX-4 one write path; provenance of Events).
+- **Content that matters:**
+  - Act store append-only, refuses duplicate id without half-applying, iteration returns a COPY, refuses non-Acts (:30-55). Gate refuses to mint with no write open; `issued` is an IDENTITY check (a forged `Receipt` `==` to a real one on every field is not issued); closing the window stops the mint (:59-89).
+  - OBSERVABLE: a hand-built receipt in an Event fails `append`, a minted one passes (:94-105). FALSIFIER: an act-caused Event appended while the act store is empty fails, and the same Event passes once the act is in the store (:122-135); causes naming a prior Event resolve, an invented one does not, `ROOT` always resolves (:138-150). Log is reversible, indexable, sized (:155-165).
+  - `test_a_bare_statechange_is_still_admitted_and_this_is_the_transitional_seam` PINS A WEAKNESS deliberately: `EventLog` admits a bare `StateChange` (probes build one at `harness/probes.py:1797`), so provenance is "checkable but not yet compulsory"; "when `G4` closes the seam this test goes red and has to be deleted ON PURPOSE" (:108-117). [Whether G4 closed it: UNVERIFIED here; test_g4 is the sibling.]
+- **Conflicts / stale:** references `world.py:625`, `harness/probes.py:1797` line numbers that may have drifted.
+- **Open items:** the transitional `StateChange` seam.
+
+### engine/season/tests/test_gate_remove_person_requires_an_open_write.py
+- **What it is:** unit test, `GATE-REMOVE-PERSON` (plan position 7, 2026-09-29): `World.remove_person` refuses with no gate write open (AX-4 "one write path" made mechanical for this function).
+- **Status:** none; live.
+- **Bears on:** CORE (write gate, death path), PC/MB (removal of persons).
+- **Content that matters:**
+  - Four arms: (1) a bare `w.remove_person` raises `InstrumentDefect` and mutates nothing; (2) the real callers' pattern `world.write(..., apply=lambda: w.remove_person(...))` succeeds, person gone, edges closed; (3) the REALISTIC case: after a prior successful write the gate has closed again so a later bare call still raises (found at the Phase-1 close: `write()`'s success path did not call `gate.close()` and `is_open` stayed True forever, making arm 1's guard vacuous in any played world; `hole_register.yaml` H-131); (4) a write whose mutation succeeds but raises from its own tail (S33: declared emission with no `subject=`) still closes the gate via the `try/finally`, proven by a second bare call on an unrelated victim (:49-129).
+  - A model case of a test catching its own vacuity: arm 3 and 4 exist because arm 1 alone could not distinguish "guard works" from "gate permanently open".
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### engine/season/tests/test_g1b_attribution.py
+- **What it is:** unit + corpus test, G1b: attribution without `Event.subject` (the field is deleted); `state/attribution.py::actor_of`/`anchor_of`.
+- **Status:** none; live. Plan position 4 (2026-09-26). Addendum C: read in full, strongest family.
+- **Bears on:** CORE (event provenance, WITNESS anchoring; R-01 chain walkback), WR.
+- **Content that matters:**
+  - `Event` has no `subject/actor/target` field and refuses a `subject=` kwarg (executed fact of `04:402`) (:58-66). An act-caused Event attributes to that act's actor; MATTER's wear has no actor (`actor_of` None, `anchor_of` the written thing); the actor channel wins over the change channel; first cause resolving to an act wins; tier 3: a consequence (`condition.band_crossed`) inherits its cause's anchor (:71-126). An Event reaching no tier returns None.
+  - Falsifier 1 over every fan-out arm (`sorted(FAN_OUT_MODES)`, sorted so `-n auto` collects the same): an anchorless planted Event (`plague.struck`, no change, `[ROOT]`) is deposited to nobody, control is the same kind carrying a change naming `R` which IS deposited; `total` is why every arm is run (before `claim_subjects` it minted `Claim(subject=None)` into all five ledgers) (:151-198).
+  - Falsifier 2: every probe in `P.PROBES` run, every World captured by monkeypatching `World.__init__`: no logged Event anchors on nothing, population floor `anchored >= 5000` (measured 10,559 Events over 111 Worlds) (:203-254).
+  - Falsifier 3: four (seed, seasons) pairs: `actor_of` agrees with the id the fold MINTED from the actor (re-derive `H(seed, tick, actor, "{kind}:{act}")`); each tier-2 anchor is a receipt `Gate.issued`; `by_act` and `by_receipt` both nonzero; `len(log) >= 20`; and `>= 10` actorless Events at seed 0 x 2 seasons (:267-330). A tier-3 crossing check against `w.crossings` is RETIRED when `11a` deleted the attribute, carried to `test_season_shape.py::test_w4_a_band_crossing_walks_back_to_the_wear_that_caused_it`.
+  - Deleted-on-purpose test `test_tier_4_is_the_field_and_it_is_the_blocker`, noted in a comment at :129-134.
+- **Conflicts / stale:** `[JUSTIFIED: A VACUITY FLOOR ...]` and `[JUSTIFIED: SEEDS ...]` comment tags. Count floors (5,000; 20; 10) justified as vacuity guards, not pins.
+- **Open items:** none.
+
+### engine/season/tests/test_g2_token.py
+- **What it is:** scan + gate test, G2: one `Token`, minted in `loop/driver` only (plan position 5; `04:199`, `04:206`): AST scan, gate refusals, the fold's class check, and DELIBERATE mutating no store by any route.
+- **Status:** none; live. Strongest family per addendum C (`test_g2_deliberate_mutates_no_store_by_any_route`).
+- **Bears on:** CORE (AX-4, R-03 DELIBERATE pauses/doesn't write; token), CHAR (player spaces), GO.
+- **Content that matters:**
+  - Scan: no `Token(` outside `loop/driver.py`, no `mint_token(` from game code (harness/tests may call), aliasing/rebinding flagged; floor `len(src) >= 60`, names the seven step modules (`calendar, matter, deliberate, resolve, encounter, witness, census`), positive control: exactly one construction (the driver). Four plants in `loop/deliberate.py` (construct, mint, alias, rebind) must be found; the same plant in the driver must not (:95-133). The scan's blind spots named (`type(t)(...)`, `dataclasses.replace`, `copy.copy`) (:62-65).
+  - `season()` hands six steps a `mint_token` in classes `{calendar: CALENDAR, matter: MATTER, resolve: ACTS, encounter: ACTS, witness: INTERIOR, census: MATTER}` and `deliberate` none (:136-160).
+  - Gate: a write with a bare class/None/str credential fails as `NoToken` (not `ShapeGap`), the control write with a token applied; a token from another tick is refused; the token is frozen; the order: absent row + no token -> `NoToken`, absent row + token -> `Unspecified` (:175-223). The fold given a MATTER token at RESOLVE is refused with `where == "S30.2"` (:230-249).
+  - DELIBERATE mutates no store: `_store_digest` digests EVERY `vars(w)` attribute (except `step`, `_in_parallel_map`) by content (so a new store is covered by default) around every DELIBERATE call; season arm (floors `calls >= 8`, `acts >= 30`); PLANTED arm calls DELIBERATE on a world with an unhomed Tenure (the only state in which the old `_rehome` mutated); the digest is shown to see `_rehome`; a SPACES arm (v10 REM-30 IN-47) runs the player's character-sheet spaces inside DELIBERATE and a planted space that writes `p.scar` reddens it (:308-414).
+- **Conflicts / stale:** the scan covers `engine/season/` only.
+- **Open items:** none.
+
+### engine/season/tests/test_g4_no_op_receipt.py
+- **What it is:** behaviour test, G4: `NoOpReceipt` and the final effect contract (plan position 7; `04 §C.2` F9): the gate compares before/after and refuses a receipt for a subject nothing moved.
+- **Status:** none; live. Addendum C: read in full; strongest family.
+- **Bears on:** CORE (write gate; effects are `Change` objects), PC (wound scar rider removed IN-08 H3), FA (convene, transfer).
+- **Content that matters:**
+  - An effect that names a subject and moves nothing is refused (`act.refused`, no `set` receipt on `Hh`); CONTROL in the same test: `World.state_of` patched to always-unequal reproduces the pre-G4 contract and the same plant SUCCEEDS with a receipt (:64-88). An effect on the retired contract (mutate, return ids) is refused by TYPE (`InstrumentDefect` "Change") (:91-99).
+  - F3 (NotYours) is asked before F9: an unnamed unlawful closure of `p_high`'s seat is `NotYours` and the seat stays live; control: without the unlawful write it is `NoOpReceipt` (:106-133). A no-op puts back a lawful edge its closure opened; naming the edge (`Subject.edge(t)`) keeps it (:136-160).
+  - Per-effect: `fight` is judged on body and existence; a `Wounded` scene that took no health is `kill.refused`, `body.changed` not published, and a refused wound scars NOBODY (IN-08 H3 retired `scar_step`); control: a half-health wound moves `body` to `body // 2` and DOES scar an observer; second identical `convene` in a season is `convene.refused`, a different `when` reschedules; a `transfer` from a rung to itself is refused (628 of 900 corpus `transfer` effect calls were `r_hearth -> r_hearth`) (:174-239).
+- **Conflicts / stale:** `test_g1a`'s `StateChange` transitional seam: this file does not close it; `P.about` Events still use bare `StateChange` [UNVERIFIED re whether G4 closed it].
+- **Open items:** none.
+
+### engine/season/tests/test_g3_not_yours.py
+- **What it is:** behaviour test, G3: `NotYours` at the gate, `Act.via`, purview through `via.scope` (plan position 6; `04 §C.2` F3 / AX-4 clause 2): every Tenure write must be T-m (owner), T-n (declared term maturation), T-o (a seat whose revocation basis reaches it, `via` present), cascade (existence change this act caused), or conferral basis.
+- **Status:** none; live. Defines `_gov_world` (imported by `test_cl_thrust_b01_arc_reader.py`, `test_cp_t03_00`, others). Addendum C: gate family, not itself read in full there.
+- **Bears on:** FA (governance: confer, revoke, establish, purview, seats), CORE (gate), SC.
+- **Content that matters:**
+  - Plan's falsifier: revoking the duke THROUGH `off_mayor` (a seat whose basis does not reach) by an actor (`p_king`) who also holds `off_crown` (which would) is refused `NotYours` at `F3`; control: same write through `off_crown` applies. Proves the basis walk reads `via`, not the actor (:111-132).
+  - Every live violation refused without basis and admitted with it, counted and set-asserted `{revoke, confer, fight}` with `_admits` bypassed by a `gate_only` fixture so only the write gate can refuse (:145-211). Fifth clause (conferral-basis opener) tested both arms with five refusing cases (no seat exercised; a seat with no purview over S; a seat the actor doesn't occupy; the seat being conferred; a seat declaring no conferral basis) (:218-265). At the precondition `_req_confer` asks the gate's own `may_fill` and, for a held seat, `may_revoke`: the King (R is not S's parent) cannot displace a sitting reeve, the duke (D is S's parent, same faction) can (:268-292).
+  - A `revoke` with `via=None` is refused at the gate and, through the shipped fold, `_eligible` declines so it emits `revoke.refused` (defence in depth) (:299-338). T-m never admits self-seating on an unrelated seat (found by an antagonist pass 2026-09-26) nor self-re-stamping one's own grant without a superior's basis; a sole holder's resignation is still T-m (:361-430). `establish` re-stamp of another's grant needs the conferral basis; the refused act's OFFICE write (`remit_acts`) is NOT undone, "the gate restores the tenure store only (`World._restore_tenures`, H-130's class)" - a pinned bound (:438-464). An edge's ends cannot be rewritten (:482-491); a refused opening is removed (:494-503).
+  - Purview = ruling (4) (`ED-IN-0256`): reflexive on the seat's rung, every rung inside, King over the duke's ground, nothing upward/sideways, rungless seat nowhere; counted `checked >= 25` (:506-529). The chooser mints `via` from the same grant person-side eligibility admitted on, swept over every verb x person (`admitted >= 20`, `remit_only >= 5`) (:532-561). Six bases (`T_M, T_O, CONFERRAL, CASCADE, HANDOVER`) each observed ADMITTING through a spy on `tenure_write_basis`; `T-n`/`renewal` are in `test_term_upkeep.py` (:564-602).
+  - Governance decisions are eligibility/authority checks (no draws) - consistent with the brief's allowed class; but `revoke`/`confer` outcomes between legitimate seats are fully determined by state (an officeholder "always" can revoke): the brief's "binds"/"senior office always wins" lens (FA lane).
+- **Conflicts / stale:** the unreleased bound that a refused `establish` still writes the office (H-130).
+- **Open items:** none.
+
+### engine/season/tests/test_give.py
+- **What it is:** behaviour + gate test, plan position 16 (`15a`): `give`, the `H-84` verb, and the gate's sixth basis `handover`.
+- **Status:** none; live. Records `plan position 14` (typed `give` with `with` stem, `_req_give` retired).
+- **Bears on:** FA/SC (documents, Records change hands), FI (document channel), CHAR (known-person operands), CORE (gate).
+- **Content that matters:**
+  - A `give` between two co-located persons closes the giver's `hold` and opens the receiver's in ONE write (the tenure store's diff is exactly those two edges; `hold_force` moves; receipts name the two EDGES, never the Record); the previous holder's `document_key` channel stops firing and the receiver's starts (needs `w.discard_caches()` between asks) (:117-147).
+  - Plan's falsifier through two real seasons: the receiver's `content:<kind>` claim is minted in the season of the handover with the giver's exact value and did not exist before (`got[0].when == t_give`); control: undo the widening of WITNESS's deposit trigger (`_hold_tenure_ends`) and the receiver learns nothing (:154-206). The stage clock is set far away (`w.tick + 50`) because the default matures a term the season after the mint and would deliver the content by the Record's id (found by the control failing) (:164-170).
+  - Gate: a write opening the receiver's `hold` WITHOUT the release is `NotYours` and put back; two live holders make `hold_force` raise; with the release admitted under `handover` (the last verdict per edge: old `T_M`, new `HANDOVER`); a release in an EARLIER write licenses nothing; one release hands on ONE edge; a seat cannot be handed over; a closure that is not the actor's licenses nothing (:224-324).
+  - Precondition: non-co-located `give` refused (control: co-located executes); to oneself, not holding it, no receiver, receiver not a person -> `give.refused` (:331-352). `give` forms per known person (the `to` fan over `known_persons`), none to himself, a giver who knows nobody forms none; the `counterparty:` column is a second guard (planted) (:366-400); loader refuses a counterparty that is no operand (:403-415).
+  - A `give` is certain given eligibility (no contest; `contests` empty).
+- **Conflicts / stale:** the first `_at_resolve` helper uses a `petition` to make a Record; `ED-IN-0210` ruling 1 cited. 
+- **Open items:** none.

@@ -16,8 +16,9 @@ named. All runs: `PYTHONHASHSEED=0`; scripts and outputs under
 Short names: `es/` = `engine/season/`; `K/` = `systems/social_contest/sim/contest/` (the kernel the
 loop does not run).
 
-**PARTIAL FILE — written early and appended (PESSIMIST_BRIEF: "write early and append"). Sections
-below this line are filled as the runs complete; a section that reads `[PENDING]` was not reached.**
+Layout: §0 verdict; §1 NERS (cut tests, executed); §2 premise audit (the five sentences); §3 emergent
+narrative; §4 findings `F-PES-SC-nn`, ranked; §5 resolutions decided and the Jordan calls; §6 the lists
+(false N-lines, failed premises); §7 evidence log. Proposals: `proposals/16_PESSIMIST_SC_A…E_*.md`.
 
 ## 0. Verdict
 
@@ -65,7 +66,11 @@ draw, in this scope: what a hearer believes once a telling lands (a fixed functi
 the cell firsthand), whether a bench that failed may ask again (always), whether a lapsed matter may be
 re-opened (always), whether a convict may discharge an imposed service (always), and whether a petition
 is docketed (always). And the draw that exists is, for a bench that persists, a timer and not a
-decision (§2.3).
+decision (§2.3). This lane's own proposals were checked against the rule: every outcome they touch
+stays on a draw (the speech, the argument, the telling, the verdict); proposals B, C and E change
+*readings* over what a person holds (which belief, which regard, which record), which the suite classes
+as arithmetic over held items (`19_LACUNA…` §5), and they make the inputs to those readings depend on
+draws that today are discarded (whether a lie was heard clearly; whether an argument was lost).
 
 ## 1. NERS — cut tests, executed
 

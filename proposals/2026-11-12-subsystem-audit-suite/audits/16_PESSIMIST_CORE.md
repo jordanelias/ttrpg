@@ -357,3 +357,231 @@ a hundred, three receipt fields holding a constant, a log 94% bookkeeping, and f
 person per season each composing a plan to release its head. The kernel is legible in its rules and
 carries roughly as much unexercised structure as exercised. *"Allows the player to intuit complex
 outcomes from simple choices"* fails where the three surprises of §1.1 are.
+
+## 3. The nine requirements, and how `register --requirements` decides them
+
+**How it decides** (`harness/register.py:631-701`, read in full): a status word from a roster of three;
+a non-empty `measure:`; for `met`/`partial` a non-empty `measured:`; a non-empty `statement:`. Two
+further checks on the measure: a `python <path>.py` must name an existing file with a `__main__`; a
+`-k` expression must "select a test". It executes nothing. `tools/m1_acceptance.py::row_nine_requirements`
+counts the same strings; CI runs the same command.
+
+**Can it fail on a false `met`? No** (`req_forge.py`; scratch copies, tracked file untouched):
+
+| scratch copy | exit | prints |
+|---|---|---|
+| the shipped file (control) | 0 | `met 3 · not_met 1 · partial 5` |
+| A: every row `met`, `measured: x` | **0** | `met 9` |
+| B: A, and every `measure:` is `python -m engine.season.harness.no_such_module` | **0** | `met 9` |
+| C: A, and every `measure:` is a pytest line with `-k 'zz_no_such_test or import'` | **0** | `met 9` |
+| D: A, and every `measure:` is `true` | **0** | `met 9` |
+| positive controls: status off the roster; missing `.py`; `-k` matching nothing | 1, 1, 1 | the violation |
+
+A is the known limit (F-CORE-03: statuses are strings). B, C and D are new and are defects in the check
+the docstring claims: the existence test's pattern does not match `python -m <module>`, which is the
+form of **six of the nine shipped measures**, so those six are unchecked; and the `-k` test passes when
+any one word of the expression occurs anywhere in any test file. F-PES-CORE-04; proposal
+`16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md`.
+
+**What this lane's runs say of each row** (the status is the file's; the reading is new evidence, seed 0;
+a row not attacked says so):
+
+| row | status | this lane's reading |
+|---|---|---|
+| R-01 propagation | met | **supported, with a control it did not have**: removing one scene changes 236 to 634 other persons' acts; replay and a cohort's scene change 0 (§1.2). Qualified: saturates; the dependence is mostly off the `causes[]` edge the row's instrument walks |
+| R-02 consequence shapes later decisions | met | the same runs. Qualified: what differs is paper (§1.2 pt 4) |
+| R-03 scene by scene | met | **supported as a tick**: 39% of acts after round 0 cite another person's earlier-round act of the same season, 14% executed; round 0: 0. The row's own control (`scene_budget = 1`) changes the act count and so does not isolate interleaving. Not supported as a scene (§1.1) |
+| R-04 strategic and management actions | partial | not attacked. In one season no person's act wrote `Site.condition`, `Site.exists`, `Rung.exists`, `Office.exists` or `Person.capability` (§2, the matrix row) |
+| R-05 all verbs built out | not_met | 48 of 67 attempted, 30 executed at seed 0 (30 to 32 over seeds 0–2, 28 common to all three); 100 of 178 declared Event kinds never emitted |
+| R-06 robust characters | partial | the median individual has 56% of his acts refused; 69 `(actor, verb)` pairs are refused at every one of three or more attempts |
+| R-07 memory, feeling, attitude | partial | the memory of a refusal is held (184 of 226) and read by nothing; 47 scar writes a person in two seasons leave no Event |
+| R-08 non-omniscient, not perfectly rational | partial | non-omniscient: yes, to the point that absence cannot be learned. *Not perfectly rational* is being met by *does not update*, which is a different thing |
+| R-09 probabilistic chains within a scene | partial | **the subject is missing**: a scene has no internal order (23% fold in order) and no step can depend on another (§1.1 pt 2). Fold order decides about 1 act in 175 |
+
+## 4. Emergent narrative — what the kernel can and cannot tell
+
+Scope: the kernel's own story-making (occasion, answer, refusal, deferral, clock, record) and the
+instruments that read it. The WR lane's chain statistics and the GAME lane's null arm are cited.
+
+**4.1 What the loop can produce at all (enumerated from the code).** A beginning is an *occasion*:
+`rosters.yaml: question_sources` has two (`claim_landed`, `need`). An escalation is an answer in a later
+round, so two people can exchange at most five times a season. A reversal needs a write that undoes one
+(a `Tenure.until`, a store falling). A cost is a spent scene. An ending is `world_q.endings_reached`: two
+roster rows (`peninsular_sovereignty`, `theocracy`), *"a read … the run does not halt on it"*
+(`driver.py:546-549`). A retelling is `chronicle.render` of one chain.
+
+**4.2 What it produces in computed play (seed 0; three seasons unless said).**
+
+| story element | reading |
+|---|---|
+| beginnings | 1,487 individual acts, every one with an occasion: 1,408 `claim_landed`, 79 `need`. Nobody begins anything unprompted |
+| escalation | deepest cross-person chain of consequence acts: 4 (`conceal`, then three `create_record`s); over all acts 10, eight of them refusals (§1.5) |
+| reversal | none observed: no `tenure.opened`, `stance.moved`, `conviction.moved`, `commitment.ended`, `record.destroyed` in three seasons |
+| cost | 828 refused scenes; the price leaves no receipt (F-CORE-17, cited) |
+| ending | `endings: []` at every season of every arm run here (11 two- or three-season runs); the WR lane reports none in six seasons |
+| retelling | one chain, as `season | actor verb | kinds | answers n`; no value, no place at the time, no reason (§1.4) |
+
+**4.3 Dead ends.** Every Event kind that finishes something is among the 100 never emitted (§2, R).
+Nineteen verbs are never attempted: `arrest`, `assign_troops`, `confer`, `destroy_record`,
+`disband_unit`, `discharge_troops`, `examine`, `fight`, `forgive`, `form_unit`, `interrogate`, `marshal`,
+`order_unit`, `recruit`, `restore`, `succeed`, `surrender`, `tie / knot`, `work`.
+
+**4.4 What a choice changes.** §1.2: one scene withheld changes a seventh to two fifths of everyone
+else's next season, in records, promises and dockets; a whole season withheld changes the same amount.
+
+**4.5 The shape of the tail: are all runs the same run?** In distribution, yes. Over seeds 0, 1, 2
+(the GAME lane's three-season outputs, re-read): the cosine between seeds of executed-act counts by verb
+is 0.993 to 0.995; the eight most executed verbs are the same eight in nearly the same order
+(`create_record`, `utter`, `research`, `reconstruct`, `commit`, `surveil`, `forge`, then `oblige` or
+`tend`); 28 of the 33 verbs ever executed are executed at all three seeds. In particulars, no: re-seeding
+the chooser's draw alone changes 81% of acts from the first round (§1.2, the ceiling arm). The realm is
+one story-shape with different names in it.
+
+**4.6 Are the persons' reasons readable afterwards?** For 95% of acts the recorded occasion is "a claim
+landed". The View the person scored against is not kept (F-CORE-12), and §1.2 pt 3 shows it matters: a
+scene can redirect 21 people through no recorded edge.
+
+**4.7 Extremes** (`extremes.py`; the GAME lane ran the cast cap). No person, no rung: five rounds of
+nothing, no error. `scene_budget = 0`: the season's wear is logged and reaches no ledger. Forty rounds on
+three persons: 87 acts a season, 108 `travel.blocked` in two seasons, which is §1.3 again at small scale.
+
+**4.8 The instruments, as claims.** `chronicle`'s pick is not distinguishable from its own shuffled
+control on this log (4 against 5). `storybar`'s `--draw-seeds` arm is a real second arm and gave this
+lane its ceiling. `register --requirements` cannot fail (§3). The invariant sweep and the loop check are
+the CORE addenda's (F-TEST-06, F-CORE-21) and were not re-run.
+
+## 5. Findings, ranked worst first
+
+**F-PES-CORE-01 · degrades narrative; touches R-06, R-07, R-08 · a refusal does not teach.**
+Falsifier run: `run_dump.py 0 3` + `an1.py`/`an2.py`: 41% of refused opportunities retried, 96% of
+retries refused; control: executed opportunities retried 21%. Second run and its control, `p34.py 0 2`:
+8% retry where the failing read is deposited, 57% where it is not (62% of refusals). `refclaim.py`: the
+actor already holds the refusal claim for 184 of 226. Minimal fix at the owner:
+`decision/choose.py::score_terms` gains an admission weight read by a new `person_q.refused_before`;
+proposal `16_PESSIMIST_CORE_a_refusal_is_remembered.md`.
+
+**F-PES-CORE-02 · degrades narrative (retelling); touches R-01, R-02 as legibility · no receipt carries
+a value.** Falsifier: any receipt with a non-`None` `delta` in two seasons; found 0 of 36,586, and no
+call site passes one. Control: the gate's own `was`/after comparison exists at `world.py:1399,1427`.
+Fix: `World.write` mints with what it read; proposal `16_PESSIMIST_CORE_the_record_holds_what_changed.md`
+(edit 1).
+
+**F-PES-CORE-03 · degrades narrative; touches R-07 · the interior is not in the log.** Falsifier:
+receipts minted against receipts logged; 3,914 of 40,494 are on no Event, all `Person.scar`; the
+conviction crisis is built the same way. Control: every other field's receipts are all logged (0
+orphans). Fix: emit the kinds the matrix rows already declare, through the gate, outside the fan-out;
+same proposal (edit 2).
+
+**F-PES-CORE-04 · blocks an honest reading of THE NINE · the gate accepts `met 9` on a module that does
+not exist.** §3. Fix: three predicates in `check_requirements`; proposal
+`16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md`.
+
+**F-PES-CORE-05 · touches R-01, R-02 · propagation is real, saturates, and mostly leaves no edge.**
+§1.2. Falsifier: the replay and cohort arms (0 and 0); dose arms 236/309/634; five scenes 625. This is a
+positive finding with two qualifications, not a defect in the loop. Fix: the reading goes into the
+requirement rows (same proposal as F-04); the unrecorded influence is F-CORE-12's proposal.
+
+**F-PES-CORE-06 · touches R-03, R-09 · a scene has no order and one occupant.** §1.1 pts 2, 3.
+Falsifier: 120 of 525 in order (chance); 62 of 87 counterparties busy. Held back for Jordan (§6);
+proposal `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md`.
+
+**F-PES-CORE-07 · code matter · the stored plan tail is never used.** §2 row 1. Falsifier: any release
+from a stored queue; 0 of 1,137 (realm), 0 of 38 (headless), and the branch cut outright reproduces four
+season hashes. Control that bounds it: `qcut.py` (the shown budget is not free). Fix: delete the branch;
+proposal `16_PESSIMIST_CORE_no_stored_plan.md`.
+
+**F-PES-CORE-08 · hygiene · an old Event's place is wherever its actor is now.** `world_q.event_place`
+reads the live `contain` edge; 39 of 831 season-0 act Events answer a different place a season later.
+Correct for WITNESS (its only caller in the loop, at the Event's own tick); wrong for any retelling.
+Resolution in §6.
+
+**F-PES-CORE-09 · hygiene · the five strata and fold order decide almost nothing in computed play.**
+0 of 821 outcomes change with the strata cut; 1 of 175 with the hash reversed. No fix: the strata are
+ruled and cost one sort key. The figure is handed to `18_DETERMINISM_rival_acts_in_one_fold.md`, which
+asked for it.
+
+**F-PES-CORE-10 · hygiene · at `scene_budget = 0` MATTER's Events are witnessed by nobody.** WITNESS
+is called only inside the round loop (`driver.py:486-541`). Resolution in §6.
+
+## 6. Lists the brief asks for
+
+**False N-lines found** (cuts that came back free): the stored tail of a plan (executed, two worlds);
+the five strata (executed, one season); fold order (1 in 175); the retry licence (pays 4 times in 309);
+`Receipt.delta`/`.spec`/`.mode` (a constant). **A cut that came back not free and is reported:** the
+budget the chooser is shown. **Unexercised, not shown false:** CENSUS; the obstacle gate; three fold
+kinds; 39 of 65 write-matrix cells in one season.
+
+**Premises that failed.** *The refusal teaches* (fails for 62% of refusals). *What happened is recorded*
+(the value, the place at the time, the round and the interior are not). *A season ticks scene by scene*
+holds as a tick and fails as a scene (no order, one occupant). **Premise that held under attack:** *a
+decision propagates and later decisions depend on it*.
+
+**Stories the kernel can tell today** (observed): a correspondence chain (news, then a record, then
+records about the record); a five-round exchange inside a season; a march declared, deferred and
+resolved; a docket formed and dated; a refusal cascade; a season re-rolled by one withheld scene.
+**Stories it cannot tell, by construction:** a scene whose second step hangs on its first; an errand (he
+is not here, so I go and find him); anything with a retold magnitude; an inner change the record holds;
+two people occupied with each other; a person entering the world; a story that ends. **Stories the code
+admits and three seasons do not produce:** a death, a succession, a founding, a building, an exchange, a
+training, a confession, a determination, either roster ending.
+
+**Resolutions decided (8)**, by the five-step ladder:
+
+| item | resolution | ladder step | carried by |
+|---|---|---|---|
+| a refusal's memory is held and unread | weigh it in the score; no deposit of `with` | 4 (precedent: `odds_weight`) | `…_a_refusal_is_remembered.md` |
+| receipts carry no value | fill `delta` from what the gate read | 3 (`04 §C.2`'s recipe) | `…_the_record_holds_what_changed.md` |
+| scar and crisis writes reach no Event | emit the row's declared kind through the gate, outside the fan-out | 4 (precedent: `claim.deposited`) | same |
+| the nine's gate has two holes | tighten three predicates | 5 | `…_the_nine_gate_and_a_knockout_reading.md` |
+| R-01/R-02 lack a controlled reading | `storybar.knockout_arm` beside `draw_seed_arm`; statuses untouched | 4 (precedent: `draw_seed_arm`) | same |
+| the stored plan tail | delete | 5 | `…_no_stored_plan.md` |
+| an old Event's place | a retelling reads the actor's `contain` edge live at `e.emitted_at` (`move` writes `Tenure.until` and `Tenure.since`, so the closed edge is kept); `event_place` stays as WITNESS's read; no proposal file: one function beside it when a retelling is built | 5 | this row |
+| `scene_budget = 0` | `Fixtures` refuses `scene_budget < 1` at load, as it refuses other unusable values: a season with no round is not a season | 4 (precedent: the loader's refusals) | this row |
+
+**Survivor for Jordan (1).** *Is a scene a budget unit or a short sequence?* Option A: keep the global
+fold order; define *scene* as a budget unit; re-point R-09 at chains across rounds. Option B: fold a
+scene's steps in the chooser's order and let a step hang on the band of the one before; R-09 gains a
+subject; the #353 §27 order becomes an order over scenes. They are different games (a turn of
+simultaneous picks, or a turn of short conditional sequences). It survives the ladder because B edits
+what Layer 1 ratifies and A leaves a ruled requirement without a subject. This lane recommends B and
+does not decide it.
+
+## 7. Evidence log
+
+All `PYTHONHASHSEED=0`, `build_realm` unless said; scripts and outputs under
+`/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/PES_CORE/`.
+The machine was heavily loaded (load average 25 to 42); wall times are not measurements.
+
+| # | command | seed × seasons | outcome |
+|---|---|---|---|
+| E-01 | `run_dump.py 0 3 s0_k3.json` | 0 × 3 | 2,630 acts, 74,510 Events, hashes `5ab73af2…`, `bacd687f…`, `52ff67bc…` (equal to the GAME lane's: the wrappers are inert); `endings []` each season |
+| E-02 | `an1.py s0_k3.json` | — | scene, round, refusal and log readings of §1.1, §1.3, §1.4 |
+| E-03 | `an2.py s0_k3.json` | — | retry by verb and by observation; refusal share per person |
+| E-04 | `knock.py 0 2` | 0 × 2, five arms | baseline `bacd687f…`; receipts 36,586 all `delta=None`; place drift 39 of 831; scene order 120 of 525; plan change 516 of 527; knockouts 634 / 309 / 236 / 625. **OOM-killed** in its sixth arm (the process-global `TRACE.rows` grows without bound across arms) |
+| E-05 | `knock2.py replay`, `cohort`, `noise` | 0 × 2, one arm a process | 0 (hash `bacd687f…`); 0; 2,760 |
+| E-06 | `p34.py 0 2` | 0 × 2 | refusals by failing stem; 3,914 orphan receipts, all `scar`; chronicle 4 acts against a shuffled 5 |
+| E-07 | `ordp.py 0 1` | 0 × 1, four arms | strata cut 0 flips; reversed 1 of 175; replay identical; write-matrix cells 26 of 65 written |
+| E-08 | `refclaim.py` | 0 × 1 | 184 of 226 refused actors hold the refusal claim, `doer` himself |
+| E-09 | `qcut.py 0 2` | 0 × 2 | one-scene budget: 812/799 acts, hashes differ (the cut is not free) |
+| E-10 | `qreuse_small.py` | headless 0 × 4 | 0 reuse; branch cut: hashes identical |
+| E-11 | `extremes.py` | empty World; headless at budgets 0, 1, 5, 40 | all run; budget 0 deposits 0; budget 40 emits `travel.blocked` 108 times |
+| E-12 | `req_forge.py` | — | forged copies A–D exit 0; three positive controls exit 1 |
+| E-13 | read of `PES_GAME/x1_s{0,1,2}_k3.txt` | 0, 1, 2 × 3 | verb-count cosine 0.993 to 0.995 |
+
+**Read in full:** `loop/driver.py:380-570`, the comment-stripped `loop/{deliberate,resolve,encounter,
+census,calendar}.py`, `state/{acts,log}.py`, `harness/chronicle.py`, `harness/register.py:600-763`,
+`AUDIT_BRIEF.md`, `PESSIMIST_BRIEF.md`, `16_PESSIMIST_GAME.md` §0–§1.3, `01_CORE_audit.md` §0–§3.
+**Read in part:** `state/world.py` (the write path, `state_of`), `state/carriers.py` (Act, Scene, Event,
+Receipt, Claim), `loop/witness.py:655-800`, `decision/choose.py:150-300`, `decision/options.py:76-110`,
+`queries/person_q.py:1385-1442`, `epistemic.py:137-220`, the heads of addenda B and C and of
+`18_DETERMINISM_SWEEP.md`. **Not read** `[SKIPPED]`: `seam/`, `manifest/`, `queries/world_q.py` beyond
+two functions, `data/`, the other harness instruments, the hole register, the `.designs/` and `.audit/`
+sets, the dossier (the CORE audit and addenda were taken as its digest). Seam and manifest claims in
+this file are therefore the CORE audit's, not this lane's. One seed (0) carries every new figure except
+E-13; a figure here is a reading at that seed, not a rate.
+
+**Not done, by the brief's limits:** no `pytest`; no `aperture`; no tracked file edited; no commit.
+The brief's §13 (arcs) and §14 (capability surface) tables are the CORE audit's and its addendum B's and
+are not repeated: this lane's scope adds one edge to §13, which is that every arc whose needs include
+an errand, a conditional scene or an ending meets a construction limit of §6 before it meets a missing
+verb.

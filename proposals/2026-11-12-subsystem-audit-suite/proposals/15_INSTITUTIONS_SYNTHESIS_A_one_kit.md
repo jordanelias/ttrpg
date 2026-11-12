@@ -123,9 +123,10 @@ and every row whose `confers:` seats an officer over other people's ground (`mar
       - {by: addressee, kind: record.given,    over: named}
       - {by: addressee, kind: duty.taken,      over: named}
       - {by: addressee, kind: covenant.offered, over: named}
+      - {by: addressee, kind: tenure.opened,    over: named}   # the secular arm: a complier does not seat him (SYN-C edit 2)
     lapse: reverts
     hardens: false
-    source: "15_INSTITUTIONS_PAPACY_D §3 (the verbs list: exchange, give, oblige, tend, train, covenant)"
+    source: "15_INSTITUTIONS_PAPACY_D §3 (the verbs list: exchange, give, oblige, tend, train, covenant); 15_INSTITUTIONS_SYNTHESIS_C edit 2"
 
   - id: interdict               # PAP-D §4: the issuer's own seat-holders in a place withhold services
     made_by: issue

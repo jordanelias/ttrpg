@@ -237,3 +237,96 @@ Lane `tests6`: 77 files under `tests/valoria/` (alphabetical `test_combat_invari
 - **Conflicts / stale:** docstring says "same discipline as keys.py vs key_types.json" (:24); the Key substrate is RETIRED (ED-IN-0232) and `keys.py` is gone; the reference is to a retired thing, in a docstring only.
 - **Open items:** the file itself says nothing catches a ratified item that never reaches the `unimplemented` block.
 
+### tests/valoria/test_design_prose_quarantine.py
+- **What it is:** pytest file, ED-IN-0231 (Jordan 2026-09-16): the game trees hold no markdown; `.designs/` is hidden and every archived doc carries a banner.
+- **Status:** none stated; reading: live; subject is process (the quarantine), kept as the named falsifier of `tools/ci_design_prose_quarantine.py`.
+- **Bears on:** PROCESS.
+- **Content that matters:**
+  - Falsifier for the gate: monkeypatches `_tracked_md` to return a markdown path under `systems/combat/` or `modules/x/` and requires `offenders()` to report it (:33-40); `engine/season/` is exempt, other `engine/` markdown is not (:43-48).
+  - `gate.ARCHIVE.startswith('.')` and `.designs/` exists (:51-57); `test_archived_documents_announce_themselves` requires at least 230 `.designs/**/*.md` and each to start with `<!-- ARCHIVED-NOT-CANON -->` (:60-71) (found 231 on disk by `find`, so the floor sits 1 below the live count).
+  - `pathres.resolve('systems/mass_battle/reference/mass_battle_v30.md')` must be `ALIASED` into `.designs/` (:74-79); the CLI returns 0 (:82-87).
+- **Conflicts / stale:** none. This reads `.designs/` (allowed: it asserts banners, loads no content into the game).
+- **Open items:** none.
+
+### tests/valoria/test_dg2_yield_residuals.py
+- **What it is:** pytest file, ED-MB-0024 (proposals/mass_battle_fighting_withdrawal_v1.md): the three deferred fighting-withdrawal residuals: emergent auto-entry into yielding (§2.2), rally exit and pocket exit (§2.4).
+- **Status:** none stated; reading: live; the docstring's claim "All three are GATED OFF by default" is STALE.
+- **Bears on:** MB (yield/fighting withdrawal, morale, discipline), SC (none).
+- **Content that matters:**
+  - Each feature is tested ON and OFF by setting env vars `MB_YIELD_EMERGENT` / `MB_YIELD_RALLY` / `MB_YIELD_POCKET` to '1'/'0' and `importlib.reload`ing six modules (`modules.mass_battle.config`, `core.exchange`, `core.state`, `hierarchy.units`, `systems.mass_battle.sim.engine`, `orchestration`) (:18-33); `teardown_module` pops the vars and reloads (:143-146). Module reload mid-session changes class identities for any other test holding old references.
+  - Emergent: a unit at 40% hp with discipline 5 (>= `D_YIELD`) enters yielding at `morale_check_phase`; discipline `D_YIELD-1` does not; flag off is inert (:44-66). Rally: recovered morale (>= 0.75 of start) reverts yielding at `between_turn_recovery`; morale 3 of 6 stays yielding; off is inert (:70-95). Pocket: map edge in the flee direction and an enemy in the retreat path are pocketed, open retreat is not (:105-127); a pocketed yielding subunit's `subunit_combat_pool` exceeds the malused pool (:130-140).
+  - The ON/OFF pairs give each feature its own control.
+- **Conflicts / stale:** `modules/mass_battle/config.py:262,266,272` read `os.environ.get('MB_YIELD_EMERGENT', '1')`: the default is ON (verified), while this docstring and the config comments (:260, :265, :271) still say "ships OFF by default / Gated OFF". Either the comments are stale or the default was flipped without them; the shipped behaviour is ON. `__all__` in that config lists about 150 constants, many `MB_*` flags read from environment variables at import time: module configuration by env var.
+- **Open items:** the config comment says the erosion-brake calibration "stays deferred (needs_jordan)"; `YIELD_RALLY_MORALE_FRAC` and `YIELD_POCKET_REACH` are tagged `[CALIBRATED-DEBT]`.
+
+### tests/valoria/test_dice_engine_properties.py
+- **What it is:** pytest file, S2 action 3: seeded property sweeps on the dice primitive (`engine/dice_engine/dice_engine.py`), ahead of the season loop.
+- **Status:** none stated; reading: live.
+- **Bears on:** DICE.
+- **Content that matters:**
+  - Die Rule and Pool Minimum: `roll_pool(pool, tn=7)` has effective pool `max(1, pool)`, rolls in 1..10, and net within `[-1*n, 2*n]` ("1 = -1 success, 2-6 = 0, 7-9 = +1, 10 = +2", PP-246) over 500 seeded trials with `checked == N_TRIALS` (:45-73); deterministic under identical seeds (:76-83).
+  - `_expected_degree` re-types the margin ladder (>=3 Overwhelming, >=1 Success, >=0 Partial, else Failure) independent of the owner and sweeps 500 fractional pairs (:97-125), exact boundary examples at 2.999/0.999/-0.001 (:128-136), and totality over uniform floats (:139-150). This is another hand-written copy of the ladder, held by the same measurement idea as `test_degree_ladder_single_owner.py` but not enrolled there.
+  - `tn = 7` is pinned ("TN7 always", ED-IN-0196), so the target-number axis is never varied here; the addendum's F-TEST-08 notes the engine refuses TN 6/8.
+  - No `hypothesis` dependency by design (CI installs only pyyaml, pytest, numpy, pytest-xdist, :12-18).
+- **Conflicts / stale:** cites `params/core.md §Pool Minimum` and `return_to_game_queue.yaml` (dissolved `params/` path; prose referents).
+- **Open items:** states it is "a beginning, not the M1 acceptance row itself".
+
+### tests/valoria/test_engine_does_not_import_systems.py
+- **What it is:** pytest file, 772 lines (A-25, plan S5a/`30`): `engine/` names no `systems/` or `modules/` code by import (top-level or function-local), by `sys.path` insert, or by loaded-module file path; composition roles resolve; a computed roster of retained `systems/` homes.
+- **Status:** none stated; reading: live. The docstring is explicit that a green result does NOT mean the engine runs without `systems/` (:27-30).
+- **Bears on:** CORE (the seam, composition roles, rosters), PC (the one `sys.path` seam), MB, SC, PROCESS.
+- **Content that matters:**
+  - Two shrink-only ratchets pinned at zero: `BASELINE_TOTAL = 0` (top-level imports) and `NESTED_BASELINE = 0` (function-local); `ALLOWED = {}` (:116-130, :157-200). A pair test shows indenting an import moves it between the two counts (:203-214).
+  - `PATH_SEAM_ALLOWED = {'substrate/pc_engine.py'}`: the only file allowed to insert a code root on `sys.path` (bare-name import of `combatant`/`wrapper`), kept because a dotted import would give the flat-loaded `workbench/balance.py` a second module identity (:228-250). The predicate (`_inserts_a_systems_path`) reads the inserted expression, follows one local assignment, then one hop into a relatively-imported anchor module (:350-400); a planted two-file case proves the hop (:510-554). It is `@pytest.mark.slow` (78.8 s measured 2026-09-11, :464-470).
+  - `test_importing_every_engine_module_pulls_in_no_subsystem` imports every non-test engine module in one subprocess and asks each loaded module's FILE path whether it lies under `systems/` or `modules/`; floor `len(mods) >= 20` (:427-461). Its probe is shown able to see both a dotted leak and a bare-name `sys.path` leak, and both roots in a planted tree (:557-609).
+  - `composition.require('no_such_role')` raises KeyError (:612-624); `kind: value` roles (e.g. `systems.social_contest.sim.contest:A`) are exported through `tools/export_composition._resolve`, and a missing attribute still fails (:633-667); every declared role resolves, `checked >= 1` (:670-684).
+  - Retention is computed: `R04_PENDING_SUBSYSTEMS` = `systems/` directories no `home:` in `engine.season.data.rosters.MODULES` names; `R04_PENDING_ROLES = set()` so no composition role may target an unretained directory; on the real tree `{combat, mass_battle, social_contest} <= retained` (:700-771). That set is read at import time from the directories present on disk, so a checkout with an extra untracked `systems/<dir>` computes a different pending set (the docstring says this is intended).
+- **Conflicts / stale:** the file name and the `TOP_LEVEL_SYSTEMS_IMPORT` names say `systems` but the roots are `ci_common.MODULE_CODE_DIRS` (stated at :82-87). Mentions the retired `game_state.py`, `echo_transport`, `parliamentary_bridge`, `combat_bridge` and the campaign driver, all as history. References `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` in a docstring (:512): that filename says retired.
+- **Open items:** the converse (a role target whose module never loads) is covered only by "every role resolves".
+
+### tests/valoria/test_engine_params_bridge.py
+- **What it is:** pytest file, plan S5e (2026-08-22): one writer per `engine/engine_params/` artifact (hard), and shrink-only ratchets on engine readers and tools/ parsers of authored surfaces.
+- **Status:** none stated; reading: live; subject is the runtime input to the engine and the Godot bridge (§0.1 pt 5 predicate met), though it scans `tools/`.
+- **Bears on:** CORE, GO (the bridge artifacts), PROCESS.
+- **Content that matters:**
+  - `ENGINE_READERS` = three artifacts, one leaf each: `composition.json` by `substrate/composition.py`, `descriptors.json` by `substrate/descriptors.py`, `combat_engine_v1.json` by `substrate/combat_kit.py` (only the `kit` section; `cfg`, `core`, `attributes` sections "are read by no engine module", :57-59). `key_types.json` and `world_initial_state.json` entries are gone (retired ED-IN-0232 and 29d-ii).
+  - `AUTHORED_PARSERS`: `descriptor_registry.yaml` has six parsers in `tools/`, `module_contracts.yaml` four (`export_composition`, `build_engine_atlas`, `ci_quantity_vocabulary_check`, `m1_acceptance`) and "no exporter and no destination for a new reader" since the Key exporter retired (:87-104). Counts are frozen sets of tool paths, so a legitimate new parser fails until the set is edited.
+  - Writer test: every artifact in `engine/engine_params/` has exactly one writer by regex (an `OUT = ...` binding or `open(...,'w')` naming it, :189-199); non-vacuity: `len(arts) >= 7` and `composition.json`'s writer is exactly `tools/export_composition.py` (:202-208).
+  - The reader/parser detectors are regex heuristics (`_PATHISH`, `_BINDING`, two-line window) corrected twice in one day by adversarial passes (comments :162-185); a docstring records the repo-wide number of module_contracts.yaml parsers as 21 (tools 10, skills 6, tests 5) though the test walks only `tools/` (:233-257).
+  - The "distance to target" test asserts every engine reader set has one member inside `engine/substrate/` (:271-297).
+- **Conflicts / stale:** the file describes `engine/engine_params/combat_engine_v1.json` sections `cfg`/`core` as unread by the engine while `test_combat_invariants.py:545` counts them (>150 and >20 keys) as the typed Godot contract: consistent (they are for the port, not the engine).
+- **Open items:** `module_contracts.yaml` has no exporter and no destination for a new reader (stated :87-95).
+
+### tests/valoria/test_export_game_constants_ambiguity.py
+- **What it is:** pytest file: `tools/export_game_constants.py` (the Godot constants bridge) must never pick a value by directory-walk order when `sim_params.json` has one key with two values.
+- **Status:** none stated; reading: live; load-bearing on the port.
+- **Bears on:** GO, CORE, MB (the live collision is `mass_battle.SEED_BASE`).
+- **Content that matters:**
+  - The collision set is computed from the live `sim_params.json` rows (non-table, numeric/bool values); `egc._load_sources()` must not contain any such key and `egc._AMBIGUOUS == collisions` (:39-51). It asserts the collision set is non-empty and says the test is then vacuous if it empties (:44-48), i.e. the test depends on a defect persisting.
+  - Every `egc.MAPPING` key must resolve in `_load_sources()` (:54-61); agreeing duplicates are still exported (:64-76), a loop without a floor.
+  - Falsifier named: deleting the `for k in ambiguous: del vals[k]` loop fails the first test.
+- **Conflicts / stale:** `tests/valoria/test_export_sim_params.py:65` pins the ambiguous set to exactly `['mass_battle.SEED_BASE']`: two tests share the same dependency on one live collision.
+- **Open items:** `mass_battle.SEED_BASE` is defined with two values in `bat.py` (1,000,000) and `lanchester_signature.py` (2,000,000) per `test_export_sim_params.py:34-37`; the MB seed base is a doubled constant.
+
+### tests/valoria/test_export_sim_params.py
+- **What it is:** pytest file for `tools/export_sim_params.py` (typed values layer, ED-IN-0079): committed `sim_params.json` equals a fresh extract; every value is an AST literal from its definition site; the scan roots are derived.
+- **Status:** none stated; reading: live; a round-trip `--check` pattern §0.05 counts as a mechanism.
+- **Bears on:** CORE, GO, MB, PC (scan roots), PROCESS.
+- **Content that matters:**
+  - `esp.check()` returns ok; indexed by (key, file) because `key` alone collides; `(key, file)` unique is its own test (:22-54). The set of keys with more than one value is pinned to exactly `['mass_battle.SEED_BASE']` (:57-69).
+  - Scan roots come from `ci_common.sim_reference_roots()` (engine, `systems/*/sim`, `modules/*`), floor `len(dirs) >= 8`, monkeypatch shows the exporter follows the owner (:72-85); a planted tree proves `modules/<name>` joins and `__pycache__`/files are skipped (:88-98).
+  - `ci_common.MODULES_WITH_OWN_EXPORT` (combat) is skipped by the sim-params scan because `modules/combat/` ships through `export_engine_params.py` (:101-117); `count == len(params)` (:120-123).
+- **Conflicts / stale:** none. The task note in `CLAUDE.md` §0.05 says the live count of constants still in `systems/` comes from `export_sim_params.py --build`; this file is what keeps that artifact honest.
+- **Open items:** none.
+
+### tests/valoria/test_face_aggressors.py
+- **What it is:** pytest file: `hierarchy.units.turn_to_face_aggressors`: a mass-battle CELL under attack rotates toward its aggressor(s) at a limited slew rate (Jordan's rule), per cell, once per tick.
+- **Status:** none stated; reading: live; direct evidence that facing, aggressors and perception are per-cell state in the shipped module.
+- **Bears on:** MB (cell state: `_node_pos`, `cell_facing_vec`; facing; rear blind arc; stance `hold`), PC (none).
+- **Content that matters:**
+  - A cell facing -row with an aggressor at +col (90 degrees off) turns by exactly `MB_FACING_SLEW_BASE` per tick, then reaches 0 error on the second tick (`pytest.approx(abs=1e-6)`, a derived-geometry equality, :61-70); requires `eff_discipline >= 5` as a precondition (:63).
+  - Control: `MB_FACING_ATTENTION=False` leaves facing unchanged and the step returns 0 (:73-78). Between two aggressors it faces their average; between opposite-side aggressors it holds; an aggressor in the rear blind arc is not turned toward; a body on `hold` still turns (:81-106).
+  - `_val._set_movement_path('node'|'grid')` selects the movement model; with 'grid' (called "the grid oracle") `turn_to_face_aggressors` returns 0 (:109-113). The fixture saves and restores `FIELD_MOVEMENT` and `MB_NODE_COHESION` on both modules.
+- **Conflicts / stale:** `_set_movement_path` is in `systems.mass_battle.sim.validators`, i.e. the test selects the engine's path through the `systems/` sim package while the code under test is `modules.mass_battle`. Two movement paths ('node' and 'grid') coexist; facing exists on one only.
+- **Open items:** the test depends on a 9-troop-per-cell `build_unit('Line', 3, 'A', 'A', 9)` fixture.
+

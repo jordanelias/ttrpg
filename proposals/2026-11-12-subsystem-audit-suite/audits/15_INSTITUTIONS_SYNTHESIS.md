@@ -683,9 +683,13 @@ or a charter.
 4. At a stage's maturity the house, or a factor sworn to it, presents the bond: the reckoning, with the
    debtor's `obligation` (his live `commit`) in the creditor's favour. Paid, paid, part paid and extended,
    or refused.
-5. `debt.lapsed`. **No bench sits over a throne**, so there is no suit. What the house has is what
-   Florentine bankers had: it can refuse the next loan; tell; and `give` the bond to someone who can use
-   it (a duke, the Church, Altonia), who then holds a king's paper. A successor is not bound until he
+5. `debt.lapsed`. **The benches that sit over a throne's holder are two kinds only**: his own judges,
+   whom he seats and may recall, and (once CR-60 gives three Church benches a realm `scope`) the
+   Church's. A `debt_suit` before the first is drawn against his own appointees' disposition; before the
+   second it can end in a `ban` on a king. So a king's creditor has one court worth going to, and it is
+   the Church's, which is how a banker's bond becomes an excommunication. Short of a suit the house has
+   what Florentine bankers had: it can refuse the next loan; tell; and `give` the bond to someone who can
+   use it (a duke, the Church, Altonia), who then holds a king's paper. A successor is not bound until he
    commits, so every accession is a default the house can see coming, and its members' readings are part
    of that accession's `reception` where they sit in the audiences.
 6. The crown's side of the same instrument is the forced loan: the treasury seat issues the realm's
@@ -733,7 +737,8 @@ it (`[PAP]` §3.8). No rule; every step is a person's.
   answer for any sanction to mean anything.
 - The **bureaux** need a holder who will not purge them and have nothing but the hand and the chest of
   papers.
-- The **houses** need a bench that will hear a suit and a debtor who can be sued, which a throne is not.
+- The **houses** need a bench that will hear a suit and a debtor who can be sued, which a throne is only
+  before the Church.
 - The **guilds and orders** need a charter from someone who can call it in.
 - The **people** need a room where what was done to them counts, and have the levy's odds, their
   testimony and their feet.
