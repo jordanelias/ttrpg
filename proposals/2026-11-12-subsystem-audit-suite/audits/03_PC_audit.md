@@ -15,10 +15,12 @@ outputs are in the scratchpad named in §12, not in the tree.
 ## 0. Verdict
 
 **Not yet: the engine is a sound resolver and a clean registered module, but as coded it is not a basis
-for emergent narrative, because computed play never reaches it and, when a hand-built act does, every
+for emergent narrative, because computed play almost never reaches it and, when it does, every
 fighter is the same fighter.** At seed 0 over two seasons, in the realm and in the spine, the personal
 combat seam was called zero times: `fight` formed no Candidate, 84 of 84 `challenge` acts, 27 of 27
-`accept` acts and 12 of 12 `capture` acts were refused, and the death census read 0 (§3 F-PC-01). All
+`accept` acts and 12 of 12 `capture` acts were refused, and the death census read 0 (§3 F-PC-01).
+Across the 143 authored case worlds at seed 0 it was called nine times: eight `fight` scenes, every
+one graded `Felled`, and one `capture`. All
 83 persons of `build_realm(0)` carry no attribute, the default kit, faculty 2 and Endurance 4, so a
 fight's outcome varies by seed and never by person (F-PC-02). At seed 1 the same instrument shows two
 `capture` scenes fought out of 150 attempts on combat verbs and again no death. What the fold does with a fight is
@@ -78,6 +80,7 @@ and restored (see F-PC-07).
 | lever sizes at module scale (A's share felled; mirror 49.3%, control 46.1%) | faculty 3 v 2: 34.8%; faculty 5 v 2: 12.5%; Endurance 3 v 4: 58.8%; Endurance 1 v 4: 80.9%; dagger v arming: 95.3%; longsword v arming: 19.2%; heavy v light armour: 0.0%; both heavy: 99.7% unresolved | E5 |
 | a played person's per-turn choice, 300 seeds | engage every turn = AUTOMATED exactly (52.0% / 47.7%); withdraw at the first wound: own death 14.3%, foe's 35.0%, both standing 50.7% | E6 |
 | computed play, `aperture 2 0` (realm 83 persons, spine 13) | `fight` formed 0; `challenge` 84 attempted, 84 refused; `accept` 27, 27; `capture` 12, 12; `train` 85, 85; `tend` executed 37; deaths 0 | E7 |
+| computed play, `corpus_run` (143 case worlds, seed 0) | degrees resolved by verb: `fight` 13 (`Declared` 5, `Felled` 8); `capture` 2 (`Declared` 1, `Wounded` 1); `accept` only ever refused; no `fight` graded `Wounded` or `Untouched` | E12 |
 | per-person inputs in `build_realm(0)` | 83 of 83: no attributes, kit `(arming, light)`, `faculty(fight)` 2, `party_end` 4; `arms` holders 0 | E8 |
 | the typed export | `python tools/export_engine_params.py --check`: the committed JSON matches the oracle | E9 |
 
@@ -118,7 +121,9 @@ Ranked by the weight each bears.
 
 Ranked worst first.
 
-**F-PC-01 · blocks a requirement (R-09, R-05) · Computed play never reaches personal combat.**
+**F-PC-01 · blocks a requirement (R-09, R-05) · Computed play almost never reaches personal combat, and
+never by a duel.** In the 143 case worlds (E12) eight `fight` scenes were fought at seed 0, all `Felled`;
+`accept` was only ever refused. In the populated realm and spine:
 Evidence: E7, `aperture_2_0.txt` lines 91, 96, 98, 116, 154, 169, 172, 174, 362 (realm) and 422, 427,
 429, 447 (spine). `fight`: formed 0. `challenge`: 84 refused, last read `exists:Person=0` 65,
 `with=False` 13, `dispute=False` 6. `accept`: 27 refused, all `exists:challenge=0`. `capture`: 12
@@ -133,8 +138,10 @@ buildable world (`rosters.yaml:739-744`), `duel` needs the `challenge` Record th
 (E7b) `capture` executed 2 of 18 in the realm, `challenge` was refused 105 of 105 (`exists:Person=0`
 75), `accept` 27 of 27, `fight` formed 0, deaths 0. The B10-11 card records the same shape at
 `eb34324f`: 0, 2 and 2 fought scenes at seeds 0 to 2, all `capture`
-(`workplans/valoria_master_workplan_v11_part3.md:86`). So over two seeds and four world-seasons the
-engine ran twice, and never from a duel or an assault.
+(`workplans/valoria_master_workplan_v11_part3.md:86`). So over two seeds and four realm-seasons the
+engine ran twice, and never from a duel or an assault; why the case worlds form `fight` where the
+realm does not was not diagnosed here `[UNVERIFIED: which `violence_contexts` reader admitted the
+eight]`.
 Consequence: almost no chain of events inside a combat scene occurs for R-09 to grade, more than 120
 scene acts per two seasons are spent on acts that cannot succeed, and a duel or an assassination
 cannot arise from persons' own acts. Minimal fix: `proposals/03_PC_duel_chain_reach.md`.
@@ -571,7 +578,7 @@ All runs `PYTHONHASHSEED=0`. No pytest was run. No tracked file was written by a
 | E9 | `python tools/export_engine_params.py --check` | — | round-trip verified |
 | E10 | `python -c`: `soft_cap·sigma_n` against `net_boost` at four points; `p_success`; the export's sections; a regex over `combat_systems.py`; `grep -c designs/audit/` | — | equal to one unit in the last place; `p_success(1.0, 8, 0)` = 0.835; sections attributes 8, cfg 214, core 26, kit 3; 0 of 18 module constants exported; 16 dead citations |
 | E11 | greps for non-test readers of the seam's return keys | — | `trace` read only by `surrender_of`; no reader of `winner`, `bouts`, `unresolved`, `seed`, `parties` |
-| E12 | `python -m engine.season.harness.corpus_run` → `corpus_run.txt` | the 143-case corpus | see §13 |
+| E12 | `python -m engine.season.harness.corpus_run` → `corpus_run.txt` | the 143-case corpus, seed 0, seasons per case | 23 of 67 verbs executed, among them `fight`, `capture`, `challenge`, `tend`; `accept` and `train` only refused; degrees: `fight` `Felled` 8, `capture` `Wounded` 1; `arrest`, `interrogate`, `forgive` never attempted |
 
 Not read, or read in part: `modules/combat/weapon_physics.py` and `weapons.py` (structure and
 docstring heads only, E2); the workbench files other than `server.py`, `trace.py`, `presets.py` heads

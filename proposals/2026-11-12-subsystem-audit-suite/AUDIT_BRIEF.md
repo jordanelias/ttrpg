@@ -130,6 +130,27 @@ the changes, ordered. Do not invent a second capability system: find the existin
 extends it. The holistic stage will merge the §14s into one authoring architecture, so state the
 interface your subsystem needs rather than a private scheme.
 
+## Design intent stated by Jordan, 2026-11-12: personal combat
+
+Personal combat is intended so that **each character can equip a weapon, armour and a suite of skills that
+correspond to levers**, and can **choose a different intensity or approach of attack per phase** (for
+example aggressive, normal, defensive). It must work in two modes from **one code path**:
+
+1. **Moment by moment, as a duel** — the player (or an NPC chooser) selects the approach each phase and sees
+   each exchange resolve.
+2. **Inside turn-based grid combat in the manner of Final Fantasy Tactics / Tactics Ogre** — the "duel"
+   sequence **resolves automatically**: the player simply selects an attack approach (aggressive, normal,
+   defensive, …) and the engine executes a duel round on their behalf, returning the outcome to the grid.
+
+Audit and design against this intent. It binds the PC lane (the module's inputs, levers, phases, the
+approach choice surface, the automatic duel-round path, the grid seam; see the ratified grid-suspension
+proposal `proposals/2026-10-07-grid-mode-suspension.md` and `engine/season/tests/test_rem31_grid_suspension.py`),
+the CHAR and CORE lanes (equipment and skills as capability data, §14), the MB lane where a duel is
+embedded in or arises from a mass engagement, and the instruction suite. Judge whether the present
+`modules/combat/` already offers the two modes as one path (typed input, typed outcome, no held state),
+and write the missing pieces as proposals. Where this intent conflicts with a ruled item, name the
+conflict and do not resolve it.
+
 ## Ground rules (from `CLAUDE.md`; read it, these are the ones that bite here)
 
 1. **Code is the mechanism; prose is reference** (§0.05). A design document is never the reason a

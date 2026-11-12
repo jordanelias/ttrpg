@@ -561,3 +561,182 @@ architecture needs. Proposal files are under `proposals/2026-11-12-subsystem-aud
 | R-28 | H-204: the confidence break path is unreachable | wiring | closed by R-05's arm (a confided copy outranks the hearer's own "a telling happened" claim) | 5 | `08_FI_02` |
 
 **28 resolutions decided.** Two are also listed in §11 (R-01's scope for common knowledge; R-26).
+
+## 7. Research transfer
+
+Read: `research/00_INDEX.md` (§1 rules), `research/by_lane/FI_fieldwork_investigation.md` (§0–§2 in full,
+§3–§11 by heading), `research/game_precedent_suite/dispositions/D_T06.md` (rows 1–51), the README and the
+sifting/simulation file of `research/emergent_narrative_literature/`. Not read: the companion parts 2–8,
+`research/historical/`, `research/provenance/`, `tables/R5`, `tutorials/T06` (§12 lists them as skipped).
+Research is tier 3; nothing below settles a design.
+
+**Precedents that change what to build.**
+
+| precedent | finding | what it changes here |
+|---|---|---|
+| Dwarf Fortress rumours; *Talk of the Town* (via the lane file's N-9 row and S05) | claims with provenance that characters act on, including false ones, is a shipped shape | confirms the carrier (`Claim.chain`, `teller`); the gap is volume (F-FI-02), not model. Valoria has the shape and not the traffic |
+| Lacuna; Pentiment (D_T06 rows 21, 37–39) | a conclusion is submitted whether or not it is right, and the world answers later; Pentiment works *only when the accusation lands a consequence* | the shape of `08_FI_03`: a conclusion as an uttered Proposition, an accusation by `petition` → `determine`, no verifier. D_T06 row 38 found that nothing downstream reads whether the judgment was right: that is the missing half |
+| Return of the Obra Dinn (rows 3–5) | every inference stays revisable; the confirm-in-threes lock leaks the answer | supports no verifier (already ruled) and argues against the terminal `Partial` (H-314): CP-T06-03 is the right edit |
+| L.A. Noire (rows 30–31) | missing evidence removes the option; a wrong answer loses the information | Valoria has the first by construction (`own_ledger` cells); it has the second only by accident (the trail lockout) |
+| Shadows of Doubt (rows 8–9, 15) | each kind of deed leaves a signature pattern; leads chain; inquiring is itself witnessed | one covert kind gives no material to recognise (CP-T06-01 widens it); lead-following exists as Q2; "inquiring is witnessed" already runs (`finding.made` is seen by the room) and is the natural counter-play |
+| GUMSHOE's access/quality split (lane file §2.2, marked *misapplied* there) | the core clue is never behind a roll; the roll buys quality | `finding_terms` is exactly a quality table, but access is behind the roll (a Failure deposits nothing). R-08's edit (a failed or refused inquiry still teaches its reads, CP-T06-04) moves toward the split without adopting it |
+| Felt / Winnow / Select the Unexpected (literature file `04`) | a simulation needs a sifter to surface storyful sequences; coupling sifting to the simulation is where the leverage is; unexpectedness as rarity is a usable ranking | bears on legibility (§9): the causal log (`causes[]`, `claim.deposited` chained to the witnessed act) is a sifting substrate nobody queries. Not an FI build; named for the holistic stage |
+| Historical: pre-modern inquiry was testimonial and procedural (lane file §1.3: oath, denunciation, inquest jury), and the Foscarini affair (wrongful execution on fabricated informer testimony) | four of the six acts are physical or archival, an anachronism; the richest historical material maps to proceedings | `interview` answered by the questioned person's own `tell` or `lie` (CP-T06-05) is the testimonial act; with R-05 and R-08 it produces the Foscarini shape (false testimony, a ruling on it, exposure later) from parts that exist |
+
+**Tried and did not transfer.**
+- *Heaven's Vault* (confidence as the number of independent support chains): already built as the noisy-OR
+  over distinct origins; it cannot be evaluated while chained claims number 0–7.
+- *CK3 secrets* (ownable, leakable, with a cost on exposure): no carrier for exposure exists and
+  `rosters.yaml` forbids a bare `exposure` name; D_T06 row 44 marks the claimed equivalence stale. A design
+  problem, not a transfer.
+- *Disco Elysium* passive checks and the Dialogue Lattice: design-only; K-36 makes `interview` a prompt.
+- *Brindlewood Bay* (player-authored truth): rejected by the lane file for the right reason: a strategic
+  layer needs a fact to propagate.
+- *Obra Dinn's and L.A. Noire's case objects, ratings and endings*: there is no case object by design (no
+  GM), so every score-over-a-closed-puzzle row is discarded.
+
+**Nulls.**
+- **No historical research was ever run for FI** (lane file §1.3). Act-level grounding is three single
+  rows, one `[UNVERIFIED]`. Any number or threshold drawn from "history" for the inquiry acts would be false
+  comfort.
+- **The game survey behind the 2026-08-18 fieldwork architecture is unattributed and self-graded**, and
+  most of its borrowings landed on the retired Key substrate. What survives are three disciplines (access
+  never behind a roll; deduction by consequence; the record as a derived view), none of which the code
+  honours yet.
+- **No shipped game was found that makes NPC-to-NPC rumour the main carrier of a strategic layer and
+  shows it readable to a player.** Shadows of Doubt spreads by newspaper, Pentiment by scripted lines, KCD2
+  by a scalar per place (D_T06 rows 17, 24, 47). Valoria is alone here, so its own measurement is the only
+  evidence, and it reads near zero.
+- **The emergent-narrative literature passes no verdict on a design** and none of its `rater`, `player` or
+  `ablation` rows can be applied without a played build.
+
+## 8. Best path forward
+
+Ordered. "Alone" = needed for the subsystem to run well by itself; "compose" = needed for it to feed the
+others. Each gate is an execution artifact (§0.2).
+
+| # | change | file / owner | gate (what shows it worked) | unblocks | class | for |
+|---|---|---|---|---|---|---|
+| 1 | CR-29 first in B10-14: the `reach` roster and predicate, then `_ch_chronicle` deleted | `epistemic.py`, `rosters.yaml`, B10-14's order | `dynamics.py`-style reading: speakerless `told_by` falls from 3,700–6,000 a season to the kinds the roster carries; `tenure.closed` and `person.died` still reach the realm | R-07; makes steps 2–3 measurable | small build (scheduled) | compose |
+| 2 | Claim-sourced referents (`08_FI_01`) | `queries/world_q.py` (`goal_referents`, `vacancies`, `aim_state`, `matters_awaiting`), `harness/populated.py::seed_acquaintances`' sibling, `requirements.yaml` R-07/R-08 text | `r08_probe.py` re-run: P1 and P2 read "candidates moved: no" with both controls unchanged; then the same seat change made by a real act the subject witnesses reads "yes" | R-07, R-08 | small build | alone |
+| 3 | The `unshared` slant (`08_FI_02`) | `queries/person_q.py::said_of`, `rosters.yaml: said_slants`, `Fixtures.said_slant` | chained claims with ≥ 2 hops > 0 at seeds 0–2 over two seasons, against the `newest` arm reading 0; told claims per `news.told` ≥ 1 | R-01, R-07; H-204, H-272 | edit | compose |
+| 4 | B10-14 as written (CR-94, CP-T06-09, -01, -03, -04, -02, -07, -05) | per card | per card; found deposits > 0 in a seeded realm (today 0 / 0 / 0) | R-05, R-09 | builds (scheduled) | alone |
+| 5 | Inquiry products and the standalone scenario (`08_FI_03`) | `verb_table.yaml` (`reconstruct`, `interview`, `examine`, `surveil` rows), `loop/witness.py` (observation deposit for a graded inquiry), `harness/` fixture | the scenario's four endings each reached at some seed in a 20-seed sweep; a hearer's `record` of a liar moves after an inquiry, not before | R-05, R-08 | design-first, then build | alone |
+| 6 | Small edits (`08_FI_04`): names, `research` presence, the confidence-0 trail, the repeat guard, `knots.py`, pointers, `budget`, razing, `ttl` | per row | each row names its test | hygiene; R-05 honesty | edit | both |
+| 7 | CR-83's design (familiarity sets inference; what a caught lie costs) | `proposals/` (design-first, B10-13 tail) | its own falsifier | R-06, R-08 | design-first | compose |
+
+Deletions recommended: `Record.ttl` (R-24); `_ch_chronicle` (with CR-29). Nothing else. No guard is
+proposed anywhere in this audit.
+
+## 9. Playable standalone and integrated
+
+**What exists today.**
+- *Entry point:* none for fieldwork. `harness/play_surface.py` (`dispatching_chooser`, `carry_on`) can seat a
+  player-proxy on any person in any world, and `decision/sheet.py::development_space` returns his ranked
+  candidates; nothing builds an investigation scenario for it.
+- *Fixture:* `engine/season/tests/test_fi03_trail.py` builds a hand-made `trail_world` (a forger, a forged
+  Record handed on, an investigator) inside the test file; it is not importable as a scenario.
+- *Choice surface:* the six inquiry rows plus `tell`, `lie`, `forge`, `conceal`, `survey`, `give`,
+  `create_record`, `petition`, `carry`. In the realm an inquirer's candidates are formed on whatever his
+  question's referent is; `examine` never folds (its `site` operand is rarely a Site).
+- *Outcome legibility:* a finding is three or four claims in a ledger (`record.forged`, a masked `seen`).
+  Nothing renders a ledger to anyone (`sheet.chronicle` returns a person's claims as a record; no
+  instrument prints "what you learned and from whom"). A refusal, an impossible task and a failure are one
+  kind (`finding.none`), deposited to nobody.
+- *Stakes:* none. Inquiring costs a scene. A wrong conclusion cannot be stated; a right one changes nothing.
+- *End condition:* none. There is no case; the trail closes when held.
+- *Instrument:* `harness/aperture.py` per-verb lines; no fieldwork instrument. This audit's
+  `dynamics.py` is a session script.
+
+**Point by point against the standing requirement.**
+
+| requirement | state | gap |
+|---|---|---|
+| Playable alone: scenario seed | absent | a builder (`trail_world` promoted to `harness/`), with a deed done, a paper handed on, three people who know parts |
+| choice surface | present, thin | three inquiries with no product; no act that states a conclusion; no act that checks a telling |
+| consequences | absent | nothing reads whether a conclusion was right; a caught liar loses nothing visible |
+| legibility | absent | no ledger view; `finding.none` conflates three outcomes |
+| ending or stable continuation | absent | the accusation determined, the forger fled, the trail cold, the investigator discredited: none representable |
+| One code path | **holds** | the season reaches `modules/fieldwork/find.py` by composition row (`fieldwork.find`, `step_call`) and there is no standalone fork. The risk is the opposite: a playable mode will need more than `find` returns, and must extend the same entry (its docstring reserves this: *"a playable mode that draws takes its generator as a parameter"*) |
+| Layer 1 conformance | module: conforms (typed in, typed out, no World, no state). Host: `loop/witness` exceeds its may-read cell five times; `epistemic.py` is unlisted in §A.2; `seam/wrappers/fieldwork.py` is a non-contest wrapper under a contest-typed row (three amendments it names itself) | §11 item 1 |
+| Integrates | executed: RESOLVE → `find_trail` → `self.findings` → WITNESS found deposit → Q2 → a response act (`test_a_found_trail_forms_a_response_on_the_forger...`). Not executed in a seeded realm (0 finds) | reachability (steps 4–5) |
+| Pauses the other scales | untested: a fieldwork scene is one act in a round; there is no multi-step scene to enter and leave | arises only with a played mode |
+| No GM | holds for what exists. The archived design needs one in four places (hidden thresholds, Sincerity, escalation, the false lead) and none of those is built | do not build from the archive |
+
+**Ordered work to close.** (1) Promote the trail fixture to a harness scenario and add a ledger rendering to
+the play surface (edit; no engine change). (2) B10-14. (3) `08_FI_03`: products for the three empty inquiries,
+the conclusion, the check. (4) An end condition read by an instrument, not stored: the scenario ends when the
+accused is determined, has left reach, or the investigator's remaining budget is spent with the trail held
+by nobody (three predicates over existing state). (5) A fieldwork line in `aperture` (found / formed /
+refused per inquiry, per seed).
+
+## 10. Interfaces
+
+| edge | direction | carrier | executed? |
+|---|---|---|---|
+| every subsystem → FI | in | the round's `Event[]` (changes, observed, causes) at WITNESS | yes: 11,000–13,000 Events a season |
+| FI → CHAR (decision) | out | `Person.ledger` → Q2 questions, clause 4, `said_of`, `known_persons`, `regard`'s judged and told halves, `opinion` | yes: 654 / 641 / 618 acts a season occasioned by a firsthand claim landing; clause 4 461 / 445 / 485 |
+| FI → CHAR (decision), unmediated | out | `questions_for`'s world-read stamps | yes, and it should not be (F-FI-01) |
+| FI → SC (contests) | out | `world_q.reception`, `proofs` read ledgers of the bench; `SocialContestInput.forgery_quality` | reception and proofs: built, read 0.00 in the measured cases (H-335); forgery quality: executed only where a forged Record is researched by another (0 in realm) |
+| SC → FI | in | the one roll (`social_contest.roll`) grades `research`, `examine`, `surveil`, `tell`, `lie` | yes |
+| FI → FA/WR (governance) | out | `tenure.closed`, `order.given`, `date.fired` claims; writs' `content:` claims; `seats_named`, `places_named` | yes by broadcast and by held document; a writ reaches its addressee only by a separate `give` (H-203) |
+| WR (MATTER) → FI | in | decay (`claim.decayed`), shortfall observations to seat-holders (the IN-22 limb), death | yes: `inferred` 297 / 297 / 324 |
+| FI → MB/PC | out | `enemies_heard` (a war he knows of), `wounded_with` (those he believes hurt), `attackers_of` | built; not measured here |
+| PC/MB → FI | in | `person.died`, `fight`/`march` Events witnessed by presence | yes (H-206's departed limb) |
+| FI → SE | out | `places_named`, `larders_in_purview` (named half) | yes for the named half; arrival teaches nothing (H-327) |
+| T07 threadwork → FI | in | `Person.thread_sensitivity` gates `thread_read`; a `knot` admits a witness by key | gate: yes; knot: only where a builder plants one (no producer) |
+| FI → GO (port) | out | the ledger is state in `content_hash`; `Seen`, `Said`, `Claim` are carriers the port must mirror | designed (`04` §C.12); not ported |
+
+## 11. Survivors for Jordan
+
+Two items survive the five-step ladder. Everything else in §6 is decided.
+
+**1. Is who holds a public seat common knowledge?** (R-01's one open parameter.) The ledger already took
+"a vacancy reaches a person as a claim through the channels" (ED-IN-0292 last row) and recorded that *"the
+Jordan-deferred question of offices as common knowledge stays open as a channel's reach"*. `08_FI_01` builds
+the claim route either way; this decides one roster row (CR-29's `reach` map for `tenure.opened` /
+`tenure.closed` on an Office).
+- *Option A: realm-wide.* Every person in a realm holds a `told_by` claim of each seat change in it.
+  Politics is legible and fast: a conspiracy re-targets within the season, a vacancy is filled at once, and
+  only what crosses a border is late. Close to today's behaviour, now mediated and carrying a confidence.
+- *Option B: by presence, purview and telling only.* A seat change is known where it happened, to those
+  whose seats contain it, and to whoever is told. A plot can run against a dead man for seasons; a king
+  can be the last to learn; a messenger matters. Slower, error-prone politics in which F-FI-02's fix is
+  load-bearing.
+These are different games. This audit builds for A as the shipped row and B as the swept control (A is what
+the realm does today and B cannot be judged until tellings travel), marked `[ASSUMPTION; medium; Jordan to
+correct]`.
+
+**2. `04_CODE_ARCHITECTURE.md` §A.2, the `loop/witness` row's may-read cell** (R-26; ratified Layer 1).
+The row lists four reads; the body makes nine, five declared as CONVENTION at the top of `witness.py`.
+- *Option A: amend the row* to name the refraction reads (`decision/options`' `refracted_confidence`,
+  `ledger_weigh`), the ledger id set, the driver's `findings` store, older Events by id, and two persons'
+  held affiliations.
+- *Option B: restore the row* by moving the refraction and credit arithmetic behind a per-holder projection
+  built at the barrier by a `queries/` function, so `witness.py` imports no `decision/` and reads only
+  declared inputs; amend only for the `findings` store and older Events, which no refactor removes.
+The game is identical either way; what differs is whether Layer 1 follows five accumulated exceptions or
+the code is brought back to it. `CLAUDE.md` §0.05 (*"a spec edited to match its implementation checks
+nothing"*) points to B for the two `decision/` imports; the row is ratified, so the choice is Jordan's.
+Carried in `08_FI_04` §6.
+
+## 12. Evidence log
+
+All `PYTHONHASHSEED=0`. Outputs under the session scratchpad, `runs/FI/`.
+
+| # | command or probe | seed · seasons | outcome |
+|---|---|---|---|
+| 1 | `python -m engine.season.harness.register --requirements` | — | exit 0; R-07 `partial`, R-08 `partial`; *"every row carries a measurement or names one"* |
+| 2 | `explore.py` (`build_realm(0)`) | 0 · 0 | 83 persons, 34 offices, 698 tenures; 6 conferrers; 0 vacant offices; goal ambitions by object kind: `seat_holders` 34, `rung` 14, `deed_doers` 11 |
+| 3 | `r08_probe.py` | 0, 1, 2 · 0 | F-FI-01's table; identical at the three seeds (the build does not vary these facts) |
+| 4 | `dynamics.py 0 1` | 0 · 1 | hash `5ab73af282d0779646c38839fbab85d8`; §1a |
+| 5 | `dynamics.py 0 1 --plain` (control: un-instrumented `populated.run`) | 0 · 1 | hash `5ab73af282d0779646c38839fbab85d8`, 13,379 Events, 749 acts: identical to #4, so the wrappers perturb nothing |
+| 6 | `dynamics.py 1 1` | 1 · 1 | hash `aa58ef0b…`; 11,409 Events, 731 acts; `told_by` 4,049, chained 0; `news.told` 1 (`Partial`), `news.untold` 12, `tell.refused` 43; `tell` 10, `lie` 3; clause 4: 20,345 calls, 445 declines, world disagreed 2; unsourced chosen 82 (folded 32); `record.forged` 19, `record.given` 1 |
+| 7 | `dynamics.py 2 1` | 2 · 1 | hash `a21ab6e1…`; 11,208 Events, 751 acts; `told_by` 3,746, chained 0; `news.told` 0, `news.untold` 2, `tell.refused` 4; `tell` 2, `lie` 0; clause 4: 19,629 / 485 / 1; unsourced chosen 84 (folded 29); cells: firsthand 734 true / 10 false, inferred 238 / 32 |
+| 8 | `dynamics.py 0 2` | 0 · 2 | hash `bacd687f…`; 37,646 Events, 1,529 acts; claims 22,958 (`firsthand` 12,929, `told_by` 9,708, `inferred` 321), largest ledger 535; chained 12, all one hop; `news.told` 7 (`Partial` 5, `Success` 2); cells: firsthand 1,135 / 73, inferred 0 / 270, told 1 / 10; clause 4: 49,271 / 1,903 / 7; `record` pairs 12: below 1.0 five, above one, unchecked six; unsourced chosen still 81 |
+| 9 | three-season runs at seeds 0–2 | — | **not completed**: stopped under machine load (other lanes' runs; load average ~30). No three-season reading is claimed anywhere in this file |
+| 10 | `python -m engine.season.harness.corpus_run` (from the scratchpad directory) | 0 | [see the note below this table] |
+| 11 | `run_cases.load_cases("NPC")`, `("ARC")` + a keyword classifier | — | 143 cases; §13's class counts (regex readings, not a classification by hand) |
+
+Not run: `pytest` (by instruction); `aperture`, `strife`, `m1_acceptance` (not needed for a claim made here).
+Everything quoted from a hole-register `cite:` as "the tree's own reading" was read, not re-run.
