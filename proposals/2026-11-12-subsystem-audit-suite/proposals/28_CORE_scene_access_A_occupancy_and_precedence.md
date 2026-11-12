@@ -159,15 +159,18 @@ ranks as it ranks any candidate (proposal B). The precedence net is not an input
 3. **`engine/season/loop/resolve.py`** —
    - `rival_key`: the `("round", person)` key (§4); the group re-order and the precedence net inside
      `_canonical_order`, shared with `loop/encounter.py` as today.
-   - `resolve`: the `engaged` local; the deferral of an engaged opener's scene (returned as
-     `self._deferred`); `_admits` takes `engaged` and a `remaining(pid)` callable and asks the `occupied`
-     clause after the counterparty clause (`:305-312`). The refusal Event names the counterparty as its
+   - `resolve`: fills the driver's round-local `engaged`; the deferral of an engaged opener's scene
+     (returned as `self._deferred`); `_admits` reads `engaged` and a `remaining(pid)` callable and asks
+     the `occupied` clause after the counterparty clause (`:305-312`). `loop/encounter.py` reads the same
+     mapping and adds to it only for a sitting's attendees. The refusal Event names the counterparty as its
      subject, so the claim it deposits is about him `[UNVERIFIED: whether `_act_events` takes a subject;
      if not, it gains one, defaulting to today's]`.
 4. **`engine/season/loop/driver.py::season`** — `self._received` reset at `:472`, promoted in the pass at
    `:519-534`; deferred scenes re-queued at the head and their debit withdrawn before the bookkeeping
    that counts `n_acts`; `remaining` built from the same expression `ask_budget` uses (one helper on the
-   driver, called by both).
+   driver, called by both; at RESOLVE it hands `budget` the empty `View` the tests build, since
+   `decision/budget.py:56-61` reads the person and the fixtures only); `engaged` emptied at the top of
+   each round.
 5. **`engine/season/loop/deliberate.py:175-176`** — `ask_budget` calls that helper.
 6. **`engine/season/queries/world_q.py`** — `office_rank`.
 7. **`engine/season/data/fixtures.py`** — `occupancy: off | seat | seat_and_debit` (control `off`);
@@ -198,6 +201,11 @@ Realm, `build_realm`, seeds 0 to 4, four seasons, `PYTHONHASHSEED=0`, on the tre
 | 9 | `seat` against `seat_and_debit` | reported: the persons for whom they differ are those with budget below the round count |
 | 10 | DELIBERATE's permutation falsifier (`engine/season/tests/test_rem31_grid_suspension.py`, named at `loop/deliberate.py:126-130`) and the `ordp.py` strata-cut arm | the first unchanged; the second reported |
 
+The two floors (95% in row 2, 60% in row 3) are set from the crude arms and are seeds `[ASSUMPTION;
+medium; Jordan to correct]`: the first is one point under the worst crude reading, the second ten points
+over the arm in which the host always wins. A run that misses row 3 is answered by `precedence_level`
+and by the formation proposals, not by raising `scenes_per_round`.
+
 **Declared hash movers:** `occupancy` other than `off`; `precedence_level` or `appointment_level` other
 than `None` in a world with a rivalry group. No other fixture moves.
 
@@ -214,7 +222,7 @@ changes. Gate 3 at or below the crude arm.
   appointment and the waiting petition have no subject. Top-down: the ruling. Bottom-up: the fold already
   refuses on scarcity of grain and seats; a person's round is the same kind of thing. Laterally: a fight
   holds both fighters (`modules/combat/` takes both parties' state); a visit is the only two-person act
-  that did not. Diagonally: a hearing's attendees (§ `05_SC_playable_hearing_B.md`, folded) are seated by
+  that did not. Diagonally: a hearing's attendees (`05_SC_playable_hearing_B.md`, folded) are seated by
   the same read. Vertically: the budget Query already varies by office, body and travel; it now varies
   by who came. Horizontally: one rule for seven rows, read off the cell.
 - **R.** Strategy: whom to see, when, and whether to go oneself. With no player: a busy lord, a crowded

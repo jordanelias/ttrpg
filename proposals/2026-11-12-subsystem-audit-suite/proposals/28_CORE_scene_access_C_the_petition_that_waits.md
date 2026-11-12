@@ -213,7 +213,8 @@ simultaneous pressures who can substantively address two, with the other two com
   ride the same count. Horizontally: the same read serves the bench, the chooser and the chronicle.
 - **R.** The no-player half is the point: neglected petitioners go over heads, leave, refuse, riot or
   give up, each for reasons the log holds. Strategy for a ruler: whom to hear before their case hardens.
-  Completeness: the man who stops asking is stated (§ resolution); the fade is gate 5.
+  Completeness: the man who stops asking is stated (the resolution's second paragraph); the fade is
+  gate 5.
 - **S.** *Calculations consistent in methodology*: one grievance function, one leverage form; no second
   ladder for "urgency".
 - **E.** Three reads, one roster, one leverage row, two regard terms.
