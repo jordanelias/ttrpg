@@ -88,7 +88,7 @@ hunger pass has already removed anyone who starved, so a cohort cannot die and g
         for pid in sorted(w.persons):
             p = w.persons[pid]
             home = homes.get(pid)
-            if p.weight <= 1 or home is None or p.body < scale:      # a cohort is a Person at weight > 1
+            if not p.is_cohort or home is None or p.body < scale:    # the carrier's one owner of the test
                 continue
             if pid in short_by_person or pid in fell:                  # matter: fed in full this season
                 continue
@@ -135,16 +135,17 @@ readers assumed a constant) covers a rising weight with no further edit: every r
 
 ## 5. The gate, and the falsifier
 
-- **Execution artifact.** `engine/season/tests/test_cr08_census_weight.py` (the first proposal's file)
-  gains, on `harness/scarce.build` with `regrow_seasons 2` and the hungry cohort fed from tick 0: its
+- **Execution artifact.** `engine/season/tests/test_in34_bodies_clock.py` (the bodies clock's own file,
+  since the writer now lives in that pass) gains, on `harness/scarce.build` with `regrow_seasons 2` and the hungry cohort fed from tick 0: its
   weight rises by 1 every second season until `population == capacity`, then stops; build a dwelling
   there and it rises once more. Each rise emits `weight.changed`; `|w.persons|` is unchanged throughout.
 - **The two arms together** (`famine_loss 500`, `regrow_seasons 2`): starve the cohort for three
   seasons, then feed it. Its weight falls, then returns. This is the first reading in the settlement
   layer of one quantity whose two arms both execute.
 - **Falsifier.** A rise in a season the cohort was short; a rise past capacity; a rise within
-  `regrow_seasons` of a fall; any change in the count of persons. Mutation: drop clause (iii) and the
-  capacity assertion reds.
+  `regrow_seasons` of a fall; any change in the count of persons; any `weight.changed` written with
+  `w.step == Step.CENSUS` by this branch. Mutation: drop clause (iii) and the capacity assertion reds;
+  remove `MAT` from the `(Person, weight)` cell and the write raises at the gate.
 - **Control.** `regrow_seasons 0` reproduces the shipped hashes.
 - **On the realm** (a reading, not a pass condition): population at season 12 under `ground`, seeds 0 to
   2, with both arms on, against both arms off.
