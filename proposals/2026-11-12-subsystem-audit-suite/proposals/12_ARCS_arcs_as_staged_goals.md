@@ -8,6 +8,8 @@ Folded: 2026-11-12 by `U5a_CHAR_owed_amendments.md` §3 — *a want can be kept 
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.6 row (CONFORMS), §2 row (the missing pointer), §7, §7b-T; `unified/U3_DEPENDENCY_ORDER.md` node B10). Added: the `Folded:` pointer above, which `U5a_CHAR_owed_amendments.md` §3 said this head carries; the body's edit list carries the head's `opens: mandatory | ordinary` key; named tests; lands-it and tier. Left INCOMPLETE with its reason: item 5's `org.person` against AM-B-09 (the ruling's text was not opened by any lane; the row is dropped if it excludes person-level goals).
 
+Reconciled: 2026-11-12, repair lane R-B (`unified/U6_VERDICT_AND_REPAIRS.md` finding 1) — item 5's open site is decided by reading `data/goals.py:139-157` (`_org` refuses `org: {person: …}`; `org_faction` names no faction for one): the row is dropped and seatless persons are served through their existing `commit` propositions, item 5's own fallback; the loader edit "accept `org.person`" is removed. What stays open is content: the `goal_stages:` rows for the cast, case by case.
+
 Reconciled: 2026-11-12, unification lane U4c (test 9; grepped at the tree) — (1) **Depends on:** no other proposal (`unified/U3_DEPENDENCY_ORDER.md` §3.1, node B10 has no inbound edge); it lands in B10 with `U5a_CHAR_owed_amendments.md` §3 (the `Folded:` line above). (2) Item 5's AM-B-09 mark is narrowed, not closed: AM-B-09 is built as `world_q.aim_state` for rung goals only (`engine/season/rosters.yaml:2324-2330`, `tests/test_cp_t02_03_aim_state.py:1`), every other goal kind "reads `open` always", and `person` is a listed goal-object kind (`rosters.yaml:2321`), so the ruling bars a person goal from being *met by `aim_state`*, not from existing; the stages here are armed by held claims and do not read `aim_state`. What stays open is the one grep at landing: whether `data/goals.py` admits an `org: {person: <id>}` form (if not, the row is dropped, as the file already says).
 
 ## Status: PROPOSED
@@ -58,8 +60,8 @@ no stage rows authored the game is unchanged (hash EQUAL).
 - `engine/season/goals.yaml`: `goal_stages:` rows for the cast, case by case, each with a `source:`
   quoting the case need it stands for, and the key `opens: mandatory | ordinary` (default `ordinary`; head
   line, A-47: the last stage's question is mandatory, it opens a scene and decides nothing).
-- `engine/season/data/goals.py`: accept `org.person` (if allowed) and refuse an `opens:` value outside the
-  two; nothing else. The one formation site that reads `opens:` is `world_q.questions_for`'s ordering
+- `engine/season/data/goals.py`: refuse an `opens:` value outside the
+  two; nothing else (item 5's `org.person` is NOT accepted: repair R-B read `data/goals.py:139-157` and `_org` refuses any kind but faction, body, seat as "not an organization", and `org_faction` (`:294-310`) returns no faction for a person, so the rung aim rule has no organization to test; the fallback in item 5 is taken). The one formation site that reads `opens:` is `world_q.questions_for`'s ordering
   (`Question.mandatory`), also read by `30_WR_A` commit 3.
 - `decision/`: none here; the reader is CHAR's proposal, to which the active stage's `pursuits` are the
   input.

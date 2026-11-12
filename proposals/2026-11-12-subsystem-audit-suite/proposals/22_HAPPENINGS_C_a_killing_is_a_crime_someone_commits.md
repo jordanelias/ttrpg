@@ -4,7 +4,9 @@ Reconciled: 2026-11-12, U5d closure — folded **A-16** (a person may try to kil
 
 Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row killing (VIOLATES: the Failure branch), §2 rows Status (A-16), Failure band (A-16, A-23), CHAR_C (A-24), §7, 7b; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-04; `unified/U3_DEPENDENCY_ORDER.md` §1 item 37, §3.1, §4.1 row 59). The body now follows the head. Changed: (1) the Status line: A-16 is taken and the "two readings" are closed; (2) the access roll's Failure no longer has "the guard's seat open a `detain`": a seat is not an agent (`04` PART D row 1: `Act.actor : PersonId`, a seat enters only through `Act.via`, and the failed act is the attacker's own `fight`), so the Failure ends the attacker's act with a witnessed Event `fight.stopped` and writes no custody; the guard, a person, forms `capture` or `arrest` through his own chooser on the claim WITNESS deposits, and A-16's "caught and detained" holds one act later (R5 §1 option (A), ladder step 4, AX-1); option (B), an engine-formed act on the guard's behalf, is taken only on Jordan's word; `person.captured` leaves the `fight` row; the `[UNVERIFIED]` bracket about which seat a guard belongs to is moot and removed; (3) the access roll's obstacle is a difficulty level plus named levels (D-U1-04) and its draw is keyed (A-30); (4) tests named; (5) dependency, batch and tier lines.
 
-Depends on: `14_VERBS_PHYSICAL_A_custody_and_force.md` A1 (warrants, `arrest`), A3 (`context_terms`, the mortal-wound draw) (B15) and A1-A2 custody (B29) for the guard's own `capture`/`arrest`; `16_PESSIMIST_CHAR_C_the_stop_is_the_mans.md` (B10, the drawn scruple); `02_CHAR_relations_have_a_ground.md` (B10); `08_FI_06_testimony-names-a-hand.md`, `08_FI_07_shortest-playable-case.md`, `18_DETERMINISM_notice_is_a_draw.md` (B11); `22_HAPPENINGS_B_the_throne_is_never_stranded.md` edit 2 (B21, the rival-title test); `18_DETERMINISM_task_draw_for_uncontested_verbs.md` (B07, the task route the access roll takes).
+Reconciled: 2026-11-12, U6 repair lane R-C (`unified/U6_VERDICT_AND_REPAIRS.md` findings 4, 5, 6): the access roll's obstacle is the one obstacle form's members 1 (`difficulty`, at `guard_ob`) and 22 (`watch`, its `guard` reading, `watch_step`), not a private "plus one level per step" (OBS §2); A-16's "caught and detained" against the guard's own later act is listed for Jordan (`unified/U6_FOR_JORDAN.md` J-U6-01, option B shipped until he answers); "fixture band" → "fixture threshold" and bare "levels" → "difficulty levels" (glossary *band*, *level*).
+
+Depends on: `14_VERBS_MATERIAL_A_mending.md` (B12, OBS member 22 `watch` and `watch_step`); `14_VERBS_PHYSICAL_A_custody_and_force.md` A1 (warrants, `arrest`), A3 (`context_terms`, the mortal-wound draw) (B15) and A1-A2 custody (B29) for the guard's own `capture`/`arrest`; `16_PESSIMIST_CHAR_C_the_stop_is_the_mans.md` (B10, the drawn scruple); `02_CHAR_relations_have_a_ground.md` (B10); `08_FI_06_testimony-names-a-hand.md`, `08_FI_07_shortest-playable-case.md`, `18_DETERMINISM_notice_is_a_draw.md` (B11); `22_HAPPENINGS_B_the_throne_is_never_stranded.md` edit 2 (B21, the rival-title test); `18_DETERMINISM_task_draw_for_uncontested_verbs.md` (B07, the task route the access roll takes).
 Lands in batch: B37 (lane PC with FI), after `22_HAPPENINGS_A`, with `U5b_PC_rulings_in_the_fight.md` §6 (the opener's first-exchange edge, D-41; §4.1 row 59). Ships at the control (`enmity_floor` unreachable).
 Tier: opus for the AX-1 reading (taken here); sonnet / high for the code and tests.
 
@@ -56,7 +58,7 @@ A context is one reader over the actor's own state (AX-2). `enmity` holds betwee
    a deed of `r`'s that `p`'s own `deeds_judged` scores against him), **or** `r` holds a seat that a
    title `p` holds may claim (`SUCCESSIONS`, in HAPPENINGS-B's list form: a rival for the seat);
 2. *hostility*: `p`'s own stance toward `r` is against him (`person_q.held_against`, the reader
-   `own_stance_declines` uses) at or below a fixture band `enmity_floor`.
+   `own_stance_declines` uses) at or below the fixture threshold `enmity_floor`.
 
 No new relation is stored. Both readers exist; the context composes them. A man with a grievance and no
 hatred, or hatred and no grievance, forms nothing.
@@ -64,9 +66,12 @@ hatred, or hatred and no grievance, forms nothing.
 **Getting to him is a draw.** Before the scene, where the target's place has a guard
 (`world_q.guard_weight(w, rung) > 0`, IN-60), the attacker makes one graded roll through the task
 route (`18_DETERMINISM_task_draw_for_uncontested_verbs.md`): pool his own covert capability (the
-capability `conceal` reads, through the one pool rule), obstacle the difficulty level `guard_ob` (a member
-of `rosters.yaml: difficulty_levels`, D-U1-04) plus one level per step of the guard's weight; keyed
-`H(seed, tick, actor, "access:" + a.id)` (A-30).
+capability `conceal` reads, through the one pool rule); obstacle composed by the one obstacle form
+(`U5c_SC_one_obstacle_form.md` §2), never a private sum: member 1 `difficulty` at the difficulty level
+`guard_ob` (a member of `rosters.yaml: difficulty_levels`, D-U1-04) and member 22 `watch` in its `guard`
+reading, `world_q.guard_weight(w, rung) × watch_step` at the target's place (the reading
+`14_VERBS_MATERIAL_A_mending.md` lands with `watch_step` in B12; this file adds no member, operand or
+fixture for it); keyed `H(seed, tick, actor, "access:" + a.id)` (A-30).
 
 | band | outcome | writes |
 |---|---|---|
@@ -79,7 +84,10 @@ institution acts only through a person, `Act.actor : PersonId`, and a seat enter
 the seat the **actor** exercises; the failed act is the attacker's own `fight`, whose `via` is not the
 guard's seat, and a Tenure write needs one of the nine bases of §C.2. The alternative (the engine forms
 the guard's `capture` on his behalf at ENCOUNTER) is a decision made outside `choose` (AX-2, PART D 41)
-and is built only on Jordan's word. A detained doer then forms no act through any seat he holds (A-23).
+and is built only on Jordan's word. That is a reading of A-16's "failure means caught and detained" (caught by
+the guard's own act, so usually and not always), not the ruling's letter; it is listed for Jordan with both
+options as `unified/U6_FOR_JORDAN.md` J-U6-01, and this file ships option B there until he answers. A detained
+doer then forms no act through any seat he holds (A-23).
 
 A place with no guard takes no draw. `build_realm`'s `guards` default is `False` today, so in the
 shipped realm every place is unguarded until that default flips (CP-T09-07); the gate's guarded arm
@@ -103,7 +111,8 @@ wounded king, a death with witnesses, a death with none.
    deposits any Event; nothing here forms the guard's act.
 5. `engine/season/data/fixtures.py`: `enmity_floor` (control: a value no stance reaches, so the context
    never holds and every base hash stands), `guard_ob` (a `difficulty_levels` member, `routine` at
-   landing; sweep over the four levels). NUMBER rows in `hole_register.yaml` (ids from B00's block).
+   landing; sweep over the four difficulty levels). NUMBER rows in `hole_register.yaml` (ids from B00's
+   block). `watch_step` is OBS member 22's fixture, landed in B12; it is read here, not created.
 6. `engine/season/verb_table.yaml`, row `fight`: `emits_on_refusal` gains the clause `access` keyed to
    `fight.stopped` (its `emits_note`: a lost access draw, not a refusal, as 18-A's `draw` clause);
    `person.captured` is **not** added to `fight` (custody is the guard's `capture`/`arrest`);

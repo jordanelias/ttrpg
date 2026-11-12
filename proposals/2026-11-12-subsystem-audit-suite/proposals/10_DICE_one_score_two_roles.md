@@ -6,6 +6,8 @@ Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-04) — the
 
 Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — the body is brought to its two heads: rows applied: `R1_READ.md` 7b-6 and §2 rows (Edit A: training only, no attribute; Edit B: `_opposition_of` returns the trained score, no `opposition_fallback`; Edit C: U1 §5's values on the verb row's `capability:` column; "What it changes" restated on the one rule; the whole-dice `pool_default / 2` figures removed, one sentence naming the inversion kept), `U1_OWNERS_AND_VOCABULARY.md` D-U1-02 (the first head line's "his pool" corrected to "his trained score"), D-U1-08 (Edit D: `scores` and `addends`, carried by `U5b_PC_rulings_in_the_fight.md` §2), `U3_CONFLICT_LEDGER.md` C3-A3 (Edit A starts from implementation lane A's `pool.py::score` split, `c5bf18a`, with its `max(attr, have)` removed), `U5_CONFLICTS_U5c.md` C-04 (`obstacle_default` deleted; nobody opposite is `opposed_ob(pool_default, rate)`); test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*); "key" (for a capability) → "capability" (glossary *capability*, *key*).
 
+Reconciled: 2026-11-12, U6 repair lane R-C (`unified/U6_VERDICT_AND_REPAIRS.md` findings 4, 6): "The resolution" no longer says `obstacle_default` "keeps the job H-127 gives it"; it is deleted (C-04, the head above), and the E line follows; the remaining "key" for a capability (What it changes, problems 1 to 4, the falsifier) → "capability" or "capability rank"; "fallback" for the untrained score → "untrained score" (glossary *stand-in*, *untrained score*).
+
 **Depends on:** `U5a_capability_home_and_two_inputs.md` Part A (B04); `29_DICE_one_opposed_rule_form_and_tuning.md` item 29-1 (`opposed_ob`, B04); `U5c_SC_one_obstacle_form.md` (B05); implementation lane A's branch rebased (B01, C3-A2).
 **Lands in batch:** Edits A and C in B04 (`B04-capability-home`, with OBS step 0, U3 §1 B04); Edit B in B05 (`B05-one-roll`).
 
@@ -18,7 +20,7 @@ depends on in the character lane.
 ## What it changes in `engine/season/` at runtime
 
 *(Reconciled, W3-1, 7b-6.)* It is a declared mover. A person is opposed at `opposition_rate × his trained
-score` (`opposed_ob`, `29_DICE_one_opposed_rule_form_and_tuning.md`); a person who holds no key is opposed at
+score` (`opposed_ob`, `29_DICE_one_opposed_rule_form_and_tuning.md`); a person who holds no capability the verb reads is opposed at
 his untrained score, `pool_default`, by the same function; where nobody stands opposite, the term is
 `opposed_ob(pool_default, opposition_rate)` (C-04; `obstacle_default` is deleted). The control arm
 (`opposition_rate` 0.5, `pool_add` 0) is today's bytes. The defect this removes is the inversion: today a
@@ -28,7 +30,7 @@ grades a person-opposed roll moves at the live arm; the readings are `29_DICE`'s
 ## The problem, with evidence
 
 1. **Holding a score makes a person easier to oppose than holding none.** `sigma.py::_opposition_of`
-   (`:117-137`) returns the larger of the held key and the held attribute, or `None`; `roll.py::obstacle`
+   (`:117-137`) returns the larger of the held capability rank and the held attribute, or `None`; `roll.py::obstacle`
    (`:141`) halves a score and falls to `obstacle_default` on `None`. Probe (audit §12, E-07), pool 2: an
    unauthored subject → obstacle 2.0, Partial-or-better 26.00 %; a subject holding the capability at 2 → obstacle 1.0,
    58.00 %; a subject holding an attribute at 1 → obstacle 0.5, 73.50 %. The stand-in is worth a score of 4 while
@@ -36,12 +38,12 @@ grades a person-opposed roll moves at the live arm; the readings are `29_DICE`'s
    made live at B10-10 and unmeasured.
 2. **The stand-in is being applied outside its stated scope.** H-127's own text: the derivation *"reads
    off a PERSON. A Record, a Rung or a Proposition has no corresponding score, and this row is the
-   stand-in for that branch"*. A person subject with no key is a person, not that branch.
+   stand-in for that branch"*. A person subject with no capability the verb reads is a person, not that branch.
 3. **Two readings of one quantity across modules.** `modules/combat/core.py:113-116` records it: a person
-   holding no key *"is attacked at Ob 1.0 here and at `obstacle_default` in a social contest: two ladders
-   for one quantity"*. Combat reads `faculty` (fallback and practice included); the social roll reads
+   holding no capability the verb reads *"is attacked at Ob 1.0 here and at `obstacle_default` in a social contest: two ladders
+   for one quantity"*. Combat reads `faculty` (untrained score and practice included); the social roll reads
    neither.
-4. **Four rolled verbs name no key.** `rosters.yaml: verb_capability` maps nine verbs; `arrest`,
+4. **Four rolled verbs name no capability.** `rosters.yaml: verb_capability` maps nine verbs; `arrest`,
    `determine`, `interrogate` and `lie` roll through the social provider and are absent (audit §12, E-09),
    so their pool is `pool_default` and their opposition `None` for every pair. H-312 measured
    `interrogate` alone: capabilities and attributes set to 0 or 20 leave the odds at
@@ -54,7 +56,9 @@ Ladder step 3 (a ruling and a register row answer the form) with step 4 for the 
 is overridden in its rate by A-26 and A-79 (`opposed_ob(trained score, opposition_rate)`); its form stands: a
 person's corresponding score is the score he rolls: one read, two roles. Practice is excluded from the opposing role on
 `_opposition_of`'s existing statement (*"the practice addend raises a pool, not an opposition"*), which
-stands. `obstacle_default` keeps the job H-127 gives it. The magnitude stays an `assumption`
+stands. `obstacle_default` is deleted with its fixture and H-127's row (C-04, `U5c_SC_one_obstacle_form.md`
+§2): where nobody stands opposite, the term is the stand-in `opposed_ob(pool_default, opposition_rate)`. The
+magnitude stays an `assumption`
 (`pool_default`, H-126, swept 1 / 2 / 4): [ASSUMPTION; medium; Jordan to correct; revert: the control
 arm below].
 
@@ -118,22 +122,22 @@ goldens; this proposal only supplies the reader.
 
 ## The falsifier
 
-`odds_of` for a `tell` at an unauthored hearer must equal the odds at a hearer holding the key at
+`odds_of` for a `tell` at an unauthored hearer must equal the odds at a hearer holding the capability at
 `pool_default` (no inversion; W3-1: the whole-dice tuples of the first text are moot under A-5); a hearer
-holding a higher key must give lower odds. For `interrogate`, raising the subject's `inquiry` score must lower
+holding it at a higher rank must give lower odds. For `interrogate`, raising the subject's `inquiry` score must lower
 Partial-or-better (H-312's probe, which today prints an unchanged tuple).
 
 ## NERS reading (E last)
 
-- **N.** Cut the fallback read and persons differ in pool but an unauthored person stays twice as hard to
+- **N.** Cut the untrained-score read and persons differ in pool but an unauthored person stays twice as hard to
   move as an authored one; the inversion returns. Holds top-down (the ruling), lateral (combat already
   reads it this way) and bottom-up (one function).
 - **R.** *Makes players feel they impact the world*: an unauthored opponent stops being the hardest one to
   move. Completeness: the inversion is an extreme where the composition breaks. (The first text's 74 % and
   42 % were whole-dice readings of the old regime, removed by W3-1.)
 - **S.** One score read by the pool and the obstacle, in the social roll and (after D) in a fight.
-- **E, as a ratio.** One function split in two, one fixture, four roster rows; one stand-in's scope
-  narrowed to what its register row says it is.
+- **E, as a ratio.** One function split in two, four verb-row values; one fixture (`obstacle_default`)
+  deleted, its job taken by the stand-in every lane already uses (C-04).
 
 ## Cost class
 

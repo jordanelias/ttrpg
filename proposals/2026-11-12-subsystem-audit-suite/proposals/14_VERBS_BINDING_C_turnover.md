@@ -3,6 +3,7 @@
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-25, C-31, C-35) — the term `standing` is the roster member `rank_gap` (licensed by Jordan's A-12; the word `standing` already names a prize). Edit 3's audience is `heard_by: seat_body` on the prize row. `revoke` reads `reception` and not `regard`: a row has an audience or a single hearer, never both. §3's Partial for `succeed` opens termed seats under the existing claim basis and lays the title down; the variant that keeps the title needs a gate basis `04` §C.2 does not list and is not built. §2's `revoke` draw carries A-35 (the head strips an officer by a resistible draw).
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head's corrections applied to the body (`unified/work/R4_READ.md` §1.1, §2, 7b.3): `standing` → `rank_gap` and `standing_step` → `rank_step` throughout (U1 R-21; the fixture is OBS's, not created here); `revoke` reads `reception`, not `regard`; edit 7's `state/gate.py` clause deleted and `succeed`'s Partial rewritten (C-31); `succeed`'s opposition and audience under A-19; gate C3 read with natural death on (A-15); the pool sentence follows U1 D-U1-01 (a seat helps as the `office` level, never as dice); `provisional_term` stays this file's one fixture at 2 (F-R4-10: U1 F-33 and U3 §11 each passed the value to the other; taken by ladder step 4, `15_INSTITUTIONS_SYNTHESIS_A`'s "`provisional_term` is VB-C's"); A-63/A-64 (C3-C13), A-81 (C3-C11), A-30 keys; U3 batch B21 and C3-D5's commit order; R4 7b.0 block. The Failure kind names stay this file's (F-R4-11; the BYZANTINE heads defer to them).
 Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_5a_DONE.md` row 12, `unified/work/W3_4b_DONE.md` "For another lane"): the `confer` obstacle table gains `cross_chain` (FA-B edit 2; OBS member 29, added in `U5c_SC_one_obstacle_form.md`); `revoke`'s Partial skipping the disposal checked against the 2026-10-21 ruling and marked `[ASSUMPTION]` at edit 6 (the ruling is silent on bands). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "vocation" → "capability" in prose (glossary *capability*).
+Reconciled: 2026-11-12, U6 repair lane R-C (`unified/U6_VERDICT_AND_REPAIRS.md` findings 4, 6): edit 10's Valorsmark sentence corrected at the tree (`off_duke_valorsmark` carries `conferral: null`, `engine/season/offices.yaml:206`, not `appointed`); "incumbent" → "the seat's present holder" (glossary *holder*); "the spine" → "the governance test world" (glossary §H *spine*).
 
 ## Status: PROPOSED
 
@@ -57,7 +58,7 @@ never as dice. Obstacle, through the one composer (`U5c_SC_one_obstacle_form.md`
 
 | row | `difficulty` | `opposition` | other terms |
 |---|---|---|---|
-| `confer` | `routine` | the incumbent, only when displacing | `reception` (audience: the seat's body), `rank_gap` (the conferee against the seat), `stakes` `hold`, `cross_chain` (OBS member 29, `cross_chain_step`: a step harder when `office_faction(via) != office_faction(off)`; `16_PESSIMIST_FA_B_who_may_sit_join_and_declare.md` edit 2) |
+| `confer` | `routine` | the seat's present holder, only when displacing | `reception` (audience: the seat's body), `rank_gap` (the conferee against the seat), `stakes` `hold`, `cross_chain` (OBS member 29, `cross_chain_step`: a step harder when `office_faction(via) != office_faction(off)`; `16_PESSIMIST_FA_B_who_may_sit_join_and_declare.md` edit 2) |
 | `revoke` | `routine` | the holder | `rank_gap`, `stakes` `hold`, `reception` (the seat's body); no `regard` (a row with an audience reads `reception` only, C-35) |
 | `succeed` | `routine` | a docketed rival claimant where one exists, else none (A-19: heir, consort, princess and both houses' heads may claim one empty seat) | `reception` over three audiences, each reading `legitimacy(q, claimant, seat)` (`15_INSTITUTIONS_BYZANTINE_E` e1; the seat's body, or the realm's seated persons for a seat with no body), `rank_gap`; `may_claim` widened to the A-19 claimants by BYZ_E e2 (CR-35) |
 
@@ -111,7 +112,7 @@ naming the seat (`LedgerReader`'s comparator), `tenure.opened`/`succession.claim
      Partial:      ["tenure.opened", "tenure.closed"]
      Failure:      ["appointment.resisted"]
    ```
-   `counterparty: to` stays (the conferee is the second side); the `opposition` operand is the incumbent,
+   `counterparty: to` stays (the conferee is the second side); the `opposition` operand is the seat's present holder,
    built host-side only when a live hold is displaced, else absent. `emits_on_refusal` stays flat.
    `_eff_confer`: at `Partial`, `term=_provisional_term(w, a)` unless the act or the row declares a
    shorter one.
@@ -146,14 +147,16 @@ naming the seat (`LedgerReader`'s comparator), `tenure.opened`/`succession.claim
    Office`. `[ASSUMPTION; medium; revert: drop the roster]`.
 10. `data/rosters.py` (the `successions` check beside `state/gate.py::FILLED_BY`): refuse at import an
     office in `offices.yaml` with `conferral: inheritance` and no `successions` key. Today that is one
-    seat (`off_king`), which has its row; CP-T09-06's Valorsmark stays `appointed`, so nothing breaks.
+    seat (`off_king`, `offices.yaml:193`), which has its row. CP-T09-06's Valorsmark seat, `off_duke_valorsmark`,
+    carries `conferral: null` (`offices.yaml:206`; the file's header leaves the Crown's hereditary seats `null`
+    as a judgment call, `:44`), so the clause does not reach it and nothing breaks.
 11. `verb_table.yaml`, the three rows' notes: one sentence each naming VB-C and its reverts.
 
 Order: C1, C2 (independent), C3 after SC-B, C4 after C3. Selection (CR-88) is not here.
 
 ## Gate (execution artifact)
 
-- C2: FA-B4's `recall` scenario on the spine: the Duke's computed `revoke` reaches the roll (a `Resolution`
+- C2: FA-B4's `recall` scenario on the governance test world (`governance_spine`): the Duke's computed `revoke` reaches the roll (a `Resolution`
   recorded), where today it is refused at clause 1.
 - C3: FA-P4's `vacancy` and `succession` situations, 40 seeds each: all four bands occur for `confer` and
   `succeed`; a Partial seat falls vacant at `provisional_term` and is offered again (`vacancies`); a

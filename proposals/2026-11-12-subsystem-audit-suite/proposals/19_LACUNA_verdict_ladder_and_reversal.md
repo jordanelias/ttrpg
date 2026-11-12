@@ -8,7 +8,9 @@ Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.
 
 **Lands in batch:** B27 (R-19-07, R-19-08); R-19-09 in B36 with `09_WR_B_chronicle_that_tells.md`. **Depends on:** `05_SC_acquittal.md` (B27), `05_SC_evidence_and_rebuttal_B.md` (B24), `U5c_SC_proceedings_residue.md` §4 (B27; `fresh`, `new_items`), `17_CENSUS_C1A_01_deletion_batches.md` D2 (B03), `11_GO_player_surface_contract_B.md` (B34; `account`).
 
-## Status: PROPOSED (results 1-4 are edits on existing owners; reversal is design-first; the case thread is harness only)
+Reconciled: 2026-11-12, repair lane R-B (`unified/U6_VERDICT_AND_REPAIRS.md` finding 1) — reversal's three open design points are decided at R-19-08 and edit 4 (sibling row `reverse`, `eligibility: ["remit:determine"]`, `verb_table.yaml:33`; appellate bench on a higher rung; one appeal per rung), so the file no longer leaves a design pass open; the "design-first" cost-class label is removed.
+
+## Status: PROPOSED (results 1-4 are edits on existing owners; reversal's shape is decided (R-B); the case thread is harness only)
 
 Carries `audits/19_LACUNA_investigation_to_proceedings.md` §3 ("The verdict ladder"), §4.6 and resolutions
 R-19-06 to R-19-09. Consumes `05_SC_acquittal.md` (SC-P6) unchanged, `05_SC_evidence_and_rebuttal_B.md`
@@ -84,6 +86,12 @@ case file is the one owner of what happened in the proceeding (E-4).
   `U5c_SC_proceedings_residue.md` §4 item 5 (one reader for both). Still open for the design pass (named,
   not decided): whether the appellate bench must be another seat or may be the same seat at a higher
   sitting; how many appeals a case admits beyond the new-grounds rule (proposed: one per rung).
+  **Decided (repair R-B, ladder step 5; the first bullet already says the bench's rung is above the disposing
+  seat's, so a same-seat appeal is excluded by that eligibility; the proposed count is taken):** the appellate
+  bench is another seat on a rung above the disposing seat's, never the same seat at a higher sitting; a case
+  admits at most one appeal per rung above the disposing seat's (a count of the case file's `reversed`/
+  `remitted`/`affirmed` stages by rung, read with the `fresh` conjunct). Both are revertible to the previous
+  open state by deleting this paragraph.
 
 **R-19-09 · The case thread (harness).** `harness/chronicle.py` gains `case_thread(w, case_file_id) ->
 list[line]`: from the determination (or dismissal, voiding, reversal) back through the case file's stages to
@@ -107,10 +115,11 @@ it. Reads only; asserts the content hash unchanged after a render, as `test_in37
 4. `engine/season/verb_table.yaml` — an appellate reading is a `petition` + `carry` with `terms` naming a
    Tenure, heard by a determining act whose `writes` are `Record.stages` at every band (the original case
    file's `reversed` / `remitted` / `affirmed` stage) and whose emits are `matter.reversed`,
-   `matter.remitted`, `matter.affirmed`; it writes no `Tenure` cell. Design-first: whether this is
-   `determine` on such a docket item or a sibling row `reverse` with `remit:determine` (the sibling is
-   cleaner for the loader and is the recommended reading). The closing of the edge is the disposing bench's
-   `pardon` (existing row; drawn).
+   `matter.remitted`, `matter.affirmed`; it writes no `Tenure` cell. **Decided (repair R-B, ladder step 5):**
+   the row is a sibling `reverse`, not `determine` on such a docket item. Its `eligibility` is `["remit:determine"]`
+   (one of the four kinds `verb_table.yaml:33` names; `remit:<act>` is the form `arrest` and `confer` already use at
+   `:173`, `:271`), so the loader needs no new kind and `determine`'s own row is untouched. The closing of the edge
+   is the disposing bench's `pardon` (existing row; drawn).
 5. `engine/season/arrangements.yaml` — `appeal_basis` gains its reader (the eligibility above); the
    unseeded *"appeal to a higher authority"* row is seeded with `disposes: Record` (it disposes the original
    case file's finding, not a person) once the reader exists.
@@ -126,7 +135,7 @@ On `build_hearing(seed)` with a case file, `PYTHONHASHSEED=0`:
 - with every `for` item a Record of one forger's origin and an examiner holding the forged claim, over 200
   seeds the `voided` stage occurs in a share strictly between 0 and 1 and only on `Overwhelming`
   impeachments;
-- reversal (after the design pass): a conviction under an arrangement with `appeal_basis: determine`,
+- reversal (the `reverse` row): a conviction under an arrangement with `appeal_basis: determine`,
   appealed above on new grounds, writes the `reversed` stage in a share strictly between 0 and 1 over 200
   seeds, and the edge closes only after the disposing bench's `pardon`; under `appeal_basis: none`, or with
   nothing new, the appeal is refused before the draw;
@@ -164,10 +173,11 @@ On `build_hearing(seed)` with a case file, `PYTHONHASHSEED=0`:
 
 ## Cost class
 
-R-19-06: none (SC-P6). R-19-07: small build. R-19-08: design-first, then small build. R-19-09: edit
+R-19-06: none (SC-P6). R-19-07: small build. R-19-08: small build (its design pass is closed above by repair R-B; the
+`opus` read below is the one read of the `reverse` row's `requires`). R-19-09: edit
 (harness). Lanes: SC (owner), WR (chronicle), FA where an appellate seat is a faction's.
 
 **Lands it and tier.** R-19-07 and R-19-08's built half in the B27 batch, `valoria-author` on `sonnet`
-(`high`), after a design pass on `opus` (with `ners`) for the reversal row's shape; R-19-09 in B36 on
+(`high`), with one `opus` read (with `ners`) of the `reverse` row's `requires` (the shape is decided above); R-19-09 in B36 on
 `sonnet`; each batch's `methodology-close` once. **Hash movers.** Mistrial (wherever `determine` refuses on
 `bench`/`quorum` with a case file); reversal (declared, once the chooser forms appeals).

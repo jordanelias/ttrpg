@@ -4,6 +4,8 @@ Reconciled: 2026-11-12, U5d closure — folded **A-30** (port randomness: one dr
 
 Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — the body is brought to its head: rows applied: `R1_READ.md` §1.4 and §2 row A-30 (`Draw.u()` is a function of `(key, n)` by an owned mix, `16_PESSIMIST_GO_keyed_draw_no_recorder.md`'s body, never CPython's Mersenne Twister; the recorder hook, gate 3's replay wording and the GO-16 recorder row are removed; one constructor and the refusals kept), §1.4's `rngsource` row (AMBIGUOUS; Option A taken: the field's `Draw` is threaded as `resolve_field`'s `rng` parameter, as `fight` takes its stream, matching `04` §C.12 rejection 4 and `R1_READ.md` 7b-13's reasoning for the config; `rngsource` is retired, with GO-12's no-default item as the interim), `U3_CONFLICT_LEDGER.md` C3-Y10 (co-lands with the pessimist file in B06; that file's key function is this body), C3-D3 (lands before the task draw, B07); `U5b_PC_residue.md` §4 as reconciled (`wrapper.py:565`'s fallback is removed by a signature with no default stream, not a raise); test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`). **Placement note:** the pessimist file puts `H2` in `engine/season/state/ids.py` beside `H`; `draw.py` is a leaf under `engine/dice_engine/` and may not import `engine/season`, so `H2` is defined once in `draw.py` (`hashlib`'s blake2b) and `ids.py` imports it `[ASSUMPTION: the leaf's import rule decides the home — basis: this file's own "imports `random` and `fmath` only" and CLAUDE.md §3; reported for R5's lane]`.
 
+Reconciled: 2026-11-12, U6 repair lane R-C (`unified/U6_VERDICT_AND_REPAIRS.md` finding 5, A-30): the `Draw` docstring states once, at the owner, that the index `n` is part of the key, so "one draw per key" holds and a keyed draw is a function of its key alone; `16_PESSIMIST_GO_keyed_draw_no_recorder.md` points here. `H2`'s home is R-A's and is not touched.
+
 **Depends on:** `U5a_DICE_owed_edits.md` §1 (B05: the one sampler); `11_GO_float_contract.md` Part A (`fmath`, B06); `16_PESSIMIST_GO_keyed_draw_no_recorder.md` (B06, co-land).
 **Lands in batch:** B06 (`B06-keyed-draw`, IN/GO), with `11_GO_float_contract.md`, `16_PESSIMIST_GO_keyed_draw_no_recorder.md`, `U5d_GO_owed_edits.md` and `11_GO_pointer_and_stale_text_resolutions.md` item 5; before B07's task draw (C3-D3).
 
@@ -52,7 +54,9 @@ owns its samplers as it owns its hash.**
 class Draw:
     """One keyed draw. `u()` is the only primitive, a function of (key, n) by an owned mix (A-30); every
     other method is this class's own function of `u()`, so the same key gives the same values in any
-    language that implements the mix. No recorder: there is nothing to record."""
+    language that implements the mix. The index `n` is part of the key: the n-th uniform is the draw keyed
+    `(H(seed, tick, subject, purpose), n)`, so A-30's "one draw per key" holds with the index counted in the
+    key, and no uniform depends on anything but its key. No recorder: there is nothing to record."""
     key: str                       # the 16-hex `H(seed, tick, subject, purpose)` it was built from
     n: int = 0                     # uniforms taken from this key
     def u(self) -> float           # the n-th uniform: n = 0 is the key itself, later ones H2(key, n);

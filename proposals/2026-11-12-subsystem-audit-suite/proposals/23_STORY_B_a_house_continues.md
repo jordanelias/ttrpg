@@ -6,6 +6,8 @@ Reconciled: 2026-11-12, U5d closure — folded **A-15**, **A-51**, **A-19** and 
 
 Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row house_continues (the individuation path AMBIGUOUS; interior at CENSUS VIOLATES), §2 rows Status (A-75, A-15), edit 4 (A-47, A-19, A-35) and J-1 (A-75), §7, 7b; `unified/DECISIONS_ANSWERED.md` A-75, A-54; `unified/U3_CONFLICT_LEDGER.md` C3-L13, C3-L14, §10 (J-1 → A-75); `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-10; `unified/U1_GLOSSARY.md` "bout"; `unified/U3_DEPENDENCY_ORDER.md` §1 item 39, §3.1, §4.1 row 90). The body now follows the head. Changed: (1) J-1 is answered by A-75 (named births on, behind `birth_rate`): the Status line and the cost line lose the Jordan switch, and the U5d line's "births stay behind `birth_rate` 0 and remain the one question of this file for Jordan (J-1)" is superseded; (2) edit 3 follows C3-L13: CENSUS mints the child with the cells individuation writes today and `born = w.tick`, and writes no pursuits or conviction (a newborn holding few pursuits is the intended game); and the birth reaches CENSUS as a `person.born` Event emitted at MATTER, a demand with a named author (the marriage), not as a row queued on the instrument's `stages` (a Record cell MATTER does not write) (R5 7b; holonic §29 `:1028` holds: no clock generates, a demand does); (3) edit 4 reads the set of titles (A-19) and a coming of age opens a mandatory scene and decides nothing (A-47); (4) the PES-SE J-2 conditional is answered by A-54 (the four-band ladder); (5) ages and `majority_age` are counted on the one owner of the year (D-U1-10); draws are keyed (A-30); "bout" is "spell of illness" (glossary); the Partial's body fall is MATTER's own write sized by the `body` stake's step (C3-L14 retires `_pay_stake`); (6) tests named; (7) dependency, batch and tier lines.
 
+Reconciled: 2026-11-12, U6 repair lane R-C (`unified/U6_VERDICT_AND_REPAIRS.md` finding 6): edit 2's bare "one level" named: the favourable term is the leverage level `birth_level` (a `LEVEL_SIGMA` name), the hostile terms are the obstacle step `birth_step`, both set at the calibration (glossary *level*; A-25).
+
 Depends on: `13_SC_draw_for_unrolled_contests.md` (B07, the `covenant` draw); `07_SE_population_regrowth_B.md` (B12); `20_NARRATIVE_E_the_year_and_the_reason.md` edit 1 (B12, the year); `14_VERBS_BINDING_C_turnover.md` and `22_HAPPENINGS_B_the_throne_is_never_stranded.md` (B21; `_provisional_term`, the set of titles); `15_INSTITUTIONS_COLONIAL_A_instruments.md`, `15_INSTITUTIONS_SYNTHESIS_A_one_kit.md` (B32; `instruments.yaml`, SYN I-1, absent from the tree until then); `22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md` (B37, ages and the spell of illness); `23_STORY_A_what_a_roll_leaves.md` (B38, the stake step and `shortfall_step`); `21_PROCEDURAL_B_cast_and_seats.md` (B39; the generator, used at build only).
 Lands in batch: B39 (lanes SE / FA), after `U5d_STORY_owed_edits.md`; edit 1 (data) one commit; edits 2-3 one commit (hash-equal at `birth_rate` 0.0); edit 4 one commit (hash-equal at `majority_age` 0). `30_WR_A`'s era-ending row that reads this file's events lands after it in B39 (§4.1 row 90).
 Tier: opus for the holonic §29 reading (taken here); sonnet / high for the code and tests.
@@ -79,10 +81,15 @@ parties share a `reside` object and whose `bearer` is of an age inside `fertile_
 - taken at all with chance `birth_rate` (keyed draw `H(seed, tick, instrument id, "birth:taken")`,
   A-30; 0.0 at landing, on behind its value per A-75);
 - then one graded draw through the one sampler, keyed `H(seed, tick, instrument id, "birth")`. Pool:
-  `birth_pool`, plus one level where the home settlement's hunger band is `fed`. Obstacle: `birth_ob`,
-  plus one level per `age_bands` step of the bearer above `fertile_peak`, plus one per body band the bearer
-  stands below the top, plus one where the home is short. `birth_pool` and `birth_ob` are set at the
-  calibration with the A-5 sampler (starting points: `pool_default` and the `routine` difficulty level);
+  `birth_pool`, plus the leverage level `birth_level` (a `LEVEL_SIGMA` name, applied by `net_boost` under
+  the soft cap, A-25's favourable side) where the home settlement's hunger band is `fed`. Obstacle: `birth_ob`,
+  plus `birth_step` (successes) per `age_bands` step of the bearer above `fertile_peak`, per body band the
+  bearer stands below the top, and where the home is short (A-25's hostile side). `birth_pool`, `birth_ob`,
+  `birth_level` and `birth_step` are set at the
+  calibration with the A-5 sampler (starting points: `pool_default` and the `routine` difficulty level;
+  `birth_level` and `birth_step` have none) [ASSUMPTION: the bare "one level" of the earlier text is read as a
+  sigma level on the pool's side and an obstacle step on the obstacle's side, named once each — basis: A-25,
+  glossary *level*];
   `fertile_ages` and `fertile_peak` are authored in years and converted by `len(SEASONS_OF_YEAR)`
   (D-U1-10) [ASSUMPTION: medium; values are calibration content, none given here — basis: none in the
   tree].

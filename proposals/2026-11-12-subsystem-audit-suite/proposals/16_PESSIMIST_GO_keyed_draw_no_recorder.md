@@ -3,12 +3,15 @@
 Reconciled: 2026-11-12, U5d closure — folded **A-30**: Jordan chose option A (the draw is a function of its key). The "one question to Jordan" is closed; the Layer 1 row is rewritten by the ruling (text owed, not applied). With A-5 the sampler the key feeds is the one bell-curve sampler. No step changes.
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-30: the Status line no longer says
-"returned to Jordan"), §1 (AMBIGUOUS against `04` PART D 35's "no counter": the per-key index `n` inside one key is
-permitted, a d10 pool drawing six or more from one key, and the row is rewritten by A-30, text owed in
+"returned to Jordan"), §1 (AMBIGUOUS against `04` PART D 35's "no counter": the index `n` is part of the key, so a d10
+pool drawing six or more uniforms draws each under its own key `(H(…), n)` and A-30's "one draw per key" holds — stated
+once at the owner, `11_GO_one_draw_owner.md`'s `Draw` docstring (U6 R-C) — and the row is rewritten by A-30, text owed in
 `OWED_TO_UNIFICATION.md` §A; `04` is not edited), §7/§7b (tests, order, tier); U3 B06, C3-Y10 (co-lands with
 `11_GO_one_draw_owner.md`: this file's key function is that file's `Draw.u` body), C3-D3 (the keyed draw, B06, before the
 task draw, B07), C3-L3 (no float recorder either: parity by `fmath` vectors); STAGES.md (the v11 workplan rows move to the
 v12 plan). Changed: Status, the edits table's workplan row, the gate's test names.
+
+Reconciled: 2026-11-12, U6 repair lane R-C (`unified/U6_VERDICT_AND_REPAIRS.md` finding 5, A-30): "the per-key index `n` inside one key" reworded above to "the index `n` is part of the key", pointing to the one statement at `11_GO_one_draw_owner.md`. The drafted Layer 1 row text in the edits table ("an index `n` within one key") is owed Layer 1 text and R-A's (finding 3); not edited here.
 
 ## Status: PROPOSED (A-30 taken: option A; the Layer 1 RNG row text is owed to Jordan's amendment, not applied)
 

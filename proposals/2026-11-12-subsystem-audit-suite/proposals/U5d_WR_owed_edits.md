@@ -62,6 +62,14 @@ control arm reproduces the base hash before the flip; the flip is one declared r
 N: each has no other carrier. R: mended bodies stop drawing care they do not need. S: the draws land in
 an order that never ships a fixed outcome. E: one code edit, one harness line, two notes.
 
+## Named tests and call sites (repair R-B; decided from the tree)
+
+- §1: new function `engine/season/tests/test_strife_execution.py::test_a_hand_built_execution_reads_xe`, in the file that already drives `harness/strife.py::readers_for(w).victim_held` over each route's real tenure (`test_strife_execution.py:34-36`, `:175-180`). It plants a lawful execution whose `person.died` Event carries the `body` change, and asserts `victim_held` is true; control: the same Event with only the `exists` change (today's reader) is the failing reading the falsifier names. Call site: `harness/strife.py:85` (`victim_held`), returned by `readers_for` (`:76`).
+- §3: new function `engine/season/tests/test_season_shape.py::test_a_witnessed_recovery_clears_a_believed_wound` (the file holds five `wounded_with` mentions; the measurement the docstring at `queries/world_q.py:3806` states is its pair count). Plants a believed wound, runs `_eff_tend` to a recovery, and asserts the pair count of `tend` formed on the healed man reads 0; control: the same world without the Observation write reads the old non-zero count. Call sites: `loop/effects_combat.py:767` (`_eff_tend`) and MATTER's recovery step write the `(pid, "body", v)` Observation as `_eff_kill` does.
+- §2 and §4: no test (an ordering constraint; roster text). The hash gate in §2 is the control arm's equality with the base hash, run by the batch's own close.
+
+Reconciled: 2026-11-12, repair lane R-B (`unified/U6_VERDICT_AND_REPAIRS.md` finding 1) — the file named no test for its two code edits (§1, §3); the covering files are named above from `engine/season/tests/` and the sites from `queries/world_q.py:3806-3812` and `harness/strife.py:85`; a function name is a proposal, the file and site are read.
+
 ## Cost class
 
 Edits. Tier: `sonnet` (R3 7b-0).

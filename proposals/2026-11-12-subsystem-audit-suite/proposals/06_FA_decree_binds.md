@@ -1,8 +1,10 @@
-# FA-P1 — a decree that binds: terms reach the addressee, the answer is a choice, defiance is the issuer's occasion
+# FA-P1 — a decree that binds: terms reach whoever learns of it, the addressee's answer is a choice, defiance is the issuer's occasion
 
 Reconciled: 2026-11-12, U5d closure — folded Jordan's answers (`unified/DECISIONS_ANSWERED.md`). **A-21** rules the decree proclaimed: edit 1's `public_terms: true` is no longer an `[ASSUMPTION … Jordan to correct]` (it is the ruled form; its revert stays as the test arm), and the audit's §11 item 1 is closed. **A-22** (command, not territory) rewrites who is bound: in edit 3, `writs_addressed` forms `comply`, `evade / defy` and `construe` only where the issuing seat commands the addressee (his sworn man, the holder of a seat it may revoke, or an unseated person in its land; the one predicate is `16_PESSIMIST_FA_C_under_the_seat.md`'s as reconciled); a writ whose addressee the seat does not command forms as a petition to him and enters no `suspicion_of` count (edit 4's fold counts commanded addressees only). **A-23**: a holder in custody forms no act through his seat, so `issue` and `revoke` by a detained issuer are refused at formation (the one check is `U5d_FA_owed_edits.md` §2). **A-24 / A-47**: `recall_suspicion` opens the issuer's question and decides nothing; the recall itself is `revoke`'s resistible draw (`14_VERBS_BINDING_C_turnover.md`), and for a Church officer the head's strip (A-35). Steps rewritten: edit 1 (tag), edit 3 (second clause gains the command conjunct), edit 4 (the fold's domain). Edits 2 and 5, the gate and the falsifier are unchanged; one gate arm is added: a writ addressed to the issuer's superior yields no `comply` candidate.
 
 Reconciled: 2026-11-12, wave 3 (W3-3) — applied D-U1-05 (edit 1 becomes the `dispensation: [issue]` entry of lane A's `rosters.yaml: read_to_addressee`; edit 2 is the existing `witness.py::addressee_reads` path, no second loop; this also dissolves R3 §1's AMBIGUOUS reading of edit 2, since `addressee_reads` reads the Record's own kind and verb); D-U1-11h (the kind stays `dispensation`; no rename precedes edit 1); R3 §2 rows on edits 3–4 (A-81 a write per band; the archived "recalls, audits or replaces" sentence follows the head, A-24/A-47); C3-C13 (the petition route is subject to A-63/A-64); the A-21 sentence in "The resolution" (no longer listed for Jordan); 7b-1 (named tests, edit order); 7b-0 (tier); U3 C3-D5 (batch and order). The "What it changes" list, edits 3–5's mechanism, the falsifier's bystander and crowd-out arms are unchanged.
+
+Reconciled: 2026-11-12, U6 repair lane R-C (`unified/U6_VERDICT_AND_REPAIRS.md` finding 5, A-21): the body gave a decree's terms to its addressees only; A-21's record says *"Whoever learns a decree was issued knows its terms and may answer it without holding paper"*. Now the terms reach whoever learns of the issue (title, "What it changes" 1, "The resolution", edits 1 and 2): the `dispensation: [issue]` entry moves from `read_to_addressee` to a sibling roster of the same shape, `proclaimed`, whose branch of `addressee_reads` has no addressee conjunct; the answer (`comply`, `evade / defy`, `construe`) stays with the addressees the seat commands (A-22), marked `[ASSUMPTION]` in "The resolution"; tests and falsifier follow (one test added, one renamed, the mutation arm rewritten). D-U1-05's map in `unified/U1_OWNERS_AND_VOCABULARY.md` is owed the matching line (not edited by this lane). "Spine" → "the governance test world" (glossary §H *spine*).
 
 ## Status: PROPOSED
 
@@ -14,8 +16,10 @@ NPC-038, ARC-17), §15; hole rows H-260, H-207 (A), H-203; plan position CR-54.
 
 ## What it changes in `engine/season/` at runtime
 
-1. A person who learns that a writ was issued, and whom the writ names as an addressee, also receives its
-   terms as a content claim. Today only a holder does.
+1. A person who learns that a decree (a writ made by `issue`) was issued also receives its terms as a
+   content claim, whether or not the decree names him (A-21: *"Whoever learns a decree was issued knows its
+   terms"*). Today only a holder does. A covenant's and a challenge's terms still reach only their holder or
+   addressee (A-21: *"covenants and challenges stay in person"*).
 2. `comply`, `evade / defy` and `construe` form on a writ the person's own ledger names him an addressee of.
    Today they form only on a writ he holds, which in computed play is never.
 3. An issuer whose suspicion of a subordinate, folded from his own claims of defied and obeyed writs, has
@@ -33,7 +37,7 @@ At `601e715`, `PYTHONHASHSEED=0` (audit §12, E-3 to E-5):
 
 - Realm, seeds 0, 1 and 2, three seasons: 29, 21 and 41 `dispensation.issued`; 0 writs held by an addressee;
   0 persons for whom `world_q.writs_held` is non-empty; 0 `compliance.given`, 0 `compliance.withheld`.
-- Spine, seeds 0 to 4, four seasons: 19 writs, the same zeros.
+- The governance test world (`governance_spine`), seeds 0 to 4, four seasons: 19 writs, the same zeros.
 - `aperture 2 0`: `comply` attempted 33 and refused 33 on `exists:dispensation=0` (it formed on other
   Records); `evade / defy` 5 of 5; `construe` 7 of 7; `revoke` formed for 5 persons, attempted 0.
 - Cause, in the code's own words (`queries/world_q.py:3234-3260`): "a writ is minted into its maker's hand …
@@ -46,8 +50,12 @@ At `601e715`, `PYTHONHASHSEED=0` (audit §12, E-3 to E-5):
 ## The resolution, decided
 
 A writ made by `issue` is a public instrument: it is a `binding_decision`, already told to everyone the
-chronicle channel reaches. Its terms travel with that news, to its addressees only. What the addressee then
-does is his own act, chosen by his own ranking. What defiance costs is whatever the issuer, now holding a
+chronicle channel reaches. Its terms travel with that news to whoever learns of it (A-21). Those it names,
+and whom the issuing seat commands (A-22), may answer it; what the addressee then does is his own act, chosen
+by his own ranking. `[ASSUMPTION: A-21's "and may answer it without holding paper" is read as the answer of
+those the decree binds, so a bystander who knows the terms is offered no `comply` — basis: A-21 answers how a
+decree reaches its addressee, and A-22 decides whom a seat binds; reversible by dropping the addressee
+conjunct of edit 3's second clause]` What defiance costs is whatever the issuer, now holding a
 claim of it, chooses to do: the chain is two persons' decisions, not a counter. `covenant` is unchanged: its
 row says it "must not be read as a public writ", and its terms still reach only a holder.
 
@@ -60,26 +68,36 @@ ruled: A-21, proclaimed (the audit's §11 item 1 is closed).
 
 ## Exact edits, by owner
 
-**1. `engine/season/rosters.yaml: read_to_addressee`** (lane A's roster, B01; the one owner of "which
-Records' content reaches their addressee without his holding the paper", D-U1-05). Its shape becomes a map
-from a `record_kinds` member to the verbs whose mint of that kind is put to the addressee, and it gains
-`dispensation: [issue]` beside `challenge: [challenge]`. The verb qualifier is needed because `covenant`
+**1. `engine/season/rosters.yaml: read_to_addressee` and its sibling `proclaimed`** (lane A's roster, B01;
+D-U1-05). `read_to_addressee` stays the one owner of "which Records' content reaches their addressee without
+his holding the paper", as a map from a `record_kinds` member to the verbs whose mint of that kind is put to
+the addressee: `{challenge: [challenge]}`. A-21 rules a decree proclaimed, which is a different property:
+its content reaches **everyone** who learns of the mint, addressee or not. It is carried by one sibling
+roster of the same shape, `proclaimed: {dispensation: [issue]}` (D-U1-05's own precedent for a property of
+record kinds is a sibling list, `covert_kinds`, `forgeable_kinds`); the `dispensation` entry lives there and
+not in `read_to_addressee`, so no Record kind is in both. The verb qualifier is needed because `covenant`
 also mints a `dispensation` (`verb_table.yaml:319`) and its counterparty learns the terms only by holding
-the Record (A-21 keeps covenants in person). The loader `data/rosters.py` refuses at import (a) a key that
-is not a `record_kinds` member, (b) a key whose content keys hold no addressee key (`record_kinds`'
-`addressee:` map), (c) a verb that is not a `verb_table.yaml` row or whose effect does not mint that kind.
-The ruled form (A-21); the revert drops the `dispensation` entry, and the deposit and the formation both
-fall back to today's. The earlier `record_kinds.dispensation.public_terms: true` cell is not made (it would
-give one `record_kinds` member a second shape; D-U1-05).
+the Record (A-21 keeps covenants in person). The loader `data/rosters.py` refuses at import, for both
+rosters, (a) a key that is not a `record_kinds` member, (b) a key whose content keys hold no addressee key
+(`record_kinds`' `addressee:` map; edit 3 still needs it to offer the answer), (c) a verb that is not a
+`verb_table.yaml` row or whose effect does not mint that kind, and (d) a kind and verb named in both. The
+ruled form (A-21); the revert empties `proclaimed`, and the deposit and the formation both fall back to
+today's. The earlier `record_kinds.dispensation.public_terms: true` cell is not made (it would give one
+`record_kinds` member a second shape; D-U1-05). D-U1-05's map `{challenge: [challenge], dispensation:
+[issue]}` (`unified/U1_OWNERS_AND_VOCABULARY.md`) predates this reading of A-21 and is owed the matching line.
 
 **2. `engine/season/loop/witness.py`: no new loop.** The fourth deposit (`:823-845` on `main`, the one writer
 of `content:<kind>` claims) already calls `addressee_reads(rec, pid)` on lane A's branch (`witness.py:86`,
 `:826`), which deposits `(rec.id, "content:<kind>", content_value(rec.subject_matter))` to a witnessing
-addressee under the existing exact-triple guard. The only change is the predicate's test: the Record's kind is
-a key of `READ_TO_ADDRESSEE`, the verb of the act that created it is in that key's list (read off the
-creating act as `world_q.py:1582` reads it for `WRIT_MINTING_VERB`), and `world_q.addressed_to(rec.subject_matter,
-pid)` (the verb list is `world_q.WRIT_MINTING_VERB`'s filter, `world_q.py:1604`, moved into data). Hash-equal at `{challenge: [challenge]}`. The holder's deposit is
-untouched.
+addressee under the existing exact-triple guard. The only change is the predicate's test, two branches over
+one creating-verb read (off the creating act as `world_q.py:1582` reads it for `WRIT_MINTING_VERB`; the verb
+lists are `world_q.WRIT_MINTING_VERB`'s filter, `world_q.py:1604`, moved into data): the Record's kind and
+verb are in `PROCLAIMED` (any witness, A-21), **or** they are in `READ_TO_ADDRESSEE` and
+`world_q.addressed_to(rec.subject_matter, pid)` holds. Those told of the issue learn the terms with the news
+`[ASSUMPTION: the told deposit carries the content claim beside the Event claim — basis: not read at the tree
+by this lane; the landing lane reads `loop/witness.py`'s told branch and, where it does not, deposits the
+content claim as a second told claim on the same telling]`. Hash-equal at `read_to_addressee: {challenge:
+[challenge]}` and `proclaimed: {}`. The holder's deposit is untouched.
 
 **3. `engine/season/queries/world_q.py::writs_held`** becomes `writs_addressed(w, p)`: the Records of a
 `RECORD_REFERENT_KINDS` kind for which `p` holds the writ **or** `p`'s own ledger holds a content claim on
@@ -143,7 +161,7 @@ alignment cells.
 
 ## Gate (execution artifact)
 
-`fa_probe`'s reading, or `aperture`'s per-verb block, on the spine at seeds 0 to 4 for four seasons and the
+`fa_probe`'s reading, or `aperture`'s per-verb block, on the governance test world at seeds 0 to 4 for four seasons and the
 realm at seeds 0 to 2 for three:
 
 - at least one `compliance.given` and one `compliance.withheld` whose actor is an addressee of the writ;
@@ -158,21 +176,24 @@ realm at seeds 0 to 2 for three:
 Named tests (7b-1), a new file `engine/season/tests/test_fa_decree_binds.py` (the hole-register text's
 `test_in10c_writ_reaches_addressee.py` does not exist on `main`), each loop asserting it asserted
 (`assert checked >= N`, CLAUDE.md §0.1 pt 2): `test_a_bystander_is_offered_nothing`,
+`test_a_bystander_who_witnessed_the_issue_holds_its_terms` (A-21),
 `test_an_addressee_is_offered_comply_defy_construe`, `test_writs_addressed_nets_an_answered_writ`,
-`test_dispensation_absent_from_read_to_addressee_reproduces_the_hash`,
+`test_dispensation_absent_from_proclaimed_reproduces_the_hash`,
 `test_a_covenant_counterparty_holds_no_content_claim` (D-U1-05's falsifier, beside lane A's
 `test_b11a_duel_reach.py`), `test_suspicion_floors_at_zero_and_a_complied_season_delays_the_recall`,
 `test_a_writ_to_the_issuers_superior_forms_no_comply` (A-22). Edit order: 1, 2, 3, 5, then 4.
 
 ## Falsifier
 
-- Control: the `dispensation` entry absent from `read_to_addressee` reproduces the pre-item `content_hash`
+- Control: the `dispensation` entry absent from `proclaimed` reproduces the pre-item `content_hash`
   at one and two seasons, realm seed 0.
-- A bystander is offered nothing: a person who witnessed the issue and is not an addressee has
-  `writs_addressed == ()` (the B10-05 close's defect, a bystander complying, must not return).
-- Mutation: drop the `addressed_to` conjunct in `addressee_reads` and a non-addressee holds the content
-  claim; the bystander assertion reddens. Drop the verb qualifier and a covenant's counterparty holds
-  `content:dispensation`; the covenant test reddens.
+- A bystander knows the terms and is offered nothing: a person who witnessed the issue and is not an
+  addressee holds the `content:dispensation` claim (A-21) and has `writs_addressed == ()` (the B10-05
+  close's defect, a bystander complying, must not return).
+- Mutation: drop the addressee conjunct of `writs_addressed`'s second clause and a bystander is offered
+  `comply`; the bystander assertion reddens. Drop the `PROCLAIMED` branch in `addressee_reads` and a
+  witnessing bystander holds no content claim; the A-21 test reddens. Drop the verb qualifier and a
+  covenant's counterparty holds `content:dispensation`; the covenant test reddens.
 - Crowd-out: the executed counts of `issue`, `transfer`, `tell` and `speak` pooled over realm seeds 0 to 2
   are read before and after and printed; a fall is reported, not asserted against (rule V2).
 
@@ -193,7 +214,7 @@ to `covenant`, `petition` or `challenge`.
   dead man forms for nobody; an answered writ stops being offered.
 - **S.** One methodology: a standing occasion stamping classed referents, as `vacancies` and `writs_held`
   already do. It pauses nothing and hands to SC (`open_case`) and PC (`arrest`) by existing seams.
-- **E, last.** One roster key, one deposit clause, one widened Query, one fold, one occasion, one fixture,
+- **E, last.** One sibling roster with one entry, one deposit branch, one widened Query, one fold, one occasion, one fixture,
   one reader swap. One new noun, suspicion, which the design already uses in its ordinary sense. Against
   what N and R buy, small.
 

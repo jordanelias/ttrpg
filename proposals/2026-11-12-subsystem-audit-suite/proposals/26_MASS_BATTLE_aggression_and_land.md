@@ -2,7 +2,9 @@
 
 Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §2 rows A-65/A-66 and `U3_CONFLICT_LEDGER.md` C3-L12 (a win does not pass the land by itself: the aggressor forms `seize`, occupies without seizing, or withdraws; the uninvited rescuer chooses among the same; §2's and §3's "passes" rows and the rescuer paragraph rewritten; the field's fold writes no title), A-67/A-68/A-70 (§2's `Drawn` bullet: each army returns at once to its station), A-68/A-85 (§3: an unopposed entry onto held land is tolerated or aggression by a draw on the parties' own state modified by the realm's strife; leave is one input to it), A-70 (§4 rewritten as the plain reading, not as this lane's open reading), A-74 (§5: a march may also be thought of on a claim or grievance), C3-L7 (the intro's "gate basis `conquest`" is withdrawn: seats pass by the existing revocation and claim bases); the "Open, named" items 1–4 marked answered; test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`). The FA owner (`U5d_FA_land_and_seats_pass_on_a_won_march.md`, R3) is cited, not edited. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "province" → "territory" (glossary *territory*).
 
-**Depends on:** `04_MB_headcount_grade_and_scale.md` (B17: the `Drawn` band and its re-homing); `04_MB_manager_battle_one_resolver.md` §1 (B20); `U5d_FA_land_and_seats_pass_on_a_won_march.md` (B23, the title owner); `14_VERBS_MATERIAL_D_paper.md` §6 (`seize`, the carrier of A-66's seizure, C3-L12); the faction lane's reader of a claim or grievance as an occasion to march (A-74, R3).
+Reconciled: 2026-11-12, U6 repair lane R-C (`unified/U6_VERDICT_AND_REPAIRS.md` finding 6): "band" for the field's result (`Won`, `Lost`, `Drawn`, `Invested`, `Unopposed`) → "end state" throughout, §2's table header included (glossary *end state*, *degree*: the field's results are end states, never bands or degrees).
+
+**Depends on:** `04_MB_headcount_grade_and_scale.md` (B17: the `Drawn` end state and its re-homing); `04_MB_manager_battle_one_resolver.md` §1 (B20); `U5d_FA_land_and_seats_pass_on_a_won_march.md` (B23, the title owner); `14_VERBS_MATERIAL_D_paper.md` §6 (`seize`, the carrier of A-66's seizure, C3-L12); the faction lane's reader of a claim or grievance as an occasion to march (A-74, R3).
 **Lands in batch:** B23 (`B23-land`, FA), after `14_VERBS_MATERIAL_D` §6 and before RES-V §2–§3 and UMR §2.
 
 ## Status: PROPOSED
@@ -41,26 +43,26 @@ regard, not a precondition. Marked ASSUMPTION in the record: a march by the hold
 ### 1. The resolver knows none of it
 
 `modules/mass_battle/` receives no holder, no purpose and no leave, and its result carries none. A battle for
-a territory and a battle on a road are the same call (ruling A-1). The season reads the band and its own
+a territory and a battle on a road are the same call (ruling A-1). The season reads the end state and its own
 world. The falsifier is a `grep` for `hold`, `holder` or `leave` under `modules/mass_battle/`.
 
 ### 2. Which end state is the aggressor's win
 
-Ruling A-3 reads the band off which side broke or conceded. With the MB proposals in the suite, the title
+Ruling A-3 reads the end state off which side broke or conceded. With the MB proposals in the suite, the title
 test `res.degree == WON` therefore means, and should be read by the FA edit as meaning:
 
-| what happened in the field | band | the land |
+| what happened in the field | end state | the land |
 |---|---|---|
 | the defender routed and the aggressor did not | `Won` | **may pass**: the aggressor forms `seize` after the `Won` (title and seats pass), or occupies without seizing, or withdraws (A-66; C3-L12) |
 | the defender **conceded** (a retreat line reached, a `withdraw`, a surrender) and the aggressor stands | `Won` (`04_MB_manager_battle_one_resolver.md` §1: `b_out and not a_out`) | **may pass**, as above. A fighting withdrawal saves the army and gives up the ground; this is the price the first MB audit asked a concession to have (`audits/04_MB_audit.md` §7, the priced exit) |
 | the defender routed and then **rallied** at the end of the field | `Won`: "a rallied side is still the field's loser (it left the field)" (`16_PESSIMIST_MB_rout_has_two_exits.md`) | **may pass**, as above. Rally saves men, not the place |
 | both sides out, or neither, when the bouts run down | `Drawn` | **stays with the defender** (A-58) |
 | the aggressor routed or conceded | `Lost` | stays; the defender takes nothing of the aggressor's by winning |
-| several bouts (`26_MASS_BATTLE_cell_scale_and_time.md` §3) | the band of the **last** bout | read once, at the scene's end; a drawn first bout passes nothing and decides nothing |
+| several bouts (`26_MASS_BATTLE_cell_scale_and_time.md` §3) | the end state of the **last** bout | read once, at the scene's end; a drawn first bout passes nothing and decides nothing |
 | `besiege` met by a garrison | `Invested` | stays; a later surrender is the FA proposal's decision 7 |
 | nobody opposed the march | `Unopposed` | not a won battle; the rulings do not speak; today's write stands (FA decision 8) |
 
-- The `Drawn` band's write (`04_MB_headcount_grade_and_scale.md`): bodies fall by each side's share and
+- The `Drawn` end state's write (`04_MB_headcount_grade_and_scale.md`): bodies fall by each side's share and
   *(W3-1, A-67, A-68, A-70)* each army returns at once to its station, the aggressor's to where the march
   began, the defender's to its own base, carrying its losses and fatigue (A-69).
 - `Won` after a **pursuit** (the amended pessimist proposal) changes nothing here: pursuit and the taking of
@@ -123,9 +125,9 @@ them at war afterwards. Named, not designed.
 
 | file (owner) | edit |
 |---|---|
-| `engine/season/seam/ladder.py::field_degree` | none beyond the suite's: it returns the band. The table of section 2 is its reading, stated once in its docstring so the FA edit's `WON` test and the MB bands cannot drift |
+| `engine/season/seam/ladder.py::field_degree` | none beyond the suite's: it returns the end state. The table of section 2 is its reading, stated once in its docstring so the FA edit's `WON` test and the MB end states cannot drift |
 | `engine/season/loop/effects_combat.py::_eff_march` | the order inside the `Won` fold: casualties and pursuit, then arrival (the army on the ground, occupying); no title write (C3-L12): the aggressor's scene continues with `seize`, occupy or withdraw (A-9, A-66) |
-| `engine/season/seam/wrappers/mass_battle.py::resolve` | with several bouts, returns one band for the scene (the bout loop is inside the module, `26_MASS_BATTLE_cell_scale_and_time.md` §3) |
+| `engine/season/seam/wrappers/mass_battle.py::resolve` | with several bouts, returns one end state for the scene (the bout loop is inside the module, `26_MASS_BATTLE_cell_scale_and_time.md` §3) |
 
 ## Open, named (not assumed)
 
@@ -133,7 +135,7 @@ them at war afterwards. Named, not designed.
 2. *(Answered, A-67, A-68: immediately back at its station.)*
 3. *(Answered, A-65: the rescuer's choice.)*
 4. *(Answered, A-70: dropped as questions; the plain reading is §4.)*
-5. Whether a walled place should pass on a won field outside its walls, or only when its `Invested` band
+5. Whether a walled place should pass on a won field outside its walls, or only when its `Invested` end state
    ends. The pages read say places usually changed hands by terms or a storm after the field
    (`research/historical/mass_battle_maneuver_sequences_grounding.md` §11); research does not settle a
    ruling, and the ruling's words are followed.
@@ -147,7 +149,7 @@ The FA proposal's five arms are the gate for the write. Added for the battle sid
    field's fold; the aggressor's `seize` then passes the land.
 2. A defender who routs and rallies: `Won`, his `rallied` flag set; the same as row 1.
 3. A six-bout field drawn at the last bout: no tenure moves and both armies are at their stations; a field
-   drawn at bout 1 and won at bout 3: one band, and at most one `seize` after it.
+   drawn at bout 1 and won at bout 3: one end state, and at most one `seize` after it.
 4. `git grep -n "holder\|passage_granted\|hold_force" modules/mass_battle` prints nothing.
 
 **Tests (W3-1).** `engine/season/tests/test_march.py::test_won_writes_no_title_in_the_fold`,
@@ -168,9 +170,9 @@ than by `seize`; the module reading who holds the ground.
   by the field and another by the title.
 - **R.** Three ways to lose a territory (broken, withdrawn, surrendered) and one way to keep it short of
   winning (the draw).
-- **S.** One band, read once; the resolver untouched.
+- **S.** One end state, read once; the resolver untouched.
 - **E, against that.** No new mechanism: a table in a docstring and an order of writes.
 
 ## Cost class
 
-Edit, with the FA proposal and after the `Drawn` band.
+Edit, with the FA proposal and after the `Drawn` end state.
