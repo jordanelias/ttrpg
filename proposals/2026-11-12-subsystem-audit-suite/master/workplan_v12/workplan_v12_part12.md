@@ -1,4 +1,4 @@
-# Workplan v12 — part 12: Batch B10-character, first half (B10.01 to B10.32)
+# Workplan v12 — part 12: Batch B10-character, first half (B10.01 to B10.33)
 
 ## Status: PROPOSED (a body part of workplan v12, drafted under `master/workplan_v12/`; unratified input to `methodology-execute`'s 0.1 stop until Jordan adopts v12, `V12_STRUCTURE_part3.md` §8; resolves nothing at runtime, CLAUDE.md §0.05; not canon)
 

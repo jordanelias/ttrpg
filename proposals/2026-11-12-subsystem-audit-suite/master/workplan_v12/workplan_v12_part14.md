@@ -418,3 +418,5 @@ Position-table row only (E-10): no code, no commit. Its reading, for B21's `## R
 - GLOSSARY: none (no new word; *seat* and *title* are §D's).
 - COST and TIER: edit (data) plus a small build (the tuple at seven sites); `sonnet`, `high` (the source's tier).
 - LANDS IT: B21's producer; `Item: B21.16`, `[skip ci]`.
+
+*Positions B21.17 to B21.23 continue in this part's continuation file (`workplan_v12_part14_cont.md` until the orchestrator's renumbering), at the 120 KB cap (`V12_STRUCTURE_part2.md` §4.1).*
