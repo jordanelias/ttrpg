@@ -36,6 +36,9 @@ C(B09-memory): this batch's entries; the plan's head parts; `unified/U1_GLOSSARY
   `engine/season/rosters.yaml` (`undeposited_kinds`, `observation_terms`, NEW `standing_occasion_opened_by`); `engine/season/verb_table.yaml`; `engine/season/write_matrix.yaml` (`(Claim, confidence)`); `engine/season/hole_register.yaml` (H-183, H-189, H-237, H-145, H-135, H-111, the three new rows); `engine/season/requirements.yaml` (R-08 `disposition:`); `CURRENT.md` (character-model row); `proposals/2026-09-20-pursuit-basis-worksheet.yaml`; `references/restructure_ledger.md`;
   `engine/season/harness/decision_spread.py`, `interactions.py`, `aperture.py`, `chronicle.py`, `probes.py` (`about`), `report.py`, `delta.py`, `headless.py`, `corpus_run.py` (read only);
   the tests named in the items; `engine/season/tests/_realm_goldens.py` (B02); the closing SHAs of B00, B01, B02, B05, B07 and the S9 merged head; the permanent surface (CLAUDE.md, `CURRENT.md`, `HANDOFF.md`, `registers/handoffs/HANDOFF_IN.md`, the skill and `methodology-close`).
+SERIAL EDGES: within the batch (U3 §1.2's B09 row, in its order): B09.01 (`present_confidence`) → B09.02 → B09.03 → B09.04 (`admission_weight` is the arm's reader, C3-Y10) → B09.05 (the shipped value is read with the arm); B09.01 → B09.06 → B09.07 → B09.08 (SC_B's own order: control, callers, flip); B09.09 → B09.10 (H-145 before the record proposal that names it, §5.6) → B09.11 (edit 1 with its tests, then edit 2) → B09.12 (U3: after the record proposal) → B09.13 → B09.14 (the test file) → B09.15; B09.13 → B09.16 (the chronicle line reads the hook) → B09.17 (`_term_why` reads `scene_of` for the actor's occasion); B09.18 → B09.19 (step one before step two); B09.01 → B09.21 (`loop/matter.py`: the ledger walk deleted before the clock writer is narrowed); B09.99 last. B09.20 has no edge (BLOCKED). Within-file order: `decision/choose.py` B09.03 → B09.13 → B09.14 → B09.15; `decision/sheet.py` B09.07 → B09.15 → B09.17; `epistemic.py` B09.16 → B09.17; `loop/resolve.py` B09.11 → B09.12 → B09.16 → B09.19; `data/fixtures.py` B09.03 → B09.04 → B09.05 → B09.06 → B09.08 → B09.12 → B09.17; `rosters.yaml` B09.04 → B09.12 → B09.17; `hole_register.yaml` B09.03 → B09.05 → B09.06 → B09.08 → B09.09 → B09.12 → B09.15 → B09.17 → B09.21.
+  With other batches, by file (U3 §5.1's lists in v12 step order): `fixtures.py`, `rosters.yaml`, `verb_table.yaml` (B07, B17 at S9) → B09 → B10; `world_q.py`, `person_q.py`, `options.py`, `choose.py` B04/B05/B07 → B09 → B10; `matter.py` B03 → B09 → B12a–c; `resolve.py` B05 → B07 → B09 → B10 (B08 at S13, after); `epistemic.py` B09 → B11; `sheet.py` B04 → B09 → B10 → B34; `predicates.py` B04 → B09 → B21; `world.py` B03 → B06 → B09 → B12a–c; `driver.py`, `deliberate.py` B03 → B09 → (B12a–c, B28); `write_matrix.yaml` B03 → B09 → B10; `requirements.yaml` B03 → B17 → B09 → B11; `hole_register.yaml` B17 → B09 → B10; `chronicle.py` B05 → B09 → B14. Serial instrument files (`V12_STRUCTURE_part3.md` §7.3): `loop/witness.py::_told_value` is not edited here (B09.04 edits the `finding.none` skip only).
+PARALLEL: S10, alone (`V12_STRUCTURE.md` §2.3). It rebases on the S9 merged head (B07 and B17).
 COST: small builds and edits; producer `valoria-author` on `sonnet`, `high`; `opus` reads the shipped `refusal_memory` (B09.05) and H-135's narrowing (B09.21); the close's terminal critique `opus`.
 EST: 11 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this batch's 22 positions (0.4 h × 22 + 2.5 h); §2.2's 7 h counted members]
 
@@ -170,3 +173,349 @@ Not in this batch, and where each is: `U5c_VERBS_residue_and_governance_owner` �
 - GLOSSARY: none.
 - COST and TIER: a value flip and its readings; `sonnet` runs; "the shipped value 0.5 is an `opus`-or-Jordan judgment" — `opus` reads.
 - LANDS IT: B09's producer; `Item: B09.05`, `[skip ci]`.
+
+### B09.06 — one comparator weighs every belief, at control · 16_PESSIMIST_SC_B_one_reader_of_a_ledger edits 1, 2, 6 · BUILD · HASH EQUAL
+- SOURCE: `proposals/16_PESSIMIST_SC_B_one_reader_of_a_ledger.md` "The resolution, decided", "Exact edits" 1, 2, 6, "Gate", "Cost class" ("order 1 → 2 (with the control at `False`, hash-equal) → 3 → 4 → 5 → the flip to `True`"); D-48; closes F-PES-SC-01 (with B09.07, B09.08).
+- ADVANCES: re-read R-07.a; R-08's one definition of what a person believes (no conjunct moves).
+- INSTRUCTION (copied). The rule:
+  ```
+  weigh(c) = (present_confidence(c) / confidence_default) × ( 1.0                              if c.chain is empty
+                                                              told_weight^hops × relation × record   otherwise )
+  ```
+  1. "`engine/season/decision/options.py::teller_weight` — `weigh(c)` multiplies its result by `present_confidence(c) / fx.get("confidence_default")` for every claim, told or not (the empty-chain branch returns that share instead of `1.0`). Control: a fixture `weigh_confidence` (bool, shipped `True`, swept `False`), read once per closure; at `False` the function is today's, exactly." Landed here at `False` (B09.08 flips it).
+  2. "`engine/season/decision/options.py::ledger_weigh` — returns the closure whenever the ledger holds *any* claim below full confidence or any told claim (today: any told claim), so a ledger of fresh firsthand claims still takes the plain reader and reads as before" — at `weigh_confidence: False` it returns today's condition.
+  3. "**Hole register**: the row that carries `H-183` gains this proposal's control; no new row (`weigh_confidence` is a switch on an existing magnitude, `claim_decay_per_season`)." The fixture's `[JUSTIFIED: …]` line cites H-183.
+- WHERE: `engine/season/decision/options.py` (`teller_weight`, `ledger_weigh`); `engine/season/data/fixtures.py` (`weigh_confidence`); `engine/season/hole_register.yaml` (H-183); NEW `engine/season/tests/test_one_reader_of_a_ledger.py`.
+- TESTS (written first): `test_weigh_confidence_false_reproduces_today` (green here); `test_said_of_sheet_and_belief_contradicts_agree_on_every_cell`, `test_stale_sighting_falls_to_enough_tellers`, `test_fresh_sighting_holds_against_one_teller` (red until B09.08).
+- EXPECTED RED UNTIL: B09.08 for the three tests named.
+- FALSIFIER and CONTROL: at `False`, any weight that differs from today's. Control: the realm content hash at seed 0, two seasons, equal to B09.05's.
+- GATE: `python -m pytest engine/season/tests/test_one_reader_of_a_ledger.py -k weigh_confidence_false -q` → pass; the hash control → equal; `python tools/ci_sim_fabrication_check.py` → exit 0.
+- HASH MOVERS: none at the control.
+- DEPENDS ON: V12 B09.01 (`present_confidence`); EXISTS-IN-TREE `decision/options.py::teller_weight`, `::ledger_weigh`, `queries/person_q.py::LedgerReader` (`weigh`), `epistemic.belief_contradicts`, H-183.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B09's producer; `Item: B09.06`, `[skip ci]`.
+
+### B09.07 — what a person says, shows and plans by reads the one comparator · 16_PESSIMIST_SC_B_one_reader_of_a_ledger edits 3–5 · BUILD · HASH MOVER(behaviour)
+- SOURCE: the same file, "Exact edits" 3–5 (grouped: one gate, the three call sites, `V12_STRUCTURE_part4.md` E-13).
+- ADVANCES: as B09.06.
+- INSTRUCTION (copied):
+  1. "`engine/season/queries/person_q.py::said_of` and `::lie_said_of` — a keyword `weigh=None`, handed to `LedgerReader(pool, weigh)`. Caller: `decision/options.py::opening_set` passes `weigh=ledger_weigh(p, fx)` at the one call site (`said_of_entity[entity] = …`). `person_q` imports nothing from `decision/` (the closure is an argument, as it is for `LedgerReader`)." "⚠ `_support` under a `weigh` ranks `latest_about` across predicates … Decided here: accepted. A person passes on what he is surest of about a subject, not the newest thing he holds."
+  2. "`engine/season/decision/sheet.py::chronicle` — signature `chronicle(p, fx=None)`; `reader = LedgerReader(p.ledger, ledger_weigh(p, fx) if fx is not None else None)`; its callers in `decision/sheet.py` and the harness pass the fixtures they already hold."
+  3. "`engine/season/queries/world_q.py`" (the stage reader, `current_stage`) "— take the closure as a parameter from its one caller, as its docstring's revert line says."
+- WHERE: `engine/season/queries/person_q.py` (`said_of`, `lie_said_of`); `engine/season/decision/options.py` (`opening_set`); `engine/season/decision/sheet.py` (`chronicle` and its callers); `engine/season/queries/world_q.py` (`current_stage` and its caller); the harness callers of `chronicle`.
+- TESTS: none new (B09.06's file).
+- FALSIFIER and CONTROL: "Any (holder, cell) in a seeded realm season for which `said_of`'s value, the sheet's value and `belief_contradicts`' value differ." Control: "`weigh_confidence=False` reproduces today's weighed column, and the three re-pointed callers then agree with it."
+- GATE: `python -m pytest engine/season/tests/test_one_reader_of_a_ledger.py -k "weigh_confidence_false" -q` → pass; then `python -m engine.season.harness.report && python -m engine.season.harness.delta HEAD` → the declared move, quoted.
+- HASH MOVERS: "every world where a person holds two values for one cell from different sources". Declared; B09.99.
+- DEPENDS ON: V12 B09.06; EXISTS-IN-TREE `person_q.said_of`, `lie_said_of`, `decision/options.py::opening_set`, `decision/sheet.py::chronicle`, `world_q.current_stage`.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B09's producer; `Item: B09.07`, `[skip ci]`.
+
+### B09.08 — the comparator weighs how sure the holder still is · 16_PESSIMIST_SC_B_one_reader_of_a_ledger the flip · BUILD · HASH MOVER(behaviour)
+- SOURCE: the same file, "Exact edits" 1 ("shipped `True`"), "Gate", "Cost class" ("→ the flip to `True`").
+- ADVANCES: as B09.06.
+- INSTRUCTION: `engine/season/data/fixtures.py`: `weigh_confidence` `False` → `True`, in its own commit; H-183's row names the shipped value.
+- WHERE: `engine/season/data/fixtures.py` (`weigh_confidence`); `engine/season/hole_register.yaml` (H-183).
+- TESTS: B09.06's three red tests turn green.
+- FALSIFIER and CONTROL: as B09.07. Control: `False` reproduces B09.07's hash.
+- GATE: `python -m pytest engine/season/tests/test_one_reader_of_a_ledger.py -q` → four pass. The scratch readings, committed as the tests: "the two columns are equal on every row (32 / 32 and 27 / 27 for the knowing hearer)"; "at `c0 = 80` the sighting holds against one teller and falls to a number of tellers the run prints; at `c0 = 5` it falls to one" (the number printed in the commit body).
+- HASH MOVERS: as B09.07; declared; B09.99.
+- DEPENDS ON: V12 B09.07.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B09's producer; `Item: B09.08`, `[skip ci]`.
+
+### B09.09 — the log refuses a change no gate vouches for · H-145 with NM-W9 (b) · BUILD · HASH EQUAL
+- SOURCE: the intake `:142` (H-145, NM-W9; `settled:` "register row governs (E7:30 STILL-NEEDED)"); its carry-forward `master/eval/E7.md` "H-145 (STILL-NEEDED) lane IN, batch B09-memory (one item with v11 NM-W9)"; `engine/season/hole_register.yaml` H-145; `master/eval/E1.md` NM-W block (v11 `_part4.md:292-307`, NM-W9 "conformance items"); `unified/U5_FINDINGS_CLOSURE_U5a.md` F-CORE-11. Placed by `V12_STRUCTURE_part2.md` §5.6 rule 1: immediately before the first item whose source names H-145 (`16_PESSIMIST_CORE_the_record_holds_what_changed`, "which is H-145 (F-CORE-11) and stays that row's").
+- ADVANCES: none of the nine; one provenance check at the log.
+- INSTRUCTION (E7's, copied): "tighten `EventLog.append` (`state/log.py`) to refuse a bare `StateChange`; first make `harness/probes.py::about` stop building one; then flip the pinned test." OWNER (verbatim): "state/log.py -- the append-time check that only inspects `Receipt`-typed changes; harness/probes.py::about -- the one production-adjacent source of a bare `StateChange` (probe-only; G1b closed the production sources)". The second `StateChange(` construction in `harness/probes.py` (the `alter` of a Site's `condition`) is converted with `about`. H-145's row is closed in the same commit (its `default:` and `hole:` kept as history; the closing line names this item).
+- WHERE: `engine/season/state/log.py` (`EventLog.append`); `engine/season/harness/probes.py` (`about`, the second `StateChange(` site); `engine/season/tests/test_g1a_act_store_and_receipts.py` (the pinned test); `engine/season/hole_register.yaml` (H-145).
+- TESTS: `test_g1a_act_store_and_receipts.py`'s pinned falsifier "goes red as its own docstring says, then is re-pinned" (its assertion inverted: a bare `StateChange` is refused).
+- FALSIFIER and CONTROL: a bare `StateChange` appended to the log. Control: the realm content hash at seed 0, two seasons, equal to B09.08's `[ASSUMPTION: HASH EQUAL — basis: E7's line "HASH: EQUAL [ASSUMPTION]"; G1b closed the production sources]`; if it moves, the commit body names the source and the item stops.
+- GATE: `python -m pytest engine/season/tests/test_g1a_act_store_and_receipts.py -q` → pass after the re-pin of its falsifier; `git grep -n "StateChange(" -- engine/season ':!engine/season/tests'` → no construction outside `harness/probes.py`'s converted sites and the `state/carriers.py` comments; the hash control → equal.
+- HASH MOVERS: none `[ASSUMPTION]` (above).
+- DEPENDS ON: EXISTS-IN-TREE `state/log.py::EventLog.append`, `harness/probes.py::about`, `test_g1a_act_store_and_receipts.py`; V12 Batch B02.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet` (E7's tier).
+- LANDS IT: B09's producer; `Item: B09.09`, `[skip ci]`.
+
+### B09.10 — a receipt carries the value the gate saw · 16_PESSIMIST_CORE_the_record_holds_what_changed edit 1 · BUILD · HASH MOVER(encoding)
+- SOURCE: `proposals/16_PESSIMIST_CORE_the_record_holds_what_changed.md` "Exact edits" 1, 3 (its tests), "Gate"; `04` §C.2; closes F-PES-CORE-02; NM-W9's `Receipt.before/after` half.
+- ADVANCES: none of the nine; the record says how much a write moved.
+- INSTRUCTION (copied, line numbers dropped): "`engine/season/state/world.py::World.write`, the `Change` branch:
+  - keep the pair instead of the subject: `moved = [(s, b, a) for s, b in zip(change.subjects, was) for a in (… self.state_of(s) …,) if … a != b]` (edge subjects keep their tenure-diff test; their `delta` stays `None`: the Tenure is its own record).
+  - `self.gate.mint(s.id, "set", driver, fieldname, _delta(s, b, a))`, where `_delta` returns `(b, a)` when `s` names `fields`, and `None` for a whole-entity digest subject. For that case set `mode` honestly instead: `"create"` when `b == (False,)`, `"delete"` when `a == (False,)`, else `"set"`.
+  - The closure branch (`apply=`) is untouched: it has no observed value, which is H-145 (F-CORE-11) and stays that row's." (B09.09 carried H-145's own fix.)
+- WHERE: `engine/season/state/world.py` (`World.write`'s `Change` branch, `_delta`); `engine/season/tests/test_g1a_act_store_and_receipts.py`.
+- TESTS (edit 1 with its tests): `test_g1a_act_store_and_receipts.py::test_receipt_delta_decodes_before_after_for_fields_subject` ("the planted 940 → 1000 case"), `::test_every_minted_receipt_is_in_an_event` (red until B09.11).
+- EXPECTED RED UNTIL: B09.11 for `test_every_minted_receipt_is_in_an_event`.
+- FALSIFIER and CONTROL: a fields-naming `Change` receipt with `delta is None`. Control: acts and per-act outcomes at seed 0, two seasons, identical to B09.09's (only the hash moves).
+- GATE: `python -m pytest engine/season/tests/test_g1a_act_store_and_receipts.py -k delta_decodes -q` → pass; "a planted `Change` raising one cohort's `body` 940 → 1000: receipt's `delta` decodes to `(940, 1000)`".
+- HASH MOVERS: every content hash (`content_hash` folds `Receipt.delta`, a field of a hashed record now filled, D-04). Declared; B09.99.
+- DEPENDS ON: V12 B09.09; EXISTS-IN-TREE `World.write`, `World.state_of`, `gate.mint`, `Receipt.delta`, `.mode`.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B09's producer; `Item: B09.10`, `[skip ci]`.
+
+### B09.11 — a scar is recorded and witnessed by nobody · 16_PESSIMIST_CORE_the_record_holds_what_changed edit 2 · BUILD · HASH MOVER(behaviour)
+- SOURCE: the same file, "Exact edits" 2, 3, "Gate", "Falsifier"; A-24 (scar only; `conviction.moved` is `16_PESSIMIST_CHAR_A`'s, B10); C3-Y8; closes F-PES-CORE-03.
+- ADVANCES: none of the nine; the interior writes reach the log.
+- INSTRUCTION (copied): "`engine/season/loop/resolve.py::_scar_witnesses` (its `w.write` call): add `emits="scar.taken"`, `causes=[a.id]` to the existing `w.write`, with each `Subject.entity(…, earns="scar.taken")` (`state/gate.py`) so the gate's `extra` path … puts the per-person receipts on one Event. Any `subject=` argument the write path takes feeds the **receipt's** subject id only: an `Event` has no `actor`, `target` or `subject` field (`04` §B.9, STRUCTURAL), and the persons scarred are named only by the receipts in `changes[]`. If the gate's single-kind `emits` path would mint a second, redundant receipt, emit through `extra` alone; the implementer picks the form that yields exactly one Event per write carrying exactly the minted receipts. Delete the docstring paragraph that says nothing is emitted. `_conviction_crisis` is **not** edited here." "*Why WITNESS does not fan these out.* … the code reads RESOLVE's returned list …, as `claim.deposited` relies on … the code reading is kept, named here, and the deposit count below is the observer; `04` is not cited as the reason and is not edited."
+- WHERE: `engine/season/loop/resolve.py` (`_scar_witnesses`); `engine/season/tests/test_g4_no_op_receipt.py`.
+- TESTS: `test_g4_no_op_receipt.py::test_scar_taken_event_deposits_no_claim`, `::test_gate_emitted_event_names_persons_only_in_changes`; B09.10's `test_every_minted_receipt_is_in_an_event` turns green.
+- FALSIFIER and CONTROL: "Deposits per season change. Then a gate-emitted Event in RESOLVE does reach WITNESS by a path this proposal did not see, the stated objection was right, and edit 2 is withdrawn (edit 1 stands alone)." Control: claims deposited per season at seed 0 equal to B09.10's (two seasons).
+- GATE: `python -m pytest engine/season/tests/test_g1a_act_store_and_receipts.py engine/season/tests/test_g4_no_op_receipt.py -q` → the four named tests pass; on `build_realm(0)`, two seasons: receipts minted and carried by no Event → 0; "`scar.taken` Events / `Person.scar` write calls" → equal; claims deposited per season → unchanged; acts and per-act outcomes → identical.
+- HASH MOVERS: the log gains `scar.taken` Events. Declared; B09.99.
+- DEPENDS ON: V12 B09.10; EXISTS-IN-TREE `loop/resolve.py::_scar_witnesses`, `state/gate.py::Subject.entity` (`earns`), `write_matrix.yaml` `(Person, scar)` `emits: scar.taken`.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B09's producer; `Item: B09.11`, `[skip ci]`.
+
+### B09.12 — an act on a standing occasion names the Event that opened it · 16_PESSIMIST_GAME_standing_occasions_carry_their_cause · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/16_PESSIMIST_GAME_standing_occasions_carry_their_cause.md` "Edits" 1–3, "Gate"; A-33, A-47; closes F-PES-GAME-03.
+- ADVANCES: re-read R-01.b, .c (a consequence's cause is readable) unchanged as a conjunct; the chronicle can read a closing act's reason.
+- INSTRUCTION (one commit: roster, branch, fixture, test; copied):
+  1. `engine/season/rosters.yaml`, a new roster, appended at the end of its family's block:
+     ```yaml
+     # the Event kinds that OPEN a standing occasion of each referent class, most specific first
+     standing_occasion_opened_by:
+       Office:    [tenure.closed, office.established]
+       Record:    [dispensation.issued, petition.filed, record.created]
+       Person:    [body.changed]            # `wounded_with`
+       Detainee:  [person.captured, arrest.made]
+       Rung:      [stores.changed, rung.seized]
+       Site:      [condition.band_crossed]
+       Proposition: [proposition.uttered]
+     ```
+     "`[ASSUMPTION; medium; Jordan to correct]` the kind lists are this proposal's reading of each source's docstring; the loader (`data/rosters.py`) exposes it as `STANDING_OCCASION_OPENED_BY` and refuses a kind that is not an `emits` of some verb row or a MATTER/CALENDAR kind, by the check that already validates `strife_kinds`." A listed kind the loader refuses at this tree is removed from its list and named in the commit body.
+  2. `engine/season/loop/resolve.py::_occasion_ids`, the one branch:
+     ```python
+         if (subj and subj not in getattr(occ, "referents", ())
+                 and any(r == subj for r, _ in getattr(occ, "classes", ()))):
+             if not w.fixtures.get("standing_occasion_cause"):          # control arm: today's `[]`
+                 return []
+             cls = next(c for r, c in occ.classes if r == subj)
+             for kind in STANDING_OCCASION_OPENED_BY.get(cls, ()):
+                 eid = w.last_emission_of(kind, subj, written=True)
+                 if eid is not None and eid != a.id:
+                     return [eid]
+             return []
+     ```
+     "Resolver-side … One id at most, so `causes[]` does not fan."
+  3. "`engine/season/data/fixtures.py` — `standing_occasion_cause`, graded `assumption`, shipped `True`. The control (`False`) reproduces every base hash." Its `[JUSTIFIED: …]` line and HOLE row: B09's H block slot 2.
+- WHERE: `engine/season/rosters.yaml` (`standing_occasion_opened_by`); `engine/season/data/rosters.py` (`STANDING_OCCASION_OPENED_BY`, the loader check); `engine/season/loop/resolve.py` (`_occasion_ids`); `engine/season/data/fixtures.py` (`standing_occasion_cause`); `engine/season/hole_register.yaml` (one new row); `engine/season/tests/test_in53_vacancy_need.py`; `engine/season/tests/test_in50_refusals_carry_the_occasion.py`.
+- TESTS (written before the edit, read red): in `test_in53_vacancy_need.py`, "build the governance spine, end the holder of a seat that `rosters.yaml: successions` names (the bodies hazard at 1 for that person …), run two seasons; assert a `succession.claimed` Event exists **and** that its `causes` contains the id of the `tenure.closed` Event naming that seat; assert the loop asserted (`checked >= 1`)", named `test_a_succession_names_the_tenure_closed_that_opened_it` `[ASSUMPTION: test name; the item creates it]`; `test_in50_refusals_carry_the_occasion.py` "gains the mirror assertion".
+- FALSIFIER and CONTROL: "the test fails if the branch returns `[]` (today's code), and the control fails if the fixture is ignored." Control arm (`False`): "the same run, `causes == [act id]`, and the world hash equals the base hash."
+- GATE: `python -m pytest engine/season/tests/test_in53_vacancy_need.py engine/season/tests/test_in50_refusals_carry_the_occasion.py -q` → pass; `rg -n "STANDING_OCCASION_OPENED_BY" engine` → the loader constant and `_occasion_ids`' read; the control at seed 0, two seasons → hash equal to B09.11's.
+- HASH MOVERS: "every Event folded from an act on a classed referent (`causes` is hashed)". Declared; B09.99.
+- DEPENDS ON: EXISTS-IN-TREE `World.last_emission_of`, `loop/resolve.py::_occasion_ids`, the `strife_kinds` loader check; V12 B09.11 (U3's order).
+- GLOSSARY: row *occasion*: "the Event that opened a standing occasion is its **opening Event**" — the row's owner column gains `rosters.yaml: standing_occasion_opened_by` (P); "opening Event": the Event that began the situation an act answers, as a door's opening begins a visit.
+- IDS: H block slot 2.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B09's producer; `Item: B09.12`, `[skip ci]`.
+
+### B09.13 — the chooser's observer hook; three harness wrappers deleted · 02_CHAR_reason_trail_and_small_edits Part A (the hook) · BUILD · HASH EQUAL
+- SOURCE: `proposals/02_CHAR_reason_trail_and_small_edits.md` Part A (the hook and the three harness repoints; the sheet `terms` are B34's), "Gate", "Falsifier"; the observer rule of `ED-IN-0225`; closes the CHAR audit §0A item (d).
+- ADVANCES: none of the nine; one owner of "what the chooser saw".
+- INSTRUCTION (copied): "`make_chooser` takes one more optional argument:
+  ```python
+  def make_chooser(fx, mint, verbs=None, draw=None, watch=None):
+      # watch(p, q, ranked, terms, sampled) -> None, called once per deliberation after the order is
+      # sampled and before it is packed. `ranked` is `score_order`'s list, `terms` the parallel
+      # `score_terms` tuples, `sampled` `_sample_order`'s list. The chooser ignores its return value and
+      # passes copies; a watcher that mutates changes nothing that is packed.
+  ```
+  - `harness/decision_spread.py`, `interactions.py` and `aperture.py` pass a `watch` and delete their wrappers and their second scoring (one owner of 'what the chooser saw')." `decision_spread.attribute_top`'s rule moves "beside `score_order` so the rule has one owner under `decision/`".
+- WHERE: `engine/season/decision/choose.py` (`make_chooser`, the deciding-term rule beside `score_order`); `engine/season/harness/decision_spread.py` (`play_season`'s `watched`, `attribute_top`), `interactions.py`, `aperture.py`; NEW `engine/season/tests/test_choose_watch.py`.
+- TESTS (new): `test_a_recording_watcher_leaves_the_hash_equal`, `test_a_reordering_watcher_changes_no_act`, `test_decision_spread_counts_equal_through_hook_and_wrapper`; "the existing `engine/season/tests/test_in62_decision_spread.py` stays green unedited".
+- FALSIFIER and CONTROL: "A watcher that returns a reordered list changes no act: if the hash moves, the hook is a steering surface and is wrong." Control: `watch=None` and a recording `watch`: equal `content_hash` at seeds 0–2.
+- GATE: `python -m pytest engine/season/tests/test_choose_watch.py engine/season/tests/test_in62_decision_spread.py engine/season/tests/test_g2_token.py -q` → pass; `decision_spread --decisions` at seed 0 → "the same deciding-term counts through the hook as through the wrapper" (the source's `223 draw, 265 pursuit, 10 stance` is `main`'s older reading; the before-reading is taken at this item's base, `reading @<sha>`).
+- HASH MOVERS: none (control `watch=None`).
+- DEPENDS ON: EXISTS-IN-TREE `decision/choose.py::make_chooser`, `score_order`, `score_terms`, `_sample_order`, `harness/decision_spread.py::attribute_top`; V12 B09.03 (`score_terms` now carries `admission_weight`).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B09's producer; `Item: B09.13`, `[skip ci]`.
+
+### B09.14 — subjects packed by first appearance, not by name · 02_CHAR_reason_trail_and_small_edits Part B row B2 · BUILD · HASH EQUAL
+- SOURCE: the same file, Part B row B2 (ladder step 4: "U4 removed the alphabet as a tie-break for verbs; this is the same defect for subjects on an unshipped arm").
+- ADVANCES: none of the nine.
+- INSTRUCTION: "`pack_scenes`' `by_subject` arm orders subjects by first appearance in the ranked list, not `sorted(seen)`."
+- WHERE: `engine/season/decision/choose.py` (`pack_scenes`, the `by_subject` arm); `engine/season/tests/test_choose_watch.py`.
+- TESTS: "`engine/season/tests/test_choose_watch.py::test_by_subject_packing_ignores_id_names`" (new; red before the edit).
+- FALSIFIER and CONTROL: "at `scene_packing_rule: by_subject`, renaming a subject id does not change which scene runs first" fails. Control: at the shipped `greedy` the realm hash at seed 0, two seasons, equal to B09.13's.
+- GATE: `python -m pytest engine/season/tests/test_choose_watch.py -q` → pass; the control → equal.
+- HASH MOVERS: none ("moves nothing at the shipped `greedy`").
+- DEPENDS ON: V12 B09.13 (the test file); EXISTS-IN-TREE `pack_scenes`, the `scene_packing_rule` fixture.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, medium.
+- LANDS IT: B09's producer; `Item: B09.14`, `[skip ci]`.
+
+### B09.15 — superseded sentences corrected at their owners · 02_CHAR_reason_trail_and_small_edits Part C · BUILD · HASH EQUAL
+- SOURCE: the same file, Part C (each "a superseded sentence; ladder step 1"); the `decision/sheet.py` docstring row is `U5a_CORE_owed_edits.md` §B row 10, "carried here".
+- ADVANCES: none of the nine ("None of Part C changes behaviour").
+- INSTRUCTION (the rows, copied; R-06's and R-08's `measured:` heads not carried, UNDECIDED (7)):
+
+  | file | now reads | should read |
+  |---|---|---|
+  | `decision/options.py::project` docstring; `decision/choose.py` comment in `make_ranker` | *"thirteen conviction weights, in the four-axis basis"*; *"weights over the THIRTEEN ... four-axis basis"* | fifteen pursuits over seven bipolar axes (`ED-IN-0261`, the 2026-10-06 row) |
+  | `decision/sheet.py` module docstring | the design is *"PROPOSED and HELD BACK (ED-1094)"* | RATIFIED (Jordan, 2026-11-05, ED-IN-0349), as `proposals/2026-10-07-character-sheet-spaces.md`'s Status line reads |
+  | `data/cast.py` module docstring | *"31 a `territory`, 30 `goals`, 29 `stats`, 32 `ts`"* (keys present) | the non-null counts at this tree, or no counts (the source's figures re-read at the item's tree; "no counts" if they differ) |
+  | `engine/season/requirements.yaml` R-08 `disposition:` | cites `engine/season/decision.py::make_chooser` | `engine/season/decision/choose.py` (`make_ranker`, `score_order`) |
+  | `hole_register.yaml` H-189 `default:` | *"whether a crisis fires within a season is not measured here"* | measured 2026-11-12, `build_realm`, two seasons: `Person.conviction` rewritten for 0 of 46 cast at seed 0 and 6 of 46 at seed 1 (re-read at this tree and the reading written with its SHA) |
+  | `hole_register.yaml` H-237 | *"over 2 seasons at seed 0 there are 0 told claims with a chain"* | re-read: 12 chained claims of 22,958 at seed 0, 5 of 21,469 at seed 1, none at two hops; `teller_weight` is reached, rarely (re-read at this tree, with its SHA) |
+  | `CURRENT.md` character-model row | head `proposals/2026-09-20-pursuit-basis-worksheet.yaml` | the owners the worksheet's own header names (`references/descriptor_registry.yaml: pursuit_roster`, `axis_roster`; `engine/season/rosters.yaml: tables.pursuit_projection`, `tables.alignment`); then the worksheet is deleted with an exact-file `FORK:` row, as its header says it is once its values land |
+
+  STOPS IF: B02 removed R-08's `disposition:` key; then that row is dropped and the commit body says so. The `FORK:` row: `| \`proposals/2026-09-20-pursuit-basis-worksheet.yaml\` | \`FORK:<sha>\` | FORKED (<date>, workplan v12 B09.15: its values landed at the owners its header names, \`02_CHAR_reason_trail_and_small_edits.md\` Part C; \`<sha>\` is the last commit carrying the file) |`, read back through `pathres.load_alias_map()`.
+- WHERE: `engine/season/decision/options.py` (`project` docstring); `engine/season/decision/choose.py` (`make_ranker` comment); `engine/season/decision/sheet.py` (module docstring); `engine/season/data/cast.py` (module docstring); `engine/season/requirements.yaml` (R-08 `disposition:`); `engine/season/hole_register.yaml` (H-189, H-237); `CURRENT.md` (the character-model row); DELETE `proposals/2026-09-20-pursuit-basis-worksheet.yaml`; `references/restructure_ledger.md` (one `FORK:` row).
+- TESTS: none new.
+- FALSIFIER and CONTROL: a corrected sentence that still says the opposite of the code. Control: the realm hash at seed 0, two seasons, equal to B09.14's.
+- GATE: `python -m engine.season.harness.register --check` and `--requirements` → exit 0; `python tools/currency_consistency_check.py` → exit 0; `python tools/freshness_gate.py` → its reading quoted; `git grep -n "pursuit-basis-worksheet" -- CURRENT.md` → nothing.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE the seven sites (opened at `aa31fd2`: `options.py` `project` docstring, `choose.py` comment, `sheet.py` header, R-08 `disposition:` citing `decision.py::make_chooser`, `CURRENT.md:21`); V12 Batch B02 (the requirements file's shape).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, medium.
+- LANDS IT: B09's producer; `Item: B09.15`, `[skip ci]`.
+
+### B09.16 — the Scene is kept beside its acts · 01_CORE_reason_trail_in_the_act_store · BUILD · HASH EQUAL
+- SOURCE: `proposals/01_CORE_reason_trail_in_the_act_store.md` "Edits" 1, 2, 4, 5 (3 is B09.13's hook), "Gate", "Falsifier"; `04` §A.2, §C.1, PART D rows 41, 41a; C3-C16, C3-N27; closes F-CORE-12.
+- ADVANCES: re-read R-01.b, .c unchanged; a past act's question survives the driver.
+- INSTRUCTION (copied):
+  1. "`engine/season/state/acts.py` — the Scene store:
+     ```python
+     class ActStore:
+         def add_scene(self, sc: Scene) -> None      # append-only; refuses a repeated id, as `add` does for an Act
+         def scene_of(self, act_id: str) -> Optional[Scene]
+         def scenes(self) -> tuple                    # in release order
+     ```"
+  2. "`loop/deliberate.py` keeps returning its `Scene` map … and stores nothing (its line `self.scenes[sc.id] = sc` is deleted with `SeasonDriver.scenes`). `loop/resolve.py::resolve`, which holds the ACTS token and the act store, calls `w.acts.add_scene(sc)` for each Scene of its `scenes` argument immediately before it appends that Scene's acts (`w.acts.append`). `_occasion_of` reads `w.acts.scene_of(a.id)`; `epistemic._term_why` (the one other reader of `Scene.occasion`) reads the same accessor."
+  3. "`engine/season/state/world.py::content_hash` — not folded. The Scene store is left out of the digest `[ASSUMPTION; medium; Jordan to correct; revert: fold it]`."
+  4. "`engine/season/harness/chronicle.py` — the reader: `--chains` prints, per act, `for: <occasion.source> <occasion.about>` (and the deciding term where the CHAR proposal's watcher supplied one)."
+  The standing-occasion case "needs no new field … `causes[]` stays `[act]`" for an occasion that is no Event (B09.12 adds the opening Event where the log holds one).
+- WHERE: `engine/season/state/acts.py` (`ActStore.add_scene`, `scene_of`, `scenes`); `engine/season/loop/deliberate.py` (the store line); `engine/season/loop/driver.py` (`SeasonDriver.scenes`); `engine/season/loop/resolve.py` (`resolve`, `_occasion_of`); `engine/season/epistemic.py` (`_term_why`'s scene read); `engine/season/harness/chronicle.py` (`--chains`); NEW `engine/season/tests/test_scene_store.py`.
+- TESTS (written first): `test_the_driver_holds_no_scenes`; `test_every_stored_act_answers_scene_of` (headless, seed 0, two seasons; "three" in the source, A-114); `test_a_fresh_driver_answers_a_season_0_acts_question` ("a second `SeasonDriver(w)` prints the same `for:` line"); `test_hash_equal_with_the_scene_store_unfolded` (the content hash at seed 0, two seasons, equal to B09.15's reading, re-read on the batch's tree, C3-N27). The existing `test_g2_token.py::test_g2_deliberate_mutates_no_store_by_any_route` "is the falsifier of the Layer 1 rewrite".
+- FALSIFIER and CONTROL: "Construct a fresh driver … and ask for a season-0 act's question. `None` falsifies the edit. A changed content hash falsifies edit 4's claim."
+- GATE: `python -m pytest engine/season/tests/test_scene_store.py engine/season/tests/test_g2_token.py -q` → pass; `python -m engine.season.harness.chronicle --seed 0 --seasons 2 --chains --min-depth 2` → exit 0 with `for:` lines.
+- HASH MOVERS: none (edit 4: not folded).
+- DEPENDS ON: V12 B09.13 (the hook the chronicle line reads, U3 §1.2 B09 row 7); EXISTS-IN-TREE `state/acts.py::ActStore`, `loop/driver.py::SeasonDriver.scenes`, `loop/resolve.py::_occasion_of`, `epistemic._term_why`, `harness/chronicle.py`.
+- GLOSSARY: none.
+- COST and TIER: edit (four files); `sonnet`, `high`.
+- LANDS IT: B09's producer; `Item: B09.16`, `[skip ci]`.
+
+### B09.17 — a witness may connect what he holds, at control · 16_PESSIMIST_GO_a_witness_may_connect_what_he_holds · BUILD · HASH EQUAL
+- SOURCE: `proposals/16_PESSIMIST_GO_a_witness_may_connect_what_he_holds.md` "The resolution, decided" §1–§3, "The gate", "The falsifier", "Cost class" ("one commit at the control"); D-U1-07; closes F-PES-GO-04 (R8.4, narrowed).
+- ADVANCES: re-read R-07.a unchanged; a relation between memories (no conjunct moves at the control).
+- INSTRUCTION (copied):
+  1. What `why` holds: "For a witness `pid` of Event `e`: walk `e.causes` in order, skipping `ROOT` and act ids. For the first cause that is an Event `c` (`state/attribution.py::event_by_id`) for which `pid`'s ledger holds a claim WITNESS deposited from `c`, `why` is that claim's id. Otherwise `None`. **The claim is found by look-up**: the `claim.deposited` Event whose `causes[0]` is `c.id` and whose receipt names `pid`'s ledger …. The id formula WITNESS mints … is only a fallback, used if the look-up is measured too slow at build, and then only after verifying that a deposit's tick is the Event's `emitted_at` `[ASSUMPTION; verify at build]`." "His own act is not a draw: where `pid` is the actor (`doer` is stamped), `why` is the occasion he acted on, with certainty" (read through `w.acts.scene_of`, B09.16).
+  2. `rosters.yaml`, `observation_terms.supplied_by`:
+     ```
+     co_located:   [stratum, marks, who, why]
+     witness_key:  [stratum, who, why]
+     document_key: []            # unchanged (R8.5, ruled)
+     post_remit:   [stratum]     # unchanged
+     chronicle:    [stratum]     # unchanged
+     ```
+     "A channel that supplies `why` makes the witness **eligible**. Whether he connects them is one keyed draw, `draw(pid, f"why:{e.id}")`, against a chance": `data/fixtures.py` `connection_chance = 0.0  # CONTROL (shipped at first landing): no draw, hash EQUAL`, with its `[JUSTIFIED: …]` line and HOLE row (B09's H block slot 3; "proposed on-value 0.6, + 0.2 where his claim on the antecedent carries a `who`" in the row, `[ASSUMPTION; medium; Jordan to correct; revert: 0.0]`).
+  3. "`epistemic.py`: the term readers take the witness (`TERM_READERS[t](w, e, act, pid)`; three of the four ignore it); `_term_why` returns the claim id per §1; `seen_of` takes the draw for an eligible witness. The docstring's 'ALWAYS `None`' paragraph is replaced." "`rosters.yaml`: … the `⚠ NO CHANNEL SUPPLIES why` note replaced by what `why` is." "`decision/sheet.py::chronicle`: `Chronicle` gains `threads`, a tuple of `(claim id, why id)` for each `seen` claim of his whose `why` names a claim he still holds." "Nothing in `decision/choose.py` reads it."
+- WHERE: `engine/season/epistemic.py` (`TERM_READERS`, `_term_why`, `seen_of`); `engine/season/rosters.yaml` (`observation_terms.supplied_by`, the note); `engine/season/data/fixtures.py` (`connection_chance`); `engine/season/hole_register.yaml` (one new row); `engine/season/decision/sheet.py` (`Chronicle.threads`, `chronicle`); NEW `engine/season/tests/test_seen_why.py`.
+- TESTS (committed first): `test_control_chance_zero_takes_no_draw_and_hash_equal` (gate 1), `test_every_why_names_a_claim_in_the_holders_ledger` (gate 2, `checked >= 100`), `test_share_with_why_inside_binomial_band` (gate 3), `test_document_channel_never_carries_why`, `test_chronicle_threads_empty_at_control` (gate 5). Gates 2 and 3 run the on-arm inside the test (the chance set in the test's own fixtures; the shipped value stays 0.0).
+- FALSIFIER and CONTROL: "A `why` naming a claim the holder does not hold. A `why` on a document-channel deposit. An on-arm run in which every eligible witness connects (the draw is decoration) or none does. A hash move at the control." Control: "`connection_chance = 0.0`, seeds 0–2, two seasons: every hash equal" to B09.16's reading; "`seen` claims with `why`: 0".
+- GATE: `python -m pytest engine/season/tests/test_seen_why.py -q` → five pass; the control → hashes equal; reading 4 (`chronicle --chains --min-depth 2`, seeds 0–2, two seasons) → 0 at the control, quoted.
+- HASH MOVERS: none at the control; "a declared mover when the chance is raised" (B98).
+- DEPENDS ON: V12 B09.16 (`scene_of`, the actor's occasion); EXISTS-IN-TREE `epistemic._term_why`, `seen_of`, `TERM_READERS`, `state/attribution.py::event_by_id`, `observation_terms`, `decision/sheet.py::Chronicle`.
+- GLOSSARY: none (`why` is a term of `observation_terms`, not a new word).
+- IDS: H block slot 3.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B09's producer; `Item: B09.17`, `[skip ci]`.
+
+### B09.18 — a predicate never raises and names the clause that refused · 01_CORE_predicates_name_their_clause step one · BUILD · HASH EQUAL
+- SOURCE: `proposals/01_CORE_predicates_name_their_clause.md` "Step one" edits 1–3, its "Gate", "Falsifier"; closes F-CORE-14 (step one).
+- ADVANCES: none of the nine; a malformed act is refused, not fatal.
+- INSTRUCTION (copied):
+  1. "`engine/season/state/carriers.py::subject_of` … Old: `return d.get("subject") or ""`. New:
+     ```python
+     s = d.get("subject")
+     return s if isinstance(s, str) else ""
+     ```
+     A sibling `operand_of(a, name) -> str` with the same rule serves `office`, `to`." `[UNVERIFIED in the source: that no computed act carries a non-string subject today … if either [gate hash] moves the edit is confined to the four predicates and `subject_of` is left alone.]`
+  2. "`_req_dispatch`, `_req_convene` and `_req_revoke` read `payload` directly; `_req_oblige` passes a possibly unhashable `seat` to `dict.get`. Each reads `subject_of(a)` / `operand_of(a, "office")`. `_req_convene`'s carve-out (no subject admits) is kept by testing the raw key's absence before the read. The three inline guards (*'a list … is unhashable: refuse, never raise'*) become the same call, so the rule lives once."
+  3. "The twenty-one bare `return False` in `confer`, `establish`, `oblige`, `succeed` become `return _refuse("<clause>", "<ids>")`":
+
+     | predicate | clauses (in branch order) |
+     |---|---|
+     | `establish` | `office resolves`, `rung held`, `conferral basis`, `filler`, `re-founding`, `may fill`, `reduction needs revocation` |
+     | `confer` | `office`, `basis`, `conferee`, `purview`, `held`, `displacement` (the decorator below) |
+     | `oblige` | `seat`, `binds`, `own_seat`, `one_edge`, `banned` `[ASSUMPTION: names from the branch comments of `_req_oblige`]` |
+     | `succeed` | `operand`, `banned` `[ASSUMPTION: from the branch comments of `_req_succeed`]` |
+
+     The count is re-read at the item's open (`ast` walk, the test below) and a branch the table does not name takes its comment's phrase, named in the commit body.
+- WHERE: `engine/season/state/carriers.py` (`subject_of`, NEW `operand_of`); `engine/season/loop/predicates.py` (`_req_dispatch`, `_req_convene`, `_req_revoke`, `_req_oblige`, `_req_confer`, `_req_establish`, `_req_succeed`, the three inline guards); NEW `engine/season/tests/test_predicates_clause.py`.
+- TESTS (the scratch `probe_predicates.py` restated, written first, read red): `test_every_refusing_branch_names_a_clause` ("an `ast` walk of the nine registered predicates: zero bare `return False`, with a population floor of nine and a planted bare branch caught"); `test_a_list_operand_is_refused_not_raised` ("each predicate on `{"subject": ["a", "b"]}` refuses, none raises").
+- FALSIFIER and CONTROL: "Any predicate still raising on `{"subject": ["a", "b"]}`; a changed headless hash." Control: `python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0` → hash equal to B09.17's reading (the source's literal is pre-B01; re-read on the batch's base, C3-N27).
+- GATE: `python -m pytest engine/season/tests/test_predicates_clause.py -q` → pass; the headless control → equal; the realm hash at seed 0, two seasons → equal to B09.17's.
+- HASH MOVERS: none ("a trace row is not world state").
+- DEPENDS ON: EXISTS-IN-TREE `state/carriers.py::subject_of`, `loop/predicates.py::_refuse` and the nine registered predicates; V12 Batch B02.
+- GLOSSARY: none (prose says "sworn man"; the tree key `obligees` keeps its name, D-06).
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B09's producer; `Item: B09.18`, `[skip ci]`.
+
+### B09.19 — the refused clause can reach the Event's kind (the channel) · 01_CORE_predicates_name_their_clause step two, edit 4's mechanism · BUILD · HASH EQUAL
+- SOURCE: the same file, "Step two" edit 4 and its "Gate", "Falsifier"; the four authored rows go to B21 (UNDECIDED (4)).
+- ADVANCES: none of the nine; "predicate rows and typed rows report a failed clause the same way".
+- INSTRUCTION (copied): "A predicate may return `(ok, clause)` where `clause` is one of the names it declares:
+  ```python
+  @requires_predicate("confer", clauses=("office", "basis", "conferee", "purview", "held", "displacement"))
+  def _req_confer(w, a) -> tuple[bool, Optional[str]]: ...
+  ```
+  `_admits` builds `Verdict(UNKNOWN, (), failed=clause)` for a predicate row (it builds `Verdict(UNKNOWN, ())` today) and already calls `row.refusal_for(verdict.failed)`. No `observed` reads are attached, so WITNESS deposits nothing new from the read itself; what changes is the refusal *kind*. The loader's rule *'a keyed row must be typed'* gains its second arm: a keyed predicate row is admitted when its keys equal the clause names passed in by the driver (`precondition_evaluable(predicates)` already receives the predicate table as a parameter for the same import-direction reason). A flat predicate row is unchanged." The four predicates of B09.18's table declare their `clauses=`; no `verb_table.yaml` row is keyed here.
+- WHERE: `engine/season/loop/predicates.py` (`requires_predicate`'s `clauses=`, the four predicates' returns); `engine/season/loop/resolve.py` (`_admits`); `engine/season/data/verbs.py` (`precondition_evaluable`, the keyed-row rule); `engine/season/tests/test_predicates_clause.py`.
+- TESTS: `test_predicates_clause.py::test_a_keyed_predicate_row_emits_its_clauses_kind` on a planted keyed `confer` row in the test's own table ("a `confer` … refused at the purview clause emits the purview kind and not the cardinality kind, and the actor's ledger holds a claim keyed by it"); `test_a_keyed_predicate_row_with_unknown_keys_is_refused` `[ASSUMPTION: test name; the item creates it — the loader arm's refusal]`.
+- FALSIFIER and CONTROL: "Two refusals for different clauses emitting one kind on a keyed row." Control: with every shipped predicate row flat, the realm hash at seed 0, two seasons, equal to B09.18's.
+- GATE: `python -m pytest engine/season/tests/test_predicates_clause.py -q` → pass; the control → equal.
+- HASH MOVERS: none here ("step two each keyed row (declared)": in B21).
+- DEPENDS ON: V12 B09.18; EXISTS-IN-TREE `loop/resolve.py::_admits`, `row.refusal_for`, `data/verbs.py::precondition_evaluable`.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B09's producer; `Item: B09.19`, `[skip ci]`.
+
+### B09.20 — the sworn-to half of grievance at read · IN-58 · BLOCKED (v12: a carrier is owed) · —
+- SOURCE: the intake `:143` (IN-58, STILL-NEEDED; lane's target "HELD list"); its carry-forward `master/eval/E1.md` "IN-58" (v11 `_part4.md:680-693`), `E2.md` "BLOCK IN-58", `E3.md` Block 14. Placed at the batch's tail in the intake's order (no member names IN-58; `V12_STRUCTURE_part2.md` §5.6).
+- WHAT (copied): "Build the sworn-to half of grievance-at-read: a judge sworn to the victim's seat reads a different regard for the killer than an unsworn judge with equal stance and pursuits."
+- What is missing (REMAINING UNBUILT and NARROWED, copied): "A judge's own live, un-`imposed` `oblige` to a seat is in `Person.tenures` and outlives the victim, so the edge is person-side; the v9 blocker is gone. What is missing is the pairing: a death's seat reaches a ledger as `(seat, tenure.closed, True)` … beside `(victim, person.died, True)`, … and `Claim` carries one `subject` and no pairing field, so the two share only `when` and `round` [`lap` after B04]. … Reopens when a claim names the dead holder with the seat (a CP-T02-01 follow-up, a Layer 2 shape change)."
+- Owner of the missing part: none in v12 (`V12_STRUCTURE_part2.md` §5.7, DEP-NOCARRIER: "a symbol with no carrier makes the dependent part `BLOCKED (v12: a carrier is owed)`"). No B09 member names the dead holder with the seat: B09.12 puts the opening Event in `causes[]`, resolver-side, not in a judge's claim.
+- EXIT and FALSIFIER (for the item the carrier unblocks): "two judges with equal stance and pursuits, one sworn to the victim's seat, read different regard for the killer -> else that half is not built." HASH: "a declared mover wherever it executes [INFERRED]".
+- LANDED ALREADY (DEPENDS ON marks, re-checked when unblocked): the stance-only half (`3bf936ee`); CR-16's `stance_polarity: declared` (`142e91e22`); IN-40's `oblige` edge.
+
+### B09.21 — a zero-wear clock write is not written · H-135 · BUILD · HASH MOVER(behaviour)
+- SOURCE: the intake `:144` (H-135; `settled:` "register row governs (E6:148 STILL-NEEDED)"); its carry-forward `master/eval/E6.md` row H-135 and Block 5 ("`H-135`: judge closure writes for F9 or skip the write when `wear` is 0 (the shipped dwelling kind); 248 of 322 `condition.worn` Events a season are zero writes"; "`H-135` joins `B09-memory` because it is the one declared mover (event counts)"); `engine/season/hole_register.yaml` H-135 (owner: "state/world.py -- `write()`'s closure branch; loop/matter.py's clock writers specifically"). Placed at the batch's tail in the intake's order (§5.6).
+- ADVANCES: none of the nine; no Event reports a change that did not happen.
+- INSTRUCTION: the narrower of the two fix shapes (UNDECIDED (6)): in `engine/season/loop/matter.py`'s clock writer that emits `condition.worn`, a Site whose wear this season is 0 is not written and emits nothing; the closure branch of `World.write` is unchanged. H-135's row is narrowed in the same commit: the live instance closed, the closure branch's F9 judgment left as the row's remainder (its `hole:` text kept; one closing line naming this item).
+- WHERE: `engine/season/loop/matter.py` (the `condition.worn` clock writer); `engine/season/hole_register.yaml` (H-135); `engine/season/tests/test_gate_observation.py` (NEW if B03 has not created it, else edited: B03's H-137, H-130, H-139 name the same file, `[ASSUMPTION: name]` in E6).
+- TESTS (E6's gate, written first, read red): `engine/season/tests/test_gate_observation.py::test_a_zero_wear_write_emits_no_condition_worn` `[ASSUMPTION: test name; the item creates it]` ("a zero-wear write emits no `condition.worn` … and the control keeps the old count").
+- FALSIFIER and CONTROL: a `condition.worn` Event whose Site's condition did not move. Control: a Site with non-zero wear still writes and emits `condition.worn` (the count of non-zero writes at seed 0, two seasons, equal to B09.19's reading).
+- GATE: `python -m pytest engine/season/tests/test_gate_observation.py -q` → pass; at seed 0, two seasons: `condition.worn` Events with zero wear → 0; with non-zero wear → equal to the before-reading (`reading @<sha>`).
+- HASH MOVERS: "event counts and the log hash" (E6). Declared; B09.99.
+- DEPENDS ON: V12 B09.01 (MATTER's ledger walk gone; `loop/matter.py` edited once per batch in order); EXISTS-IN-TREE `loop/matter.py` (the clock writers), H-135.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`; "`opus` read of the F9 design for `H-135`" (E6) — `opus` reads the narrowing at the close.
+- LANDS IT: B09's producer; `Item: B09.21`, `[skip ci]`.
+
+### B09.99 — re-pin and close readings · V12_STRUCTURE_part4.md E-1 · BUILD · HASH MOVER (the re-pin)
+- SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12; the record proposal's "Cost class" (the re-record across `engine/season/tests` and `engine/tests`).
+- ADVANCES: the five re-read conjuncts' readings on one tree.
+- INSTRUCTION:
+  1. Re-record, once, every pin the batch moved: `engine/season/tests/_realm_goldens.py` (every world); `engine/season/tests/test_go07_canonical_digest.py` where it moved; every content hash pinned under `engine/tests`; baseline the S9 merged head (`reading @<sha>`). The commit says the re-pin sentence of the RE-PIN line.
+  2. Read R-01.b, R-01.c, R-02.a, R-02.b, R-07.a by their `argv` (`register --requirements` and each conjunct's command) and write their `reading:` records (`tree`, `date`, `seed`, `seasons`, `line`, `control`, `does_not_show`); `status:` not edited.
+  3. Take the batch gate's seeded readings (seeds 0 to 2, E-2) and the close record.
+- WHERE: `engine/season/tests/_realm_goldens.py`; `engine/season/tests/test_go07_canonical_digest.py` (if moved); the `engine/tests` pin files that moved; `engine/season/requirements.yaml` (five `reading:` records).
+- TESTS: every test of the BATCH GATE green after the re-pin.
+- FALSIFIER and CONTROL: a pin moved that no item declared. Control: the control arms of the BATCH GATE.
+- GATE: the BATCH GATE.
+- HASH MOVERS: the re-pin itself.
+- DEPENDS ON: V12 B09.01 to B09.21.
+- GLOSSARY: none.
+- COST and TIER: reading and re-pin; `sonnet`, `high`.
+- LANDS IT: B09's producer; `Item: B09.99`, the batch's last `Item:` commit (no `[skip ci]`).
+
+| STOP. Batch B09-memory closes here |
