@@ -92,7 +92,9 @@ EST: 15 h [estimate: `V12_STRUCTURE.md` §2.4's formula over this batch's 31 pos
 | B28.28 | arguing a proposition one does not hold stays allowed | H-286 (the intake `:441`; E8 CF-E8-3) | BUILD | EQUAL | B28.10 |
 | B28.29 | scene access measured; engagement and precedence switched on if the rows pass | 28A commit 8 | BUILD | MOVER(behaviour), if the flip fires | B28.16 to B28.22, B28.25 |
 | B28.30 | appointments measured; switched on if asks reach hosts | 28B commit 6 | BUILD | MOVER(behaviour), if the flip fires | B28.29, B28.23 to B28.27 |
-| B28.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | MOVER (the re-pin) | B28.01 to B28.30 |
+| B28.31 | does `covenant` (and `determine`) now execute in computed play | G-14 (the intake `:372`, joined from B27 by E-8) | READING | — | B28.30; Batch B27 |
+| B28.32 | a party to a covenant forms no attack on what it names until he releases his word | TL-B4.2 (the intake `:374`, joined from B27 by E-8) | BUILD | MOVER(behaviour) | B28.31, B28.09 |
+| B28.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | MOVER (the re-pin) | B28.01 to B28.32 |
 
 Not in this batch, and where each is: 28C (`28_CORE_scene_access_C_the_petition_that_waits.md`: `waiting`, `rebuffs`, `kept_waiting`, `petition_state`) is B38; S1-D's folded edges (1) and (2) (the `waiting` leverage source on `carry`, and `carry.refused` counted as a rebuff) are 28C's edits in B38 and are not written here; the `accept` effect's forgiveness mark after a fought duel is PHYSICAL's (S1-D §3, last bullet: "owner: PHYSICAL; named here"); PAP-D's `ban.opened`, `detention.opened` (B33); `16_PESSIMIST_CORE_a_refusal_is_remembered.md` reads `visitor.kept_waiting` with no edit (28A "Dependencies").
 
