@@ -31,7 +31,8 @@ only in a world where a host commits to an ask.
 - The engine already has every part of a promise between two people: `utter` mints an immutable
   Proposition and the utterer's hold (`loop/effects_information.py:1215-1244`); `commit` opens a Tenure
   owned by its subject on a Proposition (`:1253-…`; `verb_table.yaml` `commit`, `own`-eligible), and it
-  executes in computed play (65 executed in two seasons at seed 0, `p34_s0_k2.txt`, PES_CORE);
+  executes in computed play (65 `commit` acts among the 446 that wrote, two seasons at seed 0,
+  PES_CORE's `p34_s0_k2.txt`);
   `Tenure.term` is a declared end MATTER matures for a live edge of any kind (`state/carriers.py:42-68`;
   `loop/matter.py:428-434`, `causes = [term.declared_by]`); `release` closes a `commit` and emits
   `commitment.ended` (`verb_table.yaml` `release`, `emits_note`: *"the vow-break is witnessed HERE"*).
@@ -198,7 +199,8 @@ class that cannot occur at any seed in the planted worlds.
 
 ## Layer 1 rows
 
-T-m and T-n (`04` §B.8): conform. PART D row 10a (a write by a non-owner): conform, by the choice in §2.
+T-m and T-n (the owner's own act; a declared term MATTER matures: `04` §B.8's `term?`, as
+`state/carriers.py:42-68` records it): conform. PART D row 10a (a write by a non-owner): conform, by the choice in §2.
 Row 17 and row 21 (no fourth clock; no rung with a clock) and `holonic` §29 (no clock at CENSUS): conform:
 the only time read is an act-declared term at MATTER. Row 30b (a Proposition is immutable; a Tenure is
 never deleted): relied on. Row 44 (a belief is a `commit` to an `OUGHT`): an appointment is one.

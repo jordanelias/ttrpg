@@ -119,7 +119,7 @@ only on a person whose budget is below the round count (a wounded or travelling 
   `RUNG_KINDS.index(rung.kind)` over the rungs of the seats `pid` holds live, 0 for the seatless. It is
   the existing `rank` stem's ordinal (`world_q.py:4634-4643`) asked of a seat's rung, and it reads
   every seat held because a visit is an `own` act and carries no `Act.via` (the same reading, and the
-  same `[ASSUMPTION]`, as `admits_audience` limb 2, `world_q.py:1652-1658`). `rank_gap`
+  same `[ASSUMPTION]`, as limb 2 of `world_q.py::admits_audience`). `rank_gap`
   (`U5c_SC_one_obstacle_form.md` §2 member 6) calls it for an act with no `via`.
 - **The host is one of the claimants.** His own scene is in the group with his own office rank. A duke's
   business usually outranks a petitioner's call and usually yields to the king's; neither is certain.
@@ -189,7 +189,7 @@ Realm, `build_realm`, seeds 0 to 4, four seasons, `PYTHONHASHSEED=0`, on the tre
 | 7 | planted: host of rank 4, visitors of rank 7 and rank 0, both present, 400 seeds | the rank-7 visitor is first more often; neither share is 0 or 1; the host keeps his own scene against the rank-0 visitor more often than not and loses it to the rank-7 visitor more often than not, neither with certainty |
 | 8 | planted: the same visit with `precedence_level` on and off | the visit's own roll has identical pool, obstacle terms and levels in both arms; sweeping the host's stance toward the visitor from minimum to maximum leaves every precedence net unchanged |
 | 9 | `seat` against `seat_and_debit` | reported: the persons for whom they differ are those with budget below the round count |
-| 10 | DELIBERATE's permutation falsifier (`tests/test_rem31_grid_suspension.py`) and the `ordp.py` strata-cut arm | the first unchanged; the second reported |
+| 10 | DELIBERATE's permutation falsifier (`engine/season/tests/test_rem31_grid_suspension.py`, named at `loop/deliberate.py:126-130`) and the `ordp.py` strata-cut arm | the first unchanged; the second reported |
 
 **Declared hash movers:** `occupancy` other than `off`; `precedence_level` or `appointment_level` other
 than `None` in a world with a rivalry group. No other fixture moves.

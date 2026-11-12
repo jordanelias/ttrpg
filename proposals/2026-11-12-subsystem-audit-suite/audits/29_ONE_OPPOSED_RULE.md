@@ -24,10 +24,11 @@ sides hold are never part of the opposition.** Measured on the repository's own 
   three in four, four ranks nine in ten: the fight reads 65.7 / 78.0 / 92.3% (felled shares, 1,000 fights a
   cell); the argument reads 66 / 78 / 92% of decided exchanges (closed form). Equals are 50.8% and exactly
   50%.
-- **Defence is real and is not a wall.** Each rank of the defender's training takes about four to five
-  points off an attacker's chance to wound and about seven off his chance of a telling (Overwhelming) roll;
-  each step of aptitude is one level (0.25σ) against the roller, bounded by the soft cap at 1.5σ. Two
-  masters do not stall: the rank-7 mirror runs 4.6 turns with 0.3% undecided (§4).
+- **Defence is real and is not a wall.** Each rank of the defender's training takes about six points off
+  an attacker's chance to wound, eight to nine off his chance of a telling (Overwhelming) roll and a sixth
+  off his damage; each step of aptitude is one level (0.25σ) against the roller, bounded by the soft cap at
+  1.5σ. Two masters do not stall: the rank-7 mirror runs 4.30 turns with 0.4% undecided, the rank-2 mirror
+  4.28 with 0.1%, where the half-score takes the same pair from 4.64 to 5.30 turns and 0.5 to 1.9% (§4).
 
 **What the measurement refuses is the form the suite had written down.** `U1` §4 and
 `U5a_capability_home_and_two_inputs.md` row B5 put 0.4 on the defender's *pool* (score plus the base). In an
@@ -89,8 +90,9 @@ is and what has been done to him tilt my dice, never the bar; what the act asks 
 argument's obstacle stands on it (so an untrained person meets a plain matter against an untrained person
 half the time, and A-26's *an even contest is even* holds at every rank: P5.1, row 3, 50.0% at ranks 0, 2,
 4, 7). A blow's obstacle does not, because the fight is the one contest with a defence layer: the defender's
-mode turns 55 to 62% of Successes and 10 to 17% of Overwhelmings (`config.py:136`), and with the obstacle on
-training alone an attack on an equal wounds 51.6% of the time. The two contests are therefore even in the
+mode turns 50 to 62% of Successes and 5 to 17% of Overwhelmings (`config.py:136`: `NEUTRALIZE_PARRY` 0.55,
+`_DODGE` 0.62, `_WIND` 0.50, less `NEUTRALIZE_OVERWHELM_DROP` 0.45 on the top band), and with the obstacle on
+training alone an attack on an equal wounds 52% of the time. The two contests are therefore even in the
 same sense (one chance in two of an effect on an equal) by the route each already has. The even line is one
 derived value read from two owners (`MU_PER_DIE`, `pool_add`), never typed.
 
@@ -107,7 +109,7 @@ Each target is a measurable reading with a stated instrument; the proposal's gat
 |---|---|---|
 | **(a) longer fights** | season-default mirror, death terms: mean turns in 4.0 to 5.0; mean wounding blows ≥ 4.3; a lead change in ≥ 40% of decided fights; bloodless turns ≤ 45% | A-31's own reading (`audits/16_PESSIMIST_PC.md` §6.3: 4.60 turns, 4.58 blows, 43.9%); shipped 3.35 / 3.20 / 35.2% / 40.9%. The bloodless bound says the length is bought with blows, not misses |
 | **(b) the better one wins; equals are even** | of decided contests, one rank better wins 60 to 70%, two ranks 72 to 82%, four ranks 88 to 95%; equals 50% ± the sampling band; **the same window for the fight and the argument**; equals read the same at every rank (range ≤ 6 points over ranks 0 to 7) | the shipped fight's curve at the season default (64.9 / 77.0 / 93.4%, P2), which is the only better-man curve the tree has ever calibrated; A-26's premise for the flatness |
-| **(c) defence from prowess and aptitude is real, and no big attrition** | per rank of the defender's training: ≥ 3 points off the attacker's wounding share and ≥ 5 off his Overwhelming share. Per step of aptitude: one named level against the roller. Bounds: undecided ≤ 2% in every mirror to rank 7; the rank-7 mirror within one turn of the rank-2 mirror; an exchange between equals fails ≤ 25% at every rank to 12; no cell at 0 or 1 | U5b §4's gate (undecided under 2%); the standing rule (both tails open); the pessimist's drift figures |
+| **(c) defence from prowess and aptitude is real, and no big attrition** | per rank of the defender's training: ≥ 4 points off the attacker's wounding share and ≥ 5 off his Overwhelming share. Per step of aptitude: one named level against the roller. Bounds: undecided ≤ 2% in every mirror to rank 7 (the rank ceiling); the longest mirror within half a turn of the shortest; an exchange between equals fails ≤ 25% at every rank to 7; no cell at 0 or 1 | U5b §4's gate (undecided under 2%); the standing rule (both tails open); the pessimist's drift figures |
 
 For the argument, "rounds to decision" has no built carrier (the sitting of exchanges is
 `05_SC_playable_hearing_B.md`, proposed), so its bound is stated on the one act that exists and as arithmetic
