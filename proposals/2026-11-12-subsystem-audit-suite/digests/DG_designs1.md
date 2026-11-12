@@ -845,3 +845,95 @@ Lane: archived design documents under `.designs/` (README, `_architecture`, arti
 - **Conflicts / stale:** all emission/Key apparatus retired; "Knowledge" kept outside Keys; unspecified drift magnitudes; the engine-facing equivalent of Procedures B-E in `engine/season/` (NPC decision layer) should be compared in the CHAR audit [UNVERIFIED].
 - **Open items:** drift magnitude/curve for scene outcomes (ED-936); Articulation Tier 2 calibration of the new Class B types.
 
+### .designs/systems/factions/reference/treaty_expiration_v30.md
+- **What it is:** Treaty Expiration mechanic (Pass 2h canonization, 2026-05-17): per-Treaty independent arc-boundary lapse roll at 90-95%, Senator Outward re-binding, treaty violation.
+- **Status:** "CANONICAL — Pass 2h authoring 2026-05-17" with PROVISIONAL violation and active-maintenance alternative. Reading: live design intent behind `treaty.py` (whose expiration functions have zero production callers).
+- **Bears on:** FA, WR.
+- **Content that matters:**
+  - Arc boundary (every 4 seasons) each active Crown Treaty rolls uniform [0,1) against `TREATY_LAPSE_RATE` in [0.90, 0.95] (default 0.90); lapse generates no CB, no Standing delta; independent per Treaty and memoryless (:31-60).
+  - Re-binding via Senator Outward (Crown, 1/season, Wealth -2, Pool Influence + Standing modifier, Ob = target Stability): OW treaty + target Standing +1; Success treaty; Partial CB-blocking 1 arc; Failure Standing -1 (:66-80). 3 Treaties = 3 season-actions per arc of maintenance (:82).
+  - Violation (attack, support external CB, Parliamentary Transfer) voids treaty, wronged party gains CB, violator Standing -2, wronged +1 (:90-103).
+  - "Primary Crown-nerf lever": without it Crown wins 55-90%; with it 24.7%; lapse values 0.90/0.92/0.95 statistically equivalent (:13, :117-152).
+  - Narrative extreme noted; active-maintenance alternative (v12c §8.3) deferred (:130-134).
+- **Conflicts / stale:** "sim/provincial/treaty.py is a Pass 2l armature stub" (:160) vs a later implemented `process_treaty_expirations` that no production code calls (factions flow skeleton :186); the lapse is a pure balance lever — a mechanism with a purpose (nerf Crown) rather than a simulated cause.
+- **Open items:** TREATY-VIOLATION-001, TREATY-NARRATIVE-001, TREATY-MEMORYLESS-001 (:191-193).
+
+### .designs/systems/factions/reference/varfell_path_b_v30.md
+- **What it is:** ED-311 proposal (2026-04-06) to reduce Varfell's "Path B Southernmost Dominion" victory from 7 conditions to 3-5, with a Warden Recognition (WR) track.
+- **Status:** "[SUPERSEDED-BY: GD-1]" banner: peninsula-only victory strikes the path absolutely; VTM struck 2026-04-19. Reading: dead (victory path removed); historical only.
+- **Bears on:** FA, WR.
+- **Content that matters:**
+  - Original 7 conditions: TCV >= 8, control T4, garrison/Tribune in T15, VTM >= 3 (struck PP-663), WC >= 1, WA >= +1, T4 CV <= 1 (:34-45).
+  - Option A: TCV >= 8, control T4 AND T13, WR >= 3 (WR track 0-4; WR 4 = Edeyja substantive contact) (:51-66); Option B keeps WA/WC; Option C minimal 3 conditions WR >= 2 (:75-96).
+  - Records the decision that Vaynard is "a military conqueror (Reinhardt von Lohengramm parallel)"; Thread/RM is political constituency not a force multiplier; VTM and Cultural Reformation struck (:20-26).
+- **Conflicts / stale:** victory path struck; VTM referenced elsewhere (canonical_registry, conviction_track) is struck.
+- **Open items:** none live.
+
+### .designs/systems/factions/reference/varfell_path_b_v30_infill.md
+- **What it is:** prose infill for the Path B redesign proposal.
+- **Status:** "ED-311 | Status: AWAITING USER REVIEW". Reading: dead (path struck by GD-1).
+- **Bears on:** FA.
+- **Content that matters:**
+  - WR advances with successful Expedition seasons; decreases on RM emergence (WR -2) and on neglecting T15 for 3+ seasons (WR -1); blocked permanently if WR falls to 0 after passing 1 (:19-21).
+  - T4 CV <= 1 dropped as perverse micro-management ("narrative truth should not require mechanical maintenance") (:22).
+  - Win probability unchanged by simplification (:29).
+- **Conflicts / stale:** as above.
+- **Open items:** none.
+
+### .designs/systems/fieldwork/reference/fieldwork_bg_v30.md
+- **What it is:** fieldwork spec §8 Board Game Mode (v1.1, PP-630): Survey action and mapping of fieldwork activities onto existing BG actions. Skeleton; prose in `_infill`.
+- **Status:** "DESIGN — canonical subsystem file". Reading: historical (BG mode formally discarded per videogame mode spec).
+- **Bears on:** FI, FA, SE.
+- **Content that matters:**
+  - Survey = Consul Inward variant, Pool Influence, `Ob = (5 - Proximity Rating) + 1`, min 1 (Askeheim Ob 6, Lowenskyst Ob 1); Success reveals one undiscovered POI giving a territory bonus per category (Resource Prosperity +1; Secret +1D next military/intel action; Remnant Thread Ob -1 for 2 seasons + Thread Debt token; Anomaly MS -1 + Warden Cooperation eligible when Warden Recognition >= 2) (:21-34).
+  - Failure +1 Church Attention Pool when targeting Depth >= 3 (:36).
+  - Existing-action mapping: Tribune Investigate Ob 2, Tribune Spy Ob `floor(target Intel/2)+1`, Senator Diplomacy Ob `floor(target Stability/2)+1` (:42-47).
+- **Conflicts / stale:** "Intel" stat struck; BG mode abstraction.
+- **Open items:** none.
+
+### .designs/systems/fieldwork/reference/fieldwork_bg_v30_infill.md
+- **What it is:** infill prose for §8 BG mode.
+- **Status:** same as skeleton ("DESIGN — canonical subsystem file"). Reading: historical.
+- **Bears on:** FI.
+- **Content that matters:**
+  - Survey Overwhelming reveals POI plus +1 Influence (:20); no new card types so BG action economy preserved (:22).
+- **Conflicts / stale:** none beyond skeleton.
+- **Open items:** none.
+
+### .designs/systems/fieldwork/reference/fieldwork_editorial.md
+- **What it is:** fieldwork spec §12 open items and editorial flags (PP-628/630/632 applied 2026-04-13).
+- **Status:** "DESIGN — canonical subsystem file". Reading: historical record; the Disposition/Knot redesign described has itself been superseded by ED-912.
+- **Bears on:** FI, CHAR, WR.
+- **Content that matters:**
+  - Open editorials ED-507 (POI catalog per territory, 2-6 POIs across depth levels), ED-508 (named NPC starting Dispositions), ED-509 (Godot POI node architecture) (:20-22).
+  - PP-632 redesign: Disposition range -3..+5 -> `-4 .. floor(Bonds/2)+1`, Ob `max(1, base Ob - Disposition)` direct subtraction, starting Disposition from lifepath +/-0.5 increments, Knots as being-with (Mitsein) for any character, Knot pool `(Spirit x 2)+History(Relevant)+3` with tiers Close 5/Medium 2/Loose 1, max `floor(Bonds/2)+1`, rupture sets Disposition to -4, decay threshold above +2 (:57-69).
+  - SIM-DEBT-SOC-01..03: Ob calibration, Close Knot formation pacing 3-5 seasons, Close Knot rupture = 5 Composure damage (Composure = Cha + 6, min 7) (:71-75).
+  - SIM-DEBT-FW-01..10 all RESOLVED; resolved editorials ED-496..506 (:24-55).
+- **Conflicts / stale:** direct-subtraction Ob and Bonds-capped Disposition were reversed by ED-912 (flat -5..+5, stepped table; Bonds drives Knot capacity) per canonical_registry :189-195; propagation list targets (`designs/scene/*`) no longer exist.
+- **Open items:** ED-507 POI catalog, ED-508 named NPC starting dispositions.
+
+### .designs/systems/fieldwork/reference/fieldwork_exploration.md
+- **What it is:** fieldwork spec §3 Exploration: Points of Interest, discovery procedure, movement/time, rendering strain.
+- **Status:** "DESIGN — canonical subsystem file". Reading: live design intent for exploration; GM-based procedure.
+- **Bears on:** FI, WR, SE.
+- **Content that matters:**
+  - POI categories by Depth: Landmark 0, Resource 1, Secret 2, Remnant 3, Anomaly 4, Breach 5; 2-6 POIs per territory, southern territories more Remnants/Anomalies, Askeheim entirely Anomaly/Breach; conditional availability gates (RS/MS band, season, faction control, prior discovery) (:20-33).
+  - Discovery procedure: declare intent; perception gate (ontologically unavailable -> no roll wasted); pool `(Attribute x 2)+History`, TN 7, Ob per Depth; degree table with Overwhelming revealing a hidden feature and +1 Momentum; Failure +1 Exposure (:37-47). Multi-character: up to 2 assistants at Ob +1, each failing adds +1 party Exposure (:49).
+  - Rendering strain: Depth 3 minor (TS >=10 no effect), Depth 4 Coherence check Ob 1 and Truth -1 if >=3, Depth 5 Coherence -1 automatic, Truth forced <=2, TS +1 (:65-73). Thread-Read is the only fieldwork action that produces co-movement (P-01) (:75).
+  - Non-sensitive characters at Depth 3+ generate +0 Exposure; sensitive +1 (:77).
+- **Conflicts / stale:** TS thresholds, `TN 7`, GM-prepared POIs vs no-GM engine; "RS" is the old name of MS.
+- **Open items:** ED-507 POI catalog per territory unauthored.
+
+### .designs/systems/fieldwork/reference/fieldwork_exposure.md
+- **What it is:** fieldwork spec §6 Exposure (Cover, Exposure track, sources, reduction, Church Attention Pool) and §7 derived values.
+- **Status:** "DESIGN — canonical subsystem file". Reading: live design intent for the covertness mechanic.
+- **Bears on:** FI, WR, FA.
+- **Content that matters:**
+  - Cover = Cognition + most relevant concealment History; Noticed/Watched/Compromised thresholds table e.g. Cover 1-3: 3/5/7 up to Cover 12+: 8/10/12 (:20-31).
+  - Exposure states and consequences: Noticed +1 Ob to fieldwork rolls for the season; Watched lets the dominant faction respond (Church Heresy Investigation eligible); Compromised ends the scene, Dispositions -1, investigations +2 Ob (:37-42).
+  - Sources (failed roll +1/+2, Thread-Read +1, Surveil +2, hostile territory +1 per scene, Niflhel social +2); reductions (concealment -2, leave territory resets, season change resets, cover identity -1/scene, faction support -2/season) (:46-66).
+  - Church Attention Pool feed: Watched +1 AP at Accounting, Compromised +1 AP; capped +1 per character per territory per season, +2 per territory from fieldwork combined (PP-581) (:70-74).
+  - Derived values table: Fieldwork Pool, Investigation Threshold 3/5/8 by scope, Disposition -5..+5, Cover 2-14 (:80-87).
+- **Conflicts / stale:** "Niflhel social action" (Niflhel dissolved).
+- **Open items:** none.
+

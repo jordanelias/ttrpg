@@ -190,6 +190,13 @@ resolved in §5 (a `capability:` column on the row). The rest follows F-CHAR-11'
 - `data/verbs.py:29-38`: a docstring explaining a forward declaration that *"is otherwise harmless"*
   (`VERB_TABLE: dict = {}` at `:1187`, rebound two lines later). Delete the declaration and the paragraph.
 
+- `state/carriers.py:706-707`: `Act.obstacle` and `Act.pool` are read by the fold's S27.4 arm
+  (`loop/resolve.py:1046-1063`) and written by nothing but one probe (`harness/probes.py:2799-2800`);
+  the code says so (*"`Act.obstacle` defaults to `None` and the computed chooser never sets one"*). The
+  rule's live owner is `seam/wrappers/sigma.py:543`, on the pool and obstacle the provider derives. Two
+  sites for one ruled rule, one of them reachable only by a hand-built act. Delete the fold arm and the
+  two fields; the probe asks the provider.
+
 Fix: correct each when the file is next opened; no sweep (`CLAUDE.md` §0.1 pt 5).
 
 ### F-CORE-20 · degrades narrative, and narrows R-01 and R-04 · a need propagates to the one who could meet it and is not met
@@ -405,7 +412,7 @@ executed; the doctrine's third fidelity (witnessed) and its slate have no code.
 | 6 | `seam/wrappers/sigma.py:260-300` `believed_input` | a **candidate's score** (`odds_weighting`) and the player's shown odds | the believer's own pool; a `capability:<key>` claim in his ledger about the subject | `CAPABILITY_CLAIM` literal (`sigma.py:238`) |
 | 7 | `seam/wrappers/combat.py:143-152, 203-232` `party_end`, `combat_input` | the fight's **attributes** and Endurance less one per body band | `Person.attributes` whole; `attr.body.endurance` with a literal default `4` | `modules/combat/attributes.py` SPEC (key, default, neutral, `registry_key`) |
 | 8 | `queries/person_q.py:1123-1147` `OwnStateReader` | an **aperture**: whether `thread_read` forms and folds | `Person.thread_sensitivity` against `Fixtures thread_sensitivity_gate` | two stems named in the grammar (`data/requires.py:809`, `OWN_STATE_STEMS`); `npc_registry.yaml: ts` |
-| 9 | `loop/resolve.py:1046` | a **refusal**: Ob greater than a multiple of the pool is not attempted | pool, obstacle | `Fixtures obstacle_refusal_multiple` |
+| 9 | `seam/wrappers/sigma.py:255, 543` (the live site, on the derived pair); `loop/resolve.py:1046-1063` (a second arm on `Act.obstacle`/`Act.pool`, which no computed act sets) | a **refusal**: Ob greater than a multiple of the pool is not attempted | pool, obstacle | `Fixtures obstacle_refusal_multiple` |
 | 10 | `decision/budget.py:57-62` | the **scene budget** (a cost ceiling) | live `hold` count, body bands, travel legs | `Fixtures scene_budget`, `budget_office_bonus`, `budget_leg_penalty`; `rosters.yaml: band_floors.body` |
 | 11 | `decision/options.py:1627-1668` `competence` | the **confidence** a told claim lands at | `Person.attributes[Attunement]` | the attribute is named in code (`attribute_key("Attunement")`); `Fixtures competence_gain` (0) |
 | 12 | `epistemic.py:919-931`; `person_q.heritage_regard` | a **tag** shown to witnesses, and regard from believed descent | `Person.heritage` | `descriptor_registry.yaml: heritage_roster`; `npc_registry.yaml: heritage` |
@@ -476,8 +483,12 @@ registry key, and a capability id in this block is one.
 
 The mapping capability → axiom → resolver input then reads, for any roll: the verb row names the
 capability; the capability row names its kind, base and opponent; `faculty` and `_opposition_of` are the
-two rules; `SocialContestInput`/`PersonalCombatInput` carry the pool and the opposition. A trace line per
-roll (`pool = max(attr, key) + practice`) is the legibility artifact, written by `faculty`'s caller.
+two rules; `SocialContestInput`/`PersonalCombatInput` carry the pool and the opposition. The last link is
+missing today: the provider's record carries `pool`, `ob` and `net` (`sigma.py:545-554`) and the fold
+drops it (*"the log holds the degree, not the pool"*, `harness/aperture.py:507-512`, which patches
+`d._fold` on the instance to read it). Keeping it is the SC lane's `05_SC_contest_record_on_event.md`
+(title read, body not opened); with that record on the Event, "which capabilities fed this roll, by which
+rule" is answerable from the log alone.
 
 ### (d) The RPG axioms the core implements, and those it contradicts or lacks
 

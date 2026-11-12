@@ -693,3 +693,122 @@ Lane: game precedent and historical research (`research/`, tier 3). Entries are 
 - **Bears on:** FA, SC, SE.
 - **Content that matters:** Tropico 6 has 10 era-gated factions (ATTACHMENTS_CROSSCHECK); Suzerain ~450k words launch figure, base 1M+; DAI war table with advisor-dependent odds 75/50/25 (per D_T09); Democracy 4 as signed weighted delayed graph (REPO_MENTIONS) (:21-151).
 - **Conflicts / stale:** Suzerain word count contested. **Open items:** :185.
+
+### research/game_precedent_suite/tutorials/T01_realm.md
+- **What it is:** how-it-plays tutorials (8 headings per game): Crusader Kings III, Victoria 3, Old World, Pathfinder: Kingmaker; 336 lines. NOT read in full (facts-line headings only; content known via R1 and D_T02/D_T09).
+- **Status:** none own; reference tier 3.
+- **Bears on:** FA, CHAR, CORE (budget), SC.
+- **Content that matters:** Old World Orders pool and ambitions (D_T02 OW1-OW8); CK3 "Important Actions" strip and council tasks; Vic3 diplomatic play/Infamy; Kingmaker advisor cards showing DC and success chance (D_T02 A2).
+- **Conflicts / stale:** Old World ambition rule corrected (REPO_MENTIONS §4.3). **Open items:** not read.
+
+### research/game_precedent_suite/tutorials/T02_warband.md
+- **What it is:** tutorials for Bannerlord, Warband, Battle Brothers, Kenshi; 285 lines. NOT read in full.
+- **Status:** none own; reference tier 3.
+- **Bears on:** MB, CHAR, SE, FA.
+- **Content that matters:** Bannerlord choice menu prices "play vs auto-resolve a battle" (D_T04 row 46); daily wages/food and unpaid desertion; Warband battle yields prisoners sold at a ransom broker (D_T04 row 49); BB loop (choose the 12, per-unit AP and fatigue, no auto-resolve [M]) (D_T03 row 2).
+- **Conflicts / stale:** repo claim "M&B fast path None" false for Bannerlord (D_T04 row 47). **Open items:** not read.
+
+### research/game_precedent_suite/tutorials/T03_colony_a.md
+- **What it is:** tutorials for Dwarf Fortress, RimWorld, Songs of Syx; 262 lines. NOT read in full.
+- **Status:** none own; reference tier 3.
+- **Bears on:** SE, CHAR, WR.
+- **Content that matters:** DF mandates and nobles; RimWorld drafting colonists into direct control and storyteller threat points (D_T02 A5-A6, E4d); RimWorld mean time to break 4/0.8/0.5 days [V3 RWmbc].
+- **Conflicts / stale:** attachment mean-time figures wrong. **Open items:** not read.
+
+### research/game_precedent_suite/tutorials/T04_colony_b.md
+- **What it is:** tutorials for Manor Lords, Frostpunk 1/2, Banished; 291 lines. NOT read in full.
+- **Status:** none own; reference tier 3.
+- **Bears on:** SE, FA, MB (Manor Lords militia).
+- **Content that matters:** Banished housing vacancy gates births ("most likely won't", "a few children"); Manor Lords militia leaves households' jobs empty (D_T04 row 52); Frostpunk 2 council votes.
+- **Conflicts / stale:** Banished 12-16-year die-off is lore. **Open items:** not read.
+
+### research/game_precedent_suite/tutorials/T08_sanity_a.md
+- **What it is:** tutorials for Darkest Dungeon II, Sunless Sea, Eternal Darkness; 249 lines. NOT read in full.
+- **Status:** none own; reference tier 3.
+- **Bears on:** WR (threadwork cost), CHAR, SC.
+- **Content that matters:** DD2 Meltdown 80% / Resolute 20% fork, banter changes Stress and Affinity (D_T07 rows 22, 24); Eternal Darkness MP/Sanity split with refund on finishing (D_T07 rows 3-6); Sunless Sea Terror cap 50 at return (row 27).
+- **Conflicts / stale:** none. **Open items:** not read.
+
+### research/game_precedent_suite/tutorials/T09_sanity_b.md
+- **What it is:** tutorials for Don't Starve, Pathologic 2, Vampire: Bloodlines; 207 lines. NOT read in full.
+- **Status:** none own; reference tier 3.
+- **Bears on:** WR, SE, CHAR.
+- **Content that matters:** Pathologic 2 playable Days 1-11, Day 12 ending [CONTESTED]; time as currency, quests expire; Bloodlines Masquerade five points (D_T10, D_T07).
+- **Conflicts / stale:** `.designs/player_agency_v30.md` "12 days" claim (D_T10_also row 61). **Open items:** not read.
+
+### research/game_precedent_suite/tutorials/T10_npc_economy.md
+- **What it is:** tutorials for The Sims 4, Anno 1800, Patrician IV, Wildermyth; 327 lines. NOT read in full.
+- **Status:** none own; reference tier 3.
+- **Bears on:** CHAR, SE.
+- **Content that matters:** Sims 4 Free Will on needs/mood/traits (D_T02 A7); Wildermyth events drawn to match heroes' personalities/hooks (A8), Mortal Choice (D_T03).
+- **Conflicts / stale:** none. **Open items:** not read.
+
+### research/game_precedent_suite/tutorials/T11_policy_sims.md
+- **What it is:** tutorials for Tropico 6, Suzerain, Dragon Age: Inquisition (war table), Democracy 4; 248 lines. NOT read in full.
+- **Status:** none own; reference tier 3.
+- **Bears on:** FA, SC, SE.
+- **Content that matters:** DAI war table: three advisors, timed operations, advisor-dependent odds 75/50/25, branch outcomes (D_T09 row 21); Tropico faction demands; Suzerain cabinet advising "in their own interest".
+- **Conflicts / stale:** Suzerain word count. **Open items:** not read.
+
+### research/game_precedent_suite/tutorials/T12_paradox_classical.md
+- **What it is:** tutorials for Crusader Kings II, Imperator: Rome, Total War: Rome II (Power & Politics), Oriental Empires; 340 lines. NOT read in full.
+- **Status:** none own; reference tier 3.
+- **Bears on:** FA, MB.
+- **Content that matters:** CK2 10-year truce and truce-break penalties (-25 / -5 diplomacy 5 y) CONFIRMED; Imperator five classes, civil war when disloyal power base >25% then a 40-month countdown; Rome II party loyalty, 20-turn grace; Oriental Empires four victory paths (Conquest 65% population, Son of Heaven 75% acknowledge) (D_T09 rows 25, 28, 31, 66).
+- **Conflicts / stale:** attachment "four pop types (Imperator)" wrong (five). **Open items:** not read.
+
+### research/game_precedent_suite/tutorials/T13_koei.md
+- **What it is:** tutorials for Romance of the Three Kingdoms (XI, XIII, XIV, VIII Remake), Nobunaga's Ambition, Genghis Khan II, Knights of Honor II; 301 lines. NOT read in full.
+- **Status:** none own; reference tier 3.
+- **Bears on:** FA, CHAR (officer mode), MB, SE.
+- **Content that matters:** GK2 Body Points per season, command cost scales with Politics letter; RTK VIII-R mission quotas (200% commended, <20% reprimanded); KoH II governed province yields 100% vs about a tenth ungoverned, nine seats (D_T02, D_T08_also row 32, D_T09 rows 40, 62).
+- **Conflicts / stale:** RTK "mass resignation after a ruler's death" NOT FOUND; kin-lock overstated. **Open items:** not read.
+
+### research/game_precedent_suite/tutorials/T14_squad_settlement.md
+- **What it is:** tutorials for Jagged Alliance 2 (+1.13), Medieval Dynasty, Dawn of Man, The Guild 2/3; 316 lines. NOT read in full.
+- **Status:** none own; reference tier 3.
+- **Bears on:** PC, MB (JA2 auto-resolve/enter sector/retreat), SE, CHAR.
+- **Content that matters:** JA2 contact box Auto-resolve / Enter sector / Retreat, downed mercs captured, buddy death -15 morale (D_T03 rows 15-19); JA2 militia upkeep/desertion and mine income by town loyalty x share (D_T08_also rows 33); Medieval Dynasty unpaid tax becomes debt (row 34); The Guild 2 fabricable evidence with decay (ATTACHMENTS_CROSSCHECK).
+- **Conflicts / stale:** Medieval Dynasty "children's abilities average parents'" unsupported. **Open items:** not read.
+
+### research/game_precedent_suite/tutorials/T15_pressure_political.md
+- **What it is:** tutorials for Against the Storm, Pax Pamir 2e, Empires in Arms, Shadow of Mordor/War (Nemesis); 262 lines. NOT read in full.
+- **Status:** none own; reference tier 3.
+- **Bears on:** FA, WR, CHAR.
+- **Content that matters:** Pax Pamir loyalty switch loses gifts/prizes/patriots; Empires in Arms declaration costs political points and combat is ~14 steps with secret chits (NOT one step); Nemesis promotion of the killer and persistent encounter log (D_T09 rows 43-50, D_T02 E3h).
+- **Conflicts / stale:** 13G "one-step battle" false. **Open items:** not read.
+
+### research/game_precedent_suite/tutorials/T17_repo_strategy_a.md
+- **What it is:** tutorials for EU4, Dominions 5/6, Heroes of Might and Magic III/V/VII; 177 lines. NOT read in full.
+- **Status:** none own; reference tier 3.
+- **Bears on:** MB, FA, SE.
+- **Content that matters:** Dominions: army setup (squad placement, formation, battle orders) and 5-round spell scripts before moving, battles never played live; troops rout without an unrouted leader of the right TYPE; auto-rout at 25% HP left (D6) / 75% lost (D5); HoMM town dwellings accumulate weekly whether visited or not (map dwellings do not in vanilla III) (D_T04 rows 27-37).
+- **Conflicts / stale:** EU4 "loyalty floor ~40" not found. **Open items:** not read.
+
+### research/game_precedent_suite/tutorials/T18_repo_strategy_b.md
+- **What it is:** tutorials for Shadow Empire, Stellaris, XCOM (2/EU), Brigandine; 283 lines. NOT read in full.
+- **Status:** none own; reference tier 3.
+- **Bears on:** MB (Brigandine, Shadow Empire), PC (XCOM), FA.
+- **Content that matters:** XCOM displays hit chance with hidden aim assist; Brigandine: knights never die, retreat to nearest connected castle, monsters left behind captured, war permanent (D_T03 row 22, D_T09 rows 56-58, D_T04 row 60); Shadow Empire odds popup is "estimate only", logistics network, retreat below 50% troops (D_T04 row 59).
+- **Conflicts / stale:** repo claim "garrisoned units lost wholesale" wrong. **Open items:** not read.
+
+### research/governance/governance_modes.md
+- **What it is:** 2026-07-14 thematic governance research (modes: decision procedures, legitimation, institutions) over 8 civilizations with `=> Valoria design hook:` lines mapped to a PROPOSED 8-value `governance_mode` taxonomy; 469 lines. NOT read in full (headings only).
+- **Status:** "RESEARCH — filed 2026-07-14 · Lane: IN · ED-IN-0064 · analytic/reference"; historical.
+- **Bears on:** FA, SC, WR.
+- **Content that matters:** structure: cross-civilizational synthesis (:18), consolidated Valoria design hooks table (:32), per-civilization detail (:49) beginning with Ottoman; verifier correction notes quoted inline; no Mandate-of-Heaven mechanic.
+- **Conflicts / stale:** `governance_mode` taxonomy PROPOSED; hooks phrased in the retired Key idiom per `by_lane/FA` item 2. **Open items:** not read.
+
+### research/governance/political_hierarchy_standing.md
+- **What it is:** same corpus, theme rank/office hierarchy, advancement and demotion routes mapped to the `faction_politics` Standing ladder and Demotion Magnitude; 486 lines. NOT read in full.
+- **Status:** "RESEARCH — filed 2026-07-14 ... analytic/reference"; historical.
+- **Bears on:** FA, CHAR.
+- **Content that matters:** synthesis (:18), hooks (:32), per-civilization detail (:49); Standing ranges contradicted 0-5/0-7/0-10 across the archived corpus (by_lane/NPC).
+- **Conflicts / stale:** Key-idiom hooks. **Open items:** not read.
+
+### research/governance/conflicts_power_struggles.md
+- **What it is:** same corpus, theme succession crises, usurpations, civil wars, factional strife, ruler-vs-assembly collisions, mapped to emergent-friction/churn systems and the collision-of-stresses primitive; 418 lines. NOT read in full.
+- **Status:** "RESEARCH — filed 2026-07-14 ... analytic/reference"; historical.
+- **Bears on:** FA, WR, CHAR.
+- **Content that matters:** synthesis (:18), hooks (:28), detail (:45); grounds legitimacy-collapse hooks on non-MoH precedent: Roman/Byzantine dual-trigger usurpation, Ottoman grand-vizier-as-scapegoat + Janissary revolts, imperial penance/recusatio, Polybian regime cycle (per 00_MANIFEST).
+- **Conflicts / stale:** as above. **Open items:** not read.

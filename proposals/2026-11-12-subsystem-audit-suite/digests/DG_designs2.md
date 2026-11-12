@@ -793,3 +793,65 @@ Lane `designs2`: archived design documents under `.designs/systems/{overview,set
   - Nine open editorial items (Baralta communion, two witness traditions, Ficinian emanation, Miraculous Event trigger/action/accord/proximity/conviction) (:576-592).
 - **Conflicts / stale:** "~5 year span" game duration vs settlement_layer's 10-30 year games; Truth baseline per faction is a data fact never seen in a registry [UNVERIFIED].
 - **Open items:** nine editorial items at :576-592; the miraculous_event portion was later promoted (status CANONICAL) without the others being recorded here.
+
+### .designs/systems/world/reference/southernmost_v30.md
+- **What it is:** Part Six "The Southernmost" skeleton: zone types, Forgetting check, Southernmost Awareness (SA) faction stat, expedition procedure, the [NAME-PENDING: ED-048] Ritual, Extraordinary Repair Weaving, crisis timeline, board game abstraction.
+- **Status:** header "UNVERIFIED: mechanical values in this doc have not been confirmed by simulation"; "Authority: designs/ working layer — pending compilation"; vocabulary is Thread Tension (pre-MS). Reading: older vocabulary than ms_trajectory; design intent for an expedition/ritual endgame.
+- **Bears on:** WR, FI, FA, PC, CHAR
+- **Content that matters:**
+  - Forgetting Check: Cognition + Recall, TN 8; Ob by exposure Boundary 1 / Interior 2 / Deep 3 / Core 4; + TS ÷ 20 dice; degrees control what is retained (Overwhelming: TS 40+ retain ontological understanding; Partial: emotional impressions only; Failure: nothing operational) (:31-48). Momentum may be burned (:50).
+  - Starting SA at 245 AG: Crown 0, Church 0, Hafenmark 1, Varfell 2, People's Revolution NPC 3 (:67-74); ritual penalty +2 Ob if Awareness < 5 (:76).
+  - Expedition (multi-season): prerequisites Thread Tension >= 40, TS 30+ practitioner, relevant History (Ob 3 planning); Season 1 approach (Discovery Event), 2 exploration (three zones Border/Inner/Core with hazards), 3 discovery (Diagnosis), 4+ Repair optional (TT −2 permanent per successful season) (:85-97); failure: all participants Truth −1 (:109).
+  - Ritual: lead TS 60+, two TS 20+ helpers, Ob 5 (+1D each helper max +4D); Overwhelming TT −10 (Southernmost settleable), Success TT −6 for 5 seasons, Failure TT +8 and Mode 3 entity (:131-147). Combined TT reduction cap −5/season across Ritual + Repair (SIM-STH-E1) (:171-174).
+  - Crisis timeline replaced by Thread-Tension-triggered cracking (TT 50, then 3 sustained seasons, then 3 more) (infill :59-63).
+- **Conflicts / stale:** Thread Tension (TT) vs Mending Stability (MS, inverted): obsolete track; "[NAME-PENDING: ED-048]" placeholder for the ritual's name never resolved here. Compilation paths `compilation/v0.14` dissolved. Cohesion/Discipline/CD terms predate renames.
+- **Open items:** ED-048 name; SA scale "0-7 or 0-10" ambiguous (:57).
+
+### .designs/systems/world/reference/southernmost_v30_infill.md
+- **What it is:** Prose half of the Southernmost part: zone types, the Forgetting rationale, SA mechanics, expedition notes, Ritual, Repair Weaving, crisis timeline.
+- **Status:** "[EDITORIAL: ED-IN-0071 — relocated... content unchanged]". Reading: reference prose.
+- **Bears on:** WR, SC, FI
+- **Content that matters:**
+  - Three zone types: Locked (frozen at catastrophe, undecayed), Oscillating (continuous Gap formation, most dangerous), Snapped (:14-16, skeleton :21).
+  - The Forgetting is structural, not psychological: threads encoding the danger are too close to the ground to hold stable; non-practitioners leave knowing only "somewhere hostile and strange" (:18-19).
+  - Testimony Ob penalty for non-practitioners using Southernmost knowledge in Appeals/Debates: +1 Boundary, +2 Interior, +3 Deep/Core; decreases with exposure because the retained emotional weight reads as conviction (:21) — a typed evidence-credibility rule for SC.
+  - SA floor = number of primary Einhir texts held (:24); Repair seasons: Success/OW TT −2 permanent, Partial TT −1 and CD +1, Failure TT +1 and CD +2; 4-5 successful seasons fully stabilise (:51-55); Ritual and Repair stack (:56).
+- **Conflicts / stale:** "Game Master selects or rolls" (:39) vs no-GM engine.
+- **Open items:** none.
+
+### .designs/systems/world/reference/world_flow_skeleton_v1.md
+- **What it is:** Traced flow skeleton of the OLD world subsystem (`systems/world/sim/`: insurgency_pipeline, npe, miraculous_event, restoration_movement) at commit 6545067.
+- **Status:** "REFERENCE — traced structure only". Reading: historical for call sites (mc_v18, accounting, game_state are gone); useful negative findings.
+- **Bears on:** WR, CHAR, FA, CORE
+- **Content that matters:**
+  - The only world modules that executed each season were `insurgency_pipeline` (contiguous Uncontrolled BFS over ADJACENCY, 2-season streak, promotion on L / territory count / averaged Accord / averaged PT) and `npe` (`simulate_npc_actions`: NPC pairs in a territory sharing a worldview conviction and adjacent Stance on an issue roll a Volatility check and shift stance toward each other one step) (:89-113).
+  - `miraculous_event`, `restoration_movement` (PT decay, RM emergence) were typed stubs; `generate_npc` implemented but never called (npc_counter stayed 0 across a seeded campaign; test xfail strict) (:114-123, :185-187).
+  - Outputs of insurgency/NPC steps were discarded by the caller ("Events list discarded here", "Actions list discarded here") (:135-138).
+  - Contract coverage inverted: `miraculous_event` has a module contract yet never ran; the two modules that ran (insurgency, npe) have none (:193).
+  - `systems/npcs/` had no `sim/`; `npe.py` was the sole NPC generation/drift implementation, canon-cited to a FIELDWORK doc (investigation_systems_v30 SYSTEM 1 NPE) — three different owners (:190).
+  - Starting tables were authored in `references/world_initial_state.yaml` and read via `engine/substrate/world_initial_state.py` (:58).
+- **Conflicts / stale:** everything cited lives in retired trees except references/world_initial_state.yaml [UNVERIFIED present]. Whether engine/season's NPC machinery (decision/, npcs.yaml) inherits any of npe.py's stance-drift is not shown.
+- **Open items:** none stated.
+
+### .designs/systems/world/reference/worldbuilding_canon_audit_v30.md
+- **What it is:** A 2026-04-03 canon-compliance and supersession audit of "worldbuilding v3" proposals (skeleton half).
+- **Status:** none (audit record); ED-740 (TC→CI, RS→MS abbreviation fix). Reading: historical; one-round audit.
+- **Bears on:** WR, ARCS, PROCESS
+- **Content that matters:**
+  - Findings table: Vaynard's first name is "Magnus" (canonical timeline), Baralta is "Inge" (not Inga), Church head: Confessor = personal title, Holy See = office; stage13 uses stale stat "Reach" for Influence; Baralta CI suppression threshold 4+ (stage6) vs >5 (stage13), stage6 governs; Almaic Kyriakos appears nowhere in canon (new worldbuilding); "Piety" in stage13 undefined; Klapp territory-number conflict between stage7 and PP-199; only 3 of 4 Cardinals named (the Cardinal of Prudence missing; ED-007 "resolved" status misleading); Jarnstal Independence Counter 0-3 is a new formalisation (:121-134).
+  - Overall: "No canon violations in v3" (:21, :134).
+- **Conflicts / stale:** Name conflict note: character is "Himlensendt" elsewhere (settlement_layer, threadwork) vs "Himlensendt/Himlensendt" here "Arne Himlensendt" fine; the repo-wide canonical Almud/Almund spelling split is in political_hierarchy. Bodies largely blank in the skeleton (prose in infill).
+- **Open items:** fourth Cardinal; Almaic Kyriakos adoption; territory-number reconciliation (ED-NEW-09).
+
+### .designs/systems/world/reference/worldbuilding_canon_audit_v30_infill.md
+- **What it is:** Prose half of the worldbuilding v3 canon audit: P-01..P-10 compliance checks and the 11 supersession findings in full.
+- **Status:** none (audit record). Reading: historical.
+- **Bears on:** WR, ARCS
+- **Content that matters:**
+  - P-08, P-10, P-04, P-07, P-01 checks all PASS/N/A for v3 (:17-21).
+  - Timeline cites: "Duke Magnus Vaynard" (L95), "Duchess Inge Baralta" (L94), "Confessor Arne Himlensendt" (L93) as authoritative names (:24-29).
+  - Almaic Kyriakos is Altonia's dominant religious tradition from pre-project lore, never adopted into design (:40-42).
+  - Jarnstal drift: stage13 states "Jarnstal is drifting toward unilateral action"; v3 turns it into a 0-3 counter (:52-54).
+  - ED-782: Theocracy Counter (TC) → Church Influence (CI) rename (:58).
+- **Conflicts / stale:** none beyond the above.
+- **Open items:** none.

@@ -515,3 +515,51 @@ Reading-depth note: the assigned set is about 3.3 MB. Entries marked `[READ IN F
 - **Conflicts / stale:** J-1/J-5 vs ED-IN-0279 (losing side only) and settlements doc.
 - **Open items:** J-1, J-5.
 
+### proposals/2026-10-16-verbs/2026-10-16-verbs-01-thesis-and-persons.md
+- **What it is:** Part 0 (thesis, map) and Part I (persons / the character template) of the "Verbs, v2" 23-file proposal series (2026-10-16, verb Parts rewritten 2026-10-17); IN-lane distillation of same-day v1 proposals. [READ PARTLY: header, thesis section 0 (:26-61), heading map; Part I body not read]
+- **Status:** "PROPOSED... No new probe, run or trace was made for it. Merging it ratifies nothing unless Jordan so rules." (:3). Reading: live proposal, undecided; static reading only.
+- **Bears on:** CHAR, all subsystems (roster).
+- **Content that matters:**
+  - Thesis: persons differ in wants never in what they can do; in the loop exactly one verb (`tell`) reads a personal input; the evidence supports a stored ten = registry nine + TS (Attunement/Charisma on design intent only; Recall not a candidate until read); the roster is 92 verbs in ten subsystems (48 descend from the 46 shipped, 11 planned, 33 new), all 488 gaps disposed; the chooser sees 3 of 16 node types fully - "that mismatch, not the attribute roster, is the next design lever" (:26-52).
+  - From-scratch fourteen "does not count yet" (brief seeded its result); five unlocking decisions: J-T1, J-T2, J-T4, V-2a, R-0 (rerun blind); 21 further Part III decisions (:50-61).
+  - Jordan's rewrite directions: verbs grouped by subsystem then suite; convention floor kept; folds only for true equivalents ("recruit = `tell` plus the recruit's `oblige`" was "an insane workaround"); every verb names its world effect and etymology into Latin (:23, verbs-03 :10-21).
+  - Stale-locator note: merge of #483/#484 moved `_part5.md:433` (J-13) to `:400` and `:444` to `:411`; `seize` landed as shipped row (`verb_table.yaml:898`) making 46 rows (:14-17).
+  - Tiers: T1 code the loop runs, T2 code outside the loop, T3 ratified spec/v9/RATIFIED AS INTENT, T4 design intent only (:19-24).
+- **Conflicts / stale:** the "65 live rows"/"179 verbs" counts belong to the first pass; the 46-row `verb_table.yaml` count vs verb-coverage doc's 44; recognise `refract`/`construe` renames.
+- **Open items:** J-T1..J-T4, V-2a, R-0.
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-02-attributes.md
+- **What it is:** Part II (attributes): what the evidence supports, method, the 46 demands grouped, one mapping nine/eleven/fourteen, ranking, why the from-scratch fourteen is void, and the count/tenth decision tree. [READ PARTLY: II.1 and II.7 only]
+- **Status:** "PROPOSED (2026-10-16). Not ratified" (:3). Reading: live proposal.
+- **Bears on:** CHAR.
+- **Content that matters:**
+  - Evidence ranks: executed divergence test (16 SEPARABLE, 7 IDENTICAL-BY-CODE, 1 SEPARABLE-ONLY-BY-MAGNITUDE, 13 NOT TESTABLE over 37 pairs) strongest; derivation counts medium (46 demands, 41 formulas, 58 learned-skill rows, 64 sourced uses; of 171 demand-statements only 16 are T1-T3); from-scratch fourteen weakest and currently void (:21-40).
+  - Claim: STR, AGI, END, ACU, FOC, WIL, TS strongly supported; BON narrowly; ATT, CHA only by design intent; Recall not at all; v2 recommends nine + TS as the tenth (drops Recall from v1's eleven) (:18-25).
+  - Decision tree: J-T1 stored? A0 no roster; B yes -> keep ten? name the tenth TS (recommended) / TMP / Recall (only with a reader) / RES (not advised); or reopen count -> E8 eight (ATT into ACU, CHA into Command) (:276-298).
+  - Cannot decide whether the game should have innate attributes at all - that is J-T1 (:42-45).
+- **Conflicts / stale:** Note: attribute evidence was not re-derived against the later 92-verb roster (:8).
+- **Open items:** J-T1/J-T2; R-0 blind rerun.
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-03-standards-roster-and-reconciliation.md
+- **What it is:** Part III (verbs): standards, the 92-verb roster in ten subsystems, suites and folded names, the reconciliation ledger of 29 cross-subsystem collisions, what it overturns. [READ PARTLY: III.0 and heading map; roster tables III.3-III.6 not read]
+- **Status:** "PROPOSED (2026-10-17). Not ratified... Static reading and static lookup only" (:3). Reading: live proposal; replaces first-pass Part III (recover via `git show 716c253`).
+- **Bears on:** all subsystems (PC 7, MB 9, SC 11, FI 12, TW 7, GV 20, FA 7, EC 8, WT 3, NP 8 verbs).
+- **Content that matters:**
+  - Method: linguistics beneath design; each subsystem's verbs by NERS and by the 488 traced gaps; group by suite (host verb with related acts folded, e.g. `covenant` hosts treaty/alliance/truce/cession); the genre "convention floor" verbs are kept; no composition workarounds; a verb with no subsystem mechanic and named world effect is an outcome/parameter not a verb (:10-21).
+  - Withdrawn: the first pass's 37 / 50 verb sets and the "pessimistic" cull (:12).
+  - Roster per subsystem is in III.3 (:46-193); 29 collisions ruled in III.5 (:225).
+- **Conflicts / stale:** supersedes the verb-coverage doc's 55-verb suite in scope (92 vs 55) - not reconciled; check with that doc.
+- **Open items:** III.10 named mechanics the roster waits on (see verbs-04).
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-04-critics-etymology-gaps-and-decisions.md
+- **What it is:** Critics' findings (L-01..L-19, V-01..V-21) and per-lane dispositions, etymology audit, the 488-gap disposition table, named mechanics the roster waits on, 21 items for Jordan, limits. [READ PARTLY: III.7 head, III.9, III.11, III.12; III.8 and III.10 not read]
+- **Status:** "PROPOSED (2026-10-17). Not ratified... Static reading and static lookup only" (:3). Reading: live proposal.
+- **Bears on:** all subsystems.
+- **Content that matters:**
+  - Gap register disposition: 488 gaps -> 312 closed (many "once a named mechanic exists"), 58 parked on a trigger, 97 out of scope with owner, 13 stale, 8 disputed; the first pass left 189 (39%) with no disposition (:99-109).
+  - Critic outcomes: L-02 rename `oblige` -> `pledge` (all lanes converge); L-03 `levy` fits overturned and re-key by sense first; L-04 `carry` -> `lodge`; L-05 `dispatch` disputed; L-09 `survey`/`surveil` collide (:20-30).
+  - 21 Jordan items D-V1..D-V21, e.g. D-V1 may a living top-seat holder be removed (`depose`); D-V4 may persons lie (J-C-6); D-V8 field force amends Layer 1; D-V9 does a march require war; D-V10 treaty binds signer or seat; D-V11 who may declare war; D-V12 may a won contest open an edge the counterparty owns; D-V13 draw policy under scarcity blocks `ration`; D-V16 how a questioned person answers `interview`; D-V19 threadwork Coherence elastic return (:140-165).
+  - Limits: nothing ran; precedent games from memory; gap register extracted by five Sonnet lanes unsampled; reconciliation has no critic; renames (R-10) hash act ids and move goldens (:168-178).
+- **Conflicts / stale:** D-V7 `dispatch` rename would overwrite ED-IN-0210.
+- **Open items:** all D-V items; R-10 rename batch.
+
