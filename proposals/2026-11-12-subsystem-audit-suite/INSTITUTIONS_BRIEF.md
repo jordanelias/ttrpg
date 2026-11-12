@@ -31,6 +31,20 @@ design legitimacy accordingly: rank as a ranked ledger of accomplishment, how th
 is inherited, renewed or contested by their heirs and by new deeds, what a conquest-founded house owes
 and is owed, and how a new accomplishment could in play raise a house or unseat one.
 
+*Jordan:* **Fable can develop proposals to make these political, religious and social institutions
+functional together.** The family lanes (Byzantine, papacy, Venice and the Medici, colonial and others)
+each design their own institution; a synthesis lane then designs how they **work as one order**: the
+interlocks between crown, nobility by deed, church, bureaucracy, merchant republics and banking houses,
+guilds and orders, colonial companies and the peoples under them: who needs whom, which sanctions and
+favours cross institutions (excommunication against a duke, a loan against a throne, a charter against a
+rival, a deed certified by one body and contested by another), which conflicts are structural and
+generate story by themselves, and how all of it runs on the **same primitives** (seats, bodies,
+procedures, claims, obligations, patron-client edges, credit lines, sanctions) at the **same scales** with
+the **same roll form**. Every family lane therefore states, in a section "Interfaces to other
+institutions", what it exports to and imports from the others (named primitives and verbs, not
+prose), and the synthesis lane reconciles them into one integrated institutional kit with one
+implementation plan.
+
 ## What is asked
 
 For each institution family assigned to you, from the historical research in the tree and any further

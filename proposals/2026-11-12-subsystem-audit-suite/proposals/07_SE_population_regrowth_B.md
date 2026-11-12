@@ -1,6 +1,14 @@
-# 07 · SE — a population that comes back: the rising arm of CR-08's CENSUS writer (supersedes one clause of `07_SE_population_census.md`)
+# 07 · SE — a population that comes back: the rising arm of a cohort's weight, on the bodies clock at MATTER (supersedes one clause of `07_SE_population_census.md`)
 
 ## Status: PROPOSED
+
+**Revised by its own lane before return (2026-11-12).** The first draft put the rising arm at CENSUS.
+Layer 1 forbids that: §29 (`architecture/holonic_ARCHITECTURE.md:1023-1029`) makes CENSUS *"DEMAND-DRIVEN
+ONLY. Nothing generates without a demand, and no clock generates anything"*, and a rise that waits
+`regrow_seasons` quiet seasons is a clock. The bodies clock's licensed step is MATTER (§25, `:850-866`:
+*"bodies, ageing, natural death — one of the three licensed clocks"*; *"envelope weight — births and
+deaths"*; §10.3, `:401-405`: births are written at MATTER and reconciled at CENSUS). §1, §3, §4, §5 and §6
+below are the corrected text; the decision (R-SE-26) and its bounds are unchanged.
 
 Carries finding F-SE-18 and resolutions R-SE-26 and R-SE-27 of `audits/07_SE_audit_addendum_B.md`. It
 supersedes **only** resolution R4 of `proposals/07_SE_population_census.md` (*"whether a cohort's weight
@@ -11,9 +19,10 @@ written.
 ## 1. What changes in `engine/season/` at runtime
 
 With the shipped fixture (`regrow_seasons: 0`): nothing; the branch writes nothing and every hash is the
-base. With it on: at CENSUS a cohort that is whole, has gone a stated number of seasons without loss and
-lives where there is room gains one weight and emits `weight.changed`. Nothing else moves. No person is
-minted, no verb is added, MATTER is untouched.
+base. With it on: at MATTER, in the bodies-clock pass that already runs after the hunger fall, a cohort
+that is whole, was fed in full this season, has gone a stated number of seasons without loss and lives
+where there is room gains one weight and emits `weight.changed`. Nothing else moves. No person is minted,
+no verb is added, CENSUS is untouched.
 
 ## 2. The problem, with evidence
 
@@ -40,11 +49,12 @@ minted, no verb is added, MATTER is untouched.
 
 ## 3. The resolution, decided
 
-**R-SE-26. Weight may rise, by the bodies clock, bounded as ruled.** At CENSUS, a cohort gains 1 weight
-when all of: (i) its body stands at `condition_scale` (it is whole); (ii) neither a `body.changed` fall
-nor a `weight.changed` was written on it in the last `regrow_seasons` seasons; (iii) the settlement it
-resides in has room for one more (`population < capacity`, the ruled bound); (iv) its last draw was met
-in full (matter, the other half of the ruled bound). Ladder steps 1 and 3. `regrow_seasons` is a fixture
+**R-SE-26. Weight may rise, by the bodies clock, bounded as ruled.** At MATTER, after the hunger fall,
+a cohort gains 1 weight when all of: (i) its body stands at `condition_scale` (it is whole); (ii) neither
+a `body.changed` fall nor a `weight.changed` was written on it in the last `regrow_seasons` seasons;
+(iii) the settlement it resides in has room for one more (`population < capacity`, the ruled bound);
+(iv) this season's draw was met in full (matter, the other half of the ruled bound). Ladder steps 1 and 3.
+Step: MATTER, because a birth is the bodies clock (Layer 1 §25, §25.1) and CENSUS may run no clock (§29). `regrow_seasons` is a fixture
 (shipped 0, the control; swept `0 / 4 / 8`; 4 is the archived design's figure and is intent, not a
 source).
 
@@ -63,23 +73,28 @@ over), so the first effect of the arm is slow growth toward the dwellings that e
 
 ## 4. The exact edits, by owner
 
-**(a) `engine/season/loop/census.py`**, in the same pass the first proposal's thinning block opens (one
-writer of `(Person, weight)`, two branches):
+**(a) `engine/season/loop/matter.py`**, in the bodies-clock section (`:713` on, *"THE BODIES CLOCK:
+AGEING AND ILLNESS (v9 IN-34)"*), as its own guarded block after the hunger fall (`:690-711`) and before
+or beside the ageing hazard. Placing it there answers the first draft's open question for free: this
+season's shortfall is already in hand as `short_by_person` (`:666`, `w._subsistence_shortfall`), and the
+hunger pass has already removed anyone who starved, so a cohort cannot die and grow in one barrier.
 
 ```python
-    regrow = w.fixtures.get("regrow_seasons")           # 0 is the control: no write
+    regrow = w.fixtures.get("regrow_seasons")           # 0 is the control: no read, no write
     if regrow:
         scale = w.fixtures.get("condition_scale")
-        homes = residence_of(w)
-        draw = subsistence_draw(w)                       # the draw MATTER wrote from this season
+        homes = world_q.residence_of(w)
+        fell = {f.pid for f in sub.falls}
         for pid in sorted(w.persons):
             p = w.persons[pid]
             home = homes.get(pid)
-            if not p.is_cohort or home is None or p.body < scale:
+            if p.weight <= 1 or home is None or p.body < scale:      # a cohort is a Person at weight > 1
                 continue
-            if quiet_since(w, pid, ("body.changed", "weight.changed")) < regrow:
+            if pid in short_by_person or pid in fell:                  # matter: fed in full this season
                 continue
-            if not met_in_full(draw, pid) or population(w, home) >= capacity(w, home):
+            if world_q.quiet_since(w, pid, ("body.changed", "weight.changed")) < regrow:
+                continue
+            if world_q.population(w, home, homes) >= world_q.capacity(w, home):   # the ruled room bound
                 continue
             prior = w.last_emission_of("weight.changed", pid, written=True)
             w.write("weight", token, lambda p=p: setattr(p, "weight", p.weight + 1),
@@ -88,21 +103,35 @@ writer of `(Person, weight)`, two branches):
 ```
 
 `quiet_since` (seasons since the newest written Event of the named kinds on the subject, or since tick 0)
-and `met_in_full` (every cell of the cohort's draw row has `take == want`) are two small readers in
-`queries/world_q.py`; neither stores anything. A first regrowth with no prior `weight.changed` is the
-clock's genuine first emission, which is the one lawful `[ROOT]` (P2's own note).
-`[UNVERIFIED: the exact name of the reader that returns this season's draw record at CENSUS; the first
-audit cites `world_q.subsistence_draw` at `:1273`. If CENSUS runs before MATTER in the season, the read is
-last season's draw, which is the ordering P2 defends.]`
+is one small reader in `queries/world_q.py`, beside `body_hazard` (`:1248`), the bodies clock's existing
+Query; it stores nothing. `residence_of` (`:1716`), `population` (`:1786`) and `capacity` (`:1856`) are
+the readers `migrate`'s `has_room` (`:1884`) already uses: the same room, no second ladder. A first
+regrowth with no prior `weight.changed` is the clock's genuine first emission, the one lawful `[ROOT]`
+(P2's own note). Placement follows the precedent of the ageing hazard: a host Query plus one writer in
+`matter()`, not a module outcome, because every operand is a host read (the Event log, residence, room).
 
-**(b) `engine/season/data/fixtures.py`**: `regrow_seasons=0`, with H-49's register row gaining the arm
+**(b) `engine/season/write_matrix.yaml`**, the `(Person, weight)` row (`:300-306`): `steps: [CEN]`
+becomes `steps: [MAT, CEN]`, `class: MATTER` and `social: false` unchanged, and its `by:` cell gains the
+ground: Layer 1 §25 (*"envelope weight — births and deaths"* at MATTER; bodies a licensed clock) and §29
+(no clock at CENSUS). The sibling `(Rung, envelope)` row (`:375-381`) already carries `[MAT, CEN]` on
+DR-1; this is the same shape for the quantity that carries a cohort's population. Without the cell the
+write raises at the gate, which is the matrix doing its job.
+
+**(c) `engine/season/data/fixtures.py`**: `regrow_seasons=0`, with H-49's register row gaining the arm
 beside the first proposal's `famine_loss`.
 
-**(c) The asymmetry sweep the first proposal already requires** (`Person.weight` gains a writer where
+**(c′) A note for the builder of `07_SE_population_census.md` R2 (not superseded here).** Its thinning
+branch is a death by hunger, and §25's table puts *"births and deaths"* of envelope weight at MATTER
+too; the falls it reacts to (`sub.falls`) are in hand at `:690-711`, not at CENSUS. The first proposal's
+own phrase, *"one writer of `(Person, weight)`, two branches"*, is kept by moving both branches into
+`matter()`; CENSUS then keeps only what §29 gives it (demand-driven individuation and reconciliation).
+Whether that move is made is the first proposal's builder's call; this proposal does not depend on it.
+
+**(d) The asymmetry sweep the first proposal already requires** (`Person.weight` gains a writer where
 readers assumed a constant) covers a rising weight with no further edit: every reader it lists
 (`larder_draw`'s want, `housing`, `has_room`, the muster cap, `recruit`) is monotone in weight.
 
-**(d) No edit to `modules/settlements/`.** The module reads weights from its input records.
+**(e) No edit to `modules/settlements/`.** The module reads weights from its input records.
 
 ## 5. The gate, and the falsifier
 

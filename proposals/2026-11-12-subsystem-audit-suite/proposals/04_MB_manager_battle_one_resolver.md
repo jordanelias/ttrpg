@@ -33,7 +33,7 @@ play today, so (2) to (4) move no shipped season.
   `03_VERBS_AND_LOOPS.md:286-289`). Combat's read-off-the-scene form is a ruled exemption
   (`engine/season/seam/ladder.py:193`); the field has none.
 - Layer 1 also sets the bar for the two modes: "No second resolver. No auto-resolve formula. No fast
-  path." (`architecture/holonic_ARCHITECTURE.md:984-986`) and, of fidelity, "they agree exactly, because
+  path." (`architecture/holonic_ARCHITECTURE.md:984-990`) and, of fidelity, "they agree exactly, because
   they are the same slice" (`03_VERBS_AND_LOOPS.md:151-153`).
 
 ## The resolution, decided
@@ -185,7 +185,7 @@ proposed and should be refused if proposed: it is the auto-resolve formula Layer
    unchanged.
 5. A hand-built stalemate, a mutual rout and a one-sided rout fold `field.drawn`, `field.drawn` and
    `field.won` through `field_degree` with no `verdict` anywhere in the result
-   (`git grep -n "attacker_wins\|verdict" modules/mass_battle engine/season/seam` prints nothing).
+   (`git grep -n "attacker_wins\|verdict" modules/mass_battle engine/season/seam/wrappers/mass_battle.py` prints nothing).
 6. Two officers whose units are in contact at window 1: one `combat.round` call is made; the loser's unit
    reads lower morale than the same field without the duel, and no other unit's morale moves.
 7. No function under `modules/mass_battle/` is entered by the commanded run and not by the delegated one
