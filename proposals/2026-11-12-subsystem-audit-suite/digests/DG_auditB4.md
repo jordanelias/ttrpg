@@ -784,3 +784,69 @@ Scope: 73 files under `.audit/2026-07-22-mass-battle-stress-test/`, `.audit/2026
   - Inbound: I1 convert `systems/mass_battle/sim/altonian_reinforcements.py` stub to `engine/substrate/stubwire.stub_resolve`; I2 MB import cycles (`massbattle <-> units`, a 5-module cycle); I4 token class `Mass Battle` vs `Mass Combat`; I5 golden families one owner each; FA-lane call site `faction_action.py:349` is the FA->MB seam; "promote" ruling on fork 1 spawns an FA-lane wiring item :501-594.
 - **Conflicts / stale:** fork 1 appears RESOLVED by later work: `modules/mass_battle/massbattle.py` header documents `resolve_mass_battle` and `_faction_to_unit` DELETED 2026-10-01 (plan position 29b) and the season-facing path `resolve_field -> run_battle`; `systems/mass_battle/sim/` still on disk (stale twin; `stress.py`, `engine.py`, `bat.py`) but not the live path. `tests/sim/mass_battle/` gone. `engine/substrate/stubwire.py` and `faction_action.py:349` status [UNVERIFIED]. Keys referenced (`scene_outcome.battle_concluded`) are moot after Key retirement.
 - **Open items:** forks 2-8; absent mechanisms; D1 over-decisiveness measurement; whether the A/B/C tracks executed (the `subphase_truncation_probe.py` counters exist in `modules/mass_battle/orchestration.py:1423-1466`, so A3 landed).
+
+### .audit/2026-07-29-scenario-visualization/dead_primitive_census.json
+- **What it is:** JSON census (2026-07-29) of definitions with no references: 2,164 definitions scanned -> 45 dead constants, 73 dead functions, each with `defined` file:line and an empty `referenced_in`.
+- **Status:** none (data); reading: historical, partly stale. Verified by file listing: `systems/factions/` and `engine/autoload/` paths no longer exist, so the faction, tribunal, treaty, mass_seizure and autoload entries are void.
+- **Bears on:** CORE, FA, SC, WR, FI, SE, CHAR, MB, PC, PROCESS
+- **Content that matters:**
+  - Dead constants by area: settlements `infrastructure.py` church/chapel/cathedral gain constants (`PT_GAIN_*`, `ORDER_GAIN_*`, `CI_GAIN_TEMPLAR`, `ORDER_DECAY_CATHEDRAL_BONUS`); threadwork `operations.py` (`BREADTH_OB`, `DEPTH_TS_MINIMUM`, `DISTANCE_OB`, `TN_POP_BINDING`), `opposing.py` knot constants, `threadcut.py`; fieldwork `knots.py` (`COHERENCE_BAND_STRAIN_PACING`, `RUPTURE_WOUND_DISSOLUTION`); world `npe.py` (`LOYALTY_MIN/MAX`, `PIETY_HIGH/LOW`), `insurgency_pipeline.py`; factions `treaty.py`/`tribunal.py`/`excommunication.py`; social_contest `appraise.py` (`APPRAISE_OVERWHELMING`), `parliamentary_vote.py` (`GENRES`); characters `beliefs.py`, `conviction.py`; `engine/cross_scale/` (`domain_echo`, `handoff_rules`, `zoom_in_out`) :7-322.
+  - Dead functions: threadwork `attempt_pulling/past_pulling/locking/dissolution`, `attempt_collective_operation`, `resolve_opposing_operations`, `mark_threadcut`, `resolve_threadcut_interaction`; fieldwork `advance_disposition/evidence`, `apply_response_matrix`, `evaluate_dialogue_lattice`; characters `add_belief`, `revise_belief`, `check_conviction_threshold`; world `generate_npc`, `get_npcs_in_territory`, `check_rm_emergence_trigger`; settlements `temperament_modifiers`, `apply_strain_shock`; social_contest `invoke_stay`, `resolve_stay_lift`, `guilds_boost_for`; engine `evaluate_priority_stack` (npc_ai), `render_protagonist_lens`, `generate_chronicle_entry`, `compute_thread_echo` :324-843.
+  - MB dead: `_octagon_dmg_mod`, `_reach_throttle`, `_cell_radius`, `agg_dr`, `agg_power`, `resolve_internal_collisions` (both engines), `SHAPE_DEF_MOD`, `TERMINAL_OK_FOR_VALUE`, `REACHES`, `WEIGHT_CLASSES` :324-400, :213-259.
+- **Conflicts / stale:** spot check (grep, non-.audit/.designs): `resolve_stay_lift`, `process_treaty_expirations`, `evaluate_priority_stack`, `apply_strain_shock` have NO references anywhere in the working tree (they may be deleted or still dead); `attempt_pulling` is referenced by `systems/threadwork/sim/operations.py` and `tests/valoria/test_threadwork_resilience.py` (so test-only liveness); `generate_npc` is referenced by `tests/valoria/test_flow_skeletons.py` and `tools/m1_acceptance.py`. `systems/` now holds `characters combat fieldwork mass_battle overview settlements social_contest threadwork world`. A scanner counting test callers as references would reduce this list (the same scope bug that caused the `can_choke` false positive in the PC register).
+- **Open items:** none; a stale snapshot of dead-wire candidates that other lanes may want to re-run.
+
+### .audit/2026-07-29-scenario-visualization/manifest_historical.json
+- **What it is:** Output manifest of `render_scenarios.py` at `VIZ_SCALE=historical`: flags, ticks 0/4/.../24, seed 1000000, SHA-256 per scenario panel and end-state (hp%, routed, troops) for 20 rows.
+- **Status:** none (data); reading: historical regression surface at the 2026-07-29 engine state.
+- **Bears on:** MB
+- **Content that matters:**
+  - Flag snapshot: `PC_CELL_DAMAGE` false, `PC_CELL_MORALE` false, `PC_CLOSE_RANKS` false, `PC_FEIGNED_RETREAT` false, `PC_FRACTIONAL_POOL` false, `PC_FRICTION_CEV` false, `PC_INTENT_RESOLUTION` false, `PC_NODE_COHESION` true, `PC_OCTAGON_DMG` true, `PC_RESERVE_COMMIT` false, `PC_STOCHASTIC_ROUT` true, `PC_TROOP_DENSITY_CAP` false, `PC_YIELD_EMERGENT` false, `PER_CELL` true :2-17 -- i.e. at the shipped defaults most "tactical" flags (intent, yield, friction, cell damage, close ranks) remained OFF, contrary to the 07-24 "turn all flags ON" directive.
+  - At t=24 most historical-scale rows end with both sides at 90-99% hp un-routed (H1 93.7/94.2, H2 95.3/93.8, H3 93.7/97.9, H4 85.7/98.6, H6 98.3/99.2, H7 95.7/96.5, R3 92.2/93.5), i.e. battles at historical scale had barely begun or never resolve within 24 ticks; cavalry-vs-line rows (C1, C2, C5, C6) end with the cavalry routed (hp 20-52%) and the line at ~99% :20-310.
+  - C4 (Cannae cavalry envelopment) ends with the envelopers at 97.9% and the line at 83.5% (no rout), C7 100.0 vs 93.0 :62-117.
+- **Conflicts / stale:** the `matrix` uses `PC_*` flag names whereas `render_scenarios.py` reads `MB_*` (`MB_CELL_MORALE` etc.) via `hasattr`, so the script prints only those present -- the flag naming split noted earlier.
+- **Open items:** none.
+
+### .audit/2026-07-29-scenario-visualization/measure_colocation.py
+- **What it is:** Standing measurement behind ED-MB-0056/0059/0061: counts cell co-location by three metrics (rounded squares, OBB overlap boolean, DEEP overlap with depth >= 0.1) split into same-subunit / different-subunit-same-side / opposing sides.
+- **Status:** none; reading: historical instrument with a recorded retraction (the depth function was biased); dead imports.
+- **Bears on:** MB
+- **Content that matters:**
+  - Jordan 2026-07-29: "i don't want cells between subunits mixing with each other. the surface of battle between units is the boundary between their cells... we are using a field system so there shouldn't even be any assignment issues so long as cell boundaries are respected." :3-6.
+  - A raw overlap boolean over-states co-location by about an order of magnitude because the formation lattice (pitch 1.0, bodies 1x1) sits EXACTLY on the touch boundary; of 16,847 overlapping same-subunit pairs the median depth is 0.0029 and 88.5% are below 0.1; only ~295 (1.8%) exceed 0.5 :21-29.
+  - ED-MB-0061 (2026-07-30) retracts the prior `_depth` form (rotated-square support radius up to 0.7071 on a foreign axis, missing B's axes; could return negative for pairs `obb_overlap` certified overlapping); ED-MB-0059's -48.6%/-74.4% headline "MUST BE RE-MEASURED"; per Jordan's S6 ruling the exclusion volume is now the r = 0.5 circle: penetration = `2r - dist` :83-106.
+  - Env flag `MB_CELL_EXCLUSION` (0/1) toggles the same-side exclusion pass; the pass is a no-op on the grid path :40-44.
+- **Conflicts / stale:** Jordan's S6 ruling reintroduces the CIRCLE body for exclusion, partly reversing the 07-22 "boxed (OBB) footprint" model (spatial_model_v2_plan) -- two body models now coexist (OBB for contact/TOI, circle for exclusion) [UNVERIFIED current state in `modules/mass_battle/geometry.py`].
+- **Open items:** re-measure ED-MB-0059 headline; `resolve_internal_collisions` "still unwired" :37.
+
+### .audit/2026-07-29-scenario-visualization/render_png.py
+- **What it is:** Rasteriser: headless Chromium (playwright) screenshots of `scenarios_<scale>.html` into per-scenario PNGs plus a contact sheet.
+- **Status:** none; reading: tooling for the visualization audit; needs `playwright` and `/opt/pw-browsers/chromium`.
+- **Bears on:** MB, GO, PROCESS
+- **Content that matters:**
+  - Rationale "an SVG in a repo nobody opens is not a comparison against history": machine-vision review of PNGs is the point :6-8. Reads `manifest_<scale>.json` to enumerate scenarios; viewport 1700x1200, device scale factor 2 :26-41.
+- **Conflicts / stale:** playwright is not among the packages `tools/session_provision.py` installs (CLAUDE.md §8 lists pyyaml pytest numpy pytest-xdist).
+- **Open items:** none.
+
+### .audit/2026-07-29-scenario-visualization/render_scenarios.py
+- **What it is:** Renderer of the 20 gauge scenarios tick by tick (SVG panels, one dot per cell coloured by subunit) with a SHA-256 manifest so reruns show which scenarios moved.
+- **Status:** none; reading: historical regression-surface tool; dead imports.
+- **Bears on:** MB, GO
+- **Content that matters:**
+  - Two scales: `gauge` (the gauge's tier-3 single-subunit 25-cell bodies, 400 troops: the control) and `historical` (rebuilt from real orders of battle via `scaled_orders_of_battle`) :56-70; armies built by the gauge's own constructors ("never re-derive") :10-14; snapshot rebuilds from the seed each time (tick N is always N ticks from spawn) :96-105.
+  - Orientation matches `research/diagrams/mass_battle_formations/`: side B at top, side A advances upward :23-24, palettes :45-47.
+  - Reads flags `PER_CELL`, `FIELD_MOVEMENT`, `MB_NODE_COHESION`, `MB_CELL_MORALE`, ... `MB_TROOP_DENSITY_CAP` :152-158.
+- **Conflicts / stale:** imports `mass_battle.orchestration`, `gauge_mb`, `mass_battle.config` from `tests/sim` (module path gone). The Godot port would want something like this as a debug view; no GO link established.
+- **Open items:** none.
+
+### .audit/2026-07-29-scenario-visualization/scaled_orders_of_battle.py
+- **What it is:** The 20 gauge scenarios rebuilt from HISTORICAL orders of battle (ratio, formation, subunit count preserved; absolute size scaled to engine ceilings) with deployment geometry rules; Jordan directive 2026-07-29.
+- **Status:** none; reading: reference fixtures (historical strengths table is the useful content); VISUALISATION scale only, "not a proposal to re-band the gauge".
+- **Bears on:** MB, WR
+- **Content that matters:**
+  - Engine ceilings: `MAX_TROOPS_PER_UNIT` 10,000, `SUBUNIT_CAP` 11, `BATTLEFIELD_SIZE` 50 columns (51 x 51 here), explicit width x depth up to 300 cells, cell cap 200 troops/cell :13-20, :52-58.
+  - Historical table: Cannae Rome 86,000 vs Carthage 50,000 (1.72:1; Rome 8 bodies, Carthage 7 = 3 centre + 2 African + 2 cavalry); Leuctra Thebes 7,000 vs Sparta 10,500 (0.67:1; 5 vs 6); Zama 34,000 vs 40,000 (0.85:1; 6 each, quincunx lanes); Agincourt English 6,000 vs French 12,000-24,000 (0.40:1); cavalry ~20% of an army with `TROOP_TYPE_DENSITY_CAP` capping cavalry at 100/cell :26-32, :91-96.
+  - Deployment geometry measured: a formation extends DOWNWARD in row index from `starting_position` for BOTH sides, so the engine's shipped spawn rows A=34/B=15 leave a true front-face gap of only 5 (bodies in contact within a couple of ticks, no approach phase); layout 5 + 13 + 15 + 13 + 5 = 51 rows with `A_FRONT = 33`, `B_FRONT = 17`, depth `DEEP = 13` :62-88.
+  - Builders: `roman_mass`, `carthaginian_crescent`, `theban_oblique`, `spartan_line`, `quincunx`, `wedge_army`, `line_army`, `english_archers`, `french_battles`, `cav_wing`, `braced_block`, `cav_envelop`; `SCALED` row list H1-H11, R1, R3, C1-C7 :126-257.
+- **Conflicts / stale:** dead import path (`mass_battle.engine`); "TROOP_TYPE_DENSITY_CAP caps cavalry at 100/cell" implies P-DEC-3 density cap was implemented (contradicts "deferred" in stage_F_verification) [UNVERIFIED].
+- **Open items:** none.

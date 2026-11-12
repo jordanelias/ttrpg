@@ -798,3 +798,76 @@ introduction; a wrong quantity at one remove. **Stories that cannot:** a rumour 
 believed forgery in play; a forgery disbelieved; an unwitnessed crime found out; a death reported; a
 liar exposed; acting on a dead man's standing; a wrong man accused.
 
+## 7. The detective and noir precedent, read against these runs
+
+The first FI audit's §16 and addendum B's §B3c judge which borrowings are understood and which only
+named; the LACUNA lane states the pipeline. They are cited, not redone. What the runs add is where
+each precedent's *first* requirement fails, which is earlier than those lanes place it:
+
+| precedent | what its play rests on | where the engine stops, by run |
+|---|---|---|
+| Shadows of Doubt (procedural crime, a signature left at the scene, leads that chain) | a deed writes something a later visitor can read | §2.4: a killing and a ruin write nothing readable; one covert kind of thirteen |
+| Return of the Obra Dinn (the scene reconstructed after the fact) | arriving later and working out what happened | §2.4: a visitor one tick later holds nothing; `examine` of a ruin teaches that it exists |
+| L.A. Noire, Ace Attorney (a statement set against a held item) | the item and the statement share a subject, so one can contradict the other | §2.3: a paper's content is about the paper; nothing a person holds can contradict it |
+| Lacuna (a committed conclusion the world answers later) | a wrong conclusion acted on | §2.5: a claim's content is read by clause 4 alone, so a wrong belief about a person changes nothing he does |
+| Disco Elysium, Pentiment (a community that talks, and remembers what it heard) | talk with content, moving between people | §2.1: one hop; the content is that someone exists |
+| The Case of the Golden Idol (a typed assertion a machine can grade) | — | nothing run here bears on it; F-FI-09 stands as cited |
+
+The nulls the first audit marked stand (no shipped game makes NPC-to-NPC rumour the main carrier of
+a strategic layer). One is added: **no run here could test a noir staple, the misleading clue**,
+because nothing can be planted (P5.8) and a finding is never false (§2.2: a find is true to the log
+or absent). The design's refusal of a false finding on `Failure` (K-37, ratified as intent) and the
+absence of planting together mean that every clue in the game is true. Whether that is wanted is
+proposal A's survivor in another form; it is not escalated twice.
+
+## 8. Evidence log
+
+All `PYTHONHASHSEED=0`. Scripts and outputs:
+`/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/PES_FI/`.
+Tiny-world probes use `harness/probes.tiny_world` at the shipped `DEFAULT_FIXTURES` (a test fixture,
+not canon: it shows EXECUTES and FORMS, never FIRES). Realm runs use `populated.build_realm(seed)`,
+the shipped chooser and fixtures, through the GAME lane's `pes.py`.
+
+| # | script | world · seed · seasons | outcome |
+|---|---|---|---|
+| 1 | `p2_chain.py 1` | tiny + 7 persons · world seed 1 | §2.1 first table; identical for cell and deed, `Success` and `Partial` |
+| 2 | `p2_chain_valence.py 1` (control) | the same at `said_slant: valence` | the same table |
+| 3 | `p2_proxy.py` (PROXY) | the same · world seeds 1–20 · 6 hops | §2.1 second table; deed, existence, ordinal, 1 and 0 arms at seed 1 |
+| 4 | `told_dump.py 0 2` | realm · 0 · 2 | hash `bacd687f1470883b412be9638d0b0f88` (the first FI audit's run 8); 37,646 Events; §2.1 third table |
+| 5 | `p4_detective.py 300` | tiny (the trail fixture's shape) · 300 act ids per cell | §2.2; RESOLVE only for the band tables; (b) through WITNESS |
+| 6 | `p3_forgery.py` | tiny | §2.3: who holds what after a forging; candidates forged against surveyed |
+| 7 | `p3b_knows.py` | tiny | §2.3: 116 / 19 with and without the knowledge; 28 → 21 after a `Success` find, content at 100 |
+| 8 | `p5_crime.py` | tiny | §2.4; `fight` folded at a forced `Felled` with both parties' wound states (the tree's `_scar_helpers` shape) |
+| 9 | `p1_belief.py` | tiny · world seed 1 · 3 seasons, one actor | §2.5 table |
+| 10 | `p1b_belief.py` | tiny · world seeds 1–12 · 3 seasons | `false-empty` differs from `true` at 10 of 12; refusal teaches the cell (7 → 0 transfer candidates) |
+| 11 | `p1c_exists.py`, `p1d_where.py` | tiny | §2.5 readings 4 and 5 |
+| 12 | `fi_arms.py 0 1 ship` (smoke) | realm · 0 · 1 | hash `5ab73af2…`, 13,379 Events: the first FI audit's run 4 |
+| 13 | `fi_arms.py 0 3 <arm>` | realm · 0 · 3 | `ship` `52ff67bc…` (equal to the GAME lane's `x1` shipped arm, so this instrument perturbs nothing); `draw1` `a162bf8b`; `notell` `a9b3283d`; `noc4` `d45d46f2`; `presence` `a0742623`; `nofi` `56741b4b`; `nochron` `7a08179a`. §1.1, §1.3, §3 |
+| 14 | `fi_arms.py 1 2 ship`, `presence` | realm · 1 · 2 | `ship` `8aae8412`: `march` 5, `migrate` 41 attempted / 4, forgeries 34 (0 travel), chained 5 (one hop), 13 non-information answers. `presence` `a992acee`: `march` 0, `migrate` 0, two deaths (6 firsthand holders each) |
+| 15 | `fi_arms.py 0 3 nod3`, `noinq` | realm · 0 · 3 | proposal D's "today" arms; see that file |
+
+Not run: `pytest` (by instruction); `aperture`, `strife`, `storybar`, `chronicle`, `arc`,
+`corpus_run`, `register --requirements`, `m1_acceptance` (cited from the lanes that ran them). A
+second and third seed for `nofi`, `notell`, `noc4` and `nochron` (machine load of 25 to 45 throughout;
+each three-season arm took 2 to 11 minutes of wall time): those four cuts are one seed with a
+draw-seed control, and are stated as such where they are used.
+
+Read: `PESSIMIST_BRIEF.md`, `AUDIT_BRIEF.md`, `skills/ners/SKILL.md`, `skills/premise-check/SKILL.md`
+in full; `08_FI_audit.md` in full; addendum B §B2; `19_LACUNA…` §0, §3–§11; `16_PESSIMIST_GAME.md`
+§0–§1; `08_FI_02`; `engine/season/epistemic.py` lines 1–759 in full and the rest with docstrings
+stripped; `loop/witness.py`, and the forge, conceal, give, seize, destroy and mint bodies of
+`loop/effects_information.py`, with docstrings stripped; `queries/person_q.py::said_of`,
+`lie_said_of`, `drifted`, `is_cell`, `known_persons`; `decision/options.py::record`, `teller_weight`,
+`_content_answer`; `queries/world_q.py::questions_for` (code); the verb rows; the trail fixture.
+**Not read** (`[SKIPPED]`): `skills/resolution-diagnostic/SKILL.md` (its questions were taken from
+the ners skill's description of it: a pool sweep, a quality sweep and a mirror); `modules/fieldwork/find.py`
+(34 lines; cited from the first audit); the rest of `effects_information.py`; `08_FI_01`, `03`–`08` and
+the four `19_LACUNA_*` proposals beyond what the audits say of them; `18_DETERMINISM_SWEEP.md` beyond
+the rows C-02, C-05, C-15; `.designs/`, `.audit/` and `research/` (cited through the first audit and
+its addendum). The §14 capability and §13 arcs charges of `AUDIT_BRIEF.md` were not redone: the first
+audit's sections stand, and nothing measured here changes a row of either.
+
+One mishap, corrected: a mistyped redirect wrote four small error files into the repository root
+(`p2_chain_s1.out`, `p2_proxy.out`, `p3_forgery.out`, `p4_detective.out`); they were removed at once.
+`git status --short` at the end shows this lane's files only (plus other lanes' own).
+

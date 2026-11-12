@@ -352,3 +352,65 @@ Cross-file pattern noticed early: most files in this family carry a long docstri
   - The realm-level hash identity is historical (`@23b33e9e`); the live control is `test_the_thread_read_withheld_arm_is_pinned...` (`:20-26`).
 - **Conflicts / stale:** the Calamity has no natural source in play (H-236): world clocks/hazards (WR) exist as a mechanism but shipped inert.
 - **Open items:** H-235 sweep points (250, 500) are unchosen test arms.
+
+### engine/season/tests/test_in36_foreign.py
+- **What it is:** v9 IN-36 (batch B-V) + IN-60 guard content: an external empire (Altonia) as persons: foreign cast, two seats, border outside every `realm` rung, a foreign `march` reaching the mass-battle seam through the real chooser; guards as sworn cohorts.
+- **Status:** none. Reading: live; `foreign` defaults to True since ED-IN-0310 (Jordan, 2026-11-04) (`:6-7, :107-112`).
+- **Bears on:** FA, MB, SE, CHAR (cast), CORE (R-04, ARCS foreign cast).
+- **Content that matters:**
+  - Control arm `build_realm(0, foreign=False)` seats no entity whose id contains the foreign markers and has `len(persons) == 83`; shipped default hashes equal to `foreign=True` and differ from `foreign=False` (`:96-112`). No hash literal pinned deliberately ("a later position that moves the default realm would turn a pin into a false alarm", `:9-11`).
+  - The foreign root is outside the realm for endings and the uncontrolled census, falsified by ending the root's only hold (`:162-183`).
+  - Natural chooser: the Katepano (NPC-089) forms `march` on the capital only with a planted `exists:Rung` claim (`_told_of_the_capital`, REM-27: `march` forms only on a `Rung`-classed referent stamped from the person's own ledger); the no-dispatch members (NPC-011, NPC-090) form none (`:196-223`). With CR-81 acquaintances the capital rides his first question (`out[0]`) (`:203-216`).
+  - The march folds to `mass_battle.field_input` once, `rec.origin == foreign root code`, `rec.territory == "T1"`, weights `(3, >=1)` (`:226-254`).
+  - Existence witness, not a rate: unrestricted chooser picks the march at 4 of 80 seeds at tick 0 (27, 44, 53, 63; was 10 of 80 before CR-81); `WITNESS_SEEDS = (44, 53)`; the failure message says "RE-SCAN ... do not skip" (`:273-334`). Draws keyed on `(verb, subject)` so witnesses re-roll on any upstream move.
+  - A march on Lowenskyst (`set_s_007`) arrives `field.unopposed`: "the realm's defence of its chokepoint is garrison Site and nobody" (H-233 finding) (`:257-270`).
+- **Conflicts / stale:** the witness seeds are a trajectory-dependent set (like F-TEST-02/03); frequency left to "H-233's remaining half ... the convictions' or IN-08's march cells". 4 of 80 seeds is a real play-frequency fact for the antagonist empire: the invasion is rare in computed play.
+- **Open items:** H-233 FREQUENCY half (how often the Empire marches) is open and unowned beyond "IN-08's march cells".
+
+### engine/season/tests/test_in37_chronicle.py
+- **What it is:** IN-37: `harness/chronicle.py`, a chronicle render OUTSIDE the simulation (observer's contract), plus CR-68 consequence-act pick (`arc.consequence_acts`, `--all-acts`).
+- **Status:** none. Reading: live; instrument/legibility tooling.
+- **Bears on:** CORE (R-01 legibility), WR (narrative), GO (legibility).
+- **Content that matters:**
+  - Render changes nothing: content hash, log length and write list equal after; asserts the render and the consequence cut are non-empty (non-vacuous) (`:48-63`). AST checker for write/token calls is itself run on a planted source (`>= 3` found) (`:88-92`).
+  - A real seeded render names >= 2 actors and every non-first line cites an earlier line that is a real cross-person antecedent; `checked >= 1` (`:101-129`).
+  - Planted logs: deepest chain beats a first-logged decoy and a later equal rival (`:150-159`); CR-68: a depth-3 chain of acts that WROTE outranks a depth-5 chain of refusals; the mutation (every act a consequence act) restores the depth-5 pick so the check can fail (`:235-250`).
+  - Consequence classified by record ownership (`ARC_SELF` only on one's own record, `ARC_WORLD` only on another's): a self-tend and a pupil's capability are not consequences (`:253-267`).
+- **Conflicts / stale:** the chronicle picks "the deepest cross-person chain"; the narrative that results is whatever the cause graph holds - no test asserts the chronicle is readable as a story.
+- **Open items:** none.
+
+### engine/season/tests/test_in45_carry.py
+- **What it is:** v9 IN-45 `carry`: a held petition is put before the room - the act re-winds the petition's `Record.stages` and appends a docket item naming it (`_eff_carry`).
+- **Status:** none. Reading: live. File is edited by REM-25: one test reads with `carry`'s `referent_class` blanked in-process (`_carries(..., shipped=False)`).
+- **Bears on:** FA, SC (docket, bench), CORE.
+- **Content that matters:**
+  - G4 invariant: the docket moves iff a success Event receipted the petition write; a refused carry leaves the docket as it was (`:86-107`). Matter = the petition's `terms`, not its id or petitioner (`:110-118`).
+  - Controls: non-holder, a held Record that is no petition, and a second carry of a docketed matter each `carry.refused` (`:121-136`).
+  - Composition: a bench `determine`s the carried matter; `determine` is contested (SC-03b) so the bench is a STRONG JUDGE (`pool_default` 30) and the control asserts the band it opened at (`out[0].degree in OPENS`) (`:194-206`).
+  - Latent refusal pinned: at `record_stages_default == 0` the filing and carriage both wind `[]` so `_eff_carry`'s same-stages decline refuses every carry (H-80): "pins the latent refusal; does not bless it" (`:209-220`).
+- **Conflicts / stale:** the first formation test now runs on a blanked column (a patched `VERB_TABLE`), not the shipped table.
+- **Open items:** H-80 arm 0 latent refusal.
+
+### engine/season/tests/test_in45_planned_works.py
+- **What it is:** v10 IN-45 (B10-06; M5 taken, option (B)): works authored as world data - `venues.yaml: planned_works` minted at the end of `build_realm` by `harness/populated.py::mint_planned_works`.
+- **Status:** none. Reading: live; the data are two rows (hearth plan at Auerheim S-002, dwelling plan at the Royal Court) (`:84-102`).
+- **Bears on:** SE, FA, CORE (R-05 all verbs: `found`/`build` formed for nobody before this block).
+- **Content that matters:**
+  - Why it exists: in computed play nobody declares a `works` (`create_record` is untyped and mints `text`), so `found` and `build` formed for nobody and `work` stayed refused (`:5-9`) - an authored-data fix to an unreachable-verb gap.
+  - Control: an empty block differs from shipped by exactly two Records and two `hold` edges (stores compared by sorted ids), nothing else (`:105-122`).
+  - The Duke's `found` makes a hearth Rung under Auerheim (staking 10 grain) and the Steward's `build` stands a dwelling Site at condition 0; the non-master is refused on the other's works (`:140-167`).
+  - Planted failure: rows authored `kind: text` mint records neither verb can name (`:199-215`); 10 malformed-row refusals each assert the world unmoved (`:237-265`).
+  - MATTER ripens a planned works's terms with `ROOT` as cause (a stage naming its own id as winder was refused by the gate) (`:170-192`).
+- **Conflicts / stale:** specific ids (`DUKE = "p_npc_020"`, `STEWARD = "p_npc_009"`, `set_s_002`, `b_s_001_court`) hard-code the authored world; fine as a content test, brittle to cast changes.
+- **Open items:** only two works in the whole realm; whether `found`/`build` execute in computed play is `aperture 4 0`'s reading, not asserted (`:16-17`).
+
+### engine/season/tests/test_in50_refusals_carry_the_occasion.py
+- **What it is:** IN-50: a refused act cites what occasioned it (`_act_events` is the one emission owner), plus REM-13 reader tests for `corpus_run`'s per-verb degree tables and `emits_and_writes_nothing`.
+- **Status:** none. Reading: live; R-01's `measured:` count is attributed to this file (`requirements.yaml` R-01, `:8-9`).
+- **Bears on:** CORE (R-01 decisions propagate), SC, DICE.
+- **Content that matters:**
+  - Four refusal routes that previously dropped the occasion (act.ineligible, S27.4 `attempt.refused`, contest-branch `_admits` refusal, `_refuse_party_gap`) plus the fold's own refusal each cite `[act.id, occasion]` exactly (`:81-135`); no-scene/`occasion=None`/`need` scene controls keep `[a.id]` alone, `checked >= 5` (`:139-160`).
+  - A REAL RUN over two corpus cases (ARC-23, NPC-087): refusals cite another person's act-Event (`seen >= 1` per case) and `C._r3_propagates(w, d)` reads True - this is a played-world (corpus template) R-01 assertion, with the case set picked after CP-T03-00 killed NPC-090's attackers (`:209-224`).
+  - REM-13: `degrees_by_verb` sums to `degrees`; a lost `tell` beside a found `research` loops up to 120 act ids to find the draw (`raise AssertionError` if none) (`:251-258`); `bands_that_differ` and `emits_and_writes_nothing` tested on planted rows.
+- **Conflicts / stale:** the corpus case pick is trajectory-dependent (comment explains the NPC-090 -> NPC-087 swap), so it is brittle in the F-TEST-02/03 manner, though it asserts a property (`>= 1`), not a count. Contradicts neither F-TEST-01 (corpus, not shipped realm) nor the addendum's R-01 row (which cites `test_n3_`/`_w18_`); this file is an additional R-01 test the addendum did not list.
+- **Open items:** none.

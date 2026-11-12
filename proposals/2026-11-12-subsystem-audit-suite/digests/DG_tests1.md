@@ -348,3 +348,53 @@ Lane `tests1`: 70 files under `engine/season/tests/` (test files and three helpe
   - `fight_estimate` for `capture` shows `yielded > 0`, for `fight` `yielded == 0.0`; one `combat_input`, no second `terms` path (:180-191).
 - **Conflicts / stale:** `capture` is "fight's typed cell" and a nameable seat-gated verb, yet in two realm seasons violence/`capture` formation depends on CR-87 contexts (see cp_t03_01). Whether a yielded fight resolves by a draw (yes, via `random.Random` in the engine) vs the capture outcome being a fixed function of the surrender record: the draw is the surrender in the engine, so ok.
 - **Open items:** none.
+
+### engine/season/tests/test_cp_t04_01_person_subunits.py
+- **What it is:** behaviour test, CP-T04-01 (`H-359`): `field_subunits: person` builds one subunit per commanding person and `_eff_march` scales each loser's body by HIS subunit's survivor ratio; `side` (shipped) is the field as it was.
+- **Status:** none; live.
+- **Bears on:** MB (subunit hierarchy, person-level casualties), CHAR (commanding persons), WR, CORE.
+- **Content that matters:**
+  - The field is HAND-BUILT: "One season of the shipped realm fights almost no field (seed 0: `field.unopposed` 3, `march.declared` 6; seed 1: unopposed 2, declared 3; seed 2: `field.lost` 1)" (:5-8) - so the natural game exercises the field resolver almost never. Fixture knobs `SEED=8, WEIGHT=1, FIELD_SCALE=200` (weight -> troops 200; `field_troops_per_weight` is REM-32, "a value of THIS TEST, not Jordan's answer to JQ-4"); preconditions asserted; re-picked by MB-07r (depth support cap, `POOL_QUALITY_SCALE` 0.5 -> 0.8).
+  - Under `person` two losers end with different bodies (the routed marcher cut, the other untouched); under `side` both take the side ratio; planted failure (side ratio fed to every person) reddens the same check (:64-98). Control: `side` equals the unswept fold, same hash, record holds no `subunits`/`broke_first` (:101-115). `field.lost` carries `(pid,"broke",True)` for exactly one loser (:118-124).
+  - Unit shape: `_person_unit` builds one subunit per member sized by his own weight x scale (`[100,300,200]`), total equals the side's, provisioned troops spread by weight (`fed=2.0` -> `[50,150]`); subunit logs its person in the ORDER it breaks, not on a whole-unit sweep (:127-149). Unknown arm raises `ValueError` (:152-156).
+  - The module is reached by `importlib.import_module("modules.mass_battle.massbattle")` by string (:21, :36-38): the test keeps `engine/` from naming `modules/` imports.
+- **Conflicts / stale:** weight and `field_troops_per_weight` are the only link between persons and troop counts: a character's quality (skills, kit) does not enter the headcount line (MB lead for the brief's Ogre Battle/Bannerlord intent).
+- **Open items:** JQ-4 (the weight -> troops scale) is Jordan's, unanswered.
+
+### engine/season/tests/test_cp_t04_02_marshal.py
+- **What it is:** behaviour + export test, CP-T04-02 (B10-12; AM-C-09 REPAIR): `marshal`, the standing order of battle. A seat granting `dispatch` mints an `order_of_battle` Record `[at, role, retreat_at]`; `field_input` reads per side the newest by holder edge (`world_q.standing_order`); `resolve_field` maps `role` onto each subunit of a headcount line.
+- **Status:** none; live. `[ASSUMPTION; medium; Jordan to correct; revert: gate it]` on the role bypass (:9).
+- **Bears on:** MB (orders, roles), FA (seat-gated orders, `dispatch`), CHAR (chooser `operand_bags`), CORE.
+- **Content that matters:**
+  - THE USER'S RULING: the Stop-if ("friction drowns a role's effect") was met on the roles a headcount line's stand-in troop type (`infantry`) may take (`hole_register.yaml` H-361); built as written with `role` ranging over the whole `ROLE_SPEC`, NOT gated by `registry.role_allowed`; pinned by `test_the_role_is_not_gated_by_role_allowed` (`Shock` not in `infantry`'s menu, the order still sets role, shape `Arrowhead`, instruction `charge`) (:7-9, :279-292).
+  - Falsifier on paired seeds (`random.Random(0..199)` in both arms): a `Shock` vs `ShieldWall` order on the attacker changes the band distribution by more than +-7 points and the win share; a defender's order changes a defended WALLS field; two orders in two seasons - the newer governs, the older is kept (:131-153). Planted failures: order ignored by `field_input`, module ignoring role, both leave arms equal (:165-180). Controls: no order = field as it was; other faction's, other place's, closed or seatless-holder's order is not read (:185-210).
+  - Field sized by hand: "One shipped season fights no `field.won` or `field.lost` (the aperture reading), and at the shipped `field_troops_per_weight` of 1 every subunit routs at tick 1, so no role could matter" (:11-14). SCALE 30, weights 10 vs `(4,4,3,3,3,3)`.
+  - `operand_bags` ranges `role` and `retreat_at` over `battle_orders.ROLES` x `RETREAT_AT` = 45 bags, each a distinct act id; `CHOICE_SOURCED["marshal"] == ("role","retreat_at")` (:237-248) - the chooser can enumerate it. The Spymaster grants `dispatch` but his purview doesn't reach HOME: `marshal.unauthorized` (:215-225). A `create_record` of kind `order_of_battle` is declined: only `marshal` mints (:295-306).
+  - Export: `tools/export_battle_orders.py --check` run in a subprocess, drift planted two ways (stale artifact; module `ORDER_ROLES` diverging from `ROLE_SPEC`) (:253-276).
+  - Hard-coded ids: `p_npc_020` King, `p_npc_038` Cardinal of Justice, `p_npc_033/035` marchers, `set_s_014/036`, `off_king`, `off_cardinal_justice`.
+- **Conflicts / stale:** test_cp_t04_03's docstring says "`marshal` ships WITHHELD" from the chooser, so in the shipped game no NPC issues a standing order of battle; the whole order mechanism is hand-folded. Orders set role/retreat but not mixed weapons or loadout (the brief's MB weapon-carry trade-off has no counterpart).
+- **Open items:** H-361 bypass of `role_allowed`; `reserve`/`general` keys absent (":no `reserve`, no `general`", :219).
+
+### engine/season/tests/test_cp_t04_03_retreat.py
+- **What it is:** behaviour test, CP-T04-03 (B10-12): retreat in good order. A standing order's `retreat_at` (`none`, `0.5`, `0.25`) becomes per-subunit `own_strength:FRAC` Order with the `retreat` stance; a side every one of whose subunits retreated or routed has CONCEDED (`hierarchy/units.py::unit_conceded`); `run_battle` stops for it; `_grade` never calls it the winner.
+- **Status:** none; live.
+- **Bears on:** MB (retreat conditions, concession, grading), CHAR, DICE (paired seeds).
+- **Content that matters:**
+  - Falsifier on 200 paired seeds: an attacker with `retreat_at 0.5` against an equal defender loses fewer troops than with `none` (margin 0.01), and is graded the winner in ZERO seeds where its retreat fired; asserts `fired >= 20` and that every seed where arms differ is a seed the retreat fired in and the attacker kept more troops (:107-120). Person arm: fired >= 5 of 100 seeds (:123-129). A retreating defender leaves the field to the attacker (:132-137).
+  - HONEST LIMIT (docstring :18-20): on the natural fold no fired retreat is ever ahead on size, so `_grade`'s concession rule cannot be observed by a fold; observed on hand-set units (`_fake_unit` SimpleNamespace) (:171-197). A `0.25` retreat fires in no seed on a single-subunit side because the rout floor comes first (:140-147).
+  - Planted failures: order not read (`_retreat_orders` -> ()), battle not stopping (`unit_conceded` -> False), `_grade` blind to concession - each judged by the very predicate (:152-197). Stop test: 60 `run_battle` runs, `stopped >= 5 and early >= 1`, no rout facing flip (:202-217). `unit_conceded` is keyed on the ORDER's `conceded` mark, not stance/`yielding` (a DG-2 fighting withdrawal is not a concession); `"conceded" in units._ORDER_SAFE_FIELDS` (:220-239).
+  - Controls: no order and `none` everywhere equal the field as it was, seed for seed (:244-251); an out-of-set `retreat_at` raises (:254-260). `MB_YIELD_*` yield "untouched".
+- **Conflicts / stale:** ties to `orchestration.run_battle` re-export (`ED-1043` "moved verbatim"). The concession is a deterministic grading rule (attacker conceded => never wins) given the state; the draw is in the battle itself.
+- **Open items:** none.
+
+### engine/season/tests/test_cp_t04_05_graded_walls.py
+- **What it is:** behaviour test, CP-T04-05: graded walls: `field_input` hands the engine `int(field_walls_dr * fort_level)` (floor), `None` (shipped) staying `None`; a worn garrison's walls armour the defender less.
+- **Status:** none; live.
+- **Bears on:** MB (fortification, terrain), SE (garrison condition), FA.
+- **Content that matters:**
+  - Falsifier: defender win share falls as garrison condition steps 1.0 -> 0.67 -> 0.33 -> 0 under 200 paired seeds at `field_walls_dr=3` (DR carried `[3,2,0,0]`; steps by at least the +-7 NOISE band; the 0.33 -> 0 step is exactly flat because `int(3*0.33)=0`) (:89-108). Planted failure: flat `walls_dr` reddens the same predicate (:111-120).
+  - Control: shipped `field_walls_dr = None` is flat across steps still walled and "fort 0 is no wall"; 3 at full condition is the same field as `None`, seed for seed and through the real driver by hash equality (:132-165). `int` not `round` (banker's) (:123-129).
+  - Re-picked by MB-07r (weight 10, scale 60): base share 0.49, steps ~10 points. The measured shares are in a comment, a hand-tuned fixture (:31-35).
+  - Shipped season fights almost no field (unopposed 3/2, lost 1), so "THE FIELD IS HAND-BUILT" again (:5-8).
+- **Conflicts / stale:** `field_walls_dr` shipped as `None` (walls are flat WALLS rows regardless of condition) - the graded walls are not live in the shipped game.
+- **Open items:** none.
