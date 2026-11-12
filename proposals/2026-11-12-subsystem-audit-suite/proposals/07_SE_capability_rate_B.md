@@ -1,5 +1,7 @@
 # 07 · SE — a capability's rate on an untested act, on the suite's one capability surface (supersedes two sections of `07_SE_capability_and_chooser_surface.md`)
 
+Reconciled: 2026-11-12, U5d closure — folded **A-54** and **A-12** against one row of the audit addendum's §6 that this file implements ("stewardship … No passive bonus from a holder to his domain's yield … declined"). Overruled: A-54 rules that a steward's skill bears on the harvest draw. The form: the steward (the holder of the seat whose rung is the place's treasury rung) contributes to the **pool** of the place's seasonal draw through `rate(person, work)`; it is a term in a draw, not a multiplier on a fixed yield, so the place can still fail under a good steward. A seat's own modifier (A-12) enters the same draw through the one obstacle composer. `rate`'s form (`about_mid` on `faculty`) and the row declaration (`magnitude: rate`) are unchanged; the two inputs to a roll are `U5a_capability_home_and_two_inputs.md`'s.
+
 ## Status: PROPOSED
 
 Carries finding F-SE-21 and resolution R-SE-32 of `audits/07_SE_audit_addendum_B.md` (its §6). It

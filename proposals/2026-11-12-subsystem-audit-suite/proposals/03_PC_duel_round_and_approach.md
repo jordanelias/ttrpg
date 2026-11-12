@@ -1,5 +1,7 @@
 # PC — one duel round as the unit of play: the approach choice, the round entry, the grid seam, the field's duel, and the NPC's decider
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.2, §1.3) — superseded by `03_PC_duel_round_and_approach_B.md` where the two differ (its §1 table), and by four rulings: A-4 (a duel inside a battle is called from inside as a nested contest: round state lives in the calling loop's frame, never on an adapter; the cap is `U5b_PC_rulings_in_the_fight.md` §1), A-1 (auto-resolve is the one resolver: equal plans agree exactly, not in expectation), A-31 (longer fights: the approach is calibrated after the damage scale, `U5b_PC_rulings_in_the_fight.md` §4–§5) and the standing rule (the upset flip becomes a tracked riposte, `18_DETERMINISM_no_certain_matchup.md`). §2, §3, §5, §6 and §7 carry the changes in place; the author's text stands elsewhere.
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-12) — ED-SC-0013's ledger row opened: it records the auto/manual duality doctrine as PROPOSED, not RULED. No edit of the proposal depends on the difference (Jordan's ruling 1 of 2026-11-12 governs auto-resolve).
@@ -34,7 +36,9 @@ one engagement per turn (`wrapper.py:576`). Expose that joint and let everything
 ```python
 # engine/season/queries/inputs.py
 @dataclass(frozen=True)
-class DuelState:                 # what one party carries from round to round; held by the HOST, never by the module
+class DuelState:                 # what one party carries from round to round. (Reconciled, A-4 / F-PC-19:) it lives in the
+                                 # FRAME of the loop that calls `round`, for one provider call; no adapter or wrapper holds it.
+                                 # A fifth field, `form`, is carried until `03_PC_weapon_form_at_round_start.md` lands (PB §2).
     cumulative_damage: int = 0
     stamina: Optional[float] = None      # None: start of a fight (the module derives the maximum)
     conc: Optional[float] = None
@@ -65,8 +69,9 @@ class DuelRoundOutcome:
 - `fight(inp, rng, decide)` becomes the loop over `round`: for each turn ask each party's decider for
   an approach (or `withdraw`), draw that round's private stream from the fight's stream
   (`random.Random(rng.getrandbits(64))`), call `round`, stop on a felling, a yield, a withdrawal or the
-  twelfth turn. `wrapper.fight` shrinks to that loop or is deleted in its favour; the upset flip stays
-  where it is, on the integer nobody in a season reads.
+  twelfth turn. `wrapper.fight` shrinks to that loop or is deleted in its favour. *(Reconciled, sweep
+  D-11:)* the upset flip does not stay on the unread integer; it is replaced by the tracked riposte of
+  `18_DETERMINISM_no_certain_matchup.md`, which a round's trackers carry.
 - A second composition row registers the round entry (`references/module_contracts.yaml`,
   `composition_roles:`, target `modules.combat.fight:round`), so a host reaches it by role, never by
   import.
@@ -77,7 +82,7 @@ class DuelRoundOutcome:
 |---|---|---|---|
 | AUTOMATED fight | `fight`, from the season's provider | each party's decider; an NPC's is §4 | once, after the loop (as now) |
 | duel, moment by moment | the same `fight`, with a played party's decider called between rounds and the round's trace rendered before the next question | the player | once, after the loop |
-| grid round | the grid host calls `round` once per attack action, carrying the two `DuelState`s on its units | the acting unit's player or NPC decider | when the grid battle folds |
+| grid round | *(Reconciled, A-4:)* the skirmish's own loop (the cell field at weight 1, `04_CODE_ARCHITECTURE.md:811`) calls `round` once per attack action through the `duel` callable its adapter hands it, holding the two `DuelState`s in that loop's frame | the acting unit's player or NPC decider | when the grid battle folds |
 
 A grid attack and a duel turn are the same call with the same record; the grid only decides when the
 next round happens and who else acts in between. The per-round stream makes a fight replay equal
@@ -90,9 +95,10 @@ whether its rounds are called in one frame or across grid turns: round `r`'s see
   beside `TURN_CHOICES`; the decider's set becomes `APPROACHES + ('withdraw',)`, with `engage` kept as
   a synonym of `normal` so every existing decider is unchanged.
 - An approach is a **prior on gates the engine already rolls**, never a command (the held Plan-layer
-  proposal's rule, and ED-PC-0023's ruling against imposed outcomes): it sets a per-round lean that is
-  added to `disp_lean` for that round, so it moves the commit-depth Beta, counter selection and
-  initiative drift through the three hooks that exist. `normal` is lean 0: byte-identical.
+  proposal's rule, and ED-PC-0023's ruling against imposed outcomes). *(Reconciled, R-PC-28 / F-PC-17:)*
+  it does **not** ride `disp_lean`: it has its own coefficients on commit depth, counter selection and
+  the bind break, per phase of the engagement (`measure`, `exchange`, `bind`), and never moves the
+  initiative drift, which is retired (PB §3, step 3e). `normal` is lean 0: byte-identical.
 - **Both ends must cost, in the same change.** Today the aggressive end is strictly better. The engine
   already has the cost side and under-charges it: deep commits raise `overcommit_exposure`
   (`combat_systems.py:1164-1175`) and readiness debt (`wrapper.py:287`), and a defender who out-reads
@@ -132,10 +138,13 @@ engagement through the same path:
 
 - The field's battle loop reports a **contact**: two named persons (officers, champions) in adjacent
   cells this field turn. It does not resolve it.
-- The field's host adapter (`engine/season/seam/wrappers/mass_battle.py`), which already calls a
-  second module entry by role for provisioning, builds a `DuelRoundInput` for the pair (their records
-  from `combat_input`, their `DuelState`s carried on the adapter's side for the length of the battle)
-  and calls the `combat.round` role. One field turn is one duel round.
+- *(Reconciled, A-4 / F-PC-19.)* The field is one provider call and its adapter runs before and after
+  it, never between its turns, so the adapter cannot interleave rounds or hold state. Instead the
+  adapter resolves the `combat.round` role once (`nested_entry`, `U5b_PC_rulings_in_the_fight.md` §1) and
+  hands the field module a `duel` callable with each officer's record; the field module, at its own
+  window, builds the `DuelRoundInput` for a pair in contact, calls `duel`, and keeps the two `DuelState`s
+  in its loop's frame. The call is a nested contest counted against the cap (1); at the cap it returns
+  the typed result `NESTING-CAP`. One window is one duel round (`04_MB_manager_battle_one_resolver.md` §7).
 - It hands the field module a typed result: `DuelContactResult(pair, felled, wounded, yielded)`.
   What the field does with it is MB's rule; the borrowed constraint from research is that a person's
   effect on a unit is a fraction of the unit's own cohesion, never a flat amount, because no surveyed
@@ -180,6 +189,14 @@ is never a party to a personal fight (CP-T03-01, ruled). Whether a side fights a
 commanding persons is H-359's question and MB's.
 
 ## 6. Conflicts with ruled or ratified items (named, not resolved)
+
+*(Reconciled 2026-11-12: each is now answered. 1: the grid battle is one provider call with frame-local
+round state (A-4), and the in-round consult is admitted by A-9 with one sentence owed to the ratified
+suspension. 2: one build, the cell field at weight 1 (Layer 1 `04:811`; addendum C-4). 3: A-4 keeps round
+state out of the world, and between scenes a wound is A-8's level, so the held seeded-damage question is
+not decided by this build. 4: the reopen condition is met by Jordan's own intent of 2026-11-12; D-40
+takes leans first and the transfer behind a dial at zero. 5: superseded by Layer 1 and A-1. The author's
+text follows unchanged.)*
 
 1. **The ratified suspension (`proposals/2026-10-07-grid-mode-suspension.md`, REM-31).** It covers
    "one provider call for one deferred act", with a decider that draws nothing and mutates nothing,
@@ -228,9 +245,9 @@ answered for the played case by the intent and left open for the unwatched one.
 |---|---|---|
 | 1 | `fight.round` and `fight` as a loop over it, drawing from the one stream as now | every existing combat test and season hash unchanged (hash EQUAL); `round` called twelve times by hand equals `fight` at three seeds |
 | 2 | the per-round private stream | a fight run in one call and the same fight run as separate `round` calls from `(seed, r)` give identical outcomes; season pins re-recorded once, declared |
-| 3 | `APPROACHES`, the lean, the swept costs | all-`normal` byte-identical to step 2; the workbench table: in a mirror no approach outside the control band of `normal`; each approach best in at least one named matchup |
-| 4 | per-party deciders, the widened view, the chooser's NPC decider (returns `normal` until CHAR supplies temperament) | REM-31's equality test green; a scripted NPC decider that differs moves the hash; the fidelity reading: over 300 seeds, the played fighter's felled share under the best of a small set of scripted policies, set beside his share under the NPC decider, with the disjoint-seed band, reported in the commit body |
-| 5 | the `combat.round` role called from the field adapter on a reported contact | a seeded field with two planted officers in contact shows one duel round per field turn in the trace and a `DuelContactResult` in the field's result; with the contact report off, the field's hash is unchanged |
+| 3 | `APPROACHES`, the lean, the swept costs *(Reconciled: as PB steps 3a–3e, landed after the combat calibration batch, `U5b_PC_rulings_in_the_fight.md` §5 rows 5 and 7; added gate, pessimist R-6: a state-reading policy beats never-lean by more than the interval in some named matchup)* | all-`normal` byte-identical to step 2; the workbench table: in a mirror no approach outside the control band of `normal`; each approach best in at least one named matchup |
+| 4 | per-party deciders, the widened view, the chooser's NPC decider (returns `normal` until CHAR supplies temperament) | *(Reconciled, A-1 / addendum C-2: the gate is exact, equal plans give the identical outcome and hash whoever supplied them, PB step 4; the reading in expectation below is a balance reading of the choice, not the gate.)* REM-31's equality test green; a scripted NPC decider that differs moves the hash; the fidelity reading: over 300 seeds, the played fighter's felled share under the best of a small set of scripted policies, set beside his share under the NPC decider, with the disjoint-seed band, reported in the commit body |
+| 5 | *(Reconciled, A-4:)* the `duel` callable (the `combat.round` role, nested, cap 1) handed to the field module and called at its window on a reported contact | a seeded field with two planted officers in contact shows one duel round per field turn in the trace and a `DuelContactResult` in the field's result; with the contact report off, the field's hash is unchanged |
 
 ## 8. Falsifier
 

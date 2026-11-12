@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Folded: 2026-11-12 by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (rows S-1, M-5, B-9). Nothing here is deleted; three things are added and one seed is questioned. (1) **The scale is stated**: `cell_troops: 16` is sixteen men in close order on about four metres square (four files by four ranks at three feet a man, Sabin on Polybius and Vegetius, read at the page: `research/historical/mass_battle_movement_and_behaviour_grounding.md` F1), a tick about four seconds, an 18-tick engagement one bout; the block `deployment.scale` and `max_bouts` are in `26_MASS_BATTLE_cell_scale_and_time.md` §1. (2) **`approach_rows`** stops being left at 3: it is the longest missile range on the field with a floor of 3 (same file §2), because at this scale three rows is twelve metres and there is no missile phase. (3) **`ranks` seeds against the sourced depths** (same note, F3): a cell row is four men deep, so `ranks: 2` is the hoplite's eight and a Roman line's six to ten, `ranks: 4` the phalanx's sixteen. The seeds proposed below (4 for foot, 3 for missile troops, 2 for horse) come from the tier table and make ordinary foot sixteen deep; the sourced seeds are **2 for sword and spear foot, 4 for pike, 2 for horse**, missile troops not established. Section 2's gate 4 (depth is a lever) is the reading that decides between them; both are seeds. (4) `ranks` and `files` become order-settable out of contact, at a cost in ticks (`26_MASS_BATTLE_movement_and_fatigue_as_data.md` §4).
+
 Lane MB (the record edits are IN's). Carries R-30, R-32, R-33 of
 `audits/04_MB_audit_addendum_B.md` §B6 and its §B3. Depends on the troop file of
 `04_MB_unit_loadout_and_weapon_in_hand_B.md` (stage 1) and on the first MB lane's

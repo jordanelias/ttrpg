@@ -1,5 +1,7 @@
 # 07 · SE — how a character's capability and temperament reach a settlement act
 
+Reconciled: 2026-11-12, U5d closure — folded **A-12**, **A-54** and **A-56**. §3 and §4 are superseded by `07_SE_capability_rate_B.md` (as the addendum says); §5 and §6 stand. NPC-083's "methods handing influence to internal factions" stays outside this file. A cohort's candidate surface is the heavy-move list (`U5d_SE_cohort_heavy_moves_and_caste.md`), so the chooser terms here bind named persons and the seven cohort moves only.
+
 ## Status: PROPOSED
 
 Carries §14 (capability authoring surface) and the NPC and chooser points of `audits/07_SE_audit.md`.

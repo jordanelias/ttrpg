@@ -805,3 +805,126 @@ through the uses table. R2 W5 reads a quorum before `date.fired`: a rule of an i
 row; R2 W3's reader in `queries/person_q` takes no token; R2 W1 keeps state inside one `resolve_field`
 call (`holonic` §45). No STRUCTURAL row is touched. B1 D3 retires two files with `FORK:` rows, as
 CLAUDE.md §1 requires; R1 retires fields and two contract rows, no file, and writes none.
+
+---
+
+# PART 5 — THE TEST DIGESTS (`digests/DG_tests1.md` … `DG_tests6.md`)
+
+The six digests are the second reading of the test files `audits/01_CORE_audit_addendum_C_tests.md` said it
+scanned and did not read (about 305 entries). They carry no finding ids of their own; what they hold that
+can be closed is in three places per digest: *Items that could change an audit finding*, *Cross-subsystem
+leads*, and each entry's *Open items* line. **TDA** = `U5a_tests_digest_additions.md` (written by this
+closure for the instances the three test proposals do not name). T1, T2, T3 as in §1.11.
+
+## 5.1 Items that could change an audit finding
+
+| item (digest) | claim (one line) | disposition | carrier | evidence |
+|---|---|---|---|---|
+| F-TEST-01 confirmed (DG1–DG5); its structural source is the ruling *Relax exit rules* (v9 §0.5, 2026-10-13; now `valoria_master_workplan_v11.md` P9) | nearly every file says no test asserts a verb executed in the seed-0 realm | RESOLVED-BY | T3 rows 1–3. No conflict with the ruling: it relaxed a plan position's exit; T3 asserts two requirement-level properties with a control and no verb's execution | DG2 leads, first row |
+| F-TEST-01 qualified (DG2) | three played tests exist that addendum §3 does not list (`test_in50…:209-224`, `test_in57…:427-444`, `test_in62…:256-262`) | STALE-FALSE-POSITIVE (in part) | — the addendum's sentence is too strong by three tests on played corpus or realm worlds; none is at the shipped realm on a requirement, so T3 stands | — |
+| F-TEST-02 confirmed and widened (DG1, DG3, DG5) | the same literals in more files; revert stacks up to 8 deep; 204 re-pin lines in one file | RESOLVED-BY | T1 A–C; TDA §D row D2 | — |
+| F-TEST-02 qualifier (DG3) | two more literals pin the shipped realm (arm off) | RESOLVED-BY · no edit | TDA §F (evidence corrected; T1 unchanged) | the digest's own `[UNVERIFIED by run]` |
+| F-TEST-03 widened (DG2, DG4, DG5) | some thirty further count pins with re-pin logs | RESOLVED-BY | T1 D; TDA §E (the rule per pin) | — |
+| F-TEST-04 confirmed (DG6) | two test files of archived prose; about 60 exemption strings | RESOLVED-BY | T2 rows 1–2 | — |
+| F-TEST-05 / F-TEST-09 extended (DG1–DG5) | about twenty further source-text assertions | RESOLVED-BY | T2 row 3; TDA §B (mutate, then delete only what a behaviour test covers) | — |
+| F-TEST-06 confirmed (DG6) | the sweep runs on a world with no office | RESOLVED-BY | T3 row 4 | `test_season_invariant_sweep.py:55` |
+| F-TEST-07 extended (DG1, DG2, DG4, DG5, DG6) | further loops and assertions that cannot fail | RESOLVED-BY | T3 row 5; TDA §A rows A1–A7. `test_strife_kinds.py:126-127` is sound (opened: the control of the refusals below it) | — |
+| F-TEST-07, harness probe loops (DG4) | no floor on `P.PROBES` | RESOLVED-BY · no edit | accepted (§0.1 pt 5: the harness is not read by the loop) | — |
+| F-TEST-08 confirmed (DG5) | 768 + 255 dead golden rows | RESOLVED-BY | T1 E as reconciled (C-U5a-13: the golden is regenerated under A-5) | — |
+| F-TEST-10 confirmed; three strict known-red mass-battle entries unlisted (DG5, DG6) | `conftest.py:34-44`; the reverse guard was dropped (ED-IN-0312) | RESOLVED-BY / SUPERSEDED | T2 rows 5–6; the three entries are MB's (U5b; ED-MB-0061). No guard over the known-red list is built (§0.1 pt 5 forbids one) | — |
+| F-TEST-11 extended (DG1, DG2, DG4, DG5) | skip sites in fixture form | RESOLVED-BY | T3 row 6; TDA §C | — |
+| F-TEST-12 confirmed; `test_rem31_grid_suspension.py` (DG2, DG3, DG6) | a further file kept green by reverting three shipped changes | RESOLVED-BY | T3 rows 7–9; TDA §D row D1 | — |
+| §3 R-02 "yes, narrowly" (DG4) | the fork test's no-deposit arm diverges as often as the shipped arm | RESOLVED-BY | TDA §F row F2 (the reading record says what each test attributes); T3 row 2 is the test that varies deposits alone | 10 of 33 against 10 of 36; 0 of 733 |
+| §3 R-03 (DG4) | the round stamp has no discriminating arm (H-172); the fingerprint skip is falsified for one term of six | RESOLVED-BY | TDA §G; `16_PESSIMIST_CORE_no_stored_plan.md` (the skip and its test go) | register row opened |
+| §3 R-05 (DG4, DG5) | 23 + 13 + 30 of 67 from three pins; army verbs, `destroy_record` withheld | SUPERSEDED | `17_CENSUS_REST.md` §6 measured it; the verb build-outs carry it (§4.3) | — |
+| §3 R-07 "no test" (DG2, DG3, DG5) | tests of stance, regard, opinion and reception exist at the mechanism | STALE-FALSE-POSITIVE (in part) | TDA §F row F1 (R-07's `measure:` gains the realm reader); the absent half is the gate of `02_CHAR_choice_alignment.md` | `test_told_by_channel.py:1964`, opened |
+| R-04 evidence (DG1, DG2, DG4, DG5) | every governance verb is folded from hand-built acts | SUPERSEDED | FA's gate (T3 "Not written here"; U5d) | — |
+| R-09 evidence (DG3, DG5) | three bands at the shipped judge; a model graded draw in `determine` | RESOLVED-BY | `U5a_capability_home_and_two_inputs.md` Part B gate 2 (the even contest is even) and gate 4 (two actors at different pools) | pool 2 against 2 |
+| MB and PC test strength (DG6) | `approx` on "byte identical"; an unasserted flag; an `or` that cannot fail; reload order dependence; ten pins off the shipped defaults | SUPERSEDED | U5b (RES-PC §10 for combat; MB's closure for the field) | — |
+| addendum §4, PC's "ten all-conditional loops" (DG6) | no combat loop can pass on nothing | STALE-FALSE-POSITIVE | — | DG6 item (b) |
+| `Partial` told-drift "is deterministic" (DG4) | a fixed function of state and event id | STALE-FALSE-POSITIVE | — opened: the selection is a hash of `(world_seed, tick, hearer, event)` taken only inside the act's own drawn band `Partial`; a keyed draw, which Jordan's answer A-30 orders | `loop/witness.py:201-203` |
+| fixed results on admission (DG1, DG2, DG5) | `pardon`, `seize`, `raze`, `forgive`, `sabotage`, `revoke`, `confer`, `surrender`, `requisition`, `issue`, `open_case`; `tend` whole | RESOLVED-BY | `18_DETERMINISM_task_draw_for_uncontested_verbs.md` as reconciled (sweep C-01, C-07); `tend`: sweep D-05 | — |
+| succession: "first valid claim wins" (DG2) | a fixed-order heir | SUPERSEDED | answered: A-19 (a deed race for the crown); `06_FA_seat_terms_and_turnover.md` (U5d) | — |
+| `oblige` lapse and renewal are arithmetic (DG5) | — | STALE-FALSE-POSITIVE | — a clock decides no contested outcome | — |
+| the order in which a person takes his questions is a fixed key (DG2, `test_in57`) | attention tiers | JORDAN | the register's open D-62 (one question or a list); H-54 is its register row | — |
+| a certain kill in the `total` casualty arm (DG1, DG5) | — | STALE-FALSE-POSITIVE | — a control arm, not shipped | — |
+| a certain mark at the deepest gate (DG1) | `body_ceiling` | SUPERSEDED | U5b (RES-PC §7, the lasting mark) | — |
+
+## 5.2 Cross-subsystem leads
+
+| lead (digest) | disposition | carrier |
+|---|---|---|
+| capability data is nearly empty in the shipped game; every fight is pool 8 against 1.0 and every inquiry `pool_default` (DG1, DG4) | RESOLVED-BY | `U5a_capability_home_and_two_inputs.md` Part C (content and the `cast_attributes` switch), Part B (the roll); combat's half: U5b RUL-PC §2 |
+| three "copies" of `RUNG_KINDS` (DG3) | STALE-FALSE-POSITIVE | opened: one definition (`data/rosters.py:771`, from `rosters.yaml`); `state/carriers.py:35` and `harness/corpus_run.py:54` import that name. What the test met is that patching one binding does not patch an importer's, which is true of every roster |
+| harness tests guard process artifacts (DG4) | RESOLVED-BY · no edit | accepted (§0.1 pt 5) |
+| memory decay is inert; `claim_decay_per_season` moves nothing (DG4) | RESOLVED-BY | `01_CORE_claim_fade_as_read.md` (the register's D-48, taken A) |
+| a provided character's starting beliefs have no authoring route (`knows:` refused) (DG5) | RESOLVED-BY | `01_CORE_case_setup_and_beats.md`; `12_ARCS_case_on_the_realm.md` (beliefs come from prehistory acts the engine folds; no `knows:` key). `U5a_CHAR_self_knowledge_is_a_belief.md` seeds only `self:` claims |
+| legitimacy and stability have no chooser reader (DG2) | RESOLVED-BY | `02_CHAR_voices_and_the_room.md` Edit 5 (H-224, §2.7) |
+| an ambition keeps forming a need after it is met (`aim_state` for `rung` only) (DG1) | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §3 |
+| the affiliation scar table is dormant (DG2) | RESOLVED-BY | `U5a_CHAR_owed_amendments.md` §7, §8 |
+| two receivers of different competence hear alike (H-200) (DG1) | RESOLVED-BY | `02_CHAR_capability_uses_table.md` |
+| the sheet's creation arm is off; pins are arm-off values (DG3) | SUPERSEDED | GO-B (U5d) |
+| mass battle keeps its own roller, ladder and per-die mean; two pool conventions (DG6) | RESOLVED-BY | `U5a_DICE_owed_edits.md` §1 row 4; `10_DICE_one_roller_one_fraction_rule.md` Edit C as reconciled; one sampler makes the fractional pool native (A-5) |
+| the ladder's pool-aware "declared extension" (DG6) | RESOLVED-BY | `U5a_DICE_owed_edits.md` §3 (the `extension` parameter is deleted); T1 E |
+| `speak` writes nothing at any band; a failed judgement costs the judge nothing; the proceeding occurs once in thousands of runs at shipped odds; the standing crossing cannot fire; two arrangements cannot dispose (DG3, DG5) | SUPERSEDED | SC's closure (U5c); listed in `unified/U5_CONFLICTS_U5a.md` §3 |
+| evidence and the trail never run in play; a lie is a drifted number; forgery quality unread at the shipped ceiling (DG1, DG3) | SUPERSEDED | FI's closure (U5c) |
+| fights fell exactly one party; no approach input; the believed chance of a fight is `None` (DG1, DG4) | SUPERSEDED | PC's closure (U5b); sweep C-12 |
+| fields rout at tick 1 at the shipped scale; armies are unreachable by NPCs; the golden battery is not the shipped configuration; terrain is one row (DG1, DG2, DG5, DG6) | SUPERSEDED | MB's closure (U5b) |
+| hunger is erased inside the season; weather, age, illness, lattice coupling ship dark; works have no computed producer (DG2, DG5) | SUPERSEDED | SE's and WR's closures; the `tend` half is sweep D-05 (TDA §D row D3) |
+| strife readings are dark on the realm; `victim_held` never names a real death (DG5) | SUPERSEDED | WR's closure (U5d) |
+| governance acts are hand-built; succession cannot be seeded (DG1, DG2, DG4) | SUPERSEDED | FA's closure (U5d) |
+| ladders unauthored; arc beats depend on a reveal or trial (DG1) | SUPERSEDED | ARCS (U5d) |
+
+## 5.3 Per-entry open items (120 lines across the six digests, read)
+
+| group | disposition | carrier |
+|---|---|---|
+| an item that restates a tracked row or position (H-nn, CR-nn, K-nn, JQ-n, PC-nn, AQ-X1, ED-nn; about two thirds of the lines) | SUPERSEDED | tracked at its register row or plan position; a digest's restatement files nothing new. The CORE, CHAR and DICE rows among them are closed in PARTS 1–3 by id |
+| "not asserted in a played realm" notes (about twenty lines) | RESOLVED-BY | as F-TEST-01 |
+| shipped-dark or unreached mechanisms named per file | SUPERSEDED | the owning lane's closure, as §5.2 |
+| `[ASSUMPTION; Jordan to correct]` tags noted as unresolved | STALE-FALSE-POSITIVE (as findings) | — a graded assumption on its fixture is the tree's form for exactly this |
+| `test_scale_of_rung.py`: the Object scale is unreachable | SUPERSEDED | PC's and MB's closures (one item, one wound as a scale) |
+| `test_content_operands.py`: multi-addressee writs unreadable under the singleton rule | SUPERSEDED | SC's and FA's closures (the writ's addressees); not a CORE row |
+| `test_descriptors_runtime.py`: nothing catches a ratified item that never reaches the `unimplemented` block | RESOLVED-BY · no edit | accepted (§0.1 pt 5: a process artifact) |
+| `test_engine_params_bridge.py`: `module_contracts.yaml` has no exporter | SUPERSEDED | GO's port-gate proposal (`11_GO_port_gate_order_and_coverage.md`) |
+
+## 5.4 "Likely stale or superseded" lists (stale docstrings, retired paths cited in tests, names that contradict assertions)
+
+RESOLVED-BY · no edit, as a group: a stale comment or name in a test is not load-bearing on the game or on
+a Jordan decision (CLAUDE.md §0.1 pt 5), so nothing is written for it. Where the file or test is deleted or
+rewritten by T1, T2, T3 or TDA the text goes with it (`test_flow_skeletons.py`, `test_knot_pool_formula.py`,
+`test_the_retired_pair_definitions_still_import`, the re-pin logs). `test_contest_kernel.py` retires with
+the SC kernel (T-12).
+
+---
+
+# §Z — Coverage: what this lane read, what it tallied, what it did not check
+
+- **Order of the parts.** PART 6 (determinism) was written before PARTS 4 and 5; the numbering is the
+  brief's, the file order is the order of writing.
+- **Read in full, as a second reader:** the CORE, CHAR and DICE audits and addenda; the three pessimist
+  audits; the determinism sweep; all three census audits (bodies) and their eight proposals; every family
+  proposal named in the head; `UNIFICATION_BRIEF.md`, `AUDIT_BRIEF.md`, `04_CODE_ARCHITECTURE.md`,
+  `DECISIONS_ANSWERED.md`.
+- **Tallied, not re-read row by row:** C1A's 173 and C1B's 518 false-positive rows (counted by script from
+  the audits' own ledgers; this lane did not re-open their call sites). The 26 + 13 + 7 + 11 false
+  positives of `17_CENSUS_REST.md` were read in the audit's tables and not re-opened at the code.
+- **The test digests.** Read in full: each digest's three closing sections, DG4's confirmations table, and
+  all 120 non-empty *Open items* lines. **Not read line by line: the per-entry "Content that matters"
+  bodies** (about 305 entries, some 700,000 characters). An observation that appears only inside an entry
+  body, and that its digest did not lift into a closing section or an open item, is not closed here.
+- **Opened at the code in the census and tests leg:** `world_q.py::footprint`, `density`,
+  `sovereign_fraction`, `provinces_of`, `endings_reached`; `loop/witness.py::_told_value`; the readers of
+  `Claim.round`; `RUNG_KINDS`' three bindings; `test_strife_kinds.py:122-130`;
+  `test_stress_proceedings_rehost.py:90-96`; `test_told_by_channel.py:1942-1987`; `hole_register.yaml` H-172.
+  Every other site in `U5a_tests_digest_additions.md` is marked as read from the digest.
+- **Not run:** `pytest` (the brief; CLAUDE.md §0.4). No probe was re-run by this lane; every figure quoted
+  is the citing audit's, with its seed, and is evidence of that audit's run, not of a run here.
+- **Not verified:** that sibling closures (U5b, U5c, U5d) adopted each item this file hands them; they were
+  being written while this one was. The hand-offs are listed once, in `unified/U5_CONFLICTS_U5a.md` §3.
+- **Workplan positions are cited as carriers, not duplicated** (one active plan per lane, CLAUDE.md §2):
+  IN-14, CR-07, CR-08, CR-98, NM-W9, IN-44.
+- **Lane letters.** Where a row says "(U5b)", "(U5c)" or "(U5d)" the subsystem named beside it is what
+  binds, not the letter. Verified from the sibling files as they stood: U5b holds PC and MB, U5c holds SC,
+  FI and the social verbs, U5d holds FA and SE. For WR, GO, ARCS, the institutions and the remaining verb
+  strata the letter is this lane's guess.

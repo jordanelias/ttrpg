@@ -1,5 +1,7 @@
 # 07 · SE — what the provided arcs and characters need of the settlement layer: the three SE-owned changes
 
+Reconciled: 2026-11-12, U5d closure — folded **A-12** and **A-56**. §3 b (amount as a choice) ships one share until a consequence path exists (`U5d_SE_owed_edits.md` §6); that path is now the cohort's own moves as well as `unrest`. NPC-083's and NPC-037's seats may carry a modifier on their rolls (A-12); no edit here authors one.
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-27) — a `CHOICE_RANGES` range is a closed roster's members and needs a carrier the row writes; the share range is a three-member roster, not an integer list.

@@ -1,5 +1,7 @@
 # PC — a typed combat outcome, one door onto the engine, and the small edits that ride with them
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.1, §1.2, §1.4) — four changes. (1) Part A: the upset flip is not left as a workbench rule; `18_DETERMINISM_no_certain_matchup.md` deletes it and makes the upset a riposte through the one damage site, so `result` and the trackers agree by construction and R-PC-03's comment edit is superseded by that file's edit 2. (2) Part A's record gains `shape` after it lands (`16_PESSIMIST_PC_C_what_the_world_keeps_of_a_fight.md`). (3) Part B's four new fields follow the decided surface: `skills` and the lever values are slot numbers composed host-side from capability rows (U1 §2–§3); `faculties` is the trained score and the record carries `pool_add`, `pool_floor`, `fight_opposition_rate` raw (`U5b_PC_rulings_in_the_fight.md` §2). (4) Part C gains R-PC-42 beside R-PC-17: the workbench's `degree_distribution` calls the roll's owner.
+
 ## Status: PROPOSED
 
 Lane: PC. Source: `audits/03_PC_audit.md` F-PC-06, F-PC-07, F-PC-08 (a), F-PC-10, F-PC-11; resolutions
@@ -75,8 +77,10 @@ class CombatOutcome:
 - `seam/wrappers/combat.py::resolve` returns `dict(status="RESOLVED", module=…, resolver="d_sigma",
   wound_state=…, surrender=…, beat=…, turns=…, trace=…)`. `winner`, `result`, `unresolved`, `bouts`,
   `parties` and `seed` are deleted (ladder rung 2: no reader). `fight_estimate` reads `wounds` and
-  `surrender` off the record. The integer `wrapper.fight` returns is no longer lifted; the upset flip
-  therefore has no season-side surface at all, which is what the 2026-09-04 ruling already made true.
+  `surrender` off the record. The integer `wrapper.fight` returns is no longer lifted. *(Reconciled, sweep
+  D-11:)* the upset is no longer a flip of that integer: `18_DETERMINISM_no_certain_matchup.md` makes it
+  a riposte the trackers record, so the season sees it through `wounds`, which is the surface this
+  record carries.
 - `rosters.yaml: fight_endings` gains `standing`. `loop/effects_combat.py::fight_ending` returns
   `standing` for a party who is neither felled nor the yielder when the other party is; `undecided`
   only when neither is. **Declared hash mover** for every log that carries the field.
@@ -107,12 +111,13 @@ class CombatOutcome:
 | id | file (owner) | edit |
 |---|---|---|
 | R-PC-01 | `engine/season/hole_register.yaml` H-98; `engine/season/requirements.yaml` R-09 | H-98: grade to closed, cite CP-T03-00 (each party is written by his own band, so a decisive win is the victor `Untouched` and a narrow one the victor `Wounded`). R-09 `blocks:` re-pointed from H-98 to the two things that block it for combat: reach and per-person inputs |
-| R-PC-03 | `modules/combat/config.py`, the `UPSET_FLOOR` comment | add one sentence: the flip has no effect in a season; the fold reads the trackers |
+| R-PC-03 | `modules/combat/config.py`, the `UPSET_FLOOR` comment | *(Reconciled: superseded.)* ~~add one sentence: the flip has no effect in a season; the fold reads the trackers~~ The comment is restated by `18_DETERMINISM_no_certain_matchup.md` edit 2 (the chance a deciding blow is turned; it moves the trackers) |
 | R-PC-15 | `hole_register.yaml` H-123 `site:`; `registers/handoffs/HANDOFF_PC.md`; sixteen `designs/audit/` citations in `modules/combat/*.py` | H-123's site to `loop/effects_combat.py`; the handoff names its two documents by bare filename (CLAUDE.md §1); each dead citation rewritten to the bare filename or deleted where the file no longer exists |
 | R-PC-16 | `proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md`, Status line | "PROPOSED; ratification withdrawn (ED-IN-0351). Its combat build is in the tree (`modules/combat/attributes.py`, `core.py`, `fight.py`) and stands on this unratified design" |
 | R-PC-17 | `modules/combat/core.py:135` | `net = roll_net(pool, rng) + SL.net_boost(net_sigma, pool)`. Measured equal to the inline form to one unit in the last place at four points; a golden that moves is re-recorded and said so |
 | R-PC-18 | `modules/combat/combat_systems.py` (18 module constants) → `modules/combat/config.py` `CFG` | move `REAR_CLEARANCE_TEMPO_K`, `REAR_CLEARANCE_STR_K`, `RANGE_AVAIL_FLOOR`, `RANGE_COMMIT_PEAK`, `RANGE_COMMIT_FLOOR`, `LEGIB_SWING_ROOM_K`, `STOPHIT_RANGE_K`, `FACING_VOID_K`, `FACING_PROFILE_K`, `FACING_VOID_GAIN`, `MODE_PERC_MIN`, `CLOSE_EFF_GAP_REF`, `CLOSE_EFF_FLOOR`, `MODE_EDGE_MIN`, `MODE_TIP_MIN`, `SELECT_EPS`, `TRUE_TIME_REF`, `ARREST_POB_REF` into `CFG`, values unchanged, readers through `cfg[...]`; re-derive the export with `tools/export_engine_params.py --build`. Functions that take no `cfg` today (`close_efficacy`, `range_utilization`, `_commit_range_factor`) gain it |
 | R-PC-20 | `systems/combat/combat_engine_v1/state_graph.py` docstring | state that the graph is reference for the Plan-layer proposal and is not read by `wrapper.engagement` |
+| R-PC-42 *(added by the reconciliation; addendum F-PC-23)* | `systems/combat/combat_engine_v1/workbench/probabilities.py::degree_distribution` | the mean and spread of the exchange roll are read from the dice engine `core.resolve` uses (`roll_net_continuous`'s closed form, `sigma_leverage.band_odds` after `U5a_DICE_owed_edits.md` §1), not rebuilt from the frozen harness's constants; the falsifier the file names (`tests/valoria/test_combat_ob_from_defender_consumers.py`) is run once at landing |
 
 ## Gate (execution artifacts)
 

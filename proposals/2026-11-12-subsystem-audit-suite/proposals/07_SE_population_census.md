@@ -1,5 +1,7 @@
 # 07 · SE — a population that can shrink without vanishing: CR-08's CENSUS writer, specified
 
+Reconciled: 2026-11-12, U5d closure — folded **A-56** and **A-15**. The clause leaving growth undecided (§3 R4) is superseded by `07_SE_population_regrowth_B.md` (the register's ladder table: a population may recover, bounded by food and room). Thinning's body loss is drawn on the ladder (A-54; `09_WR_B_draws_not_thresholds.md` edit 2), with `body_step × short // weight` as the Partial band's magnitude. Who leaves is the cohort's own `migrate`, one of its heavy moves (`U5d_SE_cohort_heavy_moves_and_caste.md`). A-15's natural death is of named persons with authored ages; no births or ageing pass is added to a cohort by it (A-51 says so for the prologue).
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-24) — the `(Person, weight)` matrix row already holds `CEN` (`write_matrix.yaml:300-306`); no matrix edit is owed by this proposal.

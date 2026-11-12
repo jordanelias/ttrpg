@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-11 — the upset flip is no longer left on the unread integer; it becomes a tracked riposte (`18_DETERMINISM_no_certain_matchup.md`).
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.3, §1.4) — five rulings folded. A-4: a duel inside a field or a skirmish is a nested contest counted against a cap of 1, and callables supplied for persons are one declared class of adapter input (§4, §8 items 4–5, step 5; the cap and the seam function are `U5b_PC_rulings_in_the_fight.md` §1). A-9: a turn is a short sequence, which admits the in-round consult (§8 item 3; one sentence owed to the ratified suspension). A-31 and D-40: steps 3a–3e land after the damage scale and the commit window, the transfer ships at a coefficient of 0, and step 3 gains the pessimist's gate (§3, §7). A-6, A-7, A-8: `faculties` on the record is the trained score, talent is the module's attribute sigma, a carried wound is a level (`U5b_PC_rulings_in_the_fight.md` §2–§3). The yield is a draw for every party (`16_PESSIMIST_PC_A_the_yield_is_a_draw.md`), so §5's last bullet is answered.
+
 ## Status: PROPOSED
 
 Lane: PC, with CORE (the suspension, the adapter row), MB (the cell field at weight 1, a duel inside a
@@ -139,8 +141,10 @@ primitive produces. The mass-battle formation design records Jordan's principle 
 "modulate primitives — never add a flat number" (`proposals/pc_formation_system.md` §3.5), and
 ED-PC-0023 retired a mechanism for imposing rather than emerging. The leans in the first three rows
 of the table satisfy that principle (they move a draw the engine already makes); the transfer does
-not, though it is conserved and decides nothing by itself. Whether intensity is worth a declared
-term is listed for Jordan in the addendum §B10; steps 3a and 3b do not depend on it.
+not, though it is conserved and decides nothing by itself. *(Reconciled, D-40, closed by the ladder:
+leans now; the transfer behind a dial at zero, set after A-31's damage scale has landed. So step 3c
+builds the term and ships `APPROACH_SIGMA_K = 0`; no coefficient is chosen before the calibration batch.)*
+Steps 3a and 3b do not depend on it.
 
 **The same dial exists one scale up.** The army doctrine of that design is Aggression: Cautious,
 Balanced, Pressing. A person's approach, a unit's instruction and an army's doctrine are then one
@@ -184,7 +188,7 @@ lifted wound quantities (as now). It still carries no `Combatant` and no `World`
 | AUTOMATED fight | `fight`, from the season's provider | each party's decider (§5) | `fight`'s frame |
 | duel, moment by moment | the same `fight`; the played person's decider is the host's call-out (REM-31), consulted at each phase; the trace of each exchange is rendered between consults | the player for his fighter, §5 for the other | `fight`'s frame |
 | grid attack | the skirmish's loop (the cell field at weight 1, Layer 1 `04:811`); one `round` per attack action | the attacking unit's player or decider gives **one** approach; it is the plan for every phase | the skirmish module's loop frame |
-| a duel inside a field | the field module's loop; one `round` per field turn per contact | each fighter's decider or standing order | the field module's loop frame |
+| a duel inside a field | the field module's loop; one `round` per window per officer contact (`04_MB_manager_battle_one_resolver.md` §7). *(Reconciled, A-4:)* a nested contest at depth 1, counted against `contest_nesting_cap` (1); at the cap the callable returns the typed result `NESTING-CAP` and the contact stays unresolved | each fighter's decider or standing order | the field module's loop frame |
 
 For the last two, the module that owns the grid or the field does not name `modules/combat/`. Its host
 adapter resolves the `combat.round` composition role and passes the module a `duel` callable
@@ -243,9 +247,12 @@ def approach_of(p: Person, view: "CombatTurnView", fx, draw=None) -> str:
   (`queries/inputs.py:195-201`).
 - **Reason trail.** The `approach` trace event carries the view; the decider's closure adds the
   winning value's two terms (temperament, response), so a telling can say why he pressed.
-- **Concession and withdrawal** are not decided here: `withdraw` stays in the top-of-round set, an
-  NPC returns it never until `03_PC_exits_withdrawal_recovery.md` and the first audit's §11 item 1
-  are settled.
+- **Concession and withdrawal.** *(Reconciled: both are settled.)* Concession is not a decider's answer
+  at all: whether a wounded party fights on is a draw on his own Spirit at the end of a turn in which
+  he crossed a wound gate, under every term (`16_PESSIMIST_PC_A_the_yield_is_a_draw.md`; the standing
+  rule answered the first audit's §11 item 1). `withdraw` stays in the top-of-round set and is priced
+  for every party (`03_PC_exits_withdrawal_recovery.md` Part A); `approach_of` may return it when a
+  response row authors it, and returns it never while `approach_responses` ships empty.
 
 ## 6. One resolver (Layer 1 §27.2, §44.3; `03_VERBS_AND_LOOPS.md` §C.4)
 
@@ -270,15 +277,24 @@ Where this cannot be made to fit, it is named in §8 (items 4 and 5).
 |---|---|---|
 | 1 | `fight.round`; `fight` as a loop over it on the one stream; `DuelState` with `form`; `first` drawn inside the round | every combat test and season hash unchanged; twelve `round` calls by hand equal `fight` at three seeds, including a longsword against plate (the case in which the form is carried) |
 | 2 | the per-round private stream | a fight in one call and the same fight as separate `round` calls from `(seed, r)` are identical; season pins re-recorded once, declared |
+| — | *(Reconciled, A-31, pessimist R-6.)* Steps 3a to 3e land **after** the combat calibration batch (`U5b_PC_rulings_in_the_fight.md` §5 row 5: the damage scale, then `16_PESSIMIST_PC_B_the_commit_window.md`), because every reading in §3 was taken on a three-blow fight with an unreachable deep tier. Step 3 as a whole gains one gate: a state-reading policy (press the wounded; guard when hurt) beats never-lean by more than the interval in some named matchup, or the menu is not shipped | the pessimist's `pI_approach2.py` table re-run |
 | 3a | `APPROACHES`, `PHASES`, the lean as live state, the consult points; the `exchange` lean on commit and counter | all-`normal` byte-identical to step 2; `build_levers.py`-style table at n ≥ 2,000: each approach within 3 points of `normal` in the arming mirror; the mace and rapier mirrors show opposite signs |
 | 3b | the `bind` lean on `disengage_attempt_p` | all-`normal` byte-identical; `disengage` events per fight rise under `defensive` and fall under `aggressive` for a spear against an arming sword |
-| 3c | the conserved transfer, `APPROACH_SIGMA_K` | at 0, byte-identical; at the chosen value the nine-cell arming mirror is level within the control band, mean rounds are monotone in the summed lean, and the undecided share is reported |
+| 3c | the conserved transfer, `APPROACH_SIGMA_K` *(ships at 0, D-40)* | at 0, byte-identical; at the chosen value the nine-cell arming mirror is level within the control band, mean rounds are monotone in the summed lean, and the undecided share is reported |
 | 3d | the `measure` lean | only together with both of its costs; not specified here |
 | 3e | `DISP_INIT_K = 0` | `build_levers.py disposition 2000`: disposition 7 and 1 inside 50 ± 3 against neutral (they read 57.7 and 40.8 today); season hash EQUAL |
 | 4 | per-party deciders, the widened view, `choose.approach_of`, the `CHOICE_RANGES` pointer, the empty `approach_responses` table | equal plans supplied by a constant, by a host callback and by `approach_of` give identical outcomes and one `World.content_hash()` (REM-31's test, extended); a differing script moves it; with one cell authored, two hand-built persons opposed on that axis answer differently at temperature 0; with none authored `build_realm(0)` is hash EQUAL |
-| 5 | the `duel` callable in the field's (or skirmish's) adapter | a seeded field with two planted officers in contact shows one round per field turn in the trace; with no contact reported the field's hash is unchanged |
+| 5 | the `duel` callable built by the field's (or skirmish's) adapter through `nested_entry` and handed to the module *(Reconciled, A-4: nested, cap 1)* | a seeded field with two planted officers in contact shows one round per window in the trace; with no contact reported the field's hash is unchanged; with the cap at 0 the contact is reported unresolved with `NESTING-CAP` and the field's draw count is unchanged |
 
 ## 8. Conflicts with ruled, ratified or recorded items (named, not resolved)
+
+*(Reconciled 2026-11-12. Item 1: the reopen condition is met by Jordan's own intent; D-40 sets the order.
+Item 2: A-4 keeps round state in the calling frame and A-8 makes a carried wound a level, so the held
+seeded-damage step is not decided by this build. Item 3: A-9 admits the in-round consult; one sentence
+is owed to the ratified suspension (CORE's). Items 4 and 5: answered by A-4, as one declared class of
+adapter input and a nested contest under a cap of 1; the Layer 1 text is drafted, not applied, in
+`U5b_PC_rulings_in_the_fight.md` §1. Item 6 stays CHAR's open ask. Item 7: a battle stays one act
+(A-4); the unwatched duel is as recorded. The author's text follows unchanged.)*
 
 1. **ED-PC-0007** (deferred; reopen "only if `combat_engine_v1` grows a discrete player-action
    menu"). Three approaches over three phases are such a menu. Stands as the first proposal named it.

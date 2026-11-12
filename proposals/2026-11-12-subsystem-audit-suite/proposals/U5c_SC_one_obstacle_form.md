@@ -135,7 +135,7 @@ the obstacle). The values in `terms` sum exactly to `ob`.
 | 18 | `divergence` | how far the maker believes the terms lean against the counterparty | the maker's own claims; `divergence_step` | `covenant` | S1-B §3 |
 | 19 | `unwelcome` | the document's terms against the receiver's pursuits | the receiver's pursuits and the Record; `unwelcome_step` | `give` | S1-B §1 |
 | 20 | `distance` | how far apart two rungs are | the count of `contain` edges on the ladder path; `distance_step` | `comply`, `transfer` | S1-B §2; M-B §2 (as `carriage`) |
-| 21 | `purview` | the issuing seat's reach over the actor's place | `state/gate.py::purview_reaches` | `evade / defy`; `release` of an imposed edge | S1-B §2 |
+| 21 | `purview` | the issuing seat's reach over the actor's place | `state/gate.py::purview_reaches` | `evade / defy` | S1-B §2 |
 | 22 | `watch` | who is there to see or stop it | the presence cache at the act's place less the actor, or the sworn weight there where the row says `guard`; `watch_step` | `conceal`, `evade / defy`, `sabotage`, `destroy_record`, `seize` of a Rung | M-A; M-D; S1-B (as `witnesses`); S1-C (as `notoriety`) |
 | 23 | `backlog` | matters already on that docket | the docket; `backlog_step` | `carry` | S1-D §1 |
 | 24 | `clarity` | terms that leave little room to bend | the terms Proposition has a predicate and a value | `construe` | S2-B §2 |

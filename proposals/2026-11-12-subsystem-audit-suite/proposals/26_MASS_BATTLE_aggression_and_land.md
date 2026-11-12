@@ -1,219 +1,155 @@
-# MB · a march into land another holds is the aggression; only its win takes the land, and the seats go with it
+# MB · the battle's side of the land ruling: which end state passes the land, and what the field does not decide
 
 ## Status: PROPOSED
 
-Lane MB (the row and effect edits are IN's; the title body belongs to the `seize` row's owner; the consent and
-war edges are FA's and are named, not designed). Carries Jordan's rulings **A-57** and **A-58**
-(`unified/DECISIONS_ANSWERED.md:69`, `:71`, 2026-11-12; D-20 superseded at `:87`):
+Lane MB. Carries Jordan's rulings **A-57** and **A-58** (`unified/DECISIONS_ANSWERED.md:69`, `:71`,
+2026-11-12; D-20 superseded, `:87`) for the mass-battle march and result design; row R-10 of
+`audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`.
 
-- *"a won battle takes land if and only if the aggressor marched in an effort to take land (as opposed to
-  battle in a neutral location or a defending army wins)"*;
-- *"Seats pass with holdings."* *"Draw on land taking march means defender retains land."*
-- *"Usually there will be a casus belli or some other act, but generally, sending your military into another's
-  territory is a pretty clear sign of aggression"*.
-
-Row R-10 of `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`. An earlier draft of this file gave the march a
-declared purpose; A-58 withdrew that, and the draft is gone. Reference, not mechanism (`CLAUDE.md` §0.05).
+**This file is not the owner of the title write.** That is
+`proposals/U5d_FA_land_and_seats_pass_on_a_won_march.md` (the FA closure lane, same date), which was written
+against the code at more depth than this lane read it and decides: aggression read from the act (the marching
+seat's faction differs from the target's holder), one tail for the title (`_take_hold`, with the seats
+anchored on the place, `seats_on`), a gate basis `conquest`, the kind `rung.taken`, leave as a live `covenant`
+(`world_q.passage_granted`). Nothing below restates or competes with those edits. An earlier draft of this
+file designed them a second time, first with a declared purpose (withdrawn by A-58) and then with its own
+readers; both drafts are gone. What remains is what only the battle side can say. Reference, not mechanism
+(`CLAUDE.md` §0.05).
 
 ## What it changes in `engine/season/` at runtime
 
-Every `march` folded `Won` at a place another faction holds and defended. Today it writes presence and never
-title (`engine/season/loop/effects_combat.py:532-536`, as `proposals/06_FA_war_lives_in_seats_B.md:37-38`
-quotes it). After this change the same fold also moves the place's `hold`, and closes the seats seated at it,
-through the one function that writes a Rung's title. `Lost`, `Drawn`, `Unopposed` and `Invested` write no
-title. A declared hash mover wherever such a field is won; in natural play today no field is won
-(`audits/04_MB_audit.md` §0).
+Nothing of its own. It fixes which of the field's end states the FA proposal's `Won` test will see once the
+MB proposals land, so that the two sets of edits meet at one line.
 
-## The problem
+## The rule, as ruled
 
-- Code and suite follow the reading the rulings replace: presence on a won field, title by a second act,
-  `seize`, licensed by occupation (`loop/effects_information.py:1038-1071`; `loop/effects_shared.py:149-161`;
-  `audits/04_MB_audit.md:617`, `:781`, `:821`).
-- Occupation is presence, however it came about (`effects_shared.py:157-159`: "people placed on a territory by
-  other means (a `move`) occupy it as well … named in `HANDOFF_MB.md`, not closed here"). An invited ally
-  standing on a friend's land therefore holds the licence to seize it.
-- The gate admits no seizure of an Office ("A SEAT IS NEVER SEIZED", `effects_information.py:1015-1020`), so
-  nothing can make a seat follow its land.
-- The PHYSICAL lane forms `march` only against a faction the marcher is at war with
-  (`proposals/14_VERBS_PHYSICAL_B_field_and_ruin.md` B1), which makes a war a precondition of the act.
+On a march in force onto land another faction holds, **only an aggressor's win** passes the land, and its
+seats with it. A draw or a defender's win leaves the defender holding. Ground no party holds is outside the
+rule. The aggressor's purpose is read from the act; a casus belli or other act is context for legitimacy and
+regard, not a precondition. Marked ASSUMPTION in the record: a march by the holder's leave is not aggression.
 
-## The resolution, decided
+## The resolution, decided (battle side)
 
-### 1. Aggression is read from the act, by one predicate
+### 1. The resolver knows none of it
 
-No operand, no payload key, no declaration. New in `engine/season/queries/world_q.py`, the one owner:
+`modules/mass_battle/` receives no holder, no purpose and no leave, and its result carries none. A battle for
+a province and a battle on a road are the same call (ruling A-1). The season reads the band and its own
+world. The falsifier is a `grep` for `hold`, `holder` or `leave` under `modules/mass_battle/`.
 
-```python
-def aggression_against(w, via, rung) -> Optional[str]:
-    """The faction whose land a march by seat `via` on `rung` is an aggression against, or None.
-    None when: nobody holds the place (neutral ground: outside the rule); the marcher's own faction
-    holds it; or the marcher's faction has the holder's leave to be there (section 4)."""
-```
+### 2. Which end state is the aggressor's win
 
-It reads `holder_faction_of`, `seat_faction` and `has_leave`, each an existing or named single owner. It does
-not read `at_war`: a casus belli, a claim or a declaration is context that the owners of legitimacy and regard
-read (FA, CHAR), and is no conjunct here.
+Ruling A-3 reads the band off which side broke or conceded. With the MB proposals in the suite, the title
+test `res.degree == WON` therefore means, and should be read by the FA edit as meaning:
 
-### 2. What each end state writes (ruling A-3's bands, read by the effect)
+| what happened in the field | band | the land |
+|---|---|---|
+| the defender routed and the aggressor did not | `Won` | **passes, with its seats** |
+| the defender **conceded** (a retreat line reached, a `withdraw`, a surrender) and the aggressor stands | `Won` (`04_MB_manager_battle_one_resolver.md` §1: `b_out and not a_out`) | **passes**. A fighting withdrawal saves the army and gives up the ground; this is the price the first MB audit asked a concession to have (`audits/04_MB_audit.md` §7, the priced exit) |
+| the defender routed and then **rallied** at the end of the field | `Won`: "a rallied side is still the field's loser (it left the field)" (`16_PESSIMIST_MB_rout_has_two_exits.md`) | **passes**. Rally saves men, not the place |
+| both sides out, or neither, when the bouts run down | `Drawn` | **stays with the defender** (A-58) |
+| the aggressor routed or conceded | `Lost` | stays; the defender takes nothing of the aggressor's by winning |
+| several bouts (`26_MASS_BATTLE_cell_scale_and_time.md` §3) | the band of the **last** bout | read once, at the scene's end; a drawn first bout passes nothing and decides nothing |
+| `besiege` met by a garrison | `Invested` | stays; a later surrender is the FA proposal's decision 7 |
+| nobody opposed the march | `Unopposed` | not a won battle; the rulings do not speak; today's write stands (FA decision 8) |
 
-`loop/effects_combat.py::_eff_march`, after what each band writes today:
+- The `Drawn` band's own write stands as the first MB lane proposed it: bodies fall by each side's share,
+  nobody arrives (`04_MB_headcount_grade_and_scale.md`). A-58 settles the land on a draw and says nothing of
+  where the aggressor's army then stands; "nobody arrives" is that proposal's choice and is kept.
+- `Won` after a **pursuit** (the amended pessimist proposal) changes nothing here: pursuit and the taking of
+  prisoners happen inside the same fold, before the title is written.
 
-| band | the place's title and seats |
-|---|---|
-| `Won` | **pass** to the marcher's side when `aggression_against(w, a.via, target)` is the faction whose defence was beaten (section 3); otherwise nothing |
-| `Lost` | nothing, in either direction: a defender's win takes none of the aggressor's land |
-| `Drawn` | nothing: the defender retains the land (A-58) |
-| `Unopposed` | nothing by this rule: no battle was won. Presence as today |
-| `Invested` | nothing |
+### 3. Relief and pursuit across a border, by the ruling's own words
 
-`seam/ladder.py::field_degree` still returns the band only, and `modules/mass_battle/` sees none of this: the
-resolver is the same whoever marched and why (ruling A-1).
+Classed from the act, with nothing declared; the test is the FA proposal's (holder other than the marcher's
+faction, and no leave):
 
-### 3. Whose defence was beaten: how relief and pursuit across a border are classed
+| the march | holder of the ground | leave | on `Won` |
+|---|---|---|---|
+| against a neighbour's land and its defenders | another | no | the land and seats pass (aggression) |
+| onto one's own land, against an intruder | own | — | nothing to take (defence, or relief of one's own) |
+| into an ally's land, asked, against the ally's enemy | another | yes | nothing passes (relief by leave) |
+| through another's land by agreement | another | yes | nothing passes (passage) |
+| after a beaten enemy onto land a third party holds, unasked | another | no | **aggression against the holder**: by the ruling's words a march in force into territory another holds "counts as a march to take land", and a win on it passes the land |
+| onto ground nobody holds | none | — | outside the rule |
 
-The land passes only when the side the marcher beat was **defending for the holder**: it is the holder's
-faction, or stands there by the holder's leave. One predicate, `defends_for(w, defender_faction, rung)`,
-beside the one above. Classed from the facts, with nothing declared:
+The fifth row is the FA proposal's decision 6 and this lane agrees it is what the ruling says. It has a
+consequence worth seeing before it is built: **an uninvited rescuer who beats the invader takes the land he
+rescued.** Today no such field can form: `sides_of` fields the holder's faction as the defender, and the
+PHYSICAL lane's `march_defender` forms a field against a non-holder only on the marcher's own land
+(`14_VERBS_PHYSICAL_B_field_and_ruin.md` B1). So the row is unreachable until allied relief exists, and when
+it does the one question to put to Jordan is whether the land passes when the army beaten on it was not the
+holder's. It is recorded here, not decided, and nothing is built for it.
 
-| the march | holder | marcher has leave | beaten side | title on `Won` | class |
-|---|---|---|---|---|---|
-| into another's land, against its holder | other | no | the holder, or his ally by leave | **passes, with its seats** | aggression |
-| into another's land, against its holder, though the marcher was a guest | other | yes | the holder | **passes**: leave covers entering, not fighting one's host | aggression (treachery; regard's owner reads the broken leave) |
-| into an ally's land, against the ally's enemy standing on it | other | yes | an intruder | nothing | relief of an ally |
-| into another's land after a beaten enemy, or to drive off a third party, uninvited | other | no | an intruder | nothing by this battle; the marcher is now himself there without leave | pursuit across a border; uninvited relief |
-| onto his own land, against an enemy standing on it | own | — | the intruder | nothing to take | defence |
-| through another's land by agreement, meeting nobody | other | yes | — | nothing | passage |
-| onto land nobody holds | none | — | anyone | outside the rule | neutral ground |
+### 4. Consent (the record's ASSUMPTION), battle side
 
-The fourth row is the one a reader may dispute. The plain words of A-58 make any march in force into another's
-land an aggression; this table agrees that it is one (for regard, and as a reason for the holder to march on
-the intruder) and holds that the *battle won there* was not won against the land's defence, so the "won
-battle" of A-57 has not happened yet. If Jordan reads it the other way, the change is one line: drop
-`defends_for` and pass the land on any `Won` at a place held by another without leave.
+The FA proposal reads leave as a live `covenant` between a seat of each faction
+(`world_q.passage_granted`). Two things follow for the field and are proposed to that owner, not built here:
 
-### 4. Consent (the record's ASSUMPTION): how leave is read
+- **Leave covers entering, not fighting one's host.** A guest who marches on the holder's own force and wins
+  has won a battle against the land's holder; whether the standing covenant then shields him from the ruling
+  is not stated. This lane's reading is that it does not (the holder consented to his presence, not to his
+  attack), and that regard's owner reads the broken leave. `[ASSUMPTION; Jordan to correct]`
+- **Presence by leave should not be occupation.** `occupying_faction` reads presence however it came about
+  (`engine/season/loop/effects_shared.py:157-159`, a weakness the code names). An invited ally standing on a
+  friend's land holds the licence `seize` asks for. If `world_q.occupies` declined a faction for which
+  `passage_granted` is true, the guest could not seize while his leave stands and could the moment it ends.
+  One conjunct at the one owner.
 
-`world_q.has_leave(w, guest_faction, holder_faction, rung) -> bool`, the one owner. True when **a standing
-commitment between the two exists and is live**: a covenant (the `dispensation` Record the `covenant` verb
-mints through a seat, `engine/season/verb_table.yaml:300-322`) drawn up by a seat of the holder's faction
-whose purview reaches the place, addressed to a person of the guest faction, to whose terms both parties hold
-a live `commit`, and whose terms are leave to stand at that place or a rung above it.
+### 5. A march need not wait for a war
 
-- An invitation and an agreed passage are both this: one instrument, the holder's seat's writ addressed across
-  purview. No new verb and no new Record kind.
-- Leave ends as any commitment ends: either party closes his `commit` (peace's shape,
-  `world_q.py:3576-3579`). A guest who stays after that is there without leave from the next read.
-- Leave is never implied: a common enemy is not consent. A rescuer nobody asked for is classed by row four.
-- `[UNVERIFIED: what a covenant's terms Proposition can say. The row was read; the Proposition mood roster
-  was not. If no member fits "leave to stand at a place", one joins it, named `leave`.]`
-- **Presence by leave is not occupation.** `world_q.occupies` (the one reading `seize` and `raze` share, via
-  `occupying_faction`) declines a faction that `has_leave`. This closes the weakness the code names at
-  `effects_shared.py:157-159` for the guest's case; a person who merely moved there without an army is the
-  same weakness as before and is not closed here.
+A-58: a casus belli is "not a precondition". The PHYSICAL lane forms `march` only against a faction the
+marcher knows he is at war with (`fields_in_reach`). That is a rule about when a person thinks of marching,
+not about whether the act is lawful, and it keeps formation bounded; a played or hand-built march on a
+neighbour needs only a Rung (`requires_typed` is unchanged there). What is then owed, and is FA's
+(`06_FA_war_lives_in_seats_B.md`, whose reconciliation already says "a land-taking march is a war act"):
+`sides_of` must field the holder as the defender when the two are not yet at war, and the fold must leave
+them at war afterwards. Named, not designed.
 
-### 5. One owner of the title write; seats pass with it
-
-`_seize_rung` (`loop/effects_information.py:1038`) splits, with no change to what `seize` does on a Rung
-except the seats:
-
-- `transfer_title(w, act, rid) -> Change`: closes the place's live `hold` and opens the taker's (the opened
-  edge's id salted with the act, as now), **and closes the live `hold` on every seat seated at that place or
-  beneath it that belongs to the dispossessed holder's faction**. One Change, so the fold never sees the land
-  under one faction and its seats under another. Kind earned by the place: `rung.seized`, the tree's one kind
-  for a place taken without consent.
-- `_seize_rung` keeps its licence and calls it. `_eff_march` calls it under sections 2 and 3.
-- The gate gains one named clause: a seat's `hold` may be closed by `transfer_title`, with the title of the
-  place it is seated at, and by nothing else. `[UNVERIFIED: `state/gate.py`'s `seizure` clause was read only
-  through `may_seize`'s docstring (`:1005-1019`), whose second conjunct asks the seat's grant for the seizure
-  act. A seat that grants `dispatch` and not `issue` would be refused there; the builder widens that one
-  predicate with an arm for a won aggression, not a second path. How an Office records its place was seen at
-  `engine/season/offices.yaml:189-241` (`rung:`) and not traced to its reader.]`
-- **Who receives the land** is `_seize_rung`'s present rule (the act's actor, marked ASSUMPTION there): for a
-  march, the person who exercised the dispatching seat. **Who sits the seats that passed** is not written
-  here: they are closed under their old holders and are the new holder's to fill by the acts that fill a
-  vacant seat (FA's `06_FA_seat_terms_and_turnover.md`). "Pass" is read as: they leave the old faction with
-  the land. Whether the taker is also seated in them by the same fold is the one point of A-58 this proposal
-  does not settle, and it says so.
-
-### 6. A march need not wait for a war, and makes one
-
-- `sides_of` fields the holder as the defender whenever `aggression_against` names him, at war or not. A
-  hand-built or played `march` on a neighbour therefore fights; `requires_typed` already asks only for a Rung.
-- **Formation stays the PHYSICAL lane's**: a person forms `march` on the places of those he knows he is at war
-  with (`fields_in_reach`, `_wars_known`). That is an occasion for thinking of it, not a precondition of the
-  act, and keeping it bounds formation. The alternative (every held place a Field for every dispatching seat)
-  is named for that lane and not taken: ladder step 5, formation counts.
-- A march that is an aggression against a faction the marcher is not at war with **is the act of war**. The
-  fold that folds it should leave `at_war` true between the two, by the dispatching seat-holder's `commit` to a
-  WAR Proposition (war lives in the seats that wage it, A-20). That edge is FA's
-  (`06_FA_war_lives_in_seats_B.md`) and is owed there; until it lands, `at_war` and the fact of an army on the
-  land disagree for such a march, and this proposal's gates do not exercise it.
-
-## Exact edits
+## Exact edits (MB's only)
 
 | file (owner) | edit |
 |---|---|
-| `engine/season/queries/world_q.py` | `aggression_against`, `defends_for`, `has_leave`; `occupies` declines a faction with leave |
-| `engine/season/loop/effects_information.py` | `transfer_title` factored out of `_seize_rung`; the seats' closure inside it |
-| `engine/season/loop/effects_combat.py::_eff_march` | the `Won` call of section 2; the comment "a won field writes PRESENCE, never title" replaced by a pointer to A-57 and A-58 |
-| `engine/season/loop/sides.py::sides_of` | the defender is `aggression_against`'s faction (with the PHYSICAL lane's `march_defender` reading the same predicate for its first arm, so the two never disagree) |
-| `engine/season/state/gate.py` | the one clause of section 5 |
-| `engine/season/verb_table.yaml`, row `march` (`:1064`, `:1073`) | `Won` gains the place's `Tenure.until`, `Tenure.since` pair and the seats' `Tenure.until`; `emits.Won` gains `rung.seized`; `writes_note` cites A-57, A-58. `[verify at landing: whether the loader requires each declared write on every fold of a band; `data/verbs.py::KIND_VERB`'s rule for a kind with two emitters]` |
-| `engine/season/hole_register.yaml` | the rows that record presence-not-title as an assumption (R-6's) close as superseded by A-57, A-58 |
+| `engine/season/seam/ladder.py::field_degree` | none beyond the suite's: it returns the band. The table of section 2 is its reading, stated once in its docstring so the FA edit's `WON` test and the MB bands cannot drift |
+| `engine/season/loop/effects_combat.py::_eff_march` | the order inside the `Won` fold: casualties and pursuit, then arrival, then the FA proposal's title tail. No MB write follows the title |
+| `engine/season/seam/wrappers/mass_battle.py::resolve` | with several bouts, returns one band for the scene; the title tail is reached once |
 
-## Open, named
+## Open, named (not assumed)
 
-1. Whether the taker is seated in the seats that passed, or they fall vacant to be filled (section 5).
-2. Whether an unopposed entry in force, with no battle, ever takes land. The rulings speak of a won battle;
-   today's `seize` by occupation is left as the only route and is not widened.
-3. Whether a drawn aggressor stays on the ground. `04_MB_headcount_grade_and_scale.md` writes "nobody
-   arrives" on `Drawn`; A-58 says only that the defender keeps the land. That proposal's write stands.
-4. Row four of section 3 (pursuit and uninvited relief).
-5. What a casus belli is, to the owners of regard and legitimacy. Not a field here.
-6. H-166: who holds an unheld place. Outside the rule by A-58.
+1. An `Unopposed` entry onto held land: no ruling. Today's presence, then `seize`.
+2. Where a drawn aggressor's army stands afterwards.
+3. Section 3's fifth row, when it becomes reachable.
+4. Section 4's two readings of leave.
+5. Whether a walled place should pass on a won field outside its walls, or only when its `Invested` band
+   ends. The pages read say places usually changed hands by terms or a storm after the field
+   (`research/historical/mass_battle_maneuver_sequences_grounding.md` §11); research does not settle a
+   ruling, and the ruling's words are followed.
+6. To whom the seats pass, and the rest of the FA proposal's own "not decided" list, which is that file's.
 
 ## Gate (execution artifacts)
 
-1. `build_realm(0)`, one season: content hash equal (no field is won there).
-2. A two-faction fixture world, the target held and defended by B: over seeds 0 to 59, every `Won` fold leaves
-   `holder_faction_of(target)` A's, emits one `rung.seized`, and leaves no live `hold` by a B person on a seat
-   seated at or beneath the target; every `Lost` and `Drawn` fold leaves holder and seats as they were, and
-   A's own holdings unchanged. `assert checked >= N` per band.
-3. Relief: B holds the target, C stands on it, A holds a live covenant of leave from B: A's `Won` over C
-   moves no title; with A's `commit` to the covenant closed, the same fold still moves none (row four), and
-   `occupies` now reads A as an occupier where with leave it did not.
-4. Treachery: A, with leave, marches on B's own force and wins: the title passes.
-5. Neutral ground: a planted unheld Rung: no title is written on any band.
-6. `seize` on an occupied settlement: its existing tests, with one added assertion that the seats there
-   closed with it.
-7. Same seed twice: equal `content_hash`.
+The FA proposal's five arms are the gate for the write. Added for the battle side, on the same world:
+
+1. A defender who concedes at his retreat line with his army two-thirds whole: `Won`, the land passes.
+2. A defender who routs and rallies: `Won`, the land passes, his `rallied` flag set.
+3. A six-bout field drawn at the last bout: no tenure moves; a field drawn at bout 1 and won at bout 3: the
+   title is written once.
+4. `git grep -n "holder\|passage_granted\|hold_force" modules/mass_battle` prints nothing.
 
 ## Falsifier
 
-Title or a seat moving on `Lost`, `Drawn`, `Unopposed` or `Invested`; title moving while a seat at the place
-stays with the old faction; a second site that closes a Rung's `hold`; `aggression_against` reading a stored
-purpose, or reading `at_war`; a guest with live leave passing `occupies`.
+A title written before the last bout; a title on `Drawn`; the module reading who holds the ground.
 
 ## NERS (definitions `CLAUDE.md` §0.06; E last)
 
-- **N.** From the campaign: a war is won on the map by beating the land's defenders, and by nothing less. From
-  the defender: a drawn field keeps the land, so holding is worth something. From the ally: help can be asked
-  for and given without handing over the keys. Laterally: `seize` and conquest are one write. Cut `defends_for`
-  and a pursuer takes a bystander's province; cut `has_leave` and no faction can safely call for aid.
-- **R.** Why an army is where it is can be read by everyone from where it is and whom it fights; treachery,
-  rescue and trespass are three different stories from one rule; with no player, borders move when someone
-  beats someone on his own ground.
-- **S.** No new operand, verb, Record kind or band; the resolver untouched; consent is an existing instrument
-  ended the way every commitment ends.
-- **E, against that.** Three small readers, one function split and called twice, one gate clause.
+- **N.** From the campaign: winning a field for land now takes it, so the two lanes' edits must agree on
+  what "won" is; this is that agreement. From the defender: holding to a draw keeps the land, and conceding
+  loses it, which gives the retreat line a price. Cut section 2 and a rally or a concession is read one way
+  by the field and another by the title.
+- **R.** Three ways to lose a province (broken, withdrawn, surrendered) and one way to keep it short of
+  winning (the draw).
+- **S.** One band, read once; the resolver untouched.
+- **E, against that.** No new mechanism: a table in a docstring and an order of writes.
 
 ## Cost class
 
-Small build, after the PHYSICAL lane's B1 and the MB lane's `Drawn` band. Section 6's war edge is FA's.
-
-## History, for what it is worth
-
-A ruling is not grounded in research. The pages read add one thing: a place usually changed hands by what
-followed the field, terms offered to its defenders or a storm
-(`research/historical/mass_battle_maneuver_sequences_grounding.md` §11). That bears on open item 2 and on
-whether a walled place should pass on a won field without its `Invested` band; it is not decided here.
+Edit, with the FA proposal and after the `Drawn` band.

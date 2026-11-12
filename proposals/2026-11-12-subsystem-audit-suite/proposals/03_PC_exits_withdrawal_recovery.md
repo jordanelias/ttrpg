@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-04, D-05 — Part B decided by the standing rule (a felling's death is `14_VERBS_PHYSICAL_A` A3's mortal-wound draw, adopted, not restated; terms follow context); Part C's `tend` becomes a graded draw.
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.1, §1.3, §1.4) — three further changes. (1) Part A's ground is restated (addendum C-2, C-3; A-1): the breach is that a played person holds an unpriced choice an NPC lacks (one kind of agent), and equal plans must agree **exactly** (Layer 1 §C.4), not in expectation; the quarantined duality note is PROPOSED in its ledger row (25 G-12) and is not the reason. (2) Part B's `Problem` and `two options` text is history: the standing rule and A-16 decided it, the yield is a draw under every term (`16_PESSIMIST_PC_A_the_yield_is_a_draw.md`), and its tables move with A-31's damage scale (`U5b_PC_rulings_in_the_fight.md` §4). (3) Part C's patient-side term is A-8's: the wound a `tend` mends is the level the season charges him, on the one sampler (A-5).
+
 ## Status: PROPOSED
 
 Lane: PC (Part C touches `_eff_tend`, whose hole row H-304 is filed with SE). Source:
@@ -31,10 +33,10 @@ draw, no pursuit. Measured through the registered entry (300 world seeds, tiny_w
 The engine already owns the act one level down: a reach weapon's fighting withdrawal inside an
 engagement is an attempt, a read contest (`combat_systems.py:1000-1004`, `disengage_clean_p`) and, when
 read, a pursuing strike (`wrapper.py:206-219`, `pursuit_sigma` at `combat_systems.py:1357-1378`). Two
-exits for one act, one of them free. The quarantined doctrine `auto_manual_resolution_duality_v1.md`
-(headed RULED 2026-07-08; intent only here) asks that the expected outcome of an event be the same
-whether it is played or auto-resolved, so that the choice of fidelity carries no advantage; the table
-above is that constraint broken by a factor of more than three.
+exits for one act, one of them free. *(Reconciled:)* the ground is Layer 1, not the quarantined duality
+note: a played person holds a choice an NPC lacks and it is unpriced (one kind of agent, CHAR §0A I-1),
+and a played and an automatic fight with equal plans agree exactly (`03_VERBS_AND_LOOPS.md:146-153`;
+A-1). The table above shows the unpriced choice; no expectation test is needed to see it.
 
 **Resolution** (ladder rung 5; CLAUDE.md §0, compose on the single owner). The turn-level withdrawal
 resolves through the same two functions.
@@ -53,6 +55,9 @@ resolves through the same two functions.
      If `W` is felled the fight is decided. Otherwise the turn is then fought as an engaged turn with
      `P` as `first` (he holds the tempo, as `wrapper.py:219` gives the pursuer).
 - No new constant: both probabilities and the strike are existing functions on existing coefficients.
+
+**Who may withdraw.** *(Reconciled:)* every party, through his decider (`03_PC_duel_round_and_approach_B.md`
+§5); an NPC's decider returns `withdraw` only where a response row authors it.
 
 **Gate.** The table above re-run on the same seeds: "both stand" under withdraw-at-first-wound falls
 below 50.7%, and the withdrawer takes a pursuit wound in some seeds (count reported). REM-31's

@@ -1,5 +1,7 @@
 # 07 · SE — places differ, and the larder ladder is the relief path: endowment by territory, stocked granaries, the remainder walk
 
+Reconciled: 2026-11-12, U5d closure — folded **A-50** (some starting state is drawn, small and bounded), **A-54** and the addendum's decisions. §4 (c)'s world-gen stocking ("one season of yield per settlement and a granary") becomes the centre of a bounded draw: each settlement's starting stock is drawn around that value within the bounds `21_PROCEDURAL_D_world_cards_and_churn.md` authors, so some larders start low; with the bound at zero width the edit is the text as written (the control). The granary's rung is `07_SE_treasury_granary_B.md`'s (the nearest seat-bearing rung), not every territory rung (P-7). The yield the endowment feeds is drawn on the four-band ladder (A-54; `09_WR_B_draws_not_thresholds.md`), so the endowment is the pool's ground, not a fixed output. The gate gains the migration arm of `U5d_SE_owed_edits.md` §10.
+
 ## Status: PROPOSED
 
 Carries findings F-SE-01, F-SE-03, F-SE-04 and resolutions R-SE-01, -02, -03, -11 of

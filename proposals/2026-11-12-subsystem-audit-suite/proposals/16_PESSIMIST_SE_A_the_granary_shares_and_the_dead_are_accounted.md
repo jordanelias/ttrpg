@@ -1,5 +1,7 @@
 # SE — the granary shares, the dearth is reported when it begins, and a death by hunger says so
 
+Reconciled: 2026-11-12, U5d closure — folded the ladder-closed **D-69** (famine reports once; the never-stocked edge repaired). R2's last clause ("A ladder no rung of which has ever held the kind stays silent, as ruled") is rewritten: a cohort short for the first time on a ladder that never held the kind is reported once, at the first rung of its ladder, as a crossing from "no report yet"; thereafter silence, as the 2026-10-12 cadence has it. Edit 2 gains that arm; the shipped realm's season-0 ladders therefore report once each (a declared mover the original text did not have). J-1 is closed by it. Edit 4 (`tend` does not answer hunger) is owed to PC and composes with A-56 (`tend` is a cohort move).
+
 ## Status: PROPOSED
 
 Source: `audits/16_PESSIMIST_SE.md` F-PES-SE-01, -03, -04; §1.2 A-1; resolutions R-PES-SE-01 to -04.

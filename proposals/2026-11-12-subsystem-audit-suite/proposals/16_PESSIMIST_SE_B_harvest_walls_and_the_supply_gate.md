@@ -1,5 +1,7 @@
 # SE — the harvest is of what is grown and is on the record, a second wall adds, and the supply arm ships only where armies can eat
 
+Reconciled: 2026-11-12, U5d closure — folded **A-54** (the one four-band ladder). R1's scoping stands (only grown kinds follow the weather). What the factor is changes: for a grown kind the season's yield is the band of a keyed draw on the shared ladder (pool: the place's endurance with the steward's skill; obstacle: the season's hardship), not a multiplier drawn from a table; the receipt of R2 carries the band beside the produced map. J-2 is closed (B). Edits 3 and 4 are unchanged.
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-06) — `World.write` takes no `spec=` today (`state/world.py:1138-1148`); the receipt edit the proposal named as its fallback is required.

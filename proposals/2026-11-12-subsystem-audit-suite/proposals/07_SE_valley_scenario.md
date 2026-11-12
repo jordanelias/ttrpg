@@ -1,5 +1,7 @@
 # 07 · SE — the settlement game as a scenario: three towns, one granary, one seat
 
+Reconciled: 2026-11-12, U5d closure — folded **A-54**, **A-50** and **A-56**. The scenario's seasons draw their harvest on the four-band ladder with the steward's skill in the pool, so the player's stewardship is felt as odds; its three towns' starting stores may be drawn within the fixture's bounds; its cohorts form the heavy moves only, so a starved town answers by petition, flight, refusal or riot. The P-13 change stands (the granary at the steward's seat rung).
+
 ## Status: PROPOSED
 
 Carries finding F-SE-13 and §9 of `audits/07_SE_audit.md` (the standing requirement: playable alone, one

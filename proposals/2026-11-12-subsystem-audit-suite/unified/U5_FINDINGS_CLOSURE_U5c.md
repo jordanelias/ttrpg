@@ -4,6 +4,8 @@
 
 ## Read at: 6cbc712 (working tree). Lane: U5c, a Fable unification-closure lane (UNIFICATION_BRIEF.md, "Closure rule").
 
+## Conformed to: `unified/DECISIONS_ANSWERED.md` (Jordan's answers of 2026-11-12, read in full at A-1 to A-56 with its ladder table; A-57 and A-58, added later, concern land after a battle and touch no row here). No row below is left for Jordan; the last section lists what each answer did here.
+
 Every row closes one finding, resolution row, survivor or verb verdict of the documents this family
 owns, with exactly one disposition:
 
@@ -77,7 +79,7 @@ Abbreviations for carriers: **OBS** = `U5c_SC_one_obstacle_form.md`; **RES** = `
 | G-10 | the roll's operands are dropped: `Event.ending` | RESOLVED-BY | `05_SC_contest_record_on_event.md` (C-06) | H-266 precedent |
 | G-11 | speech does not reach the verdict | SUPERSEDED | by G-36/G-40 (HEAR) and EVID: the filing writes; the sitting reads the board. CP-T05-01 and CP-T05-02 (i) are re-sourced by HEAR edit 2 | addendum C-1 |
 | G-12 | F8 breach: build the re-source | RESOLVED-BY | plan SC-02; RES §1 | `ED-SC-0040` |
-| G-13 | an equal opponent is a rising disadvantage (held for Jordan) | SUPERSEDED | by G-63 and OBS: the divisor stays the ruled one in `opposed_ob`; the base difficulty flattens the drift (13 §3.4) | addendum §B7 run 7 |
+| G-13 | an equal opponent is a rising disadvantage (held for Jordan) | RESOLVED-BY | `05_SC_opposed_obstacle_parity.md`, un-held by Jordan's answer A-26 (0.4 per point); the rate's one owner is `opposed_ob` (OBS §1; C-33) | addendum §B7 run 7; A-26 |
 | G-14 | H-127: no floor | SUPERSEDED | by OBS §2 (a person without a score opposes at `opposed_ob(pool_default)`; `obstacle_default` is deleted) | `10_DICE_one_score_two_roles.md` E-07 |
 | G-15 | close H-276 | RESOLVED-BY | RES §1 | `sigma.py:210` |
 | G-16 | close H-120 | RESOLVED-BY | RES §1 | audit §12 run 3 |
@@ -147,7 +149,7 @@ Abbreviations for carriers: **OBS** = `U5c_SC_one_obstacle_form.md`; **RES** = `
 | G-56 | chronicle shapes from `HearingOutcome.exchanges` | RESOLVED-BY | KERN carry table (last row) | `narrative.py` |
 | G-57 | the obstacle is the task's difficulty plus named modifiers | RESOLVED-BY | OBS (the reconciled form; SC-B's hard terms kept) | relayed clarification, 2026-11-12 |
 | G-58 | a `difficulty:` column | RESOLVED-BY | OBS §2 and §4 (row values: all ten `routine` at the control arm; C-04) | PES-DICE (a)–(b) |
-| G-59 | `score/2` kept, the divisor in `opposed_ob` | RESOLVED-BY | OBS §2; `10_DICE_capability_axiom_map.md` §G edit 5 | 2026-08-14 ruling |
+| G-59 | `score/2` kept, the divisor in `opposed_ob` | SUPERSEDED | in its first half by Jordan's answer A-26 (the rate is 0.4 per point; C-33). Its second half stands and is carried: one owner of the rate, `opposed_ob` (OBS §1; `10_DICE_capability_axiom_map.md` §G edit 5) | 2026-08-14 ruling; A-26 |
 | G-60 | a hearer's regard reaches the roll | RESOLVED-BY | OBS §2–§3 (reader `stance_toward`; unit per full `STANCE_MAX`; hostile half an obstacle term, favour a level; C-03) | `person_q.py:73-82`, `:424-453` |
 | G-61 | `Margin.terms` | RESOLVED-BY | OBS §5; `05_SC_contest_record_on_event.md` (C-06) | SC-B |
 | G-62 | NPC against NPC by the same builder | RESOLVED-BY | OBS §2 | SC-B |
@@ -541,3 +543,10 @@ Code opened to check a citation: `modules/social_contest/roll.py:130-160`; `quer
 (`stance_toward`, `regard`, `heritage_regard`, `deeds_judged`); `data/verbs.py:826-880`;
 `rosters.yaml` (`advantage_sources`, `graded_inquiries`, `inquiry_modules`); `loop/effects_governance.py`
 (`_eff_pardon`); ledger rows `ED-884`, `ED-934`, `ED-1037`. Nothing was run; no pytest.
+
+Read late, after most rows were written: `unified/DECISIONS_ANSWERED.md`, `DECISIONS_QUICKSHEET.md`, and
+the entries of `DECISIONS_FOR_JORDAN.md` that bear on this family (D-29 to D-33, D-42 to D-46, D-54 to
+D-56, D-74). The rows were then conformed. Not re-read after that: the body text of the verb proposals,
+so each `Reconciled:` head line this lane added states a replacement reading and leaves the body as its
+author wrote it, except in `05_SC_evidence_and_rebuttal_B.md` and `05_SC_sc05_kernel_disposition_B.md`.
+The head lines were inserted by one script run over the suite's own files (45 files), not by hand.

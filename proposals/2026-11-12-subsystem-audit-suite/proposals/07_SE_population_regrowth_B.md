@@ -1,5 +1,7 @@
 # 07 · SE — a population that comes back: the rising arm of a cohort's weight, on the bodies clock at MATTER (supersedes one clause of `07_SE_population_census.md`)
 
+Reconciled: 2026-11-12, U5d closure — folded **A-51** and **A-55**. Regrowth is a cohort's weight rising on the bodies clock at MATTER; it is not a births-and-ageing pass (none is ordered) and it re-peoples only places on the fixed map (A-55). The five-year prologue (A-51) runs this rule for its twenty seasons like any other, so a world's starting weights are the prologue's result, not the authored row alone; the gate's first reading is taken after the prologue.
+
 ## Status: PROPOSED
 
 **Revised by its own lane before return (2026-11-12).** The first draft put the rising arm at CENSUS.

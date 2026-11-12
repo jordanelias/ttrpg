@@ -1,5 +1,7 @@
 # STORY-C — a founded place can fail: a hearth or community left empty is put to a draw each season, and may be abandoned
 
+Reconciled: 2026-11-12, U5d closure — folded **A-55** (fixed map; an empty founded household may lapse). The closing sentence ("A town-scale founding and abandonment remain PES-SE J-3, Jordan's") is answered: no node of the settlement registry is added or removed; this file's lapse is the whole of what may end. The lapse draw is on the four-band ladder (A-54), as written. `lapse_draw` still ships `off`; the ruling licenses turning it on as a declared mover after its reading.
+
 ## Status: PROPOSED (one write-matrix cell is touched; named under "Where it meets Layer 1")
 
 Source: `audits/23_STORY_ENABLEMENT.md` §2 row S-38, §4.2 G3; `16_PESSIMIST_SE.md` §3.5 (*"a founder's

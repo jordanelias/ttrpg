@@ -1,5 +1,7 @@
 # GAME — the world's own motion is drawn: hunger and wear per subject, on the weather draw's precedent
 
+Reconciled: 2026-11-12, U5d closure — folded **A-54**: Jordan chose the one four-band ladder over this file's form (multipliers drawn from equally likely tables on the weather draw's precedent). The two fixtures (`hunger_severity_draw`, `wear_draw`) are kept as names and as control arms (`()` reproduces every base hash) and their drawn arm is rewritten to `09_WR_B_draws_not_thresholds.md` edits 1 and 2: a keyed draw on `degree_from_net` with pool and obstacle set by state, the four bands grading the magnitude. The keying (`draw_factory`, per eater and per Site per season), the host-draws-module-stays-pure rule and the gate's control stand. The multiplier-table arm is not built.
+
 ## Status: PROPOSED
 
 Source: `audits/16_PESSIMIST_GAME.md` F-PES-GAME-05, §5 rows W-2 to W-4; premise 2.4. Read at `4995824`.
