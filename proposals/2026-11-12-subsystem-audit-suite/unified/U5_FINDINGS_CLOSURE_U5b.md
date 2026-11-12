@@ -447,3 +447,172 @@ by title, being written at this head); **LAND** =
 | F-GO-04 | 91 mass-battle tunables read from the environment | SUPERSEDED | the same finding as F-MB-09; TO §3 |
 | F-GO-08, F-GO-18 | PLAYABLE exists at one seam | SUPERSEDED | U5d's closure; this family's carriers are PB §4 (the duel), MGR §4 (the field) and SQD (the squad), one decider interface |
 
+
+---
+
+# Part 3 — the MILITARY verb family (`audits/14_VERBS_MILITARY.md`)
+
+Every row is read with `U5b_VERBS_military_physical_residue.md` (RES-V) §1: the shape of a drawn act under
+Layer 1 (`04` §B.13 invariant 12), one sampler, one pool rule, favourable terms as levels.
+
+## 3.1 Verdicts (§0.3) and the standing-rule findings (§0.5)
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| `move` | executes and goes nowhere | RESOLVED-BY | MIL-A Edits 1–4 as reconciled (a contest row, RES-V §1) | `aperture 2 0`: 55 / 15 / 40; H-329 (16 of 17 to the mover's own rung) |
+| `migrate` | works; certain once admitted | RESOLVED-BY | MIL-A Edits 4–5 as reconciled | 84 / 10 / 74 |
+| `train` | forms for everybody and has never executed | RESOLVED-BY | MIL-B as reconciled, after `01_CORE_capability_authoring_surface.md` Edit 9 (U5a's) and MIL-A Edit 6 | 85 / 0 / 85 |
+| `recruit` | unreachable in computed play | RESOLVED-BY | MIL-C Edits 1–5, 7 as reconciled (a task row, flat) | formed 0 (withheld, `data/fixtures.py:1157`) |
+| `discharge_troops` | unreachable, and motiveless | RESOLVED-BY | MIL-C Edits 4–6; the motive is upkeep (ECON §2 with SE, U5d) | probe `probe_army_s0.txt` |
+| `form_unit`, `assign_troops`, `disband_unit`, `order_unit` | unreachable in computed play; certain when reached | RESOLVED-BY | MIL-D as reconciled | formed 0 each |
+| F-VM-01 | a held key rises by exactly one, every time | RESOLVED-BY | MIL-B Edit 1, 3 | probe (`{arms: 2}` to `{arms: 3}`) |
+| F-VM-02 | exactly `count` men come, whoever asks | RESOLVED-BY | MIL-C Edit 5 (`task_fraction`) | probe (a levy of 60 raises 60) |
+| F-VM-03 | the roll changes as written; men, units and orders comply with certainty | RESOLVED-BY | MIL-C, MIL-D | probe |
+| F-VM-04, F-VM-05 | an admitted journey always arrives; an admitted settler is always housed | RESOLVED-BY | MIL-A Edit 4 | `es/loop/effects_migration.py:71`, `:228` |
+| F-VM-06 | the unplayed commander's plan draws nothing and is folded outside DELIBERATE | RESOLVED-BY | MIL-C Edit 7, MIL-D Edit 7 (he forms the verbs through the chooser; the plan stays arithmetic, what he gets is drawn) | `harness/army_presets.py:10` |
+| §0.5 listed for FA | a levy that passes `may_levy` raises its whole count | RESOLVED-BY | MIL-C Edit 5 (the answer is drawn); who may ask stays `06_FA_levy_through_the_seat_B.md` (U5d) | — |
+| §0.5 listed for MB | `experience` rises on a fixed rule; a standing order is obeyed with certainty | RESOLVED-BY | RUL-MB §5 (veterancy a draw); 26-MAN §1 (the obedience draw; A-59 makes its odds a function of command: 27-MB) | `mb/core/contact.py:66-128` (25 G-14) |
+| §0.5 listed for SE | an unfed army is bounded by arithmetic | SUPERSEDED | SE's closure (U5d); the draw this family owns is MIL-C's `discharge_troops` Failure band and the dispersal draw | — |
+| S1 | every row joins the graded route | DISPUTED | in its form only: the draw stands; a band-keyed `writes:` on a route row does not load (`es/data/verbs.py:848-851`, `:872-876`; 25 G-01) and Layer 1 gives a band-keyed column to a `contests:` row. Each row takes shape (a) or (b) (RES-V §1; U5c's C-22). The finding stays in the audit, marked by the proposals' `Reconciled:` lines | 25 G-01 |
+| S2 | two capability keys, `command` and `wayfaring` | RESOLVED-BY | definition rows on U1's surface (RES-V §1 rule 2); `command` is defined once by 27-MB | — |
+| S3 | the commander's occasion and the army's state | RESOLVED-BY | MIL-C Edits 1–3 | — |
+
+## 3.2 Resolutions (§7), the Layer 1 conflict (§6), survivors (§9)
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| res. 1 | one draw each on the graded route | RESOLVED-BY | MIL-A to MIL-D as reconciled (RES-V §1) | — |
+| res. 2, 3, 5 | `move` on places; the same-place move declined (H-140); `with` deposited | RESOLVED-BY | MIL-A Edits 1, 2, 4, 6 | H-329 |
+| res. 4 | does migrating away vacate a seat (H-309) | SUPERSEDED | answered at the ladder (absence is not vacancy); A-23 adds custody as what suspends a seat's acts; no edit | — |
+| res. 6 | `train` on a `Person` | RESOLVED-BY | MIL-B Edit 1 | — |
+| res. 7 | J-13 (iii): no key is ever minted | SUPERSEDED | by `01_CORE_capability_authoring_surface.md` Edit 9, kept by U1 §4 | — |
+| res. 8, 13 | a payload-less command is the doctrine's step; the opportunity key | RESOLVED-BY | MIL-C Edits 1, 5 | — |
+| res. 9, 10 | a dead commander's troops stay counted for ever; nothing lowers an army when its cohort shrinks | RESOLVED-BY | MIL-C Edit 6 (the successor takes up the roll; the dispersal draw). A-15 makes it reached in ordinary play | probe (`other_army_records` 1 after the death) |
+| res. 11 | "unit" against "subformation" | RESOLVED-BY | HIER §1 (R-30) | — |
+| res. 12 | the unplayed commander is folded outside DELIBERATE | RESOLVED-BY | MIL-C, MIL-D | — |
+| §5.2 cross-lane dependencies | thirteen named edges | SUPERSEDED | each is a dependency, not a finding; ordered in RUL-MB §6 and RES-V "Who lands it" | — |
+| §6 "no unit class" | four rows make and order units | SUPERSEDED | answered: A-2 (a unit is a row) | — |
+| §6 "no second resolver" | the doctrine step is not one | SUPERSEDED | answered: A-1 | — |
+| §9 item 1 | a unit: a row or a thing | SUPERSEDED | answered: A-2 | — |
+| §9 item 2 | auto-resolve: a mode or a calculation | SUPERSEDED | answered: A-1 | — |
+| §9 item 3 | three organising verbs, or one | SUPERSEDED | closed by the ladder: D-36 A (three) | `DECISIONS_ANSWERED.md` ladder table |
+| cases (§2 to §4, item 8 of each) | M-CAP, M-STORES, ARC-07, ARC-20, ARC-23, NSC-05, NPC-072, SCN-14 | RESOLVED-BY | the verb's own proposal, as each section names; ARC-07 is MIL-C's failure band and the dispersal draw | — |
+
+---
+
+# Part 4 — the PHYSICAL verb family (`audits/14_VERBS_PHYSICAL.md`)
+
+## 4.1 Verdicts (§0.3) and the standing-rule check (§0.6)
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| `arrest` | forms almost never; never attempted | RESOLVED-BY | PHY-A A0, A1 (a warrant addressed and heard) | formed 1, attempted 0 |
+| `capture` | forms but is refused | RESOLVED-BY | PHY-A A2; RES-V §4 (`mustered` reads custody) | 12 / 0 / 12 |
+| `fight` | unreachable in the realm | RESOLVED-BY | PHY-A A3 (contexts fed by A1, A2); P1; `22_HAPPENINGS_C_a_killing_is_a_crime_someone_commits.md` (A-16; U5d's); CR-91 for war | formed 0 |
+| `accept` | forms but is refused; unreachable after lane A alone | RESOLVED-BY | PHY-A A4 (a challenge addressed and heard), with P1 | 27 of 27 on `exists:challenge=0` |
+| `march` | executes only unopposed | RESOLVED-BY | PHY-B B1 as reconciled (RES-V §2); HG; MIL-C, MIL-D | 13 attempts, 3 unopposed, 0 fields |
+| `raze` | forms but is refused | RESOLVED-BY | PHY-B B2 as reconciled (RES-V §3: the taker's arm) | 14 of 14 refused |
+| `examine` | unreachable, and empty when reached | RESOLVED-BY | PHY-C C1 | formed 1, attempted 0 |
+| `surveil` | executes and finds nothing | RESOLVED-BY | PHY-C C2 | 6 findings that taught nothing |
+| `thread_read` | executes and finds nothing | RESOLVED-BY | PHY-D stage 1; stage 2 after WR's module | 3 flat findings |
+| §0.6 `fight` | a plain fight kills its loser in 200 of 200 | RESOLVED-BY | PHY-A A3 as reconciled (`context_terms`; the mortal-wound draw on the one sampler) | F-PC-04 |
+| §0.6 `march` | a field decided by the larger number | RESOLVED-BY | HG gate 2; PHY-B's draw assertion | REM-27's own note |
+| §0.6 `raze` | ungraded in the first writing | RESOLVED-BY | PHY-B B2 as reconciled (a contest row, four bands) | — |
+| §0.6 `surveil`, `thread_read` | a success was omniscience; a flat finding | RESOLVED-BY | PHY-C C2 (a draw per sighting); PHY-D stage 1 | — |
+| §0.5 the family's one repair | the licence lives in the effect; formation cannot see it | RESOLVED-BY | one `world_q` reader per licence, called by the stamp and the effect (`warrants_for`, `field_defender`, `may_ruin`, `sites_here`, `place_here`) | — |
+
+## 4.2 Build-out decisions, by verb
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| `arrest` §1.3 items 1–9 | addressed-and-heard licence; one owner; the contest stays `a standing`; resistance hands off to `capture` | RESOLVED-BY | PHY-A A0, A1 | — |
+| `capture` §2.3 items 1–7 | `Person` class; `war` and `crime` contexts; custody to the warrant's court | RESOLVED-BY | PHY-A A2 | — |
+| `fight` §3.3 item 3 | drop `duel` from `fight`'s contexts | RESOLVED-BY | PHY-A A3 (lands with or after A4) | — |
+| `fight` §3.3 items 4, 5 | inside a field; approach, equipment, withdrawal | RESOLVED-BY | PB step 5 with RUL-PC §1; PB §3; PL; P3 Part A | — |
+| `fight` §3.3 items 6, 7 | the terms follow the context; a felling is not a death | RESOLVED-BY | PHY-A A3 as reconciled (the pool is the one pool rule; the body band is a level, A-7 and A-8) | — |
+| `accept` §4.3 items 1–5 | a challenge heard is answerable; stakes; declining costs | RESOLVED-BY | PHY-A A4; U5c's reconciliation for the declined challenge (its C-27) | — |
+| `march` §5.3 items 1, 2, 4, 5, 6, 8 | who; the `Field` class; war must exist for formation; posture a choice; `Drawn`; refusals | RESOLVED-BY | PHY-B B1 as reconciled; HG; FA's remit (U5d) | — |
+| `march` §5.3 item 3 | "no war, no march" (ED-IN-0337, ladder step 3) | SUPERSEDED | by A-58 for the act: a march in force onto land another holds is itself the aggression and the holder defends it, war or no war (RES-V §2 edit 1). Kept for formation only (a person thinks of marching against a known enemy) | `DECISIONS_ANSWERED.md` A-58 |
+| `march` §5.3 item 7 | a won field writes presence, never title | SUPERSEDED | by A-57 and A-58; LAND; 26-LAND | — |
+| `march` §5.3 item 9 | the field is a draw | RESOLVED-BY | HG gate 2 as a precondition of P-B; the siege's wear (`_fall`, a fixed fraction, 25 G-34) is SE's (RES-MB §8) | — |
+| `raze` §6.3 items 1–3, 5–8 | the `Occupied` class; sack before ruin; Sites end; consequences by deed; graded; recoverable | RESOLVED-BY | PHY-B B2 as reconciled (RES-V §1 shape (b); RES-V §3) | — |
+| `raze` §6.3 item 4 | re-homing stays out | SUPERSEDED | Layer 1 §B.8 and H-228's own ladder (the audit's answer stands); the displaced recover by `migrate`, a heavy move of the common people (A-56; U5d's carrier) | — |
+| `examine` §7.3; `surveil` §8.3 items 1–4 | Sites where he stands; a sabotage leaves a trail; watching admits by a draw; failure exposes | RESOLVED-BY | PHY-C | — |
+| `surveil` §8.3 item 5 | the person case stays absent | SUPERSEDED | the audit's ladder (no disjunction in the grammar for one row; composed from place surveillance and `tell`); no ruling orders it | — |
+| `thread_read` §9.3 | stage 1 now; stage 2 after WR | RESOLVED-BY | PHY-D as reconciled; A-40 unblocks the Site half (WR's, U5d) | — |
+
+## 4.3 Survivors (§10.4), grounded marks, handed across
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| D-1 | does an arrest need the officer beside the prisoner | SUPERSEDED | closed by the ladder: D-25 A (the court's reach suffices) | `unified/DECISIONS_QUICKSHEET.md` D-25 |
+| D-2 | does a won field transfer title | SUPERSEDED | answered: A-57 and A-58 | — |
+| §10.4 "not surviving" | PC's Part B; arrest's contest; march without war; the duel context; raze re-homing; surveil's Exposure | SUPERSEDED | each at the step the audit names, except "march without war", which A-58 re-decides (row above) | — |
+| 25 G-31 | `enemies_heard` has no cohort test | RESOLVED-BY | PHY-A A2's gate counts the residue; cohort-ness person-side is CORE's (U5a) | `es/queries/world_q.py:3711` |
+| 25 G-32 | `mustered` does not read `restrained` | RESOLVED-BY | RES-V §4 | `es/queries/world_q.py:2132-2149` |
+| 25 G-33 | which subject WITNESS gives the challenge's witness claim | RESOLVED-BY | PHY-A A4's gate asserts it; the fallback (`content:challenge` through `ABOUT_KEYS`) is named there. Still unverified at HEAD | `es/loop/effects_information.py:308-334` |
+| 25 G-34 | `_fall` is a fixed fraction | SUPERSEDED | SE's closure (U5d); cross-listed in RES-MB §8 | `es/loop/effects_economy.py:141-158` |
+| U5c `interrogate` | unreachable: no custody | RESOLVED-BY | PHY-A A1, A2 | — |
+| U5a sweep | each verb's own band row supersedes the task default | RESOLVED-BY | RES-V §1 | — |
+| U5a "one `tend` rule" | D-05 is the standing text | RESOLVED-BY | P3 Part C as reconciled | — |
+| cases (item 8 of each section) | NPC-088, NPC-004, NPC-038, ARC-21, ARC-23, ARC-16, NPC-003, NPC-020, SCN-14, NPC-089, ARC-54, ARC-07, NPC-086, ARC-32, ARC-33, NPC-033, NPC-005, NPC-002, NPC-075, NPC-080 | RESOLVED-BY | the verb's own proposal, as each section names; NPC-088's end "by being found and killed" is A-16's carrier | — |
+
+---
+
+# Part 5 — conflicts decided by this lane, and what is put to Jordan
+
+## 5.1 Contradictions found and resolved (the losing text carries a `Reconciled:` line)
+
+| id | the documents | decided | ladder step |
+|---|---|---|---|
+| C-U5b-01 | P5 against PB (phase, hooks, state, gate) | PB where they differ; P5 amended in place | 1 (PB's evidence; Layer 1 §44.3, §C.4) |
+| C-U5b-02 | `U5a_capability_home_and_two_inputs.md` row B5 (A-26's 0.4 on the pool, applied to `modules/combat/core.py::ob_from_defender`) against A-31 ("obstacle left alone") | the fight keeps its obstacle's value through the one owner, at its own named rate (RUL-PC §2 edit 4). **Flagged to U5a; its file is not edited.** Listed below (J-U5b-01) | 1 (the later, specific ruling) |
+| C-U5b-03 | `U5a_DICE_owed_edits.md` §1 row 4 ("the opposed roll stays and is named") against PART edit 2 (each side paid by its own net) | the melee pair is not opposed; the sampler swap stands (RUL-MB §1 row 2). **Flagged to U5a** | 1 (ED-MB-0003, ED-MB-0004) |
+| C-U5b-04 | MGR §7 ("resolved by the host") and SQD §3 (state and a loop in a wrapper) against Layer 1 §44.3 and A-4 | the module calls a `duel` callable at its window; the squad is a registered entry (RUL-MB §3) | 3 (Layer 1); A-4 |
+| C-U5b-05 | PLAY §E `army_presets` against MIL-C `armies_at_build`; two owners of the opportunity-key edit | one fixture and one edit, MIL-C's (RUL-MB §4) | 5 |
+| C-U5b-06 | TO §2's role list against the pessimist's measured list | one list (RES-MB §1) | 5 |
+| C-U5b-07 | LOAD-1 against LOAD-B; PL's keyed leaf against a troop's unkeyed arm | LOAD-B; `carry_demand_of(masses, …)` is the one body | 1 (addendum C-3) |
+| C-U5b-08 | the eight verb proposals' band-keyed route rows, and three names for one roster (`graded_inquiries`, `graded_routes`, `graded_tasks`), against Layer 1 invariant 12 | shape (a) or (b) per row; one name, `graded_tasks` (RES-V §1; U5a's and U5c's decision applied) | 3 (Layer 1) |
+| C-U5b-09 | PHY-B B1 (`march_defender` answers nothing without a war) and its "presence, never title" against A-57 and A-58 | the reader is split; the holder defends; title passes by LAND (RES-V §2) | 1 |
+| C-U5b-10 | PES-A (dice from Spirit; wounds as obstacle points) and PHY-A A3 (pool from the body band) against A-7 and A-8 | dice from training; the attribute and the wound as levels | 1 |
+| C-U5b-11 | TO's and HG's module-side `verdict` against A-3 and MGR §1 | the host reads the end state | 1 |
+| C-U5b-12 | P2's R-PC-03 (keep the flip as a workbench rule) against `18_DETERMINISM_no_certain_matchup.md` | the riposte; the comment edit is that file's | 1 (the standing rule) |
+| C-U5b-13 | this lane's own first draft of RUL-MB §1 (the commander's two inputs) against lane 27's charge under A-59 | withdrawn in favour of `proposals/27_MB_*` | 1 |
+| C-U5b-14 | two carriers for the land (`26_MASS_BATTLE_*land*` and `U5d_FA_land_and_seats_pass_on_a_won_march.md`) | resolved by lane 26 itself: U5d owns the title write, 26-LAND the reading of the end state; recorded, not re-decided | — |
+
+## 5.2 For Jordan (each survives the ladder as a choice between two games, or overwrites Layer 1 text)
+
+| id | question | option A | option B |
+|---|---|---|---|
+| J-U5b-01 | the fight's obstacle, where A-31 ("obstacle left alone") and A-26 with A-6 ("an even contest is even"; one way of turning a score into dice) pull apart | **keep it** (taken): the defender's score halved; an even exchange stays centred two above its obstacle, and A-31's damage scale supplies the length | apply 0.4 of the defender's pool in the fight too: an even exchange is even; more misses, fewer wounds a turn, more undecided fights; every combat figure is re-read |
+| J-U5b-02 | the nesting cap's default, which Layer 1 §39.3 says has none (A-4 orders one) | **1** (taken): a field or squad may call one duel round; a duel round calls nothing | 2: a duel round may itself open a nested contest (none is proposed anywhere in the suite) |
+| J-U5b-03 | `raze` after A-57 and A-58: the victor now holds the town, so the occupation licence is false | **the taker may ruin what he took** while it is in his own hand (proposed, an ASSUMPTION) | ruin stays an occupier's act: a won march gives title only, and `raze` is reachable only after an unopposed entry |
+| J-U5b-04 | may a person think of marching without a war (A-58: a casus belli is not a precondition of the act) | **only against a known enemy** (taken; the one occasion with a reader today) | also on a claim or grievance against the holder, once FA names the acts that count and gives them a reader |
+
+Owned by other lanes and not listed again: whether an officer's command reaches his unit's dice (27-MB §9);
+an uninvited rescuer who takes the land he rescued, and whether leave covers attacking one's host
+(26-LAND §3, §4); to whom the seats pass (LAND).
+
+## 5.3 Documents not checked in full
+
+`audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` and `proposals/27_MB_*` (head and verdict only; being written
+at this head). `proposals/26_MASS_BATTLE_*`: `…_aggression_and_land.md` read in full; the other five by
+their section lists and through `audits/26`'s table and the `Folded:` lines. `audits/11_GO_audit.md` and its
+addendum: finding heads only (U5d's family). The two `unified/U5_CONFLICTS_*` files U5a and U5c cite were
+not on disk; their decisions are cited from the closure tables.
+
+## 5.4 Tally (table rows of Parts 1 to 4; a row may close several ids that share one carrier)
+
+| part | RESOLVED-BY | SUPERSEDED | STALE / FALSE-POSITIVE | DISPUTED | JORDAN |
+|---|---|---|---|---|---|
+| 1 · PC | 117 | 48 | 4 | 0 | 0 |
+| 2 · MB | 104 | 39 | 3 | 0 | 0 |
+| 3 · MILITARY | 23 | 9 | 0 | 1 | 0 |
+| 4 · PHYSICAL | 32 | 8 | 0 | 0 | 0 |
+| all | 276 | 104 | 7 | 1 | 0 |
+
+No finding of the family ends as JORDAN: every survivor its audits listed was answered by a ruling
+(A-1 to A-4, A-6 to A-8, A-16, A-31, A-57 to A-61) or by the ladder (D-25, D-36, D-40, D-41). The four
+questions of §5.2 arise from reconciling the rulings with one another, not from an unclosed finding.
+Proposals amended in place (each carries a `Reconciled:` line naming this file): 34. New proposals: 5
+(`U5b_*`).
