@@ -1,5 +1,7 @@
 # CHAR (pessimist) A — a crisis of faith is drawn, keeps its direction, and is told
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-09) — the roll is confirmed by Jordan's answer A-24 (D-26, D-27): Option B; `crisis_draw` ships `on`; ED-IN-0261's *rolls nothing* is superseded by that ruling. This file is the emitter of `conviction.moved` (the CORE record proposal emits `scar.taken` only). The draw is the one sampler's (A-5) and its pool follows the one pool rule with the held intensity as the score (U1 architecture §4), so `crisis_obstacle` is set at the calibration, not at 1.
+
 ## Status: PROPOSED
 
 Written by the CHAR pessimist lane (`audits/16_PESSIMIST_CHAR.md`, F-PES-CHAR-03). Ratifies nothing;

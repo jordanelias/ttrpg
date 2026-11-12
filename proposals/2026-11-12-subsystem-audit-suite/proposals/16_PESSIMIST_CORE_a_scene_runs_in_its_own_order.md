@@ -1,5 +1,7 @@
 # 16 · PESSIMIST · CORE — a scene runs in its own order, and its second step may depend on its first
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §1) — **no longer held.** Jordan answered D-09 on 2026-11-12 (A-9): a scene is a short sequence (Option B). Edits 1–4 are the plan. Edit 5 (the Layer-1 text: #353 §27's order restated over scenes) is drafted by the unification stage and applied only by Jordan's amendment, never by an implementation lane. The rival-acts precedence draw (`18_DETERMINISM_rival_acts_in_one_fold.md`) re-orders scenes, not acts, once this lands.
+
 ## Status: PROPOSED — **held back: needs Jordan** (it re-keys the fold order #353 §27 ratifies; the two options are below and in `audits/16_PESSIMIST_CORE.md` §6)
 
 Carries F-PES-CORE-06 of `audits/16_PESSIMIST_CORE.md` (§1.1). Reference only (CLAUDE.md §0.05).

@@ -1,5 +1,7 @@
 # DICE — a person who cannot say the odds assumes an ordinary opponent, not a certain win
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-13) — stands. Under A-5 `band_odds` is the closed form of the one sampler (same name and signature); the prior for a stranger is an ordinary person's pool and mid-point talent (U1 architecture §4). Edit D (the roll's record on its Event) is one proposal with `10_DICE_capability_axiom_map.md` §D's `fed_by` and SC's `Margin.terms`; under A-5 the record carries the continuous margin, not a settled integer.
+
 ## Status: PROPOSED
 
 Carries finding F-DICE-14 and §15 of `../audits/10_DICE_audit.md`. Lane: IN (the seam's believed-odds

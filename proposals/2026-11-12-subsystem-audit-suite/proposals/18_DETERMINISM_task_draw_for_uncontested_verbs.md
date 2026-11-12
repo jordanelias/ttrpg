@@ -1,5 +1,7 @@
 # 18 · DETERMINISM · A — every consequential verb draws: the uncontested fold becomes bookkeeping only
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-07, C-U5a-10, C-U5a-13) — three changes. (1) Item 3 and the gate follow `16_PESSIMIST_DICE_task_difficulty_and_throughput.md`: a task nobody has ranked is `plain`; the route never ships on `obstacle_default`; gate item 5. (2) Item 4 is rewritten to `04` §B.13 invariant 12 and §C.4 (a `Degree`-keyed column belongs to a verb that declares `contests:`): a `task` row keeps flat `writes:` and `emits:`, scales its magnitude by `task_fraction`, and carries its failed draw as the keyed `emits_on_refusal` clause `draw`, which is the form the three graded inquiries already have; a verb whose bands write different cells declares `contests:`. (3) The roll is the one sampler (A-5); the pool is the one pool rule (U1 architecture §4), at the uses-table site `task`.
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-01, L-10) — step 2 gains the two loader refusals (`data/verbs.py:848-851`, `:872-876`) that today refuse a routed row that writes; step 3's pool reader is `seam/wrappers/pool.py::faculty`. The resolution is unchanged.

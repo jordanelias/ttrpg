@@ -1,5 +1,7 @@
 # CORE-T1 — one owner for the realm goldens; the shipped world is what is pinned
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-13) — lands first among the hash movers, so each later mover re-records one file. E (the dice golden) is superseded in content by A-5: the golden is regenerated for the functions that remain after the whole-dice roll is deleted (`U5a_DICE_owed_edits.md` §1 row 8), not trimmed to 735 rows. D's kept pin `len(VERB_TABLE) == 67` is re-recorded by the commit that splits `tie / knot` (A-28).
+
 ## Status: PROPOSED
 
 Source: `audits/01_CORE_audit_addendum_C_tests.md` F-TEST-02, F-TEST-03, F-TEST-08. Read at `785bc62`.

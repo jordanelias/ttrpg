@@ -1,5 +1,7 @@
 # CHAR — resolve and temper: name what `choice_temperature` divides, and give the departure from the optimum to the person
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §4) — the gate gains the test-retest reading of `U5a_CHAR_owed_amendments.md` §1 (F-PES-CHAR-04 a).
+
 ## Status: PROPOSED
 
 Written by the CHAR audit lane (`audits/02_CHAR_audit.md`, findings F-CHAR-02, F-CHAR-06, F-CHAR-10).

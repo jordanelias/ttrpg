@@ -1,5 +1,7 @@
 # 18 · DETERMINISM · C — when two acts in one RESOLVE want the same thing, a draw decides who comes first
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-13) — the precedence draw is the one sampler's (A-5). Under Jordan's answer A-9 the fold orders scenes, so a rivalry group is a group of scenes and is re-ordered among the positions it holds. First reading for gate 1: reversing the hash order flips 1 of 175 round-0 acts (realm, seed 0; `audits/16_PESSIMIST_CORE.md` E-07). Layer 1: this fills `04` F.26 and keeps D-36 (rank never breaks a tie).
+
 ## Status: PROPOSED
 
 Source: `audits/18_DETERMINISM_SWEEP.md` C-11. Standing rule: `AUDIT_BRIEF.md` (Jordan, 2026-11-12):

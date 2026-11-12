@@ -1,5 +1,7 @@
 # CORE 03 — THE NINE: one typed reading per row, and a propagation measure with a control
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-01, C-U5a-05) — §1 (the `reading:` record) stands. §2 is withdrawn: `harness/chronicle.py --propagation` is not built. R-01's and R-02's `measure:` is the knockout arm of `16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md` (edits 2–3), with the realm tests of `01_CORE_tests_shipped_world_falsifiers.md` rows 1–2 as the standing falsifiers; one instrument per property. The two statuses are not moved by any proposal of this suite (the knockout reading supports them: 0 and 0 on the controls, 236 to 634 on the arms). The two `measured:` head rewrites of `02_CHAR_reason_trail_and_small_edits.md` Part C land as these rows' `reading.does_not_show`.
+
 ## Status: PROPOSED
 
 Source: `audits/01_CORE_audit.md` F-CORE-03; resolutions 5, 6, 7.

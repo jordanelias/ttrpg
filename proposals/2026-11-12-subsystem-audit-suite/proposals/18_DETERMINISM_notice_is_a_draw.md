@@ -1,5 +1,7 @@
 # 18 · DETERMINISM · B — whether a bystander notices a deed is a draw
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-13, C-U5a-14) — the roll is the one sampler (A-5: `roll_net_continuous`, not `roll_net`). The witness's pool is not read by calling `sigma.faculty` from WITNESS: it comes from a per-holder projection built at the barrier (the register's D-74, taken B: `loop/witness` is brought back to Layer 1's may-read list), at the uses-table site `notice`. A crisis of faith and an overridden scruple are deeds of a non-public kind and reach bystanders through this draw (A-24: *drawn and seen*).
+
 ## Status: PROPOSED
 
 Source: `audits/18_DETERMINISM_SWEEP.md` C-02 (ranked first by play decided). Standing rule:

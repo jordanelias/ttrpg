@@ -1,5 +1,7 @@
 # 16 · PESSIMIST · CORE — a refusal is remembered: the person weighs what he has already been refused
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §4) — `refused_before` reads present confidence through `state/ledgers.py::present_confidence` once `01_CORE_claim_fade_as_read.md` lands (one owner of fading). A failed search enters by `U5a_DICE_owed_edits.md` §4 (`finding.none` deposited to its actor only). The register's D-46, taken B, adds a private belief of absence for the `with` stem; it composes with this weight and does not replace it.
+
 ## Status: PROPOSED
 
 Carries F-PES-CORE-01 of `audits/16_PESSIMIST_CORE.md` (§1.3, §1.5). Reference only (CLAUDE.md §0.05).

@@ -1,5 +1,7 @@
 # CORE-T3 — falsifiers on the shipped realm, and the assertions that can pass on nothing
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §4) — R-09's red-today falsifier (two persons of different capability read different odds with no monkeypatched addend) is the gate of `U5a_capability_home_and_two_inputs.md` Parts B and C.
+
 ## Status: PROPOSED
 
 Source: `audits/01_CORE_audit_addendum_C_tests.md` F-TEST-01, F-TEST-06, F-TEST-07, F-TEST-11,

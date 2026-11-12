@@ -1,5 +1,7 @@
 # DICE — the face rule and the band edges as exported facts; the two samplers named for what they are
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-13) — Jordan answered the audit's §11 the other way (A-5: the bell curve everywhere; ED-833 stands for every system). Edits A and D stand (`BAND_FLOORS`; the per-die pair asserted against `FACE_NET`; `LEVEL_SIGMA` exported). **Edit B's wording and Edit C's three-name vocabulary are withdrawn**: there is one sampler and one resolver name. `FACE_NET` is the derivation of the per-die pair, not a dealt rule. The move is `U5a_DICE_owed_edits.md` §1.
+
 ## Status: PROPOSED
 
 Carries findings F-DICE-05 and F-DICE-09 of `../audits/10_DICE_audit.md`. Lane: IN (the dice engine and

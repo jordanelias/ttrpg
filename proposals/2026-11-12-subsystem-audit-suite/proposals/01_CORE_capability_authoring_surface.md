@@ -1,5 +1,7 @@
 # CORE — one authoring surface for character capabilities
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-08, C-U5a-11) — the home proposed here (`references/descriptor_registry.yaml: capabilities`, the verb-row column) is the decided one: `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §1. Changed by that file and by Jordan's answers: Edit 1's `kinds` drops `attribute`, `untrained_rules` is `[default, none]`, every row carries `gloss`, `growth_rules` gains `fixed`; Edit 8's values are U1 §5's (`arrest: arms`, `lie: deception`, `determine: law`, each `none` with a note until its definition row exists); Edit 9 is kept as `max(untrained score, rank)` and its `untrained: attribute` arm is removed (A-7: talent and training are two inputs, never folded); **Part three is withdrawn** (A-11: a capability never gates an act). The roll these rows feed is U1 §4; the ordered plan is `U5a_capability_home_and_two_inputs.md`.
+
 ## Status: PROPOSED
 
 Source: `audits/01_CORE_audit_addendum_B.md` §5 (the brief's §14), F-CORE-15. Read at `785bc62`.

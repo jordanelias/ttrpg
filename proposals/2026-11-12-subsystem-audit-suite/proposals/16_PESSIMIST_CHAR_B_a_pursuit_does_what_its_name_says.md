@@ -1,5 +1,7 @@
 # CHAR (pessimist) B — a pursuit does what its name says: signatures for the fifteen, rows for the verbs of mercy and harm
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §4) — extended to creeds by `U5a_CHAR_owed_amendments.md` §7 (`affiliation_signatures`, same reader).
+
 ## Status: PROPOSED
 
 Written by the CHAR pessimist lane (`audits/16_PESSIMIST_CHAR.md`, F-PES-CHAR-01). Ratifies nothing;

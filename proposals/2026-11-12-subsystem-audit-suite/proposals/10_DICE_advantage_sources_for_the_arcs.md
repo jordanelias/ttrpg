@@ -1,5 +1,7 @@
 # DICE — the arcs' modifiers enter by the one door: a signed advantage channel, and `wounds` as its second member
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-12) — Edits A–D stand as written and are confirmed by Jordan's answer A-8 (a wound is a level against the roll, as combat spends it). The replacement proposed in `audits/10_DICE_audit_addendum_B.md` §5.4 (a wound as an obstacle term) is not built. Favourable sources stay levels and hostile situation terms go to the obstacle (A-25). The gate gains: at the largest stack of levels against, the chance is not under the per-pool floor (`U5a_DICE_owed_edits.md` §1 row 3, §3 row 11).
+
 ## Status: PROPOSED
 
 Carries finding F-DICE-06 and §13 of `../audits/10_DICE_audit.md`. Lane: IN (the seam's advantage

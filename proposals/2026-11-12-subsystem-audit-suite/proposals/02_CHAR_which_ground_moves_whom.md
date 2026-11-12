@@ -1,5 +1,7 @@
 # CHAR — which ground moves whom: a hearer's susceptibility, read from the cast row that already authors it
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-08) — the polarity this file left to the builder is decided: `against: true` means *against the roller* (U1 architecture §3 item 3). The four `moved_by_*` rows favour the arguer, so they are written `side: subject, against: false`. The four traits are rows of `descriptor_registry.yaml: capabilities`.
+
 ## Status: PROPOSED
 
 Written by the CHAR audit lane, addendum B (`audits/02_CHAR_audit_addendum_B.md`, F-CHAR-16, B3.2

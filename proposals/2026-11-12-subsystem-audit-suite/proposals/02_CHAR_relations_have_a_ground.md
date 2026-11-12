@@ -1,5 +1,7 @@
 # CHAR — relations have a ground: an authored relation seeds a stance row and the holder's own claim of what the other is to him
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §4) — amended by `U5a_CHAR_owed_amendments.md` §4 (F-PES-CHAR-08: a deed with a person subject is judged through `_bond`).
+
 ## Status: PROPOSED
 
 Written by the CHAR audit lane, addendum B (`audits/02_CHAR_audit_addendum_B.md`, F-CHAR-18, B3.2

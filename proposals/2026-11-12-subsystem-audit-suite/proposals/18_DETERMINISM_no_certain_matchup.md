@@ -1,5 +1,7 @@
 # 18 · DETERMINISM · D — no matchup is certain in the season: the upset becomes a blow the trackers record
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §1) — the form is closed by the decision register (the upset happens inside the fight, at the deciding blow); the option not taken stays not taken. Combat already draws from the one sampler; A-31 (longer fights) recalibrates the damage this riposte carries.
+
 ## Status: PROPOSED
 
 Source: `audits/18_DETERMINISM_SWEEP.md` C-13; `audits/03_PC_audit.md:332` (*"at season scale heavy

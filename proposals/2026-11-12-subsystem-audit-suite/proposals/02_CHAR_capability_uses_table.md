@@ -1,5 +1,7 @@
 # CHAR — one table for where a capability enters a person's choice
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-08) — adopted as `rosters.yaml: tables.capability_uses` with the `role` column (`unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3); `form` is implied by `role`. A `key` may also be a capability id from `descriptor_registry.yaml: capabilities` or the selectors `verb` / `verb.base`.
+
 ## Status: PROPOSED
 
 Written by the CHAR audit lane (`audits/02_CHAR_audit.md` §14). Ratifies nothing. Reference under

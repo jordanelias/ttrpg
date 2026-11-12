@@ -1,5 +1,7 @@
 # CHAR — the character's side of the capability surface: what a definition says to a reader, levels, bundles at a rank, and the cast row's unread keys
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-08) — the table this file would not name a path for is `references/descriptor_registry.yaml: capabilities` (`unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §1–§2); `gloss` is a required field of that block.
+
 ## Status: PROPOSED
 
 Written by the CHAR audit lane, addendum B (`audits/02_CHAR_audit_addendum_B.md`, §B4, F-CHAR-16,

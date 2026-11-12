@@ -1,5 +1,7 @@
 # CHAR — a reason a reader can follow, and the small edits the audit decided
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-05, §4) — Part A stands; the stored deciding term is `U5a_CHAR_owed_amendments.md` §5. B1 is the same edit as workplan IN-14's own narrowing of `offices` (holds with non-empty `granted_acts`) and lands once, there. Part C's two `requirements.yaml` `measured:` rewrites (R-06, R-08) land as those rows' `reading:` records (`01_CORE_requirements_reading_record.md` §1); its `decision/sheet.py` docstring row is the same edit as `U5a_CORE_owed_edits.md` §B row 10 and is carried here.
+
 ## Status: PROPOSED
 
 Written by the CHAR audit lane (`audits/02_CHAR_audit.md`, §0A item (d), §6 table 2). Ratifies nothing.

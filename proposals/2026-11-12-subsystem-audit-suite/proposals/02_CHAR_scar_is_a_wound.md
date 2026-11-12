@@ -1,5 +1,7 @@
 # CHAR — a scar is a wound, not a tally: who can be scarred, by how much of a violation, how often, and how one heals
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §4) — amended by `U5a_CHAR_owed_amendments.md` §6 (F-PES-CHAR-11: a fully scarred person's shift is not skipped). The scar write's Event is `16_PESSIMIST_CORE_the_record_holds_what_changed.md` edit 2 (`scar.taken`, logged, fanned out to nobody).
+
 ## Status: PROPOSED
 
 Written by the CHAR audit lane, addendum B (`audits/02_CHAR_audit_addendum_B.md`, F-CHAR-17, C-4).

@@ -1,5 +1,7 @@
 # DICE (pessimist) — the obstacle's ceiling saturates as the advantage does: no flat range past the cap
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-13) — stands. Under A-5 the pool's cap is solved on the closed form of the one sampler, and against the largest lawful disadvantage (`U5a_DICE_owed_edits.md` §1 row 3); the tables here are whole-dice figures. Favourable terms are levels, not obstacle reductions (A-25).
+
 ## Status: PROPOSED
 
 Carries finding F-PES-DICE-03 of `../audits/16_PESSIMIST_DICE.md`. Lanes that own the edited files: IN

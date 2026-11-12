@@ -1,5 +1,7 @@
 # CORE 01 — the fading of memory as a read, not a logged write
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §1) — Option A is confirmed by the decision register (D-48, taken A by the ladder; reversible on Jordan's word). `16_PESSIMIST_CORE_a_refusal_is_remembered.md` and `U5a_DICE_owed_edits.md` §4 read present confidence through this file's one function.
+
 ## Status: PROPOSED
 
 Source: `audits/01_CORE_audit.md` F-CORE-01, resolution 1, §11. Not ratified by being written.

@@ -1,5 +1,7 @@
 # 16 · PESSIMIST · CORE — the nine's gate checks what it says it checks, and R-01/R-02 get a reading with a control
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-01) — this file is the carrier of R-01's and R-02's `measure:`; `01_CORE_requirements_reading_record.md` §2 (a second instrument for the same property) is withdrawn.
+
 ## Status: PROPOSED
 
 Carries F-PES-CORE-04 and F-PES-CORE-05 of `audits/16_PESSIMIST_CORE.md` (§3, §1.2). Composes on

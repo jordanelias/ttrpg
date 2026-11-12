@@ -1,5 +1,7 @@
 # DICE — one roller, one ladder class, one rule for a fraction of a die
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-13) — A-5 (the bell curve everywhere) changes what the owner's roll is. Edit A (`_MARGIN_EPS`) and Edit C (mass battle composes on the owner) stand, with the owner's roll now `roll_net_continuous`; **Edit B (the stochastic die in `roll_net`) is withdrawn** with the whole-dice roll; the gate's *byte-equal goldens* cannot hold and is replaced by one declared re-pin; the falsifier reads: `grep -rn "randint(1, 10)" modules/ engine/season/` prints nothing (addendum C-4). Below one die there is one rule in the owner (`U5a_DICE_owed_edits.md` §1 rows 4–5).
+
 ## Status: PROPOSED
 
 Carries findings F-DICE-07 and F-DICE-08 of `../audits/10_DICE_audit.md`. Lanes that own the

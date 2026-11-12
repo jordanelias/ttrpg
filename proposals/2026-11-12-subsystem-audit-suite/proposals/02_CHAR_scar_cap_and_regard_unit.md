@@ -1,5 +1,7 @@
 # CHAR — the interior that moves: a season cap on the scar, one unit for regard, a bound on the stance term
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-06) — item 1 is amended by `02_CHAR_scar_is_a_wound.md` (F-CHAR-17: a cap per element bounds the rate, not the stock). There is one fixture `scar_season_cap` with the domain `None | element | person`; this file's cap is its `element` arm and its gate (*median per-person maximum ≤ 4*) is replaced by that proposal's (a share strictly between 0 and 1 at eight seasons), because the old gate passes while every person is in crisis. Items 2 and 3 and the Addendum stand; item 3 gains the `stance_scale` fixture of `U5a_CHAR_owed_amendments.md` §2.
+
 ## Status: PROPOSED
 
 Written by the CHAR audit lane (`audits/02_CHAR_audit.md`, findings F-CHAR-03, F-CHAR-04, F-CHAR-08).

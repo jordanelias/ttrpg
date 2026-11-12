@@ -1,5 +1,7 @@
 # CHAR (pessimist) C — the stop is the man's: a scruple with a closed set, one scale, a draw and a trace
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §1) — item 4 (the draw) is **no longer held**: Jordan's answer A-24 (D-28) makes a scruple a drawn tendency; `scruple_temperature` ships above 0 when the gate is armed, and the threshold arm is the control. Arming the gate is its own flip (`U5a_CHAR_owed_amendments.md` §8).
+
 ## Status: PROPOSED — one part HELD BACK (the draw: it meets a RULED item; both options in "For Jordan")
 
 Written by the CHAR pessimist lane (`audits/16_PESSIMIST_CHAR.md`, F-PES-CHAR-02). Ratifies nothing;

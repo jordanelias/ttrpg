@@ -16,7 +16,8 @@ given with the opened path:line, and the suite text is corrected). `UNRESOLVABLE
 named; the suite's mark stays).
 
 **Method.** Each row was settled by `Read`/`grep` of the cited file at the cited line at the SHA above.
-Where a behaviour is claimed, a probe was run with `PYTHONHASHSEED=0` at one seed; outputs are under
+Where a behaviour is claimed, a probe was run with `PYTHONHASHSEED=0` at one seed per probe (seed 0;
+seed 2 for the King's death, which is a claim about that seed); outputs are under
 `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/GROUND_ENGINE/`
 (called `runs/GROUND_ENGINE/` below). No pytest was run and no long aperture run. Other lanes' saved run
 outputs (`runs/<LANE>/`) are cited as *their* evidence and say so; a figure this lane did not reproduce is
@@ -107,7 +108,7 @@ wrong the mark now says so and the fallback is the edit.
 
 | # | the claim, as marked | where | status | evidence |
 |---|---|---|---|---|
-| G-01 | a graded-route row can carry writes keyed by degree ("each converted row gains `writes_by_degree`", "the existing columns"; "the fold runs an effect per band for a graded-route row") | `proposals/18_DETERMINISM_task_draw_for_uncontested_verbs.md` steps 2, 4; `14_VERBS_MILITARY.md` S1; relied on by every VERBS band map | **REFUTED at the loader, VERIFIED at the fold** | `engine/season/data/verbs.py:848-851`: a degree-keyed `writes:` with no `contests:` is refused at import; `:872-876`: a routed row with a non-empty `writes:` is refused (*"A graded verb keys its emissions by Degree and writes nothing"*). The fold itself is ready: `loop/resolve.py:897`, `:450`, `:967`. No converted row loads until those two refusals are edited; the determinism proposal now carries the edit |
+| G-01 | a graded-route row can carry writes keyed by degree ("each converted row gains `writes_by_degree`", "the existing columns"; "the fold runs an effect per band for a graded-route row") | `proposals/18_DETERMINISM_task_draw_for_uncontested_verbs.md` steps 2, 4; `14_VERBS_MILITARY.md` S1; relied on by every VERBS band map | **REFUTED at the loader, VERIFIED at the fold** | `engine/season/data/verbs.py:848-851`: a degree-keyed `writes:` with no `contests:` is refused at import; `:872-876`: a routed row with a non-empty `writes:` is refused (*"A graded verb keys its emissions by Degree and writes nothing"*). The fold itself is ready: `loop/resolve.py:897`, `:450`, `:967`. Both refusals were observed on a planted scratch copy (`g6_loader_plant.out`, §7). No converted row loads until those two refusals are edited; the determinism proposal now carries the edit |
 | G-02 | "whether an `any:` combinator exists in `data/requires.py`" | `proposals/14_VERBS_MATERIAL_D_paper.md` | REFUTED (fallback) | `data/requires.py:1021-1030`; requirement classes `:292-558` (`Existence`, `ScalarThreshold`, `ContainPath`, `Relation`, `OwnLedger`, `Basis`, `AllOf`) |
 | G-03 | "a row may list two [referent] classes" | same, the `seize` row | REFUTED (fallback) | `data/verbs.py:245`, `:668`, `:693` |
 | G-04 | "whether a typed conjunct can be waived by a payload key without a new form" | `proposals/14_VERBS_MILITARY_C_the_muster.md`, `…_D_the_order_of_battle.md` | REFUTED (fallback) | `data/requires.py:1027-1030` |
@@ -203,7 +204,7 @@ assumptions and not a claim a suite author failed to check; 112 are coverage sta
 |---|---|
 | load-bearing figures checked (§1) | 24: 19 verified, 4 verified with a correction (L-04, L-10, L-21, and L-16's four definitions), 1 refuted at HEAD (L-19, already known) |
 | Layer 1 passages checked (§2) | 12: 11 as quoted, 1 line corrected (A-09) |
-| marks settled at the line (§3) | 35: 19 verified (G-33 in part), 6 verified with a correction, 10 refuted (seven of them a proposal's hoped-for shape, whose stated fallback now applies) |
+| marks settled at the line (§3) | 35: 19 verified (G-33 in part), 6 verified with a correction, 10 refuted (five of them a proposal's hoped-for shape, whose stated fallback now applies) |
 | line citations opened as cited (§4) | 21 |
 | **total checked** | **92: 70 verified, 11 verified with a correction, 11 refuted** |
 | marks left, grouped (§5) | 9 groups. 37 `GROUNDED` tags were written into the suite; `grep -c UNVERIFIED` outside the institutions family and this file now reads 225 lines, about a dozen of which are this lane's own `Grounded:` head lines naming the marks they settled |
@@ -226,10 +227,12 @@ no document under `.designs/`, `research/` or `registers/` except the five ledge
 - *92 % (L-15).* Falsifier: a success-kind Event of an uncontested verb carrying a degree. Zero of 421.
   Control: every verb with a `contests:` or a route that resolved shows Events with a degree (61, the
   number the determinism lane's file holds).
-- *The loader refuses a routed row that writes (G-01).* Read, not run: no row was planted, because a
-  plant would edit `verb_table.yaml`. The falsifier is one line, a `writes:` on `research`'s row, and
-  the import of `engine.season.data.verbs` either raising `SystemExit` with the text at `:873-876` or
-  not. An implementation lane should make that observation before relying on this row.
+- *The loader refuses a routed row that writes (G-01).* Observed, on a scratch copy of
+  `verb_table.yaml` with `files.VERB_TABLE_YAML` pointed at it (`g6_loader_plant.py`; the tracked file
+  was read and never written). Control, the file unchanged: loads, 67 rows. `research` given a flat
+  `writes: ["Record.stages"]`: `SystemExit`, *"has a `graded_inquiries` route and a FLAT `emits:` or a
+  non-empty `writes:`"*. `research` given a degree-keyed `writes:`: `SystemExit`, *"has a degree-keyed
+  `writes:` and no `contests:`. Nothing resolves a degree for it"*. Falsifier: either plant loading. Neither did.
 - *`mustered` does not read `restrained` (G-32).* Read at `:2132-2149`, not run. Falsifier: a hand-built
   world with a detained faction member under a rung; `mustered` omits him.
 - *An absence claimed by grep* (no `any:`, no `spec=`, no waiver; G-02, G-04, G-06): each is the body of

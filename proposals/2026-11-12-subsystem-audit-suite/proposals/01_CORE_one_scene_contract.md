@@ -1,5 +1,7 @@
 # CORE — one scene contract: a registered module is a season call and a playable scene by the same entry
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-03, C-U5a-04) — Edit 3: `decide=None` does not mean the module's own policy. It asks the decider the host builds for that person from `decision/` (sampled through `_sample_order`, never a top-score pick: `18_DETERMINISM_SWEEP.md` D-06), and a module default is the named interim until one exists; the outcome carries a typed `trace`; the closed choice tuple is exported (`11_GO_player_surface_contract_B.md` §6 rules 2–4, which govern). Edit 1's role-keyed `deciders` mapping is the one `PlayHost` shape: `05_SC_playable_hearing_B.md` edit 4 reads it. Edit 5 (the player is shown all his questions) is the register's D-62, option B; it lands on that answer and is dropped on A.
+
 ## Status: PROPOSED
 
 Source: `audits/01_CORE_audit_addendum_B.md` F-CORE-13, §4.4, §7.1. Read at `785bc62`.

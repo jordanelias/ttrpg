@@ -1,5 +1,7 @@
 # DICE — the capability → axiom → resolver input map, and the one surface that authors it
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-08, C-U5a-12) — §A, §C (the roles and the uses table), §D and the reason trail are adopted by `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md`. Changed: **§B's definition rows live in `references/descriptor_registry.yaml: capabilities`**, not `rosters.yaml: tables.capabilities`, and the verb's capability is a column on the verb row (`rosters.yaml` keeps the roles, the sites and `capability_uses`; §G edit 1 loses `tables.capabilities`). By Jordan's answers: the four per-site pool fixtures become one pair, `pool_add` and `pool_floor` (A-6); `untrained` drops `attribute` and the `dice` role is training only, with talent an `edge` row `per: mid` (A-7); `wounds` is an `advantage_sources` member again, not an obstacle term (A-8; §F's last row is reversed); `circumstance` carries hostile terms only (A-25); the opposed divisor is the fixture `opposition_rate` applied to the opponent's pool (A-26); `gate` stays closed to its one site (A-11); a seat's modifier is an `addend` (A-12). `against: true` means against the roller. Plan: `U5a_capability_home_and_two_inputs.md`.
+
 ## Status: PROPOSED
 
 Carries §4 of `../audits/10_DICE_audit_addendum_B.md` (findings F-DICE-15, F-DICE-17, F-DICE-18,

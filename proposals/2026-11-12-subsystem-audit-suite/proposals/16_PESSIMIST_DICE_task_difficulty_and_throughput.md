@@ -1,5 +1,7 @@
 # DICE (pessimist) — an unopposed task is opposed by the ordinary score; a task nobody has ranked is plain; the task draw reports what it stopped
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-07, C-U5a-13) — its amendment to `18_DETERMINISM_task_draw_for_uncontested_verbs.md` (item 3, the gate's reading and refusal to ship) is applied in that file. Its amendments to SC's two files are U5c's. Under A-6 and A-26 the unopposed stand-in is an ordinary person's pool times `opposition_rate`; the 16.5 % and 42 % figures are the old regime's and the throughput reading is what replaces them.
+
 ## Status: PROPOSED
 
 Carries findings F-PES-DICE-02 and F-PES-DICE-06 of `../audits/16_PESSIMIST_DICE.md`. It writes no new

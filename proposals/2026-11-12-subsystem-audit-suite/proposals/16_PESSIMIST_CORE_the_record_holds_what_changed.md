@@ -1,5 +1,7 @@
 # 16 · PESSIMIST · CORE — the record holds what changed: receipts carry the value the gate saw, and interior writes reach the log
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-09) — edit 2 emits `scar.taken` only. `conviction.moved` is emitted by `16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` item 4, **witnessed** (Jordan's answer A-24 / D-27: a crisis is drawn and seen), so the gate row *claims deposited per season: unchanged* holds for the scar Events and not for a crisis. Edit 1 (`Receipt.delta`) is unchanged.
+
 ## Status: PROPOSED
 
 Carries F-PES-CORE-02 and F-PES-CORE-03 of `audits/16_PESSIMIST_CORE.md` (§1.4, §1.5). Reference only
