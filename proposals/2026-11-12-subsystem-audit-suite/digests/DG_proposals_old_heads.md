@@ -1058,3 +1058,109 @@ HEADS-ONLY lane (350 files, proposals dated before 2026-09-20). Method per file:
 ### proposals/2026-09-05-proceedings-subsystem/stress/stress_proceedings.py
 - one line: 28 logical stress tests against `proposals/2026-09-01-season-loop-tests/trace.../shape.py` tracer; **that tracer file no longer exists** (`ls` shows only README/evidence/session under season-loop-tests), so this script cannot run as written; `engine/season/tests/test_stress_proceedings_rehost.py` re-hosts its decorators/verdicts onto the real engine. Dead as a runnable; live as source of the rehost test.
 
+### proposals/2026-09-10-settlements-factions-populations/01_PRIMITIVE_BASE.md
+- **What it is:** Part A of a seven-file settlements/factions/populations proposal set (this lane holds 01-05 and 04 part 2), 2026-09-10; every `file:line` opened.
+- **Status:** "PROPOSED (2026-09-10). HELD BACK IN FULL - see 00_INDEX.md" (00_INDEX is outside this lane). `2026-09-18-the-gather/02_SETTLEMENTS.md` row 7: "LIVE as reference, SPENT as a work surface". Directory cited by `engine/season/{hole_register.yaml,rosters.yaml,loop/census.py}`.
+- **Bears on:** SE, FA, CHAR, CORE.
+- **Content that matters:** what the primitives are today: containment ladder complete :13, matter economy runs :30.
+- **Conflicts / stale:** line loci pre-date moves (tree `ccc3f2a`).
+- **Open items:** none.
+### proposals/2026-09-10-settlements-factions-populations/02_PROPOSALS_SUBSTRATE.md
+- one line: P1 dearth reaches the body (subsistence shortfall writes `(Person, body)`) :18 - ABSORBED (`loop/matter.py:309-313`) except its draw arithmetic, SUPERSEDED by r2 `04_MATTER_AND_WORKS.md` §A.3; P2 the bodies clock (ageing, births, deaths move `Rung.envelope`) :144 - LIVE, nothing built; P3 individuation is a refusal / `person.demanded` and the CENSUS mint :257 - LIVE, downstream of P2; P4 founding and building - SUPERSEDED by r2 §A.6-A.7. Verdicts from the-gather/02 rows 1-5 (2026-09-18, re-verify). None adds a carrier, Tenure kind, step or write class. Tags SE, CHAR.
+### proposals/2026-09-10-settlements-factions-populations/03_PROPOSALS_POLITICS.md
+- one line: P5 risk of revolt is a Query (`commit_share`, `commit` effect) :13, P6 forswearing costs (`repudiate` with entrenchment) :199, P7 a dispensation is a document (terms roster, suspicion as a Query) :276; all three LIVE, unbuilt, outside the settlement substrate (the-gather/02 row 6). Tags FA, SE, WR.
+### proposals/2026-09-10-settlements-factions-populations/04_EVALUATION.md
+- one line: NERS evaluation using `skills/ners/SKILL.md` run in full; where the argued code actually lives (relocation map) :18; verdict :52; set read together :107. Tags SE, FA, PROCESS.
+### proposals/2026-09-10-settlements-factions-populations/04_EVALUATION_part2.md
+- one line: the theorem governing the three political proposals :9; P5 six directions :43; seam; overturn table. Tags FA, SE.
+### proposals/2026-09-10-settlements-factions-populations/05_COLLISIONS_AND_RESIDUE.md
+- one line: Goldenfurt (`systems/settlements/goldenfurt_slice/reference/`, S0-S1 built) collision table mechanic by mechanic :7; ratified rulings in conflict, named not resolved :47; adjudications asked :128; the `hearth_capacity` fixture table per `site_kind` (`:202`, ledger `editorial_ledger_se.jsonl:51`) open. Tags SE.
+
+### proposals/2026-09-12-emergent-narrative-primitives-v2/00_INDEX.md
+- **What it is:** index of the v2 scoring of emergent-narrative primitives (14 proposals; "the ten"), 2026-09-12, ED-IN-0217.
+- **Status:** "RATIFIED AS INTENT (v9, ED-IN-0217) for proposal 1 (IN-37) and proposal 5 (IN-34 ...) [medium; Jordan to correct]; proposal 13 NOT ratified (CAST-POPULACE's spread construal ...)". **Flag: partially RATIFIED.** the-gather/04: LIVE, partial ABSORBED, "6 of 14 folded into workplan v7 §7 Amendment 1 (ED-IN-0218); 8 remain open PROPOSED". Directory cited by `engine/season/{loop/effects_economy.py,loop/effects_information.py,queries/faction_q.py,rosters.yaml,verb_table.yaml}`.
+- **Bears on:** WR, CORE, CHAR, ARCS.
+- **Content that matters:** ED-1094 does not apply (nothing ratifies on merge) :3-8; why v2: the tree had already ruled :15-48 (single misquotation produced the v1 refusal).
+- **Conflicts / stale:** the workplan v7 citation: v7 is no longer in `workplans/` (only v11); [UNVERIFIED] where the amendment went.
+- **Open items:** the 8 open proposals; proposal 13 CAST-POPULACE.
+### proposals/2026-09-12-emergent-narrative-primitives-v2/01_THE_TEN.md
+- one line: the set, each stated by agonist, attacked by antagonist, closed with its residual, ordered by what the game can do that it cannot today: 1 THE CHRONICLE RENDER (walk `causes[]`) :14 - "the only way R-WORLD is ever experienced"; 2 a patron with three pressures :94 ... 35 headings; grounds G (game commitment) / A (architecture, no veto) / I (cost line). Cited at `loop/effects_information.py:736`, `effects_economy.py:355`, `queries/faction_q.py:59`. Tags WR, CORE.
+### proposals/2026-09-12-emergent-narrative-primitives-v2/02_THE_RESCORE.md
+- one line: re-score of v1: v1 headline numbers were 27 false N-lines and 21 REFUSED of 76 primitives and "mostly a catalogue of things already decided against"; re-scored :28, 76 recounted :77. Tags WR, PROCESS.
+### proposals/2026-09-12-emergent-narrative-primitives-v2/03_WHAT_SURVIVES_R2.md
+- one line: refusals that earn their place: a scheduler/storyteller/director/beat engine :30, a threshold that produces an outcome :55, an automatic board wipe after a scoring event :76. Bears on the "no deterministic" rule. Tags WR, CORE.
+### proposals/2026-09-12-emergent-narrative-primitives-v2/04_PROVENANCE.md
+- one line: ask (three instalments from Jordan), relay :27, hand-verified :53. Tags PROCESS.
+
+### proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml
+- **What it is:** behaviour-layer adjudication register (yaml), 2026-09-16, 740 lines.
+- **Status:** "REFERENCE - rulings absorbed into ED-IN-0251/0261; cited as a register (v9; ED-IN-0289)." Reading: spent reference; CURRENT.md's character-model row points at `2026-09-20-pursuit-basis-worksheet.yaml`, ED-IN-0261. Directory cited by workplan v11 `_part3/_part4/_part12/_part15`.
+- **Bears on:** CHAR, CORE.
+- **Content that matters:** the rows' rulings now live in the ED ledger; the file itself is a register not read by code (one grep: only docs/ledgers).
+- **Conflicts / stale:** Key-based premises superseded by ED-IN-0232 (per its sibling banners).
+- **Open items:** none.
+### proposals/2026-09-16-conviction-decision-layer/candidate_basis_v1.json
+- one line: 23-line candidate moral-value basis (json); superseded by the 09-20 pursuit-basis worksheet. Tags CHAR.
+### proposals/2026-09-16-conviction-decision-layer/formal_analysis.md
+- one line: REFERENCE; "superseded in part by ED-IN-0232 (the Key substrate retired)"; method and evidential status :20, established facts stratified :37, carrier layer :42. Tags CHAR.
+### proposals/2026-09-16-conviction-decision-layer/synthesis.md
+- one line: REFERENCE; "How a Valorian decides" - three fusions: claims are not a category (§1.1 :31), two bases and the commitments are one ... :55. Tags CHAR.
+
+### proposals/2026-09-17-governance-and-behaviour/00_THE_SEAM.md
+- **What it is:** where the governance suite and the behaviour layer meet, ED-IN-0243, 2026-09-17.
+- **Status:** "REFERENCE (v9) - the seam it states is carried by 01_THE_BUILD_ORDER.md's phases (ABSORBED there); ratified AS INTENT (ED-IN-0243); no code reads it." the-gather/01 row 6: LIVE and "the only one of the four trees engine/season/ itself reads" (comment citations in `rosters.yaml:1119`, `state/carriers.py:1041`).
+- **Bears on:** CORE, CHAR, FA, SC.
+- **Content that matters:** grade `measured`; 20 headings; no design in it has run.
+- **Conflicts / stale:** none.
+- **Open items:** none.
+### proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md
+- one line: Status "ABSORBED (v9) - Phases 1-5 built or carried by v9 (works/founding residue IN-28); Phase 6 -> IN-08 (6a/6c cells commit, content RS-1; 6f at B-H; 6g, H-71 second half per IN-08's entry map)"; folded into the single plan 2026-09-18 (ED-IN-0253), "a CONTENT owner and no longer an order"; items 16, 3a, 3b, 6d, 6e LANDED (ED-IN-0246/0248/0249) :362. Cited by `engine/season/harness/probes.py:1210`, `loop/effects_information.py:1287`, `tests/test_governance_build.py:7`. Tags CORE, CHAR, FA.
+### proposals/2026-09-17-governance-and-behaviour/README.md
+- one line: REFERENCE index; rulings SPENT, build order ABSORBED; grade `paper` for design, `measured` for findings. Tags CORE.
+### proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml
+- one line: SPENT - 12 closed, 9 ruled, 0 escalated (ED-IN-0244/0245); 21 open questions run through the CLAUDE.md §0 five-step gate; cited by `engine/season/state/carriers.py:1041` (`CAT-3` "STORE THE TELLER", `dates[]` amendment). Not read by code at runtime (comment citations only). Tags CORE, CHAR.
+### proposals/2026-09-17-governance-and-behaviour/probe_execution_pass.py
+- one line: re-runnable instrument behind 01 §7; "gates nothing, dies with this suite". Tags PROCESS.
+
+### proposals/2026-09-17-governance-and-holdings-r2/01_ATTENTION_AND_REACH.md
+- **What it is:** round two (current) of the governance-at-every-rung and built-world suite: how a decision reaches a person and stops reaching everybody, ED-IN-0233; 8 files in r2.
+- **Status:** "RATIFIED AS INTENT (v9); absorbed where built (03 -> offices.yaml, 04 §A.3-A.4 -> matter.py, 05 -> the plans); residue -> IN-28, SE-03". **Flag: RATIFIED AS INTENT.** the-gather/01 row 5: LIVE, nothing supersedes it, 54 inbound refs. Cited by `engine/season/{hole_register.yaml,offices.yaml,rosters.yaml,verb_table.yaml,tests/test_works_founding.py}`.
+- **Bears on:** FA, SE, CORE, CHAR.
+- **Content that matters:** grade `paper`; every number produced by running the engine; 64 headings (REACH question-set decomposition re-runnable via `probe_reach_questions.py`).
+- **Conflicts / stale:** none noted.
+- **Open items:** residue IN-28, SE-03.
+### proposals/2026-09-17-governance-and-holdings-r2/02_THE_WRIT_AND_THE_WORD.md
+- one line: how authority descends without broadcast (ED-IN-0234); 100 headings; §C.5 names the artifacts that would move it. Same RATIFIED-AS-INTENT status. Tags FA, SC, CORE.
+### proposals/2026-09-17-governance-and-holdings-r2/03_SEATS_AND_CONTENT.md
+- one line: how a seat becomes fillable (ED-IN-0235, carries RR-B); absorbed into `offices.yaml`. Tags FA, CHAR.
+### proposals/2026-09-17-governance-and-holdings-r2/04_MATTER_AND_WORKS.md
+- one line: lane SE, ED-SE-0053; how matter reaches people and what it is to build something; supersedes round one's `02_THE_BUILT_WORLD.md` delivery; §A.3 `nearest_store` = `queries/world_q.py:172`, `matter.py:249`; §A.4 "the shortfall crosses the gate" = `matter.py:301`; §A.5 `envelope` kept; §A.6-A.7 founding/works (a `works` is a `Record` with five moments). Absorbed in part (the-gather/02 row 9). Tags SE.
+### proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md
+- one line: what the suite deletes, adds, in what order, what Jordan must rule; read-only against tree `46aa21d`; absorbed into the plans. Tags FA, SE, CORE.
+### proposals/2026-09-17-governance-and-holdings-r2/README.md
+- one line: Status "PROPOSED (2026-09-17). HELD BACK IN FULL" (the files carry the RATIFIED-AS-INTENT line; the README does not - inconsistent heads inside one directory); supersedes round one. Tags PROCESS.
+### proposals/2026-09-17-governance-and-holdings-r2/probe_reach_questions.py
+- one line: re-runnable REACH question-set decomposition. Tags FA.
+### proposals/2026-09-17-governance-and-holdings/03_THE_SURFACE.md
+- one line: Status "RATIFIED AS INTENT (v9) - the Surface behind PC-06 S-2/L-1 (ED-IN-0237)"; "STANDS - NOT superseded" by r2; Surface Law L-1..L-3 (the interface through which a player engages the game world); 54 headings; the-gather/01 row 3: LIVE; cited by `engine/season/queries/world_q.py:1482` (via `01_SEATS_AND_POLICY.md`). Tags GO, CHAR, CORE, PC.
+### proposals/2026-09-17-governance-and-holdings/README.md
+- one line: round one index; "ROUND TWO IS THE CURRENT SUITE"; round-one files SUPERSEDED, `AUDIT_VERDICT.md`/`UNIFICATION_LEDGER.md` SPENT. Tags PROCESS.
+
+### proposals/2026-09-18-conviction-basis-probe.py
+- **What it is:** executable instrument re-taking every number in the 2026-09-18 review of the moral-value basis, 277 lines.
+- **Status:** none; the-gather/03 row: "LIVE, executable, RE-RUN IN THIS LANE" and named by ED-IN-0251 as the committed instrument. Cited in `references/restructure_ledger.md`.
+- **Bears on:** CHAR.
+- **Content that matters:** `python proposals/2026-09-18-conviction-basis-probe.py`; reports a between-person discrimination figure (28 candidates, 28 verbs, 1 subject for all 46 persons per the-gather/03 §6 aperture).
+- **Conflicts / stale:** relation to `2026-09-20-pursuit-basis-worksheet.yaml` (ED-IN-0261) not read.
+- **Open items:** none.
+### proposals/2026-09-18-the-gather/00_THE_CENSUS.md
+- one line: Status MEASURED; every tree in `proposals/` measured (whole tree §1 :8, the fourteen trees §2 :24) by a Haiku measurement lane. Tags PROCESS.
+### proposals/2026-09-18-the-gather/01_GOVERNANCE.md
+- one line: dispositions of four governance trees with closed verdict set LIVE/SUPERSEDED/...: governance-corpus-rebuild NEEDS-STATUS (no `## Status:` heading, prose at README:3); holdings round one SUPERSEDED; `03_THE_SURFACE.md` LIVE; AUDIT_VERDICT and UNIFICATION_LEDGER SPENT; r2 all 8 LIVE; governance-and-behaviour LIVE (the only tree `engine/season` reads), BUILD_ORDER §7 items ABSORBED, RULINGS.yaml SPENT :15-22. A prior disposition of many files in this lane; dated 2026-09-18, since then 09-20 onward may have moved. Tags FA, SE, CORE.
+### proposals/2026-09-18-the-gather/02_SETTLEMENTS.md
+- one line: dispositions of the settlements lane (P1-P7 etc.) as quoted under 2026-09-10 above; verification commands: `python -m pytest engine/season/tests/test_governance_build.py -q` -> 25 passed; `build_realm(0)`/`run` shortfall probe :35-36. Tags SE.
+### proposals/2026-09-18-the-gather/03_DECISIONS.md
+- one line: decision-layer trees dispositioned; every row carries `engine_season:` (concrete change or NONE); §1 R1-R3 SUPERSEDED by ED-IN-0251 (and the two numberings collide on R3); §2 vocabulary LIVE (class test FIELD/READOUT/STRUCTURE/DISPOSED collapses a basis); §4 free cuts LIVE; §6 measurements execution-grade; §3, 5, 7, 9 NEEDS-STATUS (§7 nine-step build order competes with `01_THE_BUILD_ORDER.md:1027-1033`); `2026-09-18-conviction-basis-worksheet.yaml` LIVE; 6a affiliation roster + `incompatible` relation needs Jordan's content; 6b rename the moral-value basis is a 29-file hand sweep :65-135. Tags CHAR, CORE.
+### proposals/2026-09-18-the-gather/04_THE_TAIL.md
+- one line: seven trees (179 files, 96,721 lines, 60% of the corpus by line count): degree-sweep ABSORBED (hole_register H-113..H-120 + `architecture/meta/HANDOFF_NEXT.md` §2A; `S39` fires 0 times in 5,376 firings; σ-leverage roll landed 2026-09-11, R-09 partial); proceedings-subsystem LIVE, SCHEDULED (ED-SC-0033, "this subsystem obviously owns all social contests"); social-contest-branches SUPERSEDED; emergent-narrative-primitives v1 SUPERSEDED, v2 LIVE (6 of 14 absorbed); greenfield-systems-suite SUPERSEDED chain -> v2 -> `architecture/`; term-ownership ORPHAN (mixed) :14-24. Tags PROCESS, SC, WR, DICE.
+

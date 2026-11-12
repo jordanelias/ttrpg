@@ -482,3 +482,52 @@ Lane `tests1`: 70 files under `engine/season/tests/` (test files and three helpe
   - HASH PINS (:308-367): with `odds_weighting: none` and `choice_temperature 0.1` the one-season `build_realm(0)` reads `content_hash().startswith("eea8eaf8")` and `len(w.log) == 10397`; with capture/challenge/accept withheld `("c1bf72d0", 11016)`; inequality asserted. The pin is read behind EIGHT in-process reverts (`revert_cr79, revert_cr87, revert_cp_t03_04, revert_cp_t03_07, revert_cp_t03_08, revert_cr78, revert_cp_t03_02, revert_cr85`) and a non-shipped fixture pair - F-TEST-02's "world nobody plays" at maximal depth, plus a re-pin log of 8 entries (:354-358). The `ctl` "card's control" is "executed (it was prose in go07 and weather)".
 - **Conflicts / stale:** the hash pin world is not shipped (non-shipped arms, 8 reverts). The "shipped pair does not (685 acts, 11775)" statement ties to a past count.
 - **Open items:** none.
+
+### engine/season/tests/test_cr19_competence_gain.py
+- **What it is:** behaviour test, v10 CR-19: `AX-7`'s competence reads Attunement (`H-200`): `competence_gain`, SHIPPED AT 0. `decision/options.py::refracted_confidence` gains a swept `competence_gain`; factor `competence(p, g)` monotone in the receiver's Attunement (`Person.attributes`, CR-20), exactly 1 at the scale's middle (`COMPETENCE_MID == 4`) and 1 with no authored Attunement.
+- **Status:** none; live code, inert at the shipped gain.
+- **Bears on:** FI/CHAR (receiver competence, R-07), CORE.
+- **Content that matters:**
+  - Shipped gain is 0.0, so in the shipped game receivers of different Attunement hold a told claim at equal confidence (`DEFAULT_FIXTURES.get("competence_gain") == 0.0`, :66-68). Why shipped 0: "a person-side gain cannot separate a lie from a truth" (`ED-IN-0327`), left to CR-27's `lie` and CR-83 (:6-8).
+  - Falsifier at a live test-local gain 0.5: Attunement 2 vs 6 hold one told claim on one channel at 25 vs 37 (37 * (1 + .5*(2-4)/3) = 24.67 -> 25; 6 capped at 1) (:70-73); at gain 0 equal; no authored Attunement -> 1. Monotone in attunement over 1..7, floor 0.0 at gain 1; `ValueError` outside the unit interval (:87-101).
+  - Realm control: `build_realm(0, cast_attributes=True)` one season equals the world with `competence` made constant 1, by hash and `(kind, id)` log; built with `cast_attributes=True` because otherwise nobody holds Attunement and the equality would be true by construction (:113-128, the B10-10 Phase 3 close).
+- **Conflicts / stale:** the only person with an authored Attunement in the whole cast is NPC-001 (see test_cr20), so the factor cannot differ between receivers in the shipped game even at a live gain.
+- **Open items:** the flip to a live gain is "a later declared mover".
+
+### engine/season/tests/test_cr20_attributes.py
+- **What it is:** behaviour + loader + source-scan test, v10 CR-20: the attribute carrier `Person.attributes` executed (pools and opposition from the ten attributes via `VOCATION_ATTRIBUTE`).
+- **Status:** none; live. Part of §14 capability authoring surface.
+- **Bears on:** CHAR (attributes, vocations, §14), SC (opposition), DICE (pool), PC (attributes feed `arms`), CORE.
+- **Content that matters:**
+  - Pools: persons holding 2 and 6 on a vocation's attribute and no held key roll pools 2 and 6 (`sigma.faculty`); opposed at raw 2.0/6.0; the obstacle halves to Ob 1 and then the H-213 chance-floor cap bites: a 6 against a roller of pool 2 reads the CAP (`_chance_floor_cap`), not 3 (:61-78). A person with nothing authored gets `pool_default`; `_opposition_of` is None for him ("never the fallback") (:65-67). Planted failure: removing `pool._authored_attribute` makes the 6 roll 2 (:81-86).
+  - Pool is the LARGER of the base attribute and the held (practised) key; opposition the larger of key and attribute; a held key alone (even 0) stands alone (:100-120). A verb with no vocation (`determine`) ignores attributes (:89-93).
+  - Roster closed both ways: `set(VOCATION_ATTRIBUTE) == set(VOCATIONS)`, values within `descriptors.ATTRIBUTES` (the ten); loader refuses a vocation with no row, a non-vocation row, a non-attribute, and the retired `attr.social.bonds` (:127-144).
+  - Cast: `cast.attributes_of` reads `stats:`; legacy spellings resolve (`cognition`->`attr.mind.acuity`, `presence`->`attr.social.charisma`, ranges take the lower bound); luck, bonds, out-of-1..7, floats, bools, strings, two spellings of one key refuse; `social` as a category refuses (:151-171). The shipped cast has 46 entries and `NPC-001` is the one that authors six attribute values `{acuity 5, focus 5, endurance 4, attunement 3, charisma 3, grace 3}` (:177-181) - `>= 1` person authored, `== 46` rows (count pin).
+  - SHIPPED ARM: `build_realm(0)` (`cast_attributes=False`) leaves every person with no attribute; `True` writes the one row (NPC-001) (:213-222). So in the shipped game NO person has any attribute: every pool is `pool_default` unless a practised key (`capability`) is held.
+  - No matrix row for `Person.attributes` (gate refuses `matrix_row`, `w.write` raises `Unspecified`) (:188-197); `creation_sheet` carries a read-only copy (`TypeError` on assignment) (:200-206). Setter scan (AST, `scanned > 50`): only `harness/populated.py` assigns `attributes`/`heritage`; `{f for sites} == fields` guards population (:232-257).
+- **Conflicts / stale:** the docstring cites `test_k3_thread_sensitivity.py (e)` as the sibling. Attributes: "a written-at-build field with no play-time writer" - no training, aging or injury changes an attribute (R-06 lead: characters cannot grow through attributes; growth is via `capability` keys only).
+- **Open items:** attribute authoring is data-only for one NPC; the other 45 cast rows have no `stats:` (CHAR/§14).
+
+### engine/season/tests/test_cr21_cells.py
+- **What it is:** data test, CR-21 (M14): the cell-value and cosine pass: pursuit projection (15x7), alignment cells, refusing pole as roster data (H-146 repair).
+- **Status:** none; live.
+- **Bears on:** CHAR (pursuits, alignment, deontological refusal), SC, FA, CORE (§14).
+- **Content that matters:**
+  - cos(wealth, happiness) reads 0.818 (was 0.969) computed in the test from the roster's 15x7 `pursuit_projection`, not via `data.pursuits`; control evaluates the OLD cell (`happiness[D/I] = 0.4`) and reproduces 0.969 (:42-55). The `effective_axes` figure moves 3.81 -> 3.93 and `within_60deg` stays `(4, 15)`; `approx(abs=0.01)` on a two-decimal reading (addendum: "tolerance on a two-decimal reading and says so") (:58-73).
+  - Named cell values: `V.PURSUIT_PROJECTION["happiness"][DI] == 0.0`, `ROLE_TEMPLATE_PURSUITS["intelligence-diplomatic"]["community"] == 0.10`, `align("restore", PS) == -0.2`, `ALIGNMENT[RF/DI]["deed:commitment.ended"] == 0.4/0.8`; `restore` now celled, `thread_read` CONSIDERED and `null` on all seven axes (so it scores 0.0 and counts as none) (:76-90).
+  - A deontological witness of a vow-break reads LOWER regard for the releaser with the `deed:commitment.ended` cells than without; an instrumental witness the other way (control that the cells are read) (:107-125). The most deontological/instrumental pursuits are FOUND on the projection (min/max), not named.
+  - `refuses(verb, axis, weight)` reads the refusing pole from `rosters.pursuit_axes.refusing_pole` (the NEG pole refuses, ED-IN-0261); poles swapped inverts both verdicts; an axis with no authored pole, or a malformed one (`0, 2, -2, "negative", None, True`), refuses rather than defaulting; arming the gate on an unruled axis refuses at `refusal_tolerance` (:162-219). Exactly ONE axis has an authored refusing pole (deontological_instrumental) (:151-155).
+- **Conflicts / stale:** `doctrine` row is "PROVISIONAL, Jordan's" and its pair is not pinned. Loader refusal `is declared uncelled: and is celled on` tested for `restore`/`thread_read`.
+- **Open items:** only one refusing-pole axis is ruled; other axes cannot arm a refusal gate.
+
+### engine/season/tests/test_cr25_computed_establish.py
+- **What it is:** behaviour test, v11 CR-25: a computed `establish` founds an office over a holding (CR-11's design; M8's H-132 (b), H-144 (b)).
+- **Status:** none; live.
+- **Bears on:** FA (offices, governance, territory), SE, CORE.
+- **Content that matters:**
+  - A King holding territory `T` inside his purview founds `Lord` there (`founded_office_id("T","Lord")`), `w.offices` gains the derived row: post from `TITLE_DOMAINS` (first post in authored order whose kind is the rung's), remit = the seat's less `confer` and `revoke`, `conferral="appointed"`, `revocation="rung_above_in_holdings"`, faction `Valorsmark` (:67-78). Unheld territory refuses (`establish.refused`); planted failure `in_holdings -> True` founds it, so the refusal is conjunct (i)'s (:81-94).
+  - Equal rank refuses (the Confessor at `terr_T9`) but the test "CANNOT TELL (iii) AND (iv) APART" and asserts both false (:97-111). A re-remit of a VACANT office outside purview refuses (H-144 (b)), control the seat with purview executes; a REDUCTION of a `revocation: None` seat's grant refuses (H-132 (b)) with a widening and a basis-admitted reduction as controls; the founder revokes the founded Lord through his seat (:114-169).
+  - `holdings_to_found` on `build_realm(0)`: COUNT PIN `sum(map(len, found.values())) == 14` (every one a territory under a duchy whose duke holds it) (:183-192). Effect and precondition read one derivation (`office_founded_by is _preds.office_founded_by`) (:172-180).
+  - No draw: founding is an eligibility-decided act (outcome fixed by state) and `confer` of the Lord goes through the same non-rolled path.
+- **Conflicts / stale:** founding an office has no contest or draw at all (eligibility conjuncts decide) - a bookkeeping/eligibility check by the brief's definition, acceptable.
+- **Open items:** (iii)/(iv) indistinguishable by a test.

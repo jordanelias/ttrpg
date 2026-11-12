@@ -492,3 +492,292 @@ Play-back: *A man of honour argues a point with a man of money. Three times in f
 one time in five he "wins" and nothing happens; one time in fourteen the other man becomes a tenth more
 like him, whatever the point was, and however firmly the other held the opposite. If he says it two
 hundred times the other man is his.*
+
+FIRES (seed 1, four seasons, `realm_s1_k4.txt`): 27 arguments rolled, 21 lost, 6 "won" at Partial, 16
+more refused because the hearer was elsewhere; **0 persons moved.** The SC lane's six-season log at the
+same seed reads the same way (every `argument.won` is `@Partial`); at seed 0 it reads 3 moved of 41.
+
+## 3. Emergent narrative — what stories the social contest can tell, and which it tells
+
+Instruments: `realm_sc.py 1 4` (the populated realm, seed 1, four seasons, the shipped chooser, no
+player; per-matter timelines, every landed telling with the hearer's two readings, every argument,
+every verdict and what cites it) and `e1_reasons.py 1 1` (one season: for every proceedings act, the
+kinds in its `causes[]` and what the actor holds about the person he acts on). One seed read in detail
+is an instance; the cross-seed counts (seeds 0 and 1, six seasons each) are the SC lane's (`05_SC_audit.md`
+§1) and agree in shape. Control for the instrument: it does see a verdict, a landed lie and a death when
+they occur (two, four and one in this run).
+
+### 3.1 The stories the code can produce at all (enumerated from the rows and effects, not the documents)
+
+| story atom | beginning | escalation | reversal | cost | ending | a record a narrator could read |
+|---|---|---|---|---|---|---|
+| an accusation | `petition` + `carry`, or `open_case` | `speak` (no effect) | none: no acquittal, no counter-claim | none to the accuser | the accused bound (`oblige` / `detain` / `ban`), or the clock (`matter.lapsed`) | the judge's deed and an edge id; never the accused's name (§2.4) |
+| a sentence served | `matter.determined` | — | self-`release` (oblige), `pardon` (detain, ban) | none to release | `tenure.closed`, or the term matures | `tenure.closed` on an edge id |
+| flight | a docketed party walks out of the bench's ground | — | he may walk back | none | lapse | three `travel.moved`; nothing links them to the case |
+| a persuasion | `argue` | repetition | none (the arguer never moves) | none | the hearer's pursuits drift toward the arguer's | `pursuit.moved`; not on what ground |
+| a deception | `lie` | the hearer may pass on something (a deed claim, usually: `said_of` picks the newest) | a later sighting restores the truth in the weighed reader | none, if unheard or half-heard; `record` 0.5 with a hearer who knew | none | no kind says a lie was told |
+| an arrest and questioning | `arrest` → `interrogate` | — | `pardon` | — | `confession.*` (four names, no write) | never fires (SC audit §1) |
+
+Stories that **cannot** happen, each because no row, band or reader carries it: an acquittal; an appeal
+or a reversal; a sentence proportioned to the offence or to the vote; a witness called or a document
+entered and answered; a perjury exposed; a judge recused, bribed or challenged for bias; an accuser who
+pays for a false charge; a petition for anything but a person's binding (relief, land, a pardon for
+another, a levy lowered); a remedy that goes to the wronged party; a reputation made or ruined by a
+trial; a split bench; a negotiation settled by anything but two unilateral acts; an argument about a
+particular thing; a liar unmasked in public; a village that hides its grain (a numeric lie is always
+upward, proposal E).
+
+Stories that **can** happen and that nobody designed (the curious half): *flight* — a man docketed
+before a bench leaves its ground and the case dies; *the mutual petition* — two persons each file
+against the other in one season (`p_npc_089` and `p_npc_090`, season 3); *the court that tries its own*
+— office-holders with the `determine` remit open cases on one another (`p_npc_004` on 037, 038 and 040;
+`p_npc_038` on 041 and 034) and one of them tries to determine another's case and is refused; *the man
+talked round* would exist with proposal D.
+
+### 3.2 What the realm told, seed 1, four seasons
+
+| | season 1 | 2 | 3 | 4 | total |
+|---|---|---|---|---|---|
+| petitions filed | 14 | 5 | 12 | 13 | 44 |
+| petitions carried / carriage refused | 2 / 1 | 1 / 5 | 0 / 19 | 0 / 7 | **3 / 32** |
+| cases opened / refused | 8 / 1 | 2 / 2 | 1 / 4 | 2 / 6 | 13 / 13 |
+| speeches unheard (no docketed matter) | 9 | 15 | 10 | 5 | 39 |
+| speeches heard: turned (Failure) / held / advanced (Success) | 5 / 0 / 0 | 4 / 0 / 1 | 3 / 0 / 1 | 2 / 0 / 2 | 14 / 0 / 4 |
+| determinations: refused / undetermined / determined | 1 / 0 / 0 | 2 / 0 / 1 | 1 / 0 / 0 | 0 / 0 / 1 | 4 / 0 / **2** |
+| `release.refused` / `pardon.refused` | 6 / 0 | 9 / 1 | 10 / 5 | 7 / 3 | 32 / 9 |
+| tellings: refused (hearer elsewhere) / unheard / landed | 33 / 9 / 1 | 19 / 6 / 3 | 19 / 6 / 3 | 19 / 5 / 4 | 90 / 26 / 11 |
+| …of the landed, deposited anything new in the hearer | 0 | 0 | 1 | 1 | **2** |
+| lies: refused / unheard / landed | 10 / 3 / 0 | 19 / 3 / 1 | 10 / 2 / 1 | 26 / 5 / 2 | 65 / 13 / 4 |
+| arguments: refused / lost / "won" at Partial / moved somebody | 0 / 0 / 0 / 0 | 1 / 8 / 3 / 0 | 6 / 6 / 2 / 0 | 9 / 7 / 1 / 0 | 16 / 21 / 6 / **0** |
+| docket: items / with a matter / naming an arrangement | 10 / 10 / 0 | 16 / 12 / 0 | 21 / 13 / 0 | 25 / 14 / 0 | |
+
+Read as stories:
+
+- **Beginnings are plentiful and nearly all are the same beginning.** 44 petitions and 13 cases in
+  four seasons. In every one of the 14 petitions of season 1 the person the petition is *about*
+  (`terms`) is the person it is *addressed to* (`to`): the chooser forms `petition(subject = X, to = X)`.
+  `carry` dockets `terms` as the matter, so a petition to a lord puts the lord on the docket as the
+  accused. `p_npc_020` drew fourteen petitions in four seasons and was bound in season 4.
+- **The reason for a prosecution is not readable.** Of the 22 petitions and cases of season 1
+  (`e1_reasons_s1.txt`): 11 of 14 petitions have no act among their causes (a standing question); the
+  opener holds no deed claim at all about the person he proceeds against in 8 of 22; his regard for
+  that person is zero or positive in 20 of 22 (`p_npc_089` petitions about a man he regards at +12.5).
+  Three of the eight opened cases are a person opening a case on **himself** (`p_npc_020`,
+  `p_npc_074`; `p_npc_004`'s is refused). One beginning does read as a reason: `p_npc_021` opens the
+  case against `p_npc_004` with his own refused `covenant` among its causes.
+- **Escalation is repetition.** `p_npc_033` speaks to `p_npc_020`'s matter in each of four seasons and
+  fails each time. `p_npc_041` speaks to `p_npc_038`'s matter in seasons 2, 3 and 4 and *succeeds* each
+  time (`matter.advanced`); the matter is where it was. `p_npc_075` carries one petition in season 1
+  and is refused carrying it seven more times. `p_npc_032` tries to pardon `p_npc_020` three times in
+  season 3 (refused: there is nothing to pardon) and sentences him in season 4.
+- **Reversal: none observed, none possible.** No acquittal, no closed disposal, no answered speech.
+- **Cost: none observed.** No accuser, speaker, arguer or liar lost anything he could point to. The one
+  loss in the run is a death in a `capture` (`p_npc_013`, who had spoken twice against `p_npc_041` at
+  his hearing and then tried to seize him); the log does not link the two `[UNVERIFIED causal link]`.
+- **Endings.** Two verdicts in four seasons, both Partial, both an `oblige` to the judge's seat. In
+  both, a new case against the same party is opened in the same season (`p_npc_004` by the judge who
+  had just bound him; `p_npc_020` by himself). What cites the verdict: 254 and 251 `claim.deposited`,
+  one `challenge.refused`, one `proposition.uttered`, three `tell.refused`. No person holds a claim of
+  either verdict that names the convicted. Every other matter is waiting for the clock.
+- **Retelling.** Of 11 tellings that landed, 9 told the hearer what he already held firsthand and
+  deposited nothing; the two that carried news were a settlement's people saying that a date had come
+  due. Of 4 lies that landed, three said that a place or a person "exists: 2" for a held 1 and one
+  inflated a settlement's grain; in all three that deposited, the hearer's two readers now disagree
+  (§2.2). A narrator reading the log can say *who filed against whom and that a judge determined
+  something*; he cannot say who was convicted, of what, on what ground, or what it cost anyone.
+
+**The shape of the tail.** Twenty-seven persons were the matter of some proceeding. By signature:
+petitioned and never carried, 13; opened or carried and never spoken to or decided, 7; spoken to and
+undecided, 5; determined, 2 (both re-opened at once). No two of the twenty-seven differ in anything but
+the count of repetitions. The SC lane's six-season logs add the only other ending: at season 6 eight
+matters lapse at each seed. Across seeds and seasons it is one hearing: *filed; talked at; forgotten or,
+rarely, bound to the judge.*
+
+**What a player's choice would change.** `effort` on a speech (the only operand inside a contest,
+F-SC-07) changes a band that is read by nothing. Choosing whom to petition changes who is docketed.
+Choosing to walk away ends the case. Nothing else in this scope responds to a choice.
+
+**Extremes.** No bench (the party outside every seat's ground): refused, then lapse. A bench of one
+who is the party: opened, refused, lapse. One person alone: `argue` and `tell` to oneself are refused.
+A hundred matters: not run `[UNVERIFIED]`; the docket's turnover at this seed is two determinations in
+four seasons against sixteen docketed, so a hundred matters is the same story with a longer wait.
+
+## 4. Findings, ranked worst first
+
+Severity words are `AUDIT_BRIEF.md`'s. "Falsifier" is the run that would have shown the claim wrong, with
+its control. Requirement ids are `dossiers/00_NINE.md`'s.
+
+**F-PES-SC-01 · degrades narrative (R-07, R-08) · INVERTED · One ledger, two beliefs: an eyewitness
+acts on the truth and says, shows and plans by the lie.** §2.2. `LedgerReader` with a `weigh` has one
+caller (`epistemic.belief_contradicts`); without one it serves `said_of`, the sheet's `chronicle` and
+the goal-stage reader. One season after a firsthand sighting, a landed lie leaves the weighed reader
+true 32 of 32 and the plain reader true 1 of 32; an honest garbled telling, 27 of 27 against 4 of 27.
+Each reader is wrong at its own extreme: the plain one believes whoever spoke last; the weighed one
+keeps a nine-season-old sighting at confidence 5 against thirty independent tellers (`p2d`). Falsifier:
+`p2c_two_readers.py` with equal columns — not observed; control: at tick 0 (equal ages) the readers
+agree, 29 of 29. FIRES: three of three deposited lies at seed 1. Fix: proposal B.
+
+**F-PES-SC-02 · degrades narrative (R-07, R-08, R-09) · INVERTED · An honest teller is marked a liar
+almost as often as a liar is, and to a hearer who knows, his record can only fall.** §2.2. `record`
+0.5 after 13 of 16 landed truths and 12 of 13 landed lies; the Partial garble and the lie are one
+function at one band; a clean truth to a knower forms no agreeing pair. Falsifier: any landed truthful
+telling with `record` < 1.0 — present, 13 of 16; control: a hearer who holds nothing keeps `record`
+1.0 in 22 of 22. Fix: proposal E.
+
+**F-PES-SC-03 · degrades narrative (R-01, R-02, R-07) · INVERTED · A verdict is remembered as
+something the judge did; the convicted is named only when nothing was decided.** §2.4, §2.3. Zero
+claims naming the party after a determination, in every witness and in all three disposal kinds;
+regard for the convicted unmoved; regard for the judge up for everyone, the convict included; after a
+failed determination every person alive holds the accused's name. Falsifier: one witness holding a
+claim naming the party after a verdict — none, in three arms and in the realm's two verdicts; control:
+the case opened and never determined deposits nothing. Fix: proposal C.
+
+**F-PES-SC-04 · degrades narrative (R-06, R-09) · What the speaker brings rides two ladders, and the
+one evidence rides is the form `ED-884` retired.** §1.5. Four firsthand proofs before a hostile bench
+or a strong opponent: 0.90 → 0.90; two slots of effort: 0.90 → 0.69. Falsifier: a cell where a proof
+leaves the odds unchanged — present in four of six premise cells; control: the same proofs as named
+levels are monotone in every cell and reproduce the shipped numbers where the shipped form is
+unclipped. Fix: proposal A.
+
+**F-PES-SC-05 · blocks a requirement (R-02, R-05; touches R-09) · The verdict reads nothing of the
+hearing.** §2.1. Six cells, one distribution, the same 45 of 150 seeded acts; control: the judge's
+pool moves it. The SC lane states this from reading and from realm counts (F-SC-01, F-SC-05, F-SC-13);
+this is its execution with controls. Fix: the proposals on file — `05_SC_obstacle_difficulty_and_modifiers_B.md`
+(inputs to `determine`), `05_SC_evidence_and_rebuttal_B.md` with `19_LACUNA_admission_rides_the_citing_draw.md`
+(what was said and entered), `05_SC_acquittal.md` (a losing band) — with proposal A's amendment to the
+first. No new proposal here.
+
+**F-PES-SC-06 · degrades narrative (R-06, R-07, R-09) · An argument moves somebody 0.07 of the time,
+never the arguer; what is argued and how firmly the hearer holds the contrary are unread; repetition is
+free and converts.** §2.5, §1.2. Falsifier: an argument at Failure or Partial after which anyone's
+pursuits differ — none in 280; control: `argue` 6 on either side moves the odds. FIRES: 0 moved of 27
+(seed 1, four seasons). Fix: proposal D; the Proposition's content is FA's and CORE's formation.
+
+**F-PES-SC-07 · blocks a requirement (R-02, R-04) · A hearing ends by exhaustion only.** §2.3, §1.3,
+§1.4. A bench may ask again at once (k = 8 binds 0.90); a lapsed matter is re-opened in the same fold
+and the same petition re-carried; in the realm both verdicts were followed by a fresh case on the same
+party in the same season. Known in part (H-162 (c), F-SC-05 (a)); the `k` curve, the lapse-and-reopen
+loop and the realm's re-opened verdicts are new. Falsifier: an `open_case` refused because the matter
+was lately decided or lapsed — not observed. Fix: `05_SC_acquittal.md` as amended by G-55 makes Failure
+terminal; §5 item 4 adds the one clause it lacks.
+
+**F-PES-SC-08 · degrades narrative (R-02, R-04) · The only petition that can be granted is an
+accusation, the grant goes to the judge, and in computed play the accused is the person petitioned.**
+§2.1, §3.2. A petition about a place is docketed, spoken to and undeterminable; a granted one binds the
+party to the judge's seat; the petitioner holds nothing new; 14 of 14 computed petitions name their
+addressee as their matter; three of eight opened cases are self-cases. Falsifier: a computed petition
+with `terms` ≠ `to` — none in 14. Fix: §5 items 5 and 6 (formation is CORE's; the remedy is a Jordan
+call).
+
+**F-PES-SC-09 · degrades narrative · The room (reception, proofs, the mirror, route erosion) is
+necessary to nothing that changes the world.** §1.1. Three speeches leave no state, no claim in the
+bench and the same verdict odds; the four band kinds carry one valence. Falsifier: any state or regard
+that differs between the arms — none. Fix: `05_SC_playable_hearing_B.md` (speech writes case-file
+stages) with `19_LACUNA_admission_rides_the_citing_draw.md`; until one lands the machinery's N-line is
+unearned.
+
+**F-PES-SC-10 · degrades narrative (R-06, R-09) · The lie's roll reads neither party, is easier than an
+honest telling to a practised listener, and its content is a fixed function.** §2.2. `lie` 0.74 for
+every pair; `tell` to a hearer with `copying` 8 fails 0.90; a speaker with `copying` 8 is heard 0.77 of
+the time honest and 0.26 lying; a numeric lie is always the held value plus half. 13_SC §4 cell 1 has
+the missing opposition; the comparison with `tell` and the fixed direction are new. Fix:
+`05_SC_capability_surface.md` and `05_SC_hearing_capabilities.md` (the rows, G-53); proposal E edit 2
+(the direction). Residual, decided in §5 item 3: a cooperative telling should not be opposed by the
+hearer's skill at the same vocation.
+
+**F-PES-SC-11 · degrades narrative (R-01, R-07) · Proceedings begin without a readable reason.** §3.2.
+11 of 14 petitions with no act among their causes; no held deed about the target in 8 of 22; regard
+zero or positive in 20 of 22. Fix: not SC's. `16_PESSIMIST_GAME_standing_occasions_carry_their_cause.md`
+and CORE's formation own it; listed for them.
+
+**F-PES-SC-12 · hygiene · Words that do not mean what they say.** `argument.won` at Partial (nobody
+moved); `argument.refused` with degree Success (a won argument over an agreeing hearer); `matter.carried
+/ advanced / held / turned` (four words, one meaning to every reader); `news.untold` for a failed lie;
+`release` offered to a man under `detain` or `ban` (formed, then refused: 32 `release.refused` in four
+seasons at seed 1 `[the 32 are not all this case: UNVERIFIED split]`). Fix: proposal D renames the
+first; the rest ride the proposals that give those bands readers.
+
+## 5. Resolutions decided, and what is Jordan's
+
+Each chosen by the five-step ladder (`CLAUDE.md` §0), in order; the step is named.
+
+| # | inconsistency, gap or unclear passage | decided resolution | ladder step | carried by |
+|---|---|---|---|---|
+| 1 | proofs and favour enter as an Ob reduction; `effort` as a μ-shift; SC-B keeps the reduction after the ceiling | what stands against the act is an obstacle term; what the actor brings is a named level | 1 (`ED-884`, `ED-934`; `advantage_sources`' law) | proposal A |
+| 2 | two comparators for one person's belief; the weighed one ignores confidence | one comparator, every reader, weight × decayed confidence | 5, and 3 for the stage reader (its own revert line) | proposal B |
+| 3 | `tell` is opposed by the hearer's own `copying` / Focus, so a practised listener is harder to inform (0.90) than to deceive (0.74) | a telling the hearer does not resist is unopposed: `tell`'s opposition is read only where the hearer holds a negative stance toward the teller; otherwise the task's difficulty stands alone. Until SC-B's `difficulty` column lands: `_opposition_of` returns `None` for `tell` | 5 (the word: a hearer's skill at reproduction is not resistance to being told) | a one-line amendment to `05_SC_obstacle_difficulty_and_modifiers_B.md`'s `opposition` row; no file of its own |
+| 4 | after a lapse or (with SC-P6) a dismissal, the same matter is re-opened at once by the same bench | `open_case` and `carry` decline a matter whose case file or petition carries a `lapsed` or `dismissed` stage written within `docket_lapse` seasons, unless the act cites an item not on that file (`19_LACUNA_verdict_ladder_and_reversal.md`'s re-opening rule); MATTER writes the `lapsed` stage when it lapses an item | 4 (LACUNA's rule; `Record.stages` is the existing carrier) | an edit to `05_SC_acquittal.md` and to `loop/matter.py`'s lapse pass; listed for the SC lane |
+| 5 | every computed petition names its addressee as its matter | formation: `petition`'s `to` is drawn from the seats whose bench sits over the subject's place (`judging_set`), never the subject | 5 | CORE (`decision/options.py` operand formation); listed |
+| 6 | a judge may open a case on himself and can never determine it | `open_case` declines `subject == actor` (the fold's `counterparty` clause already exists for rows naming a second party; the row gains `counterparty: subject`) | 4 (`petition`'s two-sided rule, `ED-IN-0210`) | a one-cell edit to `verb_table.yaml`'s `open_case` row; listed for the SC lane |
+| 7 | a verdict's claims name the judge and an edge id | restraints and imposed edges are read as their two ends; the two kinds join the paired kinds | 4, 3 | proposal C |
+| 8 | Failure and Partial of `argue` move nobody; Partial is called "won" | Failure moves the arguer; Partial is `argument.held` | 3 (H-221's stated intent), 4 | proposal D |
+| 9 | the garble and the lie are one rule, so `record` cannot separate them | a hearer who knows hears true; a lie has two directions | 5 | proposal E |
+| 10 | LACUNA's table says an `oblige` is released *"by the obligee"*; the code's releaser is the convicted party | the same person: `establishment_of` calls the bound party the obligee; no conflict, the word is confusing | 3 (the code) | none |
+
+**For Jordan** (survived the ladder; two defensible options that make different games):
+
+1. **Is a favourable modifier part of the obstacle?** The clarification of 2026-11-12 (*the obstacle is
+   the task's difficulty plus all modifiers*, relayed, not ledgered) against `ED-884` / `ED-934`
+   (advantage is never an Ob reduction). *Option A* (SC-B as written): evidence and favour make the
+   task easier, floored at `OB_MIN`; a small pool's room has three states. *Option B* (proposal A):
+   they make the speaker stronger, bounded by the soft cap; every proof counts at every pool. B is
+   decided here at ladder step 1; it is listed because the newer statement is Jordan's own.
+2. **May a convicted man discharge his own sentence?** C-1's ruled price (`effects_information.py:531-535`:
+   *"a convict can discharge his own penance"*) is executed: one `release`, free, the same season.
+   `detain` and `ban` are not self-releasable. *Option A* (as ruled): a sentence of service is a penance
+   the convict may walk away from; trials bind only by custody or ban. *Option B*: an imposed `oblige`
+   (`Tenure.imposed`) is closed by the bench (`pardon`) or its term, as its two siblings are. Not
+   resolved here: it would overwrite a ruled item.
+3. **Who is a verdict for?** Today the disposal is the party's obligation to the judge's seat. *Option
+   A*: keep (the court is the injured party; the petitioner's satisfaction is not modelled). *Option
+   B*: where the docket item names a petition, the disposal's object is the petitioner (or the seat he
+   names), so winning a case is something a person can want. B changes what C-1 ruled about the edge's
+   object (*"ON THE SEAT EXERCISED"*); not resolved here.
+
+## 6. False N-lines, failed premises, stories — the lists
+
+**False N-lines found** (a thing the design treats as necessary whose cut is free, executed):
+(1) *the room reads you* — `speak`'s roll, reception, proofs, the mirror, route erosion (§1.1);
+(2) *an argument is about something* — the Proposition operand of `argue` (§1.2);
+(3) *the verdict is a draw that could go either way* — for a bench that persists it is a wait (§1.3);
+(4) *a hearing ends* — true of the docket's length only (§1.4);
+(5) *a record separates liars from honest tellers* — it measures the channel's noise (§2.2);
+(6) *the band of a contest is data* — on five of seven contested social rows it selects a name (§1.5).
+
+**N-lines attacked that held:** the per-act draw (order, interleaving, replay); firsthand over hearsay
+in the weighed reader; `odds_of` against the fold; `argue` at Success (cut it and no person's pursuits
+are moved by another person at all).
+
+**Premises that failed:** all five, at these links — P1.3 (a good case), P1.5 (usually), P1.6 (wins);
+P2.3 and P2.7 (INVERTED), P2.4, P2.6; P3.3, P3.4, P3.5; P4.1, P4.3, P4.4 (INVERTED), P4.5; P5.1, P5.4.
+**Links that follow:** P1.1, P1.2, P1.4 (for the speech), P2.1, P2.5, P3.1, P4.2 (the restriction),
+P5.2, P5.3 (skill).
+
+## 7. Evidence log
+
+All under `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/PES_SC/`;
+`PYTHONHASHSEED=0`; no tracked file written; no `pytest` run. `lib.py` is the shared fixture helper
+(`probes.tiny_world`, world seed 1).
+
+| # | command | what it is | outcome (where used) |
+|---|---|---|---|
+| 1 | `p1_petitioner.py 150` → `p1_petitioner.txt` | 3 benches × 2 cases; exact odds and 150 seeded acts per cell through the fold; control pool 30 | §2.1 |
+| 2 | `p2_lie.py 60` → `p2_lie.txt` | lie and tell to three kinds of hearer, 60 real seasons per cell; exact odds by capability | §2.2 |
+| 3 | `p2b_lie_extremes.py` → `.txt` | a loved, long-right liar against a knower; what a failed lie leaves | §2.2, §1.6 |
+| 4 | `p2c_two_readers.py` → `.txt` | the same after one empty season; the two readers; the callers of each (grep) | §2.2, F-01 |
+| 5 | `p2d_stale_sighting.py` → `.txt` | a stale sighting against n fresh tellers, direct reads | F-01, proposal B |
+| 6 | `p3_hearing_ends.py` → `.txt` | k determinations in one fold (200 forks each); a failed determination through a season; the lapse; re-opening; bounds | §2.3, §1.3, §1.4 |
+| 7 | `p4_verdict.py` → `.txt` | verdict against control, three disposal kinds, real seasons with WITNESS; what the party can do after | §2.4 |
+| 8 | `p5_argue.py 300` → `.txt` | 300 seeded arguments; three Propositions; exact odds by what the hearer brings; grinding; bounds | §2.5, §1.2 |
+| 9 | `n1_favour_two_ladders.py` → `.txt` | proofs as shipped and as named levels, exact | §1.5, proposal A |
+| 10 | `n2_cuts.py` → `.txt` | the `speak` cut; the seam's per-act draw | §1.1, §1.6 |
+| 11 | `d_projection.py` → `.txt` | proposal D's rule projected with the shipped `argued_pursuits` (not the engine) | proposal D |
+| 12 | `realm_sc.py 1 4` → `realm_s1_k4.txt` | the populated realm, seed 1, four seasons (39, 93, 148, 233 s under load); content hash `25d23448…` | §3, FIRES rows |
+| 13 | `e1_reasons.py 1 1` → `e1_reasons_s1.txt` | one realm season: causes and holdings behind each proceedings act; petition terms; proposition shapes | §3.2, §1.2 |
+
+Not run: a second realm seed in detail (machine load 27 to 44 throughout; the SC lane's six-season logs
+at seeds 0 and 1 are cited for the cross-seed shape); a realm before-and-after for any proposal (each
+names it as its gate); `harness/storybar.py`, `chronicle.py`, `arc.py`, `strife.py` on this scope
+`[SKIPPED: time; the per-matter timeline in run 12 was written instead]`; the kernel `K/` (not reached
+by the loop; the SC addendum's §B3 stands). `[UNVERIFIED]` marks in the text are the complete list of
+claims not checked by a run or an opened line.
