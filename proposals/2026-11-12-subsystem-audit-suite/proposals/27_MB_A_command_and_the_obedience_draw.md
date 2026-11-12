@@ -6,9 +6,10 @@ Lane MB (the capability rows and the pool reader are CORE's and DICE's surface, 
 FA's and the institutions kit's; the chooser's side is CHAR's and is `27_MB_D_the_commander_as_chooser.md`).
 Serves ruling **A-59** (`unified/DECISIONS_ANSWERED.md:73`) clause (1): *"order friction is a function of
 'command' which itself comes from a combination of learned skill/faculty and a function of social/mental
-attributes"*. **Extends, and does not replace:** `U5b_MB_rulings_in_the_field.md` §1 rows 3 to 5 (the
-commander's record and the `command` capability) and `26_MASS_BATTLE_maneuver_orders.md` §1 (the obedience
-draw), both amended in place with a `Folded:` line. Audit: `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md`.
+attributes"*. **It is the carrier `U5b_MB_rulings_in_the_field.md` §1 row 3 hands this to** (that file's
+earlier draft of the commander's inputs is withdrawn in this one's favour, by its own head), and it
+**extends, and does not replace,** `26_MASS_BATTLE_maneuver_orders.md` §1 (the obedience draw), amended in
+place with a `Folded:` line. Audit: `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md`.
 Read at `faf0cea`. Reference, not mechanism (`CLAUDE.md` §0.05). No code is edited by this file.
 
 ## What it changes in `engine/season/` at runtime
@@ -42,8 +43,8 @@ season fights an army field today (`audits/04_MB_audit.md` F-MB-03), so no shipp
 
 ### 1. Command is one capability row with two inputs
 
-Definition (the home U1 §1 decides, `references/descriptor_registry.yaml: capabilities.rows`; U5b §1 row 4
-already names the row and this states its cells):
+Definition (the home U1 §1 decides, `references/descriptor_registry.yaml: capabilities.rows`; the first rows
+of the `field` site are this lane's, U1 §9 and `U5b_MB_rulings_in_the_field.md`'s head):
 
 ```yaml
 command:
@@ -68,7 +69,8 @@ site, U1 §9):
 
 - **Two inputs, as A-7 and U1 §4 assign them:** training gives dice (`pool = max(pool_floor, score + addends +
   pool_add)`); talent gives signed levels by steps from the scale's mid-point. They are never folded into one
-  number. `derive_command` and its two weights leave with the harness code, as U5b §1 row 5 already decides.
+  number. `derive_command`, `CMD_CHA_WEIGHT` and `CMD_COG_WEIGHT` (one number folded from two) leave with the
+  harness code that alone calls them (`04_MB_typed_outcome_and_one_path.md` §2).
 - **"A function of social/mental attributes" is two `edge` rows**, one on Presence (`attr.social.charisma`)
   and one on Reason (`attr.mind.acuity`, whose registry aliases include `Cognition`:
   `references/descriptor_registry.yaml`, the `mind:` block). No aggregate key and no new compute kind is
@@ -97,15 +99,16 @@ class CommandRecord:
     fed_by: tuple          # U1 §8's reason trail rows, echoed on the report
 ```
 
-- `MassBattleInput.commanders: (CommandRecord | None, CommandRecord | None)` (this replaces the
-  `(score, talent_levels)` pair of U5b §1 row 3 with the same two numbers plus the three fields the draw
-  needs). `pool_add` and `pool_floor` ride the input raw, as U1 §8 has the fight carry them.
+- `MassBattleInput.commanders: (CommandRecord | None, CommandRecord | None)` (this is the typed input
+  `04_MB_typed_outcome_and_one_path.md` §4's `command: tuple = (4, 4)` yields to). `pool_add` and
+  `pool_floor` ride the input raw, as U1 §8 has the fight carry them.
 - Each unit row of the order of battle carries `officer: CommandRecord | None`, built by the same host
   function for the person the row's `officer` column names (`04_MB_manager_battle_one_resolver.md` §7).
 - One host builder, `seam/wrappers/mass_battle.py::command_record(w, person, via)`, called by `field_input`.
   It calls the one pool reader and the one edge reader and holds nothing. `None` (no commander among the
-  side, or a headcount side with no acting person) is today's literal: the module reads score 4, no addends,
-  no levels (U5b §1 row 5's `None → 4`).
+  side, or a headcount side with no acting person) is the control: every Command read behaves as it does
+  today on the literal 4, which moves from two constructors to one cell, `command_default: 4`, in the troop
+  file's header.
 
 ### 3. Who rolls: the chain has two links, and a draw is made by the link that gives the order to the unit
 
@@ -210,7 +213,7 @@ Every number is a seed. The form is what is decided.
 |---|---|
 | `recall_check`, `feigned_retreat_recognized`: `roll_pool(pursuer.command)` against Ob 2 (`orchestration.py:2094-2106`) | calls of `obey`'s pool rule on the commander's record, with their stated obstacles as steps over `obey.task` |
 | the rally roll (`16_PESSIMIST_MB_rout_has_two_exits.md` step 1) | the same; the commander's, since rally at the end of a field is his act |
-| morale erosion's divisor `dmg / (discipline × command)` (`orchestration.py:2342-2343`, `:1151`) and `h_per_size` (`hierarchy/units.py:2867`) | read the span value of **the link that covers the unit** (its officer's, else the commander's), by U5b's `command_span` table. A side-wide integer in every unit's divisor is a static side value; this makes it the unit's own |
+| morale erosion's divisor `dmg / (discipline × command)` (`orchestration.py:2342-2343`, `:1151`), `h_per_size` (`hierarchy/units.py:2867`) and the span check (`armies.py:176-193`) | read the **span value** of the link that covers the unit (its officer's, else the commander's): an integer 1 to 7 from that person's trained score by one table, `command_span`, in the troop file's header (seed: the score through the existing `clamp_command`, `core/exchange.py:44-54`; `None` is `command_default`). A side-wide integer in every unit's divisor is a static side value; this makes it the unit's own |
 | `command <= 0`: every unit's morale set to zero (`battle_loop.py:408-413`) | a stand draw for each unit (`26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` §1) |
 
 ## Exact edits

@@ -188,7 +188,13 @@ score moves no obedience share; an arm of the test whose draw counts equal anoth
 
 ## 6. Dependencies and landing order
 
-Against `U5b_MB_rulings_in_the_field.md` §6, which this audit does not reorder:
+Against `U5b_MB_rulings_in_the_field.md` §6. That file was rewritten during this pass to hand the
+commander's inputs, the obedience draw and a unit's prowess to this lane (its §1 row 3), and its §6 row 4 now
+places "the multiplier's three-arm test and the obedience draw" just after the sampler. **One difference,
+named:** the instrument can be built there, but the reading cannot be taken there. On the present pair rule
+the bare engine is a cliff, and the draws that are to carry the chance do not exist until row 4's last steps
+and row 5. The test is read last, and the multiplier's value changes in one commit after it. Otherwise that
+order stands:
 
 | this plan's part | lands in | needs first |
 |---|---|---|
@@ -282,7 +288,7 @@ a unit's dice (9) and the owner of loss (17) are each answered above by a ruling
 | `proposals/14_VERBS_MILITARY_D_the_order_of_battle.md` | the field-side draw is rolled on the officer or the commander by `27_MB_A`; `order_unit` carries `officer` and `commander_post`; `assign_troops` recalls the fled |
 | `proposals/14_VERBS_MILITARY_A_movement.md` | a march's end carries the row's losses and fatigue |
 | `proposals/14_VERBS_MILITARY_C_the_muster.md` | muster reads `assigned` after losses; absent men still count against the cohort |
-| `proposals/U5b_MB_rulings_in_the_field.md` | D-34 is answered; §1 row 3's pair becomes `CommandRecord`; §6 gains the test's place |
+| `proposals/U5b_MB_rulings_in_the_field.md` | its §1 row 3's carriers named; the one difference of order with its §6 row 4 (the test is read last) |
 | `audits/04_MB_audit.md` | a dated head statement: F-MB-08 and §11 item 2 are answered by A-59 |
 | `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` | a dated head statement: §7 item 2 is answered; B-3's owner |
 

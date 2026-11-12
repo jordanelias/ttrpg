@@ -4,6 +4,8 @@ Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Parts 
 
 ## Status: PROPOSED
 
+Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (rulings A-59 and A-69). Nothing here is deleted. (1) The `command` capability the Reconciled line's item (2) points to is defined in `27_MB_A_command_and_the_obedience_draw.md` §1: trained rank as dice, Presence and Reason as levels, a seat's modifier as whole dice on the commander's pool. (2) **A-69**: once a unit's losses are written on its row, what the army holds of a cohort is `assigned` plus the men absent injured or fled, who are alive and still the cohort's; `recruit`'s limit and `discharge_troops` count them so, and a levy cannot be raised twice over by losing a battle (`27_MB_E_what_an_army_carries_back.md` §2). The dispersal draw of Edit 6 and the flight of a routed unit are two different events with one result on the row (men off the strength who may be recalled).
+
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-04) — a typed conjunct cannot be waived by a payload key (`data/requires.py:1027-1030`); the proposal's stated fallback for `room` is now the edit. `14_VERBS_MILITARY_D_the_order_of_battle.md:128` carries the same mark and takes the same answer.
 
 Batch M-C of `audits/14_VERBS_MILITARY.md` (§1 S3, §3.1, §3.2, §5.3). Source: F-VM-02, F-VM-03,

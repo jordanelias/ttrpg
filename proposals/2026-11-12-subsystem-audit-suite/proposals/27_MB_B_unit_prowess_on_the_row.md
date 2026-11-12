@@ -84,9 +84,9 @@ dealt    = K_LINEAR * frontage(pair) * PAY_PER_NET * max(0, net) * (1 + quality)
   file decides is that **`prowess` is the only place a unit's quality becomes dice**, that it takes the unit
   and reads its row, and that nothing multiplies it by a value belonging to the side.
 - **The commander is not in it.** Jordan's 2026-07-08 directive took the commander out of the pool
-  (`config.py:533-552`), A-59 lists troops, equipment and subformation as prowess's sources, and U5b §1 row 6
-  keeps a person's two inputs to "cohesion, obedience and rally, never the dice of a pair". An officer changes
-  what his unit does and whether it stands; he does not add to its dice.
+  (`config.py:533-552`), and A-59 lists troops, equipment and subformation as prowess's sources. A person's
+  two inputs reach obedience, steadiness and rally (`27_MB_A` §4, §6), never the dice of a pair. An officer
+  changes what his unit does and whether it stands; he does not add to its dice.
 - **Numbers are not in it** (A-60). They are in `frontage(pair)`, in the depth that rests a column, and in how
   long the body lasts.
 - **Subformation and tactics are not multipliers on prowess.** They decide which of the unit's cells are in
@@ -148,8 +148,8 @@ which is the resolver sampled (`04_MB_manager_battle_one_resolver.md` §8).
 ## Falsifier
 
 A quality term read anywhere but `prowess`. A unit whose result changes when its sibling's row changes and
-nothing else does. A function returning one number for an army's strength. A commander's score changing a
-pair's pool (U5b §1's falsifier, kept).
+nothing else does. A function returning one number for an army's strength. A commander's or an officer's
+score changing a pair's pool.
 
 ## NERS (definitions `CLAUDE.md` §0.06; E last)
 
