@@ -142,8 +142,8 @@ REQUIREMENT: R-04.c3 → `PYTHONHASHSEED=0 python -m engine.season.harness.headl
 ### B24.07 — the hearing's settings, at their controls · HEAR_B edit 10 · BUILD · HASH EQUAL
 - SOURCE: HEAR_B "Exact edits" 10 (copied); R2 §7b-9 #4.
 - ADVANCES: R-04.c3 (the switch the batch flips at B24.37).
-- INSTRUCTION: "`engine/season/data/fixtures.py`: `sitting_exchanges` (0 control / shipped: the attendees' effort), `argument_step`, `fault_step` (each a `LEVEL_SIGMA` name; control `None`), `answer_step` (control 0; first value the former `proof_step` 0.25 `[ASSUMPTION: R2 §7b-9 #4 — a new fixture rather than reviving `proof_step`, which OBS §3 deletes]`), each with a NUMBER row and a three-point sweep." With them, `answer_ob` ("a fixture, proposed 2, NUMBER row", EVID_B "`standing`: the rules") at 2, because B24.06's `answer` move reads it; `HearingInput` gains `answer_ob: float` beside `answer_step` in this commit `[ASSUMPTION: the field's home — basis: HEAR_B's `answer` row reads `answer_ob + answer_step × …` and `HearingInput` carries `answer_step`]`. Added by this plan: the five NUMBER rows are `engine/season/hole_register.yaml` rows from B24's H block (slots 1–5), each fixture line carrying its `[JUSTIFIED: engine/season/hole_register.yaml H-<slot> -- `site: Fixtures <name>`, graded `assumption` …]` tag in the form `reception_gain`'s line uses; sweeps: `sitting_exchanges` 0 / shipped / shipped (the switch: `[ASSUMPTION: shipped means each attendee spends his own act's `effort`, so the setting is a switch read as 0 or 1 — basis: HEAR_B "shipped: the attendees' effort" and `Speaker.effort` "exchanges he will spend: his own act's effort"]`), `answer_step` 0 / 0.25 / 0.5, `argument_step` and `fault_step` `None` / `minor` / `moderate` `[ASSUMPTION: the sweep's two non-control points — basis: `LEVEL_SIGMA`'s two smallest names; no source states them]`.
-- WHERE: `engine/season/data/fixtures.py` (five fields); `engine/season/hole_register.yaml` (five NUMBER rows); `engine/season/queries/inputs.py` (`HearingInput.answer_ob`).
+- INSTRUCTION: "`engine/season/data/fixtures.py`: `sitting_exchanges` (0 control / shipped: the attendees' effort), `argument_step`, `fault_step` (each a `LEVEL_SIGMA` name; control `None`), `answer_step` (control 0; first value the former `proof_step` 0.25 `[ASSUMPTION: R2 §7b-9 #4 — a new fixture rather than reviving `proof_step`, which OBS §3 deletes]`), each with a NUMBER row and a three-point sweep." With them, `answer_ob` ("a fixture, proposed 2, NUMBER row", EVID_B "`standing`: the rules") at 2, because B24.06's `answer` move reads it through `HearingInput.answer_ob` (B24.05). Added by this plan: the five NUMBER rows are `engine/season/hole_register.yaml` rows from B24's H block (slots 1–5), each fixture line carrying its `[JUSTIFIED: engine/season/hole_register.yaml H-<slot> -- `site: Fixtures <name>`, graded `assumption` …]` tag in the form `reception_gain`'s line uses; sweeps: `sitting_exchanges` 0 / shipped / shipped (the switch: `[ASSUMPTION: shipped means each attendee spends his own act's `effort`, so the setting is a switch read as 0 or 1 — basis: HEAR_B "shipped: the attendees' effort" and `Speaker.effort` "exchanges he will spend: his own act's effort"]`), `answer_step` 0 / 0.25 / 0.5, `argument_step` and `fault_step` `None` / `minor` / `moderate` `[ASSUMPTION: the sweep's two non-control points — basis: `LEVEL_SIGMA`'s two smallest names; no source states them]`.
+- WHERE: `engine/season/data/fixtures.py` (five fields); `engine/season/hole_register.yaml` (five NUMBER rows).
 - TESTS: none new; `python tools/ci_sim_fabrication_check.py` reads the tags.
 - FALSIFIER and CONTROL: a fixture with no `[JUSTIFIED]` tag or an H row whose `site:` names no fixture. Control: realm hashes equal to B24.06's.
 - GATE: `python tools/ci_sim_fabrication_check.py` → exit 0; `python -m engine.season.harness.register --check` → exit 0; `python tools/export_sim_params.py --check` → exit 0 (re-derived with `--build` if it reads `Fixtures`).
@@ -299,4 +299,178 @@ REQUIREMENT: R-04.c3 → `PYTHONHASHSEED=0 python -m engine.season.harness.headl
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B24's producer; `Item: B24.16`, `[skip ci]`.
 
-@@TAIL@@
+### B24.17 — every proof kind bears on a rung; corroboration has a cap · EVID_B edit 1 · BUILD · HASH EQUAL
+- SOURCE: EVID_B "Exact edits" 1 (commit order 1, 2, 3, 5a, 5, 4, 6, 7: "Lands it and tier"), "The three operations" (`rung` "derived from the kind … by a new column on that roster (`bears_on`)"), rule 4.
+- ADVANCES: R-04.c3 (what an exhibit bears on and how far corroboration counts).
+- INSTRUCTION: "`engine/season/rosters.yaml: proofs` — a `bears_on` column (`fact` for all four members); a fixture `evidence_cap` (proposed 2.0, NUMBER row, three-point sweep)." `data/rosters.py` refuses a `bears_on` value outside `issue_rungs` (B24.03) `[ASSUMPTION: the refusal — basis: every closed-set column in this roster file is refused by its loader, `_refuse_not_in`'s practice]`. `evidence_cap` ships at 2.0 with its NUMBER row from B24's H block (slot 6), sweep 1.0 / 2.0 / 3.0 `[ASSUMPTION: the sweep's points — basis: the proposed value ±1]`.
+- WHERE: `engine/season/rosters.yaml` (`proofs` `bears_on`); `engine/season/data/rosters.py` (the column's reader); `engine/season/data/fixtures.py` (`evidence_cap`); `engine/season/hole_register.yaml` (one NUMBER row).
+- TESTS: none new; `test_arrangements.py` (which reads `PROOFS`) green.
+- FALSIFIER and CONTROL: a `bears_on` outside `issue_rungs` loads. Control: realm hashes equal to B24.16's.
+- GATE: `python tools/ci_sim_fabrication_check.py` → exit 0; `python -m engine.season.harness.register --check` → exit 0; `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_arrangements.py -q` → pass.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B24.03; EXISTS-IN-TREE `rosters.yaml: proofs`, `data/rosters.py::PROOFS`.
+- IDS: H block slot 6.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B24's producer; `Item: B24.17`, `[skip ci]`.
+
+### B24.18 — "contradicts" exposed once, beside the pairing step · EVID_B edit 2 · BUILD · HASH EQUAL
+- SOURCE: EVID_B "Exact edits" 2, rule 2 ("by `_pair`'s rule exposed once as `decision/options.py::contradicts(a, b) -> bool` (no second copy)"); FI_05_B E-5 item 1.
+- ADVANCES: R-04.c3 (one owner of "pairs and disagrees").
+- INSTRUCTION: "`engine/season/decision/options.py` — `contradicts(a, b)`, the predicate `_pair` already applies, exposed once; `_pair` calls it." The predicate is `_pair`'s ("same key, whole value, `==`", EVID_B problem 4): two claims on the same `(subject, predicate)` with different values.
+- WHERE: `engine/season/decision/options.py` (`contradicts`; `_pair`).
+- TESTS: `engine/season/tests/test_sc_hearing_evidence.py` (new): `test_contradicts_is_the_pairing_rule` `[ASSUMPTION: test name; the item creates it]` (same cell different value → True; same value → False; different predicate → False).
+- FALSIFIER and CONTROL: `_pair` and `contradicts` disagree on any pair. Control: realm hashes equal to B24.17's (`_pair`'s behaviour unchanged).
+- GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_sc_hearing_evidence.py -q` → pass; realm hash at seed 0 → equal.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `decision/options.py::_pair`.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B24's producer; `Item: B24.18`, `[skip ci]`.
+
+### B24.19 — `standing`, the one evidence rule, inside the module · EVID_B edit 3 · BUILD · HASH EQUAL
+- SOURCE: EVID_B "Exact edits" 3 (copied), "`standing`: the rules, in order" 1–4 (copied by reference below), "The evidence term"; C3-C1; rulings A-25, the standing rule (D-01).
+- ADVANCES: R-04.c3.
+- INSTRUCTION: "`modules/social_contest/evidence.py` (new) — `standing(presented, findings) -> (standing, struck, faults)`, over the `Exhibit` record of `05_SC_playable_hearing_B.md` (C3-C1: defined there, in `queries/inputs.py`; not re-described here). Called by `roll.py` and `hearing.py` only. The module names no `engine/season` module and restates no pairing rule: the host builder computes the relation with `contradicts` and hands it over as data, each `Exhibit` carrying `pairs: ((exhibit id, "contradicts" | "agrees"), …)` over the other filed exhibits. `standing` reads only that field, so the rule lives once, in `decision/options.py`." The rules, applied by the answering act's band `Exhibit.answered_band` (never a second grading call): 1 forgery (Failure stands, the impeacher bears `failed_impeachment`; Partial halved; Success struck; Overwhelming it and every item of the same origin struck, `forgery_found` against that side); 2 contradiction (Failure stands; Partial both halved; Success struck; Overwhelming struck and `self_contradiction` against its citer only if he cited it knowingly, else `discredited_source` against its origin; an item with no answering act is never struck); 3 agreement (same cell, same value, both sides: counts for neither); 4 corroboration (same cell, same value, same side, distinct origins: one item of weight `1 − Π(1 − wᵢ)`, capped at `evidence_cap`; the same origin twice counts once). `Exhibit` gains `pairs: tuple` and `answered_band: Optional[str]` in `queries/inputs.py` in this commit (EVID_B's fields on HEAR_B's record).
+- WHERE: NEW `modules/social_contest/evidence.py` (`standing`); `engine/season/queries/inputs.py` (`Exhibit.pairs`, `Exhibit.answered_band`); `engine/season/tests/test_sc_hearing_evidence.py`.
+- TESTS: written first, red: `test_corroboration_is_noisy_or_by_origin` (EVID_B gate 4: "Two items of the same cell and value from distinct origins, weights 0.5 and 0.5: one item of 0.75. From one origin: 0.5"); `test_an_off_rung_item_enters_at_half_and_a_same_origin_second_adds_less` (KERN_B check 3, a unit on `standing` with a hand-built board).
+- FALSIFIER and CONTROL: "An answer of the same value strikes nothing (it is agreement, rule 3)" (EVID_B). Control: realm hashes equal (no caller).
+- GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_sc_hearing_evidence.py -q` → pass.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B24.05 (`Exhibit`), B24.17 (`evidence_cap`), B24.18 (the relation's owner).
+- GLOSSARY: row *standing (of an exhibit)*: "standing: an exhibit still counted after every answer to it, as a claim stands in court" — added with the note that the prize `a standing` and the `Sensation` field are other senses (VRES §2's own warning on the word).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B24's producer; `Item: B24.19`, `[skip ci]`.
+
+### B24.20 — the roll and the sitting add the standing items as `proofs` levels · EVID_B edit 5a · BUILD · HASH EQUAL
+- SOURCE: EVID_B "Exact edits" 5a (copied), "The evidence term" (copied); OBS §3 (`proofs`: "one `proof_level` per whole unit of weight standing for the actor's side"); A-25.
+- ADVANCES: R-04.c3.
+- INSTRUCTION: "`modules/social_contest/roll.py` and `hearing.py` — call `evidence.standing` on the input's exhibits and add the `proofs` levels (above) to the leverage they apply; report them in `levels`." "`proofs = Σ weight(standing, side = for)`, `rebuttals = Σ weight(standing, side = against)`, computed inside the module … Neither sum enters the obstacle. Each reaches the roll as the `proofs` leverage … one `proof_level` per whole unit of weight standing for the roller's side, and the same against him for the other side's; for a docketed matter with exhibits the module adds these levels to the leverage it applies (`proof_level` carried raw on the input), and the host's `proofs` source returns nothing for it; with no exhibits the host's `proofs` source reads `world_q.proofs` (the control)." `SocialContestInput` gains `exhibits: tuple = ()` and `proof_level: Optional[str] = None` (FI_05_B "What SC builds"; EVID_B edit 5's fields, added here because the module reads them first).
+- WHERE: `modules/social_contest/roll.py`; `modules/social_contest/hearing.py`; `engine/season/queries/inputs.py` (`SocialContestInput.exhibits`, `.proof_level`).
+- TESTS: `test_sc_hearing_evidence.py::test_a_struck_item_adds_no_proofs_level` (KERN_B check 4's companion) written first, red; `test_hear_with_no_exhibits_is_todays_roll` stays green.
+- FALSIFIER and CONTROL: "If pool 2 against a score of 8 gives the same odds with 0 and 4 standing items, the levels are not applied; if the obstacle changes with them, a favourable term was subtracted (A-25)" (EVID_B). Control: with `exhibits=()` every roll is byte-equal (realm hashes equal to B24.19's).
+- GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_sc_hearing_evidence.py engine/season/tests/test_sc_hearing_sitting.py engine/season/tests/test_sc01_provider.py -q` → pass; realm hash at seed 0 → equal.
+- HASH MOVERS: none (no input carries exhibits yet).
+- DEPENDS ON: V12 B24.19; V12 Batch B05-one-roll (the leverage channel, `proof_level`, `levels` on the record: SC-P1).
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B24's producer; `Item: B24.20`, `[skip ci]`.
+
+### B24.21 — the host passes the case file's exhibits, with their relations · EVID_B edit 5 · BUILD · HASH EQUAL
+- SOURCE: EVID_B "Exact edits" 5 (copied).
+- ADVANCES: R-04.c3.
+- INSTRUCTION: "`engine/season/seam/wrappers/sigma.py::contest_input` — for a docketed matter, `exhibits` from the case file's filed stages (every filed item presented), with `pairs`, and `proof_level` carried raw; the host does not call `standing` and imports nothing from `modules/`. The control arm (`evidence_from: ledger`, a fixture) keeps `world_q.proofs` through the host's `proofs` source." Added by this plan: `hearing_input` (B24.10) builds its `exhibits` by the same function (one host reader of the case file's stages, `pairs` computed with `options.contradicts`); `evidence_from` is a fixture with values `ledger` (control) and `case_file`, shipped at `ledger` here and set at B24.37, with its NUMBER row from B24's H block (slot 7) `[ASSUMPTION: a switch carries a NUMBER row as every `Fixtures` field does under `ci_sim_fabrication_check` — basis: `reception_gain`'s tagged line]`.
+- WHERE: `engine/season/seam/wrappers/sigma.py` (`contest_input`, `hearing_input`'s exhibit reader); `engine/season/data/fixtures.py` (`evidence_from`); `engine/season/hole_register.yaml` (one row).
+- TESTS: `test_sc_hearing_evidence.py::test_the_host_imports_nothing_from_modules_social_contest_evidence` (a source scan of `seam/wrappers/sigma.py`), written first.
+- FALSIFIER and CONTROL: the host calls `standing`; a `proofs` source read both from exhibits and from `world_q.proofs` for one matter. Control: at `evidence_from: ledger` realm hashes equal to B24.20's.
+- GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_sc_hearing_evidence.py -q` → pass; `python tools/ci_sim_fabrication_check.py` → exit 0; realm hash at seed 0 → equal.
+- HASH MOVERS: none at control.
+- DEPENDS ON: V12 B24.01 (`case_file_of`), B24.10, B24.18, B24.20.
+- IDS: H block slot 7.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B24's producer; `Item: B24.21`, `[skip ci]`.
+
+### B24.22 — what kind of proof a held claim is, read once · FI_05_B FI edit 1 · BUILD · HASH EQUAL
+- SOURCE: FI_05_B "What FI supplies" 1 (copied), E-1's table (copied), E-5 item 2; placed before EVID_B edit 4 (B24.25), which files only "admitted" cites and so reads the derived kind: U3 §1.2 keeps EVID_B → FI_05_B "in this order, the reverse edge kept"; this plan lands the reverse edge's target first so no item gates on a later one (`_part2` §10.1 check 5; UNDECIDED (3)).
+- ADVANCES: R-04.c3; FI → SC (the interface).
+- INSTRUCTION: "`queries/person_q.py`: `proof_kind(c)` (the table in E-1); `impeaches(c, record_id) -> bool` (`is_deed(c)`, subject is the Record, predicate in `COVERT_KINDS`). Both World-free." E-1's table: a deed claim, untold → `testimony`, weight 1; a deed claim with a chain → `testimony`, the hop discount `teller_weight` owns; "a claim of a `confession.*` kind about its own subject → `confession`, weight 1" (narrowed by B24.23); a Record → `record`, 1; a live `commit` or `oblige` edge → `oath` (an edge, cited by its Tenure id; the host's hold check, not `proof_kind`). "One reader: `queries/person_q.py::proof_kind(c) -> str` for claims (World-free), and the host's hold check for a Record."
+- WHERE: `engine/season/queries/person_q.py` (`proof_kind`, `impeaches`); NEW `engine/season/tests/test_fi_evidence_interface.py`.
+- TESTS: in the new file, written first, red: `test_proof_kind_follows_the_e1_table` and `test_impeaches_reads_only_a_covert_deed_on_the_record` `[ASSUMPTION: test names; the item creates them]`.
+- FALSIFIER and CONTROL: a claim whose kind is declared rather than derived. Control: realm hashes equal (no caller).
+- GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_fi_evidence_interface.py -q` → pass.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `queries/person_q.py::is_deed`, `data/rosters.py::COVERT_KINDS`, `decision/options.py::teller_weight`; V12 Batch B11-fi-readers (`08_FI_06`, `08_FI_07` §2, FI_05_B's "What FI supplies" 3–4).
+- GLOSSARY: row *proof kind* → pointer to `person_q.proof_kind`.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B24's producer (FI's edit, `IS` lane FI; one producer for the batch); `Item: B24.22`, `[skip ci]`.
+
+### B24.23 — a failed interrogation is no proof against the prisoner · H-311 (intake) · BUILD · HASH EQUAL
+- SOURCE: the intake `:429` (H-311, STILL-NEEDED; "SC/FI lane, B24 (`person_q.proof_kind`); CF-E8-4"); carry-forward `master/eval/E8.md` CF-E8-4 (`:220-241`: the register row verbatim, INSTRUCTION, WHERE, FALSIFIER, GATE); placed by `_part2` §5.6's second rule (its own text: B24, at `person_q.proof_kind`, which B24.22 creates); closes H-311.
+- ADVANCES: R-04.c3 (a prisoner who gave nothing is not worse off than one never questioned).
+- INSTRUCTION (CF-E8-4, copied): "in `person_q.proof_kind(c)` map a claim of kind `confession.withheld` to no proof kind (`None`), and `confession.partial` to `confession` at the weight of its band rather than 1 [ASSUMPTION: weight by band as `14_VERBS_SOCIAL2_C_case_question_confession.md` §5 weights the case-file entry (Overwhelming and Success 1.0, Partial 0.5) — basis: that section]; `rosters.yaml: proofs` unchanged." `engine/season/hole_register.yaml` H-311 is closed in this commit (its `cite:` names this item and the test). The `world_q.proofs` control arm (B24.21's `evidence_from: ledger`) is not edited: it counts attributed deeds, and H-311's register measurement read it; with the case-file arm on (B24.37) the proof counted is the exhibit `proof_kind` derives.
+- WHERE: `engine/season/queries/person_q.py` (`proof_kind`); `engine/season/hole_register.yaml` (H-311); `engine/season/tests/test_fi_evidence_interface.py`.
+- TESTS: `test_a_withheld_confession_is_no_proof_and_a_full_one_is` `[ASSUMPTION: test name; the item creates it]`: "a prisoner whose interrogation rolled `Failure` (a `confession.withheld` claim on file) yields zero proofs to a second judge on the bench, and one who rolled Success yields the weighted proof; red before the edit" (CF-E8-4 FALSIFIER), read on the case-file arm with a hand-built bench.
+- FALSIFIER and CONTROL: as the test; the register's own reading ("`proofs` 1.0 for all four kinds") repeated by H-311's recipe on the case-file arm after the edit → 0 for `withheld`.
+- GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_fi_evidence_interface.py -q` → pass; `python -m engine.season.harness.register --check` → exit 0.
+- HASH MOVERS: "none before the reader is called by a contest, then declared with B24" (CF-E8-4): inside the case-file arm's mover (B24.37).
+- DEPENDS ON: V12 B24.22; LANDED ALREADY (re-checked at the batch's open): `verb_table.yaml` `interrogate` emits `confession.withheld` at Failure (`:1795-1798` at the evaluation's read; open the row by name).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`.
+- LANDS IT: B24's producer; `Item: B24.23`, `[skip ci]`.
+
+### B24.24 — a citation is a telling · FI_05_B FI edit 2 · BUILD · HASH EQUAL
+- SOURCE: FI_05_B "What FI supplies" 2 (copied), E-3 (with ADM edit 2's sentence, applied in FI_05_B: "The told deposit fires at every band the told channel deposits at, whether or not the item was entered").
+- ADVANCES: R-04.c3 (the bench leaves holding what it heard).
+- INSTRUCTION: "`loop/witness.py`: the told deposit's trigger widened from "the act carries `said`" to "the act carries `said` or `cites`", one loop over the cited claims; nothing else in the deposit changes." E-3: "each cited claim lands in every admitted hearer's ledger as a told copy, chain extended by the citer, through the same guard, refraction and credit as any telling. A cited Record's content lands as a `content:<kind>` claim with no hold."
+- WHERE: `engine/season/loop/witness.py` (the told deposit's trigger; `_told_value`'s caller — `_told_value` is a serial instrument file's symbol, C3-K1: edited by one batch at a time).
+- TESTS: `test_fi_evidence_interface.py::test_a_cited_claim_enters_by_band_and_is_told` is completed at B24.25 (it needs the filing); here `test_a_cites_payload_is_told_like_said` `[ASSUMPTION: test name; the item creates it]` (a hand-built `speak` carrying `cites` of one held claim deposits one told copy per present hearer, with the citer on the chain).
+- FALSIFIER and CONTROL: "If no `Failure` run carries a told copy, E-3 has been tied to admission" (ADM). Control: no computed act carries `cites` until B24.27: realm hashes equal to B24.23's.
+- GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_fi_evidence_interface.py -q` → pass; realm hash at seed 0 → equal.
+- HASH MOVERS: none (no `cites` in computed play yet).
+- DEPENDS ON: EXISTS-IN-TREE `loop/witness.py` (the told deposit, `said`); V12 Batch B11-fi-readers (`08_FI_06`: the pairing travels).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B24's producer; `Item: B24.24`, `[skip ci]`.
+
+### B24.25 — a citing `speak` files its items by its own band · EVID_B edit 4 with ADM edit 3 · BUILD · HASH EQUAL
+- SOURCE: EVID_B "Exact edits" 4 (copied), "The three operations" row **file**, rule 2's filing refusal, gates 1–3, 5; ADM "The resolution, decided" (the four-band table) and "Exact edits" 3 ("Code, when SC builds it (… the `speak` effect under its own token, SC `_B` edit 4)"), gate, named tests; FI_05_B E-2; C-05. One item: ADM's code is a dispatch inside EVID_B edit 4's effect (§5.5, two sources landed "with" each other; UNDECIDED (4)).
+- ADVANCES: R-04.c3.
+- INSTRUCTION:
+  1. EVID_B: "`engine/season/loop/effects_information.py` — the `speak` effect writes `filed` stages for its admitted cites (CR-61's case-file Record; FI E-2's `Said`)." The case file is `case_file_of` (B24.01). An id not held, or of a kind the arrangement's `proofs:` does not admit (`proof_kind`, B24.22), is refused before the draw (E-1). A cite contradicting an item already standing for the citer's own side is refused "with the refusal kind `self_contradiction` at its `cites` cell (an eligibility refusal, which emits and decides no outcome)" (rule 2).
+  2. ADM: "a per-band dispatch over the cited ids": `Failure` → `(tick, "excluded", side, Said or record id, act id)`, no `proofs`; `Partial` → `(tick, "filed", side, rung, Said or record id, weight × ½, origin, act id)`; `Success` → `filed`, full weight; `Overwhelming` → `filed`, full weight, `first: True`. "`speak.writes` in `engine/season/verb_table.yaml` gains `Record.stages` at **all four** bands (today `[]` at every band, H-63), since `Failure` writes the `excluded` stage. `engine/season/data/fixtures.py`: `first_heard_ob`" (proposed 1, three-point sweep 0 / 1 / 2, control 0; its NUMBER row from B24's H block, slot 8; shipped at 0 here, set at B24.37).
+  3. The answering `speak` (rules 1–2): a `speak` carrying `answers: [stage index, …]` declares `contests:` and its `Event.degree` (set by `seam/ladder.py::degree_of`) is the `answered_band` the host writes on the answered exhibit at B24.21's reader.
+- WHERE: `engine/season/loop/effects_information.py` (the `speak` effect); `engine/season/verb_table.yaml` (`speak` `writes:`); `engine/season/data/fixtures.py` (`first_heard_ob`); `engine/season/hole_register.yaml` (one row); NEW `engine/season/tests/test_sc_hearing_admission.py`; `test_sc_hearing_evidence.py`; `test_fi_evidence_interface.py`.
+- TESTS (written first, red; green after): ADM's `test_admission_follows_the_citing_band_over_200_seeds`, `test_excluded_items_add_no_proofs_level`, `test_partial_enters_at_half_weight`, `test_failure_still_deposits_the_told_copy`, `test_admission_is_load_bearing_in_both_directions`, `test_no_cites_is_hash_equal`; EVID_B's `test_three_filed_items_give_three_proof_levels_and_no_obstacle_change` (gate 1), `test_an_answer_strikes_by_its_band_in_a_share_strictly_between_0_and_1` (gate 2), `test_an_impeachment_strikes_origin_wide_only_at_overwhelming` (gate 3), `test_no_cites_is_hash_equal` (gate 5), `test_a_same_side_contradicting_cite_is_refused_at_filing`; FI_05_B's `test_a_cited_claim_enters_by_band_and_is_told` (a), `test_an_answer_at_success_strikes_the_stage` (b), `test_a_forged_record_counts_until_answered` (c), `test_an_impeachment_lowers_reception_of_the_accuser` (d), `test_a_cited_death_names_the_doer_only_with_told_pairing` (e), `test_a_cited_id_not_held_is_refused_before_the_draw`. Each over-seeds test asserts `checked >= 200`.
+- FALSIFIER and CONTROL: "If any excluded item changes `proofs`, the band dispatch is wrong. If `Partial` and `Success` give the same `proofs`, the half-weight cell is not read" (ADM); "If any step reads a ledger other than the actor's own or a judge's own, the stage is not carrying the `Said`" (EVID_B); FI_05_B's (d): "If (d) lowers nobody's `reception`, the forging's deed cell is unauthored for the bench's pursuits; report it and do not add a term." Control: "`cites` empty reproduces the base content hash" (ADM, EVID_B gate 5): realm hashes equal to B24.24's.
+- GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_sc_hearing_admission.py engine/season/tests/test_sc_hearing_evidence.py engine/season/tests/test_fi_evidence_interface.py -q` → pass; on `build_hearing(seed)`, seeds 0–199 (ADM gate): "all four bands of the filing `speak` occur; per band, the case file's new stages match the table"; realm hash at seed 0 → equal.
+- HASH MOVERS: "None until `cites` is on (control: `cites` empty); then every world in which a cited `speak` folds (declared)" — B24.27.
+- DEPENDS ON: V12 B24.01, B24.15 (`build_hearing`), B24.19 to B24.24; EXISTS-IN-TREE `loop/effects_information.py` (the `speak` effect), `seam/ladder.py::degree_of`, `Said` (`state/carriers.py`).
+- IDS: H block slot 8.
+- GLOSSARY: row *exhibit* gains "entered by the citing speech's band" (one sentence, ADM).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B24's producer; `Item: B24.25`, `[skip ci]`.
+
+### B24.26 — an item first heard at Overwhelming is harder to answer · ADM edit 4 · BUILD · HASH EQUAL
+- SOURCE: ADM "Exact edits" 4 (copied); OBS §2 member 11 (`first_heard`).
+- ADVANCES: R-04.c3 (the top band of a filing means something in the room).
+- INSTRUCTION: "`engine/season/queries/inputs.py::Exhibit` (HEAR_B's record; C3-C1) gains `first: bool`, filled by the host builder from the stage's `first` mark. Inside the module, an `answer` to a `first` exhibit adds the obstacle term `first_heard` (OBS §2 member 11, `first_heard_ob`) to that answer's obstacle; out of a sitting, the answering `speak`'s host builder reads the stage's mark for the same member. `standing` rolls nothing, as now."
+- WHERE: `engine/season/queries/inputs.py` (`Exhibit.first`); `modules/social_contest/hearing.py` (the `answer` move's obstacle); `engine/season/seam/wrappers/sigma.py` (the exhibit reader; the answering `speak`'s `first_heard` member).
+- TESTS: ADM's `test_first_heard_adds_the_term_to_the_answer_only` (written first, red).
+- FALSIFIER and CONTROL: the term reaches any roll other than an answer to a `first` exhibit. Control: `first_heard_ob` 0: realm hashes equal to B24.25's.
+- GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_sc_hearing_admission.py -q` → pass.
+- HASH MOVERS: none at `first_heard_ob` 0.
+- DEPENDS ON: V12 B24.25; V12 Batch B05-one-roll (`obstacle_terms` member 11 `first_heard`, OBS §2).
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B24's producer; `Item: B24.26`, `[skip ci]`.
+
+### B24.27 — the chooser forms `speak` variants that cite · EVID_B edit 6 · BUILD · HASH MOVER(behaviour)
+- SOURCE: EVID_B "Exact edits" 6 (copied), "How an NPC builds a case and is answered by another" (copied); FI_05_B E-1 ("Choice-sourced … so a chooser and a player pick from the same Candidates").
+- ADVANCES: R-04.c3 (filing happens in computed play).
+- INSTRUCTION: "`engine/season/decision/options.py` — the `speak` variants above (FI `08_FI_05` edit 3's Candidate variants; SC-P3 edit 2's place)": "The one chooser forms `speak` variants with `cites` (edit 6): none, all held admitted items about the subject, and each held item that contradicts an item already filed against his side (an answer). It scores them with its existing terms; what a variant costs is what E-7 says (disclosure: the room learns the item and its chain)." `cites` joins `rosters.yaml: choice_sourced` (E-1).
+- WHERE: `engine/season/decision/options.py` (the `speak` Candidate variants); `engine/season/rosters.yaml` (`choice_sourced`: `cites`).
+- TESTS: `test_sc_hearing_evidence.py::test_the_chooser_forms_three_cite_variants` `[ASSUMPTION: test name; the item creates it]` (a hand-built speaker holding two admitted items and one contradicting answer: the three variant shapes are offered).
+- FALSIFIER and CONTROL: a variant citing an unheld id is formed. Control: `test_no_cites_is_hash_equal` with variant formation switched off by the `cites`-empty arm; the realm at seed 0 now moves (declared).
+- GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_sc_hearing_evidence.py -q` → pass; the realm content hash after one season at seed 0 → moved, recorded; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 1 0` → `speak` attempted and executed recorded beside B24.26's reading.
+- HASH MOVERS: "every world in which a cited `speak` folds (declared)" (EVID_B). Re-pinned at B24.99.
+- DEPENDS ON: V12 B24.22 (admission by kind), B24.25; EXISTS-IN-TREE `decision/options.py::opening_set`, `rosters.yaml: choice_sourced`.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B24's producer; `Item: B24.27`, `[skip ci]`.
+
+### B24.28 — the evidence rule is no composition role · EVID_B edit 7 · BUILD · HASH EQUAL
+- SOURCE: EVID_B "Exact edits" 7 (copied).
+- ADVANCES: none of the nine; one place reaches `standing` (the module).
+- INSTRUCTION: "`references/module_contracts.yaml` — `social_contest.evidence` is not a composition role: it is called by `roll` and `hear` inside the module, never by the host or the loop." Written as a `note:` on the `social_contest` module row; the composition artifact re-derived with its exporter if the file's role list is read by it.
+- WHERE: `references/module_contracts.yaml` (the `social_contest` row's note).
+- TESTS: none new.
+- FALSIFIER and CONTROL: a `composition_roles` row `social_contest.evidence` exists. Control: `tools/export_composition.py --check` exit 0 before and after.
+- GATE: `python tools/export_composition.py --check` → exit 0; `git grep -n "social_contest.evidence" references/module_contracts.yaml` → the note only.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B24.06 (the role list), B24.19.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`.
+- LANDS IT: B24's producer; `Item: B24.28`, `[skip ci]`.
+
+*(Batch B24-sc-hearing continues in `workplan_v12_part22_cont.md`, from B24.29; the boundary row is there. Last item written in this file: B24.28.)*

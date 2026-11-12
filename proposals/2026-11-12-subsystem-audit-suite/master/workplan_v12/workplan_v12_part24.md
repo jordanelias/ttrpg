@@ -196,3 +196,227 @@ Not in this batch, and where each is: the era reading of the spell (`30_WR_A` co
 - SOURCE: the intake `:357` (CP-T10-02 · rows E5:62 · carry-forward E5 Block C28 · "B12 with `16_PESSIMIST_WR_A`, only if its draw keys on it"); `proposals/16_PESSIMIST_WR_A_the_road_is_drawn.md:23` ("It decides the shape of plan position **CP-T10-02** … which `09_WR_B_weather` edit 3 lists 'for its owner as a draw'").
 - WHAT IT POINTS AT: CP-T10-02 (a journey costs the traveller) is built as `16_PESSIMIST_WR_A`'s road draw: B12b.08 (fixtures, `RoadInput`/`RoadOutcome`, `modules/settlements/exposure.py::exposure`), B12b.09 (`world_q.road_input`), B12b.10 (`_relocate`'s legs), B12b.11 (the travel pass, `travel.delayed`), B12b.12 (the flip). Its gate is theirs (`engine/season/tests/test_travel.py`, five tests).
 - NOT CARRIED: E5 C28's `band(territory)` (breadth-first distance from `terr_T15` in `data/geography.py`) is built "only if its draw keys on it"; WR_A's obstacle names the border count, the weather and a war, and no Calamity distance, so the condition reads false and no band function is built (UNDECIDED (7)'s companion: a Calamity term on the road is a design choice no source makes).
+
+### B12b.08 — the road's fixtures, typed pair and pure entry · `16_PESSIMIST_WR_A_the_road_is_drawn` edits 1–3 · BUILD · HASH EQUAL
+- SOURCE: `proposals/16_PESSIMIST_WR_A_the_road_is_drawn.md` "The resolution, decided", "The edits" 1–3, "The gate"; rulings A-5, A-6, A-7, A-25, A-29, A-30, A-54; closes F-PES-WR-06 (with B12b.09–.12) and CP-T10-02 (B12b.07).
+- ADVANCES: none of the nine; a journey can go wrong (the standing rule: "a thing that could go either way … goes by a draw").
+- INSTRUCTION (the source's landing order: "the typed pair and the module entry with its composition row (hash-equal) → `road_input` → `_relocate`'s legs → the travel pass behind `road_hazard` off → the flip in its own commit"; this item is the first arrow), copied:
+  1. "**`engine/season/data/fixtures.py`** — `road_hazard="off"` (swept `off` / `on`), `road_base=<a difficulty level, calibration>`, `road_step_ob=<calibration>`, `road_step=100` (the body fall; one body band is 300 wide at `band_floors.body`; a third of a band), each `[ASSUMPTION; medium; Jordan to correct; revert: road_hazard = off]`, each with a hole-register row as `body_step` has (H-125's shape; ids from `references/id_reservations.yaml` `next_free`)." The ids are this batch's H block slots 1–4 (B00), not `next_free`. Until B12b.12 calibrates them, `road_base` ships the `difficulty_levels` member `routine` and `road_step_ob` 1 `[ASSUMPTION: placeholders read only with `road_hazard` on — basis: none stated; B12b.12 replaces both]`.
+  2. "**`engine/season/queries/inputs.py`** — `RoadInput(travellers: tuple)`, each `(pid, pool: int, obstacle: float, draw_key: str)` (the obstacle a declared float, A-29); `RoadOutcome(rows: tuple)`, each `(pid, degree)`. No `World` crosses."
+  3. "**The module entry** — `exposure(inp: RoadInput) -> RoadOutcome`, pure, rolling through the module's own roll owner as `modules/fieldwork/find.py` does; home `modules/settlements/exposure.py` (the module MATTER already calls twice; decided here for the v12 card of CP-T10-02, whose v11 text names no home) `[ASSUMPTION: settlements is the right module family for a travel hazard — basis: this file's own fallback; revert: a `modules/travel/` package if the v12 card says so]`. One `composition_roles:` row in `references/module_contracts.yaml` (`settlements.exposure`, kind `step_call`) and one tuple in `loop/matter.py::STEP_CALLS`, so `registrar.require_entries` refuses a missing row at construction."
+  4. The test file is written first in this commit (U3 §6.1: "written as the batch's first commit"; here, the first commit of the road): NEW `engine/season/tests/test_travel.py` with the five named tests "`test_road_degrees_not_all_equal_over_forty_journeys`, `test_four_borders_fail_more_than_one`, `test_road_hazard_off_hash_equal`, `test_hurt_traveller_is_tended_in_some_seed`, `test_one_leg_ends_per_barrier`"; at this item only `test_road_hazard_off_hash_equal` can pass.
+- WHERE: `engine/season/data/fixtures.py` (four fixtures); `engine/season/hole_register.yaml` (four rows, block slots 1–4); `engine/season/queries/inputs.py` (`RoadInput`, `RoadOutcome`); NEW `modules/settlements/exposure.py` (`exposure`); `references/module_contracts.yaml` (`settlements.exposure`); `engine/season/loop/matter.py` (`STEP_CALLS`); NEW `engine/season/tests/test_travel.py`.
+- TESTS: the five above, written now; read before the edit: the file does not import (red). `test_road_hazard_off_hash_equal` green at this item.
+- EXPECTED RED UNTIL: B12b.11 for `test_road_degrees_not_all_equal_over_forty_journeys`, `test_four_borders_fail_more_than_one`, `test_one_leg_ends_per_barrier`; B12b.12 for `test_hurt_traveller_is_tended_in_some_seed` (it reads a later season of a realm with the arm on) — all under `[skip ci]` (E-1).
+- FALSIFIER and CONTROL: a `World` in `RoadInput` (the module test imports nothing from `engine/season/state`); `registrar.require_entries` passing with the composition row deleted. Control: `road_hazard` off and nothing calls the entry: the realm hash at seed 0 after one season equals B12b.05's reading.
+- GATE: `python -m pytest engine/season/tests/test_travel.py -k off_hash_equal -q` → pass; `python -m engine.season.harness.register --check` → exit 0 (four rows, slots 1–4); `python tools/ci_sim_fabrication_check.py` → exit 0; realm hash at seed 0, one season → equal.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `loop/matter.py::STEP_CALLS`, `manifest/registrar.py::require_entries`, `modules/fieldwork/find.py` (the roll-owner precedent), `references/module_contracts.yaml` `settlements.subsist`; V12 B12b.04 (`leg_price`, read by B12b.09); V12 Batch B00 (H block).
+- GLOSSARY: none (`road_hazard`'s fixture note defines it: "a journey that crosses a border takes one draw on how the traveller arrives").
+- IDS: H block slots 1–4.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B12b's producer; `Item: B12b.08`, `[skip ci]`.
+
+### B12b.09 — who is on the road, and their odds · `16_PESSIMIST_WR_A` edit 4 · BUILD · HASH EQUAL
+- SOURCE: `proposals/16_PESSIMIST_WR_A_the_road_is_drawn.md` "The resolution, decided" (Pool, Obstacle, Draw, Degree), "The edits" 4; rulings A-5, A-6, A-7, A-25, A-30, A-54.
+- ADVANCES: none of the nine.
+- INSTRUCTION: copied: "**`engine/season/queries/world_q.py`** — `road_input(w)`: the travellers with a non-empty `travel_leg` whose last leg crossed a border, their `faculty`, their obstacle by the rule above." The rule, copied: "*Pool:* `seam/wrappers/pool.py::faculty(w, traveller, "move")`, the one owner of a person's pool for a verb (`pool_of(score, addends, pool_add, pool_floor)`, A-6; so a skill a designer attaches to `move` is read here with no engine edit). *Obstacle:* composed as every task obstacle is (U1 architecture §4: the even line, the difficulty, the stand-in for nobody opposite), with `road_base` the difficulty (a `difficulty_levels` member, its size set by the joint calibration of A-5/A-6/A-7, not 2), and three named hostile terms (A-25): the leg's border count (`leg_price`'s distance, the one owner), one step for each crossed territory whose season draw this tick landed Failure (bad weather, A-54; none while the weather arm ships at its control), and one step for each crossed territory in which a field was fought this tick or the last (`field.lost` / `field.won` placed there: a war on the road). The step's size is one fixture, `road_step_ob`, set with `road_base` at the calibration. *Draw:* keyed `H(seed, tick, pid, "road:<leg index>")` through the one keyed-draw owner (A-30), carried on the typed input as `draw_key`. *Degree:* `engine/dice_engine/dice_engine.py::degree_from_net` through `seam/ladder.py::degree_of`, the single ladder." The season draw's band per territory is B12b.03's (`season_factor_of`'s band, exposed for this read) `[ASSUMPTION: a small `season_band_of(w, territory)` beside `season_factor_of`, so the band has one owner — basis: "whose season draw this tick landed Failure"]`.
+- WHERE: `engine/season/queries/world_q.py` (`road_input`; `season_band_of`).
+- TESTS: in `test_travel.py`: `test_road_input_obstacle_counts_borders_bad_weather_and_war` `[ASSUMPTION: test name]` — a hand-built three-border leg with one crossed territory at a Failure band and one with a `field.won` last tick reads obstacle `road_base` + (3 + 1 + 1) × `road_step_ob`; red before.
+- FALSIFIER and CONTROL: a traveller whose leg crossed no border is in the input (A journey of zero borders draws nothing: the source's R completeness). Control: nothing calls `road_input` with the arm off; realm hash equal.
+- GATE: `python -m pytest engine/season/tests/test_travel.py -k road_input -q` → pass; realm hash at seed 0, one season → equal.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B12b.08 (`RoadInput`), B12b.04 (`leg_price`), B12b.03 (the season band); EXISTS-IN-TREE `seam/wrappers/pool.py`, `seam/ladder.py`; V12 Batch B05 (U1 architecture §4's task obstacle, `difficulty_levels`), Batch B06 (the keyed draw).
+- NAMES: `seam/wrappers/pool.py::faculty` → the pool owner's name as B04/B05 leave it (D-U1-08, `pool_of`) `[ASSUMPTION: the producer greps the symbol at the item's open]`; "the round of the act" in the source's evidence → the lap (B04).
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B12b's producer; `Item: B12b.09`, `[skip ci]`.
+
+### B12b.10 — a journey appends one leg per point of its price · `16_PESSIMIST_WR_A` edit 6 · BUILD · HASH EQUAL
+- SOURCE: `proposals/16_PESSIMIST_WR_A_the_road_is_drawn.md` "Time", "The edits" 6; with CP-T10-01's budget arm (`master/eval/E1.md` CP-T10-01, "Falsifier"); UNDECIDED (4).
+- ADVANCES: none of the nine.
+- INSTRUCTION: copied: "**`engine/season/loop/effects_migration.py::_relocate`** — appends `leg_price(origin, dest)` entries (the intermediate territory ids on the route) instead of `[dest]`; one entry where the price is one, which is today's." And "Time. A journey of more than one border takes more than one season: `_relocate` appends one leg per border crossed (it appends one per act today), and MATTER ends **one leg a barrier** instead of all of them. The traveller's `contain` edge moves at the act, as now …; what the remaining legs hold back is his budget, which is the price `leg_price` shows the chooser. No new carrier: `travel_leg` is already a list." Plan's addition: the append is behind `route_pricing` (on: the `leg_price` entries; off: `[dest]`, today) `[ASSUMPTION: the switch — basis: the source's control "with `road_hazard = off` the season's hash is the base hash" and `09_WR_B_weather` edit 3's "charges one point when it is off (today)"]`. `decision/budget.py` already subtracts `len(p.travel_leg) * budget_leg_penalty`, so the price reaches the budget with no edit there. Every `travel_leg` writer goes through `_relocate` (the card's asymmetry list: `_relocate`, MATTER's clear, a probe in `harness/probes.py` that sets bare strings, which a bare id reads as 1 point).
+- WHERE: `engine/season/loop/effects_migration.py` (`_relocate`).
+- TESTS: in `test_route_leg.py`: the card's "after a round-0 journey to S-013 a hold-less person's `budget()` is 1" (with `route_pricing` on; "round 0" is the first lap) as `test_far_journey_spends_the_lap_budget`; in `test_travel.py`: `test_legs_appended_equal_leg_price` `[ASSUMPTION: test names]`; red before.
+- FALSIFIER and CONTROL: a priced journey of four points appending one entry; the off arm appending anything but `[dest]`. Control: `route_pricing` off → realm hash at seeds 0–2 after one season equal to B12b.05's reading.
+- GATE: `python -m pytest engine/season/tests/test_route_leg.py engine/season/tests/test_travel.py -k "budget or legs_appended" engine/season/tests/test_migrate_capacity.py engine/season/tests/test_march.py -q` → pass; realm hash at seed 0, one season → equal.
+- HASH MOVERS: none (off arm).
+- DEPENDS ON: V12 B12b.04 (`leg_price`), B12b.09; EXISTS-IN-TREE `loop/effects_migration.py::_relocate`, `decision/budget.py::budget`, `Person.travel_leg`.
+- NAMES: "round 0" → lap 0 (B04).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B12b's producer; `Item: B12b.10`, `[skip ci]`.
+
+### B12b.11 — the travel pass takes the road's draw, behind `road_hazard` · `16_PESSIMIST_WR_A` edits 5, 7 · BUILD · HASH EQUAL
+- SOURCE: `proposals/16_PESSIMIST_WR_A_the_road_is_drawn.md` the degree table, "The edits" 5 and 7, "The gate"; one item because the two share the travel pass's emissions and one gate (E-13).
+- ADVANCES: none of the nine.
+- INSTRUCTION: copied: "**`engine/season/loop/matter.py`, the travel pass** — with `road_hazard` on: call the entry once; per traveller, by degree, the writes of the table; the leg list loses its first entry instead of being cleared. With it off: today's loop, byte for byte." The table:
+
+  | degree | how he arrives | write |
+  |---|---|---|
+  | Overwhelming | on time, and with news: he holds a firsthand Observation of the stock of the place he passed (`stores:<kind>`, CR-23's predicate) | `travel.ended` with `observed=` |
+  | Success | on time | `travel.ended` (today's write) |
+  | Partial | **spent**: the leg is not emptied this barrier, so the budget penalty stands another season (he is a scene short in the season after the journey) | no write; one `travel.delayed` Event, causes the `travel.moved` |
+  | Failure | arrives, **hurt**: his body falls by `road_step` (fixture), through the body write and `_crossings`, as a hunger fall does | `body.changed` (cause: the `travel.moved`), then `travel.ended` |
+
+  "Death is not an outcome of this table. A body that reaches zero dies through `_die`, the one owner, as it does for hunger." "**`engine/season/write_matrix.yaml`** — `(Person, travel_leg)`'s MAT row gains the kind `travel.delayed`; `(Person, body)`'s MAT emission is unchanged." The host writes "through the gate at cells the write matrix already licenses for MATTER (`(Person, body)` `[MAT, RES]`, `(Person, travel_leg)` `[MAT, RES]`)".
+- WHERE: `engine/season/loop/matter.py` (the travel pass); `engine/season/write_matrix.yaml` (`(Person, travel_leg)`).
+- TESTS: in `test_travel.py`, green at this item: `test_road_degrees_not_all_equal_over_forty_journeys` ("with `road_hazard` on and forty hand-built journeys of three borders by one person kind (PROXY), the degrees **are not all equal**, at least one traveller arrives spent and at least one arrives hurt, and the count of each differs between two seeds; the loop asserts it read at least forty"), `test_four_borders_fail_more_than_one` ("a journey of one border and a journey of four differ in their share of Failure in the expected direction over those forty"), `test_one_leg_ends_per_barrier`, `test_road_hazard_off_hash_equal`.
+- FALSIFIER and CONTROL: a Failure that kills a traveller above body 0 (death outside `_die`); an off-arm run whose travel pass differs from today's. Control: `road_hazard` off → the realm hash at seeds 0–2 after one season equals B12b.05's reading.
+- GATE: `python -m pytest engine/season/tests/test_travel.py -q` → four pass, `test_hurt_traveller_is_tended_in_some_seed` red (EXPECTED until B12b.12); `python -m engine.season.harness.register --check` → exit 0; realm hash at seed 0, one season → equal.
+- HASH MOVERS: none at `off`.
+- DEPENDS ON: V12 B12b.08, .09, .10; EXISTS-IN-TREE `loop/matter.py::_crossings`, `::_die`, the travel pass that empties `travel_leg`; V12 Batch B05/B04 (`difficulty_levels`).
+- GLOSSARY: new row *spent* (a journey's Partial): "arrived, but a scene short in the season after, as a tired traveller is"; event kind `travel.delayed` named in the row.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B12b's producer; `Item: B12b.11`, `[skip ci]`.
+
+### B12b.12 — `road_hazard` on, `road_base` and `road_step_ob` calibrated · `16_PESSIMIST_WR_A` "the flip in its own commit" · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/16_PESSIMIST_WR_A_the_road_is_drawn.md` "Cost class" ("a declared hash mover when `road_hazard` flips, its own commit"; "Tier: `opus` for the calibration of `road_base` and `road_step_ob`"), "The falsifier", "The gate" (the tended traveller); U3 §1 item 13's "each flip its own declared mover".
+- ADVANCES: none of the nine; drama on the road with nobody watching (`travel.delayed`, a `body.changed` caused by a `travel.moved`).
+- INSTRUCTION: (1) Sweep `road_base` over the `difficulty_levels` members and `road_step_ob` over 0.5, 1, 2 `[ASSUMPTION: the sweep grid — basis: none stated]` on `build_realm(s)`, s = 0, 1, 2, two seasons each (three in the source; A-114), with `road_hazard` on; read for each cell the falsifier's two numbers through `harness/aperture.py`'s per-person census: individuals who travelled across a border and how many were harmed (hurt or spent), and the most moves one person made in one season. (2) Choose the cell whose reading shows harmed travellers at every seed and fewer than every traveller harmed, at the smallest `road_base` that does so `[ASSUMPTION: the selection rule — basis: the falsifier asks that neither "harmed 0" nor "max moves 3" shows; it names no band]`; write both values with their `[ASSUMPTION; medium; Jordan to correct]` tags and the sweep's table in the commit body. (3) `road_hazard="on"`. Revert: `road_hazard = off`.
+- WHERE: `engine/season/data/fixtures.py` (`road_hazard`, `road_base`, `road_step_ob`); `engine/season/hole_register.yaml` (the two rows' `default:` text, block slots 2–3).
+- TESTS: `test_hurt_traveller_is_tended_in_some_seed` turns green ("a traveller hurt on the road is `tend`ed in a later season in at least one seed (the outcome is recoverable in play, not only on paper)") at two seasons over seeds 0–2, asserting it checked three seeds.
+- FALSIFIER and CONTROL: copied, at two seasons: "a three-season realm run at seeds 0-2 read through `harness/aperture.py`'s per-person census must show neither [`harmed 0` at every seed, `max moves by one person in one season 3`] for journeys that cross borders. If it does with `road_hazard` on, the draw is not reached by computed play and the fault is upstream (the chooser forms no cross-border `move`)." Control: `road_hazard` off reproduces B12b.11's hash.
+- GATE: `python -m pytest engine/season/tests/test_travel.py -q` → five pass; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 0` (and seeds 1, 2) → `travel.delayed` or a road-caused `body.changed` at some seed, and the realm hash moved (declared); the sweep table in the commit body.
+- HASH MOVERS: every seeded world in which someone crosses a territory border. Declared; B12b's one re-pin at B12b.99.
+- DEPENDS ON: V12 B12b.11.
+- GLOSSARY: none.
+- COST and TIER: calibration; `sonnet` runs the sweep, `opus` reads it and picks the cell (the source's tier).
+- LANDS IT: B12b's producer; `Item: B12b.12`, `[skip ci]`.
+
+### B12b.13 — a private tally raises a mandatory question · `09_WR_provided_arcs` edit 1 · BUILD · HASH EQUAL
+- SOURCE: `proposals/09_WR_provided_arcs.md` head (A-47), "Edit 1", the gate's falsifier (1), "The falsifier" for edit 1; rulings A-47, A-48, L3 clause 1, L5; closes F-WR-08's COUNTER row.
+- ADVANCES: none of the nine; one lawful carrier for "a crossing forces the moment".
+- INSTRUCTION: copied: "Add `rosters.yaml: tally_axes`, the closed registry L3 clause 1 asks for, shipped **empty** (the control: `questions_for` is byte-identical):
+  ```yaml
+    tally_axes:
+      source: "L3 clause 1; `queries/world_q.py::single_holder_counter` (which raises Unspecified without it)"
+      members: {}      # <axis id>: {counts: [<Event kind>, ...], about: <person | office | rung>, at: <int>}
+  ```
+  `world_q.tally_reached(w, p) -> tuple` returns, for each axis whose `counts` kinds number at least `at` among the claims in `p`'s **own** ledger about one referent, that referent. `questions_for` appends it to the `added` splice as a classed referent (the `vacancies` shape: a standing occasion, no new source), stamped `mandatory` (`Question.mandatory`, `12_ARCS_arcs_as_staged_goals.md`; A-47: placed first on his slate, not declinable for another, heading A-48's list for the player), so the rows that declare that class form on it and the person chooses among them; the scene's outcome is the drawn act he takes. Nothing fires: a full tally is an occasion, and what he does with it is his (L5). … `single_holder_counter` stops being probe-only and is the body `tally_reached` composes on." The loader checks each member's `counts` against the Event kinds, `about` against the three classes and `at` an int above 0.
+- WHERE: `engine/season/rosters.yaml` (`tally_axes`); `engine/season/data/rosters.py` (`TALLY_AXES`, its check); `engine/season/queries/world_q.py` (`tally_reached`, `questions_for`'s splice, `single_holder_counter`); NEW `engine/season/tests/test_tally_axes.py`.
+- TESTS: in the new file (`[ASSUMPTION: file and test names; the item creates them]`), written first, red: "a person holding three claims of an authored axis's kinds about one seat-holder has that person among his classed referents, and with two has not; a second person holding none is offered nothing" (a planted axis with `at: 3`) as `test_three_claims_reach_the_tally_two_do_not`, `test_a_person_holding_none_is_offered_nothing`, `test_tally_referent_is_mandatory`; `engine/season/tests/test_cl_thrust_b31_current_stage.py` green unedited ("the ledger-predicate precedent, unchanged").
+- FALSIFIER and CONTROL: "Edit 1 fails if the referent appears for a person who does not hold the claims (a world read leaked into a person-side tally), or if anything happens at the count with no act." Control: the empty registry → `questions_for` byte-identical; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 1 0` "hashes EQUAL at the empty registry".
+- GATE: `python -m pytest engine/season/tests/test_tally_axes.py engine/season/tests/test_cl_thrust_b31_current_stage.py -q` → pass; `aperture 1 0` → hash equal.
+- HASH MOVERS: none at the empty registry (an authored member is a declared mover, content's).
+- DEPENDS ON: EXISTS-IN-TREE `queries/world_q.py::single_holder_counter`, `::questions_for`; V12 Batch B10 (`Question.mandatory`, `12_ARCS_arcs_as_staged_goals`).
+- GLOSSARY: new row *tally* (an axis of `tally_axes`): "what one person has come to hold against a referent, counted from his own claims, as one keeps a tally of grievances"; owner `rosters.yaml: tally_axes`.
+- COST and TIER: small build (the rows are content, design-first per arc); `sonnet`, `high`.
+- LANDS IT: B12b's producer; `Item: B12b.13`, `[skip ci]`.
+
+### B12b.14 — a fed body mends, behind `body_mend` · `09_WR_provided_arcs` edit 2 · BUILD · HASH EQUAL
+- SOURCE: `proposals/09_WR_provided_arcs.md` "Edit 2", the gate's falsifier (2), "The falsifier" for edit 2; lands after `U5d_WR_owed_edits.md` §3 (Batch B12a, as the head requires); UNDECIDED (6); closes H-211's rising half.
+- ADVANCES: none of the nine; the positive half of hunger.
+- INSTRUCTION: copied: "r2 §A.4's signed step, `body_step × (2·ration − 1)`, replaces the falling half now built; `_crossings` gains an upward predicate (`before < floor <= after`) for the body row only, so recovery is audible. A new fixture `body_mend` ships `False` (the control: no rise, no upward crossing; MW-11's own control: the count of downward site crossings is unchanged with the predicate added). This is CP-T10-04's ground." Plan's reading (UNDECIDED (6), a): with `body_mend` on, a cohort whose ration this season exceeds one half gains `body_step × (2·ration − 1)` up to its ceiling (`max(body, body_ceiling)`); the fall stays B12a's drawn loss, so `2·ration − 1 < 0` writes nothing here.
+- WHERE: `engine/season/loop/matter.py` (the body pass; `_crossings`' upward predicate for the body row); `engine/season/data/fixtures.py` (`body_mend`, its tag); `modules/settlements/subsist.py` (the ration per cohort, if the outcome does not yet carry it) `[ASSUMPTION: whether `SubsistOutcome` carries the ration — the producer reads it at the open]`.
+- TESTS: in `engine/season/tests/test_hunger.py` `[ASSUMPTION: the file — basis: it covers the body pass's hunger arms]`: "a cohort fed full rations from below a body floor crosses it upward and the crossing is anchored on it, and at `body_mend` False does not" as `test_fed_cohort_mends_and_crosses_upward`, `test_body_mend_off_no_rise`, `test_downward_site_crossings_unchanged_by_the_upward_predicate` `[ASSUMPTION: test names]`; red before.
+- FALSIFIER and CONTROL: "Edit 2 fails if a fed body rises past its ceiling (`Person.body_ceiling`, CP-T03-07) or a downward crossing count moves." Control: `body_mend` False → hash equal (`aperture 1 0`).
+- GATE: `python -m pytest engine/season/tests/test_hunger.py engine/season/tests/test_in34_bodies_clock.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 1 0` → hash equal.
+- HASH MOVERS: none at `False`.
+- DEPENDS ON: EXISTS-IN-TREE `loop/matter.py::_crossings`, the hunger pass's `sub.falls`, `Person.body_ceiling`; V12 Batch B12a (`U5d_WR_owed_edits` §3; `09_WR_B_draws_not_thresholds` edit 2's drawn fall).
+- GLOSSARY: none (`body_mend`'s fixture note: "a fed cohort's body steps back up").
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B12b's producer; `Item: B12b.14`, `[skip ci]`.
+
+### B12b.15 — restated needs bound in the corpus overlay · `09_WR_provided_arcs` edit 4 · BUILD · HASH EQUAL
+- SOURCE: `proposals/09_WR_provided_arcs.md` "Edit 4", the resolution table; `audits/09_WR_audit.md` §13 (the "wrongly stated" rows: the list of cases).
+- ADVANCES: none of the nine; the corpus instrument says by what each restated need is carried.
+- INSTRUCTION: copied: "For the cases in §13's 'wrongly stated' rows, the `exercises:` overlay binds the need (by `need_sha`) to the token of its lawful form: `H-235` for the substrate needs, `H-211` for recovery, the new `tally_axes` axis for a private counter, `CR-89`'s register row when it lands for an institutional clock. No case file is edited: the case states what must be simulated; the overlay says by what." The case list is read from `audits/09_WR_audit.md` §13 at the item's open and copied into the commit body (E-12: the list is cited, not retyped here). An institutional-clock need waits on CR-89 (Batch B21d) and is left unbound with that note.
+- WHERE: `engine/season/cases/exercises/<id>.yaml` for each listed case.
+- TESTS: none new; `corpus_run`'s overlay loader reads every edited file.
+- FALSIFIER and CONTROL: an overlay binding a need to a token no register row or roster member carries (the loader refuses it). Control: case files unedited (`git diff --stat -- engine/season/cases/*.yaml` empty outside `exercises/`); realm hash equal.
+- GATE: `PYTHONHASHSEED=0 python -m engine.season.harness.corpus_run` → the ARC lane's `RUNS-UNDECLARED` falls (the source: "ARC lane: fewer RUNS-UNDECLARED"), before (`reading @<sha>`) and after quoted.
+- HASH MOVERS: none `[ASSUMPTION: the overlay's bindings are read by the grader, not the loop — basis: "Edits 3 and 4 change the harness and the corpus overlay only"]`.
+- DEPENDS ON: V12 B12b.13 (`tally_axes`); EXISTS-IN-TREE `engine/season/cases/exercises/`, `harness/corpus_run.py`'s overlay loader.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B12b's producer; `Item: B12b.15`, `[skip ci]`.
+
+### B12b.16 — the corpus stops planting endings from prose · `09_WR_provided_arcs` edit 3 · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/09_WR_provided_arcs.md` "Edit 3", the gate ("no `d_forced`").
+- ADVANCES: none of the nine; the corpus measures what the engine does, not a planted date.
+- INSTRUCTION: copied: "Delete the block … that plants `d_forced` for a `forced_by_threshold` case. What it plants (a holderless Date and a docket item whose matter is a Proposition) fires, forms no slot, can be determined by nobody and lapses. Replace it with nothing; the case's overlay may author a `tally_axes` row once edit 1 lands, which is the lawful form of 'a crossing forces the moment'. [The test] which asserts the planted date fires, is deleted with the block (it tests the plant, not a behaviour of the game). `ENDINGS_CLASSIFIED.yaml` stays as the classification it says it is; its path in `corpus_run.py` [the module docstring's two mentions] and in H-176 is corrected to `engine/season/ENDINGS_CLASSIFIED.yaml`." The block is the `if (ENDINGS.get(str(case.get("id"))) or {}).get("forced_by_threshold"):` branch at the end of `harness/corpus_run.py::build_at`; the test is `engine/season/tests/test_season_shape.py::test_calendar_a_forced_corpus_date_fires_emits_and_lands_a_claim`. A test of that file whose comment cites `d_forced` among the measured corpus counts (the `speak` re-record note) is re-read: a corpus count it asserts that moves is re-recorded in this commit with its reason (a pin this item alone moves, E-1).
+- WHERE: `engine/season/harness/corpus_run.py` (`build_at`; the docstring's path); `engine/season/tests/test_season_shape.py` (one test deleted; any moved corpus count re-recorded); `engine/season/hole_register.yaml` (H-176's path text).
+- TESTS: one deleted; `test_season_shape.py` otherwise green.
+- FALSIFIER and CONTROL: `grep -n d_forced engine/season --include=*.py` finds a plant (any hit outside comments). Control: a case with no `forced_by_threshold` flag builds the same world (its corpus hash unchanged).
+- GATE: `git grep -n "d_forced" -- engine/season/harness` → nothing; `python -m pytest engine/season/tests/test_season_shape.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.corpus_run` → "no `d_forced`", its corpus hashes for the forced cases moved (declared).
+- HASH MOVERS: the corpus worlds of every `forced_by_threshold` case. Declared; B12b's re-pin.
+- DEPENDS ON: V12 B12b.13; EXISTS-IN-TREE `harness/corpus_run.py::build_at`, `engine/season/ENDINGS_CLASSIFIED.yaml`, `files.ENDINGS_CLASSIFIED_YAML`.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B12b's producer; `Item: B12b.16`, `[skip ci]`.
+
+### B12b.17 — H-171 limit 1: a cohort in corpus worlds · H-171 · POINTER
+- SOURCE: the intake `:324` (H-171 · rows E3:597, E7:69 · carry-forward `master/eval/E7.md` "### H-171": "Carry limit 1 (seat a cohort in corpus worlds; `ED-SE-0055`) and limit 2 (the `Rung.envelope` reader, Layer 1 `04 §B.3`) as one item, or retire them with a stated reason"; GATE "a corpus world's larder draws a nonzero population"); placed by §5.6's first rule (`07_SE_arc_needs.md` names H-171 at `:36`).
+- WHAT IT POINTS AT: limit 1 is built by B12b.21 (`07_SE_arc_needs` (a): a case's `world:` block seats a cohort through `seat_cohorts`); its gate is that item's headless run, where the case's larder draws for a nonzero population. `U5d_SE_owed_edits` §1's reading on H-171's cite is B12b.27. Limit 2 is B12b.18.
+
+### B12b.18 — H-171 limit 2 and `Rung.envelope`'s game reader · H-171; `U5d_SE_owed_edits` §3 · BLOCKED (Jordan: `04` §B.3's `Rung` tuple, or a carrier for the reader)
+- SOURCE: `master/eval/E7.md` "### H-171" (limit 2); `proposals/U5d_SE_owed_edits.md` §3 ("Keep the field (C3-C4) … **INCOMPLETE:** its game reader is owed and no proposal in the suite carries one … **Owed to Jordan (Layer 1 text, not applied):** if the field is to go, `04` §B.3's `Rung` tuple drops `envelope` and `04` §A.2's `loop/census` row drops '`envelope`' by his amendment, with IN-44's commit then deleting the field and the matrix row together (one declared re-pin if `Rung` hashes it)").
+- WHAT IS MISSING: a game reader of `Rung.envelope` (no proposal carries one; `07_SE_population_regrowth_B` writes `Person.weight`, not the envelope), or Jordan's amendment of `04` §B.3 that lets IN-44 delete the field. `V12_STRUCTURE_part2.md` §5.7: "Any other symbol with no carrier makes the dependent part `BLOCKED (v12: a carrier is owed)`". The field is kept (C3-C4); nothing here edits it. It goes on the head's held-back list beside A-17's canon lines (Layer 1 text owed to Jordan).
+
+### B12b.19 — `requisition` and `transfer` carry a chosen share · `07_SE_arc_needs` (b) · BUILD · HASH EQUAL
+- SOURCE: `proposals/07_SE_arc_needs.md` §1 item 2, §3 (b) with its `[GROUNDED, 25 G-27]` note, §4 (b) and the named tests (7b-7); rulings A-56, A-81, A-24 (through `U5d_SE_owed_edits` §7's draw); closes R-SE (§13's amount row).
+- ADVANCES: none of the nine; extraction has a size (NPC-013, NPC-037, NPC-083).
+- INSTRUCTION: copied: "**`engine/season/rosters.yaml: choice_sourced` — `amount` as a choice.** The mechanism exists: `decision/options.py::_fanned_choices` fans a bag over the closed sets a row's `choice_sourced` keys range over (`marshal`'s `role × retreat_at`), and a one-member range is not fanned. Add:
+  ```yaml
+    amount_shares:
+      source: "proposals/2026-11-12-subsystem-audit-suite/proposals/07_SE_arc_needs.md"
+      open: false
+      ordered: true
+      note: "The share of the giving rung's stock a store move takes, per-mille. One member is the control: no fan."
+      values: [1000]          # shipped: one member, so no act is renamed and no hash moves
+    choice_sourced:
+      requisition: [amount_share]
+      transfer:    [amount_share]
+  ```
+  `_operands` computes `amount` for these two rows as `max(1, stock_known × share // 1000)` where `stock_known` is the actor's newest `stores:<kind>` claim about the giving rung (CR-23's stock report is its source; `LedgerReader` reads it) and falls back to today's derivation when he holds none. Authoring `[250, 500, 1000]` is the flip and a declared mover." The grounding governs the spelling: "a range is the member tuple of a closed roster (`data/verbs.py` `CHOICE_RANGES`), and a key also needs a `CHOICE_CARRIER` the row writes … So the range is a roster of three members, by that precedent `'250'`, `'500'`, `'1000'`" — so `values: ["1000"]`, `CHOICE_RANGES["amount_share"] = tuple(AMOUNT_SHARES)`, and `CHOICE_CARRIER["amount_share"]` names the store cell the two rows write (`Rung.stores`) `[ASSUMPTION: the carrier's spelling — the producer reads both rows' `writes:` at the open]`. "Every band leaves a write (A-81): a `requisition` that is refused, or that lands a lesser band than the share asked, leaves the refusing holder's deed as a claim in the requisitioner's ledger and his own (the `a_refusal_is_remembered` carrier, `16_PESSIMIST_CORE_a_refusal_is_remembered.md`)."
+- WHERE: `engine/season/rosters.yaml` (`amount_shares`, `choice_sourced`); `engine/season/data/verbs.py` (`CHOICE_RANGES`, `CHOICE_CARRIER`); `engine/season/data/rosters.py` (`AMOUNT_SHARES`); `engine/season/decision/options.py` (`_operands`); the `requisition` refusal's claim deposit where B09's carrier lands it.
+- TESTS: in `engine/season/tests/test_demand_delivery.py`, written first and read red: "`test_amount_shares_one_member_is_not_fanned`, `test_two_members_fan_two_candidates_differing_only_in_amount`, `test_a_refused_requisition_leaves_a_claim_of_the_refusal` (A-81)".
+- FALSIFIER and CONTROL: "(b) On `harness/scarce.governed` with `amount_shares: [250, 1000]`: the governor's candidate set holds two `requisition` candidates differing only in `amount`, and the executed one moves that amount. **Control:** `[1000]` reproduces the shipped `scarce` hashes."
+- GATE: `python -m pytest engine/season/tests/test_demand_delivery.py -q` → pass; realm hash at seed 0, one season → equal to B12b.16's reading.
+- STOPS IF: the A-81 deposit for a refused `requisition` is not already written by B09's `a_refusal_is_remembered` carrier and this item must add it: then the item is `MOVER(behaviour)` wherever a `requisition` is refused, declared in its commit (read `requisition.refused`'s handling at the open and say which).
+- HASH MOVERS: none at `["1000"]` (see STOPS IF).
+- DEPENDS ON: EXISTS-IN-TREE `decision/options.py::_fanned_choices`, `::_operands`, `::_from_shortfall_claim`, `data/verbs.py::CHOICE_RANGES`, `::CHOICE_CARRIER`, `harness/scarce.py::governed`; V12 Batch B09 (`16_PESSIMIST_CORE_a_refusal_is_remembered`).
+- GLOSSARY: new row *share* (`amount_share`): "the part of a store a giver hands over, in thousandths, as a share of a harvest"; owner `rosters.yaml: amount_shares`.
+- COST and TIER: edit plus content; `sonnet`, `high`.
+- LANDS IT: B12b's producer; `Item: B12b.19`, `[skip ci]`.
+
+### B12b.20 — a foreign settlement may hold stores · `07_SE_arc_needs` (c) · BUILD · HASH EQUAL
+- SOURCE: `proposals/07_SE_arc_needs.md` §1 item 3, §3 (c), §4 (c).
+- ADVANCES: none of the nine; a trade official has something to trade (NPC-090), with CR-49 (Batch B12c).
+- INSTRUCTION: copied: "**`harness/populated.py` — `FOREIGN_CAST` rows may carry `stores:`.** One optional key on the settlement entry of a `FOREIGN_CAST` place, written as a builder's stores seed at the foreign settlement rung. Shipped absent. With CR-49 (`exchange` names another rung) it gives NPC-090 a counterparty stock."
+- WHERE: `engine/season/boot/realm.py` (the foreign-place loop; was `harness/populated.py`, B03c); `engine/season/data/rosters.py` (`FOREIGN_CAST`'s key check).
+- TESTS: `test_foreign_stores_key_seeds_the_foreign_rung`, `test_foreign_cast_without_stores_builds_as_before` in `engine/season/tests/test_corpus_world_overlay.py` (created by B12b.21; this item creates the file if it lands first) `[ASSUMPTION: test names and file]`.
+- FALSIFIER and CONTROL: "(c) `build_realm(0, foreign=True)` with the key absent hashes as today." A planted `stores:` that seeds no stock at the foreign rung.
+- GATE: `python -m pytest engine/season/tests/test_corpus_world_overlay.py -k foreign -q` → pass; `build_realm(0, foreign=True)` content hash → equal to B12b.19's reading.
+- HASH MOVERS: none (shipped absent).
+- DEPENDS ON: EXISTS-IN-TREE `FOREIGN_CAST` (`data/rosters.py`); V12 Batch B03c (`boot/realm.py`).
+- NAMES: `harness/populated.py` → `boot/realm.py` (B03c).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B12b's producer; `Item: B12b.20`, `[skip ci]`.
+
+### B12b.21 — a case world may seat a cohort, stock a larder and mint Sites · `07_SE_arc_needs` (a) · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/07_SE_arc_needs.md` §1 item 1, §3 (a), §4 (a) and the named tests; closes H-171 limit 1 (B12b.17) and `ED-SE-0055`'s corpus half.
+- ADVANCES: none of the nine; the corpus can observe a settlement's need (NPC-083's third core need).
+- INSTRUCTION: copied: "**(a) `harness/corpus_run.py` — a `world:` overlay block.** The overlay loader beside `CAST_KEYS` gains a second closed set, `WORLD_KEYS = ("cohort", "stores", "sites")`, read from the case's `cases/exercises/<id>.yaml`:
+  ```yaml
+  case: NPC-083
+  world:
+    cohort: {weight: 6}                 # seated at the case's settlement rung, as seat_cohorts seats one
+    stores: {grain: 8, salt: 4}         # the settlement's larder at build
+    sites:  [harbour]                   # producing Sites at the settlement; [] is a place that makes no food
+  ```
+  `build_at` applies it after the cast: the cohort through `harness/populated.py::seat_cohorts` (one owner of what a cohort is), the stores as a builder's write, the Sites as it already mints Sites. A case with no `world:` block is built as today. The loader refuses a key outside the set, a weight that is not an int above 1, a kind outside `site_kinds`, and a `world:` block on a case whose `scale` is `person` (the corpus's person-scale worlds stay rooms). [ASSUMPTION; medium; Jordan to correct; revert: delete the block and `WORLD_KEYS`.] Authored in the same change for the three cases whose `core` needs turn on it: NPC-083 (above), NPC-013 (`cohort` at each of his two case territories' settlements, stocked, so a tithe has something to take and someone to take it from) and NPC-037 (stores at the Crown seat's rung, so the treasury post has a treasury)." The three blocks' values are `[ASSUMPTION; medium; Jordan to correct]` content (D-19), listed in the batch's PR body.
+- WHERE: `engine/season/harness/corpus_run.py` (`WORLD_KEYS`, the overlay loader, `build_at`); `engine/season/cases/exercises/NPC-083.yaml`, `NPC-013.yaml`, `NPC-037.yaml` (`world:`); NEW `engine/season/tests/test_corpus_world_overlay.py`.
+- TESTS: in the new file, written first and read red: "`test_world_block_seats_a_cohort_stocks_a_larder_and_mints_sites`, `test_world_block_refuses_an_unknown_key_a_bad_weight_a_bad_site_kind_and_a_person_scale_case`, `test_case_without_world_block_hashes_as_before`".
+- FALSIFIER and CONTROL: copied, at two seasons: "(a) `python -m engine.season.harness.headless --case NPC-083 --seasons 4 --seed 0` [run at `--seasons 2`; four in the source, A-114]: a `stores.changed` Event at the case's settlement carries a `shortfall:<kind>` Observation, and the governor holds a claim of it the season after. **Falsifier:** the governor holds no such claim (the seat channel does not reach a settlement-rung seat). **Control:** the same run with the block deleted records no shortfall and reproduces the committed corpus hash for the case."
+- GATE: `python -m pytest engine/season/tests/test_corpus_world_overlay.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.headless --case NPC-083 --seasons 2 --seed 0` → the shortfall Observation and, at the second season, the governor's claim; a two-season run that shows the Observation but not yet the claim is read again on one more season only if B99 asks (the cap), and the commit body says which it showed.
+- HASH MOVERS: the corpus worlds of NPC-083, NPC-013 and NPC-037. Declared; B12b's re-pin.
+- DEPENDS ON: EXISTS-IN-TREE `harness/corpus_run.py::build_at`, `CAST_KEYS`, `seat_cohorts`; V12 Batch B03c (`boot/realm.py`).
+- NAMES: `harness/populated.py::seat_cohorts` → `boot/realm.py::seat_cohorts` (B03c).
+- GLOSSARY: none (`world:` is an overlay key defined in the loader's docstring).
+- COST and TIER: small build plus content; `sonnet`, `high`.
+- LANDS IT: B12b's producer; `Item: B12b.21`, `[skip ci]`.
+
+Last item written in this file: B12b.21. B12b continues at B12b.22 in `workplan_v12_part24_cont.md`.

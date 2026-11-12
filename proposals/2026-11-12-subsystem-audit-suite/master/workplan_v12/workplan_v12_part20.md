@@ -71,6 +71,9 @@
 8. *`07_SE_ground_and_granaries.md` (f)* edits v11 text (AM-E-13, CR-22): AM-E-13 is SUPERSEDED (`master/V11_EVALUATION_part15.md:29`) and the CR-22 clause travels with CR-22 to B12b; no v11 file is edited.
 9. *CP-T08-02's v11 NEEDS column names CP-T08-03* (E1 `:1234`, "ids named in its gate"); the amended gate (`07_SE_ground_and_granaries.md` §5) names none, so CP-T08-02 does not wait for CP-T08-03 (B12c). Session content wins (`STAGES.md` stage 6).
 10. *The first commit that creates `test_endowment.py`.* U3 §1.3 and §6.1 say "B12 first commit"; after the cut it is `B12a.51`'s first step (nothing earlier in B12a reads it).
+11. *`U5d_WR_owed_edits` §4's sentence.* The source's text ("formed nowhere since REM-22") predates `16_PESSIMIST_WR_B` edit 4, which U3's order lands first (B12a.66) and which makes `restore` form where a crossing is witnessed. `B12a.67` writes the source's sentence with one clause naming B12a.66; the `verb_table.yaml` `restore` row's `referent_class_note` ("attempted 0/0/0") is not edited by any item of this half (no source asks it), and B12a.66's reading is quoted in its commit body.
+12. *`U5d_WR_owed_edits` §3's "carrying the ceiling".* No source states the shape; `_eff_kill`'s precedent is the `(pid, "body", v)` Observation alone. Taken: the Observation with `v` the mended body; a believed ceiling stays the `wounded_with` docstring's GAP. The "recovery step" half has no carrier at `aa31fd2` (MATTER writes falls only); it is owed to CP-T10-04 (B37p).
+13. *Steps 6–10 against U3 item 13's text.* U3 item 13 names `16_PESSIMIST_WR_B` "edits 1–2" and `U5d_WR_owed_edits` "§2 (a), §3, §4"; the sources land edits 3–4 ("order 1 → 2 → 3 → 4") and §1 ("§1 placed in B12 beside §3") in B12 too, and U3 §3.1's node rows place both whole files in B12. All are carried here, in the sources' orders.
 
 **BATCH GATE lines this half adds** (the head author merges them into the one `BATCH GATE`, read once on the closing tree, `PYTHONHASHSEED=0` on every seeded command):
   `python -m pytest engine/season/tests/test_endowment.py engine/season/tests/test_demand_delivery.py engine/season/tests/test_hunger.py engine/season/tests/test_in35_lattice_coupling.py engine/season/tests/test_strife_execution.py engine/season/tests/test_territorial_subsistence.py -q` → all pass;
@@ -265,7 +268,7 @@
 - SOURCE: `proposals/16_PESSIMIST_GAME_the_world_draws.md` edit 3 ("**INCOMPLETE (not decidable from the repository):** the conversion of a body (0-1000) and a shortfall to a pool and an obstacle on the A-5 sampler is not stated by the owner; it is set by the joint calibration (A-5, A-6), the batch's first commit writing it as two named fixtures beside `hunger_band_steps`"); `proposals/09_WR_B_draws_not_thresholds.md` edit 2 ("pool from the cohort's own body … obstacle from the shortfall's depth (how far the larder fell short of want) `[CALIBRATE: the body-to-pool and depth-to-obstacle conversions, joint calibration, OWED §B]`") and its Reconciled line ("pool from the roller's score plus base, floor five; obstacle from the task's difficulty and named terms"); `unified/U4_DOCUMENT_STATUS.md` §3.4 (code DESIGN, owner "calibration batch (B12)"); rulings A-5, A-6, A-54; D-18, E-14.
 - ADVANCES: nothing by itself; it settles the INCOMPLETE part B12a.61 and B12a.62 need.
 - INSTRUCTION: write the design stating (1) to (5) with falsifiers; no code.
-  1. The pool a cohort's body gives: a function of `Person.body` (0 to `condition_scale`) on the one sampler B05 owns, written as a fixture `hunger_body_pool` (its form and value), with the floor the capability architecture's form states ("floor five") or the reason it does not apply to a body.
+  1. The pool a cohort's body gives: a function of `Person.body` (0 to `condition_scale`) on the one sampler B05 owns, written as a fixture `hunger_body_pool` (its form and value), with the floor `09_WR_B_draws_not_thresholds.md`'s Reconciled line states for a pool ("floor five") or the reason it does not apply to a body.
   2. The obstacle a shortfall gives: a function of the depth (`want − take`, in units, or its share of `want`), written as a fixture `hunger_depth_obstacle` (its form and value).
   3. The expected band shares at three named states (a full body with a one-unit shortfall; a half body with half the want short; a body at the first floor with the whole want short), computed with `engine/dice_engine` at the item's tree, so the reader sees that a worse body and a deeper shortfall make Failure likelier, never certain.
   4. Which value each fixture ships at, marked `[ASSUMPTION; medium; Jordan to correct]`, and that `hunger_band_steps` stays `09_WR_B` edit 2's multiples.
@@ -357,3 +360,184 @@
 - GLOSSARY: none.
 - COST and TIER: edit, one declared mover; `sonnet`, `high`; the band reading by `opus` at the close.
 - LANDS IT: B12a's producer; `Item: B12a.62`, `[skip ci]`.
+
+### B12a.63 — only a broken Site pulls · `16_PESSIMIST_WR_B` edit 1 · BUILD · HASH EQUAL
+- SOURCE: `proposals/16_PESSIMIST_WR_B_the_calamity_strains_and_breaks.md` "The resolution" ("strain flows from what is broken, so it has a source and a direction and stops when the source is mended"), edit 1, "The gate"; rulings A-40 ("one Site per territory"), A-54; `U5d_WR_owed_edits.md` §2 (a); closes F-PES-WR-02 (with B12a.64).
+- ADVANCES: none of the nine by itself (inert while `lattice_coupling` is 0).
+- INSTRUCTION: `engine/season/loop/matter.py::_lattice_strain`. Old (the source's text, present at `aa31fd2`):
+  ```python
+  near = [n for u in (t, *sorted(borders.get(t, ()))) for n in by_terr.get(u, ()) if n != sid]
+  if not near:
+      continue
+  gap = max(0, w.sites[sid].condition) - max(0, min(w.sites[n].condition for n in near))
+  ```
+  New:
+  ```python
+  broken = [n for u in (t, *sorted(borders.get(t, ()))) for n in by_terr.get(u, ())
+            if n != sid and w.sites[n].condition <= 0]
+  if not broken:
+      continue
+  gap = max(0, w.sites[sid].condition)          # the pull is toward a hole in the fabric
+  ```
+  "No new field: a Site at 0 *is* the broken Site (the wound row of `09_WR_world_motion.md` edit 1 is built at 0). Ordinary uneven wear no longer propagates; a realm with nothing broken couples nothing." The function's docstring ("RULE, NO SOURCE AND NO SCALAR …") and its `TRACE.decision` line ("pulls … toward their weakest neighbour") are rewritten to say the pull is toward a broken Site (A-40), in the same commit.
+- WHERE: `engine/season/loop/matter.py` (`_lattice_strain`, its docstring and trace line).
+- TESTS: `engine/season/tests/test_in35_lattice_coupling.py` gains `test_a_realm_with_nothing_broken_couples_nothing` (weight 250, every Site above 0: `_lattice_strain` returns `{}`) and `test_the_pull_is_toward_a_broken_neighbour_only` (weight 250, one Site planted at 0: only Sites in its own and bordering territories are pulled) `[ASSUMPTION: test names — E-3]`; written before the edit, the first red (today's rule pulls toward the weakest). The file's existing weakest-neighbour tests (`test_in35_unmanaged_the_lattice_falls_and_crossings_reach_territories_in_order_of_distance`, `test_in35_the_front_advances_one_ring_a_season_at_most`, `test_in35_managed_holding_the_first_ring_stops_the_front_there_and_the_unmanaged_arm_does_not`, `test_in35_a_mended_source_does_not_recall_a_ring_matter_has_already_pulled`) are read at the item's open: each one whose plant has a Site at 0 stays; each that relies on pulling toward a weaker, unbroken neighbour is rewritten to plant its source at 0, and the commit body names each one changed and why.
+- FALSIFIER and CONTROL: the falsifier world of the source (the ring table the same at both seeds) is B12a.64's; this edit's: a Site pulled with no broken Site in its own or a bordering territory. Control: "at weight 0 the season is the base hash" — `test_in35_weight_zero_is_wear_alone_and_a_nonzero_weight_differs` and `test_in35_the_shipped_weight_is_the_control` green unedited; the seed-0 hash equal to B12a.62's.
+- GATE: `python -m pytest engine/season/tests/test_in35_lattice_coupling.py -q` → pass; the seed-0 one-season hash → equal to B12a.62's reading.
+- HASH MOVERS: none (behind `lattice_coupling`, shipped 0).
+- DEPENDS ON: EXISTS-IN-TREE `loop/matter.py::_lattice_strain`; V12 `09_WR_world_motion` edit 1 (the wound row and the `build_realm(wound=…)` switch, earlier in B12a); V12 `09_WR_B_draws_not_thresholds` edit 1 (the wear draw that reads the pull as obstacle, earlier in B12a).
+- GLOSSARY: row *broken (Site)*: "a Site at condition 0, a hole in the fabric" (owner: the comparison `condition <= 0` in `_lattice_strain`); A-40's "wearing-down" row unchanged.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B12a's producer; `Item: B12a.63`, `[skip ci]`.
+
+### B12a.64 — a strained Site breaks, holds or knits by a draw · `16_PESSIMIST_WR_B` edit 2 · BUILD · HASH EQUAL
+- SOURCE: `proposals/16_PESSIMIST_WR_B_the_calamity_strains_and_breaks.md` edit 2, "The gate", "The falsifier"; rulings A-40, A-54; `U5d_WR_owed_edits.md` §2 (a) ("edits 1–2 before `09_WR_world_motion.md` edit 1's non-zero lattice weight"); closes F-PES-WR-02, F-PES-WR-11 (with B12a.63).
+- ADVANCES: none of the nine by itself (inert at weight 0).
+- INSTRUCTION (the source's text): `loop/matter.py`, the wear loop. "After the wear write, for each Site that (a) has a broken neighbour by edit 1's reading and (b) stands below the lowest floor of its kind (`band_floors`; for a kind whose cell is `{}`, below `rupture_band`), one keyed draw (`draw_factory(w.world_seed, lambda: w.tick)(site.id, "rupture")`), resolved on the one ladder (`seam/ladder.py`, `degree_from_net`):
+  - *Pool (the strain upon it):* the count of broken Sites in its own and bordering territories, capped at `rupture_pool_cap`.
+  - *Obstacle (what holds it):* `rupture_base` + the number of its own territory's Sites standing in their top band (sound fabric beside it resists).
+
+  | the strain's degree | the Site | write on `(Site, condition)` at MATTER |
+  |---|---|---|
+  | Overwhelming, Success | **breaks**: condition → 0 | emits `site.ruptured`, cause the wear Event; witnessed like every MATTER emission |
+  | Partial | holds | none |
+  | Failure | **knits**: recovers one season's pull | emits `condition.worn` with a positive delta (the fabric held) |"
+
+  Like every edit of the source, the draw runs only while `lattice_coupling` is non-zero ("every edit is behind that weight; the control is byte identical"): at 0, `_lattice_strain` returns `{}` and no Site has a pull, and the block is skipped before any draw is taken. "The wear write" is the write `09_WR_B_draws_not_thresholds` edit 1 left (drawn under `wear_draw`), earlier in B12a. The pool is rolled on the one sampler B05 owns, as the hunger draw is (B12a.61).
+  Fixtures, "each `[ASSUMPTION; medium; Jordan to correct]` with its hole row": `rupture_band=100`, `rupture_base=2`, `rupture_pool_cap=6` ("the last two were sized on the whole-dice sampler; re-read at the joint calibration of A-5/A-6 before the weight leaves 0"). "`write_matrix.yaml`'s `(Site, condition)` MAT row gains the kind `site.ruptured`" (its `emits:` becomes "`condition.worn` · `condition.band_crossed` · `site.ruptured`"). "L5 is kept: this is matter's licensed clock writing its own cell; no social row is written and nobody is made to act." The Event kind `site.ruptured` is registered wherever the tree's Event-kind roster requires a new kind (`git grep -n "condition.band_crossed" engine/season/*.yaml` at the item's open names the roster rows to extend; each is listed in the commit body).
+- WHERE: `engine/season/loop/matter.py` (the wear loop); `engine/season/data/fixtures.py` (`rupture_band`, `rupture_base`, `rupture_pool_cap`); `engine/season/write_matrix.yaml` (`(Site, condition)`, `emits:`); the Event-kind roster rows the grep names; `engine/season/hole_register.yaml` (three rows).
+- TESTS: in `engine/season/tests/test_in35_lattice_coupling.py` (the source's names, at two seasons: "fourteen seasons" in the source; A-114), written before the edit and read red: `test_a_rupture_is_emitted_and_its_season_differs` — weight 250, the wound planted and, at season 0, every Site of the wound's bordering territories set below its kind's lowest floor (so each takes the draw in the first MATTER), seeds 0 to 9: a `site.ruptured` is emitted at some seed and the set of ruptured Sites differs between at least two seeds (`checked >= 10`); `test_yield_at_season_13_differs_between_seeds` — written as `test_yield_differs_between_seeds_after_two_seasons` on the same plant: the realm's summed yield after season 1 differs between seeds 0 and 1 `[ASSUMPTION: the planted form — basis: a drawn break cannot be relied on to occur within two seasons from an unplanted wound; UNDECIDED 5]`; `test_weight_zero_is_the_base_hash` ("at weight 0 the season is the base hash (the control)"). `test_front_stops_where_the_source_is_mended` (the source: the source raised above 0 at season 5, ring means at season 13) is written at two seasons: the source planted at 0 at season 0 and raised to `condition_scale` before season 1; after season 1 no Site is pulled (`_lattice_strain` returns `{}`) and no `site.ruptured` is emitted.
+- FALSIFIER and CONTROL: "The ring table (4,810 → 719) the same at both seeds after the change" (the source; `test_yield_differs_between_seeds_after_two_seasons` is its committed form). Control: weight 0 reproduces B12a.63's seed-0 hash.
+- GATE: `python -m pytest engine/season/tests/test_in35_lattice_coupling.py -q` → pass; `python tools/ci_sim_fabrication_check.py` → exit 0; `python -m engine.season.harness.register --check` → exit 0; the seed-0 hash → equal to B12a.63's reading.
+- HASH MOVERS: none (behind the weight).
+- DEPENDS ON: V12 B12a.63; V12 `09_WR_B_draws_not_thresholds` edit 1 (earlier in B12a); V12 Batch B06 (`draw_factory`); EXISTS-IN-TREE `loop/matter.py::_crossings`, `seam/ladder.py::degree_ladder`, `write_matrix.yaml` (`Site`, `condition`), the `body_hazard` keyed draw in the same barrier (the precedent, `loop/matter.py`).
+- GLOSSARY: rows *rupture* ("a Site's breaking to condition 0 by a drawn strain") and *knit* ("a strained Site recovering a season's pull") `[new words; the plain words "break" and "hold" are used in prose]`.
+- IDS: H block slots 8–10.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B12a's producer; `Item: B12a.64`, `[skip ci]`.
+
+### B12a.65 — `restore` declines at a broken Site while the coupling runs · `16_PESSIMIST_WR_B` edit 3 · BUILD · HASH EQUAL
+- SOURCE: `proposals/16_PESSIMIST_WR_B_the_calamity_strains_and_breaks.md` edit 3; the Mend is `09_WR_B_threadwork_session_and_practitioner.md` (B35; U3 §4.1 row 48, LATER).
+- ADVANCES: none of the nine by itself (unreached while the weight is 0).
+- INSTRUCTION: `engine/season/loop/effects_economy.py::_eff_restore`, "one decline, beside the existing `site is None` decline":
+  ```python
+  if site.condition <= 0 and w.fixtures.get("lattice_coupling"):
+      return NO_CHANGE        # -> restore.refused: a hole in the fabric is not repaired with mortar
+  ```
+  The docstring's DECLINES paragraph gains the clause. "Until that module lands the weight stays 0, so this decline is unreached and nothing is orphaned" (the source; `B12a.71`).
+- WHERE: `engine/season/loop/effects_economy.py` (`_eff_restore`).
+- TESTS: `engine/season/tests/test_in35_lattice_coupling.py` gains `test_restore_is_refused_at_a_broken_site_while_the_coupling_runs` (a hand-built `restore` at a Site at 0: refused at weight 250, admitted at weight 0) `[ASSUMPTION: test name — E-3]`, written before the edit, its first arm red.
+- FALSIFIER and CONTROL: a `restore` at a broken Site executed while the weight is non-zero. Control: at weight 0 a `restore` at a Site at 0 executes as today; the seed-0 hash equal to B12a.64's.
+- GATE: `python -m pytest engine/season/tests/test_in35_lattice_coupling.py -q` → pass; the seed-0 hash → equal.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `loop/effects_economy.py::_eff_restore`, `NO_CHANGE`; V12 B12a.64.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B12a's producer; `Item: B12a.65`, `[skip ci]`.
+
+### B12a.66 — a crossing a person stands beside raises a question about the place · `16_PESSIMIST_WR_B` edit 4 · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/16_PESSIMIST_WR_B_the_calamity_strains_and_breaks.md` edit 4 ("Owner: CORE's file; listed here with its gate because the Calamity is inert without it"; "lands in this batch with CORE's review"), "The gate" (the played reading); `verb_table.yaml`'s `restore` row (`referent_class_note`: "no question the realm delivers carries a Site among its referents").
+- ADVANCES: none of the nine by itself; `restore` forms on a question the realm delivers (the source: "attempted 0/0/0" today).
+- INSTRUCTION: `engine/season/queries/world_q.py::questions_for` (the source): "A new claim in a person's ledger whose Event is a `condition.band_crossed` or `site.ruptured` anchored on a Site at the rung he stands on is stamped as a `Site`-classed referent (`own_referents_of_class`, REM-21's term), so `restore` (and, at a broken Site, the Mend) forms for him." Where he stands is `place_of` (the `with` stem's one owner); the stamp goes through the same `_stamped` path the existing classes use.
+- WHERE: `engine/season/queries/world_q.py` (`questions_for`).
+- TESTS: `engine/season/tests/test_in35_lattice_coupling.py` gains (the source's name) `test_restore_or_mend_attempted_at_a_crossed_site`: "Played, three seasons, the wound planted: `restore` or the Mend is attempted at least once by a person standing at a crossed Site, in at least one of two seeds" — at two seasons (A-114), weight 250, the B12a.64 plant (so crossings occur in season 0), seeds 0 and 1; written before the edit and read red (no Site-classed referent). A hand-built check beside it: `test_a_witnessed_crossing_at_his_rung_stamps_the_site` (one person, one claim of a `condition.band_crossed` on a Site at his rung: `own_referents_of_class(..., {"Site"})` names it) `[ASSUMPTION: second test name — E-3]`.
+- FALSIFIER and CONTROL: a crossing witnessed at a rung the person does not stand on stamps the Site; no `restore` attempted in the played test at either seed. Control: a world with no crossing has an unchanged question set (the seed-0 hash, if no crossing is witnessed in two seasons at the shipped weight, is equal, and the commit says so).
+- GATE: `python -m pytest engine/season/tests/test_in35_lattice_coupling.py engine/season/tests/test_season_shape.py -k "restore or crossed or referent" -q` → pass; seeds 0 to 2, two seasons: executed and attempted `restore` before (`reading @<B12a.65's sha>`) and after, quoted.
+- HASH MOVERS: "edit 4 moves the question set wherever a crossing is witnessed" (the source). Declared; re-pinned at B12a.99.
+- EXPECTED RED UNTIL B12a.99: the realm pins, if a crossing is witnessed in their seasons.
+- DEPENDS ON: EXISTS-IN-TREE `queries/world_q.py::questions_for`, `::own_referents_of_class`, `::place_of`, `World.class_of`; V12 B12a.64 (`site.ruptured`); review by the CORE owner at the batch close (the source).
+- GLOSSARY: none.
+- COST and TIER: small build at CORE's owner; `sonnet`, `high`; the close's review reads it as CORE's (an `opus` critic on the stamp's reach).
+- LANDS IT: B12a's producer; `Item: B12a.66`, `[skip ci]`.
+
+### B12a.67 — the `restore` roster sentence brought to the tree · `U5d_WR_owed_edits` §4 · BUILD · HASH EQUAL
+- SOURCE: `proposals/U5d_WR_owed_edits.md` §4 ("`engine/season/rosters.yaml:1903-1906` says `restore` executes on the realm; `verb_table.yaml`'s `restore` row and eight arms read 0. Text for the orchestrator's next WR commit: the sentence reads 'formed nowhere since REM-22'. Same reading as `U5d_SE_owed_edits.md` §1 (one decision, two rows)"); "Land order: §4 (text), §1, §3, §2"; closes PES-WR R-4.
+- ADVANCES: none (roster text).
+- INSTRUCTION: `engine/season/rosters.yaml`, `wear_per_season`'s `note:`, the clause "⚠ CORRECTED (`24f`, 2026-09-30): `restore` now executes on the populated realm's SETTLEMENT fabrics (harbour, seam -- rate 10, a cohort stands beside them)" is rewritten: "`restore` is formed nowhere since REM-22 (its `verb_table.yaml` row: no question the realm delivers carries a Site among its referents) until `16_PESSIMIST_WR_B` edit 4 (B12a.66), and since then only where a person witnesses a crossing at the rung he stands on"; the rest of the note is kept. (The source's sentence predates edit 4, which lands before this item in U3's order; UNDECIDED 11.) The paired row of `U5d_SE_owed_edits.md` §1 is that file's item (B12b).
+- WHERE: `engine/season/rosters.yaml` (`wear_per_season`, `note:`).
+- TESTS: none (roster text; no reader parses the note).
+- FALSIFIER and CONTROL: the note still says `restore` "executes" on the realm. Control: the seed-0 hash equal to B12a.66's; `git diff` of the commit touches only the note.
+- GATE: `git grep -n "restore. now executes on the" engine/season/rosters.yaml` → no hit; `python -m engine.season.harness.register --check` → exit 0.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B12a.66.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `medium`.
+- LANDS IT: B12a's producer; `Item: B12a.67`, `[skip ci]`.
+
+### B12a.68 — a real execution reads as a killing · `U5d_WR_owed_edits` §1 (H-257) · BUILD · HASH EQUAL
+- SOURCE: `proposals/U5d_WR_owed_edits.md` §1, "Named tests and call sites" §1; carries `audits/09_WR_audit.md` R-06 (H-257); U5d's own Status line places §1 in B12 "beside §3" `[ASSUMPTION in the source: U3 places no batch for §1]`; closes R-06's reader half (the lawful-basis half "waits on SC's verdict naming its party (A-38)").
+- ADVANCES: none of the nine (a harness reading).
+- INSTRUCTION: `engine/season/harness/strife.py::readers_for`, its `victim_held` reader: "The reader reads the death's `body` change as well as `exists` (one line; the audit's own decision)." At `aa31fd2` the line is `victims = {c.subject for c in e.changes if c.field == "exists"}`; it becomes `… if c.field in ("exists", "body")`. "The other half of H-257 (telling an execution from a killing by its lawful basis) is an interface need, not built: it waits on SC's verdict naming its party (A-38)."
+- WHERE: `engine/season/harness/strife.py` (`readers_for`, `victim_held`); `engine/season/tests/test_strife_execution.py`.
+- TESTS: (the source) "new function `engine/season/tests/test_strife_execution.py::test_a_hand_built_execution_reads_xe` … It plants a lawful execution whose `person.died` Event carries the `body` change, and asserts `victim_held` is true; control: the same Event with only the `exists` change (today's reader) is the failing reading the falsifier names." Written before the edit and read red.
+- FALSIFIER and CONTROL: "The same world still reads KL" (the source). Control: the file's existing tests (`test_a_planted_fight_death_of_a_held_man_reads_xe_on_the_live_tenure`, `test_mutation_closing_the_tenure_one_tick_before_the_death_moves_xe_to_kl`) green unedited.
+- GATE: `python -m pytest engine/season/tests/test_strife_execution.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.strife 2 0` → exit 0, its move table quoted (the source's "on a hand-built execution: the move reads XE" is the test above).
+- HASH MOVERS: none ("Movers: none (harness)").
+- DEPENDS ON: EXISTS-IN-TREE `harness/strife.py::readers_for`, `engine/season/tests/test_strife_execution.py`.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B12a's producer; `Item: B12a.68`, `[skip ci]`.
+
+### B12a.69 — a witnessed recovery clears a believed wound · `U5d_WR_owed_edits` §3 · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/U5d_WR_owed_edits.md` §3 (F-WR-23; "owed at PC's and CHAR's owner"), "Named tests and call sites" §3; `engine/season/queries/world_q.py::wounded_with`'s docstring ("⚠ STATED LIMIT -- NOTHING CLEARS A BELIEVED WOUND. Only `_eff_kill` writes a `(pid, "body", v)` Observation; `_eff_tend` and MATTER write none"); closes F-WR-23.
+- ADVANCES: none of the nine by itself; "mended bodies stop drawing care they do not need" (the source's NERS line).
+- INSTRUCTION:
+  1. Open MATTER for a write that raises `Person.body` (`git grep -n "setattr(person, \"body\"\|\.body = " engine/season/loop`) and record what is found in the commit body (§5.7, SITE). At `aa31fd2` MATTER's bodies pass writes falls only (`loop/matter.py`, the `body_after` write); the "recovery step" the source names is CP-T10-04's (intake `:363`, B37p), which "makes bodies rise" — so only `_eff_tend` is edited here, and the recovery half is owed to CP-T10-04's item (its author is told in the receipt). If a recovery write exists at the item's open, it gets the same Observation in this commit.
+  2. `engine/season/loop/effects_combat.py::_eff_tend` writes "a `(pid, "body", v)` Observation as `_eff_kill` does": its subject becomes `Subject.entity("persons", who, fields=("body",), observed=body_observed(who, whole))`, `v` the written (mended) body, "so a witness's claim of the wound is superseded by a claim of the mended body". The source's "carrying the ceiling" is not built as a second field: `v` is the written body, which for a marked man is his ceiling, and `wounded_with`'s comparison for another person (`v < condition_scale`) is unchanged, so a marked survivor stays stamped for his believers (the docstring's `[GAP: a believed ceiling is not carried]`, kept; UNDECIDED 12).
+  3. `wounded_with`'s docstring: "NOTHING CLEARS A BELIEVED WOUND" becomes "a tend writes the mended body as an Observation (U5d_WR §3); MATTER's recovery does not yet", with the measurement re-taken (step 4).
+  4. "Lands before `09_WR_provided_arcs.md` edit 2 and plan CP-T10-04 (each makes bodies rise and would otherwise leave stale beliefs and a growing `tend` tax)": `09_WR_provided_arcs` is B12b, CP-T10-04 is B37p; both later.
+- WHERE: `engine/season/loop/effects_combat.py` (`_eff_tend`); `engine/season/queries/world_q.py` (`wounded_with`, docstring only); `engine/season/tests/test_season_shape.py`.
+- TESTS: (the source) "new function `engine/season/tests/test_season_shape.py::test_a_witnessed_recovery_clears_a_believed_wound` … Plants a believed wound, runs `_eff_tend` to a recovery, and asserts the pair count of `tend` formed on the healed man reads 0; control: the same world without the Observation write reads the old non-zero count." Written before the edit and read red.
+- FALSIFIER and CONTROL: "A `NoOpReceipt` refusal of `tend` on a man a witness saw mended" (the source). Control: a `tend` that heals nobody (already whole) is still refused `NoOpReceipt` and writes no Observation.
+- GATE: `python -m pytest engine/season/tests/test_season_shape.py -k "wounded or tend" -q` → pass; "the docstring's measurement re-run (pairs forming `tend` on a healed man: 0, 3, 9 at seeds 0 to 2 today) reads 0 after a recovery is witnessed": seeds 0 to 2, two seasons, the pair count before (`reading @<B12a.68's sha>`) and after, quoted.
+- HASH MOVERS: "Every run with a `tend`. Declared." (the source) — the Observation rides `body.changed`'s Event (`Event.observed` is folded by `World.content_hash()`). Re-pinned at B12a.99.
+- EXPECTED RED UNTIL B12a.99: the realm pins.
+- DEPENDS ON: EXISTS-IN-TREE `loop/effects_combat.py::_eff_tend`, `::body_observed`, `::_eff_kill` (the precedent), `queries/world_q.py::wounded_with`, `state/gate.py::Subject.entity` (`observed=`); V12 Batch B04 (`wounded_with`'s `(when, lap)` key after PCR-4).
+- GLOSSARY: none.
+- NAMES: in `wounded_with`'s docstring, `(when, round)` → `(when, lap)` (§5.10, B04).
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B12a's producer; `Item: B12a.69`, `[skip ci]`.
+
+### B12a.70 — the order in which WR's draws land · `U5d_WR_owed_edits` §2 (a), (b) · POINTER · HASH —
+- SOURCE: `proposals/U5d_WR_owed_edits.md` §2 ("No new edit: an ordering constraint on existing carriers, written so no builder flips a fixed-function arm"); (c) is B37's (U3 §4.1 rows 49–50).
+- What the pointed section does: (a) `16_PESSIMIST_WR_B` edits 1–2 land before any non-zero `lattice_coupling` — met by B12a.63 and B12a.64 preceding B12a.71, which holds the flip for B98; (b) `09_WR_B_draws_not_thresholds` edits 1–2 land before the weather arm of `09_WR_B_weather_with_memory_and_the_year` — met by the first half of B12a preceding B12b. Target files: none of its own. Gate (the source's): "the control arm reproduces the base hash before the flip; the flip is one declared re-pin" — read at B12a.63 and B12a.64 (weight 0 equal) and at B98's flip.
+
+### B12a.71 — the `lattice_coupling` flip and `wound=True` · `09_WR_world_motion` edit 1 (second commit), as `16_PESSIMIST_WR_B` amends it · HELD (B35's Mend; H-165/H-07's wear-0 kinds) · HASH —
+- SOURCE: `proposals/09_WR_world_motion.md` edit 1 ("Then, as its own commit and its own mover: `lattice_coupling` 0 → 250 (H-235's swept arm) with `wound=True` the default. H-235's unblock names a second precondition, the wear-0 kinds … that is H-165/H-07's and is not decided here, so the flip waits on it"); `proposals/16_PESSIMIST_WR_B_the_calamity_strains_and_breaks.md` ("amends `09_WR_world_motion.md` edit 1's second commit … The flip does not [stand], until edits 1 and 2 below land"; "The weight's flip is a declared hash mover and its own commit, after the threadwork module"; edit 3: "Until that module lands the weight stays 0"); U3 §4.1 row 48; UNDECIDED 2.
+- Not built in this batch. Trigger: `09_WR_B_threadwork_session_and_practitioner`'s Mend has landed (Batch B35) and H-165/H-07's wear-0 kinds are decided. Owner of the flip: B98 (`DIALS AT CONTROL`, D-22), one item there: `lattice_coupling` 0 → 250 and `build_realm(wound=True)` the default, one declared mover, its target `16_PESSIMIST_WR_B`'s gate as the dial line states, its control weight 0 reproducing the previous item's hash. The wound's Site kind stays Jordan's content (`09_WR_world_motion.md` edit 1, "`<a `site_kinds` member that has `band_floors`>`"; `U4_DOCUMENT_STATUS.md` §3.4: CONTENT, owner Jordan) and is set by the first half's item for that edit.
+
+### B12a.72 — a zero-amount store move changes no store · H-138 · BUILD · HASH EQUAL
+- SOURCE: `master/eval/E6.md:151` (H-138: "`loop/effects_economy.py:215 _eff_transfer` and `_shift` insert `kind: 0`; only at `default_transfer_amount` 0 (H-94's declared control arm, not shipped) … hash EQUAL at shipped arms; gate: at amount 0 a transfer is refused `NoOpReceipt`"), E6 carry-forward block 5 ("`H-138`: 'compare stores by value with zero-valued keys normalised out' (or do not touch the dict at amount 0)"); `engine/season/hole_register.yaml` H-138 (its `hole:` and `unblocks:`: reachable "at `H-94`'s own declared sweep point `amount = 0` … for any transfer whose giver or receiver does not already hold the swept `kind`", and since REM-2B for `exchange`'s `return_kind`); intake `:137`; D-10 (placed in B12a); closes H-138.
+- ADVANCES: none of the nine; F9 stops reading a move of nothing as a move (`transfer.made`, `exchange.made` at amount 0).
+- INSTRUCTION:
+  1. `engine/season/loop/effects_shared.py::_shift` (the one body of every store move; E6 names `effects_economy.py`, where its callers are): at `amount == 0` it returns without touching either store — no `_debit`, no copy, no key inserted (E6's second fix shape; UNDECIDED 6). Its docstring gains the reason (H-138). The digest reader (`state/world.py`) is not changed.
+  2. `engine/season/hole_register.yaml` H-138: closed by this commit (the row's closing text names `_shift` and the test), by the register's own closing convention.
+- WHERE: `engine/season/loop/effects_shared.py` (`_shift`); `engine/season/hole_register.yaml` (H-138); `engine/season/tests/test_gate_observation.py`.
+- TESTS: `test_a_zero_amount_transfer_to_a_side_without_the_kind_is_refused` and `test_a_zero_return_exchange_is_refused` (the row's own counterexample: a transfer at `amount=0` of a `kind` absent from both rungs' `stores` reads `transfer.refused` with `NoOpReceipt`, and neither rung's `stores` gains the key; the same for an `exchange` at `return_amount` 0) in `engine/season/tests/test_gate_observation.py` (E6 block 5's coined file, "`[ASSUMPTION: name]`"; created by B03's gate-observation items if they landed, else created here) `[ASSUMPTION: test names — E-3]`; written before the edit and read red (today the key is inserted and `transfer.made` is emitted).
+- FALSIFIER and CONTROL: a zero-amount transfer still publishes `transfer.made`, or a rung gains a `kind: 0` key. Control: at the shipped `default_transfer_amount` 1 the seed-0 to seed-2 one-season hashes equal B12a.69's (the row: "nothing at the shipped `default_transfer_amount = 1` fixture"); `engine/season/tests/test_in33_exchange.py` and `test_season_shape.py`'s H-94 sweep test (all three points executed) green, the 0 point's readings quoted before and after.
+- GATE: `python -m pytest engine/season/tests/test_gate_observation.py engine/season/tests/test_in33_exchange.py -q` → pass; `python -m pytest engine/season/tests/test_season_shape.py -k "transfer or exchange" -q` → pass; `python -m engine.season.harness.register --check` → exit 0; the shipped-arm hash → equal.
+- HASH MOVERS: none at the shipped arm.
+- STOPS IF: at the item's open `_shift` (or each caller) already returns before touching a store at amount 0 — then the item is a POINTER and the row is closed with the landing commit cited.
+- DEPENDS ON: EXISTS-IN-TREE `loop/effects_shared.py::_shift`, `::_debit`, `loop/effects_economy.py::_eff_transfer`, `::_eff_exchange`, `data/fixtures.py` `default_transfer_amount` (H-94); V12 Batch B03 (its gate-observation items, which may create `test_gate_observation.py`).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B12a's producer; `Item: B12a.72`, `[skip ci]`.
+
+### B12a.99 — re-pin and close readings · `V12_STRUCTURE_part4.md` E-1, E-2 · BUILD · HASH MOVER (the re-pin)
+- SOURCE: `V12_STRUCTURE_part4.md` E-1 ("Every batch ends with a re-pin position … re-record the realm and corpus pins that any item in the batch moved, once; write the batch's readings"), E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12; `IS-A-12` (the readings written into the conjuncts' `reading:` records; `status:` not edited).
+- ADVANCES: the requirement readings the head's `REQUIREMENT:` line names ("re-read only", `V12_STRUCTURE.md` §2.2's B12a row).
+- INSTRUCTION:
+  1. Re-pin once, for the whole batch: the realm pins in `engine/season/tests/_realm_goldens.py` (B02's one pin file) and every golden B02 routes through it, at seeds 0 to 2, one and two seasons, `PYTHONHASHSEED=0`, read against the previous batch's close (`reading @<sha>`). The commit says "re-pin" and names each mover it carries: from this half, B12a.54 (`endowment_mode`), B12a.55 (`granary_seasons`), B12a.56 (`larder_walk`), B12a.62 (`hunger_severity_draw`), B12a.66 (the Site-classed stamp, if a crossing is witnessed in the pins' seasons), B12a.69 (the tend Observation); from the first half, each mover its items declare. Behaviour controls read, not hashes: with every switch of the batch at its control the hashes equal the previous close's.
+  2. The batch's readings, in the commit body (`V12_STRUCTURE_part2.md` §5.12): `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the head's named conjuncts' readings with their tree, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before (`reading @<sha>`) and after, the readings each item of this half asked to be quoted, and the batch's measured wall time; the conjuncts' `reading:` records are written in `engine/season/requirements.yaml`; `status:` is not edited.
+  3. The full suite once (CLAUDE.md §0.4: this batch touches engine core and registries); the confirming CI push follows the close's fixes (the skill, CHECKPOINTS AND BASELINES).
+- WHERE: `engine/season/tests/_realm_goldens.py` and the goldens it owns; `engine/season/requirements.yaml` (`reading:` records only).
+- TESTS: every `EXPECTED RED UNTIL B12a.99` test turns green.
+- FALSIFIER and CONTROL: a pin moved by no declared mover (then an item's HASH line was wrong: the close stops and names it). Control: every switch at its control reproduces the previous close's hashes.
+- GATE: the head's `BATCH GATE`, with this half's lines; `python -m pytest tests/valoria -q -n auto` and the engine suites `python tools/tests_for_diff.py --base <batch-start-sha>` names → pass.
+- HASH MOVERS: the re-pin itself.
+- DEPENDS ON: every position of B12a.
+- GLOSSARY: the close reads every glossary row this batch's items named against the code it landed (`STAGES.md`, "The glossary always matches" rule 2): from this half *endowment*, *field*, *treasury*, *broken (Site)*, *rupture*, *knit*.
+- COST and TIER: reading and a re-pin; `sonnet`, `high`; the flips' readings and the close's terminal critique `opus`.
+- LANDS IT: B12a's producer; `Item: B12a.99`, the batch's last `Item:` commit, pushed without `[skip ci]`.
+
+| STOP. Batch B12a-world-motion-and-ground closes here |
