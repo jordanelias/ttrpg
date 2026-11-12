@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (L-10) — the pool reader's owner is `seam/wrappers/pool.py::faculty` (`:78`), re-exported by `sigma.py:105`; one citation corrected. No edit of the proposal changed.
+
 Source: `audits/06_FA_audit.md` §14, §15 (c), (d), F-FA-05; hole rows H-126, H-207 (the positional conferee).
 
 ## What it changes in `engine/season/` at runtime
@@ -17,7 +19,7 @@ Source: `audits/06_FA_audit.md` §14, §15 (c), (d), F-FA-05; hole rows H-126, H
 
 It adds no capability system. The owner already exists and is extended: `rosters.yaml: verb_capability`
 (verb → vocation) and `vocation_attribute` (vocation → one of the ten registry attributes), read by
-`seam/wrappers/sigma.py::faculty`.
+`seam/wrappers/pool.py::faculty` (`:78`; `sigma.py:105` re-exports it).
 
 ## The problem (evidence)
 

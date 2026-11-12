@@ -2,9 +2,11 @@
 
 Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 — where this file's names, homes or shapes differ from that ledger, the ledger governs: "roll" keeps this file's meaning for the whole kit (X-04); `debt` is a Record kind and also a form, read by the kit's one set of instrument readers (X-09); the trade charter of §6.1 part 5 is the form `staple` and no `charter` obstacle term is added (X-10); warrant and commission are forms (X-11); the exit audit is the row `audit` under the key `audit_at_exit` (X-12); part 3's ballot is SC's ballot with `obligation` among its terms, and `pledge_step` is not added (X-15); `obligation` is lifted by `excused`, not by a bare ban (X-31); the scenario is a case file (X-32). The four disagreements of §4.4 are each decided in the synthesis's §4.5, with canon amendment text drafted in its §4.6. Of §14.2: all three are closed in the synthesis's §10 with their ladder steps. Every finding below stands.
 
+Re-grounded: 2026-11-12 against the tree's own research (Jordan: *"Research should have been found in /research or /proposals"*), map and claim table in `unified/RESEARCH_MAP_INSTITUTIONS_B.md` (rows V-1 to V-50). What changed in this file: the sourcing key gains the mark `[T+]`; of the claims marked `[M]`, twenty-three now cite a tree source at path:line and twenty-seven stay memory-grade (listed in §17.3); **seven statements are corrected** where the tree's source differs (§17.1: when the Ten became permanent; what the 1297 *Serrata* enacted; the Arsenal's two figures; the Arsenal men's part in 1355; where the tree's sumptuary magistracy sits; the motive of the Pazzi's backer; the mechanism of Savonarola's fall) and three figures or dates are replaced by the tree's (rectors' terms; the Bruges blockades; the *condotta*'s second phase); **thirteen mechanisms the research describes and this design lacked are added** (§17.2), with their exact edits in `proposals/15_INSTITUTIONS_VENICE_grounding_E_what_the_tree_adds.md`; §15's nulls are restated against the game-precedent suite, which is now opened; E-4's skip of `.audit/2026-07-09-comparative-governance-research` is withdrawn as wrong. No finding of this lane or of the synthesis is deleted; the five parts, the fourteen resolutions and the three survivors stand.
+
 ## Status: REFERENCE (a design and plan in proposal form; resolves nothing at runtime, CLAUDE.md §0.05)
 
-## Read at: bb6dfc3 (working tree)
+## Read at: bb6dfc3 (working tree); re-grounded at 62dbc8b
 
 Family: **VENICE** — the Republic of Venice; Medici-era Florence and the Italian city-state world; the
 Hanse and merchant guilds where the tree's research treats them. Work order:
@@ -18,6 +20,14 @@ standard secondary literature (Lane, Finlay, Chojnacki, Mueller, Puga and Trefle
 Rubinstein, Kent, Najemy, Padgett and Ansell, Mallett for Florence and the condottieri; Dollinger and
 Greif for the Hanse and guilds), **not opened this session and therefore memory-grade**: shapes are the
 finding, every figure and date tagged `[M]` is a lead. No web source was fetched for this file.
+`[T+: file:line]` = added by the re-grounding pass of 2026-11-12: the tree's research, opened at that
+line, either supporting a claim first written from memory or correcting it; short names as in
+`unified/RESEARCH_MAP_INSTITUTIONS_B.md` (`GM`, `PHS`, `CPS` the three governance files; `CGR`
+`.audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md`; `PMP`
+`.audit/2026-08-06-social-contest-three-lens-audit/sources/01_political_mechanics_primitives.md`; `FASE`,
+`PGS`, `HCC`, `RTP`, `DPC` the precedent, proactive-governance, historical-concerns, rise-to-power and
+decision-procedure files). Where `[M]` still stands beside a `[T+]`, the `[T+]` covers part of the bullet
+and §17.3 says which part is still memory. All of it is tier 3: it informs, it settles nothing.
 
 ---
 
@@ -65,9 +75,14 @@ lynched in 1172 produced the Great Council and the six councillors `[T: research
 attempted hereditary dogeship of 976 produced election for life with no succession `[T: ibid. 1.3]`; the
 deadlocked election of 1229 produced the 1268 lot-and-ballot protocol `[T: ibid. 1.8]`; the
 Tiepolo–Querini conspiracy of 1310 produced the Ten; the Doge's own conspiracy of 1355 made the Ten
-permanent `[T: ibid. 1.6; research/governance/conflicts_power_struggles.md §Venice 3.2–3.3]`. The pattern to
+permanent `[T: ibid. 1.6; research/governance/conflicts_power_struggles.md §Venice 3.2–3.3]`.
+**Corrected `[T+: GM:310, against GM:345]`:** the tree disagrees with itself here. The body text dates
+permanence to 20 July 1355; the verifier's note quoted at the head of the same section orders "1334
+(commonly; some sources 1335)", and the fix was quoted, not applied. On the verified reading the Ten was
+already permanent when it tried and beheaded a Doge; 1355 is the first use of the standing bench against
+the capstone, not its founding. The pattern to
 carry into the game is the **ratchet**: each failure writes a new clause into a standing instrument, and
-the instrument is read at the next accession.
+the instrument is read at the next accession. The ratchet does not depend on the date.
 
 ### 1.2 The Doge and his constraints
 
@@ -78,7 +93,9 @@ the instrument is read at the next accession.
   task was to close whatever the last Doge had got away with `[T: governance_modes.md §Venice 1.3]`.
 - **Constraints in the text.** He could not open diplomatic letters or receive envoys except with his
   councillors present; could not leave the city, own property abroad, trade, accept gifts, or correspond
-  privately with foreign powers; had one vote and no veto `[T: ibid.; M for trade and gifts]`.
+  privately with foreign powers; had one vote and no veto `[T: ibid.; M for trade and gifts]`
+  `[T+: GM:326-328: letters, envoys, leaving the palace unescorted, private correspondence with powers
+  or kin abroad, no veto; property abroad, trade and gifts are not in the tree]`.
 - **The six ducal councillors** (one per *sestiere*, short terms) co-signed every act; with the three
   heads of the Forty they formed the **Signoria** of ten, which, not the Doge, held the sovereign
   capacity. A councillor could put a motion the Doge opposed; the Doge could not act with fewer than a
@@ -94,7 +111,13 @@ the instrument is read at the next accession.
 - **The roll.** The *Serrata* of 1297 fixed membership to those who had sat in the previous four years and
   their descendants; the *Libro d'Oro* (formal from 1506) made nobility a matter of a registered birth
   verified by the Avogadori (*prova di nobiltà*) `[T: governance_modes.md §Venice 1.4;
-  political_hierarchy_standing.md §Venice 2.2]`. The body was every adult male patrician (some 1,000 to
+  political_hierarchy_standing.md §Venice 2.2]`. **Narrowed `[T+: GM:311]`:** the verifier's note strikes
+  the hereditary clause from the 1297 act itself: the ordinance confirmed those who had sat in the
+  preceding four years, balloted by the Forty; descent as the test is the later hardening (the
+  registration of 1315 to 1318, the book of 1506, `GM:334`). So the closure was **a ballot on sitting
+  members first and a birth register after**, which is §5.2's adapted form (enrolment by a body's ballot)
+  more nearly than the audit knew. A yearly lot (the *Balla d'Oro*) admitted some young men early
+  `[T+: PHS:346]`. The body was every adult male patrician (some 1,000 to
   2,500 at different dates `[M]`); its business was **election**, not debate.
 - **Election by lot and ballot** `[CONT p.22–39]`, stage by stage:
   1. Doors shut; the Grand Chancellor reads the vacancies; Avogadori and the Heads of the Ten sit apart as

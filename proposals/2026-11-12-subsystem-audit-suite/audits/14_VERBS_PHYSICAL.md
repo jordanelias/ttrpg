@@ -810,7 +810,7 @@ remembers who did it.
    stores. The row joins the graded route (`rosters.yaml: graded_inquiries`, the route that is "not a
    prize", renamed `graded_routes` with its existing rows unchanged, since a razing is no inquiry: one
    key renamed, one loader). The pool is the occupying army (`mustered` headcount through
-   `seam/wrappers/sigma.py::faculty`'s fallback). The obstacle is the town's size and fabric: the
+   `seam/wrappers/pool.py::faculty`'s fallback, `:78`; `sigma.py:105` re-exports it). The obstacle is the town's size and fabric: the
    Rung's Site count and their `condition`, plus named modifiers (resident cohorts' resistance
    `[named; SE]`).
    - **Overwhelming:** the Rung ends, every Site in it ends, all stores are carried off.

@@ -25,7 +25,10 @@ die, for the same reason as before, by the one verb the repair missed.**
    needed no challenge. So in the first season of every world somebody near him attacked him: the
    **Queen's `accept`** killed him at seeds 0 and 2 and the **Prince's `fight`** at seed 1. No quarrel, no
    war, no motive. Jordan ruled against it on 2026-11-05 (ED-IN-0337: fighting is rare in civil society
-   and needs a context) and v11 CR-87 gated `fight` and `accept`.
+   and needs a context) and v11 CR-87 gated `fight` (`rosters.yaml:2772-2773`, the one line of
+   `violence_contexts`) and put `accept` under `blood` terms (`rosters.yaml:1000-1002`); `accept`'s own
+   gate, a held `challenge` Record addressed to the actor, is v10 PC-10b's cell
+   (`verb_table.yaml:956-972`).
 3. *Why he dies now* (§1.3, new in this lane): CR-87 left `capture` ungated. At seed 2 the King is the
    target of **19 `capture` attempts in four seasons**: seven by his own Spymaster, ten by the Duke of
    Varfell, two by the Duchess of Hafenmark. Seventeen are refused in the fold. In the third season the

@@ -135,7 +135,8 @@ An office usually came with a dignity; losing the office did not lose the dignit
 produced two states a single ladder cannot: the dismissed man who still outranks his successor at
 table, and the favourite in high office with no standing `[TREE ibid. :153, BYZ-1]`. Precedence was
 enacted physically: order of entry, of seating, of who is addressed first, of who may sit. A promotion
-was a ceremony before the assembled order, with set acclamations.
+was a ceremony before the assembled order, with set acclamations
+`[RE-GROUNDED: TREE proposals/2026-09-05-proceedings-subsystem/source/06-part-V-dossiers.md:39 (Liudprand, 968: "the seating below a Bulgarian envoy"); research/by_lane/SC_social_contest.md:59 ("Seating, precedence and audience are negotiated before speech", graded sound, with `attend / not attend` as the lever); research/rhetoric_oratory_contest/rhetoric_oratory_contest_research.md:123, :502 (the scripted imperial oration, which "excludes anything ambiguous or disputed"). The grades and counts above stay memory-grade: the tree's row is abridged]`.
 **The mechanism:** two tenures per person, one revocable and powerful, one sticky and paid; rank is
 public, ordered and performed in front of the others.
 
@@ -144,13 +145,13 @@ public, ordered and performed in front of the others.
 Dignity-holders drew an annual stipend in gold, the *roga*, paid in the week before Palm Sunday.
 Liudprand of Cremona watched Constantine VII pay it in 950: over three days the emperor handed each
 of the highest dignitaries his bags of coin and his robes personally, in rank order; lesser ranks were
-paid the following week by the chamberlain `[MEMORY: Antapodosis VI.10; firm]`. A dignity could be
+paid the following week by the chamberlain `[MEMORY: Antapodosis VI.10; firm. RE-GROUNDED: stays memory-grade. The tree holds Liudprand in 23 files, always for the receptions: the embassy "of 949 under Constantine VII" (*Antapodosis*) and of 968 (*Relatio*), proposals/2026-09-05-proceedings-subsystem/source/03-part-II-scenario.md:73; no file describes the payment of the stipend, and the tree's date for the embassy is 949]`. A dignity could be
 **bought**: an investiture payment in return for the title and a stipend for life, in effect an annuity
 the state sold, at a return low for the plain title and higher for supplementary stipends; the cleric
 Ktenas paid heavily for a *protospatharios*'s stipend he lived two years to draw
-`[TREE ibid. :28; rates MEMORY: Oikonomides, "Title and Income"; figures are leads]`. The stipend was
+`[TREE ibid. :28; rates MEMORY: Oikonomides, "Title and Income"; figures are leads. RE-GROUNDED: the tree's row does carry the price, "60 litrai of gold (~19.4 kg, roughly 60x the annual roga owed to a protospatharios)", a lead; "lived two years" is not in the tree's (abridged) cell and stays memory-grade]`. The stipend was
 the throne's largest discretionary outlay and its leash: when eleventh-century emperors debased the
-coin and then could not pay, the bond went with the money `[MEMORY]`.
+coin and then could not pay, the bond went with the money `[MEMORY. RE-GROUNDED: the Byzantine debasement stays memory-grade; the mechanism has tree sources in other polities: "The standing currency debases when rank-holders outrun it" (research/governance/political_hierarchy_standing.md:20); the Kamakura bond that "required the shogun to have a continuous supply of confiscatable/conquerable land to keep paying out … or the bond decayed" (:457); and one shipped game: RTK XIV, "stipend rises with the officer's Civil Service/Title … lowering a service lowers loyalty" (research/game_precedent_suite/tutorials/T13_koei.md:78)]`.
 **The mechanism:** the holder of the throne pays, in person, on a yearly clock, by rank; a title is an
 income the fisc owes; an unpaid court is an unbound court.
 
@@ -162,9 +163,9 @@ cadastre, assessment and collection), the *stratiotikon* (the army's rolls and p
 post, foreign envoys, and internal intelligence), the *eidikon* and *vestiarion* (stores, workshops,
 the mint), the *sakellarios* as general controller over all their accounts, the *protasekretis* heading
 the chancery that drafted, the master of petitions (*epi ton deeseon*), and the keeper of the imperial
-inkstand (*epi tou kanikleiou*) `[TREE ibid. :29; roster MEMORY: Bury; Oikonomides]`. No bureau shared
+inkstand (*epi tou kanikleiou*) `[TREE ibid. :29; roster MEMORY: Bury; Oikonomides. RE-GROUNDED: the tree's row names the *genikon*, the *dromos* and the coordinating *logothetes ton sekreton* only, on Wikipedia pages; the rest of the roster stays memory-grade. The archived design had already applied the form inside Valoria: "Each Cardinal Arm manages a Dicastery (Byzantine-style Sekretum)", .designs/systems/factions/reference/faction_politics_v30.md:965]`. No bureau shared
 staff with another and none could act on another's matter: the division was a check on accumulation,
-and it meant any one act of state needed several bureaux `[TREE ibid. :158, BYZ-5]`. In the Komnenian
+and it meant any one act of state needed several bureaux `[TREE ibid. :158, BYZ-5. RE-GROUNDED: that line is the judgment pass CUTTING BYZ-5 ("Redundant-in-kind with HAB-4"), confirmed keep-cut at .audit/2026-07-12-governance-compendium/tier3_proposal_status_closure.md:151; the history is the tree's, the mechanic was refused there]`. In the Komnenian
 period a coordinating *logothetes ton sekreton* was added, a first minister in all but name.
 **The mechanism:** authority is split by matter; nobody below the throne can finish anything alone.
 
@@ -175,7 +176,7 @@ master of petitions; the chancery drafted; the emperor wrote the validating word
 only he might use; the keeper of the inkstand held that ink and so stood at the last step; a gold seal
 was hung; and the document was **registered in each bureau it touched**, each adding its own note that
 it had been entered. An unregistered privilege could not be claimed against a tax collector who had no
-entry of it `[MEMORY: Dölger and Karayannopulos on the imperial chancery; firm as shape]`. Each hand
+entry of it `[MEMORY: Dölger and Karayannopulos on the imperial chancery; firm as shape. RE-GROUNDED: stays memory-grade (no file holds *chrysobull*, *protasekretis*, *kanikleiou* or *synetheia*). The tree's sourced chains are cousins: the Ming draft-then-vermilion chain (ibid. :50); the Ottoman *nişancı* and the recallable seal (research/governance/governance_modes.md:68-69); the papal chancery's five-part letter and the petition whose carrier "shaped its success" (research/rhetoric_oratory_contest/rhetoric_oratory_contest_research.md:242-253, :305); the fee-taking hand as a purchased toll-post (research/rise_to_power_roster_system_research_v1.md:493-497)]`. Each hand
 took a customary fee (*synetheia*), which was most of an official's real income. The chain's delays
 were its politics: a bureau that did not enter a grant had refused it without saying so. The Ming
 analogue is exact and better documented in the tree: a memorial went to the Grand Secretariat for a
@@ -193,7 +194,7 @@ The land tax was assessed on a cadastre by inspectors (*epoptai*) and collected 
 (*dioiketai*): assessment and collection were separate careers so that neither could invent the
 other's numbers. A village was jointly liable: neighbours paid for a defaulter's land (*allelengyon*),
 and land abandoned thirty years reverted to the fisc. Collectors added lawful surcharges for their own
-pay `[MEMORY: Oikonomides in *The Economic History of Byzantium*; firm as shape]`. Three things
+pay `[MEMORY: Oikonomides in *The Economic History of Byzantium*; firm as shape. RE-GROUNDED: stays memory-grade (no file holds *allelengyon*, *epoptai*, *dioiketai* or *exkousseia*). Joint liability is tree-grounded elsewhere: the Book of the Eparch's guarantors (ibid. :30, BYZ-3) and the five-household groups (ibid. :64); a survey that fixes a baseline usable as evidence is T7 (.audit/2026-07-12-governance-compendium/41_proactive_scale_menus.md:157)]`. Three things
 hollowed it. **Exemptions**: a chrysobull of immunity (*exkousseia*) took an estate or a monastery out
 of the collector's reach for ever, and each emperor bought support with them. **Tax farming**: from
 the eleventh century the right to collect a district was sold for a fixed sum up front, and the farmer
@@ -211,7 +212,7 @@ pays someone with the *source* instead of the *proceeds* is cheap today and perm
 ### 2.6 The themes and the provincial chain
 
 A theme was a province under a *strategos* who held both the civil and the military power, with its
-soldiers settled on inalienable military lands they held for service `[TREE research/fa_se_historical_precedent_research_v1.md:154]`.
+soldiers settled on inalienable military lands they held for service `[TREE research/fa_se_historical_precedent_research_v1.md:154; RE-GROUNDED: also research/pre_firearms_formations/03_early_medieval.md:22 ("the state grants land that produces soldiers"; its "roughly 30 themes … 4,000–10,000 troops" is a lead)]`.
 The checks on him were structural. His fiscal officer (the theme's *protonotarios*) and his muster
 officer (its *chartoularios*) answered to the bureaux in the capital, not to him; he served a few
 years and was moved; large themes that had rebelled were split `[TREE research/proactive_governance_scale_research_v1.md:142, X2; reporting lines and tenure MEMORY: Oikonomides, Treadgold]`.
@@ -232,6 +233,7 @@ their own reserved posts: the *parakoimomenos* who slept across the door, the ke
 the master of the table, the *praipositos* who ran ceremony. They could never be emperor, which is
 why they could be trusted with everything else; Basil Lekapenos governed for five emperors from the
 chamberlain's post and was removed in a day when Basil II decided to rule for himself
+`[RE-GROUNDED, corrected: the tree gives no "in a day". research/rise_to_power_roster_system_research_v1.md:256-258 (D9): "he served five"; the 985 removal was "distinctively non-violent … the adult ruler exercising ordinary authority once the regency need lapsed"; :406-408 (G7): the fall is triggered "not by a rival or succession but by the new ruler's own ambition", a "soft, near-inevitable, gentle/exile-grade fall". §18.4 item 4 builds from that reading]`
 `[TREE .audit/… :33, BYZ-8; .audit/2026-07-12-governance-compendium/40_roster_officer_system.md:376, D9]`.
 Their power was access: a petition, a face, a paper reached the emperor through them. The Ottoman
 Chief Harem Eunuch turned the same position into an endowment income of his own; the Ming case ended
@@ -250,7 +252,7 @@ three weapons: only the patriarch crowned; he could bar the emperor from the chu
 John Tzimiskes do penance and send away his accomplice before he would crown him, 969; Nicholas
 Mystikos shut the doors on Leo VI over a fourth marriage and was deposed for it, 907); and a deposed
 patriarch's partisans could refuse communion with his successor for a generation (the Arsenites, after
-Michael VIII blinded the boy John IV Laskaris in 1261) `[MEMORY; firm]`. "Caesaropapism" names the
+Michael VIII blinded the boy John IV Laskaris in 1261) `[MEMORY; firm. RE-GROUNDED: stays memory-grade (no file holds Polyeuktos, Mystikos or the Arsenites). The tree's sourced forms of the same bargain: Leo I "the first crowned by the Patriarch" (research/social_contest_procedures/04_decision_procedure_catalog.md:71); the anointings of 751 and 754 and the 799–812 dispute after the coronation of 800 (research/governance/governance_modes.md:142-147); and the Ecumenical Patriarch under the Ottomans as "simultaneously religious authorities and state-recognized civil administrators" (:76), which is canon's containment of the Church at Himmelenger in another empire's hands]`. "Caesaropapism" names the
 emperor's appointing hand; the record shows a contest the emperor usually won and always paid for.
 **The mechanism:** the ruler names the head of the church from a short list the church controls, and
 the church's consent to a reign is given once, publicly, at a price.
@@ -263,10 +265,10 @@ child a presumption no usurper had. A successful usurper was emperor; a failed o
 Usurpers therefore married into the old house or ruled as guardians of its children (Romanos I,
 Nikephoros II, John I beside the Macedonian heirs), and the capital could rise for the house against
 the man: in 1042 the city's crowd deposed and blinded Michael V for exiling the born-in-the-purple
-Zoe `[MEMORY; firm]`. A rival was removed without killing him: **blinding** or other mutilation
+Zoe `[MEMORY; firm. RE-GROUNDED in part: "No formal rule existed; hereditary succession was custom, not law", the routes by army, people, Senate and king-maker, the stages (proclamation in camp or Hippodrome, the shield, coronation by the Patriarch) and the failure mode "rival simultaneous acclamations; the acclamation often only ratified a fait accompli" are TREE research/social_contest_procedures/04_decision_procedure_catalog.md:71, which also says of the Senate's part "I don't know it". The marriages into the old house and 1042 stay memory-grade]`. A rival was removed without killing him: **blinding** or other mutilation
 disqualified him for the throne for ever, and **tonsure** removed him into a monastery; the tree's
 research records the paired Roman finding that usurpation needed two triggers at once, strain and a
-legitimating occasion `[TREE research/governance/00_MANIFEST.md:59; conflicts_power_struggles.md]`.
+legitimating occasion `[TREE research/governance/00_MANIFEST.md:59; conflicts_power_struggles.md. RE-GROUNDED: at :14 ("a frontier defeat or fiscal shock *plus* a legion's acclamation ritual"); a single-source shape, graded "UNREACHED (one source)" with "no game corroborates two signals" at research/by_lane/FA_faction_actions.md:283. The tree's sourced blinding is Carolingian, not Byzantine: Bernard of Italy, 818, "a mitigation of a death sentence", of which he died and for which the king did public penance (research/governance/political_hierarchy_standing.md:191); tonsure as deposition is Childeric III, 751 (governance_modes.md:142). Byzantine blinding and tonsure stay memory-grade]`.
 The tree also holds the long consequence: each civil war was the next invader's opening, the invader
 "enters as an ally of one side … then remains" `[TREE research/historical/precedents_analysis.md:66]`.
 **The mechanism:** legitimacy is success, recognised by three constituencies and one priest; the old
@@ -279,7 +281,7 @@ in every ceremony: they performed the acclamations. The hippodrome was the one r
 and people were both present, so it was where the people shouted for a minister's dismissal or a
 tax's repeal, and where in 532 the two factions joined and nearly ended a reign. By the tenth century
 their role was ceremonial and salaried, which is its own lesson: a crowd given a part in the ritual
-is a crowd the ritual can count `[MEMORY; Alan Cameron, *Circus Factions*; firm as shape]`.
+is a crowd the ritual can count `[MEMORY; Alan Cameron, *Circus Factions*; firm as shape. RE-GROUNDED: stays memory-grade. The tree has the Hippodrome only as a place of proclamation (research/social_contest_procedures/04_decision_procedure_catalog.md:71) and "circus factions with a claimant" as one strife family (proposals/2026-11-04-strife-flows/00_MASTER.md:34)]`.
 **The mechanism:** a public occasion with an open floor where standing is performed to the crowd and
 the crowd answers.
 
@@ -287,7 +289,7 @@ the crowd answers.
 
 Three armed bodies stood in different relations to the emperor: provincial armies loyal to their
 general, the capital's regiments loyal to their pay, and from 988 a foreign guard (the Varangians)
-sworn to the throne itself, noted for serving whoever lawfully sat on it `[MEMORY; firm as shape]`.
+sworn to the throne itself, noted for serving whoever lawfully sat on it `[MEMORY; firm as shape. RE-GROUNDED: the date and the paid capital regiments are TREE research/pre_firearms_formations/03_early_medieval.md:24 ("the imperial Varangian Guard from ~988 onward"); the guard's loyalty to the seat stays memory-grade. What the divergence of the three loyalties looks like on a field is also the tree's: Manzikert, 1071, "a doctrinally adequate army losing because internal politics or unclear command produces non-execution" (04_high_medieval.md:156)]`.
 The eleventh century's politics was the provincial military houses against the capital's civil
 officials, each starving the other: the bureaux cut the armies' pay, the generals took the throne
 (1057, 1081) and governed through their kin `[TREE .audit/… :35, the Komnenian *sebastos* titles as a kinship-distance ladder]`.
@@ -300,7 +302,7 @@ The empire governed its neighbours with paper, titles and guests more than with 
 rulers were given court dignities and the stipends that went with them, which made them clients on
 the roll; their sons were educated at court, as guests and as hostages; brides were sent out
 sparingly; and trade was let in through named gates only, where *kommerkiarioi* with their own seals
-took the duty and enforced the treaty's lists `[MEMORY: *De Administrando Imperio*; the Book of the Eparch is TREE .audit/… :30]`.
+took the duty and enforced the treaty's lists `[MEMORY: *De Administrando Imperio*; the Book of the Eparch is TREE .audit/… :30. RE-GROUNDED: the protocol is TREE research/rhetoric_oratory_contest/rhetoric_oratory_contest_research.md:127 ("a graded protocol of precedence, gifts, and staged audience — diplomacy as ritual hierarchy rather than free negotiation"); the clientage by payment is proposals/2026-09-05-proceedings-subsystem/source/06-part-V-dossiers.md:39 ("Payments made to avoid war were recorded as imperial largesse"; "the excerpts on embassies constitute a precedent file"); hostage heirs have a sourced cousin in *sankin-kotai* (.audit/… :63). The *kommerkiarioi* and their seals stay memory-grade]`.
 A treaty of privilege was a chrysobull like any other grant, and it decayed like one: the exemption
 from duty given to Venice in 1082 for a fleet starved the customs and the native merchants for a
 century and ended in 1204 `[MEMORY for 1082; TREE research/fa_se_historical_precedent_research_v1.md:45 for 1204 as the tree's anchor]`.
@@ -312,7 +314,7 @@ keeper; and a governor far enough away that his orders are always old.
 
 | tradition | what it adds to the Byzantine shape | source |
 |---|---|---|
-| Abbasid | an **audit bureau** set over the others; the ruler's or vizier's **court of complaints** against officials (*mazalim*); the routine **fining of a dismissed official** to recover what he took; the post-master as the centre's eyes in each province; slave soldiers who became the government | `[MEMORY]` |
+| Abbasid | an **audit bureau** set over the others; the ruler's or vizier's **court of complaints** against officials (*mazalim*); the routine **fining of a dismissed official** to recover what he took; the post-master as the centre's eyes in each province; slave soldiers who became the government | `[MEMORY]`. RE-GROUNDED: the Abbasid particulars stay memory-grade (no file holds *mazalim*); each mechanism has a tree source in another polity: the audit set over the others is the Censorate and the residencia (`research/fa_se_historical_precedent_research_v1.md:127-128`); recovery from a departed official is the Venetian posthumous audit, with fines "against his estate before his heirs could inherit" (`research/governance/governance_modes.md:329`) |
 | Ottoman | servants of the ruler who can found no house (the *kul*); revenue grants rotated so they do not root (*timar*); tax farms sold for life (*malikane*) and the entrenchment race that follows; the grand vizier as the scapegoat who absorbs a failure; the guard's revolt as a veto | `[TREE research/governance/*.md; rise_to_power :524; FA lane file T-FA-3]` |
 | Chinese examination state | office by **credential**, earned in stages and held by cohort; the **rule of avoidance** (no man governs his home district); the magistrate whose formal power is whole and whose real capacity is his unranked clerks; orders in triplicate with deadlines; the censor who may accuse anyone | `[TREE .audit/… :41-51, CHN-1..9]` |
 
@@ -327,7 +329,7 @@ kept the Roman bureaux and staffed them with Romans while Goths held the army; t
 Sicily, crowned in 1130 with a papal party's blessing, kept the Greek and Arabic fiscal offices with
 their registers of land and men, staffed them with Greeks, Arabs and palace eunuchs, and kept beside
 them a roll of what each baron owed in knights; Serbian and Bulgarian rulers handed Byzantine
-dignities to their own war-nobility `[MEMORY: Cassiodorus' *Variae*; Johns, *Arabic Administration in Norman Sicily*; the *Catalogus Baronum*; firm as shape, no figure used]`.
+dignities to their own war-nobility `[MEMORY: Cassiodorus' *Variae*; Johns, *Arabic Administration in Norman Sicily*; the *Catalogus Baronum*; firm as shape, no figure used. RE-GROUNDED: these three cases stay memory-grade (no file treats them). The tree holds the configuration in three other places, each sourced: the Salian *ministeriales*, an unfree service class staffed "as a deliberate counterweight to over-mighty free princes", whose elevation was itself the grievance of the Saxon revolt and who rose into the nobility within two centuries (research/governance/governance_modes.md:233-235; conflicts_power_struggles.md:208-209); Venice's *cittadini originari*, "formally barred from patrician political office" with "an effective monopoly on the professional civil service" (.audit/… :96); and the Carolingian household-as-state (governance_modes.md:150)]`.
 The shape is constant across them:
 
 1. **The conquerors hold land and arms by deed, in an order fixed at the conquest** and recorded as
@@ -741,6 +743,7 @@ a place); only Jordan can author who sits there, what the seat is called and whe
 
 **4. Do the Crown's bureaux have a barred order?** (The tree's BYZ-8, `needs_jordan` since 2026-07-09;
 not superseded; canon is silent on who staffs the Ministries.)
+`[RE-GROUNDED, narrowed: "not superseded" holds for the question and not for the form. The 2026-07-12 closure ruled the form: BYZ-8 is MERGE, "Author the oath-of-renunciation as a second collateral-type within the … succession-oath unification … not new … scaffolding", and its barred-office half "is closer to CUT" (.audit/2026-07-12-governance-compendium/tier3_proposal_status_closure.md:123). Option (B) below is that form (an oath that bars). The tree also holds a non-eunuch historical model for (B), Venice's *cittadini originari* (§2.14's re-grounding note), and the two ways such a servant falls (§18.4 item 4)]`
 - *(A) No.* Ministry seats are filled from the same people as every other seat. The barons-and-clerks
   axis exists only as `altonian_civics` against `purge_altonia`.
 - *(B) Yes: an oath that bars.* A person who takes a seat of the named bodies swears off the founding
@@ -753,6 +756,7 @@ not superseded; canon is silent on who staffs the Ministries.)
 **Changed what to build.**
 - *Office and dignity are two tenures* (Kletorologion; the tree's BYZ-1, judged KEEP). Transfers
   whole, and costs nothing: the heir row was already the precedent.
+  `[RE-GROUNDED, corrected: KEEP is the 2026-07-09 judgment; the 2026-07-12 closure regraded BYZ-1 DISTILL ("supplies no missing rung"; "retire the standalone … two-track section; preserve only the decoupled-prestige kernel", .audit/2026-07-12-governance-compendium/tier3_proposal_status_closure.md:115). This design is that distilled form: no second ladder, a remit-less seat. §18.3]`
 - *The stipend is the bond, and it is yearly and personal* (the roga). Transfers whole onto
   `_renewals`; it is the reason `oblige_term: 4` is the right number and not only a swept one.
 - *A decision is in force when entered* (the chancery; the Ming vermilion endorsement; Zhang
@@ -779,10 +783,12 @@ not superseded; canon is silent on who staffs the Ministries.)
   ("its research agent was interrupted", `00_MANIFEST.md:28`); the only treatment is eleven table rows
   and nine proposals in the quarantined `.audit/2026-07-09-comparative-governance-research/`. §2 is
   therefore mostly `[MEMORY]`. It should be read as shapes; no number in this design rests on it.
+  `[RE-GROUNDED, corrected: the first sentence is true of research/governance/ only. Nine other files treat Byzantium, four of them at procedure depth (acclamation; court rhetoric and protocol; the reception dossier; the army and its two loyalties): unified/RESEARCH_MAP_INSTITUTIONS_A.md §1. After re-grounding, of the nineteen [MEMORY] marks in §2, seven are sourced in whole or in part, and twelve stay memory-grade with a sourced cousin named beside each: §18.2]`
 - **No source in the corpus treats a decree's entry as distinct from its issue**, in games or
   history, beyond the Ming row. Decision 1 rests on the shape alone.
 - **No shipped game models a paperwork chain as persons with budgets.** The nearest the tree records
   are Republic of Rome's agenda control and the Ming piaoni row (`digests/DG_research1.md:552`).
+  `[RE-GROUNDED: two further nulls and one presence. Null: of the four policy and court sims the suite verified, none rolls a governance act to fail except, partly, Dragon Age: Inquisition (research/game_precedent_suite/tables/R9_policy_court_sims.md:8-18), so §7.0's five draws have no shipped precedent. Null: the convergence the tree cites for office against dignity (X1) is graded OVER-CLAIMED at research/by_lane/NPC_npc_cast.md:386. Presence: the roga does have a shipped precedent, RTK XI "Ranks by Deeds" and RTK XIV's stipend by title (research/game_precedent_suite/tutorials/T13_koei.md:29, :78)]`
 - **Nothing in the tree says what the Altonian church is in play.** Not designed here.
 
 **NERS (definitions `CLAUDE.md` §0.06; E last, as a ratio).**

@@ -132,7 +132,7 @@ Stated once; each verb section cites them.
 
 **S1. The draw.** Every row of the family joins the graded route (`rosters.yaml: graded_inquiries`,
 the tree's one carrier for an act graded by degree with no prize: `research`, `examine`, `surveil`
-today; provider `social_contest`, entry `social_contest.roll`, pool by `seam/wrappers/sigma.py::faculty`).
+today; provider `social_contest`, entry `social_contest.roll`, pool by `seam/wrappers/pool.py::faculty`, `:78`, which `sigma.py:105` re-exports).
 The roster keeps its key; its note gains "and graded acts" (a rename is CORE's and is not asked for).
 The obstacle is composed by the one function `proposals/05_SC_obstacle_difficulty_and_modifiers_B.md`
 adds (`difficulty + modifiers`, the terms returned and recorded on the Event), never by a second

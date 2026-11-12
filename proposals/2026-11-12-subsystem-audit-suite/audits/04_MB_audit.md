@@ -2,6 +2,8 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
+Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (L-10) — §14 (c): the pool reader's owner is `seam/wrappers/pool.py::faculty` (`:78`), which `sigma.py:105` re-exports; one citation corrected. No finding changed.
+
 ## Read at: 601e715 (working tree)
 
 Scope: `modules/mass_battle/` (29 files, 11,624 lines, 4,634 executable statements), `systems/mass_battle/sim/`,
@@ -1117,7 +1119,7 @@ weights); the troop-type table is a second, parallel "what a kind of fighter is"
 attributes, with no declared relation between them.
 
 **(c) Target shape.** The existing owner is the pair `rosters.yaml: verb_capability` (verb → capability
-key) and `vocation_attribute` (key → attribute), read through `seam/wrappers/sigma.py::faculty`, over
+key) and `vocation_attribute` (key → attribute), read through `seam/wrappers/pool.py::faculty` (`:78`; `sigma.py:105` re-exports it), over
 `Person.capability` and the ten attributes of `references/descriptor_registry.yaml`. Mass battle should
 extend that, not add a scheme:
 
