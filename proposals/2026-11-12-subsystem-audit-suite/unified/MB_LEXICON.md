@@ -33,20 +33,51 @@ two things must share an ordinary word, the lexicon fixes the qualifier ("unit f
 fails (a) or (b) for a tree name becomes a rename candidate (§4); for a suite coinage it is renamed here and
 in the documents (§5); for one of Jordan's words it is listed for him.
 
-### 1.3 The levels (largest to smallest)
+### 1.3 Three groups of words, not one ladder (corrected 2026-11-12 on Jordan's question: "how does realm fit into this? as the surface upon which factions raise armies?")
+
+The first draft numbered realm, faction, army, subformation, unit and cell as seven levels of one ladder. They are
+three different things: the ground armies are raised and fought on, who raises an army, and the army's own chain
+of parts. Cell and rank/file are geometry of the field and of men, not echelons.
+
+**(a) The ground** (what factions raise armies on, and where armies stand, march and fight)
+
+| the word | one sentence a stranger lands on | where it lives |
+|---|---|---|
+| **realm** | the kingdom: the land and every place under it. Not an echelon of any army | `Rung` kind `realm` (T) |
+| **place** (territory, settlement) | a spot of the realm where an army stands, marches to, holds or fights | `Rung` kinds below `realm` (T) |
+
+**(b) The raiser**
+
+| the word | one sentence a stranger lands on | where it lives |
+|---|---|---|
+| **faction** | a house, Church or movement that holds land and may raise one army from its people (recruit, muster) | `rosters.yaml: factions` (T) |
+| **side** | the men who fight on one side of one battle: the attacker's or the defender's (may be more than one army) | the season's `claimants` / `subject` sides (T); the engine's `Unit` (T, **a tree name that fails**, §4 L2-1) |
+
+**(c) The army's own chain** (largest to smallest)
 
 | level | the word | one sentence a stranger lands on | where it lives |
 |---|---|---|---|
-| 1 | **realm** | the kingdom: every territory under one `realm` place | `Rung` kind `realm` (T) |
-| 2 | **faction** | a house, Church or movement that holds land and may raise one army | `rosters.yaml: factions` (T) |
-| 3 | **army** | a faction's fighting force: the men it has raised and organised into units under one commander | the `army` Record (T, ED-IN-0306): one per faction (`effects_information.py::_army_mintable`, `world_q.army_of`) |
-| 3′ | **side** | the men who fight on one side of one battle: the attacker's or the defender's | the season's `claimants` / `subject` sides (T); the engine's `Unit` (T, **a tree name that fails**, §4 L2-1) |
-| 4 | **subformation** | a group of units that stands at one post of the army's formation and fights by one set of tactics; led by the officer its units name when one man leads them all | Jordan's word (A-59, A-94). Not in code: proposed as a **read** over the unit rows' `post` (§3 D-1). The code's `Subformation` names one unit, not this (§4 L1-2) |
-| 5 | **unit** | a row of the army Record: men of one troop type, with a name, an officer, a role, a posture and orders (A-2) | army Record key `subformations` (T, **fails**, §4 L1-1); `orderofbattle.Subformation` (T, **fails**, L1-2); the engine's `Subunit` (T, **fails**, L2-1); the season verbs `form_unit`, `order_unit`, `disband_unit` (T, pass) |
-| 6 | **cell** | the smallest square of the field the battle resolves, and the men standing on it | engine footprint cell (T: 40 to 200 men, `config.CELL_FLOOR`/`CELL_CAP`); proposed 16 men on about 4 m square (`26_MASS_BATTLE_cell_scale_and_time.md` §1, P*) |
-| 7 | **rank / file** | a rank is a line of men side by side; a file is a line of men one behind another | period words only (MV F1, F3). The engine counts cells, not men: its "rank" is a row of cells, its "file" a column of cells (`hierarchy/units.py:42`, `COL_WIDTH`); prose says **cell row** / **cell column** for those (§2 C) |
+| 1 | **army** | a faction's fighting force: the men it has raised and organised into units under one commander | the `army` Record (T, ED-IN-0306): one per faction (`effects_information.py::_army_mintable`, `world_q.army_of`) |
+| 2 | **subformation** | a group of units that stands at one post of the army formation and fights by one set of tactics; led by the officer its units name when one man leads them all | Jordan's word (A-59, A-94). Not in code: proposed as a **read** over the unit rows' `post` (§3 D-1). The code's `Subformation` names one unit, not this (§4 L1-2) |
+| 3 | **unit** | a row of the army Record: men of one troop type, with a name, an officer, a role, a posture and orders (A-2) | army Record key `subformations` (T, **fails**, §4 L1-1); `orderofbattle.Subformation` (T, **fails**, L1-2); the engine's `Subunit` (T, **fails**, L2-1); the season verbs `form_unit`, `order_unit`, `disband_unit` (T, pass) |
+| 4 | **troops** (the men) | the soldiers of a unit or army, counted; a **troop type** is the kind of soldier a unit is made of | `Subformation.troops` (T, a headcount); `troops.yaml` (P*) |
 
-Beside the ladder, not on it: the **squad** (a handful of named characters fighting as one group on a small
+**Formation, always qualified.** **Army formation** (Jordan's "grand formation") is where an army's subformations
+stand relative to one another, at its five posts. **Unit formation** is how one unit's men stand (width, depth,
+shape). The bare word "formation" is refused (A-99 keeps Jordan's two qualified terms).
+
+**On the field, not echelons of the army:** the **cell**, the smallest square of the field the battle resolves,
+and the men standing on it (engine footprint cell, T: 40 to 200 men, `config.CELL_FLOOR`/`CELL_CAP`; proposed 16
+men on about 4 m square, `26_MASS_BATTLE_cell_scale_and_time.md` §1, P*); and **rank / file**, period words for men
+(a rank is a line of men side by side, a file a line one behind another, MV F1, F3). The engine counts cells, not
+men: its "rank" is a row of cells, its "file" a column of cells (`hierarchy/units.py:42`, `COL_WIDTH`); prose says
+**cell row** / **cell column** for those (§2 C).
+
+**Size words** (`company`, `battalion`, `regiment`, `host`, `banner`) are not game terms (Jordan, A-99, option 1):
+the words never appear in the suite or to the player; the player sees **unit**, and the model has no fixed-size
+echelon between unit and army.
+
+Beside the chain, not on it: the **squad** (a handful of named characters fighting as one group on a small
 grid, `04_MB_squad_grid_of_named_characters.md`), the scale below a unit where named persons fight, reached
 from a battle by the duel round (A-4, A-72).
 
