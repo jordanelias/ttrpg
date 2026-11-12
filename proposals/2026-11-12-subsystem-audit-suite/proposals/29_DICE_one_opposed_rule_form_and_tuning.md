@@ -12,7 +12,9 @@ A-7, A-8, A-12, A-25, A-26, A-31, A-59, A-72. Evidence and the rejected forms:
 It **supersedes three sentences** and adds no second system:
 `U5a_capability_home_and_two_inputs.md` row B4 and row B5 (the operand: the opponent's *pool*), `U1` §4's row
 *the opponent* (the same), and `U5b_PC_rulings_in_the_fight.md` §2 edit 4 (a second rate for the fight,
-which A-71 supersedes by name). Each carries a `Folded:` line. Every other edit of those files stands.
+which A-71 supersedes by name). The two proposals carry a `Folded:` line; `U1` §4's row is owed the same
+one-word amendment (pool to trained score) and was not edited by this lane. Every other edit of those files
+stands.
 
 ## What it changes in `engine/season/` at runtime
 
@@ -160,8 +162,9 @@ every social Event that records it (U5c §4 step 2 is already a declared mover f
 Row 1: after `01_CORE_tests_one_golden_owner.md`, with U5a Part A. Rows 2 to 4 and 8: with U5a Part B,
 `U5a_DICE_owed_edits.md` §1 (the one sampler) and `U5c_SC_one_obstacle_form.md` steps 0 to 5. Rows 5 to 7
 and 9: `U5b_PC_rulings_in_the_fight.md` §5 rows 4 and 5, with the rate's flip placed first in row 5. The
-approach's coefficients (U5b §5 row 7) and `03_PC_duel_round_and_approach_B.md`'s E-B10 to E-B14 readings
-are swept after gate 2 reads green, as U5b already orders. Lanes: DICE (row 1), IN and SC (2 to 4, 8), PC
+approach's coefficients (U5b §5 row 7), `03_PC_duel_round_and_approach_B.md` §3's readings and the E-B10 to
+E-B14 readings U5b cites from `audits/03_PC_audit_addendum_B.md` (not opened by this lane) are swept after
+gate 2 reads green, as U5b already orders. Lanes: DICE (row 1), IN and SC (2 to 4, 8), PC
 (5 to 7, 9). Nothing waits on Jordan.
 
 ## Layer 1 rows graded (`skills/layer-conformance`, Lens B; rows opened at the line)

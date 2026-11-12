@@ -537,3 +537,7 @@ Length follows the subject; a thorough audit of a large subsystem is long. Do no
 A receipt of at most 200 words: the file path, the verdict sentence, the five findings that matter most
 (id and a clause each), anything you could not read (`[SKIPPED: file — what, why]`), and any item you
 believe needs the orchestrator's attention. Not the audit itself.
+
+## Standing charge: eras, regimes, strife, endings, momentum and cascades (Jordan, 2026-11-12)
+
+*"Have Fable extend author and plan how to improve upon eras regimes and strife alongside methods to make the plot legible to player. Work to improve era endings (like death of monarch, change of rule, civil war breaks out, etc) and momentum mechanisms. Cascade effects and compounding are real."* Eras, regimes and strife are three distinct things. Carried by `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md` and `proposals/30_WR_*`, `30_GO_*`. Every later lane, closure and the v12 plan treats era endings, momentum, compounding (bounded, drawn, never triggered) and player legibility as in scope.

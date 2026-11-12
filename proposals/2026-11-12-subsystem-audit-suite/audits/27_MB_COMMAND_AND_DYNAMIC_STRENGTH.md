@@ -4,6 +4,8 @@
 
 ## Read at: `faf0cea` (working tree, 2026-11-12)
 
+Folded: 2026-11-12, rulings **A-77** and **A-78** (`unified/DECISIONS_ANSWERED.md:102-103`), Jordan's answers to this audit's §9. (1) **A-77**: the side-wide multiplier ships at zero when the first arm of the test's criterion passes; the small named level only if it fails. §3 row 13, §6 and §9 item 1 are amended to say so, and `proposals/27_MB_C_dynamic_strength_and_the_residual_chance.md` carries a `Folded:` line. (2) **A-78**: permanent losses are the dead, the captured and the deserters; the injured and those who fled and regrouped are recoverable, and a beaten commander who does nothing still recovers some of them. So this audit's own decision 19 (the fled return only when recalled, taken by ladder step 4) was **wrong and is withdrawn**: the unprompted return is the default, a drawn graded partial process, and a recall, a rally or a muster is a faster arm (ASSUMPTION, reversible). §0, §3 row 19, §7, §9 item 2 and §11 are amended; `proposals/27_MB_E_what_an_army_carries_back.md` carries the change. Still not established: how many of the fled desert and how many regroup, and the rate and window of return. (3) The order difference with `U5b_MB_rulings_in_the_field.md` §6 row 4 is reconciled on this audit's reading (the multiplier's test is read last), recorded by a `Reconciled:` line in `unified/U5_FINDINGS_CLOSURE_U5b.md`. §9 now holds no open item.
+
 Jordan's ruling A-59 (`unified/DECISIONS_ANSWERED.md:73`), verbatim: *"B, and order friction is a function of
 'command' which itself comes from a combination of learned skill/faculty and a function of social/mental
 attributes.... but also, each unit within subformation will have its own martial prowess based upon quality
@@ -37,11 +39,13 @@ discipline its side lends it. The plan, in five proposals:
   written first, tells removal from lowering; the chance left is the named draws, listed on the result.
 - **`27_MB_D`**: what a commander decides, what he is shown, and what each order costs him, through the
   chooser's one interface.
-- **`27_MB_E`** (A-69): a loss is dead, injured, fled or taken; the injured and the fled may return by a
-  draw; fatigue is carried on the one ledger. Every magnitude there is marked not established.
+- **`27_MB_E`** (A-69, A-78): the dead, the captured and the deserters are lost for good; the injured and
+  those who fled and regrouped return in part, by a draw, whether or not their commander acts; fatigue is
+  carried on the one ledger. Every magnitude there is marked not established.
 
-Nothing here adds a resolver, a ladder, a capability scheme or a guard. Two items go to Jordan (§9): whether
-to ship the multiplier at zero if the test says it can go, and whether fled men return only when recalled.
+Nothing here adds a resolver, a ladder, a capability scheme or a guard. The two items this audit put to
+Jordan are answered (§9): the multiplier ships at zero when the test's first arm passes (A-77), and fled men
+drift back unprompted, in part (A-78).
 
 **Vocabulary** (the suite's, `proposals/04_MB_cell_hierarchy_as_data.md` §1): at the designer's surface
 **army, unit, subformation, troops**; in code `Unit` (a side's army), `Subunit` (a unit), the subunit's
@@ -143,13 +147,13 @@ worth one die whoever he is, and has no distance. **Kept:** its site, its bands'
 | 10 | what a unit's prowess is | `prowess(atom)`: quality times a reference size, less its disorder; numbers, subformation and tactics act through the pair, not through it | 1 (A-59, A-60), 4 (CR-12 step 2) | `27_MB_B` §2 |
 | 11 | the headcount body's literal | a troop row, `infantry`, with today's values | 3 (`CLAUDE.md` §0.05: a fact where code reads it) | `27_MB_B` §3 |
 | 12 | what replaces the multiplier | nothing | 1 (A-59) | `27_MB_C` §1 |
-| 13 | removal or lowering | a test with a criterion; ship nothing before it | 1 (A-59's record) | `27_MB_C` §4; §9 item 1 |
+| 13 | removal or lowering | a test with a criterion; ship nothing before it; **zero when its first arm passes, the named level only if it fails (A-77)** | 1 (A-59's record; A-77) | `27_MB_C` §4 |
 | 14 | the residual's form, if any | a capped, named level per side per bout | 3: D-34's option B as written | `27_MB_C` §5 |
 | 15 | the report's `fortune` field | withdrawn; `report.draws` in its place | 2: its subject is retired | `27_MB_C` §3 |
 | 16 | an unplayed commander's rule at a window | none in the module; absence, or the chooser | 3 (`CLAUDE.md` §10: scripting drift) | `27_MB_D` §4 |
 | 17 | where loss is written | the unit row; the read moves with the write | 1 (A-69, A-2); `CLAUDE.md` §0.1 pt 1 | `27_MB_E` §2 |
 | 18 | how the injured return | the world's motion draw, with rest, supply, place and the unit's state as terms | 1 (A-69), 4 (A-54) | `27_MB_E` §3 |
-| 19 | how the fled return | when recalled, by a verb that exists, and refusable | 4 (A-56; "nothing but a person acts"); §9 item 2 | `27_MB_E` §3 |
+| 19 | how the fled return | **unprompted, in part, by the world's motion draw; those still gone at the window are the deserters; a recall, a rally or a muster brings more back or sooner (ASSUMPTION, reversible)**. This row first read "when recalled" by ladder step 4; Jordan ruled otherwise and that reading is withdrawn | 1 (A-78) | `27_MB_E` §3 |
 | 20 | carried fatigue | a crossing on the row, turned into `entry_stamina` when the input is built | 4 (D-48) | `27_MB_E` §4 |
 
 ## 4. Gates (execution artifacts), by proposal
@@ -203,7 +207,7 @@ order stands:
 | `27_MB_A` §3, §4 (`obey`) | row 5 | the one sampler (row 4); the manager proposal's §2, §4 |
 | `27_MB_D` | after row 5 | CHAR's cells on payload values, for the NPC half |
 | `27_MB_C` §4 (the test) | after rows 4, 5 and 10 | every named draw on; the calibration instrument's "results" block |
-| `27_MB_C` §2 (the deletion) | one commit, after the test and Jordan's word on §9 item 1 | — |
+| `27_MB_C` §2 (the deletion) | one commit, after the test, at the value A-77 rules for the arm that passed | — |
 | `27_MB_E` §2, §4 | after row 2 (the typed outcome) and the one-ledger proposal's step 3 | per-part outcomes |
 | `27_MB_E` §1, §3 values | not before the source search, or Jordan's values | A-54's motion draw (WR); custody (PHYSICAL) |
 
@@ -218,14 +222,16 @@ leaf; the nested duel).
 Carried by `27_MB_E`. In short: a loss has a kind, read off what the field already returns (fight loss,
 pursuit loss, the taken, each part's end state) by two season-side draws; the loss is written on the unit's
 row, and strength is then read from that row alone; the injured return by the world's motion draw with rest,
-supply, place and the unit's state as its terms; the fled return when the commander recalls them and the
-levy complies; fatigue is a crossing on the row that becomes the entry share of a second field in the same
-round. It amends `16_PESSIMIST_MB_rout_has_two_exits.md`, `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md`,
+supply, place and the unit's state as its terms; the fled return in part by the same motion with nobody
+acting (A-78), those still gone when the window closes are the deserters, and a recall, a rally or a muster
+brings more back or sooner; the dead, the captured and the deserters are permanent; fatigue is a crossing on
+the row that becomes the entry share of a second field in the same round. It amends `16_PESSIMIST_MB_rout_has_two_exits.md`, `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md`,
 `16_PESSIMIST_MB_one_stamina_ledger.md` and `26_MASS_BATTLE_movement_and_fatigue_as_data.md` in place.
 
 **Not established** in the tree's research, and so not quoted: the ratio of dead to injured; the rate and
-span of recovery; whether the fled return unprompted; what share never return; how long a season round is in
-the fiction (not read by this lane). `27_MB_E` §5 gives seven calibration orderings and §6 the source search.
+span of recovery; how many of the fled desert and how many regroup; whether acting brings more back or
+sooner (taken as yes, reversible); how long a season round is in the fiction (not read by this lane).
+`27_MB_E` §5 gives the calibration orderings (T-11 to T-18) and §6 the source search.
 
 ## 8. Layer 1 conformance
 
@@ -260,6 +266,10 @@ is test code, not engine code.
    well-executed plan can still lose to nothing a commander did, by a bounded amount. Recommended: (a) when
    the first arm passes, (b) only when the second does. Shipping zero overwrites a ruled magnitude
    (`ED-MB-0016`) one step past the word "lower", which is why it is asked.
+**Both items are answered** (kept below as asked, for the record). Item 1: **A-77**, option (a): zero when
+the first arm passes; (b) only if it fails. Item 2: **A-78**, neither option as written: the fled return
+unprompted and in part, the deserters never, and this audit's taken answer (recalled) is withdrawn.
+
 2. **Fled men: recalled, or drifting back.** A-69's record marks this not assumed, and the tree's research
    does not establish it. Taken by the ladder (step 4) as *recalled*: they return only when the commander
    musters them and the levy complies. *(a) Recalled:* getting an army back costs acts and standing with the
@@ -274,7 +284,7 @@ a unit's dice (9) and the owner of loss (17) are each answered above by a ruling
 | file | what was folded |
 |---|---|
 | `proposals/26_MASS_BATTLE_maneuver_orders.md` | §1's pool (Command, plus one for an officer) is replaced by the chain and the two inputs; distance and misreading added; its table of kinds kept as steps |
-| `proposals/26_MASS_BATTLE_calibration_targets.md` | §3's last row ("read, not proposed") becomes the six-arm test; rows T-11 to T-17 |
+| `proposals/26_MASS_BATTLE_calibration_targets.md` | §3's last row ("read, not proposed") becomes the six-arm test; rows T-11 to T-18 |
 | `proposals/26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` | §4's "the field does not decide who among the hurt dies" has its season-side draw; the fled; the general's fall reads his post |
 | `proposals/26_MASS_BATTLE_movement_and_fatigue_as_data.md` | `fatigue.entry.second_field` becomes the fallback; the carried value is the writer |
 | `proposals/04_MB_manager_battle_one_resolver.md` | §6's `fortune` withdrawn for `report.draws`; §7's officer rolls; the window view's three fields |
@@ -303,7 +313,8 @@ Not edited: `proposals/04_MB_unit_loadout_and_weapon_in_hand.md` (superseded by 
 
 Command delay as a number, and any reach of voice, horn or flag in metres (MV, "does not establish"). Any
 magnitude for distance, misreading or refusal. A win probability by force ratio. The ratio of dead to
-injured; recovery rates and spans; whether the fled return unprompted. Whether a victor recovers his own
+injured; recovery rates and spans; how many of the fled desert and how many regroup (that some return
+unprompted is ruled, A-78). Whether a victor recovers his own
 wounded. The length of a season round in the fiction. Every seed in the five proposals is marked as one.
 
 ## 12. Reading disclosure and evidence log

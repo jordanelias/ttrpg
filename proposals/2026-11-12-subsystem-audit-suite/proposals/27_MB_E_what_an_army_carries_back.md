@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Folded: 2026-11-12, ruling **A-78** (`unified/DECISIONS_ANSWERED.md:103`), Jordan's answer to audit 27 §9 item 2: *"a beaten commander still loses their troops who died or got captured or deserted. a beaten commander who does nothing recovers some of the troops who were injured or who fled and regrouped"*. Three amendments, made in the body below. (1) **Permanent losses are the dead, the captured and the deserters; recoverable losses are the injured and those who fled and regrouped.** (2) **The recalled-only default is dropped.** Men who fled drift back without any command, in part, by a drawn graded process: the unprompted arm is the default. Those who never come back within the window are the deserters. (3) **Acting recovers more or sooner** (a recall, a rally, a muster): taken as yes, marked ASSUMPTION and reversible by one switch, because the ruling does not state it. Still not established in the tree's research, and so still not quoted: how many of the fled desert and how many regroup, and the rate and the window of return; §5 gives the targets.
+
 Lane MB (the season-side write is IN's; a cohort's own deaths are SE's and the census's; custody is the
 PHYSICAL lane's). Serves ruling **A-69** (`unified/DECISIONS_ANSWERED.md:90`), Jordan: *"armies carry fatigue
 and losses back. losses are written. however some losses will be due to injury not death or from fleeing, so
@@ -16,8 +18,9 @@ entry share), each amended in place with a `Folded:` line. Audit: `audits/27_MB_
 the wounded: "Nothing on wounded. Every figure above is dead (or dead and captured where said)"
 (`research/historical/mass_battle_casualties_and_results_grounding.md:124`); one engagement in that note
 names wounded beside dead (row A9) and one case is not a ratio. Not established anywhere in the tree: the
-ratio of dead to injured; how fast the injured return and over what span; whether men who fled come back
-unprompted or only when recalled; what share never return. Every magnitude below is therefore a named
+ratio of dead to injured; how fast the injured return and over what span; how many of the men who fled
+desert and how many regroup; whether a commander's acting brings more back, or brings them sooner. (That
+the fled return in part unprompted is no longer open: A-78 rules it.) Every magnitude below is therefore a named
 parameter with a control arm and **no shipped default**; §5 gives the calibration targets (orderings only)
 and §6 the source search that must be filed before any figure is used.
 
@@ -25,7 +28,8 @@ and §6 the source search that must be filed before any figure is used.
 
 With `recuperation: off` (the control): nothing; today's loop exactly. With it on, for a side that fought as
 an army: its units' strength falls by what the field cost; part of that cost is held on the unit's row as men
-injured and men fled; in later rounds some of them return, by a draw; the dead and the taken do not. A unit
+injured and men fled; in later rounds some of them return, by a draw, whether or not their commander does
+anything; the dead, the taken and those who desert do not. A unit
 that fights twice in one round enters the second field at the stamina the first left it. Declared hash movers
 wherever an army field is fought; none in a natural season today (`audits/04_MB_audit.md` F-MB-03).
 
@@ -57,10 +61,16 @@ The field returns, per side and per part (the typed outcome as the two proposals
 
 | kind | what it is | comes from | returns? |
 |---|---|---|---|
-| **dead** | killed in the line or in the pursuit | a drawn share of `fight_loss`; the untaken part of `pursuit_loss` | never |
-| **injured** | hurt and out of the ranks | the rest of `fight_loss` | by the recovery draw (§3) |
-| **fled** | alive, unhurt, gone from the colours | a drawn share of the **survivors** of a part that ended `routed` (not `rallied`, not `withdrew`) | by the return rule (§3) |
-| **taken** | alive in the victor's custody | `taken` (the `26_…` §4 draw) | only by the custody verbs (`14_VERBS_PHYSICAL_A_custody_and_force.md`) |
+| **dead** | killed in the line or in the pursuit | a drawn share of `fight_loss`; the untaken part of `pursuit_loss` | never (A-78: permanent) |
+| **captured** | alive in the victor's custody | `taken` (the `26_…` §4 draw) | not by recuperation (A-78: permanent to the commander); only the custody verbs move a captive (`14_VERBS_PHYSICAL_A_custody_and_force.md`) |
+| **injured** | hurt and out of the ranks | the rest of `fight_loss` | in part, by the recovery draw (§3) (A-78: recoverable) |
+| **fled** | alive, unhurt, gone from the colours | a drawn share of the **survivors** of a part that ended `routed` (not `rallied`, not `withdrew`) | those who **regroup** return in part, unprompted, by the return draw (§3); those who do not are the **deserters** (A-78: permanent) |
+
+A-78 names five fates and the row holds two of them. **Deserters are not a separate count written at the
+field.** A man who fled is held on the row as fled; whether he regrouped or deserted is what the return draws
+show, round by round, until the window closes on those still gone. The ruling's own phrase is "fled and
+regrouped", and the proportion of the two is not established anywhere in the tree, so it is an output of the
+draws and their terms and is read by a target (§5, T-18), never an input with a figure.
 
 - **Two draws, season-side, in `_eff_march`'s one casualty write, per part:** (a) of `fight_loss`, the share
   that is injured and not dead; (b) for a routed, unrallied part, the share of its survivors that fled. Each
@@ -102,11 +112,15 @@ path, as `04_MB_campaign_party_economy.md` §1 writes `experience`.
 - **Both sides, the same way.** The write is per unit row and does not ask who won or who marched. A-69
   leaves the defender's case "taken to be yes by symmetry"; this is symmetric by construction.
 
-### 3. Return is a draw, graded, and never a fixed share of the absent
+### 3. Return is a draw, graded, partial, and it happens whether or not the commander acts (A-78)
 
-**The injured** recover as the world moves (A-54: the world's motion is a draw on the one ladder, a place's
-endurance against the season's hardship, and a person's skill bears on it). Once a round, for each unit row
-with injured men, where the army stands:
+Both recoverable kinds return **unprompted**: "a beaten commander who does nothing recovers some". The
+carrier is the world's motion (A-54: a draw on the one ladder, a place's endurance against the season's
+hardship, and a person's skill bears on it), once a round, for each unit row with absent men. Nobody has to
+form an act for it to run. What a commander does changes its odds and adds a draw of his own; it is never a
+precondition.
+
+**The injured.** Where the army stands:
 
 ```
 pool      the endurance of the place the army is stationed at            (A-54's pool; the WR lane's reader)
@@ -124,21 +138,40 @@ band  ->  aftermath.recover_share[band] of the injured return to `assigned`; the
 - Injured men still absent after `aftermath.window` rounds are struck from `absent`: they have gone home or
   died, and the row stops carrying them. The window is not established; it is a parameter.
 
-**The fled.** Whether they come back unprompted is not established (above). Decided by the ladder, step 4,
-and reversible by one switch: **they return when recalled, and the recall can be refused.**
+**The fled.** The same motion draw, once a round, with its own terms:
 
-- Precedent: nothing but a person acts (`14_VERBS_MILITARY_D_the_order_of_battle.md` §5, on ED-IN-0306), and
-  the common people have "comply or refuse" among their few heavy moves (A-56). A levy that ran went home;
-  home is its cohort. So the commander's `assign_troops` on a unit with fled men is the recall
-  (`restore`, kind `fled`), drawn on his `command` as that verb already is, with the cohort's stance toward
-  him and the unit's `arrears` as terms, and the band gives the share that answers. No new verb.
-- The other arm, kept as the test's comparison: `fled_return: unprompted` runs the injured's draw for the
-  fled as well, with distance from the cohort's home as a term.
-- `fled_return: off` is the third arm: they never return. It is the control for both.
-- What the page-read source does say (and it is about a rally on the field, not a return afterwards): light
-  troops "simply turned and ran, and then rallied once they had temporarily outdistanced pursuit", and a
-  leader stops a panic in person (MV P1, P2). That is the field's rally draw, already amended by troop weight
-  (`26_…` §5), and is not evidence for either arm here.
+```
+pool      the endurance of the place the army is stationed at
+obstacle  the season's hardship
+          + the unit is in `arrears`             + the army stands far from the cohort's home
+          + the part was ridden down by horse    + the cohort's stance toward the commander is hostile
+band  ->  aftermath.regroup_share[band] of the fled return to `assigned`; the rest stay absent
+          and are drawn again next round
+```
+
+- Men who fled and are still absent when `aftermath.window` rounds have passed are struck from the row as
+  **deserted**, and the strike is an Observation on the round's Event (how many, from which unit). That is
+  the only place desertion is counted, and it is a result, not a rate.
+- The four terms are a design, with the signs stated and the sizes parameters; none is sourced. Each is a
+  fact its owner already holds (the Record's `arrears`; the station and the cohort's rung; the outcome's
+  pursuit; a stance row).
+- **Acting recovers more, or sooner** `[ASSUMPTION; A-78's record marks it not stated; reversible: aftermath.acting: off]`.
+  Three acts, each one that exists or is already proposed, none a precondition of the draw above:
+  - a **recall**: the commander's `assign_troops` on a unit with fled men is one **further** draw that round,
+    on his `command` as that verb is already drawn (`14_VERBS_MILITARY_D_the_order_of_battle.md` Edit 4),
+    its band returning a share of those still absent. A second draw in a round is "sooner"; a commander of
+    high `command` is "more";
+  - a **rally** on the field (`16_PESSIMIST_MB_rout_has_two_exits.md` step 1) acts earlier still: a side
+    rallied or withdrawn in order has no fled men to recover;
+  - a **muster** at the cohort's home (`14_VERBS_MILITARY_C_the_muster.md`) removes the distance term for
+    that round.
+  For the injured the like act is `tend`, as above.
+- `aftermath.return: off` is the control: nobody returns. `aftermath.acting: off` is the reversible arm: the
+  three acts change nothing, and only the unprompted draw runs.
+- What the page-read source says is about a rally on the field, not a return afterwards: light troops
+  "simply turned and ran, and then rallied once they had temporarily outdistanced pursuit", and a leader
+  stops a panic in person (MV P1, P2). It is the ground for the field's rally draw by troop weight
+  (`26_…` §5). It is not a source for how many fled men regroup later, and none is claimed.
 
 ### 4. Fatigue is carried on the one ledger
 
@@ -160,7 +193,7 @@ and reversible by one switch: **they return when recalled, and the recall can be
 
 ### 5. Calibration targets (orderings; no historical figure exists to set a band)
 
-Read on the instrument of `26_MASS_BATTLE_calibration_targets.md` §2, as rows T-11 to T-17 of its table;
+Read on the instrument of `26_MASS_BATTLE_calibration_targets.md` §2, as rows T-11 to T-18 of its table;
 n at least 400; each parameter swept at three points (the `assumption` grade's rule: inject, declare the
 site, sweep three points), and an ordering must hold at all three to count.
 
@@ -171,8 +204,10 @@ site, sweep three points), and an ordering must hold at all three to count.
 | T-13 | recoverable share of a unit pursued by horse against the same unit unpursued | lower when pursued | no horse on either side |
 | T-14 | strength three rounds after a lost field | above its strength just after the field and below its strength before, in most seeds; equal to neither in all | `off` |
 | T-15 | injured returned after one round at a supplied home station against on the march and short of ration | higher at rest; neither 0 nor all | the terms zeroed: equal |
-| T-16 | fled men returned under `recalled` by a commander at `command` 5 against 0, and against no recall | higher; higher; zero with no recall | `unprompted`: above zero with no recall |
+| T-16 | fled men returned when the commander does **nothing**, over the window | above zero and below all, in the mean; not the same at every seed (A-78: "recovers some") | `return: off`: zero |
+| T-16b | the same, with a recall each round by a commander at `command` 5, and at 0 | more returned, or the same number in fewer rounds, than with no act; more at 5 than at 0 | `acting: off`: equal to T-16, field for field |
 | T-17 | a side fighting its second field of a round against its rested mirror | loses more often than the mirror by more than the sampling band; its `entry_stamina` equals the first field's `stamina_left` plus one lull | `carry: off` |
+| T-18 | of the men who fled, the share struck as deserted when the window closes | strictly between 0 and 1 in the mean; not constant across seeds; higher for a unit in arrears and for one ridden down, same seeds | the two terms zeroed: equal |
 
 No band is a number from history. If a source search (§6) later files one, it joins as a flag, never as a
 gate, exactly as T-1 does.
@@ -185,8 +220,9 @@ To be filed as `research/historical/mass_battle_aftermath_grounding.md`, with th
 1. Wounded beside killed in pre-gunpowder field battles: any source giving both for one army. The one case
    filed is CR A9.
 2. Return to the ranks: how many of the wounded fought again, and after how long.
-3. Stragglers and deserters after a defeat: whether a beaten army's numbers rose again in the following days
-   without a muster, and by what means they were gathered where they were.
+3. Stragglers and deserters after a defeat: by how much a beaten army's numbers rose again in the following
+   days without a muster (that they rose is Jordan's ruling, A-78; the amount and the span are what is
+   sought), what share never returned, and whether a commander's recall or muster changed either.
 4. Whether a victor's holding the field changed his own wounded's fate.
 
 The works audit 26 lists as not reached at any tier above a snippet (`audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`
@@ -202,7 +238,8 @@ The works audit 26 lists as not reached at any tier above a snippet (`audits/26_
 | `engine/season/loop/effects_combat.py::_eff_march` (IN) | the two draws of §1; `lose` through the army write path; the cohort's body by the dead share only; `last_field` |
 | `engine/season/seam/wrappers/mass_battle.py` (IN) | `_order_of_battle` stops passing fitness under the arm; `field_input` computes `entry_stamina` per part from `last_field` |
 | the world-motion step (WR; A-54's owner) | the injured's recovery draw as one more motion, reading the Record |
-| `engine/season/loop/effects_army.py` (IN) | `assign_troops` on a unit with fled men is the recall |
+| the world-motion step (WR; A-54's owner) | the fled's return draw, the same motion with its own terms; the strike at the window, as an Observation |
+| `engine/season/loop/effects_army.py` (IN) | `assign_troops` on a unit with fled men is one further draw that round (the recall), behind `aftermath.acting` |
 | `references/troops.yaml: aftermath`, `fatigue.carry_rounds` (MB) | the tables and switches; every value marked not established |
 
 ## Gate (execution artifacts)
@@ -215,16 +252,20 @@ The works audit 26 lists as not reached at any tier above a snippet (`audits/26_
    stood has none in all; a rallied unit has none in all.
 4. Three rounds after a lost field, 200 seeds: some injured have returned and some have not, in most seeds;
    the dead count is unchanged by any `tend`.
-5. Under `recalled`: with no `assign_troops`, no fled man returns in any seed; with it, some return in some
-   seeds and the act's Failure band returns none. Under `unprompted`: some return with no act.
+5. **A commander who does nothing recovers some.** 200 seeds, no act formed by anyone on the army for the
+   whole window: fled men return in most seeds, never all of them in every seed, and the men struck at the
+   window's close are above zero in some seeds. With a recall each round: more return, or as many in fewer
+   rounds, beyond the sampling band. With `aftermath.acting: off` the recall changes nothing, field for
+   field. With `aftermath.return: off` nobody returns.
 6. Two fields in one round for the same army: the second field's `entry_stamina` per part equals the first's
    `stamina_left` plus one lull's recovery, asserted on the built input.
-7. Rows T-11 to T-17 print with their controls; a row whose mechanism is off prints "no mechanism".
+7. Rows T-11 to T-18 print with their controls; a row whose mechanism is off prints "no mechanism".
 
 ## Falsifier
 
 A unit whose every loss returns, or none, at every seed. A return of the same share at every seed. A dead man
-restored by `tend`. A loss present in both the cohort's body and the unit's `assigned`. A second field in a
+restored by `tend`. A captive or a man struck as deserted back on the row by recuperation. Fled men who
+return only when an act is formed (the recalled-only reading A-78 rules out). A loss present in both the cohort's body and the unit's `assigned`. A second field in a
 round entered at full stamina. Any figure for a ratio, a rate or a window appearing in the troop file without
 a filed source row or a Jordan-set value.
 
@@ -235,12 +276,14 @@ a filed source row or a Jordan-set value.
   injured get its like. Vertical: a battle's cost reaches the next battle and the town that gave the men.
   Diagonal: a short ration or an unpaid army slows its mending. Horizontal: winner and loser alike. Cut it
   and a defeat is one `tend` from never having happened.
-- **R.** Whether to fight again at once or wait for the hurt; whether to spend standing with a levy calling
-  it back; an army that never recovers because nobody could feed it. With no player, armies waste and mend.
-- **S.** One ledger for fatigue; one owner for strength; the recovery is the world's one motion draw; the
-  recall is a verb that exists.
-- **E, against that.** One column, two ops, two draws at one write, one motion, one switch; a certain,
-  total restoration leaves.
+- **R.** Whether to fight again at once or wait for the hurt; whether to spend acts calling a levy back
+  sooner or let it drift in; an unpaid army that melts by desertion; an army that never recovers because
+  nobody could feed it. With no player, armies waste and mend with nobody acting, which is the half of R
+  that has no player in it.
+- **S.** One ledger for fatigue; one owner for strength; both recoveries are the world's one motion draw;
+  the recall, the rally and the muster are verbs and draws that exist.
+- **E, against that.** One column, two ops, two draws at one write, one motion with two term lists, two
+  switches; a certain, total restoration leaves.
 
 ## Cost class
 

@@ -1,5 +1,7 @@
 # PC — one duel round as the unit of play: the approach choice, the round entry, the grid seam, the field's duel, and the NPC's decider
 
+Folded: 2026-11-12, lane 29 (`proposals/29_DICE_one_opposed_rule_form_and_tuning.md`), on Jordan's A-71 — the round's exchanges are opposed by `sigma_leverage.opposed_ob(the defender's trained score, opposition_rate)`, the rule the argument uses; the round's input carries the rate and the pool pair raw. The fold is stated in full at the head of `03_PC_duel_round_and_approach_B.md`.
+
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.2, §1.3) — superseded by `03_PC_duel_round_and_approach_B.md` where the two differ (its §1 table), and by four rulings: A-4 (a duel inside a battle is called from inside as a nested contest: round state lives in the calling loop's frame, never on an adapter; the cap is `U5b_PC_rulings_in_the_fight.md` §1), A-1 (auto-resolve is the one resolver: equal plans agree exactly, not in expectation), A-31 (longer fights: the approach is calibrated after the damage scale, `U5b_PC_rulings_in_the_fight.md` §4–§5) and the standing rule (the upset flip becomes a tracked riposte, `18_DETERMINISM_no_certain_matchup.md`). §2, §3, §5, §6 and §7 carry the changes in place; the author's text stands elsewhere.
 
 ## Status: PROPOSED

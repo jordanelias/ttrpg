@@ -198,7 +198,7 @@ half-score; the defender four ranks better is still wounded by more than one att
 the half-score leaves one in five. Aptitude (the module's own sigma assembly, defender's attribute raised,
 500 fights a cell): Agility 4, 5, 6, 7 gives the attacker 52.8, 46.8, 40.9, 36.1%, a step of Agility being
 worth a rank of training; Strength 47.2, 42.9, 39.2% from 5 to 7; Endurance moves the wounding share by a
-point a step and the felled share by eight (it is Health). Perception is far steeper (one step from its
+point a step and the felled share by six to ten (it is Health). Perception is far steeper (one step from its
 default of 3 takes the wounding share from 52 to 39%); that is `audits/16_PESSIMIST_PC.md` §2.4's finding
 and is left to its lane.
 
@@ -212,11 +212,11 @@ and is left to its lane.
 | a two-sided roll (the defender rolls too) at the blow's centre, 1.07 | 4.08 | 4.15 | 44.8% | 0.1% | **65.9** / 33.7 / 0.4 |
 | chosen, same seeds | 4.28 | 4.51 | 44.5% | 0.1% | 78.0 / 21.9 / 0.1 |
 
-Cutting the defence layer to pay for the pool operand still leaves three to seven times the bloodless
-play, fewer reversals than the shipped fight, and deletes the parry, the dodge and the riposte as things
-that happen. Rolling both sides keeps the length and halves what skill is worth: two ranks better wins two
+Cutting the defence layer to pay for the pool operand still leaves 5.6 to 15.1% of fights undecided and no
+more reversals than the shipped fight has, and deletes the parry, the dodge and the riposte as things
+that happen. Rolling both sides keeps the length and cuts what skill is worth: two ranks better wins two
 in three where the chosen rule gives three in four, because the second roll is noise the better man cannot
-buy down; it also doubles the draws of every exchange for the port. Under `blood` terms a duel is still
+buy down; it also adds a draw to every exchange for the port. Under `blood` terms a duel is still
 one blow (1.08; first blood is the first wound, which no obstacle changes); under `yield` terms the chosen
 arm runs 2.82 turns and 2.55 blows where today's runs 2.15 and 1.51 (800 duels each).
 
@@ -243,10 +243,10 @@ Equals by rank, Failure / Partial / Success / Overwhelming, %:
 | even line + 1.5 (`hard`) | 77.8 / 12.1 / 9.0 / 1.1 | 74.6 / 11.9 / 11.1 / 2.3 | 72.3 / 11.5 / 12.4 / 3.8 | 69.8 / 10.8 / 13.4 / 5.9 |
 
 The tuning tables' half-step ladder (`13_SC_tuning_tables.md` T1: 0 / 0.5 / 1 / 1.5) stands unchanged on the
-even line: the four levels separate by seven to ten points of Failure at every rank (C2, C8), equals at
+even line: the four levels separate by six to ten points of Failure at every rank (C2, C8), equals at
 `routine` fail 56.9 to 60.1% (C1's 0.50 to 0.65) and carry 22.2 to 30.1% (C1's 0.15 to 0.30; a tenth of a
-point over at rank 7, which the calibration step reads). The first two rows show why the argument cannot
-stand where the blow stands: with no even line an argument at an equal carries 72 to 76% of the time.
+point over at rank 7, which the calibration step reads). The second row shows why the argument cannot
+stand where the blow stands: with no even line an argument at an equal carries 69 to 76% of the time.
 
 The better arguer, at `routine` (actor against opponent; then the reverse; then, of one exchange each way,
 the share in which exactly one side reaches Success):
@@ -283,7 +283,7 @@ soft cap applied by `net_boost`):
 | three `minor` | −0.75 (−0.693) | 82.0% | 8.8% |
 | three `major` (far past any lawful stack) | −3.00 (−1.446) | 95.2% | 1.7% |
 
-One step of aptitude is worth about nine points of Failure at the centre, a little more than two ranks of
+One step of aptitude is worth about nine points of Failure at the centre, about one and a half ranks of
 training (a rank is 0.4 of an obstacle, 0.18σ at pool 8, against a level's 0.25σ) and unlike training it
 saturates: the cap leaves the worst-placed roller 1.7% to carry. The same levels for the roller when the
 wounded man is the one argued at: Failure 48.9, 39.7, 31.8% at one, two and three `minor`. A hurt man is
@@ -303,11 +303,11 @@ wall and is `16_PESSIMIST_DICE_soft_ceiling.md`'s to shape. No cell reads 0 or 1
 | 0 | as coded: half the score in both, damage 1.55 | fails: 3.35 turns, 3.20 blows, 35.2% | fight holds; equals drift with rank in both contests | defence real; drift: rank-12 mirror fails 37.8% of exchanges | the control |
 | 1 | U5b's default: half the score in the fight, 0.4 in the argument, damage 1.07 | meets: 4.60 / 4.60 / 45.0% | fight curve three to five points steeper; two rules | drift kept: 4.64 to 5.88 turns and 0.5 to 4.1% undecided from rank 2 to 12 | **loses A-71 itself** (two rules) and the flat mirror |
 | 2 | 0.4 × the defender's pool in both (`U1` §4, CAP B5 as written) | fails the bloodless bound: 8.4 to 10 turns, 70% of them bloodless, reversals fall to 27% | better man's share falls (two ranks: 69.3%), a fifth undecided | **fails: 29.0 to 49.7% undecided** | the big attrition, measured |
-| 3 | 0.4 × pool less a constant of 1 to 2 in the fight | 2.0: meets; 1.0: 7.43 turns, 56% bloodless | holds | 1.5: 5.1%; 1.0: 14.1% undecided, 19.4% at rank 0 | a private constant in the fight, a second regime by another name; only its top value survives, and that value is form 5 less 0.4 |
+| 3 | 0.4 × pool less a constant of 1 to 2 in the fight | 2.0: meets; 1.0: 7.43 turns, 56% bloodless | holds | 1.5: 5.1%; 1.0: 14.1% undecided, 19.4% at rank 0 | a private constant in the fight, a second regime by another name; only its top value survives, and that value is form 5 with 0.4 added to every obstacle |
 | 4 | 0.4 × pool, the defence layer's neutralisation deleted | 6.1 to 7.7 turns, reversals 31 to 36% | steeper (84.2% at two ranks) | 5.6 to 15.1% undecided | **loses the parry, the dodge and the riposte**, and still fails (c) |
 | 5 | **0.4 × the defender's trained score; the base is the argument's even line and the fight's defence layer; damage 1.07** | **meets: 4.27 / 4.50 / 45.2%, 39.3% bloodless** | **meets: one curve in both, 66 / 78 / 92; equals 50** | **meets: six points a rank; mirrors flat 4.28 to 4.33; undecided ≤ 0.5%** | **chosen** |
 | 6 | a two-sided roll at the same centre | meets: 4.08 / 4.15 / 44.8% | **fails: two ranks better wins 65.9%** | meets | loses the better man's edge and doubles the draws |
-| 7 | the defender's training as levels, not obstacle | — (not run) | saturates at the soft cap: beyond about six ranks a better defender is no harder to hit | bounded by construction | loses A-26's own words (a cost per point) and A-7's assignment (training is dice, talent is levels); not run because the cap decides it by arithmetic (1.5σ ÷ 0.25σ) |
+| 7 | the defender's training as levels, not obstacle | — (not run) | saturates at the soft cap: beyond about six ranks a better defender is barely harder to hit | bounded by construction | loses A-26's own words (a cost per point) and A-7's assignment (training is dice, talent is levels); not run because the cap decides it by arithmetic (1.5σ ÷ 0.25σ) |
 
 What the chosen form costs, stated: (i) at the shipped realm the fight's obstacle moves from 1.0 to 0.8, so
 A-31's *"obstacle left alone"* is honoured in effect (a third of a turn) and not to the letter; A-71 is the
@@ -355,7 +355,7 @@ A-26's, the scale A-31's, the two inputs A-7's, the wound A-8's, and the operand
 | the pessimist's fourth row of §6.3 (0.4 × pool − 1: 5.65 turns, 3.48 blows, 5.3%) | same | reproduced (5.63, 3.49, 5.5%); it is form 3 at 1.0 |
 | `05_SC_opposed_obstacle_parity.md` (the carrier of the rate) | option B's edit 1 | stands with one change: the composed obstacle is the even line plus the product; its whole-dice tables are history |
 | `13_SC_tuning_tables.md`, `13_SC_calibration.md` | T1's sizes, C1 to C8 | stand; restated on trained ranks and on the even line; one row added to the test (the better-arguer curve) |
-| `03_PC_duel_round_and_approach.md`, `_B.md` | the round's input | gains the three raw fields; its E-B readings are re-read after gate 2, as U5b §5 row 7 already orders |
+| `03_PC_duel_round_and_approach.md`, `_B.md` | the round's input | gains the three raw fields; §3's readings (taken on the half-score) are re-read after gate 2, as U5b §5 row 7 already orders |
 | `10_DICE_one_score_two_roles.md` Edit B | `_opposition_of` returns the score | **restored** as written (U5a B4 had replaced "score" with "the pool") |
 
 Layer 1 rows are graded in the proposal; none is edited or owed. Not read in full: `audits/10_DICE_audit.md`

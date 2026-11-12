@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Folded: 2026-11-12, ruling **A-77** (`unified/DECISIONS_ANSWERED.md:102`), Jordan's answer to audit 27 §9 item 1: *ship zero when the first test arm passes*; the small named level is used only if the first arm fails. So §4's criterion is no longer a recommendation awaiting his word: it is the rule. Its first arm passing licenses the deletion of §2 at zero, in the commit that carries the test's table; its second arm (§5's level) is reached only on the first arm's failure; its third arm (neither) is unchanged. This overwrites `ED-MB-0016`'s magnitude one step past "lower", on his word. The last section ("Conflict with a ruled item") and §5's third bullet are amended below to say so. Nothing else changes: the test is still run, the criterion is still written before the run, and nothing ships before the table exists.
+
 Lane MB (the report's fields ride the typed outcome, IN's). Serves ruling **A-59**
 (`unified/DECISIONS_ANSWERED.md:73`) clauses (3) and its answer B: *"the overall army prowess as a grand
 formation of these units is dynamic so a static fighting value is misleading as the overall placement of
@@ -182,8 +184,8 @@ header, where zero is removal.
 - It differs from the multiplier in four ways: it is bounded with every other level; it is drawn again each
   bout, so it is not the day's; it adds to a roll and does not scale a pool; it is on the result.
 - It is still a value belonging to a side and not to where anything stands. That is why it ships only on the
-  criterion's second arm, and why whether to ship it is put to Jordan with the test's table (the audit's §9
-  item 1).
+  criterion's second arm. Jordan has ruled it so (A-77): zero when the first arm passes, this level only if
+  it fails.
 - This is the form D-34's option B was written in ("a signed amount of 'fortune of the day' that enters
   through the same capped channel as morale and fatigue, and is reported afterward",
   `unified/DECISIONS_FOR_JORDAN.md`, D-34).
@@ -199,7 +201,7 @@ header, where zero is removal.
 | `engine/season/loop/effects_combat.py::_eff_march` (IN) | writes the draws that changed the end state as Observations on the band Event |
 | `references/troops.yaml: deployment.fortune` (MB) | only if arm F ships |
 | `tools/ci_golden_modes_check.py` (MB) | the pin removed with the constant |
-| `registers/editorial_ledger_mb.jsonl` (MB) | a superseding row on `ED-MB-0016` citing A-59 and the test's table, in the same commit |
+| `registers/editorial_ledger_mb.jsonl` (MB) | a superseding row on `ED-MB-0016` citing A-59, A-77 and the test's table, in the same commit |
 
 ## Gate (execution artifacts)
 
@@ -251,6 +253,7 @@ re-record. The level, if shipped: edit.
 ## Conflict with a ruled item, named
 
 `ED-MB-0016` (the multiplier, log-SD 1.1; closed again at `ED-MB-0080`) is a ruled magnitude. A-59 licenses
-lowering it and asks for removal to be tested. Shipping zero goes one step past the word "lower"; the
-audit's §9 item 1 puts that step to Jordan with the test's table as the evidence, and this file ships
-nothing before it.
+lowering it and asks for removal to be tested. Shipping zero goes one step past the word "lower", and that
+step is now ruled: **A-77**, zero when §4's first arm passes, the named level of §5 only if it fails. The
+superseding ledger row on `ED-MB-0016` cites A-59, A-77 and the test's table. This file still ships nothing
+before the table exists.
