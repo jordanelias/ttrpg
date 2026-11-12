@@ -105,7 +105,7 @@ Verdicts: **HOLDS**, **NARROWED** (holds in a sense the words do not promise, or
 | # | premise | verdict | the cheapest observation that decided it | finding |
 |---|---|---|---|---|
 | P1a | a man pursues what he wants | **NARROWED** | 243 commitments are live after three seasons at seed 0 (226 at seed 1) and **0 have ever ended**; 11 of 749 resolved acts in a season answer the actor's own want (first audit). A want is a question he is asked each season; nothing counts toward it and nothing completes or abandons it | -07 |
-| P1b | and is stopped by what he believes | **FAILS, both ways** | shipped (`refusal_axis: None`): no candidate refused in 276 readings. Armed: all 46 cast refuse `transfer`, `move`, `forge`, `reconstruct`, `exchange` in 276 of 276 readings; the stop is the realm's and not the man's | -02 |
+| P1b | and is stopped by what he believes | **FAILS** as a belief about what is right; **HOLDS** as a belief about what is so | moral: shipped (`refusal_axis: None`), no candidate refused in 276 readings; armed, all 46 cast refuse `transfer`, `move`, `forge`, `reconstruct`, `exchange` in 276 of 276, so the stop is the realm's and not the man's. Factual: with clause 4 cut, refusals rise 656 to 762 in two seasons, so he does decline what he believes cannot be done | -02 |
 | P2 | two men with different convictions choose differently | **NARROWED** to pursuits; **FAILS** on the field named `conviction` and on the names | swap a man's whole religious affiliation: his top act moves in 6 to 15 of 276 readings (2 to 5%); redraw the same man: it moves in 61%. A man of `love` alone tops `forge` in 266 of 276 | -01, -04 |
 | P3 | a man changes because of what he does and what is done to him | **FAILS on cause, on direction and on trace** | the one change that fires (the crisis) strikes the same six persons at seeds 0 and 1, by a rule with no draw, from witnessing forgeries, emits no Event, and replaces the stronger creed with its rival. Two hostile acts naming a person resolve in two seasons; those targeted by `challenge`, `sabotage` and `lie` regard the actor more warmly afterwards | -03, -08 |
 | P4 | a man is wrong about the world | **NARROWED** to stale granary counts | of 21,312 beliefs after three seasons, 1,448 are about a present fact; 312 of those are wrong, and 296 of the 312 are the count of grain or salt in a store. Believed odds equal true odds in 46 of 46 priced readings at build | -06 |
@@ -288,9 +288,13 @@ deciding term, the draw included, or they will narrate motives that were not the
 
 ### 3.5 Extremes
 
-The chooser survives every person-level extreme tried (§2.2 R). Realm-level extremes (zero population,
-one person, a hundred factions) were **not run** by this lane: the machine was at a load average of 40
-and a season cost 30 to 190 seconds. `[SKIPPED: one-person and zero-person seasons — cost]`.
+The chooser survives every person-level extreme tried (§2.2 R). Two realm-level extremes were run
+(`x2_alone.py`, seed 0, three seasons): **nobody acts** (0 acts, 0 scars, the cohorts' hunger and
+nothing else) and **one person acts** (the King alone: 43 acts, no ending, nothing answers him because
+nobody else may, and his paperwork scars all 83 persons, F-PES-CHAR-12). A lone actor's story is a list:
+no beat of it depends on an earlier one. A world of literally zero or one person and a hundred
+factions was **not run** (the machine was at a load average of 40 and a season cost 30 to 190
+seconds): `[SKIPPED: zero-person and one-person worlds, hundred-faction worlds — cost]`.
 `16_PESSIMIST_GAME.md` X5 is the reading for the realm.
 
 ## 4. Findings — ranked worst first
@@ -329,7 +333,7 @@ falsifier run and its control; requirement touched; minimal fix at the owner.
   ruled axis, 46 of 46 cast refused, `transfer`, `move`, `forge`, `reconstruct`, `exchange` in 276 of
   276, `survey` 270, `lie` 37; the gate took the person's top act in 53 readings, for a median of 0.045
   of score. The other reading of *believes* (clause 4, a premise believed false) declines about 4% of
-  candidates (first audit) and is PENDING its cut arm (§2).
+  candidates (first audit) and is necessary under the cut (§2, arm `nobelief`): that half holds.
 - **Falsifier and control.** A personal stop would refuse some persons and not others (strictly between
   0 and 46). Unarmed is 0; armed is 46.
 - **Touches.** R-06, R-08; H-146.
@@ -379,8 +383,8 @@ falsifier run and its control; requirement touched; minimal fix at the owner.
   `examine`, `surveil`, `fight`, `accept`, `capture`; five contested verbs (`arrest`, `interrogate`,
   `march`, `determine`, `lie`) name no capability at all. True odds at that pool: Failure 0.74, Partial
   0.19, Success 0.07, Overwhelming 0.00. In play (`b1_season.py`, seed 1, three seasons, 282 graded
-  rolls on `research`, `surveil`, `tell`, `argue`, `speak`, `lie`): Failure 216 (77%), Partial 50,
-  Success 16, Overwhelming 0. `c3b_curve.py` (PROXY, hand-built acts): `argue` and `tell` do not move
+  rolls on `research`, `surveil`, `tell`, `argue`, `speak`, `lie`, `determine`): Failure 216 (77%),
+  Partial 50, Success 16, Overwhelming 0. `c3b_curve.py` (PROXY, hand-built acts): `argue` and `tell` do not move
   with the subject's key from 0 to 8; `speak` does. A key of 1 gives exactly 0.000; a key of 0 is
   refused.
 - **Falsifier and control.** The curve responds to the actor's key (0.07 to 0.80 over 2 to 12 dice), so
@@ -472,9 +476,42 @@ falsifier run and its control; requirement touched; minimal fix at the owner.
 - **Minimal fix.** In `02_CHAR_scar_is_a_wound.md`'s scope: when every held pursuit is at the
   threshold, the shift is taken from the most-scarred toward the least-scarred, not skipped.
 
+### F-PES-CHAR-12 · D · one man's paperwork scars the whole realm, and himself on `love` twenty times
+
+- **Evidence.** `x2_alone.py 0 3 p_npc_020`: only the King's chooser returns acts. In three seasons he
+  takes 43 acts (`create_record` 11, `research` 9, `revoke` 6 all refused, `issue` 4, `requisition`,
+  `establish`, `open_case`, `convene`, `utter`, `commit`, `conceal`, one `sabotage` refused). At the
+  end 83 of 83 persons carry a scar. His own counts: `liberty` 21, `love` 20, `individuality` 19,
+  `justice` 19, `wealth` 15, `happiness` 14 (the actor witnesses his own act; `scar_excludes_actor`
+  ships False).
+- **Falsifier and control.** `x2_alone.py 0 3 nobody` (nobody acts): 0 of 83 scarred, and the same 37
+  cohorts change body from hunger, so the scars are the one man's acts and nothing else.
+- **Reading.** This is P3's *"because of what he does"* as built: what a man does marks him, and the
+  mark for keeping records is a wound to love. It is F-PES-CHAR-01's table read through the scar.
+- **Touches.** R-06, R-07.
+- **Minimal fix.** Proposal B (the triggers) with `02_CHAR_scar_is_a_wound.md` (the floor and the
+  outflow). No further edit.
+
 ## 5. False N-lines found
 
-(Filled from §2's table once every arm is read.)
+A false N-line is a part whose cut turns out free. Found, with the run that showed it:
+
+| part | claimed necessity (the note that makes the claim) | the cut | verdict |
+|---|---|---|---|
+| the scar count and its crisis | how a person is changed by what he sees (`ED-IN-0261`'s scar model) | `noscar`: 0 of 1,529 acts differ in two seasons; from season three, 6 or 7 fixed conversions at 2 to 5% of choices | **free** as built |
+| `Person.conviction` | *"faith as a pursuit is strongly modulated by religious conviction"* (`person_q.py:804`) | `noconviction`: a person's conduct moves 0.053; 83 of 83 still identified | **free, nearly** |
+| believed-odds weighting and NPC effort | the person prices a contested act by his believed chance (CR-17) and may put effort behind it (CP-T01-05) | `noodds`: 0.012; 82 of 83 identified | **free**: almost no contested, priced candidate forms (46 `determine` and 151 unpriced `capture` readings at build) |
+| the deontological refusal | *"deontology is a refusal"* (ED-IN-0261) | unarmed it executes nothing; armed it equals deleting five verb rows for everyone | **free** either way |
+| capability / skill | *"capability supplies dice"* | every cast pool is the default; giving everyone the default changes nothing by construction | **free** (no holder to lose it) |
+| attributes | CR-20 | ship off (first audit) | **free** |
+| organization goals | orient their members' attention (I-4) | 5 of 749 resolved acts answer one (first audit); the `samemen` arm removes them with the pursuits and cannot separate the two | **nearly free** `[not separated here]` |
+
+Mechanisms that survived only because nothing had been tried against them: the alignment table's
+content against the pursuits' names (-01); the crisis's direction (-03); the refusal's scale and set
+(-02); the deed judgement's blindness to the patient (-08).
+
+N-lines that held under the cut: the pursuit term (for the realm's mix), the stance term (as
+restraint), clause 4 (as foresight), the draw (as variety).
 
 ## 6. Resolutions decided, and what is left for Jordan
 
@@ -518,7 +555,8 @@ All `PYTHONHASHSEED=0`; scripts in the scratchpad folder named in the head.
 | `b1_season.py 0 3` | seed 0, three seasons | interior per season; records; commitments; belief against world | hashes `5ab73af2`, `bacd687f`, `52ff67bc`; acts 749, 780, 838 |
 | `b1_season.py 1 3` | seed 1, three seasons | the same, plus degrees by verb and the crisis triggers | hashes `aa58ef0b`, `8aae8412`, `26d2091b`; acts 731, 788, 871 |
 | `b2_done_to_him.py 0 2` | seed 0, two seasons | patient's regard for the actor against control pairs; scene occasions | hash `bacd687f`; §4 -08 |
-| `d1_cuts.py 0 2 <arm>` | seed 0, two seasons, ten arms | §2's table | shipped arm `5ab73af2`, `bacd687f` |
+| `d1_cuts.py 0 2 <arm>` | seed 0, two seasons, ten arms | §2's table | shipped arm `5ab73af2`, `bacd687f`; `drawseed` `dfc6d534`, `671cd84f`; `noscar` `b8a16d9c`, `17e98525` |
+| `x2_alone.py 0 3 p_npc_020` / `nobody` | seed 0, three seasons, one chooser live / none | a lone actor; the scars one man's acts leave; the null control | §3.5, §4 -12 |
 | `d1_read.py` | the arms' outputs and `b1`'s | distances, identification, cross-seed identity | §2, §3.3 |
 
 Not run: `pytest`; any `aperture`, `strife`, `storybar` or `corpus_run` pass (other lanes ran them; cited

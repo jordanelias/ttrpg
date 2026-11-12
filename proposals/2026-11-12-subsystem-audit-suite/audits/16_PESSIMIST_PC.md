@@ -312,7 +312,42 @@ as a draw, was tested and fails (0.0 → 0.2%, `pQ_knee.py`). Proposal
 
 ### 2.4 "A skilled duelist beats a novice more often than not but not always"
 
-(table appended below: `pD_skill.py`)
+| account | says |
+|---|---|
+| ordinary | Skill is the main thing. The better swordsman usually wins, the gap matters, and an upset stays possible until the gap is large. Two masters fight a different fight from two novices. |
+| the notes | pool `max(5, faculty + 6)`; Ob from the defender's faculty; "no matchup is ever certain" (`UPSET_FLOOR`, a flip the season never sees, F-PC-06). |
+| the code, run | below |
+
+`pD_skill.py`, A's faculty against B at 2 (every season person), arming and light, 3,000 fights a row,
+tracker-true; mirror control at two seed sets 50.4% and 49.0%:
+
+| A's faculty | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 14 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| A felled | 79.0% | 65.9% | 50.4% | 34.8% | 23.3% | 12.7% | 7.1% | 1.4% | 0.2% (6) | 0 of 3,000 |
+
+**Verdict: holds, and is the best-shaped lever in the subsystem.** About fifteen points a step near
+parity, an honest tail (one upset in fourteen at four points' gap, one in seventy at six), certainty
+only beyond eight. Three qualifications, each measured.
+
+- *Two masters fight the novices' fight.* Mirrors at faculty 0, 2, 5, 8, 12 and 20 (1,500 fights each)
+  take 3.26, 3.18, 3.10, 3.08, 3.05 and 2.92 wounding blows and 3.2 to 5.0 turns: the same two or three
+  blows with more misses between. The level changes nothing a watcher would name.
+- *Skill is not the strongest lever; Perception is.* One attribute against a default man
+  (`pN_att.py`, 1,000 fights a cell; default Perception is 3): Perception 4 is felled 22.7% and fells
+  77.0%; 5 reads 5.6 / 94.2; 6 reads 1.1 / 98.9; 7 reads 0.5 / 99.5. A fighter at faculty 6 against a
+  novice with Perception 5 is at parity (51.2 / 47.5); at faculty 4 he is felled 78.5%. So two points of
+  Perception are worth four of skill, and three are a certainty. At Perception 7 against 3 the defender
+  wins the read 2.2% of the time, the attacker's mean net σ is +1.27 and 74.5% of his rolls are
+  Overwhelming. Strength runs 96.6% felled at 1 to 19.4% at 7. The season carries authored attributes
+  into the fight (PC-06 K-1), so the first cast member written with Perception 5 is unbeatable by any
+  swordsman the game can train. Which term carries the slope was not isolated `[UNVERIFIED: the read's
+  logistic at scale 1.0 (`combat_systems.py:1145`), `mode_sigma`'s read term, `init_emphasis_sigma` and
+  `tempo_pressure` all read the bare Perception difference]`.
+- *The six skill axes are steeper still and uncapped* (module scale; the record cannot carry them,
+  F-PC-21): +1 on all six, felled 18.1%; +2, 5.5%; +4, 1.7%.
+
+So the premise is true of `faculty` and false of the build: the levers Jordan's intent names (weapon,
+armour, skills) sit beside one that outweighs them, and nothing bounds a lever's slope.
 
 ### 2.5 Premises the code makes that nobody asked for
 
@@ -339,7 +374,38 @@ as a draw, was tested and fails (0.0 → 0.2%, `pQ_knee.py`). Proposal
 
 ### 2.6 Does an approach per phase have anything to decide?
 
-(appended below: `pI_approach.py`)
+The intent asks that a fighter choose an approach each phase. The PC addendum measured static leans (a
+small, weapon-conditional trade once the initiative drift is excluded). The question left is whether
+*when* to lean matters: whether the fight's state gives the choice any content. Two runs.
+
+**Inside the window the engine actually draws** (`pP_window.py`; A's depth forced each exchange, B
+draws; season-default mirror, 1,500 fights; as drawn 49.9% felled, control 52.1%): 3.9 → **45.3%**; 3.0
+→ 49.0%; 2.3 → **54.4%**. Deeper is simply better. The reason is F-PES-PC-04: the commit window at
+closed measure is [2, 4.03] and everything that punishes depth is gated at 4.0. With the tier restored
+to the window's upper third (prototype, same run): 52.0 / 47.6 / 51.5: flat, both poles paying.
+
+**Policies that read the state** (`pI_approach2.py`; A leans by a rule, B always normal; depths 4.5 /
+3.5 / 2.3, so "aggressive" here is over the 4.0 cliff; 1,500 fights; normal against normal 49.1%,
+control 50.6%; three standard errors of a difference 5.5 points):
+
+| A's policy | A felled | against always-normal |
+|---|---|---|
+| always aggressive | 54.5% | −5.3 |
+| always defensive | 55.0% | −5.9 |
+| press the wounded (aggressive when the other is more hurt) | 52.2% | −3.1 |
+| guard when hurt (defensive when more hurt) | 50.7% | −1.6 |
+| press when ahead, guard when behind | 53.9% | −4.8 |
+| guard when ahead, gamble when behind | 50.3% | −1.2 |
+| press the off-balance (aggressive when the other's poise is under 0.9) | 51.9% | −2.8 |
+
+No rule that reads wounds or poise beats never leaning; every one reads at or below it. Three rules
+that read initiative and stamina were not completed (the run was cut for machine load) `[UNVERIFIED]`.
+
+**Reading.** As built, the choice is degenerate twice over: under the cliff, lean in always; over it,
+never. There is no state in which a different approach is right, because a fight is three blows (§3.2):
+by the time "he is hurt" is true, the next blow ends it either way. The approach gains content only if
+(a) the deep tier is reachable (proposal `16_PESSIMIST_PC_B_the_commit_window.md`) and (b) a fight lasts
+long enough for a position to exist (§6 J-1). Until both, building the choice surface builds a menu.
 
 ## 3. Emergent narrative
 
@@ -419,7 +485,29 @@ without a felling) and the 5.6% who die under `yield` terms.
 
 ### 3.6 Extremes
 
-(appended below: `pH_extremes.py`)
+`pH_extremes.py`, 1,000 fights a row unless said.
+
+| extreme | reading |
+|---|---|
+| Endurance 1 mirror (a man at the bottom body band; Health 13) | the loser dies to his first blow in 97.2%; 1.83 turns |
+| Endurance 2, 3 mirror | first-blow deaths 58.0%, 28.4% |
+| Endurance 7, 10 mirror (Health 55, 70) | 4.4 and 5.4 blows; undecided 0.8%, 1.9% |
+| Endurance 1 against 4 | the weak man felled 80.9% (through the seam with `body` 1: 249 of 300, `pS_season.py` S6) |
+| every attribute 1, mirror (Health 10) | first-blow deaths 74.5%; undecided 1.2% |
+| every attribute 7 against a default man | 0 of 1,000 felled; 1.76 turns |
+| Strength 20 against default | 1 of 1,000 felled |
+| Perception 0, mirror | runs; indistinguishable from the default mirror |
+| unarmoured dagger mirror | 4.1 blows, 4.4 turns: the longest ordinary fight in the roster of extremes |
+| plate, arming mirror | 99.7% undecided (§2.3) |
+| a half-sword *form* as the starting kit (the export lists four as weapons, F-PC-15) | accepted; `estoc_halfsword` against arming fells 99.0% |
+| unknown weapon or armour key | `KeyError` at the Combatant (the seam's `kit_of` is the guard) |
+| faculty −3 | runs; pool 5, and he is attacked against an obstacle of −1.5 |
+| faculty 2.5, 3.5, 4.5 | pools 8, 10, 10 (`int(round(·))` is banker's rounding); the season passes integers, the workbench need not |
+| one id as both claimants, through the seam | `RESOLVED`, a winner named, a `wound_state` of one key (`pS_season.py` S3); the fold declines the act (`fight.declared` only, `pS2.py` S8), so nothing is written. `fight_estimate` refuses the pair (`combat.py:257`); `resolve` does not |
+
+The story survives its extremes badly at the low end (a wounded or weak man's fight is one blow, so
+the season's own carry of wounds through `party_end` makes the second fight of a hurt man a formality)
+and not at all at the armoured end.
 
 ### 3.7 Stories that cannot happen, and why
 

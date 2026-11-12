@@ -95,8 +95,8 @@ a fixture with a control.
    (`NO_CHANGE`), which the row's write-refusal turns into `argument.refused`; so the control arm is
    run with edit 1's `writes.Failure` reverted, and says so.
 5. **`engine/season/write_matrix.yaml`** — `(Person, pursuits)`'s row already lists `argue`; no edit.
-   `rosters.yaml`'s `deed:` cells gain `deed:argument.held` at the valence `deed:argument.won` carries
-   today for Partial (0.0 in the run's printout), so no regard moves by the rename.
+   Wherever `rosters.yaml` authors a `deed:argument.won` cell, a `deed:argument.held` cell of the same
+   value is added beside it, so no regard moves by the rename.
 
 **Not in this proposal, named:** what is argued. The same draw moves the hearer identically on three
 different Propositions, his own included (audit §1.2), and in the realm every argued Proposition is

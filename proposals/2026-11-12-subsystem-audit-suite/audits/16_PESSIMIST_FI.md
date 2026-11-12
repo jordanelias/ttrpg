@@ -24,8 +24,8 @@ and 93.9% of the 74,510 Events are ledger bookkeeping (`claim.deposited`, `claim
 activity carries: ten tellings land; no rumour passes a second mouth, and on a hand-driven chain none
 can, because the second teller says only that he was told (§2.1); the false beliefs the first FI audit
 counted as formed by telling are seven people holding that one man exists twice; 52 papers are forged
-and none leaves its forger's hand; no inquiry finds anything; every death in the arms run here (four)
-is known as a death only to the six or seven people in the room. With every information verb removed
+and none leaves its forger's hand; no inquiry finds anything; every death in the arms run here (six,
+at two seeds) is known as a death only to the six or seven people in the room. With every information verb removed
 from the chooser (the cut `nofi`, same world, same seed, against a draw-seed control), persons march
 53 times instead of 29, move 94 times instead of 21, issue 65 writs instead of 29, carry `determine`
 through three times instead of never, fight once, and two men die (§1.1): the information verbs as the chooser
@@ -667,7 +667,7 @@ Columns: EXECUTES = a hand-built act produces the link (§2); FIRES = it occurre
 | 4 | *The report was wrong by the time it arrived.* A garbled quantity at second hand, acted on. | one hop | 1 told quantity in two seasons (grain 86 for 74, itself a lie); acted on: not observed | possible at one hop; not observed |
 | 5 | *The rumour ran ahead of the truth.* Two or more hops. | **no** (§2.1) | 0 chains over one hop in every arm (20, 9, 10, 15, 5, 13 chained claims, all one hop) | **cannot happen** |
 | 6 | *The liar was caught.* | privately (`record`, a number per hearer) | no Event, no claim, no act (F-FI-04, cited) | cannot be told as a story |
-| 7 | *The forged grant was believed.* | yes (§2.3) | 0 of 52, 53, 57, 40, 51, 34, 37 forgeries left their forger's hand | **does not happen** |
+| 7 | *The forged grant was believed.* | yes (§2.3) | 0 of 52, 53, 52, 40, 57, 51, 34, 37 forgeries (eight arms) left their forger's hand | **does not happen** |
 | 8 | *The forgery was exposed.* | the find, yes; the disbelief, no (§2.3) | 0 found deposits (first FI audit, three seeds) | the first half cannot begin; the second has no carrier |
 | 9 | *Nobody saw it done, and it was found out.* An unwitnessed deed uncovered later. | **no** (§2.4) | — | **cannot happen** |
 | 10 | *They say the steward killed him.* A killing reported at second hand, with a name. | no (F-FI-11, cited) | six deaths across the arms; each held as a death by the six or seven persons present, by nobody else, and told to nobody | **cannot happen**; and in the runs no death is even reported without a name |
@@ -687,7 +687,7 @@ answering act was not refused.
 | | `ship` s0, 3 seasons | `draw1` s0 | `ship` s1, 2 seasons |
 |---|---|---|---|
 | cross-person answers carried out, all antecedents | 513 | 472 | 309 |
-| of them, answering an information Event | 157 (attempted) | — | — |
+| cross-person answers to an information Event, refused ones included | 157 | — | — |
 | **an information Event answered by a non-information act** | **16** | 23 | 13 |
 
 At seed 0 the sixteen are `finding.made → issue` 6, `tell.refused → issue` 3, `finding.made → move` 2,
@@ -736,7 +736,7 @@ names its control. Proposal files are under `proposals/2026-11-12-subsystem-audi
 |---|---|---|---|---|
 | **F-PES-FI-01** | blocks R-05; degrades R-01, R-07 | **A deed leaves no trace but the memory of those present at that instant.** An unwitnessed killing or ruin is unknowable for ever; `examine` of a ruin teaches that the site exists; the realm learns a seat is empty and never that its holder died (§2.4) | `p5_crime.py` · the same killing with two bystanders (they hold it) | `16_PESSIMIST_FI_C` edits 1–3 (three roster rows; CP-T06-01's object list; the ending deposited as `exists:<Kind>` 0) |
 | **F-PES-FI-02** | degrades R-01, R-07 | **A rumour is one telling long, by construction; and what is said is mostly that someone exists.** The second teller says "there was a telling". The first FI audit's seven told-false cells are `(p_npc_004, exists:Person, 2)` (§2.1) | `p2_chain.py`, `told_dump.py 0 2` · the proxy chain in which content is passed on (it travels and drifts) | `08_FI_02` (cited) **amended by** `16_PESSIMIST_FI_A` edit 5: as written its slant would prefer the realm's 577 existence readings to every deed |
-| **F-PES-FI-03** | degrades R-05, R-08 | **A forged paper is believed by nobody in play (0 of 324 across seven arms left the forger's hand), and where one is put in a hand, knowing it false changes nothing.** A man who watched the forging is offered the same 19 acts off it; after a `Success` find the content stands at confidence 100 (§2.3) | `p3b_knows.py` · the same holder with the knowledge deleted (identical candidates); the surveyed sheet | `16_PESSIMIST_FI_B` edits 1–3 |
+| **F-PES-FI-03** | degrades R-05, R-08 | **A forged paper is believed by nobody in play (0 of 376 across eight arms left the forger's hand), and where one is put in a hand, knowing it false changes nothing.** A man who watched the forging is offered the same 19 acts off it; after a `Success` find the content stands at confidence 100 (§2.3) | `p3b_knows.py` · the same holder with the knowledge deleted (identical candidates); the surveyed sheet | `16_PESSIMIST_FI_B` edits 1–3 |
 | **F-PES-FI-04** | blocks R-07, R-08 (with F-FI-01) | **Who exists and where they are is read from the truth.** A silently deleted or relocated person leaves the subject's candidates (−28; 38 → 10) with his ledger unchanged; a man who believes the King dead is offered to challenge him (§2.5) | `p1_belief.py`, `p1d_where.py` · the silent-edit arm for a store (no leak) | `16_PESSIMIST_FI_C` edit 4 (the question loop reads `present_persons` and the holder's own `exists` cell); the decision is ED-IN-0292's |
 | **F-PES-FI-05** | degrades R-04, R-05 | **The information verbs, as the chooser forms them, crowd the game out.** They are 73.7% of acts carried out; with them cut the realm marches 53 times for 29, moves 94 for 21, determines 3 matters for 0, fights, and two die; with only `tell` and `lie` cut nothing changes (§1.2 N-1, N-2) | `fi_arms.py 0 3 nofi`, `notell` · `draw1` (the draw-seed control) | `16_PESSIMIST_FI_D`: the product-less inquiry rows join `withheld_verbs` until their products land; the rest is CHAR's (what a scene is spent on) |
 | **F-PES-FI-06** | degrades R-09 | **Distortion is a drift applied to anything stored as a number, and to nothing else.** Existence flags garble to 2 and 3; a deed never distorts; a `Success` copy is perfect at any depth; 0 is a fixed point; the mean drifts upward (40 → 49 in six hops) (§2.1) | `p2_proxy.py` · the all-`Success` arm (exact), the deed arm (exact) | `16_PESSIMIST_FI_A` edits 1–4; the drift's bias is `[OPEN — Jordan tuning]` |

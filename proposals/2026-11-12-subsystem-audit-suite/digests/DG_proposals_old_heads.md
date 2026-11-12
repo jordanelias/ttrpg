@@ -870,3 +870,33 @@ HEADS-ONLY lane (350 files, proposals dated before 2026-09-20). Method per file:
 ### proposals/2026-09-01-shape-tracer-audit/README.md
 - one line: index; audit of PR #351, an adversarial review of the audit, and the forward doctrine; method :16. Tags PROCESS.
 
+### proposals/2026-09-03-governance-corpus-rebuild/01-design-v1.md
+- **What it is:** v1 conceptual rebuild of a 33-document governance corpus (the zip `governance_play_redesign_v1.zip`, 810,408 bytes, ~115k words, which CURRENT.md's settlement row names as `governance_play_redesign_v1.md`), 2026-09-03; directory has 7 files.
+- **Status:** none own (README: "PROPOSAL. Nothing is ratified, no subsystem head moves"). Reading: superseded within its directory by `03-design-v2.md`; directory cited by workplan `_part4` and `_part7`.
+- **Bears on:** FA, SE, CORE, DICE.
+- **Content that matters:**
+  - Hierarchy of sets/primitives/derivatives; "one idea implemented three times" :91; what the triplication cost :119; three ideas worth keeping :143; the idea the corpus keeps reaching for and never lands :167.
+  - Accord has two write paths, one erases the other :185; the corpus already invented its own resolution kernel and it is the right one :255; Domain Echo is already the right propagation mechanism :332.
+  - Method: files read in full, sorted into sets, flattened :31.
+- **Conflicts / stale:** v1 claims refuted by 02 (see next).
+- **Open items:** none.
+### proposals/2026-09-03-governance-corpus-rebuild/02-critique-and-precedents.md
+- one line: self-authored critique of v1; verdict: right as bookkeeping, wrong as drama system - over-damped to inertia, dropped two of five territorial tiers, no object for a claim on a title, three headline slogans false :10-20; sections: nothing can run away :22, tiers dropped :62, no Claim :104, false headline claims :132, de jure vs de facto :157, emergence underpowered :175, nothing scarce :191; precedents CK3 title :227, Victoria 3 goods in markets :247, EU4 estates :261. Tags FA, SE, WR.
+### proposals/2026-09-03-governance-corpus-rebuild/03-design-v2.md
+- one line: v2 "read this one if you read one": restores two tiers, titles and claims, splits acceptance by grain, replaces "everything is capped" with a budget of instability; Mandate is per-status; throughlines TL-1 de jure/de facto :110, TL-2 one owner per quantity :126, TL-3 one outcome type `Degree` :141, TL-4 one cross-scale carrier `Echo` :155, TL-5 roles not identities :166, TL-6 uniform limits uniformly suspended :181, TL-7 every loop named and signed :193, TL-8 effects commit in generations :204 (and further to TL-13 the engine owes an explanation). Tags FA, SE, CORE, DICE.
+### proposals/2026-09-03-governance-corpus-rebuild/README.md
+- one line: provenance (uploaded zip), contents table (annex A: 14 sets, 318 primitives, 293 derivatives, 129 pipelines, 18 throughlines, 79 contradictions, 37 referee dependencies, 196 gaps; annex C: 30 underspecification entries, 362 verbatim numeric constants), "what is NOT claimed" :42. Tags PROCESS.
+### proposals/2026-09-03-governance-corpus-rebuild/annex-a-decomposition.md
+- one line: document register of 33 docs :30, 14 sets :74 (SET-01 resolution engine and action economy :142, SET-02 season accounting :248, SET-03 clocks :329, SET-04 Church influence/piety/seizure :456, SET-05 geography :588, SET-06 settlement :692, SET-07 province control/Accord/fracturing :827, SET-08 faction stats/AI :932, SET-09 succession/splits/collapse :1039, SET-10 kingdom institutions :1179). Tags FA, SE, WR, DICE.
+### proposals/2026-09-03-governance-corpus-rebuild/annex-b-state-graphs.md
+- one line: executable-model rebuild: twelve sets, state graphs :98, unified tick/graph :814, idealized code shape :907, appendix of chosen constants (marked with a diamond) :1242. Tags CORE, FA, SE.
+### proposals/2026-09-03-governance-corpus-rebuild/annex-c-gaps-and-numbers.md
+- one line: contradictions :24, underspecification U-01..U-30 (the missing decision per rule) :319, dangling references :397, 362 verbatim constants :453, summary :986; null results: `treaty_expiration_v30.md` and `territory_temperaments_v30.md` have no internal contradiction. Numbers are a hand-transcribed copy of prose constants (CLAUDE.md §0.05 orphan risk). Tags FA, SE.
+### proposals/2026-09-03-v2-against-the-meta-architecture.md
+- **What it is:** evaluation of `03-design-v2.md` against `architecture/meta/` (#358, 12 files), 2026-09-03, 1119 lines.
+- **Status:** "EVALUATION. PROPOSED. NOTHING RATIFIES ON MERGE." Reading: live as precedent; cited by `architecture/meta/README.md`.
+- **Bears on:** CORE, FA, PROCESS.
+- **Content that matters:** verdict: v2 admissible to the meta-architecture as a FALSIFIER not a source, worth a great deal in two places and a line each in ~eleven (26 candidates) :9-12; §2.1 `TL-7` every loop named and signed (largest) :80; §2.2 `TL-13` the engine owes an explanation :119; §2.3 `F.24`'s missing grammar gets a worked instance :166; §2.4 `granted_by` supplies a reader for `Tenure.conferrer` (#358's `ID-13`) :201; §2.5 `TL-5`'s test scans the CONTENT layer :226; §2.6 `TL-6` suspension must be uniform :244; §2.9 method result constraining `G.4.1` :315. A test-run note says two failures are pre-existing (`test_forked_status.py`) :1082.
+- **Conflicts / stale:** none noted.
+- **Open items:** which of the 26 were adopted into `architecture/meta/` [UNVERIFIED].
+

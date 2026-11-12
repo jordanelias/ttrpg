@@ -254,3 +254,101 @@ Cross-file pattern noticed early: most files in this family carry a long docstri
   - `sigma.faculty` varies by person only through `capability` (Carin 4 vs `pool_default` others) and through `register_pool_addend` (`:351-384`) - R-06/R-09 second half has a mechanism here.
 - **Conflicts / stale:** `tend`/`sabotage`/`train` are deterministic effects (a tend always heals fully; sabotage's fall `_fall` fixed) - brief's deterministic-outcome rule. The addendum's F-TEST list read this file for hash/approx flags only.
 - **Open items:** J-13 (iii) "forms only where a case names a vocation" half NOT built (receipt names it).
+
+### engine/season/tests/test_in18_obligee_report.py
+- **What it is:** v10 IN-18 tests of `harness/obligee_report.py`, the M0e reader (G5's trigger: do obligees report to their seat-holder), on `tiny_world` with `off_duke` re-seated to `p_low`.
+- **Status:** none. Reading: live; tests an instrument that "prints a figure and grades nothing (rule V2)" (`:3-4`).
+- **Bears on:** FA, CORE (instrument), WR.
+- **Content that matters:**
+  - Falsifier: with the `oblige` edge the telling reads `m0e == 1`; the same world and telling without the edge reads 0 on every line while `tells_all == 1` (so 0 is the missing duty, not a missing telling) (`:63-79`).
+  - Clauses each moved by one change: hearer not the holder, lost telling (`news.untold`, degree `Failure`) is an attempt not a report, refusal counted as attempt, edge not yet live at the telling tick (`:82-123`).
+  - In-test mutations patch the reader's `_live_at` three ways (window, holder side, obligee side) and require `m0e` to drop to 0 (`:126-142`).
+- **Conflicts / stale:** none. Subject is a measuring reader (process-load-bearing only, §0.1 pt 5) - it is the thing it tests.
+- **Open items:** what a realm run reads is deliberately not asserted.
+
+### engine/season/tests/test_in22_shortfall_reach.py
+- **What it is:** v9 IN-22 carry-shortfall: a larder shortfall reaches governors whose seat purview contains the drained larder (`scarce.governed` world); plus the PAYING half (`transfer` out of the seat's treasury via `Act.via`) and the live `body_step` arm. The addendum opened this file as a flagged test (hash/approx) and found it sound.
+- **Status:** none. Reading: live.
+- **Bears on:** SE, FA, CHAR, CORE (R-01/R-02 propagation of a claim; R-04 management act).
+- **Content that matters:**
+  - Isolation precondition asserted: neither reeve stands at or holds the hungry town, both hold a seat with a rung, exactly one seat's purview contains the town (`:72-84`).
+  - Falsifier both ways: inside-purview reeve holds every shortfall MATTER recorded at the recorded units with the seat channel's source (`inferred`); far reeve holds none; counted (`:87-102`). Arms that remove the cause: `observation_deposit_mode: none` and `fan_out_mode: presence_only` deposit nothing to the governor (`:141-151`); an actor's own reads stay the actor's (`:154-173`).
+  - Paying half: the reeve's computed `transfer` EXECUTES `via` his seat out of the seat's rung (`terr_march`), not his home; matter conserved exactly against a twin with nobody acting (`moved == {MARCH: -amount, HUNGRY: amount}`) (`:209-233`). The chooser's `verbs=` is narrowed to `transfer` as an instrument choice, stated in the docstring; "which verb a person prefers is the chooser's score" so this is a chain test, not a play claim (`:181-194`).
+  - Refraction: claim confidence is 100 at `refraction_gain` 0 and 50 at 0.5 (`:360-372`) - exact equality on small ints.
+  - Live arm: `body_step` falls the cohort's body by `step * shortfall` exactly; at 67 the cohort dies in the barrier but the claim is still deposited; both branches asserted (`fell >= 1 and died >= 1`) (`:390-424`); shipped arm narrows the cohort's budget by exactly the bands crossed (read from floors, `:482-510`).
+- **Conflicts / stale:** `[ASSUMPTION; medium; Jordan to correct]` that an `own` verb may be exercised through a seat (H-158's eligibility remedy) (`:27-28`). Assertions use a `_one_season()` that pins `steward_holds=False`, a planted configuration.
+- **Open items:** H-160 limit (3) ruled "a balance number, not a blocker" (`:376`).
+
+### engine/season/tests/test_in23_legitimacy_stability.py
+- **What it is:** v9 IN-23: `person_q.legitimacy`, `stability`, `recent_claims` as Queries over one person's own stance and claims, no stored value (ruling R7); read only by `harness/storybar.py`.
+- **Status:** none. Reading: live but the consumer is an instrument: "H-224: a chooser consumer was built and reverted" (`:5-7`). So legitimacy and stability influence no decision.
+- **Bears on:** CHAR, FA, WR (R-07 attitude, R7 "a ruler can be wrong about their own standing").
+- **Content that matters:**
+  - Two ledgers read two estimates; twin ledger under another id reads identical (control) (`:63-83`); a ruler and a subject who saw his deed read his legitimacy differently (`:86-93`).
+  - Window: age 0..2 counts at window 3, age 3 does not; windows 0, -1, True, 1.5, nan, None raise `ValueError` matching "H-224" (`:105-123`).
+  - Writes nothing: snapshot (hash, log, writes, ledger sizes) unchanged, and a planted write in the read path MUST move the snapshot (`:137-166`). AST scan: no `World` attribute or dataclass field holds a legitimacy/stability value (`len(attrs) > 10` floor) (`:169-182`).
+  - The instrument calls both Queries (spied) in a seeded capped season (`:187-199`).
+- **Conflicts / stale:** `fx.get("estimate_window_seasons") == confidence_default // claim_decay_per_season` ties the window to claim decay (`:55-58`).
+- **Open items:** no consumer in the decision layer, so legitimacy is observed but never acted on (R-07 attitude has no behavioural test here).
+
+### engine/season/tests/test_in27_endings.py
+- **What it is:** v9 IN-27 (END-VICTORY; H-176, GD-1): the ending vocabulary as a Query (`world_q.endings_reached`) over holds and seats that the season reports as `endings`; vocabulary in `rosters.yaml: endings`.
+- **Status:** none. Reading: live.
+- **Bears on:** CORE, FA, SE (end conditions; the brief's "stable continuation or ending").
+- **Content that matters:**
+  - Exit: the built realm's King releases the Crown and commits to the Church by two real `own` acts; `theocracy` is reached, antecedents `("in27_commit",)` and the `commitment.made` Event (`:78-97`).
+  - Falsifier T-b: each condition planted by direct Tenure construction (no act) is TRUE (`_ending_edges` non-empty asserted first) and reports nothing; three arms including an Event caused by `[ROOT]` and a re-grant that merely names a seeded hold (`:224-262`). Redundant `commit` to a faction already held is not credited (`:201-217`).
+  - Peninsular sovereignty (GD-1's sole victory row): reached by the last Crown-less territory holder's own `commit`; selected set excludes the foreign root `terr_T16` (`:145-171`).
+  - Loader refuses 11 malformed rows naming them and a second victory row (`:326-350`); shipped roster has exactly one victory (`peninsular_sovereignty`).
+  - Two seasons of the built realm call the step and report `endings == []` at hashes `BASE_HASHES[1]`, `[2]` - taken with `revert_cr79` applied, i.e. a reverted world (F-TEST-02) (`:357-385`).
+- **Conflicts / stale:** the ending is a threshold-over-state reported by a Query; the requirement of an act among its antecedents is a bookkeeping filter, not a draw. In the shipped realm no ending is reached in two seasons; whether an ending is reachable by computed play is not asserted anywhere (the King's conversion is hand-folded).
+- **Open items:** the end-condition/stakes legibility for "playable alone" is the Query only.
+
+### engine/season/tests/test_in31_revocation_cost.py
+- **What it is:** v9 IN-31 (H-100): what a revocation costs by the seat's provenance (`state/gate.py::REVOCATION_DISPOSAL`): `appointed` -> permanent `ban : him -> Act.via`; `elected`, `annex`, `None` -> nothing (Jordan 2026-10-21).
+- **Status:** none. Reading: live.
+- **Bears on:** FA, CORE.
+- **Content that matters:**
+  - One hand-built `revoke` per provenance through the fold: only `appointed` leaves a ban; outcomes differ across provenances (`:75-90`). Exit on the built realm with NPC-020 holding two duchies: Lord Steward (appointed) banned, Varfell (elected) and Hafenmark (None) not; without the placement the dukes are not revocable; with `REVOCATION_DISPOSAL["appointed"]` removed the outcomes collapse (`:290-304`).
+  - A computed `revoke` executes 0 times (ORCH amendment, H-207 ruling (A)) - the exit is on hand-built acts (`:9-11`).
+  - Mapping is total and names restraints (import-time check, `G.check_revocation_disposal`); unreadable provenance refuses (`:95-128`).
+  - Gate enforces the mapping for a non-judging seat (a ban with no revocation, beside elected closure, on another seat, or a second ban each `NotYours`, store put back); a judging seat admits a ban by `determination` (pinned, "flip deliberately") (`:162-195`).
+  - The ban bars seating (`confer.refused`) and service (`_req_oblige`) (`:200-212`).
+- **Conflicts / stale:** the revocation cost is deterministic (appointed -> ban always).
+- **Open items:** none; consequence of ban is limited to two readers.
+
+### engine/season/tests/test_in33_exchange.py
+- **What it is:** v9 IN-33 (H-58) restored at v10 REM-2B: `exchange` with two coined operands `return_kind`, `return_amount`.
+- **Status:** none. Reading: live.
+- **Bears on:** SE, FA.
+- **Content that matters:**
+  - Closed operand roster still binds: a cell naming an unlisted operand refuses at load (`:58-65`).
+  - Fold on a hand-built world: both sides move, each kind conserved; refusals (kind nobody holds, kind for itself, rung with itself, either side short, a person-rung) move nothing (`:103-131`).
+  - Formation reads `default_return_kind` and `default_transfer_amount` from fixtures; swept fixtures (timber/coin, 3) change operands so a literal equal to the shipped value would fail (`:155-180`). Crowd-out control: no other row's formation moves (`:183-198`).
+  - Realm half deliberately absent: v9 built `exchange`, measured 0 executions through the chooser, reverted; REM-2B restored it without requiring one (P9) (`:17-21`).
+- **Conflicts / stale:** exchange is a fixed-ratio, always-succeeds swap (no price/negotiation); the amounts are fixtures not valuations.
+- **Open items:** whether `exchange` ever executes in computed play is unmeasured here.
+
+### engine/season/tests/test_in34_bodies_clock.py
+- **What it is:** v9 IN-34 FORCE-BODIES: ageing and illness via the bodies pass at MATTER (`Person.born`, `world_q.age_of`, `world_q.body_hazard = illness_rate + age_step*age` capped at 1, none for a cohort); one keyed draw per living person.
+- **Status:** none. Reading: live but SHIPPED DARK - `age_step`, `illness_rate`, `age_at_build` all ship at 0 and "are Jordan's" (#457 D2 gate) (`:14-16, :104-108`). In the shipped game nobody ages or falls ill.
+- **Bears on:** CHAR, WR, SE (death), CORE.
+- **Content that matters:**
+  - Control: at shipped rates a realm with every individual 4000 old runs the same MATTER events in the same order and loses nobody (floors `len(people) >= 10`, `len(want) >= 100`) (`:149-165`).
+  - Seat-holder's death by age: persons at his place hold claims naming him, none elsewhere (floors on both); acquaintance-seeded build claims set aside (`:169-208`); at step 0 control, CR-81 acquaintances make the same holder die by a `fight` (measured 2026-11-04) so the control weakened to "every death has a causing act" plus a `acquaintances=False` arm (`:211-235`).
+  - Draws are KEYED per person, not a shared stream: skipping one person's draw leaves the others' deaths unchanged (`:322-346`); `illness_rate` 1 kills every individual exactly once and no cohort; the same seed twice gives the same set (`:302-319`) - so deaths are probabilistic but seeded (consistent with the brief's carve-out).
+  - `Person.born` has a reader (older dies, younger lives) (ID-13) (`:266-278`); H-129 `body.changed` chaining via `written=True` (`:370-411`).
+- **Conflicts / stale:** the test arms (`AGE_ARMS = (0.01, 0.25)`, `ILL_ARMS = (0.5, 1.0)`) are marked `[JUSTIFIED: test arms]`. Certainty arms (hazard 1.0) are the only way age tests reach a death, so no test pins a game-relevant mortality curve.
+- **Open items:** vacancy claims about the OFFICE or the closed HOLD after a death are "H-206's NOT DONE" per the docstring (`:23-26`) - but the sibling file `test_h206_a_death_at_matter_is_witnessed.py` covers a different half (placing the death), so the office-vacancy claim fan-out may remain open `[UNVERIFIED]`.
+
+### engine/season/tests/test_in35_lattice_coupling.py
+- **What it is:** v9 IN-35 FORCE-HAZARD: the Calamity re-expressed as a coupling rule `loop/matter.py::_lattice_strain` (a Site loses `lattice_coupling/condition_scale` of its gap to the weakest Site of its own or a bordering territory); mending is persons' `restore`.
+- **Status:** none. Reading: live but SHIPPED DARK (`lattice_coupling == 0`, `:264-265`); and the source is a PLANT: "no act strains the lattice AT ASKEHEIM and the built realm holds no Site there" (H-236) (`:30-33`).
+- **Bears on:** WR, SE (a Calamity/disaster clock), GO (geography `radiation_bands`).
+- **Content that matters:**
+  - Unmanaged: lattice condition falls and crossings reach territories in order of distance, checked against an independent oracle (`radiation_bands:` in the geography file) - bands 1..5 strictly ordered (`:146-165`); front advances one ring a season (parallel-map read of opening conditions) (`:168-177`).
+  - Managed: menders `restore` through the real RESOLVE fold; holding ring 1 makes ring 1 cross every MATTER (limit cycle) and nothing beyond; `restored >= len(RING_1)*SEASONS` asserts the arm executed (`:184-207`). Mending the SOURCE does not recall a ring already pulled (`:210-222`).
+  - Weight 0 is wear alone; non-zero differs (control that can fail) (`:229-239`); weight outside [0, scale] and NaN refused (`:253-256`).
+  - The realm-level hash identity is historical (`@23b33e9e`); the live control is `test_the_thread_read_withheld_arm_is_pinned...` (`:20-26`).
+- **Conflicts / stale:** the Calamity has no natural source in play (H-236): world clocks/hazards (WR) exist as a mechanism but shipped inert.
+- **Open items:** H-235 sweep points (250, 500) are unchosen test arms.
