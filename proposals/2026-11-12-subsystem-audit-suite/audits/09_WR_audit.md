@@ -118,7 +118,10 @@ seasons has the same shape (`record.created` 252 of 440 consequence acts, E-10).
 ending appears at shipped fixtures. Seed 0, three seasons: none. Seed 1, three seasons (E-12): one
 `matter.determined` (of 5 attempts), one `person.died`, one `field.lost`, no `covenant` (0/17), no
 `challenge` (0/134), no `accept` (0/35), `endings == []`. So closure is not impossible; it is rare: two
-closing Events in 5,276 attempted acts over the two seeds. The six-season readings are in §12 E-08.
+closing Events in 5,276 attempted acts over the two seeds. Seed 0 at six seasons (E-08): 5,483 acts, 3,124
+refused (57.0%); `endings == []` at all six; zero deaths; `challenge` 0/223, `accept` 0/102, `comply` 0/98,
+`raze` 0/51, `capture` 0/32, `covenant` 0/27; `determine` 3/6 with one `matter.determined`; and the deepest
+consequence chain at six seasons is still the four-act chain that closed in season 1.
 
 **Touches.** R-05 (verbs built out), R-02, R-06; NERS-R's no-player half.
 
@@ -145,7 +148,9 @@ openers, by 2 doers, reads `concluded`; its code sequence is `WN-WN-WN-SB/SZ-FR-
 test has three arms and two are vacuous in every run: `detain 0, ban 0, at_war 0, docketed 3..5`. (c) At
 three seasons the two-season "concluded" strand no longer exists: it has merged into `4ec32c3adc`, now 63
 moves, 17 doers, 50 terminal moves, 34 opening moves, `concluded=False`, and `concluded 0 of 5` (E-07). The
-same-doer clause of `_links` (`world_q.py:5081-5083`) joins any two deeds of one busy person. (d) At the
+same-doer clause of `_links` (`world_q.py:5081-5083`) joins any two deeds of one busy person. At six
+seasons (E-08) the reading is **one strand**: 234 moves, 55 doers, 60 parties, 154 terminal moves, 99
+opening moves, `concluded 0 of 1`. (d) At the
 person reading the roster's `concludes` list (`rosters.yaml:3396-3398`) holds `petition.filed`,
 `dispensation.issued`, `transfer.made`, `record.given` and `tenure.opened`, so for a person a strand
 "concludes" on the kind of act that also starts one; this list is read by the loop (`flow_stakes`
@@ -331,7 +336,9 @@ grow with the square of the season count.
 
 **Evidence.** `matter.py:471-501`: one gate write and one `claim.decayed` per claim whose confidence moves.
 Seed 0: `claim.decayed` per season 0, 12,115, 22,722; Events per season 13,379, 24,267, 36,864 (E-07). At
-three seasons decay is 34,837 of 74,510 Events (46.8%).
+three seasons decay is 34,837 of 74,510 Events (46.8%). At six (E-08): `claim.decayed` per season 0,
+12,115, 22,722, 35,115, 48,781, 60,323; Events per season 13,379 rising to 85,591; decay is 179,056 of
+273,067 Events (65.6%).
 
 **Touches.** R-07 (memory); standalone operability (a soak of N seasons costs O(N²)).
 

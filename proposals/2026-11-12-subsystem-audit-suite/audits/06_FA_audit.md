@@ -470,7 +470,7 @@ Each row is decided. "Step" is the rung of the five-step ladder that decided it.
 | R-03 | `revoke` has no motive and reads no `subject` (CR-54) | the defied-writ occasion is the general motive; `revoke` reads its office through `office_named_by` and declares `referent_class: Office`, `referent_named: true` | 4 (CR-54's ratified reading of H-207 (A)) | `06_FA_decree_binds.md` |
 | R-04 | J-8: which seats hold `dispatch`; `off_npc_084` has no row and every remit act | `dispatch` stays a remit act; a seat holds it only if its row names it; `remit_unruled` is deleted; NPC-084's seat gets a row | 4 (the `foreign_seats` rows; IN-64's precedent) | `06_FA_remit_grant_by_row.md` |
 | R-05 | H-91: is `remit:revoke` necessary when purview is sufficient | necessary. Every remit verb is admitted by grant AND basis (`_seat_grants` then the basis, `gate.py:370-375`); the 2026-09-02 purview sentence was superseded by ED-IN-0256 (3) and the 2026-10-12 holdings ruling, which decide the basis and leave the grant to the row. A duke who should revoke is a duke whose row names `revoke`; all three do | 1, then 4 | this table |
-| R-06 | H-294 and two `[ASSUMPTION]`s: a ban's scope and reach | scope: the banning seat's purview (the edge's object is that seat; a ban that bars every seat ignores its own object). Reach: openings only. Closing the banned man's existing holds would strip seats `may_revoke` protects, including ruled-`null` ones | 5 | `06_FA_seat_terms_and_turnover.md` §5 |
+| R-06 | H-294 and two `[ASSUMPTION]`s: a ban's scope and reach | scope: the banning seat's purview (the edge's object is that seat; a ban that bars every seat ignores its own object). Reach: openings only. Closing the banned man's existing holds would strip seats `may_revoke` protects, including ruled-`null` ones | 5 | `06_FA_seat_terms_and_turnover.md` edit 6 |
 | R-07 | H-352: one purse per rung | keep one store carrier (`Rung.stores`); a seat may name a `treasury:` anchor on its `offices.yaml` row, default its own rung; built only once a computed `requisition` lands on a rung seating two factions | 5 | this table (shape only; no proposal until reached) |
 | R-08 | H-353: a seat's faction and a holder's membership are two records | leave them two. A holder outside the faction is staff, which `world_q.leaders` already says; `_eff_succeed` and `_eff_confer` mint no `commit`, because membership is the person's own act (AX-1) | 3 (`leaders`' own docstring), 4 | this table |
 | R-09 | F-FA-09: contract rows for a retired faction | delete `faction_state` and `faction_politics` rows' `state:`, `emits`/`consumes` and Key-vocabulary fields in the commit that re-points `tools/build_engine_atlas.py:179`; keep one line per name saying the faction is `queries/faction_q.py`'s view and has no contract. [UNVERIFIED: the full reader set of the `modules:` list; `manifest/registry.py:55-58` parses it] | 2 (the subject was retired at `29b`; Key substrate by ED-IN-0232) | `06_FA_hygiene.md` |
@@ -575,7 +575,7 @@ In order. Steps 1 to 4 make FA run well alone; 5 to 8 make it compose.
 |---|---|---|---|---|---|
 | 1 | Grants by row: delete `remit_unruled`; rows name `dispatch`; a row for NPC-084's seat; the consort's remit emptied | `engine/season/offices.yaml`; `data/rosters.py` (`OFFICES_REMIT_UNRULED` goes); `harness/populated.py::authored_remit` | `aperture 2 0` PER HOLDER: every `march` attempt is by a seat whose row names `dispatch`; `p_npc_084` no longer reads 67 of 67 | R-04, R-06 | edit (declared hash mover) |
 | 2 | A decree's terms reach its addressees; the triple forms on an addressed writ; the defied-writ occasion; `revoke` reads `subject` | `loop/witness.py` (content deposit), `queries/world_q.py` (`writs_held` → `writs_addressed`; the occasion), `verb_table.yaml` (`revoke`), `loop/predicates.py`, `loop/effects_governance.py` | spine, seeds 0 to 4, four seasons: at least one `compliance.given` and one `compliance.withheld` by an addressee; after a withheld one the issuer's next question set carries the defier's seat as an `Office` referent; control arm (the deposit off) reproduces today's hash | R-04, R-02, R-05 (`comply`, `evade / defy`, `construe`, `revoke`) | small build |
-| 3 | Seat terms as data; malformed term refuses | `offices.yaml` (`term:`), `data/rosters.py` loader, `loop/effects_governance.py::_eff_confer`, `loop/predicates.py::_req_confer` | realm, seeds 0 to 2, eight seasons: `term.matured` on a seat `hold` at least once per seed, followed by a `tenure.opened` on the same seat; `term: null` everywhere reproduces the pre-item hash | R-04, R-05 (`confer`) | small build |
+| 3 | Seat terms as data; malformed term refuses | `offices.yaml` (`term:`), `data/rosters.py` loader, `loop/effects_governance.py::_eff_confer`, `loop/predicates.py::_req_confer` | realm, seeds 0 to 2, twelve seasons, once the elected rows are termed: `term.matured` on a seat `hold` at least once per seed, and the count of `tenure.opened` on a matured seat read and reported; `term: null` everywhere reproduces the pre-item hash | R-04, R-05 (`confer`) | small build |
 | 4 | The scenario, the digest and the end conditions | `harness/governance_spine.py` (`play`), reading `harness/play_surface.py` | a scripted-callback run ends on each of the three conditions; a run with the auto chooser prints a non-empty digest; no engine file changes and `content_hash` is unmoved by the digest | the standing requirement | small build |
 | 5 | B10-17 close one as planned (`declare`, alliance and peace, occupation), with CP-T09-02's exit counted on a response | plan | `aperture` and `strife` as the card states, plus one later act by a target-faction person citing the declaration | R-04, R-01, R-05 | as planned |
 | 6 | B10-17 close two (`ladders`, election, nomination, deposition), CP-T09-06's data edit | plan | as the cards state; the election's computed reach stays H-80's | R-04 | as planned |
@@ -719,6 +719,24 @@ running `4 0`; neither had produced output). Nothing in this audit rests on a fo
 `:617-866`; the 26 primary hole rows and H-100, H-217, H-230, H-353 at their register lines; the B10-17 and
 B10-17b cards; the part-4 entries for CR-09, CR-32, CR-35 to CR-37, CR-54, CR-88 to CR-91; `HANDOFF_FA.md`;
 `HANDOFF.md`; `AUDIT_BRIEF.md`; both dossiers; `CASE_BRIEF.md`.
+**`.designs/`, read end to end, with long lines truncated** (each line cut at 300 to 520 characters, so the
+tails of long table cells and paragraphs were not read):
+`_architecture/reference/governance_consolidation_v1.md`, `auto_manual_resolution_duality_v1.md`;
+`factions/reference/faction_systems_overview_v30.md`, `faction_succession_split_v30.md`,
+`faction_politics_v30.md` §1.0 to §1.0d and its index. **Outlined by heading only:** the other twelve
+faction documents the dossier lists. **Followed as a referent:** `settlements/reference/
+governance_play_redesign_v1.md` §1.4 (by search). **Not read:** `faction_layer_v30` and its parts,
+`faction_canon_v30`, `faction_behavior_v30`, `faction_state_authoring_v30`, `factions_personal_v30`,
+`ci_political_v30`, `franchise_v30`, `treaty_expiration_v30`, `parliamentary_transfer_v30`,
+`baralta_crown_claim_v30`, `fractional_province_ownership_v30`, `political_dynamics_keys_migration_v30`,
+`governance_type_registry_v1`, `factions_flow_skeleton_v1`, `fail_forward_pp177`, `varfell_path_b_v30`, the
+rest of `faction_politics_v30` (the rank ladders), and fifteen of the seventeen cross-cutting documents. The
+instructions to read these arrived after the audit's reading budget was largely spent; the findings above do
+not rest on them, and CR-32's ladder transcription and CP-T09-03's treaty work should not be taken as
+checked against them here.
+**`.audit/`, read:** `2026-07-12-governance-compendium/00_index.md` in full and `43_directive_types.md`
+§1.1 to §1.4. **Not read:** the compendium's other eight files and
+`2026-07-09-comparative-governance-research/`.
 **Sampled, not read in full:** the 22 test files (names and greps); `harness/aperture.py` past its docstring;
 `world_q.py` (the functions cited); H-101 past its first forty lines; the governance proposals (Status lines;
 IN-48's head; `reasons-to-convene` §0 to §2); the FA research file's §3 to §6, §9; the three

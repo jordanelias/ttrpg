@@ -17,8 +17,9 @@ NPCs use it without a player, but a hearing almost never ends, cannot be lost by
 moved by what is said in it, and offers nobody a choice inside it.** The live subsystem is a
 166-line roll (`modules/social_contest/roll.py`) under a correct seam; around it stand the docket,
 nine arrangement rows and seven contested verbs of the Proceedings design, of which computed play
-reaches the roll and almost nothing else (one `matter.determined` in seven seed-seasons across seeds
-0 and 1; every pool the same two dice). Beside it stands a 6,700-line kernel that models the same
+reaches the roll and almost nothing else (three `matter.determined` in twelve seed-seasons across
+seeds 0 and 1, against sixteen matters lapsed; every pool the same two dice; no docket item naming
+its arrangement row). Beside it stands a 6,700-line kernel that models the same
 subject a second way, is imported by four tests and nothing else, and holds the only social contest
 a human can play. The single largest obstacle is that the proceeding has no closing economy: its
 verdict is the judge's default roll against a default obstacle, repeated each season until it binds
@@ -79,11 +80,26 @@ a faction-vote adapter (`faction.py`), an interactive stdin harness (`agon_harne
   `determine` attempted 2, executed 0 (`clause:docket`); `open_case` 7 opened; `petition` 20 filed;
   `arrest` formed 1, attempted 0; `interrogate` formed 0. Pools: *"`argue`: pools rolled [2] over 9
   actors · two actors at different pools: no"*.
-- A per-season probe on `build_realm(seed)` (§12 run 6): seed 0, four seasons — `matter.determined`
-  0, `matter.undetermined` 1 (season 4), `determine.refused` 3, `speak` executed 6 (5 Failure, 1
-  Partial), `argue` executed 24 (9 won, 15 lost; `pursuit.moved` 4), `news.told` 12, docket length
-  8 → 14 → 18 → 23. Seed 1, two seasons — `matter.determined` 1 (Partial, season 2),
-  `matter.advanced` 1, `matter.turned` 9, `argue` executed 11.
+- A per-season probe on `build_realm(seed)` (§12 run 6). Seed 0, six seasons: `matter.determined`
+  1 (Partial, season 5), `matter.undetermined` 2 (seasons 4 and 6), `determine.refused` 3,
+  `matter.lapsed` 8 (all in season 6, the first season `docket_lapse` 4 can fire), `speak` executed
+  11 (10 Failure, 1 Partial), `argue` executed 41 (10 won, 31 lost; `pursuit.moved` 3), `news.told`
+  16 against `tell.refused` 199, `case.opened` 11, docket length 8 → 14 → 18 → 23 → 31 → 29. Seed 1,
+  six seasons: `matter.determined` 2, `matter.undetermined` 2, `determine.refused` 6,
+  `matter.lapsed` 8, `speak` executed 25 (18 Failure, 2 Partial, 5 Success), `argue` executed 52 (9
+  won, 43 lost), `news.told` 21 against `tell.refused` 261, `case.opened` 16, docket 10 → 16 → 21 →
+  25 → 29 → 29. Both seeds together: 27 cases opened and 110 petitions filed in twelve
+  seed-seasons, 3 determined, 4 heard and failed, 16 lapsed.
+- Docket composition at seed 0 after two seasons (§12 run 11): 11 matters, all persons; every
+  item's `arrangement` is `None` (14 of 14); two items hold both a date and a matter; benches over
+  the docketed persons seat 2, 4 or 5; 2 of 83 persons hold any capability and none an attribute;
+  no disposal Tenure exists.
+- `python -m engine.season.harness.corpus_run` (143 cases, seed 0; §12 run 13): `DEGREES RESOLVED BY
+  VERB` — `argue` 947 (Failure 660, Partial 156, Success 129, Overwhelming 2), `tell` 158, `lie`
+  138, `speak` 19 (Failure 16, Partial 3); `determine` is in `VERBS ONLY REFUSED`; `arrest` and
+  `interrogate` are never attempted; `BANDS THAT DIFFER`: `interrogate`, `lie`, `speak`, `tell`
+  False; the ARC bar reads *"ENDS = NOT-COMPUTABLE — closed by W23 (contest results) + W26 (binding
+  decisions)"*.
 - The module: `roll(inp, random.Random(7))` twice returns the same `Margin` (seeded, parameter
   generator). The default pair (pool 2, no opposing score) deals exactly Failure 0.74, Partial 0.19,
   Success 0.07, Overwhelming 0.00 (`band_odds`).
@@ -134,8 +150,9 @@ Ranked worst first. "Falsifier" is the run that would have shown the claim wrong
 
 **F-SC-01 · blocks a requirement (R-04, R-05) · A proceeding rarely closes, and when it does nothing
 said in it decided it.**
-Claim: in computed play the chain docket → hearing → verdict completes about once in seven
-seed-seasons, and its verdict is the judge's `pool_default` against `obstacle_default`.
+Claim: in computed play the chain docket → hearing → verdict completes three times in twelve
+seed-seasons (27 cases opened), about five matters lapse for each one determined, and the verdict is
+the judge's `pool_default` against `obstacle_default`.
 Evidence: §1's runs; `workplans/valoria_master_workplan_v11_part3.md:281` (the 2026-11-01 probe:
 *"`determine` never executed … no docket item named its row"*); `es/tests/test_sc01_the_bar.py:63-69,
 :144-146` — THE BAR passes only at `pool_default` 30, *"OFF THE SWEEP"*, on two runs found *"in 1815
@@ -145,9 +162,9 @@ Causes, each read at its site: (i) `determine` forms about once a season and is 
 of the time and Failure writes nothing; (iii) no computed case names an arrangement
 (`effects_information.py:412-418`), so every disposal is `oblige`; (iv) `speak` is refused 23 of 25
 times because the matter it addresses is not docketed.
-Falsifier: a realm run showing `matter.determined` — **present at seed 1, season 2 (one, Partial)**,
-absent at seed 0 over four seasons. The claim is therefore "rarely", not "never"; the first draft of
-this finding said never and the control corrected it.
+Falsifier: a realm run showing `matter.determined` — **present: seed 0 once (season 5, Partial),
+seed 1 twice in six seasons**. The claim is therefore "rarely", not "never"; the first draft of this
+finding said never, on a two-season reading at one seed, and the control corrected it.
 Consequence: the game's most distinctive scene produces filings and failed speeches. No trial ends,
 so no sentence, no ban, no pardon, no appeal, no precedent.
 Fix: B10-18c as scheduled (CR-57 to CR-64) for intake and rows; SC-P6 (acquittal) and SC-P3 (the
@@ -208,8 +225,8 @@ merge, not a ruling); SC-P4 (band-keyed `disposes:`).
 of nothing that plays.**
 Evidence: `arrangements.yaml` nine rows × thirteen keys; readers under `es/` non-test: `disposes`,
 `disposal`, `quorum` (§12 run 10); `speech_kinds` none; a computed docket item names no row.
-Falsifier: `DOCKET_ARRANGEMENT` non-`None` on any item after a realm season — pending in §12 run 11;
-the plan's own probe read 0 of 10 and 0 of 5.
+Falsifier: `DOCKET_ARRANGEMENT` non-`None` on any item after a realm season — none: 14 of 14 items
+read `None` at seed 0 after two seasons (§12 run 11); the plan's own probe read 0 of 10 and 0 of 5.
 Consequence: trial, tribunal, inquisition and excommunication are one act with one consequence.
 Fix: CR-60/CR-61 (plan); SC-P4 for the unread keys.
 
@@ -231,6 +248,29 @@ kind and it never executes.
 Consequence: the social layer's visible output is refusal. Formation is CORE's (the chooser aims at
 hearers who are elsewhere and at matters not before a room); the failure economy is SC's and is
 design-first (H-219, H-221).
+
+**F-SC-13 · degrades narrative (R-06, R-08) · The chooser does not weigh a speech, and the verdict
+does not read the judge.**
+Claim: `decision/choose.py::_writing_bands` returns `None` for a contested verb that writes in no
+band, so `odds_weight` is 1.0 and `settle_efforts` offers no `effort` variant for `speak`, `tell`,
+`lie` and `interrogate`; and `determine` draws on no vocation, so a judge's convictions, regard and
+skill do not enter his verdict.
+Evidence: `choose.py:154-162, :165-175, :234-266`; `corpus_run`'s *"BANDS THAT DIFFER … interrogate
+False · lie False · speak False · tell False"*; `rosters.yaml: verb_capability` (no `determine` row);
+`verb_table.yaml` `determine.contests_note`.
+Falsifier: an `effort` operand on any executed `speak` act in a realm run — not searched for in the
+log `[UNVERIFIED by run; established by reading the one function that forms the variant]`.
+Consequence: persons differ in which social act they pick and not in how hard they press it; a
+harsh judge and a lenient one are one distribution. Fix: SC-P3 edit 3 (speech writes a stage, so the
+existing chooser code prices it); CP-T05-01 (`opposed`); CR-92 for the judge's faculty. §15.
+
+**F-SC-14 · degrades narrative (R-02, R-07) · Evidence is typed where it is held and a scalar where
+it is used; nothing said in a hearing can be answered.**
+Evidence: `world_q.py:852-879` (one float; mirror by holding); `sigma.py::contest_input` (room terms
+only for `heard_by: bench`); `rosters.yaml: proofs` and each row's `proofs:` unread. Falsifier: an
+act payload naming a cited claim or Record on any contested social row other than `tell`/`lie`'s
+`said` — none in `verb_table.yaml`. Consequence: a case cannot be built item by item, broken by a
+contradiction, or spoiled by a forgery. Fix: SC-P8. §16.
 
 **F-SC-09 · hygiene with a Layer-1 edge · `reception` and `proofs` read other persons' ledgers at
 RESOLVE.**
@@ -295,6 +335,39 @@ world's own carriers. Nothing the kernel computes can be handed to the loop with
 entry (no generator, a winner where a margin belongs, a second obstacle). What the kernel has that
 the loop lacks is design, not code: a per-exchange choice, defeat by a named fault, a verdict that
 can cross the room, a chronicle of the bout's shape. Each has a loop-native home (SC-P3, SC-P1).
+
+**Four models, one name (the design set and the earlier audits, as referents).** The archived head
+`social_contest_v30.md` (read in full; intent only) describes a paired-exchange game: Appraise, a
+style pick, both orators roll and the higher wins (CLASH / REINFORCE / CROSS / TIE), strain against
+Face, Concentration, a Persuasion Track, then Obligations that bind for seasons, chain contests
+that resume where a compromise left the track, a three-way heresy verdict (acquittal, insufficient
+evidence, tribunal), a Domain Echo into faction state. The three-lens audit
+(`.audit/2026-08-06-social-contest-three-lens-audit/00_synthesis.md` §0) found *"three resolution
+models wearing one name"*: that prose (no engine), the kernel (a different, per-move loop absent
+from the prose), and a legacy pool-compare stub. Re-verified at `601e715`: the stub is deleted; the
+kernel still cannot be given a Style through `build_contest` and `_resolve_agon` still builds a
+`Bout` with no armature (`K/wrapper.py:110-111, :215-216`), so everything ratified at Gate C remains
+unreachable from the kernel's own public entry; that audit's F9 (`hard` costs 5 against `advance`'s
+3 and runs identical code, `K/resolver.py:375-408`, while `K/agon_harness.py:328` calls it *"a
+bigger swing"*) is still true; its *"live campaign path resolves every contest as `logos_spammer` vs
+`logos_spammer`"* is now false — that path was deleted with the campaign driver. The season then
+added a fourth model, the one-sided roll under the Proceedings acts, which is the only one the game
+runs. Of the archived intent, the loop carries: Obligations (a `determine` opens an `oblige` with a
+term that lapses at MATTER — the binding commitment, with no violation consequence); the three-way
+verdict not at all (SC-P4, SC-P6 restore two of its three ends); the chain contest only as a
+memoryless re-hearing (SC-P3's case-file stages give it memory); the Domain Echo not at all, by
+Layer 1's ruling that a faction is a view. The paired compare of §4 Step 4 is the archived form of
+§11 item 1's option; the ruling of 2026-08-14 is later and governs.
+
+**The duality doctrine (`auto_manual_resolution_duality_v1.md`, `ED-SC-0013`, RULED 2026-07-08).**
+*"Auto = the contest kernel run headless, played = the same kernel run interactively. Not two
+mechanics — one engine at two fidelities … same engine ⇒ consistent by construction."* This is the
+standing requirement's one-code-path clause, ruled four months earlier. It names the kernel as the
+engine; `ED-SC-0033` and `ED-SC-0037` (both later) changed which engine. The principle survives the
+change of engine and is what SC-P3 implements: the played hearing and the automated one are the
+same season acts, chosen by a callback or by the chooser. Its calibration fork C (how close auto and
+played must be) dissolves for the same reason the doctrine gives. Its "Witness" middle fidelity has
+no loop form and none is proposed.
 
 **What SC-05 should be (ladder first).** (1) Superseded/ruled: yes — retirement is ruled;
 `A1-58` makes the timing the plan's. (2) Irrelevant: the adopt-or-keep question is, since SC-01 step
@@ -426,7 +499,17 @@ H-281 (unread keys; SC-P4), H-210 (forgery quality; read, inert at the fixed cei
 | G-25 | `ED-SC-0038`'s per-matter vector is ruled and unbuilt, with no position by name | one docket item per matter already gives one margin per matter; a BUNDLE is several items opened by one act — design-first under B10-18c's CR-61 (the case file names its matters) | 5 | §8 step 9 |
 | G-26 | the lane research file (`research/by_lane/SC_social_contest.md`) describes `speak` as uncontested and `argue`/`seize` as absent | stale at HEAD (D_T05 rows 71–73 already say so); the file is dated reference — no edit, cite D_T05 | 2 | — |
 
-Resolutions decided: **26** (24 closed by the ladder; G-13 and G-24 survive to §11).
+| G-27 | the chooser prices and puts effort behind only contested verbs that write; a speech writes nothing | a carried or advanced `speak` writes a stage on the case file; the existing rule then covers it | 5 | SC-P3 edit 3 |
+| G-28 | the hearing's consequence: bench ledgers (F8) or bench commits (SC-02) or the proceeding's own record | the case file (a World Record) is the carrier; CP-T05-02 (i)'s arithmetic unchanged | 5 | SC-P3 edit 3 |
+| G-29 | a choice inside a hearing must be the same for player and NPC | proofs subset and plea are Candidate variants, formed as `effort` is | 4 (`settle_efforts`) | SC-P3 edit 2 |
+| G-30 | evidence reaches a contest as one float; the proofs roster and each row's `proofs:` are unread | cited, typed entries admitted by the row | 4 (`tell`'s held-claim rule) | SC-P8 |
+| G-31 | the only answer to a proof is silently holding the same claim | rebuttal by a held contradiction strikes the entered proof | 5 | SC-P8 |
+| G-32 | a forged Record in a hearing: *"counted as a proof until examined"* is listed unbuilt | it counts until an `examine` finding names it forged, which strikes it | 3 (`PS/19_PLAN` step 25, intent) | SC-P8 edit 5 |
+| G-33 | archived intent adds dice per Finding cited; the code moves the obstacle | the code's placement is kept (ruled obstacle form); named in SC-P8 | 3 (ruling) | SC-P8 |
+| G-34 | the walkthrough's *"every number the resolver uses … the player can see"* (`.audit/`) against the hidden room | the player sees what his character believes (`View.odds`) and, after the act, his own roll (SC-P1); the room stays hidden | 3 (code and `PS/15`) | SC-P1 |
+| G-35 | `ED-SC-0013` names the kernel as the one engine at two fidelities | superseded as to the engine by `ED-SC-0033`/`0037`; the principle is kept | 1 | SC-P3 |
+
+Resolutions decided: **35** (33 closed by the ladder; G-13 and G-24 survive to §11).
 
 ## 7. Research transfer
 
@@ -434,7 +517,11 @@ Read: `research/00_INDEX.md` (structure and the SC rows), `research/by_lane/SC_s
 (§0–§3.1 in full; the remainder not paged — `[SKIPPED partial: lines 143–799]`),
 `research/game_precedent_suite/dispositions/D_T05.md` (in full),
 `research/social_contest_procedures/01–03` (headings and the three "For the engine" tables),
-`research/rhetoric_oratory_contest/` (through the lane file's assessment, not re-read).
+`research/rhetoric_oratory_contest/` (through the lane file's assessment, not re-read),
+`research/game_precedent_suite/dispositions/D_T06.md` (in full, rows truncated at 640 characters).
+Not opened: `tables/R4`, `R5`, `tutorials/T05`, `T06` (their content reached this audit through the
+two dispositions, which cite them row by row), `research/by_lane/FI_fieldwork_investigation.md`,
+the companion parts `[SKIPPED: named in §17]`.
 
 **Changes what to build.**
 
@@ -459,10 +546,26 @@ Read: `research/00_INDEX.md` (structure and the SC rows), `research/by_lane/SC_s
 - *Emergent-narrative requirements (via D_T05 rows 66–68): a complication-modal middle band; a "why"
   on every event.* Used: F-SC-08 (the modal outcome is Failure, 0.74, and writes nothing) and SC-P1.
 
+- *The detective and noir set* (`D_T06.md` in full; §16): L.A. Noire — an accusation needs a held
+  notebook item and a missing clue removes the option (the loop HAS this for `tell`; SC-P8 extends
+  it to `speak`). Ace Attorney / Danganronpa — testimony set against a presented item; argument and
+  rebuttal as the trial's structure (the loop LACKS both; SC-P8 edit 3 is the form that needs no
+  authored truth: two held items compared). Pentiment — a judgment bound without a truth test and
+  remembered by a community (the loop's `determine` is this shape; the remembering is WITNESS).
+  Obra Dinn, Golden Idol, Shadows of Doubt's exact-match form — a verifier oracle; refused by axiom,
+  and D_T06 row 3 records the precedent's own leak. Guild 2 — evidence with strength, believability
+  and expiry, and belief with provenance (the loop HAS provenance and decay; SC-P8 makes them count
+  in a hearing).
+- *The three-lens audit's persistent-argument board* (`.audit/…/03_persuasion_documents_
+  adjudication.md:84-130`, re-read): what cards fixed for Griftlands is non-stationarity of the
+  per-turn decision, which a persistent board of standing claims supplies without cards, on the
+  condition that general verbs can reduce every board state. Used: the case file's stages are that
+  board (SC-P3 edit 3, SC-P8 edits 2–3); `speak` with `answers:` is the general verb.
+
 **Tried, did not transfer.**
 
-- *Ace Attorney / Danganronpa (statement-level contradiction).* Needs an authored truth; correctly
-  refused by the relay. Not used.
+- *Ace Attorney's one correct statement per round and its penalty gauge.* Needs an authored truth
+  and a human; refused by the relay. Only the present-against-testimony shape is used (above).
 - *Triangle Strategy's Scales vote (persuade each voter once against a hidden threshold).* The loop
   has a declared vote (`world_q.declared_votes`, quorum) on one row that computed play cannot reach;
   the precedent would transfer only after CR-61. Not used now.
@@ -488,7 +591,7 @@ Proposal files (all `## Status: PROPOSED`; SC-P5 held back):
 `…/proposals/05_SC_contest_record_on_event.md` (SC-P1), `05_SC_sc05_kernel_retirement.md` (SC-P2),
 `05_SC_playable_hearing.md` (SC-P3), `05_SC_arrangement_rows_that_bind.md` (SC-P4),
 `05_SC_opposed_obstacle_parity.md` (SC-P5), `05_SC_acquittal.md` (SC-P6),
-`05_SC_capability_surface.md` (SC-P7).
+`05_SC_capability_surface.md` (SC-P7), `05_SC_evidence_and_rebuttal.md` (SC-P8).
 
 **To run well alone.**
 
@@ -507,7 +610,10 @@ Proposal files (all `## Status: PROPOSED`; SC-P5 held back):
    seeded hashes equal. Unblocks categorical outcomes (R-04 contributor).
 7. *Small build.* SC-P3 — `build_hearing`, `--play`. Gate: its two-run artifact. This is the step
    that makes SC a playable game of its own on the season's code path.
-8. *Small build.* SC-P2 — retire the kernel. Gate: hashes equal; exporter `--check`.
+8. *Small build.* SC-P8 — evidence cited and answered, after CR-61, SC-02 and SC-P3. Gate: its
+   three-part artifact on `build_hearing`. Unblocks R-02 and R-07 inside a hearing (what a person
+   holds decides the case; a contradiction held by another answers it).
+8a. *Small build.* SC-P2 — retire the kernel. Gate: hashes equal; exporter `--check`.
 
 **To compose.**
 
@@ -606,14 +712,15 @@ Scratchpad: `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379
 | 3 | `VERB_TABLE` print of contested rows, prizes, capability keys | — | 11 rows contest; 7 through `social_contest`; table 67 rows |
 | 4 | `python -m systems.social_contest.sim.contest._kernel_tests` (a script, not pytest) | 20260603 (its own) | `RESULT: 389 passed, 0 failed` |
 | 5 | `resolve_contest` global-stream probe; `inspect.signature` | 123 | stream moved; no `rng` parameter; `('committee','win')` |
-| 6 | `probe_realm.py <seed> <seasons>`: social Event kinds per season on `build_realm` | 0 / 4 completed of 6; 1 / 2 completed of 3 | §1; `realm_seed0_6.txt`, `realm_seed1_3.txt`. The 6-season and third-season readings did not finish under machine load `[INCOMPLETE]` |
+| 6 | `probe_realm.py <seed> <seasons>`: social Event kinds per season on `build_realm` | 0 / 6; 1 / 6 (and 1 / 3) | §1; `realm_seed0_6.txt` (hash `e324ea2b…`), `realm_seed1_6.txt` (hash `af2f6e40…`), `realm_seed1_3.txt` (hash `26d2091b…`; its three seasons agree with the six-season run's first three). Single run per seed: counts, not rates |
 | 7 | the same probe, first attempt | — | **failed** (`ModuleNotFoundError`, no `PYTHONPATH`); caught by reading the output, re-run |
 | 8 | exact odds: `band_odds` over `obstacle(SocialContestInput(…))` | — | tables in F-SC-03 and SC-P5; `MU_PER_DIE` 0.4; per-pool caps 2.0 / 2.842 / 3.6 / 4.23 |
 | 9 | `grep -rnE "^\s*(from|import) systems\.social_contest"` over `engine modules tools tests` | — | four test files |
 | 10 | grep of arrangement-key and `SPEECH_KINDS` readers under `es/` | — | `disposes`, `disposal`, `quorum` read; `speech_kinds` none |
-| 11 | docket composition after two seasons (`matter` kind, `arrangement`, bench sizes) | 0 / 2 | not returned before this file was written `[INCOMPLETE]` |
+| 11 | docket composition after two seasons (`matter` kind, `arrangement`, bench sizes) | 0 / 2 | 11 person matters, 3 empty slots; `arrangement` `None` on 14 of 14; benches 2 / 4 / 5; capability held by 2 of 83, attributes by 0; no disposal Tenure |
 | 12 | self-plea probe: `contest_input(w, [p], verb="speak", subject=p)` on `probes.tiny_world` | — | opposition `None`; a third party against him: 14.0 |
-| 13 | `python -m engine.season.harness.corpus_run` | 0 | started; no output before this file was written `[INCOMPLETE]`; §13 does not rest on it |
+| 13 | `python -m engine.season.harness.corpus_run` | 0 | exit 0 (`corpus_run.txt`): 143 cases; degrees by verb in §1; 23 of 67 verbs executed; `determine` only refused; ARC ends NOT-COMPUTABLE |
+| 15 | exact odds at the proposed rate (`band_odds(6, 1.2)`, `band_odds(3, 2.4)`) | — | 0.630 and 0.124 Success or better; SC-P5's falsifier re-worded on this reading |
 | 14 | `git status --short` | — | see the receipt |
 
 Not run: `pytest` (by instruction). Not re-run: H-284's fold, H-296's arrest sweep.
@@ -624,8 +731,11 @@ Corpus read: `es/cases/chain/CASE_BRIEF.md`; the 143 cases through `harness/run_
 (972 needs: 427 core, 463 important, 82 flavour). A keyword pass found 240 needs in 105 cases that
 mention a contest, hearing, vote, plea or persuasion; the table adjudicates the cases whose CORE
 needs turn on this subsystem's mechanism. "Represented" means reached by computed play in a run
-above, not declared. `corpus_run` did not return in time (§12 run 13), so "evidence" cites code and
-the realm runs.
+above, not declared. `corpus_run` (§12 run 13) is the corpus reading: over the 143 cases `argue`
+rolled 947 times, `tell` 158, `lie` 138, `speak` 19 (16 Failure, 3 Partial); `determine` was only
+ever refused; `arrest` and `interrogate` were never attempted; and the instrument reports the ARC
+lane's endings as *"NOT-COMPUTABLE — closed by W23 (contest results) + W26 (binding decisions)"*,
+which is this subsystem's debt to the arcs in the instrument's own words.
 
 | case | need (short) | hardness | represented today? | evidence | change required | owner | proposal | gate |
 |---|---|---|---|---|---|---|---|---|

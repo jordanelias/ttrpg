@@ -32,7 +32,7 @@ the first has an ending nobody can reach.
 | coupling 250 with **no source**: still 0 band crossings and `restore` attempted 0 times in three seasons | E-11, E-16 |
 | T15 holds no Site, no settlement, no holder; `build_realm` mints Sites at settlements and hearths only | E-13; H-236 |
 | a holder's death closes his `hold`; no verb opens a hold on a place nobody holds | `state/world.py::remove_person`; `effects_information.py:1061`; H-166, H-186 |
-| territories under the realm that no faction holds, forcing on, by season | E-16 |
+| with forcing on, three seasons: unheld territories stay at 1 at seeds 0 and 1 (no land-holder died); vacant offices go 0, 3, 5 of 35 at seed 0 and 0, 0, 1 of 34 at seed 1; one hold is opened in each run | E-16 |
 | `peninsular_sovereignty` selects 16 territories; 15 are settled and held at build; GD-1 and the design both say 15 | E-13; `rosters.yaml: endings`; `victory_v30.md` §0 (intent) |
 
 ## The resolution, decided
@@ -132,9 +132,12 @@ Controls: every switch off reproduces `build_realm(0)`'s hash and the one- and t
 
 ## NERS reading
 
-- **N.** Without edit 1 the survival contest has no first move; without edit 2 every death of a
-  land-holder shrinks the governed map for ever (a ratchet in the live-edge set, the shape L3 refuses in
-  Queries and here appears in the world itself); without edit 3 the game has no reachable victory. Each
+- **N.** Without edit 1 the survival contest has no first move; without edit 2 the death of a land-holder
+  would shrink the governed map for ever (a ratchet in the live-edge set, the shape L3 refuses in Queries).
+  That ratchet is structural and was **not observed** in E-16, where no land-holder died in three seasons
+  at either seed; H-186's cite records it from an earlier tree (11 of 16 territories unheld after one
+  season). Edit 2 is therefore the lowest-ranked of the three. Without edit 3 the game has no reachable
+  victory. Each
   holds top-down (the realm's end states), bottom-up (a person's `restore`, `march`, `seize`), and
   laterally (SE's fabric, FA's holds, MB's occupation).
 - **R.** The no-player half: a front that advances unless persons hold it, and land that changes hands

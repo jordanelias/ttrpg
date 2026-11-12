@@ -215,6 +215,36 @@ trial):
 - Where this intent conflicts with a ruled item (the proceedings ownership, ED-SC-0033..0039; the
   knowledge-model ruling), name the conflict and do not resolve it.
 
+### Mass battle: the cell-based approach and the weapon-carry trade-off (Jordan, 2026-11-12; pay special attention)
+
+The structure Jordan wants, which the MB lane judges the code and the design against with particular care:
+
+- **Cell-based battlefield.** The battle is resolved on a grid of **cells**. An **army is a deployment of
+  all its units in a formation** on that grid.
+- **Nested structure.** Each **unit has its own subformation and its own troop types**: army → unit →
+  subformation → troops (the existing code names `hierarchy/units.py`, `orderofbattle.py`,
+  `troop_types/{registry,presets,recruitment}.py`, `geometry.py`, `perimeter.py`, `armies.py`; the design set
+  is §A.3, §A.3b (the 25×25 cell grid), §A.12 in `mass_battle_v30.md`; the per-cell envelopment and
+  front-fixer machinery is described in `proposals/multiunit_envelopment_plan.md`). Judge whether the
+  hierarchy is real in the data model and the resolver (each level carrying its own formation, orders and
+  state), or flattened at resolution time.
+- **Mixed weapons per unit, with a cost.** **A unit can carry different weapons, but carrying more
+  raises fatigue cost and lowers movement speed**, so that, for example, **a pike unit may also carry
+  arming swords**: the benefit is being able to fight in either mode (pike formation against a charge,
+  swords when the line closes or breaks), the price is a slower, more tiring unit. **Archers carry arming
+swords too** (Jordan): the secondary melee weapon is a general loadout choice for any troop type, not a
+pike-unit special case, so the rule must be one rule over any (troop type × primary weapon × secondary
+weapon) and the ranged-to-melee switch (when archers' line is reached) must be a state change the
+resolver handles with its cost. Judge: is weapon
+  loadout a per-unit, per-troop-type datum; is "which weapon is in hand now" a state the resolver reads and
+  an order or trigger changes; are the fatigue and speed penalties derived from the loadout by one rule
+  (data, not constants in the module) and consistent with how the same penalty works for an individual
+  character's kit in personal combat (CP-T03-03 kit, CP-T03-04 arms, `weapon_physics_and_concentration_model.md`);
+  does the cost bite in play (fatigue over a long battle, pursuit, forced march, supply). Write the missing
+  pieces as proposals, and state what a designer would edit to define a new troop type or loadout.
+- **One path.** The cell-level battle that a player commands and the auto-resolved battle (Football
+  Manager, Unicorn Overlord) must run the same cell-based resolver.
+
 ## Design intent stated by Jordan, 2026-11-12: personal combat
 
 Personal combat is intended so that **each character can equip a weapon, armour and a suite of skills that

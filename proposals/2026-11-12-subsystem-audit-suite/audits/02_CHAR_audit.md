@@ -261,8 +261,8 @@ Ranked worst first. Severity: **B** blocks a requirement, **D** degrades narrati
 - **Claim.** Over two played seasons nothing a person feels toward another, wants, or can do changes
   by an amount that could alter a choice.
 - **Evidence.** Probe 2, `build_realm`, two seasons, shipped chooser: stored stance moved for 0 of 83
-  persons at seed 0 and 0 of 83 at seed 1; pursuits for 1 and 0; `fight` 0, `forgive` 0. Probe 3:
-  regard differs from stored stance in 656 of 2,070 cast pairs, with a median computed half of 0.051
+  persons at seed 0 and 0 of 83 at seed 1; pursuits for 1 and 0. Probe 3 (seed 0): `fight` 0 and
+  `forgive` 0 resolved; regard differs from stored stance in 656 of 2,070 cast pairs, with a median computed half of 0.051
   on a ±25 scale. At build, of 46 cast: attributes 0 (the switch ships off, and the registry authors
   one `stats:` row), capability 2, thread sensitivity 10, heritage 4.
 - **Falsifier run.** A stance writer reached by ordinary play would show a non-zero count. Two seeds
@@ -381,8 +381,9 @@ Ranked worst first. Severity: **B** blocks a requirement, **D** degrades narrati
 
 - **Evidence.** `budget.py`: body bands subtract scenes, floor 1. No score term reads `Sensation`.
   H-330 (line 6156): any live `hold`, a survey sheet included, earns the office bonus.
-- **Fix.** `budget` counts holds whose object is an office (the person's own `granted_acts` snapshot
-  is non-empty), an edit at the owner.
+- **Fix.** `budget` counts holds on a seat, read off the grant snapshot on the person's own Tenure
+  (`02_CHAR_reason_trail_and_small_edits.md` B1; `[UNVERIFIED: that a seat with an empty remit is
+  stamped]`).
 
 ### F-CHAR-15 · H · stale text at the owners
 
@@ -461,4 +462,478 @@ the personality layer (CL-PERSON); attributes in a choice (CR-93) and on others 
 goal stages (CL-THRUST B2.2: the loader exists, `goal_stages` is empty); the deed lie (H-198 rule ii);
 intent reconciliation (H-191); threshold-1 destabilisation (no mechanism anywhere, H-187).
 
-<!-- part two follows -->
+## 6. Hole-register and workplan disposition, and resolutions
+
+### 6.1 Disposition
+
+Rows marked ● were read at the register line (head, owner, default, site and the opening of `cite:`;
+the longest were not read to their last character). Rows marked ○ were read at the dossier's excerpt
+and checked against code or a run where the table says so. `needs_jordan` was set on none of them.
+
+| item | listed | verified | evidence | action |
+|---|---|---|---|---|
+| H-03 ○ | closed? | closed | `make_chooser`'s four properties read in code; inputs person-side | none |
+| H-54 ○ | open? | open (assumption) | `question_aggregation_rule` ships `first`; `questions.aggregate_questions` | none; F-CHAR-01 bears on which question matters |
+| H-60 ○ | open? | closed | the player's space calls `ask_budget()` and `release` (`sheet.py`) | mark closed on the row |
+| H-66 ○ | open? | open (assumption) | `--null` (uniform alignment) reads draw 488 of 498, so the table is not a zero matrix | none; the cells are Jordan's |
+| H-71 ○ | closed? | closed | `options._admitted_through`, remit read off the Tenure | none |
+| H-73 ● | open? | superseded | its own last sentence: deleted by REM-44; no term reads `Sensation` | read as closed; F-CHAR-14 records what replaced it (nothing) |
+| H-94, H-134 ○ | closed? | closed | `operand_bags`, per-seat candidates read in code | none |
+| H-96 ● | open? | open | temperature 0.05; outvoted 219 of 498 | `02_CHAR_resolve_and_temper.md` edit 5 |
+| H-146 ● | open? | open, dormant | `refusal_axis` None | arm after the scar cap's reading |
+| H-177/178/179/183 ○ | mixed | open, almost unreached | gains 0.5; 12 and 5 chained claims of ~22,000 | none in this lane (F-CHAR-09) |
+| H-180, H-181, H-191, H-195, H-198 ○ | open?/closed? | open (absent, declared) | the `ABSENT:` markers at `options.py:1821`, `:1723`, `:1764`, `choose.py:82`, `person_q.py:1196` | none; a declared absence |
+| H-187 ● | open? | open, dormant | `scar_weight_shift` 0 | arm after the cap |
+| H-188 ○ | open? | open, dormant | `confliction_weight` 0 | none |
+| H-189 ● | open? | open; newly measured | conviction rewritten for 0 and 6 of 46 cast (seeds 0, 1) | text edit, `02_CHAR_reason_trail_and_small_edits.md` C |
+| H-190 ○ | open? | open, dormant | `intent_disclosure` 0 | none |
+| H-192, H-193 ○ | open? | open; size measured | computed half median 0.051 | `02_CHAR_scar_cap_and_regard_unit.md` item 2 |
+| H-194, H-202, H-255, H-256 ○ | mixed | closed as built | `declared`, gain 1, hostile 2.0, `loyalty_toward_creed` True read from fixtures | none |
+| H-196, H-199, H-200 ○ | mixed | open at shipped arms | `newest`, 0.5, 0 | H-200's literal moves to a table (`02_CHAR_capability_uses_table.md`) |
+| H-221 ○ | closed? | closed, rarely reached | pursuits moved for 1 and 0 of 83 | none |
+| H-237 ○ | open? | premise superseded at seed 0 | 12 chained claims after two seasons | text edit (C) |
+| H-239 ○ | open? | open (assumption) | gate 30 | table row (`capability_uses`) |
+| H-248, H-249 ○ | open?/closed? | built, shipped on | `believed`, `on` | none |
+| H-253 ○ | open? | open | `heir_hears --seeds 0 --seasons 2`: throne not vacated, control clean | none |
+| H-264 ○ | open? | open; reproduced | `fight` 0 in two seasons at seed 0 | PC lane |
+| H-268 ● | open? | open | not re-run | SC lane; cross-listed in §13 |
+| H-272 ○ | open? | open; reproduced | 0 claims at two hops, both seeds | FI lane |
+| H-283 ● | open? | open | F-CHAR-01 | `02_CHAR_goal_lean_on_its_own_question.md` |
+| H-289 ● | open? | open | not re-run; the mechanism is F-CHAR-01's | same, with FA |
+| H-330 ● | open? | open | `budget.py` counts every live `hold` | edit B1 |
+| H-334 ● | open? | open | not re-run | answered in part by the `regard_sign` column |
+| H-337, H-339 ● | open? | open | not re-run; the term read in code | scar proposal, addendum and item 3 |
+| H-346 ● | open? | open; reproduced | 656 and 620 refusals | `02_CHAR_offer_what_can_be_done.md` |
+| H-347 ● | open? | open | `forge` is 5 of 46 cast's score-top | none; the cells are Jordan's |
+| H-357, H-358 ○ | closed? | closed as built | `lie` resolved 6 times at seed 0; `heritage_gain` 0.5 | none |
+| H-362 ● | open? | open | set-order sums read in code | edit 3 of the resolve proposal |
+| the other primary rows of the dossier (H-38, H-46, H-58, H-85, H-117, H-121, H-128, H-136, H-148, H-160, H-165, H-170, H-171, H-175, H-201, H-203, H-204, H-205, H-224, H-229, H-233, H-240, H-270, H-271, H-273, H-277, H-280, H-282, H-286, H-300, H-313, H-316, H-317, H-322, H-328, H-329, H-343, H-361) | as listed | `[UNVERIFIED]` | dossier excerpt only | none taken here |
+| CR-88 (B10-17b) | design-first | open | plan entry read | input: goal-lean proposal |
+| CR-89, CR-90, CR-91 | build / measure | open | plan entries read; not this lane's mechanism | none |
+| CR-93, CR-92 (B10-19) | design-first | open | CR-93 read; CR-92 title only | temper hook and the uses table precede their builds |
+| CL-PERSON | ratified design, build held | held | plan entry read | probe 1 is evidence for M35 (identical persons already differ, by the draw) |
+| CL-ATTR | held on M24 | held | title only | none |
+
+### 6.2 Inconsistencies, gaps and unclear passages: decided resolutions
+
+| # | item | kind | decided resolution | ladder step | proposal file |
+|---|---|---|---|---|---|
+| 1 | scar count unbounded against a 1/2/3 ladder | inconsistency | one count per (person, element) per season, behind `scar_season_cap` | 3, 4 | `02_CHAR_scar_cap_and_regard_unit.md` |
+| 2 | `regard` sums one addend in stance steps and two in raw dot products | inconsistency | each deed counted as a cosine, at most one step | 4, 3 | same |
+| 3 | stance term unbounded (H-339) | gap | clamp at `STANCE_MAX` | 5 | same |
+| 4 | sign of regard on non-contest adversarial rows (H-337, H-282, H-334) | unclear | a `regard_sign` column on the row; default reproduces today; values are content | 4 | same (addendum) |
+| 5 | what `choice_temperature` is measured against | unclear | keep; name `person_q.resolve`; say so at the fixture and H-96 | 5 | `02_CHAR_resolve_and_temper.md` |
+| 6 | the departure from the optimum belongs to nobody | gap | `temper(p)` at CR-93 (2)'s site, gain 0 | 3 | same |
+| 7 | `decision_spread`'s season reading cannot fail | gap | a temperature-0 column and the pairwise table | 5 | same |
+| 8 | two summation orders for one dot (H-362) | inconsistency | iterate `_AXES` | 4 | same |
+| 9 | nine person-side declines keyed by verb | two owners | one decline through the own-state reader | 4, 5 | `02_CHAR_offer_what_can_be_done.md` |
+| 10 | acts offered that the actor could know will be refused (H-346) | gap | decline where his own state answers `False` | 3 | same |
+| 11 | a cohort forms an individual's acts | gap | the actor's `individual` answered person-side; the conjunct on eight rows | 4 | same |
+| 12 | where CR-88's goal term applies | unclear | on the question the goal raised, nowhere else | 3, 5 | `02_CHAR_goal_lean_on_its_own_question.md` |
+| 13 | ambition is a switch, not a weight (H-283) | gap | answered by 12 for organization goals; a person's own want stays a switch until a want carries a lean (content) | 3 | same |
+| 14 | attribute names as literals under `decision/` | two owners of a mapping | one `capability_uses` table | 4 | `02_CHAR_capability_uses_table.md` |
+| 15 | a fanned choice is ordered by the draw alone | gap | alignment cells on choice values | 4 | `02_CHAR_choice_alignment.md` |
+| 16 | no record of why a decision was taken (H-343) | gap | an observer hook on the chooser; terms on the player's sheet; no carrier | 5 | `02_CHAR_reason_trail_and_small_edits.md` A |
+| 17 | `budget` pays the office bonus for any held object (H-330) | inconsistency | count seats | 5 | same, B1 |
+| 18 | `by_subject` orders scenes by subject id | gap (unshipped arm) | first appearance in the ranked list | 4 | same, B2 |
+| 19 | docstrings say thirteen over four | stale | fifteen over seven | 1 | same, C |
+| 20 | `sheet.py` says its design is held back | stale | ratified, ED-IN-0349 | 1 | same, C |
+| 21 | `cast.py` counts keys, not values | unclear | non-null counts or none | 5 | same, C |
+| 22 | R-08's `measured:` opens with retracted sentences and cites a dead path | unclear | restate the head; the residue is F-CHAR-02 | 1 | same, C |
+| 23 | R-06's `measured:` says `ambitions(p)` is absent, then that it exists | unclear | restate the head; the residue is F-CHAR-01 | 1 | same, C |
+| 24 | H-189 unmeasured; H-237's premise moved | stale | record this audit's readings | 1 | same, C |
+| 25 | the pursuit worksheet outlived its landing and `CURRENT.md` names it as the head | inconsistency | point `CURRENT.md` at the owners; delete the worksheet with a `FORK:` row | 1 | same, C |
+| 26 | Layer 1's frozen `PersonInterior` against the live `Person` | doc against code | change the code: a frozen snapshot at DELIBERATE | 3 (Layer 1 answers) | none here: `state/carriers.py` and `loop/deliberate.py` are the CORE lane's; cross-listed |
+| 27 | a second scar model in `systems/characters/sim/conviction.py` | two owners | keep: retained by ED-IN-0283, unreached by the loop; its cap is item 1's precedent | 1 | none needed |
+| 28 | H-73 reads `open?` in the index | stale index | closed by REM-44, by the row's own text | 1 | none needed |
+| 29 | NPC-071's and NPC-034's "UNCLEAR: no goal authored" needs | wrongly stated need | not an engine need; an authoring gap in the cast (`goals:` is non-null on 17 of 46 rows) | 2 | §13 |
+| 30 | `decision_policy_v1.md` listed as an NPC-chooser source | wrong referent | it is the repository's editorial precedence draft | 2 | §0A |
+
+Thirty resolutions; twenty-five carried by a proposal file.
+
+## 7. Research transfer
+
+Read: `research/00_INDEX.md` (§1 and the function and verb tables), `research/by_lane/NPC_npc_cast.md`
+(§0, §2.2, §2.3, §7 in full; the rest by heading), `research/emergent_narrative_literature/00_README.md`
+and entry E17 of `04`. Not read: the companion parts, `game_precedent_suite/`, `rise_to_power`,
+`historical/`, `governance/` (§12 lists them as skipped).
+
+**Changes what to build.**
+
+- **T-NPC-9, accrual without a closer runs away** (two independent sources, per the lane file).
+  Confirmed in code by probe 3 (median 41). It is the reason the scar cap is the first interior edit
+  and the weight shift is armed only after it.
+- **T-NPC-8, tracking is not expressing** (Nemesis cut its faction display; the teardown's *"record
+  only what can be surfaced"*). It sets the order in §8: a mechanism that moves an interior nobody can
+  read is built after the reader that shows it (the reason trail, the terms on the sheet).
+- **T-NPC-5, every mechanism that changes values, capacity or body ships at its control.** An
+  independent reading that matches §2 item 7; it is why the proposals each state the live value and
+  the reading rule for flipping it, not another control.
+- **RimWorld, memory matters only where it is read at a decision** (the lane file's row; IN-72 was the
+  tree re-learning it). It is the test F-CHAR-03 applies to regard.
+- **Old World, ambitions from a person crossed with the houses around him.** Already the shape of
+  IN-66 to IN-69. What it adds here is the half the plan lacks: an ambition that expires or is met.
+  AM-B-09 narrowed that to rung goals, so it is noted and not re-raised.
+- **E17 (Adams), Q1: every simulated variable names its player-visible effect.** Applied in §5's NERS
+  cuts to the scar count and to `rank`.
+
+**Tried and did not transfer.**
+
+- **Triangle Strategy's hidden conviction axes.** Named once in the companion, unsourced, and its
+  roster is fixed and authored; it says nothing about a sampled chooser.
+- **Kremlin and John Company, holder against controller** (X1). Over-claimed convergence by the lane
+  file's own grading, and the mechanism is FA's.
+- **Crusader Kings council-seat denial as a grudge tag.** The tree computes regard at read and stores
+  no tag; a stored tag is CR-83's question.
+- **Jagged Alliance, publish a band, not the number.** Sound for a display; there is no display.
+
+**Nulls.**
+
+- **No file under `research/` surveys how a simulated person chooses**: a search for utility scoring,
+  bounded rationality, satisficing, a temperature or risk appetite returns one line, in
+  `by_lane/IN_infrastructure.md`, which records that zero literature backs the chooser's form. CR-93
+  and CL-PERSON are therefore designed without precedent in the tree. That is a finding, not a
+  comfort: the per-person temper and the goal lean rest on the tree's own measurements.
+- **N-2, no shipped game has an expression channel for interior state** (stands, per the lane file).
+  The reason trail is the tree's own answer and has no precedent to copy.
+- **N-9, no NPC acts on knowingly false information** is graded CONTRADICTED by the lane file (Talk of
+  the Town). In code a held claim can be stale and a lie on a cell value is built; a mistaken belief
+  from hearsay is almost unreachable (F-CHAR-09).
+
+## 8. Best path forward
+
+Ordered. Cost class: E edit, S small build, D design-first. "Alone" is what the subsystem needs to run
+well by itself; "compose" is what it needs from or gives to others.
+
+| # | step | file | gate (an execution artifact) | unblocks | cost | alone / compose |
+|---|---|---|---|---|---|---|
+| 1 | the reason trail: `watch` on the chooser, terms on the sheet | `decision/choose.py`, `sheet.py`, three harnesses | hash EQUAL with and without a watcher; deciding-term counts equal through the hook | legibility for every later step | E | alone |
+| 2 | instrument repair: temperature-0 column, pairwise table; `_AXES` order | `harness/decision_spread.py`, `choose.py`, `person_q.py` | under `--control` the temperature-0 column reads fewer distinct multisets than the shipped arm | R-06, R-08 measures | E | alone |
+| 3 | scar season cap | `loop/resolve.py`, fixtures | median per-person maximum after four seasons ≤ 4, seeds 0–2 | R-06, R-07; H-187, H-146 can then be armed | S | alone |
+| 4 | regard in stance steps; clamp; `regard_sign` column | `person_q.py`, `choose.py`, `verb_table.yaml` | median computed half ≥ 0.5 among pairs holding one; H-337's probe changes sign | R-07; CR-83, CR-88 | S | compose (SC, FA) |
+| 5 | offer what can be done: one decline, cohort conjunct | `options.py`, `person_q.py`, `verb_table.yaml` | `aperture 2 0`: attempts fall and executions do not, for H-346's ten verbs | R-05, R-08; the play surface | D then S | compose (every verb owner) |
+| 6 | `resolve` named; `temper` hook at gain 0; `capability_uses` table | `person_q.py`, `choose.py`, `rosters.yaml` | hash EQUAL; two hand-built persons differ only at a non-zero gain | R-08; CR-93 | E, S | alone |
+| 7 | the goal's lean on its own question | `choose.py` (inside CR-88's design) | persons with one top verb across a `need` and a `claim_landed` question fall below 36 of 46 | R-06, R-04 | S | compose (FA) |
+| 8 | alignment cells on choice values | `rosters.yaml`, `data/verbs.py`, `choose.py` | opposite temperaments rank two `retreat_at` values oppositely | R-04; MB orders, PC approach | S | compose (MB, PC) |
+| 9 | a playable character entry point (§9) | `harness/` (a reader-shaped driver over `sheet.py`) | a scripted pick moves the hash; `take_ranked` does not | the standing requirement | S | alone |
+| 10 | arm `scar_weight_shift`, then `refusal_axis` | fixtures | W-D's divergence reading moves in the ruled direction at seeds 0–2 | R-06, R-02 | E (a flip) after 3 | alone |
+| 11 | the frozen `PersonInterior` | `state/carriers.py`, `loop/deliberate.py` | the G2 spy cannot be made to pass with a writing callback | AX-2 as Layer 1 states it | S | compose (CORE) |
+| 12 | means and ends: a verb's declared writes against a goal's aim | `goal_stages` content, then design | an heir executes `succeed` on a vacant throne in a seeded run (H-289) | R-06, R-04 | D | compose (FA, WR) |
+
+Deletions: the decline rosters that step 5's reading shows redundant; the pursuit worksheet; three
+harness wrappers (step 1).
+
+## 9. Playable standalone and integrated
+
+**What exists today.**
+
+| piece | state |
+|---|---|
+| entry point | none that plays. `decision/sheet.py` has the three spaces; `harness/play_surface.py` has the dispatch and the heir re-bind (`carry_on`). Their only callers are `test_g2_token.py`, `test_cr20_attributes.py` and `test_rem30_character_sheet.py` |
+| fixture | `harness/headless.py::build_world` (three persons, NPC-088's season; ran here, hash `5405522c`); `populated.build_realm` (83 persons) |
+| choice surface | `DevelopmentSheet.candidates`, the ranked option set, picked by index; budget shown. 39 to 43% of those options resolve as refusals (F-CHAR-05) |
+| outcome legibility | `chronicle(p)`: the person's claims and present scar and conviction values. No reason for an NPC's act, no event for a scar or a crisis (the sheet's docstring says so), no terms on the options |
+| stakes | a seat, a body, a larder, a record. An ambition can be laid down or die with its holder; only a rung goal can be met (AM-B-09) |
+| end condition | death, then `carry_on` to a living tie, or the line extinct. No arc end and no win |
+| instrument | `decision_spread`, `conviction_spread`, `heir_hears`, the tests named above |
+
+**One code path.** Yes at the season's scale: the player's space and the NPC share `make_ranker` and
+`release`, and the control (`take_ranked`) is the automated run. There is no standalone fork. The
+decision layer is not a registered module and should not be one: it is `04` §A.2's island, holds no
+token, and is reached by the loop's own call.
+
+**Layer 1 conformance.** Conforms on "no `World` in scope" (path scan). Departs on the frozen
+`PersonInterior` and on `View.odds` (F-CHAR-12).
+
+**Integration.** Executed edges in §10. The scale transition this lane owns is the hand-off of a
+person to a contest: it is clean in (typed inputs built by the seam wrappers from the person) and
+thin out (a wound, a death, a stance row on a lost field; no scar event, no changed regard of a size
+that matters).
+
+**No GM.** Everything a referee would rule is either resolved by the engine or absent; the absences
+are the survival instinct, the reading of another's intent kept or broken (H-191), and the crisis's
+restabilise branch.
+
+**Ordered work to close the gaps.** (a) §8 step 1, so a watcher can say why. (b) A harness entry
+point, `python -m engine.season.harness.<name> --seat <person> --seasons N --seed S [--script file]`,
+that seats one person through `creation_sheet`/`seat`, runs `development_space` with a scripted or
+replayed `pick`, prints the sheet, the chronicle and the reasons each round, and exits on death with
+the continuation offer; a reader over existing functions, no new rule. Gate: `take_ranked` reproduces
+the automated hash; any other script moves it. (c) §8 step 5, so the options shown can succeed. (d)
+§8 steps 3, 4 and 7, so that what the player does to an NPC changes what the NPC later does.
+
+## 10. Interfaces
+
+| edge | direction | real (executed here) or designed |
+|---|---|---|
+| questions: `world_q.questions_for`, `attention_key` → `assemble` | WR/CORE → CHAR | real: 774 deliberations in two seasons |
+| the verb table, alignment and rosters → `opening_set`, `score_terms` | CORE (data) → CHAR | real |
+| `View.odds` (believed chance) → `odds_weight` | SC (sigma seam) → CHAR | real; the tree records it reaches `determine` only in the realm |
+| scenes of acts → DELIBERATE → the fold | CHAR → CORE | real: 1,529 resolved acts |
+| `teller_weight`, `refracted_confidence`, `dissents` → WITNESS | CHAR → FI | real in code; reached on 12 and 5 claims |
+| `standing_of`, `budget.bands_below` → `loop/matter.py` | CHAR → SE/WR | real `[UNVERIFIED by a run]` |
+| `regard`, `opinion`, `legitimacy`, `stability` → `world_q`, `storybar` | CHAR → FA, instruments | real for `regard`; `legitimacy` and `stability` have one harness caller |
+| the person → `PersonalCombatInput` (ends, kits, faculties, attributes, terms) | CHAR/CORE → PC | real for `end` and `faculty`; kits and attributes are empty by content |
+| the person → mass battle (`fit` from a cohort's body; power and command) | CHAR → MB | real for `fit`; no officer attribute reaches a unit |
+| `choice_sourced` values on an act (an order's role, `retreat_at`; `posture`) | CHAR → MB, PC | real as a fan; `marshal` is withheld; the value is chosen by the draw |
+| acts at RESOLVE → `Person.scar`, `conviction`, `pursuits`, `stance`, `capability` | CORE, PC, SC → CHAR | real for `scar` and the crisis; `pursuits` 1 and 0 of 83; `stance` 0 of 83 |
+| goals (`goals.yaml`) → commits at world-gen → `need` questions | FA (content) → CHAR | real: 148 commits among 46 cast |
+| duty, attributes in a choice, risk appetite, a contest decider for an NPC | FA, PC, MB ↔ CHAR | designed |
+
+**What the mass-battle intent needs from this lane.** A commander is a person holding a seat; his
+orders are `choice_sourced` values on `marshal` and `march`, set through the one chooser interface by
+a player or an NPC. Three things are missing: the value is unjudged (`02_CHAR_choice_alignment.md`);
+the believed chance of a field by its order is not served through `View.odds`; and an officer's
+attributes do not reach a unit (the registry's ten are the owner; `Person.attributes` is the carrier;
+the mass-battle input must name which it reads, as the combat input does). Adjusting orders during a
+battle is not the season chooser's: it is a suspension like REM-31's for a played commander, and a
+module-side policy on typed input for an NPC.
+
+## 11. Survivors for Jordan
+
+One item survives the five-step ladder.
+
+**Can a person be wrong about himself?** NPC-004's core need is a man with a perceptual capacity he
+does not know he has and misattributes. In code a person's own state is known to him by construction:
+`opening_set`'s own-state branch reasons that *"his sensitivity is not a belief about the world he can
+be wrong about"*, and `OwnStateReader` answers it from the field. Not superseded; not irrelevant (it
+is a `core` need of a provided case); the design documents are silent on self-knowledge as a belief;
+the only precedent in the tree is the one that excludes it; and the architecture admits either.
+
+- **Option A, own state is known (today).** Simple and already built. Self-deception, an unrecognised
+  gift and a person talked into a false view of himself cannot be played; NPC-004 is simulated only
+  as a gate he passes without knowing why.
+- **Option B, self-knowledge is a claim like any other.** A person reads his own capacities from his
+  ledger, can lack the claim, can hold a false one, and can be told. It makes NPC-004, NPC-012 (a
+  motive its holder does not recognise) and NPC-021 playable as written, and it costs a second answer
+  for every own-state read and a rule for how a person learns what he is.
+
+These are different games: in A character is transparent to itself and drama is between people; in B
+part of the drama is inside one.
+
+## 12. Evidence log
+
+All `PYTHONHASHSEED=0`, tree `601e715`. Outputs under
+`/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/CHAR/`.
+
+| command or probe | seed, seasons | outcome |
+|---|---|---|
+| `python -m engine.season.harness.conviction_spread` | none (reads the table) | 4 of 15 within 60°; 3.93 effective axes of 7 |
+| `decision_spread --persons --decisions` | 0, no season | 83 persons; 11 cast pairs above 0.99; deciders draw 223, pursuit 265, stance 10; outvoted 219, median lead 0.0590 |
+| `decision_spread --decisions --control` | 0 | draw 251, pursuit 247; distinct tops 79 |
+| `decision_spread --decisions --null` | 0 | draw 488 (all ties), stance 10; distinct tops 90 |
+| `decision_spread --season` | 0, 1 | 749 acts; 83 distinct multisets; hash `5ab73af2` |
+| `decision_spread --season --control` | 0, 1 | 683 acts; 83 distinct multisets; hash `c90e4a6c` |
+| `decision_spread --season --null` | 0, 1 | 583 acts; 83 distinct multisets; hash `ef134b29` |
+| `decision_spread --persons --control` | 0 | every pair above 0.99, as built |
+| `probe1.py` (same question, cast, with and without the draw) | 0 and 1, no season | §3 F-CHAR-02's table; control: one score-top for all 46 |
+| `probe2.py` (belief filter, hearsay, refusals, interior change) | 0, 2 | hash `bacd687f`; figures in F-CHAR-03, -05, -07, -09 |
+| `probe2.py` | 1, 2 | hash `8aae8412`; conviction moved for 6 of 46 cast |
+| `probe3.py` (situation sensitivity, authored interior, regard, scars) | 0, 2 | 36 of 46 with one top verb; regard median 0.051; scar median maximum 41 |
+| `python -m engine.season.harness.corpus_run` | 0 | 143 cases; NPC checks R1, R3, R4, R5 46 of 46; R2 not computable; 23 of 67 verbs executed; claims firsthand 93,696, told 64; 16 cases wait on a player |
+| `register --requirements` | — | met 3, partial 5, not met 1 |
+| `heir_hears --seeds 0 --seasons 2` | 0, 2 | 10 heir question sets; throne not vacated; control 0 |
+| `headless --case NPC-088 --seasons 2 --seed 0` | 0, 2 | 16 and 17 acts; hash `5405522c` |
+| registry parse (`references/npc_registry.yaml`) | — | non-null: `stats` 1, `lifepath` 5, `ts` 10, `heritage` 4, `goals` 17 of 46 |
+
+Not run: `pytest` (by instruction); H-337's, H-268's and H-289's own probes; W-D.
+
+**Not read, or read in part** (the reading budget ran out before the corpus did):
+`.designs/` beyond `npc_behavior_v30.md` §1, §3, §4, §5.0b–§5.1, §8.1, §8.11, §9, the head of
+`decision_policy_v1.md`, the head of `npc_relational_graph_v30.md`, the outline of
+`player_agency_v30.md` and one line of `conviction_track_v1.md`; all of `.audit/`; the character,
+attribute and template proposals beyond their Status lines (the dossier's 28), except
+`2026-09-20-pursuit-basis-worksheet.yaml` (head) and the Status lines of
+`2026-10-07-character-sheet-spaces.md` and `2026-09-30-character-and-play-surface/` 03, 05, 09; the
+38 register rows listed in §6.1's last line; the lane handoff files; `harness/populated.py`,
+`world_q.py` and `modules/combat/` beyond the passages cited; the 25 test files (named, not opened).
+
+## 13. Provided arcs and characters — adjudication
+
+Read: `cases/chain/CASE_BRIEF.md` in full; the 46 NPC cases' `core` needs through the repository's own
+loader (`run_cases.load_cases("NPC")`: 126 core, 180 important, 40 flavour); `corpus_run` once (§12).
+The ARC cases and `proposals/2026-08-30-arc-reachability/` were not read; arcs are adjudicated by the
+lanes that own their mechanisms. The table holds the core needs whose mechanism is a person's
+interior or choice. "Represented" means the code path is reached in a run, not that the case file
+says so. Proposal files are named by their slug.
+
+| case | need (short) | hardness | represented today? | evidence | change required | owner | proposal | gate |
+|---|---|---|---|---|---|---|---|---|
+| NPC-088 Carin | a season of tracked state a player can change | core | yes | `headless --case NPC-088` runs two seasons from her own choices | none | CHAR | — | the run |
+| NPC-012 Rikard | an unstated motive biases every decision in one direction | core | yes | the pursuit vector enters every ranking; probe 1's Kendall by cosine | none; *unrecognised by him* is §11 | CHAR | — | probe 1 |
+| NPC-012 | his employer's evaluation stays positive because of the state he prolongs | core | in mechanism, not in size | `regard` reads judged deeds; median 0.051 | regard in stance steps | CHAR | scar_cap_and_regard_unit | regard gate |
+| NPC-082 Njal | loyalty attaches to a cause; a leader's self-serving conduct erodes it | core ×2 | in mechanism, not in size | creed stance rows at build; stance moved for 0 of 83 | regard in stance steps; then CR-88's grievance | CHAR, then FA | same | a seeded run in which a member's regard for his head falls by a step after witnessed deeds |
+| NPC-035 Theodor | loyalty bound to one named person, not the institution | core | yes, as data | 42 of 79 cast stance rows name a person; `stance_term` reads them | none here; what happens when that person changes is CR-88 | CHAR, FA | — | probe 3 (b) |
+| NPC-020 Almud | a private doubt that persists for seasons and counts | core | no | threshold 1 has no mechanism; the count passes 3 in a season | scar cap, then a reading of counts 1 and 2 | CHAR | scar_cap_and_regard_unit | cap gate |
+| NPC-020, NPC-070 | an armed institution reassesses its loyalty in stages | core | no | no staged loyalty; duty unbuilt | CR-88 on regard in steps | FA | (edge: CHAR step 4 first) | CR-88's falsifier |
+| NPC-021 Arne | faith privately challenged by facts, with a real chance it cracks | core | partly | `argue` moves pursuits (947 resolved in the corpus); conviction does not resist (H-268); facts may not move the moral layer (#353 §9.3) | wrongly stated as *facts*: read as argument; then H-268 | SC | — | H-268's probe |
+| NPC-075 Orm | continuing unrewarded labour is a season-to-season choice; he may stop, burn out or die | core | partly | a standing question and a sampled order; no fatigue, no stopping for a reason | scar cap, then arm the weight shift (the design's route to giving up) | CHAR | scar_cap_and_regard_unit | his rate of `restore`/`work` falls after scars in a seeded run |
+| NPC-002 Maret | as condition degrades the range of action narrows in a fixed order to withdrawal | core | partly | `budget` narrows scenes monotonically, floor 1 | *range of actions* is wrongly stated against #353 §9.2 (nothing gates a verb); read as the budget; withdrawal at the floor is unbuilt | CHAR, WR | — | — |
+| NPC-005 Sigrid | a capability active and unknown to her institution | core | yes | `Person.thread_sensitivity` is read by its holder alone | none | CHAR, FI | — | code |
+| NPC-004 Sæmund | a capacity he does not know he has | core | no | own state is known by construction | §11 | CHAR | — | — |
+| NPC-008 Peder | institutional memory nobody else holds | core | yes | a held Record's content is in his ledger only (`held_record_claims`); it dies with him | none | CHAR, FI | — | code |
+| NPC-089 Zoe | one governor is the decision-point among graduated postures | core | partly | a person acts through a seat; `posture` has one value; H-233 | choice alignment; more than one posture (MB content) | CHAR, MB, FA | choice_alignment | its falsifier |
+| NPC-090 Stephanos | two officials' individual choices shape one relationship | core | partly | each ranks by his own vector; nothing reads the treaty when choosing | goal lean (the treaty as an office's goal) | CHAR, FA | goal_lean_on_its_own_question | its gate |
+| NPC-031 Torben | the heir's relation to the regent ranges from deference to a contest for the seat | core | no | `succeed` forms and is not chosen (H-289) | §8 step 12; IN-61 | FA | (edge: CHAR step 7) | an heir executes `succeed` |
+| NPC-034, NPC-071 | UNCLEAR: no goal authored | core | not an engine need | `goals` non-null on 17 of 46 registry rows | author the rows | content | — | the loader |
+| NPC-086 Joren | evidence shown to an audience changes belief, and the belief spreads | core | first half | told claims deposit; none retold (0 at two hops) | FI | FI | — | H-272 |
+| 16 cases (NPC-086, -075, -002, -008, -013, …) | wait on a player the engine does not supply | — | no | `corpus_run`: WAITS-ON-PLAYER 16 | the seated-person entry point (§9 (b)) | CHAR | (§8 step 9) | a scripted seat run |
+
+Not adjudicated here: NPC-083, NPC-007, NPC-010, NPC-011, NPC-085 (settlement, faction, trade and
+advocacy mechanisms; SE, FA, WR, SC).
+
+**Arcs this lane can bring up soonest, in order.**
+
+1. NPC-088 and NPC-012's first need run today.
+2. NPC-035, NPC-005, NPC-008 are representable today as data and reads; each needs only a seeded run
+   that shows the read reached.
+3. After the scar cap and regard in steps: NPC-082, NPC-012's second need, NPC-020, NPC-075.
+4. After the seated-person entry point: the 16 cases that wait on a player become runnable with a
+   scripted seat.
+5. After another lane: NPC-070 and NPC-020's institution (CR-88, FA), NPC-021 (H-268, SC), NPC-031
+   (IN-61 and means-ends, FA), NPC-089 (postures, MB), NPC-086 (retelling, FI).
+
+Dependency edges: CHAR step 4 → CR-83 and CR-88 (FA); CHAR step 7 inside CR-88's design; CHAR step 8
+→ MB orders and PC approach; FI's retelling → every hearsay weight in this lane.
+
+## 14. Capability authoring surface
+
+### (a) Where this subsystem takes a character capability as input
+
+| site | what it reads | from where |
+|---|---|---|
+| `choose.odds_weight` → `View.odds` → `seam/wrappers/pool.py::faculty` | the pool for a contested act: the larger of the vocation's attribute and the held vocation key, plus registered addends | `rosters.yaml: verb_capability`, `vocation_attribute` (and `opposed_by`); `Person.attributes`, `Person.capability`; fixture `pool_default` |
+| `options.competence` (credit for a told claim) | Attunement | a literal in the module, `options.py:1627`; gain fixture 0 |
+| `person_q.OwnStateReader` (the gate on `thread_read`) | Thread Sensitivity against a fixture threshold | its own `Person` field and two wired stems |
+| `options.opening_set`, vocation fan (`train`) | the list of vocations | the values of `verb_capability` |
+| `choose.settle_efforts` | effort, priced by believed chance | the same pool, through `View.odds` |
+| `budget` | the body band, held seats, travel legs | `band_floors`; not a capability in the sheet's sense |
+| `score_terms` | pursuits, affiliations, scars: the traits that weigh a choice | `descriptor_registry.yaml: pursuit_roster`, `axis_roster`, `affiliation_roster`; `rosters.yaml: tables.pursuit_projection`, `alignment`, `affiliation_engagement` |
+| `data/cast.py` (world-gen) | `stats:`, `lifepath:`, `ts:`, `heritage:`, the pursuit and affiliation blocks | `references/npc_registry.yaml`; `rosters.yaml: lifepaths`, `tables.lifepath_templates` |
+| `seam/wrappers/combat.py::combat_input` (the hand-off, cited for the interface) | `end` from Endurance less the body band; `faculties`; `kits` from the stores of the rungs he holds; the attributes whole | `rosters.yaml: arms_kinds`, `arms_at_build` (both empty by content); `modules/combat/attributes.py` maps by `registry_key` |
+
+### (b) Data-driven, hard-coded or doubled
+
+- **Data-driven and closed both ways**: verb → vocation → attribute → pool; lifepath → vocation keys;
+  arms kind → combat field; the trait tables for choice. A new vocation is refused until it has an
+  attribute row. This half is already the target shape.
+- **Hard-coded**: the Attunement literal; `DOCTRINE_PURSUIT`, `RELIGIOUS_CONCERNS`,
+  `TEMPERAMENT_AXIS` (checked names of roster members in modules).
+- **Doubled**: Thread Sensitivity is a registry entry (`prac.thread_sensitivity`) and a separate
+  `Person` field with its own reader. `Combatant.disp` and `faculty` are combat attributes with
+  `registry_key: None` (the module's spec says so). Abilities and traditions are defined inside
+  `modules/combat/ability_primitives.py` and reach no person: `PersonalCombatInput` has no field for
+  them, and 22 lifepath rows record a combat ability with *"no key"*.
+- **Authored and unread**: the carrier ships off (`cast_attributes=False`); one registry row holds
+  `stats:`; 2 of 46 persons hold a capability key. Every capability read above is dormant in the
+  shipped realm.
+
+### (c) Target shape for this subsystem
+
+A capability is defined once, by key, in **`references/descriptor_registry.yaml`** (the existing owner:
+name, aliases, scale; attributes and practitioner stats today). What it does in a person's choice is
+one row per use in **`engine/season/rosters.yaml`**: `vocation_attribute` for pools (exists) and
+`capability_uses` for every other entry into a choice (`02_CHAR_capability_uses_table.md`). A
+definition must say, for this subsystem to use it: its **key**; its **scale** (floor, ceiling, and so
+a mid-point); for each use the **site** (a member of a closed roster of reader sites), the **form**
+(`about_mid` or `at_least`) and the **gain fixture**. Growth and loss are the verb table's (`train`
+writes `Person.capability`); the decision layer reads and never writes.
+
+**The interface this subsystem needs from the merged surface.**
+
+```
+capability_factor(p, use, fx) -> float | None        # a factor about the scale's mid-point; None = none held
+capability_admits(p, use, fx) -> bool | UNKNOWN       # a threshold gate on the actor's own state
+View.odds(act, bands) -> float | None                 # pools and opposition, including a module's own estimate
+choice_range(key) -> tuple                            # the closed set an option on an act ranges over
+align_choice(key, value, axis) -> float               # how a temperament leans on a value
+```
+
+No attribute name, scale constant or pool arithmetic under `decision/`.
+
+**Equipment and skills (personal combat).** Weapons and armour are already capability data of the
+right shape: an arms kind is a matter kind, a person's kit is what his rungs store, and the roster maps
+a kind to the combat field and key it sets. The content is empty, so everyone fights at the default
+kit. Skills that correspond to levers exist as data inside the combat module (an ability targets a
+named lever with an operator and a level) and have no route from a person. The edge this lane needs
+stated for the holistic stage: a person-side carrier for invested abilities (the natural home is
+`Person.capability`, whose keys are vocations today, widened by a declared key class; that is CORE's
+and PC's decision), a `lifepath_templates` column that grants them, and a field on
+`PersonalCombatInput`. An ability modulates a lever and does not gate a verb, so it sits inside
+*"capability supplies dice and gates nothing"*; a tradition that gates ACCESS to a kit does not, and
+that conflict is named and not resolved here.
+
+**Per-phase approach (personal combat) and orders (mass battle).** The character model and chooser can
+carry the OPENING approach or order today, as a `choice_sourced` value on the act, through the one
+interface a player's sheet and an NPC share; they cannot yet judge it (the fan is ordered by the draw;
+`02_CHAR_choice_alignment.md`). They cannot carry a per-phase choice and should not: the chooser runs
+at DELIBERATE and a contest resolves inside a module. For a played person the per-turn choice is the
+suspension's `decide(view)` (REM-31). For an NPC it needs a policy inside the module driven by a
+person-side disposition on the typed input. That disposition has no owner: `Combatant.disp` carries no
+registry key, and the ruled source for it, ED-IN-0304's risk appetite, has its carrier open at M40.
+Officers and soldiers: an officer is a person with attributes and a seat; a soldier is part of a
+cohort and has none. For individuals' roles and attributes to feed a unit, the mass-battle input must
+declare which registry keys it reads from the commanding person, as the combat input does.
+
+**Troop types, loadouts and a character's kit as one interface (mass battle).** The existing owner of
+"an arm" is `rosters.yaml: arms_kinds`: a matter kind mapped to the combat field and key it sets, with
+a rank. A character's kit is read from it (`world_q.kit_of`: the best-ranked arm his rungs store). A
+unit's loadout should be the same fact at a different weight, not a second table: a troop type is a
+declared bundle of `arms_kinds` members (several, for a mixed-weapon unit), and the unit's stores, like
+a person's, are what its rung holds. For that to be one authoring surface the holistic stage needs
+three things stated. (i) One definition of an arm, carrying what both scales read: the duel's field
+and key (exists) and the unit-scale costs a carried arm imposes, as columns of the same row (its
+burden toward fatigue and movement), so that carrying two arms is priced from data and a troop type
+is a list of kinds, never a constant in `modules/mass_battle/config.py` (`TROOP_TYPE_ROLES` and
+`ROLE_SPEC` live there today, per H-361; `[UNVERIFIED: this lane did not read that module]`). (ii) One
+rule for who is a soldier: a cohort is a person at weight above one and holds no attributes, so a
+troop's capability is its type's, while an officer is a person whose registry attributes and vocation
+keys the mass-battle input names, as `PersonalCombatInput` names them. (iii) One formation hierarchy
+whose leaves are those two things: army and unit are seats and holdings a person commands (`Act.via`),
+a subformation is a `choice_sourced` assignment, and the cell is the module's. This lane's part is
+(ii) and the chooser's half of (iii); the columns in (i) are MB's content on CORE's roster.
+
+**Detective precedent (voices, held knowledge, a community's opinion).** Three capability
+consequences. (i) *An internal chorus of faculties*: the tree's only per-faculty read in a choice is a
+factor on a draw. A faculty that "speaks" is an observer reading of which capability's term moved a
+choice or a finding, which is the reason trail's `terms` extended by the capability uses that fired;
+it needs no new store. (ii) *Held knowledge as the basis of what one can cite*: already the model. A
+person can say only what his ledger holds (`said_of`), act only on a held Record's content
+(`held_record_claims`), and name only persons he knows (`known_persons`); what is missing is retelling
+and checking (H-271, H-272; FI). (iii) *A community's changing opinion of the investigator*: `regard`
+per person, and `opinion` and `legitimacy` computed at read, exist; a cohort is the community and
+holds a ledger. It moves by hundredths today (F-CHAR-03); regard in stance steps is the edit that
+makes it visible.
+
+### (d) The RPG axioms this subsystem implements, lacks or contradicts
+
+| axiom, in the tradition's words | here |
+|---|---|
+| attribute and skill make a dice pool | implemented, as the LARGER of the two (a default-to-attribute rule), not their sum |
+| untrained use is allowed at a default | implemented (`pool_default`); nothing is trained-only |
+| a prerequisite gates an ability | contradicted by ruling, except Thread Sensitivity ≥ 30 for one verb |
+| opposed tests | implemented (`opposed_by`, half the opposing score) |
+| advancement by training | half: `train` raises a key already held; nothing opens a new skill; attributes never advance |
+| advancement by use | built and off (`practice` addend at cap 0) |
+| wounds impose penalties | on the number of scenes, not on a roll or a choice |
+| alignment, passions or drives steer behaviour | implemented and central (pursuits × alignment) |
+| a code or vow forbids certain acts | ruled, built, unarmed (the refusal axis) |
+| traits, tags, edges and flaws as discrete descriptors | lacking: `Person.marks` was dropped; heritage is the one tag |
+| a personality or nerve stat (courage, composure under pressure) | lacking: no per-person manner (F-CHAR-02) |
+| a character knows his own sheet | assumed; NPC-004 asks for the opposite (§11) |
+| backgrounds grant starting skills | implemented (lifepath templates), authored on 5 of 46 |
+| derived statistics | placeholders (`aggregates`), unwired |
+| gear modifies resolution | implemented in mechanism, empty in content |
+
+### (e) Proposals, ordered
+
+1. `02_CHAR_capability_uses_table.md` — the table and the interface (edit).
+2. `02_CHAR_resolve_and_temper.md` — Focus on the temperature, as the table's second row (edit, then
+   small build with CR-93).
+3. `02_CHAR_choice_alignment.md` — temperament on a closed-set option (small build).
+4. `02_CHAR_reason_trail_and_small_edits.md` Part A — which terms and capabilities moved a choice
+   (edit).
+
+Not proposed here, and owed by another lane: the ability carrier and its `PersonalCombatInput` field
+(PC, CORE); the registry key for a combat disposition (M40); the mass-battle input's attribute reads
+(MB).

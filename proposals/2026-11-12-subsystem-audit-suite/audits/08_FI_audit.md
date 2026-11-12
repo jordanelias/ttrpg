@@ -280,9 +280,9 @@ decline in 461 is the closest reading; no liar is affected.
 misled into a march, and the hearer who was fooled is, by construction, the one who cannot find out.
 **Minimal fix.** Two edits carried by `proposals/08_FI_03`: an inquiry's graded success deposits the cells
 of what it examined firsthand (the W-B observation deposit that already exists, so `record` gains its pair
-after the fact: checking is investigating), and a `record` falling below 1.0 for the first time is a
-landed claim about the teller (`deed:lie` on `person_predicates`' side), which Q2 already turns into a
-question. Design-first where it prices the liar (CR-83 is the plan's home for it).
+after the fact: checking is investigating), and a teller's `record` falling below neutral raises one
+question about him, as `standing_crossed` already raises one about the people who told (no new deposit).
+Design-first where it prices the liar (CR-83 is the plan's home for it).
 
 ### F-FI-05 · degrades narrative (R-07) · The largest single source of what people hold is a channel that reads no person
 
@@ -472,6 +472,11 @@ accepted as binding and none is re-raised.
   gauge and the season's undegreed Tenure): an S defect by definition, and the season's half has no
   producer. **Not yet a design object in the game.**
 
+**The detective precedent in the design** (full table in §16): typed evidence is understood and built in a
+different form; the case board and reconstruction are named only; verification is refused on principle
+and its replacement is unbuilt; no contest consumes evidence (F-FI-09). The archived per-act attributes,
+reliability tags and Evidence Track disagree with the code, and the code governs (R-31 to R-33).
+
 **Prose only, therefore not game.** The Evidence Track, Depth axis, Desperate Trail, Dialogue Lattice,
 Response Matrix, Case Board, Cover/Exposure, points of interest and discovery (`fieldwork_v30.md`,
 `investigation_systems_v30.md`; archived, not canon). The research lane file records the archived corpus
@@ -596,8 +601,13 @@ architecture needs. Proposal files are under `proposals/2026-11-12-subsystem-aud
 | R-26 | `loop/witness` exceeds `04:178` five times by declared convention | spec against code | amend the row's may-read cell (listed in §11: it overwrites ratified Layer 1) | 5 | `08_FI_04` §6, and §11 |
 | R-27 | `reconstruct` has no product (K-37: "no value space") | gap | its value space is the persons the actor's own ledger names as doers; its product is an uttered HOLDS Proposition | 5 | `08_FI_03` |
 | R-28 | H-204: the confidence break path is unreachable | wiring | closed by R-05's arm (a confided copy outranks the hearer's own "a telling happened" claim) | 5 | `08_FI_02` |
+| R-29 | a contest takes no typed evidence; `proofs` spends a whole ledger; the `proofs` roster and the arrangement's `proofs` column have no reader | gap | the evidence interface: two existing carriers, a `cites` operand, a citation is a telling | 5 | `08_FI_05` (SC owns the consumer) |
+| R-30 | what is told, whether it is confided, what a forgery and a lie say are fixed engine rules | scripting drift | `said` and the confidence become operands a chooser scores; the forged key and the lie's direction stay as declared defaults until an operand channel carries them (`H-94`) | 5 | `08_FI_02` §4 |
+| R-31 | the archived design gives each inquiry its own attribute (Examine and Surveil Cognition, Interview Attunement, Research Recall, Thread-Read Spirit); the code gives three verbs one vocation (`inquiry` → `attr.mind.acuity`) | design against code | the code governs; splitting it is a data edit to `verb_capability` and `vocation_attribute` that Jordan can make with no engine change (§14) | 3 | none (authoring) |
+| R-32 | the archived design's seven reliability tags (Verified, Testimonial, Documentary, Observational, Thread-verified, Unverified, Derived) against the code's four `claim_sources` and four `proofs` | two vocabularies | the code's provenance (`source`, `chain`) plus the carrier (belief or document) derives every tag but "Thread-verified"; no second tag field is added | 5 | `08_FI_05` |
+| R-33 | the archived Evidence Track (a hidden GM-set threshold; "evidence does not decay") against claims that decay 5 a season and no track | design against code | no track: "enough evidence" is the investigator's own corroboration over distinct origins (`LedgerReader._support`), read when he reconstructs; decay stays (ED-IN-0319 keeps knowledge for years by the cap, not by freezing it) | 5 | `08_FI_03` §3 |
 
-**28 resolutions decided.** Two are also listed in §11 (R-01's scope for common knowledge; R-26).
+**33 resolutions decided.** Two are also listed in §11 (R-01's scope for common knowledge; R-26).
 
 ## 7. Research transfer
 
@@ -661,6 +671,8 @@ others. Each gate is an execution artifact (§0.2).
 | 5 | Inquiry products and the standalone scenario (`08_FI_03`) | `verb_table.yaml` (`reconstruct`, `interview`, `examine`, `surveil` rows), `loop/witness.py` (observation deposit for a graded inquiry), `harness/` fixture | the scenario's four endings each reached at some seed in a 20-seed sweep; a hearer's `record` of a liar moves after an inquiry, not before | R-05, R-08 | design-first, then build | alone |
 | 6 | Small edits (`08_FI_04`): names, `research` presence, the confidence-0 trail, the repeat guard, `knots.py`, pointers, `budget`, razing, `ttl` | per row | each row names its test | hygiene; R-05 honesty | edit | both |
 | 7 | CR-83's design (familiarity sets inference; what a caught lie costs) | `proposals/` (design-first, B10-13 tail) | its own falsifier | R-06, R-08 | design-first | compose |
+| 8 | The evidence interface (`08_FI_05`): a `cites` operand, a citation is a telling, forgery answered by a cited finding | `queries/world_q.py` (`cited`), `queries/inputs.py`, `loop/witness.py`; SC owns the consumer | a hearing's band moves with one cited item and back with its rebuttal; control `k = 0` reproduces today's hash | R-05, R-06 | design-first (SC) | compose |
+| 9 | What is told and whether it is confided become the teller's choice (`08_FI_02` §4) | `decision/options.py::operand_bags`, `rosters.yaml: choice_sourced` | two persons with different pursuits and the same claims tell different things in a seeded run | R-06, R-08 | small build | alone |
 
 Deletions recommended: `Record.ttl` (R-24); `_ch_chronicle` (with CR-29). Nothing else. No guard is
 proposed anywhere in this audit.
@@ -772,8 +784,224 @@ All `PYTHONHASHSEED=0`. Outputs under the session scratchpad, `runs/FI/`.
 | 7 | `dynamics.py 2 1` | 2 · 1 | hash `a21ab6e1…`; 11,208 Events, 751 acts; `told_by` 3,746, chained 0; `news.told` 0, `news.untold` 2, `tell.refused` 4; `tell` 2, `lie` 0; clause 4: 19,629 / 485 / 1; unsourced chosen 84 (folded 29); cells: firsthand 734 true / 10 false, inferred 238 / 32 |
 | 8 | `dynamics.py 0 2` | 0 · 2 | hash `bacd687f…`; 37,646 Events, 1,529 acts; claims 22,958 (`firsthand` 12,929, `told_by` 9,708, `inferred` 321), largest ledger 535; chained 12, all one hop; `news.told` 7 (`Partial` 5, `Success` 2); cells: firsthand 1,135 / 73, inferred 0 / 270, told 1 / 10; clause 4: 49,271 / 1,903 / 7; `record` pairs 12: below 1.0 five, above one, unchecked six; unsourced chosen still 81 |
 | 9 | three-season runs at seeds 0–2 | — | **not completed**: stopped under machine load (other lanes' runs; load average ~30). No three-season reading is claimed anywhere in this file |
-| 10 | `python -m engine.season.harness.corpus_run` (from the scratchpad directory) | 0 | [see the note below this table] |
+| 10 | `python -m engine.season.harness.corpus_run` (from the scratchpad directory) | 0 | exit 0; 143 cases; `CLAIMS BY SOURCE {'firsthand': 93696, 'told_by': 64}`, 49 of 442 person-instances hold a `told_by`; verbs executed 23 of 67; `examine` and `thread_read` never attempted; `forge` and `survey` only refused; `EMITS AND WRITES NOTHING` lists `interview`, `reconstruct`, `thread_read`, `lie`, `interrogate` untagged and `examine`, `research`, `surveil`, `tell` deposit-only by ruling; R1 46 of 46 and 97 of 97, R3 the same; planted control `R3 False -> True` |
 | 11 | `run_cases.load_cases("NPC")`, `("ARC")` + a keyword classifier | — | 143 cases; §13's class counts (regex readings, not a classification by hand) |
 
 Not run: `pytest` (by instruction); `aperture`, `strife`, `m1_acceptance` (not needed for a claim made here).
 Everything quoted from a hole-register `cite:` as "the tree's own reading" was read, not re-run.
+
+## 13. Provided arcs and characters — adjudication
+
+**Corpus and method.** The 143 cases `harness/run_cases.py::load_cases` loads (`cases/` and `cases/chain/`),
+each with `season_requires` needs graded `core` or not, a `knowledge` list and `ends_when`. Needs were
+sorted into information classes by a keyword classifier over `need` and `knowledge` text (§12 #11): **a
+regex reading, not a hand classification**; it over-counts (the word "exposure" in a need about substrate
+damage) and the per-case judgments below were made by reading the quoted need, not by running the case.
+`proposals/2026-08-30-arc-reachability/04_SYNTHESIS.md` and `ENDINGS_CLASSIFIED.yaml` were opened at the
+head only. Run evidence is `corpus_run` (§12 #10) and the realm runs (§12 #4–8).
+
+| need class | cases (with a CORE need) | what the engine represents today (path; run) | what it cannot | cheapest change at the owner |
+|---|---|---|---|---|
+| A. One knows, another must not | 26 (4): NPC-005, NPC-004, NPC-021, ARC-26 | per-holder ledgers and place-bound channels (`loop/witness.py`, `epistemic.observers_for`); two persons hold different facts (`test_r7_two_persons…`; corpus: 93,696 firsthand claims) | keeping it so: `chronicle` tells everyone; a telling fills the room | CR-29 (scheduled); confidences by choice (`08_FI_02` §4) |
+| B. Acting on a false or wrong belief | 30 (11): NPC-004, ARC-37, ARC-54, … | clause 4 on the person's own ledger with UNKNOWN ≠ False; the cell lie and the lossy copy form false cells (7 at seed 0) | a wrong *conclusion*; a false belief that changes an act (1–2 declines a season) | `08_FI_03` §3 (the conclusion), `08_FI_02` (traffic) |
+| C. A secret with a consequence on exposure | 33 (12): NPC-007, NPC-003, NPC-041, ARC-02, ARC-07, ARC-08, ARC-15 | `conceal` re-anchors a deed for distant channels; a found deed raises a question on the doer (`test_a_found_trail_forms_a_response_on_the_forger…`) | an exposure cost; a slowly accumulating exposure quantity (ARC-02) | B10-14 (covers found); the caught-teller question (`08_FI_03` §4); the cost is CR-83's |
+| D. Forged document, planted evidence | 3 (1): NPC-010 | `forge` mints a false sheet a holder cannot tell from a true one; quality contests an examination (`record.forged` 16 / 19 / 17 in the realm; only refused in the corpus) | a forgery reaching a second holder in play (H-316); planted *counter*-evidence aimed at an investigator | `08_FI_03` §1 (the scenario hands it on); `08_FI_05` (a forgery in a hearing) |
+| E. An investigation that accumulates to a conclusion | 59 (26): NPC-086, NPC-004, NPC-033, NPC-038, NPC-070, ARC-12, ARC-15, … | three graded inquiries; a one-hop trail in a hand-built world | accumulation across seasons toward a threshold; the conclusion; three independent detection paths with their own timing (ARC-15) | B10-14; `08_FI_03` §2–§3 (three routes: document, place, testimony; corroboration over distinct origins in place of a track) |
+| F. Rumour, reputation by report | 10 (2): NPC-005, NPC-003 | the told channel, chain, hop discount, noisy-OR, the teller's record (all built) | traffic: 64 `told_by` of 93,760 claims in the corpus; 0 two-hop chains anywhere | `08_FI_02` |
+| G. Testimony, confession, denunciation, informer | 14 (6): NPC-005, NPC-070, ARC-04, ARC-10, NSC-01, NSC-04 | `petition` → `carry` → `determine`; `proofs` in `speak` | testimony as an answer (`interview` is a prompt); a confession that writes anything (H-226); evidence a ruling reads (H-285, H-301) | CP-T06-05 (scheduled); `08_FI_05`; SC's lane |
+| H. Watching a person | 18 (6): NPC-002, NPC-034, ARC-08, ARC-25, ARC-32 | intelligence as a by-product of presence and purview (ARC-08: representable today, it is the witness rule itself) | `surveil` of a person (the row takes a Rung); an institution's pooled watch reaching a threshold (ARC-32) | CP-T06-02 (scheduled); a dossier is a Record members add to (FA's; design-first) |
+| I. Hidden identity | 3 (0) | `conceal`'s alias | borrowing a name; being found | CP-T06-07, -09 (scheduled) |
+| J. Discovery of an unknown place | 0 by this classifier (H-325 names the absence) | none | exploration | SE's lane |
+
+**Needs that are wrongly stated for this architecture** (each restated so the engine could meet it):
+- *"The Evidence Track value for each open investigation persists"* (NPC-004 `temporal`; the archived
+  design's hidden GM-set threshold). There is no track and no GM to set one. Restated: *the investigator's
+  own claims about one deed, from distinct origins, are enough for him to conclude* (R-33).
+- *"Whoever receives a Failed Reconstruct must not be told the conclusion is wrong"* (NPC-004). It presumes a
+  stored truth flag to hide. Restated: *a conclusion is built from the holder's ledger; where the ledger is
+  wrong so is the conclusion, and nothing in the engine knows which* (`08_FI_03` §3).
+- *"Sæmund does not know he is Thread Sensitive"* (NPC-004). The code contradicts it: a person answers his
+  own `thread_sensitivity` (`person_q.OwnStateReader`), and `opening_set` asks it of him. Meeting the need
+  means self-knowledge of that one state arrives as a claim (a Diagnosis deposits it). T07's; a dependency,
+  not an FI edit.
+- *A "slow-accumulating exposure quantity"* and *"a surveillance track … reaching its own threshold"*
+  (ARC-02, ARC-32). Stored scalars per target that no person holds. Restated: *the count of distinct
+  persons who hold a claim of the deed* (a read over ledgers at a barrier, resolver-side), or a dossier
+  Record. `04` forbids a social aggregate stored on a place or faction.
+- *"A faction AI (the AP ≥ 3 deployment trigger)"* in `who_acts` (NPC-004 and others): no faction acts; a
+  seated person does.
+- Sixteen cases wait on a player the engine does not supply (`corpus_run`'s WAITS-ON-PLAYER line): not
+  simulable headless until a proxy is seated (§9).
+
+**Simulable end to end once `08_FI_01`–`05` and B10-14 land** (reading of needs; not run): NSC-04 (two
+independent methods, testimony and documents: `interview`'s answer and `research`, corroborated over
+origins, cited in a hearing); ARC-15 (three independently timed detection paths; sitting on the knowledge
+is the default, since a found claim is private); NPC-033 (surfacing a hidden actor against concealment,
+with cover quality in the obstacle); NPC-086 (an evidence object examined, handed on, suppressed, and
+presented to an audience that carries it out; *copied* is not representable: no verb copies a Record);
+NPC-004's investigation half (a confident wrong conclusion acted on). **Not by FI's changes alone:**
+NPC-004's self-ignorance (T07), NPC-007 / ARC-37 / ARC-12 / NPC-080 (a hazard visible only above a
+perceptual threshold: `thread_read`'s product, B10-15), ARC-32 (an institution's memory: FA), ARC-10 (a
+mid-contest disclosure: SC's nested run), every class C case's *cost* (CR-83).
+
+**Dependency edges.** FI → SC: the evidence interface (`08_FI_05`), the telling's roll (`08_FI_02` item 6).
+FI → CHAR: `record`'s price and CR-83; `said` as a chosen operand; `holders_named` for goals. FI → FA:
+seat news by `reach`; the writ's lapse. FI → T07: `thread_read`, self-knowledge of sensitivity, knots.
+FI → SE/WR: arrival and exploration (H-325, H-327). FI ← WR: MATTER's decay and death Events. The arc
+lane's adjudication file (`audits/12_ARCS_adjudication.md`) was not opened.
+
+## 14. Capability authoring surface
+
+**(a) Where this subsystem takes a character capability, and from where.**
+
+| point | what is read | from | data-driven? |
+|---|---|---|---|
+| pool of `research`, `examine`, `surveil` | the verb's vocation, then the person's score | `rosters.yaml: verb_capability` (all three → `inquiry`) → `seam/wrappers/pool.py::faculty`: the larger of `Person.capability[vocation]` and `Person.attributes[vocation_attribute[vocation]]` (`inquiry` → `attr.mind.acuity`), else `Fixtures.pool_default`; plus registered `POOL_ADDENDS` | **yes**, end to end: two roster maps and the attribute registry (`references/descriptor_registry.yaml`, read through `engine/substrate/descriptors.py`) |
+| pool of `tell`, `lie`, `speak` | same route, vocation `copying` → `attr.mind.focus` | same | yes |
+| obstacle of an inquiry | `obstacle_default`; the subject's opposing score where it is a person; `Record.forgery_quality` | `sigma.py::_opposition_of`; `Fixtures.default_forgery_quality` (CR-94 will read the forger's Coordination, ED-IN-0347) | fixture today; `vocation_attribute.opposed_by` is an empty map |
+| what a finding shows | band → observation terms | `rosters.yaml: finding_terms` | yes |
+| what a channel shows | channel → terms; `marks` = the actor's `heritage` | `rosters.yaml: observation_terms.supplied_by`; `Person.heritage` | yes |
+| how far a hearer credits what lands | the receiver's Attunement | `decision/options.py:1627` `COMPETENCE_ATTRIBUTE = attribute_key("Attunement")`, `competence_gain` | **hard-coded name** in a Python body (resolved through the registry, but which attribute is fixed in code); ships at gain 0 |
+| the `thread_read` gate | `Person.thread_sensitivity` against `thread_sensitivity_gate` | `person_q.OwnStateReader`, two stems checked against `OWN_STATE_STEMS` at import | the threshold is a fixture; the stem pair is **hard-coded** |
+| training | `train` raises a capability key the person already holds | `loop/effects_combat.py::_eff_train`; `Person.capability` | yes (vocations are `verb_capability`'s values) |
+| the knots oracle | `bonds`, `spirit`, `ts`, a disposition | `knots.py` module constants and `getattr` on duck-typed objects | **hard-coded**, cited to archived prose, unplugged |
+| `interview`, `reconstruct`, `thread_read` (after the gate), `forge`, `conceal`, `survey` | nothing | — | no capability enters at all |
+
+**(b) Doubled or missing.** One vocation serves three verbs the archived design gives three attributes
+(R-31). `capability` (a trained key) and `attributes` (an authored score) are two fields joined by `max` in
+one function, which is single-owned and clear. The competence attribute is named in code. Nothing reads a
+*trait* (a tag) anywhere in this subsystem: no "observant", no "liar", no "discreet".
+
+**(c) Target shape.** The existing owner is the pair `rosters.yaml: verb_capability` (verb → vocation) and
+`vocation_attribute` (vocation → attribute key, with its empty `opposed_by`), read by the one pool reader
+`faculty`. It should be extended, not replaced. For this subsystem to use a capability, its definition
+must say: `name`; `kind` (attribute | trained skill | trait); `scale` (the registry's 1–7 for attributes);
+`uses`: a list of `(verb, role)` with role ∈ {`pool`, `opposes`, `addend`, `gate`, `credit`}; for a
+trained skill its `base` attribute; for a gate its threshold fixture; its `growth` (which verb trains it).
+FI needs four roles from that table and nothing private:
+`pool` (the three inquiries, the two tellings); `opposes` (a forger's or concealer's skill into
+`forgery_quality`; a questioned person's against `interview` once CP-T06-05 lands); `credit` (which
+attribute the refraction's competence reads: the row that replaces `options.py:1627`'s literal); `gate`
+(`thread_read`). The single file: wherever the holistic stage puts the merged table; this lane's
+requirement is only that `verb_capability`, `vocation_attribute` and the competence attribute are rows of
+it. **Interface for the merge:** `faculty(w, p, verb) -> int` stays the one pool reader;
+`_opposition_of(w, subject, verb)` the one opposition reader; add
+`credit_attribute() -> key` read from data. A trait enters FI as a `POOL_ADDENDS` registration or an
+`observes:` row (`08_FI_03` §2), never as a branch.
+
+**(d) RPG axioms, in the tradition's words.**
+*Implemented:* attribute-or-skill, whichever is higher, as a dice pool (**"roll attribute + skill"**
+simplified to **take the better**); **untrained default** (`pool_default`); **degrees of success** off one
+ladder; **opposed difficulty** (the subject's score sets the obstacle); **quality as difficulty** (a
+forgery's quality contests the examination, the classic *Forgery vs. Perception*); **gated perception** (a
+hard prerequisite for a supernatural sense); **training by use** (`train`); **information is never free of
+its source** (provenance on every claim, the investigative genre's *reliability* axis).
+*Lacking, that a designer would expect:* **a perception/notice skill** opposed to concealment (present
+people always see `who`; no stealth-versus-notice roll exists); **an insight/sense-motive check**
+against a lie (the competence term exists, ships off, and cannot separate a lie from a truth by its own
+docstring); **specialisation** (one `inquiry` skill for scene, archive and stakeout); **passive
+knowledge** (nothing surfaces without an act); **take-your-time** (the archived TN 6 "Controlled" has no
+carrier); **assist / teamwork** (two investigators do not help each other); **contacts or streetwise** as a
+capability (who you know is a ledger fact, which is defensible, but nothing makes a person *better* at
+hearing things); **fail forward** (a failed inquiry yields nothing; CP-T06-04 is the first step).
+*Contradicted:* **"rank supplies dice and gates nothing"** (the source ruling for `verb_capability`)
+against the archived Depth gates; the code follows the ruling, and Thread Sensitivity is the one class gate.
+
+**(e) Ordered proposals.** (1) R-31's split is authoring only: add vocations and rows in the two rosters.
+(2) Move the competence attribute's name from `options.py:1627` into the table as the `credit` role
+(edit; carried here, to be merged by the holistic stage, no FI proposal file of its own).
+(3) `opposes` rows for `forge` and `conceal` (CR-94's shape, scheduled). (4) Notice-versus-concealment is a
+design-first question that B10-14's CP-T06-09 touches (*the room files a covered deed under the hand*).
+
+## 15. NPC and chooser surface (the design-intent charge)
+
+The intent itself is the CHAR lane's to state (`audits/02_CHAR_audit.md`, its NPC and AI-chooser intent
+section; not opened at a line by this audit, which was written in parallel). Against what the code
+establishes (`decision/`, `person_q.py`):
+
+- **(a) What FI needs of a chooser.** A person decides to inquire because a claim landed about something
+  in his reach (Q2) or a standing aim names it (Q4); on his own ledger alone; with his pursuits scoring the
+  act (three inquiry rows are celled; `tell` is `uncelled` by design, so no temperament separates a talker
+  from a silent man); at a scene budget; with the reason recoverable as `Scene.occasion` → the question →
+  the claim → the Event (`world_q.occasioned_by`). Missing: discretion and candour as inclinations; a
+  reason for *what* was said.
+- **(b) One chooser for player-proxy and NPC.** Yes at the act level: `play_surface.dispatching_chooser`
+  swaps a callback for the shipped chooser on one person and both pick from `opening_set`'s Candidates. No
+  at the content level: what is told, whether it is confided and what is forged are fixed before the
+  Candidate exists (F-FI-10), so a player cannot choose them except by hand-building an Act.
+- **(c) Hard-coded NPC rules.** `said_of`'s single pick; `_circle_of`'s draw; `_eff_forge`'s fixed lie;
+  `lie_said_of`'s fixed direction; `vacancies` and its siblings deciding what a person is asked about from
+  world truth (F-FI-01). No branch on an entity id was found in scope (the tree tests for that:
+  `test_no_game_code_branches_on_an_entity_id`).
+- **(d) Characterful and legible.** Distinguishable people need: what they choose to pass on (the
+  `valence` slant exists and ships off; `08_FI_02` §4 makes it a scored choice); whom they trust
+  (`regard`, `record`: built, starved of input); how they investigate (three routes, one skill: §14).
+  Legible afterwards needs the chain a narrative can read: *he believed X because Y told him, Y having
+  heard it from Z; he acted; it was false.* Every link is stored (`Claim.chain`, `source`, `when`,
+  `causes[]`); none is rendered, and the claims a decision actually read (clause 4's decline, the `said`
+  it copied) are not recorded on the Act beyond `payload["said"]`.
+- **(e) Missing, as proposals.** `08_FI_01` (he is asked only about what he has heard), `08_FI_02` §1–§4
+  (what and to whom he tells), `08_FI_03` §1 (a rendering of his ledger), `08_FI_05` (what he cites).
+
+## 16. The detective and noir precedent, and the evidence interface for social contests
+
+**Games the tree names** (the brief's list, checked against `tables/REPO_MENTIONS.md` and the lane file):
+Disco Elysium, Return of the Obra Dinn, L.A. Noire, Pentiment, Shadows of Doubt, Ace Attorney, The Case of
+the Golden Idol, Paradise Killer, Outer Wilds, Danganronpa, Her Story, Heavy Rain, Blade Runner, the
+Frogwares Sherlock Holmes games. **Also named in the tree and not on that list:** Lacuna and Tails Noir,
+Heaven's Vault, Pathologic 2, Citizen Sleeper, Kingdom Come: Deliverance (witnessed crime, reputation by
+place), Crusader Kings III secrets, Dwarf Fortress rumours and *Talk of the Town*, Triangle Strategy (as a
+warning against hard information gates), and the tabletop GUMSHOE, Blades in the Dark and Brindlewood Bay.
+Read for this section: `dispositions/D_T06.md` rows 1–51, `tables/R5` §1–§3, the lane file §0–§2;
+`tutorials/T06` by heading only `[PARTIAL READ]`.
+
+**Understood, or only named?**
+
+| borrowing | precedent | state in code | verdict |
+|---|---|---|---|
+| evidence as a typed, bindable object | L.A. Noire (an accusation must cite a held item), Golden Idol (a typed assertion) | every claim is typed `(subject, predicate, value)` with provenance; saying or acting requires holding (`own_ledger`); nothing is *cited* | understood; the binding half is unbuilt (`08_FI_05`) |
+| the case board | Shadows of Doubt, Outer Wilds' ship log, Golden Idol | the ledger is the board's data; no view; `chronicle(p)` lists it to no one | named only |
+| reconstruction | Golden Idol's synthesis, Sherlock Holmes: C&P's deduction board | `reconstruct` requires a held claim, emits `finding.made`, writes nothing | named only (`08_FI_03` §3) |
+| verification | Obra Dinn's three-fates lock | refused on principle (no oracle; the world answers by consequence, as Lacuna and Pentiment do) | understood; its replacement is unbuilt, so today nothing answers |
+| testimony set against evidence | Ace Attorney's cross-examination, Danganronpa's rebuttal | the mirror test in `proofs`; `_pair` for a teller's record | the primitive exists; no contest uses contradiction |
+| competing inner voices | Disco Elysium | ruled into the Dialogue Lattice, which is design-only | named only; CHAR's |
+| finite time, a community that remembers | Pentiment, Pathologic 2 | the scene budget; `regard` from judged and told deeds | built |
+| a generated case with a signature | Shadows of Doubt's killer archetypes, Blade Runner's randomised culprit | one covert kind | named only (CP-T06-01 begins it) |
+| knowledge as the only persistent state | Outer Wilds, Her Story | true of an investigator: findings are claims and nothing else | built, by construction |
+
+**Nulls, marked.** No named game lets an NPC build a case that another NPC answers; none has forged
+evidence that a simulated court accepts and a later finding overturns; none propagates testimony between
+simulated people as the main information economy (§7). Citing these games for those three is false
+comfort; Valoria would be first, and its own measurements are the only evidence.
+
+**The interface SC should consume** is stated in `proposals/08_FI_05_evidence-interface.md` and summarised
+here so the SC lane can cite it: *an item of evidence is a reference to a Claim in the citer's own ledger
+or a Record on his live hold; it is held or it cannot be cited; it is cited by id on the act
+(`payload["cites"]`, a chosen operand); its kind (`record`, `testimony`, `confession`) and weight are
+derived from its carrier and provenance, never stored; citing it tells it to the room; a forgery cites at
+full weight until someone cites a finding of it; a concealed deed supplies no proof until its cover is
+found; a contradiction is an opposing citation on the same cell, weighed by corroboration over distinct
+origins.* Conflicts with ruled items (the one-act `speak`, ED-SC-0033..0039's single obstacle owner, no
+verifier) are named in that file's §6 and left to Jordan.
+
+## 17. Design descriptions and the surviving audit corpus: what was read, and what it changed
+
+**Read** (`.designs/`, archived, intent only): `fieldwork_summary.md`; `fieldwork_v30_index.md`;
+`fieldwork_v30.md` §2 (pool), §2.1 (attribute by activity), §3.4 (strain), §4.1–§4.5 (Evidence Track,
+actions, reliability tags, Desperate Trail, Thread-Read); the heading maps of
+`investigation_systems_v30.md` and `knots_v30.md`; `auto_manual_resolution_duality_v1.md` §1–§2.
+**Read** (`.audit/`): `2026-07-05-emergent-narrative-engine/_workings_joined.md` by heading and by keyword
+(SUPERSEDED by its own Status line). **Not read**: the rest of both lists (§ receipt).
+
+**What it changed in this audit.** (i) R-31 to R-33 were added: the archived per-act attributes, the seven
+reliability tags and the Evidence Track each disagree with the code, and in each the code governs. (ii) It
+confirmed, at the source, that the archived investigation needs a GM in the places the lane file says
+(*"The GM sets the threshold … not known to the player"*; *"GM does not reveal the error"*; *"GM may offer
+a misleading clue"*), which is why `08_FI_03` derives a wrong conclusion from a wrong ledger and not from
+a failed roll. (iii) The archived Reconstruct is the design's climax (*"the investigation's climactic
+moment"*) and is the row that writes nothing in code: F-FI-03 is the gap between the two. (iv) The
+duality doctrine's sentence *"zoom in = play it out; zoom out = auto-resolve"* is the one-code-path
+requirement of §9 in Jordan's earlier words; `find.py`'s docstring already reserves the playable mode on
+the same entry. (v) The superseded narrative-engine record asks that *"every foregrounded beat leaves a
+followable diegetic trail (gossip, witnesses, …)"*: F-FI-02 is that requirement unmet. Nothing in either
+tree is cited as the reason a behaviour is correct, and no proposal here makes code read either.

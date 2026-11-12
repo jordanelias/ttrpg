@@ -60,6 +60,29 @@ which is what he would retell).
    whether an ordinary telling between two people who are together should fail two times in three is a
    question for the SC lane's audit.
 
+## §4. What is told, and whether it is confided, are the teller's choices (audit F-FI-10, R-30)
+
+Today `said_of` picks one claim for everyone alike and `_circle_of` decides confidence by a world draw, so
+a gossip and a discreet man with the same ledger say the same thing, and a player-proxy seated on a
+person cannot choose what to tell (the Candidate has no operand for it).
+
+7. **`rosters.yaml: choice_sourced`** gains `said` for the rows whose cell carries an `own_ledger`
+   conjunct with a counterparty (`tell`, `lie`), on `marshal`'s precedent (`operand_bags` ranges a
+   payload key over a closed set). The set is the top `said_choices` claims `said_of`'s slant ranks for
+   that subject (a fixture; `1` is the control and is today's single pick). One Candidate per hearer and
+   per claim; the existing score terms (pursuit alignment, `deed_valence` of the claim by the teller's own
+   projected pursuits, the believed odds) rank them. No new scoring term.
+8. **Confiding is an operand, not a draw.** The same rows gain a choice-sourced `in_confidence` in
+   `{false, true}`; `loop/witness.py::_circle_of` reads the act's own operand where it now draws on
+   `telling_privacy`, which remains as the swept share for a chooser that declares none (control 0).
+   Who hears is unchanged (presence; private whispers are not built, by ruling).
+9. **Left as declared defaults:** which key a forgery falsifies and which way a lie moves a number. Both
+   need an operand channel a computed act does not have (`H-94`); named, not built.
+
+Gate for §4: at seeds 0–2, two persons holding the same claims about one subject and differing in
+pursuits tell different claims in at least one case; control `said_choices = 1` reproduces today's hash.
+One interface for an NPC and a player-proxy: both pick among the same Candidates.
+
 ## Gate (execution artifact)
 
 `dynamics.py`-shaped reading at seeds 0–2, two seasons, shipped fixtures plus the two new arms:

@@ -9,7 +9,7 @@ Subject: the resolution substrate — `engine/dice_engine/` (`dice_engine.py`, `
 (`tools/export_*`), `engine/tests/`, and the call sites in `engine/season/` and `modules/` through which a
 draw reaches the fold. Instrument: the `resolution-diagnostic` skill's five properties, run on the real
 functions; its output is evidence carried into a NERS reading (§5), not a verdict. Probe scripts and their
-output are in the scratchpad (§12); nothing in the tree was edited but this file and the four proposal
+output are in the scratchpad (§12); nothing in the tree was edited but this file and the five proposal
 files named in §6.
 
 ## 0. Verdict
@@ -22,7 +22,7 @@ engine states are the odds it deals (284 graded realm rolls at seed 0 over four 
 against 74.0 % exact at the pair that 265 of them were rolled at; 2,137 graded corpus rolls: 72.6 %). The
 single largest obstacle is upstream of the dice and is this subsystem's to name: at world build all 83
 realm persons roll two dice on every graded verb, no person holds an attribute, the advantage channel
-summed to zero on every one of 450 observed rolls, and at that pair three quarters of contested acts fail
+summed to zero on every one of 568 observed rolls, and at that pair three quarters of contested acts fail
 and write nothing while the top band cannot occur at all. The second obstacle is inside the subsystem:
 there is not one roller but three (whole dice, a Normal sampler that reads half a success harder, and
 mass battle's private copy), and the claim that they are equivalent is false at the level the game reads.
@@ -155,7 +155,7 @@ Ranked worst first. "Fix" names the owner; the edits are in the proposal files o
 
 ### F-DICE-02 · degrades narrative · the default outcome is nothing, and the top band cannot occur
 
-- **Claim.** At the pair every observed roll but 23 was thrown at (pool 2, Ob 2), Failure is 74 %,
+- **Claim.** At the pair 535 of the 568 observed realm rolls were thrown at (pool 2, Ob 2), Failure is 74 %,
   Failure writes nothing on any social-path verb, and Overwhelming is impossible (two dice net at most
   4, a margin of 2).
 - **Evidence.** `band_odds(2, 2) == (0.74, 0.19, 0.07, 0.0)` (E-16). The corpus run's
@@ -217,6 +217,16 @@ Ranked worst first. "Fix" names the owner; the edits are in the proposal files o
   pool 8 / Ob 3, 38.58 against 46.48 %; pool 11 / Ob 4, 37.31 against 44.01 %. Sampled, seed 7,
   n = 200,000, pool 8 / Ob 3: 38.59 against 46.42 %. A Normal shifted by +0.5 lands within a point of
   the whole dice in all seven cells.
+- **A returning finding.** The degree census of 2026-08-12
+  (`.audit/2026-08-12-degree-vocabulary-census/00_findings.md` §3) said combat's ladder *"should probably
+  NOT be merged"*, because its −0.5 offsets were a continuity correction and merging *"would
+  re-introduce the 5–9pp low read the correction was written to fix"*. The ruling of 2026-08-15 (no
+  system keeps its own bands) merged it, with the order *"migrate, measure, report before tuning"*.
+  Re-verified at HEAD: the low read is there, 6.7 to 9.0 points at pools 6 to 11 (E-06). The
+  correction can be restored without a private ladder, in the sampler (a Normal centred half a
+  success higher is the whole-dice distribution to within a point); whether to do so is a combat
+  balance move and is cross-listed to the PC lane with this measurement as the report the ruling asked
+  for.
 - **Touches.** R-09; NERS-S (*calculations consistent in methodology*).
 - **Consequence.** In the Python game, none visible: combat is tuned on its own sampler. In a port that
   reads *"canonical for Godot"* as covering the social roll, shown odds and dealt odds part by 7 to 12
@@ -269,6 +279,10 @@ sits here.)
   call into `dice_engine.roll_pool`. E-04: 6 of 10,000 cells differ on tenths (for example net 4.3,
   Ob 3.3: Partial against Success), 72 of 160,000 on fortieths; `3 + net_boost(-1e-16, 9)` against 0 is
   Success on the owner and Overwhelming on the copy.
+- **A returning finding.** The same census (§2) recorded that its quarter-step grid was *"structurally
+  unable to observe"* the tolerance. The guard written from it eleven days later kept the grid. The
+  roll-and-resolution inventory of 2026-08-19 named the forked roller; it is still forked, one
+  directory over.
 - **Touches.** R-04 (the field), NERS-S.
 - **Consequence.** None in play today (the differing cells are float dust). The cost is that the port
   must transcribe two rollers and two ladders, and that the ruling *"ONE resolver for all d10
@@ -335,6 +349,10 @@ sits here.)
 - **Falsifier run.** E-17: the only callers are `engine/tests/test_sigma_leverage_parity.py`,
   `tools/gen_sigma_parity_goldens.py` and the retiring kernel. The parity golden's eight pinned
   functions include three of them.
+- **A returning shape.** The combat wiring audit of 2026-07-23
+  (`.audit/2026-07-23-combat-engine-wiring-audit/wiring_audit_v1.md:58`) found `core.effective_ob` dead
+  and display-only; combat deleted it (`core.py:59-61`, re-verified). The twin it wrapped is still in
+  the dice engine.
 - **Minimal fix.** Delete with the kernel when it retires (SM-15, Jordan's timing); until then correct
   the one false sentence (§6, resolution 13).
 
@@ -488,7 +506,7 @@ verbs take no draw, so an *implementation* that can fail after a won contest (AR
 | H-114 `_eff_kill` takes no degree | open? | closed | `loop/effects_combat.py:63` takes `res`; the row records closure by `W-E` | none; the row's head should say CLOSED |
 | H-115 degree branches raise `SystemExit` | open? | closed | `data/verbs.py:382-424` raise `Unspecified` | none (the row says so in its body) |
 | H-152 a `total`-arm march death emits no `person.died` | open, `assumption` | wrongly filed (MB / core effects; no dice mechanism). `march`'s row now emits `person.died` and `tenure.closed` (E-09) `[UNVERIFIED at _eff_march's total branch]` | E-09 | the MB lane verifies and closes |
-| H-244 what one slot of effort is worth | closed? | open as a number; built | `fixtures.py:466`; effort formed on 0 of 568 rolls | keep; its value is unexercised in play until a believed opposition exists |
+| H-244 what one slot of effort is worth | closed? | open as a number; built | `fixtures.py:466`; no roll of 568 carried effort (the chooser priced effort variants of `determine` only, E-19) | keep; its value is unexercised in play until a believed opposition exists |
 | H-310 a confession graded by the dice alone | open, RULING | wrongly filed (FI / SC) | The mechanism a ruling would need exists: an instance modifier on the obstacle, as `forgery_quality` is for `examine` | that lane's; cross-listed in §10 |
 | H-312 `interrogate` has no contest key | open | open; resolved by proposal | E-09 | `10_DICE_one_score_two_roles.md` edit C |
 | H-126, H-127, H-213 (bear on findings) | `assumption` | open as numbers | E-03, E-07; ceiling caps of 2.842 observed in play | H-127's scope narrowed by the same proposal |
@@ -580,6 +598,16 @@ them (`00_INDEX.md` §3, the "Resolution kernel" row), and none bore on a findin
 - *`MBG` §1 (draws near parity are expected).* It grounds the mass-battle gauge, not the d10. Decorative
   for this subsystem.
 - *Duel of Wits' scaled compromise (I-5).* A social-contest design object; nothing in the dice.
+
+**From the surviving audit corpus** (`.audit/`, lesser weight; each re-verified before use). Read: the
+degree census's findings in full and its instrument's head; the re-band cost instrument
+(`.audit/2026-08-14-degree-reband-consumer-cost/reband_delta.py`, a script; its docstring); the two
+combat-engine audits at the passages a search for the resolution terms returned. Three leads, all of
+which still hold at HEAD and are folded into F-DICE-05, F-DICE-07 and F-DICE-12. One old finding is now
+false: the census's 45 % divergence of the faction ladder describes code deleted at plan position
+`29b`. Its method transfers and is used here: classes computed by evaluating imported functions, on
+more than one domain, with a warning when the domains disagree. Its own limit also transfers, as a
+caution: a grid of exactly representable values cannot see a tolerance.
 
 **Nulls.** No surveyed game governs its own resolver by refusal (COMP-3 §7.9 says so and it stands).
 No precedent in the corpus addresses one engine serving a duel, a debate and a battle with comparable
@@ -680,7 +708,9 @@ shipped pair the whole dice fail 74.0 % of the time and the Normal sampler 85.6 
   port carries one sampler. Every season hash moves.
 
 Proposal `10_DICE_exported_face_rule_and_band_edges.md` is written for A and says which of its edits
-depend on it.
+depend on it. Under either option the half-success offset between the two samplers can be closed in the
+sampler (F-DICE-05); under A that is a combat balance move for the PC lane, under B it decides whether
+every non-combat roll gets about ten points harder.
 
 Three other items are declared movers taken at step 3 or 4 and marked `[ASSUMPTION; Jordan to correct]`
 in their proposals, each with a control arm that reproduces today's bytes: the opposition fallback
@@ -714,6 +744,7 @@ All runs with `PYTHONHASHSEED=0`. Scratchpad:
 | E-17 | grep censuses: callers of the display functions, `capped=False`, `BandExtension`, draw sites | — | as cited in §3 |
 | E-18 | `git status --short` | — | this file and five proposal files are the lane's only changes |
 | E-19 | inline: `sigma.believed_chance` spied during `populated.run(1, 0)` | 0 · 1 | 4,929 queries; 102 figures (`determine`); `None` for `march` 3,813 and `accept` 1,014 |
+| E-21 | `.audit/` entries read (§7): the degree census, the re-band instrument, two combat audits (searched) | — | three leads re-verified at HEAD; one old finding now false |
 | E-20 | design set read (§5): four files under `.designs/engine/` and the duality doctrine in full; five cross-cutting files at their resolution passages; seven searched | — | intent only; the disagreements are listed in §5 |
 
 Not run: `pytest` (by instruction); `aperture 4 0` (R-09's own measure; the CORE lane's run had not
@@ -854,3 +885,52 @@ nothing); *difficulty by scale of the task* (no base Ob by scale); *a modifier l
 
 The merged authoring file itself (the vocation and tag blocks in `rosters.yaml`) is the holistic
 stage's to shape; this section states what the dice need from it and proposes no private scheme.
+
+## 15. The NPC and chooser surface
+
+The statement of the design intent for NPCs and the chooser is the CHAR lane's
+(`audits/02_CHAR_audit.md`, its section answering this charge); it is cited here, not redone. What
+follows is the dice engine's side of it, from code.
+
+**(a) What the chooser needs from this subsystem, and what it gets.** A person deciding whether to
+attempt a contested act needs his chance of the bands in which the act would write, as he believes it,
+from his own ledger. The engine supplies exactly that query: `seam/wrappers/sigma.py::believed_chance`,
+closed over the person as `View.odds` (`:441-448`), which `decision/choose.py::odds_weight` multiplies
+into the pursuit term, and `settle_efforts` uses to decide whether a scene's worth of effort is worth
+it. The query is typed correctly (it takes no person, so nobody can ask another's belief) and reads no
+World but for his own past acts. What it returns in play is F-DICE-14: a figure for one verb, identical
+for every person, and `None`, read as certainty, for the rest. Temperament and conviction do not enter
+the roll and should not; they enter the choice. The budget enters as effort: one named level per scene
+slot spent.
+
+**(b) One interface for a seated player and an NPC.** Yes, as built. `harness/play_surface.py` hands a
+player's callback the same `View`, so the same `odds` query, that the shipped chooser receives. The
+sources disagree about what a player should be shown: `odds_of` mode (a), the true odds, is described
+as *"the display … the player's"* (`sigma.py:385`), and the B10-08 amendment AM-B-03 planned displays
+as mode (a); Layer 1's AX-7 says no state is hidden from the player; the IN research lane observed that
+a shown chance can only be the actor's estimate. The ruled and built wins: nothing calls mode (a) from
+the loop or the play surface, and what the player's View carries is his believed chance. If true odds
+are ever printed to a player, the player and the NPC stop being the same kind of agent on this point;
+that is named, not resolved.
+
+**(c) Where a rule is hard-coded instead of read from the chooser.** None in the dice engine: it
+decides nothing. Two adjacent observations for their lanes. The fixture and roster are named
+`npc_effort` / `npc_efforts` although `settle_efforts` runs for whoever the shipped chooser serves,
+a seated player's delegate included (a name, not a rule). Inside a fight, the commitment depth, the
+defence mode and whether to counter are drawn from the generator (`modules/combat/combat_systems.py:1127-1162`):
+decisions a person would make are made by dice inside the module, not by the chooser (PC lane).
+
+**(d) What would make an NPC characterful here, and legible afterwards.** Distinguishable people need
+distinguishable inputs to the same roll: a score that differs (F-DICE-01), a wound that tells
+(F-DICE-06), and a belief about an opponent that can be wrong for a reason (F-DICE-14). The engine
+needs no per-person rule for any of these. A person's attitude to risk is the chooser's (today the
+believed chance multiplies the term linearly: every person is risk-neutral); the dice engine's part is
+only that the chance it hands over is his own. Afterwards, the narrative can read the band and nothing
+else: the roll's record (pool, obstacle, leverage, net, settled margin) is returned by the provider and
+dropped at the fold; `Event` keeps `degree` alone. *She argued with two dice against a hostile bench
+and missed by one* is computable at the moment of the roll and unrecoverable a tick later.
+
+**(e) What is missing, as proposals.** `proposals/10_DICE_believed_odds_have_a_prior.md`: the prior
+(built here), the `believed_estimate` role for a fight and a field (the interface; PC and MB build it),
+and the roll's record on its Event (the interface; CORE builds it). `10_DICE_one_score_two_roles.md` and
+`10_DICE_advantage_sources_for_the_arcs.md` supply the inputs that make two people's rolls differ.

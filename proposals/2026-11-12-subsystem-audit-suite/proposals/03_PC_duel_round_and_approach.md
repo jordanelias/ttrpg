@@ -147,6 +147,36 @@ What MB needs from combat, stated as the interface: the `combat.round` compositi
 `DuelRoundInput`, `DuelRoundOutcome` in `queries/inputs.py`; the guarantee that the entry keeps no
 state and draws only from the stream it is handed.
 
+### 5.1 Squads of named characters and a commander in the field (the named referents)
+
+Jordan's referents for mass battle are Ogre Battle, Unicorn Overlord, Football Manager, Total War and
+Mount & Blade II: Bannerlord. Two of their shapes touch this module, and the same round serves both.
+
+- **Squads resolved automatically from standing orders** (Ogre Battle, Unicorn Overlord). A squad
+  exchange is a set of pairings, each one duel round; outnumbering is more rounds against one
+  fighter's carried `DuelState` in the same field turn, which is the arithmetic the WS-7 envelope
+  already describes. The approach each member takes comes from a **standing order**: an ordered list
+  of `(condition over the turn view, approach)` rows, authored as data and evaluated host-side into the
+  same per-party decider the player and the chooser supply. So "the player picks an approach", "the
+  NPC's chooser picks one" and "a standing order picks one" are three suppliers of one callable, and
+  the module cannot tell them apart. Who is paired with whom is the squad host's policy, not combat's.
+- **A commander and companions fighting inside a field battle** (Bannerlord). This is §5's contact:
+  a named person met on the field fights rounds through the role; a played commander is asked for his
+  approach, an unplayed one is served by the chooser or by his standing order.
+
+Interface added by these two, beyond §5: nothing in `modules/combat/`. Host-side: a `StandingOrder`
+record (rows of condition and approach, the conditions a closed set over `CombatTurnView`'s fields:
+own wounds, opponent's wounds, round, measure closed) and one function that turns it into a decider.
+Its owner is the lane that owns squads and orders (MB, with the capability surface for who may hold
+which order); combat only promises that the view carries what those conditions read.
+
+Cost and a limit, measured: 200 whole fights (about 600 rounds) ran in about 0.4 s here, so one round
+is well under a millisecond and a squad battle of two fives over ten field turns is tens of
+milliseconds. That holds for named characters. It does not make per-soldier rounds for a mass unit
+sensible, and nothing here proposes them: a headcount fights as the field resolves it, and a cohort
+is never a party to a personal fight (CP-T03-01, ruled). Whether a side fights as one body or as its
+commanding persons is H-359's question and MB's.
+
 ## 6. Conflicts with ruled or ratified items (named, not resolved)
 
 1. **The ratified suspension (`proposals/2026-10-07-grid-mode-suspension.md`, REM-31).** It covers

@@ -123,7 +123,7 @@ Ranked worst first.
 
 **F-PC-01 · blocks a requirement (R-09, R-05) · Computed play almost never reaches personal combat, and
 never by a duel.** In the 143 case worlds (E12) eight `fight` scenes were fought at seed 0, all `Felled`;
-`accept` was only ever refused. In the populated realm and spine:
+`accept` was only ever refused. In the populated realm and spine it is rarer still.
 Evidence: E7, `aperture_2_0.txt` lines 91, 96, 98, 116, 154, 169, 172, 174, 362 (realm) and 422, 427,
 429, 447 (spine). `fight`: formed 0. `challenge`: 84 refused, last read `exists:Person=0` 65,
 `with=False` 13, `dispute=False` 6. `accept`: 27 refused, all `exists:challenge=0`. `capture`: 12
@@ -143,8 +143,9 @@ engine ran twice, and never from a duel or an assault; why the case worlds form 
 realm does not was not diagnosed here `[UNVERIFIED: which `violence_contexts` reader admitted the
 eight]`.
 Consequence: almost no chain of events inside a combat scene occurs for R-09 to grade, more than 120
-scene acts per two seasons are spent on acts that cannot succeed, and a duel or an assassination
-cannot arise from persons' own acts. Minimal fix: `proposals/03_PC_duel_chain_reach.md`.
+scene acts per two realm-seasons are spent on acts that cannot succeed, no duel arises from persons'
+own acts in any world read, and an assault did so eight times in 143 worlds, each ending in a death.
+Minimal fix: `proposals/03_PC_duel_chain_reach.md`.
 
 **F-PC-02 · blocks a requirement (R-09 by person, R-06) · Every person is the same fighter.**
 Evidence: E8. The mechanisms have landed (authored attributes `fight.py:44-52`; kits
@@ -575,7 +576,7 @@ plays and a grid's attack are the same call.
 | SC (social contest, proceedings) | a `challenge` Record and its `stakes` | `duel.yielded` | mechanism executed by hand; 0 in computed play (E7) |
 | FA (factions, seats, war) | the seat a `capture` is exercised through; `Enemy` stamps for the war context | `tenure.closed` naming each emptied seat; a `detain` edge | seats and custody executed (E4); the war context is empty until CR-91 (designed) |
 | SE (settlements, stores) | rung stores as arms | none (a kit is read, not consumed) | executed path over an empty roster |
-| MB (mass battle) | nothing | nothing | none today: no duel inside a field, no champion; `effects_combat.py` merely houses `_eff_march`. Designed (P5 §5): a duel can be embedded through the same round path. MB needs from combat the `combat.round` composition role, the records `DuelState` / `DuelRoundInput` / `DuelRoundOutcome`, and the guarantee of no held state; combat needs from MB a typed contact report (two named persons, the field turn) and takes back nothing. One field turn is one duel round; a played commander supplies his approach through the same decider, so a fought and an auto-resolved battle run the same rounds. A duel arising from a field is the existing `challenge` and `accept` pair. Constraint carried from research: a person's effect on a unit is a fraction of the unit, never a flat amount |
+| MB (mass battle) | nothing | nothing | none today: no duel inside a field, no champion; `effects_combat.py` merely houses `_eff_march`. Designed (P5 §5): a duel can be embedded through the same round path. MB needs from combat the `combat.round` composition role, the records `DuelState` / `DuelRoundInput` / `DuelRoundOutcome`, and the guarantee of no held state; combat needs from MB a typed contact report (two named persons, the field turn) and takes back nothing. One field turn is one duel round; a played commander supplies his approach through the same decider, so a fought and an auto-resolved battle run the same rounds. A duel arising from a field is the existing `challenge` and `accept` pair. Constraint carried from research: a person's effect on a unit is a fraction of the unit, never a flat amount. For the named referents (P5 §5.1): squads of named characters resolved from standing orders (Ogre Battle, Unicorn Overlord) are pairings of duel rounds whose approach comes from a standing order evaluated into the same per-party decider a player or the chooser supplies; a commander and companions in the field (Bannerlord) are the contact case. Both use the one round; neither needs anything further inside `modules/combat/`. Host-side they need a `StandingOrder` record and a pairing policy, which are MB's. Per-soldier rounds for a headcount are not proposed (cohorts never fight a personal fight, ruled) |
 | FI (fieldwork) | nothing | a captive for `interrogate` | designed; `interrogate` formed 0 (E7) |
 | WR (world, canon) | nothing | deaths for the chronicle | the death is logged; the fight's content is not |
 | GO (port) | — | `combat_engine_v1.json` | export executed and round-trip green; 18 constants outside it (F-PC-10) |
@@ -609,6 +610,14 @@ document or by precedent, and in each the two options are different games.
    carry it and the world sees it. B makes every fight a risk for the favourite and changes every
    balance figure.
 
+**Named and not resolved** (conflicts between the duel-and-grid intent of 2026-11-12 and ruled,
+ratified or recorded items; detail in `proposals/03_PC_duel_round_and_approach.md` §6): the ratified
+suspension covers one two-party provider call and leaves the grid map undecided; R-04's reading takes
+"grid-based map combat" to be mass battle's cell field; a round entry needs CR-85 §4 step 2's seeded
+damage, which is held; three approaches fire ED-PC-0007's reopen condition; `videogame_mode_spec.md`
+says zones and no grid. And from §13: NPC-088 and ARC-31 ask for a killing with no institutional
+context, which ED-IN-0337 rules out.
+
 ## 12. Evidence log
 
 Scratchpad: `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/PC/`.
@@ -633,6 +642,182 @@ All runs `PYTHONHASHSEED=0`. No pytest was run. No tracked file was written by a
 Not read, or read in part: `modules/combat/weapon_physics.py` and `weapons.py` (structure and
 docstring heads only, E2); the workbench files other than `server.py`, `trace.py`, `presets.py` heads
 and `balance.py`'s definitions; `capabilities.py` and `state_graph.py` (imports and readers only);
-`combat_armour_reference.json`; fifty-five of fifty-seven test files; the research files named in §7.
+`combat_armour_reference.json`; fifty-five of fifty-seven test files; the research files named in §7;
+the design descriptions and surviving audit entries named in §16; `engine/season/decision/options.py`
+and `choose.py` (symbols located by search only), which P1 and P5 propose edits to.
 
-PENDING-SECTION-13
+## 13. Provided arcs and characters — adjudication
+
+Method: `engine/season/cases/chain/CASE_BRIEF.md` read; the 143 cases loaded with the repository's own
+loader (`harness/run_cases.py::load_cases`) and their 972 needs searched for violence, wounds, capture
+and death (56 hits; 24 core, 29 important); `corpus_run` run once (E12). Only needs whose *mechanism*
+is personal combat are adjudicated here; the rest are cross-listed with their owner. "Hand" means a
+hand-built act through the real fold (E3, E4); it shows the engine can carry the need, not that play
+reaches it.
+
+| case | need (short) | hardness | represented today? | evidence | change required | owner | proposal | gate |
+|---|---|---|---|---|---|---|---|---|
+| ARC-53 | an injury persists across periods until a specific recovery action | important | **yes** | body is written by the fold and only `tend` raises it (`effects_combat.py:427-447`, `:766-790`); E3: survivors at 25 to 675 of 1000; a band costs a scene action and one Endurance (E5: 58.8% felled at one band down) | none | PC | — | — |
+| ARC-53 | the wound degrades the roll used for faction-scale actions | (the case's one-line) | **in part**: it costs actions and combat Endurance, not dice on other rolls; `POOL_ADDENDS` holds practice only (`pool.py:38-50`) | code read | an adverse instance modifier on the obstacle side, read from body bands | DICE / SC (CR-95 designs which adverse modifiers exist) | — | CR-95's falsifiers |
+| ARC-53 | a discrete recovery action a player spends a scene on | core | **yes** | `tend`: executed 37 at seed 0 (E7), 39 at seed 1 (E7b); in the corpus's executed set (E12) | none | PC / SE | — | — |
+| SCN-03 | the wound count at incapacitation varies by an attribute | important | **yes, in the module; unreached in the realm** | `combatant.py:32-44` (`max_wounds`, `health_full` from Endurance, Spirit, Strength); E5 Endurance cells; E8: every realm person at Endurance 4 | authored attributes | CHAR | P4 Part D | E8 re-run |
+| SCN-03 | two recovery actions, fast and partial against slow and full | important | **no** | one `tend` restores whole (`effects_combat.py:786-790`) | the swept `tend_fraction` | PC / SE | P3 Part C | P3's gate |
+| SCN-03 | a second resource depleting per action, forcing a restricted mode at zero | important | **yes, inside a fight only** | stamina: `act_cost`, the out-of-breath penalty and the collapse separation (`wrapper.py:286-288`, `:478`) | none for the fight; not a season quantity | PC | — | — |
+| SCN-03, SCN-01 | incapacitation or damage ends a channelled action; two action tracks in one round | core | **no** | no action tracks exist; one closed choice per turn | design-first: a channel as a state the round entry carries | WR (threadwork) with PC | P5 (the round and its state are the precondition) | — |
+| SCN-10 | wound cost paid in a different resource by entity type | core | **no** | one `WoundTracker` for every fighter | design-first; a per-party harm sink on the record | WR with PC | — | — |
+| ARC-23 | the victor may choose capture over death | important | **yes at personal scale, for a seat-holder** | `capture`: E4, 97 of 200 taken alive; `_eff_capture` (`effects_combat.py:333-381`); corpus: one `capture` graded `Wounded` (E12) | inside a battle: none exists; an exit for a plain fight is §11 item 1 | PC; MB for the field | P3 Part B; P5 §5 | E4; P5 step 5 |
+| ARC-23 | a commander's incapacitation penalises the whole force | core | **no** | no edge between a person's body and a field (§10) | the field reads its officers; a duel result reaches the field as a fraction | MB | P5 §5 (interface only) | MB's |
+| ARC-23 | a skill chosen at creation gates whether an attempt can be made | core | **wrongly stated against Layer 1** | "Rank supplies dice and gates nothing" (`pool.py:79-80`, citing `03 §A.2`) | none: resolve the need as "a skill makes the attempt far likelier", or amend the axiom; not PC's | CHAR / CORE | — | — |
+| NPC-010 | killable, as an outcome distinct from discovered, bought or turned | core | **yes by hand** | `fight` → `Felled` → `remove_person` with its cascade (E3: a death in 200 of 200); her overlay names `fight` (`cases/exercises/NPC-010.yaml:41`) | a context in which someone may attack her (below) | PC for the kill; FA / SC for the context | P1 | P1's falsifier |
+| NPC-088 | her season can end by being found and killed, with no institutional process | important | **the killing yes; "no institutional process" conflicts with a ruling** | as above; but `fight` forms only under war, crime, duel or defence (`rosters.yaml:2743-2762`, ED-IN-0337), and each is an institution or a prior attack | none without re-opening ED-IN-0337; name the conflict | Jordan | — | — |
+| NPC-035 | a person with no goal can be the object of a scene and be killed | important | **yes by hand** | E3's fixture persons hold no pursuits and are killed | as NPC-010 | PC | P1 | — |
+| NPC-006 | UNCLEAR: "high personal combat stats", no numbers | important | **wrongly stated (the source gives no value)** | — | resolve as: authored attributes and an `arms` key on his cast entry; the carrier exists (`fight.py:44-52`) | CHAR (content) | P4 | E8 re-run on his world |
+| NPC-040 | martial convictions change how he responds to force | important | not PC | — | alignment cells and the chooser | CHAR | — | — |
+| ARC-31 | a covert lethal attempt inside a formal social scene | important | **no** | no interruption of a proceeding; no context for a covert killing | design-first | SC / FA; conflicts with ED-IN-0337 as NPC-088 does | — | — |
+| ARC-16 | capturing a leader triggers consequences scaled to her remaining presence | important | **the capture yes; the scaling no** | E4; a `detain` edge and its Event | FA reads the custody | FA | — | — |
+| SCN-14 | a personal action inside a mass battle changes the target's status at the mass scale | important | **no** | §10: no edge | the field's contact and the duel round | MB with PC | P5 §5 | P5 step 5 |
+| EMG-C4 | a champion substituted mid-contest in a formal proceeding | core | **no** | a duel reaches a proceeding only as a `challenge` Record's stakes | design-first | SC | — | — |
+| NPC-081, NPC-020, NPC-031, NPC-009 | a holder's death vacates a seat and reroutes others' arcs | core / important | **the death and the named vacancy yes** | E4: `tenure.closed` on each seat a death emptied | succession and the vacancy's readers | FA | — | — |
+| ARC-07 | a failed sub-check in battle leaves a persistent condition on a unit | core | not PC | — | — | MB | — | — |
+
+**Arcs and characters this lane can bring up soonest, in order.**
+
+1. **ARC-53, The Wound Economy** (personal half). Already represented; what it lacks is a fight
+   arising in play. Artifact: a seeded world with one planted dispute (P1's falsifier) in which a duel
+   under `blood` terms wounds a person, his budget falls by a band next season, and `tend` restores it,
+   every beat from persons' own acts.
+2. **SCN-03, the wound chain** (attribute-varying incapacitation, two recoveries). After P4 Part D
+   (authored Endurance) and P3 Part C. Artifact: two persons of different Endurance fought on one seed
+   set show different felled shares; `tend` at the half arm takes two acts.
+3. **ARC-23's capture over death** at personal scale: runs today for a seat-holder by hand; in play
+   after P1 (so that fights occur) and, for a plain fight, after §11 item 1.
+4. **NPC-010 and NPC-035 as killable**: after P1 and a context supplied by another lane.
+
+**Dependency edges.** PC → CHAR: authored attributes, temperament, the deed judgement behind a
+dispute, the survivor's regard. PC → FA: the war context (CR-91), succession on a vacancy, readers of
+custody. PC → SC: proceedings that end in or are interrupted by a fight. PC → MB: the contact report
+and what a duel result does to a unit. PC → CORE: Record-kind formation in `opening_set` (P1), the
+grid's suspension (P5 §6). PC → DICE: an adverse body modifier on non-combat rolls (CR-95). No arc in
+the corpus can be simulated end to end by this lane's changes alone, because none has a fight that
+arises without another lane's occasion.
+
+## 14. Capability authoring surface
+
+**(a) Where combat takes a character capability, what it reads, from where.**
+
+| # | outcome point | reads | from | data-driven today? |
+|---|---|---|---|---|
+| 1 | dice in the attack pool | `faculty` | `PersonalCombatInput.faculties` ← `pool.py:78-100` ← `rosters.yaml: verb_capability` → `Person.capability`; `vocation_attribute` → `Person.attributes`; `pool_default`; `POOL_ADDENDS` (practice) | the inputs yes; the rule `max(5, faculty + 6)` is in code (`core.py:51-58`, exported) |
+| 2 | the obstacle one is attacked against | the same `faculty`, halved | `core.py:102-124` | the rule is in code and **doubled**: the social contest's opposition reader excludes the fallback and practice, this includes them |
+| 3 | six attributes (Strength, Coordination, Endurance, Perception, Will, Focus) | `Person.attributes` by `registry_key` | `attributes.py:44-53`; `fight.py:44-52`; `references/descriptor_registry.yaml: attributes` | the mapping is data (a pointer per attribute); what each attribute does is formulas with exported coefficients plus literal weights in code (for example the 0.45 / 0.45 and 0.30 / 0.70 blends at `combat_systems.py:350`, `:360`; the derived-stat constants at `combatant.py:22-29`) |
+| 4 | Endurance as it arrives | authored Endurance less one per body band | `combat.py:143-152` (H-97) | code; the band table is a fixture |
+| 5 | weapon and armour | `kits` | `world_q.py:3484-3509` ← `rosters.yaml: arms_kinds` | data, empty |
+| 6 | growth | +1 on the verb's key after a fight that drew blood; +1 by `train`; practice from the log | `effects_combat.py:262-296`, `:793-818`; `rosters.yaml: verb_capability`, `practice_cap` | the key is data; the step of one and "never minted" are code |
+| 7 | six skill axes | `Combatant.skills[axis]` | string literals at the read sites (`combat_systems.py:198`, `:345-362`, `:1060`; `contact.py:46`) | **hard-coded names, no carrier, uncapped** |
+| 8 | techniques and their levels | `Combatant.equipped` → `ABILITIES` | a Python literal inside the module (`ability_primitives.py:30-132`) | **a capability roster in module code**, with no carrier and absent from the export |
+| 9 | tradition | `Combatant.tradition` → kit access and familiarity | `traditions.py:20-47` | **module code, no carrier** |
+| 10 | temperament | `disp` | `attributes.py:51` (no registry key) | **no carrier** |
+| 11 | a lasting injury | `Person.body_ceiling` | `effects_combat.py:384-424` ← `band_floors` | data-driven; the nearest thing to a trait the fight writes |
+| 12 | concession | `YIELD_HEALTH_FRAC` | `config.py:301` | one exported number for everyone |
+
+**(b) Summary.** Data-driven end to end: 5, 11, and the inputs of 1. Data-driven inputs with the rule
+in module code: 1, 3, 4, 6, 12. Hard-coded or without a carrier: 7, 8, 9, 10. Doubled: 2.
+
+**(c) Target shape and the interface this subsystem needs.** Combat should receive **numbers per
+slot** and never a capability's name. The module declares its slots once, in
+`modules/combat/attributes.py` (already the one owner of which attributes a fighter carries), exported
+in the typed export's `attributes` section: the families `attr`, `pool`, `skill`, `lever`, `temper`,
+`kit` (P4 Part A lists the members). A capability definition, wherever the holistic stage puts the one
+authoring file, must say for combat's use: its key; its kind (attribute, skill, technique, trait); its
+scale and bounds; **which slot or slots it feeds and by which rule** (sets, adds, multiplies, gates
+access), with the magnitude at level one; how a level compounds (`value × level` or `value ^ level`,
+the two forms `ability_bonus` and `ability_factor` implement); what grants it (a lifepath, a tradition,
+training, doing); and what it is opposed by. The existing owners to extend, not replace:
+`references/descriptor_registry.yaml: attributes` (the ten attributes and their scale);
+`engine/season/rosters.yaml: verb_capability`, `vocation_attribute` and `lifepath_templates` (skills as
+vocations, their base attribute, who starts with them); `rosters.yaml: arms_kinds` (equipment). The
+technique table (`ABILITIES`) and the tradition table (`TRADITIONS`, `ADJACENT`) should move from
+module code to that same authoring surface, composed host-side into `lever` and `skill` slot values;
+the module keeps the lever names, the clamp and the mathematics. Interface, stated for the merge:
+`PersonalCombatInput` carries per party `attributes`, `faculties`, `skills`, `levers`, `temper`,
+`kits`; nothing else about a character crosses.
+
+**(d) The RPG axioms combat implements, in the tradition's ordinary words, and what it lacks.**
+
+Implemented: attribute-and-skill dice pools with a floor; an opposed difficulty derived from the
+defender's skill; four degrees of success with a critical tail; a wound track whose length comes from
+Endurance, with wound penalties as difficulty and never as lost dice; a fatigue economy; Strength
+requirements for weapon and armour (encumbrance); a damage-type against armour-type matrix; reach and
+weapon speed; initiative that is won and lost in play; stagger as a morale-like state; advancement by
+use and by training; schools that gate techniques, with ranks of investment; permanent injury as a
+lowered ceiling.
+
+Lacking or contradicting what a designer would expect: (1) attribute **or** skill, whichever is
+larger, rather than attribute plus skill (§11 item 2); (2) one number buys both one's dice and the
+difficulty one presents; (3) a single `arms` skill for every weapon, so no weapon proficiency and no
+specialisation; (4) no untrained penalty distinct from the default pool; (5) a skill cannot be learnt
+by doing, only raised once held; (6) no named traits or flaws, and no named injuries; (7) advantage
+enters as summed σ terms, never as the named levels the dice engine defines (minor, moderate, strong,
+major), so odds are not legible in the tradition's terms; (8) no attribute caps by ancestry or age;
+(9) a skill does not cap the technique rank it supports; (10) the tradition's rule that a capability
+may gate an attempt is refused by Layer 1 ("gates nothing"), which a designer will trip on.
+
+**(e) Proposals, ordered.** P4 (the slot interface, the inventory, the unarmed record, seeding) →
+P2 Part B (the record's new fields, one door) → P5 (the approach as the per-phase use of temperament and
+levers). No capability system is added by any of them.
+
+## 15. NPCs and the chooser, for this subsystem
+
+The intent for NPCs and the chooser is CHAR's to state (`audits/02_CHAR_audit.md`, its statement of
+that intent, which was being written when this section was; cited by name, not by line). Against it:
+
+- **(a) What combat needs an NPC to decide.** Whether to fight, challenge, accept or capture (the
+  chooser's, through `opening_set` and the score); under what stakes (a computed `challenge` carries no
+  payload, so every NPC duel is `blood`: no NPC chooses his terms); his approach each phase; whether to
+  concede, withdraw or press; whether to accept a yield; what to do with a man who has yielded. On
+  what information: his own ledger and pursuits before the fight; inside it, the view of both parties'
+  wounds. At what budget: one scene act for the fight; nothing inside it.
+- **(b) One interface for player and NPC?** Before the fight, yes: `choose(p, v, s, ask_budget)` is the
+  same call for both (`harness/play_surface.py:41-55`). Inside it, no: only a played person has a
+  decider (F-PC-14).
+- **(c) NPC rules hard-coded in the subsystem.** Engage every turn; disposition 4 for everyone; yield
+  at half Health for everyone under `yield` terms; every yield accepted; never withdraw. Each is a
+  rule about what a person does, living in module or seam code where the chooser cannot reach it. The
+  engine's within-beat picks (use-mode, half-sword form, defence mode) are resolution, not decisions,
+  and stay.
+- **(d) What makes an NPC characterful here, and legible afterwards.** A temperament that reaches the
+  fight as his approach; a concession point that depends on who he is and what is at stake; a kit and
+  training that are his own (F-PC-02). Legible: an `approach` event per round naming what he saw, the
+  ending on the band's Event, and the decisive beat (P2), so a telling can say "he pressed a wounded
+  man and was cut down on the riposte".
+- **(e) Missing, as proposals.** P5 §4 (per-party deciders; the chooser owns the NPC's; `normal` until
+  CHAR supplies temperament; the concession threshold as a per-party input) and P4 (the inputs). The
+  disagreement to name: the quarantined `videogame_mode_spec.md` assigns NPC decisions to a priority
+  tree; the built chooser is a scored softmax (`decision/choose.py`). The built one governs.
+
+## 16. Design descriptions and the surviving audit corpus: what was read, and what it changed
+
+Intent only; code governs (CLAUDE.md §0.05). Read **in full**:
+`.designs/systems/_architecture/reference/auto_manual_resolution_duality_v1.md` (to its §6);
+`.designs/systems/combat/reference/scene_combat_design_v1.md` (to the outnumber lever). Read **in
+part** (heads, or searched for the duel and grid intent): `videogame_mode_spec.md`;
+`.audit/2026-07-24-combat-four-dimension-audit/combat_four_dimension_audit_index.md` (its roster to
+F12); `.audit/2026-07-23-combat-engine-wiring-audit/wiring_audit_v1.md` (its section map and its dead
+and inert lists). **Not read:** the other eleven files under `.designs/systems/combat/`, the other
+fifteen cross-cutting descriptions, and the remaining eight combat entries under `.audit/`. This lane
+had exhausted its reading capacity on the code, the register, the plan and the instruments before the
+direction to read these arrived; a reader with a fresh context should take them.
+
+What the reading changed:
+
+- The duality doctrine supplies the test F-PC-05 and F-PC-14 now cite (played and auto-resolved must
+  agree in expectation) and P5's step 4 gate.
+- The WS-7 scene envelope confirms P5's shape (an outer loop over `engagement`, never a fork) and
+  supplies its one difference (state held by the host as a record).
+- `videogame_mode_spec.md`'s "no grid; zones" is recorded as a conflict with the stated intent (P5 §6).
+- Old audit findings re-verified against the code before any reliance: `core.effective_ob`,
+  `Combatant.ready`, `traditions.profile`, `CHOKE_BIND_K` and the unread `CFG` keys are gone, each
+  with its removal note at the site (`core.py:59-61`, `combatant.py:154-156`, `traditions.py:58-61`,
+  `config.py:130`); `ability_primitives.kit`, listed as an orphan, now has a caller
+  (`ability_primitives.py:180`). One finding of that corpus is still open in the code and is carried
+  as R-PC-21 (the tempo penalty's flat top). Nothing else from `.audit/` is relied on.
