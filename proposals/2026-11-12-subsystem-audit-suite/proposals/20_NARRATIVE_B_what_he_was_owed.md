@@ -107,7 +107,11 @@ so an unpaid oath can help clear the betrayal band exactly as a deed can. One fu
 
 ## The gate that shows it worked (execution artifacts)
 
-Seeds 0, 1, 2, six seasons (the shipped terms are four), `PYTHONHASHSEED=0`, with proposal C live:
+Two worlds, because the shipped realm cannot yet show it (its four built oaths carry no term, and the
+oaths sworn in play go to a seat nobody holds, audit E-N14): **(i)** a planted realm of three held
+seats, each with four sworn persons on a one-season term, half of them paid (gates 2 to 4 are read here
+first, and it is the falsifier's world); **(ii)** `build_realm`, seeds 0, 1, 2, six seasons (the shipped
+terms are four), once in-play oaths reach held seats. `PYTHONHASHSEED=0`, proposal C live in both:
 
 1. Control: `dues_valence 0` reproduces the base hashes.
 2. At `dues_valence 2`: persons with `dues_unmet(p, x) > 0` for some `x`: more than zero at every seed;

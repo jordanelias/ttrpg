@@ -8,7 +8,7 @@ to four of them a reading their own gates do not take, and writes one small cont
 
 ## What it changes in `engine/season/` at runtime
 
-By itself: the `home:` of a handful of `npcs.yaml` rows (§3; a declared mover of every world hash, as
+By itself: the `home:` of five `npcs.yaml` rows (§3; a declared mover of every world hash, as
 residence is build state). Everything else here is ordering and gate text for other proposals.
 
 ## 1. The batches, in order, and why in that order
@@ -64,42 +64,57 @@ challenges issued.
 
 ## 3. One content repair: where the seat-holders live
 
-**Problem.** `engine/season/npcs.yaml` authors each cast row's `home:`. Read at build: the King's is
-`b_s_002_cottage` (`npcs.yaml:186`; probe `king_0.out`); F-PES-FA-03 reads the Duchess of Hafenmark at
-`b_s_001_court` in the Crown's territory, the Duke of Varfell at an inn there, the Confessor in a market
-there, and 18 of 34 seat-holders off their seat's ground. `16_PESSIMIST_FA_C_under_the_seat` makes
-governance stop depending on the home and says the homes themselves are *"WR's and CHAR's, cross-listed"*.
-Nobody holds them.
+**Problem.** `engine/season/npcs.yaml` carries each cast row's `home:`. Read from the file (this lane):
+
+| person | `home:` | `institution:` |
+|---|---|---|
+| the King (NPC-020) | `b_s_002_cottage` | null |
+| the Queen (NPC-032) | `b_s_004_inn` | null |
+| the Prince, the Princess (NPC-031, -030) | `b_s_001_court` | court |
+| the Duchess of Hafenmark (NPC-050) | `b_s_001_court` | Crown |
+| the Duke of Varfell (NPC-052) | `b_s_003_inn` | null |
+| the Confessor (NPC-021) | `b_s_003_market` | null |
+| the Archbishop's Representative (NPC-034) | `b_s_036_cathedral` | Church |
+
+The King lives in a cottage in one town, the Queen at an inn in another, and their children at court in
+a third. The four heads whose row has `institution: null` are the four housed in a cottage, an inn or a
+market, so the home appears to follow the institution and the realm's heads have none
+`[UNVERIFIED: how the file's homes were produced; the file is the owner either way]`. F-PES-FA-03 reads
+18 of 34 seat-holders off their seat's ground. `16_PESSIMIST_FA_C_under_the_seat` makes governance stop
+depending on the home and says the homes themselves are *"WR's and CHAR's, cross-listed"*. Nobody holds
+them. It bears on the King's death directly: he is refused seventeen captures mostly because his captors
+are not where he sleeps, which is an accident of the housing and not a protection.
 
 **Decision** (ladder step 5; content, so each value is `[ASSUMPTION; medium; Jordan to correct]`):
 
-1. A holder of a seat anchored on the realm rung lives in a building of the court kind in the capital
-   settlement. The King, the Queen, the Prince and the Princess move to `b_s_001_court` (the building
-   the Duchess is recorded at).
+1. A holder of a seat anchored on the realm rung lives at the court. The King and the Queen move to
+   `b_s_001_court`, where the Prince and the Princess already are.
 2. A holder of a ducal seat lives in his duchy's own seat settlement, in its largest dwelling. The
    Duchess of Hafenmark and the Duke of Varfell move home. Whether either keeps a second residence at
    court is not expressible today (one `reside` edge) and is not added.
-3. The Confessor lives at `b_s_036_cathedral` (the building his representative's row names).
+3. The Confessor lives at `b_s_036_cathedral`, where his representative's row already is.
 4. Every other row is left. A councillor who lives at court and sits on a duchy's council is ordinary.
 
-**Owner and edit.** `engine/season/npcs.yaml`, the `home:` key of those seven rows. The two ducal
+**Owner and edit.** `engine/season/npcs.yaml`, the `home:` key of those five rows. The two ducal
 buildings are named at landing from `build_realm(0)`'s settlements (the largest dwelling Site of the
 territory that PES-FA-A edit 2 names as each duchy's seat) `[UNVERIFIED: the ids; not read here]`.
 Nothing in code changes. A declared mover of every world hash and of every seeded pin: co-location
-decides who witnesses whom, so this is a large mover for seven lines and lands in the batch-8 commit
-that re-records, never alone.
+decides who witnesses whom, so this is a large mover for five lines. **It lands after batch 1, never
+before:** today the King's distance from his officers is what refuses most of their captures, and
+housing him among them first would kill him sooner.
 
 **Gate.** `python -m engine.season.harness.populated` builds; a probe prints, for every seat-hold,
 whether the holder's home lies under the seat's rung (`state/gate.py::purview_reaches` over
-`world_q.home_of`): the realm seats and the three named heads read true; the count off-ground falls from
-18 by at least seven. The capacity of `b_s_001_court` is read first (`world_q.capacity`): if the court
-cannot house four more, the edit names a second court building and says so.
+`world_q.home_of`): the three named heads read true and the count off-ground falls from 18 by at least
+three; the King, the Queen, the Prince and the Princess share one building. The capacity of
+`b_s_001_court` is read first (`world_q.capacity`): if the court cannot house two more, the edit names a
+second court building and says so.
 
 **Falsifier.** The probe's count unchanged; or the build refusing a home that is over capacity.
 
 **NERS.** N: a reader meets the King at his court; a spy who watches the court sees the royal family,
 which is what co-location is for. R: where a lord lives is now a fact a player can use (who is near him,
-who guards him: `guard_weight` reads the principal's own place). S: no rule added. E, last: seven values.
+who guards him: `guard_weight` reads the principal's own place). S: no rule added. E, last: five values.
 
 ## Cost class
 

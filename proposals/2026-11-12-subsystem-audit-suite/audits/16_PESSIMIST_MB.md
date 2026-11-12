@@ -96,7 +96,7 @@ stochastic rout point between 15% and 30% losses; (6) contention ties.
 |---|---|---|
 | **P-iv graded, recoverable** | `a_deg = compute_degree(a_net, max(1, b_net))` and the mirror (`orchestration.resolve_engagements`): each side's net is graded against the **other side's roll** as its obstacle, so at most one side reaches Success. Casualties are `K_LINEAR x lin x max(0, DAMAGE_BY_DEGREE[deg](power) - dr)` with `Failure 0, Partial 1, Success p, Overwhelming 1 + p` and a default `dr` of 1: **Failure and Partial both deal nothing.** A four-band ladder with two live bands, on the irreversible outcome | `t2.py`: degree pairs over one field (A Failure, B Overwhelming) 14, (Failure, Success) 1, (Failure, Partial) 1; A's casualties dealt: 0 |
 | **P-iii bounded, monotonic** | the integer subtraction has reachable zeros: power 1 (levy) deals nothing on a Success; any power up to 3 deals nothing in any band against `dr` 4 (walls). A discrete boundary jumping a continuous input, to certainty | `p10_edges.py`: 3,000 light infantry, spearmen or archers against 300 levy behind walls, the defender loses nobody in 60 of 60, each; levy 600 v levy 600 on open ground, the defender loses nobody in 48 of 60 |
-| **P-ii uniform leverage** | the pool is `eff_power x (troops / 100) x 0.8`: from 1 die (under 60 men) to 320 (10,000). A sigma modifier moves the net by `softcap x 0.8 x sqrt(pool)`, a headcount edge by `0.4 x pool difference`: the worth of morale, fatigue, stance and shock against numbers falls as `1 / sqrt(pool)`. CR-12's design names this as the fourth route (first audit §5.3) | by construction, algebra shown |
+| **P-ii uniform leverage** | the pool is `eff_power x (troops / 100) x 0.8`, less a discipline term: 1 die for a body of power 4 under some sixty to eighty men, 320 at 10,000. A sigma modifier moves the net by `softcap x 0.8 x sqrt(pool)`, a headcount edge by `0.4 x pool difference`: the worth of morale, fatigue, stance and shock against numbers falls as `1 / sqrt(pool)`. CR-12's design names this as the fourth route (first audit §5.3) | by construction, algebra shown |
 | **P-i legible odds** | no caller can state a field's odds: `field_estimate` exists (first audit §1.1) and cannot see the friction draw, which decides | §2.3 link 4 |
 | Phase 4, loops | casualties → smaller pool → lower net → the other side's degree rises and one's own falls to Failure → more casualties, none dealt. Undamped; bounded only by the rout point. This loop is the cliff of §2.3's OFF column and the collapse of §2.3's partition table | `p1_size.py` OFF rows |
 | Phase 5, intent | the pair rule's one-sidedness is not a documented intent: the code's own citation for the damage rule reads "Damage is simultaneous. Both sides deal and receive damage" (PP-233, at `battle_loop.py`'s simultaneous-HP block). `[INTENT UNDETERMINED]` for the opposed-degree gate | |
@@ -113,8 +113,9 @@ convention for one quantity); P-i on E-LEGIBILITY.
   and certainty at the integer edges (§1.3). **Fails on every clause but one** (a player can feel
   important in a duel of two blocks).
 - **S.** Pauses correctly: a field that is undecided at the one engagement turn a season fights is
-  given a winner by arithmetic (first audit F-MB-04); the share undecided is 4% for two season-density
-  blocks, 28% at three ranks, 58 to 65% in the flank arms, 33% at 2,400 against 12,000. Consistent in
+  given a winner by arithmetic (first audit F-MB-04); under the shipped friction the share undecided is
+  4% for two season-density blocks (13 of 300), 10% at three ranks, 28 to 80% in the flank arms and 29
+  to 33% at 2,400 against 12,000. Consistent in
   methodology: two stamina ladders; walls as armour where the other two terrain rows are dice
   (`terrain.py`: UPHILL and RIVER_CROSSING go onto `terrain_off_d` / `terrain_def_d`, WALLS onto `dr`);
   the opposed-roll obstacle where the tree's rule for an obstacle is the opponent's score halved plus
