@@ -1,6 +1,6 @@
 # THE SEASON LOOP — A HOLONIC ARCHITECTURE, AND THE GUIDE TO BUILDING IT IN GODOT
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`. ⚠ AMENDED 2026-11-12 (Jordan-directed, A-97, ED-IN-0358): the rulings' owed amendments, appended in place so no line moves — L1-A92 (§2 T2, §9.3) · L1-A12 (§11.1) · L1-A9 (§27.1, §32 item 3) · L1-A64 (§27.1, §33) · L1-A96 (§34.1) · L1-A72 (§39.3) · L1-A3 (§39.4) · L1-A4 (§44.3). ⚠ AMENDED 2026-11-12 (Jordan, A-102; A-97, ED-IN-0359): L1-A102 (§45, a pointer to `04` §A.2's tenth module, `boot/`; §47, the `World` is constructed by `boot/`).**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`. ⚠ AMENDED 2026-11-12 (Jordan-directed, A-97, ED-IN-0358): the rulings' owed amendments, appended in place so no line moves — L1-A92 (§2 T2, §9.3) · L1-A12 (§11.1) · L1-A9 (§27.1, §32 item 3) · L1-A64 (§27.1, §33) · L1-A96 (§34.1) · L1-A72 (§39.3) · L1-A3 (§39.4) · L1-A4 (§44.3). ⚠ AMENDED 2026-11-12 (Jordan, A-102; A-97, ED-IN-0359): L1-A102 (§45, a pointer to `04` §A.2's tenth module, `boot/`; §47, the `World` is constructed by `boot/`). ⚠ AMENDED 2026-11-12 (Jordan, A-104; A-97, ED-IN-0360): L1-A104 (§26, `choose`'s bound; §26.3, "like any act": a scene of management orders costs 0, `04` §B.9).**
 ## Under `CLAUDE.md` §0.05 this document is **REFERENCE, never mechanism.** Under §0.2 **nothing in it
 ## runs.** Part X says what would make each claim done and which steps cannot be satisfied by writing.
 
@@ -879,7 +879,7 @@ a licensed clock, so this is sanctioned world-driving, not a new exception.**
 ## §26 · DELIBERATE — a map, not a barrier
 
 ```
-choose : (Person, View, Sensation) -> Act[]          -- ordered, bounded by budget(person, view)
+choose : (Person, View, Sensation) -> Act[]          -- ordered, bounded by budget(person, view)  ⚠ AMENDED 2026-11-12 (Jordan, A-104; A-97, node L1-A104): the bound is the summed cost of the scenes chosen; a scene of management orders costs 0 (`04` §B.9, PART D row 51)
 budget : (Person, View)            -> int            -- a QUERY, never a field
 sense  : (Person, frozen_world)    -> Sensation      -- the only bridge from world truth into choose
 ```
@@ -936,7 +936,7 @@ copyist's.**
 >   the pricing. (An earlier revision of this document proposed *"a refused petition costs standing
 >   with the venue"* as a necessary gate. **It is not necessary.** It may still be good design — a
 >   venue that remembers being wasted is expressible through ordinary stance and claims — but it is
->   now optional colour, not a fix.)
+>   now optional colour, not a fix.) ⚠ AMENDED 2026-11-12 (Jordan, A-104; A-97, node L1-A104): "like any act" no longer holds of a management order, which is not a scene and costs no budget, though it may open scenes after; a petition is priced as before (`04` §B.9, PART D row 51).
 > - **§54.1's close rule matters MORE, not less.** With spray allowed, several live petitions on one
 >   matter is the normal case, so the rule that closes them must be right: **petitions never close each
 >   other; a matter closes at RESOLVE by scarcity and at CALENDAR by lapse.**
