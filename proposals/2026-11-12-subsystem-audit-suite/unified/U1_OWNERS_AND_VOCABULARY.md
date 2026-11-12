@@ -4,7 +4,7 @@
 
 ## Read at: the working tree of `main`, 2026-11-12, plus implementation lane A's two unmerged commits (`e5d6ab9`, `c5bf18a`, read with `git show`). Lane: U1 (Opus), wave 2 of `unified/UNIFICATION_RUN.md`.
 
-Reconciled: 2026-11-12, U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*).
+Reconciled: 2026-11-12, U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*). A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/work/A98_SWEEP.md`): D-U1-11p and D-U1-11q marked superseded; ledger C-02 and C-12 restated for the one kind `skill` and the trait roster; "talent", "training" (the rank), "trained score" and "capability" in prose → attribute, skill score and skill.
 
 **Inputs read.** `CLAUDE.md`; `UNIFICATION_BRIEF.md`; `unified/UNIFICATION_RUN.md`; `unified/DECISIONS_ANSWERED.md`
 (A-1 to A-91, governing); `unified/OWED_TO_UNIFICATION.md`; `unified/U5_CONFLICTS_U5a.md`, `unified/U5_CONFLICTS_U5c.md`;
@@ -146,9 +146,9 @@ Three facts, three owners (one each); lane A's interim rosters retire into them 
 
 | fact | one owner | lane A's interim (branch) | what happens to it |
 |---|---|---|---|
-| a person's **training** (rank per capability) | the cast row's `capabilities: {<id>: <rank>}` in `references/npc_registry.yaml` (CORE Edit 5, P), bundles in `rosters.yaml: tables.lifepath_templates` (T); read by `data/cast.py::capability_of` (T) | none | — |
+| a person's **skill score** (rank per skill; A-98) | the cast row's `capabilities: {<id>: <rank>}` in `references/npc_registry.yaml` (CORE Edit 5, P), bundles in `rosters.yaml: tables.lifepath_templates` (T); read by `data/cast.py::capability_of` (T) | none | — |
 | a non-holder's **untrained score** | `Fixtures.pool_default` (T, H-126) | `rosters.yaml: unauthored_attributes` values 2 (B) equal it by construction | see next row |
-| a person's **talent** (attribute, 1–7) | the cast row's `stats:` (`npc_registry.yaml`, T), held on `Person.attributes`; an unauthored attribute is **not stored**: the roll reads the scale's mid-point, derived from `descriptors.ATTRIBUTE_FLOOR`/`ATTRIBUTE_CEILING` (T), zero levels either way | `unauthored_attributes` (B) seats 2 on every key under every person (`build_realm(cast_attributes=True)`) | **retired at CAP Part B**, when the attribute leaves the pool (A-7). Until then it is the interim that lets the attribute-as-pool code (CR-20) read a score for everybody; its values must equal `pool_default` and say so |
+| a person's **attribute** (1–7; a skill's governing attribute; A-98) | the cast row's `stats:` (`npc_registry.yaml`, T), held on `Person.attributes`; an unauthored attribute is **not stored**: the roll reads the scale's mid-point, derived from `descriptors.ATTRIBUTE_FLOOR`/`ATTRIBUTE_CEILING` (T), zero levels either way | `unauthored_attributes` (B) seats 2 on every key under every person (`build_realm(cast_attributes=True)`) | **retired at CAP Part B**, when the attribute leaves the pool (A-7). Until then it is the interim that lets the attribute-as-pool code (CR-20) read a score for everybody; its values must equal `pool_default` and say so |
 | a task's **difficulty** | a `difficulty:` cell on the verb's own row (`engine/season/verb_table.yaml`, P), naming a member of the closed roster `rosters.yaml: difficulty_levels` (`plain routine demanding hard`, P); the size of each level is the fixture table `Fixtures.difficulty_ob` (P, NUMBER row); required on every rolled row, refused at load where absent | `rosters.yaml: task_difficulty` (B), `verb: number`, closed over the social roll's verbs | **retired at OBS §4 step 1a**: each of its nine rows becomes `difficulty: routine` (the control arm C-04 orders: routine 1 + the stand-in 1.0 = today's 2.0 for an inquiry; routine 1 + 2/2 = 2.0 against an ordinary person) |
 | the **content** (who is how good; which task is harder) | Jordan's and the CHAR content pass (CAP Part C) | lane A ships every person at 2 and every task at a calibration | the suite assumes the defaults until authored; charge 3 ("Ob always 2 is wrong") stays **not met in the shipped realm** until Part C (OWED §E) |
 
@@ -166,7 +166,7 @@ re-pin. **(U3 defers)** on the order: lane A's branch is the base of any v12 bat
 `engine/season/tests/test_b11a_scores_and_obstacle.py` (B) composes the same obstacles before and after. (2) CAP
 Part B deletes `rosters.yaml: unauthored_attributes`, `data/rosters.py::_load_unauthored_attributes` and the
 `cast_attributes` seating, and adds `pool.py::talent` returning `None` for an unauthored key (read as mid-point);
-falsifier: an unauthored person's talent levels are non-zero.
+falsifier: an unauthored person's attribute levels are non-zero.
 
 ### D-U1-05 · The `read_to_addressee` witness roster: its home and its closed-set refusal (OWED §E (3))
 
@@ -319,8 +319,8 @@ retirement, not edited by the suite; the two agree today and no game path reads 
 | D-U1-11m | `person_q.resolve` (CHAR, proposed) vs ratified `faction_q.resolve` | the person reader is `person_q.decisiveness` | 5 (R2 §4) |
 | D-U1-11n | the GO host-side reading `receipt(w, act_of, pid, since)` / `ReceiptRow` vs Layer 1 `Receipt` | renamed `act_result` / `ResultRow` | 5 (Layer 1 owns `Receipt`, `04` §B.9) |
 | D-U1-11o | `subformation`: A-59's "each unit within subformation" vs the MB designer surface (a subformation is a unit's arrangement) vs code `Subformation` (the unit spec) | the code meaning stands (a row of `subformations` is a unit, A-2); a unit's cell arrangement is its `formation` (`ranks, files, shape`); A-59's grouping above units is a **formation post group** (`front, rear, left, right, reserve`); prose never says "subformation" for a grouping | 4 (the Record key `subformations`, T in `armyrecord.KEYS`). **SUPERSEDED 2026-11-12** by A-94 and `MB_LEXICON_part3.md` D-1: "subformation" is Jordan's word for the units at one post (the "formation post group" is retired); the code names are renamed by §4 L1-1, L1-2 |
-| D-U1-11p | `prowess`: a unit's quality (A-59, `27_MB_B`) vs a person's training (29) | a **unit's** quality only; a person's is "training" | 5 |
-| D-U1-11q | `aptitude`: a capability kind (U1 §2) vs the attribute (29) | the capability kind only; the attribute is "talent" | 5 |
+| D-U1-11p | `prowess`: a unit's quality (A-59, `27_MB_B`) vs a person's training (29) | **SUPERSEDED (A-98 (3), 2026-11-12).** Prowess stays a **unit's** quality only; a person's skill at arms is his **martial skill** (his skill score in the skills used in fighting), never "training" (which names only the act of learning) | Jordan (A-98) |
+| D-U1-11q | `aptitude`: a capability kind (U1 §2) vs the attribute (29) | **SUPERSEDED (A-98 (1), (4), 2026-11-12).** An aptitude **is** an attribute; *aptitude* and *talent* are retired as suite words (say **attribute**, or **governing attribute** for the one a skill names). The capability kind `aptitude` is gone: the `kinds:` roster collapses to `skill`, and `insight` is a skill whose use rows give no dice (U1 architecture §2) | Jordan (A-98) |
 | D-U1-11r | the seat-row key list (A-12, A-13, `term`, `vocation`, dignity, …) | one schema, owned by `engine/season/offices.yaml` rows and `state/carriers.py::Office`, one loader; keys as listed in §2 row S-24; each key lands with its proposal; a key no reader reads is not added (ID-13) | 4 |
 
 ---
@@ -411,7 +411,7 @@ copy exists).
 | # | fact | owner | consumers | competing home → decision (step) | removal edit |
 |---|---|---|---|---|---|
 | C-01 | what a capability is | `references/descriptor_registry.yaml: capabilities` (P; file T) → `descriptors.json` → `descriptors.CAPABILITIES` (P) | `data/cast.py`, `pool.py`, the port | `rosters.yaml: tables.capabilities` (DICE map §B); `verb_capability`/`vocation_attribute` (FA body, SE) (4, 5; D-U1-07) | CAP A1/A3 |
-| C-02 | closed sets of the definition | `capabilities.kinds [skill, aptitude, trait]`, `grows_by [train, practice, use, fixed]`, `untrained [default, none]` (P) | the exporter's validator | CORE Edit 1 body (`attribute` kind; `growth_rules`; `untrained_rules` with `attribute`) stale (1, A-7) | CORE rewrite lane: body to the head |
+| C-02 | closed sets of the definition | `capabilities.kinds [skill]` (A-98 (4): the roster collapses to one kind; was `[skill, aptitude, trait]`), `grows_by [train, practice, use]` (`fixed` leaves with the traits), `untrained [default, none]` (P) | the exporter's validator | CORE Edit 1 body (`attribute` kind; `growth_rules`; `untrained_rules` with `attribute`) stale (1, A-7) | CORE rewrite lane: body to the head |
 | C-03 | the held-rank scale key | `scale: [floor, ceiling]` (P) | `data/cast.py`, `raised_capability` | CORE's `{floor:, ceiling:}` shape (5: one shape) | CORE rewrite lane |
 | C-04 | which capability a verb tests | `verb_table.yaml` row `capability:` (P) | derived `VERB_CAPABILITY` (`data/verbs.py`) | `rosters.yaml: verb_capability` (T; B adds three) (4, D-U1-07) | CAP A2/A3 deletes the roster and moves lane A's values |
 | C-05 | the attribute a capability starts from / is opposed by | definition row `base`, `opposed_by` (P) | the `edge` reader (talent) | `rosters.yaml: vocation_attribute` (T) incl. `opposed_by: {}` (4) | CAP A3 deletes it |
@@ -421,7 +421,7 @@ copy exists).
 | C-09 | the verb → capability values | `interrogate: inquiry`, `lie: deception`, `determine: law`, `arrest: arms`, `march: none` (U1 §5) | — | lane A `determine: argue` (B) is the interim until `law`'s row exists | CAP A2 |
 | C-10 | social rows | `deception`, `law`, `insight` | SC | `rhetoric` (D-U1-03) | SC rewrite lane |
 | C-11 | `command` | definition row (P, `27_MB_A` §1) | the `field` site, MILITARY_D's army verbs | `MassBattleInput.command` literal 4; `derive_command` (5, D-U1-11g) | MB lane |
-| C-12 | CHAR traits | `moved_by_evidence`, `moved_by_consequence`, `moved_by_authority`, `moved_by_solidarity` (P), seated from `npc_registry.yaml: resonant_style` (T) | `told_claim_credit`'s `edge` rows | — | — |
+| C-12 | CHAR traits (not skills, A-98 (4) `[ASSUMPTION]`) | the trait roster `references/descriptor_registry.yaml: traits` (P, U1 architecture §2a): `moved_by_evidence`, `moved_by_consequence`, `moved_by_authority`, `moved_by_solidarity`, seated from `npc_registry.yaml: resonant_style` (T) | `told_claim_credit`'s `edge` rows | the skill table's `kind: trait` rows (retired with the `kinds:` roster) | U1 architecture §2a |
 | C-13 | `healing` | definition row (P, PC's `tend`) | `tend`'s task site | — | — |
 | C-14 | the Thread gate | `practitioner_stats: prac.thread_sensitivity` (T); fixture `thread_sensitivity_gate` (T) | `own_state_gate`, `told_retain` via `capability_admits` | a second literal read (W3) (1, A-11; C-U5a-20) | — |
 | C-15 | who holds what | cast rows `stats:` (T), `capabilities:` (P), `lifepath:` (T); `tables.lifepath_templates` (T) | `data/cast.py` | `unauthored_attributes` (B) (D-U1-04) | D-U1-04 |

@@ -8,6 +8,8 @@ Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.
 
 **Lands in batch:** B05 (commit 1 at OBS §4 step 3; commit 2 at step 5). **Depends on:** `U5c_SC_one_obstacle_form.md` (B05), `13_SC_calibration.md` (its test file first, B05), `02_CHAR_scar_cap_and_regard_unit.md` item 2 (the stance unit, B10; at control `regard_step` 0 the term reads nothing), U1 §11 U1-D (the seat row's `modifier:` column; T4's values ride commit 2).
 
+Reconciled: 2026-11-12, A-97 (`unified/work/L1_APPLIED.md` §`L1-A12`, `unified/work/L1_PROPAGATION.md`): the "`04` §B.7 amendment text is owed, not applied" sentence of the seat-`modifier` entry is rewritten to the applied state (`L1-A12`: `04:331`, `:351`, row 33 `:1062`). The bench die (`minor` on the bench seats) is no longer held back by Layer 1; its null control is the table's own control arm.
+
 ## Status: PROPOSED
 
 Written by the contest-interrogation lane (`audits/13_SC_contest_interrogation.md` §4–§5, §8 R-1..R-10).
@@ -134,7 +136,9 @@ a designer edits, a first value with its basis, and the sweep that would set it.
   once in the level unit at OBS §4 step 5); control: no seat row carries one. No fixture `standing_dice`
   and no pool addend are created; `judging_set(w, room)` is not read (one reader: `Act.via`). A seat held
   above the actor's by the person acted on stands against the act as `rank_gap` (OBS §2 member 6). The
-  `04` §B.7 amendment text is owed (D-U1-01's draft), not applied.
+  `04` §B.7 amendment (D-U1-01's draft, A-12) is APPLIED (2026-11-12, A-97, node `L1-A12`: `Seat` gains
+  `modifier?`, `04:331`; invariant `:351`; PART D row 33, `:1062`), so a non-null `modifier:` conforms to
+  Layer 1; the control "no seat row carries one" stays as this table's control arm, not as a Layer 1 gate.
 - **Falsifier**: a seat-holder's `speak` before his own bench whose `office` level equals the same
   person's before a foreign bench, his seat row carrying `modifier: minor`; or a seat found in his pool or
   his opposition.

@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — applied `unified/U3_CONFLICT_LEDGER.md` C3-C9 (§4 edit 1 replaced: the fold declines resolver-side, formation reads the party's own ledger; text of `unified/work/R4_READ.md` 7b.1), C3-C11 (the failed draw's durable write, A-81), C3-R1 (18-A's loader edit is the dependency), the U3 batch split (§4.1 rows 28 to 31), R4 §2 on `succeed` (A-19: a docketed rival opposite), U1 D-U1-01 (`rank_gap` is the against-half of the seat's two channels) and D-U1-11i (`graded_tasks`); R4 7b.0 implementation block added. No design change beyond those rows. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "patient" → "counterparty" (glossary *party*).
 
+Reconciled: 2026-11-12, A-97 (`unified/work/L1_APPLIED.md` §`L1-A12`, `unified/work/L1_PROPAGATION.md`): the §B.7 conformance note in the conformance paragraph is rewritten to the applied state (`L1-A12`: `04:331`, `:351`, row 33 `:1062`).
+
 ## Status: PROPOSED (written by the U5c closure lane; a plan for a later implementation lane, executed by nobody here; not ratified by being written, `CLAUDE.md` §2)
 
 Lands in batch: B07 for §1, §2 and §4 (`unified/U3_DEPENDENCY_ORDER.md` §3.1); §3 in B09 with `16_PESSIMIST_CORE_a_refusal_is_remembered.md` (U3 §4.1 row 28); §6 and the `audience_of` readers that name `present_persons` / `holders_named` in B11 after `08_FI_01`/`08_FI_02` build them (rows 29, 30); the hearing's `a verdict` row in B24 with `05_SC_playable_hearing_B.md` (row 31).
@@ -240,8 +242,9 @@ reading (a draw with nobody opposite) is withdrawn.
 does not): conforms; MECHANICAL at load. §2: `04` §C.5 (the seam returns a Margin; a prize names a
 subsystem) and PART E step 10 (a misspelled manifest row fails at boot): conforms; the audience function
 reads `World` on the host side of the seam, which the provider row allows, and the module reads a typed
-record. A-12's amendment to `04` §B.7 is owed by the unification stage; `rank_gap` is written here under
-that answer and is not conformant to the row as it stands today, which is said rather than hidden. §3:
+record. A-12's amendment to `04` §B.7 is APPLIED (2026-11-12, A-97, node `L1-A12`: `04:331`, `:351`, PART D row 33
+`:1062`); `rank_gap` conforms to row 33 as it now stands (a seat above the actor's stands against an act only as
+the obstacle term `rank_gap`). §3:
 the deposit is WITNESS's INTERIOR write into the actor's own ledger (`04` §A.2 `loop/witness`); the reader
 opens the holder's ledger only (§B.2). §4: no new gate basis (§C.2). Grades: §1, §2 MECHANICAL; §3, §4
 CONVENTION until their gates' tests exist.

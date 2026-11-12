@@ -1,8 +1,10 @@
 # INST-SYN-A — one institutional kit: one registry, one record-kind scheme, one seat row, one obstacle-term list, one fixture style, one arrangement vocabulary
 
-Reconciled: 2026-11-12, U5d closure — folded Jordan's answers (`unified/DECISIONS_ANSWERED.md`) into the kit's five meetings with Layer 1 (audit §8.2). **L-1 / A-12**: a seat may carry a modifier, so "no seat-row key of the kit is read by any roll" is no longer a constraint; the kit may add an office modifier, entered as a named term through the one obstacle composer (`U5c_SC_one_obstacle_form.md`) so that office and regard are not counted twice, and the dignity "precedence" step withdrawn by X-19 may be re-entered in that form by a later content edit (none is added here). **L-2 / A-13**: the three optional seat facts (the clerks an order passes, paper-hands, the exit audit) are ruled; a seat declaring none behaves as today; the Layer 1 seat-list text is owed, not applied. **L-3 / A-14**: a vote is a draw on the voter inside the presiding person's act; the ballot stays SC's (X-15). **L-5 / A-10**: institutions are the loop's own verbs and data; no module. **A-21 / A-22**: X-33's per-form `basis` stands with its two values ruled: a publication (`purview`) reaches everyone on the ground with the news of its issue; an order (`command`) binds the issuing seat's sworn men, the holders of seats it may revoke and the unseated in its land, and a writ to a superior is a petition. **A-41**: no `corvee` form is authored; caste is carried by regard, by the vote weight of `U5d_FA_owed_edits.md` §4 and by the practice table of `U5d_SE_cohort_heavy_moves_and_caste.md`.
+Reconciled: 2026-11-12, U5d closure — folded Jordan's answers (`unified/DECISIONS_ANSWERED.md`) into the kit's five meetings with Layer 1 (audit §8.2). **L-1 / A-12**: a seat may carry a modifier, so "no seat-row key of the kit is read by any roll" is no longer a constraint; the kit may add an office modifier, entered as a named term through the one obstacle composer (`U5c_SC_one_obstacle_form.md`) so that office and regard are not counted twice, and the dignity "precedence" step withdrawn by X-19 may be re-entered in that form by a later content edit (none is added here). **L-2 / A-13**: the three optional seat facts (the clerks an order passes, paper-hands, the exit audit) are ruled; a seat declaring none behaves as today; the Layer 1 seat-list text is APPLIED (2026-11-12, A-97, node `L1-A13`; `04:331`). **L-3 / A-14**: a vote is a draw on the voter inside the presiding person's act; the ballot stays SC's (X-15). **L-5 / A-10**: institutions are the loop's own verbs and data; no module. **A-21 / A-22**: X-33's per-form `basis` stands with its two values ruled: a publication (`purview`) reaches everyone on the ground with the news of its issue; an order (`command`) binds the issuing seat's sworn men, the holders of seats it may revoke and the unseated in its land, and a writ to a superior is a petition. **A-41**: no `corvee` form is authored; caste is carried by regard, by the vote weight of `U5d_FA_owed_edits.md` §4 and by the practice table of `U5d_SE_cohort_heavy_moves_and_caste.md`.
 
 Reconciled: 2026-11-12, wave 3 lane W3-4b — rewritten against A-12, A-13, A-14, A-35, A-36, A-41, A-42, A-56 and the re-grounding plans (`OWED_TO_UNIFICATION.md` §B); applied `R4_READ.md` §1.7 (SYN_A rows), §2 (A-12, A-13 rows), 7b.0, 7b.7; `U1_OWNERS_AND_VOCABULARY.md` D-U1-01/01a (a seat's help is its row's `modifier:` read by the `office` leverage source; a seat above stands against as `rank_gap`), D-U1-11k (`remove` → `distance`), D-U1-11r and S-24 (one seat schema), F-36, F-39; `U3_CONFLICT_LEDGER.md` C3-L9 (no Seat field for unruled keys), C3-C10 (favourable terms are leverage), C3-N31 (form count read by command). Changed: §2, §3, §4 and §6 tables; the "What it changes" list; gates 2 to 4; "What it does not do"; NERS R and E. **Correction of C3-L9 at the tree:** `lot` cannot be a `conferral_bases` value, which is Jordan's closed roster (`rosters.yaml:3042-3056`, `open: false`); it is `tables.selection` under `elected` (VENICE-C) and the fifth value is listed for Jordan. The first `Reconciled:` line's "named term through the one obstacle composer" for an office modifier is superseded by D-U1-01.
+
+Reconciled: 2026-11-12, A-97 (`unified/work/L1_APPLIED.md` §`L1-A12`, §`L1-A13`, `unified/work/L1_PROPAGATION.md`): A-13's Layer 1 seat-list text and A-12's `modifier?` are APPLIED (`04:331`); the "owed, not applied" clauses of the head and of §3 are rewritten, and `dignity` is recorded as not among the applied keys, its clause kept and re-pointed. The J-R4-1 sentence about "the owed A-13 amendment" now says option A needs a further amendment.
 
 ## Status: PROPOSED
 
@@ -231,8 +233,11 @@ reads). A case file's `setup.instruments` (COL-E) is the same row.
 One seat schema (D-U1-11r; S-24), owned by the `offices.yaml` row and `Office`, one loader. A key lands
 only where a ruling licenses a Seat field (`04` §B.7 is STRUCTURAL; C3-L9): `upkeep` is in the ratified
 tuple; `passes_through`, `hand_term`, `audit_at_exit` are A-13's three facts; `modifier` is A-12's
-(D-U1-01a); `dignity` is a seat-row grade that a ruling's amendment text must name (A-12; the owed `04`
-§B.7 text, `OWED_TO_UNIFICATION.md` §A row 2, is U1's draft and is not applied here). Each is folded into
+(D-U1-01a); `dignity` is a seat-row grade that a ruling's amendment text must name. The amendments are
+APPLIED (2026-11-12, A-97): `04:331` now carries `modifier?` (A-12, node `L1-A12`) and `passes_through?`,
+`hand_term?`, `audit_at_exit?` (A-13, node `L1-A13`, "no fourth key"), and **`dignity` is not among them**: no
+applied Layer 1 text names it, so its clause stands as written (it needs a ruling's amendment text before it
+lands as a Seat field; `04` §B.7 is STRUCTURAL). Each is folded into
 the hashed representation only when present (FA-P3's rule, so an unkeyed world's hash does not move).
 `data/rosters.py::_load_offices` (`:152-180`) refuses no unknown row key today (it checks the top level
 and repeated ids only; opened by W3-4b); this edit gives it **one closed key set** over a seat row, the
@@ -254,7 +259,8 @@ of §2, keyed by seat id (the F-12 precedent; PAPACY-B §1). Their loader (`data
 that is no `offices.yaml` row, a `patronage` member off `patronage_bases`, an `eligible_from` that is no
 row id, a `cooling_off` that is not a positive int or names a seat whose row has no `term`, and a
 `selection` value other than `lot` or on a seat whose `conferral` is not `elected`. **For Jordan
-(J-R4-1, kept):** option A widens the owed A-13 amendment to name the three keys as Seat fields and adds
+(J-R4-1, kept):** option A widens the A-13 amendment (applied at `04:331`, which names only `passes_through?`,
+`hand_term?` and `audit_at_exit?`, so a further amendment) to name the three keys as Seat fields and adds
 `lot` to `conferral_bases`; option B, taken, is the tables. A seat that stands above the actor's
 exercised seat enters a roll only as `rank_gap` (OBS member 6), and `regard` reads stance rows only, so
 a seat is never counted twice (D-U1-01).

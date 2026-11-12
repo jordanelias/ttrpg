@@ -1,19 +1,21 @@
 # GO — the draw is a function of its key: no generator, no recorder, no replay
 
-Reconciled: 2026-11-12, U5d closure — folded **A-30**: Jordan chose option A (the draw is a function of its key). The "one question to Jordan" is closed; the Layer 1 row is rewritten by the ruling (text owed, not applied). With A-5 the sampler the key feeds is the one bell-curve sampler. No step changes.
+Reconciled: 2026-11-12, U5d closure — folded **A-30**: Jordan chose option A (the draw is a function of its key). The "one question to Jordan" is closed; the Layer 1 row is rewritten by the ruling (APPLIED, 2026-11-12, A-97, node `L1-A30`). With A-5 the sampler the key feeds is the one bell-curve sampler. No step changes.
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-30: the Status line no longer says
 "returned to Jordan"), §1 (AMBIGUOUS against `04` PART D 35's "no counter": the index `n` is part of the key, so a d10
 pool drawing six or more uniforms draws each under its own key `(H(…), n)` and A-30's "one draw per key" holds — stated
-once at the owner, `11_GO_one_draw_owner.md`'s `Draw` docstring (U6 R-C) — and the row is rewritten by A-30, text owed in
-`OWED_TO_UNIFICATION.md` §A; `04` is not edited), §7/§7b (tests, order, tier); U3 B06, C3-Y10 (co-lands with
+once at the owner, `11_GO_one_draw_owner.md`'s `Draw` docstring (U6 R-C) — and the row is rewritten by A-30 (APPLIED later, A-97,
+node `L1-A30`, `04:1064`)), §7/§7b (tests, order, tier); U3 B06, C3-Y10 (co-lands with
 `11_GO_one_draw_owner.md`: this file's key function is that file's `Draw.u` body), C3-D3 (the keyed draw, B06, before the
 task draw, B07), C3-L3 (no float recorder either: parity by `fmath` vectors); STAGES.md (the v11 workplan rows move to the
 v12 plan). Changed: Status, the edits table's workplan row, the gate's test names.
 
-Reconciled: 2026-11-12, U6 repair lane R-C (`unified/U6_VERDICT_AND_REPAIRS.md` finding 5, A-30): "the per-key index `n` inside one key" reworded above to "the index `n` is part of the key", pointing to the one statement at `11_GO_one_draw_owner.md`. The drafted Layer 1 row text in the edits table ("an index `n` within one key") is owed Layer 1 text and R-A's (finding 3); not edited here.
+Reconciled: 2026-11-12, U6 repair lane R-C (`unified/U6_VERDICT_AND_REPAIRS.md` finding 5, A-30): "the per-key index `n` inside one key" reworded above to "the index `n` is part of the key", pointing to the one statement at `11_GO_one_draw_owner.md`. The drafted Layer 1 row text in the edits table ("an index `n` within one key") was owed Layer 1 text and R-A's (finding 3); it is now applied in the form of the A-97 line below, and the table row is dropped.
 
-## Status: PROPOSED (A-30 taken: option A; the Layer 1 RNG row text is owed to Jordan's amendment, not applied)
+Reconciled: 2026-11-12, A-97 (`unified/work/L1_APPLIED.md` §`L1-A30`, `unified/work/L1_PROPAGATION.md`): the Layer 1 text A-30 owed is APPLIED (node `L1-A30`) and the `04` §C.12 row of the edits table is dropped. What Layer 1 now says is the applied text, not the wording drafted in that row: §C.12 (`04:927`) reads "the draw", a function of its key `H(seed, tick, subject, purpose)` with the index `n` part of the key (not "the draw (built)": `World.new_draw`, `state/world.py:1632`, is still a per-tick ordinal counter); rejection 4 (`04:953`, `:959`) is amended to say the draw is load-bearing, without the census figure 18,702, which the Layer 1 lane did not carry (unverified there); PART D row 35 (`04:1064`) reads "no counter across keys and no service; the index `n` is part of the key". The census figure below stays this file's own measurement.
+
+## Status: PROPOSED (A-30 taken: option A; its Layer 1 text, §C.12 and PART D row 35, is APPLIED, `L1-A30`)
 
 Lands in batch: **B06** (IN/GO; one re-pin of every seeded result, shared with `11_GO_one_draw_owner.md`). Depends on:
 `11_GO_one_draw_owner.md` (B06, the `Draw` type and its single constructor; one commit pair, one re-pin). Every later
@@ -103,7 +105,6 @@ that is no longer limited to them.
 | `engine/season/state/ids.py` | IN | `draw_factory` returns `seeded(...)`, importing `seeded` (and, where it needs it, `H2`) from `engine/dice_engine/draw.py`; `H` stays here, the id mint |
 | `engine/dice_engine/draw.py` | DICE | `H2` (its one home: U6 R-A, `U3_CONFLICT_LEDGER.md` C3-V2) and `Draw.u` as above (the rest as `11_GO_one_draw_owner.md`) |
 | the v12 cards for B10-20, GO-16 and GO-08 (not the v11 lines `workplans/valoria_master_workplan_v11_part3.md` B10-20 and `…_part5.md` GO-16, GO-08, which this session's content supersedes) | GO | GO-16 is not carried into v12 (the order line and the freeze row's "the draw log's digest" with it); GO-08's text as above; exit line 4 drops `export_oracle_draws --check` (a plan edit for the v12 author) |
-| `architecture/meta/04_CODE_ARCHITECTURE.md` §C.12 | **Jordan** (A-30 ruled the substance; the text is owed, `OWED_TO_UNIFICATION.md` §A, applied only by his amendment; no lane edits `04`) | the RNG row: "the draw (built) · a function of its key, `H(seed, tick, subject, purpose)`; an index `n` within one key; no generator object, nothing global · see rejection 4"; rejection 4's last two sentences ("not yet load-bearing, because no roll exists yet") replaced by the measured count |
 | every seeded golden under `engine/season/tests/`, `engine/tests/` | IN | one re-record, said plainly in the commit (§7) |
 
 ## The gate (execution artifacts)

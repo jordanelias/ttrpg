@@ -6,6 +6,8 @@
 
 Reconciled: 2026-11-12, unification lane U1 (wave 2; `unified/U1_OWNERS_AND_VOCABULARY.md`, decisions `D-U1-nn`). Changed: §4's opposition operand is the defender's **trained score**, never his pool, with the even line a term of the social composer only (A-79; D-U1-02; lane 29's one-word amendment, OWED §B); §3 item 6 is rewritten — a seat's modifier is the `office` leverage source read off the seat row's `modifier:`, never dice, and a seat above the actor's stands against an act only as `rank_gap` (D-U1-01, which also strikes OBS §3's defender column); `rhetoric` is not created (D-U1-03); the pool rule gets one pure owner and the fight carries `scores` and `addends` in place of `faculties` (D-U1-08); `rate` reads the score and yields to the `task` site on a drawn row (D-U1-09); `capability_use_sites` names each site's one reader, so a module-applied row needs no `applied_by` column; the site rows of FI, SE, WR and MB are written out (§3); implementation lane A's unmerged branch (`e5d6ab9`, `c5bf18a`) is placed: its `verb_capability` rows, `unauthored_attributes` and `task_difficulty` are interim and retire at named batches (D-U1-04, D-U1-07); §11 adds the coding instructions (files, symbols, order, schema, call sites, tests, check, falsifier, movers, tier). Re-verified against the tree: the registry has no `capabilities` block today; `tools/export_descriptors.py --check` exists and is blocking in CI (`valoria-ci.yml:140`); `engine/substrate/descriptors.py` exposes `ATTRIBUTE_FLOOR`, `ATTRIBUTE_CEILING`; `pool.py::faculty` (`:78`) still folds `max(attr, have)`.
 
+Reconciled: 2026-11-12, A-98 vocabulary lane (A-98; ledger `unified/work/A98_SWEEP.md`): the `kinds:` roster collapses to `skill` (§2); `insight` is a skill whose use rows give no dice; the four `moved_by_*` rows leave the skill table for a trait roster of their own, with its home and loader as ordered coding instructions (§2a, batch U1-A step 1a) `[ASSUMPTION, A-98 (4)]`; the exporter's and the uses loader's refusal of "a dice use of a trait" is restated for the two rosters; `grows_by: fixed` leaves with the traits; "talent" → governing attribute, "training" (the rank) and "trained score/rank" → skill score, "capability" in prose → skill (identifiers and this file's name keep `capability`, glossary *capability*).
+
 **What this settles.** Ten proposals describe pieces of one surface
 (`01_CORE_capability_authoring_surface.md`, `10_DICE_capability_axiom_map.md`,
 `02_CHAR_capability_uses_table.md`, `02_CHAR_capability_definitions.md`, `05_SC_capability_surface.md`,
@@ -16,12 +18,13 @@ the file, on four verbs' values, on the seat's channel and on what the opponent 
 once. The executable plan is `proposals/U5a_capability_home_and_two_inputs.md` (**CAP**), as amended by §11.
 
 **Jordan's answers this is written to** (`unified/DECISIONS_ANSWERED.md`): A-5 the bell curve everywhere;
-A-6 score plus a base, floor five, one rule for combat and everything else; A-7 talent and training are two
-inputs; A-8 a wound is a level against the roll; A-11 a capability never gates an act (Thread Sensitivity
+A-6 score plus a base, floor five, one rule for combat and everything else; A-7 the attribute and the skill score
+are two inputs; A-8 a wound is a level against the roll; A-11 a capability never gates an act (Thread Sensitivity
 excepted); A-12 a seat may carry a modifier; A-25 favourable circumstances raise the speaker, hostile ones
 raise the obstacle; A-26 an equal opponent costs 0.4 per point; A-54 a steward's skill bears on the harvest draw;
 A-59 command from a learned skill and social/mental attributes; A-71/A-79 one opposition rule for fight and argument,
-on the trained score.
+on the skill score; A-98 an aptitude is an attribute, a learned rank is a skill, one kind (skill), traits apart,
+derived scores a separate family.
 
 ---
 

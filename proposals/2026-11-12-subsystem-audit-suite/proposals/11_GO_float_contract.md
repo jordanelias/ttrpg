@@ -1,10 +1,12 @@
 # GO — the float contract: one accumulation rule, one owner for each transcendental, and parity vectors (no recorded log)
 
-Reconciled: 2026-11-12, U5d closure — folded **A-29** (declared floats now). Part C's proposed reading is the ruled one: Layer 1 step 13 is amended to name the float contract (text owed, drafted by the unification stage, not applied by a suite lane), integer state stays possible later, and the audit's §11 survivor is closed. Parts A and B land as written. Consequence recorded for the save: a save is a state snapshot (`U5d_GO_owed_edits.md` §1).
+Reconciled: 2026-11-12, U5d closure — folded **A-29** (declared floats now). Part C's proposed reading is the ruled one: Layer 1 step 13 is amended to name the float contract (APPLIED 2026-11-12, A-97, node `L1-A29`; `04:1131`), integer state stays possible later, and the audit's §11 survivor is closed. Parts A and B land as written. Consequence recorded for the save: a save is a state snapshot (`U5d_GO_owed_edits.md` §1).
 
 Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U3_CONFLICT_LEDGER.md` C3-L3 (**no float recorder**: Part B's harness recorder, the `oracle_draws.json` stream of transcendental results and the port's replay of recorded bits are removed; parity is shown by `fmath` vectors at a stated tolerance, the same instrument that replaced the draw log; gate 2 and the build-file edit rewritten; Part A stands; the U5d head's "Parts A and B land as written" is superseded for Part B's recorder), `R1_READ.md` §2 row A-29 (Part C is the ruled reading C2: the "recommended C2 now, C1 later" discussion is removed; the Layer 1 step-13 text is owed, `OWED_TO_UNIFICATION.md` §A, not applied), A-30 (no recorder of any kind); test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`). R1's placement question (a non-dice `fmath` leaf under `engine/dice_engine/`) was not decided by U1 and is left as written.
 
 **Depends on:** nothing unlanded for Part A. *(U6 R-A: the edge runs the other way — `11_GO_one_draw_owner.md`'s leaf `draw.py` imports `fmath` for `Draw.normal`/`beta`, so this file's Part A lands first in B06.)*
+Reconciled: 2026-11-12, A-97 (`unified/work/L1_APPLIED.md` §`L1-A29`, `unified/work/L1_PROPAGATION.md`): Part C's Layer 1 text is APPLIED at PART E step 13 (`04:1131`, the line moved from `:1130` by PART D row 52); the "owed" wording of the head, the problem (item 6), Part C and the cost class is rewritten to the applied state. The statement that `04:903` and D-29 hold without a further amendment is unchanged and still true (`04:903` reads "Fixed point for `condition`, `stores`, `margin`").
+
 **Lands in batch:** B06 (`B06-keyed-draw`, IN/GO), Part A first, then `11_GO_one_draw_owner.md` with `16_PESSIMIST_GO_keyed_draw_no_recorder.md`, then `U5d_GO_owed_edits.md` (`U3_DEPENDENCY_ORDER.md` §1.2). Gate 2's export round-trip is read in B41 (§1.3).
 
 ## Status: PROPOSED
@@ -40,7 +42,9 @@ owner, and the port checks its own against them by exported vectors (no recorder
    pin" (`proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-20.md:177`); no slice 3 is
    defined in the plan or the build files.
 6. **Ratified Layer 1 and the adopted plan disagree.** Step 13 is done when "a headless run prints the
-   Python oracle's hash in the integer domain" (`architecture/meta/04_CODE_ARCHITECTURE.md:1130`); the
+   Python oracle's hash in the integer domain" (`architecture/meta/04_CODE_ARCHITECTURE.md:1130` as read
+   when this was written; AMENDED 2026-11-12, A-97, node `L1-A29`, and now at `:1131` because PART D gained row
+   52 above it: it reads "prints the Python oracle's hash, under the float contract"); the
    build file says "Slice 1 is **not integer-domain**" (`:175`).
 
 ## The resolution, decided
@@ -90,8 +94,9 @@ compensated summation) and, per `fmath` function, its vector set as above.
 
 *(Reconciled, W3-1: the two-option discussion is removed; A-29 ruled C2.)* Step 13's sentence is amended to
 "…prints the Python oracle's hash", with the float contract (A, B, and "hashed floats are produced only by
-`+ - * /`, `sqrt` and `fmath`") named as the condition. The amendment text is owed to Jordan's merge
-(`OWED_TO_UNIFICATION.md` §A) and is not applied by any suite lane. Integer state stays possible later. A
+`+ - * /`, `sqrt` and `fmath`") named as the condition. The amendment is APPLIED (2026-11-12, A-97, node
+`L1-A29`): PART E step 13, `04:1131`, reads as above and names `engine/dice_engine/fmath.py` as unbuilt at the
+amendment, its builder being Part A of this file. Integer state stays possible later. A
 consequence: a run is reproducible only where the math library agrees, so a save is a state snapshot
 (`U5d_GO_owed_edits.md` §1). A margin graded by the ladder is quantised at the seam
 (`U5a_DICE_owed_edits.md` §1 row 1, C3-L1), so `04:903` and D-29 hold without a further amendment.
@@ -127,7 +132,7 @@ a module: gate 3's grep prints it.
 ## Cost class
 
 A and B: small build (one leaf, about sixty mechanical call-site edits, one vector block in the exporter).
-C: edit (Layer 1 text owed, Jordan's merge).
+C: edit (Layer 1 text APPLIED, `04:1131`, A-97; nothing left to build).
 
 **Tests and lands (W3-1).** New `engine/tests/test_fmath.py`: `test_ltr_sum_is_left_to_right_on_three_orderings`,
 `test_every_vector_reproduces_bit_for_bit`; gate 3's grep as `tests/valoria/test_fmath_one_owner.py::test_no_math_transcendental_outside_fmath`.
