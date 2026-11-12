@@ -1,4 +1,4 @@
-# The master findings — part 3: the findings by subsystem (CORE, CHAR)
+# The master findings — part 3: §10, the findings by subsystem (CORE, CHAR)
 
 ## Status: REFERENCE (part 3 of `master/MASTER_FINDINGS.md`; the row tables are generated from the closure tables `unified/U5_FINDINGS_CLOSURE_U5a.md`..`_U5d.md` by the lane's scratch extract, the syntheses written by lane MF; resolves nothing at runtime; dies with the suite)
 

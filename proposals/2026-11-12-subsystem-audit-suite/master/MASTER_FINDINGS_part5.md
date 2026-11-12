@@ -1,4 +1,4 @@
-# The master findings — part 5: the findings by subsystem (FI, FA, SE, WR, DICE, GO)
+# The master findings — part 5: §10, the findings by subsystem (FI, FA, SE, WR, DICE, GO)
 
 ## Status: REFERENCE (part 5 of `master/MASTER_FINDINGS.md`; the row tables are generated from the closure tables `unified/U5_FINDINGS_CLOSURE_U5a.md`..`_U5d.md` by the lane's scratch extract, the syntheses written by lane MF; resolves nothing at runtime; dies with the suite)
 

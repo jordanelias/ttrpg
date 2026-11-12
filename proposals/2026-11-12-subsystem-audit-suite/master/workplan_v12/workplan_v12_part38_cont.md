@@ -355,3 +355,195 @@ Placed here by `V12_STRUCTURE_part2.md` §5.6's first rule: PAP_E, the next memb
 - IDS: H block slot 7 (`credit_terms`).
 - COST and TIER: small build; `sonnet`, `high`; `opus` on the band table.
 - LANDS IT: B33's producer; `Item: B33.38`, `[skip ci]`.
+
+### B33.39 — a seat on a building · VEN_D edit 1 (§1) · BUILD · HASH EQUAL
+- SOURCE: VEN_D §1 ("The house: a hearth with a head seat"), "Exact edits" 1, "Gate" first bullet, "Falsifier" (the mutation); `SYN_A` §3 ("`harness/populated.py::resolve_anchor` gains the form `{venue: <building id>}` (VEN-D edit 1)").
+- ADVANCES: none of the nine; "a firm, a bank, a guild chapter and a foreign factory have no head" (VEN_D NERS) ends.
+- INSTRUCTION:
+  0. Open the tree: `resolve_anchor` in `S/boot/realm.py` (B03c's home) for a `venue` form; if B32 landed it, record the reading and stop (the test is still written).
+  1. "`harness/populated.py::resolve_anchor` gains a fifth form, `{venue: "<building id>"}`, resolving to the `hearth` rung `venues.yaml` builds, by the same rule as the other four (it names exactly one live rung of the kind it says)." The `offices.yaml` header's "ONE resolver over the four forms" sentence says five.
+  2. Create `S/tests/test_inst_ven_d.py` (the source's named test: "the anchor gate and the content gate") with `test_a_venue_anchor_seats_on_its_hearth` and `test_an_unknown_building_is_refused_at_build` ("a row with a `venue` anchor seats on the named hearth; a row naming an unknown building is refused at build"), written before step 1 and read red.
+- WHERE: `S/boot/realm.py` (`resolve_anchor`); `S/offices.yaml` (the header comment); NEW `S/tests/test_inst_ven_d.py`.
+- TESTS: the two above.
+- FALSIFIER and CONTROL: "Mutation: anchor a head seat on a settlement; clients' upkeep then draws on the town's stores and the conservation reading names the wrong rung" (read at B33.40). Control: no shipped row uses the form; the build hash equals B33.38's reading.
+- GATE: `python -m pytest engine/season/tests/test_inst_ven_d.py -q` → pass.
+- HASH MOVERS: none ("Items 1 and 3 with no row or charter using them: hash EQUAL").
+- DEPENDS ON: V12 Batch B03c (`boot/realm.py::resolve_anchor`); EXISTS-IN-TREE `S/venues.yaml` (the hearth rungs it builds); V12 Batch B32 (`SYN_A` §3).
+- GLOSSARY: none.
+- NAMES: `harness/populated.py::resolve_anchor` → `S/boot/realm.py::resolve_anchor` (§5.10, B03c).
+- COST and TIER: small build; `sonnet`, `medium` (VEN_D's tier line for the anchor form).
+- LANDS IT: B33's producer; `Item: B33.39`, `[skip ci]`.
+
+### B33.40 — the Guilds' house, their list and a commune council · VEN_D §4 (i)–(iii) · CONTENT · HASH MOVER(encoding)
+- SOURCE: VEN_D §4 ("Content rows": `office_bodies`, `offices.yaml: seats` (i)–(iii)), §1's head-seat row pattern, §2 (the rector pattern's keys), "Exact edits" 2, "Gate" (content bullet); X-10, X-11, X-12, C3-L9 (the tables), C3-N19; A-44; VEN_D's head: "posts and bodies are functional labels owed a row in `references/names_index.yaml` before they ship".
+- ADVANCES: none of the nine; ARC-15, ARC-08, NPC-007, NPC-084, NPC-085 "turn on a guild house".
+- INSTRUCTION ("Every content row below is `[ASSUMPTION; medium; Jordan to correct]`; no canon name is coined"):
+  1. "**`engine/season/rosters.yaml: office_bodies`** (only what a seat below needs …): `"Commune Council": "Hafenmark"` ('An elected council of a chartered town.')" — in both the body → faction map and the description map, as the file's two `office_bodies` maps carry every body. (The three Schoenland bodies go with B33.43.)
+  2. "(i) `off_house_feldhaus` at the guildhall NPC-007 is homed in (`npcs.yaml`: `b_s_006_guildhall`), `faction: "Guilds"`, holder NPC-007, beside her existing `off_guild_comptroller`." On §1's pattern: `post: "Family Head"`, `rung: {venue: "b_s_006_guildhall"}`, `body: null`, `remit_acts: [issue, confer]`, `conferral: null`, `revocation: null`, `upkeep: null`.
+  3. "(ii) A guild list seat `off_guild_roll` (`{duchy: "Hafenmark"}`, `body: "Guild"`, `binds: members_by_warrant`, `remit_acts: [issue]`, `conferral: elected`, `term: 4`, vacant at build; in the tables: `selection: lot`, `eligible_from: off_guild_roll`, `cooling_off: 4`), and `tables.eligible_from: off_guild_roll` for `off_guild_comptroller` and FA-P2's `off_guild_leader`." (The narrowing of this seat's `issue` is `15_INSTITUTIONS_VENICE_grounding_E` edit 7's, B40, not here.)
+  4. "(iii) Three commune council seats on one Hafenmark settlement (`body: "Commune Council"`, `conferral: elected`, `term: 4`, `audit_at_exit: audit`, `remit_acts: [determine, convene]`; in the tables: `selection: lot`, `eligible_from: off_guild_roll`, `cooling_off: 4`), vacant at build; `tables.eligible_from: off_guild_roll` for `off_commune_rep_hm`." Ids `off_commune_council_hm_1` to `_3` and the town `[ASSUMPTION: the source names neither; the town is the settlement `b_s_006_guildhall` stands in, so list and council sit in one place, recorded in the commit body and listed in the PR body for Jordan]`.
+  5. `references/names_index.yaml`: one row each for the posts "Family Head" (if absent) and the body "Commune Council", in the file's existing row shape.
+  6. `test_inst_ven_d.py` gains `test_the_house_the_list_and_the_council_build` (the four rows build, each vacant but the house; the tables load; every council seat's `eligible_from` is the list) `[ASSUMPTION: test name (E-3)]`.
+- WHERE: `S/rosters.yaml` (`office_bodies`; `tables.selection`, `tables.eligible_from`, `tables.cooling_off`); `S/offices.yaml` (five NEW rows); `references/names_index.yaml`; `S/tests/test_inst_ven_d.py`.
+- TESTS: the one above.
+- FALSIFIER and CONTROL: a council holder off the list or inside his cooling-off (asserted in B40's scenario run). Control: the build with the five rows absent equals B33.39's hash ("the realm's pre-item hash is unchanged with the rows absent").
+- GATE: `python -m pytest engine/season/tests/test_inst_ven_d.py -q` → pass; `python tools/ci_naming_check.py` → exit 0 (the new labels); `python -m engine.season.harness.register --check` → exit 0.
+- HASH MOVERS: the build hash (five Offices). "Each content row is a declared mover." Declared; B33.99.
+- DEPENDS ON: V12 B33.39; V12 B33.18 (`audit`); V12 Batch B32 (`VEN_C`: the tables, `members_by_warrant`, the lot); V12 Batch B21 (`06_FA_remit_grant_by_row`: `off_guild_leader`); EXISTS-IN-TREE `S/offices.yaml` rows `off_guild_comptroller`, `off_commune_rep_hm`, `S/rosters.yaml: office_bodies` (`"Guild"`), `S/npcs.yaml` (NPC-007's home `b_s_006_guildhall`).
+- GLOSSARY: row *list* (glossary *roll*: "prose calls the membership a list"; `off_guild_roll` keeps its id).
+- COST and TIER: content; `sonnet`, `medium`.
+- LANDS IT: B33's producer; `Item: B33.40`, `[skip ci]`.
+
+### B33.41 — the secret bench and the enrolment ballot · VEN_D §4, the two rows · BUILD · HASH EQUAL
+- SOURCE: VEN_D §4 (`arrangements.yaml`: two rows; "`exit_audit` is not added"; the two named and not seeded); X-12, X-15 (the one tally for `declared` rows); `SYN_A` §6.
+- ADVANCES: none of the nine.
+- INSTRUCTION: open `S/arrangements.yaml` and record whether B32 added either; write only the absent:
+  ```yaml
+  - id: security_bench        # the secret bench: denunciation, no accused in the room, no appeal
+    disposal: declared
+    quorum: 3
+    bench_basis: determine
+    floor: closed
+    records_dissent: false
+    venue_min_rank: settlement
+    term_required: false
+    appeal_basis: none
+    interposed: [office, document]
+    order: scripted
+    proofs: [testimony, confession, record]
+    disposes: detain
+    disposal_reach: realm
+
+  # `exit_audit` is not added (X-12): the audit at exit is the colonial lane's `audit` row
+  # (`15_INSTITUTIONS_COLONIAL_C` edit 1), named by `audit_at_exit: audit`.
+
+  - id: enrolment_ballot      # a body votes a candidate onto its roll; his deeds are the evidence
+    disposal: declared
+    quorum: 3
+    bench_basis: determine
+    floor: admitted
+    records_dissent: false
+    venue_min_rank: settlement
+    term_required: true
+    appeal_basis: none
+    interposed: [procedure]
+    order: rank
+    proofs: [record, testimony]
+    disposes: oblige
+    disposal_reach: body
+  ```
+  "`enrolment_ballot` uses what `determine` already does (a finding opens an `oblige` owned by the party on the judging seat): carried, the candidate is in `establishment_of` the roll seat. Two further rows are **named and not seeded** … a senate's decree disposes a `Record` and an election a `hold`, and `_disposal` has no site for either until CR-36 and CR-35." "Unanimity (the three inquisitors) is not expressible without a new key and is not taken."
+- WHERE: `S/arrangements.yaml` (two rows); `S/tests/test_inst_ven_d.py`.
+- TESTS: `test_the_two_rows_load_and_enrolment_swears_the_candidate` (both load; a hand-built carried `enrolment_ballot` puts the candidate in `establishment_of(off_guild_roll)`) `[ASSUMPTION: test name (E-3)]`.
+- FALSIFIER and CONTROL: an `exit_audit` row in the file. Control: undocketed rows move nothing.
+- GATE: `python -m pytest engine/season/tests/test_inst_ven_d.py -q` → pass.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B33.40 (`off_guild_roll`); V12 Batch B32 (`SYN_A` §6: the `declared` tally, `quorum` beside `quorum_share`); EXISTS-IN-TREE `S/queries/world_q.py::establishment_of`.
+- GLOSSARY: none.
+- COST and TIER: edit (rows); `sonnet`, `medium`.
+- LANDS IT: B33's producer; `Item: B33.41`, `[skip ci]`.
+
+### B33.42 — a staple is a proof on an `exchange`; a market's standard · VEN_D §3 · BUILD · HASH EQUAL
+- SOURCE: VEN_D §3 ("The trade privilege: a level, not a gate"), "What it changes" 3, "Exact edits" 3; X-10, C3-C10; A-81; `14_VERBS_MATERIAL_B_stores.md` §3 (`exchange` drawn, B12c.14).
+- ADVANCES: none of the nine; the Hanse's privilege, the embargo.
+- INSTRUCTION:
+  0. **STOPS IF** `exchange` does not draw at the item's open (`S/verb_table.yaml: exchange` has no draw: B12c.14 not landed or HELD): the item is `HELD (exchange draws, MATERIAL-B)` and leaves to the held list at the expunge ("**Held** until `exchange` draws").
+  1. "A held live `staple` naming the `to` rung, cited on an `exchange` by the actor (or held by the seat he is sworn to), is a `proofs` level for the actor on `exchange`'s draw (`U5c_SC_one_obstacle_form.md` §3)." Its validity: "in force while `world_q.in_force` says so" (`SYN_A` §4). **No obstacle term is asked of the MATERIAL lane.**
+  2. "One venue key on the market's row, a `standard` (SC's `difficulty_levels`) the host faction's seat-holder may raise by `establish`, stands against every trader there (an embargo is the market's standard raised and its privileges left to lapse)." `S/venues.yaml` market rows gain `standard:` (absent reads the row's `routine`); the `exchange` row's `difficulty` reads it. "Its Failure band forfeits the goods offered to the market's rung (a durable write, A-81)" is MATERIAL's band and is not edited here; the item records whether B12c's `exchange` Failure cell writes it.
+- WHERE: the `proofs` source's reader for `exchange` (`S/seam/wrappers/sigma.py`, by symbol); `S/venues.yaml` (market rows: `standard`); the `exchange` row's `difficulty` read (`S/verb_table.yaml`, or its host, by symbol); `S/tests/test_inst_ven_d.py`.
+- TESTS: `test_a_held_staple_is_a_proof_on_exchange` (the same `exchange` with and without a held live `staple` naming `to`: the recorded `levels` differ by one `proofs` level, the `terms` equal) and `test_a_raised_standard_stands_against_every_trader` `[ASSUMPTION: test names (E-3)]`, red first.
+- FALSIFIER and CONTROL: "Nothing is refused outright: under the standing rule a smuggler sometimes gets through": a trade without a staple that never succeeds over 200 seeds falsifies it. Control: no market carries `standard` and no `staple` is held in the built realm: hash EQUAL.
+- GATE: `python -m pytest engine/season/tests/test_inst_ven_d.py -q` → pass (the smuggler arm asserts `checked >= 200` and at least one success).
+- HASH MOVERS: none until a staple is cited or a standard raised.
+- DEPENDS ON: V12 Batch B12c (B12c.14: `exchange` drawn); V12 Batch B32 (`COL_A`'s `staple` form; `world_q.in_force`); V12 Batch B05 (`proofs`, `difficulty_levels`); V12 B33.41.
+- GLOSSARY: row *staple* (owner `instruments.yaml: forms.staple`; "staple": a trade privilege at a named market, as a staple town's right).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B33's producer; `Item: B33.42`, `[skip ci]`.
+
+### B33.43 — Schoenland's seats · VEN_D §4 (`foreign_seats`) · BLOCKED (WR: a place for Schoenland's seats)
+VEN_D §4: "`engine/season/offices.yaml: foreign_seats` (built only with `foreign=True`, as Altonia's are; needs a `foreign_cast` row for Schoenland minting one place, WR's): a head (…`remit_acts: [convene]`, `conferral: elected`, `revocation: null` …); two councillors and two sages on `Senate` …; three on `Security Council` …; one advocate …; one line seat and one yard seat on the rector pattern. Holders are new cast rows: **nine persons this lane does not name** …"; with them the three bodies `"Assembly"`, `"Senate"`, `"Security Council"` (`"Schoenland"`) in `office_bodies` and `factions.head_seat."Schoenland"`, and the content gate's arm ("a realm built with the foreign cast seats Schoenland's rows; `queries/faction_q.py::head` answers a person for Schoenland's Proposition"). Blocked: the tree's `S/rosters.yaml: foreign_cast` note refuses a Schoenland row (its persons and its T16 root are already in the realm as built), and no item in any batch this lane read gives Schoenland's seats a place (UNDECIDED 9). Owner: WR (VEN_D's "the WR lane's place for Schoenland (`09_WR_*`, M-ABROAD)"). When unblocked, the item is VEN_D §4's foreign rows as written, with nine NPC ids from an NPC block.
+
+### B33.44 — The Counting-House · VEN_D §5 · POINTER (to B40)
+VEN_D §5 is the scenario "The Counting-House" on the spine fixture: a case file `S/cases/exercises/INST-VENICE-01.yaml` with `base: spine` (`SYN_D` §1's schema) and its readings as rows of `harness/institution.py`'s report, run by `python -m engine.season.harness.institution INST-VENICE-01 12 <seed>` (twelve seasons in the source; two before B99, A-114). VEN_D's implementation block: "the scenario's reading lands with SYNTHESIS-D in **B40**"; the schema and the harness are B40's (`SYN_D`), so the case file, its report rows and its gate (stores conserved; every council holder on the list and outside his cooling-off; an `obligation` level at the live arm and none at control; the entrenchment arm, A-80) are B40's items (UNDECIDED 6: A43 carries them). `counting_house.py` is not written. No commit here.
+
+### B33.45 — excused: whoever shuns a man, or was wronged by him, owes him nothing in the odds · SYN_C edit 1, with PAP_D edit 8 · BUILD · HASH EQUAL
+- SOURCE: SYN_C "Exact edits" 1 (the predicate and its two readers), "What it changes" 1, "Gate" 1, 2, 3, "Falsifier" first, second and third bullets; PAP_D "Exact edits" 8 ("CR-88's duty decline (when built): one exception, read from the same person-side fact as edit 7"), §3's answer table (the `release` clause); VEN_A's "lifted by" row; X-20, X-29, X-31.
+- ADVANCES: none of the nine; "a sanction is worth what the people around its target decide it is worth".
+- INSTRUCTION:
+  1. "`engine/season/queries/person_q.py::excused(p, holder_id) -> bool` — Person-side, computed when read, no World":
+     ```python
+     def excused(p, holder_id) -> bool:
+         """Is `p` excused from what he owes `holder_id`?  True when EITHER
+         (a) `p` shuns him: among `p`'s own live `oblige` Tenures carrying OBEYED_WRIT, one obeys a writ whose
+             form has a `forbears` clause `over: named` and whose content (in `p`'s own claim of it) names
+             `holder_id`;                                                    -- he chose to comply; it was a draw
+         (b) `p` holds a breach against him: `kept(p, r) < 0` for a live instrument `r` in `p`'s ledger whose
+             bound party is `holder_id`.                                     -- the other side broke faith first
+         Nothing is written.  A man who never heard of the sentence or the breach is not excused."""
+     ```
+  2. Reader one, "**`person_q.owed_to`** (`15_INSTITUTIONS_VENICE_A` edit 3): an edge toward a seat whose holder, as `p`'s own ledger names him, `p` is excused from counts 0. This replaces VEN-A's ban-keyed lift. Who holds a seat as `p` knows it is `person_q.holders_named` … Until that lands the predicate takes the seat and reads the avoided or breaching person from the writ or instrument, which names him." The item records whether `holders_named` is in the tree (B25's `14_VERBS_SOCIAL2_B`) and which branch it took.
+  3. Reader two (PAP_D edit 8 generalised): "**CR-88's duty decline** (when built …): it does not decline `p`'s own `release` of an `oblige` to a seat whose holder `p` is excused from. Whether he releases is his own score." **STOPS IF** CR-88's duty decline is not in the tree at the item's open (`grep` the decline CR-88 builds in `S/decision/options.py`; B21d, UNDECIDED 7): step 3 is not written, it is `HELD (CR-88's duty decline, B21d)` and leaves to the held list, and gate 2 is not read; steps 1–2 land.
+  4. "An oath is never dissolved by rule. `gate.py::purview_reaches`' oath clause is untouched."
+  5. Create `S/tests/test_inst_syn_c_crossings.py` (the source's named test), written before step 1 and read red.
+- WHERE: `S/queries/person_q.py` (`excused`; `owed_to`'s lift); `S/decision/options.py` (CR-88's decline: the one exception, by symbol, only if step 3 runs); NEW `S/tests/test_inst_syn_c_crossings.py`.
+- TESTS: gate 1 `test_excused_by_his_own_compliance` ("A lord, a vassal sworn to his seat, a published `avoidance` naming the lord. Arm A: the vassal's `comply` drew Success. Arm B: it drew Failure. The lord then `petition`s the vassal: the recorded levels carry no `obligation` level in A and one in B (at `obligation_level` live). Arm C: the vassal never heard of the writ: as B."); gate 3 `test_excused_by_a_breach` ("A duke under a seeded `homage`; the King's `requisition` inside the duchy succeeds and the duke witnesses it. `kept` as the duke reads it is below zero; `excused(duke, king)` is True; the King's next ask of him carries no `obligation` level. Control: the levy unwitnessed by the duke and untold: `excused` False."); gate 2 `test_the_oath_stays_his` (only if step 3 runs: "Over 200 seeds of arm A with CR-88's decline built: the vassal's `oblige` closes only by his own `release`; a vassal with a planted grievance releases more often than one without, and neither always nor never"; PAP_D's "oath" gate is this test) `[ASSUMPTION: test names (E-3)]`.
+- FALSIFIER and CONTROL: "An `oblige` that closes with no `release` act of its owner. A man excused who holds no claim of the writ, the sentence or the breach. Every vassal of a sentenced lord releasing in every seed (the sanction is a switch)." Control: with no `avoidance` complied with and no instrument breached, `excused` is False for every pair and `owed_to` reads as at B33.33.
+- GATE: `python -m pytest engine/season/tests/test_inst_syn_c_crossings.py -q` → pass (`checked >= 200` in gate 2 where it runs); `opus` reads gate 2 ("whether a sanction is a switch", SYN_C's tier line).
+- HASH MOVERS: none at ship (`obligation_level: None`; no computed `avoidance` is complied with in the built realm).
+- DEPENDS ON: V12 B33.33, B33.34, B33.27; V12 Batch B32 (`kept`, `SYN_A` §4; the seeded `homage`, `SYN_B` §3); V12 Batch B28 (`OBEYED_WRIT`); V12 Batch B25 (`person_q.holders_named`, `14_VERBS_SOCIAL2_B`); V12 Batch B21d (CR-88's duty decline: not in §2.1's `after` list, UNDECIDED 7).
+- GLOSSARY: row *excused* (new: "excused": released, in the odds only, from what one owes a man one shuns or who broke faith first, as one is excused a debt; owner `person_q.excused`).
+- COST and TIER: small build; `sonnet`, `high`; gate 2 `opus`.
+- LANDS IT: B33's producer; `Item: B33.45`, `[skip ci]`.
+
+### B33.46 — the suit's forum stated; a hand of another faction · SYN_C edits 3, 6 · BUILD · HASH EQUAL
+- SOURCE: SYN_C "Exact edits" 3 and 6, "Gate" 5, "Falsifier" (the suit bullet); CR-60 (realm benches, B24a); `PAP_A` edit 3 (B32).
+- ADVANCES: none of the nine; "a king cannot be sued" ends; BYZ_D edit 5's reliance holds.
+- INSTRUCTION:
+  1. Edit 3, no code but a comment: "Stated in `arrangements.yaml`'s header comment for `debt_suit`: *'a suit is brought where a bench sits over the debtor; for a holder of a realm seat that is his own court or the Church's.'*" `debt_suit` (B33.38), `audit` and `quo_warranto` (B33.18) "are docketed by `open_case` before a bench for which `may_determine` holds, which asks `sits_over(seat, home_of(party))`".
+  2. Edit 6: "`passes_through` … admits a body or a seat of any faction, and the loader does not compare factions. `15_INSTITUTIONS_BYZANTINE_D` edit 5 already relies on it … The basis rule `hand` in `data/requires.py` asks only that the actor hold the named seat or a seat of the named body; BYZ-C's further conjunct ('drawn up at a rung the issuing seat's purview reaches') is about the issuing seat and stands." No code: the test below holds the loader to it.
+- WHERE: `S/arrangements.yaml` (the comment above `debt_suit`); `S/tests/test_inst_syn_c_crossings.py`.
+- TESTS: `test_a_hand_of_another_faction_loads_and_enters` (a Guilds seat whose `passes_through` names an Altonian seat loads, and that seat's holder may `carry` at the hand); gate 5 `test_a_bond_before_the_church` ("A `debt` lapsed whose debtor holds a realm seat. `open_case` under `debt_suit` is admitted before a bench of realm scope and refused (`may_determine`) before a ducal bench. Over 200 seeds all four bands occur; a `ban` disposed there reads CH on the strife instrument") `[ASSUMPTION: test names (E-3)]`.
+- FALSIFIER and CONTROL: "A suit admitted before a bench that does not sit over the debtor." Control: comment-only edit to the YAML (the loader's reading equal).
+- GATE: `python -m pytest engine/season/tests/test_inst_syn_c_crossings.py -q` → pass (`checked >= 200`).
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B33.38, B33.11, B33.07, B33.29; V12 Batch B24a (CR-60's realm `scope_rung`, through B27 and B32); V12 Batch B32 (`PAP_A` edit 3); EXISTS-IN-TREE `S/state/gate.py::may_determine`, `::sits_over`.
+- GLOSSARY: none.
+- COST and TIER: edit (a comment) and tests; `sonnet`, `high`.
+- LANDS IT: B33's producer; `Item: B33.46`, `[skip ci]`.
+
+### B33.47 — a publication is not a command: `issue` asks the form's basis · SYN_C edit 7 · BUILD · HASH MOVER(behaviour)
+- SOURCE: SYN_C "Exact edits" 7, "What it changes" 7; X-33; A-21, A-22; `SYN_A` §1 (the form row's `basis: command | purview`, default `command`; `avoidance: purview`); `14_VERBS_BINDING_D_orders.md` edits 3 to 5 (B21: `issue`'s `authority` conjunct, `basis: command`).
+- ADVANCES: none of the nine; the sanction reaches the persons it is aimed at.
+- INSTRUCTION: "Decided: the basis is a property of the **form**. A form row carries `basis: command | purview` (default `command`); `issue`'s `authority` conjunct asks the basis the chosen form names, and the bare decree (no form) asks `command`. `avoidance` is `purview` … `interdict` and `tithe` stay `command` … One conjunct, one reader, no second predicate: both basis values are that proposal's." The key is `SYN_A`'s (B32); this item writes its one reader in `S/data/requires.py`'s `basis` dispatch for `issue`. "`[UNVERIFIED]` that the `authority` conjunct can read a value sourced from the act's `form` operand; if a `requires` cell cannot be keyed by an operand, `issue` gains a second row alternative for published forms, which is the table's existing way to say 'either'." The item opens the dispatch first and records which branch it took.
+- WHERE: `S/data/requires.py` (the `basis` dispatch, by symbol); `S/verb_table.yaml` (`issue`: only in the second branch, a row alternative); `S/tests/test_inst_syn_c_crossings.py`.
+- TESTS: `test_an_avoidance_addresses_the_seated_vassals_of_another_lord` (a see's `issue` of form `avoidance` admits a seated vassal on the see's ground who is neither sworn nor revocable; the same see's bare decree to him is refused); `test_an_interdict_addresses_only_the_commanded` `[ASSUMPTION: test names (E-3)]`, red first.
+- FALSIFIER and CONTROL: an `avoidance` refused toward a person on the issuing seat's ground; a bare decree admitted toward a person the seat does not command. Control: every `issue` naming no form (all of the built realm's) asks `command`, as B21 left it.
+- GATE: `python -m pytest engine/season/tests/test_inst_syn_c_crossings.py engine/season/tests/test_command_basis.py -q` → pass (`test_command_basis.py` is B21's, and stays green).
+- HASH MOVERS: any seeded run in which a computed `issue` chooses a `purview` form (`choice_sourced: issue: [form]`, `SYN_A` §2). Declared; B33.99.
+- DEPENDS ON: V12 Batch B21 (`world_q.commands`, the `basis` value `command`; `test_command_basis.py`); V12 Batch B32 (`SYN_A` §1, §2); V12 B33.46.
+- GLOSSARY: row *publication* (new: "publication": a writ that addresses everyone on the issuing seat's ground and orders nobody, as a banns is published; owner `instruments.yaml: forms[].basis: purview`).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B33's producer; `Item: B33.47`, `[skip ci]`.
+
+### B33.48 — rival certificates; an immunity in the levy · SYN_C edits 4–5 · BLOCKED (SC: the evidence owner, edit 4, if B32 left it; SE: the MATERIAL lane, edit 5)
+SYN_C edits 4 and 5 are "a request to SC's evidence owner (not edited)" and "a request to the MATERIAL lane (not edited)". Edit 4's one sentence ("**a Record carrying `recites` for a seat is admissible on either side of any docketed matter whose petition names that seat**, each recited deed filed as one item") is `SYN_B` §4's request in B32: if B32's item lands it, SYN_C gate 6 ("Rival paper. A consecration hearing with the claimant's certificate cited, with and without a rival's certificate for the same seat cited against it: exact odds printed; the advantage shrinks") is read in B33.23's `test_inst_pap_c.py` (its Arm C) and this half is a POINTER to B32; if not, it is BLOCKED (SC: `05_SC_evidence_and_rebuttal_B`'s owner). Edit 5 ("On `requisition` and `seize` …, the `proofs` source has two sides: … **the other side's** levels, a live instrument one of whose `forbears` clauses names this act's success kind over this ground, when the levied cohort or holder holds its content claim. Unit: one `proof_level` per instrument") has no carrier in any batch this lane read (UNDECIDED 8): BLOCKED (SE: `14_VERBS_MATERIAL_B` §4 and `14_VERBS_MATERIAL_D` §6's owner), and SYN_C gate 7 ("The immunity in the levy. 400 seeded levies …") waits with it.
+
+### B33.99 — re-pin and close readings · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH MOVER (the re-pin)
+- SOURCE: E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12; CLAUDE.md §7 ("say plainly when you re-record one").
+- ADVANCES: the batch's close; `IS-A-12`'s record.
+- INSTRUCTION: (1) re-record, once, the realm pins in `S/tests/_realm_goldens.py` (B02's one pin file) at seeds 0, 1, 2 — build, one season and two seasons, both arms of `build_realm(foreign=)` — read against B32's close (`reading @<sha>`), or against B31's merge where B31 merged first in S19 (§7.4); (2) any other seeded result a test of this batch pins and two items moved; (3) the commit says "re-pin" and lists the moving handles: B33.01 (encoding, if `Office` values are encoded), .02, .03, .04, .08, .09, .10, .11, .12, .14, .15, .16, .17, .19, .21, .25, .26, .31, .40, .47; (4) the commit body carries the readings of §5.12: `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before (`reading @<sha>`) and after, the executed-verb tallies of `corpus_run` at seed 0 beside B32's, and the batch's measured wall time; no conjunct's `reading:` is written (REQUIREMENT: none); `status:` is not edited.
+- WHERE: `S/tests/_realm_goldens.py`; any test-local pin two items moved.
+- TESTS: the batch's thirteen test files and the covering suites (`python tools/tests_for_diff.py --base <batch-start-sha>`), the one full-suite run (CLAUDE.md §0.4; E-2).
+- FALSIFIER and CONTROL: a pin that moved with no declared mover in the batch (stop: an undeclared mover is a defect of its item, not a re-pin). Control: the executed-verb tallies of every hash-EQUAL item's control equal.
+- GATE: the BATCH GATE of the block head.
+- HASH MOVERS: the re-pin itself.
+- DEPENDS ON: V12 B33.01 to B33.48.
+- GLOSSARY: none.
+- COST and TIER: reading and a re-pin; `sonnet`, `high`.
+- LANDS IT: B33's producer; `Item: B33.99`, the batch's last `Item:` commit (no `[skip ci]`: it opens BATCH-CLOSE's first CI run).
+
+**SERIAL EDGES (written last, E-11).** Within the batch, U3 §1.2's order with these edges: B33.01 → B33.02 (`upkeep_owed` reads the authored grades) → B33.03 (the bill sums `upkeep_owed`) → B33.04 (Partial's remainder is read by `bills_due`). B33.05 → B33.06 (the occasion reads `hand:` stages) → B33.07 (`carry`'s alternative needs an open `hand:` stage and the occasion) → B33.08 (rows turn the hands on only after the machinery is EQUAL-landed). B33.08 → B33.09 → B33.10 (the court's row names the person and `off_doux`) → B33.11 (`hand_term` on rows that exist) and → B33.12, B33.17; B33.11 → B33.13. B33.10 → B33.14 (`centre.hops`, `root_of` over the foreign root) → B33.15 (the host reads the one reader) and → B33.16 (the border test asks `root_of`). B33.15 → B33.19 (the opener's distance). B33.18 → B33.19, B33.20. B33.21 → B33.22. B33.23 → B33.24. B33.25 → B33.26, B33.28, B33.29; B33.27 → B33.45 (`excused` (a) reads the compliance B33.27's decline keys on). B33.31 → B33.32. B33.33 → B33.34 → B33.35 (the bond's reckoning reads `obligation`) → B33.36 → B33.37 → B33.38; B33.34 → B33.45 (the lift is on `owed_to`). B33.38 → B33.46 (the comment sits on `debt_suit`); B33.11 → B33.46 (the cross-faction hand). B33.46 → B33.47. B33.18 → B33.40 (`audit_at_exit: audit` on the council seats). B33.39 → B33.40 → B33.41 → B33.42. B33.04 → B33.34 (the `obligation` level on `requisition`), B33.07 → B33.34 (on `carry`); both point forward. B33.99 last. With other batches, by step (§2.3), on the files this batch edits (U3 §5.1's chains re-read in v12's order): `S/offices.yaml` B21 → B32 → B33 → B40; `S/rosters.yaml` B32 (S17) → B31, B33 (S19, different keys; B31 merges first) → B38; `S/verb_table.yaml` B32 → B33, B36 (S19, different rows; B33 merges first) → B38; `S/data/fixtures.py` B32 → B33 → B38; `S/queries/world_q.py` B32 → B33 → B38 → B40; `S/queries/person_q.py` B32 → B33 → B38; `S/loop/effects_information.py` B32 → B33 → B38; `S/decision/options.py` B28 → B33 → B38; `S/seam/wrappers/sigma.py` B32 → B33; `S/arrangements.yaml` B32 → B33 → B40; `S/loop/effects_governance.py` B32 → B33 → B39; `S/loop/effects_economy.py` B12c → B33; `modules/social_contest/roll.py` B05 → B33; `references/npc_registry.yaml` B37 (S16) → B33 → B38; `S/data/requires.py` B22 → B35 (S18) → B33 (U3 lists B33 before B35; v12's schedule opens B35 a step earlier, and B35 does not gate on B33: each edits its own basis or row, kept by hand); `S/epistemic.py` B28 → B33 → B38; `S/instruments.yaml` B32 → B33 → B39 → B40; `S/goals.yaml` B10 → B33 → B40; `S/harness/strife_moves.yaml` B32 → B33; `S/boot/realm.py` B32 → B33 → B38. Edges not taken, recorded for H2: B21d → B33 (UNDECIDED 7; asked, not added here). Requirement order and dependency order do not conflict here (REQUIREMENT: none).
+
+**FILE CENSUS (this batch; every WHERE, parsed by hand):** `S/offices.yaml` (B33.01, .08, .10, .11, .19, .21, .31, .32, .39, .40); `S/rosters.yaml` (B33.08, .09, .10, .12, .16, .17, .21, .31, .34, .35, .40); `S/verb_table.yaml` (B33.04, .07, .25, .47); `S/arrangements.yaml` (B33.18, .23, .26, .38, .41, .46); `S/goals.yaml` (B33.17, .24, .32); `S/queries/world_q.py` (B33.02, .03, .06, .14, .19); `S/queries/person_q.py` (B33.27, .33, .45); `S/queries/inputs.py` (B33.15, .34); `S/seam/wrappers/sigma.py` (B33.04, .15, .28, .34, .42); `modules/social_contest/roll.py` (B33.15, .34); `S/data/fixtures.py` (B33.14, .20, .28, .34, .38); `S/hole_register.yaml` (B33.14, .20, .28, .34, .38); `S/data/requires.py` (B33.07, .47); `S/data/rosters.py` (B33.05, .09, .16); `S/data/verbs.py` (B33.04, .07); `S/state/carriers.py` (B33.05, if absent); `S/loop/effects_information.py` (B33.05, .07, .23, .25, .36); `S/loop/effects_governance.py` (B33.04, .25, .35); `S/loop/effects_economy.py` (B33.02, .37); `S/epistemic.py` (B33.16); `S/decision/options.py` (B33.27, .45); `S/boot/realm.py` (B33.09, .39); `S/write_matrix.yaml` (B33.07); `S/harness/strife_moves.yaml` (B33.29); `S/venues.yaml` (B33.42); `S/instruments.yaml` (B33.27, if absent); `references/npc_registry.yaml` (B33.09); `references/names_index.yaml` (B33.40); `unified/U1_GLOSSARY.md` (B33.01, .03, .04, .05, .07, .14, .16, .18, .20, .23, .27, .28, .31, .33, .34, .35, .40, .42, .45, .47); NEW tests: `test_inst_byz_b.py` (B33.01–.04), `test_inst_byz_c.py` (B33.05–.08), `test_inst_byz_d.py` (B33.09–.12, .17), `test_remove.py` (B33.14–.16), `test_audit_and_charter.py` (B33.18–.20), `test_inst_col_d_ledger.py` (B33.21–.22), `test_inst_pap_c.py` (B33.23), `test_inst_pap_d.py` (B33.25–.28), `test_inst_pap_e.py` (B33.31–.32), `test_inst_ven_a.py` (B33.33–.34), `test_inst_ven_b.py` (B33.35–.38), `test_inst_ven_d.py` (B33.39–.42), `test_inst_syn_c_crossings.py` (B33.45–.47). Differences from U3 §5.1: `S/data/requires.py` (U3: B33 before B35; v12 by step: after, see above); `S/loop/matter.py` is in U3's B33 chain and is **not** edited here (C3-C7: BYZ_B, BYZ_C, VEN_B each withdraw their MATTER edit; three items gate `git diff … loop/matter.py` empty); `S/governance_spine.yaml` is in U3's B21 → B33 chain through VEN_D's scenario, which is B40's here (B33.44); `S/queries/inputs.py`, `S/venues.yaml`, `references/names_index.yaml`, `S/write_matrix.yaml`, `S/hole_register.yaml` are edited here and have no U3 §5.1 chain naming B33. Hot files (U3 §5.1, twenty or more proposals) this batch edits: `rosters.yaml`, `fixtures.py`, `world_q.py`, `verb_table.yaml`, `person_q.py`, `options.py`, `boot/realm.py` (was `populated.py`), `sigma.py`, `offices.yaml`, `effects_information.py`.
+
+| STOP. Batch B33-inst-economy-hands closes here |

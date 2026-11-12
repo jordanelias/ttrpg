@@ -1,4 +1,4 @@
-# The master findings — part 6: the findings by subsystem (game, verbs, institutions, arcs, determinism, lacuna, narrative, procgen, happenings, story, census)
+# The master findings — part 6: §10, the cross-cutting lanes (the game, the verb families, institutions, arcs, determinism, the lacuna, narrative churn, procedural generation, happenings, story enablement, the census) and the later lanes with no closure rows
 
 ## Status: REFERENCE (part 6 of `master/MASTER_FINDINGS.md`; the row tables are generated from the closure tables `unified/U5_FINDINGS_CLOSURE_U5a.md`..`_U5d.md` by the lane's scratch extract, the syntheses written by lane MF; resolves nothing at runtime; dies with the suite)
 
@@ -46,7 +46,9 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## The verb families (MILITARY, PHYSICAL, SOCIAL1, SOCIAL2, BINDING, MATERIAL)
 
-<!-- SYNTHESIS:verbs -->
+**What is wrong.** The verb families' verdicts (each `audits/14_VERBS_*.md` §0.1), at seed 0, two seasons, the realm: **MILITARY** one of nine works (`migrate`), `move` executes and goes nowhere, `train` forms for everybody and has never executed, and six are sound commands no person can give (the payload carries the command and the operand vocabulary is closed); **PHYSICAL** none of nine works as its word promises and none is a stub: 113 attempts made three unopposed arrivals and six `surveil` findings that taught nobody; **SOCIAL1** one of eleven works (`commit`), four are formed and always refused (`comply`, `evade / defy`, `covenant`, `challenge`); **SOCIAL2** the family's defect is emptiness: `utter` mints `OUGHT` propositions with an empty predicate 68–73 times a season, every `petition` is addressed to the person it is about; **BINDING** two of twelve work; the acts that redistribute power are not chosen and the acts that are chosen bind nobody; **MATERIAL** one of sixteen works (`survey`) and fifteen resolve as a fixed function of state. The common causes: an act forms on a referent the fold must refuse for a reason the actor could have read, and a graded act writes nothing per band (which the loader refuses today, G-01).
+
+**What was decided.** Everything consequential is drawn (A-24); a refused act's receipt is the budget (A-62) and a refusal is remembered (D-46); tie and knot split (A-28: 68 verbs); training supplies dice and never gates (A-11); who may raze (A-73); marching on a claim or grievance (A-74, A-103); farm work an act (D-68); three organising verbs (D-36). **What is built where:** each family's carriers land with the subsystem that owns the verb: MILITARY in B07 and **B22** (26 RESOLVED-BY rows), PHYSICAL in B15, B26, B29, SOCIAL1 and SOCIAL2 in B11, B25, B28, BINDING in B21, MATERIAL in B12a-c, B26; B07's task draw (with the loader edit) is first for all. R-05's reading (`built out n of n`) is M3's, at B35. **What stays open:** the verb proposals' bodies were not re-read after the rulings landed (`OWED_TO_UNIFICATION.md` §B); two DISPUTED rows (`_part2` §8).
 
 **Rows: 139** (RESOLVED-BY 116 · SUPERSEDED 21 · STALE/FP 0 · DISPUTED 2 · JORDAN 0).
 
@@ -196,7 +198,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## The institutions kit
 
-<!-- SYNTHESIS:institutions -->
+**What is wrong.** Four historical families (Byzantine, colonial, papal, Venetian) were read against the engine; each found the skeleton present and the force absent (`audits/15_INSTITUTIONS_*` §0): the Church's seven seats made 113 resolved acts in three seasons and opened no `ban` and no `detain`, a Cardinal who died was never replaced; the colonial lane found the missing thing is a *distance* (no cost for governing far from where you sit; every binding decision known to every person at once); the Venetian lane found a skeleton of a merchant republic and no instruments. The synthesis (`15_INSTITUTIONS_SYNTHESIS.md` §0): the four are one design drawn four times, persons in seats sworn by `oblige`, acting through documents, judged in hearings, on one roll; what stops them is four upstream absences each lane found alone and thirty-one collisions among the lanes. **What was decided:** a seat's modifier and three optional facts (A-12, A-13), votes as draws (A-14), caste's three expressions and the franchise (A-41, A-42), a head strips an officer (A-35), nobody judges the Confessor and the papal council is dropped (A-36), a convict's release by pardon or term (A-37). **What is built where:** the one kit and the deed ledger (**B32**), crossings and the economy's hands (**B33**), the first playable scenarios (B40); the obstacle terms in B05. **What stays open:** the synthesis predates rulings A-12 to A-56 and both re-groundings and must be rewritten against them (`OWED_TO_UNIFICATION.md` §B); 55 `[UNVERIFIED]` lines (`audits/25` U-08); the canon rewording A-17 asks (held); one DISPUTED row (L-4).
 
 **Rows: 41** (RESOLVED-BY 23 · SUPERSEDED 17 · STALE/FP 0 · DISPUTED 1 · JORDAN 0).
 
@@ -248,7 +250,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## The provided arcs
 
-<!-- SYNTHESIS:arcs -->
+**What is wrong.** The game cannot yet simulate any one of the 143 provided cases as that case (`audits/12_ARCS_adjudication.md` §1): of 427 core needs, 21 are represented and reached, 136 declared and not reached, 176 absent, 88 stated against the ratified shape (an actorless social counter, a faction that decides, a stat lookup in place of a choice), 6 unclear by the source's own admission. The shortest honest path is Carin Vedel (NPC-088) on the populated realm, then Vaynard's Wager (ARC-04). **What was decided:** a threshold may open a mandatory scene and never decide it, and the 27 threshold-closed arcs are restated so (A-47); a unit is a row, so a unit's story is told through its officer and men (A-2). **What is built where:** the latent counters as persons' acts (B10), the Thread's person side (B35), the case built from its own people on the realm (`12_ARCS_case_on_the_realm`, `01_CORE_case_setup_and_beats`, **B39**). **What stays open:** the per-case table's unreached needs close only as their mechanisms land; no row says a case runs as that case before B39.
 
 **Rows: 29** (RESOLVED-BY 20 · SUPERSEDED 9 · STALE/FP 0 · DISPUTED 0 · JORDAN 0).
 
@@ -288,7 +290,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## The determinism sweep
 
-<!-- SYNTHESIS:determinism -->
+**What is wrong.** "The documents are mostly conformant already; the code is not" (`audits/18_DETERMINISM_SWEEP.md`, Verdict): eleven passages of the finished lanes made a consequential outcome a fixed function of state (D-01 to D-11: among them a plain `fight` to the death, `tend` restoring a fraction for certain, a levy raising as asked, succession and set-up acts certain, "governing acts do not roll") and were corrected in place in thirteen files; fifteen code sites (C-01 to C-15) are listed with their carriers (U5a §6.2). **What was decided:** Jordan's standing rule of 2026-11-12, *we do not do deterministic*, applied everywhere (A-24); A-30's one draw per key. **What is built where:** the task draw for uncontested verbs (B07, first item; it carries the loader edit G-01 requires), rival acts in one fold (B08), the notice draw (B11), the duel's exits (B16), the governance draws (B21); U5a Part 6 and U5d Part 12 close the same sweep from both sides, the second naming the first. **What stays open:** most of the sweep's rows point at carriers whose batch the extract could not place (13 of 34 name a batch); one DISPUTED row (`world_q.subsistence_d…`, two readings, the function unopened).
 
 **Rows: 34** (RESOLVED-BY 21 · SUPERSEDED 11 · STALE/FP 1 · DISPUTED 1 · JORDAN 0).
 
@@ -333,7 +335,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## The lacuna (investigation to proceedings)
 
-<!-- SYNTHESIS:lacuna -->
+**What is wrong.** Valoria holds most of the carriers a Lacuna-style case needs (WITNESS deposits, six inquiry rows, the told channel, the case file, the docket, `determine`'s graded draw) and lacks the act that makes it a detective game: a conclusion the investigator commits to, bound to its support, that the world answers later (`audits/19_LACUNA_investigation_to_proceedings.md` §0). **What was decided:** appeal on new grounds only, tying the court to the detective game (A-39); a verdict serves the petitioner (A-38); no engine-authored wrong conclusions (D-45). **What is built where:** the committed conclusion and `reconstruct`'s bands (B11), admission riding the citing draw and the evidence cycle (B24), the inquiry verbs (B26), the verdict ladder and reversal, mistrial and dismissal (**B27**). **What stays open:** the reversal's design was completed in place by repair lane R-B (`U6_VERDICT_AND_REPAIRS.md` row 1); nothing else of this block is unplaced.
 
 **Rows: 18** (RESOLVED-BY 18 · SUPERSEDED 0 · STALE/FP 0 · DISPUTED 0 · JORDAN 0).
 
@@ -362,7 +364,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## Narrative churn
 
-<!-- SYNTHESIS:narrative -->
+**What is wrong.** Eras, regimes and strife run beside allegiance, office, obligation, pursuit and conviction and do not meet them, so the engine produces chains with causes and no plot (`audits/20_NARRATIVE_CHURN.md` §0): at seeds 0–2 over four seasons, of thirty-five edges between the eleven things four are live; no person changed faction, no seat changed hands, no oath was paid, no writ was complied with (0 of 193); 123 petitions filed and 2 determined. The regime is one value (F-NARR-01); an omission has no author (F-NARR-02); an office is a licence and owes nothing (F-NARR-03); nobody knows who holds what (F-NARR-04); allegiance is fixed (F-NARR-05); the calendar has no year (F-NARR-06). **What was decided:** A-82 to A-86, A-45, A-46 (`_part2` §4.5); a modifier is read from the acting person's own interior or own edges, never a world count, except where Jordan rules a draw reads a strife level (A-85, `L1-A85`). **What is built where:** `20_NARRATIVE_A` to `_F` land in **B38** with the era and regime proposals (16 RESOLVED-BY rows), one in B21d. **What stays open:** A-83's conformity pressure must be read from what a person believes those around him think (its reconciliation is lane 30's, in B38).
 
 **Rows: 23** (RESOLVED-BY 20 · SUPERSEDED 3 · STALE/FP 0 · DISPUTED 0 · JORDAN 0).
 
@@ -396,7 +398,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## Procedural generation
 
-<!-- SYNTHESIS:procgen -->
+**What is wrong.** Valoria generates nothing: `build_realm(seed)` stamps one hand-assembled world, identical at every seed but for two tenure ids; every settlement has the same three sites; and the largest obstacle to generation is not a missing generator but a missing *past* (`audits/21_PROCEDURAL_GENERATION.md` §0). **What was decided:** about 94 generated persons plus kin, capped (A-44); some starting state drawn, small and bounded (A-50); five years of prologue, everything older tradition and hearsay (A-51); a world that fails its checks rolls the next seed (A-53); a fixed map (A-55). **What is built where:** `21_PROCEDURAL_A` to `_E` and the cases on the realm, all in **B39** (11 RESOLVED-BY rows), the geography's fields in B12a-c. **What stays open:** the names and texts are content (`21_PROCEDURAL_E`); the prologue's cost is five years of the loop, measured on the loop's own year length, not yet measured; R-21-08 ("one simulated year") is SUPERSEDED by A-51.
 
 **Rows: 18** (RESOLVED-BY 11 · SUPERSEDED 7 · STALE/FP 0 · DISPUTED 0 · JORDAN 0).
 
@@ -425,7 +427,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## Happenings
 
-<!-- SYNTHESIS:happenings -->
+**What is wrong.** The King no longer dies at the first tick nor at every seed (the digest line was measured at `51d7b05`), and he still dies, for the old reason, by the one verb the repair missed (`audits/22_HAPPENINGS.md` §0). Officers seize with no cause, take no prisoner and kill (H-01); nobody named dies of age, illness or enmity, and everyone is zero seasons old (H-02); the world is the same whether anyone acts (H-05); no seat changes hands, no oath is paid, no writ obeyed (H-07). **What was decided:** natural death on, after the ages are authored (A-15); a person may kill another of his own motive, rarely, and a failure is always caught (A-16, A-96); the crown passes by the deed race (A-19); named births behind a rate (A-75). **What is built where:** a death is rare, caused and drawn, and a killing is a crime someone commits (**B37**); the throne is never stranded (B21); a house continues (B39). **What stays open:** the ages table (content, `_part2` §5.2) gates natural death; the H-03/H-06 groups are SUPERSEDED into the verb and dice carriers.
 
 **Rows: 24** (RESOLVED-BY 15 · SUPERSEDED 9 · STALE/FP 0 · DISPUTED 0 · JORDAN 0).
 
@@ -460,7 +462,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## Story enablement
 
-<!-- SYNTHESIS:story -->
+**What is wrong.** The twelve pessimist audits, narrative churn and happenings name 73 distinct stories the shipped game cannot tell (42 named by more than one lane; 56 with no code path, 15 with a path computed play never reaches, 2 only in a hand-built world), and their chains share nineteen mechanisms, three of them a floor under all 73: the offer makes sense, the act is drawn and every band writes, the record keeps what happened (`audits/23_STORY_ENABLEMENT.md` §0). Every one can be made possible without a script; what does not exist is the order that completes one story and an instrument that can say a story occurred. **What was decided:** A-80 and A-81 (entrenchment moves the world; no scene is still) and named births (A-75, the one JORDAN row here). **What is built where:** the story census and gate (`23_STORY_D`, **B36**), what a roll leaves (B38), a house continues, a founded place can fail and the lean year (**B39**); the floor mechanisms are SUPERSEDED into B07 to B09's carriers. **What stays open:** S-01 to S-73 complete batch by batch as their mechanisms land; the census's count script was not re-run by the closure lane.
 
 **Rows: 32** (RESOLVED-BY 23 · SUPERSEDED 8 · STALE/FP 0 · DISPUTED 0 · JORDAN 1).
 
@@ -503,7 +505,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## The census
 
-<!-- SYNTHESIS:census -->
+**What is wrong.** "The game code is not littered with dead records; it is starved at the verbs" (`audits/17_CENSUS_REST.md` §0): 34 of 67 verbs execute in neither the corpus nor a three-season realm; 39 kind-specific consumers (23 of them the strife instrument's) wait on Events those verbs would emit. The static census itself was half blind: C4 was empty because its regex matched no emission, C5 was read against a stale worktree, 46 of 102 rows were false positives; in C1B four rows in five are false leads (518 of 643 reached by a route a name search cannot see), 21 rows are newly dead (`17_CENSUS_C1B.md` §0); in C1A 173 of 187 rows are false positives, 4 dead, 10 broken (`17_CENSUS_C1A.md`). **What was decided:** deletions with their `FORK:` rows, no guard over the known-red list (CLAUDE.md §0.1 pt 5). **What is built where:** **B03** (23 RESOLVED-BY rows: the deletion batches, wiring and corrections), with the rest in B10, B32, B36. **What stays open:** the false-positive rows were tallied, not re-opened (`OWED_TO_UNIFICATION.md` §C).
 
 **Rows: 80** (RESOLVED-BY 41 · SUPERSEDED 26 · STALE/FP 13 · DISPUTED 0 · JORDAN 0).
 
@@ -594,5 +596,14 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## The later lanes with no closure rows (audits 24 to 31)
 
-<!-- SYNTHESIS:later -->
+These lanes ran after the closure tables were written and have no closure rows (`unified/U6_VERDICT_AND_REPAIRS.md`, "Not checked by the verdict"); their findings are answered by rulings and carried by their own proposals, whose batches are U3's (§3.1). One paragraph each; no rows are invented for them.
+
+- **24 · grounding in games** (`audits/24_GROUNDING_GAMES.md` §0). 63 claim groups about other games: 33 already grounded by the suite's citations, 6 grounded from the repository, 11 newly sourced and filed as repository notes, 7 partly sourced, the rest to be marked. No batch: reference.
+- **25 · grounding in the engine** (`audits/25_GROUNDING_ENGINE.md` §0, §6). The suite's fifteen read SHAs are one code tree (every suite commit touches the suite directory only). 92 claims checked: 70 verified, 11 corrected, 11 refuted (head part §2.3); 225 `[UNVERIFIED]` lines left in nine groups. Its refutation G-01 is carried by `18_DETERMINISM_task_draw_for_uncontested_verbs` (B07).
+- **26 · mass-battle history** (`26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` §0). The skeleton agrees with the sources (morale that breaks in sections and spreads, depth as fresh men, facing, a braced line against horse, giving ground, conditional orders) and the results do not: the engine wears a body down to a casualty band, the sources break it by a shock at small loss and kill afterwards. Answered by A-61 (a stand draw), A-78 (losses by kind), A-100. Carriers `26_MASS_BATTLE_*`: B19 (calibration targets, cell scale and time, rout and pursuit), B20 (manoeuvre orders), B23 (aggression and land), B31 (movement and fatigue as data). Owner MB.
+- **27 · command and dynamic strength** (`27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` §0). A-59 can be served by edits at owners that exist: strength is already computed per pair and per contact cell; what contradicts the ruling is three things laid over it, chief among them one number drawn before contact that multiplies every pool on a side (`modules/mass_battle/core/exchange.py:147`), which decides 275 of 287 even fields. Answered by A-77 (zero if the six-arm test's first arm passes) and A-78. Carriers `27_MB_A` and `_C` (B19), `_D` (B20), `_E` (B22), `_B` (B31). Owner MB.
+- **28 · scene access** (`28_SCENE_ACCESS.md` §0). A-63 and A-64 can be built on existing owners with no new verb, Record kind, stored schedule or clock; but the 62-of-87 baseline counts acts *about* a person (32 of 50 by the counterparty column), and at the shipped realm occupancy has almost nothing to occupy. Carriers `28_CORE_scene_access_A`, `_B` (B28), `_C` the petition that waits (B38); Layer 1 row 36 amended (`L1-A64`). Owner SC (B28), WR (B38).
+- **29 · the one opposed rule** (`29_ONE_OPPOSED_RULE.md` §0). One rule serves fight and argument, tuned to A-71's three goals at once: 0.4 a point of the defender's skill score, attribute and wounds as named levels under the soft cap, the six base dice never in the opposition; the fight runs about 4.3 turns and 4.5 wounding blows, a lead changes in 45.2 % of fights where it changed in 35.2 %. Ruled by A-79. Carrier `29_DICE_one_opposed_rule_form_and_tuning` (B05); item 29-5 is INCOMPLETE (`DuelRoundInput`, `HearingInput`, `Speaker` do not exist in the tree, `OWED_TO_UNIFICATION.md` §B). Owner IN.
+- **30 · eras, regimes, strife and momentum** (`30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md` §0). Not yet a sound basis, and the obstacle is of kind: no era as a named period, no regime beyond a pairwise credit factor, no momentum that is a person's, nothing of it reaching a player; what exists (`queries/world_q.py::flows_in` reads strands and eras from the log and stores nothing) is good ground and kept. Ruled by A-84 to A-86 (and A-82, A-83 before it). Carriers `30_WR_A` to `_E`, `_G`, `30_GO_F` (B38). The strife master's five sentences are held (A-84). Owner WR.
+- **31 · house stances and cast values** (`31_HOUSE_STANCES_AND_CAST_VALUES.md` §0). The stances land as data today and order the houses as A-87 says; three things stand between that and regimes that differ in play, the first that `30_WR_G` commit 1 does not build as written (P-31-5). Its four survivors were ruled (A-91), and A-92 answered its call on convictions. Carriers `31_WR_A` to `_C` (B38). Owner WR.
 
