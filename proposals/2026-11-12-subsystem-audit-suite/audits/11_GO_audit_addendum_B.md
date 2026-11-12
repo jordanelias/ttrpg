@@ -43,7 +43,7 @@ surface. `.audit/` beyond those four (about 7 MB) was not read.
 
 ## B2. Corrections and new findings
 
-Ranked worst first within the player-facing layer. "The UI set" means the ten files under
+Numbered in the order found; the severity is on each, and §B6.1 ranks them. "The UI set" means the ten files under
 `.designs/systems/ui/reference/`; all are ARCHIVED-NOT-CANON and none is cited below as the reason a
 behaviour is correct.
 
@@ -67,8 +67,9 @@ Conviction revision, "v4 §13.2"), party management, the Parliament interface, t
 treaty and Grand Debate, the clock column, the whole cutscene system with its 22 mandatory triggers, and
 feel layers 1–2.
 
-**Falsifier.** A second copy: `git grep -l "PART 19" -- . ':!.audit'` and a search of `.designs/` and
-`.audit/` for "THE CUTSCENE SYSTEM" (run; §B7 E-B2). Outcome: no copy.
+**Falsifier.** A second copy anywhere in the working tree, hidden trees included: `grep -rIl` for
+"THE CUTSCENE SYSTEM", "PART 19 — ", "PART 15 — PARLIAMENT" over `*.md` (run; §B7 E-B2). Outcome: the
+only hit is this file.
 
 **Touches.** R-04 (strategic and management actions as the player meets them), R-06/R-07 (how a
 character is shown). **Consequence.** The first audit's R45 ("the UI documents stay reference") stands,

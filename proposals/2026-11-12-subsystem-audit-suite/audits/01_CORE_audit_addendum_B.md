@@ -43,11 +43,38 @@ Read in full, with comments and docstrings (line counts from `wc -l`):
 | `decision/budget.py`, `decision/sheet.py`, `harness/play_surface.py` | 83, 209, 95 | for §6 and the corrections |
 | `loop/deliberate.py:56-330` | — | the map, the budget query, the release |
 | `audits/01_CORE_audit.md`, `audits/02_CHAR_audit.md` (part one), the brief, `dossiers/01_CORE.md` | — | |
-
 | `harness/run_cases.py`, `arms.py`, `loops.py`, `interactions.py`, `report.py`, `scarce.py` | 531, 315, 544, 470, 306, 266 | in full |
+| `harness/soak.py`, `harness/aperture.py` | 639, 1,123 | in full; `aperture` read, not run (the work order forbids a long run) |
 | `queries/world_q.py:3857-3990` | — | `attention_key`, for F-CORE-20 |
 
-<!-- APPEND-READ -->
+Read in part:
+
+| file | read | not read |
+|---|---|---|
+| `harness/populated.py` (2,162) | 1–679 (the loaders, the anchor resolver, the prose-matching seaters, cohorts, guards, acquaintances), 1014–1163 (`build_realm`'s contract and its rung ladder), and the function outline | 680–1013 (`mint_planned_works`, `goals_missing`, `seed_goals`, `seed_arms`) and 1164–2162 (the seating body, `census`, `run`, `creed_sweep`, `main`) |
+| `harness/headless.py` | 100–194 | the rest |
+| `harness/corpus_run.py` | 461 to the end | 1–460 |
+| `loop/driver.py` | 300–345, 462–482 | the rest (the first audit read it) |
+
+One observation from the part of `populated.py` that was read, stated at the strength the reading
+supports. `build_realm`'s docstring (`:1067-1072`) says `institution_of` *"runs over EVERY case on every
+build, roster or not"*; the two call sites (`:1293`, `:1885`) read
+`row.get("institution") if row else institution_of(case)`, so the prose matcher runs only for a case
+with no roster row. Which sentence is true of the shipped realm depends on whether every case has a row
+in `npcs.yaml`, which was not checked `[UNVERIFIED]`. It is the `04` G.2.6 shape (a derivation from
+prose kept beside the authored file) either way, and it is recorded here as a reading, not a finding.
+
+**Not read.** Each is declared, none was sampled as if read; the reason for all is context budget after
+the files this addendum was commissioned to read.
+
+- `[SKIPPED: harness/probes.py — 2,955 lines, the probe registry and its bodies]`
+- `[SKIPPED: harness/populated.py:680-1013, 1164-2162 — goal seeding and the seating body of the realm builder]`
+- `[SKIPPED: harness/{arc, chronicle, storybar, strife, strife_data, decision_spread, conviction_spread, governance_spine, heir_hears, military_menu, obligee_report, army_presets, delta, invariants, exercises, register}.py — the remaining instruments; the first audit read some of them code-only]`
+- `[SKIPPED: harness/corpus_run.py:1-460, harness/headless.py outside 100-194]`
+- `[SKIPPED: loop/witness.py — not on this addendum's list and not opened]`
+- `[SKIPPED: engine/season/tests/ — 43 files; no pytest was run, by instruction]`
+- `[SKIPPED: seam/wrappers/{sigma, combat, fieldwork, _entry}.py in full — read at the cited lines only (the first audit read them)]`
+- the `.designs/` and `.audit/` files listed at the end of §7
 
 ## 2. New adversarial findings (worst first)
 
@@ -300,8 +327,6 @@ text lists six steps and omits ENCOUNTER (`:76-81`); its header counts *"46 uniq
   kind and reports `PLAYABLE` when every token names something present. It executes no case. The first
   audit's F-CORE-02 covers the executing instrument; this is the grading one, and its word for "every
   declared thing exists" is the standing requirement's word for something else.
-
-<!-- APPEND-FINDINGS -->
 
 ## 3. Corrections to the first audit
 
@@ -665,8 +690,6 @@ J-15).
 | J-7: *emergence is real but must be made visible to be believed* | the log is causal and the chronicle prints chains; the reason is not kept (F-CORE-12) and fade records crowd the log (first audit F-CORE-01) | partly answered |
 | the vector audit's import-graph metrics (271 nodes, 408 edges, cycles, cut vertices, orphans) | a snapshot of the pre-season tree; its instrument survives as `tests/valoria/test_import_cycle_game_state_npe.py`, which `seam/wrappers/__init__.py:12-25` cites for the cycle it removed | history; no claim rests on it |
 
-<!-- APPEND-CONTEXT -->
-
 Read in part: `player_agency_v30.md` (§4.1, §4.2b–§4.5, §6, and every heading) and
 `derived_stats_v30.md` (§1–§3, §14.4–§14.5, and every heading).
 
@@ -717,8 +740,6 @@ Ladder steps: 1 superseded · 2 irrelevant · 3 answered by a design document ·
 
 | 29 | S27.4 has two sites; the fold's reads `Act.obstacle`/`Act.pool`, which no computed act sets | delete the fold arm and the two `Act` fields; `sigma.resolve` is the owner | 1 (`sigma.py:498`: the rule is evaluated on the derived pair) | edit: `loop/resolve.py:1046-1063`, `state/carriers.py:706-707`, one probe |
 
-<!-- APPEND-RESOLUTIONS -->
-
 ## 9. Survivors for Jordan
 
 One, added to the first audit's one.
@@ -758,5 +779,3 @@ All at tree `785bc62`, `PYTHONHASHSEED=0`, no `pytest`. Outputs under
 | `probe_unanswered_first.py` (experiment against the shipped rule) | 0 · 4 | hash equal to control; positions answered 0 ×37, 1 ×2: a null (`probe_unanswered_first.txt`) |
 | `probe_shortfall_salience.py` (experiment against the shipped key) | 0, 1, 2 · 4 | hash moves at all three; relief at seed 2 only (1 and 15 grain) (`probe_shortfall_salience.txt`) |
 | `run_cases.load_cases` and `CORPUS_DEFECTS` (inline) | — | 46 NPC, 97 ARC cases; 8 load defects (six fenced files; `ARC3.yaml` truncated, 0 rows recovered) |
-
-<!-- APPEND-EVIDENCE -->
